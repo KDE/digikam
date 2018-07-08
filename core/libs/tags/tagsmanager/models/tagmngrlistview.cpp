@@ -57,10 +57,10 @@ TagMngrListView::TagMngrListView(QWidget* const parent)
 }
 void TagMngrListView::startDrag(Qt::DropActions supportedActions)
 {
-    QModelIndexList list             = this->selectionModel()->selectedIndexes();
-    TagMngrListModel* const tagmodel = dynamic_cast<TagMngrListModel*>(this->model());
+    QModelIndexList list             = selectionModel()->selectedIndexes();
+    TagMngrListModel* const tagmodel = dynamic_cast<TagMngrListModel*>(model());
 
-    if(!tagmodel)
+    if (!tagmodel)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Error! no model available!";
         return;
@@ -68,7 +68,7 @@ void TagMngrListView::startDrag(Qt::DropActions supportedActions)
 
     QMimeData* const data = tagmodel->mimeData(list);
 
-    if(!data)
+    if (!data)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Error! no data obtained!";
         return;
@@ -81,37 +81,38 @@ void TagMngrListView::startDrag(Qt::DropActions supportedActions)
 
 QModelIndexList TagMngrListView::mySelectedIndexes()
 {
-    return this->selectedIndexes();
+    return selectedIndexes();
 }
 
-void TagMngrListView::dropEvent(QDropEvent *e)
+void TagMngrListView::dropEvent(QDropEvent* e)
 {
     QModelIndex index                = indexVisuallyAt(e->pos());
-    TagMngrListModel* const tagmodel = dynamic_cast<TagMngrListModel*>(this->model());
+    TagMngrListModel* const tagmodel = dynamic_cast<TagMngrListModel*>(model());
 
-    if(!tagmodel)
+    if (!tagmodel)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Error! no model available!";
         return;
     }
 
-    tagmodel->dropMimeData(e->mimeData(),e->dropAction(), index.row(), index.column(),index.parent());
+    tagmodel->dropMimeData(e->mimeData(), e->dropAction(),
+                           index.row(), index.column(), index.parent());
 
     QList<int> toSel = tagmodel->getDragNewSelection();
 
-    if(toSel.size() != 2)
+    if (toSel.size() != 2)
     {
         return;
     }
 
-    QItemSelectionModel* const model = this->selectionModel();
+    QItemSelectionModel* const model = selectionModel();
 
     model->clearSelection();
-    this->setCurrentIndex(tagmodel->index(toSel.first()+1,0));
+    setCurrentIndex(tagmodel->index(toSel.first()+1, 0));
 
-    for(int it = toSel.first()+1; it <= toSel.last(); ++it)
+    for (int it = toSel.first()+1 ; it <= toSel.last() ; ++it)
     {
-        model->select(tagmodel->index(it,0), model->Select);
+        model->select(tagmodel->index(it, 0), model->Select);
     }
 }
 
@@ -137,18 +138,20 @@ void TagMngrListView::contextMenuEvent(QContextMenuEvent* event)
     QMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
-    TagList* const tagList = dynamic_cast<TagList*>(this->parent());
+    TagList* const tagList = dynamic_cast<TagList*>(parent());
 
-    if(!tagList)
+    if (!tagList)
     {
         return;
     }
 
-    QAction* const delAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")), i18n("Delete Selected from List"),this);
-    cmhelper.addAction(delAction, tagList, SLOT(slotDeleteSelected()),false);
+    QAction* const delAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")),
+                                           i18n("Delete Selected from List"), this);
+    cmhelper.addAction(delAction, tagList, SLOT(slotDeleteSelected()), false);
 
-    QModelIndexList sel = this->selectionModel()->selectedIndexes();
-    if(sel.size() == 1 && sel.first().row() == 0)
+    QModelIndexList sel = selectionModel()->selectedIndexes();
+
+    if (sel.size() == 1 && sel.first().row() == 0)
         delAction->setDisabled(true);
 
     cmhelper.exec(QCursor::pos());
@@ -156,14 +159,14 @@ void TagMngrListView::contextMenuEvent(QContextMenuEvent* event)
 
 void TagMngrListView::slotDeleteSelected()
 {
-    QModelIndexList sel = this->selectionModel()->selectedIndexes();
+    QModelIndexList sel = selectionModel()->selectedIndexes();
 
-    if(sel.isEmpty())
+    if (sel.isEmpty())
         return;
 
-    TagMngrListModel* const tagmodel = dynamic_cast<TagMngrListModel*>(this->model());
+    TagMngrListModel* const tagmodel = dynamic_cast<TagMngrListModel*>(model());
 
-    if(!tagmodel)
+    if (!tagmodel)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Error! no model available!";
         return;

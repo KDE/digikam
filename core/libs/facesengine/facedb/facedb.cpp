@@ -121,19 +121,19 @@ QString FaceDb::setting(const QString& keyword) const
 int FaceDb::addIdentity() const
 {
     QVariant id;
-    d->db->execSql(QString::fromLatin1("INSERT INTO Identities (`type`) VALUES (0);"), 0, &id);
+    d->db->execSql(QLatin1String("INSERT INTO Identities (`type`) VALUES (0);"), 0, &id);
     return id.toInt();
 }
 
 void FaceDb::updateIdentity(const Identity& p)
 {
-    d->db->execSql(QString::fromLatin1("DELETE FROM IdentityAttributes WHERE id=?;"), p.id());
+    d->db->execSql(QLatin1String("DELETE FROM IdentityAttributes WHERE id=?;"), p.id());
     const QMap<QString, QString> map = p.attributesMap();
     QMap<QString, QString>::const_iterator it;
 
     for (it = map.constBegin() ; it != map.constEnd() ; ++it)
     {
-        d->db->execSql(QString::fromLatin1("INSERT INTO IdentityAttributes (id, attribute, `value`) VALUES (?, ?,?);"),
+        d->db->execSql(QLatin1String("INSERT INTO IdentityAttributes (id, attribute, `value`) VALUES (?, ?,?);"),
                        p.id(), it.key(), it.value());
     }
 }
@@ -141,15 +141,15 @@ void FaceDb::updateIdentity(const Identity& p)
 void FaceDb::deleteIdentity(int id)
 {
     // Triggers do the rest
-    d->db->execSql(QString::fromLatin1("DELETE FROM Identities WHERE id=?;"), id);
+    d->db->execSql(QLatin1String("DELETE FROM Identities WHERE id=?;"), id);
 }
 
 void FaceDb::deleteIdentity(const QString & uuid)
 {
     QList<QVariant> ids;
-    d->db->execSql(QString::fromLatin1("SELECT Identities.id FROM Identities LEFT JOIN IdentityAttributes ON "
-                                       " Identities.id=IdentityAttributes.id WHERE "
-                                       " IdentityAttributes.attribute='uuid' AND IdentityAttributes.value=?;"), uuid, &ids);
+    d->db->execSql(QLatin1String("SELECT Identities.id FROM Identities LEFT JOIN IdentityAttributes ON "
+                                 " Identities.id=IdentityAttributes.id WHERE "
+                                 " IdentityAttributes.attribute='uuid' AND IdentityAttributes.value=?;"), uuid, &ids);
     if (ids.size() == 1)
     {
         deleteIdentity(ids.first().toInt());
@@ -166,14 +166,14 @@ QList<Identity> FaceDb::identities() const
 {
     QList<QVariant> ids;
     QList<Identity> results;
-    d->db->execSql(QString::fromLatin1("SELECT id FROM Identities;"), &ids);
+    d->db->execSql(QLatin1String("SELECT id FROM Identities;"), &ids);
 
     foreach (const QVariant& v, ids)
     {
         QList<QVariant> values;
         Identity p;
         p.setId(v.toInt());
-        d->db->execSql(QString::fromLatin1("SELECT attribute, `value` FROM IdentityAttributes WHERE id=?;"), p.id(), &values);
+        d->db->execSql(QLatin1String("SELECT attribute, `value` FROM IdentityAttributes WHERE id=?;"), p.id(), &values);
 
         for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
         {
@@ -194,7 +194,7 @@ QList<Identity> FaceDb::identities() const
 QList<int> FaceDb::identityIds() const
 {
     QList<QVariant> ids;
-    d->db->execSql(QString::fromLatin1("SELECT id FROM Identities;"), &ids);
+    d->db->execSql(QLatin1String("SELECT id FROM Identities;"), &ids);
 
     QList<int> results;
 
@@ -222,12 +222,12 @@ void FaceDb::updateLBPHFaceModel(LBPHFaceModel& model)
     if (model.databaseId)
     {
         values << model.databaseId;
-        d->db->execSql(QString::fromLatin1("UPDATE OpenCVLBPHRecognizer SET version=?, radius=?, neighbors=?, grid_x=?, grid_y=? WHERE id=?;"), values);
+        d->db->execSql(QLatin1String("UPDATE OpenCVLBPHRecognizer SET version=?, radius=?, neighbors=?, grid_x=?, grid_y=? WHERE id=?;"), values);
     }
     else
     {
         QVariant insertedId;
-        d->db->execSql(QString::fromLatin1("INSERT INTO OpenCVLBPHRecognizer (version, radius, neighbors, grid_x, grid_y) VALUES (?,?,?,?,?);"),
+        d->db->execSql(QLatin1String("INSERT INTO OpenCVLBPHRecognizer (version, radius, neighbors, grid_x, grid_y) VALUES (?,?,?,?,?);"),
                        values, 0, &insertedId);
         model.databaseId = insertedId.toInt();
     }
@@ -267,8 +267,8 @@ void FaceDb::updateLBPHFaceModel(LBPHFaceModel& model)
                                     << data.cols
                                     << compressed;
 
-                    d->db->execSql(QString::fromLatin1("INSERT INTO OpenCVLBPHistograms (recognizerid, identity, `context`, `type`, `rows`, `cols`, `data`) "
-                                   "VALUES (?,?,?,?,?,?,?);"),
+                    d->db->execSql(QLatin1String("INSERT INTO OpenCVLBPHistograms (recognizerid, identity, `context`, `type`, `rows`, `cols`, `data`) "
+                                                 "VALUES (?,?,?,?,?,?,?);"),
                                    histogramValues, 0, &insertedId);
 
                     model.setWrittenToDatabase(i, insertedId.toInt());
@@ -284,7 +284,7 @@ LBPHFaceModel FaceDb::lbphFaceModel() const
 {
     QVariantList values;
     qCDebug(DIGIKAM_FACEDB_LOG) << "Loading LBPH model";
-    d->db->execSql(QString::fromLatin1("SELECT id, version, radius, neighbors, grid_x, grid_y FROM OpenCVLBPHRecognizer;"), &values);
+    d->db->execSql(QLatin1String("SELECT id, version, radius, neighbors, grid_x, grid_y FROM OpenCVLBPHRecognizer;"), &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
@@ -313,9 +313,9 @@ LBPHFaceModel FaceDb::lbphFaceModel() const
         model.setGridY(it->toInt());
         ++it;
 
-        DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, `context`, `type`, `rows`, `cols`, `data` "
-                                                                      "FROM OpenCVLBPHistograms WHERE recognizerid=?;"),
-                                                                      model.databaseId);
+        DbEngineSqlQuery query = d->db->execQuery(QLatin1String("SELECT id, identity, `context`, `type`, `rows`, `cols`, `data` "
+                                                                "FROM OpenCVLBPHistograms WHERE recognizerid=?;"),
+                                                  model.databaseId);
         QList<OpenCVMatData> histograms;
         QList<LBPHistogramMetadata> histogramMetadata;
 
@@ -369,12 +369,12 @@ void FaceDb::clearLBPHTraining(const QString& context)
 {
     if (context.isNull())
     {
-        d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVLBPHistograms;"));
-        d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVLBPHRecognizer;"));
+        d->db->execSql(QLatin1String("DELETE FROM OpenCVLBPHistograms;"));
+        d->db->execSql(QLatin1String("DELETE FROM OpenCVLBPHRecognizer;"));
     }
     else
     {
-        d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVLBPHistograms WHERE `context`=?;"), context);
+        d->db->execSql(QLatin1String("DELETE FROM OpenCVLBPHistograms WHERE `context`=?;"), context);
     }
 }
 
@@ -384,11 +384,11 @@ void FaceDb::clearLBPHTraining(const QList<int>& identities, const QString& cont
     {
         if (context.isNull())
         {
-            d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVLBPHistograms WHERE identity=?;"), id);
+            d->db->execSql(QLatin1String("DELETE FROM OpenCVLBPHistograms WHERE identity=?;"), id);
         }
         else
         {
-            d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVLBPHistograms WHERE identity=? AND `context`=?;"), id, context);
+            d->db->execSql(QLatin1String("DELETE FROM OpenCVLBPHistograms WHERE identity=? AND `context`=?;"), id, context);
         }
     }
 }
@@ -463,8 +463,8 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::M
                                     << compressed
                                     << compressed_vecdata;
 
-                    d->db->execSql(QString::fromLatin1("INSERT INTO FaceMatrices (identity, `context`, `type`, `rows`, `cols`, `data`, vecdata) "
-                                   "VALUES (?,?,?,?,?,?,?);"),
+                    d->db->execSql(QLatin1String("INSERT INTO FaceMatrices (identity, `context`, `type`, `rows`, `cols`, `data`, vecdata) "
+                                                 "VALUES (?,?,?,?,?,?,?);"),
                                    histogramValues, 0, &insertedId);
 
                     model.setWrittenToDatabase(i, insertedId.toInt());
@@ -480,8 +480,8 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::M
 EigenFaceModel FaceDb::eigenFaceModel() const
 {
     qCDebug(DIGIKAM_FACEDB_LOG) << "Loading EIGEN model";
-    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, `context`, `type`, `rows`, `cols`, `data`, vecdata "
-                                                                  "FROM FaceMatrices;"));
+    DbEngineSqlQuery query = d->db->execQuery(QLatin1String("SELECT id, identity, `context`, `type`, `rows`, `cols`, `data`, vecdata "
+                                                            "FROM FaceMatrices;"));
 
     EigenFaceModel model = EigenFaceModel();
     QList<OpenCVMatData>        mats;
@@ -533,8 +533,8 @@ EigenFaceModel FaceDb::eigenFaceModel() const
 FisherFaceModel FaceDb::fisherFaceModel() const
 {
     qCDebug(DIGIKAM_FACEDB_LOG) << "Loading FISHER model from FaceMatrices";
-    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, `context`, `type`, `rows`, `cols`, `data`, vecdata "
-                                                                  "FROM FaceMatrices;"));
+    DbEngineSqlQuery query = d->db->execQuery(QLatin1String("SELECT id, identity, `context`, `type`, `rows`, `cols`, `data`, vecdata "
+                                                            "FROM FaceMatrices;"));
 
     FisherFaceModel model  = FisherFaceModel();
     QList<OpenCVMatData>         mats;
@@ -587,8 +587,8 @@ FisherFaceModel FaceDb::fisherFaceModel() const
 DNNFaceModel FaceDb::dnnFaceModel() const
 {
     qCDebug(DIGIKAM_FACEDB_LOG) << "Loading DNN model";
-    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, `context`, `type`, `rows`, `cols`, `data`, vecdata "
-                                                                  "FROM FaceMatrices;"));
+    DbEngineSqlQuery query = d->db->execQuery(QLatin1String("SELECT id, identity, `context`, `type`, `rows`, `cols`, `data`, vecdata "
+                                                            "FROM FaceMatrices;"));
 
     DNNFaceModel model = DNNFaceModel();
     QList<std::vector<float>> mats;
@@ -644,11 +644,11 @@ void FaceDb::clearEIGENTraining(const QString& context)
 {
     if (context.isNull())
     {
-        d->db->execSql(QString::fromLatin1("DELETE FROM FaceMatrices;"));
+        d->db->execSql(QLatin1String("DELETE FROM FaceMatrices;"));
     }
     else
     {
-        d->db->execSql(QString::fromLatin1("DELETE FROM FaceMatrices WHERE `context`=?;"), context);
+        d->db->execSql(QLatin1String("DELETE FROM FaceMatrices WHERE `context`=?;"), context);
     }
 }
 
@@ -658,11 +658,11 @@ void FaceDb::clearEIGENTraining(const QList<int>& identities, const QString& con
     {
         if (context.isNull())
         {
-            d->db->execSql(QString::fromLatin1("DELETE FROM FaceMatrices WHERE identity=?;"), id);
+            d->db->execSql(QLatin1String("DELETE FROM FaceMatrices WHERE identity=?;"), id);
         }
         else
         {
-            d->db->execSql(QString::fromLatin1("DELETE FROM FaceMatrices WHERE identity=? AND `context`=?;"), id, context);
+            d->db->execSql(QLatin1String("DELETE FROM FaceMatrices WHERE identity=? AND `context`=?;"), id, context);
         }
     }
 }

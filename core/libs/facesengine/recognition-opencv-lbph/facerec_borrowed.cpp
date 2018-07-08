@@ -422,7 +422,7 @@ void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictC
         }
 
         // Compute mean
-        QString s = QString::fromLatin1("Mean distances: ");
+        QString s = QLatin1String("Mean distances: ");
         std::map<int, std::vector<int> >::const_iterator it;
 
         for (it = distancesMap.begin(); it != distancesMap.end(); ++it)
@@ -471,7 +471,7 @@ void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictC
             scoreMap[it->second]++;
         }
 
-        QString s = QString::fromLatin1("Nearest Neighbor score: ");
+        QString s = QLatin1String("Nearest Neighbor score: ");
 
         for (std::map<int,int>::iterator it = scoreMap.begin(); it != scoreMap.end(); ++it)
         {

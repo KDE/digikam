@@ -244,7 +244,7 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
 
     resize(512, 512);
     setWindowTitle(i18n("Geolocation Interface demo"));
-    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("globe")));
+    setWindowIcon(QIcon::fromTheme(QLatin1String("globe")));
     setObjectName(QLatin1String("DemoGeoLocationInterface" ));
 
     d->cmdLineArgs = cmdLineArgs;
@@ -312,8 +312,8 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
     // Sagrada Familia in Spain
     markerList<<GeoCoordinates::fromGeoUrl(QLatin1String("geo:41.4036480511,2.1743756533,46" ));
 
-    if (cmdLineArgs->isSet(QString::fromLatin1("demopoints_single")) ||
-        cmdLineArgs->isSet(QString::fromLatin1("demopoints_group")))
+    if (cmdLineArgs->isSet(QLatin1String("demopoints_single")) ||
+        cmdLineArgs->isSet(QLatin1String("demopoints_group")))
     {
         for (int i = 0; i < markerList.count(); ++i)
         {
@@ -532,7 +532,7 @@ void MainWindow::slotMarkersMoved(const QList<QPersistentModelIndex>& markerIndi
 
     if (!altitudeQueries.isEmpty())
     {
-        LookupAltitude* const myAltitudeLookup = LookupFactory::getAltitudeLookup(QString::fromLatin1("geonames"), this);
+        LookupAltitude* const myAltitudeLookup = LookupFactory::getAltitudeLookup(QLatin1String("geonames"), this);
 
         connect(myAltitudeLookup, SIGNAL(signalRequestsReady(QList<int>)),
                 this, SLOT(slotAltitudeRequestsReady(QList<int>)));
@@ -596,7 +596,7 @@ void MainWindow::slotAddImages()
     if (fileNames.isEmpty())
         return;
 
-    d->lastImageOpenDir         = fileNames.first().resolved(QUrl(QString::fromLatin1("../")));
+    d->lastImageOpenDir         = fileNames.first().resolved(QUrl(QLatin1String("../")));
 
     slotScheduleImagesForLoading(fileNames);
 }

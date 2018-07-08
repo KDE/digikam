@@ -52,7 +52,7 @@ public:
 
     static void setPrintPosition( int v )
     {
-        if (!self()->isImmutable( QString::fromLatin1( "PrintPosition" ) ))
+        if (!self()->isImmutable( QLatin1String( "PrintPosition" ) ))
             self()->mPrintPosition = v;
     }
 
@@ -63,7 +63,7 @@ public:
 
     static void setPrintScaleMode(Digikam::PrintOptionsPage::ScaleMode v)
     {
-        if (!self()->isImmutable( QString::fromLatin1( "PrintScaleMode" ) ))
+        if (!self()->isImmutable( QLatin1String( "PrintScaleMode" ) ))
             self()->mPrintScaleMode = v;
     }
 
@@ -74,7 +74,7 @@ public:
 
     static void setPrintEnlargeSmallerImages(bool v)
     {
-        if (!self()->isImmutable( QString::fromLatin1( "PrintEnlargeSmallerImages" ) ))
+        if (!self()->isImmutable( QLatin1String( "PrintEnlargeSmallerImages" ) ))
             self()->mPrintEnlargeSmallerImages = v;
     }
 
@@ -85,7 +85,7 @@ public:
 
     static void setPrintWidth(double v)
     {
-        if (!self()->isImmutable( QString::fromLatin1( "PrintWidth" ) ))
+        if (!self()->isImmutable( QLatin1String( "PrintWidth" ) ))
             self()->mPrintWidth = v;
     }
 
@@ -96,7 +96,7 @@ public:
 
     static void setPrintHeight( double v )
     {
-        if (!self()->isImmutable( QString::fromLatin1( "PrintHeight" ) ))
+        if (!self()->isImmutable( QLatin1String( "PrintHeight" ) ))
             self()->mPrintHeight = v;
     }
 
@@ -107,7 +107,7 @@ public:
 
     static void setPrintUnit( PrintOptionsPage::Unit v )
     {
-        if (!self()->isImmutable( QString::fromLatin1( "PrintUnit" ) ))
+        if (!self()->isImmutable( QLatin1String( "PrintUnit" ) ))
             self()->mPrintUnit = v;
     }
 
@@ -118,7 +118,7 @@ public:
 
     static void setPrintKeepRatio( bool v )
     {
-        if (!self()->isImmutable( QString::fromLatin1( "PrintKeepRatio" ) ))
+        if (!self()->isImmutable( QLatin1String( "PrintKeepRatio" ) ))
             self()->mPrintKeepRatio = v;
     }
 
@@ -129,7 +129,7 @@ public:
 
     static void setPrintColorManaged( bool v )
     {
-        if (!self()->isImmutable( QString::fromLatin1( "PrintColorManaged" ) ))
+        if (!self()->isImmutable( QLatin1String( "PrintColorManaged" ) ))
             self()->mPrintColorManaged = v;
     }
 
@@ -140,7 +140,7 @@ public:
 
     static void setPrintAutoRotate( bool v )
     {
-        if (!self()->isImmutable( QString::fromLatin1( "PrintAutoRotate" ) ))
+        if (!self()->isImmutable( QLatin1String( "PrintAutoRotate" ) ))
             self()->mPrintAutoRotate = v;
     }
 

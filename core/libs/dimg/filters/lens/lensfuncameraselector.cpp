@@ -647,7 +647,7 @@ void LensFunCameraSelector::populateDeviceCombos()
             // Maker DB does not change, so we fill it only once.
             if ((*it)->Maker)
             {
-                QString t = QString::fromLatin1((*it)->Maker);
+                QString t = QLatin1String((*it)->Maker);
 
                 if (d->make->combo()->findText(t, Qt::MatchExactly) < 0)
                 {
@@ -657,11 +657,11 @@ void LensFunCameraSelector::populateDeviceCombos()
         }
 
         // Fill models for current selected maker
-        if ((*it)->Model && QString::fromLatin1((*it)->Maker) == d->make->combo()->currentText())
+        if ((*it)->Model && QLatin1String((*it)->Maker) == d->make->combo()->currentText())
         {
             LensFunIface::DevicePtr dev = *it;
             QVariant b                  = qVariantFromValue(dev);
-            d->model->combo()->addItem(QString::fromLatin1(dev->Model), b);
+            d->model->combo()->addItem(QLatin1String(dev->Model), b);
         }
 
         ++it;
@@ -710,7 +710,7 @@ void LensFunCameraSelector::populateLensCombo()
     {
         LensFunIface::LensPtr lens = *lenses;
         QVariant b                 = qVariantFromValue(lens);
-        d->lens->combo()->addItem(QString::fromLatin1(lens->Model), b);
+        d->lens->combo()->addItem(QLatin1String(lens->Model), b);
         ++lenses;
     }
 

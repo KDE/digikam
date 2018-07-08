@@ -43,7 +43,7 @@ bool MetaEngine::setImageProgramId(const QString& program, const QString& versio
     try
     {
         QString software(program);
-        software.append(QString::fromLatin1("-"));
+        software.append(QLatin1String("-"));
         software.append(version);
 
         // Set program info into Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
@@ -89,7 +89,7 @@ bool MetaEngine::setImageProgramId(const QString& program, const QString& versio
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Program identity into image using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot set Program identity into image using Exiv2 "), e);
     }
     catch(...)
     {
@@ -191,7 +191,7 @@ QSize MetaEngine::getImageDimensions() const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot parse image dimensions tag using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot parse image dimensions tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -228,7 +228,7 @@ bool MetaEngine::setImageDimensions(const QSize& size) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set image dimensions using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot set image dimensions using Exiv2 "), e);
     }
     catch(...)
     {
@@ -329,7 +329,7 @@ MetaEngine::ImageOrientation MetaEngine::getImageOrientation() const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot parse Exif Orientation tag using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot parse Exif Orientation tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -403,7 +403,7 @@ bool MetaEngine::setImageOrientation(ImageOrientation orientation) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Exif Orientation tag using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot set Exif Orientation tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -446,9 +446,9 @@ MetaEngine::ImageColorWorkSpace MetaEngine::getImageColorWorkSpace() const
 
             if (!interopIndex.isNull())
             {
-                if (interopIndex == QString::fromLatin1("R03"))
+                if (interopIndex == QLatin1String("R03"))
                     return WORKSPACE_ADOBERGB;
-                else if (interopIndex == QString::fromLatin1("R98"))
+                else if (interopIndex == QLatin1String("R98"))
                     return WORKSPACE_SRGB;
             }
         }
@@ -469,7 +469,7 @@ MetaEngine::ImageColorWorkSpace MetaEngine::getImageColorWorkSpace() const
         }
         // Exif.Nikon3.ColorMode is set to "MODE2" for AdobeRGB, but there are sometimes two ColorMode fields
         // in a NEF, with the first one "COLOR" and the second one "MODE2"; but in this case, ColorSpace (above) was set.
-        if (getExifTagString("Exif.Nikon3.ColorMode").contains(QString::fromLatin1("MODE2")))
+        if (getExifTagString("Exif.Nikon3.ColorMode").contains(QLatin1String("MODE2")))
             return WORKSPACE_ADOBERGB;
 
         //TODO: This makernote tag (0x00b4) must be added to libexiv2
@@ -513,7 +513,7 @@ bool MetaEngine::setImageColorWorkSpace(ImageColorWorkSpace workspace) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Exif color workspace tag using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot set Exif color workspace tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -540,7 +540,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != exifData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid())
@@ -555,7 +555,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != exifData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -571,7 +571,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != exifData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -596,7 +596,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -612,7 +612,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -628,7 +628,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -644,7 +644,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -660,7 +660,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -676,7 +676,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -692,7 +692,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -711,7 +711,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -727,7 +727,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -743,7 +743,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -759,7 +759,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -786,13 +786,13 @@ QDateTime MetaEngine::getImageDateTime() const
 
             if (it != iptcData.end())
             {
-                QString IptcDateCreated(QString::fromLatin1(it->toString().c_str()));
+                QString IptcDateCreated(QLatin1String(it->toString().c_str()));
                 Exiv2::IptcKey keyTimeCreated("Iptc.Application2.TimeCreated");
                 Exiv2::IptcData::const_iterator it2 = iptcData.findKey(keyTimeCreated);
 
                 if (it2 != iptcData.end())
                 {
-                    QString IptcTimeCreated(QString::fromLatin1(it2->toString().c_str()));
+                    QString IptcTimeCreated(QLatin1String(it2->toString().c_str()));
                     QDate date         = QDate::fromString(IptcDateCreated, Qt::ISODate);
                     QTime time         = QTime::fromString(IptcTimeCreated, Qt::ISODate);
                     QDateTime dateTime = QDateTime(date, time);
@@ -813,13 +813,13 @@ QDateTime MetaEngine::getImageDateTime() const
 
             if (it3 != iptcData.end())
             {
-                QString IptcDateDigitization(QString::fromLatin1(it3->toString().c_str()));
+                QString IptcDateDigitization(QLatin1String(it3->toString().c_str()));
                 Exiv2::IptcKey keyDigitizationTime("Iptc.Application2.DigitizationTime");
                 Exiv2::IptcData::const_iterator it4 = iptcData.findKey(keyDigitizationTime);
 
                 if (it4 != iptcData.end())
                 {
-                    QString IptcTimeDigitization(QString::fromLatin1(it4->toString().c_str()));
+                    QString IptcTimeDigitization(QLatin1String(it4->toString().c_str()));
                     QDate date         = QDate::fromString(IptcDateDigitization, Qt::ISODate);
                     QTime time         = QTime::fromString(IptcTimeDigitization, Qt::ISODate);
                     QDateTime dateTime = QDateTime(date, time);
@@ -865,7 +865,7 @@ QDateTime MetaEngine::getImageDateTime() const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot parse Exif date & time tag using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot parse Exif date & time tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -943,7 +943,7 @@ bool MetaEngine::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDig
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Date & Time into image using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot set Date & Time into image using Exiv2 "), e);
     }
     catch(...)
     {
@@ -971,7 +971,7 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
 
             if (it != exifData.end())
             {
-                QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                 dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                 if (dateTime.isValid())
@@ -994,7 +994,7 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -1010,7 +1010,7 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
@@ -1036,14 +1036,14 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
 
             if (it != iptcData.end())
             {
-                QString IptcDateDigitization(QString::fromLatin1(it->toString().c_str()));
+                QString IptcDateDigitization(QLatin1String(it->toString().c_str()));
 
                 Exiv2::IptcKey keyDigitizationTime("Iptc.Application2.DigitizationTime");
                 Exiv2::IptcData::const_iterator it2 = iptcData.findKey(keyDigitizationTime);
 
                 if (it2 != iptcData.end())
                 {
-                    QString IptcTimeDigitization(QString::fromLatin1(it2->toString().c_str()));
+                    QString IptcTimeDigitization(QLatin1String(it2->toString().c_str()));
 
                     QDate date         = QDate::fromString(IptcDateDigitization, Qt::ISODate);
                     QTime time         = QTime::fromString(IptcTimeDigitization, Qt::ISODate);
@@ -1091,7 +1091,7 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot parse Exif digitization date & time tag using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot parse Exif digitization date & time tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -1116,7 +1116,7 @@ bool MetaEngine::getImagePreview(QImage& preview) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get image preview using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot get image preview using Exiv2 "), e);
     }
     catch(...)
     {
@@ -1159,7 +1159,7 @@ bool MetaEngine::setImagePreview(const QImage& preview) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get image preview using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot get image preview using Exiv2 "), e);
     }
     catch(...)
     {

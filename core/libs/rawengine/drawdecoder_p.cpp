@@ -149,10 +149,10 @@ void DRawDecoder::Private::fillIndentifyInfo(LibRaw* const raw, RawInfo& identif
 
         for (int i=0; i < 16; i++)
         {
-            identify.filterPattern.append(QChar::fromLatin1(raw->imgdata.idata.cdesc[raw->COLOR(i >> 1, i & 1)]));
+            identify.filterPattern.append(QLatin1Char(raw->imgdata.idata.cdesc[raw->COLOR(i >> 1, i & 1)]));
         }
 
-        identify.colorKeys = QString::fromLatin1(raw->imgdata.idata.cdesc);
+        identify.colorKeys = QLatin1String(raw->imgdata.idata.cdesc);
     }
 
     for(int c = 0 ; c < raw->imgdata.idata.colors ; c++)

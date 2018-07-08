@@ -67,8 +67,8 @@ CalSettings::CalSettings(QObject* const parent)
 {
     params.drawLines = false;
     params.year      = CalSystem().earliestValidDate().year() + 1;
-    setPaperSize(QString::fromLatin1("A4"));
-    setResolution(QString::fromLatin1("High"));
+    setPaperSize(QLatin1String("A4"));
+    setResolution(QLatin1String("High"));
     setImagePos(0);
 }
 
@@ -110,13 +110,13 @@ QUrl CalSettings::image(int month) const
 
 void CalSettings::setPaperSize(const QString& paperSize)
 {
-    if (paperSize == QString::fromLatin1("A4"))
+    if (paperSize == QLatin1String("A4"))
     {
         params.paperWidth  = 210;
         params.paperHeight = 297;
         params.pageSize    = QPageSize::A4;
     }
-    else if (paperSize == QString::fromLatin1("US Letter"))
+    else if (paperSize == QLatin1String("US Letter"))
     {
         params.paperWidth  = 216;
         params.paperHeight = 279;
@@ -128,11 +128,11 @@ void CalSettings::setPaperSize(const QString& paperSize)
 
 void CalSettings::setResolution(const QString& resolution)
 {
-    if (resolution == QString::fromLatin1("High"))
+    if (resolution == QLatin1String("High"))
     {
         params.printResolution = QPrinter::HighResolution;
     }
-    else if (resolution == QString::fromLatin1("Low"))
+    else if (resolution == QLatin1String("Low"))
     {
         params.printResolution = QPrinter::ScreenResolution;
     }
@@ -219,7 +219,7 @@ void CalSettings::addSpecial(const QDate& date, const Day& info)
 {
     if (d->special.contains(date))
     {
-        d->special[date].second.append(QString::fromLatin1("; ")).append(info.second);
+        d->special[date].second.append(QLatin1String("; ")).append(info.second);
     }
     else
     {
@@ -299,7 +299,7 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
     KCalCore::MemoryCalendar::Ptr memCal(new KCalCore::MemoryCalendar(QTimeZone::utc()));
     using DateTime = QDateTime;
 #else
-    KCalCore::MemoryCalendar::Ptr memCal(new KCalCore::MemoryCalendar(QString::fromLatin1("UTC")));
+    KCalCore::MemoryCalendar::Ptr memCal(new KCalCore::MemoryCalendar(QLatin1String("UTC")));
     using DateTime = KDateTime;
 #endif
     KCalCore::FileStorage::Ptr fileStorage(new KCalCore::FileStorage(memCal, url.toLocalFile(), new KCalCore::ICalFormat));

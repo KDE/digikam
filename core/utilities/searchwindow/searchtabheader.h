@@ -62,6 +62,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void keywordChanged();
+    void keywordChangedTimer();
     void editCurrentAdvancedSearch();
     void saveSearch();
     void storedKeywordChanged();

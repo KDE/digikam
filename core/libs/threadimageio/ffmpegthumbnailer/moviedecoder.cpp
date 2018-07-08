@@ -128,7 +128,7 @@ QString MovieDecoder::getCodec() const
 
     if (d->pVideoCodec)
     {
-        codecName = QString::fromLatin1(d->pVideoCodec->name);
+        codecName = QLatin1String(d->pVideoCodec->name);
     }
 
     return codecName;

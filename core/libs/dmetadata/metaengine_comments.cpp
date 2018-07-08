@@ -88,9 +88,9 @@ QString MetaEngine::detectLanguageAlt(const QString& value, QString& lang)
 {
     // Ex. from an Xmp tag Xmp.tiff.copyright: "lang="x-default"
 
-    if (value.size() > 6 && value.startsWith(QString::fromLatin1("lang=\"")))
+    if (value.size() > 6 && value.startsWith(QLatin1String("lang=\"")))
     {
-        int pos = value.indexOf(QString::fromLatin1("\""), 6);
+        int pos = value.indexOf(QLatin1String("\""), 6);
 
         if (pos != -1)
         {

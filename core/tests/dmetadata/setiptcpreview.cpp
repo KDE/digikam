@@ -68,7 +68,7 @@ int main (int argc, char **argv)
     QImage preview2;
     DMetadata meta2(filePath);
     meta2.getImagePreview(preview2);
-    preview2.save(QString::fromLatin1("preview.png"), "PNG");
+    preview2.save(QLatin1String("preview.png"), "PNG");
 
     return 0;
 }

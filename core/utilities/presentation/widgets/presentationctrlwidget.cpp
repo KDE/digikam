@@ -45,17 +45,17 @@ PresentationCtrlWidget::PresentationCtrlWidget(QWidget* const parent)
 {
     setupUi(this);
     m_playButton->setCheckable(true);
-    m_slideLabel->setPixmap(QIcon::fromTheme(QString::fromLatin1("view-presentation")).pixmap(64, 64));
+    m_slideLabel->setPixmap(QIcon::fromTheme(QLatin1String("view-presentation")).pixmap(64, 64));
 
     m_prevButton->setText(QString());
     m_nextButton->setText(QString());
     m_playButton->setText(QString());
     m_stopButton->setText(QString());
 
-    m_prevButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-skip-backward")));
-    m_nextButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-skip-forward")));
-    m_playButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-playback-start")));
-    m_stopButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-playback-stop")));
+    m_prevButton->setIcon(QIcon::fromTheme(QLatin1String("media-skip-backward")));
+    m_nextButton->setIcon(QIcon::fromTheme(QLatin1String("media-skip-forward")));
+    m_playButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
+    m_stopButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-stop")));
 
     m_canHide = true;
 
@@ -124,13 +124,13 @@ void PresentationCtrlWidget::slotPlayButtonToggled()
     if (m_playButton->isChecked())
     {
         m_canHide = false;
-        m_playButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-playback-start")).pixmap(22));
+        m_playButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")).pixmap(22));
         emit signalPause();
     }
     else
     {
         m_canHide = true;
-        m_playButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-playback-pause")).pixmap(22));
+        m_playButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")).pixmap(22));
         emit signalPlay();
     }
 }
@@ -141,7 +141,7 @@ void PresentationCtrlWidget::slotNexPrevClicked()
     {
         m_playButton->setChecked(true);
         m_canHide = false;
-        m_playButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-playback-start")).pixmap(22));
+        m_playButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")).pixmap(22));
         emit signalPause();
     }
 }

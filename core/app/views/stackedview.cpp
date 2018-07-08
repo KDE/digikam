@@ -124,27 +124,30 @@ StackedView::StackedView(QWidget* const parent)
     d->imagePreviewView = new ImagePreviewView(this);
     d->thumbBarDock     = new ThumbBarDock();
     d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
-    d->thumbBar->setModelsFiltered(d->imageIconView->imageModel(), d->imageIconView->imageFilterModel());
+    d->thumbBar->setModelsFiltered(d->imageIconView->imageModel(),
+                                   d->imageIconView->imageFilterModel());
     d->thumbBar->installOverlays();
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName(QLatin1String("mainwindow_thumbbar"));
-    d->welcomePageView = new WelcomePageView(this);
-    d->tableView       = new TableView(d->imageIconView->getSelectionModel(),
-                                       d->imageIconView->imageFilterModel(),
-                                       this);
+    d->thumbBarDock->setWindowTitle(i18n("DigiKam Thumbnail Dock"));
+
+    d->welcomePageView  = new WelcomePageView(this);
+    d->tableView        = new TableView(d->imageIconView->getSelectionModel(),
+                                        d->imageIconView->imageFilterModel(),
+                                        this);
     d->tableView->setObjectName(QLatin1String("mainwindow_tableview"));
-    d->trashView = new TrashView(this);
+
+    d->trashView        = new TrashView(this);
 
 #ifdef HAVE_MARBLE
-    d->mapWidgetView   = new MapWidgetView(d->imageIconView->getSelectionModel(),
-                                           d->imageIconView->imageFilterModel(), this,
-                                           MapWidgetView::ApplicationDigikam
-                                          );
+    d->mapWidgetView    = new MapWidgetView(d->imageIconView->getSelectionModel(),
+                                            d->imageIconView->imageFilterModel(), this,
+                                            MapWidgetView::ApplicationDigikam);
     d->mapWidgetView->setObjectName(QLatin1String("mainwindow_mapwidgetview"));
 #endif // HAVE_MARBLE
 
 #ifdef HAVE_MEDIAPLAYER
-    d->mediaPlayerView = new MediaPlayerView(this);
+    d->mediaPlayerView  = new MediaPlayerView(this);
 #endif //HAVE_MEDIAPLAYER
 
     insertWidget(IconViewMode,     d->imageIconView);
@@ -233,7 +236,7 @@ StackedView::~StackedView()
 void StackedView::readSettings()
 {
     ApplicationSettings* settings = ApplicationSettings::instance();
-    bool showThumbbar       = settings->getShowThumbbar();
+    bool showThumbbar             = settings->getShowThumbbar();
     d->thumbBarDock->setShouldBeVisible(showThumbbar);
 }
 
@@ -336,8 +339,7 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
     {
         if (info.category() == DatabaseItem::Audio      ||
             info.category() == DatabaseItem::Video      ||
-            DImg::isAnimatedImage(info.fileUrl().toLocalFile())        // Special case for animated image as GIF or NMG
-           )
+            DImg::isAnimatedImage(info.fileUrl().toLocalFile()))    // Special case for animated image as GIF or NMG
         {
             // Stop image viewer
 
