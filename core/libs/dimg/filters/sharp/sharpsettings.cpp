@@ -562,11 +562,11 @@ void SharpSettings::saveAsSettings()
         stream << QLatin1String("# Photograph Refocus Configuration File\n");
 
 #ifdef HAVE_EIGEN3
-        stream << d->matrixSize->value()  << QLatin1String("\n");
-        stream << d->radius->value()      << QLatin1String("\n");
-        stream << d->gauss->value()       << QLatin1String("\n");
-        stream << d->correlation->value() << QLatin1String("\n");
-        stream << d->noise->value()       << QLatin1String("\n");
+        stream << d->matrixSize->value()  << QLatin1Char('\n');
+        stream << d->radius->value()      << QLatin1Char('\n');
+        stream << d->gauss->value()       << QLatin1Char('\n');
+        stream << d->correlation->value() << QLatin1Char('\n');
+        stream << d->noise->value()       << QLatin1Char('\n');
 #endif // HAVE_EIGEN3
 
     }

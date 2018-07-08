@@ -431,12 +431,12 @@ void NRSettings::saveAsSettings()
     {
         QTextStream stream(&file);
         stream << QLatin1String("# Photograph Wavelets Noise Reduction Configuration File V2\n");
-        stream << d->thrLumInput->value()  << QLatin1String("\n");
-        stream << d->softLumInput->value() << QLatin1String("\n");
-        stream << d->thrCrInput->value()   << QLatin1String("\n");
-        stream << d->softCrInput->value()  << QLatin1String("\n");
-        stream << d->thrCbInput->value()   << QLatin1String("\n");
-        stream << d->softCbInput->value()  << QLatin1String("\n");
+        stream << d->thrLumInput->value()  << QLatin1Char('\n');
+        stream << d->softLumInput->value() << QLatin1Char('\n');
+        stream << d->thrCrInput->value()   << QLatin1Char('\n');
+        stream << d->softCrInput->value()  << QLatin1Char('\n');
+        stream << d->thrCbInput->value()   << QLatin1Char('\n');
+        stream << d->softCbInput->value()  << QLatin1Char('\n');
     }
     else
     {

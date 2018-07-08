@@ -151,7 +151,7 @@ void DHistoryView::slotCopy2ClipBoard()
         textInfo.append((*it)->text(1));
         textInfo.append(QLatin1String(" :: "));
         textInfo.append((*it)->text(2));
-        textInfo.append(QLatin1String("\n"));
+        textInfo.append(QLatin1Char('\n'));
         ++it;
     }
 

@@ -180,7 +180,7 @@ MetaEngine::MetaDataMap MetaEngine::getIptcTagsDataList(const QStringList& iptcK
             }
 
             // To make a string just on one line.
-            value.replace(QLatin1String("\n"), QLatin1String(" "));
+            value.replace(QLatin1Char('\n'), QLatin1String(" "));
 
             // Some Iptc key are redondancy. check if already one exist...
             MetaDataMap::const_iterator it = metaDataMap.constFind(key);
@@ -400,7 +400,7 @@ QString MetaEngine::getIptcTagString(const char* iptcTagName, bool escapeCR) con
             QString tagValue(QLatin1String(os.str().c_str()));
 
             if (escapeCR)
-                tagValue.replace(QLatin1String("\n"), QLatin1String(" "));
+                tagValue.replace(QLatin1Char('\n'), QLatin1String(" "));
 
             return tagValue;
         }
@@ -458,7 +458,7 @@ QStringList MetaEngine::getIptcTagsStringList(const char* iptcTagName, bool esca
                     QString tagValue = QString::fromUtf8(it->toString().c_str());
 
                     if (escapeCR)
-                        tagValue.replace(QLatin1String("\n"), QLatin1String(" "));
+                        tagValue.replace(QLatin1Char('\n'), QLatin1String(" "));
 
                     values.append(tagValue);
                 }

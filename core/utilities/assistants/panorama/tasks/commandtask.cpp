@@ -94,7 +94,7 @@ QString CommandTask::getProcessError()
         return QString();
     return (i18n("<b>Cannot run <i>%1</i>:</b><p>%2</p>",
                  getProgram(),
-                 output.toHtmlEscaped().replace(QLatin1String("\n"), QLatin1String("<br />"))));
+                 output.toHtmlEscaped().replace(QLatin1Char('\n'), QLatin1String("<br />"))));
 }
 
 void CommandTask::printDebug(const QString& binaryName)
