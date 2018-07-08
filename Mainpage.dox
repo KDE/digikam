@@ -6,7 +6,7 @@
 \section sourcedirs Source Code Directories
 
    digiKam is split into a number of components, each ones located to a dedicated directory.
-   The main namespace is Digikam for the digiKam application and all sub components. A second one is Showfoto for the stand alone version of image editor.
+   The main namespace is Digikam for the digiKam application and all sub components. A second one is ShowFoto for the stand alone version of image editor.
 
    See below the complete list of directories used by the project:
 
