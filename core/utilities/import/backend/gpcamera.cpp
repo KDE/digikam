@@ -1665,8 +1665,8 @@ int GPCamera::autoDetect(QString& model, QString& port)
 
         if (camModel_ && camPort_)
         {
-            model = QString::fromLatin1(camModel_);
-            port  = QString::fromLatin1(camPort_);
+            model = QLatin1String(camModel_);
+            port  = QLatin1String(camPort_);
             gp_list_free(camList);
             return 0;
         }
@@ -1785,8 +1785,8 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
                                   << "only the first camera is used.";
        }
 
-       model   = QString::fromLatin1(model_str);
-       port    = QString::fromLatin1(port_str);
+       model   = QLatin1String(model_str);
+       port    = QLatin1String(port_str);
        success = true;
     }
     else

@@ -220,7 +220,7 @@ void MetadataEditDialog::updatePreview()
     QByteArray byteArray;
     QBuffer    buffer(&byteArray);
     img.save(&buffer, "PNG");
-    d->preview = QString::fromLatin1("<img src=\"data:image/png;base64,%1\">  ").arg(QString::fromLatin1(byteArray.toBase64().data()));
+    d->preview = QString::fromLatin1("<img src=\"data:image/png;base64,%1\">  ").arg(QLatin1String(byteArray.toBase64().data()));
 
     d->catcher->setActive(false);
 }

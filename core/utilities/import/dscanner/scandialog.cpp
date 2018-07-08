@@ -157,7 +157,7 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
 
     foreach (QByteArray mimeType, supported)
     {
-        writableMimetypes.append(QString::fromLatin1(mimeType));
+        writableMimetypes.append(QLatin1String(mimeType));
     }
 
     // Put first class citizens at first place
