@@ -42,7 +42,7 @@ int main (int argc, char **argv)
         return -1;
     }
 
-    QString filePath(QLatin1String(argv[1]));
+    QString filePath = QLatin1String(argv[1]);
 
     DMetadata meta;
     meta.setUseXMPSidecar4Reading(true);
