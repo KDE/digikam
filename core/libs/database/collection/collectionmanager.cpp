@@ -860,7 +860,7 @@ CollectionLocation CollectionManager::addLocation(const QUrl& fileUrl, const QSt
         qCWarning(DIGIKAM_DATABASE_LOG) << "Unable to identify a path with Solid. Adding the location with path only.";
         ChangingDB changing(d);
         CoreDbAccess().db()->addAlbumRoot(AlbumRoot::VolumeHardWired,
-                                            d->volumeIdentifier(path), QLatin1String("/"), label);
+                                          d->volumeIdentifier(path), QLatin1String("/"), label);
     }
 
     // Do not emit the locationAdded signal here, it is done in updateLocations()

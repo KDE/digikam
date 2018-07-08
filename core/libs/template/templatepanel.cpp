@@ -449,7 +449,7 @@ TemplatePanel::~TemplatePanel()
 
 void TemplatePanel::setTemplate(const Template& t)
 {
-    d->authorsEdit->setText(t.authors().join(QLatin1String(";")));
+    d->authorsEdit->setText(t.authors().join(QLatin1Char(';')));
     d->authorsPositionEdit->setText(t.authorsPosition());
     d->creditEdit->setText(t.credit());
     d->copyrightEdit->setValues(t.copyright());

@@ -193,7 +193,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
                 // We using the filter to make a more user friendly output (Custom Mode)
 
                 // Filter is not a list of complete tag keys
-                if (!filters.at(0).contains(QLatin1String(".")) && filters.contains(it.key().section(QLatin1Char('.'), 2, 2)))
+                if (!filters.at(0).contains(QLatin1Char('.')) && filters.contains(it.key().section(QLatin1Char('.'), 2, 2)))
                 {
                     QString tagTitle = m_parent->getTagTitle(it.key());
                     new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
@@ -218,7 +218,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     }
 
     // Add not found tags from filter as grey items.
-    if (!filters.isEmpty() && filters.at(0) != QLatin1String("FULL") && filters.at(0).contains(QLatin1String(".")))
+    if (!filters.isEmpty() && filters.at(0) != QLatin1String("FULL") && filters.at(0).contains(QLatin1Char('.')))
     {
         foreach(const QString& key, filters)
         {
@@ -290,7 +290,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
                         // We using the filter to make a more user friendly output (Custom Mode)
 
                         // Filter is not a list of complete tag keys
-                        if (!filters.at(0).contains(QLatin1String(".")) && filters.contains(it.key().section(QLatin1Char('.'), 2, 2)))
+                        if (!filters.at(0).contains(QLatin1Char('.')) && filters.contains(it.key().section(QLatin1Char('.'), 2, 2)))
                         {
                             QString tagTitle = m_parent->getTagTitle(it.key());
                             new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
@@ -317,7 +317,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     }
 
     // Add not found tags from filter as grey items.
-    if (!filters.isEmpty() && filters.at(0) != QLatin1String("FULL") && filters.at(0).contains(QLatin1String(".")))
+    if (!filters.isEmpty() && filters.at(0) != QLatin1String("FULL") && filters.at(0).contains(QLatin1Char('.')))
     {
         foreach(const QString& key, filters)
         {

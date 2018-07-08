@@ -365,7 +365,7 @@ void AlbumHistory::getBackwardHistory(QStringList& list) const
 
                 if (iter+1 < it->albums.size())
                 {
-                    name.append(QLatin1String("/"));
+                    name.append(QLatin1Char('/'));
                 }
             }
 
@@ -395,7 +395,7 @@ void AlbumHistory::getForwardHistory(QStringList& list) const
 
                 if (iter+1 < it->albums.size())
                 {
-                    name.append(QLatin1String("/"));
+                    name.append(QLatin1Char('/'));
                 }
             }
 

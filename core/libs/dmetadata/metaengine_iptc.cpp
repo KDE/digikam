@@ -191,7 +191,7 @@ MetaEngine::MetaDataMap MetaEngine::getIptcTagsDataList(const QStringList& iptcK
             {
                 if (!invertSelection)
                 {
-                    if (iptcKeysFilter.contains(key.section(QLatin1String("."), 1, 1)))
+                    if (iptcKeysFilter.contains(key.section(QLatin1Char('.'), 1, 1)))
                     {
                         if (it == metaDataMap.constEnd())
                         {
@@ -208,7 +208,7 @@ MetaEngine::MetaDataMap MetaEngine::getIptcTagsDataList(const QStringList& iptcK
                 }
                 else
                 {
-                    if (!iptcKeysFilter.contains(key.section(QLatin1String("."), 1, 1)))
+                    if (!iptcKeysFilter.contains(key.section(QLatin1Char('.'), 1, 1)))
                     {
                         if (it == metaDataMap.constEnd())
                         {

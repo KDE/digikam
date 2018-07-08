@@ -526,7 +526,7 @@ public:
 
             foreach(const QString& value, values)
             {
-                if (value.contains(QLatin1String("*")))
+                if (value.contains(QLatin1Char('*')))
                 {
                     wildcards << value;
                 }
@@ -573,7 +573,7 @@ public:
         {
             QString value = reader.value();
 
-            if (relation == SearchXml::Like && value.contains(QLatin1String("*")))
+            if (relation == SearchXml::Like && value.contains(QLatin1Char('*')))
             {
                 // Handle special case: * denotes the place if the wildcard,
                 // Don't automatically prepend and append %
