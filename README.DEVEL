@@ -1,3 +1,5 @@
-See Doxygen section 'getsourcecode' from API documentation.
+See The API documentation to generate with Doxygen.
 
-Online version: https://www.digikam.org/api/index.html#getsourcecode
+Install Doxygen and Graphviz, and then run make doc from build directory.
+
+Online version: https://www.digikam.org/api/index.html
