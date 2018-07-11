@@ -26,15 +26,12 @@
 |├── download-repos                                           | Script to download all source code including extra repositories         |
 |├── gits                                                     | Script to perform git in reccursive mode over multiple repositories     |
 |├── gitup                                                    | Script to perform git pull --rebase in reccursive mode                  |
-|├── INSTALL                                                  | Project install notice                                                  |
 |├── Mainpage.dox                                             | API documentation main page based on Doxygen                            |
 |├── Messages.sh                                              | Script to extract strings for translators                               |
-|├── NEWS                                                     | Notice to resume all main project changes done at release time          |
+|├── NEWS                                                     | Notice to resume all project changes done at release time               |
 |├── README.DEVEL                                             | Read me file for developers                                             |
 |├── README.md                                                | First start helper documentation                                        |
-|├── README.MACOS                                             | Read me for MacOs support                                               |
-|├── README.WINDOWS                                           | Read me for Windows support                                             |
-|├── TODO                                                     | List of project pending tasks                                           |
+|├── README.BUNDLES                                           | Read me for Linux, MacOs, and Windows bundles support                   |
 |├── build                                                    | Directory to store compiled files and binary targets                    |
 |├── core                                                     | All source code are hosted in this directory                            |
 |│   ├── app                                                  | Lead application component                                              |
