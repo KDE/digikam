@@ -163,6 +163,7 @@
         <Action name="export_googlephoto" />
         <Action name="export_imageshack" />
         <Action name="export_imgur" />
+        <Action name="export_onedrive" />
         <Action name="export_rajce" />
         <Action name="export_smugmug" />
         <Action name="export_yandexfotki" />

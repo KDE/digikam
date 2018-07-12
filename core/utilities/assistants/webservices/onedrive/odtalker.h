@@ -61,7 +61,7 @@ public:
     void cancel();
     bool addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality);
     void listFolders(const QString& path = QString());
-    void createFolder(const QString& path);
+    void createFolder(QString& path);
     void setAccessToken(const QString& token);
     QMap<QString,QString> ParseUrlParameters(const QString& url);
 
@@ -78,18 +78,20 @@ Q_SIGNALS:
     void signalAddPhotoFailed(const QString& msg);
     void signalAddPhotoSucceeded();
     void oneDriveLinkingSucceeded();
+    void oneDriveLinkingFailed();
 
 private Q_SLOTS:
 
     void slotLinkingFailed();
     void slotLinkingSucceeded();
-    void slotOpenBrowser(const QUrl& url);
+    void slotCatchUrl(const QUrl& url);
     void slotFinished(QNetworkReply* reply);
 
 private:
 
     void parseResponseUserName(const QByteArray& data);
     void parseResponseListFolders(const QByteArray& data);
+    //QList<QPair<QString, QString> > parseListFoldersRequest(const QByteArray& data);
     void parseResponseCreateFolder(const QByteArray& data);
     void parseResponseAddPhoto(const QByteArray& data);
 

@@ -127,7 +127,6 @@ set(libwsonedrive_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odnewalbumdlg.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odwidget.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odwindow.cpp
 )
-
 # SmugMug tool -------------------------------------------------------------
 
 set(libwssmugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugnewalbumdlg.cpp

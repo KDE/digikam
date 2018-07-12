@@ -1503,6 +1503,12 @@ void ShowFoto::slotExportTool()
         w->exec();
         delete w;
     }
+    /*else if (tool == m_exportTwitterAction)
+    {
+        QPointer<ODWindow> w = new TwWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
+    }*/
     else if (tool == m_exportFacebookAction)
     {
         QPointer<FbWindow> w = new FbWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);

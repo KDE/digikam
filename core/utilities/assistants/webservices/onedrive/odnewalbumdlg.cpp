@@ -46,8 +46,7 @@ ODNewAlbumDlg::~ODNewAlbumDlg()
 
 void ODNewAlbumDlg::getFolderTitle(ODFolder& folder)
 {
-    folder.title = QLatin1String("/") + getTitleEdit()->text();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getFolderTitle:" << folder.title;
+    folder.title = "/" + getTitleEdit()->text();
 }
 
 } // namespace Digikam

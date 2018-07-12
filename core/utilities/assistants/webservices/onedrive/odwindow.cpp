@@ -138,8 +138,8 @@ void ODWindow::readSettings()
 {
     KConfig config;
     KConfigGroup grp   = config.group("Onedrive Settings");
-
     d->currentAlbumName = grp.readEntry("Current Album",QString());
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "readsettings:" << d->currentAlbumName;
 
     if (grp.readEntry("Resize", false))
     {
@@ -224,7 +224,8 @@ void ODWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
         d->widget->getAlbumsCoB()->addItem(
         QIcon::fromTheme(QLatin1String("system-users")),
         list.value(i).second, list.value(i).first);
-
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" << list.value(i).second << " " << list.value(i).first;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" <<d->currentAlbumName;
         if (d->currentAlbumName == list.value(i).first)
         {
             d->widget->getAlbumsCoB()->setCurrentIndex(i);
@@ -275,6 +276,7 @@ void ODWindow::slotStartTransfer()
     }
 
     d->currentAlbumName = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "StartTransfer:" << d->currentAlbumName << "INDEX: " << d->widget->getAlbumsCoB()->currentIndex();
     d->imagesTotal = d->transferQueue.count();
     d->imagesCount = 0;
 
@@ -318,7 +320,7 @@ void ODWindow::uploadNextPhoto()
 void ODWindow::slotAddPhotoFailed(const QString& msg)
 {
     if (QMessageBox::question(this, i18n("Uploading Failed"),
-                              i18n("Failed to upload photo to Dropbox."
+                              i18n("Failed to upload photo to OneDrive."
                                    "\n%1\n"
                                    "Do you want to continue?", msg))
         != QMessageBox::Yes)

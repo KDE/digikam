@@ -207,7 +207,7 @@ void DBTalker::createFolder(const QString& path)
     netRequest.setRawHeader("Authorization", QString::fromLatin1("Bearer %1").arg(d->o2->token()).toUtf8());
 
     QByteArray postData = QString::fromUtf8("{\"path\": \"%1\"}").arg(path).toUtf8();
-
+qCDebug(DIGIKAM_WEBSERVICES_LOG) << "createFolder:" << postData;
     d->reply = d->netMngr->post(netRequest, postData);
 
     d->state = Private::DB_CREATEFOLDER;
@@ -252,6 +252,9 @@ void DBTalker::listFolders(const QString& path)
 
 bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality)
 {
+  qCDebug(DIGIKAM_WEBSERVICES_LOG) << "PATH " << imgPath;
+  qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Folder " << uploadFolder;
+  qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Others: " << rescale << " " << maxDim << " " <<imageQuality;
     if (d->reply)
     {
         d->reply->abort();
@@ -270,7 +273,7 @@ bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     QString path = WSToolUtils::makeTemporaryDir("dropbox").filePath(QFileInfo(imgPath)
                                                  .baseName().trimmed() + QLatin1String(".jpg"));
-
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "maketempdir " << path;
     if (rescale && (image.width() > maxDim || image.height() > maxDim))
     {
         image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
@@ -295,12 +298,14 @@ bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     QString uploadPath = uploadFolder + QUrl(QUrl::fromLocalFile(imgPath)).fileName();
     QUrl url(QLatin1String("https://content.dropboxapi.com/2/files/upload"));
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "upload path " << uploadPath;
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/octet-stream"));
     netRequest.setRawHeader("Authorization", QString::fromLatin1("Bearer %1").arg(d->o2->token()).toUtf8());
 
     QByteArray postData = QString::fromUtf8("{\"path\": \"%1\",\"mode\": \"add\"}").arg(uploadPath).toUtf8();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "postData " << postData;
     netRequest.setRawHeader("Dropbox-API-Arg", postData);
 
     d->reply = d->netMngr->post(netRequest, form.formData());
@@ -430,6 +435,7 @@ void DBTalker::parseResponseListFolders(const QByteArray& data)
         {
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Path is" << path;
             QString name = path.section(QLatin1Char('/'), -1);
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "name is" << name;
             list.append(qMakePair(path, name));
         }
     }
