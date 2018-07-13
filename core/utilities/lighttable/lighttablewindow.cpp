@@ -273,7 +273,6 @@ void LightTableWindow::closeEvent(QCloseEvent* e)
     writeSettings();
 
     DXmlGuiWindow::closeEvent(e);
-    e->accept();
 }
 
 void LightTableWindow::showEvent(QShowEvent*)
@@ -317,6 +316,7 @@ void LightTableWindow::setupUserArea()
     // The thumb bar is placed in a detachable/dockable widget.
     d->barViewDock = new ThumbBarDock(viewContainer, Qt::Tool);
     d->barViewDock->setObjectName(QLatin1String("lighttable_thumbbar"));
+    d->barViewDock->setWindowTitle(i18n("Light Table Thumbnail Dock"));
 
     d->thumbView   = new LightTableThumbBar(d->barViewDock);
 

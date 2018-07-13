@@ -116,15 +116,15 @@ QString s_setXmpTagStringFromEntry(DMetadata* const meta,
 
 QStringList s_keywordsSeparation(const QString& data)
 {
-    QStringList keywords = data.split(QLatin1String("/"));
+    QStringList keywords = data.split(QLatin1Char('/'));
 
     if (keywords.isEmpty())
     {
-        keywords = data.split(QLatin1String(","));
+        keywords = data.split(QLatin1Char(','));
 
         if (keywords.isEmpty())
         {
-            keywords = data.split(QLatin1String(" "));
+            keywords = data.split(QLatin1Char(' '));
         }
     }
 
@@ -208,7 +208,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     qCDebug(DIGIKAM_METAENGINE_LOG) << "Parse metadada with FFMpeg:" << filePath;
 
+#if LIBAVFORMAT_VERSION_MAJOR < 58
     av_register_all();
+#endif
 
     AVFormatContext* fmt_ctx = avformat_alloc_context();
     int ret                  = avformat_open_input(&fmt_ctx, filePath.toUtf8().data(), NULL, NULL);

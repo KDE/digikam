@@ -38,10 +38,12 @@
 #include <QLineEdit>
 #include <QInputDialog>
 #include <QIcon>
+#include <QMenu>
 
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -63,7 +65,11 @@ public:
     explicit KeywordLineEdit(QWidget* const parent = 0)
         : QLineEdit(parent)
     {
-        m_hasAdvanced = false;
+        m_hasAdvanced             = false;
+
+        KSharedConfig::Ptr config = KSharedConfig::openConfig();
+        KConfigGroup group        = config->group(QLatin1String("KeywordSearchEdit Settings"));
+        m_autoSearch              = group.readEntry(QLatin1String("Autostart Search"), true);
     }
 
     void showAdvancedSearch(bool hasAdvanced)
@@ -97,6 +103,28 @@ public:
         }
     }
 
+    void contextMenuEvent(QContextMenuEvent* e)
+    {
+        QAction* const action = new QAction(i18nc("@action:inmenu",
+                                                  "Autostart Search"), this);
+        action->setCheckable(true);
+        action->setChecked(m_autoSearch);
+
+        connect(action, &QAction::triggered,
+                this, &KeywordLineEdit::toggleAutoSearch);
+
+        QMenu* const menu = createStandardContextMenu();
+        menu->addSeparator();
+        menu->addAction(action);
+        menu->exec(e->globalPos());
+        delete menu;
+    }
+
+    bool autoSearchEnabled() const
+    {
+        return m_autoSearch;
+    }
+
     void adjustStatus(bool adv)
     {
         if (adv)
@@ -118,9 +146,21 @@ public:
         }
     }
 
+public Q_SLOTS:
+
+    void toggleAutoSearch()
+    {
+        m_autoSearch              = !m_autoSearch;
+
+        KSharedConfig::Ptr config = KSharedConfig::openConfig();
+        KConfigGroup group        = config->group(QLatin1String("KeywordSearchEdit Settings"));
+        group.writeEntry(QLatin1String("Autostart Search"), m_autoSearch);
+    }
+
 protected:
 
     bool m_hasAdvanced;
+    bool m_autoSearch;
 };
 
 // -------------------------------------------------------------------------
@@ -298,7 +338,7 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
             d->keywordEditTimer, SLOT(start()));
 
     connect(d->keywordEditTimer, SIGNAL(timeout()),
-            this, SLOT(keywordChanged()));
+            this, SLOT(keywordChangedTimer()));
 
     connect(d->keywordEdit, SIGNAL(editingFinished()),
             this, SLOT(keywordChanged()));
@@ -346,7 +386,6 @@ SearchWindow* SearchTabHeader::searchWindow() const
 
 void SearchTabHeader::selectedSearchChanged(Album* a)
 {
-
     SAlbum* album = dynamic_cast<SAlbum*>(a);
 
     // Signal from SearchFolderView that a search has been selected.
@@ -449,6 +488,14 @@ void SearchTabHeader::keywordChanged()
 
     setCurrentSearch(DatabaseSearch::KeywordSearch, queryFromKeywords(keywords));
     d->keywordEdit->setFocus();
+}
+
+void SearchTabHeader::keywordChangedTimer()
+{
+    if (d->keywordEdit->autoSearchEnabled())
+    {
+        keywordChanged();
+    }
 }
 
 void SearchTabHeader::editCurrentAdvancedSearch()

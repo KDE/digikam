@@ -24,6 +24,8 @@ FLEX_TARGET(PTOScanner ptoparser/panoScanner.l ${CMAKE_CURRENT_BINARY_DIR}/panoS
 BISON_TARGET(PTOParser ptoparser/panoParser.y  ${CMAKE_CURRENT_BINARY_DIR}/panoParser.c)
 ADD_FLEX_BISON_DEPENDENCY(PTOScanner PTOParser)
 
+set_property(SOURCE panoParser.h PROPERTY SKIP_AUTOMOC ON)
+
 # =======================================================
 
 set(libpanorama_SRCS

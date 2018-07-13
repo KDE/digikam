@@ -114,7 +114,7 @@ void HTMLWidget::slotHTMLCompleted(bool ok)
 
 void HTMLWidget::mousePressEvent(QMouseEvent* e)
 {
-    slotScanForJSMessages(QString::fromLatin1("(event)"));
+    slotScanForJSMessages(QLatin1String("(event)"));
     QWebView::mousePressEvent(e);
 }
 
@@ -173,8 +173,7 @@ void HTMLWidget::mouseReleaseEvent(QMouseEvent* e)
 
             const GeoCoordinates::Pair selectionCoordinates(
                     GeoCoordinates(latNorth, lonWest),
-                    GeoCoordinates(latSouth, lonEast)
-                );
+                    GeoCoordinates(latSouth, lonEast));
 
             d->firstSelectionPoint.clear();
             d->intermediateSelectionPoint.clear();
@@ -183,7 +182,7 @@ void HTMLWidget::mouseReleaseEvent(QMouseEvent* e)
         }
     }
 
-    slotScanForJSMessages(QString::fromLatin1("(event)"));
+    slotScanForJSMessages(QLatin1String("(event)"));
     QWebView::mouseReleaseEvent(e);
 }
 
@@ -199,7 +198,7 @@ void HTMLWidget::mouseMoveEvent(QMouseEvent *e)
 
         d->intermediateSelectionScreenPoint = QPoint(e->x(), e->y());
 
-        qCDebug(DIGIKAM_GEOIFACE_LOG) << d->firstSelectionScreenPoint << QLatin1String(" ")
+        qCDebug(DIGIKAM_GEOIFACE_LOG) << d->firstSelectionScreenPoint << QLatin1Char(' ')
                                       << d->intermediateSelectionScreenPoint;
 
         qreal lonWest, latNorth, lonEast, latSouth;
@@ -300,7 +299,7 @@ void HTMLWidget::setSelectionRectangle(const GeoCoordinates::Pair& searchCoordin
 {
     if (!searchCoordinates.first.hasCoordinates())
     {
-        runScript(QString::fromLatin1("kgeomapRemoveSelectionRectangle();"));
+        runScript(QLatin1String("kgeomapRemoveSelectionRectangle();"));
         return;
     }
 

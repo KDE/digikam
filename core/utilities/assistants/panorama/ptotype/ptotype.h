@@ -370,7 +370,7 @@ struct PTOType
     }
 
     explicit PTOType(const QString& version)
-      : version(version.split(QChar::fromLatin1('.'))[0].toInt() >= 2014 ? V2014 : PRE_V2014)
+      : version(version.split(QLatin1Char('.'))[0].toInt() >= 2014 ? V2014 : PRE_V2014)
     {
     }
 

@@ -307,7 +307,7 @@ void SlideProperties::printComments(QPainter& p, int& offset, const QString& com
 
             if (breakLine)
             {
-                newLine.append(QLatin1String(" "));
+                newLine.append(QLatin1Char(' '));
             }
             else
             {

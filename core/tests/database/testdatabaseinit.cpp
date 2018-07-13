@@ -61,8 +61,8 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    KAboutData aboutData(QString::fromLatin1("digikam"),
-                         QString::fromLatin1("digiKam"), // No need i18n here.
+    KAboutData aboutData(QLatin1String("digikam"),
+                         QLatin1String("digiKam"), // No need i18n here.
                          digiKamVersion());
 
     QApplication app(argc, argv);
@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 
     qDebug() << "Setup Database...";
     DbEngineParameters params;
-    QString dbtype = QString::fromLatin1(argv[1]);
+    QString dbtype = QLatin1String(argv[1]);
 
     // ------------------------------------------------------------------------------------
 

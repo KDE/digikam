@@ -203,7 +203,7 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs1;
     tagNs1.namespaceName    = QLatin1String("Xmp.digiKam.TagsList");
     tagNs1.tagPaths         = NamespaceEntry::TAGPATH;
-    tagNs1.separator        = QLatin1String("/");
+    tagNs1.separator        = QLatin1Char('/');
     tagNs1.nsType           = NamespaceEntry::TAGS;
     tagNs1.index            = 0;
     tagNs1.specialOpts      = NamespaceEntry::TAG_XMPSEQ;
@@ -212,7 +212,7 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs2;
     tagNs2.namespaceName    = QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP");
     tagNs2.tagPaths         = NamespaceEntry::TAGPATH;
-    tagNs2.separator        = QLatin1String("/");
+    tagNs2.separator        = QLatin1Char('/');
     tagNs2.nsType           = NamespaceEntry::TAGS;
     tagNs2.index            = 1;
     tagNs2.specialOpts      = NamespaceEntry::TAG_XMPBAG;
@@ -221,7 +221,7 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs3;
     tagNs3.namespaceName    = QLatin1String("Xmp.lr.hierarchicalSubject");
     tagNs3.tagPaths         = NamespaceEntry::TAGPATH;
-    tagNs3.separator        = QLatin1String("|");
+    tagNs3.separator        = QLatin1Char('|');
     tagNs3.nsType           = NamespaceEntry::TAGS;
     tagNs3.index            = 2;
     tagNs3.specialOpts      = NamespaceEntry::TAG_XMPBAG;
@@ -232,7 +232,7 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs4;
     tagNs4.namespaceName    = QLatin1String("Xmp.mediapro.CatalogSets");
     tagNs4.tagPaths         = NamespaceEntry::TAGPATH;
-    tagNs4.separator        = QLatin1String("|");
+    tagNs4.separator        = QLatin1Char('|');
     tagNs4.nsType           = NamespaceEntry::TAGS;
     tagNs4.index            = 3;
     tagNs4.specialOpts      = NamespaceEntry::TAG_XMPBAG;
@@ -241,7 +241,7 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs5;
     tagNs5.namespaceName    = QLatin1String("Xmp.acdsee.categories");
     tagNs5.tagPaths         = NamespaceEntry::TAGPATH;
-    tagNs5.separator        = QLatin1String("/");
+    tagNs5.separator        = QLatin1Char('/');
     tagNs5.nsType           = NamespaceEntry::TAGS;
     tagNs5.index            = 4;
     tagNs5.specialOpts      = NamespaceEntry::TAG_ACDSEE;
@@ -250,7 +250,7 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs6;
     tagNs6.namespaceName    = QLatin1String("Xmp.dc.subject");
     tagNs6.tagPaths         = NamespaceEntry::TAG;
-    tagNs6.separator        = QLatin1String("/");
+    tagNs6.separator        = QLatin1Char('/');
     tagNs6.nsType           = NamespaceEntry::TAGS;
     tagNs6.index            = 5;
     tagNs6.specialOpts      = NamespaceEntry::TAG_XMPBAG;
@@ -259,7 +259,7 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs7;
     tagNs7.namespaceName    = QLatin1String("Iptc.Application2.Keywords");
     tagNs7.tagPaths         = NamespaceEntry::TAGPATH;
-    tagNs7.separator        = QLatin1String(".");
+    tagNs7.separator        = QLatin1Char('.');
     tagNs7.nsType           = NamespaceEntry::TAGS;
     tagNs7.index            = 6;
     tagNs7.subspace         = NamespaceEntry::IPTC;
@@ -267,7 +267,7 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs8;
     tagNs8.namespaceName    = QLatin1String("Exif.Image.XPKeywords");
     tagNs8.tagPaths         = NamespaceEntry::TAGPATH;
-    tagNs8.separator        = QLatin1String(";");
+    tagNs8.separator        = QLatin1Char(';');
     tagNs8.nsType           = NamespaceEntry::TAGS;
     tagNs8.index            = 7;
     tagNs8.subspace         = NamespaceEntry::EXIF;

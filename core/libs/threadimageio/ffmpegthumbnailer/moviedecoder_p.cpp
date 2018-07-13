@@ -323,10 +323,34 @@ void MovieDecoder::Private::convertAndScaleFrame(AVPixelFormat format,
                                                  int& scaledWidth,
                                                  int& scaledHeight)
 {
+    AVPixelFormat pVideoCodecContextPixFormat;
+    pVideoCodecContextPixFormat = pVideoCodecContext->pix_fmt;
+
+#if LIBAVUTIL_VERSION_MAJOR > 55
+    switch (pVideoCodecContextPixFormat)
+    {
+        case AV_PIX_FMT_YUVJ420P:
+            pVideoCodecContextPixFormat = AV_PIX_FMT_YUV420P;
+            break;
+        case AV_PIX_FMT_YUVJ422P:
+            pVideoCodecContextPixFormat = AV_PIX_FMT_YUV422P;
+            break;
+        case AV_PIX_FMT_YUVJ444P:
+            pVideoCodecContextPixFormat = AV_PIX_FMT_YUV444P;
+            break;
+        case AV_PIX_FMT_YUVJ440P:
+            pVideoCodecContextPixFormat = AV_PIX_FMT_YUV440P;
+            break;
+        default:
+            break;
+    }
+#endif
+
     calculateDimensions(scaledSize, maintainAspectRatio, scaledWidth, scaledHeight);
+
     SwsContext* const scaleContext = sws_getContext(pVideoCodecContext->width,
                                                     pVideoCodecContext->height,
-                                                    pVideoCodecContext->pix_fmt,
+                                                    pVideoCodecContextPixFormat,
                                                     scaledWidth,
                                                     scaledHeight,
                                                     format,

@@ -58,13 +58,6 @@ void DigikamApp::slotSendByMail()
     delete w;
 }
 
-void DigikamApp::slotPrintCreator()
-{
-    QPointer<AdvPrintWizard> w = new AdvPrintWizard(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
-    w->exec();
-    delete w;
-}
-
 void DigikamApp::slotHtmlGallery()
 {
 #ifdef HAVE_HTMLGALLERY
@@ -79,11 +72,6 @@ void DigikamApp::slotCalendar()
     QPointer<CalWizard> w = new CalWizard(view()->selectedUrls(ApplicationSettings::Tools), this);
     w->exec();
     delete w;
-}
-
-void DigikamApp::slotPresentation()
-{
-    d->view->presentation();
 }
 
 void DigikamApp::slotMediaServer()
@@ -114,12 +102,12 @@ void DigikamApp::slotExportTool()
         w->exec();
         delete w;
     }
-    else if (tool == m_exportTwitterAction)
+    /*else if (tool == m_exportTwitterAction)
     {
         QPointer<ODWindow> w = new TwWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
         w->exec();
         delete w;
-    }
+    }*/
     else if (tool == m_exportFacebookAction)
     {
         QPointer<FbWindow> w = new FbWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);

@@ -175,7 +175,7 @@ void InfoDlg::slotCopy2ClipBoard()
     textInfo.append(QApplication::applicationName());
     textInfo.append(QLatin1String(" version "));
     textInfo.append(QApplication::applicationVersion());
-    textInfo.append(QLatin1String("\n"));
+    textInfo.append(QLatin1Char('\n'));
 
     QTreeWidgetItemIterator it(d->listView);
 
@@ -184,7 +184,7 @@ void InfoDlg::slotCopy2ClipBoard()
         textInfo.append((*it)->text(0));
         textInfo.append(QLatin1String(": "));
         textInfo.append((*it)->text(1));
-        textInfo.append(QLatin1String("\n"));
+        textInfo.append(QLatin1Char('\n'));
         ++it;
     }
 

@@ -62,8 +62,8 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    KAboutData aboutData(QString::fromLatin1("digikam"),
-                         QString::fromLatin1("digiKam"), // No need i18n here.
+    KAboutData aboutData(QLatin1String("digikam"),
+                         QLatin1String("digiKam"), // No need i18n here.
                          digiKamVersion());
 
     QApplication app(argc, argv);
@@ -74,7 +74,7 @@ int main(int argc, char** argv)
     aboutData.setupCommandLine(&parser);
     parser.process(app);
     aboutData.processCommandLine(&parser);
-    QString switchCondition = QString::fromLatin1(argv[1]);
+    QString switchCondition = QLatin1String(argv[1]);
 
     // ------------------------------------------------------------------------------------
 

@@ -76,8 +76,8 @@ int main(int argc, char* argv[])
 
     KLocalizedString::setApplicationDomain("digikam");
 
-    KAboutData aboutData(QString::fromLatin1("digikam"), // component name
-                         i18n("digiKam"),                // display name
+    KAboutData aboutData(QLatin1String("digikam"), // component name
+                         i18n("digiKam"),          // display name
                          digiKamVersion());
 
     aboutData.setShortDescription(DAboutData::digiKamSlogan());;

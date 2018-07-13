@@ -964,11 +964,9 @@ void ImportUI::refreshFreeSpace()
 
 void ImportUI::closeEvent(QCloseEvent* e)
 {
-    DXmlGuiWindow::closeEvent(e);
-
     if (dialogClosed())
     {
-        e->accept();
+        DXmlGuiWindow::closeEvent(e);
     }
     else
     {
@@ -1313,7 +1311,7 @@ void ImportUI::slotUploadItems(const QList<QUrl>& urls)
             continue;
         }
 
-        QString ext  = QLatin1String(".") + fi.completeSuffix();
+        QString ext  = QLatin1Char('.') + fi.completeSuffix();
         QString name = fi.fileName();
         name.truncate(fi.fileName().length() - ext.length());
 

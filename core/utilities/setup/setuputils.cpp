@@ -44,7 +44,7 @@ QStringList cleanUserFilterString(QString filterString,
     if (!useSemicolon)
     {
         separator = QLatin1Char(' ');
-        filterString.remove(QLatin1String("*"));
+        filterString.remove(QLatin1Char('*'));
         filterString.replace(QLatin1Char(';'), QLatin1Char(' '));
         filterString.replace(QLatin1String(" ."), QLatin1String(" "));
         filterString.replace(QLatin1String(" -."), QLatin1String(" -"));

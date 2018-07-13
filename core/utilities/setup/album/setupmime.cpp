@@ -261,7 +261,7 @@ void SetupMime::applySettings()
                                                "with these formats, they will be removed from the database and you will "
                                                "lose all information about them, including rating and tags.</p>"
                                                "<p>Are you sure you want to apply your changes and lose the support for these formats?</p>",
-                                               removedImageFormats.join(QLatin1String(" "))),
+                                               removedImageFormats.join(QLatin1Char(' '))),
                                           QMessageBox::Yes | QMessageBox::No);
 
         if (result != QMessageBox::Yes)
@@ -310,7 +310,7 @@ void SetupMime::slotShowCurrentImageSettings()
     CoreDbAccess().db()->getFilterSettings(&imageList, 0, 0);
     QString text = i18n("<p>Files with these extensions will be recognized as images "
                         "and included into the database:<br/> <code>%1</code></p>",
-                        imageList.join(QLatin1String(" ")));
+                        imageList.join(QLatin1Char(' ')));
     QWhatsThis::showText(d->imageFileFilterLabel->mapToGlobal(QPoint(0, 0)), text, d->imageFileFilterLabel);
 }
 
@@ -320,7 +320,7 @@ void SetupMime::slotShowCurrentMovieSettings()
     CoreDbAccess().db()->getFilterSettings(0, &movieList, 0);
     QString text = i18n("<p>Files with these extensions will be recognized as video files "
                         "and included into the database:<br/> <code>%1</code></p>",
-                        movieList.join(QLatin1String(" ")));
+                        movieList.join(QLatin1Char(' ')));
     QWhatsThis::showText(d->movieFileFilterLabel->mapToGlobal(QPoint(0, 0)), text, d->movieFileFilterLabel);
 }
 
@@ -330,7 +330,7 @@ void SetupMime::slotShowCurrentAudioSettings()
     CoreDbAccess().db()->getFilterSettings(0, 0, &audioList);
     QString text = i18n("<p>Files with these extensions will be recognized as audio files "
                         "and included into the database:<br/> <code>%1</code></p>",
-                        audioList.join(QLatin1String(" ")));
+                        audioList.join(QLatin1Char(' ')));
     QWhatsThis::showText(d->audioFileFilterLabel->mapToGlobal(QPoint(0, 0)), text, d->audioFileFilterLabel);
 }
 

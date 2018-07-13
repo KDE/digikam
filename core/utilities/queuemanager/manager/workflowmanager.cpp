@@ -194,7 +194,7 @@ bool WorkflowManager::save()
         return true;
     }
 
-    QDomDocument doc(QString::fromLatin1("queuelist"));
+    QDomDocument doc(QLatin1String("queuelist"));
     doc.setContent(QString::fromUtf8("<!DOCTYPE XMLQueueList><queuelist version=\"2.0\" client=\"digikam\" encoding=\"UTF-8\"/>"));
     QDomElement docElem = doc.documentElement();
 
@@ -204,80 +204,80 @@ bool WorkflowManager::save()
         foreach(const Workflow& q, d->qList)
         {
 
-            QDomElement elm = doc.createElement(QString::fromLatin1("queue"));
+            QDomElement elm = doc.createElement(QLatin1String("queue"));
             QDomElement data;
 
-            data = doc.createElement(QString::fromLatin1("queuetitle"));
-            data.setAttribute(QString::fromLatin1("value"), q.title);
+            data = doc.createElement(QLatin1String("queuetitle"));
+            data.setAttribute(QLatin1String("value"), q.title);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("queuedesc"));
-            data.setAttribute(QString::fromLatin1("value"), q.desc);
+            data = doc.createElement(QLatin1String("queuedesc"));
+            data.setAttribute(QLatin1String("value"), q.desc);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("renamingparser"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.renamingParser);
+            data = doc.createElement(QLatin1String("renamingparser"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.renamingParser);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("useoriginalalbum"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.useOrgAlbum);
+            data = doc.createElement(QLatin1String("useoriginalalbum"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.useOrgAlbum);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("usemulticorecpu"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.useMultiCoreCPU);
+            data = doc.createElement(QLatin1String("usemulticorecpu"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.useMultiCoreCPU);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("workingurl"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.workingUrl.toLocalFile());
+            data = doc.createElement(QLatin1String("workingurl"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.workingUrl.toLocalFile());
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("conflictrule"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.conflictRule);
+            data = doc.createElement(QLatin1String("conflictrule"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.conflictRule);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("renamingrule"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.renamingRule);
+            data = doc.createElement(QLatin1String("renamingrule"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.renamingRule);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("rawloadingrule"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.rawLoadingRule);
+            data = doc.createElement(QLatin1String("rawloadingrule"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.rawLoadingRule);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("jpegcompression"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.JPEGCompression);
+            data = doc.createElement(QLatin1String("jpegcompression"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.ioFileSettings.JPEGCompression);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("jpegsubsampling"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.JPEGSubSampling);
+            data = doc.createElement(QLatin1String("jpegsubsampling"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.ioFileSettings.JPEGSubSampling);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("pngcompression"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.PNGCompression);
+            data = doc.createElement(QLatin1String("pngcompression"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.ioFileSettings.PNGCompression);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("tiffcompression"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.TIFFCompression);
+            data = doc.createElement(QLatin1String("tiffcompression"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.ioFileSettings.TIFFCompression);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("jpeg2000lossless"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.JPEG2000LossLess);
+            data = doc.createElement(QLatin1String("jpeg2000lossless"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.ioFileSettings.JPEG2000LossLess);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("jpeg2000compression"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.JPEG2000Compression);
+            data = doc.createElement(QLatin1String("jpeg2000compression"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.ioFileSettings.JPEG2000Compression);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("pgflossless"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.PGFLossLess);
+            data = doc.createElement(QLatin1String("pgflossless"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.ioFileSettings.PGFLossLess);
             elm.appendChild(data);
 
-            data = doc.createElement(QString::fromLatin1("pgfcompression"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.PGFCompression);
+            data = doc.createElement(QLatin1String("pgfcompression"));
+            data.setAttribute(QLatin1String("value"), q.qSettings.ioFileSettings.PGFCompression);
             elm.appendChild(data);
 
             // ----------------------
 
-            QDomElement rawdecodingsettings = doc.createElement(QString::fromLatin1("rawdecodingsettings"));
+            QDomElement rawdecodingsettings = doc.createElement(QLatin1String("rawdecodingsettings"));
             elm.appendChild(rawdecodingsettings);
             DRawDecoding::decodingSettingsToXml(q.qSettings.rawDecodingSettings, rawdecodingsettings);
 
@@ -285,31 +285,31 @@ bool WorkflowManager::save()
 
             foreach(const BatchToolSet& set, q.aTools)
             {
-                QDomElement batchtool = doc.createElement(QString::fromLatin1("tool"));
+                QDomElement batchtool = doc.createElement(QLatin1String("tool"));
                 elm.appendChild(batchtool);
 
-                data = doc.createElement(QString::fromLatin1("toolname"));
-                data.setAttribute(QString::fromLatin1("value"), set.name);
+                data = doc.createElement(QLatin1String("toolname"));
+                data.setAttribute(QLatin1String("value"), set.name);
                 batchtool.appendChild(data);
 
-                data = doc.createElement(QString::fromLatin1("toolgroup"));
-                data.setAttribute(QString::fromLatin1("value"), set.group);
+                data = doc.createElement(QLatin1String("toolgroup"));
+                data.setAttribute(QLatin1String("value"), set.group);
                 batchtool.appendChild(data);
 
-                data = doc.createElement(QString::fromLatin1("index"));
-                data.setAttribute(QString::fromLatin1("value"), set.index);
+                data = doc.createElement(QLatin1String("index"));
+                data.setAttribute(QLatin1String("value"), set.index);
                 batchtool.appendChild(data);
 
-                data = doc.createElement(QString::fromLatin1("version"));
-                data.setAttribute(QString::fromLatin1("value"), set.version);
+                data = doc.createElement(QLatin1String("version"));
+                data.setAttribute(QLatin1String("value"), set.version);
                 batchtool.appendChild(data);
 
                 for (BatchToolSettings::const_iterator it = set.settings.constBegin() ; it != set.settings.constEnd() ; ++it)
                 {
-                    data = doc.createElement(QString::fromLatin1("parameter"));
-                    data.setAttribute(QString::fromLatin1("name"),  it.key());
-                    data.setAttribute(QString::fromLatin1("type"),  QString::fromUtf8(it.value().typeName()));
-                    data.setAttribute(QString::fromLatin1("value"), it.value().toString());
+                    data = doc.createElement(QLatin1String("parameter"));
+                    data.setAttribute(QLatin1String("name"),  it.key());
+                    data.setAttribute(QLatin1String("type"),  QString::fromUtf8(it.value().typeName()));
+                    data.setAttribute(QLatin1String("value"), it.value().toString());
                     batchtool.appendChild(data);
                 }
             }
@@ -349,7 +349,7 @@ bool WorkflowManager::load(QStringList& failed)
             return false;
         }
 
-        QDomDocument doc(QString::fromLatin1("queuelist"));
+        QDomDocument doc(QLatin1String("queuelist"));
 
         if (!doc.setContent(&file))
         {
@@ -359,7 +359,7 @@ bool WorkflowManager::load(QStringList& failed)
 
         QDomElement docElem = doc.documentElement();
 
-        if (docElem.tagName() != QString::fromLatin1("queuelist"))
+        if (docElem.tagName() != QLatin1String("queuelist"))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Workflow XML file do not content Queue List data";
             return false;
@@ -374,7 +374,7 @@ bool WorkflowManager::load(QStringList& failed)
                 continue;
             }
 
-            if (e.tagName() != QString::fromLatin1("queue"))
+            if (e.tagName() != QLatin1String("queue"))
             {
                 continue;
             }
@@ -392,82 +392,82 @@ bool WorkflowManager::load(QStringList& failed)
                 }
 
                 QString name2 = e2.tagName();
-                QString val2  = e2.attribute(QString::fromLatin1("value"));
+                QString val2  = e2.attribute(QLatin1String("value"));
                 bool ok       = true;
 
-                if (name2 == QString::fromLatin1("queuetitle"))
+                if (name2 == QLatin1String("queuetitle"))
                 {
                     q.title = val2;
                 }
-                else if (name2 == QString::fromLatin1("queuedesc"))
+                else if (name2 == QLatin1String("queuedesc"))
                 {
                     q.desc = val2;
                 }
-                else if (name2 == QString::fromLatin1("renamingparser"))
+                else if (name2 == QLatin1String("renamingparser"))
                 {
                     q.qSettings.renamingParser = val2;
                 }
-                else if (name2 == QString::fromLatin1("useoriginalalbum"))
+                else if (name2 == QLatin1String("useoriginalalbum"))
                 {
                     q.qSettings.useOrgAlbum = (bool)val2.toUInt(&ok);
                 }
-                else if (name2 == QString::fromLatin1("usemulticorecpu"))
+                else if (name2 == QLatin1String("usemulticorecpu"))
                 {
                     q.qSettings.useMultiCoreCPU = (bool)val2.toUInt(&ok);
                 }
-                else if (name2 == QString::fromLatin1("workingurl"))
+                else if (name2 == QLatin1String("workingurl"))
                 {
                     q.qSettings.workingUrl = QUrl::fromLocalFile(val2);
                 }
-                else if (name2 == QString::fromLatin1("conflictrule"))
+                else if (name2 == QLatin1String("conflictrule"))
                 {
                     q.qSettings.conflictRule = (FileSaveConflictBox::ConflictRule)val2.toUInt(&ok);
                 }
-                else if (name2 == QString::fromLatin1("renamingrule"))
+                else if (name2 == QLatin1String("renamingrule"))
                 {
                     q.qSettings.renamingRule = (QueueSettings::RenamingRule)val2.toUInt(&ok);
                 }
-                else if (name2 == QString::fromLatin1("rawloadingrule"))
+                else if (name2 == QLatin1String("rawloadingrule"))
                 {
                     q.qSettings.rawLoadingRule = (QueueSettings::RawLoadingRule)val2.toUInt(&ok);
                 }
-                else if (name2 == QString::fromLatin1("jpegcompression"))
+                else if (name2 == QLatin1String("jpegcompression"))
                 {
                     q.qSettings.ioFileSettings.JPEGCompression = val2.toUInt(&ok);
                 }
-                else if (name2 == QString::fromLatin1("jpegsubsampling"))
+                else if (name2 == QLatin1String("jpegsubsampling"))
                 {
                     q.qSettings.ioFileSettings.JPEGSubSampling = val2.toUInt(&ok);
                 }
-                else if (name2 == QString::fromLatin1("pngcompression"))
+                else if (name2 == QLatin1String("pngcompression"))
                 {
                     q.qSettings.ioFileSettings.PNGCompression = val2.toUInt(&ok);
                 }
-                else if (name2 == QString::fromLatin1("tiffcompression"))
+                else if (name2 == QLatin1String("tiffcompression"))
                 {
                     q.qSettings.ioFileSettings.TIFFCompression = (bool)val2.toUInt(&ok);
                 }
-                else if (name2 == QString::fromLatin1("jpeg2000lossless"))
+                else if (name2 == QLatin1String("jpeg2000lossless"))
                 {
                     q.qSettings.ioFileSettings.JPEG2000LossLess = (bool)val2.toUInt(&ok);
                 }
-                else if (name2 == QString::fromLatin1("jpeg2000compression"))
+                else if (name2 == QLatin1String("jpeg2000compression"))
                 {
                     q.qSettings.ioFileSettings.JPEG2000Compression = val2.toUInt(&ok);
                 }
-                else if (name2 == QString::fromLatin1("pgflossless"))
+                else if (name2 == QLatin1String("pgflossless"))
                 {
                     q.qSettings.ioFileSettings.PGFLossLess = (bool)val2.toUInt(&ok);
                 }
-                else if (name2 == QString::fromLatin1("pgfcompression"))
+                else if (name2 == QLatin1String("pgfcompression"))
                 {
                     q.qSettings.ioFileSettings.PGFCompression = val2.toUInt(&ok);
                 }
-                else if (name2 == QString::fromLatin1("rawdecodingsettings"))
+                else if (name2 == QLatin1String("rawdecodingsettings"))
                 {
                     DRawDecoding::decodingSettingsFromXml(e2, q.qSettings.rawDecodingSettings);
                 }
-                else if (name2 == QString::fromLatin1("tool"))
+                else if (name2 == QLatin1String("tool"))
                 {
                     BatchToolSet set;
 
@@ -481,28 +481,28 @@ bool WorkflowManager::load(QStringList& failed)
                         }
 
                         QString name3  = e3.tagName();
-                        QString val3   = e3.attribute(QString::fromLatin1("value"));
+                        QString val3   = e3.attribute(QLatin1String("value"));
 
-                        if (name3 == QString::fromLatin1("toolname"))
+                        if (name3 == QLatin1String("toolname"))
                         {
                             set.name = val3;
                         }
-                        else if (name3 == QString::fromLatin1("toolgroup"))
+                        else if (name3 == QLatin1String("toolgroup"))
                         {
                             set.group = (BatchTool::BatchToolGroup)val3.toInt(&ok);
                         }
-                        else if (name3 == QString::fromLatin1("index"))
+                        else if (name3 == QLatin1String("index"))
                         {
                             set.index = val3.toInt(&ok);
                         }
-                        else if (name3 == QString::fromLatin1("version"))
+                        else if (name3 == QLatin1String("version"))
                         {
                             set.version = val3.toInt(&ok);
                         }
-                        else if (name3 == QString::fromLatin1("parameter"))
+                        else if (name3 == QLatin1String("parameter"))
                         {
-                            QString pname = e3.attribute(QString::fromLatin1("name"));
-                            QString type  = e3.attribute(QString::fromLatin1("type"));
+                            QString pname = e3.attribute(QLatin1String("name"));
+                            QString type  = e3.attribute(QLatin1String("type"));
                             QVariant var(val3);
                             var.convert(QVariant::nameToType(type.toLatin1().constData()));
 /*

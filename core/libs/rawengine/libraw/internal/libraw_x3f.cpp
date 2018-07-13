@@ -915,6 +915,10 @@ static void free_camf_entry(camf_entry_t *entry)
 		x3f_directory_entry_header_t *DEH = &DE->header;
 		if (DEH->identifier == X3F_SECp) {
 			x3f_property_list_t *PL = &DEH->data_subsection.property_list;
+			if (PL)
+			{
+				int i;
+			}
 			FREE(PL->property_table.element);
 			FREE(PL->data);
 		}
@@ -1398,7 +1402,7 @@ static void huffman_decode_row(x3f_info_t *I,
   x3f_image_data_t *ID = &DEH->data_subsection.image_data;
   x3f_huffman_t *HUF = ID->huffman;
 
-  int16_t c[3] = {offset,offset,offset};
+  int16_t c[3] = {(int16_t)offset,(int16_t)offset,(int16_t)offset};
   int col;
   bit_state_t BS;
 
@@ -1621,12 +1625,12 @@ static void x3f_load_property_list(x3f_info_t *I, x3f_directory_entry_t *DE)
 
 	if (!PL->data_size)
 		PL->data_size = read_data_block(&PL->data, I, DE, 0);
-        uint32_t maxoffset = PL->data_size/sizeof(utf16_t)-2; // at least 2 chars, value + terminating 0x0000
+	uint32_t maxoffset = PL->data_size/sizeof(utf16_t)-2; // at least 2 chars, value + terminating 0x0000
 
 	for (i=0; i<PL->num_properties; i++) {
 		x3f_property_t *P = &PL->property_table.element[i];
-                if(P->name_offset > maxoffset || P->value_offset > maxoffset)
-                  throw LIBRAW_EXCEPTION_IO_CORRUPT;
+		if(P->name_offset > maxoffset || P->value_offset > maxoffset)
+			throw LIBRAW_EXCEPTION_IO_CORRUPT;
 		P->name = ((utf16_t *)PL->data + P->name_offset);
 		P->value = ((utf16_t *)PL->data + P->value_offset);
 	}

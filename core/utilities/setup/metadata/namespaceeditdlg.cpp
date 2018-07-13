@@ -553,14 +553,14 @@ bool NamespaceEditDlg::validifyCheck(QString& errMsg)
     {
         case NamespaceEntry::EXIF:
 
-            if (d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Exif"))
+            if (d->namespaceName->text().split(QLatin1Char('.')).first() != QLatin1String("Exif"))
             {
                 errMsg = i18n("EXIF namespace name must start with \"Exif\".");
                 return false;
             }
 
             if (!d->alternativeName->text().isEmpty() &&
-                d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Exif"))
+                d->alternativeName->text().split(QLatin1Char('.')).first() != QLatin1String("Exif"))
             {
                 errMsg = i18n("EXIF alternative namespace name must start with \"Exif\".");
                 return false;
@@ -570,14 +570,14 @@ bool NamespaceEditDlg::validifyCheck(QString& errMsg)
 
         case NamespaceEntry::IPTC:
 
-            if (d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Iptc"))
+            if (d->namespaceName->text().split(QLatin1Char('.')).first() != QLatin1String("Iptc"))
             {
                 errMsg = i18n("IPTC namespace name must start with \"Iptc\".");
                 return false;
             }
 
             if(!d->alternativeName->text().isEmpty() &&
-               d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Iptc"))
+               d->alternativeName->text().split(QLatin1Char('.')).first() != QLatin1String("Iptc"))
             {
                 errMsg = i18n("IPTC alternative namespace name must start with \"Iptc\".");
                 return false;
@@ -587,14 +587,14 @@ bool NamespaceEditDlg::validifyCheck(QString& errMsg)
 
         case NamespaceEntry::XMP:
 
-            if (d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Xmp"))
+            if (d->namespaceName->text().split(QLatin1Char('.')).first() != QLatin1String("Xmp"))
             {
                 errMsg = i18n("XMP namespace name must start with \"Xmp\".");
                 return false;
             }
 
             if (!d->alternativeName->text().isEmpty() &&
-                d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Xmp"))
+                d->alternativeName->text().split(QLatin1Char('.')).first() != QLatin1String("Xmp"))
             {
                 errMsg = i18n("XMP alternative namespace name must start with \"Xmp\".");
                 return false;

@@ -104,8 +104,8 @@ public:
         actionMoveImagesToThisResult                  = 0;
         actionRemovedSelectedSearchResultsFromList    = 0;
         searchInProgress                              = false;
-        actionToggleAllResultsVisibilityIconUnchecked = QIcon::fromTheme(QString::fromLatin1("layer-visible-off"));
-        actionToggleAllResultsVisibilityIconChecked   = QIcon::fromTheme(QString::fromLatin1("layer-visible-on"));
+        actionToggleAllResultsVisibilityIconUnchecked = QIcon::fromTheme(QLatin1String("layer-visible-off"));
+        actionToggleAllResultsVisibilityIconChecked   = QIcon::fromTheme(QLatin1String("layer-visible-on"));
     }
 
     // Map
@@ -173,13 +173,13 @@ SearchWidget::SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
     d->mainVBox->addWidget(actionHBox);
 
     d->actionClearResultsList = new QAction(this);
-    d->actionClearResultsList->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-clear")));
+    d->actionClearResultsList->setIcon(QIcon::fromTheme(QLatin1String("edit-clear")));
     d->actionClearResultsList->setToolTip(i18n("Clear the search results."));
     QToolButton* const tbClearResultsList = new QToolButton(actionHBox);
     tbClearResultsList->setDefaultAction(d->actionClearResultsList);
 
     d->actionKeepOldResults = new QAction(this);
-    d->actionKeepOldResults->setIcon(QIcon::fromTheme(QString::fromLatin1("flag")));
+    d->actionKeepOldResults->setIcon(QIcon::fromTheme(QLatin1String("flag")));
     d->actionKeepOldResults->setCheckable(true);
     d->actionKeepOldResults->setChecked(false);
     d->actionKeepOldResults->setToolTip(i18n("Keep the results of old searches when doing a new search."));
@@ -194,12 +194,12 @@ SearchWidget::SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
     tbToggleAllVisibility->setDefaultAction(d->actionToggleAllResultsVisibility);
 
     d->actionCopyCoordinates = new QAction(i18n("Copy coordinates"), this);
-    d->actionCopyCoordinates->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-copy")));
+    d->actionCopyCoordinates->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
 
     d->actionMoveImagesToThisResult = new QAction(i18n("Move selected images to this position"), this);
 
     d->actionRemovedSelectedSearchResultsFromList = new QAction(i18n("Remove from results list"), this);
-    d->actionRemovedSelectedSearchResultsFromList->setIcon(QIcon::fromTheme(QString::fromLatin1("list-remove")));
+    d->actionRemovedSelectedSearchResultsFromList->setIcon(QIcon::fromTheme(QLatin1String("list-remove")));
 
     d->backendSelectionBox                            = new QComboBox(actionHBox);
     d->backendSelectionBox->setToolTip(i18n("Select which service you would like to use."));

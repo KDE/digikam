@@ -643,14 +643,16 @@ endif()
 
 if(Doxygen_FOUND)
 
-    set(API_DIR    ${CMAKE_BINARY_DIR}/api)
-    set(SOURCE_DIR ${CMAKE_SOURCE_DIR})
-    set(DOXYFILE   ${CMAKE_BINARY_DIR}/Doxyfile)
-    set(WARNFILE   ${CMAKE_BINARY_DIR}/doxygen-warn.log)
+    message(STATUS " ==> Doxygen is found:          ${Doxygen_FOUND}")
+    message(STATUS " ==> Graphviz Dot is found:     ${DOXYGEN_DOT_FOUND}")
 
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/Doxyfile.cmake.in
-                   ${DOXYFILE})
+    if(Doxygen_FOUND AND DOXYGEN_DOT_FOUND)
 
-    add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
-                      WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+        message(STATUS " To build API documentation use 'make doc'")
+
+        add_custom_target(doc ${DOXYGEN_EXECUTABLE}
+                          WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+    endif()
+
 endif()

@@ -313,7 +313,7 @@ bool HTMLWidget::eventFilter(QObject* object, QEvent* event)
 
                 d->intermediateSelectionScreenPoint = QPoint(e->x(), e->y());
 
-                qCDebug(DIGIKAM_GEOIFACE_LOG) << d->firstSelectionScreenPoint << QLatin1String(" ")
+                qCDebug(DIGIKAM_GEOIFACE_LOG) << d->firstSelectionScreenPoint << QLatin1Char(' ')
                                               << d->intermediateSelectionScreenPoint;
 
                 qreal lonWest, latNorth, lonEast, latSouth;
@@ -356,7 +356,7 @@ void HTMLWidget::setSelectionRectangle(const GeoCoordinates::Pair& searchCoordin
 {
     if (!searchCoordinates.first.hasCoordinates())
     {
-        runScript(QString::fromLatin1("kgeomapRemoveSelectionRectangle();"));
+        runScript(QLatin1String("kgeomapRemoveSelectionRectangle();"));
         return;
     }
 

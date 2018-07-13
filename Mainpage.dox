@@ -1,6 +1,1105 @@
-/** @mainpage
-*
-* Main Doxygen page for digikam.
-* digikam is a program.
-* digikam has libraries.
+/** \mainpage digiKam API reference page.
+    \author (c) 2001-2018 digiKam team.
+    \brief digiKam is an advanced open-source digital photo management application that runs on Linux, Windows, and MacOS.
+    \image html logo-digikam.png
+
+\section sourcedirs Source Code Directories
+
+   digiKam is split into a number of components, each ones located to a dedicated directory.
+   The main namespace is Digikam for the digiKam application and all sub components. A second one is ShowFoto for the stand alone version of image editor.
+
+   See below the complete list of directories used by the project:
+
+| SOURCE TREE-VIEW                                            | DETAILS                                                                 |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------- |
+|├── AUTHORS                                                  | List of developers and contributors to the project                      |
+|├── bootstrap.linux                                          | Configuration script to compile under Linux                             |
+|├── bootstrap.local                                          | Configuration script to compile a local version under Linux             |
+|├── bootstrap.macports                                       | Configuration script to compile under MacOS with Macports               |
+|├── bootstrap.mxe                                            | Configuration script to cross-compile for Windows under Linux with MXE  |
+|├── build                                                    | Temporary directory created by bootstrap script to host compiled files  |
+|├── ChangeLog                                                | Complete list of source code changes since the project origin           |
+|├── CMakeLists.txt                                           | Main Cmake script including lead compilation rules for the project      |
+|├── COPYING                                                  | Main project license                                                    |
+|├── COPYING-CMAKE-SCRIPTS                                    | Cmake files license                                                     |
+|├── COPYING.LIB                                              | Internal shared libraries license                                       |
+|├── download-repos                                           | Script to download all source code including extra repositories         |
+|├── gits                                                     | Script to perform git in reccursive mode over multiple repositories     |
+|├── gitup                                                    | Script to perform git pull --rebase in reccursive mode                  |
+|├── Mainpage.dox                                             | API documentation main page based on Doxygen                            |
+|├── Messages.sh                                              | Script to extract strings for translators                               |
+|├── NEWS                                                     | Notice to resume all project changes done at release time               |
+|├── README.DEVEL                                             | Read me file for developers                                             |
+|├── README.md                                                | First start helper documentation                                        |
+|├── README.BUNDLES                                           | Read me for Linux, MacOs, and Windows bundles support                   |
+|├── build                                                    | Directory to store compiled files and binary targets                    |
+|├── core                                                     | All source code are hosted in this directory                            |
+|│   ├── app                                                  | Lead application component                                              |
+|│   │   ├── date                                             | All date relevant views                                                 |
+|│   │   ├── dragdrop                                         | Drag and drop helper classes                                            |
+|│   │   ├── filters                                          | Tags filter widgets                                                     |
+|│   │   ├── items                                            | Icon-view item widgets                                                  |
+|│   │   │   └── overlays                                     | Icon-view item overlays                                                 |
+|│   │   ├── main                                             | Main digiKam application                                                |
+|│   │   ├── utils                                            | Generic utility classes                                                 |
+|│   │   └── views                                            | Views classes                                                           |
+|│   │       └── tableview                                    | Table-view classes                                                      |
+|│   ├── cmake                                                | Extra Cmake scripts will be hosted here                                 |
+|│   │   ├── modules                                          | Cmake scripts to find extra dependencies                                |
+|│   │   └── templates                                        | Cmake template files used at configuration time                         |
+|│   ├── data                                                 | Data files will be hosted here                                          |
+|│   │   ├── about                                            | Welcome page files (HTML + CSS)                                         |
+|│   │   ├── colorschemes                                     | GUI Color scheme files                                                  |
+|│   │   ├── database                                         | Database XML configuration files                                        |
+|│   │   ├── facesengine                                      | Face detection and recognition data files                               |
+|│   │   ├── filters                                          | Image filters data files                                                |
+|│   │   ├── geolocation                                      | Geolocation tool data files                                             |
+|│   │   ├── hotplug                                          | Hotplug Linux integration files                                         |
+|│   │   ├── htmlgallery                                      | HTML gallery tool data files                                            |
+|│   │   ├── icons                                            | Application icons                                                       |
+|│   │   ├── metadata                                         | Metadata tool data files                                                |
+|│   │   ├── pics                                             | Application pictures                                                    |
+|│   │   ├── printcreator                                     | Print Creator tool data files                                           |
+|│   │   ├── profiles                                         | Basis open source ICC color profiles                                    |
+|│   │   └── scripts                                          | Miscs maintenance scripts                                               |
+|│   ├── libs                                                 | digiKam core sub-components (few are shared with Showfoto)              |
+|│   │   ├── album                                            | All classes use to manage digiKam albums operations and properties      |
+|│   │   ├── database                                         | All low level database interface is here                                |
+|│   │   │   ├── collection                                   | All classes relevant of collections management                          |
+|│   │   │   ├── coredb                                       | The core database interface used to host all image properties           |
+|│   │   │   ├── dbjobs                                       | All database multi-threaded jobs                                        |
+|│   │   │   ├── engine                                       | The low level database engine classes                                   |
+|│   │   │   ├── haar                                         | The similarity low level algorithms to compute image finger-prints      |
+|│   │   │   ├── imagehistory                                 | The image history classes for the database                              |
+|│   │   │   ├── imgqsort                                     | The image quality sort algorithms                                       |
+|│   │   │   ├── item                                         | The database item classes                                               |
+|│   │   │   ├── models                                       | The databse model classes                                               |
+|│   │   │   ├── server                                       | The Mysql internal server                                               |
+|│   │   │   ├── similaritydb                                 | The similarity database                                                 |
+|│   │   │   ├── tags                                         | The database tags management classes                                    |
+|│   │   │   ├── thumbsdb                                     | The thumbnails database                                                 |
+|│   │   │   └── utils                                        | Miscs tools and widgets used with database                              |
+|│   │   ├── dialogs                                          | Common dialogs                                                          |
+|│   │   ├── dimg                                             | The Qt digiKam image data container support ICC and 16 bits color depth |
+|│   │   │   ├── filters                                      | All image filters will be hosted here. All support 16 bits color depth  |
+|│   │   │   │   ├── auto                                     | Auto colors correction filters                                          |
+|│   │   │   │   ├── bcg                                      | Brightness-Contrast-Gamma filter                                        |
+|│   │   │   │   ├── bw                                       | Black and White image converter, including infrared filter              |
+|│   │   │   │   ├── cb                                       | Colors balance filter                                                   |
+|│   │   │   │   ├── curves                                   | Colors curves filter                                                    |
+|│   │   │   │   ├── decorate                                 | Decorate filters                                                        |
+|│   │   │   │   ├── film                                     | Analog film emulation filters                                           |
+|│   │   │   │   ├── fx                                       | Special effect filters                                                  |
+|│   │   │   │   ├── greycstoration                           | Cimg based restoration filter                                           |
+|│   │   │   │   ├── hsl                                      | Hue-Saturation-Lightness filter                                         |
+|│   │   │   │   ├── icc                                      | Icc color profile filters                                               |
+|│   │   │   │   ├── lc                                       | Local contrast filter (pseudo HDR)                                      |
+|│   │   │   │   ├── lens                                     | Lens corrections filters, including Qt Lensfun interface                |
+|│   │   │   │   ├── levels                                   | Color levels filter                                                     |
+|│   │   │   │   ├── nr                                       | Wavelets noise reduction filter                                         |
+|│   │   │   │   ├── redeye                                   | Red-eyes parser and fixer                                               |
+|│   │   │   │   ├── sharp                                    | Image sharp filter, including Unsharped-mask and Refocus                |
+|│   │   │   │   ├── transform                                | All image transformation filters                                        |
+|│   │   │   │   └── wb                                       | White balance filter                                                    |
+|│   │   │   ├── imagehistory                                 | Image history interface for image container                             |
+|│   │   │   └── loaders                                      | All DImg image loaders are here                                         |
+|│   │   ├── dmetadata                                        | The metadata wrapper based on Exiv2 for image and FFMpeg for video      |
+|│   │   ├── dngwriter                                        | Qt classes to convert RAW files to DNG format                           |
+|│   │   │   └── extra                                        | DNG and XMP sdks from Adobe                                             |
+|│   │   ├── dtrash                                           | digiKam trash manager full independant of desktop trash                 |
+|│   │   ├── facesengine                                      | Face detection and recognition engine + Faces database implementations  |
+|│   │   │   ├── alignment-congealing                         | Face alignment based on congealing method                               |
+|│   │   │   ├── alignment-flandmark                          | Face alignment based on flandmark method                                |
+|│   │   │   ├── detection                                    | Face detection algorithms                                               |
+|│   │   │   ├── dnnface                                      | Deep-learning face algorithms                                           |
+|│   │   │   ├── facedb                                       | Faces database classes                                                  |
+|│   │   │   ├── opencv3-face                                 | OpenCV version 3 face management classes                                |
+|│   │   │   ├── preprocessing-tantriggs                      | Face pre-processing based on tantriggs method                           |
+|│   │   │   ├── recognition-dlib-dnn                         | Deep-learning faces recognition module                                  |
+|│   │   │   ├── recognition-opencv-eigenfaces                | Eigen faces recognition mudule                                          |
+|│   │   │   ├── recognition-opencv-fisherfaces               | Fisher faces recognition module                                         |
+|│   │   │   ├── recognition-opencv-lbph                      | LBPH bases faces recognition module                                     |
+|│   │   │   └── shape-predictor                              | Shape predictor algorithms                                              |
+|│   │   ├── fileactionmanager                                | Classes to connect database and metadata actions to file operations     |
+|│   │   ├── filters                                          | Widgets to filter items by metadata properties                          |
+|│   │   ├── imageproperties                                  | All widgets used in right side-bar from all main views                  |
+|│   │   ├── iojobs                                           | Multithreaded jobs manager used with files operations                   |
+|│   │   ├── jpegutils                                        | Utilities to process JPEG files                                         |
+|│   │   │   └── libjpeg                                      | JPEG loss-less transform private implementations from libjpeg           |
+|│   │   ├── kmemoryinfo                                      | Qt backend to analyze system memory information                         |
+|│   │   ├── models                                           | Qt models used with item views                                          |
+|│   │   ├── notificationmanager                              | Multi-desktop notifications wrapper                                     |
+|│   │   ├── pgfutils                                         | Qt Classes to work with PGF image format                                |
+|│   │   ├── progressmanager                                  | Multi-level operations progress widget                                  |
+|│   │   ├── rawengine                                        | Qt classes to work with libraw decoder                                  |
+|│   │   ├── settings                                         | digiKam settings manager                                                |
+|│   │   ├── tags                                             | Classes to play with tags                                               |
+|│   │   │   └── tagsmanager                                  | Tags manager view                                                       |
+|│   │   ├── template                                         | Metadata template support                                               |
+|│   │   ├── threadimageio                                    | Classes to process thumbs and preview extraction                        |
+|│   │   │   └── ffmpegthumbnailer                            | Video files thumbnailer                                                 |
+|│   │   ├── threads                                          | Classes to manage and chain threads using multi-core                    |
+|│   │   ├── transitionmngr                                   | Frames transitions manager                                              |
+|│   │   ├── versionmanager                                   | Classes to manage versionning operations                                |
+|│   │   └── widgets                                          | To host plenty of widgets used everywhere                               |
+|│   │       ├── colors                                       | Colors relevant views                                                   |
+|│   │       ├── combo                                        | Combo-box helper classes                                                |
+|│   │       ├── common                                       | Uncategorized widgets                                                   |
+|│   │       ├── files                                        | File operation classes                                                  |
+|│   │       ├── fonts                                        | Font management classes                                                 |
+|│   │       ├── graphicsview                                 | Graphics-view implementation (model-view)                               |
+|│   │       ├── iccprofiles                                  | ICC color profiles widgets                                              |
+|│   │       ├── imagehistory                                 | Image history widgets                                                   |
+|│   │       ├── itemview                                     | Item-view implementations (model-view)                                  |
+|│   │       ├── layout                                       | Layout helper classes                                                   |
+|│   │       ├── mainview                                     | Common top-level view implementations                                   |
+|│   │       ├── metadata                                     | Metadata widgets                                                        |
+|│   │       └── range                                        | Range helper classes                                                    |
+|│   ├── showfoto                                             | Stand alone image editor                                                |
+|│   │   ├── main                                             | Main Showfoto application                                               |
+|│   │   ├── setup                                            | Showfoto Setup views                                                    |
+|│   │   └── thumbbar                                         | Showfoto thumb-bar views                                                |
+|│   ├── tests                                                | Unit tests                                                              |
+|│   └── utilities                                            | digiKam utilities and advanced tools (few are shared with showfoto)     |
+|│       ├── advancedrename                                   | Advance rename tool                                                     |
+|│       ├── assistants                                       | All tools based on assistants dialog are hosted here                    |
+|│       │   ├── calendar                                     | Tool to export items as calendar                                        |
+|│       │   ├── common                                       | Common classes used by assistants                                       |
+|│       │   ├── expoblending                                 | Tool to merge items together to create HDR images                       |
+|│       │   ├── firstrun                                     | First-run assistant to configure lead digiKam settings                  |
+|│       │   ├── htmlgallery                                  | Tool to create html gallery from items                                  |
+|│       │   ├── panorama                                     | Tool to create panorama from items                                      |
+|│       │   ├── printcreator                                 | Tool to print items                                                     |
+|│       │   ├── sendbymail                                   | Tool to export items by e-mail                                          |
+|│       │   ├── videoslideshow                               | Tool to create video slideshow from items                               |
+|│       │   └── webservices                                  | All tools to import and export items to remote web-services             |
+|│       │       ├── common                                   | Common classes used by web-services tools                               |
+|│       │       ├── dropbox                                  | Tool to export items with Dropbox                                       |
+|│       │       ├── facebook                                 | Tool to export items with Facebook                                      |
+|│       │       ├── filetransfer                             | Tool to export items with a remote computer                             |
+|│       │       ├── flickr                                   | Tool to export items with Flickr                                        |
+|│       │       ├── google                                   | Tool to export items with Google                                        |
+|│       │       ├── imageshack                               | Tool to export items with ImageShack                                    |
+|│       │       ├── imgur                                    | Tool to export items with ImgUr                                         |
+|│       │       ├── mediawiki                                | Tool to export items with Mediawiki                                     |
+|│       │       ├── piwigo                                   | Tool to export items with Piwigo                                        |
+|│       │       ├── rajce                                    | Tool to export items with Rajce                                         |
+|│       │       ├── smugmug                                  | Tool to export items with Smugmug                                       |
+|│       │       ├── vkontakte                                | Tool to export items with Vkontakte                                     |
+|│       │       └── yandexfotki                              | Tool to export items with Yandexfotki                                   |
+|│       ├── extrasupport                                     | Extra desktop features support as Baloo search engine                   |
+|│       ├── facemanagement                                   | Face management classes and tools                                       |
+|│       ├── fuzzysearch                                      | Similarity search tools                                                 |
+|│       ├── geolocation                                      | All geo-location tools are located here                                 |
+|│       │   ├── editor                                       | Tool to edit items geo-location                                         |
+|│       │   ├── geoiface                                     | All shared classes used by geo-location tools                           |
+|│       │   ├── geomapwrapper                                | Legacy helper classes for geo-location support                          |
+|│       │   └── mapsearches                                  | Tool to perform map searches                                            |
+|│       ├── imageeditor                                      | The famous digiKam image editor, a lots of classes shared with Showfoto |
+|│       │   ├── core                                         | Core implementation including canvas and tools interface                |
+|│       │   ├── dialogs                                      | Image editor dialogs                                                    |
+|│       │   ├── editor                                       | The core image editors classes                                          |
+|│       │   ├── main                                         | The main digiKam image editor view, not shared with Showfoto            |
+|│       │   ├── printiface                                   | The print interface                                                     |
+|│       │   ├── rawimport                                    | The Raw import tool                                                     |
+|│       │   ├── tools                                        | All Image editor tools                                                  |
+|│       │   └── widgets                                      | All common widgets                                                      |
+|│       ├── import                                           | The import tools, including USB MAss Storage, Gphoto2, and Sane support |
+|│       │   ├── backend                                      | Camera backends                                                         |
+|│       │   ├── dialogs                                      | Import tools dialogs                                                    |
+|│       │   ├── dscanner                                     | Digital scanners import tool                                            |
+|│       │   ├── items                                        | Import item classes                                                     |
+|│       │   ├── main                                         | Import tool main view                                                   |
+|│       │   ├── models                                       | Import model classes                                                    |
+|│       │   ├── views                                        | Import view classes                                                     |
+|│       │   └── widgets                                      | Import common widgets                                                   |
+|│       ├── lighttable                                       | The Light-table tool to compare images side by side                     |
+|│       ├── maintenance                                      | The digiKam tool to maintain the database contents                      |
+|│       ├── mediaserver                                      | The DLNA/UPNP sharing tool                                              |
+|│       │   └── upnpsdk                                      | Internal Upnp SDK based on Neptune and Platinum frameworks              |
+|│       ├── metadataedit                                     | The metadata editor tool                                                |
+|│       ├── presentation                                     | The presentation tool with OpenGL effects                               |
+|│       ├── queuemanager                                     | The famous Batch Queue Manager tool                                     |
+|│       │   ├── main                                         | The main BQM view                                                       |
+|│       │   ├── manager                                      | The multi-core manager to run tools in background                       |
+|│       │   ├── tools                                        | All BQM tools classed by functions                                      |
+|│       │   └── views                                        | The BQM internal views                                                  |
+|│       ├── searchwindow                                     | The powerfull advanced search tool                                      |
+|│       ├── setup                                            | All digiKam setup panel, with few ones shared with Showfoto             |
+|│       │   ├── album                                        | Album configuration views                                               |
+|│       │   ├── camera                                       | Camera configuration views                                              |
+|│       │   ├── collections                                  | Collection configuration views                                          |
+|│       │   ├── editor                                       | Image Editor configuration views                                        |
+|│       │   └── metadata                                     | Metadata configuration views                                            |
+|│       └── slideshow                                        | The simple slideshow tool                                               |
+|├── doc                                                      | Handbooks directory                                                     |
+|│   ├── digikam                                              | digiKam manual                                                          |
+|│   ├── project                                              | Extra files for the documentation                                       |
+|│   └── showfoto                                             | Showfoto manual                                                         |
+|├── extra                                                    | Optional extra libraries to compile advanced features                   |
+|└── project                                                  | Extra project parts                                                     |
+|    ├── bundles                                              | Bundles build scripts                                                   |
+|    │   ├── 3rdparty                                         | External components required to build bundles                           |
+|    │   ├── appimage                                         | Linux AppImage                                                          |
+|    │   ├── macports                                         | MacOs package                                                           |
+|    │   └── mxe                                              | Windows installer                                                       |
+|    ├── documents                                            | Project documentations                                                  |
+|    ├── release                                              | Release scripts                                                         |
+|    ├── reports                                              | Static analyzers report scripts                                         |
+|    └── scripts                                              | 3rdparty source code management scripts                                 |
+
+\section externaldeps External Dependencies
+
+\subsection depscheckout Dependencies To Checkout All Source Code
+
+ - Perl       http://www.perl.org
+ - Git        http://git-scm.com
+
+\subsection depstrans Dependencies To Process Translations Files (optional)
+
+ - Ruby       http://www.ruby-lang.org             (to extract translations files from remote repositories)
+ - Subversion https://subversion.apache.org/       (to extract translations files from remote repositories)
+ - Gettext    https://www.gnu.org/software/gettext (including Msgfmt to compile po files to mo files)
+
+
+\subsection depscomplink Dependencies To Compile And Link Source Code
+
+The full list of mandatory (X) and optional (opt) external dependencies required to compile and link digiKam source code is listed below.
+
+| Dependency           | Status   | Version     | Project URL                                       | Remarks                                                | TODO                                                                                  |
+|----------------------|----------|-------------|---------------------------------------------------|--------------------------------------------------------|---------------------------------------------------------------------------------------|
+| CMake                |   X      | >= 3.0.0    | http://www.cmake.org                              | > 3.1.0 hightly recommended                            |                                                                                       |
+| ECM                  |   X      | >= 1.7.0    | https://cgit.kde.org/extra-cmake-modules.git/     |                                                        |                                                                                       |
+| Qt5::Core            |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::Gui             |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::Widgets         |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::Network         |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::Sql             |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | Including Qt5::Sqlite and Qt5::Mysql plugins           |                                                                                       |
+| Qt5::Xml             |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::Concurrent      |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::PrintSupport    |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::Svg             |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtsvg.git/              |                                                        |                                                                                       |
+| Qt5::XmlPatterns     |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtxmlpatterns.git/      |                                                        |                                                                                       |
+| Qt5::WebKitWidgets   |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtwebkit.git/           | To render web contents                                 | Still the default while transitional stage                                            |
+| Qt5::WebView         |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtwebview.git/          | To render web contents (ENABLE_QWEBENGINE=on)          | To replace QWebKitWidgets. Must be the default in the future                          |
+| Qt5::X11Extras       |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtx11extras.git/        | For color management support under Linux               |                                                                                       |
+| Qt5::DBus            |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | Optional: only for Linux Desktop                       |                                                                                       |
+| Qt5::OpenGL          |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | For Presentation tool                                  |                                                                                       |
+| Qt5::Test            |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | To compile test codes (BUILD_TESTING=on)               |                                                                                       |
+| KF5::Config          |   X      | >= 5.5.0    | https://cgit.kde.org/kconfig.git/about/           |                                                        |                                                                                       |
+| KF5::XmlGui          |   X      | >= 5.5.0    | https://cgit.kde.org/kxmlgui.git/about/           |                                                        |                                                                                       |
+| KF5::I18n            |   X      | >= 5.5.0    | https://cgit.kde.org/ki18n.git/about/             |                                                        |                                                                                       |
+| KF5::WindowSystem    |   X      | >= 5.5.0    | https://cgit.kde.org/kwindowsystem.git/about/     |                                                        |                                                                                       |
+| KF5::Service         |   X      | >= 5.5.0    | https://cgit.kde.org/kservice.git/about/          | TODO: make optional for Linux desktop (DFileOperations)|                                                                                       |
+| KF5::Solid           |   X      | >= 5.5.0    | https://cgit.kde.org/solid.git/about/             |                                                        |                                                                                       |
+| KF5::CoreAddons      |   X      | >= 5.5.0    | https://cgit.kde.org/kcoreaddons.git/about/       | Needs for KAboutData                                   |                                                                                       |
+| KF5::NotifyConfig    |  opt     | >= 5.5.0    | https://cgit.kde.org/knotifyconfig.git/about/     | For Linux desktop application notify configuration     |                                                                                       |
+| KF5::Notifications   |  opt     | >= 5.5.0    | https://cgit.kde.org/knotifications.git/about/    | For Linux desktop notifications integrations           |                                                                                       |
+| KF5::ThreadWeaver    |  opt     | >= 5.5.0    | https://cgit.kde.org/threadweaver.git/about/      | For panorama tool                                      |                                                                                       |
+| KF5::IconThemes      |  opt     | >= 5.5.0    | https://cgit.kde.org/kiconthemes.git/about/       | Optional: only for Linux Desktop (KIconDialog)         |                                                                                       |
+| KF5::FileMetaData    |  opt     | >= 5.5.0    | https://cgit.kde.org/kfilemetadata.git/about/     | KDE files indexer (ENABLE_KFILEMETADATASUPPORT=on)     | Still experimental, disabled by default. Implementation from KDE side very unstable   |
+| KF5::AkonadiContact  |  opt     | >= 17.12.1  | https://cgit.kde.org/akonadi-contacts.git/about/  | KDE Mail contacts (ENABLE_AKONADICONTACTSUPPORT=on)    | Still experimental, disabled by default. Need testing                                 |
+| KF5::CalendarCore    |  opt     | >= 17.12.1  | https://cgit.kde.org/kcalcore.git/about/          | For calendar tool to setup ical special events         |                                                                                       |
+| KF5::KIO             |  opt     | >= 5.5.0    | https://cgit.kde.org/kio.git/about/               | Optional: only for Linux Desktop                       |                                                                                       |
+| libopencv            |   X      | >= 3.1      | http://opencv.willowgarage.com                    | Both versions supported using a cmake flag             |                                                                                       |
+| libpthread           |   X      | >= 2.0.0    | http://www.gnu.org/software/hurd/libpthread.html  | For DNG converter                                      |                                                                                       |
+| libtiff              |   X      | >= 4.0      | http://www.remotesensing.org/libtiff              | For DImg image loader                                  |                                                                                       |
+| libpng               |   X      | >= 1.6      | http://www.libpng.org/pub/png/libpng.html         | For DImg image loader                                  |                                                                                       |
+| libjpeg              |   X      | >= 6b       | http://www.ijg.org                                | jpeglib >= 8.0 hightly recommended for RawEngine       |                                                                                       |
+| libboost             |   X      | >= 1.55.0   | http://www.boost.org/doc/libs                     | For Versionning support                                |                                                                                       |
+| liblcms              |   X      | >= 2.x      | http://www.littlecms.com                          | For Color Management support                           |                                                                                       |
+| libexpat             |   X      | >= 2.1.0    | http://expat.sourceforge.net                      | For DNG converter                                      |                                                                                       |
+| libexiv2             |   X      | >= 0.26     | http://www.exiv2.org                              | Metadata low level management. 0.24 deprecated         |                                                                                       |
+| libxml2              |  opt     | >= 2.7.0    | http://xmlsoft.org                                | For HtmlGallery tool                                   |                                                                                       |
+| libxslt              |  opt     | >= 1.1.0    | http://xmlsoft.org/XSLT                           | For HtmlGallery tool                                   |                                                                                       |
+| libqtav              |  opt     | >= 1.12.0   | http://www.qtav.org                               | To play video and audio (ENABLE_MEDIAPLAYER=on)        |                                                                                       |
+| libffmpeg            |  opt     | >= 3.3.x    | http://www.ffmpeg.org                             | To play video and audio (ENABLE_MEDIAPLAYER=on)        | libavformat, libavutil, libavcodec used to extract video metadata                     |
+| Flex                 |  opt     | >= 2.5.0    | http://flex.sourceforge.net                       | For Panorama tool                                      |                                                                                       |
+| Bison                |  opt     | >= 2.5.0    | http://www.gnu.org/software/bison/bison.html      | For Panorama tool                                      |                                                                                       |
+| libmesa              |  opt     | >= 11.0     | http://www.mesa3d.org                             | For Presentation tools (Linux only)                    |                                                                                       |
+| libmediawiki         |  opt     | >= 5.5.0    | https://cgit.kde.org/libmediawiki.git/about/      | For MediaWiki tool (DIGIKAMSC_COMPILE_LIBMEDIAWIKI=on) |                                                                                       |
+| libkvkontakte        |  opt     | >= 4.70.0   | https://cgit.kde.org/libkvkontatke.git/about/     | For Vkontakte tool (DIGIKAMSC_COMPILE_LIBKVKONTAKTE=on)|                                                                                       |
+| libksane             |  opt     | >= 5.0.0    | https://cgit.kde.org/libksane.git/about/          | Digital scanner (DIGIKAMSC_COMPILE_LIBKSANE=on)        |                                                                                       |
+| libjpasper           |  opt     | >= 1.900.1  | http://www.ece.uvic.ca/~mdadams/jasper            | For JPEG-2000 support                                  |                                                                                       |
+| libmarble            |  opt     | >= 0.21.80  | https://cgit.kde.org/marble.git/about/            | For geolocation support                                |                                                                                       |
+| libeigen3            |  opt     | >= 3.2      | http://eigen.tuxfamily.org                        | For Refocus tool                                       | See if Clapack from OpenCV can be used instead                                        |
+| liblensfun           |  opt     | >= 0.2.8    | http://lensfun.sourceforge.net                    | For LensCorrection tool                                |                                                                                       |
+| liblqr-1             |  opt     | >= 0.4.2    | http://liblqr.wikidot.com                         | For Liquid rescale tool                                |                                                                                       |
+| libgphoto2           |  opt     | >= 2.5      | http://www.gphoto.org                             | Digital camera drivers support. Need libusb-1          |                                                                                       |
+| libgomp              |  opt     | >= 5.0      | https://gcc.gnu.org/onlinedocs/libgomp            | OpenMP support for RawEngine                           |                                                                                       |
+
+\section getsourcecode Get Source Code
+
+\subsection softcomponents Software Components
+
+digiKam project use a single git repository to host whole source code base. The project page is given below:
+
+https://phabricator.kde.org/source/digikam/
+
+Even if code base can be compiled as well, more features can be enabled if extra components are downloaded and compiled at the same time.
+The project pages of these extra components are given below:
+
+ - \b libksane            : https://phabricator.kde.org/source/libksane/
+ - \b libmediawiki        : https://phabricator.kde.org/source/libmediawiki/
+ - \b libkvkontatke       : https://projects.kde.org/projects/extragear/libs/libkvkontatke
+ - \b digiKam \b handbook : https://phabricator.kde.org/source/digikam-doc/
+
+\subsection downloadcomponents Downloading Software Components
+
+To download all needed git repositories, you can execute download script like this:
+
+\code
+    perl ./download-repos
+\endcode
+
+Important: by default only digiKam handbook is downloaded with code base for packaging purpose. To populate also all extra 
+components, set \b $GITSLAVE environnement variable before to run \b download-repos script, like this:
+
+\code
+    export GITSLAVE=.gitslave.devel
+\endcode
+
+\section develenv Development Envirronnement
+
+If you are a developer with push access to the git repositories, it is strongly recommended
+to use the "kde:" prefix and let git use the read-only mirrors for pulling.
+
+If you did not clone this repository from "kde:", do it again:
+
+\code
+    git config --global url.git://anongit.kde.org/.insteadof kde:
+    git config --global url.ssh://git@git.kde.org/.pushinsteadof kde:
+    git clone kde:digikam
+\endcode
+
+See below an example of \b .gitconfig file working with a developer account :
+
+\code
+[url "git://anongit.kde.org/"]
+        insteadof = kde://
+
+[url "git@git.kde.org:"]
+        pushinsteadof = kde://
+
+[url "ssh://git@git.kde.org/"]
+        pushinsteadof = kde://
+
+[alias]
+        up = pull --rebase -v --stat
+        ci = commit -a -v
+[core]
+        editor = mcedit
+
+[user]
+        name = my name
+        email = my email
+
+[push]
+        default = tracking
+
+[color]
+        # turn on color
+        diff = auto
+        status = auto
+        branch = auto
+        interactive = auto
+        ui = auto
+
+[color "branch"]
+        current = green bold
+        local = green
+        remote = red bold
+
+[color "diff"]
+        meta = yellow bold
+        frag = magenta bold
+        old = red bold
+        new = green bold
+
+[color "status"]
+        added = green bold
+        changed = yellow bold
+        untracked = red
+
+[color "sh"]
+        branch = yellow
+        [color "sh"]
+\endcode
+
+\section cmakeoptions Cmake Configuration Options
+
+To configure the project with CMake, use dedicated "bootstrap" script for your platform where all available configuration
+options are present with default values.
+
+There are two configuration sections : the top level and the core.
+
+\subsection topleveloptions Top Level Configuration
+
+ - Packaging options:
+
+  - \b DIGIKAMSC_COMPILE_DIGIKAM             : Build digiKam core (default=ON).
+  - \b DIGIKAMSC_CHECKOUT_PO                 : Extract application translation files from remote repositories (default=ON).
+  - \b DIGIKAMSC_CHECKOUT_DOC                : Extract documentation translation files from remote repositories (default=ON).
+  - \b DIGIKAMSC_COMPILE_DOC                 : Build handbook i18n files. It require to checkout documentation translations files before from remote repositories (default=ON).
+  - \b DIGIKAMSC_COMPILE_PO                  : Build GUI i18n files. It require to checkout application translations files before from remote repositories (default=ON).
+
+ - Developers only options:
+
+  - \b BUILD_TESTING=ON                      : Build tests code (default=ON).
+  - \b DIGIKAMSC_COMPILE_LIBKSANE=OFF        : Force to use local libksane instead version installed on your computer (default=OFF).
+  - \b DIGIKAMSC_COMPILE_LIBMEDIAWIKI=OFF    : Force to use local libmediawiki instead version installed on your computer (default=OFF).
+  - \b DIGIKAMSC_COMPILE_LIBKVKONTAKE=OFF    : Force to use local libkvkontakte instead version installed on your computer (default=OFF).
+
+\subsection coreoptions Core Configuration
+
+ - Extra feature support options:
+
+  - \b ENABLE_KFILEMETADATASUPPORT           : Build digiKam with KDE files indexer support (default=OFF).
+  - \b ENABLE_AKONADICONTACTSUPPORT          : Build digiKam with KDE Mail Contacts support (default=OFF).
+  - \b ENABLE_MEDIAPLAYER                    : Build digiKam with Media Player support (default=OFF).
+  - \b ENABLE_DBUS                           : Build digiKam with DBUS support (default=ON).
+  - \b ENABLE_APPSTYLES                      : Build digiKam with support for changing the widget application style (default=OFF).
+  - \b ENABLE_QWEBENGINE                     : Build digiKam with QWebEngine instead of QWebKit (default=OFF).
+
+ - Experimental support options
+
+  - \b ENABLE_MYSQLSUPPORT                   : Build digiKam with MySQL dabatase support (default=ON).
+  - \b ENABLE_INTERNALMYSQL                  : Build digiKam with internal MySQL server executable (default=ON).
+
+ - Developers only options:
+
+  - \b ENABLE_DIGIKAM_MODELTEST              : Enable ModelTest on some models for debugging (default=OFF).
+
+\section setuplocaldev Setup Local Compilation and Run-Time
+
+This section describes how to install digiKam from the git repository, while keeping a system-wide digiKam install.
+
+This procedure is based on the configure script \b boostrap.local
+
+ 1. Set the root directory for your git install in boostrap.local (DIGIKAM_INSTALL_PREFIX variable)
+ 2. If you want a clean build directory, set CLEANROOT to 1
+ 3. Type the following command in your terminal:
+
+\code
+   $ ./boostrap.local  # or "./bootstrap.local --eclipse" if you intend to use Eclipse
+   $ cd build
+   $ make
+   $ make install
+   $ KDESYCOCA="/your/root/directory/var/tmp/kde-$USER/ksycoca5" kbuildsycoca5
+\endcode
+
+To run digikam, use the following commands:
+
+\code
+   $ export KDESYCOCA=/your/root/directory/var/tmp/kde-$USER/ksycoca5
+   $ export QT_PLUGIN_PATH=/your/root/directory/lib64/plugins:/your/root/directory/lib/plugins:$QT_PLUGIN_PATH
+   $ export XDG_DATA_DIRS=/your/root/directory/share:$XDG_DATA_DIRS
+   $ /your/root/directory/bin/digikam
+\endcode
+
+The same applies for all binaries in /your/root/directory/bin/
+
+If your shell is bash, you can edit your \b .bashrc file (in $HOME) and add the follwing alias:
+
+\code
+ DIGIKAMROOT="/your/root/directory"
+ alias digikam-dev="KDESYCOCA=\$DIGIKAMROOT/var/tmp/kde-$USER/ksycoca5 XDG_DATA_DIRS=\$DIGIKAMROOT/share:\$XDG_DATA_DIRS QT_PLUGIN_PATH=\$DIGIKAMROOT/lib64/plugins:\$DIGIKAMROOT/lib/plugins:\$QT_PLUGIN_PATH \$DIGIKAMROOT/bin/digikam"
+\endcode
+
+then you can start your newly installed digikam with
+
+\code
+    $ digikam-dev
+\endcode
+
+\section debugtraces Debug Traces At Run-Time
+
+digiKam uses categorized logging at run-time. By default, all debug messages are printed on the console. To disable output, you can either
+fine-grained control by using one or more logging categories listed below.
+
+Note: under Windows, to catch all debug messages you need to install an extra Microsoft application named DebugView available at this url:
+http://technet.microsoft.com/en-us/sysinternals/bb896647.aspx
+
+\subsection Enable Logging Using an Environment Variable
+
+You can set the environment variable \b QT_LOGGING_RULES. Rules are divided by semicolons.
+
+E.g. you can start digiKam like this on the commandline with thumbnails and core database messages disabled:
+
+\code
+    export QT_LOGGING_RULES='digikam.thumbsdb=false:digikam.coredb=false'
+    digikam
+\endcode
+
+\subsection digiKamloggincat Logging Categories in digiKam
+
+All loggin categories are listed in \ref digikam_debug.cpp source code.
+
+\subsection moreaboutloggincat Further Reading
+
+ For more details see the Qt framework documentation about loggin categories available at this url:
+ https://doc.qt.io/qt-5/qloggingcategory.html#details
+
+\section cmakecompilrules Cmake compilation rules
+
+\subsection cmakeintro Introduction
+
+The whole project is written mostly in C++/Qt and the Cmake framework is used to compile under Linux, MacOs, and Windows.
+The Cmake rules have been configured to reduce the linking overhead and improve CPU utilization with modular design.
+
+Independent Cmake configuration is presents in following folders:
+
+ - root source dir
+ - core
+ - extra
+ - doc
+
+The Cmake rules for the core component will link the following executable:
+
+ - digikam
+ - showfoto
+ - digikam database server - if compilation is enabled in cmake files
+ - various test executables - if testing is enabled
+
+Each of them depend on various sources which must be compiled before.
+A complete description of source code direction is given to the sourcedirs section.
+
+\subsection cmakeimpldetails CMake Implementation Details
+
+\subsubsection includedirs Include Directories
+
+Local include directories are all managed by this snippet of code:
+
+\code
+    set(DK_INCLUDES_ALL "")
+    HEADER_DIRECTORIES(DK_LOCAL_INCLUDES_RAW)
+\endcode
+
+The libjpeg- folders are all included, so we need to delete them all and include the correct one only:
+
+\code
+    # This macro will set all paths which do not containt libjpeg-
+    # We will add later the directory we need
+
+    FOREACH(var ${DK_LOCAL_INCLUDES_RAW})
+        STRING(REGEX MATCH "libjpeg-" item ${var})
+        IF(item STREQUAL "")
+            LIST(APPEND DK_LOCAL_INCLUDES ${var})
+        ENDIF(item)
+    ENDFOREACH(var)
+
+    set(DK_LOCAL_INCLUDES ${DK_LOCAL_INCLUDES}
+                          libs/jpegutils/${DIGIKAM_LIBJPEG_DIR})
+
+    include_directories(${DK_LOCAL_INCLUDES})
+\endcode
+
+There is no need for manual intervention to add new includes, even if you add a new folder, just keep in mind to use:
+
+\code
+    #include "tagmngrlistitem.h"
+\endcode
+
+instead of :
+
+\code
+    #include "models/tagmngrlistitem.h"
+\endcode
+
+\subsubsection sharedlibs Shared Libraries
+
+To avoid linking overhead and make a better use of sources there are some dynamic libs as these one:
+
+ - digikamcore : core components used by almost all executables as digiKam and Showfoto.
+ - digikamdatabase : database components, also used together with digikamcore but only for digiKam
+
+Please add sources to digikam core or digikam database only if they don't depend on any big component
+from digikam main executable. These two shared libs must be kept small because they link in a lot of places
+
+\subsubsection staticlibs Static Libraries
+
+Currently cmake configuration features a lots of shared libraries as:
+
+ - metadataedit
+ - geolocationedit
+ - libraw
+ - digikamfaceengine
+
+This libraries are linked in digikam main executable and some tests.
+
+Avoid making static libraries if possible, and use OBJECT libraries instead.
+Only make STATIC libraries which does not depend on other digikam code.
+Also make sure you put the PRIVATE parameter when setting the target_link_libraries.
+
+\code
+    target_link_libraries(digikamcore
+                          PRIVATE
+                          Qt5::Core
+                          Qt5::Gui
+                          Qt5::Widgets
+    )
+\endcode
+
+
+\subsubsection objlibs Object Libraries
+
+While static libraries are still collection of objects, CMake offer a better approach by
+allowing to specify an OBJECT library:
+
+\code
+    set(libslideshow_SRCS
+        slidetoolbar.cpp
+        slideosd.cpp
+        slideproperties.cpp
+        slideimage.cpp
+        slideerror.cpp
+        slideend.cpp
+        slideshow.cpp
+        slidehelp.cpp
+        slideshowsettings.cpp
+    )
+
+    add_library(slideshow_src OBJECT ${libslideshow_SRCS})
+\endcode
+
+OBJECT library is a cmake internal implementation feature and allow to easily manage sources.
+Here is an example of how to make a shared lib using OBJECT libraries:
+
+\code
+    add_library(digikamcore
+                SHARED
+                $<TARGET_OBJECTS:slideshow_src> # the lib we made few lines above
+                $<TARGET_OBJECTS:digikamdatabasecore_src>
+                $<TARGET_OBJECTS:dimg_src>
+                ....
+    )
+\endcode
+
+\section codecontrib Contribute To The Code
+
+This section's purpose is to guide contributors and developers to help on the
+digiKam project.
+
+\subsection startopensource Starting With Open-Source
+
+Before to contribute to digiKam project, please take a look to this link
+which provide 10 golden rules for starting with open source project:
+
+http://schlitt.info/opensource/blog/0541_10_golden_rules_for_starting_with_open_source.html
+
+\subsection codeformat Source Code Formatting
+
+Adhere to this style guide strictly while adding new code to digiKam or
+working on existing code.
+
+\subsubsection indentlength Indentation length
+
+Indent with 4 spaces exactly.
+
+for eg:
+
+\code
+void function()
+{
+....int a;                    // 4 spaces from beginning
+....for (int i=0; i<10; i++)  // 4 spaces from beginning
+....{                         // 4 spaces from beginning
+........a = i;                // 4 spaces from previous indent block
+\endcode
+
+Emacs by default will indent to 4 spaces
+vim users add this to you .vimrc
+ set tabstop=4
+
+\subsubsection tabsspaces Tabs vs Spaces
+
+Absolutely no tabs. Use a sensible editor which will convert tabs to spaces.
+This will reduce unnecessary changes in your cvs commits.
+
+Emacs by default will convert tab to spaces.
+For vim users, add this to your .vimrc
+  set expandtab
+
+\subsubsection linelength Line length
+
+Line length should never exceed 80 chars (unless really necessary - these
+cases are rare). Having long lines greatly reduces readability of code
+
+\subsubsection bracketing Bracketing
+
+In all cases, {} brackets should start on a newline and should be
+aligned with previous line (follow the indentation spaces). for eg.
+
+\code
+class A
+{ //new line
+...
+
+for (int i=0; i<10; i++)
+{ //new line
+
+if (a == foobar)
+{ //new line
+...
+}
+else
+{ // new line
+..
+}
+\endcode
+
+\subsubsection accessmod Positioning of Access modifiers
+
+public, private, protected, public slots, ... should be aligned to the
+beginning of the line with no margin
+
+\code
+class A
+{
+public: // aligned to left
+...
+private Q_SLOTS: // aligned to left
+\endcode
+
+Follow a consistent order in defining these attributes. The recommended
+order is public, protected (functions), private (functions),
+signals, public slots, protected slots, private slots, private (variables)
+
+\subsection itemsnames Class, file and Variable names
+
+\subsubsection classfilenames Class and filenames
+
+- filenames should always be in lower-case
+- class names should match the filenames. Capitalize the first letter and
+  other letters logically to improve readability
+
+\subsubsection protectvars Protected Member variables
+
+- protected member variable names should always be of the form m_varName.
+- Capitalize logically so that it becomes easy to read it. Do not capitalize
+  the first letter after _ (Use m_varName not m_VarName)
+- variable names should be indicative of their functionality and also of
+  the type they belong too if they are instances of qt widgets.
+  for eg, QCheckBox* m_autoRotateCheckBox;
+
+\subsubsection nomembvars Non-Member variables
+
+- non-member variables should follow the same naming convention as the member
+  variables, except for the leading m_
+
+\subsubsection privmembvars Private Member variables
+
+- private member variables must be stored in a d private container to reduce
+  compilation time and improve binary compatibility between digiKam components.
+  See more information how to use a 'd' private class at this url:
+
+  http://developer.kde.org/policies/librarypolicy.html
+
+\subsection commentsspaces Comments and Whitespace
+
+Use whitespaces liberally to improve readability. Add blank lines between logical
+sections of the code.
+
+Comment as much as possible. Position comments at the beginning of the
+section/line you want to comment, NEVER at the end of the line, excepted for special
+cases for ex to describe enum values.
+
+\code
+// put your comments here
+a = (b == foobar) ? 1 : -1;
+
+a = (b == foobar) ? 1 : -1; // you are asking for trouble by putting comments here
+\endcode
+
+\subsection headerfiles Header Files
+
+- Add copyright to top of every file. Use the same header than others digiKam
+  source code.
+- Double inclusion protection defines are all upper case letters and are
+  composed of the classname and a H suffix separated by underscore
+
+\code
+#ifndef ANOTHERNICECLASS_H
+#define ANOTHERNICECLASS_H
+
+class AnotherNiceClass
+{
+...
+}
+
+#endif
+\endcode
+
+- Use forward declarations as much as possible.
+
+\code
+class QFileInfo;
+
+class A
+{
+....QFileInfo* m_fileInfo;
+\endcode
+
+\subsection autocodeformat Automatic source code formatting
+
+The above coding style guidelines can be automatically applied with
+astyle (http://astyle.sourceforge.net/).
+
+Run it in the directory where the files are located that should be formatted
+with the following command:
+
+\code
+astyle --brackets=break --indent=spaces=4 --convert-tabs --indent-switches \
+       --break-blocks --break-closing-brackets --pad-header                \
+       --align-pointer=type --indent-col1-comments --add-brackets          \
+       --min-conditional-indent=0                                          \
+       `find -type f -name '*.cpp'` `find -type f -name '*.cc'` `find -type f -name '*.h'`
+\endcode
+
+Another way to apply the coding guidelines with astyle is to use the
+fileformatter script in /project/scripts. This script will also clean up the
+source tree and remove backup files that had been created by astyle, 
+if the appropriate command line argument is given.
+
+To handle the command easier, create a bash function in ~/.bashrc, e.g.
+
+\code
+digikamformatcode()
+{
+    astyle --brackets=break --indent=spaces=4 --convert-tabs --indent-switches \
+           --break-blocks --break-closing-brackets --pad-header                \
+           --align-pointer=type --indent-col1-comments --add-brackets          \
+           --min-conditional-indent=0                                          \
+           `find $1 -type f -name '*.cpp'` `find $1 -type f -name '*.cc'` `find $1 -type f -name '*.h'`
+}
+\endcode
+
+You can pass a parameter to the function, in this case the first parameter is the directory, where
+files should be formatted.
+
+Examples:
+
+1. Run astyle in the current directory
+\code
+$> digikamformatcode
+\endcode
+
+2. Run astyle in a different directory
+\code
+$> digikamformatcode /home/user/code/svn/digikam/
+\endcode
+
+\subsection generalrecommend General recommendations
+
+Please take a look into this contrib page tips before to write code/patches for
+digiKam project : http://techbase.kde.org/Contribute
+
+Use the same .cpp/.h header than the rest of digiKam project.
+
+Use a decent editor which does auto-indentation/syntax-highlighting for you, 
+as Kate or QtCreator
+
+There are excellent initializer scripts in the kdesdk
+package for xemacs and vim which can substantially increase your productivity.
+
+Just to give a taste of what i can do with emacs (and kdesdk):
+
+* automatically insert copyright (and ifdefs) in new files.
+* insertion of class function definitions for declared class
+  functions in header with one keystroke
+* switch between header and declaration files with one keystroke
+* go to corresponding definition/declaration with one keystroke
+* tab completion of variable/function names already declared.
+
+\subsection gdbbacktrace GDB Backtrace
+
+If you found a context to crash digiKam, you can provide a backtrace using GDB debugger.
+digiKam need to be compiled with all debug info else the backtrace will not suitable.
+There is a configure option for that:
+
+\code
+$> cmake . -DCMAKE_BUILD_TYPE=debugfull
+$> make
+$> su
+$> make install/fast
+\endcode
+
+To make a backtrace with GDB use following command:
+
+\code
+$ gdb digikam
+> catch throw
+> run
+> ...
+> _crash here_
+> ...
+> bt
+> _the backtrace is here_
+> quit
+\endcode
+
+Post this backtrace at the right place (Bugzilla or developement mailing list) for investigations by developers.
+
+For Windows users, take a look on this tutorial :
+
+http://techbase.kde.org/Development/Tutorials/Debugging/Debugging_on_MS_Windows
+
+\subsection memleak Memory Leak
+
+To check any memory leak problem in digiKam, valgrind is your friend (http://valgrind.org)
+Try this command line to use with valgrind :
+
+\code
+valgrind --tool=memcheck --leak-check=full --error-limit=no --suppressions=project/reports/digikam.supp digikam
+\endcode
+
+NOTE: digikam.supp file is available in digikam/project sub-folder.
+
+\subsection profilingcode Profiling With Cachegrind
+
+Valgrind also includes a tool to find out in which parts of your code time is spent.
+
+\code
+valgrind --tool=callgrind digikam
+\endcode
+
+Profiling can be disabled at startup to limit the output to the code you are interested in.
+Start with
+
+\code
+valgrind --tool=callgrind --instr-atstart=no digikam
+\endcode
+
+and prepare the situation you want to profile. Then, in another console, start profiling with
+"callgrind_control -i on" and, after the situation has passed, request a profile dump with
+"callgrind_control -d".
+The resulting callgrind.out files need to be viewed with the kcachegrind program, e.g.:
+
+\code
+kcachegrind callgrind.out.16693.1
+\endcode
+
+\subsection unittests Unit Testing / Automated Testing
+
+Unit Testing is great way to ensure that software units (in OOP this normally
+means classes) work as expected. Wikipedia gives a good introduction to
+Unit Testing:
+
+http://en.wikipedia.org/wiki/Unit_testing
+
+It is also worth to follow most of QTTest API rules with digiKam:
+
+http://doc.qt.io/qt-5/qtest-tutorial.html
+
+The digiKam test suite is located under tests and will be compiled if
+BUILD_TESTING is turned ON at cmake configuration time. After compiling the source code
+the tests can be executed via
+
+\code
+make test
+\endcode
+
+The console output while running the tests is stored in
+Testing/Temporary/LastTest.log in the CMake binary dir.
+
+All tests are simple binaries that can be executed separately if needed.
+
+\subsection corruptedsignalslot Checking For Corrupt Qt Signal Slot Connection
+
+Use this alias for running digikam:
+
+\code
+alias digikamdbg="digikam 2>&1 | tee - /tmp/digikam.out; echo -e \"\n\n\nPossible connection errors:\n\n\"; cat /tmp/digikam.out | grep -A2 'Object::connect'"
+\endcode
+
+It will print a list of connection warnings after terminating the program.
+Moreover the complete console log of the last session is stored in
+/tmp/digikam.out.
+
+\subsection dupcodes Finding Duplicated Code
+
+Code duplication should be avoided as bugs have to be fixed for every piece of
+duplicated code. The current duplication can be analyzed eg. with Simian:
+http://www.redhillconsulting.com.au/products/simian/
+
+In the digikam checkout directory run:
+
+\code
+java -jar simian.jar `find . -regex '.*\.cpp\|.*\.h' | grep -v 3rdparty`
+\endcode
+
+This prints out a list of duplicated code segments.
+
+\subsection docvalidcodecheck API Documentation Validation, User Documentation Validation, Source Code Checking
+
+The following site check on a daily basis for the a.m. errors:
+www.englishbreakfastnetwork.org/krazy/
+
+It can be very useful, in particular before major releases.
+Don't trust it blindly! Sometimes they propose too advanced modifications that
+are no compatible with the prevailant include files.
+
+\subsection appusability Usability Issues
+
+OpenUsability project has define default menu structure and keyboard shortcuts:
+
+http://wiki.openusability.org/guidelines/index.php/Appendices:Keyboard_Shortcuts
+
+\subsection apidoc Generate API Documentation
+
+To generate API documentation, you need to install:
+
+- Doxygen program (http://www.doxygen.org)
+- Dot program (http://www.graphviz.org)
+
+After cmake generated a Makefile you can call 'make doc'. A new subfolder named
+'html' will be created. Warning, this can take a while.
+
+For finding documentation errors, doxygen generates a warning log file at the
+cmake binary dir called 'doxygen-warn.log'.
+
+\subsection speedupcompil Speed Up The Code-Compile-Test Cycle
+
+Assuming you have setup your environment in ~/.bashrc as is suggested for development,
+you can add something like this to your ~/.bashrc:
+
+\code
+function digikam_start
+{
+LD_LIBRARY_PATH=${KDE_BUILD}/extragear/graphics/lib:${LD_LIBRARY_PATH} ${KDE_BUILD}/extragear/graphics/digikam/digikam/digikam
+}
+
+function digikam_start_gdb
+{
+LD_LIBRARY_PATH=${KDE_BUILD}/extragear/graphics/lib:${LD_LIBRARY_PATH} gdb ${KDE_BUILD}/extragear/graphics/digikam/digikam/digikam
+}
+\endcode
+
+This allows you to run digikam after compiling without the need of a "make install", even
+if you changed code in the libraries.
+
+\subsection gitbranches Working With Branches From Git Repository
+
+As with Subversion, it typical to use a dedicated developement branch in Git to keep the
+master code stable for production. To synchronize branches with master, use these commands in your
+local branch checkout:
+
+\code
+$>git checkout master
+$>git pull --rebase
+$>git checkout -b MY_DEVEL_BRANCH GIT_REMOTE_PATH
+  Branch 'MY_DEVEL_BRANCH' set up to track remote branch path 'GIT_REMOTE_PATH' from origin.
+  To list GIT_REMOTE_PATH, use 'git branch -a' command
+  Switched to a new branch 'MY_DEVEL_BRANCH'
+$>git merge master
+  Merge made by the 'recursive' strategy.
+  ...
+$>git push
+  ...
+\endcode
+
+The first 2 lines make sure that your local master repository is up to date. The 3rd line creates the local development branch "MY_DEVEL_BRANCH". If you have already created this branch, just run "git checkout MY_DEVEL_BRANCH". 
+Merging between master and "MY_DEVEL_BRANCH" branch is done in the 4th line. Git might ask you to resolve conflicts here.
+When it's done, it will ask you to provide a commit message. Finally you push your merge into the remote repository.
+
 */

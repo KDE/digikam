@@ -49,7 +49,7 @@ void DImgFilterActionTest::testDRawDecoding()
     params.rawPrm.autoBrightness        = true;
     params.rawPrm.whiteBalance          = DRawDecoderSettings::AERA;
     params.rawPrm.RGBInterpolate4Colors = true;
-    params.rawPrm.RAWQuality            = DRawDecoderSettings::AMAZE;
+    params.rawPrm.RAWQuality            = DRawDecoderSettings::DHT;
     params.rawPrm.NRType                = DRawDecoderSettings::WAVELETSNR;
     params.rawPrm.outputColorSpace      = DRawDecoderSettings::ADOBERGB;
 

@@ -1896,13 +1896,13 @@ void ImageWindow::slotExportTool()
         w->exec();
         delete w;
     }
-    else if (tool == m_exportTwitterAction)
+    /*else if (tool == m_exportTwitterAction)
     {
-        QPointer<TwWindow> w = new TwWindow(new DBInfoIface(this, d->thumbBar->allUrls(),
+        QPointer<ODWindow> w = new TwWindow(new DBInfoIface(this, d->thumbBar->allUrls(),
                                    ApplicationSettings::ImportExport), this);
         w->exec();
         delete w;
-    }
+    }*/
     else if (tool == m_exportFacebookAction)
     {
         QPointer<FbWindow> w = new FbWindow(new DBInfoIface(this, d->thumbBar->allUrls(),

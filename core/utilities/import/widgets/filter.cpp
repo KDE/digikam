@@ -46,8 +46,8 @@ QString Filter::toString()
     return QString::fromUtf8("%1|%2|%3|%4|%5")
            .arg(name)
            .arg(onlyNew ? QLatin1String("true") : QLatin1String("false"))
-           .arg(fileFilter.join(QLatin1String(";")))
-           .arg(pathFilter.join(QLatin1String(";")))
+           .arg(fileFilter.join(QLatin1Char(';')))
+           .arg(pathFilter.join(QLatin1Char(';')))
            .arg(mimeFilter);
 }
 

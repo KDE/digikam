@@ -114,7 +114,7 @@ QString ImageGPS::saveChanges()
 
             for (int j = 0; j < currentTagPath.count(); ++j)
             {
-                singleTagPath.append(QLatin1String("/") + currentTagPath[j].tagName);
+                singleTagPath.append(QLatin1Char('/') + currentTagPath[j].tagName);
 
                 if (j == 0)
                 {

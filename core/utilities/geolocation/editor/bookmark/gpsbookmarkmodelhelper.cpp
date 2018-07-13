@@ -114,7 +114,7 @@ GPSBookmarkModelHelper::GPSBookmarkModelHelper(BookmarksManager* const bookmarkM
     d->bookmarkManager = bookmarkManager;
     d->imageModel      = imageModel;
     d->bookmarkIconUrl = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                             QString::fromLatin1("digikam/geolocationedit/bookmarks-marker.png")));
+                                             QLatin1String("digikam/geolocationedit/bookmarks-marker.png")));
     d->pixmap          = QPixmap(d->bookmarkIconUrl.toLocalFile());
 
     connect(d->bookmarkManager, SIGNAL(entryChanged(BookmarkNode*)),

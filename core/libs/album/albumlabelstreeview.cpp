@@ -667,7 +667,7 @@ SAlbum* AlbumLabelsSearchHandler::search(const QString& xml) const
         if (album)
         {
             id = album->id();
-            CoreDbAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
+            CoreDbAccess().db()->updateSearch(id, DatabaseSearch::AdvancedSearch,
                                               SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
         }
         else
@@ -685,7 +685,7 @@ SAlbum* AlbumLabelsSearchHandler::search(const QString& xml) const
         if (album)
         {
             id = album->id();
-            CoreDbAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
+            CoreDbAccess().db()->updateSearch(id, DatabaseSearch::AdvancedSearch,
                                               getDefaultTitle(), xml);
         }
         else

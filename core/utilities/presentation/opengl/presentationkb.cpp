@@ -620,7 +620,7 @@ QStringList PresentationKB::effectNames()
 {
     QStringList effects;
 
-    effects.append(QString::fromLatin1("Ken Burns"));
+    effects.append(QLatin1String("Ken Burns"));
     return effects;
 }
 
@@ -628,7 +628,7 @@ QMap<QString, QString> PresentationKB::effectNamesI18N()
 {
     QMap<QString, QString> effects;
 
-    effects[QString::fromLatin1("Ken Burns")] = i18n("Ken Burns");
+    effects[QLatin1String("Ken Burns")] = i18n("Ken Burns");
 
     return effects;
 }

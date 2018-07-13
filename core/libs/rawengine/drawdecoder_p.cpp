@@ -149,10 +149,10 @@ void DRawDecoder::Private::fillIndentifyInfo(LibRaw* const raw, RawInfo& identif
 
         for (int i=0; i < 16; i++)
         {
-            identify.filterPattern.append(QChar::fromLatin1(raw->imgdata.idata.cdesc[raw->COLOR(i >> 1, i & 1)]));
+            identify.filterPattern.append(QLatin1Char(raw->imgdata.idata.cdesc[raw->COLOR(i >> 1, i & 1)]));
         }
 
-        identify.colorKeys = QString::fromLatin1(raw->imgdata.idata.cdesc);
+        identify.colorKeys = QLatin1String(raw->imgdata.idata.cdesc);
     }
 
     for(int c = 0 ; c < raw->imgdata.idata.colors ; c++)
@@ -368,39 +368,13 @@ bool DRawDecoder::Private::loadFromLibraw(const QString& filePath, QByteArray& i
             raw.imgdata.params.fbdd_noiserd = lround(m_parent->m_decoderSettings.NRThreshold / 100.0);
             break;
         }
-        case DRawDecoderSettings::LINENR:
-        {
-            // (100 - 1000) => (0.001 - 0.02) conversion.
-            raw.imgdata.params.linenoise    = m_parent->m_decoderSettings.NRThreshold * 2.11E-5 + 0.00111111;
-            raw.imgdata.params.cfaline      = true;
-            break;
-        }
-
-        case DRawDecoderSettings::IMPULSENR:
-        {
-            // (100 - 1000) => (0.005 - 0.05) conversion.
-            raw.imgdata.params.lclean       = m_parent->m_decoderSettings.NRThreshold     * 5E-5;
-            raw.imgdata.params.cclean       = m_parent->m_decoderSettings.NRChroThreshold * 5E-5;
-            raw.imgdata.params.cfa_clean    = true;
-            break;
-        }
         default:   // No Noise Reduction
         {
             raw.imgdata.params.threshold    = 0;
             raw.imgdata.params.fbdd_noiserd = 0;
-            raw.imgdata.params.linenoise    = 0;
-            raw.imgdata.params.cfaline      = false;
-            raw.imgdata.params.lclean       = 0;
-            raw.imgdata.params.cclean       = 0;
-            raw.imgdata.params.cfa_clean    = false;
             break;
         }
     }
-
-    // Chromatic aberration correction.
-    raw.imgdata.params.ca_correc  = m_parent->m_decoderSettings.enableCACorrection;
-    raw.imgdata.params.cared      = m_parent->m_decoderSettings.caMultiplier[0];
-    raw.imgdata.params.cablue     = m_parent->m_decoderSettings.caMultiplier[1];
 
     // Exposure Correction before interpolation.
     raw.imgdata.params.exp_correc = m_parent->m_decoderSettings.expoCorrection;
@@ -454,8 +428,6 @@ bool DRawDecoder::Private::loadFromLibraw(const QString& filePath, QByteArray& i
 
     raw.imgdata.params.dcb_iterations = m_parent->m_decoderSettings.dcbIterations;
     raw.imgdata.params.dcb_enhance_fl = m_parent->m_decoderSettings.dcbEnhanceFl;
-    raw.imgdata.params.eeci_refine    = m_parent->m_decoderSettings.eeciRefine;
-    raw.imgdata.params.es_med_passes  = m_parent->m_decoderSettings.esMedPasses;
 
     //-------------------------------------------------------------------------------------------
 

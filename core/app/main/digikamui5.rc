@@ -158,7 +158,6 @@
       <Action name="export_onedrive" />
       <Action name="export_rajce" />
       <Action name="export_smugmug" />
-      <Action name="export_twitter" />
       <Action name="export_yandexfotki" />
       <Action name="export_mediawiki" />
       <Action name="export_vkontakte" />

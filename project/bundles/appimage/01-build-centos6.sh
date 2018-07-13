@@ -40,6 +40,8 @@ ORIG_WD="`pwd`"
 
 echo -e "---------- Update Linux CentOS 6\n"
 
+yum -y install epel-release
+
 if [[ "$(arch)" = "x86_64" ]] ; then
 
     yum upgrade ca-certificates --disablerepo=epel
@@ -186,7 +188,7 @@ yum -y install libass-devel \
 echo -e "---------- Clean-up Old Packages\n"
 
 # Remove system based devel package to prevent conflict with new one.
-yum -y erase qt-devel boost-devel libgphoto2 sane-backends libjpeg-devel jasper-devel libpng-devel libtiff-devel ffmpeg ffmpeg-devel
+yum -y erase qt-devel boost-devel libgphoto2 sane-backends libjpeg-devel jasper-devel libpng-devel libtiff-devel ffmpeg ffmpeg-devel ant pulseaudio-libs-devel
 
 #################################################################################################
 

@@ -265,7 +265,7 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
 
     registerEffects();
 
-    if (d->sharedData->effectName == QString::fromLatin1("Random"))
+    if (d->sharedData->effectName == QLatin1String("Random"))
     {
         d->effect = getRandomEffect();
     }
@@ -276,8 +276,8 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
 
         if (!d->effect)
         {
-            d->effect     = d->Effects[QString::fromLatin1("None")];
-            d->effectName = QString::fromLatin1("None");
+            d->effect     = d->Effects[QLatin1String("None")];
+            d->effectName = QLatin1String("None");
         }
     }
 
@@ -823,39 +823,39 @@ void PresentationWidget::slotVideoFinished()
 
 void PresentationWidget::registerEffects()
 {
-    d->Effects.insert(QString::fromLatin1("None"),             &PresentationWidget::effectNone);
-    d->Effects.insert(QString::fromLatin1("Chess Board"),      &PresentationWidget::effectChessboard);
-    d->Effects.insert(QString::fromLatin1("Melt Down"),        &PresentationWidget::effectMeltdown);
-    d->Effects.insert(QString::fromLatin1("Sweep"),            &PresentationWidget::effectSweep);
-    d->Effects.insert(QString::fromLatin1("Mosaic"),           &PresentationWidget::effectMosaic);
-    d->Effects.insert(QString::fromLatin1("Cubism"),           &PresentationWidget::effectCubism);
-    d->Effects.insert(QString::fromLatin1("Growing"),          &PresentationWidget::effectGrowing);
-    d->Effects.insert(QString::fromLatin1("Horizontal Lines"), &PresentationWidget::effectHorizLines);
-    d->Effects.insert(QString::fromLatin1("Vertical Lines"),   &PresentationWidget::effectVertLines);
-    d->Effects.insert(QString::fromLatin1("Circle Out"),       &PresentationWidget::effectCircleOut);
-    d->Effects.insert(QString::fromLatin1("MultiCircle Out"),  &PresentationWidget::effectMultiCircleOut);
-    d->Effects.insert(QString::fromLatin1("Spiral In"),        &PresentationWidget::effectSpiralIn);
-    d->Effects.insert(QString::fromLatin1("Blobs"),            &PresentationWidget::effectBlobs);
+    d->Effects.insert(QLatin1String("None"),             &PresentationWidget::effectNone);
+    d->Effects.insert(QLatin1String("Chess Board"),      &PresentationWidget::effectChessboard);
+    d->Effects.insert(QLatin1String("Melt Down"),        &PresentationWidget::effectMeltdown);
+    d->Effects.insert(QLatin1String("Sweep"),            &PresentationWidget::effectSweep);
+    d->Effects.insert(QLatin1String("Mosaic"),           &PresentationWidget::effectMosaic);
+    d->Effects.insert(QLatin1String("Cubism"),           &PresentationWidget::effectCubism);
+    d->Effects.insert(QLatin1String("Growing"),          &PresentationWidget::effectGrowing);
+    d->Effects.insert(QLatin1String("Horizontal Lines"), &PresentationWidget::effectHorizLines);
+    d->Effects.insert(QLatin1String("Vertical Lines"),   &PresentationWidget::effectVertLines);
+    d->Effects.insert(QLatin1String("Circle Out"),       &PresentationWidget::effectCircleOut);
+    d->Effects.insert(QLatin1String("MultiCircle Out"),  &PresentationWidget::effectMultiCircleOut);
+    d->Effects.insert(QLatin1String("Spiral In"),        &PresentationWidget::effectSpiralIn);
+    d->Effects.insert(QLatin1String("Blobs"),            &PresentationWidget::effectBlobs);
 }
 
 QStringList PresentationWidget::effectNames()
 {
     QStringList effects;
 
-    effects.append(QString::fromLatin1("None"));
-    effects.append(QString::fromLatin1("Chess Board"));
-    effects.append(QString::fromLatin1("Melt Down"));
-    effects.append(QString::fromLatin1("Sweep"));
-    effects.append(QString::fromLatin1("Mosaic"));
-    effects.append(QString::fromLatin1("Cubism"));
-    effects.append(QString::fromLatin1("Growing"));
-    effects.append(QString::fromLatin1("Horizontal Lines"));
-    effects.append(QString::fromLatin1("Vertical Lines"));
-    effects.append(QString::fromLatin1("Circle Out"));
-    effects.append(QString::fromLatin1("MultiCircle Out"));
-    effects.append(QString::fromLatin1("Spiral In"));
-    effects.append(QString::fromLatin1("Blobs"));
-    effects.append(QString::fromLatin1("Random"));
+    effects.append(QLatin1String("None"));
+    effects.append(QLatin1String("Chess Board"));
+    effects.append(QLatin1String("Melt Down"));
+    effects.append(QLatin1String("Sweep"));
+    effects.append(QLatin1String("Mosaic"));
+    effects.append(QLatin1String("Cubism"));
+    effects.append(QLatin1String("Growing"));
+    effects.append(QLatin1String("Horizontal Lines"));
+    effects.append(QLatin1String("Vertical Lines"));
+    effects.append(QLatin1String("Circle Out"));
+    effects.append(QLatin1String("MultiCircle Out"));
+    effects.append(QLatin1String("Spiral In"));
+    effects.append(QLatin1String("Blobs"));
+    effects.append(QLatin1String("Random"));
 
     return effects;
 }
@@ -864,20 +864,20 @@ QMap<QString, QString> PresentationWidget::effectNamesI18N()
 {
     QMap<QString, QString> effects;
 
-    effects[QString::fromLatin1("None")]             = i18nc("Filter Effect: No effect",        "None");
-    effects[QString::fromLatin1("Chess Board")]      = i18nc("Filter Effect: Chess Board",      "Chess Board");
-    effects[QString::fromLatin1("Melt Down")]        = i18nc("Filter Effect: Melt Down",        "Melt Down");
-    effects[QString::fromLatin1("Sweep")]            = i18nc("Filter Effect: Sweep",            "Sweep");
-    effects[QString::fromLatin1("Mosaic")]           = i18nc("Filter Effect: Mosaic",           "Mosaic");
-    effects[QString::fromLatin1("Cubism")]           = i18nc("Filter Effect: Cubism",           "Cubism");
-    effects[QString::fromLatin1("Growing")]          = i18nc("Filter Effect: Growing",          "Growing");
-    effects[QString::fromLatin1("Horizontal Lines")] = i18nc("Filter Effect: Horizontal Lines", "Horizontal Lines");
-    effects[QString::fromLatin1("Vertical Lines")]   = i18nc("Filter Effect: Vertical Lines",   "Vertical Lines");
-    effects[QString::fromLatin1("Circle Out")]       = i18nc("Filter Effect: Circle Out",       "Circle Out");
-    effects[QString::fromLatin1("MultiCircle Out")]  = i18nc("Filter Effect: Multi-Circle Out", "Multi-Circle Out");
-    effects[QString::fromLatin1("Spiral In")]        = i18nc("Filter Effect: Spiral In",        "Spiral In");
-    effects[QString::fromLatin1("Blobs")]            = i18nc("Filter Effect: Blobs",            "Blobs");
-    effects[QString::fromLatin1("Random")]           = i18nc("Filter Effect: Random effect",    "Random");
+    effects[QLatin1String("None")]             = i18nc("Filter Effect: No effect",        "None");
+    effects[QLatin1String("Chess Board")]      = i18nc("Filter Effect: Chess Board",      "Chess Board");
+    effects[QLatin1String("Melt Down")]        = i18nc("Filter Effect: Melt Down",        "Melt Down");
+    effects[QLatin1String("Sweep")]            = i18nc("Filter Effect: Sweep",            "Sweep");
+    effects[QLatin1String("Mosaic")]           = i18nc("Filter Effect: Mosaic",           "Mosaic");
+    effects[QLatin1String("Cubism")]           = i18nc("Filter Effect: Cubism",           "Cubism");
+    effects[QLatin1String("Growing")]          = i18nc("Filter Effect: Growing",          "Growing");
+    effects[QLatin1String("Horizontal Lines")] = i18nc("Filter Effect: Horizontal Lines", "Horizontal Lines");
+    effects[QLatin1String("Vertical Lines")]   = i18nc("Filter Effect: Vertical Lines",   "Vertical Lines");
+    effects[QLatin1String("Circle Out")]       = i18nc("Filter Effect: Circle Out",       "Circle Out");
+    effects[QLatin1String("MultiCircle Out")]  = i18nc("Filter Effect: Multi-Circle Out", "Multi-Circle Out");
+    effects[QLatin1String("Spiral In")]        = i18nc("Filter Effect: Spiral In",        "Spiral In");
+    effects[QLatin1String("Blobs")]            = i18nc("Filter Effect: Blobs",            "Blobs");
+    effects[QLatin1String("Random")]           = i18nc("Filter Effect: Random effect",    "Random");
 
     return effects;
 }
@@ -903,7 +903,7 @@ void PresentationWidget::slotTimeOut()
             return;
         }
 
-        if (d->sharedData->effectName  == QString::fromLatin1("Random")) // Take a random effect.
+        if (d->sharedData->effectName  == QLatin1String("Random")) // Take a random effect.
         {
             d->effect = getRandomEffect();
 
@@ -940,7 +940,7 @@ void PresentationWidget::showCurrentImage()
 PresentationWidget::EffectMethod PresentationWidget::getRandomEffect()
 {
     QStringList effs = d->Effects.keys();
-    effs.removeAt(effs.indexOf(QString::fromLatin1("None")));
+    effs.removeAt(effs.indexOf(QLatin1String("None")));
 
     int count        = effs.count();
     int i            = qrand() % count;

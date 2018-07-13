@@ -926,7 +926,7 @@ static inline QString fastNumberToString(int id)
         number >>= 4;
     }
 
-    return QString::fromLatin1(c);
+    return QLatin1String(c);
 }
 
 QString ImageFilterModel::categoryIdentifier(const ImageInfo& i) const

@@ -189,7 +189,6 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
 
     m_exportDropboxAction      = 0;
     m_exportOnedriveAction     = 0;
-    m_exportTwitterAction      = 0;
     m_exportFacebookAction     = 0;
     m_exportFlickrAction       = 0;
     m_exportGdriveAction       = 0;
@@ -246,10 +245,18 @@ QString DXmlGuiWindow::configGroupName() const
 
 void DXmlGuiWindow::closeEvent(QCloseEvent* e)
 {
-    if(fullScreenIsActive())
+    if (fullScreenIsActive())
         slotToggleFullScreen(false);
 
+    if (!testAttribute(Qt::WA_DeleteOnClose))
+    {
+        setVisible(false);
+        e->ignore();
+        return;
+    }
+
     KXmlGuiWindow::closeEvent(e);
+    e->accept();
 }
 
 void DXmlGuiWindow::setFullScreenOptions(int options)
@@ -1030,7 +1037,7 @@ void DXmlGuiWindow::setupIconTheme()
 void DXmlGuiWindow::createExportActions()
 {
     m_exportDropboxAction = new QAction(i18n("Export to &Dropbox..."), this);
-    m_exportDropboxAction->setIcon(QIcon::fromTheme(QString::fromLatin1("dropbox")));
+    m_exportDropboxAction->setIcon(QIcon::fromTheme(QLatin1String("dropbox")));
     actionCollection()->addAction(QLatin1String("export_dropbox"), m_exportDropboxAction);
     actionCollection()->setDefaultShortcut(m_exportDropboxAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_D);
 
@@ -1046,16 +1053,16 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
 
-    m_exportTwitterAction = new QAction(i18n("Export to &Twitter..."), this);
+    /*m_exportTwitterAction = new QAction(i18n("Export to &Twitter..."), this);
     m_exportTwitterAction->setIcon(QIcon::fromTheme(QString::fromLatin1("twitter")));
     actionCollection()->addAction(QLatin1String("export_twitter"), m_exportTwitterAction);
     actionCollection()->setDefaultShortcut(m_exportTwitterAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_T);
 
     connect(m_exportTwitterAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
-
+*/
     m_exportFacebookAction = new QAction(i18n("Export to &Facebook..."), this);
-    m_exportFacebookAction->setIcon(QIcon::fromTheme(QString::fromLatin1("facebook")));
+    m_exportFacebookAction->setIcon(QIcon::fromTheme(QLatin1String("facebook")));
     actionCollection()->addAction(QLatin1String("export_facebook"), m_exportFacebookAction);
     actionCollection()->setDefaultShortcut(m_exportFacebookAction, Qt::ALT + Qt::SHIFT + Qt::Key_F);
 
@@ -1063,7 +1070,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportFlickrAction = new QAction(i18n("Export to Flick&r..."), this);
-    m_exportFlickrAction->setIcon(QIcon::fromTheme(QString::fromLatin1("flickr")));
+    m_exportFlickrAction->setIcon(QIcon::fromTheme(QLatin1String("flickr")));
     actionCollection()->addAction(QLatin1String("export_flickr"), m_exportFlickrAction);
     actionCollection()->setDefaultShortcut(m_exportFlickrAction, Qt::ALT + Qt::SHIFT + Qt::Key_R);
 
@@ -1071,7 +1078,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportGdriveAction = new QAction(i18n("Export to &Google Drive..."), this);
-    m_exportGdriveAction->setIcon(QIcon::fromTheme(QString::fromLatin1("googledrive")));
+    m_exportGdriveAction->setIcon(QIcon::fromTheme(QLatin1String("googledrive")));
     actionCollection()->addAction(QLatin1String("export_googledrive"), m_exportGdriveAction);
     actionCollection()->setDefaultShortcut(m_exportGdriveAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_G);
 
@@ -1079,7 +1086,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportGphotoAction = new QAction(i18n("Export to &Google Photos..."), this);
-    m_exportGphotoAction->setIcon(QIcon::fromTheme(QString::fromLatin1("googlephoto")));
+    m_exportGphotoAction->setIcon(QIcon::fromTheme(QLatin1String("googlephoto")));
     actionCollection()->addAction(QLatin1String("export_googlephoto"), m_exportGphotoAction);
     actionCollection()->setDefaultShortcut(m_exportGphotoAction, Qt::ALT + Qt::SHIFT + Qt::Key_P);
 
@@ -1087,7 +1094,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportImageshackAction = new QAction(i18n("Export to &Imageshack..."), this);
-    m_exportImageshackAction->setIcon(QIcon::fromTheme(QString::fromLatin1("imageshack")));
+    m_exportImageshackAction->setIcon(QIcon::fromTheme(QLatin1String("imageshack")));
     actionCollection()->addAction(QLatin1String("export_imageshack"), m_exportImageshackAction);
     actionCollection()->setDefaultShortcut(m_exportImageshackAction, Qt::ALT + Qt::SHIFT + Qt::Key_M);
 
@@ -1095,21 +1102,21 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportImgurAction = new QAction(i18n("Export to &Imgur.."), this);
-    m_exportImgurAction->setIcon(QIcon::fromTheme(QString::fromLatin1("imgur")));
+    m_exportImgurAction->setIcon(QIcon::fromTheme(QLatin1String("imgur")));
     actionCollection()->addAction(QLatin1String("export_imgur"), m_exportImgurAction);
 
     connect(m_exportImgurAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
     m_exportPiwigoAction = new QAction(i18n("Export to &Piwigo..."), this);
-    m_exportPiwigoAction->setIcon(QIcon::fromTheme(QString::fromLatin1("piwigo")));
+    m_exportPiwigoAction->setIcon(QIcon::fromTheme(QLatin1String("piwigo")));
     actionCollection()->addAction(QLatin1String("export_piwigo"), m_exportPiwigoAction);
 
     connect(m_exportPiwigoAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
     m_exportRajceAction = new QAction(i18n("Export to &Rajce.net..."), this);
-    m_exportRajceAction->setIcon(QIcon::fromTheme(QString::fromLatin1("rajce")));
+    m_exportRajceAction->setIcon(QIcon::fromTheme(QLatin1String("rajce")));
     actionCollection()->addAction(QLatin1String("export_rajce"), m_exportRajceAction);
     actionCollection()->setDefaultShortcut(m_exportRajceAction, Qt::ALT + Qt::SHIFT + Qt::Key_J);
 
@@ -1117,7 +1124,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportSmugmugAction = new QAction(i18n("Export to &SmugMug..."), this);
-    m_exportSmugmugAction->setIcon(QIcon::fromTheme(QString::fromLatin1("smugmug")));
+    m_exportSmugmugAction->setIcon(QIcon::fromTheme(QLatin1String("smugmug")));
     actionCollection()->addAction(QLatin1String("export_smugmug"), m_exportSmugmugAction);
     actionCollection()->setDefaultShortcut(m_exportSmugmugAction, Qt::ALT + Qt::SHIFT +  Qt::Key_S);
 
@@ -1125,7 +1132,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportYandexfotkiAction = new QAction(i18n("Export to &Yandex.Fotki..."), this);
-    m_exportYandexfotkiAction->setIcon(QIcon::fromTheme(QString::fromLatin1("internet-web-browser")));
+    m_exportYandexfotkiAction->setIcon(QIcon::fromTheme(QLatin1String("internet-web-browser")));
     actionCollection()->addAction(QLatin1String("export_yandexfotki"), m_exportYandexfotkiAction);
     actionCollection()->setDefaultShortcut(m_exportYandexfotkiAction, Qt::ALT + Qt::SHIFT + Qt::Key_Y);
 
@@ -1134,7 +1141,7 @@ void DXmlGuiWindow::createExportActions()
 
 #ifdef HAVE_MEDIAWIKI
     m_exportMediawikiAction = new QAction(i18n("Export to MediaWiki..."), this);
-    m_exportMediawikiAction->setIcon(QIcon::fromTheme(QString::fromLatin1("mediawiki")));
+    m_exportMediawikiAction->setIcon(QIcon::fromTheme(QLatin1String("mediawiki")));
     actionCollection()->addAction(QLatin1String("export_mediawiki"), m_exportMediawikiAction);
 
     connect(m_exportMediawikiAction, SIGNAL(triggered(bool)),
@@ -1143,7 +1150,7 @@ void DXmlGuiWindow::createExportActions()
 
 #ifdef HAVE_VKONTAKTE
     m_exportVkontakteAction = new QAction(i18n("Export to &VKontakte..."), this);
-    m_exportVkontakteAction->setIcon(QIcon::fromTheme(QString::fromLatin1("preferences-web-browser-shortcuts")));
+    m_exportVkontakteAction->setIcon(QIcon::fromTheme(QLatin1String("preferences-web-browser-shortcuts")));
     actionCollection()->addAction(QLatin1String("export_vkontakte"), m_exportVkontakteAction);
 
     connect(m_exportVkontakteAction, SIGNAL(triggered(bool)),
@@ -1152,7 +1159,7 @@ void DXmlGuiWindow::createExportActions()
 
 #ifdef HAVE_KIO
     m_exportFileTransferAction = new QAction(i18n("Export to remote storage..."), this);
-    m_exportFileTransferAction->setIcon(QIcon::fromTheme(QString::fromLatin1("folder-html")));
+    m_exportFileTransferAction->setIcon(QIcon::fromTheme(QLatin1String("folder-html")));
     actionCollection()->addAction(QLatin1String("export_filetransfer"), m_exportFileTransferAction);
     actionCollection()->setDefaultShortcut(m_exportYandexfotkiAction, Qt::ALT + Qt::SHIFT + Qt::Key_K);
 
@@ -1164,7 +1171,7 @@ void DXmlGuiWindow::createExportActions()
 void DXmlGuiWindow::createImportActions()
 {
     m_importGphotoAction = new QAction(i18n("Import from &Google Photos..."), this);
-    m_importGphotoAction->setIcon(QIcon::fromTheme(QString::fromLatin1("googlephoto")));
+    m_importGphotoAction->setIcon(QIcon::fromTheme(QLatin1String("googlephoto")));
     actionCollection()->addAction(QLatin1String("import_googlephoto"), m_importGphotoAction);
     actionCollection()->setDefaultShortcut(m_importGphotoAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_P);
 
@@ -1172,7 +1179,7 @@ void DXmlGuiWindow::createImportActions()
             this, SLOT(slotImportTool()));
 
     m_importSmugmugAction = new QAction(i18n("Import from &SmugMug..."), this);
-    m_importSmugmugAction->setIcon(QIcon::fromTheme(QString::fromLatin1("smugmug")));
+    m_importSmugmugAction->setIcon(QIcon::fromTheme(QLatin1String("smugmug")));
     actionCollection()->addAction(QLatin1String("import_smugmug"), m_importSmugmugAction);
     actionCollection()->setDefaultShortcut(m_importSmugmugAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_S);
 
@@ -1181,7 +1188,7 @@ void DXmlGuiWindow::createImportActions()
 
 #ifdef HAVE_KIO
     m_importFileTransferAction = new QAction(i18n("Import from remote storage..."), this);
-    m_importFileTransferAction->setIcon(QIcon::fromTheme(QString::fromLatin1("folder-html")));
+    m_importFileTransferAction->setIcon(QIcon::fromTheme(QLatin1String("folder-html")));
     actionCollection()->addAction(QLatin1String("import_filetransfer"), m_importFileTransferAction);
     actionCollection()->setDefaultShortcut(m_importFileTransferAction, Qt::ALT + Qt::SHIFT + Qt::Key_I);
 
@@ -1202,7 +1209,6 @@ QList<QAction*> DXmlGuiWindow::exportActions() const
 {
     return QList<QAction*>() << m_exportDropboxAction
                              << m_exportOnedriveAction
-                             << m_exportTwitterAction
                              << m_exportFacebookAction
                              << m_exportFlickrAction
                              << m_exportGdriveAction

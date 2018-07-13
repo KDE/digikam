@@ -1,0 +1,5 @@
+All the bundles information are located in relevant README file from sub-directories of project/bundles/:
+
+- appimage : bundle for Linux 32 and 64 bits.
+- macports : bundle 64 bits for MacOS.
+- mxe      : bundle for windows 32 and 64 bits.

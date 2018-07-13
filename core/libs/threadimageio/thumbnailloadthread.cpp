@@ -867,6 +867,11 @@ void ThumbnailLoadThread::slotVideoThumbnailFinished()
 
 QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& description)
 {
+    if (!d->sendSurrogate)
+    {
+        return QPixmap();
+    }
+
     QPixmap pix;
 
     QMimeType mimeType = QMimeDatabase().mimeTypeForFile(description.filePath);

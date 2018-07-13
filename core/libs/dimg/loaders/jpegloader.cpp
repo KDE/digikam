@@ -61,7 +61,7 @@ void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-    qCDebug(DIGIKAM_DIMG_LOG_JPEG) << buffer;
+    qCWarning(DIGIKAM_DIMG_LOG_JPEG) << buffer;
 
     longjmp(myerr->setjmp_buffer, 1);
 }
@@ -138,9 +138,10 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
         CleanupData()
         {
-            data  = 0;
-            dest  = 0;
-            f     = 0;
+            data = 0;
+            dest = 0;
+            file = 0;
+            cmod = 0;
         }
 
         ~CleanupData()
@@ -148,9 +149,9 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             delete [] data;
             delete [] dest;
 
-            if (f)
+            if (file)
             {
-                fclose(f);
+                fclose(file);
             }
         }
 
@@ -164,9 +165,19 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             dest = d;
         }
 
-        void setFile(FILE* const file)
+        void setFile(FILE* const f)
         {
-            f = file;
+            file = f;
+        }
+
+        void setSize(const QSize& s)
+        {
+            size = s;
+        }
+
+        void setColorModel(int c)
+        {
+            cmod = c;
         }
 
         void deleteData()
@@ -184,7 +195,10 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
         uchar* data;
         uchar* dest;
-        FILE*  f;
+        FILE*  file;
+
+        QSize  size;
+        int    cmod;
     };
 
     CleanupData* const cleanupData = new CleanupData;
@@ -195,9 +209,38 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     if (setjmp(jerr.setjmp_buffer))
     {
         jpeg_destroy_decompress(&cinfo);
+
+        if (!cleanupData->dest ||
+            !cleanupData->size.isValid())
+        {
+            delete cleanupData;
+            loadingFailed();
+            return false;
+        }
+
+        // We check only Exif metadata for ICC profile to prevent endless loop
+
+        if (m_loadFlags & LoadICCData)
+        {
+            checkExifWorkingColorSpace();
+        }
+
+        if (observer)
+        {
+            observer->progressInfo(m_image, 1.0);
+        }
+
+        imageWidth()  = cleanupData->size.width();
+        imageHeight() = cleanupData->size.height();
+        imageData()   = cleanupData->dest;
+        imageSetAttribute(QLatin1String("format"),             QLatin1String("JPG"));
+        imageSetAttribute(QLatin1String("originalColorModel"), cleanupData->cmod);
+        imageSetAttribute(QLatin1String("originalBitDepth"),   8);
+        imageSetAttribute(QLatin1String("originalSize"),       cleanupData->size);
+
+        cleanupData->takeDest();
         delete cleanupData;
-        loadingFailed();
-        return false;
+        return true;
     }
 
     // -------------------------------------------------------------------
@@ -281,6 +324,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         default:
             break;
     }
+
+    cleanupData->setColorModel(colorModel);
 
     // -------------------------------------------------------------------
     // Load image data.
@@ -382,6 +427,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         }
 
         dest = new_failureTolerant(w, h, 4);
+        cleanupData->setSize(QSize(w, h));
         cleanupData->setDest(dest);
 
         if (!dest)

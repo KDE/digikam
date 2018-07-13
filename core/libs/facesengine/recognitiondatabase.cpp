@@ -360,7 +360,7 @@ void RecognitionDatabase::Private::applyParameters()
     {
         for (QVariantMap::const_iterator it = parameters.constBegin() ; it != parameters.constEnd() ; ++it)
         {
-            if (it.key() == QString::fromLatin1("threshold") || it.key() == QString::fromLatin1("accuracy"))
+            if (it.key() == QLatin1String("threshold") || it.key() == QLatin1String("accuracy"))
             {
                 if (recognizeAlgorithm == RecognitionDatabase::RecognizeAlgorithm::LBP)
                 {
@@ -602,8 +602,8 @@ Identity RecognitionDatabase::findIdentity(const QMap<QString, QString>& attribu
     Identity match;
 
     // First and foremost, UUID
-    QString uuid = attributes.value(QString::fromLatin1("uuid"));
-    match        = d->findByAttribute(QString::fromLatin1("uuid"), uuid);
+    QString uuid = attributes.value(QLatin1String("uuid"));
+    match        = d->findByAttribute(QLatin1String("uuid"), uuid);
 
     if (!match.isNull())
     {
@@ -617,7 +617,7 @@ Identity RecognitionDatabase::findIdentity(const QMap<QString, QString>& attribu
     }
 
     // full name
-    match = d->findByAttributes(QString::fromLatin1("fullName"), attributes);
+    match = d->findByAttributes(QLatin1String("fullName"), attributes);
 
     if (!match.isNull())
     {
@@ -625,7 +625,7 @@ Identity RecognitionDatabase::findIdentity(const QMap<QString, QString>& attribu
     }
 
     // name
-    match = d->findByAttributes(QString::fromLatin1("name"), attributes);
+    match = d->findByAttributes(QLatin1String("name"), attributes);
 
     if (!match.isNull())
     {
@@ -636,9 +636,9 @@ Identity RecognitionDatabase::findIdentity(const QMap<QString, QString>& attribu
 
     for (it = attributes.begin(); it != attributes.end(); ++it)
     {
-        if (it.key() == QString::fromLatin1("uuid")     ||
-            it.key() == QString::fromLatin1("fullName") ||
-            it.key() == QString::fromLatin1("name"))
+        if (it.key() == QLatin1String("uuid")     ||
+            it.key() == QLatin1String("fullName") ||
+            it.key() == QLatin1String("name"))
         {
             continue;
         }
@@ -663,9 +663,9 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
 
     QMutexLocker lock(&d->mutex);
 
-    if (attributes.contains(QString::fromLatin1("uuid")))
+    if (attributes.contains(QLatin1String("uuid")))
     {
-        Identity matchByUuid = findIdentity(QString::fromLatin1("uuid"), attributes.value(QString::fromLatin1("uuid")));
+        Identity matchByUuid = findIdentity(QLatin1String("uuid"), attributes.value(QLatin1String("uuid")));
 
         if (!matchByUuid.isNull())
         {
@@ -684,7 +684,7 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
         int id = FaceDbAccess().db()->addIdentity();
         identity.setId(id);
         identity.setAttributesMap(attributes);
-        identity.setAttribute(QString::fromLatin1("uuid"), QUuid::createUuid().toString());
+        identity.setAttribute(QLatin1String("uuid"), QUuid::createUuid().toString());
         FaceDbAccess().db()->updateIdentity(identity);
     }
 
@@ -753,19 +753,19 @@ QString RecognitionDatabase::backendIdentifier() const
 {
     if (d->recognizeAlgorithm == RecognizeAlgorithm::LBP)
     {
-        return QString::fromLatin1("opencvlbph");
+        return QLatin1String("opencvlbph");
     }
     else if (d->recognizeAlgorithm == RecognizeAlgorithm::EigenFace)
     {
-        return QString::fromLatin1("eigenfaces");
+        return QLatin1String("eigenfaces");
     }
     else if (d->recognizeAlgorithm == RecognizeAlgorithm::FisherFace)
     {
-        return QString::fromLatin1("fisherfaces");
+        return QLatin1String("fisherfaces");
     }
 
     // d->recognizeAlgorithm == RecognizeAlgorithm::DNN
-    return QString::fromLatin1("dnn");
+    return QLatin1String("dnn");
 }
 
 void RecognitionDatabase::setParameter(const QString& parameter, const QVariant& value)

@@ -173,7 +173,7 @@ void DAdjustableLabel::adjustTextToLabel()
 
     if (adjusted)
     {
-        QLabel::setText(adjustedLines.join(QLatin1String("\n")));
+        QLabel::setText(adjustedLines.join(QLatin1Char('\n')));
         setToolTip(d->ajdText);
     }
     else

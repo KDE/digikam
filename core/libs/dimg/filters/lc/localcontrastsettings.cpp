@@ -711,22 +711,22 @@ void LocalContrastSettings::saveAsSettings()
         QTextStream stream(&file);
         stream << QLatin1String("# Photograph Local Contrast Configuration File\n");
 
-        stream << d->stretchContrastCheck->isChecked() << QLatin1String("\n");
-        stream << d->expanderBox->isChecked(1) << QLatin1String("\n");
-        stream << d->expanderBox->isChecked(2) << QLatin1String("\n");
-        stream << d->expanderBox->isChecked(3) << QLatin1String("\n");
-        stream << d->expanderBox->isChecked(4) << QLatin1String("\n");
-        stream << d->lowSaturationInput->value() << QLatin1String("\n");
-        stream << d->highSaturationInput->value() << QLatin1String("\n");
-        stream << d->functionInput->currentIndex() << QLatin1String("\n");
-        stream << d->powerInput1->value() << QLatin1String("\n");
-        stream << d->blurInput1->value() << QLatin1String("\n");
-        stream << d->powerInput2->value() << QLatin1String("\n");
-        stream << d->blurInput2->value() << QLatin1String("\n");
-        stream << d->powerInput3->value() << QLatin1String("\n");
-        stream << d->blurInput3->value() << QLatin1String("\n");
-        stream << d->powerInput4->value() << QLatin1String("\n");
-        stream << d->blurInput4->value() << QLatin1String("\n");
+        stream << d->stretchContrastCheck->isChecked() << QLatin1Char('\n');
+        stream << d->expanderBox->isChecked(1) << QLatin1Char('\n');
+        stream << d->expanderBox->isChecked(2) << QLatin1Char('\n');
+        stream << d->expanderBox->isChecked(3) << QLatin1Char('\n');
+        stream << d->expanderBox->isChecked(4) << QLatin1Char('\n');
+        stream << d->lowSaturationInput->value() << QLatin1Char('\n');
+        stream << d->highSaturationInput->value() << QLatin1Char('\n');
+        stream << d->functionInput->currentIndex() << QLatin1Char('\n');
+        stream << d->powerInput1->value() << QLatin1Char('\n');
+        stream << d->blurInput1->value() << QLatin1Char('\n');
+        stream << d->powerInput2->value() << QLatin1Char('\n');
+        stream << d->blurInput2->value() << QLatin1Char('\n');
+        stream << d->powerInput3->value() << QLatin1Char('\n');
+        stream << d->blurInput3->value() << QLatin1Char('\n');
+        stream << d->powerInput4->value() << QLatin1Char('\n');
+        stream << d->blurInput4->value() << QLatin1Char('\n');
     }
     else
     {

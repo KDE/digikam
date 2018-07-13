@@ -142,7 +142,7 @@ void ImageDialogPreview::slotShowPreview(const QUrl& url)
         if (!info.isEmpty())
         {
             DToolTipStyleSheet cnt;
-            QString identify = QString::fromLatin1("<qt><center>");
+            QString identify = QLatin1String("<qt><center>");
             QString make, model, dateTime, aperture, focalLength, exposureTime, sensitivity;
             QString aspectRatio, audioBitRate, audioChannelType, audioCodec, duration, frameRate, videoCodec;
 
@@ -272,7 +272,7 @@ void ImageDialogPreview::slotShowPreview(const QUrl& url)
                 videoCodec = videoInfo.videoCodec;
             }
 
-            identify += QString::fromLatin1("<table cellspacing=0 cellpadding=0>");
+            identify += QLatin1String("<table cellspacing=0 cellpadding=0>");
             identify += cnt.cellBeg + i18n("<i>Make:</i>")              + cnt.cellMid + make                + cnt.cellEnd;
             identify += cnt.cellBeg + i18n("<i>Model:</i>")             + cnt.cellMid + model               + cnt.cellEnd;
             identify += cnt.cellBeg + i18n("<i>Created:</i>")           + cnt.cellMid + dateTime            + cnt.cellEnd;
@@ -292,7 +292,7 @@ void ImageDialogPreview::slotShowPreview(const QUrl& url)
                 identify += cnt.cellBeg + i18n("<i>VideoCodec:</i>")        + cnt.cellMid + videoCodec          + cnt.cellEnd;
             }
 
-            identify += QString::fromLatin1("</table></center></qt>");
+            identify += QLatin1String("</table></center></qt>");
 
             d->infoLabel->setText(identify);
         }

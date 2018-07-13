@@ -65,6 +65,7 @@ endif()
 # JPEG library check
 
 message(STATUS "Looking for LibJpeg")
+
 if(JPEG_FOUND)
     # JPEG lib version is done on top level through MacroJPEG.cmake
     if (${JPEG_LIB_VERSION} LESS 80)
@@ -132,8 +133,8 @@ set(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/internal/dcraw_common.cpp
    )
 
 # Disable compilation warnings from LibRaw. Just to be clear on the console.
-# Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (B.K.O: #269903)
-# Use O4 GCC compilation option to prevent artifacts with OpenMP (B.K.O #305382)
+# Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (Bug: #269903)
+# Use O4 GCC compilation option to prevent artifacts with OpenMP (Bug #305382)
 foreach(_curentfile ${libraw_LIB_SRCS})
     if(WIN32 AND MSVC)
         set_source_files_properties(${_curentfile} PROPERTIES COMPILE_FLAGS "-w")
@@ -150,6 +151,7 @@ target_link_libraries(libraw
                       ${LCMS2_LIBRARIES}
                       ${OPENMP_LDFLAGS}
                      )
+
 if(JPEG_FOUND)
     target_link_libraries(libraw ${JPEG_LIBRARY})
 endif()
