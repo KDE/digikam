@@ -110,8 +110,9 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     connect(d->imageGetOption, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotImageGetOptionChanged(int)));
 
-    // --------------------
-    // ComboBox for web service selection
+    /* --------------------
+     * ComboBox for web service selection
+     */
 
     DHBox* const wsBox          = new DHBox(vbox);
     QLabel* const wsLabel       = new QLabel(i18n("&Choose remote Web Service:"), wsBox);
@@ -132,14 +133,17 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     connect(d->wsOption, SIGNAL(currentIndexChanged(const QString&)),
             this, SLOT(slotWebServiceOptionChanged(const QString&)));
     
-    // --------------------
-    // ComboBox for user account selection
+    /* --------------------
+     * ComboBox for user account selection
+     */
     
     DHBox* const accountBox     = new DHBox(vbox);
     QLabel* const accountLabel  = new QLabel(i18n("&Choose account:"), accountBox);
     d->accountOption            = new QComboBox(accountBox);
-    QStringList accounts        = QStringList(QString("")) << WSSettings::allUserNames(d->wizard->settings()->oauthSettings, 
-                                                                                       map.constBegin().value());
+    
+    // An empty string is added to accounts so that user can login with new account
+    QStringList accounts        = QStringList(QString(""))
+                                  << WSSettings::allUserNames(d->wizard->settings()->oauthSettings, map.constBegin().value());
     
     foreach(const QString& account, accounts)
     {
@@ -148,7 +152,9 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     
     accountLabel->setBuddy(d->accountOption);
     
-    // --------------------
+    /* --------------------
+     * Place widget in the view
+     */
     
     vbox->setStretchFactor(desc,         3);
     vbox->setStretchFactor(d->hbox,      1);
@@ -202,8 +208,9 @@ void WSIntroPage::slotWebServiceOptionChanged(const QString& serviceName)
 {
     d->accountOption->clear();
 
-    QStringList accounts    = QStringList(QString("")) << WSSettings::allUserNames(d->wizard->settings()->oauthSettings, 
-                                                                                   serviceName);
+    // An empty string is added to accounts so that user can login with new account
+    QStringList accounts    = QStringList(QString(""))
+                              << WSSettings::allUserNames(d->wizard->settings()->oauthSettings, serviceName);
     
     foreach(const QString& account, accounts)
     {

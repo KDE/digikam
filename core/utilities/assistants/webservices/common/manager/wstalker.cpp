@@ -149,6 +149,7 @@ QMap<QString, QVariant> WSTalker::getUserAccountInfo(const QString& userName)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getUserAccountInfo with userID: " << userID;
     
     QMap<QString, QVariant> map;
+    
     if(userID.isEmpty())
     {
         return map;
@@ -216,11 +217,13 @@ bool WSTalker::loadUserAccount(const QString& userName)
     
     QMap<QString, QVariant> map = getUserAccountInfo(userName);
     
-    /* If user exists but does not login yet, return false so that we can unlink() current account, 
-     * before link() to new account
+    /* There must be some kind of errors making getUserAccountInfo(userName) return empty with a userName non empty.
+     * So, this is a security check, which ensures user to relogin anyway.
+     * However, if it happens, INSPECTATION is compulsory!!!
      */
     if(map.isEmpty())
     {
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "WARNING: Something strange happens with getUserAccountInfo";
         return false;
     }
     
@@ -232,7 +235,8 @@ bool WSTalker::loadUserAccount(const QString& userName)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "current time : " << QDateTime::currentMSecsSinceEpoch() / 1000;
     
     /* If access token is not expired yet, retrieve all tokens and return true so that we can link() 
-     * directly to new account.
+     * directly to new account. 
+     * Otherwise, return false so that user can relogin.
      */
     if(expire.toLongLong() > QDateTime::currentMSecsSinceEpoch() / 1000)
     {

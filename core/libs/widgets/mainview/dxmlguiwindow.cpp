@@ -1042,15 +1042,15 @@ void DXmlGuiWindow::createExportActions()
 
     connect(m_exportDropboxAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
-/*
+
     m_exportFacebookAction = new QAction(i18n("Export to &Facebook..."), this);
-    m_exportFacebookAction->setIcon(QIcon::fromTheme(QString::fromLatin1("facebook")));
+/*    m_exportFacebookAction->setIcon(QIcon::fromTheme(QString::fromLatin1("facebook")));
     actionCollection()->addAction(QLatin1String("export_facebook"), m_exportFacebookAction);
-    actionCollection()->setDefaultShortcut(m_exportFacebookAction, Qt::ALT + Qt::SHIFT + Qt::Key_F);
+    actionCollection()->setDefaultShortcut(m_exportFacebookAction, Qt::ALT + Qt::SHIFT + Qt::Key_F);*/
 
     connect(m_exportFacebookAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
-*/
+
     m_exportFlickrAction = new QAction(i18n("Export to Flick&r..."), this);
     m_exportFlickrAction->setIcon(QIcon::fromTheme(QLatin1String("flickr")));
     actionCollection()->addAction(QLatin1String("export_flickr"), m_exportFlickrAction);
