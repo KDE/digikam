@@ -625,7 +625,7 @@ void DatabaseSettingsWidget::slotUpdateSqlInit()
                                    .arg(d->userName->text());
     }
 
-    sql += QString::fromLatin1("FLUSH PRIVILEGES;<br>");
+    sql += QLatin1String("FLUSH PRIVILEGES;<br>");
 
     d->sqlInit->setText(sql);
 }

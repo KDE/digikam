@@ -63,11 +63,11 @@ DBinarySearch::DBinarySearch(QWidget* const parent)
     setRootIsDecorated(false);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setColumnCount(5);
-    setHeaderLabels(QStringList() << QString::fromLatin1("")
+    setHeaderLabels(QStringList() << QLatin1String("")
                                   << i18n("Binary")
                                   << i18n("Version")
-                                  << QString::fromLatin1("")
-                                  << QString::fromLatin1(""));
+                                  << QLatin1String("")
+                                  << QLatin1String(""));
 
     header()->setSectionResizeMode(Status,  QHeaderView::ResizeToContents);
     header()->setSectionResizeMode(Binary,  QHeaderView::Stretch);
@@ -94,7 +94,7 @@ void DBinarySearch::addBinary(DBinaryIface& binary)
     d->binaryIfaces.append(&binary);
     d->items.append(new QTreeWidgetItem());
     QTreeWidgetItem* const item = d->items[d->items.size() - 1];
-    item->setIcon(Status, QIcon::fromTheme(QString::fromLatin1("dialog-cancel")).pixmap(16, 16));
+    item->setIcon(Status, QIcon::fromTheme(QLatin1String("dialog-cancel")).pixmap(16, 16));
     item->setText(Binary, binary.baseName());
     item->setText(Version, binary.version());
     item->setToolTip(Binary,  binary.description());
@@ -156,12 +156,12 @@ bool DBinarySearch::allBinariesFound()
         {
             if (!binary->developmentVersion())
             {
-                d->items[index]->setIcon(Status, QIcon::fromTheme(QString::fromLatin1("dialog-ok-apply")).pixmap(16, 16));
+                d->items[index]->setIcon(Status, QIcon::fromTheme(QLatin1String("dialog-ok-apply")).pixmap(16, 16));
                 d->items[index]->setToolTip(Status, QString());
             }
             else
             {
-                d->items[index]->setIcon(Status, QIcon::fromTheme(QString::fromLatin1("dialog-warning")).pixmap(16, 16));
+                d->items[index]->setIcon(Status, QIcon::fromTheme(QLatin1String("dialog-warning")).pixmap(16, 16));
                 d->items[index]->setToolTip(Status, i18n("A development version has been detect. "
                                                          "There is no guarantee on the behavior of this binary."));
                 d->downloadLabel->show();

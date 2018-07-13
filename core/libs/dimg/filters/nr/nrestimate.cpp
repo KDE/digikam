@@ -417,9 +417,9 @@ void NREstimate::startAnalyse()
 
         if (!d->path.isEmpty())
         {
-            owms << QLatin1String("\nChannel : ")     << j            << QLatin1String("\n");
-            owms << QLatin1String("Weighted Mean : ") << weightedMean << QLatin1String("\n");
-            owms << QLatin1String("Weighted Std  : ") << weightedStd  << QLatin1String("\n");
+            owms << QLatin1String("\nChannel : ")     << j            << QLatin1Char('\n');
+            owms << QLatin1String("Weighted Mean : ") << weightedMean << QLatin1Char('\n');
+            owms << QLatin1String("Weighted Std  : ") << weightedStd  << QLatin1Char('\n');
         }
 
         info.append(QLatin1String("\n\nChannel: "));

@@ -242,7 +242,7 @@ int DMediaServerMngr::itemsShared() const
 
 bool DMediaServerMngr::save()
 {
-    QDomDocument doc(QString::fromLatin1("mediaserverlist"));
+    QDomDocument doc(QLatin1String("mediaserverlist"));
     doc.setContent(QString::fromUtf8("<!DOCTYPE XMLQueueList><mediaserverlist version=\"1.0\" client=\"digikam\" encoding=\"UTF-8\"/>"));
     QDomElement docElem = doc.documentElement();
 
@@ -250,8 +250,8 @@ bool DMediaServerMngr::save()
 
     for (auto it = d->collectionMap.cbegin() ; it != end ; ++it)
     {
-        QDomElement elm = doc.createElement(QString::fromLatin1("album"));
-        elm.setAttribute(QString::fromLatin1("title"), it.key());
+        QDomElement elm = doc.createElement(QLatin1String("album"));
+        elm.setAttribute(QLatin1String("title"), it.key());
 
         // ----------------------
 
@@ -259,8 +259,8 @@ bool DMediaServerMngr::save()
 
         foreach(const QUrl& url, it.value())
         {
-            data = doc.createElement(QString::fromLatin1("path"));
-            data.setAttribute(QString::fromLatin1("value"), url.toLocalFile());
+            data = doc.createElement(QLatin1String("path"));
+            data.setAttribute(QLatin1String("value"), url.toLocalFile());
             elm.appendChild(data);
         }
 
@@ -297,7 +297,7 @@ bool DMediaServerMngr::load()
             return false;
         }
 
-        QDomDocument doc(QString::fromLatin1("mediaserverlist"));
+        QDomDocument doc(QLatin1String("mediaserverlist"));
 
         if (!doc.setContent(&file))
         {
@@ -319,12 +319,12 @@ bool DMediaServerMngr::load()
                 continue;
             }
 
-            if (e.tagName() != QString::fromLatin1("album"))
+            if (e.tagName() != QLatin1String("album"))
             {
                 continue;
             }
 
-            album = e.attribute(QString::fromLatin1("title"));
+            album = e.attribute(QLatin1String("title"));
             urls.clear();
 
             for (QDomNode n2 = e.firstChild() ; !n2.isNull() ; n2 = n2.nextSibling())
@@ -337,9 +337,9 @@ bool DMediaServerMngr::load()
                 }
 
                 QString name2 = e2.tagName();
-                QString val2  = e2.attribute(QString::fromLatin1("value"));
+                QString val2  = e2.attribute(QLatin1String("value"));
 
-                if (name2 == QString::fromLatin1("path"))
+                if (name2 == QLatin1String("path"))
                 {
                     urls << QUrl::fromLocalFile(val2);
                 }

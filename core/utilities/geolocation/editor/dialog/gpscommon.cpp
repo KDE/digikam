@@ -43,7 +43,7 @@ namespace Digikam
 
 QString getUserAgentName()
 {
-    return QString::fromLatin1("KIPI-Plugins GPSSync - kde-imaging@kde.org");
+    return QLatin1String("KIPI-Plugins GPSSync - kde-imaging@kde.org");
 }
 
 void coordinatesToClipboard(const GeoCoordinates& coordinates,

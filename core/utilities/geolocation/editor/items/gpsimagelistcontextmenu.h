@@ -69,7 +69,8 @@ protected:
 private Q_SLOTS:
 
     void copyActionTriggered();
-    void pasteActionTriggered();
+    void pasteSwapActionTriggered();
+    void pasteActionTriggered(bool swap = false);
     void slotBookmarkSelected(const GPSDataContainer& position);
     void slotRemoveCoordinates();
     void slotRemoveAltitude();

@@ -327,23 +327,23 @@ bool LensFunFilter::registerSettingsToXmp(MetaEngineData& data) const
     LensFunContainer prm = d->iface->settings();
 
     str.append(i18n("Camera: %1-%2",        prm.cameraMake, prm.cameraModel));
-    str.append(QLatin1String("\n"));
+    str.append(QLatin1Char('\n'));
     str.append(i18n("Lens: %1",             prm.lensModel));
-    str.append(QLatin1String("\n"));
+    str.append(QLatin1Char('\n'));
     str.append(i18n("Subject Distance: %1", QString::number(prm.subjectDistance)));
-    str.append(QLatin1String("\n"));
+    str.append(QLatin1Char('\n'));
     str.append(i18n("Aperture: %1",         QString::number(prm.aperture)));
-    str.append(QLatin1String("\n"));
+    str.append(QLatin1Char('\n'));
     str.append(i18n("Focal Length: %1",     QString::number(prm.focalLength)));
-    str.append(QLatin1String("\n"));
+    str.append(QLatin1Char('\n'));
     str.append(i18n("Crop Factor: %1",      QString::number(prm.cropFactor)));
-    str.append(QLatin1String("\n"));
+    str.append(QLatin1Char('\n'));
     str.append(i18n("CCA Correction: %1",   prm.filterCCA  && d->iface->supportsCCA()       ? i18n("enabled") : i18n("disabled")));
-    str.append(QLatin1String("\n"));
+    str.append(QLatin1Char('\n'));
     str.append(i18n("VIG Correction: %1",   prm.filterVIG  && d->iface->supportsVig()       ? i18n("enabled") : i18n("disabled")));
-    str.append(QLatin1String("\n"));
+    str.append(QLatin1Char('\n'));
     str.append(i18n("DST Correction: %1",   prm.filterDST && d->iface->supportsDistortion() ? i18n("enabled") : i18n("disabled")));
-    str.append(QLatin1String("\n"));
+    str.append(QLatin1Char('\n'));
     str.append(i18n("GEO Correction: %1",   prm.filterGEO && d->iface->supportsGeometry()   ? i18n("enabled") : i18n("disabled")));
 
     DMetadata meta(data);

@@ -2136,7 +2136,7 @@ void SearchFieldChoice::write(SearchXmlWriter& writer)
             {
                 // For choice string fields, we have the possibility to specify the wildcard
                 // position with the position of *.
-                if (v.first().contains(QLatin1String("*")))
+                if (v.first().contains(QLatin1Char('*')))
                 {
                     writer.writeField(m_name, SearchXml::Like);
                 }

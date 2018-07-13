@@ -139,27 +139,27 @@ FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, con
 
     // Draw the bounding name rectangle with the scene coordinates
     d->nameRect->setRect(r);
-    QPen p(QColor(QString::fromLatin1("white")));
+    QPen p(QColor(QLatin1String("white")));
     p.setWidth(3);
     d->nameRect->setPen(p);
-    d->nameRect->setBrush(QBrush(QColor(QString::fromLatin1("black"))));
+    d->nameRect->setBrush(QBrush(QColor(QLatin1String("black"))));
     d->nameRect->setOpacity(0.6);
     d->nameRect->show();
 
     // Draw the name input item
-    d->faceName->setDefaultTextColor(QColor(QString::fromLatin1("white")));
-    d->faceName->setFont(QFont(QString::fromLatin1("Helvetica"), 9));
+    d->faceName->setDefaultTextColor(QColor(QLatin1String("white")));
+    d->faceName->setFont(QFont(QLatin1String("Helvetica"), 9));
     d->faceName->setTextInteractionFlags(Qt::TextEditorInteraction);
     d->faceName->setOpacity(1);
 
     //---------------------
 
-    QPixmap rejectPix  = QIcon::fromTheme(QString::fromLatin1("window-close")).pixmap(16, 16);
+    QPixmap rejectPix  = QIcon::fromTheme(QLatin1String("window-close")).pixmap(16, 16);
     d->rejectButton    = new Button( rejectPix, rejectPix);
     scene->addItem(d->rejectButton);
     d->rejectButton->show();
 
-    QPixmap acceptPix  = QIcon::fromTheme(QString::fromLatin1("dialog-ok-apply")).pixmap(16, 16);
+    QPixmap acceptPix  = QIcon::fromTheme(QLatin1String("dialog-ok-apply")).pixmap(16, 16);
     d->acceptButton    = new Button( acceptPix, acceptPix);
     scene->addItem(d->acceptButton);
     //d->acceptButton->show();
@@ -211,7 +211,7 @@ void FaceItem::setText(const QString& newName)
 
 QString FaceItem::text() const
 {
-    return d->faceName->toPlainText().remove(QString::fromLatin1("?"));
+    return d->faceName->toPlainText().remove(QLatin1String("?"));
 }
 
 void FaceItem::update()
@@ -330,7 +330,7 @@ void FaceItem::switchToEditMode()
 {
     d->suggestionMode = false;
     d->faceName->setEnabled(true);
-    d->faceName->setHtml(QString::fromLatin1("<b>") + d->name + QString::fromLatin1("</b>"));
+    d->faceName->setHtml(QLatin1String("<b>") + d->name + QLatin1String("</b>"));
     d->acceptButton->show();
     d->suggestionAcceptButton->hide();
     d->suggestionRejectButton->hide();
@@ -340,7 +340,7 @@ void FaceItem::switchToSuggestionMode()
 {
     d->suggestionMode = true;
     d->faceName->setEnabled(false);
-    d->faceName->setHtml(QString::fromLatin1("Is this <b>") + d->name + QString::fromLatin1("</b> ?"));
+    d->faceName->setHtml(QLatin1String("Is this <b>") + d->name + QLatin1String("</b> ?"));
     d->acceptButton->hide();
     d->suggestionAcceptButton->show();
     d->suggestionRejectButton->show();
@@ -349,7 +349,7 @@ void FaceItem::switchToSuggestionMode()
 void FaceItem::slotSuggestionAccepted()
 {
     switchToEditMode();
-    d->faceName->setHtml(QString::fromLatin1("<b>") + d->name + QString::fromLatin1("</b>"));
+    d->faceName->setHtml(QLatin1String("<b>") + d->name + QLatin1String("</b>"));
     accepted();
     emit suggestionAcceptButtonClicked(this->text(), this->originalRect());
 }
@@ -357,7 +357,7 @@ void FaceItem::slotSuggestionAccepted()
 void FaceItem::slotSuggestionRejected()
 {
     switchToEditMode();
-    d->faceName->setHtml(QString::fromLatin1("<b>") + QString() + QString::fromLatin1("</b>"));
+    d->faceName->setHtml(QLatin1String("<b>") + QString() + QLatin1String("</b>"));
     emit suggestionRejectButtonClicked(this->text(), this->originalRect());
 }
 

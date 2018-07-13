@@ -643,22 +643,16 @@ endif()
 
 if(Doxygen_FOUND)
 
-    message(STATUS " ==> Doxygen is found:          ${DOXYGEN_FOUND}")
+    message(STATUS " ==> Doxygen is found:          ${Doxygen_FOUND}")
     message(STATUS " ==> Graphviz Dot is found:     ${DOXYGEN_DOT_FOUND}")
 
-    set(API_DIR     ${CMAKE_BINARY_DIR}/api)
-    set(SOURCE_DIR  ${CMAKE_SOURCE_DIR}/)           # on root of source dir else export to doc web site will not be named as "digiKam"
-    set(DOXYFILE    ${CMAKE_BINARY_DIR}/Doxyfile)
-    set(WARNFILE    ${CMAKE_BINARY_DIR}/doxygen-warn.log)
-    set(IMAGES_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/digikam")
+    if(Doxygen_FOUND AND DOXYGEN_DOT_FOUND)
 
-    if(DOXYGEN_DOT_FOUND)
-        set(API_USE_DOT "YES")
+        message(STATUS " To build API documentation use 'make doc'")
+
+        add_custom_target(doc ${DOXYGEN_EXECUTABLE}
+                          WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
     endif()
 
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/Doxyfile.cmake.in
-                   ${DOXYFILE})
-
-    add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
-                      WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 endif()

@@ -151,7 +151,7 @@ void TagList::restoreSettings()
         if (data.isEmpty())
             continue;
 
-        QStringList ids = data.split(QLatin1String(" "), QString::SkipEmptyParts);
+        QStringList ids = data.split(QLatin1Char(' '), QString::SkipEmptyParts);
         QList<QVariant> itemData;
         itemData << QBrush(Qt::cyan, Qt::Dense2Pattern);
 

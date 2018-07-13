@@ -851,7 +851,7 @@ QString KeywordSearch::merge(const QStringList& keywordList)
     }
 
     // join in a string
-    return list.join(QLatin1String(" "));
+    return list.join(QLatin1Char(' '));
 }
 
 QString KeywordSearch::merge(const QString& previousContent, const QString& newEntry)

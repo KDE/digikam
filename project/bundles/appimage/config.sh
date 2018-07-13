@@ -24,7 +24,7 @@ DK_BUILDTEMP=$BUILDING_DIR/dktemp
 # If you want to package current implemntation from git, use "master" as tag.
 #DK_VERSION=v5.5.0
 DK_VERSION=master
-#DK_VERSION=development/6.0.0
+#DK_VERSION=gsoc18-exporttools-o2
 
 # Installer sub version to differentiates newer updates of the installer itself, even if the underlying application hasn’t changed.
 #DK_EPOCH="-01"

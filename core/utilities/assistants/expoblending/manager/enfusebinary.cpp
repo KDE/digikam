@@ -40,16 +40,16 @@ bool EnfuseBinary::parseHeader(const QString& output)
     // Work around Enfuse <= 3.2
     // The output look like this : ==== enfuse, version 3.2 ====
     QString headerStartsOld = QLatin1String("==== enfuse, version ");
-    QString firstLine = output.section(QChar::fromLatin1('\n'), m_headerLine, m_headerLine);
+    QString firstLine = output.section(QLatin1Char('\n'), m_headerLine, m_headerLine);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << path() << " help header line: \n" << firstLine;
 
     if (firstLine.startsWith(m_headerStarts))
     {
         setVersion(firstLine.remove(0, m_headerStarts.length()));
-        QStringList versionList = version().split(QChar::fromLatin1('.'));
+        QStringList versionList = version().split(QLatin1Char('.'));
         versionList.removeLast();
-        versionDouble = versionList.join(QChar::fromLatin1('.')).toDouble();
+        versionDouble = versionList.join(QLatin1Char('.')).toDouble();
         emit signalEnfuseVersion(versionDouble);
         qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << path() << " version: " << version();
         return true;
@@ -57,9 +57,9 @@ bool EnfuseBinary::parseHeader(const QString& output)
     else if (firstLine.startsWith(headerStartsOld))
     {
         setVersion(firstLine.remove(0, headerStartsOld.length()));
-        QStringList versionList = version().split(QChar::fromLatin1('.'));
+        QStringList versionList = version().split(QLatin1Char('.'));
         versionList.removeLast();
-        versionDouble = versionList.join(QChar::fromLatin1('.')).toDouble();
+        versionDouble = versionList.join(QLatin1Char('.')).toDouble();
         emit signalEnfuseVersion(versionDouble);
         qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << path() << " version: " << version();
         return true;

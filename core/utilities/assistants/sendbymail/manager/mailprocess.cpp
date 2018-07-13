@@ -266,7 +266,7 @@ void MailProcess::buildPropertiesFile()
 
             propertiesText.append(i18n("Rating: %1\n", rating));
 
-            propertiesText.append(QLatin1String("\n"));
+            propertiesText.append(QLatin1Char('\n'));
         }
 
         QFile propertiesFile(d->settings->tempPath + i18n("properties.txt"));
@@ -281,7 +281,7 @@ void MailProcess::buildPropertiesFile()
             return;
         }
 
-        stream << propertiesText << QLatin1String("\n");
+        stream << propertiesText << QLatin1Char('\n');
         propertiesFile.close();
         d->attachementFiles << QUrl::fromLocalFile(propertiesFile.fileName());
 
@@ -311,7 +311,7 @@ bool MailProcess::showFailedResizedImages() const
                            "Do you want them to be added as attachments without resizing?"));
         mbox->setStandardButtons(QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel));
         mbox->setDefaultButton(QMessageBox::No);
-        mbox->setDetailedText(list.join(QLatin1String("\n")));
+        mbox->setDetailedText(list.join(QLatin1Char('\n')));
 
         int valRet = mbox->exec();
 

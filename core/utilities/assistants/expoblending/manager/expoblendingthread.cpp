@@ -449,7 +449,7 @@ void ExpoBlendingThread::run()
 
                         result = result & d->meta.setXmpTagString("Xmp.digiKam.EnfuseSettings",
                                                                   t->enfuseSettings.asCommentString().
-                                                                  replace(QChar::fromLatin1('\n'),
+                                                                  replace(QLatin1Char('\n'),
                                                                   QLatin1String(" ; ")));
 
                         d->meta.setImageDateTime(QDateTime::currentDateTime());
@@ -622,10 +622,10 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
         foreach (const QUrl& url, inUrls)
         {
             QUrl previewUrl;
-            QUrl alignedUrl = QUrl::fromLocalFile(d->preprocessingTmpDir->path()                               +
-                                                  QChar::fromLatin1('/')                                       +
-                                                  QLatin1String("aligned")                                     +
-                                                  QString::number(i).rightJustified(4, QChar::fromLatin1('0')) +
+            QUrl alignedUrl = QUrl::fromLocalFile(d->preprocessingTmpDir->path()                         +
+                                                  QLatin1Char('/')                                       +
+                                                  QLatin1String("aligned")                               +
+                                                  QString::number(i).rightJustified(4, QLatin1Char('0')) +
                                                   QLatin1String(".tif"));
 
             if (!computePreview(alignedUrl, previewUrl))
@@ -679,10 +679,10 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
 
 bool ExpoBlendingThread::computePreview(const QUrl& inUrl, QUrl& outUrl)
 {
-    outUrl = QUrl::fromLocalFile(d->preprocessingTmpDir->path()                                           +
-                                 QChar::fromLatin1('/')                                                   +
-                                 QChar::fromLatin1('.')                                                   +
-                                 inUrl.fileName().replace(QChar::fromLatin1('.'), QChar::fromLatin1('_')) +
+    outUrl = QUrl::fromLocalFile(d->preprocessingTmpDir->path()                               +
+                                 QLatin1Char('/')                                             +
+                                 QLatin1Char('.')                                             +
+                                 inUrl.fileName().replace(QLatin1Char('.'), QLatin1Char('_')) +
                                  QLatin1String("-preview.jpg"));
 
     DImg img;
@@ -738,10 +738,10 @@ bool ExpoBlendingThread::convertRaw(const QUrl& inUrl, QUrl& outUrl)
             d->meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
 
             QFileInfo fi(inUrl.toLocalFile());
-            outUrl = QUrl::fromLocalFile(d->preprocessingTmpDir->path()                                                +
-                                         QChar::fromLatin1('/')                                                        +
-                                         QChar::fromLatin1('.')                                                        +
-                                         fi.completeBaseName().replace(QChar::fromLatin1('.'), QChar::fromLatin1('_')) +
+            outUrl = QUrl::fromLocalFile(d->preprocessingTmpDir->path()                                    +
+                                         QLatin1Char('/')                                                  +
+                                         QLatin1Char('.')                                                  +
+                                         fi.completeBaseName().replace(QLatin1Char('.'), QLatin1Char('_')) +
                                          QLatin1String(".tif"));
 
             if (!img.save(outUrl.toLocalFile(), QLatin1String("TIF")))

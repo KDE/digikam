@@ -485,7 +485,7 @@ const char* DRawDecoder::rawFiles()
 
 QStringList DRawDecoder::rawFilesList()
 {
-    QString string = QString::fromLatin1(rawFiles());
+    QString string = QLatin1String(rawFiles());
     return string.remove(QLatin1String("*.")).split(QLatin1Char(' '));
 }
 

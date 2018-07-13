@@ -1311,7 +1311,7 @@ void ImportUI::slotUploadItems(const QList<QUrl>& urls)
             continue;
         }
 
-        QString ext  = QLatin1String(".") + fi.completeSuffix();
+        QString ext  = QLatin1Char('.') + fi.completeSuffix();
         QString name = fi.fileName();
         name.truncate(fi.fileName().length() - ext.length());
 

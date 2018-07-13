@@ -207,7 +207,7 @@ void ThemeManager::populateThemeMenu()
 
     // digiKam colors scheme
     dirs << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                      QString::fromLatin1("digikam/colorschemes"),
+                                      QLatin1String("digikam/colorschemes"),
                                       QStandardPaths::LocateDirectory);
 
     qCDebug(DIGIKAM_WIDGETS_LOG) << "Paths to color scheme : " << dirs;

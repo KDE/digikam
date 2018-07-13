@@ -8,6 +8,12 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
+if [[ "$(arch)" = "x86_64" ]] ; then
+    export LD_PRELOAD=$LD_PRELOAD:/usr/lib64/libfreetype.so
+else
+    export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libfreetype.so
+fi
+
 echo "-- digiKam AppImage Bundle"
 echo "-- Use 'help' as CLI argument to know all available options for digiKam application"
 

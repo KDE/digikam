@@ -56,7 +56,8 @@ public:
         if (!m_backend)
         {
             QStringList cascadeDirs;
-            cascadeDirs << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QString::fromLatin1("digikam/facesengine"), QStandardPaths::LocateDirectory);
+            cascadeDirs << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QLatin1String("digikam/facesengine"),
+                                                     QStandardPaths::LocateDirectory);
 
             qCDebug(DIGIKAM_FACESENGINE_LOG) << "Try to find OpenCV Haar Cascade files in these directories: " << cascadeDirs;
 
@@ -80,19 +81,19 @@ public:
         }
         for (QVariantMap::const_iterator it = m_parameters.constBegin(); it != m_parameters.constEnd(); ++it)
         {
-            if (it.key() == QString::fromLatin1("accuracy"))
+            if (it.key() == QLatin1String("accuracy"))
             {
                 backend()->setAccuracy(it.value().toDouble());
             }
-            else if (it.key() == QString::fromLatin1("speed"))
+            else if (it.key() == QLatin1String("speed"))
             {
                 backend()->setAccuracy(1.0 - it.value().toDouble());
             }
-            else if (it.key() == QString::fromLatin1("specificity"))
+            else if (it.key() == QLatin1String("specificity"))
             {
                 backend()->setSpecificity(it.value().toDouble());
             }
-            else if (it.key() == QString::fromLatin1("sensitivity"))
+            else if (it.key() == QLatin1String("sensitivity"))
             {
                 backend()->setSpecificity(1.0 - it.value().toDouble());
             }
@@ -132,7 +133,7 @@ FaceDetector::~FaceDetector()
 
 QString FaceDetector::backendIdentifier() const
 {
-    return QString::fromLatin1("OpenCV Cascades");
+    return QLatin1String("OpenCV Cascades");
 }
 
 QList<QRectF> FaceDetector::detectFaces(const QImage& image, const QSize& originalSize)

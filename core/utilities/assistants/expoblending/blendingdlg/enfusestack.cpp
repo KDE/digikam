@@ -82,7 +82,7 @@ void EnfuseStackItem::setEnfuseSettings(const EnfuseSettings& settings)
     setText(1, d->settings.targetFileName);
     setText(2, d->settings.inputImagesList());
     setToolTip(1, d->settings.asCommentString());
-    setToolTip(2, d->settings.inputImagesList().replace(QLatin1String(" ; "), QChar::fromLatin1('\n')));
+    setToolTip(2, d->settings.inputImagesList().replace(QLatin1String(" ; "), QLatin1String("\n")));
 }
 
 EnfuseSettings EnfuseStackItem::enfuseSettings() const

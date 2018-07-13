@@ -119,7 +119,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
                 folder.remove(0, rootPath.length());
             }
 
-            QString path(QLatin1String("/"));
+            QString path(QLatin1Char('/'));
 
             foreach(const QString& sub, folder.split(QLatin1Char('/'), QString::SkipEmptyParts))
             {

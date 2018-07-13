@@ -1378,7 +1378,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
         // get keywords from tags path, for type tag
         for (QString tagPath : tagsPath)
         {
-            newList.append(tagPath.split(QLatin1String("/")).last());
+            newList.append(tagPath.split(QLatin1Char('/')).last());
         }
 
         switch(entry.subspace)
@@ -1465,7 +1465,7 @@ bool DMetadata::getACDSeeTagsPath(QStringList &tagsPath) const
     {
         xmlACDSee.remove(QLatin1String("</Categories>"));
         xmlACDSee.remove(QLatin1String("<Categories>"));
-        xmlACDSee.replace(QLatin1String("/"), QLatin1String("\\"));
+        xmlACDSee.replace(QLatin1Char('/'), QLatin1Char('\\'));
 
         QStringList xmlTags = xmlACDSee.split(QLatin1String("<Category Assigned"));
         int category        = 0;
@@ -1483,14 +1483,14 @@ bool DMetadata::getACDSeeTagsPath(QStringList &tagsPath) const
                 }
                 else
                 {
-                    tagsPath.last().append(QLatin1String("/") + tags.mid(5, length));
+                    tagsPath.last().append(QLatin1Char('/') + tags.mid(5, length));
                 }
 
                 category = category - count + 1;
 
                 if (tags.left(5) == QLatin1String("=\"1\">") && category > 0)
                 {
-                    tagsPath << tagsPath.last().section(QLatin1String("/"), 0, category - 1);
+                    tagsPath << tagsPath.last().section(QLatin1Char('/'), 0, category - 1);
                 }
             }
         }
@@ -1514,7 +1514,7 @@ bool DMetadata::setACDSeeTagsPath(const QStringList &tagsPath) const
 
     foreach(const QString& tags, tagsPath)
     {
-        splitTags   = tags.split(QLatin1String("/"));
+        splitTags   = tags.split(QLatin1Char('/'));
         int current = 0;
 
         for (int index = 0; index < splitTags.size(); index++)
@@ -2243,7 +2243,7 @@ QString DMetadata::getLensDescription() const
 
         if (!lens.isEmpty())
         {
-            lens.append(QLatin1String(" "));
+            lens.append(QLatin1Char(' '));
         }
 
         lens.append(getXmpTagString("Xmp.MicrosoftPhoto.LensModel"));
@@ -3012,7 +3012,7 @@ QString DMetadata::valueToString(const QVariant& value, MetadataInfo::Field fiel
         case MetadataInfo::IptcCoreCreator:
         case MetadataInfo::IptcCoreScene:
         case MetadataInfo::IptcCoreSubjectCode:
-            return value.toStringList().join(QLatin1String(" "));
+            return value.toStringList().join(QLatin1Char(' '));
 
             // Text
         case MetadataInfo::Comment:

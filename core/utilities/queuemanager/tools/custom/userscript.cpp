@@ -233,7 +233,7 @@ bool UserScript::toolOperations()
 #ifndef Q_OS_WIN
     process.start(QLatin1String("/bin/sh"), QStringList() << QLatin1String("-c") << script);
 #else
-    script.replace(QLatin1String("\n"), QLatin1String(" & "));
+    script.replace(QLatin1Char('\n'), QLatin1String(" & "));
 
     process.setNativeArguments(QLatin1String("/C ") + script);
 

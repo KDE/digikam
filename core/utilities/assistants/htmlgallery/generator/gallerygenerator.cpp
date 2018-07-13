@@ -482,8 +482,8 @@ public:
             AbstractThemeParameter* const themeParameter = *it;
             QByteArray internalName                      = themeParameter->internalName();
             QString value                                = info->getThemeParameterValue(themeInternalName,
-                                                                QString::fromLatin1(internalName),
-                                                                themeParameter->defaultValue());
+                                                                                        QLatin1String(internalName),
+                                                                                        themeParameter->defaultValue());
 
             map[internalName]                            = makeXsltParam(value);
         }
