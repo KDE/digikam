@@ -45,7 +45,12 @@ public:
 
     void initializePage();
     bool validatePage();
-
+    
+private Q_SLOTS:
+    
+    void slotImageGetOptionChanged(int index);
+    void slotWebServiceOptionChanged(const QString& serviceName);
+    
 private:
 
     class Private;

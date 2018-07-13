@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-03
- * Description : Web Service settings container.
+ * Description : Web Service authentication container.
  *
  * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
@@ -30,17 +30,11 @@
 #include <QUrl>
 #include <QWidget>
 #include <QMap>
+#include <QSettings>
 
 // Local includes
 
 #include "dinfointerface.h"
-#include "dbtalker.h"
-#include "fbtalker.h"
-#include "flickrtalker.h"
-#include "gptalker.h"
-#include "gdtalker.h"
-#include "imgurtalker.h"
-#include "smugtalker.h"
 #include "wssettings.h"
 
 namespace Digikam
@@ -55,15 +49,18 @@ public:
     explicit WSAuthentication(QWidget* const parent, DInfoInterface* const iface=0);
     ~WSAuthentication();
     
-    void createTalker(WSSettings::WebService ws, const QString& serviceName=QString(""));
+    void createTalker(WSSettings::WebService ws,
+                      const QString& serviceName=QString());
     
-    void reauthenticate();
+    void authenticate();
+    bool authenticated() const;
 
 Q_SIGNALS:
     
     void signalOpenBrowser(const QUrl&);
     void signalCloseBrowser();
     void signalResponseTokenReceived(const QMap<QString, QString>&);
+    void signalAuthenticationComplete(bool);
     
 private:
     

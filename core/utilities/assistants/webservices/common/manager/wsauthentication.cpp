@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-03
- * Description : Web Service settings container.
+ * Description : Web Service authentication container.
  *
  * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
@@ -25,6 +25,14 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "wstalker.h"
+#include "dbtalker.h"
+#include "fbtalker.h"
+#include "flickrtalker.h"
+#include "gptalker.h"
+#include "gdtalker.h"
+#include "imgurtalker.h"
+#include "smugtalker.h"
 
 namespace Digikam
 {
@@ -36,26 +44,14 @@ public:
     explicit Private()
       : parent(0),
         iface(0),
-        dbtalker(0),
-        fbtalker(0),
-        fltalker(0),
-        gptalker(0),
-        gdtalker(0),
-        igtalker(0),
-        smtalker(0)
+        talker(0)
     {
     }
     
     QWidget*                    parent;
     DInfoInterface*             iface;
     
-    DBTalker*                   dbtalker;
-    FbTalker*                   fbtalker;
-    FlickrTalker*               fltalker;
-    GPTalker*                   gptalker;
-    GDTalker*                   gdtalker;
-    ImgurTalker*                igtalker;
-    SmugTalker*                 smtalker;
+    WSTalker*                   talker;
     
     WSSettings::WebService      ws;
 };
@@ -72,7 +68,8 @@ WSAuthentication::~WSAuthentication()
     delete d;
 }
 
-void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& serviceName)
+void WSAuthentication::createTalker(WSSettings::WebService ws,
+                                    const QString& serviceName)
 {
     d->ws = ws;
     
@@ -81,59 +78,48 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
     switch(ws)
     {
         case WSSettings::WebService::FLICKR:
-            d->fltalker = new FlickrTalker(d->parent, serviceName, d->iface);
+            //d->talker = new FlickrTalker(d->parent, serviceName, d->iface);
             break;
         case WSSettings::WebService::DROPBOX:
-            d->dbtalker = new DBTalker(d->parent);
+            //d->talker = new DBTalker(d->parent);
             break;
         case WSSettings::WebService::IMGUR:
-            d->igtalker = new ImgurTalker(d->parent);
+            //d->talker = new ImgurTalker(d->parent);
             break;
         case WSSettings::WebService::FACEBOOK:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "create FbTalker";
-            d->fbtalker = new FbTalker(d->parent);
-            connect(this, SIGNAL(signalResponseTokenReceived(const QMap<QString, QString>&)),
-                    d->fbtalker, SLOT(slotResponseTokenReceived(const QMap<QString, QString>&)));
-            connect(d->fbtalker, SIGNAL(signalOpenBrowser(const QUrl&)),
-                    this, SIGNAL(signalOpenBrowser(const QUrl&)));
-            connect(d->fbtalker, SIGNAL(signalCloseBrowser()),
-                    this, SIGNAL(signalCloseBrowser()));
+            d->talker = new FbTalker(d->parent);
             break;
         case WSSettings::WebService::SMUGMUG:
-            d->smtalker = new SmugTalker(d->iface, d->parent);
+            //d->talker = new SmugTalker(d->iface, d->parent);
             break;
         case WSSettings::WebService::GDRIVE:
-            d->gdtalker = new GDTalker(d->parent);
+            //d->talker = new GDTalker(d->parent);
+            break;
+        case WSSettings::WebService::GPHOTO:
+            //d->talker = new GPTalker(d->parent);
             break;
     }
+    
+    connect(this, SIGNAL(signalResponseTokenReceived(const QMap<QString, QString>&)),
+            d->talker, SLOT(slotResponseTokenReceived(const QMap<QString, QString>&)));
+    connect(d->talker, SIGNAL(signalOpenBrowser(const QUrl&)),
+            this, SIGNAL(signalOpenBrowser(const QUrl&)));
+    connect(d->talker, SIGNAL(signalCloseBrowser()),
+            this, SIGNAL(signalCloseBrowser()));
+    connect(d->talker, SIGNAL(signalAuthenticationComplete(bool)),
+            this, SIGNAL(signalAuthenticationComplete(bool)));
 }
 
-void WSAuthentication::reauthenticate()
+void WSAuthentication::authenticate()
 {
-    switch(d->ws)
-    {
-        case WSSettings::WebService::FLICKR:
-            //d->fltalker->reauthenticate();
-            break;
-        case WSSettings::WebService::DROPBOX:
-            //d->dbtalker->reauthenticate();
-            break;
-        case WSSettings::WebService::IMGUR:
-            //d->igtalker->reauthenticate();
-            break;
-        case WSSettings::WebService::FACEBOOK:
-            d->fbtalker->reauthenticate();
-            break;
-        case WSSettings::WebService::SMUGMUG:
-            //d->smtalker->reauthenticate();
-            break;
-        case WSSettings::WebService::GDRIVE:
-            //d->gdtalker->reauthenticate();
-            break;
-    }
+    d->talker->authenticate();
 }
 
-
+bool WSAuthentication::authenticated() const
+{
+    return d->talker->linked();
+}
 
 } // namespace Digikam
 

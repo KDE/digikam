@@ -32,6 +32,8 @@
 #include <QGridLayout>
 #include <QRadioButton>
 #include <QButtonGroup>
+#include <QIcon>
+#include <QSettings>
 
 // KDE includes
 
@@ -43,6 +45,7 @@
 #include "dlayoutbox.h"
 #include "wswizard.h"
 #include "wssettings.h"
+#include "wstoolutils.h"
 
 namespace Digikam
 {
@@ -56,7 +59,9 @@ public:
         hbox(0),
         wizard(0),
         iface(0),
-        wsOption(0)
+        wsOption(0),
+        accountOption(0),
+        settings(0)
     {
         wizard = dynamic_cast<WSWizard*>(dialog);
 
@@ -71,6 +76,8 @@ public:
     WSWizard*         wizard;
     DInfoInterface*   iface;
     QComboBox*        wsOption;
+    QComboBox*        accountOption;
+    QSettings*        settings;
 };
 
 WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
@@ -90,16 +97,21 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
                        "accordingly with your remote Web service capabilities.</p>"
                        "</qt>"));
 
+    // --------------------
     // ComboBox for image selection method
 
     d->hbox                     = new DHBox(vbox);
-    QLabel* const getImageLabel = new QLabel(i18n("&Choose image selection method:"), d->hbox);
+    QLabel* const getImageLabel = new QLabel(i18n("&Choose operation:"), d->hbox);
     d->imageGetOption           = new QComboBox(d->hbox);
-    d->imageGetOption->insertItem(WSSettings::ALBUMS, i18n("Albums"));
-    d->imageGetOption->insertItem(WSSettings::IMAGES, i18n("Images"));
+    d->imageGetOption->insertItem(WSSettings::EXPORT, i18n("Export to web services"));
+    d->imageGetOption->insertItem(WSSettings::IMPORT, i18n("Import from web services"));
     getImageLabel->setBuddy(d->imageGetOption);
+    
+    connect(d->imageGetOption, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotImageGetOptionChanged(int)));
 
     // --------------------
+    // ComboBox for web service selection
 
     DHBox* const wsBox          = new DHBox(vbox);
     QLabel* const wsLabel       = new QLabel(i18n("&Choose remote Web Service:"), wsBox);
@@ -109,16 +121,40 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
 
     while (it != map.constEnd())
     {
-        d->wsOption->addItem(it.value(), (int)it.key());
+        QString wsName = it.value().toLower();
+        QIcon icon = QIcon::fromTheme(wsName.remove(QLatin1Char(' ')));
+        d->wsOption->addItem(icon, it.value(), (int)it.key());
         ++it;
     }
 
     wsLabel->setBuddy(d->wsOption);
-
-    vbox->setStretchFactor(desc,    3);
-    vbox->setStretchFactor(d->hbox, 1);
-    vbox->setStretchFactor(wsBox,   3);
-
+    
+    connect(d->wsOption, SIGNAL(currentIndexChanged(const QString&)),
+            this, SLOT(slotWebServiceOptionChanged(const QString&)));
+    
+    // --------------------
+    // ComboBox for user account selection
+    
+    DHBox* const accountBox     = new DHBox(vbox);
+    QLabel* const accountLabel  = new QLabel(i18n("&Choose account:"), accountBox);
+    d->accountOption            = new QComboBox(accountBox);
+    QStringList accounts        = QStringList(QString("")) << WSSettings::allUserNames(d->wizard->settings()->oauthSettings, 
+                                                                                       map.constBegin().value());
+    
+    foreach(const QString& account, accounts)
+    {
+        d->accountOption->addItem(account);
+    }
+    
+    accountLabel->setBuddy(d->accountOption);
+    
+    // --------------------
+    
+    vbox->setStretchFactor(desc,         3);
+    vbox->setStretchFactor(d->hbox,      1);
+    vbox->setStretchFactor(wsBox,        3);
+    vbox->setStretchFactor(accountBox,   3);
+    
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-html")));
 }
@@ -128,25 +164,65 @@ WSIntroPage::~WSIntroPage()
     delete d;
 }
 
-void WSIntroPage::initializePage()
+void WSIntroPage::slotImageGetOptionChanged(int index)
 {
-    bool albumSupport = (d->iface && d->iface->supportAlbums());
-
-    if (!albumSupport)
-    {
-        d->imageGetOption->setCurrentIndex(WSSettings::IMAGES);
-        d->hbox->setEnabled(false);
+    QMap<WSSettings::WebService, QString> map   = WSSettings::webServiceNames();
+    
+    d->wsOption->clear();
+    
+    /*
+     * index == 0 <=> Export
+     * index == 1 <=> Import, we only have Google Photo and Smugmug 
+     */
+    if(index == 0)
+    {          
+        QMap<WSSettings::WebService, QString>::const_iterator it = map.constBegin();
+        
+        while (it != map.constEnd())
+        {
+            QString wsName = it.value().toLower();
+            QIcon icon = QIcon::fromTheme(wsName.remove(QLatin1Char(' ')));
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << wsName.remove(QLatin1Char(' '));
+            d->wsOption->addItem(icon, it.value(), (int)it.key());
+            ++it;
+        }
     }
     else
     {
-        d->imageGetOption->setCurrentIndex(d->wizard->settings()->selMode);
+        d->wsOption->addItem(QIcon::fromTheme(QString::fromLatin1("smugmug")),
+                             map[WSSettings::WebService::SMUGMUG], 
+                             WSSettings::WebService::SMUGMUG);
+        d->wsOption->addItem(QIcon::fromTheme(QString::fromLatin1("googlephoto")),
+                             map[WSSettings::WebService::GPHOTO], 
+                             WSSettings::WebService::GPHOTO);        
     }
+}
+
+void WSIntroPage::slotWebServiceOptionChanged(const QString& serviceName)
+{
+    d->accountOption->clear();
+
+    QStringList accounts    = QStringList(QString("")) << WSSettings::allUserNames(d->wizard->settings()->oauthSettings, 
+                                                                                   serviceName);
+    
+    foreach(const QString& account, accounts)
+    {
+        d->accountOption->addItem(account);
+    }
+}
+
+void WSIntroPage::initializePage()
+{
+    d->imageGetOption->setCurrentIndex(d->wizard->settings()->selMode);
 }
 
 bool WSIntroPage::validatePage()
 {
-    d->wizard->settings()->selMode = (WSSettings::Selection)d->imageGetOption->currentIndex();
-    d->wizard->settings()->webService = (WSSettings::WebService)d->wsOption->currentIndex();
+    d->wizard->settings()->selMode      = (WSSettings::Selection)d->imageGetOption->currentIndex();
+    d->wizard->settings()->webService   = (WSSettings::WebService)d->wsOption->currentIndex();
+    d->wizard->settings()->userName     = d->accountOption->currentText();
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << d->wizard->settings()->userName;
 
     return true;
 }

@@ -37,19 +37,18 @@ public:
 
     FbUser()
     {
-        id         = 0;
         uploadPerm = false;
     }
 
     void clear()
     {
-        id         = 0;
+        id.clear();
         name.clear();
         profileURL = QStringLiteral("https://www.facebook.com");
         uploadPerm = true;
     }
 
-    long long id;
+    QString   id;
 
     QString   name;
     QString   profileURL;

@@ -25,19 +25,21 @@
 
 // Qt includes
 
+#include <QObject>
 #include <QtGlobal>
 #include <QList>
 #include <QString>
 #include <QStringList>
 #include <QUrl>
 #include <QMap>
+#include <QSettings>
 
 class KConfigGroup;
 
 namespace Digikam
 {
 
-class WSSettings
+class WSSettings: public QObject
 {
 
 public:
@@ -45,8 +47,9 @@ public:
     // Images selection mode
     enum Selection
     {
-        IMAGES = 0,
-        ALBUMS
+        EXPORT = 0,
+        IMPORT
+        
     };
 
     enum WebService
@@ -56,7 +59,8 @@ public:
         IMGUR,
         FACEBOOK,
         SMUGMUG,
-        GDRIVE
+        GDRIVE,
+        GPHOTO
     };
 
     enum ImageFormat
@@ -76,13 +80,11 @@ public:
 
     QString format() const;
 
-    void setMailUrl(const QUrl& orgUrl, const QUrl& emailUrl);
-    QUrl mailUrl(const QUrl& orgUrl) const;
-
     // Helper methods to fill settings from GUI.
     static QMap<WebService,  QString> webServiceNames();
     static QMap<ImageFormat, QString> imageFormatNames();
-
+    static QStringList allUserNames(QSettings* const settings, const QString& serviceName);
+    
 public:
 
     Selection                 selMode;             // Items selection mode
@@ -101,6 +103,9 @@ public:
     QString                   tempPath;
 
     WebService                webService;
+    
+    QString                   userName;
+    QSettings*                oauthSettings;
 
     int                       imageSize;
 

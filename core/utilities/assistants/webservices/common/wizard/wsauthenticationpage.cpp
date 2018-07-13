@@ -89,8 +89,7 @@ WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
                                                    WSAuthentication* const wsAuth,
                                                    QString callbackUrl)
     : QWebEngineView(parent),
-      m_WSAuthentication(wsAuth),
-      m_authenticationCompleted(false)
+      m_WSAuthentication(wsAuth)
       
 #else // #ifdef HAVE_QWEBENGINE
       
@@ -98,8 +97,7 @@ WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
                                                    WSAuthentication* const wsAuth,
                                                    QString callbackUrl)
     : QWebView(parent),
-      m_WSAuthentication(wsAuth),
-      m_authenticationCompleted(false)
+      m_WSAuthentication(wsAuth)
       
 #endif // #ifdef HAVE_QWEBENGINE
       
@@ -142,7 +140,7 @@ WSAuthenticationPageView::~WSAuthenticationPageView()
 
 bool WSAuthenticationPageView::authenticationComplete() const
 {
-    return m_authenticationCompleted;
+    return m_WSAuthentication->authenticated();
 }
 
 QMap<QString, QString> WSAuthenticationPageView::parseResponseToken(const QString& rep)
@@ -155,7 +153,7 @@ QMap<QString, QString> WSAuthenticationPageView::parseResponseToken(const QStrin
     foreach(const QString& arg, listArgs)
     {
         QStringList pair = arg.split(QLatin1Char('='));
-        result.insert(pair.takeFirst(), pair.takeLast());
+        result.insert(pair.first(), pair.last());
     }
     
     return result;
@@ -166,7 +164,6 @@ void WSAuthenticationPageView::slotOpenBrowser(const QUrl& url)
 #ifdef HAVE_QWEBENGINE
     
     WSAuthenticationPage* page = dynamic_cast<WSAuthenticationPage*>(this->page());
-    page->profile()->cookieStore()->deleteAllCookies();
     page->setUrl(url);
     show();
 
@@ -189,10 +186,6 @@ void WSAuthenticationPageView::slotCloseBrowser()
     //(Trung) TODO: backport with QWebkit 
 
 #endif 
-    
-    m_authenticationCompleted = true;
-    
-    emit signalAuthenticationComplete();
 }
 
 void WSAuthenticationPageView::slotCallbackCatched(const QString& callbackUrl)
@@ -255,10 +248,10 @@ WSAuthenticationWizard::WSAuthenticationWizard(QWizard* const dialog, const QStr
     d->text->setWordWrap(true);
     d->text->setOpenExternalLinks(true);
     
-    d->wsAuth       = new WSAuthentication(d->vbox, d->iface); 
+    d->wsAuth       = new WSAuthentication(dialog, d->iface); 
     d->wsAuthView   = new WSAuthenticationPageView(d->vbox, d->wsAuth, callbackUrl);
-    connect(d->wsAuthView, SIGNAL(signalAuthenticationComplete()),
-            this, SLOT(slotAuthenticationComplete()));
+    connect(d->wsAuth, SIGNAL(signalAuthenticationComplete(bool)),
+            this, SLOT(slotAuthenticationComplete(bool)));
     
     d->vbox->setStretchFactor(d->text, 1);
     d->vbox->setStretchFactor(d->wsAuthView, 4);
@@ -286,7 +279,7 @@ void WSAuthenticationWizard::initializePage()
         wsAuthPage->setCallbackUrl(QLatin1String("https://www.facebook.com/connect/login_success.html"));
     }
     
-    d->wsAuth->reauthenticate();
+    d->wsAuth->authenticate();
 }
 
 bool WSAuthenticationWizard::validatePage()
@@ -296,11 +289,23 @@ bool WSAuthenticationWizard::validatePage()
     return true;
 }
 
-void WSAuthenticationWizard::slotAuthenticationComplete()
+void WSAuthenticationWizard::slotAuthenticationComplete(bool isLinked)
 {
-    d->text->setText(i18n("<qt>"
-                          "<p><h2><b>Authentication done!</b></h2></p>"
-                          "</qt>"));
+    if(isLinked)
+    {
+        d->text->setText(i18n("<qt>"
+                              "<p><h1><b>Authentication done!</b></h1></p>"
+                              "<p><h3>Account linking succeeded!</h3></p>"
+                              "</qt>"));
+    }
+    else
+    {
+        d->text->setText(i18n("<qt>"
+                              "<p><h1><b>Authentication done!</b></h1></p>"
+                              "<p><h3>Account linking failed!</h3></p>"
+                              "</qt>"));
+    }
+    
     emit completeChanged();
 }
 

@@ -131,6 +131,7 @@ void WSFinalPage::slotProcess()
     d->progressView->clear();
     d->progressBar->reset();
 
+/*
     d->progressView->addEntry(i18n("Preparing file to export by mail..."),
                               DHistoryView::ProgressEntry);
 
@@ -148,7 +149,7 @@ void WSFinalPage::slotProcess()
         d->progressView->addEntry(QDir::toNativeSeparators(it.key().toLocalFile()),
                                   DHistoryView::ProgressEntry);
     }
-
+*/
 
     d->progressBar->setMinimum(0);
     d->progressBar->setMaximum(d->settings->itemsList.count());

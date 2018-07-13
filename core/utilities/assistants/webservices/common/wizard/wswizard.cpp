@@ -42,6 +42,7 @@
 
 #include "dwizardpage.h"
 #include "digikam_debug.h"
+#include "wstoolutils.h"
 #include "wsintropage.h"
 #include "wsauthenticationpage.h"
 #include "wsalbumspage.h"
@@ -88,6 +89,9 @@ WSWizard::WSWizard(QWidget* const parent, DInfoInterface* const iface)
     d->iface             = iface;
     d->settings          = new WSSettings;
 
+    // Create settings for talker
+    d->settings->oauthSettings = WSToolUtils::getOauthSettings(this);
+    
     KConfig config;
     KConfigGroup group   = config.group("Web Services Dialog Settings");
     d->settings->readSettings(group);
@@ -136,7 +140,7 @@ int WSWizard::nextId() const
 {
     if (currentPage() == d->authPage)
     {        
-        if (d->settings->selMode == WSSettings::ALBUMS)
+        if (d->settings->selMode == WSSettings::IMPORT)
         {
             return d->albumsPage->id();
         }

@@ -100,7 +100,7 @@ private:
 
 Q_SIGNALS:
     
-    void signalAuthenticationComplete();
+    void signalAuthenticationComplete(bool);
     
 private Q_SLOTS:
     
@@ -111,7 +111,6 @@ private Q_SLOTS:
 private:
     
     WSAuthentication*   m_WSAuthentication;
-    bool                m_authenticationCompleted;
 }; 
 
 // -------------------------------------------------------------------
@@ -133,7 +132,7 @@ public:
 
 public Q_SLOTS:
     
-    void slotAuthenticationComplete();
+    void slotAuthenticationComplete(bool isLinked);
 
 private:
     

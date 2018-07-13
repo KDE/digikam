@@ -95,7 +95,7 @@ void WSImagesPage::initializePage()
 {
     d->imageList->setIface(d->iface);
     d->imageList->listView()->clear();
-
+/*
     if (d->wizard->settings()->selMode == WSSettings::IMAGES)
     {
         d->imageList->loadImagesFromCurrentSelection();
@@ -104,6 +104,7 @@ void WSImagesPage::initializePage()
     {
         setItemsList(d->wizard->settings()->inputImages);
     }
+*/
 }
 
 bool WSImagesPage::validatePage()

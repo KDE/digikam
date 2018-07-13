@@ -91,7 +91,7 @@ private:
     void    readSettings();
     void    writeSettings();
 
-    void    authenticate(bool imposed = false);
+    void    authenticate();
 
     void    buttonStateChange(bool state);
 

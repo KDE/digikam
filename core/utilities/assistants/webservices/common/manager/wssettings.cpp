@@ -22,6 +22,10 @@
 
 #include "wssettings.h"
 
+// Qt includes
+
+#include <QSettings>
+
 // KDE includes
 
 #include <kconfig.h>
@@ -33,12 +37,14 @@ namespace Digikam
 
 WSSettings::WSSettings()
 {
-    selMode           = IMAGES;
+    selMode           = EXPORT;
     addFileProperties = false;
     imagesChangeProp  = false;
     removeMetadata    = false;
     imageCompression  = 75;
     webService        = FLICKR;
+    userName          = QString("");
+    oauthSettings     = 0;
     imageSize         = 1024;
     imageFormat       = JPEG;
 }
@@ -50,7 +56,7 @@ WSSettings::~WSSettings()
 void WSSettings::readSettings(KConfigGroup& group)
 {
     selMode           = (Selection)group.readEntry("SelMode",
-                        (int)IMAGES);
+                        (int)EXPORT);
     addFileProperties = group.readEntry("AddCommentsAndTags",
                         false);
     imagesChangeProp  = group.readEntry("ImagesChangeProp",
@@ -61,6 +67,8 @@ void WSSettings::readSettings(KConfigGroup& group)
                         75);
     webService        = (WebService)group.readEntry("WebService",
                         (int)FLICKR);
+    userName          = group.readEntry("UserName",
+                        QString(""));
     imageSize         = group.readEntry("ImageSize",
                         1024);
     imageFormat       = (ImageFormat)group.readEntry("ImageFormat",
@@ -75,6 +83,7 @@ void WSSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("RemoveMetadata",     removeMetadata);
     group.writeEntry("ImageCompression",   imageCompression);
     group.writeEntry("WebService",         (int)webService);
+    group.writeEntry("UserName",           userName);
     group.writeEntry("ImageSize",          imageSize);
     group.writeEntry("ImageFormat",        (int)imageFormat);
 }
@@ -87,31 +96,17 @@ QString WSSettings::format() const
     return QLatin1String("PNG");
 }
 
-void WSSettings::setMailUrl(const QUrl& orgUrl, const QUrl& emailUrl)
-{
-    itemsList.insert(orgUrl, emailUrl);
-}
-
-QUrl WSSettings::mailUrl(const QUrl& orgUrl) const
-{
-    if (itemsList.contains(orgUrl))
-    {
-        return itemsList.find(orgUrl).value();
-    }
-
-    return QUrl();
-}
-
 QMap<WSSettings::WebService, QString> WSSettings::webServiceNames()
 {
     QMap<WebService, QString> services;
-
+    
     services[FLICKR]    = i18nc("Web Service: FLICKR",    "Flickr");
     services[DROPBOX]   = i18nc("Web Service: DROPBOX",   "Dropbox");
     services[IMGUR]     = i18nc("Web Service: IMGUR",     "Imgur");
     services[FACEBOOK]  = i18nc("Web Service: FACEBOOK",  "Facebook");
     services[SMUGMUG]   = i18nc("Web Service: SMUGMUG",   "Smugmug");
     services[GDRIVE]    = i18nc("Web Service: GDRIVE",    "Google Drive");
+    services[GPHOTO]    = i18nc("Web Service: GPHOTO",    "Google Photo");
     
     return services;
 }
@@ -125,5 +120,19 @@ QMap<WSSettings::ImageFormat, QString> WSSettings::imageFormatNames()
 
     return frms;
 }
+
+QStringList WSSettings::allUserNames(QSettings* const settings, const QString& serviceName)
+{
+    QStringList userNames;
+    
+    settings->beginGroup(serviceName);
+    settings->beginGroup("users");
+    userNames = settings->allKeys();
+    settings->endGroup();
+    settings->endGroup();
+    
+    return userNames;
+}
+
 
 } // namespace Digikam

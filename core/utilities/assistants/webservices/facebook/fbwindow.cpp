@@ -79,7 +79,6 @@ public:
         imageQualitySpB = widget->getImgQualitySpB();
         imagesCount     = 0;
         imagesTotal     = 0;
-        sessionExpires  = 0;
         talker          = 0;
         albumDlg        = 0;
     }
@@ -189,7 +188,7 @@ FbWindow::FbWindow(DInfoInterface* const iface,
     readSettings();
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
-    buttonStateChange(d->talker->loggedIn());
+    buttonStateChange(d->talker->linked());
     
     authenticate();
 }
@@ -325,14 +324,14 @@ void FbWindow::writeSettings()
     config.sync();
 }
 
-void FbWindow::authenticate(bool imposed)
+void FbWindow::authenticate()
 {
     setRejectButtonMode(QDialogButtonBox::Cancel);
     d->progressBar->show();
     d->progressBar->setFormat(QString::fromLatin1(""));
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method ";
-    d->talker->authenticate(imposed);
+    d->talker->authenticate();
 }
 
 void FbWindow::slotLoginProgress(int step, int maxStep, const QString& label)
@@ -357,21 +356,15 @@ void FbWindow::slotLoginDone(int errCode, const QString& errMsg)
     setRejectButtonMode(QDialogButtonBox::Close);
     d->progressBar->hide();
 
-    buttonStateChange(d->talker->loggedIn());
+    buttonStateChange(d->talker->linked());
     FbUser user = d->talker->getUser();
-    setProfileAID(user.id);
+    setProfileAID(user.id.toLongLong());
     d->widget->updateLabels(user.name, user.profileURL);
     d->albumsCoB->clear();
 
     d->albumsCoB->addItem(i18n("<auto create>"), QString());
 
-    /* 
-     * Access token and session expire now handled in fbtalker.cpp by O2
-     */
-//     d->accessToken    = d->talker->getAccessToken();
-//     d->sessionExpires = d->talker->getSessionExpires();
-
-    if (errCode == 0 && d->talker->loggedIn())
+    if (errCode == 0 && d->talker->linked())
     {
         d->talker->listAlbums();    // get albums to fill combo box
     }
@@ -466,7 +459,7 @@ void FbWindow::slotBusy(bool val)
     {
         setCursor(Qt::ArrowCursor);
         d->changeUserBtn->setEnabled(true);
-        buttonStateChange(d->talker->loggedIn());
+        buttonStateChange(d->talker->linked());
     }
 }
 
@@ -491,12 +484,7 @@ void FbWindow::slotUserLogout()
     
     if (warn->exec() == QMessageBox::Yes)
     {
-        //unlink and wait until it has really finished
-        d->talker->unlink();
-        while(d->talker->loggedIn());
-        
-        // Relogin
-        authenticate(true);
+        d->talker->reauthenticate();
     }
     
     delete warn;    
@@ -515,7 +503,7 @@ void FbWindow::slotReloadAlbumsRequest(long long userID)
     if (userID == 0)
     {
         FbUser user = d->talker->getUser();
-        setProfileAID(user.id);
+        setProfileAID(user.id.toLongLong());
         d->talker->listAlbums(); // re-get albums from current user
     }
     else
