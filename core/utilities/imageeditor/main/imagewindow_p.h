@@ -102,7 +102,7 @@
 #include "facetagseditor.h"
 #include "dbwindow.h"
 #include "odwindow.h"
-//#include "twitterwindow.h"
+#include "twitterwindow.h"
 #include "fbwindow.h"
 #include "flickrwindow.h"
 #include "gswindow.h"

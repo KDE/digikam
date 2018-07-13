@@ -297,6 +297,7 @@ bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     }
 
     QString uploadPath = uploadFolder + QUrl(QUrl::fromLocalFile(imgPath)).fileName();
+    
     QUrl url(QLatin1String("https://content.dropboxapi.com/2/files/upload"));
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "upload path " << uploadPath;
 

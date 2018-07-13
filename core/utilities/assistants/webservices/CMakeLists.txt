@@ -127,6 +127,16 @@ set(libwsonedrive_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odnewalbumdlg.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odwidget.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odwindow.cpp
 )
+
+# Twitter tool --------------------------------------------------------------
+
+set(libwstwitter_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twitternewalbumdlg.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twittermpform.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twittertalker.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twitterwidget.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twitterwindow.cpp
+)
+
 # SmugMug tool -------------------------------------------------------------
 
 set(libwssmugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugnewalbumdlg.cpp
@@ -245,6 +255,7 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsimgur_SRCS}
                                    ${libwsdropbox_SRCS}
                                    ${libwsonedrive_SRCS}
+                                   ${libwstwitter_SRCS}
                                    ${libwssmugmug_SRCS}
                                    ${libwsimageshack_SRCS}
                                    ${libwsfacebook_SRCS}
