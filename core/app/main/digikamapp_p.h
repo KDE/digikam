@@ -131,6 +131,7 @@
 #include "dmediaservermngr.h"
 #include "dmediaserverdlg.h"
 #include "dbwindow.h"
+#include "odwindow.h"
 #include "fbwindow.h"
 #include "flickrwindow.h"
 #include "gswindow.h"
@@ -253,6 +254,7 @@ public:
         imageViewAction(0),
         imageWriteMetadataAction(0),
         imageReadMetadataAction(0),
+        imageScanForFacesAction(0),
         imageFindSimilarAction(0),
         imageSetExifOrientation1Action(0),
         imageSetExifOrientation2Action(0),
@@ -375,6 +377,7 @@ public:
     QAction*                            imageViewAction;
     QAction*                            imageWriteMetadataAction;
     QAction*                            imageReadMetadataAction;
+    QAction*                            imageScanForFacesAction;
     QAction*                            imageFindSimilarAction;
     QAction*                            imageSetExifOrientation1Action;
     QAction*                            imageSetExifOrientation2Action;
