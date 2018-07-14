@@ -58,7 +58,7 @@ public:
      *
      * @param parent parent of this widget, may be null
      */
-    explicit SidebarWidget(QWidget* parent);
+    explicit SidebarWidget(QWidget* const parent);
 
     /**
      * Destructor.
