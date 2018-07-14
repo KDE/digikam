@@ -1934,32 +1934,27 @@ AlbumList AlbumManager::allDAlbums() const
     return list;
 }
 
-void AlbumManager::setCurrentAlbums(QList<Album*> albums)
+void AlbumManager::setCurrentAlbums(const QList<Album*>& albums)
 {
     if (albums.isEmpty())
         return;
 
     QList<Album*> filtered;
-
     /**
      * Filter out the null pointers
     */
     foreach(Album* const album, albums)
     {
-        if (album != 0)
+        if (album)
         {
-            filtered.append(album);
+            filtered << album;
         }
     }
-
-    albums = filtered;
-
     /**
      * Sort is needed to identify selection correctly, ex AlbumHistory
      */
-    std::sort(albums.begin(), albums.end());
-    d->currentAlbums.clear();
-    d->currentAlbums+=albums;
+    std::sort(filtered.begin(), filtered.end());
+    d->currentAlbums = filtered;
 
     emit signalAlbumCurrentChanged(d->currentAlbums);
 }

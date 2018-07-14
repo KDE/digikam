@@ -57,7 +57,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void searchShallBeSelected(QList<Album*> albums);
+    void searchShallBeSelected(const QList<Album*>& albums);
 
 private Q_SLOTS:
 

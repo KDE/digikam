@@ -214,7 +214,7 @@ TagPropWidget::~TagPropWidget()
     delete d;
 }
 
-void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
+void TagPropWidget::slotSelectionChanged(const QList<Album*>& albums)
 {
 
     if (albums.isEmpty())
@@ -261,10 +261,10 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
     else
     {
         d->selectedAlbums.clear();
-        QList<Album*>::iterator it;
+        QList<Album*>::const_iterator it;
         bool containsRoot = false;
 
-        for (it = albums.begin() ; it != albums.end() ; ++it)
+        for (it = albums.constBegin() ; it != albums.constEnd() ; ++it)
         {
             TAlbum* const temp = dynamic_cast<TAlbum*>(*it);
 

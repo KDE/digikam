@@ -1461,6 +1461,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             }
 
             album = man->findAlbum(albumId);
+            album = 0;
 
             if (album && album->type() != Album::PHYSICAL)
             {
