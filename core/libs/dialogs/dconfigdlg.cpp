@@ -97,7 +97,7 @@ protected:
 
 // ------------------------------------------------------------------------
 
-DConfigDlg::DConfigDlg(QWidget* parent, Qt::WindowFlags flags)
+DConfigDlg::DConfigDlg(QWidget* const parent, Qt::WindowFlags flags)
     : QDialog(parent, flags),
       d_ptr(new DConfigDlgPrivate(this))
 {
@@ -112,7 +112,7 @@ DConfigDlg::DConfigDlg(QWidget* parent, Qt::WindowFlags flags)
     d->init();
 }
 
-DConfigDlg::DConfigDlg(DConfigDlgWdg* widget, QWidget* parent, Qt::WindowFlags flags)
+DConfigDlg::DConfigDlg(DConfigDlgWdg* const widget, QWidget* const parent, Qt::WindowFlags flags)
     : QDialog(parent, flags),
       d_ptr(new DConfigDlgPrivate(this))
 {
@@ -127,7 +127,7 @@ DConfigDlg::DConfigDlg(DConfigDlgWdg* widget, QWidget* parent, Qt::WindowFlags f
     d->init();
 }
 
-DConfigDlg::DConfigDlg(DConfigDlgPrivate& dd, DConfigDlgWdg* widget, QWidget* parent, Qt::WindowFlags flags)
+DConfigDlg::DConfigDlg(DConfigDlgPrivate& dd, DConfigDlgWdg* const widget, QWidget* const parent, Qt::WindowFlags flags)
     : QDialog(parent, flags),
       d_ptr(&dd)
 {
@@ -159,42 +159,42 @@ void DConfigDlg::setFaceType(FaceType faceType)
     d_func()->mPageWidget->setFaceType(static_cast<DConfigDlgWdg::FaceType>(faceType));
 }
 
-DConfigDlgWdgItem* DConfigDlg::addPage(QWidget* widget, const QString& name)
+DConfigDlgWdgItem* DConfigDlg::addPage(QWidget* const widget, const QString& name)
 {
     return d_func()->mPageWidget->addPage(widget, name);
 }
 
-void DConfigDlg::addPage(DConfigDlgWdgItem* item)
+void DConfigDlg::addPage(DConfigDlgWdgItem* const item)
 {
     d_func()->mPageWidget->addPage(item);
 }
 
-DConfigDlgWdgItem* DConfigDlg::insertPage(DConfigDlgWdgItem* before, QWidget* widget, const QString& name)
+DConfigDlgWdgItem* DConfigDlg::insertPage(DConfigDlgWdgItem* const before, QWidget* const widget, const QString& name)
 {
     return d_func()->mPageWidget->insertPage(before, widget, name);
 }
 
-void DConfigDlg::insertPage(DConfigDlgWdgItem* before, DConfigDlgWdgItem* item)
+void DConfigDlg::insertPage(DConfigDlgWdgItem* const before, DConfigDlgWdgItem* const item)
 {
     d_func()->mPageWidget->insertPage(before, item);
 }
 
-DConfigDlgWdgItem* DConfigDlg::addSubPage(DConfigDlgWdgItem* parent, QWidget* widget, const QString& name)
+DConfigDlgWdgItem* DConfigDlg::addSubPage(DConfigDlgWdgItem* const parent, QWidget* const widget, const QString& name)
 {
     return d_func()->mPageWidget->addSubPage(parent, widget, name);
 }
 
-void DConfigDlg::addSubPage(DConfigDlgWdgItem* parent, DConfigDlgWdgItem* item)
+void DConfigDlg::addSubPage(DConfigDlgWdgItem* const parent, DConfigDlgWdgItem* const item)
 {
     d_func()->mPageWidget->addSubPage(parent, item);
 }
 
-void DConfigDlg::removePage(DConfigDlgWdgItem* item)
+void DConfigDlg::removePage(DConfigDlgWdgItem* const item)
 {
     d_func()->mPageWidget->removePage(item);
 }
 
-void DConfigDlg::setCurrentPage(DConfigDlgWdgItem* item)
+void DConfigDlg::setCurrentPage(DConfigDlgWdgItem* const item)
 {
     d_func()->mPageWidget->setCurrentPage(item);
 }
@@ -214,7 +214,7 @@ QPushButton* DConfigDlg::button(QDialogButtonBox::StandardButton which) const
     return d_func()->mButtonBox->button(which);
 }
 
-void DConfigDlg::addActionButton(QAbstractButton* button)
+void DConfigDlg::addActionButton(QAbstractButton* const button)
 {
     d_func()->mButtonBox->addButton(button, QDialogButtonBox::ActionRole);
 }
@@ -224,16 +224,16 @@ DConfigDlgWdg* DConfigDlg::pageWidget()
     return d_func()->mPageWidget;
 }
 
-void DConfigDlg::setPageWidget(DConfigDlgWdg* widget)
+const DConfigDlgWdg* DConfigDlg::pageWidget() const
+{
+    return d_func()->mPageWidget;
+}
+
+void DConfigDlg::setPageWidget(DConfigDlgWdg* const widget)
 {
     delete d_func()->mPageWidget;
     d_func()->mPageWidget = widget;
     d_func()->init();
-}
-
-const DConfigDlgWdg* DConfigDlg::pageWidget() const
-{
-    return d_func()->mPageWidget;
 }
 
 QDialogButtonBox* DConfigDlg::buttonBox()
@@ -246,7 +246,7 @@ const QDialogButtonBox* DConfigDlg::buttonBox() const
     return d_func()->mButtonBox;
 }
 
-void DConfigDlg::setButtonBox(QDialogButtonBox* box)
+void DConfigDlg::setButtonBox(QDialogButtonBox* const box)
 {
     delete d_func()->mButtonBox;
     d_func()->mButtonBox = box;
