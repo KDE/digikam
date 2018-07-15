@@ -1062,7 +1062,7 @@ void DigikamView::slotAlbumHistoryForward(int steps)
 }
 
 // TODO update, use SideBarWidget instead of QWidget
-void DigikamView::changeAlbumFromHistory(QList<Album*> album, QWidget* const widget)
+void DigikamView::changeAlbumFromHistory(const QList<Album*>& album, QWidget* const widget)
 {
     if (!(album.isEmpty()) && widget)
     {
