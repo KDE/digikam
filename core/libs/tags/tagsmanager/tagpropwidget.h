@@ -62,7 +62,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void slotSelectionChanged(QList<Album*> albums);
+    void slotSelectionChanged(const QList<Album*>& albums);
     void slotFocusTitleEdit();
 
 private Q_SLOTS:

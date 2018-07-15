@@ -531,7 +531,7 @@ void AbstractAlbumTreeView::setAlbumManagerCurrentAlbum(const bool set)
     d->setInAlbumManager = set;
 }
 
-void AbstractAlbumTreeView::setCurrentAlbums(QList<Album*> albums, bool selectInAlbumManager)
+void AbstractAlbumTreeView::setCurrentAlbums(const QList<Album*>& albums, bool selectInAlbumManager)
 {
     if (!model())
     {
@@ -1568,7 +1568,7 @@ PAlbum* AlbumTreeView::albumForIndex(const QModelIndex& index) const
     return dynamic_cast<PAlbum*> (m_albumFilterModel->albumForIndex(index));
 }
 
-void AlbumTreeView::setCurrentAlbums(QList<Album*> albums, bool selectInAlbumManager)
+void AlbumTreeView::setCurrentAlbums(const QList<Album*>& albums, bool selectInAlbumManager)
 {
     AbstractCheckableAlbumTreeView::setCurrentAlbums(albums, selectInAlbumManager);
 }
@@ -1688,7 +1688,7 @@ TagModificationHelper* TagTreeView::tagModificationHelper() const
     return m_modificationHelper;
 }
 
-void TagTreeView::setCurrentAlbums(QList<Album*> albums, bool selectInAlbumManager)
+void TagTreeView::setCurrentAlbums(const QList<Album*>& albums, bool selectInAlbumManager)
 {
     AbstractCheckableAlbumTreeView::setCurrentAlbums(albums, selectInAlbumManager);
 }
@@ -1755,7 +1755,7 @@ SAlbum* SearchTreeView::currentAlbum() const
     return dynamic_cast<SAlbum*> (m_albumFilterModel->albumForIndex(currentIndex()));
 }
 
-void SearchTreeView::setCurrentAlbums(QList<Album*> albums, bool selectInAlbumManager)
+void SearchTreeView::setCurrentAlbums(const QList<Album*>& albums, bool selectInAlbumManager)
 {
     AbstractCheckableAlbumTreeView::setCurrentAlbums(albums, selectInAlbumManager);
 }
@@ -1809,7 +1809,7 @@ DAlbum* DateAlbumTreeView::albumForIndex(const QModelIndex& index) const
     return dynamic_cast<DAlbum*> (m_albumFilterModel->albumForIndex(index));
 }
 
-void DateAlbumTreeView::setCurrentAlbums(QList<Album*> albums, bool selectInAlbumManager)
+void DateAlbumTreeView::setCurrentAlbums(const QList<Album*>& albums, bool selectInAlbumManager)
 {
     AbstractCountingAlbumTreeView::setCurrentAlbums(albums, selectInAlbumManager);
 }

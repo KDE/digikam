@@ -189,7 +189,7 @@ void AlbumHistory::clearHistory()
     d->moving = false;
 }
 
-void AlbumHistory::addAlbums(QList<Album*> const albums, QWidget* const widget)
+void AlbumHistory::addAlbums(const QList<Album*>& albums, QWidget* const widget)
 {
 
     if (albums.isEmpty() || !widget || d->moving)
@@ -218,7 +218,7 @@ void AlbumHistory::addAlbums(QList<Album*> const albums, QWidget* const widget)
  *
  * @author Mohamed_Anwer
  */
-void AlbumHistory::addAlbums(QList<Album*> const albums,
+void AlbumHistory::addAlbums(const QList<Album*>& albums,
                              QWidget* const widget,
                              QHash<AlbumLabelsTreeView::Labels,
                              QList<int> > selectedLabels)
