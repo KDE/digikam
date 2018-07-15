@@ -1,3 +1,11 @@
-See Doxygen section 'getsourcecode' from API documentation.
+See The API documentation to generate with Doxygen. You will find all information about the dependencies,
+the configuration options, the rules to compile and install, and all pointers to contribute to the project as developer.
 
-Online version: https://www.digikam.org/api/index.html#getsourcecode
+Install Doxygen and Graphviz, and then run make doc from build directory. You can also run doxygen command line tool
+directly from this folder.
+
+Online version: https://www.digikam.org/api/index.html
+
+For the todo list, see bugzilla for details which is the complete story of the project.
+
+https://bugs.kde.org/component-report.cgi?product=digikam

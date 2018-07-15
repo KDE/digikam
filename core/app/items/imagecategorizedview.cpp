@@ -403,7 +403,7 @@ QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const
     return hint;
 }
 
-void ImageCategorizedView::openAlbum(QList<Album*> albums)
+void ImageCategorizedView::openAlbum(const QList<Album*>& albums)
 {
     ImageAlbumModel* const albumModel = imageAlbumModel();
 

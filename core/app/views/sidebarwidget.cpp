@@ -26,8 +26,9 @@
 namespace Digikam
 {
 
-SidebarWidget::SidebarWidget(QWidget* parent) :
-    QWidget(parent), StateSavingObject(this)
+SidebarWidget::SidebarWidget(QWidget* const parent)
+    : QWidget(parent),
+      StateSavingObject(this)
 {
 }
 

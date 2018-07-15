@@ -97,7 +97,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     QLabel* const logo      = new QLabel(this);
 
     logo->setPixmap(QIcon::fromTheme(QLatin1String("tag-properties")).pixmap(30,30));
-    d->topLabel = new QLabel(this);
+    d->topLabel             = new QLabel(this);
     d->topLabel->setText(i18n("Tag Properties"));
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->topLabel->setWordWrap(false);
@@ -111,11 +111,12 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     titleLabel->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
     titleLabel->setIndent(spacing);
 
-    d->titleEdit = new SearchTextBar(this, QLatin1String("TagEditDlgTitleEdit"), i18n("Enter tag name here"));
+    d->titleEdit             = new SearchTextBar(this, QLatin1String("TagEditDlgTitleEdit"),
+                                                 i18n("Enter tag name here"));
     d->titleEdit->setCaseSensitive(false);
     titleLabel->setBuddy(d->titleEdit);
 
-    QLabel* const tipLabel = new QLabel(this);
+    QLabel* const tipLabel   = new QLabel(this);
     tipLabel->setTextFormat(Qt::RichText);
     tipLabel->setWordWrap(true);
     tipLabel->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
@@ -128,11 +129,12 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     iconTextLabel->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
     iconTextLabel->setIndent(spacing);
 
-    d->iconButton         = new QPushButton(this);
+    d->iconButton               = new QPushButton(this);
     d->iconButton->setFixedSize(40, 40);
     iconTextLabel->setBuddy(d->iconButton);
 
-    d->resetIconButton = new QPushButton(QIcon::fromTheme(QLatin1String("view-refresh")), i18n("Reset"), this);
+    d->resetIconButton          = new QPushButton(QIcon::fromTheme(QLatin1String("view-refresh")),
+                                                  i18n("Reset"), this);
 
 #ifndef HAVE_KICONTHEMES
     iconTextLabel->hide();
@@ -147,11 +149,11 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     kscTextLabel->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
     kscTextLabel->setIndent(spacing);
 
-    d->keySeqWidget      = new KKeySequenceWidget(this);
+    d->keySeqWidget            = new KKeySequenceWidget(this);
     kscTextLabel->setBuddy(d->keySeqWidget);
     d->keySeqWidget->setCheckActionCollections(TagsActionMngr::defaultManager()->actionCollections());
 
-    QLabel* const tipLabel2 = new QLabel(this);
+    QLabel* const tipLabel2    = new QLabel(this);
     tipLabel2->setTextFormat(Qt::RichText);
     tipLabel2->setWordWrap(true);
     tipLabel2->setText(i18n("<p><b>Note:</b> <i>This shortcut can be used "
@@ -159,8 +161,8 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     tipLabel2->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
     tipLabel2->setIndent(spacing);
 
-    d->saveButton    = new QPushButton(i18n("Save"));
-    d->discardButton = new QPushButton(i18n("Discard"));
+    d->saveButton              = new QPushButton(i18n("Save"));
+    d->discardButton           = new QPushButton(i18n("Discard"));
 
     // --------------------------------------------------------
 
@@ -214,7 +216,7 @@ TagPropWidget::~TagPropWidget()
     delete d;
 }
 
-void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
+void TagPropWidget::slotSelectionChanged(const QList<Album*>& albums)
 {
 
     if (albums.isEmpty())
@@ -261,10 +263,10 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
     else
     {
         d->selectedAlbums.clear();
-        QList<Album*>::iterator it;
         bool containsRoot = false;
+        QList<Album*>::const_iterator it;
 
-        for (it = albums.begin() ; it != albums.end() ; ++it)
+        for (it = albums.constBegin() ; it != albums.constEnd() ; ++it)
         {
             TAlbum* const temp = dynamic_cast<TAlbum*>(*it);
 

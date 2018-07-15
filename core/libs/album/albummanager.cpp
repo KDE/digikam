@@ -1335,6 +1335,7 @@ void AlbumManager::scanPAlbums()
         {
             continue;
         }
+
         if (oldAlbums.contains(info.id))
         {
             oldAlbums.remove(info.id);
@@ -1423,7 +1424,7 @@ void AlbumManager::scanPAlbums()
 
             if (!parent)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) <<  "Could not find parent with url: "
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Could not find parent with url: "
                                              << parentPath << " for: "
                                              << info.relativePath;
                 continue;
@@ -1934,32 +1935,26 @@ AlbumList AlbumManager::allDAlbums() const
     return list;
 }
 
-void AlbumManager::setCurrentAlbums(QList<Album*> albums)
+void AlbumManager::setCurrentAlbums(const QList<Album*>& albums)
 {
     if (albums.isEmpty())
         return;
 
-    QList<Album*> filtered;
-
+    d->currentAlbums.clear();
     /**
      * Filter out the null pointers
     */
     foreach(Album* const album, albums)
     {
-        if (album != 0)
+        if (album)
         {
-            filtered.append(album);
+            d->currentAlbums << album;
         }
     }
-
-    albums = filtered;
-
     /**
      * Sort is needed to identify selection correctly, ex AlbumHistory
      */
-    std::sort(albums.begin(), albums.end());
-    d->currentAlbums.clear();
-    d->currentAlbums+=albums;
+    std::sort(d->currentAlbums.begin(), d->currentAlbums.end());
 
     emit signalAlbumCurrentChanged(d->currentAlbums);
 }
@@ -2073,7 +2068,7 @@ Album* AlbumManager::findAlbum(Album::Type type, int id) const
 TAlbum* AlbumManager::findTAlbum(const QString& tagPath) const
 {
     // handle gracefully with or without leading slash
-    bool          withLeadingSlash = tagPath.startsWith(QLatin1Char('/'));
+    bool withLeadingSlash = tagPath.startsWith(QLatin1Char('/'));
     AlbumIterator it(d->rootTAlbum);
 
     while (it.current())

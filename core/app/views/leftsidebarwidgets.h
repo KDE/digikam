@@ -71,7 +71,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(QList<Album*> album);
+    void    changeAlbumFromHistory(const QList<Album*>& album);
     const QIcon   getIcon();
     const QString getCaption();
 
@@ -112,7 +112,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(QList<Album*> album);
+    void    changeAlbumFromHistory(const QList<Album*>& album);
     const QIcon   getIcon();
     const QString getCaption();
 
@@ -162,7 +162,7 @@ public:
 
     void    setActive(bool active);
     void    applySettings();
-    void    changeAlbumFromHistory(QList<Album *> album);
+    void    changeAlbumFromHistory(const QList<Album*>& album);
     void    doLoadState();
     void    doSaveState();
     const QIcon   getIcon();
@@ -198,7 +198,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(QList<Album*> album);
+    void    changeAlbumFromHistory(const QList<Album*>& album);
     const QIcon   getIcon();
     const QString getCaption();
 
@@ -234,7 +234,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(QList<Album*> album);
+    void    changeAlbumFromHistory(const QList<Album*>& album);
     const QIcon   getIcon();
     const QString getCaption();
 
@@ -281,7 +281,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(QList<Album*> album);
+    void    changeAlbumFromHistory(const QList<Album*>& album);
     const QIcon   getIcon();
     const QString getCaption();
 
@@ -316,7 +316,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(QList<Album*> album);
+    void    changeAlbumFromHistory(const QList<Album*>& album);
     const QIcon   getIcon();
     const QString getCaption();
 
@@ -361,7 +361,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(QList<Album*> album);
+    void    changeAlbumFromHistory(const QList<Album*>& album);
     const QIcon   getIcon();
     const QString getCaption();
 
@@ -399,7 +399,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(QList<Album*> album);
+    void    changeAlbumFromHistory(const QList<Album*>& album);
     const QIcon   getIcon();
     const QString getCaption();
 

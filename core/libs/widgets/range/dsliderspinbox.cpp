@@ -201,7 +201,7 @@ void DAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
     painter.end();
 }
 
-void DAbstractSliderSpinBox::paint(QPainter &painter)
+void DAbstractSliderSpinBox::paint(QPainter& painter)
 {
     Q_D(DAbstractSliderSpinBox);
 
@@ -238,7 +238,7 @@ void DAbstractSliderSpinBox::paint(QPainter &painter)
     }
 }
 
-void DAbstractSliderSpinBox::paintFusion(QPainter &painter)
+void DAbstractSliderSpinBox::paintFusion(QPainter& painter)
 {
     Q_D(DAbstractSliderSpinBox);
 
@@ -307,7 +307,7 @@ void DAbstractSliderSpinBox::paintFusion(QPainter &painter)
     painter.restore();
 }
 
-void DAbstractSliderSpinBox::paintPlastique(QPainter &painter)
+void DAbstractSliderSpinBox::paintPlastique(QPainter& painter)
 {
     Q_D(DAbstractSliderSpinBox);
 
@@ -370,7 +370,7 @@ void DAbstractSliderSpinBox::paintPlastique(QPainter &painter)
     painter.restore();
 }
 
-void DAbstractSliderSpinBox::paintBreeze(QPainter &painter)
+void DAbstractSliderSpinBox::paintBreeze(QPainter& painter)
 {
     Q_D(DAbstractSliderSpinBox);
 
@@ -949,7 +949,8 @@ class DSliderSpinBoxPrivate : public DAbstractSliderSpinBoxPrivate
 {
 };
 
-DSliderSpinBox::DSliderSpinBox(QWidget* parent) : DAbstractSliderSpinBox(parent, new DSliderSpinBoxPrivate)
+DSliderSpinBox::DSliderSpinBox(QWidget* const parent)
+    : DAbstractSliderSpinBox(parent, new DSliderSpinBoxPrivate)
 {
     setRange(0, 99);
 }
@@ -1054,7 +1055,8 @@ class DDoubleSliderSpinBoxPrivate : public DAbstractSliderSpinBoxPrivate
 {
 };
 
-DDoubleSliderSpinBox::DDoubleSliderSpinBox(QWidget* parent) : DAbstractSliderSpinBox(parent, new DDoubleSliderSpinBoxPrivate)
+DDoubleSliderSpinBox::DDoubleSliderSpinBox(QWidget* const parent)
+    : DAbstractSliderSpinBox(parent, new DDoubleSliderSpinBoxPrivate)
 {
 }
 
