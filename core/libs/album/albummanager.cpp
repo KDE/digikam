@@ -1335,6 +1335,7 @@ void AlbumManager::scanPAlbums()
         {
             continue;
         }
+
         if (oldAlbums.contains(info.id))
         {
             oldAlbums.remove(info.id);
@@ -1423,7 +1424,7 @@ void AlbumManager::scanPAlbums()
 
             if (!parent)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) <<  "Could not find parent with url: "
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Could not find parent with url: "
                                              << parentPath << " for: "
                                              << info.relativePath;
                 continue;
@@ -2067,7 +2068,7 @@ Album* AlbumManager::findAlbum(Album::Type type, int id) const
 TAlbum* AlbumManager::findTAlbum(const QString& tagPath) const
 {
     // handle gracefully with or without leading slash
-    bool          withLeadingSlash = tagPath.startsWith(QLatin1Char('/'));
+    bool withLeadingSlash = tagPath.startsWith(QLatin1Char('/'));
     AlbumIterator it(d->rootTAlbum);
 
     while (it.current())
