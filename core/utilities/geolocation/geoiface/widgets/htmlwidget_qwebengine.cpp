@@ -141,12 +141,7 @@ HTMLWidget::HTMLWidget(QWidget* const parent)
         d->parent->installEventFilter(this);
     }
 
-    d->child = findChild<QWidget*>();
-
-    if (d->child)
-    {
-        d->child->installEventFilter(this);
-    }
+    installEventFilter(this);
 }
 
 HTMLWidget::~HTMLWidget()
@@ -218,7 +213,18 @@ bool HTMLWidget::runScript2Coordinates(const QString& scriptCode, GeoCoordinates
 
 bool HTMLWidget::eventFilter(QObject* object, QEvent* event)
 {
-    if (d->parent && object == d->parent)
+    if (object == this && event->type() == QEvent::ChildAdded)
+    {
+        d->child = findChild<QWidget*>();
+
+        if (d->child)
+        {
+            d->child->installEventFilter(this);
+        }
+
+        return QWebEngineView::eventFilter(object, event);
+    }
+    else if (d->parent && object == d->parent)
     {
 
         if (event->type() == QEvent::Resize)
