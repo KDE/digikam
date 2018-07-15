@@ -299,4 +299,5 @@ BUGFIXES:
 244 ==> 396234 - Add a feature which allow to switch latitude and longitude.
 245 ==> 396283 - Missing images in album preview.
 246 ==> 396352 - Some iptc tags are not displayed in the metadata part.
-247 ==> 
+247 ==> 396434 - Uncontrolled log messages oversize log file up to run out of disk space.
+248 ==> 
