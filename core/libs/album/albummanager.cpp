@@ -1939,7 +1939,7 @@ void AlbumManager::setCurrentAlbums(const QList<Album*>& albums)
     if (albums.isEmpty())
         return;
 
-    QList<Album*> filtered;
+    d->currentAlbums.clear();
     /**
      * Filter out the null pointers
     */
@@ -1947,14 +1947,13 @@ void AlbumManager::setCurrentAlbums(const QList<Album*>& albums)
     {
         if (album)
         {
-            filtered << album;
+            d->currentAlbums << album;
         }
     }
     /**
      * Sort is needed to identify selection correctly, ex AlbumHistory
      */
-    std::sort(filtered.begin(), filtered.end());
-    d->currentAlbums = filtered;
+    std::sort(d->currentAlbums.begin(), d->currentAlbums.end());
 
     emit signalAlbumCurrentChanged(d->currentAlbums);
 }
