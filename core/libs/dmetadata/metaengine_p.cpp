@@ -469,7 +469,24 @@ QString MetaEngine::Private::detectEncodingAndDecode(const std::string& value) c
     // to reliably autodetect different ISO-8859 charsets.
     // So we can use either local encoding, or latin1.
 
-    return QString::fromLocal8Bit(value.c_str());
+    QString localString = QString::fromLocal8Bit(value.c_str());
+
+    // To fix broken JFIF comment, remove non printable
+    // characters from the string. See bug 39617
+
+    QString cleanString;
+
+    for (int i = 0 ; i < localString.size() ; ++i)
+    {
+        if (localString.at(i).isPrint()            ||
+            localString.at(i) == QLatin1Char('\n') ||
+            localString.at(i) == QLatin1Char('\r'))
+        {
+            cleanString.append(localString.at(i));
+        }
+    }
+
+    return cleanString;
 }
 
 bool MetaEngine::Private::isUtf8(const char* const buffer) const
