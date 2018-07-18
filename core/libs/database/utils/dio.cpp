@@ -448,7 +448,6 @@ void DIO::slotOneProccessed(const QUrl& url)
 
             if (!info.isNull())
             {
-                CoreDbAccess access;
                 access.db()->removeAllImageRelationsFrom(info.id(),
                                                          DatabaseRelation::Grouped);
 
