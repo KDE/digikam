@@ -471,22 +471,20 @@ QString MetaEngine::Private::detectEncodingAndDecode(const std::string& value) c
 
     QString localString = QString::fromLocal8Bit(value.c_str());
 
-    // To fix broken JFIF comment, remove non printable
+    // To fix broken JFIF comment, replace non printable
     // characters from the string. See bug 39617
-
-    QString cleanString;
 
     for (int i = 0 ; i < localString.size() ; ++i)
     {
-        if (localString.at(i).isPrint()            ||
-            localString.at(i) == QLatin1Char('\n') ||
-            localString.at(i) == QLatin1Char('\r'))
+        if (!localString.at(i).isPrint()             &&
+            (localString.at(i) != QLatin1Char('\n')) &&
+            (localString.at(i) != QLatin1Char('\r')))
         {
-            cleanString.append(localString.at(i));
+            localString[i] = QLatin1Char('_');
         }
     }
 
-    return cleanString;
+    return localString;
 }
 
 bool MetaEngine::Private::isUtf8(const char* const buffer) const
