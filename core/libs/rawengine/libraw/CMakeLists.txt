@@ -94,12 +94,6 @@ message(STATUS "")
 
 # -- LibRaw library Compilation --------------------------------------------------------------------------------
 
-# Flag to include demosaic pack GPL2
-add_definitions(-DLIBRAW_DEMOSAIC_PACK_GPL2)
-
-# Flag to include demosaic pack GPL3
-add_definitions(-DLIBRAW_DEMOSAIC_PACK_GPL3)
-
 # Flag to compile with DNG SDK
 add_definitions(-DUSE_DNGSDK)
 
@@ -119,8 +113,6 @@ if(WIN32)
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/
-                    ${CMAKE_CURRENT_SOURCE_DIR}/demosaic-pack-GPL2
-                    ${CMAKE_CURRENT_SOURCE_DIR}/demosaic-pack-GPL3
                     ${CMAKE_CURRENT_SOURCE_DIR}/../../dngwriter/extra/dng_sdk
                    )
 
