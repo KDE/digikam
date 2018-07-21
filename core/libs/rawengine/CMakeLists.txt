@@ -58,6 +58,8 @@ if(WIN32)
     else()
         add_definitions(-DLIBRAW_NODLL)
     endif()
+else()
+    add_definitions(-DLIBRAW_BUILDLIB)
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libraw
