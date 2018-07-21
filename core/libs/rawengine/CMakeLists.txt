@@ -11,7 +11,106 @@ endif (POLICY CMP0063)
 # LibRaw use C++ exceptions
 kde_enable_exceptions()
 
-add_subdirectory(libraw)
+# -- General definitions rules ------------------------------------------------------------------------
+
+# To prevent warnings from M$ compiler
+
+if(WIN32 AND MSVC)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-D_ATL_SECURE_NO_WARNINGS)
+    add_definitions(-D_AFX_SECURE_NO_WARNINGS)
+endif()
+
+# Under Windows, use specific flag to compile.
+
+if(WIN32)
+    add_definitions(-DDJGPP)
+endif()
+
+# Adjust compiler options to compile fine.
+
+if(NOT MSVC)
+
+    while(CMAKE_CXX_FLAGS MATCHES "-Werror=return-type")
+        string(REPLACE "-Werror=return-type" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    endwhile()
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++11-narrowing" )
+
+endif()
+
+# We always use LCMS version 2
+
+add_definitions(-DUSE_LCMS2)
+
+# -- LibRaw library Compilation --------------------------------------------------------------------------------
+
+# Flag to compile with DNG SDK
+add_definitions(-DUSE_DNGSDK)
+
+# Flag to debug LibRaw
+add_definitions(-DDCRAW_VERBOSE)
+
+# Flag used by default into LibRaw to not use dedicated external thread
+#add_definitions(-DLIBRAW_NOTHREADS)
+
+# Flag to export library symbols
+if(WIN32)
+    if(MSVC)
+        add_definitions(-DLIBRAW_BUILDLIB)
+    else()
+        add_definitions(-DLIBRAW_NODLL)
+    endif()
+endif()
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libraw
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../dngwriter/extra/dng_sdk
+                   )
+
+set(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_fileio.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/demosaic_packs.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_cxx.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_c_api.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_datastream.cpp
+   )
+
+# Disable compilation warnings from LibRaw. Just to be clear on the console.
+# Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (Bug: #269903)
+# Use O4 GCC compilation option to prevent artifacts with OpenMP (Bug #305382)
+foreach(_curentfile ${libraw_LIB_SRCS})
+    if(WIN32 AND MSVC)
+        set_source_files_properties(${_curentfile} PROPERTIES COMPILE_FLAGS "-w")
+    else()
+        set_source_files_properties(${_curentfile} PROPERTIES COMPILE_FLAGS "-w -fPIC -O4")
+    endif()
+endforeach()
+
+
+#target_link_libraries(libraw
+#                      libdng
+#                      ${MATH_LIBRARY}
+#                      ${LCMS2_LIBRARIES}
+#                      ${OPENMP_LDFLAGS}
+#                     )
+
+#if(JPEG_FOUND)
+#    target_link_libraries(libraw ${JPEG_LIBRARY})
+#endif()
+
+#if(Jasper_FOUND)
+#    target_link_libraries(libraw ${JASPER_LIBRARIES})
+#endif()
+
+# Registration of Libraw configuration to a dedicated header
+
+MACRO_BOOL_TO_01(JPEG8_FOUND  LIBRAW_USE_DNGLOSSYCODEC)
+MACRO_BOOL_TO_01(OPENMP_FOUND LIBRAW_USE_OPENMP)
+MACRO_BOOL_TO_01(Jasper_FOUND LIBRAW_USE_REDCINECODEC)
+
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libraw/libraw_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libraw/libraw_config.h)
+
+#################################
 
 set(librawengine_SRCS
     drawdecoder.cpp
@@ -19,10 +118,11 @@ set(librawengine_SRCS
     drawdecodersettings.cpp
     drawdecoderwidget.cpp
     rawinfo.cpp
+    ${libraw_LIB_SRCS}
 )
 
 include_directories(
-    ${CMAKE_CURRENT_BINARY_DIR}/libraw/libraw
+    ${CMAKE_CURRENT_BINARY_DIR}/libraw/
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>

@@ -403,6 +403,62 @@ else()
     set(HAVE_HTMLGALLERY 0)
 endif()
 
+# -- Check dependencies for libraw ---------------------------------------------
+
+message(STATUS "")
+message(STATUS "--------------------------------------------------")
+message(STATUS "digiKam RawEngine dependencies checks:")
+message(STATUS "")
+
+include(MacroOpenMP)
+DETECT_OPENMP()
+
+if(OPENMP_FOUND)
+    message(STATUS "RawEngine will be compiled with OpenMP support")
+else()
+    message(STATUS "RawEngine will not be compiled with OpenMP support")
+endif()
+
+# Flag to use libjasper with LibRaw RedCine codec
+
+if(Jasper_FOUND)
+    add_definitions(-DUSE_JASPER)
+    include_directories(${JASPER_INCLUDE_DIR})
+    message(STATUS "RawEngine will be compiled with RedCine codec")
+else()
+    message(STATUS "RawEngine will not be compiled with RedCine codec")
+endif()
+
+# JPEG library check
+
+message(STATUS "Looking for LibJpeg")
+
+if(JPEG_FOUND)
+    # JPEG lib version is done on top level through MacroJPEG.cmake
+    if (${JPEG_LIB_VERSION} LESS 80)
+        set(JPEG8_FOUND FALSE)
+    else()
+        set(JPEG8_FOUND TRUE)
+    endif()
+endif()
+
+# Flag to use libjpeg with LibRaw DNG lossy codec
+
+if(JPEG8_FOUND)
+    add_definitions(-DUSE_JPEG)
+    add_definitions(-DUSE_JPEG8)
+    include_directories(${JPEG_INCLUDE_DIR})
+    message(STATUS "RawEngine will be compiled with DNG lossy codec")
+else()
+    message(STATUS "RawEngine will not be compiled with DNG lossy codec")
+endif()
+
+message(STATUS "Looking for PThreads")
+set(PTHREADS_FOUND (CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT))
+
+message(STATUS "--------------------------------------------------")
+message(STATUS "")
+
 # -- compilation options definitions -------------------------------------------
 
 MACRO_BOOL_TO_01(KF5Sane_FOUND           HAVE_KSANE)
