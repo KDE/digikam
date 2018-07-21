@@ -29,8 +29,7 @@
 
 #include <QTimer>
 #include <QResizeEvent>
-#include <QWebView>
-#include <QWebFrame>
+#include <qwebframe.h>
 
 // Local includes
 
