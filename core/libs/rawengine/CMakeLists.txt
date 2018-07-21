@@ -40,10 +40,7 @@ if(NOT MSVC)
 endif()
 
 # We always use LCMS version 2
-
 add_definitions(-DUSE_LCMS2)
-
-# -- LibRaw library Compilation --------------------------------------------------------------------------------
 
 # Flag to compile with DNG SDK
 add_definitions(-DUSE_DNGSDK)
@@ -85,30 +82,6 @@ foreach(_curentfile ${libraw_LIB_SRCS})
         set_source_files_properties(${_curentfile} PROPERTIES COMPILE_FLAGS "-w -fPIC -O4")
     endif()
 endforeach()
-
-
-#target_link_libraries(libraw
-#                      libdng
-#                      ${MATH_LIBRARY}
-#                      ${LCMS2_LIBRARIES}
-#                      ${OPENMP_LDFLAGS}
-#                     )
-
-#if(JPEG_FOUND)
-#    target_link_libraries(libraw ${JPEG_LIBRARY})
-#endif()
-
-#if(Jasper_FOUND)
-#    target_link_libraries(libraw ${JASPER_LIBRARIES})
-#endif()
-
-# Registration of Libraw configuration to a dedicated header
-
-MACRO_BOOL_TO_01(JPEG8_FOUND  LIBRAW_USE_DNGLOSSYCODEC)
-MACRO_BOOL_TO_01(OPENMP_FOUND LIBRAW_USE_OPENMP)
-MACRO_BOOL_TO_01(Jasper_FOUND LIBRAW_USE_REDCINECODEC)
-
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libraw/libraw_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libraw/libraw_config.h)
 
 #################################
 
