@@ -39,7 +39,7 @@
 #   include <QWebEngineView>
 #   include <QWebEnginePage>
 #else
-#   include <QWebView>
+#   include <qwebview.h>
 #endif
 
 // Local includes
