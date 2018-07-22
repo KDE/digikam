@@ -103,7 +103,7 @@ typedef unsigned long long UINT64;
 #       ifdef LIBRAW_BUILDLIB
 #           define DllDef __declspec(dllexport)
 #       else
-#          define DllDef __declspec(dllimport)
+#           define DllDef __declspec(dllimport)
 #       endif
 #   endif
 #else

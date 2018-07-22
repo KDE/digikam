@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2017, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -48,7 +48,7 @@ add_definitions(-DUSE_DNGSDK)
 # Flag to debug LibRaw
 add_definitions(-DDCRAW_VERBOSE)
 
-# Flag used by default into LibRaw to not use dedicated external thread
+# Flag used into LibRaw to be not thread-safe. Never use this mode.
 #add_definitions(-DLIBRAW_NOTHREADS)
 
 # Flag to export library symbols
@@ -62,9 +62,10 @@ else()
     add_definitions(-DLIBRAW_BUILDLIB)
 endif()
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libraw
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/libraw/
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw
                     ${CMAKE_CURRENT_SOURCE_DIR}/../dngwriter/extra/dng_sdk
-                   )
+)
 
 set(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_fileio.cpp
@@ -72,7 +73,7 @@ set(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_cxx.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_c_api.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_datastream.cpp
-   )
+)
 
 # Disable compilation warnings from LibRaw. Just to be clear on the console.
 # Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (Bug: #269903)
@@ -97,7 +98,6 @@ set(librawengine_SRCS
 )
 
 include_directories(
-    ${CMAKE_CURRENT_BINARY_DIR}/libraw/
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
