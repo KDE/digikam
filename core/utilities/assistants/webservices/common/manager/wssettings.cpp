@@ -44,7 +44,6 @@ WSSettings::WSSettings()
     imageCompression  = 75;
     webService        = FLICKR;
     userName          = QString("");
-    oauthSettings     = 0;
     imageSize         = 1024;
     imageFormat       = JPEG;
 }

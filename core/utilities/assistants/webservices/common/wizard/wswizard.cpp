@@ -42,13 +42,13 @@
 
 #include "dwizardpage.h"
 #include "digikam_debug.h"
-#include "wstoolutils.h"
 #include "wsintropage.h"
 #include "wsauthenticationpage.h"
 #include "wsalbumspage.h"
 #include "wsimagespage.h"
 #include "wssettingspage.h"
 #include "wsfinalpage.h"
+#include "wstoolutils.h"
 
 namespace Digikam
 {
@@ -77,6 +77,9 @@ public:
     WSSettingsPage*             settingsPage;
     WSFinalPage*                finalPage;
     WSSettings*                 settings;
+
+    WSAuthentication*           wsAuth;
+    QSettings*                  oauthSettings;
 };
 
 WSWizard::WSWizard(QWidget* const parent, DInfoInterface* const iface)
@@ -89,8 +92,8 @@ WSWizard::WSWizard(QWidget* const parent, DInfoInterface* const iface)
     d->iface             = iface;
     d->settings          = new WSSettings;
 
-    // Create settings for talker
-    d->settings->oauthSettings = WSToolUtils::getOauthSettings(this);
+    d->wsAuth            = new WSAuthentication(this, d->iface);
+    d->oauthSettings     = WSToolUtils::getOauthSettings(this);
     
     KConfig config;
     KConfigGroup group   = config.group("Web Services Dialog Settings");
@@ -126,6 +129,16 @@ DInfoInterface* WSWizard::iface() const
 WSSettings* WSWizard::settings() const
 {
     return d->settings;
+}
+
+WSAuthentication* WSWizard::wsAuth() const
+{
+    return d->wsAuth;
+}
+
+QSettings* WSWizard::oauthSettings() const
+{
+    return d->oauthSettings;
 }
 
 bool WSWizard::validateCurrentPage()

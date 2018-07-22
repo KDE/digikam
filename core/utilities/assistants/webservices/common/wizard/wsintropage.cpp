@@ -45,7 +45,6 @@
 #include "dlayoutbox.h"
 #include "wswizard.h"
 #include "wssettings.h"
-#include "wstoolutils.h"
 
 namespace Digikam
 {
@@ -60,8 +59,7 @@ public:
         wizard(0),
         iface(0),
         wsOption(0),
-        accountOption(0),
-        settings(0)
+        accountOption(0)
     {
         wizard = dynamic_cast<WSWizard*>(dialog);
 
@@ -69,6 +67,7 @@ public:
         {
             iface = wizard->iface();
         }
+
     }
 
     QComboBox*        imageGetOption;
@@ -77,7 +76,6 @@ public:
     DInfoInterface*   iface;
     QComboBox*        wsOption;
     QComboBox*        accountOption;
-    QSettings*        settings;
 };
 
 WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
@@ -91,10 +89,10 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     desc->setOpenExternalLinks(true);
     desc->setText(i18n("<qt>"
                        "<p><h1><b>Welcome to Web Services Tool</b></h1></p>"
-                       "<p>This assistant will guide you to export "
+                       "<p>This assistant will guide you step by step, to export "
                        "your items to popular Internet data hosting service.</p>"
-                       "<p>Before to export contents, you will be able to adjust items properties "
-                       "accordingly with your remote Web service capabilities.</p>"
+                       "<p>Before exporting contents, you will be able to adjust items' properties "
+                       "according to your remote Web service capabilities.</p>"
                        "</qt>"));
 
     // --------------------
@@ -143,7 +141,7 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     
     // An empty string is added to accounts so that user can login with new account
     QStringList accounts        = QStringList(QString(""))
-                                  << WSSettings::allUserNames(d->wizard->settings()->oauthSettings, map.constBegin().value());
+                                  << WSSettings::allUserNames(d->wizard->oauthSettings(), map.constBegin().value());
     
     foreach(const QString& account, accounts)
     {
@@ -210,7 +208,7 @@ void WSIntroPage::slotWebServiceOptionChanged(const QString& serviceName)
 
     // An empty string is added to accounts so that user can login with new account
     QStringList accounts    = QStringList(QString(""))
-                              << WSSettings::allUserNames(d->wizard->settings()->oauthSettings, serviceName);
+                              << WSSettings::allUserNames(d->wizard->oauthSettings(), serviceName);
     
     foreach(const QString& account, accounts)
     {

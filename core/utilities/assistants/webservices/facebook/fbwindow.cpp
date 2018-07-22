@@ -331,7 +331,7 @@ void FbWindow::authenticate()
     d->progressBar->setFormat(QString::fromLatin1(""));
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method ";
-    d->talker->authenticate();
+    d->talker->reauthenticate();
 }
 
 void FbWindow::slotLoginProgress(int step, int maxStep, const QString& label)

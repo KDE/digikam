@@ -248,7 +248,7 @@ WSAuthenticationWizard::WSAuthenticationWizard(QWizard* const dialog, const QStr
     d->text->setWordWrap(true);
     d->text->setOpenExternalLinks(true);
     
-    d->wsAuth       = new WSAuthentication(dialog, d->iface); 
+    d->wsAuth       = d->wizard->wsAuth();
     d->wsAuthView   = new WSAuthenticationPageView(d->vbox, d->wsAuth, callbackUrl);
     connect(d->wsAuth, SIGNAL(signalAuthenticationComplete(bool)),
             this, SLOT(slotAuthenticationComplete(bool)));
@@ -271,13 +271,21 @@ bool WSAuthenticationWizard::isComplete() const
 
 void WSAuthenticationWizard::initializePage()
 {
+    QString callbackUrl;
+
     d->wsAuth->createTalker(d->wizard->settings()->webService);
     
     if(d->wizard->settings()->webService == WSSettings::WebService::FACEBOOK)
     {
-        WSAuthenticationPage* wsAuthPage = dynamic_cast<WSAuthenticationPage*>(d->wsAuthView->page());
-        wsAuthPage->setCallbackUrl(QLatin1String("https://www.facebook.com/connect/login_success.html"));
+        callbackUrl = QLatin1String("https://www.facebook.com/connect/login_success.html");
     }
+    else
+    {
+        callbackUrl = QLatin1String("http://127.0.0.1:8000/");
+    }
+
+    WSAuthenticationPage* wsAuthPage = dynamic_cast<WSAuthenticationPage*>(d->wsAuthView->page());
+    wsAuthPage->setCallbackUrl(callbackUrl);
     
     d->wsAuth->authenticate();
 }

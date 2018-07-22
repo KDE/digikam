@@ -37,8 +37,9 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "wswizard.h"
 #include "o0globals.h"
+#include "wswizard.h"
+#include "wstoolutils.h"
 
 namespace Digikam
 {
@@ -49,10 +50,24 @@ WSTalker::WSTalker(QWidget* const parent)
     m_reply(0),
     m_state(WSTalker::DEFAULT),
     m_buffer(0),
-    m_settings(dynamic_cast<WSWizard*>(parent)->settings()->oauthSettings),
-    m_store(new O0SettingsStore(m_settings, QLatin1String(O2_ENCRYPTION_KEY), this)),
-    m_userName(dynamic_cast<WSWizard*>(parent)->settings()->userName)
+    m_settings(0),
+    m_store(0),
+    m_userName(QString(""))
 {
+    WSWizard* wizard = dynamic_cast<WSWizard*>(parent);
+    if(wizard != nullptr)
+    {
+        m_settings = wizard->oauthSettings();
+        m_userName = wizard->settings()->userName;
+    }
+    else
+    {
+        m_settings = WSToolUtils::getOauthSettings(parent);
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parent of talker is not an instance of WSWizard";
+    }
+
+    m_store = new O0SettingsStore(m_settings, QLatin1String(O2_ENCRYPTION_KEY), this);
+
     connect(m_netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
 }
@@ -162,7 +177,6 @@ QMap<QString, QVariant> WSTalker::getUserAccountInfo(const QString& userName)
     {
         QVariant value = m_settings->value(key);
         map.insert(key, value);
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << key << "(key), " << value.toString() << "(value)"; 
     }
     m_settings->endGroup();
     m_settings->endGroup();
@@ -198,9 +212,7 @@ void WSTalker::saveUserAccount(const QString& userName,
     m_settings->endGroup();
     
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "current " << QDateTime::currentMSecsSinceEpoch() / 1000;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "expire " << expire; 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "access_token" << accessToken;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "refresh_token" << refreshToken;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "expire " << expire;
 }
 
 bool WSTalker::loadUserAccount(const QString& userName)
@@ -248,6 +260,10 @@ bool WSTalker::loadUserAccount(const QString& userName)
 }
 
 void WSTalker::resetTalker(const QString& expire, const QString& accessToken, const QString& refreshToken)
+{
+}
+
+void WSTalker::getLoggedInUser()
 {
 }
 
@@ -354,6 +370,32 @@ void WSTalker::slotCloseBrowser()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Close Browser...";
     emit signalCloseBrowser();
+}
+
+void WSTalker::slotLinkingFailed()
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK fail";
+//     authenticationDone(-1, i18n("Canceled by user."));
+
+    emit signalBusy(false);
+    emit signalAuthenticationComplete(linked());
+}
+
+void WSTalker::slotLinkingSucceeded()
+{
+    if (!linked())
+    {
+        emit signalBusy(false);
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK ok";
+
+        return;
+    }
+
+    // Get user account information
+    getLoggedInUser();
+
+    emit signalAuthenticationComplete(linked());
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK ok";
 }
 
 void WSTalker::slotResponseTokenReceived(const QMap<QString, QString>& rep)

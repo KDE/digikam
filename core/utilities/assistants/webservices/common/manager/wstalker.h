@@ -89,6 +89,8 @@ protected:
     
     virtual void resetTalker(const QString& expire, const QString& accessToken, const QString& refreshToken);
     
+    virtual void getLoggedInUser();
+
     virtual void parseResponseGetLoggedInUser(const QByteArray& data);
     virtual void parseResponseListAlbums(const QByteArray& data);
     virtual void parseResponseCreateAlbum(const QByteArray& data);
@@ -106,6 +108,8 @@ protected Q_SLOTS:
     void slotFinished(QNetworkReply* reply);
     void slotOpenBrowser(const QUrl& url);
     void slotCloseBrowser();
+    virtual void slotLinkingFailed();
+    virtual void slotLinkingSucceeded();
     virtual void slotResponseTokenReceived(const QMap<QString, QString>& rep);
 
 protected:

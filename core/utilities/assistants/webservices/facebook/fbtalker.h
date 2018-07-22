@@ -103,8 +103,6 @@ private:
 private Q_SLOTS:
     
     void    slotResponseTokenReceived(const QMap<QString, QString>& rep);
-    void    slotLinkingFailed();
-    void    slotLinkingSucceeded();
 
 private:
 

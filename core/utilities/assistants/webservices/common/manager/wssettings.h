@@ -105,7 +105,6 @@ public:
     WebService                webService;
     
     QString                   userName;
-    QSettings*                oauthSettings;
 
     int                       imageSize;
 

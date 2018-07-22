@@ -27,6 +27,7 @@
 
 #include <QList>
 #include <QUrl>
+#include <QSettings>
 
 // Local includes
 
@@ -34,6 +35,7 @@
 #include "dinfointerface.h"
 #include "digikam_export.h"
 #include "wssettings.h"
+#include "wsauthentication.h"
 
 namespace Digikam
 {
@@ -48,8 +50,11 @@ public:
     bool validateCurrentPage() override;
     int  nextId() const override;
 
-    DInfoInterface* iface()  const;
-    WSSettings*   settings() const;
+    DInfoInterface*     iface()  const;
+    WSSettings*         settings() const;
+
+    WSAuthentication*   wsAuth() const;
+    QSettings*          oauthSettings() const;
 
     void setItemsList(const QList<QUrl>& urls);
 

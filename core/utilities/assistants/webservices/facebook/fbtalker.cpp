@@ -175,33 +175,6 @@ void FbTalker::unlink()
     d->o2->unlink();
 }
 
-void FbTalker::slotLinkingFailed()
-{
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Facebook fail";
-    authenticationDone(-1, i18n("Canceled by user."));
-    
-    emit signalBusy(false);
-    emit signalAuthenticationComplete(linked());
-}
-
-void FbTalker::slotLinkingSucceeded()
-{    
-    if (!d->o2->linked())
-    {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Facebook ok";
-        
-        emit signalBusy(false);
-        return;
-    }
-    
-    // Get user account information
-    getLoggedInUser();
-
-    emit signalAuthenticationComplete(linked());
-    
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Facebook ok";
-}
-
 void FbTalker::slotResponseTokenReceived(const QMap<QString, QString>& rep)
 {
     d->o2->onVerificationReceived(rep);
