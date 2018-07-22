@@ -623,10 +623,9 @@ Currently cmake configuration features a lots of shared libraries as:
 
  - metadataedit
  - geolocationedit
- - libraw
  - digikamfaceengine
 
-This libraries are linked in digikam main executable and some tests.
+This libraries are linked in digikam main executable and some tests tools.
 
 Avoid making static libraries if possible, and use OBJECT libraries instead.
 Only make STATIC libraries which does not depend on other digikam code.
