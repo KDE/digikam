@@ -15,6 +15,8 @@ if (MINGW)
         URL file://${EXTERNALS_DOWNLOAD_DIR}/lensfun-0.3.95.tar.gz
         URL_MD5 21107eaf72303706256481fef2dc8013
 
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/lensfun-installdb-mxe.patch
+
         CONFIGURE_COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.mxe <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.mxe ${MXE_BUILDROOT} RelWithDebInfo ${GLOBAL_PROFILE}
 
