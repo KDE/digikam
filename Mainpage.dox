@@ -132,6 +132,7 @@
 |│   │   ├── pgfutils                                         | Qt Classes to work with PGF image format                                |
 |│   │   ├── progressmanager                                  | Multi-level operations progress widget                                  |
 |│   │   ├── rawengine                                        | Qt classes to work with libraw decoder                                  |
+|│   │   │   └── libraw                                       | Internal Libraw sdk                                                     |
 |│   │   ├── settings                                         | digiKam settings manager                                                |
 |│   │   ├── tags                                             | Classes to play with tags                                               |
 |│   │   │   └── tagsmanager                                  | Tags manager view                                                       |
