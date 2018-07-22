@@ -91,7 +91,7 @@ public:
     /**
      * Creates a new page dialog.
      */
-    explicit DConfigDlg(QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    explicit DConfigDlg(QWidget* const parent = 0, Qt::WindowFlags flags = 0);
 
     /**
      * Destroys the page dialog.
@@ -111,14 +111,14 @@ public:
      *
      * @returns The associated @see DConfigDlgWdgItem.
      */
-    DConfigDlgWdgItem* addPage(QWidget* widget, const QString& name);
+    DConfigDlgWdgItem* addPage(QWidget* const widget, const QString& name);
 
     /**
      * Adds a new top level page to the dialog.
      *
      * @param item The @see DConfigDlgWdgItem which describes the page.
      */
-    void addPage(DConfigDlgWdgItem* item);
+    void addPage(DConfigDlgWdgItem* const item);
 
     /**
      * Inserts a new page in the dialog.
@@ -130,7 +130,7 @@ public:
      *
      * @returns The associated @see DConfigDlgWdgItem.
      */
-    DConfigDlgWdgItem* insertPage(DConfigDlgWdgItem* before, QWidget* widget, const QString& name);
+    DConfigDlgWdgItem* insertPage(DConfigDlgWdgItem* const before, QWidget* const widget, const QString& name);
 
     /**
      * Inserts a new page in the dialog.
@@ -140,7 +140,7 @@ public:
      *
      * @param item The @see DConfigDlgWdgItem which describes the page.
      */
-    void insertPage(DConfigDlgWdgItem* before, DConfigDlgWdgItem* item);
+    void insertPage(DConfigDlgWdgItem* const before, DConfigDlgWdgItem* const item);
 
     /**
      * Inserts a new sub page in the dialog.
@@ -151,7 +151,7 @@ public:
      *
      * @returns The associated @see DConfigDlgWdgItem.
      */
-    DConfigDlgWdgItem* addSubPage(DConfigDlgWdgItem* parent, QWidget* widget, const QString& name);
+    DConfigDlgWdgItem* addSubPage(DConfigDlgWdgItem* const parent, QWidget* const widget, const QString& name);
 
     /**
      * Inserts a new sub page in the dialog.
@@ -160,18 +160,18 @@ public:
      *
      * @param item The @see DConfigDlgWdgItem which describes the page.
      */
-    void addSubPage(DConfigDlgWdgItem* parent, DConfigDlgWdgItem* item);
+    void addSubPage(DConfigDlgWdgItem* const parent, DConfigDlgWdgItem* const item);
 
     /**
      * Removes the page associated with the given @see DConfigDlgWdgItem.
      */
-    void removePage(DConfigDlgWdgItem* item);
+    void removePage(DConfigDlgWdgItem* const item);
 
     /**
      * Sets the page which is associated with the given @see DConfigDlgWdgItem to
      * be the current page and emits the currentPageChanged() signal.
      */
-    void setCurrentPage(DConfigDlgWdgItem* item);
+    void setCurrentPage(DConfigDlgWdgItem* const item);
 
     /**
      * Returns the @see DConfigDlgWdgItem for the current page or 0 if there is no
@@ -193,7 +193,7 @@ public:
     /**
       * Set an action button.
       */
-    void addActionButton(QAbstractButton* button);
+    void addActionButton(QAbstractButton* const button);
 
 Q_SIGNALS:
 
@@ -219,8 +219,8 @@ protected:
      * \param widget The DConfigDlgWdg object will be reparented to this object, so you can create
      * it without parent and you are not allowed to delete it.
      */
-    DConfigDlg(DConfigDlgWdg* widget, QWidget* parent, Qt::WindowFlags flags = 0);
-    DConfigDlg(DConfigDlgPrivate& dd, DConfigDlgWdg* widget, QWidget* parent, Qt::WindowFlags flags = 0);
+    DConfigDlg(DConfigDlgWdg* const widget, QWidget* const parent, Qt::WindowFlags flags = 0);
+    DConfigDlg(DConfigDlgPrivate& dd, DConfigDlgWdg* const widget, QWidget* const parent, Qt::WindowFlags flags = 0);
 
     /**
      * Returns the page widget of the dialog or 0 if no page widget is set.
@@ -240,7 +240,7 @@ protected:
      * @param widget The DConfigDlgWdg object will be reparented to this object, so you can create
      * it without parent and you are not allowed to delete it.
      */
-    void setPageWidget(DConfigDlgWdg* widget);
+    void setPageWidget(DConfigDlgWdg* const widget);
 
     /**
      * Returns the button box of the dialog or 0 if no button box is set.
@@ -260,7 +260,7 @@ protected:
      * @param box The QDialogButtonBox object will be reparented to this object, so you can create
      * it without parent and you are not allowed to delete it.
      */
-    void setButtonBox(QDialogButtonBox* box);
+    void setButtonBox(QDialogButtonBox* const box);
 
 protected:
 

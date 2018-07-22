@@ -126,7 +126,7 @@ public:
 
 public Q_SLOTS:
 
-    void openAlbum(QList<Album*> album);
+    void openAlbum(const QList<Album*>& album);
 
     void setThumbnailSize(int size);
 

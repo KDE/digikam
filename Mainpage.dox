@@ -23,21 +23,15 @@
 |├── COPYING                                                  | Main project license                                                    |
 |├── COPYING-CMAKE-SCRIPTS                                    | Cmake files license                                                     |
 |├── COPYING.LIB                                              | Internal shared libraries license                                       |
-|├── DEPENDENCIES                                             | Complete list of external project dependencies                          |
 |├── download-repos                                           | Script to download all source code including extra repositories         |
 |├── gits                                                     | Script to perform git in reccursive mode over multiple repositories     |
 |├── gitup                                                    | Script to perform git pull --rebase in reccursive mode                  |
-|├── HACKING                                                  | Coding style and debuging instructions                                  |
-|├── INSTALL                                                  | Project install notice                                                  |
 |├── Mainpage.dox                                             | API documentation main page based on Doxygen                            |
 |├── Messages.sh                                              | Script to extract strings for translators                               |
-|├── NEWS                                                     | Notice to resume all main project changes done at release time          |
+|├── NEWS                                                     | Notice to resume all project changes done at release time               |
 |├── README.DEVEL                                             | Read me file for developers                                             |
-|├── README.LOCAL                                             | Read me for bootstrap.local script                                      |
 |├── README.md                                                | First start helper documentation                                        |
-|├── README.MACOS                                             | Read me for MacOs support                                               |
-|├── README.WINDOWS                                           | Read me for Windows support                                             |
-|├── TODO                                                     | List of project pending tasks                                           |
+|├── README.BUNDLES                                           | Read me for Linux, MacOs, and Windows bundles support                   |
 |├── build                                                    | Directory to store compiled files and binary targets                    |
 |├── core                                                     | All source code are hosted in this directory                            |
 |│   ├── app                                                  | Lead application component                                              |
@@ -548,7 +542,7 @@ All loggin categories are listed in \ref digikam_debug.cpp source code.
 
 \section cmakecompilrules Cmake compilation rules
 
-\subsection Introduction
+\subsection cmakeintro Introduction
 
 The whole project is written mostly in C++/Qt and the Cmake framework is used to compile under Linux, MacOs, and Windows.
 The Cmake rules have been configured to reduce the linking overhead and improve CPU utilization with modular design.
@@ -570,9 +564,9 @@ The Cmake rules for the core component will link the following executable:
 Each of them depend on various sources which must be compiled before.
 A complete description of source code direction is given to the sourcedirs section.
 
-\subsection CMake Implementation Details
+\subsection cmakeimpldetails CMake Implementation Details
 
- Include Directories
+\subsubsection includedirs Include Directories
 
 Local include directories are all managed by this snippet of code:
 
@@ -612,7 +606,7 @@ instead of :
     #include "models/tagmngrlistitem.h"
 \endcode
 
-Shared Libraries
+\subsubsection sharedlibs Shared Libraries
 
 To avoid linking overhead and make a better use of sources there are some dynamic libs as these one:
 
@@ -622,7 +616,7 @@ To avoid linking overhead and make a better use of sources there are some dynami
 Please add sources to digikam core or digikam database only if they don't depend on any big component
 from digikam main executable. These two shared libs must be kept small because they link in a lot of places
 
-\subsubsection Static Libraries
+\subsubsection staticlibs Static Libraries
 
 Currently cmake configuration features a lots of shared libraries as:
 
@@ -647,7 +641,7 @@ Also make sure you put the PRIVATE parameter when setting the target_link_librar
 \endcode
 
 
-\subsubsection Object Libraries
+\subsubsection objlibs Object Libraries
 
 While static libraries are still collection of objects, CMake offer a better approach by
 allowing to specify an OBJECT library:
@@ -671,7 +665,7 @@ allowing to specify an OBJECT library:
 OBJECT library is a cmake internal implementation feature and allow to easily manage sources.
 Here is an example of how to make a shared lib using OBJECT libraries:
 
-\endcode
+\code
     add_library(digikamcore
                 SHARED
                 $<TARGET_OBJECTS:slideshow_src> # the lib we made few lines above
@@ -680,5 +674,432 @@ Here is an example of how to make a shared lib using OBJECT libraries:
                 ....
     )
 \endcode
+
+\section codecontrib Contribute To The Code
+
+This section's purpose is to guide contributors and developers to help on the
+digiKam project.
+
+\subsection startopensource Starting With Open-Source
+
+Before to contribute to digiKam project, please take a look to this link
+which provide 10 golden rules for starting with open source project:
+
+http://schlitt.info/opensource/blog/0541_10_golden_rules_for_starting_with_open_source.html
+
+\subsection codeformat Source Code Formatting
+
+Adhere to this style guide strictly while adding new code to digiKam or
+working on existing code.
+
+\subsubsection indentlength Indentation length
+
+Indent with 4 spaces exactly.
+
+for eg:
+
+\code
+void function()
+{
+....int a;                    // 4 spaces from beginning
+....for (int i=0; i<10; i++)  // 4 spaces from beginning
+....{                         // 4 spaces from beginning
+........a = i;                // 4 spaces from previous indent block
+\endcode
+
+Emacs by default will indent to 4 spaces
+vim users add this to you .vimrc
+ set tabstop=4
+
+\subsubsection tabsspaces Tabs vs Spaces
+
+Absolutely no tabs. Use a sensible editor which will convert tabs to spaces.
+This will reduce unnecessary changes in your cvs commits.
+
+Emacs by default will convert tab to spaces.
+For vim users, add this to your .vimrc
+  set expandtab
+
+\subsubsection linelength Line length
+
+Line length should never exceed 80 chars (unless really necessary - these
+cases are rare). Having long lines greatly reduces readability of code
+
+\subsubsection bracketing Bracketing
+
+In all cases, {} brackets should start on a newline and should be
+aligned with previous line (follow the indentation spaces). for eg.
+
+\code
+class A
+{ //new line
+...
+
+for (int i=0; i<10; i++)
+{ //new line
+
+if (a == foobar)
+{ //new line
+...
+}
+else
+{ // new line
+..
+}
+\endcode
+
+\subsubsection accessmod Positioning of Access modifiers
+
+public, private, protected, public slots, ... should be aligned to the
+beginning of the line with no margin
+
+\code
+class A
+{
+public: // aligned to left
+...
+private Q_SLOTS: // aligned to left
+\endcode
+
+Follow a consistent order in defining these attributes. The recommended
+order is public, protected (functions), private (functions),
+signals, public slots, protected slots, private slots, private (variables)
+
+\subsection itemsnames Class, file and Variable names
+
+\subsubsection classfilenames Class and filenames
+
+- filenames should always be in lower-case
+- class names should match the filenames. Capitalize the first letter and
+  other letters logically to improve readability
+
+\subsubsection protectvars Protected Member variables
+
+- protected member variable names should always be of the form m_varName.
+- Capitalize logically so that it becomes easy to read it. Do not capitalize
+  the first letter after _ (Use m_varName not m_VarName)
+- variable names should be indicative of their functionality and also of
+  the type they belong too if they are instances of qt widgets.
+  for eg, QCheckBox* m_autoRotateCheckBox;
+
+\subsubsection nomembvars Non-Member variables
+
+- non-member variables should follow the same naming convention as the member
+  variables, except for the leading m_
+
+\subsubsection privmembvars Private Member variables
+
+- private member variables must be stored in a d private container to reduce
+  compilation time and improve binary compatibility between digiKam components.
+  See more information how to use a 'd' private class at this url:
+
+  http://developer.kde.org/policies/librarypolicy.html
+
+\subsection commentsspaces Comments and Whitespace
+
+Use whitespaces liberally to improve readability. Add blank lines between logical
+sections of the code.
+
+Comment as much as possible. Position comments at the beginning of the
+section/line you want to comment, NEVER at the end of the line, excepted for special
+cases for ex to describe enum values.
+
+\code
+// put your comments here
+a = (b == foobar) ? 1 : -1;
+
+a = (b == foobar) ? 1 : -1; // you are asking for trouble by putting comments here
+\endcode
+
+\subsection headerfiles Header Files
+
+- Add copyright to top of every file. Use the same header than others digiKam
+  source code.
+- Double inclusion protection defines are all upper case letters and are
+  composed of the classname and a H suffix separated by underscore
+
+\code
+#ifndef ANOTHERNICECLASS_H
+#define ANOTHERNICECLASS_H
+
+class AnotherNiceClass
+{
+...
+}
+
+#endif
+\endcode
+
+- Use forward declarations as much as possible.
+
+\code
+class QFileInfo;
+
+class A
+{
+....QFileInfo* m_fileInfo;
+\endcode
+
+\subsection autocodeformat Automatic source code formatting
+
+The above coding style guidelines can be automatically applied with
+astyle (http://astyle.sourceforge.net/).
+
+Run it in the directory where the files are located that should be formatted
+with the following command:
+
+\code
+astyle --brackets=break --indent=spaces=4 --convert-tabs --indent-switches \
+       --break-blocks --break-closing-brackets --pad-header                \
+       --align-pointer=type --indent-col1-comments --add-brackets          \
+       --min-conditional-indent=0                                          \
+       `find -type f -name '*.cpp'` `find -type f -name '*.cc'` `find -type f -name '*.h'`
+\endcode
+
+Another way to apply the coding guidelines with astyle is to use the
+fileformatter script in /project/scripts. This script will also clean up the
+source tree and remove backup files that had been created by astyle, 
+if the appropriate command line argument is given.
+
+To handle the command easier, create a bash function in ~/.bashrc, e.g.
+
+\code
+digikamformatcode()
+{
+    astyle --brackets=break --indent=spaces=4 --convert-tabs --indent-switches \
+           --break-blocks --break-closing-brackets --pad-header                \
+           --align-pointer=type --indent-col1-comments --add-brackets          \
+           --min-conditional-indent=0                                          \
+           `find $1 -type f -name '*.cpp'` `find $1 -type f -name '*.cc'` `find $1 -type f -name '*.h'`
+}
+\endcode
+
+You can pass a parameter to the function, in this case the first parameter is the directory, where
+files should be formatted.
+
+Examples:
+
+1. Run astyle in the current directory
+\code
+$> digikamformatcode
+\endcode
+
+2. Run astyle in a different directory
+\code
+$> digikamformatcode /home/user/code/svn/digikam/
+\endcode
+
+\subsection generalrecommend General recommendations
+
+Please take a look into this contrib page tips before to write code/patches for
+digiKam project : http://techbase.kde.org/Contribute
+
+Use the same .cpp/.h header than the rest of digiKam project.
+
+Use a decent editor which does auto-indentation/syntax-highlighting for you, 
+as Kate or QtCreator
+
+There are excellent initializer scripts in the kdesdk
+package for xemacs and vim which can substantially increase your productivity.
+
+Just to give a taste of what i can do with emacs (and kdesdk):
+
+* automatically insert copyright (and ifdefs) in new files.
+* insertion of class function definitions for declared class
+  functions in header with one keystroke
+* switch between header and declaration files with one keystroke
+* go to corresponding definition/declaration with one keystroke
+* tab completion of variable/function names already declared.
+
+\subsection gdbbacktrace GDB Backtrace
+
+If you found a context to crash digiKam, you can provide a backtrace using GDB debugger.
+digiKam need to be compiled with all debug info else the backtrace will not suitable.
+There is a configure option for that:
+
+\code
+$> cmake . -DCMAKE_BUILD_TYPE=debugfull
+$> make
+$> su
+$> make install/fast
+\endcode
+
+To make a backtrace with GDB use following command:
+
+\code
+$ gdb digikam
+> catch throw
+> run
+> ...
+> _crash here_
+> ...
+> bt
+> _the backtrace is here_
+> quit
+\endcode
+
+Post this backtrace at the right place (Bugzilla or developement mailing list) for investigations by developers.
+
+For Windows users, take a look on this tutorial :
+
+http://techbase.kde.org/Development/Tutorials/Debugging/Debugging_on_MS_Windows
+
+\subsection memleak Memory Leak
+
+To check any memory leak problem in digiKam, valgrind is your friend (http://valgrind.org)
+Try this command line to use with valgrind :
+
+\code
+valgrind --tool=memcheck --leak-check=full --error-limit=no --suppressions=project/reports/digikam.supp digikam
+\endcode
+
+NOTE: digikam.supp file is available in digikam/project sub-folder.
+
+\subsection profilingcode Profiling With Cachegrind
+
+Valgrind also includes a tool to find out in which parts of your code time is spent.
+
+\code
+valgrind --tool=callgrind digikam
+\endcode
+
+Profiling can be disabled at startup to limit the output to the code you are interested in.
+Start with
+
+\code
+valgrind --tool=callgrind --instr-atstart=no digikam
+\endcode
+
+and prepare the situation you want to profile. Then, in another console, start profiling with
+"callgrind_control -i on" and, after the situation has passed, request a profile dump with
+"callgrind_control -d".
+The resulting callgrind.out files need to be viewed with the kcachegrind program, e.g.:
+
+\code
+kcachegrind callgrind.out.16693.1
+\endcode
+
+\subsection unittests Unit Testing / Automated Testing
+
+Unit Testing is great way to ensure that software units (in OOP this normally
+means classes) work as expected. Wikipedia gives a good introduction to
+Unit Testing:
+
+http://en.wikipedia.org/wiki/Unit_testing
+
+It is also worth to follow most of QTTest API rules with digiKam:
+
+http://doc.qt.io/qt-5/qtest-tutorial.html
+
+The digiKam test suite is located under tests and will be compiled if
+BUILD_TESTING is turned ON at cmake configuration time. After compiling the source code
+the tests can be executed via
+
+\code
+make test
+\endcode
+
+The console output while running the tests is stored in
+Testing/Temporary/LastTest.log in the CMake binary dir.
+
+All tests are simple binaries that can be executed separately if needed.
+
+\subsection corruptedsignalslot Checking For Corrupt Qt Signal Slot Connection
+
+Use this alias for running digikam:
+
+\code
+alias digikamdbg="digikam 2>&1 | tee - /tmp/digikam.out; echo -e \"\n\n\nPossible connection errors:\n\n\"; cat /tmp/digikam.out | grep -A2 'Object::connect'"
+\endcode
+
+It will print a list of connection warnings after terminating the program.
+Moreover the complete console log of the last session is stored in
+/tmp/digikam.out.
+
+\subsection dupcodes Finding Duplicated Code
+
+Code duplication should be avoided as bugs have to be fixed for every piece of
+duplicated code. The current duplication can be analyzed eg. with Simian:
+http://www.redhillconsulting.com.au/products/simian/
+
+In the digikam checkout directory run:
+
+\code
+java -jar simian.jar `find . -regex '.*\.cpp\|.*\.h' | grep -v 3rdparty`
+\endcode
+
+This prints out a list of duplicated code segments.
+
+\subsection docvalidcodecheck API Documentation Validation, User Documentation Validation, Source Code Checking
+
+The following site check on a daily basis for the a.m. errors:
+www.englishbreakfastnetwork.org/krazy/
+
+It can be very useful, in particular before major releases.
+Don't trust it blindly! Sometimes they propose too advanced modifications that
+are no compatible with the prevailant include files.
+
+\subsection appusability Usability Issues
+
+OpenUsability project has define default menu structure and keyboard shortcuts:
+
+http://wiki.openusability.org/guidelines/index.php/Appendices:Keyboard_Shortcuts
+
+\subsection apidoc Generate API Documentation
+
+To generate API documentation, you need to install:
+
+- Doxygen program (http://www.doxygen.org)
+- Dot program (http://www.graphviz.org)
+
+After cmake generated a Makefile you can call 'make doc'. A new subfolder named
+'html' will be created. Warning, this can take a while.
+
+For finding documentation errors, doxygen generates a warning log file at the
+cmake binary dir called 'doxygen-warn.log'.
+
+\subsection speedupcompil Speed Up The Code-Compile-Test Cycle
+
+Assuming you have setup your environment in ~/.bashrc as is suggested for development,
+you can add something like this to your ~/.bashrc:
+
+\code
+function digikam_start
+{
+LD_LIBRARY_PATH=${KDE_BUILD}/extragear/graphics/lib:${LD_LIBRARY_PATH} ${KDE_BUILD}/extragear/graphics/digikam/digikam/digikam
+}
+
+function digikam_start_gdb
+{
+LD_LIBRARY_PATH=${KDE_BUILD}/extragear/graphics/lib:${LD_LIBRARY_PATH} gdb ${KDE_BUILD}/extragear/graphics/digikam/digikam/digikam
+}
+\endcode
+
+This allows you to run digikam after compiling without the need of a "make install", even
+if you changed code in the libraries.
+
+\subsection gitbranches Working With Branches From Git Repository
+
+As with Subversion, it typical to use a dedicated developement branch in Git to keep the
+master code stable for production. To synchronize branches with master, use these commands in your
+local branch checkout:
+
+\code
+$>git checkout master
+$>git pull --rebase
+$>git checkout -b MY_DEVEL_BRANCH GIT_REMOTE_PATH
+  Branch 'MY_DEVEL_BRANCH' set up to track remote branch path 'GIT_REMOTE_PATH' from origin.
+  To list GIT_REMOTE_PATH, use 'git branch -a' command
+  Switched to a new branch 'MY_DEVEL_BRANCH'
+$>git merge master
+  Merge made by the 'recursive' strategy.
+  ...
+$>git push
+  ...
+\endcode
+
+The first 2 lines make sure that your local master repository is up to date. The 3rd line creates the local development branch "MY_DEVEL_BRANCH". If you have already created this branch, just run "git checkout MY_DEVEL_BRANCH". 
+Merging between master and "MY_DEVEL_BRANCH" branch is done in the 4th line. Git might ask you to resolve conflicts here.
+When it's done, it will ask you to provide a commit message. Finally you push your merge into the remote repository.
 
 */

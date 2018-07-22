@@ -298,4 +298,7 @@ BUGFIXES:
 243 ==> 221345 - Do not process search immediately when enter text to query.
 244 ==> 396234 - Add a feature which allow to switch latitude and longitude.
 245 ==> 396283 - Missing images in album preview.
-246 ==> 
+246 ==> 396352 - Some iptc tags are not displayed in the metadata part.
+247 ==> 396434 - Uncontrolled log messages oversize log file up to run out of disk space.
+248 ==> 396482 - Empty folder selector window after select and click on "Import selected elements".
+249 ==> 
