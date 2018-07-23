@@ -637,6 +637,11 @@ if(DIGIKAM_CAN_BE_COMPILED)
         string(REPLACE "-Wdate-time" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     endwhile()
 
+    # Remove -Wzero-as-null-pointer-constant GCC flag which generate a lots of compile warnings
+    while(CMAKE_CXX_FLAGS MATCHES "-Wzero-as-null-pointer-constant")
+        string(REPLACE "-Wzero-as-null-pointer-constant" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    endwhile()
+
     # translations catalog
     add_definitions(-DTRANSLATION_DOMAIN=\"digikam\")
 
