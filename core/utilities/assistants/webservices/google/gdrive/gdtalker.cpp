@@ -369,9 +369,10 @@ void GDTalker::parseResponseUserName(const QByteArray& data)
 
 void GDTalker::parseResponseListFolders(const QByteArray& data)
 {
-//     qCDebug(DIGIKAM_WEBSERVICES_LOG) << data;
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << doc;
 
     if (err.error != QJsonParseError::NoError)
     {
@@ -392,9 +393,26 @@ void GDTalker::parseResponseListFolders(const QByteArray& data)
     foreach (const QJsonValue& value, jsonArray)
     {
         QJsonObject obj = value.toObject();
+
+        // Verify if album is in trash
+        QJsonObject labels      = obj[QString::fromLatin1("labels")].toObject();
+        bool        trashed     = labels[QString::fromLatin1("trashed")].toBool();
+
+        // Verify if album is editable
+        bool        editable    = obj[QString::fromLatin1("editable")].toBool();
+
+        /* Verify if album is visualized in a folder inside My Drive
+         * If parents is empty, album is shared by another person and not added to My Drive yet
+         */
+        QJsonArray  parents     = obj[QString::fromLatin1("parents")].toArray();
+
         fps.id          = obj[QString::fromLatin1("id")].toString();
         fps.title       = obj[QString::fromLatin1("title")].toString();
-        albumList.append(fps);
+
+        if(editable && !trashed && !parents.isEmpty())
+        {
+            albumList.append(fps);
+        }
     }
 
     std::sort(albumList.begin(), albumList.end(), gdriveLessThan);
