@@ -200,7 +200,7 @@ void ImageSelectionWidget::setup(int w, int h,
 
     d->iface   = new ImageIface(QSize(w, h));
     d->preview = d->iface->preview();
-    d->preview.setIccProfile( d->iface->original()->getIccProfile() );
+    d->preview.setIccProfile(d->iface->original()->getIccProfile());
     d->preview.convertToEightBit();
 
     d->pixmap  = new QPixmap(w, h);
@@ -225,7 +225,7 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent* e)
     int w      = e->size().width();
     int h      = e->size().height();
     d->preview = d->iface->setPreviewSize(QSize(w, h));
-    d->preview.setIccProfile( d->iface->original()->getIccProfile() );
+    d->preview.setIccProfile(d->iface->original()->getIccProfile());
     d->preview.convertToEightBit();
 
     d->pixmap  = new QPixmap(w, h);
@@ -305,10 +305,10 @@ int ImageSelectionWidget::getMaxWidthRange() const
         // Compute max width taking aspect ratio into account
         int t = d->currentWidthRatioValue > d->currentHeightRatioValue ? 1 : 0;
         int h = d->image.height() - d->regionSelection.top();
-        int w = (int)rint( ( h + t ) * d->currentWidthRatioValue /
-                           d->currentHeightRatioValue ) - t;
+        int w = (int)rint((h + t) * d->currentWidthRatioValue /
+                          d->currentHeightRatioValue) - t;
 
-        if ( w < maxW )
+        if (w < maxW)
         {
             maxW = w;
         }
@@ -327,10 +327,10 @@ int ImageSelectionWidget::getMaxHeightRange() const
         // Compute max height taking aspect ratio into account
         int t = d->currentHeightRatioValue > d->currentWidthRatioValue ? 1 : 0;
         int w = d->image.width() - d->regionSelection.left();
-        int h = (int)rint( ( w + t ) * d->currentHeightRatioValue /
-                           d->currentWidthRatioValue ) - t;
+        int h = (int)rint((w + t) * d->currentHeightRatioValue /
+                          d->currentWidthRatioValue) - t;
 
-        if ( h < maxH )
+        if (h < maxH)
         {
             maxH = h;
         }
@@ -342,7 +342,7 @@ int ImageSelectionWidget::getMaxHeightRange() const
 
 int ImageSelectionWidget::getWidthStep() const
 {
-    if ( d->preciseCrop && preciseCropAvailable() )
+    if (d->preciseCrop && preciseCropAvailable())
     {
         return (int)d->currentWidthRatioValue;
     }
@@ -354,7 +354,7 @@ int ImageSelectionWidget::getWidthStep() const
 
 int ImageSelectionWidget::getHeightStep() const
 {
-    if ( d->preciseCrop && preciseCropAvailable() )
+    if (d->preciseCrop && preciseCropAvailable())
     {
         return (int)d->currentHeightRatioValue;
     }
@@ -378,13 +378,13 @@ void ImageSelectionWidget::resetSelection()
 void ImageSelectionWidget::setCenterSelection(int centerType)
 {
     // Adjust selection size if bigger than real image
-    if ( d->regionSelection.height() > d->image.height() )
+    if (d->regionSelection.height() > d->image.height())
     {
         d->regionSelection.setHeight(d->image.height());
         applyAspectRatio(true, false);
     }
 
-    if ( d->regionSelection.width() > d->image.width() )
+    if (d->regionSelection.width() > d->image.width())
     {
         d->regionSelection.setWidth(d->image.width());
         applyAspectRatio(false, false);
@@ -418,7 +418,7 @@ void ImageSelectionWidget::maxAspectSelection()
     d->regionSelection.setWidth(d->image.width());
     d->regionSelection.setHeight(d->image.height());
 
-    if ( d->currentAspectRatioType != RATIONONE )
+    if (d->currentAspectRatioType != RATIONONE)
     {
         applyAspectRatio(d->currentOrientation == Portrait, false);
     }
@@ -567,19 +567,19 @@ void ImageSelectionWidget::setSelectionAspectRatioValue(int widthRatioValue, int
     d->currentAspectRatioType  = RATIOCUSTOM;
 
     // Fix orientation
-    if ( d->autoOrientation )
+    if (d->autoOrientation)
     {
-        if ( heightRatioValue > widthRatioValue &&
-             d->currentOrientation == Landscape )
+        if (heightRatioValue > widthRatioValue &&
+            d->currentOrientation == Landscape)
         {
             d->currentOrientation = Portrait;
-            emit signalSelectionOrientationChanged( d->currentOrientation );
+            emit signalSelectionOrientationChanged(d->currentOrientation);
         }
-        else if ( widthRatioValue > heightRatioValue &&
-                  d->currentOrientation == Portrait )
+        else if (widthRatioValue > heightRatioValue &&
+                 d->currentOrientation == Portrait)
         {
             d->currentOrientation = Landscape;
-            emit signalSelectionOrientationChanged( d->currentOrientation );
+            emit signalSelectionOrientationChanged(d->currentOrientation);
         }
     }
     else
@@ -593,10 +593,10 @@ void ImageSelectionWidget::setSelectionAspectRatioValue(int widthRatioValue, int
 void ImageSelectionWidget::reverseRatioValues()
 {
     // Reverse ratio values if needed
-    if ( ( d->currentWidthRatioValue > d->currentHeightRatioValue &&
-           d->currentOrientation == Portrait ) ||
-         ( d->currentHeightRatioValue > d->currentWidthRatioValue &&
-           d->currentOrientation == Landscape ) )
+    if ((d->currentWidthRatioValue > d->currentHeightRatioValue  &&
+         d->currentOrientation == Portrait)                      ||
+         (d->currentHeightRatioValue > d->currentWidthRatioValue &&
+          d->currentOrientation == Landscape))
     {
         float tmp = d->currentWidthRatioValue;
         d->currentWidthRatioValue = d->currentHeightRatioValue;
@@ -616,7 +616,7 @@ bool ImageSelectionWidget::preciseCropAvailable() const
             return false;
 
         case RATIOCUSTOM:
-            return ( d->currentWidthRatioValue != d->currentHeightRatioValue );
+            return (d->currentWidthRatioValue != d->currentHeightRatioValue);
 
         default:
             return true;
@@ -674,19 +674,19 @@ QPoint ImageSelectionWidget::convertPoint(int x, int y, bool localToReal) const
 
     if (localToReal)
     {
-        pmX = (int)(( x - d->rect.left() ) * (float)d->image.width() /
+        pmX = (int)((x - d->rect.left()) * (float)d->image.width() /
                     (float)d->preview.width());
 
-        pmY = (int)(( y - d->rect.top() ) * (float)d->image.height() /
+        pmY = (int)((y - d->rect.top()) * (float)d->image.height() /
                     (float)d->preview.height());
     }
     else
     {
-        pmX = (int)(d->rect.left() + ( x * (float)d->preview.width() /
-                                       (float)d->image.width() ));
+        pmX = (int)(d->rect.left() + (x * (float)d->preview.width() /
+                                      (float)d->image.width()));
 
-        pmY = (int)(d->rect.top() + ( y * (float)d->preview.height() /
-                                      (float)d->image.height() ));
+        pmY = (int)(d->rect.top() + (y * (float)d->preview.height() /
+                                     (float)d->image.height()));
     }
 
     return QPoint(pmX, pmY);
@@ -695,7 +695,7 @@ QPoint ImageSelectionWidget::convertPoint(int x, int y, bool localToReal) const
 int ImageSelectionWidget::computePreciseSize(int size, int step) const
 {
     // Adjust size if precise crop is wanted
-    if ( d->preciseCrop && preciseCropAvailable() )
+    if (d->preciseCrop && preciseCropAvailable())
     {
         size = int(size / step) * step;
     }
@@ -708,7 +708,7 @@ void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
     // Save selection area for re-adjustment after changing width and height.
     QRect oldRegionSelection = d->regionSelection;
 
-    if ( !useHeight )  // Width changed.
+    if (!useHeight)  // Width changed.
     {
         int w = computePreciseSize(d->regionSelection.width(),
                                    (int)d->currentWidthRatioValue);
@@ -722,8 +722,8 @@ void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
 
             default:
                 d->regionSelection.setHeight((int)
-                                             rint( w * d->currentHeightRatioValue /
-                                                   d->currentWidthRatioValue ) );
+                                             rint(w * d->currentHeightRatioValue /
+                                                  d->currentWidthRatioValue));
                 break;
         }
     }
@@ -741,8 +741,8 @@ void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
 
             default:
                 d->regionSelection.setWidth((int)
-                                            rint( h * d->currentWidthRatioValue /
-                                                  d->currentHeightRatioValue ) );
+                                            rint(h * d->currentWidthRatioValue /
+                                                 d->currentHeightRatioValue));
                 break;
         }
     }
@@ -751,19 +751,19 @@ void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
     switch (d->currentResizing)
     {
         case Private::ResizingTopLeft:
-            d->regionSelection.moveBottomRight( oldRegionSelection.bottomRight() );
+            d->regionSelection.moveBottomRight(oldRegionSelection.bottomRight());
             break;
 
         case Private::ResizingTopRight:
-            d->regionSelection.moveBottomLeft( oldRegionSelection.bottomLeft() );
+            d->regionSelection.moveBottomLeft(oldRegionSelection.bottomLeft());
             break;
 
         case Private::ResizingBottomLeft:
-            d->regionSelection.moveTopRight( oldRegionSelection.topRight() );
+            d->regionSelection.moveTopRight(oldRegionSelection.topRight());
             break;
 
         case Private::ResizingBottomRight:
-            d->regionSelection.moveTopLeft( oldRegionSelection.topLeft() );
+            d->regionSelection.moveTopLeft(oldRegionSelection.topLeft());
             break;
     }
 
@@ -806,7 +806,7 @@ void ImageSelectionWidget::regionSelectionMoved()
     updatePixmap();
     update();
 
-    emit signalSelectionMoved( d->regionSelection );
+    emit signalSelectionMoved(d->regionSelection);
 }
 
 void ImageSelectionWidget::regionSelectionChanged()
@@ -815,33 +815,33 @@ void ImageSelectionWidget::regionSelectionChanged()
     QRect cut = d->regionSelection & d->image;
 
     // Adjust selection size if it was cropped
-    if ( d->regionSelection.width() > cut.width() )
+    if (d->regionSelection.width() > cut.width())
     {
         d->regionSelection = cut;
         applyAspectRatio(false);
     }
 
-    if ( d->regionSelection.height() > cut.height() )
+    if (d->regionSelection.height() > cut.height())
     {
         d->regionSelection = cut;
         applyAspectRatio(true);
     }
 
-    emit signalSelectionChanged( d->regionSelection );
+    emit signalSelectionChanged(d->regionSelection);
 }
 
 void ImageSelectionWidget::drawRulesOfThirds(QPainter& p, const int& xThird, const int& yThird)
 {
 
-    p.drawLine( d->localRegionSelection.left() + xThird,   d->localRegionSelection.top(),
-                d->localRegionSelection.left() + xThird,   d->localRegionSelection.bottom() );
-    p.drawLine( d->localRegionSelection.left() + 2*xThird, d->localRegionSelection.top(),
-                d->localRegionSelection.left() + 2*xThird, d->localRegionSelection.bottom() );
+    p.drawLine(d->localRegionSelection.left() + xThird,   d->localRegionSelection.top(),
+               d->localRegionSelection.left() + xThird,   d->localRegionSelection.bottom());
+    p.drawLine(d->localRegionSelection.left() + 2*xThird, d->localRegionSelection.top(),
+               d->localRegionSelection.left() + 2*xThird, d->localRegionSelection.bottom());
 
-    p.drawLine( d->localRegionSelection.left(),  d->localRegionSelection.top() + yThird,
-                d->localRegionSelection.right(), d->localRegionSelection.top() + yThird );
-    p.drawLine( d->localRegionSelection.left(),  d->localRegionSelection.top() + 2*yThird,
-                d->localRegionSelection.right(), d->localRegionSelection.top() + 2*yThird );
+    p.drawLine(d->localRegionSelection.left(),  d->localRegionSelection.top() + yThird,
+               d->localRegionSelection.right(), d->localRegionSelection.top() + yThird);
+    p.drawLine(d->localRegionSelection.left(),  d->localRegionSelection.top() + 2*yThird,
+               d->localRegionSelection.right(), d->localRegionSelection.top() + 2*yThird);
 
 }
 
@@ -869,14 +869,14 @@ void ImageSelectionWidget::drawHarmoniousTriangles(QPainter& p, const int& dst)
 {
     p.setRenderHint(QPainter::Antialiasing);
 
-    p.drawLine( -d->localRegionSelection.width()/2, -d->localRegionSelection.height()/2,
+    p.drawLine(-d->localRegionSelection.width()/2, -d->localRegionSelection.height()/2,
                 d->localRegionSelection.width()/2,  d->localRegionSelection.height()/2);
 
-    p.drawLine( -d->localRegionSelection.width()/2 + dst, -d->localRegionSelection.height()/2,
-                -d->localRegionSelection.width()/2,        d->localRegionSelection.height()/2);
+    p.drawLine(-d->localRegionSelection.width()/2 + dst, -d->localRegionSelection.height()/2,
+               -d->localRegionSelection.width()/2,        d->localRegionSelection.height()/2);
 
-    p.drawLine( d->localRegionSelection.width()/2,       -d->localRegionSelection.height()/2,
-                d->localRegionSelection.width()/2 - dst,  d->localRegionSelection.height()/2);
+    p.drawLine(d->localRegionSelection.width()/2,       -d->localRegionSelection.height()/2,
+               d->localRegionSelection.width()/2 - dst,  d->localRegionSelection.height()/2);
 }
 
 void ImageSelectionWidget::drawGoldenMean(QPainter& p, const QRect& R1,
@@ -889,82 +889,82 @@ void ImageSelectionWidget::drawGoldenMean(QPainter& p, const QRect& R1,
     if (d->drawGoldenSection)
     {
         // horizontal lines:
-        p.drawLine( R1.left(), R2.top(),
-                    R2.right(), R2.top());
+        p.drawLine(R1.left(), R2.top(),
+                   R2.right(), R2.top());
 
-        p.drawLine( R1.left(), R1.top() + R2.height(),
-                    R2.right(), R1.top() + R2.height());
+        p.drawLine(R1.left(), R1.top() + R2.height(),
+                   R2.right(), R1.top() + R2.height());
 
         // vertical lines:
-        p.drawLine( R1.right(), R1.top(),
-                    R1.right(), R1.bottom() );
+        p.drawLine(R1.right(), R1.top(),
+                   R1.right(), R1.bottom());
 
-        p.drawLine( R1.left()+R2.width(), R1.top(),
-                    R1.left()+R2.width(), R1.bottom() );
+        p.drawLine(R1.left()+R2.width(), R1.top(),
+                   R1.left()+R2.width(), R1.bottom());
     }
 
     // Drawing Golden triangle guides.
     if (d->drawGoldenTriangle)
     {
-        p.drawLine( R1.left(),  R1.bottom(),
-                    R2.right(), R1.top() );
+        p.drawLine(R1.left(),  R1.bottom(),
+                   R2.right(), R1.top());
 
-        p.drawLine( R1.left(), R1.top(),
-                    R2.right() - R1.width(), R1.bottom());
+        p.drawLine(R1.left(), R1.top(),
+                   R2.right() - R1.width(), R1.bottom());
 
-        p.drawLine( R1.left() + R1.width(), R1.top(),
-                    R2.right(), R1.bottom() );
+        p.drawLine(R1.left() + R1.width(), R1.top(),
+                   R2.right(), R1.bottom());
     }
 
     // Drawing Golden spiral sections.
     if (d->drawGoldenSpiralSection)
     {
-        p.drawLine( R1.topRight(),   R1.bottomRight() );
-        p.drawLine( R2.topLeft(),    R2.topRight() );
-        p.drawLine( R3.topLeft(),    R3.bottomLeft() );
-        p.drawLine( R4.bottomLeft(), R4.bottomRight() );
-        p.drawLine( R5.topRight(),   R5.bottomRight() );
-        p.drawLine( R6.topLeft(),    R6.topRight() );
-        p.drawLine( R7.topLeft(),    R7.bottomLeft() );
+        p.drawLine(R1.topRight(),   R1.bottomRight());
+        p.drawLine(R2.topLeft(),    R2.topRight());
+        p.drawLine(R3.topLeft(),    R3.bottomLeft());
+        p.drawLine(R4.bottomLeft(), R4.bottomRight());
+        p.drawLine(R5.topRight(),   R5.bottomRight());
+        p.drawLine(R6.topLeft(),    R6.topRight());
+        p.drawLine(R7.topLeft(),    R7.bottomLeft());
     }
 
     // Drawing Golden Spiral.
     if (d->drawGoldenSpiral)
     {
-        p.drawArc ( R1.left(),
-                    R1.top() - R1.height(),
-                    2*R1.width(), 2*R1.height(),
-                    180*16, 90*16);
+        p.drawArc(R1.left(),
+                  R1.top() - R1.height(),
+                  2*R1.width(), 2*R1.height(),
+                  180*16, 90*16);
 
-        p.drawArc ( R2.right() - 2*R2.width(),
-                    R1.bottom() - 2*R2.height(),
-                    2*R2.width(), 2*R2.height(),
-                    270*16, 90*16);
+        p.drawArc(R2.right()  - 2*R2.width(),
+                  R1.bottom() - 2*R2.height(),
+                  2*R2.width(), 2*R2.height(),
+                  270*16, 90*16);
 
-        p.drawArc ( R2.right() - 2*R3.width(),
-                    R3.top(),
-                    2*R3.width(), 2*R3.height(),
-                    0, 90*16);
+        p.drawArc(R2.right() - 2*R3.width(),
+                  R3.top(),
+                  2*R3.width(), 2*R3.height(),
+                  0, 90*16);
 
-        p.drawArc ( R4.left(),
-                    R4.top(),
-                    2*R4.width(), 2*R4.height(),
-                    90*16, 90*16);
+        p.drawArc(R4.left(),
+                  R4.top(),
+                  2*R4.width(), 2*R4.height(),
+                  90*16, 90*16);
 
-        p.drawArc ( R5.left(),
-                    R5.top()-R5.height(),
-                    2*R5.width(), 2*R5.height(),
-                    180*16, 90*16);
+        p.drawArc(R5.left(),
+                  R5.top() - R5.height(),
+                  2*R5.width(), 2*R5.height(),
+                  180*16, 90*16);
 
-        p.drawArc ( R6.left()-R6.width(),
-                    R6.top()-R6.height(),
-                    2*R6.width(), 2*R6.height(),
-                    270*16, 90*16);
+        p.drawArc(R6.left() - R6.width(),
+                  R6.top()  - R6.height(),
+                  2*R6.width(), 2*R6.height(),
+                  270*16, 90*16);
 
-        p.drawArc ( R7.left()-R7.width(),
-                    R7.top(),
-                    2*R7.width(), 2*R7.height(),
-                    0, 90*16);
+        p.drawArc(R7.left() - R7.width(),
+                  R7.top(),
+                  2*R7.width(), 2*R7.height(),
+                  0, 90*16);
     }
 }
 
@@ -1187,19 +1187,19 @@ void ImageSelectionWidget::setCursorResizing()
     switch (d->currentResizing)
     {
         case Private::ResizingTopLeft:
-            setCursor( Qt::SizeFDiagCursor );
+            setCursor(Qt::SizeFDiagCursor);
             break;
 
         case Private::ResizingTopRight:
-            setCursor( Qt::SizeBDiagCursor );
+            setCursor(Qt::SizeBDiagCursor);
             break;
 
         case Private::ResizingBottomLeft:
-            setCursor( Qt::SizeBDiagCursor );
+            setCursor(Qt::SizeBDiagCursor);
             break;
 
         case Private::ResizingBottomRight:
-            setCursor( Qt::SizeFDiagCursor );
+            setCursor(Qt::SizeFDiagCursor);
             break;
     }
 }
@@ -1207,26 +1207,26 @@ void ImageSelectionWidget::setCursorResizing()
 void ImageSelectionWidget::placeSelection(const QPoint& pm, bool symmetric, const QPoint& center)
 {
     // Set orientation
-    if ( d->autoOrientation )
+    if (d->autoOrientation)
     {
         QPoint rel = pm - opposite();
 
-        if ( abs(rel.x()) > abs(rel.y()) )
+        if (abs(rel.x()) > abs(rel.y()))
         {
-            if ( d->currentOrientation == Portrait )
+            if (d->currentOrientation == Portrait)
             {
                 d->currentOrientation = Landscape;
                 reverseRatioValues();
-                emit signalSelectionOrientationChanged( d->currentOrientation );
+                emit signalSelectionOrientationChanged(d->currentOrientation);
             }
         }
         else
         {
-            if ( d->currentOrientation == Landscape )
+            if (d->currentOrientation == Landscape)
             {
                 d->currentOrientation = Portrait;
                 reverseRatioValues();
-                emit signalSelectionOrientationChanged( d->currentOrientation );
+                emit signalSelectionOrientationChanged(d->currentOrientation);
             }
         }
     }
@@ -1241,7 +1241,7 @@ void ImageSelectionWidget::placeSelection(const QPoint& pm, bool symmetric, cons
             // Place corners to the proper position
             d->regionSelection.setTopLeft(pm);
 
-            if ( symmetric )
+            if (symmetric)
             {
                 d->regionSelection.setBottomRight(center);
             }
@@ -1251,7 +1251,7 @@ void ImageSelectionWidget::placeSelection(const QPoint& pm, bool symmetric, cons
         case Private::ResizingTopRight:
             d->regionSelection.setTopRight(pm);
 
-            if ( symmetric )
+            if (symmetric)
             {
                 d->regionSelection.setBottomLeft(center);
             }
@@ -1261,7 +1261,7 @@ void ImageSelectionWidget::placeSelection(const QPoint& pm, bool symmetric, cons
         case Private::ResizingBottomLeft:
             d->regionSelection.setBottomLeft(pm);
 
-            if ( symmetric )
+            if (symmetric)
             {
                 d->regionSelection.setTopRight(center);
             }
@@ -1271,7 +1271,7 @@ void ImageSelectionWidget::placeSelection(const QPoint& pm, bool symmetric, cons
         case Private::ResizingBottomRight:
             d->regionSelection.setBottomRight(pm);
 
-            if ( symmetric )
+            if (symmetric)
             {
                 d->regionSelection.setTopLeft(center);
             }
@@ -1279,14 +1279,14 @@ void ImageSelectionWidget::placeSelection(const QPoint& pm, bool symmetric, cons
             break;
     }
 
-    if ( symmetric )
+    if (symmetric)
     {
         d->regionSelection.setSize(d->regionSelection.size()*2);
     }
 
     applyAspectRatio(d->currentOrientation == Portrait, false);
 
-    if ( symmetric )
+    if (symmetric)
     {
         d->regionSelection.moveCenter(center);
     }
@@ -1304,9 +1304,9 @@ void ImageSelectionWidget::mousePressEvent(QMouseEvent* e)
         QPoint pmVirtual = convertPoint(pm);
         d->moving        = false;
 
-        if ( (e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier )
+        if ((e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier)
         {
-            bool symmetric  = (e->modifiers() & Qt::ControlModifier ) == Qt::ControlModifier;
+            bool symmetric  = (e->modifiers() & Qt::ControlModifier) == Qt::ControlModifier;
             QPoint center   = d->regionSelection.center();
 
             // Find the closest corner
@@ -1345,34 +1345,34 @@ void ImageSelectionWidget::mousePressEvent(QMouseEvent* e)
         }
         else
         {
-            if ( d->localTopLeftCorner.contains( pm ) )
+            if (d->localTopLeftCorner.contains(pm))
             {
                 d->currentResizing = Private::ResizingTopLeft;
             }
-            else if ( d->localTopRightCorner.contains( pm ) )
+            else if (d->localTopRightCorner.contains(pm))
             {
                 d->currentResizing = Private::ResizingTopRight;
             }
-            else if ( d->localBottomLeftCorner.contains( pm ) )
+            else if (d->localBottomLeftCorner.contains(pm))
             {
                 d->currentResizing = Private::ResizingBottomLeft;
             }
-            else if ( d->localBottomRightCorner.contains( pm ) )
+            else if (d->localBottomRightCorner.contains(pm))
             {
                 d->currentResizing = Private::ResizingBottomRight;
             }
             else
             {
                 d->lastPos = pmVirtual;
-                setCursor( Qt::SizeAllCursor );
+                setCursor(Qt::SizeAllCursor);
 
-                if (d->regionSelection.contains( pmVirtual ) )
+                if (d->regionSelection.contains(pmVirtual))
                 {
                     d->moving = true;
                 }
                 else
                 {
-                    d->regionSelection.moveCenter( pmVirtual );
+                    d->regionSelection.moveCenter(pmVirtual);
                     normalizeRegion();
                     updatePixmap();
                     update();
@@ -1384,20 +1384,20 @@ void ImageSelectionWidget::mousePressEvent(QMouseEvent* e)
 
 void ImageSelectionWidget::mouseReleaseEvent(QMouseEvent*)
 {
-    if ( d->currentResizing != Private::ResizingNone )
+    if (d->currentResizing != Private::ResizingNone)
     {
-        setCursor( Qt::ArrowCursor );
+        setCursor(Qt::ArrowCursor);
         regionSelectionChanged();
         d->currentResizing = Private::ResizingNone;
     }
-    else if ( d->regionSelection.contains( d->lastPos ) )
+    else if (d->regionSelection.contains(d->lastPos))
     {
-        setCursor( Qt::SizeAllCursor );
+        setCursor(Qt::SizeAllCursor);
         regionSelectionMoved();
     }
     else
     {
-        setCursor( Qt::ArrowCursor );
+        setCursor(Qt::ArrowCursor);
         regionSelectionMoved();
     }
 }
@@ -1406,13 +1406,13 @@ void ImageSelectionWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if (e->buttons() & Qt::LeftButton)
     {
-        if ( d->moving )
+        if (d->moving)
         {
-            setCursor( Qt::SizeAllCursor );
+            setCursor(Qt::SizeAllCursor);
             QPoint newPos = convertPoint(e->x(), e->y());
 
-            d->regionSelection.translate( newPos.x() - d->lastPos.x(),
-                                          newPos.y() - d->lastPos.y() );
+            d->regionSelection.translate(newPos.x() - d->lastPos.x(),
+                                         newPos.y() - d->lastPos.y());
 
             d->lastPos = newPos;
 
@@ -1425,58 +1425,58 @@ void ImageSelectionWidget::mouseMoveEvent(QMouseEvent* e)
         {
             QPoint pmVirtual = convertPoint(e->x(), e->y());
 
-            if ( d->currentResizing == Private::ResizingNone )
+            if (d->currentResizing == Private::ResizingNone)
             {
-                d->regionSelection.setTopLeft( pmVirtual );
-                d->regionSelection.setBottomRight( pmVirtual );
+                d->regionSelection.setTopLeft(pmVirtual);
+                d->regionSelection.setBottomRight(pmVirtual);
                 d->currentResizing = Private::ResizingTopLeft; // set to anything
             }
 
             QPoint center  = d->regionSelection.center();
-            bool symmetric = (e->modifiers() & Qt::ControlModifier ) == Qt::ControlModifier;
+            bool symmetric = (e->modifiers() & Qt::ControlModifier) == Qt::ControlModifier;
 
             // Change resizing mode
 
             QPoint opp = symmetric ? center : opposite();
             QPoint dir = pmVirtual - opp;
 
-            if ( dir.x() > 0 && dir.y() > 0 && d->currentResizing != Private::ResizingBottomRight)
+            if (dir.x() > 0 && dir.y() > 0 && d->currentResizing != Private::ResizingBottomRight)
             {
                 d->currentResizing = Private::ResizingBottomRight;
-                d->regionSelection.setTopLeft( opp );
-                setCursor( Qt::SizeFDiagCursor );
+                d->regionSelection.setTopLeft(opp);
+                setCursor(Qt::SizeFDiagCursor);
             }
-            else if ( dir.x() > 0 && dir.y() < 0 && d->currentResizing != Private::ResizingTopRight)
+            else if (dir.x() > 0 && dir.y() < 0 && d->currentResizing != Private::ResizingTopRight)
             {
                 d->currentResizing = Private::ResizingTopRight;
-                d->regionSelection.setBottomLeft( opp );
-                setCursor( Qt::SizeBDiagCursor );
+                d->regionSelection.setBottomLeft(opp);
+                setCursor(Qt::SizeBDiagCursor);
             }
-            else if ( dir.x() < 0 && dir.y() > 0 && d->currentResizing != Private::ResizingBottomLeft)
+            else if (dir.x() < 0 && dir.y() > 0 && d->currentResizing != Private::ResizingBottomLeft)
             {
                 d->currentResizing = Private::ResizingBottomLeft;
-                d->regionSelection.setTopRight( opp );
-                setCursor( Qt::SizeBDiagCursor );
+                d->regionSelection.setTopRight(opp);
+                setCursor(Qt::SizeBDiagCursor);
             }
-            else if ( dir.x() < 0 && dir.y() < 0 && d->currentResizing != Private::ResizingTopLeft)
+            else if (dir.x() < 0 && dir.y() < 0 && d->currentResizing != Private::ResizingTopLeft)
             {
                 d->currentResizing = Private::ResizingTopLeft;
-                d->regionSelection.setBottomRight( opp );
-                setCursor( Qt::SizeFDiagCursor );
+                d->regionSelection.setBottomRight(opp);
+                setCursor(Qt::SizeFDiagCursor);
             }
             else
             {
-                if ( dir.x() == 0 && dir.y() == 0 )
+                if (dir.x() == 0 && dir.y() == 0)
                 {
-                    setCursor( Qt::SizeAllCursor );
+                    setCursor(Qt::SizeAllCursor);
                 }
-                else if ( dir.x() == 0 )
+                else if (dir.x() == 0)
                 {
-                    setCursor( Qt::SizeHorCursor );
+                    setCursor(Qt::SizeHorCursor);
                 }
-                else if ( dir.y() == 0 )
+                else if (dir.y() == 0)
                 {
-                    setCursor( Qt::SizeVerCursor );
+                    setCursor(Qt::SizeVerCursor);
                 }
             }
 
@@ -1485,23 +1485,23 @@ void ImageSelectionWidget::mouseMoveEvent(QMouseEvent* e)
     }
     else
     {
-        if ( d->localTopLeftCorner.contains( e->x(), e->y() ) ||
-             d->localBottomRightCorner.contains( e->x(), e->y() ) )
+        if (d->localTopLeftCorner.contains(e->x(), e->y()) ||
+            d->localBottomRightCorner.contains(e->x(), e->y()))
         {
-            setCursor( Qt::SizeFDiagCursor );
+            setCursor(Qt::SizeFDiagCursor);
         }
-        else if ( d->localTopRightCorner.contains( e->x(), e->y() ) ||
-                  d->localBottomLeftCorner.contains( e->x(), e->y() ) )
+        else if (d->localTopRightCorner.contains(e->x(), e->y()) ||
+                 d->localBottomLeftCorner.contains(e->x(), e->y()))
         {
-            setCursor( Qt::SizeBDiagCursor );
+            setCursor(Qt::SizeBDiagCursor);
         }
-        else if ( d->localRegionSelection.contains( e->x(), e->y() ) )
+        else if (d->localRegionSelection.contains(e->x(), e->y()))
         {
-            setCursor( Qt::SizeAllCursor );
+            setCursor(Qt::SizeAllCursor);
         }
         else
         {
-            setCursor( Qt::ArrowCursor );
+            setCursor(Qt::ArrowCursor);
         }
     }
 }
