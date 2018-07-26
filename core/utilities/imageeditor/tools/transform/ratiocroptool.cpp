@@ -227,8 +227,8 @@ RatioCropTool::RatioCropTool(QObject* const parent)
                                           "<p>Press and hold the <b>SHIFT</b> key to move the closest corner to the "
                                           "mouse pointer.</p>"));
 
-    d->originalIsLandscape = ((d->imageSelectionWidget->getOriginalImageWidth()) >
-                              (d->imageSelectionWidget->getOriginalImageHeight()));
+    d->originalIsLandscape = (d->imageSelectionWidget->getOriginalImageWidth() >
+                              d->imageSelectionWidget->getOriginalImageHeight());
 
     setToolView(d->imageSelectionWidget);
 
@@ -847,10 +847,10 @@ void RatioCropTool::slotSelectionOrientationChanged(int newOrientation)
 
     // Reverse custom values
 
-    if ( ( d->customRatioNInput->value() < d->customRatioDInput->value() &&
-           newOrientation == ImageSelectionWidget::Landscape ) ||
-         ( d->customRatioNInput->value() > d->customRatioDInput->value() &&
-           newOrientation == ImageSelectionWidget::Portrait ) )
+    if ((d->customRatioNInput->value() < d->customRatioDInput->value() &&
+         newOrientation == ImageSelectionWidget::Landscape)            ||
+        (d->customRatioNInput->value() > d->customRatioDInput->value() &&
+         newOrientation == ImageSelectionWidget::Portrait))
     {
         d->customRatioNInput->blockSignals(true);
         d->customRatioDInput->blockSignals(true);
@@ -899,7 +899,7 @@ void RatioCropTool::slotOrientChanged(int o)
 
 void RatioCropTool::slotAutoOrientChanged(bool a)
 {
-    d->orientCB->setEnabled(!a /*|| d->ratioCB->currentIndex() == ImageSelectionWidget::RATIONONE*/);
+    d->orientCB->setEnabled(!a);
     d->imageSelectionWidget->setAutoOrientation(a);
 }
 
@@ -964,10 +964,12 @@ void RatioCropTool::slotGuideTypeChanged(int t)
             d->guideColorBt->setEnabled(false);
             d->guideSize->setEnabled(false);
             break;
+
         case ImageSelectionWidget::HarmoniousTriangles:
             d->flipHorBox->setEnabled(true);
             d->flipVerBox->setEnabled(true);
             break;
+
         case ImageSelectionWidget::GoldenMean:
             d->flipHorBox->setEnabled(true);
             d->flipVerBox->setEnabled(true);
@@ -994,12 +996,12 @@ void RatioCropTool::slotGoldenGuideTypeChanged()
 
 void RatioCropTool::slotCustomNRatioChanged(int a)
 {
-    if ( ! d->autoOrientation->isChecked() )
+    if (!d->autoOrientation->isChecked())
     {
-        if ( ( d->orientCB->currentIndex() == ImageSelectionWidget::Portrait &&
-               d->customRatioDInput->value() < a ) ||
-             ( d->orientCB->currentIndex() == ImageSelectionWidget::Landscape &&
-               d->customRatioDInput->value() > a ) )
+        if ((d->orientCB->currentIndex() == ImageSelectionWidget::Portrait  &&
+             d->customRatioDInput->value() < a)                             ||
+            (d->orientCB->currentIndex() == ImageSelectionWidget::Landscape &&
+             d->customRatioDInput->value() > a))
         {
             d->customRatioDInput->blockSignals(true);
             d->customRatioDInput->setValue(a);
@@ -1012,12 +1014,12 @@ void RatioCropTool::slotCustomNRatioChanged(int a)
 
 void RatioCropTool::slotCustomDRatioChanged(int a)
 {
-    if ( ! d->autoOrientation->isChecked() )
+    if (!d->autoOrientation->isChecked())
     {
-        if ( ( d->orientCB->currentIndex() == ImageSelectionWidget::Landscape &&
-               d->customRatioNInput->value() < a ) ||
-             ( d->orientCB->currentIndex() == ImageSelectionWidget::Portrait &&
-               d->customRatioNInput->value() > a ) )
+        if ((d->orientCB->currentIndex() == ImageSelectionWidget::Landscape &&
+             d->customRatioNInput->value() < a)                             ||
+            (d->orientCB->currentIndex() == ImageSelectionWidget::Portrait  &&
+             d->customRatioNInput->value() > a))
         {
             d->customRatioNInput->blockSignals(true);
             d->customRatioNInput->setValue(a);
