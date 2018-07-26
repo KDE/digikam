@@ -619,9 +619,9 @@ void RatioCropTool::readSettings()
     {
         d->ratioCB->setCurrentIndex(group.readEntry(d->configHorOrientedAspectRatioEntry,
                                                     d->ratioCB->defaultIndex()));
+        d->orientCB->setDefaultIndex(ImageSelectionWidget::Landscape);
         d->orientCB->setCurrentIndex(group.readEntry(d->configHorOrientedAspectRatioOrientationEntry,
                                                      (int)ImageSelectionWidget::Landscape));
-        d->orientCB->setDefaultIndex(ImageSelectionWidget::Landscape);
         d->customRatioNInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioNumEntry,
                                                        d->customRatioNInput->defaultValue()));
         d->customRatioDInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioDenEntry,
@@ -651,9 +651,9 @@ void RatioCropTool::readSettings()
     {
         d->ratioCB->setCurrentIndex(group.readEntry(d->configVerOrientedAspectRatioEntry,
                                                     d->ratioCB->defaultIndex()));
+        d->orientCB->setDefaultIndex(ImageSelectionWidget::Portrait);
         d->orientCB->setCurrentIndex(group.readEntry(d->configVerOrientedAspectRatioOrientationEntry,
                                                      (int)ImageSelectionWidget::Portrait));
-        d->orientCB->setDefaultIndex(ImageSelectionWidget::Portrait);
         d->customRatioNInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioNumEntry,
                                                        d->customRatioNInput->defaultValue()));
         d->customRatioDInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioDenEntry,
