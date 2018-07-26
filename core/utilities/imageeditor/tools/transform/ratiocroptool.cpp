@@ -235,9 +235,9 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
-    d->gboxSettings->setButtons(EditorToolSettings::Default|
-                                EditorToolSettings::Ok|
-                                EditorToolSettings::Try|
+    d->gboxSettings->setButtons(EditorToolSettings::Default |
+                                EditorToolSettings::Ok      |
+                                EditorToolSettings::Try     |
                                 EditorToolSettings::Cancel);
 
     // -------------------------------------------------------------
@@ -299,41 +299,41 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->ratioCB->addItem(i18nc("no crop mode", "None"));
     d->ratioCB->setDefaultIndex(ImageSelectionWidget::RATIO03X04);
     setRatioCBText(ImageSelectionWidget::Landscape);
-    d->ratioCB->setWhatsThis( i18n("<p>Select your constrained aspect ratio for cropping. "
-                                   "Aspect Ratio Crop tool uses a relative ratio. That means it "
-                                   "is the same if you use centimeters or inches and it does not "
-                                   "specify the physical size.</p>"
-                                   "<p>You can see below a correspondence list of traditional photographic "
-                                   "paper sizes and aspect ratio crop:</p>"
-                                   "<p><b>2:3</b>: 10x15cm, 20x30cm, 30x45cm, 4x6\", 8x12\", "
-                                   "12x18\", 16x24\", 20x30\"</p>"
-                                   "<p><b>3:4</b>: 6x8cm, 15x20cm, 18x24cm, 30x40cm, 3.75x5\", 4.5x6\", "
-                                   "6x8\", 7.5x10\", 9x12\"</p>"
-                                   "<p><b>4:5</b>: 20x25cm, 40x50cm, 8x10\", 16x20\"</p>"
-                                   "<p><b>5:7</b>: 15x21cm, 30x42cm, 5x7\"</p>"
-                                   "<p><b>7:10</b>: 21x30cm, 42x60cm, 3.5x5\"</p>"
-                                   "<p><b>8:5</b>: common wide-screen monitor (as 1680x1050)</p>"
-                                   "<p><b>2:1</b>, <b>3:1</b>, <b>4:1</b>: common panoramic sizes</p>"
-                                   "<p><b>16:9</b>: common tv-screen (as HDTV or Full-HD)</p>"
-                                   "<p>The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
-                                   "is considered visually harmonious but can be unadapted to print on "
-                                   "standard photographic paper.</p>"
-                                   "<p>The <b>Current Aspect Ratio</b> takes aspect ratio from the currently "
-                                   "opened image.</p>"));
+    d->ratioCB->setWhatsThis(i18n("<p>Select your constrained aspect ratio for cropping. "
+                                  "Aspect Ratio Crop tool uses a relative ratio. That means it "
+                                  "is the same if you use centimeters or inches and it does not "
+                                  "specify the physical size.</p>"
+                                  "<p>You can see below a correspondence list of traditional photographic "
+                                  "paper sizes and aspect ratio crop:</p>"
+                                  "<p><b>2:3</b>: 10x15cm, 20x30cm, 30x45cm, 4x6\", 8x12\", "
+                                  "12x18\", 16x24\", 20x30\"</p>"
+                                  "<p><b>3:4</b>: 6x8cm, 15x20cm, 18x24cm, 30x40cm, 3.75x5\", 4.5x6\", "
+                                  "6x8\", 7.5x10\", 9x12\"</p>"
+                                  "<p><b>4:5</b>: 20x25cm, 40x50cm, 8x10\", 16x20\"</p>"
+                                  "<p><b>5:7</b>: 15x21cm, 30x42cm, 5x7\"</p>"
+                                  "<p><b>7:10</b>: 21x30cm, 42x60cm, 3.5x5\"</p>"
+                                  "<p><b>8:5</b>: common wide-screen monitor (as 1680x1050)</p>"
+                                  "<p><b>2:1</b>, <b>3:1</b>, <b>4:1</b>: common panoramic sizes</p>"
+                                  "<p><b>16:9</b>: common tv-screen (as HDTV or Full-HD)</p>"
+                                  "<p>The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
+                                  "is considered visually harmonious but can be unadapted to print on "
+                                  "standard photographic paper.</p>"
+                                  "<p>The <b>Current Aspect Ratio</b> takes aspect ratio from the currently "
+                                  "opened image.</p>"));
 
     d->preciseCrop = new QCheckBox(cropSelection);
     d->preciseCrop->setToolTip(i18n("Exact aspect"));
     d->preciseCrop->setWhatsThis(i18n("Enable this option to force exact aspect ratio crop."));
 
     d->orientLabel = new QLabel(i18n("Orientation:"), cropSelection);
-    d->orientCB    = new DComboBox( cropSelection );
-    d->orientCB->addItem( i18n("Landscape") );
-    d->orientCB->addItem( i18n("Portrait") );
+    d->orientCB    = new DComboBox(cropSelection);
+    d->orientCB->addItem(i18n("Landscape"));
+    d->orientCB->addItem(i18n("Portrait"));
     d->orientCB->setWhatsThis(i18n("Select constrained aspect ratio orientation."));
 
     d->autoOrientation = new QCheckBox(cropSelection);
     d->autoOrientation->setToolTip(i18n("Auto"));
-    d->autoOrientation->setWhatsThis( i18n("Enable this option to automatically set the orientation."));
+    d->autoOrientation->setWhatsThis(i18n("Enable this option to automatically set the orientation."));
 
     // -------------------------------------------------------------
 
@@ -342,12 +342,12 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->customRatioNInput = new DIntNumInput(cropSelection);
     d->customRatioNInput->setRange(1, 10000, 1);
     d->customRatioNInput->setDefaultValue(1);
-    d->customRatioNInput->setWhatsThis( i18n("Set here the desired custom aspect numerator value."));
+    d->customRatioNInput->setWhatsThis(i18n("Set here the desired custom aspect numerator value."));
 
     d->customRatioDInput = new DIntNumInput(cropSelection);
     d->customRatioDInput->setRange(1, 10000, 1);
     d->customRatioDInput->setDefaultValue(1);
-    d->customRatioDInput->setWhatsThis( i18n("Set here the desired custom aspect denominator value."));
+    d->customRatioDInput->setWhatsThis(i18n("Set here the desired custom aspect denominator value."));
 
     // -------------------------------------------------------------
 
@@ -355,12 +355,12 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     positionLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 
     d->xInput = new DIntNumInput(cropSelection);
-    d->xInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
+    d->xInput->setWhatsThis(i18n("Set here the top left selection corner position for cropping."));
     d->xInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
     d->xInput->setDefaultValue(50);
 
     d->yInput = new DIntNumInput(cropSelection);
-    d->yInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
+    d->yInput->setWhatsThis(i18n("Set here the top left selection corner position for cropping."));
     d->yInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
     d->yInput->setDefaultValue(50);
 
@@ -370,7 +370,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     sizeLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 
     d->widthInput = new DIntNumInput(cropSelection);
-    d->widthInput->setWhatsThis( i18n("Set here the width selection for cropping."));
+    d->widthInput->setWhatsThis(i18n("Set here the width selection for cropping."));
     d->widthInput->setRange(d->imageSelectionWidget->getMinWidthRange(),
                             d->imageSelectionWidget->getMaxWidthRange(),
                             d->imageSelectionWidget->getWidthStep());
@@ -378,10 +378,10 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     d->centerWidth = new QToolButton(cropSelection);
     d->centerWidth->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/centerwidth.png"))));
-    d->centerWidth->setWhatsThis( i18n("Set width position to center."));
+    d->centerWidth->setWhatsThis(i18n("Set width position to center."));
 
     d->heightInput = new DIntNumInput(cropSelection);
-    d->heightInput->setWhatsThis( i18n("Set here the height selection for cropping."));
+    d->heightInput->setWhatsThis(i18n("Set here the height selection for cropping."));
     d->heightInput->setRange(d->imageSelectionWidget->getMinHeightRange(),
                              d->imageSelectionWidget->getMaxHeightRange(),
                              d->imageSelectionWidget->getHeightStep());
@@ -389,7 +389,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     d->centerHeight = new QToolButton(cropSelection);
     d->centerHeight->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/centerheight.png"))));
-    d->centerHeight->setWhatsThis( i18n("Set height position to center."));
+    d->centerHeight->setWhatsThis(i18n("Set height position to center."));
 
     // -------------------------------------------------------------
 
@@ -431,8 +431,8 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->guideLinesCB->addItem(i18nc("no geometric form", "None"));
     d->guideLinesCB->setDefaultIndex(ImageSelectionWidget::GuideNone);
     d->guideLinesCB->setCurrentIndex(3);
-    d->guideLinesCB->setWhatsThis( i18n("With this option, you can display guide lines "
-                                        "to help compose your photograph."));
+    d->guideLinesCB->setWhatsThis(i18n("With this option, you can display guide lines "
+                                       "to help compose your photograph."));
 
     d->goldenSectionBox = new QCheckBox(i18n("Golden sections"), compositionGuide);
     d->goldenSectionBox->setWhatsThis(i18n("Enable this option to show golden sections."));
@@ -454,7 +454,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     d->colorGuideLabel = new QLabel(i18n("Color and width:"), compositionGuide);
     d->guideColorBt    = new DColorSelector(compositionGuide);
-    d->guideColorBt->setColor(QColor( 250, 250, 255 ));
+    d->guideColorBt->setColor(QColor(250, 250, 255));
     d->guideSize       = new DIntNumInput(compositionGuide);
     d->guideSize->setRange(1, 5, 1);
     d->guideSize->setDefaultValue(1);
@@ -1073,7 +1073,7 @@ QRect RatioCropTool::getNormalizedRegion() const
 
 void RatioCropTool::finalRendering()
 {
-    qApp->setOverrideCursor( Qt::WaitCursor );
+    qApp->setOverrideCursor(Qt::WaitCursor);
 
     QRect currentRegion     = d->imageSelectionWidget->getRegionSelection();
     ImageIface* const iface = d->imageSelectionWidget->imageIface();
