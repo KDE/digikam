@@ -604,16 +604,14 @@ void RatioCropTool::readSettings()
     d->goldenTriangleBox->setChecked(group.readEntry(d->configGoldenTriangleEntry,           false));
     d->flipHorBox->setChecked(group.readEntry(d->configGoldenFlipHorizontalEntry,            false));
     d->flipVerBox->setChecked(group.readEntry(d->configGoldenFlipVerticalEntry,              false));
+    d->autoOrientation->setChecked(group.readEntry(d->configAutoOrientationEntry,            false));
+    d->preciseCrop->setChecked(group.readEntry(d->configPreciseAspectRatioCropEntry,         false));
     d->guideColorBt->setColor(group.readEntry(d->configGuideColorEntry,                      defaultGuideColor));
     d->guideSize->setValue(group.readEntry(d->configGuideWidthEntry,                         d->guideSize->defaultValue()));
 
     d->imageSelectionWidget->slotGuideLines(d->guideLinesCB->currentIndex());
     d->imageSelectionWidget->slotChangeGuideColor(d->guideColorBt->color());
-
-    d->preciseCrop->setChecked(group.readEntry(d->configPreciseAspectRatioCropEntry, false));
-    d->imageSelectionWidget->setPreciseCrop( d->preciseCrop->isChecked() );
-
-    d->autoOrientation->setChecked(group.readEntry(d->configAutoOrientationEntry, false));
+    d->imageSelectionWidget->setPreciseCrop(d->preciseCrop->isChecked());
 
     if (d->originalIsLandscape)
     {
@@ -680,11 +678,12 @@ void RatioCropTool::readSettings()
                                                  d->heightInput->defaultValue()));
     }
 
-    // For the last setting to be applied, activate drawing in the selectionWidget,
-    // so that we can see the results.
+    setInputRange(d->imageSelectionWidget->getRegionSelection());
+
+    // For the last setting to be applied, activate drawing in
+    // the selectionWidget, so that we can see the results.
     d->imageSelectionWidget->setIsDrawingSelection(true);
 
-    setInputRange(d->imageSelectionWidget->getRegionSelection());
     slotGuideTypeChanged(d->guideLinesCB->currentIndex());
 
     updateCropInfo();
