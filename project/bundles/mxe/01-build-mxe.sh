@@ -130,7 +130,6 @@ make MXE_TARGETS=$MXE_BUILD_TARGETS \
      qtscript \
      ffmpeg \
      openal \
-     lensfun \
      libical \
      opencv
 
@@ -175,6 +174,7 @@ ${MXE_BUILD_TARGETS}-cmake $ORIG_WD/../3rdparty \
 
 ${MXE_BUILD_TARGETS}-cmake --build . --config RelWithDebInfo --target ext_exiv2      -- -j$CPU_CORES
 ${MXE_BUILD_TARGETS}-cmake --build . --config RelWithDebInfo --target ext_qtav       -- -j$CPU_CORES
+${MXE_BUILD_TARGETS}-cmake --build . --config RelWithDebInfo --target ext_lensfun    -- -j$CPU_CORES
 
 #################################################################################################
 

@@ -301,4 +301,7 @@ BUGFIXES:
 246 ==> 396352 - Some iptc tags are not displayed in the metadata part.
 247 ==> 396434 - Uncontrolled log messages oversize log file up to run out of disk space.
 248 ==> 396482 - Empty folder selector window after select and click on "Import selected elements".
-249 ==> 
+249 ==> 396170 - Gallery creation error.
+250 ==> 140374 - HTML Gallery export fails to parse xml from non-UTF8 metadata in jpeg.
+251 ==> 396712 - "Save Search" does not work.
+252 ==> 

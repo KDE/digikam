@@ -174,8 +174,9 @@ target_link_libraries(digikamcore
 
                       ${FFMPEG_LIBRARIES}
 
+                      ${OPENMP_LDFLAGS}
+
                       libdng
-                      libraw
 )
 
 if(ENABLE_QWEBENGINE)
