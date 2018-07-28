@@ -707,7 +707,7 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
     int errCode = -1;
     QString errMsg;
     QJsonParseError err;
-    QList <FbAlbum> albumsList;
+    QList<WSAlbum> albumsList; // QList <FbAlbum> albumsList;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
     if (err.error != QJsonParseError::NoError)
@@ -725,7 +725,7 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
         foreach (const QJsonValue & value, jsonArray)
         {
             QJsonObject obj   = value.toObject();
-            FbAlbum album;
+            WSAlbum album; //FbAlbum album;
             album.id          = obj[QString::fromLatin1("id")].toString();
             album.title       = obj[QString::fromLatin1("name")].toString();
             album.location    = obj[QString::fromLatin1("location")].toString();
@@ -771,7 +771,7 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
         errMsg          = obj[QString::fromLatin1("message")].toString();
     }
 
-    std::sort(albumsList.begin(), albumsList.end());
+    // std::sort(albumsList.begin(), albumsList.end());
 
     emit signalBusy(false);
     emit signalListAlbumsDone(errCode, errorToText(errCode, errMsg),

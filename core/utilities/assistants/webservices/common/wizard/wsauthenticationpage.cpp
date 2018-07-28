@@ -242,6 +242,12 @@ WSAuthenticationWizard::WSAuthenticationWizard(QWizard* const dialog, const QStr
     : DWizardPage(dialog, title),
       d(new Private(dialog))
 {
+    /* Set this page as commit page so that on next page (authentication page), back button will be disabled.
+     * However, "Next" button will become "Commit" button as a side effect. Therefore, set text to "Next" is a kind of cheating :).
+     */
+    setCommitPage(true);
+    setButtonText(QWizard::CommitButton, QLatin1String("Next >"));
+    
     d->vbox    = new DVBox(this);
     
     d->text    = new QLabel(d->vbox);
@@ -271,10 +277,11 @@ bool WSAuthenticationWizard::isComplete() const
 
 void WSAuthenticationWizard::initializePage()
 {
+    QMap<WSSettings::WebService, QString> wsNames = WSSettings::webServiceNames();
+    WSSettings::WebService ws = d->wizard->settings()->webService;
+    d->wsAuth->createTalker(ws, wsNames[ws]);
+ 
     QString callbackUrl;
-
-    d->wsAuth->createTalker(d->wizard->settings()->webService);
-    
     if(d->wizard->settings()->webService == WSSettings::WebService::FACEBOOK)
     {
         callbackUrl = QLatin1String("https://www.facebook.com/connect/login_success.html");
@@ -292,8 +299,7 @@ void WSAuthenticationWizard::initializePage()
 
 bool WSAuthenticationWizard::validatePage()
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "validatePage";
-    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "validatePage";    
     return true;
 }
 

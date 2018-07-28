@@ -82,6 +82,12 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title),
       d(new Private(dialog))
 {
+    /* Set this page as commit page so that on next page (authentication page), back button will be disabled.
+     * However, "Next" button will become "Commit" button as a side effect. Therefore, set text to "Next" is a kind of cheating :).
+     */
+    setCommitPage(true);
+    setButtonText(QWizard::CommitButton, QLatin1String("Next >"));
+    
     DVBox* const vbox  = new DVBox(this);
     QLabel* const desc = new QLabel(vbox);
 

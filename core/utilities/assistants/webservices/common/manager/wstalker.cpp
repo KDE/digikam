@@ -43,6 +43,8 @@
 
 namespace Digikam
 {
+
+static bool SettingsInitInContructor = false;
     
 WSTalker::WSTalker(QWidget* const parent)
   : QObject(parent),
@@ -59,10 +61,16 @@ WSTalker::WSTalker(QWidget* const parent)
     {
         m_settings = wizard->oauthSettings();
         m_userName = wizard->settings()->userName;
+        
+        connect(this, SIGNAL(signalBusy(bool)),
+                wizard, SLOT(slotBusy(bool)));
+        
+        SettingsInitInContructor = false;
     }
     else
     {
         m_settings = WSToolUtils::getOauthSettings(parent);
+        SettingsInitInContructor = true;
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parent of talker is not an instance of WSWizard";
     }
 
@@ -82,7 +90,14 @@ WSTalker::~WSTalker()
     delete m_reply;
     delete m_netMngr;
     
-    delete m_settings;
+    /* Verify if m_settings is initialized by wstalker constructor.
+     * Therefore, we have to delete it.
+     */
+    if(SettingsInitInContructor)
+    {
+        delete m_settings;
+    }
+    
     delete m_store;
 }
 
@@ -264,6 +279,10 @@ void WSTalker::resetTalker(const QString& expire, const QString& accessToken, co
 }
 
 void WSTalker::getLoggedInUser()
+{
+}
+
+void WSTalker::listAlbums(long long userID)
 {
 }
 

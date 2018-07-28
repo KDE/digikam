@@ -552,9 +552,9 @@ void SmugTalker::createAlbum(const SmugAlbum& album)
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
     
     /**
-        * Something must to be remembereed here is that we HAVE TO start a name with upper case !!!
-        * And url name with '-' instead of space
-        */
+     * Something must to be remembered here is that we HAVE TO start a name with upper case !!!
+     * And url name with '-' instead of space
+     */
     QByteArray data;
     data += "{\"Name\": \"";
     data += createAlbumName(album.title).toUtf8();

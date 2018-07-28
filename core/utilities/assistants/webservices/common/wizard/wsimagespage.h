@@ -25,19 +25,26 @@
 
 // Qt includes
 
+#include <QObject>
 #include <QList>
 #include <QUrl>
 #include <QString>
+#include <QStringList>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 // Local includes
 
 #include "dwizardpage.h"
+#include "wsitem.h"
 
 namespace Digikam
 {
 
 class WSImagesPage : public DWizardPage
 {
+    Q_OBJECT
+    
 public:
 
     explicit WSImagesPage(QWizard* const dialog, const QString& title);
@@ -49,6 +56,17 @@ public:
 
     void setItemsList(const QList<QUrl>& urls);
 
+private:
+
+    void addChildToTreeView(QTreeWidgetItem* const parent,
+                            const QMap<QString, AlbumSimplified>& albumTree, 
+                            const QStringList& childrenAlbums);
+    
+private Q_SLOTS:
+    
+    void slotListAlbumsDone(const QMap<QString, AlbumSimplified>& albumTree, 
+                            const QStringList& rootAlbums);
+    
 private:
 
     class Private;

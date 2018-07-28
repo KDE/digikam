@@ -86,7 +86,7 @@ WSWizard::WSWizard(QWidget* const parent, DInfoInterface* const iface)
     : DWizardDlg(parent, QLatin1String("Web Services Dialog")),
       d(new Private)
 {
-    setOption(QWizard::NoCancelButtonOnLastPage);
+    setOptions(QWizard::NoBackButtonOnStartPage | QWizard::NoCancelButtonOnLastPage);
     setWindowTitle(i18n("Export to Web Services"));
 
     d->iface             = iface;
@@ -164,6 +164,18 @@ int WSWizard::nextId() const
     }
     
     return DWizardDlg::nextId();
+}
+
+void WSWizard::slotBusy(bool val)
+{
+    if (val)
+    {
+        setCursor(Qt::WaitCursor);
+    }
+    else
+    {
+        setCursor(Qt::ArrowCursor);
+    }
 }
 
 } // namespace Digikam

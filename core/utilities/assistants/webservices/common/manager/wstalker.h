@@ -39,6 +39,7 @@
 // Local includes
 
 #include "o0settingsstore.h"
+#include "wsitem.h"
 
 namespace Digikam
 {
@@ -88,13 +89,16 @@ protected:
     void removeAllAccounts();
     
     virtual void resetTalker(const QString& expire, const QString& accessToken, const QString& refreshToken);
-    
-    virtual void getLoggedInUser();
 
     virtual void parseResponseGetLoggedInUser(const QByteArray& data);
     virtual void parseResponseListAlbums(const QByteArray& data);
     virtual void parseResponseCreateAlbum(const QByteArray& data);
     virtual void parseResponseAddPhoto(const QByteArray& data);
+    
+public:
+    
+    virtual void getLoggedInUser();
+    virtual void listAlbums(long long userID = 0);
     
 Q_SIGNALS:
     
@@ -102,6 +106,7 @@ Q_SIGNALS:
     void signalOpenBrowser(const QUrl& url);
     void signalCloseBrowser();
     void signalAuthenticationComplete(bool);
+    void signalListAlbumsDone(int errCode, const QString& errMsg, const QList <WSAlbum>& albumsList);
     
 protected Q_SLOTS:
     

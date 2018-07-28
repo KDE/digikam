@@ -41,6 +41,7 @@
 
 #include "fbitem.h"
 #include "wstalker.h"
+#include "wsitem.h"
 
 // O2 include
 
@@ -85,7 +86,7 @@ Q_SIGNALS:
     void    signalLoginDone(int errCode, const QString& errMsg);
     void    signalAddPhotoDone(int errCode, const QString& errMsg);
     void    signalCreateAlbumDone(int errCode, const QString& errMsg, const QString &newAlbumID);
-    void    signalListAlbumsDone(int errCode, const QString& errMsg, const QList <FbAlbum>& albumsList);
+    void    signalListAlbumsDone(int errCode, const QString& errMsg, const QList <WSAlbum>& albumsList); //const QList <FbAlbum>& albumsList);
 
 private:
 

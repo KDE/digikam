@@ -48,37 +48,54 @@ public:
     explicit Private(QWizard* const dialog)
       : imageList(0),
         wizard(0),
-        iface(0)
+        iface(0),
+        wsAuth(0)
     {
         wizard = dynamic_cast<WSWizard*>(dialog);
 
         if (wizard)
         {
-            iface = wizard->iface();
+            iface   = wizard->iface();
+            wsAuth  = wizard->wsAuth();
         }
     }
 
-    DImagesList*     imageList;
-    WSWizard*      wizard;
-    DInfoInterface*  iface;
+    DImagesList*        imageList;
+    QTreeWidget*        albumView;
+    WSWizard*           wizard;
+    DInfoInterface*     iface;
+    WSAuthentication*   wsAuth;
 };
 
 WSImagesPage::WSImagesPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title),
       d(new Private(dialog))
-{
-    DVBox* const vbox  = new DVBox(this);
-    QLabel* const desc = new QLabel(vbox);
-    desc->setText(i18n("<p>This view list all items to export by mail.</p>"));
+{    
+    DHBox* const hbox  = new DHBox(this);
+    
+    DVBox* const vboxImage  = new DVBox(hbox);
+    QLabel* const descImage = new QLabel(vboxImage);
+    descImage->setText(i18n("<p>This view lists all items to export.</p>"));
 
-    d->imageList       = new DImagesList(vbox);
+    DVBox* const vboxAlbum  = new DVBox(hbox);
+    QLabel* const descAlbum = new QLabel(vboxAlbum);
+    descAlbum->setText(i18n("<p>This view lists all albums.</p>"));    
+    
+    d->imageList       = new DImagesList(vboxImage);
     d->imageList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
+    
+    d->albumView       = new QTreeWidget(vboxAlbum);
 
-    setPageWidget(vbox);
+    hbox->setStretchFactor(vboxImage,   2);
+    hbox->setStretchFactor(vboxAlbum,   1);
+
+    setPageWidget(hbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));
 
     connect(d->imageList, SIGNAL(signalImageListChanged()),
             this, SIGNAL(completeChanged()));
+    connect(d->wsAuth, SIGNAL(signalListAlbumsDone(const QMap<QString, AlbumSimplified>&, const QStringList&)),
+            this, SLOT(slotListAlbumsDone(const QMap<QString, AlbumSimplified>&, const QStringList&)));
 }
 
 WSImagesPage::~WSImagesPage()
@@ -93,8 +110,15 @@ void WSImagesPage::setItemsList(const QList<QUrl>& urls)
 
 void WSImagesPage::initializePage()
 {
+    // Hide back button because we don't want to go back to a blank authentication page
+    d->wizard->button(QWizard::BackButton)->hide();
+    
     d->imageList->setIface(d->iface);
     d->imageList->listView()->clear();
+    
+    // List current albums in user account
+    d->wsAuth->listAlbums();
+    
 /*
     if (d->wizard->settings()->selMode == WSSettings::IMAGES)
     {
@@ -109,6 +133,8 @@ void WSImagesPage::initializePage()
 
 bool WSImagesPage::validatePage()
 {
+    d->wizard->button(QWizard::BackButton)->show();
+    
     if (d->imageList->imageUrls().isEmpty())
         return false;
 
@@ -120,6 +146,36 @@ bool WSImagesPage::validatePage()
 bool WSImagesPage::isComplete() const
 {
     return (!d->imageList->imageUrls().isEmpty());
+}
+
+void WSImagesPage::addChildToTreeView(QTreeWidgetItem* const parent,
+                                      const QMap<QString, AlbumSimplified>& albumTree, 
+                                      const QStringList& childrenAlbums)
+{
+    if(childrenAlbums.isEmpty())
+    {
+        return;
+    }
+    
+    foreach(const QString& albumId, childrenAlbums)
+    {
+        QTreeWidgetItem* item = new QTreeWidgetItem(parent);
+        item->setText(0, albumTree[albumId].title);
+        
+        addChildToTreeView(item, albumTree, albumTree[albumId].childrenIDs);
+    }
+}
+
+void WSImagesPage::slotListAlbumsDone(const QMap<QString, AlbumSimplified>& albumTree, 
+                                      const QStringList& rootAlbums)
+{
+    foreach(const QString& albumId, rootAlbums)
+    {
+        QTreeWidgetItem* item = new QTreeWidgetItem(d->albumView);
+        item->setText(0, albumTree[albumId].title);
+        
+        addChildToTreeView(item, albumTree, albumTree[albumId].childrenIDs);
+    }
 }
 
 } // namespace Digikam

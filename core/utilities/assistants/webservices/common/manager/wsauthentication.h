@@ -31,15 +31,18 @@
 #include <QWidget>
 #include <QMap>
 #include <QSettings>
+#include <QStringList>
+#include <QList>
 
 // Local includes
 
 #include "dinfointerface.h"
 #include "wssettings.h"
+#include "wsitem.h"
 
 namespace Digikam
 {
-
+    
 class WSAuthentication : public QObject
 {
     Q_OBJECT
@@ -53,7 +56,14 @@ public:
                       const QString& serviceName=QString());
     
     void authenticate();
+    void reauthenticate();
     bool authenticated() const;
+    
+    void listAlbums();
+    
+private:
+    
+    void parseTreeFromListAlbums(const QList <WSAlbum>& albumsList);
 
 Q_SIGNALS:
     
@@ -61,6 +71,12 @@ Q_SIGNALS:
     void signalCloseBrowser();
     void signalResponseTokenReceived(const QMap<QString, QString>&);
     void signalAuthenticationComplete(bool);
+    
+    void signalListAlbumsDone(const QMap<QString, AlbumSimplified>&, const QStringList&);
+    
+private Q_SLOTS:
+    
+    void slotListAlbumsDone(int errCode, const QString& errMsg, const QList<WSAlbum>& albumsList);
     
 private:
     
