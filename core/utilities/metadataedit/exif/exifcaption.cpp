@@ -31,7 +31,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QLineEdit>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 
 // KDE includes
 
@@ -65,21 +65,21 @@ public:
         syncIPTCCaptionCheck = 0;
     }
 
-    QCheckBox* documentNameCheck;
-    QCheckBox* imageDescCheck;
-    QCheckBox* artistCheck;
-    QCheckBox* copyrightCheck;
-    QCheckBox* userCommentCheck;
-    QCheckBox* syncJFIFCommentCheck;
-    QCheckBox* syncXMPCaptionCheck;
-    QCheckBox* syncIPTCCaptionCheck;
+    QCheckBox*      documentNameCheck;
+    QCheckBox*      imageDescCheck;
+    QCheckBox*      artistCheck;
+    QCheckBox*      copyrightCheck;
+    QCheckBox*      userCommentCheck;
+    QCheckBox*      syncJFIFCommentCheck;
+    QCheckBox*      syncXMPCaptionCheck;
+    QCheckBox*      syncIPTCCaptionCheck;
 
-    QTextEdit* userCommentEdit;
+    QPlainTextEdit* userCommentEdit;
 
-    QLineEdit* documentNameEdit;
-    QLineEdit* imageDescEdit;
-    QLineEdit* artistEdit;
-    QLineEdit* copyrightEdit;
+    QLineEdit*      documentNameEdit;
+    QLineEdit*      imageDescEdit;
+    QLineEdit*      artistEdit;
+    QLineEdit*      copyrightEdit;
 };
 
 EXIFCaption::EXIFCaption(QWidget* const parent)
@@ -132,7 +132,7 @@ EXIFCaption::EXIFCaption(QWidget* const parent)
     // --------------------------------------------------------
 
     d->userCommentCheck = new QCheckBox(i18nc("image caption", "Caption:"), this);
-    d->userCommentEdit  = new QTextEdit(this);
+    d->userCommentEdit  = new QPlainTextEdit(this);
     d->userCommentEdit->setWhatsThis(i18n("Enter the image's caption. "
                                           "This field is not limited. UTF8 encoding "
                                           "will be used to save the text."));
@@ -339,7 +339,7 @@ void EXIFCaption::readMetadata(QByteArray& exifData)
 
     if (!data.isNull())
     {
-        d->userCommentEdit->setText(data);
+        d->userCommentEdit->setPlainText(data);
         d->userCommentCheck->setChecked(true);
     }
 
