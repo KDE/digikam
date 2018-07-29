@@ -35,7 +35,7 @@
 #include <QStyle>
 #include <QComboBox>
 #include <QLineEdit>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 
 // KDE includes
 
@@ -144,9 +144,9 @@ public:
     QLineEdit*                     serviceIDEdit;
     QLineEdit*                     productIDEdit;
 
-    QDateEdit*                   dateSentSel;
+    QDateEdit*                     dateSentSel;
 
-    QTextEdit*                     destinationEdit;
+    QPlainTextEdit*                destinationEdit;
 
     MetadataCheckBox*              priorityCheck;
     MetadataCheckBox*              formatCheck;
@@ -177,7 +177,7 @@ IPTCEnvelope::IPTCEnvelope(QWidget* const parent)
     // --------------------------------------------------------
 
     d->destinationCheck = new QCheckBox(i18n("Destination:"), this);
-    d->destinationEdit  = new QTextEdit(this);
+    d->destinationEdit  = new QPlainTextEdit(this);
 /*
     d->specialInstructionEdit->setValidator(asciiValidator);
     d->specialInstructionEdit->document()->setMaxLength;
@@ -449,7 +449,7 @@ void IPTCEnvelope::readMetadata(QByteArray& iptcData)
 
     if (!data.isNull())
     {
-        d->destinationEdit->setText(data);
+        d->destinationEdit->setPlainText(data);
         d->destinationCheck->setChecked(true);
     }
 

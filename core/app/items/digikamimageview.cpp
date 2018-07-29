@@ -154,6 +154,9 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     connect(imageModel()->dragDropHandler(), SIGNAL(addToGroup(ImageInfo,QList<ImageInfo>)),
             FileActionMngr::instance(), SLOT(addToGroup(ImageInfo,QList<ImageInfo>)));
 
+    connect(imageModel()->dragDropHandler(), SIGNAL(dragDropSort(ImageInfo,QList<ImageInfo>)),
+            this, SLOT(dragDropSort(ImageInfo,QList<ImageInfo>)));
+
     connect(d->utilities, SIGNAL(editorCurrentUrlChanged(QUrl)),
             this, SLOT(setCurrentUrlWhenAvailable(QUrl)));
 
@@ -208,6 +211,74 @@ ImageInfoList DigikamImageView::selectedImageInfosCurrentFirst(bool grouping) co
 
     return ImageCategorizedView::selectedImageInfosCurrentFirst();
 }
+
+void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos)
+{
+    ImageInfoList infoList = this->allImageInfos(false);
+    bool flag              = false;
+    int order              = 1;
+
+    foreach(const ImageInfo& info, infoList)
+    {
+        if (info.name() == infos[0].name())
+        {
+            break;
+        }
+
+        if (info.name() == pick.name())
+        {
+            flag = true;
+            break;
+        }
+    }
+
+    ImageInfo backInfo;
+
+    // flag==false means image in infos is in the front of pick before manually sort
+
+    if (!flag)
+    {
+        foreach(ImageInfo info, infoList)
+        {
+            if (info.name() == infos[0].name())
+            {
+                backInfo = info;
+                continue;
+            }
+            else if (info.name() == pick.name())
+            {
+                info.setManualOrder(order++);
+                backInfo.setManualOrder(order++);
+                continue;
+            }
+
+            info.setManualOrder(order++);
+        }
+    }
+    else // flag==true means image in pick is in the front of infos before manually sort
+    {
+        int orderReserved = 0;
+
+        foreach(ImageInfo info, infoList)
+        {
+            if (info.name() == pick.name())
+            {
+                info.setManualOrder(order++);
+                orderReserved = order++;
+                continue;
+            }
+            else if (info.name() == infos[0].name())
+            {
+                info.setManualOrder(orderReserved);
+                continue;
+            }
+
+            info.setManualOrder(order++);
+        }
+    }
+
+    imageFilterModel()->invalidate();
+ }
 
 bool DigikamImageView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
 {

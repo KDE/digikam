@@ -31,7 +31,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QLineEdit>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 
 // KDE includes
 
@@ -67,7 +67,7 @@ public:
     QCheckBox*        syncJFIFCommentCheck;
     QCheckBox*        syncEXIFCommentCheck;
 
-    QTextEdit*        captionEdit;
+    QPlainTextEdit*   captionEdit;
 
     QLineEdit*        headlineEdit;
 
@@ -97,7 +97,7 @@ IPTCContent::IPTCContent(QWidget* const parent)
     // --------------------------------------------------------
 
     d->captionCheck         = new QCheckBox(i18nc("content description", "Caption:"), this);
-    d->captionEdit          = new QTextEdit(this);
+    d->captionEdit          = new QPlainTextEdit(this);
     d->syncJFIFCommentCheck = new QCheckBox(i18n("Sync JFIF Comment section"), this);
     d->syncEXIFCommentCheck = new QCheckBox(i18n("Sync EXIF Comment"), this);
 
@@ -219,7 +219,7 @@ void IPTCContent::readMetadata(QByteArray& iptcData)
     data = meta.getIptcTagString("Iptc.Application2.Caption", false);
     if (!data.isNull())
     {
-        d->captionEdit->setText(data);
+        d->captionEdit->setPlainText(data);
         d->captionCheck->setChecked(true);
     }
     d->captionEdit->setEnabled(d->captionCheck->isChecked());
