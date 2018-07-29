@@ -56,6 +56,7 @@ private:
     void  applyRatioChanges(int a);
     void  blockWidgetSignals(bool b);
     void  setRatioCBText(int orientation);
+    void  setInputRange(const QRect& rect);
     void  setBackgroundColor(const QColor& bg);
     QRect getNormalizedRegion() const;
 

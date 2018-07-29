@@ -1137,6 +1137,7 @@ void SearchSideBarWidget::setActive(bool active)
     if (active)
     {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << d->searchTreeView->currentAlbum());
+        d->searchTabHeader->selectedSearchChanged(d->searchTreeView->currentAlbum());
     }
 }
 

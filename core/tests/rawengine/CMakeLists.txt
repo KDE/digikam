@@ -8,9 +8,9 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-include_directories(
-    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../libs/rawengine/libraw
+                    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(raw2png_SRCS raw2png.cpp)
@@ -50,7 +50,6 @@ macro(LIBRAW_BUILD_SAMPLES)
                           ${OPENMP_LDFLAGS}
                           ${CMAKE_THREAD_LIBS_INIT}
                           digikamcore
-                          libraw
                           libdng
     )
 
