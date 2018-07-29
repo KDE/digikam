@@ -67,17 +67,20 @@ enum DropAction
 
 static QAction* addGroupAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image", "Group here"));
+    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image",
+                                                                                "Group here"));
 }
 
 static QAction* addSortAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Put dragged image behind dropped image", "Put back"));
+    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Put dragged image behind dropped image",
+                                                                                "Put back"));
 }
 
 static QAction* addGroupAndMoveAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image and move them to its album", "Group here and move to album"));
+    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image and move them to its album",
+                                                                                "Group here and move to album"));
 }
 
 static QAction* addCancelAction(QMenu* const menu)
@@ -188,10 +191,18 @@ static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool a
 
 static DropAction groupAction(const QDropEvent* const, QWidget* const view)
 {
+    int sort = ApplicationSettings::instance()->getImageSortOrder();
+
     QMenu popMenu(view);
+    QAction* sortAction        = 0;
     QAction* const groupAction = addGroupAction(&popMenu);
-    popMenu.addSeparator();
-    QAction* const sortAction  = addSortAction(&popMenu);
+
+    if (sort == ImageSortSettings::SortByManualOrder)
+    {
+        popMenu.addSeparator();
+        sortAction             = addSortAction(&popMenu);
+    }
+
     popMenu.addSeparator();
     addCancelAction(&popMenu);
 
