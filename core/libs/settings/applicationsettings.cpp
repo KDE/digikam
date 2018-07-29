@@ -187,7 +187,7 @@ void ApplicationSettings::readSettings()
     d->tooltipShowVideoAspectRatio       = group.readEntry(d->configToolTipsShowVideoAspectRatioEntry,      true);
     d->tooltipShowVideoAudioBitRate      = group.readEntry(d->configToolTipsShowVideoAudioBitRateEntry,     true);
     d->tooltipShowVideoAudioChannelType  = group.readEntry(d->configToolTipsShowVideoAudioChannelTypeEntry, true);
-    d->tooltipShowVideoAudioCodec   = group.readEntry(d->configToolTipsShowVideoAudioCodecEntry,  true);
+    d->tooltipShowVideoAudioCodec        = group.readEntry(d->configToolTipsShowVideoAudioCodecEntry,       true);
     d->tooltipShowVideoDuration          = group.readEntry(d->configToolTipsShowVideoDurationEntry,         true);
     d->tooltipShowVideoFrameRate         = group.readEntry(d->configToolTipsShowVideoFrameRateEntry,        true);
     d->tooltipShowVideoVideoCodec        = group.readEntry(d->configToolTipsShowVideoVideoCodecEntry,       true);
