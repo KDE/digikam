@@ -214,66 +214,66 @@ ImageInfoList DigikamImageView::selectedImageInfosCurrentFirst(bool grouping) co
 
 void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos)
 {
-    ImageInfoList info_list = this->allImageInfos(false);
-    bool flag               = false;
-    int order               = 1;
+    ImageInfoList infoList = this->allImageInfos(false);
+    bool flag              = false;
+    int order              = 1;
 
-    for (auto iinfo: info_list)
+    foreach(const ImageInfo& info, infoList)
     {
-        if (iinfo.name() == infos[0].name())
+        if (info.name() == infos[0].name())
         {
             break;
         }
 
-        if (iinfo.name() == pick.name())
+        if (info.name() == pick.name())
         {
             flag = true;
             break;
         }
     }
 
-    ImageInfo back_info;
+    ImageInfo backInfo;
 
-    //flag==false means image in infos is in the front of pick before manually sort 
+    // flag==false means image in infos is in the front of pick before manually sort
 
     if (!flag)
     {
-        for (auto iinfo: info_list)
+        foreach(ImageInfo info, infoList)
         {
-            if (iinfo.name() == infos[0].name())
+            if (info.name() == infos[0].name())
             {
-                back_info = iinfo;
+                backInfo = info;
                 continue;
             }
-            else if (iinfo.name() == pick.name())
+            else if (info.name() == pick.name())
             {
-                iinfo.setManualOrder(order++);
-                back_info.setManualOrder(order++);
+                info.setManualOrder(order++);
+                backInfo.setManualOrder(order++);
                 continue;
             }
 
-            iinfo.setManualOrder(order++);
+            info.setManualOrder(order++);
         }
     }
-    else //flag==true means image in pick is in the front of infos before manually sort
+    else // flag==true means image in pick is in the front of infos before manually sort
     {
-        int order_reserved = 0;
+        int orderReserved = 0;
 
-        for (auto iinfo: info_list)
+        foreach(ImageInfo info, infoList)
         {
-            if (iinfo.name() == pick.name())
+            if (info.name() == pick.name())
             {
-                iinfo.setManualOrder(order++);
-                order_reserved = order++;
+                info.setManualOrder(order++);
+                orderReserved = order++;
                 continue;
             }
-            else if (iinfo.name() == infos[0].name())
+            else if (info.name() == infos[0].name())
             {
-                iinfo.setManualOrder(order_reserved);
+                info.setManualOrder(orderReserved);
                 continue;
             }
 
-            iinfo.setManualOrder(order++);
+            info.setManualOrder(order++);
         }
     }
 
