@@ -71,7 +71,7 @@ enum ImagesField
                          UniqueHash       |
                          ManualOrder,
     ImagesFirst        = Album,
-    ImagesLast         = UniqueHash
+    ImagesLast         = ManualOrder
 };
 typedef uint8_t ImagesMinSizeType;
 
