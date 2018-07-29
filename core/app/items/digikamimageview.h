@@ -74,6 +74,8 @@ public Q_SLOTS:
     void confirmFaces(const QList<QModelIndex>& indexes, int tagId);
     void removeFaces(const QList<QModelIndex>& indexes);
 
+    void dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos);
+
 Q_SIGNALS:
 
     void previewRequested(const ImageInfo& info);
@@ -88,6 +90,7 @@ Q_SIGNALS:
     void signalShowGroupContextMenu(QContextMenuEvent* event,
                                     const QList<ImageInfo>& selectedInfos,
                                     ImageFilterModel* filterModel);
+    void signalManualSort();
 
 protected Q_SLOTS:
 

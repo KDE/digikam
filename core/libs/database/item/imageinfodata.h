@@ -108,6 +108,7 @@ public:
     quint8                 pickLabel;
     quint8                 colorLabel;
     qint8                  rating;
+    qint8                  manualOrder;
     DatabaseItem::Category category;
     QString                format;
     QDateTime              creationDate;
@@ -135,6 +136,7 @@ public:
     bool                   pickLabelCached        : 1;
     bool                   colorLabelCached       : 1;
     bool                   ratingCached           : 1;
+    bool                   manualOrderCached      : 1;
     bool                   categoryCached         : 1;
     bool                   formatCached           : 1;
     bool                   creationDateCached     : 1;

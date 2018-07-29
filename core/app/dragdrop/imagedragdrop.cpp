@@ -60,6 +60,7 @@ enum DropAction
     CopyAction,
     MoveAction,
     GroupAction,
+    SortAction,
     GroupAndMoveAction,
     AssignTagAction
 };
@@ -67,6 +68,11 @@ enum DropAction
 static QAction* addGroupAction(QMenu* const menu)
 {
     return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image", "Group here"));
+}
+
+static QAction* addSortAction(QMenu* const menu)
+{
+    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Put dragged image behind dropped image", "Put back"));
 }
 
 static QAction* addGroupAndMoveAction(QMenu* const menu)
@@ -185,6 +191,8 @@ static DropAction groupAction(const QDropEvent* const, QWidget* const view)
     QMenu popMenu(view);
     QAction* const groupAction = addGroupAction(&popMenu);
     popMenu.addSeparator();
+    QAction* const sortAction  = addSortAction(&popMenu);
+    popMenu.addSeparator();
     addCancelAction(&popMenu);
 
     QAction* const choice      = popMenu.exec(QCursor::pos());
@@ -192,6 +200,11 @@ static DropAction groupAction(const QDropEvent* const, QWidget* const view)
     if (groupAction && choice == groupAction)
     {
         return GroupAction;
+    }
+
+    if (sortAction && choice == sortAction)
+    {
+        return SortAction;
     }
 
     return NoAction;
@@ -440,6 +453,17 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             }
 
             emit addToGroup(droppedOnInfo, ImageInfoList(imageIDs));
+            return true;
+        }
+
+        if (action == SortAction)
+        {
+            if (droppedOnInfo.isNull())
+            {
+                return false;
+            }
+
+            emit dragDropSort(droppedOnInfo, ImageInfoList(imageIDs));
             return true;
         }
 
