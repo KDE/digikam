@@ -122,15 +122,15 @@ void ApplicationSettings::readSettings()
     }
 
     d->albumSortRole                     = ApplicationSettings::AlbumSortRole(group.readEntry(d->configAlbumSortRoleEntry,
-                                           (int)ApplicationSettings::ByFolder));
+                                                                                                       (int)ApplicationSettings::ByFolder));
 
-    d->imageSortOrder                    = group.readEntry(d->configImageSortOrderEntry,      (int)ImageSortSettings::SortByFileName);
-    d->imageSorting                      = group.readEntry(d->configImageSortingEntry,        (int)ImageSortSettings::AscendingOrder);
-    d->imageSeparationMode                = group.readEntry(d->configImageSeparationModeEntry,      (int)ImageSortSettings::CategoryByAlbum);
-    d->imageSeparationSortOrder           = group.readEntry(d->configImageSeparationSortOrderEntry, (int)ImageSortSettings::AscendingOrder);
+    d->imageSortOrder                    = group.readEntry(d->configImageSortOrderEntry,               (int)ImageSortSettings::SortByFileName);
+    d->imageSorting                      = group.readEntry(d->configImageSortingEntry,                 (int)ImageSortSettings::AscendingOrder);
+    d->imageSeparationMode               = group.readEntry(d->configImageSeparationModeEntry,          (int)ImageSortSettings::CategoryByAlbum);
+    d->imageSeparationSortOrder          = group.readEntry(d->configImageSeparationSortOrderEntry,     (int)ImageSortSettings::AscendingOrder);
 
-    d->itemLeftClickAction               = ApplicationSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
-                                           (int)ApplicationSettings::ShowPreview));
+    d->itemLeftClickAction               = ApplicationSettings::ItemLeftClickAction(group.readEntry(d->configItemLeftClickActionEntry,
+                                                                                                       (int)ApplicationSettings::ShowPreview));
 
     d->thumbnailSize                     = group.readEntry(d->configDefaultIconSizeEntry,              (int)ThumbnailSize::Medium);
     d->treeThumbnailSize                 = group.readEntry(d->configDefaultTreeIconSizeEntry,          22);
@@ -138,10 +138,10 @@ void ApplicationSettings::readSettings()
     d->currentTheme                      = group.readEntry(d->configThemeEntry,                        ThemeManager::instance()->defaultThemeName());
 
     d->sidebarTitleStyle                 = (DMultiTabBar::TextStyle)group.readEntry(d->configSidebarTitleStyleEntry,
-                                           (int)DMultiTabBar::AllIconsText);
+                                                                                                       (int)DMultiTabBar::AllIconsText);
 
     d->ratingFilterCond                  = group.readEntry(d->configRatingFilterConditionEntry,
-                                           (int)ImageFilterSettings::GreaterEqualCondition);
+                                                                                                       (int)ImageFilterSettings::GreaterEqualCondition);
 
     d->recursiveAlbums                   = group.readEntry(d->configRecursiveAlbumsEntry,              false);
     d->recursiveTags                     = group.readEntry(d->configRecursiveTagsEntry,                true);
@@ -296,7 +296,7 @@ void ApplicationSettings::readSettings()
          it != d->groupingOperateOnAll.keyEnd(); ++it)
     {
         d->groupingOperateOnAll.insert(*it, (ApplicationSettings::ApplyToEntireGroup)group.readEntry(
-                                              d->configGroupingOperateOnAll.value(*it), (int)ApplicationSettings::Ask));
+                                             d->configGroupingOperateOnAll.value(*it), (int)ApplicationSettings::Ask));
     }
 
     emit setupChanged();
@@ -316,8 +316,8 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configAlbumSortRoleEntry,                      (int)d->albumSortRole);
     group.writeEntry(d->configImageSortOrderEntry,                     (int)d->imageSortOrder);
     group.writeEntry(d->configImageSortingEntry,                       (int)d->imageSorting);
-    group.writeEntry(d->configImageSeparationModeEntry,                     (int)d->imageSeparationMode);
-    group.writeEntry(d->configImageSeparationSortOrderEntry,                (int)d->imageSeparationSortOrder);
+    group.writeEntry(d->configImageSeparationModeEntry,                (int)d->imageSeparationMode);
+    group.writeEntry(d->configImageSeparationSortOrderEntry,           (int)d->imageSeparationSortOrder);
 
     group.writeEntry(d->configItemLeftClickActionEntry,                (int)d->itemLeftClickAction);
     group.writeEntry(d->configDefaultIconSizeEntry,                    QString::number(d->thumbnailSize));
@@ -370,7 +370,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowVideoAspectRatioEntry,       d->tooltipShowVideoAspectRatio);
     group.writeEntry(d->configToolTipsShowVideoAudioBitRateEntry,      d->tooltipShowVideoAudioBitRate);
     group.writeEntry(d->configToolTipsShowVideoAudioChannelTypeEntry,  d->tooltipShowVideoAudioChannelType);
-    group.writeEntry(d->configToolTipsShowVideoAudioCodecEntry,   d->tooltipShowVideoAudioCodec);
+    group.writeEntry(d->configToolTipsShowVideoAudioCodecEntry,        d->tooltipShowVideoAudioCodec);
     group.writeEntry(d->configToolTipsShowVideoDurationEntry,          d->tooltipShowVideoDuration);
     group.writeEntry(d->configToolTipsShowVideoFrameRateEntry,         d->tooltipShowVideoFrameRate);
     group.writeEntry(d->configToolTipsShowVideoVideoCodecEntry,        d->tooltipShowVideoVideoCodec);
@@ -386,6 +386,7 @@ void ApplicationSettings::saveSettings()
     if (d->previewSettings.quality == PreviewSettings::HighQualityPreview)
     {
         group.writeEntry(d->configPreviewLoadFullItemSizeEntry, true);
+
         switch (d->previewSettings.rawLoading)
         {
             case PreviewSettings::RawPreviewAutomatic:

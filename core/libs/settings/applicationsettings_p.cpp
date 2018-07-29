@@ -279,8 +279,8 @@ void ApplicationSettings::Private::init()
     albumSortRole                        = ApplicationSettings::ByFolder;
     imageSortOrder                       = ImageSortSettings::SortByFileName;
     imageSorting                         = ImageSortSettings::AscendingOrder;
-    imageSeparationMode                       = ImageSortSettings::CategoryByAlbum;
-    imageSeparationSortOrder                  = ImageSortSettings::AscendingOrder;
+    imageSeparationMode                  = ImageSortSettings::CategoryByAlbum;
+    imageSeparationSortOrder             = ImageSortSettings::AscendingOrder;
 
     itemLeftClickAction                  = ApplicationSettings::ShowPreview;
 
@@ -341,7 +341,7 @@ void ApplicationSettings::Private::init()
     tooltipShowVideoAspectRatio          = true;
     tooltipShowVideoAudioBitRate         = true;
     tooltipShowVideoAudioChannelType     = true;
-    tooltipShowVideoAudioCodec      = true;
+    tooltipShowVideoAudioCodec           = true;
     tooltipShowVideoDuration             = true;
     tooltipShowVideoFrameRate            = true;
     tooltipShowVideoVideoCodec           = true;
@@ -382,7 +382,7 @@ void ApplicationSettings::Private::init()
     applicationStyle                     = qApp->style()->objectName();
     iconTheme                            = QString();
 
-    for (int i = 0; i != ApplicationSettings::Unspecified; ++i)
+    for (int i = 0 ; i != ApplicationSettings::Unspecified ; ++i)
     {
         groupingOperateOnAll.insert((ApplicationSettings::OperationType)i,
                                     ApplicationSettings::Ask);
