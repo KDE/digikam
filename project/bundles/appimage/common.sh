@@ -55,7 +55,7 @@ echo "Elaspsed time for script execution : $(($difftimelps / 3600 )) hours $((($
 }
 
 ########################################################################
-# For time execution measurement : shutdown
+# Adjust devel env.for Centos6
 CentOS6Adjustments()
 {
 
