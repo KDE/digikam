@@ -43,7 +43,7 @@
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QPushButton>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 
 // KDE includes
 
@@ -107,7 +107,7 @@ public:
     QComboBox*        categoryCombo;
     QComboBox*        parentCombo;
     QLineEdit*        titleEdit;
-    QTextEdit*        commentsEdit;
+    QPlainTextEdit*   commentsEdit;
 
     AlbumDatePicker*  datePicker;
 
@@ -176,11 +176,10 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     QLabel* const commentsLabel = new QLabel(page);
     commentsLabel->setText(i18n("Ca&ption:"));
 
-    d->commentsEdit = new QTextEdit(page);
+    d->commentsEdit = new QPlainTextEdit(page);
     commentsLabel->setBuddy(d->commentsEdit);
     d->commentsEdit->setWordWrapMode(QTextOption::WordWrap);
     d->commentsEdit->setPlaceholderText(i18n("Enter album caption here..."));
-    d->commentsEdit->setAcceptRichText(false);
 
     QLabel* const dateLabel = new QLabel(page);
     dateLabel->setText(i18n("Album &date:"));
@@ -278,7 +277,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     else
     {
         d->titleEdit->setText(album->title());
-        d->commentsEdit->setText(album->caption());
+        d->commentsEdit->setPlainText(album->caption());
         d->datePicker->setDate(album->date());
     }
 
@@ -321,7 +320,7 @@ QString AlbumPropsEdit::title() const
 
 QString AlbumPropsEdit::comments() const
 {
-    return d->commentsEdit->document()->toPlainText();
+    return d->commentsEdit->toPlainText();
 }
 
 QDate AlbumPropsEdit::date() const
