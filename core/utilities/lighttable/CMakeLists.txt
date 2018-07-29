@@ -14,6 +14,11 @@ set(liblighttable_SRCS
     lighttableview.cpp
     lighttablethumbbar.cpp
     lighttablewindow.cpp
+    lighttablewindow_config.cpp
+    lighttablewindow_setup.cpp
+    lighttablewindow_tools.cpp
+    lighttablewindow_import.cpp
+    lighttablewindow_export.cpp
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>

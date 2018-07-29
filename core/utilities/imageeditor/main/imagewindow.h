@@ -207,7 +207,7 @@ private:
 
     void slideShow(SlideShowSettings& settings);
 
-// -- Export tools methods implemented in showfoto_export.cpp -------------------------------------
+// -- Export tools methods implemented in imagewindow_export.cpp -------------------------------------
 
 private Q_SLOTS:
 
