@@ -2,7 +2,7 @@ See The API documentation to generate with Doxygen. You will find all informatio
 the configuration options, the rules to compile and install, and all pointers to contribute to the project as developer.
 
 Install Doxygen and Graphviz, and then run make doc from build directory. You can also run doxygen command line tool
-directly from this folder.
+directly from this folder or consult the Mainpage.dox file.
 
 Online version: https://www.digikam.org/api/index.html
 
