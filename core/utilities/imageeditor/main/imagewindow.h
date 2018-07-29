@@ -63,9 +63,6 @@ public:
 
 public Q_SLOTS:
 
-    void slotSetup();
-    void slotSetupICC();
-
     void loadImageInfos(const ImageInfoList& imageInfoList,
                         const ImageInfo& imageInfoCurrent, const QString& caption);
     void openImage(const ImageInfo& info);
@@ -90,18 +87,12 @@ private:
     void dragMoveEvent(QDragMoveEvent* e);
     void dropEvent(QDropEvent* e);
 
-    void setupActions();
-    void setupConnections();
-    void setupUserArea();
-
     bool save();
     bool saveAs();
     bool saveNewVersion();
     bool saveCurrentVersion();
     bool saveNewVersionAs();
     bool saveNewVersionInFormat(const QString& format);
-
-    void addServicesMenu();
 
     QUrl saveDestinationUrl();
     bool hasOriginalToRestore();
@@ -116,8 +107,6 @@ private:
     void setViewToURL(const QUrl& url);
     void deleteCurrentItem(bool ask, bool permanently);
     void removeCurrent();
-
-    void slideShow(SlideShowSettings& settings);
 
     void assignPickLabel(const ImageInfo& info, int pickId);
     void assignColorLabel(const ImageInfo& info, int colorId);
@@ -140,7 +129,6 @@ private Q_SLOTS:
     void slotBackward();
     void slotFirst();
     void slotLast();
-    void slotFilePrint();
     void slotFileWithDefaultApplication();
 
     void slotToMainWindow();
@@ -156,7 +144,6 @@ private Q_SLOTS:
     void slotUpdateItemInfo();
     void slotFileOriginChanged(const QString&);
 
-    void slotContextMenu();
     void slotRevert();
     void slotOpenOriginal();
 
@@ -176,8 +163,6 @@ private Q_SLOTS:
     void slotComponentsInfo();
     void slotDBStat();
 
-    void slotSetupChanged();
-
     void slotAddedDropedItems(QDropEvent*);
     void slotOpenWith(QAction* action=0);
 
@@ -185,23 +170,65 @@ private Q_SLOTS:
     void slotRightSideBarActivateComments();
     void slotRightSideBarActivateAssignedTags();
 
-    void slotImportFromScanner();
-    void slotImportedImagefromScanner(const QUrl& url);
+// -- Internal setup methods implemented in imagewindow_config.cpp ----------------------------------------
+
+public Q_SLOTS:
+
+    void slotSetup();
+    void slotSetupICC();
+
+    void slotSetupChanged();
+
+// -- Internal setup methods implemented in imagewindow_setup.cpp ----------------------------------------
+
+private:
+
+    void setupActions();
+    void setupConnections();
+    void setupUserArea();
+
+    void addServicesMenu();
+
+private Q_SLOTS:
+
+    void slotContextMenu();
+
+// -- Extra tool methods implemented in imagewindow_tools.cpp ----------------------------------------
+
+private Q_SLOTS:
 
     void slotEditMetadata();
     void slotEditGeolocation();
+    void slotFilePrint();
+    void slotPrintCreator();
     void slotPresentation();
+
+private:
+
+    void slideShow(SlideShowSettings& settings);
+
+// -- Export tools methods implemented in showfoto_export.cpp -------------------------------------
+
+private Q_SLOTS:
+
     void slotHtmlGallery();
     void slotCalendar();
     void slotExpoBlending();
     void slotPanorama();
     void slotVideoSlideshow();
     void slotSendByMail();
-    void slotPrintCreator();
     void slotMediaServer();
-
     void slotExportTool();
+
+// -- Import tools methods implemented in imagewindow_import.cpp -------------------------------------
+
+private Q_SLOTS:
+
+    void slotImportFromScanner();
+    void slotImportedImagefromScanner(const QUrl& url);
     void slotImportTool();
+
+// -- Internal private container --------------------------------------------------------------------
 
 private:
 
