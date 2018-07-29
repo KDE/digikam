@@ -304,4 +304,5 @@ BUGFIXES:
 249 ==> 396170 - Gallery creation error.
 250 ==> 140374 - HTML Gallery export fails to parse xml from non-UTF8 metadata in jpeg.
 251 ==> 396712 - "Save Search" does not work.
-252 ==> 
+252 ==> 396944 - Integrity constraint violation on Albums.icons when migrating from sqlite to mysql.
+253 ==> 
