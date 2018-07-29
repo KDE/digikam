@@ -505,9 +505,6 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(zoomInStep()),
             this, SLOT(slotZoomIn()));
 
-    connect(d->iconView, SIGNAL(signalManualSort()),
-            this, SLOT(slotManualSort()));
-
     connect(d->iconView, SIGNAL(signalShowContextMenu(QContextMenuEvent*,QList<QAction*>)),
             this, SLOT(slotShowContextMenu(QContextMenuEvent*,QList<QAction*>)));
 
@@ -1542,11 +1539,6 @@ void DigikamView::slotZoomOut()
     {
         d->stackedview->decreaseZoom();
     }
-}
-
-void DigikamView::slotManualSort()
-{
-    this->slotSortImages(ImageSortSettings::SortByManualOrder);
 }
 
 void DigikamView::slotZoomTo100Percents()

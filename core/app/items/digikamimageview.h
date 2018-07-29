@@ -90,7 +90,6 @@ Q_SIGNALS:
     void signalShowGroupContextMenu(QContextMenuEvent* event,
                                     const QList<ImageInfo>& selectedInfos,
                                     ImageFilterModel* filterModel);
-    void signalManualSort();
 
 protected Q_SLOTS:
 

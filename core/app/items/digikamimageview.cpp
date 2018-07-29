@@ -277,7 +277,7 @@ void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo
         }
     }
 
-    emit signalManualSort();
+    imageFilterModel()->invalidate();
  }
 
 bool DigikamImageView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
