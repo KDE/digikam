@@ -663,7 +663,7 @@ int ImageInfo::manualOrder() const
         return 0;
     }
 
-    // RETURN_IF_CACHED(manualOrder)
+    RETURN_IF_CACHED(manualOrder)
 
     QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::ManualOrder);
     STORE_IN_CACHE_AND_RETURN(manualOrder, values.first().toLongLong())
@@ -1669,11 +1669,11 @@ void ImageInfo::setManualOrder(int value)
         return;
     }
 
-    CoreDbAccess().db()->changeImages(m_data->id, QVariantList() << value, DatabaseFields::ManualOrder);
+    CoreDbAccess().db()->setItemManualOrder(m_data->id, value);
 
-    // ImageInfoWriteLocker lock;
-    // m_data->manualOrder       = value;
-    // m_data->manualOrderCached = true;
+    ImageInfoWriteLocker lock;
+    m_data->manualOrder       = value;
+    m_data->manualOrderCached = true;
 }
 
 void ImageInfo::setOrientation(int value)

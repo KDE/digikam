@@ -1809,7 +1809,8 @@ QVariantList CoreDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseFields
     return values;
 }
 
-void CoreDB::addImageInformation(qlonglong imageID, const QVariantList& infos, DatabaseFields::ImageInformation fields)
+void CoreDB::addImageInformation(qlonglong imageID, const QVariantList& infos,
+                                 DatabaseFields::ImageInformation fields)
 {
     if (fields == DatabaseFields::ImageInformationNone)
     {
@@ -1836,7 +1837,7 @@ void CoreDB::addImageInformation(qlonglong imageID, const QVariantList& infos, D
 }
 
 void CoreDB::changeImageInformation(qlonglong imageId, const QVariantList& infos,
-                                     DatabaseFields::ImageInformation fields)
+                                    DatabaseFields::ImageInformation fields)
 {
     if (fields == DatabaseFields::ImageInformationNone)
     {
@@ -1845,27 +1846,13 @@ void CoreDB::changeImageInformation(qlonglong imageId, const QVariantList& infos
 
     QStringList fieldNames = imageInformationFieldList(fields);
 
-    d->db->execUpsertDBAction(QLatin1String("changeImageInformation"), imageId, fieldNames, infos);
+    d->db->execUpsertDBAction(QLatin1String("changeImageInformation"),
+                              imageId, fieldNames, infos);
     d->db->recordChangeset(ImageChangeset(imageId, fields));
 }
 
-void CoreDB::changeImages(qlonglong imageId, const QVariantList& infos,
-                          DatabaseFields::Images fields)
-{
-    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDB::changeImages" << imageId;
-
-    if (fields == DatabaseFields::ImagesNone)
-    {
-        return;
-    }
-
-    QStringList fieldNames = imagesFieldList(fields);
-
-    d->db->execUpsertDBAction(QLatin1String("changeImages"), imageId, fieldNames, infos);
-    d->db->recordChangeset(ImageChangeset(imageId, fields));
-}
-
-void CoreDB::addImageMetadata(qlonglong imageID, const QVariantList& infos, DatabaseFields::ImageMetadata fields)
+void CoreDB::addImageMetadata(qlonglong imageID, const QVariantList& infos,
+                              DatabaseFields::ImageMetadata fields)
 {
     if (fields == DatabaseFields::ImageMetadataNone)
     {
@@ -3782,6 +3769,18 @@ void CoreDB::setItemAlbum(qlonglong imageID, qlonglong album)
     d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Album));
     // also record that the collection was changed by adding an image to an album.
     d->db->recordChangeset(CollectionImageChangeset(imageID, album, CollectionImageChangeset::Added));
+}
+
+void CoreDB::setItemManualOrder(qlonglong imageID, int value)
+{
+    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDB::setItemManualOrder" << imageID;
+
+    QVariantList boundValues;
+    boundValues << value << imageID;
+    d->db->execSql(QString::fromUtf8("UPDATE Images SET manualOrder=? WHERE id=?;"),
+                   boundValues);
+
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::ManualOrder));
 }
 
 void CoreDB::renameItem(qlonglong imageID, const QString& newName)
