@@ -215,7 +215,7 @@ public:
     /**
      * Returns the manual sort order
      */
-    int manualOrder() const;
+    qlonglong manualOrder() const;
 
     /**
      * Returns the category of the item: Image, Audio, Video

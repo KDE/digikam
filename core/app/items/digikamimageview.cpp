@@ -31,6 +31,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QPointer>
 #include <QMenu>
 #include <QIcon>
@@ -214,40 +215,47 @@ ImageInfoList DigikamImageView::selectedImageInfosCurrentFirst(bool grouping) co
 
 void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos)
 {
-    if (infos.isEmpty())
+    if (pick.isNull() || infos.isEmpty())
     {
         return;
     }
 
     ImageInfoList infoList = allImageInfos(false);
     int counter            = pick.manualOrder();
-    bool flag              = false;
-    int order              = 1;
+    bool order             = (ApplicationSettings::instance()->
+                                getImageSorting() == Qt::AscendingOrder);
+    bool found             = false;
 
-    if (ApplicationSettings::instance()->getImageSorting() == Qt::DescendingOrder)
-    {
-        order = -1;
-    }
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     foreach(ImageInfo info, infoList)
     {
-        if (!flag && info.name() == pick.name())
+        if (!found && info.name() == pick.name())
         {
             foreach(ImageInfo info, infos)
             {
                 info.setManualOrder(counter);
-                counter += order;
+                counter += (order ? 1 : -1);
             }
 
-            flag = true;
-        }
-
-        if (flag && !infos.contains(info))
-        {
             info.setManualOrder(counter);
-            counter += order;
+            counter += (order ? 1 : -1);
+            found    = true;
+        }
+        else if (found && !infos.contains(info))
+        {
+            if ((order  && info.manualOrder() > counter) ||
+                (!order && info.manualOrder() < counter))
+            {
+                break;
+            }
+
+            info.setManualOrder(counter);
+            counter += (order ? 1000 : -1000);
         }
     }
+
+    QApplication::restoreOverrideCursor();
 
     imageFilterModel()->invalidate();
  }
