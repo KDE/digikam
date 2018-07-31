@@ -306,4 +306,5 @@ BUGFIXES:
 251 ==> 396712 - "Save Search" does not work.
 252 ==> 396944 - Integrity constraint violation on Albums.icons when migrating from sqlite to mysql.
 253 ==> 396952 - Cut and Paste Into Caption Has Incorrect Font Initially.
-254 ==> 
+254 ==> 91562  - Change order of pictures in the virtual album manually.
+255 ==> 

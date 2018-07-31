@@ -43,6 +43,7 @@
 #include "digikam_debug.h"
 #include "albummanager.h"
 #include "coredb.h"
+#include "coredboperationgroup.h"
 #include "advancedrenamedialog.h"
 #include "advancedrenameprocessdialog.h"
 #include "applicationsettings.h"
@@ -228,6 +229,9 @@ void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
+    CoreDbOperationGroup group;
+    group.setMaximumTime(200);
+
     foreach(ImageInfo info, infoList)
     {
         if (!found && info.name() == pick.name())
@@ -251,8 +255,10 @@ void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo
             }
 
             info.setManualOrder(counter);
-            counter += (order ? 1000 : -1000);
+            counter += (order ? 100 : -100);
         }
+
+        group.allowLift();
     }
 
     QApplication::restoreOverrideCursor();
