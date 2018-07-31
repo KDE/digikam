@@ -25,7 +25,7 @@ O1::O1(QObject *parent, QNetworkAccessManager *manager, O0AbstractStore *store):
     setSignatureMethod(O2_SIGNATURE_TYPE_HMAC_SHA1);
     manager_ = manager ? manager : new QNetworkAccessManager(this);
     qRegisterMetaType<QNetworkReply::NetworkError>("QNetworkReply::NetworkError");
-    
+
     setCallbackUrl(O2_CALLBACK_URL);
 }
 
@@ -151,6 +151,7 @@ QByteArray O1::getRequestBase(const QList<O0RequestParameter> &oauthParams, cons
     headers.append(otherParams);
     std::sort(headers.begin(), headers.end());
     base.append(encodeHeaders(headers));
+    qDebug() << "base string inside 01:              " << QString::fromUtf8(base);
 
     return base;
 }
@@ -181,6 +182,7 @@ QByteArray O1::buildAuthorizationHeader(const QList<O0RequestParameter> &oauthPa
         ret.append(QUrl::toPercentEncoding(h.value));
         ret.append("\"");
     }
+    qDebug() << "Auth Header 01.cpp:" << QString::fromUtf8(ret);
     return ret;
 }
 
@@ -227,13 +229,13 @@ void O1::link() {
     setToken("");
     setTokenSecret("");
     setExtraTokens(QVariantMap());
-    
+
     if (!useExternalWebInterceptor_) {
         // Start reply server
         if (!replyServer_->isListening())
             replyServer_->listen(QHostAddress::Any, localPort());
     }
-    
+
     // Get any query parameters for the request
 #if QT_VERSION >= 0x050000
     QUrlQuery requestData;

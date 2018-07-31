@@ -189,6 +189,8 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
 
     m_exportDropboxAction      = 0;
     m_exportOnedriveAction     = 0;
+    m_exportLinkedInAction     = 0;
+    m_exportTwitterAction      = 0;
     m_exportFacebookAction     = 0;
     m_exportFlickrAction       = 0;
     m_exportGdriveAction       = 0;
@@ -1052,15 +1054,22 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportOnedriveAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
+    m_exportLinkedInAction = new QAction(i18n("Export to &LinkedIn..."), this);
+    m_exportLinkedInAction->setIcon(QIcon::fromTheme(QString::fromLatin1("linkedin")));
+    actionCollection()->addAction(QLatin1String("export_linkedin"), m_exportLinkedInAction);
+    actionCollection()->setDefaultShortcut(m_exportLinkedInAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_L);
 
-    /*m_exportTwitterAction = new QAction(i18n("Export to &Twitter..."), this);
+    connect(m_exportLinkedInAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+    m_exportTwitterAction = new QAction(i18n("Export to &Twitter..."), this);
     m_exportTwitterAction->setIcon(QIcon::fromTheme(QString::fromLatin1("twitter")));
     actionCollection()->addAction(QLatin1String("export_twitter"), m_exportTwitterAction);
     actionCollection()->setDefaultShortcut(m_exportTwitterAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_T);
 
     connect(m_exportTwitterAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
-*/
+
     m_exportFacebookAction = new QAction(i18n("Export to &Facebook..."), this);
     m_exportFacebookAction->setIcon(QIcon::fromTheme(QLatin1String("facebook")));
     actionCollection()->addAction(QLatin1String("export_facebook"), m_exportFacebookAction);
@@ -1209,6 +1218,8 @@ QList<QAction*> DXmlGuiWindow::exportActions() const
 {
     return QList<QAction*>() << m_exportDropboxAction
                              << m_exportOnedriveAction
+                             << m_exportLinkedInAction
+                             << m_exportTwitterAction
                              << m_exportFacebookAction
                              << m_exportFlickrAction
                              << m_exportGdriveAction

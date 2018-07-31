@@ -18,6 +18,7 @@ class O0_EXPORT O1Requestor: public QObject {
 
 public:
     explicit O1Requestor(QNetworkAccessManager *manager, O1 *authenticator, QObject *parent = 0);
+    void debugRequest(QNetworkRequest request, QByteArray data = QByteArray());
 
 public Q_SLOTS:
     /// Make a GET request.

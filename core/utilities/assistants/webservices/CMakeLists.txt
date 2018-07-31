@@ -62,7 +62,7 @@ set(libwso2_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1requestor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1timedreply.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1smugmug.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1twitter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1twitter.h
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/oxtwitter.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1dropbox.h
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1flickr.h
@@ -128,6 +128,23 @@ set(libwsonedrive_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odnewalbumdlg.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odwindow.cpp
 )
 
+# LinkedIn tool --------------------------------------------------------------
+
+set(libwslinkedin_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/linkedIn/linewalbumdlg.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/linkedIn/limpform.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/linkedIn/litalker.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/linkedIn/liwidget.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/linkedIn/liwindow.cpp
+)
+
+# Twitter tool --------------------------------------------------------------
+
+set(libwstwitter_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twitternewalbumdlg.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twittermpform.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twittertalker.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twitterwidget.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twitterwindow.cpp
+)
 
 
 # SmugMug tool -------------------------------------------------------------
@@ -248,6 +265,8 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsimgur_SRCS}
                                    ${libwsdropbox_SRCS}
                                    ${libwsonedrive_SRCS}
+                                   ${libwstwitter_SRCS}
+                                   ${libwslinkedin_SRCS}
                                    ${libwssmugmug_SRCS}
                                    ${libwsimageshack_SRCS}
                                    ${libwsfacebook_SRCS}
