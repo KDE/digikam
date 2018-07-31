@@ -243,7 +243,7 @@ void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo
             }
 
             info.setManualOrder(counter);
-            found    = true;
+            found = true;
         }
         else if (found && !infos.contains(info))
         {
