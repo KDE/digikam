@@ -87,30 +87,30 @@ public:
     
 public:
 
-    Selection                 selMode;             // Items selection mode
+    Selection           selMode;             // Items selection mode
 
-    QList<QUrl>               inputImages;         // Selected items to send.
+    QList<QUrl>         inputImages;         // Selected items to send.
 
-    bool                      addFileProperties;
-    bool                      imagesChangeProp;
+    bool                addFileProperties;
+    bool                imagesChangeProp;
 
-    bool                      removeMetadata;
+    bool                removeMetadata;
 
-    int                       imageCompression;
+    int                 imageCompression;
 
-    qint64                    attLimitInMbytes;
+    qint64              attLimitInMbytes;
 
-    QString                   tempPath;
-
-    WebService                webService;
+    WebService          webService;
     
-    QString                   userName;
+    QString             userName;
 
-    int                       imageSize;
+    QString             currentAlbumId;
 
-    ImageFormat               imageFormat;
+    int                 imageSize;
 
-    QMap<QUrl, QUrl>          itemsList; // Map of original item and attached item (can be resized).
+    ImageFormat         imageFormat;
+
+    QMap<QUrl, QUrl>    itemsList; // Map of original item and attached item (can be resized).
 };
 
 } // namespace Digikam

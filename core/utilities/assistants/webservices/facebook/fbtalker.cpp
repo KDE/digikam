@@ -180,6 +180,11 @@ void FbTalker::slotResponseTokenReceived(const QMap<QString, QString>& rep)
     d->o2->onVerificationReceived(rep);
 }
 
+void FbTalker::slotCreateAlbum(const FbAlbum& album)
+{
+    createAlbum(album);
+}
+
 bool FbTalker::linked() const
 {
     return d->o2->linked();
@@ -221,9 +226,9 @@ void FbTalker::getLoggedInUser()
     emit signalLoginProgress(3);
     
     QUrl url(d->apiURL.arg("me")
-                        .arg(""));
+                      .arg(""));
     QUrlQuery q;
-    q.addQueryItem(QLatin1String("fields"), QLatin1String("id,name,link"));
+//     q.addQueryItem(QLatin1String("fields"), QLatin1String("id,name,link"));
     q.addQueryItem(QLatin1String("access_token"), d->o2->token().toUtf8());
     url.setQuery(q);
 
@@ -399,7 +404,7 @@ void FbTalker::createAlbum(const FbAlbum& album)
     m_buffer.resize(0);
 }
 
-bool FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QString& caption)
+void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QString& caption)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Adding photo " << imgPath << " to album with id "
                                     << albumID << " using caption '" << caption << "'";
@@ -432,7 +437,7 @@ bool FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
     if (!form.addFile(QUrl::fromLocalFile(imgPath).fileName(), imgPath))
     {
         emit signalBusy(false);
-        return false;
+        emit signalAddPhotoDone(666, i18n("Cannot open file"));
     }
 
     form.finish();
@@ -456,8 +461,6 @@ bool FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
     
     m_state = WSTalker::ADDPHOTO;
     m_buffer.resize(0);
-
-    return true;
 }
 //----------------------------------------------------------------------------------------------------
 
@@ -731,7 +734,10 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
             album.location    = obj[QString::fromLatin1("location")].toString();
             album.url         = obj[QString::fromLatin1("link")].toString();
             album.description = obj[QString::fromLatin1("description")].toString();
-
+            album.uploadable  = obj[QString::fromLatin1("can_upload")].toBool();
+            
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "can_upload " << album.uploadable;
+/*
             if (QString::compare(obj[QString::fromLatin1("privacy")].toString(),
                                  QString::fromLatin1("ALL_FRIENDS"), Qt::CaseInsensitive) == 0)
             {
@@ -757,7 +763,7 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
             {
                 album.privacy = FB_ME;
             }
-            
+*/
             albumsList.append(album);
         }
 
@@ -771,7 +777,10 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
         errMsg          = obj[QString::fromLatin1("message")].toString();
     }
 
-    // std::sort(albumsList.begin(), albumsList.end());
+    /* std::sort(albumsList.begin(), albumsList.end());
+     * This function is replaced by method below which is defined in WSTalker as a virtual method for further evolution if needed
+     */
+    sortAlbumsList(albumsList);
 
     emit signalBusy(false);
     emit signalListAlbumsDone(errCode, errorToText(errCode, errMsg),

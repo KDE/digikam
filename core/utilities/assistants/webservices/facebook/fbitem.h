@@ -28,6 +28,10 @@
 
 #include <QString>
 
+// Local includes
+
+#include "wsitem.h"
+
 namespace Digikam
 {
 
@@ -69,22 +73,17 @@ enum FbPrivacy
 
 // ---------------------------------------------------------------
 
-class FbAlbum
+class FbAlbum: public WSAlbum
 {
 public:
 
     FbAlbum()
+      : WSAlbum()
     {
         privacy = FB_FRIENDS;
     }
 
-    QString   id;
-
-    QString   title;
-    QString   description;
-    QString   location;
     FbPrivacy privacy;
-    QString   url;
 };
 
 // ---------------------------------------------------------------

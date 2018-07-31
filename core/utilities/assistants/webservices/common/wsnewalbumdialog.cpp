@@ -215,6 +215,10 @@ void WSNewAlbumDialog::addToMainLayout(QWidget* const widget)
     d->mainLayout->addWidget(d->buttonBox);
 }
 
+void WSNewAlbumDialog::getAlbumProperties()
+{
+}
+
 QDialogButtonBox* WSNewAlbumDialog::getButtonBox() const
 {
     return d->buttonBox;

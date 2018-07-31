@@ -42,6 +42,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "wsitem.h"
 
 namespace Digikam
 {
@@ -69,11 +70,12 @@ public:
     QDialogButtonBox* getButtonBox()    const;
 
     void addToMainLayout(QWidget* const widget);
+    virtual void getAlbumProperties();
 
 private Q_SLOTS:
 
     void slotTextChanged(const QString& text);
-
+    
 private:
 
     class Private;

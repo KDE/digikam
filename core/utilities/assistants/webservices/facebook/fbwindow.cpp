@@ -122,7 +122,7 @@ FbWindow::FbWindow(DInfoInterface* const iface,
       d(new Private(this, iface))
 {
     d->tmpPath.clear();
-    d->tmpDir      = WSToolUtils::makeTemporaryDir("facebook").absolutePath() + QLatin1Char('/');;
+    d->tmpDir      = WSToolUtils::makeTemporaryDir("facebook").absolutePath() + QLatin1Char('/');
 
     setMainWidget(d->widget);
     setModal(false);
@@ -641,7 +641,6 @@ void FbWindow::uploadNextPhoto()
     d->progressBar->setValue(d->imagesCount);
 
     QString caption;
-    bool    res;
 
     if (d->resizeChB->isChecked())
     {
@@ -651,19 +650,13 @@ void FbWindow::uploadNextPhoto()
             return;
         }
 
-        res = d->talker->addPhoto(d->tmpPath, d->currentAlbumID, caption);
+        d->talker->addPhoto(d->tmpPath, d->currentAlbumID, caption);
     }
     else
     {
         caption = getImageCaption(imgPath);
         d->tmpPath.clear();
-        res     = d->talker->addPhoto(imgPath, d->currentAlbumID, caption);
-    }
-
-    if (!res)
-    {
-        slotAddPhotoDone(666, i18n("Cannot open file"));
-        return;
+        d->talker->addPhoto(imgPath, d->currentAlbumID, caption);
     }
 }
 

@@ -38,13 +38,19 @@
 
 #include "digikam_debug.h"
 #include "o0globals.h"
-#include "wswizard.h"
 #include "wstoolutils.h"
 
 namespace Digikam
 {
 
 static bool SettingsInitInContructor = false;
+
+bool operator< (const WSAlbum& first, const WSAlbum& second)
+{
+    return first.title < second.title;
+}
+
+// -----------------------------------------------------------------------------
     
 WSTalker::WSTalker(QWidget* const parent)
   : QObject(parent),
@@ -54,16 +60,17 @@ WSTalker::WSTalker(QWidget* const parent)
     m_buffer(0),
     m_settings(0),
     m_store(0),
-    m_userName(QString(""))
+    m_userName(QString("")),
+    m_wizard(0)
 {
-    WSWizard* wizard = dynamic_cast<WSWizard*>(parent);
-    if(wizard != nullptr)
+    WSWizard* m_wizard = dynamic_cast<WSWizard*>(parent);
+    if(m_wizard != nullptr)
     {
-        m_settings = wizard->oauthSettings();
-        m_userName = wizard->settings()->userName;
+        m_settings = m_wizard->oauthSettings();
+        m_userName = m_wizard->settings()->userName;
         
         connect(this, SIGNAL(signalBusy(bool)),
-                wizard, SLOT(slotBusy(bool)));
+                m_wizard, SLOT(slotBusy(bool)));
         
         SettingsInitInContructor = false;
     }
@@ -286,6 +293,10 @@ void WSTalker::listAlbums(long long userID)
 {
 }
 
+void WSTalker::addPhoto(const QString& imgPath, const QString& albumID, const QString& caption)
+{
+}
+
 void WSTalker::removeUserAccount(const QString& userName)
 {
     QString userID = getUserID(userName);
@@ -315,6 +326,11 @@ void WSTalker::removeAllAccounts()
     m_settings->beginGroup(m_store->groupKey());
     m_settings->remove("");
     m_settings->endGroup();
+}
+
+void WSTalker::sortAlbumsList(QList<WSAlbum>& albumsList)
+{
+    std::sort(albumsList.begin(), albumsList.end());
 }
 
 void WSTalker::parseResponseGetLoggedInUser(const QByteArray& data)

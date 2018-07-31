@@ -40,6 +40,7 @@
 
 #include "o0settingsstore.h"
 #include "wsitem.h"
+#include "wswizard.h"
 
 namespace Digikam
 {
@@ -89,7 +90,9 @@ protected:
     void removeAllAccounts();
     
     virtual void resetTalker(const QString& expire, const QString& accessToken, const QString& refreshToken);
-
+    
+    virtual void sortAlbumsList(QList<WSAlbum>& albumsList);
+    
     virtual void parseResponseGetLoggedInUser(const QByteArray& data);
     virtual void parseResponseListAlbums(const QByteArray& data);
     virtual void parseResponseCreateAlbum(const QByteArray& data);
@@ -99,6 +102,7 @@ public:
     
     virtual void getLoggedInUser();
     virtual void listAlbums(long long userID = 0);
+    virtual void addPhoto(const QString& imgPath, const QString& albumID, const QString& caption);
     
 Q_SIGNALS:
     
@@ -107,6 +111,7 @@ Q_SIGNALS:
     void signalCloseBrowser();
     void signalAuthenticationComplete(bool);
     void signalListAlbumsDone(int errCode, const QString& errMsg, const QList <WSAlbum>& albumsList);
+    void signalAddPhotoDone(int errCode, const QString& errMsg);
     
 protected Q_SLOTS:
     
@@ -116,7 +121,7 @@ protected Q_SLOTS:
     virtual void slotLinkingFailed();
     virtual void slotLinkingSucceeded();
     virtual void slotResponseTokenReceived(const QMap<QString, QString>& rep);
-
+    
 protected:
     
     QNetworkAccessManager*  m_netMngr;
@@ -129,6 +134,8 @@ protected:
     O0SettingsStore*        m_store;
     
     QString                 m_userName;
+    
+    WSWizard*               m_wizard;
 };
     
 } // namespace Digikam

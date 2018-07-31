@@ -77,7 +77,7 @@ public:
 
     void    createAlbum(const FbAlbum& album);
 
-    bool    addPhoto(const QString& imgPath, const QString& albumID,
+    void    addPhoto(const QString& imgPath, const QString& albumID,
                      const QString& caption);
 
 Q_SIGNALS:
@@ -104,6 +104,7 @@ private:
 private Q_SLOTS:
     
     void    slotResponseTokenReceived(const QMap<QString, QString>& rep);
+    void    slotCreateAlbum(const FbAlbum& album);
 
 private:
 

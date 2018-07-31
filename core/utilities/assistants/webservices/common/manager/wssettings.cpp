@@ -43,7 +43,8 @@ WSSettings::WSSettings()
     removeMetadata    = false;
     imageCompression  = 75;
     webService        = FLICKR;
-    userName          = QString("");
+    currentAlbumId    = QLatin1String("");
+    userName          = QLatin1String("");
     imageSize         = 1024;
     imageFormat       = JPEG;
 }
@@ -68,6 +69,8 @@ void WSSettings::readSettings(KConfigGroup& group)
                         (int)FLICKR);
     userName          = group.readEntry("UserName",
                         QString(""));
+    currentAlbumId    = group.readEntry("Album",
+                        QString(""));
     imageSize         = group.readEntry("ImageSize",
                         1024);
     imageFormat       = (ImageFormat)group.readEntry("ImageFormat",
@@ -83,6 +86,7 @@ void WSSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("ImageCompression",   imageCompression);
     group.writeEntry("WebService",         (int)webService);
     group.writeEntry("UserName",           userName);
+    group.writeEntry("Album",              currentAlbumId);
     group.writeEntry("ImageSize",          imageSize);
     group.writeEntry("ImageFormat",        (int)imageFormat);
 }

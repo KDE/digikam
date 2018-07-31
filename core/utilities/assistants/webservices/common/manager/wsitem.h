@@ -40,21 +40,19 @@ public:
     explicit WSAlbum()
       : parentID(QLatin1String("")),
         isRoot(true),
-        description(QLatin1String("")),
-        privacy(0) // public
+        description(QLatin1String(""))
     {
     }
     
     QString   id;
     QString   parentID;
-    
     bool      isRoot;
     
     QString   title;
     QString   description;
     QString   location;
     QString   url;
-    int       privacy;  
+    bool      uploadable;
 }; 
 
 class AlbumSimplified 
@@ -63,11 +61,17 @@ class AlbumSimplified
 public:
     
     explicit AlbumSimplified()
+      : uploadable(true)
+    {
+    }    
+    explicit AlbumSimplified(const QString& title)
+      : title(title),
+        uploadable(true)
     {
     }
-    
-    explicit AlbumSimplified(const QString& title)
-      : title(title)
+    explicit AlbumSimplified(const QString& title, bool uploadable)
+      : title(title),
+        uploadable(uploadable)
     {
     }
 
@@ -75,6 +79,7 @@ public:
     
     QString     title;
     QStringList childrenIDs;
+    bool        uploadable;
 };
 
 } // namespace Digikam

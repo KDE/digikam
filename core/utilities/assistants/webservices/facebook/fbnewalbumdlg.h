@@ -48,7 +48,12 @@ public:
     explicit FbNewAlbumDlg(QWidget* const parent, const QString& toolName);
     ~FbNewAlbumDlg();
 
+    void getAlbumProperties();
     void getAlbumProperties(FbAlbum& album);
+
+Q_SIGNALS:
+
+    void signalCreateAlbum(const FbAlbum&);
 
 private:
 

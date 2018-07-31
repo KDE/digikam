@@ -50,23 +50,26 @@ public:
     explicit WSImagesPage(QWizard* const dialog, const QString& title);
     ~WSImagesPage();
 
-    void initializePage();
-    bool validatePage();
-    bool isComplete() const;
+    void    initializePage();
+    bool    validatePage();
+    bool    isComplete() const;
 
-    void setItemsList(const QList<QUrl>& urls);
+    void    setItemsList(const QList<QUrl>& urls);
 
 private:
 
     void addChildToTreeView(QTreeWidgetItem* const parent,
                             const QMap<QString, AlbumSimplified>& albumTree, 
                             const QStringList& childrenAlbums);
-    
+    void setCurrentAlbumId(const QString& currentAlbumId);
+
 private Q_SLOTS:
-    
+
     void slotListAlbumsDone(const QMap<QString, AlbumSimplified>& albumTree, 
-                            const QStringList& rootAlbums);
-    
+                            const QStringList& rootAlbums,
+                            const QString& currentAlbumId);
+    void slotReloadListAlbums();
+
 private:
 
     class Private;

@@ -45,7 +45,7 @@
 #include "digikam_debug.h"
 #include "dprogresswdg.h"
 #include "dhistoryview.h"
-//#include "wsprocess.h"
+#include "wsauthentication.h"
 
 namespace Digikam
 {
@@ -58,10 +58,10 @@ public:
       : progressView(0),
         progressBar(0),
         complete(false),
-//        processor(0),
         wizard(0),
         settings(0),
-        iface(0)
+        iface(0),
+        wsAuth(0)
     {
         wizard = dynamic_cast<WSWizard*>(dialog);
 
@@ -69,16 +69,17 @@ public:
         {
             iface    = wizard->iface();
             settings = wizard->settings();
+            wsAuth   = wizard->wsAuth();
         }
     }
 
     DHistoryView*     progressView;
     DProgressWdg*     progressBar;
     bool              complete;
-//    MailProcess*      processor;
     WSWizard*         wizard;
     WSSettings*       settings;
     DInfoInterface*   iface;
+    WSAuthentication* wsAuth;
 };
 
 WSFinalPage::WSFinalPage(QWizard* const dialog, const QString& title)
@@ -95,6 +96,9 @@ WSFinalPage::WSFinalPage(QWizard* const dialog, const QString& title)
 
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("WS_send")));
+    
+    connect(this, SIGNAL(signalStartTransfer()),
+            d->wsAuth, SLOT(slotStartTransfer()));
 }
 
 WSFinalPage::~WSFinalPage()
@@ -130,6 +134,8 @@ void WSFinalPage::slotProcess()
 
     d->progressView->clear();
     d->progressBar->reset();
+    
+    emit signalStartTransfer();
 
 /*
     d->progressView->addEntry(i18n("Preparing file to export by mail..."),

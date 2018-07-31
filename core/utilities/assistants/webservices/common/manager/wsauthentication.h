@@ -52,31 +52,40 @@ public:
     explicit WSAuthentication(QWidget* const parent, DInfoInterface* const iface=0);
     ~WSAuthentication();
     
-    void createTalker(WSSettings::WebService ws,
-                      const QString& serviceName=QString());
-    
-    void authenticate();
-    void reauthenticate();
-    bool authenticated() const;
-    
-    void listAlbums();
+    void    createTalker(WSSettings::WebService ws, const QString& serviceName=QString());
+    QString webserviceName();
+
+    void    authenticate();
+    void    reauthenticate();
+    bool    authenticated() const;
+
+    QString getImageCaption(const QString& fileName);
+    void    prepareImageForUpload(const QString& imgPath, QString& caption);
+
+    void    listAlbums();
+    void    uploadNextPhoto();
     
 private:
     
-    void parseTreeFromListAlbums(const QList <WSAlbum>& albumsList);
+    void    parseTreeFromListAlbums(const QList <WSAlbum>& albumsList, 
+                                    QMap<QString, AlbumSimplified>& albumTree,
+                                    QStringList& rootAlbums);
 
 Q_SIGNALS:
     
-    void signalOpenBrowser(const QUrl&);
-    void signalCloseBrowser();
-    void signalResponseTokenReceived(const QMap<QString, QString>&);
-    void signalAuthenticationComplete(bool);
+    void    signalOpenBrowser(const QUrl&);
+    void    signalCloseBrowser();
+    void    signalResponseTokenReceived(const QMap<QString, QString>&);
+    void    signalAuthenticationComplete(bool);
+    void    signalListAlbumsDone(const QMap<QString, AlbumSimplified>&, const QStringList&, const QString&);
+    void    signalDone();
     
-    void signalListAlbumsDone(const QMap<QString, AlbumSimplified>&, const QStringList&);
+public Q_SLOTS:
     
-private Q_SLOTS:
-    
-    void slotListAlbumsDone(int errCode, const QString& errMsg, const QList<WSAlbum>& albumsList);
+    void    slotNewAlbumRequest();
+    void    slotStartTransfer();
+    void    slotListAlbumsDone(int errCode, const QString& errMsg, const QList<WSAlbum>& albumsList);
+    void    slotAddPhotoDone(int errCode, const QString& errMsg);
     
 private:
     
