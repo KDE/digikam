@@ -195,14 +195,14 @@ static DropAction groupAction(const QDropEvent* const, QWidget* const view)
 
     QMenu popMenu(view);
     QAction* sortAction        = 0;
-    QAction* const groupAction = addGroupAction(&popMenu);
 
     if (sort == ImageSortSettings::SortByManualOrder)
     {
-        popMenu.addSeparator();
         sortAction             = addSortAction(&popMenu);
+        popMenu.addSeparator();
     }
 
+    QAction* const groupAction = addGroupAction(&popMenu);
     popMenu.addSeparator();
     addCancelAction(&popMenu);
 

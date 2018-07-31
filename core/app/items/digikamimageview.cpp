@@ -222,7 +222,7 @@ void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo
     }
 
     ImageInfoList infoList = allImageInfos(false);
-    int counter            = pick.manualOrder();
+    qlonglong counter      = pick.manualOrder();
     bool order             = (ApplicationSettings::instance()->
                                 getImageSorting() == Qt::AscendingOrder);
     bool found             = false;

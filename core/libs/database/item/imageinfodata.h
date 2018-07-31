@@ -136,12 +136,12 @@ public:
     bool                   pickLabelCached        : 1;
     bool                   colorLabelCached       : 1;
     bool                   ratingCached           : 1;
-    bool                   manualOrderCached      : 1;
     bool                   categoryCached         : 1;
     bool                   formatCached           : 1;
     bool                   creationDateCached     : 1;
     bool                   modificationDateCached : 1;
     bool                   fileSizeCached         : 1;
+    bool                   manualOrderCached      : 1;
     bool                   uniqueHashCached       : 1;
     bool                   imageSizeCached        : 1;
     bool                   tagIdsCached           : 1;

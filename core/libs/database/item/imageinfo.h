@@ -470,7 +470,7 @@ public:
     /**
      * Set the manul sorting order for the item
      */
-    void setManualOrder(int value);
+    void setManualOrder(qlonglong value);
 
     /**
      * Set the orientation for the item

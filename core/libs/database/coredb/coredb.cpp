@@ -3771,7 +3771,7 @@ void CoreDB::setItemAlbum(qlonglong imageID, qlonglong album)
     d->db->recordChangeset(CollectionImageChangeset(imageID, album, CollectionImageChangeset::Added));
 }
 
-void CoreDB::setItemManualOrder(qlonglong imageID, int value)
+void CoreDB::setItemManualOrder(qlonglong imageID, qlonglong value)
 {
     QVariantList boundValues;
     boundValues << value << imageID;

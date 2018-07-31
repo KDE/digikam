@@ -1674,7 +1674,7 @@ void ImageInfo::setRating(int value)
     m_data->ratingCached = true;
 }
 
-void ImageInfo::setManualOrder(int value)
+void ImageInfo::setManualOrder(qlonglong value)
 {
     if (!m_data)
     {
