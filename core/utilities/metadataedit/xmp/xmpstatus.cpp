@@ -29,7 +29,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QLineEdit>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 
 // KDE includes
 
@@ -63,7 +63,7 @@ public:
 
     QLineEdit*          nicknameEdit;
 
-    QTextEdit*          specialInstructionEdit;
+    QPlainTextEdit*     specialInstructionEdit;
 
     MultiStringsEdit*   identifiersEdit;
 
@@ -97,7 +97,7 @@ XMPStatus::XMPStatus(QWidget* const parent)
     // --------------------------------------------------------
 
     d->specialInstructionCheck = new QCheckBox(i18n("Special Instructions:"), this);
-    d->specialInstructionEdit  = new QTextEdit(this);
+    d->specialInstructionEdit  = new QPlainTextEdit(this);
     d->specialInstructionEdit->setWhatsThis(i18n("Enter the editorial usage instructions."));
 
     // --------------------------------------------------------
@@ -193,7 +193,7 @@ void XMPStatus::readMetadata(QByteArray& xmpData)
 
     if (!data.isNull())
     {
-        d->specialInstructionEdit->setText(data);
+        d->specialInstructionEdit->setPlainText(data);
         d->specialInstructionCheck->setChecked(true);
     }
 

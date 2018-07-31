@@ -25,6 +25,40 @@
 #ifndef DIGIKAM_IMAGE_WINDOW_PRIVATE_H
 #define DIGIKAM_IMAGE_WINDOW_PRIVATE_H
 
+// C++ includes
+
+#include <cstdio>
+#include <vector>
+#include <algorithm>
+
+// Qt includes
+
+#include <QKeySequence>
+#include <QCloseEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QImage>
+#include <QLabel>
+#include <QPainter>
+#include <QPersistentModelIndex>
+#include <QPixmap>
+#include <QProgressBar>
+#include <QSplitter>
+#include <QTimer>
+#include <QAction>
+#include <QMenu>
+#include <QMenuBar>
+#include <QMessageBox>
+#include <QApplication>
+
+// KDE includes
+
+#include <kactioncollection.h>
+#include <klocalizedstring.h>
+#include <kwindowsystem.h>
+
 // Local includes
 
 #include "versionmanager.h"
@@ -168,6 +202,8 @@ class ImageWindow::Private
 public:
 
     Private() :
+        configShowThumbbarEntry(QLatin1String("Show Thumbbar")),
+        configHorizontalThumbbarEntry(QLatin1String("HorizontalThumbbar")),
         viewContainer(0),
         toMainWindowAction(0),
         fileDeletePermanentlyAction(0),
@@ -252,8 +288,8 @@ public:
 
 public:
 
-    static const QString         configShowThumbbarEntry;
-    static const QString         configHorizontalThumbbarEntry;
+    const QString                configShowThumbbarEntry;
+    const QString                configHorizontalThumbbarEntry;
 
     KMainWindow*                 viewContainer;
 
@@ -278,9 +314,6 @@ public:
 
     QMultiMap<QString, QVariant> newFaceTags;
 };
-
-const QString ImageWindow::Private::configShowThumbbarEntry(QLatin1String("Show Thumbbar"));
-const QString ImageWindow::Private::configHorizontalThumbbarEntry(QLatin1String("HorizontalThumbbar"));
 
 } // namespace Digikam
 

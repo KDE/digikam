@@ -66,6 +66,7 @@ Q_SIGNALS:
     void urlsDropped(const QList<QUrl>& urls);
     void assignTags(const QList<ImageInfo>& list, const QList<int>& tagIDs);
     void addToGroup(const ImageInfo& pick, const QList<ImageInfo>& infos);
+    void dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos);
 
 protected:
 

@@ -51,6 +51,11 @@ set(libeditordlg_SRCS
 
 set(libeditorgui_SRCS
     main/imagewindow.cpp
+    main/imagewindow_setup.cpp
+    main/imagewindow_config.cpp
+    main/imagewindow_tools.cpp
+    main/imagewindow_import.cpp
+    main/imagewindow_export.cpp
 )
 
 install(FILES main/imageeditorui5.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)

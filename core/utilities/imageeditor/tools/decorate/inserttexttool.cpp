@@ -344,7 +344,7 @@ void InsertTextTool::writeSettings()
     group.writeEntry(d->configTextRotationEntry,    d->textRotation->currentIndex());
     group.writeEntry(d->configFontColorEntry,       d->fontColorButton->color());
     group.writeEntry(d->configTextOpacity,          d->textOpacity->value());
-    group.writeEntry(d->configTextStringEntry,      d->textEdit->document()->toPlainText());
+    group.writeEntry(d->configTextStringEntry,      d->textEdit->toPlainText());
     group.writeEntry(d->configFontPropertiesEntry,  d->textFont);
     group.writeEntry(d->configTextAlignmentEntry,   d->alignTextMode);
     group.writeEntry(d->configBorderTextEntry,      d->borderText->isChecked());
@@ -419,7 +419,7 @@ void InsertTextTool::setBackgroundColor(const QColor& bg)
 
 void InsertTextTool::slotUpdatePreview()
 {
-    d->previewWidget->setText(d->textEdit->document()->toPlainText(), d->textFont, d->fontColorButton->color(),
+    d->previewWidget->setText(d->textEdit->toPlainText(), d->textFont, d->fontColorButton->color(),
                               d->textOpacity->value(), d->alignTextMode,
                               d->borderText->isChecked(), d->transparentText->isChecked(),
                               d->textRotation->currentIndex());

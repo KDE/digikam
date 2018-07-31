@@ -53,7 +53,6 @@ public:
 
     void loadImageInfos(const ImageInfoList& list, const ImageInfo& imageInfoCurrent, bool addTo);
     void setLeftRightItems(const ImageInfoList& list, bool addTo);
-    void applySettings();
     void refreshView();
     bool isEmpty() const;
 
@@ -80,12 +79,6 @@ private:
     void showSideBars(bool visible);
     void closeEvent(QCloseEvent* e);
     void showEvent(QShowEvent*);
-    void setupActions();
-    void setupConnections();
-    void setupUserArea();
-    void setupStatusBar();
-    void readSettings();
-    void writeSettings();
 
     void deleteItem(bool permanently);
     void deleteItem(const ImageInfo& info, bool permanently);
@@ -115,19 +108,9 @@ private Q_SLOTS:
     void slotLeftZoomFactorChanged(double);
     void slotRightZoomFactorChanged(double);
 
-    void slotLeftSlideShowManualFromCurrent();
-    void slotRightSlideShowManualFromCurrent();
-
-    void slotSlideShowLastItemUrl(const QUrl&);
-    void slotSlideShowManualFrom(const ImageInfo&);
-    void slotSlideShowBuilderComplete(const SlideShowSettings&);
-
     void slotToggleOnSyncPreview(bool);
     void slotToggleSyncPreview();
     void slotToggleNavigateByPair();
-
-    void slotEditItem();
-    void slotEditItem(const ImageInfo&);
 
     void slotDeleteItem();
     void slotDeleteItem(const ImageInfo&);
@@ -143,17 +126,11 @@ private Q_SLOTS:
 
     void slotThumbbarDroppedItems(const QList<ImageInfo>&);
 
-    void slotPresentation();
-    void slotSlideShowAll();
-    void slotSetup();
-    void slotColorManagementOptionsChanged();
     void slotToggleColorManagedView();
     void slotComponentsInfo();
     void slotDBStat();
 
     void slotFileWithDefaultApplication();
-    void slotApplicationSettingsChanged();
-    void slotThemeChanged();
 
     void slotRefreshStatusBar();
 
@@ -171,22 +148,75 @@ private Q_SLOTS:
     void slotLeftSideBarActivateComments();
     void slotLeftSideBarActivateAssignedTags();
 
-    void slotImportFromScanner();
-    void slotImportedImagefromScanner(const QUrl& url);
+// -- Internal setup methods implemented in lighttablewindow_config.cpp ----------------------------------------
 
+public:
+
+    void applySettings();
+
+private:
+
+    void readSettings();
+    void writeSettings();
+
+public Q_SLOTS:
+
+    void slotSetup();
+    void slotColorManagementOptionsChanged();
+
+    void slotThemeChanged();
+    void slotApplicationSettingsChanged();
+
+// -- Internal setup methods implemented in lighttablewindow_setup.cpp ----------------------------------------
+
+private:
+
+    void setupActions();
+    void setupConnections();
+    void setupUserArea();
+    void setupStatusBar();
+
+// -- Extra tool methods implemented in lighttablewindow_tools.cpp ----------------------------------------
+
+private Q_SLOTS:
+
+    void slotEditItem();
+    void slotEditItem(const ImageInfo&);
+    
     void slotEditMetadata();
     void slotEditGeolocation();
+    void slotPrintCreator();
+    void slotPresentation();
+
+    void slotSlideShowAll();
+    void slotLeftSlideShowManualFromCurrent();
+    void slotRightSlideShowManualFromCurrent();
+    void slotSlideShowLastItemUrl(const QUrl&);
+    void slotSlideShowManualFrom(const ImageInfo&);
+    void slotSlideShowBuilderComplete(const SlideShowSettings&);
+
+// -- Export tools methods implemented in lighttablewindow_export.cpp -------------------------------------
+
+private Q_SLOTS:
+
     void slotHtmlGallery();
     void slotCalendar();
     void slotExpoBlending();
     void slotPanorama();
     void slotVideoSlideshow();
     void slotSendByMail();
-    void slotPrintCreator();
     void slotMediaServer();
-
     void slotExportTool();
+
+// -- Import tools methods implemented in lighttablewindow_import.cpp -------------------------------------
+
+private Q_SLOTS:
+
+    void slotImportFromScanner();
+    void slotImportedImagefromScanner(const QUrl& url);
     void slotImportTool();
+
+// -- Internal private container --------------------------------------------------------------------
 
 private:
 

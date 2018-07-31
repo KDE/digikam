@@ -28,7 +28,7 @@
 
 // Qt includes
 
-#include <QWebView>
+#include <qwebview.h>
 
 // Local includes
 

@@ -30,7 +30,7 @@
 #include <QLabel>
 #include <QWidget>
 #include <QProcess>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 
 // KDE includes
 
@@ -69,10 +69,10 @@ public:
     {
     }
 
-    DComboBox* comboBox;
-    QTextEdit* textEdit;
+    DComboBox*      comboBox;
+    QPlainTextEdit* textEdit;
 
-    bool       changeSettings;
+    bool            changeSettings;
 };
 
 UserScript::UserScript(QObject* parent)
@@ -106,8 +106,7 @@ void UserScript::registerSettingsWidget()
     QLabel* const label2 = new QLabel(vbox);
     label2->setText(i18n("Shell Script:"));
 
-    d->textEdit          = new QTextEdit(vbox);
-    d->textEdit->setAcceptRichText(false);
+    d->textEdit          = new QPlainTextEdit(vbox);
     d->textEdit->setPlaceholderText(i18n("Enter script for execution. Use $INPUT and $OUTPUT for input / output filenames (with "
                                          "special characters escaped). These would be substituted before shell execution."));
 
