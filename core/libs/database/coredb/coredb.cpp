@@ -3773,7 +3773,7 @@ void CoreDB::setItemAlbum(qlonglong imageID, qlonglong album)
 
 void CoreDB::setItemManualOrder(qlonglong imageID, int value)
 {
-    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDB::setItemManualOrder" << imageID;
+    // qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDB::setItemManualOrder" << imageID << value;;
 
     QVariantList boundValues;
     boundValues << value << imageID;
@@ -3785,8 +3785,7 @@ void CoreDB::setItemManualOrder(qlonglong imageID, int value)
 
 void CoreDB::renameItem(qlonglong imageID, const QString& newName)
 {
-    d->db->execSql(QString::fromUtf8("UPDATE Images SET name=? "
-                                     "WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Images SET name=? WHERE id=?;"),
                    newName, imageID);
 }
 

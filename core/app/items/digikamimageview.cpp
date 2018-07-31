@@ -214,66 +214,38 @@ ImageInfoList DigikamImageView::selectedImageInfosCurrentFirst(bool grouping) co
 
 void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos)
 {
-    ImageInfoList infoList = this->allImageInfos(false);
+    if (infos.isEmpty())
+    {
+        return;
+    }
+
+    ImageInfoList infoList = allImageInfos(false);
+    int counter            = pick.manualOrder();
     bool flag              = false;
     int order              = 1;
 
-    foreach(const ImageInfo& info, infoList)
+    if (ApplicationSettings::instance()->getImageSorting() == Qt::DescendingOrder)
     {
-        if (info.name() == infos[0].name())
-        {
-            break;
-        }
+        order = -1;
+    }
 
-        if (info.name() == pick.name())
+    foreach(ImageInfo info, infoList)
+    {
+        if (!flag && info.name() == pick.name())
         {
+            foreach(ImageInfo info, infos)
+            {
+                info.setManualOrder(counter);
+                counter += order;
+            }
+
             flag = true;
-            break;
         }
-    }
 
-    ImageInfo backInfo;
-
-    // flag==false means image in infos is in the front of pick before manually sort
-
-    if (!flag)
-    {
-        foreach(ImageInfo info, infoList)
+        if (flag && !infos.contains(info))
         {
-            if (info.name() == infos[0].name())
-            {
-                backInfo = info;
-                continue;
-            }
-            else if (info.name() == pick.name())
-            {
-                info.setManualOrder(order++);
-                backInfo.setManualOrder(order++);
-                continue;
-            }
-
-            info.setManualOrder(order++);
-        }
-    }
-    else // flag==true means image in pick is in the front of infos before manually sort
-    {
-        int orderReserved = 0;
-
-        foreach(ImageInfo info, infoList)
-        {
-            if (info.name() == pick.name())
-            {
-                info.setManualOrder(order++);
-                orderReserved = order++;
-                continue;
-            }
-            else if (info.name() == infos[0].name())
-            {
-                info.setManualOrder(orderReserved);
-                continue;
-            }
-
-            info.setManualOrder(order++);
+            info.setManualOrder(counter);
+            counter += order;
         }
     }
 
