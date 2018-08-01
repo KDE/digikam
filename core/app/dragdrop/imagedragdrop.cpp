@@ -73,8 +73,8 @@ static QAction* addGroupAction(QMenu* const menu)
 
 static QAction* addSortAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Insert dragged images before this image",
-                                                                                "Insert images here"));
+    return menu->addAction( QIcon::fromTheme(QLatin1String("insert-image")), i18nc("@action:inmenu Insert dragged images before this image",
+                                                                                   "Insert Items here"));
 }
 
 static QAction* addGroupAndMoveAction(QMenu* const menu)
