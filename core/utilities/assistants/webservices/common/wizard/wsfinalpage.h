@@ -46,10 +46,6 @@ public:
     void initializePage();
     bool isComplete() const;
     void cleanupPage();
-
-Q_SIGNALS:
-    
-    void signalStartTransfer();
     
 private Q_SLOTS:
 

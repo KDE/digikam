@@ -97,16 +97,21 @@ WSFinalPage::WSFinalPage(QWizard* const dialog, const QString& title)
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("WS_send")));
     
-    connect(this, SIGNAL(signalStartTransfer()),
-            d->wsAuth, SLOT(slotStartTransfer()));
+    connect(d->wsAuth, SIGNAL(signalProgress(int)),
+            d->progressBar, SLOT(setValue(int)));
+    connect(d->wsAuth, SIGNAL(signalMessage(QString, bool)),
+            this, SLOT(slotMessage(QString, bool)));
+    connect(d->wsAuth, SIGNAL(signalDone()),
+            this, SLOT(slotDone()));
 }
 
 WSFinalPage::~WSFinalPage()
 {
-/*
-    if (d->processor)
-        d->processor->slotCancel();
-*/
+    if (d->wsAuth)
+    {
+        d->wsAuth->slotCancel();
+    }
+
     delete d;
 }
 
@@ -127,60 +132,30 @@ void WSFinalPage::slotProcess()
 {
     if (!d->wizard)
     {
-        d->progressView->addEntry(i18n("Internal Error"),
-                                  DHistoryView::ErrorEntry);
+        d->progressView->addEntry(i18n("Internal Error"), DHistoryView::ErrorEntry);
         return;
     }
 
     d->progressView->clear();
     d->progressBar->reset();
-    
-    emit signalStartTransfer();
 
-/*
-    d->progressView->addEntry(i18n("Preparing file to export by mail..."),
-                              DHistoryView::ProgressEntry);
+    d->progressView->addEntry(i18n("Preparing files..."), DHistoryView::ProgressEntry);
+    d->wsAuth->prepareForUpload();
 
-    foreach (const QUrl& url, d->settings->inputImages)
-    {
-        d->settings->setMailUrl(url, QUrl());
-    }
-
-    d->progressView->addEntry(i18n("%1 input items to process", d->settings->itemsList.count()),
-                                  DHistoryView::ProgressEntry);
-
-    for (QMap<QUrl, QUrl>::const_iterator it = d->settings->itemsList.constBegin();
-         it != d->settings->itemsList.constEnd(); ++it)
-    {
-        d->progressView->addEntry(QDir::toNativeSeparators(it.key().toLocalFile()),
-                                  DHistoryView::ProgressEntry);
-    }
-*/
+    d->progressView->addEntry(i18n("Start transferring process..."), DHistoryView::ProgressEntry);
+    d->progressView->addEntry(i18n("%1 input items to process", d->settings->inputImages.count()), DHistoryView::ProgressEntry);
+    d->wsAuth->startTransfer();
 
     d->progressBar->setMinimum(0);
-    d->progressBar->setMaximum(d->settings->itemsList.count());
-/*
-    d->processor = new MailProcess(d->settings, d->iface, this);
-
-    connect(d->processor, SIGNAL(signalProgress(int)),
-            d->progressBar, SLOT(setValue(int)));
-
-    connect(d->processor, SIGNAL(signalMessage(QString, bool)),
-            this, SLOT(slotMessage(QString, bool)));
-
-    connect(d->processor, SIGNAL(signalDone(bool)),
-            this, SLOT(slotDone()));
-
-    d->processor->firstStage();
-*/
+    d->progressBar->setMaximum(d->settings->inputImages.count());
 }
 
 void WSFinalPage::cleanupPage()
 {
-/*
-    if (d->processor)
-        d->processor->slotCancel();
-*/
+    if (d->wsAuth)
+    {
+        d->wsAuth->slotCancel();
+    }
 }
 
 void WSFinalPage::slotMessage(const QString& mess, bool err)

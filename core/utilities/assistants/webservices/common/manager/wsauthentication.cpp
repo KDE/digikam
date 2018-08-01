@@ -76,10 +76,11 @@ public:
     WSNewAlbumDialog*       albumDlg;
     QString                 currentAlbumId;
     
-    QString                 tmpPath;
+    QStringList             tmpPath;
     QString                 tmpDir;
     unsigned int            imagesCount;
     unsigned int            imagesTotal;
+    QMap<QString, QString>  imagesCaption;
     
     QList<QUrl>             transferQueue;
 };
@@ -107,9 +108,7 @@ WSAuthentication::WSAuthentication(QWidget* const parent, DInfoInterface* const 
 
 WSAuthentication::~WSAuthentication()
 {
-    // Just to be sure that all temporary files will be removed after all 
-    QFile::remove(d->tmpPath);
-    
+    slotCancel();
     delete d;
 }
 
@@ -222,61 +221,75 @@ void WSAuthentication::parseTreeFromListAlbums(const QList <WSAlbum>& albumsList
 QString WSAuthentication::getImageCaption(const QString& fileName)
 {
     DItemInfo info(d->iface->itemInfo(QUrl::fromLocalFile(fileName)));
-    
+
     // If webservice doesn't support image titles, include it in descriptions if needed.
     QStringList descriptions = QStringList() << info.title() << info.comment();
     descriptions.removeAll(QString::fromLatin1(""));
     return descriptions.join(QString::fromLatin1("\n\n"));
 }
 
-void WSAuthentication::prepareImageForUpload(const QString& imgPath, QString& caption)
+void WSAuthentication::prepareForUpload()
 {
-    QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
-    
-    if (image.isNull())
+    d->transferQueue  = d->wizard->settings()->inputImages;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "prepareForUpload invoked";
+
+    if (d->transferQueue.isEmpty())
     {
-        image.load(imgPath);
-    }
-    
-    if (image.isNull())
-    {
-        emit d->talker->signalAddPhotoDone(666, i18n(QString::fromLatin1("Cannot open image at %1").arg(imgPath).toLatin1()));
+        emit(QLatin1String("transferQueue is empty"), true);
         return;
     }
 
-    // get temporary file name
-    d->tmpPath = d->tmpDir + QFileInfo(imgPath).baseName().trimmed() + QString::fromLatin1(".jpg");
-    
-    // rescale image if requested
-    int maxDim = d->wizard->settings()->imageSize;
-    
-    if (d->wizard->settings()->imagesChangeProp
-        && (image.width() > maxDim || image.height() > maxDim))
+    d->currentAlbumId = d->wizard->settings()->currentAlbumId;
+    d->imagesTotal    = d->transferQueue.count();
+    d->imagesCount    = 0;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "upload request got album id from widget: " << d->currentAlbumId;
+
+    if (d->wizard->settings()->imagesChangeProp)
     {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing to " << maxDim;
-        image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio,
-                             Qt::SmoothTransformation);
-    }
-    
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Saving to temp file: " << d->tmpPath;
-    image.save(d->tmpPath, "JPEG", d->wizard->settings()->imageCompression);
-    
-    // copy meta data to temporary image
-    
-    DMetadata meta;
-    
-    if (meta.load(imgPath))
-    {
-        caption = getImageCaption(imgPath);
-        meta.setImageDimensions(image.size());
-        meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-        meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
-        meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-        meta.save(d->tmpPath);
-    }
-    else
-    {
-        caption.clear();
+        foreach(const QUrl& imgUrl, d->transferQueue)
+        {
+            QString imgPath = imgUrl.toLocalFile();
+            QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
+
+            if (image.isNull())
+            {
+                image.load(imgPath);
+            }
+
+            if (image.isNull())
+            {
+                emit d->talker->signalAddPhotoDone(666, i18n("Cannot open image at %1\n", imgPath));
+                return;
+            }
+
+            // get temporary file name
+            d->tmpPath << d->tmpDir + QFileInfo(imgPath).baseName().trimmed() + d->wizard->settings()->format();
+
+            // rescale image if requested
+            int maxDim = d->wizard->settings()->imageSize;
+            if (image.width() > maxDim || image.height() > maxDim)
+            {
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing to " << maxDim;
+                image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio,
+                                     Qt::SmoothTransformation);
+            }
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Saving to temp file: " << d->tmpPath.last();
+            image.save(d->tmpPath.last(), "JPEG", d->wizard->settings()->imageCompression);
+
+            // copy meta data to temporary image and get caption for image
+            DMetadata meta;
+            QString caption = QLatin1String("");
+            if (meta.load(imgPath))
+            {
+                meta.setImageDimensions(image.size());
+                meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
+                meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+                meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+                meta.save(d->tmpPath.last());
+                caption = getImageCaption(imgPath);
+            }
+            d->imagesCaption[imgPath] = caption;
+        }
     }
 }
 
@@ -293,55 +306,51 @@ void WSAuthentication::uploadNextPhoto()
         return;
     }
     
+    /*
+     * This comparaison is a little bit complicated and may seem unnecessary, but it will be useful later
+     * when we will be able to choose to change or not image properties for EACH image
+     */
     QString imgPath = d->transferQueue.first().toLocalFile();
+    QString tmpPath = d->tmpDir + QFileInfo(imgPath).baseName().trimmed() + d->wizard->settings()->format();
     
-    QString caption;
-    
-    if (d->wizard->settings()->imagesChangeProp)
+    if (!d->tmpPath.isEmpty() && tmpPath == d->tmpPath.first())
     {
-        prepareImageForUpload(imgPath, caption);
-        d->talker->addPhoto(d->tmpPath, d->currentAlbumId, caption);
+        d->talker->addPhoto(tmpPath, d->currentAlbumId, d->imagesCaption[imgPath]);
+        d->tmpPath.removeFirst();
     }
     else
     {
-        caption = getImageCaption(imgPath);
-        d->tmpPath.clear();
-        d->talker->addPhoto(imgPath, d->currentAlbumId, caption);
+        d->talker->addPhoto(imgPath, d->currentAlbumId, d->imagesCaption[imgPath]);
     }
+
 }
 
-void WSAuthentication::slotStartTransfer()
+void WSAuthentication::startTransfer()
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotStartTransfer invoked";
-
-    d->transferQueue  = d->wizard->settings()->inputImages;
-    
-    if (d->transferQueue.isEmpty())
-    {
-        return;
-    }
-    
-    d->currentAlbumId = d->wizard->settings()->currentAlbumId;
-    d->imagesTotal    = d->transferQueue.count();
-    d->imagesCount    = 0;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "upload request got album id from widget: " << d->currentAlbumId;
-        
     uploadNextPhoto();
+}
+
+void WSAuthentication::slotCancel()
+{
+    // Just to be sure that all temporary files in temporary dir will be removed after all
+    QDir tmpDir(d->tmpDir);
+    if(tmpDir.exists())
+    {
+        tmpDir.removeRecursively();
+    }
+
+    emit signalProgress(0);
 }
 
 void WSAuthentication::slotAddPhotoDone(int errCode, const QString& errMsg)
 {
-    // Remove temporary file if it was used
-    if (!d->tmpPath.isEmpty())
-    {
-        QFile::remove(d->tmpPath);
-        d->tmpPath.clear();
-    }
-    
     if (errCode == 0)
     {
+        emit signalMessage(QDir::toNativeSeparators(d->transferQueue.first().toLocalFile()), false);
         d->transferQueue.removeFirst();
+
         d->imagesCount++;
+        emit signalProgress(d->imagesCount);
     }
     else
     {

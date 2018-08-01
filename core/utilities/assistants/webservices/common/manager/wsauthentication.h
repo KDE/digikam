@@ -60,10 +60,11 @@ public:
     bool    authenticated() const;
 
     QString getImageCaption(const QString& fileName);
-    void    prepareImageForUpload(const QString& imgPath, QString& caption);
+    void    prepareForUpload();
 
     void    listAlbums();
     void    uploadNextPhoto();
+    void    startTransfer();
     
 private:
     
@@ -78,12 +79,15 @@ Q_SIGNALS:
     void    signalResponseTokenReceived(const QMap<QString, QString>&);
     void    signalAuthenticationComplete(bool);
     void    signalListAlbumsDone(const QMap<QString, AlbumSimplified>&, const QStringList&, const QString&);
+
+    void    signalProgress(int);
+    void    signalMessage(const QString&, bool);
     void    signalDone();
     
 public Q_SLOTS:
     
+    void    slotCancel();
     void    slotNewAlbumRequest();
-    void    slotStartTransfer();
     void    slotListAlbumsDone(int errCode, const QString& errMsg, const QList<WSAlbum>& albumsList);
     void    slotAddPhotoDone(int errCode, const QString& errMsg);
     
