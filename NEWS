@@ -310,4 +310,12 @@ BUGFIXES:
 253 ==> 396952 - Cut and Paste Into Caption Has Incorrect Font Initially.
 254 ==> 091562 - Change order of pictures in the virtual album manually.
 255 ==> 098340 - Re-sort images in albums
-256 ==> 
+256 ==> 177355 - Feature request: export slideshow in lighttable.
+257 ==> 158520 - Wishlist sort thumbnails manually and rename images.
+258 ==> 191000 - Wish: Visual tool to change the sort order of photos.
+259 ==> 216802 - digiKam ability to sort album with "picture is before picture".
+260 ==> 230136 - It lacks the ability to sort photos manually.
+261 ==> 236249 - Wish: custom sort in album view.
+262 ==> 323559 - Wish: Albums like Playlists in Amarok.
+263 ==> 337002 - Manual image sort.
+264 ==> 
