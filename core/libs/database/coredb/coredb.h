@@ -758,6 +758,11 @@ public:
     void setItemAlbum(qlonglong imageID, qlonglong albumId);
 
     /**
+     * Updates the manualOrder field for the item.
+     */
+    void setItemManualOrder(qlonglong imageID, qlonglong value);
+
+    /**
      * Rename the item.
      * Note: we not use here ImageChangeset.
      */
@@ -805,15 +810,6 @@ public:
      */
     void changeImageInformation(qlonglong imageID, const QVariantList& infos,
                                 DatabaseFields::ImageInformation fields = DatabaseFields::ImageInformationAll);
-
-    /**
-     * Change the indicated fields of the images for the specified item.
-     * Fields not indicated by the fields parameter will not be touched.
-     * This method does nothing if the item does not yet have an entry in the Images table.
-     * The parameters are as for the method above.
-     */
-    void changeImages(qlonglong imageID, const QVariantList& infos,
-                      DatabaseFields::Images fields = DatabaseFields::ImagesAll);
 
     /**
      * Read image information. Parameters as above.

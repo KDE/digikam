@@ -298,6 +298,11 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
                 (*it)->fileSizeCached = false;
             }
 
+            if (changes & DatabaseFields::ManualOrder)
+            {
+                (*it)->manualOrderCached = false;
+            }
+
             if ((changes & DatabaseFields::Width) || (changes & DatabaseFields::Height))
             {
                 (*it)->imageSizeCached = false;

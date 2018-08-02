@@ -390,11 +390,6 @@
                 <statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID;</statement>
             </dbaction>
 
-            <dbaction name="changeImages" mode="transaction">
-                 <statement mode="query">INSERT OR IGNORE INTO Images ( id, :fieldList ) VALUES ( :id, :valueList );</statement>
-                 <statement mode="query">UPDATE Images SET :fieldValueList WHERE id=:id;</statement>
-            </dbaction>
-
             <dbaction name="changeImageInformation" mode="transaction">
                  <statement mode="query">INSERT OR IGNORE INTO ImageInformation ( imageid, :fieldList ) VALUES ( :id, :valueList );</statement>
                  <statement mode="query">UPDATE ImageInformation SET :fieldValueList WHERE imageid=:id;</statement>
@@ -1422,10 +1417,6 @@
 
             <dbaction name="getItemURLsInAlbumNoItemSorting">
                 <statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID;</statement>
-            </dbaction>
-
-            <dbaction name="changeImages">
-                <statement mode="query">INSERT INTO Images ( id, :fieldList ) VALUES ( :id, :valueList ) ON DUPLICATE KEY UPDATE :fieldValueList;</statement>
             </dbaction>
 
             <dbaction name="changeImageInformation">
