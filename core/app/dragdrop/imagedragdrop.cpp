@@ -191,12 +191,14 @@ static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool a
 
 static DropAction groupAction(const QDropEvent* const, QWidget* const view)
 {
-    int sort = ApplicationSettings::instance()->getImageSortOrder();
+    ImageCategorizedView* const imgView
+                  = dynamic_cast<ImageCategorizedView*>(view);
+    int sortOrder = ApplicationSettings::instance()->getImageSortOrder();
 
     QMenu popMenu(view);
     QAction* sortAction        = 0;
 
-    if (sort == ImageSortSettings::SortByManualOrder)
+    if (imgView && sortOrder == ImageSortSettings::SortByManualOrder)
     {
         sortAction             = addSortAction(&popMenu);
         popMenu.addSeparator();
