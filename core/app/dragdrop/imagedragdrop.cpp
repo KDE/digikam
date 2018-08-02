@@ -162,7 +162,8 @@ static DropAction copyOrMove(const QDropEvent* const e, QWidget* const view, boo
 static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool askForGrouping)
 {
     QMenu popMenu(view);
-    QAction* const tagAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")), i18n("Assign Tag to Dropped Items"));
+    QAction* const tagAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")),
+                                                 i18n("Assign Tag to Dropped Items"));
     QAction* groupAction     = 0;
 
     if (askForGrouping)
@@ -355,7 +356,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                 return false;
             }
 
-            for (QList<qlonglong>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
+            for (QList<qlonglong>::const_iterator it = imageIDs.constBegin() ; it != imageIDs.constEnd() ; ++it)
             {
                 ImageInfo info(*it);
 
@@ -434,7 +435,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                 }
                 else if (action == CopyAction)
                 {
-                    DIO::copy(extImages+intImages, palbum);
+                    DIO::copy(extImages + intImages, palbum);
                     return true;
                 }
             }
