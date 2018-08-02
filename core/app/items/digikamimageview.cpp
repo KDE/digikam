@@ -234,11 +234,11 @@ void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo
 
     foreach(ImageInfo info, infoList)
     {
-        if (!found && info.name() == pick.name())
+        if (!found && info.id() == pick.id())
         {
-            foreach(ImageInfo info, infos)
+            foreach(ImageInfo dropInfo, infos)
             {
-                info.setManualOrder(counter);
+                dropInfo.setManualOrder(counter);
                 counter += (order ? 1 : -1);
             }
 
@@ -247,7 +247,7 @@ void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo
         }
         else if (found && !infos.contains(info))
         {
-            if ((order  && info.manualOrder() > counter) ||
+            if (( order && info.manualOrder() > counter) ||
                 (!order && info.manualOrder() < counter))
             {
                 break;
