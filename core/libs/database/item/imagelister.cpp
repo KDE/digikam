@@ -542,7 +542,7 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
 
     if (limit > 0)
     {
-        sqlQuery += QString::fromUtf8(" ) LIMIT %1; ").arg(limit);
+        sqlQuery += QString::fromUtf8(" ) LIMIT %1;").arg(limit);
     }
     else
     {
@@ -568,11 +568,11 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
         return;
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Search result:" << values.size();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Search result:" << values.size() / 14;
 
     QSet<int> albumRoots = albumRootsToList();
     int       width, height;
-    double    lat,lon;
+    double    lat, lon;
 
     CoreDbAccess access;
 
@@ -691,7 +691,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
         return;
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Search result:" << values.size();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Search result:" << values.size() / 15;
 
     QSet<int> albumRoots = albumRootsToList();
 
@@ -747,6 +747,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
                 tagId    = values.at(0);
             }
         }
+
         record.extraValues << value;
         record.extraValues << property;
         record.extraValues << tagId;
