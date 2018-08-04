@@ -196,6 +196,7 @@ ImageInfoData::ImageInfoData()
     rating                 = -1;
     category               = DatabaseItem::UndefinedCategory;
     fileSize               = 0;
+    manualOrder            = 0;
 
     longitude              = 0;
     latitude               = 0;
@@ -213,12 +214,12 @@ ImageInfoData::ImageInfoData()
     pickLabelCached        = false;
     colorLabelCached       = false;
     ratingCached           = false;
-    manualOrderCached      = false;
     categoryCached         = false;
     formatCached           = false;
     creationDateCached     = false;
     modificationDateCached = false;
     fileSizeCached         = false;
+    manualOrderCached      = false;
     imageSizeCached        = false;
     tagIdsCached           = false;
     positionsCached        = false;
@@ -653,19 +654,21 @@ int ImageInfo::rating() const
     RETURN_IF_CACHED(rating)
 
     QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Rating);
+
     STORE_IN_CACHE_AND_RETURN(rating, values.first().toLongLong())
 }
 
-int ImageInfo::manualOrder() const
+qlonglong ImageInfo::manualOrder() const
 {
     if (!m_data)
     {
         return 0;
     }
 
-    // RETURN_IF_CACHED(manualOrder)
+    RETURN_IF_CACHED(manualOrder)
 
     QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::ManualOrder);
+
     STORE_IN_CACHE_AND_RETURN(manualOrder, values.first().toLongLong())
 }
 
@@ -677,7 +680,9 @@ QString ImageInfo::format() const
     }
 
     RETURN_IF_CACHED(format)
+
     QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Format);
+
     STORE_IN_CACHE_AND_RETURN(format, values.first().toString())
 }
 
@@ -689,7 +694,9 @@ DatabaseItem::Category ImageInfo::category() const
     }
 
     RETURN_IF_CACHED(category)
+
     QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::Category);
+
     STORE_IN_CACHE_AND_RETURN(category, (DatabaseItem::Category)values.first().toInt())
 }
 
@@ -701,7 +708,9 @@ QDateTime ImageInfo::dateTime() const
     }
 
     RETURN_IF_CACHED(creationDate)
+
     QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::CreationDate);
+
     STORE_IN_CACHE_AND_RETURN(creationDate, values.first().toDateTime())
 }
 
@@ -713,7 +722,9 @@ QDateTime ImageInfo::modDateTime() const
     }
 
     RETURN_IF_CACHED(modificationDate)
+
     QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::ModificationDate);
+
     STORE_IN_CACHE_AND_RETURN(modificationDate, values.first().toDateTime())
 }
 
@@ -725,6 +736,7 @@ QSize ImageInfo::dimensions() const
     }
 
     RETURN_IF_CACHED(imageSize)
+
     QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
     ImageInfoWriteLocker lock;
     m_data.constCastData()->imageSizeCached = true;
@@ -1662,18 +1674,18 @@ void ImageInfo::setRating(int value)
     m_data->ratingCached = true;
 }
 
-void ImageInfo::setManualOrder(int value)
+void ImageInfo::setManualOrder(qlonglong value)
 {
     if (!m_data)
     {
         return;
     }
 
-    CoreDbAccess().db()->changeImages(m_data->id, QVariantList() << value, DatabaseFields::ManualOrder);
+    CoreDbAccess().db()->setItemManualOrder(m_data->id, value);
 
-    // ImageInfoWriteLocker lock;
-    // m_data->manualOrder       = value;
-    // m_data->manualOrderCached = true;
+    ImageInfoWriteLocker lock;
+    m_data->manualOrder       = value;
+    m_data->manualOrderCached = true;
 }
 
 void ImageInfo::setOrientation(int value)

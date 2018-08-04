@@ -73,8 +73,8 @@ static QAction* addGroupAction(QMenu* const menu)
 
 static QAction* addSortAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Put dragged image behind dropped image",
-                                                                                "Put back"));
+    return menu->addAction( QIcon::fromTheme(QLatin1String("insert-image")), i18nc("@action:inmenu Insert dragged images before this image",
+                                                                                   "Insert Items here"));
 }
 
 static QAction* addGroupAndMoveAction(QMenu* const menu)
@@ -162,7 +162,8 @@ static DropAction copyOrMove(const QDropEvent* const e, QWidget* const view, boo
 static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool askForGrouping)
 {
     QMenu popMenu(view);
-    QAction* const tagAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")), i18n("Assign Tag to Dropped Items"));
+    QAction* const tagAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")),
+                                                 i18n("Assign Tag to Dropped Items"));
     QAction* groupAction     = 0;
 
     if (askForGrouping)
@@ -191,18 +192,20 @@ static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool a
 
 static DropAction groupAction(const QDropEvent* const, QWidget* const view)
 {
-    int sort = ApplicationSettings::instance()->getImageSortOrder();
+    ImageCategorizedView* const imgView
+                  = dynamic_cast<ImageCategorizedView*>(view);
+    int sortOrder = ApplicationSettings::instance()->getImageSortOrder();
 
     QMenu popMenu(view);
     QAction* sortAction        = 0;
-    QAction* const groupAction = addGroupAction(&popMenu);
 
-    if (sort == ImageSortSettings::SortByManualOrder)
+    if (imgView && sortOrder == ImageSortSettings::SortByManualOrder)
     {
-        popMenu.addSeparator();
         sortAction             = addSortAction(&popMenu);
+        popMenu.addSeparator();
     }
 
+    QAction* const groupAction = addGroupAction(&popMenu);
     popMenu.addSeparator();
     addCancelAction(&popMenu);
 
@@ -353,7 +356,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                 return false;
             }
 
-            for (QList<qlonglong>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
+            for (QList<qlonglong>::const_iterator it = imageIDs.constBegin() ; it != imageIDs.constEnd() ; ++it)
             {
                 ImageInfo info(*it);
 
@@ -432,7 +435,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                 }
                 else if (action == CopyAction)
                 {
-                    DIO::copy(extImages+intImages, palbum);
+                    DIO::copy(extImages + intImages, palbum);
                     return true;
                 }
             }

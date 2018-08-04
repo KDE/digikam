@@ -31,6 +31,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QPointer>
 #include <QMenu>
 #include <QIcon>
@@ -42,6 +43,7 @@
 #include "digikam_debug.h"
 #include "albummanager.h"
 #include "coredb.h"
+#include "coredboperationgroup.h"
 #include "advancedrenamedialog.h"
 #include "advancedrenameprocessdialog.h"
 #include "applicationsettings.h"
@@ -214,68 +216,51 @@ ImageInfoList DigikamImageView::selectedImageInfosCurrentFirst(bool grouping) co
 
 void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos)
 {
-    ImageInfoList infoList = this->allImageInfos(false);
-    bool flag              = false;
-    int order              = 1;
-
-    foreach(const ImageInfo& info, infoList)
+    if (pick.isNull() || infos.isEmpty())
     {
-        if (info.name() == infos[0].name())
-        {
-            break;
-        }
-
-        if (info.name() == pick.name())
-        {
-            flag = true;
-            break;
-        }
+        return;
     }
 
-    ImageInfo backInfo;
+    ImageInfoList infoList = allImageInfos(false);
+    qlonglong counter      = pick.manualOrder();
+    bool order             = (ApplicationSettings::instance()->
+                                getImageSorting() == Qt::AscendingOrder);
+    bool found             = false;
 
-    // flag==false means image in infos is in the front of pick before manually sort
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    if (!flag)
+    CoreDbOperationGroup group;
+    group.setMaximumTime(200);
+
+    foreach(ImageInfo info, infoList)
     {
-        foreach(ImageInfo info, infoList)
+        if (!found && info.id() == pick.id())
         {
-            if (info.name() == infos[0].name())
+            foreach(ImageInfo dropInfo, infos)
             {
-                backInfo = info;
-                continue;
-            }
-            else if (info.name() == pick.name())
-            {
-                info.setManualOrder(order++);
-                backInfo.setManualOrder(order++);
-                continue;
+                dropInfo.setManualOrder(counter);
+                counter += (order ? 1 : -1);
             }
 
-            info.setManualOrder(order++);
+            info.setManualOrder(counter);
+            found = true;
         }
-    }
-    else // flag==true means image in pick is in the front of infos before manually sort
-    {
-        int orderReserved = 0;
-
-        foreach(ImageInfo info, infoList)
+        else if (found && !infos.contains(info))
         {
-            if (info.name() == pick.name())
+            if (( order && info.manualOrder() > counter) ||
+                (!order && info.manualOrder() < counter))
             {
-                info.setManualOrder(order++);
-                orderReserved = order++;
-                continue;
-            }
-            else if (info.name() == infos[0].name())
-            {
-                info.setManualOrder(orderReserved);
-                continue;
+                break;
             }
 
-            info.setManualOrder(order++);
+            counter += (order ? 100 : -100);
+            info.setManualOrder(counter);
         }
+
+        group.allowLift();
     }
+
+    QApplication::restoreOverrideCursor();
 
     imageFilterModel()->invalidate();
  }

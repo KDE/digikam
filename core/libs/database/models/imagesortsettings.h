@@ -118,11 +118,11 @@ public:
         SortByCreationDate,
         SortByFileSize,
         SortByRating,
-        SortByModificationDate,
         SortByImageSize,            // pixel number
         SortByAspectRatio,          // width / height * 100000
         SortBySimilarity,
-        SortByManualOrder
+        SortByManualOrder,
+        SortByModificationDate      // currently not used in the icon view
     };
 
     SortRole                sortRole;
