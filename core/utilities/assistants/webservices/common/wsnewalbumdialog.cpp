@@ -215,8 +215,11 @@ void WSNewAlbumDialog::addToMainLayout(QWidget* const widget)
     d->mainLayout->addWidget(d->buttonBox);
 }
 
-void WSNewAlbumDialog::getAlbumProperties()
+void WSNewAlbumDialog::getBaseAlbumProperties()
 {
+    m_baseAlbum.title       = getTitleEdit()->text();
+    m_baseAlbum.location    = getLocEdit()->text();
+    m_baseAlbum.description = getDescEdit()->toPlainText();
 }
 
 QDialogButtonBox* WSNewAlbumDialog::getButtonBox() const

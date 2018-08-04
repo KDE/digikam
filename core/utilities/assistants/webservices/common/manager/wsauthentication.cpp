@@ -52,7 +52,7 @@
 
 namespace Digikam
 {
-
+    
 class WSAuthentication::Private
 {
 public:
@@ -75,6 +75,7 @@ public:
     
     WSNewAlbumDialog*       albumDlg;
     QString                 currentAlbumId;
+    WSAlbum                 baseAlbum;
     
     QStringList             tmpPath;
     QString                 tmpDir;
@@ -129,9 +130,9 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
         case WSSettings::WebService::IMGUR:
             //d->talker = new ImgurTalker(d->wizard);
             break;
-        case WSSettings::WebService::FACEBOOK:
-            d->talker   = new FbTalker(d->wizard);
+        case WSSettings::WebService::FACEBOOK: 
             d->albumDlg = new FbNewAlbumDlg(d->wizard, d->serviceName);
+            d->talker   = new FbTalker(d->wizard, d->albumDlg);
             connect(d->albumDlg, SIGNAL(signalCreateAlbum(const FbAlbum&)),
                     d->talker, SLOT(slotCreateAlbum(const FbAlbum&)));
             break;
@@ -399,7 +400,7 @@ void WSAuthentication::slotNewAlbumRequest()
     if (d->albumDlg->exec() == QDialog::Accepted)
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling New Album method";
-        d->albumDlg->getAlbumProperties();
+        d->talker->createNewAlbum();
     }
 }
 

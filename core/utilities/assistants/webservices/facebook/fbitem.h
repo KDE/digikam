@@ -82,6 +82,12 @@ public:
     {
         privacy = FB_FRIENDS;
     }
+    
+    FbAlbum(const WSAlbum& baseAlbum)
+      : WSAlbum(baseAlbum)
+    {
+        privacy = FB_FRIENDS;
+    }
 
     FbPrivacy privacy;
 };

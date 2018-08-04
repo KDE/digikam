@@ -293,6 +293,10 @@ void WSTalker::listAlbums(long long userID)
 {
 }
 
+void WSTalker::createNewAlbum()
+{
+}
+
 void WSTalker::addPhoto(const QString& imgPath, const QString& albumID, const QString& caption)
 {
 }

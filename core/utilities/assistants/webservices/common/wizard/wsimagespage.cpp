@@ -107,7 +107,7 @@ WSImagesPage::WSImagesPage(QWizard* const dialog, const QString& title)
     d->albumView            = new QTreeWidget(vboxAlbum);
     DHBox* const buttonBox  = new DHBox(vboxAlbum);
     d->newAlbumBtn          = new QPushButton(QString("New Album"), buttonBox);
-    d->newAlbumBtn->setDisabled(true); // Just for now, since creating album is encountering a strange error
+    //d->newAlbumBtn->setDisabled(true); // Just for now, since creating album is encountering a strange error
     d->reloadAlbumsBtn      = new QPushButton(QString("Reload"), buttonBox);
 
     connect(d->newAlbumBtn, SIGNAL(clicked()),

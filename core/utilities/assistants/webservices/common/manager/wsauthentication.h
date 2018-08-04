@@ -42,7 +42,7 @@
 
 namespace Digikam
 {
-    
+
 class WSAuthentication : public QObject
 {
     Q_OBJECT

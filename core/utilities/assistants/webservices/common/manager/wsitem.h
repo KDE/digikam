@@ -40,8 +40,22 @@ public:
     explicit WSAlbum()
       : parentID(QLatin1String("")),
         isRoot(true),
-        description(QLatin1String(""))
+        description(QLatin1String("")),
+        url(QLatin1String("")),
+        uploadable(true)
     {
+    }
+    
+    void setBaseAlbum(const WSAlbum& album)
+    {
+        id          = album.id;
+        parentID    = album.parentID;
+        isRoot      = album.isRoot;
+        title       = album.title;
+        description = album.description;
+        location    = album.location;
+        url         = album.url;
+        uploadable  = album.uploadable;
     }
     
     QString   id;

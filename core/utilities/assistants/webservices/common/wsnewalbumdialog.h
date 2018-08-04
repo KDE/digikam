@@ -70,11 +70,16 @@ public:
     QDialogButtonBox* getButtonBox()    const;
 
     void addToMainLayout(QWidget* const widget);
-    virtual void getAlbumProperties();
 
 private Q_SLOTS:
 
     void slotTextChanged(const QString& text);
+
+protected:
+    
+    void getBaseAlbumProperties();
+
+    WSAlbum m_baseAlbum;
     
 private:
 

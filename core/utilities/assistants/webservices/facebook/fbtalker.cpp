@@ -52,6 +52,7 @@
 
 #include "digikam_version.h"
 #include "fbmpform.h"
+#include "fbnewalbumdlg.h"
 #include "digikam_debug.h"
 #include "o0settingsstore.h"
 #include "wstoolutils.h"
@@ -76,22 +77,19 @@ class FbTalker::Private
 
 public:
 
-    explicit Private()
+    explicit Private(WSNewAlbumDialog* albumDlg)
+      : dialog(0),
+        parent(0),
+        apiURL(QLatin1String("https://graph.facebook.com/%1/%2")),
+        authUrl(QLatin1String("https://www.facebook.com/dialog/oauth")),
+        tokenUrl(QLatin1String("https://graph.facebook.com/oauth/access_token")),
+        apikey(QLatin1String("400589753481372")),
+        clientSecret(QLatin1String("5b0b5cd096e110cd4f4c72f517e2c544")),
+        loginInProgress(false),
+        albumDlg(dynamic_cast<FbNewAlbumDlg*>(albumDlg)),
+        o2(0),
+        scope(QLatin1String("user_photos,publish_pages,manage_pages")) //publish_to_groups,user_friends not necessary?
     {
-        apiURL          = QLatin1String("https://graph.facebook.com/%1/%2");
-        authUrl         = QLatin1String("https://www.facebook.com/dialog/oauth");
-        tokenUrl        = QLatin1String("https://graph.facebook.com/oauth/access_token");
-        
-        clientSecret    = QLatin1String("5b0b5cd096e110cd4f4c72f517e2c544");
-        apikey          = QLatin1String("400589753481372");
-        
-        scope           = QLatin1String("user_photos,publish_pages,manage_pages"); //publish_to_groups,user_friends not necessary?
-        
-        dialog          = 0;
-        parent          = 0;
-        loginInProgress = false;
-
-        o2              = 0;
     }
 
     QDialog*               dialog;
@@ -100,12 +98,13 @@ public:
     QString                apiURL;
     QString                authUrl;
     QString                tokenUrl;
-    QString                clientSecret;
     QString                apikey;
+    QString                clientSecret;
 
     bool                   loginInProgress;
 
     FbUser                 user;
+    FbNewAlbumDlg* const   albumDlg; // Pointer to FbNewAlbumDlg* const so that no modification can impact this pointer
     
     //Ported to O2 here
     O2*                    o2;
@@ -114,9 +113,9 @@ public:
 
 // -----------------------------------------------------------------------------
 
-FbTalker::FbTalker(QWidget* const parent)
+FbTalker::FbTalker(QWidget* const parent, WSNewAlbumDialog* albumDlg)
     : WSTalker(parent),
-      d(new Private)
+      d(new Private(albumDlg))
 {           
     d->parent  = parent;          
     
@@ -402,6 +401,13 @@ void FbTalker::createAlbum(const FbAlbum& album)
     
     m_state = WSTalker::CREATEALBUM;
     m_buffer.resize(0);
+}
+
+void FbTalker::createNewAlbum()
+{
+    FbAlbum album;
+    d->albumDlg->getAlbumProperties(album);
+    createAlbum(album);
 }
 
 void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QString& caption)

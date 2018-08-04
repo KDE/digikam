@@ -102,6 +102,7 @@ public:
     
     virtual void getLoggedInUser();
     virtual void listAlbums(long long userID = 0);
+    virtual void createNewAlbum();
     virtual void addPhoto(const QString& imgPath, const QString& albumID, const QString& caption);
     
 Q_SIGNALS:

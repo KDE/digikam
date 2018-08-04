@@ -72,19 +72,11 @@ FbNewAlbumDlg::~FbNewAlbumDlg()
 {
 }
 
-void FbNewAlbumDlg::getAlbumProperties()
-{
-    FbAlbum album;
-    getAlbumProperties(album);
-    emit signalCreateAlbum(album);
-}
-
 void FbNewAlbumDlg::getAlbumProperties(FbAlbum& album)
 {
-    album.title       = getTitleEdit()->text();
-    album.location    = getLocEdit()->text();
-    album.description = getDescEdit()->toPlainText();
-    album.privacy     = static_cast<Digikam::FbPrivacy>(m_privacyCoB->itemData(m_privacyCoB->currentIndex()).toInt());
+    getBaseAlbumProperties();
+    album.setBaseAlbum(m_baseAlbum);
+    album.privacy = static_cast<Digikam::FbPrivacy>(m_privacyCoB->itemData(m_privacyCoB->currentIndex()).toInt());
 }
 
 } // namespace Digikam

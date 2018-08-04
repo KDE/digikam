@@ -40,6 +40,7 @@
 // Local includes
 
 #include "fbitem.h"
+#include "wsnewalbumdialog.h"
 #include "wstalker.h"
 #include "wsitem.h"
 
@@ -59,7 +60,7 @@ class FbTalker : public WSTalker
 
 public:
 
-    explicit FbTalker(QWidget* const parent);
+    explicit FbTalker(QWidget* const parent, WSNewAlbumDialog* albumDlg=0);
     ~FbTalker();
     
     void    link();
@@ -75,6 +76,7 @@ public:
     
     void    listAlbums(long long userID = 0);
 
+    void    createNewAlbum();
     void    createAlbum(const FbAlbum& album);
 
     void    addPhoto(const QString& imgPath, const QString& albumID,
