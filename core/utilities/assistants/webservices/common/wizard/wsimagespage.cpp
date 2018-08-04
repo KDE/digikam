@@ -155,8 +155,15 @@ void WSImagesPage::initializePage()
 }
 
 bool WSImagesPage::validatePage()
-{  
-    setCurrentAlbumId(d->albumView->currentItem()->data(0, Qt::AccessibleDescriptionRole).toString());
+{
+    if(d->albumView->currentItem())
+    {
+        setCurrentAlbumId(d->albumView->currentItem()->data(0, Qt::AccessibleDescriptionRole).toString());
+    }
+    else
+    {
+        setCurrentAlbumId(QLatin1String(""));
+    }
 
     if (d->imageList->imageUrls().isEmpty())
         return false;
@@ -209,6 +216,12 @@ void WSImagesPage::slotListAlbumsDone(const QMap<QString, AlbumSimplified>& albu
                                       const QString& currentAlbumId)
 {
     d->albumView->clear();
+    
+    if(rootAlbums.isEmpty() || albumTree.isEmpty())
+    {
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "WARNING: albums list is empty";
+        return;
+    }
     
     if(currentAlbumId.isEmpty())
     {
