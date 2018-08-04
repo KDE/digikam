@@ -81,8 +81,8 @@ bool WSAuthenticationPage::slotUrlChanged(const QUrl& url)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "urlString: " << urlString;
     
     if(m_callbackUrl.length() > 0 &&
-        urlString.length() >= m_callbackUrl.length() &&
-        urlString.left(m_callbackUrl.length()) == m_callbackUrl)
+       urlString.length() >= m_callbackUrl.length() &&
+       urlString.left(m_callbackUrl.length()) == m_callbackUrl)
     {
         emit callbackCatched(urlString);
         return false;
@@ -120,8 +120,6 @@ WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
     WSAuthenticationPage* const wpage = new WSAuthenticationPage(this, new QWebEngineProfile, callbackUrl);
 #else
     WSAuthenticationPage* const wpage = new WSAuthenticationPage(this, callbackUrl);
-    setRenderHint(QPainter::TextAntialiasing);
-    wpage->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 #endif // #ifdef HAVE_QWEBENGINE
     
     setPage(wpage);

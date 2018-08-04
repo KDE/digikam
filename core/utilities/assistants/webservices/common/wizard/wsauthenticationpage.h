@@ -33,7 +33,6 @@
 #include <QString>
 #include <QUrl>
 #include <QMap>
-#include <QNetworkRequest>
 
 #ifdef HAVE_QWEBENGINE
 #   include <QWebEngineView>
@@ -44,6 +43,7 @@
 #   include <QWebView>
 #   include <QWebPage>
 #   include <QWebFrame>
+#   include <QNetworkRequest>
 #endif
 
 // Local includes
