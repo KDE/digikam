@@ -104,7 +104,7 @@ option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with KDE Mail Contacts suppor
 option(ENABLE_MEDIAPLAYER           "Build digiKam with Media Player support (default=OFF)"                              OFF)
 option(ENABLE_DBUS                  "Build digiKam with DBUS support (default=ON)"                                       ON)
 option(ENABLE_APPSTYLES             "Build digiKam with support for changing the widget application style (default=OFF)" OFF)
-option(ENABLE_QWEBENGINE            "Build digiKam with QWebEngine instead of QWebKit (default=OFF)"                     ON)
+option(ENABLE_QWEBENGINE            "Build digiKam with QWebEngine instead of QWebKit (default=OFF)"                     OFF)
 
 # Mysql support options (experimental):
 option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=ON)"                             ON)

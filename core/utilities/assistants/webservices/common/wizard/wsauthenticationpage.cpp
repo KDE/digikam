@@ -52,29 +52,42 @@ namespace Digikam
 {
 
 #ifdef HAVE_QWEBENGINE
-    
-
 WSAuthenticationPage::WSAuthenticationPage(QObject* const parent, QWebEngineProfile* profile, QString callbackUrl)
   : QWebEnginePage(profile, parent),
     m_callbackUrl(callbackUrl)
 {
 }
+#else
+WSAuthenticationPage::WSAuthenticationPage(QObject* const parent, QString callbackUrl)
+  : QWebPage(parent),
+    m_callbackUrl(callbackUrl)
+{
+    connect(mainFrame(), SIGNAL(urlChanged(const QUrl&)),
+            this, SLOT(slotUrlChanged(const QUrl&)));
+}
+#endif // #ifdef HAVE_QWEBENGINE
 
 WSAuthenticationPage::~WSAuthenticationPage()
 {
 }
 
-bool WSAuthenticationPage::acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool)
+#ifdef HAVE_QWEBENGINE
+bool WSAuthenticationPage::acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool isMainFrame)
+#else
+bool WSAuthenticationPage::slotUrlChanged(const QUrl& url)
+#endif // #ifdef HAVE_QWEBENGINE
 {
     QString urlString = url.toString();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "urlString: " << urlString;
+    
     if(m_callbackUrl.length() > 0 &&
-       urlString.length() >= m_callbackUrl.length() &&
-       urlString.left(m_callbackUrl.length()) == m_callbackUrl)
+        urlString.length() >= m_callbackUrl.length() &&
+        urlString.left(m_callbackUrl.length()) == m_callbackUrl)
     {
         emit callbackCatched(urlString);
         return false;
     }
-
+    
     return true;
 }
 
@@ -85,47 +98,36 @@ void WSAuthenticationPage::setCallbackUrl(const QString& url)
 
 // ----------------------------------------------------------------------------
 
+#ifdef HAVE_QWEBENGINE
 WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
                                                    WSAuthentication* const wsAuth,
                                                    QString callbackUrl)
     : QWebEngineView(parent),
       m_WSAuthentication(wsAuth)
-      
-#else // #ifdef HAVE_QWEBENGINE
-      
+#else
 WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent, 
                                                    WSAuthentication* const wsAuth,
                                                    QString callbackUrl)
     : QWebView(parent),
       m_WSAuthentication(wsAuth)
-      
 #endif // #ifdef HAVE_QWEBENGINE
       
-{
-    
-#ifdef HAVE_QWEBENGINE
-    
+{    
     adjustSize();
     setMinimumSize(QSize(850,800));
-    
+
+#ifdef HAVE_QWEBENGINE
     WSAuthenticationPage* const wpage = new WSAuthenticationPage(this, new QWebEngineProfile, callbackUrl);
-    setPage(wpage);
+#else
+    WSAuthenticationPage* const wpage = new WSAuthenticationPage(this, callbackUrl);
+    setRenderHint(QPainter::TextAntialiasing);
+    wpage->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+#endif // #ifdef HAVE_QWEBENGINE
     
+    setPage(wpage);
+
     connect(wpage, SIGNAL(callbackCatched(QString)),
             this, SLOT(slotCallbackCatched(QString)));
-
-#else
-    
-    /*
-     * (Trung) TODO: backport with QWebkit for setting page()
-     *               backport with QWebkit for signal callbackCatched(const QUrl&)
-     */ 
-    page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-    setRenderHint(QPainter::TextAntialiasing);
-    
-#endif
-    
-    
     connect(m_WSAuthentication, SIGNAL(signalOpenBrowser(const QUrl&)),
             this, SLOT(slotOpenBrowser(const QUrl&)));
     connect(m_WSAuthentication, SIGNAL(signalCloseBrowser()),
@@ -161,31 +163,21 @@ QMap<QString, QString> WSAuthenticationPageView::parseResponseToken(const QStrin
 
 void WSAuthenticationPageView::slotOpenBrowser(const QUrl& url)
 {
-#ifdef HAVE_QWEBENGINE
-    
     WSAuthenticationPage* page = dynamic_cast<WSAuthenticationPage*>(this->page());
+    
+#ifdef HAVE_QWEBENGINE
     page->setUrl(url);
-    show();
-
 #else
-
-    //(Trung) TODO: backport with QWebkit 
-
+    page->mainFrame()->setUrl(url);
 #endif
+
+    show();
 }
 
 //(Trung) Here we hide browser, instead of closing it completely
 void WSAuthenticationPageView::slotCloseBrowser()
 {
-#ifdef HAVE_QWEBENGINE
-
     close();
-
-#else
-
-    //(Trung) TODO: backport with QWebkit 
-
-#endif 
 }
 
 void WSAuthenticationPageView::slotCallbackCatched(const QString& callbackUrl)
@@ -197,14 +189,6 @@ void WSAuthenticationPageView::slotCallbackCatched(const QString& callbackUrl)
     
     QMap<QString, QString> rep = parseResponseToken(url.fragment());
     emit m_WSAuthentication->signalResponseTokenReceived(rep);
-
-#ifdef HAVE_QWEBENGINE
-    
-#else
-
-    //(Trung) TODO: backport with QWebkit 
-
-#endif
 }
 
 // ----------------------------------------------------------------------------

@@ -33,6 +33,7 @@
 #include <QString>
 #include <QUrl>
 #include <QMap>
+#include <QNetworkRequest>
 
 #ifdef HAVE_QWEBENGINE
 #   include <QWebEngineView>
@@ -41,6 +42,8 @@
 #   include <QWebEngineCookieStore>
 #else
 #   include <QWebView>
+#   include <QWebPage>
+#   include <QWebFrame>
 #endif
 
 // Local includes
@@ -55,17 +58,30 @@ namespace Digikam
     
 #ifdef HAVE_QWEBENGINE
 class WSAuthenticationPage : public QWebEnginePage
+#else
+class WSAuthenticationPage : public QWebPage
+#endif // #ifdef HAVE_QWEBENGINE
 {
     Q_OBJECT
 
 public:
 
+#ifdef HAVE_QWEBENGINE
     explicit WSAuthenticationPage(QObject* const parent, QWebEngineProfile* profile, QString callbackUrl);
+#else
+    explicit WSAuthenticationPage(QObject* const parent, QString callbackUrl);
+#endif // #ifdef HAVE_QWEBENGINE
+    
     virtual ~WSAuthenticationPage();
 
-    bool acceptNavigationRequest(const QUrl&, QWebEnginePage::NavigationType, bool);
-
     void setCallbackUrl(const QString& url);
+
+#ifdef HAVE_QWEBENGINE
+    bool acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool isMainFrame);
+#else
+private Q_SLOTS:
+    bool slotUrlChanged(const QUrl& url);
+#endif // #ifdef HAVE_QWEBENGINE
     
 Q_SIGNALS:
 
@@ -78,6 +94,7 @@ private:
 
 // -------------------------------------------------------------------
 
+#ifdef HAVE_QWEBENGINE
 class WSAuthenticationPageView : public QWebEngineView
 #else
 class WSAuthenticationPageView : public QWebView
@@ -103,7 +120,7 @@ Q_SIGNALS:
     void signalAuthenticationComplete(bool);
     
 private Q_SLOTS:
-    
+
     void slotCallbackCatched(const QString& callbackUrl); 
     void slotOpenBrowser(const QUrl& url);
     void slotCloseBrowser();
