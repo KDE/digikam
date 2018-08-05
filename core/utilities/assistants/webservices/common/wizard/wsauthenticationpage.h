@@ -146,6 +146,7 @@ public:
     
     void initializePage();
     bool validatePage();
+    void cleanupPage();
 
 public Q_SLOTS:
     

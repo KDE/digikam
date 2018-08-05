@@ -53,6 +53,7 @@ public:
     ~WSAuthentication();
     
     void    createTalker(WSSettings::WebService ws, const QString& serviceName=QString());
+    void    cancelTalker();
     QString webserviceName();
 
     void    authenticate();

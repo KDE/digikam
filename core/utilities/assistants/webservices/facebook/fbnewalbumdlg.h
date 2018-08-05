@@ -51,10 +51,6 @@ public:
     void getAlbumProperties();
     void getAlbumProperties(FbAlbum& album);
 
-Q_SIGNALS:
-
-    void signalCreateAlbum(const FbAlbum&);
-
 private:
 
     QComboBox* m_privacyCoB;

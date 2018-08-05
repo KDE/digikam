@@ -43,8 +43,6 @@
 namespace Digikam
 {
 
-static bool SettingsInitInContructor = false;
-
 bool operator< (const WSAlbum& first, const WSAlbum& second)
 {
     return first.title < second.title;
@@ -63,7 +61,7 @@ WSTalker::WSTalker(QWidget* const parent)
     m_userName(QString("")),
     m_wizard(0)
 {
-    WSWizard* m_wizard = dynamic_cast<WSWizard*>(parent);
+    m_wizard = dynamic_cast<WSWizard*>(parent);
     if(m_wizard != nullptr)
     {
         m_settings = m_wizard->oauthSettings();
@@ -71,13 +69,10 @@ WSTalker::WSTalker(QWidget* const parent)
         
         connect(this, SIGNAL(signalBusy(bool)),
                 m_wizard, SLOT(slotBusy(bool)));
-        
-        SettingsInitInContructor = false;
     }
     else
     {
         m_settings = WSToolUtils::getOauthSettings(parent);
-        SettingsInitInContructor = true;
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parent of talker is not an instance of WSWizard";
     }
 
@@ -96,15 +91,16 @@ WSTalker::~WSTalker()
     
     delete m_reply;
     delete m_netMngr;
-    
-    /* Verify if m_settings is initialized by wstalker constructor.
-     * Therefore, we have to delete it.
+
+    /* Verify if m_settings is initialized by wstalker constructor or it is already initialized in wizard.
+     * if not by wizard, we have to delete it.
      */
-    if(SettingsInitInContructor)
+    if(!m_wizard)
     {
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "delete m_settings";
         delete m_settings;
     }
-    
+
     delete m_store;
 }
 
@@ -267,18 +263,21 @@ bool WSTalker::loadUserAccount(const QString& userName)
     
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "expired moment : " << expire;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "current time : " << QDateTime::currentMSecsSinceEpoch() / 1000;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "access_token: " << accessToken;
     
     /* If access token is not expired yet, retrieve all tokens and return true so that we can link() 
      * directly to new account. 
      * Otherwise, return false so that user can relogin.
      */
+
     if(expire.toLongLong() > QDateTime::currentMSecsSinceEpoch() / 1000)
     {
         resetTalker(expire, accessToken, refreshToken);
         return true;
     }
-    
+
     return false;
+
 }
 
 void WSTalker::resetTalker(const QString& expire, const QString& accessToken, const QString& refreshToken)

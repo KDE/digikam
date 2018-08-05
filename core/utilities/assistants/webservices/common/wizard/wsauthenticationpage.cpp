@@ -195,13 +195,14 @@ class WSAuthenticationWizard::Private
 {
 public:
     
-    explicit Private(QWizard* const dialog)
+    explicit Private(QWizard* const dialog, const QString& callbackUrl)
       : wizard(0),
         iface(0),
         wsAuth(0),
         wsAuthView(0),
         vbox(0),
-        text(0)
+        text(0),
+        callbackUrl(callbackUrl)
     {
         wizard = dynamic_cast<WSWizard*>(dialog);
         
@@ -217,29 +218,29 @@ public:
     WSAuthenticationPageView*   wsAuthView;
     DVBox*                      vbox;
     QLabel*                     text;
+    QString                     callbackUrl;
 };
 
 WSAuthenticationWizard::WSAuthenticationWizard(QWizard* const dialog, const QString& title, 
                                                QString callbackUrl)
     : DWizardPage(dialog, title),
-      d(new Private(dialog))
+      d(new Private(dialog, callbackUrl))
 {
     /* Set this page as commit page so that on next page (authentication page), back button will be disabled.
      * However, "Next" button will become "Commit" button as a side effect. Therefore, set text to "Next" is a kind of cheating :).
      */
     setCommitPage(true);
     setButtonText(QWizard::CommitButton, QLatin1String("Next >"));
+
+    d->wsAuth  = d->wizard->wsAuth();
+    connect(d->wsAuth, SIGNAL(signalAuthenticationComplete(bool)),
+            this, SLOT(slotAuthenticationComplete(bool)));
     
     d->vbox    = new DVBox(this);
     
     d->text    = new QLabel(d->vbox);
     d->text->setWordWrap(true);
     d->text->setOpenExternalLinks(true);
-    
-    d->wsAuth       = d->wizard->wsAuth();
-    d->wsAuthView   = new WSAuthenticationPageView(d->vbox, d->wsAuth, callbackUrl);
-    connect(d->wsAuth, SIGNAL(signalAuthenticationComplete(bool)),
-            this, SLOT(slotAuthenticationComplete(bool)));
     
     d->vbox->setStretchFactor(d->text, 1);
     d->vbox->setStretchFactor(d->wsAuthView, 4);
@@ -259,6 +260,11 @@ bool WSAuthenticationWizard::isComplete() const
 
 void WSAuthenticationWizard::initializePage()
 {
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "initPage WSAuthenticationWizard";
+
+    // Init WebView of WSAuthenticationWizard
+    d->wsAuthView   = new WSAuthenticationPageView(d->vbox, d->wsAuth, d->callbackUrl);
+
     QMap<WSSettings::WebService, QString> wsNames = WSSettings::webServiceNames();
     WSSettings::WebService ws = d->wizard->settings()->webService;
     d->wsAuth->createTalker(ws, wsNames[ws]);
@@ -283,6 +289,15 @@ bool WSAuthenticationWizard::validatePage()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "validatePage";    
     return true;
+}
+
+void WSAuthenticationWizard::cleanupPage()
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "cleanupPage WSAuthenticationWizard";
+    d->wsAuth->cancelTalker();
+
+    delete d->wsAuthView;
+    d->wsAuthView = 0;
 }
 
 void WSAuthenticationWizard::slotAuthenticationComplete(bool isLinked)

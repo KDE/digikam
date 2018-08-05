@@ -85,8 +85,8 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     /* Set this page as commit page so that on next page (authentication page), back button will be disabled.
      * However, "Next" button will become "Commit" button as a side effect. Therefore, set text to "Next" is a kind of cheating :).
      */
-    setCommitPage(true);
-    setButtonText(QWizard::CommitButton, QLatin1String("Next >"));
+//     setCommitPage(true);
+//     setButtonText(QWizard::CommitButton, QLatin1String("Next >"));
     
     DVBox* const vbox  = new DVBox(this);
     QLabel* const desc = new QLabel(vbox);
@@ -101,8 +101,9 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
                        "according to your remote Web service capabilities.</p>"
                        "</qt>"));
 
-    // --------------------
-    // ComboBox for image selection method
+    /* --------------------
+     * ComboBox for image selection method
+     */
 
     d->hbox                     = new DHBox(vbox);
     QLabel* const getImageLabel = new QLabel(i18n("&Choose operation:"), d->hbox);
@@ -232,8 +233,6 @@ bool WSIntroPage::validatePage()
     d->wizard->settings()->selMode      = (WSSettings::Selection)d->imageGetOption->currentIndex();
     d->wizard->settings()->webService   = (WSSettings::WebService)d->wsOption->currentIndex();
     d->wizard->settings()->userName     = d->accountOption->currentText();
-    
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << d->wizard->settings()->userName;
 
     return true;
 }

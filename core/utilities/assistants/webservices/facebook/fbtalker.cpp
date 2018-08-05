@@ -150,11 +150,6 @@ FbTalker::FbTalker(QWidget* const parent, WSNewAlbumDialog* albumDlg)
 
 FbTalker::~FbTalker()
 {
-    //removeAllAccounts();
-    
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "call destructor";
-    saveUserAccount(d->user.name, d->user.id, d->o2->expires(), d->o2->token(), d->o2->refreshToken());
-    
     delete d;
 }
 
@@ -179,11 +174,6 @@ void FbTalker::slotResponseTokenReceived(const QMap<QString, QString>& rep)
     d->o2->onVerificationReceived(rep);
 }
 
-void FbTalker::slotCreateAlbum(const FbAlbum& album)
-{
-    createAlbum(album);
-}
-
 bool FbTalker::linked() const
 {
     return d->o2->linked();
@@ -205,7 +195,6 @@ FbUser FbTalker::getUser() const
 void FbTalker::authenticate()
 {
     d->loginInProgress = true;
-
     emit signalLoginProgress(2, 9, i18n("Validate previous session..."));
     
     WSTalker::authenticate();
@@ -574,7 +563,10 @@ void FbTalker::authenticationDone(int errCode, const QString &errMsg)
         d->user.clear();
     }
 
+    saveUserAccount(d->user.name, d->user.id, d->o2->expires(), d->o2->token(), d->o2->refreshToken());
+
     emit signalBusy(false);
+
     emit signalLoginDone(errCode, errMsg);
     d->loginInProgress = false;
 }
@@ -623,17 +615,15 @@ void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
     QJsonObject jsonObject = doc.object();
     d->user.id             = jsonObject[QString::fromLatin1("id")].toString();
     
-    if (!(QString::compare(jsonObject[QLatin1String("id")].toString(),
-                            QLatin1String(""), 
-                            Qt::CaseInsensitive) == 0))
+    if (!(QString::compare(jsonObject[QLatin1String("id")].toString(), QLatin1String(""), Qt::CaseInsensitive) == 0))
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "ID found in response of GetLoggedInUser";
     }
 
     d->user.name       = jsonObject[QString::fromLatin1("name")].toString();
-    d->user.profileURL = jsonObject[QString::fromLatin1("link")].toString();
+    m_userName         = d->user.name;
 
-    m_userName = d->user.name;
+    d->user.profileURL = jsonObject[QString::fromLatin1("link")].toString();
     
     authenticationDone(0, QString::fromLatin1(""));
 }

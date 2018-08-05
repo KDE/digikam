@@ -118,7 +118,7 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
     d->ws = ws;
     d->serviceName = serviceName;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "create " << serviceName << "talker";
-    
+
     switch(ws)
     {
         case WSSettings::WebService::FLICKR:
@@ -133,8 +133,6 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
         case WSSettings::WebService::FACEBOOK: 
             d->albumDlg = new FbNewAlbumDlg(d->wizard, d->serviceName);
             d->talker   = new FbTalker(d->wizard, d->albumDlg);
-            connect(d->albumDlg, SIGNAL(signalCreateAlbum(const FbAlbum&)),
-                    d->talker, SLOT(slotCreateAlbum(const FbAlbum&)));
             break;
         case WSSettings::WebService::SMUGMUG:
             //d->talker = new SmugTalker(d->iface, d->wizard);
@@ -146,7 +144,7 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
             //d->talker = new GPTalker(d->wizard);
             break;
     }
-    
+
     connect(this, SIGNAL(signalResponseTokenReceived(const QMap<QString, QString>&)),
             d->talker, SLOT(slotResponseTokenReceived(const QMap<QString, QString>&)));
     connect(d->talker, SIGNAL(signalOpenBrowser(const QUrl&)),
@@ -160,6 +158,14 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
             this, SLOT(slotListAlbumsDone(int, const QString&, const QList <WSAlbum>&)));
     connect(d->talker, SIGNAL(signalAddPhotoDone(int,QString)),
             this, SLOT(slotAddPhotoDone(int,QString)));
+}
+
+void WSAuthentication::cancelTalker()
+{
+    if(d->talker)
+    {
+        d->talker->cancel();
+    }
 }
 
 QString WSAuthentication::webserviceName()

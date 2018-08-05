@@ -106,7 +106,6 @@ private:
 private Q_SLOTS:
     
     void    slotResponseTokenReceived(const QMap<QString, QString>& rep);
-    void    slotCreateAlbum(const FbAlbum& album);
 
 private:
 
