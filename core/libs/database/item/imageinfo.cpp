@@ -987,12 +987,29 @@ qlonglong ImageInfo::groupImageId() const
 
 void ImageInfoList::loadGroupImageIds() const
 {
-    QVector<QList<qlonglong> > allGroupIds = CoreDbAccess().db()->getImagesRelatedFrom(toImageIdList(), DatabaseRelation::Grouped);
+    ImageInfoList infoList;
+
+    foreach(const ImageInfo& info, *this)
+    {
+        if (info.m_data && !info.m_data->groupImageCached)
+        {
+            infoList << info;
+        }
+    }
+
+    if (infoList.isEmpty())
+    {
+        return;
+    }
+
+    QVector<QList<qlonglong> > allGroupIds = CoreDbAccess().db()->getImagesRelatedFrom(infoList.toImageIdList(),
+                                                                                       DatabaseRelation::Grouped);
+
     ImageInfoWriteLocker lock;
 
-    for (int i = 0 ; i < size() ; i++)
+    for (int i = 0 ; i < infoList.size() ; ++i)
     {
-        const ImageInfo& info            = at(i);
+        const ImageInfo& info            = infoList.at(i);
         const QList<qlonglong>& groupIds = allGroupIds.at(i);
 
         if (!info.m_data)
