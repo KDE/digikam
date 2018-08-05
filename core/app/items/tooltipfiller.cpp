@@ -501,9 +501,6 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             QStringList tagPaths = AlbumManager::instance()->tagPaths(info.tagIds(), false);
             tagPaths.sort();
 
-            QStringList tagNames = AlbumManager::instance()->tagNames(info.tagIds());
-            tagNames.sort();
-
             QString tags(i18n("Tags:"));
 
             if (tagPaths.isEmpty())
@@ -515,14 +512,9 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 QString title = tags;
                 QString tagText;
 
-                for (int i = 0; i<tagPaths.size(); ++i)
+                for (int i = 0 ; i < tagPaths.size() ; ++i)
                 {
                     tagText = tagPaths.at(i);
-
-                    if (tagText.size() > cnt.maxStringLength)
-                    {
-                        tagText = tagNames.at(i);
-                    }
 
                     if (tagText.size() > cnt.maxStringLength)
                     {
@@ -547,7 +539,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
             if (rating > RatingMin && rating <= RatingMax)
             {
-                for (int i=0; i<rating; ++i)
+                for (int i = 0 ; i < rating ; ++i)
                 {
                     str += QChar(0x2730);
                     str += QLatin1Char(' ');
@@ -720,7 +712,7 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
         {
             QHash<QString, QVariant>::const_iterator it;
 
-            for (it = params.find(key); it != params.end() && it.key() == key; ++it)
+            for (it = params.find(key) ; it != params.end() && it.key() == key ; ++it)
             {
                 if (it.key().isEmpty() || !it.value().isValid())
                 {
