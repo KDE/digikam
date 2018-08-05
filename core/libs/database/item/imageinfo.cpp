@@ -767,13 +767,28 @@ QList<int> ImageInfo::tagIds() const
 
 void ImageInfoList::loadTagIds() const
 {
-    QVector<QList<int> > allTagIds = CoreDbAccess().db()->getItemsTagIDs(toImageIdList());
+    ImageInfoList infoList;
+
+    foreach(const ImageInfo& info, *this)
+    {
+        if (info.m_data && !info.m_data->tagIdsCached)
+        {
+            infoList << info;
+        }
+    }
+
+    if (infoList.isEmpty())
+    {
+        return;
+    }
+
+    QVector<QList<int> > allTagIds = CoreDbAccess().db()->getItemsTagIDs(infoList.toImageIdList());
 
     ImageInfoWriteLocker lock;
 
-    for (int i = 0 ; i < size() ; i++)
+    for (int i = 0 ; i < infoList.size() ; ++i)
     {
-        const ImageInfo& info = at(i);
+        const ImageInfo& info = infoList.at(i);
         const QList<int>& ids = allTagIds.at(i);
 
         if (!info.m_data)
