@@ -27,7 +27,7 @@ add_subdirectory(rawengine)
 add_subdirectory(presentation)
 add_subdirectory(mediaserver)
 add_subdirectory(webservices)
-
+add_subdirectory(dplugins)
 
 if(ENABLE_MEDIAPLAYER)
     add_subdirectory(video)
