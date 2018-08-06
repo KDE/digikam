@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : manager to load external plugins at run-time
+ * Description : manager to load external plugins at run-time: private container
  *
  * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -22,45 +22,37 @@
  * ============================================================ */
 
 #include "dpluginloader.h"
-#include "dpluginloader_p.h"
 
 // Qt includes
 
-#include <QStringList>
-
-// Local includes
-
-#include "digikam_config.h"
-#include "digikam_debug.h"
+#include <QDir>
+#include <QPluginLoader>
 
 namespace Digikam
 {
 
-DPluginLoader::DPluginLoader(QObject* const parent)
-    : QObject(parent),
-      d(new Private(this))
+class Q_DECL_HIDDEN DPluginLoader::Private
 {
-    d->loadPlugins();
-}
+public:
 
-DPluginLoader::~DPluginLoader()
-{
-    delete d;
-}
+    explicit Private(DPluginLoader* const q);
+    ~Private();
 
-QList<DPlugin*> DPluginLoader::allPlugins() const
-{
-    return d->allPlugins;
-}
+    QString     pluginSystemPath();
+    QString     pluginLocalPath();
+    QString     pluginPath(const QString& relativePath);
+    QStringList pluginEntriesList(const QString& relativePath, QDir::Filters filters);
 
-void DPluginLoader::appendPluginToBlackList(const QString& filename)
-{
-    d->blacklist << QLatin1String(DIGIKAM_SHARED_LIBRARY_PREFIX) + filename;
-}
+    bool        appendPlugin(QObject* const obj, QPluginLoader* const loader, QList<DPlugin*>& list);
+    void        loadPlugins();
 
-void DPluginLoader::appendPluginToWhiteList(const QString& filename)
-{
-    d->whitelist << QLatin1String(DIGIKAM_SHARED_LIBRARY_PREFIX) + filename;
-}
+public:
+
+    bool            pluginsLoaded;
+    QList<DPlugin*> allPlugins;
+    DPluginLoader*  parent;
+    QStringList     blacklist;
+    QStringList     whitelist;
+};
 
 } // namepace Digikam

@@ -12,6 +12,7 @@ set(libdpluginsinterface_SRCS
     dplugin.cpp
     dpluginauthor.cpp
     dpluginloader.cpp
+    dpluginloader_p.cpp
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
