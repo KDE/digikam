@@ -55,21 +55,26 @@ public:
         InvalidCat       = -1,
         GenericExportCat = 0,    /// Generic export plugins.
         GenericImportCat,        /// Generic import plugins.
-        GenericToolsCat          /// Generic processing plugins.
+        GenericToolCat           /// Generic processing plugins.
 
         // TODO: extend categories for Editor and BQM.
     };
 
 public:
 
-    explicit DPluginAction();
+    explicit DPluginAction(QObject* const parent = 0);
     ~DPluginAction();
+
+    void setActionName(const QString& name);
+    QString actionName() const;
 
     void setActionType(ActionType type);
     ActionType actionType() const;
 
     void setActionCategory(ActionCategory cat);
     ActionCategory actionCategory() const;
+
+    QString asString() const;
 };
 
 } // namespace Digikam

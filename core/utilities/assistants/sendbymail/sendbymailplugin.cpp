@@ -25,6 +25,7 @@
 // Qt includes
 
 #include <QPointer>
+#include <QIcon>
 
 // KDE includes
 
@@ -70,11 +71,22 @@ QList<DPluginAuthor> SendByMailPlugin::authors() const
                              QLatin1String("(C) 2004-2018"));
 }
 
-void SendByMailPlugin::init()
+void SendByMailPlugin::setup()
 {
+    DPluginAction* const ac = new DPluginAction(this);
+    ac->setIcon(QIcon::fromTheme(QLatin1String("mail-send")));
+    ac->setText(i18nc("@action", "Send by Mail..."));
+    ac->setActionName(QLatin1String("sendbymail"));
+    ac->setActionType(DPluginAction::GenericType);
+    ac->setActionCategory(DPluginAction::GenericToolCat);
+
+    connect(ac, SIGNAL(triggered(bool)),
+            this, SLOT(slotSendByMail()));
+
+    addAction(ac);
 }
 
-void SendByMailPlugin::slotRun()
+void SendByMailPlugin::slotSendByMail()
 {
     QPointer<MailWizard> wzrd = new MailWizard(0, infoIface());
     wzrd->exec();

@@ -47,10 +47,12 @@ int main(int argc, char* argv[])
     parser.setApplicationDescription(QLatin1String("Test application to run digiKam plugins as stand alone"));
 
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("list"), QLatin1String("List all available plugins")));
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("n"),    QLatin1String("Id name of plugin to use"), QLatin1String("String ID")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("n"),    QLatin1String("Id name of plugin to use"),  QLatin1String("String ID")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("a"),    QLatin1String("Plugin action name to run"), QLatin1String("Action Name")));
     parser.process(app);
 
     DPluginLoader dpl;
+    bool found = false;
 
     if (parser.isSet(QString::fromLatin1("list")))
     {
@@ -64,39 +66,66 @@ int main(int argc, char* argv[])
 
             QString authors;
 
-            foreach (const DPluginAuthor& a, p->authors())
+            foreach (const DPluginAuthor& au, p->authors())
             {
-                authors.append(a.asString());
+                authors.append(au.asString());
                 authors.append(QLatin1String(" ; "));
             }
 
             qDebug() << "Authors:" << authors;
+
+            p->setup();
+            QString actions;
+
+            foreach (DPluginAction* const ac, p->actions())
+            {
+                actions.append(ac->asString());
+                actions.append(QLatin1String(" ; "));
+            }
+
+            qDebug() << "Actions:" << actions;
         }
 
         return 0;
     }
-    else if (parser.isSet(QString::fromLatin1("n")) )
+    else if (parser.isSet(QString::fromLatin1("n")))
     {
         const QString name = parser.value(QString::fromLatin1("n"));
+        QString action;
+
+        if (parser.isSet(QString::fromLatin1("a")))
+        {
+            action = parser.value(QString::fromLatin1("a"));
+        }
+        else
+        {
+            qDebug() << "Plugin action name to run is missing...";
+            qDebug() << "Use --help option for details.";
+            return -1;
+        }
 
         MetaEngine::initializeExiv2();
-
-        bool found = false;
 
         foreach (DPlugin* const p, dpl.allPlugins())
         {
             if (p->id() == name)
             {
-                p->init();
-                p->slotRun();
                 found = true;
+                p->setup();
+                DPluginAction* const ac = p->findActionByName(action);
+
+                if (ac)
+                {
+                    ac->trigger();
+                    app.exec();
+                }
+                else
+                {
+                    qDebug() << action << "action not found in plugin!";
+                }
+
                 break;
             }
-        }
-
-        if (!found)
-        {
-            qDebug() << name << "plugin not found!";
         }
 
         MetaEngine::cleanupExiv2();
@@ -105,6 +134,13 @@ int main(int argc, char* argv[])
     {
         qDebug() << "Command line option not recognized...";
         qDebug() << "Use --help option for details.";
+        return -1;
+    }
+
+    if (!found)
+    {
+        qDebug() << "Plugin not found!";
+        return -1;
     }
 
     return 0;

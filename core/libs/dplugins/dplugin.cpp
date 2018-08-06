@@ -39,7 +39,8 @@ public:
     {
     }
 
-    DInfoInterface* iface;
+    DInfoInterface*       iface;
+    QList<DPluginAction*> actions;
 };
 
 DPlugin::DPlugin(QObject* const parent)
@@ -66,6 +67,29 @@ DInfoInterface* DPlugin::infoIface() const
 QIcon DPlugin::icon() const
 {
     return QIcon();
+}
+
+QList<DPluginAction*> DPlugin::actions() const
+{
+    return d->actions;
+}
+
+DPluginAction* DPlugin::findActionByName(const QString& name) const
+{
+    foreach (DPluginAction* const ac, actions())
+    {
+        if (ac->actionName() == name)
+        {
+            return ac;
+        }
+    }
+
+    return 0;
+}
+
+void DPlugin::addAction(DPluginAction* const ac)
+{
+    d->actions.append(ac);
 }
 
 QString DPlugin::aboutDataText() const

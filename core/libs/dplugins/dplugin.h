@@ -36,6 +36,7 @@
 
 #include "dinfointerface.h"
 #include "dpluginauthor.h"
+#include "dpluginaction.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -63,9 +64,19 @@ public:
     void setInfoIface(DInfoInterface* const iface);
     DInfoInterface* infoIface() const;
 
-    /** Plugin factory method to create all internal data.
+    /**
+     * Plugin factory method to create all internal actions.
+     * To retrieve all plugin actions, use actions() public methods.
+     * To register a new plugin action in this method, use addAction() protected method.
      */
-    virtual void init() = 0;
+    virtual void setup() = 0;
+
+    /**
+     * Return all plugin actions registered in setup() method with addAction().
+     */
+    QList<DPluginAction*> actions() const;
+
+    DPluginAction* findActionByName(const QString& name) const;
 
     /**
      * @brief Returns the user-visible name of the plugin.
@@ -106,9 +117,9 @@ public:
      */
     virtual QString aboutDataText() const;
 
-public Q_SLOTS:
+protected:
 
-    virtual void slotRun() = 0;
+    void addAction(DPluginAction* const ac);
 
 private:
 

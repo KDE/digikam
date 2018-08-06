@@ -30,12 +30,23 @@
 namespace Digikam
 {
 
-DPluginAction::DPluginAction()
+DPluginAction::DPluginAction(QObject* const parent)
+    : QAction(parent)
 {
 }
 
 DPluginAction::~DPluginAction()
 {
+}
+
+void DPluginAction::setActionName(const QString& name)
+{
+    setProperty("DPluginActionName", name);
+}
+
+QString DPluginAction::actionName() const
+{
+    return (property("DPluginActionName").toString());
 }
 
 void DPluginAction::setActionType(ActionType type)
@@ -66,6 +77,11 @@ DPluginAction::ActionCategory DPluginAction::actionCategory() const
     if (b) return (ActionCategory)v;
 
     return InvalidCat;
+}
+
+QString DPluginAction::asString() const
+{
+    return QString::fromUtf8("%1: \"%2\"").arg(actionName()).arg(text());
 }
 
 } // namespace Digikam

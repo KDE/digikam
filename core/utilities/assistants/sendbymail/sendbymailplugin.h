@@ -46,11 +46,11 @@ public:
     QString description() const          override;
     QList<DPluginAuthor> authors() const override;
 
-    void init();
+    void setup();
 
-public Q_SLOT:
+private Q_SLOTS:
 
-    void slotRun();
+    void slotSendByMail();
 };
 
 } // namespace Digikam
