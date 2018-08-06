@@ -10,6 +10,7 @@ endif (POLICY CMP0063)
 
 set(libdpluginsinterface_SRCS
     dplugin.cpp
+    dpluginauthor.cpp
     dpluginloader.cpp
 )
 

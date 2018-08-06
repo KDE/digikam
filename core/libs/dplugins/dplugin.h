@@ -32,45 +32,14 @@
 #include <QtPlugin>
 #include <QObject>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "dinfointerface.h"
+#include "dpluginauthor.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
-
-class DIGIKAM_EXPORT DPluginAuthor
-{
-public:
-
-    explicit DPluginAuthor(const QString& n,
-                           const QString& e,
-                           const QString& y,
-                           const QString& r = i18n("Developer"))
-      : name(n),
-        email(e),
-        years(y),
-        roles(r)
-    {
-    }
-
-    QString asString() const
-    {
-        return (QString::fromLatin1("%1 <%2> %3 [%4]").arg(name).arg(email).arg(years).arg(roles));
-    }
-
-public:
-
-    QString name;    // Author name and surname
-    QString email;   // Email anti-spammed
-    QString years;   // Copyrights years
-    QString roles;   // Author roles, as "Developer", "Designer", "Translator", etc.
-};
 
 /**
  * A digiKam external plugin template class.
