@@ -223,7 +223,7 @@ void BackendGeonamesRG::slotFinished(QNetworkReply* reply)
     if (reply->error() != QNetworkReply::NoError)
     {
         d->errorMessage = reply->errorString();
-        emit(signalRGReady(d->jobs.first().request));
+        emit signalRGReady(d->jobs.first().request);
         d->jobs.clear();
         return;
     }
@@ -254,7 +254,7 @@ void BackendGeonamesRG::slotFinished(QNetworkReply* reply)
                 d->jobs[i].request[j].rgData =  resultMap;
             }
 
-            emit(signalRGReady(d->jobs[i].request));
+            emit signalRGReady(d->jobs[i].request);
 
             d->jobs.removeAt(i);
 

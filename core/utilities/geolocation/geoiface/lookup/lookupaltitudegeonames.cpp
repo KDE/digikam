@@ -175,7 +175,7 @@ void LookupAltitudeGeonames::startNextRequest()
     if (d->currentMergedRequestIndex >= d->mergedRequests.count())
     {
         d->status = StatusSuccess;
-        emit(signalDone());
+        emit signalDone();
         return;
     }
 
@@ -219,7 +219,7 @@ void LookupAltitudeGeonames::slotFinished(QNetworkReply* reply)
 
         // after an error, we abort:
         reply->deleteLater();
-        emit(signalDone());
+        emit signalDone();
         return;
     }
 
@@ -261,7 +261,7 @@ void LookupAltitudeGeonames::slotFinished(QNetworkReply* reply)
         readyRequests << currentRequestIndexes;
     }
 
-    emit(signalRequestsReady(readyRequests));
+    emit signalRequestsReady(readyRequests);
 
     reply->deleteLater();
 
@@ -287,7 +287,7 @@ void LookupAltitudeGeonames::cancel()
 
     d->status = StatusCanceled;
 
-    emit(signalDone());
+    emit signalDone();
 }
 
 } // namespace Digikam

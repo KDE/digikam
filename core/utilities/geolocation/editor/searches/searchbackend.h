@@ -61,7 +61,7 @@ public:
         GeoCoordinates::Pair        boundingBox;
         QString                     internalId;
     };
-    
+
 public:
 
     explicit SearchBackend(QObject* const parent);
