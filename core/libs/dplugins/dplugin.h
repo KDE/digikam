@@ -94,7 +94,7 @@ public:
     void setInfoIface(DInfoInterface* const iface);
     DInfoInterface* infoIface() const;
 
-    /** Plugin factory method to create a new internal tool instance.
+    /** Plugin factory method to create all internal data.
      */
     virtual void init() = 0;
 
