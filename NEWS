@@ -319,4 +319,5 @@ BUGFIXES:
 262 ==> 323559 - Wish: Albums like Playlists in Amarok.
 263 ==> 337002 - Manual image sort.
 264 ==> 397167 - Some tags are not displayed on the preview.
-265 ==> 
+265 ==> 397207 - Too many open files, when reverse geocoding many images.
+266 ==> 

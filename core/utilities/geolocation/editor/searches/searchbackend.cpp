@@ -46,25 +46,28 @@ class SearchBackend::Private
 public:
 
     explicit Private()
-      : results(),
-        netReply(0),
-        runningBackend(),
-        searchData(),
-        errorMessage()
+      : netReply(0),
+        mngr(0)
     {
     }
 
     SearchBackend::SearchResult::List results;
-    QNetworkReply*                    netReply;
     QString                           runningBackend;
     QByteArray                        searchData;
     QString                           errorMessage;
+
+    QNetworkReply*                    netReply;
+    QNetworkAccessManager*            mngr;
 };
 
 SearchBackend::SearchBackend(QObject* const parent)
     : QObject(parent),
       d(new Private())
 {
+    d->mngr = new QNetworkAccessManager(this);
+
+    connect(d->mngr, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(slotFinished(QNetworkReply*)));
 }
 
 SearchBackend::~SearchBackend()
@@ -77,11 +80,6 @@ bool SearchBackend::search(const QString& backendName, const QString& searchTerm
     d->searchData.clear();
     d->errorMessage.clear();
     d->results.clear();
-
-    QNetworkAccessManager* const mngr = new QNetworkAccessManager(this);
-
-    connect(mngr, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(slotFinished(QNetworkReply*)));
 
     if (backendName == QLatin1String("osm"))
     {
@@ -97,7 +95,7 @@ bool SearchBackend::search(const QString& backendName, const QString& searchTerm
         QNetworkRequest netRequest(netUrl);
         netRequest.setRawHeader("User-Agent", getUserAgentName().toLatin1());
 
-        d->netReply = mngr->get(netRequest);
+        d->netReply = d->mngr->get(netRequest);
 
         return true;
     }
@@ -119,7 +117,7 @@ bool SearchBackend::search(const QString& backendName, const QString& searchTerm
         QNetworkRequest netRequest(netUrl);
         netRequest.setRawHeader("User-Agent", getUserAgentName().toLatin1());
 
-        d->netReply = mngr->get(netRequest);
+        d->netReply = d->mngr->get(netRequest);
 
         return true;
     }
@@ -137,7 +135,7 @@ void SearchBackend::slotFinished(QNetworkReply* reply)
     if (reply->error() != QNetworkReply::NoError)
     {
         d->errorMessage = reply->errorString();
-        emit(signalSearchCompleted());
+        emit signalSearchCompleted();
         reply->deleteLater();
         return;
     }
@@ -214,7 +212,7 @@ void SearchBackend::slotFinished(QNetworkReply* reply)
         QDomElement docElement = doc.documentElement(); // error-handling
         qCDebug(DIGIKAM_GENERAL_LOG)<<docElement.toElement().tagName();
 
-        for (QDomNode resultNode = docElement.firstChild(); !resultNode.isNull(); resultNode = resultNode.nextSibling())
+        for (QDomNode resultNode = docElement.firstChild() ; !resultNode.isNull() ; resultNode = resultNode.nextSibling())
         {
             QDomElement resultElement = resultNode.toElement();
             qCDebug(DIGIKAM_GENERAL_LOG) << resultElement.tagName();
@@ -261,7 +259,7 @@ void SearchBackend::slotFinished(QNetworkReply* reply)
                 }
             }
 
-            if (latString.isEmpty()||lonString.isEmpty()||displayName.isEmpty())
+            if (latString.isEmpty() || lonString.isEmpty() || displayName.isEmpty())
             {
                 continue;
             }
@@ -295,7 +293,7 @@ void SearchBackend::slotFinished(QNetworkReply* reply)
         }
     }
 
-    emit(signalSearchCompleted());
+    emit signalSearchCompleted();
 
     reply->deleteLater();
 }
