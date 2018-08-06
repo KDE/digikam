@@ -44,10 +44,7 @@ class OsmInternalJobs
 public:
 
     OsmInternalJobs()
-      : language(),
-        request(),
-        data(),
-        netReply(0)
+      : netReply(0)
     {
     }
 
@@ -60,6 +57,7 @@ public:
     QString            language;
     QList<RGInfo>      request;
     QByteArray         data;
+
     QNetworkReply*     netReply;
 };
 
@@ -68,13 +66,14 @@ class BackendOsmRG::Private
 public:
 
     explicit Private()
-      : jobs(),
-        errorMessage()
+      : mngr(0)
     {
     }
 
     QList<OsmInternalJobs> jobs;
     QString                errorMessage;
+
+    QNetworkAccessManager* mngr;
 };
 
 /**
@@ -91,6 +90,10 @@ BackendOsmRG::BackendOsmRG(QObject* const parent)
     : RGBackend(parent),
       d(new Private())
 {
+    d->mngr = new QNetworkAccessManager(this);
+
+    connect(d->mngr, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(slotFinished(QNetworkReply*)));
 }
 
 /**
@@ -120,15 +123,10 @@ void BackendOsmRG::nextPhoto()
     q.addQueryItem(QLatin1String("accept-language"), d->jobs.first().language);
     netUrl.setQuery(q);
 
-    QNetworkAccessManager* const mngr = new QNetworkAccessManager(this);
-
-    connect(mngr, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(slotFinished(QNetworkReply*)));
-
     QNetworkRequest netRequest(netUrl);
     netRequest.setRawHeader("User-Agent", getUserAgentName().toLatin1());
 
-    d->jobs.first().netReply = mngr->get(netRequest);
+    d->jobs.first().netReply = d->mngr->get(netRequest);
 }
 
 /**
@@ -140,11 +138,11 @@ void BackendOsmRG::callRGBackend(const QList<RGInfo>& rgList, const QString& lan
 {
     d->errorMessage.clear();
 
-    for ( int i = 0 ; i < rgList.count() ; ++i)
+    for (int i = 0 ; i < rgList.count() ; ++i)
     {
         bool foundIt = false;
 
-        for ( int j = 0 ; j < d->jobs.count() ; ++j)
+        for (int j = 0 ; j < d->jobs.count() ; ++j)
         {
             if (d->jobs[j].request.first().coordinates.sameLonLatAs(rgList[i].coordinates))
             {
@@ -152,7 +150,7 @@ void BackendOsmRG::callRGBackend(const QList<RGInfo>& rgList, const QString& lan
                 d->jobs[j].language = language;
                 foundIt             = true;
                 break;
-             }
+            }
         }
 
         if (!foundIt)
@@ -172,7 +170,7 @@ void BackendOsmRG::callRGBackend(const QList<RGInfo>& rgList, const QString& lan
  * The data is returned from Open Street Map in a XML. This function translates the XML into a QMap.
  * @param xmlData The returned XML.
  */
-QMap<QString,QString> BackendOsmRG::makeQMapFromXML(const QString& xmlData)
+QMap<QString, QString> BackendOsmRG::makeQMapFromXML(const QString& xmlData)
 {
     QString resultString;
     QMap<QString, QString> mappedData;
@@ -237,7 +235,6 @@ void BackendOsmRG::slotFinished(QNetworkReply* reply)
         d->errorMessage = reply->errorString();
         emit signalRGReady(d->jobs.first().request);
         d->jobs.clear();
-
         return;
     }
 

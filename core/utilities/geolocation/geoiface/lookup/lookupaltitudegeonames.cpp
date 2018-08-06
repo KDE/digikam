@@ -72,19 +72,21 @@ public:
     explicit Private()
       : status(StatusSuccess),
         currentMergedRequestIndex(0),
-        netReply(0)
+        netReply(0),
+        mngr(0)
 
     {
     }
 
-    Request::List        requests;
-    MergedRequests::List mergedRequests;
-    StatusAltitude       status;
-    QString              errorMessage;
+    Request::List          requests;
+    MergedRequests::List   mergedRequests;
+    StatusAltitude         status;
+    QString                errorMessage;
 
-    int                  currentMergedRequestIndex;
+    int                    currentMergedRequestIndex;
 
-    QNetworkReply*       netReply;
+    QNetworkReply*         netReply;
+    QNetworkAccessManager* mngr;
 };
 
 // ------------------------------------------------------------
@@ -93,6 +95,10 @@ LookupAltitudeGeonames::LookupAltitudeGeonames(QObject* const parent)
     : LookupAltitude(parent),
       d(new Private)
 {
+    d->mngr = new QNetworkAccessManager(this);
+
+    connect(d->mngr, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(slotFinished(QNetworkReply*)));
 }
 
 LookupAltitudeGeonames::~LookupAltitudeGeonames()
@@ -201,12 +207,7 @@ void LookupAltitudeGeonames::startNextRequest()
     q.addQueryItem(QLatin1String("username"), QLatin1String("digikam"));
     netUrl.setQuery(q);
 
-    QNetworkAccessManager* const mngr = new QNetworkAccessManager(this);
-
-    connect(mngr, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(slotFinished(QNetworkReply*)));
-
-    d->netReply = mngr->get(QNetworkRequest(netUrl));
+    d->netReply = d->mngr->get(QNetworkRequest(netUrl));
 }
 
 void LookupAltitudeGeonames::slotFinished(QNetworkReply* reply)
