@@ -247,9 +247,12 @@ bool WSTalker::loadUserAccount(const QString& userName)
     
     QMap<QString, QVariant> map = getUserAccountInfo(userName);
     
-    /* There must be some kind of errors making getUserAccountInfo(userName) return empty with a userName non empty.
-     * So, this is a security check, which ensures user to relogin anyway.
-     * However, if it happens, INSPECTATION is compulsory!!!
+    /* 
+     * if getUserAccountInfo(userName) return empty with a non empty userName, there must 
+     * be some kind of errors. So, the condition below is a security check, which assures 
+     * user to relogin anyway.
+     * 
+     * However, if it happens, INSPECTATION is obligated!!!
      */
     if(map.isEmpty())
     {
@@ -336,6 +339,22 @@ void WSTalker::sortAlbumsList(QList<WSAlbum>& albumsList)
     std::sort(albumsList.begin(), albumsList.end());
 }
 
+/*
+ * saveUserAccount(...) must be called inside this method when it is reimplemented
+ * in derived class, because saveUserAccount(...) can be called only in derived class.
+ */
+void WSTalker::authenticationDone(int errCode, const QString& errMsg)
+{
+    if (errCode != 0)
+    {
+        QMessageBox::critical(QApplication::activeWindow(),
+                              i18n("Error"), 
+                              i18n("Code: %1. %2", errCode, errMsg));
+    }
+
+    emit signalBusy(false);
+}
+
 void WSTalker::parseResponseGetLoggedInUser(const QByteArray& data)
 {
 }
@@ -364,12 +383,7 @@ void WSTalker::slotFinished(QNetworkReply* reply)
     if (reply->error() != QNetworkReply::NoError)
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << reply->error() << " text :"<< QString(reply->readAll());
-        
-        emit signalBusy(false);
-        QMessageBox::critical(QApplication::activeWindow(),
-                              i18n(QString::fromLatin1("Error %1").arg(reply->error()).toLatin1()),
-                              reply->errorString());
-        
+        authenticationDone(reply->error(), reply->errorString());       
         reply->deleteLater();
         return;
     }
@@ -380,6 +394,7 @@ void WSTalker::slotFinished(QNetworkReply* reply)
     {
         case WSTalker::GETUSER :
             parseResponseGetLoggedInUser(m_buffer);
+            authenticationDone(0, QString::fromLatin1(""));
             break;
         case WSTalker::LISTALBUMS :
             parseResponseListAlbums(m_buffer);
@@ -413,7 +428,7 @@ void WSTalker::slotCloseBrowser()
 void WSTalker::slotLinkingFailed()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK fail";
-//     authenticationDone(-1, i18n("Canceled by user."));
+    authenticationDone(-1, QLatin1String("Account link failed."));
 
     emit signalBusy(false);
     emit signalAuthenticationComplete(linked());

@@ -3,11 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2008-12-26
+ * Date        : 2018-07-26
  * Description : common items needed for web services
  *
- * Copyright (C) 2008-2009 by Luka Renko <lure at kubuntu dot org>
- * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +44,12 @@ public:
         uploadable(true)
     {
     }
-    
+
+    /*
+     * This method is used by derived class of WSAblum,
+     * to set the attributes inherited from WSAlbum, knowing
+     * a WSAlbum.
+     */
     void setBaseAlbum(const WSAlbum& album)
     {
         id          = album.id;
@@ -69,6 +73,11 @@ public:
     bool      uploadable;
 }; 
 
+/*
+ * This class is used when parsing response of listAlbums().
+ * It contains only the most important attributes of an album,
+ * which is needed for further usage (e.g upload photos, create new album).
+ */
 class AlbumSimplified 
 {
     

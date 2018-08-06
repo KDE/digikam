@@ -145,8 +145,6 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
             break;
     }
 
-    connect(this, SIGNAL(signalResponseTokenReceived(const QMap<QString, QString>&)),
-            d->talker, SLOT(slotResponseTokenReceived(const QMap<QString, QString>&)));
     connect(d->talker, SIGNAL(signalOpenBrowser(const QUrl&)),
             this, SIGNAL(signalOpenBrowser(const QUrl&)));
     connect(d->talker, SIGNAL(signalCloseBrowser()),
@@ -154,6 +152,11 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
     connect(d->talker, SIGNAL(signalAuthenticationComplete(bool)),
             this, SIGNAL(signalAuthenticationComplete(bool)));
     
+    connect(this, SIGNAL(signalResponseTokenReceived(const QMap<QString, QString>&)),
+            d->talker, SLOT(slotResponseTokenReceived(const QMap<QString, QString>&)));
+
+    connect(d->talker, SIGNAL(signalCreateAlbumDone(int, const QString&, const QString&)),
+            this, SIGNAL(signalCreateAlbumDone(int, const QString&, const QString&)));
     connect(d->talker, SIGNAL(signalListAlbumsDone(int, const QString&, const QList <WSAlbum>&)),
             this, SLOT(slotListAlbumsDone(int, const QString&, const QList <WSAlbum>&)));
     connect(d->talker, SIGNAL(signalAddPhotoDone(int,QString)),
@@ -300,11 +303,6 @@ void WSAuthentication::prepareForUpload()
     }
 }
 
-void WSAuthentication::listAlbums()
-{
-    d->talker->listAlbums();
-}
-
 void WSAuthentication::uploadNextPhoto()
 {    
     if (d->transferQueue.isEmpty())
@@ -315,7 +313,7 @@ void WSAuthentication::uploadNextPhoto()
     
     /*
      * This comparaison is a little bit complicated and may seem unnecessary, but it will be useful later
-     * when we will be able to choose to change or not image properties for EACH image
+     * when we will be able to choose to change or not image properties for EACH image.
      */
     QString imgPath = d->transferQueue.first().toLocalFile();
     QString tmpPath = d->tmpDir + QFileInfo(imgPath).baseName().trimmed() + d->wizard->settings()->format();
@@ -339,7 +337,10 @@ void WSAuthentication::startTransfer()
 
 void WSAuthentication::slotCancel()
 {
-    // Just to be sure that all temporary files in temporary dir will be removed after all
+    // First we cancel talker
+    cancelTalker();
+
+    // Then the folder containing all temporary photos to upload will be removed after all.
     QDir tmpDir(d->tmpDir);
     if(tmpDir.exists())
     {
@@ -347,56 +348,6 @@ void WSAuthentication::slotCancel()
     }
 
     emit signalProgress(0);
-}
-
-void WSAuthentication::slotAddPhotoDone(int errCode, const QString& errMsg)
-{
-    if (errCode == 0)
-    {
-        emit signalMessage(QDir::toNativeSeparators(d->transferQueue.first().toLocalFile()), false);
-        d->transferQueue.removeFirst();
-
-        d->imagesCount++;
-        emit signalProgress(d->imagesCount);
-    }
-    else
-    {
-        if (QMessageBox::question(d->wizard, i18n("Uploading Failed"),
-                                  i18n("Failed to upload photo: %1\n"
-                                       "Do you want to continue?", errMsg))
-            != QMessageBox::Yes)
-        {
-            d->transferQueue.clear();
-            return;
-        }
-    }
-    
-    uploadNextPhoto();
-}
-
-void WSAuthentication::slotListAlbumsDone(int errCode, const QString& errMsg, const QList<WSAlbum>& albumsList)
-{
-    QString albumDebug = QString::fromLatin1("");
-    foreach(const WSAlbum &album, albumsList)
-    {
-        albumDebug.append(QString::fromLatin1("%1: %2\n").arg(album.id).arg(album.title));
-    }
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received albums (errCode = " << errCode << ", errMsg = " 
-                                     << errMsg << "): " << albumDebug;
-    
-    if (errCode != 0)
-    {
-        QMessageBox::critical(QApplication::activeWindow(), 
-                              i18n(QString::fromLatin1("%1 Call Failed: %2\n").arg(d->serviceName).arg(errCode).toLatin1()),
-                              errMsg);
-        return;
-    }
-    
-    QMap<QString, AlbumSimplified> albumTree;
-    QStringList rootAlbums;
-    parseTreeFromListAlbums(albumsList, albumTree, rootAlbums);
-    
-    emit signalListAlbumsDone(albumTree, rootAlbums, QLatin1String(""));
 }
 
 void WSAuthentication::slotNewAlbumRequest()
@@ -408,6 +359,61 @@ void WSAuthentication::slotNewAlbumRequest()
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling New Album method";
         d->talker->createNewAlbum();
     }
+}
+
+void WSAuthentication::slotListAlbumsRequest()
+{
+    d->talker->listAlbums();
+}
+
+void WSAuthentication::slotListAlbumsDone(int errCode, const QString& errMsg, const QList<WSAlbum>& albumsList)
+{
+    QString albumDebug = QString::fromLatin1("");
+    foreach(const WSAlbum &album, albumsList)
+    {
+        albumDebug.append(QString::fromLatin1("%1: %2\n").arg(album.id).arg(album.title));
+    }
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received albums (errCode = " << errCode << ", errMsg = " 
+                                     << errMsg << "): " << albumDebug;
+
+    if (errCode != 0)
+    {
+        QMessageBox::critical(QApplication::activeWindow(),
+                              i18n("%1 Call Failed",  d->serviceName), 
+                              i18n("Code: %1. %2", errCode, errMsg));
+        return;
+    }
+
+    QMap<QString, AlbumSimplified> albumTree;
+    QStringList rootAlbums;
+    parseTreeFromListAlbums(albumsList, albumTree, rootAlbums);
+    
+    emit signalListAlbumsDone(albumTree, rootAlbums, QLatin1String(""));
+}
+
+void WSAuthentication::slotAddPhotoDone(int errCode, const QString& errMsg)
+{
+    if (errCode == 0)
+    {
+        emit signalMessage(QDir::toNativeSeparators(d->transferQueue.first().toLocalFile()), false);
+        d->transferQueue.removeFirst();
+        
+        d->imagesCount++;
+        emit signalProgress(d->imagesCount);
+    }
+    else
+    {
+        if (QMessageBox::question(d->wizard, i18n("Uploading Failed"),
+            i18n("Failed to upload photo: %1\n"
+            "Do you want to continue?", errMsg))
+            != QMessageBox::Yes)
+        {
+            d->transferQueue.clear();
+            return;
+        }
+    }
+    
+    uploadNextPhoto();
 }
 
 } // namespace Digikam

@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-02
- * Description : a widget to display authentication dialog with web 
- *               service server.
+ * Description : embedded web browser for web service authentication
  *
  * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
@@ -71,6 +70,11 @@ WSAuthenticationPage::~WSAuthenticationPage()
 {
 }
 
+void WSAuthenticationPage::setCallbackUrl(const QString& url)
+{
+    m_callbackUrl = url;
+}
+
 #ifdef HAVE_QWEBENGINE
 bool WSAuthenticationPage::acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool isMainFrame)
 #else
@@ -80,6 +84,9 @@ bool WSAuthenticationPage::slotUrlChanged(const QUrl& url)
     QString urlString = url.toString();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "urlString: " << urlString;
     
+    /*
+     * Condition to verify that the url loaded on page is the one containing access token
+     */
     if(m_callbackUrl.length() > 0 &&
        urlString.length() >= m_callbackUrl.length() &&
        urlString.left(m_callbackUrl.length()) == m_callbackUrl)
@@ -89,11 +96,6 @@ bool WSAuthenticationPage::slotUrlChanged(const QUrl& url)
     }
     
     return true;
-}
-
-void WSAuthenticationPage::setCallbackUrl(const QString& url)
-{
-    m_callbackUrl = url;
 }
 
 // ----------------------------------------------------------------------------
@@ -130,7 +132,12 @@ WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
             this, SLOT(slotOpenBrowser(const QUrl&)));
     connect(m_WSAuthentication, SIGNAL(signalCloseBrowser()),
             this, SLOT(slotCloseBrowser()));
-    
+
+    /*
+     * Here we hide the web browser immediately after creation.
+     * If user has to login, we will show the browser again. Ohterwise,
+     * we will keep it hiding to improve page's looking.
+     */
     hide();
 }
 
@@ -143,13 +150,13 @@ bool WSAuthenticationPageView::authenticationComplete() const
     return m_WSAuthentication->authenticated();
 }
 
-QMap<QString, QString> WSAuthenticationPageView::parseResponseToken(const QString& rep)
+QMap<QString, QString> WSAuthenticationPageView::parseUrlFragment(const QString& urlFragment)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseToken: " << rep;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseUrlFragment: " << urlFragment;
     
     QMap<QString, QString> result;
-    
-    QStringList listArgs = rep.split(QLatin1Char('&'));
+    QStringList listArgs = urlFragment.split(QLatin1Char('&'));
+
     foreach(const QString& arg, listArgs)
     {
         QStringList pair = arg.split(QLatin1Char('='));
@@ -169,10 +176,13 @@ void WSAuthenticationPageView::slotOpenBrowser(const QUrl& url)
     page->mainFrame()->setUrl(url);
 #endif
 
+    /*
+     * Here we show the web browser again after creation, because when this slot is triggered,
+     * user has to login. Therefore the login page has to be shown.
+     */
     show();
 }
 
-//(Trung) Here we hide browser, instead of closing it completely
 void WSAuthenticationPageView::slotCloseBrowser()
 {
     close();
@@ -185,8 +195,8 @@ void WSAuthenticationPageView::slotCallbackCatched(const QString& callbackUrl)
     QUrl url(callbackUrl);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url fragment: " << url.fragment();
     
-    QMap<QString, QString> rep = parseResponseToken(url.fragment());
-    emit m_WSAuthentication->signalResponseTokenReceived(rep);
+    QMap<QString, QString> res = parseUrlFragment(url.fragment());
+    emit m_WSAuthentication->signalResponseTokenReceived(res);
 }
 
 // ----------------------------------------------------------------------------
@@ -195,20 +205,25 @@ class WSAuthenticationWizard::Private
 {
 public:
     
-    explicit Private(QWizard* const dialog, const QString& callbackUrl)
+    explicit Private(QWizard* const dialog, const QString& callback)
       : wizard(0),
         iface(0),
         wsAuth(0),
         wsAuthView(0),
         vbox(0),
         text(0),
-        callbackUrl(callbackUrl)
+        callbackUrl(callback)
     {
         wizard = dynamic_cast<WSWizard*>(dialog);
         
         if(wizard)
         {
             iface = wizard->iface();
+
+            if(wizard->settings()->webService == WSSettings::WebService::FACEBOOK)
+            {
+                callbackUrl = QLatin1String("https://www.facebook.com/connect/login_success.html");
+            }
         }
     }
     
@@ -222,16 +237,10 @@ public:
 };
 
 WSAuthenticationWizard::WSAuthenticationWizard(QWizard* const dialog, const QString& title, 
-                                               QString callbackUrl)
+                                               const QString& callback)
     : DWizardPage(dialog, title),
-      d(new Private(dialog, callbackUrl))
+      d(new Private(dialog, callback))
 {
-    /* Set this page as commit page so that on next page (authentication page), back button will be disabled.
-     * However, "Next" button will become "Commit" button as a side effect. Therefore, set text to "Next" is a kind of cheating :).
-     */
-    setCommitPage(true);
-    setButtonText(QWizard::CommitButton, QLatin1String("Next >"));
-
     d->wsAuth  = d->wizard->wsAuth();
     connect(d->wsAuth, SIGNAL(signalAuthenticationComplete(bool)),
             this, SLOT(slotAuthenticationComplete(bool)));
@@ -262,26 +271,18 @@ void WSAuthenticationWizard::initializePage()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "initPage WSAuthenticationWizard";
 
-    // Init WebView of WSAuthenticationWizard
+    /*
+     * Init WebView of WSAuthenticationWizard every time initializePage is called.
+     * 
+     * This guarantees an appropriate authentication page, even when user goes back to 
+     * intro page and choose a different account or different web service. 
+     */
     d->wsAuthView   = new WSAuthenticationPageView(d->vbox, d->wsAuth, d->callbackUrl);
 
     QMap<WSSettings::WebService, QString> wsNames = WSSettings::webServiceNames();
     WSSettings::WebService ws = d->wizard->settings()->webService;
     d->wsAuth->createTalker(ws, wsNames[ws]);
- 
-    QString callbackUrl;
-    if(d->wizard->settings()->webService == WSSettings::WebService::FACEBOOK)
-    {
-        callbackUrl = QLatin1String("https://www.facebook.com/connect/login_success.html");
-    }
-    else
-    {
-        callbackUrl = QLatin1String("http://127.0.0.1:8000/");
-    }
 
-    WSAuthenticationPage* wsAuthPage = dynamic_cast<WSAuthenticationPage*>(d->wsAuthView->page());
-    wsAuthPage->setCallbackUrl(callbackUrl);
-    
     d->wsAuth->authenticate();
 }
 

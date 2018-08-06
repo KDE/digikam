@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-02
- * Description : a widget to display authentication dialog with web 
- *               service server.
+ * Description : embedded web browser for web service authentication
  *
  * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
@@ -113,7 +112,10 @@ public:
     
 private:
     
-    QMap<QString, QString> parseResponseToken(const QString& rep);
+    /*
+     * Parse url into a hash map with key and value for each parameter
+     */
+    QMap<QString, QString> parseUrlFragment(const QString& urlFragment);
 
 Q_SIGNALS:
     
@@ -139,7 +141,7 @@ class WSAuthenticationWizard : public DWizardPage
 public:
     
     explicit WSAuthenticationWizard(QWizard* const dialog, const QString& title,
-                                    QString callbackUrl = QString("http://127.1.1.0:8000/"));
+                                    const QString& callback = QLatin1String("http://127.1.1.0:8000/"));
     ~WSAuthenticationWizard();
     
     bool isComplete() const;

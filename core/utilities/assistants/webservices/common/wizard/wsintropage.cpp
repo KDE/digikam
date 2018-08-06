@@ -4,9 +4,11 @@
  * http://www.digikam.org
  *
  * Date        : 2017-06-27
- * Description : a tool to export items to web services.
+ * Description : intro page to export tool where user can choose web service to export,
+ *               existant accounts and function mode (export/import).
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,13 +83,7 @@ public:
 WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title),
       d(new Private(dialog))
-{
-    /* Set this page as commit page so that on next page (authentication page), back button will be disabled.
-     * However, "Next" button will become "Commit" button as a side effect. Therefore, set text to "Next" is a kind of cheating :).
-     */
-//     setCommitPage(true);
-//     setButtonText(QWizard::CommitButton, QLatin1String("Next >"));
-    
+{    
     DVBox* const vbox  = new DVBox(this);
     QLabel* const desc = new QLabel(vbox);
 
@@ -140,13 +136,14 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     
     /* --------------------
      * ComboBox for user account selection
+     * 
+     * An empty option is added to accounts, so that user can choose to login with new account
      */
     
     DHBox* const accountBox     = new DHBox(vbox);
     QLabel* const accountLabel  = new QLabel(i18n("&Choose account:"), accountBox);
     d->accountOption            = new QComboBox(accountBox);
     
-    // An empty string is added to accounts so that user can login with new account
     QStringList accounts        = QStringList(QString(""))
                                   << WSSettings::allUserNames(d->wizard->oauthSettings(), map.constBegin().value());
     
@@ -183,7 +180,7 @@ void WSIntroPage::slotImageGetOptionChanged(int index)
     
     /*
      * index == 0 <=> Export
-     * index == 1 <=> Import, we only have Google Photo and Smugmug 
+     * index == 1 <=> Import, for now we only have Google Photo and Smugmug in this option
      */
     if(index == 0)
     {          
@@ -213,7 +210,7 @@ void WSIntroPage::slotWebServiceOptionChanged(const QString& serviceName)
 {
     d->accountOption->clear();
 
-    // An empty string is added to accounts so that user can login with new account
+    // An empty option is added to accounts, so that user can choose to login with new account
     QStringList accounts    = QStringList(QString(""))
                               << WSSettings::allUserNames(d->wizard->oauthSettings(), serviceName);
     

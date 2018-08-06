@@ -4,9 +4,12 @@
  * http://www.digikam.org
  *
  * Date        : 2017-06-27
- * Description : a tool to export items to web services.
+ * Description : page visualizing photos user choosing to upload and
+ *               user albums list to upload photos to. Creating new album 
+ *               is also available on this page.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,17 +61,42 @@ public:
 
 private:
 
+    /*
+     * Get a structure from albums list and add it recursively to albums view
+     */
     void addChildToTreeView(QTreeWidgetItem* const parent,
                             const QMap<QString, AlbumSimplified>& albumTree, 
                             const QStringList& childrenAlbums);
+
+    /*
+     * Set id for album chosen to upload photos.
+     * 
+     * This method should be called in validatePage(), so that talker can get it 
+     * from d->wizard later.
+     */
     void setCurrentAlbumId(const QString& currentAlbumId);
+
+Q_SIGNALS:
+
+    /*
+     * Signal to inform talker to list albums.
+     */
+    void signalListAlbumsRequest();
 
 private Q_SLOTS:
 
+    /*
+     * Connected to signal signalListAlbumsDone of WSAuthentication to visualize albums list
+     */
     void slotListAlbumsDone(const QMap<QString, AlbumSimplified>& albumTree, 
                             const QStringList& rootAlbums,
                             const QString& currentAlbumId);
-    void slotReloadListAlbums();
+
+    /*
+     * Connected to signalCreatAlbumDone of WSAuthentication to refresh album list and point
+     * pre-selected album to new album
+     */
+    void slotCreateAlbumDone(int errCode, const QString& errMsg, const QString& newAlbumId);
 
 private:
 

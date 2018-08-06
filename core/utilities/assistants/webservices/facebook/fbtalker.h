@@ -86,9 +86,6 @@ Q_SIGNALS:
 
     void    signalLoginProgress(int step, int maxStep = 0, const QString& label = QString());
     void    signalLoginDone(int errCode, const QString& errMsg);
-    void    signalAddPhotoDone(int errCode, const QString& errMsg);
-    void    signalCreateAlbumDone(int errCode, const QString& errMsg, const QString &newAlbumID);
-    void    signalListAlbumsDone(int errCode, const QString& errMsg, const QList <WSAlbum>& albumsList); //const QList <FbAlbum>& albumsList);
 
 private:
 

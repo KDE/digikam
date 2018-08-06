@@ -562,13 +562,15 @@ void FbTalker::authenticationDone(int errCode, const QString &errMsg)
     {
         d->user.clear();
     }
-
-    saveUserAccount(d->user.name, d->user.id, d->o2->expires(), d->o2->token(), d->o2->refreshToken());
-
-    emit signalBusy(false);
-
+    else
+    {
+        saveUserAccount(d->user.name, d->user.id, d->o2->expires(), d->o2->token(), d->o2->refreshToken());
+    }
+    
     emit signalLoginDone(errCode, errMsg);
     d->loginInProgress = false;
+
+    WSTalker::authenticationDone(errCode, errMsg);
 }
 
 int FbTalker::parseErrorResponse(const QDomElement& e, QString& errMsg)
@@ -624,8 +626,6 @@ void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
     m_userName         = d->user.name;
 
     d->user.profileURL = jsonObject[QString::fromLatin1("link")].toString();
-    
-    authenticationDone(0, QString::fromLatin1(""));
 }
 
 void FbTalker::parseResponseAddPhoto(const QByteArray& data)
