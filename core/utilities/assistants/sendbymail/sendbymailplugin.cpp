@@ -47,7 +47,7 @@ QString SendByMailPlugin::name() const
     return i18n("Send by Email");
 }
 
-QString SendByMailPlugin::nameId() const
+QString SendByMailPlugin::id() const
 {
     return QLatin1String("SendByMail");
 }
@@ -62,16 +62,12 @@ QString SendByMailPlugin::description() const
     return i18n("A Tool to Send Items by Email.");
 }
 
-QString SendByMailPlugin::copyrightYears() const
-{
-    return QLatin1String("2018");
-}
-
 QList<DPluginAuthor> SendByMailPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"));
+                             QLatin1String("caulier dot gilles at gmail dot com"),
+                             QLatin1String("(C) 2004-2018"));
 }
 
 void SendByMailPlugin::init()

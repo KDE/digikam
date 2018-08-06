@@ -41,10 +41,9 @@ public:
     explicit SendByMailPlugin(QObject* const parent = 0);
 
     QString name() const                 override;
-    QString nameId() const               override;
+    QString id() const                   override;
     QString version() const              override;
     QString description() const          override;
-    QString copyrightYears() const       override;
     QList<DPluginAuthor> authors() const override;
 
     void init();

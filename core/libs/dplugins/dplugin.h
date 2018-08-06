@@ -50,16 +50,26 @@ public:
 
     explicit DPluginAuthor(const QString& n,
                            const QString& e,
-                           const QString& t = i18n("Developer"))
+                           const QString& y,
+                           const QString& r = i18n("Developer"))
       : name(n),
         email(e),
-        task(t)
+        years(y),
+        roles(r)
     {
     }
 
-    QString name;
-    QString email;
-    QString task;
+    QString asString() const
+    {
+        return (QString::fromLatin1("%1 <%2> %3 [%4]").arg(name).arg(email).arg(years).arg(roles));
+    }
+
+public:
+
+    QString name;    // Author name and surname
+    QString email;   // Email anti-spammed
+    QString years;   // Copyrights years
+    QString roles;   // Author roles, as "Developer", "Designer", "Translator", etc.
 };
 
 /**
@@ -98,9 +108,9 @@ public:
     virtual QString name() const = 0;
 
     /**
-     * @brief Returns the unique name of the plugin.
+     * @brief Returns the unique identification string of the plugin.
      */
-    virtual QString nameId() const = 0;
+    virtual QString id() const = 0;
 
     virtual QString version() const = 0;
 
@@ -113,8 +123,6 @@ public:
      * @brief Returns an icon for the plugin.
      */
     virtual QIcon icon() const;
-
-    virtual QString copyrightYears() const = 0;
 
     /**
      * @brief Returns authors list for the plugin.

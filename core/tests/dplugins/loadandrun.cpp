@@ -40,38 +40,72 @@ using namespace Digikam;
 
 int main(int argc, char* argv[])
 {
-    if (argc != 2)
-    {
-        qDebug() << "loadandrun - Load a plugin and run it";
-        qDebug() << "Usage: <plugin name>";
-        return -1;
-    }
-
-    QString toolName = QString::fromUtf8(argv[1]);
     QApplication app(argc, argv);
 
-    MetaEngine::initializeExiv2();
+    QCommandLineParser parser;
+    parser.addHelpOption();
+    parser.setApplicationDescription(QLatin1String("Test application to run digiKam plugins as stand alone"));
 
-    bool found = false;
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("list"), QLatin1String("List all available plugins")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("n"),    QLatin1String("Id name of plugin to use"), QLatin1String("String ID")));
+    parser.process(app);
+
     DPluginLoader dpl;
 
-    foreach (DPlugin* const p, dpl.allPlugins())
+    if (parser.isSet(QString::fromLatin1("list")))
     {
-        if (p->nameId() == toolName)
+        foreach (DPlugin* const p, dpl.allPlugins())
         {
-            p->init();
-            p->slotRun();
-            found = true;
-            break;
+            qDebug() << "--------------------------------------------";
+            qDebug() << "Id     :" << p->id();
+            qDebug() << "Name   :" << p->name();
+            qDebug() << "Version:" << p->version();
+            qDebug() << "Desc   :" << p->description();
+
+            QString authors;
+
+            foreach (const DPluginAuthor& a, p->authors())
+            {
+                authors.append(a.asString());
+                authors.append(QLatin1String(" ; "));
+            }
+
+            qDebug() << "Authors:" << authors;
         }
-    }
 
-    if (!found)
+        return 0;
+    }
+    else if (parser.isSet(QString::fromLatin1("n")) )
     {
-        qDebug() << toolName << "plugin not found!";
-    }
+        const QString name = parser.value(QString::fromLatin1("n"));
 
-    MetaEngine::cleanupExiv2();
+        MetaEngine::initializeExiv2();
+
+        bool found = false;
+
+        foreach (DPlugin* const p, dpl.allPlugins())
+        {
+            if (p->id() == name)
+            {
+                p->init();
+                p->slotRun();
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            qDebug() << name << "plugin not found!";
+        }
+
+        MetaEngine::cleanupExiv2();
+    }
+    else
+    {
+        qDebug() << "Command line option not recognized...";
+        qDebug() << "Use --help option for details.";
+    }
 
     return 0;
 }
