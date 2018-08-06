@@ -35,7 +35,6 @@
 #include <QStatusBar>
 #include <QMenu>
 #include <QSplitter>
-#include <QAction>
 
 // KDE includes
 
@@ -82,7 +81,6 @@
 #include "collectionscanner.h"
 #include "scancontroller.h"
 #include "tagsactionmngr.h"
-#include "thumbbardock.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
 #include "dexpanderbox.h"
