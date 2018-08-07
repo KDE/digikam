@@ -46,9 +46,11 @@ int main(int argc, char* argv[])
     parser.addHelpOption();
     parser.setApplicationDescription(QLatin1String("Test application to run digiKam plugins as stand alone"));
 
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("list"), QLatin1String("List all available plugins")));
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("n"),    QLatin1String("Id name of plugin to use"),  QLatin1String("String ID")));
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("a"),    QLatin1String("Plugin action name to run"), QLatin1String("Action Name")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("list"),      QLatin1String("List all available plugins")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("n"),         QLatin1String("Name of plugin to use"),     QLatin1String("Plugin Name")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("a"),         QLatin1String("Plugin action name to run"), QLatin1String("Action Name")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("w"),         QLatin1String("Wait until plugin non-modal dialog is closed")));
+
     parser.process(app);
 
     DPluginLoader dpl;
@@ -117,7 +119,11 @@ int main(int argc, char* argv[])
                 if (ac)
                 {
                     ac->trigger();
-                    app.exec();
+
+                    if (parser.isSet(QString::fromLatin1("w")))
+                    {
+                        app.exec();
+                    }
                 }
                 else
                 {
