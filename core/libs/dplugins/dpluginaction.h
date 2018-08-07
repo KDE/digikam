@@ -65,16 +65,33 @@ public:
     explicit DPluginAction(QObject* const parent = 0);
     ~DPluginAction();
 
+    /**
+     * Manage the internal action name.
+     */
     void setActionName(const QString& name);
     QString actionName() const;
 
+    /**
+     * Manage the internal action type.
+     */
     void setActionType(ActionType type);
     ActionType actionType() const;
 
+    /**
+     * Manage the internal action category.
+     */
     void setActionCategory(ActionCategory cat);
     ActionCategory actionCategory() const;
 
-    QString asString() const;
+    /**
+     * Return the XML section to merge in KXMLGUIClient host XML definition.
+     */
+    QString xmlSection() const;
+
+    /**
+     * Return details as string details about action properties.
+     */
+    QString toString() const;
 };
 
 } // namespace Digikam

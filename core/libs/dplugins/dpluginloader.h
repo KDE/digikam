@@ -62,6 +62,16 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
     QList<DPlugin*> allPlugins() const;
 
     /**
+     * @brief Returns a list of plugin actions set for a kind of category.
+     */
+    QList<DPluginAction*> pluginActions(DPluginAction::ActionCategory cat) const;
+
+    /**
+     * @brief Returns all xml sections as string of plugin actions set for a kind of category.
+     */
+    QString pluginXmlSections(DPluginAction::ActionCategory cat) const;
+
+    /**
      * @brief appendPluginToBlackList Prevent that a plugin is loaded from the given filename
      * @param filename The name of the file (excluding prefix and file extension) to blacklist. E.g.
      * to ignore "libflickrexport.so" on Linux and "flickrexport.dll" on Windows, pass "flickrexport"

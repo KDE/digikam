@@ -79,7 +79,12 @@ DPluginAction::ActionCategory DPluginAction::actionCategory() const
     return InvalidCat;
 }
 
-QString DPluginAction::asString() const
+QString DPluginAction::xmlSection() const
+{
+    return QString::fromLatin1("<Action name=\"%1\" />\n").arg(actionName());
+}
+
+QString DPluginAction::toString() const
 {
     return QString::fromUtf8("%1: \"%2\"").arg(actionName()).arg(text());
 }

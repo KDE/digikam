@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 
             foreach (const DPluginAuthor& au, p->authors())
             {
-                authors.append(au.asString());
+                authors.append(au.toString());
                 authors.append(QLatin1String(" ; "));
             }
 
@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
 
             foreach (DPluginAction* const ac, p->actions())
             {
-                actions.append(ac->asString());
+                actions.append(ac->toString());
                 actions.append(QLatin1String(" ; "));
             }
 

@@ -53,6 +53,36 @@ QList<DPlugin*> DPluginLoader::allPlugins() const
     return d->allPlugins;
 }
 
+QList<DPluginAction*> DPluginLoader::pluginActions(DPluginAction::ActionCategory cat) const
+{
+    QList<DPluginAction*> list;
+
+    foreach (DPlugin* const p, allPlugins())
+    {
+        foreach (DPluginAction* const ac, p->actions())
+        {
+            if (ac->actionCategory() == cat)
+            {
+                list << ac;
+            }
+         }
+     }
+
+     return list;
+}
+
+QString DPluginLoader::pluginXmlSections(DPluginAction::ActionCategory cat) const
+{
+    QString xml;
+
+    foreach (DPluginAction* const ac, pluginActions(cat))
+    {
+        xml.append(ac->xmlSection());
+    }
+
+    return xml;
+}
+
 void DPluginLoader::appendPluginToBlackList(const QString& filename)
 {
     d->blacklist << QLatin1String(DIGIKAM_SHARED_LIBRARY_PREFIX) + filename;

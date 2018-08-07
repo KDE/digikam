@@ -41,7 +41,7 @@ DPluginAuthor::~DPluginAuthor()
 {
 }
 
-QString DPluginAuthor::asString() const
+QString DPluginAuthor::toString() const
 {
     return (QString::fromLatin1("%1 <%2> %3 [%4]").arg(name).arg(email).arg(years).arg(roles));
 }

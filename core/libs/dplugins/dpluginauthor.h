@@ -50,7 +50,7 @@ public:
 
     ~DPluginAuthor();
 
-    QString asString() const;
+    QString toString() const;
 
 public:
 
