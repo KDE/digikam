@@ -277,6 +277,7 @@ void WSAuthenticationWizard::initializePage()
      * This guarantees an appropriate authentication page, even when user goes back to 
      * intro page and choose a different account or different web service. 
      */
+    d->text->hide();
     d->wsAuthView   = new WSAuthenticationPageView(d->vbox, d->wsAuth, d->callbackUrl);
 
     QMap<WSSettings::WebService, QString> wsNames = WSSettings::webServiceNames();
@@ -303,6 +304,8 @@ void WSAuthenticationWizard::cleanupPage()
 
 void WSAuthenticationWizard::slotAuthenticationComplete(bool isLinked)
 {
+    d->text->show();
+
     if(isLinked)
     {
         d->text->setText(i18n("<qt>"

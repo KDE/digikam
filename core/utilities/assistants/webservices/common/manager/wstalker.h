@@ -138,8 +138,8 @@ protected:
 
     /*
      * This method can be (and must be) reimplemented in derived class. Indeed, it will hard code 
-     * at runtime O2's settings (i.e accessToken, refreshToken, expired date and value of linked state).
-     * It is used to force O2 to link to another account according to user's selection. Otherwise, O2 will
+     * (at runtime) O2's settings (i.e accessToken, refreshToken, expired date and value of linked state).
+     * It forces O2 to link to another account according to user's selection. Otherwise, O2 will
      * "remember" account from previous login and always link to that account, if an obligated reauthenticate
      * (unlink and then link) is not realized.
      */

@@ -33,25 +33,35 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
+// Local includes
+
+#include "wstoolutils.h"
+#include "o0globals.h"
+
 namespace Digikam
 {
 
-WSSettings::WSSettings()
+WSSettings::WSSettings(QObject* const parent)
+  : QObject(parent)
 {
-    selMode           = EXPORT;
-    addFileProperties = false;
-    imagesChangeProp  = false;
-    removeMetadata    = false;
-    imageCompression  = 75;
-    webService        = FLICKR;
-    currentAlbumId    = QLatin1String("");
-    userName          = QLatin1String("");
-    imageSize         = 1024;
-    imageFormat       = JPEG;
+    selMode             = EXPORT;
+    addFileProperties   = false;
+    imagesChangeProp    = false;
+    removeMetadata      = false;
+    imageCompression    = 75;
+    webService          = FLICKR;
+    currentAlbumId      = QLatin1String("");
+    userName            = QLatin1String("");
+    oauthSettings       = WSToolUtils::getOauthSettings(parent);
+    oauthSettingsStore  = new O0SettingsStore(oauthSettings, QLatin1String(O2_ENCRYPTION_KEY), this);
+    imageSize           = 1024;
+    imageFormat         = JPEG;
 }
 
 WSSettings::~WSSettings()
 {
+    delete oauthSettings;
+    delete oauthSettingsStore;
 }
 
 void WSSettings::readSettings(KConfigGroup& group)
@@ -125,16 +135,16 @@ QMap<WSSettings::ImageFormat, QString> WSSettings::imageFormatNames()
     return frms;
 }
 
-QStringList WSSettings::allUserNames(QSettings* const settings, const QString& serviceName)
+QStringList WSSettings::allUserNames(const QString& serviceName)
 {
     QStringList userNames;
-    
-    settings->beginGroup(serviceName);
-    settings->beginGroup("users");
-    userNames = settings->allKeys();
-    settings->endGroup();
-    settings->endGroup();
-    
+
+    oauthSettings->beginGroup(serviceName);
+    oauthSettings->beginGroup("users");
+    userNames = oauthSettings->allKeys();
+    oauthSettings->endGroup();
+    oauthSettings->endGroup();
+
     return userNames;
 }
 

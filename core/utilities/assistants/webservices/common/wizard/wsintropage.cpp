@@ -67,7 +67,8 @@ public:
 
         if (wizard)
         {
-            iface = wizard->iface();
+            iface     = wizard->iface();
+            settings  = wizard->settings();
         }
 
     }
@@ -75,6 +76,7 @@ public:
     QComboBox*        imageGetOption;
     DHBox*            hbox;
     WSWizard*         wizard;
+    WSSettings*       settings;
     DInfoInterface*   iface;
     QComboBox*        wsOption;
     QComboBox*        accountOption;
@@ -145,7 +147,7 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     d->accountOption            = new QComboBox(accountBox);
     
     QStringList accounts        = QStringList(QString(""))
-                                  << WSSettings::allUserNames(d->wizard->oauthSettings(), map.constBegin().value());
+                                  << d->settings->allUserNames(map.constBegin().value());
     
     foreach(const QString& account, accounts)
     {
@@ -212,7 +214,7 @@ void WSIntroPage::slotWebServiceOptionChanged(const QString& serviceName)
 
     // An empty option is added to accounts, so that user can choose to login with new account
     QStringList accounts    = QStringList(QString(""))
-                              << WSSettings::allUserNames(d->wizard->oauthSettings(), serviceName);
+                              << d->settings->allUserNames(serviceName);
     
     foreach(const QString& account, accounts)
     {

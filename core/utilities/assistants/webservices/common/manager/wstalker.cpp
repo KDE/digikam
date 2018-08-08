@@ -65,6 +65,7 @@ WSTalker::WSTalker(QWidget* const parent)
     if(m_wizard != nullptr)
     {
         m_settings = m_wizard->oauthSettings();
+        m_store    = m_wizard->oauthSettingsStore();
         m_userName = m_wizard->settings()->userName;
         
         connect(this, SIGNAL(signalBusy(bool)),
@@ -72,11 +73,10 @@ WSTalker::WSTalker(QWidget* const parent)
     }
     else
     {
-        m_settings = WSToolUtils::getOauthSettings(parent);
+        m_settings  = WSToolUtils::getOauthSettings(parent);
+        m_store     = new O0SettingsStore(m_settings, QLatin1String(O2_ENCRYPTION_KEY), this);
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parent of talker is not an instance of WSWizard";
     }
-
-    m_store = new O0SettingsStore(m_settings, QLatin1String(O2_ENCRYPTION_KEY), this);
 
     connect(m_netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
@@ -99,9 +99,8 @@ WSTalker::~WSTalker()
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "delete m_settings";
         delete m_settings;
+        delete m_store;
     }
-
-    delete m_store;
 }
 
 void WSTalker::cancel()

@@ -60,27 +60,27 @@ public:
 
     explicit Private()
       : iface(0),
+        settings(0),
         introPage(0),
         authPage(0),
         albumsPage(0),
         imagesPage(0),
         settingsPage(0),
-        finalPage(0),
-        settings(0)
+        finalPage(0)
     {
     }
 
     DInfoInterface*             iface;
+
+    WSSettings*                 settings;
     WSIntroPage*                introPage;
     WSAuthenticationWizard*     authPage;
     WSAlbumsPage*               albumsPage;
     WSImagesPage*               imagesPage;
     WSSettingsPage*             settingsPage;
     WSFinalPage*                finalPage;
-    WSSettings*                 settings;
 
     WSAuthentication*           wsAuth;
-    QSettings*                  oauthSettings;
 };
 
 WSWizard::WSWizard(QWidget* const parent, DInfoInterface* const iface)
@@ -91,10 +91,9 @@ WSWizard::WSWizard(QWidget* const parent, DInfoInterface* const iface)
     setWindowTitle(i18n("Export to Web Services"));
 
     d->iface             = iface;
-    d->settings          = new WSSettings;
+    d->settings          = new WSSettings(this);
 
     d->wsAuth            = new WSAuthentication(this, d->iface);
-    d->oauthSettings     = WSToolUtils::getOauthSettings(this);
     
     KConfig config;
     KConfigGroup group   = config.group("Web Services Dialog Settings");
@@ -139,7 +138,12 @@ WSAuthentication* WSWizard::wsAuth() const
 
 QSettings* WSWizard::oauthSettings() const
 {
-    return d->oauthSettings;
+    return d->settings->oauthSettings;
+}
+
+O0SettingsStore* WSWizard::oauthSettingsStore() const
+{
+    return d->settings->oauthSettingsStore;
 }
 
 bool WSWizard::validateCurrentPage()

@@ -35,6 +35,7 @@
 #include "dwizarddlg.h"
 #include "dinfointerface.h"
 #include "digikam_export.h"
+#include "o0settingsstore.h"
 #include "wssettings.h"
 #include "wsauthentication.h"
 
@@ -65,7 +66,8 @@ public:
      */
     WSAuthentication*   wsAuth() const;
     QSettings*          oauthSettings() const;
-
+    O0SettingsStore*    oauthSettingsStore() const;
+    
     void setItemsList(const QList<QUrl>& urls);
 
 public Q_SLOTS:

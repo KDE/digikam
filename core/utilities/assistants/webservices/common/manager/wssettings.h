@@ -35,6 +35,11 @@
 #include <QMap>
 #include <QSettings>
 
+// Local include
+
+#include "o0settingsstore.h"
+
+
 class KConfigGroup;
 
 namespace Digikam
@@ -72,7 +77,7 @@ public:
 
 public:
 
-    explicit WSSettings();
+    explicit WSSettings(QObject* const parent=0);
     ~WSSettings();
 
     // Read and write settings in config file between sessions.
@@ -86,7 +91,7 @@ public:
     static QMap<ImageFormat, QString> imageFormatNames();
 
     // Helper method to list all user accounts (of all web service) that user logged in before.
-    static QStringList allUserNames(QSettings* const settings, const QString& serviceName);
+    QStringList allUserNames(const QString& serviceName);
     
 public:
 
@@ -106,6 +111,9 @@ public:
     WebService          webService;
     
     QString             userName;
+
+    QSettings*          oauthSettings;
+    O0SettingsStore*    oauthSettingsStore;
 
     QString             currentAlbumId;     // Selected album to upload to
 
