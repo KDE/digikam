@@ -66,7 +66,7 @@ DInfoInterface* DPlugin::infoIface() const
 
 QIcon DPlugin::icon() const
 {
-    return QIcon();
+    return QIcon::fromTheme(QLatin1String("digikam"));
 }
 
 QList<DPluginAction*> DPlugin::actions() const

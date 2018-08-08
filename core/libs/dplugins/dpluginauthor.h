@@ -50,6 +50,10 @@ public:
 
     ~DPluginAuthor();
 
+    /**
+     * Return author details as string.
+     * For debug purpose only.
+     */
     QString toString() const;
 
 public:

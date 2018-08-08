@@ -77,7 +77,6 @@ void SendByMailPlugin::setup()
     ac->setIcon(QIcon::fromTheme(QLatin1String("mail-send")));
     ac->setText(i18nc("@action", "Send by Mail..."));
     ac->setActionName(QLatin1String("sendbymail"));
-    ac->setActionType(DPluginAction::GenericType);
     ac->setActionCategory(DPluginAction::GenericToolCat);
 
     connect(ac, SIGNAL(triggered(bool)),

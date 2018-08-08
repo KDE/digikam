@@ -40,24 +40,37 @@ class DIGIKAM_EXPORT DPluginAction : public QAction
 {
 public:
 
-    /// Plugin action types to define where they can be used.
+    /// Plugin action types to resume where they can be used.
     enum ActionType
     {
         InvalidType = -1,
-        GenericType = 0,         /// Generic plugins available everywhere (AlbumView, Editor, and LightTable).
-        EditorType,              /// Specific plugins for Image Editor and Showfoto.
-        BQMType                  /// Specific plugins for Batch Queue Manager.
+        GenericType = 0,         /// Generic action available everywhere (AlbumView, Editor, and LightTable).
+        EditorType,              /// Specific action for Image Editor and Showfoto.
+        BqmType                  /// Specific action for Batch Queue Manager.
     };
 
-    /// Plugin action categories for the generic plugins action type.
+    /// Plugin action categories.
     enum ActionCategory
     {
         InvalidCat       = -1,
-        GenericExportCat = 0,    /// Generic export plugins.
-        GenericImportCat,        /// Generic import plugins.
-        GenericToolCat           /// Generic processing plugins.
+        GenericExportCat = 0,   /// Generic export action.
+        GenericImportCat,       /// Generic import action.
+        GenericToolCat,         /// Generic processing action.
 
-        // TODO: extend categories for Editor and BQM.
+        EditorColor,            /// Image Editor color correction action.
+        EditorEnhance,          /// Image Editor enhance action.
+        EditorTransform,        /// Image Editor transform action.
+        EditorDecorate,         /// Image Editor decorate action.
+        EditorEffects,          /// Image Editor special effects action.
+
+        BqmColor,               /// Batch Queue Manager color action.
+        BqmEnhance,             /// Batch Queue Manager enhance action.
+        BqmTransform,           /// Batch Queue Manager transform action.
+        BqmDecorate,            /// Batch Queue Manager decorate action.
+        BqmFilters,             /// Batch Queue Manager filters action.
+        BqmConvert,             /// Batch Queue Manager convert action.
+        BqmMetadata,            /// Batch Queue Manager metadata action.
+        BqmCustom               /// Batch Queue Manager custom action.
     };
 
 public:
@@ -72,16 +85,16 @@ public:
     QString actionName() const;
 
     /**
-     * Manage the internal action type.
-     */
-    void setActionType(ActionType type);
-    ActionType actionType() const;
-
-    /**
      * Manage the internal action category.
      */
     void setActionCategory(ActionCategory cat);
     ActionCategory actionCategory() const;
+    QString actionCategoryToString() const;
+
+    /**
+     * Return the action type depending of category.
+     */
+    ActionType actionType() const;
 
     /**
      * Return the XML section to merge in KXMLGUIClient host XML definition.
@@ -89,7 +102,8 @@ public:
     QString xmlSection() const;
 
     /**
-     * Return details as string details about action properties.
+     * Return details as string about action properties.
+     * For debug purpose only.
      */
     QString toString() const;
 };

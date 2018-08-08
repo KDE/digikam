@@ -49,17 +49,32 @@ QString DPluginAction::actionName() const
     return (property("DPluginActionName").toString());
 }
 
-void DPluginAction::setActionType(ActionType type)
-{
-    setProperty("DPluginActionType", (int)type);
-}
-
 DPluginAction::ActionType DPluginAction::actionType() const
 {
-    bool b = false;
-    int v  = property("DPluginActionType").toInt(&b);
+    switch (actionCategory())
+    {
+        case GenericExportCat:
+        case GenericImportCat:
+        case GenericToolCat:
+            return GenericType;
 
-    if (b) return (ActionType)v;
+        case EditorColor:
+        case EditorEnhance:
+        case EditorTransform:
+        case EditorDecorate:
+        case EditorEffects:
+            return EditorType;
+
+        case BqmColor:
+        case BqmEnhance:
+        case BqmTransform:
+        case BqmDecorate:
+        case BqmFilters:
+        case BqmConvert:
+        case BqmMetadata:
+        case BqmCustom:
+            return BqmType;
+    }
 
     return InvalidType;
 }
@@ -72,11 +87,54 @@ void DPluginAction::setActionCategory(ActionCategory cat)
 DPluginAction::ActionCategory DPluginAction::actionCategory() const
 {
     bool b = false;
-    int v  = property("DpluginActionCategory").toInt(&b);
+    int v  = property("DPluginActionCategory").toInt(&b);
 
     if (b) return (ActionCategory)v;
 
     return InvalidCat;
+}
+
+QString DPluginAction::actionCategoryToString() const
+{
+    switch (actionCategory())
+    {
+        case GenericExportCat:
+            return QLatin1String("GenericExportCat");
+        case GenericImportCat:
+            return QLatin1String("GenericImportCat");
+        case GenericToolCat:
+            return QLatin1String("GenericToolCat");
+
+        case EditorColor:
+            return QLatin1String("EditorColor");
+        case EditorEnhance:
+            return QLatin1String("EditorEnhance");
+        case EditorTransform:
+            return QLatin1String("EditorTransform");
+        case EditorDecorate:
+            return QLatin1String("EditorDecorate");
+        case EditorEffects:
+            return QLatin1String("EditorEffects");
+
+        case BqmColor:
+            return QLatin1String("BqmColor");
+        case BqmEnhance:
+            return QLatin1String("BqmEnhance");
+        case BqmTransform:
+            return QLatin1String("BqmTransform");
+        case BqmDecorate:
+            return QLatin1String("BqmDecorate");
+        case BqmFilters:
+            return QLatin1String("BqmFilters");
+        case BqmConvert:
+            return QLatin1String("BqmConvert");
+        case BqmMetadata:
+            return QLatin1String("BqmMetadata");
+        case BqmCustom:
+            return QLatin1String("BqmCustom");
+    }
+
+    return QLatin1String("InvalidCat");
 }
 
 QString DPluginAction::xmlSection() const
@@ -86,7 +144,9 @@ QString DPluginAction::xmlSection() const
 
 QString DPluginAction::toString() const
 {
-    return QString::fromUtf8("%1: \"%2\"").arg(actionName()).arg(text());
+    return QString::fromUtf8("%1: \"%2\" - %3").arg(actionName())
+                                               .arg(text())
+                                               .arg(actionCategoryToString());
 }
 
 } // namespace Digikam
