@@ -34,6 +34,8 @@
 #define PHI      1.61803398874989479F
 // 1/PHI
 #define INVPHI   0.61803398874989479F
+// DIN A sqrt(2)
+#define DINA     1.41421356237309504F
 
 #include "imageselectionwidget.h"
 
@@ -536,6 +538,11 @@ void ImageSelectionWidget::setSelectionAspectRatioType(int aspectRatioType)
             d->currentWidthRatioValue  = 9.0;
             break;
 
+        case RATIODINA0:
+            d->currentHeightRatioValue = 1.0;
+            d->currentWidthRatioValue  = DINA;
+            break;
+
         case RATIOGOLDEN:
             d->currentHeightRatioValue = 1.0;
             d->currentWidthRatioValue  = PHI;
@@ -612,6 +619,7 @@ bool ImageSelectionWidget::preciseCropAvailable() const
     {
         case RATIONONE:
         case RATIO01X01:
+        case RATIODINA0:
         case RATIOGOLDEN:
             return false;
 

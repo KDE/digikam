@@ -57,6 +57,7 @@ public:
         RATIO07x10,                // 7:10
         RATIO08x05,                // 8:5
         RATIO16x09,                // 19:9
+        RATIODINA0,                // DIN A
         RATIOGOLDEN,               // Golden ratio : 1:1.618
         RATIOCURRENT,              // Current loaded image aspect ratio
         RATIONONE                  // No aspect ratio.

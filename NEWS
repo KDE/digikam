@@ -321,4 +321,6 @@ BUGFIXES:
 264 ==> 397167 - Some tags are not displayed on the preview.
 265 ==> 397207 - Too many open files, when reverse geocoding many images.
 266 ==> 397278 - DNG conversion not possible.
-267 ==> 
+267 ==> 397311 - DIN A relation in "Aspect Ratio Crop".
+268 ==> 
+

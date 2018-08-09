@@ -294,6 +294,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->ratioCB->addItem(QLatin1String("7:10"));
     d->ratioCB->addItem(QLatin1String("8:5"));
     d->ratioCB->addItem(QLatin1String("16:9"));
+    d->ratioCB->addItem(i18n("Format DIN A"));
     d->ratioCB->addItem(i18n("Golden Ratio"));
     d->ratioCB->addItem(i18n("Current Image Aspect Ratio"));
     d->ratioCB->addItem(i18nc("no crop mode", "None"));
@@ -315,6 +316,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
                                   "<p><b>8:5</b>: common wide-screen monitor (as 1680x1050)</p>"
                                   "<p><b>2:1</b>, <b>3:1</b>, <b>4:1</b>: common panoramic sizes</p>"
                                   "<p><b>16:9</b>: common tv-screen (as HDTV or Full-HD)</p>"
+                                  "<p>The paper <b>Format DIN A</b> use the ratio 1:1.414</p>"
                                   "<p>The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
                                   "is considered visually harmonious but can be unadapted to print on "
                                   "standard photographic paper.</p>"
@@ -815,6 +817,7 @@ void RatioCropTool::setRatioCBText(int orientation)
         d->ratioCB->addItem(QLatin1String("16:9"));
     }
 
+    d->ratioCB->addItem(i18n("Format DIN A"));
     d->ratioCB->addItem(i18n("Golden Ratio"));
     d->ratioCB->addItem(i18n("Current aspect ratio"));
     d->ratioCB->addItem(i18nc("no aspect ratio", "None"));
