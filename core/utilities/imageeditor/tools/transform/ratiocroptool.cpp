@@ -296,8 +296,8 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->ratioCB->addItem(QLatin1String("16:9"));
     d->ratioCB->addItem(i18n("Format DIN A"));
     d->ratioCB->addItem(i18n("Golden Ratio"));
-    d->ratioCB->addItem(i18n("Current Image Aspect Ratio"));
-    d->ratioCB->addItem(i18nc("no crop mode", "None"));
+    d->ratioCB->addItem(i18n("Current Aspect Ratio"));
+    d->ratioCB->addItem(i18nc("no aspect ratio", "None"));
     d->ratioCB->setDefaultIndex(ImageSelectionWidget::RATIO03X04);
     setRatioCBText(ImageSelectionWidget::Landscape);
     d->ratioCB->setWhatsThis(i18n("<p>Select your constrained aspect ratio for cropping. "
@@ -819,7 +819,7 @@ void RatioCropTool::setRatioCBText(int orientation)
 
     d->ratioCB->addItem(i18n("Format DIN A"));
     d->ratioCB->addItem(i18n("Golden Ratio"));
-    d->ratioCB->addItem(i18n("Current aspect ratio"));
+    d->ratioCB->addItem(i18n("Current Aspect Ratio"));
     d->ratioCB->addItem(i18nc("no aspect ratio", "None"));
     d->ratioCB->setCurrentIndex(item);
     d->ratioCB->blockSignals(false);
