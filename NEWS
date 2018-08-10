@@ -327,4 +327,5 @@ BUGFIXES:
 270 ==> 224706 - digiKam for KDE on Windows "Failed to rename Album" (KDirWatch Relevant).
 271 ==> 383016 - digiKam with incomplete German translation.
 272 ==> 244982 - digiKam crashes at initial configuration.
-273 ==> 
+273 ==> 366453 - digiKam crash while using mouse over title bar.
+274 ==> 
