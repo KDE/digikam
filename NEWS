@@ -323,4 +323,5 @@ BUGFIXES:
 266 ==> 397278 - DNG conversion not possible.
 267 ==> 397311 - DIN A relation in "Aspect Ratio Crop".
 268 ==> 222716 - digiKam does not start. Showing: Reading database.
-269 ==> 
+269 ==> 276633 - Crash when using map view inside of digiKam.
+270 ==> 
