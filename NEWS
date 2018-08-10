@@ -330,5 +330,5 @@ BUGFIXES:
 273 ==> 366453 - digiKam crash while using mouse over title bar.
 274 ==> 278490 - Incorrect tab layout with slider/spinbox/reset button.
 275 ==> 324642 - digiKam crash when starting a bug report while offline.
-276 ==> 
-
+276 ==> 238392 - digiKam Camera interface : rename dialog interprets alt-s as plain s when button greyed out.
+277 ==> 
