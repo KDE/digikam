@@ -48,7 +48,7 @@ public:
     explicit BackendOsmRG(QObject* const parent);
     virtual ~BackendOsmRG();
 
-    QMap<QString,QString> makeQMapFromXML(const QString& xmlData);
+    QMap<QString, QString> makeQMapFromXML(const QString& xmlData);
 
     virtual void callRGBackend(const QList<RGInfo>& rgList,const QString& language);
     virtual QString getErrorMessage();

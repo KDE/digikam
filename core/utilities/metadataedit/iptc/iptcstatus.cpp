@@ -31,7 +31,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QLineEdit>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 
 // KDE includes
 
@@ -60,16 +60,16 @@ public:
         objectNameCheck         = 0;
     }
 
-    QCheckBox* statusCheck;
-    QCheckBox* JobIDCheck;
-    QCheckBox* specialInstructionCheck;
-    QCheckBox* objectNameCheck;
+    QCheckBox*      statusCheck;
+    QCheckBox*      JobIDCheck;
+    QCheckBox*      specialInstructionCheck;
+    QCheckBox*      objectNameCheck;
 
-    QLineEdit* objectNameEdit;
-    QLineEdit* statusEdit;
-    QLineEdit* JobIDEdit;
+    QLineEdit*      objectNameEdit;
+    QLineEdit*      statusEdit;
+    QLineEdit*      JobIDEdit;
 
-    QTextEdit* specialInstructionEdit;
+    QPlainTextEdit* specialInstructionEdit;
 };
 
 IPTCStatus::IPTCStatus(QWidget* const parent)
@@ -115,7 +115,7 @@ IPTCStatus::IPTCStatus(QWidget* const parent)
     // --------------------------------------------------------
 
     d->specialInstructionCheck = new QCheckBox(i18n("Special Instructions:"), this);
-    d->specialInstructionEdit  = new QTextEdit(this);
+    d->specialInstructionEdit  = new QPlainTextEdit(this);
 /*
     d->specialInstructionEdit->setValidator(asciiValidator);
     d->specialInstructionEdit->document()->setMaxLength;
@@ -250,7 +250,7 @@ void IPTCStatus::readMetadata(QByteArray& iptcData)
 
     if (!data.isNull())
     {
-        d->specialInstructionEdit->setText(data);
+        d->specialInstructionEdit->setPlainText(data);
         d->specialInstructionCheck->setChecked(true);
     }
 

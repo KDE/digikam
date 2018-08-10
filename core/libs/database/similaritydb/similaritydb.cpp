@@ -290,6 +290,11 @@ void SimilarityDb::removeImageFingerprint(qlonglong imageID,
 
 double SimilarityDb::getImageSimilarity(qlonglong imageID1, qlonglong imageID2, FuzzyAlgorithm algorithm)
 {
+    if (imageID1 < 0 || imageID2 < 0)
+    {
+        return -1;
+    }
+
     // If the image ids are the same, we return 1 which is equivalent to 100%.
     // We do not have to access the database here as the same image id implies
     // the same image and thus identity.
@@ -477,7 +482,7 @@ QPair<qlonglong, qlonglong> SimilarityDb::orderIds(qlonglong id1, qlonglong id2)
     }
     else
     {
-        ordered.first = id2;
+        ordered.first  = id2;
         ordered.second = id1;
     }
 

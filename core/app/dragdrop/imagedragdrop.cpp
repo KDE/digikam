@@ -60,18 +60,27 @@ enum DropAction
     CopyAction,
     MoveAction,
     GroupAction,
+    SortAction,
     GroupAndMoveAction,
     AssignTagAction
 };
 
 static QAction* addGroupAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image", "Group here"));
+    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image",
+                                                                                "Group here"));
+}
+
+static QAction* addSortAction(QMenu* const menu)
+{
+    return menu->addAction( QIcon::fromTheme(QLatin1String("insert-image")), i18nc("@action:inmenu Insert dragged images before this image",
+                                                                                   "Insert Items here"));
 }
 
 static QAction* addGroupAndMoveAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image and move them to its album", "Group here and move to album"));
+    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image and move them to its album",
+                                                                                "Group here and move to album"));
 }
 
 static QAction* addCancelAction(QMenu* const menu)
@@ -153,7 +162,8 @@ static DropAction copyOrMove(const QDropEvent* const e, QWidget* const view, boo
 static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool askForGrouping)
 {
     QMenu popMenu(view);
-    QAction* const tagAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")), i18n("Assign Tag to Dropped Items"));
+    QAction* const tagAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")),
+                                                 i18n("Assign Tag to Dropped Items"));
     QAction* groupAction     = 0;
 
     if (askForGrouping)
@@ -182,7 +192,19 @@ static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool a
 
 static DropAction groupAction(const QDropEvent* const, QWidget* const view)
 {
+    ImageCategorizedView* const imgView
+                  = dynamic_cast<ImageCategorizedView*>(view);
+    int sortOrder = ApplicationSettings::instance()->getImageSortOrder();
+
     QMenu popMenu(view);
+    QAction* sortAction        = 0;
+
+    if (imgView && sortOrder == ImageSortSettings::SortByManualOrder)
+    {
+        sortAction             = addSortAction(&popMenu);
+        popMenu.addSeparator();
+    }
+
     QAction* const groupAction = addGroupAction(&popMenu);
     popMenu.addSeparator();
     addCancelAction(&popMenu);
@@ -192,6 +214,11 @@ static DropAction groupAction(const QDropEvent* const, QWidget* const view)
     if (groupAction && choice == groupAction)
     {
         return GroupAction;
+    }
+
+    if (sortAction && choice == sortAction)
+    {
+        return SortAction;
     }
 
     return NoAction;
@@ -329,7 +356,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                 return false;
             }
 
-            for (QList<qlonglong>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
+            for (QList<qlonglong>::const_iterator it = imageIDs.constBegin() ; it != imageIDs.constEnd() ; ++it)
             {
                 ImageInfo info(*it);
 
@@ -408,7 +435,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                 }
                 else if (action == CopyAction)
                 {
-                    DIO::copy(extImages+intImages, palbum);
+                    DIO::copy(extImages + intImages, palbum);
                     return true;
                 }
             }
@@ -440,6 +467,17 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             }
 
             emit addToGroup(droppedOnInfo, ImageInfoList(imageIDs));
+            return true;
+        }
+
+        if (action == SortAction)
+        {
+            if (droppedOnInfo.isNull())
+            {
+                return false;
+            }
+
+            emit dragDropSort(droppedOnInfo, ImageInfoList(imageIDs));
             return true;
         }
 

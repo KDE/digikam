@@ -213,6 +213,11 @@ public:
     int rating() const;
 
     /**
+     * Returns the manual sort order
+     */
+    qlonglong manualOrder() const;
+
+    /**
      * Returns the category of the item: Image, Audio, Video
      */
     DatabaseItem::Category category() const;
@@ -461,6 +466,11 @@ public:
      * Set the rating for the item
      */
     void setRating(int value);
+
+    /**
+     * Set the manul sorting order for the item
+     */
+    void setManualOrder(qlonglong value);
 
     /**
      * Set the orientation for the item

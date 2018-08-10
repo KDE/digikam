@@ -758,6 +758,11 @@ public:
     void setItemAlbum(qlonglong imageID, qlonglong albumId);
 
     /**
+     * Updates the manualOrder field for the item.
+     */
+    void setItemManualOrder(qlonglong imageID, qlonglong value);
+
+    /**
      * Rename the item.
      * Note: we not use here ImageChangeset.
      */

@@ -50,10 +50,7 @@ class GeonamesInternalJobs
 public:
 
     GeonamesInternalJobs()
-      : language(),
-        request(),
-        data(),
-        netReply(0)
+      : netReply(0)
     {
     }
 
@@ -66,6 +63,7 @@ public:
     QString            language;
     QList<RGInfo>      request;
     QByteArray         data;
+
     QNetworkReply*     netReply;
 };
 
@@ -76,8 +74,7 @@ public:
     explicit Private()
       : itemCounter(0),
         itemCount(0),
-        jobs(),
-        errorMessage()
+        mngr(0)
     {
     }
 
@@ -85,6 +82,8 @@ public:
     int                         itemCount;
     QList<GeonamesInternalJobs> jobs;
     QString                     errorMessage;
+
+    QNetworkAccessManager*      mngr;
 };
 
 /**
@@ -95,6 +94,10 @@ BackendGeonamesRG::BackendGeonamesRG(QObject* const parent)
     : RGBackend(parent),
       d(new Private())
 {
+    d->mngr = new QNetworkAccessManager(this);
+
+    connect(d->mngr, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(slotFinished(QNetworkReply*)));
 }
 
 /**
@@ -122,15 +125,10 @@ void BackendGeonamesRG::nextPhoto()
     q.addQueryItem(QLatin1String("username"), QLatin1String("digikam"));
     netUrl.setQuery(q);
 
-    QNetworkAccessManager* const mngr = new QNetworkAccessManager(this);
-
-    connect(mngr, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(slotFinished(QNetworkReply*)));
-
     QNetworkRequest netRequest(netUrl);
     netRequest.setRawHeader("User-Agent", getUserAgentName().toLatin1());
 
-    d->jobs.first().netReply = mngr->get(netRequest);
+    d->jobs.first().netReply = d->mngr->get(netRequest);
 }
 
 /**
@@ -142,11 +140,11 @@ void BackendGeonamesRG::callRGBackend(const QList<RGInfo>& rgList, const QString
 {
     d->errorMessage.clear();
 
-    for ( int i = 0; i < rgList.count(); ++i)
+    for (int i = 0 ; i < rgList.count() ; ++i)
     {
             bool foundIt = false;
 
-            for ( int j = 0; j < d->jobs.count(); ++j)
+            for (int j = 0 ; j < d->jobs.count() ; ++j)
             {
                 if (d->jobs[j].request.first().coordinates.sameLonLatAs(rgList[i].coordinates))
                 {
@@ -173,7 +171,7 @@ void BackendGeonamesRG::callRGBackend(const QList<RGInfo>& rgList, const QString
  * The data is returned from Open Street Map in a XML. This function translates the XML into a QMap.
  * @param xmlData The returned XML.
  */
-QMap<QString,QString> BackendGeonamesRG::makeQMapFromXML(const QString& xmlData)
+QMap<QString, QString> BackendGeonamesRG::makeQMapFromXML(const QString& xmlData)
 {
     QMap<QString, QString> mappedData;
     QString resultString;
@@ -225,12 +223,12 @@ void BackendGeonamesRG::slotFinished(QNetworkReply* reply)
     if (reply->error() != QNetworkReply::NoError)
     {
         d->errorMessage = reply->errorString();
-        emit(signalRGReady(d->jobs.first().request));
+        emit signalRGReady(d->jobs.first().request);
         d->jobs.clear();
         return;
     }
 
-    for (int i = 0; i < d->jobs.count(); ++i)
+    for (int i = 0 ; i < d->jobs.count() ; ++i)
     {
         if (d->jobs.at(i).netReply == reply)
         {
@@ -249,14 +247,14 @@ void BackendGeonamesRG::slotFinished(QNetworkReply* reply)
             dataString.remove(0,pos);
             dataString.chop(1);
 
-            QMap<QString,QString> resultMap = makeQMapFromXML(dataString);
+            QMap<QString, QString> resultMap = makeQMapFromXML(dataString);
 
-            for (int j = 0; j < d->jobs[i].request.count(); ++j)
+            for (int j = 0 ; j < d->jobs[i].request.count() ; ++j)
             {
                 d->jobs[i].request[j].rgData =  resultMap;
             }
 
-            emit(signalRGReady(d->jobs[i].request));
+            emit signalRGReady(d->jobs[i].request);
 
             d->jobs.removeAt(i);
 

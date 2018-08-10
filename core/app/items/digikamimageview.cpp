@@ -31,6 +31,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QPointer>
 #include <QMenu>
 #include <QIcon>
@@ -42,6 +43,7 @@
 #include "digikam_debug.h"
 #include "albummanager.h"
 #include "coredb.h"
+#include "coredboperationgroup.h"
 #include "advancedrenamedialog.h"
 #include "advancedrenameprocessdialog.h"
 #include "applicationsettings.h"
@@ -154,6 +156,9 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     connect(imageModel()->dragDropHandler(), SIGNAL(addToGroup(ImageInfo,QList<ImageInfo>)),
             FileActionMngr::instance(), SLOT(addToGroup(ImageInfo,QList<ImageInfo>)));
 
+    connect(imageModel()->dragDropHandler(), SIGNAL(dragDropSort(ImageInfo,QList<ImageInfo>)),
+            this, SLOT(dragDropSort(ImageInfo,QList<ImageInfo>)));
+
     connect(d->utilities, SIGNAL(editorCurrentUrlChanged(QUrl)),
             this, SLOT(setCurrentUrlWhenAvailable(QUrl)));
 
@@ -208,6 +213,57 @@ ImageInfoList DigikamImageView::selectedImageInfosCurrentFirst(bool grouping) co
 
     return ImageCategorizedView::selectedImageInfosCurrentFirst();
 }
+
+void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos)
+{
+    if (pick.isNull() || infos.isEmpty())
+    {
+        return;
+    }
+
+    ImageInfoList infoList = allImageInfos(false);
+    qlonglong counter      = pick.manualOrder();
+    bool order             = (ApplicationSettings::instance()->
+                                getImageSorting() == Qt::AscendingOrder);
+    bool found             = false;
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
+    CoreDbOperationGroup group;
+    group.setMaximumTime(200);
+
+    foreach(ImageInfo info, infoList)
+    {
+        if (!found && info.id() == pick.id())
+        {
+            foreach(ImageInfo dropInfo, infos)
+            {
+                dropInfo.setManualOrder(counter);
+                counter += (order ? 1 : -1);
+            }
+
+            info.setManualOrder(counter);
+            found = true;
+        }
+        else if (found && !infos.contains(info))
+        {
+            if (( order && info.manualOrder() > counter) ||
+                (!order && info.manualOrder() < counter))
+            {
+                break;
+            }
+
+            counter += (order ? 100 : -100);
+            info.setManualOrder(counter);
+        }
+
+        group.allowLift();
+    }
+
+    QApplication::restoreOverrideCursor();
+
+    imageFilterModel()->invalidate();
+ }
 
 bool DigikamImageView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
 {

@@ -233,6 +233,11 @@ bool ImageSortSettings::lessThan(const ImageInfo& left, const ImageInfo& right) 
         return result < 0;
     }
 
+    if ( (result = compare(left, right, SortByManualOrder)) != 0)
+    {
+        return result < 0;
+    }
+
     return false;
 }
 
@@ -287,6 +292,8 @@ int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right, So
             double rightSimilarity = right.id() == rightReferenceImageId ? 1.1 : right.currentSimilarity();
             return compareByOrder(leftSimilarity, rightSimilarity, currentSortOrder);
         }
+        case SortByManualOrder:
+            return compareByOrder(left.manualOrder(), right.manualOrder(), currentSortOrder);
         default:
             return 1;
     }
@@ -386,6 +393,9 @@ DatabaseFields::Set ImageSortSettings::watchFlags() const
         case SortBySimilarity:
             // TODO: Not sure what to do here....
             set |= DatabaseFields::Name;
+            break;
+        case SortByManualOrder:
+            set |= DatabaseFields::ManualOrder;
             break;
     }
 

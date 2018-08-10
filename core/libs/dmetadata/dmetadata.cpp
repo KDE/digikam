@@ -333,7 +333,7 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer& settin
     return captionsMap;
 }
 
-bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSettingsContainer &settings) const
+bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSettingsContainer& settings) const
 {
 /*
     // See bug #139313: An empty string is also a valid value
@@ -660,7 +660,7 @@ bool DMetadata::setImageTitles(const CaptionsMap& titles) const
     return true;
 }
 
-int DMetadata::getImageRating(const DMetadataSettingsContainer &settings) const
+int DMetadata::getImageRating(const DMetadataSettingsContainer& settings) const
 {
     if (getFilePath().isEmpty())
     {
@@ -816,7 +816,7 @@ bool DMetadata::setImageColorLabel(int colorId) const
     return true;
 }
 
-bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &settings) const
+bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer& settings) const
 {
     // NOTE : with digiKam 0.9.x, we have used IPTC Urgency to store Rating.
     // Now this way is obsolete, and we use standard XMP rating tag instead.

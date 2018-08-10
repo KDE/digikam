@@ -116,6 +116,8 @@
 
 #define LIBEXEC_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${LIBEXEC_INSTALL_DIR}"
 
+#define DIGIKAM_SHARED_LIBRARY_PREFIX "${CMAKE_SHARED_LIBRARY_PREFIX}"
+
 /*
   Disable indeep warnings from Visual Studio C++ 2008 (9.0)
 */

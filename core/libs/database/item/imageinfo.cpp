@@ -196,6 +196,7 @@ ImageInfoData::ImageInfoData()
     rating                 = -1;
     category               = DatabaseItem::UndefinedCategory;
     fileSize               = 0;
+    manualOrder            = 0;
 
     longitude              = 0;
     latitude               = 0;
@@ -218,6 +219,7 @@ ImageInfoData::ImageInfoData()
     creationDateCached     = false;
     modificationDateCached = false;
     fileSizeCached         = false;
+    manualOrderCached      = false;
     imageSizeCached        = false;
     tagIdsCached           = false;
     positionsCached        = false;
@@ -652,7 +654,22 @@ int ImageInfo::rating() const
     RETURN_IF_CACHED(rating)
 
     QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Rating);
+
     STORE_IN_CACHE_AND_RETURN(rating, values.first().toLongLong())
+}
+
+qlonglong ImageInfo::manualOrder() const
+{
+    if (!m_data)
+    {
+        return 0;
+    }
+
+    RETURN_IF_CACHED(manualOrder)
+
+    QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::ManualOrder);
+
+    STORE_IN_CACHE_AND_RETURN(manualOrder, values.first().toLongLong())
 }
 
 QString ImageInfo::format() const
@@ -663,7 +680,9 @@ QString ImageInfo::format() const
     }
 
     RETURN_IF_CACHED(format)
+
     QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Format);
+
     STORE_IN_CACHE_AND_RETURN(format, values.first().toString())
 }
 
@@ -675,7 +694,9 @@ DatabaseItem::Category ImageInfo::category() const
     }
 
     RETURN_IF_CACHED(category)
+
     QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::Category);
+
     STORE_IN_CACHE_AND_RETURN(category, (DatabaseItem::Category)values.first().toInt())
 }
 
@@ -687,7 +708,9 @@ QDateTime ImageInfo::dateTime() const
     }
 
     RETURN_IF_CACHED(creationDate)
+
     QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::CreationDate);
+
     STORE_IN_CACHE_AND_RETURN(creationDate, values.first().toDateTime())
 }
 
@@ -699,7 +722,9 @@ QDateTime ImageInfo::modDateTime() const
     }
 
     RETURN_IF_CACHED(modificationDate)
+
     QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::ModificationDate);
+
     STORE_IN_CACHE_AND_RETURN(modificationDate, values.first().toDateTime())
 }
 
@@ -711,6 +736,7 @@ QSize ImageInfo::dimensions() const
     }
 
     RETURN_IF_CACHED(imageSize)
+
     QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
     ImageInfoWriteLocker lock;
     m_data.constCastData()->imageSizeCached = true;
@@ -741,13 +767,28 @@ QList<int> ImageInfo::tagIds() const
 
 void ImageInfoList::loadTagIds() const
 {
-    QVector<QList<int> > allTagIds = CoreDbAccess().db()->getItemsTagIDs(toImageIdList());
+    ImageInfoList infoList;
+
+    foreach(const ImageInfo& info, *this)
+    {
+        if (info.m_data && !info.m_data->tagIdsCached)
+        {
+            infoList << info;
+        }
+    }
+
+    if (infoList.isEmpty())
+    {
+        return;
+    }
+
+    QVector<QList<int> > allTagIds = CoreDbAccess().db()->getItemsTagIDs(infoList.toImageIdList());
 
     ImageInfoWriteLocker lock;
 
-    for (int i = 0 ; i < size() ; i++)
+    for (int i = 0 ; i < infoList.size() ; ++i)
     {
-        const ImageInfo& info = at(i);
+        const ImageInfo& info = infoList.at(i);
         const QList<int>& ids = allTagIds.at(i);
 
         if (!info.m_data)
@@ -961,12 +1002,29 @@ qlonglong ImageInfo::groupImageId() const
 
 void ImageInfoList::loadGroupImageIds() const
 {
-    QVector<QList<qlonglong> > allGroupIds = CoreDbAccess().db()->getImagesRelatedFrom(toImageIdList(), DatabaseRelation::Grouped);
+    ImageInfoList infoList;
+
+    foreach(const ImageInfo& info, *this)
+    {
+        if (info.m_data && !info.m_data->groupImageCached)
+        {
+            infoList << info;
+        }
+    }
+
+    if (infoList.isEmpty())
+    {
+        return;
+    }
+
+    QVector<QList<qlonglong> > allGroupIds = CoreDbAccess().db()->getImagesRelatedFrom(infoList.toImageIdList(),
+                                                                                       DatabaseRelation::Grouped);
+
     ImageInfoWriteLocker lock;
 
-    for (int i = 0 ; i < size() ; i++)
+    for (int i = 0 ; i < infoList.size() ; ++i)
     {
-        const ImageInfo& info            = at(i);
+        const ImageInfo& info            = infoList.at(i);
         const QList<qlonglong>& groupIds = allGroupIds.at(i);
 
         if (!info.m_data)
@@ -1646,6 +1704,20 @@ void ImageInfo::setRating(int value)
     ImageInfoWriteLocker lock;
     m_data->rating       = value;
     m_data->ratingCached = true;
+}
+
+void ImageInfo::setManualOrder(qlonglong value)
+{
+    if (!m_data)
+    {
+        return;
+    }
+
+    CoreDbAccess().db()->setItemManualOrder(m_data->id, value);
+
+    ImageInfoWriteLocker lock;
+    m_data->manualOrder       = value;
+    m_data->manualOrderCached = true;
 }
 
 void ImageInfo::setOrientation(int value)

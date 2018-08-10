@@ -26,8 +26,20 @@
 
 // Qt includes
 
-#include <QSplitter>
+#include <QApplication>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QAction>
+#include <QMenuBar>
+#include <QStatusBar>
+#include <QMenu>
+#include <QSplitter>
+
+// KDE includes
+
+#include <klocalizedstring.h>
+#include <kactioncollection.h>
 
 // Local includes
 
@@ -38,6 +50,85 @@
 #include "lighttableview.h"
 #include "lighttablethumbbar.h"
 #include "thumbbardock.h"
+#include "drawdecoder.h"
+#include "digikam_debug.h"
+#include "componentsinfo.h"
+#include "digikamapp.h"
+#include "thememanager.h"
+#include "dimg.h"
+#include "dio.h"
+#include "dmetadata.h"
+#include "dfileoperations.h"
+#include "metadatasettings.h"
+#include "metadataedit.h"
+#include "applicationsettings.h"
+#include "albummanager.h"
+#include "loadingcacheinterface.h"
+#include "deletedialog.h"
+#include "iccsettings.h"
+#include "imagewindow.h"
+#include "imagegps.h"
+#include "imagedescedittab.h"
+#include "presentationmngr.h"
+#include "slideshowbuilder.h"
+#include "slideshow.h"
+#include "setup.h"
+#include "syncjob.h"
+#include "lighttablepreview.h"
+#include "albummodel.h"
+#include "albumfiltermodel.h"
+#include "coredbchangesets.h"
+#include "collectionscanner.h"
+#include "scancontroller.h"
+#include "tagsactionmngr.h"
+#include "thumbnailsize.h"
+#include "thumbnailloadthread.h"
+#include "dexpanderbox.h"
+#include "dbinfoiface.h"
+#include "calwizard.h"
+#include "expoblendingmanager.h"
+#include "mailwizard.h"
+#include "advprintwizard.h"
+#include "dmediaserverdlg.h"
+#include "dbwindow.h"
+#include "fbwindow.h"
+#include "flickrwindow.h"
+#include "gswindow.h"
+#include "imageshackwindow.h"
+#include "imgurwindow.h"
+#include "piwigowindow.h"
+#include "rajcewindow.h"
+#include "smugwindow.h"
+#include "yfwindow.h"
+
+#ifdef HAVE_MEDIAWIKI
+#   include "mediawikiwindow.h"
+#endif
+
+#ifdef HAVE_VKONTAKTE
+#   include "vkwindow.h"
+#endif
+
+#ifdef HAVE_KIO
+#   include "ftexportwindow.h"
+#   include "ftimportwindow.h"
+#endif
+
+#ifdef HAVE_MARBLE
+#   include "geolocationedit.h"
+#endif
+
+#ifdef HAVE_HTMLGALLERY
+#   include "htmlwizard.h"
+#endif
+
+#ifdef HAVE_PANORAMA
+#   include "panomanager.h"
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+#   include "vidslidewizard.h"
+#endif
 
 namespace Digikam
 {
@@ -92,7 +183,13 @@ public:
     {
     }
 
-    void addPageUpDownActions(LightTableWindow* const q, QWidget* const w);
+    void addPageUpDownActions(LightTableWindow* const q, QWidget* const w)
+    {
+        defineShortcut(w, Qt::Key_Down,  q, SLOT(slotForward()));
+        defineShortcut(w, Qt::Key_Right, q, SLOT(slotForward()));
+        defineShortcut(w, Qt::Key_Up,    q, SLOT(slotBackward()));
+        defineShortcut(w, Qt::Key_Left,  q, SLOT(slotBackward()));
+    }
 
 public:
 
@@ -146,15 +243,6 @@ public:
     ImagePropertiesSideBarDB* leftSideBar;
     ImagePropertiesSideBarDB* rightSideBar;
 };
-
-void LightTableWindow::Private::addPageUpDownActions(LightTableWindow* const q,
-                                                     QWidget* const w)
-{
-    defineShortcut(w, Qt::Key_Down,  q, SLOT(slotForward()));
-    defineShortcut(w, Qt::Key_Right, q, SLOT(slotForward()));
-    defineShortcut(w, Qt::Key_Up,    q, SLOT(slotBackward()));
-    defineShortcut(w, Qt::Key_Left,  q, SLOT(slotBackward()));
-}
 
 } // namespace Digikam
 

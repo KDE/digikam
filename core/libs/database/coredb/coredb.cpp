@@ -1809,7 +1809,8 @@ QVariantList CoreDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseFields
     return values;
 }
 
-void CoreDB::addImageInformation(qlonglong imageID, const QVariantList& infos, DatabaseFields::ImageInformation fields)
+void CoreDB::addImageInformation(qlonglong imageID, const QVariantList& infos,
+                                 DatabaseFields::ImageInformation fields)
 {
     if (fields == DatabaseFields::ImageInformationNone)
     {
@@ -1836,7 +1837,7 @@ void CoreDB::addImageInformation(qlonglong imageID, const QVariantList& infos, D
 }
 
 void CoreDB::changeImageInformation(qlonglong imageId, const QVariantList& infos,
-                                     DatabaseFields::ImageInformation fields)
+                                    DatabaseFields::ImageInformation fields)
 {
     if (fields == DatabaseFields::ImageInformationNone)
     {
@@ -1845,11 +1846,13 @@ void CoreDB::changeImageInformation(qlonglong imageId, const QVariantList& infos
 
     QStringList fieldNames = imageInformationFieldList(fields);
 
-    d->db->execUpsertDBAction(QLatin1String("changeImageInformation"), imageId, fieldNames, infos);
+    d->db->execUpsertDBAction(QLatin1String("changeImageInformation"),
+                              imageId, fieldNames, infos);
     d->db->recordChangeset(ImageChangeset(imageId, fields));
 }
 
-void CoreDB::addImageMetadata(qlonglong imageID, const QVariantList& infos, DatabaseFields::ImageMetadata fields)
+void CoreDB::addImageMetadata(qlonglong imageID, const QVariantList& infos,
+                              DatabaseFields::ImageMetadata fields)
 {
     if (fields == DatabaseFields::ImageMetadataNone)
     {
@@ -2785,6 +2788,11 @@ QStringList CoreDB::imagesFieldList(DatabaseFields::Images fields)
     if (fields & DatabaseFields::UniqueHash)
     {
         list << QLatin1String("uniqueHash");
+    }
+
+    if (fields & DatabaseFields::ManualOrder)
+    {
+        list << QLatin1String("manualOrder");
     }
 
     return list;
@@ -3763,10 +3771,19 @@ void CoreDB::setItemAlbum(qlonglong imageID, qlonglong album)
     d->db->recordChangeset(CollectionImageChangeset(imageID, album, CollectionImageChangeset::Added));
 }
 
+void CoreDB::setItemManualOrder(qlonglong imageID, qlonglong value)
+{
+    QVariantList boundValues;
+    boundValues << value << imageID;
+    d->db->execSql(QString::fromUtf8("UPDATE Images SET manualOrder=? WHERE id=?;"),
+                   boundValues);
+
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::ManualOrder));
+}
+
 void CoreDB::renameItem(qlonglong imageID, const QString& newName)
 {
-    d->db->execSql(QString::fromUtf8("UPDATE Images SET name=? "
-                                     "WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Images SET name=? WHERE id=?;"),
                    newName, imageID);
 }
 

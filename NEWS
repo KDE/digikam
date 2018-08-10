@@ -46,6 +46,8 @@ General      : Update internal Libraw to last 0.19.0.
 
 Tags         : Add possibility to merge tags by drag & drop.
 
+IconView     : Add capability to re-organize the contents manually.
+
 HTML Gallery : New Vanilla theme to emulate export to HTML from Adobe LightRoom.
 HTML Gallery : New Blue Frame theme.
 HTML Gallery : New Kiosk-Mode theme.
@@ -306,4 +308,31 @@ BUGFIXES:
 251 ==> 396712 - "Save Search" does not work.
 252 ==> 396944 - Integrity constraint violation on Albums.icons when migrating from sqlite to mysql.
 253 ==> 396952 - Cut and Paste Into Caption Has Incorrect Font Initially.
-254 ==> 
+254 ==> 091562 - Change order of pictures in the virtual album manually.
+255 ==> 098340 - Re-sort images in albums
+256 ==> 177355 - Feature request: export slideshow in lighttable.
+257 ==> 158520 - Wishlist sort thumbnails manually and rename images.
+258 ==> 191000 - Wish: Visual tool to change the sort order of photos.
+259 ==> 216802 - digiKam ability to sort album with "picture is before picture".
+260 ==> 230136 - It lacks the ability to sort photos manually.
+261 ==> 236249 - Wish: custom sort in album view.
+262 ==> 323559 - Wish: Albums like Playlists in Amarok.
+263 ==> 337002 - Manual image sort.
+264 ==> 397167 - Some tags are not displayed on the preview.
+265 ==> 397207 - Too many open files, when reverse geocoding many images.
+266 ==> 397278 - DNG conversion not possible.
+267 ==> 397311 - DIN A relation in "Aspect Ratio Crop".
+268 ==> 222716 - digiKam does not start. Showing: Reading database.
+269 ==> 276633 - Crash when using map view inside of digiKam.
+270 ==> 224706 - digiKam for KDE on Windows "Failed to rename Album" (KDirWatch Relevant).
+271 ==> 383016 - digiKam with incomplete German translation.
+272 ==> 244982 - digiKam crashes at initial configuration.
+273 ==> 366453 - digiKam crash while using mouse over title bar.
+274 ==> 278490 - Incorrect tab layout with slider/spinbox/reset button.
+275 ==> 324642 - digiKam crash when starting a bug report while offline.
+276 ==> 238392 - digiKam Camera interface : rename dialog interprets alt-s as plain s when button greyed out.
+277 ==> 397177 - image editor does not export exif and IPTC data when saving to PNG.
+278 ==> 341276 - Picture bigger than 5MB are not previewed.
+279 ==> 388908 - Error while scanning with HP F300 series.
+280 ==> 
+
