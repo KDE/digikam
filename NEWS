@@ -325,5 +325,5 @@ BUGFIXES:
 268 ==> 222716 - digiKam does not start. Showing: Reading database.
 269 ==> 276633 - Crash when using map view inside of digiKam.
 270 ==> 224706 - digiKam for KDE on Windows "Failed to rename Album" (KDirWatch Relevant).
-271 ==> 
-
+271 ==> 383016 - digiKam with incomplete German translation.
+272 ==> 
