@@ -333,4 +333,6 @@ BUGFIXES:
 276 ==> 238392 - digiKam Camera interface : rename dialog interprets alt-s as plain s when button greyed out.
 277 ==> 397177 - image editor does not export exif and IPTC data when saving to PNG.
 278 ==> 341276 - Picture bigger than 5MB are not previewed.
-279 ==> 
+279 ==> 388908 - Error while scanning with HP F300 series.
+280 ==> 
+
