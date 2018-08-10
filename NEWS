@@ -329,4 +329,6 @@ BUGFIXES:
 272 ==> 244982 - digiKam crashes at initial configuration.
 273 ==> 366453 - digiKam crash while using mouse over title bar.
 274 ==> 278490 - Incorrect tab layout with slider/spinbox/reset button.
-275 ==> 
+275 ==> 324642 - digiKam crash when starting a bug report while offline.
+276 ==> 
+
