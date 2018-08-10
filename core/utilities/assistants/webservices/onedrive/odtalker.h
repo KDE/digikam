@@ -36,8 +36,6 @@
 // Local includes
 
 #include "oditem.h"
-#include "o2.h"
-#include "o0globals.h"
 #include "dmetadata.h"
 
 namespace Digikam
@@ -60,7 +58,7 @@ public:
     bool authenticated();
     void cancel();
     bool addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality);
-    void listFolders(const QString& path = QString());
+    void listFolders();
     void createFolder(QString& path);
     void setAccessToken(const QString& token);
     QMap<QString,QString> ParseUrlParameters(const QString& url);
@@ -91,7 +89,6 @@ private:
 
     void parseResponseUserName(const QByteArray& data);
     void parseResponseListFolders(const QByteArray& data);
-    //QList<QPair<QString, QString> > parseListFoldersRequest(const QByteArray& data);
     void parseResponseCreateFolder(const QByteArray& data);
     void parseResponseAddPhoto(const QByteArray& data);
 

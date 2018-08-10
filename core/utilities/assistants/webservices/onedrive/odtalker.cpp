@@ -1,4 +1,27 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2018-05-20
+ * Description : a tool to export images to Onedrive web service
+ *
+ * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
+ * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 #include <odtalker.h>
+#include "digikam_config.h"
 
 // Qt includes
 
@@ -16,10 +39,6 @@
 #include <QApplication>
 #include <QDesktopServices>
 #include <QUrlQuery>
-#include <QWebEngineView>
-#include <QWebEnginePage>
-#include <QWebEngineProfile>
-#include <QWebEngineCookieStore>
 
 // Local includes
 
@@ -30,7 +49,12 @@
 #include "oditem.h"
 #include "odmpform.h"
 #include "previewloadthread.h"
-#include "o0settingsstore.h"
+
+#ifdef HAVE_QWEBENGINE
+#   include "webwidget_qwebengine.h"
+#else
+#   include "webwidget.h"
+#endif
 
 namespace Digikam
 {
@@ -89,13 +113,15 @@ public:
 
     QMap<QString,QString> urlParametersMap;
 
-    QWebEngineView*        view;
+    WebWidget*        view;
+
+    QString                tokenKey;
 };
 ODTalker::ODTalker(QWidget* const parent)
     : d(new Private)
 {
-    d->parent  = parent;
-    d->netMngr = new QNetworkAccessManager(this);
+    d->parent   = parent;
+    d->netMngr  = new QNetworkAccessManager(this);
 
     connect(this, SIGNAL(oneDriveLinkingFailed()),
             this, SLOT(slotLinkingFailed()));
@@ -124,7 +150,7 @@ void ODTalker::link()
     query.addQueryItem(QLatin1String("response_type"), "token");
     url.setQuery(query);
 
-    d->view = new QWebEngineView(d->parent);
+    d->view = new WebWidget(d->parent);
     d->view->setWindowFlags(Qt::Dialog);
     d->view->load(url);
     d->view->show();
@@ -134,22 +160,27 @@ void ODTalker::link()
 void ODTalker::unLink()
 {
     d->accessToken = "";
+    #ifdef HAVE_QWEBENGINE
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
+    #else
+
+    #endif
+
     Q_EMIT oneDriveLinkingSucceeded();
 }
 void ODTalker::slotCatchUrl(const QUrl& url)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Recieved URL from webview in link function: " << url ;
     d->urlParametersMap = ParseUrlParameters(url.toString());
     d->accessToken = d->urlParametersMap.value("access_token");
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Recieved URL from webview in link function: " << url ;
+    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Recieved URL from webview in link function: " << url ;
     if(d->accessToken != ""){
-      qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token Recieved";
+      qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access Token Recieved";
       Q_EMIT oneDriveLinkingSucceeded();
     }else{
       Q_EMIT oneDriveLinkingFailed();
     }
 }
+
 QMap<QString,QString> ODTalker::ParseUrlParameters(const QString &url)
 {
   QMap<QString,QString> urlParameters;
@@ -228,7 +259,6 @@ void ODTalker::createFolder(QString& path)
     netRequest.setRawHeader("Authorization", QString::fromLatin1("bearer %1").arg(d->accessToken).toUtf8());
 
     QByteArray postData = QString::fromUtf8("{\"name\": \"%1\",\"folder\": {}}").arg(name).toUtf8();
-qCDebug(DIGIKAM_WEBSERVICES_LOG) << "createFolder:" << postData;
     d->reply = d->netMngr->post(netRequest, postData);
 
     d->state = Private::OD_CREATEFOLDER;
@@ -244,7 +274,6 @@ void ODTalker::getUserName()
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
 
     d->reply = d->netMngr->get(netRequest);
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "AFter Request Usar " << d->reply;
     d->state = Private::OD_USERNAME;
     d->buffer.resize(0);
     emit signalBusy(true);
@@ -252,7 +281,7 @@ void ODTalker::getUserName()
 
 /** Get list of folders by parsing json sent by onedrive
  */
-void ODTalker::listFolders(const QString& path)
+void ODTalker::listFolders()
 {
     QUrl url(QLatin1String("https://graph.microsoft.com/v1.0/me//drive/root/children?select=name,folder,path,parentReference"));;
 
@@ -269,9 +298,6 @@ void ODTalker::listFolders(const QString& path)
 
 bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "PATH " << imgPath;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Folder " << uploadFolder;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Others: " << rescale << " " << maxDim << " " <<imageQuality;
     if (d->reply)
     {
         d->reply->abort();
@@ -394,10 +420,7 @@ void ODTalker::parseResponseAddPhoto(const QByteArray& data)
 void ODTalker::parseResponseUserName(const QByteArray& data)
 {
     QJsonDocument doc      = QJsonDocument::fromJson(data);
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseUserName: "<<doc;
     QString name  = doc.object()[QLatin1String("displayName")].toString();
-
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseUserName: "<<name;
     emit signalBusy(false);
     emit signalSetUserName(name);
 }
@@ -417,8 +440,6 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
     QJsonObject jsonObject = doc.object();
     //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Json: " << doc;
     QJsonArray jsonArray   = jsonObject[QLatin1String("value")].toArray();
-
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Json response: " << jsonArray;
 
     QList<QPair<QString, QString> > list;
     list.append(qMakePair(QLatin1String(""), QLatin1String("root")));

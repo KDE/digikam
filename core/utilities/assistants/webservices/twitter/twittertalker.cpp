@@ -16,10 +16,10 @@
 #include <QApplication>
 #include <QDesktopServices>
 #include <QUrlQuery>
-#include <QWebEngineView>
+/*#include <QWebEngineView>
 #include <QWebEnginePage>
 #include <QWebEngineProfile>
-#include <QWebEngineCookieStore>
+#include <QWebEngineCookieStore>*/
 
 // Local includes
 
@@ -93,7 +93,7 @@ public:
 
     QMap<QString,QString> urlParametersMap;
 
-    QWebEngineView*        view;
+    //QWebEngineView*        view;
 
     QSettings*             settings;
 

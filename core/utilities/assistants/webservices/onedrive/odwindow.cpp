@@ -1,3 +1,25 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2018-05-20
+ * Description : a tool to export images to Onedrive web service
+ *
+ * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
+ * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 #include "odwindow.h"
 
 // Qt includes
@@ -217,15 +239,12 @@ void ODWindow::slotSetUserName(const QString& msg)
 void ODWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
 {
     d->widget->getAlbumsCoB()->clear();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" << list.size();
 
     for (int i = 0 ; i < list.size() ; i++)
     {
         d->widget->getAlbumsCoB()->addItem(
         QIcon::fromTheme(QLatin1String("system-users")),
         list.value(i).second, list.value(i).first);
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" << list.value(i).second << " " << list.value(i).first;
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" <<d->currentAlbumName;
         if (d->currentAlbumName == list.value(i).first)
         {
             d->widget->getAlbumsCoB()->setCurrentIndex(i);

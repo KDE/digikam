@@ -95,4 +95,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GS_WINDOW_H
+#endif // OD_WINDOW_H
