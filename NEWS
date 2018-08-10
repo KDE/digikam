@@ -328,4 +328,5 @@ BUGFIXES:
 271 ==> 383016 - digiKam with incomplete German translation.
 272 ==> 244982 - digiKam crashes at initial configuration.
 273 ==> 366453 - digiKam crash while using mouse over title bar.
-274 ==> 
+274 ==> 278490 - Incorrect tab layout with slider/spinbox/reset button.
+275 ==> 
