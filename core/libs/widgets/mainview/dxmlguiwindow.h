@@ -231,8 +231,7 @@ protected:
 
     QAction*     m_exportDropboxAction;
     QAction*     m_exportOnedriveAction;
-    QAction*     m_exportLinkedInAction;
-    QAction*     m_exportTwitterAction;
+    QAction*     m_exportPinterestAction;
     QAction*     m_exportFacebookAction;
     QAction*     m_exportFlickrAction;
     QAction*     m_exportGdriveAction;
