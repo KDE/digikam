@@ -322,5 +322,5 @@ BUGFIXES:
 265 ==> 397207 - Too many open files, when reverse geocoding many images.
 266 ==> 397278 - DNG conversion not possible.
 267 ==> 397311 - DIN A relation in "Aspect Ratio Crop".
-268 ==> 
-
+268 ==> 222716 - digiKam does not start. Showing: Reading database.
+269 ==> 
