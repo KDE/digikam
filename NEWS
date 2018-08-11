@@ -318,4 +318,5 @@ BUGFIXES:
 261 ==> 236249 - Wish: custom sort in album view.
 262 ==> 323559 - Wish: Albums like Playlists in Amarok.
 263 ==> 337002 - Manual image sort.
-264 ==> 
+264 ==> 309508 - Export to Flickr does not send the geodata.
+265 ==> 
