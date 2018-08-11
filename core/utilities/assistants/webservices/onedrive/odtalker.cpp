@@ -6,8 +6,7 @@
  * Date        : 2018-05-20
  * Description : a tool to export images to Onedrive web service
  *
- * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
- * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018      by Tarek Talaat <tarektalaat93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -241,10 +240,8 @@ void ODTalker::cancel()
 void ODTalker::createFolder(QString& path)
 {
     //path also has name of new folder so send path parameter accordingly
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "createFolder:" << path;
     QString name = path.section(QLatin1Char('/'), -1);
     QString folderPath = path.section(QLatin1Char('/'),-2,-2);
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "createFolder: name After: " << name << " folderpath section: " << folderPath;
 
     QUrl url;
 
@@ -456,7 +453,6 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
         if(!folder.isEmpty()){
           folderName    = obj[QLatin1String("name")].toString();
           path          =    "/" + folderName;
-          qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Folder Name is" << folderName;
           list.append(qMakePair(path, folderName));
 
         }
@@ -478,7 +474,6 @@ void ODTalker::parseResponseCreateFolder(const QByteArray& data)
     {
       QJsonParseError err;
       QJsonDocument doc = QJsonDocument::fromJson(data, &err);
-      qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseCreateFolder ERROR: " << doc;
       emit signalCreateFolderFailed(jsonObject[QLatin1String("error_summary")].toString());
     }
     else

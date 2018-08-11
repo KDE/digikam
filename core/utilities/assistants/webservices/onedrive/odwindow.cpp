@@ -6,8 +6,7 @@
  * Date        : 2018-05-20
  * Description : a tool to export images to Onedrive web service
  *
- * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
- * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018      by Tarek Talaat <tarektalaat93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -161,7 +160,6 @@ void ODWindow::readSettings()
     KConfig config;
     KConfigGroup grp   = config.group("Onedrive Settings");
     d->currentAlbumName = grp.readEntry("Current Album",QString());
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "readsettings:" << d->currentAlbumName;
 
     if (grp.readEntry("Resize", false))
     {
@@ -379,7 +377,6 @@ void ODWindow::slotNewAlbumRequest()
     {
         ODFolder newFolder;
         d->albumDlg->getFolderTitle(newFolder);
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotNewAlbumRequest:" << newFolder.title;
         d->currentAlbumName = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
         QString temp = d->currentAlbumName + newFolder.title;
         d->talker->createFolder(temp);
