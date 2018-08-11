@@ -4,10 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2018-05-20
- * Description : a tool to export images to Onedrive web service
+ * Description : a tool to export images to Pinterest web service
  *
- * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
- * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018      by Tarek Talaat <tarektalaat93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- 
+
 #include "pwindow.h"
 
 // Qt includes
@@ -162,7 +161,6 @@ void PWindow::readSettings()
     KConfig config;
     KConfigGroup grp   = config.group("Pinterest Settings");
     d->currentAlbumName = grp.readEntry("Current Album",QString());
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "readsettings:" << d->currentAlbumName;
 
     if (grp.readEntry("Resize", false))
     {
