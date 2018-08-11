@@ -337,4 +337,6 @@ BUGFIXES:
 280 ==> 381723 - digiKam crashed when I tried to close the window opened by clicking import button.
 281 ==> 345288 - Crash from digiKam when try customizing a shortcut to a Tag.
 282 ==> 381193 - digiKam crashes after uploading photos from smartphone via USB.
-283 ==> 
+283 ==> 275670 - Face preview image incorrect on 'rotated' images.
+284 ==> 
+
