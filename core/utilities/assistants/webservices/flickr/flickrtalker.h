@@ -68,7 +68,8 @@ public:
         FE_ADDPHOTO,
         FE_CREATEPHOTOSET,
         FE_ADDPHOTOTOPHOTOSET,
-        FE_GETMAXSIZE
+        FE_GETMAXSIZE,
+        FE_SETGEO
     };
 
 public:
@@ -98,6 +99,7 @@ public:
     bool    addPhoto(const QString& photoPath, const FPhotoInfo& info,
                      bool original = false, bool rescale = false,
                      int maxDim = 600, int imageQuality = 85);
+    void    setGeoLocation(const QString& photoId, const QString& lat, const QString& lon);
 
 public:
 
@@ -109,7 +111,7 @@ Q_SIGNALS:
 
     void signalError(const QString& msg);
     void signalBusy(bool val);
-    void signalAddPhotoSucceeded();
+    void signalAddPhotoSucceeded(const QString&);
     void signalAddPhotoSetSucceeded();
     void signalListPhotoSetsSucceeded();
     void signalListPhotoSetsFailed(QString& msg);
@@ -128,6 +130,7 @@ private:
     void parseResponsePhotoProperty(const QByteArray& data);
     void parseResponseCreatePhotoSet(const QByteArray& data);
     void parseResponseAddPhotoToPhotoSet(const QByteArray& data);
+    void parseResponseSetGeoLocation(const QByteArray& data);
 
 private Q_SLOTS:
 
