@@ -338,5 +338,6 @@ BUGFIXES:
 281 ==> 345288 - Crash from digiKam when try customizing a shortcut to a Tag.
 282 ==> 381193 - digiKam crashes after uploading photos from smartphone via USB.
 283 ==> 275670 - Face preview image incorrect on 'rotated' images.
-284 ==> 
+284 ==> 395199 - Uploading large video files to flickr fails [patch].
+285 ==> 
 
