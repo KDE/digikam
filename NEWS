@@ -339,5 +339,6 @@ BUGFIXES:
 282 ==> 381193 - digiKam crashes after uploading photos from smartphone via USB.
 283 ==> 275670 - Face preview image incorrect on 'rotated' images.
 284 ==> 395199 - Uploading large video files to flickr fails [patch].
-285 ==> 
-
+285 ==> 240144 - digiKam : When I press the left button of the mouse on a photo, a menu appears, but no items are seen.
+286 ==> 240229 - White contextual menu problem.
+287 ==> 
