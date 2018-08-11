@@ -292,8 +292,6 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsdropbox_SRCS}
                                    ${libwsonedrive_SRCS}
                                    ${libwspinterest_SRCS}
-                                   ${libwstwitter_SRCS}
-                                   ${libwsbox_SRCS}
                                    ${libwssmugmug_SRCS}
                                    ${libwsimageshack_SRCS}
                                    ${libwsfacebook_SRCS}

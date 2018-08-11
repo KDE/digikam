@@ -41,8 +41,7 @@ WebWidget::WebWidget(QWidget* const parent)
       d(new Private())
 {
     d->parent = parent;
-    connect(this, SIGNAL(loadProgress(int)),
-            this, SLOT(progress(int)));
+
 }
 WebWidget::~WebWidget()
 {
