@@ -60,7 +60,6 @@ public:
         progressBar(0),
         complete(false),
         wizard(0),
-        settings(0),
         iface(0),
         wsAuth(0)
     {
@@ -69,7 +68,6 @@ public:
         if (wizard)
         {
             iface    = wizard->iface();
-            settings = wizard->settings();
             wsAuth   = wizard->wsAuth();
         }
     }
@@ -78,7 +76,6 @@ public:
     DProgressWdg*     progressBar;
     bool              complete;
     WSWizard*         wizard;
-    WSSettings*       settings;
     DInfoInterface*   iface;
     WSAuthentication* wsAuth;
 };
@@ -143,14 +140,14 @@ void WSFinalPage::slotProcess()
     d->progressView->addEntry(i18n("Preparing files..."), DHistoryView::ProgressEntry);
     d->wsAuth->prepareForUpload();
 
-    d->progressView->addEntry(i18n("%1 input items to process", d->settings->inputImages.count()), 
+    d->progressView->addEntry(i18n("%1 input items to process", d->wsAuth->numberItemsUpload()), 
                               DHistoryView::ProgressEntry);
 
     d->progressView->addEntry(i18n("Start transferring process..."), DHistoryView::ProgressEntry);
     d->wsAuth->startTransfer();
 
     d->progressBar->setMinimum(0);
-    d->progressBar->setMaximum(d->settings->inputImages.count());
+    d->progressBar->setMaximum(d->wsAuth->numberItemsUpload());
 }
 
 void WSFinalPage::cleanupPage()

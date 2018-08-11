@@ -90,6 +90,10 @@ public:
     void    prepareForUpload();
 
     /*
+     * Return number of images to upload
+     */
+    unsigned int    numberItemsUpload();
+    /*
      * Upload photo to web service (one at a time).
      * This method is called for the first time in startTransfer.
      * Then each time a photo is uploaded successfully, this method

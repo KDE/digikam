@@ -303,6 +303,11 @@ void WSAuthentication::prepareForUpload()
     }
 }
 
+unsigned int WSAuthentication::numberItemsUpload()
+{
+    return d->imagesTotal;
+}
+
 void WSAuthentication::uploadNextPhoto()
 {    
     if (d->transferQueue.isEmpty())
