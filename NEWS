@@ -334,5 +334,5 @@ BUGFIXES:
 277 ==> 397177 - image editor does not export exif and IPTC data when saving to PNG.
 278 ==> 341276 - Picture bigger than 5MB are not previewed.
 279 ==> 388908 - Error while scanning with HP F300 series.
-280 ==> 
-
+280 ==> 381723 - digiKam crashed when I tried to close the window opened by clicking import button.
+281 ==> 
