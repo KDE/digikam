@@ -174,8 +174,8 @@ void DBWindow::readSettings()
 {
     KConfig config;
     KConfigGroup grp   = config.group("Dropbox Settings");
+
     d->currentAlbumName = grp.readEntry("Current Album",QString());
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "readsettings:" << d->currentAlbumName;
 
     if (grp.readEntry("Resize", false))
     {
@@ -233,7 +233,6 @@ void DBWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
 
         if (d->currentAlbumName == list.value(i).first)
         {
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" << d->currentAlbumName << list.value(i).first;
             d->widget->getAlbumsCoB()->setCurrentIndex(i);
         }
     }
