@@ -83,8 +83,6 @@ public:
     QString refreshTokenUrl();
     void setRefreshTokenUrl(const QString &value);
 
-    void setoneDriveRedirectUrl(const QString &value);
-
 public:
     /// Constructor.
     /// @param  parent  Parent object.
