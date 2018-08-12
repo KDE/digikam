@@ -30,6 +30,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:dngwriter_src>
             $<TARGET_OBJECTS:rawengine_srcs>
             $<TARGET_OBJECTS:digikamfacesengine_src>
+            $<TARGET_OBJECTS:dpluginsinterface_src>
 
             # widgets
             $<TARGET_OBJECTS:digikamwidgetscore_src>
