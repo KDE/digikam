@@ -87,16 +87,15 @@ private Q_SLOTS:
     //void slotChangeProgressBar();
 
     void slotBusy(bool);
-    void slotTextBoxEmpty();
-    void slotAccessTokenFailed(int errCode,const QString& errMsg);
     void slotAccessTokenObtained();
-    void slotRefreshTokenObtained(const QString& msg);
+    void slotAuthenticationRefused();
     void slotSetUserName(const QString& msg);
     void slotListAlbumsDone(int,const QString&,const QList <GSFolder>&);
     void slotListPhotosDoneForDownload(int errCode, const QString& errMsg, const QList <GSPhoto>& photosList);
     void slotListPhotosDoneForUpload(int errCode, const QString& errMsg, const QList <GSPhoto>& photosList);
     void slotCreateFolderDone(int,const QString& msg, const QString& = QStringLiteral("-1"));
-    void slotAddPhotoDone(int,const QString& msg, const QString&);
+    void slotAddPhotoDone(int,const QString& msg);
+    void slotUploadPhotoDone(int, const QString& msg, const QStringList&);
     void slotGetPhotoDone(int errCode, const QString& errMsg, const QByteArray& photoData);
     void slotTransferCancel();
 

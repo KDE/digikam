@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2008-2009 by Luka Renko <lure at kubuntu dot org>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,6 +49,7 @@ public:
     explicit FbNewAlbumDlg(QWidget* const parent, const QString& toolName);
     ~FbNewAlbumDlg();
 
+    void getAlbumProperties();
     void getAlbumProperties(FbAlbum& album);
 
 private:

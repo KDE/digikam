@@ -45,8 +45,6 @@
 #include "dinfointerface.h"
 #include "digikam_version.h"
 
-static const constexpr char* IMGUR_CLIENT_ID("bd2572bce74b73d");
-static const constexpr char* IMGUR_CLIENT_SECRET("300988683e99cb7b203a5889cf71de9ac891c1c1");
 
 namespace Digikam
 {
@@ -78,8 +76,7 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     : WSToolDialog(0),
       d(new Private)
 {
-    d->api = new ImgurTalker(QString::fromLatin1(IMGUR_CLIENT_ID),
-                             QString::fromLatin1(IMGUR_CLIENT_SECRET), this);
+    d->api = new ImgurTalker(this);
 
     // Connect API signals
     connect(d->api, &ImgurTalker::signalAuthorized,

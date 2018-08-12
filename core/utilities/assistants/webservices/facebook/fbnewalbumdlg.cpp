@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2008-2009 by Luka Renko <lure at kubuntu dot org>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,8 +58,10 @@ FbNewAlbumDlg::FbNewAlbumDlg(QWidget* const parent, const QString& toolName)
                           i18n("Only Friends"),            FB_FRIENDS);
     m_privacyCoB->addItem(QIcon::fromTheme(QString::fromLatin1("system-users")),
                           i18n("Friends of Friends"),      FB_FRIENDS_OF_FRIENDS);
+/*
     m_privacyCoB->addItem(QIcon::fromTheme(QString::fromLatin1("network-workgroup")),
                           i18n("My Networks and Friends"), FB_NETWORKS);
+*/
     m_privacyCoB->addItem(QIcon::fromTheme(QString::fromLatin1("folder-html")),
                           i18n("Everyone"),                FB_EVERYONE);
     m_privacyCoB->setCurrentIndex(1);
@@ -72,10 +75,11 @@ FbNewAlbumDlg::~FbNewAlbumDlg()
 
 void FbNewAlbumDlg::getAlbumProperties(FbAlbum& album)
 {
-    album.title       = getTitleEdit()->text();
-    album.location    = getLocEdit()->text();
-    album.description = getDescEdit()->toPlainText();
-    album.privacy     = static_cast<Digikam::FbPrivacy>(m_privacyCoB->itemData(m_privacyCoB->currentIndex()).toInt());
+    WSAlbum baseAlbum;
+    getBaseAlbumProperties(baseAlbum);
+
+    album.setBaseAlbum(baseAlbum);
+    album.privacy = static_cast<Digikam::FbPrivacy>(m_privacyCoB->itemData(m_privacyCoB->currentIndex()).toInt());
 }
 
 } // namespace Digikam

@@ -3,6 +3,20 @@ https://www.smugmug.com/
 
 TODO:
 
+* GSoC 2018 export tools:
+ ++ Port to O2:
+    - Remove totally email, password field
+    - Remove totally categories related methodes (now still let in comments)
+    - Codes for anonymous login (enable/disable some functionalities)
+    - When finishing uploading an image, remove it from transferQueue
+ ++ Factorization: 
+    - Like in Flickr -> Button Change Account only add new user accounts
+                     -> Button Remove Account (or Logout) really removes an account
+                     -> A combo box to choose account at login if user has many accounts
+    - Instead of open browser for login with QDesktopServices::openUrl(url) (which is slow and leaves an unpleasant tab 
+      when finishing login), maybe we should use QWebEnginePage (?) 
+ 
+
 * Minor improvements:
  - Fix button enable/disable when image list is empty (ImagesList)
  - Fix button enable/disable on new album dialog

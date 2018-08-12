@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2010 by Jens Mueller <tschenser at gmx dot de>
  * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -213,6 +214,13 @@ void WSNewAlbumDialog::addToMainLayout(QWidget* const widget)
     d->mainLayout->addWidget(widget);
     d->mainLayout->removeWidget(d->buttonBox);
     d->mainLayout->addWidget(d->buttonBox);
+}
+
+void WSNewAlbumDialog::getBaseAlbumProperties(WSAlbum& baseAlbum)
+{
+    baseAlbum.title       = getTitleEdit()->text();
+    baseAlbum.location    = getLocEdit()->text();
+    baseAlbum.description = getDescEdit()->toPlainText();
 }
 
 QDialogButtonBox* WSNewAlbumDialog::getButtonBox() const

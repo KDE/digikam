@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2015      by Shourya Singh Gupta <shouryasgupta at gmail dot com>
  * Copyright (C) 2015-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,6 +35,10 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 
+// O2 includes
+
+#include "o2.h"
+
 namespace Digikam
 {
 
@@ -43,49 +48,43 @@ class GSTalkerBase : public QObject
 
 public:
 
-    explicit GSTalkerBase(QWidget* const parent, const QString& scope);
+    explicit GSTalkerBase(QWidget* const parent, const QStringList& scope, const QString& serviceName);
     ~GSTalkerBase();
 
 public:
 
+    void        link();
+    void        unlink();
     void        doOAuth();
-    void        getAccessToken();
-    void        getAccessTokenFromRefreshToken(const QString& msg);
-    bool        authenticated()                                               const;
-    QString     getValue(const QString&, const QString&)                      const;
-    QStringList getParams(const QString&, const QStringList&, const QString&) const;
-    QString     getToken(const QString&, const QString&, const QString&)      const;
-    int         getTokenEnd(const QString&, int)                              const;
-
+    bool        authenticated() const;
+    
 Q_SIGNALS:
 
     void signalBusy(bool val);
-    void signalAccessTokenFailed(int errCode, const QString& errMsg);
+    void signalLinkingSucceeded();
     void signalAccessTokenObtained();
-    void signalTextBoxEmpty();
-    void signalRefreshTokenObtained(const QString& msg);
+    void signalAuthenticationRefused();
 
 private Q_SLOTS:
 
-    void slotAuthFinished(QNetworkReply* reply);
-    void slotAccept();
-    void slotReject();
+    void slotLinkingSucceeded();
+    void slotLinkingFailed();
+    void slotOpenBrowser(const QUrl&);
+    
+private:
+    
+    void parseResponseGetLoggedInUser(const QByteArray& data);
 
 protected:
 
-    QString        m_scope;
+    QStringList    m_scope;
     QString        m_accessToken;
-    QString        m_refreshToken;
 
     QString        m_bearerAccessToken;
     QByteArray     m_buffer;
 
     QNetworkReply* m_reply;
-
-private:
-
-    void parseResponseAccessToken(const QByteArray& data);
-    void parseResponseRefreshToken(const QByteArray& data);
+    QString        m_serviceName;
 
 private:
 

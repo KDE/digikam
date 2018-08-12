@@ -341,4 +341,5 @@ BUGFIXES:
 284 ==> 395199 - Uploading large video files to flickr fails [patch].
 285 ==> 240144 - digiKam : When I press the left button of the mouse on a photo, a menu appears, but no items are seen.
 286 ==> 240229 - White contextual menu problem.
-287 ==> 
+287 ==> 309508 - Export to Flickr does not send the geodata.
+288 ==> 

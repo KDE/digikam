@@ -88,6 +88,7 @@ GSWidget::GSWidget(QWidget* const parent,
             getOptionsBox()->hide();
             imagesList()->hide();
             m_LeafBox->hide();
+            getSizeBox()->hide(); // (Trung) Hide this option temporary, until factorization 
             break;
         case GoogleService::GDrive:
             getUploadBox()->hide();
@@ -95,7 +96,6 @@ GSWidget::GSWidget(QWidget* const parent,
             m_LeafBox->hide();
             break;
         default:
-            getNewAlbmBtn()->hide();    // Google has removed this function in the current API V3.
             getUploadBox()->hide();
             getSizeBox()->hide();
             m_LeafBox->hide();    // Google has removed this function in the current API V3.

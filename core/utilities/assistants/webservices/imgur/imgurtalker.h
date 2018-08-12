@@ -105,9 +105,7 @@ Q_OBJECT
 
 public:
 
-    explicit ImgurTalker(const QString& client_id,
-                         const QString& client_secret,
-                         QObject* const parent = nullptr);
+    explicit ImgurTalker(QObject* const parent = nullptr);
     ~ImgurTalker();
 
 public:

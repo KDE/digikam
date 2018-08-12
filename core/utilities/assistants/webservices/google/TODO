@@ -1,0 +1,31 @@
+TODO:
+
+* Google Photo:
+
+ ++ Port to O2:
+    - updatePhoto(...) when Google Photo API supports that functionality (not yet in v1)
+    - Prevent limit of API for uploading (mediaItems:batchCreate) : 50 items by default
+    
+    !!!!! Upload now only works with albums created by digiKam -> it's normal
+    !!!!! Downloaded images won't show in digiKam view
+    
+    
+    
+ ++ Factorization: 
+    - Option to choose which images to import
+    - Option to choose size for image downloaded (by GPhoto Import)
+    - Like in Flickr 
+        -> Button Change Account only add new user accounts
+        -> Button Remove Account (or Logout) really removes an account
+        -> A combo box to choose account at login if user has many accounts
+    - Instead of open browser for login with QDesktopServices::openUrl(url) (which is slow and leaves an unpleasant tab 
+      when finishing login), maybe we should use QWebEnginePage (?)
+    - Performance Improvement 
+        -> Using gzip
+        -> Filter API's responses 
+        
+        
+ ++ Metadata add/removal before (even after) uploading: 
+    - Reference : https://developers.google.com/photos/library/guides/add-enrichments 
+ 
+ 

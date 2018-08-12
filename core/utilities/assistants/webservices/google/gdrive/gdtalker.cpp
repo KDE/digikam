@@ -83,30 +83,39 @@ public:
 
     explicit Private()
     {
+        apiUrl         = QString::fromLatin1("https://www.googleapis.com/drive/v2/%1");
+        uploadUrl      = QLatin1String("https://www.googleapis.com/upload/drive/v2/files");
         state          = GD_LOGOUT;
         netMngr        = 0;
         rootid         = QString::fromLatin1("root");
         rootfoldername = QString::fromLatin1("GoogleDrive Root");
+        listPhotoId    = QStringList();
     }
 
 public:
 
+    QString                apiUrl;
+    QString                uploadUrl;
     QString                rootid;
     QString                rootfoldername;
     QString                username;
     State                  state;
+    QStringList            listPhotoId;
 
     QNetworkAccessManager* netMngr;
 };
 
 GDTalker::GDTalker(QWidget* const parent)
-    : GSTalkerBase(parent, QString::fromLatin1("https://www.googleapis.com/auth/drive")), 
+    : GSTalkerBase(parent, QStringList(QLatin1String("https://www.googleapis.com/auth/drive")), QLatin1String("GoogleDrive")), 
       d(new Private)
 {
     d->netMngr = new QNetworkAccessManager(this);
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
+    
+    connect(this, SIGNAL(signalReadyToUpload()),
+            this, SLOT(slotUploadPhoto()));
 }
 
 GDTalker::~GDTalker()
@@ -119,11 +128,9 @@ GDTalker::~GDTalker()
  */
 void GDTalker::getUserName()
 {
-    QUrl url(QString::fromLatin1("https://www.googleapis.com/drive/v2/about"));
-    QUrlQuery urlQuery;
-    urlQuery.addQueryItem(QString::fromLatin1("scope"),        m_scope);
-    urlQuery.addQueryItem(QString::fromLatin1("access_token"), m_accessToken);
-    url.setQuery(urlQuery);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getUserName";
+    
+    QUrl url(d->apiUrl.arg("about"));
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -141,7 +148,12 @@ void GDTalker::getUserName()
  */
 void GDTalker::listFolders()
 {
-    QUrl url(QString::fromLatin1("https://www.googleapis.com/drive/v2/files?q=mimeType = 'application/vnd.google-apps.folder'"));
+    QUrl url(d->apiUrl.arg("files"));
+    
+    QUrlQuery q;
+    q.addQueryItem(QLatin1String("q"), QLatin1String("mimeType = 'application/vnd.google-apps.folder'"));
+    
+    url.setQuery(q);
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -165,7 +177,7 @@ void GDTalker::createFolder(const QString& title, const QString& id)
         m_reply = 0;
     }
 
-    QUrl url(QString::fromLatin1("https://www.googleapis.com/drive/v2/files"));
+    QUrl url(d->apiUrl.arg("files"));
     QByteArray data;
     data += "{\"title\":\"";
     data += title.toLatin1();
@@ -222,10 +234,9 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
             return false;
         }
 
-        path                  = WSToolUtils::makeTemporaryDir("google")
-                                             .filePath(QFileInfo(imgPath)
-                                             .baseName().trimmed() +
-                                             QLatin1String(".jpg"));
+        path = WSToolUtils::makeTemporaryDir("google")
+                            .filePath(QFileInfo(imgPath)
+                            .baseName().trimmed() + QLatin1String(".jpg"));
         int imgQualityToApply = 100;
 
         if (rescale)
@@ -258,8 +269,13 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
     form.finish();
 
-    QUrl url(QString::fromLatin1("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart"));
+    QUrl url(d->uploadUrl);
+    
+    QUrlQuery q;
+    q.addQueryItem(QLatin1String("uploadType"), QLatin1String("multipart"));
 
+    url.setQuery(q);
+    
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
@@ -324,6 +340,12 @@ void GDTalker::slotFinished(QNetworkReply* reply)
     reply->deleteLater();
 }
 
+void GDTalker::slotUploadPhoto()
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << d->listPhotoId.join(", ");
+    emit signalUploadPhotoDone(1, QString(), d->listPhotoId);
+}
+
 void GDTalker::parseResponseUserName(const QByteArray& data)
 {
     QJsonParseError err;
@@ -347,9 +369,10 @@ void GDTalker::parseResponseUserName(const QByteArray& data)
 
 void GDTalker::parseResponseListFolders(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << data;
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << doc;
 
     if (err.error != QJsonParseError::NoError)
     {
@@ -370,9 +393,26 @@ void GDTalker::parseResponseListFolders(const QByteArray& data)
     foreach (const QJsonValue& value, jsonArray)
     {
         QJsonObject obj = value.toObject();
+
+        // Verify if album is in trash
+        QJsonObject labels      = obj[QString::fromLatin1("labels")].toObject();
+        bool        trashed     = labels[QString::fromLatin1("trashed")].toBool();
+
+        // Verify if album is editable
+        bool        editable    = obj[QString::fromLatin1("editable")].toBool();
+
+        /* Verify if album is visualized in a folder inside My Drive
+         * If parents is empty, album is shared by another person and not added to My Drive yet
+         */
+        QJsonArray  parents     = obj[QString::fromLatin1("parents")].toArray();
+
         fps.id          = obj[QString::fromLatin1("id")].toString();
         fps.title       = obj[QString::fromLatin1("title")].toString();
-        albumList.append(fps);
+
+        if(editable && !trashed && !parents.isEmpty())
+        {
+            albumList.append(fps);
+        }
     }
 
     std::sort(albumList.begin(), albumList.end(), gdriveLessThan);
@@ -434,11 +474,12 @@ void GDTalker::parseResponseAddPhoto(const QByteArray& data)
 
     if (!success)
     {
-        emit signalAddPhotoDone(0, i18n("Failed to upload photo"), QString::fromLatin1("-1"));
+        emit signalAddPhotoDone(0, i18n("Failed to upload photo"));
     }
     else
     {
-        emit signalAddPhotoDone(1, QString(), photoId);
+        d->listPhotoId << photoId;
+        emit signalAddPhotoDone(1, QString());
     }
 }
 

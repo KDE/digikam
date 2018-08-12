@@ -46,6 +46,7 @@
 #include "o0settingsstore.h"
 #include "o0globals.h"
 
+
 namespace Digikam
 {
 
@@ -59,10 +60,17 @@ public:
 
     explicit Private()
     {
-        workTimer = 0;
-        reply     = 0;
-        image     = 0;
+        client_id       = QLatin1String("bd2572bce74b73d");
+        client_secret   = QLatin1String("300988683e99cb7b203a5889cf71de9ac891c1c1");
+        workTimer       = 0;
+        reply           = 0;
+        image           = 0;
     }
+    
+    /* API key and secret 
+     */
+    QString                   client_id;
+    QString                   client_secret;
 
     /* Handler for OAuth 2 related requests.
      */
@@ -89,14 +97,12 @@ public:
     QNetworkAccessManager     net;
 };
 
-ImgurTalker::ImgurTalker(const QString& client_id,
-                         const QString& client_secret,
-                         QObject* const parent)
+ImgurTalker::ImgurTalker(QObject* const parent)
     : QObject(parent),
       d(new Private)
 {
-    d->auth.setClientId(client_id);
-    d->auth.setClientSecret(client_secret);
+    d->auth.setClientId(d->client_id);
+    d->auth.setClientSecret(d->client_secret);
     d->auth.setRequestUrl(imgur_auth_url);
     d->auth.setTokenUrl(imgur_token_url);
     d->auth.setRefreshTokenUrl(imgur_token_url);

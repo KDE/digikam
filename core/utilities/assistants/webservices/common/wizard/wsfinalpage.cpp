@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2017-06-27
- * Description : a tool to export items to web services.
+ * Description : finish page of export tool, where user can watch upload process.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +46,7 @@
 #include "digikam_debug.h"
 #include "dprogresswdg.h"
 #include "dhistoryview.h"
-//#include "wsprocess.h"
+#include "wsauthentication.h"
 
 namespace Digikam
 {
@@ -58,27 +59,25 @@ public:
       : progressView(0),
         progressBar(0),
         complete(false),
-//        processor(0),
         wizard(0),
-        settings(0),
-        iface(0)
+        iface(0),
+        wsAuth(0)
     {
         wizard = dynamic_cast<WSWizard*>(dialog);
 
         if (wizard)
         {
             iface    = wizard->iface();
-            settings = wizard->settings();
+            wsAuth   = wizard->wsAuth();
         }
     }
 
     DHistoryView*     progressView;
     DProgressWdg*     progressBar;
     bool              complete;
-//    MailProcess*      processor;
     WSWizard*         wizard;
-    WSSettings*       settings;
     DInfoInterface*   iface;
+    WSAuthentication* wsAuth;
 };
 
 WSFinalPage::WSFinalPage(QWizard* const dialog, const QString& title)
@@ -95,14 +94,22 @@ WSFinalPage::WSFinalPage(QWizard* const dialog, const QString& title)
 
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("WS_send")));
+    
+    connect(d->wsAuth, SIGNAL(signalProgress(int)),
+            d->progressBar, SLOT(setValue(int)));
+    connect(d->wsAuth, SIGNAL(signalMessage(QString, bool)),
+            this, SLOT(slotMessage(QString, bool)));
+    connect(d->wsAuth, SIGNAL(signalDone()),
+            this, SLOT(slotDone()));
 }
 
 WSFinalPage::~WSFinalPage()
 {
-/*
-    if (d->processor)
-        d->processor->slotCancel();
-*/
+    if (d->wsAuth)
+    {
+        d->wsAuth->slotCancel();
+    }
+
     delete d;
 }
 
@@ -123,57 +130,32 @@ void WSFinalPage::slotProcess()
 {
     if (!d->wizard)
     {
-        d->progressView->addEntry(i18n("Internal Error"),
-                                  DHistoryView::ErrorEntry);
+        d->progressView->addEntry(i18n("Internal Error"), DHistoryView::ErrorEntry);
         return;
     }
 
     d->progressView->clear();
     d->progressBar->reset();
 
-    d->progressView->addEntry(i18n("Preparing file to export by mail..."),
+    d->progressView->addEntry(i18n("Preparing files..."), DHistoryView::ProgressEntry);
+    d->wsAuth->prepareForUpload();
+
+    d->progressView->addEntry(i18n("%1 input items to process", d->wsAuth->numberItemsUpload()), 
                               DHistoryView::ProgressEntry);
 
-    foreach (const QUrl& url, d->settings->inputImages)
-    {
-        d->settings->setMailUrl(url, QUrl());
-    }
-
-    d->progressView->addEntry(i18n("%1 input items to process", d->settings->itemsList.count()),
-                                  DHistoryView::ProgressEntry);
-
-    for (QMap<QUrl, QUrl>::const_iterator it = d->settings->itemsList.constBegin();
-         it != d->settings->itemsList.constEnd(); ++it)
-    {
-        d->progressView->addEntry(QDir::toNativeSeparators(it.key().toLocalFile()),
-                                  DHistoryView::ProgressEntry);
-    }
-
+    d->progressView->addEntry(i18n("Start transferring process..."), DHistoryView::ProgressEntry);
+    d->wsAuth->startTransfer();
 
     d->progressBar->setMinimum(0);
-    d->progressBar->setMaximum(d->settings->itemsList.count());
-/*
-    d->processor = new MailProcess(d->settings, d->iface, this);
-
-    connect(d->processor, SIGNAL(signalProgress(int)),
-            d->progressBar, SLOT(setValue(int)));
-
-    connect(d->processor, SIGNAL(signalMessage(QString, bool)),
-            this, SLOT(slotMessage(QString, bool)));
-
-    connect(d->processor, SIGNAL(signalDone(bool)),
-            this, SLOT(slotDone()));
-
-    d->processor->firstStage();
-*/
+    d->progressBar->setMaximum(d->wsAuth->numberItemsUpload());
 }
 
 void WSFinalPage::cleanupPage()
 {
-/*
-    if (d->processor)
-        d->processor->slotCancel();
-*/
+    if (d->wsAuth)
+    {
+        d->wsAuth->slotCancel();
+    }
 }
 
 void WSFinalPage::slotMessage(const QString& mess, bool err)

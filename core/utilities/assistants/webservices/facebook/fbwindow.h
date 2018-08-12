@@ -69,6 +69,7 @@ private Q_SLOTS:
     void slotListAlbumsDone(int errCode, const QString& errMsg,
                             const QList<FbAlbum>& albumsList);
 
+    void slotUserLogout();
     void slotUserChangeRequest();
     void slotReloadAlbumsRequest(long long userID);
     void slotNewAlbumRequest();
