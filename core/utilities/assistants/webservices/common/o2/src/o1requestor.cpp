@@ -19,6 +19,7 @@ QNetworkReply *O1Requestor::get(const QNetworkRequest &req, const QList<O0Reques
 
 QNetworkReply *O1Requestor::post(const QNetworkRequest &req, const QList<O0RequestParameter> &signingParameters, const QByteArray &data) {
     QNetworkRequest request = setup(req, signingParameters, QNetworkAccessManager::PostOperation);
+    debugRequest(request, data);
     return addTimer(manager_->post(request, data));
 }
 
@@ -53,5 +54,17 @@ QNetworkRequest O1Requestor::setup(const QNetworkRequest &req, const QList<O0Req
     // Return a copy of the original request with authorization header set
     QNetworkRequest request(req);
     authenticator_->decorateRequest(request, oauthParams);
+
     return request;
+}
+void O1Requestor::debugRequest(QNetworkRequest request, QByteArray data)
+{
+  qDebug() << "<<<<<<<<<< Debugging Request >>>>>>>>>>>>>>>";
+  qDebug() << request.url().toString();
+  const QList<QByteArray>& rawHeaderList(request.rawHeaderList());
+  foreach (QByteArray rawHeader, rawHeaderList) {
+    qDebug() <<rawHeader << ": " << request.rawHeader(rawHeader);
+  }
+  qDebug() << data;
+  qDebug() << " ------------------- END -------------------------";
 }

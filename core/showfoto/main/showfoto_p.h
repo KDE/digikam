@@ -108,6 +108,8 @@
 #include "dmediaservermngr.h"
 #include "dmediaserverdlg.h"
 #include "dbwindow.h"
+#include "odwindow.h"
+#include "pwindow.h"
 #include "fbwindow.h"
 #include "flickrwindow.h"
 #include "gswindow.h"

@@ -96,7 +96,7 @@ QByteArray O0BaseAuth::replyContent() const {
     if(replyServer_ != NULL) {
         return replyServer_->replyContent();
     }
-    
+
     return QByteArray();
 }
 
@@ -146,5 +146,7 @@ QByteArray O0BaseAuth::createQueryParameters(const QList<O0RequestParameter> &pa
         }
         ret.append(QUrl::toPercentEncoding(h.name) + "=" + QUrl::toPercentEncoding(h.value));
     }
+    qDebug() << "createQueryParameters in o0base:" << QString::fromUtf8(ret);
+
     return ret;
 }

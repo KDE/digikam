@@ -188,6 +188,8 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     // Export tools
 
     m_exportDropboxAction      = 0;
+    m_exportOnedriveAction     = 0;
+    m_exportPinterestAction    = 0;
     m_exportFacebookAction     = 0;
     m_exportFlickrAction       = 0;
     m_exportGdriveAction       = 0;
@@ -212,7 +214,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
 #endif
 
     // Import tools
-    
+
     m_importGphotoAction       = 0;
     m_importSmugmugAction      = 0;
 
@@ -1043,6 +1045,22 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportDropboxAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
+    m_exportOnedriveAction = new QAction(i18n("Export to &Onedrive..."), this);
+    m_exportOnedriveAction->setIcon(QIcon::fromTheme(QString::fromLatin1("onedrive")));
+    actionCollection()->addAction(QLatin1String("export_onedrive"), m_exportOnedriveAction);
+    actionCollection()->setDefaultShortcut(m_exportOnedriveAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_O);
+
+    connect(m_exportOnedriveAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+    m_exportPinterestAction = new QAction(i18n("Export to &Pinterest..."), this);
+    m_exportPinterestAction->setIcon(QIcon::fromTheme(QString::fromLatin1("pinterest")));
+    actionCollection()->addAction(QLatin1String("export_pinterest"), m_exportPinterestAction);
+    actionCollection()->setDefaultShortcut(m_exportPinterestAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_I);
+
+    connect(m_exportPinterestAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
     m_exportFacebookAction = new QAction(i18n("Export to &Facebook..."), this);
 /*    m_exportFacebookAction->setIcon(QIcon::fromTheme(QString::fromLatin1("facebook")));
     actionCollection()->addAction(QLatin1String("export_facebook"), m_exportFacebookAction);
@@ -1190,6 +1208,8 @@ void DXmlGuiWindow::createImportActions()
 QList<QAction*> DXmlGuiWindow::exportActions() const
 {
     return QList<QAction*>() << m_exportDropboxAction
+                             << m_exportOnedriveAction
+                             << m_exportPinterestAction
                              << m_exportFacebookAction
                              << m_exportFlickrAction
                              << m_exportGdriveAction
