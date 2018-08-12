@@ -343,4 +343,6 @@ BUGFIXES:
 286 ==> 240229 - White contextual menu problem.
 287 ==> 309508 - Export to Flickr does not send the geodata.
 288 ==> 383987 - Flickr tool no longer authenticates to Flickr.
-289 ==> 
+289 ==> 338333 - Account problem.
+290 ==> 
+
