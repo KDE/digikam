@@ -137,7 +137,7 @@
 #include "dbwindow.h"
 #include "odwindow.h"
 #include "twitterwindow.h"
-#include "liwindow.h"
+//#include "liwindow.h"
 #include "fbwindow.h"
 #include "flickrwindow.h"
 #include "gswindow.h"
