@@ -344,5 +344,5 @@ BUGFIXES:
 287 ==> 309508 - Export to Flickr does not send the geodata.
 288 ==> 383987 - Flickr tool no longer authenticates to Flickr.
 289 ==> 338333 - Account problem.
-290 ==> 
-
+290 ==> 397001 - The "maximise" button is missing in decoration of the geolocation editor window [patch].
+291 ==> 
