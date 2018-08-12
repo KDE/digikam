@@ -1080,7 +1080,35 @@ if you changed code in the libraries.
 
 \subsection gitbranches Working With Branches From Git Repository
 
-As with Subversion, it typical to use a dedicated developement branch in Git to keep the
+Example to create a local 'dplugins' development branch based on master:
+
+\code
+git checkout master
+git checkout -b development/dplugins
+\endcode
+
+Example to delete the local 'dplugins' developement branch:
+
+\code
+git checkout master
+git branch -d development/dplugins
+\endcode
+
+Example to create a remote 'dplugins' development branch from the local branch:
+
+\code
+git push -u origin development/dplugins
+\endcode
+
+Example to delete the remote 'dplugins' development branch:
+
+\code
+git push origin :development/dplugins
+\endcode
+
+\subsection gitbranches Sync a Branch With Master From Git Repository
+
+It typical to use a dedicated developement branch in Git to keep the
 master code stable for production. To synchronize branches with master, use these commands in your
 local branch checkout:
 
