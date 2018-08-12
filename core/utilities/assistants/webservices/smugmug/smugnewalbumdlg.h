@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2008-2009 by Luka Renko <lure at kubuntu dot org>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,8 +47,13 @@ public:
 
     void getAlbumProperties(SmugAlbum& album);
 
-    QComboBox* categoryCombo()    const;
-    QComboBox* subCategoryCombo() const;
+    /** 
+     * Categories are deprecated
+     * 
+     * QComboBox* categoryCombo()    const;
+     * QComboBox* subCategoryCombo() const;
+     */
+    
     QComboBox* templateCombo()    const;
     QGroupBox* privateGroupBox()  const;
 

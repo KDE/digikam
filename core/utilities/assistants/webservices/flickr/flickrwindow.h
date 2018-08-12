@@ -79,7 +79,7 @@ private Q_SLOTS:
     void slotRemoveAccount();
     void slotPopulatePhotoSetComboBox();
     void slotAddPhotoNext();
-    void slotAddPhotoSucceeded();
+    void slotAddPhotoSucceeded(const QString& photoId);
     void slotAddPhotoFailed(const QString& msg);
     void slotAddPhotoSetSucceeded();
     void slotListPhotoSetsFailed(const QString& msg);

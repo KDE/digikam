@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2008-2009 by Luka Renko <lure at kubuntu dot org>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,6 +48,9 @@ public:
         nickName.clear();
         displayName.clear();
         accountType.clear();
+        userUri.clear();
+        nodeUri.clear();
+        folderUri.clear();
         fileSizeLimit = 0;
     }
 
@@ -56,6 +60,9 @@ public:
     QString nickName;
     QString displayName;
     QString accountType;
+    QString userUri;
+    QString nodeUri;
+    QString folderUri;
     int     fileSizeLimit;
 };
 
@@ -74,12 +81,15 @@ public:
         tmplID        = -1;
         isPublic      = true;
         imageCount    = 0;
+        canShare      = true;
     }
 
 public:
 
     qint64  id;
+    QString nodeID;
 
+    QString name;
     QString key;
     QString title;
     QString description;
@@ -93,6 +103,7 @@ public:
 
     bool    isPublic;
     QString password;
+    bool    canShare;
     QString passwordHint;
 
     int     imageCount;
@@ -148,6 +159,7 @@ public:
 
     qint64  id;
     QString name;
+    QString uri;
 
     bool    isPublic;
     QString password;

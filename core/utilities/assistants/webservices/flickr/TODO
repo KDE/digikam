@@ -6,3 +6,6 @@ TODO:
 * Support for viewing your photos stored at server.
 * Querying Space Limit from the server.
 * Allow fetching feature of images just uploaded, like url etc.
+
+* GSoC 2018
+    ++ When right-click on albums and choose "import to Flickr", albums should be shown in pop-up window

@@ -89,7 +89,6 @@ public:
     QString                       toolName;
     GoogleService                 service;
     QString                       tmp;
-    QString                       refreshToken;
 
     GSWidget*                     widget;
     GSNewAlbumDlg*                albumDlg;
@@ -101,7 +100,8 @@ public:
     QString                       currentAlbumId;
 
     QList< QPair<QUrl, GSPhoto> > transferQueue;
-
+    QList< QPair<QUrl, GSPhoto> > uploadQueue;
+    
     DInfoInterface*               iface;
     DMetadata                     meta;
 };
@@ -156,17 +156,11 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->talker,SIGNAL(signalBusy(bool)),
                     this,SLOT(slotBusy(bool)));
 
-            connect(d->talker,SIGNAL(signalTextBoxEmpty()),
-                    this,SLOT(slotTextBoxEmpty()));
-
-            connect(d->talker,SIGNAL(signalAccessTokenFailed(int,QString)),
-                    this,SLOT(slotAccessTokenFailed(int,QString)));
-
             connect(d->talker,SIGNAL(signalAccessTokenObtained()),
                     this,SLOT(slotAccessTokenObtained()));
-
-            connect(d->talker,SIGNAL(signalRefreshTokenObtained(QString)),
-                    this,SLOT(slotRefreshTokenObtained(QString)));
+            
+            connect(d->talker, SIGNAL(signalAuthenticationRefused()),
+                    this,SLOT(slotAuthenticationRefused()));
 
             connect(d->talker,SIGNAL(signalSetUserName(QString)),
                     this,SLOT(slotSetUserName(QString)));
@@ -177,20 +171,16 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->talker,SIGNAL(signalCreateFolderDone(int,QString)),
                     this,SLOT(slotCreateFolderDone(int,QString)));
 
-            connect(d->talker,SIGNAL(signalAddPhotoDone(int,QString,QString)),
-                    this,SLOT(slotAddPhotoDone(int,QString,QString)));
+            connect(d->talker,SIGNAL(signalAddPhotoDone(int,QString)),
+                    this,SLOT(slotAddPhotoDone(int,QString)));
+            
+            connect(d->talker, SIGNAL(signalUploadPhotoDone(int,QString,QStringList)),
+                    this, SLOT(slotUploadPhotoDone(int,QString,QStringList)));
 
             readSettings();
             buttonStateChange(false);
 
-            if (d->refreshToken.isEmpty())
-            {
-                d->talker->doOAuth();
-            }
-            else
-            {
-                d->talker->getAccessTokenFromRefreshToken(d->refreshToken);
-            }
+            d->talker->doOAuth();
 
             break;
 
@@ -221,18 +211,15 @@ GSWindow::GSWindow(DInfoInterface* const iface,
 
             connect(d->gphotoTalker, SIGNAL(signalBusy(bool)),
                     this, SLOT(slotBusy(bool)));
-
-            connect(d->gphotoTalker, SIGNAL(signalTextBoxEmpty()),
-                    this, SLOT(slotTextBoxEmpty()));
-
-            connect(d->gphotoTalker, SIGNAL(signalAccessTokenFailed(int,QString)),
-                    this, SLOT(slotAccessTokenFailed(int,QString)));
-
+            
+            connect(d->gphotoTalker,SIGNAL(signalSetUserName(QString)),
+                    this,SLOT(slotSetUserName(QString)));
+            
             connect(d->gphotoTalker, SIGNAL(signalAccessTokenObtained()),
                     this, SLOT(slotAccessTokenObtained()));
-
-            connect(d->gphotoTalker, SIGNAL(signalRefreshTokenObtained(QString)),
-                    this, SLOT(slotRefreshTokenObtained(QString)));
+            
+            connect(d->gphotoTalker, SIGNAL(signalAuthenticationRefused()),
+                    this,SLOT(slotAuthenticationRefused()));
 
             connect(d->gphotoTalker, SIGNAL(signalListAlbumsDone(int,QString,QList<GSFolder>)),
                     this, SLOT(slotListAlbumsDone(int,QString,QList<GSFolder>)));
@@ -240,8 +227,11 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->gphotoTalker, SIGNAL(signalCreateAlbumDone(int,QString,QString)),
                     this, SLOT(slotCreateFolderDone(int,QString,QString)));
 
-            connect(d->gphotoTalker, SIGNAL(signalAddPhotoDone(int,QString,QString)),
-                    this, SLOT(slotAddPhotoDone(int,QString,QString)));
+            connect(d->gphotoTalker, SIGNAL(signalAddPhotoDone(int,QString)),
+                    this, SLOT(slotAddPhotoDone(int,QString)));
+            
+            connect(d->gphotoTalker, SIGNAL(signalUploadPhotoDone(int,QString,QStringList)),
+                    this, SLOT(slotUploadPhotoDone(int,QString,QStringList)));
 
             connect(d->gphotoTalker, SIGNAL(signalGetPhotoDone(int,QString,QByteArray)),
                     this, SLOT(slotGetPhotoDone(int,QString,QByteArray)));
@@ -249,15 +239,8 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             readSettings();
             buttonStateChange(false);
 
-            if (d->refreshToken.isEmpty())
-            {
-                d->gphotoTalker->doOAuth();
-            }
-            else
-            {
-                d->gphotoTalker->getAccessTokenFromRefreshToken(d->refreshToken);
-            }
-
+            d->gphotoTalker->doOAuth();
+            
             break;
     }
 
@@ -314,7 +297,6 @@ void GSWindow::readSettings()
     }
 
     d->currentAlbumId = grp.readEntry("Current Album",QString());
-    d->refreshToken  = grp.readEntry("refresh_token");
 
     if (grp.readEntry("Resize", false))
     {
@@ -370,7 +352,6 @@ void GSWindow::writeSettings()
             break;
     }
 
-    grp.writeEntry("refresh_token", d->refreshToken);
     grp.writeEntry("Current Album", d->currentAlbumId);
     grp.writeEntry("Resize",        d->widget->getResizeCheckBox()->isChecked());
     grp.writeEntry("Maximum Width", d->widget->getDimensionSpB()->value());
@@ -541,7 +522,6 @@ void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <G
             }
 
             d->widget->getAlbumsCoB()->clear();
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone1:" << list.size();
 
             for (int i=0;i<list.size();i++)
             {
@@ -568,7 +548,6 @@ void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <G
                 return;
             }
 
-            d->widget->updateLabels(d->gphotoTalker->getLoginName(), d->gphotoTalker->getUserName());
             d->widget->getAlbumsCoB()->clear();
 
             for (int i = 0; i < list.size(); ++i)
@@ -629,20 +608,13 @@ void GSWindow::googlePhotoTransferHandler()
             // list photos of the album, then start upload with add/update items
             connect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int,QString,QList<GSPhoto>)),
                     this, SLOT(slotListPhotosDoneForUpload(int,QString,QList<GSPhoto>)));
+            
 
             d->gphotoTalker->listPhotos(
                 d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString());
+             
             break;
     }
-}
-
-void GSWindow::slotTextBoxEmpty()
-{
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in slotTextBoxEmpty";
-    QMessageBox::critical(this, i18nc("@title:window", "Error"),
-                          i18n("The textbox is empty, please enter the code from the browser in the textbox. "
-                               "To complete the authentication click \"Change Account\", "
-                               "or \"Start Upload\" to authenticate again."));
 }
 
 void GSWindow::slotStartTransfer()
@@ -715,8 +687,15 @@ void GSWindow::slotStartTransfer()
                 }
             }
 
-            googlePhotoTransferHandler();
-            return;
+            /**
+             * (Trung) At that time, googlePhotoTransferHandler is only used for GPhotoImport, 
+             * since we don't sync image to update in GPhotoExport
+             */
+            if(d->service == GoogleService::GPhotoImport)
+            {
+                googlePhotoTransferHandler();
+                return;
+            }
     }
 
     typedef QPair<QUrl, GSPhoto> Pair;
@@ -767,6 +746,21 @@ void GSWindow::uploadNextPhoto()
     {
         //d->widget->progressBar()->hide();
         d->widget->progressBar()->progressCompleted();
+        
+        /**
+         * Now all raw photos have been added, 
+         * for GPhoto: prepare to upload on user account
+         * for GDrive: get listPhotoId to write metadata and finish upload
+         */ 
+        if(d->service == GoogleService::GPhotoExport)
+        {
+            emit d->gphotoTalker->signalReadyToUpload();
+        }
+        else
+        {
+            emit d->talker->signalReadyToUpload();
+        }
+        
         return;
     }
 
@@ -932,7 +926,7 @@ void GSWindow::uploadNextPhoto()
 
     if (!res)
     {
-        slotAddPhotoDone(0, QString::fromLatin1(""), QString::fromLatin1("-1"));
+        slotAddPhotoDone(0, QString::fromLatin1(""));
         return;
     }
 }
@@ -957,7 +951,18 @@ void GSWindow::downloadNextPhoto()
 void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteArray& photoData)
 {
     GSPhoto item = d->transferQueue.first().second;
-    QUrl tmpUrl  = QUrl::fromLocalFile(QString(d->tmp + item.title));
+    
+    /**
+     * (Trung)
+     * Google Photo API now does not support title for image, so we use creation time for image name instead
+     */
+    QString itemName(item.title);
+    if(item.title.isEmpty())
+    {
+        itemName = QString::fromLatin1("image-%1").arg(item.creationTime);
+    }
+    
+    QUrl tmpUrl  = QUrl::fromLocalFile(QString(d->tmp + itemName));
 
     if (item.mimeType == QString::fromLatin1("video/mpeg4"))
     {
@@ -973,6 +978,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
         if (!imgFile.open(QIODevice::WriteOnly))
         {
             errText = imgFile.errorString();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "error write";
         }
         else if (imgFile.write(photoData) != photoData.size())
         {
@@ -1046,9 +1052,11 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
         
         delete warn;
     }
-
-    QUrl newUrl = QUrl::fromLocalFile(QString(d->widget->getDestinationPath() + tmpUrl.fileName()));
-
+    
+    QUrl newUrl = QUrl::fromLocalFile(QString::fromLatin1("%1/%2").arg(d->widget->getDestinationPath())
+                                                                  .arg(tmpUrl.fileName()));
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "location " << newUrl.url();
+    
     QFileInfo targetInfo(newUrl.toLocalFile());
 
     if (targetInfo.exists())
@@ -1099,7 +1107,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
     downloadNextPhoto();
 }
 
-void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& photoId)
+void GSWindow::slotAddPhotoDone(int err, const QString& msg)
 {
     if (err == 0)
     {
@@ -1131,26 +1139,66 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
     }
     else
     {
-        QUrl fileUrl = d->transferQueue.first().first;
-
-        if (d->meta.supportXmp()                       &&
-            d->meta.canWriteXmp(fileUrl.toLocalFile()) &&
-            d->meta.load(fileUrl.toLocalFile())        &&
-            !photoId.isEmpty()
-           )
-        {
-            d->meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", photoId);
-            d->meta.save(fileUrl.toLocalFile());
-        }
-
-        // Remove photo uploaded from the list
-        d->widget->imagesList()->removeItemByUrl(d->transferQueue.first().first);
+        /**
+         * (Trung) Take first item out of transferQueue and append to uploadQueue, 
+         * in order to use it again to write id in slotUploadPhotoDone
+         */
+        QPair<QUrl, GSPhoto> item = d->transferQueue.first();
+        d->uploadQueue.append(item);
+        
+        // Remove photo uploaded from the transfer queue
         d->transferQueue.removeFirst();
         d->imagesCount++;
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In slotAddPhotoSucceeded" << d->imagesCount;
         d->widget->progressBar()->setMaximum(d->imagesTotal);
         d->widget->progressBar()->setValue(d->imagesCount);
         uploadNextPhoto();
+    }
+}
+
+void GSWindow::slotUploadPhotoDone(int err, const QString& msg, const QStringList& listPhotoId)
+{
+    if (err == 0)
+    {
+        QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
+                                                     i18n("Warning"),
+                                                     i18n("Failed to finish uploading photo to %1.\n%2\nNo image uploaded to your account.", d->toolName,msg),
+                                                     QMessageBox::Yes);
+        
+        (warn->button(QMessageBox::Yes))->setText(i18n("OK"));
+        
+        d->uploadQueue.clear();
+        d->widget->progressBar()->hide();
+        
+        delete warn;
+    }
+    else
+    {
+        foreach(const QString& photoId, listPhotoId)
+        {
+            // Remove image from upload list and from UI
+            QPair<QUrl, GSPhoto> item = d->uploadQueue.takeFirst();
+            d->widget->imagesList()->removeItemByUrl(item.first);
+            
+            QUrl fileUrl = item.first;
+            
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "photoID: " << photoId;
+            
+            if (d->meta.supportXmp()                       &&
+                d->meta.canWriteXmp(fileUrl.toLocalFile()) &&
+                d->meta.load(fileUrl.toLocalFile())        
+                && !photoId.isEmpty())
+            {
+                d->meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", photoId);
+                d->meta.save(fileUrl.toLocalFile());
+            }
+        }
+        
+        if(!d->widget->imagesList()->imageUrls().isEmpty())
+        {
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "continue to upload";
+            emit d->gphotoTalker->signalReadyToUpload();
+        }
     }
 }
 
@@ -1197,16 +1245,6 @@ void GSWindow::slotReloadAlbumsRequest()
             break;
     }
 }
-
-void GSWindow::slotAccessTokenFailed(int errCode,const QString& errMsg)
-{
-    QMessageBox::critical(this, i18nc("@title:window", "Error"),
-                          i18nc("%1 is the error string, %2 is the error code",
-                                "An authentication error occurred: %1 (%2)",
-                                errMsg, errCode));
-    return;
-}
-
 void GSWindow::slotAccessTokenObtained()
 {
     switch (d->service)
@@ -1216,25 +1254,23 @@ void GSWindow::slotAccessTokenObtained()
             break;
         case GoogleService::GPhotoImport:
         case GoogleService::GPhotoExport:
-            d->gphotoTalker->listAlbums();
+            d->gphotoTalker->getLoggedInUser();
             break;
     }
 }
 
-void GSWindow::slotRefreshTokenObtained(const QString& msg)
+void GSWindow::slotAuthenticationRefused()
 {
-    switch (d->service)
-    {
-        case GoogleService::GDrive:
-            d->refreshToken = msg;
-            d->talker->listFolders();
-            break;
-        case GoogleService::GPhotoImport:
-        case GoogleService::GPhotoExport:
-            d->refreshToken = msg;
-            d->gphotoTalker->listAlbums();
-            break;
-    }
+//     QMessageBox::critical(this, i18nc("@title:window", "Error"),
+//                           i18n("An authentication error occurred: account failed to link"));
+    
+    // Clear list albums
+    d->widget->getAlbumsCoB()->clear();
+    
+    // Clear user name
+    d->widget->updateLabels(QString(""));
+    
+    return;
 }
 
 void GSWindow::slotCreateFolderDone(int code, const QString& msg, const QString& albumId)
@@ -1246,7 +1282,10 @@ void GSWindow::slotCreateFolderDone(int code, const QString& msg, const QString&
                 QMessageBox::critical(this, i18nc("@title:window", "Error"),
                                       i18n("Google Drive call failed:\n%1", msg));
             else
+            {
+                d->currentAlbumId = albumId;
                 d->talker->listFolders();
+            }
             break;
         case GoogleService::GPhotoImport:
         case GoogleService::GPhotoExport:
@@ -1281,29 +1320,35 @@ void GSWindow::slotTransferCancel()
 
 void GSWindow::slotUserChangeRequest()
 {
-    QUrl url(QString::fromLatin1("https://accounts.google.com/logout"));
-    QDesktopServices::openUrl(url);
-
     QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
-                     i18nc("@title:window", "Warning"),
-                     i18n("After you have been logged out in the browser, "
-                          "click \"Continue\" to authenticate for another account"),
-                     QMessageBox::Yes | QMessageBox::No);
-
+                                                    i18n("Warning"),
+                                                    i18n("You will be logged out of your account, "
+                                                    "click \"Continue\" to authenticate for another account"),
+                                                    QMessageBox::Yes | QMessageBox::No);
+    
     (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
     (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
-
+    
     if (warn->exec() == QMessageBox::Yes)
     {
-        d->refreshToken = QString::fromLatin1("");
-
+        /**
+            * We do not force user to logout from their account
+            * We simply unlink user account and direct use to login page to login new account
+            * (In the future, we may not unlink() user, but let them change account and 
+            * choose which one they want to use)
+            * After unlink(), waiting actively until O2 completely unlink() account, before doOAuth() again
+            */
         switch (d->service)
         {
             case GoogleService::GDrive:
+                d->talker->unlink();
+                while(d->talker->authenticated());
                 d->talker->doOAuth();
                 break;
             case GoogleService::GPhotoImport:
             case GoogleService::GPhotoExport:
+                d->gphotoTalker->unlink();
+                while(d->gphotoTalker->authenticated());
                 d->gphotoTalker->doOAuth();
                 break;
         }

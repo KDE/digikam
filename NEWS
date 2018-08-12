@@ -334,5 +334,15 @@ BUGFIXES:
 277 ==> 397177 - image editor does not export exif and IPTC data when saving to PNG.
 278 ==> 341276 - Picture bigger than 5MB are not previewed.
 279 ==> 388908 - Error while scanning with HP F300 series.
-280 ==> 
+280 ==> 381723 - digiKam crashed when I tried to close the window opened by clicking import button.
+281 ==> 345288 - Crash from digiKam when try customizing a shortcut to a Tag.
+282 ==> 381193 - digiKam crashes after uploading photos from smartphone via USB.
+283 ==> 275670 - Face preview image incorrect on 'rotated' images.
+284 ==> 395199 - Uploading large video files to flickr fails [patch].
+285 ==> 240144 - digiKam : When I press the left button of the mouse on a photo, a menu appears, but no items are seen.
+286 ==> 240229 - White contextual menu problem.
+287 ==> 309508 - Export to Flickr does not send the geodata.
+288 ==> 383987 - Flickr tool no longer authenticates to Flickr.
+289 ==> 338333 - Account problem.
+290 ==> 
 

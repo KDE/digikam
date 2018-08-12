@@ -9,6 +9,7 @@
  * Copyright (C) 2007-2008 by Vardhman Jain <vardhman at gmail dot com>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Luka Renko <lure at kubuntu dot org>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +33,11 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QDomNode>
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QJsonArray>
 #include <QFile>
 #include <QFileInfo>
 #include <QImage>
@@ -58,6 +64,8 @@
 #include "previewloadthread.h"
 #include "dmetadata.h"
 
+#define NB_MAX_ITEM_UPLOAD 50
+
 namespace Digikam
 {
 
@@ -74,9 +82,11 @@ public:
     {
         GP_LOGOUT     = -1,
         GP_LISTALBUMS = 0,
+        GP_GETUSER,
         GP_LISTPHOTOS,
         GP_ADDPHOTO,
         GP_UPDATEPHOTO,
+        GP_UPLOADPHOTO,
         GP_GETPHOTO,
         GP_CREATEALBUM
     };
@@ -85,23 +95,41 @@ public:
 
     explicit Private()
     {
-        state   = GP_LOGOUT;
-        netMngr = 0;
+        state           = GP_LOGOUT;
+        netMngr         = 0;
+        
+        userInfoUrl     = QLatin1String("https://www.googleapis.com/plus/v1/people/me");
+        
+        apiVersion      = QLatin1String("v1");   
+        apiUrl          = QString::fromLatin1("https://photoslibrary.googleapis.com/%1/%2").arg(apiVersion);
+        
+        albumIdToUpload = QLatin1String("-1");
+        previousImageId = QLatin1String("-1");
     }
 
 public:
+    
+    QString                userInfoUrl;
 
-    QString                loginName;
-    QString                username;
-    QString                password;
-    QString                userEmailId;
+    QString                apiUrl;
+    QString                apiVersion;
+    
     State                  state;
+    
+    QString                albumIdToUpload;
+    QString                previousImageId;
+    QStringList            uploadTokenList;
 
     QNetworkAccessManager* netMngr;
 };
 
 GPTalker::GPTalker(QWidget* const parent)
-    : GSTalkerBase(parent, QString::fromLatin1("https://picasaweb.google.com/data/")),
+: GSTalkerBase(parent, 
+               (QStringList() << QLatin1String("https://www.googleapis.com/auth/plus.login") // to get user login (temporary until gphoto supports it officially)
+                              << QLatin1String("https://www.googleapis.com/auth/photoslibrary") // to add and download photo in the library
+                              << QLatin1String("https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata") // to download photo created by digiKam on GPhoto
+                              << QLatin1String(" https://www.googleapis.com/auth/photoslibrary.sharing")), // for shared albums 
+               QLatin1String("GooglePhotos")),
       d(new Private)
 {
     m_reply   = 0;
@@ -112,6 +140,9 @@ GPTalker::GPTalker(QWidget* const parent)
 
     connect(this, SIGNAL(signalError(QString)),
             this, SLOT(slotError(QString)));
+    
+    connect(this, SIGNAL(signalReadyToUpload()),
+            this, SLOT(slotUploadPhoto()));
 }
 
 GPTalker::~GPTalker()
@@ -122,7 +153,13 @@ GPTalker::~GPTalker()
     delete d;
 }
 
+QStringList GPTalker::getUploadTokenList()
+{
+    return d->uploadTokenList;
+}
+
 /**
+ * (Trung) : Comments below are not valid anymore with google photos api
  * Google Photo's Album listing request/response
  * First a request is sent to the url below and then we might(?) get a redirect URL
  * We then need to send the GET request to the Redirect url.
@@ -136,21 +173,52 @@ void GPTalker::listAlbums()
         m_reply->abort();
         m_reply = 0;
     }
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "list albums";
 
-    QUrl url(QString::fromLatin1("https://picasaweb.google.com/data/feed/api/user/default"));
-
+    QUrl url(d->apiUrl.arg("albums"));
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url for list albums " << url;
+    
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
-
-    if (!m_accessToken.isEmpty())
-    {
-        netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
-    }
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
 
     m_reply = d->netMngr->get(netRequest);
 
     d->state = Private::GP_LISTALBUMS;
     m_buffer.resize(0);
+    emit signalBusy(true);
+}
+
+/**
+ * We get user profile from Google Plus API 
+ * This is a temporary solution until Google Photo support API for user profile
+ */
+void GPTalker::getLoggedInUser()
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getLoggedInUser";
+    
+    if (m_reply)
+    {
+        m_reply->abort();
+        m_reply = 0;
+    }
+    
+    QUrl url(d->userInfoUrl);
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url for list albums " << url;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "m_accessToken " << m_accessToken;
+    
+    QNetworkRequest netRequest(url);
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
+    
+    m_reply = d->netMngr->get(netRequest);
+    
+    d->state = Private::GP_GETUSER;
+    m_buffer.resize(0);
+    
     emit signalBusy(true);
 }
 
@@ -162,36 +230,24 @@ void GPTalker::listPhotos(const QString& albumId, const QString& imgmax)
         m_reply = 0;
     }
 
-    QUrl url(QString::fromLatin1("https://picasaweb.google.com/data/feed/api/user/default/albumid/") + albumId);
-
-    QUrlQuery q(url);
-    q.addQueryItem(QString::fromLatin1("thumbsize"), QString::fromLatin1("200"));
-
-    if (!imgmax.isNull())
-    {
-        q.addQueryItem(QString::fromLatin1("imgmax"), imgmax);
-    }
-
-    url.setQuery(q);
+    QUrl url(d->apiUrl.arg("mediaItems:search"));
 
     QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-
-    if (!m_accessToken.isEmpty())
-    {
-        netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
-    }
-
-    m_reply = d->netMngr->get(netRequest);
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toUtf8());
+    
+    QByteArray data;
+    data += "{\"pageSize\": \"100\",";
+    data += "\"albumId\":\"";
+    data += albumId.toUtf8();
+    data += "\"}";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "data to list photos : " << QString(data);
+    
+    m_reply = d->netMngr->post(netRequest, data);
 
     d->state = Private::GP_LISTPHOTOS;
     m_buffer.resize(0);
     emit signalBusy(true);
-}
-
-QString GPTalker::token() const
-{
-    return m_accessToken;
 }
 
 void GPTalker::createAlbum(const GSFolder& album)
@@ -202,83 +258,31 @@ void GPTalker::createAlbum(const GSFolder& album)
         m_reply = 0;
     }
 
-    //Create the Body in atom-xml
-    QDomDocument docMeta;
-    QDomProcessingInstruction instr = docMeta.createProcessingInstruction(
-        QString::fromLatin1("xml"), QString::fromLatin1("version='1.0' encoding='UTF-8'"));
-    docMeta.appendChild(instr);
-    QDomElement entryElem           = docMeta.createElement(QString::fromLatin1("entry"));
-    docMeta.appendChild(entryElem);
-    entryElem.setAttribute(QString::fromLatin1("xmlns"), QString::fromLatin1("http://www.w3.org/2005/Atom"));
-    QDomElement titleElem           = docMeta.createElement(QString::fromLatin1("title"));
-    entryElem.appendChild(titleElem);
-    QDomText titleText              = docMeta.createTextNode(album.title);
-    titleElem.appendChild(titleText);
-    QDomElement summaryElem         = docMeta.createElement(QString::fromLatin1("summary"));
-    entryElem.appendChild(summaryElem);
-    QDomText summaryText            = docMeta.createTextNode(album.description);
-    summaryElem.appendChild(summaryText);
-    QDomElement locationElem        = docMeta.createElementNS(
-        QString::fromLatin1("http://schemas.google.com/photos/2007"),
-        QString::fromLatin1("gphoto:location"));
-    entryElem.appendChild(locationElem);
-    QDomText locationText           = docMeta.createTextNode(album.location);
-    locationElem.appendChild(locationText);
-    QDomElement accessElem          = docMeta.createElementNS(
-        QString::fromLatin1("http://schemas.google.com/photos/2007"),
-        QString::fromLatin1("gphoto:access"));
-    entryElem.appendChild(accessElem);
-    QDomText accessText             = docMeta.createTextNode(album.access);
-    accessElem.appendChild(accessText);
-    QDomElement commentElem         = docMeta.createElementNS(
-        QString::fromLatin1("http://schemas.google.com/photos/2007"),
-        QString::fromLatin1("gphoto:commentingEnabled"));
-    entryElem.appendChild(commentElem);
-    QDomText commentText            = docMeta.createTextNode(
-        album.canComment ? QString::fromLatin1("true")
-                         : QString::fromLatin1("false"));
-    commentElem.appendChild(commentText);
-    QDomElement timestampElem       = docMeta.createElementNS(
-        QString::fromLatin1("http://schemas.google.com/photos/2007"),
-        QString::fromLatin1("gphoto:timestamp"));
-    entryElem.appendChild(timestampElem);
-    QDomText timestampText          = docMeta.createTextNode(album.timestamp);
-    timestampElem.appendChild(timestampText);
-    QDomElement categoryElem        = docMeta.createElement(QString::fromLatin1("category"));
-    entryElem.appendChild(categoryElem);
-    categoryElem.setAttribute(
-        QString::fromLatin1("scheme"),
-        QString::fromLatin1("http://schemas.google.com/g/2005#kind"));
-    categoryElem.setAttribute(
-        QString::fromLatin1("term"),
-        QString::fromLatin1("http://schemas.google.com/photos/2007#album"));
-    QDomElement mediaGroupElem      = docMeta.createElementNS(
-        QString::fromLatin1("http://search.yahoo.com/mrss/"),
-        QString::fromLatin1("media:group"));
-    entryElem.appendChild(mediaGroupElem);
-    QDomElement mediaKeywordsElem   = docMeta.createElementNS(
-        QString::fromLatin1("http://search.yahoo.com/mrss/"),
-        QString::fromLatin1("media:keywords"));
-    mediaGroupElem.appendChild(mediaKeywordsElem);
-    QDomText mediaKeywordsText      = docMeta.createTextNode(album.tags.join(QString::fromLatin1(",")));
-    mediaKeywordsElem.appendChild(mediaKeywordsText);
+    // Create body in json    
+    QByteArray data;
+    data += "{\"album\":";
+    data += "{\"title\":\"";
+    data += album.title.toLatin1();
+    data += "\"}}";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(data);
 
-    QByteArray buffer;
-    buffer.append(docMeta.toString().toUtf8());
-
-    QUrl url(QString::fromLatin1("https://picasaweb.google.com/data/feed/api/user/default"));
+    QUrl url(d->apiUrl.arg("albums"));
 
     QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/atom+xml"));
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
 
-    m_reply = d->netMngr->post(netRequest, buffer);
+    m_reply = d->netMngr->post(netRequest, data);
 
     d->state = Private::GP_CREATEALBUM;
     m_buffer.resize(0);
     emit signalBusy(true);
 }
 
+/**
+ * First a request is sent to the url below and then we will get an upload token
+ * Upload token then will be sent with url in GPTlaker::uploadPhoto to create real photos on user accont
+ */
 bool GPTalker::addPhoto(const QString& photoPath,
                         GSPhoto& info,
                         const QString& albumId,
@@ -286,14 +290,18 @@ bool GPTalker::addPhoto(const QString& photoPath,
                         int maxDim,
                         int imageQuality)
 {
-   if (m_reply)
+    if (m_reply)
     {
         m_reply->abort();
         m_reply = 0;
     }
 
-    QUrl url(QString::fromLatin1("https://picasaweb.google.com/data/feed/api/user/default/albumid/") + albumId);
-    GPMPForm form;
+    QUrl url(d->apiUrl.arg("uploads"));
+   
+    // Save album ID to upload
+    d->albumIdToUpload = albumId;
+   
+//     GPMPForm form;
     QString path = photoPath;
 
     QMimeDatabase mimeDB;
@@ -312,10 +320,8 @@ bool GPTalker::addPhoto(const QString& photoPath,
             return false;
         }
 
-        path                  = WSToolUtils::makeTemporaryDir("google")
-                                             .filePath(QFileInfo(photoPath)
-                                             .baseName().trimmed() + 
-                                             QLatin1String(".jpg"));
+        path = WSToolUtils::makeTemporaryDir("google").filePath(QFileInfo(photoPath)
+                                                      .baseName().trimmed() + QLatin1String(".jpg"));
         int imgQualityToApply = 100;
 
         if (rescale)
@@ -339,72 +345,26 @@ bool GPTalker::addPhoto(const QString& photoPath,
             meta.save(path);
         }
     }
-
-    // Create the Body in atom-xml
-
-    QDomDocument docMeta;
-    QDomProcessingInstruction instr = docMeta.createProcessingInstruction(QString::fromLatin1("xml"), QString::fromLatin1("version='1.0' encoding='UTF-8'"));
-    docMeta.appendChild(instr);
-    QDomElement entryElem           = docMeta.createElement(QString::fromLatin1("entry"));
-    docMeta.appendChild(entryElem);
-    entryElem.setAttribute(QString::fromLatin1("xmlns"), QString::fromLatin1("http://www.w3.org/2005/Atom"));
-    QDomElement titleElem           = docMeta.createElement(QString::fromLatin1("title"));
-    entryElem.appendChild(titleElem);
-    QDomText titleText              = docMeta.createTextNode(QFileInfo(path).fileName()); // NOTE: Do not use info.title as arg here to set titleText because we change the format of image as .jpg before uploading.
-    titleElem.appendChild(titleText);
-    QDomElement summaryElem         = docMeta.createElement(QString::fromLatin1("summary"));
-    entryElem.appendChild(summaryElem);
-    QDomText summaryText            = docMeta.createTextNode(info.description);
-    summaryElem.appendChild(summaryText);
-    QDomElement categoryElem        = docMeta.createElement(QString::fromLatin1("category"));
-    entryElem.appendChild(categoryElem);
-    categoryElem.setAttribute(
-        QString::fromLatin1("scheme"),
-        QString::fromLatin1("http://schemas.google.com/g/2005#kind"));
-    categoryElem.setAttribute(
-        QString::fromLatin1("term"),
-        QString::fromLatin1("http://schemas.google.com/photos/2007#photo"));
-    QDomElement mediaGroupElem      = docMeta.createElementNS(
-        QString::fromLatin1("http://search.yahoo.com/mrss/"),
-        QString::fromLatin1("media:group"));
-    entryElem.appendChild(mediaGroupElem);
-    QDomElement mediaKeywordsElem   = docMeta.createElementNS(
-        QString::fromLatin1("http://search.yahoo.com/mrss/"),
-        QString::fromLatin1("media:keywords"));
-    mediaGroupElem.appendChild(mediaKeywordsElem);
-    QDomText mediaKeywordsText      = docMeta.createTextNode(info.tags.join(QString::fromLatin1(",")));
-    mediaKeywordsElem.appendChild(mediaKeywordsText);
-
-    if (!info.gpsLat.isEmpty() && !info.gpsLon.isEmpty())
+    
+    // Create the body for temporary upload
+    QFile imageFile(path);
+    if (!imageFile.open(QIODevice::ReadOnly))
     {
-        QDomElement whereElem = docMeta.createElementNS(
-            QString::fromLatin1("http://www.georss.org/georss"),
-            QString::fromLatin1("georss:where"));
-        entryElem.appendChild(whereElem);
-        QDomElement pointElem = docMeta.createElementNS(
-            QString::fromLatin1("http://www.opengis.net/gml"),
-            QString::fromLatin1("gml:Point"));
-        whereElem.appendChild(pointElem);
-        QDomElement gpsElem   = docMeta.createElementNS(
-            QString::fromLatin1("http://www.opengis.net/gml"),
-            QString::fromLatin1("gml:pos"));
-        pointElem.appendChild(gpsElem);
-        QDomText gpsVal       = docMeta.createTextNode(info.gpsLat + QLatin1Char(' ') + info.gpsLon);
-        gpsElem.appendChild(gpsVal);
-    }
-
-    form.addPair(QString::fromLatin1("descr"), docMeta.toString(), QString::fromLatin1("application/atom+xml"));
-
-    if (!form.addFile(QString::fromLatin1("photo"), path))
         return false;
-
-    form.finish();
-
+    }
+    QByteArray data = imageFile.readAll();
+    imageFile.close();
+    
+    QString imageName = QUrl::fromLocalFile(path).fileName().toLatin1();
+    
     QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
-    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1() + "\nMIME-version: 1.0");
-
-    m_reply = d->netMngr->post(netRequest, form.formData());
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/octet-stream"));
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
+    netRequest.setRawHeader("X-Goog-Upload-File-Name", imageName.toLatin1());
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << imageName;
+    
+    m_reply = d->netMngr->post(netRequest, data);
 
     d->state = Private::GP_ADDPHOTO;
     m_buffer.resize(0);
@@ -554,25 +514,12 @@ void GPTalker::getPhoto(const QString& imgPath)
     emit signalBusy(true);
 
     QUrl url(imgPath);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "link to get photo " << url.url();
+    
     m_reply = d->netMngr->get(QNetworkRequest(url));
 
     d->state = Private::GP_GETPHOTO;
     m_buffer.resize(0);
-}
-
-QString GPTalker::getUserName() const
-{
-    return d->username;
-}
-
-QString GPTalker::getUserEmailId() const
-{
-    return d->userEmailId;
-}
-
-QString GPTalker::getLoginName() const
-{
-    return d->loginName;
 }
 
 void GPTalker::cancel()
@@ -663,11 +610,13 @@ void GPTalker::slotFinished(QNetworkReply* reply)
 
     m_reply = 0;
 
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "reply error : " << reply->error() << " - " << reply->errorString();
+    
     if (reply->error() != QNetworkReply::NoError)
     {
         if (d->state == Private::GP_ADDPHOTO)
         {
-            emit signalAddPhotoDone(reply->error(), reply->errorString(), QString::fromLatin1("-1"));
+            emit signalAddPhotoDone(reply->error(), reply->errorString());
         }
         else
         {
@@ -676,7 +625,7 @@ void GPTalker::slotFinished(QNetworkReply* reply)
         }
 
         reply->deleteLater();
-        return;
+//         return;
     }
 
     m_buffer.append(reply->readAll());
@@ -684,6 +633,9 @@ void GPTalker::slotFinished(QNetworkReply* reply)
     switch (d->state)
     {
         case (Private::GP_LOGOUT):
+            break;
+        case (Private::GP_GETUSER):
+            parseResponseGetLoggedInUser(m_buffer);
             break;
         case (Private::GP_CREATEALBUM):
             parseResponseCreateAlbum(m_buffer);
@@ -698,9 +650,14 @@ void GPTalker::slotFinished(QNetworkReply* reply)
             parseResponseAddPhoto(m_buffer);
             break;
         case (Private::GP_UPDATEPHOTO):
-            emit signalAddPhotoDone(1, QString::fromLatin1(""), QString::fromLatin1(""));
+            emit signalAddPhotoDone(1, QString::fromLatin1(""));
+            break;
+        case (Private::GP_UPLOADPHOTO):
+            parseResponseUploadPhoto(m_buffer);
             break;
         case (Private::GP_GETPHOTO):
+            
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(m_buffer);
             // all we get is data of the image
             emit signalGetPhotoDone(1, QString(), m_buffer);
             break;
@@ -709,290 +666,261 @@ void GPTalker::slotFinished(QNetworkReply* reply)
     reply->deleteLater();
 }
 
-void GPTalker::parseResponseListAlbums(const QByteArray& data)
+void GPTalker::slotUploadPhoto()
 {
-    QDomDocument doc(QString::fromLatin1("feed"));
-    QString      err;
-    int          line;
-    int          columns;
-
-    if ( !doc.setContent( data, false, &err, &line, &columns ) )
+    /* Keep track of number of items will be uploaded, because
+     * Google Photo API upload maximum NB_MAX_ITEM_UPLOAD items in at a time 
+     */ 
+    int nbItemsUpload = 0;
+    
+    if(m_reply)
     {
-        qCCritical(DIGIKAM_WEBSERVICES_LOG) << "error is "<< err << " at line " << line << " at columns " << columns;
-        emit signalListAlbumsDone(0, i18n("Failed to fetch photo-set list"), QList<GSFolder>());
+        m_reply->abort();
+        m_reply = 0;
+    }
+    
+    QUrl url(d->apiUrl.arg("mediaItems:batchCreate"));
+    
+    QByteArray data;
+    data += '{';
+    if(d->albumIdToUpload != QLatin1String("-1"))
+    {
+        data += "\"albumId\": \"";
+        data += d->albumIdToUpload.toLatin1();
+        data += "\",";
+    }
+    data += "\"newMediaItems\": [";
+    
+    if(d->uploadTokenList.isEmpty())
+    {
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "token list is empty";
+    }
+    
+    while(!d->uploadTokenList.isEmpty() && nbItemsUpload < NB_MAX_ITEM_UPLOAD)
+    {
+        const QString& uploadToken = d->uploadTokenList.takeFirst(); 
+        data += "{\"description\": \"\",";
+        data += "\"simpleMediaItem\": {";
+        data += "\"uploadToken\": \"";
+        data += uploadToken;
+        data += "\"}}";
+        if(d->uploadTokenList.length() > 0)
+        {
+            data += ',';
+        }
+        
+        nbItemsUpload ++;
+    }
+    if(d->previousImageId == QLatin1String("-1"))
+    {
+        data += ']';
+    }
+    else
+    {
+        data += "],\"albumPosition\": {";
+        data += "\"position\": \"AFTER_MEDIA_ITEM\",";
+        data += "\"relativeMediaItemId\": \"";
+        data += d->previousImageId.toLatin1();
+        data += "\"}\r\n";
+    }
+    data += "}\r\n";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(data);
+    
+    QNetworkRequest netRequest(url);
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
+    
+    m_reply = d->netMngr->post(netRequest, data);
+    
+    d->state = Private::GP_UPLOADPHOTO;
+    m_buffer.resize(0);
+    emit signalBusy(true);
+}
+
+void GPTalker::parseResponseListAlbums(const QByteArray& data)
+{   
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseListAlbums";
+    
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    
+    if(err.error != QJsonParseError::NoError)
+    {
+        emit signalBusy(false);
+        emit signalListAlbumsDone(0, QString::fromLatin1("Code: %1 - %2").arg(err.error)
+                                                                         .arg(err.errorString()), 
+                                  QList<GSFolder>());
         return;
     }
-
-    QDomElement docElem = doc.documentElement();
-    QDomNode node       = docElem.firstChild();
-    QDomElement e;
-
+    
+    QJsonObject jsonObject  = doc.object();
+    QJsonArray jsonArray    = jsonObject[QLatin1String("albums")].toArray();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json array " << doc;
+    
+    
     QList<GSFolder> albumList;
-
-    while (!node.isNull())
+    
+    /**
+     * Google-photos allows user to post photos on their main page (not in any albums)
+     * so this folder is created for that purpose
+     */
+    GSFolder mainPage;
+    albumList.append(mainPage);
+    
+    foreach(const QJsonValue& value, jsonArray)
     {
-        if (node.isElement() && node.nodeName() == QString::fromLatin1("gphoto:nickname"))
-        {
-            d->loginName = node.toElement().text();
-        }
-
-        if (node.isElement() && node.nodeName() == QString::fromLatin1("gphoto:user"))
-        {
-            d->username = node.toElement().text();
-        }
-
-        if (node.isElement() && node.nodeName() == QString::fromLatin1("entry"))
-        {
-            e                    = node.toElement();
-            QDomNode details     = e.firstChild();
-            QDomNode detailsNode = details;
-            GSFolder fps;
-
-            while (!detailsNode.isNull())
-            {
-                if (detailsNode.isElement())
-                {
-                    if (detailsNode.nodeName() == QString::fromLatin1("gphoto:id"))
-                    {
-                        fps.id = detailsNode.toElement().text();
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("title"))
-                    {
-                        fps.title = detailsNode.toElement().text();
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("gphoto:access"))
-                    {
-                        fps.access = detailsNode.toElement().text();
-                    }
-                }
-
-                detailsNode = detailsNode.nextSibling();
-            }
-
-            albumList.append(fps);
-        }
-
-        node = node.nextSibling();
+        QJsonObject obj = value.toObject();
+        
+        GSFolder album;
+        album.id            = obj[QLatin1String("id")].toString();
+        album.title         = obj[QLatin1String("title")].toString();
+        album.url           = obj[QLatin1String("productUrl")].toString();
+        
+        albumList.append(album);
     }
-
-    std::sort(albumList.begin(), albumList.end(), gphotoLessThan);
-    emit signalListAlbumsDone(1, QString::fromLatin1(""), albumList);
+    
+    std::sort(albumList.begin(), albumList.end(), gphotoLessThan);    
+    emit signalListAlbumsDone(1, QString::fromLatin1(""), albumList);    
 }
 
 void GPTalker::parseResponseListPhotos(const QByteArray& data)
 {
-    QDomDocument doc(QString::fromLatin1("feed"));
-
-    if ( !doc.setContent( data ) )
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseListPhotos";
+    
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    
+    if(err.error != QJsonParseError::NoError)
     {
+        emit signalBusy(false);
         emit signalListPhotosDone(0, i18n("Failed to fetch photo-set list"), QList<GSPhoto>());
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "error code: " << err.error << ", msg: " << err.errorString();
         return;
     }
-
-    QDomElement docElem = doc.documentElement();
-    QDomNode node       = docElem.firstChild();
-
+    
+    QJsonObject jsonObject  = doc.object();
+    QJsonArray jsonArray    = jsonObject[QLatin1String("mediaItems")].toArray();
     QList<GSPhoto> photoList;
-
-    while (!node.isNull())
+    
+    foreach(const QJsonValue& value, jsonArray)
     {
-        if (node.isElement() && node.nodeName() == QString::fromLatin1("entry"))
-        {
-            QDomNode details     = node.firstChild();
-            QDomNode detailsNode = details;
-            GSPhoto fps;
-
-            while (!detailsNode.isNull())
-            {
-                if (detailsNode.isElement())
-                {
-                    QDomElement detailsElem = detailsNode.toElement();
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("gphoto:id"))
-                    {
-                        fps.id = detailsElem.text();
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("title"))
-                    {
-                        //fps.title = detailsElem.text();
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("summary"))
-                    {
-                        fps.description = detailsElem.text();
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("gphoto:access"))
-                    {
-                        fps.access = detailsElem.text();
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("link") &&
-                        detailsElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("edit-media"))
-                    {
-                        fps.editUrl = QUrl(detailsElem.attribute(QString::fromLatin1("href")));
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("georss:where"))
-                    {
-                        QDomNode geoPointNode = detailsElem.namedItem(QString::fromLatin1("gml:Point"));
-
-                        if (!geoPointNode.isNull() && geoPointNode.isElement())
-                        {
-                            QDomNode geoPosNode = geoPointNode.toElement().namedItem(
-                                QString::fromLatin1("gml:pos"));
-
-                            if (!geoPosNode.isNull() && geoPosNode.isElement())
-                            {
-                                QStringList value = geoPosNode.toElement().text().split(QLatin1Char(' '));
-
-                                if (value.size() == 2)
-                                {
-                                    fps.gpsLat = value[0];
-                                    fps.gpsLon = value[1];
-                                }
-                            }
-                        }
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("media:group"))
-                    {
-                        QDomNode thumbNode = detailsElem.namedItem(QString::fromLatin1("media:thumbnail"));
-
-                        if (!thumbNode.isNull() && thumbNode.isElement())
-                        {
-                            fps.thumbURL = QUrl(thumbNode.toElement().attribute(
-                                QString::fromLatin1("url"), QString::fromLatin1("")));
-                        }
-
-                        QDomNode keywordNode = detailsElem.namedItem(QString::fromLatin1("media:keywords"));
-
-                        if (!keywordNode.isNull() && keywordNode.isElement())
-                        {
-                            fps.tags = keywordNode.toElement().text().split(QLatin1Char(','));
-                        }
-
-                        QDomNodeList contentsList = detailsElem.elementsByTagName(QString::fromLatin1("media:content"));
-
-                        for (int i = 0; i < contentsList.size(); ++i)
-                        {
-                            QDomElement contentElem = contentsList.at(i).toElement();
-
-                            if (!contentElem.isNull())
-                            {
-                                if ((contentElem.attribute(QString::fromLatin1("medium")) == QString::fromLatin1("image")) &&
-                                    fps.originalURL.isEmpty())
-                                {
-                                    fps.originalURL = QUrl(contentElem.attribute(QString::fromLatin1("url")));
-                                    fps.title       = fps.originalURL.fileName();
-                                    fps.mimeType    = contentElem.attribute(QString::fromLatin1("type"));
-                                }
-
-                                if ((contentElem.attribute(QString::fromLatin1("medium")) == QString::fromLatin1("video")) &&
-                                    (contentElem.attribute(QString::fromLatin1("type")) == QString::fromLatin1("video/mpeg4")))
-                                {
-                                    fps.originalURL = QUrl(contentElem.attribute(QString::fromLatin1("url")));
-                                    fps.title       = fps.originalURL.fileName();
-                                    fps.mimeType    = contentElem.attribute(QString::fromLatin1("type"));
-                                }
-                            }
-                        }
-                    }
-                }
-
-                detailsNode = detailsNode.nextSibling();
-            }
-
-            photoList.append(fps);
-        }
-
-        node = node.nextSibling();
+        QJsonObject obj = value.toObject();
+        
+        GSPhoto photo;
+        
+        photo.baseUrl       = obj[QLatin1String("baseUrl")].toString();
+        photo.description   = obj[QLatin1String("description")].toString();
+        photo.id            = obj[QLatin1String("id")].toString();
+        photo.mimeType      = obj[QLatin1String("mimeType")].toString();
+        photo.location      = obj[QLatin1String("Location")].toString(); // Not yet available in v1 but will be in the future 
+        
+        QJsonObject metadata = obj[QLatin1String("mediaMetadata")].toObject();
+        
+        photo.creationTime  = metadata[QLatin1String("creationTime")].toString();
+        photo.width         = metadata[QLatin1String("width")].toString();
+        photo.height        = metadata[QLatin1String("height")].toString();
+        
+        photo.originalURL   = QUrl(photo.baseUrl + QString::fromLatin1("=w%1-h%2").arg(photo.width)
+                                                                                  .arg(photo.height));
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << photo.originalURL.url();
+        
+        photoList.append(photo);
     }
-
+    
     emit signalListPhotosDone(1, QString::fromLatin1(""), photoList);
 }
 
 void GPTalker::parseResponseCreateAlbum(const QByteArray& data)
 {
-    bool success = false;
-
-    QDomDocument doc(QString::fromLatin1("AddPhoto Response"));
-
-    if ( !doc.setContent( data ) )
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseCreateAlbums";
+    
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    
+    if(err.error != QJsonParseError::NoError)
     {
-        signalCreateAlbumDone(0, i18n("Failed to create album"), QString::fromLatin1("-1"));
+        emit signalBusy(false);
+        emit signalCreateAlbumDone(0, QString::fromLatin1("Code: %1 - %2").arg(err.error)
+                                                                          .arg(err.errorString()), 
+                                   QString());
         return;
     }
-
-    // parse the new album name
-    QDomElement docElem = doc.documentElement();
-    QString albumId(QString::fromLatin1(""));
-
-    if (docElem.nodeName() == QString::fromLatin1("entry"))
-    {
-        success       = true;
-        QDomNode node = docElem.firstChild(); //this should mean <entry>
-
-        while ( !node.isNull() )
-        {
-            if ( node.isElement())
-            {
-                if (node.nodeName() == QString::fromLatin1("gphoto:id"))
-                {
-                    albumId = node.toElement().text();
-                }
-             }
-
-             node = node.nextSibling();
-        }
-    }
-
-    if (success == true)
-    {
-        signalCreateAlbumDone(1, QString::fromLatin1(""), albumId);
-    }
-    else
-    {
-        signalCreateAlbumDone(0, i18n("Failed to create album"), QString::fromLatin1("-1"));
-    }
+    
+    QJsonObject jsonObject  = doc.object();
+    QString albumId         = jsonObject[QLatin1String("id")].toString();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "album Id " << doc;
+        
+    emit signalCreateAlbumDone(1, QString::fromLatin1(""), albumId);
 }
 
 void GPTalker::parseResponseAddPhoto(const QByteArray& data)
-{
-    QDomDocument doc(QString::fromLatin1("AddPhoto Response"));
+{  
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseAddPhoto";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "response " << QString(data);
 
-    if ( !doc.setContent( data ) )
+    d->uploadTokenList << QString(data);
+    emit signalAddPhotoDone(1, QLatin1String(""));  
+}
+
+void GPTalker::parseResponseGetLoggedInUser(const QByteArray& data)
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseGetLoggedInUser";
+    
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    
+    if(err.error != QJsonParseError::NoError)
     {
-        emit signalAddPhotoDone(0, i18n("Failed to upload photo"), QString::fromLatin1("-1"));
+        emit signalBusy(false);
         return;
     }
+    
+    QJsonObject jsonObject = doc.object();
+    QString userName       = jsonObject[QLatin1String("displayName")].toString();
+    
+    emit signalSetUserName(userName);
+    
+    listAlbums();
+}
 
-    // parse the new album name
-    QDomElement docElem = doc.documentElement();
-    QString photoId(QString::fromLatin1(""));
-
-    if (docElem.nodeName() == QString::fromLatin1("entry"))
+//TODO: Parse and return photoID
+void GPTalker::parseResponseUploadPhoto(const QByteArray& data)
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseUploadPhoto";
+    
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "doc " << doc;
+    
+    if(err.error != QJsonParseError::NoError)
     {
-        QDomNode node = docElem.firstChild(); //this should mean <entry>
-
-        while (!node.isNull())
-        {
-            if (node.isElement())
-            {
-                if (node.nodeName() == QString::fromLatin1("gphoto:id"))
-                {
-                    photoId = node.toElement().text();
-                }
-            }
-
-            node = node.nextSibling();
-        }
+        emit signalBusy(false);
+        emit signalUploadPhotoDone(0, err.errorString(), QStringList());
+        return;
     }
-
-    emit signalAddPhotoDone(1, QString::fromLatin1(""), photoId);
+    
+    QJsonObject jsonObject  = doc.object();
+    QJsonArray jsonArray    = jsonObject[QLatin1String("newMediaItemResults")].toArray();
+    
+    QStringList listPhotoId;
+    
+    foreach(const QJsonValue& value, jsonArray)
+    {
+        QJsonObject obj = value.toObject();
+        
+        QJsonObject mediaItem = obj[QLatin1String("mediaItem")].toObject();
+        listPhotoId << mediaItem[QLatin1String("id")].toString();
+    }
+    
+    d->previousImageId = listPhotoId.last();
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "list photo Id " << listPhotoId.join(", ");
+    
+    emit signalBusy(false);
+    emit signalUploadPhotoDone(1, QLatin1String(""), listPhotoId);
+    
 }
 
 } // namespace Digikam

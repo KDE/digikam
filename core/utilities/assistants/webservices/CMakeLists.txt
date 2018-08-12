@@ -27,11 +27,15 @@ else()
 endif()
 
 if(KF5KIO_FOUND)
-
     include_directories($<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
                         $<TARGET_PROPERTY:KF5::KIOFileWidgets,INTERFACE_INCLUDE_DIRECTORIES>
     )
+endif()
 
+if(ENABLE_QWEBENGINE)
+    include_directories($<TARGET_PROPERTY:Qt5::WebEngineWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
+else()
+    include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
 # OAuth2 library ---------------------------------------------------
@@ -66,13 +70,13 @@ set(libwso2_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1requestor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1timedreply.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1smugmug.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1smugmug.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1twitter.h
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/oxtwitter.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1dropbox.h
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1flickr.h
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2gft.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2facebook.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2facebook.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2skydrive.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2hubic.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2uber.cpp
@@ -100,11 +104,14 @@ set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/common/wscomboboxdelegate.cp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wstooldialog.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wslogindialog.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wssettings.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wsauthentication.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wstalker.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsalbumspage.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsfinalpage.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsimagespage.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsintropage.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wssettingspage.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsauthenticationpage.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wswizard.cpp
 )
 

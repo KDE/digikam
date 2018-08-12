@@ -54,7 +54,7 @@ public:
 
     bool             albumSupport;
     QWidget*         albumSelector;
-    WSWizard*      wizard;
+    WSWizard*        wizard;
     DInfoInterface*  iface;
 };
 

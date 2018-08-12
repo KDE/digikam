@@ -7,6 +7,7 @@
  * Description : a tool to export items to web services.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,18 +56,12 @@ class WSSettingsPage::Private
 public:
 
     explicit Private(QWizard* const dialog)
-      : labelMailAgent(0),
-        labelImagesResize(0),
+      : labelImagesResize(0),
         labelImagesFormat(0),
-        labelAttachmentLimit(0),
         labelImageCompression(0),
-        mailAgentName(0),
         imagesFormat(0),
-        changeImagesProp(0),
-        addFileProperties(0),
         removeMetadata(0),
         imageCompression(0),
-        attachmentlimit(0),
         imagesResize(0),
         wizard(0),
         iface(0),
@@ -81,21 +76,16 @@ public:
         }
     }
 
-    QLabel*         labelMailAgent;
     QLabel*         labelImagesResize;
     QLabel*         labelImagesFormat;
-    QLabel*         labelAttachmentLimit;
     QLabel*         labelImageCompression;
 
-    QComboBox*      mailAgentName;
     QComboBox*      imagesFormat;
 
     QCheckBox*      changeImagesProp;
-    QCheckBox*      addFileProperties;
     QCheckBox*      removeMetadata;
 
     QSpinBox*       imageCompression;
-    QSpinBox*       attachmentlimit;
     QSpinBox*       imagesResize;
 
     WSWizard*       wizard;
@@ -108,34 +98,6 @@ WSSettingsPage::WSSettingsPage(QWizard* const dialog, const QString& title)
       d(new Private(dialog))
 {
     QWidget* const main = new QWidget(this);
-
-    // --------------------
-
-    d->labelMailAgent = new QLabel(main);
-    d->labelMailAgent->setWordWrap(false);
-    d->labelMailAgent->setText(i18n("Mail program:"));
-
-    d->mailAgentName  = new QComboBox(main);
-    d->mailAgentName->setEditable(false);
-    d->mailAgentName->setWhatsThis(i18n("Select your preferred external mail client program here."));
-
-    //---------------------------------------------
-
-    d->addFileProperties = new QCheckBox(i18n("Attach a file with items properties"), main);
-    d->addFileProperties->setWhatsThis(i18n("If you enable this option, all item properties "
-                                            "as Comments, Rating, or Tags, will be added as "
-                                            "an attached file."));
-
-    // --------------------------------------------
-
-    d->attachmentlimit = new QSpinBox(main);
-    d->attachmentlimit->setRange(1, 50);
-    d->attachmentlimit->setSingleStep(1);
-    d->attachmentlimit->setValue(17);
-    d->attachmentlimit->setSuffix(i18n(" MB"));
-
-    d->labelAttachmentLimit = new QLabel(i18n("Maximum email size limit:"), main);
-    d->labelAttachmentLimit->setBuddy(d->attachmentlimit);
 
     //---------------------------------------------
 
@@ -224,18 +186,18 @@ WSSettingsPage::WSSettingsPage(QWizard* const dialog, const QString& title)
 
     QGridLayout* const grid = new QGridLayout(main);
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->addWidget(d->labelMailAgent,      0, 0, 1, 1);
-    grid->addWidget(d->mailAgentName,       0, 1, 1, 2);
-    grid->addWidget(d->labelAttachmentLimit,1, 0, 1, 1);
-    grid->addWidget(d->attachmentlimit,     1, 1, 1, 4);
-    grid->addWidget(d->addFileProperties,   2, 0, 1, 4);
-    grid->addWidget(d->changeImagesProp,    3, 0, 1, 4);
-    grid->addWidget(groupBox,               4, 0, 1, 4);
-    grid->setRowStretch(5, 10);
+    grid->addWidget(d->changeImagesProp,    0, 0, 1, 4);
+    grid->addWidget(groupBox,               1, 0, 1, 4);
+    grid->setRowStretch(2, 10);
     grid->setColumnStretch(3, 10);
 
     setPageWidget(main);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("mail-attachment")));
+    
+    /* We should use another icon here, because it's not for mail attachment.
+     * Therefore, I comment this line.
+     * 
+     * setLeftBottomPix(QIcon::fromTheme(QLatin1String("mail-attachment")));
+     */
 
     //---------------------------------------------
 
@@ -270,9 +232,6 @@ void WSSettingsPage::initializePage()
 
     d->changeImagesProp->setChecked(d->settings->imagesChangeProp);
 
-    d->addFileProperties->setChecked(d->iface ? d->settings->addFileProperties : false);
-    d->addFileProperties->setEnabled(d->iface);
-
     d->imageCompression->setValue(d->settings->imageCompression);
     d->removeMetadata->setChecked(d->settings->removeMetadata);
 
@@ -285,7 +244,6 @@ bool WSSettingsPage::validatePage()
     d->settings->imageFormat       = WSSettings::ImageFormat(d->imagesFormat->currentIndex());
 
     d->settings->imagesChangeProp  = d->changeImagesProp->isChecked();
-    d->settings->addFileProperties = d->addFileProperties->isChecked();
     d->settings->removeMetadata    = d->removeMetadata->isChecked();
 
     d->settings->imageCompression  = d->imageCompression->value();

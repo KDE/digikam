@@ -7,6 +7,7 @@
  * Description : a tool to export items to web services.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,10 +44,12 @@
 #include "dwizardpage.h"
 #include "digikam_debug.h"
 #include "wsintropage.h"
+#include "wsauthenticationpage.h"
 #include "wsalbumspage.h"
 #include "wsimagespage.h"
 #include "wssettingspage.h"
 #include "wsfinalpage.h"
+#include "wstoolutils.h"
 
 namespace Digikam
 {
@@ -57,39 +60,47 @@ public:
 
     explicit Private()
       : iface(0),
+        settings(0),
         introPage(0),
+        authPage(0),
         albumsPage(0),
         imagesPage(0),
         settingsPage(0),
-        finalPage(0),
-        settings(0)
+        finalPage(0)
     {
     }
 
-    DInfoInterface*   iface;
-    WSIntroPage*      introPage;
-    WSAlbumsPage*     albumsPage;
-    WSImagesPage*     imagesPage;
-    WSSettingsPage*   settingsPage;
-    WSFinalPage*      finalPage;
-    WSSettings*       settings;
+    DInfoInterface*             iface;
+
+    WSSettings*                 settings;
+    WSIntroPage*                introPage;
+    WSAuthenticationWizard*     authPage;
+    WSAlbumsPage*               albumsPage;
+    WSImagesPage*               imagesPage;
+    WSSettingsPage*             settingsPage;
+    WSFinalPage*                finalPage;
+
+    WSAuthentication*           wsAuth;
 };
 
 WSWizard::WSWizard(QWidget* const parent, DInfoInterface* const iface)
     : DWizardDlg(parent, QLatin1String("Web Services Dialog")),
       d(new Private)
 {
-    setOption(QWizard::NoCancelButtonOnLastPage);
+    setOptions(QWizard::NoBackButtonOnStartPage | QWizard::NoCancelButtonOnLastPage);
     setWindowTitle(i18n("Export to Web Services"));
 
     d->iface             = iface;
-    d->settings          = new WSSettings;
+    d->settings          = new WSSettings(this);
 
+    d->wsAuth            = new WSAuthentication(this, d->iface);
+    
     KConfig config;
     KConfigGroup group   = config.group("Web Services Dialog Settings");
     d->settings->readSettings(group);
 
     d->introPage         = new WSIntroPage(this,    i18n("Welcome to Web Services Tool"));
+    d->authPage          = new WSAuthenticationWizard(this, i18n("Authentication dialog"));
     d->albumsPage        = new WSAlbumsPage(this,   i18n("Albums Selection"));
     d->imagesPage        = new WSImagesPage(this,   i18n("Images List"));
     d->settingsPage      = new WSSettingsPage(this, i18n("Web Service Settings"));
@@ -120,6 +131,21 @@ WSSettings* WSWizard::settings() const
     return d->settings;
 }
 
+WSAuthentication* WSWizard::wsAuth() const
+{
+    return d->wsAuth;
+}
+
+QSettings* WSWizard::oauthSettings() const
+{
+    return d->settings->oauthSettings;
+}
+
+O0SettingsStore* WSWizard::oauthSettingsStore() const
+{
+    return d->settings->oauthSettingsStore;
+}
+
 bool WSWizard::validateCurrentPage()
 {
     if (!DWizardDlg::validateCurrentPage())
@@ -130,18 +156,31 @@ bool WSWizard::validateCurrentPage()
 
 int WSWizard::nextId() const
 {
-    if (d->settings->selMode == WSSettings::ALBUMS)
-    {
-        if (currentPage() == d->introPage)
+    if (currentPage() == d->authPage)
+    {        
+        if (d->settings->selMode == WSSettings::IMPORT)
+        {
             return d->albumsPage->id();
+        }
+        else
+        {
+            return d->imagesPage->id();
+        }
+    }
+    
+    return DWizardDlg::nextId();
+}
+
+void WSWizard::slotBusy(bool val)
+{
+    if (val)
+    {
+        setCursor(Qt::WaitCursor);
     }
     else
     {
-        if (currentPage() == d->introPage)
-            return d->imagesPage->id();
+        setCursor(Qt::ArrowCursor);
     }
-
-    return DWizardDlg::nextId();
 }
 
 } // namespace Digikam

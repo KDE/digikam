@@ -28,6 +28,10 @@
 
 #include <QString>
 
+// Local includes
+
+#include "wsitem.h"
+
 namespace Digikam
 {
 
@@ -37,19 +41,18 @@ public:
 
     FbUser()
     {
-        id         = 0;
         uploadPerm = false;
     }
 
     void clear()
     {
-        id         = 0;
+        id.clear();
         name.clear();
         profileURL = QStringLiteral("https://www.facebook.com");
         uploadPerm = true;
     }
 
-    long long id;
+    QString   id;
 
     QString   name;
     QString   profileURL;
@@ -63,29 +66,30 @@ enum FbPrivacy
     FB_ME = 0,
     FB_FRIENDS = 1,
     FB_FRIENDS_OF_FRIENDS,
-    FB_NETWORKS,
+//     FB_NETWORKS, //NETWORK is deprecated in latest version of Graph API
     FB_EVERYONE,
     FB_CUSTOM
 };
 
 // ---------------------------------------------------------------
 
-class FbAlbum
+class FbAlbum: public WSAlbum
 {
 public:
 
     FbAlbum()
+      : WSAlbum()
+    {
+        privacy = FB_FRIENDS;
+    }
+    
+    FbAlbum(const WSAlbum& baseAlbum)
+      : WSAlbum(baseAlbum)
     {
         privacy = FB_FRIENDS;
     }
 
-    QString   id;
-
-    QString   title;
-    QString   description;
-    QString   location;
     FbPrivacy privacy;
-    QString   url;
 };
 
 // ---------------------------------------------------------------

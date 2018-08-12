@@ -210,8 +210,8 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
     connect(d->talker, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
 
-    connect(d->talker, SIGNAL(signalAddPhotoSucceeded()),
-            this, SLOT(slotAddPhotoSucceeded()));
+    connect(d->talker, SIGNAL(signalAddPhotoSucceeded(const QString&)),
+            this, SLOT(slotAddPhotoSucceeded(const QString&)));
 
     connect(d->talker, SIGNAL(signalAddPhotoFailed(QString)),
             this, SLOT(slotAddPhotoFailed(QString)));
@@ -805,10 +805,21 @@ void FlickrWindow::slotAddPhotoNext()
     }
 }
 
-void FlickrWindow::slotAddPhotoSucceeded()
+void FlickrWindow::slotAddPhotoSucceeded(const QString& photoId)
 {
+    QUrl photoUrl = d->uploadQueue.first().first;
+
+    // Set location for uploaded photo
+    DItemInfo info(d->iface->itemInfo(photoUrl));
+    if(info.hasGeolocationInfo())
+    {
+        d->talker->setGeoLocation(photoId, 
+                                  QString::number(info.latitude()), 
+                                  QString::number(info.longitude()));
+    }
+
     // Remove photo uploaded from the list
-    d->imglst->removeItemByUrl(d->uploadQueue.first().first);
+    d->imglst->removeItemByUrl(photoUrl);
     d->uploadQueue.removeFirst();
     d->uploadCount++;
     d->widget->progressBar()->setMaximum(d->uploadTotal);
@@ -859,7 +870,7 @@ void FlickrWindow::slotAddPhotoFailed(const QString& msg)
 void FlickrWindow::slotAddPhotoSetSucceeded()
 {
     slotPopulatePhotoSetComboBox();
-    slotAddPhotoSucceeded();
+    slotAddPhotoSucceeded(QLatin1String(""));
 }
 
 void FlickrWindow::slotImageListChanged()

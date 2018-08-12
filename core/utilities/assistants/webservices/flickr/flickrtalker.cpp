@@ -592,6 +592,38 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
     return true;
 }
 
+void FlickrTalker::setGeoLocation(const QString& photoId, const QString& lat, const QString& lon)
+{
+    if (d->reply)
+    {
+        d->reply->abort();
+        d->reply = 0;
+    }
+    
+    if (!d->o1->linked())
+        return;
+
+    QUrl url(d->apiUrl);
+    QNetworkRequest netRequest(url);
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String(O2_MIME_TYPE_XFORM));
+
+    QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
+
+    reqParams << O0RequestParameter("method", "flickr.photos.geo.setLocation");
+    reqParams << O0RequestParameter("photo_id", photoId.toLatin1());
+    reqParams << O0RequestParameter("lat", lat.toLatin1());
+    reqParams << O0RequestParameter("lon", lon.toLatin1());
+
+    QByteArray postData = O1::createQueryParameters(reqParams);
+
+    d->reply = d->requestor->post(netRequest, reqParams, postData);
+    
+    d->state = FE_SETGEO;
+    d->buffer.resize(0);
+
+    emit signalBusy(true);
+}
+
 QString FlickrTalker::getUserName() const
 {
     return d->username;
@@ -760,6 +792,10 @@ void FlickrTalker::slotFinished(QNetworkReply* reply)
             parseResponseMaxSize(d->buffer);
             break;
 
+        case (FE_SETGEO):
+            parseResponseSetGeoLocation(d->buffer);
+            break;
+
         default:  // FR_LOGOUT
             break;
     }
@@ -795,7 +831,7 @@ void FlickrTalker::parseResponseMaxSize(const QByteArray& data)
                 {
                     e = details.toElement();
 
-                    if (details.nodeName() == QLatin1String("photos"))
+                    if (details.nodeName() == QLatin1String("videos"))
                     {
                         QDomAttr a = e.attributeNode(QLatin1String("maxupload"));
                         d->maxSize = a.value();
@@ -1057,7 +1093,7 @@ void FlickrTalker::parseResponseAddPhoto(const QByteArray& data)
         if (photoSetId == QLatin1String("-1"))
         {
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "PhotoSet Id not set, not adding the photo to any photoset";
-            emit signalAddPhotoSucceeded();
+            emit signalAddPhotoSucceeded(photoId);
         }
         else
         {
@@ -1111,14 +1147,19 @@ void FlickrTalker::parseResponsePhotoProperty(const QByteArray& data)
     }
     else
     {
-        emit signalAddPhotoSucceeded();
+        emit signalAddPhotoSucceeded(QLatin1String(""));
     }
 }
 
 void FlickrTalker::parseResponseAddPhotoToPhotoSet(const QByteArray& data)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseListPhotosets" << data;
-    emit signalAddPhotoSucceeded();
+    emit signalAddPhotoSucceeded(QLatin1String(""));
+}
+
+void FlickrTalker::parseResponseSetGeoLocation(const QByteArray& data)
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseSetGeoLocation" << data;
 }
 
 } // namespace Digikam

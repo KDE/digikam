@@ -93,6 +93,8 @@ GSNewAlbumDlg::GSNewAlbumDlg(QWidget* const parent,
     privBoxLayout->setSpacing(spacing);
     privBox->setLayout(privBoxLayout);
 
+    /**
+     * Album on google-photos now only needs title to create, so gdrive and gphoto now share the same newalbumdlg
     if (!(QString::compare(d->serviceName,
                            QString::fromLatin1("googledriveexport"),
                            Qt::CaseInsensitive) == 0))
@@ -107,6 +109,14 @@ GSNewAlbumDlg::GSNewAlbumDlg(QWidget* const parent,
         hideLocation();
         getMainWidget()->setMinimumSize(300,0);
     }
+    */
+    
+    privBox->hide();
+    hideDateTime();
+    hideDesc();
+    hideLocation();
+    getMainWidget()->setMinimumSize(300,0);
+    
 }
 
 GSNewAlbumDlg::~GSNewAlbumDlg()
@@ -116,6 +126,8 @@ GSNewAlbumDlg::~GSNewAlbumDlg()
 
 void GSNewAlbumDlg::getAlbumProperties(GSFolder& album)
 {
+    /**
+     * Album on google-photos now only needs title to create, so gdrive and gphoto now share the same newalbumdlg
     if (QString::compare(d->serviceName,
                          QString::fromLatin1("googledriveexport"),
                          Qt::CaseInsensitive) == 0)
@@ -137,6 +149,10 @@ void GSNewAlbumDlg::getAlbumProperties(GSFolder& album)
 
     long long timestamp = getDateTimeEdit()->dateTime().toTime_t();
     album.timestamp     = QString::number(timestamp * 1000);
+    */
+    
+    album.title = getTitleEdit()->text();
+    return;
 }
 
 } // namespace Digikam

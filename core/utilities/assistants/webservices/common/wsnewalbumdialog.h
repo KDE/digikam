@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2010 by Jens Mueller <tschenser at gmx dot de>
  * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,6 +43,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "wsitem.h"
 
 namespace Digikam
 {
@@ -74,6 +76,10 @@ private Q_SLOTS:
 
     void slotTextChanged(const QString& text);
 
+protected:
+    
+    void getBaseAlbumProperties(WSAlbum& baseAlbum);
+    
 private:
 
     class Private;

@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2008-2009 by Luka Renko <lure at kubuntu dot org>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,6 +36,11 @@
 #include "smugitem.h"
 #include "dinfointerface.h"
 
+// O2 include
+#include "o0globals.h"
+#include "o1smugmug.h"
+#include "o1requestor.h"
+
 class QNetworkReply;
 
 namespace Digikam
@@ -51,22 +57,31 @@ public:
 
 public:
 
+            
     SmugUser getUser() const;
-
+            
     bool    loggedIn() const;
     void    cancel();
-    void    login(const QString& email = QString(),
-                  const QString& password = QString());
+    
+    void    link();
+    void    unlink();
+    void    removeUserAccount(const QString& userName);
+    void    login();
+    void    getLoginedUser();
     void    logout();
 
+    
     void    listAlbums(const QString& nickName = QString());
     void    listPhotos(qint64 albumID,
                        const QString& albumKey,
                        const QString& albumPassword = QString(),
                        const QString& sitePassword = QString());
     void    listAlbumTmpl();
-    void    listCategories();
-    void    listSubCategories(qint64 categoryID);
+    /**
+     * Categories are deprecated in API v2
+     *   void    listCategories();
+     *   void    listSubCategories(qint64 categoryID);
+     */
 
     void    createAlbum(const SmugAlbum& album);
 
@@ -76,14 +91,21 @@ public:
                      const QString& caption);
 
     void    getPhoto(const QString& imgPath);
-
+    
+    QString createAlbumName(const QString& word);
+    
+    QString createAlbumUrl(const QString& name)
+;
 Q_SIGNALS:
 
     void signalBusy(bool val);
+    void signalLinkingSucceeded();
     void signalLoginProgress(int step,
-                             int maxStep = 0,
-                             const QString& label = QString());
+                            int maxStep = 0,
+                            const QString& label = QString());
     void signalLoginDone(int errCode, const QString& errMsg);
+    
+    
     void signalAddPhotoDone(int errCode, const QString& errMsg);
     void signalGetPhotoDone(int errCode, const QString& errMsg,
                             const QByteArray& photoData);
@@ -95,28 +117,39 @@ Q_SIGNALS:
                               const QList <SmugPhoto>& photosList);
     void signalListAlbumTmplDone(int errCode, const QString& errMsg,
                                  const QList <SmugAlbumTmpl>& albumTList);
-    void signalListCategoriesDone(int errCode, const QString& errMsg,
-                                  const QList <SmugCategory>& categoriesList);
-    void signalListSubCategoriesDone(int errCode, const QString& errMsg,
-                                     const QList <SmugCategory>& categoriesList);
+    /**
+     * Categories deprecated in API v2
+     * 
+     *   void signalListCategoriesDone(int errCode, const QString& errMsg,
+     *                               const QList <SmugCategory>& categoriesList);
+     *   void signalListSubCategoriesDone(int errCode, const QString& errMsg,
+     *                                   const QList <SmugCategory>& categoriesList);
+     */
 
 private:
 
     QString htmlToText(const QString& htmlText) const;
     QString errorToText(int errCode, const QString& errMsg) const;
     void parseResponseLogin(const QByteArray& data);
-    void parseResponseLogout(const QByteArray& data);
+//     void parseResponseLogout(const QByteArray& data);
     void parseResponseAddPhoto(const QByteArray& data);
     void parseResponseCreateAlbum(const QByteArray& data);
     void parseResponseListAlbums(const QByteArray& data);
     void parseResponseListPhotos(const QByteArray& data);
     void parseResponseListAlbumTmpl(const QByteArray& data);
-    void parseResponseListCategories(const QByteArray& data);
-    void parseResponseListSubCategories(const QByteArray& data);
+    /**
+     * Categories deprecated in API v2
+     * 
+     *   void parseResponseListCategories(const QByteArray& data);
+     *   void parseResponseListSubCategories(const QByteArray& data);
+     */
 
 private Q_SLOTS:
-
     void slotFinished(QNetworkReply* reply);
+    void slotLinkingFailed();
+    void slotLinkingSucceeded();
+    void slotOpenBrowser(const QUrl& url);
+    void slotCloseBrowser();
 
 private:
 
