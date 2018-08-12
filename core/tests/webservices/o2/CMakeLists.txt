@@ -13,3 +13,7 @@ endif (POLICY CMP0063)
 
 add_subdirectory(fbdemo)
 #add_subdirectory(twdemo)
+
+if(ENABLE_QWEBENGINE)
+    add_subdirectory(fbinter)
+endif()

@@ -27,8 +27,8 @@ remove_definitions(
 # =======================================================
 # Facebook demo test tool
 
-set(fbdemo_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/../../../utilities/assistants/webservices/common/o2/examples/facebookdemo/fbdemo.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/../../../utilities/assistants/webservices/common/o2/examples/facebookdemo/main.cpp
+set(fbdemo_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/../../../../utilities/assistants/webservices/common/o2/examples/facebookdemo/fbdemo.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/../../../../utilities/assistants/webservices/common/o2/examples/facebookdemo/main.cpp
 )
 
 add_executable(fbdemo ${fbdemo_SRCS})
