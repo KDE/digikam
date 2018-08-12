@@ -3,11 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2013-11-18
- * Description : a tool to export images to Dropbox web service
+ * Date        : 2018-05-20
+ * Description : a tool to export images to Onedrive web service
  *
- * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
- * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018      by Tarek Talaat <tarektalaat93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,8 +19,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
-#include "dbwindow.h"
+#include "odwindow.h"
 
 // Qt includes
 
@@ -42,15 +40,15 @@
 #include "digikam_debug.h"
 #include "dimageslist.h"
 #include "digikam_version.h"
-#include "dbtalker.h"
-#include "dbitem.h"
-#include "dbnewalbumdlg.h"
-#include "dbwidget.h"
+#include "odtalker.h"
+#include "oditem.h"
+#include "odnewalbumdlg.h"
+#include "odwidget.h"
 
 namespace Digikam
 {
 
-class DBWindow::Private
+class ODWindow::Private
 {
 public:
 
@@ -66,28 +64,29 @@ public:
     unsigned int   imagesCount;
     unsigned int   imagesTotal;
 
-    DBWidget*      widget;
-    DBNewAlbumDlg* albumDlg;
-    DBTalker*      talker;
+    ODWidget*      widget;
+    ODNewAlbumDlg* albumDlg;
+    ODTalker*      talker;
 
     QString        currentAlbumName;
     QList<QUrl>    transferQueue;
 };
 
-DBWindow::DBWindow(DInfoInterface* const iface,
+ODWindow::ODWindow(DInfoInterface* const iface,
                    QWidget* const /*parent*/)
     : WSToolDialog(0),
       d(new Private)
 {
-    d->widget      = new DBWidget(this, iface, QLatin1String("Dropbox"));
+    d->widget      = new ODWidget(this, iface, QLatin1String("Onedrive"));
+
     d->widget->imagesList()->setIface(iface);
 
     setMainWidget(d->widget);
     setModal(false);
-    setWindowTitle(i18n("Export to Dropbox"));
+    setWindowTitle(i18n("Export to Onedrive"));
 
     startButton()->setText(i18n("Start Upload"));
-    startButton()->setToolTip(i18n("Start upload to Dropbox"));
+    startButton()->setToolTip(i18n("Start upload to Onedrive"));
 
     d->widget->setMinimumSize(700, 500);
 
@@ -106,39 +105,38 @@ DBWindow::DBWindow(DInfoInterface* const iface,
     connect(startButton(), SIGNAL(clicked()),
             this, SLOT(slotStartTransfer()));
 
-    d->albumDlg = new DBNewAlbumDlg(this, QLatin1String("Dropbox"));
+    d->albumDlg = new ODNewAlbumDlg(this, QLatin1String("Onedrive"));
+    d->talker   = new ODTalker(this);
 
-    d->talker   = new DBTalker(this);
+    connect(d->talker,SIGNAL(signalBusy(bool)),
+            this,SLOT(slotBusy(bool)));
 
-    connect(d->talker, SIGNAL(signalBusy(bool)),
-            this, SLOT(slotBusy(bool)));
+    connect(d->talker,SIGNAL(signalLinkingFailed()),
+            this,SLOT(slotSignalLinkingFailed()));
 
-    connect(d->talker, SIGNAL(signalLinkingFailed()),
-            this, SLOT(slotSignalLinkingFailed()));
+    connect(d->talker,SIGNAL(signalLinkingSucceeded()),
+            this,SLOT(slotSignalLinkingSucceeded()));
 
-    connect(d->talker, SIGNAL(signalLinkingSucceeded()),
-            this, SLOT(slotSignalLinkingSucceeded()));
+    connect(d->talker,SIGNAL(signalSetUserName(QString)),
+            this,SLOT(slotSetUserName(QString)));
 
-    connect(d->talker, SIGNAL(signalSetUserName(QString)),
-            this, SLOT(slotSetUserName(QString)));
+    connect(d->talker,SIGNAL(signalListAlbumsFailed(QString)),
+            this,SLOT(slotListAlbumsFailed(QString)));
 
-    connect(d->talker, SIGNAL(signalListAlbumsFailed(QString)),
-            this, SLOT(slotListAlbumsFailed(QString)));
+    connect(d->talker,SIGNAL(signalListAlbumsDone(QList<QPair<QString,QString> >)),
+            this,SLOT(slotListAlbumsDone(QList<QPair<QString,QString> >)));
 
-    connect(d->talker, SIGNAL(signalListAlbumsDone(QList<QPair<QString,QString> >)),    // krazy:exclude=normalize
-            this, SLOT(slotListAlbumsDone(QList<QPair<QString,QString> >)));            // krazy:exclude=normalize
+    connect(d->talker,SIGNAL(signalCreateFolderFailed(QString)),
+            this,SLOT(slotCreateFolderFailed(QString)));
 
-    connect(d->talker, SIGNAL(signalCreateFolderFailed(QString)),
-            this, SLOT(slotCreateFolderFailed(QString)));
+    connect(d->talker,SIGNAL(signalCreateFolderSucceeded()),
+            this,SLOT(slotCreateFolderSucceeded()));
 
-    connect(d->talker, SIGNAL(signalCreateFolderSucceeded()),
-            this, SLOT(slotCreateFolderSucceeded()));
+    connect(d->talker,SIGNAL(signalAddPhotoFailed(QString)),
+            this,SLOT(slotAddPhotoFailed(QString)));
 
-    connect(d->talker, SIGNAL(signalAddPhotoFailed(QString)),
-            this, SLOT(slotAddPhotoFailed(QString)));
-
-    connect(d->talker, SIGNAL(signalAddPhotoSucceeded()),
-            this, SLOT(slotAddPhotoSucceeded()));
+    connect(d->talker,SIGNAL(signalAddPhotoSucceeded()),
+            this,SLOT(slotAddPhotoSucceeded()));
 
     connect(this, SIGNAL(finished(int)),
             this, SLOT(slotFinished()));
@@ -149,7 +147,7 @@ DBWindow::DBWindow(DInfoInterface* const iface,
     d->talker->link();
 }
 
-DBWindow::~DBWindow()
+ODWindow::~ODWindow()
 {
     delete d->widget;
     delete d->albumDlg;
@@ -157,25 +155,11 @@ DBWindow::~DBWindow()
     delete d;
 }
 
-void DBWindow::setItemsList(const QList<QUrl>& urls)
-{
-    d->widget->imagesList()->slotAddImages(urls);
-}
-
-void DBWindow::reactivate()
-{
-    d->widget->imagesList()->loadImagesFromCurrentSelection();
-    d->widget->progressBar()->hide();
-
-    show();
-}
-
-void DBWindow::readSettings()
+void ODWindow::readSettings()
 {
     KConfig config;
-    KConfigGroup grp   = config.group("Dropbox Settings");
+    KConfigGroup grp   = config.group("Onedrive Settings");
     d->currentAlbumName = grp.readEntry("Current Album",QString());
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "readsettings:" << d->currentAlbumName;
 
     if (grp.readEntry("Resize", false))
     {
@@ -193,56 +177,43 @@ void DBWindow::readSettings()
     d->widget->getDimensionSpB()->setValue(grp.readEntry("Maximum Width",  1600));
     d->widget->getImgQualitySpB()->setValue(grp.readEntry("Image Quality", 90));
 
+    KConfigGroup dialogGroup = config.group("Onedrive Export Dialog");
+
     winId();
-    KConfigGroup dialogGroup = config.group("Dropbox Export Dialog");
     KWindowConfig::restoreWindowSize(windowHandle(), dialogGroup);
     resize(windowHandle()->size());
 }
 
-void DBWindow::writeSettings()
+void ODWindow::writeSettings()
 {
     KConfig config;
-    KConfigGroup grp = config.group("Dropbox Settings");
+    KConfigGroup grp = config.group("Onedrive Settings");
 
     grp.writeEntry("Current Album", d->currentAlbumName);
     grp.writeEntry("Resize",        d->widget->getResizeCheckBox()->isChecked());
     grp.writeEntry("Maximum Width", d->widget->getDimensionSpB()->value());
     grp.writeEntry("Image Quality", d->widget->getImgQualitySpB()->value());
 
-    KConfigGroup dialogGroup = config.group("Dropbox Export Dialog");
+    KConfigGroup dialogGroup = config.group("Onedrive Export Dialog");
     KWindowConfig::saveWindowSize(windowHandle(), dialogGroup);
 
     config.sync();
 }
 
-void DBWindow::slotSetUserName(const QString& msg)
+void ODWindow::reactivate()
 {
-    d->widget->updateLabels(msg, QLatin1String(""));
+    d->widget->imagesList()->loadImagesFromCurrentSelection();
+    d->widget->progressBar()->hide();
+
+    show();
 }
 
-void DBWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
+void ODWindow::setItemsList(const QList<QUrl>& urls)
 {
-    d->widget->getAlbumsCoB()->clear();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" << list.size();
-
-    for (int i = 0 ; i < list.size() ; i++)
-    {
-        d->widget->getAlbumsCoB()->addItem(
-        QIcon::fromTheme(QLatin1String("system-users")),
-        list.value(i).second, list.value(i).first);
-
-        if (d->currentAlbumName == list.value(i).first)
-        {
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" << d->currentAlbumName << list.value(i).first;
-            d->widget->getAlbumsCoB()->setCurrentIndex(i);
-        }
-    }
-
-    buttonStateChange(true);
-    d->talker->getUserName();
+    d->widget->imagesList()->slotAddImages(urls);
 }
 
-void DBWindow::slotBusy(bool val)
+void ODWindow::slotBusy(bool val)
 {
     if (val)
     {
@@ -258,7 +229,31 @@ void DBWindow::slotBusy(bool val)
     }
 }
 
-void DBWindow::slotStartTransfer()
+void ODWindow::slotSetUserName(const QString& msg)
+{
+    d->widget->updateLabels(msg, QLatin1String(""));
+}
+
+void ODWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
+{
+    d->widget->getAlbumsCoB()->clear();
+
+    for (int i = 0 ; i < list.size() ; i++)
+    {
+        d->widget->getAlbumsCoB()->addItem(
+        QIcon::fromTheme(QLatin1String("system-users")),
+        list.value(i).second, list.value(i).first);
+        if (d->currentAlbumName == list.value(i).first)
+        {
+            d->widget->getAlbumsCoB()->setCurrentIndex(i);
+        }
+    }
+
+    buttonStateChange(true);
+    d->talker->getUserName();
+}
+
+void ODWindow::slotStartTransfer()
 {
     d->widget->imagesList()->clearProcessedStatus();
 
@@ -271,9 +266,15 @@ void DBWindow::slotStartTransfer()
 
     if (!(d->talker->authenticated()))
     {
-        if (QMessageBox::question(this, i18n("Login Failed"),
-                                  i18n("Authentication failed. Do you want to try again?"))
-            == QMessageBox::Yes)
+        QMessageBox warn(QMessageBox::Warning,
+                         i18n("Warning"),
+                         i18n("Authentication failed. Click \"Continue\" to authenticate."),
+                         QMessageBox::Yes | QMessageBox::No);
+
+        (warn.button(QMessageBox::Yes))->setText(i18n("Continue"));
+        (warn.button(QMessageBox::No))->setText(i18n("Cancel"));
+
+        if (warn.exec() == QMessageBox::Yes)
         {
             d->talker->link();
             return;
@@ -292,7 +293,7 @@ void DBWindow::slotStartTransfer()
     }
 
     d->currentAlbumName = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
-
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "StartTransfer:" << d->currentAlbumName << "INDEX: " << d->widget->getAlbumsCoB()->currentIndex();
     d->imagesTotal = d->transferQueue.count();
     d->imagesCount = 0;
 
@@ -300,14 +301,13 @@ void DBWindow::slotStartTransfer()
     d->widget->progressBar()->setMaximum(d->imagesTotal);
     d->widget->progressBar()->setValue(0);
     d->widget->progressBar()->show();
-    d->widget->progressBar()->progressScheduled(i18n("Dropbox export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(
-        QIcon(QLatin1String("dropbox")).pixmap(22, 22));
+    d->widget->progressBar()->progressScheduled(i18n("Onedrive export"), true, true);
+    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("onedrive")).pixmap(22, 22));
 
     uploadNextPhoto();
 }
 
-void DBWindow::uploadNextPhoto()
+void ODWindow::uploadNextPhoto()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "uploadNextPhoto:" << d->transferQueue.count();
 
@@ -319,25 +319,25 @@ void DBWindow::uploadNextPhoto()
     }
 
     QString imgPath = d->transferQueue.first().toLocalFile();
-    QString temp = d->currentAlbumName + QLatin1Char('/');
+    QString temp = d->currentAlbumName + QLatin1String("/");
 
-    bool res = d->talker->addPhoto(imgPath,
+    bool result = d->talker->addPhoto(imgPath,
                                    temp,
                                    d->widget->getResizeCheckBox()->isChecked(),
                                    d->widget->getDimensionSpB()->value(),
                                    d->widget->getImgQualitySpB()->value());
 
-    if (!res)
+    if (!result)
     {
         slotAddPhotoFailed(QLatin1String(""));
         return;
     }
 }
 
-void DBWindow::slotAddPhotoFailed(const QString& msg)
+void ODWindow::slotAddPhotoFailed(const QString& msg)
 {
     if (QMessageBox::question(this, i18n("Uploading Failed"),
-                              i18n("Failed to upload photo to Dropbox."
+                              i18n("Failed to upload photo to OneDrive."
                                    "\n%1\n"
                                    "Do you want to continue?", msg))
         != QMessageBox::Yes)
@@ -347,7 +347,7 @@ void DBWindow::slotAddPhotoFailed(const QString& msg)
     }
     else
     {
-        d->transferQueue.removeFirst();
+        d->transferQueue.pop_front();
         d->imagesTotal--;
         d->widget->progressBar()->setMaximum(d->imagesTotal);
         d->widget->progressBar()->setValue(d->imagesCount);
@@ -355,41 +355,40 @@ void DBWindow::slotAddPhotoFailed(const QString& msg)
     }
 }
 
-void DBWindow::slotAddPhotoSucceeded()
+void ODWindow::slotAddPhotoSucceeded()
 {
     // Remove photo uploaded from the list
     d->widget->imagesList()->removeItemByUrl(d->transferQueue.first());
-    d->transferQueue.removeFirst();
+    d->transferQueue.pop_front();
     d->imagesCount++;
     d->widget->progressBar()->setMaximum(d->imagesTotal);
     d->widget->progressBar()->setValue(d->imagesCount);
     uploadNextPhoto();
 }
 
-void DBWindow::slotImageListChanged()
+void ODWindow::slotImageListChanged()
 {
     startButton()->setEnabled(!(d->widget->imagesList()->imageUrls().isEmpty()));
 }
 
-void DBWindow::slotNewAlbumRequest()
+void ODWindow::slotNewAlbumRequest()
 {
     if (d->albumDlg->exec() == QDialog::Accepted)
     {
-        DBFolder newFolder;
+        ODFolder newFolder;
         d->albumDlg->getFolderTitle(newFolder);
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotNewAlbumRequest:" << newFolder.title;
         d->currentAlbumName = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
         QString temp = d->currentAlbumName + newFolder.title;
         d->talker->createFolder(temp);
     }
 }
 
-void DBWindow::slotReloadAlbumsRequest()
+void ODWindow::slotReloadAlbumsRequest()
 {
     d->talker->listFolders();
 }
 
-void DBWindow::slotSignalLinkingFailed()
+void ODWindow::slotSignalLinkingFailed()
 {
     slotSetUserName(QLatin1String(""));
     d->widget->getAlbumsCoB()->clear();
@@ -402,34 +401,34 @@ void DBWindow::slotSignalLinkingFailed()
     }
 }
 
-void DBWindow::slotSignalLinkingSucceeded()
+void ODWindow::slotSignalLinkingSucceeded()
 {
     d->talker->listFolders();
 }
 
-void DBWindow::slotListAlbumsFailed(const QString& msg)
+void ODWindow::slotListAlbumsFailed(const QString& msg)
 {
-    QMessageBox::critical(this, QString(), i18n("Dropbox call failed:\n%1", msg));
+    QMessageBox::critical(this, QString(), i18n("Onedrive call failed:\n%1", msg));
 }
 
-void DBWindow::slotCreateFolderFailed(const QString& msg)
+void ODWindow::slotCreateFolderFailed(const QString& msg)
 {
-    QMessageBox::critical(this, QString(), i18n("Dropbox call failed:\n%1", msg));
+    QMessageBox::critical(this, QString(), i18n("Onedrive call failed:\n%1", msg));
 }
 
-void DBWindow::slotCreateFolderSucceeded()
+void ODWindow::slotCreateFolderSucceeded()
 {
     d->talker->listFolders();
 }
 
-void DBWindow::slotTransferCancel()
+void ODWindow::slotTransferCancel()
 {
     d->transferQueue.clear();
     d->widget->progressBar()->hide();
     d->talker->cancel();
 }
 
-void DBWindow::slotUserChangeRequest()
+void ODWindow::slotUserChangeRequest()
 {
     slotSetUserName(QLatin1String(""));
     d->widget->getAlbumsCoB()->clear();
@@ -437,20 +436,20 @@ void DBWindow::slotUserChangeRequest()
     d->talker->link();
 }
 
-void DBWindow::buttonStateChange(bool state)
+void ODWindow::buttonStateChange(bool state)
 {
     d->widget->getNewAlbmBtn()->setEnabled(state);
     d->widget->getReloadBtn()->setEnabled(state);
     startButton()->setEnabled(state);
 }
 
-void DBWindow::slotFinished()
+void ODWindow::slotFinished()
 {
     writeSettings();
     d->widget->imagesList()->listView()->clear();
 }
 
-void DBWindow::closeEvent(QCloseEvent* e)
+void ODWindow::closeEvent(QCloseEvent* e)
 {
     if (!e)
     {

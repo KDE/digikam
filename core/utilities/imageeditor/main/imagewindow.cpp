@@ -133,11 +133,14 @@ void ImageWindow::closeEvent(QCloseEvent* e)
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroupName());
-    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
-    d->rightSideBar->saveState();
+    saveMainWindowSettings(group);
     saveSettings();
 
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
+    d->rightSideBar->saveState();
+
     DXmlGuiWindow::closeEvent(e);
+    e->accept();
 }
 
 void ImageWindow::showEvent(QShowEvent*)
@@ -169,6 +172,7 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
         return;
     }
 
+    d->currentImageInfo = ImageInfo();
     d->currentImageInfo = imageInfoCurrent;
 
     // Note: Addition is asynchronous, indexes not yet available

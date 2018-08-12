@@ -20,6 +20,12 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
+if(ENABLE_QWEBENGINE)
+    include_directories($<TARGET_PROPERTY:Qt5::WebEngineWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
+else()
+    include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
+
 if(KF5KIO_FOUND)
     include_directories($<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
                         $<TARGET_PROPERTY:KF5::KIOFileWidgets,INTERFACE_INCLUDE_DIRECTORIES>
@@ -31,7 +37,7 @@ if(ENABLE_QWEBENGINE)
 else()
     include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
-                      
+
 # OAuth2 library ---------------------------------------------------
 
 # The o2 library does not adhere to the flags we use
@@ -65,7 +71,7 @@ set(libwso2_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1requestor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1timedreply.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1smugmug.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1twitter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1twitter.h
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/oxtwitter.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1dropbox.h
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1flickr.h
@@ -75,6 +81,17 @@ set(libwso2_SRCS
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2hubic.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2uber.cpp
 )
+if(ENABLE_QWEBENGINE)
+    set(libwso2_SRCS
+        ${libwso2_SRCS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/webwidget_qwebengine.cpp
+       )
+else()
+    set(libwso2_SRCS
+        ${libwso2_SRCS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/webwidget.cpp
+       )
+endif()
 
 # Helper classes ------------------------------------------------------------------
 
@@ -124,6 +141,44 @@ set(libwsdropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbnewalbumdlg.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbwidget.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbwindow.cpp
 )
+
+# OneDrive tool --------------------------------------------------------------
+
+set(libwsonedrive_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odnewalbumdlg.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odmpform.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odtalker.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odwidget.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odwindow.cpp
+)
+
+# Pinterest tool --------------------------------------------------------------
+
+set(libwspinterest_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/pinterest/pnewalbumdlg.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/pinterest/pmpform.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/pinterest/ptalker.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/pinterest/pwidget.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/pinterest/pwindow.cpp
+)
+
+# Box tool --------------------------------------------------------------
+
+set(libwsbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/box/boxnewalbumdlg.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/box/boxmpform.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/box/boxtalker.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/box/boxwidget.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/box/boxwindow.cpp
+)
+
+
+# Twitter tool --------------------------------------------------------------
+
+set(libwstwitter_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twitternewalbumdlg.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twittermpform.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twittertalker.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twitterwidget.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twitterwindow.cpp
+)
+
 
 # SmugMug tool -------------------------------------------------------------
 
@@ -234,7 +289,7 @@ if(KF5KIO_FOUND)
     )
 
 endif()
-    
+
 # ------------------------------------------------------------------------------
 
 add_library(webservices_src OBJECT ${libwebservices_SRCS}
@@ -242,6 +297,8 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsflickr_SRCS}
                                    ${libwsimgur_SRCS}
                                    ${libwsdropbox_SRCS}
+                                   ${libwsonedrive_SRCS}
+                                   ${libwspinterest_SRCS}
                                    ${libwssmugmug_SRCS}
                                    ${libwsimageshack_SRCS}
                                    ${libwsfacebook_SRCS}

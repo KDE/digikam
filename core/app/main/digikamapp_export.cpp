@@ -96,6 +96,20 @@ void DigikamApp::slotExportTool()
         w->exec();
         delete w;
     }
+    else if (tool == m_exportOnedriveAction)
+    {
+        QPointer<ODWindow> w = new ODWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w->exec();
+        delete w;
+    }
+
+    else if (tool == m_exportPinterestAction)
+    {
+        QPointer<PWindow> w = new PWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w->exec();
+        delete w;
+    }
+
     else if (tool == m_exportFacebookAction)
     {
         QPointer<FbWindow> w = new FbWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
