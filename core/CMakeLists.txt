@@ -147,7 +147,7 @@ if(ENABLE_DBUS)
 endif()
 
 if(BUILD_TESTING)
-    find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS Test)
+    find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS Test Qml WebView)
 endif()
 
 find_package(KF5 ${KF5_MIN_VERSION}
