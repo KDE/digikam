@@ -72,7 +72,7 @@ set(libwso2_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1timedreply.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1smugmug.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1twitter.h
-    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/oxtwitter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/oxtwitter.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1dropbox.h
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1flickr.h
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2gft.cpp

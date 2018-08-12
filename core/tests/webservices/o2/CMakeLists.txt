@@ -12,7 +12,7 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 add_subdirectory(fbdemo)
-#add_subdirectory(twdemo)
+add_subdirectory(twdemo)
 add_subdirectory(sialis)
 
 if(ENABLE_QWEBENGINE)
