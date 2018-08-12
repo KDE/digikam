@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="601" name="lighttablewindow" translationDomain="digikam" >
+<gui version="602" name="lighttablewindow" translationDomain="digikam" >
 
 <MenuBar>
 
