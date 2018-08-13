@@ -56,6 +56,9 @@ public:
 
     explicit Private(QWizard* const dialog)
       : imageList(0),
+        albumView(0),
+        newAlbumBtn(0),
+        reloadAlbumsBtn(0),
         wizard(0),
         iface(0),
         wsAuth(0)

@@ -61,7 +61,10 @@ public:
       : wizard(0),
         iface(0),
         talker(0),
-        albumDlg(0)
+        ws(WSSettings::WebService::FLICKR),
+        albumDlg(0),
+        imagesCount(0),
+        imagesTotal(0)
     {
     }
     

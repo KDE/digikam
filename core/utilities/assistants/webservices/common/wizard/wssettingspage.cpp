@@ -60,6 +60,7 @@ public:
         labelImagesFormat(0),
         labelImageCompression(0),
         imagesFormat(0),
+        changeImagesProp(0),
         removeMetadata(0),
         imageCompression(0),
         imagesResize(0),
