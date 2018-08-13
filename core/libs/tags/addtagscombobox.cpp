@@ -224,6 +224,7 @@ bool AddTagsComboBox::eventFilter(QObject* object, QEvent* event)
                                  keyEvent->key() == Qt::Key_Return))
                 {
                     QApplication::sendEvent(d->lineEdit->completer()->popup(), event);
+                    return true;
                 }
             }
         }
