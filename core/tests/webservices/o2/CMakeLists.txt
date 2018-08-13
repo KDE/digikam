@@ -13,7 +13,10 @@ endif (POLICY CMP0063)
 
 add_subdirectory(fbdemo)
 add_subdirectory(twdemo)
-add_subdirectory(sialis)
+
+if (Qt5Qml_FOUND AND Qt5WebView_FOUND)
+    add_subdirectory(sialis)
+endif()
 
 if(ENABLE_QWEBENGINE)
     add_subdirectory(fbinter)
