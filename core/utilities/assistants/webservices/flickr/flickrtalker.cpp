@@ -259,7 +259,7 @@ void FlickrTalker::slotLinkingSucceeded()
 
 void FlickrTalker::slotOpenBrowser(const QUrl& url)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Open Browser...";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Open Browser... (" << url << ")";
     QDesktopServices::openUrl(url);
 }
 
