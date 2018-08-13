@@ -79,6 +79,7 @@ public:
         imageQualitySpB = widget->getImgQualitySpB();
         imagesCount     = 0;
         imagesTotal     = 0;
+        sessionExpires  = 0;
         talker          = 0;
         albumDlg        = 0;
     }

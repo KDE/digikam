@@ -66,7 +66,8 @@ public:
         albumsPage(0),
         imagesPage(0),
         settingsPage(0),
-        finalPage(0)
+        finalPage(0),
+        wsAuth(0)
     {
     }
 
