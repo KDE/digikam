@@ -73,7 +73,8 @@ public:
 };
 
 SetupCollections::SetupCollections(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
@@ -90,12 +91,15 @@ SetupCollections::SetupCollections(QWidget* const parent)
                                               "your images. Write access is necessary to be able "
                                               "to edit images in these albums.</p>"
                                               "<p>Note: Removable media (such as USB drives or DVDs) and remote file systems "
-                                              "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p><p></p>"),
+                                              "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p>"
+                                              "<p>Important: You need to mount the share natively on your system before to setup a remote collection.</p>"
+                                              "<p></p>"),
                                               albumPathBox);
 #else
     QLabel* const albumPathLabel  = new QLabel(i18n("<p>Below are the locations of your root albums used to store "
                                               "your images. Write access is necessary to be able "
-                                              "to edit images in these albums.</p><p></p>"),
+                                              "to edit images in these albums.</p>"
+                                              "<p></p>"),
                                               albumPathBox);
 #endif
     albumPathLabel->setWordWrap(true);
