@@ -345,4 +345,5 @@ BUGFIXES:
 288 ==> 383987 - Flickr tool no longer authenticates to Flickr.
 289 ==> 338333 - Account problem.
 290 ==> 397001 - The "maximise" button is missing in decoration of the geolocation editor window [patch].
-291 ==> 
+291 ==> 397406 - Digikam shouldn't use parentheses when renaming files.
+292 ==> 
