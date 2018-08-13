@@ -411,7 +411,7 @@ void TwTalker::slotTweetDone()
         qDebug() << "Content:" << reply->readAll();
         emit signalAddPhotoFailed(i18n("Failed to upload photo"));
     } else {
-        qDebug() << "Tweet posted sucessfully!";
+        qDebug() << "Tweet posted successfully!";
         emit signalAddPhotoSucceeded();
     }
 

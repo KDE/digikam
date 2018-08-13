@@ -66,7 +66,7 @@ public:
     ~WSTalker();
 
     /*
-     * Get ID of an existant user account saved when he logged in before, 
+     * Get ID of an existent user account saved when he logged in before, 
      * knowing user name.
      */
     QString getUserID(const QString& userName);

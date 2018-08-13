@@ -171,9 +171,9 @@ void ODTalker::slotCatchUrl(const QUrl& url)
 {
     d->urlParametersMap = ParseUrlParameters(url.toString());
     d->accessToken = d->urlParametersMap.value("access_token");
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Recieved URL from webview in link function: " << url ;
+    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function: " << url ;
     if(d->accessToken != ""){
-      qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access Token Recieved";
+      qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access Token Received";
       Q_EMIT oneDriveLinkingSucceeded();
     }else{
       Q_EMIT oneDriveLinkingFailed();

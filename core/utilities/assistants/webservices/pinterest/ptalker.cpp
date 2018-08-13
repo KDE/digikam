@@ -195,7 +195,7 @@ void PTalker::slotCatchUrl(const QUrl& url)
     d->view->close();
     d->urlParametersMap = ParseUrlParameters(url.toString());
     QString code =  d->urlParametersMap.value("code");
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Recieved URL from webview in link function: " << url ;
+    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function: " << url ;
     if(code.isEmpty()){
       //pinterest redirects you to another page for login
       WebWidget* mainview = new WebWidget(d->parent);
@@ -490,7 +490,7 @@ void PTalker::parseResponseAccessToken(const QByteArray& data)
     QJsonObject jsonObject = doc.object();
     d->accessToken           = jsonObject[QLatin1String("access_token")].toString();
     if(d->accessToken != ""){
-      qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token Recieved: " << d->accessToken;
+      qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token Received: " << d->accessToken;
       Q_EMIT pinterestLinkingSucceeded();
     }else{
       Q_EMIT pinterestLinkingFailed();

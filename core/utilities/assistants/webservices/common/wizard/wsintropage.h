@@ -5,7 +5,7 @@
  *
  * Date        : 2017-06-27
  * Description : intro page to export tool where user can choose web service to export,
- *               existant accounts and function mode (export/import).
+ *               existent accounts and function mode (export/import).
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
