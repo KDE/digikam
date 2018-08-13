@@ -262,6 +262,8 @@ done
 
 echo -e "---------- Clean-up Bundle Directory Contents\n"
 
+ln -s libssl.so.10 usr/lib/libssl.so || true
+
 # The following are assumed to be part of the base system
 rm -f usr/lib/libcom_err.so.2 || true
 rm -f usr/lib/libcrypt.so.1 || true
