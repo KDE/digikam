@@ -4,10 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2018-06-29
- * Description : a tool to export images to Onedrive web service
+ * Description : a tool to export images to Twitter social network
  *
- * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
- * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018 by Tarek Talaat <tarektalaat93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,78 +20,78 @@
  *
  * ============================================================ */
 
- #ifndef DIGIKAM_TW_WINDOW_H
- #define DIGIKAM_TW_WINDOW_H
+#ifndef DIGIKAM_TW_WINDOW_H
+#define DIGIKAM_TW_WINDOW_H
 
- // Qt includes
+// Qt includes
 
- #include <QList>
+#include <QList>
 
- // Local includes
+// Local includes
 
- #include "digikam_export.h"
- #include "dinfointerface.h"
- #include "wstooldialog.h"
+#include "digikam_export.h"
+#include "dinfointerface.h"
+#include "wstooldialog.h"
 
- class QCloseEvent;
- class QUrl;
+class QCloseEvent;
+class QUrl;
 
- namespace Digikam
- {
+namespace Digikam
+{
 
- class TwAlbum;
+class TwAlbum;
 
- class DIGIKAM_EXPORT TwWindow : public WSToolDialog
- {
-     Q_OBJECT
+class DIGIKAM_EXPORT TwWindow : public WSToolDialog
+{
+    Q_OBJECT
 
-   public:
+public:
 
-      explicit TwWindow(DInfoInterface* const iface, QWidget* const parent);
-      ~TwWindow();
+    explicit TwWindow(DInfoInterface* const iface, QWidget* const parent);
+    ~TwWindow();
 
-      void reactivate();
+    void reactivate();
 
-      void setItemsList(const QList<QUrl>& urls);
+    void setItemsList(const QList<QUrl>& urls);
 
-  private:
+private:
 
-      void readSettings();
-      void writeSettings();
+    void readSettings();
+    void writeSettings();
 
-      void uploadNextPhoto();
+    void uploadNextPhoto();
 
-      void buttonStateChange(bool state);
-      void closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
+    void buttonStateChange(bool state);
+    void closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
 
-  private Q_SLOTS:
+private Q_SLOTS:
 
-      void slotImageListChanged();
-      void slotUserChangeRequest();
-      void slotNewAlbumRequest();
-      //void slotReloadAlbumsRequest();
-      void slotStartTransfer();
+    void slotImageListChanged();
+    void slotUserChangeRequest();
+    void slotNewAlbumRequest();
+    //void slotReloadAlbumsRequest();
+    void slotStartTransfer();
 
-      void slotBusy(bool);
-      void slotSignalLinkingFailed();
-      void slotSignalLinkingSucceeded();
-      void slotSetUserName(const QString& msg);
-      void slotListAlbumsFailed(const QString& msg);
-      void slotListAlbumsDone(const QList<QPair<QString, QString> >& list);
-      void slotCreateFolderFailed(const QString& msg);
-      void slotCreateFolderSucceeded();
-      void slotAddPhotoFailed(const QString& msg);
-      void slotAddPhotoSucceeded();
-      void slotTransferCancel();
+    void slotBusy(bool);
+    void slotSignalLinkingFailed();
+    void slotSignalLinkingSucceeded();
+    void slotSetUserName(const QString& msg);
+    void slotListAlbumsFailed(const QString& msg);
+    void slotListAlbumsDone(const QList<QPair<QString, QString> >& list);
+    void slotCreateFolderFailed(const QString& msg);
+    void slotCreateFolderSucceeded();
+    void slotAddPhotoFailed(const QString& msg);
+    void slotAddPhotoSucceeded();
+    void slotTransferCancel();
 
-      void slotFinished();
+    void slotFinished();
 
-  private:
+private:
 
-      class Private;
-      Private* const d;
-  };
+    class Private;
+    Private* const d;
+};
 
-  } // namespace Digikam
+} // namespace Digikam
 
-  #endif // TW_WINDOW_H
+#endif // DIGIKAM_TW_WINDOW_H

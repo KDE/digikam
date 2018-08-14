@@ -4,10 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2018-06-29
- * Description : a tool to export images to Onedrive web service
+ * Description : a tool to export images to Twitter social network
  *
- * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
- * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018 by Tarek Talaat <tarektalaat93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,40 +20,40 @@
  *
  * ============================================================ */
 
- #ifndef DIGIKAM_TW_NEW_ALBUM_DLG_H
- #define DIGIKAM_TW_NEW_ALBUM_DLG_H
+#ifndef DIGIKAM_TW_NEW_ALBUM_DLG_H
+#define DIGIKAM_TW_NEW_ALBUM_DLG_H
 
- // Qt includes
+// Qt includes
 
- #include <QDialog>
+#include <QDialog>
 
- // Local includes
+// Local includes
 
- #include "wsnewalbumdialog.h"
+#include "wsnewalbumdialog.h"
 
- class QComboBox;
+class QComboBox;
 
- namespace Digikam
- {
+namespace Digikam
+{
 
- class TwAlbum;
+class TwAlbum;
 
- class TwNewAlbumDlg : public WSNewAlbumDialog
- {
+class TwNewAlbumDlg : public WSNewAlbumDialog
+{
      Q_OBJECT
 
- public:
+public:
 
      explicit TwNewAlbumDlg(QWidget* const parent, const QString& toolName);
      ~TwNewAlbumDlg();
 
      void getAlbumProperties(TwAlbum& album);
 
- private:
-   
+private:
+
      friend class TwWindow;
- };
+};
 
- } // namespace Digikam
+} // namespace Digikam
 
- #endif // DIGIKAM_TW_NEW_ALBUM_DLG_H
+#endif // DIGIKAM_TW_NEW_ALBUM_DLG_H
