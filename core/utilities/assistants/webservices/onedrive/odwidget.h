@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef OD_WIDGET_H
-#define OD_WIDGET_H
+#ifndef DIGIKAM_OD_WIDGET_H
+#define DIGIKAM_OD_WIDGET_H
 
 // Qt includes
 
@@ -53,9 +53,10 @@ public:
                       const QString& url = QString()) Q_DECL_OVERRIDE;
 
 private:
+
     friend class ODWindow;
 };
 
 } // namespace Digikam
 
-#endif // OD_WIDGET_H
+#endif // DIGIKAM_OD_WIDGET_H

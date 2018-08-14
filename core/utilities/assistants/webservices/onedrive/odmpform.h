@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef OD_MPFORM_H
-#define OD_MPFORM_H
+#ifndef DIGIKAM_OD_MPFORM_H
+#define DIGIKAM_OD_MPFORM_H
 
 // Qt includes
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace Digikam
 
-#endif // OD_MPFORM_H
+#endif // DIGIKAM_OD_MPFORM_H

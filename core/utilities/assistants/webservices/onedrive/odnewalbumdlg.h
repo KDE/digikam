@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef OD_NEW_ALBUM_DLG_H
-#define OD_NEW_ALBUM_DLG_H
+#ifndef DIGIKAM_OD_NEW_ALBUM_DLG_H
+#define DIGIKAM_OD_NEW_ALBUM_DLG_H
 
 // Local includes
 
@@ -46,4 +46,4 @@ public:
 
 } // namespace Digikam
 
-#endif // OD_NEW_ALBUM_DLG_H
+#endif // DIGIKAM_OD_NEW_ALBUM_DLG_H

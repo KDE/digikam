@@ -20,12 +20,12 @@
  *
  * ============================================================ */
 
- #include "odnewalbumdlg.h"
+#include "odnewalbumdlg.h"
 
- // Local includes
+// Local includes
 
- #include "digikam_debug.h"
- #include "oditem.h"
+#include "digikam_debug.h"
+#include "oditem.h"
 
 namespace Digikam
 {

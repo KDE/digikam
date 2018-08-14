@@ -19,8 +19,8 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-#include <odtalker.h>
-#include "digikam_config.h"
+
+#include "odtalker.h"
 
 // Qt includes
 
@@ -39,8 +39,14 @@
 #include <QDesktopServices>
 #include <QUrlQuery>
 
+// KDE includes
+
+#include <kconfig.h>
+#include <kwindowconfig.h>
+
 // Local includes
 
+#include "digikam_config.h"
 #include "digikam_debug.h"
 #include "digikam_version.h"
 #include "wstoolutils.h"
@@ -48,8 +54,6 @@
 #include "oditem.h"
 #include "odmpform.h"
 #include "previewloadthread.h"
-#include <kconfig.h>
-#include <kwindowconfig.h>
 
 #ifdef HAVE_QWEBENGINE
 #   include "webwidget_qwebengine.h"

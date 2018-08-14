@@ -19,14 +19,13 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- #include "odwidget.h"
+
+#include "odwidget.h"
 
 // Qt includes
 
 #include <QLabel>
 #include <QGroupBox>
-
-// Local includes
 
 namespace Digikam
 {

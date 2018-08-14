@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef OD_TALKER_H
-#define OD_TALKER_H
+#ifndef DIGIKAM_OD_TALKER_H
+#define DIGIKAM_OD_TALKER_H
 
 // Qt includes
 
@@ -101,4 +101,4 @@ private:
 
 } // namespace Digikam
 
-#endif // OD_TALKER_H
+#endif // DIGIKAM_OD_TALKER_H

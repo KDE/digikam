@@ -20,46 +20,44 @@
  *
  * ============================================================ */
 
- // local includes
+#include "odmpform.h"
 
- #include "odmpform.h"
+// Qt includes
 
- // Qt includes
+#include <QFile>
 
- #include <QFile>
+// Local includes
 
- // Local includes
+#include "digikam_debug.h"
 
- #include "digikam_debug.h"
+namespace Digikam
+{
 
- namespace Digikam
- {
+ODMPForm::ODMPForm()
+{
+}
 
- ODMPForm::ODMPForm()
- {
- }
+ODMPForm::~ODMPForm()
+{
+}
 
- ODMPForm::~ODMPForm()
- {
- }
+bool ODMPForm::addFile(const QString& imgPath)
+{
+    QFile file(imgPath);
 
- bool ODMPForm::addFile(const QString& imgPath)
- {
-     QFile file(imgPath);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        return false;
+    }
 
-     if (!file.open(QIODevice::ReadOnly))
-     {
-         return false;
-     }
+    m_buffer = file.readAll();
 
-     m_buffer = file.readAll();
+    return true;
+}
 
-     return true;
- }
+QByteArray ODMPForm::formData() const
+{
+    return m_buffer;
+}
 
- QByteArray ODMPForm::formData() const
- {
-     return m_buffer;
- }
-
- } // namespace Digikam
+} // namespace Digikam

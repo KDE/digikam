@@ -40,12 +40,6 @@
 #include <QUrlQuery>
 #include <QHttpMultiPart>
 
-#ifdef HAVE_QWEBENGINE
-#   include "webwidget_qwebengine.h"
-#else
-#   include "webwidget.h"
-#endif
-
 // KDE includes
 
 #include <kconfig.h>
@@ -61,6 +55,12 @@
 #include "pitem.h"
 #include "pmpform.h"
 #include "previewloadthread.h"
+
+#ifdef HAVE_QWEBENGINE
+#   include "webwidget_qwebengine.h"
+#else
+#   include "webwidget.h"
+#endif
 
 namespace Digikam
 {

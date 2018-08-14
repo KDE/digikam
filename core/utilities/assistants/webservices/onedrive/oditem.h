@@ -20,14 +20,15 @@
  *
  * ============================================================ */
 
-#ifndef OD_ITEM_H
-#define OD_ITEM_H
+#ifndef DIGIKAM_OD_ITEM_H
+#define DIGIKAM_OD_ITEM_H
 
 // Qt includes
 
 #include <QString>
 
-namespace Digikam{
+namespace Digikam
+{
 
 class ODPhoto
 {
@@ -35,25 +36,22 @@ public:
 
     ODPhoto()
     {
-
     }
 
-    QString     title;
+    QString title;
 };
 
 class ODFolder
 {
-
 public:
 
-  ODFolder()
-  {
+    ODFolder()
+    {
+    }
 
-  }
-
-  QString title;
+    QString title;
 };
 
-} //namespace Digikam
+} // namespace Digikam
 
-#endif // OD_ITEM_H
+#endif // DIGIKAM_OD_ITEM_H

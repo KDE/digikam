@@ -19,6 +19,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #include "odwindow.h"
 
 // Qt includes
@@ -238,7 +239,7 @@ void ODWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
 {
     d->widget->getAlbumsCoB()->clear();
 
-    for (int i = 0 ; i < list.size() ; i++)
+    for (int i = 0 ; i < list.size() ; ++i)
     {
         d->widget->getAlbumsCoB()->addItem(
         QIcon::fromTheme(QLatin1String("system-users")),
@@ -322,10 +323,10 @@ void ODWindow::uploadNextPhoto()
     QString temp = d->currentAlbumName + QLatin1String("/");
 
     bool result = d->talker->addPhoto(imgPath,
-                                   temp,
-                                   d->widget->getResizeCheckBox()->isChecked(),
-                                   d->widget->getDimensionSpB()->value(),
-                                   d->widget->getImgQualitySpB()->value());
+                                      temp,
+                                      d->widget->getResizeCheckBox()->isChecked(),
+                                      d->widget->getDimensionSpB()->value(),
+                                      d->widget->getImgQualitySpB()->value());
 
     if (!result)
     {
@@ -378,7 +379,7 @@ void ODWindow::slotNewAlbumRequest()
         ODFolder newFolder;
         d->albumDlg->getFolderTitle(newFolder);
         d->currentAlbumName = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
-        QString temp = d->currentAlbumName + newFolder.title;
+        QString temp        = d->currentAlbumName + newFolder.title;
         d->talker->createFolder(temp);
     }
 }
