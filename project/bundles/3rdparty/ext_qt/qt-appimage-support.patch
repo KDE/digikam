@@ -2,7 +2,7 @@ diff --git a/qtbase/src/platformsupport/services/genericunix/qgenericunixservice
 index cdb5d33859..5a2bd5f724 100644
 --- a/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
 +++ b/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
-@@ -146,7 +146,29 @@ static inline bool launch(const QString &launcher, const QUrl &url)
+@@ -146,7 +146,30 @@ static inline bool launch(const QString &launcher, const QUrl &url)
  #if !QT_CONFIG(process)
      const bool ok = ::system(qPrintable(command + QLatin1String(" &")));
  #else
@@ -29,7 +29,8 @@ index cdb5d33859..5a2bd5f724 100644
 +
 +    QProcess process;
 +    process.setProcessEnvironment(env);
-+    const bool ok = process.startDetached(command);
++    process.setProgram(command);
++    const bool ok = process.startDetached();
  #endif
      if (!ok)
          qWarning("Launch failed (%s)", qPrintable(command));
