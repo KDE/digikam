@@ -4291,7 +4291,8 @@ QStringList CoreDB::getItemURLsInTag(int tagID, bool recursive)
     QList<QVariant>         values;
     QMap<QString, QVariant> bindingMap;
 
-    bindingMap.insert(QString::fromUtf8(":tagID"), tagID);
+    bindingMap.insert(QString::fromUtf8(":tagID"),  tagID);
+    bindingMap.insert(QString::fromUtf8(":tagID2"), tagID);
 
     if (recursive)
     {
