@@ -20,13 +20,16 @@
  *
  * ============================================================ */
 
-#ifndef P_MPFORM_H
-#define P_MPFORM_H
+#ifndef DIGIKAM_P_MPFORM_H
+#define DIGIKAM_P_MPFORM_H
 
 // Qt includes
 
 #include <QByteArray>
 #include <QString>
+
+// Local includes
+
 #include "wstoolutils.h"
 
 namespace Digikam
@@ -50,4 +53,4 @@ private:
 
 } // namespace Digikam
 
-#endif // P_MPFORM_H
+#endif // DIGIKAM_P_MPFORM_H

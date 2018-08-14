@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef P_WIDGET_H
-#define P_WIDGET_H
+#ifndef DIGIKAM_P_WIDGET_H
+#define DIGIKAM_P_WIDGET_H
 
 // Qt includes
 
@@ -53,9 +53,10 @@ public:
                       const QString& url = QString()) Q_DECL_OVERRIDE;
 
 private:
+
     friend class PWindow;
 };
 
 } // namespace Digikam
 
-#endif // P_WIDGET_H
+#endif // DIGIKAM_P_WIDGET_H

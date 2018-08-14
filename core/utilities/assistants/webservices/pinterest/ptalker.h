@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef P_TALKER_H
-#define P_TALKER_H
+#ifndef DIGIKAM_P_TALKER_H
+#define DIGIKAM_P_TALKER_H
 
 // Qt includes
 
@@ -31,6 +31,7 @@
 #include <QSettings>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
+
 // Local includes
 
 #include "pitem.h"
@@ -102,4 +103,4 @@ private:
 
 } // namespace Digikam
 
-#endif // P_TALKER_H
+#endif // DIGIKAM_P_TALKER_H

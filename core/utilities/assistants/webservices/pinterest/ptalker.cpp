@@ -19,8 +19,8 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-#include <ptalker.h>
-#include "digikam_config.h"
+
+#include "ptalker.h"
 
 // Qt includes
 
@@ -40,9 +40,20 @@
 #include <QUrlQuery>
 #include <QHttpMultiPart>
 
+#ifdef HAVE_QWEBENGINE
+#   include "webwidget_qwebengine.h"
+#else
+#   include "webwidget.h"
+#endif
+
+// KDE includes
+
+#include <kconfig.h>
+#include <kwindowconfig.h>
 
 // Local includes
 
+#include "digikam_config.h"
 #include "digikam_debug.h"
 #include "digikam_version.h"
 #include "wstoolutils.h"
@@ -50,14 +61,6 @@
 #include "pitem.h"
 #include "pmpform.h"
 #include "previewloadthread.h"
-#include <kconfig.h>
-#include <kwindowconfig.h>
-
-#ifdef HAVE_QWEBENGINE
-#   include "webwidget_qwebengine.h"
-#else
-#   include "webwidget.h"
-#endif
 
 namespace Digikam
 {
@@ -123,13 +126,15 @@ public:
 
     QSettings*             settings;
 };
+
 PTalker::PTalker(QWidget* const parent)
     : d(new Private)
 {
     d->parent  = parent;
     d->netMngr = new QNetworkAccessManager(this);
-    d->view = new WebWidget(d->parent);
+    d->view    = new WebWidget(d->parent);
     d->view->settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
+
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
 
@@ -138,16 +143,18 @@ PTalker::PTalker(QWidget* const parent)
 
     connect(this, SIGNAL(pinterestLinkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
-
 }
+
 PTalker::~PTalker()
 {
     if (d->reply)
     {
         d->reply->abort();
     }
+
     delete d;
 }
+
 void PTalker::link()
 {
     emit signalBusy(true);
@@ -162,33 +169,39 @@ void PTalker::link()
     d->view->setWindowFlags(Qt::Dialog);
     d->view->show();
     d->view->load(url);
-    connect(d->view, SIGNAL(urlChanged(QUrl)), this, SLOT(slotCatchUrl(QUrl)));
 
+    connect(d->view, SIGNAL(urlChanged(QUrl)),
+            this, SLOT(slotCatchUrl(QUrl)));
 }
+
 void PTalker::unLink()
 {
     d->accessToken = "";
-    #ifdef HAVE_QWEBENGINE
-    d->view->page()->profile()->cookieStore()->deleteAllCookies();
-    #else
 
-    #endif
+#ifdef HAVE_QWEBENGINE
+    d->view->page()->profile()->cookieStore()->deleteAllCookies();
+#else
+#endif
 
     Q_EMIT pinterestLinkingSucceeded();
 }
+
 void PTalker::slotCatchUrl(const QUrl& url)
 {
     d->urlParametersMap = ParseUrlParameters(url.toString());
     QString code =  d->urlParametersMap.value("code");
     //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Recieved URL from webview in link function: " << url ;
-    if(!code.isEmpty()){
-      d->view->close();
-      getToken(code);
-      emit signalBusy(false);
+
+    if (!code.isEmpty())
+    {
+        d->view->close();
+        getToken(code);
+        emit signalBusy(false);
     }
 }
 
-void PTalker::getToken(const QString& code){
+void PTalker::getToken(const QString& code)
+{
   //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Code: " << code;
   QUrl url(d->tokenUrl);
   QUrlQuery query(url);
@@ -207,18 +220,20 @@ void PTalker::getToken(const QString& code){
   d->state = Private::P_ACCESSTOKEN;
   d->buffer.resize(0);
 }
+
 QMap<QString,QString> PTalker::ParseUrlParameters(const QString &url)
 {
   QMap<QString,QString> urlParameters;
-  if(url.indexOf('?')==-1)
+
+  if (url.indexOf('?')==-1)
   {
       return urlParameters;
   }
 
-  QString tmp = url.right(url.length()-url.indexOf('?')-1);
+  QString tmp           = url.right(url.length()-url.indexOf('?')-1);
   QStringList paramlist = tmp.split('&');
 
-  for(int i=0;i<paramlist.count();i++)
+  for (int i = 0 ; i < paramlist.count() ; ++i)
   {
       QStringList paramarg = paramlist.at(i).split('=');
       urlParameters.insert(paramarg.at(0),paramarg.at(1));
@@ -252,12 +267,16 @@ void PTalker::slotLinkingSucceeded()
 
 bool PTalker::authenticated()
 {
-    if(d->accessToken != ""){
-      return true;
-    }else{
-      return false;
+    if (d->accessToken != "")
+    {
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
+
 void PTalker::cancel()
 {
     if (d->reply)
@@ -268,6 +287,7 @@ void PTalker::cancel()
 
     emit signalBusy(false);
 }
+
 void PTalker::createBoard(QString& boardName)
 {
     QUrl url("https://api.pinterest.com/v1/boards/");
@@ -283,6 +303,7 @@ void PTalker::createBoard(QString& boardName)
     d->buffer.resize(0);
     emit signalBusy(true);
 }
+
 void PTalker::getUserName()
 {
     QUrl url(QLatin1String("https://api.pinterest.com/v1/me/?fields=username"));
@@ -352,7 +373,6 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
 
     QString boardparam =  d->userName + "/" + uploadBoard;
 
-
     if (!form.addFile(path))
     {
         emit signalBusy(false);
@@ -360,7 +380,6 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
     }
 
     QUrl url(QString::fromLatin1("https://api.pinterest.com/v1/pins/?access_token=%1").arg(d->accessToken));
-
 
     QHttpMultiPart * multipart = new QHttpMultiPart (QHttpMultiPart::FormDataType);
     ///Board Section
@@ -388,7 +407,7 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
 
     QHttpPart imagepart;
     QString imagepartHeader = QString::fromLatin1("form-data; name=\"image\"; filename=\"") +
-                                QFileInfo(imgPath).fileName() + QString::fromLatin1("\"") ;
+                              QFileInfo(imgPath).fileName() + QString::fromLatin1("\"") ;
 
     imagepart.setHeader(QNetworkRequest::ContentDispositionHeader,imagepartHeader);
     imagepart.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("image/jpeg"));
@@ -396,20 +415,19 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
     imagepart.setBodyDevice(file);
     multipart->append(imagepart);
 
-
-
     QString content = QString::fromLatin1("multipart/form-data;boundary=")+multipart->boundary();
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, content);
 
     d->reply = d->netMngr->post(netRequest, multipart);
 
-
     d->state = Private::P_ADDPIN;
     d->buffer.resize(0);
     emit signalBusy(true);
+
     return true;
 }
+
 void PTalker::slotFinished(QNetworkReply* reply)
 {
     if (reply != d->reply)
@@ -435,6 +453,7 @@ void PTalker::slotFinished(QNetworkReply* reply)
 
     d->buffer.append(reply->readAll());
     //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "BUFFER" << QString(d->buffer);
+
     switch (d->state)
     {
         case Private::P_LISTBOARDS:
@@ -463,19 +482,26 @@ void PTalker::slotFinished(QNetworkReply* reply)
 
     reply->deleteLater();
 }
+
 void PTalker::parseResponseAccessToken(const QByteArray& data)
 {
     QJsonDocument doc      = QJsonDocument::fromJson(data);
     QJsonObject jsonObject = doc.object();
-    d->accessToken           = jsonObject[QLatin1String("access_token")].toString();
-    if(d->accessToken != ""){
-      qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token Received: " << d->accessToken;
-      Q_EMIT pinterestLinkingSucceeded();
-    }else{
-      Q_EMIT pinterestLinkingFailed();
+    d->accessToken         = jsonObject[QLatin1String("access_token")].toString();
+
+    if (d->accessToken != "")
+    {
+        qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token Received: " << d->accessToken;
+        Q_EMIT pinterestLinkingSucceeded();
     }
+    else
+    {
+        Q_EMIT pinterestLinkingFailed();
+    }
+
     emit signalBusy(false);
 }
+
 void PTalker::parseResponseAddPin(const QByteArray& data)
 {
     QJsonDocument doc      = QJsonDocument::fromJson(data);
@@ -492,11 +518,12 @@ void PTalker::parseResponseAddPin(const QByteArray& data)
         emit signalAddPinSucceeded();
     }
 }
+
 void PTalker::parseResponseUserName(const QByteArray& data)
 {
     QJsonDocument doc      = QJsonDocument::fromJson(data);
     QJsonObject jsonObject = doc.object()[QLatin1String("data")].toObject();
-    QString name    = jsonObject[QLatin1String("username")].toString();
+    QString name           = jsonObject[QLatin1String("username")].toString();
 
     emit signalBusy(false);
     d->userName = name;
@@ -548,15 +575,16 @@ void PTalker::parseResponseCreateBoard(const QByteArray& data)
 
     if (fail)
     {
-      QJsonParseError err;
-      QJsonDocument doc = QJsonDocument::fromJson(data, &err);
-      emit signalCreateBoardFailed(jsonObject[QLatin1String("error_summary")].toString());
+        QJsonParseError err;
+        QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+        emit signalCreateBoardFailed(jsonObject[QLatin1String("error_summary")].toString());
     }
     else
     {
         emit signalCreateBoardSucceeded();
     }
 }
+
 void PTalker::writeSettings()
 {
     KConfig config;
@@ -565,6 +593,7 @@ void PTalker::writeSettings()
     grp.writeEntry("access_token",     d->accessToken);
     config.sync();
 }
+
 void PTalker::readSettings()
 {
     KConfig config;
@@ -584,4 +613,5 @@ void PTalker::readSettings()
 
     }
 }
+
 } // namespace Digikam

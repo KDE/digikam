@@ -19,14 +19,13 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- #include "pwidget.h"
+
+#include "pwidget.h"
 
 // Qt includes
 
 #include <QLabel>
 #include <QGroupBox>
-
-// Local includes
 
 namespace Digikam
 {

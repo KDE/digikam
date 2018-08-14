@@ -62,23 +62,23 @@ public:
         talker      = 0;
     }
 
-    unsigned int   imagesCount;
-    unsigned int   imagesTotal;
+    unsigned int  imagesCount;
+    unsigned int  imagesTotal;
 
     PWidget*      widget;
     PNewAlbumDlg* albumDlg;
     PTalker*      talker;
 
-    QString        currentAlbumName;
-    QList<QUrl>    transferQueue;
+    QString       currentAlbumName;
+    QList<QUrl>   transferQueue;
 };
 
 PWindow::PWindow(DInfoInterface* const iface,
-                   QWidget* const /*parent*/)
+                 QWidget* const /*parent*/)
     : WSToolDialog(0),
       d(new Private)
 {
-    d->widget      = new PWidget(this, iface, QLatin1String("Pinterest"));
+    d->widget = new PWidget(this, iface, QLatin1String("Pinterest"));
 
     d->widget->imagesList()->setIface(iface);
 
@@ -159,7 +159,7 @@ PWindow::~PWindow()
 void PWindow::readSettings()
 {
     KConfig config;
-    KConfigGroup grp   = config.group("Pinterest Settings");
+    KConfigGroup grp    = config.group("Pinterest Settings");
     d->currentAlbumName = grp.readEntry("Current Album",QString());
 
     if (grp.readEntry("Resize", false))
@@ -238,11 +238,13 @@ void PWindow::slotSetUserName(const QString& msg)
 void PWindow::slotListBoardsDone(const QList<QPair<QString,QString> >& list)
 {
     d->widget->getAlbumsCoB()->clear();
-    for (int i = 0 ; i < list.size() ; i++)
+
+    for (int i = 0 ; i < list.size() ; ++i)
     {
         d->widget->getAlbumsCoB()->addItem(
         QIcon::fromTheme(QLatin1String("system-users")),
         list.value(i).second, list.value(i).second);
+
         if (d->currentAlbumName == list.value(i).first)
         {
             d->widget->getAlbumsCoB()->setCurrentIndex(i);
@@ -319,13 +321,13 @@ void PWindow::uploadNextPhoto()
     }
 
     QString imgPath = d->transferQueue.first().toLocalFile();
-    QString temp = d->currentAlbumName;
+    QString temp    = d->currentAlbumName;
 
     bool result = d->talker->addPin(imgPath,
-                                   temp,
-                                   d->widget->getResizeCheckBox()->isChecked(),
-                                   d->widget->getDimensionSpB()->value(),
-                                   d->widget->getImgQualitySpB()->value());
+                                    temp,
+                                    d->widget->getResizeCheckBox()->isChecked(),
+                                    d->widget->getDimensionSpB()->value(),
+                                    d->widget->getImgQualitySpB()->value());
 
     if (!result)
     {

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef P_WINDOW_H
-#define P_WINDOW_H
+#ifndef DIGIKAM_P_WINDOW_H
+#define DIGIKAM_P_WINDOW_H
 
 // Qt includes
 
@@ -94,4 +94,4 @@ private:
 
 } // namespace Digikam
 
-#endif // P_WINDOW_H
+#endif // DIGIKAM_P_WINDOW_H

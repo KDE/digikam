@@ -20,14 +20,15 @@
  *
  * ============================================================ */
 
-#ifndef P_ITEM_H
-#define P_ITEM_H
+#ifndef DIGIKAM_P_ITEM_H
+#define DIGIKAM_P_ITEM_H
 
 // Qt includes
 
 #include <QString>
 
-namespace Digikam{
+namespace Digikam
+{
 
 class PPhoto
 {
@@ -35,10 +36,9 @@ public:
 
     PPhoto()
     {
-
     }
 
-    QString     title;
+    QString title;
 };
 
 class PFolder
@@ -46,14 +46,13 @@ class PFolder
 
 public:
 
-  PFolder()
-  {
+    PFolder()
+    {
+    }
 
-  }
-
-  QString title;
+    QString title;
 };
 
-} //namespace Digikam
+} // namespace Digikam
 
-#endif // P_ITEM_H
+#endif // DIGIKAM_P_ITEM_H
