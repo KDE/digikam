@@ -504,7 +504,6 @@ void ODTalker::readSettings()
     KConfig config;
     KConfigGroup grp   = config.group("Onedrive User Settings");
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In read settings";
     if (!grp.readEntry("access_token", false))
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Linking...";
@@ -513,7 +512,6 @@ void ODTalker::readSettings()
     else
     {
         d->accessToken = grp.readEntry("access_token",QString());
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "readsettings:" << d->accessToken;
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Already Linked";
         emit oneDriveLinkingSucceeded();
 
