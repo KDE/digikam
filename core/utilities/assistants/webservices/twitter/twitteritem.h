@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_TW_ITEM_H
-#define DIGIKAM_TW_ITEM_H
+#ifndef DIGIKAM_TWITTER_ITEM_H
+#define DIGIKAM_TWITTER_ITEM_H
 
  // Qt includes
 
@@ -106,4 +106,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_TW_ITEM_H
+#endif // DIGIKAM_TWITTER_ITEM_H

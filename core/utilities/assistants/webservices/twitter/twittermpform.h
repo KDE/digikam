@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_TW_MPFORM_H
-#define DIGIKAM_TW_MPFORM_H
+#ifndef DIGIKAM_TWITTER_MPFORM_H
+#define DIGIKAM_TWITTER_MPFORM_H
 
 // Qt includes
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_TW_MPFORM_H
+#endif // DIGIKAM_TWITTER_MPFORM_H

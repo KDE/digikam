@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_TW_NEW_ALBUM_DLG_H
-#define DIGIKAM_TW_NEW_ALBUM_DLG_H
+#ifndef DIGIKAM_TWITTER_NEW_ALBUM_DLG_H
+#define DIGIKAM_TWITTER_NEW_ALBUM_DLG_H
 
 // Qt includes
 
@@ -56,4 +56,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_TW_NEW_ALBUM_DLG_H
+#endif // DIGIKAM_TWITTER_NEW_ALBUM_DLG_H

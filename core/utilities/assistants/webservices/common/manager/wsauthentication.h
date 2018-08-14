@@ -20,8 +20,8 @@
  *
  * ============================================================ */ 
 
-#ifndef DIGIKAM_WS_AUTHENTICACTION_H
-#define DIGIKAM_WS_AUTHENTICACTION_H
+#ifndef DIGIKAM_WS_AUTHENTICATION_H
+#define DIGIKAM_WS_AUTHENTICATION_H
 
 // Qt includes
 
@@ -169,6 +169,6 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_WS_AUTHENTICACTION_H
+#endif // DIGIKAM_WS_AUTHENTICATION_H
 
 
