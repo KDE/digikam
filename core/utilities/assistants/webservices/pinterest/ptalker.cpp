@@ -82,12 +82,12 @@ public:
 
     explicit Private()
     {
-        clientId       =     QLatin1String("4982378732590216737");
-        clientSecret   =     QLatin1String("b18a848371ab898b4746c3d958d96b118810bcf06ae3ff48b7b7461dffa2f283");
+        clientId       =     QLatin1String("4983380570301022071");
+        clientSecret   =     QLatin1String("2a698db679125930d922a2dfb897e16b668a67c6f614593636e83fc3d8d9b47d");
 
         authUrl        =     QLatin1String("https://api.pinterest.com/oauth/");
         tokenUrl       =     QLatin1String("https://api.pinterest.com/v1/oauth/token");
-        redirectUrl    =     QLatin1String("https://127.0.0.1:8000/");
+        redirectUrl    =     QLatin1String("https://login.live.com/oauth20_desktop.srf");
 
         scope          =     QLatin1String("read_public,write_public");
 
@@ -132,8 +132,10 @@ PTalker::PTalker(QWidget* const parent)
 {
     d->parent  = parent;
     d->netMngr = new QNetworkAccessManager(this);
-    d->view    = new WebWidget(d->parent);
-    d->view->settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
+    d->view = new WebWidget(d->parent);
+    #ifndef HAVE_QWEBENGINE
+      d->view->settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
+    #endif
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
@@ -177,11 +179,9 @@ void PTalker::link()
 void PTalker::unLink()
 {
     d->accessToken = "";
-
-#ifdef HAVE_QWEBENGINE
+    #ifdef HAVE_QWEBENGINE
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
-#else
-#endif
+    #endif
 
     Q_EMIT pinterestLinkingSucceeded();
 }
