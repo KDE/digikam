@@ -1,7 +1,7 @@
-diff --git a/src/platformsupport/services/genericunix/qgenericunixservices.cpp b/src/platformsupport/services/genericunix/qgenericunixservices.cpp
+diff --git a/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp b/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
 index cdb5d33859..5a2bd5f724 100644
---- a/src/platformsupport/services/genericunix/qgenericunixservices.cpp
-+++ b/src/platformsupport/services/genericunix/qgenericunixservices.cpp
+--- a/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
++++ b/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
 @@ -146,7 +146,29 @@ static inline bool launch(const QString &launcher, const QUrl &url)
  #if !QT_CONFIG(process)
      const bool ok = ::system(qPrintable(command + QLatin1String(" &")));
@@ -15,7 +15,7 @@ index cdb5d33859..5a2bd5f724 100644
 +        env.contains(QLatin1String("APPIMAGE_ORIGINAL_XDG_DATA_DIRS"))   &&
 +        env.contains(QLatin1String("APPIMAGE_ORIGINAL_PATH")))
 +    {
-+        qCDebug(DIGIKAM_GENERAL_LOG) << "Adjusting environment variables for AppImage bundle";
++        qDebug() << "Adjusting environment variables for AppImage bundle";
 +
 +        env.insert(QLatin1String("LD_LIBRARY_PATH"),
 +                   env.value(QLatin1String("APPIMAGE_ORIGINAL_LD_LIBRARY_PATH")));
