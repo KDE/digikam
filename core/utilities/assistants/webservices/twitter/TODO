@@ -1,0 +1,4 @@
+The authentication fails with uploading media although
+we are using the o2 library which has a class specific for twitter authentication.
+Posting tweets authenticates and passes using the same library.
+Need to see twitter community response on this problem.

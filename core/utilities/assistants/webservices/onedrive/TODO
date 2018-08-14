@@ -1,0 +1,4 @@
+Add Unit Tests
+When the token expires onedrive issues a User requires authentication error.
+If the user presses Ok and then choose change account he will be linked normaly.
+So instead of an error we can issue a warning box with a re-authenticate choice.
