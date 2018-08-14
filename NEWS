@@ -349,4 +349,5 @@ BUGFIXES:
 292 ==> 397411 - Not being able to move files in a removable media collection which is not mounted.
 293 ==> 227566 - digiKam does not allow smb:// shared folder as picture collection.
 294 ==> 395201 - SSL broken in 5.9.0 AppImage bundle.
-295 ==> 
+295 ==> 385363 - digiKam crashes when authorizing access to Google photo because of SSL error in AppImage.
+296 ==> 
