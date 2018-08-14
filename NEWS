@@ -351,4 +351,5 @@ BUGFIXES:
 294 ==> 395201 - SSL broken in 5.9.0 AppImage bundle.
 295 ==> 385363 - digiKam crashes when authorizing access to Google photo because of SSL error in AppImage.
 296 ==> 348277 - Please focus auth code input field in the GDrive authentication dialog.
-297 ==> 
+297 ==> 383174 - Google photo, export stops after a random quantity of photos.
+298 ==> 
