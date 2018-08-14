@@ -12,6 +12,9 @@ ExternalProject_Add(ext_qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://download.qt.io/official_releases/qt/5.9/5.9.6/single/qt-everywhere-opensource-src-5.9.6.tar.xz
     URL_MD5 a427428c65f35909ef6ae865b8ee0da6
+
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt-appimage-support.patch
+
     CONFIGURE_COMMAND <SOURCE_DIR>/configure
                   -prefix ${EXTPREFIX_qt}
                   -opensource
