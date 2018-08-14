@@ -50,7 +50,8 @@
 #include "pitem.h"
 #include "pmpform.h"
 #include "previewloadthread.h"
-#include "o0settingsstore.h"
+#include <kconfig.h>
+#include <kwindowconfig.h>
 
 #ifdef HAVE_QWEBENGINE
 #   include "webwidget_qwebengine.h"
@@ -120,15 +121,15 @@ public:
 
     QString                userName;
 
-    int requestCounter;
-
+    QSettings*             settings;
 };
 PTalker::PTalker(QWidget* const parent)
     : d(new Private)
 {
     d->parent  = parent;
     d->netMngr = new QNetworkAccessManager(this);
-    d->requestCounter = 0;
+    d->view = new WebWidget(d->parent);
+    d->view->settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
 
@@ -158,21 +159,11 @@ void PTalker::link()
     query.addQueryItem(QLatin1String("response_type"), "code");
     url.setQuery(query);
 
-
-    d->view = new WebWidget(d->parent);
     d->view->setWindowFlags(Qt::Dialog);
     d->view->show();
     d->view->load(url);
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In LInk" << d->view->url().toString();
-    connect(d->view, SIGNAL(loadFinished(bool)), this, SLOT(slotLoadFinished(bool)));
-
-}
-void PTalker::slotLoadFinished(bool loadFinished){
-
-  if(loadFinished){
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In slot load finished" << d->view->url().toString();
     connect(d->view, SIGNAL(urlChanged(QUrl)), this, SLOT(slotCatchUrl(QUrl)));
-  }
+
 }
 void PTalker::unLink()
 {
@@ -185,45 +176,29 @@ void PTalker::unLink()
 
     Q_EMIT pinterestLinkingSucceeded();
 }
-void PTalker::slotOpenBrowser(const QUrl& url)
-{
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Open Browser..." << url;
-    QDesktopServices::openUrl(url);
-}
 void PTalker::slotCatchUrl(const QUrl& url)
 {
-    d->view->close();
     d->urlParametersMap = ParseUrlParameters(url.toString());
     QString code =  d->urlParametersMap.value("code");
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function: " << url ;
-    if(code.isEmpty()){
-      //pinterest redirects you to another page for login
-      WebWidget* mainview = new WebWidget(d->parent);
-      mainview->setWindowFlags(Qt::Dialog);
-      mainview->show();
-      mainview->load(url);
-      connect(mainview, SIGNAL(urlChanged(QUrl)), this, SLOT(slotCatchUrl(QUrl)));
-    }else{
-      WebWidget* senderObj = qobject_cast<WebWidget*>(sender());
-      senderObj->close();
-
+    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Recieved URL from webview in link function: " << url ;
+    if(!code.isEmpty()){
+      d->view->close();
       getToken(code);
-
+      emit signalBusy(false);
     }
-    emit signalBusy(false);
 }
 
 void PTalker::getToken(const QString& code){
   //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Code: " << code;
-  QUrl url2(d->tokenUrl);
-  QUrlQuery query(url2);
+  QUrl url(d->tokenUrl);
+  QUrlQuery query(url);
   query.addQueryItem(QLatin1String("grant_type"), "authorization_code");
   query.addQueryItem(QLatin1String("client_id"), d->clientId);
   query.addQueryItem(QLatin1String("client_secret"), d->clientSecret);
   query.addQueryItem(QLatin1String("code"), code);
-  url2.setQuery(query);
+  url.setQuery(query);
 
-  QNetworkRequest netRequest(url2);
+  QNetworkRequest netRequest(url);
   netRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
   netRequest.setRawHeader("Accept", "application/json");
 
@@ -263,11 +238,15 @@ void PTalker::slotLinkingSucceeded()
     if (d->accessToken == "")
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Pinterest ok";
+        KConfig config;
+        KConfigGroup grp   = config.group("Pinterest User Settings");
+        grp.deleteGroup();
         emit signalBusy(false);
         return;
     }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Pinterest ok";
+    writeSettings();
     emit signalLinkingSucceeded();
 }
 
@@ -578,5 +557,31 @@ void PTalker::parseResponseCreateBoard(const QByteArray& data)
         emit signalCreateBoardSucceeded();
     }
 }
+void PTalker::writeSettings()
+{
+    KConfig config;
+    KConfigGroup grp = config.group("Pinterest User Settings");
 
+    grp.writeEntry("access_token",     d->accessToken);
+    config.sync();
+}
+void PTalker::readSettings()
+{
+    KConfig config;
+    KConfigGroup grp   = config.group("Pinterest User Settings");
+
+    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In read settings";
+    if (!grp.readEntry("access_token", false))
+    {
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Linking...";
+        link();
+    }
+    else
+    {
+        d->accessToken = grp.readEntry("access_token",QString());
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Already Linked";
+        emit pinterestLinkingSucceeded();
+
+    }
+}
 } // namespace Digikam

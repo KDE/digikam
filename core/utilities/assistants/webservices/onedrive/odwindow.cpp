@@ -144,7 +144,7 @@ ODWindow::ODWindow(DInfoInterface* const iface,
     readSettings();
     buttonStateChange(false);
 
-    d->talker->link();
+    d->talker->readSettings();
 }
 
 ODWindow::~ODWindow()

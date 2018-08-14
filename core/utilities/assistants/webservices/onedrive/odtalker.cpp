@@ -48,6 +48,8 @@
 #include "oditem.h"
 #include "odmpform.h"
 #include "previewloadthread.h"
+#include <kconfig.h>
+#include <kwindowconfig.h>
 
 #ifdef HAVE_QWEBENGINE
 #   include "webwidget_qwebengine.h"
@@ -121,6 +123,7 @@ ODTalker::ODTalker(QWidget* const parent)
 {
     d->parent   = parent;
     d->netMngr  = new QNetworkAccessManager(this);
+    d->view = new WebWidget(d->parent);
 
     connect(this, SIGNAL(oneDriveLinkingFailed()),
             this, SLOT(slotLinkingFailed()));
@@ -149,7 +152,6 @@ void ODTalker::link()
     query.addQueryItem(QLatin1String("response_type"), "token");
     url.setQuery(query);
 
-    d->view = new WebWidget(d->parent);
     d->view->setWindowFlags(Qt::Dialog);
     d->view->load(url);
     d->view->show();
@@ -210,11 +212,15 @@ void ODTalker::slotLinkingSucceeded()
     if (d->accessToken == "")
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Onedrive ok";
+        KConfig config;
+        KConfigGroup grp   = config.group("Onedrive User Settings");
+        grp.deleteGroup();
         emit signalBusy(false);
         return;
     }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Onedrive ok";
+    writeSettings();
     d->view->close();
     emit signalLinkingSucceeded();
 }
@@ -481,5 +487,32 @@ void ODTalker::parseResponseCreateFolder(const QByteArray& data)
         emit signalCreateFolderSucceeded();
     }
 }
+void ODTalker::writeSettings()
+{
+    KConfig config;
+    KConfigGroup grp = config.group("Onedrive User Settings");
 
+    grp.writeEntry("access_token",     d->accessToken);
+    config.sync();
+}
+void ODTalker::readSettings()
+{
+    KConfig config;
+    KConfigGroup grp   = config.group("Onedrive User Settings");
+
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In read settings";
+    if (!grp.readEntry("access_token", false))
+    {
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Linking...";
+        link();
+    }
+    else
+    {
+        d->accessToken = grp.readEntry("access_token",QString());
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "readsettings:" << d->accessToken;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Already Linked";
+        emit oneDriveLinkingSucceeded();
+
+    }
+}
 } // namespace Digikam

@@ -31,7 +31,6 @@
 #include <QSettings>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
-
 // Local includes
 
 #include "pitem.h"
@@ -62,6 +61,8 @@ public:
     void setAccessToken(const QString& token);
     QMap<QString,QString> ParseUrlParameters(const QString& url);
     void getToken(const QString& code);
+    void readSettings();
+    void writeSettings();
 
 Q_SIGNALS:
 
@@ -83,9 +84,7 @@ private Q_SLOTS:
     void slotLinkingFailed();
     void slotLinkingSucceeded();
     void slotCatchUrl(const QUrl& url);
-    void slotOpenBrowser(const QUrl& url);
     void slotFinished(QNetworkReply* reply);
-    void slotLoadFinished(bool loadFinished);
 
 private:
 

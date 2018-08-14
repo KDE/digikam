@@ -145,7 +145,7 @@ PWindow::PWindow(DInfoInterface* const iface,
     readSettings();
     buttonStateChange(false);
 
-    d->talker->link();
+    d->talker->readSettings();
 }
 
 PWindow::~PWindow()
