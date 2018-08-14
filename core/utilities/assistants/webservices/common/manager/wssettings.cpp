@@ -7,7 +7,7 @@
  * Description : Web Service settings container.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -113,7 +113,7 @@ QString WSSettings::format() const
 QMap<WSSettings::WebService, QString> WSSettings::webServiceNames()
 {
     QMap<WebService, QString> services;
-    
+
     services[FLICKR]    = i18nc("Web Service: FLICKR",    "Flickr");
     services[DROPBOX]   = i18nc("Web Service: DROPBOX",   "Dropbox");
     services[IMGUR]     = i18nc("Web Service: IMGUR",     "Imgur");
@@ -121,7 +121,7 @@ QMap<WSSettings::WebService, QString> WSSettings::webServiceNames()
     services[SMUGMUG]   = i18nc("Web Service: SMUGMUG",   "Smugmug");
     services[GDRIVE]    = i18nc("Web Service: GDRIVE",    "Google Drive");
     services[GPHOTO]    = i18nc("Web Service: GPHOTO",    "Google Photo");
-    
+
     return services;
 }
 
@@ -147,6 +147,5 @@ QStringList WSSettings::allUserNames(const QString& serviceName)
 
     return userNames;
 }
-
 
 } // namespace Digikam

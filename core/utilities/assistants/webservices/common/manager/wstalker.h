@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * ============================================================ */ 
+ * ============================================================ */
 
 #ifndef DIGIKAM_WS_TALKER_H
 #define DIGIKAM_WS_TALKER_H
@@ -44,13 +44,13 @@
 
 namespace Digikam
 {
-    
+
 class WSTalker : public QObject
 {
     Q_OBJECT
-    
+
 public:
-    
+
     enum State
     {
         DEFAULT = 0,
@@ -59,9 +59,9 @@ public:
         CREATEALBUM,
         ADDPHOTO
     };
-    
+
 public:
-    
+
     explicit WSTalker(QWidget* const parent);
     ~WSTalker();
 
@@ -101,7 +101,7 @@ public:
      * Abort any network request realizing at the moment.
      */
     void cancel();
-    
+
 protected:
 
     /*
@@ -116,7 +116,7 @@ protected:
     void saveUserAccount(const QString& userName,
                          const QString& userID,
                          long long int expire,
-                         const QString& accessToken, 
+                         const QString& accessToken,
                          const QString& refreshToken = QString());
 
     /*
@@ -131,13 +131,13 @@ protected:
     void removeAllAccounts();
 
     /*
-     * A wrapper method of getUserAccountInfo(userName), but perform further verification 
-     * on account's validation and further operation in case that account is expired. 
+     * A wrapper method of getUserAccountInfo(userName), but perform further verification
+     * on account's validation and further operation in case that account is expired.
      */
     bool loadUserAccount(const QString& userName);
 
     /*
-     * This method can be (and must be) reimplemented in derived class. Indeed, it will hard code 
+     * This method can be (and must be) reimplemented in derived class. Indeed, it will hard code
      * (at runtime) O2's settings (i.e accessToken, refreshToken, expired date and value of linked state).
      * It forces O2 to link to another account according to user's selection. Otherwise, O2 will
      * "remember" account from previous login and always link to that account, if an obligated reauthenticate
@@ -146,13 +146,13 @@ protected:
     virtual void resetTalker(const QString& expire, const QString& accessToken, const QString& refreshToken);
 
     /*
-     * Sort list of albums by ascending order of titles. 
+     * Sort list of albums by ascending order of titles.
      */
     virtual void sortAlbumsList(QList<WSAlbum>& albumsList);
 
     /*
-     * These methods are reimplemented in derived class and used to parse response of network requests 
-     * for user's information or APIs of web service. They will be called asynchronously when responses 
+     * These methods are reimplemented in derived class and used to parse response of network requests
+     * for user's information or APIs of web service. They will be called asynchronously when responses
      * for net request are received.
      */
     virtual void parseResponseGetLoggedInUser(const QByteArray& data);
@@ -166,20 +166,20 @@ protected:
      * can call it if needed.
      */
     virtual void authenticationDone(int errCode, const QString& errMsg);
-    
+
 public:
 
     /*
-     * These methods are reimplemented in derived class, and will be used to make network requests 
+     * These methods are reimplemented in derived class, and will be used to make network requests
      * for user's information or APIs of web service.
      */
     virtual void getLoggedInUser();
     virtual void listAlbums(long long userID = 0);
     virtual void createNewAlbum();
     virtual void addPhoto(const QString& imgPath, const QString& albumID, const QString& caption);
-    
+
 Q_SIGNALS:
-    
+
     void signalBusy(bool val);
     void signalOpenBrowser(const QUrl& url);
     void signalCloseBrowser();
@@ -187,7 +187,7 @@ Q_SIGNALS:
     void signalCreateAlbumDone(int errCode, const QString& errMsg, const QString& newAlbumId);
     void signalListAlbumsDone(int errCode, const QString& errMsg, const QList <WSAlbum>& albumsList);
     void signalAddPhotoDone(int errCode, const QString& errMsg);
-    
+
 protected Q_SLOTS:
 
     /*
@@ -208,26 +208,24 @@ protected Q_SLOTS:
      * Facebook is a web service where this approach is used, because the callback url is not http://127.0.0.1/
      */
     virtual void slotResponseTokenReceived(const QMap<QString, QString>& rep);
-    
+
 protected:
-    
+
     QNetworkAccessManager*  m_netMngr;
     QNetworkReply*          m_reply;
-    
+
     State                   m_state;
     QByteArray              m_buffer;
-    
+
     QSettings*              m_settings;
     O0SettingsStore*        m_store;
-    
+
     QString                 m_userName;
-    
+
     WSWizard*               m_wizard;
 };
-    
+
 } // namespace Digikam
 
-#endif // DIGIKAM_WS_TALKER_H  
-
-
+#endif // DIGIKAM_WS_TALKER_H
 

@@ -33,9 +33,9 @@ namespace Digikam
 
 class WSAlbum
 {
-    
+
 public:
-    
+
     explicit WSAlbum()
       : parentID(QLatin1String("")),
         isRoot(true),
@@ -61,17 +61,17 @@ public:
         url         = album.url;
         uploadable  = album.uploadable;
     }
-    
+
     QString   id;
     QString   parentID;
     bool      isRoot;
-    
+
     QString   title;
     QString   description;
     QString   location;
     QString   url;
     bool      uploadable;
-}; 
+};
 
 /*
  * This class is used when parsing response of listAlbums().
@@ -80,18 +80,20 @@ public:
  */
 class AlbumSimplified 
 {
-    
+
 public:
-    
+
     explicit AlbumSimplified()
       : uploadable(true)
     {
-    }    
+    }
+
     explicit AlbumSimplified(const QString& title)
       : title(title),
         uploadable(true)
     {
     }
+
     explicit AlbumSimplified(const QString& title, bool uploadable)
       : title(title),
         uploadable(uploadable)
@@ -99,7 +101,7 @@ public:
     }
 
 public:
-    
+
     QString     title;
     QStringList childrenIDs;
     bool        uploadable;
