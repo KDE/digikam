@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef BOX_TALKER_H
-#define BOX_TALKER_H
+#ifndef DIGIKAM_BOX_TALKER_H
+#define DIGIKAM_BOX_TALKER_H
 
 // Qt includes
 
@@ -102,4 +102,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BOX_TALKER_H
+#endif // DIGIKAM_BOX_TALKER_H

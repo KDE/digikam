@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef BOX_WIDGET_H
-#define BOX_WIDGET_H
+#ifndef DIGIKAM_BOX_WIDGET_H
+#define DIGIKAM_BOX_WIDGET_H
 
 // Qt includes
 
@@ -53,9 +53,10 @@ public:
                       const QString& url = QString()) Q_DECL_OVERRIDE;
 
 private:
+
     friend class BOXWindow;
 };
 
 } // namespace Digikam
 
-#endif // BOX_WIDGET_H
+#endif // DIGIKAM_BOX_WIDGET_H

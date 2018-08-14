@@ -20,49 +20,47 @@
  *
  * ============================================================ */
 
- // local includes
+#include "boxmpform.h"
 
- #include "boxmpform.h"
+// Qt includes
 
- // Qt includes
+#include <QFile>
+#include <QUrl>
+#include <QMimeDatabase>
+#include <QMimeType>
 
- #include <QFile>
- #include <QUrl>
- #include <QMimeDatabase>
- #include <QMimeType>
+// Local includes
 
- // Local includes
+#include "digikam_debug.h"
 
- #include "digikam_debug.h"
+namespace Digikam
+{
 
- namespace Digikam
- {
+BOXMPForm::BOXMPForm()
+{
+}
 
- BOXMPForm::BOXMPForm()
- {
- }
+BOXMPForm::~BOXMPForm()
+{
+}
 
- BOXMPForm::~BOXMPForm()
- {
- }
+bool BOXMPForm::addFile(const QString& imgPath)
+{
+    QFile file(imgPath);
 
- bool BOXMPForm::addFile(const QString& imgPath)
- {
-     QFile file(imgPath);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        return false;
+    }
 
-     if (!file.open(QIODevice::ReadOnly))
-     {
-         return false;
-     }
+    m_buffer = file.readAll();
 
-     m_buffer = file.readAll();
+    return true;
+}
 
-     return true;
- }
-
- QByteArray BOXMPForm::formData() const
- {
-     return m_buffer;
- }
+QByteArray BOXMPForm::formData() const
+{
+    return m_buffer;
+}
 
 } // namespace Digikam

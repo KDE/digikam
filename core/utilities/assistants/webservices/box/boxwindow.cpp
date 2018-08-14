@@ -19,6 +19,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #include "boxwindow.h"
 
 // Qt includes
@@ -61,23 +62,23 @@ public:
         talker      = 0;
     }
 
-    unsigned int   imagesCount;
-    unsigned int   imagesTotal;
+    unsigned int    imagesCount;
+    unsigned int    imagesTotal;
 
     BOXWidget*      widget;
     BOXNewAlbumDlg* albumDlg;
     BOXTalker*      talker;
 
-    QString        currentAlbumName;
-    QList<QUrl>    transferQueue;
+    QString         currentAlbumName;
+    QList<QUrl>     transferQueue;
 };
 
 BOXWindow::BOXWindow(DInfoInterface* const iface,
-                   QWidget* const /*parent*/)
+                     QWidget* const /*parent*/)
     : WSToolDialog(0),
       d(new Private)
 {
-    d->widget      = new BOXWidget(this, iface, QLatin1String("Box"));
+    d->widget = new BOXWidget(this, iface, QLatin1String("Box"));
 
     d->widget->imagesList()->setIface(iface);
 
@@ -237,11 +238,13 @@ void BOXWindow::slotSetUserName(const QString& msg)
 void BOXWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
 {
     d->widget->getAlbumsCoB()->clear();
-    for (int i = 0 ; i < list.size() ; i++)
+
+    for (int i = 0 ; i < list.size() ; ++i)
     {
         d->widget->getAlbumsCoB()->addItem(
         QIcon::fromTheme(QLatin1String("system-users")),
         list.value(i).second, list.value(i).second);
+
         if (d->currentAlbumName == QString(list.value(i).second))
         {
             d->widget->getAlbumsCoB()->setCurrentIndex(i);
@@ -318,13 +321,13 @@ void BOXWindow::uploadNextPhoto()
     }
 
     QString imgPath = d->transferQueue.first().toLocalFile();
-    QString temp = d->currentAlbumName;
+    QString temp    = d->currentAlbumName;
 
     bool result = d->talker->addPhoto(imgPath,
-                                   temp,
-                                   d->widget->getResizeCheckBox()->isChecked(),
-                                   d->widget->getDimensionSpB()->value(),
-                                   d->widget->getImgQualitySpB()->value());
+                                      temp,
+                                      d->widget->getResizeCheckBox()->isChecked(),
+                                      d->widget->getDimensionSpB()->value(),
+                                      d->widget->getImgQualitySpB()->value());
 
     if (!result)
     {

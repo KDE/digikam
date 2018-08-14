@@ -19,7 +19,8 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-#include <boxtalker.h>
+
+#include "boxtalker.h"
 
 // Qt includes
 
@@ -38,7 +39,6 @@
 #include <QDesktopServices>
 #include <QUrlQuery>
 #include <QHttpMultiPart>
-
 
 // Local includes
 
@@ -85,24 +85,25 @@ public:
 
 public:
 
-    QString                clientId;
-    QString                clientSecret;
-    QString                authUrl;
-    QString                tokenUrl;
-    QString                redirectUrl;
-    QString                accessToken;
-    QString                refreshToken;
-    QWidget*               parent;
-    QNetworkAccessManager* netMngr;
-    QNetworkReply*         reply;
-    State                  state;
-    QByteArray             buffer;
-    DMetadata              meta;
-    QMap<QString,QString> urlParametersMap;
-    QSettings*             settings;
-    O2*                    o2;
+    QString                         clientId;
+    QString                         clientSecret;
+    QString                         authUrl;
+    QString                         tokenUrl;
+    QString                         redirectUrl;
+    QString                         accessToken;
+    QString                         refreshToken;
+    QWidget*                        parent;
+    QNetworkAccessManager*          netMngr;
+    QNetworkReply*                  reply;
+    State                           state;
+    QByteArray                      buffer;
+    DMetadata                       meta;
+    QMap<QString,QString>           urlParametersMap;
+    QSettings*                      settings;
+    O2*                             o2;
     QList<QPair<QString, QString> > foldersList;
 };
+
 BOXTalker::BOXTalker(QWidget* const parent)
     : d(new Private)
 {
@@ -114,8 +115,10 @@ BOXTalker::BOXTalker(QWidget* const parent)
 
     connect(this, SIGNAL(boxLinkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
+
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
+
     d->o2      = new O2(this);
 
     d->o2->setClientId(d->clientId);
@@ -139,19 +142,23 @@ BOXTalker::BOXTalker(QWidget* const parent)
     connect(d->o2, SIGNAL(openBrowser(QUrl)),
             this, SLOT(slotOpenBrowser(QUrl)));
 }
+
 BOXTalker::~BOXTalker()
 {
     if (d->reply)
     {
         d->reply->abort();
     }
+
     delete d;
 }
+
 void BOXTalker::link()
 {
     emit signalBusy(true);
     d->o2->link();
 }
+
 void BOXTalker::unLink()
 {
     d->o2->unlink();
@@ -159,11 +166,13 @@ void BOXTalker::unLink()
     d->settings->remove(QString());
     d->settings->endGroup();
 }
+
 void BOXTalker::slotLinkingFailed()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Box fail";
     emit signalBusy(false);
 }
+
 void BOXTalker::slotLinkingSucceeded()
 {
     if (!d->o2->linked())
@@ -179,12 +188,16 @@ void BOXTalker::slotLinkingSucceeded()
 
 bool BOXTalker::authenticated()
 {
-    if(d->o2->linked()){
-      return true;
-    }else{
-      return false;
+    if (d->o2->linked())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
+
 void BOXTalker::cancel()
 {
     if (d->reply)
@@ -195,22 +208,25 @@ void BOXTalker::cancel()
 
     emit signalBusy(false);
 }
+
 void BOXTalker::slotOpenBrowser(const QUrl& url)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Open Browser...";
     QDesktopServices::openUrl(url);
 }
+
 void BOXTalker::createFolder(QString& path)
 {
     QString name = path.section(QLatin1Char('/'), -1);
     QString folderPath = path.section(QLatin1Char('/'),-2,-2);
 
-
     QString id;
-    for (int i = 0 ; i < d->foldersList.size() ; i++)
+
+    for (int i = 0 ; i < d->foldersList.size() ; ++i)
     {
-        if(d->foldersList.value(i).second == folderPath){
-          id = d->foldersList.value(i).first;
+        if(d->foldersList.value(i).second == folderPath)
+        {
+            id = d->foldersList.value(i).first;
         }
     }
 
@@ -226,6 +242,7 @@ void BOXTalker::createFolder(QString& path)
     d->buffer.resize(0);
     emit signalBusy(true);
 }
+
 void BOXTalker::getUserName()
 {
     QUrl url(QLatin1String("https://api.box.com/2.0/users/me"));
@@ -291,14 +308,15 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
         d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
         d->meta.save(path);
     }
+
     QString id;
-    for (int i = 0 ; i < d->foldersList.size() ; i++)
+
+    for (int i = 0 ; i < d->foldersList.size() ; ++i)
     {
         if(d->foldersList.value(i).second == uploadFolder){
           id = d->foldersList.value(i).first;
         }
     }
-
 
     if (!form.addFile(path))
     {
@@ -306,10 +324,10 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
         return false;
     }
 
-    QHttpMultiPart * multipart = new QHttpMultiPart (QHttpMultiPart::FormDataType);
+    QHttpMultiPart* multipart = new QHttpMultiPart (QHttpMultiPart::FormDataType);
 
     QHttpPart attributes;
-    QString attributesHeader = QString::fromLatin1("form-data; name=\"attributes\"");
+    QString attributesHeader  = QString::fromLatin1("form-data; name=\"attributes\"");
     attributes.setHeader(QNetworkRequest::ContentDispositionHeader,attributesHeader);
 
     QString postData = QString::fromLatin1("{\"name\":\"") + QFileInfo(imgPath).fileName() + QString::fromLatin1("\"")+
@@ -323,14 +341,13 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
 
     QHttpPart imagepart;
     QString imagepartHeader = QString::fromLatin1("form-data; name=\"file\"; filename=\"") +
-                                QFileInfo(imgPath).fileName() + QString::fromLatin1("\"") ;
+                              QFileInfo(imgPath).fileName() + QString::fromLatin1("\"") ;
 
     imagepart.setHeader(QNetworkRequest::ContentDispositionHeader,imagepartHeader);
     imagepart.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("image/jpeg"));
 
     imagepart.setBodyDevice(file);
     multipart->append(imagepart);
-
 
     QUrl url(QString::fromLatin1("https://upload.box.com/api/2.0/files/content?access_token=%1").arg(d->o2->token()));
 
@@ -342,8 +359,10 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     d->state = Private::BOX_ADDPHOTO;
     d->buffer.resize(0);
     emit signalBusy(true);
+
     return true;
 }
+
 void BOXTalker::slotFinished(QNetworkReply* reply)
 {
     if (reply != d->reply)
@@ -352,6 +371,7 @@ void BOXTalker::slotFinished(QNetworkReply* reply)
     }
 
     d->reply = 0;
+
     if (reply->error() != QNetworkReply::NoError)
     {
         if (d->state != Private::BOX_CREATEFOLDER)
@@ -390,12 +410,14 @@ void BOXTalker::slotFinished(QNetworkReply* reply)
 
     reply->deleteLater();
 }
+
 void BOXTalker::parseResponseAddPhoto(const QByteArray& data)
 {
     QJsonDocument doc      = QJsonDocument::fromJson(data);
     QJsonObject jsonObject = doc.object();
     bool success           = jsonObject.contains(QLatin1String("total_count"));
     emit signalBusy(false);
+
     if (!success)
     {
         emit signalAddPhotoFailed(i18n("Failed to upload photo"));
@@ -405,10 +427,11 @@ void BOXTalker::parseResponseAddPhoto(const QByteArray& data)
         emit signalAddPhotoSucceeded();
     }
 }
+
 void BOXTalker::parseResponseUserName(const QByteArray& data)
 {
-    QJsonDocument doc      = QJsonDocument::fromJson(data);
-    QString name  = doc.object()[QLatin1String("name")].toString();
+    QJsonDocument doc = QJsonDocument::fromJson(data);
+    QString name      = doc.object()[QLatin1String("name")].toString();
     emit signalBusy(false);
     emit signalSetUserName(name);
 }
@@ -441,11 +464,11 @@ void BOXTalker::parseResponseListFolders(const QByteArray& data)
         QJsonObject obj = value.toObject();
         type       = obj[QLatin1String("type")].toString();
 
-        if(type=="folder"){
-          folderName    = obj[QLatin1String("name")].toString();
-          id            = obj[QLatin1String("id")].toString();
-          d->foldersList.append(qMakePair(id, folderName));
-
+        if(type=="folder")
+        {
+            folderName    = obj[QLatin1String("name")].toString();
+            id            = obj[QLatin1String("id")].toString();
+            d->foldersList.append(qMakePair(id, folderName));
         }
     }
 
@@ -463,9 +486,9 @@ void BOXTalker::parseResponseCreateFolder(const QByteArray& data)
 
     if (fail)
     {
-      QJsonParseError err;
-      QJsonDocument doc = QJsonDocument::fromJson(data, &err);
-      emit signalCreateFolderFailed(jsonObject[QLatin1String("error_summary")].toString());
+        QJsonParseError err;
+        QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+        emit signalCreateFolderFailed(jsonObject[QLatin1String("error_summary")].toString());
     }
     else
     {

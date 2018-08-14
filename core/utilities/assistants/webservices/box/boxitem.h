@@ -20,14 +20,15 @@
  *
  * ============================================================ */
 
-#ifndef BOX_ITEM_H
-#define BOX_ITEM_H
+#ifndef DIGIKAM_BOX_ITEM_H
+#define DIGIKAM_BOX_ITEM_H
 
 // Qt includes
 
 #include <QString>
 
-namespace Digikam{
+namespace Digikam
+{
 
 class BOXPhoto
 {
@@ -35,25 +36,22 @@ public:
 
     BOXPhoto()
     {
-
     }
 
-    QString     title;
+    QString title;
 };
 
 class BOXFolder
 {
-
 public:
 
   BOXFolder()
   {
-
   }
 
   QString title;
 };
 
-} //namespace Digikam
+} // namespace Digikam
 
-#endif // BOX_ITEM_H
+#endif // DIGIKAM_BOX_ITEM_H

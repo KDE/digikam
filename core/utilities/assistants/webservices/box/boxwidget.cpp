@@ -19,7 +19,8 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- #include "boxwidget.h"
+
+#include "boxwidget.h"
 
 // Qt includes
 

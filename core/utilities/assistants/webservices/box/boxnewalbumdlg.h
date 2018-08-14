@@ -19,8 +19,9 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-#ifndef BOX_NEW_ALBUM_DLG_H
-#define BOX_NEW_ALBUM_DLG_H
+
+#ifndef DIGIKAM_BOX_NEW_ALBUM_DLG_H
+#define DIGIKAM_BOX_NEW_ALBUM_DLG_H
 
 // Local includes
 
@@ -45,4 +46,4 @@ public:
 
 } // namespace Digikam
 
-#endif // BOX_NEW_ALBUM_DLG_H
+#endif // DIGIKAM_BOX_NEW_ALBUM_DLG_H

@@ -20,12 +20,12 @@
  *
  * ============================================================ */
 
- #include "boxnewalbumdlg.h"
+#include "boxnewalbumdlg.h"
 
- // Local includes
+// Local includes
 
- #include "digikam_debug.h"
- #include "boxitem.h"
+#include "digikam_debug.h"
+#include "boxitem.h"
 
 namespace Digikam
 {
