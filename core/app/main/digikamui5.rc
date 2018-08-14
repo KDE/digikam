@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="604" name="digikam" translationDomain="digikam" >
+<gui version="605" name="digikam" translationDomain="digikam" >
 
  <MenuBar>
 
@@ -157,6 +157,7 @@
       <Action name="export_imgur" />
       <Action name="export_onedrive" />
       <Action name="export_pinterest" />
+      <Action name="export_box" />
       <Action name="export_rajce" />
       <Action name="export_smugmug" />
       <Action name="export_yandexfotki" />

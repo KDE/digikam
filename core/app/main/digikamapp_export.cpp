@@ -109,6 +109,12 @@ void DigikamApp::slotExportTool()
         w->exec();
         delete w;
     }
+    else if (tool == m_exportBoxAction)
+    {
+        QPointer<BOXWindow> w = new BOXWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w->exec();
+        delete w;
+    }
 
     else if (tool == m_exportFacebookAction)
     {

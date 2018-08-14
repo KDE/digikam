@@ -190,6 +190,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_exportDropboxAction      = 0;
     m_exportOnedriveAction     = 0;
     m_exportPinterestAction    = 0;
+    m_exportBoxAction          = 0;
     m_exportFacebookAction     = 0;
     m_exportFlickrAction       = 0;
     m_exportGdriveAction       = 0;
@@ -1059,6 +1060,14 @@ void DXmlGuiWindow::createExportActions()
     actionCollection()->setDefaultShortcut(m_exportPinterestAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_I);
 
     connect(m_exportPinterestAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+    m_exportBoxAction = new QAction(i18n("Export to &Box..."), this);
+    m_exportBoxAction->setIcon(QIcon::fromTheme(QString::fromLatin1("box")));
+    actionCollection()->addAction(QLatin1String("export_box"), m_exportBoxAction);
+    actionCollection()->setDefaultShortcut(m_exportBoxAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_B);
+
+    connect(m_exportBoxAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
     m_exportFacebookAction = new QAction(i18n("Export to &Facebook..."), this);
