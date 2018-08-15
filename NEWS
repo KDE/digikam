@@ -362,5 +362,5 @@ BUGFIXES:
 305 ==> 286754 - Crash when when entering collection name in flickr uploader.
 306 ==> 337980 - Flickr Export tool can no longer obtain a new token.
 307 ==> 151018 - Requires new token with every invokation.
-308 ==> 
-
+308 ==> 132922 - Export to flickr doesn't work.
+309 ==> 
