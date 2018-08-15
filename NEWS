@@ -379,4 +379,5 @@ BUGFIXES:
 322 ==> 391329 - Two actions that wants to use same shortcut (Ctrl+Shift+,).
 323 ==> 391655 - Kubuntu 18.04 beta, Digikam 5.6.0 Ambiguous Shortcuts - Zoom to 100% and Configure Digikam share the same shortcut (Ctrl+Shift+,).
 324 ==> 393031 - Two actions for digikam[helpfully identified as a bug].
-325 ==> 
+325 ==> 395518 - When manually typing face name, sort the filtered tags by recent usage.
+326 ==> 
