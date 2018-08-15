@@ -366,5 +366,10 @@ BUGFIXES:
 309 ==> 149864 - Dialog box pops up saying 'Error Occured: Missing signature. We can not proceed further".
 310 ==> 196179 - Flickr export does not work.
 311 ==> 391734 - Can't export to google photos: SSL Handshake failed.
-312 ==> 
+312 ==> 386402 - Not all page sizes for selected printer can be selected.
+313 ==> 395557 - Printformat not selectable.
+314 ==> 340644 - Allow to use standard photo paper sizes.
+315 ==> 
+
+
 
