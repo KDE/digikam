@@ -381,4 +381,7 @@ BUGFIXES:
 324 ==> 393031 - Two actions for digikam[helpfully identified as a bug].
 325 ==> 395518 - When manually typing face name, sort the filtered tags by recent usage.
 326 ==> 304202 - No option to re-read metadata from XMP sidecar file.
-327 ==> 
+327 ==> 289445 - Allow to create Contact Sheet from an album.
+328 ==> 164750 - Picture alignment and background picture.
+239 ==> 
+
