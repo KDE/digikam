@@ -353,5 +353,5 @@ BUGFIXES:
 296 ==> 348277 - Please focus auth code input field in the GDrive authentication dialog.
 297 ==> 383174 - Google photo, export stops after a random quantity of photos.
 298 ==> 387422 - Flickr export authorization does not work.
-299 ==> 
-
+299 ==> 397126 - Fail to replace a photo in google photo.
+300 ==> 
