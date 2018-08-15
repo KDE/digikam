@@ -383,5 +383,5 @@ BUGFIXES:
 326 ==> 304202 - No option to re-read metadata from XMP sidecar file.
 327 ==> 289445 - Allow to create Contact Sheet from an album.
 328 ==> 164750 - Picture alignment and background picture.
-239 ==> 
-
+329 ==> 338180 - Add "Toggle auto-refresh" option in search view.
+330 ==> 
