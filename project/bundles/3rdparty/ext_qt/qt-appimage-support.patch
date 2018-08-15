@@ -23,7 +23,7 @@ index cdb5d33859..5a2bd5f724 100644
 +        setenv("PATH",            env.value(QLatin1String("APPIMAGE_ORIGINAL_PATH")).toLatin1().data(),            1);
 +    }
 +
-+    const bool ok = ::system(qPrintable(command + QLatin1String(" &")));
++    const bool ok = QProcess::startDetached(command);
  #endif
      if (!ok)
          qWarning("Launch failed (%s)", qPrintable(command));
