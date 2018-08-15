@@ -375,4 +375,5 @@ BUGFIXES:
 318 ==> 225725 - Crash using HTML export.
 319 ==> 396092 - Don't init search till user press a buttom specifically for this task.
 320 ==> 397376 - Search in Geolocation doesn't work for Streets / location, only for City.
-321 ==> 
+321 ==> 393259 - Configuration conflicts.
+322 ==> 
