@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -87,7 +87,7 @@ bool WSAuthenticationPage::slotUrlChanged(const QUrl& url)
     /*
      * Condition to verify that the url loaded on page is the one containing access token
      */
-    if(m_callbackUrl.length() > 0 &&
+    if (m_callbackUrl.length() > 0 &&
        urlString.length() >= m_callbackUrl.length() &&
        urlString.left(m_callbackUrl.length()) == m_callbackUrl)
     {
@@ -128,8 +128,10 @@ WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
 
     connect(wpage, SIGNAL(callbackCatched(QString)),
             this, SLOT(slotCallbackCatched(QString)));
+
     connect(m_WSAuthentication, SIGNAL(signalOpenBrowser(const QUrl&)),
             this, SLOT(slotOpenBrowser(const QUrl&)));
+
     connect(m_WSAuthentication, SIGNAL(signalCloseBrowser()),
             this, SLOT(slotCloseBrowser()));
 
@@ -157,7 +159,7 @@ QMap<QString, QString> WSAuthenticationPageView::parseUrlFragment(const QString&
     QMap<QString, QString> result;
     QStringList listArgs = urlFragment.split(QLatin1Char('&'));
 
-    foreach(const QString& arg, listArgs)
+    foreach (const QString& arg, listArgs)
     {
         QStringList pair = arg.split(QLatin1Char('='));
         result.insert(pair.first(), pair.last());
@@ -243,6 +245,7 @@ WSAuthenticationWizard::WSAuthenticationWizard(QWizard* const dialog,
       d(new Private(dialog, callback))
 {
     d->wsAuth  = d->wizard->wsAuth();
+
     connect(d->wsAuth, SIGNAL(signalAuthenticationComplete(bool)),
             this, SLOT(slotAuthenticationComplete(bool)));
 
@@ -307,7 +310,7 @@ void WSAuthenticationWizard::slotAuthenticationComplete(bool isLinked)
 {
     d->text->show();
 
-    if(isLinked)
+    if (isLinked)
     {
         d->text->setText(i18n("<qt>"
                               "<p><h1><b>Authentication done!</b></h1></p>"

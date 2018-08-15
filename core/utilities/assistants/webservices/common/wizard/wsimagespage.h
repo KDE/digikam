@@ -47,7 +47,7 @@ namespace Digikam
 class WSImagesPage : public DWizardPage
 {
     Q_OBJECT
-    
+
 public:
 
     explicit WSImagesPage(QWizard* const dialog, const QString& title);
@@ -65,13 +65,13 @@ private:
      * Get a structure from albums list and add it recursively to albums view
      */
     void addChildToTreeView(QTreeWidgetItem* const parent,
-                            const QMap<QString, AlbumSimplified>& albumTree, 
+                            const QMap<QString, AlbumSimplified>& albumTree,
                             const QStringList& childrenAlbums);
 
     /*
      * Set id for album chosen to upload photos.
-     * 
-     * This method should be called in validatePage(), so that talker can get it 
+     *
+     * This method should be called in validatePage(), so that talker can get it
      * from d->wizard later.
      */
     void setCurrentAlbumId(const QString& currentAlbumId);
@@ -88,7 +88,7 @@ private Q_SLOTS:
     /*
      * Connected to signal signalListAlbumsDone of WSAuthentication to visualize albums list
      */
-    void slotListAlbumsDone(const QMap<QString, AlbumSimplified>& albumTree, 
+    void slotListAlbumsDone(const QMap<QString, AlbumSimplified>& albumTree,
                             const QStringList& rootAlbums,
                             const QString& currentAlbumId);
 

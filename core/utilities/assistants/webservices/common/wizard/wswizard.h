@@ -45,7 +45,7 @@ namespace Digikam
 class DIGIKAM_EXPORT WSWizard : public DWizardDlg
 {
     Q_OBJECT
-    
+
 public:
 
     explicit WSWizard(QWidget* const parent, DInfoInterface* const iface = 0);
@@ -67,13 +67,13 @@ public:
     WSAuthentication*   wsAuth() const;
     QSettings*          oauthSettings() const;
     O0SettingsStore*    oauthSettingsStore() const;
-    
+
     void setItemsList(const QList<QUrl>& urls);
 
 public Q_SLOTS:
-    
+
     void slotBusy(bool val);
-    
+
 private:
 
     class Private;

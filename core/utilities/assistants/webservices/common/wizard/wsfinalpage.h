@@ -47,7 +47,7 @@ public:
     void initializePage();
     bool isComplete() const;
     void cleanupPage();
-    
+
 private Q_SLOTS:
 
     void slotDone();
