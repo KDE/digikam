@@ -354,4 +354,5 @@ BUGFIXES:
 297 ==> 383174 - Google photo, export stops after a random quantity of photos.
 298 ==> 387422 - Flickr export authorization does not work.
 299 ==> 397126 - Fail to replace a photo in google photo.
-300 ==> 
+300 ==> 387201 - kioslave needed by flickr export but not included in appimage.
+301 ==> 
