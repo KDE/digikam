@@ -132,10 +132,11 @@ PTalker::PTalker(QWidget* const parent)
 {
     d->parent  = parent;
     d->netMngr = new QNetworkAccessManager(this);
-    d->view = new WebWidget(d->parent);
-    #ifndef HAVE_QWEBENGINE
-      d->view->settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
-    #endif
+    d->view    = new WebWidget(d->parent);
+
+#ifndef HAVE_QWEBENGINE
+    d->view->settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
+#endif
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
@@ -179,18 +180,18 @@ void PTalker::link()
 void PTalker::unLink()
 {
     d->accessToken = "";
-    #ifdef HAVE_QWEBENGINE
+#ifdef HAVE_QWEBENGINE
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
-    #endif
+#endif
 
-    Q_EMIT pinterestLinkingSucceeded();
+    emit pinterestLinkingSucceeded();
 }
 
 void PTalker::slotCatchUrl(const QUrl& url)
 {
     d->urlParametersMap = ParseUrlParameters(url.toString());
-    QString code =  d->urlParametersMap.value("code");
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Recieved URL from webview in link function: " << url ;
+    QString code        = d->urlParametersMap.value("code");
+    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function: " << url ;
 
     if (!code.isEmpty())
     {
@@ -202,44 +203,44 @@ void PTalker::slotCatchUrl(const QUrl& url)
 
 void PTalker::getToken(const QString& code)
 {
-  //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Code: " << code;
-  QUrl url(d->tokenUrl);
-  QUrlQuery query(url);
-  query.addQueryItem(QLatin1String("grant_type"), "authorization_code");
-  query.addQueryItem(QLatin1String("client_id"), d->clientId);
-  query.addQueryItem(QLatin1String("client_secret"), d->clientSecret);
-  query.addQueryItem(QLatin1String("code"), code);
-  url.setQuery(query);
+    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Code: " << code;
+    QUrl url(d->tokenUrl);
+    QUrlQuery query(url);
+    query.addQueryItem(QLatin1String("grant_type"), "authorization_code");
+    query.addQueryItem(QLatin1String("client_id"), d->clientId);
+    query.addQueryItem(QLatin1String("client_secret"), d->clientSecret);
+    query.addQueryItem(QLatin1String("code"), code);
+    url.setQuery(query);
 
-  QNetworkRequest netRequest(url);
-  netRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-  netRequest.setRawHeader("Accept", "application/json");
+    QNetworkRequest netRequest(url);
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    netRequest.setRawHeader("Accept", "application/json");
 
-  d->reply = d->netMngr->post(netRequest,QByteArray());
+    d->reply = d->netMngr->post(netRequest,QByteArray());
 
-  d->state = Private::P_ACCESSTOKEN;
-  d->buffer.resize(0);
+    d->state = Private::P_ACCESSTOKEN;
+    d->buffer.resize(0);
 }
 
 QMap<QString,QString> PTalker::ParseUrlParameters(const QString &url)
 {
-  QMap<QString,QString> urlParameters;
+    QMap<QString,QString> urlParameters;
 
-  if (url.indexOf('?')==-1)
-  {
-      return urlParameters;
-  }
+    if (url.indexOf('?') == -1)
+    {
+        return urlParameters;
+    }
 
-  QString tmp           = url.right(url.length()-url.indexOf('?')-1);
-  QStringList paramlist = tmp.split('&');
+    QString tmp           = url.right(url.length()-url.indexOf('?')-1);
+    QStringList paramlist = tmp.split('&');
 
-  for (int i = 0 ; i < paramlist.count() ; ++i)
-  {
-      QStringList paramarg = paramlist.at(i).split('=');
-      urlParameters.insert(paramarg.at(0),paramarg.at(1));
-  }
+    for (int i = 0 ; i < paramlist.count() ; ++i)
+    {
+        QStringList paramarg = paramlist.at(i).split('=');
+        urlParameters.insert(paramarg.at(0),paramarg.at(1));
+    }
 
-  return urlParameters;
+    return urlParameters;
 }
 
 void PTalker::slotLinkingFailed()
@@ -250,7 +251,7 @@ void PTalker::slotLinkingFailed()
 
 void PTalker::slotLinkingSucceeded()
 {
-    if (d->accessToken == "")
+    if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Pinterest ok";
         KConfig config;
@@ -267,7 +268,7 @@ void PTalker::slotLinkingSucceeded()
 
 bool PTalker::authenticated()
 {
-    if (d->accessToken != "")
+    if (!d->accessToken.isEmpty())
     {
         return true;
     }
@@ -489,14 +490,14 @@ void PTalker::parseResponseAccessToken(const QByteArray& data)
     QJsonObject jsonObject = doc.object();
     d->accessToken         = jsonObject[QLatin1String("access_token")].toString();
 
-    if (d->accessToken != "")
+    if (!d->accessToken.isEmpty())
     {
         qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token Received: " << d->accessToken;
-        Q_EMIT pinterestLinkingSucceeded();
+        emit pinterestLinkingSucceeded();
     }
     else
     {
-        Q_EMIT pinterestLinkingFailed();
+        emit pinterestLinkingFailed();
     }
 
     emit signalBusy(false);

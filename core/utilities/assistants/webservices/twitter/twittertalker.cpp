@@ -212,7 +212,7 @@ void TwTalker::unLink()
 {
     /*d->accessToken = "";
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
-    Q_EMIT oneDriveLinkingSucceeded();*/
+    emit oneDriveLinkingSucceeded();*/
 
     d->o1Twitter->unlink();
 

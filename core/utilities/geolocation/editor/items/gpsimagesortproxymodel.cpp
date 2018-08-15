@@ -212,7 +212,7 @@ void GPSLinkItemSelectionModel::setLinkedItemSelectionModel(QItemSelectionModel*
         }
 
         d->reinitializeIndexMapper();
-        Q_EMIT linkedItemSelectionModelChanged();
+        emit linkedItemSelectionModelChanged();
     }
 }
 
@@ -446,7 +446,7 @@ void GPSModelIndexProxyMapperPrivate::setConnected(bool connected)
     {
         Q_Q(GPSModelIndexProxyMapper);
         mConnected = connected;
-        Q_EMIT q->isConnectedChanged();
+        emit q->isConnectedChanged();
     }
 }
 

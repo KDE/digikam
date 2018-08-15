@@ -118,10 +118,11 @@ public:
 
     QMap<QString,QString> urlParametersMap;
 
-    WebWidget*        view;
+    WebWidget*            view;
 
-    QString                tokenKey;
+    QString               tokenKey;
 };
+
 ODTalker::ODTalker(QWidget* const parent)
     : d(new Private)
 {
@@ -134,17 +135,21 @@ ODTalker::ODTalker(QWidget* const parent)
 
     connect(this, SIGNAL(oneDriveLinkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
+
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
 }
+
 ODTalker::~ODTalker()
 {
     if (d->reply)
     {
         d->reply->abort();
     }
+
     delete d;
 }
+
 void ODTalker::link()
 {
     emit signalBusy(true);
@@ -162,62 +167,71 @@ void ODTalker::link()
 
     connect(d->view, SIGNAL(urlChanged(QUrl)), this, SLOT(slotCatchUrl(QUrl)));
 }
+
 void ODTalker::unLink()
 {
     d->accessToken = "";
-    #ifdef HAVE_QWEBENGINE
+#ifdef HAVE_QWEBENGINE
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
-    #else
+#else
 
-    #endif
+#endif
 
-    Q_EMIT oneDriveLinkingSucceeded();
+    emit oneDriveLinkingSucceeded();
 }
+
 void ODTalker::slotCatchUrl(const QUrl& url)
 {
     d->urlParametersMap = ParseUrlParameters(url.toString());
     d->accessToken = d->urlParametersMap.value("access_token");
     //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function: " << url ;
-    if(d->accessToken != ""){
-      qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access Token Received";
-      Q_EMIT oneDriveLinkingSucceeded();
-    }else{
-      Q_EMIT oneDriveLinkingFailed();
+
+    if (!d->accessToken.isEmpty())
+    {
+        qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access Token Received";
+        emit oneDriveLinkingSucceeded();
+    }
+    else
+    {
+        emit oneDriveLinkingFailed();
     }
 }
 
 QMap<QString,QString> ODTalker::ParseUrlParameters(const QString &url)
 {
-  QMap<QString,QString> urlParameters;
-  if(url.indexOf('?')==-1)
-  {
-      return urlParameters;
-  }
+    QMap<QString,QString> urlParameters;
 
-  QString tmp = url.right(url.length()-url.indexOf('?')-1);
-  tmp = tmp.right(tmp.length() - tmp.indexOf('#')-1);
-  QStringList paramlist = tmp.split('&');
+    if (url.indexOf('?') == -1)
+    {
+        return urlParameters;
+    }
 
-  for(int i=0;i<paramlist.count();i++)
-  {
-      QStringList paramarg = paramlist.at(i).split('=');
-      urlParameters.insert(paramarg.at(0),paramarg.at(1));
-  }
+    QString tmp           = url.right(url.length() - url.indexOf('?')-1);
+    tmp                   = tmp.right(tmp.length() - tmp.indexOf('#')-1);
+    QStringList paramlist = tmp.split('&');
 
-  return urlParameters;
+    for (int i = 0 ; i < paramlist.count() ; ++i)
+    {
+        QStringList paramarg = paramlist.at(i).split('=');
+        urlParameters.insert(paramarg.at(0),paramarg.at(1));
+    }
+
+    return urlParameters;
 }
+
 void ODTalker::slotLinkingFailed()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Onedrive fail";
     emit signalBusy(false);
 }
+
 void ODTalker::slotLinkingSucceeded()
 {
-    if (d->accessToken == "")
+    if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Onedrive ok";
         KConfig config;
-        KConfigGroup grp   = config.group("Onedrive User Settings");
+        KConfigGroup grp = config.group("Onedrive User Settings");
         grp.deleteGroup();
         emit signalBusy(false);
         return;
@@ -231,12 +245,16 @@ void ODTalker::slotLinkingSucceeded()
 
 bool ODTalker::authenticated()
 {
-    if(d->accessToken != ""){
-      return true;
-    }else{
-      return false;
+    if (!d->accessToken.isEmpty())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
+
 void ODTalker::cancel()
 {
     if (d->reply)
@@ -247,18 +265,22 @@ void ODTalker::cancel()
 
     emit signalBusy(false);
 }
+
 void ODTalker::createFolder(QString& path)
 {
     //path also has name of new folder so send path parameter accordingly
-    QString name = path.section(QLatin1Char('/'), -1);
+    QString name       = path.section(QLatin1Char('/'), -1);
     QString folderPath = path.section(QLatin1Char('/'),-2,-2);
 
     QUrl url;
 
-    if(folderPath == ""){
-      url = QLatin1String("https://graph.microsoft.com/v1.0/me/drive/root/children");
-    }else{
-      url = QString("https://graph.microsoft.com/v1.0/me/drive/root:/%1:/children").arg(folderPath);
+    if (folderPath.isEmpty())
+    {
+        url = QLatin1String("https://graph.microsoft.com/v1.0/me/drive/root/children");
+    }
+    else
+    {
+        url = QString("https://graph.microsoft.com/v1.0/me/drive/root:/%1:/children").arg(folderPath);
     }
 
     QNetworkRequest netRequest(url);
@@ -272,6 +294,7 @@ void ODTalker::createFolder(QString& path)
     d->buffer.resize(0);
     emit signalBusy(true);
 }
+
 void ODTalker::getUserName()
 {
     QUrl url(QLatin1String("https://graph.microsoft.com/v1.0/me"));
@@ -360,6 +383,7 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     emit signalBusy(true);
     return true;
 }
+
 void ODTalker::slotFinished(QNetworkReply* reply)
 {
     if (reply != d->reply)
@@ -408,6 +432,7 @@ void ODTalker::slotFinished(QNetworkReply* reply)
 
     reply->deleteLater();
 }
+
 void ODTalker::parseResponseAddPhoto(const QByteArray& data)
 {
     QJsonDocument doc      = QJsonDocument::fromJson(data);
@@ -424,6 +449,7 @@ void ODTalker::parseResponseAddPhoto(const QByteArray& data)
         emit signalAddPhotoSucceeded();
     }
 }
+
 void ODTalker::parseResponseUserName(const QByteArray& data)
 {
     QJsonDocument doc      = QJsonDocument::fromJson(data);
@@ -458,13 +484,13 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
         QJsonObject folder;
 
         QJsonObject obj = value.toObject();
-        folder       = obj[QLatin1String("folder")].toObject();
+        folder          = obj[QLatin1String("folder")].toObject();
 
-        if(!folder.isEmpty()){
-          folderName    = obj[QLatin1String("name")].toString();
-          path          =    "/" + folderName;
-          list.append(qMakePair(path, folderName));
-
+        if (!folder.isEmpty())
+        {
+            folderName    = obj[QLatin1String("name")].toString();
+            path          =    "/" + folderName;
+            list.append(qMakePair(path, folderName));
         }
     }
 
@@ -482,27 +508,29 @@ void ODTalker::parseResponseCreateFolder(const QByteArray& data)
 
     if (fail)
     {
-      QJsonParseError err;
-      QJsonDocument doc = QJsonDocument::fromJson(data, &err);
-      emit signalCreateFolderFailed(jsonObject[QLatin1String("error_summary")].toString());
+        QJsonParseError err;
+        QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+        emit signalCreateFolderFailed(jsonObject[QLatin1String("error_summary")].toString());
     }
     else
     {
         emit signalCreateFolderSucceeded();
     }
 }
+
 void ODTalker::writeSettings()
 {
     KConfig config;
     KConfigGroup grp = config.group("Onedrive User Settings");
 
-    grp.writeEntry("access_token",     d->accessToken);
+    grp.writeEntry("access_token", d->accessToken);
     config.sync();
 }
+
 void ODTalker::readSettings()
 {
     KConfig config;
-    KConfigGroup grp   = config.group("Onedrive User Settings");
+    KConfigGroup grp = config.group("Onedrive User Settings");
 
     if (!grp.readEntry("access_token", false))
     {
@@ -517,4 +545,5 @@ void ODTalker::readSettings()
 
     }
 }
+
 } // namespace Digikam
