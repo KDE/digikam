@@ -376,4 +376,7 @@ BUGFIXES:
 319 ==> 396092 - Don't init search till user press a buttom specifically for this task.
 320 ==> 397376 - Search in Geolocation doesn't work for Streets / location, only for City.
 321 ==> 393259 - Configuration conflicts.
-322 ==> 
+322 ==> 391329 - Two actions that wants to use same shortcut (Ctrl+Shift+,).
+323 ==> 391655 - Kubuntu 18.04 beta, Digikam 5.6.0 Ambiguous Shortcuts - Zoom to 100% and Configure Digikam share the same shortcut (Ctrl+Shift+,).
+324 ==> 393031 - Two actions for digikam[helpfully identified as a bug].
+325 ==> 
