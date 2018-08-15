@@ -358,5 +358,6 @@ BUGFIXES:
 301 ==> 389785 - 'Open in Filemanager' dolphin not working.
 302 ==> 396619 - All Exports fail - cannot find ioslave.
 303 ==> 254512 - Crash when initializing the export to Flickr.com.
-304 ==> 
+304 ==> 237818 - Crash when uploading multiple images to Flickr.
+305 ==> 
 
