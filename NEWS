@@ -359,5 +359,6 @@ BUGFIXES:
 302 ==> 396619 - All Exports fail - cannot find ioslave.
 303 ==> 254512 - Crash when initializing the export to Flickr.com.
 304 ==> 237818 - Crash when uploading multiple images to Flickr.
-305 ==> 
+305 ==> 286754 - Crash when when entering collection name in flickr uploader.
+306 ==> 
 
