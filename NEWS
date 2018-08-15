@@ -363,4 +363,5 @@ BUGFIXES:
 306 ==> 337980 - Flickr Export tool can no longer obtain a new token.
 307 ==> 151018 - Requires new token with every invokation.
 308 ==> 132922 - Export to flickr doesn't work.
-309 ==> 
+309 ==> 149864 - Dialog box pops up saying 'Error Occured: Missing signature. We can not proceed further".
+310 ==> 
