@@ -44,6 +44,11 @@ MXE_TOOLCHAIN=${MXE_INSTALL_PREFIX}/share/cmake/mxe-conf.cmake
 
 #-------------------------------------------------------------------------------------------
 
+# URL to git repository to checkout digiKam source code
+# Read/write url is an alternative when official read only server is down.
+#DK_GITURL="git://anongit.kde.org/digikam.git"
+DK_GITURL="git@git.kde.org:digikam"
+
 # digiKam tarball information.
 DK_URL="http://download.kde.org/stable/digikam"
 
