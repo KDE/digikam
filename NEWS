@@ -352,4 +352,19 @@ BUGFIXES:
 295 ==> 385363 - digiKam crashes when authorizing access to Google photo because of SSL error in AppImage.
 296 ==> 348277 - Please focus auth code input field in the GDrive authentication dialog.
 297 ==> 383174 - Google photo, export stops after a random quantity of photos.
-298 ==> 
+298 ==> 387422 - Flickr export authorization does not work.
+299 ==> 397126 - Fail to replace a photo in google photo.
+300 ==> 387201 - kioslave needed by flickr export but not included in appimage.
+301 ==> 389785 - 'Open in Filemanager' dolphin not working.
+302 ==> 396619 - All Exports fail - cannot find ioslave.
+303 ==> 254512 - Crash when initializing the export to Flickr.com.
+304 ==> 237818 - Crash when uploading multiple images to Flickr.
+305 ==> 286754 - Crash when when entering collection name in flickr uploader.
+306 ==> 337980 - Flickr Export tool can no longer obtain a new token.
+307 ==> 151018 - Requires new token with every invokation.
+308 ==> 132922 - Export to flickr doesn't work.
+309 ==> 149864 - Dialog box pops up saying 'Error Occured: Missing signature. We can not proceed further".
+310 ==> 196179 - Flickr export does not work.
+311 ==> 391734 - Can't export to google photos: SSL Handshake failed.
+312 ==> 
+
