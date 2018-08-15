@@ -29,7 +29,6 @@
 // Qt includes
 
 #include <qwebview.h>
-//#include<QWebView>
 
 namespace Digikam
 {

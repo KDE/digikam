@@ -83,7 +83,7 @@ bool WSAuthenticationPage::slotUrlChanged(const QUrl& url)
 {
     QString urlString = url.toString();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "urlString: " << urlString;
-    
+
     /*
      * Condition to verify that the url loaded on page is the one containing access token
      */
@@ -94,7 +94,7 @@ bool WSAuthenticationPage::slotUrlChanged(const QUrl& url)
         emit callbackCatched(urlString);
         return false;
     }
-    
+
     return true;
 }
 
@@ -107,14 +107,14 @@ WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
     : QWebEngineView(parent),
       m_WSAuthentication(wsAuth)
 #else
-WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent, 
+WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
                                                    WSAuthentication* const wsAuth,
                                                    QString callbackUrl)
     : QWebView(parent),
       m_WSAuthentication(wsAuth)
 #endif // #ifdef HAVE_QWEBENGINE
-      
-{    
+
+{
     adjustSize();
     setMinimumSize(QSize(850,800));
 
@@ -123,7 +123,7 @@ WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
 #else
     WSAuthenticationPage* const wpage = new WSAuthenticationPage(this, callbackUrl);
 #endif // #ifdef HAVE_QWEBENGINE
-    
+
     setPage(wpage);
 
     connect(wpage, SIGNAL(callbackCatched(QString)),
@@ -153,7 +153,7 @@ bool WSAuthenticationPageView::authenticationComplete() const
 QMap<QString, QString> WSAuthenticationPageView::parseUrlFragment(const QString& urlFragment)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseUrlFragment: " << urlFragment;
-    
+
     QMap<QString, QString> result;
     QStringList listArgs = urlFragment.split(QLatin1Char('&'));
 
@@ -162,14 +162,14 @@ QMap<QString, QString> WSAuthenticationPageView::parseUrlFragment(const QString&
         QStringList pair = arg.split(QLatin1Char('='));
         result.insert(pair.first(), pair.last());
     }
-    
+
     return result;
 }
 
 void WSAuthenticationPageView::slotOpenBrowser(const QUrl& url)
 {
     WSAuthenticationPage* page = dynamic_cast<WSAuthenticationPage*>(this->page());
-    
+
 #ifdef HAVE_QWEBENGINE
     page->setUrl(url);
 #else
@@ -191,10 +191,10 @@ void WSAuthenticationPageView::slotCloseBrowser()
 void WSAuthenticationPageView::slotCallbackCatched(const QString& callbackUrl)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotCallbackCatched url: " << callbackUrl;
-    
+
     QUrl url(callbackUrl);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url fragment: " << url.fragment();
-    
+
     QMap<QString, QString> res = parseUrlFragment(url.fragment());
     emit m_WSAuthentication->signalResponseTokenReceived(res);
 }
@@ -204,7 +204,7 @@ void WSAuthenticationPageView::slotCallbackCatched(const QString& callbackUrl)
 class WSAuthenticationWizard::Private 
 {
 public:
-    
+
     explicit Private(QWizard* const dialog, const QString& callback)
       : wizard(0),
         iface(0),
@@ -215,18 +215,18 @@ public:
         callbackUrl(callback)
     {
         wizard = dynamic_cast<WSWizard*>(dialog);
-        
-        if(wizard)
+
+        if (wizard)
         {
             iface = wizard->iface();
 
-            if(wizard->settings()->webService == WSSettings::WebService::FACEBOOK)
+            if (wizard->settings()->webService == WSSettings::WebService::FACEBOOK)
             {
                 callbackUrl = QLatin1String("https://www.facebook.com/connect/login_success.html");
             }
         }
     }
-    
+
     WSWizard*                   wizard;
     DInfoInterface*             iface;
     WSAuthentication*           wsAuth;
@@ -236,7 +236,8 @@ public:
     QString                     callbackUrl;
 };
 
-WSAuthenticationWizard::WSAuthenticationWizard(QWizard* const dialog, const QString& title, 
+WSAuthenticationWizard::WSAuthenticationWizard(QWizard* const dialog,
+                                               const QString& title,
                                                const QString& callback)
     : DWizardPage(dialog, title),
       d(new Private(dialog, callback))
@@ -244,16 +245,16 @@ WSAuthenticationWizard::WSAuthenticationWizard(QWizard* const dialog, const QStr
     d->wsAuth  = d->wizard->wsAuth();
     connect(d->wsAuth, SIGNAL(signalAuthenticationComplete(bool)),
             this, SLOT(slotAuthenticationComplete(bool)));
-    
+
     d->vbox    = new DVBox(this);
-    
+
     d->text    = new QLabel(d->vbox);
     d->text->setWordWrap(true);
     d->text->setOpenExternalLinks(true);
-    
+
     d->vbox->setStretchFactor(d->text, 1);
     d->vbox->setStretchFactor(d->wsAuthView, 4);
-    
+
     setPageWidget(d->vbox);
 }
 
@@ -273,9 +274,9 @@ void WSAuthenticationWizard::initializePage()
 
     /*
      * Init WebView of WSAuthenticationWizard every time initializePage is called.
-     * 
-     * This guarantees an appropriate authentication page, even when user goes back to 
-     * intro page and choose a different account or different web service. 
+     *
+     * This guarantees an appropriate authentication page, even when user goes back to
+     * intro page and choose a different account or different web service.
      */
     d->text->hide();
     d->wsAuthView   = new WSAuthenticationPageView(d->vbox, d->wsAuth, d->callbackUrl);
@@ -289,7 +290,7 @@ void WSAuthenticationWizard::initializePage()
 
 bool WSAuthenticationWizard::validatePage()
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "validatePage";    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "validatePage";
     return true;
 }
 
@@ -320,7 +321,7 @@ void WSAuthenticationWizard::slotAuthenticationComplete(bool isLinked)
                               "<p><h3>Account linking failed!</h3></p>"
                               "</qt>"));
     }
-    
+
     emit completeChanged();
 }
 
