@@ -369,7 +369,8 @@ BUGFIXES:
 312 ==> 386402 - Not all page sizes for selected printer can be selected.
 313 ==> 395557 - Printformat not selectable.
 314 ==> 340644 - Allow to use standard photo paper sizes.
-315 ==> 
-
-
-
+315 ==> 330906 - Crashes when exporting to HTML.
+316 ==> 309316 - Html gallery export crash and other bugs.
+317 ==> 314248 - digiKam crashing when exporting pictures to html.
+318 ==> 225725 - Crash using HTML export.
+319 ==> 
