@@ -373,4 +373,5 @@ BUGFIXES:
 316 ==> 309316 - Html gallery export crash and other bugs.
 317 ==> 314248 - digiKam crashing when exporting pictures to html.
 318 ==> 225725 - Crash using HTML export.
-319 ==> 
+319 ==> 396092 - Don't init search till user press a buttom specifically for this task.
+320 ==> 
