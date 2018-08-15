@@ -361,4 +361,6 @@ BUGFIXES:
 304 ==> 237818 - Crash when uploading multiple images to Flickr.
 305 ==> 286754 - Crash when when entering collection name in flickr uploader.
 306 ==> 337980 - Flickr Export tool can no longer obtain a new token.
-307 ==> 
+307 ==> 151018 - Requires new token with every invokation.
+308 ==> 
+
