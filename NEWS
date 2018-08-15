@@ -357,5 +357,6 @@ BUGFIXES:
 300 ==> 387201 - kioslave needed by flickr export but not included in appimage.
 301 ==> 389785 - 'Open in Filemanager' dolphin not working.
 302 ==> 396619 - All Exports fail - cannot find ioslave.
-303 ==> 
+303 ==> 254512 - Crash when initializing the export to Flickr.com.
+304 ==> 
 
