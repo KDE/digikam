@@ -110,13 +110,13 @@ GSNewAlbumDlg::GSNewAlbumDlg(QWidget* const parent,
         getMainWidget()->setMinimumSize(300,0);
     }
     */
-    
+
     privBox->hide();
     hideDateTime();
     hideDesc();
     hideLocation();
     getMainWidget()->setMinimumSize(300,0);
-    
+
 }
 
 GSNewAlbumDlg::~GSNewAlbumDlg()
@@ -150,7 +150,7 @@ void GSNewAlbumDlg::getAlbumProperties(GSFolder& album)
     long long timestamp = getDateTimeEdit()->dateTime().toTime_t();
     album.timestamp     = QString::number(timestamp * 1000);
     */
-    
+
     album.title = getTitleEdit()->text();
     return;
 }

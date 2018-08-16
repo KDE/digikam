@@ -58,22 +58,22 @@ public:
 
     QString     id;
     QString     title;
-    QString     description;   
-    
+    QString     description;
+
     QString     timestamp;
     QString     creationTime;
-    
+
     QString     location;
     QString     gpsLon;
     QString     gpsLat;
-    
+
     QString     access;
     bool        canComment;
     QStringList tags;
-    
+
     QString     width;
     QString     height;
-    
+
     QString     mimeType;
     QString     baseUrl;
     QUrl        originalURL;

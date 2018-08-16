@@ -24,6 +24,7 @@
 
 // Qt includes
 
+#include <QPointer>
 #include <QWindow>
 #include <QSpinBox>
 #include <QCheckBox>
@@ -268,21 +269,23 @@ void BOXWindow::slotStartTransfer()
 
     if (!(d->talker->authenticated()))
     {
-        QMessageBox warn(QMessageBox::Warning,
+        QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
                          i18n("Warning"),
                          i18n("Authentication failed. Click \"Continue\" to authenticate."),
                          QMessageBox::Yes | QMessageBox::No);
 
-        (warn.button(QMessageBox::Yes))->setText(i18n("Continue"));
-        (warn.button(QMessageBox::No))->setText(i18n("Cancel"));
+        (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
+        (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
 
-        if (warn.exec() == QMessageBox::Yes)
+        if (warn->exec() == QMessageBox::Yes)
         {
             d->talker->link();
+            delete warn;
             return;
         }
         else
         {
+            delete warn;
             return;
         }
     }
