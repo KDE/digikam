@@ -206,10 +206,10 @@ void PTalker::getToken(const QString& code)
     //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Code: " << code;
     QUrl url(d->tokenUrl);
     QUrlQuery query(url);
-    query.addQueryItem(QLatin1String("grant_type"), "authorization_code");
-    query.addQueryItem(QLatin1String("client_id"), d->clientId);
+    query.addQueryItem(QLatin1String("grant_type"),    "authorization_code");
+    query.addQueryItem(QLatin1String("client_id"),     d->clientId);
     query.addQueryItem(QLatin1String("client_secret"), d->clientSecret);
-    query.addQueryItem(QLatin1String("code"), code);
+    query.addQueryItem(QLatin1String("code"),          code);
     url.setQuery(query);
 
     QNetworkRequest netRequest(url);
@@ -222,7 +222,7 @@ void PTalker::getToken(const QString& code)
     d->buffer.resize(0);
 }
 
-QMap<QString,QString> PTalker::ParseUrlParameters(const QString &url)
+QMap<QString, QString> PTalker::ParseUrlParameters(const QString& url)
 {
     QMap<QString,QString> urlParameters;
 
@@ -358,10 +358,10 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
 
     if (rescale && (image.width() > maxDim || image.height() > maxDim))
     {
-        image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
     }
 
-    image.save(path,"JPEG",imageQuality);
+    image.save(path, "JPEG", imageQuality);
 
     if (d->meta.load(imgPath))
     {
@@ -372,7 +372,7 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
         d->meta.save(path);
     }
 
-    QString boardparam =  d->userName + "/" + uploadBoard;
+    QString boardparam = d->userName + QLatin1String("/") + uploadBoard;
 
     if (!form.addFile(path))
     {
@@ -591,7 +591,7 @@ void PTalker::writeSettings()
     KConfig config;
     KConfigGroup grp = config.group("Pinterest User Settings");
 
-    grp.writeEntry("access_token",     d->accessToken);
+    grp.writeEntry("access_token", d->accessToken);
     config.sync();
 }
 
