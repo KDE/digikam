@@ -244,7 +244,6 @@ port install \
              libxslt \
              libical \
              lensfun \
-             liblqr \
              bison \
              sane-backends \
              ffmpeg \
