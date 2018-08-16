@@ -70,17 +70,17 @@ public:
 
     explicit Private()
     {
-        clientId       =     QLatin1String("w2gevz5rargld3aun22fwmssnmswptrn");
-        clientSecret   =     QLatin1String("iIL49xl04DJH7on8NYLrcYTQEgNKVmbs");
+        clientId     = QLatin1String("w2gevz5rargld3aun22fwmssnmswptrn");
+        clientSecret = QLatin1String("iIL49xl04DJH7on8NYLrcYTQEgNKVmbs");
 
-        authUrl        =     QLatin1String("https://account.box.com/api/oauth2/authorize");
-        tokenUrl       =     QLatin1String("https://api.box.com/oauth2/token");
-        redirectUrl    =     QLatin1String("https://app.box.com");
+        authUrl      = QLatin1String("https://account.box.com/api/oauth2/authorize");
+        tokenUrl     = QLatin1String("https://api.box.com/oauth2/token");
+        redirectUrl  = QLatin1String("https://app.box.com");
 
-        state          =     BOX_USERNAME;
-        netMngr        =     0;
-        reply          =     0;
-        accessToken    =     "";
+        state        = BOX_USERNAME;
+        netMngr      = 0;
+        reply        = 0;
+        accessToken  = QString();
     }
 
 public:
@@ -295,10 +295,10 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
 
     if (rescale && (image.width() > maxDim || image.height() > maxDim))
     {
-        image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    image.save(path,"JPEG",imageQuality);
+    image.save(path, "JPEG", imageQuality);
 
     if (d->meta.load(imgPath))
     {
@@ -313,8 +313,9 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
 
     for (int i = 0 ; i < d->foldersList.size() ; ++i)
     {
-        if(d->foldersList.value(i).second == uploadFolder){
-          id = d->foldersList.value(i).first;
+        if (d->foldersList.value(i).second == uploadFolder)
+        {
+            id = d->foldersList.value(i).first;
         }
     }
 
@@ -324,7 +325,7 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
         return false;
     }
 
-    QHttpMultiPart* multipart = new QHttpMultiPart (QHttpMultiPart::FormDataType);
+    QHttpMultiPart* const multipart = new QHttpMultiPart (QHttpMultiPart::FormDataType);
 
     QHttpPart attributes;
     QString attributesHeader  = QString::fromLatin1("form-data; name=\"attributes\"");
@@ -336,7 +337,7 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     multipart->append(attributes);
 
 
-    QFile* file = new QFile(imgPath);
+    QFile* const file = new QFile(imgPath);
     file->open(QIODevice::ReadOnly);
 
     QHttpPart imagepart;
@@ -354,9 +355,9 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     QNetworkRequest netRequest(url);
     QString content = QString::fromLatin1("multipart/form-data;boundary=")+multipart->boundary();
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, content);
-    d->reply = d->netMngr->post(netRequest, multipart);
+    d->reply        = d->netMngr->post(netRequest, multipart);
 
-    d->state = Private::BOX_ADDPHOTO;
+    d->state        = Private::BOX_ADDPHOTO;
     d->buffer.resize(0);
     emit signalBusy(true);
 
@@ -462,9 +463,9 @@ void BOXTalker::parseResponseListFolders(const QByteArray& data)
         QString id;
 
         QJsonObject obj = value.toObject();
-        type       = obj[QLatin1String("type")].toString();
+        type            = obj[QLatin1String("type")].toString();
 
-        if(type=="folder")
+        if (type == "folder")
         {
             folderName    = obj[QLatin1String("name")].toString();
             id            = obj[QLatin1String("id")].toString();

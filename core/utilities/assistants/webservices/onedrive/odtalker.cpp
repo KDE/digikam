@@ -91,7 +91,7 @@ public:
         state        = OD_USERNAME;
         netMngr      = 0;
         reply        = 0;
-        accessToken  = "";
+        accessToken  = QString();
     }
 
 public:
@@ -170,7 +170,7 @@ void ODTalker::link()
 
 void ODTalker::unLink()
 {
-    d->accessToken = "";
+    d->accessToken = QString();
 #ifdef HAVE_QWEBENGINE
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
 #else
@@ -183,7 +183,7 @@ void ODTalker::unLink()
 void ODTalker::slotCatchUrl(const QUrl& url)
 {
     d->urlParametersMap = ParseUrlParameters(url.toString());
-    d->accessToken = d->urlParametersMap.value("access_token");
+    d->accessToken      = d->urlParametersMap.value("access_token");
     //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function: " << url ;
 
     if (!d->accessToken.isEmpty())
@@ -197,7 +197,7 @@ void ODTalker::slotCatchUrl(const QUrl& url)
     }
 }
 
-QMap<QString,QString> ODTalker::ParseUrlParameters(const QString &url)
+QMap<QString, QString> ODTalker::ParseUrlParameters(const QString& url)
 {
     QMap<QString,QString> urlParameters;
 
@@ -206,8 +206,8 @@ QMap<QString,QString> ODTalker::ParseUrlParameters(const QString &url)
         return urlParameters;
     }
 
-    QString tmp           = url.right(url.length() - url.indexOf('?')-1);
-    tmp                   = tmp.right(tmp.length() - tmp.indexOf('#')-1);
+    QString tmp           = url.right(url.length() - url.indexOf('?') - 1);
+    tmp                   = tmp.right(tmp.length() - tmp.indexOf('#') - 1);
     QStringList paramlist = tmp.split('&');
 
     for (int i = 0 ; i < paramlist.count() ; ++i)
@@ -270,7 +270,7 @@ void ODTalker::createFolder(QString& path)
 {
     //path also has name of new folder so send path parameter accordingly
     QString name       = path.section(QLatin1Char('/'), -1);
-    QString folderPath = path.section(QLatin1Char('/'),-2,-2);
+    QString folderPath = path.section(QLatin1Char('/'), -2, -2);
 
     QUrl url;
 
@@ -349,10 +349,10 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     if (rescale && (image.width() > maxDim || image.height() > maxDim))
     {
-        image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    image.save(path,"JPEG",imageQuality);
+    image.save(path, "JPEG", imageQuality);
 
     if (d->meta.load(imgPath))
     {

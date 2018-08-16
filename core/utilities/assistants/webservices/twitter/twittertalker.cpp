@@ -89,7 +89,7 @@ public:
         state           = OD_USERNAME;
         netMngr         = 0;
         reply           = 0;
-        accessToken     = "";
+        accessToken     = QString();
     }
 
 public:
@@ -121,7 +121,7 @@ public:
 
     QSettings*             settings;
 
-    O1Twitter*                    o1Twitter;
+    O1Twitter*             o1Twitter;
 };
 
 TwTalker::TwTalker(QWidget* const parent)
@@ -165,7 +165,8 @@ TwTalker::~TwTalker()
 
 void TwTalker::link()
 {
-    /*emit signalBusy(true);
+/*
+    emit signalBusy(true);
     QUrl url(d->requestTokenUrl);
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -173,9 +174,11 @@ void TwTalker::link()
     QNetworkAccessManager requestMngr;
     QNetworkReply* reply;
     reply = requestMngr.post(netRequest);
+
     if (reply->error() != QNetworkReply::NoError){
 
     }
+
     QByteArray buffer;
     buffer.append(reply->readAll());
     QString response = fromLatin1(buffer);
@@ -185,20 +188,22 @@ void TwTalker::link()
     // Discard the first line
     response = response.mid(response.indexOf('\n') + 1).trimmed();
 
-    foreach(QString line, response.split('\n')) {
+    foreach (QString line, response.split('\n'))
+    {
         int colon = line.indexOf(':');
         QString headerName = line.left(colon).trimmed();
         QString headerValue = line.mid(colon + 1).trimmed();
 
         headers.insertMulti(headerName, headerValue);
     }
+
     QString oauthToken = headers[oauth_token];
     QSting oauthTokenSecret = headers[oauth_token_secret];
 
     QUrlQuery query(url);
-    query.addQueryItem(QLatin1String("client_id"), d->clientId);
-    query.addQueryItem(QLatin1String("scope"), d->scope);
-    query.addQueryItem(QLatin1String("redirect_uri"), d->redirectUrl);
+    query.addQueryItem(QLatin1String("client_id"),     d->clientId);
+    query.addQueryItem(QLatin1String("scope"),         d->scope);
+    query.addQueryItem(QLatin1String("redirect_uri"),  d->redirectUrl);
     query.addQueryItem(QLatin1String("response_type"), "token");
     url.setQuery(query);
 
@@ -207,7 +212,9 @@ void TwTalker::link()
     d->view->load(url);
     d->view->show();
 
-    connect(d->view, SIGNAL(urlChanged(QUrl)), this, SLOT(slotCatchUrl(QUrl)));*/
+    connect(d->view, SIGNAL(urlChanged(QUrl)),
+            this, SLOT(slotCatchUrl(QUrl)));
+*/
 
     emit signalBusy(true);
     d->o1Twitter->link();
@@ -215,9 +222,11 @@ void TwTalker::link()
 
 void TwTalker::unLink()
 {
-    /*d->accessToken = "";
+/*
+    d->accessToken = QString();
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
-    emit oneDriveLinkingSucceeded();*/
+    emit oneDriveLinkingSucceeded();
+*/
 
     d->o1Twitter->unlink();
 
@@ -236,13 +245,13 @@ QMap<QString,QString> TwTalker::ParseUrlParameters(const QString &url)
 {
     QMap<QString,QString> urlParameters;
 
-    if (url.indexOf('?')==-1)
+    if (url.indexOf('?') == -1)
     {
         return urlParameters;
     }
 
-    QString tmp = url.right(url.length()-url.indexOf('?')-1);
-    tmp = tmp.right(tmp.length() - tmp.indexOf('#')-1);
+    QString tmp           = url.right(url.length()-url.indexOf('?')-1);
+    tmp                   = tmp.right(tmp.length() - tmp.indexOf('#')-1);
     QStringList paramlist = tmp.split('&');
 
     for (int i = 0 ; i < paramlist.count() ; ++i)
@@ -263,7 +272,7 @@ void TwTalker::slotLinkingFailed()
 void TwTalker::slotLinkingSucceeded()
 {
 /*
-    if (d->accessToken == "")
+    if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Twitter ok";
         emit signalBusy(false);
@@ -329,7 +338,7 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     //qDebug() << "Status update message:" << message.toLatin1().constData();
     emit signalBusy(true);
     TwMPForm form;
-    QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
+    QImage image     = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
     qint64 imageSize = QFileInfo(imgPath).size();
     qDebug() << "SIZE of image using qfileinfo:   " << imageSize;
     qDebug() << " " ;
@@ -344,10 +353,10 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     if (rescale && (image.width() > maxDim || image.height() > maxDim))
     {
-        image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    image.save(path,"JPEG",imageQuality);
+    image.save(path, "JPEG", imageQuality);
 
     if (d->meta.load(imgPath))
     {
@@ -378,7 +387,7 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     QUrl url = QUrl("https://upload.twitter.com/1.1/media/upload.json");
 
-    O1Requestor* requestor = new O1Requestor(d->netMngr, d->o1Twitter, this);
+    O1Requestor* const requestor        = new O1Requestor(d->netMngr, d->o1Twitter, this);
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
 
     //These are the parameters passed for the first step in chuncked media upload.
@@ -392,7 +401,7 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
-    QNetworkReply *reply2 = requestor->post(request, reqParams, postData);
+    QNetworkReply* const reply2 = requestor->post(request, reqParams, postData);
     qDebug() << "reply size:              " << reply2->readBufferSize();  //always returns 0
     QByteArray replyData = reply2->readAll();
     qDebug() << "Media reply:" << replyData; //always Empty
@@ -408,7 +417,7 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     request.setUrl(url2);
     request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_XFORM);
 
-    QNetworkReply *reply = requestor->post(request, reqParams, postData);
+    QNetworkReply* const reply = requestor->post(request, reqParams, postData);
 
     connect(reply, SIGNAL(finished()),
             this, SLOT(slotTweetDone()));
@@ -423,7 +432,7 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 void TwTalker::reply2finish()
 {
     qDebug() << "In Reply2:";
-    QNetworkReply *reply2 = qobject_cast<QNetworkReply *>(sender());
+    QNetworkReply* const reply2 = qobject_cast<QNetworkReply *>(sender());
     QString mediaId;
 
     if (reply2->error() != QNetworkReply::NoError)
@@ -462,7 +471,7 @@ void TwTalker::getUserName()
 void TwTalker::slotTweetDone()
 {
     qDebug() << "In slotTweetDone:";
-    QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
+    QNetworkReply* const reply = qobject_cast<QNetworkReply *>(sender());
 
     if (reply->error() != QNetworkReply::NoError)
     {
@@ -475,7 +484,6 @@ void TwTalker::slotTweetDone()
         qDebug() << "Tweet posted successfully!";
         emit signalAddPhotoSucceeded();
     }
-
 }
 
 /*
@@ -506,10 +514,10 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     if (rescale && (image.width() > maxDim || image.height() > maxDim))
     {
-        image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    image.save(path,"JPEG",imageQuality);
+    image.save(path, "JPEG", imageQuality);
 
     if (d->meta.load(imgPath))
     {
@@ -649,7 +657,7 @@ void TwTalker::parseResponseListFolders(const QByteArray& data)
         QJsonObject obj = value.toObject();
         folder          = obj[QLatin1String("folder")].toObject();
 
-        if(!folder.isEmpty())
+        if (!folder.isEmpty())
         {
             folderName    = obj[QLatin1String("name")].toString();
             path          = QLatin1String("/") + folderName;
