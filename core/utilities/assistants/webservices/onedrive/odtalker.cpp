@@ -80,18 +80,18 @@ public:
 
     explicit Private()
     {
-        clientId       =     QLatin1String("83de95b7-0f35-4abf-bac1-7729ced74c01");
-        clientSecret   =     QLatin1String("tgjV796:)yezuRWMZSZ45+!");
-        scope          =     QLatin1String("User.Read Files.ReadWrite");
+        clientId     = QLatin1String("83de95b7-0f35-4abf-bac1-7729ced74c01");
+        clientSecret = QLatin1String("tgjV796:)yezuRWMZSZ45+!");
+        scope        = QLatin1String("User.Read Files.ReadWrite");
 
-        authUrl        =     QLatin1String("https://login.live.com/oauth20_authorize.srf");
-        tokenUrl       =     QLatin1String("https://login.live.com/oauth20_token.srf");
-        redirectUrl    =     QLatin1String("https://login.live.com/oauth20_desktop.srf");
+        authUrl      = QLatin1String("https://login.live.com/oauth20_authorize.srf");
+        tokenUrl     = QLatin1String("https://login.live.com/oauth20_token.srf");
+        redirectUrl  = QLatin1String("https://login.live.com/oauth20_desktop.srf");
 
-        state          =     OD_USERNAME;
-        netMngr        =     0;
-        reply          =     0;
-        accessToken    =     "";
+        state        = OD_USERNAME;
+        netMngr      = 0;
+        reply        = 0;
+        accessToken  = "";
     }
 
 public:
@@ -452,8 +452,8 @@ void ODTalker::parseResponseAddPhoto(const QByteArray& data)
 
 void ODTalker::parseResponseUserName(const QByteArray& data)
 {
-    QJsonDocument doc      = QJsonDocument::fromJson(data);
-    QString name  = doc.object()[QLatin1String("displayName")].toString();
+    QJsonDocument doc = QJsonDocument::fromJson(data);
+    QString name      = doc.object()[QLatin1String("displayName")].toString();
     emit signalBusy(false);
     emit signalSetUserName(name);
 }
@@ -489,7 +489,7 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
         if (!folder.isEmpty())
         {
             folderName    = obj[QLatin1String("name")].toString();
-            path          =    "/" + folderName;
+            path          = QLatin1String("/") + folderName;
             list.append(qMakePair(path, folderName));
         }
     }
