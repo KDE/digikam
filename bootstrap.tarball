@@ -18,7 +18,7 @@ TARBALL_BUILD="build.tarball"
 mkdir -p $TARBALL_BUILD
 cd $TARBALL_BUILD
 
-# Configure to checkout translation files
+# Configure to checkout translation files. Stop at any error.
 
 cmake -G "Unix Makefiles" . \
       -DBUILD_TESTING=OFF \
@@ -39,14 +39,14 @@ cmake -G "Unix Makefiles" . \
       -DENABLE_APPSTYLES=OFF \
       -DENABLE_QWEBENGINE=OFF \
       -Wno-dev \
-      ..
+      .. || exit 1
 
-# Check if translation files can be compiled (.po => .mo)
-# Source code is not compiled and it's expected to compile. No check about.
+# Check if translation files can be compiled (.po => .mo). Stop the script at any error.
+# Source code is not compiled and it's expected to compile. No check about is performed.
 
-make -j4
+make -j4 || exit 1
 
-# If yes cleanup build.
+# If all is fine cleanup build and continu.
 
 cd ..
 rm -fr $TARBALL_BUILD
@@ -60,6 +60,8 @@ tar cf - $TARBALL_DIR | xz -4e > $TARBALL_FILE
 # Cleanup temp directory
 
 rm -fr $TARBALL_DIR
+rm -fr ./po
+rm -fr ./doc-translated
 
 # Show resume information about the tarball
 
