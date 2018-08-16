@@ -1,37 +1,29 @@
 #!/usr/bin/env python
 
 # ============================================================
-# 
+#
 # This file is a part of digiKam project
 # http://www.digikam.org
-# 
-# Date        : 2011-03-09
-# Description : a helper script for formatting the digiKam source code
-# 
+#
+# Date         : 2011-03-09
+# Description  : a helper script for formatting the digiKam source code
+# prerequisites: Python 2.7 or higher: http://www.python.org
+#                AStyle:               http://astyle.sourceforge.net
+#
 # Copyright (C) 2011 by Andi Clemens <andi dot clemens at gmail dot com>
-# 
+#
 # This program is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General
 # Public License as published by the Free Software Foundation;
 # either version 2, or (at your option)
 # any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # ============================================================ */
-
-
-
-
-# prerequisites:
-#     Python 2.7 or higher: http://www.python.org
-#     AStyle:               http://astyle.sourceforge.net
-
-
-
 
 import os
 import sys
@@ -61,7 +53,7 @@ def format_file(f, verbose=False):
     args = list()
     args.append(astyle)
     args.append("--mode=c")
-    args.append("--brackets=break")
+    args.append("--style=allman")
     args.append("--indent=spaces=4")
     args.append("--convert-tabs")
     args.append("--indent-switches")
@@ -117,14 +109,14 @@ def format_path(path, verbose=False):
     if (verbose):
         print("Formatted %d source files..." % (len(files2check) - errors))
 
-    return errors 
+    return errors
 
 # ---------------------------------------------------
 
 def cleanup_path(path, verbose):
-	# TODO: error handling
+    # TODO: error handling
     errors = 0
-    
+
     files2check = get_files(path, file_backup)
 
     for f in files2check:
@@ -150,7 +142,7 @@ def main():
 
     if (args.backup == False):
         errors += cleanup_path(args.path, args.verbose)
-        
+
     return errors
 
 # ---------------------------------------------------
