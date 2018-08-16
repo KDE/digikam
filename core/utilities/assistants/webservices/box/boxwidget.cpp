@@ -33,8 +33,8 @@ namespace Digikam
 {
 
 BOXWidget::BOXWidget(QWidget* const parent,
-                   DInfoInterface* const iface,
-                   const QString& toolName)
+                     DInfoInterface* const iface,
+                     const QString& toolName)
     : WSSettingsWidget(parent, iface, toolName)
 {
     getUploadBox()->hide();
@@ -50,12 +50,14 @@ void BOXWidget::updateLabels(const QString& name, const QString& url)
     QString web(QLatin1String("https://www.box.com/"));
 
     if (!url.isEmpty())
+    {
         web = url;
+    }
 
     getHeaderLbl()->setText(QString::fromLatin1(
-        "<b><h2><a href='%1'>"
-        "<font color=\"#9ACD32\">Box</font>"
-        "</a></h2></b>").arg(web));
+                                "<b><h2><a href='%1'>"
+                                "<font color=\"#9ACD32\">Box</font>"
+                                "</a></h2></b>").arg(web));
 
     if (name.isEmpty())
     {

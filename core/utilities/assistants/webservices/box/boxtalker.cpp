@@ -224,7 +224,7 @@ void BOXTalker::createFolder(QString& path)
 
     for (int i = 0 ; i < d->foldersList.size() ; ++i)
     {
-        if(d->foldersList.value(i).second == folderPath)
+        if (d->foldersList.value(i).second == folderPath)
         {
             id = d->foldersList.value(i).first;
         }
@@ -291,7 +291,7 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     }
 
     QString path = WSToolUtils::makeTemporaryDir("box").filePath(QFileInfo(imgPath)
-                                                 .baseName().trimmed() + QLatin1String(".jpg"));
+                   .baseName().trimmed() + QLatin1String(".jpg"));
 
     if (rescale && (image.width() > maxDim || image.height() > maxDim))
     {
@@ -332,7 +332,7 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     attributes.setHeader(QNetworkRequest::ContentDispositionHeader,attributesHeader);
 
     QString postData = QString::fromLatin1("{\"name\":\"") + QFileInfo(imgPath).fileName() + QString::fromLatin1("\"")+
-                        QString::fromLatin1(", \"parent\":{\"id\":\"") + id + QString::fromLatin1("\"}}");
+                       QString::fromLatin1(", \"parent\":{\"id\":\"") + id + QString::fromLatin1("\"}}");
     attributes.setBody(postData.toUtf8());
     multipart->append(attributes);
 
@@ -393,18 +393,22 @@ void BOXTalker::slotFinished(QNetworkReply* reply)
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In BOX_LISTFOLDERS";
             parseResponseListFolders(d->buffer);
             break;
+
         case Private::BOX_CREATEFOLDER:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In BOX_CREATEFOLDER";
             parseResponseCreateFolder(d->buffer);
             break;
+
         case Private::BOX_ADDPHOTO:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In BOX_ADDPHOTO";
             parseResponseAddPhoto(d->buffer);
             break;
+
         case Private::BOX_USERNAME:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In BOX_USERNAME";
             parseResponseUserName(d->buffer);
             break;
+
         default:
             break;
     }

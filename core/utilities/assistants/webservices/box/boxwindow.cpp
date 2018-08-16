@@ -243,8 +243,8 @@ void BOXWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
     for (int i = 0 ; i < list.size() ; ++i)
     {
         d->widget->getAlbumsCoB()->addItem(
-        QIcon::fromTheme(QLatin1String("system-users")),
-        list.value(i).second, list.value(i).second);
+            QIcon::fromTheme(QLatin1String("system-users")),
+            list.value(i).second, list.value(i).second);
 
         if (d->currentAlbumName == QString(list.value(i).second))
         {
@@ -270,9 +270,9 @@ void BOXWindow::slotStartTransfer()
     if (!(d->talker->authenticated()))
     {
         QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
-                         i18n("Warning"),
-                         i18n("Authentication failed. Click \"Continue\" to authenticate."),
-                         QMessageBox::Yes | QMessageBox::No);
+                i18n("Warning"),
+                i18n("Authentication failed. Click \"Continue\" to authenticate."),
+                QMessageBox::Yes | QMessageBox::No);
 
         (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
         (warn->button(QMessageBox::No))->setText(i18n("Cancel"));

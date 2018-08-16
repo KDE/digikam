@@ -45,8 +45,8 @@ class BOXWidget : public WSSettingsWidget
 public:
 
     explicit BOXWidget(QWidget* const parent,
-                      DInfoInterface* const iface,
-                      const QString& toolName);
+                       DInfoInterface* const iface,
+                       const QString& toolName);
     ~BOXWidget();
 
     void updateLabels(const QString& name = QString(),
