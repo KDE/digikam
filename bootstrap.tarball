@@ -5,13 +5,20 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+# Configuration to tune bofore to make tarball.
+
 TARBALL_VERSION="6.0.0-beta1"
 TARBALL_DIR="$PWD/../digikam-$TARBALL_VERSION"
 TARBALL_FILE="$PWD/../digikam-$TARBALL_VERSION.tar.xz"
+TARBALL_CHECKSUMS="$PWD/../digikam-$TARBALL_VERSION.sum"
 TARBALL_BUILD="build.tarball"
+
+# Prepare temp dir to compile translations files.
 
 mkdir -p $TARBALL_BUILD
 cd $TARBALL_BUILD
+
+# Configure to checkout translation files
 
 cmake -G "Unix Makefiles" . \
       -DBUILD_TESTING=OFF \
@@ -34,13 +41,37 @@ cmake -G "Unix Makefiles" . \
       -Wno-dev \
       ..
 
+# Check if translation files can be compiled (.po => .mo)
+# Source code is not compiled and it's expected to compile. No check about.
+
 make -j4
+
+# If yes cleanup build.
 
 cd ..
 rm -fr $TARBALL_BUILD
+
+# Prepare the tarball and compress.
 
 mkdir -p $TARBALL_DIR
 cp -rf * $TARBALL_DIR
 tar cf - $TARBALL_DIR | xz -4e > $TARBALL_FILE
 
+# Cleanup temp directory
+
 rm -fr $TARBALL_DIR
+
+# Show resume information about the tarball
+
+echo -e "\n---------- Compute tarball checksums for digiKam $TARBALL_VERSION\n"  > $TARBALL_CHECKSUMS
+echo    "File       : $TARBALL_FILE"                                            >> $TARBALL_CHECKSUMS
+echo -n "Size       : "                                                         >> $TARBALL_CHECKSUMS
+du -h "$TARBALL_FILE"     | { read first rest ; echo $first ; }                 >> $TARBALL_CHECKSUMS
+echo -n "MD5 sum    : "                                                         >> $TARBALL_CHECKSUMS
+md5sum "$TARBALL_FILE"    | { read first rest ; echo $first ; }                 >> $TARBALL_CHECKSUMS
+echo -n "SHA1 sum   : "                                                         >> $TARBALL_CHECKSUMS
+sha1sum "$TARBALL_FILE"   | { read first rest ; echo $first ; }                 >> $TARBALL_CHECKSUMS
+echo -n "SHA256 sum : "                                                         >> $TARBALL_CHECKSUMS
+sha256sum "$TARBALL_FILE" | { read first rest ; echo $first ; }                 >> $TARBALL_CHECKSUMS
+
+cat $TARBALL_CHECKSUMS
