@@ -368,12 +368,13 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 
     if (!camera)
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Solid device" << cameraDevice.description() << "is not a camera";
         return false;
     }
 
     QStringList drivers = camera->supportedDrivers();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "fillSolidMenus: Found Camera "
+    qCDebug(DIGIKAM_GENERAL_LOG) << "checkSolidCamera: Found Camera "
                                  << QString::fromUtf8("%1 %2").arg(cameraDevice.vendor()).arg(cameraDevice.product())
                                  << " protocols " << camera->supportedProtocols()
                                  << " drivers " << camera->supportedDrivers(QLatin1String("ptp"));
@@ -671,7 +672,7 @@ void DigikamApp::slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorDa
 
 void DigikamApp::slotSolidDeviceChanged(const QString& udi)
 {
-    Q_UNUSED(udi)
+    qCDebug(DIGIKAM_GENERAL_LOG) << "slotSolidDeviceChanged:" << udi;
     fillSolidMenus();
 }
 
