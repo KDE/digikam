@@ -95,7 +95,7 @@ WSWizard::WSWizard(QWidget* const parent, DInfoInterface* const iface)
     d->settings          = new WSSettings(this);
 
     d->wsAuth            = new WSAuthentication(this, d->iface);
-    
+
     KConfig config;
     KConfigGroup group   = config.group("Web Services Dialog Settings");
     d->settings->readSettings(group);
@@ -158,7 +158,7 @@ bool WSWizard::validateCurrentPage()
 int WSWizard::nextId() const
 {
     if (currentPage() == d->authPage)
-    {        
+    {
         if (d->settings->selMode == WSSettings::IMPORT)
         {
             return d->albumsPage->id();
@@ -168,7 +168,7 @@ int WSWizard::nextId() const
             return d->imagesPage->id();
         }
     }
-    
+
     return DWizardDlg::nextId();
 }
 

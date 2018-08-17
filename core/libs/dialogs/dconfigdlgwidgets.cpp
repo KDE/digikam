@@ -142,7 +142,7 @@ void DConfigDlgWdg::addSubPage(DConfigDlgWdgItem* parent, DConfigDlgWdgItem* ite
 
 void DConfigDlgWdg::removePage(DConfigDlgWdgItem* item)
 {
-    emit pageRemoved(item); // Q_EMIT signal before we remove it, because the item will be deleted in the model
+    emit pageRemoved(item); // Emit signal before we remove it, because the item will be deleted in the model
     d_func()->model()->removePage(item);
 }
 

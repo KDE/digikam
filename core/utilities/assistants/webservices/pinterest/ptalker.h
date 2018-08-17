@@ -60,7 +60,7 @@ public:
     void listBoards(const QString& path = QString());
     void createBoard(QString& boardName);
     void setAccessToken(const QString& token);
-    QMap<QString,QString> ParseUrlParameters(const QString& url);
+    QMap<QString, QString> ParseUrlParameters(const QString& url);
     void getToken(const QString& code);
     void readSettings();
     void writeSettings();

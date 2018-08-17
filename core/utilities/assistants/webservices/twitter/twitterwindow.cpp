@@ -24,6 +24,7 @@
 
 // Qt includes
 
+#include <QPointer>
 #include <QWindow>
 #include <QSpinBox>
 #include <QCheckBox>
@@ -242,13 +243,14 @@ void TwWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
     d->widget->getAlbumsCoB()->clear();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" << list.size();
 
-    for (int i = 0 ; i < list.size() ; i++)
+    for (int i = 0 ; i < list.size() ; ++i)
     {
         d->widget->getAlbumsCoB()->addItem(
         QIcon::fromTheme(QLatin1String("system-users")),
         list.value(i).second, list.value(i).first);
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" << list.value(i).second << " " << list.value(i).first;
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" <<d->currentAlbumName;
+
         if (d->currentAlbumName == list.value(i).first)
         {
             d->widget->getAlbumsCoB()->setCurrentIndex(i);
@@ -272,21 +274,23 @@ void TwWindow::slotStartTransfer()
 
     if (!(d->talker->authenticated()))
     {
-        QMessageBox warn(QMessageBox::Warning,
+        QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
                          i18n("Warning"),
                          i18n("Authentication failed. Click \"Continue\" to authenticate."),
                          QMessageBox::Yes | QMessageBox::No);
 
-        (warn.button(QMessageBox::Yes))->setText(i18n("Continue"));
-        (warn.button(QMessageBox::No))->setText(i18n("Cancel"));
+        (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
+        (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
 
-        if (warn.exec() == QMessageBox::Yes)
+        if (warn->exec() == QMessageBox::Yes)
         {
             d->talker->link();
+            delete warn;
             return;
         }
         else
         {
+            delete warn;
             return;
         }
     }
@@ -328,10 +332,10 @@ void TwWindow::uploadNextPhoto()
     QString temp = d->currentAlbumName + QLatin1String("/");
 
     bool result = d->talker->addPhoto(imgPath,
-                                   temp,
-                                   d->widget->getResizeCheckBox()->isChecked(),
-                                   d->widget->getDimensionSpB()->value(),
-                                   d->widget->getImgQualitySpB()->value());
+                                      temp,
+                                      d->widget->getResizeCheckBox()->isChecked(),
+                                      d->widget->getDimensionSpB()->value(),
+                                      d->widget->getImgQualitySpB()->value());
 
     if (!result)
     {
@@ -390,10 +394,12 @@ void TwWindow::slotNewAlbumRequest()
     }
 }
 
-/*void TwWindow::slotReloadAlbumsRequest()
+/*
+void TwWindow::slotReloadAlbumsRequest()
 {
   //  d->talker->listFolders();
-}*/
+}
+*/
 
 void TwWindow::slotSignalLinkingFailed()
 {

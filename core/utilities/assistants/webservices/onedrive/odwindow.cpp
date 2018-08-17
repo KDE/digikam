@@ -24,6 +24,7 @@
 
 // Qt includes
 
+#include <QPointer>
 #include <QWindow>
 #include <QSpinBox>
 #include <QCheckBox>
@@ -78,7 +79,7 @@ ODWindow::ODWindow(DInfoInterface* const iface,
     : WSToolDialog(0),
       d(new Private)
 {
-    d->widget      = new ODWidget(this, iface, QLatin1String("Onedrive"));
+    d->widget = new ODWidget(this, iface, QLatin1String("Onedrive"));
 
     d->widget->imagesList()->setIface(iface);
 
@@ -244,6 +245,7 @@ void ODWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
         d->widget->getAlbumsCoB()->addItem(
         QIcon::fromTheme(QLatin1String("system-users")),
         list.value(i).second, list.value(i).first);
+
         if (d->currentAlbumName == list.value(i).first)
         {
             d->widget->getAlbumsCoB()->setCurrentIndex(i);
@@ -267,21 +269,23 @@ void ODWindow::slotStartTransfer()
 
     if (!(d->talker->authenticated()))
     {
-        QMessageBox warn(QMessageBox::Warning,
+        QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
                          i18n("Warning"),
                          i18n("Authentication failed. Click \"Continue\" to authenticate."),
                          QMessageBox::Yes | QMessageBox::No);
 
-        (warn.button(QMessageBox::Yes))->setText(i18n("Continue"));
-        (warn.button(QMessageBox::No))->setText(i18n("Cancel"));
+        (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
+        (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
 
-        if (warn.exec() == QMessageBox::Yes)
+        if (warn->exec() == QMessageBox::Yes)
         {
             d->talker->link();
+            delete warn;
             return;
         }
         else
         {
+            delete warn;
             return;
         }
     }

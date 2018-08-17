@@ -57,7 +57,7 @@ public:
     void        unlink();
     void        doOAuth();
     bool        authenticated() const;
-    
+
 Q_SIGNALS:
 
     void signalBusy(bool val);
@@ -70,9 +70,9 @@ private Q_SLOTS:
     void slotLinkingSucceeded();
     void slotLinkingFailed();
     void slotOpenBrowser(const QUrl&);
-    
+
 private:
-    
+
     void parseResponseGetLoggedInUser(const QByteArray& data);
 
 protected:

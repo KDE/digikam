@@ -76,20 +76,20 @@ public:
 
     explicit Private()
     {
-        clientId              =     QLatin1String("Kej10Xqld2SzYHpl1zPNXBkdz");
-        clientSecret          =     QLatin1String("u7012XOx5Xd4t2oH10UMsffY8NseowtsfrXscoOzi4I0c039MF");
-        //scope          =     QLatin1String("User.Read Files.ReadWrite");
+        clientId        = QLatin1String("Kej10Xqld2SzYHpl1zPNXBkdz");
+        clientSecret    = QLatin1String("u7012XOx5Xd4t2oH10UMsffY8NseowtsfrXscoOzi4I0c039MF");
+        //scope          = QLatin1String("User.Read Files.ReadWrite");
 
-        authUrl               =     QLatin1String("https://api.twitter.com/oauth/request_token");
-        requestTokenUrl       =     QLatin1String("https://api.twitter.com/oauth/authenticate");
-        accessTokenUrl        =     QLatin1String("https://api.twitter.com/oauth/access_token");
+        authUrl         = QLatin1String("https://api.twitter.com/oauth/request_token");
+        requestTokenUrl = QLatin1String("https://api.twitter.com/oauth/authenticate");
+        accessTokenUrl  = QLatin1String("https://api.twitter.com/oauth/access_token");
 
-        redirectUrl    =     QLatin1String("http://127.0.0.1:8000");
+        redirectUrl     = QLatin1String("http://127.0.0.1:8000");
 
-        state          =     OD_USERNAME;
-        netMngr        =     0;
-        reply          =     0;
-        accessToken    =     "";
+        state           = OD_USERNAME;
+        netMngr         = 0;
+        reply           = 0;
+        accessToken     = QString();
     }
 
 public:
@@ -115,14 +115,15 @@ public:
 
     DMetadata              meta;
 
-    QMap<QString,QString> urlParametersMap;
+    QMap<QString,QString>  urlParametersMap;
 
     //QWebEngineView*        view;
 
     QSettings*             settings;
 
-    O1Twitter*                    o1Twitter;
+    O1Twitter*             o1Twitter;
 };
+
 TwTalker::TwTalker(QWidget* const parent)
     : d(new Private)
 {
@@ -151,17 +152,21 @@ TwTalker::TwTalker(QWidget* const parent)
     connect(d->o1Twitter, SIGNAL(openBrowser(QUrl)),
             this, SLOT(slotOpenBrowser(QUrl)));
 }
+
 TwTalker::~TwTalker()
 {
     if (d->reply)
     {
         d->reply->abort();
     }
+
     delete d;
 }
+
 void TwTalker::link()
 {
-    /*emit signalBusy(true);
+/*
+    emit signalBusy(true);
     QUrl url(d->requestTokenUrl);
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -169,9 +174,11 @@ void TwTalker::link()
     QNetworkAccessManager requestMngr;
     QNetworkReply* reply;
     reply = requestMngr.post(netRequest);
+
     if (reply->error() != QNetworkReply::NoError){
 
     }
+
     QByteArray buffer;
     buffer.append(reply->readAll());
     QString response = fromLatin1(buffer);
@@ -181,20 +188,22 @@ void TwTalker::link()
     // Discard the first line
     response = response.mid(response.indexOf('\n') + 1).trimmed();
 
-    foreach(QString line, response.split('\n')) {
+    foreach (QString line, response.split('\n'))
+    {
         int colon = line.indexOf(':');
         QString headerName = line.left(colon).trimmed();
         QString headerValue = line.mid(colon + 1).trimmed();
 
         headers.insertMulti(headerName, headerValue);
     }
+
     QString oauthToken = headers[oauth_token];
     QSting oauthTokenSecret = headers[oauth_token_secret];
 
     QUrlQuery query(url);
-    query.addQueryItem(QLatin1String("client_id"), d->clientId);
-    query.addQueryItem(QLatin1String("scope"), d->scope);
-    query.addQueryItem(QLatin1String("redirect_uri"), d->redirectUrl);
+    query.addQueryItem(QLatin1String("client_id"),     d->clientId);
+    query.addQueryItem(QLatin1String("scope"),         d->scope);
+    query.addQueryItem(QLatin1String("redirect_uri"),  d->redirectUrl);
     query.addQueryItem(QLatin1String("response_type"), "token");
     url.setQuery(query);
 
@@ -203,16 +212,21 @@ void TwTalker::link()
     d->view->load(url);
     d->view->show();
 
-    connect(d->view, SIGNAL(urlChanged(QUrl)), this, SLOT(slotCatchUrl(QUrl)));*/
+    connect(d->view, SIGNAL(urlChanged(QUrl)),
+            this, SLOT(slotCatchUrl(QUrl)));
+*/
 
     emit signalBusy(true);
     d->o1Twitter->link();
 }
+
 void TwTalker::unLink()
 {
-    /*d->accessToken = "";
+/*
+    d->accessToken = QString();
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
-    Q_EMIT oneDriveLinkingSucceeded();*/
+    emit oneDriveLinkingSucceeded();
+*/
 
     d->o1Twitter->unlink();
 
@@ -229,32 +243,36 @@ void TwTalker::slotOpenBrowser(const QUrl& url)
 
 QMap<QString,QString> TwTalker::ParseUrlParameters(const QString &url)
 {
-  QMap<QString,QString> urlParameters;
-  if(url.indexOf('?')==-1)
-  {
-      return urlParameters;
-  }
+    QMap<QString,QString> urlParameters;
 
-  QString tmp = url.right(url.length()-url.indexOf('?')-1);
-  tmp = tmp.right(tmp.length() - tmp.indexOf('#')-1);
-  QStringList paramlist = tmp.split('&');
+    if (url.indexOf('?') == -1)
+    {
+        return urlParameters;
+    }
 
-  for(int i=0;i<paramlist.count();i++)
-  {
-      QStringList paramarg = paramlist.at(i).split('=');
-      urlParameters.insert(paramarg.at(0),paramarg.at(1));
-  }
+    QString tmp           = url.right(url.length()-url.indexOf('?')-1);
+    tmp                   = tmp.right(tmp.length() - tmp.indexOf('#')-1);
+    QStringList paramlist = tmp.split('&');
 
-  return urlParameters;
+    for (int i = 0 ; i < paramlist.count() ; ++i)
+    {
+        QStringList paramarg = paramlist.at(i).split('=');
+        urlParameters.insert(paramarg.at(0),paramarg.at(1));
+    }
+
+    return urlParameters;
 }
+
 void TwTalker::slotLinkingFailed()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Twitter fail";
     emit signalBusy(false);
 }
+
 void TwTalker::slotLinkingSucceeded()
 {
-    /*if (d->accessToken == "")
+/*
+    if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Twitter ok";
         emit signalBusy(false);
@@ -263,8 +281,8 @@ void TwTalker::slotLinkingSucceeded()
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Twitter ok";
     d->view->close();
-    emit signalLinkingSucceeded();*/
-
+    emit signalLinkingSucceeded();
+*/
 
     if (!d->o1Twitter->linked())
     {
@@ -275,13 +293,18 @@ void TwTalker::slotLinkingSucceeded()
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Twitter ok";
     QVariantMap extraTokens = d->o1Twitter->extraTokens();
-    if (!extraTokens.isEmpty()) {
+
+    if (!extraTokens.isEmpty())
+    {
         //emit extraTokensReady(extraTokens);
         qDebug() << "Extra tokens in response:";
-        foreach (QString key, extraTokens.keys()) {
+
+        foreach (QString key, extraTokens.keys())
+        {
             qDebug() << "\t" << key << ":" << (extraTokens.value(key).toString().left(3) + "...");
         }
     }
+
     emit signalLinkingSucceeded();
 
 }
@@ -290,6 +313,7 @@ bool TwTalker::authenticated()
 {
     return d->o1Twitter->linked();
 }
+
 void TwTalker::cancel()
 {
     if (d->reply)
@@ -300,21 +324,25 @@ void TwTalker::cancel()
 
     emit signalBusy(false);
 }
-/*void TwTalker::upload(QByteArray& data){
+
+/*
+void TwTalker::upload(QByteArray& data){
   QByteArray encoded = data.toBase64(QByteArray::Base64UrlEncoding);
 
   QUrl url = QUrl("https://upload.twitter.com/1.1/media/upload.json");
-}*/
+}
+*/
+
 bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality)
 {
-
     //qDebug() << "Status update message:" << message.toLatin1().constData();
     emit signalBusy(true);
     TwMPForm form;
-    QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
+    QImage image     = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
     qint64 imageSize = QFileInfo(imgPath).size();
     qDebug() << "SIZE of image using qfileinfo:   " << imageSize;
     qDebug() << " " ;
+
     if (image.isNull())
     {
         return false;
@@ -325,10 +353,10 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     if (rescale && (image.width() > maxDim || image.height() > maxDim))
     {
-        image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    image.save(path,"JPEG",imageQuality);
+    image.save(path, "JPEG", imageQuality);
 
     if (d->meta.load(imgPath))
     {
@@ -344,16 +372,22 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
         emit signalBusy(false);
         return false;
     }
+
     QString uploadPath = uploadFolder + QUrl(QUrl::fromLocalFile(imgPath)).fileName();
-    if(form.formData().isEmpty()){
-      qDebug() << "Form DATA Empty:";
+
+    if (form.formData().isEmpty())
+    {
+        qDebug() << "Form DATA Empty:";
     }
-    if(form.formData().isNull()){
-      qDebug() << "Form DATA null:";
+
+    if (form.formData().isNull())
+    {
+        qDebug() << "Form DATA null:";
     }
+
     QUrl url = QUrl("https://upload.twitter.com/1.1/media/upload.json");
 
-    O1Requestor* requestor = new O1Requestor(d->netMngr, d->o1Twitter, this);
+    O1Requestor* const requestor        = new O1Requestor(d->netMngr, d->o1Twitter, this);
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
 
     //These are the parameters passed for the first step in chuncked media upload.
@@ -365,14 +399,12 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     QByteArray postData = O1::createQueryParameters(reqParams);
 
-
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
-    QNetworkReply *reply2 = requestor->post(request, reqParams, postData);
+    QNetworkReply* const reply2 = requestor->post(request, reqParams, postData);
     qDebug() << "reply size:              " << reply2->readBufferSize();  //always returns 0
     QByteArray replyData = reply2->readAll();
     qDebug() << "Media reply:" << replyData; //always Empty
-
 
     //uncomment this to try to post a tweet
     QUrl url2 = QUrl("https://api.twitter.com/1.1/statuses/update.json");
@@ -385,33 +417,42 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     request.setUrl(url2);
     request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_XFORM);
 
-    QNetworkReply *reply = requestor->post(request, reqParams, postData);
-    connect(reply, SIGNAL(finished()), this, SLOT(slotTweetDone()));
+    QNetworkReply* const reply = requestor->post(request, reqParams, postData);
 
+    connect(reply, SIGNAL(finished()),
+            this, SLOT(slotTweetDone()));
 
-    connect(reply2, SIGNAL(finished()), this, SLOT(reply2finish()));
+    connect(reply2, SIGNAL(finished()),
+            this, SLOT(reply2finish()));
+
     emit signalBusy(true);
     return true;
 }
-void TwTalker::reply2finish(){
-  qDebug() << "In Reply2:";
-  QNetworkReply *reply2 = qobject_cast<QNetworkReply *>(sender());
-  QString mediaId;
-  if (reply2->error() != QNetworkReply::NoError) {
 
-      qDebug() << "ERROR:" << reply2->errorString();
-      qDebug() << "Content:" << reply2->readAll();
-      emit signalAddPhotoFailed(i18n("Failed to upload photo"));
-  } else {
-    QByteArray replyData = reply2->readAll();
-    QJsonDocument doc      = QJsonDocument::fromJson(replyData);
-    qDebug() << "Media reply:" << replyData;
-    QJsonObject jsonObject = doc.object();
-    mediaId = jsonObject[QLatin1String("media_id")].toString();
-  }
+void TwTalker::reply2finish()
+{
+    qDebug() << "In Reply2:";
+    QNetworkReply* const reply2 = qobject_cast<QNetworkReply *>(sender());
+    QString mediaId;
 
-  qDebug() << "Media ID:" << mediaId;
+    if (reply2->error() != QNetworkReply::NoError)
+    {
+        qDebug() << "ERROR:" << reply2->errorString();
+        qDebug() << "Content:" << reply2->readAll();
+        emit signalAddPhotoFailed(i18n("Failed to upload photo"));
+    }
+    else
+    {
+        QByteArray replyData = reply2->readAll();
+        QJsonDocument doc      = QJsonDocument::fromJson(replyData);
+        qDebug() << "Media reply:" << replyData;
+        QJsonObject jsonObject = doc.object();
+        mediaId = jsonObject[QLatin1String("media_id")].toString();
+    }
+
+    qDebug() << "Media ID:" << mediaId;
 }
+
 void TwTalker::getUserName()
 {
     QUrl url(QLatin1String("https://graph.microsoft.com/v1.0/me"));
@@ -426,25 +467,32 @@ void TwTalker::getUserName()
     d->buffer.resize(0);
     emit signalBusy(true);
 }
+
 void TwTalker::slotTweetDone()
 {
     qDebug() << "In slotTweetDone:";
-    QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
-    if (reply->error() != QNetworkReply::NoError) {
+    QNetworkReply* const reply = qobject_cast<QNetworkReply *>(sender());
+
+    if (reply->error() != QNetworkReply::NoError)
+    {
         qDebug() << "ERROR:" << reply->errorString();
         qDebug() << "Content:" << reply->readAll();
         emit signalAddPhotoFailed(i18n("Failed to upload photo"));
-    } else {
+    }
+    else
+    {
         qDebug() << "Tweet posted successfully!";
         emit signalAddPhotoSucceeded();
     }
-
 }
-/*bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality)
+
+/*
+bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "PATH " << imgPath;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Folder " << uploadFolder;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Others: " << rescale << " " << maxDim << " " <<imageQuality;
+
     if (d->reply)
     {
         d->reply->abort();
@@ -466,10 +514,10 @@ void TwTalker::slotTweetDone()
 
     if (rescale && (image.width() > maxDim || image.height() > maxDim))
     {
-        image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    image.save(path,"JPEG",imageQuality);
+    image.save(path, "JPEG", imageQuality);
 
     if (d->meta.load(imgPath))
     {
@@ -499,7 +547,9 @@ void TwTalker::slotTweetDone()
     d->buffer.resize(0);
     emit signalBusy(true);
     return true;
-}*/
+}
+*/
+
 void TwTalker::slotFinished(QNetworkReply* reply)
 {
     if (reply != d->reply)
@@ -548,6 +598,7 @@ void TwTalker::slotFinished(QNetworkReply* reply)
 
     reply->deleteLater();
 }
+
 void TwTalker::parseResponseAddPhoto(const QByteArray& data)
 {
     QJsonDocument doc      = QJsonDocument::fromJson(data);
@@ -564,11 +615,12 @@ void TwTalker::parseResponseAddPhoto(const QByteArray& data)
         emit signalAddPhotoSucceeded();
     }
 }
+
 void TwTalker::parseResponseUserName(const QByteArray& data)
 {
-    QJsonDocument doc      = QJsonDocument::fromJson(data);
+    QJsonDocument doc = QJsonDocument::fromJson(data);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseUserName: "<<doc;
-    QString name  = doc.object()[QLatin1String("displayName")].toString();
+    QString name      = doc.object()[QLatin1String("displayName")].toString();
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseUserName: "<<name;
     emit signalBusy(false);
@@ -603,14 +655,14 @@ void TwTalker::parseResponseListFolders(const QByteArray& data)
         QJsonObject folder;
 
         QJsonObject obj = value.toObject();
-        folder       = obj[QLatin1String("folder")].toObject();
+        folder          = obj[QLatin1String("folder")].toObject();
 
-        if(!folder.isEmpty()){
-          folderName    = obj[QLatin1String("name")].toString();
-          path          =    "/" + folderName;
-          qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Folder Name is" << folderName;
-          list.append(qMakePair(path, folderName));
-
+        if (!folder.isEmpty())
+        {
+            folderName    = obj[QLatin1String("name")].toString();
+            path          = QLatin1String("/") + folderName;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Folder Name is" << folderName;
+            list.append(qMakePair(path, folderName));
         }
     }
 

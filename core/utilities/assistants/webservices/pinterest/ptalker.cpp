@@ -82,19 +82,19 @@ public:
 
     explicit Private()
     {
-        clientId       =     QLatin1String("4983380570301022071");
-        clientSecret   =     QLatin1String("2a698db679125930d922a2dfb897e16b668a67c6f614593636e83fc3d8d9b47d");
+        clientId     = QLatin1String("4983380570301022071");
+        clientSecret = QLatin1String("2a698db679125930d922a2dfb897e16b668a67c6f614593636e83fc3d8d9b47d");
 
-        authUrl        =     QLatin1String("https://api.pinterest.com/oauth/");
-        tokenUrl       =     QLatin1String("https://api.pinterest.com/v1/oauth/token");
-        redirectUrl    =     QLatin1String("https://login.live.com/oauth20_desktop.srf");
+        authUrl      = QLatin1String("https://api.pinterest.com/oauth/");
+        tokenUrl     = QLatin1String("https://api.pinterest.com/v1/oauth/token");
+        redirectUrl  = QLatin1String("https://login.live.com/oauth20_desktop.srf");
 
-        scope          =     QLatin1String("read_public,write_public");
+        scope        = QLatin1String("read_public,write_public");
 
-        state          =     P_USERNAME;
-        netMngr        =     0;
-        reply          =     0;
-        accessToken    =     "";
+        state        = P_USERNAME;
+        netMngr      = 0;
+        reply        = 0;
+        accessToken  = QString();
     }
 
 public:
@@ -118,7 +118,7 @@ public:
 
     DMetadata              meta;
 
-    QMap<QString,QString> urlParametersMap;
+    QMap<QString, QString> urlParametersMap;
 
     WebWidget*             view;
 
@@ -132,10 +132,11 @@ PTalker::PTalker(QWidget* const parent)
 {
     d->parent  = parent;
     d->netMngr = new QNetworkAccessManager(this);
-    d->view = new WebWidget(d->parent);
-    #ifndef HAVE_QWEBENGINE
-      d->view->settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
-    #endif
+    d->view    = new WebWidget(d->parent);
+
+#ifndef HAVE_QWEBENGINE
+    d->view->settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
+#endif
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
@@ -162,9 +163,9 @@ void PTalker::link()
     emit signalBusy(true);
     QUrl url(d->authUrl);
     QUrlQuery query(url);
-    query.addQueryItem(QLatin1String("client_id"), d->clientId);
-    query.addQueryItem(QLatin1String("scope"), d->scope);
-    query.addQueryItem(QLatin1String("redirect_uri"), d->redirectUrl);
+    query.addQueryItem(QLatin1String("client_id"),     d->clientId);
+    query.addQueryItem(QLatin1String("scope"),         d->scope);
+    query.addQueryItem(QLatin1String("redirect_uri"),  d->redirectUrl);
     query.addQueryItem(QLatin1String("response_type"), "code");
     url.setQuery(query);
 
@@ -178,19 +179,19 @@ void PTalker::link()
 
 void PTalker::unLink()
 {
-    d->accessToken = "";
-    #ifdef HAVE_QWEBENGINE
+    d->accessToken = QString();
+#ifdef HAVE_QWEBENGINE
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
-    #endif
+#endif
 
-    Q_EMIT pinterestLinkingSucceeded();
+    emit pinterestLinkingSucceeded();
 }
 
 void PTalker::slotCatchUrl(const QUrl& url)
 {
     d->urlParametersMap = ParseUrlParameters(url.toString());
-    QString code =  d->urlParametersMap.value("code");
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Recieved URL from webview in link function: " << url ;
+    QString code        = d->urlParametersMap.value("code");
+    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function: " << url ;
 
     if (!code.isEmpty())
     {
@@ -202,44 +203,44 @@ void PTalker::slotCatchUrl(const QUrl& url)
 
 void PTalker::getToken(const QString& code)
 {
-  //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Code: " << code;
-  QUrl url(d->tokenUrl);
-  QUrlQuery query(url);
-  query.addQueryItem(QLatin1String("grant_type"), "authorization_code");
-  query.addQueryItem(QLatin1String("client_id"), d->clientId);
-  query.addQueryItem(QLatin1String("client_secret"), d->clientSecret);
-  query.addQueryItem(QLatin1String("code"), code);
-  url.setQuery(query);
+    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Code: " << code;
+    QUrl url(d->tokenUrl);
+    QUrlQuery query(url);
+    query.addQueryItem(QLatin1String("grant_type"),    "authorization_code");
+    query.addQueryItem(QLatin1String("client_id"),     d->clientId);
+    query.addQueryItem(QLatin1String("client_secret"), d->clientSecret);
+    query.addQueryItem(QLatin1String("code"),          code);
+    url.setQuery(query);
 
-  QNetworkRequest netRequest(url);
-  netRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-  netRequest.setRawHeader("Accept", "application/json");
+    QNetworkRequest netRequest(url);
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    netRequest.setRawHeader("Accept", "application/json");
 
-  d->reply = d->netMngr->post(netRequest,QByteArray());
+    d->reply = d->netMngr->post(netRequest,QByteArray());
 
-  d->state = Private::P_ACCESSTOKEN;
-  d->buffer.resize(0);
+    d->state = Private::P_ACCESSTOKEN;
+    d->buffer.resize(0);
 }
 
-QMap<QString,QString> PTalker::ParseUrlParameters(const QString &url)
+QMap<QString, QString> PTalker::ParseUrlParameters(const QString& url)
 {
-  QMap<QString,QString> urlParameters;
+    QMap<QString, QString> urlParameters;
 
-  if (url.indexOf('?')==-1)
-  {
-      return urlParameters;
-  }
+    if (url.indexOf('?') == -1)
+    {
+        return urlParameters;
+    }
 
-  QString tmp           = url.right(url.length()-url.indexOf('?')-1);
-  QStringList paramlist = tmp.split('&');
+    QString tmp           = url.right(url.length()-url.indexOf('?') - 1);
+    QStringList paramlist = tmp.split('&');
 
-  for (int i = 0 ; i < paramlist.count() ; ++i)
-  {
-      QStringList paramarg = paramlist.at(i).split('=');
-      urlParameters.insert(paramarg.at(0),paramarg.at(1));
-  }
+    for (int i = 0 ; i < paramlist.count() ; ++i)
+    {
+        QStringList paramarg = paramlist.at(i).split('=');
+        urlParameters.insert(paramarg.at(0),paramarg.at(1));
+    }
 
-  return urlParameters;
+    return urlParameters;
 }
 
 void PTalker::slotLinkingFailed()
@@ -250,7 +251,7 @@ void PTalker::slotLinkingFailed()
 
 void PTalker::slotLinkingSucceeded()
 {
-    if (d->accessToken == "")
+    if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Pinterest ok";
         KConfig config;
@@ -267,7 +268,7 @@ void PTalker::slotLinkingSucceeded()
 
 bool PTalker::authenticated()
 {
-    if (d->accessToken != "")
+    if (!d->accessToken.isEmpty())
     {
         return true;
     }
@@ -357,10 +358,10 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
 
     if (rescale && (image.width() > maxDim || image.height() > maxDim))
     {
-        image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    image.save(path,"JPEG",imageQuality);
+    image.save(path, "JPEG", imageQuality);
 
     if (d->meta.load(imgPath))
     {
@@ -371,7 +372,7 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
         d->meta.save(path);
     }
 
-    QString boardparam =  d->userName + "/" + uploadBoard;
+    QString boardparam = d->userName + QLatin1String("/") + uploadBoard;
 
     if (!form.addFile(path))
     {
@@ -396,13 +397,13 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
     QString noteHeader = QString("form-data; name=\"note\"") ;
     note.setHeader(QNetworkRequest::ContentDispositionHeader,noteHeader);
 
-    postData = "";
+    postData = QByteArray();
 
     note.setBody(postData);
     multipart->append(note);
 
     ///image section
-    QFile* file = new QFile(imgPath);
+    QFile* const file = new QFile(imgPath);
     file->open(QIODevice::ReadOnly);
 
     QHttpPart imagepart;
@@ -489,14 +490,14 @@ void PTalker::parseResponseAccessToken(const QByteArray& data)
     QJsonObject jsonObject = doc.object();
     d->accessToken         = jsonObject[QLatin1String("access_token")].toString();
 
-    if (d->accessToken != "")
+    if (!d->accessToken.isEmpty())
     {
         qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token Received: " << d->accessToken;
-        Q_EMIT pinterestLinkingSucceeded();
+        emit pinterestLinkingSucceeded();
     }
     else
     {
-        Q_EMIT pinterestLinkingFailed();
+        emit pinterestLinkingFailed();
     }
 
     emit signalBusy(false);
@@ -555,7 +556,7 @@ void PTalker::parseResponseListBoards(const QByteArray& data)
         QString boardID;
         QString boardName;
         QJsonObject obj = value.toObject();
-        boardID       = obj[QLatin1String("id")].toString();
+        boardID         = obj[QLatin1String("id")].toString();
         boardName       = obj[QLatin1String("name")].toString();
 
         list.append(qMakePair(boardID, boardName));
@@ -590,7 +591,7 @@ void PTalker::writeSettings()
     KConfig config;
     KConfigGroup grp = config.group("Pinterest User Settings");
 
-    grp.writeEntry("access_token",     d->accessToken);
+    grp.writeEntry("access_token", d->accessToken);
     config.sync();
 }
 

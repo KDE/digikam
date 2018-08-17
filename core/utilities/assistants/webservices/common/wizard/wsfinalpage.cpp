@@ -94,11 +94,13 @@ WSFinalPage::WSFinalPage(QWizard* const dialog, const QString& title)
 
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("WS_send")));
-    
+
     connect(d->wsAuth, SIGNAL(signalProgress(int)),
             d->progressBar, SLOT(setValue(int)));
+
     connect(d->wsAuth, SIGNAL(signalMessage(QString, bool)),
             this, SLOT(slotMessage(QString, bool)));
+
     connect(d->wsAuth, SIGNAL(signalDone()),
             this, SLOT(slotDone()));
 }
@@ -140,7 +142,7 @@ void WSFinalPage::slotProcess()
     d->progressView->addEntry(i18n("Preparing files..."), DHistoryView::ProgressEntry);
     d->wsAuth->prepareForUpload();
 
-    d->progressView->addEntry(i18n("%1 input items to process", d->wsAuth->numberItemsUpload()), 
+    d->progressView->addEntry(i18n("%1 input items to process", d->wsAuth->numberItemsUpload()),
                               DHistoryView::ProgressEntry);
 
     d->progressView->addEntry(i18n("Start transferring process..."), DHistoryView::ProgressEntry);

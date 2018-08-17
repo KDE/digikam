@@ -45,11 +45,11 @@ class BOXFolder
 {
 public:
 
-  BOXFolder()
-  {
-  }
+    BOXFolder()
+    {
+    }
 
-  QString title;
+    QString title;
 };
 
 } // namespace Digikam

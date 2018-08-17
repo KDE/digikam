@@ -847,32 +847,30 @@ class A
 The above coding style guidelines can be automatically applied with
 astyle (http://astyle.sourceforge.net/).
 
-Run it in the directory where the files are located that should be formatted
-with the following command:
+Run it in the directory where the files are located that should be formatted.
 
-\code
-astyle --brackets=break --indent=spaces=4 --convert-tabs --indent-switches \
-       --break-blocks --break-closing-brackets --pad-header                \
-       --align-pointer=type --indent-col1-comments --add-brackets          \
-       --min-conditional-indent=0                                          \
-       `find -type f -name '*.cpp'` `find -type f -name '*.cc'` `find -type f -name '*.h'`
-\endcode
-
-Another way to apply the coding guidelines with astyle is to use the
-fileformatter script in /project/scripts. This script will also clean up the
-source tree and remove backup files that had been created by astyle, 
+To apply the coding guidelines with astyle is to use the
+fileformatter.py script in project/scripts directory. This script will also clean up the
+source tree and remove backup files that had been created by astyle,
 if the appropriate command line argument is given.
 
 To handle the command easier, create a bash function in ~/.bashrc, e.g.
 
 \code
-digikamformatcode()
+dkfrmcode()
 {
-    astyle --brackets=break --indent=spaces=4 --convert-tabs --indent-switches \
-           --break-blocks --break-closing-brackets --pad-header                \
-           --align-pointer=type --indent-col1-comments --add-brackets          \
-           --min-conditional-indent=0                                          \
-           `find $1 -type f -name '*.cpp'` `find $1 -type f -name '*.cc'` `find $1 -type f -name '*.h'`
+    astyle --style=allman             \
+           --indent=spaces=4          \
+           --convert-tabs             \
+           --indent-switches          \
+           --break-blocks             \
+           --break-closing-brackets   \
+           --pad-header               \
+           --align-pointer=type       \
+           --indent-col1-comments     \
+           --add-brackets             \
+           --min-conditional-indent=0 \
+           `find $1 -type f -name '*.cpp'` `find $1 -type f -name '*.c'` `find $1 -type f -name '*.h'`
 }
 \endcode
 
@@ -883,12 +881,12 @@ Examples:
 
 1. Run astyle in the current directory
 \code
-$> digikamformatcode
+$> dkfrmcode
 \endcode
 
 2. Run astyle in a different directory
 \code
-$> digikamformatcode /home/user/code/svn/digikam/
+$> dkfrmcode /home/user/code/git/digikam/
 \endcode
 
 \subsection generalrecommend General recommendations

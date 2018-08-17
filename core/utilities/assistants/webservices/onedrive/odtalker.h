@@ -60,7 +60,7 @@ public:
     void listFolders();
     void createFolder(QString& path);
     void setAccessToken(const QString& token);
-    QMap<QString,QString> ParseUrlParameters(const QString& url);
+    QMap<QString, QString> ParseUrlParameters(const QString& url);
     void readSettings();
     void writeSettings();
 

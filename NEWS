@@ -373,4 +373,17 @@ BUGFIXES:
 316 ==> 309316 - Html gallery export crash and other bugs.
 317 ==> 314248 - digiKam crashing when exporting pictures to html.
 318 ==> 225725 - Crash using HTML export.
-319 ==> 
+319 ==> 396092 - Don't init search till user press a buttom specifically for this task.
+320 ==> 397376 - Search in Geolocation doesn't work for Streets / location, only for City.
+321 ==> 393259 - Configuration conflicts.
+322 ==> 391329 - Two actions that wants to use same shortcut (Ctrl+Shift+,).
+323 ==> 391655 - Kubuntu 18.04 beta, Digikam 5.6.0 Ambiguous Shortcuts - Zoom to 100% and Configure Digikam share the same shortcut (Ctrl+Shift+,).
+324 ==> 393031 - Two actions for digikam[helpfully identified as a bug].
+325 ==> 395518 - When manually typing face name, sort the filtered tags by recent usage.
+326 ==> 304202 - No option to re-read metadata from XMP sidecar file.
+327 ==> 289445 - Allow to create Contact Sheet from an album.
+328 ==> 164750 - Picture alignment and background picture.
+329 ==> 338180 - Add "Toggle auto-refresh" option in search view.
+330 ==> 359235 - digiKam doesn't response after start when StatusBar=Disabled in digikamrc.
+331 ==> 090550 - Linking error with jpeg.
+332 ==> 

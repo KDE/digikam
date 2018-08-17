@@ -94,7 +94,7 @@ bool WSAlbumsPage::validatePage()
     d->wizard->settings()->inputImages.clear();
 
     // update image list with album contents.
-    foreach(const QUrl& url, d->iface->albumsItems(d->iface->albumChooserItems()))
+    foreach (const QUrl& url, d->iface->albumsItems(d->iface->albumChooserItems()))
     {
         d->wizard->settings()->inputImages << url;
     }
