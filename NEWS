@@ -388,5 +388,6 @@ BUGFIXES:
 331 ==> 090550 - Linking error with jpeg.
 332 ==> 393974 - Appimage bundle does not automatically recognize Gphoto2 devices connected.
 333 ==> 141288 - Error KIoexec usb camera.
-334 ==> 
+334 ==> 397554 - digiKam crashes while running BatchQueueManager.
+335 ==> 
 
