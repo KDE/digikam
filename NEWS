@@ -387,4 +387,6 @@ BUGFIXES:
 330 ==> 359235 - digiKam doesn't response after start when StatusBar=Disabled in digikamrc.
 331 ==> 090550 - Linking error with jpeg.
 332 ==> 393974 - Appimage bundle does not automatically recognize Gphoto2 devices connected.
-333 ==> 
+333 ==> 141288 - Error KIoexec usb camera.
+334 ==> 
+
