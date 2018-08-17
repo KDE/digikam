@@ -409,6 +409,7 @@ void BOXWindow::slotSignalLinkingFailed()
 
 void BOXWindow::slotSignalLinkingSucceeded()
 {
+    slotBusy(false);
     d->talker->listFolders();
 }
 

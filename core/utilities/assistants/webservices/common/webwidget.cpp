@@ -22,7 +22,8 @@
  * ============================================================ */
 
  #include "webwidget.h"
-
+ #include "digikam_debug.h"
+ #include <QCloseEvent>
 namespace Digikam
 {
 class WebWidget::Private
@@ -42,6 +43,10 @@ WebWidget::WebWidget(QWidget* const parent)
 {
     d->parent = parent;
 
+}
+void WebWidget::closeEvent(QCloseEvent *event){
+  emit closeView(false);
+  event->accept();
 }
 WebWidget::~WebWidget()
 {

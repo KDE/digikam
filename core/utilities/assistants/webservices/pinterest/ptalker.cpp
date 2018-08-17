@@ -39,6 +39,7 @@
 #include <QDesktopServices>
 #include <QUrlQuery>
 #include <QHttpMultiPart>
+#include <QNetworkCookieJar>
 
 // KDE includes
 
@@ -175,13 +176,21 @@ void PTalker::link()
 
     connect(d->view, SIGNAL(urlChanged(QUrl)),
             this, SLOT(slotCatchUrl(QUrl)));
+    connect(d->view, SIGNAL(closeView(bool)),
+            this, SIGNAL(signalBusy(bool)));
 }
 
 void PTalker::unLink()
 {
     d->accessToken = QString();
+    KConfig config;
+    KConfigGroup grp   = config.group("Pinterest User Settings");
+    grp.deleteGroup();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "group deleted";
 #ifdef HAVE_QWEBENGINE
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
+#else
+    d->view->page()->networkAccessManager()->setCookieJar(new QNetworkCookieJar());
 #endif
 
     emit pinterestLinkingSucceeded();
@@ -191,10 +200,11 @@ void PTalker::slotCatchUrl(const QUrl& url)
 {
     d->urlParametersMap = ParseUrlParameters(url.toString());
     QString code        = d->urlParametersMap.value("code");
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function: " << url ;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function: " << url ;
 
     if (!code.isEmpty())
     {
+       qCDebug(DIGIKAM_WEBSERVICES_LOG) << "CODE Received " ;
         d->view->close();
         getToken(code);
         emit signalBusy(false);
@@ -203,7 +213,7 @@ void PTalker::slotCatchUrl(const QUrl& url)
 
 void PTalker::getToken(const QString& code)
 {
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Code: " << code;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Code: " << code;
     QUrl url(d->tokenUrl);
     QUrlQuery query(url);
     query.addQueryItem(QLatin1String("grant_type"),    "authorization_code");
@@ -211,6 +221,7 @@ void PTalker::getToken(const QString& code)
     query.addQueryItem(QLatin1String("client_secret"), d->clientSecret);
     query.addQueryItem(QLatin1String("code"),          code);
     url.setQuery(query);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Token Request URL:    " << url.toString();
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -254,9 +265,6 @@ void PTalker::slotLinkingSucceeded()
     if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Pinterest ok";
-        KConfig config;
-        KConfigGroup grp   = config.group("Pinterest User Settings");
-        grp.deleteGroup();
         emit signalBusy(false);
         return;
     }
@@ -268,14 +276,7 @@ void PTalker::slotLinkingSucceeded()
 
 bool PTalker::authenticated()
 {
-    if (!d->accessToken.isEmpty())
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return (!d->accessToken.isEmpty());
 }
 
 void PTalker::cancel()

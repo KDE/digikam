@@ -38,6 +38,7 @@
 #include <QApplication>
 #include <QDesktopServices>
 #include <QUrlQuery>
+#include <QNetworkCookieJar>
 
 // KDE includes
 
@@ -138,6 +139,9 @@ ODTalker::ODTalker(QWidget* const parent)
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
+
+    connect(d->view, SIGNAL(closeView(bool)),
+            this, SIGNAL(signalBusy(bool)));
 }
 
 ODTalker::~ODTalker()
@@ -171,10 +175,13 @@ void ODTalker::link()
 void ODTalker::unLink()
 {
     d->accessToken = QString();
+    KConfig config;
+    KConfigGroup grp = config.group("Onedrive User Settings");
+    grp.deleteGroup();
 #ifdef HAVE_QWEBENGINE
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
 #else
-
+    d->view->page()->networkAccessManager()->setCookieJar(new QNetworkCookieJar());
 #endif
 
     emit oneDriveLinkingSucceeded();
@@ -230,9 +237,6 @@ void ODTalker::slotLinkingSucceeded()
     if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Onedrive ok";
-        KConfig config;
-        KConfigGroup grp = config.group("Onedrive User Settings");
-        grp.deleteGroup();
         emit signalBusy(false);
         return;
     }
@@ -245,14 +249,7 @@ void ODTalker::slotLinkingSucceeded()
 
 bool ODTalker::authenticated()
 {
-    if (!d->accessToken.isEmpty())
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return (!d->accessToken.isEmpty());
 }
 
 void ODTalker::cancel()

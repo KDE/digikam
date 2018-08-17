@@ -188,14 +188,7 @@ void BOXTalker::slotLinkingSucceeded()
 
 bool BOXTalker::authenticated()
 {
-    if (d->o2->linked())
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return d->o2->linked();
 }
 
 void BOXTalker::cancel()
