@@ -386,4 +386,5 @@ BUGFIXES:
 329 ==> 338180 - Add "Toggle auto-refresh" option in search view.
 330 ==> 359235 - digiKam doesn't response after start when StatusBar=Disabled in digikamrc.
 331 ==> 090550 - Linking error with jpeg.
-332 ==> 
+332 ==> 393974 - Appimage bundle does not automatically recognize Gphoto2 devices connected.
+333 ==> 
