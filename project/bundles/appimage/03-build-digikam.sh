@@ -57,7 +57,7 @@ if [ -d "$DK_BUILDTEMP/digikam-$DK_VERSION" ] ; then
     cd "$DK_BUILDTEMP"
     cd digikam-$DK_VERSION
 
-    git pull --rebase
+    git pull
 
     mkdir -p build
     cd build
