@@ -153,9 +153,6 @@ RECURSIVE_LIBRARY_LISTER="$BUILDDIR/rll.py"
 
 echo "digiKam version: $DKRELEASEID"
 
-# digiKam has been built with debug symbol. We'll need to set DYLIB_IMAGE_SUFFIX later.
-DEBUG=1
-
 # ./installer sub-dir must be writable by root
 chmod 777 ${PROJECTDIR}
 
@@ -220,7 +217,7 @@ for app in $KDE_MENU_APPS ; do
 
             # Debug variant needs DYLD_IMAGE_SUFFIX="_debug set at runtime
 
-            if [ $DEBUG ] ; then
+            if [[ $DK_DEBUG = 1 ]] ; then
                 DYLD_ENV_CMD="DYLD_IMAGE_SUFFIX=_debug "
             else
                 DYLD_ENV_CMD=""
@@ -459,10 +456,6 @@ fi
 # Build PKG file
 
 echo "---------- Create MacOS package for digiKam $DKRELEASEID"
-
-#if [[ $DK_DEBUG = 1 ]] ; then
-#    DEBUG_SUF="-debug"
-#fi
 
 mkdir -p $ORIG_WD/bundle
 rm -f $ORIG_WD/bundle/* || true
