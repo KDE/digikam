@@ -395,4 +395,5 @@ BUGFIXES:
 335 ==> 379261 - Crash on attempting camera import.
 336 ==> 379335 - digiKam crashes when deleting images in the download window [patch].
 337 ==> 394291 - Cannot upgrade mysql db from v7 to v9.
-338 ==> 
+338 ==> 389468 - Immediate Crash On Metadata Sync.
+339 ==> 
