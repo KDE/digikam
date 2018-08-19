@@ -8,12 +8,12 @@ Notice to make release tarballs from GIT
 
 3/  Update the release info in top of core/CMakeLists.txt and commit it to GIT.
 
-4/  Update changelog file using git2cl script from root directory.
-    Extract all contents and append only new ones to changelog file since the last release done previously.
+4/  Update ChangeLog file using git2cl script from root directory.
+    Extract all contents and append only new ones to ChangeLog file since the last release done previously.
     Register the new release info on to of file inluding release date.
     Commit to GIT.
 
-5/  Update NEWS file. If Changelog is a dry historical record of development,
+5/  Update NEWS file. If ChangeLog is a dry historical record of development,
     NEWS should focus on the improvements and changes, summarize everything since
     last major release. Look in bugzilla for closed file summaries.
     Commit to GIT.
