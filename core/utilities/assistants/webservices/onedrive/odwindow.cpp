@@ -324,7 +324,7 @@ void ODWindow::uploadNextPhoto()
     }
 
     QString imgPath = d->transferQueue.first().toLocalFile();
-    QString temp = d->currentAlbumName + QLatin1String("/");
+    QString temp = d->currentAlbumName + QLatin1Char('/');
 
     bool result = d->talker->addPhoto(imgPath,
                                       temp,

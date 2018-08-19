@@ -512,7 +512,7 @@ QString AddPhotoCommand::additionalXml() const
 
     metadata[QLatin1String("FullFilePath")]          = d->imagePath;
     metadata[QLatin1String("OriginalFileName")]      = f.fileName();
-    metadata[QLatin1String("OriginalFileExtension")] = QLatin1String(".") + f.suffix();
+    metadata[QLatin1String("OriginalFileExtension")] = QLatin1Char('.') + f.suffix();
     metadata[QLatin1String("PerceivedType")]         = QLatin1String("image"); //what are the other values here? video?
     metadata[QLatin1String("OriginalWidth")]         = QString::number(d->image.width());
     metadata[QLatin1String("OriginalHeight")]        = QString::number(d->image.height());

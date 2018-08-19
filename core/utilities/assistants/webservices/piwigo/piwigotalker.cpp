@@ -171,7 +171,7 @@ void PiwigoTalker::login(const QUrl& url, const QString& name, const QString& pa
     qsl.append(QLatin1String("password=") + QString::fromUtf8(passwd.toUtf8().toPercentEncoding()));
     qsl.append(QLatin1String("method=pwg.session.login"));
     qsl.append(QLatin1String("username=") + QString::fromUtf8(name.toUtf8().toPercentEncoding()));
-    QString dataParameters = qsl.join(QLatin1String("&"));
+    QString dataParameters = qsl.join(QLatin1Char('&'));
     QByteArray buffer;
     buffer.append(dataParameters.toUtf8());
 
@@ -192,7 +192,7 @@ void PiwigoTalker::listAlbums()
     QStringList qsl;
     qsl.append(QLatin1String("method=pwg.categories.getList"));
     qsl.append(QLatin1String("recursive=true"));
-    QString dataParameters = qsl.join(QLatin1String("&"));
+    QString dataParameters = qsl.join(QLatin1Char('&'));
     QByteArray buffer;
     buffer.append(dataParameters.toUtf8());
 
@@ -319,7 +319,7 @@ bool PiwigoTalker::addPhoto(int   albumId,
     QStringList qsl;
     qsl.append(QLatin1String("method=pwg.images.exist"));
     qsl.append(QLatin1String("md5sud->list=") + QLatin1String(d->md5sum.toHex()));
-    QString dataParameters = qsl.join(QLatin1String("&"));
+    QString dataParameters = qsl.join(QLatin1Char('&'));
     QByteArray buffer;
     buffer.append(dataParameters.toUtf8());
 
@@ -645,7 +645,7 @@ void PiwigoTalker::parseResponseDoesPhotoExist(const QByteArray& data)
                     QStringList qsl;
                     qsl.append(QLatin1String("method=pwg.images.getInfo"));
                     qsl.append(QLatin1String("image_id=") + QString::number(d->photoId));
-                    QString dataParameters = qsl.join(QLatin1String("&"));
+                    QString dataParameters = qsl.join(QLatin1Char('&'));
                     QByteArray buffer;
                     buffer.append(dataParameters.toUtf8());
 
@@ -759,8 +759,8 @@ void PiwigoTalker::parseResponseGetInfo(const QByteArray& data)
     QStringList qsl;
     qsl.append(QLatin1String("method=pwg.images.setInfo"));
     qsl.append(QLatin1String("image_id=") + QString::number(d->photoId));
-    qsl.append(QLatin1String("categories=") + QString::fromUtf8(qsl_cat.join(QLatin1String(";")).toUtf8().toPercentEncoding()));
-    QString dataParameters = qsl.join(QLatin1String("&"));
+    qsl.append(QLatin1String("categories=") + QString::fromUtf8(qsl_cat.join(QLatin1Char(';')).toUtf8().toPercentEncoding()));
+    QString dataParameters = qsl.join(QLatin1Char('&'));
     QByteArray buffer;
     buffer.append(dataParameters.toUtf8());
 
@@ -839,7 +839,7 @@ void PiwigoTalker::addNextChunk()
     qsl.append(QLatin1String("position=") + QString::number(d->chunkId));
     qsl.append(QLatin1String("type=file"));
     qsl.append(QLatin1String("data=") + QString::fromUtf8(imagefile.read(CHUNK_MAX_SIZE).toBase64().toPercentEncoding()));
-    QString dataParameters = qsl.join(QLatin1String("&"));
+    QString dataParameters = qsl.join(QLatin1Char('&'));
     QByteArray buffer;
     buffer.append(dataParameters.toUtf8());
 
@@ -920,7 +920,7 @@ void PiwigoTalker::addPhotoSummary()
                QString::fromUtf8(d->date.toString(QLatin1String("yyyy-MM-dd hh:mm:ss")).toUtf8().toPercentEncoding()));
 
     //qsl.append("tag_ids="); // TODO Implement this function
-    QString dataParameters = qsl.join(QLatin1String("&"));
+    QString dataParameters = qsl.join(QLatin1Char('&'));
     QByteArray buffer;
     buffer.append(dataParameters.toUtf8());
 

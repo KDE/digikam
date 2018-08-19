@@ -485,7 +485,7 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
     form.addPair(QLatin1String("content_type"), contentType, QLatin1String("text/plain"));
     reqParams << O0RequestParameter("content_type", contentType.toLatin1());
 
-    QString tags = QLatin1String("\"") + info.tags.join(QLatin1String("\" \"")) + QLatin1String("\"");
+    QString tags = QLatin1Char('"') + info.tags.join(QLatin1String("\" \"")) + QLatin1Char('"');
 
     if (tags.length() > 0)
     {

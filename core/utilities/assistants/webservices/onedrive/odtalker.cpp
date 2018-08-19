@@ -486,7 +486,7 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
         if (!folder.isEmpty())
         {
             folderName    = obj[QLatin1String("name")].toString();
-            path          = QLatin1String("/") + folderName;
+            path          = QLatin1Char('/') + folderName;
             list.append(qMakePair(path, folderName));
         }
     }

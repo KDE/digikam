@@ -387,7 +387,7 @@ void ImageShackWindow::uploadNextItem()
         QString str = d->widget->d->tagsFld->text();
         QStringList tagsList;
         tagsList = str.split(QRegExp(QLatin1String("\\W+")), QString::SkipEmptyParts);
-        opts[QLatin1String("tags")] = tagsList.join(QLatin1String(","));
+        opts[QLatin1String("tags")] = tagsList.join(QLatin1Char(','));
     }
 
     opts[QLatin1String("auth_token")] = d->session->authToken();

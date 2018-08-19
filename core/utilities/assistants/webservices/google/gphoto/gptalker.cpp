@@ -463,7 +463,7 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
         QLatin1String("http://search.yahoo.com/mrss/"),
         QLatin1String("media:keywords"));
     mediaGroupElem.appendChild(mediaKeywordsElem);
-    QDomText mediaKeywordsText      = docMeta.createTextNode(info.tags.join(QLatin1String(",")));
+    QDomText mediaKeywordsText      = docMeta.createTextNode(info.tags.join(QLatin1Char(',')));
     mediaKeywordsElem.appendChild(mediaKeywordsText);
 
     if (!info.gpsLat.isEmpty() && !info.gpsLon.isEmpty())

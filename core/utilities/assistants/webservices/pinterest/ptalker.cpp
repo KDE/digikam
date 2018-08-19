@@ -373,7 +373,7 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
         d->meta.save(path);
     }
 
-    QString boardparam = d->userName + QLatin1String("/") + uploadBoard;
+    QString boardparam = d->userName + QLatin1Char('/') + uploadBoard;
 
     if (!form.addFile(path))
     {
@@ -409,7 +409,7 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
 
     QHttpPart imagepart;
     QString imagepartHeader = QLatin1String("form-data; name=\"image\"; filename=\"") +
-                              QFileInfo(imgPath).fileName() + QLatin1String("\"") ;
+                              QFileInfo(imgPath).fileName() + QLatin1Char('"');
 
     imagepart.setHeader(QNetworkRequest::ContentDispositionHeader,imagepartHeader);
     imagepart.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("image/jpeg"));

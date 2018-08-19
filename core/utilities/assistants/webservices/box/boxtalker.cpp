@@ -324,7 +324,7 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     QString attributesHeader  = QLatin1String("form-data; name=\"attributes\"");
     attributes.setHeader(QNetworkRequest::ContentDispositionHeader,attributesHeader);
 
-    QString postData = QLatin1String("{\"name\":\"") + QFileInfo(imgPath).fileName() + QLatin1String("\"")+
+    QString postData = QLatin1String("{\"name\":\"") + QFileInfo(imgPath).fileName() + QLatin1Char('"') +
                        QLatin1String(", \"parent\":{\"id\":\"") + id + QLatin1String("\"}}");
     attributes.setBody(postData.toUtf8());
     multipart->append(attributes);
@@ -335,7 +335,7 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
 
     QHttpPart imagepart;
     QString imagepartHeader = QLatin1String("form-data; name=\"file\"; filename=\"") +
-                              QFileInfo(imgPath).fileName() + QLatin1String("\"") ;
+                              QFileInfo(imgPath).fileName() + QLatin1Char('"');
 
     imagepart.setHeader(QNetworkRequest::ContentDispositionHeader, imagepartHeader);
     imagepart.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("image/jpeg"));

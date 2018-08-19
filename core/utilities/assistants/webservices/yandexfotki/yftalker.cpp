@@ -254,7 +254,7 @@ void YFTalker::getToken()
 
     paramList.append(QLatin1String("credentials=") + QString::fromUtf8(QUrl::toPercentEncoding(credentials)));
 
-    QString params = paramList.join(QLatin1String("&"));
+    QString params = paramList.join(QLatin1Char('&'));
 
     d->state = STATE_GETTOKEN;
 

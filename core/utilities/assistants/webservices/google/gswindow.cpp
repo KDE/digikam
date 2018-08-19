@@ -842,7 +842,7 @@ void GSWindow::uploadNextPhoto()
                     for (itT = info.tags.constBegin() ; itT != info.tags.constEnd() ; ++itT)
                     {
                         QString strTmp = *itT;
-                        int idx        = strTmp.lastIndexOf(QLatin1String("/"));
+                        int idx        = strTmp.lastIndexOf(QLatin1Char('/'));
 
                         if (idx > 0)
                         {

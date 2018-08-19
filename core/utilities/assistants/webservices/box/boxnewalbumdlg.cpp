@@ -45,7 +45,7 @@ BOXNewAlbumDlg::~BOXNewAlbumDlg()
 
 void BOXNewAlbumDlg::getFolderTitle(BOXFolder& folder)
 {
-    folder.title = QLatin1String("/") + getTitleEdit()->text();
+    folder.title = QLatin1Char('/') + getTitleEdit()->text();
 }
 
 } // namespace Digikam

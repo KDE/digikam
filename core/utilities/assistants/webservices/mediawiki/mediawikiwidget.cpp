@@ -757,7 +757,7 @@ void MediaWikiWidget::loadImageInfo(const QUrl& url)
 {
     DItemInfo info(d->iface->itemInfo(url));
     QStringList keywar        = info.keywords();
-    QString date              = info.dateTime().toString(Qt::ISODate).replace(QLatin1String("T"), QLatin1String(" "), Qt::CaseSensitive);
+    QString date              = info.dateTime().toString(Qt::ISODate).replace(QLatin1Char('T'), QLatin1Char(' '), Qt::CaseSensitive);
     QString title             = info.name();
     QString description       = info.title();
     QString currentCategories;
@@ -820,7 +820,7 @@ void MediaWikiWidget::slotLoadImagesDesc(QTreeWidgetItem* item)
     imageMetaData = d->imagesDescInfo[l_item->url().toLocalFile()];
 
     d->titleEdit->setText(imageMetaData[QLatin1String("title")]);
-    d->dateEdit->setText(imageMetaData[QLatin1String("date")].replace(QLatin1String("T"), QLatin1String(" "), Qt::CaseSensitive));
+    d->dateEdit->setText(imageMetaData[QLatin1String("date")].replace(QLatin1Char('T'), QLatin1Char(' '), Qt::CaseSensitive));
     d->latitudeEdit->setText(imageMetaData[QLatin1String("latitude")]);
     d->longitudeEdit->setText(imageMetaData[QLatin1String("longitude")]);
 
@@ -907,7 +907,7 @@ void MediaWikiWidget::slotApplyTitle()
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
     QStringList parts;
 
-    const int minLength = givenTitle.count(QLatin1String("#"));
+    const int minLength = givenTitle.count(QLatin1Char('#'));
 
     // Build the list of items to rename
     for (int i = 0; i < selectedItems.size(); ++i)
@@ -926,16 +926,16 @@ void MediaWikiWidget::slotApplyTitle()
         // If there is at least one #, replace it the correct number
         if (minLength > 0)
         {
-            parts      = imageTitle.split(QLatin1String("#"), QString::KeepEmptyParts);
-            imageTitle = parts.first().append(QLatin1String("#")).append(parts.last());
+            parts      = imageTitle.split(QLatin1Char('#'), QString::KeepEmptyParts);
+            imageTitle = parts.first().append(QLatin1Char('#')).append(parts.last());
             number     = QString::number(i + 1);
 
             while (number.length() < minLength)
             {
-                number.prepend(QLatin1String("0"));
+                number.prepend(QLatin1Char('0'));
             }
 
-            imageTitle.replace(imageTitle.indexOf(QLatin1String("#")), 1, number);
+            imageTitle.replace(imageTitle.indexOf(QLatin1Char('#')), 1, number);
         }
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << urls.at(i).toLocalFile() << "renamed to" << imageTitle;
