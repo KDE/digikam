@@ -399,4 +399,6 @@ BUGFIXES:
 339 ==> 379807 - ShowFoto crashes when clicking Color Effects from menu.
 340 ==> 257301 - showfoto reaches an assert when saving file with "~/" in the path.
 341 ==> 183629 - Digikam/Showfoto Dark Theme: The selected photo filename is nearly invisible.
-342 ==> 
+342 ==> 249379 - All versions of Digikam/Showfoto/KDE download is missing a file.
+343 ==> 
+
