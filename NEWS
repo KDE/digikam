@@ -416,4 +416,5 @@ BUGFIXES:
 356 ==> 205275 - After changing symbols in bar on preview digikam closes.
 357 ==> 214418 - Crash while importing into digiKam.
 358 ==> 279909 - digiKam crashed when I tried to import photos from my iPhone 4.
-359 ==> 
+359 ==> 287616 - digiKam crash when selecting folder to store photos.
+360 ==> 
