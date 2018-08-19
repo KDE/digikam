@@ -19,7 +19,9 @@ Notice to make release tarballs from GIT
     Commit to GIT.
 
 6/  Tag Git vith the release version in this format: vX.Y.Z-suffix.
-    Use the command "git tag -a vX.Y.Z-suffix -m "Create version X.Y.Z-suffix"
+    Use the commands:
+       git tag -a vX.Y.Z-suffix -m "Create version X.Y.Z-suffix"
+       git push origin vX.Y.Z-suffix
     Where X is major version, Y minor version, and Z the patch version.
     The optional suffix is to indicate a non final release, as "-beta1" for ex.
     Look with "git tag" command for exiting tags in git.
