@@ -210,8 +210,8 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
     connect(d->talker, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
 
-    connect(d->talker, SIGNAL(signalAddPhotoSucceeded(const QString&)),
-            this, SLOT(slotAddPhotoSucceeded(const QString&)));
+    connect(d->talker, SIGNAL(signalAddPhotoSucceeded(QString)),
+            this, SLOT(slotAddPhotoSucceeded(QString)));
 
     connect(d->talker, SIGNAL(signalAddPhotoFailed(QString)),
             this, SLOT(slotAddPhotoFailed(QString)));

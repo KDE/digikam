@@ -93,7 +93,8 @@ public:
 WSAuthentication::WSAuthentication(QWidget* const parent, DInfoInterface* const iface)
     : d(new Private())
 {
-    d->wizard   = dynamic_cast<WSWizard*>(parent);
+    d->wizard = dynamic_cast<WSWizard*>(parent);
+
     if(d->wizard)
     {
         d->iface = d->wizard->iface();
@@ -119,7 +120,7 @@ WSAuthentication::~WSAuthentication()
 
 void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& serviceName)
 {
-    d->ws = ws;
+    d->ws          = ws;
     d->serviceName = serviceName;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "create " << serviceName << "talker";
 
@@ -134,7 +135,7 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
         case WSSettings::WebService::IMGUR:
             //d->talker = new ImgurTalker(d->wizard);
             break;
-        case WSSettings::WebService::FACEBOOK: 
+        case WSSettings::WebService::FACEBOOK:
             d->albumDlg = new FbNewAlbumDlg(d->wizard, d->serviceName);
             d->talker   = new FbTalker(d->wizard, d->albumDlg);
             break;
@@ -149,8 +150,8 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
             break;
     }
 
-    connect(d->talker, SIGNAL(signalOpenBrowser(const QUrl&)),
-            this, SIGNAL(signalOpenBrowser(const QUrl&)));
+    connect(d->talker, SIGNAL(signalOpenBrowser(QUrl)),
+            this, SIGNAL(signalOpenBrowser(QUrl)));
 
     connect(d->talker, SIGNAL(signalCloseBrowser()),
             this, SIGNAL(signalCloseBrowser()));
@@ -158,14 +159,14 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
     connect(d->talker, SIGNAL(signalAuthenticationComplete(bool)),
             this, SIGNAL(signalAuthenticationComplete(bool)));
 
-    connect(this, SIGNAL(signalResponseTokenReceived(const QMap<QString,QString>&)),
-            d->talker, SLOT(slotResponseTokenReceived(const QMap<QString,QString>&)));
+    connect(this, SIGNAL(signalResponseTokenReceived(QMap<QString,QString>)),
+            d->talker, SLOT(slotResponseTokenReceived(QMap<QString,QString>)));
 
-    connect(d->talker, SIGNAL(signalCreateAlbumDone(int,const QString&,const QString&)),
-            this, SIGNAL(signalCreateAlbumDone(int,const QString&,const QString&)));
+    connect(d->talker, SIGNAL(signalCreateAlbumDone(int,QString,QString)),
+            this, SIGNAL(signalCreateAlbumDone(int,QString,QString)));
 
-    connect(d->talker, SIGNAL(signalListAlbumsDone(int,const QString&,const QList <WSAlbum>&)),
-            this, SLOT(slotListAlbumsDone(int,const QString&,const QList <WSAlbum>&)));
+    connect(d->talker, SIGNAL(signalListAlbumsDone(int,QString,QList<WSAlbum>)),
+            this, SLOT(slotListAlbumsDone(int,QString,QList<WSAlbum>)));
 
     connect(d->talker, SIGNAL(signalAddPhotoDone(int,QString)),
             this, SLOT(slotAddPhotoDone(int,QString)));

@@ -8,7 +8,7 @@
  *               existent accounts and function mode (export/import).
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,19 +66,19 @@ public:
 
         if (wizard)
         {
-            iface     = wizard->iface();
-            settings  = wizard->settings();
+            iface    = wizard->iface();
+            settings = wizard->settings();
         }
 
     }
 
-    QComboBox*        imageGetOption;
-    DHBox*            hbox;
-    WSWizard*         wizard;
-    WSSettings*       settings;
-    DInfoInterface*   iface;
-    QComboBox*        wsOption;
-    QComboBox*        accountOption;
+    QComboBox*      imageGetOption;
+    DHBox*          hbox;
+    WSWizard*       wizard;
+    WSSettings*     settings;
+    DInfoInterface* iface;
+    QComboBox*      wsOption;
+    QComboBox*      accountOption;
 };
 
 WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
@@ -125,15 +125,15 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     while (it != map.constEnd())
     {
         QString wsName = it.value().toLower();
-        QIcon icon = QIcon::fromTheme(wsName.remove(QLatin1Char(' ')));
+        QIcon icon     = QIcon::fromTheme(wsName.remove(QLatin1Char(' ')));
         d->wsOption->addItem(icon, it.value(), (int)it.key());
         ++it;
     }
 
     wsLabel->setBuddy(d->wsOption);
 
-    connect(d->wsOption, SIGNAL(currentIndexChanged(const QString&)),
-            this, SLOT(slotWebServiceOptionChanged(const QString&)));
+    connect(d->wsOption, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(slotWebServiceOptionChanged(QString)));
 
     /* --------------------
      * ComboBox for user account selection
@@ -159,10 +159,10 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
      * Place widget in the view
      */
 
-    vbox->setStretchFactor(desc,         3);
-    vbox->setStretchFactor(d->hbox,      1);
-    vbox->setStretchFactor(wsBox,        3);
-    vbox->setStretchFactor(accountBox,   3);
+    vbox->setStretchFactor(desc,       3);
+    vbox->setStretchFactor(d->hbox,    1);
+    vbox->setStretchFactor(wsBox,      3);
+    vbox->setStretchFactor(accountBox, 3);
 
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-html")));
@@ -212,8 +212,8 @@ void WSIntroPage::slotWebServiceOptionChanged(const QString& serviceName)
     d->accountOption->clear();
 
     // An empty option is added to accounts, so that user can choose to login with new account
-    QStringList accounts    = QStringList(QString(""))
-                              << d->settings->allUserNames(serviceName);
+    QStringList accounts = QStringList(QString(""))
+                           << d->settings->allUserNames(serviceName);
 
     foreach(const QString& account, accounts)
     {
@@ -228,9 +228,9 @@ void WSIntroPage::initializePage()
 
 bool WSIntroPage::validatePage()
 {
-    d->wizard->settings()->selMode      = (WSSettings::Selection)d->imageGetOption->currentIndex();
-    d->wizard->settings()->webService   = (WSSettings::WebService)d->wsOption->currentIndex();
-    d->wizard->settings()->userName     = d->accountOption->currentText();
+    d->wizard->settings()->selMode    = (WSSettings::Selection)d->imageGetOption->currentIndex();
+    d->wizard->settings()->webService = (WSSettings::WebService)d->wsOption->currentIndex();
+    d->wizard->settings()->userName   = d->accountOption->currentText();
 
     return true;
 }

@@ -170,5 +170,3 @@ private:
 } // namespace Digikam
 
 #endif // DIGIKAM_WS_AUTHENTICATION_H
-
-

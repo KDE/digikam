@@ -6,7 +6,7 @@
  * Date        : 2018-07-02
  * Description : embedded web browser for web service authentication
  *
- * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,9 +66,9 @@ class WSAuthenticationPage : public QWebPage
 public:
 
 #ifdef HAVE_QWEBENGINE
-    explicit WSAuthenticationPage(QObject* const parent, QWebEngineProfile* profile, QString callbackUrl);
+    explicit WSAuthenticationPage(QObject* const parent, QWebEngineProfile* profile, const QString& callbackUrl);
 #else
-    explicit WSAuthenticationPage(QObject* const parent, QString callbackUrl);
+    explicit WSAuthenticationPage(QObject* const parent, const QString& callbackUrl);
 #endif // #ifdef HAVE_QWEBENGINE
 
     virtual ~WSAuthenticationPage();
@@ -103,9 +103,9 @@ class WSAuthenticationPageView : public QWebView
 
 public:
 
-    explicit WSAuthenticationPageView(QWidget* const parent, 
+    explicit WSAuthenticationPageView(QWidget* const parent,
                                       WSAuthentication* const wsAuth,
-                                      QString callbackUrl);
+                                      const QString& callbackUrl);
     ~WSAuthenticationPageView();
 
     bool authenticationComplete() const;
@@ -123,7 +123,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotCallbackCatched(const QString& callbackUrl); 
+    void slotCallbackCatched(const QString& callbackUrl);
     void slotOpenBrowser(const QUrl& url);
     void slotCloseBrowser();
 

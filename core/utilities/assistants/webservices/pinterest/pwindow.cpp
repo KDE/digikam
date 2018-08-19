@@ -125,8 +125,8 @@ PWindow::PWindow(DInfoInterface* const iface,
     connect(d->talker,SIGNAL(signalListBoardsFailed(QString)),
             this,SLOT(slotListBoardsFailed(QString)));
 
-    connect(d->talker,SIGNAL(signalListBoardsDone(QList<QPair<QString,QString> >)),
-            this,SLOT(slotListBoardsDone(QList<QPair<QString,QString> >)));
+    connect(d->talker,SIGNAL(signalListBoardsDone(QList<QPair<QString,QString> >)), // krazy:exclude=normalize
+            this,SLOT(slotListBoardsDone(QList<QPair<QString,QString> >)));         // krazy:exclude=normalize
 
     connect(d->talker,SIGNAL(signalCreateBoardFailed(QString)),
             this,SLOT(slotCreateBoardFailed(QString)));

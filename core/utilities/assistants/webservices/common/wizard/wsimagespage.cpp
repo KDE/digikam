@@ -9,7 +9,7 @@
  *               is also available on this page.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,21 +67,21 @@ public:
 
         if (wizard)
         {
-            iface   = wizard->iface();
-            wsAuth  = wizard->wsAuth();
+            iface  = wizard->iface();
+            wsAuth = wizard->wsAuth();
         }
     }
 
-    DImagesList*        imageList;
+    DImagesList*      imageList;
 
-    QTreeWidget*        albumView;
-    QString             currentAlbumId;
-    QPushButton*        newAlbumBtn;
-    QPushButton*        reloadAlbumsBtn;
+    QTreeWidget*      albumView;
+    QString           currentAlbumId;
+    QPushButton*      newAlbumBtn;
+    QPushButton*      reloadAlbumsBtn;
 
-    WSWizard*           wizard;
-    DInfoInterface*     iface;
-    WSAuthentication*   wsAuth;
+    WSWizard*         wizard;
+    DInfoInterface*   iface;
+    WSAuthentication* wsAuth;
 };
 
 WSImagesPage::WSImagesPage(QWizard* const dialog, const QString& title)
@@ -133,18 +133,18 @@ WSImagesPage::WSImagesPage(QWizard* const dialog, const QString& title)
     connect(this, SIGNAL(signalListAlbumsRequest()),
             d->wsAuth, SLOT(slotListAlbumsRequest()));
 
-    connect(d->wsAuth, SIGNAL(signalCreateAlbumDone(int, const QString&, const QString&)),
-            this, SLOT(slotCreateAlbumDone(int, const QString&, const QString&)));
+    connect(d->wsAuth, SIGNAL(signalCreateAlbumDone(int, QString, QString)),
+            this, SLOT(slotCreateAlbumDone(int, QString, QString)));
 
-    connect(d->wsAuth, SIGNAL(signalListAlbumsDone(const QMap<QString, AlbumSimplified>&, const QStringList&, const QString&)),
-            this, SLOT(slotListAlbumsDone(const QMap<QString, AlbumSimplified>&, const QStringList&, const QString&)));
+    connect(d->wsAuth, SIGNAL(signalListAlbumsDone(QMap<QString, AlbumSimplified>, QStringList, QString)),
+            this, SLOT(slotListAlbumsDone(QMap<QString, AlbumSimplified>, QStringList, QString)));
 
     /* --------------------
      * General settings for imagespage
      */
 
-    hbox->setStretchFactor(vboxImage,   2);
-    hbox->setStretchFactor(vboxAlbum,   1);
+    hbox->setStretchFactor(vboxImage, 2);
+    hbox->setStretchFactor(vboxAlbum, 1);
 
     setPageWidget(hbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));
@@ -214,7 +214,7 @@ void WSImagesPage::addChildToTreeView(QTreeWidgetItem* const parent,
 
     foreach (const QString& albumId, childrenAlbums)
     {
-        QTreeWidgetItem* item   = new QTreeWidgetItem(parent);
+        QTreeWidgetItem* const item = new QTreeWidgetItem(parent);
         item->setText(0, albumTree[albumId].title);
         item->setData(0, Qt::AccessibleDescriptionRole, albumId);
 
@@ -272,7 +272,7 @@ void WSImagesPage::slotListAlbumsDone(const QMap<QString, AlbumSimplified>& albu
 
     foreach (const QString& albumId, rootAlbums)
     {
-        QTreeWidgetItem* item   = new QTreeWidgetItem(d->albumView);
+        QTreeWidgetItem* const item = new QTreeWidgetItem(d->albumView);
         item->setText(0, albumTree[albumId].title);
         item->setData(0, Qt::AccessibleDescriptionRole, albumId); // set ID hidden, so that we can use it for uploading photos to album
 

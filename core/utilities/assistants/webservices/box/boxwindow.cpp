@@ -111,34 +111,34 @@ BOXWindow::BOXWindow(DInfoInterface* const iface,
     d->talker   = new BOXTalker(this);
 
     connect(d->talker,SIGNAL(signalBusy(bool)),
-            this,SLOT(slotBusy(bool)));
+            this, SLOT(slotBusy(bool)));
 
-    connect(d->talker,SIGNAL(signalLinkingFailed()),
-            this,SLOT(slotSignalLinkingFailed()));
+    connect(d->talker, SIGNAL(signalLinkingFailed()),
+            this, SLOT(slotSignalLinkingFailed()));
 
-    connect(d->talker,SIGNAL(signalLinkingSucceeded()),
-            this,SLOT(slotSignalLinkingSucceeded()));
+    connect(d->talker, SIGNAL(signalLinkingSucceeded()),
+            this, SLOT(slotSignalLinkingSucceeded()));
 
-    connect(d->talker,SIGNAL(signalSetUserName(QString)),
-            this,SLOT(slotSetUserName(QString)));
+    connect(d->talker, SIGNAL(signalSetUserName(QString)),
+            this, SLOT(slotSetUserName(QString)));
 
-    connect(d->talker,SIGNAL(signalListAlbumsFailed(QString)),
-            this,SLOT(slotListAlbumsFailed(QString)));
+    connect(d->talker, SIGNAL(signalListAlbumsFailed(QString)),
+            this, SLOT(slotListAlbumsFailed(QString)));
 
-    connect(d->talker,SIGNAL(signalListAlbumsDone(QList<QPair<QString,QString> >)),
-            this,SLOT(slotListAlbumsDone(QList<QPair<QString,QString> >)));
+    connect(d->talker, SIGNAL(signalListAlbumsDone(QList<QPair<QString,QString> >)), // krazy:exclude=normalize
+            this, SLOT(slotListAlbumsDone(QList<QPair<QString,QString> >)));         // krazy:exclude=normalize
 
-    connect(d->talker,SIGNAL(signalCreateFolderFailed(QString)),
-            this,SLOT(slotCreateFolderFailed(QString)));
+    connect(d->talker, SIGNAL(signalCreateFolderFailed(QString)),
+            this, SLOT(slotCreateFolderFailed(QString)));
 
-    connect(d->talker,SIGNAL(signalCreateFolderSucceeded()),
-            this,SLOT(slotCreateFolderSucceeded()));
+    connect(d->talker, SIGNAL(signalCreateFolderSucceeded()),
+            this, SLOT(slotCreateFolderSucceeded()));
 
-    connect(d->talker,SIGNAL(signalAddPhotoFailed(QString)),
-            this,SLOT(slotAddPhotoFailed(QString)));
+    connect(d->talker, SIGNAL(signalAddPhotoFailed(QString)),
+            this, SLOT(slotAddPhotoFailed(QString)));
 
-    connect(d->talker,SIGNAL(signalAddPhotoSucceeded()),
-            this,SLOT(slotAddPhotoSucceeded()));
+    connect(d->talker, SIGNAL(signalAddPhotoSucceeded()),
+            this, SLOT(slotAddPhotoSucceeded()));
 
     connect(this, SIGNAL(finished(int)),
             this, SLOT(slotFinished()));

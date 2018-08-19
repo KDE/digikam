@@ -6,7 +6,7 @@
  * Date        : 2018-07-02
  * Description : embedded web browser for web service authentication
  *
- * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,18 +51,18 @@ namespace Digikam
 {
 
 #ifdef HAVE_QWEBENGINE
-WSAuthenticationPage::WSAuthenticationPage(QObject* const parent, QWebEngineProfile* profile, QString callbackUrl)
+WSAuthenticationPage::WSAuthenticationPage(QObject* const parent, QWebEngineProfile* profile, const QString& callbackUrl)
   : QWebEnginePage(profile, parent),
     m_callbackUrl(callbackUrl)
 {
 }
 #else
-WSAuthenticationPage::WSAuthenticationPage(QObject* const parent, QString callbackUrl)
+WSAuthenticationPage::WSAuthenticationPage(QObject* const parent, const QString& callbackUrl)
   : QWebPage(parent),
     m_callbackUrl(callbackUrl)
 {
-    connect(mainFrame(), SIGNAL(urlChanged(const QUrl&)),
-            this, SLOT(slotUrlChanged(const QUrl&)));
+    connect(mainFrame(), SIGNAL(urlChanged(QUrl)),
+            this, SLOT(slotUrlChanged(QUrl)));
 }
 #endif // #ifdef HAVE_QWEBENGINE
 
@@ -87,7 +87,7 @@ bool WSAuthenticationPage::slotUrlChanged(const QUrl& url)
     /*
      * Condition to verify that the url loaded on page is the one containing access token
      */
-    if (m_callbackUrl.length() > 0 &&
+    if (m_callbackUrl.length() > 0                  &&
        urlString.length() >= m_callbackUrl.length() &&
        urlString.left(m_callbackUrl.length()) == m_callbackUrl)
     {
@@ -103,13 +103,13 @@ bool WSAuthenticationPage::slotUrlChanged(const QUrl& url)
 #ifdef HAVE_QWEBENGINE
 WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
                                                    WSAuthentication* const wsAuth,
-                                                   QString callbackUrl)
+                                                   const QString& callbackUrl)
     : QWebEngineView(parent),
       m_WSAuthentication(wsAuth)
 #else
 WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
                                                    WSAuthentication* const wsAuth,
-                                                   QString callbackUrl)
+                                                   const QString& callbackUrl)
     : QWebView(parent),
       m_WSAuthentication(wsAuth)
 #endif // #ifdef HAVE_QWEBENGINE
@@ -129,8 +129,8 @@ WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
     connect(wpage, SIGNAL(callbackCatched(QString)),
             this, SLOT(slotCallbackCatched(QString)));
 
-    connect(m_WSAuthentication, SIGNAL(signalOpenBrowser(const QUrl&)),
-            this, SLOT(slotOpenBrowser(const QUrl&)));
+    connect(m_WSAuthentication, SIGNAL(signalOpenBrowser(QUrl)),
+            this, SLOT(slotOpenBrowser(QUrl)));
 
     connect(m_WSAuthentication, SIGNAL(signalCloseBrowser()),
             this, SLOT(slotCloseBrowser()));
@@ -203,7 +203,7 @@ void WSAuthenticationPageView::slotCallbackCatched(const QString& callbackUrl)
 
 // ----------------------------------------------------------------------------
 
-class WSAuthenticationWizard::Private 
+class WSAuthenticationWizard::Private
 {
 public:
 
