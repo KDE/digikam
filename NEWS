@@ -397,4 +397,5 @@ BUGFIXES:
 337 ==> 394291 - Cannot upgrade mysql db from v7 to v9.
 338 ==> 389468 - Immediate Crash On Metadata Sync.
 339 ==> 379807 - ShowFoto crashes when clicking Color Effects from menu.
-340 ==> 
+340 ==> 257301 - showfoto reaches an assert when saving file with "~/" in the path.
+341 ==> 
