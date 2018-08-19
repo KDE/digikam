@@ -147,13 +147,13 @@ bool GPMPForm::addFile(const QString& name, const QString& path)
 
 QString GPMPForm::contentType() const
 {
-    return QString::fromLatin1("multipart/related; boundary=") + 
-           QString::fromLatin1(m_boundary);
+    return QLatin1String("multipart/related; boundary=") +
+           QLatin1String(m_boundary);
 }
 
 QString GPMPForm::boundary() const
 {
-    return QString::fromLatin1(m_boundary);
+    return QLatin1String(m_boundary);
 }
 
 QByteArray GPMPForm::formData() const

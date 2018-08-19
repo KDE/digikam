@@ -67,7 +67,7 @@ public:
     explicit Private(QWidget* const parent, DInfoInterface* const interface)
     {
         iface           = interface;
-        widget          = new FbWidget(parent, iface, QString::fromLatin1("Facebook"));
+        widget          = new FbWidget(parent, iface, QLatin1String("Facebook"));
         imgList         = widget->imagesList();
         progressBar     = widget->progressBar();
         changeUserBtn   = widget->getChangeUserBtn();
@@ -158,7 +158,7 @@ FbWindow::FbWindow(DInfoInterface* const iface,
     connect(this, SIGNAL(cancelClicked()),
             this, SLOT(slotCancelClicked()));
 
-    d->albumDlg = new FbNewAlbumDlg(this, QString::fromLatin1("Facebook"));
+    d->albumDlg = new FbNewAlbumDlg(this, QLatin1String("Facebook"));
 
     // ------------------------------------------------------------------------
 
@@ -329,7 +329,7 @@ void FbWindow::authenticate()
 {
     setRejectButtonMode(QDialogButtonBox::Cancel);
     d->progressBar->show();
-    d->progressBar->setFormat(QString::fromLatin1(""));
+    d->progressBar->setFormat(QLatin1String(""));
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method ";
     d->talker->reauthenticate();
@@ -379,7 +379,7 @@ void FbWindow::slotListAlbumsDone(int errCode,
                                   const QString& errMsg,
                                   const QList<FbAlbum>& albumsList)
 {
-    QString albumDebug = QString::fromLatin1("");
+    QString albumDebug = QLatin1String("");
 
     foreach(const FbAlbum &album, albumsList)
     {
@@ -405,27 +405,27 @@ void FbWindow::slotListAlbumsDone(int errCode,
         switch (albumsList.at(i).privacy)
         {
             case FB_ME:
-                albumIcon = QString::fromLatin1("secure-card");
+                albumIcon = QLatin1String("secure-card");
                 break;
 
             case FB_FRIENDS:
-                albumIcon = QString::fromLatin1("user-identity");
+                albumIcon = QLatin1String("user-identity");
                 break;
 
             case FB_FRIENDS_OF_FRIENDS:
-                albumIcon = QString::fromLatin1("system-users");
+                albumIcon = QLatin1String("system-users");
                 break;
 
 //             case FB_NETWORKS:
-//                 albumIcon = QString::fromLatin1("network-workgroup");
+//                 albumIcon = QLatin1String("network-workgroup");
 //                 break;
 
             case FB_EVERYONE:
-                albumIcon = QString::fromLatin1("folder-html");
+                albumIcon = QLatin1String("folder-html");
                 break;
 
             case FB_CUSTOM:
-                albumIcon = QString::fromLatin1("configure");
+                albumIcon = QLatin1String("configure");
                 break;
         }
 
@@ -569,8 +569,8 @@ QString FbWindow::getImageCaption(const QString& fileName)
 
     // Facebook doesn't support image titles. Include it in descriptions if needed.
     QStringList descriptions = QStringList() << info.title() << info.comment();
-    descriptions.removeAll(QString::fromLatin1(""));
-    return descriptions.join(QString::fromLatin1("\n\n"));
+    descriptions.removeAll(QLatin1String(""));
+    return descriptions.join(QLatin1String("\n\n"));
 }
 
 bool FbWindow::prepareImageForUpload(const QString& imgPath, QString& caption)
@@ -588,7 +588,7 @@ bool FbWindow::prepareImageForUpload(const QString& imgPath, QString& caption)
     }
 
     // get temporary file name
-    d->tmpPath = d->tmpDir + QFileInfo(imgPath).baseName().trimmed() + QString::fromLatin1(".jpg");
+    d->tmpPath = d->tmpDir + QFileInfo(imgPath).baseName().trimmed() + QLatin1String(".jpg");
 
     // rescale image if requested
     int maxDim = d->dimensionSpB->value();
@@ -613,7 +613,7 @@ bool FbWindow::prepareImageForUpload(const QString& imgPath, QString& caption)
         caption = getImageCaption(imgPath);
         meta.setImageDimensions(image.size());
         meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-        meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+        meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
         meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
         meta.save(d->tmpPath);
     }

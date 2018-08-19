@@ -109,7 +109,7 @@ public:
 };
 
 RajceWidget::RajceWidget(DInfoInterface* const iface, QWidget* const parent)
-    : WSSettingsWidget(parent, iface, QString::fromLatin1("Rajce.net")),
+    : WSSettingsWidget(parent, iface, QLatin1String("Rajce.net")),
       d(new Private)
 {
     d->iface             = iface;
@@ -167,19 +167,19 @@ void RajceWidget::updateLabels(const QString&, const QString&)
         emit signalLoginStatusChanged(loggedIn);
     }
 
-    QString username = loggedIn ? d->talker->session().username() : QString::fromLatin1("");
+    QString username = loggedIn ? d->talker->session().username() : QLatin1String("");
     QString nickname = loggedIn ? d->talker->session().nickname() : i18n("Not logged in");
 
     getUserNameLabel()->setText(QString::fromLatin1("<b>%2</b> <small>%1</small>").arg(username, nickname));
 
     QString link = loggedIn
         ? QString::fromLatin1("<b><h2><a href='http://") + d->talker->session().nickname() +
-        QString::fromLatin1(".rajce.net'>"
-        "<font color=\"#9ACD32\">Rajce.net</font>"
-        "</a></h2></b>")
+          QString::fromLatin1(".rajce.net'>"
+                              "<font color=\"#9ACD32\">Rajce.net</font>"
+                              "</a></h2></b>")
         : QString::fromLatin1("<b><h2><a href='http://www.rajce.net'>"
-        "<font color=\"#9ACD32\">Rajce.net</font>"
-        "</a></h2></b>");
+                              "<font color=\"#9ACD32\">Rajce.net</font>"
+                              "</a></h2></b>");
 
     getHeaderLbl()->setText(link);
 
@@ -326,7 +326,7 @@ void RajceWidget::slotProgressStarted(unsigned commandType)
 
 void RajceWidget::slotChangeUserClicked()
 {
-    WSLoginDialog* const dlg = new WSLoginDialog(this, QString::fromLatin1("Rajce.net"));
+    WSLoginDialog* const dlg = new WSLoginDialog(this, QLatin1String("Rajce.net"));
 
     if (dlg->exec() == QDialog::Accepted)
     {

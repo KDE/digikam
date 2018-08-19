@@ -66,7 +66,7 @@ public:
         reply           = 0;
         image           = 0;
     }
-    
+
     /* API key and secret 
      */
     QString                   client_id;

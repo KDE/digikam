@@ -150,7 +150,7 @@ bool FlickrMPForm::addFile(const QString& name, const QString& path)
 
 QString FlickrMPForm::contentType() const
 {
-    return QString(QString::fromLatin1("multipart/form-data; boundary=") + QLatin1String(m_boundary));
+    return QLatin1String("multipart/form-data; boundary=") + QLatin1String(m_boundary);
 }
 
 QString FlickrMPForm::boundary() const

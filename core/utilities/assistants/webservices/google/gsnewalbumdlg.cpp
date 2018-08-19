@@ -96,7 +96,7 @@ GSNewAlbumDlg::GSNewAlbumDlg(QWidget* const parent,
     /**
      * Album on google-photos now only needs title to create, so gdrive and gphoto now share the same newalbumdlg
     if (!(QString::compare(d->serviceName,
-                           QString::fromLatin1("googledriveexport"),
+                           QLatin1String("googledriveexport"),
                            Qt::CaseInsensitive) == 0))
     {
         addToMainLayout(privBox);
@@ -129,7 +129,7 @@ void GSNewAlbumDlg::getAlbumProperties(GSFolder& album)
     /**
      * Album on google-photos now only needs title to create, so gdrive and gphoto now share the same newalbumdlg
     if (QString::compare(d->serviceName,
-                         QString::fromLatin1("googledriveexport"),
+                         QLatin1String("googledriveexport"),
                          Qt::CaseInsensitive) == 0)
     {
         album.title = getTitleEdit()->text();
@@ -141,11 +141,11 @@ void GSNewAlbumDlg::getAlbumProperties(GSFolder& album)
     album.location    = getLocEdit()->text();
 
     if (d->publicRBtn->isChecked())
-        album.access = QString::fromLatin1("public");
+        album.access = QLatin1String("public");
     else if (d->unlistedRBtn->isChecked())
-        album.access = QString::fromLatin1("private");
+        album.access = QLatin1String("private");
     else
-        album.access = QString::fromLatin1("protected");
+        album.access = QLatin1String("protected");
 
     long long timestamp = getDateTimeEdit()->dateTime().toTime_t();
     album.timestamp     = QString::number(timestamp * 1000);

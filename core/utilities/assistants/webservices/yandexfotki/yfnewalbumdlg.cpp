@@ -64,7 +64,7 @@ public:
 };
 
 YFNewAlbumDlg::YFNewAlbumDlg(QWidget* const parent, YandexFotkiAlbum& album)
-    : WSNewAlbumDialog(parent, QString::fromLatin1("Yandex.Fotki")),
+    : WSNewAlbumDialog(parent, QLatin1String("Yandex.Fotki")),
       d(new Private)
 {
     d->album = album;

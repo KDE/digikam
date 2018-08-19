@@ -71,7 +71,7 @@ QString makeCredentials(const QString& publicKey,
     QByteArray ba;
     ba.append(encrypted);
 
-    return QString::fromLatin1(ba.toBase64());
+    return QLatin1String(ba.toBase64());
 }
 
 } // namespace YFAuth

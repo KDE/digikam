@@ -87,15 +87,15 @@ void GDMPForm::addPair(const QString& name,
 
     // Generate JSON
     QJsonObject photoInfo;
-    photoInfo.insert(QString::fromLatin1("title"),       QJsonValue(name));
-    photoInfo.insert(QString::fromLatin1("description"), QJsonValue(description));
-    photoInfo.insert(QString::fromLatin1("mimeType"),    QJsonValue(mime));
+    photoInfo.insert(QLatin1String("title"),       QJsonValue(name));
+    photoInfo.insert(QLatin1String("description"), QJsonValue(description));
+    photoInfo.insert(QLatin1String("mimeType"),    QJsonValue(mime));
 
     QVariantMap parentId;
-    parentId.insert(QString::fromLatin1("id"), id);
+    parentId.insert(QLatin1String("id"), id);
     QVariantList parents;
     parents << parentId;
-    photoInfo.insert(QString::fromLatin1("parents"),     QJsonValue(QJsonArray::fromVariantList(parents)));
+    photoInfo.insert(QLatin1String("parents"),     QJsonValue(QJsonArray::fromVariantList(parents)));
 
     QJsonDocument doc(photoInfo);
     QByteArray json = doc.toJson();
@@ -152,13 +152,13 @@ QByteArray GDMPForm::formData() const
 
 QString GDMPForm::boundary() const
 {
-    return QString::fromLatin1(m_boundary);
+    return QLatin1String(m_boundary);
 }
 
 QString GDMPForm::contentType() const
 {
-    return QString::fromLatin1("multipart/related;boundary=") + 
-           QString::fromLatin1(m_boundary);
+    return QLatin1String("multipart/related;boundary=") +
+           QLatin1String(m_boundary);
 }
 
 QString GDMPForm::getFileSize() const

@@ -321,11 +321,11 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     QHttpMultiPart* const multipart = new QHttpMultiPart (QHttpMultiPart::FormDataType);
 
     QHttpPart attributes;
-    QString attributesHeader  = QString::fromLatin1("form-data; name=\"attributes\"");
+    QString attributesHeader  = QLatin1String("form-data; name=\"attributes\"");
     attributes.setHeader(QNetworkRequest::ContentDispositionHeader,attributesHeader);
 
-    QString postData = QString::fromLatin1("{\"name\":\"") + QFileInfo(imgPath).fileName() + QString::fromLatin1("\"")+
-                       QString::fromLatin1(", \"parent\":{\"id\":\"") + id + QString::fromLatin1("\"}}");
+    QString postData = QLatin1String("{\"name\":\"") + QFileInfo(imgPath).fileName() + QLatin1String("\"")+
+                       QLatin1String(", \"parent\":{\"id\":\"") + id + QLatin1String("\"}}");
     attributes.setBody(postData.toUtf8());
     multipart->append(attributes);
 
@@ -334,10 +334,10 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     file->open(QIODevice::ReadOnly);
 
     QHttpPart imagepart;
-    QString imagepartHeader = QString::fromLatin1("form-data; name=\"file\"; filename=\"") +
-                              QFileInfo(imgPath).fileName() + QString::fromLatin1("\"") ;
+    QString imagepartHeader = QLatin1String("form-data; name=\"file\"; filename=\"") +
+                              QFileInfo(imgPath).fileName() + QLatin1String("\"") ;
 
-    imagepart.setHeader(QNetworkRequest::ContentDispositionHeader,imagepartHeader);
+    imagepart.setHeader(QNetworkRequest::ContentDispositionHeader, imagepartHeader);
     imagepart.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("image/jpeg"));
 
     imagepart.setBodyDevice(file);
@@ -346,7 +346,7 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     QUrl url(QString::fromLatin1("https://upload.box.com/api/2.0/files/content?access_token=%1").arg(d->o2->token()));
 
     QNetworkRequest netRequest(url);
-    QString content = QString::fromLatin1("multipart/form-data;boundary=")+multipart->boundary();
+    QString content = QLatin1String("multipart/form-data;boundary=") + multipart->boundary();
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, content);
     d->reply        = d->netMngr->post(netRequest, multipart);
 

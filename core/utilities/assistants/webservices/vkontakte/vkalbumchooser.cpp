@@ -95,23 +95,23 @@ VKAlbumChooser::VKAlbumChooser(QWidget* const parent,
     d->albumsCombo        = new QComboBox(this);
     d->albumsCombo->setEditable(false);
 
-    d->newAlbumButton     = new QPushButton(QIcon::fromTheme(QString::fromLatin1("list-add")),
+    d->newAlbumButton     = new QPushButton(QIcon::fromTheme(QLatin1String("list-add")),
                                            i18n("New Album"), this);
     d->newAlbumButton->setToolTip(i18n("Create new VKontakte album"));
 
-    d->reloadAlbumsButton = new QPushButton(QIcon::fromTheme(QString::fromLatin1("view-refresh")),
+    d->reloadAlbumsButton = new QPushButton(QIcon::fromTheme(QLatin1String("view-refresh")),
                                            i18nc("reload albums list", "Reload"), this);
     d->reloadAlbumsButton->setToolTip(i18n("Reload albums list"));
 
     d->editAlbumButton    = new QToolButton(this);
     d->editAlbumButton->setToolTip(i18n("Edit selected album"));
     d->editAlbumButton->setEnabled(false);
-    d->editAlbumButton->setIcon(QIcon::fromTheme(QString::fromLatin1("document-edit")));
+    d->editAlbumButton->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
 
     d->deleteAlbumButton  = new QToolButton(this);
     d->deleteAlbumButton->setToolTip(i18n("Delete selected album"));
     d->deleteAlbumButton->setEnabled(false);
-    d->deleteAlbumButton->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-delete")));
+    d->deleteAlbumButton->setIcon(QIcon::fromTheme(QLatin1String("edit-delete")));
 
     QWidget* const currentAlbumWidget           = new QWidget(this);
     QHBoxLayout* const currentAlbumWidgetLayout = new QHBoxLayout(currentAlbumWidget);
@@ -410,7 +410,7 @@ void VKAlbumChooser::slotAlbumsReloadDone(KJob* kjob)
     d->albums = job->list();
 
     foreach (const Vkontakte::AlbumInfo &album, d->albums)
-        d->albumsCombo->addItem(QIcon::fromTheme(QString::fromLatin1("folder-image")), album.title());
+        d->albumsCombo->addItem(QIcon::fromTheme(QLatin1String("folder-image")), album.title());
 
     if (d->albumToSelect != -1)
     {

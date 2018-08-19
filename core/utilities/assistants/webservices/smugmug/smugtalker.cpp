@@ -89,11 +89,11 @@ public:
         parent     = 0;
 
         // FIXME ?
-        //userAgent  = QString::fromLatin1("KIPI-Plugin-Smug/%1 (lure@kubuntu.org)").arg(kipipluginsVersion());
+        //userAgent  = QLatin1String("KIPI-Plugin-Smug/%1 (lure@kubuntu.org)").arg(kipipluginsVersion());
         userAgent       = QString::fromLatin1("digiKam/%1 (digikamdeveloper@gmail.com)").arg(digiKamVersion());
 
         apiVersion      = QLatin1String("v2");
-        apiURL          = QString::fromLatin1("https://api.smugmug.com%1");
+        apiURL          = QLatin1String("https://api.smugmug.com%1");
         uploadUrl       = QLatin1String("https://upload.smugmug.com/");
         requestTokenUrl = QLatin1String("https://api.smugmug.com/services/oauth/1.0a/getRequestToken");
         authUrl         = QLatin1String("https://api.smugmug.com/services/oauth/1.0a/authorize");
@@ -101,8 +101,8 @@ public:
         
 //         apikey          = QLatin1String("66NGWpNDWmnsW6qZKLp6hNMTDZ9C24pN");
 //         clientSecret    = QLatin1String("GbtsCvH3GMGnQ6Lf4XmGXwMQs2pm5SpSvVJdPsQDpHMRbsPQSWqzhxXKRRXhMwP5");
-        apikey          = QString::fromLatin1("P3GR322MB4rf3dZRxDZNFv8cbK6sLPdV");
-        clientSecret    = QString::fromLatin1("trJrZT3pHQRpZB8Z3LMGCL39g9q7nWJPBzZTQSWhzCnmTmtqqW5xxXdBn6fVhM3p");
+        apikey          = QLatin1String("P3GR322MB4rf3dZRxDZNFv8cbK6sLPdV");
+        clientSecret    = QLatin1String("trJrZT3pHQRpZB8Z3LMGCL39g9q7nWJPBzZTQSWhzCnmTmtqqW5xxXdBn6fVhM3p");
         iface           = 0;
         netMngr         = 0;
         reply           = 0;
@@ -494,8 +494,8 @@ void SmugTalker::listCategories()
 
     QUrl url(d->apiURL);
     QUrlQuery q;
-    q.addQueryItem(QString::fromLatin1("method"),    QString::fromLatin1("smugmug.categories.get"));
-    q.addQueryItem(QString::fromLatin1("SessionID"), d->sessionID);
+    q.addQueryItem(QLatin1String("method"),    QLatin1String("smugmug.categories.get"));
+    q.addQueryItem(QLatin1String("SessionID"), d->sessionID);
     url.setQuery(q);
 
     QNetworkRequest netRequest(url);
@@ -520,9 +520,9 @@ void SmugTalker::listSubCategories(qint64 categoryID)
 
     QUrl url(d->apiURL);
     QUrlQuery q;
-    q.addQueryItem(QString::fromLatin1("method"),     QString::fromLatin1("smugmug.subcategories.get"));
-    q.addQueryItem(QString::fromLatin1("SessionID"),  d->sessionID);
-    q.addQueryItem(QString::fromLatin1("CategoryID"), QString::number(categoryID));
+    q.addQueryItem(QLatin1String("method"),     QLatin1String("smugmug.subcategories.get"));
+    q.addQueryItem(QLatin1String("SessionID"),  d->sessionID);
+    q.addQueryItem(QLatin1String("CategoryID"), QString::number(categoryID));
     url.setQuery(q);
 
     QNetworkRequest netRequest(url);
@@ -603,7 +603,7 @@ bool SmugTalker::addPhoto(const  QString& imgPath,
     SmugMPForm form;
 
     if (!caption.isEmpty())
-        form.addPair(QString::fromLatin1("Caption"), caption);
+        form.addPair(QLatin1String("Caption"), caption);
 
     if (!form.addFile(imgName, imgPath))
         return false;
@@ -816,7 +816,7 @@ void SmugTalker::parseResponseLogout(const QByteArray& data)
     int errCode = -1;
     QString errMsg;
 
-    QDomDocument doc(QString::fromLatin1("logout"));
+    QDomDocument doc(QLatin1String("logout"));
 
     if (!doc.setContent(data))
         return;
@@ -832,14 +832,14 @@ void SmugTalker::parseResponseLogout(const QByteArray& data)
 
         e = node.toElement();
 
-        if (e.tagName() == QString::fromLatin1("Logout"))
+        if (e.tagName() == QLatin1String("Logout"))
         {
             errCode = 0;
         }
-        else if (e.tagName() == QString::fromLatin1("err"))
+        else if (e.tagName() == QLatin1String("err"))
         {
-            errCode = e.attribute(QString::fromLatin1("code")).toInt();
-            errMsg  = e.attribute(QString::fromLatin1("msg"));
+            errCode = e.attribute(QLatin1String("code")).toInt();
+            errMsg  = e.attribute(QLatin1String("msg"));
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
         }
     }
@@ -1071,7 +1071,7 @@ void SmugTalker::parseResponseListCategories(const QByteArray& data)
 {
     int errCode = -1;
     QString errMsg;
-    QDomDocument doc(QString::fromLatin1("categories.get"));
+    QDomDocument doc(QLatin1String("categories.get"));
 
     if (!doc.setContent(data))
         return;
@@ -1088,7 +1088,7 @@ void SmugTalker::parseResponseListCategories(const QByteArray& data)
 
         e = node.toElement();
 
-        if (e.tagName() == QString::fromLatin1("Categories"))
+        if (e.tagName() == QLatin1String("Categories"))
         {
             for (QDomNode nodeC = e.firstChild(); !nodeC.isNull(); nodeC = nodeC.nextSibling())
             {
@@ -1097,21 +1097,21 @@ void SmugTalker::parseResponseListCategories(const QByteArray& data)
 
                 QDomElement e = nodeC.toElement();
 
-                if (e.tagName() == QString::fromLatin1("Category"))
+                if (e.tagName() == QLatin1String("Category"))
                 {
                     SmugCategory category;
-                    category.id   = e.attribute(QString::fromLatin1("id")).toLongLong();
-                    category.name = htmlToText(e.attribute(QString::fromLatin1("Name")));
+                    category.id   = e.attribute(QLatin1String("id")).toLongLong();
+                    category.name = htmlToText(e.attribute(QLatin1String("Name")));
                     categoriesList.append(category);
                 }
             }
 
             errCode = 0;
         }
-        else if (e.tagName() == QString::fromLatin1("err"))
+        else if (e.tagName() == QLatin1String("err"))
         {
-            errCode = e.attribute(QString::fromLatin1("code")).toInt();
-            errMsg  = e.attribute(QString::fromLatin1("msg"));
+            errCode = e.attribute(QLatin1String("code")).toInt();
+            errMsg  = e.attribute(QLatin1String("msg"));
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
         }
     }
@@ -1127,7 +1127,7 @@ void SmugTalker::parseResponseListSubCategories(const QByteArray& data)
 {
     int errCode = -1;
     QString errMsg;
-    QDomDocument doc(QString::fromLatin1("subcategories.get"));
+    QDomDocument doc(QLatin1String("subcategories.get"));
 
     if (!doc.setContent(data))
         return;
@@ -1144,7 +1144,7 @@ void SmugTalker::parseResponseListSubCategories(const QByteArray& data)
 
         e = node.toElement();
 
-        if (e.tagName() == QString::fromLatin1("SubCategories"))
+        if (e.tagName() == QLatin1String("SubCategories"))
         {
             for (QDomNode nodeC = e.firstChild(); !nodeC.isNull(); nodeC = nodeC.nextSibling())
             {
@@ -1153,21 +1153,21 @@ void SmugTalker::parseResponseListSubCategories(const QByteArray& data)
 
                 e = nodeC.toElement();
 
-                if (e.tagName() == QString::fromLatin1("SubCategory"))
+                if (e.tagName() == QLatin1String("SubCategory"))
                 {
                     SmugCategory category;
-                    category.id   = e.attribute(QString::fromLatin1("id")).toLongLong();
-                    category.name = htmlToText(e.attribute(QString::fromLatin1("Name")));
+                    category.id   = e.attribute(QLatin1String("id")).toLongLong();
+                    category.name = htmlToText(e.attribute(QLatin1String("Name")));
                     categoriesList.append(category);
                 }
             }
 
             errCode = 0;
         }
-        else if (e.tagName() == QString::fromLatin1("err"))
+        else if (e.tagName() == QLatin1String("err"))
         {
-            errCode = e.attribute(QString::fromLatin1("code")).toInt();
-            errMsg  = e.attribute(QString::fromLatin1("msg"));
+            errCode = e.attribute(QLatin1String("code")).toInt();
+            errMsg  = e.attribute(QLatin1String("msg"));
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
         }
     }

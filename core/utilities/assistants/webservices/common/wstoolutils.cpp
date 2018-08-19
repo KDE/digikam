@@ -63,7 +63,7 @@ void WSToolUtils::removeTemporaryDir(const char* prefix)
 
 QString WSToolUtils::randomString(const int& length)
 {
-    const QString possibleCharacters(QString::fromLatin1("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"));
+    const QString possibleCharacters(QLatin1String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"));
 
     QString randomString;
     qsrand((uint)QTime::currentTime().msec());

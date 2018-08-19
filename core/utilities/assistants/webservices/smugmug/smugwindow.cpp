@@ -485,11 +485,11 @@ void SmugWindow::slotListAlbumsDone(int errCode, const QString &errMsg,
         QString albumIcon;
 
         if (!albumsList.at(i).password.isEmpty())
-            albumIcon = QString::fromLatin1("folder-locked");
+            albumIcon = QLatin1String("folder-locked");
         else if (albumsList.at(i).isPublic)
-            albumIcon = QString::fromLatin1("folder-image");
+            albumIcon = QLatin1String("folder-image");
         else
-            albumIcon = QString::fromLatin1("folder");
+            albumIcon = QLatin1String("folder");
 
         QString data = QString::fromLatin1("%1:%2").arg(albumsList.at(i).id).arg(albumsList.at(i).key);
         d->widget->m_albumsCoB->addItem(QIcon::fromTheme(albumIcon), albumsList.at(i).title, data);
@@ -546,11 +546,11 @@ void SmugWindow::slotListAlbumTmplDone(int errCode, const QString &errMsg,
         QString albumIcon;
 
         if (!albumTList.at(i).password.isEmpty())
-            albumIcon = QString::fromLatin1("folder-locked");
+            albumIcon = QLatin1String("folder-locked");
         else if (albumTList.at(i).isPublic)
-            albumIcon = QString::fromLatin1("folder-image");
+            albumIcon = QLatin1String("folder-image");
         else
-            albumIcon = QString::fromLatin1("folder");
+            albumIcon = QLatin1String("folder");
 
         d->albumDlg->templateCombo()->addItem(QIcon::fromTheme(albumIcon), albumTList.at(i).name, albumTList.at(i).id);
 
@@ -820,7 +820,7 @@ bool SmugWindow::prepareImageForUpload(const QString& imgPath) const
     }
 
     // get temporary file name
-    d->tmpPath  = d->tmpDir + QFileInfo(imgPath).baseName().trimmed() + QString::fromLatin1(".jpg");
+    d->tmpPath  = d->tmpDir + QFileInfo(imgPath).baseName().trimmed() + QLatin1String(".jpg");
 
     // rescale image if requested
     int maxDim = d->widget->m_dimensionSpB->value();
@@ -843,7 +843,7 @@ bool SmugWindow::prepareImageForUpload(const QString& imgPath) const
     {
         meta.setImageDimensions(image.size());
         meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-        meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+        meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
         meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
         meta.save(d->tmpPath);
     }

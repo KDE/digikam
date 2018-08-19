@@ -76,12 +76,12 @@ public:
     {
         parent          = 0;
 
-        apikey          = QString::fromLatin1("258540448336-hgdegpohibcjasvk1p595fpvjor15pbc.apps.googleusercontent.com");
-        clientSecret    = QString::fromLatin1("iiIKTNM4ggBXiTdquAzbs2xw");
+        apikey          = QLatin1String("258540448336-hgdegpohibcjasvk1p595fpvjor15pbc.apps.googleusercontent.com");
+        clientSecret    = QLatin1String("iiIKTNM4ggBXiTdquAzbs2xw");
         /* Old api key and secret below only work for gdrive, not gphoto
          * Switch to new api key and secret above
-         * apikey       = QString::fromLatin1("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
-         * clientSecret = QString::fromLatin1("4MJOS0u1-_AUEKJ0ObA-j22U");
+         * apikey       = QLatin1String("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
+         * clientSecret = QLatin1String("4MJOS0u1-_AUEKJ0ObA-j22U");
          */
 
         authUrl         = QLatin1String("https://accounts.google.com/o/oauth2/auth");
@@ -191,7 +191,7 @@ void GSTalkerBase::slotLinkingSucceeded()
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to " << m_serviceName << " ok";
 
     m_accessToken = d->o2->token();
-    m_bearerAccessToken = QString::fromLatin1("Bearer ") + m_accessToken;
+    m_bearerAccessToken = QLatin1String("Bearer ") + m_accessToken;
 
     emit signalAccessTokenObtained();
 }

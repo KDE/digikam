@@ -115,22 +115,22 @@ GSWindow::GSWindow(DInfoInterface* const iface,
     d->iface       = iface;
     d->serviceName = serviceName;
 
-    if (QString::compare(d->serviceName, QString::fromLatin1("googledriveexport"),
+    if (QString::compare(d->serviceName, QLatin1String("googledriveexport"),
         Qt::CaseInsensitive) == 0)
     {
         d->service  = GoogleService::GDrive;
-        d->toolName = QString::fromLatin1("Google Drive");
+        d->toolName = QLatin1String("Google Drive");
     }
-    else if (QString::compare(d->serviceName, QString::fromLatin1("googlephotoexport"),
+    else if (QString::compare(d->serviceName, QLatin1String("googlephotoexport"),
              Qt::CaseInsensitive) == 0)
     {
         d->service  = GoogleService::GPhotoExport;
-        d->toolName = QString::fromLatin1("Google Photos/PicasaWeb");
+        d->toolName = QLatin1String("Google Photos/PicasaWeb");
     }
     else
     {
         d->service  = GoogleService::GPhotoImport;
-        d->toolName = QString::fromLatin1("Google Photos/PicasaWeb");
+        d->toolName = QLatin1String("Google Photos/PicasaWeb");
     }
 
     d->tmp         = WSToolUtils::makeTemporaryDir("google").absolutePath() + QLatin1Char('/');;
@@ -456,8 +456,8 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
 
         // Google Photo doesn't support image titles. Include it in descriptions if needed.
         QStringList descriptions = QStringList() << info.title() << info.comment();
-        descriptions.removeAll(QString::fromLatin1(""));
-        temp.description         = descriptions.join(QString::fromLatin1("\n\n"));
+        descriptions.removeAll(QLatin1String(""));
+        temp.description         = descriptions.join(QLatin1String("\n\n"));
 
         // check for existing items
         QString localId;
@@ -526,7 +526,7 @@ void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <G
             for (int i = 0 ; i < list.size() ; ++i)
             {
                 d->widget->getAlbumsCoB()->addItem(
-                    QIcon::fromTheme(QString::fromLatin1("system-users")),
+                    QIcon::fromTheme(QLatin1String("system-users")),
                     list.value(i).title, list.value(i).id);
 
                 if (d->currentAlbumId == list.value(i).id)
@@ -554,12 +554,12 @@ void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <G
             {
                 QString albumIcon;
 
-                if (list.at(i).access == QString::fromLatin1("public"))
-                    albumIcon = QString::fromLatin1("folder-image");
-                else if (list.at(i).access == QString::fromLatin1("protected"))
-                    albumIcon = QString::fromLatin1("folder-locked");
+                if (list.at(i).access == QLatin1String("public"))
+                    albumIcon = QLatin1String("folder-image");
+                else if (list.at(i).access == QLatin1String("protected"))
+                    albumIcon = QLatin1String("folder-locked");
                 else
-                    albumIcon = QString::fromLatin1("folder");
+                    albumIcon = QLatin1String("folder");
 
                 d->widget->getAlbumsCoB()->addItem(QIcon::fromTheme(albumIcon), list.at(i).title, list.at(i).id);
 
@@ -715,7 +715,7 @@ void GSWindow::slotStartTransfer()
                 break;
         }
 
-        temp.description = info.comment().section(QString::fromLatin1("\n"), 0, 0);
+        temp.description = info.comment().section(QLatin1String("\n"), 0, 0);
         temp.gpsLat.setNum(info.latitude());
         temp.gpsLon.setNum(info.longitude());
         temp.tags        = info.tagsPath();
@@ -799,7 +799,7 @@ void GSWindow::uploadNextPhoto()
                         break;
                     default:
                     {
-                        QPointer<ReplaceDialog> dlg = new ReplaceDialog(this, QString::fromLatin1(""),
+                        QPointer<ReplaceDialog> dlg = new ReplaceDialog(this, QLatin1String(""),
                                                                         d->iface, pathComments.first,
                                                                         info.thumbURL);
                         dlg->exec();
@@ -842,7 +842,7 @@ void GSWindow::uploadNextPhoto()
                     for (itT = info.tags.constBegin() ; itT != info.tags.constEnd() ; ++itT)
                     {
                         QString strTmp = *itT;
-                        int idx        = strTmp.lastIndexOf(QString::fromLatin1("/"));
+                        int idx        = strTmp.lastIndexOf(QLatin1String("/"));
 
                         if (idx > 0)
                         {
@@ -925,7 +925,7 @@ void GSWindow::uploadNextPhoto()
 
     if (!res)
     {
-        slotAddPhotoDone(0, QString::fromLatin1(""));
+        slotAddPhotoDone(0, QLatin1String(""));
         return;
     }
 }
@@ -964,10 +964,10 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
 
     QUrl tmpUrl  = QUrl::fromLocalFile(QString(d->tmp + itemName));
 
-    if (item.mimeType == QString::fromLatin1("video/mpeg4"))
+    if (item.mimeType == QLatin1String("video/mpeg4"))
     {
         tmpUrl = tmpUrl.adjusted(QUrl::RemoveFilename);
-        tmpUrl.setPath(tmpUrl.path() + item.title + QString::fromLatin1(".mp4"));
+        tmpUrl.setPath(tmpUrl.path() + item.title + QLatin1String(".mp4"));
     }
 
     if (errCode == 1)

@@ -42,7 +42,7 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
 
     // -- The image list --------------------------------------------------
 
-    d->imglst               = new FlickrList(this, (serviceName == QString::fromLatin1("23")));
+    d->imglst               = new FlickrList(this, (serviceName == QLatin1String("23")));
 
     // For figuring out the width of the permission columns.
     QHeaderView* const hdr = d->imglst->listView()->header();
@@ -60,7 +60,7 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
     d->imglst->listView()->setColumn(static_cast<DImagesListView::ColumnType>(FlickrList::TAGS),
                                     i18n("Extra tags"), true);
 
-    if (serviceName != QString::fromLatin1("23"))
+    if (serviceName != QLatin1String("23"))
     {
         int tmpWidth;
 
@@ -126,7 +126,7 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
     d->extendedTagsButton->setSizePolicy(QSizePolicy::Maximum,
                                         QSizePolicy::Preferred);
 
-    d->extendedTagsBox               = new QGroupBox(QString::fromLatin1(""), getSettingsBox());
+    d->extendedTagsBox               = new QGroupBox(QLatin1String(""), getSettingsBox());
     d->extendedTagsBox->setFlat(true);
     QGridLayout* extendedTagsLayout = new QGridLayout(d->extendedTagsBox);
 
@@ -175,7 +175,7 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
     d->extendedPublicationButton->setChecked(true);
     d->extendedPublicationButton->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
 
-    d->extendedPublicationBox                  = new QGroupBox(QString::fromLatin1(""), publicationBox);
+    d->extendedPublicationBox                  = new QGroupBox(QLatin1String(""), publicationBox);
     d->extendedPublicationBox->setFlat(true);
     QGridLayout* const extendedSettingsLayout = new QGridLayout(d->extendedPublicationBox);
 
@@ -231,7 +231,7 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
             this, SLOT(slotAddExtraTagsToggled(bool)));
 
     // 23HQ doesn't support the Family and Friends concept.
-    if (serviceName != QString::fromLatin1("23"))
+    if (serviceName != QLatin1String("23"))
     {
         connect(d->familyCheckBox, SIGNAL(stateChanged(int)),
                 this, SLOT(slotMainFamilyToggled(int)));
@@ -246,7 +246,7 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
     }
 
     // 23HQ don't support the Safety Level and Content Type concept.
-    if (serviceName != QString::fromLatin1("23"))
+    if (serviceName != QLatin1String("23"))
     {
         connect(d->safetyLevelComboBox, SIGNAL(currentIndexChanged(int)),
                 this, SLOT(slotMainSafetyLevelChanged(int)));
@@ -279,7 +279,7 @@ FlickrWidget::~FlickrWidget()
 
 void FlickrWidget::updateLabels(const QString& /*name*/, const QString& /*url*/)
 {
-    if (d->serviceName == QString::fromLatin1("23"))
+    if (d->serviceName == QLatin1String("23"))
     {
         getHeaderLbl()->setText(i18n("<b><h2><a href='http://www.23hq.com'>"
                                   "<font color=\"#7CD164\">23</font></a>"

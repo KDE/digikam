@@ -106,14 +106,14 @@ ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
     d->widget  = new ImageShackWidget(this,
                                       d->session,
                                       d->iface,
-                                      QString::fromLatin1("ImageShack"));
+                                      QLatin1String("ImageShack"));
     d->widget->setMinimumSize(700, 500);
 
     setMainWidget(d->widget);
     setWindowTitle(i18n("Export to ImageShack"));
     setModal(true);
 
-    d->albumDlg = new ImageShackNewAlbumDlg(this, QString::fromLatin1("ImageShack"));
+    d->albumDlg = new ImageShackNewAlbumDlg(this, QLatin1String("ImageShack"));
 
     connect(d->widget->d->chgRegCodeBtn, SIGNAL(clicked(bool)),
             this, SLOT(slotChangeRegistrantionCode()));
@@ -281,7 +281,7 @@ void ImageShackWindow::authenticate()
     d->widget->d->progressBar->setMaximum(4);
     d->widget->progressBar()->setFormat(i18n("Authenticating..."));
 
-    WSLoginDialog* const dlg = new WSLoginDialog(this, QString::fromLatin1("ImageShack"));
+    WSLoginDialog* const dlg = new WSLoginDialog(this, QLatin1String("ImageShack"));
 
     if (dlg->exec() == QDialog::Accepted)
     {
@@ -373,12 +373,12 @@ void ImageShackWindow::uploadNextItem()
 
     if (d->widget->d->privateImagesChb->isChecked())
     {
-        opts[QString::fromLatin1("public")] = QString::fromLatin1("no");
+        opts[QLatin1String("public")] = QLatin1String("no");
     }
 
     if (d->widget->d->remBarChb->isChecked())
     {
-        opts[QString::fromLatin1("rembar")] = QString::fromLatin1("yes");
+        opts[QLatin1String("rembar")] = QLatin1String("yes");
     }
 
     // tags
@@ -386,11 +386,11 @@ void ImageShackWindow::uploadNextItem()
     {
         QString str = d->widget->d->tagsFld->text();
         QStringList tagsList;
-        tagsList = str.split(QRegExp(QString::fromLatin1("\\W+")), QString::SkipEmptyParts);
-        opts[QString::fromLatin1("tags")] = tagsList.join(QString::fromLatin1(","));
+        tagsList = str.split(QRegExp(QLatin1String("\\W+")), QString::SkipEmptyParts);
+        opts[QLatin1String("tags")] = tagsList.join(QLatin1String(","));
     }
 
-    opts[QString::fromLatin1("auth_token")] = d->session->authToken();
+    opts[QLatin1String("auth_token")] = d->session->authToken();
 
     int gidx = d->widget->d->galleriesCob->currentIndex();
 
@@ -402,11 +402,11 @@ void ImageShackWindow::uploadNextItem()
             d->talker->uploadItem(imgPath, opts);
             break;
         case 1:
-            opts[QString::fromLatin1("album")] = d->newAlbmTitle;
+            opts[QLatin1String("album")] = d->newAlbmTitle;
             d->talker->uploadItemToGallery(imgPath, d->newAlbmTitle, opts);
             break;
         default:
-            opts[QString::fromLatin1("album")] = d->widget->d->galleriesCob->itemData(gidx).toString();
+            opts[QLatin1String("album")] = d->widget->d->galleriesCob->itemData(gidx).toString();
             d->talker->uploadItemToGallery(imgPath, d->widget->d->galleriesCob->itemData(gidx).toString(), opts);
     }
 }

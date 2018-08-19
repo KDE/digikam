@@ -49,7 +49,7 @@ bool operator< (const WSAlbum& first, const WSAlbum& second)
 }
 
 // -----------------------------------------------------------------------------
-    
+
 WSTalker::WSTalker(QWidget* const parent)
   : QObject(parent),
     m_netMngr(new QNetworkAccessManager(this)),
@@ -67,7 +67,7 @@ WSTalker::WSTalker(QWidget* const parent)
         m_settings = m_wizard->oauthSettings();
         m_store    = m_wizard->oauthSettingsStore();
         m_userName = m_wizard->settings()->userName;
-        
+
         connect(this, SIGNAL(signalBusy(bool)),
                 m_wizard, SLOT(slotBusy(bool)));
     }
@@ -88,14 +88,14 @@ WSTalker::~WSTalker()
     {
         m_reply->abort();
     }
-    
+
     delete m_reply;
     delete m_netMngr;
 
     /* Verify if m_settings is initialized by wstalker constructor or it is already initialized in wizard.
      * if not by wizard, we have to delete it.
      */
-    if(!m_wizard)
+    if (!m_wizard)
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "delete m_settings";
         delete m_settings;
@@ -110,15 +110,15 @@ void WSTalker::cancel()
         m_reply->abort();
         m_reply = 0;
     }
-    
+
     emit signalBusy(false);
 }
 
 QString WSTalker::getUserID(const QString& userName)
 {
     QString userID;
-    
-    if(!userName.isEmpty())
+
+    if (!userName.isEmpty())
     {
         m_settings->beginGroup(m_store->groupKey());
         m_settings->beginGroup("users");
@@ -126,7 +126,7 @@ QString WSTalker::getUserID(const QString& userName)
         m_settings->endGroup();
         m_settings->endGroup();
     }
-    
+
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "ID of user " << userName << " : " << userID;
     return userID;
 }
@@ -148,56 +148,58 @@ void WSTalker::authenticate()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "username chosen: " << m_userName;
     bool authenticateValide = loadUserAccount(m_userName);
-    
+
     /* If user account already exists and doesn't expire yet (authenticateValide == true), linking to his account
      * Otherwise, unlink() current account and link to new account
      */
-    if(authenticateValide)
+    if (authenticateValide)
     {
         link();
     }
     else
     {
         reauthenticate();
-    } 
+    }
 }
 
 void WSTalker::reauthenticate()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "reauthenticate";
-    
+
     unlink();
-    
+
     // Wait until user account is unlinked completely
     while(linked());
-    
+
     link();
 }
 
 QMap<QString, QVariant> WSTalker::getUserAccountInfo(const QString& userName)
 {
     QString userID = getUserID(userName);
-    
+
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getUserAccountInfo with userID: " << userID;
-    
+
     QMap<QString, QVariant> map;
-    
-    if(userID.isEmpty())
+
+    if (userID.isEmpty())
     {
         return map;
     }
-    
+
     m_settings->beginGroup(m_store->groupKey());
     m_settings->beginGroup(userID);
     QStringList keys = m_settings->allKeys();
+
     foreach(const QString& key, keys)
     {
         QVariant value = m_settings->value(key);
         map.insert(key, value);
     }
+
     m_settings->endGroup();
     m_settings->endGroup();
-    
+
     return map;
 }
 
@@ -208,26 +210,26 @@ void WSTalker::saveUserAccount(const QString& userName,
                                const QString& refreshToken)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "saveUserAccount with username : " << userName << ", userID: " << userID;
-    
-    if(userID.isEmpty())
+
+    if (userID.isEmpty())
     {
         return; 
     }
-    
+
     m_settings->beginGroup(m_store->groupKey());
-    
+
     m_settings->beginGroup("users");
     m_settings->setValue(userName, userID);
     m_settings->endGroup();
-    
+
     m_settings->beginGroup(userID);
     m_settings->setValue("expiration_time", expire);
     m_settings->setValue("access_token", accessToken);
     m_settings->setValue("refresh_token", refreshToken);
     m_settings->endGroup();
-    
+
     m_settings->endGroup();
-    
+
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "current " << QDateTime::currentMSecsSinceEpoch() / 1000;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "expire " << expire;
 }
@@ -235,17 +237,17 @@ void WSTalker::saveUserAccount(const QString& userName,
 bool WSTalker::loadUserAccount(const QString& userName)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "loadUserAccount with user name : " << userName;
-    
+
     /* User logins using new account, return false so that we can unlink() current account, 
      * before link() to new account
      */
-    if(userName.isEmpty())
+    if (userName.isEmpty())
     {
         return false;
     }
-    
+
     QMap<QString, QVariant> map = getUserAccountInfo(userName);
-    
+
     /* 
      * if getUserAccountInfo(userName) return empty with a non empty userName, there must 
      * be some kind of errors. So, the condition below is a security check, which assures 
@@ -253,26 +255,26 @@ bool WSTalker::loadUserAccount(const QString& userName)
      * 
      * However, if it happens, INSPECTATION is obligated!!!
      */
-    if(map.isEmpty())
+    if (map.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "WARNING: Something strange happens with getUserAccountInfo";
         return false;
     }
-    
+
     QString expire        = map["expiration_time"].toString();
     QString accessToken   = map["access_token"].toString();
     QString refreshToken  = map["refresh_token"].toString();
-    
+
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "expired moment : " << expire;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "current time : " << QDateTime::currentMSecsSinceEpoch() / 1000;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "access_token: " << accessToken;
-    
+
     /* If access token is not expired yet, retrieve all tokens and return true so that we can link() 
      * directly to new account. 
      * Otherwise, return false so that user can relogin.
      */
 
-    if(expire.toLongLong() > QDateTime::currentMSecsSinceEpoch() / 1000)
+    if (expire.toLongLong() > QDateTime::currentMSecsSinceEpoch() / 1000)
     {
         resetTalker(expire, accessToken, refreshToken);
         return true;
@@ -305,24 +307,24 @@ void WSTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
 void WSTalker::removeUserAccount(const QString& userName)
 {
     QString userID = getUserID(userName);
-    
+
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "removeUserAccount with userID: " << userID;
-    
+
     if(userID.isEmpty())
     {
        return; 
     }
-    
+
     m_settings->beginGroup(m_store->groupKey());
-    
+
     m_settings->beginGroup(userID);
     m_settings->remove("");
     m_settings->endGroup();
-    
+
     m_settings->beginGroup("users");
     m_settings->remove(userName);
     m_settings->endGroup();
-    
+
     m_settings->endGroup();  
 }
 
@@ -376,9 +378,9 @@ void WSTalker::slotFinished(QNetworkReply* reply)
     {
         return;
     }
-    
+
     m_reply = 0;
-    
+
     if (reply->error() != QNetworkReply::NoError)
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << reply->error() << " text :"<< QString(reply->readAll());
@@ -386,14 +388,14 @@ void WSTalker::slotFinished(QNetworkReply* reply)
         reply->deleteLater();
         return;
     }
-    
+
     m_buffer.append(reply->readAll());
-    
+
     switch(m_state)
     {
         case WSTalker::GETUSER :
             parseResponseGetLoggedInUser(m_buffer);
-            authenticationDone(0, QString::fromLatin1(""));
+            authenticationDone(0, QLatin1String(""));
             break;
         case WSTalker::LISTALBUMS :
             parseResponseListAlbums(m_buffer);
@@ -408,8 +410,8 @@ void WSTalker::slotFinished(QNetworkReply* reply)
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotFinished at state = default";
             break;
     }
-    
-    reply->deleteLater();    
+
+    reply->deleteLater();
 }
 
 void WSTalker::slotOpenBrowser(const QUrl& url)

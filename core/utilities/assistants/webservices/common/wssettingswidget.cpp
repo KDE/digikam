@@ -134,7 +134,7 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
     : QWidget(parent),
       d(new Private(iface, toolName))
 {
-    setObjectName(d->toolName + QString::fromLatin1(" Widget"));
+    setObjectName(d->toolName + QLatin1String(" Widget"));
 
     d->mainLayout         = new QHBoxLayout(this);
     d->imgList            = new DImagesList(this);
@@ -191,7 +191,7 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
 
     QLabel* const userNameLbl = new QLabel(i18nc("account settings","Name:"), d->accountBox);
     d->changeUserBtn->setText(i18n("Change Account"));
-    d->changeUserBtn->setIcon(QIcon::fromTheme(QString::fromLatin1("system-switch-user")).pixmap(16));
+    d->changeUserBtn->setIcon(QIcon::fromTheme(QLatin1String("system-switch-user")).pixmap(16));
     d->changeUserBtn->setToolTip(i18n("Change %1 account for transfer", d->toolName));
 
     d->accountBoxLayout->addWidget(userNameLbl,             0, 0, 1, 2);
@@ -209,11 +209,11 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
     d->albumsCoB->setEditable(false);
 
     d->newAlbumBtn->setText(i18n("New Album"));
-    d->newAlbumBtn->setIcon(QIcon::fromTheme(QString::fromLatin1("list-add")).pixmap(16));
+    d->newAlbumBtn->setIcon(QIcon::fromTheme(QLatin1String("list-add")).pixmap(16));
     d->newAlbumBtn->setToolTip(i18n("Create new %1 folder", d->toolName));
 
     d->reloadAlbumsBtn->setText(i18nc("album list","Reload"));
-    d->reloadAlbumsBtn->setIcon(QIcon::fromTheme(QString::fromLatin1("view-refresh")).pixmap(16));
+    d->reloadAlbumsBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")).pixmap(16));
     d->reloadAlbumsBtn->setToolTip(i18n("Reload album list"));
 
     d->albumsBoxLayout->addWidget(albLbl,               0, 0, 1, 1);
@@ -224,12 +224,12 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
     //----------------------------------------------------------
 
     d->sizeBox->setWhatsThis(i18n("This is the maximum dimension of the images. Images larger than this will be scaled down."));
-    d->dlDimensionCoB->addItem(i18n("Original Size"), QString::fromLatin1("d"));
-    d->dlDimensionCoB->addItem(i18n("1600 px"), QString::fromLatin1("1600"));
-    d->dlDimensionCoB->addItem(i18n("1440 px"), QString::fromLatin1("1440"));
-    d->dlDimensionCoB->addItem(i18n("1280 px"), QString::fromLatin1("1280"));
-    d->dlDimensionCoB->addItem(i18n("1152 px"), QString::fromLatin1("1152"));
-    d->dlDimensionCoB->addItem(i18n("1024 px"), QString::fromLatin1("1024"));
+    d->dlDimensionCoB->addItem(i18n("Original Size"), QLatin1String("d"));
+    d->dlDimensionCoB->addItem(i18n("1600 px"), QLatin1String("1600"));
+    d->dlDimensionCoB->addItem(i18n("1440 px"), QLatin1String("1440"));
+    d->dlDimensionCoB->addItem(i18n("1280 px"), QLatin1String("1280"));
+    d->dlDimensionCoB->addItem(i18n("1152 px"), QLatin1String("1152"));
+    d->dlDimensionCoB->addItem(i18n("1024 px"), QLatin1String("1024"));
     d->dlDimensionCoB->setCurrentIndex(0);
     d->sizeBoxLayout->addWidget(d->dlDimensionCoB);
 

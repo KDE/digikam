@@ -134,7 +134,7 @@ PiwigoWindow::Private::Private(PiwigoWindow* const parent,
     logo->setText(QString::fromLatin1("<a href=\"%1\">%2</a>")
                   .arg(QLatin1String("http://piwigo.org"))
                   .arg(QString::fromLatin1("<img src=\"data:image/png;base64,%1\">")
-                  .arg(QString::fromLatin1(byteArray.toBase64().data()))));
+                  .arg(QLatin1String(byteArray.toBase64().data()))));
 
     // ---------------------------------------------------------------------------
 
@@ -152,7 +152,7 @@ PiwigoWindow::Private::Private(PiwigoWindow* const parent,
 
     confButton = new QPushButton;
     confButton->setText(i18n("Change Account"));
-    confButton->setIcon(QIcon::fromTheme(QString::fromLatin1("system-switch-user")));
+    confButton->setIcon(QIcon::fromTheme(QLatin1String("system-switch-user")));
     confButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     QGroupBox* const optionsBox = new QGroupBox(i18n("Options"));
@@ -353,7 +353,7 @@ void PiwigoWindow::slotDoLogin()
 
     if (url.scheme().isEmpty())
     {
-        url.setScheme(QString::fromLatin1("http"));
+        url.setScheme(QLatin1String("http"));
         url.setHost(d->pPiwigo->url());
     }
 
@@ -437,7 +437,7 @@ void PiwigoWindow::slotAlbums(const QList<PiwigoAlbum>& albumList)
         {
             QTreeWidgetItem* const item = new QTreeWidgetItem();
             item->setText(0, cleanName(album.m_name) );
-            item->setIcon(0, QIcon::fromTheme(QString::fromLatin1("inode-directory")) );
+            item->setIcon(0, QIcon::fromTheme(QLatin1String("inode-directory")) );
             item->setData(1, Qt::UserRole, QVariant(album.m_refNum) );
             item->setText(2, i18n("Album") );
 
@@ -461,7 +461,7 @@ void PiwigoWindow::slotAlbums(const QList<PiwigoAlbum>& albumList)
                 {
                     QTreeWidgetItem* const item = new QTreeWidgetItem(parentItem);
                     item->setText(0, cleanName(album.m_name) );
-                    item->setIcon(0, QIcon::fromTheme(QString::fromLatin1("inode-directory")) );
+                    item->setIcon(0, QIcon::fromTheme(QLatin1String("inode-directory")) );
                     item->setData(1, Qt::UserRole, album.m_refNum );
                     item->setText(2, i18n("Album") );
 
@@ -636,10 +636,10 @@ void PiwigoWindow::slotSettings()
 QString PiwigoWindow::cleanName(const QString& str) const
 {
     QString plain = str;
-    plain.replace(QString::fromLatin1("&lt;"),   QString::fromLatin1("<"));
-    plain.replace(QString::fromLatin1("&gt;"),   QString::fromLatin1(">"));
-    plain.replace(QString::fromLatin1("&quot;"), QString::fromLatin1("\""));
-    plain.replace(QString::fromLatin1("&amp;"),  QString::fromLatin1("&"));
+    plain.replace(QLatin1String("&lt;"),   QLatin1String("<"));
+    plain.replace(QLatin1String("&gt;"),   QLatin1String(">"));
+    plain.replace(QLatin1String("&quot;"), QLatin1String("\""));
+    plain.replace(QLatin1String("&amp;"),  QLatin1String("&"));
 
     return plain;
 }

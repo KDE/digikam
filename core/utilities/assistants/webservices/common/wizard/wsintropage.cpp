@@ -198,10 +198,10 @@ void WSIntroPage::slotImageGetOptionChanged(int index)
     }
     else
     {
-        d->wsOption->addItem(QIcon::fromTheme(QString::fromLatin1("smugmug")),
+        d->wsOption->addItem(QIcon::fromTheme(QLatin1String("smugmug")),
                              map[WSSettings::WebService::SMUGMUG],
                              WSSettings::WebService::SMUGMUG);
-        d->wsOption->addItem(QIcon::fromTheme(QString::fromLatin1("googlephoto")),
+        d->wsOption->addItem(QIcon::fromTheme(QLatin1String("googlephoto")),
                              map[WSSettings::WebService::GPHOTO],
                              WSSettings::WebService::GPHOTO);
     }

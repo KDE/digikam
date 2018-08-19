@@ -93,7 +93,7 @@ WSNewAlbumDialog::WSNewAlbumDialog(QWidget* const parent, const QString& toolNam
       d(new Private(this, toolName))
 {
     d->mainWidget->setMinimumSize(500, 500);
-    setWindowTitle(QString(d->toolName + QString::fromLatin1(" New Album")));
+    setWindowTitle(QString(d->toolName + QLatin1String(" New Album")));
     setModal(false);
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
@@ -117,7 +117,7 @@ WSNewAlbumDialog::WSNewAlbumDialog(QWidget* const parent, const QString& toolNam
 
     d->titleEdt->setToolTip(i18n("Title of the album that will be created (required)."));
 
-    d->dtEdt->setDisplayFormat(QString::fromLatin1("dd.MM.yyyy HH:mm"));
+    d->dtEdt->setDisplayFormat(QLatin1String("dd.MM.yyyy HH:mm"));
     d->dtEdt->setWhatsThis(i18n("Date and Time of the album that will be created (optional)."));
 
     d->descEdt->setToolTip(i18n("Description of the album that will be created (optional)."));

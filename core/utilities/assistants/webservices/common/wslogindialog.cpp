@@ -79,7 +79,7 @@ WSLoginDialog::WSLoginDialog(QWidget* const parent,
     d->headerLabel->setText(prompt);
 
     QFrame* const hline = new QFrame(this);
-    hline->setObjectName(QString::fromLatin1("hline"));
+    hline->setObjectName(QLatin1String("hline"));
     hline->setFrameShape( QFrame::HLine );
     hline->setFrameShadow( QFrame::Sunken );
     hline->setFrameShape( QFrame::HLine );
@@ -118,7 +118,7 @@ WSLoginDialog::WSLoginDialog(QWidget* const parent,
 
     vbox->setContentsMargins(5, 5, 5, 5);
     vbox->setSpacing(5);
-    vbox->setObjectName(QString::fromLatin1("vbox"));
+    vbox->setObjectName(QLatin1String("vbox"));
     vbox->addWidget(d->headerLabel);
     vbox->addWidget(hline);
     vbox->addLayout(centerLayout);

@@ -242,8 +242,8 @@ QString WSAuthentication::getImageCaption(const QString& fileName)
 
     // If webservice doesn't support image titles, include it in descriptions if needed.
     QStringList descriptions = QStringList() << info.title() << info.comment();
-    descriptions.removeAll(QString::fromLatin1(""));
-    return descriptions.join(QString::fromLatin1("\n\n"));
+    descriptions.removeAll(QLatin1String(""));
+    return descriptions.join(QLatin1String("\n\n"));
 }
 
 void WSAuthentication::prepareForUpload()
@@ -304,7 +304,7 @@ void WSAuthentication::prepareForUpload()
             {
                 meta.setImageDimensions(image.size());
                 meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-                meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+                meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
                 meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
                 meta.save(d->tmpPath.last());
                 caption = getImageCaption(imgPath);
@@ -384,7 +384,7 @@ void WSAuthentication::slotListAlbumsRequest()
 
 void WSAuthentication::slotListAlbumsDone(int errCode, const QString& errMsg, const QList<WSAlbum>& albumsList)
 {
-    QString albumDebug = QString::fromLatin1("");
+    QString albumDebug = QLatin1String("");
 
     foreach (const WSAlbum &album, albumsList)
     {

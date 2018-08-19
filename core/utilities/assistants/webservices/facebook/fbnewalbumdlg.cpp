@@ -52,17 +52,17 @@ FbNewAlbumDlg::FbNewAlbumDlg(QWidget* const parent, const QString& toolName)
     m_privacyCoB        = new QComboBox;
     m_privacyCoB->setEditable(false);
     m_privacyCoB->setWhatsThis(i18n("Privacy setting of the album that will be created (required)."));
-    m_privacyCoB->addItem(QIcon::fromTheme(QString::fromLatin1("secure-card")),
+    m_privacyCoB->addItem(QIcon::fromTheme(QLatin1String("secure-card")),
                           i18n("Only Me"),                 FB_ME);
-    m_privacyCoB->addItem(QIcon::fromTheme(QString::fromLatin1("user-identity")),
+    m_privacyCoB->addItem(QIcon::fromTheme(QLatin1String("user-identity")),
                           i18n("Only Friends"),            FB_FRIENDS);
-    m_privacyCoB->addItem(QIcon::fromTheme(QString::fromLatin1("system-users")),
+    m_privacyCoB->addItem(QIcon::fromTheme(QLatin1String("system-users")),
                           i18n("Friends of Friends"),      FB_FRIENDS_OF_FRIENDS);
 /*
-    m_privacyCoB->addItem(QIcon::fromTheme(QString::fromLatin1("network-workgroup")),
+    m_privacyCoB->addItem(QIcon::fromTheme(QLatin1String("network-workgroup")),
                           i18n("My Networks and Friends"), FB_NETWORKS);
 */
-    m_privacyCoB->addItem(QIcon::fromTheme(QString::fromLatin1("folder-html")),
+    m_privacyCoB->addItem(QIcon::fromTheme(QLatin1String("folder-html")),
                           i18n("Everyone"),                FB_EVERYONE);
     m_privacyCoB->setCurrentIndex(1);
 
