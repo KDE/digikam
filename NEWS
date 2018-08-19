@@ -410,6 +410,6 @@ BUGFIXES:
 350 ==> 250364 - digiKam 1.2 crashes at start-up in xubuntu 10.04.
 351 ==> 253205 - digiKam crashes while loading on Ubunu 10.04.
 352 ==> 249033 - After upgrade to 10.04 digiKam crashes after starting always.
-353 ==> 
-
-
+353 ==> 300713 - Crash while editing tag in digiKam.
+354 ==> 184443 - digiKam save as "JPEG" appends a ".JPEG" file extension. Bad!
+355 ==> 
