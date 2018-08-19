@@ -412,4 +412,5 @@ BUGFIXES:
 352 ==> 249033 - After upgrade to 10.04 digiKam crashes after starting always.
 353 ==> 300713 - Crash while editing tag in digiKam.
 354 ==> 184443 - digiKam save as "JPEG" appends a ".JPEG" file extension. Bad!
-355 ==> 
+355 ==> 189084 - Crash while editing toolbars (here from digiKam camera GUI).
+356 ==> 
