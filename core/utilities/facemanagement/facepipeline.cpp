@@ -1013,7 +1013,7 @@ Trainer::Trainer(FacePipeline::Private* const d)
 
     RecognitionDatabase::RecognizeAlgorithm algo =
             (RecognitionDatabase::RecognizeAlgorithm)group.readEntry(QLatin1String("Recognize Algorithm"),
-                                                                    (int)RecognitionDatabase::RecognizeAlgorithm::DNN);
+                                                                     (int)RecognitionDatabase::RecognizeAlgorithm::LBP);
     database.activeFaceRecognizer(algo);
 }
 

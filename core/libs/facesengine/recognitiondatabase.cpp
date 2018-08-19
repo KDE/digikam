@@ -279,7 +279,7 @@ RecognitionDatabase::Private::Private()
     params.setFaceDatabasePath(CoreDbAccess::parameters().faceParameters().getFaceDatabaseNameOrDir());
     FaceDbAccess::setParameters(params);
     dbAvailable               = FaceDbAccess::checkReadyForUse(0);
-    recognizeAlgorithm        = RecognizeAlgorithm::DNN;
+    recognizeAlgorithm        = RecognizeAlgorithm::LBP;
 
     if (dbAvailable)
     {

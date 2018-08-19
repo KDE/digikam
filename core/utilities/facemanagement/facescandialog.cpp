@@ -187,8 +187,9 @@ void FaceScanDialog::doLoadState()
 
     d->useFullCpuButton->setChecked(group.readEntry(entryName(d->configUseFullCpu), false));
 
-    RecognitionDatabase::RecognizeAlgorithm algo = (RecognitionDatabase::RecognizeAlgorithm)group.readEntry(entryName(d->configRecognizeAlgorithm),
-                                                                                                            (int)RecognitionDatabase::RecognizeAlgorithm::DNN);
+    RecognitionDatabase::RecognizeAlgorithm algo =
+            (RecognitionDatabase::RecognizeAlgorithm)group.readEntry(entryName(d->configRecognizeAlgorithm),
+                                                                               (int)RecognitionDatabase::RecognizeAlgorithm::LBP);
 
     d->recognizeBox->setCurrentIndex(d->recognizeBox->findData(algo));
 
@@ -359,7 +360,7 @@ void FaceScanDialog::setupUi()
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using EigenFaces algorithm"),    RecognitionDatabase::RecognizeAlgorithm::EigenFace);
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using FisherFaces algorithm"),   RecognitionDatabase::RecognizeAlgorithm::FisherFace);
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using Deep Learning algorithm"), RecognitionDatabase::RecognizeAlgorithm::DNN);
-    d->recognizeBox->setCurrentIndex(RecognitionDatabase::RecognizeAlgorithm::DNN);
+    d->recognizeBox->setCurrentIndex(RecognitionDatabase::RecognizeAlgorithm::LBP);
 
     d->retrainAllButton = new QCheckBox(advancedTab);
     d->retrainAllButton->setText(i18nc("@option:check", "Clear and rebuild all training data"));
