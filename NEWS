@@ -414,4 +414,5 @@ BUGFIXES:
 354 ==> 184443 - digiKam save as "JPEG" appends a ".JPEG" file extension. Bad!
 355 ==> 189084 - Crash while editing toolbars (here from digiKam camera GUI).
 356 ==> 205275 - After changing symbols in bar on preview digikam closes.
-357 ==> 
+357 ==> 214418 - Crash while importing into digiKam.
+358 ==> 
