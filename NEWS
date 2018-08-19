@@ -400,5 +400,16 @@ BUGFIXES:
 340 ==> 257301 - showfoto reaches an assert when saving file with "~/" in the path.
 341 ==> 183629 - Digikam/Showfoto Dark Theme: The selected photo filename is nearly invisible.
 342 ==> 249379 - All versions of Digikam/Showfoto/KDE download is missing a file.
-343 ==> 
+343 ==> 237286 - digiKam crash after to scan collection (upgrate from 9.10 to 10.04).
+344 ==> 254878 - digiKam error segmentation fault when open it.
+345 ==> 255759 - digikam crash when open it kunbuntu lucid.
+346 ==> 249009 - digiKam crashes at initialisation.
+347 ==> 236647 - After upgrading to Ubuntu 10.04 digiKam crashes everytime it is launched.
+348 ==> 235905 - digiKam crash after upgrade.
+349 ==> 185265 - digiKam constantly using some CPU in a poll loop due a timeout
+350 ==> 250364 - digiKam 1.2 crashes at start-up in xubuntu 10.04.
+351 ==> 253205 - digiKam crashes while loading on Ubunu 10.04.
+352 ==> 249033 - After upgrade to 10.04 digiKam crashes after starting always.
+353 ==> 
+
 
