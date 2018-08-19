@@ -1,0 +1,64 @@
+Notice to make release tarballs from GIT
+----------------------------------------
+
+1/  Release announcements can be send to kde-i18n-docs if internationalized strings are frozen.
+    The earlier the better.
+
+2/  Commit last changes from source code to GIT. The code MUST compile in all cases.
+
+3/  Update the release info in top of core/CMakeLists.txt and commit it to GIT.
+
+4/  Update changelog file using git2cl script from root directory.
+    Extract all contents and append only new ones to changelog file since the last release done previously.
+    Register the new release info on to of file inluding release date.
+    Commit to GIT.
+
+5/  Update NEWS file. If Changelog is a dry historical record of development,
+    NEWS should focus on the improvements and changes, summarize everything since
+    last major release. Look in bugzilla for closed file summaries.
+    Commit to GIT.
+
+6/  Tag Git vith the release version in this format: vX.Y.Z-suffix.
+    Use the command "git tag -a vX.Y.Z-suffix -m "Create version X.Y.Z-suffix"
+    Where X is major version, Y minor version, and Z the patch version.
+    The optional suffix is to indicate a non final release, as "-beta1" for ex.
+    Look with "git tag" command for exiting tags in git.
+
+7/  Run the bootstrap.tarball script to release digiKam source tarball. This will include all translations
+    files and the documentation. The script compile all translations files to see if nothing is broken.
+    At end, if all is fine, the tarball properties must be show.
+
+8/  Upload tarball to ssh://digikam@racnoss.kde.org/srv/archives/files/digikam/" (you need a valid developer accound with ssh keys)
+    and post a message on digikam-users@kde.org mailing list to have a feedback from packagers before posting an
+    official release announcement.
+
+9/  Upload tarball to ftp://upload.kde.org/incoming
+    Create system admin task to publish the file officialy on download servers
+    https://phabricator.kde.org/maniphest/task/edit/form/2/
+    Don't forget to join all tarball checksums.
+
+10/ Create a release announce page on digikam.org web site.
+    Web-site is hosted in a dedicated release repository : https://cgit.kde.org/websites/digikam-org.git/
+    Website repository use a staging branch to review changes before to post contents officialy.
+    See this README file for details: https://cgit.kde.org/websites/digikam-org.git/tree/README
+    The release announcement can use MarkDown format and are located to "news" directory.
+
+11/ Perform an official release announcement to these mailing-lists:
+
+    * digikam-users@kde.org
+    * digikam-devel@kde.org
+    * kde-announce@kde.org
+
+    Draft:
+
+    Dear all digiKam fans and users,
+
+    The digiKam development team is proud to release digiKam
+    Software Collection X.Y.Z-suffix. For more details, see announcement on
+    digikam.org:
+
+    https://www.digikam.org/news/2018-03-25-X.Y.Z-suffix_release_announcement/
+
+    Best
+
+---------------------------------------------------
