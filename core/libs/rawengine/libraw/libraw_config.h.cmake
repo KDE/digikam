@@ -27,10 +27,10 @@
 /* Define to 1 if LibRaw have been compiled with DNG lossy codec support */
 #cmakedefine LIBRAW_USE_DNGLOSSYCODEC 1
 
-/* Define to 1 if LibRaw have been compiled with OpenMP support */
-#cmakedefine LIBRAW_USE_OPENMP 1
-
 /* Define to 1 if LibRaw have been compiled with RedCine codec support */
 #cmakedefine LIBRAW_USE_REDCINECODEC 1
+
+/* To share OpenMp support detected by Libraw at compilation time */
+#include "libraw_types.h"
 
 #endif // LIBRAW_CONFIG_H
