@@ -420,4 +420,5 @@ BUGFIXES:
 360 ==> 327714 - digiKam crashes when starting up [Qt Bmp Image IO].
 361 ==> 396892 - digiKam font sizes cannot be changed. Mostly too small.
 362 ==> 371726 - Dates view empty using MYSQL due to SQL query error (fix supplied).
-363 ==> 
+363 ==> 382217 - Use normalized connects [patch].
+364 ==> 
