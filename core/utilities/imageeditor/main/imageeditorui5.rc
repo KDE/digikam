@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="603" name="imageeditor" translationDomain="digikam" >
+<gui version="604" name="imageeditor" translationDomain="digikam" >
 
 <MenuBar>
 

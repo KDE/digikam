@@ -106,7 +106,7 @@ void ShowFoto::slotExportTool()
     }
     if (tool == m_exportBoxAction)
     {
-        QPointer<ODWindow> w = new ODWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        QPointer<BOXWindow> w = new BOXWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
         w->exec();
         delete w;
     }

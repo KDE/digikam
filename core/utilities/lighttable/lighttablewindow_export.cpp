@@ -98,6 +98,27 @@ void LightTableWindow::slotExportTool()
         w->exec();
         delete w;
     }
+    if (tool == m_exportOnedriveAction)
+    {
+        QPointer<ODWindow> w = new ODWindow(new DBInfoIface(this, d->thumbView->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
+        w->exec();
+        delete w;
+    }
+    if (tool == m_exportPinterestAction)
+    {
+        QPointer<PWindow> w = new PWindow(new DBInfoIface(this, d->thumbView->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
+        w->exec();
+        delete w;
+    }
+    if (tool == m_exportBoxAction)
+    {
+        QPointer<BOXWindow> w = new BOXWindow(new DBInfoIface(this, d->thumbView->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
+        w->exec();
+        delete w;
+    }
     else if (tool == m_exportFacebookAction)
     {
         QPointer<FbWindow> w = new FbWindow(new DBInfoIface(this, d->thumbView->allUrls(),
@@ -173,7 +194,7 @@ void LightTableWindow::slotExportTool()
 #ifdef HAVE_MEDIAWIKI
     else if (tool == m_exportMediawikiAction)
     {
-        QPointer<MediaWikiWindow> w = new MediaWikiWindow(new DBInfoIface(this, d->thumbView->allUrls(), 
+        QPointer<MediaWikiWindow> w = new MediaWikiWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                           ApplicationSettings::ImportExport), this);
         w->exec();
         delete w;

@@ -1219,6 +1219,7 @@ QList<QAction*> DXmlGuiWindow::exportActions() const
     return QList<QAction*>() << m_exportDropboxAction
                              << m_exportOnedriveAction
                              << m_exportPinterestAction
+                             << m_exportBoxAction
                              << m_exportFacebookAction
                              << m_exportFlickrAction
                              << m_exportGdriveAction
