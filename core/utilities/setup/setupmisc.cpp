@@ -65,7 +65,6 @@ public:
         stringComparisonTypeLabel(0),
         applicationStyleLabel(0),
         applicationIconLabel(0),
-        iconThemeLabel(0),
         minSimilarityBoundLabel(0),
         showSplashCheck(0),
         showTrashDeleteDialogCheck(0),
@@ -93,7 +92,6 @@ public:
     QLabel*                   stringComparisonTypeLabel;
     QLabel*                   applicationStyleLabel;
     QLabel*                   applicationIconLabel;
-    QLabel*                   iconThemeLabel;
     QLabel*                   minSimilarityBoundLabel;
 
     QCheckBox*                showSplashCheck;

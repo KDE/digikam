@@ -85,6 +85,7 @@ public:
     static const QString configRightSideBarStyle;
     static const QString configApplicationStyle;
     static const QString configIconTheme;
+    static const QString configApplicationFont;
     static const QString configShowFormatOverThumbnail;
     static const QString configShowCoordinates;
     static const QString configShowSplash;
@@ -145,7 +146,8 @@ public:
     QString              lastOpenedDir;
     QString              theme;
     QString              applicationStyle;
-    QString              iconTheme;
+    QString              applicationIcon;
+    QFont                applicationFont;
 
     KSharedConfigPtr     config;
     KConfigGroup         group;
@@ -161,6 +163,7 @@ const QString ShowfotoSettings::Private::configCurrentTheme(QLatin1String("Theme
 const QString ShowfotoSettings::Private::configRightSideBarStyle(QLatin1String("Sidebar Title Style"));
 const QString ShowfotoSettings::Private::configApplicationStyle(QLatin1String("Application Style"));
 const QString ShowfotoSettings::Private::configIconTheme(QLatin1String("Icon Theme"));
+const QString ShowfotoSettings::Private::configApplicationFont(QLatin1String("Application Font"));
 const QString ShowfotoSettings::Private::configShowFormatOverThumbnail(QLatin1String("ShowMimeOverImage"));
 const QString ShowfotoSettings::Private::configShowCoordinates(QLatin1String("Show Coordinates"));
 const QString ShowfotoSettings::Private::configShowSplash(QLatin1String("ShowSplash"));
@@ -259,47 +262,55 @@ void ShowfotoSettings::init()
 #else
     d->applicationStyle        = QLatin1String("Fusion");
 #endif
-    d->iconTheme               = QString();
+    d->applicationIcon         = QString();
+    d->applicationFont         = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 }
 
 void ShowfotoSettings::readSettings()
 {
     KConfigGroup group         = d->group;
 
-    d->lastOpenedDir           = group.readEntry(d->configLastOpenedDir, QString());
-    d->deleteItem2Trash        = group.readEntry(d->configDeleteItem2Trash, true);
-    d->theme                   = group.readEntry(d->configCurrentTheme, Digikam::ThemeManager::instance()->defaultThemeName());
-    d->rightSideBarStyle       = group.readEntry(d->configRightSideBarStyle, 0);
+    d->lastOpenedDir           = group.readEntry(d->configLastOpenedDir,           QString());
+    d->deleteItem2Trash        = group.readEntry(d->configDeleteItem2Trash,        true);
+    d->theme                   = group.readEntry(d->configCurrentTheme,            Digikam::ThemeManager::instance()->defaultThemeName());
+    d->rightSideBarStyle       = group.readEntry(d->configRightSideBarStyle,       0);
+
 #ifdef HAVE_APPSTYLE_SUPPORT
-    d->applicationStyle        = group.readEntry(d->configApplicationStyle, qApp->style()->objectName());
+    setApplicationStyle(group.readEntry(d->configApplicationStyle, qApp->style()->objectName()));
+#else
+    setApplicationStyle(QLatin1String("Fusion"));
 #endif
-    d->iconTheme               = group.readEntry(d->configIconTheme, QString());
-    d->showSplash              = group.readEntry(d->configShowSplash, true);
-    d->nativeFileDialog        = group.readEntry(d->configNativeFileDialog, false);
-    d->itemCenter              = group.readEntry(d->configItemCenter, false);
-    d->sortOrder               = group.readEntry(d->configSortOrder, 0);
-    d->reverseSort             = group.readEntry(d->configReverseSort, false);
+
+    d->applicationIcon         = group.readEntry(d->configIconTheme,               QString());
+
+    setApplicationFont(group.readEntry(d->configApplicationFont, QFontDatabase::systemFont(QFontDatabase::GeneralFont)));
+
+    d->showSplash              = group.readEntry(d->configShowSplash,              true);
+    d->nativeFileDialog        = group.readEntry(d->configNativeFileDialog,        false);
+    d->itemCenter              = group.readEntry(d->configItemCenter,              false);
+    d->sortOrder               = group.readEntry(d->configSortOrder,               0);
+    d->reverseSort             = group.readEntry(d->configReverseSort,             false);
     d->showFormatOverThumbnail = group.readEntry(d->configShowFormatOverThumbnail, false);
-    d->showCoordinates         = group.readEntry(d->configShowCoordinates, false);
+    d->showCoordinates         = group.readEntry(d->configShowCoordinates,         false);
 
-    d->showToolTip             = group.readEntry(d->configShowToolTip, true);
+    d->showToolTip             = group.readEntry(d->configShowToolTip,             true);
 
-    d->showFileName            = group.readEntry(d->configShowFileName, true);
-    d->showFileDate            = group.readEntry(d->configShowFileDate, false);
-    d->showFileSize            = group.readEntry(d->configShowFileSize, false);
-    d->showFileType            = group.readEntry(d->configShowFileType, false);
-    d->showFileDim             = group.readEntry(d->configShowFileDim,  true);
+    d->showFileName            = group.readEntry(d->configShowFileName,            true);
+    d->showFileDate            = group.readEntry(d->configShowFileDate,            false);
+    d->showFileSize            = group.readEntry(d->configShowFileSize,            false);
+    d->showFileType            = group.readEntry(d->configShowFileType,            false);
+    d->showFileDim             = group.readEntry(d->configShowFileDim,             true);
 
-    d->showPhotoMake           = group.readEntry(d->configShowPhotoMake,  true);
-    d->showPhotoLens           = group.readEntry(d->configShowPhotoLens,  true);
-    d->showPhotoFocal          = group.readEntry(d->configShowPhotoFocal, true);
-    d->showPhotoExpo           = group.readEntry(d->configShowPhotoExpo,  true);
-    d->showPhotoFlash          = group.readEntry(d->configShowPhotoFlash, false);
-    d->showPhotoWB             = group.readEntry(d->configShowPhotoWB,    false);
-    d->showPhotoDate           = group.readEntry(d->configShowPhotoDate,  true);
-    d->showPhotoMode           = group.readEntry(d->configShowPhotoMode,  true);
+    d->showPhotoMake           = group.readEntry(d->configShowPhotoMake,           true);
+    d->showPhotoLens           = group.readEntry(d->configShowPhotoLens,           true);
+    d->showPhotoFocal          = group.readEntry(d->configShowPhotoFocal,          true);
+    d->showPhotoExpo           = group.readEntry(d->configShowPhotoExpo,           true);
+    d->showPhotoFlash          = group.readEntry(d->configShowPhotoFlash,          false);
+    d->showPhotoWB             = group.readEntry(d->configShowPhotoWB,             false);
+    d->showPhotoDate           = group.readEntry(d->configShowPhotoDate,           true);
+    d->showPhotoMode           = group.readEntry(d->configShowPhotoMode,           true);
 
-    d->toolTipsFont            = group.readEntry(d->configToolTipsFont, QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+    d->toolTipsFont            = group.readEntry(d->configToolTipsFont,            QFontDatabase::systemFont(QFontDatabase::GeneralFont));
 }
 
 QString ShowfotoSettings::getLastOpenedDir() const
@@ -339,7 +350,12 @@ QString ShowfotoSettings::getApplicationStyle() const
 
 QString ShowfotoSettings::getIconTheme() const
 {
-    return d->iconTheme;
+    return d->applicationIcon;
+}
+
+QFont ShowfotoSettings::getApplicationFont() const
+{
+    return d->applicationFont;
 }
 
 bool ShowfotoSettings::getShowSplash() const
@@ -539,12 +555,27 @@ void ShowfotoSettings::setRightSideBarStyle(int style)
 
 void ShowfotoSettings::setApplicationStyle(const QString& style)
 {
-    d->group.writeEntry(d->configApplicationStyle, style);
+    if (d->applicationStyle.compare(style, Qt::CaseInsensitive) != 0)
+    {
+        d->applicationStyle = style;
+        qApp->setStyle(d->applicationStyle);
+        qApp->style()->polish(qApp);
+        qCDebug(DIGIKAM_SHOWFOTO_LOG) << "Switch to widget style: " << d->applicationStyle;
+        d->group.writeEntry(d->configApplicationStyle, d->applicationStyle);
+    }
 }
 
 void ShowfotoSettings::setIconTheme(const QString& theme)
 {
     d->group.writeEntry(d->configIconTheme, theme);
+}
+
+void ShowfotoSettings::setApplicationFont(const QFont& font)
+{
+    d->applicationFont = font;
+    qApp->setFont(d->applicationFont);
+    qCDebug(DIGIKAM_SHOWFOTO_LOG) << "Switch to application font: " << d->applicationFont;
+    d->group.writeEntry(d->configApplicationFont, d->applicationFont);
 }
 
 void ShowfotoSettings::setShowFormatOverThumbnail(bool show)

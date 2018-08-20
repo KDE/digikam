@@ -181,8 +181,8 @@ int main(int argc, char* argv[])
             return 1;
         }
     }
-    KSharedConfig::Ptr config = KSharedConfig::openConfig();
 
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("General Settings"));
     QString version           = group.readEntry(QLatin1String("Version"), QString());
     QString iconTheme         = group.readEntry(QLatin1String("Icon Theme"), QString());

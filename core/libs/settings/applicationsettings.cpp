@@ -249,8 +249,9 @@ void ApplicationSettings::readSettings()
     setApplicationStyle(QLatin1String("Fusion"));
 #endif
 
-    d->iconTheme                         = group.readEntry(d->configIconThemeEntry,                                   QString());
-    d->applicationFont                   = group.readEntry(d->configApplicationFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+    d->applicationIcon                   = group.readEntry(d->configIconThemeEntry,                                   QString());
+
+    setApplicationFont(group.readEntry(d->configApplicationFontEntry, QFontDatabase::systemFont(QFontDatabase::GeneralFont)));
 
     d->scanAtStart                       = group.readEntry(d->configScanAtStartEntry,                                 true);
     d->cleanAtStart                      = group.readEntry(d->configCleanAtStartEntry,                                false);
@@ -433,7 +434,7 @@ void ApplicationSettings::saveSettings()
 #ifdef HAVE_APPSTYLE_SUPPORT
     group.writeEntry(d->configApplicationStyleEntry,                   d->applicationStyle);
 #endif
-    group.writeEntry(d->configIconThemeEntry,                          d->iconTheme);
+    group.writeEntry(d->configIconThemeEntry,                          d->applicationIcon);
     group.writeEntry(d->configApplicationFontEntry,                    d->applicationFont);
 
     group.writeEntry(d->configScanAtStartEntry,                        d->scanAtStart);

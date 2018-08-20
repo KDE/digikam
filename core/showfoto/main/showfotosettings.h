@@ -65,6 +65,9 @@ public:
     QString getIconTheme() const;
     void setIconTheme(const QString& theme);
 
+    void setApplicationFont(const QFont& fnt);
+    QFont getApplicationFont() const;
+
     bool getShowFormatOverThumbnail() const;
     void setShowFormatOverThumbnail(bool show);
 

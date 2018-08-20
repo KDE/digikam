@@ -381,7 +381,7 @@ void ApplicationSettings::Private::init()
     stringComparisonType                 = ApplicationSettings::Natural;
 
     applicationStyle                     = qApp->style()->objectName();
-    iconTheme                            = QString();
+    applicationIcon                      = QString();
     applicationFont                      = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 
     for (int i = 0 ; i != ApplicationSettings::Unspecified ; ++i)

@@ -211,12 +211,12 @@ QString ApplicationSettings::getApplicationStyle() const
 
 void ApplicationSettings::setIconTheme(const QString& theme)
 {
-    d->iconTheme = theme;
+    d->applicationIcon = theme;
 }
 
 QString ApplicationSettings::getIconTheme() const
 {
-    return d->iconTheme;
+    return d->applicationIcon;
 }
 
 void ApplicationSettings::setShowThumbbar(bool val)

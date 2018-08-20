@@ -292,7 +292,7 @@ public:
     //misc
     ApplicationSettings::StringComparisonType    stringComparisonType;
     QString                                      applicationStyle;
-    QString                                      iconTheme;
+    QString                                      applicationIcon;
     QFont                                        applicationFont;
 
     int                                          minimumSimilarityBound;
