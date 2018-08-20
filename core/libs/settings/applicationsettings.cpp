@@ -250,6 +250,8 @@ void ApplicationSettings::readSettings()
 #endif
 
     d->iconTheme                         = group.readEntry(d->configIconThemeEntry,                                   QString());
+    d->applicationFont                   = group.readEntry(d->configApplicationFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+
     d->scanAtStart                       = group.readEntry(d->configScanAtStartEntry,                                 true);
     d->cleanAtStart                      = group.readEntry(d->configCleanAtStartEntry,                                false);
 
@@ -432,6 +434,8 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configApplicationStyleEntry,                   d->applicationStyle);
 #endif
     group.writeEntry(d->configIconThemeEntry,                          d->iconTheme);
+    group.writeEntry(d->configApplicationFontEntry,                    d->applicationFont);
+
     group.writeEntry(d->configScanAtStartEntry,                        d->scanAtStart);
     group.writeEntry(d->configCleanAtStartEntry,                       d->cleanAtStart);
 

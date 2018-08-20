@@ -49,6 +49,7 @@
 
 #include "digikam_config.h"
 #include "dlayoutbox.h"
+#include "dfontselect.h"
 #include "applicationsettings.h"
 
 namespace Digikam
@@ -63,6 +64,7 @@ public:
         sidebarTypeLabel(0),
         stringComparisonTypeLabel(0),
         applicationStyleLabel(0),
+        applicationIconLabel(0),
         iconThemeLabel(0),
         minSimilarityBoundLabel(0),
         showSplashCheck(0),
@@ -78,7 +80,8 @@ public:
         sidebarType(0),
         stringComparisonType(0),
         applicationStyle(0),
-        iconTheme(0),
+        applicationIcon(0),
+        applicationFont(0),
         minimumSimilarityBound(0),
         groupingButtons(QHash<int, QButtonGroup*>())
     {
@@ -89,6 +92,7 @@ public:
     QLabel*                   sidebarTypeLabel;
     QLabel*                   stringComparisonTypeLabel;
     QLabel*                   applicationStyleLabel;
+    QLabel*                   applicationIconLabel;
     QLabel*                   iconThemeLabel;
     QLabel*                   minSimilarityBoundLabel;
 
@@ -106,7 +110,8 @@ public:
     QComboBox*                sidebarType;
     QComboBox*                stringComparisonType;
     QComboBox*                applicationStyle;
-    QComboBox*                iconTheme;
+    QComboBox*                applicationIcon;
+    DFontSelect*              applicationFont;
 
     QSpinBox*                 minimumSimilarityBound;
 
@@ -217,11 +222,11 @@ SetupMisc::SetupMisc(QWidget* const parent)
 #endif
 
     DHBox* const iconThemeHbox = new DHBox(abOptionsGroup);
-    d->iconThemeLabel          = new QLabel(i18n("Icon theme (changes after restart):"), iconThemeHbox);
-    d->iconTheme               = new QComboBox(iconThemeHbox);
-    d->iconTheme->setToolTip(i18n("Set this option to choose the default icon theme."));
+    d->applicationIconLabel    = new QLabel(i18n("Icon theme (changes after restart):"), iconThemeHbox);
+    d->applicationIcon         = new QComboBox(iconThemeHbox);
+    d->applicationIcon->setToolTip(i18n("Set this option to choose the default icon theme."));
 
-    d->iconTheme->addItem(i18n("Use Icon Theme From System"), QString());
+    d->applicationIcon->addItem(i18n("Use Icon Theme From System"), QString());
 
     const QString indexTheme = QLatin1String("/index.theme");
     const QString breezeDark = QLatin1String("/breeze-dark");
@@ -234,16 +239,19 @@ SetupMisc::SetupMisc(QWidget* const parent)
     {
         if (!foundBreeze && QFile::exists(path + breeze + indexTheme))
         {
-            d->iconTheme->addItem(i18n("Breeze"), breeze.mid(1));
+            d->applicationIcon->addItem(i18n("Breeze"), breeze.mid(1));
             foundBreeze = true;
         }
 
         if (!foundBreezeDark && QFile::exists(path + breezeDark + indexTheme))
         {
-            d->iconTheme->addItem(i18n("Breeze Dark"), breezeDark.mid(1));
+            d->applicationIcon->addItem(i18n("Breeze Dark"), breezeDark.mid(1));
             foundBreezeDark = true;
         }
     }
+
+    d->applicationFont = new DFontSelect(i18n("Application font:"), abOptionsGroup);
+    d->applicationFont->setToolTip(i18n("Select here the font used to display text in whole application."));
 
     gLayout5->addWidget(d->showSplashCheck);
     gLayout5->addWidget(d->useNativeFileDialogCheck);
@@ -254,6 +262,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     gLayout5->addWidget(tabStyleHbox);
     gLayout5->addWidget(appStyleHbox);
     gLayout5->addWidget(iconThemeHbox);
+    gLayout5->addWidget(d->applicationFont);
     abOptionsGroup->setLayout(gLayout5);
 
     // --------------------------------------------------------
@@ -380,7 +389,8 @@ void SetupMisc::applySettings()
     settings->setApplicationStyle(d->applicationStyle->currentText());
 #endif
 
-    settings->setIconTheme(d->iconTheme->currentData().toString());
+    settings->setIconTheme(d->applicationIcon->currentData().toString());
+    settings->setApplicationFont(d->applicationFont->font());
     settings->saveSettings();
 }
 
@@ -413,7 +423,8 @@ void SetupMisc::readSettings()
                                                                        Qt::MatchFixedString));
 #endif
 
-    d->iconTheme->setCurrentIndex(d->iconTheme->findData(settings->getIconTheme()));
+    d->applicationIcon->setCurrentIndex(d->applicationIcon->findData(settings->getIconTheme()));
+    d->applicationFont->setFont(settings->getApplicationFont());
 }
 
 } // namespace Digikam

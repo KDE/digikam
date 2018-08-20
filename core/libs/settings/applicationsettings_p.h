@@ -152,6 +152,7 @@ public:
     static const QString configFaceDetectionAccuracyEntry;
     static const QString configApplicationStyleEntry;
     static const QString configIconThemeEntry;
+    static const QString configApplicationFontEntry;
     static const QString configMinimumSimilarityBound;
     static const QString configDuplicatesSearchLastMinSimilarity;
     static const QString configDuplicatesSearchLastMaxSimilarity;
@@ -292,6 +293,7 @@ public:
     ApplicationSettings::StringComparisonType    stringComparisonType;
     QString                                      applicationStyle;
     QString                                      iconTheme;
+    QFont                                        applicationFont;
 
     int                                          minimumSimilarityBound;
     int                                          duplicatesSearchLastMinSimilarity;
@@ -308,7 +310,7 @@ private:
 
 private:
 
-    // cppcheck-suppress unusedPrivateFunction 
+    // cppcheck-suppress unusedPrivateFunction
     static ApplicationSettings::OperationStrings createConfigGroupingOperateOnAll();
 };
 

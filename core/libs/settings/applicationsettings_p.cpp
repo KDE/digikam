@@ -140,6 +140,7 @@ const QString ApplicationSettings::Private::configStringComparisonTypeEntry(QLat
 const QString ApplicationSettings::Private::configFaceDetectionAccuracyEntry(QLatin1String("Detection Accuracy"));
 const QString ApplicationSettings::Private::configApplicationStyleEntry(QLatin1String("Application Style"));
 const QString ApplicationSettings::Private::configIconThemeEntry(QLatin1String("Icon Theme"));
+const QString ApplicationSettings::Private::configApplicationFontEntry(QLatin1String("Application Font"));
 const QString ApplicationSettings::Private::configScanAtStartEntry(QLatin1String("Scan At Start"));
 const QString ApplicationSettings::Private::configCleanAtStartEntry(QLatin1String("Clean core DB At Start"));
 const QString ApplicationSettings::Private::configMinimumSimilarityBound(QLatin1String("Lower bound for minimum similarity"));
@@ -381,6 +382,7 @@ void ApplicationSettings::Private::init()
 
     applicationStyle                     = qApp->style()->objectName();
     iconTheme                            = QString();
+    applicationFont                      = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 
     for (int i = 0 ; i != ApplicationSettings::Unspecified ; ++i)
     {
