@@ -423,4 +423,9 @@ BUGFIXES:
 363 ==> 382217 - Use normalized connects [patch].
 364 ==> 113692 - digiKam thumbnail hangs on .mov movie.
 365 ==> 185638 - digiKam crash on startup.
-366 ==> 
+366 ==> 350404 - digiKam crashes at startup.
+367 ==> 301583 - digiKam crash on preview avi.
+368 ==> 236960 - No video in digiKam embedded viewer no way to change codec?
+369 ==> 227113 - digiKam crashes when selecting a movie.
+370 ==> 274333 - digiKam crashed upon startup.
+371 ==> 
