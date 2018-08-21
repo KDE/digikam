@@ -437,4 +437,8 @@ BUGFIXES:
 377 ==> 252411 - digiKam crashes when .AVI videoclip is launched.
 378 ==> 247399 - digiKam crashes when viewing videos.
 379 ==> 261706 - digiKam crashed after downloading pictures.
-380 ==> 
+380 ==> 172170 - digiKam embedded video player - video not synchronized with sound.
+381 ==> 293173 - digiKam does not play videos.
+382 ==> 182401 - Wrong color palette on playback videos within digiKam.
+383 ==> 219419 - digiKam crashes after splash screen with PTP.
+384 ==> 
