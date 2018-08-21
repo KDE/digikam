@@ -442,4 +442,5 @@ BUGFIXES:
 382 ==> 182401 - Wrong color palette on playback videos within digiKam.
 383 ==> 219419 - digiKam crashes after splash screen with PTP.
 384 ==> 397565 - Unable to launch in OS X after install.
-385 ==> 
+385 ==> 337978 - digiKam crashes on startup - always.
+386 ==> 
