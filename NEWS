@@ -422,5 +422,5 @@ BUGFIXES:
 362 ==> 371726 - Dates view empty using MYSQL due to SQL query error (fix supplied).
 363 ==> 382217 - Use normalized connects [patch].
 364 ==> 113692 - digiKam thumbnail hangs on .mov movie.
-365 ==> 
-
+365 ==> 185638 - digiKam crash on startup.
+366 ==> 
