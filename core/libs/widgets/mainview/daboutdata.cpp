@@ -161,7 +161,7 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
 
     aboutData.addCredit ( ki18n("Yingjie Liu").toString(),
                           ki18n("Face-engine improvements and manual icon-view sort").toString(),
-                          QLatin1String("yingjiewudi at gmail dot com "),
+                          QLatin1String("yingjiewudi at gmail dot com"),
                           QLatin1String("https://yjwudi.github.io")
                         );
 
