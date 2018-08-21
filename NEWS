@@ -407,7 +407,7 @@ BUGFIXES:
 347 ==> 236647 - After upgrading to Ubuntu 10.04 digiKam crashes everytime it is launched.
 348 ==> 235905 - digiKam crash after upgrade.
 349 ==> 185265 - digiKam constantly using some CPU in a poll loop due a timeout
-350 ==> 250364 - digiKam 1.2 crashes at start-up in xubuntu 10.04.
+350 ==> 250364 - digiKam crashes at start-up in xubuntu 10.04.
 351 ==> 253205 - digiKam crashes while loading on Ubunu 10.04.
 352 ==> 249033 - After upgrade to 10.04 digiKam crashes after starting always.
 353 ==> 300713 - Crash while editing tag in digiKam.
