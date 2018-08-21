@@ -428,4 +428,13 @@ BUGFIXES:
 368 ==> 236960 - No video in digiKam embedded viewer no way to change codec?
 369 ==> 227113 - digiKam crashes when selecting a movie.
 370 ==> 274333 - digiKam crashed upon startup.
-371 ==> 
+371 ==> 247019 - digiKam crashes in Album view with Canon IXUS 90 video clip.
+372 ==> 238525 - digiKam crashes on browsing in album view.
+373 ==> 317437 - digiKam crashes on startup.
+374 ==> 237183 - digiKam crashes on playing Quicktime movies.
+375 ==> 256644 - digiKam crashes after adding photos to light table.
+376 ==> 245033 - digiKam falls on video files.
+377 ==> 252411 - digiKam crashes when .AVI videoclip is launched.
+378 ==> 247399 - digiKam crashes when viewing videos.
+379 ==> 261706 - digiKam crashed after downloading pictures.
+380 ==> 
