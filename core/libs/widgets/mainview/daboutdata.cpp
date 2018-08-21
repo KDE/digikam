@@ -96,6 +96,12 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                           QLatin1String("https://plus.google.com/u/0/107171232114475191915")
                         );
 
+    aboutData.addAuthor ( ki18n("Mohamed Anwer").toString(),                                    // krazy:exclude=spelling
+                          ki18n("Developer and Mentoring").toString(),
+                          QLatin1String("mohammed dot ahmed dot anwer at gmail dot com"),       // krazy:exclude=spelling
+                          QLatin1String("https://plus.google.com/106020792892118847381")
+                        );
+
     aboutData.addAuthor ( ki18n("Michael G. Hansen").toString(),
                           ki18n("Developer and Mentoring").toString(),
                           QLatin1String("mike at mghansen dot de"),
@@ -141,10 +147,22 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                           QLatin1String("https://plus.google.com/114906808699351374523")
                         );
 
-    aboutData.addCredit ( ki18n("Mohamed Anwer").toString(),                                    // krazy:exclude=spelling
-                          ki18n("Model/View Port of Showfoto Thumbbar").toString(),
-                          QLatin1String("mohammed dot ahmed dot anwer at gmail dot com"),       // krazy:exclude=spelling
-                          QLatin1String("https://plus.google.com/106020792892118847381")
+    aboutData.addCredit ( ki18n("Thanh Trung Dinh>").toString(),
+                          ki18n("Port web-service tools to OAuth and factoring").toString(),
+                          QLatin1String("dinhthanhtrung1996 at gmail dot com"),
+                          QLatin1String("https://plus.google.com/u/0/105288296237200960831")
+                        );
+
+    aboutData.addCredit ( ki18n("Tarek Talaat").toString(),
+                          ki18n("New OneDrive, Pinterrest, and Box export tools").toString(),
+                          QLatin1String("tarektalaat93 at gmail dot com"),
+                          QLatin1String("https://plus.google.com/u/0/108164047195873182769")
+                        );
+
+    aboutData.addCredit ( ki18n("Yingjie Liu").toString(),
+                          ki18n("Face-engine improvements and manual icon-view sort").toString(),
+                          QLatin1String("yingjiewudi at gmail dot com "),
+                          QLatin1String("https://yjwudi.github.io")
                         );
 
     aboutData.addCredit ( ki18n("Yiou Wang").toString(),
