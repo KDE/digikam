@@ -321,7 +321,7 @@ void PTalker::getUserName()
 
 /** Get list of boards by parsing json sent by pinterest
  */
-void PTalker::listBoards(const QString& path)
+void PTalker::listBoards(const QString& /*path*/)
 {
     QUrl url(QLatin1String("https://api.pinterest.com/v1/me/boards/"));;
 

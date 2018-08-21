@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * ============================================================ */ 
+ * ============================================================ */
 
 #include "wstalker.h"
 
@@ -51,18 +51,19 @@ bool operator< (const WSAlbum& first, const WSAlbum& second)
 // -----------------------------------------------------------------------------
 
 WSTalker::WSTalker(QWidget* const parent)
-  : QObject(parent),
-    m_netMngr(new QNetworkAccessManager(this)),
-    m_reply(0),
-    m_state(WSTalker::DEFAULT),
-    m_buffer(0),
-    m_settings(0),
-    m_store(0),
-    m_userName(QString("")),
-    m_wizard(0)
+    : QObject(parent),
+      m_netMngr(new QNetworkAccessManager(this)),
+      m_reply(0),
+      m_state(WSTalker::DEFAULT),
+      m_buffer(0),
+      m_settings(0),
+      m_store(0),
+      m_userName(QString("")),
+      m_wizard(0)
 {
     m_wizard = dynamic_cast<WSWizard*>(parent);
-    if(m_wizard != nullptr)
+
+    if (m_wizard != nullptr)
     {
         m_settings = m_wizard->oauthSettings();
         m_store    = m_wizard->oauthSettingsStore();
@@ -206,14 +207,14 @@ QMap<QString, QVariant> WSTalker::getUserAccountInfo(const QString& userName)
 void WSTalker::saveUserAccount(const QString& userName,
                                const QString& userID,
                                long long int expire,
-                               const QString& accessToken, 
+                               const QString& accessToken,
                                const QString& refreshToken)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "saveUserAccount with username : " << userName << ", userID: " << userID;
 
     if (userID.isEmpty())
     {
-        return; 
+        return;
     }
 
     m_settings->beginGroup(m_store->groupKey());
@@ -238,7 +239,7 @@ bool WSTalker::loadUserAccount(const QString& userName)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "loadUserAccount with user name : " << userName;
 
-    /* User logins using new account, return false so that we can unlink() current account, 
+    /* User logins using new account, return false so that we can unlink() current account,
      * before link() to new account
      */
     if (userName.isEmpty())
@@ -248,11 +249,11 @@ bool WSTalker::loadUserAccount(const QString& userName)
 
     QMap<QString, QVariant> map = getUserAccountInfo(userName);
 
-    /* 
-     * if getUserAccountInfo(userName) return empty with a non empty userName, there must 
-     * be some kind of errors. So, the condition below is a security check, which assures 
+    /*
+     * if getUserAccountInfo(userName) return empty with a non empty userName, there must
+     * be some kind of errors. So, the condition below is a security check, which assures
      * user to relogin anyway.
-     * 
+     *
      * However, if it happens, INSPECTATION is obligated!!!
      */
     if (map.isEmpty())
@@ -269,8 +270,8 @@ bool WSTalker::loadUserAccount(const QString& userName)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "current time : " << QDateTime::currentMSecsSinceEpoch() / 1000;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "access_token: " << accessToken;
 
-    /* If access token is not expired yet, retrieve all tokens and return true so that we can link() 
-     * directly to new account. 
+    /* If access token is not expired yet, retrieve all tokens and return true so that we can link()
+     * directly to new account.
      * Otherwise, return false so that user can relogin.
      */
 
@@ -284,7 +285,7 @@ bool WSTalker::loadUserAccount(const QString& userName)
 
 }
 
-void WSTalker::resetTalker(const QString& expire, const QString& accessToken, const QString& refreshToken)
+void WSTalker::resetTalker(const QString& /*expire*/, const QString& /*accessToken*/, const QString& /*refreshToken*/)
 {
 }
 
@@ -292,7 +293,7 @@ void WSTalker::getLoggedInUser()
 {
 }
 
-void WSTalker::listAlbums(long long userID)
+void WSTalker::listAlbums(long long /*userID*/)
 {
 }
 
@@ -300,7 +301,7 @@ void WSTalker::createNewAlbum()
 {
 }
 
-void WSTalker::addPhoto(const QString& imgPath, const QString& albumID, const QString& caption)
+void WSTalker::addPhoto(const QString& /*imgPath*/, const QString& /*albumID*/, const QString& /*caption*/)
 {
 }
 
@@ -310,9 +311,9 @@ void WSTalker::removeUserAccount(const QString& userName)
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "removeUserAccount with userID: " << userID;
 
-    if(userID.isEmpty())
+    if (userID.isEmpty())
     {
-       return; 
+       return;
     }
 
     m_settings->beginGroup(m_store->groupKey());
@@ -325,7 +326,7 @@ void WSTalker::removeUserAccount(const QString& userName)
     m_settings->remove(userName);
     m_settings->endGroup();
 
-    m_settings->endGroup();  
+    m_settings->endGroup();
 }
 
 void WSTalker::removeAllAccounts()
@@ -349,26 +350,26 @@ void WSTalker::authenticationDone(int errCode, const QString& errMsg)
     if (errCode != 0)
     {
         QMessageBox::critical(QApplication::activeWindow(),
-                              i18n("Error"), 
+                              i18n("Error"),
                               i18n("Code: %1. %2", errCode, errMsg));
     }
 
     emit signalBusy(false);
 }
 
-void WSTalker::parseResponseGetLoggedInUser(const QByteArray& data)
+void WSTalker::parseResponseGetLoggedInUser(const QByteArray& /*data*/)
 {
 }
 
-void WSTalker::parseResponseListAlbums(const QByteArray& data)
+void WSTalker::parseResponseListAlbums(const QByteArray& /*data*/)
 {
 }
 
-void WSTalker::parseResponseCreateAlbum(const QByteArray& data)
+void WSTalker::parseResponseCreateAlbum(const QByteArray& /*data*/)
 {
 }
 
-void WSTalker::parseResponseAddPhoto(const QByteArray& data)
+void WSTalker::parseResponseAddPhoto(const QByteArray& /*data*/)
 {
 }
 
@@ -384,14 +385,14 @@ void WSTalker::slotFinished(QNetworkReply* reply)
     if (reply->error() != QNetworkReply::NoError)
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << reply->error() << " text :"<< QString(reply->readAll());
-        authenticationDone(reply->error(), reply->errorString());       
+        authenticationDone(reply->error(), reply->errorString());
         reply->deleteLater();
         return;
     }
 
     m_buffer.append(reply->readAll());
 
-    switch(m_state)
+    switch (m_state)
     {
         case WSTalker::GETUSER :
             parseResponseGetLoggedInUser(m_buffer);
@@ -452,8 +453,8 @@ void WSTalker::slotLinkingSucceeded()
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK ok";
 }
 
-void WSTalker::slotResponseTokenReceived(const QMap<QString, QString>& rep)
+void WSTalker::slotResponseTokenReceived(const QMap<QString, QString>& /*rep*/)
 {
 }
 
-} // Digikam
+} // namespace Digikam

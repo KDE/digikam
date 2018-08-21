@@ -250,7 +250,7 @@ void BOXTalker::getUserName()
     emit signalBusy(true);
 }
 
-void BOXTalker::listFolders(const QString& path)
+void BOXTalker::listFolders(const QString& /*path*/)
 {
     QUrl url(QLatin1String("https://api.box.com/2.0/folders/0/items"));;
 

@@ -124,11 +124,11 @@ public:
 };
 
 GPTalker::GPTalker(QWidget* const parent)
-: GSTalkerBase(parent, 
+: GSTalkerBase(parent,
                (QStringList() << QLatin1String("https://www.googleapis.com/auth/plus.login") // to get user login (temporary until gphoto supports it officially)
                               << QLatin1String("https://www.googleapis.com/auth/photoslibrary") // to add and download photo in the library
                               << QLatin1String("https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata") // to download photo created by digiKam on GPhoto
-                              << QLatin1String(" https://www.googleapis.com/auth/photoslibrary.sharing")), // for shared albums 
+                              << QLatin1String(" https://www.googleapis.com/auth/photoslibrary.sharing")), // for shared albums
                QLatin1String("GooglePhotos")),
       d(new Private)
 {
@@ -192,13 +192,13 @@ void GPTalker::listAlbums()
 }
 
 /**
- * We get user profile from Google Plus API 
+ * We get user profile from Google Plus API
  * This is a temporary solution until Google Photo support API for user profile
  */
 void GPTalker::getLoggedInUser()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getLoggedInUser";
-    
+
     if (m_reply)
     {
         m_reply->abort();
@@ -222,7 +222,7 @@ void GPTalker::getLoggedInUser()
     emit signalBusy(true);
 }
 
-void GPTalker::listPhotos(const QString& albumId, const QString& imgmax)
+void GPTalker::listPhotos(const QString& albumId, const QString& /*imgmax*/)
 {
     if (m_reply)
     {
@@ -284,7 +284,7 @@ void GPTalker::createAlbum(const GSFolder& album)
  * Upload token then will be sent with url in GPTlaker::uploadPhoto to create real photos on user accont
  */
 bool GPTalker::addPhoto(const QString& photoPath,
-                        GSPhoto& info,
+                        GSPhoto& /*info*/,
                         const QString& albumId,
                         bool rescale,
                         int maxDim,
@@ -669,8 +669,8 @@ void GPTalker::slotFinished(QNetworkReply* reply)
 void GPTalker::slotUploadPhoto()
 {
     /* Keep track of number of items will be uploaded, because
-     * Google Photo API upload maximum NB_MAX_ITEM_UPLOAD items in at a time 
-     */ 
+     * Google Photo API upload maximum NB_MAX_ITEM_UPLOAD items in at a time
+     */
     int nbItemsUpload = 0;
 
     if(m_reply)
@@ -698,7 +698,7 @@ void GPTalker::slotUploadPhoto()
 
     while (!d->uploadTokenList.isEmpty() && nbItemsUpload < NB_MAX_ITEM_UPLOAD)
     {
-        const QString& uploadToken = d->uploadTokenList.takeFirst(); 
+        const QString& uploadToken = d->uploadTokenList.takeFirst();
         data += "{\"description\": \"\",";
         data += "\"simpleMediaItem\": {";
         data += "\"uploadToken\": \"";
@@ -749,7 +749,7 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
     {
         emit signalBusy(false);
         emit signalListAlbumsDone(0, QString::fromLatin1("Code: %1 - %2").arg(err.error)
-                                                                         .arg(err.errorString()), 
+                                                                         .arg(err.errorString()),
                                   QList<GSFolder>());
         return;
     }
@@ -779,8 +779,8 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
         albumList.append(album);
     }
 
-    std::sort(albumList.begin(), albumList.end(), gphotoLessThan);    
-    emit signalListAlbumsDone(1, QLatin1String(""), albumList);    
+    std::sort(albumList.begin(), albumList.end(), gphotoLessThan);
+    emit signalListAlbumsDone(1, QLatin1String(""), albumList);
 }
 
 void GPTalker::parseResponseListPhotos(const QByteArray& data)
@@ -812,7 +812,7 @@ void GPTalker::parseResponseListPhotos(const QByteArray& data)
         photo.description   = obj[QLatin1String("description")].toString();
         photo.id            = obj[QLatin1String("id")].toString();
         photo.mimeType      = obj[QLatin1String("mimeType")].toString();
-        photo.location      = obj[QLatin1String("Location")].toString(); // Not yet available in v1 but will be in the future 
+        photo.location      = obj[QLatin1String("Location")].toString(); // Not yet available in v1 but will be in the future
 
         QJsonObject metadata = obj[QLatin1String("mediaMetadata")].toObject();
 
@@ -841,7 +841,7 @@ void GPTalker::parseResponseCreateAlbum(const QByteArray& data)
     {
         emit signalBusy(false);
         emit signalCreateAlbumDone(0, QString::fromLatin1("Code: %1 - %2").arg(err.error)
-                                                                          .arg(err.errorString()), 
+                                                                          .arg(err.errorString()),
                                    QString());
         return;
     }
@@ -859,7 +859,7 @@ void GPTalker::parseResponseAddPhoto(const QByteArray& data)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "response " << QString(data);
 
     d->uploadTokenList << QString(data);
-    emit signalAddPhotoDone(1, QLatin1String(""));  
+    emit signalAddPhotoDone(1, QLatin1String(""));
 }
 
 void GPTalker::parseResponseGetLoggedInUser(const QByteArray& data)
