@@ -91,7 +91,7 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                         );
 
     aboutData.addAuthor ( ki18n("Maik Qualmann").toString(),
-                          ki18n("Developer").toString(),
+                          ki18n("Developer and Mentoring").toString(),
                           QLatin1String("metzpinguin at gmail dot com"),
                           QLatin1String("https://plus.google.com/u/0/107171232114475191915")
                         );
@@ -147,7 +147,7 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                           QLatin1String("https://plus.google.com/114906808699351374523")
                         );
 
-    aboutData.addCredit ( ki18n("Thanh Trung Dinh>").toString(),
+    aboutData.addCredit ( ki18n("Thanh Trung Dinh").toString(),
                           ki18n("Port web-service tools to OAuth and factoring").toString(),
                           QLatin1String("dinhthanhtrung1996 at gmail dot com"),
                           QLatin1String("https://plus.google.com/u/0/105288296237200960831")
