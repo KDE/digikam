@@ -49,7 +49,7 @@ public:
         RAWFiles,
         MoviesFiles,
         AudioFiles,
-        RasterFiles               // PSD, XCF, etc...
+        RasterGraphics       // PSD, XCF, etc...
     };
 
 public:

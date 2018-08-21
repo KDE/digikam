@@ -563,7 +563,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
 
             break;
         }
-        case MimeFilter::RasterFiles:
+        case MimeFilter::RasterGraphics:
         {
             if (info.format() != QLatin1String("PSD") &&         // Adobe Photoshop Document
                 info.format() != QLatin1String("PSB") &&         // Adobe Photoshop Big

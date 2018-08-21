@@ -61,7 +61,7 @@ int CoreDbSchemaUpdater::schemaVersion()
 
 int CoreDbSchemaUpdater::filterSettingsVersion()
 {
-    return 7;
+    return 8;
 }
 
 int CoreDbSchemaUpdater::uniqueHashVersion()
@@ -472,12 +472,20 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
                        << QLatin1String("tif") << QLatin1String("tiff")                                                                         // TIFF
                        << QLatin1String("png")                                                                                                  // PNG
                        << QLatin1String("gif") << QLatin1String("xpm")  << QLatin1String("ppm") << QLatin1String("pnm") << QLatin1String("pgf")
-                       << QLatin1String("bmp") << QLatin1String("xcf")  << QLatin1String("pcx")
+                       << QLatin1String("bmp") << QLatin1String("pcx")
                        << QLatin1String("webp");
+
+    // Raster graphics editor containers: https://en.wikipedia.org/wiki/Raster_graphics_editor
+
+    defaultImageFilter << QLatin1String("xcf")
+                       << QLatin1String("psd") << QLatin1String("psb")
+                       << QLatin1String("kra") << QLatin1String("ora");
+
+    // Raw images: https://en.wikipedia.org/wiki/Raw_image_format
 
     defaultImageFilter << DRawDecoder::rawFilesList();
 
-    // https://en.wikipedia.org/wiki/Video_file_format
+    // Video files: https://en.wikipedia.org/wiki/Video_file_format
 
     defaultVideoFilter << QLatin1String("mpeg") << QLatin1String("mpg")  << QLatin1String("mpo") << QLatin1String("mpe") << QLatin1String("mts") << QLatin1String("vob")    // MPEG
                        << QLatin1String("avi")  << QLatin1String("divx")                                                                                                    // RIFF
@@ -486,7 +494,7 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
                        << QLatin1String("mkv")  << QLatin1String("webm")                                                                                                    // Matroska
                        << QLatin1String("mng");                                                                                                                             // Animated PNG image
 
-    // https://en.wikipedia.org/wiki/Audio_file_format
+    // Audio files: https://en.wikipedia.org/wiki/Audio_file_format
 
     defaultAudioFilter << QLatin1String("ogg") << QLatin1String("oga") << QLatin1String("flac") << QLatin1String("wv")  << QLatin1String("ape") // Linux audio
                        << QLatin1String("mpc") << QLatin1String("au")                                                                           // Linux audio
