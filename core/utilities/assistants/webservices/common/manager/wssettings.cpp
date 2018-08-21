@@ -42,7 +42,7 @@ namespace Digikam
 {
 
 WSSettings::WSSettings(QObject* const parent)
-  : QObject(parent)
+    : QObject(parent)
 {
     selMode             = EXPORT;
     addFileProperties   = false;

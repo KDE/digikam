@@ -78,7 +78,7 @@ public:
  * It contains only the most important attributes of an album,
  * which is needed for further usage (e.g upload photos, create new album).
  */
-class AlbumSimplified 
+class AlbumSimplified
 {
 
 public:

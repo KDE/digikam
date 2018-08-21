@@ -228,4 +228,3 @@ protected:
 } // namespace Digikam
 
 #endif // DIGIKAM_WS_TALKER_H
-

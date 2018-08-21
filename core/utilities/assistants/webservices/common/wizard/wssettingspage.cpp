@@ -193,10 +193,10 @@ WSSettingsPage::WSSettingsPage(QWizard* const dialog, const QString& title)
     grid->setColumnStretch(3, 10);
 
     setPageWidget(main);
-    
+
     /* We should use another icon here, because it's not for mail attachment.
      * Therefore, I comment this line.
-     * 
+     *
      * setLeftBottomPix(QIcon::fromTheme(QLatin1String("mail-attachment")));
      */
 

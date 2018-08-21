@@ -20,6 +20,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #ifndef DIGIKAM_WEB_WIDGET_H
 #define DIGIKAM_WEB_WIDGET_H
 
@@ -43,14 +44,16 @@ Q_SIGNALS:
 
     void closeView(bool val);
 
-
 protected:
-  void closeEvent(QCloseEvent *event) override;
+
+    void closeEvent(QCloseEvent *event) override;
 
 private:
 
-  class Private;
-  Private* const d;
+    class Private;
+    Private* const d;
 };
-}
-#endif
+
+} // namespace Digikam
+
+#endif // DIGIKAM_WEB_WIDGET_H

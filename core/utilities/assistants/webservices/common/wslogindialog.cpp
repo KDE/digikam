@@ -62,7 +62,7 @@ public:
     QLineEdit* loginEdit;
     QLineEdit* passwordEdit;
 };
-    
+
 WSLoginDialog::WSLoginDialog(QWidget* const parent,
                              const QString& prompt,
                              const QString& login,

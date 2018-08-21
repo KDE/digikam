@@ -58,7 +58,7 @@ protected Q_SLOTS:
     void slotAccept();
 
 private:
-    
+
     class Private;
     Private* const d;
 };

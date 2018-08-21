@@ -192,7 +192,7 @@ QMap<QString, QVariant> WSTalker::getUserAccountInfo(const QString& userName)
     m_settings->beginGroup(userID);
     QStringList keys = m_settings->allKeys();
 
-    foreach(const QString& key, keys)
+    foreach (const QString& key, keys)
     {
         QVariant value = m_settings->value(key);
         map.insert(key, value);

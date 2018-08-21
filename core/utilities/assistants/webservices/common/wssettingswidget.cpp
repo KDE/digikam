@@ -62,7 +62,7 @@ public:
           settingsScrollArea(0),
           albumsCoB(0),
           newAlbumBtn(0),
-          reloadAlbumsBtn(0),   
+          reloadAlbumsBtn(0),
           originalChB(0),
           resizeChB(0),
           dimensionSpB(0),
@@ -82,9 +82,9 @@ public:
           accountBoxLayout(0),
           iface(interface),
           progressBar(0)
-    {        
+    {
     }
-          
+
     DImagesList*                   imgList;
     QWidget*                       uploadWidget;
     QString                        toolName;

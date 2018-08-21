@@ -95,7 +95,7 @@ WSAuthentication::WSAuthentication(QWidget* const parent, DInfoInterface* const 
 {
     d->wizard = dynamic_cast<WSWizard*>(parent);
 
-    if(d->wizard)
+    if (d->wizard)
     {
         d->iface = d->wizard->iface();
     }
@@ -124,7 +124,7 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
     d->serviceName = serviceName;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "create " << serviceName << "talker";
 
-    switch(ws)
+    switch (ws)
     {
         case WSSettings::WebService::FLICKR:
             //d->talker = new FlickrTalker(d->wizard, serviceName, d->iface);
@@ -359,7 +359,7 @@ void WSAuthentication::slotCancel()
 
     // Then the folder containing all temporary photos to upload will be removed after all.
     QDir tmpDir(d->tmpDir);
-    if(tmpDir.exists())
+    if (tmpDir.exists())
     {
         tmpDir.removeRecursively();
     }
@@ -423,8 +423,8 @@ void WSAuthentication::slotAddPhotoDone(int errCode, const QString& errMsg)
     else
     {
         if (QMessageBox::question(d->wizard, i18n("Uploading Failed"),
-            i18n("Failed to upload photo: %1\n"
-            "Do you want to continue?", errMsg))
+                i18n("Failed to upload photo: %1\n"
+                "Do you want to continue?", errMsg))
             != QMessageBox::Yes)
         {
             d->transferQueue.clear();

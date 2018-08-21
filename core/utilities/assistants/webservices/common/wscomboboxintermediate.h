@@ -65,7 +65,7 @@ private Q_SLOTS:
     void slotIndexChanged(int);
 
 private:
-    
+
     class Private;
     Private* const d;
 };

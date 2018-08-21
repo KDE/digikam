@@ -21,9 +21,16 @@
  *
  * ============================================================ */
 
- #include "webwidget.h"
- #include "digikam_debug.h"
- #include <QCloseEvent>
+#include "webwidget.h"
+
+// Qt includes
+
+#include <QCloseEvent>
+
+// Local includes
+
+#include "digikam_debug.h"
+
 namespace Digikam
 {
 class WebWidget::Private
@@ -35,8 +42,9 @@ public:
     {
     }
 
-    QWidget*        parent;
+    QWidget* parent;
 };
+
 WebWidget::WebWidget(QWidget* const parent)
     : QWebView(parent),
       d(new Private())
@@ -44,12 +52,16 @@ WebWidget::WebWidget(QWidget* const parent)
     d->parent = parent;
 
 }
-void WebWidget::closeEvent(QCloseEvent *event){
-  emit closeView(false);
-  event->accept();
+
+void WebWidget::closeEvent(QCloseEvent *event)
+{
+    emit closeView(false);
+    event->accept();
 }
+
 WebWidget::~WebWidget()
 {
     delete d;
 }
+
 } // namespace Digikam

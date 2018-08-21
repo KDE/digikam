@@ -50,7 +50,7 @@ protected Q_SLOTS:
     void slotNewAccountClicked();
 
 private:
-    
+
     class Private;
     Private* const d;
 };

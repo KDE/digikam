@@ -77,9 +77,9 @@ private Q_SLOTS:
     void slotTextChanged(const QString& text);
 
 protected:
-    
+
     void getBaseAlbumProperties(WSAlbum& baseAlbum);
-    
+
 private:
 
     class Private;

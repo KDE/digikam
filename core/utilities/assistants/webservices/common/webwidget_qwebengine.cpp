@@ -20,11 +20,20 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- #include "webwidget_qwebengine.h"
- #include "digikam_debug.h"
- #include <QCloseEvent>
+
+#include "webwidget_qwebengine.h"
+
+// Qt includes
+
+#include <QCloseEvent>
+
+// Local includes
+
+#include "digikam_debug.h"
+
 namespace Digikam
 {
+
 class WebWidget::Private
 {
 public:
@@ -36,6 +45,7 @@ public:
 
     QWidget*        parent;
 };
+
 WebWidget::WebWidget(QWidget* const parent)
     : QWebEngineView(parent),
       d(new Private())
@@ -43,10 +53,13 @@ WebWidget::WebWidget(QWidget* const parent)
     d->parent = parent;
 
 }
-void WebWidget::closeEvent(QCloseEvent *event){
-  emit closeView(false);
-  event->accept();
+
+void WebWidget::closeEvent(QCloseEvent* event)
+{
+    emit closeView(false);
+    event->accept();
 }
+
 WebWidget::~WebWidget()
 {
     delete d;

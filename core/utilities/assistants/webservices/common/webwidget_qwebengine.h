@@ -25,6 +25,7 @@
 #define DIGIKAM_WEB_WIDGET_QWEBENGINE_H
 
 // Qt includes
+
 #include <QWebEngineView>
 #include <QWebEnginePage>
 #include <QWebEngineProfile>
@@ -54,5 +55,7 @@ private:
   class Private;
   Private* const d;
 };
-}
-#endif
+
+} // namespace Digikam
+
+#endif // DIGIKAM_WEB_WIDGET_QWEBENGINE_H

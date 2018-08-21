@@ -54,7 +54,7 @@ public:
     bool validateCurrentPage() override;
     int  nextId() const override;
 
-    DInfoInterface*     iface()  const;
+    DInfoInterface*     iface()    const;
     WSSettings*         settings() const;
 
     /*
@@ -64,8 +64,8 @@ public:
      * These 2 methods below are getters, used in other pages of wizard so as to facilitate
      * access to WSAuthentication instance and its settings.
      */
-    WSAuthentication*   wsAuth() const;
-    QSettings*          oauthSettings() const;
+    WSAuthentication*   wsAuth()             const;
+    QSettings*          oauthSettings()      const;
     O0SettingsStore*    oauthSettingsStore() const;
 
     void setItemsList(const QList<QUrl>& urls);
