@@ -421,4 +421,6 @@ BUGFIXES:
 361 ==> 396892 - digiKam font sizes cannot be changed. Mostly too small.
 362 ==> 371726 - Dates view empty using MYSQL due to SQL query error (fix supplied).
 363 ==> 382217 - Use normalized connects [patch].
-364 ==> 
+364 ==> 113692 - digiKam thumbnail hangs on .mov movie.
+365 ==> 
+
