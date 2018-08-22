@@ -445,4 +445,6 @@ BUGFIXES:
 384 ==> 397565 - Unable to launch in OS X after install.
 385 ==> 337978 - digiKam crashes on startup - always.
 386 ==> 215673 - digiKam movie no preview.
-387 ==> 
+387 ==> 204481 - digikam: Wizard not translated in French.
+388 ==> 
+
