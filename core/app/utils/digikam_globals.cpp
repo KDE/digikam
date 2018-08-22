@@ -32,6 +32,8 @@
 #include <QByteArray>
 #include <QShortcut>
 #include <QApplication>
+#include <QStandardPaths>
+#include <QLibrary>
 
 // KDE includes
 
@@ -179,20 +181,20 @@ QProcessEnvironment adjustedEnvironmentForAppImage()
     return env;
 }
 
-} // namespace Digikam
-
 #ifdef HAVE_DRMINGW
 
-namespace
-{
+#include <windows.h>
 
 void tryInitDrMingw()
 {
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Loading DrMinGw run-time...";
+
     wchar_t path[MAX_PATH];
-    QString pathStr = QCoreApplication::applicationDirPath().replace(L'/', L'\\') + QStringLiteral("\\exchndl.dll");
+    QString pathStr = QCoreApplication::applicationDirPath().replace(L'/', L'\\') + QLatin1String("\\exchndl.dll");
 
     if (pathStr.size() > MAX_PATH - 1)
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "DrMinGw: cannot find crash handler dll.";
         return;
     }
 
@@ -202,6 +204,7 @@ void tryInitDrMingw()
 
     if (!hMod)
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "DrMinGw: cannot init crash handler dll.";
         return;
     }
 
@@ -210,14 +213,18 @@ void tryInitDrMingw()
 
     if (!myExcHndlSetLogFileNameA)
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "DrMinGw: cannot init customized crash file.";
         return;
     }
 
     // Set the log file path to %LocalAppData%\kritacrash.log
-    QString logFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation).replace(L'/', L'\\') + QStringLiteral("\\digikamcrash.log");
-    myExcHndlSetLogFileNameA(logFile.toLocal8Bit());
+    QString logFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation).replace(L'/', L'\\') + QLatin1String("\\digikam_crash.log");
+    myExcHndlSetLogFileNameA(logFile.toLocal8Bit().data());
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "DrMinGw run-time loaded.";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "DrMinGw crash-file will be located at: " << logFile;
 }
 
-} // namespace
+} // namespace Digikam
 
 #endif // HAVE_DRMINGW

@@ -171,20 +171,15 @@ DIGIKAM_EXPORT void showRawCameraList();
  */
 DIGIKAM_EXPORT QProcessEnvironment adjustedEnvironmentForAppImage();
 
-} // namespace Digikam
-
 #ifdef HAVE_DRMINGW
-
-namespace
-{
 
 /** Static method to initialize DrMinGw crash handler under windows.
  *  This method is typically called from main() function.
  */
 DIGIKAM_EXPORT void tryInitDrMingw();
 
-} // namespace
-
 #endif // HAVE_DRMINGW
+
+} // namespace Digikam
 
 #endif // DIGIKAM_GLOBALS_H
