@@ -14,6 +14,7 @@ Database     : Similarity database has been moved to a dedicated file to not blo
 Database     : New video metadata parser based on ffmpeg to populate database.
 Search       : Add video support to find files based on properties registered on database.
 
+General      : Use DrMinGW has crash handler under Windows.
 General      : Port all export/import tool to OAuth2 authentification.
 General      : New tool to export to Pinterest social network.
 General      : New tool to export to OneDrive webservice.
