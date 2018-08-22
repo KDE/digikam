@@ -69,12 +69,12 @@ using namespace Digikam;
 
 int main(int argc, char* argv[])
 {
+    QApplication app(argc, argv);
 
 #ifdef HAVE_DRMINGW
     tryInitDrMingw();
 #endif
 
-    QApplication app(argc, argv);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     // if we have some local breeze icon resource, prefer it
