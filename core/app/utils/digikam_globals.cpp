@@ -225,6 +225,6 @@ void tryInitDrMingw()
     qCDebug(DIGIKAM_GENERAL_LOG) << "DrMinGw crash-file will be located at: " << logFile;
 }
 
-} // namespace Digikam
-
 #endif // HAVE_DRMINGW
+
+} // namespace Digikam
