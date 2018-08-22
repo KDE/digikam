@@ -330,6 +330,7 @@ The full list of mandatory (X) and optional (opt) external dependencies required
 | liblqr-1             |  opt     | >= 0.4.2    | http://liblqr.wikidot.com                         | For Liquid rescale tool                                |                                                                                       |
 | libgphoto2           |  opt     | >= 2.5      | http://www.gphoto.org                             | Digital camera drivers support. Need libusb-1          |                                                                                       |
 | libgomp              |  opt     | >= 5.0      | https://gcc.gnu.org/onlinedocs/libgomp            | OpenMP support for RawEngine                           |                                                                                       |
+| DrMingw              |  opt     | >= 0.8.2    | https://github.com/jrfonseca/drmingw              | Mingw crash handler (run-time deps only for windows)   |                                                                                       |
 
 \section getsourcecode Get Source Code
 
@@ -472,6 +473,7 @@ There are two configuration sections : the top level and the core.
  - Developers only options:
 
   - \b ENABLE_DIGIKAM_MODELTEST              : Enable ModelTest on some models for debugging (default=OFF).
+  - \b ENABLE_DRMINGW                        : Enable the Dr. Mingw crash handler for windows (default=ON).
 
 \section setuplocaldev Setup Local Compilation and Run-Time
 

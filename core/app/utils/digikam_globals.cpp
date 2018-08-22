@@ -42,7 +42,6 @@
 #include "drawdecoder.h"
 #include "rawcameradlg.h"
 #include "digikam_debug.h"
-#include "digikam_config.h"
 
 namespace Digikam
 {
@@ -181,3 +180,44 @@ QProcessEnvironment adjustedEnvironmentForAppImage()
 }
 
 } // namespace Digikam
+
+#ifdef HAVE_DRMINGW
+
+namespace
+{
+
+void tryInitDrMingw()
+{
+    wchar_t path[MAX_PATH];
+    QString pathStr = QCoreApplication::applicationDirPath().replace(L'/', L'\\') + QStringLiteral("\\exchndl.dll");
+
+    if (pathStr.size() > MAX_PATH - 1)
+    {
+        return;
+    }
+
+    int pathLen   = pathStr.toWCharArray(path);
+    path[pathLen] = L'\0'; // toWCharArray doesn't add NULL terminator
+    HMODULE hMod  = LoadLibraryW(path);
+
+    if (!hMod)
+    {
+        return;
+    }
+
+    // No need to call ExcHndlInit since the crash handler is installed on DllMain
+    auto myExcHndlSetLogFileNameA = reinterpret_cast<BOOL (APIENTRY*)(const char*)>(GetProcAddress(hMod, "ExcHndlSetLogFileNameA"));
+
+    if (!myExcHndlSetLogFileNameA)
+    {
+        return;
+    }
+
+    // Set the log file path to %LocalAppData%\kritacrash.log
+    QString logFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation).replace(L'/', L'\\') + QStringLiteral("\\digikamcrash.log");
+    myExcHndlSetLogFileNameA(logFile.toLocal8Bit());
+}
+
+} // namespace
+
+#endif // HAVE_DRMINGW

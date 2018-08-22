@@ -44,8 +44,11 @@
 
 // Local includes
 
-#include "metaengine.h"
+#include "digikam_config.h"
 #include "digikam_debug.h"
+#include "digikam_version.h"
+#include "digikam_globals.h"
+#include "metaengine.h"
 #include "dmessagebox.h"
 #include "albummanager.h"
 #include "firstrundlg.h"
@@ -59,15 +62,18 @@
 #include "thumbsdbaccess.h"
 #include "facedbaccess.h"
 #include "dxmlguiwindow.h"
-#include "digikam_version.h"
 #include "applicationsettings.h"
 #include "similaritydbaccess.h"
 
 using namespace Digikam;
 
-
 int main(int argc, char* argv[])
 {
+
+#ifdef HAVE_DRMINGW
+    tryInitDrMingw();
+#endif
+
     QApplication app(argc, argv);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 

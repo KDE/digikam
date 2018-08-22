@@ -113,6 +113,10 @@ option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server ex
 # Debug options:
 option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debugging (default=OFF)"                        OFF)
 
+if(MINGW)
+    option(ENABLE_DRMINGW           "Enable the Dr. Mingw crash handler support for windows (default ON)"                ON)
+endif()
+
 ############## Find Packages ###################
 
 find_package(Qt5 ${QT_MIN_VERSION}
@@ -482,6 +486,7 @@ MACRO_BOOL_TO_01(ENABLE_MEDIAPLAYER      HAVE_MEDIAPLAYER)
 MACRO_BOOL_TO_01(ENABLE_DBUS             HAVE_DBUS)
 MACRO_BOOL_TO_01(ENABLE_APPSTYLES        HAVE_APPSTYLE_SUPPORT)
 MACRO_BOOL_TO_01(ENABLE_QWEBENGINE       HAVE_QWEBENGINE)
+MACRO_BOOL_TO_01(ENABLE_DRMINGW          HAVE_DRMINGW)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina

@@ -34,6 +34,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "digikam_config.h"
 
 class QWidget;
 class QObject;
@@ -171,5 +172,19 @@ DIGIKAM_EXPORT void showRawCameraList();
 DIGIKAM_EXPORT QProcessEnvironment adjustedEnvironmentForAppImage();
 
 } // namespace Digikam
+
+#ifdef HAVE_DRMINGW
+
+namespace
+{
+
+/** Static method to initialize DrMinGw crash handler under windows.
+ *  This method is typically called from main() function.
+ */
+DIGIKAM_EXPORT void tryInitDrMingw();
+
+} // namespace
+
+#endif // HAVE_DRMINGW
 
 #endif // DIGIKAM_GLOBALS_H
