@@ -129,12 +129,12 @@ bool ImageShackMPForm::addFile(const QString& name, const QString& path)
 
 QString ImageShackMPForm::contentType() const
 {
-    return QString::fromLatin1("multipart/form-data; boundary=") + QString::fromLatin1(m_boundary);
+    return QLatin1String("multipart/form-data; boundary=") + QLatin1String(m_boundary);
 }
 
 QString ImageShackMPForm::boundary() const
 {
-    return QString::fromLatin1(m_boundary);
+    return QLatin1String(m_boundary);
 }
 
 QByteArray ImageShackMPForm::formData() const

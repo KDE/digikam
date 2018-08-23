@@ -19,7 +19,7 @@ BUILDING_DIR="`pwd`/temp.build"
 
 #------------
 # IMPORTANT: Target Windows architecture to build installer. Possible values: 32 or 64 bits.
-MXE_ARCHBITS=32
+MXE_ARCHBITS=64
 #------------
 
 if [[ $MXE_ARCHBITS == 32 ]]; then
@@ -43,6 +43,11 @@ MXE_INSTALL_PREFIX=${MXE_BUILDROOT}/usr/${MXE_BUILD_TARGETS}/
 MXE_TOOLCHAIN=${MXE_INSTALL_PREFIX}/share/cmake/mxe-conf.cmake
 
 #-------------------------------------------------------------------------------------------
+
+# URL to git repository to checkout digiKam source code
+# Read/write url is an alternative when official read only server is down.
+#DK_GITURL="git://anongit.kde.org/digikam.git"
+DK_GITURL="git@git.kde.org:digikam"
 
 # digiKam tarball information.
 DK_URL="http://download.kde.org/stable/digikam"

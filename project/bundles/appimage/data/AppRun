@@ -10,8 +10,10 @@
 
 if [[ "$(arch)" = "x86_64" ]] ; then
     export LD_PRELOAD=$LD_PRELOAD:/usr/lib64/libfreetype.so
+    export LD_PRELOAD=$LD_PRELOAD:/usr/lib64/libudev.so
 else
     export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libfreetype.so
+    export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libudev.so
 fi
 
 echo "-- digiKam AppImage Bundle"
@@ -33,6 +35,16 @@ export PATH=$DIR/usr/bin:$DIR/usr/lib:$DIR/usr/lib/libexec/kf5:$DIR/usr/share/di
 export KDE_FORK_SLAVES=1
 export CAMLIBS=$DIR/usr/lib/libgphoto2
 export IOLIBS=$DIR/usr/lib/libgphoto2_port
+
+# code to disable Plasma desktopk detection with QDesktopService
+export APPIMAGE_ORIGINAL_KDE_FULL_SESSION=$KDE_FULL_SESSION
+export APPIMAGE_ORIGINAL_DESKTOP_SESSION=$DESKTOP_SESSION
+export APPIMAGE_ORIGINAL_XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP
+export APPIMAGE_ORIGINAL_XDG_SESSION_DESKTOP=$XDG_SESSION_DESKTOP
+#unset KDE_FULL_SESSION
+#unset DESKTOP_SESSION
+#unset XDG_CURRENT_DESKTOP
+#unset XDG_SESSION_DESKTOP
 
 # if no customized Qt debug loggin variable is set, turn on one for a better readability
 

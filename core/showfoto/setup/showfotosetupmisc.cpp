@@ -46,6 +46,7 @@
 
 #include "digikam_config.h"
 #include "dlayoutbox.h"
+#include "dfontselect.h"
 #include "showfotosettings.h"
 
 using namespace Digikam;
@@ -60,7 +61,7 @@ public:
     explicit Private() :
         sidebarTypeLabel(0),
         applicationStyleLabel(0),
-        iconThemeLabel(0),
+        applicationIconLabel(0),
         showSplash(0),
         nativeFileDialog(0),
         itemCenter(0),
@@ -70,14 +71,15 @@ public:
         sidebarType(0),
         sortOrderComboBox(0),
         applicationStyle(0),
-        iconTheme(0),
+        applicationIcon(0),
+        applicationFont(0),
         settings(ShowfotoSettings::instance())
     {
     }
 
     QLabel*              sidebarTypeLabel;
     QLabel*              applicationStyleLabel;
-    QLabel*              iconThemeLabel;
+    QLabel*              applicationIconLabel;
 
     QCheckBox*           showSplash;
     QCheckBox*           nativeFileDialog;
@@ -89,7 +91,8 @@ public:
     QComboBox*           sidebarType;
     QComboBox*           sortOrderComboBox;
     QComboBox*           applicationStyle;
-    QComboBox*           iconTheme;
+    QComboBox*           applicationIcon;
+    DFontSelect*         applicationFont;
 
     ShowfotoSettings*    settings;
 };
@@ -177,11 +180,11 @@ SetupMisc::SetupMisc(QWidget* const parent)
 #endif
 
     DHBox* const iconThemeHbox = new DHBox(panel);
-    d->iconThemeLabel          = new QLabel(i18n("Icon theme (changes after restart):"), iconThemeHbox);
-    d->iconTheme               = new QComboBox(iconThemeHbox);
-    d->iconTheme->setToolTip(i18n("Set this option to choose the default icon theme."));
+    d->applicationIconLabel    = new QLabel(i18n("Icon theme (changes after restart):"), iconThemeHbox);
+    d->applicationIcon         = new QComboBox(iconThemeHbox);
+    d->applicationIcon->setToolTip(i18n("Set this option to choose the default icon theme."));
 
-    d->iconTheme->addItem(i18n("Use Icon Theme From System"), QString());
+    d->applicationIcon->addItem(i18n("Use Icon Theme From System"), QString());
 
     const QString indexTheme = QLatin1String("/index.theme");
     const QString breezeDark = QLatin1String("/breeze-dark");
@@ -194,16 +197,19 @@ SetupMisc::SetupMisc(QWidget* const parent)
     {
         if (!foundBreeze && QFile::exists(path + breeze + indexTheme))
         {
-            d->iconTheme->addItem(i18n("Breeze"), breeze.mid(1));
+            d->applicationIcon->addItem(i18n("Breeze"), breeze.mid(1));
             foundBreeze = true;
         }
 
         if (!foundBreezeDark && QFile::exists(path + breezeDark + indexTheme))
         {
-            d->iconTheme->addItem(i18n("Breeze Dark"), breezeDark.mid(1));
+            d->applicationIcon->addItem(i18n("Breeze Dark"), breezeDark.mid(1));
             foundBreezeDark = true;
         }
     }
+
+    d->applicationFont = new DFontSelect(i18n("Application font:"), abOptionsGroup);
+    d->applicationFont->setToolTip(i18n("Select here the font used to display text in whole application."));
 
     gLayout5->addWidget(d->showSplash);
     gLayout5->addWidget(d->nativeFileDialog);
@@ -211,6 +217,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     gLayout5->addWidget(tabStyleHbox);
     gLayout5->addWidget(appStyleHbox);
     gLayout5->addWidget(iconThemeHbox);
+    gLayout5->addWidget(d->applicationFont);
     abOptionsGroup->setLayout(gLayout5);
 
     // --------------------------------------------------------
@@ -245,7 +252,8 @@ void SetupMisc::readSettings()
 #ifdef HAVE_APPSTYLE_SUPPORT
     d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(d->settings->getApplicationStyle(), Qt::MatchFixedString));
 #endif
-    d->iconTheme->setCurrentIndex(d->iconTheme->findData(d->settings->getIconTheme()));
+    d->applicationIcon->setCurrentIndex(d->applicationIcon->findData(d->settings->getIconTheme()));
+    d->applicationFont->setFont(d->settings->getApplicationFont());
 }
 
 void SetupMisc::applySettings()
@@ -261,7 +269,8 @@ void SetupMisc::applySettings()
 #ifdef HAVE_APPSTYLE_SUPPORT
     d->settings->setApplicationStyle(d->applicationStyle->currentText());
 #endif
-    d->settings->setIconTheme(d->iconTheme->currentData().toString());
+    d->settings->setIconTheme(d->applicationIcon->currentData().toString());
+    d->settings->setApplicationFont(d->applicationFont->font());
     d->settings->syncConfig();
 }
 

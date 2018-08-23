@@ -136,6 +136,13 @@ find  $MXE_INSTALL_PREFIX/lib/plugins -name "*.dll" -type f -exec cp {} $BUNDLED
 echo -e "\n---------- OpenAL for QtAV"
 cp -r $MXE_INSTALL_PREFIX/bin/OpenAL32.dll                              $BUNDLEDIR/             2>/dev/null
 
+echo -e "\n---------- DrMinGw run-time"
+cp -r $MXE_INSTALL_PREFIX/bin/dbghelp.dll                               $BUNDLEDIR/             2>/dev/null
+cp -r $MXE_INSTALL_PREFIX/bin/symsrv.dll                                $BUNDLEDIR/             2>/dev/null
+cp -r $MXE_INSTALL_PREFIX/bin/symsrv.yes                                $BUNDLEDIR/             2>/dev/null
+cp -r $MXE_INSTALL_PREFIX/bin/exchndl.dll                               $BUNDLEDIR/             2>/dev/null
+cp -r $MXE_INSTALL_PREFIX/bin/mgwhelp.dll                               $BUNDLEDIR/             2>/dev/null
+
 echo -e "\n---------- Copy executables with recursive dependencies in bundle directory\n"
 
 # Executables and plugins shared libraries dependencies scan ---------------------------------

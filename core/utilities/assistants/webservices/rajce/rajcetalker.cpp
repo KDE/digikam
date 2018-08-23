@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-const QUrl RAJCE_URL(QString::fromLatin1("http://www.rajce.idnes.cz/liveAPI/index.php"));
+const QUrl RAJCE_URL(QLatin1String("http://www.rajce.idnes.cz/liveAPI/index.php"));
 
 class RajceTalker::Private
 {
@@ -211,7 +211,7 @@ void RajceTalker::uploadPhoto(const QString& path, unsigned dimension, int jpgQu
 void RajceTalker::clearLastError()
 {
     d->session.lastErrorCode()    = 0;
-    d->session.lastErrorMessage() = QString::fromLatin1("");
+    d->session.lastErrorMessage() = QLatin1String("");
 }
 
 void RajceTalker::slotUploadProgress(qint64 bytesSent, qint64 bytesTotal)

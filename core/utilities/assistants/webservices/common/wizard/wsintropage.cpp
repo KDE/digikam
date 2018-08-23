@@ -5,10 +5,10 @@
  *
  * Date        : 2017-06-27
  * Description : intro page to export tool where user can choose web service to export,
- *               existant accounts and function mode (export/import).
+ *               existent accounts and function mode (export/import).
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,7 +34,6 @@
 #include <QGridLayout>
 #include <QRadioButton>
 #include <QButtonGroup>
-#include <QIcon>
 #include <QSettings>
 
 // KDE includes
@@ -67,25 +66,25 @@ public:
 
         if (wizard)
         {
-            iface     = wizard->iface();
-            settings  = wizard->settings();
+            iface    = wizard->iface();
+            settings = wizard->settings();
         }
 
     }
 
-    QComboBox*        imageGetOption;
-    DHBox*            hbox;
-    WSWizard*         wizard;
-    WSSettings*       settings;
-    DInfoInterface*   iface;
-    QComboBox*        wsOption;
-    QComboBox*        accountOption;
+    QComboBox*      imageGetOption;
+    DHBox*          hbox;
+    WSWizard*       wizard;
+    WSSettings*     settings;
+    DInfoInterface* iface;
+    QComboBox*      wsOption;
+    QComboBox*      accountOption;
 };
 
 WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title),
       d(new Private(dialog))
-{    
+{
     DVBox* const vbox  = new DVBox(this);
     QLabel* const desc = new QLabel(vbox);
 
@@ -109,7 +108,7 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     d->imageGetOption->insertItem(WSSettings::EXPORT, i18n("Export to web services"));
     d->imageGetOption->insertItem(WSSettings::IMPORT, i18n("Import from web services"));
     getImageLabel->setBuddy(d->imageGetOption);
-    
+
     connect(d->imageGetOption, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotImageGetOptionChanged(int)));
 
@@ -126,45 +125,45 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     while (it != map.constEnd())
     {
         QString wsName = it.value().toLower();
-        QIcon icon = QIcon::fromTheme(wsName.remove(QLatin1Char(' ')));
+        QIcon icon     = QIcon::fromTheme(wsName.remove(QLatin1Char(' ')));
         d->wsOption->addItem(icon, it.value(), (int)it.key());
         ++it;
     }
 
     wsLabel->setBuddy(d->wsOption);
-    
-    connect(d->wsOption, SIGNAL(currentIndexChanged(const QString&)),
-            this, SLOT(slotWebServiceOptionChanged(const QString&)));
-    
+
+    connect(d->wsOption, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(slotWebServiceOptionChanged(QString)));
+
     /* --------------------
      * ComboBox for user account selection
-     * 
+     *
      * An empty option is added to accounts, so that user can choose to login with new account
      */
-    
+
     DHBox* const accountBox     = new DHBox(vbox);
     QLabel* const accountLabel  = new QLabel(i18n("&Choose account:"), accountBox);
     d->accountOption            = new QComboBox(accountBox);
-    
+
     QStringList accounts        = QStringList(QString(""))
                                   << d->settings->allUserNames(map.constBegin().value());
-    
+
     foreach(const QString& account, accounts)
     {
         d->accountOption->addItem(account);
     }
-    
+
     accountLabel->setBuddy(d->accountOption);
-    
+
     /* --------------------
      * Place widget in the view
      */
-    
-    vbox->setStretchFactor(desc,         3);
-    vbox->setStretchFactor(d->hbox,      1);
-    vbox->setStretchFactor(wsBox,        3);
-    vbox->setStretchFactor(accountBox,   3);
-    
+
+    vbox->setStretchFactor(desc,       3);
+    vbox->setStretchFactor(d->hbox,    1);
+    vbox->setStretchFactor(wsBox,      3);
+    vbox->setStretchFactor(accountBox, 3);
+
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-html")));
 }
@@ -177,17 +176,17 @@ WSIntroPage::~WSIntroPage()
 void WSIntroPage::slotImageGetOptionChanged(int index)
 {
     QMap<WSSettings::WebService, QString> map   = WSSettings::webServiceNames();
-    
+
     d->wsOption->clear();
-    
+
     /*
      * index == 0 <=> Export
      * index == 1 <=> Import, for now we only have Google Photo and Smugmug in this option
      */
-    if(index == 0)
-    {          
+    if (index == 0)
+    {
         QMap<WSSettings::WebService, QString>::const_iterator it = map.constBegin();
-        
+
         while (it != map.constEnd())
         {
             QString wsName = it.value().toLower();
@@ -199,12 +198,12 @@ void WSIntroPage::slotImageGetOptionChanged(int index)
     }
     else
     {
-        d->wsOption->addItem(QIcon::fromTheme(QString::fromLatin1("smugmug")),
-                             map[WSSettings::WebService::SMUGMUG], 
+        d->wsOption->addItem(QIcon::fromTheme(QLatin1String("smugmug")),
+                             map[WSSettings::WebService::SMUGMUG],
                              WSSettings::WebService::SMUGMUG);
-        d->wsOption->addItem(QIcon::fromTheme(QString::fromLatin1("googlephoto")),
-                             map[WSSettings::WebService::GPHOTO], 
-                             WSSettings::WebService::GPHOTO);        
+        d->wsOption->addItem(QIcon::fromTheme(QLatin1String("googlephoto")),
+                             map[WSSettings::WebService::GPHOTO],
+                             WSSettings::WebService::GPHOTO);
     }
 }
 
@@ -213,9 +212,9 @@ void WSIntroPage::slotWebServiceOptionChanged(const QString& serviceName)
     d->accountOption->clear();
 
     // An empty option is added to accounts, so that user can choose to login with new account
-    QStringList accounts    = QStringList(QString(""))
-                              << d->settings->allUserNames(serviceName);
-    
+    QStringList accounts = QStringList(QString(""))
+                           << d->settings->allUserNames(serviceName);
+
     foreach(const QString& account, accounts)
     {
         d->accountOption->addItem(account);
@@ -229,9 +228,9 @@ void WSIntroPage::initializePage()
 
 bool WSIntroPage::validatePage()
 {
-    d->wizard->settings()->selMode      = (WSSettings::Selection)d->imageGetOption->currentIndex();
-    d->wizard->settings()->webService   = (WSSettings::WebService)d->wsOption->currentIndex();
-    d->wizard->settings()->userName     = d->accountOption->currentText();
+    d->wizard->settings()->selMode    = (WSSettings::Selection)d->imageGetOption->currentIndex();
+    d->wizard->settings()->webService = (WSSettings::WebService)d->wsOption->currentIndex();
+    d->wizard->settings()->userName   = d->accountOption->currentText();
 
     return true;
 }

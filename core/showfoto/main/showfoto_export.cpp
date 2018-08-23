@@ -92,6 +92,24 @@ void ShowFoto::slotExportTool()
         w->exec();
         delete w;
     }
+    if (tool == m_exportOnedriveAction)
+    {
+        QPointer<ODWindow> w = new ODWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
+    }
+    if (tool == m_exportPinterestAction)
+    {
+        QPointer<PWindow> w = new PWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
+    }
+    if (tool == m_exportBoxAction)
+    {
+        QPointer<BOXWindow> w = new BOXWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
+    }
     else if (tool == m_exportFacebookAction)
     {
         QPointer<FbWindow> w = new FbWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);

@@ -223,6 +223,7 @@ cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libfreetype.so.6 | cut -d ">" -f 2 | 
 cp /usr/bin/digikam                 ./usr/bin
 cp /usr/bin/showfoto                ./usr/bin
 cp /usr/bin/kbuildsycoca5           ./usr/bin
+cp /usr/bin/solid-hardware5         ./usr/bin
 
 # QWebEngine runtime process
 [[ -e /usr/libexec/QtWebEngineProcess ]] && cp /usr/libexec/QtWebEngineProcess ./usr/bin
@@ -261,6 +262,8 @@ done
 #################################################################################################
 
 echo -e "---------- Clean-up Bundle Directory Contents\n"
+
+ln -s libssl.so.10 usr/lib/libssl.so || true
 
 # The following are assumed to be part of the base system
 rm -f usr/lib/libcom_err.so.2 || true

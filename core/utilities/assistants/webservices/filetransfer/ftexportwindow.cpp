@@ -65,9 +65,9 @@ public:
     FTExportWidget* exportWidget;
 };
 
-const QString FTExportWindow::Private::TARGET_URL_PROPERTY  = QString::fromLatin1("targetUrl");
-const QString FTExportWindow::Private::HISTORY_URL_PROPERTY = QString::fromLatin1("historyUrls");
-const QString FTExportWindow::Private::CONFIG_GROUP         = QString::fromLatin1("KioExport");
+const QString FTExportWindow::Private::TARGET_URL_PROPERTY  = QLatin1String("targetUrl");
+const QString FTExportWindow::Private::HISTORY_URL_PROPERTY = QLatin1String("historyUrls");
+const QString FTExportWindow::Private::CONFIG_GROUP         = QLatin1String("KioExport");
 
 FTExportWindow::FTExportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     : WSToolDialog(0),
@@ -138,7 +138,7 @@ void FTExportWindow::restoreSettings()
     d->exportWidget->setTargetUrl(group.readEntry(d->TARGET_URL_PROPERTY, QUrl()));
 
     winId();
-    KConfigGroup group2 = config.group(QString::fromLatin1("Kio Export Dialog"));
+    KConfigGroup group2 = config.group(QLatin1String("Kio Export Dialog"));
     KWindowConfig::restoreWindowSize(windowHandle(), group2);
     resize(windowHandle()->size());
 }
@@ -150,7 +150,7 @@ void FTExportWindow::saveSettings()
     group.writeEntry(d->HISTORY_URL_PROPERTY, d->exportWidget->history());
     group.writeEntry(d->TARGET_URL_PROPERTY,  d->exportWidget->targetUrl().url());
 
-    KConfigGroup group2 = config.group(QString::fromLatin1("Kio Export Dialog"));
+    KConfigGroup group2 = config.group(QLatin1String("Kio Export Dialog"));
     KWindowConfig::saveWindowSize(windowHandle(), group2);
     config.sync();
 }

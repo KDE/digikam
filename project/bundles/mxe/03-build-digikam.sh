@@ -45,47 +45,57 @@ cd $MXE_BUILDROOT
 #################################################################################################
 # Build digiKam in temporary directory and installation
 
-if [ -d "$DK_BUILDTEMP" ] ; then
-   echo "---------- Removing existing $DK_BUILDTEMP"
-   rm -rf "$DK_BUILDTEMP"
+if [ -d "$DK_BUILDTEMP/digikam-$DK_VERSION" ] ; then
+
+    echo "---------- Updating existing $DK_BUILDTEMP"
+
+    cd "$DK_BUILDTEMP"
+    cd digikam-$DK_VERSION
+
+    git pull
+
+    mkdir -p build
+
+else
+
+    echo "---------- Creating $DK_BUILDTEMP"
+    mkdir -p "$DK_BUILDTEMP"
+
+    if [ $? -ne 0 ] ; then
+        echo "---------- Cannot create $DK_BUILDTEMP directory."
+        echo "---------- Aborting..."
+        exit;
+    fi
+
+    cd "$DK_BUILDTEMP"
+    echo -e "\n\n"
+    echo "---------- Downloading digiKam $DK_VERSION"
+
+    git clone --progress --verbose $DK_GITURL digikam-$DK_VERSION
+    cd digikam-$DK_VERSION
+    export GITSLAVE=".gitslave.bundle"
+    ./download-repos
+
+    if [ $? -ne 0 ] ; then
+        echo "---------- Cannot clone repositories."
+        echo "---------- Aborting..."
+        exit;
+    fi
+
+    git checkout $DK_VERSION
+
+    mkdir build
+
 fi
-
-echo "---------- Creating $DK_BUILDTEMP"
-mkdir "$DK_BUILDTEMP"
-
-if [ $? -ne 0 ] ; then
-    echo "---------- Cannot create $DK_BUILDTEMP directory."
-    echo "---------- Aborting..."
-    exit;
-fi
-
-cd "$DK_BUILDTEMP"
-echo -e "\n\n"
-echo "---------- Downloading digiKam $DK_VERSION"
-
-git clone --progress --verbose git://anongit.kde.org/digikam.git digikam-$DK_VERSION
-cd digikam-$DK_VERSION
-export GITSLAVE=".gitslave.bundle"
-./download-repos
-
-if [ $? -ne 0 ] ; then
-    echo "---------- Cannot clone repositories."
-    echo "---------- Aborting..."
-    exit;
-fi
-
-git checkout $DK_VERSION
 
 echo -e "\n\n"
 echo "---------- Configure digiKam $DK_VERSION"
-
-rm -rf build
-mkdir build
 
 sed -e "s/DIGIKAMSC_CHECKOUT_PO=OFF/DIGIKAMSC_CHECKOUT_PO=ON/g" ./bootstrap.mxe > ./tmp.mxe ; mv -f ./tmp.mxe ./bootstrap.mxe
 sed -e "s/DIGIKAMSC_COMPILE_PO=OFF/DIGIKAMSC_COMPILE_PO=ON/g"   ./bootstrap.mxe > ./tmp.mxe ; mv -f ./tmp.mxe ./bootstrap.mxe
 sed -e "s/DBUILD_TESTING=ON/DBUILD_TESTING=OFF/g"               ./bootstrap.mxe > ./tmp.mxe ; mv -f ./tmp.mxe ./bootstrap.mxe
 sed -e "s/DENABLE_DBUS=ON/DENABLE_DBUS=OFF/g"                   ./bootstrap.mxe > ./tmp.mxe ; mv -f ./tmp.mxe ./bootstrap.mxe
+sed -e "s/DENABLE_DRMINGW=OFF/DENABLE_DRMINGW=ON/g"             ./bootstrap.mxe > ./tmp.mxe ; mv -f ./tmp.mxe ./bootstrap.mxe
 
 chmod +x ./bootstrap.mxe
 

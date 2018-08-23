@@ -1,9 +1,8 @@
-digiKam 6.0.0 - Release date: 2018-xx-xx
+digiKam 6.0.0-beta1 - Release date: 2018-08-19
 
 *****************************************************************************************************
 NEW FEATURES:
 
-ImageEditor  : New clone tool to replace old CImg in-painting tool.
 ImageEditor  : Add Web services Import and Export tools.
 
 Showfoto     : Add Web services Import and Export tools.
@@ -15,6 +14,11 @@ Database     : Similarity database has been moved to a dedicated file to not blo
 Database     : New video metadata parser based on ffmpeg to populate database.
 Search       : Add video support to find files based on properties registered on database.
 
+General      : Use DrMinGW has crash handler under Windows.
+General      : Port all export/import tool to OAuth2 authentification.
+General      : New tool to export to Pinterest social network.
+General      : New tool to export to OneDrive webservice.
+General      : New tool to export to Box webservice.
 General      : All bundles use last Lenfun 0.3.95 to process automatic lens correction.
 General      : Add QWebEngine support.
 General      : Fix all Krazy static analyzer reports.
@@ -342,4 +346,114 @@ BUGFIXES:
 285 ==> 240144 - digiKam : When I press the left button of the mouse on a photo, a menu appears, but no items are seen.
 286 ==> 240229 - White contextual menu problem.
 287 ==> 309508 - Export to Flickr does not send the geodata.
-288 ==> 
+288 ==> 383987 - Flickr tool no longer authenticates to Flickr.
+289 ==> 338333 - Account problem.
+290 ==> 397001 - The "maximise" button is missing in decoration of the geolocation editor window [patch].
+291 ==> 397406 - Digikam shouldn't use parentheses when renaming files.
+292 ==> 397411 - Not being able to move files in a removable media collection which is not mounted.
+293 ==> 227566 - digiKam does not allow smb:// shared folder as picture collection.
+294 ==> 395201 - SSL broken in 5.9.0 AppImage bundle.
+295 ==> 385363 - digiKam crashes when authorizing access to Google photo because of SSL error in AppImage.
+296 ==> 348277 - Please focus auth code input field in the GDrive authentication dialog.
+297 ==> 383174 - Google photo, export stops after a random quantity of photos.
+298 ==> 387422 - Flickr export authorization does not work.
+299 ==> 397126 - Fail to replace a photo in google photo.
+300 ==> 387201 - kioslave needed by flickr export but not included in appimage.
+301 ==> 389785 - 'Open in Filemanager' dolphin not working.
+302 ==> 396619 - All Exports fail - cannot find ioslave.
+303 ==> 254512 - Crash when initializing the export to Flickr.com.
+304 ==> 237818 - Crash when uploading multiple images to Flickr.
+305 ==> 286754 - Crash when when entering collection name in flickr uploader.
+306 ==> 337980 - Flickr Export tool can no longer obtain a new token.
+307 ==> 151018 - Requires new token with every invokation.
+308 ==> 132922 - Export to flickr doesn't work.
+309 ==> 149864 - Dialog box pops up saying 'Error Occured: Missing signature. We can not proceed further".
+310 ==> 196179 - Flickr export does not work.
+311 ==> 391734 - Can't export to google photos: SSL Handshake failed.
+312 ==> 386402 - Not all page sizes for selected printer can be selected.
+313 ==> 395557 - Printformat not selectable.
+314 ==> 340644 - Allow to use standard photo paper sizes.
+315 ==> 330906 - Crashes when exporting to HTML.
+316 ==> 309316 - Html gallery export crash and other bugs.
+317 ==> 314248 - digiKam crashing when exporting pictures to html.
+318 ==> 225725 - Crash using HTML export.
+319 ==> 396092 - Don't init search till user press a buttom specifically for this task.
+320 ==> 397376 - Search in Geolocation doesn't work for Streets / location, only for City.
+321 ==> 393259 - Configuration conflicts.
+322 ==> 391329 - Two actions that wants to use same shortcut (Ctrl+Shift+,).
+323 ==> 391655 - Kubuntu 18.04 beta, Digikam 5.6.0 Ambiguous Shortcuts - Zoom to 100% and Configure Digikam share the same shortcut (Ctrl+Shift+,).
+324 ==> 393031 - Two actions for digikam[helpfully identified as a bug].
+325 ==> 395518 - When manually typing face name, sort the filtered tags by recent usage.
+326 ==> 304202 - No option to re-read metadata from XMP sidecar file.
+327 ==> 289445 - Allow to create Contact Sheet from an album.
+328 ==> 164750 - Picture alignment and background picture.
+329 ==> 338180 - Add "Toggle auto-refresh" option in search view.
+330 ==> 359235 - digiKam doesn't response after start when StatusBar=Disabled in digikamrc.
+331 ==> 090550 - Linking error with jpeg.
+332 ==> 393974 - Appimage bundle does not automatically recognize Gphoto2 devices connected.
+333 ==> 141288 - Error KIoexec usb camera.
+334 ==> 397554 - digiKam crashes while running BatchQueueManager.
+335 ==> 379261 - Crash on attempting camera import.
+336 ==> 379335 - digiKam crashes when deleting images in the download window [patch].
+337 ==> 394291 - Cannot upgrade mysql db from v7 to v9.
+338 ==> 389468 - Immediate Crash On Metadata Sync.
+339 ==> 379807 - ShowFoto crashes when clicking Color Effects from menu.
+340 ==> 257301 - showfoto reaches an assert when saving file with "~/" in the path.
+341 ==> 183629 - Digikam/Showfoto Dark Theme: The selected photo filename is nearly invisible.
+342 ==> 249379 - All versions of Digikam/Showfoto/KDE download is missing a file.
+343 ==> 237286 - digiKam crash after to scan collection (upgrate from 9.10 to 10.04).
+344 ==> 254878 - digiKam error segmentation fault when open it.
+345 ==> 255759 - digikam crash when open it kunbuntu lucid.
+346 ==> 249009 - digiKam crashes at initialisation.
+347 ==> 236647 - After upgrading to Ubuntu 10.04 digiKam crashes everytime it is launched.
+348 ==> 235905 - digiKam crash after upgrade.
+349 ==> 185265 - digiKam constantly using some CPU in a poll loop due a timeout
+350 ==> 250364 - digiKam crashes at start-up in xubuntu 10.04.
+351 ==> 253205 - digiKam crashes while loading on Ubunu 10.04.
+352 ==> 249033 - After upgrade to 10.04 digiKam crashes after starting always.
+353 ==> 300713 - Crash while editing tag in digiKam.
+354 ==> 184443 - digiKam save as "JPEG" appends a ".JPEG" file extension. Bad!
+355 ==> 189084 - Crash while editing toolbars (here from digiKam camera GUI).
+356 ==> 205275 - After changing symbols in bar on preview digikam closes.
+357 ==> 214418 - Crash while importing into digiKam.
+358 ==> 279909 - digiKam crashed when I tried to import photos from my iPhone 4.
+359 ==> 287616 - digiKam crash when selecting folder to store photos.
+360 ==> 327714 - digiKam crashes when starting up [Qt Bmp Image IO].
+361 ==> 396892 - digiKam font sizes cannot be changed. Mostly too small.
+362 ==> 371726 - Dates view empty using MYSQL due to SQL query error (fix supplied).
+363 ==> 382217 - Use normalized connects [patch].
+364 ==> 113692 - digiKam thumbnail hangs on .mov movie.
+365 ==> 185638 - digiKam crash on startup.
+366 ==> 350404 - digiKam crashes at startup.
+367 ==> 301583 - digiKam crash on preview avi.
+368 ==> 236960 - No video in digiKam embedded viewer no way to change codec?
+369 ==> 227113 - digiKam crashes when selecting a movie.
+370 ==> 274333 - digiKam crashed upon startup.
+371 ==> 247019 - digiKam crashes in Album view with Canon IXUS 90 video clip.
+372 ==> 238525 - digiKam crashes on browsing in album view.
+373 ==> 317437 - digiKam crashes on startup.
+374 ==> 237183 - digiKam crashes on playing Quicktime movies.
+375 ==> 256644 - digiKam crashes after adding photos to light table.
+376 ==> 245033 - digiKam falls on video files.
+377 ==> 252411 - digiKam crashes when .AVI videoclip is launched.
+378 ==> 247399 - digiKam crashes when viewing videos.
+379 ==> 261706 - digiKam crashed after downloading pictures.
+380 ==> 172170 - digiKam embedded video player - video not synchronized with sound.
+381 ==> 293173 - digiKam does not play videos.
+382 ==> 182401 - Wrong color palette on playback videos within digiKam.
+383 ==> 219419 - digiKam crashes after splash screen with PTP.
+384 ==> 397565 - Unable to launch in OS X after install.
+385 ==> 337978 - digiKam crashes on startup - always.
+386 ==> 215673 - digiKam movie no preview.
+387 ==> 204481 - digikam: Wizard not translated in French.
+388 ==> 365694 - digiKam 5.0.0 : every menus are in French, excepted the menu bar.
+389 ==> 394434 - Installation problem mysql internal on mac os high sierra [patch].
+390 ==> 397696 - [Website] On Fedora, use dnf instead of yum.
+391 ==> 392970 - Website: Mention KDE Familly.
+392 ==> 394694 - Showfoto crashes on change picture size.
+393 ==> 326006 - digiKam Raw engine generates pink & black stripe on the right.
+394 ==> 379984 - ASSERT failure in Q_GLOBAL_STATIC: "The global static was used after being destroyed".
+395 ==> 373572 - File synchronization.
+396 ==> 296768 - When creating thumbnails, digiKam uses 80% CPU - quadcore 3800, 9GB RAM.
+397 ==> 397777 - Need to default to native filesystem browser on first run to see external drives.
+398 ==> 

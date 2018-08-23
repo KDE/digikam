@@ -221,7 +221,8 @@ AdvPrintPhotoPage::~AdvPrintPhotoPage()
 
 void AdvPrintPhotoPage::initializePage()
 {
-    d->photoUi->mPrintList->listView()->clear();
+    d->photoUi->mPrintList->listView()->selectAll();
+    d->photoUi->mPrintList->slotRemoveItems();
 
     if (d->settings->selMode == AdvPrintSettings::IMAGES)
     {

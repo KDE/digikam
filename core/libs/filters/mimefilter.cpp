@@ -33,21 +33,21 @@ namespace Digikam
 MimeFilter::MimeFilter(QWidget* const parent)
     : QComboBox(parent)
 {
-    insertItem( AllFiles,    i18n("All Files") );
-    insertItem( ImageFiles,  i18n("Image Files") );
-    insertItem( NoRAWFiles,  i18n("No RAW Files") );
-    insertItem( JPGFiles,    i18n("JPEG Files") );
-    insertItem( PNGFiles,    i18n("PNG Files") );
-    insertItem( TIFFiles,    i18n("TIFF Files") );
-    insertItem( DNGFiles,    i18n("DNG Files") );
-    insertItem( RAWFiles,    i18n("RAW Files") );
-    insertItem( MoviesFiles, i18n("Video Files") );
-    insertItem( AudioFiles,  i18n("Audio Files") );
-    insertItem( RasterFiles, i18n("Raster Files") );
+    insertItem(AllFiles,       i18n("All Files"));
+    insertItem(ImageFiles,     i18n("Image Files"));
+    insertItem(NoRAWFiles,     i18n("No RAW Files"));
+    insertItem(JPGFiles,       i18n("JPEG Files"));
+    insertItem(PNGFiles,       i18n("PNG Files"));
+    insertItem(TIFFiles,       i18n("TIFF Files"));
+    insertItem(DNGFiles,       i18n("DNG Files"));
+    insertItem(RAWFiles,       i18n("RAW Files"));
+    insertItem(MoviesFiles,    i18n("Video Files"));
+    insertItem(AudioFiles,     i18n("Audio Files"));
+    insertItem(RasterGraphics, i18n("Raster Graphics"));
 
     setToolTip(i18n("Filter by file type"));
     setWhatsThis(i18n("Select the file types (MIME types) that you want shown. "
-                      "Note: \"Raster Files\" are formats from raster graphics editors, "
+                      "Note: \"Raster Graphics\" are file formats from raster graphics editors, "
                       "such as Photoshop, The Gimp, Krita, etc."));
 
     setMimeFilter(AllFiles);

@@ -9,7 +9,7 @@
  *               is also available on this page.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,6 +56,9 @@ public:
 
     explicit Private(QWizard* const dialog)
       : imageList(0),
+        albumView(0),
+        newAlbumBtn(0),
+        reloadAlbumsBtn(0),
         wizard(0),
         iface(0),
         wsAuth(0)
@@ -64,51 +67,51 @@ public:
 
         if (wizard)
         {
-            iface   = wizard->iface();
-            wsAuth  = wizard->wsAuth();
+            iface  = wizard->iface();
+            wsAuth = wizard->wsAuth();
         }
     }
 
-    DImagesList*        imageList;
+    DImagesList*      imageList;
 
-    QTreeWidget*        albumView;
-    QString             currentAlbumId;
-    QPushButton*        newAlbumBtn;
-    QPushButton*        reloadAlbumsBtn;
-    
-    WSWizard*           wizard;
-    DInfoInterface*     iface;
-    WSAuthentication*   wsAuth;
+    QTreeWidget*      albumView;
+    QString           currentAlbumId;
+    QPushButton*      newAlbumBtn;
+    QPushButton*      reloadAlbumsBtn;
+
+    WSWizard*         wizard;
+    DInfoInterface*   iface;
+    WSAuthentication* wsAuth;
 };
 
 WSImagesPage::WSImagesPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title),
       d(new Private(dialog))
-{    
+{
     DHBox* const hbox       = new DHBox(this);
 
     /* --------------------
      * Widget for Images list
      */
-    
+
     DVBox* const vboxImage  = new DVBox(hbox);
     QLabel* const descImage = new QLabel(vboxImage);
     descImage->setText(i18n("<h3>This view lists all items to export.</h3>"));
 
     d->imageList            = new DImagesList(vboxImage);
     d->imageList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
-    
+
     connect(d->imageList, SIGNAL(signalImageListChanged()),
             this, SIGNAL(completeChanged()));
-    
+
     /* --------------------
      * User albums list
-     */    
+     */
 
     DVBox* const vboxAlbum  = new DVBox(hbox);
 
     QLabel* const descAlbum = new QLabel(vboxAlbum);
-    descAlbum->setText(i18n("<h3>This view lists user albums.</h3>"));    
+    descAlbum->setText(i18n("<h3>This view lists user albums.</h3>"));
 
     d->albumView            = new QTreeWidget(vboxAlbum);
     d->albumView->setHeaderLabel(QLatin1String(""));
@@ -123,23 +126,25 @@ WSImagesPage::WSImagesPage(QWizard* const dialog, const QString& title)
 
     connect(d->newAlbumBtn, SIGNAL(clicked()),
             d->wsAuth, SLOT(slotNewAlbumRequest()));
+
     connect(d->reloadAlbumsBtn, SIGNAL(clicked()),
             this, SIGNAL(signalListAlbumsRequest()));
 
     connect(this, SIGNAL(signalListAlbumsRequest()),
             d->wsAuth, SLOT(slotListAlbumsRequest()));
 
-    connect(d->wsAuth, SIGNAL(signalCreateAlbumDone(int, const QString&, const QString&)),
-            this, SLOT(slotCreateAlbumDone(int, const QString&, const QString&)));
-    connect(d->wsAuth, SIGNAL(signalListAlbumsDone(const QMap<QString, AlbumSimplified>&, const QStringList&, const QString&)),
-            this, SLOT(slotListAlbumsDone(const QMap<QString, AlbumSimplified>&, const QStringList&, const QString&)));
-    
+    connect(d->wsAuth, SIGNAL(signalCreateAlbumDone(int,QString,QString)),
+            this, SLOT(slotCreateAlbumDone(int,QString,QString)));
+
+    connect(d->wsAuth, SIGNAL(signalListAlbumsDone(QMap<QString,AlbumSimplified>,QStringList,QString)),
+            this, SLOT(slotListAlbumsDone(QMap<QString,AlbumSimplified>,QStringList,QString)));
+
     /* --------------------
      * General settings for imagespage
      */
-    
-    hbox->setStretchFactor(vboxImage,   2);
-    hbox->setStretchFactor(vboxAlbum,   1);
+
+    hbox->setStretchFactor(vboxImage, 2);
+    hbox->setStretchFactor(vboxAlbum, 1);
 
     setPageWidget(hbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));
@@ -162,10 +167,10 @@ void WSImagesPage::setCurrentAlbumId(const QString& currentAlbumId)
 }
 
 void WSImagesPage::initializePage()
-{    
+{
     d->imageList->setIface(d->iface);
     d->imageList->listView()->clear();
-    
+
     // List current albums in user account
     emit signalListAlbumsRequest();
 }
@@ -176,7 +181,7 @@ bool WSImagesPage::validatePage()
      * Otherwise, set album id as empty string and uploading to empty album will be handled in 
      * specific talker of each web service
      */
-    if(d->albumView->currentItem())
+    if (d->albumView->currentItem())
     {
         setCurrentAlbumId(d->albumView->currentItem()->data(0, Qt::AccessibleDescriptionRole).toString());
     }
@@ -186,7 +191,9 @@ bool WSImagesPage::validatePage()
     }
 
     if (d->imageList->imageUrls().isEmpty())
+    {
         return false;
+    }
 
     d->wizard->settings()->inputImages = d->imageList->imageUrls();
 
@@ -202,26 +209,26 @@ void WSImagesPage::addChildToTreeView(QTreeWidgetItem* const parent,
                                       const QMap<QString, AlbumSimplified>& albumTree, 
                                       const QStringList& childrenAlbums)
 {
-    if(childrenAlbums.isEmpty())
+    if (childrenAlbums.isEmpty())
     {
         return;
     }
-    
-    foreach(const QString& albumId, childrenAlbums)
+
+    foreach (const QString& albumId, childrenAlbums)
     {
-        QTreeWidgetItem* item   = new QTreeWidgetItem(parent);
+        QTreeWidgetItem* const item = new QTreeWidgetItem(parent);
         item->setText(0, albumTree[albumId].title);
-        item->setData(0, Qt::AccessibleDescriptionRole, albumId); 
+        item->setData(0, Qt::AccessibleDescriptionRole, albumId);
 
         /* Verify if album is editable. If yes, let it enable on view for albums list and
          * add a description for that. Otherwise, disable it and add description.
-         * 
-         * However, in case of Facebook, GET album may return False for uploadable, but 
-         * indeed we can still upload to it. 
-         * 
+         *
+         * However, in case of Facebook, GET album may return False for uploadable, but
+         * indeed we can still upload to it.
+         *
          * Hence, this functionality needs a more particular solution.
          */
-        if(albumTree[albumId].uploadable)
+        if (albumTree[albumId].uploadable)
         {
             item->setWhatsThis(0, QLatin1String("Albums that can be uploaded."));
         }
@@ -235,11 +242,11 @@ void WSImagesPage::addChildToTreeView(QTreeWidgetItem* const parent,
          * Condition to call setCurrentItem for QTreeWidget is tested here to assure that after clicking on Reload, currentItem still points 
          * to the same album as before
          */
-        if(albumId == d->currentAlbumId)
+        if (albumId == d->currentAlbumId)
         {
             d->albumView->setCurrentItem(item);
         }
-        
+
         addChildToTreeView(item, albumTree, albumTree[albumId].childrenIDs);
     }
 }
@@ -249,14 +256,14 @@ void WSImagesPage::slotListAlbumsDone(const QMap<QString, AlbumSimplified>& albu
                                       const QString& currentAlbumId)
 {
     d->albumView->clear();
-    
-    if(rootAlbums.isEmpty() || albumTree.isEmpty())
+
+    if (rootAlbums.isEmpty() || albumTree.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "WARNING: albums list is empty";
         return;
     }
-    
-    if(currentAlbumId.isEmpty())
+
+    if (currentAlbumId.isEmpty())
     {
         d->currentAlbumId = rootAlbums.first();
     }
@@ -264,22 +271,22 @@ void WSImagesPage::slotListAlbumsDone(const QMap<QString, AlbumSimplified>& albu
     {
         d->currentAlbumId = currentAlbumId;
     }
-    
-    foreach(const QString& albumId, rootAlbums)
+
+    foreach (const QString& albumId, rootAlbums)
     {
-        QTreeWidgetItem* item   = new QTreeWidgetItem(d->albumView);
+        QTreeWidgetItem* const item = new QTreeWidgetItem(d->albumView);
         item->setText(0, albumTree[albumId].title);
         item->setData(0, Qt::AccessibleDescriptionRole, albumId); // set ID hidden, so that we can use it for uploading photos to album
 
         /* Verify if album is editable. If yes, let it enable on view for albums list and
          * add a description for that. Otherwise, disable it and add description.
-         * 
-         * However, in case of Facebook, GET album may return False for uploadable, but 
-         * indeed we can still upload to it. 
-         * 
+         *
+         * However, in case of Facebook, GET album may return False for uploadable, but
+         * indeed we can still upload to it.
+         *
          * Hence, this functionality needs a more particular solution.
          */
-        if(albumTree[albumId].uploadable)
+        if (albumTree[albumId].uploadable)
         {
             item->setWhatsThis(0, QLatin1String("Albums that can be uploaded."));
         }
@@ -293,11 +300,11 @@ void WSImagesPage::slotListAlbumsDone(const QMap<QString, AlbumSimplified>& albu
          * Condition to call setCurrentItem for QTreeWidget is tested here to assure that after clicking on Reload, currentItem still points 
          * to the same album as before
          */
-        if(d->currentAlbumId == albumId)
+        if (d->currentAlbumId == albumId)
         {
             d->albumView->setCurrentItem(item);
         }
-        
+
         addChildToTreeView(item, albumTree, albumTree[albumId].childrenIDs);
     }
 }
@@ -307,7 +314,7 @@ void WSImagesPage::slotCreateAlbumDone(int errCode, const QString& errMsg, const
     if (errCode != 0)
     {
         QMessageBox::critical(QApplication::activeWindow(),
-                              i18n("%1 - Create album failed",  d->wsAuth->webserviceName()), 
+                              i18n("%1 - Create album failed",  d->wsAuth->webserviceName()),
                               i18n("Code: %1. %2", errCode, errMsg));
         return;
     }

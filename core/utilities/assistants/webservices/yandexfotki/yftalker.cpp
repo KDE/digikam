@@ -101,20 +101,20 @@ public:
 /*
  * static API constants
  */
-const QString YFTalker::Private::SESSION_URL          = QString::fromLatin1("http://auth.mobile.yandex.ru/yamrsa/key/");
-const QString YFTalker::Private::AUTH_REALM           = QString::fromLatin1("fotki.yandex.ru");
-const QString YFTalker::Private::TOKEN_URL            = QString::fromLatin1("http://auth.mobile.yandex.ru/yamrsa/token/");
-const QString YFTalker::Private::SERVICE_URL          = QString::fromLatin1("http://api-fotki.yandex.ru/api/users/%1/");
+const QString YFTalker::Private::SESSION_URL          = QLatin1String("http://auth.mobile.yandex.ru/yamrsa/key/");
+const QString YFTalker::Private::AUTH_REALM           = QLatin1String("fotki.yandex.ru");
+const QString YFTalker::Private::TOKEN_URL            = QLatin1String("http://auth.mobile.yandex.ru/yamrsa/token/");
+const QString YFTalker::Private::SERVICE_URL          = QLatin1String("http://api-fotki.yandex.ru/api/users/%1/");
 
 const QString YFTalker::Private::ACCESS_STRINGS[]     =
 {
-    QString::fromLatin1("public"),
-    QString::fromLatin1("friends"),
-    QString::fromLatin1("private")
+    QLatin1String("public"),
+    QLatin1String("friends"),
+    QLatin1String("private")
 };
 
-const QString YFTalker::USERPAGE_URL         = QString::fromLatin1("http://fotki.yandex.ru/users/%1/");
-const QString YFTalker::USERPAGE_DEFAULT_URL = QString::fromLatin1("http://fotki.yandex.ru/");
+const QString YFTalker::USERPAGE_URL         = QLatin1String("http://fotki.yandex.ru/users/%1/");
+const QString YFTalker::USERPAGE_DEFAULT_URL = QLatin1String("http://fotki.yandex.ru/");
 
 // ------------------------------------------------------------
 
@@ -254,7 +254,7 @@ void YFTalker::getToken()
 
     paramList.append(QLatin1String("credentials=") + QString::fromUtf8(QUrl::toPercentEncoding(credentials)));
 
-    QString params = paramList.join(QString::fromLatin1("&"));
+    QString params = paramList.join(QLatin1Char('&'));
 
     d->state = STATE_GETTOKEN;
 
@@ -382,56 +382,56 @@ void YFTalker::updatePhotoInfo(YFPhoto& photo)
 {
     QDomDocument doc;
     QDomProcessingInstruction instr = doc.createProcessingInstruction(
-        QString::fromLatin1("xml"),
-        QString::fromLatin1("version='1.0' encoding='UTF-8'"));
+        QLatin1String("xml"),
+        QLatin1String("version='1.0' encoding='UTF-8'"));
 
     doc.appendChild(instr);
-    QDomElement entryElem = doc.createElement(QString::fromLatin1("entry"));
-    entryElem.setAttribute(QString::fromLatin1("xmlns"), QString::fromLatin1("http://www.w3.org/2005/Atom"));
-    entryElem.setAttribute(QString::fromLatin1("xmlns:f"), QString::fromLatin1("yandex:fotki"));
+    QDomElement entryElem = doc.createElement(QLatin1String("entry"));
+    entryElem.setAttribute(QLatin1String("xmlns"), QLatin1String("http://www.w3.org/2005/Atom"));
+    entryElem.setAttribute(QLatin1String("xmlns:f"), QLatin1String("yandex:fotki"));
     doc.appendChild(entryElem);
 
-    QDomElement urn = doc.createElement(QString::fromLatin1("urn"));
+    QDomElement urn = doc.createElement(QLatin1String("urn"));
     urn.appendChild(doc.createTextNode(photo.urn()));
     entryElem.appendChild(urn);
 
-    QDomElement title = doc.createElement(QString::fromLatin1("title"));
+    QDomElement title = doc.createElement(QLatin1String("title"));
     title.appendChild(doc.createTextNode(photo.title()));
     entryElem.appendChild(title);
 
-    QDomElement linkAlbum = doc.createElement(QString::fromLatin1("link"));
-    linkAlbum.setAttribute(QString::fromLatin1("href"), photo.m_apiAlbumUrl);
-    linkAlbum.setAttribute(QString::fromLatin1("rel"), QString::fromLatin1("album"));
+    QDomElement linkAlbum = doc.createElement(QLatin1String("link"));
+    linkAlbum.setAttribute(QLatin1String("href"), photo.m_apiAlbumUrl);
+    linkAlbum.setAttribute(QLatin1String("rel"), QLatin1String("album"));
     entryElem.appendChild(linkAlbum);
 
-    QDomElement summary   = doc.createElement(QString::fromLatin1("summary"));
+    QDomElement summary   = doc.createElement(QLatin1String("summary"));
     summary.appendChild(doc.createTextNode(photo.summary()));
     entryElem.appendChild(summary);
 
-    QDomElement adult     = doc.createElement(QString::fromLatin1("f:xxx"));
-    adult.setAttribute(QString::fromLatin1("value"), photo.isAdult() ? QString::fromLatin1("true") : QString::fromLatin1("false"));
+    QDomElement adult     = doc.createElement(QLatin1String("f:xxx"));
+    adult.setAttribute(QLatin1String("value"), photo.isAdult() ? QLatin1String("true") : QLatin1String("false"));
     entryElem.appendChild(adult);
 
-    QDomElement hideOriginal = doc.createElement(QString::fromLatin1("f:hide_original"));
-    hideOriginal.setAttribute(QString::fromLatin1("value"),
-                              photo.isHideOriginal() ? QString::fromLatin1("true") : QString::fromLatin1("false"));
+    QDomElement hideOriginal = doc.createElement(QLatin1String("f:hide_original"));
+    hideOriginal.setAttribute(QLatin1String("value"),
+                              photo.isHideOriginal() ? QLatin1String("true") : QLatin1String("false"));
     entryElem.appendChild(hideOriginal);
 
-    QDomElement disableComments = doc.createElement(QString::fromLatin1("f:disable_comments"));
-    disableComments.setAttribute(QString::fromLatin1("value"),
-                                 photo.isDisableComments() ? QString::fromLatin1("true") : QString::fromLatin1("false"));
+    QDomElement disableComments = doc.createElement(QLatin1String("f:disable_comments"));
+    disableComments.setAttribute(QLatin1String("value"),
+                                 photo.isDisableComments() ? QLatin1String("true") : QLatin1String("false"));
     entryElem.appendChild(disableComments);
 
-    QDomElement access = doc.createElement(QString::fromLatin1("f:access"));
-    access.setAttribute(QString::fromLatin1("value"), d->ACCESS_STRINGS[photo.access()]);
+    QDomElement access = doc.createElement(QLatin1String("f:access"));
+    access.setAttribute(QLatin1String("value"), d->ACCESS_STRINGS[photo.access()]);
     entryElem.appendChild(access);
 
     // FIXME: undocumented API
     foreach(const QString& t, photo.tags)
     {
-        QDomElement tag = doc.createElement(QString::fromLatin1("category"));
-        tag.setAttribute(QString::fromLatin1("scheme"), d->apiTagsUrl);
-        tag.setAttribute(QString::fromLatin1("term"), t);
+        QDomElement tag = doc.createElement(QLatin1String("category"));
+        tag.setAttribute(QLatin1String("scheme"), d->apiTagsUrl);
+        tag.setAttribute(QLatin1String("term"), t);
         entryElem.appendChild(tag);
     }
 
@@ -475,24 +475,24 @@ void YFTalker::updateAlbumCreate(YandexFotkiAlbum& album)
 {
     QDomDocument doc;
     QDomProcessingInstruction instr = doc.createProcessingInstruction(
-        QString::fromLatin1("xml"),
-        QString::fromLatin1("version='1.0' encoding='UTF-8'"));
+        QLatin1String("xml"),
+        QLatin1String("version='1.0' encoding='UTF-8'"));
 
     doc.appendChild(instr);
-    QDomElement entryElem = doc.createElement(QString::fromLatin1("entry"));
-    entryElem.setAttribute(QString::fromLatin1("xmlns"), QString::fromLatin1("http://www.w3.org/2005/Atom"));
-    entryElem.setAttribute(QString::fromLatin1("xmlns:f"), QString::fromLatin1("yandex:fotki"));
+    QDomElement entryElem = doc.createElement(QLatin1String("entry"));
+    entryElem.setAttribute(QLatin1String("xmlns"), QLatin1String("http://www.w3.org/2005/Atom"));
+    entryElem.setAttribute(QLatin1String("xmlns:f"), QLatin1String("yandex:fotki"));
     doc.appendChild(entryElem);
 
-    QDomElement title = doc.createElement(QString::fromLatin1("title"));
+    QDomElement title = doc.createElement(QLatin1String("title"));
     title.appendChild(doc.createTextNode(album.title()));
     entryElem.appendChild(title);
 
-    QDomElement summary = doc.createElement(QString::fromLatin1("summary"));
+    QDomElement summary = doc.createElement(QLatin1String("summary"));
     summary.appendChild(doc.createTextNode(album.summary()));
     entryElem.appendChild(summary);
 
-    QDomElement password = doc.createElement(QString::fromLatin1("f:password"));
+    QDomElement password = doc.createElement(QLatin1String("f:password"));
     password.appendChild(doc.createTextNode(album.m_password));
     entryElem.appendChild(password);
 
@@ -642,7 +642,7 @@ void YFTalker::slotFinished(QNetworkReply* reply)
 
 void YFTalker::slotParseResponseGetService()
 {
-    QDomDocument doc(QString::fromLatin1("service"));
+    QDomDocument doc(QLatin1String("service"));
 
     if (!doc.setContent(d->buffer))
     {
@@ -652,14 +652,14 @@ void YFTalker::slotParseResponseGetService()
 
     const QDomElement rootElem = doc.documentElement();
 
-    QDomElement workspaceElem = rootElem.firstChildElement(QString::fromLatin1("app:workspace"));
+    QDomElement workspaceElem = rootElem.firstChildElement(QLatin1String("app:workspace"));
 
     // FIXME: workaround for Yandex xml namespaces bugs
-    QString prefix = QString::fromLatin1("app:");
+    QString prefix = QLatin1String("app:");
 
     if (workspaceElem.isNull())
     {
-        workspaceElem = rootElem.firstChildElement(QString::fromLatin1("workspace"));
+        workspaceElem = rootElem.firstChildElement(QLatin1String("workspace"));
         prefix        = QString();
         qCCritical(DIGIKAM_WEBSERVICES_LOG) << "Service document without namespaces found";
     }
@@ -674,12 +674,12 @@ void YFTalker::slotParseResponseGetService()
     QString apiPhotosUrl;
     QString apiTagsUrl;
 
-    QDomElement collectionElem = workspaceElem.firstChildElement(prefix + QString::fromLatin1("collection"));
+    QDomElement collectionElem = workspaceElem.firstChildElement(prefix + QLatin1String("collection"));
 
     for ( ; !collectionElem.isNull() ;
-          collectionElem = collectionElem.nextSiblingElement(prefix + QString::fromLatin1("collection")))
+          collectionElem = collectionElem.nextSiblingElement(prefix + QLatin1String("collection")))
     {
-        const QDomElement acceptElem = collectionElem.firstChildElement(prefix + QString::fromLatin1("accept"));
+        const QDomElement acceptElem = collectionElem.firstChildElement(prefix + QLatin1String("accept"));
 
         if (acceptElem.isNull()) // invalid section, ignore
         {
@@ -687,17 +687,17 @@ void YFTalker::slotParseResponseGetService()
         }
 
         // FIXME: id attribute is undocumented
-        if (collectionElem.attribute(QString::fromLatin1("id")) == QString::fromLatin1("album-list"))
+        if (collectionElem.attribute(QLatin1String("id")) == QLatin1String("album-list"))
         {
-            apiAlbumsUrl = collectionElem.attribute(QString::fromLatin1("href"));
+            apiAlbumsUrl = collectionElem.attribute(QLatin1String("href"));
         }
-        else if (collectionElem.attribute(QString::fromLatin1("id")) == QString::fromLatin1("photo-list"))
+        else if (collectionElem.attribute(QLatin1String("id")) == QLatin1String("photo-list"))
         {
-            apiPhotosUrl = collectionElem.attribute(QString::fromLatin1("href"));
+            apiPhotosUrl = collectionElem.attribute(QLatin1String("href"));
         }
-        else if (collectionElem.attribute(QString::fromLatin1("id")) == QString::fromLatin1("tag-list"))
+        else if (collectionElem.attribute(QLatin1String("id")) == QLatin1String("tag-list"))
         {
-            apiTagsUrl = collectionElem.attribute(QString::fromLatin1("href"));
+            apiTagsUrl = collectionElem.attribute(QLatin1String("href"));
         }
         // else skip unknown section
     }
@@ -732,7 +732,7 @@ void YFTalker::slotParseResponseCheckToken()
 
 void YFTalker::slotParseResponseGetSession()
 {
-    QDomDocument doc(QString::fromLatin1("session"));
+    QDomDocument doc(QLatin1String("session"));
 
     if (!doc.setContent(d->buffer))
     {
@@ -741,9 +741,9 @@ void YFTalker::slotParseResponseGetSession()
 
     const QDomElement rootElem = doc.documentElement();
 
-    const QDomElement keyElem =  rootElem.firstChildElement(QString::fromLatin1("key"));
+    const QDomElement keyElem =  rootElem.firstChildElement(QLatin1String("key"));
 
-    const QDomElement requestIdElem =  rootElem.firstChildElement(QString::fromLatin1("request_id"));
+    const QDomElement requestIdElem =  rootElem.firstChildElement(QLatin1String("request_id"));
 
     if (keyElem.isNull() || keyElem.nodeType() != QDomNode::ElementNode ||
         requestIdElem.isNull() || requestIdElem.nodeType() != QDomNode::ElementNode)
@@ -763,7 +763,7 @@ void YFTalker::slotParseResponseGetSession()
 
 void YFTalker::slotParseResponseGetToken()
 {
-    QDomDocument doc(QString::fromLatin1("response"));
+    QDomDocument doc(QLatin1String("response"));
 
     if (!doc.setContent(d->buffer))
     {
@@ -772,11 +772,11 @@ void YFTalker::slotParseResponseGetToken()
     }
 
     const QDomElement rootElem  = doc.documentElement();
-    const QDomElement tokenElem = rootElem.firstChildElement(QString::fromLatin1("token"));
+    const QDomElement tokenElem = rootElem.firstChildElement(QLatin1String("token"));
 
     if (tokenElem.isNull() || tokenElem.nodeType() != QDomNode::ElementNode)
     {
-        const QDomElement errorElem = rootElem.firstChildElement(QString::fromLatin1("error"));
+        const QDomElement errorElem = rootElem.firstChildElement(QLatin1String("error"));
 
         if (errorElem.isNull() || errorElem.nodeType() != QDomNode::ElementNode)
         {
@@ -809,7 +809,7 @@ void YFTalker::slotParseResponseGetToken()
 
 void YFTalker::slotParseResponseListAlbums()
 {
-    QDomDocument doc(QString::fromLatin1("feed"));
+    QDomDocument doc(QLatin1String("feed"));
 
     if (!doc.setContent(d->buffer))
     {
@@ -822,47 +822,47 @@ void YFTalker::slotParseResponseListAlbums()
 
     // find next page link
     d->albumsNextUrl.clear();
-    QDomElement linkElem       = rootElem.firstChildElement(QString::fromLatin1("link"));
+    QDomElement linkElem       = rootElem.firstChildElement(QLatin1String("link"));
 
     for ( ; !linkElem.isNull() ;
-          linkElem = linkElem.nextSiblingElement(QString::fromLatin1("link")))
+          linkElem = linkElem.nextSiblingElement(QLatin1String("link")))
     {
-        if (linkElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("next") &&
-            !linkElem.attribute(QString::fromLatin1("href")).isNull())
+        if (linkElem.attribute(QLatin1String("rel")) == QLatin1String("next") &&
+            !linkElem.attribute(QLatin1String("href")).isNull())
         {
-            d->albumsNextUrl = linkElem.attribute(QString::fromLatin1("href"));
+            d->albumsNextUrl = linkElem.attribute(QLatin1String("href"));
             break;
         }
     }
 
-    QDomElement entryElem = rootElem.firstChildElement(QString::fromLatin1("entry"));
+    QDomElement entryElem = rootElem.firstChildElement(QLatin1String("entry"));
 
     for ( ; !entryElem.isNull() ;
-          entryElem = entryElem.nextSiblingElement(QString::fromLatin1("entry")))
+          entryElem = entryElem.nextSiblingElement(QLatin1String("entry")))
     {
-        const QDomElement urn       = entryElem.firstChildElement(QString::fromLatin1("id"));
-        const QDomElement author    = entryElem.firstChildElement(QString::fromLatin1("author"));
-        const QDomElement title     = entryElem.firstChildElement(QString::fromLatin1("title"));
-        const QDomElement summary   = entryElem.firstChildElement(QString::fromLatin1("summary"));
-        const QDomElement published = entryElem.firstChildElement(QString::fromLatin1("published"));
-        const QDomElement edited    = entryElem.firstChildElement(QString::fromLatin1("app:edited"));
-        const QDomElement updated   = entryElem.firstChildElement(QString::fromLatin1("updated"));
-        const QDomElement prot      = entryElem.firstChildElement(QString::fromLatin1("protected"));
+        const QDomElement urn       = entryElem.firstChildElement(QLatin1String("id"));
+        const QDomElement author    = entryElem.firstChildElement(QLatin1String("author"));
+        const QDomElement title     = entryElem.firstChildElement(QLatin1String("title"));
+        const QDomElement summary   = entryElem.firstChildElement(QLatin1String("summary"));
+        const QDomElement published = entryElem.firstChildElement(QLatin1String("published"));
+        const QDomElement edited    = entryElem.firstChildElement(QLatin1String("app:edited"));
+        const QDomElement updated   = entryElem.firstChildElement(QLatin1String("updated"));
+        const QDomElement prot      = entryElem.firstChildElement(QLatin1String("protected"));
 
         QDomElement linkSelf;
         QDomElement linkEdit;
         QDomElement linkPhotos;
 
-        QDomElement linkElem = entryElem.firstChildElement(QString::fromLatin1("link"));
+        QDomElement linkElem = entryElem.firstChildElement(QLatin1String("link"));
 
         for ( ; !linkElem.isNull() ;
-              linkElem = linkElem.nextSiblingElement(QString::fromLatin1("link")))
+              linkElem = linkElem.nextSiblingElement(QLatin1String("link")))
         {
-            if (linkElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("self"))
+            if (linkElem.attribute(QLatin1String("rel")) == QLatin1String("self"))
                 linkSelf = linkElem;
-            else if (linkElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("edit"))
+            else if (linkElem.attribute(QLatin1String("rel")) == QLatin1String("edit"))
                 linkEdit = linkElem;
-            else if (linkElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("photos"))
+            else if (linkElem.attribute(QLatin1String("rel")) == QLatin1String("photos"))
                 linkPhotos = linkElem;
             // else skip <link>
         }
@@ -878,9 +878,9 @@ void YFTalker::slotParseResponseListAlbums()
 
         QString password;
 
-        if (!prot.isNull() && prot.attribute(QString::fromLatin1("value"), QString::fromLatin1("false")) == QString::fromLatin1("true"))
+        if (!prot.isNull() && prot.attribute(QLatin1String("value"), QLatin1String("false")) == QLatin1String("true"))
         {
-            password = QString::fromLatin1(""); // set not null value
+            password = QLatin1String(""); // set not null value
         }
 
         d->albums.append(YandexFotkiAlbum(
@@ -888,12 +888,12 @@ void YFTalker::slotParseResponseListAlbums()
                             author.text(),
                             title.text(),
                             summary.text(),
-                            linkEdit.attribute(QString::fromLatin1("href")),
-                            linkSelf.attribute(QString::fromLatin1("href")),
-                            linkPhotos.attribute(QString::fromLatin1("href")),
-                            QDateTime::fromString(published.text(), QString::fromLatin1("yyyy-MM-ddTHH:mm:ssZ")),
-                            QDateTime::fromString(edited.text(), QString::fromLatin1("yyyy-MM-ddTHH:mm:ssZ")),
-                            QDateTime::fromString(updated.text(), QString::fromLatin1("yyyy-MM-ddTHH:mm:ssZ")),
+                            linkEdit.attribute(QLatin1String("href")),
+                            linkSelf.attribute(QLatin1String("href")),
+                            linkPhotos.attribute(QLatin1String("href")),
+                            QDateTime::fromString(published.text(), QLatin1String("yyyy-MM-ddTHH:mm:ssZ")),
+                            QDateTime::fromString(edited.text(),    QLatin1String("yyyy-MM-ddTHH:mm:ssZ")),
+                            QDateTime::fromString(updated.text(),   QLatin1String("yyyy-MM-ddTHH:mm:ssZ")),
                             password
                         ));
 
@@ -925,38 +925,38 @@ void YFTalker::slotParseResponseListAlbums()
 bool YFTalker::slotParsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
 {
 
-    const QDomElement urn             = entryElem.firstChildElement(QString::fromLatin1("id"));
-    const QDomElement author          = entryElem.firstChildElement(QString::fromLatin1("author"));
-    const QDomElement title           = entryElem.firstChildElement(QString::fromLatin1("title"));
-    const QDomElement summary         = entryElem.firstChildElement(QString::fromLatin1("summary"));
-    const QDomElement published       = entryElem.firstChildElement(QString::fromLatin1("published"));
-    const QDomElement edited          = entryElem.firstChildElement(QString::fromLatin1("app:edited"));
-    const QDomElement updated         = entryElem.firstChildElement(QString::fromLatin1("updated"));
-    const QDomElement created         = entryElem.firstChildElement(QString::fromLatin1("f:created"));
-    const QDomElement accessAttr      = entryElem.firstChildElement(QString::fromLatin1("f:access"));
-    const QDomElement hideOriginal    = entryElem.firstChildElement(QString::fromLatin1("f:hide_original"));
-    const QDomElement disableComments = entryElem.firstChildElement(QString::fromLatin1("f:disable_comments"));
-    const QDomElement adult           = entryElem.firstChildElement(QString::fromLatin1("f:xxx"));
-    const QDomElement content         = entryElem.firstChildElement(QString::fromLatin1("content"));
+    const QDomElement urn             = entryElem.firstChildElement(QLatin1String("id"));
+    const QDomElement author          = entryElem.firstChildElement(QLatin1String("author"));
+    const QDomElement title           = entryElem.firstChildElement(QLatin1String("title"));
+    const QDomElement summary         = entryElem.firstChildElement(QLatin1String("summary"));
+    const QDomElement published       = entryElem.firstChildElement(QLatin1String("published"));
+    const QDomElement edited          = entryElem.firstChildElement(QLatin1String("app:edited"));
+    const QDomElement updated         = entryElem.firstChildElement(QLatin1String("updated"));
+    const QDomElement created         = entryElem.firstChildElement(QLatin1String("f:created"));
+    const QDomElement accessAttr      = entryElem.firstChildElement(QLatin1String("f:access"));
+    const QDomElement hideOriginal    = entryElem.firstChildElement(QLatin1String("f:hide_original"));
+    const QDomElement disableComments = entryElem.firstChildElement(QLatin1String("f:disable_comments"));
+    const QDomElement adult           = entryElem.firstChildElement(QLatin1String("f:xxx"));
+    const QDomElement content         = entryElem.firstChildElement(QLatin1String("content"));
 
     QDomElement linkSelf;
     QDomElement linkEdit;
     QDomElement linkMedia;
     QDomElement linkAlbum;
 
-    QDomElement linkElem = entryElem.firstChildElement(QString::fromLatin1("link"));
+    QDomElement linkElem = entryElem.firstChildElement(QLatin1String("link"));
 
     for ( ; !linkElem.isNull() ;
-          linkElem = linkElem.nextSiblingElement(QString::fromLatin1("link")))
+          linkElem = linkElem.nextSiblingElement(QLatin1String("link")))
     {
 
-        if (linkElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("self"))
+        if (linkElem.attribute(QLatin1String("rel")) == QLatin1String("self"))
             linkSelf = linkElem;
-        else if (linkElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("edit"))
+        else if (linkElem.attribute(QLatin1String("rel")) == QLatin1String("edit"))
             linkEdit = linkElem;
-        else if (linkElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("edit-media"))
+        else if (linkElem.attribute(QLatin1String("rel")) == QLatin1String("edit-media"))
             linkMedia = linkElem;
-        else if (linkElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("album"))
+        else if (linkElem.attribute(QLatin1String("rel")) == QLatin1String("album"))
             linkAlbum = linkElem;
         // else skip <link>
     }
@@ -965,8 +965,8 @@ bool YFTalker::slotParsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
     if (urn.isNull()       || title.isNull()              ||
         linkSelf.isNull()  || linkEdit.isNull()           ||
         linkMedia.isNull() || linkAlbum.isNull()          ||
-        !content.hasAttribute(QString::fromLatin1("src")) ||
-        !accessAttr.hasAttribute(QString::fromLatin1("value")))
+        !content.hasAttribute(QLatin1String("src")) ||
+        !accessAttr.hasAttribute(QLatin1String("value")))
     {
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Invalid XML data, error on line" << entryElem.lineNumber();
@@ -974,7 +974,7 @@ bool YFTalker::slotParsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
         return false;
     }
 
-    const QString accessString = accessAttr.attribute(QString::fromLatin1("value"));
+    const QString accessString = accessAttr.attribute(QLatin1String("value"));
 
     YFPhoto::Access access;
 
@@ -995,24 +995,24 @@ bool YFTalker::slotParsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
 
     photo.setTitle(title.text());
     photo.setSummary(summary.text());
-    photo.m_apiEditUrl    = linkEdit.attribute(QString::fromLatin1("href"));
-    photo.m_apiSelfUrl    = linkSelf.attribute(QString::fromLatin1("href"));
-    photo.m_apiMediaUrl   = linkMedia.attribute(QString::fromLatin1("href"));
-    photo.m_apiAlbumUrl   = linkAlbum.attribute(QString::fromLatin1("href"));
-    photo.m_publishedDate = QDateTime::fromString(published.text(), QString::fromLatin1("yyyy-MM-ddTHH:mm:ssZ"));
-    photo.m_editedDate    = QDateTime::fromString(edited.text(), QString::fromLatin1("yyyy-MM-ddTHH:mm:ssZ"));
-    photo.m_updatedDate   = QDateTime::fromString(updated.text(), QString::fromLatin1("yyyy-MM-ddTHH:mm:ssZ"));
-    photo.m_createdDate   = QDateTime::fromString(created.text(), QString::fromLatin1("yyyy-MM-ddTHH:mm:ss"));
+    photo.m_apiEditUrl    = linkEdit.attribute(QLatin1String("href"));
+    photo.m_apiSelfUrl    = linkSelf.attribute(QLatin1String("href"));
+    photo.m_apiMediaUrl   = linkMedia.attribute(QLatin1String("href"));
+    photo.m_apiAlbumUrl   = linkAlbum.attribute(QLatin1String("href"));
+    photo.m_publishedDate = QDateTime::fromString(published.text(), QLatin1String("yyyy-MM-ddTHH:mm:ssZ"));
+    photo.m_editedDate    = QDateTime::fromString(edited.text(),    QLatin1String("yyyy-MM-ddTHH:mm:ssZ"));
+    photo.m_updatedDate   = QDateTime::fromString(updated.text(),   QLatin1String("yyyy-MM-ddTHH:mm:ssZ"));
+    photo.m_createdDate   = QDateTime::fromString(created.text(),   QLatin1String("yyyy-MM-ddTHH:mm:ss"));
 
     photo.setAccess(access);
     photo.setHideOriginal(hideOriginal.attribute(
-        QString::fromLatin1("value"), QString::fromLatin1("false")) == QString::fromLatin1("true"));
+        QLatin1String("value"), QLatin1String("false")) == QLatin1String("true"));
     photo.setDisableComments(disableComments.attribute(
-        QString::fromLatin1("value"), QString::fromLatin1("false")) == QString::fromLatin1("true"));
+        QLatin1String("value"), QLatin1String("false")) == QLatin1String("true"));
     photo.setAdult(adult.attribute(
-        QString::fromLatin1("value"), QString::fromLatin1("false")) == QString::fromLatin1("true"));
+        QLatin1String("value"), QLatin1String("false")) == QLatin1String("true"));
 
-    photo.m_remoteUrl = content.attribute(QString::fromLatin1("src"));
+    photo.m_remoteUrl = content.attribute(QLatin1String("src"));
 
     /*
      * FIXME: tags part of the API is not documented by Yandex
@@ -1020,17 +1020,17 @@ bool YFTalker::slotParsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
 
     // reload all tags from the response
     photo.tags.clear();
-    QDomElement category = entryElem.firstChildElement(QString::fromLatin1("category"));
+    QDomElement category = entryElem.firstChildElement(QLatin1String("category"));
 
     for ( ; !category.isNull() ;
-         category = category.nextSiblingElement(QString::fromLatin1("category")))
+         category = category.nextSiblingElement(QLatin1String("category")))
     {
-        if (category.hasAttribute(QString::fromLatin1("term")) &&
-            category.hasAttribute(QString::fromLatin1("scheme")) &&
+        if (category.hasAttribute(QLatin1String("term")) &&
+            category.hasAttribute(QLatin1String("scheme")) &&
             // FIXME: I have no idea how to make its better, usable API is needed
-            category.attribute(QString::fromLatin1("scheme")) == d->apiTagsUrl)
+            category.attribute(QLatin1String("scheme")) == d->apiTagsUrl)
         {
-            photo.tags.append(category.attribute(QString::fromLatin1("term")));
+            photo.tags.append(category.attribute(QLatin1String("term")));
         }
     }
 
@@ -1039,7 +1039,7 @@ bool YFTalker::slotParsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
 
 void YFTalker::slotParseResponseListPhotos()
 {
-    QDomDocument doc(QString::fromLatin1("feed"));
+    QDomDocument doc(QLatin1String("feed"));
 
     if (!doc.setContent(d->buffer))
     {
@@ -1053,23 +1053,23 @@ void YFTalker::slotParseResponseListPhotos()
 
     // find next page link
     d->photosNextUrl.clear();
-    QDomElement linkElem       = rootElem.firstChildElement(QString::fromLatin1("link"));
+    QDomElement linkElem       = rootElem.firstChildElement(QLatin1String("link"));
 
     for ( ; !linkElem.isNull() ;
-          linkElem = linkElem.nextSiblingElement(QString::fromLatin1("link")))
+          linkElem = linkElem.nextSiblingElement(QLatin1String("link")))
     {
-        if (linkElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("next") &&
-            !linkElem.attribute(QString::fromLatin1("href")).isNull())
+        if (linkElem.attribute(QLatin1String("rel")) == QLatin1String("next") &&
+            !linkElem.attribute(QLatin1String("href")).isNull())
         {
-            d->photosNextUrl = linkElem.attribute(QString::fromLatin1("href"));
+            d->photosNextUrl = linkElem.attribute(QLatin1String("href"));
             break;
         }
     }
 
-    QDomElement entryElem = rootElem.firstChildElement(QString::fromLatin1("entry"));
+    QDomElement entryElem = rootElem.firstChildElement(QLatin1String("entry"));
 
     for ( ; !entryElem.isNull() ;
-          entryElem = entryElem.nextSiblingElement(QString::fromLatin1("entry")))
+          entryElem = entryElem.nextSiblingElement(QLatin1String("entry")))
     {
         YFPhoto photo;
 
@@ -1107,7 +1107,7 @@ void YFTalker::slotParseResponseListPhotos()
 void YFTalker::slotParseResponseUpdatePhotoFile()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Uploaded photo document" << d->buffer;
-    QDomDocument doc(QString::fromLatin1("entry"));
+    QDomDocument doc(QLatin1String("entry"));
 
     if (!doc.setContent(d->buffer))
     {

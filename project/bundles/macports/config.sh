@@ -46,6 +46,13 @@ MP_BUILDTEMP=~/mptemp
 # Uncomment this line to force a specific version of Macports to use, else lastest will be used.
 #MP_VERSION="2.3.3"
 
+########################################################################
+
+# URL to git repository to checkout digiKam source code
+# Read/write url is an alternative when official read only server is down.
+#DK_GITURL="git://anongit.kde.org/digikam.git"
+DK_GITURL="git@git.kde.org:digikam"
+
 # digiKam tarball information
 DK_URL="http://download.kde.org/stable/digikam"
 

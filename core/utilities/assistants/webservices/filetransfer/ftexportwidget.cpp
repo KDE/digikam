@@ -89,7 +89,7 @@ FTExportWidget::FTExportWidget(DInfoInterface* const iface, QWidget* const paren
                                       "e.g. ftp://my.server.org/sub/folder."));
 
     d->targetSearchButton = new QPushButton(i18n("Select export location..."), this);
-    d->targetSearchButton->setIcon(QIcon::fromTheme(QString::fromLatin1("folder-remote")));
+    d->targetSearchButton->setIcon(QIcon::fromTheme(QLatin1String("folder-remote")));
 
     // setup image list
     d->imageList = new DImagesList(this);

@@ -71,7 +71,7 @@ WSSelectUserDlg::WSSelectUserDlg(QWidget* const parent, const QString& serviceNa
     QDialogButtonBox* const buttonBox   = new QDialogButtonBox();
     QPushButton* const buttonNewAccount = new QPushButton(buttonBox);
     buttonNewAccount->setText(i18n("Add another account"));
-    buttonNewAccount->setIcon(QIcon::fromTheme(QString::fromLatin1("network-workgroup")));
+    buttonNewAccount->setIcon(QIcon::fromTheme(QLatin1String("network-workgroup")));
 
     buttonBox->addButton(buttonNewAccount, QDialogButtonBox::AcceptRole);
     buttonBox->addButton(QDialogButtonBox::Ok);
@@ -81,13 +81,13 @@ WSSelectUserDlg::WSSelectUserDlg(QWidget* const parent, const QString& serviceNa
 
     d->okButton = buttonBox->button(QDialogButtonBox::Ok);
 
-    if (d->serviceName == QString::fromLatin1("23"))
+    if (d->serviceName == QLatin1String("23"))
     {
-        setWindowIcon(QIcon::fromTheme(QString::fromLatin1("hq")));
+        setWindowIcon(QIcon::fromTheme(QLatin1String("hq")));
     }
     else
     {
-        setWindowIcon(QIcon::fromTheme(QString::fromLatin1("flickr")));
+        setWindowIcon(QIcon::fromTheme(QLatin1String("flickr")));
     }
 
     d->userName     = QString();
@@ -134,10 +134,10 @@ void WSSelectUserDlg::reactivate()
 
         KConfigGroup grp = config.group(group);
 
-        if (QString::compare(grp.readEntry(QString::fromLatin1("username")), QString(), Qt::CaseInsensitive) == 0)
+        if (QString::compare(grp.readEntry(QLatin1String("username")), QString(), Qt::CaseInsensitive) == 0)
             continue;
 
-        d->userComboBox->addItem(grp.readEntry(QString::fromLatin1("username")));
+        d->userComboBox->addItem(grp.readEntry(QLatin1String("username")));
     }
 
     d->okButton->setEnabled(d->userComboBox->count() > 0);

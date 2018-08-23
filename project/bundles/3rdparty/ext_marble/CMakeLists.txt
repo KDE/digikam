@@ -18,7 +18,9 @@ if(MINGW)
                         URL_MD5 469d23d33f584dc0f94e4ded24a3fd6d
 
                         INSTALL_DIR ${EXTPREFIX_marble}
-                        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/marble-libs-install-mxe.patch
+                        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/marble-libs-install-mxe.patch &&
+                                      cp ${CMAKE_CURRENT_SOURCE_DIR}/../../mxe/fixqtwebkitincludes.sh <SOURCE_DIR>/. &&
+                                      <SOURCE_DIR>/fixqtwebkitincludes.sh
 
                         CMAKE_ARGS -DMXE_TOOLCHAIN=${MXE_TOOLCHAIN}
                                    -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}

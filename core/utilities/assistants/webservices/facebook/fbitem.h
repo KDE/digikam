@@ -77,13 +77,13 @@ class FbAlbum: public WSAlbum
 {
 public:
 
-    FbAlbum()
+    explicit FbAlbum()
       : WSAlbum()
     {
         privacy = FB_FRIENDS;
     }
     
-    FbAlbum(const WSAlbum& baseAlbum)
+    explicit FbAlbum(const WSAlbum& baseAlbum)
       : WSAlbum(baseAlbum)
     {
         privacy = FB_FRIENDS;

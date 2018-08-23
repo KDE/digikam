@@ -267,9 +267,13 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
     : QDialog(parent),
       d(new Private)
 {
+    setWindowFlags((windowFlags() & ~Qt::Dialog) | Qt::Window |
+                                                   Qt::WindowCloseButtonHint |
+                                                   Qt::WindowMinMaxButtonsHint);
     setAttribute(Qt::WA_DeleteOnClose, true);
     setWindowTitle(i18n("Geolocation Editor"));
     setMinimumSize(300, 400);
+    setModal(true);
 
     d->iface          = iface;
     d->imageModel     = new GPSImageModel(this);

@@ -33,6 +33,10 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
+// Local includes
+
+#include "digikam_config.h"
+
 namespace Digikam
 {
 
@@ -148,7 +152,11 @@ QFileDialog::Option DFileDialog::getNativeFileDialogOption()
         group = config->group(QLatin1String("ImageViewer Settings"));
     }
 
+#ifdef Q_OS_OSX
+    bool useNativeFileDialog  = group.readEntry(QLatin1String("Use Native File Dialog"), true);
+#else
     bool useNativeFileDialog  = group.readEntry(QLatin1String("Use Native File Dialog"), false);
+#endif
 
     if (useNativeFileDialog)
         return (QFileDialog::Option)0;

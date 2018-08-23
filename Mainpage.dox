@@ -287,6 +287,8 @@ The full list of mandatory (X) and optional (opt) external dependencies required
 | Qt5::DBus            |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | Optional: only for Linux Desktop                       |                                                                                       |
 | Qt5::OpenGL          |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | For Presentation tool                                  |                                                                                       |
 | Qt5::Test            |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | To compile test codes (BUILD_TESTING=on)               |                                                                                       |
+| Qt5::Qml             |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | To compile test codes (BUILD_TESTING=on) O2 unit tests |                                                                                       |
+| Qt5::WebView         |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | To compile test codes (BUILD_TESTING=on) O2 unit tests |                                                                                       |
 | KF5::Config          |   X      | >= 5.5.0    | https://cgit.kde.org/kconfig.git/about/           |                                                        |                                                                                       |
 | KF5::XmlGui          |   X      | >= 5.5.0    | https://cgit.kde.org/kxmlgui.git/about/           |                                                        |                                                                                       |
 | KF5::I18n            |   X      | >= 5.5.0    | https://cgit.kde.org/ki18n.git/about/             |                                                        |                                                                                       |
@@ -328,6 +330,7 @@ The full list of mandatory (X) and optional (opt) external dependencies required
 | liblqr-1             |  opt     | >= 0.4.2    | http://liblqr.wikidot.com                         | For Liquid rescale tool                                |                                                                                       |
 | libgphoto2           |  opt     | >= 2.5      | http://www.gphoto.org                             | Digital camera drivers support. Need libusb-1          |                                                                                       |
 | libgomp              |  opt     | >= 5.0      | https://gcc.gnu.org/onlinedocs/libgomp            | OpenMP support for RawEngine                           |                                                                                       |
+| DrMingw              |  opt     | >= 0.8.2    | https://github.com/jrfonseca/drmingw              | Mingw crash handler (run-time deps only for windows)   |                                                                                       |
 
 \section getsourcecode Get Source Code
 
@@ -470,6 +473,7 @@ There are two configuration sections : the top level and the core.
  - Developers only options:
 
   - \b ENABLE_DIGIKAM_MODELTEST              : Enable ModelTest on some models for debugging (default=OFF).
+  - \b ENABLE_DRMINGW                        : Enable the Dr. Mingw crash handler for windows (default=ON).
 
 \section setuplocaldev Setup Local Compilation and Run-Time
 
@@ -845,32 +849,30 @@ class A
 The above coding style guidelines can be automatically applied with
 astyle (http://astyle.sourceforge.net/).
 
-Run it in the directory where the files are located that should be formatted
-with the following command:
+Run it in the directory where the files are located that should be formatted.
 
-\code
-astyle --brackets=break --indent=spaces=4 --convert-tabs --indent-switches \
-       --break-blocks --break-closing-brackets --pad-header                \
-       --align-pointer=type --indent-col1-comments --add-brackets          \
-       --min-conditional-indent=0                                          \
-       `find -type f -name '*.cpp'` `find -type f -name '*.cc'` `find -type f -name '*.h'`
-\endcode
-
-Another way to apply the coding guidelines with astyle is to use the
-fileformatter script in /project/scripts. This script will also clean up the
-source tree and remove backup files that had been created by astyle, 
+To apply the coding guidelines with astyle is to use the
+fileformatter.py script in project/scripts directory. This script will also clean up the
+source tree and remove backup files that had been created by astyle,
 if the appropriate command line argument is given.
 
 To handle the command easier, create a bash function in ~/.bashrc, e.g.
 
 \code
-digikamformatcode()
+dkfrmcode()
 {
-    astyle --brackets=break --indent=spaces=4 --convert-tabs --indent-switches \
-           --break-blocks --break-closing-brackets --pad-header                \
-           --align-pointer=type --indent-col1-comments --add-brackets          \
-           --min-conditional-indent=0                                          \
-           `find $1 -type f -name '*.cpp'` `find $1 -type f -name '*.cc'` `find $1 -type f -name '*.h'`
+    astyle --style=allman             \
+           --indent=spaces=4          \
+           --convert-tabs             \
+           --indent-switches          \
+           --break-blocks             \
+           --break-closing-brackets   \
+           --pad-header               \
+           --align-pointer=type       \
+           --indent-col1-comments     \
+           --add-brackets             \
+           --min-conditional-indent=0 \
+           `find $1 -type f -name '*.cpp'` `find $1 -type f -name '*.c'` `find $1 -type f -name '*.h'`
 }
 \endcode
 
@@ -881,12 +883,12 @@ Examples:
 
 1. Run astyle in the current directory
 \code
-$> digikamformatcode
+$> dkfrmcode
 \endcode
 
 2. Run astyle in a different directory
 \code
-$> digikamformatcode /home/user/code/svn/digikam/
+$> dkfrmcode /home/user/code/git/digikam/
 \endcode
 
 \subsection generalrecommend General recommendations

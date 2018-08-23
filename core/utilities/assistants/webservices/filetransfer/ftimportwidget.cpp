@@ -64,7 +64,7 @@ FTImportWidget::FTImportWidget(QWidget* const parent, DInfoInterface* const ifac
       d(new Private)
 {
     d->importSearchBtn = new QPushButton(i18n("Select import location..."), this);
-    d->importSearchBtn->setIcon(QIcon::fromTheme(QString::fromLatin1("folder-remote")));
+    d->importSearchBtn->setIcon(QIcon::fromTheme(QLatin1String("folder-remote")));
 
     // setup image list
     d->imageList = new DImagesList(this);

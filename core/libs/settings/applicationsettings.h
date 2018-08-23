@@ -448,6 +448,9 @@ public:
     void setIconTheme(const QString& theme);
     QString getIconTheme() const;
 
+    void setApplicationFont(const QFont& fnt);
+    QFont getApplicationFont() const;
+
     void setShowSplashScreen(bool val);
     bool getShowSplashScreen() const;
 

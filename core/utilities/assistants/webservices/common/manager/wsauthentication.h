@@ -20,8 +20,8 @@
  *
  * ============================================================ */ 
 
-#ifndef DIGIKAM_WS_AUTHENTICACTION_H
-#define DIGIKAM_WS_AUTHENTICACTION_H
+#ifndef DIGIKAM_WS_AUTHENTICATION_H
+#define DIGIKAM_WS_AUTHENTICATION_H
 
 // Qt includes
 
@@ -46,7 +46,7 @@ namespace Digikam
 class WSAuthentication : public QObject
 {
     Q_OBJECT
-    
+
 public:
 
     explicit WSAuthentication(QWidget* const parent, DInfoInterface* const iface=0);
@@ -108,10 +108,10 @@ public:
 private:
 
     /*
-     * Parse albums list to a map of pairs <album_id, content> and a list of 
+     * Parse albums list to a map of pairs <album_id, content> and a list of
      * albums at the very top level (root of other albums).
      */
-    void    parseTreeFromListAlbums(const QList <WSAlbum>& albumsList, 
+    void    parseTreeFromListAlbums(const QList <WSAlbum>& albumsList,
                                     QMap<QString, AlbumSimplified>& albumTree,
                                     QStringList& rootAlbums);
 
@@ -162,14 +162,11 @@ public Q_SLOTS:
     void    slotAddPhotoDone(int errCode, const QString& errMsg);
 
 private:
-    
+
     class Private;
     Private* const d;
-    
 };
-    
+
 } // namespace Digikam
 
-#endif // DIGIKAM_WS_AUTHENTICACTION_H  
-
-
+#endif // DIGIKAM_WS_AUTHENTICATION_H

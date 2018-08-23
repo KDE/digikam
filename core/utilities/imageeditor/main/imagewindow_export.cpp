@@ -99,6 +99,27 @@ void ImageWindow::slotExportTool()
         w->exec();
         delete w;
     }
+    if (tool == m_exportOnedriveAction)
+    {
+        QPointer<ODWindow> w = new ODWindow(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
+        w->exec();
+        delete w;
+    }
+    if (tool == m_exportPinterestAction)
+    {
+        QPointer<PWindow> w = new PWindow(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
+        w->exec();
+        delete w;
+    }
+    if (tool == m_exportBoxAction)
+    {
+        QPointer<BOXWindow> w = new BOXWindow(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
+        w->exec();
+        delete w;
+    }
     else if (tool == m_exportFacebookAction)
     {
         QPointer<FbWindow> w = new FbWindow(new DBInfoIface(this, d->thumbBar->allUrls(),

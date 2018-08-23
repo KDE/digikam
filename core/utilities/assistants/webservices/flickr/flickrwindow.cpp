@@ -168,7 +168,7 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
     d->uploadCount               = 0;
     d->uploadTotal               = 0;
     d->widget                    = new FlickrWidget(this, iface, serviceName);
-    d->albumDlg                  = new FlickrNewAlbumDlg(this, QString::fromLatin1("Flickr"));
+    d->albumDlg                  = new FlickrNewAlbumDlg(this, QLatin1String("Flickr"));
     d->albumsListComboBox        = d->widget->getAlbumsCoB();
     d->newAlbumBtn               = d->widget->getNewAlbmBtn();
     d->originalCheckBox          = d->widget->getOriginalCheckBox();
@@ -210,8 +210,8 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
     connect(d->talker, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
 
-    connect(d->talker, SIGNAL(signalAddPhotoSucceeded(const QString&)),
-            this, SLOT(slotAddPhotoSucceeded(const QString&)));
+    connect(d->talker, SIGNAL(signalAddPhotoSucceeded(QString)),
+            this, SLOT(slotAddPhotoSucceeded(QString)));
 
     connect(d->talker, SIGNAL(signalAddPhotoFailed(QString)),
             this, SLOT(slotAddPhotoFailed(QString)));
@@ -567,7 +567,7 @@ void FlickrWindow::slotCreateNewPhotoSet()
         // Lets find an UNDEFINED_ style id that isn't taken yet.s
         QString id;
         int i                               = 0;
-        id                                  = QString::fromLatin1("UNDEFINED_") + QString::number(i);
+        id                                  = QLatin1String("UNDEFINED_") + QString::number(i);
         QLinkedList<FPhotoSet>::iterator it = d->talker->m_photoSetsList->begin();
 
         while (it != d->talker->m_photoSetsList->end())
@@ -576,7 +576,7 @@ void FlickrWindow::slotCreateNewPhotoSet()
 
             if (fps.id == id)
             {
-                id = QString::fromLatin1("UNDEFINED_") + QString::number(++i);
+                id = QLatin1String("UNDEFINED_") + QString::number(++i);
                 it = d->talker->m_photoSetsList->begin();
             }
 
@@ -793,7 +793,7 @@ void FlickrWindow::slotAddPhotoNext()
 
     if (!res)
     {
-        slotAddPhotoFailed(QString::fromLatin1(""));
+        slotAddPhotoFailed(QLatin1String(""));
         return;
     }
 
@@ -829,7 +829,7 @@ void FlickrWindow::slotAddPhotoSucceeded(const QString& photoId)
 
 void FlickrWindow::slotListPhotoSetsFailed(const QString& msg)
 {
-    QMessageBox::critical(this, QString::fromLatin1("Error"),
+    QMessageBox::critical(this, QLatin1String("Error"),
                           i18n("Failed to Fetch Photoset information from %1. %2\n",
                                d->serviceName, msg));
 }

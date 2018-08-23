@@ -71,8 +71,8 @@ PreparedImage s_prepareImageForUpload(const QString& saveDir,
 
     // get temporary file name
     QString baseName    = saveDir  + QFileInfo(imagePath).baseName().trimmed();
-    ret.scaledImagePath = baseName + QString::fromLatin1(".jpg");
-    ret.thumbPath       = baseName + QString::fromLatin1(".thumb.jpg");
+    ret.scaledImagePath = baseName + QLatin1String(".jpg");
+    ret.thumbPath       = baseName + QLatin1String(".thumb.jpg");
 
     if (maxDimension > 0 && ((unsigned) image.width() > maxDimension ||
         (unsigned) image.height() > maxDimension))
@@ -96,7 +96,7 @@ PreparedImage s_prepareImageForUpload(const QString& saveDir,
     {
         meta.setImageDimensions(image.size());
         meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-        meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+        meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
         meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
         meta.save(ret.scaledImagePath);
     }
@@ -139,22 +139,22 @@ QMap<QString, QString>& RajceCommand::parameters() const
 
 QString RajceCommand::getXml() const
 {
-    QString ret(QString::fromLatin1("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"));
+    QString ret(QLatin1String("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"));
 
-    ret.append(QString::fromLatin1("<request>\n"));
-    ret.append(QString::fromLatin1("  <command>")).append(d->name).append(QString::fromLatin1("</command>\n"));
-    ret.append(QString::fromLatin1("  <parameters>\n"));
+    ret.append(QLatin1String("<request>\n"));
+    ret.append(QLatin1String("  <command>")).append(d->name).append(QLatin1String("</command>\n"));
+    ret.append(QLatin1String("  <parameters>\n"));
 
     foreach (QString key, d->parameters.keys())
     {
-        ret.append(QString::fromLatin1("    <")).append(key).append(QString::fromLatin1(">"));
+        ret.append(QLatin1String("    <")).append(key).append(QLatin1String(">"));
         ret.append(d->parameters[key]);
-        ret.append(QString::fromLatin1("</")).append(key).append(QString::fromLatin1(">\n"));
+        ret.append(QLatin1String("</")).append(key).append(QLatin1String(">\n"));
     }
 
-    ret.append(QString::fromLatin1("</parameters>\n"));
+    ret.append(QLatin1String("</parameters>\n"));
     ret.append(additionalXml());
-    ret.append(QString::fromLatin1("\n</request>\n"));
+    ret.append(QLatin1String("\n</request>\n"));
 
     return ret;
 }
@@ -163,13 +163,13 @@ bool RajceCommand::parseErrorFromQuery(QXmlQuery& query, RajceSession& state)
 {
     QString results;
 
-    query.setQuery(QString::fromLatin1("/response/string(errorCode)"));
+    query.setQuery(QLatin1String("/response/string(errorCode)"));
     query.evaluateTo(&results);
 
     if (results.trimmed().length() > 0)
     {
         state.lastErrorCode()    = results.toUInt();
-        query.setQuery(QString::fromLatin1("/response/string(result)"));
+        query.setQuery(QLatin1String("/response/string(result)"));
         query.evaluateTo(&results);
         state.lastErrorMessage() = results.trimmed();
 
@@ -211,7 +211,7 @@ QByteArray RajceCommand::encode() const
 
 QString RajceCommand::contentType() const
 {
-    return QString::fromLatin1("application/x-www-form-urlencoded");
+    return QLatin1String("application/x-www-form-urlencoded");
 }
 
 RajceCommandType RajceCommand::commandType() const
@@ -222,10 +222,10 @@ RajceCommandType RajceCommand::commandType() const
 // -----------------------------------------------------------------------
 
 OpenAlbumCommand::OpenAlbumCommand(unsigned albumId, const RajceSession& state)
-    : RajceCommand(QString::fromLatin1("openAlbum"), OpenAlbum)
+    : RajceCommand(QLatin1String("openAlbum"), OpenAlbum)
 {
-    parameters()[QString::fromLatin1("token")]   = state.sessionToken();
-    parameters()[QString::fromLatin1("albumID")] = QString::number(albumId);
+    parameters()[QLatin1String("token")]   = state.sessionToken();
+    parameters()[QLatin1String("albumID")] = QString::number(albumId);
 }
 
 void OpenAlbumCommand::parseResponse(QXmlQuery& q, RajceSession& state)
@@ -234,7 +234,7 @@ void OpenAlbumCommand::parseResponse(QXmlQuery& q, RajceSession& state)
 
     QString result;
 
-    q.setQuery(QString::fromLatin1("/response/data(albumToken)"));
+    q.setQuery(QLatin1String("/response/data(albumToken)"));
     q.evaluateTo(&result);
 
     state.openAlbumToken() = result.trimmed();
@@ -248,10 +248,10 @@ void OpenAlbumCommand::cleanUpOnError(RajceSession& state)
 // -----------------------------------------------------------------------
 
 LoginCommand::LoginCommand(const QString& username, const QString& password)
-    : RajceCommand(QString::fromLatin1("login"), Login)
+    : RajceCommand(QLatin1String("login"), Login)
 {
-    parameters()[QString::fromLatin1("login")]    = username;
-    parameters()[QString::fromLatin1("password")] = QString::fromLatin1(
+    parameters()[QLatin1String("login")]    = username;
+    parameters()[QLatin1String("password")] = QLatin1String(
         QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Md5).toHex());
 }
 
@@ -259,38 +259,38 @@ void LoginCommand::parseResponse(QXmlQuery& q, RajceSession& state)
 {
     QString results;
 
-    q.setQuery(QString::fromLatin1("/response/string(maxWidth)"));
+    q.setQuery(QLatin1String("/response/string(maxWidth)"));
     q.evaluateTo(&results);
     state.maxWidth()     = results.toUInt();
 
-    q.setQuery(QString::fromLatin1("/response/string(maxHeight)"));
+    q.setQuery(QLatin1String("/response/string(maxHeight)"));
     q.evaluateTo(&results);
     state.maxHeight()    = results.toUInt();
 
-    q.setQuery(QString::fromLatin1("/response/string(quality)"));
+    q.setQuery(QLatin1String("/response/string(quality)"));
     q.evaluateTo(&results);
     state.imageQuality() = results.toUInt();
 
-    q.setQuery(QString::fromLatin1("/response/string(nick)"));
+    q.setQuery(QLatin1String("/response/string(nick)"));
     q.evaluateTo(&results);
     state.nickname()     = results.trimmed();
 
-    q.setQuery(QString::fromLatin1("data(/response/sessionToken)"));
+    q.setQuery(QLatin1String("data(/response/sessionToken)"));
     q.evaluateTo(&results);
     state.sessionToken() = results.trimmed();
 
-    state.username()     = parameters()[QString::fromLatin1("login")];
+    state.username()     = parameters()[QLatin1String("login")];
 }
 
 void LoginCommand::cleanUpOnError(RajceSession& state)
 {
-    state.openAlbumToken() = QString::fromLatin1("");
-    state.nickname()       = QString::fromLatin1("");
-    state.username()       = QString::fromLatin1("");
+    state.openAlbumToken() = QLatin1String("");
+    state.nickname()       = QLatin1String("");
+    state.username()       = QLatin1String("");
     state.imageQuality()   = 0;
     state.maxHeight()      = 0;
     state.maxWidth()       = 0;
-    state.sessionToken()   = QString::fromLatin1("");
+    state.sessionToken()   = QLatin1String("");
     state.albums().clear();
 }
 
@@ -300,12 +300,12 @@ CreateAlbumCommand::CreateAlbumCommand(const QString& name,
                                        const QString& description,
                                        bool visible,
                                        const RajceSession& state)
-    : RajceCommand(QString::fromLatin1("createAlbum"), CreateAlbum)
+    : RajceCommand(QLatin1String("createAlbum"), CreateAlbum)
 {
-    parameters()[QString::fromLatin1("token")]            = state.sessionToken();
-    parameters()[QString::fromLatin1("albumName")]        = name;
-    parameters()[QString::fromLatin1("albumDescription")] = description;
-    parameters()[QString::fromLatin1("albumVisible")]     = visible ? QString::fromLatin1("1") : QString::fromLatin1("0");
+    parameters()[QLatin1String("token")]            = state.sessionToken();
+    parameters()[QLatin1String("albumName")]        = name;
+    parameters()[QLatin1String("albumDescription")] = description;
+    parameters()[QLatin1String("albumVisible")]     = visible ? QLatin1String("1") : QLatin1String("0");
 }
 
 void CreateAlbumCommand::parseResponse(QXmlQuery&, RajceSession&)
@@ -327,18 +327,18 @@ void CloseAlbumCommand::cleanUpOnError(RajceSession&)
 // -----------------------------------------------------------------------
 
 CloseAlbumCommand::CloseAlbumCommand(const RajceSession& state)
-    : RajceCommand(QString::fromLatin1("closeAlbum"), CloseAlbum)
+    : RajceCommand(QLatin1String("closeAlbum"), CloseAlbum)
 {
-    parameters()[QString::fromLatin1("token")]      = state.sessionToken();
-    parameters()[QString::fromLatin1("albumToken")] = state.openAlbumToken();
+    parameters()[QLatin1String("token")]      = state.sessionToken();
+    parameters()[QLatin1String("albumToken")] = state.openAlbumToken();
 }
 
 // -----------------------------------------------------------------------
 
 AlbumListCommand::AlbumListCommand(const RajceSession& state)
-    : RajceCommand(QString::fromLatin1("getAlbumList"), ListAlbums)
+    : RajceCommand(QLatin1String("getAlbumList"), ListAlbums)
 {
-    parameters()[QString::fromLatin1("token")] = state.sessionToken();
+    parameters()[QLatin1String("token")] = state.sessionToken();
 }
 
 void AlbumListCommand::parseResponse(QXmlQuery& q, RajceSession& state)
@@ -347,7 +347,7 @@ void AlbumListCommand::parseResponse(QXmlQuery& q, RajceSession& state)
 
     QXmlResultItems results;
 
-    q.setQuery(QString::fromLatin1("/response/albums/album"));
+    q.setQuery(QLatin1String("/response/albums/album"));
     q.evaluateTo(&results);
 
     QXmlItem item(results.next());
@@ -358,61 +358,61 @@ void AlbumListCommand::parseResponse(QXmlQuery& q, RajceSession& state)
         RajceAlbum album;
         QString detail;
 
-        q.setQuery(QString::fromLatin1("data(./@id)"));
+        q.setQuery(QLatin1String("data(./@id)"));
         q.evaluateTo(&detail);
         album.id          = detail.toUInt();
 
-        q.setQuery(QString::fromLatin1("data(./albumName)"));
+        q.setQuery(QLatin1String("data(./albumName)"));
         q.evaluateTo(&detail);
         album.name        = detail.trimmed();
 
-        q.setQuery(QString::fromLatin1("data(./description)"));
+        q.setQuery(QLatin1String("data(./description)"));
         q.evaluateTo(&detail);
         album.description = detail.trimmed();
 
-        q.setQuery(QString::fromLatin1("data(./url)"));
+        q.setQuery(QLatin1String("data(./url)"));
         q.evaluateTo(&detail);
         album.url         = detail.trimmed();
 
-        q.setQuery(QString::fromLatin1("data(./thumbUrl)"));
+        q.setQuery(QLatin1String("data(./thumbUrl)"));
         q.evaluateTo(&detail);
         album.thumbUrl    = detail.trimmed();
 
-        q.setQuery(QString::fromLatin1("data(./createDate)"));
+        q.setQuery(QLatin1String("data(./createDate)"));
         q.evaluateTo(&detail);
-        album.createDate  = QDateTime::fromString(detail.trimmed(), QString::fromLatin1("yyyy-MM-dd hh:mm:ss"));
+        album.createDate  = QDateTime::fromString(detail.trimmed(), QLatin1String("yyyy-MM-dd hh:mm:ss"));
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Create date: " << detail.trimmed() << " = "
-                                         << QDateTime::fromString(detail.trimmed(), QString::fromLatin1("yyyy-MM-dd hh:mm:ss"));
+                                         << QDateTime::fromString(detail.trimmed(), QLatin1String("yyyy-MM-dd hh:mm:ss"));
 
-        q.setQuery(QString::fromLatin1("data(./updateDate)"));
+        q.setQuery(QLatin1String("data(./updateDate)"));
         q.evaluateTo(&detail);
-        album.updateDate  = QDateTime::fromString(detail.trimmed(), QString::fromLatin1("yyyy-MM-dd hh:mm:ss"));
+        album.updateDate  = QDateTime::fromString(detail.trimmed(), QLatin1String("yyyy-MM-dd hh:mm:ss"));
 
         q.evaluateTo(&detail);
         album.isHidden    = detail.toUInt() != 0;
 
-        q.setQuery(QString::fromLatin1("data(./secure)"));
+        q.setQuery(QLatin1String("data(./secure)"));
         q.evaluateTo(&detail);
         album.isSecure    = detail.toUInt() != 0;
 
-        q.setQuery(QString::fromLatin1("data(./startDateInterval)"));
+        q.setQuery(QLatin1String("data(./startDateInterval)"));
         q.evaluateTo(&detail);
 
         if (detail.trimmed().length() > 0)
         {
-            album.validFrom = QDateTime::fromString(detail, QString::fromLatin1("yyyy-MM-dd hh:mm:ss"));
+            album.validFrom = QDateTime::fromString(detail, QLatin1String("yyyy-MM-dd hh:mm:ss"));
         }
 
-        q.setQuery(QString::fromLatin1("data(./endDateInterval)"));
+        q.setQuery(QLatin1String("data(./endDateInterval)"));
         q.evaluateTo(&detail);
 
         if (detail.trimmed().length() > 0)
         {
-            album.validTo = QDateTime::fromString(detail, QString::fromLatin1("yyyy-MM-dd hh:mm:ss"));
+            album.validTo = QDateTime::fromString(detail, QLatin1String("yyyy-MM-dd hh:mm:ss"));
         }
 
-        q.setQuery(QString::fromLatin1("data(./thumbUrlBest)"));
+        q.setQuery(QLatin1String("data(./thumbUrlBest)"));
         q.evaluateTo(&detail);
         album.bestQualityThumbUrl = detail.trimmed();
 
@@ -458,7 +458,7 @@ AddPhotoCommand::AddPhotoCommand(const QString& tmpDir,
                                  unsigned dimension,
                                  int      jpgQuality,
                                  const RajceSession& state)
-    : RajceCommand(QString::fromLatin1("addPhoto"), AddPhoto),
+    : RajceCommand(QLatin1String("addPhoto"), AddPhoto),
       d(new Private)
 {
     d->jpgQuality       = jpgQuality;
@@ -481,8 +481,8 @@ AddPhotoCommand::AddPhotoCommand(const QString& tmpDir,
 
     d->maxDimension                                 = (state.maxHeight() > state.maxWidth()) ? state.maxWidth()
                                                                                              : state.maxHeight();
-    parameters()[QString::fromLatin1("token")]      = state.sessionToken();
-    parameters()[QString::fromLatin1("albumToken")] = state.openAlbumToken();
+    parameters()[QLatin1String("token")]      = state.sessionToken();
+    parameters()[QLatin1String("albumToken")] = state.openAlbumToken();
     d->form                                         = new RajceMPForm;
 }
 
@@ -510,45 +510,45 @@ QString AddPhotoCommand::additionalXml() const
     QMap<QString, QString> metadata;
     QFileInfo f(d->imagePath);
 
-    metadata[QString::fromLatin1("FullFilePath")]          = d->imagePath;
-    metadata[QString::fromLatin1("OriginalFileName")]      = f.fileName();
-    metadata[QString::fromLatin1("OriginalFileExtension")] = QString::fromLatin1(".") + f.suffix();
-    metadata[QString::fromLatin1("PerceivedType")]         = QString::fromLatin1("image"); //what are the other values here? video?
-    metadata[QString::fromLatin1("OriginalWidth")]         = QString::number(d->image.width());
-    metadata[QString::fromLatin1("OriginalHeight")]        = QString::number(d->image.height());
-    metadata[QString::fromLatin1("LengthMS")]              = QLatin1Char('0');
-    metadata[QString::fromLatin1("FileSize")]              = QString::number(f.size());
+    metadata[QLatin1String("FullFilePath")]          = d->imagePath;
+    metadata[QLatin1String("OriginalFileName")]      = f.fileName();
+    metadata[QLatin1String("OriginalFileExtension")] = QLatin1Char('.') + f.suffix();
+    metadata[QLatin1String("PerceivedType")]         = QLatin1String("image"); //what are the other values here? video?
+    metadata[QLatin1String("OriginalWidth")]         = QString::number(d->image.width());
+    metadata[QLatin1String("OriginalHeight")]        = QString::number(d->image.height());
+    metadata[QLatin1String("LengthMS")]              = QLatin1Char('0');
+    metadata[QLatin1String("FileSize")]              = QString::number(f.size());
 
     //TODO extract these from exif
-    metadata[QString::fromLatin1("Title")]                 = QString::fromLatin1("");
-    metadata[QString::fromLatin1("KeywordSet")]            = QString::fromLatin1("");
-    metadata[QString::fromLatin1("PeopleRegionSet")]       = QString::fromLatin1("");
+    metadata[QLatin1String("Title")]                 = QLatin1String("");
+    metadata[QLatin1String("KeywordSet")]            = QLatin1String("");
+    metadata[QLatin1String("PeopleRegionSet")]       = QLatin1String("");
 
     qsrand((uint)QTime::currentTime().msec());
     QString id = QString::number(qrand());
-    QString ret(QString::fromLatin1("  <objectInfo>\n    <Item id=\""));
-    ret.append(id).append(QString::fromLatin1("\">\n"));
+    QString ret(QLatin1String("  <objectInfo>\n    <Item id=\""));
+    ret.append(id).append(QLatin1String("\">\n"));
 
     foreach(const QString& key, metadata.keys())
     {
-        ret.append(QString::fromLatin1("      <")).append(key);
+        ret.append(QLatin1String("      <")).append(key);
         QString value = metadata[key];
 
         if (value.length() == 0)
         {
-            ret.append(QString::fromLatin1(" />\n"));
+            ret.append(QLatin1String(" />\n"));
         }
         else
         {
-            ret.append(QString::fromLatin1(">"));
+            ret.append(QLatin1String(">"));
             ret.append(value);
-            ret.append(QString::fromLatin1("</"));
+            ret.append(QLatin1String("</"));
             ret.append(key);
-            ret.append(QString::fromLatin1(">\n"));
+            ret.append(QLatin1String(">\n"));
         }
     }
 
-    ret.append(QString::fromLatin1("    </Item>\n  </objectInfo>\n"));
+    ret.append(QLatin1String("    </Item>\n  </objectInfo>\n"));
 
     return ret;
 }
@@ -575,8 +575,8 @@ QByteArray AddPhotoCommand::encode() const
 
     //add the rest of the parameters to be encoded as xml
     QImage scaled(prepared.scaledImagePath);
-    parameters()[QString::fromLatin1("width")]  = QString::number(scaled.width());
-    parameters()[QString::fromLatin1("height")] = QString::number(scaled.height());
+    parameters()[QLatin1String("width")]  = QString::number(scaled.width());
+    parameters()[QLatin1String("height")] = QString::number(scaled.height());
     QString xml                                 = getXml();
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Really sending:\n" << xml;
@@ -584,10 +584,10 @@ QByteArray AddPhotoCommand::encode() const
     //now we can create the form with all the info
     d->form->reset();
 
-    d->form->addPair(QString::fromLatin1("data"),  xml);
+    d->form->addPair(QLatin1String("data"),  xml);
 
-    d->form->addFile(QString::fromLatin1("thumb"), prepared.thumbPath);
-    d->form->addFile(QString::fromLatin1("photo"), prepared.scaledImagePath);
+    d->form->addFile(QLatin1String("thumb"), prepared.thumbPath);
+    d->form->addFile(QLatin1String("photo"), prepared.scaledImagePath);
 
     QFile::remove(prepared.thumbPath);
     QFile::remove(prepared.scaledImagePath);

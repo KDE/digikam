@@ -50,7 +50,7 @@ public:
 
     explicit ComboBoxDelegate(DImagesList* const, const QMap<int, QString>&);
     ~ComboBoxDelegate();
-    
+
     /* Whenever an element needs to be edited, this method should be called.
      * It's actually a hack to prevent the item text shining through whenever
      * editing occurs.

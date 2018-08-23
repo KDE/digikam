@@ -318,7 +318,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
                                   "<p><b>16:9</b>: common tv-screen (as HDTV or Full-HD)</p>"
                                   "<p>The paper <b>Format DIN A</b> use the ratio 1:1.414</p>"
                                   "<p>The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
-                                  "is considered visually harmonious but can be unadapted to print on "
+                                  "is considered visually harmonious but may not be suitable to print on "
                                   "standard photographic paper.</p>"
                                   "<p>The <b>Current Aspect Ratio</b> takes aspect ratio from the currently "
                                   "opened image.</p>"));

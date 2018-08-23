@@ -64,7 +64,7 @@ public:
         accuracy               = 80;
         task                   = Detect;
         alreadyScannedHandling = Skip;
-        recognizeAlgorithm     = RecognitionDatabase::RecognizeAlgorithm::DNN;
+        recognizeAlgorithm     = RecognitionDatabase::RecognizeAlgorithm::LBP;
     }
 
     // processing power

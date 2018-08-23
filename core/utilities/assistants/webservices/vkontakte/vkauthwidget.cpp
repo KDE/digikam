@@ -81,7 +81,7 @@ VKAuthWidget::VKAuthWidget(QWidget* const parent,
     loginDescLabel->setWhatsThis(i18n("Your VKontakte login"));
 
     d->loginLabel       = new QLabel(this);
-    d->changeUserButton = new QPushButton(QIcon::fromTheme(QString::fromLatin1("system-switch-user")),
+    d->changeUserButton = new QPushButton(QIcon::fromTheme(QLatin1String("system-switch-user")),
                                          i18n("Change Account"), this);
     d->changeUserButton->setToolTip(i18n("Change VKontakte account used to authenticate"));
     d->changeUserButton->hide(); // changing account does not work anyway
@@ -189,7 +189,7 @@ QString VKAuthWidget::albumsURL() const
     if (d->vkapi->isAuthenticated() && d->userId != -1)
         return QString::fromLatin1("http://vk.com/albums%1").arg(d->userId);
     else
-        return QString::fromLatin1("http://vk.com/");
+        return QLatin1String("http://vk.com/");
 }
 
 } // namespace Digikam

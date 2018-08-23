@@ -97,7 +97,7 @@ ReplaceDialog::ReplaceDialog(QWidget* const parent,
     : QDialog(parent),
       d(new Private)
 {
-    setObjectName(QString::fromLatin1("ReplaceDialog"));
+    setObjectName(QLatin1String("ReplaceDialog"));
 
     d->src   = src;
     d->dest  = dest;

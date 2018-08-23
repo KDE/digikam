@@ -75,34 +75,34 @@ public:
     explicit Private()
     {
         parent          = 0;
-                
-        apikey          = QString::fromLatin1("258540448336-hgdegpohibcjasvk1p595fpvjor15pbc.apps.googleusercontent.com");
-        clientSecret    = QString::fromLatin1("iiIKTNM4ggBXiTdquAzbs2xw");     
+
+        apikey          = QLatin1String("258540448336-hgdegpohibcjasvk1p595fpvjor15pbc.apps.googleusercontent.com");
+        clientSecret    = QLatin1String("iiIKTNM4ggBXiTdquAzbs2xw");
         /* Old api key and secret below only work for gdrive, not gphoto
          * Switch to new api key and secret above
-         * apikey       = QString::fromLatin1("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
-         * clientSecret = QString::fromLatin1("4MJOS0u1-_AUEKJ0ObA-j22U");
+         * apikey       = QLatin1String("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
+         * clientSecret = QLatin1String("4MJOS0u1-_AUEKJ0ObA-j22U");
          */
-        
+
         authUrl         = QLatin1String("https://accounts.google.com/o/oauth2/auth");
         tokenUrl        = QLatin1String("https://accounts.google.com/o/oauth2/token");
         refreshUrl      = QLatin1String("https://accounts.google.com/o/oauth2/token");
-        
+
         o2              = 0;
         settings        = 0;
     }
 
-    QWidget*               parent;
-    
-    QString                authUrl;
-    QString                tokenUrl;
-    QString                refreshUrl;
-    
-    QString                apikey;
-    QString                clientSecret;
+    QWidget*   parent;
 
-    O2*                    o2;
-    QSettings*             settings;
+    QString    authUrl;
+    QString    tokenUrl;
+    QString    refreshUrl;
+
+    QString    apikey;
+    QString    clientSecret;
+
+    O2*        o2;
+    QSettings* settings;
 };
 
 GSTalkerBase::GSTalkerBase(QWidget* const parent, const QStringList & scope, const QString& serviceName)
@@ -112,44 +112,47 @@ GSTalkerBase::GSTalkerBase(QWidget* const parent, const QStringList & scope, con
     m_scope         = scope;
     m_serviceName   = serviceName;
     d->parent       = parent;
-    
-    //Ported to O2
+
+    // Ported to O2
     d->o2 = new O2(this);
     d->o2->setClientId(d->apikey);
     d->o2->setClientSecret(d->clientSecret);
-    
-    // OAuth2 flow control 
+
+    // OAuth2 flow control
     d->o2->setRequestUrl(d->authUrl);
     d->o2->setTokenUrl(d->tokenUrl);
     d->o2->setRefreshTokenUrl(d->refreshUrl);
     d->o2->setLocalPort(8000);
     d->o2->setGrantFlow(O2::GrantFlow::GrantFlowAuthorizationCode);
     d->o2->setScope(m_scope.join(" "));
-    
+
     // OAuth configuration saved to between dk sessions
     d->settings                  = WSToolUtils::getOauthSettings(this);
     O0SettingsStore* const store = new O0SettingsStore(d->settings, QLatin1String(O2_ENCRYPTION_KEY), this);
     store->setGroupKey(m_serviceName);
     d->o2->setStore(store);
-    
+
     // Refresh token permission when offline
     QMap<QString, QVariant> extraParams;
     extraParams.insert("access_type", "offline");
     d->o2->setExtraRequestParams(extraParams);
-    
+
     connect(d->o2, SIGNAL(linkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
+
     connect(this, SIGNAL(signalLinkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
+
     connect(d->o2, SIGNAL(linkingFailed()),
             this, SLOT(slotLinkingFailed()));
+
     connect(d->o2, SIGNAL(openBrowser(QUrl)),
             this, SLOT(slotOpenBrowser(QUrl)));
 
 }
 
 GSTalkerBase::~GSTalkerBase()
-{  
+{
     if (m_reply)
         m_reply->abort();
 
@@ -159,19 +162,19 @@ GSTalkerBase::~GSTalkerBase()
 void GSTalkerBase::link()
 {
     emit signalBusy(true);
-    d->o2->link();                
+    d->o2->link();
 }
 
 void GSTalkerBase::unlink()
 {
     emit signalBusy(true);
-    
+
     d->o2->unlink();
-    
+
     d->settings->beginGroup(m_serviceName);
     d->settings->remove("");
     d->settings->endGroup();
-    
+
     m_bearerAccessToken.clear();
     m_accessToken.clear();
 }
@@ -184,19 +187,19 @@ void GSTalkerBase::slotLinkingSucceeded()
         emit signalBusy(false);
         return;
     }
-    
+
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to " << m_serviceName << " ok";
-    
+
     m_accessToken = d->o2->token();
-    m_bearerAccessToken = QString::fromLatin1("Bearer ") + m_accessToken;
-    
+    m_bearerAccessToken = QLatin1String("Bearer ") + m_accessToken;
+
     emit signalAccessTokenObtained();
 }
 
 void GSTalkerBase::slotLinkingFailed()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to " << m_serviceName << " fail";
-    
+
     emit signalBusy(false);
     emit signalAuthenticationRefused();
 }
@@ -213,17 +216,17 @@ bool GSTalkerBase::authenticated() const
 }
 
 void GSTalkerBase::doOAuth()
-{                        
+{
     int sessionExpires = d->o2->expires();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "current time " << QDateTime::currentMSecsSinceEpoch() / 1000;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "expires at : " << sessionExpires;
-    
+
     /**
     * If user has not logined yet (sessionExpires == 0), link
     * If access token has expired yet, refresh
     * TODO: Otherwise, provoke slotLinkingSucceeded
     */
-    if(sessionExpires == 0)
+    if (sessionExpires == 0)
     {
         link();
     }

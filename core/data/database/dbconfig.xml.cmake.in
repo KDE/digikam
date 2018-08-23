@@ -1494,7 +1494,6 @@
                     ON tc.id = ita.tagID
                     WHERE img.status = 1
                       AND tp.id = :tagID
-                      /* AND tp.id = :tagID2 */
                     ORDER BY img.name;
                 </statement>
             </dbaction>
@@ -1516,7 +1515,7 @@
                 <statement mode="query">
                     SELECT DISTINCT ita.imageid
                     FROM (
-                      Images AS img
+                           Images AS img
                       JOIN ImageTags AS ita
                         ON ita.imageid = img.id
                     ) JOIN (

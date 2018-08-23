@@ -52,7 +52,7 @@ namespace Digikam
 SmugWidget::SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool import)
     : QWidget(parent)
 {
-    setObjectName(QString::fromLatin1("SmugWidget"));
+    setObjectName(QLatin1String("SmugWidget"));
 
     m_iface                       = iface;
     const int spacing             = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
@@ -94,7 +94,7 @@ SmugWidget::SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool 
     m_changeUserBtn     = new QPushButton(accountBox);
 
     m_changeUserBtn->setText(i18n("Change Account"));
-    m_changeUserBtn->setIcon(QIcon::fromTheme(QString::fromLatin1("system-switch-user")));
+    m_changeUserBtn->setIcon(QIcon::fromTheme(QLatin1String("system-switch-user")));
     m_changeUserBtn->setToolTip(i18n("Change SmugMug Account used to authenticate"));
 
     accountBoxLayout->addWidget(m_anonymousRBtn,        0, 0, 1, 2);
@@ -127,12 +127,12 @@ SmugWidget::SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool 
 
     m_newAlbumBtn = new QPushButton(accountBox);
     m_newAlbumBtn->setText(i18n("New Album"));
-    m_newAlbumBtn->setIcon(QIcon::fromTheme(QString::fromLatin1("list-add")));
+    m_newAlbumBtn->setIcon(QIcon::fromTheme(QLatin1String("list-add")));
     m_newAlbumBtn->setToolTip(i18n("Create new SmugMug album"));
 
     m_reloadAlbumsBtn = new QPushButton(accountBox);
     m_reloadAlbumsBtn->setText(i18nc("reload album list", "Reload"));
-    m_reloadAlbumsBtn->setIcon(QIcon::fromTheme(QString::fromLatin1("view-refresh")));
+    m_reloadAlbumsBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
     m_reloadAlbumsBtn->setToolTip(i18n("Reload album list"));
 
     albumsBoxLayout->addWidget(m_albumsCoB,         0, 0, 1, 5);
@@ -318,7 +318,7 @@ void SmugWidget::updateLabels(const QString& email, const QString& name, const Q
 {
     m_email->setText(email);
     m_userName->setText(QString::fromLatin1("<b>%1</b>").arg(name));
-    QString web(QString::fromLatin1("www"));
+    QString web(QLatin1String("www"));
 
     if (!nick.isEmpty())
         web = nick;

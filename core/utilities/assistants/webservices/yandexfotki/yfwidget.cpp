@@ -90,11 +90,11 @@ YFWidget::YFWidget(QWidget* const parent, DInfoInterface* const iface, const QSt
 
     QLabel* const accessLabel = new QLabel(i18n("Privacy settings:"), optionsBox);
     d->accessCombo             = new QComboBox(optionsBox);
-    d->accessCombo->addItem(QIcon::fromTheme(QString::fromLatin1("folder")),
+    d->accessCombo->addItem(QIcon::fromTheme(QLatin1String("folder")),
                            i18n("Public access"), YFPhoto::ACCESS_PUBLIC);
-    d->accessCombo->addItem(QIcon::fromTheme(QString::fromLatin1("folder-red")),
+    d->accessCombo->addItem(QIcon::fromTheme(QLatin1String("folder-red")),
                            i18n("Friends access"), YFPhoto::ACCESS_FRIENDS);
-    d->accessCombo->addItem(QIcon::fromTheme(QString::fromLatin1("folder-locked")),
+    d->accessCombo->addItem(QIcon::fromTheme(QLatin1String("folder-locked")),
                            i18n("Private access"), YFPhoto::ACCESS_PRIVATE);
 
     d->hideOriginalCheck    = new QCheckBox(i18n("Hide original photo"), optionsBox);

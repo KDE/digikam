@@ -52,7 +52,7 @@ GSWidget::GSWidget(QWidget* const parent,
     : WSSettingsWidget(parent, iface, serviceName)
 {
     m_service               = service;
-    QGroupBox* m_LeafBox    = new QGroupBox(QString::fromLatin1(""), getSettingsBox());
+    QGroupBox* m_LeafBox    = new QGroupBox(QLatin1String(""), getSettingsBox());
     QGridLayout* leafLayout = new QGridLayout(m_LeafBox);
     m_tagsBGrp              = new QButtonGroup(m_LeafBox);
 
@@ -113,7 +113,7 @@ void GSWidget::updateLabels(const QString& name, const QString& url)
     {
         case GoogleService::GDrive:
         {
-            QString web(QString::fromLatin1("https://drive.google.com"));
+            QString web(QLatin1String("https://drive.google.com"));
             getHeaderLbl()->setText(QString::fromLatin1(
                 "<b><h2><a href='%1'>"
                 "<font color=\"#9ACD32\">Google Drive</font>"

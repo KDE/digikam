@@ -151,7 +151,7 @@ YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const parent, bool impo
     d->iface                = iface;
     d->import               = import;
     d->tmpDir               = WSToolUtils::makeTemporaryDir("yandexfotki").absolutePath() + QLatin1Char('/');
-    d->widget               = new YFWidget(this, d->iface, QString::fromLatin1("Yandex.Fotki"));
+    d->widget               = new YFWidget(this, d->iface, QLatin1String("Yandex.Fotki"));
     d->loginLabel           = d->widget->getUserNameLabel();
     d->headerLabel          = d->widget->getHeaderLbl();
     d->changeUserButton     = d->widget->getChangeUserBtn();
@@ -394,7 +394,7 @@ void YFWindow::authenticate(bool forceAuthWindow)
     // update credentials
     if (forceAuthWindow || d->talker.login().isNull() || d->talker.password().isNull())
     {
-        WSLoginDialog* const dlg = new WSLoginDialog(this, QString::fromLatin1("Yandex.Fotki"), d->talker.login(), QString());
+        WSLoginDialog* const dlg = new WSLoginDialog(this, QLatin1String("Yandex.Fotki"), d->talker.login(), QString());
 
         if (dlg->exec() == QDialog::Accepted)
         {
@@ -590,7 +590,7 @@ void YFWindow::updateNextPhoto()
 
             photo.setLocalUrl(d->tmpDir + QFileInfo(photo.originalUrl())
                               .baseName()
-                              .trimmed() + QString::fromLatin1(".jpg"));
+                              .trimmed() + QLatin1String(".jpg"));
 
             bool prepared = false;
 
@@ -616,7 +616,7 @@ void YFWindow::updateNextPhoto()
                     {
                         d->meta.setImageDimensions(image.size());
                         d->meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-                        d->meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+                        d->meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
                         d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
                         d->meta.save(photo.localUrl());
                         prepared = true;
@@ -799,11 +799,11 @@ void YFWindow::slotListAlbumsDone(const QList<YandexFotkiAlbum>& albumsList)
 
         if (album.isProtected())
         {
-            albumIcon = QString::fromLatin1("folder-locked");
+            albumIcon = QLatin1String("folder-locked");
         }
         else
         {
-            albumIcon = QString::fromLatin1("folder-image");
+            albumIcon = QLatin1String("folder-image");
         }
 
         d->albumsCombo->addItem(QIcon::fromTheme(albumIcon), album.toString());

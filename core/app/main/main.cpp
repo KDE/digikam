@@ -44,8 +44,11 @@
 
 // Local includes
 
-#include "metaengine.h"
+#include "digikam_config.h"
 #include "digikam_debug.h"
+#include "digikam_version.h"
+#include "digikam_globals.h"
+#include "metaengine.h"
 #include "dmessagebox.h"
 #include "albummanager.h"
 #include "firstrundlg.h"
@@ -59,16 +62,19 @@
 #include "thumbsdbaccess.h"
 #include "facedbaccess.h"
 #include "dxmlguiwindow.h"
-#include "digikam_version.h"
 #include "applicationsettings.h"
 #include "similaritydbaccess.h"
 
 using namespace Digikam;
 
-
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
+
+#ifdef HAVE_DRMINGW
+    tryInitDrMingw();
+#endif
+
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     // if we have some local breeze icon resource, prefer it
@@ -181,8 +187,8 @@ int main(int argc, char* argv[])
             return 1;
         }
     }
-    KSharedConfig::Ptr config = KSharedConfig::openConfig();
 
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("General Settings"));
     QString version           = group.readEntry(QLatin1String("Version"), QString());
     QString iconTheme         = group.readEntry(QLatin1String("Icon Theme"), QString());

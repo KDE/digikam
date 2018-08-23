@@ -7,7 +7,7 @@
  * Description : a tool to export items to web services.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,7 +66,8 @@ public:
         albumsPage(0),
         imagesPage(0),
         settingsPage(0),
-        finalPage(0)
+        finalPage(0),
+        wsAuth(0)
     {
     }
 
@@ -94,7 +95,7 @@ WSWizard::WSWizard(QWidget* const parent, DInfoInterface* const iface)
     d->settings          = new WSSettings(this);
 
     d->wsAuth            = new WSAuthentication(this, d->iface);
-    
+
     KConfig config;
     KConfigGroup group   = config.group("Web Services Dialog Settings");
     d->settings->readSettings(group);
@@ -157,7 +158,7 @@ bool WSWizard::validateCurrentPage()
 int WSWizard::nextId() const
 {
     if (currentPage() == d->authPage)
-    {        
+    {
         if (d->settings->selMode == WSSettings::IMPORT)
         {
             return d->albumsPage->id();
@@ -167,7 +168,7 @@ int WSWizard::nextId() const
             return d->imagesPage->id();
         }
     }
-    
+
     return DWizardDlg::nextId();
 }
 

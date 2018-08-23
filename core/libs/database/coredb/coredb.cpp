@@ -4289,10 +4289,9 @@ ItemScanInfo CoreDB::getItemScanInfo(qlonglong imageID)
 QStringList CoreDB::getItemURLsInTag(int tagID, bool recursive)
 {
     QList<QVariant>         values;
-    QString                 imagesIdClause;
     QMap<QString, QVariant> bindingMap;
 
-    bindingMap.insert(QString::fromUtf8(":tagID"), tagID);
+    bindingMap.insert(QString::fromUtf8(":tagID"),  tagID);
     bindingMap.insert(QString::fromUtf8(":tagID2"), tagID);
 
     if (recursive)
@@ -4311,9 +4310,9 @@ QStringList CoreDB::getItemURLsInTag(int tagID, bool recursive)
     {
         albumRootPath = CollectionManager::instance()->albumRootPath((*it).toInt());
         ++it;
-        relativePath = (*it).toString();
+        relativePath  = (*it).toString();
         ++it;
-        name = (*it).toString();
+        name          = (*it).toString();
         ++it;
 
         if (relativePath == QLatin1String("/"))

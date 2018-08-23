@@ -114,6 +114,9 @@
 /* Define to 1 if system use QWebEngine instead of QWebKit */
 #cmakedefine HAVE_QWEBENGINE 1
 
+/* Defines to 1 if the Dr. Mingw crash handler should be used */
+#cmakedefine HAVE_DRMINGW 1
+
 #define LIBEXEC_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${LIBEXEC_INSTALL_DIR}"
 
 #define DIGIKAM_SHARED_LIBRARY_PREFIX "${CMAKE_SHARED_LIBRARY_PREFIX}"

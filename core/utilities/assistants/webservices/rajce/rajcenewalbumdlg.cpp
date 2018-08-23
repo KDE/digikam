@@ -40,7 +40,7 @@ namespace Digikam
 
 RajceNewAlbumDlg::RajceNewAlbumDlg(QWidget* const parent)
     : WSNewAlbumDialog(parent,
-      QString::fromLatin1("Rajce.net"))
+      QLatin1String("Rajce.net"))
 {
     getLocEdit()->hide();
     getDateTimeEdit()->hide();

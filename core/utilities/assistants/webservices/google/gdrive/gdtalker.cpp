@@ -83,12 +83,12 @@ public:
 
     explicit Private()
     {
-        apiUrl         = QString::fromLatin1("https://www.googleapis.com/drive/v2/%1");
+        apiUrl         = QLatin1String("https://www.googleapis.com/drive/v2/%1");
         uploadUrl      = QLatin1String("https://www.googleapis.com/upload/drive/v2/files");
         state          = GD_LOGOUT;
         netMngr        = 0;
-        rootid         = QString::fromLatin1("root");
-        rootfoldername = QString::fromLatin1("GoogleDrive Root");
+        rootid         = QLatin1String("root");
+        rootfoldername = QLatin1String("GoogleDrive Root");
         listPhotoId    = QStringList();
     }
 
@@ -255,7 +255,7 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
         {
             meta.setImageDimensions(image.size());
             meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+            meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
             meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
             meta.save(path);
         }
@@ -358,8 +358,8 @@ void GDTalker::parseResponseUserName(const QByteArray& data)
     }
 
     QJsonObject jsonObject = doc.object();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG)<<"User Name is: " << jsonObject[QString::fromLatin1("name")].toString();
-    QString temp           = jsonObject[QString::fromLatin1("name")].toString();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG)<<"User Name is: " << jsonObject[QLatin1String("name")].toString();
+    QString temp           = jsonObject[QLatin1String("name")].toString();
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in parseResponseUserName";
 
@@ -382,7 +382,7 @@ void GDTalker::parseResponseListFolders(const QByteArray& data)
     }
 
     QJsonObject jsonObject = doc.object();
-    QJsonArray jsonArray   = jsonObject[QString::fromLatin1("items")].toArray();
+    QJsonArray jsonArray   = jsonObject[QLatin1String("items")].toArray();
 
     QList<GSFolder> albumList;
     GSFolder fps;
@@ -395,19 +395,19 @@ void GDTalker::parseResponseListFolders(const QByteArray& data)
         QJsonObject obj = value.toObject();
 
         // Verify if album is in trash
-        QJsonObject labels      = obj[QString::fromLatin1("labels")].toObject();
-        bool        trashed     = labels[QString::fromLatin1("trashed")].toBool();
+        QJsonObject labels      = obj[QLatin1String("labels")].toObject();
+        bool        trashed     = labels[QLatin1String("trashed")].toBool();
 
         // Verify if album is editable
-        bool        editable    = obj[QString::fromLatin1("editable")].toBool();
+        bool        editable    = obj[QLatin1String("editable")].toBool();
 
         /* Verify if album is visualized in a folder inside My Drive
          * If parents is empty, album is shared by another person and not added to My Drive yet
          */
-        QJsonArray  parents     = obj[QString::fromLatin1("parents")].toArray();
+        QJsonArray  parents     = obj[QLatin1String("parents")].toArray();
 
-        fps.id          = obj[QString::fromLatin1("id")].toString();
-        fps.title       = obj[QString::fromLatin1("title")].toString();
+        fps.id          = obj[QLatin1String("id")].toString();
+        fps.title       = obj[QLatin1String("title")].toString();
 
         if(editable && !trashed && !parents.isEmpty())
         {
@@ -433,10 +433,10 @@ void GDTalker::parseResponseCreateFolder(const QByteArray& data)
     }
 
     QJsonObject jsonObject = doc.object();
-    QString temp           = jsonObject[QString::fromLatin1("alternateLink")].toString();
+    QString temp           = jsonObject[QLatin1String("alternateLink")].toString();
     bool success           = false;
 
-    if (!(QString::compare(temp, QString::fromLatin1(""), Qt::CaseInsensitive) == 0))
+    if (!(QString::compare(temp, QLatin1String(""), Qt::CaseInsensitive) == 0))
         success = true;
 
     emit signalBusy(false);
@@ -463,11 +463,11 @@ void GDTalker::parseResponseAddPhoto(const QByteArray& data)
     }
 
     QJsonObject jsonObject = doc.object();
-    QString altLink        = jsonObject[QString::fromLatin1("alternateLink")].toString();
-    QString photoId        = jsonObject[QString::fromLatin1("id")].toString();
+    QString altLink        = jsonObject[QLatin1String("alternateLink")].toString();
+    QString photoId        = jsonObject[QLatin1String("id")].toString();
     bool success           = false;
 
-    if (!(QString::compare(altLink, QString::fromLatin1(""), Qt::CaseInsensitive) == 0))
+    if (!(QString::compare(altLink, QLatin1String(""), Qt::CaseInsensitive) == 0))
         success = true;
 
     emit signalBusy(false);

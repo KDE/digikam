@@ -95,6 +95,9 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
     : QDialog(parent),
       d(new Private)
 {
+    setWindowFlags((windowFlags() & ~Qt::Dialog) | Qt::Window |
+                                                   Qt::WindowCloseButtonHint |
+                                                   Qt::WindowMinMaxButtonsHint);
     setWindowTitle(i18n("Metadata Editor"));
     setModal(true);
 

@@ -64,7 +64,7 @@ FbWidget::~FbWidget()
 
 void FbWidget::updateLabels(const QString& name, const QString& url)
 {
-    QString web(QString::fromLatin1("http://www.facebook.com"));
+    QString web(QLatin1String("http://www.facebook.com"));
 
     if (!url.isEmpty())
         web = url;

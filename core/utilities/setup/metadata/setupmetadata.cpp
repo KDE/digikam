@@ -568,7 +568,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->writingModeCombo   = new QComboBox;
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only item only"), MetaEngine::WRITETOSIDECARONLY4READONLYFILES);
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                    MetaEngine::WRITETOSIDECARONLY);
-    d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),               MetaEngine::WRITETOSIDECARANDIMAGE);
+    d->writingModeCombo->addItem(i18n("Write to item and XMP Sidecar"),                MetaEngine::WRITETOSIDECARANDIMAGE);
     d->writingModeCombo->setToolTip(i18nc("@info:tooltip", "Specify the exact mode of XMP sidecar writing"));
     d->writingModeCombo->setEnabled(false);
 

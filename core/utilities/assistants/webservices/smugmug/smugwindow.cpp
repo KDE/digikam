@@ -110,7 +110,7 @@ public:
 SmugWindow::SmugWindow(DInfoInterface* const iface,
                        QWidget* const /*parent*/,
                        bool import,
-                       QString nickName)
+                       QString /*nickName*/)
     : WSToolDialog(0),
       d(new Private)
 {
@@ -167,7 +167,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
 
     /**
      * This is deprecated because we know use O2 to login
-     * 
+     *
      * if(nickName.isEmpty())
      * {
      *     d->loginDlg  = new WSLoginDialog(this,
@@ -175,21 +175,21 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
      *                                       "<a href=\"http://www.smugmug.com\">SmugMug</a> account</qt>"));
      * }
      */
-    
+
     // ------------------------------------------------------------------------
 
     d->albumDlg  = new SmugNewAlbumDlg(this);
 
-    /** 
+    /**
      * Categories are deprecated
-     * 
+     *
      * connect(d->albumDlg->categoryCombo(), SIGNAL(currentIndexChanged(int)),
      *        this, SLOT(slotCategorySelectionChanged(int)) );
 
      * connect(d->albumDlg->templateCombo(), SIGNAL(currentIndexChanged(int)),
      *        this, SLOT(slotTemplateSelectionChanged(int)) );
      */
-    
+
     // ------------------------------------------------------------------------
 
     d->talker = new SmugTalker(d->iface, this);
@@ -221,7 +221,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
     connect(d->talker, SIGNAL(signalListAlbumTmplDone(int,QString,QList<SmugAlbumTmpl>)),
             this, SLOT(slotListAlbumTmplDone(int,QString,QList<SmugAlbumTmpl>)));
 
-    /** 
+    /**
      * Categories deprecated in API v2
      *   connect(d->talker, SIGNAL(signalListCategoriesDone(int,QString,QList<SmugCategory>)),
      *           this, SLOT(slotListCategoriesDone(int,QString,QList<SmugCategory>)));
@@ -239,9 +239,9 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
     buttonStateChange(d->talker->loggedIn());
-    
+
     authenticate();
-    
+
 //     if(!nickName.isEmpty())
 //     {
 //         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "login with nickname";
@@ -261,7 +261,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
 //             {
 //                 authenticate(d->email, d->password);
 //             }
-//             
+//
 //             d->widget->setAnonymous(d->anonymousImport);
 //         }
 //         else
@@ -298,11 +298,11 @@ void SmugWindow::slotDialogFinished()
 
     /**
      * We should not logout without user consent
-     * 
+     *
      * if (d->talker->loggedIn())
      *    d->talker->logout();
      */
-    
+
     writeSettings();
     d->widget->imagesList()->listView()->clear();
 }
@@ -349,7 +349,7 @@ void SmugWindow::authenticate()
 {
     setUiInProgressState(true);
     d->widget->progressBar()->setFormat(QString());
-    
+
     d->talker->login();
 }
 
@@ -485,11 +485,11 @@ void SmugWindow::slotListAlbumsDone(int errCode, const QString &errMsg,
         QString albumIcon;
 
         if (!albumsList.at(i).password.isEmpty())
-            albumIcon = QString::fromLatin1("folder-locked");
+            albumIcon = QLatin1String("folder-locked");
         else if (albumsList.at(i).isPublic)
-            albumIcon = QString::fromLatin1("folder-image");
+            albumIcon = QLatin1String("folder-image");
         else
-            albumIcon = QString::fromLatin1("folder");
+            albumIcon = QLatin1String("folder");
 
         QString data = QString::fromLatin1("%1:%2").arg(albumsList.at(i).id).arg(albumsList.at(i).key);
         d->widget->m_albumsCoB->addItem(QIcon::fromTheme(albumIcon), albumsList.at(i).title, data);
@@ -546,11 +546,11 @@ void SmugWindow::slotListAlbumTmplDone(int errCode, const QString &errMsg,
         QString albumIcon;
 
         if (!albumTList.at(i).password.isEmpty())
-            albumIcon = QString::fromLatin1("folder-locked");
+            albumIcon = QLatin1String("folder-locked");
         else if (albumTList.at(i).isPublic)
-            albumIcon = QString::fromLatin1("folder-image");
+            albumIcon = QLatin1String("folder-image");
         else
-            albumIcon = QString::fromLatin1("folder");
+            albumIcon = QLatin1String("folder");
 
         d->albumDlg->templateCombo()->addItem(QIcon::fromTheme(albumIcon), albumTList.at(i).name, albumTList.at(i).id);
 
@@ -569,7 +569,7 @@ void SmugWindow::slotListAlbumTmplDone(int errCode, const QString &errMsg,
 
 /**
  * Categories now are deprecated in API v2
- * 
+ *
 void SmugWindow::slotListCategoriesDone(int errCode,
                                         const QString& errMsg,
                                         const QList <SmugCategory>& categoriesList)
@@ -634,7 +634,7 @@ void SmugWindow::slotTemplateSelectionChanged(int index)
 
 /**
  * Categories now are deprecated in API v2
- * 
+ *
 void SmugWindow::slotCategorySelectionChanged(int index)
 {
     if (index < 0)
@@ -669,29 +669,29 @@ void SmugWindow::slotBusy(bool val)
     }
 }
 
-void SmugWindow::slotUserChangeRequest(bool anonymous)
+void SmugWindow::slotUserChangeRequest(bool /*anonymous*/)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot Change User Request";
-    
+
     QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
                                                  i18n("Warning"),
                                                  i18n("You will be logged out of your account, "
                                                  "click \"Continue\" to authenticate for another account."),
                                                  QMessageBox::Yes | QMessageBox::No);
-    
+
     (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
     (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
-    
+
     if (warn->exec() == QMessageBox::Yes)
     {
         // Unlink user account and wait active until really logged out
         d->talker->logout();
         while(d->talker->loggedIn());
-        
+
         // Re-login
         authenticate();
     }
-    
+
     delete warn;
 
 /*
@@ -740,13 +740,13 @@ void SmugWindow::slotNewAlbumRequest()
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling New Album method";
         d->currentTmplID = d->albumDlg->templateCombo()->itemData(
                         d->albumDlg->templateCombo()->currentIndex()).toLongLong();
-        /** 
+        /**
          * Categories are deprecated
-         * 
+         *
          * d->currentCategoryID = d->albumDlg->categoryCombo()->itemData(
          *                d->albumDlg->categoryCombo()->currentIndex()).toLongLong();
          */
-        
+
         SmugAlbum newAlbum;
         d->albumDlg->getAlbumProperties(newAlbum);
         d->talker->createAlbum(newAlbum);
@@ -820,7 +820,7 @@ bool SmugWindow::prepareImageForUpload(const QString& imgPath) const
     }
 
     // get temporary file name
-    d->tmpPath  = d->tmpDir + QFileInfo(imgPath).baseName().trimmed() + QString::fromLatin1(".jpg");
+    d->tmpPath  = d->tmpDir + QFileInfo(imgPath).baseName().trimmed() + QLatin1String(".jpg");
 
     // rescale image if requested
     int maxDim = d->widget->m_dimensionSpB->value();
@@ -843,7 +843,7 @@ bool SmugWindow::prepareImageForUpload(const QString& imgPath) const
     {
         meta.setImageDimensions(image.size());
         meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-        meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+        meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
         meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
         meta.save(d->tmpPath);
     }
@@ -947,7 +947,7 @@ void SmugWindow::slotGetPhotoDone(int errCode,
 {
     QString imgPath = d->widget->getDestinationPath() + QLatin1Char('/')
                       + d->transferQueue.first().fileName();
-                      
+
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << imgPath;
 
     if (errCode == 0)

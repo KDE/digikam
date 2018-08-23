@@ -182,7 +182,11 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     : QDialog(parent),
       d(new Private)
 {
+    setWindowFlags((windowFlags() & ~Qt::Dialog) | Qt::Window |
+                                                   Qt::WindowCloseButtonHint |
+                                                   Qt::WindowMinMaxButtonsHint);
     setWindowTitle(i18n("Maintenance"));
+    setModal(true);
 
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Cancel)->setDefault(true);

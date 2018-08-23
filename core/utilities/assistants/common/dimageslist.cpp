@@ -549,7 +549,7 @@ DImagesList::DImagesList(QWidget* const parent, int iconSize)
     // --------------------------------------------------------
 
     setControlButtons(Add | Remove | MoveUp | MoveDown | Clear | Save | Load ); // add all buttons      (default)
-    setControlButtonsPlacement(ControlButtonsRight);                            // buttons on the right (default)
+    setControlButtonsPlacement(ControlButtonsBelow);                            // buttons on the bottom (default)
     enableDragAndDrop(true);                                                    // enable drag and drop (default)
 
     // --------------------------------------------------------

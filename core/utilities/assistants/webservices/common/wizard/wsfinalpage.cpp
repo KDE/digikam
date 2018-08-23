@@ -7,7 +7,7 @@
  * Description : finish page of export tool, where user can watch upload process.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2018 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,8 +67,8 @@ public:
 
         if (wizard)
         {
-            iface    = wizard->iface();
-            wsAuth   = wizard->wsAuth();
+            iface  = wizard->iface();
+            wsAuth = wizard->wsAuth();
         }
     }
 
@@ -94,11 +94,13 @@ WSFinalPage::WSFinalPage(QWizard* const dialog, const QString& title)
 
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("WS_send")));
-    
+
     connect(d->wsAuth, SIGNAL(signalProgress(int)),
             d->progressBar, SLOT(setValue(int)));
-    connect(d->wsAuth, SIGNAL(signalMessage(QString, bool)),
-            this, SLOT(slotMessage(QString, bool)));
+
+    connect(d->wsAuth, SIGNAL(signalMessage(QString,bool)),
+            this, SLOT(slotMessage(QString,bool)));
+
     connect(d->wsAuth, SIGNAL(signalDone()),
             this, SLOT(slotDone()));
 }
@@ -140,7 +142,7 @@ void WSFinalPage::slotProcess()
     d->progressView->addEntry(i18n("Preparing files..."), DHistoryView::ProgressEntry);
     d->wsAuth->prepareForUpload();
 
-    d->progressView->addEntry(i18n("%1 input items to process", d->wsAuth->numberItemsUpload()), 
+    d->progressView->addEntry(i18n("%1 input items to process", d->wsAuth->numberItemsUpload()),
                               DHistoryView::ProgressEntry);
 
     d->progressView->addEntry(i18n("Start transferring process..."), DHistoryView::ProgressEntry);
