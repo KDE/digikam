@@ -456,4 +456,8 @@ BUGFIXES:
 395 ==> 373572 - File synchronization.
 396 ==> 296768 - When creating thumbnails, digiKam uses 80% CPU - quadcore 3800, 9GB RAM.
 397 ==> 397777 - Need to default to native filesystem browser on first run to see external drives.
-398 ==> 
+398 ==> 279818 - digiKam crashed when updating fingerprints.
+399 ==> 275931 - digiKam crashed when trying to stop a batch queue.
+400 ==> 272144 - Alphabetically sorting of the tools in BQM.
+401 ==> 271531 - Cannot edit canon crw-pics.
+402 ==> 
