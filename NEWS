@@ -454,4 +454,5 @@ BUGFIXES:
 393 ==> 326006 - digiKam Raw engine generates pink & black stripe on the right.
 394 ==> 379984 - ASSERT failure in Q_GLOBAL_STATIC: "The global static was used after being destroyed".
 395 ==> 373572 - File synchronization.
-396 ==> 
+396 ==> 296768 - When creating thumbnails, digiKam uses 80% CPU - quadcore 3800, 9GB RAM.
+397 ==> 
