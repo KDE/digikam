@@ -8,6 +8,8 @@
 ########################################################################
 # Fix QtWebkit includes under MXE where camel case header files sound like not generated at install.
 
-LC_CTYPE=C find . -name "*.cpp" -or -name "*.h" -type f -exec sed -i '' -e 's/#include <QWebView>/#include <qwebview.h>/g' {} \;
-LC_CTYPE=C find . -name "*.cpp" -or -name "*.h" -type f -exec sed -i '' -e 's/#include <QWebPage>/#include <qwebpage.h>/g' {} \;
-LC_CTYPE=C find . -name "*.cpp" -or -name "*.h" -type f -exec sed -i '' -e 's/#include <QWebFrame>/#include <qwebframe.h>/g' {} \;
+find . -regex '.*\.\(cpp\|h\)' -type f -print0 | xargs -r0 sed -e 's/#include <QWebView>/#include <qwebview.h>/g' -i
+find . -regex '.*\.\(cpp\|h\)' -type f -print0 | xargs -r0 sed -e 's/#include <QWebPage>/#include <qwebpage.h>/g' -i
+find . -regex '.*\.\(cpp\|h\)' -type f -print0 | xargs -r0 sed -e 's/#include <QWebFrame>/#include <qwebframe.h>/g' -i
+find . -regex '.*\.\(cpp\|h\)' -type f -print0 | xargs -r0 sed -e 's/#include <QWebElement>/#include <qwebelement.h>/g' -i
+find . -regex '.*\.\(cpp\|h\)' -type f -print0 | xargs -r0 sed -e 's/#include <QWebHistory>/#include <qwebhistory.h>/g' -i
