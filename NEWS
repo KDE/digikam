@@ -453,4 +453,5 @@ BUGFIXES:
 392 ==> 394694 - Showfoto crashes on change picture size.
 393 ==> 326006 - digiKam Raw engine generates pink & black stripe on the right.
 394 ==> 379984 - ASSERT failure in Q_GLOBAL_STATIC: "The global static was used after being destroyed".
-395 ==> 
+395 ==> 373572 - File synchronization.
+396 ==> 
