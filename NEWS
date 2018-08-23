@@ -450,5 +450,5 @@ BUGFIXES:
 389 ==> 394434 - Installation problem mysql internal on mac os high sierra [patch].
 390 ==> 397696 - [Website] On Fedora, use dnf instead of yum.
 391 ==> 392970 - Website: Mention KDE Familly.
-392 ==> 
-
+392 ==> 394694 - Showfoto crashes on change picture size.
+393 ==> 
