@@ -39,17 +39,19 @@ Notice to make release tarballs from GIT
     https://phabricator.kde.org/maniphest/task/edit/form/2/
     Don't forget to join all tarball checksums.
 
-10/ Create a release announce page on digikam.org web site.
+10/ Create bundles and installer. See README.BUNDLES for details.
+
+11/ Create a release announce page on digikam.org web site.
     Web-site is hosted in a dedicated release repository : https://cgit.kde.org/websites/digikam-org.git/
     Website repository use a staging branch to review changes before to post contents officialy.
     See this README file for details: https://cgit.kde.org/websites/digikam-org.git/tree/README
     The release announcement can use MarkDown format and are located to "news" directory.
 
-11/ Perform an official release announcement to these mailing-lists:
+12/ Perform an official release announcement to these mailing-lists:
 
-    * digikam-users@kde.org
-    * digikam-devel@kde.org
-    * kde-announce@kde.org
+    digikam-users@kde.org
+    digikam-devel@kde.org
+    kde-announce@kde.org
 
     Title: digiKam X.Y.Z-suffix is released
 
