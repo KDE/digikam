@@ -2,18 +2,6 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 2ea05eb58..5c6bba77d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -134,9 +134,9 @@ else()
-             WebKitWidgets
-     )
- 
--   if ( NOT Qt5WebKitWidgets_FOUND )
-+#   if ( NOT Qt5WebKitWidgets_FOUND )
-      set ( MARBLE_NO_WEBKITWIDGETS TRUE )
--   endif()
-+#   endif()
- endif()
- 
- if (BUILD_WITH_DBUS)
 @@ -195,7 +195,7 @@ elseif(APPLE)
        # for Mac OS X, everything is put inside an application bundle
        SET (CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/)
