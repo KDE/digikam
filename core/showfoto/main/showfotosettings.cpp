@@ -286,7 +286,13 @@ void ShowfotoSettings::readSettings()
     setApplicationFont(group.readEntry(d->configApplicationFont, QFontDatabase::systemFont(QFontDatabase::GeneralFont)));
 
     d->showSplash              = group.readEntry(d->configShowSplash,              true);
+
+#ifdef Q_OS_OSX
+    d->nativeFileDialog        = group.readEntry(d->configNativeFileDialog,        true);
+#else
     d->nativeFileDialog        = group.readEntry(d->configNativeFileDialog,        false);
+#endif
+
     d->itemCenter              = group.readEntry(d->configItemCenter,              false);
     d->sortOrder               = group.readEntry(d->configSortOrder,               0);
     d->reverseSort             = group.readEntry(d->configReverseSort,             false);

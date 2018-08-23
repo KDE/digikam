@@ -237,7 +237,13 @@ void ApplicationSettings::readSettings()
     d->showTrashDeleteDialog             = group.readEntry(d->configShowTrashDeleteDialogEntry,                       true);
     d->showPermanentDeleteDialog         = group.readEntry(d->configShowPermanentDeleteDialogEntry,                   true);
     d->sidebarApplyDirectly              = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
+
+#ifdef Q_OS_OSX
+    d->useNativeFileDialog               = group.readEntry(d->configUseNativeFileDialogEntry,                         true);
+#else
     d->useNativeFileDialog               = group.readEntry(d->configUseNativeFileDialogEntry,                         false);
+#endif
+
     d->drawFramesToGrouped               = group.readEntry(d->configDrawFramesToGroupedEntry,                         true);
     d->scrollItemToCenter                = group.readEntry(d->configScrollItemToCenterEntry,                          false);
     d->showOnlyPersonTagsInPeopleSidebar = group.readEntry(d->configShowOnlyPersonTagsInPeopleSidebarEntry,           true);
