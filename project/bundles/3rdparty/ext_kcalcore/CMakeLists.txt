@@ -18,7 +18,6 @@ if(MINGW)
         URL http://download.kde.org/stable/applications/${KA_VERSION}/src/kcalcore-${KA_VERSION}.tar.xz
         URL_MD5 ${KF5_APPLICATION_MD5SUM}
         INSTALL_DIR ${EXTPREFIX_kcalcore}
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kcalcore-ecm.patch
 
         CONFIGURE_COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.mxe <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.mxe ${MXE_BUILDROOT} RelWithDebInfo -DBUILD_TESTING=OFF
@@ -61,7 +60,6 @@ else() # Linux
         URL http://download.kde.org/stable/applications/${KA_VERSION}/src/kcalcore-${KA_VERSION}.tar.xz
         URL_MD5 ${KF5_APPLICATION_MD5SUM}
         INSTALL_DIR ${EXTPREFIX_kcalcore}
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kcalcore-centos6.patch
 
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_kcalcore}
                    -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
