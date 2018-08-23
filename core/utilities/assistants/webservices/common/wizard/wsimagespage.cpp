@@ -133,11 +133,11 @@ WSImagesPage::WSImagesPage(QWizard* const dialog, const QString& title)
     connect(this, SIGNAL(signalListAlbumsRequest()),
             d->wsAuth, SLOT(slotListAlbumsRequest()));
 
-    connect(d->wsAuth, SIGNAL(signalCreateAlbumDone(int, QString, QString)),
-            this, SLOT(slotCreateAlbumDone(int, QString, QString)));
+    connect(d->wsAuth, SIGNAL(signalCreateAlbumDone(int,QString,QString)),
+            this, SLOT(slotCreateAlbumDone(int,QString,QString)));
 
-    connect(d->wsAuth, SIGNAL(signalListAlbumsDone(QMap<QString, AlbumSimplified>, QStringList, QString)),
-            this, SLOT(slotListAlbumsDone(QMap<QString, AlbumSimplified>, QStringList, QString)));
+    connect(d->wsAuth, SIGNAL(signalListAlbumsDone(QMap<QString,AlbumSimplified>,QStringList,QString)),
+            this, SLOT(slotListAlbumsDone(QMap<QString,AlbumSimplified>,QStringList,QString)));
 
     /* --------------------
      * General settings for imagespage
@@ -191,7 +191,9 @@ bool WSImagesPage::validatePage()
     }
 
     if (d->imageList->imageUrls().isEmpty())
+    {
         return false;
+    }
 
     d->wizard->settings()->inputImages = d->imageList->imageUrls();
 
