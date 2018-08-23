@@ -460,4 +460,6 @@ BUGFIXES:
 399 ==> 275931 - digiKam crashed when trying to stop a batch queue.
 400 ==> 272144 - Alphabetically sorting of the tools in BQM.
 401 ==> 271531 - Cannot edit canon crw-pics.
-402 ==> 
+402 ==> 397739 - Menu icons are not scaled correctly on external/secondary screen (2560x1440) while using MacBookPro.
+403 ==> 
+
