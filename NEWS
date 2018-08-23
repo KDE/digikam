@@ -449,5 +449,6 @@ BUGFIXES:
 388 ==> 365694 - digiKam 5.0.0 : every menus are in French, excepted the menu bar.
 389 ==> 394434 - Installation problem mysql internal on mac os high sierra [patch].
 390 ==> 397696 - [Website] On Fedora, use dnf instead of yum.
-391 ==> 
+391 ==> 392970 - Website: Mention KDE Familly.
+392 ==> 
 
