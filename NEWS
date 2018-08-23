@@ -451,4 +451,5 @@ BUGFIXES:
 390 ==> 397696 - [Website] On Fedora, use dnf instead of yum.
 391 ==> 392970 - Website: Mention KDE Familly.
 392 ==> 394694 - Showfoto crashes on change picture size.
-393 ==> 
+393 ==> 326006 - digiKam Raw engine generates pink & black stripe on the right.
+394 ==> 
