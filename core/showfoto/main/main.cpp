@@ -55,9 +55,7 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
-#ifdef HAVE_DRMINGW
     tryInitDrMingw();
-#endif
 
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
