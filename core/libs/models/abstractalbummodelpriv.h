@@ -65,22 +65,7 @@ public:
             return 0;
         }
 
-        Album* a = parent->firstChild();
-        int i    = 0;
-
-        while (a != child)
-        {
-            a = a->next();
-
-            if (!a)
-            {
-                return -1;
-            }
-
-            ++i;
-        }
-
-        return i;
+        return parent->rowFromChild(child);
     }
 };
 

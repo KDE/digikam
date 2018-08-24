@@ -136,11 +136,6 @@ public:
     int     id() const;
 
     /**
-     * @return the @p childCount of the album
-     */
-    int     childCount() const;
-
-    /**
      * An album ID is only unique among the set of all Albums of its Type.
      * This is a global Identifier which will uniquely identifying the Album
      * among all Albums
@@ -158,6 +153,16 @@ public:
      * @see id()
      */
     int     globalID() const;
+
+    /**
+     * @return the @p childCount of the album
+     */
+    int     childCount() const;
+
+    /**
+     * @return the @p rowFromChild of the album
+     */
+    int     rowFromChild(Album* const child) const;
 
     /**
      * @return the @p title aka name of the album
@@ -335,6 +340,8 @@ private:
     QString                  m_title;
 
     QMap<const void*, void*> m_extraMap;
+
+    QHash<Album*, int>       m_rowHash;
     QHash<int, Album*>       m_childHash;
 
     Type                     m_type;
