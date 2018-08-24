@@ -55,29 +55,6 @@ public:
 
 public:
 
-    Album* findNthChild(Album* const parent, int n) const
-    {
-        // return the n-th of the children of parent, or 0
-        Album* a = parent->firstChild();
-
-        if (!a)
-        {
-            return 0;
-        }
-
-        for (int i = 0 ; i < n ; ++i)
-        {
-            a = a->next();
-
-            if (!a)
-            {
-                return 0;
-            }
-        }
-
-        return a;
-    }
-
     int findIndexAsChild(Album* const child) const
     {
         // return index of child in the list of children of its parent

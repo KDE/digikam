@@ -210,7 +210,7 @@ QModelIndex AbstractAlbumModel::index(int row, int column, const QModelIndex& pa
     if (parent.isValid())
     {
         Album* const parentAlbum = static_cast<Album*>(parent.internalPointer());
-        Album* const a           = d->findNthChild(parentAlbum, row);
+        Album* const a           = parentAlbum->childAtRow(row);
 
         if (a)
         {
@@ -233,7 +233,7 @@ QModelIndex AbstractAlbumModel::index(int row, int column, const QModelIndex& pa
         }
         else
         {
-            Album* const a = d->findNthChild(d->rootAlbum, row);
+            Album* const a = d->rootAlbum->childAtRow(row);
 
             if (a)
             {

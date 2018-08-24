@@ -47,7 +47,6 @@ Album::Album(Album::Type type, int id, bool root)
     m_parent           = 0;
     m_next             = 0;
     m_prev             = 0;
-    m_childCount       = 0;
     m_firstChild       = 0;
     m_lastChild        = 0;
     m_clearing         = false;
@@ -100,6 +99,11 @@ Album* Album::next() const
 Album* Album::prev() const
 {
     return m_prev;
+}
+
+Album* Album::childAtRow(int row) const
+{
+    return m_childHash.value(row, 0);
 }
 
 AlbumList Album::childAlbums(bool recursive)
@@ -157,7 +161,7 @@ void Album::insertChild(Album* const child)
         m_lastChild         = child;
     }
 
-    ++m_childCount;
+    m_childHash[m_childHash.count()] = child;
 }
 
 void Album::removeChild(Album* const child)
@@ -208,7 +212,14 @@ void Album::removeChild(Album* const child)
         }
     }
 
-    --m_childCount;
+    int row = m_childHash.key(child);
+
+    for (; row < m_childHash.count()-1 ; ++row)
+    {
+        m_childHash[row] = m_childHash.value(row + 1);
+    }
+
+    m_childHash.remove(row);
 }
 
 void Album::clear()
@@ -224,9 +235,9 @@ void Album::clear()
         child     = nextChild;
     }
 
-    m_childCount = 0;
     m_firstChild = 0;
     m_lastChild  = 0;
+    m_childHash.clear();
     m_clearing   = false;
 }
 
@@ -268,7 +279,7 @@ int Album::id() const
 
 int Album::childCount() const
 {
-    return m_childCount;
+    return m_childHash.count();
 }
 
 void Album::setTitle(const QString& title)
