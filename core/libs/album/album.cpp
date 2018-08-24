@@ -47,6 +47,7 @@ Album::Album(Album::Type type, int id, bool root)
     m_parent           = 0;
     m_next             = 0;
     m_prev             = 0;
+    m_childCount       = 0;
     m_firstChild       = 0;
     m_lastChild        = 0;
     m_clearing         = false;
@@ -155,6 +156,8 @@ void Album::insertChild(Album* const child)
         child->m_next       = 0;
         m_lastChild         = child;
     }
+
+    ++m_childCount;
 }
 
 void Album::removeChild(Album* const child)
@@ -204,6 +207,8 @@ void Album::removeChild(Album* const child)
             c->m_next->m_prev = c->m_prev;
         }
     }
+
+    --m_childCount;
 }
 
 void Album::clear()
@@ -219,6 +224,7 @@ void Album::clear()
         child     = nextChild;
     }
 
+    m_childCount = 0;
     m_firstChild = 0;
     m_lastChild  = 0;
     m_clearing   = false;
@@ -258,6 +264,11 @@ int Album::globalID(Type type, int id)
 int Album::id() const
 {
     return m_id;
+}
+
+int Album::childCount() const
+{
+    return m_childCount;
 }
 
 void Album::setTitle(const QString& title)

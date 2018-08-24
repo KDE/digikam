@@ -131,6 +131,11 @@ public:
     int     id() const;
 
     /**
+     * @return the @p childCount of the album
+     */
+    int     childCount() const;
+
+    /**
      * An album ID is only unique among the set of all Albums of its Type.
      * This is a global Identifier which will uniquely identifying the Album
      * among all Albums
@@ -320,9 +325,11 @@ private:
     bool                     m_usedByLabelsTree;
 
     int                      m_id;
-    QString                  m_name;
+    int                      m_childCount;
 
+    QString                  m_name;
     QString                  m_title;
+
     QMap<const void*, void*> m_extraMap;
 
     Type                     m_type;

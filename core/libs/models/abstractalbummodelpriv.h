@@ -105,20 +105,6 @@ public:
 
         return i;
     }
-
-    int numberOfChildren(Album* const parent) const
-    {
-        Album* a  = parent->firstChild();
-        int count = 0;
-
-        while (a)
-        {
-            ++count;
-            a = a->next();
-        }
-
-        return count;
-    }
 };
 
 } // namespace Digikam

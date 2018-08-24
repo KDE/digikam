@@ -139,7 +139,7 @@ int AbstractAlbumModel::rowCount(const QModelIndex& parent) const
     if (parent.isValid())
     {
         Album* const a = static_cast<Album*>(parent.internalPointer());
-        return d->numberOfChildren(a);
+        return a->childCount();
     }
     else
     {
@@ -154,7 +154,7 @@ int AbstractAlbumModel::rowCount(const QModelIndex& parent) const
         }
         else
         {
-            return d->numberOfChildren(d->rootAlbum);
+            return d->rootAlbum->childCount();
         }
     }
 }
