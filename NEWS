@@ -461,5 +461,8 @@ BUGFIXES:
 400 ==> 272144 - Alphabetically sorting of the tools in BQM.
 401 ==> 271531 - Cannot edit canon crw-pics.
 402 ==> 397739 - Menu icons are not scaled correctly on external/secondary screen (2560x1440) while using MacBookPro.
-403 ==> 
+403 ==> 380841 - Crash while correcting color manually.
+404 ==> 378176 - Using tool causes program to crash.
+405 ==> 395842 - digiKam crashes adjusting color balance on a RAW file.
+406 ==> 
 
