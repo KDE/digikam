@@ -61,6 +61,7 @@ function(InstallKF5Component
                                        -DCMAKE_SYSTEM_INCLUDE_PATH=${CMAKE_PREFIX_PATH}/include
                                        -DCMAKE_INCLUDE_PATH=${CMAKE_PREFIX_PATH}/include
                                        -DCMAKE_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib
+                                       -DBUILD_TESTING=OFF
                                        -DZLIB_ROOT=${CMAKE_PREFIX_PATH}
                                        -DINSTALL_ROOT=${MXE_INSTALL_PREFIX}
                                        ${GLOBAL_PROFILE}
@@ -128,6 +129,7 @@ function(InstallKF5Component
                                           <SOURCE_DIR>/fixbundledatapath.sh
 
                             CONFIGURE_COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.macports <SOURCE_DIR>/. &&
+                                              sed -i '' -e "s/DBUILD_TESTING=ON/DBUILD_TESTING=OFF/g" <SOURCE_DIR>/bootstrap.macports &&
                                               <SOURCE_DIR>/bootstrap.macports ${EXTPREFIX_frameworks} debug x86_64 "${argoptions}"
 
                             BUILD_COMMAND cd <SOURCE_DIR>/build && $(MAKE)

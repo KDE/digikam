@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a7371cb99..7b6b7cf7b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -23,7 +23,7 @@ include(ECMCoverageOption)
+ if(POLICY CMP0053)
+   cmake_policy(SET CMP0053 NEW)
+ endif()
+-set(QT_REQUIRED_VERSION "5.9.0")
++set(QT_REQUIRED_VERSION "5.8.0")
+ 
+ set(KCALENDARCORE_LIB_VERSION ${PIM_VERSION})
+ ecm_setup_version(PROJECT VARIABLE_PREFIX KCALCORE
