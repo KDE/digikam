@@ -464,5 +464,5 @@ BUGFIXES:
 403 ==> 380841 - Crash while correcting color manually.
 404 ==> 378176 - Using tool causes program to crash.
 405 ==> 395842 - digiKam crashes adjusting color balance on a RAW file.
-406 ==> 
-
+406 ==> 388608 - Faces engine hangs and crashes.
+407 ==> 
