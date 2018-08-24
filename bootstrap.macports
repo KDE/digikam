@@ -93,6 +93,7 @@ cmake -G "$MAKEFILES_TYPE" . \
       -DQT_QT_INCLUDE_DIR=${QT_INCLUDE_DIR} \
       -DQT_LIBRARY_DIR=${QTDIR}/lib \
       -DQT_QMAKE_EXECUTABLE=${QTDIR}/bin/qmake \
+      -Wno-dev \
       ${OPTIONS} \
       ..
 
