@@ -358,11 +358,11 @@ private:
      * @param index index to start restoring
      * @param stateStore states indexed by album id
      */
-    void restoreStateForHierarchy(const QModelIndex& index, QMap<int, Digikam::State>& stateStore);
+    void restoreStateForHierarchy(const QModelIndex& index, const QMap<int, Digikam::State>& stateStore);
     /**
      * Restore the state for this index.
      */
-    void restoreState(const QModelIndex& index, QMap<int, Digikam::State>& stateStore);
+    void restoreState(const QModelIndex& index, const QMap<int, Digikam::State>& stateStore);
 
     /**
      * Creates the context menu.
