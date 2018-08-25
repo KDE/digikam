@@ -471,5 +471,6 @@ BUGFIXES:
 410 ==> 222740 - Starting digiKam cause sound system to report pulseaudio is removed.
 411 ==> 378697 - Add image carousel to front page screenshots.
 412 ==> 180375 - Web page: Wrong link to Alpenglow Webpage.
-413 ==> 
+413 ==> 331141 - Broken link to database schema in web site digikam.org pointing to project.kde.org.
+414 ==> 
 
