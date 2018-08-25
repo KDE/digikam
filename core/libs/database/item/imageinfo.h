@@ -223,7 +223,7 @@ public:
     DatabaseItem::Category category() const;
 
     /** Returns the image format / mimetype as a standardized
-     *  string (see DBSCHEMA.ODS).
+     *  string (see project/documents/DBSCHEMA.ODS).
      */
     QString format() const;
 
