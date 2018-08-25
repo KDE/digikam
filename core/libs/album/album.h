@@ -33,6 +33,7 @@
 #include <QString>
 #include <QMap>
 #include <QUrl>
+#include <QVector>
 #include <QObject>
 
 // Local includes
@@ -340,9 +341,7 @@ private:
     QString                  m_title;
 
     QMap<const void*, void*> m_extraMap;
-
-    QHash<Album*, int>       m_rowHash;
-    QHash<int, Album*>       m_childHash;
+    QVector<Album*>          m_childCache;
 
     Type                     m_type;
 
