@@ -469,4 +469,5 @@ BUGFIXES:
 408 ==> 391039 - digiKam stalled after trying to make a panorama.
 409 ==> 184318 - Starting digiKam it crashed and caused the signal 11 (SIGSEGV).
 410 ==> 222740 - Starting digiKam cause sound system to report pulseaudio is removed.
-411 ==> 
+411 ==> 378697 - Add image carousel to front page screenshots.
+412 ==> 
