@@ -466,5 +466,5 @@ BUGFIXES:
 405 ==> 395842 - digiKam crashes adjusting color balance on a RAW file.
 406 ==> 388608 - Faces engine hangs and crashes.
 407 ==> 397855 - Not compatible with Windows 10.
-408 ==> 
-
+408 ==> 391039 - digiKam stalled after trying to make a panorama.
+409 ==> 
