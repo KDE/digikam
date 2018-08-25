@@ -59,7 +59,9 @@ namespace Digikam
 ExifWidget::ExifWidget(QWidget* const parent, const QString& name)
     : MetadataWidget(parent, name)
 {
-    for (int i=0 ; QLatin1String(StandardExifEntryList[i]) != QLatin1String("-1") ; ++i)
+    setup();
+
+    for (int i = 0 ; QLatin1String(StandardExifEntryList[i]) != QLatin1String("-1") ; ++i)
     {
         m_keysFilter << QLatin1String(StandardExifEntryList[i]);
     }
