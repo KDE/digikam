@@ -22,8 +22,6 @@
  *
  * ============================================================ */
 
-#include "digikam_config.h"
-
 // Qt includes
 
 #include <QFile>
