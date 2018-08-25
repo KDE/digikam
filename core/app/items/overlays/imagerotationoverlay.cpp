@@ -41,6 +41,7 @@ ImageRotateOverlayButton::ImageRotateOverlayButton(ImageRotateOverlayDirection d
     : ItemViewHoverButton(parentView),
       m_direction(dir)
 {
+    setup();
 }
 
 QSize ImageRotateOverlayButton::sizeHint() const

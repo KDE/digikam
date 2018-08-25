@@ -57,6 +57,11 @@ public:
 
 protected:
 
+    /**
+     * to call in children class contructors to init signal/slot connections.
+     */
+    void setup();
+
     void enterEvent(QEvent* event);
     void leaveEvent(QEvent* event);
     void paintEvent(QPaintEvent* event);

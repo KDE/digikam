@@ -41,6 +41,7 @@ namespace Digikam
 ImageFsOverlayButton::ImageFsOverlayButton(QAbstractItemView* const parentView)
     : ItemViewHoverButton(parentView)
 {
+    setup();
 }
 
 QSize ImageFsOverlayButton::sizeHint() const

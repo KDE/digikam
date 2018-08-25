@@ -39,6 +39,7 @@ namespace Digikam
 ImageSelectionOverlayButton::ImageSelectionOverlayButton(QAbstractItemView* parentView)
     : ItemViewHoverButton(parentView)
 {
+    setup();
 }
 
 QSize ImageSelectionOverlayButton::sizeHint() const
