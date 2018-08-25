@@ -465,4 +465,6 @@ BUGFIXES:
 404 ==> 378176 - Using tool causes program to crash.
 405 ==> 395842 - digiKam crashes adjusting color balance on a RAW file.
 406 ==> 388608 - Faces engine hangs and crashes.
-407 ==> 
+407 ==> 397855 - Not compatible with Windows 10.
+408 ==> 
+
