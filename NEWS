@@ -473,4 +473,5 @@ BUGFIXES:
 412 ==> 180375 - Web page: Wrong link to Alpenglow Webpage.
 413 ==> 331141 - Broken link to database schema in web site digikam.org pointing to project.kde.org.
 414 ==> 397862 - Reordering geolocation bookmarks will remove them from the list.
-415 ==> 
+415 ==> 223348 - digiKam crash during album view browsing AVIs with PgUp/PgDown.
+416 ==> 
