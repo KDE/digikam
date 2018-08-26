@@ -822,12 +822,7 @@ void AbstractAlbumTreeView::doLoadState()
                  (Qt::SortOrder) configGroup.readEntry(entryName(d->configSortOrderEntry), (int)Qt::AscendingOrder));
 
     // use a timer to scroll to the first possible selected album
-    QTimer* const selectCurrentTimer = new QTimer(this);
-    selectCurrentTimer->setInterval(200);
-    selectCurrentTimer->setSingleShot(true);
-
-    connect(selectCurrentTimer, SIGNAL(timeout()),
-            this, SLOT(scrollToSelectedAlbum()));
+    QTimer::singleShot(200, this, SLOT(scrollToSelectedAlbum()));
 }
 
 void AbstractAlbumTreeView::restoreStateForHierarchy(const QModelIndex& index, const QMap<int, Digikam::State>& stateStore)
