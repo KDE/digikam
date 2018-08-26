@@ -280,15 +280,7 @@ void Album::removeExtraData(const void* const key)
 
 void* Album::extraData(const void* const key) const
 {
-    typedef QMap<const void*, void*> Map;
-    Map::const_iterator it = m_extraMap.constFind(key);
-
-    if (it == m_extraMap.constEnd())
-    {
-        return 0;
-    }
-
-    return it.value();
+    return m_extraMap.value(key, 0);
 }
 
 bool Album::isRoot() const
