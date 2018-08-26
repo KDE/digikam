@@ -50,7 +50,6 @@
 
 #include "mediawiki_login.h"
 #include "mediawiki_mediawiki.h"
-#include "mediawiki_version.h"
 
 // Local includes
 
