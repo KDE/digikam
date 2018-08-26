@@ -241,9 +241,14 @@ int Album::childCount() const
     return m_childCache.count();
 }
 
-int Album::rowFromChild(Album* const child) const
+int Album::rowFromAlbum() const
 {
-    int row = m_childCache.indexOf(child);
+    if (!m_parent)
+    {
+        return 0;
+    }
+
+    int row = m_parent->m_childCache.indexOf(const_cast<Album*>(this));
 
     return (row != -1) ? row : 0;
 }

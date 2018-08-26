@@ -23,7 +23,6 @@
  * ============================================================ */
 
 #include "abstractalbummodel.h"
-#include "abstractalbummodelpriv.h"
 
 // Qt includes
 
@@ -44,6 +43,34 @@
 
 namespace Digikam
 {
+
+class AbstractAlbumModel::Private
+{
+public:
+
+    explicit Private()
+      : rootAlbum(0),
+        addingAlbum(0),
+        type(Album::PHYSICAL),
+        dragDropHandler(0),
+        rootBehavior(AbstractAlbumModel::IncludeRootAlbum),
+        removingAlbum(0),
+        itemDrag(true),
+        itemDrop(true)
+    {
+    }
+
+    Album*                                rootAlbum;
+    Album*                                addingAlbum;
+    Album::Type                           type;
+    AlbumModelDragDropHandler*            dragDropHandler;
+    AbstractAlbumModel::RootAlbumBehavior rootBehavior;
+
+    quintptr                              removingAlbum;
+
+    bool                                  itemDrag;
+    bool                                  itemDrop;
+};
 
 AbstractAlbumModel::AbstractAlbumModel(Album::Type albumType, Album* const rootAlbum, RootAlbumBehavior rootBehavior,
                                        QObject* const parent)
@@ -348,9 +375,7 @@ QModelIndex AbstractAlbumModel::indexForAlbum(Album* a) const
     }
 
     // Normal album. Get its row.
-    int row = d->findIndexAsChild(a);
-
-    return createIndex(row, 0, a);
+    return createIndex(a->rowFromAlbum(), 0, a);
 }
 
 Album* AbstractAlbumModel::albumForIndex(const QModelIndex& index) const
@@ -434,7 +459,7 @@ void AbstractAlbumModel::slotAlbumAboutToBeAdded(Album* album, Album* parent, Al
     }
 
     // start inserting operation
-    int row                 = prev ? d->findIndexAsChild(prev)+1 : 0;
+    int row                 = prev ? prev->rowFromAlbum()+1 : 0;
     QModelIndex parentIndex = indexForAlbum(parent);
     beginInsertRows(parentIndex, row, row);
 
@@ -480,7 +505,7 @@ void AbstractAlbumModel::slotAlbumAboutToBeDeleted(Album* album)
     }
 
     // begin removing operation
-    int row            = d->findIndexAsChild(album);
+    int row            = album->rowFromAlbum();
     QModelIndex parent = indexForAlbum(album->parent());
     beginRemoveRows(parent, row, row);
     albumCleared(album);

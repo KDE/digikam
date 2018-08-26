@@ -161,9 +161,9 @@ public:
     int     childCount() const;
 
     /**
-     * @return the @p rowFromChild of the album
+     * @return the @p rowFromAlbum of the album
      */
-    int     rowFromChild(Album* const child) const;
+    int     rowFromAlbum() const;
 
     /**
      * @return the @p title aka name of the album
