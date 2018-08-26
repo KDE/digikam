@@ -26,6 +26,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+// Qt includes
+
 #include <QFile>
 #include <QFileDialog>
 
@@ -45,55 +47,58 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
-    this->ui->comboBox->addItem(QString("Own work, multi-license with CC-BY-SA-3.0 and GFDL"),QString("{{self|cc-by-sa-3.0|GFDL|migration=redundant}}"));
-    this->ui->comboBox->addItem(QString("Own work, multi-license with CC-BY-SA-3.0 and older"),QString("{{self|cc-by-sa-3.0,2.5,2.0,1.0}}"));
-    this->ui->comboBox->addItem(QString("Creative Commons Attribution-Share Alike 3.0"),QString("{{self|cc-by-sa-3.0}}"));
-    this->ui->comboBox->addItem(QString("Own work, Creative Commons Attribution 3.0"),QString("{{self|cc-by-3.0}}"));
-    this->ui->comboBox->addItem(QString("Own work, release into public domain under the CC-Zero license"),QString("{{self|cc-zero}}"));
-    this->ui->comboBox->addItem(QString("Author died more than 100 years ago"),QString("{{PD-old}}"));
-    this->ui->comboBox->addItem(QString("Photo of a two-dimensional work whose author died more than 100 years ago"),QString("{{PD-art}}"));
-    this->ui->comboBox->addItem(QString("First published in the United States before 1923"),QString("{{PD-US}}"));
-    this->ui->comboBox->addItem(QString("Work of a U.S. government agency"),QString("{{PD-USGov}}"));
-    this->ui->comboBox->addItem(QString("Simple typefaces, individual words or geometric shapes"),QString("{{PD-text}}"));
-    this->ui->comboBox->addItem(QString("Logos with only simple typefaces, individual words or geometric shapes"),QString("{{PD-textlogo}}"));
+    this->ui->comboBox->addItem(QLatin1String("Own work, multi-license with CC-BY-SA-3.0 and GFDL"),                        QLatin1String("{{self|cc-by-sa-3.0|GFDL|migration=redundant}}"));
+    this->ui->comboBox->addItem(QLatin1String("Own work, multi-license with CC-BY-SA-3.0 and older"),                       QLatin1String("{{self|cc-by-sa-3.0,2.5,2.0,1.0}}"));
+    this->ui->comboBox->addItem(QLatin1String("Creative Commons Attribution-Share Alike 3.0"),                              QLatin1String("{{self|cc-by-sa-3.0}}"));
+    this->ui->comboBox->addItem(QLatin1String("Own work, Creative Commons Attribution 3.0"),                                QLatin1String("{{self|cc-by-3.0}}"));
+    this->ui->comboBox->addItem(QLatin1String("Own work, release into public domain under the CC-Zero license"),            QLatin1String("{{self|cc-zero}}"));
+    this->ui->comboBox->addItem(QLatin1String("Author died more than 100 years ago"),                                       QLatin1String("{{PD-old}}"));
+    this->ui->comboBox->addItem(QLatin1String("Photo of a two-dimensional work whose author died more than 100 years ago"), QLatin1String("{{PD-art}}"));
+    this->ui->comboBox->addItem(QLatin1String("First published in the United States before 1923"),                          QLatin1String("{{PD-US}}"));
+    this->ui->comboBox->addItem(QLatin1String("Work of a U.S. government agency"),                                          QLatin1String("{{PD-USGov}}"));
+    this->ui->comboBox->addItem(QLatin1String("Simple typefaces, individual words or geometric shapes"),                    QLatin1String("{{PD-text}}"));
+    this->ui->comboBox->addItem(QLatin1String("Logos with only simple typefaces, individual words or geometric shapes"),    QLatin1String("{{PD-textlogo}}"));
 }
 
 void MainWindow::on_pushButton_clicked()
 {
     this->ui->progressBar->setValue(0);
-    Login* login = new Login(mediawiki, this->ui->mLoginEdit->text(), this->ui->mMdpEdit->text());
+    Login* const login = new Login(mediawiki, this->ui->mLoginEdit->text(), this->ui->mMdpEdit->text());
+
     connect(login, SIGNAL(result(KJob*)),
             this, SLOT(loginHandle(KJob*)));
+
     login->start();
 }
 
 void MainWindow::loginHandle(KJob* login)
 {
-    if(login->error() != 0)
+    if (login->error() != 0)
     {
         QMessageBox popup;
-        popup.setText("Wrong authentication.");
+        popup.setText(QLatin1String("Wrong authentication."));
         popup.exec();
     }
     else
     {
-        Upload* e1  = new Upload( mediawiki );
-        QFile* file = new QFile(this->ui->lineEdit->text());
+        Upload* const e1  = new Upload( mediawiki );
+        QFile* const file = new QFile(this->ui->lineEdit->text());
         file->open(QIODevice::ReadOnly);
         e1->setFile(file);
         e1->setFilename(this->ui->lineEdit_2->text());
 
-        QString text("== {{int:filedesc}} == \n{{Information |Description=");
+        QString text = QLatin1String("== {{int:filedesc}} == \n{{Information |Description=");
         text.append(this->ui->descriptionEdit->text());
-        text.append("\n|Source=").append(this->ui->sourceEdit->text());
-        text.append("\n|Date=").append(this->ui->dateEdit->text());
-        text.append("\n|Author=").append(this->ui->authorEdit->text());
-        text.append("\n|Permission=").append(this->ui->permissionEdit->text());
-        text.append("\n|other_versions=").append(this->ui->versionsEdit->text());
-        text.append("\n}}\n== {{int:license}} ==\n");
+        text.append(QLatin1String("\n|Source=")).append(this->ui->sourceEdit->text());
+        text.append(QLatin1String("\n|Date=")).append(this->ui->dateEdit->text());
+        text.append(QLatin1String("\n|Author=")).append(this->ui->authorEdit->text());
+        text.append(QLatin1String("\n|Permission=")).append(this->ui->permissionEdit->text());
+        text.append(QLatin1String("\n|other_versions=")).append(this->ui->versionsEdit->text());
+        text.append(QLatin1String("\n}}\n== {{int:license}} ==\n"));
         text.append(this->ui->comboBox->itemData(this->ui->comboBox->currentIndex()).toString());
 
         e1->setText(text);
+
         connect(e1, SIGNAL(result(KJob*)),
                 this, SLOT(uploadHandle(KJob*)));
 
@@ -102,6 +107,7 @@ void MainWindow::loginHandle(KJob* login)
 
         connect(e1,SIGNAL(totalSize(KJob*,qulonglong)),
                 this,SLOT(TotalUploadSize(KJob*,qulonglong)));
+
         e1->start();
     }
 }
@@ -118,8 +124,12 @@ void MainWindow::uploadHandle(KJob* job)
                this, SLOT(TotalUploadSize(KJob*,qulonglong)));
 
     QString errorMessage;
-    if(job->error() == 0) errorMessage = "Image uploaded successfully.";
-    else errorMessage = "Image upload failed.";
+
+    if (job->error() == 0)
+        errorMessage = QLatin1String("Image uploaded successfully.");
+    else
+        errorMessage = QLatin1String("Image upload failed.");
+
     QMessageBox popup;
     popup.setText(errorMessage);
     popup.exec();
@@ -139,13 +149,17 @@ void MainWindow::TotalUploadSize(KJob* job, qulonglong size)
 
 void MainWindow::on_parcourir_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, QLatin1String("Open Image"), "~", QLatin1String("Image Files (*.png *.jpg *.bmp *.jpeg *.gif)"));
-    if(fileName != NULL)
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    QLatin1String("Open Image"),
+                                                    QLatin1String("~"),
+                                                    QLatin1String("Image Files (*.png *.jpg *.bmp *.jpeg *.gif)"));
+
+    if (!fileName.isEmpty())
     {
         QPixmap preview(fileName);
         QSize size(preview.size());
-        size.scale(400,200,Qt::KeepAspectRatio);
-        preview = preview.scaled(size, Qt::KeepAspectRatio,Qt::FastTransformation);
+        size.scale(400, 200, Qt::KeepAspectRatio);
+        preview = preview.scaled(size, Qt::KeepAspectRatio, Qt::FastTransformation);
 
         this->ui->previewLabel->setPixmap(preview);
         this->ui->lineEdit->setText(fileName);

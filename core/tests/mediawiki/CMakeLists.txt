@@ -8,7 +8,7 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-#add_subdirectory(examples)
+add_subdirectory(examples)
 
 include(ECMMarkAsTest)
 

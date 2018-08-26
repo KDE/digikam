@@ -26,8 +26,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+// Qt includes
+
 #include <QMainWindow>
 #include <QMessageBox>
+
+// Local includes
 
 #include "mediawiki_upload.h"
 #include "mediawiki_mediawiki.h"

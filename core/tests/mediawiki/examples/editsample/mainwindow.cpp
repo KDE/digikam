@@ -60,15 +60,15 @@ void MainWindow::on_pushButton2_clicked()
 
 void MainWindow::revisionHandle(const QList<Revision>& revisions)
 {
-    if(revisions.isEmpty())
+    if (revisions.isEmpty())
     {
         QMessageBox popup;
-        popup.setText("This page doesn't exist.");
+        popup.setText(QLatin1String("This page doesn't exist."));
         popup.exec();
         return;
     }
 
-    this->ui->plainTextEdit->setPlainText(revisions[0].content().toUtf8());
+    this->ui->plainTextEdit->setPlainText(revisions[0].content());
 }
 
 //Send page
@@ -84,10 +84,10 @@ void MainWindow::on_pushButton1_clicked()
 
 void MainWindow::loginHandle(KJob* login)
 {
-    if(login->error()!= 0)
+    if (login->error()!= 0)
     {
         QMessageBox popup;
-        popup.setText("Wrong authentication.");
+        popup.setText(QLatin1String("Wrong authentication."));
         popup.exec();
     }
     else
@@ -107,10 +107,10 @@ void MainWindow::editError(KJob* job)
 {
     QString errorMessage;
 
-    if(job->error() == 0)
-        errorMessage = "The Wiki page modified successfully.";
+    if (job->error() == 0)
+        errorMessage = QLatin1String("The Wiki page modified successfully.");
     else
-        errorMessage = "The Wiki page can't be modified.";
+        errorMessage = QLatin1String("The Wiki page can't be modified.");
 
     QMessageBox popup;
     popup.setText(errorMessage);
@@ -122,7 +122,7 @@ void MainWindow::revisionError(KJob* job)
     if(job->error() != 0)
     {
         QMessageBox popup;
-        popup.setText("The Wiki page can't be loaded.");
+        popup.setText(QLatin1String("The Wiki page can't be loaded."));
         popup.exec();
     }
 }
