@@ -90,11 +90,14 @@ public:
                 << QStringLiteral("editconflict")
                 << QStringLiteral("revwrongpage")
                 << QStringLiteral("undofailure");
+
         ret = list.indexOf(temp.remove(QChar::fromLatin1('-')));
-        if(ret == -1)
+
+        if (ret == -1)
         {
             ret = 0;
         }
+
         return  ret + (int)Edit::TextMissing ;
     }
 
@@ -105,7 +108,8 @@ public:
 
 Edit::Edit(MediaWiki& media, QObject* parent)
     : Job(*new EditPrivate(media), parent)
-{}
+{
+}
 
 void Edit::setUndoAfter(int undoafter)
 {
@@ -161,43 +165,47 @@ void Edit::setText(const QString& text)
 {
     Q_D(Edit);
     d->requestParameter[QStringLiteral("text")] = text;
-    d->requestParameter[QStringLiteral("md5")] = QString();
+    d->requestParameter[QStringLiteral("md5")]  = QString();
 }
 
 void Edit::setRecreate(bool recreate)
 {
     Q_D(Edit);
-    if(recreate)
+
+    if (recreate)
     {
         d->requestParameter[QStringLiteral("recreate")] = QStringLiteral("on");
-        d->requestParameter[QStringLiteral("md5")] = QString();
+        d->requestParameter[QStringLiteral("md5")]      = QString();
     }
 }
 
 void Edit::setCreateonly(bool createonly)
 {
     Q_D(Edit);
-    if(createonly)
+
+    if (createonly)
     {
         d->requestParameter[QStringLiteral("createonly")] = QStringLiteral("on");
-        d->requestParameter[QStringLiteral("md5")] = QString();
+        d->requestParameter[QStringLiteral("md5")]        = QString();
     }
 }
 
 void Edit::setNocreate(bool norecreate)
 {
     Q_D(Edit);
-    if(norecreate)
+
+    if (norecreate)
     {
         d->requestParameter[QStringLiteral("nocreate")] = QStringLiteral("on");
-        d->requestParameter[QStringLiteral("md5")] = QString();
+        d->requestParameter[QStringLiteral("md5")]      = QString();
     }
 }
 
 void Edit::setMinor(bool minor)
 {
     Q_D(Edit);
-    if(minor)
+
+    if (minor)
         d->requestParameter[QStringLiteral("minor")] = QStringLiteral("on");
     else
         d->requestParameter[QStringLiteral("notminor")] = QStringLiteral("on");
@@ -218,19 +226,21 @@ void Edit::setSummary(const QString& summary)
 void Edit::setWatchList(Edit::Watchlist watchlist)
 {
     Q_D(Edit);
-    switch(watchlist) {
-    case Edit::watch:
-        d->requestParameter[QStringLiteral("watchlist")] = QString(QStringLiteral("watch"));
-        break;
-    case Edit::unwatch:
-        d->requestParameter[QStringLiteral("watchlist")] = QString(QStringLiteral("unwatch"));
-        break;
-    case Edit::nochange:
-        d->requestParameter[QStringLiteral("watchlist")] = QString(QStringLiteral("nochange"));
-        break;
-    case Edit::preferences:
-        d->requestParameter[QStringLiteral("watchlist")] = QString(QStringLiteral("preferences"));
-        break;
+
+    switch (watchlist)
+    {
+        case Edit::watch:
+            d->requestParameter[QStringLiteral("watchlist")] = QString(QStringLiteral("watch"));
+            break;
+        case Edit::unwatch:
+            d->requestParameter[QStringLiteral("watchlist")] = QString(QStringLiteral("unwatch"));
+            break;
+        case Edit::nochange:
+            d->requestParameter[QStringLiteral("watchlist")] = QString(QStringLiteral("nochange"));
+            break;
+        case Edit::preferences:
+            d->requestParameter[QStringLiteral("watchlist")] = QString(QStringLiteral("preferences"));
+            break;
     }
 }
 
@@ -241,13 +251,14 @@ Edit::~Edit()
 void Edit::start()
 {
     Q_D(Edit);
-    QueryInfo* info = new QueryInfo(d->mediawiki,this);
+    QueryInfo* const info = new QueryInfo(d->mediawiki,this);
     info->setPageName(d->requestParameter[QStringLiteral("title")]);
     info->setToken(QStringLiteral("edit"));
+
     connect(info, SIGNAL(page(Page)),
             this, SLOT(doWorkSendRequest(Page)));
-    info->start();
 
+    info->start();
 }
 
 void Edit::doWorkSendRequest(Page page)
@@ -261,34 +272,42 @@ void Edit::doWorkSendRequest(Page page)
     query.addQueryItem(QStringLiteral("action"), QStringLiteral("edit"));
 
     // Add params
-    if(d->requestParameter.contains(QStringLiteral("md5")))
+    if (d->requestParameter.contains(QStringLiteral("md5")))
     {
         QString text;
-        if(d->requestParameter.contains(QStringLiteral("prependtext")))
+
+        if (d->requestParameter.contains(QStringLiteral("prependtext")))
             text += d->requestParameter[QStringLiteral("prependtext")];
-        if(d->requestParameter.contains(QStringLiteral("appendtext")))
+
+        if (d->requestParameter.contains(QStringLiteral("appendtext")))
             text += d->requestParameter[QStringLiteral("appendtext")];
-        if(d->requestParameter.contains(QStringLiteral("text")))
+
+        if (d->requestParameter.contains(QStringLiteral("text")))
             text = d->requestParameter[QStringLiteral("text")];
+
         QByteArray hash = QCryptographicHash::hash(text.toUtf8(),QCryptographicHash::Md5);
         d->requestParameter[QStringLiteral("md5")] = QString::fromLatin1(hash.toHex());
     }
 
     QMapIterator<QString, QString> i(d->requestParameter);
+
     while (i.hasNext())
     {
         i.next();
-        if(i.key() != QStringLiteral("token"))
+
+        if (i.key() != QStringLiteral("token"))
             query.addQueryItem(i.key(),i.value());
     }
 
     QByteArray cookie;
     QList<QNetworkCookie> mediawikiCookies = d->manager->cookieJar()->cookiesForUrl(d->mediawiki.url());
+
     for(int i = 0 ; i < mediawikiCookies.size(); ++i)
     {
         cookie += mediawikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
         cookie += ';';
     }
+
     // Add the token
     query.addQueryItem(QStringLiteral("token"), d->requestParameter[QStringLiteral("token")]);
     url.setQuery(query);
@@ -305,6 +324,7 @@ void Edit::doWorkSendRequest(Page page)
     // Send the request
     d->reply = d->manager->post( request, url.toString().toUtf8() );
     connectReply();
+
     connect( d->reply, SIGNAL(finished()),
              this, SLOT(finishedEdit()) );
 
@@ -314,12 +334,13 @@ void Edit::doWorkSendRequest(Page page)
 void Edit::finishedEdit()
 {
     Q_D(Edit);
+
     disconnect(d->reply, SIGNAL(finished()),
                this, SLOT(finishedEdit()));
 
     setPercent(75); // Response received.
 
-    if ( d->reply->error() != QNetworkReply::NoError )
+    if (d->reply->error() != QNetworkReply::NoError)
     {
         this->setError(this->NetworkError);
         d->reply->close();
@@ -327,16 +348,20 @@ void Edit::finishedEdit()
         emitResult();
         return;
     }
+
     QXmlStreamReader reader( d->reply );
-    while ( !reader.atEnd() && !reader.hasError() )
+
+    while (!reader.atEnd() && !reader.hasError())
     {
         QXmlStreamReader::TokenType token = reader.readNext();
-        if ( token == QXmlStreamReader::StartElement )
+
+        if (token == QXmlStreamReader::StartElement)
         {
             QXmlStreamAttributes attrs = reader.attributes();
-            if ( reader.name() == QStringLiteral("edit") )
+
+            if (reader.name() == QStringLiteral("edit"))
             {
-                if ( attrs.value( QStringLiteral("result") ).toString() == QLatin1String("Success") )
+                if (attrs.value( QStringLiteral("result") ).toString() == QLatin1String("Success"))
                 {
                     setPercent(100); // Response parsed successfully.
                     this->setError(KJob::NoError);
@@ -345,19 +370,20 @@ void Edit::finishedEdit()
                     emitResult();
                     return;
                 }
-                else if ( attrs.value( QStringLiteral("result") ).toString() == QLatin1String("Failure") )
+                else if (attrs.value( QStringLiteral("result") ).toString() == QLatin1String("Failure"))
                 {
                     this->setError(KJob::NoError);
                     reader.readNext();
                     attrs = reader.attributes();
-                    d->result.m_captchaId = attrs.value( QStringLiteral("id") ).toString().toUInt() ;
+                    d->result.m_captchaId = attrs.value( QStringLiteral("id") ).toString().toUInt();
+
                     if (!attrs.value( QStringLiteral("question") ).isEmpty())
                         d->result.m_captchaQuestion = QVariant(attrs.value( QStringLiteral("question") ).toString()) ;
                     else if (!attrs.value( QStringLiteral("url") ).isEmpty())
                         d->result.m_captchaQuestion = QVariant(attrs.value( QStringLiteral("url") ).toString()) ;
                 }
             }
-            else if ( reader.name() == QStringLiteral("error") )
+            else if (reader.name() == QStringLiteral("error"))
             {
                 this->setError(EditPrivate::error(attrs.value( QStringLiteral("code") ).toString()));
                 d->reply->close();
@@ -366,7 +392,7 @@ void Edit::finishedEdit()
                 return;
             }
         }
-        else if ( token == QXmlStreamReader::Invalid && reader.error() != QXmlStreamReader::PrematureEndOfDocumentError)
+        else if (token == QXmlStreamReader::Invalid && reader.error() != QXmlStreamReader::PrematureEndOfDocumentError)
         {
             this->setError(this->XmlError);
             d->reply->close();
@@ -375,6 +401,7 @@ void Edit::finishedEdit()
             return;
         }
     }
+
     d->reply->close();
     d->reply->deleteLater();
     emit resultCaptcha(d->result.m_captchaQuestion);
@@ -392,7 +419,8 @@ void Edit::finishedCaptcha(const QString& captcha)
     QString data      = url.toString();
     QByteArray cookie;
     QList<QNetworkCookie> mediawikiCookies = d->manager->cookieJar()->cookiesForUrl(d->mediawiki.url());
-    for(int i = 0 ; i < mediawikiCookies.size(); ++i)
+
+    for(int i = 0 ; i < mediawikiCookies.size() ; ++i)
     {
         cookie += mediawikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
         cookie += ';';
@@ -404,7 +432,8 @@ void Edit::finishedCaptcha(const QString& captcha)
     request.setRawHeader( "Cookie", cookie );
     request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/x-www-form-urlencoded"));
     // Send the request
-    d->reply = d->manager->post( request, data.toUtf8() );
+    d->reply = d->manager->post(request, data.toUtf8());
+
     connect( d->reply, SIGNAL(finished()),
              this, SLOT(finishedEdit()) );
 }

@@ -320,4 +320,4 @@ public Q_SLOTS:
 
 } // namespace mediawiki
 
-#endif // EDIT_H
+#endif // MEDIAWIKI_EDIT_H
