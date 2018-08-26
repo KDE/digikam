@@ -151,9 +151,9 @@ TaggingActionFactory::NameMatchMode TaggingActionFactory::nameMatchMode() const
 void TaggingActionFactory::reset()
 {
     d->fragment.clear();
-    d->parentTagId = 0;
-    d->defaultIndex = -1;
-    d->nameMatchMode = MatchStartingWithFragment;
+    d->parentTagId         = 0;
+    d->defaultIndex        = -1;
+    d->nameMatchMode       = MatchStartingWithFragment;
     d->constraintInterface = 0;
     d->invalidate();
 }
@@ -199,10 +199,14 @@ QList<TaggingAction> TaggingActionFactory::actions() const
 
     QListIterator<int> recent_iter(recentTagIDs);
     recent_iter.toBack();
-    while(recent_iter.hasPrevious()){
+
+    while (recent_iter.hasPrevious())
+    {
         int poz = completionEntries.indexOf(recent_iter.previous());
-        if(poz > 0){
-            completionEntries.move(poz,0);
+
+        if (poz > 0)
+        {
+            completionEntries.move(poz, 0);
         }
     }
 
@@ -254,19 +258,22 @@ QList<TaggingAction> TaggingActionFactory::actions() const
         foreach(const TaggingAction& assignAction, assignActions)
         {
             actions << assignAction;
+
             if (assignAction == defaultAction)
             {
                 defaultActionIndex = actions.size()-1;
             }
         }
+
         actions << newUnderParent;
         actions << newToplevel;
     }
 
-    Private* ncd = const_cast<Private*>(d);
-    ncd->valid = true;
-    ncd->actions = actions;
+    Private* ncd      = const_cast<Private*>(d);
+    ncd->valid        = true;
+    ncd->actions      = actions;
     ncd->defaultIndex = defaultActionIndex;
+
     return actions;
 }
 
@@ -276,6 +283,7 @@ int TaggingActionFactory::indexOfDefaultAction() const
     {
         actions();
     }
+
     return d->defaultIndex;
 }
 
@@ -352,7 +360,7 @@ QString TaggingActionFactory::suggestedUIString(const TaggingAction& action) con
 
     if (action.shallAssignTag())
     {
-        QString tagName = TagsCache::instance()->tagName(action.tagId());
+        QString tagName     = TagsCache::instance()->tagName(action.tagId());
         int tagsParentTagId = TagsCache::instance()->parentTag(action.tagId());
         // check if it is a toplevel tag or there is only one tag with this name - then simply the tag name is sufficient
         if (tagsParentTagId == 0 || TagsCache::instance()->tagsForName(tagName).size() == 1)
@@ -391,8 +399,9 @@ TaggingAction TaggingActionFactory::defaultTaggingAction() const
         return TaggingAction();
     }
 
-    Private* ncd = const_cast<Private*>(d);
+    Private* ncd       = const_cast<Private*>(d);
     ncd->defaultAction = defaultTaggingAction(d->fragment, d->parentTagId);
+
     return d->defaultAction;
 }
 

@@ -49,14 +49,14 @@ class AbstractAlbumModel::Private
 public:
 
     explicit Private()
-      : rootAlbum(0),
-        addingAlbum(0),
-        type(Album::PHYSICAL),
-        dragDropHandler(0),
-        rootBehavior(AbstractAlbumModel::IncludeRootAlbum),
-        removingAlbum(0),
-        itemDrag(true),
-        itemDrop(true)
+        : rootAlbum(0),
+          addingAlbum(0),
+          type(Album::PHYSICAL),
+          dragDropHandler(0),
+          rootBehavior(AbstractAlbumModel::IncludeRootAlbum),
+          removingAlbum(0),
+          itemDrag(true),
+          itemDrop(true)
     {
     }
 
