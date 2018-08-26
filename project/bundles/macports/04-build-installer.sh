@@ -483,9 +483,6 @@ echo -n "SHA256 sum : "                                                     >> $
 shasum -a256 "$TARGET_PKG_FILE" | { read first rest ; echo $first ; }       >> $TARGET_PKG_FILE.sum
 
 cat $TARGET_PKG_FILE.sum
-echo -e "\n------------------------------------------------------------------"
-curl https://download.kde.org/README_UPLOAD
-echo -e "------------------------------------------------------------------\n"
 
 if [[ $DK_UPLOAD = 1 ]] ; then
 
