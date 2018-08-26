@@ -45,11 +45,6 @@ namespace Digikam
 Album::Album(Album::Type type, int id, bool root)
 {
     m_parent           = 0;
-    m_next             = 0;
-    m_prev             = 0;
-    m_firstChild       = 0;
-    m_lastChild        = 0;
-    m_clearing         = false;
     m_type             = type;
     m_id               = id;
     m_root             = root;
@@ -83,22 +78,56 @@ Album* Album::parent() const
 
 Album* Album::firstChild() const
 {
-    return m_firstChild;
+    if (m_childCache.isEmpty())
+    {
+        return 0;
+    }
+
+    return m_childCache.constFirst();
 }
 
 Album* Album::lastChild() const
 {
-    return m_lastChild;
+    if (m_childCache.isEmpty())
+    {
+        return 0;
+    }
+
+    return m_childCache.constLast();
 }
 
 Album* Album::next() const
 {
-    return m_next;
+    if (!m_parent)
+    {
+        return 0;
+    }
+
+    int row = m_parent->m_childCache.indexOf(const_cast<Album*>(this));
+
+    if (row < 0 || row + 1 >= m_parent->m_childCache.count())
+    {
+        return 0;
+    }
+
+    return m_parent->m_childCache.at(row + 1);
 }
 
 Album* Album::prev() const
 {
-    return m_prev;
+    if (!m_parent)
+    {
+        return 0;
+    }
+
+    int row = m_parent->m_childCache.indexOf(const_cast<Album*>(this));
+
+    if (row < 1)
+    {
+        return 0;
+    }
+
+    return m_parent->m_childCache.at(row - 1);
 }
 
 Album* Album::childAtRow(int row) const
@@ -110,14 +139,18 @@ AlbumList Album::childAlbums(bool recursive)
 {
     AlbumList childList;
 
-    for (Album* child = this->firstChild(); child; child = child->next())
+    QVector<Album*>::const_iterator it = m_childCache.constBegin();
+
+    while (it != m_childCache.constEnd())
     {
-        childList += child;
+        childList << (*it);
 
         if (recursive)
         {
-            childList += child->childAlbums(recursive);
+            childList << (*it)->childAlbums(recursive);
         }
+
+        ++it;
     }
 
     return childList;
@@ -127,13 +160,13 @@ QList<int> Album::childAlbumIds(bool recursive)
 {
     QList<int> ids;
 
-    AlbumList childList = this->childAlbums(recursive);
+    AlbumList childList = childAlbums(recursive);
 
     QListIterator<Album*> it(childList);
 
     while (it.hasNext())
     {
-        ids += it.next()->id();
+        ids << it.next()->id();
     }
 
     return ids;
@@ -146,70 +179,14 @@ void Album::insertChild(Album* const child)
         return;
     }
 
-    if (!m_firstChild)
-    {
-        m_firstChild  = child;
-        m_lastChild   = child;
-        child->m_next = 0;
-        child->m_prev = 0;
-    }
-    else
-    {
-        m_lastChild->m_next = child;
-        child->m_prev       = m_lastChild;
-        child->m_next       = 0;
-        m_lastChild         = child;
-    }
-
     m_childCache.append(child);
 }
 
 void Album::removeChild(Album* const child)
 {
-    if (!child || m_clearing)
+    if (!child)
     {
         return;
-    }
-
-    if (child == m_firstChild)
-    {
-        m_firstChild = m_firstChild->m_next;
-
-        if (m_firstChild)
-        {
-            m_firstChild->m_prev = 0;
-        }
-        else
-        {
-            m_firstChild = m_lastChild = 0;
-        }
-    }
-    else if (child == m_lastChild)
-    {
-        m_lastChild = m_lastChild->m_prev;
-
-        if (m_lastChild)
-        {
-            m_lastChild->m_next = 0;
-        }
-        else
-        {
-            m_firstChild = m_lastChild = 0;
-        }
-    }
-    else
-    {
-        Album* c = child;
-
-        if (c->m_prev)
-        {
-            c->m_prev->m_next = c->m_next;
-        }
-
-        if (c->m_next)
-        {
-            c->m_next->m_prev = c->m_prev;
-        }
     }
 
     m_childCache.removeOne(child);
@@ -217,21 +194,10 @@ void Album::removeChild(Album* const child)
 
 void Album::clear()
 {
-    m_clearing       = true;
-    Album* child     = m_firstChild;
-    Album* nextChild = 0;
-
-    while (child)
+    while (!m_childCache.isEmpty())
     {
-        nextChild = child->m_next;
-        delete child;
-        child     = nextChild;
+        delete m_childCache.takeFirst();
     }
-
-    m_firstChild = 0;
-    m_lastChild  = 0;
-    m_childCache.clear();
-    m_clearing   = false;
 }
 
 int Album::globalID() const
