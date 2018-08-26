@@ -1,0 +1,15 @@
+<?xml version="1.0"?><api><query><pages><page pageid="27697087" ns="0" title="API"><revisions><rev revid="367741756" parentid="367741564" minor="" user="Graham87" timestamp="2010-06-13T08:41:17Z" size="70" comment="Protected API: restore protection ([edit=sysop] (indefinite) [move=sysop] (indefinite))" xml:space="preserve">#REDIRECT [[Application programming interface]]{{R from abbreviation}}</rev></revisions></page><page pageid="15580374" ns="0" title="Main Page"><revisions><rev revid="387545037" parentid="387542946" minor="" user="Rich Farmbrough" timestamp="2010-09-28T15:21:07Z" size="5074" comment="[[Help:Reverting|Reverted]] edits by [[Special:Contributions/Rich Farmbrough|Rich Farmbrough]] ([[User talk:Rich Farmbrough|talk]]) to last version by David Levy" xml:space="preserve">&lt;!--        BANNER ACROSS TOP OF PAGE        --&gt;
+{| id=&quot;mp-topbanner&quot; style=&quot;width:100%; background:#f6f6f6; margin-top:1.2em; border:1px solid #ddd;&quot;
+| style=&quot;width:61%; color:#000;&quot; |
+&lt;!--        &quot;WELCOME TO WIKIPEDIA&quot; AND ARTICLE COUNT        --&gt;
+{| style=&quot;width:280px; border:none; background:none;&quot;
+| style=&quot;width:280px; text-align:center; white-space:nowrap; color:#000;&quot; |
+&lt;div style=&quot;font-size:162%; border:none; margin:0; padding:.1em; color:#000;&quot;&gt;Welcome to [[Wikipedia]],&lt;/div&gt;
+&lt;div style=&quot;top:+0.2em; font-size:95%;&quot;&gt;the [[free content|free]] [[encyclopedia]] that [[Wikipedia:Introduction|anyone&amp;nbsp;can&amp;nbsp;edit]].&lt;/div&gt;
+&lt;div id=&quot;articlecount&quot; style=&quot;width:100%; text-align:center; font-size:85%;&quot;&gt;[[Special:Statistics|{{NUMBEROFARTICLES}}]] articles in [[English language|English]]&lt;/div&gt;
+|}
+&lt;!--        PORTAL LIST ON RIGHT-HAND SIDE        --&gt;
+| style=&quot;width:13%; font-size:95%;&quot; |
+* [[Portal:Arts|Arts]]
+* [[Portal:Biography|Biography]]
+

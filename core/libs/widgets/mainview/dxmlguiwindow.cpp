@@ -201,10 +201,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_exportRajceAction        = 0;
     m_exportSmugmugAction      = 0;
     m_exportYandexfotkiAction  = 0;
-
-#ifdef HAVE_MEDIAWIKI
     m_exportMediawikiAction    = 0;
-#endif
 
 #ifdef HAVE_VKONTAKTE
     m_exportVkontakteAction    = 0;
@@ -1148,14 +1145,12 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportYandexfotkiAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
-#ifdef HAVE_MEDIAWIKI
     m_exportMediawikiAction = new QAction(i18n("Export to MediaWiki..."), this);
     m_exportMediawikiAction->setIcon(QIcon::fromTheme(QLatin1String("mediawiki")));
     actionCollection()->addAction(QLatin1String("export_mediawiki"), m_exportMediawikiAction);
 
     connect(m_exportMediawikiAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
-#endif
 
 #ifdef HAVE_VKONTAKTE
     m_exportVkontakteAction = new QAction(i18n("Export to &VKontakte..."), this);
@@ -1230,9 +1225,7 @@ QList<QAction*> DXmlGuiWindow::exportActions() const
                              << m_exportRajceAction
                              << m_exportSmugmugAction
                              << m_exportYandexfotkiAction
-#ifdef HAVE_MEDIAWIKI
                              << m_exportMediawikiAction
-#endif
 
 #ifdef HAVE_VKONTAKTE
                              << m_exportVkontakteAction

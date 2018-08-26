@@ -48,9 +48,9 @@
 
 // MediaWiki includes
 
-#include <MediaWiki/login.h>
-#include <MediaWiki/mediawiki.h>
-#include <mediawiki_version.h>
+#include "mediawiki_login.h"
+#include "mediawiki_mediawiki.h"
+#include "mediawiki_version.h"
 
 // Local includes
 

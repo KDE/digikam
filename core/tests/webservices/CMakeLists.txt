@@ -166,19 +166,15 @@ target_link_libraries(piwigo
 # =======================================================
 # Stand alone version of MediaWiki tool
 
-if(KF5MediaWiki_FOUND)
+set(mediawiki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki.cpp)
+add_executable(mediawiki ${mediawiki_SRCS})
 
-    set(mediawiki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki.cpp)
-    add_executable(mediawiki ${mediawiki_SRCS})
+target_link_libraries(mediawiki
+                      digikamcore
 
-    target_link_libraries(mediawiki
-                          digikamcore
-
-                          Qt5::Gui
-                          Qt5::Xml
-    )
-
-endif()
+                      Qt5::Gui
+                      Qt5::Xml
+)
 
 # =======================================================
 # Stand alone version of VKontakte tool

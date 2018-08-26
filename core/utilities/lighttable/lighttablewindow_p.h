@@ -103,10 +103,7 @@
 #include "rajcewindow.h"
 #include "smugwindow.h"
 #include "yfwindow.h"
-
-#ifdef HAVE_MEDIAWIKI
-#   include "mediawikiwindow.h"
-#endif
+#include "mediawikiwindow.h"
 
 #ifdef HAVE_VKONTAKTE
 #   include "vkwindow.h"

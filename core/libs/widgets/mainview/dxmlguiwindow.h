@@ -243,10 +243,7 @@ protected:
     QAction*     m_exportRajceAction;
     QAction*     m_exportSmugmugAction;
     QAction*     m_exportYandexfotkiAction;
-
-#ifdef HAVE_MEDIAWIKI
     QAction*     m_exportMediawikiAction;
-#endif
 
 #ifdef HAVE_VKONTAKTE
     QAction*     m_exportVkontakteAction;

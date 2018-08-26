@@ -268,10 +268,6 @@ if(LibXml2_FOUND AND LibXslt_FOUND)
                                              ${LIBXML2_LIBRARIES})
 endif()
 
-if(KF5MediaWiki_FOUND)
-    target_link_libraries(digikamcore PUBLIC ${LIBMEDIAWIKI_LIBRARIES})
-endif()
-
 if(KF5Vkontakte_FOUND)
     target_link_libraries(digikamcore PUBLIC ${LIBKVKONTAKTE_LIBRARIES})
 endif()

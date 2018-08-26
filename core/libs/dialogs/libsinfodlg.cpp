@@ -45,11 +45,11 @@
 #include "metaengine.h"
 
 #ifdef HAVE_LENSFUN
-#include "lensfuniface.h"
+#   include "lensfuniface.h"
 #endif // HAVE_LENSFUN
 
 #ifdef HAVE_MARBLE
-#include "mapwidget.h"
+#   include "mapwidget.h"
 #endif // HAVE_MARBLE
 
 // C ANSI includes
@@ -60,7 +60,7 @@ extern "C"
 #endif
 
 #ifdef HAVE_JASPER
-#include <jasper/jas_version.h>
+#   include <jasper/jas_version.h>
 #endif // HAVE_JASPER
 
 #include <png.h>
@@ -128,12 +128,6 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 #else
     list.insert(i18nc(CONTEXT, "LibLqr support"),              SUPPORTED_NO);
 #endif // HAVE_LIBLQR_1
-
-#ifdef HAVE_MEDIAWIKI
-    list.insert(i18nc(CONTEXT, "MediaWiki support"),           SUPPORTED_YES);
-#else
-    list.insert(i18nc(CONTEXT, "MediaWiki support"),           SUPPORTED_NO);
-#endif // HAVE_MEDIAWIKI
 
 #ifdef HAVE_VKONTAKTE
     list.insert(i18nc(CONTEXT, "VKontakte support"),           SUPPORTED_YES);
