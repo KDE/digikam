@@ -23,11 +23,11 @@ endmacro()
 
 mediawiki_executable_tests(
     edittest
-    logintest
+    #logintest
     logouttest
     mediawikitest
     parsetest
-    queryimageinfotest
+    #queryimageinfotest
     queryimagestest
     queryinfotest
     queryrevisiontest
