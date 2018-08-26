@@ -224,9 +224,6 @@ echo -n "SHA256 sum : "                                                         
 shasum -a256 "$ORIG_WD/bundle/$TARGET_INSTALLER" | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
 
 cat $ORIG_WD/bundle/$TARGET_INSTALLER.sum
-echo -e "\n------------------------------------------------------------------"
-curl https://download.kde.org/README_UPLOAD
-echo -e "------------------------------------------------------------------\n"
 
 if [[ $DK_UPLOAD = 1 ]] ; then
 
