@@ -455,10 +455,12 @@ CoreDbUrl PAlbum::databaseUrl() const
 
 QString PAlbum::prettyUrl() const
 {
-    QString u = i18n("Albums") + QLatin1Char('/') + albumRootLabel() + albumPath();
+    QString u = i18n("Albums") + QLatin1Char('/') +
+                                 albumRootLabel() +
+                                 albumPath();
 
     if (u.endsWith(QLatin1Char('/')))
-        u.truncate(u.length() - 1);
+        u.chop(1);
 
     return u;
 }
