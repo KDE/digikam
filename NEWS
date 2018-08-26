@@ -475,4 +475,5 @@ BUGFIXES:
 414 ==> 397862 - Reordering geolocation bookmarks will remove them from the list.
 415 ==> 223348 - digiKam crash during album view browsing AVIs with PgUp/PgDown.
 416 ==> 156146 - Reading data base, digiKam don't start.
-417 ==> 
+417 ==> 118090 - digiKam crashed while attempting to save scanned (tiff) image.
+418 ==> 
