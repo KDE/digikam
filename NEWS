@@ -480,4 +480,5 @@ BUGFIXES:
 419 ==> 397924 - Merge tag names of people.
 420 ==> 397425 - Bug when trying find duplicates.
 421 ==> 397496 - Wish: Read facetags from jpg files edited in Mylio.
-422 ==> 
+422 ==> 397727 - Don't show "Mod."" label when no modified timestamp exists on an image.
+423 ==> 

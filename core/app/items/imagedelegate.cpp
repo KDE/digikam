@@ -311,7 +311,8 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         drawCreationDate(p, d->dateRect, info.dateTime());
     }
 
-    if (!d->modDateRect.isNull() && info.modDateTime() != info.dateTime())
+    if (!d->modDateRect.isNull() && info.modDateTime().isValid() &&
+                                    info.modDateTime() != info.dateTime())
     {
         drawModificationDate(p, d->modDateRect, info.modDateTime());
     }
