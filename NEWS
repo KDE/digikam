@@ -476,4 +476,5 @@ BUGFIXES:
 415 ==> 223348 - digiKam crash during album view browsing AVIs with PgUp/PgDown.
 416 ==> 156146 - Reading data base, digiKam don't start.
 417 ==> 118090 - digiKam crashed while attempting to save scanned (tiff) image.
-418 ==> 
+418 ==> 397828 - Operation cancelled when exporting to flickr.
+419 ==> 

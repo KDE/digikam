@@ -599,7 +599,7 @@ void FlickrTalker::setGeoLocation(const QString& photoId, const QString& lat, co
         d->reply->abort();
         d->reply = 0;
     }
-    
+
     if (!d->o1->linked())
         return;
 
@@ -617,7 +617,7 @@ void FlickrTalker::setGeoLocation(const QString& photoId, const QString& lat, co
     QByteArray postData = O1::createQueryParameters(reqParams);
 
     d->reply = d->requestor->post(netRequest, reqParams, postData);
-    
+
     d->state = FE_SETGEO;
     d->buffer.resize(0);
 
@@ -1160,6 +1160,7 @@ void FlickrTalker::parseResponseAddPhotoToPhotoSet(const QByteArray& data)
 void FlickrTalker::parseResponseSetGeoLocation(const QByteArray& data)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseSetGeoLocation" << data;
+    emit signalAddPhotoSucceeded(QLatin1String(""));
 }
 
 } // namespace Digikam
