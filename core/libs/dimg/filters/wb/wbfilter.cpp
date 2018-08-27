@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class WBFilter::Private
+class Q_DECL_HIDDEN WBFilter::Private
 {
 public:
 

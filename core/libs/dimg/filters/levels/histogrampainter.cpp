@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class HistogramPainter::Private
+class Q_DECL_HIDDEN HistogramPainter::Private
 {
 
 public:

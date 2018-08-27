@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class BlurFXFilter::Private
+class Q_DECL_HIDDEN BlurFXFilter::Private
 {
 public:
 

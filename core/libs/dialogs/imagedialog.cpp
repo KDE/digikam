@@ -54,12 +54,12 @@
 namespace Digikam
 {
 
-class ImageDialogPreview::Private
+class Q_DECL_HIDDEN ImageDialogPreview::Private
 {
 public:
 
-    explicit Private() :
-        imageLabel(0),
+    explicit Private()
+      : imageLabel(0),
         infoLabel(0),
         thumbLoadThread(0)
     {

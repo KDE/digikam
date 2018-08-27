@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class DSplashScreen::Private
+class Q_DECL_HIDDEN DSplashScreen::Private
 {
 
 public:

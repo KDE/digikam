@@ -44,12 +44,12 @@
 namespace Digikam
 {
 
-class FilmGrainFilter::Private
+class Q_DECL_HIDDEN FilmGrainFilter::Private
 {
 public:
 
-    explicit Private() :
-        div(0.0),
+    explicit Private()
+      : div(0.0),
         leadLumaNoise(1.0),
         leadChromaBlueNoise(1.0),
         leadChromaRedNoise(1.0),

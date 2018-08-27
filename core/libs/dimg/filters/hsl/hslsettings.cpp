@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class HSLSettings::Private
+class Q_DECL_HIDDEN HSLSettings::Private
 {
 public:
 

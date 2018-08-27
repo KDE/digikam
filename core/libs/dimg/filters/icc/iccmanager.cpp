@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class IccManager::Private
+class Q_DECL_HIDDEN IccManager::Private
 {
 public:
 

@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class RainDropFilter::Private
+class Q_DECL_HIDDEN RainDropFilter::Private
 {
 
 public:

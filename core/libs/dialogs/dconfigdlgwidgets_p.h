@@ -38,7 +38,7 @@ namespace Digikam
 
 class DConfigDlgWdgModel;
 
-class DConfigDlgWdgPrivate : public DConfigDlgViewPrivate
+class Q_DECL_HIDDEN DConfigDlgWdgPrivate : public DConfigDlgViewPrivate
 {
     Q_DECLARE_PUBLIC(DConfigDlgWdg)
 
@@ -56,7 +56,7 @@ protected:
 
 // -----------------------------------------------------------------------------------
 
-class DConfigDlgTitle::Private
+class Q_DECL_HIDDEN DConfigDlgTitle::Private
 {
 public:
 

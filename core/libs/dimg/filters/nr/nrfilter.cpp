@@ -75,7 +75,7 @@ QDebug operator<<(QDebug dbg, const NRContainer& inf)
 
 // ----------------------------------------------------------------------------------------------
 
-class NRFilter::Private
+class Q_DECL_HIDDEN NRFilter::Private
 {
 public:
 

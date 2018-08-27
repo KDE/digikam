@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class LensFunIface::Private
+class Q_DECL_HIDDEN LensFunIface::Private
 {
 public:
 

@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class CharcoalFilter::Private
+class Q_DECL_HIDDEN CharcoalFilter::Private
 {
 public:
 

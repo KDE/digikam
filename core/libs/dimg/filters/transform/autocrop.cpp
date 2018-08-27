@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class AutoCrop::Private
+class Q_DECL_HIDDEN AutoCrop::Private
 {
 public:
 

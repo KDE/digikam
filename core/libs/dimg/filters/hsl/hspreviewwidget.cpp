@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class HSPreviewWidget::Private
+class Q_DECL_HIDDEN HSPreviewWidget::Private
 {
 
 public:

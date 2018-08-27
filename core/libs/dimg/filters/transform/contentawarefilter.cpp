@@ -94,7 +94,7 @@ static LqrResizeOrder toLqrOrder(Qt::Orientation direction)
 
 // --------------------------------------------------------------------------------------
 
-class ContentAwareFilter::Private
+class Q_DECL_HIDDEN ContentAwareFilter::Private
 {
 public:
 

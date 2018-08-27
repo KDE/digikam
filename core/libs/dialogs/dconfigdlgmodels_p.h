@@ -30,7 +30,7 @@
 namespace Digikam
 {
 
-class DConfigDlgModelPrivate
+class Q_DECL_HIDDEN DConfigDlgModelPrivate
 {
     Q_DECLARE_PUBLIC(DConfigDlgModel)
 
@@ -77,7 +77,7 @@ private:
 
 // ----------------------------------------------------------------------------
 
-class DConfigDlgWdgModelPrivate : public DConfigDlgModelPrivate
+class Q_DECL_HIDDEN DConfigDlgWdgModelPrivate : public DConfigDlgModelPrivate
 {
     Q_DECLARE_PUBLIC(DConfigDlgWdgModel)
 

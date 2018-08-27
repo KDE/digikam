@@ -59,13 +59,13 @@
 namespace Digikam
 {
 
-class SharpSettings::Private
+class Q_DECL_HIDDEN SharpSettings::Private
 {
 
 public:
 
-    explicit Private() :
-        stack(0),
+    explicit Private()
+      : stack(0),
         sharpMethod(0),
         radiusInput(0),
 #ifdef HAVE_EIGEN3

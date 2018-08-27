@@ -61,7 +61,7 @@
 namespace Digikam
 {
 
-class CurvesWidget::Private
+class Q_DECL_HIDDEN CurvesWidget::Private
 {
 public:
 

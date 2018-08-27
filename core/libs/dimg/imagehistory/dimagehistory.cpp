@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class DImageHistory::Private : public QSharedData
+class Q_DECL_HIDDEN DImageHistory::Private : public QSharedData
 {
 public:
 

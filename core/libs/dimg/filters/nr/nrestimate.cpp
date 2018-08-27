@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class NREstimate::Private
+class Q_DECL_HIDDEN NREstimate::Private
 {
 public:
 

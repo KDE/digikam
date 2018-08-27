@@ -45,12 +45,12 @@
 namespace Digikam
 {
 
-class BorderFilter::Private
+class Q_DECL_HIDDEN BorderFilter::Private
 {
 public:
 
-    explicit Private() :
-        borderMainWidth(0),
+    explicit Private()
+      : borderMainWidth(0),
         border2ndWidth(0),
         orgRatio(0.0f)
     {

@@ -50,12 +50,12 @@
 namespace Digikam
 {
 
-class FilmGrainSettings::Private
+class Q_DECL_HIDDEN FilmGrainSettings::Private
 {
 public:
 
-    explicit Private() :
-        sizeLabel(0),
+    explicit Private()
+      : sizeLabel(0),
         label1(0),
         label2(0),
         label3(0),

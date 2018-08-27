@@ -54,9 +54,8 @@
 namespace Digikam
 {
 
-class HistogramBox::Private
+class Q_DECL_HIDDEN HistogramBox::Private
 {
-
 public:
 
     explicit Private()

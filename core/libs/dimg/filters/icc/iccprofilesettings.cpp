@@ -49,12 +49,12 @@
 namespace Digikam
 {
 
-class IccProfilesSettings::Private
+class Q_DECL_HIDDEN IccProfilesSettings::Private
 {
 public:
 
-    explicit Private() :
-        profilesBox(0)
+    explicit Private()
+      : profilesBox(0)
     {
         favoriteProfiles.setMaxCost(10);
     }

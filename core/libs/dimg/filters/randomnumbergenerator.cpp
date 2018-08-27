@@ -137,7 +137,7 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
 
 // ---------------------------------------------------------------------------------
 
-class RandomNumberGenerator::Private
+class Q_DECL_HIDDEN RandomNumberGenerator::Private
 {
 public:
 

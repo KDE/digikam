@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class TIFFSettings::Private
+class Q_DECL_HIDDEN TIFFSettings::Private
 {
 
 public:

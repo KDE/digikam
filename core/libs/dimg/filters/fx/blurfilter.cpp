@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class BlurFilter::Private
+class Q_DECL_HIDDEN BlurFilter::Private
 {
 public:
 

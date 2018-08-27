@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class BWSepiaSettings::Private
+class Q_DECL_HIDDEN BWSepiaSettings::Private
 {
 
 public:

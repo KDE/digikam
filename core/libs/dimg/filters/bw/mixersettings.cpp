@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class MixerSettings::Private
+class Q_DECL_HIDDEN MixerSettings::Private
 {
 public:
 

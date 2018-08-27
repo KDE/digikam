@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class RedEyeCorrectionFilter::Private
+class Q_DECL_HIDDEN RedEyeCorrectionFilter::Private
 {
 public:
 
@@ -52,7 +52,7 @@ public:
     {
     }
 
-    FaceDetector      facedetector;
+    FaceDetector                   facedetector;
     static redeye::ShapePredictor* sp;
 
     RedEyeCorrectionContainer      settings;

@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class HSLFilter::Private
+class Q_DECL_HIDDEN HSLFilter::Private
 {
 public:
 

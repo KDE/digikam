@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class ImageHistogram::Private
+class Q_DECL_HIDDEN ImageHistogram::Private
 {
 
 public:

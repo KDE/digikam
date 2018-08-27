@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class HistogramWidget::Private
+class Q_DECL_HIDDEN HistogramWidget::Private
 {
 
 public:

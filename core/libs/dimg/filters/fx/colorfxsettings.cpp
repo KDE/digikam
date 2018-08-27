@@ -46,19 +46,20 @@
 namespace Digikam
 {
 
-class ColorFXSettings::Private
+class Q_DECL_HIDDEN ColorFXSettings::Private
 {
 public:
 
-    explicit Private() :
-        stack(0),
+    explicit Private()
+      : stack(0),
         effectType(0),
         levelInput(0),
         iterationInput(0),
         intensityInput(0),
         iterationLabel(0),
         correctionTools(0)
-    {}
+    {
+    }
 
     static const QString configEffectTypeEntry;
     static const QString configLevelAdjustmentEntry;

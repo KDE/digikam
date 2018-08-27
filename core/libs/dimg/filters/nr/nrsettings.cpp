@@ -51,12 +51,12 @@
 namespace Digikam
 {
 
-class NRSettings::Private
+class Q_DECL_HIDDEN NRSettings::Private
 {
 public:
 
-    explicit Private() :
-        luminanceBox(0),
+    explicit Private()
+      : luminanceBox(0),
         chrominanceRedBox(0),
         chrominanceBlueBox(0),
         checkAutoEst(0),
@@ -67,7 +67,8 @@ public:
         softCrInput(0),
         thrCbInput(0),
         softCbInput(0)
-    {}
+    {
+    }
 
     static const QString configThrLumInputAdjustmentEntry;
     static const QString configSoftLumInputAdjustmentEntry;

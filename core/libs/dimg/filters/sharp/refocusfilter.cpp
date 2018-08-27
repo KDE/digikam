@@ -45,12 +45,12 @@ namespace Digikam
 
 const int MAX_MATRIX_SIZE = 25;
 
-class RefocusFilter::Private
+class Q_DECL_HIDDEN RefocusFilter::Private
 {
 public:
 
-    explicit Private() :
-        matrixSize(5),
+    explicit Private()
+      : matrixSize(5),
         radius(0.9),
         gauss(0.0),
         correlation(0.5),

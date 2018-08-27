@@ -114,7 +114,7 @@ private:
 
 // --------------------------------------------------------------------------------------------------------
 
-class FilmContainer::Private
+class Q_DECL_HIDDEN FilmContainer::Private
 {
 public:
 
@@ -144,7 +144,7 @@ public:
 
 // ------------------------------------------------------------------
 
-class FilmFilter::Private
+class Q_DECL_HIDDEN FilmFilter::Private
 {
 public:
 

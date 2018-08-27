@@ -43,12 +43,10 @@
 #include "dnuminput.h"
 #include "dexpanderbox.h"
 
-
-
 namespace Digikam
 {
 
-class LensFunCameraSelector::Private
+class Q_DECL_HIDDEN LensFunCameraSelector::Private
 {
 public:
 

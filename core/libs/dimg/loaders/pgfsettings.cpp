@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class PGFSettings::Private
+class Q_DECL_HIDDEN PGFSettings::Private
 {
 
 public:

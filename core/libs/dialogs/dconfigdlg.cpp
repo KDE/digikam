@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class DConfigDlgPrivate
+class Q_DECL_HIDDEN DConfigDlgPrivate
 {
     Q_DECLARE_PUBLIC(DConfigDlg)
 
