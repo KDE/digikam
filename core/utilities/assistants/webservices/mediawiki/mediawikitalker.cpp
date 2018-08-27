@@ -41,7 +41,7 @@
 // MediaWiki includes
 
 #include "mediawiki_upload.h"
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 
 // Local includes
 
@@ -62,14 +62,14 @@ public:
 
     QList<QUrl>                              urls;
     DInfoInterface*                          interface;
-    MediaWiki*                               mediawiki;
+    Iface*                                   mediawiki;
     QString                                  error;
     QString                                  currentFile;
     QMap <QString, QMap <QString, QString> > imageDesc;
 };
 
 MediaWikiTalker::MediaWikiTalker(DInfoInterface* const iface,
-                                 MediaWiki* const mediawiki,
+                                 Iface* const mediawiki,
                                  QObject* const parent)
     : KJob(parent),
       d(new Private)

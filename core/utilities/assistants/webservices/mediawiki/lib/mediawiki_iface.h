@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Remi Benoit <r3m1 dot benoit at gmail dot com>
@@ -39,26 +39,25 @@ namespace mediawiki
 {
 
 /**
- * @brief Provides access to wiki powered by MediaWiki.
+ * @brief Provides access to wiki powered by Iface.
  */
-class DIGIKAM_EXPORT MediaWiki
+class DIGIKAM_EXPORT Iface
 {
-
 public:
 
     /**
-     * @brief Constructs a MediaWiki by its url api.
+     * @brief Constructs a Iface by its url api.
      * @param url the url api of the wiki
      * @param customUserAgent you can specify the user agent to use
                               which will be concatenated with the postfix user agent
      *                        else the postfix user agent is used only
      */
-    explicit MediaWiki(const QUrl& url, const QString& customUserAgent = QString());
+    explicit Iface(const QUrl& url, const QString& customUserAgent = QString());
 
     /**
-     * @brief Destructs the MediaWiki.
+     * @brief Destructs the Iface.
      */
-    ~MediaWiki();
+    ~Iface();
 
     /**
      * @brief Returns the url api of the wiki.
@@ -80,8 +79,8 @@ public:
 
 private:
 
-    class MediaWikiPrivate;
-    MediaWikiPrivate* const d_ptr;
+    class Private;
+    Private* const d;
 
     friend class JobPrivate;
 };

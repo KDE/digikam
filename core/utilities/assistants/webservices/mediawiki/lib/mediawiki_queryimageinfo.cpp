@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Ludovic Delfau <ludovicdelfau at gmail dot com>
@@ -36,7 +36,7 @@
 // Local includes
 
 #include "mediawiki_job_p.h"
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_imageinfo.h"
 
 namespace mediawiki
@@ -47,7 +47,7 @@ class QueryImageinfoPrivate : public JobPrivate
 
 public:
 
-    QueryImageinfoPrivate(MediaWiki& mediawiki)
+    QueryImageinfoPrivate(Iface& mediawiki)
         : JobPrivate(mediawiki)
     {
         onlyOneSignal = false;
@@ -81,7 +81,7 @@ public:
     QString height;
 };
 
-QueryImageinfo::QueryImageinfo(MediaWiki& mediawiki, QObject* const parent)
+QueryImageinfo::QueryImageinfo(Iface& mediawiki, QObject* const parent)
     : Job(*new QueryImageinfoPrivate(mediawiki), parent)
 {
     Q_D(QueryImageinfo);

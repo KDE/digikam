@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Remi Benoit <r3m1 dot benoit at gmail dot com>
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "mediawiki_mediawiki.h"
-#include "mediawiki_mediawiki_p.h"
+#include "mediawiki_iface.h"
+#include "mediawiki_iface_p.h"
 
 // Qt includes
 
@@ -31,32 +31,34 @@
 namespace mediawiki
 {
 
-MediaWiki::MediaWiki(const QUrl& url, const QString& customUserAgent)
-    : d_ptr(new MediaWikiPrivate(url,
-                                 (customUserAgent.isEmpty() ? QString() 
-                                                            : QString(customUserAgent + QStringLiteral("-"))) + MediaWikiPrivate::POSTFIX_USER_AGENT,
-                                 new QNetworkAccessManager()))
+Iface::Iface(const QUrl& url, const QString& customUserAgent)
+    : d(new Private(url,
+            (customUserAgent.isEmpty() ? QString()
+                                       : QString(customUserAgent +
+                                         QStringLiteral("-")))   +
+                                         Private::POSTFIX_USER_AGENT,
+            new QNetworkAccessManager()))
 {
 }
 
-MediaWiki::~MediaWiki()
+Iface::~Iface()
 {
-    delete d_ptr;
+    delete d;
 }
 
-QUrl MediaWiki::url() const
+QUrl Iface::url() const
 {
-    return d_ptr->url;
+    return d->url;
 }
 
-QString MediaWiki::userAgent() const
+QString Iface::userAgent() const
 {
-    return d_ptr->userAgent;
+    return d->userAgent;
 }
 
-QNetworkAccessManager* MediaWiki::manager() const
+QNetworkAccessManager* Iface::manager() const
 {
-    return d_ptr->manager;
+    return d->manager;
 }
 
 } // namespace mediawiki

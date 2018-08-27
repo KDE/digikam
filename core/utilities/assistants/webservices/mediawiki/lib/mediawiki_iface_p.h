@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Remi Benoit <r3m1 dot benoit at gmail dot com>
@@ -33,19 +33,19 @@
 namespace mediawiki
 {
 
-class Q_DECL_HIDDEN MediaWiki::MediaWikiPrivate
+class Q_DECL_HIDDEN Iface::Private
 {
 
 public:
 
-    MediaWikiPrivate(const QUrl& url, const QString& userAgent, QNetworkAccessManager* const manager)
+    Private(const QUrl& url, const QString& userAgent, QNetworkAccessManager* const manager)
         : url(url),
           userAgent(userAgent),
           manager(manager)
     {
     }
 
-    ~MediaWikiPrivate()
+    ~Private()
     {
         delete manager;
     }
@@ -59,7 +59,7 @@ public:
     QNetworkAccessManager* const manager;
 };
 
-const QString MediaWiki::MediaWikiPrivate::POSTFIX_USER_AGENT = QString::fromUtf8("mediawiki-silk");
+const QString Iface::Private::POSTFIX_USER_AGENT = QString::fromUtf8("mediawiki-silk");
 
 } // namespace mediawiki
 

@@ -34,7 +34,7 @@
 // Local includes
 
 #include "mediawiki_edit.h"
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_login.h"
 #include "mediawiki_queryinfo.h"
 #include "mediawiki_queryrevision.h"
@@ -70,7 +70,7 @@ private Q_SLOTS:
 private:
 
     Ui::MainWindow* ui;
-    MediaWiki*      mediawiki;
+    Iface*      mediawiki;
 };
 
 #endif // MAINWINDOW_H

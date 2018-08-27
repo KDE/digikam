@@ -31,11 +31,11 @@
 
 #include <kjob.h>
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_login.h"
 #include "fakeserver/fakeserver.h"
 
-using mediawiki::MediaWiki;
+using mediawiki::Iface;
 using mediawiki::Login;
 
 class LoginTest : public QObject
@@ -68,7 +68,7 @@ private Q_SLOTS:
         m_server->addScenario(senario, cookie);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -90,7 +90,7 @@ private Q_SLOTS:
         m_server->addScenario(senario, cookie);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -113,7 +113,7 @@ private Q_SLOTS:
         m_server->addScenario(senario, cookie);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
         login.exec();
@@ -131,7 +131,7 @@ private Q_SLOTS:
         m_server->addScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -151,7 +151,7 @@ private Q_SLOTS:
         m_server->setScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -171,7 +171,7 @@ private Q_SLOTS:
         m_server->setScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -191,7 +191,7 @@ private Q_SLOTS:
         m_server->setScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -211,7 +211,7 @@ private Q_SLOTS:
         m_server->setScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QString());
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -231,7 +231,7 @@ private Q_SLOTS:
         m_server->setScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -251,7 +251,7 @@ private Q_SLOTS:
         m_server->setScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -271,7 +271,7 @@ private Q_SLOTS:
         m_server->setScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -291,7 +291,7 @@ private Q_SLOTS:
         m_server->setScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -311,7 +311,7 @@ private Q_SLOTS:
         m_server->setScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -334,7 +334,7 @@ private Q_SLOTS:
         m_server->addScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -357,7 +357,7 @@ private Q_SLOTS:
         m_server->addScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -380,7 +380,7 @@ private Q_SLOTS:
         m_server->addScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -403,7 +403,7 @@ private Q_SLOTS:
         m_server->addScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -426,7 +426,7 @@ private Q_SLOTS:
         m_server->addScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QString());
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -449,7 +449,7 @@ private Q_SLOTS:
         m_server->addScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -472,7 +472,7 @@ private Q_SLOTS:
         m_server->addScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -495,7 +495,7 @@ private Q_SLOTS:
         m_server->addScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -518,7 +518,7 @@ private Q_SLOTS:
         m_server->addScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));
@@ -541,7 +541,7 @@ private Q_SLOTS:
         m_server->addScenario(senario);
         m_server->startAndWait();
 
-        MediaWiki site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface site(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         Login login(site, QStringLiteral("MyUsername"), QStringLiteral("test"));
 
         connect(&login, SIGNAL(result(KJob*)),this, SLOT(loginHandle(KJob*)));

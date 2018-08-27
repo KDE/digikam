@@ -36,11 +36,11 @@
 
 #include "fakeserver/fakeserver.h"
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_queryrevision.h"
 #include "mediawiki_revision.h"
 
-using mediawiki::MediaWiki;
+using mediawiki::Iface;
 using mediawiki::QueryRevision;
 using mediawiki::Revision;
 
@@ -112,7 +112,7 @@ private Q_SLOTS:
         QFETCH(QList<Revision>, results);
 
 
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer fakeserver;
         fakeserver.setScenario(scenario);
         fakeserver.startAndWait();
@@ -219,7 +219,7 @@ private Q_SLOTS:
         QFETCH(int, error);
 
 
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer fakeserver;
         if(scenario != QStringLiteral("error serveur"))
         {
@@ -285,7 +285,7 @@ private Q_SLOTS:
     }
     void testRvLimit()
     {
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer::Request requestSend(QStringLiteral("GET"),QString(),QStringLiteral("/?format=xml&action=query&prop=revisions&rvlimit=2&titles=API"));
         QueryRevision job(mediawiki);
         job.setPageName(QStringLiteral("API"));
@@ -306,7 +306,7 @@ private Q_SLOTS:
     }
     void testRvStartId()
     {
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer::Request requestSend(QStringLiteral("GET"),QString(),QStringLiteral("/?format=xml&action=query&prop=revisions&rvstartid=2&titles=API"));
         QueryRevision job(mediawiki);
         job.setPageName(QStringLiteral("API"));
@@ -327,7 +327,7 @@ private Q_SLOTS:
     }
     void testRvEndId()
     {
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer::Request requestSend(QStringLiteral("GET"),QString(),QStringLiteral("/?format=xml&action=query&prop=revisions&rvendid=2&titles=API"));
         QueryRevision job(mediawiki);
         job.setPageName(QStringLiteral("API"));
@@ -349,7 +349,7 @@ private Q_SLOTS:
 
     void testRvStart()
     {
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer::Request requestSend(QStringLiteral("GET"),QString(),QStringLiteral("/?format=xml&action=query&prop=revisions&rvstart=2010-09-28T15:21:07Z&titles=API"));
         QueryRevision job(mediawiki);
          job.setPageName(QStringLiteral("API"));
@@ -371,7 +371,7 @@ private Q_SLOTS:
 
     void testRvEnd()
     {
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer::Request requestSend(QStringLiteral("GET"),QString(),QStringLiteral("/?format=xml&action=query&prop=revisions&rvend=2010-09-28T15:21:07Z&titles=API"));
         QueryRevision job(mediawiki);
         job.setPageName(QStringLiteral("API"));
@@ -393,7 +393,7 @@ private Q_SLOTS:
 
     void testRvUser()
     {
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer::Request requestSend(QStringLiteral("GET"),QString(),QStringLiteral("/?format=xml&action=query&prop=revisions&rvuser=martine&titles=API"));
         QueryRevision job(mediawiki);
         job.setPageName(QStringLiteral("API"));
@@ -415,7 +415,7 @@ private Q_SLOTS:
 
     void testRvExcludeUser()
     {
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer::Request requestSend(QStringLiteral("GET"),QString(),QStringLiteral("/?format=xml&action=query&prop=revisions&rvexcludeuser=martine&titles=API"));
         QueryRevision job(mediawiki);
         job.setPageName(QStringLiteral("API"));
@@ -437,7 +437,7 @@ private Q_SLOTS:
 
     void testRvDirOlder()
     {
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer::Request requestSend(QStringLiteral("GET"),QString(),QStringLiteral("/?format=xml&action=query&prop=revisions&rvdir=older&titles=API"));
         QueryRevision job(mediawiki);
         job.setPageName(QStringLiteral("API"));
@@ -459,7 +459,7 @@ private Q_SLOTS:
 
     void testRvDirNewer()
     {
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer::Request requestSend(QStringLiteral("GET"),QString(),QStringLiteral("/?format=xml&action=query&prop=revisions&rvdir=newer&titles=API"));
         QueryRevision job(mediawiki);
         job.setPageName(QStringLiteral("API"));
@@ -502,7 +502,7 @@ private Q_SLOTS:
         rev2.setContent(QStringLiteral("#REDIRECT [[Application programming interface]]{{R from abbreviation}}"));
         rev2.setParseTree(QStringLiteral("<root>#REDIRECT [[Application programming interface]]<template><title>R from abbreviation</title></template></root>"));
         results << rev2;
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
 
         FakeServer fakeserver;
         fakeserver.setScenario(scenario);
@@ -533,7 +533,7 @@ private Q_SLOTS:
     }
     void testRvSection()
     {
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer::Request requestSend(QStringLiteral("GET"),QString(),QStringLiteral("/?format=xml&action=query&prop=revisions&rvsection=1&titles=API"));
         QueryRevision job(mediawiki);
         job.setPageName(QStringLiteral("API"));
@@ -568,7 +568,7 @@ private Q_SLOTS:
                                            ,QStringLiteral("094a45ddbbd5e90d55d79d2a23a8c921+\\"));
 
 
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
 
         FakeServer fakeserver;
         fakeserver.setScenario(scenario);
@@ -599,7 +599,7 @@ private Q_SLOTS:
     }
     void testRvExpandTemplates()
     {
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer::Request requestSend(QStringLiteral("GET"),QString(),QStringLiteral("/?format=xml&action=query&prop=revisions&rvexpandtemplates=on&titles=API"));
         QueryRevision job(mediawiki);
         job.setPageName(QStringLiteral("API"));
@@ -624,7 +624,7 @@ private Q_SLOTS:
         int id= 2993;
 
 
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
 
         FakeServer fakeserver;
         fakeserver.startAndWait();
@@ -655,7 +655,7 @@ private Q_SLOTS:
         int id= 2993;
 
 
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
 
         FakeServer fakeserver;
         fakeserver.startAndWait();

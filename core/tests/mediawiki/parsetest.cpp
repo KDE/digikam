@@ -31,11 +31,11 @@
 
 #include <kjob.h>
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_parse.h"
 #include "fakeserver/fakeserver.h"
 
-using mediawiki::MediaWiki;
+using mediawiki::Iface;
 using mediawiki::Parse;
 
 Q_DECLARE_METATYPE(FakeServer::Request)
@@ -85,7 +85,7 @@ private Q_SLOTS:
     void initTestCase()
     {
         parseCount        = 0;
-        this->m_mediaWiki = new MediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        this->m_mediaWiki = new Iface(QUrl(QStringLiteral("http://127.0.0.1:12566")));
     }
 
     void result()
@@ -238,7 +238,7 @@ private:
     int        parseCount;
     QString    request;
     QString    parseResult;
-    MediaWiki* m_mediaWiki;
+    Iface* m_mediaWiki;
 };
 
 QTEST_MAIN(ParseTest)

@@ -33,11 +33,11 @@
 
 #include "fakeserver/fakeserver.h"
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_querysiteinfousergroups.h"
 #include "mediawiki_usergroup.h"
 
-using mediawiki::MediaWiki;
+using mediawiki::Iface;
 using mediawiki::QuerySiteinfoUsergroups;
 using mediawiki::UserGroup;
 
@@ -70,7 +70,7 @@ private Q_SLOTS:
         fakeserver.setScenario(scenario);
         fakeserver.startAndWait();
 
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         QuerySiteinfoUsergroups * job = new QuerySiteinfoUsergroups(mediawiki);
 
         job->setIncludeNumber(includeNumber);

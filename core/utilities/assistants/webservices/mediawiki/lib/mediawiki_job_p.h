@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Paolo de Vathaire <paolo dot devathaire at gmail dot com>
@@ -24,7 +24,7 @@
 #ifndef MEDIAWIKI_JOB_P_H
 #define MEDIAWIKI_JOB_P_H
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 
 namespace mediawiki
 {
@@ -33,14 +33,14 @@ class JobPrivate
 {
 public:
 
-    explicit JobPrivate(MediaWiki& mediawiki)
+    explicit JobPrivate(Iface& mediawiki)
         : mediawiki(mediawiki),
           manager(mediawiki.manager()),
           reply(0)
     {
     }
 
-    MediaWiki&                   mediawiki;
+    Iface&                   mediawiki;
     QNetworkAccessManager* const manager;
     QNetworkReply*               reply;
 };

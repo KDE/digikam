@@ -28,11 +28,11 @@
 #include <QUrl>
 #include <QtTest>
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 
-using mediawiki::MediaWiki;
+using mediawiki::Iface;
 
-class MediaWikiTest : public QObject
+class IfaceTest : public QObject
 {
 
     Q_OBJECT
@@ -44,7 +44,7 @@ private Q_SLOTS:
         QFETCH(QString, customUserAgent);
         QFETCH(QString, userAgent);
 
-        MediaWiki mediawiki(url, customUserAgent);
+        Iface mediawiki(url, customUserAgent);
 
         QCOMPARE(mediawiki.url(), url);
         QCOMPARE(mediawiki.userAgent(), userAgent);
@@ -63,6 +63,6 @@ private Q_SLOTS:
 
 };
 
-QTEST_MAIN(MediaWikiTest)
+QTEST_MAIN(IfaceTest)
 
 #include "mediawikitest.moc"

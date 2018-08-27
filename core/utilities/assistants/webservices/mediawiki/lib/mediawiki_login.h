@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Alexandre Mendes <alex dot mendes1988 at gmail dot com>
@@ -39,7 +39,7 @@
 namespace mediawiki
 {
 
-class MediaWiki;
+class Iface;
 class LoginPrivate;
 /**
  * @brief Login job.
@@ -81,7 +81,7 @@ public:
         WrongPassword,
 
         /**
-        * @brief Same as WrongPass, returned when an authentication plugin rather than MediaWiki itself rejected the password
+        * @brief Same as WrongPass, returned when an authentication plugin rather than Iface itself rejected the password
         */
         WrongPluginPassword,
 
@@ -115,7 +115,7 @@ public:
      * @param password the QObject parent
      * @param parent the QObject parent
      */
-    explicit Login(MediaWiki& mediawiki, const QString& login, const QString& password, QObject* const parent = 0);
+    explicit Login(Iface& mediawiki, const QString& login, const QString& password, QObject* const parent = 0);
 
     /**
      * @brief Destroys the Login job.

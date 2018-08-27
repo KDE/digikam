@@ -261,7 +261,7 @@ set(libwsmediawiki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/mediawikiwindow.cp
                         ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/mediawikitalker.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/lib/mediawiki_image.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/lib/mediawiki_imageinfo.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/lib/mediawiki_mediawiki.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/lib/mediawiki_iface.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/lib/mediawiki_login.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/lib/mediawiki_logout.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/lib/mediawiki_queryimageinfo.cpp

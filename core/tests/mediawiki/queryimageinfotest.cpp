@@ -28,7 +28,7 @@
 
 #include "fakeserver/fakeserver.h"
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_imageinfo.h"
 #include "mediawiki_queryimageinfo.h"
 
@@ -67,7 +67,7 @@ private Q_SLOTS:
         fakeserver.startAndWait();
 
         // Prepare the job
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         QueryImageinfo* job = new QueryImageinfo(mediawiki);
         job->setTitle(QStringLiteral("Image:Image.bmp"));
         job->setProperties(
@@ -154,7 +154,7 @@ private Q_SLOTS:
         fakeserver.startAndWait();
 
         // Prepare the job
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         QueryImageinfo* job = new QueryImageinfo(mediawiki);
         job->setProperties(
             QueryImageinfo::Timestamp|

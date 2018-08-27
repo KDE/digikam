@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Paolo de Vathaire <paolo dot devathaire at gmail dot com>
@@ -35,11 +35,11 @@
 namespace mediawiki
 {
 
-class MediaWiki;
+class Iface;
 class JobPrivate;
 
 /**
- * @brief The base class for all MediaWiki jobs.
+ * @brief The base class for all Iface jobs.
  */
 class DIGIKAM_EXPORT Job : public KJob
 {

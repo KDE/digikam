@@ -28,11 +28,11 @@
 
 #include "fakeserver/fakeserver.h"
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_queryimages.h"
 #include "mediawiki_image.h"
 
-using mediawiki::MediaWiki;
+using mediawiki::Iface;
 using mediawiki::QueryImages;
 using mediawiki::Image;
 
@@ -84,7 +84,7 @@ private Q_SLOTS:
         fakeserver.startAndWait();
 
         // Prepare the job
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         QueryImages * job = new QueryImages(mediawiki);
         job->setTitle(title);
         job->setLimit(limit);

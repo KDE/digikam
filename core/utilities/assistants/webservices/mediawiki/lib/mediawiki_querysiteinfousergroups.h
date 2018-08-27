@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Ludovic Delfau <ludovicdelfau at gmail dot com>
@@ -33,7 +33,7 @@
 namespace mediawiki
 {
 
-class MediaWiki;
+class Iface;
 class QuerySiteinfoUsergroupsPrivate;
 
 /**
@@ -53,7 +53,7 @@ public:
      * @param mediawiki the mediawiki concerned by the job
      * @param parent the QObject parent
      */
-    explicit QuerySiteinfoUsergroups(MediaWiki& mediawiki, QObject* const parent = 0);
+    explicit QuerySiteinfoUsergroups(Iface& mediawiki, QObject* const parent = 0);
 
     /**
      * @brief Destroys the UserGroups job.

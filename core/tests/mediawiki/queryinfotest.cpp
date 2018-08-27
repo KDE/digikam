@@ -31,13 +31,13 @@
 
 #include <kjob.h>
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_queryinfo.h"
 #include "mediawiki_page.h"
 #include "mediawiki_protection.h"
 #include "fakeserver/fakeserver.h"
 
-using mediawiki::MediaWiki;
+using mediawiki::Iface;
 using mediawiki::QueryInfo;
 using mediawiki::Page;
 using mediawiki::Protection;
@@ -70,7 +70,7 @@ private Q_SLOTS:
     void initTestCase()
     {
         queryInfoCount    = 0;
-        this->m_mediaWiki = new MediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        this->m_mediaWiki = new Iface(QUrl(QStringLiteral("http://127.0.0.1:12566")));
     }
 
     void constructQuery()
@@ -216,7 +216,7 @@ private:
     int                  queryInfoCount;
     Page                 queryInfoResultsPage;
     QVector <Protection> queryInfoResultsProtections;
-    MediaWiki*           m_mediaWiki;
+    Iface*           m_mediaWiki;
 };
 
 QTEST_MAIN(QueryInfoTest)

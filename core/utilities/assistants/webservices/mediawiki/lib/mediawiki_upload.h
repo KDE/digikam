@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Alexandre Mendes <alex dot mendes1988 at gmail dot com>
@@ -41,7 +41,7 @@
 namespace mediawiki
 {
 
-class MediaWiki;
+class Iface;
 class UploadPrivate;
 
 /**
@@ -129,7 +129,7 @@ public:
      * @brief Constructs an Upload job.
      * @param parent the QObject parent
      */
-    Upload(MediaWiki& mediawiki, QObject* const parent = 0);
+    Upload(Iface& mediawiki, QObject* const parent = 0);
 
     /**
      * @brief Destroys the Upload job.

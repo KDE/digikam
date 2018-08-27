@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Ludovic Delfau <ludovicdelfau at gmail dot com>
@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_job_p.h"
 
 namespace mediawiki
@@ -45,7 +45,7 @@ class QuerySiteinfoUsergroupsPrivate : public JobPrivate
 {
 public:
 
-    QuerySiteinfoUsergroupsPrivate(MediaWiki& mediawiki, QNetworkAccessManager* const manager, bool includeNumber)
+    QuerySiteinfoUsergroupsPrivate(Iface& mediawiki, QNetworkAccessManager* const manager, bool includeNumber)
             : JobPrivate(mediawiki),
               manager(manager),
               includeNumber(includeNumber)
@@ -56,7 +56,7 @@ public:
     bool                         includeNumber;
 };
 
-QuerySiteinfoUsergroups::QuerySiteinfoUsergroups(MediaWiki& mediawiki, QObject* const parent)
+QuerySiteinfoUsergroups::QuerySiteinfoUsergroups(Iface& mediawiki, QObject* const parent)
     : Job(*new QuerySiteinfoUsergroupsPrivate(mediawiki, new QNetworkAccessManager(), false), parent)
 {
 }

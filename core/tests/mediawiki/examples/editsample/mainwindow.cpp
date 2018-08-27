@@ -42,7 +42,7 @@ MainWindow::~MainWindow()
 //Load page
 void MainWindow::on_pushButton2_clicked()
 {
-    mediawiki = new MediaWiki(QUrl(this->ui->mWikiEdit->text()));
+    mediawiki = new Iface(QUrl(this->ui->mWikiEdit->text()));
     QueryRevision* const queryrevision(new QueryRevision(*mediawiki));
     queryrevision->setPageName(this->ui->mPageEdit->text());
     queryrevision->setProperties(QueryRevision::Content);

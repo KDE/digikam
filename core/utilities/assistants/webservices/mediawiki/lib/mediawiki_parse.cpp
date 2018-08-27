@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Alexandre Mendes <alex dot mendes1988 at gmail dot com>
@@ -36,7 +36,7 @@
 // Local includes
 
 #include "mediawiki_job_p.h"
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 
 namespace mediawiki
 {
@@ -46,7 +46,7 @@ class ParsePrivate : public JobPrivate
 
 public:
 
-    ParsePrivate(MediaWiki& mediawiki)
+    ParsePrivate(Iface& mediawiki)
         : JobPrivate(mediawiki)
     {
     }
@@ -54,7 +54,7 @@ public:
     QMap<QString, QString> requestParameter;
 };
 
-Parse::Parse(MediaWiki& mediawiki, QObject* const parent)
+Parse::Parse(Iface& mediawiki, QObject* const parent)
     : Job(*new ParsePrivate(mediawiki), parent)
 {
 }

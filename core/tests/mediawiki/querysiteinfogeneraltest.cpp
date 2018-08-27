@@ -33,11 +33,11 @@
 
 #include "fakeserver/fakeserver.h"
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_querysiteinfogeneral.h"
 #include "mediawiki_generalinfo.h"
 
-using mediawiki::MediaWiki;
+using mediawiki::Iface;
 using mediawiki::QuerySiteInfoGeneral;
 using mediawiki::Generalinfo;
 
@@ -62,11 +62,11 @@ void initTestCase()
 }
 void QuerySiteInfoGeneralTestConnectTrue()
 {
-    MediaWiki mediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+    Iface mediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
     FakeServer server;
 
     generalCount = 0;
-    QString senario(QStringLiteral("<api><query><general mainpage=\"Main Page\" base=\"http://en.wikipedia.org/wiki/Main_Page\" sitename=\"Wikipedia\" generator=\"MediaWiki 1.16wmf4\" phpversion=\"5.2.4-2ubuntu5.12wm1\" phpsapi=\"apache2handler\" dbtype=\"mysql\" dbversion=\"5.1.46-facebook-r3489-log\" rev=\"75268\" case=\"first-letter\" rights=\"Creative Commons Attribution-Share Alike 3.0 Unported\" lang=\"en\" fallback8bitEncoding=\"windows-1252\" writeapi=\"\" timezone=\"UTC\" timeoffset=\"0\" articlepath=\"/wiki/$1\" scriptpath=\"/w\" script=\"/w/index.php\" variantarticlepath=\"\" server=\"http://en.wikipedia.org\" wikiid=\"enwiki\" time=\"2010-10-24T19:53:13Z\"/></query></api>"));
+    QString senario(QStringLiteral("<api><query><general mainpage=\"Main Page\" base=\"http://en.wikipedia.org/wiki/Main_Page\" sitename=\"Wikipedia\" generator=\"Iface 1.16wmf4\" phpversion=\"5.2.4-2ubuntu5.12wm1\" phpsapi=\"apache2handler\" dbtype=\"mysql\" dbversion=\"5.1.46-facebook-r3489-log\" rev=\"75268\" case=\"first-letter\" rights=\"Creative Commons Attribution-Share Alike 3.0 Unported\" lang=\"en\" fallback8bitEncoding=\"windows-1252\" writeapi=\"\" timezone=\"UTC\" timeoffset=\"0\" articlepath=\"/wiki/$1\" scriptpath=\"/w\" script=\"/w/index.php\" variantarticlepath=\"\" server=\"http://en.wikipedia.org\" wikiid=\"enwiki\" time=\"2010-10-24T19:53:13Z\"/></query></api>"));
     server.addScenario(senario);
     server.startAndWait();
 
@@ -85,11 +85,11 @@ void QuerySiteInfoGeneralTestConnectTrue()
 
 void QuerySiteInfoGeneralTestAttribute()
 {
-    MediaWiki mediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+    Iface mediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
     FakeServer server;
 
     generalCount = 0;
-    QString senario(QStringLiteral("<api><query><general mainpage=\"Main Page\" base=\"http://en.wikipedia.org/wiki/Main_Page\" sitename=\"Wikipedia\" generator=\"MediaWiki 1.16wmf4\" phpversion=\"5.2.4-2ubuntu5.12wm1\" phpsapi=\"apache2handler\" dbtype=\"mysql\" dbversion=\"5.1.46-facebook-r3489-log\" rev=\"75268\" case=\"first-letter\" rights=\"Creative Commons Attribution-Share Alike 3.0 Unported\" lang=\"en\" fallback8bitEncoding=\"windows-1252\" writeapi=\"\" timezone=\"UTC\" timeoffset=\"0\" articlepath=\"/wiki/$1\" scriptpath=\"/w\" script=\"/w/index.php\" variantarticlepath=\"\" server=\"http://en.wikipedia.org\" wikiid=\"enwiki\" time=\"2010-10-24T19:53:13Z\"/></query></api>"));
+    QString senario(QStringLiteral("<api><query><general mainpage=\"Main Page\" base=\"http://en.wikipedia.org/wiki/Main_Page\" sitename=\"Wikipedia\" generator=\"Iface 1.16wmf4\" phpversion=\"5.2.4-2ubuntu5.12wm1\" phpsapi=\"apache2handler\" dbtype=\"mysql\" dbversion=\"5.1.46-facebook-r3489-log\" rev=\"75268\" case=\"first-letter\" rights=\"Creative Commons Attribution-Share Alike 3.0 Unported\" lang=\"en\" fallback8bitEncoding=\"windows-1252\" writeapi=\"\" timezone=\"UTC\" timeoffset=\"0\" articlepath=\"/wiki/$1\" scriptpath=\"/w\" script=\"/w/index.php\" variantarticlepath=\"\" server=\"http://en.wikipedia.org\" wikiid=\"enwiki\" time=\"2010-10-24T19:53:13Z\"/></query></api>"));
     server.addScenario(senario);
     server.startAndWait();
 
@@ -108,7 +108,7 @@ void QuerySiteInfoGeneralTestAttribute()
     resultExpected.setMainPage(QStringLiteral("Main Page"));
     resultExpected.setUrl(QUrl(QStringLiteral("http://en.wikipedia.org/wiki/Main_Page")));
     resultExpected.setSiteName(QStringLiteral("Wikipedia"));
-    resultExpected.setGenerator(QStringLiteral("MediaWiki 1.16wmf4"));
+    resultExpected.setGenerator(QStringLiteral("Iface 1.16wmf4"));
     resultExpected.setPhpVersion(QStringLiteral("5.2.4-2ubuntu5.12wm1"));
     resultExpected.setPhpApi(QStringLiteral("apache2handler"));
     resultExpected.setDataBaseType(QStringLiteral("mysql"));
@@ -134,11 +134,11 @@ void QuerySiteInfoGeneralTestAttribute()
 void QuerySiteInfoGeneralTestConnectFalseXML()
 {
 
-    MediaWiki mediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+    Iface mediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
     FakeServer server;
 
     generalCount = 0;
-    QString senario(QStringLiteral("<api><query<general mainpage=\"Main Page\" base=\"http://en.wikipedia.org/wiki/Main_Page\" sitename=\"Wikipedia\" generator=\"MediaWiki 1.16wmf4\" phpversion=\"5.2.4-2ubuntu5.12wm1\" phpsapi=\"apache2handler\" dbtype=\"mysql\" dbversion=\"5.1.46-facebook-r3489-log\" rev=\"75268\" case=\"first-letter\" rights=\"Creative Commons Attribution-Share Alike 3.0 Unported\" lang=\"en\" fallback8bitEncoding=\"windows-1252\" writeapi=\"\" timezone=\"UTC\" timeoffset=\"0\" articlepath=\"/wiki/$1\" scriptpath=\"/w\" script=\"/w/index.php\" variantarticlepath=\"\" server=\"http://en.wikipedia.org\" wikiid=\"enwiki\" time=\"2010-10-24T19:53:13Z\"/>"));
+    QString senario(QStringLiteral("<api><query<general mainpage=\"Main Page\" base=\"http://en.wikipedia.org/wiki/Main_Page\" sitename=\"Wikipedia\" generator=\"Iface 1.16wmf4\" phpversion=\"5.2.4-2ubuntu5.12wm1\" phpsapi=\"apache2handler\" dbtype=\"mysql\" dbversion=\"5.1.46-facebook-r3489-log\" rev=\"75268\" case=\"first-letter\" rights=\"Creative Commons Attribution-Share Alike 3.0 Unported\" lang=\"en\" fallback8bitEncoding=\"windows-1252\" writeapi=\"\" timezone=\"UTC\" timeoffset=\"0\" articlepath=\"/wiki/$1\" scriptpath=\"/w\" script=\"/w/index.php\" variantarticlepath=\"\" server=\"http://en.wikipedia.org\" wikiid=\"enwiki\" time=\"2010-10-24T19:53:13Z\"/>"));
     server.addScenario(senario);
     server.startAndWait();
 
@@ -157,7 +157,7 @@ void QuerySiteInfoGeneralTestConnectFalseXML()
 
 void QuerySiteInfoGeneralTestErrortIncludeAllDenied()
 {
-    MediaWiki mediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+    Iface mediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
     FakeServer server;
 
     generalCount = 0;

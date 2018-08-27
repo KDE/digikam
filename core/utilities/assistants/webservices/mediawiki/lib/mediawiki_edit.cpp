@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Alexandre Mendes <alex dot mendes1988 at gmail dot com>
@@ -41,7 +41,7 @@
 
 // Local includes
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_queryinfo.h"
 #include "mediawiki_job_p.h"
 
@@ -61,7 +61,7 @@ class EditPrivate : public JobPrivate
 {
 public:
 
-    EditPrivate(MediaWiki& mediawiki)
+    EditPrivate(Iface& mediawiki)
         : JobPrivate(mediawiki)
     {
     }
@@ -106,7 +106,7 @@ public:
     Result                 result;
 };
 
-Edit::Edit(MediaWiki& media, QObject* parent)
+Edit::Edit(Iface& media, QObject* parent)
     : Job(*new EditPrivate(media), parent)
 {
 }

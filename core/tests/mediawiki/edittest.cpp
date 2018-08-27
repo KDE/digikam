@@ -31,11 +31,11 @@
 
 #include <kjob.h>
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_edit.h"
 #include "fakeserver/fakeserver.h"
 
-using mediawiki::MediaWiki;
+using mediawiki::Iface;
 using mediawiki::Edit;
 
 Q_DECLARE_METATYPE(FakeServer::Request)
@@ -69,7 +69,7 @@ private Q_SLOTS:
     void initTestCase()
     {
         editCount            = 0;
-        this->m_mediaWiki    = new MediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        this->m_mediaWiki    = new Iface(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         this->m_infoScenario = QStringLiteral("<api><query><pages><page pageid=\"27697087\" ns=\"0\" title=\"API\" touched=\"2010-11-25T13:59:03Z\" lastrevid=\"367741756\" counter=\"0\" length=\"70\" redirect=\"\" starttimestamp=\"2010-11-25T16:14:51Z\" edittoken=\"cecded1f35005d22904a35cc7b736e18+\\\" talkid=\"5477418\" fullurl=\"http://en.wikipedia.org/wiki/API\" editurl=\"http://en.wikipedia.org/w/index.php?title=API&action=edit\" ><protection /></page></pages></query></api>");
     }
 
@@ -276,7 +276,7 @@ private Q_SLOTS:
 
 
         editCount = 0;
-        MediaWiki mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer fakeserver;
 
         if(scenario != QStringLiteral("error serveur"))
@@ -434,7 +434,7 @@ private:
     QString    CaptchaAnswer;
     QString    request;
     QString    m_infoScenario;
-    MediaWiki* m_mediaWiki;
+    Iface* m_mediaWiki;
 };
 
 QTEST_MAIN(EditTest)

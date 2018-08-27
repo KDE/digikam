@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Manuel Campomanes <campomanes dot manuel at gmail dot com>
@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 
 namespace mediawiki
 {

@@ -49,7 +49,7 @@
 // MediaWiki includes
 
 #include "mediawiki_login.h"
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 
 // Local includes
 
@@ -86,7 +86,7 @@ public:
     QUrl            wikiUrl;
 
     MediaWikiWidget* widget;
-    MediaWiki*       mediawiki;
+    Iface*           mediawiki;
     DInfoInterface*  iface;
     MediaWikiTalker* uploadTalker;
 };
@@ -332,7 +332,7 @@ void MediaWikiWindow::slotDoLogin(const QString& login, const QString& pass, con
     d->pass               = pass;
     d->wikiName           = wikiName;
     d->wikiUrl            = wikiUrl;
-    d->mediawiki          = new MediaWiki(wikiUrl);
+    d->mediawiki          = new Iface(wikiUrl);
     Login* const loginJob = new Login(*d->mediawiki, login, pass);
 
     connect(loginJob, SIGNAL(result(KJob*)),

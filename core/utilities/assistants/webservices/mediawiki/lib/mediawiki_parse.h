@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-22
- * Description : a MediaWiki C++ interface
+ * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Alexandre Mendes <alex dot mendes1988 at gmail dot com>
@@ -38,7 +38,7 @@
 namespace mediawiki
 {
 
-class MediaWiki;
+class Iface;
 class ParsePrivate;
 
 class DIGIKAM_EXPORT Parse : public Job
@@ -69,7 +69,7 @@ public:
         MissingPage
     };
 
-    explicit Parse(MediaWiki& mediawiki, QObject* const parent = 0);
+    explicit Parse(Iface& mediawiki, QObject* const parent = 0);
     virtual ~Parse();
 
     void setText(const QString& param);

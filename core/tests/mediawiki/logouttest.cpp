@@ -31,11 +31,11 @@
 
 #include <kjob.h>
 
-#include "mediawiki_mediawiki.h"
+#include "mediawiki_iface.h"
 #include "mediawiki_logout.h"
 #include "fakeserver/fakeserver.h"
 
-using mediawiki::MediaWiki;
+using mediawiki::Iface;
 using mediawiki::Logout;
 
 class LogoutTest : public QObject
@@ -55,7 +55,7 @@ private Q_SLOTS:
     void initTestCase()
     {
         logoutCount = 0;
-        this->m_mediaWiki = new MediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        this->m_mediaWiki = new Iface(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         this->m_server = new FakeServer;
         this->request = QStringLiteral("/?format=xml&action=logout");
     }
@@ -93,7 +93,7 @@ private:
 
     int         logoutCount;
     QString     request;
-    MediaWiki*  m_mediaWiki;
+    Iface*  m_mediaWiki;
     FakeServer* m_server;
 };
 
