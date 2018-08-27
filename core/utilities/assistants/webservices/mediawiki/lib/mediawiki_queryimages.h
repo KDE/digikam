@@ -34,7 +34,7 @@
 #include "mediawiki_image.h"
 #include "digikam_export.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Iface;
@@ -72,10 +72,10 @@ public:
 
     /**
      * @brief Constructs a query images job.
-     * @param mediawiki the mediawiki concerned by the job
+     * @param MediaWiki the MediaWiki concerned by the job
      * @param parent the QObject parent
      */
-    explicit QueryImages(Iface& mediawiki, QObject* const parent = 0);
+    explicit QueryImages(Iface& MediaWiki, QObject* const parent = 0);
 
     /**
      * @brief Destroys a query images job.
@@ -116,6 +116,6 @@ private Q_SLOTS:
     void doWorkProcessReply();
 };
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // MEDIAWIKI_QUERYIMAGES_H

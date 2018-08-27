@@ -44,7 +44,7 @@ namespace Ui
     class MainWindow;
 }
 
-using namespace mediawiki;
+using namespace MediaWiki;
 
 class MainWindow : public QMainWindow
 {
@@ -70,7 +70,7 @@ private Q_SLOTS:
 private:
 
     Ui::MainWindow* ui;
-    Iface*      mediawiki;
+    Iface*      MediaWiki;
 };
 
 #endif // MAINWINDOW_H

@@ -34,7 +34,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
-      mediawiki(QUrl(QLatin1String("https://test.wikipedia.org/w/api.php")))
+      MediaWiki(QUrl(QLatin1String("https://test.wikipedia.org/w/api.php")))
 {
     ui->setupUi(this);
     init();
@@ -63,7 +63,7 @@ void MainWindow::init()
 void MainWindow::on_pushButton_clicked()
 {
     this->ui->progressBar->setValue(0);
-    Login* const login = new Login(mediawiki, this->ui->mLoginEdit->text(), this->ui->mMdpEdit->text());
+    Login* const login = new Login(MediaWiki, this->ui->mLoginEdit->text(), this->ui->mMdpEdit->text());
 
     connect(login, SIGNAL(result(KJob*)),
             this, SLOT(loginHandle(KJob*)));
@@ -81,7 +81,7 @@ void MainWindow::loginHandle(KJob* login)
     }
     else
     {
-        Upload* const e1  = new Upload( mediawiki );
+        Upload* const e1  = new Upload( MediaWiki );
         QFile* const file = new QFile(this->ui->lineEdit->text());
         file->open(QIODevice::ReadOnly);
         e1->setFile(file);

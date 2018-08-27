@@ -38,15 +38,15 @@
 #include "mediawiki_iface.h"
 #include "mediawiki_job_p.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class QuerySiteinfoUsergroupsPrivate : public JobPrivate
 {
 public:
 
-    QuerySiteinfoUsergroupsPrivate(Iface& mediawiki, QNetworkAccessManager* const manager, bool includeNumber)
-            : JobPrivate(mediawiki),
+    QuerySiteinfoUsergroupsPrivate(Iface& MediaWiki, QNetworkAccessManager* const manager, bool includeNumber)
+            : JobPrivate(MediaWiki),
               manager(manager),
               includeNumber(includeNumber)
     {
@@ -56,8 +56,8 @@ public:
     bool                         includeNumber;
 };
 
-QuerySiteinfoUsergroups::QuerySiteinfoUsergroups(Iface& mediawiki, QObject* const parent)
-    : Job(*new QuerySiteinfoUsergroupsPrivate(mediawiki, new QNetworkAccessManager(), false), parent)
+QuerySiteinfoUsergroups::QuerySiteinfoUsergroups(Iface& MediaWiki, QObject* const parent)
+    : Job(*new QuerySiteinfoUsergroupsPrivate(MediaWiki, new QNetworkAccessManager(), false), parent)
 {
 }
 
@@ -81,7 +81,7 @@ void QuerySiteinfoUsergroups::doWorkSendRequest()
     Q_D(QuerySiteinfoUsergroups);
 
     // Set the url
-    QUrl url = d->mediawiki.url();
+    QUrl url = d->MediaWiki.url();
     QUrlQuery query;
     query.addQueryItem(QStringLiteral("format"), QStringLiteral("xml"));
     query.addQueryItem(QStringLiteral("action"), QStringLiteral("query"));
@@ -95,7 +95,7 @@ void QuerySiteinfoUsergroups::doWorkSendRequest()
 
     // Set the request
     QNetworkRequest request(url);
-    request.setRawHeader("User-Agent", d->mediawiki.userAgent().toUtf8());
+    request.setRawHeader("User-Agent", d->MediaWiki.userAgent().toUtf8());
 
     // Send the request
     d->reply = d->manager->get(request);
@@ -180,4 +180,4 @@ void QuerySiteinfoUsergroups::doWorkProcessReply()
     emitResult();
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

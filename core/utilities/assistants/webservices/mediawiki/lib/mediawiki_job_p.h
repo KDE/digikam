@@ -26,25 +26,25 @@
 
 #include "mediawiki_iface.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class JobPrivate
 {
 public:
 
-    explicit JobPrivate(Iface& mediawiki)
-        : mediawiki(mediawiki),
-          manager(mediawiki.manager()),
+    explicit JobPrivate(Iface& MediaWiki)
+        : MediaWiki(MediaWiki),
+          manager(MediaWiki.manager()),
           reply(0)
     {
     }
 
-    Iface&                   mediawiki;
+    Iface&                   MediaWiki;
     QNetworkAccessManager* const manager;
     QNetworkReply*               reply;
 };
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // MEDIAWIKI_JOB_P_H

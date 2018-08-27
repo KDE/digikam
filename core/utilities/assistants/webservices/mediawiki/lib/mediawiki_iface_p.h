@@ -30,7 +30,7 @@
 #include <QUrl>
 #include <QNetworkAccessManager>
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Q_DECL_HIDDEN Iface::Private
@@ -59,8 +59,8 @@ public:
     QNetworkAccessManager* const manager;
 };
 
-const QString Iface::Private::POSTFIX_USER_AGENT = QString::fromUtf8("mediawiki-silk");
+const QString Iface::Private::POSTFIX_USER_AGENT = QString::fromUtf8("MediaWiki-silk");
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // MEDIAWIKI_P_H

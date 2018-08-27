@@ -26,10 +26,16 @@
 #ifndef TEST_QUERYINFO_H
 #define TEST_QUERYINFO_H
 
+// Qt includes
+
 #include <QObject>
 #include <QtTest>
 
+// KDE includes
+
 #include <kjob.h>
+
+// Local includes
 
 #include "mediawiki_iface.h"
 #include "mediawiki_queryinfo.h"
@@ -37,10 +43,10 @@
 #include "mediawiki_protection.h"
 #include "fakeserver/fakeserver.h"
 
-using mediawiki::Iface;
-using mediawiki::QueryInfo;
-using mediawiki::Page;
-using mediawiki::Protection;
+using MediaWiki::Iface;
+using MediaWiki::QueryInfo;
+using MediaWiki::Page;
+using MediaWiki::Protection;
 
 Q_DECLARE_METATYPE(Page)
 Q_DECLARE_METATYPE(Protection)
@@ -216,7 +222,7 @@ private:
     int                  queryInfoCount;
     Page                 queryInfoResultsPage;
     QVector <Protection> queryInfoResultsProtections;
-    Iface*           m_mediaWiki;
+    Iface*               m_mediaWiki;
 };
 
 QTEST_MAIN(QueryInfoTest)

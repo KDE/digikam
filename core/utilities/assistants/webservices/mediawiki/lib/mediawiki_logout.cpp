@@ -39,21 +39,21 @@
 #include "mediawiki_iface.h"
 #include "mediawiki_job_p.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class LogoutPrivate : public JobPrivate
 {
 public:
 
-    LogoutPrivate(Iface& mediawiki)
-        : JobPrivate(mediawiki)
+    LogoutPrivate(Iface& MediaWiki)
+        : JobPrivate(MediaWiki)
     {
     }
 };
 
-Logout::Logout(Iface& mediawiki, QObject* const parent)
-    : Job(*new LogoutPrivate(mediawiki), parent)
+Logout::Logout(Iface& MediaWiki, QObject* const parent)
+    : Job(*new LogoutPrivate(MediaWiki), parent)
 {
 }
 
@@ -70,24 +70,24 @@ void Logout::doWorkSendRequest()
 {
     Q_D(Logout);
 
-    QUrl url = d->mediawiki.url();
+    QUrl url = d->MediaWiki.url();
     QUrlQuery query;
     query.addQueryItem(QStringLiteral("format"), QStringLiteral("xml"));
     query.addQueryItem(QStringLiteral("action"), QStringLiteral("logout"));
     url.setQuery(query);
 
     QByteArray cookie = "";
-    QList<QNetworkCookie> mediawikiCookies = d->manager->cookieJar()->cookiesForUrl(d->mediawiki.url());
+    QList<QNetworkCookie> MediaWikiCookies = d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url());
 
-    for (int i = 0 ; i < mediawikiCookies.size() ; ++i)
+    for (int i = 0 ; i < MediaWikiCookies.size() ; ++i)
     {
-        cookie += mediawikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
+        cookie += MediaWikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
         cookie += ';';
     }
 
     // Set the request
     QNetworkRequest request(url);
-    request.setRawHeader("User-Agent", d->mediawiki.userAgent().toUtf8());
+    request.setRawHeader("User-Agent", d->MediaWiki.userAgent().toUtf8());
     request.setRawHeader("Cookie", cookie);
 
     // Delete cookies
@@ -114,4 +114,4 @@ void Logout::doWorkProcessReply()
     emitResult();
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

@@ -39,7 +39,7 @@
 #include "mediawiki_iface.h"
 #include "mediawiki_imageinfo.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class QueryImageinfoPrivate : public JobPrivate
@@ -47,8 +47,8 @@ class QueryImageinfoPrivate : public JobPrivate
 
 public:
 
-    QueryImageinfoPrivate(Iface& mediawiki)
-        : JobPrivate(mediawiki)
+    QueryImageinfoPrivate(Iface& MediaWiki)
+        : JobPrivate(MediaWiki)
     {
         onlyOneSignal = false;
     }
@@ -81,8 +81,8 @@ public:
     QString height;
 };
 
-QueryImageinfo::QueryImageinfo(Iface& mediawiki, QObject* const parent)
-    : Job(*new QueryImageinfoPrivate(mediawiki), parent)
+QueryImageinfo::QueryImageinfo(Iface& MediaWiki, QObject* const parent)
+    : Job(*new QueryImageinfoPrivate(MediaWiki), parent)
 {
     Q_D(QueryImageinfo);
     Q_UNUSED(d);
@@ -201,7 +201,7 @@ void QueryImageinfo::doWorkSendRequest()
     }
 
     // Set the url
-    QUrl url = d->mediawiki.url();
+    QUrl url = d->MediaWiki.url();
     QUrlQuery query;
     query.addQueryItem(QStringLiteral("format"), QStringLiteral("xml"));
     query.addQueryItem(QStringLiteral("action"), QStringLiteral("query"));
@@ -217,7 +217,7 @@ void QueryImageinfo::doWorkSendRequest()
 
     // Set the request
     QNetworkRequest request(url);
-    request.setRawHeader("User-Agent", d->mediawiki.userAgent().toUtf8());
+    request.setRawHeader("User-Agent", d->MediaWiki.userAgent().toUtf8());
 
     // Send the request
     d->reply = d->manager->get(request);
@@ -316,4 +316,4 @@ void QueryImageinfo::doWorkProcessReply()
     emitResult();
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

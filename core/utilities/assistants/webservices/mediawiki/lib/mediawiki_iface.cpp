@@ -28,7 +28,7 @@
 
 #include <QString>
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 Iface::Iface(const QUrl& url, const QString& customUserAgent)
@@ -61,4 +61,4 @@ QNetworkAccessManager* Iface::manager() const
     return d->manager;
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

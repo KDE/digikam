@@ -26,20 +26,25 @@
 #ifndef TEST_GENERAL_H
 #define TEST_GENERAL_H
 
+// Qt includes
+
 #include <QObject>
 #include <QtTest>
 
+// KDE includes
+
 #include <kjob.h>
 
-#include "fakeserver/fakeserver.h"
+// Local includes
 
+#include "fakeserver/fakeserver.h"
 #include "mediawiki_iface.h"
 #include "mediawiki_querysiteinfogeneral.h"
 #include "mediawiki_generalinfo.h"
 
-using mediawiki::Iface;
-using mediawiki::QuerySiteInfoGeneral;
-using mediawiki::Generalinfo;
+using MediaWiki::Iface;
+using MediaWiki::QuerySiteInfoGeneral;
+using MediaWiki::Generalinfo;
 
 class QuerySiteInfoGeneralTest : public QObject
 {
@@ -60,6 +65,7 @@ void initTestCase()
     generalCount  = 0;
     this->request = QStringLiteral("/?format=xml&action=query&meta=siteinfo&siprop=general");
 }
+
 void QuerySiteInfoGeneralTestConnectTrue()
 {
     Iface mediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
@@ -133,7 +139,6 @@ void QuerySiteInfoGeneralTestAttribute()
 
 void QuerySiteInfoGeneralTestConnectFalseXML()
 {
-
     Iface mediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
     FakeServer server;
 

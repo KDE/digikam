@@ -37,9 +37,9 @@
 #include "mediawiki_querysiteinfousergroups.h"
 #include "mediawiki_usergroup.h"
 
-using mediawiki::Iface;
-using mediawiki::QuerySiteinfoUsergroups;
-using mediawiki::UserGroup;
+using MediaWiki::Iface;
+using MediaWiki::QuerySiteinfoUsergroups;
+using MediaWiki::UserGroup;
 
 Q_DECLARE_METATYPE(QList<UserGroup>)
 
@@ -70,8 +70,8 @@ private Q_SLOTS:
         fakeserver.setScenario(scenario);
         fakeserver.startAndWait();
 
-        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
-        QuerySiteinfoUsergroups * job = new QuerySiteinfoUsergroups(mediawiki);
+        Iface MediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        QuerySiteinfoUsergroups * job = new QuerySiteinfoUsergroups(MediaWiki);
 
         job->setIncludeNumber(includeNumber);
 
@@ -83,7 +83,7 @@ private Q_SLOTS:
         QCOMPARE(requests.size(), 1);
 
         FakeServer::Request request = requests[0];
-        QCOMPARE(request.agent, mediawiki.userAgent());
+        QCOMPARE(request.agent, MediaWiki.userAgent());
         QCOMPARE(request.type, QStringLiteral("GET"));
         if (includeNumber) {
             QCOMPARE(request.value, QStringLiteral("/?format=xml&action=query&meta=siteinfo&siprop=usergroups&sinumberingroup"));

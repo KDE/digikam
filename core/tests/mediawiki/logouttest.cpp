@@ -26,17 +26,23 @@
 #ifndef TEST_LOGOUT_H
 #define TEST_LOGOUT_H
 
+// Qt includes
+
 #include <QObject>
 #include <QtTest>
 
+// KDE includes
+
 #include <kjob.h>
+
+// Local includes
 
 #include "mediawiki_iface.h"
 #include "mediawiki_logout.h"
 #include "fakeserver/fakeserver.h"
 
-using mediawiki::Iface;
-using mediawiki::Logout;
+using MediaWiki::Iface;
+using MediaWiki::Logout;
 
 class LogoutTest : public QObject
 {
@@ -54,10 +60,10 @@ private Q_SLOTS:
 
     void initTestCase()
     {
-        logoutCount = 0;
+        logoutCount       = 0;
         this->m_mediaWiki = new Iface(QUrl(QStringLiteral("http://127.0.0.1:12566")));
-        this->m_server = new FakeServer;
-        this->request = QStringLiteral("/?format=xml&action=logout");
+        this->m_server    = new FakeServer;
+        this->request     = QStringLiteral("/?format=xml&action=logout");
     }
 
     void logoutTestConnectTrue()
@@ -93,7 +99,7 @@ private:
 
     int         logoutCount;
     QString     request;
-    Iface*  m_mediaWiki;
+    Iface*      m_mediaWiki;
     FakeServer* m_server;
 };
 

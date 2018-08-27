@@ -38,7 +38,7 @@
 #include "mediawiki_job_p.h"
 #include "mediawiki_iface.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class ParsePrivate : public JobPrivate
@@ -46,16 +46,16 @@ class ParsePrivate : public JobPrivate
 
 public:
 
-    ParsePrivate(Iface& mediawiki)
-        : JobPrivate(mediawiki)
+    ParsePrivate(Iface& MediaWiki)
+        : JobPrivate(MediaWiki)
     {
     }
 
     QMap<QString, QString> requestParameter;
 };
 
-Parse::Parse(Iface& mediawiki, QObject* const parent)
-    : Job(*new ParsePrivate(mediawiki), parent)
+Parse::Parse(Iface& MediaWiki, QObject* const parent)
+    : Job(*new ParsePrivate(MediaWiki), parent)
 {
 }
 
@@ -96,7 +96,7 @@ void Parse::doWorkSendRequest()
 {
     Q_D(Parse);
 
-    QUrl url = d->mediawiki.url();
+    QUrl url = d->MediaWiki.url();
     QUrlQuery query;
     query.addQueryItem(QStringLiteral("format"), QStringLiteral("xml"));
     query.addQueryItem(QStringLiteral("action"), QStringLiteral("parse"));
@@ -111,7 +111,7 @@ void Parse::doWorkSendRequest()
 
     // Set the request
     QNetworkRequest request(url);
-    request.setRawHeader("User-Agent", d->mediawiki.userAgent().toUtf8());
+    request.setRawHeader("User-Agent", d->MediaWiki.userAgent().toUtf8());
 
     // Send the request
     d->reply = d->manager->get(request);
@@ -176,4 +176,4 @@ void Parse::doWorkProcessReply()
     emitResult();
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

@@ -35,7 +35,7 @@
 
 #include "digikam_export.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 /**
@@ -85,6 +85,6 @@ private:
     friend class JobPrivate;
 };
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // MEDIAWIKI_MEDIAWIKI_H

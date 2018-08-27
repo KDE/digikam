@@ -31,7 +31,7 @@
 
 #include <QUrl>
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Q_DECL_HIDDEN Page::PagePrivate
@@ -233,4 +233,4 @@ QDateTime Page::pageStarttimestamp() const
     return d->m_starttimestamp;
 }
 
-} // namespace mediawiki;
+} // namespace MediaWiki;

@@ -61,7 +61,7 @@
 #include "mediawikiwidget.h"
 #include "mediawikitalker.h"
 
-using namespace mediawiki;
+using namespace MediaWiki;
 
 namespace Digikam
 {
@@ -73,7 +73,7 @@ public:
     explicit Private()
     {
         widget       = 0;
-        mediawiki    = 0;
+        MediaWiki    = 0;
         iface        = 0;
         uploadTalker = 0;
     }
@@ -86,7 +86,7 @@ public:
     QUrl            wikiUrl;
 
     MediaWikiWidget* widget;
-    Iface*           mediawiki;
+    Iface*           MediaWiki;
     DInfoInterface*  iface;
     MediaWikiTalker* uploadTalker;
 };
@@ -96,7 +96,7 @@ MediaWikiWindow::MediaWikiWindow(DInfoInterface* const iface, QWidget* const /*p
       d(new Private)
 {
     d->tmpPath.clear();
-    d->tmpDir       = WSToolUtils::makeTemporaryDir("mediawiki").absolutePath() + QLatin1Char('/');
+    d->tmpDir       = WSToolUtils::makeTemporaryDir("MediaWiki").absolutePath() + QLatin1Char('/');
     d->widget       = new MediaWikiWidget(iface, this);
     d->uploadTalker = 0;
     d->login        = QString();
@@ -316,7 +316,7 @@ void MediaWikiWindow::slotStartTransfer()
 
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("MediaWiki export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("mediawiki")).pixmap(22, 22));
+    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("MediaWiki")).pixmap(22, 22));
     d->uploadTalker->slotBegin();
 }
 
@@ -332,8 +332,8 @@ void MediaWikiWindow::slotDoLogin(const QString& login, const QString& pass, con
     d->pass               = pass;
     d->wikiName           = wikiName;
     d->wikiUrl            = wikiUrl;
-    d->mediawiki          = new Iface(wikiUrl);
-    Login* const loginJob = new Login(*d->mediawiki, login, pass);
+    d->MediaWiki          = new Iface(wikiUrl);
+    Login* const loginJob = new Login(*d->MediaWiki, login, pass);
 
     connect(loginJob, SIGNAL(result(KJob*)),
             this, SLOT(slotLoginHandle(KJob*)));
@@ -354,7 +354,7 @@ int MediaWikiWindow::slotLoginHandle(KJob* loginJob)
     }
     else
     {
-        d->uploadTalker = new MediaWikiTalker(d->iface, d->mediawiki, this);
+        d->uploadTalker = new MediaWikiTalker(d->iface, d->MediaWiki, this);
         startButton()->setEnabled(true);
         d->widget->invertAccountLoginBox();
         d->widget->updateLabels(d->login, d->wikiName, d->wikiUrl.toString());

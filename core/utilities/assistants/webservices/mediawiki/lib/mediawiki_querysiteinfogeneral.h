@@ -36,7 +36,7 @@
 #include "mediawiki_job.h"
 #include "mediawiki_generalinfo.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Iface;
@@ -63,10 +63,10 @@ public:
 
     /**
      * @brief Constructs a QuerySiteInfoGeneral job.
-     * @param mediawiki the mediawiki concerned by the job
+     * @param MediaWiki the MediaWiki concerned by the job
      * @param parent the QObject parent
      */
-    explicit QuerySiteInfoGeneral(Iface& mediawiki, QObject* const parent = 0);
+    explicit QuerySiteInfoGeneral(Iface& MediaWiki, QObject* const parent = 0);
 
     /**
      * @brief Destroys the QuerySiteInfoGeneral job.
@@ -92,6 +92,6 @@ private Q_SLOTS:
     void doWorkProcessReply();
 };
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // MEDIAWIKI_QUERYSITEINFOGENERAL_H

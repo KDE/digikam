@@ -29,7 +29,7 @@
 #include "mediawiki_job.h"
 #include "digikam_export.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Iface;
@@ -51,7 +51,7 @@ public:
      * @brief Constructs a Logout job.
      * @param parent the QObject parent
      */
-    explicit Logout(Iface& mediawiki, QObject* const parent = 0);
+    explicit Logout(Iface& MediaWiki, QObject* const parent = 0);
 
     /**
      * @brief Destroys the Logout job.
@@ -69,6 +69,6 @@ private Q_SLOTS:
     void doWorkProcessReply();
 };
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // MEDIAWIKI_LOGOUT_H

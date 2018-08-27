@@ -38,7 +38,7 @@
 #include "mediawiki_job.h"
 #include "mediawiki_queryinfo.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Iface;
@@ -129,7 +129,7 @@ public:
      * @brief Constructs an Upload job.
      * @param parent the QObject parent
      */
-    Upload(Iface& mediawiki, QObject* const parent = 0);
+    Upload(Iface& MediaWiki, QObject* const parent = 0);
 
     /**
      * @brief Destroys the Upload job.
@@ -171,6 +171,6 @@ private Q_SLOTS:
     void doWorkProcessReply();
 };
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // UPLOAD_H

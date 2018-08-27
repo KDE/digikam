@@ -32,7 +32,7 @@
 
 #include "digikam_export.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 /**
@@ -197,6 +197,6 @@ private:
     RevisionPrivate* const d;
 };
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // MEDIAWIKI_REVISION_H

@@ -25,12 +25,16 @@
 
 #include "fakeserver.h"
 
+// C++ includes
+
 #include <iostream>
+
+// Qt includes
 
 #include <QFile>
 
 FakeServer::FakeServer(QObject* const parent)
-    :  QThread( parent )
+    :  QThread(parent)
 {
     m_clientSocket = 0;
     m_tcpServer    = 0;

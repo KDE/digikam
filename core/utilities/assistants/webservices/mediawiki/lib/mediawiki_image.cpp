@@ -28,7 +28,7 @@
 
 #include <algorithm>
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Q_DECL_HIDDEN Image::Private
@@ -87,4 +87,4 @@ void Image::setTitle(const QString& title)
     d->title = title;
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

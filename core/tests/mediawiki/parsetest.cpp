@@ -26,17 +26,23 @@
 #ifndef TEST_PARSE_H
 #define TEST_PARSE_H
 
+// Qt includes
+
 #include <QObject>
 #include <QtTest>
 
+// KDE includes
+
 #include <kjob.h>
+
+// Local includes
 
 #include "mediawiki_iface.h"
 #include "mediawiki_parse.h"
 #include "fakeserver/fakeserver.h"
 
-using mediawiki::Iface;
-using mediawiki::Parse;
+using MediaWiki::Iface;
+using MediaWiki::Parse;
 
 Q_DECLARE_METATYPE(FakeServer::Request)
 Q_DECLARE_METATYPE(QVariant)
@@ -44,11 +50,11 @@ Q_DECLARE_METATYPE(Parse*)
 
 QString QStringFromFile(const QString& fileName)
 {
-    QFile file( fileName );
+    QFile file(fileName);
 
     if (!file.open( QFile::ReadOnly ))
         return QString();
-    
+
     QTextStream in(&file);
     QString scenario;
     // When loading from files we never have the authentication phase
@@ -94,7 +100,7 @@ private Q_SLOTS:
         QString result   = QStringFromFile(QStringLiteral("./parsetest_resulttrue.rc"));
 
         Parse* const job = new Parse(*m_mediaWiki, NULL);
-        parseCount = 0;
+        parseCount       = 0;
         FakeServer fakeserver;
         fakeserver.setScenario(scenario);
         fakeserver.startAndWait();
@@ -127,14 +133,14 @@ private Q_SLOTS:
         job->exec();
         FakeServer::Request serverrequest = fakeserver.getRequest()[0];
         QCOMPARE(serverrequest.type, QStringLiteral("GET"));
-        QCOMPARE(serverrequest.value, request);        
+        QCOMPARE(serverrequest.value, request);
         QCOMPARE(this->parseCount, 1);
     }
 
     void parseSetters_data()
     {
         QTest::addColumn<QString>("scenario");
-        QTest::addColumn<QString>("request");        
+        QTest::addColumn<QString>("request");
         QTest::addColumn<Parse*>("job");
 
         Parse* const p1 = new Parse( *m_mediaWiki, NULL);
@@ -177,7 +183,7 @@ private Q_SLOTS:
         parseCount = 0;
         FakeServer fakeserver;
 
-        if(scenario != QStringLiteral("error serveur"))
+        if (scenario != QStringLiteral("error serveur"))
         {
             fakeserver.addScenario(scenario);
             fakeserver.startAndWait();
@@ -191,7 +197,7 @@ private Q_SLOTS:
 
         job->exec();
 
-        if(scenario != QStringLiteral("error serveur"))
+        if (scenario != QStringLiteral("error serveur"))
         {
             QList<FakeServer::Request> requests = fakeserver.getRequest();
             QCOMPARE(requests.size(), 1);
@@ -200,7 +206,7 @@ private Q_SLOTS:
         QCOMPARE(job->error(), error);
         QCOMPARE(parseCount, 1);
 
-        if(scenario != QStringLiteral("error serveur"))
+        if (scenario != QStringLiteral("error serveur"))
         {
             QVERIFY(fakeserver.isAllScenarioDone());
         }
@@ -238,7 +244,7 @@ private:
     int        parseCount;
     QString    request;
     QString    parseResult;
-    Iface* m_mediaWiki;
+    Iface*     m_mediaWiki;
 };
 
 QTEST_MAIN(ParseTest)

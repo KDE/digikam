@@ -27,7 +27,7 @@
 
 #include <algorithm>
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Q_DECL_HIDDEN Imageinfo::Private
@@ -238,4 +238,4 @@ void Imageinfo::setMetadata(const QHash<QString, QVariant>& metadata)
      d->metadata = metadata;
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

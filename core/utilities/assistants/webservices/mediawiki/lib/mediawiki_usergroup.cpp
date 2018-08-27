@@ -27,7 +27,7 @@
 
 #include <algorithm>
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Q_DECL_HIDDEN UserGroup::UserGroupPrivate
@@ -63,7 +63,7 @@ UserGroup& UserGroup::operator=(UserGroup other)
     return *this;
 }
 
-bool UserGroup::operator==(const mediawiki::UserGroup& other) const
+bool UserGroup::operator==(const MediaWiki::UserGroup& other) const
 {
     return number() == other.number() &&
            rights() == other.rights() &&
@@ -105,4 +105,4 @@ void UserGroup::setNumber(qint64 number)
     d->number = number;
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

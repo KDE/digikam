@@ -32,7 +32,7 @@
 
 #include "digikam_export.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Iface;
@@ -96,6 +96,6 @@ private Q_SLOTS:
     void processUploadProgress(qint64 bytesReceived, qint64 bytesTotal);
 };
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // MEDIAWIKI_JOB_H

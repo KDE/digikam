@@ -27,7 +27,7 @@
 
 #include <algorithm>
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Q_DECL_HIDDEN Revision::RevisionPrivate
@@ -184,4 +184,4 @@ QString Revision::rollback() const
     return d->rollback;
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

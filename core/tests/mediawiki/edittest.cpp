@@ -35,8 +35,8 @@
 #include "mediawiki_edit.h"
 #include "fakeserver/fakeserver.h"
 
-using mediawiki::Iface;
-using mediawiki::Edit;
+using MediaWiki::Iface;
+using MediaWiki::Edit;
 
 Q_DECLARE_METATYPE(FakeServer::Request)
 Q_DECLARE_METATYPE(QVariant)
@@ -52,7 +52,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void editHandle(KJob* )
+    void editHandle(KJob*)
     {
         editCount++;
     }
@@ -95,6 +95,7 @@ private Q_SLOTS:
         QCOMPARE(job->error(), (int)Edit::NoError);
         QCOMPARE(this->editCount, 1);
     }
+
     void editSetters_data()
     {
         QTest::addColumn<QString>("request");
@@ -274,19 +275,18 @@ private Q_SLOTS:
         QFETCH(QString, scenario);
         QFETCH(int, error);
 
-
         editCount = 0;
-        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface MediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer fakeserver;
 
-        if(scenario != QStringLiteral("error serveur"))
+        if (scenario != QStringLiteral("error serveur"))
         {
             fakeserver.setScenario(m_infoScenario);
             fakeserver.addScenario(scenario);
             fakeserver.startAndWait();
         }
 
-        Edit* const job = new Edit(mediawiki, NULL);
+        Edit* const job = new Edit(MediaWiki, NULL);
         job->setSection(QStringLiteral("new"));
         job->setSummary(QStringLiteral("Hello World") );
         job->setPageName( QStringLiteral("Talk:Main Page") );
@@ -300,7 +300,7 @@ private Q_SLOTS:
 
         job->exec();
 
-        if(scenario != QStringLiteral("error serveur"))
+        if (scenario != QStringLiteral("error serveur"))
         {
             QList<FakeServer::Request> requests = fakeserver.getRequest();
             QCOMPARE(requests.size(), 2);
@@ -309,11 +309,12 @@ private Q_SLOTS:
         QCOMPARE(job->error(), error);
         QCOMPARE(editCount, 1);
 
-        if(scenario != QStringLiteral("error serveur"))
+        if (scenario != QStringLiteral("error serveur"))
         {
             QVERIFY(fakeserver.isAllScenarioDone());
         }
     }
+
     void error_data()
     {
         QTest::addColumn<QString>("scenario");
@@ -434,7 +435,7 @@ private:
     QString    CaptchaAnswer;
     QString    request;
     QString    m_infoScenario;
-    Iface* m_mediaWiki;
+    Iface*     m_mediaWiki;
 };
 
 QTEST_MAIN(EditTest)

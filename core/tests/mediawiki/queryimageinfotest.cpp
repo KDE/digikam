@@ -23,16 +23,19 @@
  *
  * ============================================================ */
 
+// Qt includes
+
 #include <QObject>
 #include <QTest>
 
-#include "fakeserver/fakeserver.h"
+// Local includes
 
+#include "fakeserver/fakeserver.h"
 #include "mediawiki_iface.h"
 #include "mediawiki_imageinfo.h"
 #include "mediawiki_queryimageinfo.h"
 
-using namespace mediawiki;
+using namespace MediaWiki;
 
 class QueryImageinfoTest : public QObject
 {
@@ -67,18 +70,20 @@ private Q_SLOTS:
         fakeserver.startAndWait();
 
         // Prepare the job
-        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
-        QueryImageinfo* job = new QueryImageinfo(mediawiki);
+        Iface MediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        QueryImageinfo* const job = new QueryImageinfo(MediaWiki);
         job->setTitle(QStringLiteral("Image:Image.bmp"));
+
         job->setProperties(
-            QueryImageinfo::Timestamp|
-            QueryImageinfo::User|
-            QueryImageinfo::Comment|
-            QueryImageinfo::Url|
-            QueryImageinfo::Size|
-            QueryImageinfo::Sha1|
-            QueryImageinfo::Mime|
+            QueryImageinfo::Timestamp |
+            QueryImageinfo::User      |
+            QueryImageinfo::Comment   |
+            QueryImageinfo::Url       |
+            QueryImageinfo::Size      |
+            QueryImageinfo::Sha1      |
+            QueryImageinfo::Mime      |
             QueryImageinfo::Metadata);
+
         job->setLimit(1u);
         job->setBeginTimestamp(QDateTime(QDate(2008, 06, 06), QTime(22, 27, 45, 0)));
         job->setEndTimestamp(QDateTime(QDate(2007, 06, 06), QTime(22, 27, 45, 0)));
@@ -96,11 +101,13 @@ private Q_SLOTS:
         // Test requests sent
         const QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 2);
-        for (unsigned int i = 0; i < 2; ++i)
+
+        for (unsigned int i = 0 ; i < 2 ; ++i)
         {
-            QCOMPARE(requests[i].agent, mediawiki.userAgent());
+            QCOMPARE(requests[i].agent, MediaWiki.userAgent());
             QCOMPARE(requests[i].type, QStringLiteral("GET"));
         }
+
         QCOMPARE(requests[0].value, QStringLiteral("/?format=xml&action=query&titles=Image:Image.bmp&prop=imageinfo&iiprop=timestamp%7Cuser%7Ccomment%7Curl%7Csize%7Csha1%7Cmime%7Cmetadata&iilimit=1&iistart=2008-06-06T22:27:45Z&iiend=2007-06-06T22:27:45Z&iiurlwidth=78&iiurlheight=102"));
         QCOMPARE(requests[1].value, QStringLiteral("/?format=xml&action=query&titles=Image:Image.bmp&prop=imageinfo&iiprop=timestamp%7Cuser%7Ccomment%7Curl%7Csize%7Csha1%7Cmime%7Cmetadata&iilimit=1&iistart=2007-06-06T22:27:45Z&iiend=2007-06-06T22:27:45Z&iiurlwidth=78&iiurlheight=102"));
 
@@ -110,6 +117,7 @@ private Q_SLOTS:
             QHash<QString, QVariant> metadata;
             metadata[QStringLiteral("Name1")] = QStringLiteral("Value1");
             metadata[QStringLiteral("Name2")] = QStringLiteral("Value2");
+
             {
                 Imageinfo imageinfoExpected;
                 imageinfoExpected.setTimestamp(QDateTime(QDate(2008, 06, 06), QTime(22, 27, 45, 0)));
@@ -128,6 +136,7 @@ private Q_SLOTS:
                 imageinfoExpected.setMetadata(metadata);
                 imageinfosExpected.push_back(QList<Imageinfo>() << imageinfoExpected);
             }
+
             {
                 Imageinfo imageinfoExpected;
                 imageinfoExpected.setTimestamp(QDateTime(QDate(2007, 06, 06), QTime(22, 27, 45, 0)));
@@ -144,6 +153,7 @@ private Q_SLOTS:
                 imageinfosExpected.push_back(QList<Imageinfo>() << imageinfoExpected);
             }
         }
+
         QCOMPARE(imageinfosReceived, imageinfosExpected);
     }
 
@@ -154,17 +164,19 @@ private Q_SLOTS:
         fakeserver.startAndWait();
 
         // Prepare the job
-        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
-        QueryImageinfo* job = new QueryImageinfo(mediawiki);
+        Iface MediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        QueryImageinfo* const job = new QueryImageinfo(MediaWiki);
+
         job->setProperties(
-            QueryImageinfo::Timestamp|
-            QueryImageinfo::User|
-            QueryImageinfo::Comment|
-            QueryImageinfo::Url|
-            QueryImageinfo::Size|
-            QueryImageinfo::Sha1|
-            QueryImageinfo::Mime|
+            QueryImageinfo::Timestamp |
+            QueryImageinfo::User      |
+            QueryImageinfo::Comment   |
+            QueryImageinfo::Url       |
+            QueryImageinfo::Size      |
+            QueryImageinfo::Sha1      |
+            QueryImageinfo::Mime      |
             QueryImageinfo::Metadata);
+
         job->setLimit(1u);
         job->setBeginTimestamp(QDateTime(QDate(2008, 06, 06), QTime(22, 27, 45, 0)));
         job->setEndTimestamp(QDateTime(QDate(2007, 06, 06), QTime(22, 27, 45, 0)));

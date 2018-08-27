@@ -42,15 +42,15 @@
 #include "mediawiki_iface.h"
 #include "mediawiki_queryinfo.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 class UploadPrivate : public JobPrivate
 {
 
 public:
 
-    UploadPrivate(Iface& mediawiki)
-        : JobPrivate(mediawiki)
+    UploadPrivate(Iface& MediaWiki)
+        : JobPrivate(MediaWiki)
     {
         file = 0;
     }
@@ -88,8 +88,8 @@ public:
     QString    token;
 };
 
-Upload::Upload(Iface& mediawiki, QObject* const parent)
-    : Job(*new UploadPrivate(mediawiki), parent)
+Upload::Upload(Iface& MediaWiki, QObject* const parent)
+    : Job(*new UploadPrivate(MediaWiki), parent)
 {
 }
 
@@ -125,7 +125,7 @@ void Upload::start()
 {
     Q_D(Upload);
 
-    QueryInfo* info = new QueryInfo(d->mediawiki, this);
+    QueryInfo* info = new QueryInfo(d->MediaWiki, this);
     info->setPageName(QStringLiteral("File:") + d->filename);
     info->setToken(QStringLiteral("edit"));
 
@@ -151,7 +151,7 @@ void Upload::doWorkSendRequest(Page page)
     else if (extension == QLatin1String("svg"))
         extension += QStringLiteral("+xml");
 
-    QUrl url = d->mediawiki.url();
+    QUrl url = d->MediaWiki.url();
     QUrlQuery query;
     query.addQueryItem(QStringLiteral("action"), QStringLiteral("upload"));
     query.addQueryItem(QStringLiteral("format"), QStringLiteral("xml"));
@@ -159,16 +159,16 @@ void Upload::doWorkSendRequest(Page page)
 
     // Add the cookies
     QByteArray cookie = "";
-    QList<QNetworkCookie> mediawikiCookies = d->manager->cookieJar()->cookiesForUrl(d->mediawiki.url());
-    for(int i = 0; i < mediawikiCookies.size(); ++i)
+    QList<QNetworkCookie> MediaWikiCookies = d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url());
+    for(int i = 0; i < MediaWikiCookies.size(); ++i)
     {
-        cookie += mediawikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
+        cookie += MediaWikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
         cookie += ';';
     }
 
     // Set the request
     QNetworkRequest request( url );
-    request.setRawHeader("User-Agent", d->mediawiki.userAgent().toUtf8());
+    request.setRawHeader("User-Agent", d->MediaWiki.userAgent().toUtf8());
     request.setRawHeader("Accept-Charset", "utf-8");
 
     QByteArray boundary = "-----------------------------15827188141577679942014851228";
@@ -281,4 +281,4 @@ void Upload::doWorkProcessReply()
     emitResult();
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

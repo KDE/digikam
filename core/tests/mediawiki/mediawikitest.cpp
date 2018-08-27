@@ -23,44 +23,48 @@
  *
  * ============================================================ */
 
+// Qt includes
+
 #include <QObject>
 #include <QString>
 #include <QUrl>
 #include <QtTest>
 
+// Local includes
+
 #include "mediawiki_iface.h"
 
-using mediawiki::Iface;
+using MediaWiki::Iface;
 
 class IfaceTest : public QObject
 {
-
     Q_OBJECT
 
 private Q_SLOTS:
 
-    void testConstructor() {
+    void testConstructor()
+    {
         QFETCH(QUrl, url);
         QFETCH(QString, customUserAgent);
         QFETCH(QString, userAgent);
 
-        Iface mediawiki(url, customUserAgent);
+        Iface MediaWiki(url, customUserAgent);
 
-        QCOMPARE(mediawiki.url(), url);
-        QCOMPARE(mediawiki.userAgent(), userAgent);
+        QCOMPARE(MediaWiki.url(), url);
+        QCOMPARE(MediaWiki.userAgent(), userAgent);
     }
 
-    void testConstructor_data() {
+    void testConstructor_data()
+    {
         QTest::addColumn<QUrl>("url");
         QTest::addColumn<QString>("customUserAgent");
         QTest::addColumn<QString>("userAgent");
 
-        QTest::newRow("") << QUrl(QStringLiteral("http://127.0.0.1:12566")) << QString() << QStringLiteral("mediawiki-silk");
-        QTest::newRow("") << QUrl(QStringLiteral("commons.wikimedia.org/w/api.php")) << QString() << QStringLiteral("mediawiki-silk");
-        QTest::newRow("") << QUrl(QStringLiteral("http://commons.wikimedia.org/w/api.php")) << QStringLiteral("test1") << QStringLiteral("test1-mediawiki-silk");
-        QTest::newRow("") << QUrl(QStringLiteral("http://commons.wikimedia.org/w/api.php/")) << QStringLiteral("test2") << QStringLiteral("test2-mediawiki-silk");
+        QTest::newRow("") << QUrl(QStringLiteral("http://127.0.0.1:12566")) << QString() << QStringLiteral("MediaWiki-silk");
+        QTest::newRow("") << QUrl(QStringLiteral("commons.wikimedia.org/w/api.php")) << QString() << QStringLiteral("MediaWiki-silk");
+        QTest::newRow("") << QUrl(QStringLiteral("http://commons.wikimedia.org/w/api.php")) << QStringLiteral("test1") << QStringLiteral("test1-MediaWiki-silk");
+        QTest::newRow("") << QUrl(QStringLiteral("http://commons.wikimedia.org/w/api.php/")) << QStringLiteral("test2") << QStringLiteral("test2-MediaWiki-silk");
     }
-
 };
 
 QTEST_MAIN(IfaceTest)

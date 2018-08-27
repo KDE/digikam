@@ -1146,8 +1146,8 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportMediawikiAction = new QAction(i18n("Export to MediaWiki..."), this);
-    m_exportMediawikiAction->setIcon(QIcon::fromTheme(QLatin1String("mediawiki")));
-    actionCollection()->addAction(QLatin1String("export_mediawiki"), m_exportMediawikiAction);
+    m_exportMediawikiAction->setIcon(QIcon::fromTheme(QLatin1String("MediaWiki")));
+    actionCollection()->addAction(QLatin1String("export_MediaWiki"), m_exportMediawikiAction);
 
     connect(m_exportMediawikiAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));

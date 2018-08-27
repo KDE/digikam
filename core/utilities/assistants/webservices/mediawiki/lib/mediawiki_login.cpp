@@ -40,7 +40,7 @@
 #include "mediawiki_iface.h"
 #include "mediawiki_job_p.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class LoginPrivate : public JobPrivate
@@ -48,8 +48,8 @@ class LoginPrivate : public JobPrivate
 
 public:
 
-    LoginPrivate(Iface& mediawiki, const QString& login, const QString& password)
-        : JobPrivate(mediawiki),
+    LoginPrivate(Iface& MediaWiki, const QString& login, const QString& password)
+        : JobPrivate(MediaWiki),
           login(login),
           password(password)
     {
@@ -88,8 +88,8 @@ public:
     QString lgtoken;
 };
 
-Login::Login(Iface& mediawiki, const QString& login, const QString& password, QObject* const parent)
-    : Job(*new LoginPrivate(mediawiki, login, password), parent)
+Login::Login(Iface& MediaWiki, const QString& login, const QString& password, QObject* const parent)
+    : Job(*new LoginPrivate(MediaWiki, login, password), parent)
 {
 }
 
@@ -107,7 +107,7 @@ void Login::doWorkSendRequest()
     Q_D(Login);
 
     // Set the url
-    QUrl url   = d->mediawiki.url();
+    QUrl url   = d->MediaWiki.url();
     d->baseUrl = url;
 
     QUrlQuery query;
@@ -118,7 +118,7 @@ void Login::doWorkSendRequest()
 
     // Set the request
     QNetworkRequest request(url);
-    request.setRawHeader(QByteArrayLiteral("User-Agent"), d->mediawiki.userAgent().toUtf8());
+    request.setRawHeader(QByteArrayLiteral("User-Agent"), d->MediaWiki.userAgent().toUtf8());
     request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/x-www-form-urlencoded"));
 
     // Send the request
@@ -162,7 +162,7 @@ void Login::doWorkProcessReply()
                     d->lgtoken     = attrs.value(QStringLiteral("lgtoken")).toString();
                     d->lgsessionid = attrs.value(QStringLiteral("sessionid")).toString();
 
-                    if(d->manager->cookieJar()->cookiesForUrl(d->mediawiki.url()).isEmpty())
+                    if(d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url()).isEmpty())
                     {
                         QList<QNetworkCookie> cookies;
                         QString prefix = attrs.value(QStringLiteral("cookieprefix")).toString();
@@ -187,7 +187,7 @@ void Login::doWorkProcessReply()
                         QNetworkCookie cookie4(prefixToken.toUtf8(),attrs.value(QStringLiteral("lgtoken")).toString().toUtf8());
                         cookies.append(cookie4);
 
-                        d->manager->cookieJar()->setCookiesFromUrl(cookies, d->mediawiki.url());
+                        d->manager->cookieJar()->setCookiesFromUrl(cookies, d->MediaWiki.url());
                     }
 
                     d->reply->close();
@@ -201,14 +201,14 @@ void Login::doWorkProcessReply()
                     d->lgtoken     = attrs.value(QStringLiteral("token")).toString();
                     d->lgsessionid = attrs.value(QStringLiteral("sessionid")).toString();
 
-                    if(d->manager->cookieJar()->cookiesForUrl(d->mediawiki.url()).isEmpty())
+                    if(d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url()).isEmpty())
                     {
                         QString prefix = attrs.value(QStringLiteral("cookieprefix")).toString();
                         prefix.append(QStringLiteral("_session"));
                         QNetworkCookie cookie(prefix.toUtf8(),QString(d->lgsessionid).toUtf8());
                         QList<QNetworkCookie> cookies;
                         cookies.append(cookie);
-                        d->manager->cookieJar()->setCookiesFromUrl(cookies, d->mediawiki.url());
+                        d->manager->cookieJar()->setCookiesFromUrl(cookies, d->MediaWiki.url());
                     }
                 }
                 else if (attrs.value(QStringLiteral("result")).toString() == QLatin1String("WrongToken"))
@@ -260,8 +260,8 @@ void Login::doWorkProcessReply()
 
     // Set the request
     QNetworkRequest request(url);
-    request.setRawHeader("User-Agent", d->mediawiki.userAgent().toUtf8());
-    request.setRawHeader("Cookie", d->manager->cookieJar()->cookiesForUrl(d->mediawiki.url()).at(0).toRawForm());
+    request.setRawHeader("User-Agent", d->MediaWiki.userAgent().toUtf8());
+    request.setRawHeader("Cookie", d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url()).at(0).toRawForm());
     request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/x-www-form-urlencoded"));
 
     // Send the request
@@ -272,4 +272,4 @@ void Login::doWorkProcessReply()
             this, SLOT(doWorkProcessReply()));
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

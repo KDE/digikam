@@ -45,7 +45,7 @@
 #include "mediawiki_queryinfo.h"
 #include "mediawiki_job_p.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Result
@@ -61,8 +61,8 @@ class EditPrivate : public JobPrivate
 {
 public:
 
-    EditPrivate(Iface& mediawiki)
-        : JobPrivate(mediawiki)
+    EditPrivate(Iface& MediaWiki)
+        : JobPrivate(MediaWiki)
     {
     }
 
@@ -251,7 +251,7 @@ Edit::~Edit()
 void Edit::start()
 {
     Q_D(Edit);
-    QueryInfo* const info = new QueryInfo(d->mediawiki,this);
+    QueryInfo* const info = new QueryInfo(d->MediaWiki,this);
     info->setPageName(d->requestParameter[QStringLiteral("title")]);
     info->setToken(QStringLiteral("edit"));
 
@@ -266,7 +266,7 @@ void Edit::doWorkSendRequest(Page page)
     Q_D(Edit);
     d->requestParameter[QStringLiteral("token")] = page.pageEditToken();
     // Set the url
-    QUrl    url = d->mediawiki.url();
+    QUrl    url = d->MediaWiki.url();
     QUrlQuery query;
     query.addQueryItem(QStringLiteral("format"), QStringLiteral("xml"));
     query.addQueryItem(QStringLiteral("action"), QStringLiteral("edit"));
@@ -300,11 +300,11 @@ void Edit::doWorkSendRequest(Page page)
     }
 
     QByteArray cookie;
-    QList<QNetworkCookie> mediawikiCookies = d->manager->cookieJar()->cookiesForUrl(d->mediawiki.url());
+    QList<QNetworkCookie> MediaWikiCookies = d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url());
 
-    for(int i = 0 ; i < mediawikiCookies.size(); ++i)
+    for(int i = 0 ; i < MediaWikiCookies.size(); ++i)
     {
-        cookie += mediawikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
+        cookie += MediaWikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
         cookie += ';';
     }
 
@@ -315,7 +315,7 @@ void Edit::doWorkSendRequest(Page page)
 
     // Set the request
     QNetworkRequest request( url );
-    request.setRawHeader("User-Agent", d->mediawiki.userAgent().toUtf8());
+    request.setRawHeader("User-Agent", d->MediaWiki.userAgent().toUtf8());
     request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/x-www-form-urlencoded"));
     request.setRawHeader( "Cookie", cookie );
 
@@ -418,17 +418,17 @@ void Edit::finishedCaptcha(const QString& captcha)
     url.setQuery(query);
     QString data      = url.toString();
     QByteArray cookie;
-    QList<QNetworkCookie> mediawikiCookies = d->manager->cookieJar()->cookiesForUrl(d->mediawiki.url());
+    QList<QNetworkCookie> MediaWikiCookies = d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url());
 
-    for(int i = 0 ; i < mediawikiCookies.size() ; ++i)
+    for(int i = 0 ; i < MediaWikiCookies.size() ; ++i)
     {
-        cookie += mediawikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
+        cookie += MediaWikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
         cookie += ';';
     }
 
     // Set the request
     QNetworkRequest request( url );
-    request.setRawHeader("User-Agent", d->mediawiki.userAgent().toUtf8());
+    request.setRawHeader("User-Agent", d->MediaWiki.userAgent().toUtf8());
     request.setRawHeader( "Cookie", cookie );
     request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/x-www-form-urlencoded"));
     // Send the request
@@ -438,4 +438,4 @@ void Edit::finishedCaptcha(const QString& captcha)
              this, SLOT(finishedEdit()) );
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

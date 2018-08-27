@@ -26,17 +26,23 @@
 #ifndef TEST_UPLOAD_H
 #define TEST_UPLOAD_H
 
+// Qt includes
+
 #include <QObject>
 #include <QtTest>
 
+// KDE includes
+
 #include <kjob.h>
+
+// Local includes
 
 #include "mediawiki_iface.h"
 #include "mediawiki_upload.h"
 #include "fakeserver/fakeserver.h"
 
-using mediawiki::Iface;
-using mediawiki::Upload;
+using MediaWiki::Iface;
+using MediaWiki::Upload;
 
 Q_DECLARE_METATYPE(FakeServer::Request)
 Q_DECLARE_METATYPE(Upload*)
@@ -47,7 +53,8 @@ class UploadTest : public QObject
 
 public Q_SLOTS:
 
-    void uploadHandle(KJob* ) {
+    void uploadHandle(KJob*)
+    {
         uploadCount++;
     }
 
@@ -55,10 +62,10 @@ private Q_SLOTS:
 
     void initTestCase()
     {
-        uploadCount = 0;
-        this->m_mediaWiki = new Iface(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        uploadCount          = 0;
+        this->m_mediaWiki    = new Iface(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         this->m_infoScenario = QStringLiteral("<api><query><pages><page pageid=\"27697087\" ns=\"0\" title=\"API\" touched=\"2010-11-25T13:59:03Z\" lastrevid=\"367741756\" counter=\"0\" length=\"70\" redirect=\"\" starttimestamp=\"2010-11-25T16:14:51Z\" edittoken=\"cecded1f35005d22904a35cc7b736e18%2B\" talkid=\"5477418\" fullurl=\"http://en.wikipedia.org/wiki/API\" editurl=\"http://en.wikipedia.org/w/index.php?title=API&action=edit\" ><protection /></page></pages></query></api>");
-        this->m_file = new QFile(QCoreApplication::applicationFilePath() + QStringLiteral("_image.jpg"));
+        this->m_file         = new QFile(QCoreApplication::applicationFilePath() + QStringLiteral("_image.jpg"));
         this->m_file->open(QIODevice::ReadOnly);
     }
 
@@ -81,13 +88,14 @@ private Q_SLOTS:
         QCOMPARE(job->error(), (int)Upload::NoError);
         QCOMPARE(this->uploadCount, 1);
     }
+
     void uploadSetters_data()
     {
         QTest::addColumn<QString>("request");
         QTest::addColumn<QString>("senario");
         QTest::addColumn<Upload*>("job");
 
-        Upload * e1 = new Upload( *m_mediaWiki, NULL);
+        Upload* const e1 = new Upload( *m_mediaWiki, NULL);
         e1->setFile(this->m_file);
         e1->setFilename(QStringLiteral("Test.jpeg"));
         e1->setComment(QStringLiteral("Test"));
@@ -104,16 +112,17 @@ private Q_SLOTS:
         QFETCH(int, error);
 
         uploadCount = 0;
-        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        Iface MediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
         FakeServer fakeserver;
-        if(scenario != QStringLiteral("error server"))
+
+        if (scenario != QStringLiteral("error server"))
         {
             fakeserver.setScenario(m_infoScenario);
             fakeserver.addScenario(scenario);
             fakeserver.startAndWait();
         }
 
-        Upload * job = new Upload(mediawiki, NULL);
+        Upload* const job = new Upload(MediaWiki, NULL);
         job->setFile(this->m_file);
         job->setFilename(QStringLiteral("Test.jpeg"));
         job->setComment(QStringLiteral("Test"));
@@ -122,7 +131,7 @@ private Q_SLOTS:
 
         job->exec();
 
-        if(scenario != QStringLiteral("error server"))
+        if (scenario != QStringLiteral("error server"))
         {
             QList<FakeServer::Request> requests = fakeserver.getRequest();
             QCOMPARE(requests.size(), 2);
@@ -130,11 +139,12 @@ private Q_SLOTS:
         QCOMPARE(job->error(), error);
         QCOMPARE(uploadCount, 1);
 
-        if(scenario != QStringLiteral("error server"))
+        if (scenario != QStringLiteral("error server"))
         {
             QVERIFY(fakeserver.isAllScenarioDone());
         }
     }
+
     void error_data()
     {
         QTest::addColumn<QString>("scenario");
@@ -205,7 +215,7 @@ private:
     QString    request;
     QString    m_infoScenario;
     QIODevice* m_file;
-    Iface* m_mediaWiki;
+    Iface*     m_mediaWiki;
 };
 
 QTEST_MAIN(UploadTest)

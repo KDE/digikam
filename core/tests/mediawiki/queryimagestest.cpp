@@ -23,18 +23,21 @@
  *
  * ============================================================ */
 
+// Qt includes
+
 #include <QObject>
 #include <QTest>
 
-#include "fakeserver/fakeserver.h"
+// Local includes
 
+#include "fakeserver/fakeserver.h"
 #include "mediawiki_iface.h"
 #include "mediawiki_queryimages.h"
 #include "mediawiki_image.h"
 
-using mediawiki::Iface;
-using mediawiki::QueryImages;
-using mediawiki::Image;
+using MediaWiki::Iface;
+using MediaWiki::QueryImages;
+using MediaWiki::Image;
 
 Q_DECLARE_METATYPE(QList<QString>)
 Q_DECLARE_METATYPE(QList<Image>)
@@ -47,7 +50,7 @@ class QueryImagesTest : public QObject
 
 public Q_SLOTS:
 
-    void imagesHandle(const QList<Image> & images)
+    void imagesHandle(const QList<Image>& images)
     {
         imagesReceivedList.push_back(images);
     }
@@ -69,7 +72,7 @@ private Q_SLOTS:
         // Constructs the fakeserver
         FakeServer fakeserver;
 
-        for (int i = 0; i < scenarios.size(); ++i)
+        for (int i = 0 ; i < scenarios.size() ; ++i)
         {
             if (i == 0)
             {
@@ -84,8 +87,8 @@ private Q_SLOTS:
         fakeserver.startAndWait();
 
         // Prepare the job
-        Iface mediawiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
-        QueryImages * job = new QueryImages(mediawiki);
+        Iface MediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
+        QueryImages* const job = new QueryImages(MediaWiki);
         job->setTitle(title);
         job->setLimit(limit);
         connect(job, SIGNAL(images(QList<Image>)), this, SLOT(imagesHandle(QList<Image>)));
@@ -97,12 +100,18 @@ private Q_SLOTS:
         // Test requests sent
         const QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), imagesExpectedList.size());
-        for (int i = 0; i < requests.size(); ++i) {
-            QCOMPARE(requests[i].agent, mediawiki.userAgent());
+
+        for (int i = 0 ; i < requests.size() ; ++i)
+        {
+            QCOMPARE(requests[i].agent, MediaWiki.userAgent());
             QCOMPARE(requests[i].type, QStringLiteral("GET"));
-            if (i == 0) {
+
+            if (i == 0)
+            {
                 QCOMPARE(requests[i].value, QString(QStringLiteral("/?format=xml&action=query&titles=") + title + QStringLiteral("&prop=images&imlimit=") + QString::number(limit)));
-            } else {
+            }
+            else
+            {
                 QCOMPARE(requests[i].value, QString(QStringLiteral("/?format=xml&action=query&titles=") + title + QStringLiteral("&prop=images&imlimit=") + QString::number(limit) + QStringLiteral("&imcontinue=1234%7C") + imagesExpectedList[i][0].title().remove(0, 5)));
             }
         }
@@ -114,7 +123,8 @@ private Q_SLOTS:
         QVERIFY(fakeserver.isAllScenarioDone());
     }
 
-    void testConstructor_data() {
+    void testConstructor_data()
+    {
         QTest::addColumn<QList<QString> >("scenarios");
         QTest::addColumn<QString>("title");
         QTest::addColumn<unsigned int>("limit");
@@ -123,7 +133,7 @@ private Q_SLOTS:
 
         QTest::newRow("Page with no image")
                 << (QList<QString>()
-                        << QStringLiteral("<?xml version=\"1.0\"?><api><query><pages><page pageid=\"736\" ns=\"1\" title=\"Title-1\"></page></pages></query></api>"))
+                    << QStringLiteral("<?xml version=\"1.0\"?><api><query><pages><page pageid=\"736\" ns=\"1\" title=\"Title-1\"></page></pages></query></api>"))
                 << QStringLiteral("Title-1")
                 << 10u
                 << (QList<QList<Image> >() << QList<Image>());
@@ -132,7 +142,7 @@ private Q_SLOTS:
         image.setTitle(QStringLiteral("File:Image-1-1"));
         QTest::newRow("Page with one image")
                 << (QList<QString>()
-                        << QStringLiteral("<?xml version=\"1.0\"?><api><query><pages><page pageid=\"736\" ns=\"1\" title=\"Title-1\"><images><im ns=\"46\" title=\"File:Image-1-1\" /></images></page></pages></query></api>"))
+                    << QStringLiteral("<?xml version=\"1.0\"?><api><query><pages><page pageid=\"736\" ns=\"1\" title=\"Title-1\"><images><im ns=\"46\" title=\"File:Image-1-1\" /></images></page></pages></query></api>"))
                 << QStringLiteral("Title-1")
                 << 10u
                 << (QList<QList<Image> >() << (QList<Image>() << image));
@@ -141,7 +151,7 @@ private Q_SLOTS:
         image2.setTitle(QStringLiteral("File:Image-1-2"));
         QTest::newRow("Page with two images")
                 << (QList<QString>()
-                        << QStringLiteral("<?xml version=\"1.0\"?><api><query><pages><page pageid=\"736\" ns=\"1\" title=\"Title-1\"><images><im ns=\"46\" title=\"File:Image-1-1\" /><im ns=\"9997\" title=\"File:Image-1-2\" /></images></page></pages></query></api>"))
+                    << QStringLiteral("<?xml version=\"1.0\"?><api><query><pages><page pageid=\"736\" ns=\"1\" title=\"Title-1\"><images><im ns=\"46\" title=\"File:Image-1-1\" /><im ns=\"9997\" title=\"File:Image-1-2\" /></images></page></pages></query></api>"))
                 << QStringLiteral("Title-1")
                 << 10u
                 << (QList<QList<Image> >() << (QList<Image>() << image << image2));
@@ -157,13 +167,13 @@ private Q_SLOTS:
 
         QTest::newRow("Page with three images by two signals")
                 << (QList<QString>()
-                        << QStringLiteral("<?xml version=\"1.0\"?><api><query><pages><page pageid=\"1234\" ns=\"5757\" title=\"Title-2\"><images><im ns=\"8\" title=\"File:Image-2-1\" /><im ns=\"8998\" title=\"File:Image-2-2\" /></images></page></pages></query><query-continue><images imcontinue=\"1234|Image-2-3\" /></query-continue></api>")
-                        << QStringLiteral("<?xml version=\"1.0\"?><api><query><pages><page pageid=\"1234\" ns=\"5757\" title=\"Title-2\"><images><im ns=\"38423283\" title=\"File:Image-2-3\" /></images></page></pages></query></api>"))
+                    << QStringLiteral("<?xml version=\"1.0\"?><api><query><pages><page pageid=\"1234\" ns=\"5757\" title=\"Title-2\"><images><im ns=\"8\" title=\"File:Image-2-1\" /><im ns=\"8998\" title=\"File:Image-2-2\" /></images></page></pages></query><query-continue><images imcontinue=\"1234|Image-2-3\" /></query-continue></api>")
+                    << QStringLiteral("<?xml version=\"1.0\"?><api><query><pages><page pageid=\"1234\" ns=\"5757\" title=\"Title-2\"><images><im ns=\"38423283\" title=\"File:Image-2-3\" /></images></page></pages></query></api>"))
                 << QStringLiteral("Title-2")
                 << 2u
                 << (QList<QList<Image> >()
-                        << (QList<Image>() << image << image2)
-                        << (QList<Image>() << image3));
+                    << (QList<Image>() << image << image2)
+                    << (QList<Image>() << image3));
 
 
     }

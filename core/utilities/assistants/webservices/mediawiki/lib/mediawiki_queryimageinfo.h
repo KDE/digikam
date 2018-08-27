@@ -34,7 +34,7 @@
 #include "mediawiki_job.h"
 #include "digikam_export.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Iface;
@@ -77,10 +77,10 @@ public:
      *
      * By default, a single image info is returned.
      *
-     * @param mediawiki the mediawiki concerned by the job
+     * @param MediaWiki the MediaWiki concerned by the job
      * @param parent the QObject parent
      */
-    explicit QueryImageinfo(Iface& mediawiki, QObject* const parent = 0);
+    explicit QueryImageinfo(Iface& MediaWiki, QObject* const parent = 0);
 
     /**
      * @brief Destructs a query image info job.
@@ -162,6 +162,6 @@ private Q_SLOTS:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QueryImageinfo::Properties)
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // MEDIAWIKI_QUERYIMAGEINFO_H

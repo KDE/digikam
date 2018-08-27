@@ -37,7 +37,7 @@
 #include "mediawiki_revision.h"
 #include "digikam_export.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Iface;
@@ -132,10 +132,10 @@ public:
 
     /**
      * @brief Constructs a Revision job.
-     * @param mediawiki the mediawiki concerned by the job
+     * @param MediaWiki the MediaWiki concerned by the job
      * @param parent the QObject parent
      */
-    explicit QueryRevision(Iface& mediawiki, QObject* const parent = 0);
+    explicit QueryRevision(Iface& MediaWiki, QObject* const parent = 0);
 
     /**
      * @brief Destroys the QueryRevision job.
@@ -271,6 +271,6 @@ private Q_SLOTS:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QueryRevision::Properties)
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // MEDIAWIKI_QUERYREVISION_H

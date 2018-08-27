@@ -33,7 +33,7 @@
 
 #include "digikam_export.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 /**
@@ -102,6 +102,6 @@ private:
     Private* const d;
 };
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // MEDIAWIKI_IMAGE_H

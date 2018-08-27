@@ -32,7 +32,7 @@
 #include "mediawiki_iface.h"
 #include "mediawiki_job_p.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 Job::Job(JobPrivate& dd, QObject* const parent)
@@ -73,4 +73,4 @@ void Job::processUploadProgress(qint64 bytesReceived, qint64 bytesTotal)
     setProcessedAmount(Job::Bytes, bytesReceived);
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

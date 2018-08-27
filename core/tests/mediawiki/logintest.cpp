@@ -26,17 +26,23 @@
 #ifndef TEST_LOGIN_H
 #define TEST_LOGIN_H
 
+// Qt includes
+
 #include <QObject>
 #include <QtTest>
 
+// KDE includes
+
 #include <kjob.h>
+
+// Local includes
 
 #include "mediawiki_iface.h"
 #include "mediawiki_login.h"
 #include "fakeserver/fakeserver.h"
 
-using mediawiki::Iface;
-using mediawiki::Login;
+using MediaWiki::Iface;
+using MediaWiki::Login;
 
 class LoginTest : public QObject
 {
@@ -100,7 +106,7 @@ private Q_SLOTS:
         QCOMPARE(this->loginCount, 1);
         QCOMPARE(serverrequest.type, QStringLiteral("POST"));
         QCOMPARE(serverrequest.value, QStringLiteral("/?format=xml&action=login&lgname=MyUsername&lgpassword=test"));
-        QCOMPARE(login.error(), (int)Login::NoError);        
+        QCOMPARE(login.error(), (int)Login::NoError);
     }
 
     void loginTestConnectTrueWithoutCookie()
@@ -141,7 +147,6 @@ private Q_SLOTS:
         QCOMPARE(serverrequest.type, QStringLiteral("POST"));
         QCOMPARE(serverrequest.value, QStringLiteral("/?format=xml&action=login&lgname=MyUsername&lgpassword=test"));
         QCOMPARE(login.error(), (int)Login::XmlError);
-
     }
 
     void loginTestNoNameLogin()
@@ -344,7 +349,6 @@ private Q_SLOTS:
         QCOMPARE(serverrequest.type, QStringLiteral("POST"));
         QCOMPARE(serverrequest.value, QStringLiteral("/?format=xml&action=login&lgname=MyUsername&lgpassword=test"));
         QCOMPARE(login.error(), (int)Login::XmlError);
-
     }
 
     void loginTestNoNameToken()

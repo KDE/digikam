@@ -27,7 +27,7 @@
 
 #include <algorithm>
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Q_DECL_HIDDEN Protection::ProtectionPrivate
@@ -109,4 +109,4 @@ QString Protection::source() const
     return d->source;
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

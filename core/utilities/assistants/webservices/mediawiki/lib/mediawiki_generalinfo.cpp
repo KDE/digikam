@@ -31,7 +31,7 @@
 
 #include "mediawiki_iface.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Q_DECL_HIDDEN Generalinfo::Private
@@ -341,4 +341,4 @@ void Generalinfo::setTime(const QDateTime& time)
     d->time = time;
 }
 
-} // namespace mediawiki
+} // namespace MediaWiki

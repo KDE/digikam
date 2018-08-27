@@ -35,7 +35,7 @@
 #include "mediawiki_job.h"
 #include "digikam_export.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Iface;
@@ -69,7 +69,7 @@ public:
         MissingPage
     };
 
-    explicit Parse(Iface& mediawiki, QObject* const parent = 0);
+    explicit Parse(Iface& MediaWiki, QObject* const parent = 0);
     virtual ~Parse();
 
     void setText(const QString& param);
@@ -92,6 +92,6 @@ private Q_SLOTS:
     void doWorkProcessReply();
 };
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // MEDIAWIKI_PARSE_H

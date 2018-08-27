@@ -40,7 +40,7 @@
 #include "mediawiki_queryinfo.h"
 #include "digikam_export.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
 
 class Iface;
@@ -104,12 +104,12 @@ public:
         CreateImagePermissionMissing,
 
         /**
-         * @brief The mediawiki considers you are spamming.
+         * @brief The MediaWiki considers you are spamming.
          */
         SpamDetected,
 
         /**
-         * @brief The mediawiki refuses your edit.
+         * @brief The MediaWiki refuses your edit.
          */
         Filtered,
 
@@ -318,6 +318,6 @@ public Q_SLOTS:
     void finishedCaptcha(const QString& captcha);
 };
 
-} // namespace mediawiki
+} // namespace MediaWiki
 
 #endif // MEDIAWIKI_EDIT_H
