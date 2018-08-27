@@ -63,12 +63,12 @@ protected:
     }
 };
 
-class ShowfotoCategorizedView::Private
+class Q_DECL_HIDDEN ShowfotoCategorizedView::Private
 {
 public:
 
-    explicit Private() :
-        model(0),
+    explicit Private()
+      : model(0),
         filterModel(0),
         delegate(0),
         showToolTip(false),
@@ -92,7 +92,8 @@ public:
 };
 
 ShowfotoCategorizedView::ShowfotoCategorizedView(QWidget* const parent)
-    : ItemViewCategorized(parent), d(new Private)
+    : ItemViewCategorized(parent),
+      d(new Private)
 {
     setToolTip(new ShowfotoItemViewToolTip(this));
 
@@ -103,7 +104,8 @@ ShowfotoCategorizedView::ShowfotoCategorizedView(QWidget* const parent)
     d->delayedEnterTimer->setInterval(10);
     d->delayedEnterTimer->setSingleShot(false);
 
-    connect(d->delayedEnterTimer, &QTimer::timeout, this, &ShowfotoCategorizedView::slotDelayedEnter);
+    connect(d->delayedEnterTimer, &QTimer::timeout,
+            this, &ShowfotoCategorizedView::slotDelayedEnter);
 }
 
 ShowfotoCategorizedView::~ShowfotoCategorizedView()
@@ -133,9 +135,11 @@ void ShowfotoCategorizedView::setModels(ShowfotoImageModel* model, ShowfotoSortF
 
     setModel(d->filterModel);
 
-    connect(d->filterModel, &ShowfotoSortFilterModel::layoutAboutToBeChanged, this, &ShowfotoCategorizedView::layoutAboutToBeChanged);
+    connect(d->filterModel, &ShowfotoSortFilterModel::layoutAboutToBeChanged,
+            this, &ShowfotoCategorizedView::layoutAboutToBeChanged);
 
-    connect(d->filterModel, &ShowfotoSortFilterModel::layoutChanged, this, &ShowfotoCategorizedView::layoutWasChanged, Qt::QueuedConnection);
+    connect(d->filterModel, &ShowfotoSortFilterModel::layoutChanged,
+            this, &ShowfotoCategorizedView::layoutWasChanged, Qt::QueuedConnection);
 
     emit modelChanged();
 
@@ -208,9 +212,11 @@ void ShowfotoCategorizedView::setItemDelegate(ShowfotoDelegate* delegate)
     d->delegate->setViewOnAllOverlays(this);
     d->delegate->setAllOverlaysActive(true);
 
-    connect(d->delegate, &ShowfotoDelegate::requestNotification, this, &ShowfotoCategorizedView::showIndexNotification);
+    connect(d->delegate, &ShowfotoDelegate::requestNotification,
+            this, &ShowfotoCategorizedView::showIndexNotification);
 
-    connect(d->delegate, &ShowfotoDelegate::hideNotification, this, &ShowfotoCategorizedView::hideIndexNotification);
+    connect(d->delegate, &ShowfotoDelegate::hideNotification,
+            this, &ShowfotoCategorizedView::hideIndexNotification);
 }
 
 ShowfotoItemInfo ShowfotoCategorizedView::currentInfo() const
@@ -234,7 +240,7 @@ QList<ShowfotoItemInfo> ShowfotoCategorizedView::selectedShowfotoItemInfosCurren
     QModelIndex        current = currentIndex();
     QList<ShowfotoItemInfo> infos;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         ShowfotoItemInfo info = d->filterModel->showfotoItemInfo(index);
 
@@ -261,7 +267,7 @@ QList<QUrl> ShowfotoCategorizedView::urls() const
     QList<ShowfotoItemInfo> infos = showfotoItemInfos();
     QList<QUrl>              urls;
 
-    foreach(const ShowfotoItemInfo& info, infos)
+    foreach (const ShowfotoItemInfo& info, infos)
     {
         urls << info.url;
     }
@@ -274,7 +280,7 @@ QList<QUrl> ShowfotoCategorizedView::selectedUrls() const
     QList<ShowfotoItemInfo> infos = selectedShowfotoItemInfos();
     QList<QUrl>              urls;
 
-    foreach(const ShowfotoItemInfo& info, infos)
+    foreach (const ShowfotoItemInfo& info, infos)
     {
         urls << info.url;
     }
@@ -425,7 +431,7 @@ void ShowfotoCategorizedView::setSelectedShowfotoItemInfos(const QList<ShowfotoI
 {
     QItemSelection mySelection;
 
-    foreach(const ShowfotoItemInfo& info, infos)
+    foreach (const ShowfotoItemInfo& info, infos)
     {
         QModelIndex index = d->filterModel->indexForShowfotoItemInfo(info);
         mySelection.select(index, index);

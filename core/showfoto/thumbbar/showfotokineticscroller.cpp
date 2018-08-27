@@ -60,7 +60,7 @@ static const int gMaxDecelerationSpeed = 30;
  */
 static const int gFriction             = 1;
 
-class ShowfotoKineticScroller::Private
+class Q_DECL_HIDDEN ShowfotoKineticScroller::Private
 {
 public:
 

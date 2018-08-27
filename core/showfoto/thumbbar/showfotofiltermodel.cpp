@@ -204,7 +204,7 @@ void ShowfotoSortFilterModel::setDirectSourceShowfotoModel(ShowfotoImageModel* c
 
 //--- ShowfotoFilterModel methods ---------------------------------
 
-class ShowfotoFilterModel::ShowfotoFilterModelPrivate : public QObject
+class Q_DECL_HIDDEN ShowfotoFilterModel::ShowfotoFilterModelPrivate : public QObject
 {
 
 public:
@@ -335,7 +335,7 @@ void ShowfotoFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int st
 {
     QList<ShowfotoItemInfo> infos;
 
-    for (int i = start; i < end; i++)
+    for (int i = start ; i < end ; i++)
     {
         infos << showfotoItemInfo(index(i, 0));
     }
@@ -347,7 +347,7 @@ void ShowfotoFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/
 {
     QList<ShowfotoItemInfo> infos;
 
-    for (int i = start; i < end; i++)
+    for (int i = start ; i < end ; i++)
     {
         infos << showfotoItemInfo(index(i, 0));
     }

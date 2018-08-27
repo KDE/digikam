@@ -34,13 +34,12 @@
 namespace ShowFoto
 {
 
-class SetupRaw::Private
+class Q_DECL_HIDDEN SetupRaw::Private
 {
 public:
 
-
-    explicit Private() :
-        tab(0),
+    explicit Private()
+      : tab(0),
         raw(0)
     {
     }

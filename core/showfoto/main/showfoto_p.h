@@ -150,7 +150,7 @@
 namespace ShowFoto
 {
 
-class ShowFoto::Private
+class Q_DECL_HIDDEN ShowFoto::Private
 {
 public:
 

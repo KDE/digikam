@@ -45,7 +45,7 @@
 namespace ShowFoto
 {
 
-class ShowfotoSettings::Private
+class Q_DECL_HIDDEN ShowfotoSettings::Private
 {
 
 public:

@@ -52,12 +52,12 @@
 namespace ShowFoto
 {
 
-class SetupMetadata::Private
+class Q_DECL_HIDDEN SetupMetadata::Private
 {
 public:
 
-    explicit Private() :
-        exifRotateBox(0),
+    explicit Private()
+      : exifRotateBox(0),
         exifSetOrientationBox(0),
         tab(0),
         tagsCfgPanel(0)
