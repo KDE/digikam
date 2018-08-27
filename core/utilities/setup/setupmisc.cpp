@@ -40,6 +40,7 @@
 #include <QStyle>
 #include <QStyleFactory>
 #include <QVBoxLayout>
+#include <QTabWidget>
 
 // KDE includes
 
