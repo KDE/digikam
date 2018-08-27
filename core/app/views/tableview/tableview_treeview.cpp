@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class TableViewTreeView::Private
+class Q_DECL_HIDDEN TableViewTreeView::Private
 {
 public:
 

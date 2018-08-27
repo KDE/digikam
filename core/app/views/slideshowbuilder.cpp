@@ -43,12 +43,12 @@
 namespace Digikam
 {
 
-class SlideShowBuilder::Private
+class Q_DECL_HIDDEN SlideShowBuilder::Private
 {
 public:
 
-    explicit Private() :
-        cancel(false),
+    explicit Private()
+      : cancel(false),
         album(0),
         autoPlayEnabled(true)
     {

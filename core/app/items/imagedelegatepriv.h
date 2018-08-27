@@ -41,7 +41,7 @@ namespace Digikam
 
 class ImageCategoryDrawer;
 
-class ImageDelegate::ImageDelegatePrivate : public ItemViewImageDelegatePrivate
+class Q_DECL_HIDDEN ImageDelegate::ImageDelegatePrivate : public ItemViewImageDelegatePrivate
 {
 public:
 

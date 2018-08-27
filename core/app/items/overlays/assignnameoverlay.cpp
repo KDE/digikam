@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class AssignNameOverlay::Private
+class Q_DECL_HIDDEN AssignNameOverlay::Private
 {
 public:
 

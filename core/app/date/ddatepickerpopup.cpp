@@ -74,12 +74,12 @@ private:
 
 // ---------------------------------------------------------------------------------------
 
-class DDatePickerPopup::Private
+class Q_DECL_HIDDEN DDatePickerPopup::Private
 {
 public:
 
-    explicit Private() :
-        datePicker(0)
+    explicit Private()
+      : datePicker(0)
     {
     }
 

@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class DigikamImageDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
+class Q_DECL_HIDDEN DigikamImageDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
 {
 public:
 
@@ -53,7 +53,7 @@ public:
 
 // -----------------------------------------------------------------------------------------
 
-class DigikamImageFaceDelegatePrivate : public DigikamImageDelegatePrivate
+class Q_DECL_HIDDEN DigikamImageFaceDelegatePrivate : public DigikamImageDelegatePrivate
 {
 public:
 

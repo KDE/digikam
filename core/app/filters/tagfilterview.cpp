@@ -42,12 +42,12 @@
 namespace Digikam
 {
 
-class TagFilterView::Private
+class Q_DECL_HIDDEN TagFilterView::Private
 {
 public:
 
-    explicit Private() :
-        onRestoreTagFiltersAction(0),
+    explicit Private()
+      : onRestoreTagFiltersAction(0),
         offRestoreTagFiltersAction(0),
         ignoreTagAction(0),
         includeTagAction(0),

@@ -65,9 +65,8 @@
 namespace Digikam
 {
 
-class StackedView::Private
+class Q_DECL_HIDDEN StackedView::Private
 {
-
 public:
 
     explicit Private()

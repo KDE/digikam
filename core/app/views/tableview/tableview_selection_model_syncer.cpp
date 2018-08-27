@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class TableViewSelectionModelSyncer::Private
+class Q_DECL_HIDDEN TableViewSelectionModelSyncer::Private
 {
 public:
 

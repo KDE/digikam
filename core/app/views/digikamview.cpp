@@ -101,12 +101,12 @@
 namespace Digikam
 {
 
-class DigikamView::Private
+class Q_DECL_HIDDEN DigikamView::Private
 {
 public:
 
-    explicit Private() :
-        needDispatchSelection(false),
+    explicit Private()
+      : needDispatchSelection(false),
         useAlbumHistory(false),
         initialAlbumID(0),
         thumbSize(ThumbnailSize::Medium),

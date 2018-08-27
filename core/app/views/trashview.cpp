@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class TrashView::Private
+class Q_DECL_HIDDEN TrashView::Private
 {
 
 public:

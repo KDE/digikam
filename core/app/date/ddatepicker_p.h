@@ -93,7 +93,7 @@ private:
 
 // ------------------------------------------------------------------------------
 
-class DDatePicker::Private
+class Q_DECL_HIDDEN DDatePicker::Private
 {
 public:
 

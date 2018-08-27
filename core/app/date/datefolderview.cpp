@@ -42,12 +42,12 @@
 namespace Digikam
 {
 
-class DateFolderView::Private
+class Q_DECL_HIDDEN DateFolderView::Private
 {
 public:
 
-    explicit Private() :
-        active(false),
+    explicit Private()
+      : active(false),
         selected(),
         dateTreeView(0),
         monthview(0)

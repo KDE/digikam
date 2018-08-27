@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class ImageThumbnailDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
+class Q_DECL_HIDDEN ImageThumbnailDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
 {
 public:
 

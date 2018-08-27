@@ -205,7 +205,7 @@ public:
 
 // ------------------------------------------------------------------------------
 
-class DigikamApp::Private
+class Q_DECL_HIDDEN DigikamApp::Private
 {
 public:
 

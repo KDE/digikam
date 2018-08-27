@@ -78,12 +78,12 @@
 namespace Digikam
 {
 
-class ContextMenuHelper::Private
+class Q_DECL_HIDDEN ContextMenuHelper::Private
 {
 public:
 
-    explicit Private(ContextMenuHelper* const q) :
-        gotoAlbumAction(0),
+    explicit Private(ContextMenuHelper* const q)
+      : gotoAlbumAction(0),
         gotoDateAction(0),
         setThumbnailAction(0),
         imageFilterModel(0),

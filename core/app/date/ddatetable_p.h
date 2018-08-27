@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class DDateTable::Private : public QObject
+class Q_DECL_HIDDEN DDateTable::Private : public QObject
 {
     Q_OBJECT
 

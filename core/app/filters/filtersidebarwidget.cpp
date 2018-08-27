@@ -52,12 +52,12 @@
 namespace Digikam
 {
 
-class FilterSideBarWidget::Private
+class Q_DECL_HIDDEN FilterSideBarWidget::Private
 {
 public:
 
-    explicit Private() :
-        space(0),
+    explicit Private()
+      : space(0),
         expanderVlay(0),
         tagFilterView(0),
         tagFilterSearchBar(0),
@@ -113,7 +113,9 @@ const QString FilterSideBarWidget::Private::configMatchingConditionEntry(QLatin1
 // ---------------------------------------------------------------------------------------------------
 
 FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const tagFilterModel)
-    : DVBox(parent), StateSavingObject(this), d(new Private)
+    : DVBox(parent),
+      StateSavingObject(this),
+      d(new Private)
 {
     setObjectName(QLatin1String("TagFilter Sidebar"));
 

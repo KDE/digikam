@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class DigikamModelCollection::Private
+class Q_DECL_HIDDEN DigikamModelCollection::Private
 {
 
 public:
