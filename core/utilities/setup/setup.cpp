@@ -57,12 +57,12 @@
 namespace Digikam
 {
 
-class Setup::Private
+class Q_DECL_HIDDEN Setup::Private
 {
 public:
 
-    explicit Private() :
-        page_database(0),
+    explicit Private()
+      : page_database(0),
         page_collections(0),
         page_albumView(0),
         page_tooltip(0),

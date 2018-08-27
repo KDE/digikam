@@ -68,12 +68,12 @@
 namespace Digikam
 {
 
-class SetupICC::Private
+class Q_DECL_HIDDEN SetupICC::Private
 {
 public:
 
-    explicit Private() :
-        iccFolderLabel(0),
+    explicit Private()
+      : iccFolderLabel(0),
         enableColorManagement(0),
         defaultSRGBConvert(0),
         bpcAlgorithm(0),

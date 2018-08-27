@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class SetupVersioning::Private
+class Q_DECL_HIDDEN SetupVersioning::Private
 {
 public:
 

@@ -394,7 +394,7 @@ void SetupCollectionModel::apply()
     }
 
     // Delete deleted items
-    foreach(int i, deletedItems)
+    foreach (int i, deletedItems)
     {
         Item& item    = m_collections[i];
         CollectionManager::instance()->removeLocation(item.location);
@@ -404,7 +404,7 @@ void SetupCollectionModel::apply()
     // Add added items
     QList<Item> failedItems;
 
-    foreach(int i, newItems)
+    foreach (int i, newItems)
     {
         Item& item = m_collections[i];
         CollectionLocation location;
@@ -431,7 +431,7 @@ void SetupCollectionModel::apply()
     }
 
     // Rename collections
-    foreach(int i, renamedItems)
+    foreach (int i, renamedItems)
     {
         Item& item = m_collections[i];
         CollectionManager::instance()->setLabel(item.location, item.label);
@@ -443,7 +443,7 @@ void SetupCollectionModel::apply()
     {
         QStringList failedPaths;
 
-        foreach(const Item& item, failedItems)
+        foreach (const Item& item, failedItems)
         {
             failedPaths << QDir::toNativeSeparators(item.path);
         }
@@ -530,7 +530,7 @@ void SetupCollectionModel::addCollection(int category)
     QString path = QDir::fromNativeSeparators(curl.toDisplayString(QUrl::PreferLocalFile ));
 
     // If there are other added collections then CollectionManager does not know about them. Check here.
-    foreach(const Item& item, m_collections)
+    foreach (const Item& item, m_collections)
     {
         if (!item.deleted && item.location.isNull())
         {
@@ -926,7 +926,7 @@ int SetupCollectionModel::rowCount(const QModelIndex& parent) const
     int parentId = parent.row();
     int rowCount = 0;
 
-    foreach(const Item& item, m_collections)
+    foreach (const Item& item, m_collections)
     {
         if (!item.deleted && item.parentId == parentId)
         {
@@ -995,7 +995,7 @@ QModelIndex SetupCollectionModel::index(int row, int column, const QModelIndex& 
         int parentId = parent.row();
         int rowCount = 0;
 
-        for (int i = 0; i < m_collections.count(); ++i)
+        for (int i = 0 ; i < m_collections.count() ; ++i)
         {
             const Item& item = m_collections.at(i);
 
@@ -1040,7 +1040,7 @@ QList<QModelIndex> SetupCollectionModel::categoryIndexes() const
 {
     QList<QModelIndex> list;
 
-    for (int cat = 0; cat < NumberOfCategories; ++cat)
+    for (int cat = 0 ; cat < NumberOfCategories ; ++cat)
     {
         list << index(cat, 0, QModelIndex());
     }
@@ -1053,7 +1053,7 @@ QModelIndex SetupCollectionModel::indexForId(int id, int column) const
     int   row             = 0;
     const Item& indexItem = m_collections.at(id);
 
-    for (int i = 0; i < m_collections.count(); ++i)
+    for (int i = 0 ; i < m_collections.count() ; ++i)
     {
         const Item& item = m_collections.at(i);
 

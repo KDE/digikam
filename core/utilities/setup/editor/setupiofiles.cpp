@@ -50,12 +50,12 @@
 namespace Digikam
 {
 
-class SetupIOFiles::Private
+class Q_DECL_HIDDEN SetupIOFiles::Private
 {
 public:
 
-    explicit Private() :
-        JPEGOptions(0),
+    explicit Private()
+      : JPEGOptions(0),
         PNGOptions(0),
         TIFFOptions(0),
 #ifdef HAVE_JASPER

@@ -54,12 +54,12 @@
 namespace Digikam
 {
 
-class SetupEditorIface::Private
+class Q_DECL_HIDDEN SetupEditorIface::Private
 {
 public:
 
-    explicit Private() :
-        themebackgroundColor(0),
+    explicit Private()
+      : themebackgroundColor(0),
         expoIndicatorMode(0),
         expoPreview(0),
         colorBox(0),

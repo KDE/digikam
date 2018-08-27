@@ -41,12 +41,12 @@
 namespace Digikam
 {
 
-class SetupEditor::Private
+class Q_DECL_HIDDEN SetupEditor::Private
 {
 public:
 
-    explicit Private() :
-        tab(0),
+    explicit Private()
+      : tab(0),
         iface(0),
         iofiles(0),
         versioning(0),

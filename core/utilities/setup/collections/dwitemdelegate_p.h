@@ -41,7 +41,7 @@ namespace Digikam
 class DWItemDelegate;
 class DWItemDelegatePool;
 
-class DWItemDelegatePrivate : public QObject
+class Q_DECL_HIDDEN DWItemDelegatePrivate : public QObject
 {
     Q_OBJECT
 

@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class NamespaceEditDlg::Private
+class Q_DECL_HIDDEN NamespaceEditDlg::Private
 {
 public:
 

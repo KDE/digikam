@@ -64,7 +64,7 @@
 namespace Digikam
 {
 
-class SetupMetadata::Private
+class Q_DECL_HIDDEN SetupMetadata::Private
 {
 public:
 
