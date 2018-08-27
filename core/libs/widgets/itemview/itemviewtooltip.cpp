@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class ItemViewToolTip::Private
+class Q_DECL_HIDDEN ItemViewToolTip::Private
 {
 public:
 

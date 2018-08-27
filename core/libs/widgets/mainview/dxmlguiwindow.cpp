@@ -74,7 +74,7 @@
 namespace Digikam
 {
 
-class DXmlGuiWindow::Private
+class Q_DECL_HIDDEN DXmlGuiWindow::Private
 {
 public:
 

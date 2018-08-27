@@ -164,7 +164,7 @@ static const char* XmpHumanList[] =
     "-1"
 };
 
-class MetadataPanel::Private
+class Q_DECL_HIDDEN MetadataPanel::Private
 {
 public:
 

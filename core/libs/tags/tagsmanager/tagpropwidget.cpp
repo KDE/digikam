@@ -56,7 +56,7 @@
 namespace Digikam
 {
 
-class TagPropWidget::Private
+class Q_DECL_HIDDEN TagPropWidget::Private
 {
 public:
 

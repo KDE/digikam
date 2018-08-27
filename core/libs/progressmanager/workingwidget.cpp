@@ -40,14 +40,14 @@
 namespace Digikam
 {
 
-class WorkingWidget::Private
+class Q_DECL_HIDDEN WorkingWidget::Private
 {
 
 public:
 
     explicit Private()
         : pixmaps(DWorkingPixmap()),
-          currentPixmap(0)          
+          currentPixmap(0)
     {
     }
 

@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class DMultiTabBarFrame::Private
+class Q_DECL_HIDDEN DMultiTabBarFrame::Private
 {
 public:
 
@@ -233,7 +233,7 @@ void DMultiTabBarButton::paintEvent(QPaintEvent*)
 
 // -------------------------------------------------------------------------------------
 
-class DMultiTabBarTab::Private
+class Q_DECL_HIDDEN DMultiTabBarTab::Private
 {
 public:
 
@@ -537,7 +537,7 @@ void DMultiTabBarTab::paintEvent(QPaintEvent*)
 
 // -------------------------------------------------------------------------------------
 
-class DMultiTabBar::Private
+class Q_DECL_HIDDEN DMultiTabBar::Private
 {
 public:
 
@@ -734,13 +734,13 @@ public:
 
 // -------------------------------------------------------------------------------------
 
-class Sidebar::Private
+class Q_DECL_HIDDEN Sidebar::Private
 {
 
 public:
 
-    explicit Private() :
-        minimizedDefault(false),
+    explicit Private()
+      : minimizedDefault(false),
         minimized(false),
         isMinimized(false),
         tabs(0),
@@ -1325,7 +1325,7 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
     {
         QWidget* const w = widget(index);
 
-        foreach(Sidebar* sidebar, d->sidebars)
+        foreach(Sidebar* const sidebar, d->sidebars)
         {
             if (w == sidebar->d->stack)
             {

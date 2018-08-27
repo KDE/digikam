@@ -61,6 +61,7 @@ LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& fi
     if (settings.enableCM && settings.useManagedPreviews)
     {
         description.postProcessingParameters.colorManagement = LoadingDescription::ConvertForDisplay;
+
         if (displayProfile.isNull())
         {
             description.postProcessingParameters.setProfile(IccProfile::sRGB());

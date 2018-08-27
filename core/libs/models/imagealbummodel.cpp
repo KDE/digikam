@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class ImageAlbumModel::Private
+class Q_DECL_HIDDEN ImageAlbumModel::Private
 {
 public:
 

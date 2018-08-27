@@ -34,13 +34,13 @@
 namespace Digikam
 {
 
-class DragHandle::Private
+class Q_DECL_HIDDEN DragHandle::Private
 {
 
 public:
 
-    explicit Private() :
-        parent(0),
+    explicit Private()
+      : parent(0),
         currentArea(Qt::LeftDockWidgetArea)
     {
     }
@@ -50,7 +50,8 @@ public:
 };
 
 DragHandle::DragHandle(QDockWidget* const parent)
-    : QWidget(), d(new Private)
+    : QWidget(),
+      d(new Private)
 {
     d->parent = parent;
 
@@ -142,7 +143,8 @@ QSize DragHandle::minimumSizeHint() const
 // ----------------------------------------------------------------------------
 
 ThumbBarDock::ThumbBarDock(QWidget* const parent, Qt::WindowFlags flags)
-    : QDockWidget(parent, flags), m_visible(SHOULD_BE_SHOWN)
+    : QDockWidget(parent, flags),
+      m_visible(SHOULD_BE_SHOWN)
 {
     // Use a DragHandle as title bar widget.
     setTitleBarWidget(new DragHandle(this));

@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class ImageAlbumFilterModelPrivate : public ImageFilterModel::ImageFilterModelPrivate
+class Q_DECL_HIDDEN ImageAlbumFilterModelPrivate : public ImageFilterModel::ImageFilterModelPrivate
 {
 public:
 

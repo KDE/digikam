@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class RatingWidget::Private
+class Q_DECL_HIDDEN RatingWidget::Private
 {
 public:
 
@@ -470,7 +470,7 @@ void RatingWidget::applyFading(QPixmap& pix)
 
 // -------------------------------------------------------------------------------
 
-class RatingBox::Private
+class Q_DECL_HIDDEN RatingBox::Private
 {
 
 public:

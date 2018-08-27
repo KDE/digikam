@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class DGradientSlider::Private
+class Q_DECL_HIDDEN DGradientSlider::Private
 {
 
 public:

@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class EffectPreview::Private
+class Q_DECL_HIDDEN EffectPreview::Private
 {
 public:
 

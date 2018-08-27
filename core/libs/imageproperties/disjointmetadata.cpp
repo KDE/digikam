@@ -123,7 +123,7 @@ public:
     bool                                invalid;
 };
 
-class DisjointMetadata::Private : public DisjointMetadataDataFields
+class Q_DECL_HIDDEN DisjointMetadata::Private : public DisjointMetadataDataFields
 {
 public:
 

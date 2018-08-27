@@ -244,7 +244,7 @@ public:
 
 // ---------------------------------------------------------------------------------------------------
 
-class OpenCVFaceDetector::Private
+class Q_DECL_HIDDEN OpenCVFaceDetector::Private
 {
 
 public:

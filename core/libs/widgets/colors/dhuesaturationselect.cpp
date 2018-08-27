@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class DPointSelect::Private
+class Q_DECL_HIDDEN DPointSelect::Private
 {
 public:
 
@@ -261,7 +261,7 @@ void DPointSelect::drawMarker(QPainter* p, int xp, int yp)
 
 // --------------------------------------------------------------------------------------------------------
 
-class DHueSaturationSelector::Private
+class Q_DECL_HIDDEN DHueSaturationSelector::Private
 {
 public:
 

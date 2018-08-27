@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class AddTagsLineEdit::Private
+class Q_DECL_HIDDEN AddTagsLineEdit::Private
 {
 public:
 

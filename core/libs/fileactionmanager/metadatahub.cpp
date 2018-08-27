@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class MetadataHub::Private
+class Q_DECL_HIDDEN MetadataHub::Private
 {
 public:
 

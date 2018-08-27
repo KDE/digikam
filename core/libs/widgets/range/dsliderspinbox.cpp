@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class DAbstractSliderSpinBoxPrivate
+class Q_DECL_HIDDEN DAbstractSliderSpinBoxPrivate
 {
 public:
 
@@ -945,7 +945,7 @@ void DAbstractSliderSpinBox::changeEvent(QEvent* e)
 
 // ---------------------------------------------------------------------------------------------
 
-class DSliderSpinBoxPrivate : public DAbstractSliderSpinBoxPrivate
+class Q_DECL_HIDDEN DSliderSpinBoxPrivate : public DAbstractSliderSpinBoxPrivate
 {
 };
 
@@ -1051,7 +1051,7 @@ void DSliderSpinBox::setInternalValue(int _value, bool blockUpdateSignal)
 
 // ---------------------------------------------------------------------------------------------
 
-class DDoubleSliderSpinBoxPrivate : public DAbstractSliderSpinBoxPrivate
+class Q_DECL_HIDDEN DDoubleSliderSpinBoxPrivate : public DAbstractSliderSpinBoxPrivate
 {
 };
 

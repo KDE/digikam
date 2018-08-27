@@ -374,7 +374,7 @@ bool TagToggleAction::isCheckBoxHidden() const
 
 // ------------------------------------------------------------------------
 
-class TagsPopupMenu::Private
+class Q_DECL_HIDDEN TagsPopupMenu::Private
 {
 public:
 

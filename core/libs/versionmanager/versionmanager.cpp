@@ -630,7 +630,7 @@ QStringList VersionFileOperation::allFilePaths() const
 
 // ------------------------------------------------------------------------------------------------------
 
-class VersionManager::VersionManagerPriv
+class Q_DECL_HIDDEN VersionManager::VersionManagerPriv
 {
 public:
 

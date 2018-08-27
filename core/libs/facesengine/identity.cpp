@@ -28,7 +28,7 @@
 namespace Digikam
 {
 
-class Identity::Private : public QSharedData
+class Q_DECL_HIDDEN Identity::Private : public QSharedData
 {
 public:
 

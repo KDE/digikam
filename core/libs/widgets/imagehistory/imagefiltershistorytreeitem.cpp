@@ -26,7 +26,7 @@
 namespace Digikam
 {
 
-class ImageFiltersHistoryTreeItem::Private
+class Q_DECL_HIDDEN ImageFiltersHistoryTreeItem::Private
 {
 public:
 

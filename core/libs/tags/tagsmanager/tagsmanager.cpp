@@ -66,9 +66,8 @@ namespace Digikam
 
 QPointer<TagsManager> TagsManager::internalPtr = QPointer<TagsManager>();
 
-class TagsManager::Private
+class Q_DECL_HIDDEN TagsManager::Private
 {
-
 public:
 
     explicit Private()

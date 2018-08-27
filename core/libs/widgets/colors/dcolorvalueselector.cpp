@@ -40,9 +40,10 @@
 namespace Digikam
 {
 
-class DSelector::Private
+class Q_DECL_HIDDEN DSelector::Private
 {
 public:
+
     explicit Private()
       : arrowsize(5)
     {
@@ -341,7 +342,7 @@ void DSelector::drawArrow(QPainter* painter, const QPoint& pos)
 
 // -------------------------------------------------------------------------------------
 
-class DColorValueSelector::Private
+class Q_DECL_HIDDEN DColorValueSelector::Private
 {
 public:
 

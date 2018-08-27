@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class FlandmarkAligner::Private
+class Q_DECL_HIDDEN FlandmarkAligner::Private
 {
 public:
 

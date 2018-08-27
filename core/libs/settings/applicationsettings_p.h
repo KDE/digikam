@@ -42,7 +42,7 @@ namespace Digikam
 
 class ApplicationSettings;
 
-class ApplicationSettings::Private
+class Q_DECL_HIDDEN ApplicationSettings::Private
 {
 public:
 

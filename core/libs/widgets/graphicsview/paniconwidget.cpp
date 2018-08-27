@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class PanIconFrame::Private
+class Q_DECL_HIDDEN PanIconFrame::Private
 {
 public:
 

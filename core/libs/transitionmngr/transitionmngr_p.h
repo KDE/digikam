@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class TransitionMngr::Private
+class Q_DECL_HIDDEN TransitionMngr::Private
 {
 public:
 

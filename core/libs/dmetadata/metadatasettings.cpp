@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class MetadataSettings::Private
+class Q_DECL_HIDDEN MetadataSettings::Private
 {
 public:
 

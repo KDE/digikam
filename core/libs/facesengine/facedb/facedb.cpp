@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class FaceDb::Private
+class Q_DECL_HIDDEN FaceDb::Private
 {
 
 public:

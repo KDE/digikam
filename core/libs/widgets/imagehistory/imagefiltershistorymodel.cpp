@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class ImageFiltersHistoryModel::Private
+class Q_DECL_HIDDEN ImageFiltersHistoryModel::Private
 {
 public:
 

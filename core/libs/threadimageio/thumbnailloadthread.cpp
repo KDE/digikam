@@ -108,7 +108,7 @@ Q_GLOBAL_STATIC(ThumbnailLoadThreadStaticPriv, static_d)
 
 // -------------------------------------------------------------------
 
-class ThumbnailLoadThread::Private
+class Q_DECL_HIDDEN ThumbnailLoadThread::Private
 {
 
 public:

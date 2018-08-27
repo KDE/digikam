@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class VideoThumbnailerJob::Private
+class Q_DECL_HIDDEN VideoThumbnailerJob::Private
 {
 public:
 

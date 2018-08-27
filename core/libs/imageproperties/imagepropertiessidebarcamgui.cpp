@@ -44,18 +44,18 @@
 #include "imagepropertiesmetadatatab.h"
 
 #ifdef HAVE_MARBLE
-#include "imagepropertiesgpstab.h"
+#   include "imagepropertiesgpstab.h"
 #endif // HAVE_MARBLE
 
 namespace Digikam
 {
 
-class ImagePropertiesSideBarCamGui::Private
+class Q_DECL_HIDDEN ImagePropertiesSideBarCamGui::Private
 {
 public:
 
-    explicit Private() :
-        dirtyMetadataTab(false),
+    explicit Private()
+      : dirtyMetadataTab(false),
         dirtyCameraItemTab(false),
         dirtyGpsTab(false),
 #ifdef HAVE_MARBLE

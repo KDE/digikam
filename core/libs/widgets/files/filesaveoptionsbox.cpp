@@ -50,13 +50,13 @@
 #include "pgfsettings.h"
 
 #ifdef HAVE_JASPER
-#include "jp2ksettings.h"
+#   include "jp2ksettings.h"
 #endif // HAVE_JASPER
 
 namespace Digikam
 {
 
-class FileSaveOptionsBox::Private
+class Q_DECL_HIDDEN FileSaveOptionsBox::Private
 {
 
 public:

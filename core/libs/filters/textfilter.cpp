@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class TextFilter::Private
+class Q_DECL_HIDDEN TextFilter::Private
 {
 public:
 

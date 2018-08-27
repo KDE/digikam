@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class IOJobsThread::Private
+class Q_DECL_HIDDEN IOJobsThread::Private
 {
 
 public:
@@ -82,7 +82,7 @@ void IOJobsThread::copyOrMove(IOJobData* const data)
     int threads = qMin(maximumNumberOfThreads(),
                        data->sourceUrls().count());
 
-    for (int i = 0 ; i < threads ; i++)
+    for (int i = 0 ; i < threads ; ++i)
     {
         CopyOrMoveJob* const j = new CopyOrMoveJob(data);
 
@@ -104,7 +104,7 @@ void IOJobsThread::deleteFiles(IOJobData* const data)
     int threads = qMin(maximumNumberOfThreads(),
                        data->sourceUrls().count());
 
-    for (int i = 0 ; i < threads ; i++)
+    for (int i = 0 ; i < threads ; ++i)
     {
         DeleteJob* const j = new DeleteJob(data);
 

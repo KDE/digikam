@@ -39,8 +39,10 @@
 namespace Digikam
 {
 
-struct DBinarySearch::Private
+class Q_DECL_HIDDEN DBinarySearch::Private
 {
+public:
+
     explicit Private()
     {
         downloadLabel = 0;

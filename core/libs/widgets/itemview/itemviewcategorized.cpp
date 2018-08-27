@@ -44,14 +44,12 @@
 namespace Digikam
 {
 
-// -------------------------------------------------------------------------------
-
-class ItemViewCategorized::Private
+class Q_DECL_HIDDEN ItemViewCategorized::Private
 {
 public:
 
-    explicit Private(ItemViewCategorized* const q) :
-        delegate(0),
+    explicit Private(ItemViewCategorized* const q)
+      : delegate(0),
         toolTip(0),
         notificationToolTip(0),
         showToolTip(false),

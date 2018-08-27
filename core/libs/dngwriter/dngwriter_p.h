@@ -64,7 +64,7 @@
 namespace Digikam
 {
 
-class DNGWriter::Private
+class Q_DECL_HIDDEN DNGWriter::Private
 {
 
 public:

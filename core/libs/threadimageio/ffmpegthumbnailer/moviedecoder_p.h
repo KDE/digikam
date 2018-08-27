@@ -43,7 +43,7 @@ extern "C"
 namespace Digikam
 {
 
-class MovieDecoder::Private
+class Q_DECL_HIDDEN MovieDecoder::Private
 {
 public:
 

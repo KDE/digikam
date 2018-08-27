@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class PickLabelWidget::Private
+class Q_DECL_HIDDEN PickLabelWidget::Private
 {
 
 public:
@@ -297,7 +297,7 @@ QString PickLabelWidget::labelPickName(PickLabel label)
 
 // -----------------------------------------------------------------------------
 
-class PickLabelSelector::Private
+class Q_DECL_HIDDEN PickLabelSelector::Private
 {
 
 public:

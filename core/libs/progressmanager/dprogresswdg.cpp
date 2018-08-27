@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class DProgressWdg::Private
+class Q_DECL_HIDDEN DProgressWdg::Private
 {
 public:
 

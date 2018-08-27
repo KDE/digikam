@@ -38,12 +38,12 @@
 namespace Digikam
 {
 
-class ModelCompleter::Private
+class Q_DECL_HIDDEN ModelCompleter::Private
 {
 public:
 
-    explicit Private() :
-        displayRole(Qt::DisplayRole),
+    explicit Private()
+      : displayRole(Qt::DisplayRole),
         uniqueIdRole(Qt::DisplayRole),
         delayedModelTimer(0),
         stringModel(0),

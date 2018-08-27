@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class EffectMngr::Private
+class Q_DECL_HIDDEN EffectMngr::Private
 {
 public:
 

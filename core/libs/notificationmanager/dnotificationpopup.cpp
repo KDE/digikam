@@ -50,7 +50,7 @@ static const int DEFAULT_POPUP_TYPE      = DNotificationPopup::Boxed;
 static const int DEFAULT_POPUP_TIME      = 6 * 1000;
 static const Qt::WindowFlags POPUP_FLAGS = Qt::Tool | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint;
 
-class DNotificationPopup::Private
+class Q_DECL_HIDDEN DNotificationPopup::Private
 {
 public:
 

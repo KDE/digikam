@@ -45,13 +45,13 @@
 namespace Digikam
 {
 
-class DTrashItemModel::Private
+class Q_DECL_HIDDEN DTrashItemModel::Private
 {
 
 public:
 
-    explicit Private() :
-        thumbSize(ThumbnailSize::Large),
+    explicit Private()
+      : thumbSize(ThumbnailSize::Large),
         sortColumn(2),
         sortOrder(Qt::DescendingOrder),
         itemsLoadingThread(0),

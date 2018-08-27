@@ -47,7 +47,7 @@ enum ClickDragState
     ClickedMoveState
 };
 
-class ClickDragReleaseItem::Private
+class Q_DECL_HIDDEN ClickDragReleaseItem::Private
 {
 public:
 

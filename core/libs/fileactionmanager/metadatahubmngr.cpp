@@ -41,7 +41,7 @@ namespace Digikam
 
 QPointer<MetadataHubMngr> MetadataHubMngr::internalPtr = QPointer<MetadataHubMngr>();
 
-class MetadataHubMngr::Private
+class Q_DECL_HIDDEN MetadataHubMngr::Private
 {
 public:
 

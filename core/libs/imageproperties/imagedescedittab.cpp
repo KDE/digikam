@@ -80,7 +80,7 @@
 namespace Digikam
 {
 
-class ImageDescEditTab::Private
+class Q_DECL_HIDDEN ImageDescEditTab::Private
 {
 
 public:

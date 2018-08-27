@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class TaggingActionFactory::Private
+class Q_DECL_HIDDEN TaggingActionFactory::Private
 {
 public:
 

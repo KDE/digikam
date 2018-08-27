@@ -501,7 +501,7 @@ void AnimationControl::setAnimationDuration(int msecs)
 
 // ---------------------------------------------------------------------------------
 
-class ItemVisibilityController::Private
+class Q_DECL_HIDDEN ItemVisibilityController::Private
 {
 public:
 
@@ -512,7 +512,7 @@ public:
           animationDuration(75),
           easingCurve(QEasingCurve::InOutQuad),
           control(0),
-          q(qq)          
+          q(qq)
     {
     }
 

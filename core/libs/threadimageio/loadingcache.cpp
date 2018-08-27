@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class LoadingCache::Private
+class Q_DECL_HIDDEN LoadingCache::Private
 {
 public:
 

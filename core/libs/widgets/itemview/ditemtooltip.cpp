@@ -45,7 +45,6 @@
 
 #include <klocalizedstring.h>
 
-
 namespace Digikam
 {
 
@@ -161,7 +160,7 @@ QString DToolTipStyleSheet::imageAsBase64(const QImage& img) const
 
 // --------------------------------------------------------------------------------------------------
 
-class DItemToolTip::Private
+class Q_DECL_HIDDEN DItemToolTip::Private
 {
 public:
 
@@ -283,7 +282,7 @@ void DItemToolTip::renderArrows()
     QPainter p0(&pix0);
     p0.setPen(QPen(qApp->palette().color(QPalette::Text), 1));
 
-    for (int j=0; j<w; ++j)
+    for (int j = 0 ; j < w ; ++j)
     {
         p0.drawLine(0, j, w-j-1, j);
     }
@@ -299,7 +298,7 @@ void DItemToolTip::renderArrows()
     QPainter p1(&pix1);
     p1.setPen(QPen(qApp->palette().color(QPalette::Text), 1));
 
-    for (int j=0; j<w; ++j)
+    for (int j = 0 ; j < w ; ++j)
     {
         p1.drawLine(j, j, w-1, j);
     }
@@ -315,7 +314,7 @@ void DItemToolTip::renderArrows()
     QPainter p2(&pix2);
     p2.setPen(QPen(qApp->palette().color(QPalette::Text), 1));
 
-    for (int j=0; j<w; ++j)
+    for (int j = 0 ; j < w ; ++j)
     {
         p2.drawLine(0, j, j, j);
     }
@@ -331,7 +330,7 @@ void DItemToolTip::renderArrows()
     QPainter p3(&pix3);
     p3.setPen(QPen(qApp->palette().color(QPalette::Text), 1));
 
-    for (int j=0; j<w; ++j)
+    for (int j = 0 ; j < w ; ++j)
     {
         p3.drawLine(w-j-1, j, w-1, j);
     }

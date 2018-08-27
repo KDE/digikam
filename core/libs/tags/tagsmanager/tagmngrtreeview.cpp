@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class TagMngrTreeView::Private
+class Q_DECL_HIDDEN TagMngrTreeView::Private
 {
 
 public:

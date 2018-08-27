@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class CaptionEdit::Private
+class Q_DECL_HIDDEN CaptionEdit::Private
 {
 public:
 

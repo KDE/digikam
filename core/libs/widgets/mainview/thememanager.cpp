@@ -67,7 +67,7 @@ Q_GLOBAL_STATIC(ThemeManagerCreator, creator)
 // ---------------------------------------------------------------
 
 
-class ThemeManager::Private
+class Q_DECL_HIDDEN ThemeManager::Private
 {
 public:
 

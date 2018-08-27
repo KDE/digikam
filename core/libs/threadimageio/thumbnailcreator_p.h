@@ -55,7 +55,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class ThumbnailCreator::Private
+class Q_DECL_HIDDEN ThumbnailCreator::Private
 {
 public:
 

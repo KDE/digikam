@@ -50,12 +50,12 @@ bool operator==(const SearchTextSettings& a, const SearchTextSettings& b)
     return a.caseSensitive == b.caseSensitive && a.text == b.text;
 }
 
-class SearchTextBar::Private
+class Q_DECL_HIDDEN SearchTextBar::Private
 {
 public:
 
-    explicit Private() :
-        optionAutoCompletionModeEntry(QLatin1String("AutoCompletionMode")),
+    explicit Private()
+      : optionAutoCompletionModeEntry(QLatin1String("AutoCompletionMode")),
         optionCaseSensitiveEntry(QLatin1String("CaseSensitive")),
         textQueryCompletion(false),
         hasCaseSensitive(true),

@@ -68,13 +68,13 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 namespace Digikam
 {
 
-class ImagePropertiesGPSTab::Private
+class Q_DECL_HIDDEN ImagePropertiesGPSTab::Private
 {
 
 public:
 
-    explicit Private() :
-        altLabel(0),
+    explicit Private()
+      : altLabel(0),
         latLabel(0),
         lonLabel(0),
         dateLabel(0),

@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class FaceDbAccessStaticPriv
+class Q_DECL_HIDDEN FaceDbAccessStaticPriv
 {
 public:
 

@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class DNotificationWidget::Private : public QObject
+class Q_DECL_HIDDEN DNotificationWidget::Private : public QObject
 {
     Q_OBJECT
 

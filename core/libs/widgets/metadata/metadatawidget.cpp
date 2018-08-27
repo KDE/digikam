@@ -66,7 +66,7 @@
 namespace Digikam
 {
 
-class MetadataWidget::Private
+class Q_DECL_HIDDEN MetadataWidget::Private
 {
 
 public:

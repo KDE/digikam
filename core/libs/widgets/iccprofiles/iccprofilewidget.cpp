@@ -101,7 +101,7 @@ typedef QMap<QString, ICCTagInfo> ICCTagInfoMap;
 
 // ---------------------------------------------------------------------------------------
 
-class ICCProfileWidget::Private
+class Q_DECL_HIDDEN ICCProfileWidget::Private
 {
 
 public:

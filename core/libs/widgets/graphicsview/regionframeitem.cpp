@@ -92,7 +92,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::CropHandle)
 namespace Digikam
 {
 
-class RegionFrameItem::Private
+class Q_DECL_HIDDEN RegionFrameItem::Private
 {
 public:
 
@@ -376,7 +376,8 @@ void RegionFrameItem::Private::updateHudWidgetPosition()
 // ---------------------------------------------------------------------------------------
 
 RegionFrameItem::RegionFrameItem(QGraphicsItem* const item)
-    : DImgChildItem(item), d(new Private(this))
+    : DImgChildItem(item),
+      d(new Private(this))
 {
     d->resizeHandleVisibility = new AnimatedVisibility(this);
     d->resizeHandleVisibility->controller()->setShallBeShown(false);

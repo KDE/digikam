@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class TransitionPreview::Private
+class Q_DECL_HIDDEN TransitionPreview::Private
 {
 public:
 

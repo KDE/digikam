@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class IOJobData::Private
+class Q_DECL_HIDDEN IOJobData::Private
 {
 public:
 

@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class RatingFilterWidget::Private
+class Q_DECL_HIDDEN RatingFilterWidget::Private
 {
 public:
 
@@ -190,7 +190,7 @@ void RatingFilterWidget::updateRatingTooltip()
 
 // -----------------------------------------------------------------------------------------------
 
-class RatingFilter::Private
+class Q_DECL_HIDDEN RatingFilter::Private
 {
 public:
 

@@ -34,12 +34,12 @@
 namespace Digikam
 {
 
-class StateSavingObject::Private
+class Q_DECL_HIDDEN StateSavingObject::Private
 {
 public:
 
-    explicit Private() :
-        host(0),
+    explicit Private()
+      : host(0),
         group(),
         prefix(),
         groupSet(false),
@@ -141,8 +141,8 @@ public:
     StateSavingObject::StateSavingDepth depth;
 };
 
-StateSavingObject::StateSavingObject(QObject* const host) :
-    d(new Private)
+StateSavingObject::StateSavingObject(QObject* const host)
+    : d(new Private)
 {
     d->host = host;
     // we cannot safely create the default config group here, because the host

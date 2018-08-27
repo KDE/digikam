@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class DynamicThread::Private : public QRunnable
+class Q_DECL_HIDDEN DynamicThread::Private : public QRunnable
 {
 public:
 

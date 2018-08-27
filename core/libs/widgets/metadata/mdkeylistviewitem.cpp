@@ -43,7 +43,8 @@ namespace Digikam
 {
 
 MdKeyListViewItem::MdKeyListViewItem(QTreeWidget* const parent, const QString& key)
-    : QObject(parent), QTreeWidgetItem(parent)
+    : QObject(parent),
+      QTreeWidgetItem(parent)
 {
     m_key          = key;
     m_decryptedKey = key;

@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class DLogoAction::Private
+class Q_DECL_HIDDEN DLogoAction::Private
 {
 public:
 

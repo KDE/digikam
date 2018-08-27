@@ -45,7 +45,7 @@ int FaceDbSchemaUpdater::schemaVersion()
 
 // -------------------------------------------------------------------------------------
 
-class FaceDbSchemaUpdater::Private
+class Q_DECL_HIDDEN FaceDbSchemaUpdater::Private
 {
 public:
 

@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class VersionsDelegate::Private
+class Q_DECL_HIDDEN VersionsDelegate::Private
 {
 public:
 

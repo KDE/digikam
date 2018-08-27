@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class StatusbarProgressWidget::Private
+class Q_DECL_HIDDEN StatusbarProgressWidget::Private
 {
 public:
 
@@ -65,8 +65,8 @@ public:
 
 public:
 
-    explicit Private() :
-        mode(None),
+    explicit Private()
+      : mode(None),
         bShowButton(true),
         pProgressBar(0),
         pLabel(0),

@@ -47,12 +47,12 @@
 namespace Digikam
 {
 
-class CameraItemPropertiesTab::Private
+class Q_DECL_HIDDEN CameraItemPropertiesTab::Private
 {
 public:
 
-    explicit Private() :
-        file(0),
+    explicit Private()
+      : file(0),
         folder(0),
         date(0),
         size(0),
