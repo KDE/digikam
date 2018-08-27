@@ -478,4 +478,5 @@ BUGFIXES:
 417 ==> 118090 - digiKam crashed while attempting to save scanned (tiff) image.
 418 ==> 397828 - Operation cancelled when exporting to flickr.
 419 ==> 397924 - Merge tag names of people.
-420 ==> 
+420 ==> 397425 - Bug when trying find duplicates.
+421 ==> 
