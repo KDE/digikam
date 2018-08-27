@@ -69,17 +69,17 @@ void Logout::start()
 void Logout::doWorkSendRequest()
 {
     Q_D(Logout);
-    
+
     QUrl url = d->mediawiki.url();
     QUrlQuery query;
     query.addQueryItem(QStringLiteral("format"), QStringLiteral("xml"));
     query.addQueryItem(QStringLiteral("action"), QStringLiteral("logout"));
     url.setQuery(query);
-    
+
     QByteArray cookie = "";
     QList<QNetworkCookie> mediawikiCookies = d->manager->cookieJar()->cookiesForUrl(d->mediawiki.url());
 
-    for(int i = 0 ; i < mediawikiCookies.size(); ++i)
+    for (int i = 0 ; i < mediawikiCookies.size() ; ++i)
     {
         cookie += mediawikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
         cookie += ';';
@@ -88,7 +88,7 @@ void Logout::doWorkSendRequest()
     // Set the request
     QNetworkRequest request(url);
     request.setRawHeader("User-Agent", d->mediawiki.userAgent().toUtf8());
-    request.setRawHeader( "Cookie", cookie );
+    request.setRawHeader("Cookie", cookie);
 
     // Delete cookies
     d->manager->setCookieJar(new QNetworkCookieJar);
@@ -96,6 +96,7 @@ void Logout::doWorkSendRequest()
     // Send the request
     d->reply = d->manager->get(request);
     connectReply();
+
     connect(d->reply, SIGNAL(finished()),
             this, SLOT(doWorkProcessReply()));
 }
@@ -103,6 +104,7 @@ void Logout::doWorkSendRequest()
 void Logout::doWorkProcessReply()
 {
     Q_D(Logout);
+
     disconnect(d->reply, SIGNAL(finished()),
                this, SLOT(doWorkProcessReply()));
 

@@ -71,7 +71,7 @@ public:
 
         int ret = list.indexOf(error);
 
-        if(ret == -1)
+        if (ret == -1)
         {
             ret = 0;
         }
@@ -107,7 +107,7 @@ void Login::doWorkSendRequest()
     Q_D(Login);
 
     // Set the url
-    QUrl url = d->mediawiki.url();
+    QUrl url   = d->mediawiki.url();
     d->baseUrl = url;
 
     QUrlQuery query;
@@ -123,6 +123,7 @@ void Login::doWorkSendRequest()
 
     // Send the request
     d->reply = d->manager->post(request, query.toString().toUtf8());
+
     connect(d->reply, SIGNAL(finished()),
             this, SLOT(doWorkProcessReply()));
 }
@@ -130,6 +131,7 @@ void Login::doWorkSendRequest()
 void Login::doWorkProcessReply()
 {
     Q_D(Login);
+
     disconnect(d->reply, SIGNAL(finished()),
                this, SLOT(doWorkProcessReply()));
 

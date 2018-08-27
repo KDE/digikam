@@ -352,8 +352,8 @@ public:
 
 private:
 
-    class GeneralinfoPrivate;
-    GeneralinfoPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace mediawiki

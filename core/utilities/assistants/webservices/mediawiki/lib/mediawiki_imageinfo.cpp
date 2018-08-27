@@ -30,7 +30,7 @@
 namespace mediawiki
 {
 
-class Q_DECL_HIDDEN Imageinfo::ImageinfoPrivate
+class Q_DECL_HIDDEN Imageinfo::Private
 {
 public:
 
@@ -51,7 +51,7 @@ public:
 };
 
 Imageinfo::Imageinfo()
-    : d(new ImageinfoPrivate())
+    : d(new Private())
 {
     d->thumbWidth  = -1;
     d->thumbHeight = -1;
@@ -61,7 +61,7 @@ Imageinfo::Imageinfo()
 }
 
 Imageinfo::Imageinfo(const Imageinfo& other)
-    : d(new ImageinfoPrivate(*(other.d)))
+    : d(new Private(*(other.d)))
 {}
 
 Imageinfo::~Imageinfo()

@@ -34,7 +34,7 @@
 namespace mediawiki
 {
 
-class Q_DECL_HIDDEN Generalinfo::GeneralinfoPrivate
+class Q_DECL_HIDDEN Generalinfo::Private
 {
 public:
 
@@ -66,11 +66,11 @@ public:
 };
 
 Generalinfo::Generalinfo()
-    : d(new GeneralinfoPrivate())
+    : d(new Private())
 {}
 
 Generalinfo::Generalinfo(const Generalinfo& other)
-    : d(new GeneralinfoPrivate(*(other.d)))
+    : d(new Private(*(other.d)))
 {}
 
 Generalinfo::~Generalinfo()

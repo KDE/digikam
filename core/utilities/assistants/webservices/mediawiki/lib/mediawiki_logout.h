@@ -71,4 +71,4 @@ private Q_SLOTS:
 
 } // namespace mediawiki
 
-#endif // LOGOUT_H
+#endif // MEDIAWIKI_LOGOUT_H

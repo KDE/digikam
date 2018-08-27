@@ -31,7 +31,7 @@
 namespace mediawiki
 {
 
-class Q_DECL_HIDDEN Image::ImagePrivate
+class Q_DECL_HIDDEN Image::Private
 {
 public:
 
@@ -40,14 +40,15 @@ public:
 };
 
 Image::Image()
-    : d(new ImagePrivate())
+    : d(new Private())
 {
     d->namespaceId = -1;
 }
 
 Image::Image(const Image& other)
-    : d(new ImagePrivate(*(other.d)))
-{}
+    : d(new Private(*(other.d)))
+{
+}
 
 Image::~Image()
 {

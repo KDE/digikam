@@ -50,16 +50,19 @@ Job::~Job()
 bool Job::doKill()
 {
     Q_D(Job);
+
     if (d->reply != 0)
     {
         d->reply->abort();
     }
+
     return true;
 }
 
 void Job::connectReply()
 {
     Q_D(Job);
+
     connect(d->reply, SIGNAL(uploadProgress(qint64,qint64)),
             this, SLOT(processUploadProgress(qint64,qint64)));
 }

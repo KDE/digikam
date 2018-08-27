@@ -41,7 +41,6 @@ namespace mediawiki
  */
 class DIGIKAM_EXPORT Image
 {
-
 public:
 
     /**
@@ -99,8 +98,8 @@ public:
 
 private:
 
-    class ImagePrivate;
-    ImagePrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace mediawiki

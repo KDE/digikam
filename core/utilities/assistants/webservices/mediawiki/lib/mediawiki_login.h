@@ -36,7 +36,6 @@
 #include "mediawiki_job.h"
 #include "digikam_export.h"
 
-
 namespace mediawiki
 {
 
@@ -146,4 +145,4 @@ private Q_SLOTS:
 
 } // namespace mediawiki
 
-#endif // LOGIN_H
+#endif // MEDIAWIKI_LOGIN_H
