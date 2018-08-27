@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class SetupMisc::Private
+class Q_DECL_HIDDEN SetupMisc::Private
 {
 public:
 
@@ -126,12 +126,10 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    // --------------------------------------------------------
+    // -- Application Behavior Options --------------------------------------------------------
 
     QWidget* const behaviourPanel = new QWidget(d->tab);
     QVBoxLayout* const layout     = new QVBoxLayout(behaviourPanel);
-
-    // --------------------------------------------------------
 
     DHBox* const stringComparisonHbox = new DHBox(behaviourPanel);
     d->stringComparisonTypeLabel      = new QLabel(i18n("String comparison type:"), stringComparisonHbox);
@@ -160,7 +158,6 @@ SetupMisc::SetupMisc(QWidget* const parent)
                                     "this can introduce low latency, and it is recommended to disable this option and to plan\n"
                                     "a manual scan through the maintenance tool at the right moment."));
 
-    // ---------------------------------------------------------
 
     d->cleanAtStart                   = new QCheckBox(i18n("Remove obsolete core database objects (makes startup slower)"), behaviourPanel);
     d->cleanAtStart->setToolTip(i18n("Set this option to force digiKam to clean up the core database from obsolete item entries.\n"
@@ -169,18 +166,12 @@ SetupMisc::SetupMisc(QWidget* const parent)
                                      "This option does not clean up other databases as the thumbnails or recognition db.\n"
                                      "For clean up routines for other databases, please use the maintenance."));
 
-    // -- Application Behavior Options --------------------------------------------------------
+    d->scrollItemToCenterCheck                = new QCheckBox(i18n("Scroll current item to center of thumbbar"), behaviourPanel);
+    d->showOnlyPersonTagsInPeopleSidebarCheck = new QCheckBox(i18n("Show only face tags for assigning names in people sidebar"), behaviourPanel);
 
-    QGroupBox* const abOptionsGroup = new QGroupBox(i18n("Application Behavior"), behaviourPanel);
-    QVBoxLayout* const gLayout5     = new QVBoxLayout();
+    // ---------------------------------------------------------
 
-    d->showSplashCheck                        = new QCheckBox(i18n("&Show splash screen at startup"), abOptionsGroup);
-    d->useNativeFileDialogCheck               = new QCheckBox(i18n("Use file dialogs from the system"), abOptionsGroup);
-    d->drawFramesToGroupedCheck               = new QCheckBox(i18n("Draw frames around grouped items"), abOptionsGroup);
-    d->scrollItemToCenterCheck                = new QCheckBox(i18n("Scroll current item to center of thumbbar"), abOptionsGroup);
-    d->showOnlyPersonTagsInPeopleSidebarCheck = new QCheckBox(i18n("Show only face tags for assigning names in people sidebar"), abOptionsGroup);
-
-    DHBox* const minSimilarityBoundHbox       = new DHBox(abOptionsGroup);
+    DHBox* const minSimilarityBoundHbox       = new DHBox(behaviourPanel);
     d->minSimilarityBoundLabel                = new QLabel(i18n("Lower bound for minimum similarity:"), minSimilarityBoundHbox);
     d->minimumSimilarityBound                 = new QSpinBox(minSimilarityBoundHbox);
     d->minimumSimilarityBound->setSuffix(QLatin1String("%"));
@@ -194,7 +185,33 @@ SetupMisc::SetupMisc(QWidget* const parent)
                                                "a lower value than 40 can make the search <b>really</b> slow."));
     d->minSimilarityBoundLabel->setBuddy(d->minimumSimilarityBound);
 
-    DHBox* const tabStyleHbox = new DHBox(abOptionsGroup);
+    // ---------------------------------------------------------
+
+    layout->setContentsMargins(spacing, spacing, spacing, spacing);
+    layout->setSpacing(spacing);
+    layout->addWidget(stringComparisonHbox);
+    layout->addWidget(d->scanAtStart);
+    layout->addWidget(d->cleanAtStart);
+    layout->addWidget(d->showTrashDeleteDialogCheck);
+    layout->addWidget(d->showPermanentDeleteDialogCheck);
+    layout->addWidget(d->sidebarApplyDirectlyCheck);
+    layout->addWidget(d->scrollItemToCenterCheck);
+    layout->addWidget(d->showOnlyPersonTagsInPeopleSidebarCheck);
+    layout->addWidget(minSimilarityBoundHbox);
+    layout->addStretch();
+
+    d->tab->insertTab(Behaviour, behaviourPanel, i18nc("@title:tab", "Behaviour"));
+
+    // -- Application Apparence Options --------------------------------------------------------
+
+    QWidget* const apparencePanel = new QWidget(d->tab);
+    QVBoxLayout* const layout2    = new QVBoxLayout(apparencePanel);
+
+    d->showSplashCheck                        = new QCheckBox(i18n("&Show splash screen at startup"), apparencePanel);
+    d->useNativeFileDialogCheck               = new QCheckBox(i18n("Use native file dialogs from the system"), apparencePanel);
+    d->drawFramesToGroupedCheck               = new QCheckBox(i18n("Draw frames around grouped items"), apparencePanel);
+
+    DHBox* const tabStyleHbox = new DHBox(apparencePanel);
     d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
     d->sidebarType            = new QComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
@@ -202,7 +219,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->sidebarType->setToolTip(i18n("Set this option to configure how sidebar tab titles are visible. "
                                     "Use \"Only For Active Tab\" option if you use a small screen resolution as with a laptop computer."));
 
-    DHBox* const appStyleHbox = new DHBox(abOptionsGroup);
+    DHBox* const appStyleHbox = new DHBox(apparencePanel);
     d->applicationStyleLabel  = new QLabel(i18n("Widget style:"), appStyleHbox);
     d->applicationStyle       = new QComboBox(appStyleHbox);
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
@@ -219,7 +236,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     appStyleHbox->setVisible(false);
 #endif
 
-    DHBox* const iconThemeHbox = new DHBox(abOptionsGroup);
+    DHBox* const iconThemeHbox = new DHBox(apparencePanel);
     d->applicationIconLabel    = new QLabel(i18n("Icon theme (changes after restart):"), iconThemeHbox);
     d->applicationIcon         = new QComboBox(iconThemeHbox);
     d->applicationIcon->setToolTip(i18n("Set this option to choose the default icon theme."));
@@ -233,7 +250,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     bool foundBreezeDark     = false;
     bool foundBreeze         = false;
 
-    foreach(const QString& path, QIcon::themeSearchPaths())
+    foreach (const QString& path, QIcon::themeSearchPaths())
     {
         if (!foundBreeze && QFile::exists(path + breeze + indexTheme))
         {
@@ -248,37 +265,23 @@ SetupMisc::SetupMisc(QWidget* const parent)
         }
     }
 
-    d->applicationFont = new DFontSelect(i18n("Application font:"), abOptionsGroup);
+    d->applicationFont = new DFontSelect(i18n("Application font:"), apparencePanel);
     d->applicationFont->setToolTip(i18n("Select here the font used to display text in whole application."));
 
-    gLayout5->addWidget(d->showSplashCheck);
-    gLayout5->addWidget(d->useNativeFileDialogCheck);
-    gLayout5->addWidget(d->drawFramesToGroupedCheck);
-    gLayout5->addWidget(d->scrollItemToCenterCheck);
-    gLayout5->addWidget(d->showOnlyPersonTagsInPeopleSidebarCheck);
-    gLayout5->addWidget(minSimilarityBoundHbox);
-    gLayout5->addWidget(tabStyleHbox);
-    gLayout5->addWidget(appStyleHbox);
-    gLayout5->addWidget(iconThemeHbox);
-    gLayout5->addWidget(d->applicationFont);
-    abOptionsGroup->setLayout(gLayout5);
-
     // --------------------------------------------------------
 
-    layout->setContentsMargins(spacing, spacing, spacing, spacing);
-    layout->setSpacing(spacing);
-    layout->addWidget(stringComparisonHbox);
-    layout->addWidget(d->scanAtStart);
-    layout->addWidget(d->cleanAtStart);
-    layout->addWidget(d->showTrashDeleteDialogCheck);
-    layout->addWidget(d->showPermanentDeleteDialogCheck);
-    layout->addWidget(d->sidebarApplyDirectlyCheck);
-    layout->addWidget(abOptionsGroup);
-    layout->addStretch();
+    layout2->setContentsMargins(spacing, spacing, spacing, spacing);
+    layout2->setSpacing(spacing);
+    layout2->addWidget(d->showSplashCheck);
+    layout2->addWidget(d->useNativeFileDialogCheck);
+    layout2->addWidget(d->drawFramesToGroupedCheck);
+    layout2->addWidget(tabStyleHbox);
+    layout2->addWidget(appStyleHbox);
+    layout2->addWidget(iconThemeHbox);
+    layout2->addWidget(d->applicationFont);
+    layout2->addStretch();
 
-    // --------------------------------------------------------
-
-    d->tab->insertTab(Behaviour, behaviourPanel, i18nc("@title:tab", "Behaviour"));
+    d->tab->insertTab(Apparence, apparencePanel, i18nc("@title:tab", "Apparence"));
 
     // --------------------------------------------------------
 
@@ -341,16 +344,12 @@ SetupMisc::SetupMisc(QWidget* const parent)
     grid->setColumnMinimumWidth(3, 30);
     grid->setRowStretch(20, 10);
 
-    // --------------------------------------------------------
-
     d->tab->insertTab(Grouping, groupingPanel, i18nc("@title:tab", "Grouping"));
 
     // --------------------------------------------------------
 
     readSettings();
     adjustSize();
-
-    // --------------------------------------------------------
 }
 
 SetupMisc::~SetupMisc()

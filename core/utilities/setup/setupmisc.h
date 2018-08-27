@@ -30,12 +30,6 @@
 
 #include <QScrollArea>
 
-// local includes
-
-#include "applicationsettings.h"
-
-class QButtonGroup;
-
 namespace Digikam
 {
 
@@ -47,11 +41,12 @@ public:
     enum MiscTab
     {
         Behaviour = 0,
+        Apparence,
         Grouping
     };
 
     explicit SetupMisc(QWidget* const parent = 0);
-    virtual ~SetupMisc();
+    ~SetupMisc();
 
     void applySettings();
 
