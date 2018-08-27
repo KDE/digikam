@@ -38,24 +38,30 @@
 
 #include <klocalizedstring.h>
 
+// Local includes
+
+#include "dexpanderbox.h"
+
 namespace Digikam
 {
 
-class DFontSelect::Private
+class Q_DECL_HIDDEN DFontSelect::Private
 {
 public:
 
-    explicit Private() :
-        space(0),
+    explicit Private()
+      : space(0),
         label(0),
+        desc(0),
         chooseFontButton(0),
         modeCombo(0),
         mode(DFontSelect::SystemFont)
     {
     }
 
-    QLabel*               space;
+    QWidget*              space;
     QLabel*               label;
+    DAdjustableLabel*     desc;
 
     QFont                 font;
 
@@ -72,7 +78,7 @@ DFontSelect::DFontSelect(const QString& text, QWidget* const parent)
 {
     d->label     = new QLabel(this);
     d->label->setText(text);
-    d->space     = new QLabel(this);
+    d->space     = new QWidget(this);
 
     if (text.isEmpty())
     {
@@ -85,6 +91,7 @@ DFontSelect::DFontSelect(const QString& text, QWidget* const parent)
     d->modeCombo->addItem(i18n("Custom Font"));
 
     d->chooseFontButton = new QPushButton(i18n("Choose..."), this);
+    d->desc             = new DAdjustableLabel(this);
 
     setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     setContentsMargins(QMargins());
@@ -108,7 +115,7 @@ void DFontSelect::setMode(FontMode mode)
 {
     d->mode = mode;
     d->modeCombo->setCurrentIndex(d->mode);
-    d->modeCombo->setToolTip(i18n("Current font: %1 - %2", font().family(), font().pointSize()));
+    d->desc->setAdjustedText(QString::fromLatin1("%1 - %2").arg(font().family()).arg(font().pointSize()));
     d->chooseFontButton->setEnabled(d->mode == CustomFont);
 }
 
@@ -119,7 +126,8 @@ DFontSelect::FontMode DFontSelect::mode() const
 
 QFont DFontSelect::font() const
 {
-    return (d->mode == CustomFont) ? d->font : QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    return (d->mode == CustomFont) ? d->font
+                                   : QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 }
 
 void DFontSelect::setFont(const QFont& font)
@@ -153,8 +161,7 @@ void DFontSelect::slotOpenFontDialog()
 
     if (ok)
     {
-        d->font = f;
-        d->modeCombo->setFont(d->font);
+        setFont(f);
         emit signalFontChanged();
     }
 }
