@@ -54,7 +54,7 @@ int SimilarityDbSchemaUpdater::schemaVersion()
 
 // -------------------------------------------------------------------------------------
 
-class SimilarityDbSchemaUpdater::Private
+class Q_DECL_HIDDEN SimilarityDbSchemaUpdater::Private
 {
 
 public:

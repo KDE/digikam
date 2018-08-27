@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class DatabaseServerStarter::Private
+class Q_DECL_HIDDEN DatabaseServerStarter::Private
 {
 public:
 

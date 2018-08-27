@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class DbEngineConnectionChecker::Private
+class Q_DECL_HIDDEN DbEngineConnectionChecker::Private
 {
 
 public:

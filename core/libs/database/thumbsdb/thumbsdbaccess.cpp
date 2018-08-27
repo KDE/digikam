@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class ThumbsDbAccessStaticPriv
+class Q_DECL_HIDDEN ThumbsDbAccessStaticPriv
 {
 public:
 

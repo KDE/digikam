@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class SyncJob::Private
+class Q_DECL_HIDDEN SyncJob::Private
 {
 public:
 

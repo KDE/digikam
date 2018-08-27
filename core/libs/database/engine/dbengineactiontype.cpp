@@ -29,7 +29,7 @@
 namespace Digikam
 {
 
-class DbEngineActionType::Private
+class Q_DECL_HIDDEN DbEngineActionType::Private
 {
 
 public:

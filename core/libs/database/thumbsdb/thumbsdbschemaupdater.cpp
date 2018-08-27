@@ -53,7 +53,7 @@ int ThumbsDbSchemaUpdater::schemaVersion()
 
 // -------------------------------------------------------------------------------------
 
-class ThumbsDbSchemaUpdater::Private
+class Q_DECL_HIDDEN ThumbsDbSchemaUpdater::Private
 {
 
 public:

@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class ImageVersionsModel::Private
+class Q_DECL_HIDDEN ImageVersionsModel::Private
 {
 public:
 

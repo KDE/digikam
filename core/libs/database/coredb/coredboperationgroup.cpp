@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class CoreDbOperationGroup::Private
+class Q_DECL_HIDDEN CoreDbOperationGroup::Private
 {
 public:
 

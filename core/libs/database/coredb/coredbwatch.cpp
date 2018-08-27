@@ -46,7 +46,7 @@ namespace Digikam
 class DBusSignalListenerThread;
 #endif
 
-class CoreDbWatch::Private
+class Q_DECL_HIDDEN CoreDbWatch::Private
 {
 public:
 

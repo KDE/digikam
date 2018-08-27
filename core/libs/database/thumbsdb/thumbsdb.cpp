@@ -39,13 +39,13 @@
 namespace Digikam
 {
 
-class ThumbsDb::Private
+class Q_DECL_HIDDEN ThumbsDb::Private
 {
 
 public:
 
-    explicit Private() :
-        db(0)
+    explicit Private()
+      : db(0)
     {
     }
 

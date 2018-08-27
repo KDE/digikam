@@ -31,14 +31,14 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "thumbnailloadthread.h"
 #include "digikam_export.h"
 #include "digikam_globals.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
 
-class ImageThumbnailModel::Private
+class Q_DECL_HIDDEN ImageThumbnailModel::Private
 {
 public:
 

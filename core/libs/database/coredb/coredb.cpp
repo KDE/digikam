@@ -64,7 +64,7 @@ extern "C"
 namespace Digikam
 {
 
-class CoreDB::Private
+class Q_DECL_HIDDEN CoreDB::Private
 {
 
 public:

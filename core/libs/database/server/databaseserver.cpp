@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class DatabaseServer::Private
+class Q_DECL_HIDDEN DatabaseServer::Private
 {
 public:
 

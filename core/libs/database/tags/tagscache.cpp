@@ -60,12 +60,12 @@ typedef QPair<TagPropertiesConstIterator, TagPropertiesConstIterator> TagPropert
 
 // ------------------------------------------------------------------------------------------
 
-class TagsCache::Private
+class Q_DECL_HIDDEN TagsCache::Private
 {
 public:
 
-    explicit Private(TagsCache* const q) :
-        initialized(false),
+    explicit Private(TagsCache* const q)
+      : initialized(false),
         needUpdateInfos(true),
         needUpdateHash(true),
         needUpdateProperties(true),

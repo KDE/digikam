@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class AlbumSelectDialog::Private
+class Q_DECL_HIDDEN AlbumSelectDialog::Private
 {
 
 public:

@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class AlbumSelectComboBox::Private
+class Q_DECL_HIDDEN AlbumSelectComboBox::Private
 {
 public:
 

@@ -50,12 +50,12 @@
 namespace Digikam
 {
 
-class AlbumSelectTreeView::Private
+class Q_DECL_HIDDEN AlbumSelectTreeView::Private
 {
 public:
 
-    explicit Private() :
-        albumModificationHelper(0),
+    explicit Private()
+      : albumModificationHelper(0),
         newAlbumAction(0)
     {
     }
@@ -115,12 +115,12 @@ void AlbumSelectTreeView::slotNewAlbum()
 
 // --------------------------------------------------------------------------------------------------------
 
-class AlbumSelectWidget::Private
+class Q_DECL_HIDDEN AlbumSelectWidget::Private
 {
 public:
 
-    explicit Private() :
-        albumModel(0),
+    explicit Private()
+      : albumModel(0),
         albumTreeView(0),
         albumModificationHelper(0),
         searchBar(0),

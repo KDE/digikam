@@ -67,7 +67,7 @@ public:
 
 // ------------------------------------------------------------------------------------------
 
-class AlbumSelectors::Private
+class Q_DECL_HIDDEN AlbumSelectors::Private
 {
 public:
 

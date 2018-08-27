@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class AlbumSelectTabs::Private
+class Q_DECL_HIDDEN AlbumSelectTabs::Private
 {
 public:
 

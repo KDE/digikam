@@ -56,12 +56,12 @@
 namespace Digikam
 {
 
-class AlbumLabelsTreeView::Private
+class Q_DECL_HIDDEN AlbumLabelsTreeView::Private
 {
 public:
 
-    explicit Private() :
-        ratings(0),
+    explicit Private()
+      : ratings(0),
         picks(0),
         colors(0),
         isCheckableTreeView(false),
@@ -94,10 +94,10 @@ const QString AlbumLabelsTreeView::Private::configPickSelectionEntry(QLatin1Stri
 const QString AlbumLabelsTreeView::Private::configColorSelectionEntry(QLatin1String("ColorSelection"));
 const QString AlbumLabelsTreeView::Private::configExpansionEntry(QLatin1String("Expansion"));
 
-AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckable) :
-    QTreeWidget(parent),
-    StateSavingObject(this),
-    d(new Private)
+AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckable)
+    : QTreeWidget(parent),
+      StateSavingObject(this),
+      d(new Private)
 {
     d->regularFont         = ApplicationSettings::instance()->getTreeViewFont();
     d->iconSizeFromSetting = ApplicationSettings::instance()->getTreeViewIconSize();
@@ -502,12 +502,12 @@ void AlbumLabelsTreeView::restoreSelectionFromHistory(QHash<Labels, QList<int> >
 
 // -------------------------------------------------------------------------------
 
-class AlbumLabelsSearchHandler::Private
+class Q_DECL_HIDDEN AlbumLabelsSearchHandler::Private
 {
 public:
 
-    explicit Private() :
-        treeWidget(0),
+    explicit Private()
+      : treeWidget(0),
         dbJobThread(0),
         restoringSelectionFromHistory(0),
         currentXmlIsEmpty(0),

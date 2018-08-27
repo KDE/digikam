@@ -86,7 +86,7 @@ public:
 
 // ------------------------------------------------------------------------------
 
-class ScanController::Private
+class Q_DECL_HIDDEN ScanController::Private
 {
 public:
 

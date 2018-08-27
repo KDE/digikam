@@ -35,7 +35,7 @@ namespace Digikam
 
 class CoreDbWatch;
 
-class CoreDbBackendPrivate : public BdEngineBackendPrivate
+class Q_DECL_HIDDEN CoreDbBackendPrivate : public BdEngineBackendPrivate
 {
 public:
 

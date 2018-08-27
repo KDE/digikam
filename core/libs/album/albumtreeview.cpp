@@ -136,12 +136,12 @@ protected:
 
 // -------------------------------------------------------------------------------
 
-class AbstractAlbumTreeView::Private
+class Q_DECL_HIDDEN AbstractAlbumTreeView::Private
 {
 public:
 
-    explicit Private() :
-        delegate(0),
+    explicit Private()
+      : delegate(0),
         expandOnSingleClick(false),
         expandNewCurrent(false),
         selectAlbumOnClick(false),
@@ -1263,7 +1263,7 @@ void AbstractCountingAlbumTreeView::rowsInserted(const QModelIndex& parent, int 
 
 // ----------------------------------------------------------------------------------------------
 
-class AbstractCheckableAlbumTreeView::Private
+class Q_DECL_HIDDEN AbstractCheckableAlbumTreeView::Private
 {
 public:
 

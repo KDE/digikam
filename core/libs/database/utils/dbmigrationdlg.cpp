@@ -59,7 +59,7 @@
 namespace Digikam
 {
 
-class DatabaseCopyThread::Private
+class Q_DECL_HIDDEN DatabaseCopyThread::Private
 {
 public:
 
@@ -95,12 +95,12 @@ void DatabaseCopyThread::init(const DbEngineParameters& fromDbEngineParameters, 
 
 // ---------------------------------------------------------------------------
 
-class DatabaseMigrationDialog::Private
+class Q_DECL_HIDDEN DatabaseMigrationDialog::Private
 {
 public:
 
-    explicit Private() :
-        fromDatabaseSettingsWidget(0),
+    explicit Private()
+      : fromDatabaseSettingsWidget(0),
         toDatabaseSettingsWidget(0),
         migrateButton(0),
         cancelButton(0),

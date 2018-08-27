@@ -40,7 +40,7 @@ namespace Digikam
 
 typedef QExplicitlySharedDataPointer<TagProperties::TagPropertiesPriv> TagPropertiesPrivSharedPointer;
 
-class TagProperties::TagPropertiesPriv : public QSharedData
+class Q_DECL_HIDDEN TagProperties::TagPropertiesPriv : public QSharedData
 {
 public:
 

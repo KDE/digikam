@@ -131,7 +131,7 @@ public:
 
 // ---------------------------------------------------------------------------
 
-class ImageScanner::Private
+class Q_DECL_HIDDEN ImageScanner::Private
 {
 public:
 

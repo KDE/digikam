@@ -90,7 +90,7 @@ static inline int toInt32BitSafe(const QList<QVariant>::const_iterator& it)
 
 // ---------------------------------------------------------------------------------
 
-class ImageLister::Private
+class Q_DECL_HIDDEN ImageLister::Private
 {
 
 public:

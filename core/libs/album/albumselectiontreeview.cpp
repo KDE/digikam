@@ -73,13 +73,13 @@ protected:
 
 // ----------------------------------------------------------------------------------------------------
 
-class AlbumSelectionTreeView::Private
+class Q_DECL_HIDDEN AlbumSelectionTreeView::Private
 {
 
 public:
 
-    explicit Private() :
-        enableToolTips(false),
+    explicit Private()
+      : enableToolTips(false),
         albumModificationHelper(0),
         toolTip(0),
         renameAction(0),

@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class ImagePositionPriv : public QSharedData
+class Q_DECL_HIDDEN ImagePositionPriv : public QSharedData
 {
 
 public:
@@ -104,6 +104,8 @@ void ImagePositionPriv::init(CoreDbAccess& access, qlonglong id)
         description     = values.at(9).toString();
     }
 }
+
+// ------------------------------------------------------
 
 ImagePosition::ImagePosition()
 {

@@ -160,7 +160,7 @@ uint qHash(const PAlbumPath& id)
 
 // -----------------------------------------------------------------------------------
 
-class AlbumManager::Private
+class Q_DECL_HIDDEN AlbumManager::Private
 {
 public:
 

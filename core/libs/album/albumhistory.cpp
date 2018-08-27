@@ -130,7 +130,7 @@ public:
 
 // ---------------------------------------------------------------------
 
-class AlbumHistory::Private
+class Q_DECL_HIDDEN AlbumHistory::Private
 {
 public:
 

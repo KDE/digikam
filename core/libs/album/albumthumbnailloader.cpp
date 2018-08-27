@@ -62,7 +62,7 @@ Q_GLOBAL_STATIC(AlbumThumbnailLoaderCreator, creator)
 
 // ---------------------------------------------------------------------------------------------
 
-class AlbumThumbnailLoader::Private
+class Q_DECL_HIDDEN AlbumThumbnailLoader::Private
 {
 public:
 

@@ -86,13 +86,13 @@ public:
 
 // --------------------------------------------------------------------------------
 
-class AlbumPropsEdit::Private
+class Q_DECL_HIDDEN AlbumPropsEdit::Private
 {
 
 public:
 
-    explicit Private() :
-        buttons(0),
+    explicit Private()
+      : buttons(0),
         categoryCombo(0),
         parentCombo(0),
         titleEdit(0),
