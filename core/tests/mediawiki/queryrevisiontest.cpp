@@ -54,7 +54,7 @@ Q_DECLARE_METATYPE(FakeServer::Request)
 Q_DECLARE_METATYPE(QueryRevision*)
 Q_DECLARE_METATYPE(QueryRevision::Properties)
 
-Revision constructRevision(int i,int p, int s, bool m, QString u, QDateTime t, QString cm, QString ct, QString pt, QString r)
+Revision constructRevision(int i, int p, int s, bool m, QString u, QDateTime t, QString cm, QString ct, QString pt, QString r)
 {
     Revision rev;
     rev.setRevisionId(i);

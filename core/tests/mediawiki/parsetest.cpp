@@ -23,9 +23,6 @@
  *
  * ============================================================ */
 
-#ifndef TEST_PARSE_H
-#define TEST_PARSE_H
-
 // Qt includes
 
 #include <QObject>
@@ -250,5 +247,3 @@ private:
 QTEST_MAIN(ParseTest)
 
 #include "parsetest.moc"
-
-#endif // TEST_PARSE_H

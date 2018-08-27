@@ -23,9 +23,6 @@
  *
  * ============================================================ */
 
-#ifndef TEST_QUERYINFO_H
-#define TEST_QUERYINFO_H
-
 // Qt includes
 
 #include <QObject>
@@ -228,5 +225,3 @@ private:
 QTEST_MAIN(QueryInfoTest)
 
 #include "queryinfotest.moc"
-
-#endif // TEST_QUERYINFO_H

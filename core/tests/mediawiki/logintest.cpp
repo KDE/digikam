@@ -23,9 +23,6 @@
  *
  * ============================================================ */
 
-#ifndef TEST_LOGIN_H
-#define TEST_LOGIN_H
-
 // Qt includes
 
 #include <QObject>
@@ -50,7 +47,8 @@ class LoginTest : public QObject
 
 public Q_SLOTS:
 
-    void loginHandle(KJob* job) {
+    void loginHandle(KJob* job)
+    {
         Q_UNUSED(job)
         loginCount++;
     }
@@ -59,7 +57,7 @@ private Q_SLOTS:
 
     void initTestCase()
     {
-        loginCount = 0;
+        loginCount     = 0;
         this->m_server = new FakeServer;
     }
 
@@ -572,5 +570,3 @@ private:
 QTEST_MAIN(LoginTest)
 
 #include "logintest.moc"
-
-#endif // TEST_LOGIN_H

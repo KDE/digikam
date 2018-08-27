@@ -23,13 +23,16 @@
  *
  * ============================================================ */
 
-#ifndef TEST_EDIT_H
-#define TEST_EDIT_H
+// Qt includes
 
 #include <QObject>
 #include <QtTest>
 
+// KDE includes
+
 #include <kjob.h>
+
+// Local includes
 
 #include "mediawiki_iface.h"
 #include "mediawiki_edit.h"
@@ -48,7 +51,7 @@ class EditTest : public QObject
 
 Q_SIGNALS:
 
-    void captchaSignal(const QString & CaptchaAnswer);
+    void captchaSignal(const QString& CaptchaAnswer);
 
 public Q_SLOTS:
 
@@ -265,7 +268,7 @@ private Q_SLOTS:
         e13->setText( QStringLiteral("Hello everyone!") );
         e13->setWatchList(Edit::nochange);
         QTest::newRow("WatchList nochange")
-                <<  QStringLiteral("/?format=xml&action=edit&basetimestamp=2008-03-20T17:26:39Z&md5=4d184ec6e8fe61abccb8ff62c4583cd0&summary=Hello%20World&text=Hello%20everyone!&title=Talk:Main%20Page&watchlist=nochange&token=cecded1f35005d22904a35cc7b736e18+%5C")
+                << QStringLiteral("/?format=xml&action=edit&basetimestamp=2008-03-20T17:26:39Z&md5=4d184ec6e8fe61abccb8ff62c4583cd0&summary=Hello%20World&text=Hello%20everyone!&title=Talk:Main%20Page&watchlist=nochange&token=cecded1f35005d22904a35cc7b736e18+%5C")
                 << QStringLiteral("<api><edit result=\"Success\" pageid=\"12\" title=\"Talk:Main Page\" oldrevid=\"465\" newrevid=\"471\" /></api>")
                 << e13;
     }
@@ -441,5 +444,3 @@ private:
 QTEST_MAIN(EditTest)
 
 #include "edittest.moc"
-
-#endif // TEST_EDIT_H

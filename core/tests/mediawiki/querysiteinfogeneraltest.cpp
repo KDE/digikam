@@ -23,9 +23,6 @@
  *
  * ============================================================ */
 
-#ifndef TEST_GENERAL_H
-#define TEST_GENERAL_H
-
 // Qt includes
 
 #include <QObject>
@@ -193,5 +190,3 @@ private:
 QTEST_MAIN(QuerySiteInfoGeneralTest)
 
 #include "querysiteinfogeneraltest.moc"
-
-#endif // TEST_GENERAL_H
