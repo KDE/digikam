@@ -81,7 +81,7 @@ void WSAuthenticationPage::setCallbackUrl(const QString& url)
 
 #ifdef HAVE_QWEBENGINE
 
-bool WSAuthenticationPage::acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool isMainFrame)
+bool WSAuthenticationPage::acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType /*type*/, bool /*isMainFrame*/)
 
 #else
 
