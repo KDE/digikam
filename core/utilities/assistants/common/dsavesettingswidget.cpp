@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class DSaveSettingsWidget::Private
+class Q_DECL_HIDDEN DSaveSettingsWidget::Private
 {
 public:
 

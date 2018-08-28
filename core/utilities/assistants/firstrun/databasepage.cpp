@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class DatabasePage::Private
+class Q_DECL_HIDDEN DatabasePage::Private
 {
 public:
 

@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class FirstRunDlg::Private
+class Q_DECL_HIDDEN FirstRunDlg::Private
 {
 public:
 

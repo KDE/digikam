@@ -74,7 +74,7 @@ QString EnfuseSettings::inputImagesList() const
     return ret;
 }
 
-class EnfuseSettingsWidget::Private
+class Q_DECL_HIDDEN EnfuseSettingsWidget::Private
 {
 public:
 

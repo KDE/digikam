@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class MigrateFromDigikam4Page::Private
+class Q_DECL_HIDDEN MigrateFromDigikam4Page::Private
 {
 public:
 

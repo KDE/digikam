@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class CalPrinter::Private
+class Q_DECL_HIDDEN CalPrinter::Private
 {
 public:
 

@@ -65,7 +65,7 @@ namespace Digikam
 
 typedef QMap<QByteArray, QByteArray> XsltParameterMap;
 
-class GalleryGenerator::Private
+class Q_DECL_HIDDEN GalleryGenerator::Private
 {
 public:
 

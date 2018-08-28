@@ -76,7 +76,7 @@ extern "C"
 namespace Digikam
 {
 
-class ExpoBlendingDlg::Private
+class Q_DECL_HIDDEN ExpoBlendingDlg::Private
 {
 public:
 

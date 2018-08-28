@@ -38,7 +38,7 @@ static const char* DEFAULT_VALUE_KEY = "Default";
 namespace Digikam
 {
 
-class AbstractThemeParameter::Private
+class Q_DECL_HIDDEN AbstractThemeParameter::Private
 {
 public:
 

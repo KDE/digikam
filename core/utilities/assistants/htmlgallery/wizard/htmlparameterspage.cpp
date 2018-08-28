@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class HTMLParametersPage::Private
+class Q_DECL_HIDDEN HTMLParametersPage::Private
 {
 public:
 

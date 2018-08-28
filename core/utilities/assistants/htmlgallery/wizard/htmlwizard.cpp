@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class HTMLWizard::Private
+class Q_DECL_HIDDEN HTMLWizard::Private
 {
 public:
 

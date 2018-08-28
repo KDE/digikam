@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class HTMLFinalPage::Private
+class Q_DECL_HIDDEN HTMLFinalPage::Private
 {
 public:
 

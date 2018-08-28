@@ -57,10 +57,10 @@ namespace Digikam
 static const qreal   selMargin = 8.0;
 static const QPointF boundMargin(selMargin, selMargin);
 
-class DSelectionItem::Private
+class Q_DECL_HIDDEN DSelectionItem::Private
 {
 public:
-    
+
     explicit Private()
     {
         selMargin   = 0.0;
@@ -72,7 +72,7 @@ public:
         hasMaxY     = false;
         hasMax      = false;
     }
-    
+
     QPen        penDark;
     QPen        penLight;
     QPen        penAnchors;
@@ -410,7 +410,7 @@ void DSelectionItem::updateAnchors()
 
 // -------------------------------------------------------------------------------------------------
 
-class DPreviewImage::Private
+class Q_DECL_HIDDEN DPreviewImage::Private
 {
 public:
 

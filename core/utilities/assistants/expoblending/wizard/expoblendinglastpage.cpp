@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class ExpoBlendingLastPage::Private
+class Q_DECL_HIDDEN ExpoBlendingLastPage::Private
 {
 public:
 
@@ -59,7 +59,7 @@ ExpoBlendingLastPage::ExpoBlendingLastPage(ExpoBlendingManager* const mngr, QWiz
       d(new Private)
 {
     d->mngr                 = mngr;
-    DVBox* const vbox      = new DVBox(this);
+    DVBox* const vbox       = new DVBox(this);
     QLabel* const title     = new QLabel(vbox);
     title->setOpenExternalLinks(true);
     title->setWordWrap(true);

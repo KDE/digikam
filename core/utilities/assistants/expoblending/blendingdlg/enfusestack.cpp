@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class EnfuseStackItem::Private
+class Q_DECL_HIDDEN EnfuseStackItem::Private
 {
 public:
 
@@ -141,7 +141,7 @@ void EnfuseStackItem::setOn(bool b)
 
 // -------------------------------------------------------------------------
 
-class EnfuseStackList::Private
+class Q_DECL_HIDDEN EnfuseStackList::Private
 {
 public:
 

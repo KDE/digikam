@@ -59,7 +59,7 @@ static const char* INT_PARAMETER_TYPE     = "int";
 
 static GalleryTheme::List sList;
 
-class GalleryTheme::Private
+class Q_DECL_HIDDEN GalleryTheme::Private
 {
 public:
 

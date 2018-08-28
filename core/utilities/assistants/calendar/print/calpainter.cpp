@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class CalPainter::Private
+class Q_DECL_HIDDEN CalPainter::Private
 {
 public:
 

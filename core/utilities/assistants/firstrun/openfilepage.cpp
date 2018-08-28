@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class OpenFilePage::Private
+class Q_DECL_HIDDEN OpenFilePage::Private
 {
 public:
 

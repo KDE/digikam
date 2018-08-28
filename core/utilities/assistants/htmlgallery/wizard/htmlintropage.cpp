@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class HTMLIntroPage::Private
+class Q_DECL_HIDDEN HTMLIntroPage::Private
 {
 public:
 

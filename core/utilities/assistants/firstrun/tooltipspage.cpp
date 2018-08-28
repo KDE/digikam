@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class TooltipsPage::Private
+class Q_DECL_HIDDEN TooltipsPage::Private
 {
 public:
 

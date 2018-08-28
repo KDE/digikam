@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class HTMLOutputPage::Private
+class Q_DECL_HIDDEN HTMLOutputPage::Private
 {
 public:
 

@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class HTMLThemePage::Private
+class Q_DECL_HIDDEN HTMLThemePage::Private
 {
 public:
 

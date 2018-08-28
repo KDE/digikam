@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class DPreviewManager::Private
+class Q_DECL_HIDDEN DPreviewManager::Private
 {
 public:
 
