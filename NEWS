@@ -482,4 +482,6 @@ BUGFIXES:
 421 ==> 397496 - Wish: Read facetags from jpg files edited in Mylio.
 422 ==> 397727 - Don't show "Mod."" label when no modified timestamp exists on an image.
 423 ==> 397893 - MacOS : digiKam do not link with libksane 18.08.0.
-424 ==> 
+424 ==> 397990 - Carousel images too large.
+425 ==> 
+
