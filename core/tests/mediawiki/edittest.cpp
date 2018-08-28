@@ -417,7 +417,7 @@ private Q_SLOTS:
         connect(this, SIGNAL(captchaSignal(QString)),
                 &edit, SLOT(finishedCaptcha(QString)));
 
-        edit.exec();
+        edit.exec();   // krazy:exclude=crashy;
 
         FakeServer::Request serverrequest = fakeserver.getRequest()[1];
         QCOMPARE(serverrequest.type, QStringLiteral("POST"));

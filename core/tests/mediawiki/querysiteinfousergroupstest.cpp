@@ -23,16 +23,21 @@
  *
  * ============================================================ */
 
+// Qt includes
+
 #include <QList>
 #include <QObject>
 #include <QString>
 #include <QUrl>
 #include <QTest>
 
+// KDE includes
+
 #include <kjob.h>
 
-#include "fakeserver/fakeserver.h"
+// Local includes
 
+#include "fakeserver/fakeserver.h"
 #include "mediawiki_iface.h"
 #include "mediawiki_querysiteinfousergroups.h"
 #include "mediawiki_usergroup.h"
@@ -49,18 +54,21 @@ class QuerySiteinfoUsergroupsTest : public QObject
 
 public Q_SLOTS:
 
-    void usergroupsHandle(const QList<UserGroup> & usergroups) {
+    void usergroupsHandle(const QList<UserGroup> & usergroups)
+    {
         ++usergroupsCount;
         usergroupsResults = usergroups;
     }
 
 private Q_SLOTS:
 
-    void init() {
+    void init()
+    {
         usergroupsCount = 0;
     }
 
-    void testResult() {
+    void testResult()
+    {
         QFETCH(QString, scenario);
         QFETCH(bool, includeNumber);
         QFETCH(int, error);
@@ -71,11 +79,12 @@ private Q_SLOTS:
         fakeserver.startAndWait();
 
         Iface MediaWiki(QUrl(QStringLiteral("http://127.0.0.1:12566")));
-        QuerySiteinfoUsergroups * job = new QuerySiteinfoUsergroups(MediaWiki);
+        QuerySiteinfoUsergroups* const job = new QuerySiteinfoUsergroups(MediaWiki);
 
         job->setIncludeNumber(includeNumber);
 
-        connect(job, SIGNAL(usergroups(QList<UserGroup>)), this, SLOT(usergroupsHandle(QList<UserGroup>)));
+        connect(job, SIGNAL(usergroups(QList<UserGroup>)),
+                this, SLOT(usergroupsHandle(QList<UserGroup>)));
 
         job->exec();
 
@@ -85,9 +94,13 @@ private Q_SLOTS:
         FakeServer::Request request = requests[0];
         QCOMPARE(request.agent, MediaWiki.userAgent());
         QCOMPARE(request.type, QStringLiteral("GET"));
-        if (includeNumber) {
+
+        if (includeNumber)
+        {
             QCOMPARE(request.value, QStringLiteral("/?format=xml&action=query&meta=siteinfo&siprop=usergroups&sinumberingroup"));
-        } else {
+        }
+        else
+        {
             QCOMPARE(request.value, QStringLiteral("/?format=xml&action=query&meta=siteinfo&siprop=usergroups"));
         }
 
@@ -100,7 +113,8 @@ private Q_SLOTS:
         QVERIFY(fakeserver.isAllScenarioDone());
     }
 
-    void testResult_data() {
+    void testResult_data()
+    {
         QTest::addColumn<QString>("scenario");
         QTest::addColumn<bool>("includeNumber");
         QTest::addColumn<int>("error");
@@ -146,7 +160,6 @@ private Q_SLOTS:
                 << int(KJob::NoError)
                 << (QList<UserGroup>() << ug1 << ug2);
 
-
         ug2.setRights(ug2.rights() << QStringLiteral("permission_2_1"));
         QTest::newRow("Two groups with group one no right and group two one right")
                 << QStringLiteral("<?xml version=\"1.0\"?><api><query><usergroups><group name=\"name_1\"></group><group name=\"name_2\"><rights><permission>permission_2_1</permission></rights></group></usergroups></query></api>")
@@ -154,14 +167,12 @@ private Q_SLOTS:
                 << int(KJob::NoError)
                 << (QList<UserGroup>() << ug1 << ug2);
 
-
         ug2.setRights(ug2.rights() << QStringLiteral("permission_2_2"));
         QTest::newRow("Two groups with group one no right and group two two rights")
                 << QStringLiteral("<?xml version=\"1.0\"?><api><query><usergroups><group name=\"name_1\"></group><group name=\"name_2\"><rights><permission>permission_2_1</permission><permission>permission_2_2</permission></rights></group></usergroups></query></api>")
                 << false
                 << int(KJob::NoError)
                 << (QList<UserGroup>() << ug1 << ug2);
-
 
         ug1.setRights(ug1.rights() << QStringLiteral("permission_1_1"));
         ug2.setRights(QList<QString>());
@@ -171,7 +182,6 @@ private Q_SLOTS:
                 << int(KJob::NoError)
                 << (QList<UserGroup>() << ug1 << ug2);
 
-
         ug2.setRights(ug2.rights() << QStringLiteral("permission_2_1"));
         QTest::newRow("Two groups with group one one right and group two one right")
                 << QStringLiteral("<?xml version=\"1.0\"?><api><query><usergroups><group name=\"name_1\"><rights><permission>permission_1_1</permission></rights></group><group name=\"name_2\"><rights><permission>permission_2_1</permission></rights></group></usergroups></query></api>")
@@ -179,14 +189,12 @@ private Q_SLOTS:
                 << int(KJob::NoError)
                 << (QList<UserGroup>() << ug1 << ug2);
 
-
         ug2.setRights(ug2.rights() << QStringLiteral("permission_2_2"));
         QTest::newRow("Two groups with group one one right and group two two rights")
                 << QStringLiteral("<?xml version=\"1.0\"?><api><query><usergroups><group name=\"name_1\"><rights><permission>permission_1_1</permission></rights></group><group name=\"name_2\"><rights><permission>permission_2_1</permission><permission>permission_2_2</permission></rights></group></usergroups></query></api>")
                 << false
                 << int(KJob::NoError)
                 << (QList<UserGroup>() << ug1 << ug2);
-
 
         ug1.setRights(ug1.rights() << QStringLiteral("permission_1_2"));
         ug2.setRights(QList<QString>());
@@ -196,7 +204,6 @@ private Q_SLOTS:
                 << int(KJob::NoError)
                 << (QList<UserGroup>() << ug1 << ug2);
 
-
         ug2.setRights(ug2.rights() << QStringLiteral("permission_2_1"));
         QTest::newRow("Two groups with group one two rights and group two one right")
                 << QStringLiteral("<?xml version=\"1.0\"?><api><query><usergroups><group name=\"name_1\"><rights><permission>permission_1_1</permission><permission>permission_1_2</permission></rights></group><group name=\"name_2\"><rights><permission>permission_2_1</permission></rights></group></usergroups></query></api>")
@@ -204,14 +211,12 @@ private Q_SLOTS:
                 << int(KJob::NoError)
                 << (QList<UserGroup>() << ug1 << ug2);
 
-
         ug2.setRights(ug2.rights() << QStringLiteral("permission_2_2"));
         QTest::newRow("Two groups with group one two rights and group two two rights")
                 << QStringLiteral("<?xml version=\"1.0\"?><api><query><usergroups><group name=\"name_1\"><rights><permission>permission_1_1</permission><permission>permission_1_2</permission></rights></group><group name=\"name_2\"><rights><permission>permission_2_1</permission><permission>permission_2_2</permission></rights></group></usergroups></query></api>")
                 << false
                 << int(KJob::NoError)
                 << (QList<UserGroup>() << ug1 << ug2);
-
 
         QTest::newRow("No group with include number")
                 << QStringLiteral("<?xml version=\"1.0\"?><api><query><usergroups></usergroups></query></api>")

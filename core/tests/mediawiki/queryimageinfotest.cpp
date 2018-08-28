@@ -89,7 +89,10 @@ private Q_SLOTS:
         job->setEndTimestamp(QDateTime(QDate(2007, 06, 06), QTime(22, 27, 45, 0)));
         job->setWidthScale(78u);
         job->setHeightScale(102u);
-        connect(job, SIGNAL(result(QList<Imageinfo>)), this, SLOT(resultHandle(QList<Imageinfo>)));
+
+        connect(job, SIGNAL(result(QList<Imageinfo>)),
+                this, SLOT(resultHandle(QList<Imageinfo>)));
+
         job->exec();
 
         // Test job
@@ -182,7 +185,10 @@ private Q_SLOTS:
         job->setEndTimestamp(QDateTime(QDate(2007, 06, 06), QTime(22, 27, 45, 0)));
         job->setWidthScale(78u);
         job->setHeightScale(102u);
-        connect(job, SIGNAL(result(QList<Imageinfo>)), this, SLOT(missingTitleHandle(QList<Imageinfo>)));
+
+        connect(job, SIGNAL(result(QList<Imageinfo>)),
+                this, SLOT(missingTitleHandle(QList<Imageinfo>)));
+
         job->exec();
 
         // Test job

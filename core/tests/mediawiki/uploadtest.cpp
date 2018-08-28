@@ -80,7 +80,10 @@ private Q_SLOTS:
         fakeserver.setScenario(m_infoScenario);
         fakeserver.addScenario(senario);
         fakeserver.startAndWait();
-        connect(job, SIGNAL(result(KJob*)),this, SLOT(uploadHandle(KJob*)));
+
+        connect(job, SIGNAL(result(KJob*)),
+                this, SLOT(uploadHandle(KJob*)));
+
         job->exec();
         FakeServer::Request serverrequest = fakeserver.getRequest()[1];
         QCOMPARE(serverrequest.type, QStringLiteral("POST"));
@@ -127,7 +130,9 @@ private Q_SLOTS:
         job->setFilename(QStringLiteral("Test.jpeg"));
         job->setComment(QStringLiteral("Test"));
         job->setText(QStringLiteral("{{Information|Description=Ajout du logo de l'IUP ISI, Toulouse.|Source=http://www.iupisi.ups-tlse.fr/|Date=1992-01-01|Author=iup|Permission={{PD-EEA}}|other_versions=}}"));
-        connect(job,  SIGNAL(result(KJob*)),this, SLOT(uploadHandle(KJob*)));
+
+        connect(job,  SIGNAL(result(KJob*)),
+                this, SLOT(uploadHandle(KJob*)));
 
         job->exec();
 
@@ -136,6 +141,7 @@ private Q_SLOTS:
             QList<FakeServer::Request> requests = fakeserver.getRequest();
             QCOMPARE(requests.size(), 2);
         }
+
         QCOMPARE(job->error(), error);
         QCOMPARE(uploadCount, 1);
 

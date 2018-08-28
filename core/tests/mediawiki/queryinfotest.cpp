@@ -148,7 +148,7 @@ private Q_SLOTS:
         connect(&job, SIGNAL(protection(QVector<Protection>)),
                 this,SLOT(queryInfoHandleProtection(QVector<Protection>)));
 
-        job.exec();
+        job.exec();   // krazy:exclude=crashy
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);

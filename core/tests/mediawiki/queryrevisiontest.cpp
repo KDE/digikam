@@ -68,7 +68,6 @@ Revision constructRevision(int i, int p, int s, bool m, QString u, QDateTime t, 
     rev.setParseTree(pt);
     rev.setRollback(r);
     return rev;
-
 }
 
 QString QStringFromFile(const QString& fileName)
@@ -129,9 +128,10 @@ private Q_SLOTS:
         job->setProperties(rvprop);
         job->setPageName(title);
 
-        connect(job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job->exec();
+        job->exec();   // krazy:exclude=crashy;
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -236,13 +236,14 @@ private Q_SLOTS:
             fakeserver.startAndWait();
         }
 
-        QueryRevision * job = new QueryRevision(MediaWiki);
+        QueryRevision* const job = new QueryRevision(MediaWiki);
         job->setProperties( QueryRevision::Size | QueryRevision::Content );
         job->setPageName(QStringLiteral("title"));
 
-        connect(job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job->exec();
+        job->exec();   // krazy:exclude=crashy;
 
         if (scenario != QStringLiteral("error serveur"))
         {
@@ -305,9 +306,10 @@ private Q_SLOTS:
         FakeServer fakeserver;
         fakeserver.startAndWait();
 
-        connect(&job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(&job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job.exec();
+        job.exec();   // krazy:exclude=crashy
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -327,9 +329,10 @@ private Q_SLOTS:
         FakeServer fakeserver;
         fakeserver.startAndWait();
 
-        connect(&job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(&job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job.exec();
+        job.exec();   // krazy:exclude=crashy
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -349,9 +352,10 @@ private Q_SLOTS:
         FakeServer fakeserver;
         fakeserver.startAndWait();
 
-        connect(&job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(&job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job.exec();
+        job.exec();   // krazy:exclude=crashy
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -371,9 +375,10 @@ private Q_SLOTS:
         FakeServer fakeserver;
         fakeserver.startAndWait();
 
-        connect(&job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(&job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job.exec();
+        job.exec();   // krazy:exclude=crashy
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -393,9 +398,10 @@ private Q_SLOTS:
         FakeServer fakeserver;
         fakeserver.startAndWait();
 
-        connect(&job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(&job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job.exec();
+        job.exec();   // krazy:exclude=crashy
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -415,9 +421,10 @@ private Q_SLOTS:
         FakeServer fakeserver;
         fakeserver.startAndWait();
 
-        connect(&job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(&job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job.exec();
+        job.exec();   // krazy:exclude=crashy
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -437,9 +444,10 @@ private Q_SLOTS:
         FakeServer fakeserver;
         fakeserver.startAndWait();
 
-        connect(&job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(&job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job.exec();
+        job.exec();   // krazy:exclude=crashy
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -459,9 +467,10 @@ private Q_SLOTS:
         FakeServer fakeserver;
         fakeserver.startAndWait();
 
-        connect(&job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(&job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job.exec();
+        job.exec();   // krazy:exclude=crashy
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -481,9 +490,10 @@ private Q_SLOTS:
         FakeServer fakeserver;
         fakeserver.startAndWait();
 
-        connect(&job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(&job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job.exec();
+        job.exec();   // krazy:exclude=crashy
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -527,9 +537,10 @@ private Q_SLOTS:
         job->setPageName(title);
         job->setGenerateXML(true);
 
-        connect(job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job->exec();
+        job->exec();   // krazy:exclude=crashy;
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -557,9 +568,10 @@ private Q_SLOTS:
         FakeServer fakeserver;
         fakeserver.startAndWait();
 
-        connect(&job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(&job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job.exec();
+        job.exec();   // krazy:exclude=crashy
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -595,9 +607,10 @@ private Q_SLOTS:
 
         job->setToken(QueryRevision::Rollback);
 
-        connect(job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job->exec();
+        job->exec();   // krazy:exclude=crashy;
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -625,9 +638,10 @@ private Q_SLOTS:
         FakeServer fakeserver;
         fakeserver.startAndWait();
 
-        connect(&job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(&job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job.exec();
+        job.exec();   // krazy:exclude=crashy
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -651,9 +665,10 @@ private Q_SLOTS:
         job->setProperties( rvprop );
         job->setPageId(id);
 
-        connect(job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job->exec();
+        job->exec();   // krazy:exclude=crashy;
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);
@@ -681,9 +696,10 @@ private Q_SLOTS:
         job->setProperties( rvprop );
         job->setRevisionId(id);
 
-        connect(job, SIGNAL(revision(QList<Revision>)), this, SLOT(revisionHandle(QList<Revision>)));
+        connect(job, SIGNAL(revision(QList<Revision>)),
+                this, SLOT(revisionHandle(QList<Revision>)));
 
-        job->exec();
+        job->exec();   // krazy:exclude=crashy;
 
         QList<FakeServer::Request> requests = fakeserver.getRequest();
         QCOMPARE(requests.size(), 1);

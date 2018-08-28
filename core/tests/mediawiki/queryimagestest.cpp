@@ -90,7 +90,10 @@ private Q_SLOTS:
         QueryImages* const job = new QueryImages(MediaWiki);
         job->setTitle(title);
         job->setLimit(limit);
-        connect(job, SIGNAL(images(QList<Image>)), this, SLOT(imagesHandle(QList<Image>)));
+
+        connect(job, SIGNAL(images(QList<Image>)),
+                this, SLOT(imagesHandle(QList<Image>)));
+
         job->exec();
 
         // Test job

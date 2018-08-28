@@ -23,9 +23,6 @@
  *
  * ============================================================ */
 
-#ifndef TEST_LOGOUT_H
-#define TEST_LOGOUT_H
-
 // Qt includes
 
 #include <QObject>
@@ -75,8 +72,11 @@ private Q_SLOTS:
 
         logoutCount = 0;
         Logout logout(*m_mediaWiki);
-        connect(&logout, SIGNAL(result(KJob*)),this, SLOT(logoutHandle(KJob*)));
-        logout.exec();
+
+        connect(&logout, SIGNAL(result(KJob*)),
+                this, SLOT(logoutHandle(KJob*)));
+
+        logout.exec();   // krazy:exclude=crashy
         QCOMPARE(this->logoutCount, 1);
         QCOMPARE(logout.error(), (int)Logout::NoError);
 
@@ -106,6 +106,3 @@ private:
 QTEST_MAIN(LogoutTest)
 
 #include "logouttest.moc"
-
-#endif // TEST_LOGOUT_H
-
