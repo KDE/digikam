@@ -242,7 +242,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     layout2->addWidget(d->applicationFont);
     layout2->addStretch();
 
-    d->tab->insertTab(Apparence, apparencePanel, i18nc("@title:tab", "Appearence"));
+    d->tab->insertTab(Appearence, appearencePanel, i18nc("@title:tab", "Appearence"));
 
     // --------------------------------------------------------
 
