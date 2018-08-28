@@ -42,7 +42,7 @@
 namespace MediaWiki
 {
 
-class QuerySiteInfoGeneralPrivate : public JobPrivate
+class Q_DECL_HIDDEN QuerySiteInfoGeneralPrivate : public JobPrivate
 {
 
 public:

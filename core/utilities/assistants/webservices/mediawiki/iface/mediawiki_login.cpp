@@ -44,7 +44,7 @@
 namespace MediaWiki
 {
 
-class LoginPrivate : public JobPrivate
+class Q_DECL_HIDDEN LoginPrivate : public JobPrivate
 {
 
 public:

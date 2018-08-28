@@ -42,7 +42,7 @@
 namespace MediaWiki
 {
 
-class LogoutPrivate : public JobPrivate
+class Q_DECL_HIDDEN LogoutPrivate : public JobPrivate
 {
 public:
 

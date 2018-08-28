@@ -29,7 +29,7 @@
 namespace MediaWiki
 {
 
-class JobPrivate
+class Q_DECL_HIDDEN JobPrivate
 {
 public:
 
@@ -40,7 +40,7 @@ public:
     {
     }
 
-    Iface&                   MediaWiki;
+    Iface&                       MediaWiki;
     QNetworkAccessManager* const manager;
     QNetworkReply*               reply;
 };

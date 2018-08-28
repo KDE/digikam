@@ -41,7 +41,7 @@
 namespace MediaWiki
 {
 
-class QuerySiteinfoUsergroupsPrivate : public JobPrivate
+class Q_DECL_HIDDEN QuerySiteinfoUsergroupsPrivate : public JobPrivate
 {
 public:
 

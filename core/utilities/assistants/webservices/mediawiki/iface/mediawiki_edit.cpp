@@ -57,7 +57,7 @@ public:
     QString      m_captchaAnswer;
 };
 
-class EditPrivate : public JobPrivate
+class Q_DECL_HIDDEN EditPrivate : public JobPrivate
 {
 public:
 
