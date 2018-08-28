@@ -81,11 +81,11 @@ public:
     QList<qlonglong> imagesId;
 };
 
-class GPSMarkerTiler::Private
+class Q_DECL_HIDDEN GPSMarkerTiler::Private
 {
 public:
 
-    class InternalJobs
+    class Q_DECL_HIDDEN InternalJobs
     {
     public:
 

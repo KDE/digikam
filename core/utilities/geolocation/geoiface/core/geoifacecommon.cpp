@@ -48,7 +48,7 @@ Q_GLOBAL_STATIC(GeoIfaceGlobalObjectCreator, geoifaceGlobalObjectCreator)
 
 // -------------------------------------------------------------------------
 
-class GeoIfaceGlobalObject::Private
+class Q_DECL_HIDDEN GeoIfaceGlobalObject::Private
 {
 public:
 

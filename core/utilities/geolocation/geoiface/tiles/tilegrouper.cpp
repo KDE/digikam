@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class TileGrouper::Private
+class Q_DECL_HIDDEN TileGrouper::Private
 {
 public:
 

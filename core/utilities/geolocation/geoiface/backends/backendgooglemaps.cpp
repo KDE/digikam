@@ -61,7 +61,7 @@
 namespace Digikam
 {
 
-class GMInternalWidgetInfo
+class Q_DECL_HIDDEN GMInternalWidgetInfo
 {
 public:
 
@@ -80,31 +80,31 @@ Q_DECLARE_METATYPE(Digikam::GMInternalWidgetInfo)
 namespace Digikam
 {
 
-class BackendGoogleMaps::Private
+class Q_DECL_HIDDEN BackendGoogleMaps::Private
 {
 public:
 
     explicit Private()
-    : htmlWidget(0),
-      htmlWidgetWrapper(0),
-      isReady(false),
-      mapTypeActionGroup(0),
-      floatItemsActionGroup(0),
-      showMapTypeControlAction(0),
-      showNavigationControlAction(0),
-      showScaleControlAction(0),
-      cacheMapType(QLatin1String("ROADMAP")),
-      cacheShowMapTypeControl(true),
-      cacheShowNavigationControl(true),
-      cacheShowScaleControl(true),
-      cacheZoom(8),
-      cacheMaxZoom(0),
-      cacheMinZoom(0),
-      cacheCenter(52.0, 6.0),
-      cacheBounds(),
-      activeState(false),
-      widgetIsDocked(false),
-      trackChangeTracker()
+      : htmlWidget(0),
+        htmlWidgetWrapper(0),
+        isReady(false),
+        mapTypeActionGroup(0),
+        floatItemsActionGroup(0),
+        showMapTypeControlAction(0),
+        showNavigationControlAction(0),
+        showScaleControlAction(0),
+        cacheMapType(QLatin1String("ROADMAP")),
+        cacheShowMapTypeControl(true),
+        cacheShowNavigationControl(true),
+        cacheShowScaleControl(true),
+        cacheZoom(8),
+        cacheMaxZoom(0),
+        cacheMinZoom(0),
+        cacheCenter(52.0, 6.0),
+        cacheBounds(),
+        activeState(false),
+        widgetIsDocked(false),
+        trackChangeTracker()
     {
     }
 
