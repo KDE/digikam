@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_JOB_H
-#define MEDIAWIKI_JOB_H
+#ifndef DIGIKAM_MEDIAWIKI_JOB_H
+#define DIGIKAM_MEDIAWIKI_JOB_H
 
 // KDE includes
 
@@ -98,4 +98,4 @@ private Q_SLOTS:
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_JOB_H
+#endif // DIGIKAM_MEDIAWIKI_JOB_H

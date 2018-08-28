@@ -7,8 +7,7 @@
  * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2011      by Hormiere Guillaume <hormiere dot guillaume at gmail dot com>
- * Copyright (C) 2011      by Manuel Campomanes <campomanes dot manuel at gmail dot com>
+ * Copyright (C) 2011      by Alexandre Mendes <alex dot mendes1988 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,69 +21,47 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_QUERYSITEINFOGENERAL_H
-#define MEDIAWIKI_QUERYSITEINFOGENERAL_H
-
-// Qt includes
-
-#include <QList>
-#include <QString>
+#ifndef DIGIKAM_MEDIAWIKI_LOGOUT_H
+#define DIGIKAM_MEDIAWIKI_LOGOUT_H
 
 // Local includes
 
-#include "digikam_export.h"
 #include "mediawiki_job.h"
-#include "mediawiki_generalinfo.h"
+#include "digikam_export.h"
 
 namespace MediaWiki
 {
 
 class Iface;
-class QuerySiteInfoGeneralPrivate;
+class LogoutPrivate;
 
 /**
- * @brief QuerySiteInfoGeneral job.
+ * @brief Logout job.
  *
- * Uses for fetch a generals information about the wiki.
+ * Uses for log out a user.
  */
-class DIGIKAM_EXPORT QuerySiteInfoGeneral : public Job
+class DIGIKAM_EXPORT Logout : public Job
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(QuerySiteInfoGeneral)
-
-public:
-
-    enum
-    {
-        IncludeAllDenied = Job::UserDefinedError + 1
-    };
+    Q_DECLARE_PRIVATE(Logout)
 
 public:
 
     /**
-     * @brief Constructs a QuerySiteInfoGeneral job.
-     * @param MediaWiki the MediaWiki concerned by the job
+     * @brief Constructs a Logout job.
      * @param parent the QObject parent
      */
-    explicit QuerySiteInfoGeneral(Iface& MediaWiki, QObject* const parent = 0);
+    explicit Logout(Iface& MediaWiki, QObject* const parent = 0);
 
     /**
-     * @brief Destroys the QuerySiteInfoGeneral job.
+     * @brief Destroys the Logout job.
      */
-    virtual ~QuerySiteInfoGeneral();
+    virtual ~Logout();
 
     /**
      * @brief Starts the job asynchronously.
      */
     void start() Q_DECL_OVERRIDE;
-
-Q_SIGNALS:
-
-    /**
-     * @brief Provide general info.
-     * @param generalinfo the general info
-     */
-    void result(const Generalinfo& generalinfo);
 
 private Q_SLOTS:
 
@@ -94,4 +71,4 @@ private Q_SLOTS:
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_QUERYSITEINFOGENERAL_H
+#endif // DIGIKAM_MEDIAWIKI_LOGOUT_H

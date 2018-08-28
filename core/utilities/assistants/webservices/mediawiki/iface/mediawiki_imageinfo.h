@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_IMAGEINFO_H
-#define MEDIAWIKI_IMAGEINFO_H
+#ifndef DIGIKAM_MEDIAWIKI_IMAGEINFO_H
+#define DIGIKAM_MEDIAWIKI_IMAGEINFO_H
 
 // Qt includes
 
@@ -257,4 +257,4 @@ private:
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_IMAGEINFO_H
+#endif // DIGIKAM_MEDIAWIKI_IMAGEINFO_H

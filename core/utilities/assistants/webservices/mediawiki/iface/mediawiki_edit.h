@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_EDIT_H
-#define MEDIAWIKI_EDIT_H
+#ifndef DIGIKAM_MEDIAWIKI_EDIT_H
+#define DIGIKAM_MEDIAWIKI_EDIT_H
 
 // Qt includes
 
@@ -320,4 +320,4 @@ public Q_SLOTS:
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_EDIT_H
+#endif // DIGIKAM_MEDIAWIKI_EDIT_H

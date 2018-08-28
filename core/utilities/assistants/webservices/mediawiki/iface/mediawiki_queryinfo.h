@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_QUERYINFO_H
-#define MEDIAWIKI_QUERYINFO_H
+#ifndef DIGIKAM_MEDIAWIKI_QUERYINFO_H
+#define DIGIKAM_MEDIAWIKI_QUERYINFO_H
 
 // Qt includes
 
@@ -118,4 +118,4 @@ private Q_SLOTS:
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_QUERYINFO_H
+#endif // DIGIKAM_MEDIAWIKI_QUERYINFO_H

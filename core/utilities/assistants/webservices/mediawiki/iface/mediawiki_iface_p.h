@@ -7,7 +7,7 @@
  * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2011      by Paolo de Vathaire <paolo dot devathaire at gmail dot com>
+ * Copyright (C) 2011      by Remi Benoit <r3m1 dot benoit at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,30 +21,46 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_JOB_P_H
-#define MEDIAWIKI_JOB_P_H
+#ifndef DIGIKAM_MEDIAWIKI_P_H
+#define DIGIKAM_MEDIAWIKI_P_H
 
-#include "mediawiki_iface.h"
+// Qt includes
+
+#include <QString>
+#include <QUrl>
+#include <QNetworkAccessManager>
 
 namespace MediaWiki
 {
 
-class JobPrivate
+class Q_DECL_HIDDEN Iface::Private
 {
+
 public:
 
-    explicit JobPrivate(Iface& MediaWiki)
-        : MediaWiki(MediaWiki),
-          manager(MediaWiki.manager()),
-          reply(0)
+    Private(const QUrl& url, const QString& userAgent, QNetworkAccessManager* const manager)
+        : url(url),
+          userAgent(userAgent),
+          manager(manager)
     {
     }
 
-    Iface&                   MediaWiki;
+    ~Private()
+    {
+        delete manager;
+    }
+
+public:
+
+    static const QString         POSTFIX_USER_AGENT;
+
+    const QUrl                   url;
+    const QString                userAgent;
     QNetworkAccessManager* const manager;
-    QNetworkReply*               reply;
 };
+
+const QString Iface::Private::POSTFIX_USER_AGENT = QString::fromUtf8("MediaWiki-silk");
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_JOB_P_H
+#endif // DIGIKAM_MEDIAWIKI_P_H

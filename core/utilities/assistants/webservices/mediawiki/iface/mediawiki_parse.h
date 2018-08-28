@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_PARSE_H
-#define MEDIAWIKI_PARSE_H
+#ifndef DIGIKAM_MEDIAWIKI_PARSE_H
+#define DIGIKAM_MEDIAWIKI_PARSE_H
 
 // Qt includes
 
@@ -94,4 +94,4 @@ private Q_SLOTS:
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_PARSE_H
+#endif // DIGIKAM_MEDIAWIKI_PARSE_H

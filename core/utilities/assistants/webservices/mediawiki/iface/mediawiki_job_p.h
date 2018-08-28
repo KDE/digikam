@@ -7,7 +7,7 @@
  * Description : a Iface C++ interface
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2011      by Alexandre Mendes <alex dot mendes1988 at gmail dot com>
+ * Copyright (C) 2011      by Paolo de Vathaire <paolo dot devathaire at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,54 +21,30 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_LOGOUT_H
-#define MEDIAWIKI_LOGOUT_H
+#ifndef DIGIKAM_MEDIAWIKI_JOB_P_H
+#define DIGIKAM_MEDIAWIKI_JOB_P_H
 
-// Local includes
-
-#include "mediawiki_job.h"
-#include "digikam_export.h"
+#include "mediawiki_iface.h"
 
 namespace MediaWiki
 {
 
-class Iface;
-class LogoutPrivate;
-
-/**
- * @brief Logout job.
- *
- * Uses for log out a user.
- */
-class DIGIKAM_EXPORT Logout : public Job
+class JobPrivate
 {
-    Q_OBJECT
-    Q_DECLARE_PRIVATE(Logout)
-
 public:
 
-    /**
-     * @brief Constructs a Logout job.
-     * @param parent the QObject parent
-     */
-    explicit Logout(Iface& MediaWiki, QObject* const parent = 0);
+    explicit JobPrivate(Iface& MediaWiki)
+        : MediaWiki(MediaWiki),
+          manager(MediaWiki.manager()),
+          reply(0)
+    {
+    }
 
-    /**
-     * @brief Destroys the Logout job.
-     */
-    virtual ~Logout();
-
-    /**
-     * @brief Starts the job asynchronously.
-     */
-    void start() Q_DECL_OVERRIDE;
-
-private Q_SLOTS:
-
-    void doWorkSendRequest();
-    void doWorkProcessReply();
+    Iface&                   MediaWiki;
+    QNetworkAccessManager* const manager;
+    QNetworkReply*               reply;
 };
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_LOGOUT_H
+#endif // DIGIKAM_MEDIAWIKI_JOB_P_H

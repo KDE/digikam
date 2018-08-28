@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_UPLOAD_H
-#define MEDIAWIKI_UPLOAD_H
+#ifndef DIGIKAM_MEDIAWIKI_UPLOAD_H
+#define DIGIKAM_MEDIAWIKI_UPLOAD_H
 
 // Qt includes
 

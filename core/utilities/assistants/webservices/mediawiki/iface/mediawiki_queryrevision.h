@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_QUERYREVISION_H
-#define MEDIAWIKI_QUERYREVISION_H
+#ifndef DIGIKAM_MEDIAWIKI_QUERYREVISION_H
+#define DIGIKAM_MEDIAWIKI_QUERYREVISION_H
 
 // Qt includes
 
@@ -273,4 +273,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QueryRevision::Properties)
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_QUERYREVISION_H
+#endif // DIGIKAM_MEDIAWIKI_QUERYREVISION_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_FAKE_SERVER_H
-#define MEDIAWIKI_FAKE_SERVER_H
+#ifndef DIGIKAM_MEDIAWIKI_FAKE_SERVER_H
+#define DIGIKAM_MEDIAWIKI_FAKE_SERVER_H
 
 // Qt includes
 
@@ -117,4 +117,4 @@ private:
     QTcpSocket*                m_clientSocket;
 };
 
-#endif // MEDIAWIKI_FAKE_SERVER_H
+#endif // DIGIKAM_MEDIAWIKI_FAKE_SERVER_H

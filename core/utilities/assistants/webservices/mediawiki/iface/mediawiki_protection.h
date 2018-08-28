@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_PROTECTION_H
-#define MEDIAWIKI_PROTECTION_H
+#ifndef DIGIKAM_MEDIAWIKI_PROTECTION_H
+#define DIGIKAM_MEDIAWIKI_PROTECTION_H
 
 // Qt includes
 
@@ -132,4 +132,4 @@ private:
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_PROTECTION_H
+#endif // DIGIKAM_MEDIAWIKI_PROTECTION_H

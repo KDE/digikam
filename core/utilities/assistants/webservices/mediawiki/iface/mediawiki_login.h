@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_LOGIN_H
-#define MEDIAWIKI_LOGIN_H
+#ifndef DIGIKAM_MEDIAWIKI_LOGIN_H
+#define DIGIKAM_MEDIAWIKI_LOGIN_H
 
 // Qt includes
 
@@ -145,4 +145,4 @@ private Q_SLOTS:
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_LOGIN_H
+#endif // DIGIKAM_MEDIAWIKI_LOGIN_H

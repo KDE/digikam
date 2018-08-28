@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_QUERYIMAGEINFO_H
-#define MEDIAWIKI_QUERYIMAGEINFO_H
+#ifndef DIGIKAM_MEDIAWIKI_QUERYIMAGEINFO_H
+#define DIGIKAM_MEDIAWIKI_QUERYIMAGEINFO_H
 
 // Qt includes
 
@@ -164,4 +164,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QueryImageinfo::Properties)
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_QUERYIMAGEINFO_H
+#endif // DIGIKAM_MEDIAWIKI_QUERYIMAGEINFO_H

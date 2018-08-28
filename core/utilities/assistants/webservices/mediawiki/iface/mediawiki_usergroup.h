@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_USERGROUP_H
-#define MEDIAWIKI_USERGROUP_H
+#ifndef DIGIKAM_MEDIAWIKI_USERGROUP_H
+#define DIGIKAM_MEDIAWIKI_USERGROUP_H
 
 // Qt includes
 
@@ -123,4 +123,4 @@ private:
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_USERGROUP_H
+#endif // DIGIKAM_MEDIAWIKI_USERGROUP_H

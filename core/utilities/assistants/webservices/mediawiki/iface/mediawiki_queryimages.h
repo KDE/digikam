@@ -21,50 +21,78 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_QUERYSITEINFOUSERGROUPS_H
-#define MEDIAWIKI_QUERYSITEINFOUSERGROUPS_H
+#ifndef DIGIKAM_MEDIAWIKI_QUERYIMAGES_H
+#define DIGIKAM_MEDIAWIKI_QUERYIMAGES_H
+
+// KDE includes
+
+#include <kjob.h>
 
 // Local includes
 
-#include "digikam_export.h"
 #include "mediawiki_job.h"
-#include "mediawiki_usergroup.h"
+#include "mediawiki_image.h"
+#include "digikam_export.h"
 
 namespace MediaWiki
 {
 
 class Iface;
-class QuerySiteinfoUsergroupsPrivate;
+class QueryImagesPrivate;
 
 /**
- * @brief UserGroups job.
+ * @brief Query images job.
  *
- * Uses for fetch a list of all user groups and their permissions.
+ * Gets a list of all images used on pages.
  */
-class DIGIKAM_EXPORT QuerySiteinfoUsergroups : public Job
+class DIGIKAM_EXPORT QueryImages : public Job
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(QuerySiteinfoUsergroups)
+    Q_DECLARE_PRIVATE(QueryImages)
 
 public:
 
     /**
-     * @brief Constructs a UserGroups job.
+     * @brief Indicates all possible error conditions found during the processing of the job.
+     */
+    enum
+    {
+        /**
+         * @brief A network error has occurred.
+         */
+        NetworkError = KJob::UserDefinedError + 1,
+
+        /**
+         * @brief A XML error has occurred.
+         */
+        XmlError
+    };
+
+public:
+
+    /**
+     * @brief Constructs a query images job.
      * @param MediaWiki the MediaWiki concerned by the job
      * @param parent the QObject parent
      */
-    explicit QuerySiteinfoUsergroups(Iface& MediaWiki, QObject* const parent = 0);
+    explicit QueryImages(Iface& MediaWiki, QObject* const parent = 0);
 
     /**
-     * @brief Destroys the UserGroups job.
+     * @brief Destroys a query images job.
      */
-    virtual ~QuerySiteinfoUsergroups();
+    virtual ~QueryImages();
 
     /**
-     * @brief If true number of users of each user group is included
-     * @param includeNumber if true number of users of each user group is included
+     * @brief Set the title.
+     * @param title the title of the page
      */
-    void setIncludeNumber(bool includeNumber);
+    void setTitle(const QString& title);
+
+    /**
+     * @brief Set the limit.
+     * @param limit number of images returned by one signal #pages()
+     */
+    void setLimit(unsigned int limit);
 
     /**
      * @brief Starts the job asynchronously.
@@ -74,11 +102,13 @@ public:
 Q_SIGNALS:
 
     /**
-     * @brief Provides a list of all user groups.
-     * @param usergroups list of all user groups
-     * @see QuerySiteinfoUsergroups::Result
+     * @brief Provides a list of all images used on pages
+     *
+     * This signal can be emitted several times.
+     *
+     * @param pages list of all images used on pages
      */
-    void usergroups(const QList<UserGroup>& usergroups);
+    void images(const QList<Image> & images);
 
 private Q_SLOTS:
 
@@ -88,4 +118,4 @@ private Q_SLOTS:
 
 } // namespace MediaWiki
 
-#endif // MEDIAWIKI_QUERYSITEINFOUSERGROUPS_H
+#endif // DIGIKAM_MEDIAWIKI_QUERYIMAGES_H
