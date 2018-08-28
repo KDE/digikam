@@ -706,10 +706,10 @@ for eg:
 \code
 void function()
 {
-....int a;                    // 4 spaces from beginning
-....for (int i=0; i<10; i++)  // 4 spaces from beginning
-....{                         // 4 spaces from beginning
-........a = i;                // 4 spaces from previous indent block
+....int a;                          // 4 spaces from beginning
+....for (int i = 0 ; i < 10 ; ++i)  // 4 spaces from beginning
+....{                               // 4 spaces from beginning
+........a = i;                      // 4 spaces from previous indent block
 \endcode
 
 Emacs by default will indent to 4 spaces
@@ -740,7 +740,7 @@ class A
 { //new line
 ...
 
-for (int i=0; i<10; i++)
+for (int i = 0 ; i < 10 ; ++i)
 { //new line
 
 if (a == foobar)
@@ -824,15 +824,15 @@ a = (b == foobar) ? 1 : -1; // you are asking for trouble by putting comments he
   composed of the classname and a H suffix separated by underscore
 
 \code
-#ifndef ANOTHERNICECLASS_H
-#define ANOTHERNICECLASS_H
+#ifndef DIGIKAM_ANOTHER_NICE_CLASS_H
+#define DIGIKAM_ANOTHER_NICE_CLASS_H
 
 class AnotherNiceClass
 {
 ...
 }
 
-#endif
+#endif // DIGIKAM_ANOTHER_NICE_CLASS_H
 \endcode
 
 - Use forward declarations as much as possible.
