@@ -213,14 +213,17 @@ void SharedLoadingTask::execute()
     // load image
     m_img = DImg(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
 
-//    bool isCached = false;
+    if (m_loadingTaskStatus == LoadingTaskStatusStopping)
+    {
+        return;
+    }
+
     {
         LoadingCache::CacheLock lock(cache);
 
         // put (valid) image into cache of loaded images
         if (!m_img.isNull())
         {
-//            isCached =
             cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img), m_loadingDescription.filePath);
         }
 
@@ -268,7 +271,6 @@ void SharedLoadingTask::execute()
     }
 
     // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
-    // postprocessing only with valid image
     if (!m_img.isNull())
     {
         postProcess();
