@@ -41,7 +41,7 @@ public:
     enum MiscTab
     {
         Behaviour = 0,
-        Apparence,
+        Appearence,
         Grouping
     };
 

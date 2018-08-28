@@ -203,16 +203,16 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     d->tab->insertTab(Behaviour, behaviourPanel, i18nc("@title:tab", "Behaviour"));
 
-    // -- Application Apparence Options --------------------------------------------------------
+    // -- Application Appearence Options --------------------------------------------------------
 
-    QWidget* const apparencePanel = new QWidget(d->tab);
-    QVBoxLayout* const layout2    = new QVBoxLayout(apparencePanel);
+    QWidget* const appearencePanel = new QWidget(d->tab);
+    QVBoxLayout* const layout2    = new QVBoxLayout(appearencePanel);
 
-    d->showSplashCheck                        = new QCheckBox(i18n("&Show splash screen at startup"), apparencePanel);
-    d->useNativeFileDialogCheck               = new QCheckBox(i18n("Use native file dialogs from the system"), apparencePanel);
-    d->drawFramesToGroupedCheck               = new QCheckBox(i18n("Draw frames around grouped items"), apparencePanel);
+    d->showSplashCheck                        = new QCheckBox(i18n("&Show splash screen at startup"), appearencePanel);
+    d->useNativeFileDialogCheck               = new QCheckBox(i18n("Use native file dialogs from the system"), appearencePanel);
+    d->drawFramesToGroupedCheck               = new QCheckBox(i18n("Draw frames around grouped items"), appearencePanel);
 
-    DHBox* const tabStyleHbox = new DHBox(apparencePanel);
+    DHBox* const tabStyleHbox = new DHBox(appearencePanel);
     d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
     d->sidebarType            = new QComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
@@ -220,7 +220,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->sidebarType->setToolTip(i18n("Set this option to configure how sidebar tab titles are visible. "
                                     "Use \"Only For Active Tab\" option if you use a small screen resolution as with a laptop computer."));
 
-    DHBox* const appStyleHbox = new DHBox(apparencePanel);
+    DHBox* const appStyleHbox = new DHBox(appearencePanel);
     d->applicationStyleLabel  = new QLabel(i18n("Widget style:"), appStyleHbox);
     d->applicationStyle       = new QComboBox(appStyleHbox);
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
@@ -237,7 +237,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     appStyleHbox->setVisible(false);
 #endif
 
-    DHBox* const iconThemeHbox = new DHBox(apparencePanel);
+    DHBox* const iconThemeHbox = new DHBox(appearencePanel);
     d->applicationIconLabel    = new QLabel(i18n("Icon theme (changes after restart):"), iconThemeHbox);
     d->applicationIcon         = new QComboBox(iconThemeHbox);
     d->applicationIcon->setToolTip(i18n("Set this option to choose the default icon theme."));
@@ -266,7 +266,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
         }
     }
 
-    d->applicationFont = new DFontSelect(i18n("Application font:"), apparencePanel);
+    d->applicationFont = new DFontSelect(i18n("Application font:"), appearencePanel);
     d->applicationFont->setToolTip(i18n("Select here the font used to display text in whole application."));
 
     // --------------------------------------------------------
@@ -282,7 +282,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     layout2->addWidget(d->applicationFont);
     layout2->addStretch();
 
-    d->tab->insertTab(Apparence, apparencePanel, i18nc("@title:tab", "Apparence"));
+    d->tab->insertTab(Apparence, apparencePanel, i18nc("@title:tab", "Appearence"));
 
     // --------------------------------------------------------
 
