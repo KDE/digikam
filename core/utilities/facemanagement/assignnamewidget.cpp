@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class AssignNameWidget::Private
+class Q_DECL_HIDDEN AssignNameWidget::Private
 {
 public:
 

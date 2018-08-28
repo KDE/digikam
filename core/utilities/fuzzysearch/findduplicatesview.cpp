@@ -61,7 +61,7 @@
 namespace Digikam
 {
 
-class FindDuplicatesView::Private
+class Q_DECL_HIDDEN FindDuplicatesView::Private
 {
 
 public:

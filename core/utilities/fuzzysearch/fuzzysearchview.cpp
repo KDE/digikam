@@ -83,7 +83,7 @@
 namespace Digikam
 {
 
-class FuzzySearchView::Private
+class Q_DECL_HIDDEN FuzzySearchView::Private
 {
 
 public:

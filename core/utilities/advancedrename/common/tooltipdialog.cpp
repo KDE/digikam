@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class TooltipDialog::Private
+class Q_DECL_HIDDEN TooltipDialog::Private
 {
 public:
 

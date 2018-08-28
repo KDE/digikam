@@ -50,13 +50,13 @@ RemoveDoublesModifier::RemoveDoublesModifier()
 
 QString RemoveDoublesModifier::parseOperation(ParseSettings& settings)
 {
-    QString result = settings.str2Modify;
+    QString result    = settings.str2Modify;
 
     QSet<QString> knownWords;
     QStringList words = result.split(QLatin1Char(' '));
     QStringList newString;
 
-    foreach(const QString& word, words)
+    foreach (const QString& word, words)
     {
         if (!knownWords.contains(word))
         {

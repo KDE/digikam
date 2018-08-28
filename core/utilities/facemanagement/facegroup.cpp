@@ -166,7 +166,7 @@ void AssignNameWidgetHidingStateChanger::slotStateChanged()
 
 //-------------------------------------------------------------------------------
 
-class FaceGroup::Private
+class Q_DECL_HIDDEN FaceGroup::Private
 {
 public:
 

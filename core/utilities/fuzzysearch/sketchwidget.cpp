@@ -47,14 +47,14 @@ class DrawEvent
 {
 public:
 
-    DrawEvent() :
-        penWidth(10),
+    DrawEvent()
+      : penWidth(10),
         penColor(Qt::black)
     {
     };
 
-    DrawEvent(int width, const QColor& color) :
-        penWidth(width),
+    DrawEvent(int width, const QColor& color)
+      : penWidth(width),
         penColor(color)
     {
     };
@@ -73,12 +73,12 @@ public:
 
 // ------------------------------------------------------------------------------
 
-class SketchWidget::Private
+class Q_DECL_HIDDEN SketchWidget::Private
 {
 public:
 
-    explicit Private() :
-        isClear(true),
+    explicit Private()
+      : isClear(true),
         drawing(false),
         penWidth(10),
         eventIndex(-1),

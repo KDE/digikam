@@ -45,10 +45,10 @@
 namespace Digikam
 {
 
-MetadataOptionDialog::MetadataOptionDialog(Rule* const parent) :
-    RuleDialog(parent),
-    metadataPanel(0),
-    separatorLineEdit(0)
+MetadataOptionDialog::MetadataOptionDialog(Rule* const parent)
+    : RuleDialog(parent),
+      metadataPanel(0),
+      separatorLineEdit(0)
 {
     QWidget* const mainWidget = new QWidget(this);
     QTabWidget* const tab     = new QTabWidget(this);
@@ -61,7 +61,7 @@ MetadataOptionDialog::MetadataOptionDialog(Rule* const parent) :
 
     // We only need the "SearchBar" control element.
     // We also need to reset the default selections.
-    foreach(MetadataSelectorView* const viewer, metadataPanel->viewers())
+    foreach (MetadataSelectorView* const viewer, metadataPanel->viewers())
     {
         viewer->setControlElements(MetadataSelectorView::SearchBar);
         viewer->clearSelection();
@@ -72,7 +72,7 @@ MetadataOptionDialog::MetadataOptionDialog(Rule* const parent) :
     // remove "Viewer" string from tabs
     int tabs = tab->count();
 
-    for (int i = 0; i < tabs; ++i)
+    for (int i = 0 ; i < tabs ; ++i)
     {
         QString text = tab->tabText(i);
         text.remove(QLatin1String("viewer"), Qt::CaseInsensitive);

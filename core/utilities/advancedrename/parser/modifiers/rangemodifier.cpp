@@ -112,7 +112,7 @@ void RangeModifier::slotTokenTriggered(const QString& token)
 QString RangeModifier::parseOperation(ParseSettings& settings)
 {
     const QRegExp& reg = regExp();
-    bool ok = false;
+    bool ok            = false;
 
     // if the start parameter can not be extracted or is a negative value, set it to 1
     int start = reg.cap(2).simplified().toInt(&ok);

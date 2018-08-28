@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class BalooWrap::Private
+class Q_DECL_HIDDEN BalooWrap::Private
 {
 public:
 

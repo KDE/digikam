@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class RuleDialog::Private
+class Q_DECL_HIDDEN RuleDialog::Private
 {
 public:
 

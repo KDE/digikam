@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class Rule::Private
+class Q_DECL_HIDDEN Rule::Private
 {
 public:
 
