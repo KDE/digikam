@@ -268,7 +268,12 @@ void SharedLoadingTask::execute()
     }
 
     // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
-    postProcess();
+    // postprocessing only with valid image
+    if (!m_img.isNull())
+    {
+        postProcess();
+    }
+
     m_thread->taskHasFinished();
     m_thread->imageLoaded(m_loadingDescription, m_img);
 }
