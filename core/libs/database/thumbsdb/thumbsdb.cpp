@@ -26,15 +26,11 @@
 
 // Qt includes
 
-#include <QFile>
-#include <QFileInfo>
-#include <QDir>
+#include <QMap>
 
 // Local includes
 
 #include "digikam_debug.h"
-#include "collectionmanager.h"
-#include "collectionlocation.h"
 
 namespace Digikam
 {

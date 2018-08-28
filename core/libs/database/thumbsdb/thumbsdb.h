@@ -27,13 +27,10 @@
 
 // Qt includes
 
-#include <QString>
-#include <QList>
-#include <QStringList>
 #include <QDateTime>
-#include <QPair>
-#include <QMap>
+#include <QString>
 #include <QHash>
+#include <QList>
 
 // Local includes
 
@@ -126,8 +123,6 @@ public:
 
     void replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize, const QString& newUniqueHash, int newFileSize);
     BdEngineBackend::QueryState updateModificationDate(int thumbId, const QDateTime& modificationDate);
-
-    //QStringList getAllThumbnailPaths();
 
     // ----------- Database shrinking methods ----------
 
