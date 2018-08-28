@@ -470,7 +470,11 @@ There are two configuration sections : the top level and the core.
  - Developers only options:
 
   - \b ENABLE_DIGIKAM_MODELTEST              : Enable ModelTest on some models for debugging (default=OFF).
+
+ - Packaging options
+
   - \b ENABLE_DRMINGW                        : Enable the Dr. Mingw crash handler for windows (default=ON).
+  - \b ENABLE_MINGW_HARDENING_LINKER         : Enable DEP (NX), ASLR, and high-entropy ASLR linker flags for MinGW (default ON).
 
 \section setuplocaldev Setup Local Compilation and Run-Time
 
