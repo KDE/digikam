@@ -223,7 +223,7 @@ void ThumbnailLoadingTask::execute()
     }
 
     // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
-    if (!m_img.isNull())
+    if (!m_qimage.isNull())
     {
         postProcess();
     }
