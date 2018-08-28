@@ -195,16 +195,16 @@ public:
     void setCas(const QString& cas);
 
     /**
-     * @brief Get the licence.
-     * @return the licence
+     * @brief Get the license.
+     * @return the license
      */
-    QString licence() const;
+    QString license() const;
 
     /**
-     * @brief Set the licence.
-     * @param licence the licence
+     * @brief Set the license.
+     * @param license the license
      */
-    void setLicence(const QString& licence);
+    void setLicense(const QString& license);
 
     /**
      * @brief Get the language.

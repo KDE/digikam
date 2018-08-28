@@ -88,7 +88,7 @@ void QuerySiteInfoGeneral::doWorkSendRequest()
     d->reply = d->manager->get(request);
     connectReply();
 
-    connect(d->reply, SIGNAL(finished()), 
+    connect(d->reply, SIGNAL(finished()),
             this, SLOT(doWorkProcessReply()));
 }
 
@@ -129,7 +129,7 @@ void QuerySiteInfoGeneral::doWorkProcessReply()
                 generalinfo.setDataBaseVersion(reader.attributes().value(QStringLiteral("dbversion")).toString());
                 generalinfo.setRev(reader.attributes().value(QStringLiteral("rev")).toString());
                 generalinfo.setCas(reader.attributes().value(QStringLiteral("case")).toString());
-                generalinfo.setLicence(reader.attributes().value(QStringLiteral("rights")).toString());
+                generalinfo.setLicense(reader.attributes().value(QStringLiteral("rights")).toString());
                 generalinfo.setLanguage(reader.attributes().value(QStringLiteral("lang")).toString());
                 generalinfo.setFallBack8bitEncoding(reader.attributes().value(QStringLiteral("fallback8bitEncoding")).toString());
                 generalinfo.setWriteApi(reader.attributes().value(QStringLiteral("writeapi")).toString());

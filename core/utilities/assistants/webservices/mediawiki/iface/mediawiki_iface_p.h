@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_MEDIAWIKI_P_H
-#define DIGIKAM_MEDIAWIKI_P_H
+#ifndef DIGIKAM_MEDIAWIKI_IFACE_P_H
+#define DIGIKAM_MEDIAWIKI_IFACE_P_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ const QString Iface::Private::POSTFIX_USER_AGENT = QString::fromUtf8("MediaWiki-
 
 } // namespace MediaWiki
 
-#endif // DIGIKAM_MEDIAWIKI_P_H
+#endif // DIGIKAM_MEDIAWIKI_IFACE_P_H

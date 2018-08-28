@@ -23,6 +23,8 @@
  *
  * ============================================================ */
 
+#include "mediawiki_login.h"
+
 // Qt includes
 
 #include <QStringList>
@@ -36,7 +38,6 @@
 
 // Local includes
 
-#include "mediawiki_login.h"
 #include "mediawiki_iface.h"
 #include "mediawiki_job_p.h"
 

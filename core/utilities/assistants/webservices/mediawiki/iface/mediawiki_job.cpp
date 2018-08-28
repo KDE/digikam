@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "mediawiki_job.h"
+#include "mediawiki_job_p.h"
 
 // Qt includes
 
@@ -30,7 +31,6 @@
 // Local include
 
 #include "mediawiki_iface.h"
-#include "mediawiki_job_p.h"
 
 namespace MediaWiki
 {

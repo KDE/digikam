@@ -47,7 +47,7 @@ public:
     QString   dataBaseVersion;
     QString   rev;
     QString   cas;
-    QString   licence;
+    QString   license;
     QString   language;
     QString   fallBack8bitEncoding;
     QString   writeApi;
@@ -67,11 +67,13 @@ public:
 
 Generalinfo::Generalinfo()
     : d(new Private())
-{}
+{
+}
 
 Generalinfo::Generalinfo(const Generalinfo& other)
     : d(new Private(*(other.d)))
-{}
+{
+}
 
 Generalinfo::~Generalinfo()
 {
@@ -96,7 +98,7 @@ bool Generalinfo::operator==(const Generalinfo& other) const
            dataBaseVersion()      == other.dataBaseVersion()      &&
            rev()                  == other.rev()                  &&
            cas()                  == other.cas()                  &&
-           licence()              == other.licence()              &&
+           license()              == other.license()              &&
            language()             == other.language()             &&
            fallBack8bitEncoding() == other.fallBack8bitEncoding() &&
            writeApi()             == other.writeApi()             &&
@@ -211,14 +213,14 @@ void Generalinfo::setCas(const QString& cas)
     d->cas = cas;
 }
 
-QString Generalinfo::licence() const
+QString Generalinfo::license() const
 {
-    return d->licence;
+    return d->license;
 }
 
-void Generalinfo::setLicence(const QString& licence)
+void Generalinfo::setLicense(const QString& license)
 {
-    d->licence = licence;
+    d->license = license;
 }
 
 QString Generalinfo::language() const
