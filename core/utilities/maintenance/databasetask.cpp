@@ -292,7 +292,7 @@ void DatabaseTask::run()
 
             FaceTagsEditor editor;
 
-            foreach (const qlonglong& item, coredbItems)
+            foreach(const qlonglong& item, coredbItems)
             {
                 if (m_cancel)
                 {
@@ -322,7 +322,7 @@ void DatabaseTask::run()
                     url.setPath(info.filePath());
                     QList<FaceTagsIface> faces = editor.databaseFaces(item);
 
-                    foreach(FaceTagsIface face, faces)
+                    foreach(const FaceTagsIface& face, faces)
                     {
                         QRect rect = face.region().toRect();
                         QString r  = QString::fromLatin1("%1,%2-%3x%4").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
@@ -362,7 +362,7 @@ void DatabaseTask::run()
             QList<TagProperty> properties = CoreDbAccess().db()->getTagProperties(TagPropertyName::faceEngineUuid());
             QSet<QString> uuidSet;
 
-            foreach (TagProperty prop, properties)
+            foreach(const TagProperty& prop, properties)
             {
                 uuidSet << prop.value;
             }
@@ -371,7 +371,7 @@ void DatabaseTask::run()
 
             // Get all identitites to remove. Don't remove now in order to make sure no side effects occur.
 
-            foreach(Identity identity, identities)
+            foreach(const Identity& identity, identities)
             {
                 QString value = identity.attribute(QLatin1String("uuid"));
 
@@ -399,7 +399,7 @@ void DatabaseTask::run()
             QSet<qlonglong> similarityDbItems = SimilarityDbAccess().db()->registeredImageIds();
 
             // Remove all image ids that are existent in the core db
-            foreach (const qlonglong& imageId, coredbItems)
+            foreach(const qlonglong& imageId, coredbItems)
             {
                 similarityDbItems.remove(imageId);
 
