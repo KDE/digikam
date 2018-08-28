@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class WSSettingsPage::Private
+class Q_DECL_HIDDEN WSSettingsPage::Private
 {
 public:
 

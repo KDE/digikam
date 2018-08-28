@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class MediaWikiTalker::Private
+class Q_DECL_HIDDEN MediaWikiTalker::Private
 {
 public:
 

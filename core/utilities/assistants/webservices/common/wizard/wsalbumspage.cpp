@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class WSAlbumsPage::Private
+class Q_DECL_HIDDEN WSAlbumsPage::Private
 {
 public:
 

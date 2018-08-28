@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class TwWindow::Private
+class Q_DECL_HIDDEN TwWindow::Private
 {
 public:
 

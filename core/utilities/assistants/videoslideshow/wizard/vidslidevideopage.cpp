@@ -54,7 +54,7 @@ using namespace QtAV;
 namespace Digikam
 {
 
-class VidSlideVideoPage::Private
+class Q_DECL_HIDDEN VidSlideVideoPage::Private
 {
 public:
 

@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class AdvPrintCropPage::Private
+class Q_DECL_HIDDEN AdvPrintCropPage::Private
 {
 public:
 

@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class DBWindow::Private
+class Q_DECL_HIDDEN DBWindow::Private
 {
 public:
 

@@ -40,7 +40,8 @@
 
 namespace Digikam
 {
-class FlickrList::Private
+
+class Q_DECL_HIDDEN FlickrList::Private
 {
 public:
 

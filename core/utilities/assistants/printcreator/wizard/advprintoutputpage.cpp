@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class AdvPrintOutputPage::Private
+class Q_DECL_HIDDEN AdvPrintOutputPage::Private
 {
 public:
 

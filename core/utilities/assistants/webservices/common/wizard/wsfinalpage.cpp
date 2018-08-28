@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class WSFinalPage::Private
+class Q_DECL_HIDDEN WSFinalPage::Private
 {
 public:
 

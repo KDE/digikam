@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class WSAuthentication::Private
+class Q_DECL_HIDDEN WSAuthentication::Private
 {
 public:
 

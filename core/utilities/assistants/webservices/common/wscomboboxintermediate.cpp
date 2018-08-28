@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-class WSComboBoxIntermediate::Private
+class Q_DECL_HIDDEN WSComboBoxIntermediate::Private
 {
 public:
 

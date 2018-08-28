@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class FlickrWidget::Private
+class Q_DECL_HIDDEN FlickrWidget::Private
 {
 public:
 

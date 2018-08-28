@@ -72,7 +72,7 @@ bool operator< (const FbAlbum& first, const FbAlbum& second)
 
 // -----------------------------------------------------------------------------
 
-class FbTalker::Private
+class Q_DECL_HIDDEN FbTalker::Private
 {
 
 public:

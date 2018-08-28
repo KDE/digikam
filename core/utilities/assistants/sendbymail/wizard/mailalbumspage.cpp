@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class MailAlbumsPage::Private
+class Q_DECL_HIDDEN MailAlbumsPage::Private
 {
 public:
 

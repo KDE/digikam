@@ -64,7 +64,7 @@
 namespace Digikam
 {
 
-class VKWindow::Private
+class Q_DECL_HIDDEN VKWindow::Private
 {
 public:
 

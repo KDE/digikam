@@ -62,7 +62,7 @@ using namespace QtAV;
 namespace Digikam
 {
 
-class VidSlideTask::Private
+class Q_DECL_HIDDEN VidSlideTask::Private
 {
 public:
 

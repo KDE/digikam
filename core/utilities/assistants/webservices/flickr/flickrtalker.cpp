@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class FlickrTalker::Private
+class Q_DECL_HIDDEN FlickrTalker::Private
 {
 public:
 

@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class AdvPrintCaptionPage::Private
+class Q_DECL_HIDDEN AdvPrintCaptionPage::Private
 {
 public:
 

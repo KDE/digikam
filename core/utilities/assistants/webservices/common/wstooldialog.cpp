@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class WSToolDialog::Private
+class Q_DECL_HIDDEN WSToolDialog::Private
 {
 public:
 

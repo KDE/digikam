@@ -47,7 +47,7 @@ using namespace ThreadWeaver;
 namespace Digikam
 {
 
-class PanoActionThread::Private
+class Q_DECL_HIDDEN PanoActionThread::Private
 {
 public:
 

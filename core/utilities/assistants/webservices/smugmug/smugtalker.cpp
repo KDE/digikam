@@ -53,6 +53,7 @@
 #include "smugitem.h"
 
 // O2 includes
+
 #include "wstoolutils.h"
 #include "o0settingsstore.h"
 #include "o1requestor.h"
@@ -61,7 +62,7 @@
 namespace Digikam
 {
 
-class SmugTalker::Private
+class Q_DECL_HIDDEN SmugTalker::Private
 {
 
 public:
@@ -86,10 +87,8 @@ public:
 
     explicit Private()
     {
-        parent     = 0;
+        parent          = 0;
 
-        // FIXME ?
-        //userAgent  = QLatin1String("KIPI-Plugin-Smug/%1 (lure@kubuntu.org)").arg(kipipluginsVersion());
         userAgent       = QString::fromLatin1("digiKam/%1 (digikamdeveloper@gmail.com)").arg(digiKamVersion());
 
         apiVersion      = QLatin1String("v2");
@@ -174,18 +173,21 @@ SmugTalker::SmugTalker(DInfoInterface* const iface, QWidget* const parent)
     d->o1->setUserAgent(d->userAgent.toUtf8());
 
     // Setting to store oauth config
-    d->settings = WSToolUtils::getOauthSettings(this);
-    O0SettingsStore* const store   = new O0SettingsStore(d->settings, QLatin1String(O2_ENCRYPTION_KEY), this);
+    d->settings                  = WSToolUtils::getOauthSettings(this);
+    O0SettingsStore* const store = new O0SettingsStore(d->settings, QLatin1String(O2_ENCRYPTION_KEY), this);
     store->setGroupKey(QLatin1String("Smugmug"));
     d->o1->setStore(store);
 
     // Connect signaux slots
     connect(d->o1, SIGNAL(linkingFailed()),
             this, SLOT(slotLinkingFailed()));
+
     connect(this, SIGNAL(signalLinkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
+
     connect(d->o1, SIGNAL(linkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
+
     connect(d->o1, SIGNAL(openBrowser(QUrl)),
             this, SLOT(slotOpenBrowser(QUrl)));
 

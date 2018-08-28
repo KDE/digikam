@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class TemplateIcon::Private
+class Q_DECL_HIDDEN TemplateIcon::Private
 {
 public:
 

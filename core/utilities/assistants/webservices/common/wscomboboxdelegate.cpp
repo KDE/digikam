@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class ComboBoxDelegate::Private
+class Q_DECL_HIDDEN ComboBoxDelegate::Private
 {
 public:
 

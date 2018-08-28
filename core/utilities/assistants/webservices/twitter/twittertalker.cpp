@@ -60,7 +60,7 @@
 namespace Digikam
 {
 
-class TwTalker::Private
+class Q_DECL_HIDDEN TwTalker::Private
 {
 public:
 

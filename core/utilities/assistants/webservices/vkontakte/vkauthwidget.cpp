@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class VKAuthWidget::Private
+class Q_DECL_HIDDEN VKAuthWidget::Private
 {
 public:
 

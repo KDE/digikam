@@ -66,7 +66,7 @@ static bool gdriveLessThan(const GSFolder& p1, const GSFolder& p2)
     return (p1.title.toLower() < p2.title.toLower());
 }
 
-class GDTalker::Private
+class Q_DECL_HIDDEN GDTalker::Private
 {
 public:
 

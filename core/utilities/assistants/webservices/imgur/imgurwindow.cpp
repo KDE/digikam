@@ -45,11 +45,10 @@
 #include "dinfointerface.h"
 #include "digikam_version.h"
 
-
 namespace Digikam
 {
 
-class ImgurWindow::Private
+class Q_DECL_HIDDEN ImgurWindow::Private
 {
 public:
 

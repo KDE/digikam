@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class PiwigoLoginDlg::Private
+class Q_DECL_HIDDEN PiwigoLoginDlg::Private
 {
 public:
 

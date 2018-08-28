@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class YFTalker::Private
+class Q_DECL_HIDDEN YFTalker::Private
 {
 public:
 

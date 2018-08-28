@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class FTExportWindow::Private
+class Q_DECL_HIDDEN FTExportWindow::Private
 {
 public:
 

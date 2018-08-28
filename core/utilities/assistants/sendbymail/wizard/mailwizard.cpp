@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class MailWizard::Private
+class Q_DECL_HIDDEN MailWizard::Private
 {
 public:
 

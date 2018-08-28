@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class WSImagesPage::Private
+class Q_DECL_HIDDEN WSImagesPage::Private
 {
 public:
 

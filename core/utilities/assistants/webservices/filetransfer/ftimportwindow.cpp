@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class FTImportWindow::Private
+class Q_DECL_HIDDEN FTImportWindow::Private
 {
 public:
 

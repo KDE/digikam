@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class YFWidget::Private
+class Q_DECL_HIDDEN YFWidget::Private
 {
 public:
 

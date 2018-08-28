@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class VidSlideFinalPage::Private
+class Q_DECL_HIDDEN VidSlideFinalPage::Private
 {
 public:
 

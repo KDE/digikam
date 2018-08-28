@@ -67,7 +67,7 @@
 namespace Digikam
 {
 
-class PiwigoWindow::Private
+class Q_DECL_HIDDEN PiwigoWindow::Private
 {
 public:
 

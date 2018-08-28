@@ -66,7 +66,7 @@
 namespace Digikam
 {
 
-class PTalker::Private
+class Q_DECL_HIDDEN PTalker::Private
 {
 public:
 

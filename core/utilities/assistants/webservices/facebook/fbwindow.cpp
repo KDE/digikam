@@ -60,7 +60,7 @@
 namespace Digikam
 {
 
-class FbWindow::Private
+class Q_DECL_HIDDEN FbWindow::Private
 {
 public:
 

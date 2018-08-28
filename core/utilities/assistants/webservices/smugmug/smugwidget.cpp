@@ -231,12 +231,12 @@ SmugWidget::SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool 
         m_imgList->hide();
         m_newAlbumBtn->hide();
         optionsBox->hide();
-        
+
         /**
          * Deactivate anonymous login functionality
          */
         m_anonymousRBtn->hide();
-        m_accountRBtn->hide();        
+        m_accountRBtn->hide();
         m_nickNameLbl->hide();
         m_nickNameEdt->hide();
         m_sitePasswordLbl->hide();

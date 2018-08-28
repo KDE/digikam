@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class VKAlbumChooser::Private
+class Q_DECL_HIDDEN VKAlbumChooser::Private
 {
 public:
 

@@ -66,7 +66,7 @@ using namespace MediaWiki;
 namespace Digikam
 {
 
-class MediaWikiWindow::Private
+class Q_DECL_HIDDEN MediaWikiWindow::Private
 {
 public:
 

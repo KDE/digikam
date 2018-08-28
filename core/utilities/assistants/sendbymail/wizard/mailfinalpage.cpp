@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class MailFinalPage::Private
+class Q_DECL_HIDDEN MailFinalPage::Private
 {
 public:
 

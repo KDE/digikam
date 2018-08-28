@@ -58,7 +58,7 @@
 namespace Digikam
 {
 
-class FlickrWindow::Private
+class Q_DECL_HIDDEN FlickrWindow::Private
 {
 public:
 

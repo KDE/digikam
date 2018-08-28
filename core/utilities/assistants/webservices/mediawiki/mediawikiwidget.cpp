@@ -63,7 +63,7 @@
 namespace Digikam
 {
 
-class MediaWikiWidget::Private
+class Q_DECL_HIDDEN MediaWikiWidget::Private
 {
 public:
 

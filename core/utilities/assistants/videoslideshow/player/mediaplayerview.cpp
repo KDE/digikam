@@ -57,7 +57,7 @@ using namespace QtAV;
 namespace Digikam
 {
 
-class MediaPlayerMouseClickFilter : public QObject
+class Q_DECL_HIDDEN MediaPlayerMouseClickFilter : public QObject
 {
 public:
 

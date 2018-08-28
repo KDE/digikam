@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class PiwigoSession::Private
+class Q_DECL_HIDDEN PiwigoSession::Private
 {
 public:
 

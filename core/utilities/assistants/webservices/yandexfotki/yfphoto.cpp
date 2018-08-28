@@ -32,12 +32,10 @@ YFPhoto::YFPhoto()
     m_disableComments(false),
     m_adult(false)
 {
-
 }
 
 YFPhoto::~YFPhoto()
 {
-    // nothing
 }
 
 YFPhoto::YFPhoto(const QString& urn,

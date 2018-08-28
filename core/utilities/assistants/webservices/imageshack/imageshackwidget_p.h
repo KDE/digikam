@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class ImageShackWidget::Private
+class Q_DECL_HIDDEN ImageShackWidget::Private
 {
 public:
 

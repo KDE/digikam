@@ -65,7 +65,7 @@
 namespace Digikam
 {
 
-class ODTalker::Private
+class Q_DECL_HIDDEN ODTalker::Private
 {
 public:
 
