@@ -46,7 +46,7 @@ static bool RowRangeLessThan(const QPair<int, int>& a, const QPair<int, int>& b)
     return a.first < b.first;
 }
 
-class SearchResultModel::Private
+class Q_DECL_HIDDEN SearchResultModel::Private
 {
 public:
 

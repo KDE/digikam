@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class BookmarkNode::Private
+class Q_DECL_HIDDEN BookmarkNode::Private
 {
 public:
 

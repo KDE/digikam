@@ -45,18 +45,18 @@
 namespace Digikam
 {
 
-class GPSImageList::Private
+class Q_DECL_HIDDEN GPSImageList::Private
 {
 public:
 
     explicit Private()
-    : editEnabled(true),
-      dragEnabled(false),
-      model(0),
-      selectionModel(0),
-      itemDelegate(0),
-      imageSortProxyModel(0),
-      dragDropHandler(0)
+      : editEnabled(true),
+        dragEnabled(false),
+        model(0),
+        selectionModel(0),
+        itemDelegate(0),
+        imageSortProxyModel(0),
+        dragDropHandler(0)
     {
     }
 

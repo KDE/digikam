@@ -46,7 +46,7 @@ namespace Digikam
  * or custom tags) and new tags (tags containing data retrieved from backend).
  */
 
-class RGTagModel::Private
+class Q_DECL_HIDDEN RGTagModel::Private
 {
 public:
 

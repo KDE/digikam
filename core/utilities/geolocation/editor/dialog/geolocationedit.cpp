@@ -152,7 +152,7 @@ public:
 
 // ---------------------------------------------------------------------------------
 
-class GeolocationEdit::Private
+class Q_DECL_HIDDEN GeolocationEdit::Private
 {
 public:
 
@@ -537,12 +537,12 @@ bool GeolocationEdit::eventFilter(QObject* const o, QEvent* const e)
             else if (d->tabBar->currentIndex() == var)
             {
                 d->splitterSize = sizes.at(1);
-                sizes[1] = 0;
+                sizes[1]        = 0;
             }
         }
         else
         {
-            sizes[1] = d->splitterSize;
+            sizes[1]        = d->splitterSize;
             d->splitterSize = 0;
         }
 
@@ -603,7 +603,7 @@ void GeolocationEdit::setItems(const QList<GPSImageItem*>& items)
 
     QList<QPersistentModelIndex> imagesToLoad;
 
-    for (int i = 0; i < d->imageModel->rowCount(); ++i)
+    for (int i = 0 ; i < d->imageModel->rowCount() ; ++i)
     {
         imagesToLoad << d->imageModel->index(i, 0);
     }
@@ -625,7 +625,7 @@ void GeolocationEdit::setItems(const QList<GPSImageItem*>& items)
 
 void GeolocationEdit::slotFileMetadataLoaded(int beginIndex, int endIndex)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG)<<beginIndex<<endIndex;
+    qCDebug(DIGIKAM_GENERAL_LOG) << beginIndex << endIndex;
     d->fileIOCountDone += (endIndex-beginIndex);
     slotProgressChanged(d->fileIOCountDone);
 
@@ -883,7 +883,7 @@ void GeolocationEdit::saveChanges(const bool closeAfterwards)
     // are there any modified images?
     QList<QPersistentModelIndex> dirtyImages;
 
-    for (int i = 0; i < d->imageModel->rowCount(); ++i)
+    for (int i = 0 ; i < d->imageModel->rowCount() ; ++i)
     {
         const QModelIndex itemIndex = d->imageModel->index(i, 0);
         GPSImageItem* const item    = d->imageModel->itemFromIndex(itemIndex);
@@ -935,7 +935,7 @@ void GeolocationEdit::slotFileChangesSaved(int beginIndex, int endIndex)
         // any errors?
         QList<QPair<QUrl, QString> > errorList;
 
-        for (int i = 0; i < d->fileIOFuture.resultCount(); ++i)
+        for (int i = 0 ; i < d->fileIOFuture.resultCount() ; ++i)
         {
             if (!d->fileIOFuture.resultAt(i).second.isEmpty())
                 errorList << d->fileIOFuture.resultAt(i);
@@ -945,7 +945,7 @@ void GeolocationEdit::slotFileChangesSaved(int beginIndex, int endIndex)
         {
             QStringList errorStrings;
 
-            for (int i = 0; i < errorList.count(); ++i)
+            for (int i = 0 ; i < errorList.count() ; ++i)
             {
                 // TODO: how to do kurl->qstring?
                 errorStrings << QString::fromLatin1("%1: %2")
@@ -1067,7 +1067,7 @@ void GeolocationEdit::adjustMapLayout(const bool syncSettings)
     }
     else
     {
-        if (d->mapSplitter->count()==1)
+        if (d->mapSplitter->count() == 1)
         {
             QWidget* mapHolder = 0;
             d->mapWidget2      = makeMapWidget(&mapHolder);
@@ -1075,15 +1075,15 @@ void GeolocationEdit::adjustMapLayout(const bool syncSettings)
 
             if (syncSettings)
             {
-                KSharedConfig::Ptr config = KSharedConfig::openConfig();
-                KConfigGroup group        = config->group("Geolocation Edit Settings");
+                KSharedConfig::Ptr config         = KSharedConfig::openConfig();
+                KConfigGroup group                = config->group("Geolocation Edit Settings");
                 const KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
                 d->mapWidget2->readSettingsFromGroup(&groupMapWidget);
                 d->mapWidget2->setActive(true);
             }
         }
 
-        if (d->mapLayout==MapLayoutHorizontal)
+        if (d->mapLayout == MapLayoutHorizontal)
         {
             d->mapSplitter->setOrientation(Qt::Horizontal);
         }

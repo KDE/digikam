@@ -37,22 +37,23 @@
 namespace Digikam
 {
 
-class GPSImageItemDelegate::Private
+class Q_DECL_HIDDEN GPSImageItemDelegate::Private
 {
 public:
 
     explicit Private()
-    : imageList(0),
-      thumbnailSize(60)
+      : imageList(0),
+        thumbnailSize(60)
     {
     }
 
     GPSImageList* imageList;
-    int            thumbnailSize;
+    int           thumbnailSize;
 };
 
 GPSImageItemDelegate::GPSImageItemDelegate(GPSImageList* const imageList, QObject* const parent)
-    : QItemDelegate(parent), d(new Private())
+    : QItemDelegate(parent),
+      d(new Private())
 {
     d->imageList = imageList;
 }

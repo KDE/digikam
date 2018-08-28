@@ -67,7 +67,7 @@ public:
     QNetworkReply*     netReply;
 };
 
-class BackendGeonamesRG::Private
+class Q_DECL_HIDDEN BackendGeonamesRG::Private
 {
 public:
 
@@ -119,9 +119,9 @@ void BackendGeonamesRG::nextPhoto()
     QUrl netUrl(QLatin1String("http://api.geonames.org/findNearbyPlaceName"));
 
     QUrlQuery q(netUrl);
-    q.addQueryItem(QLatin1String("lat"),  d->jobs.first().request.first().coordinates.latString());
-    q.addQueryItem(QLatin1String("lng"),  d->jobs.first().request.first().coordinates.lonString());
-    q.addQueryItem(QLatin1String("lang"), d->jobs.first().language);
+    q.addQueryItem(QLatin1String("lat"),      d->jobs.first().request.first().coordinates.latString());
+    q.addQueryItem(QLatin1String("lng"),      d->jobs.first().request.first().coordinates.lonString());
+    q.addQueryItem(QLatin1String("lang"),     d->jobs.first().language);
     q.addQueryItem(QLatin1String("username"), QLatin1String("digikam"));
     netUrl.setQuery(q);
 
@@ -237,7 +237,7 @@ void BackendGeonamesRG::slotFinished(QNetworkReply* reply)
         }
     }
 
-    for (int i = 0; i < d->jobs.count(); ++i)
+    for (int i = 0 ; i < d->jobs.count() ; ++i)
     {
         if (d->jobs.at(i).netReply == reply)
         {

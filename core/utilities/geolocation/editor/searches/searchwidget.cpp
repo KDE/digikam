@@ -77,7 +77,7 @@ static int QItemSelectionModel_selectedRowsCount(const QItemSelectionModel* cons
     return selectionModel->selectedRows().count();
 }
 
-class SearchWidget::Private
+class Q_DECL_HIDDEN SearchWidget::Private
 {
 public:
 
@@ -160,7 +160,7 @@ SearchWidget::SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
     d->searchResultsModel->setSelectionModel(d->searchResultsSelectionModel);
     d->searchResultModelHelper     = new SearchResultModelHelper(d->searchResultsModel, d->searchResultsSelectionModel, d->gpsImageModel, this);
 
-    d->mainVBox = new QVBoxLayout(this);
+    d->mainVBox           = new QVBoxLayout(this);
     setLayout(d->mainVBox);
 
     DHBox* const topHBox  = new DHBox(this);
@@ -205,7 +205,7 @@ SearchWidget::SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
     d->backendSelectionBox->setToolTip(i18n("Select which service you would like to use."));
     const QList<QPair<QString, QString> > backendList = d->searchBackend->getBackends();
 
-    for (int i=0; i<backendList.count(); ++i)
+    for (int i = 0 ; i < backendList.count() ; ++i)
     {
         d->backendSelectionBox->addItem(backendList.at(i).first, backendList.at(i).second);
     }
@@ -419,7 +419,7 @@ void SearchWidget::readSettingsFromGroup(const KConfigGroup* const group)
     d->actionKeepOldResults->setChecked(group->readEntry("Keep old results", false));
     const QString backendId = group->readEntry("Search backend", "osm");
 
-    for (int i = 0; i < d->backendSelectionBox->count(); ++i)
+    for (int i = 0 ; i < d->backendSelectionBox->count() ; ++i)
     {
         if (d->backendSelectionBox->itemData(i).toString()==backendId)
         {
@@ -443,10 +443,10 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
 
     GPSUndoCommand* const undoCommand = new GPSUndoCommand();
 
-    for (int i = 0; i < selectedImageIndices.count(); ++i)
+    for (int i = 0 ; i < selectedImageIndices.count() ; ++i)
     {
         const QPersistentModelIndex itemIndex = selectedImageIndices.at(i);
-        GPSImageItem* const item             = d->gpsImageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item              = d->gpsImageModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(item);

@@ -61,7 +61,7 @@ public:
     QNetworkReply*     netReply;
 };
 
-class BackendOsmRG::Private
+class Q_DECL_HIDDEN BackendOsmRG::Private
 {
 public:
 
@@ -115,11 +115,11 @@ void BackendOsmRG::nextPhoto()
     QUrl netUrl(QLatin1String("https://nominatim.openstreetmap.org/reverse"));
 
     QUrlQuery q(netUrl);
-    q.addQueryItem(QLatin1String("format"), QLatin1String("xml"));
-    q.addQueryItem(QLatin1String("lat"), d->jobs.first().request.first().coordinates.latString());
-    q.addQueryItem(QLatin1String("lon"), d->jobs.first().request.first().coordinates.lonString());
-    q.addQueryItem(QLatin1String("zoom"), QLatin1String("18"));
-    q.addQueryItem(QLatin1String("addressdetails"), QLatin1String("1"));
+    q.addQueryItem(QLatin1String("format"),          QLatin1String("xml"));
+    q.addQueryItem(QLatin1String("lat"),             d->jobs.first().request.first().coordinates.latString());
+    q.addQueryItem(QLatin1String("lon"),             d->jobs.first().request.first().coordinates.lonString());
+    q.addQueryItem(QLatin1String("zoom"),            QLatin1String("18"));
+    q.addQueryItem(QLatin1String("addressdetails"),  QLatin1String("1"));
     q.addQueryItem(QLatin1String("accept-language"), d->jobs.first().language);
     netUrl.setQuery(q);
 

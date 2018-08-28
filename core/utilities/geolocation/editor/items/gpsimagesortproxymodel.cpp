@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class GPSImageSortProxyModel::Private
+class Q_DECL_HIDDEN GPSImageSortProxyModel::Private
 {
 public:
 
@@ -415,8 +415,7 @@ void GPSModelIndexProxyMapperPrivate::createProxyChain()
                          q_ptr, [this]
                          {
                              createProxyChain();
-                             
-                         } 
+                         }
                         );
 
         sourceProxyModel      = qobject_cast<const QAbstractProxyModel *>(sourceProxyModel->sourceModel());

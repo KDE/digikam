@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class SearchBackend::Private
+class Q_DECL_HIDDEN SearchBackend::Private
 {
 public:
 

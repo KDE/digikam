@@ -56,7 +56,7 @@
 namespace Digikam
 {
 
-class SearchResultModelHelper::Private
+class Q_DECL_HIDDEN SearchResultModelHelper::Private
 {
 public:
 
@@ -142,10 +142,10 @@ void SearchResultModelHelper::snapItemsTo(const QModelIndex& targetIndex,
     SearchResultModel::SearchResultItem targetItem = d->model->resultItem(targetIndex);
     const GeoCoordinates& targetCoordinates        = targetItem.result.coordinates;
 
-    for (int i = 0; i < snappedIndices.count(); ++i)
+    for (int i = 0 ; i < snappedIndices.count() ; ++i)
     {
         const QPersistentModelIndex itemIndex = snappedIndices.at(i);
-        GPSImageItem* const item             = d->imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item              = d->imageModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(item);

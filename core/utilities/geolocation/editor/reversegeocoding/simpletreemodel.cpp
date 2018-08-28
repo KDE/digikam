@@ -27,7 +27,7 @@
 namespace Digikam
 {
 
-class SimpleTreeModel::Private
+class Q_DECL_HIDDEN SimpleTreeModel::Private
 {
 public:
 

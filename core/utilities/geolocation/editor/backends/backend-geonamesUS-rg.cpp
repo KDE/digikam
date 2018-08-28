@@ -67,7 +67,7 @@ public:
     QNetworkReply*     netReply;
 };
 
-class BackendGeonamesUSRG::Private
+class Q_DECL_HIDDEN BackendGeonamesUSRG::Private
 {
 
 public:
@@ -120,8 +120,8 @@ void BackendGeonamesUSRG::nextPhoto()
     QUrl netUrl(QLatin1String("http://api.geonames.org/findNearestAddress"));
 
     QUrlQuery q(netUrl);
-    q.addQueryItem(QLatin1String("lat"), d->jobs.first().request.first().coordinates.latString());
-    q.addQueryItem(QLatin1String("lng"), d->jobs.first().request.first().coordinates.lonString());
+    q.addQueryItem(QLatin1String("lat"),      d->jobs.first().request.first().coordinates.latString());
+    q.addQueryItem(QLatin1String("lng"),      d->jobs.first().request.first().coordinates.lonString());
     q.addQueryItem(QLatin1String("username"), QLatin1String("digikam"));
     // q.addQueryItem(QLatin1String("lang"), d->jobs.first().language);
     netUrl.setQuery(q);
@@ -231,7 +231,7 @@ void BackendGeonamesUSRG::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    for (int i = 0; i < d->jobs.count(); ++i)
+    for (int i = 0 ; i < d->jobs.count() ; ++i)
     {
         if (d->jobs.at(i).netReply == reply)
         {
@@ -240,7 +240,7 @@ void BackendGeonamesUSRG::slotFinished(QNetworkReply* reply)
         }
     }
 
-    for (int i = 0; i < d->jobs.count(); ++i)
+    for (int i = 0 ; i < d->jobs.count() ; ++i)
     {
         if (d->jobs.at(i).netReply == reply)
         {
