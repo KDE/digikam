@@ -93,8 +93,8 @@ private Q_SLOTS:
 
     void result()
     {
-        QString scenario = QStringFromFile(QStringLiteral("./parsetest_result.rc"));
-        QString result   = QStringFromFile(QStringLiteral("./parsetest_resulttrue.rc"));
+        QString scenario = QStringFromFile(QStringLiteral("./data/parsetest_result.rc"));
+        QString result   = QStringFromFile(QStringLiteral("./data/parsetest_resulttrue.rc"));
 
         Parse* const job = new Parse(*m_mediaWiki, NULL);
         parseCount       = 0;
@@ -144,7 +144,7 @@ private Q_SLOTS:
         p1->setText(QStringLiteral("listedecharacteres"));
 
         QTest::newRow("Text")
-                << QStringFromFile(QStringLiteral("./parsetest.rc"))
+                << QStringFromFile(QStringLiteral("./data/parsetest.rc"))
                 << QStringLiteral("/?format=xml&action=parse&text=listedecharacteres")
                 << p1;
 
@@ -152,7 +152,7 @@ private Q_SLOTS:
         p2->setPageName(QStringLiteral("listedecharacteres"));
 
         QTest::newRow("Page Name")
-                << QStringFromFile(QStringLiteral("./parsetest.rc"))
+                << QStringFromFile(QStringLiteral("./data/parsetest.rc"))
                 << QStringLiteral("/?format=xml&action=parse&page=listedecharacteres")
                 << p2;
 
@@ -160,7 +160,7 @@ private Q_SLOTS:
         p3->setTitle(QStringLiteral("listedecharacteres"));
 
         QTest::newRow("Title")
-                << QStringFromFile(QStringLiteral("./parsetest.rc"))
+                << QStringFromFile(QStringLiteral("./data/parsetest.rc"))
                 << QStringLiteral("/?format=xml&action=parse&title=listedecharacteres")
                 << p3;
 
@@ -168,7 +168,7 @@ private Q_SLOTS:
         p4->setUseLang(QStringLiteral("fr"));
 
         QTest::newRow("User Langue")
-                << QStringFromFile(QStringLiteral("./parsetest.rc"))
+                << QStringFromFile(QStringLiteral("./data/parsetest.rc"))
                 << QStringLiteral("/?format=xml&action=parse&uselang=fr")
                 << p4;
     }

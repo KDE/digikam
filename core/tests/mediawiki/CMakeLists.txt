@@ -42,9 +42,9 @@ macro(MEDIAWIKI_TEST_RESOURCES)
 
         add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${resource}"
                            COMMAND ${CMAKE_COMMAND} -E copy
-                           "${CMAKE_CURRENT_SOURCE_DIR}/${resource}"
+                           "${CMAKE_CURRENT_SOURCE_DIR}/data/${resource}"
                            "${CMAKE_CURRENT_BINARY_DIR}/${resource}"
-                           DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/${resource}")
+                           DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/data/${resource}")
         list(APPEND test_resources_dest "${resource}" )
 
     endforeach()
