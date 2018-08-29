@@ -482,6 +482,11 @@ shasum -a1 "$TARGET_PKG_FILE"   | { read first rest ; echo $first ; }       >> $
 echo -n "SHA256 sum : "                                                     >> $TARGET_PKG_FILE.sum
 shasum -a256 "$TARGET_PKG_FILE" | { read first rest ; echo $first ; }       >> $TARGET_PKG_FILE.sum
 
+if [[ $DK_SIGN = 1 ]] ; then
+    cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -stabv "$TARGET_PKG_FILE"
+    mv -f $TARGET_PKG_FILE.acs $$TARGET_PKG_FILE.sig
+fi
+
 cat $TARGET_PKG_FILE.sum
 
 if [[ $DK_UPLOAD = 1 ]] ; then
@@ -494,6 +499,11 @@ if [[ $DK_UPLOAD = 1 ]] ; then
 
     scp $BUILDDIR/bundle/$TARGET_INSTALLER     $DK_UPLOADURL:$DK_UPLOADDIR
     scp $BUILDDIR/bundle/$TARGET_INSTALLER.sum $DK_UPLOADURL:$DK_UPLOADDIR
+
+    if [[ $DK_SIGN = 1 ]] ; then
+        scp $BUILDDIR/bundle/$TARGET_INSTALLER.sig $DK_UPLOADURL:$DK_UPLOADDIR
+    fi
+
 else
     echo -e "\n------------------------------------------------------------------"
     curl https://download.kde.org/README_UPLOAD

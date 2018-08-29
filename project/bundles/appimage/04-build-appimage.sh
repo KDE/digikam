@@ -452,6 +452,11 @@ sha1sum "$ORIG_WD/bundle/$APPIMAGE"   | { read first rest ; echo $first ; }  >> 
 echo -n "SHA256 sum : "                                                      >> $ORIG_WD/bundle/$APPIMAGE.sum
 sha256sum "$ORIG_WD/bundle/$APPIMAGE" | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$APPIMAGE.sum
 
+if [[ $DK_SIGN = 1 ]] ; then
+    cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -stabv "$ORIG_WD/bundle/$APPIMAGE"
+    mv -f $ORIG_WD/bundle/$APPIMAGE.acs $ORIG_WD/bundle/$APPIMAGE.sig
+fi
+
 cat $ORIG_WD/bundle/$APPIMAGE.sum
 
 if [[ $DK_UPLOAD = 1 ]] ; then
@@ -468,6 +473,11 @@ if [[ $DK_UPLOAD = 1 ]] ; then
 
     scp $ORIG_WD/bundle/$APPIMAGE     $DK_UPLOADURL:$DK_UPLOADDIR
     scp $ORIG_WD/bundle/$APPIMAGE.sum $DK_UPLOADURL:$DK_UPLOADDIR
+
+    if [[ $DK_SIGN = 1 ]] ; then
+        scp $ORIG_WD/bundle/$APPIMAGE.sig $DK_UPLOADURL:$DK_UPLOADDIR
+    fi
+
 else
     echo -e "\n------------------------------------------------------------------"
     curl https://download.kde.org/README_UPLOAD
