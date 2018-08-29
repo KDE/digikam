@@ -454,7 +454,7 @@ sha256sum "$ORIG_WD/bundle/$APPIMAGE" | { read first rest ; echo $first ; }  >> 
 
 if [[ $DK_SIGN = 1 ]] ; then
     cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -stabv "$ORIG_WD/bundle/$APPIMAGE"
-    mv -f $ORIG_WD/bundle/$APPIMAGE.acs $ORIG_WD/bundle/$APPIMAGE.sig
+    mv -f $ORIG_WD/bundle/$APPIMAGE.asc $ORIG_WD/bundle/$APPIMAGE.sig
 fi
 
 cat $ORIG_WD/bundle/$APPIMAGE.sum
