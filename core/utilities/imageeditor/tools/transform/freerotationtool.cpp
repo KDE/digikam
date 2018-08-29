@@ -58,13 +58,12 @@
 namespace Digikam
 {
 
-class FreeRotationTool::Private
+class Q_DECL_HIDDEN FreeRotationTool::Private
 {
 public:
 
-    explicit Private() :
-        configGroupName(QLatin1String("freerotation Tool")),
-
+    explicit Private()
+      : configGroupName(QLatin1String("freerotation Tool")),
         newHeightLabel(0),
         newWidthLabel(0),
         autoAdjustBtn(0),

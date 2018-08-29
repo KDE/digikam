@@ -74,14 +74,12 @@
 namespace Digikam
 {
 
-// -------------------------------------------------------------
-
-class ResizeTool::Private
+class Q_DECL_HIDDEN ResizeTool::Private
 {
 public:
 
-    explicit Private() :
-        orgWidth(0),
+    explicit Private()
+      : orgWidth(0),
         orgHeight(0),
         prevW(0),
         prevH(0),

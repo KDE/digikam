@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class PerspectiveWidget::Private
+class Q_DECL_HIDDEN PerspectiveWidget::Private
 {
 public:
 
@@ -66,8 +66,10 @@ public:
         ResizingBottomRight
     };
 
-    explicit Private() :
-        antiAliasing(false),
+public:
+
+    explicit Private()
+      : antiAliasing(false),
         drawWhileMoving(true),
         drawGrid(false),
         inverseTransformation(false),

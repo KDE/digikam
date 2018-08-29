@@ -45,20 +45,19 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-
-
 namespace Digikam
 {
 
-class HSLTool::Private
+class Q_DECL_HIDDEN HSLTool::Private
 {
 public:
 
-    explicit Private() :
-        hslSettings(0),
+    explicit Private()
+      : hslSettings(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;

@@ -55,12 +55,12 @@
 namespace Digikam
 {
 
-class AdjustCurvesTool::Private
+class Q_DECL_HIDDEN AdjustCurvesTool::Private
 {
 public:
 
-    explicit Private() :
-        settingsView(0),
+    explicit Private()
+      : settingsView(0),
         previewWidget(0),
         gboxSettings(0)
     {

@@ -53,12 +53,12 @@
 namespace Digikam
 {
 
-class ProfileConversionTool::Private
+class Q_DECL_HIDDEN ProfileConversionTool::Private
 {
 public:
 
-    explicit Private() :
-        profilesBox(0),
+    explicit Private()
+      : profilesBox(0),
         previewWidget(0),
         gboxSettings(0)
     {

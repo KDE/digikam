@@ -52,12 +52,12 @@
 namespace Digikam
 {
 
-class PerspectiveTool::Private
+class Q_DECL_HIDDEN PerspectiveTool::Private
 {
 public:
 
-    explicit Private() :
-        newWidthLabel(0),
+    explicit Private()
+      : newWidthLabel(0),
         newHeightLabel(0),
         topLeftAngleLabel(0),
         topRightAngleLabel(0),

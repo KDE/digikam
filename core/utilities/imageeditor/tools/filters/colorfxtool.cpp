@@ -57,18 +57,16 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-
-
 namespace Digikam
 {
 
-class ColorFxTool::Private
+class Q_DECL_HIDDEN ColorFxTool::Private
 {
 
 public:
 
-    explicit Private() :
-        previewWidget(0),
+    explicit Private()
+      : previewWidget(0),
         gboxSettings(0),
         settingsView(0)
     {

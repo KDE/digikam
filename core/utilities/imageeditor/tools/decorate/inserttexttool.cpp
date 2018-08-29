@@ -64,12 +64,12 @@
 namespace Digikam
 {
 
-class InsertTextTool::Private
+class Q_DECL_HIDDEN InsertTextTool::Private
 {
 public:
 
-    explicit Private() :
-        alignTextMode(0),
+    explicit Private()
+      : alignTextMode(0),
         defaultSizeFont(0),
         borderText(0),
         transparentText(0),

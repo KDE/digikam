@@ -49,12 +49,12 @@
 namespace Digikam
 {
 
-class BCGTool::Private
+class Q_DECL_HIDDEN BCGTool::Private
 {
 public:
 
-    explicit Private() :
-        settingsView(0),
+    explicit Private()
+      : settingsView(0),
         previewWidget(0),
         gboxSettings(0)
     {

@@ -54,12 +54,12 @@
 namespace Digikam
 {
 
-class LocalContrastTool::Private
+class Q_DECL_HIDDEN LocalContrastTool::Private
 {
 public:
 
-    explicit Private() :
-        settingsView(0),
+    explicit Private()
+      : settingsView(0),
         previewWidget(0),
         gboxSettings(0)
     {

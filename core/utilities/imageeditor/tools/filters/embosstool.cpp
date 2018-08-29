@@ -48,12 +48,12 @@
 namespace Digikam
 {
 
-class EmbossTool::Private
+class Q_DECL_HIDDEN EmbossTool::Private
 {
 public:
 
-    explicit Private() :
-        depthInput(0),
+    explicit Private()
+      : depthInput(0),
         previewWidget(0),
         gboxSettings(0)
     {

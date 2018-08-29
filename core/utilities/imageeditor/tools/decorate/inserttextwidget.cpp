@@ -41,12 +41,12 @@
 namespace Digikam
 {
 
-class InsertTextWidget::Private
+class Q_DECL_HIDDEN InsertTextWidget::Private
 {
 public:
 
-    explicit Private() :
-        currentMoving(false),
+    explicit Private()
+      : currentMoving(false),
         textBorder(false),
         textTransparent(false),
         alignMode(0),

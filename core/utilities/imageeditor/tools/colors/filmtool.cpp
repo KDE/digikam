@@ -64,7 +64,7 @@
 namespace Digikam
 {
 
-class FilmTool::Private
+class Q_DECL_HIDDEN FilmTool::Private
 {
 
 public:
@@ -77,8 +77,8 @@ public:
 
 public:
 
-    explicit Private() :
-        histoSegments(0),
+    explicit Private()
+      : histoSegments(0),
         resetButton(0),
         pickWhitePoint(0),
         autoButton(0),

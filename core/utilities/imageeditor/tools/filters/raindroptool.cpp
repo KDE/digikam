@@ -49,12 +49,12 @@
 namespace Digikam
 {
 
-class RainDropTool::Private
+class Q_DECL_HIDDEN RainDropTool::Private
 {
 public:
 
-    explicit Private() :
-        dropInput(0),
+    explicit Private()
+      : dropInput(0),
         amountInput(0),
         coeffInput(0),
         previewWidget(0),

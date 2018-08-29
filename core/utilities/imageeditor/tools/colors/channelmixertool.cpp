@@ -58,15 +58,16 @@
 namespace Digikam
 {
 
-class ChannelMixerTool::Private
+class Q_DECL_HIDDEN ChannelMixerTool::Private
 {
 public:
 
-    explicit Private() :
-        settingsView(0),
+    explicit Private()
+      : settingsView(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;

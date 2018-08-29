@@ -49,19 +49,19 @@
 #include "imageregionwidget.h"
 
 #ifdef HAVE_EIGEN3
-#include "refocusfilter.h"
+#   include "refocusfilter.h"
 #endif // HAVE_EIGEN3
 
 namespace Digikam
 {
 
-class SharpenTool::Private
+class Q_DECL_HIDDEN SharpenTool::Private
 {
 
 public:
 
-    explicit Private() :
-        configGroupName(QLatin1String("sharpen Tool")),
+    explicit Private()
+      : configGroupName(QLatin1String("sharpen Tool")),
         sharpSettings(0),
         previewWidget(0),
         gboxSettings(0)

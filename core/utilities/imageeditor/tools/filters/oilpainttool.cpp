@@ -49,12 +49,12 @@
 namespace Digikam
 {
 
-class OilPaintTool::Private
+class Q_DECL_HIDDEN OilPaintTool::Private
 {
 public:
 
-    explicit Private() :
-        brushSizeInput(0),
+    explicit Private()
+      : brushSizeInput(0),
         smoothInput(0),
         previewWidget(0),
         gboxSettings(0)
