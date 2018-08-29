@@ -80,5 +80,5 @@ cat $TARBALL_CHECKSUMS
 
 if [[ $TARBALL_SIGN = 1 ]] ; then
     cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -stabv "$TARBALL_FILE"
-    mv -f $TARBALL_FILE.acs $TARBALL_FILE.sig
+    mv -f $TARBALL_FILE.asc $TARBALL_FILE.sig
 fi
