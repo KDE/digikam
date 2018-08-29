@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-class PrintConfigHelper
+class Q_DECL_HIDDEN PrintConfigHelper
 {
     public:
 

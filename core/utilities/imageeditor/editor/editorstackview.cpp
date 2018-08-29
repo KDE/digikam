@@ -34,13 +34,13 @@
 namespace Digikam
 {
 
-class EditorStackView::Private
+class Q_DECL_HIDDEN EditorStackView::Private
 {
 
 public:
 
-    explicit Private() :
-        toolView(0),
+    explicit Private()
+      : toolView(0),
         canvas(0)
     {
     }
@@ -50,7 +50,8 @@ public:
 };
 
 EditorStackView::EditorStackView(QWidget* const parent)
-    : QStackedWidget(parent), d(new Private)
+    : QStackedWidget(parent),
+      d(new Private)
 {
 }
 

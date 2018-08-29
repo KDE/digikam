@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class UndoAction::Private
+class Q_DECL_HIDDEN UndoAction::Private
 {
 public:
 

@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class UndoCache::Private
+class Q_DECL_HIDDEN UndoCache::Private
 {
 public:
 
@@ -95,7 +95,7 @@ UndoCache::~UndoCache()
 
 void UndoCache::clear()
 {
-    foreach(int level, d->cachedLevels)
+    foreach (int level, d->cachedLevels)
     {
         QFile(d->cacheFile(level)).remove();
     }
@@ -105,7 +105,7 @@ void UndoCache::clear()
 
 void UndoCache::clearFrom(int fromLevel)
 {
-    foreach(int level, d->cachedLevels)
+    foreach (int level, d->cachedLevels)
     {
         if (level >= fromLevel)
         {

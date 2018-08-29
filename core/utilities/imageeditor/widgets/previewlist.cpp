@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class PreviewThreadWrapper::Private
+class Q_DECL_HIDDEN PreviewThreadWrapper::Private
 {
 
 public:
@@ -151,13 +151,12 @@ void PreviewThreadWrapper::stopFilters()
 
 // ---------------------------------------------------------------------
 
-class PreviewListItem::Private
+class Q_DECL_HIDDEN PreviewListItem::Private
 {
-
 public:
 
-    explicit Private() :
-        busy(false),
+    explicit Private()
+      : busy(false),
         id(0)
     {
     }
@@ -212,13 +211,13 @@ bool PreviewListItem::isBusy() const
 
 // ---------------------------------------------------------------------
 
-class PreviewList::Private
+class Q_DECL_HIDDEN PreviewList::Private
 {
 
 public:
 
-    explicit Private() :
-        progressCount(0),
+    explicit Private()
+      : progressCount(0),
         progressTimer(0),
         wrapper(0)
     {

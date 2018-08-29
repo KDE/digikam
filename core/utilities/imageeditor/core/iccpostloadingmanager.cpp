@@ -40,7 +40,8 @@ namespace Digikam
 {
 
 IccPostLoadingManager::IccPostLoadingManager(DImg& image, const QString& filePath, const ICCSettingsContainer& settings)
-    : IccManager(image, settings), m_filePath(filePath)
+    : IccManager(image, settings),
+      m_filePath(filePath)
 {
 }
 

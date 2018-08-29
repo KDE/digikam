@@ -49,12 +49,12 @@
 namespace Digikam
 {
 
-class RawPreview::Private
+class Q_DECL_HIDDEN RawPreview::Private
 {
 public:
 
-    explicit Private() :
-        currentFitWindowZoom(0.0),
+    explicit Private()
+      : currentFitWindowZoom(0.0),
         thread(0),
         item(0)
     {

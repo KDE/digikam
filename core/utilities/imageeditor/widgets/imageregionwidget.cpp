@@ -49,13 +49,13 @@
 namespace Digikam
 {
 
-class ImageRegionWidget::Private
+class Q_DECL_HIDDEN ImageRegionWidget::Private
 {
 
 public:
 
-    explicit Private() :
-        capturePtMode(false),
+    explicit Private()
+      : capturePtMode(false),
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
         oldRenderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
         delay(0),
@@ -76,7 +76,8 @@ public:
 };
 
 ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
-    : GraphicsDImgView(parent), d_ptr(new Private)
+    : GraphicsDImgView(parent),
+      d_ptr(new Private)
 {
     d_ptr->item = new ImageRegionItem(this);
     setItem(d_ptr->item);

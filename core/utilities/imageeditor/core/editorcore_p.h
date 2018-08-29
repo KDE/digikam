@@ -53,12 +53,12 @@ namespace Digikam
 
 class UndoManager;
 
-class EditorCore::Private
+class Q_DECL_HIDDEN EditorCore::Private
 {
 
 public:
 
-    class FileToSave
+    class Q_DECL_HIDDEN FileToSave
     {
     public:
 
@@ -75,8 +75,8 @@ public:
 
 public:
 
-    Private() :
-        valid(false),
+    Private()
+      : valid(false),
         rotatedOrFlipped(false),
         exifOrient(false),
         doSoftProofing(false),

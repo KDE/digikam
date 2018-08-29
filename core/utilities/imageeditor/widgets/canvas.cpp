@@ -56,7 +56,7 @@
 namespace Digikam
 {
 
-class Canvas::Private
+class Q_DECL_HIDDEN Canvas::Private
 {
 
 public:
@@ -79,7 +79,8 @@ public:
 };
 
 Canvas::Canvas(QWidget* const parent)
-    : GraphicsDImgView(parent), d(new Private)
+    : GraphicsDImgView(parent),
+      d(new Private)
 {
     d->core       = new EditorCore();
     d->canvasItem = new ImagePreviewItem;

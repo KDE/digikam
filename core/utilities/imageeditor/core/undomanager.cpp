@@ -44,12 +44,12 @@
 namespace Digikam
 {
 
-class UndoManager::Private
+class Q_DECL_HIDDEN UndoManager::Private
 {
 public:
 
-    explicit Private() :
-        origin(0),
+    explicit Private()
+      : origin(0),
         undoCache(0),
         core(0)
     {

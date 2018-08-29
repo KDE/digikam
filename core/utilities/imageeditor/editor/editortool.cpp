@@ -49,13 +49,13 @@
 namespace Digikam
 {
 
-class EditorTool::Private
+class Q_DECL_HIDDEN EditorTool::Private
 {
 
 public:
 
-    explicit Private() :
-        initPreview(false),
+    explicit Private()
+      : initPreview(false),
         version(0),
         view(0),
         timer(0),

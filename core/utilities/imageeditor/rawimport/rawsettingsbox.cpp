@@ -59,7 +59,7 @@
 namespace Digikam
 {
 
-class RawSettingsBox::Private
+class Q_DECL_HIDDEN RawSettingsBox::Private
 {
 public:
 
@@ -72,8 +72,8 @@ public:
 
 public:
 
-    explicit Private() :
-        optionGroupName(QLatin1String("RAW Import Settings")),
+    explicit Private()
+      : optionGroupName(QLatin1String("RAW Import Settings")),
         optionHistogramChannelEntry(QLatin1String("Histogram Channel")),
         optionHistogramScaleEntry(QLatin1String("Histogram Scale")),
         optionBrightnessEntry(QLatin1String("Brightness")),

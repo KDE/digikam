@@ -177,7 +177,7 @@
 namespace Digikam
 {
 
-class DatabaseVersionManager : public VersionManager
+class Q_DECL_HIDDEN DatabaseVersionManager : public VersionManager
 {
 public:
 
@@ -196,13 +196,13 @@ public:
 
 // -----------------------------------------------------------------------------------------
 
-class ImageWindow::Private
+class Q_DECL_HIDDEN ImageWindow::Private
 {
 
 public:
 
-    Private() :
-        configShowThumbbarEntry(QLatin1String("Show Thumbbar")),
+    Private()
+      : configShowThumbbarEntry(QLatin1String("Show Thumbbar")),
         configHorizontalThumbbarEntry(QLatin1String("HorizontalThumbbar")),
         viewContainer(0),
         toMainWindowAction(0),
