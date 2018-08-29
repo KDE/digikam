@@ -483,5 +483,5 @@ BUGFIXES:
 422 ==> 397727 - Don't show "Mod."" label when no modified timestamp exists on an image.
 423 ==> 397893 - MacOS : digiKam do not link with libksane 18.08.0.
 424 ==> 397990 - Carousel images too large.
-425 ==> 
-
+425 ==> 389273 - Copy/move selected items to anothor Album doesn't work correctly [patch].
+426 ==> 
