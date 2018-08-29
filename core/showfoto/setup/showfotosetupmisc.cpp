@@ -169,7 +169,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     // -- Application Appearance Options --------------------------------------------------------
 
     QWidget* const appearancePanel = new QWidget(d->tab);
-    QVBoxLayout* const layout2     = new QVBoxLayout(appearencePanel);
+    QVBoxLayout* const layout2     = new QVBoxLayout(appearancePanel);
 
     d->showSplash       = new QCheckBox(i18n("&Show splash screen at startup"),            appearancePanel);
     d->nativeFileDialog = new QCheckBox(i18n("Use native file dialogs from the system"),   appearancePanel);
@@ -188,7 +188,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     QStringList styleList     = QStyleFactory::keys();
 
-    for (int i = 0; i < styleList.count(); i++)
+    for (int i = 0 ; i < styleList.count() ; i++)
     {
         d->applicationStyle->addItem(styleList.at(i));
     }
