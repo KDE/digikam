@@ -225,7 +225,7 @@ shasum -a256 "$ORIG_WD/bundle/$TARGET_INSTALLER" | { read first rest ; echo $fir
 
 if [[ $DK_SIGN = 1 ]] ; then
     cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -stabv "$ORIG_WD/bundle/$TARGET_INSTALLER"
-    mv -f $ORIG_WD/bundle/$TARGET_INSTALLER.acs $ORIG_WD/bundle/$TARGET_INSTALLER.sig
+    mv -f $ORIG_WD/bundle/$TARGET_INSTALLER.asc $ORIG_WD/bundle/$TARGET_INSTALLER.sig
 fi
 
 cat $ORIG_WD/bundle/$TARGET_INSTALLER.sum
