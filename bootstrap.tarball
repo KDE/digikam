@@ -12,6 +12,7 @@ TARBALL_DIR="$PWD/../digikam-$TARBALL_VERSION"
 TARBALL_FILE="$PWD/../digikam-$TARBALL_VERSION.tar.xz"
 TARBALL_CHECKSUMS="$PWD/../digikam-$TARBALL_VERSION.sum"
 TARBALL_BUILD="build.tarball"
+TARBALL_SIGN=1
 
 # Prepare temp dir to compile translations files.
 
@@ -76,3 +77,8 @@ echo -n "SHA256 sum : "                                                         
 sha256sum "$TARBALL_FILE" | { read first rest ; echo $first ; }                 >> $TARBALL_CHECKSUMS
 
 cat $TARBALL_CHECKSUMS
+
+if [[ $TARBALL_SIGN = 1 ]] ; then
+    cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -stabv "$TARBALL_FILE"
+    mv -f $TARBALL_FILE.acs $TARBALL_FILE.sig
+fi
