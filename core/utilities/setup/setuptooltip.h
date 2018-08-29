@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPTOOLTIP_H
-#define SETUPTOOLTIP_H
+#ifndef DIGIKAM_SETUP_TOOLTIP_H
+#define DIGIKAM_SETUP_TOOLTIP_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUPTOOLTIP_H
+#endif // DIGIKAM_SETUP_TOOLTIP_H

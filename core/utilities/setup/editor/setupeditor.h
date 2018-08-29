@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPEDITOR_H
-#define SETUPEDITOR_H
+#ifndef DIGIKAM_SETUP_EDITOR_H
+#define DIGIKAM_SETUP_EDITOR_H
 
 // Qt includes
 
@@ -54,4 +54,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUPEDITOR_H
+#endif // DIGIKAM_SETUP_EDITOR_H

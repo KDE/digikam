@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPVERSIONING_H
-#define SETUPVERSIONING_H
+#ifndef DIGIKAM_SETUP_VERSIONING_H
+#define DIGIKAM_SETUP_VERSIONING_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUPVERSIONING_H
+#endif // DIGIKAM_SETUP_VERSIONING_H

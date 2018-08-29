@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPLIGHTTABLE_H
-#define SETUPLIGHTTABLE_H
+#ifndef DIGIKAM_SETUP_LIGHT_TABLE_H
+#define DIGIKAM_SETUP_LIGHT_TABLE_H
 
 // Qt includes
 
@@ -54,4 +54,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUPLIGHTTABLE_H
+#endif // DIGIKAM_SETUP_LIGHT_TABLE_H

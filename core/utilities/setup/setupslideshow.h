@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPSLIDESHOW_H
-#define SETUPSLIDESHOW_H
+#ifndef DIGIKAM_SETUP_SLIDESHOW_H
+#define DIGIKAM_SETUP_SLIDESHOW_H
 
 // Qt includes
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* SETUPSLIDESHOW_H */
+#endif // DIGIKAM_SETUP_SLIDESHOW_H

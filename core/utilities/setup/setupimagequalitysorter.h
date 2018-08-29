@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPIMAGEQUALITYSORTER_H
-#define SETUPIMAGEQUALITYSORTER_H
+#ifndef DIGIKAM_SETUP_IMAGE_QUALITY_SORTER_H
+#define DIGIKAM_SETUP_IMAGE_QUALITY_SORTER_H
 
 // Qt includes
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* SETUPIMAGEQUALITYSORTER_H */
+#endif // DIGIKAM_SETUP_IMAGE_QUALITY_SORTER_H

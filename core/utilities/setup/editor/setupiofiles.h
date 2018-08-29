@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPIOFILES_H
-#define SETUPIOFILES_H
+#ifndef DIGIKAM_SETUP_IOFILES_H
+#define DIGIKAM_SETUP_IOFILES_H
 
 // Qt includes
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUPIOFILES_H
+#endif // DIGIKAM_SETUP_IOFILES_H
