@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTIMAGEMODEL_H
-#define IMPORTIMAGEMODEL_H
+#ifndef DIGIKAM_IMPORT_IMAGE_MODEL_H
+#define DIGIKAM_IMPORT_IMAGE_MODEL_H
 
 // Qt includes
 
@@ -299,4 +299,4 @@ private:
 
 Q_DECLARE_METATYPE(Digikam::ImportImageModel*)
 
-#endif // IMPORTIMAGEMODEL_H
+#endif // DIGIKAM_IMPORT_IMAGE_MODEL_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ImportIconView_H
-#define ImportIconView_H
+#ifndef DIGIKAM_IMPORT_ICON_VIEW_H
+#define DIGIKAM_IMPORT_ICON_VIEW_H
 
 // Local includes
 
@@ -101,4 +101,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ImportIconView_H
+#endif // DIGIKAM_IMPORT_ICON_VIEW_H

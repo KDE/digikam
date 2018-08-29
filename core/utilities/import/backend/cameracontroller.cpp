@@ -59,7 +59,7 @@
 namespace Digikam
 {
 
-class CameraCommand
+class Q_DECL_HIDDEN CameraCommand
 {
 public:
 
@@ -87,12 +87,12 @@ public:
     QMap<QString, QVariant> map;
 };
 
-class CameraController::Private
+class Q_DECL_HIDDEN CameraController::Private
 {
 public:
 
-    explicit Private() :
-        close(false),
+    explicit Private()
+      : close(false),
         canceled(false),
         running(false),
         conflictRule(SetupCamera::DIFFNAME),

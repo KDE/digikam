@@ -32,12 +32,12 @@
 namespace Digikam
 {
 
-class FreeSpaceToolTip::Private
+class Q_DECL_HIDDEN FreeSpaceToolTip::Private
 {
 public:
 
-    explicit Private() :
-        parent(0)
+    explicit Private()
+      : parent(0)
     {
     }
 

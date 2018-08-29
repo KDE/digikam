@@ -41,12 +41,12 @@
 namespace Digikam
 {
 
-class ImportSettings::Private
+class Q_DECL_HIDDEN ImportSettings::Private
 {
-
 public:
-    explicit Private() :
-        iconShowName(true),
+
+    explicit Private()
+      : iconShowName(true),
         iconShowSize(false),
         iconShowDate(true),
         iconShowTitle(false),

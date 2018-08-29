@@ -40,7 +40,7 @@ namespace Digikam
 
 class MediaPlayerView;
 
-class ImportStackedView::Private
+class Q_DECL_HIDDEN ImportStackedView::Private
 {
 
 public:

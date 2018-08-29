@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTSETTINGS_H
-#define IMPORTSETTINGS_H
+#ifndef DIGIKAM_IMPORT_SETTINGS_H
+#define DIGIKAM_IMPORT_SETTINGS_H
 
 // Qt includes
 
@@ -183,4 +183,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMPORTSETTINGS_H
+#endif // DIGIKAM_IMPORT_SETTINGS_H

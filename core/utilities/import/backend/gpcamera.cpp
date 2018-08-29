@@ -75,9 +75,8 @@ extern "C"
 namespace Digikam
 {
 
-class GPStatus
+class Q_DECL_HIDDEN GPStatus
 {
-
 public:
 
     GPStatus()
@@ -146,7 +145,7 @@ bool GPStatus::cancel = false;
 
 // ---------------------------------------------------------------------------
 
-class GPCamera::Private
+class Q_DECL_HIDDEN GPCamera::Private
 {
 
 public:

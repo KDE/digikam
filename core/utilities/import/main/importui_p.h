@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTUI_PRIVATE_H
-#define IMPORTUI_PRIVATE_H
+#ifndef DIGIKAM_IMPORTUI_PRIVATE_H
+#define DIGIKAM_IMPORTUI_PRIVATE_H
 
 // Qt includes
 
@@ -61,12 +61,12 @@
 namespace Digikam
 {
 
-class ImportUI::Private
+class Q_DECL_HIDDEN ImportUI::Private
 {
 public:
 
-    Private() :
-        deleteAfter(false),
+    Private()
+      : deleteAfter(false),
         busy(false),
         closed(false),
         downloadMenu(0),
@@ -256,4 +256,4 @@ const QString ImportUI::Private::importFiltersConfigGroupName(QLatin1String("Imp
 
 } // namespace Digikam
 
-#endif // IMPORTUI_PRIVATE_H
+#endif // DIGIKAM_IMPORTUI_PRIVATE_H

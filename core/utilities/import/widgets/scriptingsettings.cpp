@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class ScriptingSettings::Private
+class Q_DECL_HIDDEN ScriptingSettings::Private
 {
 public:
 

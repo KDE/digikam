@@ -42,7 +42,7 @@ using namespace KSaneIface;
 namespace Digikam
 {
 
-class SaveImgThread::Private
+class Q_DECL_HIDDEN SaveImgThread::Private
 {
 public:
 

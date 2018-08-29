@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class AdvancedSettings::Private
+class Q_DECL_HIDDEN AdvancedSettings::Private
 {
 public:
 

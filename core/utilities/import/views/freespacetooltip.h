@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FREESPACETOOLTIP_H
-#define FREESPACETOOLTIP_H
+#ifndef DIGIKAM_FREE_SPACE_TOOL_TIP_H
+#define DIGIKAM_FREE_SPACE_TOOL_TIP_H
 
 // Local includes
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FREESPACETOOLTIP_H */
+#endif // DIGIKAM_FREE_SPACE_TOOL_TIP_H

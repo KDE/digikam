@@ -36,12 +36,12 @@
 namespace Digikam
 {
 
-class ImportThumbnailModel::Private
+class Q_DECL_HIDDEN ImportThumbnailModel::Private
 {
 public:
 
-    explicit Private() :
-        thumbsCtrl(0),
+    explicit Private()
+      : thumbsCtrl(0),
         thumbSize(0),
         lastGlobalThumbSize(0),
         emitDataChanged(true)

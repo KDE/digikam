@@ -56,12 +56,12 @@
 namespace Digikam
 {
 
-class RenameCustomizer::Private
+class Q_DECL_HIDDEN RenameCustomizer::Private
 {
 public:
 
-    explicit Private() :
-        startIndex(1),
+    explicit Private()
+      : startIndex(1),
         buttonGroup(0),
         renameDefaultCase(0),
         renameDefault(0),
@@ -99,7 +99,8 @@ public:
 };
 
 RenameCustomizer::RenameCustomizer(QWidget* const parent, const QString& cameraTitle)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     d->changedTimer = new QTimer(this);
     d->cameraTitle  = cameraTitle;

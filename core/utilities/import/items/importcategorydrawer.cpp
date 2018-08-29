@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class ImportCategoryDrawer::Private
+class Q_DECL_HIDDEN ImportCategoryDrawer::Private
 {
 public:
 

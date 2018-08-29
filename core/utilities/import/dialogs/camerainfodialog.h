@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERAINFODIALOG_H
-#define CAMERAINFODIALOG_H
+#ifndef DIGIKAM_CAMERA_INFO_DIALOG_H
+#define DIGIKAM_CAMERA_INFO_DIALOG_H
 
 // Qt includes
 
@@ -52,4 +52,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif /* CAMERAINFODIALOG_H */
+#endif // DIGIKAM_CAMERA_INFO_DIALOG_H

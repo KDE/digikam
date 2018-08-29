@@ -46,18 +46,18 @@
 #include "camitemsortsettings.h"
 
 #ifdef HAVE_MARBLE
-#include "mapwidgetview.h"
+#   include "mapwidgetview.h"
 #endif // HAVE_MARBLE
 
 namespace Digikam
 {
 
-class ImportView::Private
+class Q_DECL_HIDDEN ImportView::Private
 {
 public:
 
-    explicit Private() :
-        needDispatchSelection(false),
+    explicit Private()
+      : needDispatchSelection(false),
         thumbSize(ThumbnailSize::Medium),
         dockArea(0),
         splitter(0),

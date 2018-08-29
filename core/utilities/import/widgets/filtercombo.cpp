@@ -50,7 +50,7 @@ const QString FilterComboBox::defaultIgnoreExtensions(QLatin1String("dsp dps"));
 
 // ---------------------------------------------------------------------------------
 
-class FilterComboBox::Private
+class Q_DECL_HIDDEN FilterComboBox::Private
 {
 public:
 
@@ -59,7 +59,7 @@ public:
         KSharedConfig::Ptr config = KSharedConfig::openConfig();
         KConfigGroup group        = config->group(QLatin1String("Import Filters"));
 
-        for (int i = 0; true; ++i)
+        for (int i = 0 ; true ; ++i)
         {
             QString filter = group.readEntry(QString::fromUtf8("Filter%1").arg(i), QString());
 

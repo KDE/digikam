@@ -43,12 +43,14 @@ namespace Digikam
 class ImageDelegateOverlay;
 class ItemViewImportDelegate;
 
-class ItemViewImportDelegatePrivate
+class Q_DECL_HIDDEN ItemViewImportDelegatePrivate
 {
 public:
 
     explicit ItemViewImportDelegatePrivate();
-    virtual ~ItemViewImportDelegatePrivate() {}
+    virtual ~ItemViewImportDelegatePrivate()
+    {
+    }
 
     void init(ItemViewImportDelegate* const _q);
 

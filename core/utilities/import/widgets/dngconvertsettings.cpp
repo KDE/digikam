@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class DNGConvertSettings::Private
+class Q_DECL_HIDDEN DNGConvertSettings::Private
 {
 public:
 

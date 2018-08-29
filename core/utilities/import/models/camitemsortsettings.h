@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMITEMSORTSETTINGS_H
-#define CAMITEMSORTSETTINGS_H
+#ifndef DIGIKAM_CAMITEM_SORT_SETTINGS_H
+#define DIGIKAM_CAMITEM_SORT_SETTINGS_H
 
 // Qt includes
 
@@ -184,4 +184,4 @@ public:
 
 } // namespace Digikam
 
-#endif // CAMITEMSORTSETTINGS_H
+#endif // DIGIKAM_CAMITEM_SORT_SETTINGS_H

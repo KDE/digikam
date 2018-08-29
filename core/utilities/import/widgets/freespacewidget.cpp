@@ -56,7 +56,7 @@
 namespace Digikam
 {
 
-class MountPointInfo
+class Q_DECL_HIDDEN MountPointInfo
 {
 public:
 
@@ -79,12 +79,12 @@ public:
 
 // ---------------------------------------------------------------------------------
 
-class FreeSpaceWidget::Private
+class Q_DECL_HIDDEN FreeSpaceWidget::Private
 {
 public:
 
-    explicit Private() :
-        isValid(false),
+    explicit Private()
+      : isValid(false),
         percentUsed(-1),
         dSizeKb(0),
         kBSize(0),

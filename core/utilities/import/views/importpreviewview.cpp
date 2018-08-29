@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class ImportPreviewViewItem : public DImgPreviewItem
+class Q_DECL_HIDDEN ImportPreviewViewItem : public DImgPreviewItem
 {
 public:
 
@@ -113,7 +113,7 @@ protected:
 
 // ---------------------------------------------------------------------
 
-class ImportPreviewView::Private
+class Q_DECL_HIDDEN ImportPreviewView::Private
 {
 public:
 
@@ -160,7 +160,8 @@ public:
 };
 
 ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
-    : GraphicsDImgView(parent), d(new Private)
+    : GraphicsDImgView(parent),
+      d(new Private)
 {
     d->mode = mode;
     d->item = new ImportPreviewViewItem(this);

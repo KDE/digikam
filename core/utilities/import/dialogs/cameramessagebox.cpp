@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class CameraItem::Private
+class Q_DECL_HIDDEN CameraItem::Private
 {
 
 public:
