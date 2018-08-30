@@ -486,5 +486,5 @@ BUGFIXES:
 425 ==> 389273 - Copy/move selected items to anothor Album doesn't work correctly [patch].
 426 ==> 261471 - Crashes when trying to delete photos or albums.
 427 ==> 342108 - Crashes when trying to import images
-428 ==> 
-
+428 ==> 341268 - digiKam freeze each time I select a photograph in a collection.
+429 ==> 
