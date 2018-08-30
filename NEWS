@@ -488,4 +488,6 @@ BUGFIXES:
 427 ==> 342108 - Crashes when trying to import images
 428 ==> 341268 - digiKam freeze each time I select a photograph in a collection.
 429 ==> 388551 - Error message at startup showing that Marble plugins are not loading but they do.
-430 ==> 
+430 ==> 342110 - Bug reporting feature gives error wont report bug.
+431 ==> 
+
