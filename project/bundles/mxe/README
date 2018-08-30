@@ -6,11 +6,13 @@ environnement MXE and NSIS application.
 This script follow instructions from Qt bundle deployement for Windows as shared libraries
 available at this url: http://doc.qt.io/qt-5/windows-deployment.html
 
+
 AUTHORS
 -------
-(c) 2015-2018 by :
+(c) 2015-2018 by:
 
 Gilles Caulier <caulier dot gilles at gmail dot com>
+
 
 DESCRIPTION
 -----------
@@ -19,17 +21,18 @@ Software Collection for Windows 32 bits or 64 bits. In addition to this README,
 there are comments in the scripts that provide some additional explanations for
 how they work.
 
-Note : these cross-compiling scripts exists because the way provided by KDE team to compile 
-a KDE application under Windows with MSVC compiler through emerge tool never work and is just
-a big pain to use/configure/run with a Windows OS. Also KDE Windows initiative look like 
-unmaintained/inactive since a while.
+Note: these cross-compiling scripts exists because the way provided to compile 
+a KDE application under Windows with MSVC compiler is just a big pain to 
+use/configure/run with a Windows system.
 Another big advantage of cross-compiling is to not require a Windows to do the job, which 
-is definitively a weird operating system to compile and hack.
+is definitively a weird operating system to compile and hack. There is also no risk to
+inject a virus in the binary installer.
+
 
 BUNDLE CONTENTS
 ---------------
 
-Note : the bundle is rellocable.
+Note: the bundle is rellocable.
 
 |                                                    Executable, shared dlls, KDE plugins dlls, qt.conf
 |--- data
@@ -74,17 +77,21 @@ The scripts build digiKam with MXE cross compiler, so you will need all dependen
 and the other pre-requisites first for MXE.
 See http://mxe.cc/#requirements for details.
 
+
 IMPORTANT:
 - You must set the right target architecture : windows 32 or 64 bits.
 - You must set the digiKam git tags to checkout right source code in installer.
 - You must set the option to host debug symbols or not in installer.
-Look in config.sh file for details.
+
+Note: Look in config.sh file for settings details.
+
 
 COMPONENTS
 ----------
 There are 4 scripts to be run by the user. 2 first ones installs
 MXE and all dependencies, next one digiKam, and last one makes a 
 binary installer for Windows.
+
 
 SCRIPT DESCRIPTIONS
 -------------------
@@ -123,6 +130,9 @@ at startup following instruction give at this url:
 
 https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-password-prompt
 
+Note: the bundle can be signed with GPG. You must setup your private and public keys before
+and put your passphare to a text file (~/.gnupg/dkorg-gpg-pwd.txt) 
+
 * rll.py
 
 Run by 04-build-installer.sh. It is a python script that takes a list of binaries
@@ -138,6 +148,7 @@ This script permit to build whole 32 and 64 bits installers from scratch at the 
 * update.sh
 
 This script re-build only digiKam and installers in 32 and 64 bits.
+
 
 LICENSES
 --------

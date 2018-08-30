@@ -82,7 +82,8 @@ REQUIREMENTS
 
 - You must set the digiKam git tags to checkout right source code in bundle.
 - You must set the option to host debug symbols or not in bundle.
-  Look in config.sh file for details.
+
+NOTE: Look in config.sh file for settings details.
 
 
 COMPONENTS
@@ -134,6 +135,9 @@ export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 ssh-add -l > /dev/null || ssh-add
 
 # ---
+
+Note: the bundle can be signed with GPG. You must setup your private and public keys before
+and put your passphare to a text file (~/.gnupg/dkorg-gpg-pwd.txt) 
 
 4/ Re-login as root to setup password.
 
