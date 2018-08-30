@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class WSNewAlbumDialog::Private
+class Q_DECL_HIDDEN WSNewAlbumDialog::Private
 {
 public:
 

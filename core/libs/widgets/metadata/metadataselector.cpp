@@ -240,7 +240,7 @@ void MetadataSelector::selectAll()
 
 // ------------------------------------------------------------------------------------
 
-class MetadataSelectorView::Private
+class Q_DECL_HIDDEN MetadataSelectorView::Private
 {
 public:
 

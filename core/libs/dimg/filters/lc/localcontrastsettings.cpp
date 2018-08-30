@@ -60,13 +60,13 @@
 namespace Digikam
 {
 
-class LocalContrastSettings::Private
+class Q_DECL_HIDDEN LocalContrastSettings::Private
 {
 
 public:
 
-    explicit Private() :
-        stretchContrastCheck(0),
+    explicit Private()
+      : stretchContrastCheck(0),
         label4(0),
         label5(0),
         label6(0),

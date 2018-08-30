@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-class ColorGradientWidget::Private
+class Q_DECL_HIDDEN ColorGradientWidget::Private
 {
 
 public:

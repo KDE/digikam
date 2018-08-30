@@ -81,7 +81,7 @@ namespace Digikam
  * @brief The RGWidget class represents the main widget for reverse geocoding.
  */
 
-class RGWidget::Private
+class Q_DECL_HIDDEN RGWidget::Private
 {
 public:
 

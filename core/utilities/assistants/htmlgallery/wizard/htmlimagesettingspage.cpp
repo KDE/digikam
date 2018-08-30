@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class HTMLImageSettingsPage::Private
+class Q_DECL_HIDDEN HTMLImageSettingsPage::Private
 {
 public:
 

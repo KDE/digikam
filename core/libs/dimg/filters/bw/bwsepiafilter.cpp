@@ -38,12 +38,12 @@
 namespace Digikam
 {
 
-class BWSepiaFilter::Private
+class Q_DECL_HIDDEN BWSepiaFilter::Private
 {
 public:
 
-    explicit Private() :
-        redAttn(0.0),
+    explicit Private()
+      : redAttn(0.0),
         greenAttn(0.0),
         blueAttn(0.0),
         redMult(0.0),

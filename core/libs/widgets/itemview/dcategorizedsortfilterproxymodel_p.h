@@ -36,7 +36,7 @@ namespace Digikam
 
 class DCategorizedSortFilterProxyModel;
 
-class DCategorizedSortFilterProxyModel::Private
+class Q_DECL_HIDDEN DCategorizedSortFilterProxyModel::Private
 {
 public:
 

@@ -74,7 +74,7 @@ static bool gphotoLessThan(const GSFolder& p1, const GSFolder& p2)
     return (p1.title.toLower() < p2.title.toLower());
 }
 
-class GPTalker::Private
+class Q_DECL_HIDDEN GPTalker::Private
 {
 public:
 
@@ -124,15 +124,15 @@ public:
 };
 
 GPTalker::GPTalker(QWidget* const parent)
-: GSTalkerBase(parent,
-               (QStringList() << QLatin1String("https://www.googleapis.com/auth/plus.login") // to get user login (temporary until gphoto supports it officially)
-                              << QLatin1String("https://www.googleapis.com/auth/photoslibrary") // to add and download photo in the library
-                              << QLatin1String("https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata") // to download photo created by digiKam on GPhoto
-                              << QLatin1String(" https://www.googleapis.com/auth/photoslibrary.sharing")), // for shared albums
-               QLatin1String("GooglePhotos")),
+    : GSTalkerBase(parent,
+                   (QStringList() << QLatin1String("https://www.googleapis.com/auth/plus.login")                            // to get user login (temporary until gphoto supports it officially)
+                                  << QLatin1String("https://www.googleapis.com/auth/photoslibrary")                         // to add and download photo in the library
+                                  << QLatin1String("https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata") // to download photo created by digiKam on GPhoto
+                                  << QLatin1String(" https://www.googleapis.com/auth/photoslibrary.sharing")),              // for shared albums
+                   QLatin1String("GooglePhotos")),
       d(new Private)
 {
-    m_reply   = 0;
+    m_reply    = 0;
     d->netMngr = new QNetworkAccessManager(this);
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
@@ -159,7 +159,7 @@ QStringList GPTalker::getUploadTokenList()
 }
 
 /**
- * (Trung) : Comments below are not valid anymore with google photos api
+ * (Trung): Comments below are not valid anymore with google photos api
  * Google Photo's Album listing request/response
  * First a request is sent to the url below and then we might(?) get a redirect URL
  * We then need to send the GET request to the Redirect url.

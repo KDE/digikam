@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class VersionsWidget::Private
+class Q_DECL_HIDDEN VersionsWidget::Private
 {
 public:
 

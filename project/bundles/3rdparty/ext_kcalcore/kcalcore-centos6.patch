@@ -1,16 +1,7 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 699c9dd..8793a93 100644
+index a7371cb..5293a5d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -4,7 +4,7 @@ set(PIM_VERSION "5.7.1")
- project(KCalCore VERSION ${PIM_VERSION})
- 
- # ECM setup
--set(KF5_VERSION "5.44.0")
-+set(KF5_VERSION "5.36.0")
- 
- find_package(ECM ${KF5_VERSION} CONFIG REQUIRED)
- set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${KCalCore_SOURCE_DIR}/cmake)
 @@ -35,7 +35,7 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KCALCORE
  ########### Find packages ###########
  find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED Core Gui)
@@ -18,8 +9,8 @@ index 699c9dd..8793a93 100644
 -set(LibIcal_MIN_VERSION "2.0")
 +set(LibIcal_MIN_VERSION "0.43")
  find_package(LibIcal ${LibIcal_MIN_VERSION})
- set_package_properties(LibIcal PROPERTIES
-   DESCRIPTION "The libical library"
+ set_package_properties(LibIcal PROPERTIES TYPE REQUIRED)
+ if(LibIcal_VERSION VERSION_GREATER "2.98")
 diff --git a/src/icalformat_p.cpp b/src/icalformat_p.cpp
 index 8708e26..b994e06 100644
 --- a/src/icalformat_p.cpp

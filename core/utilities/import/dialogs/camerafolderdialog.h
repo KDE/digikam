@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERAFOLDERDIALOG_H
-#define CAMERAFOLDERDIALOG_H
+#ifndef DIGIKAM_CAMERA_FOLDER_DIALOG_H
+#define DIGIKAM_CAMERA_FOLDER_DIALOG_H
 
 // Qt includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CAMERAFOLDERDIALOG_H */
+#endif // DIGIKAM_CAMERA_FOLDER_DIALOG_H

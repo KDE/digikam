@@ -35,12 +35,12 @@
 namespace Digikam
 {
 
-class CameraType::Private
+class Q_DECL_HIDDEN CameraType::Private
 {
 public:
 
-    explicit Private() :
-        valid(false),
+    explicit Private()
+      : valid(false),
         startingNumber(1),
         action(0)
     {

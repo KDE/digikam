@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class LensFunFilter::Private
+class Q_DECL_HIDDEN LensFunFilter::Private
 {
 public:
 

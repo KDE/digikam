@@ -39,12 +39,14 @@ namespace Digikam
 {
 
 ImageZoomSettings::ImageZoomSettings()
-    : m_zoom(1), m_zoomConst(1)
+    : m_zoom(1),
+      m_zoomConst(1)
 {
 }
 
 ImageZoomSettings::ImageZoomSettings(const QSize& imageSize, const QSize& originalSize)
-    : m_zoom(1), m_zoomConst(1)
+    : m_zoom(1),
+      m_zoomConst(1)
 {
     setImageSize(imageSize, originalSize);
 }

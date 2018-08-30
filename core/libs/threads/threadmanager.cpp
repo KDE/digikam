@@ -211,7 +211,7 @@ void WorkerObjectRunnable::run()
 
 // -------------------------------------------------------------------------------------------------
 
-class ThreadManager::Private
+class Q_DECL_HIDDEN ThreadManager::Private
 {
 public:
 

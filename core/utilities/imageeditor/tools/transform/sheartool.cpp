@@ -51,12 +51,12 @@
 namespace Digikam
 {
 
-class ShearTool::Private
+class Q_DECL_HIDDEN ShearTool::Private
 {
 public:
 
-    explicit Private() :
-        newWidthLabel(0),
+    explicit Private()
+      : newWidthLabel(0),
         newHeightLabel(0),
         antialiasInput(0),
         mainHAngleInput(0),

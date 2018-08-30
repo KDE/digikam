@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class WSWizard::Private
+class Q_DECL_HIDDEN WSWizard::Private
 {
 public:
 

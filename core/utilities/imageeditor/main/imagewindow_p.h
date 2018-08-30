@@ -147,10 +147,7 @@
 #include "rajcewindow.h"
 #include "smugwindow.h"
 #include "yfwindow.h"
-
-#ifdef HAVE_MEDIAWIKI
-#   include "mediawikiwindow.h"
-#endif
+#include "mediawikiwindow.h"
 
 #ifdef HAVE_VKONTAKTE
 #   include "vkwindow.h"
@@ -180,7 +177,7 @@
 namespace Digikam
 {
 
-class DatabaseVersionManager : public VersionManager
+class Q_DECL_HIDDEN DatabaseVersionManager : public VersionManager
 {
 public:
 
@@ -199,13 +196,13 @@ public:
 
 // -----------------------------------------------------------------------------------------
 
-class ImageWindow::Private
+class Q_DECL_HIDDEN ImageWindow::Private
 {
 
 public:
 
-    Private() :
-        configShowThumbbarEntry(QLatin1String("Show Thumbbar")),
+    Private()
+      : configShowThumbbarEntry(QLatin1String("Show Thumbbar")),
         configHorizontalThumbbarEntry(QLatin1String("HorizontalThumbbar")),
         viewContainer(0),
         toMainWindowAction(0),

@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class GPSImageListContextMenu::Private
+class Q_DECL_HIDDEN GPSImageListContextMenu::Private
 {
 public:
 

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERAFOLDERVIEW_H
-#define CAMERAFOLDERVIEW_H
+#ifndef DIGIKAM_CAMERA_FOLDER_VIEW_H
+#define DIGIKAM_CAMERA_FOLDER_VIEW_H
 
 // Qt includes
 
@@ -76,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CAMERAFOLDERVIEW_H */
+#endif // DIGIKAM_CAMERA_FOLDER_VIEW_H

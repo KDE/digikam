@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-class GPSImageModel::Private
+class Q_DECL_HIDDEN GPSImageModel::Private
 {
 public:
 

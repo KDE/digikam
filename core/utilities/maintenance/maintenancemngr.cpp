@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class MaintenanceMngr::Private
+class Q_DECL_HIDDEN MaintenanceMngr::Private
 {
 public:
 

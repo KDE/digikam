@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class AdvPrintTask::Private
+class Q_DECL_HIDDEN AdvPrintTask::Private
 {
 public:
 

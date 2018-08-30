@@ -52,12 +52,12 @@ static const QString DUMMY_TEXT(QLatin1String("DUMMY_TEXT_y_fjqp|"));
 namespace Digikam
 {
 
-class AdvancedRenameLineEdit::Private
+class Q_DECL_HIDDEN AdvancedRenameLineEdit::Private
 {
 public:
 
-    explicit Private() :
-        allowDirectoryCreation(false),
+    explicit Private()
+      : allowDirectoryCreation(false),
         verticalSliderPosition(INVALID),
         parseTimer(0),
         parser(0)
@@ -243,12 +243,12 @@ void AdvancedRenameLineEdit::slotSetText(const QString& text)
 
 // --------------------------------------------------------
 
-class AdvancedRenameInput::Private
+class Q_DECL_HIDDEN AdvancedRenameInput::Private
 {
 public:
 
-    explicit Private() :
-        maxVisibleItems(10),
+    explicit Private()
+      : maxVisibleItems(10),
         maxHistoryItems(30),
         lineEdit(0),
         proxy(0),

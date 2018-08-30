@@ -70,7 +70,7 @@ TagsActionMngr* TagsActionMngr::defaultManager()
     return m_defaultManager;
 }
 
-class TagsActionMngr::Private
+class Q_DECL_HIDDEN TagsActionMngr::Private
 {
 public:
 

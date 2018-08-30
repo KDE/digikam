@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class AdvancedRenameProcessDialog::Private
+class Q_DECL_HIDDEN AdvancedRenameProcessDialog::Private
 {
 public:
 

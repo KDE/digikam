@@ -60,7 +60,8 @@ void EditorCore::setDefaultInstance(EditorCore* const instance)
 }
 
 EditorCore::EditorCore()
-    : QObject(), d(new Private)
+    : QObject(),
+      d(new Private)
 {
     d->undoMan = new UndoManager(this);
     d->thread  = new SharedLoadSaveThread;
@@ -162,7 +163,7 @@ void EditorCore::slotLoadRawFromTool()
 
 void EditorCore::slotLoadRaw()
 {
-    //    qCDebug(DIGIKAM_GENERAL_LOG) << d->nextRawDescription.rawDecodingSettings;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << d->nextRawDescription.rawDecodingSettings;
     d->load(d->nextRawDescription);
     d->nextRawDescription = LoadingDescription();
 }

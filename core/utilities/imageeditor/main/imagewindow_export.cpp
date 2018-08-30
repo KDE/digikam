@@ -192,8 +192,6 @@ void ImageWindow::slotExportTool()
         w->exec();
         delete w;
     }
-
-#ifdef HAVE_MEDIAWIKI
     else if (tool == m_exportMediawikiAction)
     {
         QPointer<MediaWikiWindow> w = new MediaWikiWindow(new DBInfoIface(this, d->thumbBar->allUrls(),
@@ -201,7 +199,6 @@ void ImageWindow::slotExportTool()
         w->exec();
         delete w;
     }
-#endif
 
 #ifdef HAVE_VKONTAKTE
     else if (tool == m_exportVkontakteAction)

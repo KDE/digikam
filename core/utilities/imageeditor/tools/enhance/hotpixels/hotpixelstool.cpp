@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class HotPixelsTool::Private
+class Q_DECL_HIDDEN HotPixelsTool::Private
 {
 public:
 

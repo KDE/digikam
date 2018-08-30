@@ -60,7 +60,7 @@
 namespace Digikam
 {
 
-class FaceScanDialog::Private
+class Q_DECL_HIDDEN FaceScanDialog::Private
 {
 public:
 

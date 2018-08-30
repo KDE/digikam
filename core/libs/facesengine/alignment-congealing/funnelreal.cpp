@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class FunnelReal::Private
+class Q_DECL_HIDDEN FunnelReal::Private
 {
 public:
 

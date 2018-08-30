@@ -63,12 +63,12 @@ class ImageFilterModel;
  *
  * @brief Class containing digiKam's central map view.
  */
-class MapWidgetView::Private
+class Q_DECL_HIDDEN MapWidgetView::Private
 {
 public:
 
     explicit Private()
-        :vbox(0),
+       : vbox(0),
          mapWidget(0),
          imageFilterModel(0),
          imageModel(0),

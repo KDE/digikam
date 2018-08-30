@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class AtkinsPageLayout::Private
+class Q_DECL_HIDDEN AtkinsPageLayout::Private
 {
 public:
 

@@ -66,7 +66,7 @@
 namespace Digikam
 {
 
-class AdjustLevelsTool::Private
+class Q_DECL_HIDDEN AdjustLevelsTool::Private
 {
 
 public:
@@ -81,8 +81,8 @@ public:
 
 public:
 
-    explicit Private() :
-        histoSegments(0),
+    explicit Private()
+      : histoSegments(0),
         pickerBox(0),
         resetButton(0),
         autoButton(0),

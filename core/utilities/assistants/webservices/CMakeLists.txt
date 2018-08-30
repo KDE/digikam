@@ -256,14 +256,30 @@ set(libwspiwigo_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/piwigo/piwigologindlg.cpp
 
 # MediaWiki tool ------------------------------------------------------------
 
-if(KF5MediaWiki_FOUND)
-
-    set(libwsmediawiki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/mediawikiwindow.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/mediawikiwidget.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/mediawikitalker.cpp
-    )
-
-endif()
+set(libwsmediawiki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/mediawikiwindow.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/mediawikiwidget.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/mediawikitalker.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_image.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_imageinfo.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_iface.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_login.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_logout.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_queryimageinfo.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_queryimages.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_querysiteinfogeneral.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_generalinfo.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_querysiteinfousergroups.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_queryrevision.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_queryinfo.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_edit.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_job.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_usergroup.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_revision.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_page.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_parse.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_protection.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/iface/mediawiki_upload.cpp
+)
 
 # VKontakte tool ------------------------------------------------------------
 

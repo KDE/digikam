@@ -22,9 +22,6 @@
  * ============================================================ */
 
 #include "dimgchilditem.h"
-
-// Local includes
-
 #include "graphicsdimgitem.h"
 #include "imagezoomsettings.h"
 
@@ -58,7 +55,7 @@ public:
 };
 */
 
-class DImgChildItem::Private
+class Q_DECL_HIDDEN DImgChildItem::Private
 {
 public:
 
@@ -97,7 +94,8 @@ void DImgChildItem::Private::connectParent(bool active)
 }
 
 DImgChildItem::DImgChildItem(QGraphicsItem* const parent)
-    : QGraphicsObject(parent), d(new Private(this))
+    : QGraphicsObject(parent),
+      d(new Private(this))
 {
     d->connectParent();
 }

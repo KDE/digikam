@@ -45,12 +45,12 @@
 namespace Digikam
 {
 
-class ImageIface::Private
+class Q_DECL_HIDDEN ImageIface::Private
 {
 public:
 
-    explicit Private() :
-        previewType(FullImage),
+    explicit Private()
+      : previewType(FullImage),
         originalWidth(0),
         originalHeight(0),
         originalBytesDepth(0),

@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class ExpoBlendingWizard::Private
+class Q_DECL_HIDDEN ExpoBlendingWizard::Private
 {
 public:
 

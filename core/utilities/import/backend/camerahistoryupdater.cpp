@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class CameraHistoryUpdater::Private
+class Q_DECL_HIDDEN CameraHistoryUpdater::Private
 {
 
 public:
@@ -49,8 +49,8 @@ public:
 
 public:
 
-    explicit Private() :
-        canceled(false),
+    explicit Private()
+      : canceled(false),
         running(false)
     {
     }

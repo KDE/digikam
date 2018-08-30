@@ -70,7 +70,7 @@
 namespace Digikam
 {
 
-class DatabaseSettingsWidget::Private
+class Q_DECL_HIDDEN DatabaseSettingsWidget::Private
 {
 
 public:

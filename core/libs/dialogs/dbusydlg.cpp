@@ -47,7 +47,7 @@ DBusyThread::~DBusyThread()
 
 // ----------------------------------------------------------------------------------
 
-class DBusyDlg::Private
+class Q_DECL_HIDDEN DBusyDlg::Private
 {
 public:
 

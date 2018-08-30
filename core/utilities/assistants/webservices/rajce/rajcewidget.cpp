@@ -58,7 +58,7 @@
 namespace Digikam
 {
 
-class RajceWidget::Private
+class Q_DECL_HIDDEN RajceWidget::Private
 {
 public:
 

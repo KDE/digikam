@@ -7,15 +7,16 @@
 #
 
 set(EXTPREFIX_libksane "${EXTPREFIX}" )
+set(KA_VERSION 18.08.0)
 
-set(KA_VERSION 18.04.0)
+GetKF5ApplicationMd5Sums(libksane ${KA_VERSION})
 
 if(MINGW)
 
     ExternalProject_Add(ext_libksane
                         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
                         URL http://download.kde.org/stable/applications/${KA_VERSION}/src/libksane-${KA_VERSION}.tar.xz
-                        URL_MD5 c586e58b33ab1e3b852f68b46f496664
+                        URL_MD5 ${KF5_APPLICATION_MD5SUM}
 
                         INSTALL_DIR ${EXTPREFIX_libksane}
                         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/libksane-drop-ktextwidgets.patch
@@ -46,7 +47,7 @@ elseif(APPLE)
     ExternalProject_Add(ext_libksane
                         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
                         URL http://download.kde.org/stable/applications/${KA_VERSION}/src/libksane-${KA_VERSION}.tar.xz
-                        URL_MD5 c586e58b33ab1e3b852f68b46f496664
+                        URL_MD5 ${KF5_APPLICATION_MD5SUM}
 
                         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/libksane-drop-ktextwidgets.patch
 
@@ -68,7 +69,7 @@ else() # Linux
     ExternalProject_Add(ext_libksane
                         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
                         URL http://download.kde.org/stable/applications/${KA_VERSION}/src/libksane-${KA_VERSION}.tar.xz
-                        URL_MD5 c586e58b33ab1e3b852f68b46f496664
+                        URL_MD5 ${KF5_APPLICATION_MD5SUM}
                         INSTALL_DIR ${EXTPREFIX_libksane}
                         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_libksane}
                                    -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}

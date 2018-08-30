@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class FindDuplicatesAlbum::Private
+class Q_DECL_HIDDEN FindDuplicatesAlbum::Private
 {
 
 public:

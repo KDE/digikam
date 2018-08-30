@@ -43,10 +43,16 @@ public:
         SortByFileSize
     };
 
+    enum MiscTab
+    {
+        Behaviour = 0,
+        Appearance
+    };
+
 public:
 
     explicit SetupMisc(QWidget* const parent = 0);
-    virtual ~SetupMisc();
+    ~SetupMisc();
 
     void applySettings();
 

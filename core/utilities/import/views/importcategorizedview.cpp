@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class ImportItemViewToolTip : public ItemViewToolTip
+class Q_DECL_HIDDEN ImportItemViewToolTip : public ItemViewToolTip
 {
 public:
 
@@ -66,7 +66,7 @@ protected:
     }
 };
 
-class ImportCategorizedView::Private
+class Q_DECL_HIDDEN ImportCategorizedView::Private
 {
 public:
 

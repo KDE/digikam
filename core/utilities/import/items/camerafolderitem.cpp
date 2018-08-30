@@ -27,12 +27,12 @@
 namespace Digikam
 {
 
-class CameraFolderItem::Private
+class Q_DECL_HIDDEN CameraFolderItem::Private
 {
 public:
 
-    explicit Private() :
-        virtualFolder(true),
+    explicit Private()
+      : virtualFolder(true),
         count(0)
     {
     }

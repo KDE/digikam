@@ -26,26 +26,22 @@
 
 // Qt includes
 
-#include <QFile>
-#include <QFileInfo>
-#include <QDir>
+#include <QMap>
 
 // Local includes
 
 #include "digikam_debug.h"
-#include "collectionmanager.h"
-#include "collectionlocation.h"
 
 namespace Digikam
 {
 
-class ThumbsDb::Private
+class Q_DECL_HIDDEN ThumbsDb::Private
 {
 
 public:
 
-    explicit Private() :
-        db(0)
+    explicit Private()
+      : db(0)
     {
     }
 

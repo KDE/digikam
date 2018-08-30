@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class GreycstorationSettings::Private
+class Q_DECL_HIDDEN GreycstorationSettings::Private
 {
 
 public:

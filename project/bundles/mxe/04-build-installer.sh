@@ -223,10 +223,12 @@ shasum -a1 "$ORIG_WD/bundle/$TARGET_INSTALLER"   | { read first rest ; echo $fir
 echo -n "SHA256 sum : "                                                                 >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
 shasum -a256 "$ORIG_WD/bundle/$TARGET_INSTALLER" | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
 
+if [[ $DK_SIGN = 1 ]] ; then
+    cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -stabv "$ORIG_WD/bundle/$TARGET_INSTALLER"
+    mv -f $ORIG_WD/bundle/$TARGET_INSTALLER.asc $ORIG_WD/bundle/$TARGET_INSTALLER.sig
+fi
+
 cat $ORIG_WD/bundle/$TARGET_INSTALLER.sum
-echo -e "\n------------------------------------------------------------------"
-curl https://download.kde.org/README_UPLOAD
-echo -e "------------------------------------------------------------------\n"
 
 if [[ $DK_UPLOAD = 1 ]] ; then
 
@@ -242,6 +244,11 @@ if [[ $DK_UPLOAD = 1 ]] ; then
 
     scp $ORIG_WD/bundle/$TARGET_INSTALLER     $DK_UPLOADURL:$DK_UPLOADDIR
     scp $ORIG_WD/bundle/$TARGET_INSTALLER.sum $DK_UPLOADURL:$DK_UPLOADDIR
+
+    if [[ $DK_SIGN = 1 ]] ; then
+        scp $ORIG_WD/bundle/$TARGET_INSTALLER.sig $DK_UPLOADURL:$DK_UPLOADDIR
+    fi
+
 else
     echo -e "\n------------------------------------------------------------------"
     curl https://download.kde.org/README_UPLOAD

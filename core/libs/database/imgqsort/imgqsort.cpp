@@ -51,7 +51,7 @@ using namespace cv;
 namespace Digikam
 {
 
-class ImgQSort::Private
+class Q_DECL_HIDDEN ImgQSort::Private
 {
 public:
 
@@ -59,7 +59,7 @@ public:
         clusterCount(30),                   //used for k-means clustering algorithm in noise detection
         size(512)
     {
-        for (int c = 0 ; c < 3; c++)
+        for (int c = 0 ; c < 3 ; c++)
         {
             fimg[c] = 0;
         }

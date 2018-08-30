@@ -1,0 +1,32 @@
+<api>
+
+<parse displaytitle="API">
+
+<text xml:space="preserve">
+<p><a href="/wiki/Foo" title="Foo" class="mw-redirect">foo</a> <a href="/w/index.php?title=API:Query&amp;action=edit&amp;redlink=1" class="new" title="API:Query (page does not exist)">bar</a> <a href="http://www.example.com/" class="external text" rel="nofollow">baz</a></p>
+
+
+<!-- 
+NewPP limit report
+Preprocessor node count: 1/1000000
+Post-expand include size: 0/2048000 bytes
+Template argument size: 0/2048000 bytes
+Expensive parser function count: 0/500
+-->
+</text>
+<langlinks/>
+<categories/>
+
+<links>
+<pl ns="0" exists="" xml:space="preserve">Foo</pl>
+<pl ns="0" xml:space="preserve">API:Query</pl>
+</links>
+<templates/>
+<images/>
+
+<externallinks>
+<el>http://www.example.com/</el>
+</externallinks>
+<sections/>
+</parse>
+</api>

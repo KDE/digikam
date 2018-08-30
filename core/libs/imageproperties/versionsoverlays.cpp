@@ -57,6 +57,7 @@ protected:
 ShowHideVersionsOverlay::Button::Button(QAbstractItemView* const parentView)
     : ItemViewHoverButton(parentView)
 {
+    setup();
 }
 
 QSize ShowHideVersionsOverlay::Button::sizeHint() const
@@ -181,6 +182,7 @@ ActionVersionsOverlay::Button::Button(QAbstractItemView* const parentView, const
       m_text(text),
       m_tip(tip)
 {
+    setup();
 }
 
 QSize ActionVersionsOverlay::Button::sizeHint() const

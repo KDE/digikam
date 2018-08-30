@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class InfoDlg::Private
+class Q_DECL_HIDDEN InfoDlg::Private
 {
 public:
 

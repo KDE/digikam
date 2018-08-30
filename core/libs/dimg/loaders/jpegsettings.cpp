@@ -45,13 +45,13 @@
 namespace Digikam
 {
 
-class JPEGSettings::Private
+class Q_DECL_HIDDEN JPEGSettings::Private
 {
 
 public:
 
-    explicit Private() :
-        JPEGGrid(0),
+    explicit Private()
+      : JPEGGrid(0),
         labelJPEGcompression(0),
         labelWarning(0),
         labelSubSampling(0),

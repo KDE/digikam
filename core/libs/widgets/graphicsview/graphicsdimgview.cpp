@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class GraphicsDImgView::Private
+class Q_DECL_HIDDEN GraphicsDImgView::Private
 {
 public:
 

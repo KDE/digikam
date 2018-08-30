@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class DuplicatesFinder::Private
+class Q_DECL_HIDDEN DuplicatesFinder::Private
 {
 public:
 

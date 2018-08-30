@@ -8,10 +8,12 @@ environnement and Packages application.
 These scripts follow instructions from Qt bundle deployement for MacOS as shared libraries
 available at this url: http://doc.qt.io/qt-5/osx-deployment.html
 
+
 AUTHORS
 -------
 (c)      2015 by Shanti <listaccount at revenant dot org>
 (c) 2015-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+
 
 DESCRIPTION
 -----------
@@ -19,6 +21,7 @@ These files and scripts are used to make a binary package of the digiKam
 Software Collection for MacOS. In addition to this README, there are
 comments in the scripts that provide some additional explanations for
 how they work.
+
 
 BUNDLE CONTENTS
 ---------------
@@ -114,18 +117,22 @@ IMPORTANT:
 - You must set the minimal MacOS target with relevant SDK installed for backward compatibility.
 - You must set the digiKam git tags to checkout right source code to package.
 - You must set the option to host debug symbols or not in package.
-Look in config.sh file for details.
+
+NOTE: Look in config.sh file for settings details.
+
 
 HERE THERE BE DRAGONS
 ---------------------
 Use these scripts at your own risk. For example, both scripts contain
 "rm -rf" (to clear previous builds) -- a mistake could wipe your drive.
 
+
 COMPONENTS
 ----------
 There are 4 main scripts to be run by the user. 2 first ones installs
 MacPorts and all dependencies, next one digiKam, and last one makes a
 PKG binary installer for MacOS using Packages.
+
 
 SCRIPT DESCRIPTIONS
 -------------------
@@ -180,6 +187,9 @@ at startup following instruction give at this url:
 
 https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-password-prompt
 
+Note: the bundle can be signed with GPG. You must setup your private and public keys before
+and put your passphare to a text file (~/.gnupg/dkorg-gpg-pwd.txt) 
+
 * rll.py
 
 Run by 04-build-installer.sh. It is a Python script that takes a list of binaries
@@ -195,6 +205,7 @@ This script permit to build whole package from scratch (all stages).
 * update.sh
 
 This script re-build only digiKam and package (2 last stages).
+
 
 LICENSES
 --------

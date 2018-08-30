@@ -55,12 +55,12 @@
 namespace Digikam
 {
 
-class ImportContextMenuHelper::Private
+class Q_DECL_HIDDEN ImportContextMenuHelper::Private
 {
 public:
 
-    explicit Private(ImportContextMenuHelper* const q) :
-        importFilterModel(0),
+    explicit Private(ImportContextMenuHelper* const q)
+      : importFilterModel(0),
         parent(0),
         ABCmenu(0),
         stdActionCollection(0),

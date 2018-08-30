@@ -32,7 +32,8 @@ namespace Digikam
 {
 
 AbstractItemDragDropHandler::AbstractItemDragDropHandler(QAbstractItemModel* const model)
-    : QObject(model), m_model(model)
+    : QObject(model),
+      m_model(model)
 {
 }
 

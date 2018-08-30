@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class AbstractMarkerTiler::Private
+class Q_DECL_HIDDEN AbstractMarkerTiler::Private
 {
 public:
 

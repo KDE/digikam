@@ -44,13 +44,13 @@
 namespace Digikam
 {
 
-class EditorToolIface::Private
+class Q_DECL_HIDDEN EditorToolIface::Private
 {
 
 public:
 
-    explicit Private() :
-        toolsIconView(0),
+    explicit Private()
+      : toolsIconView(0),
         tool(0),
         editor(0),
         sidebarWasExpanded(false),

@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class DItemDelegate::Private
+class Q_DECL_HIDDEN DItemDelegate::Private
 {
 public:
 

@@ -47,7 +47,7 @@ extern "C"
 namespace Digikam
 {
 
-class PTOFile::Private
+class Q_DECL_HIDDEN PTOFile::Private
 {
 public:
 

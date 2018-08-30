@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class PanoWizard::Private
+class Q_DECL_HIDDEN PanoWizard::Private
 {
 public:
 

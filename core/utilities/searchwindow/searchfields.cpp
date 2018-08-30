@@ -1052,7 +1052,8 @@ void SearchField::setValidValueState(bool valueIsValid)
 // -------------------------------------------------------------------------
 
 SearchFieldText::SearchFieldText(QObject* const parent)
-    : SearchField(parent), m_edit(0)
+    : SearchField(parent),
+      m_edit(0)
 {
 }
 

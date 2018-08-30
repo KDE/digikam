@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class CameraSelection::Private
+class Q_DECL_HIDDEN CameraSelection::Private
 {
 public:
 

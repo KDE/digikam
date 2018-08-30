@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-class DynamicLayout::Private
+class Q_DECL_HIDDEN DynamicLayout::Private
 {
 public:
 

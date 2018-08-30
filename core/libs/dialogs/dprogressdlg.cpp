@@ -44,12 +44,12 @@
 namespace Digikam
 {
 
-class DProgressDlg::Private
+class Q_DECL_HIDDEN DProgressDlg::Private
 {
 public:
 
-    explicit Private() :
-        logo(0),
+    explicit Private()
+      : logo(0),
         title(0),
         label(0),
         actionPix(0),

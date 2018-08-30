@@ -42,6 +42,7 @@ namespace Digikam
 FaceRejectionOverlayButton::FaceRejectionOverlayButton(QAbstractItemView* const parentView)
     : ItemViewHoverButton(parentView)
 {
+    setup();
 }
 
 QSize FaceRejectionOverlayButton::sizeHint() const

@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class PiwigoTalker::Private
+class Q_DECL_HIDDEN PiwigoTalker::Private
 {
 public:
 
@@ -96,7 +96,7 @@ public:
     QDateTime              date;       // Synchronized with Piwigo date
     DInfoInterface*        iface;
 };
-    
+
 QString PiwigoTalker::s_authToken = QLatin1String("");
 
 PiwigoTalker::PiwigoTalker(DInfoInterface* const iface, QWidget* const parent)

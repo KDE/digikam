@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class WSSettingsWidget::Private
+class Q_DECL_HIDDEN WSSettingsWidget::Private
 {
 public:
 

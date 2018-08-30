@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class BOXWindow::Private
+class Q_DECL_HIDDEN BOXWindow::Private
 {
 public:
 

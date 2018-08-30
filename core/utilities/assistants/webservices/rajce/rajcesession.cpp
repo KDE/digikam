@@ -30,7 +30,7 @@
 namespace Digikam
 {
 
-class RajceSession::Private
+class Q_DECL_HIDDEN RajceSession::Private
 {
 public:
 

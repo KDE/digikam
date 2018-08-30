@@ -55,12 +55,12 @@
 namespace Digikam
 {
 
-class DistortionFXTool::Private
+class Q_DECL_HIDDEN DistortionFXTool::Private
 {
 public:
 
-    explicit Private() :
-        effectTypeLabel(0),
+    explicit Private()
+      : effectTypeLabel(0),
         levelLabel(0),
         iterationLabel(0),
         effectType(0),

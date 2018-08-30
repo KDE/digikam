@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class DCursorTracker::Private
+class Q_DECL_HIDDEN DCursorTracker::Private
 {
 
 public:

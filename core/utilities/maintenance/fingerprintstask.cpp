@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class FingerprintsTask::Private
+class Q_DECL_HIDDEN FingerprintsTask::Private
 {
 public:
 

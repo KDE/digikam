@@ -61,15 +61,16 @@
 namespace Digikam
 {
 
-class CurvesSettings::Private
+class Q_DECL_HIDDEN CurvesSettings::Private
 {
 
 public:
 
-    explicit Private() :
-        histoSegments(0),
+    explicit Private()
+      : histoSegments(0),
         curvesBox(0)
-    {}
+    {
+    }
 
     static const QString configCurveEntry;
 

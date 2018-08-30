@@ -71,7 +71,7 @@
 namespace Digikam
 {
 
-class ImageSelectionWidget::Private
+class Q_DECL_HIDDEN ImageSelectionWidget::Private
 {
 public:
 
@@ -84,8 +84,8 @@ public:
         ResizingBottomRight
     };
 
-    explicit Private() :
-        drawGoldenSection(false),
+    explicit Private()
+      : drawGoldenSection(false),
         drawGoldenSpiralSection(false),
         drawGoldenSpiral(false),
         drawGoldenTriangle(false),

@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class SoftProofDialog::Private
+class Q_DECL_HIDDEN SoftProofDialog::Private
 {
 public:
 

@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class RestorationTool::Private
+class Q_DECL_HIDDEN RestorationTool::Private
 {
 public:
 
@@ -69,8 +69,8 @@ public:
 
 public:
 
-    explicit Private() :
-        mainTab(0),
+    explicit Private()
+      : mainTab(0),
         restorationTypeCB(0),
         settingsWidget(0),
         previewWidget(0),

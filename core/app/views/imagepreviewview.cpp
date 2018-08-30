@@ -69,7 +69,7 @@
 namespace Digikam
 {
 
-class ImagePreviewView::Private
+class Q_DECL_HIDDEN ImagePreviewView::Private
 {
 public:
 

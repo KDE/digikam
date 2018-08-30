@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class MailIntroPage::Private
+class Q_DECL_HIDDEN MailIntroPage::Private
 {
 public:
 

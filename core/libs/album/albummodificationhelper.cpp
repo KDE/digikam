@@ -53,11 +53,12 @@
 namespace Digikam
 {
 
-class AlbumModificationHelper::Private
+class Q_DECL_HIDDEN AlbumModificationHelper::Private
 {
 public:
-    explicit Private() :
-        dialogParent(0)
+
+    explicit Private()
+      : dialogParent(0)
     {
     }
 

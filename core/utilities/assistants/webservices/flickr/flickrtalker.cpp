@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class FlickrTalker::Private
+class Q_DECL_HIDDEN FlickrTalker::Private
 {
 public:
 
@@ -296,6 +296,7 @@ void FlickrTalker::maxAllowedFileSize()
     m_authProgressDlg->setMaximum(4);
     m_authProgressDlg->setValue(1);
     d->buffer.resize(0);
+
     emit signalBusy(true);
 }
 
@@ -326,6 +327,7 @@ void FlickrTalker::listPhotoSets()
 
     d->state = FE_LISTPHOTOSETS;
     d->buffer.resize(0);
+
     emit signalBusy(true);
 }
 
@@ -360,6 +362,7 @@ void FlickrTalker::getPhotoProperty(const QString& method, const QStringList& ar
 
     d->state = FE_GETPHOTOPROPERTY;
     d->buffer.resize(0);
+
     emit signalBusy(true);
 }
 
@@ -399,6 +402,7 @@ void FlickrTalker::createPhotoSet(const QString& /*albumName*/, const QString& a
 
     d->state = FE_CREATEPHOTOSET;
     d->buffer.resize(0);
+
     emit signalBusy(true);
 }
 
@@ -442,6 +446,7 @@ void FlickrTalker::addPhotoToPhotoSet(const QString& photoId,
 
         d->state = FE_ADDPHOTOTOPHOTOSET;
         d->buffer.resize(0);
+
         emit signalBusy(true);
     }
 }
@@ -522,7 +527,7 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
             }
 
             path = WSToolUtils::makeTemporaryDir(d->serviceName.toLatin1().constData()).filePath(QFileInfo(photoPath)
-                                                                         .baseName().trimmed() + QLatin1String(".jpg"));
+                                                                          .baseName().trimmed() + QLatin1String(".jpg"));
 
             if (rescale)
             {
@@ -588,6 +593,7 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
 
     d->state = FE_ADDPHOTO;
     d->buffer.resize(0);
+
     emit signalBusy(true);
     return true;
 }
@@ -599,7 +605,7 @@ void FlickrTalker::setGeoLocation(const QString& photoId, const QString& lat, co
         d->reply->abort();
         d->reply = 0;
     }
-    
+
     if (!d->o1->linked())
         return;
 
@@ -617,7 +623,7 @@ void FlickrTalker::setGeoLocation(const QString& photoId, const QString& lat, co
     QByteArray postData = O1::createQueryParameters(reqParams);
 
     d->reply = d->requestor->post(netRequest, reqParams, postData);
-    
+
     d->state = FE_SETGEO;
     d->buffer.resize(0);
 
@@ -1160,6 +1166,7 @@ void FlickrTalker::parseResponseAddPhotoToPhotoSet(const QByteArray& data)
 void FlickrTalker::parseResponseSetGeoLocation(const QByteArray& data)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseSetGeoLocation" << data;
+    emit signalAddPhotoSucceeded(QLatin1String(""));
 }
 
 } // namespace Digikam

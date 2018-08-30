@@ -54,12 +54,12 @@
 namespace Digikam
 {
 
-class LensAutoFixTool::Private
+class Q_DECL_HIDDEN LensAutoFixTool::Private
 {
 public:
 
-    explicit Private() :
-        configGroupName(QLatin1String("Lens Auto-Correction Tool")),
+    explicit Private()
+      : configGroupName(QLatin1String("Lens Auto-Correction Tool")),
         configShowGrid(QLatin1String("Show Grid")),
         maskPreviewLabel(0),
         showGrid(0),

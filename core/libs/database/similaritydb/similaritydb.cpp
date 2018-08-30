@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class SimilarityDb::Private
+class Q_DECL_HIDDEN SimilarityDb::Private
 {
 
 public:

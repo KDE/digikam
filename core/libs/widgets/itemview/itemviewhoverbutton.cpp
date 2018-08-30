@@ -48,7 +48,10 @@ ItemViewHoverButton::ItemViewHoverButton(QAbstractItemView* const view)
 
     setCheckable(true);
     setChecked(false);
+}
 
+void ItemViewHoverButton::setup()
+{
     connect(m_fadingTimeLine, SIGNAL(frameChanged(int)),
             this, SLOT(setFadingValue(int)));
 

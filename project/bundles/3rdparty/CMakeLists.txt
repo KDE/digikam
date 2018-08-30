@@ -43,7 +43,93 @@ set(GLOBAL_BUILD_TYPE RelWithDebInfo)
 set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DBUILD_TESTING=false)
 set(PATCH_COMMAND patch)
 
+# Function to get MD5 sums from download area for a KF5 application
+# The sum is available in ${KF5_APPLICATION_MD5SUM}
+function(GetKF5ApplicationMd5Sums
+         name
+         version)
+
+    if(MINGW)
+
+        # Extract MD5 sums of KF5 application directly from server.
+        execute_process(COMMAND
+                        wget -q -O - -o /dev/null http://download.kde.org/stable/applications/${version}/src/${name}-${version}.tar.xz.mirrorlist
+                        COMMAND
+                        grep "MD5 Hash"
+                        COMMAND
+                        grep -o -P "(?<=<tt>).*(?=</tt>)"
+                        RESULT_VARIABLE
+                        wgetresult
+                        OUTPUT_VARIABLE
+                        md5sm
+                        OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+
+        if(NOT ${wgetresult} MATCHES 0)
+            message(FATAL_ERROR "Cannot download MD5 sum for ${name}!")
+        endif()
+
+    elseif(APPLE)
+
+        # Extract MD5 sums of KF5 application directly from server.
+        execute_process(COMMAND
+                            wget -q -O - -o /dev/null http://download.kde.org/stable/applications/${version}/src/${name}-${version}.tar.xz.mirrorlist
+                        COMMAND
+                            grep "MD5 Hash"
+                        COMMAND
+                            grep -o "<tt>.*</tt>"
+                        COMMAND
+                            cut -c 5-
+                        COMMAND
+                            rev
+                        COMMAND
+                            cut -c 6-
+                        COMMAND
+                            rev
+                        RESULT_VARIABLE
+                            wgetresult
+                        OUTPUT_VARIABLE
+                            md5sm
+                        OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+
+        if(NOT ${wgetresult} MATCHES 0)
+            message(FATAL_ERROR "Cannot download MD5 sum for ${name}!")
+        endif()
+
+    else() # Linux
+
+        # Extract MD5 sums of KF5 application directly from server.
+        execute_process(COMMAND
+                        wget -q -O - -o /dev/null http://download.kde.org/stable/applications/${version}/src/${name}-${version}.tar.xz.mirrorlist
+                        COMMAND
+                        grep "MD5 Hash"
+                        COMMAND
+                        grep -o -P "(?<=<tt>).*(?=</tt>)"
+                        RESULT_VARIABLE
+                        wgetresult
+                        OUTPUT_VARIABLE
+                        md5sm
+                        OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+
+        if(NOT ${wgetresult} MATCHES 0)
+            message(FATAL_ERROR "Cannot download MD5 sum for ${name}!")
+        endif()
+
+    endif()
+
+    message(STATUS "--------------------------------")
+    message(STATUS "KF5 application    : ${name}")
+    message(STATUS "application version: ${version}")
+    message(STATUS "application MD5    : ${md5sm}")
+
+    set(${KF5_APPLICATION_MD5SUM} ${md5sm} PARENT_SCOPE)
+
+endfunction()
+
 # this list must be dependency-ordered
+
 add_subdirectory(ext_jpeg)
 add_subdirectory(ext_jasper)
 add_subdirectory(ext_png)
@@ -57,7 +143,7 @@ add_subdirectory(ext_lensfun)
 add_subdirectory(ext_qt)
 add_subdirectory(ext_qtwebkit)
 add_subdirectory(ext_qtav)
-add_subdirectory(ext_kf5)
+add_subdirectory(ext_kf5_frameworks)
 add_subdirectory(ext_marble)
 add_subdirectory(ext_libksane)
 add_subdirectory(ext_kcalcore)

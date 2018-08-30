@@ -23,7 +23,6 @@
  * ============================================================ */
 
 #include "abstractalbummodel.h"
-#include "abstractalbummodelpriv.h"
 
 // Qt includes
 
@@ -44,6 +43,34 @@
 
 namespace Digikam
 {
+
+class Q_DECL_HIDDEN AbstractAlbumModel::Private
+{
+public:
+
+    explicit Private()
+        : rootAlbum(0),
+          addingAlbum(0),
+          type(Album::PHYSICAL),
+          dragDropHandler(0),
+          rootBehavior(AbstractAlbumModel::IncludeRootAlbum),
+          removingAlbum(0),
+          itemDrag(true),
+          itemDrop(true)
+    {
+    }
+
+    Album*                                rootAlbum;
+    Album*                                addingAlbum;
+    Album::Type                           type;
+    AlbumModelDragDropHandler*            dragDropHandler;
+    AbstractAlbumModel::RootAlbumBehavior rootBehavior;
+
+    quintptr                              removingAlbum;
+
+    bool                                  itemDrag;
+    bool                                  itemDrop;
+};
 
 AbstractAlbumModel::AbstractAlbumModel(Album::Type albumType, Album* const rootAlbum, RootAlbumBehavior rootBehavior,
                                        QObject* const parent)
@@ -139,7 +166,7 @@ int AbstractAlbumModel::rowCount(const QModelIndex& parent) const
     if (parent.isValid())
     {
         Album* const a = static_cast<Album*>(parent.internalPointer());
-        return d->numberOfChildren(a);
+        return a->childCount();
     }
     else
     {
@@ -154,7 +181,7 @@ int AbstractAlbumModel::rowCount(const QModelIndex& parent) const
         }
         else
         {
-            return d->numberOfChildren(d->rootAlbum);
+            return d->rootAlbum->childCount();
         }
     }
 }
@@ -210,7 +237,7 @@ QModelIndex AbstractAlbumModel::index(int row, int column, const QModelIndex& pa
     if (parent.isValid())
     {
         Album* const parentAlbum = static_cast<Album*>(parent.internalPointer());
-        Album* const a           = d->findNthChild(parentAlbum, row);
+        Album* const a           = parentAlbum->childAtRow(row);
 
         if (a)
         {
@@ -233,7 +260,7 @@ QModelIndex AbstractAlbumModel::index(int row, int column, const QModelIndex& pa
         }
         else
         {
-            Album* const a = d->findNthChild(d->rootAlbum, row);
+            Album* const a = d->rootAlbum->childAtRow(row);
 
             if (a)
             {
@@ -348,9 +375,7 @@ QModelIndex AbstractAlbumModel::indexForAlbum(Album* a) const
     }
 
     // Normal album. Get its row.
-    int row = d->findIndexAsChild(a);
-
-    return createIndex(row, 0, a);
+    return createIndex(a->rowFromAlbum(), 0, a);
 }
 
 Album* AbstractAlbumModel::albumForIndex(const QModelIndex& index) const
@@ -434,7 +459,7 @@ void AbstractAlbumModel::slotAlbumAboutToBeAdded(Album* album, Album* parent, Al
     }
 
     // start inserting operation
-    int row                 = prev ? d->findIndexAsChild(prev)+1 : 0;
+    int row                 = prev ? prev->rowFromAlbum()+1 : 0;
     QModelIndex parentIndex = indexForAlbum(parent);
     beginInsertRows(parentIndex, row, row);
 
@@ -480,7 +505,7 @@ void AbstractAlbumModel::slotAlbumAboutToBeDeleted(Album* album)
     }
 
     // begin removing operation
-    int row            = d->findIndexAsChild(album);
+    int row            = album->rowFromAlbum();
     QModelIndex parent = indexForAlbum(album->parent());
     beginRemoveRows(parent, row, row);
     albumCleared(album);

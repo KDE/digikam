@@ -47,12 +47,12 @@
 namespace Digikam
 {
 
-class RawImport::Private
+class Q_DECL_HIDDEN RawImport::Private
 {
 public:
 
-    explicit Private() :
-        settingsBox(0),
+    explicit Private()
+      : settingsBox(0),
         previewWidget(0)
     {
     }

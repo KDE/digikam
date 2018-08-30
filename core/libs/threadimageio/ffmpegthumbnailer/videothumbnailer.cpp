@@ -46,7 +46,7 @@ using namespace std;
 namespace Digikam
 {
 
-class VideoThumbnailer::Private
+class Q_DECL_HIDDEN VideoThumbnailer::Private
 {
 public:
 

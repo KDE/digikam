@@ -46,12 +46,12 @@
 namespace Digikam
 {
 
-class BlurTool::Private
+class Q_DECL_HIDDEN BlurTool::Private
 {
 public:
 
-    explicit Private() :
-        radiusInput(0),
+    explicit Private()
+      : radiusInput(0),
         previewWidget(0),
         gboxSettings(0)
     {

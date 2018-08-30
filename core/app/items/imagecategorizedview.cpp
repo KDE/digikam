@@ -77,7 +77,7 @@ protected:
 
 // -------------------------------------------------------------------------------
 
-class ImageCategorizedView::Private
+class Q_DECL_HIDDEN ImageCategorizedView::Private
 {
 public:
 

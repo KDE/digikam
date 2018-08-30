@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class MetadataStatusBar::Private
+class Q_DECL_HIDDEN MetadataStatusBar::Private
 {
 public:
 

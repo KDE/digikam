@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class VKNewAlbumDlg::Private
+class Q_DECL_HIDDEN VKNewAlbumDlg::Private
 {
 public:
 
@@ -59,7 +59,7 @@ public:
         titleEdit            = 0;
         summaryEdit          = 0;
         albumPrivacyCombo    = 0;
-        commentsPrivacyCombo = 0; 
+        commentsPrivacyCombo = 0;
     }
 
     QLineEdit*      titleEdit;

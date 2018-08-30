@@ -44,20 +44,19 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-
-
 namespace Digikam
 {
 
-class CBTool::Private
+class Q_DECL_HIDDEN CBTool::Private
 {
 public:
 
-    explicit Private() :
-        cbSettings(0),
+    explicit Private()
+      : cbSettings(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;

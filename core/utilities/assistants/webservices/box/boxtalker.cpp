@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class BOXTalker::Private
+class Q_DECL_HIDDEN BOXTalker::Private
 {
 public:
 

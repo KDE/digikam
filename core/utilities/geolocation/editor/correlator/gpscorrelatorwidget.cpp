@@ -68,7 +68,7 @@
 namespace Digikam
 {
 
-class GPSCorrelatorWidget::Private
+class Q_DECL_HIDDEN GPSCorrelatorWidget::Private
 {
 public:
 

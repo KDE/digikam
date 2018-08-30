@@ -409,6 +409,7 @@ ImportRotateOverlayButton::ImportRotateOverlayButton(ImportRotateOverlayDirectio
     : ItemViewHoverButton(parentView),
       m_direction(dir)
 {
+    setup();
 }
 
 QSize ImportRotateOverlayButton::sizeHint() const

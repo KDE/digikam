@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class AdvPrintAlbumsPage::Private
+class Q_DECL_HIDDEN AdvPrintAlbumsPage::Private
 {
 public:
 

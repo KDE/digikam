@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class PanoItemsPage::Private
+class Q_DECL_HIDDEN PanoItemsPage::Private
 {
 public:
 
@@ -57,7 +57,7 @@ public:
 
     DImagesList* list;
 
-    PanoManager*     mngr;
+    PanoManager* mngr;
 };
 
 PanoItemsPage::PanoItemsPage(PanoManager* const mngr, QWizard* const dlg)

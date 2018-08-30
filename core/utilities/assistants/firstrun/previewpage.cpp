@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class PreviewPage::Private
+class Q_DECL_HIDDEN PreviewPage::Private
 {
 public:
 

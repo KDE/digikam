@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class WorkerObject::Private
+class Q_DECL_HIDDEN WorkerObject::Private
 {
 public:
 

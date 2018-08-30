@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUP_METADATA_H
-#define SETUP_METADATA_H
+#ifndef DIGIKAM_SETUP_METADATA_H
+#define DIGIKAM_SETUP_METADATA_H
 
 // Qt includes
 
@@ -77,4 +77,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUP_METADATA_H
+#endif // DIGIKAM_SETUP_METADATA_H

@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class DCategoryDrawer::Private
+class Q_DECL_HIDDEN DCategoryDrawer::Private
 {
 public:
     explicit Private(DCategorizedView* const view)

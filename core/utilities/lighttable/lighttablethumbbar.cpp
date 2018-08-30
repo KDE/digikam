@@ -70,7 +70,7 @@ void removeAnyInInterval(Container& list, const T& begin, const T& end)
     }
 }
 
-class LightTableImageListModel : public ImageListModel
+class Q_DECL_HIDDEN LightTableImageListModel : public ImageListModel
 {
 public:
 
@@ -155,7 +155,7 @@ protected:
     bool      m_exclusive;
 };
 
-class LightTableThumbBar::Private
+class Q_DECL_HIDDEN LightTableThumbBar::Private
 {
 
 public:

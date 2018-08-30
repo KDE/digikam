@@ -68,7 +68,7 @@ namespace Digikam
 
 const int DEFAULTSIZE = 48;
 
-class DImagesListViewItem::Private
+class Q_DECL_HIDDEN DImagesListViewItem::Private
 {
 public:
 
@@ -463,7 +463,7 @@ CtrlButton::~CtrlButton()
 
 // ---------------------------------------------------------------------------
 
-class DImagesList::Private
+class Q_DECL_HIDDEN DImagesList::Private
 {
 public:
 

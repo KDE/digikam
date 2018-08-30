@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class PanoOptimizePage::Private
+class Q_DECL_HIDDEN PanoOptimizePage::Private
 {
 public:
 

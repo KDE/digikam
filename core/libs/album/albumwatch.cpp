@@ -44,12 +44,12 @@
 namespace Digikam
 {
 
-class AlbumWatch::Private
+class Q_DECL_HIDDEN AlbumWatch::Private
 {
 public:
 
-    explicit Private() :
-        dirWatch(0)
+    explicit Private()
+      : dirWatch(0)
     {
     }
 

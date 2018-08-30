@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class DBInfoIface::Private
+class Q_DECL_HIDDEN DBInfoIface::Private
 {
 public:
 

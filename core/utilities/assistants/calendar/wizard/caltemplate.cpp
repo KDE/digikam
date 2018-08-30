@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class CalTemplate::Private
+class Q_DECL_HIDDEN CalTemplate::Private
 {
 public:
 

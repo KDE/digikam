@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class MailImagesPage::Private
+class Q_DECL_HIDDEN MailImagesPage::Private
 {
 public:
 

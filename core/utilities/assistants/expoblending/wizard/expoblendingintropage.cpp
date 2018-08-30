@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class ExpoBlendingIntroPage::Private
+class Q_DECL_HIDDEN ExpoBlendingIntroPage::Private
 {
 public:
 

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUP_TEMPLATE_H
-#define SETUP_TEMPLATE_H
+#ifndef DIGIKAM_SETUP_TEMPLATE_H
+#define DIGIKAM_SETUP_TEMPLATE_H
 
 // Qt includes
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUP_TEMPLATE_H
+#endif // DIGIKAM_SETUP_TEMPLATE_H

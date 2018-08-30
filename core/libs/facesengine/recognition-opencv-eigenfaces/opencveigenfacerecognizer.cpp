@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class OpenCVEIGENFaceRecognizer::Private
+class Q_DECL_HIDDEN OpenCVEIGENFaceRecognizer::Private
 {
 public:
 

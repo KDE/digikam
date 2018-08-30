@@ -50,12 +50,12 @@
 namespace Digikam
 {
 
-class TagFolderView::Private
+class Q_DECL_HIDDEN TagFolderView::Private
 {
 public:
 
-    explicit Private() :
-        showFindDuplicateAction(true),
+    explicit Private()
+      : showFindDuplicateAction(true),
         showDeleteFaceTagsAction(false),
         resetIconAction(0),
         findDuplAction(0)

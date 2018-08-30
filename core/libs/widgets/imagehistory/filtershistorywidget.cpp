@@ -45,7 +45,6 @@
 namespace Digikam
 {
 
-
 RemoveFilterAction::RemoveFilterAction(const QString& label, const QModelIndex& index, QObject* const parent)
     : QAction(label, parent)
 {
@@ -54,7 +53,7 @@ RemoveFilterAction::RemoveFilterAction(const QString& label, const QModelIndex& 
 
 // -------------------------------------------------------------------------------------------------------
 
-class FiltersHistoryWidget::Private
+class Q_DECL_HIDDEN FiltersHistoryWidget::Private
 {
 public:
 
@@ -75,7 +74,8 @@ public:
 };
 
 FiltersHistoryWidget::FiltersHistoryWidget(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     d->layout      = new QGridLayout(this);
     d->view        = new QTreeView(this);

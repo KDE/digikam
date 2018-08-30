@@ -52,7 +52,8 @@ public:
 };
 
 SqueezedComboBox::SqueezedComboBox(QWidget* const parent, const char* name)
-    : QComboBox(parent), d(new Private)
+    : QComboBox(parent),
+      d(new Private)
 {
     setObjectName(QString::fromUtf8(name));
     setMinimumWidth(100);

@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class LocalContrastFilter::Private
+class Q_DECL_HIDDEN LocalContrastFilter::Private
 {
 public:
 

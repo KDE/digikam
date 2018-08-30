@@ -52,16 +52,17 @@
 namespace Digikam
 {
 
-class AntiVignettingTool::Private
+class Q_DECL_HIDDEN AntiVignettingTool::Private
 {
 public:
 
-    explicit Private() :
-        configGroupName(QLatin1String("antivignetting Tool")),
+    explicit Private()
+      : configGroupName(QLatin1String("antivignetting Tool")),
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     const QString           configGroupName;
 

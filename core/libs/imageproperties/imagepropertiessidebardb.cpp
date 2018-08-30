@@ -65,12 +65,12 @@
 namespace Digikam
 {
 
-class ImagePropertiesSideBarDB::Private
+class Q_DECL_HIDDEN ImagePropertiesSideBarDB::Private
 {
 public:
 
-    explicit Private() :
-        dirtyDesceditTab(false),
+    explicit Private()
+      : dirtyDesceditTab(false),
         hasPrevious(false),
         hasNext(false),
         hasImageInfoOwnership(false),

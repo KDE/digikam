@@ -71,7 +71,7 @@ private:
 
 // ---------------------------
 
-class DConfigDlgViewPrivate
+class Q_DECL_HIDDEN DConfigDlgViewPrivate
 {
     Q_DECLARE_PUBLIC(DConfigDlgView)
 

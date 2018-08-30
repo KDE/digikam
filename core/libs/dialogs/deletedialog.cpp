@@ -58,7 +58,7 @@
 namespace Digikam
 {
 
-class DeleteItem::Private
+class Q_DECL_HIDDEN DeleteItem::Private
 {
 
 public:
@@ -151,7 +151,7 @@ void DeleteItem::setThumb(const QPixmap& pix, bool hasThumb)
 
 //----------------------------------------------------------------------------
 
-class DeleteItemList::Private
+class Q_DECL_HIDDEN DeleteItemList::Private
 {
 
 public:
@@ -229,7 +229,7 @@ void DeleteItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const
 
 //----------------------------------------------------------------------------
 
-class DeleteWidget::Private
+class Q_DECL_HIDDEN DeleteWidget::Private
 {
 public:
 
@@ -462,7 +462,7 @@ void DeleteWidget::updateText()
 
 //----------------------------------------------------------------------------
 
-class DeleteDialog::Private
+class Q_DECL_HIDDEN DeleteDialog::Private
 {
 public:
 

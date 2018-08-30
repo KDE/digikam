@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class VidSlideIntroPage::Private
+class Q_DECL_HIDDEN VidSlideIntroPage::Private
 {
 public:
 

@@ -103,10 +103,7 @@
 #include "rajcewindow.h"
 #include "smugwindow.h"
 #include "yfwindow.h"
-
-#ifdef HAVE_MEDIAWIKI
-#   include "mediawikiwindow.h"
-#endif
+#include "mediawikiwindow.h"
 
 #ifdef HAVE_VKONTAKTE
 #   include "vkwindow.h"
@@ -138,13 +135,13 @@ namespace Digikam
 
 class DAdjustableLabel;
 
-class LightTableWindow::Private
+class Q_DECL_HIDDEN LightTableWindow::Private
 {
 
 public:
 
-    Private() :
-        autoLoadOnRightPanel(true),
+    Private()
+      : autoLoadOnRightPanel(true),
         autoSyncPreview(true),
         fromLeftPreview(true),
         setItemLeftAction(0),

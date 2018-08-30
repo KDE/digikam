@@ -37,6 +37,7 @@
 #include <QStyle>
 #include <QComboBox>
 #include <QFile>
+#include <QTabWidget>
 
 // KDE includes
 
@@ -54,11 +55,12 @@ using namespace Digikam;
 namespace ShowFoto
 {
 
-class SetupMisc::Private
+class Q_DECL_HIDDEN SetupMisc::Private
 {
 public:
 
-    explicit Private() :
+    explicit Private()
+      : tab(0),
         sidebarTypeLabel(0),
         applicationStyleLabel(0),
         applicationIconLabel(0),
@@ -76,6 +78,8 @@ public:
         settings(ShowfotoSettings::instance())
     {
     }
+
+    QTabWidget*          tab;
 
     QLabel*              sidebarTypeLabel;
     QLabel*              applicationStyleLabel;
@@ -103,16 +107,20 @@ SetupMisc::SetupMisc(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
-    QWidget* const panel      = new QWidget(viewport());
-    setWidget(panel);
+    d->tab = new QTabWidget(viewport());
+    setWidget(d->tab);
     setWidgetResizable(true);
 
     const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-    QVBoxLayout* const layout = new QVBoxLayout(panel);
 
+    // -- Application Behavior Options --------------------------------------------------------
+
+    QWidget* const behaviourPanel = new QWidget(d->tab);
+    QVBoxLayout* const layout     = new QVBoxLayout(behaviourPanel);
+    
     // -- Sort Order Options --------------------------------------------------------
 
-    QGroupBox* const sortOptionsGroup = new QGroupBox(i18n("Images Sort Order"), panel);
+    QGroupBox* const sortOptionsGroup = new QGroupBox(i18n("Images Sort Order"), behaviourPanel);
     QVBoxLayout* const gLayout4       = new QVBoxLayout();
 
     DHBox* const sortBox = new DHBox(sortOptionsGroup);
@@ -134,42 +142,53 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     // Thumbnails Options ----------------------------------------------------------------------
 
-    QGroupBox* const thOptionsGroup = new QGroupBox(i18n("Thumbnails"), panel);
+    QGroupBox* const thOptionsGroup = new QGroupBox(i18n("Thumbnails"), behaviourPanel);
     QVBoxLayout* const gLayout3     = new QVBoxLayout();
 
     d->showMimeOverImage = new QCheckBox(i18n("&Show image Format"),          thOptionsGroup);
     d->showMimeOverImage->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
     d->showCoordinates   = new QCheckBox(i18n("&Show Geolocation Indicator"), thOptionsGroup);
     d->showCoordinates->setWhatsThis(i18n("Set this option to indicate if image has geolocation information."));
+    d->itemCenter        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), thOptionsGroup);
 
     gLayout3->addWidget(d->showMimeOverImage);
     gLayout3->addWidget(d->showCoordinates);
+    gLayout3->addWidget(d->itemCenter);
     thOptionsGroup->setLayout(gLayout3);
 
-    // -- Application Behavior Options --------------------------------------------------------
+    // ---------------------------------------------------------
 
-    QGroupBox* const abOptionsGroup = new QGroupBox(i18n("Application Behavior"), panel);
-    QVBoxLayout* const gLayout5     = new QVBoxLayout();
+    layout->setContentsMargins(spacing, spacing, spacing, spacing);
+    layout->setSpacing(spacing);
+    layout->addWidget(sortOptionsGroup);
+    layout->addWidget(thOptionsGroup);
+    layout->addStretch();
 
-    d->showSplash       = new QCheckBox(i18n("&Show splash screen at startup"),            abOptionsGroup);
-    d->nativeFileDialog = new QCheckBox(i18n("Use file dialogs from the system"),          abOptionsGroup);
-    d->itemCenter       = new QCheckBox(i18n("Scroll current item to center of thumbbar"), abOptionsGroup);
+    d->tab->insertTab(Behaviour, behaviourPanel, i18nc("@title:tab", "Behaviour"));
 
-    DHBox* const tabStyleHbox = new DHBox(abOptionsGroup);
+    // -- Application Appearance Options --------------------------------------------------------
+
+    QWidget* const appearancePanel = new QWidget(d->tab);
+    QVBoxLayout* const layout2     = new QVBoxLayout(appearancePanel);
+
+    d->showSplash       = new QCheckBox(i18n("&Show splash screen at startup"),            appearancePanel);
+    d->nativeFileDialog = new QCheckBox(i18n("Use native file dialogs from the system"),   appearancePanel);
+
+    DHBox* const tabStyleHbox = new DHBox(appearancePanel);
     d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
     d->sidebarType            = new QComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
     d->sidebarType->addItem(i18n("For All Tabs"),        1);
     d->sidebarType->setToolTip(i18n("Set this option to configure how sidebars tab title are visible."));
 
-    DHBox* const appStyleHbox = new DHBox(abOptionsGroup);
+    DHBox* const appStyleHbox = new DHBox(appearancePanel);
     d->applicationStyleLabel  = new QLabel(i18n("Widget style:"), appStyleHbox);
     d->applicationStyle       = new QComboBox(appStyleHbox);
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
 
     QStringList styleList     = QStyleFactory::keys();
 
-    for (int i = 0; i < styleList.count(); i++)
+    for (int i = 0 ; i < styleList.count() ; i++)
     {
         d->applicationStyle->addItem(styleList.at(i));
     }
@@ -179,7 +198,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     appStyleHbox->setVisible(false);
 #endif
 
-    DHBox* const iconThemeHbox = new DHBox(panel);
+    DHBox* const iconThemeHbox = new DHBox(appearancePanel);
     d->applicationIconLabel    = new QLabel(i18n("Icon theme (changes after restart):"), iconThemeHbox);
     d->applicationIcon         = new QComboBox(iconThemeHbox);
     d->applicationIcon->setToolTip(i18n("Set this option to choose the default icon theme."));
@@ -193,7 +212,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     bool foundBreezeDark     = false;
     bool foundBreeze         = false;
 
-    foreach(const QString& path, QIcon::themeSearchPaths())
+    foreach (const QString& path, QIcon::themeSearchPaths())
     {
         if (!foundBreeze && QFile::exists(path + breeze + indexTheme))
         {
@@ -208,26 +227,22 @@ SetupMisc::SetupMisc(QWidget* const parent)
         }
     }
 
-    d->applicationFont = new DFontSelect(i18n("Application font:"), abOptionsGroup);
+    d->applicationFont = new DFontSelect(i18n("Application font:"), appearancePanel);
     d->applicationFont->setToolTip(i18n("Select here the font used to display text in whole application."));
-
-    gLayout5->addWidget(d->showSplash);
-    gLayout5->addWidget(d->nativeFileDialog);
-    gLayout5->addWidget(d->itemCenter);
-    gLayout5->addWidget(tabStyleHbox);
-    gLayout5->addWidget(appStyleHbox);
-    gLayout5->addWidget(iconThemeHbox);
-    gLayout5->addWidget(d->applicationFont);
-    abOptionsGroup->setLayout(gLayout5);
 
     // --------------------------------------------------------
 
-    layout->addWidget(sortOptionsGroup);
-    layout->addWidget(thOptionsGroup);
-    layout->addWidget(abOptionsGroup);
-    layout->addStretch();
-    layout->setContentsMargins(spacing, spacing, spacing, spacing);
-    layout->setSpacing(spacing);
+    layout2->setContentsMargins(spacing, spacing, spacing, spacing);
+    layout2->setSpacing(spacing);
+    layout2->addWidget(d->showSplash);
+    layout2->addWidget(d->nativeFileDialog);
+    layout2->addWidget(tabStyleHbox);
+    layout2->addWidget(appStyleHbox);
+    layout2->addWidget(iconThemeHbox);
+    layout2->addWidget(d->applicationFont);
+    layout2->addStretch();
+
+    d->tab->insertTab(Appearance, appearancePanel, i18nc("@title:tab", "Appearance"));
 
     // --------------------------------------------------------
 

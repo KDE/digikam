@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class MonthWidget::Private
+class Q_DECL_HIDDEN MonthWidget::Private
 {
 public:
 
@@ -70,8 +70,8 @@ public:
 
 public:
 
-    explicit Private() :
-        active(true),
+    explicit Private()
+      : active(true),
         model(0),
         timer(0),
         year(0),

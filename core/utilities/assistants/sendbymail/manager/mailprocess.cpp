@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class MailProcess::Private
+class Q_DECL_HIDDEN MailProcess::Private
 {
 public:
 

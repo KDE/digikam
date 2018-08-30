@@ -46,12 +46,12 @@
 namespace Digikam
 {
 
-class SearchModificationHelper::Private
+class Q_DECL_HIDDEN SearchModificationHelper::Private
 {
 public:
 
-    explicit Private() :
-        dialogParent(0)
+    explicit Private()
+      : dialogParent(0)
     {
     }
 

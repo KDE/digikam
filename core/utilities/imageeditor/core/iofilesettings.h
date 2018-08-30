@@ -50,7 +50,9 @@ public:
         useRAWImport        = true;
     };
 
-    ~IOFileSettings() {};
+    ~IOFileSettings()
+    {
+    };
 
 public:
 

@@ -45,7 +45,7 @@
 
 #include "myactionthread.h"
 
-class ProcessorDlg::Private
+class Q_DECL_HIDDEN ProcessorDlg::Private
 {
 public:
 

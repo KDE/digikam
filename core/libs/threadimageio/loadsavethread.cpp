@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class LoadSaveThread::Private
+class Q_DECL_HIDDEN LoadSaveThread::Private
 {
 public:
 

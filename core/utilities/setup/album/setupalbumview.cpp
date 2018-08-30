@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class SetupAlbumView::Private
+class Q_DECL_HIDDEN SetupAlbumView::Private
 {
 public:
 

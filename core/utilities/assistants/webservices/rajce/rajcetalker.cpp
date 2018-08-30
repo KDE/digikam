@@ -51,7 +51,7 @@ namespace Digikam
 
 const QUrl RAJCE_URL(QLatin1String("http://www.rajce.idnes.cz/liveAPI/index.php"));
 
-class RajceTalker::Private
+class Q_DECL_HIDDEN RajceTalker::Private
 {
 public:
 

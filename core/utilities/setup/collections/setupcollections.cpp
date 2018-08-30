@@ -55,12 +55,12 @@
 namespace Digikam
 {
 
-class SetupCollections::Private
+class Q_DECL_HIDDEN SetupCollections::Private
 {
 public:
 
-    explicit Private() :
-        rootsPathChanged(false),
+    explicit Private()
+      : rootsPathChanged(false),
         collectionView(0),
         collectionModel(0)
     {

@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class WebWidget::Private
+class Q_DECL_HIDDEN WebWidget::Private
 {
 public:
 
@@ -43,7 +43,7 @@ public:
     {
     }
 
-    QWidget*        parent;
+    QWidget* parent;
 };
 
 WebWidget::WebWidget(QWidget* const parent)

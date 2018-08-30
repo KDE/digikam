@@ -77,7 +77,7 @@ namespace Digikam
 
 class RawObserver;
 
-class ExpoBlendingThread::Private
+class Q_DECL_HIDDEN ExpoBlendingThread::Private
 {
 public:
 

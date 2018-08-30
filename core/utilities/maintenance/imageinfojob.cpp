@@ -41,12 +41,12 @@
 namespace Digikam
 {
 
-class ImageInfoJob::Private
+class Q_DECL_HIDDEN ImageInfoJob::Private
 {
 public:
 
-    explicit Private() :
-        jobThread(0)
+    explicit Private()
+      : jobThread(0)
     {
     }
 

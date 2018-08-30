@@ -40,7 +40,7 @@ namespace Digikam
 
 class ImportCategoryDrawer;
 
-class ImportDelegate::ImportDelegatePrivate : public ItemViewImportDelegatePrivate
+class Q_DECL_HIDDEN ImportDelegate::ImportDelegatePrivate : public ItemViewImportDelegatePrivate
 {
 public:
 
@@ -95,7 +95,7 @@ public:
 
 // --- ImportThumbnailDelegate ----------------------------------------------------
 
-class ImportThumbnailDelegatePrivate : public ImportDelegate::ImportDelegatePrivate
+class Q_DECL_HIDDEN ImportThumbnailDelegatePrivate : public ImportDelegate::ImportDelegatePrivate
 {
 public:
 
@@ -121,7 +121,7 @@ public:
 
 // --- ImportNormalDelegate ----------------------------------------------------
 
-class ImportNormalDelegatePrivate : public ImportDelegate::ImportDelegatePrivate
+class Q_DECL_HIDDEN ImportNormalDelegatePrivate : public ImportDelegate::ImportDelegatePrivate
 {
 public:
 

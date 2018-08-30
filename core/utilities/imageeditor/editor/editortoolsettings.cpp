@@ -57,13 +57,13 @@
 namespace Digikam
 {
 
-class EditorToolSettings::Private
+class Q_DECL_HIDDEN EditorToolSettings::Private
 {
 
 public:
 
-    explicit Private() :
-        scaleBG(0),
+    explicit Private()
+      : scaleBG(0),
         linHistoButton(0),
         logHistoButton(0),
         settingsArea(0),
@@ -139,18 +139,18 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     d->toolName->setFont(font);
 
     QString frameStyle = QString::fromLatin1("QFrame {"
-                                 "color: %1;"
-                                 "border: 1px solid %2;"
-                                 "border-radius: 5px;"
-                                 "background-color: %3;"
-                                 "}")
+                                             "color: %1;"
+                                             "border: 1px solid %2;"
+                                             "border-radius: 5px;"
+                                             "background-color: %3;"
+                                             "}")
                          .arg(QApplication::palette().color(QPalette::HighlightedText).name())
                          .arg(QApplication::palette().color(QPalette::HighlightedText).name())
                          .arg(QApplication::palette().color(QPalette::Highlight).name());
 
     QString noFrameStyle(QLatin1String("QFrame {"
-                         "border: none;"
-                         "}"));
+                                       "border: none;"
+                                       "}"));
 
     toolDescriptor->setStyleSheet(frameStyle);
     d->toolName->setStyleSheet(noFrameStyle);

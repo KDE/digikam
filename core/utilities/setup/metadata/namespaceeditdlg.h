@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef NAMESPACE_EDIT_DLG_H
-#define NAMESPACE_EDIT_DLG_H
+#ifndef DIGIKAM_NAMESPACE_EDIT_DLG_H
+#define DIGIKAM_NAMESPACE_EDIT_DLG_H
 
 // Qt includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // NAMESPACE_EDIT_DLG_H
+#endif // DIGIKAM_NAMESPACE_EDIT_DLG_H

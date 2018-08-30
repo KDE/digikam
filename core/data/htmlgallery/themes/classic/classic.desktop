@@ -140,6 +140,7 @@ Max=100
 
 [X-HTMLGallery Parameter bgColor]
 Name=Background Color
+Name[ar]=لون الخلفية
 Name[ca]=Color de fons
 Name[ca@valencia]=Color de fons
 Name[cs]=Barva pozadí
@@ -169,6 +170,7 @@ Default=#333333
 
 [X-HTMLGallery Parameter fgColor]
 Name=Foreground Color
+Name[ar]=لون المقدمة
 Name[ca]=Color de primer pla
 Name[ca@valencia]=Color de primer pla
 Name[cs]=Barva popředí

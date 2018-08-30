@@ -87,7 +87,7 @@ using namespace cimg_library;
 namespace Digikam
 {
 
-class GreycstorationFilter::Private
+class Q_DECL_HIDDEN GreycstorationFilter::Private
 {
 
 public:

@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class AutoCorrectionTool::Private
+class Q_DECL_HIDDEN AutoCorrectionTool::Private
 {
 public:
 
@@ -65,11 +65,12 @@ public:
 
 public:
 
-    explicit Private() :
-        correctionTools(0),
+    explicit Private()
+      : correctionTools(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;

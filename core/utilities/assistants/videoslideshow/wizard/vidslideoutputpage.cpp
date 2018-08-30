@@ -52,7 +52,7 @@ using namespace QtAV;
 namespace Digikam
 {
 
-class VidSlideOutputPage::Private
+class Q_DECL_HIDDEN VidSlideOutputPage::Private
 {
 public:
 

@@ -38,13 +38,13 @@
 namespace Digikam
 {
 
-class FindDuplicatesAlbumItem::Private
+class Q_DECL_HIDDEN FindDuplicatesAlbumItem::Private
 {
 
 public:
 
-    explicit Private() :
-        hasThumb(false),
+    explicit Private()
+      : hasThumb(false),
         album(0),
         itemCount(0)
     {

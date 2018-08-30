@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERANAMEHELPER_H
-#define CAMERANAMEHELPER_H
+#ifndef DIGIKAM_CAMERA_NAME_HELPER_H
+#define DIGIKAM_CAMERA_NAME_HELPER_H
 
 // Qt includes
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CAMERANAMEHELPER_H */
+#endif // DIGIKAM_CAMERA_NAME_HELPER_H

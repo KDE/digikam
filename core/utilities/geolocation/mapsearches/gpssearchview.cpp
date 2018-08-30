@@ -55,13 +55,13 @@
 namespace Digikam
 {
 
-class GPSSearchView::Private
+class Q_DECL_HIDDEN GPSSearchView::Private
 {
 
 public:
 
-    explicit Private() :
-        saveBtn(0),
+    explicit Private()
+      : saveBtn(0),
         nameEdit(0),
         imageInfoJob(),
         searchGPSBar(0),

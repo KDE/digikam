@@ -48,12 +48,12 @@
 namespace Digikam
 {
 
-class ImageRegionItem::Private
+class Q_DECL_HIDDEN ImageRegionItem::Private
 {
 public:
 
-    explicit Private():
-        onMouseMovePreviewToggled(true),
+    explicit Private()
+      : onMouseMovePreviewToggled(true),
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
         view(0),
         iface(0)

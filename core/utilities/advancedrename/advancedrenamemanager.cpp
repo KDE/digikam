@@ -75,12 +75,12 @@ struct SortBySize
     }
 };
 
-class AdvancedRenameManager::Private
+class Q_DECL_HIDDEN AdvancedRenameManager::Private
 {
 public:
 
-    explicit Private() :
-        parser(0),
+    explicit Private()
+      : parser(0),
         widget(0),
         parserType(AdvancedRenameManager::DefaultParser),
         sortAction(AdvancedRenameManager::SortCustom),

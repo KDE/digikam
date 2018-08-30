@@ -143,10 +143,7 @@
 #include "rajcewindow.h"
 #include "smugwindow.h"
 #include "yfwindow.h"
-
-#ifdef HAVE_MEDIAWIKI
-#   include "mediawikiwindow.h"
-#endif
+#include "mediawikiwindow.h"
 
 #ifdef HAVE_VKONTAKTE
 #   include "vkwindow.h"
@@ -208,7 +205,7 @@ public:
 
 // ------------------------------------------------------------------------------
 
-class DigikamApp::Private
+class Q_DECL_HIDDEN DigikamApp::Private
 {
 public:
 

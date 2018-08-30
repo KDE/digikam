@@ -160,7 +160,7 @@ uint qHash(const PAlbumPath& id)
 
 // -----------------------------------------------------------------------------------
 
-class AlbumManager::Private
+class Q_DECL_HIDDEN AlbumManager::Private
 {
 public:
 
@@ -2231,7 +2231,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     int albumRootId   = parent->albumRootId();
 
     // first check if we have a sibling album with the same name
-    PAlbum* child = static_cast<PAlbum*>(parent->m_firstChild);
+    PAlbum* child = static_cast<PAlbum*>(parent->firstChild());
 
     while (child)
     {
@@ -2241,7 +2241,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
             return 0;
         }
 
-        child = static_cast<PAlbum*>(child->m_next);
+        child = static_cast<PAlbum*>(child->next());
     }
 
     CoreDbUrl url   = parent->databaseUrl();
@@ -2537,7 +2537,7 @@ bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg, bool askUser)
 bool AlbumManager::hasDirectChildAlbumWithTitle(Album* parent, const QString& title)
 {
 
-    Album* sibling = parent->m_firstChild;
+    Album* sibling = parent->firstChild();
 
     while (sibling)
     {
@@ -2546,7 +2546,7 @@ bool AlbumManager::hasDirectChildAlbumWithTitle(Album* parent, const QString& ti
             return true;
         }
 
-        sibling = sibling->m_next;
+        sibling = sibling->next();
     }
 
     return false;
@@ -2688,7 +2688,7 @@ bool AlbumManager::mergeTAlbum(TAlbum* album, TAlbum* destAlbum, bool dialog, QS
         return false;
     }
 
-    if (album->m_firstChild)
+    if (album->firstChild())
     {
         errMsg = i18n("Only a tag without children can be merged!");
         return false;
@@ -3097,12 +3097,12 @@ void AlbumManager::removePAlbum(PAlbum* album)
     }
 
     // remove all children of this album
-    Album* child        = album->m_firstChild;
+    Album* child        = album->firstChild();
     PAlbum* toBeRemoved = 0;
 
     while (child)
     {
-        Album* next = child->m_next;
+        Album* next = child->next();
         toBeRemoved = static_cast<PAlbum*>(child);
 
         if (toBeRemoved)
@@ -3167,12 +3167,12 @@ void AlbumManager::removeTAlbum(TAlbum* album)
     }
 
     // remove all children of this album
-    Album* child        = album->m_firstChild;
+    Album* child        = album->firstChild();
     TAlbum* toBeRemoved = 0;
 
     while (child)
     {
-        Album* next = child->m_next;
+        Album* next = child->next();
         toBeRemoved = static_cast<TAlbum*>(child);
 
         if (toBeRemoved)

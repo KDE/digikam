@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class OpenCVLBPHFaceRecognizer::Private
+class Q_DECL_HIDDEN OpenCVLBPHFaceRecognizer::Private
 {
 public:
 

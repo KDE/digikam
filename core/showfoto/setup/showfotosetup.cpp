@@ -49,12 +49,12 @@
 namespace ShowFoto
 {
 
-class Setup::Private
+class Q_DECL_HIDDEN Setup::Private
 {
 public:
 
-    explicit Private() :
-        page_editorIface(0),
+    explicit Private()
+      : page_editorIface(0),
         page_metadata(0),
         page_tooltip(0),
         page_raw(0),

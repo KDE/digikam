@@ -1,0 +1,73 @@
+<?xml version="1.0"?><api><query><pages><page pageid="27697087" ns="0" title="API"><revisions><rev revid="367741756" parentid="367741564" minor="" user="Graham87" timestamp="2010-06-13T08:41:17Z" size="70" comment="Protected API: restore protection ([edit=sysop] (indefinite) [move=sysop] (indefinite))" xml:space="preserve">#REDIRECT [[Application programming interface]]{{R from abbreviation}}</rev></revisions></page><page pageid="15580374" ns="0" title="Main Page"><revisions><rev revid="387545037" parentid="387542946" minor="" user="Rich Farmbrough" timestamp="2010-09-28T15:21:07Z" size="5074" comment="[[Help:Reverting|Reverted]] edits by [[Special:Contributions/Rich Farmbrough|Rich Farmbrough]] ([[User talk:Rich Farmbrough|talk]]) to last version by David Levy" xml:space="preserve">&lt;!--        BANNER ACROSS TOP OF PAGE        --&gt;
+{| id=&quot;mp-topbanner&quot; style=&quot;width:100%; background:#f6f6f6; margin-top:1.2em; border:1px solid #ddd;&quot;
+| style=&quot;width:61%; color:#000;&quot; |
+&lt;!--        &quot;WELCOME TO WIKIPEDIA&quot; AND ARTICLE COUNT        --&gt;
+{| style=&quot;width:280px; border:none; background:none;&quot;
+| style=&quot;width:280px; text-align:center; white-space:nowrap; color:#000;&quot; |
+&lt;div style=&quot;font-size:162%; border:none; margin:0; padding:.1em; color:#000;&quot;&gt;Welcome to [[Wikipedia]],&lt;/div&gt;
+&lt;div style=&quot;top:+0.2em; font-size:95%;&quot;&gt;the [[free content|free]] [[encyclopedia]] that [[Wikipedia:Introduction|anyone&amp;nbsp;can&amp;nbsp;edit]].&lt;/div&gt;
+&lt;div id=&quot;articlecount&quot; style=&quot;width:100%; text-align:center; font-size:85%;&quot;&gt;[[Special:Statistics|{{NUMBEROFARTICLES}}]] articles in [[English language|English]]&lt;/div&gt;
+|}
+&lt;!--        PORTAL LIST ON RIGHT-HAND SIDE        --&gt;
+| style=&quot;width:13%; font-size:95%;&quot; |
+* [[Portal:Arts|Arts]]
+* [[Portal:Biography|Biography]]
+* [[Portal:Geography|Geography]]
+| style=&quot;width:13%; font-size:95%;&quot; |
+* [[Portal:History|History]]
+* [[Portal:Mathematics|Mathematics]]
+* [[Portal:Science|Science]]
+| style=&quot;width:13%; font-size:95%;&quot; |
+* [[Portal:Society|Society]]
+* [[Portal:Technology|Technology]]
+* '''[[Portal:Contents/Portals|All&amp;nbsp;portals]]'''
+|}
+&lt;!--        TODAY'S FEATURED ARTICLE; DID YOU KNOW        --&gt;
+{| id=&quot;mp-upper&quot; style=&quot;width: 100%; margin:6px 0 0 0; background:none; border-spacing: 0px;&quot;
+{{#if:{{Main Page banner}}|&lt;tr id=&quot;mp-banner&quot;&gt;&lt;td colspan=&quot;3&quot; style=&quot;text-align:center; font-size:100%; background-color:#F2E6CE; padding:0.2em; border:1px solid #BFB1A3; color:#000; font-weight:bold;&quot;&gt;{{Main Page banner}}&lt;/td&gt;&lt;/tr&gt;
+}}
+| class=&quot;MainPageBG&quot; style=&quot;width:55%; border:1px solid #cef2e0; background:#f5fffa; vertical-align:top; color:#000;&quot; |
+{| id=&quot;mp-left&quot; style=&quot;vertical-align:top; background:#f5fffa;&quot;
+! style=&quot;padding:2px;&quot; | &lt;h2 id=&quot;mp-tfa-h2&quot; style=&quot;margin:3px; background:#cef2e0; font-size:120%; font-weight:bold; border:1px solid #a3bfb1; text-align:left; color:#000; padding:0.2em 0.4em;&quot;&gt;{{#ifexpr:{{formatnum:{{PAGESIZE:Wikipedia:Today's featured article/{{#time:F j, Y}}}}|R}}&gt;150|Today's featured article|Featured article&amp;ensp;&lt;small&gt;(Check back later for today's.)&lt;/small&gt;}}&lt;/h2&gt;
+|-
+| style=&quot;color:#000;&quot; | &lt;div id=&quot;mp-tfa&quot; style=&quot;padding:2px 5px&quot;&gt;{{#ifexpr:{{formatnum:{{PAGESIZE:Wikipedia:Today's featured article/{{#time:F j, Y}}}}|R}}&gt;150|{{Wikipedia:Today's featured article/{{#time:F j, Y}}}}|{{Wikipedia:Today's featured article/{{#time:F j, Y|-1 days}}}}}}&lt;/div&gt;
+|-
+! style=&quot;padding:2px&quot; | &lt;h2 id=&quot;mp-dyk-h2&quot; style=&quot;margin:3px; background:#cef2e0; font-size:120%; font-weight:bold; border:1px solid #a3bfb1; text-align:left; color:#000; padding:0.2em 0.4em;&quot;&gt;Did you know...&lt;/h2&gt;
+|-
+| style=&quot;color:#000;padding:2px 5px 5px&quot; | &lt;div id=&quot;mp-dyk&quot;&gt;{{Did you know}}&lt;/div&gt;
+|}
+| style=&quot;border:1px solid transparent;&quot; |
+&lt;!--        IN THE NEWS; ON THIS DAY        --&gt;
+| class=&quot;MainPageBG&quot; style=&quot;width:45%; border:1px solid #cedff2; background:#f5faff; vertical-align:top;&quot;|
+{| id=&quot;mp-right&quot; style=&quot;width:100%; vertical-align:top; background:#f5faff;&quot;
+! style=&quot;padding:2px&quot; | &lt;h2 id=&quot;mp-itn-h2&quot; style=&quot;margin:3px; background:#cedff2; font-size:120%; font-weight:bold; border:1px solid #a3b0bf; text-align:left; color:#000; padding:0.2em 0.4em;&quot;&gt;In the news&lt;/h2&gt;
+|-
+| style=&quot;color:#000;padding:2px 5px&quot; | &lt;div id=&quot;mp-itn&quot;&gt;{{In the news}}&lt;/div&gt;
+|-
+! style=&quot;padding:2px&quot; | &lt;h2 id=&quot;mp-otd-h2&quot; style=&quot;margin:3px; background:#cedff2; font-size:120%; font-weight:bold; border:1px solid #a3b0bf; text-align:left; color:#000; padding:0.2em 0.4em;&quot;&gt;On this day...&lt;/h2&gt;
+|-
+| style=&quot;color:#000;padding:2px 5px 5px&quot; | &lt;div id=&quot;mp-otd&quot;&gt;{{Wikipedia:Selected anniversaries/{{#time:F j}}}}&lt;/div&gt;
+|}
+|}
+&lt;!--        TODAY'S FEATURED PICTURE        --&gt;
+{| style=&quot;margin:4px 0 0 0; width:100%; background:none; border-spacing: 0px;&quot;
+| class=&quot;MainPageBG&quot; style=&quot;width:100%; border:1px solid #ddcef2; background:#faf5ff; vertical-align:top; color:#000;&quot;|
+{| id=&quot;mp-bottom&quot; style=&quot;vertical-align:top; background:#faf5ff; color:#000; width:100%&quot;
+! style=&quot;padding:2px&quot; | &lt;h2  id=&quot;mp-tfp-h2&quot; style=&quot;margin:3px; background:#ddcef2; font-size:120%; font-weight:bold; border:1px solid #afa3bf; text-align:left; color:#000; padding:0.2em 0.4em&quot;&gt;{{#ifexist:Template:POTD protected/{{#time:Y-m-d}}|Today's featured picture|Featured picture&amp;ensp;&lt;small&gt;(Check back later for today's.)&lt;/small&gt;}}&lt;/h2&gt;
+|-
+| style=&quot;color:#000;padding: 2px&quot; | &lt;div id=&quot;mp-tfp&quot;&gt;{{#ifexist:Template:POTD protected/{{#time:Y-m-d}}|{{POTD protected/{{#time:Y-m-d}}}}|{{POTD protected/{{#time:Y-m-d|-1 days}}}}}}&lt;/div&gt;
+|}
+|}
+&lt;!--        SECTIONS AT BOTTOM OF PAGE        --&gt;
+&lt;div id=&quot;mp-other&quot; style=&quot;padding-top:4px; padding-bottom:2px;&quot;&gt;
+== Other areas of Wikipedia ==
+{{Other areas of Wikipedia}}
+&lt;/div&gt;&lt;div id=&quot;mp-sister&quot;&gt;
+== Wikipedia's sister projects ==
+{{Wikipedia's sister projects}}
+&lt;/div&gt;&lt;div id=&quot;mp-lang&quot;&gt;
+== Wikipedia languages ==
+{{Wikipedia languages}}
+&lt;/div&gt;
+&lt;!--        INTERWIKI STRAPLINE        --&gt;
+{{Main Page interwikis}}__NOTOC____NOEDITSECTION__</rev></revisions></page></pages></query></api>

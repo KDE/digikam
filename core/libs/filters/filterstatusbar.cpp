@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class FilterStatusBar::Private
+class Q_DECL_HIDDEN FilterStatusBar::Private
 {
 public:
 

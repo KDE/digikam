@@ -33,6 +33,7 @@
 #include <QString>
 #include <QMap>
 #include <QUrl>
+#include <QVector>
 #include <QObject>
 
 // Local includes
@@ -104,6 +105,11 @@ public:
     Album*  prev() const;
 
     /**
+     * @return the child of this album at row
+     */
+    Album*  childAtRow(int row) const;
+
+    /**
      * @return a list of all child Albums
      */
     AlbumList childAlbums(bool recursive = false);
@@ -148,6 +154,16 @@ public:
      * @see id()
      */
     int     globalID() const;
+
+    /**
+     * @return the @p childCount of the album
+     */
+    int     childCount() const;
+
+    /**
+     * @return the @p rowFromAlbum of the album
+     */
+    int     rowFromAlbum() const;
 
     /**
      * @return the @p title aka name of the album
@@ -316,22 +332,19 @@ private:
 private:
 
     bool                     m_root;
-    bool                     m_clearing;
     bool                     m_usedByLabelsTree;
 
     int                      m_id;
-    QString                  m_name;
 
+    QString                  m_name;
     QString                  m_title;
+
     QMap<const void*, void*> m_extraMap;
+    QVector<Album*>          m_childCache;
 
     Type                     m_type;
 
     Album*                   m_parent;
-    Album*                   m_firstChild;
-    Album*                   m_lastChild;
-    Album*                   m_next;
-    Album*                   m_prev;
 
     friend class AlbumManager;
 };

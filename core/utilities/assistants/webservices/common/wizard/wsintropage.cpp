@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class WSIntroPage::Private
+class Q_DECL_HIDDEN WSIntroPage::Private
 {
 public:
 

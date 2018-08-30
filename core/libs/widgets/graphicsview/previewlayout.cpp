@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class SinglePhotoPreviewLayout::Private
+class Q_DECL_HIDDEN SinglePhotoPreviewLayout::Private
 {
 public:
 
@@ -76,7 +76,8 @@ public:
 };
 
 SinglePhotoPreviewLayout::SinglePhotoPreviewLayout(QObject* const parent)
-    : QObject(parent), d(new Private)
+    : QObject(parent),
+      d(new Private)
 {
 }
 

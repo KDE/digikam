@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class ImageComments::Private : public QSharedData
+class Q_DECL_HIDDEN ImageComments::Private : public QSharedData
 {
 public:
 

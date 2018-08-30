@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class ImagePropertiesMetaDataTab::Private
+class Q_DECL_HIDDEN ImagePropertiesMetaDataTab::Private
 {
 public:
 
@@ -61,8 +61,8 @@ public:
         XMP
     };
 
-    explicit Private() :
-        exifWidget(0),
+    explicit Private()
+      : exifWidget(0),
         makernoteWidget(0),
         iptcWidget(0),
         xmpWidget(0)
@@ -76,7 +76,8 @@ public:
 };
 
 ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* const parent)
-    : QTabWidget(parent), d(new Private)
+    : QTabWidget(parent),
+      d(new Private)
 {
     // Exif tab area ---------------------------------------
 

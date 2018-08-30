@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class PlaceholderWidget::Private
+class Q_DECL_HIDDEN PlaceholderWidget::Private
 {
 public:
 

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPDATABASE_H
-#define SETUPDATABASE_H
+#ifndef DIGIKAM_SETUP_DATABASE_H
+#define DIGIKAM_SETUP_DATABASE_H
 
 // Qt includes
 
@@ -37,6 +37,7 @@ class SetupDatabase : public QScrollArea
     Q_OBJECT
 
 public:
+
     enum AlbumTab
     {
         DbSettings = 0,
@@ -69,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUPDATABASE_H
+#endif // DIGIKAM_SETUP_DATABASE_H

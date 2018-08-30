@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class VersioningPromptUserSaveDialog::Private
+class Q_DECL_HIDDEN VersioningPromptUserSaveDialog::Private
 {
 public:
 

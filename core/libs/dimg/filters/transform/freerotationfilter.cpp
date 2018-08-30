@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class FreeRotationFilter::Private
+class Q_DECL_HIDDEN FreeRotationFilter::Private
 {
 public:
 

@@ -44,12 +44,12 @@
 namespace Digikam
 {
 
-class RawCameraDlg::Private
+class Q_DECL_HIDDEN RawCameraDlg::Private
 {
 public:
 
-    explicit Private() :
-        header(0),
+    explicit Private()
+      : header(0),
         searchBar(0)
     {
     }

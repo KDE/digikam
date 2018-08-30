@@ -85,7 +85,7 @@ void GPSUndoCommand::UndoInfo::readOldDataFromItem(const GPSImageItem* const ima
 
 void GPSUndoCommand::UndoInfo::readNewDataFromItem(const GPSImageItem* const imageItem)
 {
-    this->dataAfter = imageItem->gpsData();
+    this->dataAfter  = imageItem->gpsData();
     this->newTagList = imageItem->getTagList();
 }
 

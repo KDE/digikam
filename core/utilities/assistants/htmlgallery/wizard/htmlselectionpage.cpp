@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class HTMLSelectionPage::Private
+class Q_DECL_HIDDEN HTMLSelectionPage::Private
 {
 public:
 

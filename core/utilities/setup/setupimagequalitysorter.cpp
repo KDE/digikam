@@ -49,12 +49,12 @@
 namespace Digikam
 {
 
-class SetupImageQualitySorter::Private
+class Q_DECL_HIDDEN SetupImageQualitySorter::Private
 {
 public:
 
-    explicit Private() :
-        optionsView(0),
+    explicit Private()
+      : optionsView(0),
         enableSorter(0),
         useFullImage(0),
         detectBlur(0),

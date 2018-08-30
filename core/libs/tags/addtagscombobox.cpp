@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class AddTagsComboBox::Private
+class Q_DECL_HIDDEN AddTagsComboBox::Private
 {
 public:
 

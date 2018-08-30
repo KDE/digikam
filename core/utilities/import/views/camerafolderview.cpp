@@ -36,12 +36,12 @@
 namespace Digikam
 {
 
-class CameraFolderView::Private
+class Q_DECL_HIDDEN CameraFolderView::Private
 {
 public:
 
-    explicit Private() :
-        cameraName(QLatin1String("Camera")),
+    explicit Private()
+      : cameraName(QLatin1String("Camera")),
         virtualFolder(0),
         rootFolder(0)
     {

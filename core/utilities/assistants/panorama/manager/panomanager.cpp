@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class PanoManager::Private
+class Q_DECL_HIDDEN PanoManager::Private
 {
 public:
 

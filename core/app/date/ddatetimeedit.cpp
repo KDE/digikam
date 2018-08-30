@@ -35,12 +35,12 @@
 namespace Digikam
 {
 
-class DDateTimeEdit::Private
+class Q_DECL_HIDDEN DDateTimeEdit::Private
 {
 public:
 
-    explicit Private() :
-        timePopUp(0),
+    explicit Private()
+      : timePopUp(0),
         datePopUp(0)
     {
     }

@@ -61,7 +61,7 @@
 namespace Digikam
 {
 
-class SmugWindow::Private
+class Q_DECL_HIDDEN SmugWindow::Private
 {
 public:
 
@@ -168,7 +168,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
     /**
      * This is deprecated because we know use O2 to login
      *
-     * if(nickName.isEmpty())
+     * if (nickName.isEmpty())
      * {
      *     d->loginDlg  = new WSLoginDialog(this,
      *                                      i18n("<qt>Enter the <b>email address</b> and <b>password</b> for your "
@@ -356,7 +356,7 @@ void SmugWindow::authenticate()
 void SmugWindow::readSettings()
 {
     KConfig config;
-    KConfigGroup grp  = config.group("Smug Settings");
+    KConfigGroup grp   = config.group("Smug Settings");
     d->anonymousImport = grp.readEntry("AnonymousImport", true);
     d->email           = grp.readEntry("Email");
     d->password        = grp.readEntry("Password");

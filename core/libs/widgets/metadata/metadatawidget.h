@@ -79,11 +79,6 @@ Q_SIGNALS:
 
     void signalSetupMetadataFilters();
 
-private Q_SLOTS:
-
-    void slotCopy2Clipboard();
-    void slotPrintMetadata();
-
 protected Q_SLOTS:
 
     virtual void slotSaveMetadataToFile()=0;
@@ -108,13 +103,23 @@ protected:
     bool   storeMetadataToFile(const QUrl& url, const QByteArray& metaData);
 
     virtual void buildView();
-    virtual bool decodeMetadata()=0;
-    virtual QString getMetadataTitle()=0;
     virtual void setMetadataEmpty();
+
+    virtual bool    decodeMetadata()=0;
+    virtual QString getMetadataTitle()=0;
 
 private Q_SLOTS :
 
+    void slotCopy2Clipboard();
+    void slotPrintMetadata();
     void slotFilterChanged(QAction*);
+
+protected:
+
+    /**
+     * Call this method in children class contructors to init signal/slots connections.
+     */
+    void setup();
 
 private:
 

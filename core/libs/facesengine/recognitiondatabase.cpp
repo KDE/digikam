@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class RecognitionDatabase::Private
+class Q_DECL_HIDDEN RecognitionDatabase::Private
 {
 public:
 

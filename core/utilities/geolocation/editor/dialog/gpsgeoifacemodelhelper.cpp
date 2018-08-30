@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class GPSGeoIfaceModelHelper::Private
+class Q_DECL_HIDDEN GPSGeoIfaceModelHelper::Private
 {
 public:
 

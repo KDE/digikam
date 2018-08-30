@@ -30,7 +30,8 @@ namespace Digikam
 {
 
 DNGWriterHost::DNGWriterHost(DNGWriter::Private* const priv, dng_memory_allocator* const allocator)
-    : dng_host(allocator), m_priv(priv)
+    : dng_host(allocator),
+      m_priv(priv)
 {
 }
 

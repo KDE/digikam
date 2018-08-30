@@ -49,12 +49,12 @@
 namespace Digikam
 {
 
-class CameraFolderDialog::Private
+class Q_DECL_HIDDEN CameraFolderDialog::Private
 {
 public:
 
-    explicit Private() :
-        buttons(0),
+    explicit Private()
+      : buttons(0),
         folderView(0)
     {
     }

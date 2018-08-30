@@ -44,12 +44,12 @@
 namespace ShowFoto
 {
 
-class SetupToolTip::Private
+class Q_DECL_HIDDEN SetupToolTip::Private
 {
 public:
 
-    explicit Private() :
-        showFileDateBox(0),
+    explicit Private()
+      : showFileDateBox(0),
         showFileNameBox(0),
         showFileSizeBox(0),
         showImageDimBox(0),

@@ -30,7 +30,7 @@
 namespace Digikam
 {
 
-class CalSystemPrivate : public QSharedData
+class Q_DECL_HIDDEN CalSystemPrivate : public QSharedData
 {
 public:
 

@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class ImageLevels::Private
+class Q_DECL_HIDDEN ImageLevels::Private
 {
 
 public:

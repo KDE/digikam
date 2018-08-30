@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class BorderSettings::Private
+class Q_DECL_HIDDEN BorderSettings::Private
 {
 public:
 

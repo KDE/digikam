@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class WSLoginDialog::Private
+class Q_DECL_HIDDEN WSLoginDialog::Private
 {
 public:
 

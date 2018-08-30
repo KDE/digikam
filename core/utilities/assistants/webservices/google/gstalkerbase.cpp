@@ -68,7 +68,7 @@
 namespace Digikam
 {
 
-class GSTalkerBase::Private
+class Q_DECL_HIDDEN GSTalkerBase::Private
 {
 public:
 

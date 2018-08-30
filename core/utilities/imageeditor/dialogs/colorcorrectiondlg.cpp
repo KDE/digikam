@@ -56,12 +56,10 @@
 #include "dxmlguiwindow.h"
 #include "dexpanderbox.h"
 
-
-
 namespace Digikam
 {
 
-class ColorCorrectionDlg::Private
+class Q_DECL_HIDDEN ColorCorrectionDlg::Private
 {
 public:
 
@@ -250,7 +248,7 @@ QLayout* ColorCorrectionDlg::createHeading() const
     QLabel* const logo      = new QLabel;
     logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
 
-    DLineWidget* const line  = new DLineWidget(Qt::Horizontal);
+    DLineWidget* const line = new DLineWidget(Qt::Horizontal);
 
     QGridLayout* const grid = new QGridLayout;
     grid->addWidget(icon,    0, 0);
@@ -258,6 +256,7 @@ QLayout* ColorCorrectionDlg::createHeading() const
     grid->addWidget(logo,    0, 2);
     grid->addWidget(line,    1, 0, 1, 3);
     grid->setColumnStretch(1, 1);
+
     return grid;
 }
 

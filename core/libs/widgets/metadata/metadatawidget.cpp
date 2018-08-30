@@ -66,7 +66,7 @@
 namespace Digikam
 {
 
-class MetadataWidget::Private
+class Q_DECL_HIDDEN MetadataWidget::Private
 {
 
 public:
@@ -99,6 +99,10 @@ public:
 
     QStringList            tagsFilter;
 
+    QAction*               saveMetadata;
+    QAction*               printMetadata;
+    QAction*               copy2ClipBoard;
+
     QMenu*                 optionsMenu;
 
     MetadataListView*      view;
@@ -116,8 +120,7 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const QString& name)
     setObjectName(name);
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
-    d->mainLayout = new QGridLayout(this);
+    d->mainLayout     = new QGridLayout(this);
 
     // -----------------------------------------------------------------
 
@@ -154,14 +157,13 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const QString& name)
     d->toolBtn->setPopupMode(QToolButton::InstantPopup);
     d->toolBtn->setWhatsThis(i18n("Run tool over metadata tags."));
 
-    QMenu* const toolMenu         = new QMenu(d->toolBtn);
-    QAction* const saveMetadata   = toolMenu->addAction(i18nc("@action:inmenu", "Save in file"));
-    QAction* const printMetadata  = toolMenu->addAction(i18nc("@action:inmenu", "Print"));
-    QAction* const copy2ClipBoard = toolMenu->addAction(i18nc("@action:inmenu", "Copy to Clipboard"));
+    QMenu* const toolMenu = new QMenu(d->toolBtn);
+    d->saveMetadata       = toolMenu->addAction(i18nc("@action:inmenu", "Save in file"));
+    d->printMetadata      = toolMenu->addAction(i18nc("@action:inmenu", "Print"));
+    d->copy2ClipBoard     = toolMenu->addAction(i18nc("@action:inmenu", "Copy to Clipboard"));
     d->toolBtn->setMenu(toolMenu);
 
     d->view         = new MetadataListView(this);
-
     QString barName = name + QLatin1String("SearchBar");
     d->searchBar    = new SearchTextBar(this, barName);
 
@@ -175,19 +177,25 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const QString& name)
     d->mainLayout->setRowStretch(1, 10);
     d->mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     d->mainLayout->setSpacing(0);
+}
 
-    // -----------------------------------------------------------------
+MetadataWidget::~MetadataWidget()
+{
+    delete d;
+}
 
+void MetadataWidget::setup()
+{
     connect(d->optionsMenu, SIGNAL(triggered(QAction*)),
             this, SLOT(slotFilterChanged(QAction*)));
 
-    connect(copy2ClipBoard, SIGNAL(triggered(bool)),
+    connect(d->copy2ClipBoard, SIGNAL(triggered(bool)),
             this, SLOT(slotCopy2Clipboard()));
 
-    connect(printMetadata, SIGNAL(triggered(bool)),
+    connect(d->printMetadata, SIGNAL(triggered(bool)),
             this, SLOT(slotPrintMetadata()));
 
-    connect(saveMetadata, SIGNAL(triggered(bool)),
+    connect(d->saveMetadata, SIGNAL(triggered(bool)),
             this, SLOT(slotSaveMetadataToFile()));
 
     connect(d->searchBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
@@ -195,11 +203,6 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const QString& name)
 
     connect(d->view, SIGNAL(signalTextFilterMatch(bool)),
             d->searchBar, SLOT(slotSearchResult(bool)));
-}
-
-MetadataWidget::~MetadataWidget()
-{
-    delete d;
 }
 
 void MetadataWidget::slotFilterChanged(QAction* action)

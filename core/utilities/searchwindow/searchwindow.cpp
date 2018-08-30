@@ -42,12 +42,12 @@
 namespace Digikam
 {
 
-class SearchWindow::Private
+class Q_DECL_HIDDEN SearchWindow::Private
 {
 public:
 
-    explicit Private() :
-        scrollArea(0),
+    explicit Private()
+      : scrollArea(0),
         searchView(0),
         bottomBar(0),
         currentId(-1),
@@ -64,18 +64,19 @@ public:
 };
 
 SearchWindow::SearchWindow()
-    : QWidget(0), d(new Private)
+    : QWidget(0),
+      d(new Private)
 {
-    QVBoxLayout* layout = new QVBoxLayout;
+    QVBoxLayout* const layout = new QVBoxLayout;
 
-    d->scrollArea       = new QScrollArea(this);
+    d->scrollArea             = new QScrollArea(this);
     d->scrollArea->setWidgetResizable(true);
     d->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-    d->searchView       = new SearchView;
+    d->searchView             = new SearchView;
     d->searchView->setup();
 
-    d->bottomBar        = new SearchViewBottomBar(d->searchView);
+    d->bottomBar              = new SearchViewBottomBar(d->searchView);
     d->searchView->setBottomBar(d->bottomBar);
 
     d->scrollArea->setWidget(d->searchView);

@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class WebBrowserDlg::Private
+class Q_DECL_HIDDEN WebBrowserDlg::Private
 {
 public:
 

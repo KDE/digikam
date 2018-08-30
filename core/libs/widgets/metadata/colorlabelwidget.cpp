@@ -52,9 +52,8 @@
 namespace Digikam
 {
 
-class ColorLabelWidget::Private
+class Q_DECL_HIDDEN ColorLabelWidget::Private
 {
-
 public:
 
     explicit Private()

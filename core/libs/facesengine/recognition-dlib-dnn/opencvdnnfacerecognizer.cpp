@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class OpenCVDNNFaceRecognizer::Private
+class Q_DECL_HIDDEN OpenCVDNNFaceRecognizer::Private
 {
 public:
 

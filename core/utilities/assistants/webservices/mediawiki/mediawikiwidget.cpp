@@ -63,7 +63,7 @@
 namespace Digikam
 {
 
-class MediaWikiWidget::Private
+class Q_DECL_HIDDEN MediaWikiWidget::Private
 {
 public:
 
@@ -284,7 +284,7 @@ MediaWikiWidget::MediaWikiWidget(DInfoInterface* const iface, QWidget* const par
     d->wikiSelect->addItem(i18n("Wikiquote"),          QLatin1String("https://en.wikiquote.org/w/api.php"));
     d->wikiSelect->addItem(i18n("Wikisource"),         QLatin1String("https://en.wikinews.org/w/api.php"));
     d->wikiSelect->addItem(i18n("Wiktionary"),         QLatin1String("https://en.wiktionary.org/w/api.php"));
-    d->wikiSelect->addItem(i18n("MediaWiki"),          QLatin1String("https://www.mediawiki.org/w/api.php"));
+    d->wikiSelect->addItem(i18n("MediaWiki"),          QLatin1String("https://www.MediaWiki.org/w/api.php"));
     d->wikiSelect->addItem(i18n("Wikia Foto"),         QLatin1String("https://foto.wikia.com/api.php"));
     d->wikiSelect->addItem(i18n("Wikia Uncyclopedia"), QLatin1String("https://uncyclopedia.wikia.com/api.php"));
 
@@ -650,7 +650,7 @@ DProgressWdg* MediaWikiWidget::progressBar() const
 
 void MediaWikiWidget::updateLabels(const QString& userName, const QString& wikiName, const QString& url)
 {
-    QString web = QLatin1String("https://www.mediawiki.org");
+    QString web = QLatin1String("https://www.MediaWiki.org");
 
     if (url.isEmpty())
     {

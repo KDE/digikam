@@ -44,13 +44,12 @@
 namespace Digikam
 {
 
-class PreviewToolBar::Private
+class Q_DECL_HIDDEN PreviewToolBar::Private
 {
-
 public:
 
-    explicit Private() :
-        previewOriginalButton(0),
+    explicit Private()
+      : previewOriginalButton(0),
         previewBothButtonVert(0),
         previewBothButtonHorz(0),
         previewDuplicateBothButtonVert(0),
@@ -78,7 +77,8 @@ public:
 };
 
 PreviewToolBar::PreviewToolBar(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 

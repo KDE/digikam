@@ -61,7 +61,7 @@
 namespace Digikam
 {
 
-class PanoPreProcessPage::Private
+class Q_DECL_HIDDEN PanoPreProcessPage::Private
 {
 public:
 

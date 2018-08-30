@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class FileSaveConflictBox::Private
+class Q_DECL_HIDDEN FileSaveConflictBox::Private
 {
 public:
 

@@ -62,12 +62,10 @@
 #include "imagepropertiestxtlabel.h"
 #include "digikam_globals.h"
 
-
-
 namespace Digikam
 {
 
-class ImagePropertiesColorsTab::Private
+class Q_DECL_HIDDEN ImagePropertiesColorsTab::Private
 {
 public:
 

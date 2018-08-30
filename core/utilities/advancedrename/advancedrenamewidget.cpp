@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class AdvancedRenameWidget::Private
+class Q_DECL_HIDDEN AdvancedRenameWidget::Private
 {
     typedef AdvancedRenameWidget::ControlWidgets CWMask;
     typedef AdvancedRenameWidget::LayoutStyle    LStyle;
@@ -72,7 +72,8 @@ public:
         optionsLabel(0),
         controlWidgetsMask(AdvancedRenameWidget::DefaultControls),
         layoutStyle(AdvancedRenameWidget::LayoutNormal)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configExpandedStateEntry;

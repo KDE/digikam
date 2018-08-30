@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class DBTalker::Private
+class Q_DECL_HIDDEN DBTalker::Private
 {
 public:
 

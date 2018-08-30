@@ -36,13 +36,13 @@
 namespace Digikam
 {
 
-class VidPlayerDlg::Private
+class Q_DECL_HIDDEN VidPlayerDlg::Private
 {
 public:
 
     explicit Private()
     {
-        player   = 0;
+        player = 0;
     }
 
 public:

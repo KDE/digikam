@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPUTILS_H
-#define SETUPUTILS_H
+#ifndef DIGIKAM_SETUP_UTILS_H
+#define DIGIKAM_SETUP_UTILS_H
 
 class QString;
 class QStringList;
@@ -36,4 +36,4 @@ QStringList cleanUserFilterString(QString filterString,
 
 } // namespace Digikam
 
-#endif // SETUPUTILS_H
+#endif // DIGIKAM_SETUP_UTILS_H

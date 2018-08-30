@@ -51,12 +51,12 @@
 namespace Digikam
 {
 
-class AntiVignettingSettings::Private
+class Q_DECL_HIDDEN AntiVignettingSettings::Private
 {
 public:
 
-    explicit Private() :
-        addVignettingCheck(0),
+    explicit Private()
+      : addVignettingCheck(0),
         maskPreviewLabel(0),
         densityInput(0),
         powerInput(0),

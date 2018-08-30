@@ -56,9 +56,10 @@ enum TrackColumns
     ColumnCount    = 3
 };
 
-class TrackListModel::Private
+class Q_DECL_HIDDEN TrackListModel::Private
 {
 public:
+
     explicit Private()
       : trackManager(0)
     {
@@ -238,7 +239,7 @@ Qt::ItemFlags TrackListModel::flags(const QModelIndex& index) const
 
     if (index.isValid())
     {
-        Q_ASSERT(index.model()==this);
+        Q_ASSERT(index.model() == this);
     }
 
     return QAbstractItemModel::flags(index);

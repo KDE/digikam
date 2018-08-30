@@ -222,7 +222,7 @@ void ImportSortFilterModel::setDirectSourceImportModel(ImportImageModel* const s
 
 //--- ImportFilterModel methods ---------------------------------
 
-class ImportFilterModel::ImportFilterModelPrivate : public QObject
+class Q_DECL_HIDDEN ImportFilterModel::ImportFilterModelPrivate : public QObject
 {
 
 public:

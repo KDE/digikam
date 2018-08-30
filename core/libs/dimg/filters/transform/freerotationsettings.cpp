@@ -46,17 +46,15 @@
 #include "digikam_debug.h"
 #include "dcombobox.h"
 
-
-
 namespace Digikam
 {
 
-class FreeRotationSettings::Private
+class Q_DECL_HIDDEN FreeRotationSettings::Private
 {
 public:
 
-    explicit Private() :
-        antialiasInput(0),
+    explicit Private()
+      : antialiasInput(0),
         angleInput(0),
         fineAngleInput(0),
         autoCropCB(0)

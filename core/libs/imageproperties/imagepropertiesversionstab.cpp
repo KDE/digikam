@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class ImagePropertiesVersionsTab::Private
+class Q_DECL_HIDDEN ImagePropertiesVersionsTab::Private
 {
 public:
 

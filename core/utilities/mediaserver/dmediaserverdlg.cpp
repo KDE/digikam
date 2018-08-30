@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class DMediaServerDlg::Private
+class Q_DECL_HIDDEN DMediaServerDlg::Private
 {
 public:
 

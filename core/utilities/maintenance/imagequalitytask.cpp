@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class ImageQualityTask::Private
+class Q_DECL_HIDDEN ImageQualityTask::Private
 {
 public:
 

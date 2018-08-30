@@ -99,22 +99,24 @@ include(MacroBoolTo01)
 
 # ==============================================================================
 
-option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KDE files indexer support (default=OFF)"                         OFF)
-option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with KDE Mail Contacts support (default=OFF)"                         OFF)
-option(ENABLE_MEDIAPLAYER           "Build digiKam with Media Player support (default=OFF)"                              OFF)
-option(ENABLE_DBUS                  "Build digiKam with DBUS support (default=ON)"                                       ON)
-option(ENABLE_APPSTYLES             "Build digiKam with support for changing the widget application style (default=OFF)" OFF)
-option(ENABLE_QWEBENGINE            "Build digiKam with QWebEngine instead of QWebKit (default=OFF)"                     OFF)
+option(ENABLE_KFILEMETADATASUPPORT       "Build digiKam with KDE files indexer support (default=OFF)"                         OFF)
+option(ENABLE_AKONADICONTACTSUPPORT      "Build digiKam with KDE Mail Contacts support (default=OFF)"                         OFF)
+option(ENABLE_MEDIAPLAYER                "Build digiKam with Media Player support (default=OFF)"                              OFF)
+option(ENABLE_DBUS                       "Build digiKam with DBUS support (default=ON)"                                       ON)
+option(ENABLE_APPSTYLES                  "Build digiKam with support for changing the widget application style (default=OFF)" OFF)
+option(ENABLE_QWEBENGINE                 "Build digiKam with QWebEngine instead of QWebKit (default=OFF)"                     OFF)
 
 # Mysql support options (experimental):
-option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=ON)"                             ON)
-option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=ON)"                   ON)
+option(ENABLE_MYSQLSUPPORT               "Build digiKam with MySQL dabatase support (default=ON)"                             ON)
+option(ENABLE_INTERNALMYSQL              "Build digiKam with internal MySQL server executable (default=ON)"                   ON)
 
-# Debug options:
-option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debugging (default=OFF)"                        OFF)
+# Developer options:
+option(ENABLE_DIGIKAM_MODELTEST          "Enable ModelTest on some models for debugging (default=OFF)"                        OFF)
 
+# Packaging options:
 if(MINGW)
-    option(ENABLE_DRMINGW           "Enable the Dr. Mingw crash handler support for windows (default ON)"                ON)
+    option(ENABLE_DRMINGW                "Enable the Dr. MinGW crash handler support for windows (default ON)"                ON)
+    option(ENABLE_MINGW_HARDENING_LINKER "Enable DEP (NX), ASLR, and high-entropy ASLR linker flags for MinGW (default ON)"   ON)
 endif()
 
 ############## Find Packages ###################
@@ -296,7 +298,6 @@ find_package(LibXslt)                              # For HTMLGallery tool.
 find_package(LibXml2)                              # For HTMLGallery tool.
 
 DETECT_LIBKSANE(${KSANE_MIN_VERSION})              # For digital scanner device support.
-DETECT_LIBMEDIAWIKI(${KF5_MIN_VERSION})            # For Mediawiki webservice support.
 DETECT_LIBKVKONTAKTE(${VKONTAKTE_MIN_VERSION})     # For VKontakte webservice support.
 
 find_package(Marble)                               # For geolocation support.
@@ -323,10 +324,42 @@ elseif()
     set(HAVE_OPENGL FALSE)
 endif()
 
+# -- Windows rules ------------------------------------------------------------
+
 # For LibRaw
 if(WIN32)
     find_library(WSOCK32_LIBRARY wsock32)
     find_library(WS2_32_LIBRARY ws2_32)
+endif()
+
+if(MINGW)
+
+    # NOTE: inspired from https://phabricator.kde.org/T3917
+    if(ENABLE_MINGW_HARDENING_LINKER)
+
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
+        set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
+
+        if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+
+            # Enable high-entropy ASLR for 64-bit
+            # The image base has to be >4GB for HEASLR to be enabled.
+            # The values used here are kind of arbitrary.
+            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x140000000")
+            set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
+            set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
+
+        endif()
+
+        message(STATUS "MinGW linker Security Flags enabled")
+
+    else()
+
+        message(WARNING "MinGW Linker Security Flags not enabled!")
+
+    endif ()
+
 endif()
 
 # -- To link under Solaris (see bug #274484) -----------------------------------
@@ -472,7 +505,6 @@ MACRO_BOOL_TO_01(KF5Notifications_FOUND  HAVE_KNOTIFICATIONS)
 MACRO_BOOL_TO_01(KF5NotifyConfig_FOUND   HAVE_KNOTIFYCONFIG)
 MACRO_BOOL_TO_01(KF5KIO_FOUND            HAVE_KIO)
 MACRO_BOOL_TO_01(KF5IconThemes_FOUND     HAVE_KICONTHEMES)
-MACRO_BOOL_TO_01(KF5MediaWiki_FOUND      HAVE_MEDIAWIKI)
 MACRO_BOOL_TO_01(KF5Vkontakte_FOUND      HAVE_VKONTAKTE)
 MACRO_BOOL_TO_01(LensFun_FOUND           HAVE_LENSFUN)
 MACRO_BOOL_TO_01(Lqr-1_FOUND             HAVE_LIBLQR_1)
@@ -538,7 +570,6 @@ PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"         "http://eigen.tuxfamily.org"  
 PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"        "http://www.gphoto.org"                                           "(version >= 2.4.0)"                    "digiKam will be compiled without GPhoto2 camera drivers support."            Gphoto2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"         "http://www.ece.uvic.ca/~mdadams/jasper"                          "(version >= 1.7.0)"                    "digiKam will be compiled without JPEG2000 support."                          Jasper_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkcalcore"       "https://cgit.kde.org/kcalcore.git/about/"                        "(version >= ${CALENDAR_MIN_VERSION})"  "digiKam will be compiled without advanced calendar support."                 KF5CalendarCore_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libmediawiki"      "https://cgit.kde.org/libmediawiki.git/about/"                    "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without libmediawiki support."                      KF5MediaWiki_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkvkontakte"     "https://cgit.kde.org/libkvkontatke.git/about/"                   "(version >= ${VKONTAKTE_MIN_VERSION})" "digiKam will be compiled without libkvkontakte support."                     KF5Vkontakte_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://cgit.kde.org/kfilemetadata.git/about/"                   "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without KDE desktop file metadata support."         KF5FileMetaData_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkiconthemes"    "https://cgit.kde.org/kiconthemes.git/about/"                     "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without KDE desktop icon themes support."           KF5IconThemes_FOUND)
@@ -684,7 +715,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     include_directories(${OpenCV_INCLUDE_DIRS})
 
-    include_directories(${LIBMEDIAWIKI_INCLUDES})
     include_directories(${LIBKVKONTAKTE_INCLUDES})
 
     # ==========================================================================

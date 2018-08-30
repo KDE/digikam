@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class DWizardPage::Private
+class Q_DECL_HIDDEN DWizardPage::Private
 {
 public:
 

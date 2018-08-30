@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class MaintenanceTool::Private
+class Q_DECL_HIDDEN MaintenanceTool::Private
 {
 public:
 

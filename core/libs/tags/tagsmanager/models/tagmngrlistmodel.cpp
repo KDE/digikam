@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class TagMngrListModel::Private
+class Q_DECL_HIDDEN TagMngrListModel::Private
 {
 public:
 

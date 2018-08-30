@@ -49,13 +49,13 @@
 namespace Digikam
 {
 
-class BWSepiaTool::Private
+class Q_DECL_HIDDEN BWSepiaTool::Private
 {
 
 public:
 
-    explicit Private() :
-        bwsepiaSettings(0),
+    explicit Private()
+      : bwsepiaSettings(0),
         previewWidget(0),
         gboxSettings(0)
     {
@@ -79,7 +79,8 @@ const QString BWSepiaTool::Private::configHistogramScaleEntry(QLatin1String("His
 // -----------------------------------------------------------------------------------
 
 BWSepiaTool::BWSepiaTool(QObject* const parent)
-    : EditorToolThreaded(parent), d(new Private)
+    : EditorToolThreaded(parent),
+      d(new Private)
 {
     setObjectName(QLatin1String("convertbw"));
     setToolName(i18n("Black and White"));

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTFILTERMODEL_H
-#define IMPORTFILTERMODEL_H
+#ifndef DIGIKAM_IMPORT_FILTER_MODEL_H
+#define DIGIKAM_IMPORT_FILTER_MODEL_H
 
 // Qt includes
 
@@ -228,4 +228,4 @@ protected:
 
 Q_DECLARE_METATYPE(Digikam::ImportFilterModel*)
 
-#endif // IMPORTFILTERMODEL_H
+#endif // DIGIKAM_IMPORT_FILTER_MODEL_H

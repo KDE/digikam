@@ -53,7 +53,7 @@ enum
     CompletionRole    = Qt::UserRole + 2
 };
 
-class TagCompleter::Private : public TaggingActionFactory::ConstraintInterface
+class Q_DECL_HIDDEN TagCompleter::Private : public TaggingActionFactory::ConstraintInterface
 {
 public:
 
@@ -64,7 +64,9 @@ public:
     {
     }
 
-    ~Private() {}
+    ~Private()
+    {
+    }
 
     QModelIndex indexForAlbum(int id)
     {

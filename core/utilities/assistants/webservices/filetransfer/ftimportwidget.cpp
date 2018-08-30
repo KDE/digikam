@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class FTImportWidget::Private
+class Q_DECL_HIDDEN FTImportWidget::Private
 {
 public:
 

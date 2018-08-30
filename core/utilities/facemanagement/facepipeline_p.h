@@ -401,7 +401,7 @@ protected:
 
 // ----------------------------------------------------------------------------------------
 
-class FacePipeline::Private : public QObject
+class Q_DECL_HIDDEN FacePipeline::Private : public QObject
 {
     Q_OBJECT
 

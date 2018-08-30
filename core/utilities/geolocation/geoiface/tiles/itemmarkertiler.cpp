@@ -66,7 +66,7 @@ public:
 
 void ItemMarkerTiler::MyTile::removeMarkerIndexOrInvalidIndex(const QModelIndex& indexToRemove)
 {
-    int i=0;
+    int i = 0;
 
     while (i < markerIndices.count())
     {
@@ -76,13 +76,13 @@ void ItemMarkerTiler::MyTile::removeMarkerIndexOrInvalidIndex(const QModelIndex&
         //       an aboutToRemove-signal. It is possible that the persistent
         //       marker index became invalid before the caller received the signal.
         //       we remove any invalid indices as we find them.
-        if ( !currentIndex.isValid() )
+        if (!currentIndex.isValid())
         {
             markerIndices.takeAt(i);
             continue;
         }
 
-        if ( currentIndex == indexToRemove )
+        if (currentIndex == indexToRemove)
         {
             markerIndices.takeAt(i);
             return;

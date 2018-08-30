@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class GSNewAlbumDlg::Private
+class Q_DECL_HIDDEN GSNewAlbumDlg::Private
 {
 public:
 

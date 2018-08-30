@@ -47,12 +47,12 @@
 namespace Digikam
 {
 
-class BorderTool::Private
+class Q_DECL_HIDDEN BorderTool::Private
 {
 public:
 
-    explicit Private() :
-        configGroupName(QLatin1String("border Tool")),
+    explicit Private()
+      : configGroupName(QLatin1String("border Tool")),
 
         gboxSettings(0),
         previewWidget(0),

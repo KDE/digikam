@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class ImageCategoryDrawer::Private
+class Q_DECL_HIDDEN ImageCategoryDrawer::Private
 {
 public:
 
@@ -67,7 +67,8 @@ public:
 };
 
 ImageCategoryDrawer::ImageCategoryDrawer(ImageCategorizedView* const parent)
-    : DCategoryDrawer(0), d(new Private)
+    : DCategoryDrawer(0),
+      d(new Private)
 {
     d->view = parent;
 }

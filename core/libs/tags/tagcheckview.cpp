@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class TagCheckView::Private
+class Q_DECL_HIDDEN TagCheckView::Private
 {
 public:
 

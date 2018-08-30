@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class StatusProgressBar::Private
+class Q_DECL_HIDDEN StatusProgressBar::Private
 {
 
 public:
@@ -53,8 +53,8 @@ public:
         ProgressBar
     };
 
-    explicit Private() :
-        notify(false),
+    explicit Private()
+      : notify(false),
         progressWidget(0),
         cancelButton(0),
         progressBar(0),

@@ -48,12 +48,12 @@
 namespace Digikam
 {
 
-class CharcoalTool::Private
+class Q_DECL_HIDDEN CharcoalTool::Private
 {
 public:
 
-    explicit Private() :
-        pencilInput(0),
+    explicit Private()
+      : pencilInput(0),
         smoothInput(0),
         previewWidget(0),
         gboxSettings(0)

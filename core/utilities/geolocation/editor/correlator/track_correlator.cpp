@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-class TrackCorrelator::Private
+class Q_DECL_HIDDEN TrackCorrelator::Private
 {
 public:
 

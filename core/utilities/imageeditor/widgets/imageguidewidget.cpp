@@ -52,12 +52,12 @@ namespace Digikam
 static const KLocalizedString beforeLabel = ki18nc("Preview image (before filter has been applied)", "Before");
 static const KLocalizedString afterLabel  = ki18nc("Preview image (after filter has been applied)",  "After");
 
-class ImageGuideWidget::Private
+class Q_DECL_HIDDEN ImageGuideWidget::Private
 {
 public:
 
-    explicit Private() :
-        sixteenBit(false),
+    explicit Private()
+      : sixteenBit(false),
         focus(false),
         spotVisible(false),
         onMouseMovePreviewToggled(true),

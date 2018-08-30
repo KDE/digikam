@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class AdvPrintCropFrame::Private
+class Q_DECL_HIDDEN AdvPrintCropFrame::Private
 {
 public:
 

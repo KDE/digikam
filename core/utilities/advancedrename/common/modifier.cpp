@@ -26,24 +26,27 @@
 namespace Digikam
 {
 
-class Modifier::Private
+class Q_DECL_HIDDEN Modifier::Private
 {
 public:
 
     explicit Private()
-    {}
+    {
+    }
 
     ParseResults parsedResults;
 };
 
 Modifier::Modifier(const QString& name, const QString& description)
-    : Rule(name), d(new Private)
+    : Rule(name),
+      d(new Private)
 {
     setDescription(description);
 }
 
 Modifier::Modifier(const QString& name, const QString& description, const QString& icon)
-    : Rule(name, icon), d(new Private)
+    : Rule(name, icon),
+      d(new Private)
 {
     setDescription(description);
 }

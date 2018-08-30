@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class GPSImageInfoSorter::Private
+class Q_DECL_HIDDEN GPSImageInfoSorter::Private
 {
 public:
 

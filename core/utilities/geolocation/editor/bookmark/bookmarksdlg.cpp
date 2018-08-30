@@ -62,12 +62,12 @@
 namespace Digikam
 {
 
-class AddBookmarkDialog::Private
+class Q_DECL_HIDDEN AddBookmarkDialog::Private
 {
 public:
 
-    explicit Private() :
-        manager(0),
+    explicit Private()
+      : manager(0),
         proxyModel(0),
         location(0),
         title(0),
@@ -181,12 +181,12 @@ void AddBookmarkDialog::accept()
 
 // ----------------------------------------------------------------
 
-class BookmarksDialog::Private
+class Q_DECL_HIDDEN BookmarksDialog::Private
 {
 public:
 
-    explicit Private() :
-        manager(0),
+    explicit Private()
+      : manager(0),
         bookmarksModel(0),
         proxyModel(0),
         search(0),

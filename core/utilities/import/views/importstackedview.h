@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTSTACKEDVIEW_H
-#define IMPORTSTACKEDVIEW_H
+#ifndef DIGIKAM_IMPORT_STACKED_VIEW_H
+#define DIGIKAM_IMPORT_STACKED_VIEW_H
 
 // Qt inclueds
 
@@ -155,4 +155,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMPORTSTACKEDVIEW_H
+#endif // DIGIKAM_IMPORT_STACKED_VIEW_H

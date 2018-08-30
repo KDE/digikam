@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class PNGSettings::Private
+class Q_DECL_HIDDEN PNGSettings::Private
 {
 
 public:

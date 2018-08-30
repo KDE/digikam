@@ -32,7 +32,8 @@ namespace Digikam
 
 void TwoProgressItemsContainer::scheduleOnProgressItem(QAtomicPointer<ProgressItem>& ptr,
                                                        int total,
-                                                       const QString& action, FileActionProgressItemCreator* const creator)
+                                                       const QString& action,
+                                                       FileActionProgressItemCreator* const creator)
 {
     if (total <= 0)
     {

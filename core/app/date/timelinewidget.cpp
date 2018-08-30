@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class TimeLineWidget::Private
+class Q_DECL_HIDDEN TimeLineWidget::Private
 {
 
 public :
@@ -59,8 +59,8 @@ public :
 
 public:
 
-    explicit Private() :
-        validMouseEvent(false),
+    explicit Private()
+      : validMouseEvent(false),
         selMouseEvent(false),
         maxCountByDay(1),
         maxCountByWeek(1),

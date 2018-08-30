@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class PanoLastPage::Private
+class Q_DECL_HIDDEN PanoLastPage::Private
 {
 public:
 

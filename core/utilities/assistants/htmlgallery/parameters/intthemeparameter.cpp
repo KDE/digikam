@@ -37,7 +37,7 @@ static const char* MAX_VALUE_KEY = "Max";
 namespace Digikam
 {
 
-class IntThemeParameter::Private
+class Q_DECL_HIDDEN IntThemeParameter::Private
 {
 public:
 

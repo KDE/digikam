@@ -63,7 +63,7 @@
 namespace Digikam
 {
 
-class GSWindow::Private
+class Q_DECL_HIDDEN GSWindow::Private
 {
 public:
 

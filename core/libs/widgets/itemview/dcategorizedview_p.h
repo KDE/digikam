@@ -76,7 +76,7 @@ private:
 
 // ------------------------------------------------------------------------------------
 
-class DCategorizedView::Private
+class Q_DECL_HIDDEN DCategorizedView::Private
 {
 public:
 

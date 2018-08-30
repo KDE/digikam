@@ -366,7 +366,7 @@ void KmlWidget::readSettings()
     bool    optimize_googlemap;
     int     iconSize;
 
-    //	int googlemapSize;
+    // int googlemapSize;
     int     size;
     QString UrlDestDir;
     QString baseDestDir;
@@ -384,15 +384,15 @@ void KmlWidget::readSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("KMLExport Settings"));
 
-    localTarget	        = group.readEntry(QLatin1String("localTarget"), true);
+    localTarget         = group.readEntry(QLatin1String("localTarget"), true);
     optimize_googlemap  = group.readEntry(QLatin1String("optimize_googlemap"), false);
     iconSize            = group.readEntry(QLatin1String("iconSize"), 33);
     // not saving this size as it should not change
-    //	googlemapSize = group.readNumEntry("googlemapSize", 32);
+    // googlemapSize = group.readNumEntry("googlemapSize", 32);
     size                = group.readEntry(QLatin1String("size"), 320);
     // UrlDestDir have to have the trailing /
-    baseDestDir	        = group.readEntry(QLatin1String("baseDestDir"), QString::fromUtf8("/tmp/"));
-    UrlDestDir	        = group.readEntry(QLatin1String("UrlDestDir"),  QString::fromUtf8("http://www.example.com/"));
+    baseDestDir         = group.readEntry(QLatin1String("baseDestDir"), QString::fromUtf8("/tmp/"));
+    UrlDestDir          = group.readEntry(QLatin1String("UrlDestDir"),  QString::fromUtf8("http://www.example.com/"));
     KMLFileName         = group.readEntry(QLatin1String("KMLFileName"), QString::fromUtf8("kmldocument"));
     AltitudeMode        = group.readEntry(QLatin1String("Altitude Mode"), 0);
 

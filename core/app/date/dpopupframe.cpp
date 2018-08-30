@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class DPopupFrame::Private
+class Q_DECL_HIDDEN DPopupFrame::Private
 {
 public:
 

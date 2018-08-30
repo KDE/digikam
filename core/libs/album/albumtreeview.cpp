@@ -136,54 +136,48 @@ protected:
 
 // -------------------------------------------------------------------------------
 
-class AbstractAlbumTreeView::Private
+class Q_DECL_HIDDEN AbstractAlbumTreeView::Private
 {
 public:
 
-    explicit Private() :
-        delegate(0),
+    explicit Private()
+      : delegate(0),
         expandOnSingleClick(false),
         expandNewCurrent(false),
         selectAlbumOnClick(false),
         selectOnContextMenu(true),
         enableContextMenu(false),
         setInAlbumManager(false),
-        statesByAlbumId(),
-        searchBackup(),
-        resizeColumnsTimer(0),
-        lastSelectedAlbum(),
-        contextMenuElements(),
-        contextMenuIcon(),
-        contextMenuTitle()
+        resizeColumnsTimer(0)
     {
     }
 
-    AlbumTreeViewDelegate*    delegate;
+    AlbumTreeViewDelegate*     delegate;
 
-    bool                      expandOnSingleClick;
-    bool                      expandNewCurrent;
-    bool                      selectAlbumOnClick;
-    bool                      selectOnContextMenu;
-    bool                      enableContextMenu;
-    bool                      setInAlbumManager;
+    bool                       expandOnSingleClick;
+    bool                       expandNewCurrent;
+    bool                       selectAlbumOnClick;
+    bool                       selectOnContextMenu;
+    bool                       enableContextMenu;
+    bool                       setInAlbumManager;
 
-    QMap<int, Digikam::State> statesByAlbumId;
-    QMap<int, Digikam::State> searchBackup;
+    QMap<int, Digikam::State>  statesByAlbumId;
+    QMap<int, Digikam::State>  searchBackup;
 
-    QTimer*                   resizeColumnsTimer;
+    QTimer*                    resizeColumnsTimer;
 
-    AlbumPointer<Album>       lastSelectedAlbum;
+    AlbumPointer<Album>        lastSelectedAlbum;
 
     QList<ContextMenuElement*> contextMenuElements;
 
-    QPixmap                   contextMenuIcon;
-    QString                   contextMenuTitle;
+    QPixmap                    contextMenuIcon;
+    QString                    contextMenuTitle;
 
-    static const QString      configSelectionEntry;
-    static const QString      configExpansionEntry;
-    static const QString      configCurrentIndexEntry;
-    static const QString      configSortColumnEntry;
-    static const QString      configSortOrderEntry;
+    static const QString       configSelectionEntry;
+    static const QString       configExpansionEntry;
+    static const QString       configCurrentIndexEntry;
+    static const QString       configSortColumnEntry;
+    static const QString       configSortOrderEntry;
 };
 
 const QString AbstractAlbumTreeView::Private::configSelectionEntry(QLatin1String("Selection"));
@@ -388,7 +382,7 @@ QList<A*> AbstractAlbumTreeView::currentAlbums()
     QList<A*> albums;
     const QList<Album*> currentAl = AlbumManager::instance()->currentAlbums();
 
-    for(QList<Album*>::const_iterator it = currentAl.constBegin(); it != currentAl.constEnd(); ++it)
+    for (QList<Album*>::const_iterator it = currentAl.constBegin() ; it != currentAl.constEnd() ; ++it)
     {
         A* const item = dynamic_cast<A*>(*it);
         if (item)
@@ -505,7 +499,7 @@ bool AbstractAlbumTreeView::expandMatches(const QModelIndex& index)
     // Recurse. Expand if children if have an (indirect) match
     const int rows = m_albumFilterModel->rowCount(index);
 
-    for (int i = 0; i < rows; ++i)
+    for (int i = 0 ; i < rows ; ++i)
     {
         const QModelIndex child = m_albumFilterModel->index(i, 0, index);
         const bool childResult  = expandMatches(child);
@@ -548,7 +542,7 @@ void AbstractAlbumTreeView::setCurrentAlbums(const QList<Album*>& albums, bool s
     QItemSelectionModel* const model = selectionModel();
     model->clearSelection();
 
-    for (int it = 0; it < albums.size(); ++ it)
+    for (int it = 0 ; it < albums.size() ; ++ it)
     {
         model->select(albumFilterModel()->indexForAlbum(albums.at(it)),
                       model->Select);
@@ -825,30 +819,25 @@ void AbstractAlbumTreeView::doLoadState()
 
     // also restore the sorting order
     sortByColumn(configGroup.readEntry(entryName(d->configSortColumnEntry), 0),
-                 (Qt::SortOrder) configGroup.readEntry(entryName(d->configSortOrderEntry), (int) Qt::AscendingOrder));
+                 (Qt::SortOrder) configGroup.readEntry(entryName(d->configSortOrderEntry), (int)Qt::AscendingOrder));
 
     // use a timer to scroll to the first possible selected album
-    QTimer* const selectCurrentTimer = new QTimer(this);
-    selectCurrentTimer->setInterval(200);
-    selectCurrentTimer->setSingleShot(true);
-
-    connect(selectCurrentTimer, SIGNAL(timeout()),
-            this, SLOT(scrollToSelectedAlbum()));
+    QTimer::singleShot(200, this, SLOT(scrollToSelectedAlbum()));
 }
 
-void AbstractAlbumTreeView::restoreStateForHierarchy(const QModelIndex& index, QMap<int, Digikam::State>& stateStore)
+void AbstractAlbumTreeView::restoreStateForHierarchy(const QModelIndex& index, const QMap<int, Digikam::State>& stateStore)
 {
     restoreState(index, stateStore);
 
     // do a recursive call of the state restoration
-    for (int i = 0; i < model()->rowCount(index); ++i)
+    for (int i = 0 ; i < model()->rowCount(index) ; ++i)
     {
         const QModelIndex child = model()->index(i, 0, index);
         restoreStateForHierarchy(child, stateStore);
     }
 }
 
-void AbstractAlbumTreeView::restoreState(const QModelIndex& index, QMap<int, Digikam::State>& stateStore)
+void AbstractAlbumTreeView::restoreState(const QModelIndex& index, const QMap<int, Digikam::State>& stateStore)
 {
     Album* const album = albumFilterModel()->albumForIndex(index);
 
@@ -906,7 +895,7 @@ void AbstractAlbumTreeView::rowsInserted(const QModelIndex& parent, int start, i
         // Restore state for parent a second time - expansion can only be restored if there are children
         restoreState(parent, d->statesByAlbumId);
 
-        for (int i = start; i <= end; ++i)
+        for (int i = start ; i <= end ; ++i)
         {
             const QModelIndex child = model()->index(i, 0, parent);
             restoreState(child, d->statesByAlbumId);
@@ -921,7 +910,7 @@ void AbstractAlbumTreeView::rowsAboutToBeRemoved(const QModelIndex& parent, int 
     // Clean up map if album id is reused for a new album
     if (!d->statesByAlbumId.isEmpty())
     {
-        for (int i = start; i <= end; ++i)
+        for (int i = start ; i <= end ; ++i)
         {
             const QModelIndex child = model()->index(i, 0, parent);
             Album* const album      = albumModel()->albumForIndex(child);
@@ -996,7 +985,7 @@ void AbstractAlbumTreeView::doSaveState()
 
     QList<int> selection, expansion;
 
-    for (int i = 0; i < model()->rowCount(); ++i)
+    for (int i = 0 ; i < model()->rowCount() ; ++i)
     {
         const QModelIndex index = model()->index(i, 0);
         saveStateRecursive(index, selection, expansion);
@@ -1010,10 +999,10 @@ void AbstractAlbumTreeView::doSaveState()
         currentIndex = QString::number(selectedAlbum->id());
     }
 
-    configGroup.writeEntry(entryName(d->configSelectionEntry), selection);
-    configGroup.writeEntry(entryName(d->configExpansionEntry), expansion);
+    configGroup.writeEntry(entryName(d->configSelectionEntry),    selection);
+    configGroup.writeEntry(entryName(d->configExpansionEntry),    expansion);
     configGroup.writeEntry(entryName(d->configCurrentIndexEntry), currentIndex);
-    configGroup.writeEntry(entryName(d->configSortColumnEntry), albumFilterModel()->sortColumn());
+    configGroup.writeEntry(entryName(d->configSortColumnEntry),   albumFilterModel()->sortColumn());
 
     // A dummy way to force the tree view to resort if the album sort role changed
 
@@ -1030,7 +1019,7 @@ void AbstractAlbumTreeView::doSaveState()
     }
     else
     {
-        configGroup.writeEntry(entryName(d->configSortOrderEntry), int(albumFilterModel()->sortOrder()) );
+        configGroup.writeEntry(entryName(d->configSortOrderEntry), int(albumFilterModel()->sortOrder()));
     }
 }
 
@@ -1053,7 +1042,7 @@ void AbstractAlbumTreeView::saveStateRecursive(const QModelIndex& index, QList<i
         }
     }
 
-    for (int i = 0; i < model()->rowCount(index); ++i)
+    for (int i = 0 ; i < model()->rowCount(index) ; ++i)
     {
         const QModelIndex child = model()->index(i, 0, index);
         saveStateRecursive(child, selection, expansion);
@@ -1146,7 +1135,7 @@ void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent* event)
 
     addCustomContextMenuActions(cmhelper, album);
 
-    foreach (ContextMenuElement* const element, d->contextMenuElements)
+    foreach(ContextMenuElement* const element, d->contextMenuElements)
     {
         element->addActions(this, cmhelper, album);
     }
@@ -1239,7 +1228,7 @@ void AbstractCountingAlbumTreeView::updateShowCountState(const QModelIndex& inde
     {
         const int rows = m_albumFilterModel->rowCount(index);
 
-        for (int i=0; i<rows; ++i)
+        for (int i = 0 ; i < rows ; ++i)
         {
             updateShowCountState(m_albumFilterModel->index(i, 0, index), true);
         }
@@ -1266,7 +1255,7 @@ void AbstractCountingAlbumTreeView::rowsInserted(const QModelIndex& parent, int 
     AbstractAlbumTreeView::rowsInserted(parent, start, end);
 
     // initialize showCount state when items are added
-    for (int i=start; i<=end; ++i)
+    for (int i = start ; i <= end ; ++i)
     {
         updateShowCountState(m_albumFilterModel->index(i, 0, parent), false);
     }
@@ -1274,7 +1263,7 @@ void AbstractCountingAlbumTreeView::rowsInserted(const QModelIndex& parent, int 
 
 // ----------------------------------------------------------------------------------------------
 
-class AbstractCheckableAlbumTreeView::Private
+class Q_DECL_HIDDEN AbstractCheckableAlbumTreeView::Private
 {
 public:
 
@@ -1427,7 +1416,7 @@ void AbstractCheckableAlbumTreeView::rowsInserted(const QModelIndex& parent, int
 
     if (!d->checkedAlbumIds.isEmpty())
     {
-        for (int i = start; i <= end; ++i)
+        for (int i = start ; i <= end ; ++i)
         {
             const QModelIndex child = checkableModel()->index(i, 0, parent);
             restoreCheckState(child);
@@ -1438,7 +1427,7 @@ void AbstractCheckableAlbumTreeView::rowsInserted(const QModelIndex& parent, int
 void AbstractCheckableAlbumTreeView::restoreCheckStateForHierarchy(const QModelIndex& index)
 {
     // recurse children
-    for (int i = 0; i < checkableModel()->rowCount(index); ++i)
+    for (int i = 0 ; i < checkableModel()->rowCount(index) ; ++i)
     {
         const QModelIndex child = checkableModel()->index(i, 0, index);
         restoreCheckState(child);

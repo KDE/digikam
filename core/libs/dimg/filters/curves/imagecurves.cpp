@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class ImageCurves::Private : public QSharedData
+class Q_DECL_HIDDEN ImageCurves::Private : public QSharedData
 {
 
 public:

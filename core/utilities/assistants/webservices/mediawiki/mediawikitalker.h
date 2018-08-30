@@ -39,12 +39,12 @@
 
 #include "dinfointerface.h"
 
-namespace mediawiki
+namespace MediaWiki
 {
-    class MediaWiki;
+    class Iface;
 }
 
-using namespace mediawiki;
+using namespace MediaWiki;
 
 namespace Digikam
 {
@@ -55,7 +55,7 @@ class MediaWikiTalker : public KJob
 
 public:
 
-    explicit MediaWikiTalker(DInfoInterface* const iface, MediaWiki* const mediawiki, QObject* const parent=0);
+    explicit MediaWikiTalker(DInfoInterface* const iface, Iface* const MediaWiki, QObject* const parent=0);
     ~MediaWikiTalker();
 
 public:

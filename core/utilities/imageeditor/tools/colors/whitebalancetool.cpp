@@ -52,12 +52,12 @@
 namespace Digikam
 {
 
-class WhiteBalanceTool::Private
+class Q_DECL_HIDDEN WhiteBalanceTool::Private
 {
 public:
 
-    explicit Private() :
-        settingsView(0),
+    explicit Private()
+      : settingsView(0),
         previewWidget(0),
         gboxSettings(0)
     {

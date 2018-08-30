@@ -92,7 +92,7 @@ TableViewModel::Item* TableViewModel::Item::findChildWithImageId(const qlonglong
         return this;
     }
 
-    foreach(Item* const item, children)
+    foreach (Item* const item, children)
     {
         Item* const iItem = item->findChildWithImageId(searchImageId);
 
@@ -107,7 +107,7 @@ TableViewModel::Item* TableViewModel::Item::findChildWithImageId(const qlonglong
 
 // ----------------------------------------------------------------------------------------------
 
-class TableViewModel::Private
+class Q_DECL_HIDDEN TableViewModel::Private
 {
 public:
 

@@ -82,7 +82,7 @@ void HTMLWidgetPage::slotSendHTMLEvents()
 
 // ---------------------------------------------------------------------------------------------
 
-class HTMLWidget::Private
+class Q_DECL_HIDDEN HTMLWidget::Private
 {
 public:
 

@@ -47,8 +47,8 @@ DefaultValueDialog::DefaultValueDialog(Rule* parent)
 
     QString defaultValueStr = i18n("Default Value");
 
-    QLabel* const srcLabel = new QLabel(defaultValueStr + QLatin1Char(':'));
-    valueInput             = new QLineEdit(this);
+    QLabel* const srcLabel  = new QLabel(defaultValueStr + QLatin1Char(':'));
+    valueInput              = new QLineEdit(this);
     valueInput->setToolTip(i18n("<p>Set a default value for empty strings.<br/>"
                                 "When applied to a renaming option, "
                                 "an empty string will be replaced by the value you specify here.</p>"));

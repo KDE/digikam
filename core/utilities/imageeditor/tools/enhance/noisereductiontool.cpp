@@ -47,16 +47,17 @@
 namespace Digikam
 {
 
-class NoiseReductionTool::Private
+class Q_DECL_HIDDEN NoiseReductionTool::Private
 {
 public:
 
-    explicit Private() :
-        configGroupName(QLatin1String("noisereduction Tool")),
+    explicit Private()
+      : configGroupName(QLatin1String("noisereduction Tool")),
         nrSettings(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     const QString       configGroupName;
 

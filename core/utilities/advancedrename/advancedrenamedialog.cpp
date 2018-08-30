@@ -61,7 +61,7 @@
 namespace Digikam
 {
 
-class AdvancedRenameListItem::Private
+class Q_DECL_HIDDEN AdvancedRenameListItem::Private
 {
 public:
 
@@ -143,12 +143,12 @@ bool AdvancedRenameListItem::isNameEqual() const
 
 // --------------------------------------------------------
 
-class AdvancedRenameDialog::Private
+class Q_DECL_HIDDEN AdvancedRenameDialog::Private
 {
 public:
 
-    explicit Private() :
-        singleFileMode(false),
+    explicit Private()
+      : singleFileMode(false),
         minSizeDialog(450),
         sortActionName(0),
         sortActionDate(0),

@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class OpenCVFISHERFaceRecognizer::Private
+class Q_DECL_HIDDEN OpenCVFISHERFaceRecognizer::Private
 {
 public:
 

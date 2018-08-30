@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class CaptureWidget::Private
+class Q_DECL_HIDDEN CaptureWidget::Private
 {
 public:
 
@@ -50,7 +50,8 @@ public:
 };
 
 CaptureWidget::CaptureWidget(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

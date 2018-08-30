@@ -108,7 +108,7 @@ static QString formatFontSize(qreal size)
 
 // -----------------------------------------------------------------------------------
 
-class DFontProperties::Private
+class Q_DECL_HIDDEN DFontProperties::Private
 {
 public:
 

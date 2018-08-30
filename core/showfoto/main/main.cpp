@@ -55,11 +55,11 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
-#ifdef HAVE_DRMINGW
     tryInitDrMingw();
-#endif
 
+#ifdef Q_OS_LINUX
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+#endif
 
     // if we have some local breeze icon resource, prefer it
     DXmlGuiWindow::setupIconTheme();

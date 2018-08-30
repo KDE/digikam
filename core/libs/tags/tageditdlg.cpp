@@ -72,7 +72,7 @@ public:
 
 // ------------------------------------------------------------------------------
 
-class TagEditDlg::Private
+class Q_DECL_HIDDEN TagEditDlg::Private
 {
 public:
 

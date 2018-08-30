@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class CalMonthWidget::Private
+class Q_DECL_HIDDEN CalMonthWidget::Private
 {
 public:
 

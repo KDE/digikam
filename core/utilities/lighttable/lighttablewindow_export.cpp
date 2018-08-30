@@ -190,8 +190,6 @@ void LightTableWindow::slotExportTool()
         w->exec();
         delete w;
     }
-
-#ifdef HAVE_MEDIAWIKI
     else if (tool == m_exportMediawikiAction)
     {
         QPointer<MediaWikiWindow> w = new MediaWikiWindow(new DBInfoIface(this, d->thumbView->allUrls(),
@@ -199,7 +197,6 @@ void LightTableWindow::slotExportTool()
         w->exec();
         delete w;
     }
-#endif
 
 #ifdef HAVE_VKONTAKTE
     else if (tool == m_exportVkontakteAction)

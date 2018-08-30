@@ -52,12 +52,12 @@
 namespace Digikam
 {
 
-class ThumbsGenerator::Private
+class Q_DECL_HIDDEN ThumbsGenerator::Private
 {
 public:
 
-    explicit Private() :
-        rebuildAll(true),
+    explicit Private()
+      : rebuildAll(true),
         thread(0)
     {
     }

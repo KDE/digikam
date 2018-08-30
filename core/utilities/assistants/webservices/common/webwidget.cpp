@@ -33,7 +33,7 @@
 
 namespace Digikam
 {
-class WebWidget::Private
+class Q_DECL_HIDDEN WebWidget::Private
 {
 public:
 

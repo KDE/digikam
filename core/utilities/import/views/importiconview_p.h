@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTICONVIEW_PRIVATE_H
-#define IMPORTICONVIEW_PRIVATE_H
+#ifndef DIGIKAM_IMPORT_ICON_VIEW_PRIVATE_H
+#define DIGIKAM_IMPORT_ICON_VIEW_PRIVATE_H
 
 // Qt includes
 
@@ -41,7 +41,7 @@ namespace Digikam
 
 class ImportNormalDelegate;
 
-class ImportIconView::Private : public QObject
+class Q_DECL_HIDDEN ImportIconView::Private : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PUBLIC(ImportIconView)
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMPORTICONVIEW_PRIVATE_H
+#endif // DIGIKAM_IMPORT_ICON_VIEW_PRIVATE_H

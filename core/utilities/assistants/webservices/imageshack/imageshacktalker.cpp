@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class ImageShackTalker::Private
+class Q_DECL_HIDDEN ImageShackTalker::Private
 {
 public:
 

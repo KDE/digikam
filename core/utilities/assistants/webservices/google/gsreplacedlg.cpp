@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class ReplaceDialog::Private
+class Q_DECL_HIDDEN ReplaceDialog::Private
 {
 public:
 

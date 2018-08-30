@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class DistortionFXFilter::Private
+class Q_DECL_HIDDEN DistortionFXFilter::Private
 {
 public:
 

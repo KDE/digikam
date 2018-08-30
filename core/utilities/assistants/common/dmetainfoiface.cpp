@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class DMetaInfoIface::Private
+class Q_DECL_HIDDEN DMetaInfoIface::Private
 {
 public:
 

@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class ExpoBlendingPreProcessPage::Private
+class Q_DECL_HIDDEN ExpoBlendingPreProcessPage::Private
 {
 public:
 

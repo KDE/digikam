@@ -71,12 +71,12 @@
 namespace Digikam
 {
 
-class AlbumFolderViewSideBarWidget::Private
+class Q_DECL_HIDDEN AlbumFolderViewSideBarWidget::Private
 {
 public:
 
-    explicit Private() :
-        albumModificationHelper(0),
+    explicit Private()
+      : albumModificationHelper(0),
         albumFolderView(0),
         searchTextBar(0)
     {
@@ -173,7 +173,7 @@ const QString AlbumFolderViewSideBarWidget::getCaption()
 
 // -----------------------------------------------------------------------------
 
-class TagViewSideBarWidget::Private
+class Q_DECL_HIDDEN TagViewSideBarWidget::Private
 {
 public:
 
@@ -426,7 +426,7 @@ void TagViewSideBarWidget::slotToggleTagsSelection(int radioClicked)
 
 // -----------------------------------------------------------------------------
 
-class LabelsSideBarWidget::Private
+class Q_DECL_HIDDEN LabelsSideBarWidget::Private
 {
 
 public:
@@ -508,7 +508,7 @@ QHash<AlbumLabelsTreeView::Labels, QList<int> > LabelsSideBarWidget::selectedLab
 
 // -----------------------------------------------------------------------------
 
-class DateFolderViewSideBarWidget::Private
+class Q_DECL_HIDDEN DateFolderViewSideBarWidget::Private
 {
 public:
 
@@ -589,7 +589,7 @@ const QString DateFolderViewSideBarWidget::getCaption()
 
 // -----------------------------------------------------------------------------
 
-class TimelineSideBarWidget::Private
+class Q_DECL_HIDDEN TimelineSideBarWidget::Private
 {
 public:
 
@@ -1071,7 +1071,7 @@ void TimelineSideBarWidget::slotCheckAboutSelection()
 
 // -----------------------------------------------------------------------------
 
-class SearchSideBarWidget::Private
+class Q_DECL_HIDDEN SearchSideBarWidget::Private
 {
 public:
 
@@ -1182,7 +1182,7 @@ void SearchSideBarWidget::newAdvancedSearch()
 
 // -----------------------------------------------------------------------------
 
-class FuzzySearchSideBarWidget::Private
+class Q_DECL_HIDDEN FuzzySearchSideBarWidget::Private
 {
 public:
     explicit Private()
@@ -1288,7 +1288,7 @@ void FuzzySearchSideBarWidget::newSimilarSearch(const ImageInfo& imageInfo)
 
 #ifdef HAVE_MARBLE
 
-class GPSSearchSideBarWidget::Private
+class Q_DECL_HIDDEN GPSSearchSideBarWidget::Private
 {
 public:
 
@@ -1368,7 +1368,7 @@ const QString GPSSearchSideBarWidget::getCaption()
 
 // -----------------------------------------------------------------------------
 
-class PeopleSideBarWidget::Private : public TagViewSideBarWidget::Private
+class Q_DECL_HIDDEN PeopleSideBarWidget::Private : public TagViewSideBarWidget::Private
 {
 public:
 

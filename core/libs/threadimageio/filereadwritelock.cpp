@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class FileReadWriteLockPriv
+class Q_DECL_HIDDEN FileReadWriteLockPriv
 {
 public:
 
@@ -126,10 +126,12 @@ Entry* FileReadWriteLockStaticPrivate::entry(const QString& filePath)
 Entry* FileReadWriteLockStaticPrivate::entry_locked(const QString& filePath)
 {
     QHash<QString, Entry*>::iterator it = entries.find(filePath);
+
     if (it == entries.end())
     {
         it = entries.insert(filePath, new Entry(filePath));
     }
+
     (*it)->ref++;
     return *it;
 }
@@ -143,6 +145,7 @@ void FileReadWriteLockStaticPrivate::drop(Entry* entry)
 void FileReadWriteLockStaticPrivate::drop_locked(Entry* entry)
 {
     entry->ref--;
+
     if (entry->ref == 0 && entry->isFree())
     {
         entries.remove(entry->filePath);
@@ -182,8 +185,10 @@ bool FileReadWriteLockStaticPrivate::lockForRead_locked(Entry* entry, int mode, 
         --entry->accessCount;
         return true;
     }
+
     // recursive read lock by this thread?
     QHash<Qt::HANDLE, int>::iterator it = entry->readers.find(self);
+
     if (it != entry->readers.end())
     {
         ++it.value();
@@ -261,6 +266,7 @@ bool FileReadWriteLockStaticPrivate::lockForWrite_locked(Entry* entry, int mode,
     // recursive read lock by this thread?
     QHash<Qt::HANDLE, int>::iterator it = entry->readers.find(self);
     int recursiveReadLockCount = 0;
+
     if (it != entry->readers.end())
     {
         // We could deadlock, or promote the read locks to write locks
@@ -315,11 +321,13 @@ void FileReadWriteLockStaticPrivate::unlock(Entry* entry)
 void FileReadWriteLockStaticPrivate::unlock_locked(Entry* entry)
 {
     bool unlocked = false;
+
     if (entry->accessCount > 0)
     {
         // releasing a read lock
         Qt::HANDLE self = QThread::currentThreadId();
         QHash<Qt::HANDLE, int>::iterator it = entry->readers.find(self);
+
         if (it != entry->readers.end())
         {
             if (--it.value() <= 0)

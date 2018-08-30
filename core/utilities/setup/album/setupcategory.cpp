@@ -53,12 +53,12 @@
 namespace Digikam
 {
 
-class SetupCategory::Private
+class Q_DECL_HIDDEN SetupCategory::Private
 {
 public:
 
-    explicit Private() :
-        addCategoryButton(0),
+    explicit Private()
+      : addCategoryButton(0),
         delCategoryButton(0),
         repCategoryButton(0),
         albumCategoryBox(0),

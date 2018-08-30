@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class FaceDetector::Private : public QSharedData
+class Q_DECL_HIDDEN FaceDetector::Private : public QSharedData
 {
 public:
 

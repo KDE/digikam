@@ -39,7 +39,7 @@
 namespace ShowFoto
 {
 
-class ShowfotoDelegate::ShowfotoDelegatePrivate : public ItemViewShowfotoDelegatePrivate
+class Q_DECL_HIDDEN ShowfotoDelegate::ShowfotoDelegatePrivate : public ItemViewShowfotoDelegatePrivate
 {
 public:
 
@@ -82,7 +82,7 @@ public:
 
 // --- ShowfotoThumbnailDelegate ----------------------------------------------------
 
-class ShowfotoThumbnailDelegatePrivate : public ShowfotoDelegate::ShowfotoDelegatePrivate
+class Q_DECL_HIDDEN ShowfotoThumbnailDelegatePrivate : public ShowfotoDelegate::ShowfotoDelegatePrivate
 {
 public:
 
@@ -105,7 +105,7 @@ public:
 
 // --- ShowfotoNormalDelegate ----------------------------------------------------
 
-class ShowfotoNormalDelegatePrivate : public ShowfotoDelegate::ShowfotoDelegatePrivate
+class Q_DECL_HIDDEN ShowfotoNormalDelegatePrivate : public ShowfotoDelegate::ShowfotoDelegatePrivate
 {
 public:
 

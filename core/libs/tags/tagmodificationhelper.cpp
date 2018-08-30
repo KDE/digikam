@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class TagModificationHelper::Private
+class Q_DECL_HIDDEN TagModificationHelper::Private
 {
 public:
 

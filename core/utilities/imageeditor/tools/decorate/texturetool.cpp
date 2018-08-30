@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class TextureTool::Private
+class Q_DECL_HIDDEN TextureTool::Private
 {
 public:
 
@@ -76,8 +76,8 @@ public:
 
 public:
 
-    explicit Private():
-        textureType(0),
+    explicit Private()
+      : textureType(0),
         blendGain(0),
         previewWidget(0),
         gboxSettings(0)

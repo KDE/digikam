@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class VidSlideWizard::Private
+class Q_DECL_HIDDEN VidSlideWizard::Private
 {
 public:
 

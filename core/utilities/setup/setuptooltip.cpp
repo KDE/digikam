@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class SetupToolTip::Private
+class Q_DECL_HIDDEN SetupToolTip::Private
 {
 public:
 

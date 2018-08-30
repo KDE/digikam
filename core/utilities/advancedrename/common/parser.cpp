@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class Parser::Private
+class Q_DECL_HIDDEN Parser::Private
 {
 public:
 
@@ -100,6 +100,7 @@ void Parser::reset()
     {
         option->reset();
     }
+
     foreach(Rule* const modifier, d->modifiers)
     {
         modifier->reset();
@@ -378,7 +379,7 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
             }
         }
     }
- 
+
     results = appliedModifiers;
 
     return modifierResults;

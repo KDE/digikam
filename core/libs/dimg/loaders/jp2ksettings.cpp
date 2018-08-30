@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class JP2KSettings::Private
+class Q_DECL_HIDDEN JP2KSettings::Private
 {
 
 public:

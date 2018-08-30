@@ -45,13 +45,12 @@
 namespace Digikam
 {
 
-class SetupRaw::Private
+class Q_DECL_HIDDEN SetupRaw::Private
 {
 public:
 
-
-    explicit Private() :
-        tab(0),
+    explicit Private()
+      : tab(0),
         behaviorPanel(0),
         settingsPanel(0),
         openSimple(0),

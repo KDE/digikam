@@ -65,12 +65,12 @@
 namespace Digikam
 {
 
-class RatioCropTool::Private
+class Q_DECL_HIDDEN RatioCropTool::Private
 {
 public:
 
-    explicit Private() :
-        originalIsLandscape(false),
+    explicit Private()
+      : originalIsLandscape(false),
         customLabel(0),
         orientLabel(0),
         colorGuideLabel(0),

@@ -83,7 +83,7 @@ public:
     int        proofIntent;
 };
 
-class IccTransform::Private : public QSharedData
+class Q_DECL_HIDDEN IccTransform::Private : public QSharedData
 {
 public:
 

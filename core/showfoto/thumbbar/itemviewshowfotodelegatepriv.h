@@ -43,7 +43,7 @@ namespace ShowFoto
 
 class ItemViewShowfotoDelegate;
 
-class ItemViewShowfotoDelegatePrivate
+class Q_DECL_HIDDEN ItemViewShowfotoDelegatePrivate
 {
 public:
 

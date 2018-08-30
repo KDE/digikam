@@ -41,9 +41,16 @@
 
 // Local includes
 
+#include "digikam_config.h"
+#include "digikam_debug.h"
 #include "drawdecoder.h"
 #include "rawcameradlg.h"
-#include "digikam_debug.h"
+
+// Windows includes
+
+#ifdef HAVE_DRMINGW
+#   include <windows.h>
+#endif
 
 namespace Digikam
 {
@@ -181,12 +188,11 @@ QProcessEnvironment adjustedEnvironmentForAppImage()
     return env;
 }
 
-#ifdef HAVE_DRMINGW
-
-#include <windows.h>
 
 void tryInitDrMingw()
 {
+#ifdef HAVE_DRMINGW
+
     qCDebug(DIGIKAM_GENERAL_LOG) << "Loading DrMinGw run-time...";
 
     wchar_t path[MAX_PATH];
@@ -223,8 +229,8 @@ void tryInitDrMingw()
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "DrMinGw run-time loaded.";
     qCDebug(DIGIKAM_GENERAL_LOG) << "DrMinGw crash-file will be located at: " << logFile;
-}
 
 #endif // HAVE_DRMINGW
+}
 
 } // namespace Digikam

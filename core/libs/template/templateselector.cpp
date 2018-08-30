@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class TemplateSelector::Private
+class Q_DECL_HIDDEN TemplateSelector::Private
 {
 public:
 

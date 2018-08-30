@@ -45,12 +45,12 @@
 namespace Digikam
 {
 
-class ImageQualitySorter::Private
+class Q_DECL_HIDDEN ImageQualitySorter::Private
 {
 public:
 
-    explicit Private() :
-        mode(ImageQualitySorter::NonAssignedItems),
+    explicit Private()
+      : mode(ImageQualitySorter::NonAssignedItems),
         thread(0)
     {
     }

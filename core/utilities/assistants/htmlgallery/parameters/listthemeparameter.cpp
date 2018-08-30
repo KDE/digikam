@@ -37,7 +37,7 @@ namespace Digikam
 static const char* ITEM_VALUE_KEY   = "Value-";
 static const char* ITEM_CAPTION_KEY = "Caption-";
 
-class ListThemeParameter::Private
+class Q_DECL_HIDDEN ListThemeParameter::Private
 {
 public:
 

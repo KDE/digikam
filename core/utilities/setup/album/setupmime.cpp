@@ -53,12 +53,12 @@
 namespace Digikam
 {
 
-class SetupMime::Private
+class Q_DECL_HIDDEN SetupMime::Private
 {
 public:
 
-    explicit Private() :
-        imageFileFilterLabel(0),
+    explicit Private()
+      : imageFileFilterLabel(0),
         movieFileFilterLabel(0),
         audioFileFilterLabel(0),
         imageFileFilterEdit(0),

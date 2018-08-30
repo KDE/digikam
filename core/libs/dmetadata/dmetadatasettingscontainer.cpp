@@ -42,7 +42,7 @@ bool dmcompare(NamespaceEntry& e1, NamespaceEntry e2)
 
 // -------------------------------------------------------------------------------------------------
 
-class DMetadataSettingsContainer::Private
+class Q_DECL_HIDDEN DMetadataSettingsContainer::Private
 {
 public:
 
@@ -97,7 +97,7 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 {
     bool valid = true;
 
-    foreach(const QString& str, mappingKeys())
+    foreach (const QString& str, mappingKeys())
     {
         if (!group.hasGroup(QLatin1String("read") + str + QLatin1String("Namespaces")))
         {
@@ -149,7 +149,7 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 
 void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 {
-    foreach(const QString& str, mappingKeys())
+    foreach (const QString& str, mappingKeys())
     {
         writeOneGroup(group, QLatin1String("read")  + str + QLatin1String("Namespaces"), getReadMapping(str));
         writeOneGroup(group, QLatin1String("write") + str + QLatin1String("Namespaces"), getWriteMapping(str));

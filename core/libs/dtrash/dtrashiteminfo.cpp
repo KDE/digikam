@@ -27,7 +27,8 @@
 
 #include <QDebug>
 
-namespace Digikam {
+namespace Digikam
+{
 
 DTrashItemInfo::DTrashItemInfo()
 {

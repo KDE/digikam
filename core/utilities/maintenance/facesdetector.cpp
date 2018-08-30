@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class BenchmarkMessageDisplay : public QWidget
+class Q_DECL_HIDDEN BenchmarkMessageDisplay : public QWidget
 {
 public:
 
@@ -86,7 +86,7 @@ public:
 
 // --------------------------------------------------------------------------
 
-class FacesDetector::Private
+class Q_DECL_HIDDEN FacesDetector::Private
 {
 public:
 

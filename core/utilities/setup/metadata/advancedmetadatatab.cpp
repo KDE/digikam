@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class AdvancedMetadataTab::Private
+class Q_DECL_HIDDEN AdvancedMetadataTab::Private
 {
 public:
 

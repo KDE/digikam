@@ -59,7 +59,7 @@
 namespace Digikam
 {
 
-class WBSettings::Private
+class Q_DECL_HIDDEN WBSettings::Private
 {
 
 public:
@@ -84,8 +84,8 @@ public:
 
 public:
 
-    explicit Private() :
-        DefaultTemperature(DaylightD65),
+    explicit Private()
+      : DefaultTemperature(DaylightD65),
         pickTemperature(0),
         autoAdjustExposure(0),
         adjTemperatureLabel(0),

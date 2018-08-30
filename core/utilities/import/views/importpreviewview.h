@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTPREVIEWVIEW_H
-#define IMPORTPREVIEWVIEW_H
+#ifndef DIGIKAM_IMPORT_PREVIEW_VIEW_H
+#define DIGIKAM_IMPORT_PREVIEW_VIEW_H
 
 // Local includes
 
@@ -115,4 +115,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMPORTPREVIEWVIEW_H
+#endif // DIGIKAM_IMPORT_PREVIEW_VIEW_H

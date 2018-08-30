@@ -101,7 +101,7 @@ typedef QMap<QString, ICCTagInfo> ICCTagInfoMap;
 
 // ---------------------------------------------------------------------------------------
 
-class ICCProfileWidget::Private
+class Q_DECL_HIDDEN ICCProfileWidget::Private
 {
 
 public:
@@ -124,6 +124,7 @@ ICCProfileWidget::ICCProfileWidget(QWidget* const parent, int w, int h)
     : MetadataWidget(parent),
       d(new Private)
 {
+    setup();
     dkCmsErrorAction(LCMS_ERROR_SHOW);
 
     // Set the translated ICC tags titles/descriptions list
@@ -142,14 +143,14 @@ ICCProfileWidget::ICCProfileWidget(QWidget* const parent, int w, int h)
     d->iccTagsDescription[QLatin1String("Icc.Header.CMMFlags")]        = ICCTagInfo(i18n("CMM Flags"),        i18n("The ICC profile color management flags"));
 
     // Set the list of keys and tags filters.
-    for (int i=0 ; QLatin1String(ICCEntryList[i]) != QLatin1String("-1") ; ++i)
+    for (int i = 0 ; QLatin1String(ICCEntryList[i]) != QLatin1String("-1") ; ++i)
     {
         d->keysFilter << QLatin1String(ICCEntryList[i]);
     }
 
     QStringList tagsFilter;
 
-    for (int i=0 ; QLatin1String(ICCHumanList[i]) != QLatin1String("-1") ; ++i)
+    for (int i = 0 ; QLatin1String(ICCHumanList[i]) != QLatin1String("-1") ; ++i)
     {
         tagsFilter << QLatin1String(ICCHumanList[i]);
     }

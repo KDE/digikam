@@ -259,7 +259,7 @@ public:
 
 // ------------------------------------------------------------------------
 
-class ImageHistoryGraphModel::Private
+class Q_DECL_HIDDEN ImageHistoryGraphModel::Private
 {
 public:
 

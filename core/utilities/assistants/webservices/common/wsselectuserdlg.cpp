@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class WSSelectUserDlg::Private
+class Q_DECL_HIDDEN WSSelectUserDlg::Private
 {
 public:
 

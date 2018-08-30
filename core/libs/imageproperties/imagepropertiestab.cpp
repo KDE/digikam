@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class ImagePropertiesTab::Private
+class Q_DECL_HIDDEN ImagePropertiesTab::Private
 {
 public:
 
@@ -70,8 +70,8 @@ public:
 
 public:
 
-    explicit Private() :
-        file(0),
+    explicit Private()
+      : file(0),
         folder(0),
         modifiedDate(0),
         size(0),

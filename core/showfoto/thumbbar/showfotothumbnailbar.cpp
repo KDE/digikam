@@ -44,7 +44,7 @@
 namespace ShowFoto
 {
 
-class ShowfotoThumbnailBar::Private
+class Q_DECL_HIDDEN ShowfotoThumbnailBar::Private
 {
 public:
 

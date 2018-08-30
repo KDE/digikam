@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class CalWizard::Private
+class Q_DECL_HIDDEN CalWizard::Private
 {
 public:
 

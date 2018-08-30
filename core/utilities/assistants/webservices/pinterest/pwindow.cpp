@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class PWindow::Private
+class Q_DECL_HIDDEN PWindow::Private
 {
 public:
 

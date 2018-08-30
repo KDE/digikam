@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<api>
+<query>
+<pages>
+<page pageid="5" ns="0" title="Main Page" rollbacktoken="094a45ddbbd5e90d55d79d2a23a8c921+\">
+<revisions>
+<rev revid="20" user="Catrope" timestamp="2007-09-03T20:32:20Z" />
+</revisions>
+</page>
+</pages>
+</query>
+</api>

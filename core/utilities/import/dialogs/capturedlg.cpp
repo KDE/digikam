@@ -44,12 +44,12 @@
 namespace Digikam
 {
 
-class CaptureDlg::Private
+class Q_DECL_HIDDEN CaptureDlg::Private
 {
 public:
 
-    explicit Private() :
-        stopPreview(false),
+    explicit Private()
+      : stopPreview(false),
         timer(0),
         buttons(0),
         controller(0),

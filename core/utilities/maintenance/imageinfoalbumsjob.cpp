@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class ImageInfoAlbumsJob::Private
+class Q_DECL_HIDDEN ImageInfoAlbumsJob::Private
 {
 public:
 

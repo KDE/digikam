@@ -56,12 +56,12 @@
 namespace Digikam
 {
 
-class CurvesBox::Private
+class Q_DECL_HIDDEN CurvesBox::Private
 {
 public:
 
-    explicit Private() :
-        sixteenBit(false),
+    explicit Private()
+      : sixteenBit(false),
         channel(LuminosityChannel),
         curveFree(0),
         curveSmooth(0),

@@ -56,12 +56,12 @@ CameraList* CameraList::defaultList()
     return m_defaultList;
 }
 
-class CameraList::Private
+class Q_DECL_HIDDEN CameraList::Private
 {
 public:
 
-    explicit Private() :
-        modified(false)
+    explicit Private()
+      : modified(false)
     {
     }
 

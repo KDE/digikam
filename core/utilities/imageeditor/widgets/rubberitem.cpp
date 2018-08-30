@@ -26,9 +26,8 @@
 namespace Digikam
 {
 
-class RubberItem::Private
+class Q_DECL_HIDDEN RubberItem::Private
 {
-
 public:
 
     explicit Private()
@@ -40,7 +39,8 @@ public:
 };
 
 RubberItem::RubberItem(ImagePreviewItem* const parent)
-    : RegionFrameItem(parent), d(new Private)
+    : RegionFrameItem(parent),
+      d(new Private)
 {
 }
 

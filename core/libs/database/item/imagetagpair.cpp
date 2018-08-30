@@ -39,7 +39,8 @@ namespace Digikam
 {
 
 typedef QSharedDataPointer<ImageTagPairPriv> ImageTagPairPrivSharedPointer;
-class ImageTagPairPriv : public QSharedData
+
+class Q_DECL_HIDDEN ImageTagPairPriv : public QSharedData
 {
 
 public:

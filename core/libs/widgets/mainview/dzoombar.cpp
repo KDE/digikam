@@ -52,9 +52,8 @@
 namespace Digikam
 {
 
-class DZoomBar::Private
+class Q_DECL_HIDDEN DZoomBar::Private
 {
-
 public:
 
     explicit Private()

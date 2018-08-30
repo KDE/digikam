@@ -38,7 +38,7 @@ using namespace Digikam;
 namespace ShowFoto
 {
 
-class ShowfotoThumbnailModel::Private
+class Q_DECL_HIDDEN ShowfotoThumbnailModel::Private
 {
 public:
 
@@ -350,7 +350,7 @@ void ShowfotoThumbnailModel::slotThumbInfoLoaded(const ShowfotoItemInfo& info, c
         thumbnail = QImage();
     }
 
-    foreach(const QModelIndex& index, indexesForUrl(info.url))
+    foreach (const QModelIndex& index, indexesForUrl(info.url))
     {
         if (thumbnail.isNull())
         {

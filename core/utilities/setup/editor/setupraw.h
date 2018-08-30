@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPRAW_H
-#define SETUPRAW_H
+#ifndef DIGIKAM_SETUP_RAW_H
+#define DIGIKAM_SETUP_RAW_H
 
 // Qt includes
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUPRAW_H
+#endif // DIGIKAM_SETUP_RAW_H

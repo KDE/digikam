@@ -40,8 +40,8 @@
 
 // MediaWiki includes
 
-#include <MediaWiki/upload.h>
-#include <MediaWiki/mediawiki.h>
+#include "mediawiki_upload.h"
+#include "mediawiki_iface.h"
 
 // Local includes
 
@@ -50,32 +50,32 @@
 namespace Digikam
 {
 
-class MediaWikiTalker::Private
+class Q_DECL_HIDDEN MediaWikiTalker::Private
 {
 public:
 
     explicit Private()
     {
         interface = 0;
-        mediawiki = 0;
+        MediaWiki = 0;
     }
 
     QList<QUrl>                              urls;
     DInfoInterface*                          interface;
-    MediaWiki*                               mediawiki;
+    Iface*                                   MediaWiki;
     QString                                  error;
     QString                                  currentFile;
     QMap <QString, QMap <QString, QString> > imageDesc;
 };
 
 MediaWikiTalker::MediaWikiTalker(DInfoInterface* const iface,
-                                 MediaWiki* const mediawiki,
+                                 Iface* const MediaWiki,
                                  QObject* const parent)
     : KJob(parent),
       d(new Private)
 {
     d->interface = iface;
-    d->mediawiki = mediawiki;
+    d->MediaWiki = MediaWiki;
 }
 
 MediaWikiTalker::~MediaWikiTalker()
@@ -135,7 +135,7 @@ void MediaWikiTalker::slotUploadHandle(KJob* j)
     {
         QList<QString> keys        = d->imageDesc.keys();
         QMap<QString,QString> info = d->imageDesc.take(keys.first());
-        Upload* const e1           = new Upload(*d->mediawiki, this);
+        Upload* const e1           = new Upload(*d->MediaWiki, this);
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Path:" << keys.first();
 

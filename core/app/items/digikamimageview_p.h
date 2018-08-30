@@ -46,7 +46,7 @@ namespace Digikam
 class DigikamImageDelegate;
 class DigikamImageFaceDelegate;
 
-class DigikamImageView::Private : public QObject
+class Q_DECL_HIDDEN DigikamImageView::Private : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PUBLIC(DigikamImageView)
@@ -82,7 +82,7 @@ private:
     DigikamImageView*         q_ptr;
 
 private:
-    
+
     Private() {};  // disable default constructor.
 };
 

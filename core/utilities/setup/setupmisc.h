@@ -23,18 +23,12 @@
  *
  * ============================================================ */
 
-#ifndef SETUPMISC_H
-#define SETUPMISC_H
+#ifndef DIGIKAM_SETUP_MISC_H
+#define DIGIKAM_SETUP_MISC_H
 
 // Qt includes
 
 #include <QScrollArea>
-
-// local includes
-
-#include "applicationsettings.h"
-
-class QButtonGroup;
 
 namespace Digikam
 {
@@ -47,11 +41,12 @@ public:
     enum MiscTab
     {
         Behaviour = 0,
+        Appearance,
         Grouping
     };
 
     explicit SetupMisc(QWidget* const parent = 0);
-    virtual ~SetupMisc();
+    ~SetupMisc();
 
     void applySettings();
 
@@ -67,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUPMISC_H
+#endif // DIGIKAM_SETUP_MISC_H

@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class CBFilter::Private
+class Q_DECL_HIDDEN CBFilter::Private
 {
 public:
 

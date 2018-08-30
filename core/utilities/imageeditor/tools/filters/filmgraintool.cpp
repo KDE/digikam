@@ -51,12 +51,12 @@
 namespace Digikam
 {
 
-class FilmGrainTool::Private
+class Q_DECL_HIDDEN FilmGrainTool::Private
 {
 public:
 
-    explicit Private() :
-        configGroupName(QLatin1String("filmgrain Tool")),
+    explicit Private()
+      : configGroupName(QLatin1String("filmgrain Tool")),
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)

@@ -43,12 +43,12 @@
 namespace Digikam
 {
 
-class LightTableView::Private
+class Q_DECL_HIDDEN LightTableView::Private
 {
 public:
 
-    explicit Private() :
-        syncPreview(false),
+    explicit Private()
+      : syncPreview(false),
         grid(0),
         leftFrame(0),
         rightFrame(0),

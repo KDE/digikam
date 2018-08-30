@@ -76,7 +76,7 @@ bool CoreDbSchemaUpdater::isUniqueHashUpToDate()
 
 // --------------------------------------------------------------------------------------
 
-class CoreDbSchemaUpdater::Private
+class Q_DECL_HIDDEN CoreDbSchemaUpdater::Private
 {
 
 public:

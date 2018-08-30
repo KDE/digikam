@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class FilterActionFilter::Private
+class Q_DECL_HIDDEN FilterActionFilter::Private
 {
 public:
 

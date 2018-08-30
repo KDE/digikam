@@ -56,7 +56,7 @@
 namespace Digikam
 {
 
-class PanoIntroPage::Private
+class Q_DECL_HIDDEN PanoIntroPage::Private
 {
 public:
 

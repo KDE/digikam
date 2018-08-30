@@ -49,13 +49,13 @@
 namespace Digikam
 {
 
-class HealingCloneTool::Private
+class Q_DECL_HIDDEN HealingCloneTool::Private
 {
 
 public:
 
-    explicit Private() :
-        radiusInput(0),
+    explicit Private()
+      : radiusInput(0),
         blurPercent(0),
         previewWidget(0),
         gboxSettings(0),

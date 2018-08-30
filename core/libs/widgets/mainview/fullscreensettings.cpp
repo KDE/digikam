@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class FullScreenSettings::Private
+class Q_DECL_HIDDEN FullScreenSettings::Private
 {
 public:
 

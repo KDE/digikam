@@ -70,12 +70,12 @@ static inline double unitToInches(PrintOptionsPage::Unit unit)
 
 // --------------------------------------------------------------------------
 
-class PrintOptionsPage::Private : public Ui_PrintOptionsPage
+class Q_DECL_HIDDEN PrintOptionsPage::Private : public Ui_PrintOptionsPage
 {
 public:
 
-    explicit Private() :
-        mParent(0),
+    explicit Private()
+      : mParent(0),
         mConfigDialogManager(0),
         colorManaged(0),
         cmPreferences(0),

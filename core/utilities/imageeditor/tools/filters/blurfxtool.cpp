@@ -51,12 +51,12 @@
 namespace Digikam
 {
 
-class BlurFXTool::Private
+class Q_DECL_HIDDEN BlurFXTool::Private
 {
 public:
 
-    explicit Private() :
-        effectTypeLabel(0),
+    explicit Private()
+      : effectTypeLabel(0),
         distanceLabel(0),
         levelLabel(0),
         effectType(0),
@@ -64,8 +64,8 @@ public:
         levelInput(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
-
+    {
+    }
 
     static const QString configGroupName;
     static const QString configEffectTypeEntry;

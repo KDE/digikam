@@ -45,12 +45,12 @@
 namespace Digikam
 {
 
-class OilPaintFilter::Private
+class Q_DECL_HIDDEN OilPaintFilter::Private
 {
 public:
 
-    explicit Private() :
-        brushSize(1),
+    explicit Private()
+      : brushSize(1),
         smoothness(30),
         globalProgress(0)
     {

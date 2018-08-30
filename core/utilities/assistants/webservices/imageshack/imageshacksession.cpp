@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class ImageShackSession::Private
+class Q_DECL_HIDDEN ImageShackSession::Private
 {
 
 public:

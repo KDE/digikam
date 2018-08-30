@@ -60,7 +60,7 @@
 namespace Digikam
 {
 
-class BMInternalWidgetInfo
+class Q_DECL_HIDDEN BMInternalWidgetInfo
 {
 public:
 
@@ -79,7 +79,7 @@ Q_DECLARE_METATYPE(Digikam::BMInternalWidgetInfo)
 namespace Digikam
 {
 
-class BackendMarble::Private
+class Q_DECL_HIDDEN BackendMarble::Private
 {
 public:
 
@@ -212,7 +212,15 @@ QWidget* BackendMarble::mapWidget()
             d->marbleWidget                    = qobject_cast<Marble::MarbleWidget*>(info.widget);
             const BMInternalWidgetInfo intInfo = info.backendData.value<BMInternalWidgetInfo>();
             d->bmLayer                         = intInfo.bmLayer;
-            d->bmLayer->setBackend(this);
+
+            if (d->bmLayer)
+            {
+                d->bmLayer->setBackend(this);
+            }
+            else
+            {
+                qCWarning(DIGIKAM_GEOIFACE_LOG) << "Marble widget instance is null!";
+            }
         }
         else
         {
@@ -1154,7 +1162,7 @@ GeoCoordinates::PairList BackendMarble::getNormalizedBounds()
     }
 
     const Marble::GeoDataLatLonAltBox marbleBounds = d->marbleWidget->viewport()->viewLatLonAltBox();
-//     qCDebug(DIGIKAM_GEOIFACE_LOG)<<marbleBounds.toString(GeoDataCoordinates::Degree);
+//     qCDebug(DIGIKAM_GEOIFACE_LOG) << marbleBounds.toString(GeoDataCoordinates::Degree);
 
     const GeoCoordinates::Pair boundsPair = GeoCoordinates::makePair(
             marbleBounds.south(Marble::GeoDataCoordinates::Degree),
@@ -1162,8 +1170,8 @@ GeoCoordinates::PairList BackendMarble::getNormalizedBounds()
             marbleBounds.north(Marble::GeoDataCoordinates::Degree),
             marbleBounds.east(Marble::GeoDataCoordinates::Degree));
 
-//     qCDebug(DIGIKAM_GEOIFACE_LOG)<<boundsPair.first<<boundsPair.second;
-//     qCDebug(DIGIKAM_GEOIFACE_LOG)<<GeoIfaceHelperNormalizeBounds(boundsPair);
+//     qCDebug(DIGIKAM_GEOIFACE_LOG) << boundsPair.first<<boundsPair.second;
+//     qCDebug(DIGIKAM_GEOIFACE_LOG) << GeoIfaceHelperNormalizeBounds(boundsPair);
 
     return GeoIfaceHelperNormalizeBounds(boundsPair);
 }

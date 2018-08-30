@@ -57,12 +57,11 @@ public:
 
 public:
 
-            
     SmugUser getUser() const;
-            
+
     bool    loggedIn() const;
     void    cancel();
-    
+
     void    link();
     void    unlink();
     void    removeUserAccount(const QString& userName);
@@ -70,7 +69,6 @@ public:
     void    getLoginedUser();
     void    logout();
 
-    
     void    listAlbums(const QString& nickName = QString());
     void    listPhotos(qint64 albumID,
                        const QString& albumKey,
@@ -91,11 +89,11 @@ public:
                      const QString& caption);
 
     void    getPhoto(const QString& imgPath);
-    
+
     QString createAlbumName(const QString& word);
-    
-    QString createAlbumUrl(const QString& name)
-;
+
+    QString createAlbumUrl(const QString& name);
+
 Q_SIGNALS:
 
     void signalBusy(bool val);
@@ -104,9 +102,9 @@ Q_SIGNALS:
                             int maxStep = 0,
                             const QString& label = QString());
     void signalLoginDone(int errCode, const QString& errMsg);
-    
-    
+
     void signalAddPhotoDone(int errCode, const QString& errMsg);
+
     void signalGetPhotoDone(int errCode, const QString& errMsg,
                             const QByteArray& photoData);
     void signalCreateAlbumDone(int errCode, const QString& errMsg, qint64 newAlbumID,
@@ -119,7 +117,7 @@ Q_SIGNALS:
                                  const QList <SmugAlbumTmpl>& albumTList);
     /**
      * Categories deprecated in API v2
-     * 
+     *
      *   void signalListCategoriesDone(int errCode, const QString& errMsg,
      *                               const QList <SmugCategory>& categoriesList);
      *   void signalListSubCategoriesDone(int errCode, const QString& errMsg,
@@ -139,12 +137,13 @@ private:
     void parseResponseListAlbumTmpl(const QByteArray& data);
     /**
      * Categories deprecated in API v2
-     * 
+     *
      *   void parseResponseListCategories(const QByteArray& data);
      *   void parseResponseListSubCategories(const QByteArray& data);
      */
 
 private Q_SLOTS:
+
     void slotFinished(QNetworkReply* reply);
     void slotLinkingFailed();
     void slotLinkingSucceeded();

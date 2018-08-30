@@ -44,56 +44,6 @@ endmacro()
 
 ###########################################################################################################################################"
 
-macro(DETECT_LIBMEDIAWIKI MIN_VERSION)
-
-    if (NOT DIGIKAMSC_COMPILE_LIBMEDIAWIKI)
-
-        message(STATUS "libmediawiki : search system based library")
-        find_package(KF5MediaWiki ${MIN_VERSION} QUIET)
-
-        if(KF5MediaWiki_FOUND)
-            set(LIBMEDIAWIKI_LIBRARIES KF5::MediaWiki)
-            get_target_property(LIBMEDIAWIKI_INCLUDES KF5::MediaWiki INTERFACE_INCLUDE_DIRECTORIES)
-            set(KF5MediaWiki_FOUND TRUE)
-        else()
-            set(KF5MediaWiki_FOUND FALSE)
-        endif()
-
-    else()
-
-        message(STATUS "libmediawiki : use local library from ${CMAKE_SOURCE_DIR}/extra/libmediawiki/")
-
-        if(EXISTS "${CMAKE_SOURCE_DIR}/extra/libmediawiki/CMakeLists.txt")
-            set(KF5MediaWiki_FOUND TRUE)
-
-            # Create symbolic links to compile fine with client codes.
-            execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
-                            ${CMAKE_SOURCE_DIR}/extra/libmediawiki/src/
-                            ${CMAKE_SOURCE_DIR}/extra/libmediawiki/MediaWiki)
-            execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
-                            ${CMAKE_BINARY_DIR}/extra/libmediawiki/src/
-                            ${CMAKE_BINARY_DIR}/extra/libmediawiki/MediaWiki)
-
-        else()
-            message(WARNING "libmediawiki : local library not found")
-            set(KF5MediaWiki_FOUND FALSE)
-        endif()
-
-        set(LIBMEDIAWIKI_INCLUDES ${CMAKE_SOURCE_DIR}/extra/libmediawiki/
-                                  ${CMAKE_BINARY_DIR}/extra/libmediawiki/
-                                  ${CMAKE_BINARY_DIR}/extra/libmediawiki/MediaWiki)
-        set(LIBMEDIAWIKI_LIBRARIES KF5MediaWiki)
-
-    endif()
-
-    message(STATUS "libmediawiki found      : ${KF5MediaWiki_FOUND}")
-    message(STATUS "libmediawiki library    : ${LIBMEDIAWIKI_LIBRARIES}")
-    message(STATUS "libmediawiki includes   : ${LIBMEDIAWIKI_INCLUDES}")
-
-endmacro()
-
-###########################################################################################################################################"
-
 macro(DETECT_LIBKVKONTAKTE MIN_VERSION)
 
     if (NOT DIGIKAMSC_COMPILE_LIBKVKONTAKTE)

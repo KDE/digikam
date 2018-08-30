@@ -49,12 +49,12 @@
 namespace Digikam
 {
 
-class RedEyeCorrectionSettings::Private
+class Q_DECL_HIDDEN RedEyeCorrectionSettings::Private
 {
 public:
 
-    explicit Private() :
-        redtoavgratioInput(0)
+    explicit Private()
+      : redtoavgratioInput(0)
     {
     }
 

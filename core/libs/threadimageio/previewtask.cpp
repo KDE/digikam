@@ -69,7 +69,7 @@ void PreviewLoadingTask::execute()
 
         foreach(const QString& key, lookupKeys)
         {
-            if ( (cachedImg = cache->retrieveImage(key)) )
+            if ((cachedImg = cache->retrieveImage(key)))
             {
                 if (m_loadingDescription.needCheckRawDecoding())
                 {
@@ -112,9 +112,9 @@ void PreviewLoadingTask::execute()
             // find possible running loading process
             m_usedProcess = 0;
 
-            for ( QStringList::const_iterator it = lookupKeys.constBegin(); it != lookupKeys.constEnd(); ++it )
+            for ( QStringList::const_iterator it = lookupKeys.constBegin() ; it != lookupKeys.constEnd() ; ++it )
             {
-                if ( (m_usedProcess = cache->retrieveLoadingProcess(*it)) )
+                if ((m_usedProcess = cache->retrieveLoadingProcess(*it)))
                 {
                     break;
                 }
@@ -347,22 +347,12 @@ void PreviewLoadingTask::execute()
                 break;
             }
         }
-
-        if (m_img.isNull() && continueQuery())
-        {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot extract preview for " << m_loadingDescription.filePath;
-        }
     }
 
-    if (m_img.isNull() && continueQuery())
+    if (!m_img.isNull() && continueQuery())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot extract preview for " << m_loadingDescription.filePath;
-    }
+        // Post processing
 
-    // Post processing
-
-    if (continueQuery())
-    {
         if (m_loadingDescription.previewParameters.previewSettings.convertToEightBit)
         {
             m_img.convertToEightBit();
@@ -398,6 +388,10 @@ void PreviewLoadingTask::execute()
 
         postProcess();
     }
+    else if (continueQuery())
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot extract preview for " << m_loadingDescription.filePath;
+    }
     else
     {
         m_img = DImg();
@@ -425,7 +419,7 @@ void PreviewLoadingTask::execute()
 
         // dispatch image to all listeners, including this
 
-        for (int i = 0; i < m_listeners.count(); ++i)
+        for (int i = 0 ; i < m_listeners.count() ; ++i)
         {
             LoadingProcessListener* const l = m_listeners[i];
 
@@ -443,7 +437,7 @@ void PreviewLoadingTask::execute()
             }
         }
 
-        for (int i = 0; i < m_listeners.count(); ++i)
+        for (int i = 0 ; i < m_listeners.count() ; ++i)
         {
             LoadSaveNotifier* notifier = m_listeners[i]->loadSaveNotifier();
 

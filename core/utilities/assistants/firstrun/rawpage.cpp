@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class RawPage::Private
+class Q_DECL_HIDDEN RawPage::Private
 {
 public:
 

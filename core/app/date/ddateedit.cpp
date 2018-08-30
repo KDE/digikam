@@ -96,7 +96,7 @@ private:
 
 // -----------------------------------------------------------------------------------
 
-class DDateEdit::Private
+class Q_DECL_HIDDEN DDateEdit::Private
 {
 public:
 

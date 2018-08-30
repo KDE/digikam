@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class ImportImageModel::Private
+class Q_DECL_HIDDEN ImportImageModel::Private
 {
 public:
 
@@ -82,7 +82,7 @@ public:
 typedef QPair<int, int> IntPair;
 typedef QList<IntPair>  IntPairList;
 
-class ImportImageModelIncrementalUpdater
+class Q_DECL_HIDDEN ImportImageModelIncrementalUpdater
 {
 public:
 

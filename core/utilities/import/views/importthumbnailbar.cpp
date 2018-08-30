@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class ImportThumbnailBar::Private
+class Q_DECL_HIDDEN ImportThumbnailBar::Private
 {
 public:
 

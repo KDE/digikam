@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class ListItem::Private
+class Q_DECL_HIDDEN ListItem::Private
 {
 public:
 

@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTUI_H
-#define IMPORTUI_H
+#ifndef DIGIKAM_IMPORTUI_H
+#define DIGIKAM_IMPORTUI_H
 
 // Qt includes
 
@@ -237,4 +237,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMPORTUI_H
+#endif // DIGIKAM_IMPORTUI_H

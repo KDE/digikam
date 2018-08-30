@@ -173,7 +173,7 @@ public:
           : v(graph_traits::null_vertex())
         {
         }
-        
+
         Vertex(const vertex_t& v)    // krazy:exclude=explicit
           : v(v)
         {

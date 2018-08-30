@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class ProgressItem::Private
+class Q_DECL_HIDDEN ProgressItem::Private
 {
 public:
 

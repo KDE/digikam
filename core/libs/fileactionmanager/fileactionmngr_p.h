@@ -50,7 +50,7 @@ enum GroupAction
     Ungroup
 };
 
-class PrivateProgressItemCreator : public QObject, public FileActionProgressItemCreator
+class Q_DECL_HIDDEN PrivateProgressItemCreator : public QObject, public FileActionProgressItemCreator
 {
     Q_OBJECT
 
@@ -73,7 +73,7 @@ public Q_SLOTS:
 
 // -----------------------------------------------------------------------------------------------------------
 
-class FileActionMngr::Private : public QObject
+class Q_DECL_HIDDEN FileActionMngr::Private : public QObject
 {
     Q_OBJECT
 

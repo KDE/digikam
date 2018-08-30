@@ -35,7 +35,7 @@
 namespace ShowFoto
 {
 
-class ShowfotoImageModel::Private
+class Q_DECL_HIDDEN ShowfotoImageModel::Private
 {
 public:
 
@@ -567,7 +567,6 @@ QList<QPair<int, int> > ShowfotoImageModel::toContiguousPairs(const QList<int>& 
 }
 
 // ------------ QAbstractItemModel implementation -------------
-
 
 int ShowfotoImageModel::rowCount(const QModelIndex& parent) const
 {

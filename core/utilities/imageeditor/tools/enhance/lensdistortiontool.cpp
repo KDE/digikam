@@ -55,19 +55,20 @@
 namespace Digikam
 {
 
-class LensDistortionTool::Private
+class Q_DECL_HIDDEN LensDistortionTool::Private
 {
 public:
 
-    explicit Private() :
-        maskPreviewLabel(0),
+    explicit Private()
+      : maskPreviewLabel(0),
         mainInput(0),
         edgeInput(0),
         rescaleInput(0),
         brightenInput(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString config2ndOrderDistortionEntry;

@@ -70,7 +70,7 @@
 namespace Digikam
 {
 
-class YFWindow::Private
+class Q_DECL_HIDDEN YFWindow::Private
 {
 public:
 

@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class ShearFilter::Private
+class Q_DECL_HIDDEN ShearFilter::Private
 {
 public:
 

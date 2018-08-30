@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class ImportFilters::Private
+class Q_DECL_HIDDEN ImportFilters::Private
 {
 public:
 

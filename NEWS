@@ -456,4 +456,32 @@ BUGFIXES:
 395 ==> 373572 - File synchronization.
 396 ==> 296768 - When creating thumbnails, digiKam uses 80% CPU - quadcore 3800, 9GB RAM.
 397 ==> 397777 - Need to default to native filesystem browser on first run to see external drives.
-398 ==> 
+398 ==> 279818 - digiKam crashed when updating fingerprints.
+399 ==> 275931 - digiKam crashed when trying to stop a batch queue.
+400 ==> 272144 - Alphabetically sorting of the tools in BQM.
+401 ==> 271531 - Cannot edit canon crw-pics.
+402 ==> 397739 - Menu icons are not scaled correctly on external/secondary screen (2560x1440) while using MacBookPro.
+403 ==> 380841 - Crash while correcting color manually.
+404 ==> 378176 - Using tool causes program to crash.
+405 ==> 395842 - digiKam crashes adjusting color balance on a RAW file.
+406 ==> 388608 - Faces engine hangs and crashes.
+407 ==> 397855 - Not compatible with Windows 10.
+408 ==> 391039 - digiKam stalled after trying to make a panorama.
+409 ==> 184318 - Starting digiKam it crashed and caused the signal 11 (SIGSEGV).
+410 ==> 222740 - Starting digiKam cause sound system to report pulseaudio is removed.
+411 ==> 378697 - Add image carousel to front page screenshots.
+412 ==> 180375 - Web page: Wrong link to Alpenglow Webpage.
+413 ==> 331141 - Broken link to database schema in web site digikam.org pointing to project.kde.org.
+414 ==> 397862 - Reordering geolocation bookmarks will remove them from the list.
+415 ==> 223348 - digiKam crash during album view browsing AVIs with PgUp/PgDown.
+416 ==> 156146 - Reading data base, digiKam don't start.
+417 ==> 118090 - digiKam crashed while attempting to save scanned (tiff) image.
+418 ==> 397828 - Operation cancelled when exporting to flickr.
+419 ==> 397924 - Merge tag names of people.
+420 ==> 397425 - Bug when trying find duplicates.
+421 ==> 397496 - Wish: Read facetags from jpg files edited in Mylio.
+422 ==> 397727 - Don't show "Mod."" label when no modified timestamp exists on an image.
+423 ==> 397893 - MacOS : digiKam do not link with libksane 18.08.0.
+424 ==> 397990 - Carousel images too large.
+425 ==> 389273 - Copy/move selected items to anothor Album doesn't work correctly [patch].
+426 ==> 

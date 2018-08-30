@@ -58,7 +58,7 @@
 namespace Digikam
 {
 
-class FlickrWindow::Private
+class Q_DECL_HIDDEN FlickrWindow::Private
 {
 public:
 
@@ -811,11 +811,13 @@ void FlickrWindow::slotAddPhotoSucceeded(const QString& photoId)
 
     // Set location for uploaded photo
     DItemInfo info(d->iface->itemInfo(photoUrl));
-    if(info.hasGeolocationInfo())
+
+    if (info.hasGeolocationInfo() && !photoId.isEmpty())
     {
-        d->talker->setGeoLocation(photoId, 
-                                  QString::number(info.latitude()), 
+        d->talker->setGeoLocation(photoId,
+                                  QString::number(info.latitude()),
                                   QString::number(info.longitude()));
+        return;
     }
 
     // Remove photo uploaded from the list

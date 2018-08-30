@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class ScanDialog::Private
+class Q_DECL_HIDDEN ScanDialog::Private
 {
 public:
 

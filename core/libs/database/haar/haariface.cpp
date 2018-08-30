@@ -150,7 +150,7 @@ public:
 
 // -----------------------------------------------------------------------------------------------------
 
-class HaarIface::Private
+class Q_DECL_HIDDEN HaarIface::Private
 {
 public:
 
