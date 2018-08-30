@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class ActionThread::Private
+class Q_DECL_HIDDEN ActionThread::Private
 {
 public:
 
@@ -48,7 +48,8 @@ public:
 // --------------------------------------------------------------------------------------
 
 ActionThread::ActionThread(QObject* const parent)
-    : ActionThreadBase(parent), d(new Private)
+    : ActionThreadBase(parent),
+      d(new Private)
 {
     setObjectName(QLatin1String("QueueMngrThread"));
     qRegisterMetaType<ActionData>();

@@ -264,9 +264,11 @@ void WorkflowList::slotContextMenu()
     else if (choice == propAction)
     {
         QList<QTreeWidgetItem*> list = selectedItems();
+
         if (!list.isEmpty())
         {
             WorkflowItem* const item = dynamic_cast<WorkflowItem*>(list.first());
+
             if (item)
             {
                 WorkflowManager* const mngr = WorkflowManager::instance();

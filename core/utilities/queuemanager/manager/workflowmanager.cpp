@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class WorkflowManager::Private
+class Q_DECL_HIDDEN WorkflowManager::Private
 {
 public:
 
@@ -59,6 +59,8 @@ public:
 
     QMutex          mutex;
 };
+
+// ------------------------------------------------------------------------------------------
 
 class WorkflowManagerCreator
 {

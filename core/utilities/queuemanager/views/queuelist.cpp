@@ -62,13 +62,13 @@
 namespace Digikam
 {
 
-class QueueListViewItem::Private
+class Q_DECL_HIDDEN QueueListViewItem::Private
 {
 
 public:
 
-    explicit Private() :
-        isBusy(false),
+    explicit Private()
+      : isBusy(false),
         done(false),
         hasThumb(false),
         progressIndex(0),
@@ -241,7 +241,7 @@ QString QueueListViewItem::destSuffix() const
 
 // ---------------------------------------------------------------------------
 
-class QueueListView::Private
+class Q_DECL_HIDDEN QueueListView::Private
 {
 
 public:

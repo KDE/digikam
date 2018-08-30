@@ -39,12 +39,12 @@
 namespace Digikam
 {
 
-class QueueToolTip::Private
+class Q_DECL_HIDDEN QueueToolTip::Private
 {
 public:
 
-    explicit Private() :
-        view(0),
+    explicit Private()
+      : view(0),
         item(0)
     {
     }

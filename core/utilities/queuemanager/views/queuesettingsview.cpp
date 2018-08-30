@@ -65,7 +65,7 @@
 namespace Digikam
 {
 
-class QueueSettingsView::Private
+class Q_DECL_HIDDEN QueueSettingsView::Private
 {
 public:
 
@@ -80,8 +80,8 @@ public:
 
 public:
 
-    explicit Private() :
-        rawLoadingLabel(0),
+    explicit Private()
+      : rawLoadingLabel(0),
         renamingButtonGroup(0),
         rawLoadingButtonGroup(0),
         renameOriginal(0),

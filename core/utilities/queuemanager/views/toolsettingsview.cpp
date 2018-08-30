@@ -44,12 +44,10 @@
 #include "thememanager.h"
 #include "batchtoolsfactory.h"
 
-
-
 namespace Digikam
 {
 
-class ToolSettingsView::Private
+class Q_DECL_HIDDEN ToolSettingsView::Private
 {
 
 public:
@@ -62,8 +60,8 @@ public:
 
 public:
 
-    explicit Private() :
-        messageView(0),
+    explicit Private()
+      : messageView(0),
         settingsViewIcon(0),
         settingsViewTitle(0),
         settingsViewReset(0),
@@ -85,7 +83,8 @@ public:
 };
 
 ToolSettingsView::ToolSettingsView(QWidget* const parent)
-    : QStackedWidget(parent), d(new Private)
+    : QStackedWidget(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 

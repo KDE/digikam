@@ -43,13 +43,13 @@
 namespace Digikam
 {
 
-class ToolsView::Private
+class Q_DECL_HIDDEN ToolsView::Private
 {
 
 public:
 
-    explicit Private() :
-        baseTools(0),
+    explicit Private()
+      : baseTools(0),
         historyView(0),
         workflow(0)
     {

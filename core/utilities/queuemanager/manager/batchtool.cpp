@@ -56,13 +56,13 @@ namespace Digikam
 
 class BatchToolObserver;
 
-class BatchTool::Private
+class Q_DECL_HIDDEN BatchTool::Private
 {
 
 public:
 
-    explicit Private() :
-        exifResetOrientation(false),
+    explicit Private()
+      : exifResetOrientation(false),
         exifCanEditOrientation(true),
         branchHistory(true),
         cancel(false),
@@ -105,7 +105,7 @@ public:
     QueueSettings::RawLoadingRule rawLoadingRule;
 };
 
-class BatchToolObserver : public DImgLoaderObserver
+class Q_DECL_HIDDEN BatchToolObserver : public DImgLoaderObserver
 {
 
 public:
