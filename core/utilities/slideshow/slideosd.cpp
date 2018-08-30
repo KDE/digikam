@@ -52,13 +52,12 @@
 namespace Digikam
 {
 
-class SlideOSD::Private
+class Q_DECL_HIDDEN SlideOSD::Private
 {
-
 public:
 
-    explicit Private() :
-        paused(false),
+    explicit Private()
+      : paused(false),
         blink(false),
         refresh(1000),       // Progress bar refresh in ms
         progressBar(0),

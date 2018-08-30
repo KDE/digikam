@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class SlideImage::Private
+class Q_DECL_HIDDEN SlideImage::Private
 {
 
 public:

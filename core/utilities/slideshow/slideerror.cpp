@@ -38,13 +38,13 @@
 namespace Digikam
 {
 
-class SlideError::Private
+class Q_DECL_HIDDEN SlideError::Private
 {
 
 public:
 
-    explicit Private() :
-        errorMsg(0)
+    explicit Private()
+      : errorMsg(0)
     {
     }
 

@@ -45,12 +45,12 @@
 namespace Digikam
 {
 
-class SlideToolBar::Private
+class Q_DECL_HIDDEN SlideToolBar::Private
 {
 public:
 
-    explicit Private() :
-        playBtn(0),
+    explicit Private()
+      : playBtn(0),
         stopBtn(0),
         nextBtn(0),
         prevBtn(0),
