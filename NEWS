@@ -496,4 +496,5 @@ BUGFIXES:
 435 ==> 347589 - Menu icons size is not unified - text overlapping.
 436 ==> 382053 - digiKam preferences when using mysql host port resets to default (3306) when accessing preferences.
 437 ==> 388227 - Image version always shown.
-438 ==> 
+438 ==> 386561 - Cannot import images from mac /Volumes/<SdCard>.
+439 ==> 
