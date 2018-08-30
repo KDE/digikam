@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class EXIFEditWidget::Private
+class Q_DECL_HIDDEN EXIFEditWidget::Private
 {
 
 public:

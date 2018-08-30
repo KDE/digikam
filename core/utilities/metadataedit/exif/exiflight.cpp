@@ -47,15 +47,29 @@
 namespace Digikam
 {
 
-class FlashMode
+class Q_DECL_HIDDEN FlashMode
 {
 public:
 
-    FlashMode() : m_id(0) {}
-    FlashMode(int id, const QString& desc) : m_id(id), m_desc(desc) {}
+    FlashMode()
+      : m_id(0)
+    {
+    }
+    FlashMode(int id, const QString& desc)
+      : m_id(id),
+        m_desc(desc)
+    {
+    }
 
-    int     id()   const { return m_id;   }
-    QString desc() const { return m_desc; }
+    int     id()   const
+    {
+        return m_id;
+    }
+
+    QString desc() const
+    {
+        return m_desc;
+    }
 
 private:
 
@@ -65,7 +79,7 @@ private:
 
 // --------------------------------------------------------------------------
 
-class EXIFLight::Private
+class Q_DECL_HIDDEN EXIFLight::Private
 {
 public:
 

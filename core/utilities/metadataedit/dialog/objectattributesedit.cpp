@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class ObjectAttributesEdit::Private
+class Q_DECL_HIDDEN ObjectAttributesEdit::Private
 {
 public:
 

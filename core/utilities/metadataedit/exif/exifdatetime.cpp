@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class EXIFDateTime::Private
+class Q_DECL_HIDDEN EXIFDateTime::Private
 {
 public:
 

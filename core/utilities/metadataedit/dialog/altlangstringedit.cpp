@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class AltLangStringsEdit::Private
+class Q_DECL_HIDDEN AltLangStringsEdit::Private
 {
 public:
 

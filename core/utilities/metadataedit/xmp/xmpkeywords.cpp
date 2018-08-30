@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class XMPKeywords::Private
+class Q_DECL_HIDDEN XMPKeywords::Private
 {
 public:
 

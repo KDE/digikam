@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class XMPOrigin::Private
+class Q_DECL_HIDDEN XMPOrigin::Private
 {
 public:
 

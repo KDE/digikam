@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class IPTCStatus::Private
+class Q_DECL_HIDDEN IPTCStatus::Private
 {
 public:
 

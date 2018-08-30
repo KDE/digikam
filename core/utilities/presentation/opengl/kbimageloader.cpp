@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class KBImageLoader::Private
+class Q_DECL_HIDDEN KBImageLoader::Private
 {
 
 public:

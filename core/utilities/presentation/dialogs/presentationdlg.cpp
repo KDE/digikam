@@ -56,7 +56,7 @@
 namespace Digikam
 {
 
-class PresentationDlg::Private
+class Q_DECL_HIDDEN PresentationDlg::Private
 {
 
 public:

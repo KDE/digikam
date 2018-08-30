@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class XMPEditWidget::Private
+class Q_DECL_HIDDEN XMPEditWidget::Private
 {
 
 public:

@@ -66,7 +66,7 @@ SoundtrackPreview::~SoundtrackPreview()
 
 // ------------------------------------------------------------------------------------
 
-class PresentationAudioPage::Private
+class Q_DECL_HIDDEN PresentationAudioPage::Private
 {
 public:
 
@@ -78,13 +78,13 @@ public:
         timeMutex  = 0;
     }
 
-    QList<QUrl>             urlList;
-    PresentationContainer*        sharedData;
-    QTime                   totalTime;
-    QTime                   imageTime;
-    QMap<QUrl, QTime>*      tracksTime;
+    QList<QUrl>                             urlList;
+    PresentationContainer*                  sharedData;
+    QTime                                   totalTime;
+    QTime                                   imageTime;
+    QMap<QUrl, QTime>*                      tracksTime;
     QMap<QUrl, PresentationAudioListItem*>* soundItems;
-    QMutex*                 timeMutex;
+    QMutex*                                 timeMutex;
 };
 
 PresentationAudioPage::PresentationAudioPage(QWidget* const parent, PresentationContainer* const sharedData)

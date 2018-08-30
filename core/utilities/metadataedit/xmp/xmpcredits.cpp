@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class XMPCredits::Private
+class Q_DECL_HIDDEN XMPCredits::Private
 {
 public:
 
