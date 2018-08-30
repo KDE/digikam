@@ -8,13 +8,19 @@
 # Configuration to tune before to build tarball.
 
 TARBALL_VERSION="6.0.0-beta1"
+
+# Location to host target files.
 TARBALL_DIR="$PWD/../digikam-$TARBALL_VERSION"
 TARBALL_FILE="$PWD/../digikam-$TARBALL_VERSION.tar.xz"
 TARBALL_CHECKSUMS="$PWD/../digikam-$TARBALL_VERSION.sum"
+
+# sub-dir to build translations
 TARBALL_BUILD="build.tarball"
+
+# PGP signature
 TARBALL_SIGN=1
 
-# Prepare temperary directory to compile translations files.
+# Prepare temporary directory to compile translations files.
 
 mkdir -p $TARBALL_BUILD
 cd $TARBALL_BUILD
@@ -55,7 +61,7 @@ rm -fr $TARBALL_BUILD
 # Prepare the tarball and compress.
 
 mkdir -p $TARBALL_DIR
-cp -rf * $TARBALL_DIR
+cp -rf ./* $TARBALL_DIR
 tar cf - $TARBALL_DIR | xz -4e > $TARBALL_FILE
 
 # Cleanup temp directory
