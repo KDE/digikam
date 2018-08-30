@@ -135,13 +135,13 @@ namespace Digikam
 
 class DAdjustableLabel;
 
-class LightTableWindow::Private
+class Q_DECL_HIDDEN LightTableWindow::Private
 {
 
 public:
 
-    Private() :
-        autoLoadOnRightPanel(true),
+    Private()
+      : autoLoadOnRightPanel(true),
         autoSyncPreview(true),
         fromLeftPreview(true),
         setItemLeftAction(0),

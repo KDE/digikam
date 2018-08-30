@@ -148,12 +148,12 @@ QList<QRect> AbstractSearchGroupContainer::startupAnimationAreaOfGroups() const
 
 // -------------------------------------------------------------------------
 
-class SearchView::Private
+class Q_DECL_HIDDEN SearchView::Private
 {
 public:
 
-    explicit Private() :
-        needAnimationForReadIn(false),
+    explicit Private()
+      : needAnimationForReadIn(false),
         layout(0),
         timeline(0),
         bar(0)
@@ -349,7 +349,7 @@ void SearchView::paintEvent(QPaintEvent*)
         }
 
         int animationStep = d->timeline->currentFrame();
-        const int margin = 2;
+        const int margin  = 2;
 
         QRadialGradient grad(0.5, 0.5, 1, 0.5, 0.3);
         grad.setCoordinateMode(QGradient::ObjectBoundingMode);

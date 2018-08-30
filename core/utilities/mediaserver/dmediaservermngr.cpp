@@ -63,7 +63,7 @@ Q_GLOBAL_STATIC(DMediaServerMngrCreator, creator)
 
 // ---------------------------------------------------------------------------------------------
 
-class DMediaServerMngr::Private
+class Q_DECL_HIDDEN DMediaServerMngr::Private
 {
 public:
 

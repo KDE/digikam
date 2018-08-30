@@ -58,7 +58,7 @@
 namespace Digikam
 {
 
-class MaintenanceDlg::Private
+class Q_DECL_HIDDEN MaintenanceDlg::Private
 {
 public:
 
@@ -182,9 +182,10 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     : QDialog(parent),
       d(new Private)
 {
-    setWindowFlags((windowFlags() & ~Qt::Dialog) | Qt::Window |
-                                                   Qt::WindowCloseButtonHint |
-                                                   Qt::WindowMinMaxButtonsHint);
+    setWindowFlags((windowFlags() & ~Qt::Dialog) |
+                   Qt::Window                    |
+                   Qt::WindowCloseButtonHint     |
+                   Qt::WindowMinMaxButtonsHint);
     setWindowTitle(i18n("Maintenance"));
     setModal(true);
 

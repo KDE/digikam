@@ -39,12 +39,12 @@
 namespace Digikam
 {
 
-class NormalSearchTreeView::Private
+class Q_DECL_HIDDEN NormalSearchTreeView::Private
 {
 public:
 
-    explicit Private() :
-        newAction(0),
+    explicit Private()
+      : newAction(0),
         editAction(0)
     {
     }

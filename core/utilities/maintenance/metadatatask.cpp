@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class MetadataTask::Private
+class Q_DECL_HIDDEN MetadataTask::Private
 {
 public:
 

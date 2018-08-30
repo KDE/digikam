@@ -378,7 +378,7 @@ QList<QRect> SearchGroup::startupAnimationArea() const
 
 // -------------------------------------------------------------------------
 
-class RadioButtonHBox : public QHBoxLayout
+class Q_DECL_HIDDEN RadioButtonHBox : public QHBoxLayout
 {
 public:
 
@@ -400,24 +400,24 @@ public:
     }
 };
 
-class SearchGroupLabel::Private
+class Q_DECL_HIDDEN SearchGroupLabel::Private
 {
 public:
 
-    explicit Private() :
-      extended(false),
-      groupOp(SearchXml::And),
-      fieldOp(SearchXml::And),
-      layout(0),
-      groupOpLabel(0),
-      allBox(0),
-      anyBox(0),
-      noneBox(0),
-      oneNotBox(0),
-      optionsLabel(0),
-      removeLabel(0),
-      stackedLayout(0),
-      themeCache(0)
+    explicit Private()
+      : extended(false),
+        groupOp(SearchXml::And),
+        fieldOp(SearchXml::And),
+        layout(0),
+        groupOpLabel(0),
+        allBox(0),
+        anyBox(0),
+        noneBox(0),
+        oneNotBox(0),
+        optionsLabel(0),
+        removeLabel(0),
+        stackedLayout(0),
+        themeCache(0)
     {
     }
 
@@ -438,7 +438,8 @@ public:
 };
 
 SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, SearchGroup::Type type, QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     d->themeCache = cache;
     d->layout     = new QGridLayout;

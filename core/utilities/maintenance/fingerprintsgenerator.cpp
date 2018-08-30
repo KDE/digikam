@@ -48,12 +48,12 @@
 namespace Digikam
 {
 
-class FingerPrintsGenerator::Private
+class Q_DECL_HIDDEN FingerPrintsGenerator::Private
 {
 public:
 
-    explicit Private() :
-        rebuildAll(true),
+    explicit Private()
+      : rebuildAll(true),
         thread(0)
     {
     }

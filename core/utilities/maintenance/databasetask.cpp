@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class DatabaseTask::Private
+class Q_DECL_HIDDEN DatabaseTask::Private
 {
 public:
 

@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class NewItemsFinder::Private
+class Q_DECL_HIDDEN NewItemsFinder::Private
 {
 public:
 

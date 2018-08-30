@@ -38,12 +38,12 @@
 namespace Digikam
 {
 
-class EditableSearchTreeView::Private
+class Q_DECL_HIDDEN EditableSearchTreeView::Private
 {
 public:
 
-    explicit Private() :
-        searchModificationHelper(0),
+    explicit Private()
+      : searchModificationHelper(0),
         renameSearchAction(0),
         deleteSearchAction(0)
     {

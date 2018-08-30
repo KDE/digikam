@@ -87,7 +87,7 @@ public:
     PLT_DeviceHostReference m_device;
 };
 
-class DMediaServer::Private
+class Q_DECL_HIDDEN DMediaServer::Private
 {
 public:
 

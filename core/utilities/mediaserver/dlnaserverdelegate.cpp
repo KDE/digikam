@@ -58,7 +58,7 @@ NPT_SET_LOCAL_LOGGER("digiKam.media.server.delegate")
 namespace Digikam
 {
 
-class DLNAMediaServerDelegate::Private
+class Q_DECL_HIDDEN DLNAMediaServerDelegate::Private
 {
 public:
 

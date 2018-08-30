@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class MaintenanceData::Private
+class Q_DECL_HIDDEN MaintenanceData::Private
 {
 public:
 

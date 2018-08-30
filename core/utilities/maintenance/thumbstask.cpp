@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class ThumbsTask::Private
+class Q_DECL_HIDDEN ThumbsTask::Private
 {
 public:
 

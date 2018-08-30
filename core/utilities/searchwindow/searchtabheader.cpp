@@ -58,7 +58,7 @@
 namespace Digikam
 {
 
-class KeywordLineEdit : public QLineEdit
+class Q_DECL_HIDDEN KeywordLineEdit : public QLineEdit
 {
 public:
 
@@ -165,7 +165,7 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class SearchTabHeader::Private
+class Q_DECL_HIDDEN SearchTabHeader::Private
 {
 public:
 

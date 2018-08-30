@@ -62,7 +62,7 @@
 namespace Digikam
 {
 
-class AnimatedClearButton::Private : public AnimatedVisibility
+class Q_DECL_HIDDEN AnimatedClearButton::Private : public AnimatedVisibility
 {
 public:
 
@@ -171,16 +171,16 @@ void AnimatedClearButton::mouseReleaseEvent(QMouseEvent* event)
 
 // ------------------------------------------------------------------------
 
-class CustomStepsDoubleSpinBox::Private
+class Q_DECL_HIDDEN CustomStepsDoubleSpinBox::Private
 {
 public:
 
-    explicit Private() :
-      beforeInitialValue(true),
-      initialValue(0),
-      smallerStep(0),
-      largerStep(0),
-      invertStepping(false)
+    explicit Private()
+      : beforeInitialValue(true),
+        initialValue(0),
+        smallerStep(0),
+        largerStep(0),
+        invertStepping(false)
     {
     }
 
@@ -342,16 +342,16 @@ void CustomStepsDoubleSpinBox::slotValueChanged(double val)
 
 // ------------------------------------------------------------------------
 
-class CustomStepsIntSpinBox::Private
+class Q_DECL_HIDDEN CustomStepsIntSpinBox::Private
 {
 public:
 
-    explicit Private() :
-      beforeInitialValue(true),
-      initialValue(0),
-      smallerStep(0),
-      largerStep(0),
-      invertStepping(false)
+    explicit Private()
+      : beforeInitialValue(true),
+        initialValue(0),
+        smallerStep(0),
+        largerStep(0),
+        invertStepping(false)
     {
     }
 

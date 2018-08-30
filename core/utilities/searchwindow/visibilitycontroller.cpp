@@ -26,7 +26,7 @@
 namespace Digikam
 {
 
-class VisibilityController::Private
+class Q_DECL_HIDDEN VisibilityController::Private
 {
 public:
 
@@ -41,7 +41,7 @@ public:
     QWidget*                     containerWidget;
 };
 
-class VisibilityWidgetWrapper : public QObject, public VisibilityObject
+class Q_DECL_HIDDEN VisibilityWidgetWrapper : public QObject, public VisibilityObject
 {
 public:
 

@@ -43,12 +43,12 @@
 namespace Digikam
 {
 
-class MetadataSynchronizer::Private
+class Q_DECL_HIDDEN MetadataSynchronizer::Private
 {
 public:
 
-    explicit Private() :
-        imageInfoJob(0),
+    explicit Private()
+      : imageInfoJob(0),
         thread(0),
         direction(MetadataSynchronizer::WriteFromDatabaseToFile),
         tagsOnly(false)
