@@ -498,4 +498,5 @@ BUGFIXES:
 437 ==> 388227 - Image version always shown.
 438 ==> 386561 - Cannot import images from mac /Volumes/<SdCard>.
 439 ==> 396491 - Versions are not grouped despite the correct setting.
-440 ==> 
+440 ==> 389505 - Database port reset to 3306 when oppening digiKam setup (working with maiaDB10).
+441 ==> 
