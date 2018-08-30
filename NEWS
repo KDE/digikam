@@ -487,4 +487,5 @@ BUGFIXES:
 426 ==> 261471 - Crashes when trying to delete photos or albums.
 427 ==> 342108 - Crashes when trying to import images
 428 ==> 341268 - digiKam freeze each time I select a photograph in a collection.
-429 ==> 
+429 ==> 388551 - Error message at startup showing that Marble plugins are not loading but they do.
+430 ==> 
