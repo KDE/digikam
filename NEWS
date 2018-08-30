@@ -485,4 +485,6 @@ BUGFIXES:
 424 ==> 397990 - Carousel images too large.
 425 ==> 389273 - Copy/move selected items to anothor Album doesn't work correctly [patch].
 426 ==> 261471 - Crashes when trying to delete photos or albums.
-427 ==> 
+427 ==> 342108 - Crashes when trying to import images
+428 ==> 
+
