@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class FacePipelineExtendedPackage : public FacePipelinePackage, public QSharedData
+class Q_DECL_HIDDEN FacePipelineExtendedPackage : public FacePipelinePackage, public QSharedData
 {
 public:
 
@@ -63,7 +63,7 @@ public:
 
 // ----------------------------------------------------------------------------------------
 
-class PackageLoadingDescriptionList : public QList<FacePipelineExtendedPackage::Ptr>
+class Q_DECL_HIDDEN PackageLoadingDescriptionList : public QList<FacePipelineExtendedPackage::Ptr>
 {
 public:
 
@@ -76,7 +76,7 @@ public:
 
 // ----------------------------------------------------------------------------------------
 
-class ParallelPipes : public QObject
+class Q_DECL_HIDDEN ParallelPipes : public QObject
 {
     Q_OBJECT
 
@@ -112,7 +112,7 @@ protected:
 
 // ----------------------------------------------------------------------------------------
 
-class ScanStateFilter : public DynamicThread
+class Q_DECL_HIDDEN ScanStateFilter : public DynamicThread
 {
     Q_OBJECT
 
@@ -127,8 +127,8 @@ public:
 
 public:
 
-    FacePipeline::Private* const    d;
-    FacePipeline::FilterMode        mode;
+    FacePipeline::Private* const     d;
+    FacePipeline::FilterMode         mode;
     FacePipelineFaceTagsIface::Roles tasks;
 
 protected Q_SLOTS:
@@ -152,7 +152,7 @@ protected:
 
 // ----------------------------------------------------------------------------------------
 
-class PreviewLoader : public PreviewLoadThread
+class Q_DECL_HIDDEN PreviewLoader : public PreviewLoadThread
 {
     Q_OBJECT
 
@@ -182,7 +182,7 @@ protected:
 
 // ----------------------------------------------------------------------------------------
 
-class DetectionWorker : public WorkerObject
+class Q_DECL_HIDDEN DetectionWorker : public WorkerObject
 {
     Q_OBJECT
 
@@ -207,13 +207,13 @@ Q_SIGNALS:
 
 protected:
 
-    FaceDetector     detector;
+    FaceDetector                 detector;
     FacePipeline::Private* const d;
 };
 
 // ----------------------------------------------------------------------------------------
 
-class FaceImageRetriever
+class Q_DECL_HIDDEN FaceImageRetriever
 {
 public:
 
@@ -232,7 +232,7 @@ protected:
 
 // ----------------------------------------------------------------------------------------
 
-class RecognitionWorker : public WorkerObject
+class Q_DECL_HIDDEN RecognitionWorker : public WorkerObject
 {
     Q_OBJECT
 
@@ -264,14 +264,14 @@ Q_SIGNALS:
 
 protected:
 
-    FaceImageRetriever               imageRetriever;
-    RecognitionDatabase database;
-    FacePipeline::Private* const     d;
+    FaceImageRetriever           imageRetriever;
+    RecognitionDatabase          database;
+    FacePipeline::Private* const d;
 };
 
 // ----------------------------------------------------------------------------------------
 
-class DatabaseWriter : public WorkerObject
+class Q_DECL_HIDDEN DatabaseWriter : public WorkerObject
 {
     Q_OBJECT
 
@@ -296,7 +296,7 @@ protected:
 
 // ----------------------------------------------------------------------------------------
 
-class Trainer : public WorkerObject
+class Q_DECL_HIDDEN Trainer : public WorkerObject
 {
     Q_OBJECT
 
@@ -322,14 +322,14 @@ Q_SIGNALS:
 
 protected:
 
-    RecognitionDatabase database;
-    FaceImageRetriever               imageRetriever;
-    FacePipeline::Private* const     d;
+    RecognitionDatabase          database;
+    FaceImageRetriever           imageRetriever;
+    FacePipeline::Private* const d;
 };
 
 // ----------------------------------------------------------------------------------------
 
-class DetectionBenchmarker : public WorkerObject
+class Q_DECL_HIDDEN DetectionBenchmarker : public WorkerObject
 {
     Q_OBJECT
 
@@ -365,7 +365,7 @@ protected:
 
 // ----------------------------------------------------------------------------------------
 
-class RecognitionBenchmarker : public WorkerObject
+class Q_DECL_HIDDEN RecognitionBenchmarker : public WorkerObject
 {
     Q_OBJECT
 
@@ -384,11 +384,14 @@ Q_SIGNALS:
 
 protected:
 
-    class Statistics
+    class Q_DECL_HIDDEN Statistics
     {
     public:
 
         Statistics();
+
+    public:
+
         int knownFaces;
         int correctlyRecognized;
     };

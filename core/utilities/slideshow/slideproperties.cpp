@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class SlideProperties::Private
+class Q_DECL_HIDDEN SlideProperties::Private
 {
 public:
 

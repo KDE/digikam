@@ -64,7 +64,7 @@
 namespace Digikam
 {
 
-class SlideShow::Private
+class Q_DECL_HIDDEN SlideShow::Private
 {
 
 public:
