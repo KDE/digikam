@@ -492,4 +492,5 @@ BUGFIXES:
 431 ==> 387047 - Easily accessible signatures.
 432 ==> 286286 - digiKam crashes if I request fullscreen mode.
 433 ==> 292522 - digiKam crashes on startup.
-434 ==> 
+434 ==> 294791 - digiKam and Showfoto crashes while switching to fullscreen mode.
+435 ==> 
