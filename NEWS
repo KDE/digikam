@@ -491,5 +491,5 @@ BUGFIXES:
 430 ==> 342110 - Bug reporting feature gives error wont report bug.
 431 ==> 387047 - Easily accessible signatures.
 432 ==> 286286 - digiKam crashes if I request fullscreen mode.
-433 ==> 
-
+433 ==> 292522 - digiKam crashes on startup.
+434 ==> 
