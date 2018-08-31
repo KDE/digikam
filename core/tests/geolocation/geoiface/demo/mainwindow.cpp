@@ -124,7 +124,7 @@ void MarkerModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& moved
 
 // ----------------------------------------------------------------------
 
-class MyImageData
+class Q_DECL_HIDDEN MyImageData
 {
 public:
 
@@ -179,7 +179,7 @@ TrackManager::Track::List MyTrackModelHelper::getTracks() const
 
 // ----------------------------------------------------------------------
 
-class MainWindow::Private
+class Q_DECL_HIDDEN MainWindow::Private
 {
 public:
 

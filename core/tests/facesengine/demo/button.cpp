@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-class Button::Private
+class Q_DECL_HIDDEN Button::Private
 {
 public:
 

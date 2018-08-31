@@ -197,7 +197,7 @@ const QString ShowfotoSettings::Private::configToolTipsFont(QLatin1String("ToolT
 
 // -------------------------------------------------------------------------------------------------
 
-class ShowfotoSettingsCreator
+class Q_DECL_HIDDEN ShowfotoSettingsCreator
 {
 public:
 

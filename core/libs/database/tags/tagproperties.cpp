@@ -61,7 +61,7 @@ public:
 
 // ------------------------------------------------------------------------------------------------
 
-class TagPropertiesPrivSharedNull : public TagPropertiesPrivSharedPointer
+class Q_DECL_HIDDEN TagPropertiesPrivSharedNull : public TagPropertiesPrivSharedPointer
 {
 public:
 

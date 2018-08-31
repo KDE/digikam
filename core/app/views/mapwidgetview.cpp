@@ -201,9 +201,10 @@ bool MapWidgetView::getActiveState() const
 
 //-------------------------------------------------------------------------------------------------------------
 
-class MapViewModelHelper::Private
+class Q_DECL_HIDDEN MapViewModelHelper::Private
 {
 public:
+
     explicit Private()
         : model(0),
           importModel(0),
@@ -211,7 +212,6 @@ public:
           thumbnailLoadThread(0),
           application(MapWidgetView::ApplicationDigikam)
     {
-
     }
 
     ImageFilterModel*           model;

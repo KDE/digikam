@@ -61,8 +61,7 @@ DConfigDlgModel::~DConfigDlgModel()
 
 // ----------------------------------------------------------------------------------
 
-
-class DConfigDlgWdgItem::Private
+class Q_DECL_HIDDEN DConfigDlgWdgItem::Private
 {
 public:
 

@@ -37,7 +37,7 @@
 
 #include "mydragdrophandler.h"
 
-class MyTreeWidget::Private
+class Q_DECL_HIDDEN MyTreeWidget::Private
 {
 public:
 

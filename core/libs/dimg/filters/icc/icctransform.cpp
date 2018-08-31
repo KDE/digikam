@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class TransformDescription
+class Q_DECL_HIDDEN TransformDescription
 {
 public:
 

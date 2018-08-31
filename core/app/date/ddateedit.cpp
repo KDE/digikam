@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class DateValidator : public QValidator
+class Q_DECL_HIDDEN DateValidator : public QValidator
 {
 public:
 

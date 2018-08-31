@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class OsmInternalJobs
+class Q_DECL_HIDDEN OsmInternalJobs
 {
 public:
 

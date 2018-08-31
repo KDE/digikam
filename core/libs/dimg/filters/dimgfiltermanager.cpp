@@ -257,7 +257,7 @@ void DImgFilterManager::Private::addGenerator(const ImgFilterPtr& generator)
 
 // -----------------------------------------------------------------------------------------
 
-class DImgFilterManagerCreator
+class Q_DECL_HIDDEN DImgFilterManagerCreator
 {
 public:
 

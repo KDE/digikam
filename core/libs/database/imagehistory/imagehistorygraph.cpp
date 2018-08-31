@@ -35,7 +35,7 @@ namespace Digikam
 
 // -----------------------------------------------------------------------------------------------
 
-class ImageHistoryGraphDataSharedNull : public QSharedDataPointer<ImageHistoryGraphData>
+class Q_DECL_HIDDEN ImageHistoryGraphDataSharedNull : public QSharedDataPointer<ImageHistoryGraphData>
 {
 public:
 

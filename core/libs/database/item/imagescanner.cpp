@@ -56,13 +56,13 @@
 #include "imagehistorygraphdata.h"
 
 #ifdef HAVE_KFILEMETADATA
-#include "baloowrap.h"
+#   include "baloowrap.h"
 #endif
 
 namespace Digikam
 {
 
-class ImageScannerCommit
+class Q_DECL_HIDDEN ImageScannerCommit
 {
 
 public:
@@ -1389,7 +1389,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
 
 // ---------------------------------------------------------------------------------------
 
-class lessThanByProximityToSubject
+class Q_DECL_HIDDEN lessThanByProximityToSubject
 {
 public:
 

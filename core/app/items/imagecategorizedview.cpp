@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class ImageItemViewToolTip : public ItemViewToolTip
+class Q_DECL_HIDDEN ImageItemViewToolTip : public ItemViewToolTip
 {
 public:
 

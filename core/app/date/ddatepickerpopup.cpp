@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class DDatePickerAction : public QWidgetAction
+class Q_DECL_HIDDEN DDatePickerAction : public QWidgetAction
 {
 public:
 

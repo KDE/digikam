@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class CameraThumbsCtrlStaticPriv
+class Q_DECL_HIDDEN CameraThumbsCtrlStaticPriv
 {
 public:
 

@@ -146,7 +146,7 @@ void HidingStateChanger::slotPropertiesAssigned(bool visible)
 
 // ---------------------------------------------------------------------------------
 
-class AnimationControl
+class Q_DECL_HIDDEN AnimationControl
 {
 public:
 

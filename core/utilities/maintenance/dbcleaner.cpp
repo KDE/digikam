@@ -441,7 +441,7 @@ void DbCleaner::slotDone()
 
 //----------------------------------------------------------------------------
 
-class DbShrinkDialog::Private
+class Q_DECL_HIDDEN DbShrinkDialog::Private
 {
 public:
 
@@ -459,7 +459,7 @@ public:
     int            progressIndex;
     QListWidget*   statusList;
 };
-    
+
 DbShrinkDialog::DbShrinkDialog(QWidget* const parent)
     : QDialog(parent),
       d(new Private)

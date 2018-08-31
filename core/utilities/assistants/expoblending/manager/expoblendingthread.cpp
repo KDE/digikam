@@ -130,7 +130,7 @@ public:
     MetaEngine                      meta;
 };
 
-class RawObserver : public DImgLoaderObserver
+class Q_DECL_HIDDEN RawObserver : public DImgLoaderObserver
 {
 public:
 

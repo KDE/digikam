@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class SimilarityDbAccessStaticPriv
+class Q_DECL_HIDDEN SimilarityDbAccessStaticPriv
 {
 public:
 
@@ -75,7 +75,7 @@ SimilarityDbAccessStaticPriv* SimilarityDbAccess::d = 0;
 
 // -----------------------------------------------------------------------------
 
-class SimilarityDbAccessMutexLocker : public QMutexLocker
+class Q_DECL_HIDDEN SimilarityDbAccessMutexLocker : public QMutexLocker
 {
 public:
 

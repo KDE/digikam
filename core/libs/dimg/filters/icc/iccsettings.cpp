@@ -93,7 +93,7 @@ public:
 
 // -----------------------------------------------------------------------------------------------
 
-class IccSettingsCreator
+class Q_DECL_HIDDEN IccSettingsCreator
 {
 public:
 

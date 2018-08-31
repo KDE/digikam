@@ -38,12 +38,12 @@ Q_DECLARE_METATYPE(QModelIndex)
 namespace Digikam
 {
 
-class ModelMenu::Private
+class Q_DECL_HIDDEN ModelMenu::Private
 {
 public:
 
-    explicit Private() :
-        maxRows(7),
+    explicit Private()
+      : maxRows(7),
         firstSeparator(-1),
         maxWidth(-1),
         hoverRole(0),
@@ -276,12 +276,12 @@ void ModelMenu::hovered(QAction* action)
 
 // ------------------------------------------------------------------------------
 
-class BookmarksMenu::Private
+class Q_DECL_HIDDEN BookmarksMenu::Private
 {
 public:
 
-    explicit Private() :
-        manager(0)
+    explicit Private()
+      : manager(0)
     {
     }
 

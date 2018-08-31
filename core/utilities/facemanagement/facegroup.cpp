@@ -61,7 +61,7 @@ enum FaceGroupState
 
 //-------------------------------------------------------------------------------
 
-class FaceItem : public RegionFrameItem
+class Q_DECL_HIDDEN FaceItem : public RegionFrameItem
 {
 public:
 

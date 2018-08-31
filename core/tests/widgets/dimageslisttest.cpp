@@ -44,8 +44,7 @@
 
 using namespace Digikam;
 
-
-class Task : public ActionJob
+class Q_DECL_HIDDEN Task : public ActionJob
 {
 public:
 
@@ -178,7 +177,7 @@ void ActionThread::slotJobStarted()
 
 // ----------------------------------------------------------
 
-class DImagesListTest::Private
+class Q_DECL_HIDDEN DImagesListTest::Private
 {
 public:
 

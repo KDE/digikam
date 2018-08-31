@@ -394,7 +394,7 @@ QIcon DFileIconProvider::icon(const QFileInfo& info) const
 */
 // ------------------------------------------------------------------------
 
-class ImageDialog::Private
+class Q_DECL_HIDDEN ImageDialog::Private
 {
 
 public:

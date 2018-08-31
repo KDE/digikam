@@ -51,7 +51,7 @@ namespace Digikam
 typedef QMap<qlonglong, QList<int> > IdAlbumMap;
 typedef QMap<int, QPixmap>           AlbumThumbnailMap;
 
-class AlbumThumbnailLoaderCreator
+class Q_DECL_HIDDEN AlbumThumbnailLoaderCreator
 {
 public:
 

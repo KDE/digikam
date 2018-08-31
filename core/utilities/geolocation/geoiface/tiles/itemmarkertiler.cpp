@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class ItemMarkerTiler::MyTile : public Tile
+class Q_DECL_HIDDEN ItemMarkerTiler::MyTile : public Tile
 {
 public:
 

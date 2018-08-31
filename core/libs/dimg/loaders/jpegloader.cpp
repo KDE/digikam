@@ -132,7 +132,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     cinfo.err->output_message = dimg_jpeg_output_message;
 
     // setjmp-save cleanup
-    class CleanupData
+    class Q_DECL_HIDDEN CleanupData
     {
     public:
 
@@ -690,11 +690,13 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     cinfo.err->output_message = dimg_jpeg_output_message;
 
     // setjmp-save cleanup
-    class CleanupData
+    class Q_DECL_HIDDEN CleanupData
     {
     public:
 
-        CleanupData() : line(0), f(0)
+        CleanupData()
+            : line(0),
+              f(0)
         {
         }
 

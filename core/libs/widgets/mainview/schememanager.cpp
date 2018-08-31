@@ -43,7 +43,7 @@ namespace Digikam
 
 // HCY color space management
 
-class HCYColorSpace
+class Q_DECL_HIDDEN HCYColorSpace
 {
 public:
 
@@ -475,7 +475,7 @@ qreal HCYColorSpace::luma(const QColor& color)
 
 // -------------------------------------------------------------------------------------
 
-class StateEffects
+class Q_DECL_HIDDEN StateEffects
 {
 public:
 

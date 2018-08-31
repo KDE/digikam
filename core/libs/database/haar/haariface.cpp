@@ -72,7 +72,7 @@ typedef QMap<qlonglong, int>                 AlbumCache;
  *  Reading and writing is done in a platform-independent manner, which
  *  induces a certain overhead, but which is necessary IMO.
  */
-class DatabaseBlob
+class Q_DECL_HIDDEN DatabaseBlob
 {
 public:
 
@@ -637,7 +637,7 @@ QPair<double,QMap<qlonglong,double>> HaarIface::bestMatchesWithThreshold(qlonglo
     // Debug output
     if (bestMatches.count() > 1)
     {
-        // The average percentage is the sum of all percentages 
+        // The average percentage is the sum of all percentages
         // (without the original picture) divided by the count of pictures -1.
         // Subtracting 1 is necessary since the original picture is not used for the calculation.
         avgPercentage = avgPercentage / (bestMatches.count() - 1);

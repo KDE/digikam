@@ -88,7 +88,7 @@ public:
 
 // --------------------------------------------------------------------------------
 
-class BatchToolsFactoryCreator
+class Q_DECL_HIDDEN BatchToolsFactoryCreator
 {
 public:
 

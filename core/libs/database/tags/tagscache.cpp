@@ -241,7 +241,7 @@ public:
 
 // ------------------------------------------------------------------------------------------
 
-class ChangingDB
+class Q_DECL_HIDDEN ChangingDB
 {
 public:
 
@@ -260,7 +260,7 @@ public:
 
 // ------------------------------------------------------------------------------------------
 
-class TagsCacheCreator
+class Q_DECL_HIDDEN TagsCacheCreator
 {
 public:
 

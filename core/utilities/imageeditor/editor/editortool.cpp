@@ -365,13 +365,13 @@ void EditorTool::slotUpdateSpotInfo(const DColor& col, const QPoint& point)
 
 // ----------------------------------------------------------------
 
-class EditorToolThreaded::Private
+class Q_DECL_HIDDEN EditorToolThreaded::Private
 {
 
 public:
 
-    explicit Private() :
-        delFilter(true),
+    explicit Private()
+      : delFilter(true),
         currentRenderingMode(EditorToolThreaded::NoneRendering),
         threadedFilter(0),
         threadedAnalyser(0)

@@ -69,7 +69,7 @@ public:
 
 // -----------------------------------------------------------------------
 
-class ImageTagPairPrivSharedNull : public ImageTagPairPrivSharedPointer
+class Q_DECL_HIDDEN ImageTagPairPrivSharedNull : public ImageTagPairPrivSharedPointer
 {
 public:
 

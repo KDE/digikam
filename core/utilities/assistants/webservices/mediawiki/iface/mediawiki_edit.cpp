@@ -48,7 +48,7 @@
 namespace MediaWiki
 {
 
-class Result
+class Q_DECL_HIDDEN Result
 {
 public:
 

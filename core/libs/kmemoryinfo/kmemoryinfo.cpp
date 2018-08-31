@@ -31,7 +31,7 @@ static int fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* const data);
 namespace Digikam
 {
 
-class KMemoryInfo::KMemoryInfoData : public QSharedData
+class Q_DECL_HIDDEN KMemoryInfo::KMemoryInfoData : public QSharedData
 {
 public:
 
@@ -67,7 +67,7 @@ public:
 
 // ------------------------------------------------------------------------------------------
 
-class KMemoryInfoDataSharedNull : public QSharedDataPointer<KMemoryInfo::KMemoryInfoData>
+class Q_DECL_HIDDEN KMemoryInfoDataSharedNull : public QSharedDataPointer<KMemoryInfo::KMemoryInfoData>
 {
 public:
 

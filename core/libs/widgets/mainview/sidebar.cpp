@@ -711,7 +711,7 @@ void DMultiTabBar::fontChange(const QFont&)
 
 // -------------------------------------------------------------------------------------
 
-class SidebarState
+class Q_DECL_HIDDEN SidebarState
 {
 
 public:
@@ -779,7 +779,7 @@ public:
     const QString                 optionRestoreSizeEntry;
 };
 
-class SidebarSplitter::Private
+class Q_DECL_HIDDEN SidebarSplitter::Private
 {
 public:
 

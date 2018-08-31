@@ -64,7 +64,7 @@
 namespace Digikam
 {
 
-class SimpleCollectionScannerObserver : public CollectionScannerObserver
+class Q_DECL_HIDDEN SimpleCollectionScannerObserver : public CollectionScannerObserver
 {
 public:
 
@@ -232,7 +232,7 @@ public:
 
 // ------------------------------------------------------------------------------
 
-class ScanControllerCreator
+class Q_DECL_HIDDEN ScanControllerCreator
 {
 public:
 

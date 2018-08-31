@@ -61,7 +61,7 @@
 namespace Digikam
 {
 
-class ThumbnailResult
+class Q_DECL_HIDDEN ThumbnailResult
 {
 
 public:
@@ -78,7 +78,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class ThumbnailLoadThreadStaticPriv
+class Q_DECL_HIDDEN ThumbnailLoadThreadStaticPriv
 {
 public:
 
@@ -945,7 +945,7 @@ void ThumbnailLoadThread::deleteThumbnail(const QString& filePath)
 
 // --- ThumbnailImageCatcher ---------------------------------------------------------
 
-class ThumbnailImageCatcher::Private
+class Q_DECL_HIDDEN ThumbnailImageCatcher::Private
 {
 
 public:
@@ -960,7 +960,7 @@ public:
 
 public:
 
-    class CatcherResult
+    class Q_DECL_HIDDEN CatcherResult
     {
     public:
 

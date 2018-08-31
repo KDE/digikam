@@ -86,7 +86,7 @@ struct State
 
 // -------------------------------------------------------------------------------
 
-class AlbumTreeViewDelegate : public QStyledItemDelegate
+class Q_DECL_HIDDEN AlbumTreeViewDelegate : public QStyledItemDelegate
 {
 public:
 

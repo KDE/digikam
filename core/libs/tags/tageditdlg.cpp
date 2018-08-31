@@ -61,7 +61,7 @@
 namespace Digikam
 {
 
-class TagsListCreationErrorDialog : public QDialog
+class Q_DECL_HIDDEN TagsListCreationErrorDialog : public QDialog
 {
 
 public:

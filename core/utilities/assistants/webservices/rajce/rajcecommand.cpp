@@ -106,7 +106,7 @@ PreparedImage s_prepareImageForUpload(const QString& saveDir,
 
 // -----------------------------------------------------------------------
 
-class RajceCommand::Private
+class Q_DECL_HIDDEN RajceCommand::Private
 {
 public:
 
@@ -428,7 +428,7 @@ void AlbumListCommand::cleanUpOnError(RajceSession& state)
 
 // -----------------------------------------------------------------------
 
-class AddPhotoCommand::Private
+class Q_DECL_HIDDEN AddPhotoCommand::Private
 {
 public:
 
