@@ -33,7 +33,7 @@
 
 #include "metaengine.h"
 #include "dmetainfoiface.h"
-#include "yfwindow.h"
+#include "boxwindow.h"
 
 using namespace Digikam;
 
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    QPointer<YFWindow> dlg = new YFWindow(new DMetaInfoIface(&app, urlList), 0);
+    QPointer<BOXWindow> dlg = new BOXWindow(new DMetaInfoIface(&app, urlList), 0);
     dlg->exec();
     delete dlg;
 

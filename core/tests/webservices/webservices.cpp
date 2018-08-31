@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2017-06-28
- * Description : stand alone test application for webservices tool.
+ * Description : stand alone test application for factored webservices tool.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

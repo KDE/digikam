@@ -326,4 +326,7 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsmediawiki_SRCS}
                                    ${libwsvkontakte_SRCS}
                                    ${libwsfiletransfer_SRCS}
+
+                                   # Not yet finalized
+                                   #${libwstwitter_SRCS}
 )
