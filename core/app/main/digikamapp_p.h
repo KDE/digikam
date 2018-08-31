@@ -188,7 +188,7 @@ class FilterStatusBar;
 class TagsActionMngr;
 class DAdjustableLabel;
 
-class ProgressEntry
+class Q_DECL_HIDDEN ProgressEntry
 {
 public:
 

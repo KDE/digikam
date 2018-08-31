@@ -45,7 +45,7 @@ protected:
 
 // ----------------------------------------------------------------------------
 
-class PageItem
+class Q_DECL_HIDDEN PageItem
 {
 public:
 

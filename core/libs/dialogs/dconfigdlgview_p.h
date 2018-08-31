@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class DConfigDlgStackedWidget : public QStackedWidget
+class Q_DECL_HIDDEN DConfigDlgStackedWidget : public QStackedWidget
 {
 public:
 
@@ -122,7 +122,7 @@ namespace DConfigDlgInternal
 class DConfigDlgListViewDelegate;
 class DConfigDlgListViewProxy;
 
-class DConfigDlgPlainView : public QAbstractItemView
+class Q_DECL_HIDDEN DConfigDlgPlainView : public QAbstractItemView
 {
 public:
 
@@ -144,7 +144,7 @@ protected:
 
 // ---------------------------
 
-class DConfigDlgListView : public QListView
+class Q_DECL_HIDDEN DConfigDlgListView : public QListView
 {
     Q_OBJECT
 
@@ -162,7 +162,7 @@ private Q_SLOTS:
 
 // ---------------------------
 
-class DConfigDlgTreeView : public QTreeView
+class Q_DECL_HIDDEN DConfigDlgTreeView : public QTreeView
 {
     Q_OBJECT
 
@@ -183,7 +183,7 @@ private:
 
 // ---------------------------
 
-class DConfigDlgTabbedView : public QAbstractItemView
+class Q_DECL_HIDDEN DConfigDlgTabbedView : public QAbstractItemView
 {
     Q_OBJECT
 
@@ -220,7 +220,7 @@ private:
 
 // ---------------------------
 
-class DConfigDlgListViewDelegate : public QAbstractItemDelegate
+class Q_DECL_HIDDEN DConfigDlgListViewDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
 
@@ -242,7 +242,7 @@ private:
  * We need this proxy model to map the leaves of a tree-like model
  * to a one-level list model.
  */
-class DConfigDlgListViewProxy : public QAbstractProxyModel
+class Q_DECL_HIDDEN DConfigDlgListViewProxy : public QAbstractProxyModel
 {
     Q_OBJECT
 
@@ -274,7 +274,7 @@ private:
 
 // ---------------------------
 
-class SelectionModel : public QItemSelectionModel
+class Q_DECL_HIDDEN SelectionModel : public QItemSelectionModel
 {
     Q_OBJECT
 
