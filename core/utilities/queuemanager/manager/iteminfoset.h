@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ITEM_INFO_SET_H
-#define DIGIKAM_ITEM_INFO_SET_H
+#ifndef DIGIKAM_BQM_ITEM_INFO_SET_H
+#define DIGIKAM_BQM_ITEM_INFO_SET_H
 
 // Qt includes
 
@@ -69,4 +69,4 @@ typedef QList<ItemInfoSet> QueuePoolItemsList;
 Q_DECLARE_METATYPE(Digikam::ItemInfoSet)
 Q_DECLARE_METATYPE(Digikam::QueuePoolItemsList)
 
-#endif // DIGIKAM_ITEM_INFO_SET_H
+#endif // DIGIKAM_BQM_ITEM_INFO_SET_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_EDITOR_WINDOW_PRIVATE_H
-#define DIGIKAM_EDITOR_WINDOW_PRIVATE_H
+#ifndef DIGIKAM_IMAGE_EDITOR_WINDOW_PRIVATE_H
+#define DIGIKAM_IMAGE_EDITOR_WINDOW_PRIVATE_H
 
 // Qt includes
 
@@ -381,4 +381,4 @@ void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* const q, 
 
 } // namespace Digikam
 
-#endif // DIGIKAM_EDITOR_WINDOW_PRIVATE_H
+#endif // DIGIKAM_IMAGE_EDITOR_WINDOW_PRIVATE_H

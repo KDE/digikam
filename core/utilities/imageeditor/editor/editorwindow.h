@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_EDITOR_WINDOW_H
-#define DIGIKAM_EDITOR_WINDOW_H
+#ifndef DIGIKAM_IMAGE_EDITOR_WINDOW_H
+#define DIGIKAM_IMAGE_EDITOR_WINDOW_H
 
 // C++ includes
 
@@ -442,4 +442,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_EDITOR_WINDOW_H
+#endif // DIGIKAM_IMAGE_EDITOR_WINDOW_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ACTION_THREAD_H
-#define DIGIKAM_ACTION_THREAD_H
+#ifndef DIGIKAM_BQM_ACTION_THREAD_H
+#define DIGIKAM_BQM_ACTION_THREAD_H
 
 // Local includes
 
@@ -83,4 +83,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ACTION_THREAD_H
+#endif // DIGIKAM_BQM_ACTION_THREAD_H

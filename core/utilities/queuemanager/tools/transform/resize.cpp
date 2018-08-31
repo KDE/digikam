@@ -42,12 +42,10 @@
 #include "dimg.h"
 #include "dimgbuiltinfilter.h"
 
-
-
 namespace Digikam
 {
 
-class Resize::Private
+class Q_DECL_HIDDEN Resize::Private
 {
 public:
 
@@ -63,8 +61,8 @@ public:
 
 public:
 
-    explicit Private() :
-        labelPreset(0),
+    explicit Private()
+      : labelPreset(0),
         useCustom(0),
         customLength(0),
         comboBox(0),

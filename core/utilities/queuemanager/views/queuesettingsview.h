@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_QUEUE_SETTINGS_VIEW_H
-#define DIGIKAM_QUEUE_SETTINGS_VIEW_H
+#ifndef DIGIKAM_BQM_QUEUE_SETTINGS_VIEW_H
+#define DIGIKAM_BQM_QUEUE_SETTINGS_VIEW_H
 
 // Qt includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_QUEUE_SETTINGS_VIEW_H
+#endif // DIGIKAM_BQM_QUEUE_SETTINGS_VIEW_H

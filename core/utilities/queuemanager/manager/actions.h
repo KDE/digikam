@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ACTIONS_H
-#define DIGIKAM_ACTIONS_H
+#ifndef DIGIKAM_BQM_ACTIONS_H
+#define DIGIKAM_BQM_ACTIONS_H
 
 // Qt includes
 
@@ -69,4 +69,4 @@ public:
 
 Q_DECLARE_METATYPE(Digikam::ActionData)
 
-#endif // DIGIKAM_ACTIONS_H
+#endif // DIGIKAM_BQM_ACTIONS_H

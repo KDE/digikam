@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_WORKFLOW_MANAGER_H
-#define DIGIKAM_WORKFLOW_MANAGER_H
+#ifndef DIGIKAM_BQM_WORKFLOW_MANAGER_H
+#define DIGIKAM_BQM_WORKFLOW_MANAGER_H
 
 // Qt includes
 
@@ -110,4 +110,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_WORKFLOW_MANAGER_H
+#endif // DIGIKAM_BQM_WORKFLOW_MANAGER_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_TOOLS_LIST_VIEW_H
-#define DIGIKAM_TOOLS_LIST_VIEW_H
+#ifndef DIGIKAM_BQM_TOOLS_LIST_VIEW_H
+#define DIGIKAM_BQM_TOOLS_LIST_VIEW_H
 
 // Qt includes
 
@@ -62,7 +62,6 @@ class ToolListViewItem : public QTreeWidgetItem
 {
 
 public:
-
 
     ToolListViewItem(ToolListViewGroup* const parent, BatchTool* const tool);
     virtual ~ToolListViewItem();
@@ -114,4 +113,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_TOOLS_LIST_VIEW_H
+#endif // DIGIKAM_BQM_TOOLS_LIST_VIEW_H

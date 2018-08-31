@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_QUEUE_MGR_WINDOW_PRIVATE_H
-#define DIGIKAM_QUEUE_MGR_WINDOW_PRIVATE_H
+#ifndef DIGIKAM_BQM_QUEUE_MGR_WINDOW_PRIVATE_H
+#define DIGIKAM_BQM_QUEUE_MGR_WINDOW_PRIVATE_H
 
 // Qt includes
 
@@ -138,4 +138,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_QUEUE_MGR_WINDOW_PRIVATE_H
+#endif // DIGIKAM_BQM_QUEUE_MGR_WINDOW_PRIVATE_H

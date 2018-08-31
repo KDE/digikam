@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_EDITOR_CANVAS_H
-#define DIGIKAM_EDITOR_CANVAS_H
+#ifndef DIGIKAM_IMAGE_EDITOR_CANVAS_H
+#define DIGIKAM_IMAGE_EDITOR_CANVAS_H
 
 // Qt includes
 
@@ -209,4 +209,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_EDITOR_CANVAS_H
+#endif // DIGIKAM_IMAGE_EDITOR_CANVAS_H

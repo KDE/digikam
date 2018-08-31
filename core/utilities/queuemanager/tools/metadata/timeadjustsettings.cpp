@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class TimeAdjustSettings::Private
+class Q_DECL_HIDDEN TimeAdjustSettings::Private
 {
 
 public:
