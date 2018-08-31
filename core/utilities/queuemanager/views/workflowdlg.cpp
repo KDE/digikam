@@ -49,18 +49,16 @@
 #include "dxmlguiwindow.h"
 #include "dexpanderbox.h"
 
-
-
 namespace Digikam
 {
 
-class WorkflowDlg::Private
+class Q_DECL_HIDDEN WorkflowDlg::Private
 {
 
 public:
 
-    explicit Private() :
-        buttons(0),
+    explicit Private()
+      : buttons(0),
         titleEdit(0),
         descEdit(0)
     {

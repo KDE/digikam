@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_WORK_FLOW_DLG_H
-#define DIGIKAM_WORK_FLOW_DLG_H
+#ifndef DIGIKAM_BQM_WORK_FLOW_DLG_H
+#define DIGIKAM_BQM_WORK_FLOW_DLG_H
 
 // Qt includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_WORK_FLOW_DLG_H
+#endif // DIGIKAM_BQM_WORK_FLOW_DLG_H

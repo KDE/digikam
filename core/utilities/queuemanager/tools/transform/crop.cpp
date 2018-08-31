@@ -47,12 +47,12 @@
 namespace Digikam
 {
 
-class Crop::Private
+class Q_DECL_HIDDEN Crop::Private
 {
 public:
 
-    explicit Private() :
-        autoCrop(0),
+    explicit Private()
+      : autoCrop(0),
         heightInput(0),
         widthInput(0),
         xInput(0),
@@ -89,7 +89,7 @@ Crop::~Crop()
 
 void Crop::registerSettingsWidget()
 {
-    m_settingsWidget = new QWidget;
+    m_settingsWidget  = new QWidget;
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 

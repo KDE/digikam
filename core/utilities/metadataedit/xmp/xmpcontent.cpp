@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class XMPContent::Private
+class Q_DECL_HIDDEN XMPContent::Private
 {
 public:
 

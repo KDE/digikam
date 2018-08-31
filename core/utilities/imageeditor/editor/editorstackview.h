@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_EDITOR_STACK_VIEW_H
-#define DIGIKAM_EDITOR_STACK_VIEW_H
+#ifndef DIGIKAM_IMAGE_EDITOR_STACK_VIEW_H
+#define DIGIKAM_IMAGE_EDITOR_STACK_VIEW_H
 
 // Qt includes
 
@@ -101,4 +101,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_EDITOR_STACK_VIEW_H
+#endif // DIGIKAM_IMAGE_EDITOR_STACK_VIEW_H

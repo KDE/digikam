@@ -47,7 +47,7 @@ class KBImageLoader;
 class ScreenProperties;
 class PresentationAudioWidget;
 
-class PresentationKB::Private
+class Q_DECL_HIDDEN PresentationKB::Private
 {
 
 public:

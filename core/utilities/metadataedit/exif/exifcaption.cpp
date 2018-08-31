@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class EXIFCaption::Private
+class Q_DECL_HIDDEN EXIFCaption::Private
 {
 public:
 

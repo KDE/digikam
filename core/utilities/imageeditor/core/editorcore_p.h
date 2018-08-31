@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_EDITOR_CORE_PRIVATE_H
-#define DIGIKAM_EDITOR_CORE_PRIVATE_H
+#ifndef DIGIKAM_IMAGE_EDITOR_CORE_PRIVATE_H
+#define DIGIKAM_IMAGE_EDITOR_CORE_PRIVATE_H
 
 // Local includes
 
@@ -403,4 +403,4 @@ void EditorCore::Private::load(const LoadingDescription& description)
 
 } // namespace Digikam
 
-#endif // DIGIKAM_EDITOR_CORE_PRIVATE_H
+#endif // DIGIKAM_IMAGE_EDITOR_CORE_PRIVATE_H

@@ -58,7 +58,7 @@
 namespace Digikam
 {
 
-class MetadataEditDialog::Private
+class Q_DECL_HIDDEN MetadataEditDialog::Private
 {
 public:
 

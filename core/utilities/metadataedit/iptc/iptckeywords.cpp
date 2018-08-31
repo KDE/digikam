@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class IPTCKeywords::Private
+class Q_DECL_HIDDEN IPTCKeywords::Private
 {
 public:
 

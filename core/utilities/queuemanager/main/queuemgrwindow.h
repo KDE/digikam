@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_QUEUE_MGR_WINDOW_H
-#define DIGIKAM_QUEUE_MGR_WINDOW_H
+#ifndef DIGIKAM_BQM_QUEUE_MGR_WINDOW_H
+#define DIGIKAM_BQM_QUEUE_MGR_WINDOW_H
 
 // Qt includes
 
@@ -136,4 +136,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_QUEUE_MGR_WINDOW_H
+#endif // DIGIKAM_BQM_QUEUE_MGR_WINDOW_H

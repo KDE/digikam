@@ -46,17 +46,15 @@
 #include "freerotationsettings.h"
 #include "loadsavethread.h"
 
-
-
 namespace Digikam
 {
 
-class Rotate::Private
+class Q_DECL_HIDDEN Rotate::Private
 {
 public:
 
-    explicit Private() :
-        CUSTOM_ANGLE(DImg::ROT270 + 1),
+    explicit Private()
+      : CUSTOM_ANGLE(DImg::ROT270 + 1),
         label(0),
         useExif(0),
         comboBox(0),
@@ -104,12 +102,12 @@ void Rotate::registerSettingsWidget()
     d->comboBox->setDefaultIndex(DImg::ROT90);
     d->label->setText(i18n("Angle:"));
 
-    d->frSettings = new FreeRotationSettings(vbox);
+    d->frSettings       = new FreeRotationSettings(vbox);
 
     QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    m_settingsWidget = vbox;
+    m_settingsWidget    = vbox;
 
     setNeedResetExifOrientation(true);
 
@@ -228,6 +226,7 @@ bool Rotate::toolOperations()
     else
     {
         DImgBuiltinFilter filter;
+
         switch (rotation)
         {
             case DImg::ROT90:

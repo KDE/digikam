@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class IPTCEnvelope::Private
+class Q_DECL_HIDDEN IPTCEnvelope::Private
 {
 public:
 

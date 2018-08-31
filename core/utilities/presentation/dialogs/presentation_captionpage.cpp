@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-PresentationCaptionPage::PresentationCaptionPage( QWidget* const parent, PresentationContainer* const sharedData)
+PresentationCaptionPage::PresentationCaptionPage(QWidget* const parent, PresentationContainer* const sharedData)
     : QWidget(parent)
 {
     setupUi(this);

@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class IPTCEditWidget::Private
+class Q_DECL_HIDDEN IPTCEditWidget::Private
 {
 
 public:

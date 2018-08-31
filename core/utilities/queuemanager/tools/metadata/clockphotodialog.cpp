@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class ClockPhotoDialog::Private
+class Q_DECL_HIDDEN ClockPhotoDialog::Private
 {
 
 public:

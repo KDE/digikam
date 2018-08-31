@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class IPTCCredits::Private
+class Q_DECL_HIDDEN IPTCCredits::Private
 {
 public:
 

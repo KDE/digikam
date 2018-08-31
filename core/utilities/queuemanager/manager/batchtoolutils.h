@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BATCH_TOOL_UTILS_H
-#define DIGIKAM_BATCH_TOOL_UTILS_H
+#ifndef DIGIKAM_BQM_BATCH_TOOL_UTILS_H
+#define DIGIKAM_BQM_BATCH_TOOL_UTILS_H
 
 // Qt includes
 
@@ -100,4 +100,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_BATCH_TOOL_UTILS_H
+#endif // DIGIKAM_BQM_BATCH_TOOL_UTILS_H

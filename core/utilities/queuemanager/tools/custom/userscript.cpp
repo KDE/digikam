@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class UserScript::Private
+class Q_DECL_HIDDEN UserScript::Private
 {
 public:
 
@@ -62,8 +62,8 @@ public:
 
 public:
 
-    explicit Private() :
-        comboBox(0),
+    explicit Private()
+      : comboBox(0),
         textEdit(0),
         changeSettings(true)
     {
@@ -118,7 +118,7 @@ void UserScript::registerSettingsWidget()
     QLabel* const space  = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    m_settingsWidget = vbox;
+    m_settingsWidget     = vbox;
 
     connect(d->comboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));

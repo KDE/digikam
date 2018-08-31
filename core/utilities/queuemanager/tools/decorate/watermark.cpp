@@ -25,7 +25,6 @@
 
 #include "watermark.h"
 
-
 // Qt includes
 
 #include <QFontMetrics>
@@ -66,7 +65,7 @@
 namespace Digikam
 {
 
-class WaterMark::Private
+class Q_DECL_HIDDEN WaterMark::Private
 {
 
 public:
@@ -89,8 +88,8 @@ public:
 
 public:
 
-    explicit Private() :
-        textSettingsGroupBox(0),
+    explicit Private()
+      : textSettingsGroupBox(0),
         imageSettingsGroupBox(0),
         useAbsoluteImageSizeGroupBox(0),
         useImageRadioButton(0),
@@ -397,7 +396,7 @@ void WaterMark::registerSettingsWidget()
     QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    m_settingsWidget = vbox;
+    m_settingsWidget    = vbox;
 
     // ------------------------------------------------------------------------------------------------------
 
@@ -755,11 +754,12 @@ bool WaterMark::toolOperations()
 
     watermarkImage.rotate(rotationAngle);
 
-    if(placementType == Private::SpecifiedLocation)
+    if (placementType == Private::SpecifiedLocation)
     {
         switch (placementPosition)
         {
             case Private::TopLeft:
+
                 watermarkRect.moveTopLeft(QPoint(marginW, marginH));
                 break;
 
@@ -795,6 +795,7 @@ bool WaterMark::toolOperations()
                 break;
 
             default :    // BottomRight
+
                 if (rotationAngle == DImg::ANGLE::ROT90 || rotationAngle == DImg::ANGLE::ROT270)
                 {
                     xAdditionalValue += watermarkRect.width() - watermarkRect.height();
@@ -813,10 +814,10 @@ bool WaterMark::toolOperations()
     {
         const float DENSE_SPACING_FACTOR  = 1.2;
         const float SPARSE_SPACING_FACTOR = 1.8;
-        float widthRatio     = (float)watermarkRect.width()/image().width();
-        float heightRatio    = (float)watermarkRect.height()/image().height();
-        float spacingFactor  = (denseRepetition) ? DENSE_SPACING_FACTOR : SPARSE_SPACING_FACTOR;
-        spacingFactor       *= userSparsityFactor;
+        float widthRatio                  = (float)watermarkRect.width()/image().width();
+        float heightRatio                 = (float)watermarkRect.height()/image().height();
+        float spacingFactor               = (denseRepetition) ? DENSE_SPACING_FACTOR : SPARSE_SPACING_FACTOR;
+        spacingFactor                    *= userSparsityFactor;
 
         if (placementType == Private::SystematicRepetition)
         {

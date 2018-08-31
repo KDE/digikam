@@ -61,7 +61,7 @@
 namespace Digikam
 {
 
-class PresentationMainPage::Private
+class Q_DECL_HIDDEN PresentationMainPage::Private
 {
 
 public:

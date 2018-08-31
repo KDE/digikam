@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class MultiValuesEdit::Private
+class Q_DECL_HIDDEN MultiValuesEdit::Private
 {
 public:
 

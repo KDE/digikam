@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class MultiStringsEdit::Private
+class Q_DECL_HIDDEN MultiStringsEdit::Private
 {
 public:
 

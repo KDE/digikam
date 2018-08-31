@@ -5,16 +5,22 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-# Configuration to tune bofore to make tarball.
+# Configuration to tune before to build tarball.
 
 TARBALL_VERSION="6.0.0-beta1"
+
+# Location to host target files.
 TARBALL_DIR="$PWD/../digikam-$TARBALL_VERSION"
 TARBALL_FILE="$PWD/../digikam-$TARBALL_VERSION.tar.xz"
 TARBALL_CHECKSUMS="$PWD/../digikam-$TARBALL_VERSION.sum"
+
+# sub-dir to build translations
 TARBALL_BUILD="build.tarball"
+
+# PGP signature
 TARBALL_SIGN=1
 
-# Prepare temp dir to compile translations files.
+# Prepare temporary directory to compile translations files.
 
 mkdir -p $TARBALL_BUILD
 cd $TARBALL_BUILD
@@ -41,12 +47,13 @@ cmake -G "Unix Makefiles" . \
       -Wno-dev \
       .. || exit 1
 
-# Check if translation files can be compiled (.po => .mo). Stop the script at any error.
-# Source code is not compiled and it's expected to compile. No check about is performed.
+# Check if translation files can be compiled (.po => .mo). Stop the script is one error occurs.
+# Source code is not compiled and it's expected to compile at release time.
+# So, no check about this point is performed.
 
 make -j4 || exit 1
 
-# If all is fine cleanup build and continu.
+# If all is fine clean-up build and continue.
 
 cd ..
 rm -fr $TARBALL_BUILD
@@ -54,7 +61,7 @@ rm -fr $TARBALL_BUILD
 # Prepare the tarball and compress.
 
 mkdir -p $TARBALL_DIR
-cp -rf * $TARBALL_DIR
+cp -rf ./* $TARBALL_DIR
 tar cf - $TARBALL_DIR | xz -4e > $TARBALL_FILE
 
 # Cleanup temp directory
@@ -77,6 +84,8 @@ echo -n "SHA256 sum : "                                                         
 sha256sum "$TARBALL_FILE" | { read first rest ; echo $first ; }                 >> $TARBALL_CHECKSUMS
 
 cat $TARBALL_CHECKSUMS
+
+# Compute GPG signature.
 
 if [[ $TARBALL_SIGN = 1 ]] ; then
     cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -stabv "$TARBALL_FILE"

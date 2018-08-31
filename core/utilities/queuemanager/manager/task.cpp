@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class Task::Private
+class Q_DECL_HIDDEN Task::Private
 {
 public:
 

@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class LensAutoFix::Private
+class Q_DECL_HIDDEN LensAutoFix::Private
 {
 public:
 

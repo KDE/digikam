@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_QUEUE_MGR_WINDOW_PRIVATE_H
-#define DIGIKAM_QUEUE_MGR_WINDOW_PRIVATE_H
+#ifndef DIGIKAM_BQM_QUEUE_MGR_WINDOW_PRIVATE_H
+#define DIGIKAM_BQM_QUEUE_MGR_WINDOW_PRIVATE_H
 
 // Qt includes
 
@@ -47,7 +47,7 @@ namespace Digikam
 
 class BatchToolsFactory;
 
-class QueueMgrWindow::Private
+class Q_DECL_HIDDEN QueueMgrWindow::Private
 {
 
 public:
@@ -138,4 +138,4 @@ public:
 
 } // namespace Digikam
 
-#endif // QUEUEMGRWINDOWPRIVATE_H
+#endif // DIGIKAM_BQM_QUEUE_MGR_WINDOW_PRIVATE_H

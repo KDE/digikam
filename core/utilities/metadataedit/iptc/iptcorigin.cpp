@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class IPTCOrigin::Private
+class Q_DECL_HIDDEN IPTCOrigin::Private
 {
 public:
 

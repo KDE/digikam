@@ -46,7 +46,7 @@ namespace Digikam
 
 typedef QMap<QUrl, QImage> LoadedImages;
 
-class LoadThread : public QThread
+class Q_DECL_HIDDEN LoadThread : public QThread
 {
 
 public:
@@ -95,7 +95,7 @@ typedef QMap<QUrl, LoadThread*> LoadingThreads;
 
 // -----------------------------------------------------------------------------------------
 
-class PresentationLoader::Private
+class Q_DECL_HIDDEN PresentationLoader::Private
 {
 
 public:

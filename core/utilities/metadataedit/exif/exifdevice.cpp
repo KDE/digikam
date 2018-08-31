@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class EXIFDevice::Private
+class Q_DECL_HIDDEN EXIFDevice::Private
 {
 public:
 

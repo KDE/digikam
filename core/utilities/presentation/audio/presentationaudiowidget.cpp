@@ -46,7 +46,7 @@ using namespace QtAV;
 namespace Digikam
 {
 
-class PresentationAudioWidget::Private
+class Q_DECL_HIDDEN PresentationAudioWidget::Private
 {
 
 public:

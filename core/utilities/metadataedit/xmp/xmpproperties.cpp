@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class XMPProperties::Private
+class Q_DECL_HIDDEN XMPProperties::Private
 {
 public:
 
