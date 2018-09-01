@@ -52,7 +52,7 @@ public:
 
     template <class Ui_Class>
 
-    class WizardUI : public QWidget, public Ui_Class
+    class Q_DECL_HIDDEN WizardUI : public QWidget, public Ui_Class
     {
     public:
 

@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class DrawEvent
+class Q_DECL_HIDDEN DrawEvent
 {
 public:
 

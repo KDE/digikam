@@ -58,12 +58,12 @@ using namespace Digikam;
 
 const int CoordinatesRole = Qt::UserRole + 1;
 
-class CalibratorModelHelper::Private
+class Q_DECL_HIDDEN CalibratorModelHelper::Private
 {
 public:
 
     explicit Private()
-     : model(0)
+        : model(0)
     {
     }
 
@@ -124,7 +124,7 @@ GeoModelHelper::PropertyFlags CalibratorModelHelper::modelFlags() const
 
 // ---------------------------------------------------------------------------------------------
 
-class Calibrator::Private
+class Q_DECL_HIDDEN Calibrator::Private
 {
 public:
 

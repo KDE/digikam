@@ -33,7 +33,7 @@ namespace Digikam
 {
 
 MetaEngineData::MetaEngineData()
-    : d(new Private)
+    : d(0)
 {
 }
 

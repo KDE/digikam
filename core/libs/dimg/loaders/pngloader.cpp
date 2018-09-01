@@ -155,12 +155,12 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     // will jump here
 
     // setjmp-save cleanup
-    class CleanupData
+    class Q_DECL_HIDDEN CleanupData
     {
     public:
 
-        CleanupData():
-            data(0),
+        CleanupData()
+          : data(0),
             lines(0),
             f(0)
         {
@@ -660,12 +660,12 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
     // will jump here
 
     // setjmp-save cleanup
-    class CleanupData
+    class Q_DECL_HIDDEN CleanupData
     {
     public:
 
-        CleanupData():
-            data(0),
+        CleanupData()
+          : data(0),
             f(0)
         {
         }

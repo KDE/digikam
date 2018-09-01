@@ -57,13 +57,13 @@
 namespace Digikam
 {
 
-class AlbumRootLocation : public CollectionLocation
+class Q_DECL_HIDDEN AlbumRootLocation : public CollectionLocation
 {
 
 public:
 
-    AlbumRootLocation() :
-        available(false),
+    AlbumRootLocation()
+      : available(false),
         hidden(false)
     {
     }
@@ -155,7 +155,7 @@ public:
 
 // -------------------------------------------------
 
-class SolidVolumeInfo
+class Q_DECL_HIDDEN SolidVolumeInfo
 {
 
 public:
@@ -185,7 +185,7 @@ public:
 
 // -------------------------------------------------
 
-class CollectionManagerPrivate
+class Q_DECL_HIDDEN CollectionManagerPrivate
 {
 
 public:
@@ -248,12 +248,13 @@ public:
 
 // -------------------------------------------------
 
-class ChangingDB
+class Q_DECL_HIDDEN ChangingDB
 {
 
 public:
 
-    explicit ChangingDB(CollectionManagerPrivate* d) : d(d)
+    explicit ChangingDB(CollectionManagerPrivate* const d)
+        : d(d)
     {
         d->changingDB = true;
     }

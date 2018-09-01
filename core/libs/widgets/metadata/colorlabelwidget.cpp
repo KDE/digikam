@@ -458,7 +458,7 @@ QString ColorLabelWidget::labelColorName(ColorLabel label)
 
 // -----------------------------------------------------------------------------
 
-class ColorLabelSelector::Private
+class Q_DECL_HIDDEN ColorLabelSelector::Private
 {
 
 public:

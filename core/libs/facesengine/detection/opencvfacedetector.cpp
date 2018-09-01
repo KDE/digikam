@@ -46,7 +46,7 @@ using namespace std;
 namespace Digikam
 {
 
-class DetectObjectParameters
+class Q_DECL_HIDDEN DetectObjectParameters
 {
 public:
 
@@ -103,7 +103,7 @@ static cv::Rect fromQRect(const QRect& rect)
 
 // --------------------------------------------------------------------------------
 
-class Cascade : public cv::CascadeClassifier
+class Q_DECL_HIDDEN Cascade : public cv::CascadeClassifier
 {
 public:
 

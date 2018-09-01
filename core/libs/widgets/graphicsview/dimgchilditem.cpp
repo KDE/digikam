@@ -29,7 +29,7 @@ namespace Digikam
 {
 
 /**
-class SimpleRectChildItem : public DImgChildItem
+class Q_DECL_HIDDEN SimpleRectChildItem : public DImgChildItem
 {
 public:
 

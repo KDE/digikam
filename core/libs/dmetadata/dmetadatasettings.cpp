@@ -90,7 +90,7 @@ DMetadataSettingsContainer DMetadataSettings::Private::setSettings(const DMetada
 
 // -----------------------------------------------------------------------------------------------
 
-class DMetadataSettingsCreator
+class Q_DECL_HIDDEN DMetadataSettingsCreator
 {
 public:
 

@@ -45,7 +45,7 @@ namespace Digikam
  * @brief This class calls Geonames' reverse geocoding service.
  */
 
-class GeonamesInternalJobs
+class Q_DECL_HIDDEN GeonamesInternalJobs
 {
 public:
 

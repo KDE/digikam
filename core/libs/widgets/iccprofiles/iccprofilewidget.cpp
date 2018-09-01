@@ -67,7 +67,7 @@ static const char* ICCEntryList[] =
 namespace Digikam
 {
 
-class ICCTagInfo
+class Q_DECL_HIDDEN ICCTagInfo
 {
 
 public:

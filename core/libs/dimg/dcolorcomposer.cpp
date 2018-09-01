@@ -43,86 +43,98 @@
 namespace Digikam
 {
 
-class DColorComposerPorterDuffNone : public DColorComposer
+class Q_DECL_HIDDEN DColorComposerPorterDuffNone : public DColorComposer
 {
 public:
+
     virtual void compose(DColor& dest, DColor src);
     virtual void compose(DColor& dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
-class DColorComposerPorterDuffClear : public DColorComposer
+class Q_DECL_HIDDEN DColorComposerPorterDuffClear : public DColorComposer
 {
 public:
+
     virtual void compose(DColor& dest, DColor src);
     virtual void compose(DColor& dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
-class DColorComposerPorterDuffSrc : public DColorComposer
+class Q_DECL_HIDDEN DColorComposerPorterDuffSrc : public DColorComposer
 {
 public:
+
     virtual void compose(DColor& dest, DColor src);
     virtual void compose(DColor& dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
-class DColorComposerPorterDuffSrcOver : public DColorComposer
+class Q_DECL_HIDDEN DColorComposerPorterDuffSrcOver : public DColorComposer
 {
 public:
+
     virtual void compose(DColor& dest, DColor src);
     virtual void compose(DColor& dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
-class DColorComposerPorterDuffDstOver : public DColorComposer
+class Q_DECL_HIDDEN DColorComposerPorterDuffDstOver : public DColorComposer
 {
 public:
+
     virtual void compose(DColor& dest, DColor src);
     virtual void compose(DColor& dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
-class DColorComposerPorterDuffSrcIn : public DColorComposer
+class Q_DECL_HIDDEN DColorComposerPorterDuffSrcIn : public DColorComposer
 {
 public:
+
     virtual void compose(DColor& dest, DColor src);
     virtual void compose(DColor& dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
-class DColorComposerPorterDuffDstIn : public DColorComposer
+class Q_DECL_HIDDEN DColorComposerPorterDuffDstIn : public DColorComposer
 {
 public:
+
     virtual void compose(DColor& dest, DColor src);
     virtual void compose(DColor& dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
-class DColorComposerPorterDuffSrcOut : public DColorComposer
+class Q_DECL_HIDDEN DColorComposerPorterDuffSrcOut : public DColorComposer
 {
 public:
+
     virtual void compose(DColor& dest, DColor src);
     virtual void compose(DColor& dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
-class DColorComposerPorterDuffDstOut : public DColorComposer
+class Q_DECL_HIDDEN DColorComposerPorterDuffDstOut : public DColorComposer
 {
 public:
+
     virtual void compose(DColor& dest, DColor src);
     virtual void compose(DColor& dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
-class DColorComposerPorterDuffSrcAtop : public DColorComposer
+class Q_DECL_HIDDEN DColorComposerPorterDuffSrcAtop : public DColorComposer
 {
 public:
+
     virtual void compose(DColor& dest, DColor src);
     virtual void compose(DColor& dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
-class DColorComposerPorterDuffDstAtop : public DColorComposer
+class Q_DECL_HIDDEN DColorComposerPorterDuffDstAtop : public DColorComposer
 {
 public:
+
     virtual void compose(DColor& dest, DColor src);
     virtual void compose(DColor& dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
-class DColorComposerPorterDuffXor : public DColorComposer
+class Q_DECL_HIDDEN DColorComposerPorterDuffXor : public DColorComposer
 {
 public:
+
     virtual void compose(DColor& dest, DColor src);
     virtual void compose(DColor& dest, DColor src, MultiplicationFlags multiplicationFlags);
 };

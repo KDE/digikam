@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class DbEngineThreadData
+class Q_DECL_HIDDEN DbEngineThreadData
 {
 public:
 
@@ -130,7 +130,7 @@ public:
 
 public:
 
-    class AbstractUnlocker
+    class Q_DECL_HIDDEN AbstractUnlocker
     {
     public:
 
@@ -149,7 +149,7 @@ public:
 
     // ------------------------------------------------------------------
 
-    class AbstractWaitingUnlocker : public AbstractUnlocker
+    class Q_DECL_HIDDEN AbstractWaitingUnlocker : public AbstractUnlocker
     {
     public:
 
@@ -168,7 +168,7 @@ public:
 
     // ------------------------------------------------------------------
 
-    class ErrorLocker : public AbstractWaitingUnlocker
+    class Q_DECL_HIDDEN ErrorLocker : public AbstractWaitingUnlocker
     {
     public:
 
@@ -178,7 +178,7 @@ public:
 
     // ------------------------------------------------------------------
 
-    class BusyWaiter : public AbstractWaitingUnlocker
+    class Q_DECL_HIDDEN BusyWaiter : public AbstractWaitingUnlocker
     {
     public:
 

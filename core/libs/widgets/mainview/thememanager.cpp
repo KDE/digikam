@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class ThemeManagerCreator
+class Q_DECL_HIDDEN ThemeManagerCreator
 {
 public:
 

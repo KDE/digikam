@@ -90,7 +90,7 @@ QItemSelectionModel* GPSImageSortProxyModel::mappedSelectionModel() const
 
 // --------------------------------------------------------------------------------------
 
-class GPSLinkItemSelectionModelPrivate
+class Q_DECL_HIDDEN GPSLinkItemSelectionModelPrivate
 {
 public:
 
@@ -151,7 +151,7 @@ public:
     void slotCurrentChanged(const QModelIndex& current);
 
 public:
-    
+
     QItemSelectionModel*      m_linkedItemSelectionModel;
     bool                      m_ignoreCurrentChanged;
     GPSModelIndexProxyMapper* m_indexMapper;
@@ -308,7 +308,7 @@ void GPSLinkItemSelectionModelPrivate::sourceCurrentChanged(const QModelIndex& c
 
 // --------------------------------------------------------------------------------------
 
-class GPSModelIndexProxyMapperPrivate
+class Q_DECL_HIDDEN GPSModelIndexProxyMapperPrivate
 {
 public:
 
@@ -327,7 +327,7 @@ public:
     void checkConnected();
     void setConnected(bool connected);
 
-    // cppcheck-suppress unusedPrivateFunction 
+    // cppcheck-suppress unusedPrivateFunction
     bool assertSelectionValid(const QItemSelection& selection) const
     {
         foreach(const QItemSelectionRange& range, selection)
@@ -390,7 +390,7 @@ void GPSModelIndexProxyMapperPrivate::createProxyChain()
         QObject::connect(selectionTargetProxyModel.data(), &QAbstractProxyModel::sourceModelChanged,
                          q_ptr, [this]
                          {
-                             createProxyChain(); 
+                             createProxyChain();
                          }
                         );
 

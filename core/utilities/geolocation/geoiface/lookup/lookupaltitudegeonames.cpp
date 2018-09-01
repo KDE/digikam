@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class MergedRequests
+class Q_DECL_HIDDEN MergedRequests
 {
 public:
 

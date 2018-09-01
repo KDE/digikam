@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class VersionManagerSettingsConfig
+class Q_DECL_HIDDEN VersionManagerSettingsConfig
 {
 public:
 
@@ -115,7 +115,7 @@ void VersionManagerSettings::writeToConfig(KConfigGroup& group) const
 
 // ---------------------------------------------------------------------------------------------
 
-class DefaultVersionNamingScheme : public VersionNamingScheme
+class Q_DECL_HIDDEN DefaultVersionNamingScheme : public VersionNamingScheme
 {
 public:
 
@@ -213,7 +213,7 @@ QString DefaultVersionNamingScheme::intermediateDirectory(const QString& current
 
 // -------------------------------------------------------------------------------------------------------
 
-class VersionNameCreator
+class Q_DECL_HIDDEN VersionNameCreator
 {
 public:
 

@@ -62,7 +62,7 @@ public:
 
 // ------------------------------------------------------------------------------------------
 
-class WorkflowManagerCreator
+class Q_DECL_HIDDEN WorkflowManagerCreator
 {
 public:
 

@@ -98,7 +98,7 @@ public:
 
 // ----------------------------------------------------------------------------------
 
-class IccProfileStatic
+class Q_DECL_HIDDEN IccProfileStatic
 {
 public:
 

@@ -328,14 +328,14 @@ unsigned int ProgressItem::progress() const
 
 // --------------------------------------------------------------------------
 
-class ProgressManagerCreator
+class Q_DECL_HIDDEN ProgressManagerCreator
 {
 public:
 
     ProgressManager object;
 };
 
-class ProgressManager::Private
+class Q_DECL_HIDDEN ProgressManager::Private
 {
 public:
 

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-05-23
- * Description : stand alone test application for MediaWiki tool.
+ * Description : stand alone test application for webservice tool.
  *
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class CoreDbAccessStaticPriv
+class Q_DECL_HIDDEN CoreDbAccessStaticPriv
 {
 public:
 
@@ -85,7 +85,7 @@ public:
     bool                initializing;
 };
 
-class CoreDbAccessMutexLocker : public QMutexLocker
+class Q_DECL_HIDDEN CoreDbAccessMutexLocker : public QMutexLocker
 {
 public:
 

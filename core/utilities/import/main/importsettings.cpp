@@ -213,7 +213,7 @@ const QString ImportSettings::Private::configShowThumbbarEntry(QLatin1String("Sh
 
 // -------------------------------------------------------------------------------------------------
 
-class ImportSettingsCreator
+class Q_DECL_HIDDEN ImportSettingsCreator
 {
 public:
 

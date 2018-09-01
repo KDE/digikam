@@ -59,7 +59,7 @@ public:
     QMutex          mutex;
 };
 
-class TemplateManagerCreator
+class Q_DECL_HIDDEN TemplateManagerCreator
 {
 public:
 

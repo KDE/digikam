@@ -20,206 +20,48 @@ include_directories(
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-# =======================================================
-# Stand alone version of Flickr tool
+macro(WEBSERVICE_BUILD_STANDALONE)
 
-set(flickr_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/flickr.cpp)
-add_executable(flickr ${flickr_SRCS})
+    set(_filename ${ARGV0})
+    string(REPLACE "." ";" _temp ${_filename})
+    list(GET _temp 0 _target)
 
-target_link_libraries(flickr
-                      digikamcore
+    set(${_target}_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/${_filename})
 
-                      Qt5::Gui
-                      Qt5::Xml
-)
+    add_executable(${_target} ${${_target}_SRCS})
 
-# =======================================================
-# Stand alone version of Imgur tool
+    target_link_libraries(${_target}
+                          digikamcore
+                          Qt5::Gui
+                          Qt5::Xml
+    )
 
-set(imgur_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imgur.cpp)
-add_executable(imgur ${imgur_SRCS})
+endmacro()
 
-target_link_libraries(imgur
-                      digikamcore
+WEBSERVICE_BUILD_STANDALONE(box.cpp)
+WEBSERVICE_BUILD_STANDALONE(onedrive.cpp)
+WEBSERVICE_BUILD_STANDALONE(pinterest.cpp)
+WEBSERVICE_BUILD_STANDALONE(flickr.cpp)
+WEBSERVICE_BUILD_STANDALONE(imgur.cpp)
+WEBSERVICE_BUILD_STANDALONE(dropbox.cpp)
+WEBSERVICE_BUILD_STANDALONE(smugmug.cpp)
+WEBSERVICE_BUILD_STANDALONE(imageshack.cpp)
+WEBSERVICE_BUILD_STANDALONE(facebook.cpp)
+WEBSERVICE_BUILD_STANDALONE(rajce.cpp)
+WEBSERVICE_BUILD_STANDALONE(gdrive.cpp)
+WEBSERVICE_BUILD_STANDALONE(gphoto.cpp)
+WEBSERVICE_BUILD_STANDALONE(yandexfotki.cpp)
+WEBSERVICE_BUILD_STANDALONE(piwigo.cpp)
+WEBSERVICE_BUILD_STANDALONE(mediawiki.cpp)
+WEBSERVICE_BUILD_STANDALONE(webservices.cpp)
 
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of Dropbox tool
-
-set(dropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox.cpp)
-add_executable(dropbox ${dropbox_SRCS})
-
-target_link_libraries(dropbox
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of SmugMug tool
-
-set(smugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug.cpp)
-add_executable(smugmug ${smugmug_SRCS})
-
-target_link_libraries(smugmug
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of ImageShack tool
-
-set(imageshack_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imageshack.cpp)
-add_executable(imageshack ${imageshack_SRCS})
-
-target_link_libraries(imageshack
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of FaceBook tool
-
-set(facebook_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/facebook.cpp)
-add_executable(facebook ${facebook_SRCS})
-
-target_link_libraries(facebook
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of Rajce tool
-
-set(rajce_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/rajce.cpp)
-add_executable(rajce ${rajce_SRCS})
-
-target_link_libraries(rajce
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of GDrive tool
-
-set(gdrive_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gdrive.cpp)
-add_executable(gdrive ${gdrive_SRCS})
-
-target_link_libraries(gdrive
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of GPhoto tool
-
-set(gphoto_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gphoto.cpp)
-add_executable(gphoto ${gphoto_SRCS})
-
-target_link_libraries(gphoto
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of YandexFotki tool
-
-set(yandexfotki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki.cpp)
-add_executable(yandexfotki ${yandexfotki_SRCS})
-
-target_link_libraries(yandexfotki
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of Piwigo tool
-
-set(piwigo_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/piwigo.cpp)
-add_executable(piwigo ${piwigo_SRCS})
-
-target_link_libraries(piwigo
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of MediaWiki tool
-
-set(mediawiki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki.cpp)
-add_executable(mediawiki ${mediawiki_SRCS})
-
-target_link_libraries(mediawiki
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of VKontakte tool
+# Not yet finalized
+#WEBSERVICE_BUILD_STANDALONE(twitter.cpp)
 
 if(KF5Vkontakte_FOUND)
-
-    set(vkontakte_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/vkontakte.cpp)
-    add_executable(vkontakte ${vkontakte_SRCS})
-
-    target_link_libraries(vkontakte
-                          digikamcore
-
-                          Qt5::Gui
-                          Qt5::Xml
-    )
-
+    WEBSERVICE_BUILD_STANDALONE(vkontakte.cpp)
 endif()
-
-# =======================================================
-# Stand alone version of FileTransfer tool
 
 if(KF5KIO_FOUND)
-
-    set(filetransfer_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer.cpp)
-    add_executable(filetransfer ${filetransfer_SRCS})
-
-    target_link_libraries(filetransfer
-                          digikamcore
-
-                          Qt5::Gui
-                          Qt5::Xml
-    )
-
+    WEBSERVICE_BUILD_STANDALONE(filetransfer.cpp)
 endif()
-
-# =======================================================
-# Stand alone version of factored WebServices tool
-
-set(webservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/webservices.cpp)
-
-add_executable(webservices ${webservices_SRCS})
-
-target_link_libraries(webservices
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)

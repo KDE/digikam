@@ -70,7 +70,7 @@
 namespace Digikam
 {
 
-class SetupCameraItem : public QTreeWidgetItem
+class Q_DECL_HIDDEN SetupCameraItem : public QTreeWidgetItem
 {
 
 public:

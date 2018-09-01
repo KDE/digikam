@@ -318,7 +318,7 @@ bool StayPoppedUpComboBox::eventFilter(QObject* o, QEvent* e)
 
 // -------------------------------------------------------------------------
 
-class TreeViewComboBoxTreeView : public QTreeView
+class Q_DECL_HIDDEN TreeViewComboBoxTreeView : public QTreeView
 {
 public:
 
@@ -358,7 +358,7 @@ QTreeView* TreeViewComboBox::view() const
 
 // -------------------------------------------------------------------------
 
-class ListViewComboBoxListView : public QListView
+class Q_DECL_HIDDEN ListViewComboBoxListView : public QListView
 {
 public:
 
@@ -399,7 +399,7 @@ QListView* ListViewComboBox::view() const
 
 // -------------------------------------------------------------------------
 
-class TreeViewComboBoxLineEdit : public QLineEdit
+class Q_DECL_HIDDEN TreeViewComboBoxLineEdit : public QLineEdit
 {
 public:
 

@@ -64,7 +64,7 @@
 namespace Digikam
 {
 
-class AlbumDatePicker : public DDatePicker
+class Q_DECL_HIDDEN AlbumDatePicker : public DDatePicker
 {
 
 public:

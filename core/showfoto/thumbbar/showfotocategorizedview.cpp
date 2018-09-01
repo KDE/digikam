@@ -40,7 +40,7 @@ using namespace Digikam;
 namespace ShowFoto
 {
 
-class ShowfotoItemViewToolTip : public ItemViewToolTip
+class Q_DECL_HIDDEN ShowfotoItemViewToolTip : public ItemViewToolTip
 {
 public:
 

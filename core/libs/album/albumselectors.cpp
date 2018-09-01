@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class ModelClearButton : public AnimatedClearButton
+class Q_DECL_HIDDEN ModelClearButton : public AnimatedClearButton
 {
 public:
 

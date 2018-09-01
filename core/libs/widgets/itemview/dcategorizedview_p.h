@@ -37,7 +37,7 @@ namespace Digikam
 
 class DCategorizedSortFilterProxyModel;
 
-class SparseModelIndexVector : public QVector<QModelIndex>
+class Q_DECL_HIDDEN SparseModelIndexVector : public QVector<QModelIndex>
 {
 public:
 

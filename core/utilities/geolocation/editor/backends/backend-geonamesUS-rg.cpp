@@ -44,7 +44,7 @@ namespace Digikam
  *
  * @brief This class calls Geonames' get address service available only for USA locations.
  */
-class GeonamesUSInternalJobs
+class Q_DECL_HIDDEN GeonamesUSInternalJobs
 {
 
 public:

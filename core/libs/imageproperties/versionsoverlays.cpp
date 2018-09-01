@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class ShowHideVersionsOverlay::Button : public ItemViewHoverButton
+class Q_DECL_HIDDEN ShowHideVersionsOverlay::Button : public ItemViewHoverButton
 {
 public:
 
@@ -157,7 +157,7 @@ bool ShowHideVersionsOverlay::checkIndex(const QModelIndex& index) const
 
 // --------------------------------------------------------------------
 
-class ActionVersionsOverlay::Button : public ItemViewHoverButton
+class Q_DECL_HIDDEN ActionVersionsOverlay::Button : public ItemViewHoverButton
 {
 public:
 

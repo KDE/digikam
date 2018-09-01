@@ -107,12 +107,12 @@ void InsertBookmarksCommand::redo()
 
 // --------------------------------------------------------------
 
-class ChangeBookmarkCommand::Private
+class Q_DECL_HIDDEN ChangeBookmarkCommand::Private
 {
 public:
 
-    explicit Private() :
-        manager(0),
+    explicit Private()
+      : manager(0),
         type(Url),
         node(0)
     {
@@ -197,12 +197,12 @@ void ChangeBookmarkCommand::redo()
 
 // --------------------------------------------------------------
 
-class BookmarksModel::Private
+class Q_DECL_HIDDEN BookmarksModel::Private
 {
 public:
 
-    explicit Private() :
-        manager(0),
+    explicit Private()
+      : manager(0),
         endMacro(false)
     {
     }
@@ -654,12 +654,12 @@ void TreeProxyModel::emitResult(bool v)
 
 // --------------------------------------------------------------
 
-class BookmarksManager::Private
+class Q_DECL_HIDDEN BookmarksManager::Private
 {
 public:
 
-    explicit Private() :
-        loaded(false),
+    explicit Private()
+      : loaded(false),
         bookmarkRootNode(0),
         bookmarkModel(0)
     {

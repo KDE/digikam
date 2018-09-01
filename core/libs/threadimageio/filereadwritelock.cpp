@@ -77,7 +77,7 @@ public:
 
 typedef FileReadWriteLockPriv Entry;
 
-class FileReadWriteLockStaticPrivate
+class Q_DECL_HIDDEN FileReadWriteLockStaticPrivate
 {
 public:
 

@@ -90,7 +90,7 @@ MetadataSettingsContainer MetadataSettings::Private::setSettings(const MetadataS
 
 // -----------------------------------------------------------------------------------------------
 
-class MetadataSettingsCreator
+class Q_DECL_HIDDEN MetadataSettingsCreator
 {
 public:
 

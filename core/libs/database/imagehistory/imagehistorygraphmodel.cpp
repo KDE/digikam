@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class HistoryTreeItem
+class Q_DECL_HIDDEN HistoryTreeItem
 {
 public:
 
@@ -92,7 +92,7 @@ public:
 
 // ------------------------------------------------------------------------
 
-class VertexItem : public HistoryTreeItem
+class Q_DECL_HIDDEN VertexItem : public HistoryTreeItem
 {
 public:
 
@@ -102,7 +102,7 @@ public:
 
     explicit VertexItem(const HistoryGraph::Vertex& v)
         : vertex(v),
-          category(HistoryImageId::InvalidType) 
+          category(HistoryImageId::InvalidType)
     {
     }
 
@@ -120,14 +120,14 @@ public:
 
 // ------------------------------------------------------------------------
 
-class FilterActionItem : public HistoryTreeItem
+class Q_DECL_HIDDEN FilterActionItem : public HistoryTreeItem
 {
 public:
 
     FilterActionItem()
     {
     }
-    
+
     explicit FilterActionItem(const FilterAction& action)
         : action(action)
     {
@@ -145,7 +145,7 @@ public:
 
 // ------------------------------------------------------------------------
 
-class HeaderItem : public HistoryTreeItem
+class Q_DECL_HIDDEN HeaderItem : public HistoryTreeItem
 {
 public:
 
@@ -166,7 +166,7 @@ public:
 
 // ------------------------------------------------------------------------
 
-class CategoryItem : public HistoryTreeItem
+class Q_DECL_HIDDEN CategoryItem : public HistoryTreeItem
 {
 public:
 
@@ -187,7 +187,7 @@ public:
 
 // ------------------------------------------------------------------------
 
-class SeparatorItem : public HistoryTreeItem
+class Q_DECL_HIDDEN SeparatorItem : public HistoryTreeItem
 {
 public:
 
@@ -228,7 +228,7 @@ static bool newestInfoFirst(const ImageInfo&a, const ImageInfo& b) { return a.mo
 
 template <typename ImageInfoLessThan>
 
-class LessThanOnVertexImageInfo
+class Q_DECL_HIDDEN LessThanOnVertexImageInfo
 {
 public:
 

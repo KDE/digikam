@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class ImageQueryPostHook
+class Q_DECL_HIDDEN ImageQueryPostHook
 {
 public:
 
@@ -218,7 +218,7 @@ void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
 
 // ---------------------------------------------------------------------------------------
 
-class FieldQueryBuilder
+class Q_DECL_HIDDEN FieldQueryBuilder
 {
 public:
 
@@ -682,7 +682,7 @@ public:
                 // We precompute c.
                 */
 
-                class HaversinePostHook : public ImageQueryPostHook
+                class Q_DECL_HIDDEN HaversinePostHook : public ImageQueryPostHook
                 {
                 public:
 
@@ -1639,7 +1639,7 @@ void ImageQueryBuilder::addNoEffectContent(QString& sql, SearchXml::Operator op)
 
 // ----------- Legacy query description handling -------------- //
 
-class RuleTypeForConversion
+class Q_DECL_HIDDEN RuleTypeForConversion
 {
 public:
 
@@ -1834,7 +1834,7 @@ enum SOperator
 
 // -------------------------------------------------------------------------
 
-class RuleType
+class Q_DECL_HIDDEN RuleType
 {
 public:
 
@@ -1845,7 +1845,7 @@ public:
 
 // -------------------------------------------------------------------------
 
-class SubQueryBuilder
+class Q_DECL_HIDDEN SubQueryBuilder
 {
 public:
 

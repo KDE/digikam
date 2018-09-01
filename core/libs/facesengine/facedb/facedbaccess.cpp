@@ -74,7 +74,7 @@ FaceDbAccessStaticPriv* FaceDbAccess::d = 0;
 
 // ----------------------------------------------------------------
 
-class FaceDbAccessMutexLocker : public QMutexLocker
+class Q_DECL_HIDDEN FaceDbAccessMutexLocker : public QMutexLocker
 {
 public:
 

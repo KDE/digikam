@@ -1114,7 +1114,7 @@ void TableViewModel::slotFilterSettingsChanged(const ImageFilterSettings& settin
     slotPopulateModel(true);
 }
 
-class TableViewModel::LessThan
+class Q_DECL_HIDDEN TableViewModel::LessThan
 {
 public:
 

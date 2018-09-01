@@ -59,7 +59,7 @@
 namespace Digikam
 {
 
-class TagToggleAction : public QWidgetAction
+class Q_DECL_HIDDEN TagToggleAction : public QWidgetAction
 {
 public:
 
@@ -81,7 +81,7 @@ private:
 
 // ------------------------------------------------------------------------
 
-class TagToggleMenuWidget : public QWidget
+class Q_DECL_HIDDEN TagToggleMenuWidget : public QWidget
 {
 public:
 

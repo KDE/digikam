@@ -82,7 +82,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class PanIconFrame::Private::OutsideClickCatcher
+class Q_DECL_HIDDEN PanIconFrame::Private::OutsideClickCatcher
     : public QObject
 {
 public:
@@ -250,7 +250,7 @@ int PanIconFrame::exec(int x, int y)
 
 // -------------------------------------------------------------------
 
-class PanIconWidget::Private
+class Q_DECL_HIDDEN PanIconWidget::Private
 {
 
 public:

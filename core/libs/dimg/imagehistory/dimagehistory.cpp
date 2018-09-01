@@ -53,7 +53,7 @@ public:
 
 // -----------------------------------------------------------------------------------------------
 
-class PrivateSharedNull : public QSharedDataPointer<DImageHistory::Private>
+class Q_DECL_HIDDEN PrivateSharedNull : public QSharedDataPointer<DImageHistory::Private>
 {
 public:
 

@@ -320,7 +320,7 @@ void AbstractAlbumTreeViewSelectComboBox::setTreeView(AbstractAlbumTreeView* con
 
 // -------------------------------------------------------------------------------------------------------------------
 
-class CheckUncheckContextMenuElement : public QObject, public AbstractAlbumTreeView::ContextMenuElement
+class Q_DECL_HIDDEN CheckUncheckContextMenuElement : public QObject, public AbstractAlbumTreeView::ContextMenuElement
 {
 public:
 

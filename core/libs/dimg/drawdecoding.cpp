@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class DRawDecoderSettingsWriter
+class Q_DECL_HIDDEN DRawDecoderSettingsWriter
 {
 public:
 
@@ -177,7 +177,7 @@ void DRawDecoderSettingsWriter::write()
 
 // --------------------------------------------------------------------------------------------
 
-class DRawDecoderSettingsReader
+class Q_DECL_HIDDEN DRawDecoderSettingsReader
 {
 public:
 

@@ -64,7 +64,7 @@ public:
     PanoObserver*             observer;
 };
 
-class PanoObserver : public DImgLoaderObserver
+class Q_DECL_HIDDEN PanoObserver : public DImgLoaderObserver
 {
 public:
 
