@@ -55,11 +55,11 @@ set(CMAKE_MIN_VERSION     "3.0.0")
 set(ECM_MIN_VERSION       "1.7.0")
 set(KF5_MIN_VERSION       "5.1.0")
 set(QT_MIN_VERSION        "5.6.0")
-set(KSANE_MIN_VERSION     "5.0.0")
 set(LENSFUN_MIN_VERSION   "0.2.6.0")
 set(EXIV2_MIN_VERSION     "0.26")
 set(OPENCV_MIN_VERSION    "3.1.0")
 set(QTAV_MIN_VERSION      "1.12.0")
+set(KSANE_MIN_VERSION     "5.0.0")         # For digital scanner support.
 set(CALENDAR_MIN_VERSION  "4.81.0")        # Calendar Core dependency
 set(AKONADI_MIN_VERSION   "4.89.0")        # Akonadi Contact dependency
 set(VKONTAKTE_MIN_VERSION "4.70.0")        # VKontakte library dependency
@@ -182,6 +182,11 @@ find_package(KF5 ${AKONADI_MIN_VERSION} QUIET
              AkonadiContact         # For KDE Mail Contacts support.
 )
 
+find_package(KF5 ${KSANE_MIN_VERSION} QUIET
+             OPTIONAL_COMPONENTS
+             Sane                   # For digital scanner support.
+)
+
 find_package(KF5 ${CALENDAR_MIN_VERSION} QUIET
              OPTIONAL_COMPONENTS
              CalendarCore           # For Calendar tool.
@@ -297,7 +302,6 @@ find_package(BISON)                                # For Panorama tool.
 find_package(LibXslt)                              # For HTMLGallery tool.
 find_package(LibXml2)                              # For HTMLGallery tool.
 
-DETECT_LIBKSANE(${KSANE_MIN_VERSION})              # For digital scanner device support.
 DETECT_LIBKVKONTAKTE(${VKONTAKTE_MIN_VERSION})     # For VKontakte webservice support.
 
 find_package(Marble)                               # For geolocation support.
