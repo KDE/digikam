@@ -79,6 +79,7 @@ IccManager::IccManager(DImg& image, const ICCSettingsContainer& settings)
     if (!d->workspaceProfile.open())
     {
         qCDebug(DIGIKAM_DIMG_LOG) << "Cannot open workspace color profile" << d->workspaceProfile.filePath();
+        d->image = DImg();
         return;
     }
 

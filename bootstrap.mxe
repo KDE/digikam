@@ -100,8 +100,6 @@ ${MXE_BUILD_TARGETS}-cmake -G "Unix Makefiles" . \
                            -DDIGIKAMSC_COMPILE_PO=OFF \
                            -DDIGIKAMSC_COMPILE_DOC=OFF \
                            -DDIGIKAMSC_COMPILE_DIGIKAM=ON \
-                           -DDIGIKAMSC_COMPILE_LIBKSANE=OFF \
-                           -DDIGIKAMSC_COMPILE_LIBKVKONTAKTE=OFF \
                            -DENABLE_KFILEMETADATASUPPORT=OFF \
                            -DENABLE_AKONADICONTACTSUPPORT=OFF \
                            -DENABLE_MYSQLSUPPORT=ON \

@@ -43,7 +43,7 @@ using MediaWiki::Iface;
 using MediaWiki::QuerySiteInfoGeneral;
 using MediaWiki::Generalinfo;
 
-class QuerySiteInfoGeneralTest : public QObject
+class Q_DECL_HIDDEN QuerySiteInfoGeneralTest : public QObject
 {
     Q_OBJECT
 

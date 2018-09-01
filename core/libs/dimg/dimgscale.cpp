@@ -62,7 +62,7 @@ namespace Digikam
 namespace DImgScale
 {
 
-class DImgScaleInfo
+class Q_DECL_HIDDEN DImgScaleInfo
 {
 public:
 

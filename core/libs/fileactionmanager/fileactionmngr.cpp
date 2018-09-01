@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class FileActionMngrCreator
+class Q_DECL_HIDDEN FileActionMngrCreator
 {
 public:
 

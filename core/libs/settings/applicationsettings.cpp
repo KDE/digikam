@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class ApplicationSettingsCreator
+class Q_DECL_HIDDEN ApplicationSettingsCreator
 {
 public:
 

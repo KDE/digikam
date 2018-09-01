@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class ImageCopyrightCache
+class Q_DECL_HIDDEN ImageCopyrightCache
 {
 public:
 

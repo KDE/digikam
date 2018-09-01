@@ -78,7 +78,7 @@ BCGContainer BCGContainer::fromFilterAction(const FilterAction& action, const QS
 
 // -----------------------------------------------------------------------------------------------
 
-class BCGFilter::Private
+class Q_DECL_HIDDEN BCGFilter::Private
 {
 public:
 

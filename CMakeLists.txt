@@ -39,12 +39,6 @@ option(DIGIKAMSC_CHECKOUT_PO             "Checkout application translations file
 option(DIGIKAMSC_CHECKOUT_DOC            "Checkout documentation translations files from git repositories (default=OFF)"          OFF)
 option(DIGIKAMSC_COMPILE_PO              "Build translations files (default=ON)"                                                  ON)
 option(DIGIKAMSC_COMPILE_DOC             "Build handbook files (default=ON)"                                                      ON)
-
-# shared libs options for developers only
-
-option(DIGIKAMSC_COMPILE_LIBKSANE        "Build local libksane library instead of using distributed files (default=OFF)"          OFF)
-option(DIGIKAMSC_COMPILE_LIBKVKONTAKTE   "Build local libkvkontakte library instead of using distributed files (default=OFF)"     OFF)
-
 option(DIGIKAMSC_COMPILE_DIGIKAM         "Build digiKam core (default=ON)"                                                        ON)
 
 ###########################################################################################################################################
@@ -64,7 +58,7 @@ if(DIGIKAMSC_CHECKOUT_PO OR DIGIKAMSC_CHECKOUT_DOC)
                 set(CHECKOUT_PO_DIGIKAM "--enable-digikam")
             endif()
 
-            execute_process(COMMAND ${RUBY_EXECUTABLE} "${CMAKE_SOURCE_DIR}/project/release/fetch_l10n_po.rb" ${CHECKOUT_PO_DIGIKAM} ${CHECKOUT_PO_LIBKVKONTAKTE}
+            execute_process(COMMAND ${RUBY_EXECUTABLE} "${CMAKE_SOURCE_DIR}/project/release/fetch_l10n_po.rb" ${CHECKOUT_PO_DIGIKAM}
                             WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
             message(STATUS "Application translation files extraction done.")
@@ -141,28 +135,6 @@ else()
     message(STATUS     "digiKam core will be compiled.................. NO")
 endif()
 
-if(DIGIKAMSC_COMPILE_LIBKSANE)
-    if(NOT EXISTS ${CMAKE_SOURCE_DIR}/extra/libksane)
-        message(STATUS "Local shared libksane will be compiled......... NO (library source code not available)")
-        set (DIGIKAMSC_COMPILE_LIBKSANE OFF)
-    else()
-        message(STATUS "Local shared libksane will be compiled......... YES")
-    endif()
-else()
-    message(STATUS     "Local shared libksane will be compiled......... NO")
-endif()
-
-if(DIGIKAMSC_COMPILE_LIBKVKONTAKTE)
-    if(NOT EXISTS ${CMAKE_SOURCE_DIR}/extra/libkvkontakte)
-        message(STATUS "Local shared libkvkontakte will be compiled.... NO (library source code not available)")
-        set (DIGIKAMSC_COMPILE_LIBKVKONTAKTE OFF)
-    else()
-        message(STATUS "Local shared libkvkontakte will be compiled.... YES")
-    endif()
-else()
-    message(STATUS     "Local shared libkvkontakte will be compiled.... NO")
-endif()
-
 if(DIGIKAMSC_CHECKOUT_PO)
     message(STATUS "Extract application translations files......... YES")
 else()
@@ -194,8 +166,6 @@ else()
 endif()
 
 #############################################################################################
-
-add_subdirectory(extra)
 
 if(DIGIKAMSC_COMPILE_DIGIKAM)
     add_subdirectory(core)

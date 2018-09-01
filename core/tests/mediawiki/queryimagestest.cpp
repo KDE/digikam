@@ -43,7 +43,7 @@ Q_DECLARE_METATYPE(QList<QString>)
 Q_DECLARE_METATYPE(QList<Image>)
 Q_DECLARE_METATYPE(QList<QList<Image> >)
 
-class QueryImagesTest : public QObject
+class Q_DECL_HIDDEN QueryImagesTest : public QObject
 {
     Q_OBJECT
 

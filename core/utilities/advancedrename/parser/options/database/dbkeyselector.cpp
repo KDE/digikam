@@ -154,7 +154,7 @@ QStringList DbKeySelector::checkedKeysList()
 
 // ------------------------------------------------------------------------------------
 
-class DbKeySelectorView::Private
+class Q_DECL_HIDDEN DbKeySelectorView::Private
 {
 public:
 

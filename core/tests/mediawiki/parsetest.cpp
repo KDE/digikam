@@ -66,7 +66,7 @@ QString QStringFromFile(const QString& fileName)
     return scenario;
 }
 
-class ParseTest : public QObject
+class Q_DECL_HIDDEN ParseTest : public QObject
 {
     Q_OBJECT
 

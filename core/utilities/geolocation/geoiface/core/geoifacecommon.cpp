@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class GeoIfaceGlobalObjectCreator
+class Q_DECL_HIDDEN GeoIfaceGlobalObjectCreator
 {
 public:
 

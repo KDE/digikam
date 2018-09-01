@@ -270,7 +270,7 @@ if(LibXml2_FOUND AND LibXslt_FOUND)
 endif()
 
 if(KF5Vkontakte_FOUND)
-    target_link_libraries(digikamcore PUBLIC ${LIBKVKONTAKTE_LIBRARIES})
+    target_link_libraries(digikamcore PUBLIC KF5::Vkontakte)
 endif()
 
 if(APPLE)

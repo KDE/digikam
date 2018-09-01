@@ -49,7 +49,7 @@ using namespace Digikam;
 const int firstMultiplier  = 20;
 const int secondMultiplier = 20;
 
-class Runnable : public QRunnable
+class Q_DECL_HIDDEN Runnable : public QRunnable
 {
 public:
 

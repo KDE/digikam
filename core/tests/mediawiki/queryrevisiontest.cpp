@@ -89,7 +89,7 @@ QString QStringFromFile(const QString& fileName)
     return scenario;
 }
 
-class QueryRevisionTest : public QObject
+class Q_DECL_HIDDEN QueryRevisionTest : public QObject
 {
     Q_OBJECT
 

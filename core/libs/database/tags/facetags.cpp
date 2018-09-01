@@ -41,7 +41,7 @@ namespace Digikam
 
 // --- FaceIfacePriv ----------------------------------------------------------------------------------------
 
-class FaceTagsHelper
+class Q_DECL_HIDDEN FaceTagsHelper
 {
 public:
 

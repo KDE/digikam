@@ -71,7 +71,7 @@ QList<cv::Mat> toImages(const QStringList& paths)
 
 // --------------------------------------------------------------------------------------------------
 
-class OpenCVSideBySideDisplay
+class Q_DECL_HIDDEN OpenCVSideBySideDisplay
 {
 public:
 

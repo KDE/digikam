@@ -48,7 +48,7 @@ using MediaWiki::UserGroup;
 
 Q_DECLARE_METATYPE(QList<UserGroup>)
 
-class QuerySiteinfoUsergroupsTest : public QObject
+class Q_DECL_HIDDEN QuerySiteinfoUsergroupsTest : public QObject
 {
     Q_OBJECT
 

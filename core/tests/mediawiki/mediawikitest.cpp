@@ -36,7 +36,7 @@
 
 using MediaWiki::Iface;
 
-class IfaceTest : public QObject
+class Q_DECL_HIDDEN IfaceTest : public QObject
 {
     Q_OBJECT
 

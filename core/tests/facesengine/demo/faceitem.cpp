@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class FaceItem::Private
+class Q_DECL_HIDDEN FaceItem::Private
 {
 public:
 

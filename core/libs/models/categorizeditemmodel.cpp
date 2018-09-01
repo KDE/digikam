@@ -94,7 +94,7 @@ static QString adjustedActionText(const QAction* const action)
     return text;
 }
 
-class ActionEnumerator
+class Q_DECL_HIDDEN ActionEnumerator
 {
 public:
 

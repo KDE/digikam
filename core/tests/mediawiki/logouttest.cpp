@@ -41,7 +41,7 @@
 using MediaWiki::Iface;
 using MediaWiki::Logout;
 
-class LogoutTest : public QObject
+class Q_DECL_HIDDEN LogoutTest : public QObject
 {
     Q_OBJECT
 

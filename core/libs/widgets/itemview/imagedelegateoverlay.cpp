@@ -466,7 +466,7 @@ void HoverButtonDelegateOverlay::slotEntered(const QModelIndex& index)
 
 // -----------------------------------------------------------------------------------
 
-class PersistentWidgetDelegateOverlay::Private
+class Q_DECL_HIDDEN PersistentWidgetDelegateOverlay::Private
 {
 public:
 

@@ -47,7 +47,7 @@ using namespace Digikam;
 
 // --------------------------------------------------------------------------------------------------
 
-class MainWindow::Private
+class Q_DECL_HIDDEN MainWindow::Private
 {
 public:
 

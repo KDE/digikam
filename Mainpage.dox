@@ -342,7 +342,6 @@ https://phabricator.kde.org/source/digikam/
 Even if code base can be compiled as well, more features can be enabled if extra components are downloaded and compiled at the same time.
 The project pages of these extra components are given below:
 
- - \b libksane            : https://phabricator.kde.org/source/libksane/
  - \b libkvkontatke       : https://projects.kde.org/projects/extragear/libs/libkvkontatke
  - \b digiKam \b handbook : https://phabricator.kde.org/source/digikam-doc/
 
@@ -448,8 +447,6 @@ There are two configuration sections : the top level and the core.
  - Developers only options:
 
   - \b BUILD_TESTING=ON                      : Build tests code (default=ON).
-  - \b DIGIKAMSC_COMPILE_LIBKSANE=OFF        : Force to use local libksane instead version installed on your computer (default=OFF).
-  - \b DIGIKAMSC_COMPILE_LIBKVKONTAKE=OFF    : Force to use local libkvkontakte instead version installed on your computer (default=OFF).
 
 \subsection coreoptions Core Configuration
 

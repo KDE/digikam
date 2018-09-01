@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class GPSBookmarkOwner::Private
+class Q_DECL_HIDDEN GPSBookmarkOwner::Private
 {
 public:
 

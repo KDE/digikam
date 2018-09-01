@@ -37,7 +37,7 @@
 
 using namespace MediaWiki;
 
-class QueryImageinfoTest : public QObject
+class Q_DECL_HIDDEN QueryImageinfoTest : public QObject
 {
     Q_OBJECT
 
