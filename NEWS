@@ -502,4 +502,5 @@ BUGFIXES:
 441 ==> 266165 - Advanced slideshow crash.
 442 ==> 387372 - With Digikam Version 5.7 is no preview possible.
 443 ==> 286341 - Crash at startup with a "Bus Error".
-444 ==> 
+444 ==> 329050 - Application crashes while starts.
+445 ==> 
