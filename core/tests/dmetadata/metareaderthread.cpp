@@ -34,7 +34,7 @@
 
 #include "metaengine.h"
 
-class Mytask : public ActionJob
+class Q_DECL_HIDDEN Mytask : public ActionJob
 {
 public:
 

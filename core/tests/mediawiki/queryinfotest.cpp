@@ -50,7 +50,7 @@ Q_DECLARE_METATYPE(Protection)
 Q_DECLARE_METATYPE(QueryInfo*)
 Q_DECLARE_METATYPE(QVector <Protection>)
 
-class QueryInfoTest : public QObject
+class Q_DECL_HIDDEN QueryInfoTest : public QObject
 {
     Q_OBJECT
 

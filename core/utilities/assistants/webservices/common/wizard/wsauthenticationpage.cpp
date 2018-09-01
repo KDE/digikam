@@ -224,7 +224,7 @@ void WSAuthenticationPageView::slotCallbackCatched(const QString& callbackUrl)
 
 // ----------------------------------------------------------------------------
 
-class WSAuthenticationWizard::Private
+class Q_DECL_HIDDEN WSAuthenticationWizard::Private
 {
 public:
 

@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class VersionsTreeView::ToolTip : public ItemViewToolTip
+class Q_DECL_HIDDEN VersionsTreeView::ToolTip : public ItemViewToolTip
 {
 public:
 

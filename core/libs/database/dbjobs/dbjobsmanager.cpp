@@ -28,7 +28,7 @@
 namespace Digikam
 {
 
-class DBJobsManagerCreator
+class Q_DECL_HIDDEN DBJobsManagerCreator
 {
 public:
 

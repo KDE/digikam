@@ -47,7 +47,7 @@ using MediaWiki::Upload;
 Q_DECLARE_METATYPE(FakeServer::Request)
 Q_DECLARE_METATYPE(Upload*)
 
-class UploadTest : public QObject
+class Q_DECL_HIDDEN UploadTest : public QObject
 {
     Q_OBJECT
 

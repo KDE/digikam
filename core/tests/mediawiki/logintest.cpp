@@ -41,7 +41,7 @@
 using MediaWiki::Iface;
 using MediaWiki::Login;
 
-class LoginTest : public QObject
+class Q_DECL_HIDDEN LoginTest : public QObject
 {
     Q_OBJECT
 

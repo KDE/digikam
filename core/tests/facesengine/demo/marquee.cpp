@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class Marquee::Private
+class Q_DECL_HIDDEN Marquee::Private
 {
 public:
 

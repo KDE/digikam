@@ -249,7 +249,7 @@ void DImgHistoryGraphTest::testHistory()
     QCOMPARE(graph.data().edges().size(), 2);
 }
 
-class lessThanById
+class Q_DECL_HIDDEN lessThanById
 {
 public:
 

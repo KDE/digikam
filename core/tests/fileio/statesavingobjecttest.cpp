@@ -40,7 +40,7 @@ using namespace Digikam;
 
 QTEST_GUILESS_MAIN(StateSavingObjectTest)
 
-class StubStateSaverPriv
+class Q_DECL_HIDDEN StubStateSaverPriv
 {
 public:
 

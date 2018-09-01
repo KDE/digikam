@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-class IOJobsManagerCreator
+class Q_DECL_HIDDEN IOJobsManagerCreator
 {
 public:
 

@@ -470,7 +470,7 @@ bool DImgBuiltinFilter::isSupported(const QString& filterIdentifier, int version
 
 // -------------------------------------------------------------------------------------------------------------------
 
-class DImgBuiltinThreadedFilter : public DImgThreadedFilter
+class Q_DECL_HIDDEN DImgBuiltinThreadedFilter : public DImgThreadedFilter
 {
 public:
 

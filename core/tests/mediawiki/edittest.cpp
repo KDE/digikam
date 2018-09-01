@@ -45,7 +45,7 @@ Q_DECLARE_METATYPE(FakeServer::Request)
 Q_DECLARE_METATYPE(QVariant)
 Q_DECLARE_METATYPE(Edit*)
 
-class EditTest : public QObject
+class Q_DECL_HIDDEN EditTest : public QObject
 {
     Q_OBJECT
 

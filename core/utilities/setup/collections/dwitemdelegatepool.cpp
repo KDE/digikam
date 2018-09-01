@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class DWItemDelegateEventListener
+class Q_DECL_HIDDEN DWItemDelegateEventListener
     : public QObject
 {
 public:

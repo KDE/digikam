@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class DHistoryViewItem : public QTreeWidgetItem
+class Q_DECL_HIDDEN DHistoryViewItem : public QTreeWidgetItem
 {
 public:
 

@@ -54,7 +54,7 @@ namespace Haar
 
 /** Signature structure
  */
-class valStruct
+class Q_DECL_HIDDEN valStruct
 {
 
 public:

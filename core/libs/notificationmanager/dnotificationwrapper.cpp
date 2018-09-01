@@ -57,7 +57,7 @@ namespace Digikam
     the position of KDE notifier pop-up from task bar if this one is not available,
     as for ex under Windows, Gnome, or using a remote connection through ssh.
  */
-class NotificationPassivePopup : public DNotificationPopup
+class Q_DECL_HIDDEN NotificationPassivePopup : public DNotificationPopup
 {
 public:
 

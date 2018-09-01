@@ -970,7 +970,7 @@ void RecognitionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
 
 // ----------------------------------------------------------------------------------------
 
-class MapListTrainingDataProvider : public TrainingDataProvider
+class Q_DECL_HIDDEN MapListTrainingDataProvider : public TrainingDataProvider
 {
 public:
 

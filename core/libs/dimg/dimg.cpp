@@ -1959,7 +1959,7 @@ QImage DImg::copyQImage(int x, int y, int w, int h) const
 
 // --------------------------------------------------------------------------------------
 
-class PixmapPaintEngineDetector
+class Q_DECL_HIDDEN PixmapPaintEngineDetector
 {
 public:
 

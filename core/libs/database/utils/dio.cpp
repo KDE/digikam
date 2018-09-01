@@ -121,7 +121,7 @@ GroupedImagesFinder::GroupedImagesFinder(const QList<ImageInfo>& source)
 
 // ------------------------------------------------------------------------------------------------
 
-class DIOCreator
+class Q_DECL_HIDDEN DIOCreator
 {
 public:
 
