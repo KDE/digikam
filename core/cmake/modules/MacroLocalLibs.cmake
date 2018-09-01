@@ -5,45 +5,6 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-macro(DETECT_LIBKSANE MIN_VERSION)
-
-    if (NOT DIGIKAMSC_COMPILE_LIBKSANE)
-
-        message(STATUS "libksane : search system based library")
-        find_package(KF5Sane ${MIN_VERSION} QUIET)
-
-        if(KF5Sane_FOUND)
-            set(LIBKSANE_LIBRARIES KF5::Sane)
-            get_target_property(LIBKSANE_INCLUDES KF5::Sane INTERFACE_INCLUDE_DIRECTORIES)
-            set(KF5Sane_FOUND TRUE)
-        else()
-            set(KF5Sane_FOUND FALSE)
-        endif()
-
-    else()
-
-        message(STATUS "libksane : use local library from ${CMAKE_SOURCE_DIR}/extra/libksane/")
-
-        if(EXISTS "${CMAKE_SOURCE_DIR}/extra/libksane/CMakeLists.txt")
-            set(KF5Sane_FOUND TRUE)
-        else()
-            message(WARNING "libksane : local library not found")
-            set(KF5Sane_FOUND FALSE)
-        endif()
-
-        set(LIBKSANE_INCLUDES ${CMAKE_SOURCE_DIR}/extra/libksane/src ${CMAKE_BINARY_DIR}/extra/libksane)
-        set(LIBKSANE_LIBRARIES KF5Sane)
-
-    endif()
-
-    message(STATUS "libksane found      : ${KF5Sane_FOUND}")
-    message(STATUS "libksane library    : ${LIBKSANE_LIBRARIES}")
-    message(STATUS "libksane includes   : ${LIBKSANE_INCLUDES}")
-
-endmacro()
-
-###########################################################################################################################################"
-
 macro(DETECT_LIBKVKONTAKTE MIN_VERSION)
 
     if (NOT DIGIKAMSC_COMPILE_LIBKVKONTAKTE)

@@ -42,7 +42,6 @@ option(DIGIKAMSC_COMPILE_DOC             "Build handbook files (default=ON)"    
 
 # shared libs options for developers only
 
-option(DIGIKAMSC_COMPILE_LIBKSANE        "Build local libksane library instead of using distributed files (default=OFF)"          OFF)
 option(DIGIKAMSC_COMPILE_LIBKVKONTAKTE   "Build local libkvkontakte library instead of using distributed files (default=OFF)"     OFF)
 
 option(DIGIKAMSC_COMPILE_DIGIKAM         "Build digiKam core (default=ON)"                                                        ON)
@@ -139,17 +138,6 @@ if(DIGIKAMSC_COMPILE_DIGIKAM)
     endif()
 else()
     message(STATUS     "digiKam core will be compiled.................. NO")
-endif()
-
-if(DIGIKAMSC_COMPILE_LIBKSANE)
-    if(NOT EXISTS ${CMAKE_SOURCE_DIR}/extra/libksane)
-        message(STATUS "Local shared libksane will be compiled......... NO (library source code not available)")
-        set (DIGIKAMSC_COMPILE_LIBKSANE OFF)
-    else()
-        message(STATUS "Local shared libksane will be compiled......... YES")
-    endif()
-else()
-    message(STATUS     "Local shared libksane will be compiled......... NO")
 endif()
 
 if(DIGIKAMSC_COMPILE_LIBKVKONTAKTE)
