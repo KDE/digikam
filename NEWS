@@ -501,4 +501,5 @@ BUGFIXES:
 440 ==> 389505 - Database port reset to 3306 when oppening digiKam setup (working with maiaDB10).
 441 ==> 266165 - Advanced slideshow crash.
 442 ==> 387372 - With Digikam Version 5.7 is no preview possible.
-443 ==> 
+443 ==> 286341 - Crash at startup with a "Bus Error".
+444 ==> 
