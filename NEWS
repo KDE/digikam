@@ -503,4 +503,5 @@ BUGFIXES:
 442 ==> 387372 - With Digikam Version 5.7 is no preview possible.
 443 ==> 286341 - Crash at startup with a "Bus Error".
 444 ==> 329050 - Application crashes while starts.
-445 ==> 
+445 ==> 396374 - editing a picture (F4) presents an empty screen.
+446 ==> 
