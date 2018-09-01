@@ -500,4 +500,5 @@ BUGFIXES:
 439 ==> 396491 - Versions are not grouped despite the correct setting.
 440 ==> 389505 - Database port reset to 3306 when oppening digiKam setup (working with maiaDB10).
 441 ==> 266165 - Advanced slideshow crash.
-442 ==> 
+442 ==> 387372 - With Digikam Version 5.7 is no preview possible.
+443 ==> 
