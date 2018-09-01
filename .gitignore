@@ -1,5 +1,3 @@
-extra/libksane
-extra/libkvkontakte
 doc/digikam
 *.kate-swp
 tests/databases/*/*.db
