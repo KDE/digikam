@@ -96,9 +96,9 @@ public:
     DInfoInterface*        iface;
 };
 
-ImageShackWindow::ImageShackWindow(DInfoInterface* const iface, 
-                                   QWidget* const parent)
-    : WSToolDialog(parent),
+ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
+                                   QWidget* const /*parent*/)
+    : WSToolDialog(0),
       d(new Private)
 {
     d->session = new ImageShackSession();
