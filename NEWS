@@ -509,7 +509,14 @@ BUGFIXES:
 448 ==> 265749 - Blank context menus.
 449 ==> 274733 - Delete file permanentry works wrong.
 450 ==> 383711 - All Albums Disappear.
-451 ==> 
-
-
-
+451 ==> 378929 - DNG conversion fails in Windows 10 for Olympus ORF files.
+452 ==> 170458 - Object position on pictures.
+453 ==> 184638 - Generate XMP for raw files.
+454 ==> 200380 - Usability of editing exif comments.
+455 ==> 195090 - Thumbnails bar should have no empty space.
+456 ==> 196730 - Add Color Space converter to batch queue tool.
+457 ==> 207921 - Using image editing tools in fullscreen modes leaves right sidebar open.
+458 ==> 211066 - TIFFs written by digiKam not readable with GIMP.
+459 ==> 224603 - One-touch download when connecting media.
+460 ==> 282021 - Impossible to start...
+461 ==> 
