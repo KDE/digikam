@@ -505,5 +505,6 @@ BUGFIXES:
 444 ==> 329050 - Application crashes while starts.
 445 ==> 396374 - editing a picture (F4) presents an empty screen.
 446 ==> 336874 - After exiting full screen, Menu Bar disappear and crash.
-447 ==> 
+447 ==> 237494 - B&W JPEG displayed incorrectly.
+448 ==> 
 
