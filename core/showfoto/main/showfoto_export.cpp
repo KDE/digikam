@@ -118,9 +118,7 @@ void ShowFoto::slotExportTool()
     }
     else if (tool == m_exportFlickrAction)
     {
-        QPointer<FlickrWindow> w = new FlickrWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
+        WSStarter::exportFlickr(new DMetaInfoIface(this, d->thumbBar->urls()), this);
     }
     else if (tool == m_exportGdriveAction)
     {

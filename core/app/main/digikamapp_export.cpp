@@ -124,9 +124,7 @@ void DigikamApp::slotExportTool()
     }
     else if (tool == m_exportFlickrAction)
     {
-        QPointer<FlickrWindow> w = new FlickrWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
-        w->exec();
-        delete w;
+        WSStarter::exportFlickr(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
     }
     else if (tool == m_exportGdriveAction)
     {

@@ -103,6 +103,7 @@ set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/common/wscomboboxdelegate.cp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wsselectuserdlg.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wstooldialog.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wslogindialog.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wsstarter.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wssettings.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wsauthentication.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wstalker.cpp
