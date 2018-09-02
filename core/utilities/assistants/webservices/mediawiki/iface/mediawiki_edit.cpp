@@ -52,6 +52,11 @@ class Q_DECL_HIDDEN Result
 {
 public:
 
+    explicit Result()
+    {
+        m_captchaId = -1;
+    }
+
     unsigned int m_captchaId;
     QVariant     m_captchaQuestion;
     QString      m_captchaAnswer;
@@ -106,7 +111,7 @@ public:
     Result                 result;
 };
 
-Edit::Edit(Iface& media, QObject* parent)
+Edit::Edit(Iface& media, QObject* const parent)
     : Job(*new EditPrivate(media), parent)
 {
 }
@@ -127,14 +132,14 @@ void Edit::setPrependText(const QString& prependText)
 {
     Q_D(Edit);
     d->requestParameter[QStringLiteral("prependtext")] = prependText;
-    d->requestParameter[QStringLiteral("md5")] = QString();
+    d->requestParameter[QStringLiteral("md5")]         = QString();
 }
 
 void Edit::setAppendText(const QString& appendText)
 {
     Q_D(Edit);
     d->requestParameter[QStringLiteral("appendtext")] = appendText;
-    d->requestParameter[QStringLiteral("md5")] = QString();
+    d->requestParameter[QStringLiteral("md5")]        = QString();
 }
 
 void Edit::setPageName(const QString& pageName)
@@ -206,7 +211,7 @@ void Edit::setMinor(bool minor)
     Q_D(Edit);
 
     if (minor)
-        d->requestParameter[QStringLiteral("minor")] = QStringLiteral("on");
+        d->requestParameter[QStringLiteral("minor")]    = QStringLiteral("on");
     else
         d->requestParameter[QStringLiteral("notminor")] = QStringLiteral("on");
 }
@@ -266,7 +271,7 @@ void Edit::doWorkSendRequest(Page page)
     Q_D(Edit);
     d->requestParameter[QStringLiteral("token")] = page.pageEditToken();
     // Set the url
-    QUrl    url = d->MediaWiki.url();
+    QUrl    url                                  = d->MediaWiki.url();
     QUrlQuery query;
     query.addQueryItem(QStringLiteral("format"), QStringLiteral("xml"));
     query.addQueryItem(QStringLiteral("action"), QStringLiteral("edit"));
@@ -285,7 +290,7 @@ void Edit::doWorkSendRequest(Page page)
         if (d->requestParameter.contains(QStringLiteral("text")))
             text = d->requestParameter[QStringLiteral("text")];
 
-        QByteArray hash = QCryptographicHash::hash(text.toUtf8(),QCryptographicHash::Md5);
+        QByteArray hash                            = QCryptographicHash::hash(text.toUtf8(),QCryptographicHash::Md5);
         d->requestParameter[QStringLiteral("md5")] = QString::fromLatin1(hash.toHex());
     }
 
@@ -302,7 +307,7 @@ void Edit::doWorkSendRequest(Page page)
     QByteArray cookie;
     QList<QNetworkCookie> MediaWikiCookies = d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url());
 
-    for(int i = 0 ; i < MediaWikiCookies.size(); ++i)
+    for (int i = 0 ; i < MediaWikiCookies.size() ; ++i)
     {
         cookie += MediaWikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
         cookie += ';';
@@ -317,7 +322,7 @@ void Edit::doWorkSendRequest(Page page)
     QNetworkRequest request( url );
     request.setRawHeader("User-Agent", d->MediaWiki.userAgent().toUtf8());
     request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/x-www-form-urlencoded"));
-    request.setRawHeader( "Cookie", cookie );
+    request.setRawHeader("Cookie", cookie);
 
     setPercent(25); // Request ready.
 
@@ -413,23 +418,23 @@ void Edit::finishedCaptcha(const QString& captcha)
     d->result.m_captchaAnswer = captcha;
     QUrl url                  = d->baseUrl;
     QUrlQuery query;
-    query.addQueryItem(QStringLiteral("CaptchaId"), QString::number(d->result.m_captchaId));
+    query.addQueryItem(QStringLiteral("CaptchaId"),     QString::number(d->result.m_captchaId));
     query.addQueryItem(QStringLiteral("CaptchaAnswer"), d->result.m_captchaAnswer);
     url.setQuery(query);
-    QString data      = url.toString();
+    QString data              = url.toString();
     QByteArray cookie;
     QList<QNetworkCookie> MediaWikiCookies = d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url());
 
-    for(int i = 0 ; i < MediaWikiCookies.size() ; ++i)
+    for (int i = 0 ; i < MediaWikiCookies.size() ; ++i)
     {
         cookie += MediaWikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
         cookie += ';';
     }
 
     // Set the request
-    QNetworkRequest request( url );
+    QNetworkRequest request(url);
     request.setRawHeader("User-Agent", d->MediaWiki.userAgent().toUtf8());
-    request.setRawHeader( "Cookie", cookie );
+    request.setRawHeader("Cookie", cookie);
     request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/x-www-form-urlencoded"));
     // Send the request
     d->reply = d->manager->post(request, data.toUtf8());

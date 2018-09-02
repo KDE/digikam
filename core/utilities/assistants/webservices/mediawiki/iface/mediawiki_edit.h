@@ -160,21 +160,6 @@ public:
     };
 
     /**
-     * @brief Constructs an Edit job.
-     * @param parent the QObject parent
-     */
-    explicit Edit(Iface& media, QObject* parent = 0);
-    /**
-     * @brief Destroys the Edit job.
-     */
-    virtual ~Edit();
-
-    /**
-     * @brief Starts the job asynchronously.
-     */
-    void start() Q_DECL_OVERRIDE;
-
-    /**
      * @brief Specify how the watchlist is affected by this edit.
      */
     enum Watchlist
@@ -199,6 +184,23 @@ public:
          */
         nochange
     };
+
+public:
+
+    /**
+     * @brief Constructs an Edit job.
+     * @param parent the QObject parent
+     */
+    explicit Edit(Iface& media, QObject* const parent = 0);
+    /**
+     * @brief Destroys the Edit job.
+     */
+    virtual ~Edit();
+
+    /**
+     * @brief Starts the job asynchronously.
+     */
+    void start() Q_DECL_OVERRIDE;
 
     /**
      * @brief Specify how the watchlist is affected by this edit.
