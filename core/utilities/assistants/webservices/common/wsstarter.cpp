@@ -114,34 +114,37 @@ WSStarter* WSStarter::instance()
 
 void WSStarter::cleanUp()
 {
-    delete instance()->d->boxWindow;
-    delete instance()->d->dbWindow;
-    delete instance()->d->fbWindow;
+    if (creator.exists())
+    {
+        delete instance()->d->boxWindow;
+        delete instance()->d->dbWindow;
+        delete instance()->d->fbWindow;
 
 #ifdef HAVE_KIO
-    delete instance()->d->ftExportWindow;
-    delete instance()->d->ftImportWindow;
+        delete instance()->d->ftExportWindow;
+        delete instance()->d->ftImportWindow;
 #endif
 
-    delete instance()->d->flickrWindow;
-    delete instance()->d->gdWindow;
-    delete instance()->d->gpWindow;
-    delete instance()->d->gpImportWindow;
-    delete instance()->d->imageShackWindow;
-    delete instance()->d->imgurWindow;
-    delete instance()->d->mediaWikiWindow;
-    delete instance()->d->odWindow;
-    delete instance()->d->pWindow;
-    delete instance()->d->piwigoWindow;
-    delete instance()->d->rajceWindow;
-    delete instance()->d->smugWindow;
-    delete instance()->d->smugImportWindow;
+        delete instance()->d->flickrWindow;
+        delete instance()->d->gdWindow;
+        delete instance()->d->gpWindow;
+        delete instance()->d->gpImportWindow;
+        delete instance()->d->imageShackWindow;
+        delete instance()->d->imgurWindow;
+        delete instance()->d->mediaWikiWindow;
+        delete instance()->d->odWindow;
+        delete instance()->d->pWindow;
+        delete instance()->d->piwigoWindow;
+        delete instance()->d->rajceWindow;
+        delete instance()->d->smugWindow;
+        delete instance()->d->smugImportWindow;
 
 #ifdef HAVE_VKONTAKTE
-    delete instance()->d->vkWindow;
+        delete instance()->d->vkWindow;
 #endif
 
-    delete instance()->d->yfWindow;
+        delete instance()->d->yfWindow;
+    }
 }
 
 void WSStarter::exportToWebService(int tool, DInfoInterface* const iface, QWidget* const parent)
