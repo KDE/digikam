@@ -529,4 +529,5 @@ BUGFIXES:
 468 ==> 395788 - If tags have a in them rename effectively deletes the file.
 469 ==> 388596 - Main area remains empty with Qt 5.9.3.
 470 ==> 387552 - digiKam suddenly is unable to read or display any images.
-471 ==> 
+471 ==> 397972 - Unable to navigate in DK during flickr export.
+472 ==> 
