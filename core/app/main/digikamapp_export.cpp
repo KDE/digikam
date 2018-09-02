@@ -93,7 +93,8 @@ void DigikamApp::slotExportTool()
 
     if (tool != WSStarter::Unknown)
     {
-        WSStarter::exportToWebService(tool, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        WSStarter::exportToWebService(tool, new DBInfoIface(this, QList<QUrl>(),
+                                                            ApplicationSettings::ImportExport), this);
     }
 }
 
