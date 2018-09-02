@@ -520,4 +520,5 @@ BUGFIXES:
 459 ==> 224603 - One-touch download when connecting media.
 460 ==> 282021 - Impossible to start...
 461 ==> 202430 - Crash after startup on Mac OS X.
-462 ==> 
+462 ==> 139153 - Can't compile from source.
+463 ==> 
