@@ -80,6 +80,8 @@ private:
 
     void toWebService(int tool, DInfoInterface* const iface, QWidget* const parent);
 
+    bool checkWebService(QWidget* const widget);
+
 private:
 
     class Private;

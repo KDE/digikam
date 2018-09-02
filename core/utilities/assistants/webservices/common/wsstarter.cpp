@@ -160,11 +160,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
 {
     if (tool == Box)
     {
-        if (d->boxWindow && (d->boxWindow->isMinimized() || !d->boxWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->boxWindow)))
         {
-            d->boxWindow->showNormal();       // krazy:exclude=qmethods
-            d->boxWindow->activateWindow();
-            d->boxWindow->raise();
+            return;
         }
         else
         {
@@ -174,11 +172,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
     else if (tool == Dropbox)
     {
-        if (d->dbWindow && (d->dbWindow->isMinimized() || !d->dbWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->dbWindow)))
         {
-            d->dbWindow->showNormal();       // krazy:exclude=qmethods
-            d->dbWindow->activateWindow();
-            d->dbWindow->raise();
+            return;
         }
         else
         {
@@ -188,11 +184,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
     else if (tool == Facebook)
     {
-        if (d->fbWindow && (d->fbWindow->isMinimized() || !d->fbWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->fbWindow)))
         {
-            d->fbWindow->showNormal();       // krazy:exclude=qmethods
-            d->fbWindow->activateWindow();
-            d->fbWindow->raise();
+            return;
         }
         else
         {
@@ -204,11 +198,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
 #ifdef HAVE_KIO
     else if (tool == FileTransfer)
     {
-        if (d->ftExportWindow && (d->ftExportWindow->isMinimized() || !d->ftExportWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->ftExportWindow)))
         {
-            d->ftExportWindow->showNormal();       // krazy:exclude=qmethods
-            d->ftExportWindow->activateWindow();
-            d->ftExportWindow->raise();
+            return;
         }
         else
         {
@@ -220,11 +212,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
 
     else if (tool == Flickr)
     {
-        if (d->flickrWindow && (d->flickrWindow->isMinimized() || !d->flickrWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->flickrWindow)))
         {
-            d->flickrWindow->showNormal();       // krazy:exclude=qmethods
-            d->flickrWindow->activateWindow();
-            d->flickrWindow->raise();
+            return;
         }
         else
         {
@@ -234,11 +224,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
     else if (tool == Gdrive)
     {
-        if (d->gdWindow && (d->gdWindow->isMinimized() || !d->gdWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->gdWindow)))
         {
-            d->gdWindow->showNormal();       // krazy:exclude=qmethods
-            d->gdWindow->activateWindow();
-            d->gdWindow->raise();
+            return;
         }
         else
         {
@@ -248,11 +236,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
     else if (tool == Gphoto)
     {
-        if (d->gpWindow && (d->gpWindow->isMinimized() || !d->gpWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->gpWindow)))
         {
-            d->gpWindow->showNormal();       // krazy:exclude=qmethods
-            d->gpWindow->activateWindow();
-            d->gpWindow->raise();
+            return;
         }
         else
         {
@@ -262,11 +248,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
     else if (tool == Imageshack)
     {
-        if (d->imageShackWindow && (d->imageShackWindow->isMinimized() || !d->imageShackWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->imageShackWindow)))
         {
-            d->imageShackWindow->showNormal();       // krazy:exclude=qmethods
-            d->imageShackWindow->activateWindow();
-            d->imageShackWindow->raise();
+            return;
         }
         else
         {
@@ -276,11 +260,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
     else if (tool == Imgur)
     {
-        if (d->imgurWindow && (d->imgurWindow->isMinimized() || !d->imgurWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->imgurWindow)))
         {
-            d->imgurWindow->showNormal();       // krazy:exclude=qmethods
-            d->imgurWindow->activateWindow();
-            d->imgurWindow->raise();
+            return;
         }
         else
         {
@@ -290,11 +272,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
     else if (tool == Mediawiki)
     {
-        if (d->mediaWikiWindow && (d->mediaWikiWindow->isMinimized() || !d->mediaWikiWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->mediaWikiWindow)))
         {
-            d->mediaWikiWindow->showNormal();       // krazy:exclude=qmethods
-            d->mediaWikiWindow->activateWindow();
-            d->mediaWikiWindow->raise();
+            return;
         }
         else
         {
@@ -304,11 +284,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
     else if (tool == Onedrive)
     {
-        if (d->odWindow && (d->odWindow->isMinimized() || !d->odWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->odWindow)))
         {
-            d->odWindow->showNormal();       // krazy:exclude=qmethods
-            d->odWindow->activateWindow();
-            d->odWindow->raise();
+            return;
         }
         else
         {
@@ -318,11 +296,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
     else if (tool == Pinterest)
     {
-        if (d->pWindow && (d->pWindow->isMinimized() || !d->pWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->pWindow)))
         {
-            d->pWindow->showNormal();       // krazy:exclude=qmethods
-            d->pWindow->activateWindow();
-            d->pWindow->raise();
+            return;
         }
         else
         {
@@ -332,11 +308,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
     else if (tool == Piwigo)
     {
-        if (d->piwigoWindow && (d->piwigoWindow->isMinimized() || !d->piwigoWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->piwigoWindow)))
         {
-            d->piwigoWindow->showNormal();       // krazy:exclude=qmethods
-            d->piwigoWindow->activateWindow();
-            d->piwigoWindow->raise();
+            return;
         }
         else
         {
@@ -346,11 +320,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
     else if (tool == Rajce)
     {
-        if (d->rajceWindow && (d->rajceWindow->isMinimized() || !d->rajceWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->rajceWindow)))
         {
-            d->rajceWindow->showNormal();       // krazy:exclude=qmethods
-            d->rajceWindow->activateWindow();
-            d->rajceWindow->raise();
+            return;
         }
         else
         {
@@ -360,11 +332,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
     else if (tool == Smugmug)
     {
-        if (d->smugWindow && (d->smugWindow->isMinimized() || !d->smugWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->smugWindow)))
         {
-            d->smugWindow->showNormal();       // krazy:exclude=qmethods
-            d->smugWindow->activateWindow();
-            d->smugWindow->raise();
+            return;
         }
         else
         {
@@ -376,11 +346,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
 #ifdef HAVE_VKONTAKTE
     else if (tool == Vkontakte)
     {
-        if (d->vkWindow && (d->vkWindow->isMinimized() || !d->vkWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->vkWindow)))
         {
-            d->vkWindow->showNormal();       // krazy:exclude=qmethods
-            d->vkWindow->activateWindow();
-            d->vkWindow->raise();
+            return;
         }
         else
         {
@@ -392,11 +360,9 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
 
     else if (tool == Yandexfotki)
     {
-        if (d->yfWindow && (d->yfWindow->isMinimized() || !d->yfWindow->isHidden()))
+        if (checkWebService(static_cast<QWidget*>(d->yfWindow)))
         {
-            d->yfWindow->showNormal();       // krazy:exclude=qmethods
-            d->yfWindow->activateWindow();
-            d->yfWindow->raise();
+            return;
         }
         else
         {
@@ -404,6 +370,19 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->yfWindow->show();
         }
     }
+}
+
+bool WSStarter::checkWebService(QWidget* const widget)
+{
+    if (widget && (widget->isMinimized() || !widget->isHidden()))
+    {
+        widget->showNormal();       // krazy:exclude=qmethods
+        widget->activateWindow();
+        widget->raise();
+        return true;
+    }
+
+    return false;
 }
 
 } // namespace Digikam
