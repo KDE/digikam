@@ -504,4 +504,6 @@ BUGFIXES:
 443 ==> 286341 - Crash at startup with a "Bus Error".
 444 ==> 329050 - Application crashes while starts.
 445 ==> 396374 - editing a picture (F4) presents an empty screen.
-446 ==> 
+446 ==> 336874 - After exiting full screen, Menu Bar disappear and crash.
+447 ==> 
+
