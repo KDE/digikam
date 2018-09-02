@@ -84,116 +84,13 @@ void ShowFoto::slotMediaServer()
 
 void ShowFoto::slotExportTool()
 {
-    QAction* const tool = dynamic_cast<QAction*>(sender());
+    QAction* const action = dynamic_cast<QAction*>(sender());
+    int tool              = actionToWebService(action);
 
-    if (tool == m_exportDropboxAction)
+    if (tool != WSStarter::Unknown)
     {
-        QPointer<DBWindow> w = new DBWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
+        WSStarter::exportToWebService(tool, new DMetaInfoIface(this, d->thumbBar->urls()), this);
     }
-    if (tool == m_exportOnedriveAction)
-    {
-        QPointer<ODWindow> w = new ODWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
-    }
-    if (tool == m_exportPinterestAction)
-    {
-        QPointer<PWindow> w = new PWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
-    }
-    if (tool == m_exportBoxAction)
-    {
-        QPointer<BOXWindow> w = new BOXWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
-    }
-    else if (tool == m_exportFacebookAction)
-    {
-        QPointer<FbWindow> w = new FbWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
-    }
-    else if (tool == m_exportFlickrAction)
-    {
-        WSStarter::exportToWebService(WSStarter::Flickr, new DMetaInfoIface(this, d->thumbBar->urls()), this);
-    }
-    else if (tool == m_exportGdriveAction)
-    {
-        QPointer<GSWindow> w = new GSWindow(new DMetaInfoIface(this, d->thumbBar->urls()),
-                   this, QLatin1String("googledriveexport"));
-        w->exec();
-        delete w;
-    }
-    else if (tool == m_exportGphotoAction)
-    {
-        QPointer<GSWindow> w = new GSWindow(new DMetaInfoIface(this, d->thumbBar->urls()),
-                   this, QLatin1String("googlephotoexport"));
-        w->exec();
-        delete w;
-    }
-    else if (tool == m_exportImageshackAction)
-    {
-        QPointer<ImageShackWindow> w = new ImageShackWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
-    }
-    else if (tool == m_exportImgurAction)
-    {
-        QPointer<ImgurWindow> w = new ImgurWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
-    }
-    else if (tool == m_exportPiwigoAction)
-    {
-        QPointer<PiwigoWindow> w = new PiwigoWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
-    }
-    else if (tool == m_exportRajceAction)
-    {
-        QPointer<RajceWindow> w = new RajceWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
-    }
-    else if (tool == m_exportSmugmugAction)
-    {
-        QPointer<SmugWindow> w = new SmugWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
-    }
-    else if (tool == m_exportYandexfotkiAction)
-    {
-        QPointer<YFWindow> w = new YFWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
-    }
-    else if (tool == m_exportMediawikiAction)
-    {
-        QPointer<MediaWikiWindow> w = new MediaWikiWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
-    }
-
-#ifdef HAVE_VKONTAKTE
-    else if (tool == m_exportVkontakteAction)
-    {
-        QPointer<VKWindow> w = new VKWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
-    }
-#endif
-
-#ifdef HAVE_KIO
-    else if (tool == m_exportFileTransferAction)
-    {
-        QPointer<FTExportWindow> w = new FTExportWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w->exec();
-        delete w;
-    }
-#endif
 }
 
 } // namespace ShowFoto

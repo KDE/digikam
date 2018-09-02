@@ -107,27 +107,11 @@
 #include "advprintwizard.h"
 #include "dmediaservermngr.h"
 #include "dmediaserverdlg.h"
-#include "dbwindow.h"
-#include "odwindow.h"
-#include "pwindow.h"
-#include "boxwindow.h"
-#include "fbwindow.h"
 #include "wsstarter.h"
 #include "gswindow.h"
-#include "imageshackwindow.h"
-#include "imgurwindow.h"
-#include "piwigowindow.h"
-#include "rajcewindow.h"
 #include "smugwindow.h"
-#include "yfwindow.h"
-#include "mediawikiwindow.h"
-
-#ifdef HAVE_VKONTAKTE
-#   include "vkwindow.h"
-#endif
 
 #ifdef HAVE_KIO
-#   include "ftexportwindow.h"
 #   include "ftimportwindow.h"
 #endif
 
