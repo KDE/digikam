@@ -93,7 +93,7 @@ void ImageWindow::slotExportTool()
     QAction* const action = dynamic_cast<QAction*>(sender());
     int tool              = actionToWebService(action);
 
-    if (tool != WSStarter::Unknown)
+    if (tool != WSStarter::ExportUnknown)
     {
         WSStarter::exportToWebService(tool, new DBInfoIface(this, QList<QUrl>(),
                                                             ApplicationSettings::ImportExport), this);

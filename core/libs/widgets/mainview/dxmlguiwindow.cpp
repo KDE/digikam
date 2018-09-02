@@ -1257,21 +1257,21 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
 {
     if (action == m_exportBoxAction)
     {
-        return WSStarter::Box;
+        return WSStarter::ExportBox;
     }
     else if (action == m_exportDropboxAction)
     {
-        return WSStarter::Dropbox;
+        return WSStarter::ExportDropbox;
     }
     else if (action == m_exportFacebookAction)
     {
-        return WSStarter::Facebook;
+        return WSStarter::ExportFacebook;
     }
 
 #ifdef HAVE_KIO
     else if (action == m_exportFileTransferAction)
     {
-        return WSStarter::FileTransfer;
+        return WSStarter::ExportFileTransfer;
     }
     else if (action == m_importFileTransferAction)
     {
@@ -1281,59 +1281,59 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
 
     else if (action == m_exportFlickrAction)
     {
-        return WSStarter::Flickr;
+        return WSStarter::ExportFlickr;
     }
     else if (action == m_exportGdriveAction)
     {
-        return WSStarter::Gdrive;
+        return WSStarter::ExportGdrive;
     }
     else if (action == m_exportGphotoAction)
     {
-        return WSStarter::Gphoto;
+        return WSStarter::ExportGphoto;
     }
     else if (action == m_exportImageshackAction)
     {
-        return WSStarter::Imageshack;
+        return WSStarter::ExportImageshack;
     }
     else if (action == m_exportImgurAction)
     {
-        return WSStarter::Imgur;
+        return WSStarter::ExportImgur;
     }
     else if (action == m_exportMediawikiAction)
     {
-        return WSStarter::Mediawiki;
+        return WSStarter::ExportMediawiki;
     }
     else if (action == m_exportOnedriveAction)
     {
-        return WSStarter::Onedrive;
+        return WSStarter::ExportOnedrive;
     }
     else if (action == m_exportPinterestAction)
     {
-        return WSStarter::Pinterest;
+        return WSStarter::ExportPinterest;
     }
     else if (action == m_exportPiwigoAction)
     {
-        return WSStarter::Piwigo;
+        return WSStarter::ExportPiwigo;
     }
     else if (action == m_exportRajceAction)
     {
-        return WSStarter::Rajce;
+        return WSStarter::ExportRajce;
     }
     else if (action == m_exportSmugmugAction)
     {
-        return WSStarter::Smugmug;
+        return WSStarter::ExportSmugmug;
     }
 
 #ifdef HAVE_VKONTAKTE
     else if (action == m_exportVkontakteAction)
     {
-        return WSStarter::Vkontakte;
+        return WSStarter::ExportVkontakte;
     }
 #endif
 
     else if (action == m_exportYandexfotkiAction)
     {
-        return WSStarter::Yandexfotki;
+        return WSStarter::ExportYandexfotki;
     }
     else if (action == m_importGphotoAction)
     {
@@ -1344,7 +1344,7 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
         return WSStarter::ImportSmugmug;
     }
 
-    return WSStarter::Unknown;
+    return WSStarter::ExportUnknown;
 }
 
 } // namespace Digikam

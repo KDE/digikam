@@ -168,7 +168,7 @@ WSStarter::~WSStarter()
 
 void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* const parent)
 {
-    if (tool == Box)
+    if (tool == ExportBox)
     {
         if (checkWebService(static_cast<QWidget*>(d->boxWindow)))
         {
@@ -180,7 +180,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->boxWindow->show();
         }
     }
-    else if (tool == Dropbox)
+    else if (tool == ExportDropbox)
     {
         if (checkWebService(static_cast<QWidget*>(d->dbWindow)))
         {
@@ -192,7 +192,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->dbWindow->show();
         }
     }
-    else if (tool == Facebook)
+    else if (tool == ExportFacebook)
     {
         if (checkWebService(static_cast<QWidget*>(d->fbWindow)))
         {
@@ -206,7 +206,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
 
 #ifdef HAVE_KIO
-    else if (tool == FileTransfer)
+    else if (tool == ExportFileTransfer)
     {
         if (checkWebService(static_cast<QWidget*>(d->ftExportWindow)))
         {
@@ -220,7 +220,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
 #endif
 
-    else if (tool == Flickr)
+    else if (tool == ExportFlickr)
     {
         if (checkWebService(static_cast<QWidget*>(d->flickrWindow)))
         {
@@ -232,7 +232,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->flickrWindow->show();
         }
     }
-    else if (tool == Gdrive)
+    else if (tool == ExportGdrive)
     {
         if (checkWebService(static_cast<QWidget*>(d->gdWindow)))
         {
@@ -244,7 +244,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->gdWindow->show();
         }
     }
-    else if (tool == Gphoto)
+    else if (tool == ExportGphoto)
     {
         if (checkWebService(static_cast<QWidget*>(d->gpWindow)))
         {
@@ -256,7 +256,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->gpWindow->show();
         }
     }
-    else if (tool == Imageshack)
+    else if (tool == ExportImageshack)
     {
         if (checkWebService(static_cast<QWidget*>(d->imageShackWindow)))
         {
@@ -268,7 +268,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->imageShackWindow->show();
         }
     }
-    else if (tool == Imgur)
+    else if (tool == ExportImgur)
     {
         if (checkWebService(static_cast<QWidget*>(d->imgurWindow)))
         {
@@ -280,7 +280,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->imgurWindow->show();
         }
     }
-    else if (tool == Mediawiki)
+    else if (tool == ExportMediawiki)
     {
         if (checkWebService(static_cast<QWidget*>(d->mediaWikiWindow)))
         {
@@ -292,7 +292,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->mediaWikiWindow->show();
         }
     }
-    else if (tool == Onedrive)
+    else if (tool == ExportOnedrive)
     {
         if (checkWebService(static_cast<QWidget*>(d->odWindow)))
         {
@@ -304,7 +304,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->odWindow->show();
         }
     }
-    else if (tool == Pinterest)
+    else if (tool == ExportPinterest)
     {
         if (checkWebService(static_cast<QWidget*>(d->pWindow)))
         {
@@ -316,7 +316,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->pWindow->show();
         }
     }
-    else if (tool == Piwigo)
+    else if (tool == ExportPiwigo)
     {
         if (checkWebService(static_cast<QWidget*>(d->piwigoWindow)))
         {
@@ -328,7 +328,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->piwigoWindow->show();
         }
     }
-    else if (tool == Rajce)
+    else if (tool == ExportRajce)
     {
         if (checkWebService(static_cast<QWidget*>(d->rajceWindow)))
         {
@@ -340,7 +340,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->rajceWindow->show();
         }
     }
-    else if (tool == Smugmug)
+    else if (tool == ExportSmugmug)
     {
         if (checkWebService(static_cast<QWidget*>(d->smugWindow)))
         {
@@ -354,7 +354,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
 
 #ifdef HAVE_VKONTAKTE
-    else if (tool == Vkontakte)
+    else if (tool == ExportVkontakte)
     {
         if (checkWebService(static_cast<QWidget*>(d->vkWindow)))
         {
@@ -368,7 +368,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
     }
 #endif
 
-    else if (tool == Yandexfotki)
+    else if (tool == ExportYandexfotki)
     {
         if (checkWebService(static_cast<QWidget*>(d->yfWindow)))
         {

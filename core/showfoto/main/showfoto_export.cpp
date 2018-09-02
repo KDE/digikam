@@ -87,7 +87,7 @@ void ShowFoto::slotExportTool()
     QAction* const action = dynamic_cast<QAction*>(sender());
     int tool              = actionToWebService(action);
 
-    if (tool != WSStarter::Unknown)
+    if (tool != WSStarter::ExportUnknown)
     {
         WSStarter::exportToWebService(tool, new DMetaInfoIface(this, d->thumbBar->urls()), this);
     }

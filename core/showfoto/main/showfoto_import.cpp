@@ -64,7 +64,7 @@ void ShowFoto::slotImportTool()
     QAction* const action = dynamic_cast<QAction*>(sender());
     int tool              = actionToWebService(action);
 
-    if (tool != WSStarter::Unknown)
+    if (tool != WSStarter::ExportUnknown)
     {
         WSStarter::importFromWebService(tool, new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()), this);
     }

@@ -45,28 +45,27 @@ public:
 
     enum WSTool
     {
-        Unknown = 0,
-        Box,
-        Dropbox,
-        Facebook,
-        FileTransfer,
-        Flickr,
-        Gdrive,
-        Gphoto,
-        Imageshack,
-        Imgur,
-        Mediawiki,
-        Onedrive,
-        Pinterest,
-        Piwigo,
-        Rajce,
-        Smugmug,
-        Vkontakte,
-        Yandexfotki,
-        // Import
-        ImportGphoto,
+        ExportUnknown = 0,
+        ExportBox,
+        ExportDropbox,
+        ExportFacebook,
+        ExportFileTransfer,
         ImportFileTransfer,
-        ImportSmugmug
+        ExportFlickr,
+        ExportGdrive,
+        ExportGphoto,
+        ImportGphoto,
+        ExportImageshack,
+        ExportImgur,
+        ExportMediawiki,
+        ExportOnedrive,
+        ExportPinterest,
+        ExportPiwigo,
+        ExportRajce,
+        ExportSmugmug,
+        ImportSmugmug,
+        ExportVkontakte,
+        ExportYandexfotki
     };
 
 public:
