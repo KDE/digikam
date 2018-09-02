@@ -357,7 +357,7 @@ Important: by default only digiKam handbook is downloaded with code base for pac
 components, set \b $GITSLAVE environnement variable before to run \b download-repos script, like this:
 
 \code
-    export GITSLAVE=.gitslave.devel
+    export GITSLAVE=.gitslave
 \endcode
 
 \section develenv Development Envirronnement
