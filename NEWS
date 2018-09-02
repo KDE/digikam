@@ -526,5 +526,6 @@ BUGFIXES:
 465 ==> 261134 - Drag a folder into album view - deletes source folder.
 466 ==> 365809 - Menu bar disappears after having used full screen mode.
 467 ==> 383924 - Tags syncing and reading from file not working.
-468 ==> 
+468 ==> 395788 - If tags have a in them rename effectively deletes the file.
+469 ==> 
 
