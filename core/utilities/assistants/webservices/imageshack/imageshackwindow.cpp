@@ -111,7 +111,7 @@ ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
 
     setMainWidget(d->widget);
     setWindowTitle(i18n("Export to ImageShack"));
-    setModal(true);
+    setModal(false);
 
     d->albumDlg = new ImageShackNewAlbumDlg(this, QLatin1String("ImageShack"));
 
