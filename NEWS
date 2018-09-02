@@ -519,4 +519,5 @@ BUGFIXES:
 458 ==> 211066 - TIFFs written by digiKam not readable with GIMP.
 459 ==> 224603 - One-touch download when connecting media.
 460 ==> 282021 - Impossible to start...
-461 ==> 
+461 ==> 202430 - Crash after startup on Mac OS X.
+462 ==> 
