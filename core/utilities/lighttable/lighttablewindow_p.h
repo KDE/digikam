@@ -95,7 +95,7 @@
 #include "pwindow.h"
 #include "boxwindow.h"
 #include "fbwindow.h"
-#include "flickrwindow.h"
+#include "wsstarter.h"
 #include "gswindow.h"
 #include "imageshackwindow.h"
 #include "imgurwindow.h"

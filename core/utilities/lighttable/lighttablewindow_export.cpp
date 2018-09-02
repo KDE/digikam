@@ -128,10 +128,8 @@ void LightTableWindow::slotExportTool()
     }
     else if (tool == m_exportFlickrAction)
     {
-        QPointer<FlickrWindow> w = new FlickrWindow(new DBInfoIface(this, d->thumbView->allUrls(),
-                                       ApplicationSettings::ImportExport), this);
-        w->exec();
-        delete w;
+        WSStarter::exportFlickr(new DBInfoIface(this, d->thumbView->allUrls(),
+                                                ApplicationSettings::ImportExport), this);
     }
     else if (tool == m_exportGdriveAction)
     {
