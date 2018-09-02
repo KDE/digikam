@@ -55,7 +55,6 @@ public:
      *  present Album objects as managed by AlbumManager.
      *  You will want to create an instance of the base classes.
      */
-
     enum RootAlbumBehavior
     {
         /** The root album will be included as a single parent item
@@ -91,8 +90,10 @@ public:
      * Pass the root album if it is already available.
      * Do not use this class directly, but one of the subclasses.
      */
-    AbstractAlbumModel(Album::Type albumType, Album* const rootAlbum, RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                       QObject* const parent = 0);
+    explicit AbstractAlbumModel(Album::Type albumType,
+                                Album* const rootAlbum,
+                                RootAlbumBehavior rootBehavior = IncludeRootAlbum,
+                                QObject* const parent = 0);
     ~AbstractAlbumModel();
 
     /** Set a drag drop handler
@@ -213,9 +214,10 @@ class DIGIKAM_EXPORT AbstractSpecificAlbumModel : public AbstractAlbumModel
 public:
 
     /// Abstract base class, do not instantiate.
-    AbstractSpecificAlbumModel(Album::Type albumType, Album* const rootAlbum,
-                               RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                               QObject* const parent = 0);
+    explicit AbstractSpecificAlbumModel(Album::Type albumType,
+                                        Album* const rootAlbum,
+                                        RootAlbumBehavior rootBehavior = IncludeRootAlbum,
+                                        QObject* const parent = 0);
 
 protected:
 
@@ -247,10 +249,18 @@ public:
 
     /// Supports displaying a count alongside the album name in DisplayRole
 
-    AbstractCountingAlbumModel(Album::Type albumType, Album* const rootAlbum,
-                               RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                               QObject* const parent = 0);
+    explicit AbstractCountingAlbumModel(Album::Type albumType,
+                                        Album* const rootAlbum,
+                                        RootAlbumBehavior rootBehavior = IncludeRootAlbum,
+                                        QObject* const parent = 0);
     ~AbstractCountingAlbumModel();
+
+protected:
+
+    /**
+     * Call this method in children class contructors to init signal/slots connections.
+     */
+    void setup();
 
 public Q_SLOTS:
 
@@ -323,9 +333,10 @@ public:
     /// Abstract base class that manages the check state of Albums.
     /// Call setCheckable(true) to enable checkable albums.
 
-    AbstractCheckableAlbumModel(Album::Type albumType, Album* const rootAlbum,
-                                RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                                QObject* const parent = 0);
+    explicit AbstractCheckableAlbumModel(Album::Type albumType,
+                                         Album* const rootAlbum,
+                                         RootAlbumBehavior rootBehavior = IncludeRootAlbum,
+                                         QObject* const parent = 0);
     ~AbstractCheckableAlbumModel();
 
     /// Triggers if the albums in this model are checkable
