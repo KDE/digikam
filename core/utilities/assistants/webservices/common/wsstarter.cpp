@@ -72,11 +72,13 @@ public:
 
 #ifdef HAVE_KIO
     QPointer<FTExportWindow>   ftExportWindow;
+    QPointer<FTImportWindow>   ftImportWindow;
 #endif
 
     QPointer<FlickrWindow>     flickrWindow;
     QPointer<GSWindow>         gdWindow;
     QPointer<GSWindow>         gpWindow;
+    QPointer<GSWindow>         gpImportWindow;
     QPointer<ImageShackWindow> imageShackWindow;
     QPointer<ImgurWindow>      imgurWindow;
     QPointer<MediaWikiWindow>  mediaWikiWindow;
@@ -85,6 +87,7 @@ public:
     QPointer<PiwigoWindow>     piwigoWindow;
     QPointer<RajceWindow>      rajceWindow;
     QPointer<SmugWindow>       smugWindow;
+    QPointer<SmugWindow>       smugImportWindow;
 
 #ifdef HAVE_VKONTAKTE
     QPointer<VKWindow>         vkWindow;
@@ -117,11 +120,13 @@ void WSStarter::cleanUp()
 
 #ifdef HAVE_KIO
     delete instance()->d->ftExportWindow;
+    delete instance()->d->ftImportWindow;
 #endif
 
     delete instance()->d->flickrWindow;
     delete instance()->d->gdWindow;
     delete instance()->d->gpWindow;
+    delete instance()->d->gpImportWindow;
     delete instance()->d->imageShackWindow;
     delete instance()->d->imgurWindow;
     delete instance()->d->mediaWikiWindow;
@@ -130,6 +135,7 @@ void WSStarter::cleanUp()
     delete instance()->d->piwigoWindow;
     delete instance()->d->rajceWindow;
     delete instance()->d->smugWindow;
+    delete instance()->d->smugImportWindow;
 
 #ifdef HAVE_VKONTAKTE
     delete instance()->d->vkWindow;
@@ -143,12 +149,16 @@ void WSStarter::exportToWebService(int tool, DInfoInterface* const iface, QWidge
     instance()->toWebService(tool, iface, parent);
 }
 
+void WSStarter::importFromWebService(int tool, DInfoInterface* const iface, QWidget* const parent)
+{
+    instance()->fromWebService(tool, iface, parent);
+}
+
 // ------------------------------------------------------------------------------------------------
 
 WSStarter::WSStarter()
     : d(new Private)
 {
-    //qDebug() << "New WSStarter";
 }
 
 WSStarter::~WSStarter()
@@ -368,6 +378,50 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         {
             d->yfWindow = new YFWindow(iface, parent);
             d->yfWindow->show();
+        }
+    }
+}
+
+void WSStarter::fromWebService(int tool, DInfoInterface* const iface, QWidget* const parent)
+{
+    if (tool == ImportGphoto)
+    {
+        if (checkWebService(static_cast<QWidget*>(d->gpImportWindow)))
+        {
+            return;
+        }
+        else
+        {
+            d->gpImportWindow = new GSWindow(iface, parent, QLatin1String("googlephotoimport"));
+            d->gpImportWindow->show();
+        }
+    }
+
+#ifdef HAVE_KIO
+    else if (tool == ImportFileTransfer)
+    {
+        if (checkWebService(static_cast<QWidget*>(d->ftImportWindow)))
+        {
+            return;
+        }
+        else
+        {
+            d->ftImportWindow = new FTImportWindow(iface, parent);
+            d->ftImportWindow->show();
+        }
+    }
+#endif
+
+    else if (tool == ImportSmugmug)
+    {
+        if (checkWebService(static_cast<QWidget*>(d->smugImportWindow)))
+        {
+            return;
+        }
+        else
+        {
+            d->smugImportWindow = new SmugWindow(iface, parent, true);
+            d->smugImportWindow->show();
         }
     }
 }

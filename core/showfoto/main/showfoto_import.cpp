@@ -61,32 +61,13 @@ void ShowFoto::slotImportedImagefromScanner(const QUrl& url)
 
 void ShowFoto::slotImportTool()
 {
-    QAction* const tool = dynamic_cast<QAction*>(sender());
+    QAction* const action = dynamic_cast<QAction*>(sender());
+    int tool              = actionToWebService(action);
 
-    if (tool == m_importGphotoAction)
+    if (tool != WSStarter::Unknown)
     {
-        QPointer<GSWindow> w = new GSWindow(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
-                   this, QLatin1String("googlephotoimport"));
-        w->exec();
-        delete w;
+        WSStarter::importFromWebService(tool, new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()), this);
     }
-    else if (tool == m_importSmugmugAction)
-    {
-        QPointer<SmugWindow> w = new SmugWindow(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
-                     this, true);
-        w->exec();
-        delete w;
-    }
-
-#ifdef HAVE_KIO
-    else if (tool == m_importFileTransferAction)
-    {
-        QPointer<FTImportWindow> w = new FTImportWindow(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
-                         this);
-        w->exec();
-        delete w;
-    }
-#endif
 }
 
 } // namespace ShowFoto

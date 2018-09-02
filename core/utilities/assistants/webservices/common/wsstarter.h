@@ -62,7 +62,11 @@ public:
         Rajce,
         Smugmug,
         Vkontakte,
-        Yandexfotki
+        Yandexfotki,
+        // Import
+        ImportGphoto,
+        ImportFileTransfer,
+        ImportSmugmug
     };
 
 public:
@@ -72,6 +76,7 @@ public:
     static void cleanUp();
 
     static void exportToWebService(int tool, DInfoInterface* const iface, QWidget* const parent);
+    static void importFromWebService(int tool, DInfoInterface* const iface, QWidget* const parent);
 
 private:
 
@@ -79,6 +84,7 @@ private:
     ~WSStarter();
 
     void toWebService(int tool, DInfoInterface* const iface, QWidget* const parent);
+    void fromWebService(int tool, DInfoInterface* const iface, QWidget* const parent);
 
     bool checkWebService(QWidget* const widget);
 

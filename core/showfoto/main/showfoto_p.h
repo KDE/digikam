@@ -108,12 +108,6 @@
 #include "dmediaservermngr.h"
 #include "dmediaserverdlg.h"
 #include "wsstarter.h"
-#include "gswindow.h"
-#include "smugwindow.h"
-
-#ifdef HAVE_KIO
-#   include "ftimportwindow.h"
-#endif
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
