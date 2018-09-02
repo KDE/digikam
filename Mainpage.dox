@@ -342,7 +342,6 @@ https://phabricator.kde.org/source/digikam/
 Even if code base can be compiled as well, more features can be enabled if extra components are downloaded and compiled at the same time.
 The project pages of these extra components are given below:
 
- - \b libkvkontatke       : https://projects.kde.org/projects/extragear/libs/libkvkontatke
  - \b digiKam \b handbook : https://phabricator.kde.org/source/digikam-doc/
 
 \subsection downloadcomponents Downloading Software Components
