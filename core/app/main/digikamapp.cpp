@@ -203,7 +203,7 @@ DigikamApp::~DigikamApp()
         QueueMgrWindow::queueManagerWindow()->close();
     }
 
-    // Close all web service windows.
+    // Close all web service tools.
 
     WSStarter::cleanUp();
 
