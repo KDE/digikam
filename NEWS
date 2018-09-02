@@ -507,6 +507,7 @@ BUGFIXES:
 446 ==> 336874 - After exiting full screen, Menu Bar disappear and crash.
 447 ==> 237494 - B&W JPEG displayed incorrectly.
 448 ==> 265749 - Blank context menus.
-449 ==> 
+449 ==> 274733 - Delete file permanentry works wrong.
+450 ==> 
 
 
