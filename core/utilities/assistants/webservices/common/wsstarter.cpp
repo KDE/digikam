@@ -429,7 +429,7 @@ void WSStarter::fromWebService(int tool, DInfoInterface* const iface, QWidget* c
     }
 }
 
-bool WSStarter::checkWebService(QWidget* const widget)
+bool WSStarter::checkWebService(QWidget* const widget) const
 {
     if (widget && (widget->isMinimized() || !widget->isHidden()))
     {

@@ -85,7 +85,7 @@ private:
     void toWebService(int tool, DInfoInterface* const iface, QWidget* const parent);
     void fromWebService(int tool, DInfoInterface* const iface, QWidget* const parent);
 
-    bool checkWebService(QWidget* const widget);
+    bool checkWebService(QWidget* const widget) const;
 
 private:
 

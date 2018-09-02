@@ -1273,10 +1273,6 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     {
         return WSStarter::ExportFileTransfer;
     }
-    else if (action == m_importFileTransferAction)
-    {
-        return WSStarter::ImportFileTransfer;
-    }
 #endif
 
     else if (action == m_exportFlickrAction)
@@ -1339,6 +1335,14 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     {
         return WSStarter::ImportGphoto;
     }
+
+#ifdef HAVE_KIO
+    else if (action == m_importFileTransferAction)
+    {
+        return WSStarter::ImportFileTransfer;
+    }
+#endif
+
     else if (action == m_importSmugmugAction)
     {
         return WSStarter::ImportSmugmug;
