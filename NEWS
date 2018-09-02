@@ -519,4 +519,14 @@ BUGFIXES:
 458 ==> 211066 - TIFFs written by digiKam not readable with GIMP.
 459 ==> 224603 - One-touch download when connecting media.
 460 ==> 282021 - Impossible to start...
-461 ==> 
+461 ==> 202430 - Crash after startup on Mac OS X.
+462 ==> 139153 - Can't compile from source.
+463 ==> 380971 - Albums disappear when the network is interrupted. (5.6.0).
+464 ==> 342673 - Rebuild fingerprints crashes with large number (>110000) of images.
+465 ==> 261134 - Drag a folder into album view - deletes source folder.
+466 ==> 365809 - Menu bar disappears after having used full screen mode.
+467 ==> 383924 - Tags syncing and reading from file not working.
+468 ==> 395788 - If tags have a in them rename effectively deletes the file.
+469 ==> 388596 - Main area remains empty with Qt 5.9.3.
+470 ==> 387552 - digiKam suddenly is unable to read or display any images.
+471 ==> 
