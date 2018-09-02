@@ -113,6 +113,10 @@ public:
      */
     QList<QAction*> importActions() const;
 
+    /** Return the Webservice enum from action
+     */
+    int actionToWebService(QAction* const action) const;
+
     /** Create Geolocation Edit tool action.
      */
     void createGeolocationEditAction();

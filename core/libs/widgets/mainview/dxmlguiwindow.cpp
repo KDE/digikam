@@ -70,6 +70,7 @@
 #include "digikam_globals.h"
 #include "daboutdata.h"
 #include "webbrowserdlg.h"
+#include "wsstarter.h"
 
 namespace Digikam
 {
@@ -1250,6 +1251,84 @@ QList<QAction*> DXmlGuiWindow::importActions() const
                              << m_ksaneAction
 #endif
                              ;
+}
+
+int DXmlGuiWindow::actionToWebService(QAction* const action) const
+{
+    if (action == m_exportBoxAction)
+    {
+        return WSStarter::Box;
+    }
+    else if (action == m_exportDropboxAction)
+    {
+        return WSStarter::Dropbox;
+    }
+    else if (action == m_exportFacebookAction)
+    {
+        return WSStarter::Facebook;
+    }
+#ifdef HAVE_KIO
+    else if (action == m_exportFileTransferAction)
+    {
+        return WSStarter::FileTransfer;
+    }
+#endif
+    else if (action == m_exportFlickrAction)
+    {
+        return WSStarter::Flickr;
+    }
+    else if (action == m_exportGdriveAction)
+    {
+        return WSStarter::Gdrive;
+    }
+    else if (action == m_exportGphotoAction)
+    {
+        return WSStarter::Gphoto;
+    }
+    else if (action == m_exportImageshackAction)
+    {
+        return WSStarter::Imageshack;
+    }
+    else if (action == m_exportImgurAction)
+    {
+        return WSStarter::Imgur;
+    }
+    else if (action == m_exportMediawikiAction)
+    {
+        return WSStarter::Mediawiki;
+    }
+    else if (action == m_exportOnedriveAction)
+    {
+        return WSStarter::Onedrive;
+    }
+    else if (action == m_exportPinterestAction)
+    {
+        return WSStarter::Pinterest;
+    }
+    else if (action == m_exportPiwigoAction)
+    {
+        return WSStarter::Piwigo;
+    }
+    else if (action == m_exportRajceAction)
+    {
+        return WSStarter::Rajce;
+    }
+    else if (action == m_exportSmugmugAction)
+    {
+        return WSStarter::Smugmug;
+    }
+#ifdef HAVE_VKONTAKTE
+    else if (action == m_exportVkontakteAction)
+    {
+        return WSStarter::Vkontakte;
+    }
+#endif
+    else if (action == m_exportYandexfotkiAction)
+    {
+        return WSStarter::Yandexfotki;
+    }
+
+    return WSStarter::Unknown;
 }
 
 } // namespace Digikam

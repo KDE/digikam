@@ -43,6 +43,30 @@ class DIGIKAM_EXPORT WSStarter : public QObject
 
 public:
 
+    enum WSTool
+    {
+        Unknown = 0,
+        Box,
+        Dropbox,
+        Facebook,
+        FileTransfer,
+        Flickr,
+        Gdrive,
+        Gphoto,
+        Imageshack,
+        Imgur,
+        Mediawiki,
+        Onedrive,
+        Pinterest,
+        Piwigo,
+        Rajce,
+        Smugmug,
+        Vkontakte,
+        Yandexfotki
+    };
+
+public:
+
     static WSStarter* instance();
 
     static void cleanUp();
