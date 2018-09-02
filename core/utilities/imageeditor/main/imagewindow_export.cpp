@@ -129,7 +129,7 @@ void ImageWindow::slotExportTool()
     }
     else if (tool == m_exportFlickrAction)
     {
-        WSStarter::exportFlickr(new DBInfoIface(this, d->thumbBar->allUrls(),
+        WSStarter::exportToWebService(WSStarter::Flickr, new DBInfoIface(this, d->thumbBar->allUrls(),
                                                 ApplicationSettings::ImportExport), this);
     }
     else if (tool == m_exportGdriveAction)

@@ -1267,12 +1267,14 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     {
         return WSStarter::Facebook;
     }
+
 #ifdef HAVE_KIO
     else if (action == m_exportFileTransferAction)
     {
         return WSStarter::FileTransfer;
     }
 #endif
+
     else if (action == m_exportFlickrAction)
     {
         return WSStarter::Flickr;
@@ -1317,12 +1319,14 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     {
         return WSStarter::Smugmug;
     }
+
 #ifdef HAVE_VKONTAKTE
     else if (action == m_exportVkontakteAction)
     {
         return WSStarter::Vkontakte;
     }
 #endif
+
     else if (action == m_exportYandexfotkiAction)
     {
         return WSStarter::Yandexfotki;

@@ -118,7 +118,7 @@ void ShowFoto::slotExportTool()
     }
     else if (tool == m_exportFlickrAction)
     {
-        WSStarter::exportFlickr(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        WSStarter::exportToWebService(WSStarter::Flickr, new DMetaInfoIface(this, d->thumbBar->urls()), this);
     }
     else if (tool == m_exportGdriveAction)
     {

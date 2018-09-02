@@ -128,7 +128,7 @@ void LightTableWindow::slotExportTool()
     }
     else if (tool == m_exportFlickrAction)
     {
-        WSStarter::exportFlickr(new DBInfoIface(this, d->thumbView->allUrls(),
+        WSStarter::exportToWebService(WSStarter::Flickr, new DBInfoIface(this, d->thumbView->allUrls(),
                                                 ApplicationSettings::ImportExport), this);
     }
     else if (tool == m_exportGdriveAction)

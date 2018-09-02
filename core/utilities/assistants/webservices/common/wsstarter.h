@@ -71,14 +71,14 @@ public:
 
     static void cleanUp();
 
-    static void exportFlickr(DInfoInterface* const iface, QWidget* const parent);
+    static void exportToWebService(int tool, DInfoInterface* const iface, QWidget* const parent);
 
 private:
 
     explicit WSStarter();
     ~WSStarter();
 
-    void toFlickr(DInfoInterface* const iface, QWidget* const parent);
+    void toWebService(int tool, DInfoInterface* const iface, QWidget* const parent);
 
 private:
 
