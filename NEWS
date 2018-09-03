@@ -544,5 +544,6 @@ BUGFIXES:
 483 ==> 127498 - Reduce image size delete exif data.
 484 ==> 219009 - Crashed when selecting photos for upload.
 485 ==> 234395 - Unable to get list of albums.
-486 ==> 
+486 ==> 241587 - Flickr export reencode jpeg before sending them.
+487 ==> 
 
