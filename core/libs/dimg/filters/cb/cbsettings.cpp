@@ -78,19 +78,19 @@ CBSettings::CBSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     QGridLayout* const grid = new QGridLayout(parent);
 
     QLabel* const labelCyan = new QLabel(i18n("Cyan"));
     labelCyan->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-    d->rInput = new DIntNumInput();
+    d->rInput               = new DIntNumInput();
     d->rInput->setRange(-100, 100, 1);
     d->rInput->setDefaultValue(0);
     d->rInput->setWhatsThis(i18n("Set here the cyan/red color adjustment of the image."));
 
-    QLabel* const labelRed = new QLabel(i18n("Red"));
+    QLabel* const labelRed     = new QLabel(i18n("Red"));
     labelRed->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     // -------------------------------------------------------------
@@ -103,7 +103,7 @@ CBSettings::CBSettings(QWidget* const parent)
     d->gInput->setDefaultValue(0);
     d->gInput->setWhatsThis(i18n("Set here the magenta/green color adjustment of the image."));
 
-    QLabel* const labelGreen = new QLabel(i18n("Green"));
+    QLabel* const labelGreen  = new QLabel(i18n("Green"));
     labelGreen->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     // -------------------------------------------------------------
@@ -111,10 +111,10 @@ CBSettings::CBSettings(QWidget* const parent)
     QLabel* const labelYellow = new QLabel(i18n("Yellow"));
     labelYellow->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-    QLabel* const labelBlue = new QLabel(i18n("Blue"));
+    QLabel* const labelBlue   = new QLabel(i18n("Blue"));
     labelBlue->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-    d->bInput = new DIntNumInput();
+    d->bInput                 = new DIntNumInput();
     d->bInput->setRange(-100, 100, 1);
     d->bInput->setDefaultValue(0);
     d->bInput->setWhatsThis(i18n("Set here the yellow/blue color adjustment of the image."));

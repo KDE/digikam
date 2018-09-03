@@ -71,9 +71,15 @@ class DIGIKAM_EXPORT CBFilter : public DImgThreadedFilter
 public:
 
     explicit CBFilter(QObject* const parent = 0);
-    explicit CBFilter(DImg* const orgImage, QObject* const parent=0, const CBContainer& settings=CBContainer());
-    explicit CBFilter(const CBContainer& settings, DImgThreadedFilter* const master,
-                      const DImg& orgImage, DImg& destImage, int progressBegin=0, int progressEnd=100);
+    explicit CBFilter(DImg* const orgImage,
+                      QObject* const parent=0,
+                      const CBContainer& settings=CBContainer());
+    explicit CBFilter(const CBContainer& settings,
+                      DImgThreadedFilter* const master,
+                      const DImg& orgImage,
+                      DImg& destImage,
+                      int progressBegin=0,
+                      int progressEnd=100);
     virtual ~CBFilter();
 
     static QString          FilterIdentifier()
