@@ -19,119 +19,38 @@ include_directories(
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-# =======================================================
-# Stand alone version of ExpoBlending tool
+macro(ASSISTANTS_BUILD_STANDALONE)
 
-set(expoblending_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/expoblending.cpp)
+    set(_filename ${ARGV0})
+    string(REPLACE "." ";" _temp ${_filename})
+    list(GET _temp 0 _target)
 
-add_executable(expoblending ${expoblending_SRCS})
+    set(${_target}_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/${_filename})
 
-target_link_libraries(expoblending
-                      digikamcore
+    add_executable(${_target} ${${_target}_SRCS})
 
-                      Qt5::Gui
-                      Qt5::Xml
-)
+    target_link_libraries(${_target}
+                          digikamcore
+                          Qt5::Gui
+                          Qt5::Xml
+    )
 
-# =======================================================
-# Stand alone version of Calendar tool
+endmacro()
 
-set(calendar_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/calendar.cpp)
-
-add_executable(calendar ${calendar_SRCS})
-
-target_link_libraries(calendar
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of Panorama tool plus test code
+ASSISTANTS_BUILD_STANDALONE(expoblending)
+ASSISTANTS_BUILD_STANDALONE(calendar)
+ASSISTANTS_BUILD_STANDALONE(sendbymail)
+ASSISTANTS_BUILD_STANDALONE(printcreator)
 
 if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
-    set(panorama_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/panorama.cpp)
-
-    add_executable(panorama ${panorama_SRCS})
-
-    target_link_libraries(panorama
-                          digikamcore
-
-                          Qt5::Gui
-                          Qt5::Xml
-    )
-
-    set(panoparser_test_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/panoparser_test.cpp)
-
-    add_executable(panoparser_test ${panoparser_test_SRCS})
-
-    target_link_libraries(panoparser_test
-                          digikamcore
-
-                          Qt5::Gui
-                          Qt5::Xml
-    )
+    ASSISTANTS_BUILD_STANDALONE(panorama)
+    ASSISTANTS_BUILD_STANDALONE(panoparser_test)
 endif()
-
-# =======================================================
-# Stand alone version of SendByMail tool
-
-set(sendbymail_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/sendbymail.cpp)
-
-add_executable(sendbymail ${sendbymail_SRCS})
-
-target_link_libraries(sendbymail
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of PrintCreator tool
-
-set(printcreator_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/printcreator.cpp)
-
-add_executable(printcreator ${printcreator_SRCS})
-
-target_link_libraries(printcreator
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
-
-# =======================================================
-# Stand alone version of VideoSlideshow tool
 
 if(ENABLE_MEDIAPLAYER)
-
-    set(videoslideshow_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/videoslideshow.cpp)
-
-    add_executable(videoslideshow ${videoslideshow_SRCS})
-
-    target_link_libraries(videoslideshow
-                          digikamcore
-
-                          Qt5::Gui
-                          Qt5::Xml
-    )
+    ASSISTANTS_BUILD_STANDALONE(videoslideshow)
 endif()
 
-# =======================================================
-# Stand alone version of HTML Gallery tool
-
 if(LibXml2_FOUND AND LibXslt_FOUND)
-
-    set(htmlgallery_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/htmlgallery.cpp)
-
-    add_executable(htmlgallery ${htmlgallery_SRCS})
-
-    target_link_libraries(htmlgallery
-                          digikamcore
-
-                          Qt5::Gui
-                          Qt5::Xml
-    )
+    ASSISTANTS_BUILD_STANDALONE(htmlgallery)
 endif()
