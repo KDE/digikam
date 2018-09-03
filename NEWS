@@ -539,6 +539,7 @@ BUGFIXES:
 478 ==> 129870 - Album sent to HTMLGallery tool doesn't respect the view order.
 479 ==> 111462 - Exporting multiple "tag" albums in HTML produces invalid hyperlinks on main webpage.
 480 ==> 147770 - Use a hierarchical treeview in HTMLExport (instead of a listview).
-481 ==> 
+481 ==> 259748 - Xorg crashes when launching the "Export to flickr" tool.
+482 ==> 
 
 
