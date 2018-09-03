@@ -542,5 +542,5 @@ BUGFIXES:
 481 ==> 259748 - Xorg crashes when launching the "Export to flickr" tool.
 482 ==> 398206 - Strongly underexposed areas of the jpeg file are white rather than pure black.
 483 ==> 127498 - Reduce image size delete exif data.
-484 ==> 
-
+484 ==> 219009 - Crashed when selecting photos for upload.
+485 ==> 
