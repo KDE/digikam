@@ -548,11 +548,15 @@ void ImageModel::ensureHasImageInfos(const QList<ImageInfo>& infos, const QList<
 
 void ImageModel::clearImageInfos()
 {
+    beginResetModel();
+
     d->infos.clear();
     d->extraValues.clear();
     d->idHash.clear();
     d->filePathHash.clear();
+
     delete d->incrementalUpdater;
+
     d->incrementalUpdater          = 0;
     d->pendingInfos.clear();
     d->pendingExtraValues.clear();
@@ -560,10 +564,8 @@ void ImageModel::clearImageInfos()
     d->reAdding                    = false;
     d->incrementalRefreshRequested = false;
 
-    beginResetModel();
-    endResetModel();
-
     imageInfosCleared();
+    endResetModel();
 }
 
 void ImageModel::setImageInfos(const QList<ImageInfo>& infos)

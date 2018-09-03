@@ -266,13 +266,14 @@ void ShowfotoImageModel::addShowfotoItemInfosSynchronously(const QList<ShowfotoI
 
 void ShowfotoImageModel::clearShowfotoItemInfos()
 {
+    beginResetModel();
+
     d->infos.clear();
     d->fileUrlHash.clear();
     d->reAdding                    = false;
     d->refreshing                  = false;
     d->incrementalRefreshRequested = false;
 
-    beginResetModel();
     showfotoItemInfosCleared();
     endResetModel();
 }
