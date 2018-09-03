@@ -545,5 +545,6 @@ BUGFIXES:
 484 ==> 219009 - Crashed when selecting photos for upload.
 485 ==> 234395 - Unable to get list of albums.
 486 ==> 241587 - Flickr export reencode jpeg before sending them.
-487 ==> 
+487 ==> 278890 - Showfoto crashes with qt 4.8.
+488 ==> 
 
