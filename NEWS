@@ -533,5 +533,6 @@ BUGFIXES:
 472 ==> 390228 - No clear rule on where digikam wants to import.
 473 ==> 187274 - The dialogue to export to an HTML gallery has an album selected but the Next button is greyed out.
 474 ==> 129762 - Flickr export tool should export whole host application albums.
-475 ==> 
+475 ==> 130966 - Exporting to html gallery doesn't include subalbums.
+476 ==> 
 
