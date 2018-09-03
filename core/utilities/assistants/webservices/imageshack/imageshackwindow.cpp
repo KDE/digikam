@@ -96,9 +96,9 @@ public:
     DInfoInterface*        iface;
 };
 
-ImageShackWindow::ImageShackWindow(DInfoInterface* const iface, 
-                                   QWidget* const parent)
-    : WSToolDialog(parent),
+ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
+                                   QWidget* const /*parent*/)
+    : WSToolDialog(0),
       d(new Private)
 {
     d->session = new ImageShackSession();
@@ -111,7 +111,7 @@ ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
 
     setMainWidget(d->widget);
     setWindowTitle(i18n("Export to ImageShack"));
-    setModal(true);
+    setModal(false);
 
     d->albumDlg = new ImageShackNewAlbumDlg(this, QLatin1String("ImageShack"));
 

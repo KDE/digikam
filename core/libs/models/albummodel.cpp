@@ -255,6 +255,8 @@ DateAlbumModel::DateAlbumModel(QObject* const parent)
             this, SLOT(setYearMonthMap(QMap<YearMonth,int>)));
 
     setYearMonthMap(AlbumManager::instance()->getDAlbumsCount());
+
+    setup();
 }
 
 DAlbum* DateAlbumModel::albumForIndex(const QModelIndex& index) const

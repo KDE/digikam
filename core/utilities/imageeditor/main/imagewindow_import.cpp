@@ -45,32 +45,14 @@ void ImageWindow::slotImportedImagefromScanner(const QUrl& url)
 
 void ImageWindow::slotImportTool()
 {
-    QAction* const tool = dynamic_cast<QAction*>(sender());
+    QAction* const action = dynamic_cast<QAction*>(sender());
+    int tool              = actionToWebService(action);
 
-    if (tool == m_importGphotoAction)
+    if (tool != WSStarter::ExportUnknown)
     {
-        QPointer<GSWindow> w = new GSWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
-                   this, QLatin1String("googlephotoimport"));
-        w->exec();
-        delete w;
+        WSStarter::importFromWebService(tool, new DBInfoIface(this, QList<QUrl>(),
+                                                              ApplicationSettings::ImportExport), this);
     }
-    else if (tool == m_importSmugmugAction)
-    {
-        QPointer<SmugWindow> w = new SmugWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
-                     this, true);
-        w->exec();
-        delete w;
-    }
-
-#ifdef HAVE_KIO
-    else if (tool == m_importFileTransferAction)
-    {
-        QPointer<FTImportWindow> w = new FTImportWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
-                         this);
-        w->exec();
-        delete w;
-    }
-#endif
 }
 
 } // namespace Digikam

@@ -70,6 +70,7 @@
 #include "digikam_globals.h"
 #include "daboutdata.h"
 #include "webbrowserdlg.h"
+#include "wsstarter.h"
 
 namespace Digikam
 {
@@ -1250,6 +1251,104 @@ QList<QAction*> DXmlGuiWindow::importActions() const
                              << m_ksaneAction
 #endif
                              ;
+}
+
+int DXmlGuiWindow::actionToWebService(QAction* const action) const
+{
+    if (action == m_exportBoxAction)
+    {
+        return WSStarter::ExportBox;
+    }
+    else if (action == m_exportDropboxAction)
+    {
+        return WSStarter::ExportDropbox;
+    }
+    else if (action == m_exportFacebookAction)
+    {
+        return WSStarter::ExportFacebook;
+    }
+
+#ifdef HAVE_KIO
+    else if (action == m_exportFileTransferAction)
+    {
+        return WSStarter::ExportFileTransfer;
+    }
+#endif
+
+    else if (action == m_exportFlickrAction)
+    {
+        return WSStarter::ExportFlickr;
+    }
+    else if (action == m_exportGdriveAction)
+    {
+        return WSStarter::ExportGdrive;
+    }
+    else if (action == m_exportGphotoAction)
+    {
+        return WSStarter::ExportGphoto;
+    }
+    else if (action == m_exportImageshackAction)
+    {
+        return WSStarter::ExportImageshack;
+    }
+    else if (action == m_exportImgurAction)
+    {
+        return WSStarter::ExportImgur;
+    }
+    else if (action == m_exportMediawikiAction)
+    {
+        return WSStarter::ExportMediawiki;
+    }
+    else if (action == m_exportOnedriveAction)
+    {
+        return WSStarter::ExportOnedrive;
+    }
+    else if (action == m_exportPinterestAction)
+    {
+        return WSStarter::ExportPinterest;
+    }
+    else if (action == m_exportPiwigoAction)
+    {
+        return WSStarter::ExportPiwigo;
+    }
+    else if (action == m_exportRajceAction)
+    {
+        return WSStarter::ExportRajce;
+    }
+    else if (action == m_exportSmugmugAction)
+    {
+        return WSStarter::ExportSmugmug;
+    }
+
+#ifdef HAVE_VKONTAKTE
+    else if (action == m_exportVkontakteAction)
+    {
+        return WSStarter::ExportVkontakte;
+    }
+#endif
+
+    else if (action == m_exportYandexfotkiAction)
+    {
+        return WSStarter::ExportYandexfotki;
+    }
+    else if (action == m_importGphotoAction)
+    {
+        return WSStarter::ImportGphoto;
+    }
+
+#ifdef HAVE_KIO
+    else if (action == m_importFileTransferAction)
+    {
+        return WSStarter::ImportFileTransfer;
+    }
+#endif
+
+    else if (action == m_importSmugmugAction)
+    {
+        return WSStarter::ImportSmugmug;
+    }
+
+    return WSStarter::ExportUnknown;
 }
 
 } // namespace Digikam

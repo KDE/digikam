@@ -203,6 +203,10 @@ DigikamApp::~DigikamApp()
         QueueMgrWindow::queueManagerWindow()->close();
     }
 
+    // Close all web service tools.
+
+    WSStarter::cleanUp();
+
     if (TagsManager::isCreated())
     {
         TagsManager::instance()->close();

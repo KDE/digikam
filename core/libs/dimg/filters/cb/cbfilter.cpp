@@ -73,7 +73,9 @@ CBFilter::CBFilter(QObject* const parent)
     initFilter();
 }
 
-CBFilter::CBFilter(DImg* const orgImage, QObject* const parent, const CBContainer& settings)
+CBFilter::CBFilter(DImg* const orgImage,
+                   QObject* const parent,
+                   const CBContainer& settings)
     : DImgThreadedFilter(orgImage, parent, QLatin1String("CBFilter")),
       d(new Private)
 {
@@ -82,15 +84,19 @@ CBFilter::CBFilter(DImg* const orgImage, QObject* const parent, const CBContaine
     initFilter();
 }
 
-CBFilter::CBFilter(const CBContainer& settings, DImgThreadedFilter* const master,
-            const DImg& orgImage, DImg& destImage, int progressBegin, int progressEnd)
+CBFilter::CBFilter(const CBContainer& settings,
+                   DImgThreadedFilter* const master,
+                   const DImg& orgImage,
+                   DImg& destImage,
+                   int progressBegin,
+                   int progressEnd)
     : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, QLatin1String("CBFilter")),
       d(new Private)
 {
     d->settings = settings;
     reset();
     initFilter();
-    destImage = m_destImage;
+    destImage   = m_destImage;
 }
 
 CBFilter::~CBFilter()
@@ -110,7 +116,7 @@ void CBFilter::reset()
 {
     // initialize to linear mapping
 
-    for (int i = 0; i < 65536; ++i)
+    for (int i = 0 ; i < 65536 ; ++i)
     {
         d->redMap16[i]   = i;
         d->greenMap16[i] = i;
@@ -118,7 +124,7 @@ void CBFilter::reset()
         d->alphaMap16[i] = i;
     }
 
-    for (int i = 0; i < 256; ++i)
+    for (int i = 0 ; i < 256 ; ++i)
     {
         d->redMap[i]   = i;
         d->greenMap[i] = i;
@@ -127,11 +133,15 @@ void CBFilter::reset()
     }
 }
 
-void CBFilter::setTables(int* const redMap, int* const greenMap, int* const blueMap, int* const alphaMap, bool sixteenBit)
+void CBFilter::setTables(int* const redMap,
+                         int* const greenMap,
+                         int* const blueMap,
+                         int* const alphaMap,
+                         bool sixteenBit)
 {
     if (!sixteenBit)
     {
-        for (int i = 0; i < 256; ++i)
+        for (int i = 0 ; i < 256 ; ++i)
         {
             if (redMap)
             {
@@ -156,7 +166,7 @@ void CBFilter::setTables(int* const redMap, int* const greenMap, int* const blue
     }
     else
     {
-        for (int i = 0; i < 65536; ++i)
+        for (int i = 0 ; i < 65536 ; ++i)
         {
             if (redMap)
             {
@@ -181,7 +191,11 @@ void CBFilter::setTables(int* const redMap, int* const greenMap, int* const blue
     }
 }
 
-void CBFilter::getTables(int* const redMap, int* const greenMap, int* const blueMap, int* const alphaMap, bool sixteenBit)
+void CBFilter::getTables(int* const redMap,
+                         int* const greenMap,
+                         int* const blueMap,
+                         int* const alphaMap,
+                         bool sixteenBit)
 {
     if (!sixteenBit)
     {
@@ -245,14 +259,14 @@ void CBFilter::applyCBFilter(DImg& image, double r, double g, double b, double a
     {
         uchar* data = (uchar*) image.bits();
 
-        for (uint i = 0; runningFlag() && (i < size); ++i)
+        for (uint i = 0 ; runningFlag() && (i < size) ; ++i)
         {
-            data[0] = d->blueMap[data[0]];
-            data[1] = d->greenMap[data[1]];
-            data[2] = d->redMap[data[2]];
-            data[3] = d->alphaMap[data[3]];
+            data[0]  = d->blueMap[data[0]];
+            data[1]  = d->greenMap[data[1]];
+            data[2]  = d->redMap[data[2]];
+            data[3]  = d->alphaMap[data[3]];
 
-            data += 4;
+            data    += 4;
 
             progress = (int)(((double)i * 100.0) / size);
 
@@ -266,14 +280,14 @@ void CBFilter::applyCBFilter(DImg& image, double r, double g, double b, double a
     {
         ushort* data = reinterpret_cast<ushort*>(image.bits());
 
-        for (uint i = 0; runningFlag() && (i < size); ++i)
+        for (uint i = 0 ; runningFlag() && (i < size) ; ++i)
         {
-            data[0] = d->blueMap16[data[0]];
-            data[1] = d->greenMap16[data[1]];
-            data[2] = d->redMap16[data[2]];
-            data[3] = d->alphaMap16[data[3]];
+            data[0]  = d->blueMap16[data[0]];
+            data[1]  = d->greenMap16[data[1]];
+            data[2]  = d->redMap16[data[2]];
+            data[3]  = d->alphaMap16[data[3]];
 
-            data += 4;
+            data    += 4;
 
             progress = (int)(((double)i * 100.0) / size);
 
@@ -290,49 +304,50 @@ void CBFilter::setGamma(double val)
     val = (val < 0.01) ? 0.01 : val;
     int val2;
 
-    for (int i = 0; i < 65536; ++i)
+    for (int i = 0 ; i < 65536 ; ++i)
     {
-        val2 = (int)(pow(((double)d->redMap16[i] / 65535), (1 / val)) * 65535);
-        d->redMap16[i] = CLAMP065535(val2);
+        val2             = (int)(pow(((double)d->redMap16[i] / 65535), (1 / val)) * 65535);
+        d->redMap16[i]   = CLAMP065535(val2);
 
-        val2 = (int)(pow(((double)d->greenMap16[i] / 65535), (1 / val)) * 65535);
+        val2             = (int)(pow(((double)d->greenMap16[i] / 65535), (1 / val)) * 65535);
         d->greenMap16[i] = CLAMP065535(val2);
 
-        val2 = (int)(pow(((double)d->blueMap16[i] / 65535), (1 / val)) * 65535);
-        d->blueMap16[i] = CLAMP065535(val2);
+        val2             = (int)(pow(((double)d->blueMap16[i] / 65535), (1 / val)) * 65535);
+        d->blueMap16[i]  = CLAMP065535(val2);
 
-        val2 = (int)(pow(((double)d->alphaMap16[i] / 65535), (1 / val)) * 65535);
+        val2             = (int)(pow(((double)d->alphaMap16[i] / 65535), (1 / val)) * 65535);
         d->alphaMap16[i] = CLAMP065535(val2);
     }
 
-    for (int i = 0; i < 256; ++i)
+    for (int i = 0 ; i < 256 ; ++i)
     {
-        val2 = (int)(pow(((double)d->redMap[i] / 255), (1 / val)) * 255);
-        d->redMap[i] = CLAMP0255(val2);
+        val2           = (int)(pow(((double)d->redMap[i] / 255), (1 / val)) * 255);
+        d->redMap[i]   = CLAMP0255(val2);
 
-        val2 = (int)(pow(((double)d->greenMap[i] / 255), (1 / val)) * 255);
+        val2           = (int)(pow(((double)d->greenMap[i] / 255), (1 / val)) * 255);
         d->greenMap[i] = CLAMP0255(val2);
 
-        val2 = (int)(pow(((double)d->blueMap[i] / 255), (1 / val)) * 255);
-        d->blueMap[i] = CLAMP0255(val2);
+        val2           = (int)(pow(((double)d->blueMap[i] / 255), (1 / val)) * 255);
+        d->blueMap[i]  = CLAMP0255(val2);
 
-        val2 = (int)(pow(((double)d->alphaMap[i] / 255), (1 / val)) * 255);
+        val2           = (int)(pow(((double)d->alphaMap[i] / 255), (1 / val)) * 255);
         d->alphaMap[i] = CLAMP0255(val2);
     }
 }
 
 void CBFilter::adjustRGB(double r, double g, double b, double a, bool sixteenBit)
 {
+    if (r == 1.0 && g == 1.0 && b == 1.0 && a == 1.0)
+    {
+        // Nothing to do.
+        return ;
+    }
+
     int* r_table     = new int[65536];
     int* g_table     = new int[65536];
     int* b_table     = new int[65536];
     int* a_table     = new int[65536];
     int* dummy_table = new int[65536];
-
-    if (r == 1.0 && g == 1.0 && b == 1.0 && a == 1.0)
-    {
-        return ;
-    }
 
     if (r == g && r == b && r == a)
     {

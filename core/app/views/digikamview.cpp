@@ -794,7 +794,7 @@ QList<QUrl> DigikamView::allUrls(bool grouping) const
 
 QList<QUrl> DigikamView::selectedUrls(bool grouping) const
 {
-    return selectedInfoList(grouping).toImageUrlList();
+    return selectedInfoList(false, grouping).toImageUrlList();
 }
 
 QList<QUrl> DigikamView::selectedUrls(const ApplicationSettings::OperationType type) const

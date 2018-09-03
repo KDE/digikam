@@ -72,7 +72,9 @@ public:
     bool                                  itemDrop;
 };
 
-AbstractAlbumModel::AbstractAlbumModel(Album::Type albumType, Album* const rootAlbum, RootAlbumBehavior rootBehavior,
+AbstractAlbumModel::AbstractAlbumModel(Album::Type albumType,
+                                       Album* const rootAlbum,
+                                       RootAlbumBehavior rootBehavior,
                                        QObject* const parent)
     : QAbstractItemModel(parent),
       d(new Private)
@@ -511,7 +513,7 @@ void AbstractAlbumModel::slotAlbumAboutToBeDeleted(Album* album)
     albumCleared(album);
 
     // store album for slotAlbumHasBeenDeleted
-    d->removingAlbum = reinterpret_cast<quintptr>(album);
+    d->removingAlbum   = reinterpret_cast<quintptr>(album);
 }
 
 void AbstractAlbumModel::slotAlbumHasBeenDeleted(quintptr p)
@@ -650,11 +652,16 @@ public:
     QSet<int>       includeChildrenAlbums;
 };
 
-AbstractCountingAlbumModel::AbstractCountingAlbumModel(Album::Type albumType, Album* const rootAlbum,
+AbstractCountingAlbumModel::AbstractCountingAlbumModel(Album::Type albumType,
+                                                       Album* const rootAlbum,
                                                        RootAlbumBehavior rootBehavior,
                                                        QObject* const parent)
     : AbstractSpecificAlbumModel(albumType, rootAlbum, rootBehavior, parent),
       d(new Private)
+{
+}
+
+void AbstractCountingAlbumModel::setup()
 {
     connect(AlbumManager::instance(), SIGNAL(signalAlbumMoved(Album*)),
             this, SLOT(slotAlbumMoved(Album*)));
@@ -898,11 +905,14 @@ public:
     QVector<int> staticVectorContainingCheckStateRole;
 };
 
-AbstractCheckableAlbumModel::AbstractCheckableAlbumModel(Album::Type albumType, Album* const rootAlbum,
-                                                         RootAlbumBehavior rootBehavior, QObject* const parent)
+AbstractCheckableAlbumModel::AbstractCheckableAlbumModel(Album::Type albumType,
+                                                         Album* const rootAlbum,
+                                                         RootAlbumBehavior rootBehavior,
+                                                         QObject* const parent)
     : AbstractCountingAlbumModel(albumType, rootAlbum, rootBehavior, parent),
       d(new Private)
 {
+    setup();
 }
 
 AbstractCheckableAlbumModel::~AbstractCheckableAlbumModel()
@@ -1018,7 +1028,7 @@ void AbstractCheckableAlbumModel::resetAllCheckedAlbums()
     const QHash<Album*, Qt::CheckState> oldChecked = d->checkedAlbums;
     d->checkedAlbums.clear();
 
-    for (QHash<Album*, Qt::CheckState>::const_iterator it = oldChecked.begin(); it != oldChecked.end(); ++it)
+    for (QHash<Album*, Qt::CheckState>::const_iterator it = oldChecked.begin() ; it != oldChecked.end() ; ++it)
     {
         if (it.value() != Qt::Unchecked)
         {
@@ -1033,7 +1043,7 @@ void AbstractCheckableAlbumModel::setDataForChildren(const QModelIndex& parent, 
 {
     setData(parent, value, role);
 
-    for (int row = 0; row < rowCount(parent); ++row)
+    for (int row = 0 ; row < rowCount(parent) ; ++row)
     {
         QModelIndex childIndex = index(row, 0, parent);
         setDataForChildren(childIndex, value, role);
@@ -1087,7 +1097,7 @@ void AbstractCheckableAlbumModel::invertCheckedAlbums(const QModelIndex& parent)
         toggleChecked(album);
     }
 
-    for (int row = 0; row < rowCount(parent); ++row)
+    for (int row = 0 ; row < rowCount(parent) ; ++row)
     {
         invertCheckedAlbums(index(row, 0, parent));
     }
