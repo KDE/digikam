@@ -540,6 +540,7 @@ BUGFIXES:
 479 ==> 111462 - Exporting multiple "tag" albums in HTML produces invalid hyperlinks on main webpage.
 480 ==> 147770 - Use a hierarchical treeview in HTMLExport (instead of a listview).
 481 ==> 259748 - Xorg crashes when launching the "Export to flickr" tool.
-482 ==> 
+482 ==> 398206 - Strongly underexposed areas of the jpeg file are white rather than pure black.
+483 ==> 
 
 
