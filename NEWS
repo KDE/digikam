@@ -531,4 +531,5 @@ BUGFIXES:
 470 ==> 387552 - digiKam suddenly is unable to read or display any images.
 471 ==> 397972 - Unable to navigate in DK during flickr export.
 472 ==> 390228 - No clear rule on where digikam wants to import.
-473 ==> 
+473 ==> 187274 - The dialogue to export to an HTML gallery has an album selected but the Next button is greyed out.
+474 ==> 
