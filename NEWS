@@ -546,5 +546,5 @@ BUGFIXES:
 485 ==> 234395 - Unable to get list of albums.
 486 ==> 241587 - Flickr export reencode jpeg before sending them.
 487 ==> 278890 - Showfoto crashes with qt 4.8.
-488 ==> 
-
+488 ==> 355744 - Segfault on SmugMug upload.
+489 ==> 
