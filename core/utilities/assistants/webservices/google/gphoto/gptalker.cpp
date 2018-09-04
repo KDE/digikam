@@ -384,6 +384,8 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
         m_reply = 0;
     }
 
+    emit signalBusy(true);
+
     GPMPForm form;
     QString path = photoPath;
 
@@ -400,6 +402,7 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
 
         if (image.isNull())
         {
+            emit signalBusy(false);
             return false;
         }
 
@@ -488,7 +491,10 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
     form.addPair(QLatin1String("descr"), docMeta.toString(), QLatin1String("application/atom+xml"));
 
     if (!form.addFile(QLatin1String("photo"), path))
+    {
+        emit signalBusy(false);
         return false;
+    }
 
     form.finish();
 
@@ -500,7 +506,7 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
 
     d->state = Private::GP_UPDATEPHOTO;
     m_buffer.resize(0);
-    emit signalBusy(true);
+
     return true;
 }
 

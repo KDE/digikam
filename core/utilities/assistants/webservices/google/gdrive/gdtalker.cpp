@@ -219,6 +219,8 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
         m_reply = 0;
     }
 
+    emit signalBusy(true);
+
     GDMPForm form;
     form.addPair(QUrl::fromLocalFile(imgPath).fileName(), info.description, imgPath, id);
 
@@ -237,6 +239,7 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
         if (image.isNull())
         {
+            emit signalBusy(false);
             return false;
         }
 
@@ -291,8 +294,6 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In add photo";
     d->state = Private::GD_ADDPHOTO;
     m_buffer.resize(0);
-
-    emit signalBusy(true);
 
     return true;
 }

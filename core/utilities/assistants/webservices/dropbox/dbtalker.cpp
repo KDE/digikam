@@ -168,10 +168,10 @@ void DBTalker::unLink()
 void DBTalker::reauthenticate()
 {
     d->o2->unlink();
-    
+
     // Wait until user account is unlinked completely
-    while(authenticated());
-    
+    while (authenticated());
+
     d->o2->link();
 }
 
@@ -277,6 +277,7 @@ bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     if (image.isNull())
     {
+        emit signalBusy(false);
         return false;
     }
 
@@ -319,7 +320,7 @@ bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     d->state = Private::DB_ADDPHOTO;
     d->buffer.resize(0);
-    emit signalBusy(true);
+
     return true;
 }
 

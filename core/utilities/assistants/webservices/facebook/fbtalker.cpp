@@ -434,14 +434,16 @@ void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
 
     if (!form.addFile(QUrl::fromLocalFile(imgPath).fileName(), imgPath))
     {
-        emit signalBusy(false);
         emit signalAddPhotoDone(666, i18n("Cannot open file"));
+        emit signalBusy(false);
+        return;
     }
 
     form.finish();
 
     QVariant arg_1;
-    if(albumID.isEmpty())
+
+    if (albumID.isEmpty())
     {
         arg_1 = d->user.id;
     }
@@ -450,9 +452,7 @@ void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
         arg_1 = albumID;
     }
 
-
-    QNetworkRequest netRequest(QUrl(d->apiURL.arg(arg_1.toString())
-                                                .arg("photos")));
+    QNetworkRequest netRequest(QUrl(d->apiURL.arg(arg_1.toString()).arg("photos")));
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
 
     m_reply = m_netMngr->post(netRequest, form.formData());

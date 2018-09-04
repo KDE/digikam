@@ -432,7 +432,6 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
 
     d->state = Private::P_ADDPIN;
     d->buffer.resize(0);
-    emit signalBusy(true);
 
     return true;
 }

@@ -278,8 +278,9 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
         d->reply = 0;
     }
 
-    QMimeDatabase mimeDB;
+    emit signalBusy(true);
 
+    QMimeDatabase mimeDB;
     QString path     = imgPath;
     QString mimeType = mimeDB.mimeTypeForFile(path).name();
 
@@ -289,6 +290,7 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
 
         if (image.isNull())
         {
+            emit signalBusy(false);
             return false;
         }
 
@@ -357,7 +359,6 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
 
     d->state        = Private::BOX_ADDPHOTO;
     d->buffer.resize(0);
-    emit signalBusy(true);
 
     return true;
 }
