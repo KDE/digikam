@@ -93,9 +93,11 @@ public:
         scope        = QLatin1String("read_public,write_public");
 
         state        = P_USERNAME;
+
+        parent       = 0;
         netMngr      = 0;
         reply        = 0;
-        accessToken  = QString();
+        view         = 0;
     }
 
 public:
@@ -107,6 +109,7 @@ public:
     QString                redirectUrl;
     QString                accessToken;
     QString                scope;
+
     QWidget*               parent;
 
     QNetworkAccessManager* netMngr;
@@ -124,8 +127,6 @@ public:
     WebWidget*             view;
 
     QString                userName;
-
-    QSettings*             settings;
 };
 
 PTalker::PTalker(QWidget* const parent)
@@ -164,6 +165,7 @@ PTalker::~PTalker()
 void PTalker::link()
 {
     emit signalBusy(true);
+
     QUrl url(d->authUrl);
     QUrlQuery query(url);
     query.addQueryItem(QLatin1String("client_id"),     d->clientId);
@@ -206,7 +208,7 @@ void PTalker::slotCatchUrl(const QUrl& url)
 
     if (!code.isEmpty())
     {
-       qCDebug(DIGIKAM_WEBSERVICES_LOG) << "CODE Received " ;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "CODE Received";
         d->view->close();
         getToken(code);
         emit signalBusy(false);
@@ -229,7 +231,7 @@ void PTalker::getToken(const QString& code)
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     netRequest.setRawHeader("Accept", "application/json");
 
-    d->reply = d->netMngr->post(netRequest,QByteArray());
+    d->reply = d->netMngr->post(netRequest, QByteArray());
 
     d->state = Private::P_ACCESSTOKEN;
     d->buffer.resize(0);
@@ -250,7 +252,7 @@ QMap<QString, QString> PTalker::ParseUrlParameters(const QString& url)
     for (int i = 0 ; i < paramlist.count() ; ++i)
     {
         QStringList paramarg = paramlist.at(i).split('=');
-        urlParameters.insert(paramarg.at(0),paramarg.at(1));
+        urlParameters.insert(paramarg.at(0), paramarg.at(1));
     }
 
     return urlParameters;
@@ -353,6 +355,7 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
 
     if (image.isNull())
     {
+        emit signalBusy(false);
         return false;
     }
 
@@ -375,7 +378,7 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
         d->meta.save(path);
     }
 
-    QString boardparam = d->userName + QLatin1Char('/') + uploadBoard;
+    QString boardParam = d->userName + QLatin1Char('/') + uploadBoard;
 
     if (!form.addFile(path))
     {
@@ -385,15 +388,15 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
 
     QUrl url(QString::fromLatin1("https://api.pinterest.com/v1/pins/?access_token=%1").arg(d->accessToken));
 
-    QHttpMultiPart * multipart = new QHttpMultiPart (QHttpMultiPart::FormDataType);
+    QHttpMultiPart* const multiPart = new QHttpMultiPart (QHttpMultiPart::FormDataType);
     ///Board Section
     QHttpPart board;
     QString boardHeader = QString("form-data; name=\"board\"") ;
     board.setHeader(QNetworkRequest::ContentDispositionHeader, boardHeader);
 
-    QByteArray postData = boardparam.toUtf8();
+    QByteArray postData = boardParam.toUtf8();
     board.setBody(postData);
-    multipart->append(board);
+    multiPart->append(board);
 
     ///Note section
     QHttpPart note;
@@ -403,27 +406,29 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
     postData = QByteArray();
 
     note.setBody(postData);
-    multipart->append(note);
+    multiPart->append(note);
 
     ///image section
     QFile* const file = new QFile(imgPath);
     file->open(QIODevice::ReadOnly);
 
-    QHttpPart imagepart;
-    QString imagepartHeader = QLatin1String("form-data; name=\"image\"; filename=\"") +
+    QHttpPart imagePart;
+    QString imagePartHeader = QLatin1String("form-data; name=\"image\"; filename=\"") +
                               QFileInfo(imgPath).fileName() + QLatin1Char('"');
 
-    imagepart.setHeader(QNetworkRequest::ContentDispositionHeader,imagepartHeader);
-    imagepart.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("image/jpeg"));
+    imagePart.setHeader(QNetworkRequest::ContentDispositionHeader, imagePartHeader);
+    imagePart.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("image/jpeg"));
 
-    imagepart.setBodyDevice(file);
-    multipart->append(imagepart);
+    imagePart.setBodyDevice(file);
+    multiPart->append(imagePart);
 
-    QString content = QLatin1String("multipart/form-data;boundary=") + multipart->boundary();
+    QString content = QLatin1String("multipart/form-data;boundary=") + multiPart->boundary();
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, content);
 
-    d->reply = d->netMngr->post(netRequest, multipart);
+    d->reply = d->netMngr->post(netRequest, multiPart);
+    // delete the multiPart and file with the reply
+    multiPart->setParent(d->reply);
 
     d->state = Private::P_ADDPIN;
     d->buffer.resize(0);
@@ -601,7 +606,7 @@ void PTalker::writeSettings()
 void PTalker::readSettings()
 {
     KConfig config;
-    KConfigGroup grp   = config.group("Pinterest User Settings");
+    KConfigGroup grp = config.group("Pinterest User Settings");
 
     //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In read settings";
     if (!grp.readEntry("access_token", false))
