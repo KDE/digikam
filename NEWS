@@ -550,4 +550,5 @@ BUGFIXES:
 489 ==> 358704 - Request authorization does not occur and upload becomes impossible.
 490 ==> 175233 - Showfoto crashes on windows.
 491 ==> 259623 - Application: showFoto (showfoto), signal: Segmentation fault (opening jpg).
-492 ==> 
+492 ==> 194832 - Showfoto open and crash after one second.
+493 ==> 
