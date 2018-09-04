@@ -164,7 +164,6 @@ set(libwspinterest_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/pinterest/pnewalbumdlg.cpp
 # Box tool --------------------------------------------------------------
 
 set(libwsbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/box/boxnewalbumdlg.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/box/boxmpform.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/box/boxtalker.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/box/boxwidget.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/box/boxwindow.cpp

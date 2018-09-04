@@ -38,7 +38,6 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QDesktopServices>
-#include <QUrlQuery>
 #include <QHttpMultiPart>
 
 // Local includes
@@ -48,7 +47,6 @@
 #include "wstoolutils.h"
 #include "boxwindow.h"
 #include "boxitem.h"
-#include "boxmpform.h"
 #include "previewloadthread.h"
 #include "o0settingsstore.h"
 
@@ -79,9 +77,12 @@ public:
         redirectUrl  = QLatin1String("https://app.box.com");
 
         state        = BOX_USERNAME;
+
+        parent       = 0;
         netMngr      = 0;
         reply        = 0;
-        accessToken  = QString();
+        settings     = 0;
+        o2           = 0;
     }
 
 public:
@@ -91,17 +92,18 @@ public:
     QString                         authUrl;
     QString                         tokenUrl;
     QString                         redirectUrl;
-    QString                         accessToken;
-    QString                         refreshToken;
+
     QWidget*                        parent;
     QNetworkAccessManager*          netMngr;
     QNetworkReply*                  reply;
-    State                           state;
-    QByteArray                      buffer;
-    DMetadata                       meta;
-    QMap<QString,QString>           urlParametersMap;
     QSettings*                      settings;
     O2*                             o2;
+
+    State                           state;
+
+    QByteArray                      buffer;
+    DMetadata                       meta;
+    QMap<QString, QString>          urlParametersMap;
     QList<QPair<QString, QString> > foldersList;
 };
 
@@ -278,7 +280,6 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
 
     emit signalBusy(true);
 
-    BOXMPForm form;
     QMimeDatabase mimeDB;
 
     QString path     = imgPath;
@@ -323,43 +324,38 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
         }
     }
 
-    if (!form.addFile(path))
-    {
-        emit signalBusy(false);
-        return false;
-    }
-
-    QHttpMultiPart* const multipart = new QHttpMultiPart (QHttpMultiPart::FormDataType);
+    QHttpMultiPart* const multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
     QHttpPart attributes;
     QString attributesHeader  = QLatin1String("form-data; name=\"attributes\"");
-    attributes.setHeader(QNetworkRequest::ContentDispositionHeader,attributesHeader);
+    attributes.setHeader(QNetworkRequest::ContentDispositionHeader, attributesHeader);
 
     QString postData = QLatin1String("{\"name\":\"") + QFileInfo(imgPath).fileName() + QLatin1Char('"') +
                        QLatin1String(", \"parent\":{\"id\":\"") + id + QLatin1String("\"}}");
     attributes.setBody(postData.toUtf8());
-    multipart->append(attributes);
+    multiPart->append(attributes);
 
-    //QFile* const file = new QFile(imgPath);
-    //file->open(QIODevice::ReadOnly);
+    QFile* const file = new QFile(path);
+    file->open(QIODevice::ReadOnly);
 
-    QHttpPart imagepart;
-    QString imagepartHeader = QLatin1String("form-data; name=\"file\"; filename=\"") +
+    QHttpPart imagePart;
+    QString imagePartHeader = QLatin1String("form-data; name=\"file\"; filename=\"") +
                               QFileInfo(imgPath).fileName() + QLatin1Char('"');
 
-    imagepart.setHeader(QNetworkRequest::ContentDispositionHeader, imagepartHeader);
-    imagepart.setHeader(QNetworkRequest::ContentTypeHeader, mimeType);
+    imagePart.setHeader(QNetworkRequest::ContentDispositionHeader, imagePartHeader);
+    imagePart.setHeader(QNetworkRequest::ContentTypeHeader, mimeType);
 
-    imagepart.setBody(form.formData());
-    //imagepart.setBodyDevice(file);
-    multipart->append(imagepart);
+    imagePart.setBodyDevice(file);
+    multiPart->append(imagePart);
 
     QUrl url(QString::fromLatin1("https://upload.box.com/api/2.0/files/content?access_token=%1").arg(d->o2->token()));
 
     QNetworkRequest netRequest(url);
-    QString content = QLatin1String("multipart/form-data;boundary=") + multipart->boundary();
+    QString content = QLatin1String("multipart/form-data;boundary=") + multiPart->boundary();
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, content);
-    d->reply        = d->netMngr->post(netRequest, multipart);
+    d->reply        = d->netMngr->post(netRequest, multiPart);
+    // delete the multiPart and file with the reply
+    multiPart->setParent(d->reply);
 
     d->state        = Private::BOX_ADDPHOTO;
     d->buffer.resize(0);
