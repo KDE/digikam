@@ -556,6 +556,6 @@ BUGFIXES:
 495 ==> 388542 - DNG crash when i open a .nef files.
 496 ==> 390580 - First crashes when saving tiff file, then crashes when starting.
 497 ==> 391721 - No photography is displayed in the main view.
-498 ==> 
-
+498 ==> 392813 - Showfoto crashed when clicked on close button in title bar.
+499 ==> 
 
