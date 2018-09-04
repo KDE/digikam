@@ -113,13 +113,20 @@ GDTalker::GDTalker(QWidget* const parent)
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
-    
+
     connect(this, SIGNAL(signalReadyToUpload()),
             this, SLOT(slotUploadPhoto()));
 }
 
 GDTalker::~GDTalker()
 {
+    if (m_reply)
+    {
+        m_reply->abort();
+    }
+
+    WSToolUtils::removeTemporaryDir("google");
+
     delete d;
 }
 
@@ -129,7 +136,7 @@ GDTalker::~GDTalker()
 void GDTalker::getUserName()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getUserName";
-    
+
     QUrl url(d->apiUrl.arg("about"));
 
     QNetworkRequest netRequest(url);
@@ -149,10 +156,10 @@ void GDTalker::getUserName()
 void GDTalker::listFolders()
 {
     QUrl url(d->apiUrl.arg("files"));
-    
+
     QUrlQuery q;
     q.addQueryItem(QLatin1String("q"), QLatin1String("mimeType = 'application/vnd.google-apps.folder'"));
-    
+
     url.setQuery(q);
 
     QNetworkRequest netRequest(url);
@@ -220,7 +227,7 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
     QMimeDatabase mimeDB;
 
-    if (!mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("video/")))
+    if (mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("image/")))
     {
         QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
 
@@ -234,9 +241,8 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
             return false;
         }
 
-        path = WSToolUtils::makeTemporaryDir("google")
-                            .filePath(QFileInfo(imgPath)
-                            .baseName().trimmed() + QLatin1String(".jpg"));
+        path = WSToolUtils::makeTemporaryDir("google").filePath(QFileInfo(imgPath)
+                                             .baseName().trimmed() + QLatin1String(".jpg"));
         int imgQualityToApply = 100;
 
         if (rescale)
@@ -270,12 +276,12 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
     form.finish();
 
     QUrl url(d->uploadUrl);
-    
+
     QUrlQuery q;
     q.addQueryItem(QLatin1String("uploadType"), QLatin1String("multipart"));
 
     url.setQuery(q);
-    
+
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
@@ -286,7 +292,7 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In add photo";
     d->state = Private::GD_ADDPHOTO;
     m_buffer.resize(0);
-    
+
     emit signalBusy(true);
 
     return true;

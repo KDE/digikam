@@ -160,6 +160,8 @@ TwTalker::~TwTalker()
         d->reply->abort();
     }
 
+    WSToolUtils::removeTemporaryDir("twitter");
+
     delete d;
 }
 

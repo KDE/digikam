@@ -156,6 +156,8 @@ PTalker::~PTalker()
         d->reply->abort();
     }
 
+    WSToolUtils::removeTemporaryDir("pinterest");
+
     delete d;
 }
 

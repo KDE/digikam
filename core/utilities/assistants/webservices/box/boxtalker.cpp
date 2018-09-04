@@ -294,7 +294,7 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
         }
 
         path = WSToolUtils::makeTemporaryDir("box").filePath(QFileInfo(imgPath)
-                                                   .baseName().trimmed() + QLatin1String(".jpg"));
+                                             .baseName().trimmed() + QLatin1String(".jpg"));
 
         if (rescale && (image.width() > maxDim || image.height() > maxDim))
         {

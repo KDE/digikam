@@ -151,6 +151,8 @@ ODTalker::~ODTalker()
         d->reply->abort();
     }
 
+    WSToolUtils::removeTemporaryDir("onedrive");
+
     delete d;
 }
 

@@ -145,6 +145,8 @@ DBTalker::~DBTalker()
         d->reply->abort();
     }
 
+    WSToolUtils::removeTemporaryDir("dropbox");
+
     delete d;
 }
 

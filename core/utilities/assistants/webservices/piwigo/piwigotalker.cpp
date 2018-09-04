@@ -113,6 +113,8 @@ PiwigoTalker::PiwigoTalker(DInfoInterface* const iface, QWidget* const parent)
 PiwigoTalker::~PiwigoTalker()
 {
     cancel();
+    WSToolUtils::removeTemporaryDir("piwigo");
+
     delete d;
 }
 
@@ -260,7 +262,7 @@ bool PiwigoTalker::addPhoto(int   albumId,
             }
 
             d->path = WSToolUtils::makeTemporaryDir("piwigo")
-                     .filePath(QUrl::fromLocalFile(mediaPath).fileName());
+                                                    .filePath(QUrl::fromLocalFile(mediaPath).fileName());
             d->tmpPath = d->path;
             image.save(d->path, "JPEG", quality);
 

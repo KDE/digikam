@@ -148,7 +148,11 @@ GPTalker::GPTalker(QWidget* const parent)
 GPTalker::~GPTalker()
 {
     if (m_reply)
+    {
         m_reply->abort();
+    }
+
+    WSToolUtils::removeTemporaryDir("google");
 
     delete d;
 }
@@ -306,7 +310,7 @@ bool GPTalker::addPhoto(const QString& photoPath,
 
     QMimeDatabase mimeDB;
 
-    if (!mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("video/")))
+    if (mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("image/")))
     {
         QImage image = PreviewLoadThread::loadHighQualitySynchronously(photoPath).copyQImage();
 
@@ -321,7 +325,7 @@ bool GPTalker::addPhoto(const QString& photoPath,
         }
 
         path = WSToolUtils::makeTemporaryDir("google").filePath(QFileInfo(photoPath)
-                                                      .baseName().trimmed() + QLatin1String(".jpg"));
+                                             .baseName().trimmed() + QLatin1String(".jpg"));
         int imgQualityToApply = 100;
 
         if (rescale)

@@ -85,6 +85,8 @@ RajceTalker::RajceTalker(QWidget* const parent)
 
 RajceTalker::~RajceTalker()
 {
+    WSToolUtils::removeTemporaryDir("rajce");
+
     delete d;
 }
 

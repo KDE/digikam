@@ -94,7 +94,7 @@ public:
     QSpinBox*       dimensionSpB;
     QSpinBox*       imageQualitySpB;
     DProgressWdg*   progressBar;
-    
+
     unsigned int    imagesCount;
     unsigned int    imagesTotal;
     QString         tmpDir;
@@ -190,12 +190,14 @@ FbWindow::FbWindow(DInfoInterface* const iface,
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
     buttonStateChange(d->talker->linked());
-    
+
     authenticate();
 }
 
 FbWindow::~FbWindow()
 {
+    WSToolUtils::removeTemporaryDir("facebook");
+
     delete d->albumDlg;
     delete d->talker;
     delete d;
@@ -251,7 +253,7 @@ void FbWindow::readSettings()
 {
     KConfig config;
     KConfigGroup grp  = config.group("Facebook Settings");
-    
+
     /* 
      * Access token and session expire now handled in fbtalker.cpp by O2
      */
@@ -292,7 +294,7 @@ void FbWindow::writeSettings()
 {
     KConfig config;
     KConfigGroup grp = config.group("Facebook Settings");
-    
+
     /* 
      * Access token and session expire now handled in fbtalker.cpp by O2
      */
@@ -398,7 +400,7 @@ void FbWindow::slotListAlbumsDone(int errCode,
     d->albumsCoB->clear();
     d->albumsCoB->addItem(i18n("<auto create>"), QString());
 
-    for (int i = 0; i < albumsList.size(); ++i)
+    for (int i = 0 ; i < albumsList.size() ; ++i)
     {
         QString albumIcon;
 
@@ -473,7 +475,7 @@ void FbWindow::slotUserLogout()
 
     // Logout and wait until it's done
     d->talker->logout();
-        
+
     QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
                                                     i18n("Warning"),
                                                     i18n("You will be logged out of your account. If you have logged out of facebook,"
@@ -482,13 +484,13 @@ void FbWindow::slotUserLogout()
 
     (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
     (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
-    
+
     if (warn->exec() == QMessageBox::Yes)
     {
         d->talker->reauthenticate();
     }
-    
-    delete warn;    
+
+    delete warn;
 }
 
 void FbWindow::slotUserChangeRequest()
