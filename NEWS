@@ -554,4 +554,6 @@ BUGFIXES:
 493 ==> 390287 - digiKam crashes when I do batch renames.
 494 ==> 390290 - Trying to use "red eyes" reduction function make showfoto crash.
 495 ==> 388542 - DNG crash when i open a .nef files.
-496 ==> 
+496 ==> 390580 - First crashes when saving tiff file, then crashes when starting.
+497 ==> 
+
