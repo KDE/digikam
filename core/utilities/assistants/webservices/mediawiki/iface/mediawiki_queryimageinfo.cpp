@@ -33,6 +33,10 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 // Local includes
 
 #include "mediawiki_job_p.h"
