@@ -192,10 +192,11 @@ void QueryImageinfo::doWorkSendRequest()
     Q_D(QueryImageinfo);
 
     // Requirements.
-    if (d->title.isEmpty()) {
+    if (d->title.isEmpty())
+    {
         setError(QueryImageinfo::MissingMandatoryParameter);
-        setErrorText(QStringLiteral("You cannot query the information of an "
-            "image if you do not provide the title of that image."));
+        setErrorText(i18n("You cannot query the information of an "
+                          "image if you do not provide the title of that image."));
         emitResult();
         return;
     }
