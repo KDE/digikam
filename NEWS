@@ -548,4 +548,5 @@ BUGFIXES:
 487 ==> 278890 - Showfoto crashes with qt 4.8.
 488 ==> 355744 - Segfault on SmugMug upload.
 489 ==> 358704 - Request authorization does not occur and upload becomes impossible.
-490 ==> 
+490 ==> 175233 - Showfoto crashes on windows.
+491 ==> 
