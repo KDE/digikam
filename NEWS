@@ -558,5 +558,5 @@ BUGFIXES:
 497 ==> 391721 - No photography is displayed in the main view.
 498 ==> 392813 - Showfoto crashed when clicked on close button in title bar.
 499 ==> 393069 - I do not see images in the file browser, only in calendar.
-500 ==> 
-
+500 ==> 392189 - Database upgrade fails.
+501 ==> 
