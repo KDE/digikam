@@ -25,9 +25,6 @@
 // Qt includes
 
 #include <QFile>
-#include <QUrl>
-#include <QMimeDatabase>
-#include <QMimeType>
 
 // Local includes
 
@@ -54,6 +51,8 @@ bool BOXMPForm::addFile(const QString& imgPath)
     }
 
     m_buffer = file.readAll();
+
+    file.close();
 
     return true;
 }

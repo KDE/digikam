@@ -24,6 +24,7 @@
 
 // Qt includes
 
+#include <QMimeDatabase>
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
@@ -276,30 +277,38 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     emit signalBusy(true);
 
     BOXMPForm form;
-    QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
+    QMimeDatabase mimeDB;
 
-    if (image.isNull())
+    QString path     = imgPath;
+    QString mimeType = mimeDB.mimeTypeForFile(path).name();
+
+    if (mimeType.startsWith(QLatin1String("image/")))
     {
-        return false;
-    }
+        QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
 
-    QString path = WSToolUtils::makeTemporaryDir("box").filePath(QFileInfo(imgPath)
-                   .baseName().trimmed() + QLatin1String(".jpg"));
+        if (image.isNull())
+        {
+            return false;
+        }
 
-    if (rescale && (image.width() > maxDim || image.height() > maxDim))
-    {
-        image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    }
+        path = WSToolUtils::makeTemporaryDir("box").filePath(QFileInfo(imgPath)
+                                                   .baseName().trimmed() + QLatin1String(".jpg"));
 
-    image.save(path, "JPEG", imageQuality);
+        if (rescale && (image.width() > maxDim || image.height() > maxDim))
+        {
+            image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
 
-    if (d->meta.load(imgPath))
-    {
-        d->meta.setImageDimensions(image.size());
-        d->meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-        d->meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
-        d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-        d->meta.save(path);
+        image.save(path, "JPEG", imageQuality);
+
+        if (d->meta.load(imgPath))
+        {
+            d->meta.setImageDimensions(image.size());
+            d->meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+            d->meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
+            d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+            d->meta.save(path);
+        }
     }
 
     QString id;
@@ -329,18 +338,18 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     attributes.setBody(postData.toUtf8());
     multipart->append(attributes);
 
-
-    QFile* const file = new QFile(imgPath);
-    file->open(QIODevice::ReadOnly);
+    //QFile* const file = new QFile(imgPath);
+    //file->open(QIODevice::ReadOnly);
 
     QHttpPart imagepart;
     QString imagepartHeader = QLatin1String("form-data; name=\"file\"; filename=\"") +
                               QFileInfo(imgPath).fileName() + QLatin1Char('"');
 
     imagepart.setHeader(QNetworkRequest::ContentDispositionHeader, imagepartHeader);
-    imagepart.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("image/jpeg"));
+    imagepart.setHeader(QNetworkRequest::ContentTypeHeader, mimeType);
 
-    imagepart.setBodyDevice(file);
+    imagepart.setBody(form.formData());
+    //imagepart.setBodyDevice(file);
     multipart->append(imagepart);
 
     QUrl url(QString::fromLatin1("https://upload.box.com/api/2.0/files/content?access_token=%1").arg(d->o2->token()));
