@@ -151,6 +151,8 @@ BOXTalker::~BOXTalker()
         d->reply->abort();
     }
 
+    WSToolUtils::removeTemporaryDir("box");
+
     delete d;
 }
 
