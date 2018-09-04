@@ -378,26 +378,26 @@ void ImgurTalker::doWork()
             }
 
             // Set ownership to d->image to delete that as well.
-            auto* multipart = new QHttpMultiPart(QHttpMultiPart::FormDataType, d->image);
+            auto* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType, d->image);
             QHttpPart title;
             title.setHeader(QNetworkRequest::ContentDispositionHeader,
                             QLatin1String("form-data; name=\"title\""));
             title.setBody(work.upload.title.toUtf8().toPercentEncoding());
-            multipart->append(title);
+            multiPart->append(title);
 
             QHttpPart description;
             description.setHeader(QNetworkRequest::ContentDispositionHeader,
                                   QLatin1String("form-data; name=\"description\""));
             description.setBody(work.upload.description.toUtf8().toPercentEncoding());
-            multipart->append(description);
+            multiPart->append(description);
 
-            QHttpPart image;
-            image.setHeader(QNetworkRequest::ContentDispositionHeader,
+            QHttpPart imagePart;
+            imagePart.setHeader(QNetworkRequest::ContentDispositionHeader,
                             QVariant(QString::fromLatin1("form-data; name=\"image\"; filename=\"%1\"")
                             .arg(QLatin1String(QFileInfo(work.upload.imgpath).fileName().toUtf8().toPercentEncoding()))));
-            image.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/octet-stream"));
-            image.setBodyDevice(d->image);
-            multipart->append(image);
+            imagePart.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/octet-stream"));
+            imagePart.setBodyDevice(d->image);
+            multiPart->append(imagePart);
 
             QNetworkRequest request(QUrl(QLatin1String("https://api.imgur.com/3/image")));
 
@@ -406,7 +406,9 @@ void ImgurTalker::doWork()
             else
                 addAnonToken(&request);
 
-            d->reply = d->net.post(request, multipart);
+            d->reply = d->net.post(request, multiPart);
+            // delete the multiPart with the reply
+            multiPart->setParent(d->reply);
 
             break;
         }

@@ -87,9 +87,12 @@ public:
         redirectUrl     = QLatin1String("http://127.0.0.1:8000");
 
         state           = OD_USERNAME;
+
+        parent          = 0;
         netMngr         = 0;
         reply           = 0;
-        accessToken     = QString();
+        settings        = 0;
+        o1Twitter       = 0;
     }
 
 public:
@@ -115,7 +118,7 @@ public:
 
     DMetadata              meta;
 
-    QMap<QString,QString>  urlParametersMap;
+    QMap<QString, QString> urlParametersMap;
 
     //QWebEngineView*        view;
 
@@ -243,9 +246,9 @@ void TwTalker::slotOpenBrowser(const QUrl& url)
     QDesktopServices::openUrl(url);
 }
 
-QMap<QString,QString> TwTalker::ParseUrlParameters(const QString &url)
+QMap<QString, QString> TwTalker::ParseUrlParameters(const QString &url)
 {
-    QMap<QString,QString> urlParameters;
+    QMap<QString, QString> urlParameters;
 
     if (url.indexOf('?') == -1)
     {
@@ -299,11 +302,11 @@ void TwTalker::slotLinkingSucceeded()
     if (!extraTokens.isEmpty())
     {
         //emit extraTokensReady(extraTokens);
-        qDebug() << "Extra tokens in response:";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Extra tokens in response:";
 
-        foreach (QString key, extraTokens.keys())
+        foreach (const QString& key, extraTokens.keys())
         {
-            qDebug() << "\t" << key << ":" << (extraTokens.value(key).toString().left(3) + "...");
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "\t" << key << ":" << (extraTokens.value(key).toString().left(3) + "...");
         }
     }
 
@@ -337,16 +340,18 @@ void TwTalker::upload(QByteArray& data){
 
 bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality)
 {
-    //qDebug() << "Status update message:" << message.toLatin1().constData();
+    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Status update message:" << message.toLatin1().constData();
     emit signalBusy(true);
+
     TwMPForm form;
     QImage image     = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
     qint64 imageSize = QFileInfo(imgPath).size();
-    qDebug() << "SIZE of image using qfileinfo:   " << imageSize;
-    qDebug() << " " ;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "SIZE of image using qfileinfo:   " << imageSize;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << " " ;
 
     if (image.isNull())
     {
+        emit signalBusy(false);
         return false;
     }
 
@@ -379,12 +384,12 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     if (form.formData().isEmpty())
     {
-        qDebug() << "Form DATA Empty:";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Form DATA Empty:";
     }
 
     if (form.formData().isNull())
     {
-        qDebug() << "Form DATA null:";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Form DATA null:";
     }
 
     QUrl url = QUrl("https://upload.twitter.com/1.1/media/upload.json");
@@ -404,9 +409,9 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
     QNetworkReply* const reply2 = requestor->post(request, reqParams, postData);
-    qDebug() << "reply size:              " << reply2->readBufferSize();  //always returns 0
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "reply size:              " << reply2->readBufferSize();  //always returns 0
     QByteArray replyData = reply2->readAll();
-    qDebug() << "Media reply:" << replyData; //always Empty
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Media reply:" << replyData; //always Empty
 
     //uncomment this to try to post a tweet
     QUrl url2 = QUrl("https://api.twitter.com/1.1/statuses/update.json");
@@ -427,32 +432,31 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     connect(reply2, SIGNAL(finished()),
             this, SLOT(reply2finish()));
 
-    emit signalBusy(true);
     return true;
 }
 
 void TwTalker::reply2finish()
 {
-    qDebug() << "In Reply2:";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Reply2:";
     QNetworkReply* const reply2 = qobject_cast<QNetworkReply *>(sender());
     QString mediaId;
 
     if (reply2->error() != QNetworkReply::NoError)
     {
-        qDebug() << "ERROR:" << reply2->errorString();
-        qDebug() << "Content:" << reply2->readAll();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "ERROR:" << reply2->errorString();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Content:" << reply2->readAll();
         emit signalAddPhotoFailed(i18n("Failed to upload photo"));
     }
     else
     {
         QByteArray replyData = reply2->readAll();
         QJsonDocument doc      = QJsonDocument::fromJson(replyData);
-        qDebug() << "Media reply:" << replyData;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Media reply:" << replyData;
         QJsonObject jsonObject = doc.object();
         mediaId = jsonObject[QLatin1String("media_id")].toString();
     }
 
-    qDebug() << "Media ID:" << mediaId;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Media ID:" << mediaId;
 }
 
 void TwTalker::getUserName()
@@ -472,18 +476,18 @@ void TwTalker::getUserName()
 
 void TwTalker::slotTweetDone()
 {
-    qDebug() << "In slotTweetDone:";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In slotTweetDone:";
     QNetworkReply* const reply = qobject_cast<QNetworkReply *>(sender());
 
     if (reply->error() != QNetworkReply::NoError)
     {
-        qDebug() << "ERROR:" << reply->errorString();
-        qDebug() << "Content:" << reply->readAll();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "ERROR:" << reply->errorString();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Content:" << reply->readAll();
         emit signalAddPhotoFailed(i18n("Failed to upload photo"));
     }
     else
     {
-        qDebug() << "Tweet posted successfully!";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Tweet posted successfully!";
         emit signalAddPhotoSucceeded();
     }
 }
