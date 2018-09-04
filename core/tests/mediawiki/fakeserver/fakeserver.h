@@ -43,8 +43,10 @@ class FakeServer : QThread
 
 public:
 
-    struct Request
+    class Request
     {
+    public:
+
         Request()
         {
         }
@@ -56,50 +58,39 @@ public:
             value = v;
         }
 
-        QString type;
-        QString agent;
-        QString value;
-
         bool operator==(const FakeServer::Request &other) const
         {
             return this->type  == other.type  &&
                    this->agent == other.agent &&
                    this->value == other.value;
         }
+
+    public:
+
+        QString type;
+        QString agent;
+        QString value;
     };
 
-    FakeServer(QObject* const parent = 0);
+public:
+
+    explicit FakeServer(QObject* const parent = 0);
     ~FakeServer();
 
     void startAndWait();
     void run() Q_DECL_OVERRIDE;
 
-    void setScenario( const QString& scenario, const QString& cookie = QStringLiteral("empty"));
-    void addScenario( const QString& scenario, const QString& cookie = QStringLiteral("empty"));
-    void addScenarioFromFile( const QString& fileName, const QString& cookie = QStringLiteral("empty"));
+    void setScenario(const QString& scenario, const QString& cookie = QStringLiteral("empty"));
+    void addScenario(const QString& scenario, const QString& cookie = QStringLiteral("empty"));
+    void addScenarioFromFile(const QString& fileName, const QString& cookie = QStringLiteral("empty"));
 
-    bool isScenarioDone( int scenarioNumber ) const;
-    bool isAllScenarioDone() const;
+    bool isScenarioDone(int scenarioNumber) const;
+    bool isAllScenarioDone()                const;
 
-    const QList<FakeServer::Request>& getRequest()
-    {
-        return m_request;
-    }
-
-    FakeServer::Request takeLastRequest()
-    {
-        return m_request.takeLast();
-    }
-
-    FakeServer::Request takeFirstRequest()
-    {
-        return m_request.takeFirst();
-    }
-
-    void clearRequest()
-    {
-        return m_request.clear();
-    }
+    const QList<FakeServer::Request>& getRequest();
+    FakeServer::Request takeLastRequest();
+    FakeServer::Request takeFirstRequest();
+    void clearRequest();
 
 private Q_SLOTS:
 

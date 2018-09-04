@@ -52,7 +52,7 @@ void FakeServer::startAndWait()
 {
     start();
     // this will block until the event queue starts
-    QMetaObject::invokeMethod( this, "started", Qt::BlockingQueuedConnection );
+    QMetaObject::invokeMethod(this, "started", Qt::BlockingQueuedConnection);
 }
 
 void FakeServer::newConnection()
@@ -103,8 +103,9 @@ void FakeServer::run()
 {
     m_tcpServer = new QTcpServer();
 
-    if ( !m_tcpServer->listen( QHostAddress( QHostAddress::LocalHost ), 12566 ) )
+    if (!m_tcpServer->listen(QHostAddress(QHostAddress::LocalHost), 12566))
     {
+        // TODO
     }
 
     connect(m_tcpServer, SIGNAL(newConnection()),
@@ -128,7 +129,7 @@ void FakeServer::setScenario(const QString& scenario, const QString& cookie)
     m_scenarios.clear();
     m_scenarios << scenario;
     m_cookie.clear();
-    m_cookie << cookie;
+    m_cookie    << cookie;
     m_request.clear();
 }
 
@@ -137,14 +138,14 @@ void FakeServer::addScenario(const QString& scenario, const QString& cookie )
     QMutexLocker locker(&m_mutex);
 
     m_scenarios << scenario;
-    m_cookie << cookie;
+    m_cookie    << cookie;
 }
 
 void FakeServer::addScenarioFromFile(const QString& fileName, const QString& cookie )
 {
-    QFile file( fileName );
+    QFile file(fileName);
 
-    if (!file.open( QFile::ReadOnly ))
+    if (!file.open(QFile::ReadOnly))
     {
         return;
     }
@@ -155,41 +156,61 @@ void FakeServer::addScenarioFromFile(const QString& fileName, const QString& coo
     // When loading from files we never have the authentication phase
     // force jumping directly to authenticated state.
 
-    while ( !in.atEnd() )
+    while (!in.atEnd())
     {
-            scenario.append( in.readLine() );
+        scenario.append(in.readLine());
     }
 
     file.close();
 
-    addScenario( scenario , cookie);
+    addScenario(scenario, cookie);
 }
 
 bool FakeServer::isScenarioDone( int scenarioNumber ) const
 {
     QMutexLocker locker(&m_mutex);
 
-    if ( scenarioNumber < m_scenarios.size() )
+    if (scenarioNumber < m_scenarios.size())
     {
-            return m_scenarios[scenarioNumber].isEmpty();
+        return m_scenarios[scenarioNumber].isEmpty();
     }
     else
     {
-            return true; // Non existent hence empty, right?
+        return true; // Non existent hence empty, right?
     }
 }
 
 bool FakeServer::isAllScenarioDone() const
 {
-    QMutexLocker locker( &m_mutex );
+    QMutexLocker locker(&m_mutex);
 
-    foreach( const QString& scenario, m_scenarios )
+    foreach (const QString& scenario, m_scenarios)
     {
-        if ( !scenario.isEmpty() )
+        if (!scenario.isEmpty())
         {
             return false;
         }
     }
 
     return true;
+}
+
+const QList<FakeServer::Request>& FakeServer::getRequest()
+{
+    return m_request;
+}
+
+FakeServer::Request FakeServer::takeLastRequest()
+{
+    return m_request.takeLast();
+}
+
+FakeServer::Request FakeServer::takeFirstRequest()
+{
+    return m_request.takeFirst();
+}
+
+void FakeServer::clearRequest()
+{
+    return m_request.clear();
 }
