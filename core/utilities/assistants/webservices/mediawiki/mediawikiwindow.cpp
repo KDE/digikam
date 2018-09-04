@@ -78,12 +78,12 @@ public:
         uploadTalker = 0;
     }
 
-    QString         tmpDir;
-    QString         tmpPath;
-    QString         login;
-    QString         pass;
-    QString         wikiName;
-    QUrl            wikiUrl;
+    QString          tmpDir;
+    QString          tmpPath;
+    QString          login;
+    QString          pass;
+    QString          wikiName;
+    QUrl             wikiUrl;
 
     MediaWikiWidget* widget;
     Iface*           MediaWiki;
@@ -165,7 +165,7 @@ void MediaWikiWindow::reactivate()
 void MediaWikiWindow::readSettings()
 {
     KConfig config;
-    KConfigGroup group = config.group(QLatin1String("MediaWiki export settings"));
+    KConfigGroup group  = config.group(QLatin1String("MediaWiki export settings"));
 
     d->widget->readSettings(group);
 
@@ -178,7 +178,7 @@ void MediaWikiWindow::readSettings()
 void MediaWikiWindow::saveSettings()
 {
     KConfig config;
-    KConfigGroup group = config.group(QLatin1String("MediaWiki export settings"));
+    KConfigGroup group  = config.group(QLatin1String("MediaWiki export settings"));
 
     d->widget->saveSettings(group);
 
@@ -292,7 +292,7 @@ void MediaWikiWindow::slotStartTransfer()
     QList<QUrl> urls                                    = d->widget->imagesList()->imageUrls(false);
     QMap <QString, QMap <QString, QString> > imagesDesc = d->widget->allImagesDesc();
 
-    for (int i = 0; i < urls.size(); ++i)
+    for (int i = 0 ; i < urls.size() ; ++i)
     {
         QString url;
 
