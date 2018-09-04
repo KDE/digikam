@@ -215,8 +215,8 @@ void BOXTalker::slotOpenBrowser(const QUrl& url)
 
 void BOXTalker::createFolder(QString& path)
 {
-    QString name = path.section(QLatin1Char('/'), -1);
-    QString folderPath = path.section(QLatin1Char('/'),-2,-2);
+    QString name       = path.section(QLatin1Char('/'), -1);
+    QString folderPath = path.section(QLatin1Char('/'), -2, -2);
 
     QString id;
 
@@ -277,8 +277,6 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
         d->reply->abort();
         d->reply = 0;
     }
-
-    emit signalBusy(true);
 
     QMimeDatabase mimeDB;
 
@@ -471,8 +469,8 @@ void BOXTalker::parseResponseListFolders(const QByteArray& data)
 
         if (type == "folder")
         {
-            folderName    = obj[QLatin1String("name")].toString();
-            id            = obj[QLatin1String("id")].toString();
+            folderName = obj[QLatin1String("name")].toString();
+            id         = obj[QLatin1String("id")].toString();
             d->foldersList.append(qMakePair(id, folderName));
         }
     }
