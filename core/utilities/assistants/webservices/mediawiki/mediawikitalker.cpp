@@ -133,9 +133,9 @@ void MediaWikiTalker::slotUploadHandle(KJob* j)
 
     if (!d->imageDesc.isEmpty())
     {
-        QList<QString> keys        = d->imageDesc.keys();
-        QMap<QString,QString> info = d->imageDesc.take(keys.first());
-        Upload* const e1           = new Upload(*d->MediaWiki, this);
+        QList<QString> keys         = d->imageDesc.keys();
+        QMap<QString, QString> info = d->imageDesc.take(keys.first());
+        Upload* const e1            = new Upload(*d->MediaWiki, this);
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Path:" << keys.first();
 

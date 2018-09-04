@@ -3256,7 +3256,7 @@ void AlbumManager::slotPeopleJobResult()
     d->personListJob = 0;
 }
 
-void AlbumManager::slotPeopleJobData(const QMap<QString,QMap<int,int> >& facesStatMap)
+void AlbumManager::slotPeopleJobData(const QMap<QString, QMap<int, int> >& facesStatMap)
 {
     if (facesStatMap.isEmpty())
     {
@@ -3299,7 +3299,7 @@ void AlbumManager::slotTagsJobResult()
     d->tagListJob = 0;
 }
 
-void AlbumManager::slotTagsJobData(const QMap<int,int>& tagsStatMap)
+void AlbumManager::slotTagsJobData(const QMap<int, int>& tagsStatMap)
 {
     if (tagsStatMap.isEmpty())
     {

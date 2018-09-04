@@ -473,7 +473,7 @@ void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictC
 
         QString s = QLatin1String("Nearest Neighbor score: ");
 
-        for (std::map<int,int>::iterator it = scoreMap.begin(); it != scoreMap.end(); ++it)
+        for (std::map<int, int>::iterator it = scoreMap.begin(); it != scoreMap.end(); ++it)
         {
             double score = double(it->second) / countMap.at(it->first);
             s           += QString::fromLatin1("%1/%2 %3  ").arg(it->second).arg(countMap.at(it->first)).arg(score);

@@ -90,7 +90,7 @@ void AtkinsPageLayout::addLayoutItem(int key, double aspectRatio, double relativ
 
 QRectF AtkinsPageLayout::itemRect(int key)
 {
-    QMap<int,int>::iterator it = d->indexMap.find(key);
+    QMap<int, int>::iterator it = d->indexMap.find(key);
 
     if (it != d->indexMap.end())
     {
