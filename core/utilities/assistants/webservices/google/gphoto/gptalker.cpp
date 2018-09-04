@@ -28,7 +28,6 @@
 // Qt includes
 
 #include <QMimeDatabase>
-#include <QTextDocument>
 #include <QByteArray>
 #include <QDomDocument>
 #include <QDomElement>
@@ -43,12 +42,10 @@
 #include <QImage>
 #include <QStringList>
 #include <QUrl>
-#include <QPointer>
 #include <QtAlgorithms>
 #include <QApplication>
 #include <QDir>
 #include <QMessageBox>
-#include <QUrlQuery>
 
 // KDE includes
 
@@ -352,10 +349,12 @@ bool GPTalker::addPhoto(const QString& photoPath,
 
     // Create the body for temporary upload
     QFile imageFile(path);
+
     if (!imageFile.open(QIODevice::ReadOnly))
     {
         return false;
     }
+
     QByteArray data = imageFile.readAll();
     imageFile.close();
 
@@ -390,7 +389,7 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
 
     QMimeDatabase mimeDB;
 
-    if (!mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("video/")))
+    if (mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("image/")))
     {
         QImage image = PreviewLoadThread::loadHighQualitySynchronously(photoPath).copyQImage();
 
@@ -404,10 +403,8 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
             return false;
         }
 
-        path                  = WSToolUtils::makeTemporaryDir("google")
-                                             .filePath(QFileInfo(photoPath)
-                                             .baseName().trimmed() +
-                                             QLatin1String(".jpg"));
+        path = WSToolUtils::makeTemporaryDir("google").filePath(QFileInfo(photoPath)
+                                             .baseName().trimmed() + QLatin1String(".jpg"));
         int imgQualityToApply = 100;
 
         if (rescale)
@@ -629,7 +626,7 @@ void GPTalker::slotFinished(QNetworkReply* reply)
         }
 
         reply->deleteLater();
-//         return;
+        return;
     }
 
     m_buffer.append(reply->readAll());
@@ -677,7 +674,7 @@ void GPTalker::slotUploadPhoto()
      */
     int nbItemsUpload = 0;
 
-    if(m_reply)
+    if (m_reply)
     {
         m_reply->abort();
         m_reply = 0;
@@ -687,12 +684,14 @@ void GPTalker::slotUploadPhoto()
 
     QByteArray data;
     data += '{';
+
     if (d->albumIdToUpload != QLatin1String("-1"))
     {
         data += "\"albumId\": \"";
         data += d->albumIdToUpload.toLatin1();
         data += "\",";
     }
+
     data += "\"newMediaItems\": [";
 
     if (d->uploadTokenList.isEmpty())
@@ -708,7 +707,8 @@ void GPTalker::slotUploadPhoto()
         data += "\"uploadToken\": \"";
         data += uploadToken;
         data += "\"}}";
-        if(d->uploadTokenList.length() > 0)
+
+        if (d->uploadTokenList.length() > 0)
         {
             data += ',';
         }
@@ -728,6 +728,7 @@ void GPTalker::slotUploadPhoto()
         data += d->previousImageId.toLatin1();
         data += "\"}\r\n";
     }
+
     data += "}\r\n";
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(data);
 
@@ -771,7 +772,7 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
     GSFolder mainPage;
     albumList.append(mainPage);
 
-    foreach(const QJsonValue& value, jsonArray)
+    foreach (const QJsonValue& value, jsonArray)
     {
         QJsonObject obj = value.toObject();
 
@@ -806,7 +807,7 @@ void GPTalker::parseResponseListPhotos(const QByteArray& data)
     QJsonArray jsonArray    = jsonObject[QLatin1String("mediaItems")].toArray();
     QList<GSPhoto> photoList;
 
-    foreach(const QJsonValue& value, jsonArray)
+    foreach (const QJsonValue& value, jsonArray)
     {
         QJsonObject obj = value.toObject();
 
@@ -909,7 +910,7 @@ void GPTalker::parseResponseUploadPhoto(const QByteArray& data)
 
     QStringList listPhotoId;
 
-    foreach(const QJsonValue& value, jsonArray)
+    foreach (const QJsonValue& value, jsonArray)
     {
         QJsonObject obj = value.toObject();
 

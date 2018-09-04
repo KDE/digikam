@@ -175,10 +175,9 @@ FlickrTalker::~FlickrTalker()
         d->reply->abort();
     }
 
-    delete m_photoSetsList;
-
     WSToolUtils::removeTemporaryDir(d->serviceName.toLatin1().constData());
 
+    delete m_photoSetsList;
     delete d;
 }
 

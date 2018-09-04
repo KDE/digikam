@@ -74,22 +74,22 @@ public:
 
     explicit Private()
     {
-        parent          = 0;
+        parent       = 0;
 
-        apikey          = QLatin1String("258540448336-hgdegpohibcjasvk1p595fpvjor15pbc.apps.googleusercontent.com");
-        clientSecret    = QLatin1String("iiIKTNM4ggBXiTdquAzbs2xw");
+        apikey       = QLatin1String("258540448336-hgdegpohibcjasvk1p595fpvjor15pbc.apps.googleusercontent.com");
+        clientSecret = QLatin1String("iiIKTNM4ggBXiTdquAzbs2xw");
         /* Old api key and secret below only work for gdrive, not gphoto
          * Switch to new api key and secret above
          * apikey       = QLatin1String("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
          * clientSecret = QLatin1String("4MJOS0u1-_AUEKJ0ObA-j22U");
          */
 
-        authUrl         = QLatin1String("https://accounts.google.com/o/oauth2/auth");
-        tokenUrl        = QLatin1String("https://accounts.google.com/o/oauth2/token");
-        refreshUrl      = QLatin1String("https://accounts.google.com/o/oauth2/token");
+        authUrl      = QLatin1String("https://accounts.google.com/o/oauth2/auth");
+        tokenUrl     = QLatin1String("https://accounts.google.com/o/oauth2/token");
+        refreshUrl   = QLatin1String("https://accounts.google.com/o/oauth2/token");
 
-        o2              = 0;
-        settings        = 0;
+        o2           = 0;
+        settings     = 0;
     }
 
     QWidget*   parent;
@@ -154,7 +154,9 @@ GSTalkerBase::GSTalkerBase(QWidget* const parent, const QStringList & scope, con
 GSTalkerBase::~GSTalkerBase()
 {
     if (m_reply)
+    {
         m_reply->abort();
+    }
 
     delete d;
 }
