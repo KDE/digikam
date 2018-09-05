@@ -559,4 +559,5 @@ BUGFIXES:
 498 ==> 392813 - Showfoto crashed when clicked on close button in title bar.
 499 ==> 393069 - I do not see images in the file browser, only in calendar.
 500 ==> 392189 - Database upgrade fails.
-501 ==> 
+501 ==> 386653 - Message error on face detectior.
+502 ==> 

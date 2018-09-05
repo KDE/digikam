@@ -103,7 +103,12 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     // TIFF error handling. If an errors/warnings occurs during reading,
     // libtiff will call these methods
 
+#ifdef Q_OS_WIN
+    TIFFSetWarningHandler(NULL);
+#else
     TIFFSetWarningHandler(dimg_tiff_warning);
+#endif
+
     TIFFSetErrorHandler(dimg_tiff_error);
 
     // -------------------------------------------------------------------
