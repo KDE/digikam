@@ -209,7 +209,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     d->workProfilesKC          = new IccProfilesComboBox;
     d->workProfilesKC->setWhatsThis(i18n("<p>This is the color space all the images will be converted to when opened "
                                          "(if you choose to convert) and the profile that will be embedded when saving. "
-                                         "Good and safe choices are <b>Adobe RGB (1998)</b> and <b>sRGB IEC61966-2.1</b>"));
+                                         "Good and safe choices are <b>Adobe RGB (1998)</b> and <b>sRGB IEC61966-2.1</b></p>"));
 
     d->infoWorkProfiles        = new QPushButton;
     d->infoWorkProfiles->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));

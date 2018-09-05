@@ -78,7 +78,7 @@ ScriptingSettings::ScriptingSettings(QWidget* const parent)
                                       "<p><b>%path</b>: path of the imported file</p>"
                                       "<p><b>%orgfilename</b>: original file name</p>"
                                       "<p><b>%orgpath</b>: original path</p>"
-                                      "<p>If there are no expressions full path is added to the command.<p>"
+                                      "<p>If there are no expressions full path is added to the command.</p>"
                                      ));
     d->tooltipDialog->resize(650, 530);
 

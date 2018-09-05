@@ -117,7 +117,7 @@ SoftProofDialog::SoftProofDialog(QWidget* const parent)
 
     d->infoProofProfiles      = new QPushButton;
     d->infoProofProfiles->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
-    d->infoProofProfiles->setWhatsThis(i18n("Press this button to get detailed "
+    d->infoProofProfiles->setWhatsThis(i18n("<p>Press this button to get detailed "
                                             "information about the selected proofing profile.</p>"));
 
     d->deviceProfileBox->replaceProfilesSqueezed(IccSettings::instance()->outputProfiles());
