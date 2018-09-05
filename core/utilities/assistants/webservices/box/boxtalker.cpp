@@ -35,10 +35,12 @@
 #include <QPair>
 #include <QFileInfo>
 #include <QWidget>
+#include <QSettings>
 #include <QMessageBox>
 #include <QApplication>
 #include <QDesktopServices>
 #include <QHttpMultiPart>
+#include <QNetworkAccessManager>
 
 // Local includes
 

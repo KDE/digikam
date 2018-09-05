@@ -47,6 +47,7 @@
 #include <QDialogButtonBox>
 #include <QUrlQuery>
 #include <QMessageBox>
+#include <QNetworkAccessManager>
 
 // Local includes
 

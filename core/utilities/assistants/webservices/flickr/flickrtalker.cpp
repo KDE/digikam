@@ -26,29 +26,33 @@
 
 // Qt includes
 
-#include <QByteArray>
 #include <QDomDocument>
 #include <QDomElement>
-#include <QFile>
+#include <QByteArray>
 #include <QFileInfo>
-#include <QImage>
+#include <QFile>
 #include <QMap>
+#include <QImage>
 #include <QStringList>
-#include <QProgressDialog>
-#include <QApplication>
-#include <QDesktopServices>
 #include <QMessageBox>
+#include <QApplication>
+#include <QProgressDialog>
+#include <QDesktopServices>
+#include <QNetworkAccessManager>
 
 // Local includes
 
 #include "dmetadata.h"
 #include "wstoolutils.h"
 #include "flickrmpform.h"
-#include "flickritem.h"
 #include "flickrwindow.h"
 #include "digikam_debug.h"
 #include "digikam_version.h"
 #include "previewloadthread.h"
+#include "o1.h"
+#include "o0globals.h"
+#include "o1requestor.h"
+#include "o0settingsstore.h"
 
 namespace Digikam
 {

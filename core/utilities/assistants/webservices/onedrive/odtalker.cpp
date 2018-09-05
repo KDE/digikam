@@ -39,6 +39,7 @@
 #include <QDesktopServices>
 #include <QUrlQuery>
 #include <QNetworkCookieJar>
+#include <QNetworkAccessManager>
 
 // KDE includes
 

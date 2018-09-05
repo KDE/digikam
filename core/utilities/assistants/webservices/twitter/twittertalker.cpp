@@ -30,14 +30,17 @@
 #include <QJsonValue>
 #include <QJsonArray>
 #include <QByteArray>
+#include <QUrlQuery>
 #include <QList>
 #include <QPair>
 #include <QFileInfo>
 #include <QWidget>
+#include <QSettings>
 #include <QMessageBox>
 #include <QApplication>
 #include <QDesktopServices>
-#include <QUrlQuery>
+#include <QNetworkAccessManager>
+
 /*
 #include <QWebEngineView>
 #include <QWebEnginePage>

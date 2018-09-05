@@ -35,19 +35,24 @@
 #include <QPair>
 #include <QFileInfo>
 #include <QWidget>
+#include <QSettings>
 #include <QMessageBox>
 #include <QApplication>
 #include <QDesktopServices>
+#include <QNetworkAccessManager>
 
 // Local includes
 
 #include "digikam_debug.h"
 #include "digikam_version.h"
-#include "wstoolutils.h"
-#include "dbwindow.h"
-#include "dbitem.h"
-#include "dbmpform.h"
 #include "previewloadthread.h"
+#include "wstoolutils.h"
+#include "dmetadata.h"
+#include "dbwindow.h"
+#include "dbmpform.h"
+#include "dbitem.h"
+#include "o2.h"
+#include "o0globals.h"
 #include "o0settingsstore.h"
 
 namespace Digikam

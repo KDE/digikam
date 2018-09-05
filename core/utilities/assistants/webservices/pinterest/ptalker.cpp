@@ -40,6 +40,7 @@
 #include <QUrlQuery>
 #include <QHttpMultiPart>
 #include <QNetworkCookieJar>
+#include <QNetworkAccessManager>
 
 // KDE includes
 

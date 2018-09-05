@@ -33,7 +33,6 @@
 #include <QObject>
 #include <QUrl>
 #include <QNetworkReply>
-#include <QNetworkAccessManager>
 #include <QMap>
 #include <QSettings>
 
@@ -62,18 +61,18 @@ public:
 
     explicit FbTalker(QWidget* const parent, WSNewAlbumDialog* albumDlg=0);
     ~FbTalker();
-    
+
     void    link();
     void    unlink();
     bool    linked() const;
-    
+
     void    resetTalker(const QString& expire, const QString& accessToken, const QString& refreshToken);
 
     FbUser  getUser() const;
-    
+
     void    authenticate();
-    void    logout();    
-    
+    void    logout();
+
     void    listAlbums(long long userID = 0);
 
     void    createNewAlbum();
@@ -101,7 +100,7 @@ private:
     void    parseResponseListAlbums(const QByteArray& data);
 
 private Q_SLOTS:
-    
+
     void    slotResponseTokenReceived(const QMap<QString, QString>& rep);
 
 private:
