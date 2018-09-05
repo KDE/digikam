@@ -420,13 +420,11 @@ void RGTagModel::addDataInTree(TreeBranch* currentBranch,
                     else
                         currentIndex = createIndex(currentRow, 0, currentBranch);
 
-                    //checks if adds the new tag as a sibling to a spacer, or as a child of a new tag
+                    // checks if adds the new tag as a sibling to a spacer, or as a child of a new tag
                     QPersistentModelIndex auxIndex;
 
-                    if ((currentBranch->type != TypeSpacer) ||
-                        ((currentBranch->type == TypeSpacer) &&
-                         (currentBranch->data.indexOf(QLatin1String("{")) != 0)) ||
-                         (d->auxIndexList.isEmpty()))
+                    if ((currentBranch.type != TypeSpacer || currentBranch.data.indexOf(QLatin1String("{")) != 0) ||
+                        (d->auxIndexList.isEmpty()))
                     {
                         auxIndex = addNewTag(currentIndex, elementsData[j]);
                     }
