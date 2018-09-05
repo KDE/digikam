@@ -103,7 +103,7 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
                                       "<p><b>yyyy</b>: The year as four digit number (eg. 2012)</p>"
                                       "<p>All other input characters will be treated as text. Any sequence of characters "
                                       "that are enclosed in singlequotes will be treated as text and not be used as an "
-                                      "expression. Examples, if date is 20 July 1969:<p>"
+                                      "expression. Examples, if date is 20 July 1969:</p>"
                                       "<p><b>dd.MM.yyyy</b> : 20.07.1969</p>"
                                       "<p><b>ddd MMMM d yy</b> : Sun July 20 69</p>"
                                       "<p><b>'Photo shot on ' dddd</b> : Photo shot on Sunday</p>"

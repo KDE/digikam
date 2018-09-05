@@ -126,7 +126,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     d->authorsEdit->setWhatsThis(i18n("<p>This field should contain the names of the persons who created the photograph. "
                                       "If it is not appropriate to add the name of the photographer (for example, if the identity of "
                                       "the photographer needs to be protected) the name of a company or organization can also be used. "
-                                      "Once saved, this field should not be changed by anyone. "
+                                      "Once saved, this field should not be changed by anyone.</p>"
                                       "<p>To enter more than one name, use <b>semi-colons as separators</b>.</p>"
                                       "<p>With IPTC, this field is limited to 32 ASCII characters.</p>"));
 
@@ -187,7 +187,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     d->rightUsageEdit->setFixedHeight(75);
     d->rightUsageEdit->setPlaceholderText(i18n("Enter the list of instructions on how a resource can be legally used here."));
     d->rightUsageEdit->setWhatsThis(i18n("<p>The Right Usage Terms field should be used to list instructions on how "
-                                         "a resource can be legally used."
+                                         "a resource can be legally used.</p>"
                                          "<p>With XMP, you can include more than one right usage terms string using "
                                          "different languages.</p>"
                                          "<p>This field does not exist with IPTC.</p>"));

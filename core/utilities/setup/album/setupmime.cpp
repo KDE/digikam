@@ -90,7 +90,7 @@ SetupMime::SetupMime(QWidget* const parent)
     // --------------------------------------------------------
 
     QLabel* const explanationLabel = new QLabel;
-    explanationLabel->setText(i18n("<p>Add new file types to show as album items. "
+    explanationLabel->setText(i18n("<p>Add new file types to show as album items.</p>"
                                    "<p>digiKam attempts to support all of the image formats that digital cameras produce, "
                                    "while being able to handle a few other important video and audio formats.</p> "
                                    "<p>You can add to the already-appreciable list of formats that digiKam handles by "

@@ -174,7 +174,7 @@ void DDatePicker::Private::fillWeeksCombo()
         // e.g. 1st day of this year may fall in week 53 of previous year
         int weekYear       = thisYear;
         const int week     = day.weekNumber(&weekYear);
-        QString weekString = i18n("Week %1", QString::number(week));
+        QString weekString = i18n("Week %1", week);
 
         // show that this is a week from a different year
         if (weekYear != thisYear)

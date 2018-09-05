@@ -805,7 +805,7 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
                 QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                                       i18n("<p>Failed to open the database. Error message from database:</p>"
                                            "<p><b>%1</b></p>"
-                                           "</p><p>You cannot use digiKam without a working database. "
+                                           "<p>You cannot use digiKam without a working database. "
                                            "digiKam will attempt to start now, but it will <b>not</b> be functional. "
                                            "Please check the database settings in the <b>configuration menu</b>.</p>",
                                            errorMsg));

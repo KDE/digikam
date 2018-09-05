@@ -447,8 +447,8 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
                     d->stitchingBusy = false;
                     QString message  = i18nc("Error message for image file number %1 out of %2",
                                              "<p><b>Processing file %1 / %2: </b></p><p>%3</p>",
-                                             QString::number(ad.id + 1),
-                                             QString::number(d->totalProgress - 1),
+                                             ad.id + 1,
+                                             d->totalProgress - 1,
                                              ad.message);
                     qCWarning(DIGIKAM_GENERAL_LOG) << "Nona call failed for file #" << ad.id;
                     d->postProcessing->addEntry(message, DHistoryView::ErrorEntry);
@@ -549,8 +549,8 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
                 {
                     QString message = i18nc("Success for image file number %1 out of %2",
                                             "Processing file %1 / %2",
-                                            QString::number(ad.id + 1),
-                                            QString::number(d->totalProgress - 1));
+                                            ad.id + 1,
+                                            d->totalProgress - 1);
                     d->postProcessing->addEntry(message, DHistoryView::SuccessEntry);
                     d->curProgress++;
                     d->progressBar->setValue(d->curProgress);
@@ -617,8 +617,8 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
             {
                 QString message = i18nc("Compilation started for image file number %1 out of %2",
                                         "Processing file %1 / %2",
-                                        QString::number(ad.id + 1),
-                                        QString::number(d->totalProgress - 1));
+                                        ad.id + 1,
+                                        d->totalProgress - 1);
                 d->postProcessing->addEntry(message, DHistoryView::StartingEntry);
                 break;
             }
