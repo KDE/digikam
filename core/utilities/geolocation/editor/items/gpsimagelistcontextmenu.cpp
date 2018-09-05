@@ -457,13 +457,12 @@ void GPSImageListContextMenu::pasteActionTriggered(bool swap)
 
             if ((parts.size() == 3) || (parts.size() == 2))
             {
-                double ptLongitude = 0.0;
                 double ptLatitude  = 0.0;
                 double ptAltitude  = 0.0;
                 bool haveAltitude  = false;
                 bool okay          = true;
 
-                ptLongitude = parts[0].toDouble(&okay);
+                double ptLongitude = parts[0].toDouble(&okay);
 
                 if (okay)
                 {
