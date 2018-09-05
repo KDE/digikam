@@ -126,6 +126,7 @@ public:
     {
     }
 
+    // cppcheck-suppress noExplicitConstructor
     PAlbumPath(PAlbum* const album)
     {
         if (album->isRoot())
