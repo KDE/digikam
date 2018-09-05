@@ -89,7 +89,7 @@ FirstRunDlg::FirstRunDlg(QWidget* const parent)
                                                    << QWizard::NextButton
                                                    << QWizard::FinishButton);
 
-    bool migrateAvailable = false;
+    bool migrateAvailable;
 
 #ifdef Q_OS_LINUX
     ::Kdelibs4Migration migration;
@@ -97,6 +97,8 @@ FirstRunDlg::FirstRunDlg(QWidget* const parent)
     // If there's a digikamrc file in $KDEHOME/share/config,
     // then we create the migration page in the wizard
     migrateAvailable = !migration.locateLocal("config", QLatin1String("digikamrc")).isEmpty();
+#else
+    migrateAvailable = false;
 #endif
 
     d->welcomePage    = new WelcomePage(this);    // First assistant page
