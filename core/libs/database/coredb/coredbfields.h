@@ -299,10 +299,9 @@ private:
  */
 template<typename FieldName> class DatabaseFieldsEnumIteratorSetOnly
 {
-
 public:
 
-    DatabaseFieldsEnumIteratorSetOnly(const FieldName setValues)
+    explicit DatabaseFieldsEnumIteratorSetOnly(const FieldName setValues)
       : i(),
         values(setValues)
     {
