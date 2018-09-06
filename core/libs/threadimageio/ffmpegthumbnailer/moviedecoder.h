@@ -62,6 +62,10 @@ public:
 
 private:
 
+    MovieDecoder(const MovieDecoder&); // Disabled
+
+private:
+
     class Private;
     Private* const d;
 };
