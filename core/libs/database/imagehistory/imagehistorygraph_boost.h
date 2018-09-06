@@ -29,16 +29,16 @@
 
 // Pragma directives to reduce warnings from Boost header files.
 #if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #endif
 
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundef"
-#pragma clang diagnostic ignored "-Wunused-parameter"
-#pragma clang diagnostic ignored "-Wcast-align"
-#pragma clang diagnostic ignored "-Wunused-local-typedef"
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wundef"
+#   pragma clang diagnostic ignored "-Wunused-parameter"
+#   pragma clang diagnostic ignored "-Wcast-align"
+#   pragma clang diagnostic ignored "-Wunused-local-typedef"
 #endif
 
 // Boost includes
@@ -1589,11 +1589,11 @@ protected:
 
 // Restore warnings
 #if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
-#pragma GCC diagnostic pop
+#   pragma GCC diagnostic pop
 #endif
 
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
-#pragma clang diagnostic pop
+#   pragma clang diagnostic pop
 #endif
 
 #endif // DIGIKAM_IMAGE_HISTORY_GRAPH_BOOST_H
