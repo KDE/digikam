@@ -253,7 +253,7 @@ class Q_DECL_HIDDEN lessThanById
 {
 public:
 
-    lessThanById(const QMap<HistoryGraph::Vertex, qlonglong>& vertexToId)
+    explicit lessThanById(const QMap<HistoryGraph::Vertex, qlonglong>& vertexToId)
         : vertexToId(vertexToId)
     {
     }
