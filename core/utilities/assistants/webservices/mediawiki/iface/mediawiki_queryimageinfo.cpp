@@ -48,10 +48,9 @@ namespace MediaWiki
 
 class Q_DECL_HIDDEN QueryImageinfoPrivate : public JobPrivate
 {
-
 public:
 
-    QueryImageinfoPrivate(Iface& MediaWiki)
+    explicit QueryImageinfoPrivate(Iface& MediaWiki)
         : JobPrivate(MediaWiki)
     {
         onlyOneSignal = false;
