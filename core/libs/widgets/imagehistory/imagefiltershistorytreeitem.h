@@ -58,8 +58,7 @@ public:
 
 private:
 
-    // To prevent cppcheck warnings.
-    ImageFiltersHistoryTreeItem(const ImageFiltersHistoryTreeItem&);
+    ImageFiltersHistoryTreeItem(const ImageFiltersHistoryTreeItem&); // disable
 
 private:
 

@@ -126,8 +126,7 @@ public:
     {
     }
 
-    // cppcheck-suppress noExplicitConstructor
-    PAlbumPath(PAlbum* const album)
+    PAlbumPath(PAlbum* const album)   // krazy:exclude=explicit
     {
         if (album->isRoot())
         {
