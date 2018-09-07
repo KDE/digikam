@@ -233,7 +233,7 @@ private:
 
 private:
 
-    Q_DISABLE_COPY(SimilarityDb)
+    SimilarityDb(const SimilarityDb&); // Disable
 
     class Private;
     Private* const d;

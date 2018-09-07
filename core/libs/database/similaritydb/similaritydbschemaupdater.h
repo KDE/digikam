@@ -27,10 +27,6 @@
 #ifndef DIGIKAM_SIMILARITY_DB_SCHEMA_UPDATER_H
 #define DIGIKAM_SIMILARITY_DB_SCHEMA_UPDATER_H
 
-// Qt includes
-
-#include <QObject>
-
 namespace Digikam
 {
 
@@ -63,7 +59,7 @@ private:
 
 private:
 
-    Q_DISABLE_COPY(SimilarityDbSchemaUpdater)
+    SimilarityDbSchemaUpdater(const SimilarityDbSchemaUpdater&); // Disable
 
     class Private;
     Private* const d;

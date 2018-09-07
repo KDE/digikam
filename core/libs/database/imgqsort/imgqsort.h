@@ -69,7 +69,7 @@ private:
 
 private:
 
-    Q_DISABLE_COPY(ImgQSort)
+    ImgQSort(const ImgQSort&); // Disable
 
     class Private;
     Private* const d;

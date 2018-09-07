@@ -114,7 +114,7 @@ public:
 
 private:
 
-    Q_DISABLE_COPY(ImageDialog)
+    ImageDialog(const ImageDialog&); // Disable
 
     class Private;
     Private* const d;

@@ -1372,7 +1372,7 @@ protected:
 
 private:
 
-    Q_DISABLE_COPY(CoreDB)
+    CoreDB(const CoreDB&); // Disable
 
     void readSettings();
     void writeSettings();

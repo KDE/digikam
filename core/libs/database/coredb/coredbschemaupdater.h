@@ -106,7 +106,7 @@ private:
 
 private:
 
-    Q_DISABLE_COPY(CoreDbSchemaUpdater)
+    CoreDbSchemaUpdater(const CoreDbSchemaUpdater&); // Disable
 
     class Private;
     Private* const d;

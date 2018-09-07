@@ -25,10 +25,6 @@
 #ifndef DIGIKAM_THUMBS_DB_SCHEMA_UPDATER_H
 #define DIGIKAM_THUMBS_DB_SCHEMA_UPDATER_H
 
-// Qt includes
-
-#include <QObject>
-
 namespace Digikam
 {
 
@@ -62,7 +58,7 @@ private:
 
 private:
 
-    Q_DISABLE_COPY(ThumbsDbSchemaUpdater)
+    ThumbsDbSchemaUpdater(const ThumbsDbSchemaUpdater&); // Disable
 
     class Private;
     Private* const d;

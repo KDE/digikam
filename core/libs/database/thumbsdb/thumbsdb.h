@@ -143,7 +143,7 @@ private:
 
 private:
 
-    Q_DISABLE_COPY(ThumbsDb)
+    ThumbsDb(const ThumbsDb&); // Disable
 
     class Private;
     Private* const d;

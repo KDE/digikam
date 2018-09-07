@@ -274,7 +274,7 @@ protected:
 
 private:
 
-    Q_DISABLE_COPY(ImageScanner)
+    ImageScanner(const ImageScanner&); // Disable
 
     class Private;
     Private* const d;

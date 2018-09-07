@@ -144,7 +144,7 @@ private:
 
 private:
 
-    Q_DISABLE_COPY(ImageLister)
+    ImageLister(const ImageLister&); // Disable
 
     class Private;
     Private* const d;
