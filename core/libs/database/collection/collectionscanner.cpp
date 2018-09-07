@@ -1774,7 +1774,7 @@ QStringList CollectionScanner::formattedListOfStaleFiles()
     QStringList listToBeDeleted;
 
     CoreDbAccess access;
-    QList< QPair<QString,int> >::const_iterator it;
+    QList<QPair<QString, int> >::const_iterator it;
 
     for (it = m_filesToBeDeleted.constBegin(); it != m_filesToBeDeleted.constEnd(); ++it)
     {
@@ -1790,7 +1790,7 @@ void CollectionScanner::removeStaleFiles()
 {
     CoreDbAccess access;
     CoreDbTransaction transaction(&access);
-    QList< QPair<QString,int> >::const_iterator it;
+    QList<QPair<QString, int> >::const_iterator it;
 
     for (it = m_filesToBeDeleted.constBegin(); it != m_filesToBeDeleted.constEnd(); ++it)
     {
@@ -1953,7 +1953,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
 
         while (it.hasNext())
         {
-            QPair<QString,int> pair(it.next(),albumID);
+            QPair<QString, int> pair(it.next(),albumID);
 
             if (m_filesToBeDeleted.indexOf(pair) == -1)
             {

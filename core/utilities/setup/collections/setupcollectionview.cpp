@@ -352,6 +352,8 @@ SetupCollectionModel::~SetupCollectionModel()
 
 void SetupCollectionModel::loadCollections()
 {
+    beginResetModel();
+
     m_collections.clear();
     QList<CollectionLocation> locations = CollectionManager::instance()->allLocations();
 
@@ -360,7 +362,6 @@ void SetupCollectionModel::loadCollections()
         m_collections << Item(location);
     }
 
-    beginResetModel();
     endResetModel();
     emit collectionsLoaded();
 }

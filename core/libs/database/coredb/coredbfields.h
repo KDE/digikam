@@ -299,10 +299,9 @@ private:
  */
 template<typename FieldName> class DatabaseFieldsEnumIteratorSetOnly
 {
-
 public:
 
-    DatabaseFieldsEnumIteratorSetOnly(const FieldName setValues)
+    explicit DatabaseFieldsEnumIteratorSetOnly(const FieldName setValues)
       : i(),
         values(setValues)
     {
@@ -362,6 +361,7 @@ enum CustomEnumFlags
 };
 Q_DECLARE_FLAGS(CustomEnum, CustomEnumFlags)
 
+// krazy:exclude=explicit
 #define DATABASEFIELDS_SET_DECLARE_METHODS(Flag, variable)                     \
     Set(const Flag& f)                      { initialize(); variable = f;    } \
     Set(const Flag##Field& f)               { initialize(); variable = f;    } \

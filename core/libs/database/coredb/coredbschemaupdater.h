@@ -106,6 +106,8 @@ private:
 
 private:
 
+    Q_DISABLE_COPY(CoreDbSchemaUpdater)
+
     class Private;
     Private* const d;
 };

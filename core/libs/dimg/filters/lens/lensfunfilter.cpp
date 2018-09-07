@@ -330,13 +330,13 @@ bool LensFunFilter::registerSettingsToXmp(MetaEngineData& data) const
     str.append(QLatin1Char('\n'));
     str.append(i18n("Lens: %1",             prm.lensModel));
     str.append(QLatin1Char('\n'));
-    str.append(i18n("Subject Distance: %1", QString::number(prm.subjectDistance)));
+    str.append(i18n("Subject Distance: <numid>%1</numid>", prm.subjectDistance));
     str.append(QLatin1Char('\n'));
-    str.append(i18n("Aperture: %1",         QString::number(prm.aperture)));
+    str.append(i18n("Aperture: <numid>%1</numid>",         prm.aperture));
     str.append(QLatin1Char('\n'));
-    str.append(i18n("Focal Length: %1",     QString::number(prm.focalLength)));
+    str.append(i18n("Focal Length: <numid>%1</numid>",     prm.focalLength));
     str.append(QLatin1Char('\n'));
-    str.append(i18n("Crop Factor: %1",      QString::number(prm.cropFactor)));
+    str.append(i18n("Crop Factor: <numid>%1</numid>",      prm.cropFactor));
     str.append(QLatin1Char('\n'));
     str.append(i18n("CCA Correction: %1",   prm.filterCCA  && d->iface->supportsCCA()       ? i18n("enabled") : i18n("disabled")));
     str.append(QLatin1Char('\n'));

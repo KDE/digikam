@@ -43,7 +43,6 @@
 #include <QVariantMap>
 #include <QPair>
 #include <QFileInfo>
-#include <QDebug>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QUrlQuery>
@@ -113,13 +112,20 @@ GDTalker::GDTalker(QWidget* const parent)
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
-    
+
     connect(this, SIGNAL(signalReadyToUpload()),
             this, SLOT(slotUploadPhoto()));
 }
 
 GDTalker::~GDTalker()
 {
+    if (m_reply)
+    {
+        m_reply->abort();
+    }
+
+    WSToolUtils::removeTemporaryDir("google");
+
     delete d;
 }
 
@@ -129,7 +135,7 @@ GDTalker::~GDTalker()
 void GDTalker::getUserName()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getUserName";
-    
+
     QUrl url(d->apiUrl.arg("about"));
 
     QNetworkRequest netRequest(url);
@@ -149,10 +155,10 @@ void GDTalker::getUserName()
 void GDTalker::listFolders()
 {
     QUrl url(d->apiUrl.arg("files"));
-    
+
     QUrlQuery q;
     q.addQueryItem(QLatin1String("q"), QLatin1String("mimeType = 'application/vnd.google-apps.folder'"));
-    
+
     url.setQuery(q);
 
     QNetworkRequest netRequest(url);
@@ -214,13 +220,15 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
     }
 
     emit signalBusy(true);
+
     GDMPForm form;
-    form.addPair(QUrl::fromLocalFile(imgPath).fileName(),info.description,imgPath,id);
+    form.addPair(QUrl::fromLocalFile(imgPath).fileName(), info.description, imgPath, id);
+
     QString path = imgPath;
 
     QMimeDatabase mimeDB;
 
-    if (!mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("video/")))
+    if (mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("image/")))
     {
         QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
 
@@ -231,12 +239,12 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
         if (image.isNull())
         {
+            emit signalBusy(false);
             return false;
         }
 
-        path = WSToolUtils::makeTemporaryDir("google")
-                            .filePath(QFileInfo(imgPath)
-                            .baseName().trimmed() + QLatin1String(".jpg"));
+        path = WSToolUtils::makeTemporaryDir("google").filePath(QFileInfo(imgPath)
+                                             .baseName().trimmed() + QLatin1String(".jpg"));
         int imgQualityToApply = 100;
 
         if (rescale)
@@ -270,12 +278,12 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
     form.finish();
 
     QUrl url(d->uploadUrl);
-    
+
     QUrlQuery q;
     q.addQueryItem(QLatin1String("uploadType"), QLatin1String("multipart"));
 
     url.setQuery(q);
-    
+
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
@@ -286,8 +294,6 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In add photo";
     d->state = Private::GD_ADDPHOTO;
     m_buffer.resize(0);
-    
-    emit signalBusy(true);
 
     return true;
 }
@@ -392,19 +398,19 @@ void GDTalker::parseResponseListFolders(const QByteArray& data)
 
     foreach (const QJsonValue& value, jsonArray)
     {
-        QJsonObject obj = value.toObject();
+        QJsonObject obj      = value.toObject();
 
         // Verify if album is in trash
-        QJsonObject labels      = obj[QLatin1String("labels")].toObject();
-        bool        trashed     = labels[QLatin1String("trashed")].toBool();
+        QJsonObject labels   = obj[QLatin1String("labels")].toObject();
+        bool        trashed  = labels[QLatin1String("trashed")].toBool();
 
         // Verify if album is editable
-        bool        editable    = obj[QLatin1String("editable")].toBool();
+        bool        editable = obj[QLatin1String("editable")].toBool();
 
         /* Verify if album is visualized in a folder inside My Drive
          * If parents is empty, album is shared by another person and not added to My Drive yet
          */
-        QJsonArray  parents     = obj[QLatin1String("parents")].toArray();
+        QJsonArray  parents  = obj[QLatin1String("parents")].toArray();
 
         fps.id          = obj[QLatin1String("id")].toString();
         fps.title       = obj[QLatin1String("title")].toString();
@@ -418,7 +424,7 @@ void GDTalker::parseResponseListFolders(const QByteArray& data)
     std::sort(albumList.begin(), albumList.end(), gdriveLessThan);
 
     emit signalBusy(false);
-    emit signalListAlbumsDone(1,QString(),albumList);
+    emit signalListAlbumsDone(1, QString(), albumList);
 }
 
 void GDTalker::parseResponseCreateFolder(const QByteArray& data)

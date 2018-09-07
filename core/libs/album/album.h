@@ -326,7 +326,7 @@ private:
      * Disable copy and default constructor
      */
     Album();
-    Album(const Album&);
+    Q_DISABLE_COPY(Album)
     Album& operator==(const Album&);
 
 private:

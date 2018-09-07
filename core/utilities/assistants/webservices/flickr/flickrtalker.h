@@ -33,16 +33,11 @@
 #include <QString>
 #include <QObject>
 #include <QNetworkReply>
-#include <QNetworkAccessManager>
 
 // Local includes
 
 #include "dinfointerface.h"
 #include "flickritem.h"
-#include "o1.h"
-#include "o0globals.h"
-#include "o1requestor.h"
-#include "o0settingsstore.h"
 
 class QProgressDialog;
 

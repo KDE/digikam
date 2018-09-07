@@ -60,8 +60,8 @@ public:
 private:
 
     void tiffSetExifAsciiTag(TIFF* const tif, ttag_t tiffTag, const DMetadata& metaData, const char* const exifTagName);
-    
-    // cppcheck-suppress unusedPrivateFunction 
+
+    // cppcheck-suppress unusedPrivateFunction
     void tiffSetExifDataTag(TIFF* const tif, ttag_t tiffTag, const DMetadata& metaData, const char* const exifTagName);
 
     static void dimg_tiff_warning(const char* module, const char* format, va_list warnings);

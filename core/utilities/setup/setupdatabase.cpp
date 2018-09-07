@@ -283,7 +283,7 @@ void SetupDatabase::createUpdateBox()
                                         "<qt>File hashes are used to identify identical files and to display thumbnails. "
                                         "A new, improved algorithm to create the hash is now used. "
                                         "The old algorithm, though, still works quite well, so it is recommended to "
-                                        "carry out this upgrade, but not required.<br> "
+                                        "carry out this upgrade, but not required.<br/> "
                                         "After the upgrade you cannot use your database with a digiKam version "
                                         "prior to 2.0.</qt>"));
 

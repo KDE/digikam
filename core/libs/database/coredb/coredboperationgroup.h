@@ -80,6 +80,8 @@ public:
 
 private:
 
+    Q_DISABLE_COPY(CoreDbOperationGroup)
+
     class Private;
     Private* const d;
 };

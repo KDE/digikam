@@ -45,19 +45,17 @@ class Q_DECL_HIDDEN QuerySiteinfoUsergroupsPrivate : public JobPrivate
 {
 public:
 
-    QuerySiteinfoUsergroupsPrivate(Iface& MediaWiki, QNetworkAccessManager* const manager, bool includeNumber)
+    QuerySiteinfoUsergroupsPrivate(Iface& MediaWiki, bool includeNumber)
             : JobPrivate(MediaWiki),
-              manager(manager),
               includeNumber(includeNumber)
     {
     }
 
-    QNetworkAccessManager* const manager;
-    bool                         includeNumber;
+    bool includeNumber;
 };
 
 QuerySiteinfoUsergroups::QuerySiteinfoUsergroups(Iface& MediaWiki, QObject* const parent)
-    : Job(*new QuerySiteinfoUsergroupsPrivate(MediaWiki, new QNetworkAccessManager(), false), parent)
+    : Job(*new QuerySiteinfoUsergroupsPrivate(MediaWiki, false), parent)
 {
 }
 
@@ -87,10 +85,12 @@ void QuerySiteinfoUsergroups::doWorkSendRequest()
     query.addQueryItem(QStringLiteral("action"), QStringLiteral("query"));
     query.addQueryItem(QStringLiteral("meta"),   QStringLiteral("siteinfo"));
     query.addQueryItem(QStringLiteral("siprop"), QStringLiteral("usergroups"));
+
     if (d->includeNumber)
     {
         query.addQueryItem(QStringLiteral("sinumberingroup"), QString());
     }
+
     url.setQuery(query);
 
     // Set the request
@@ -129,6 +129,7 @@ void QuerySiteinfoUsergroups::doWorkProcessReply()
                 if (reader.name() == QLatin1String("group"))
                 {
                     name = reader.attributes().value(QStringLiteral("name")).toString();
+    
                     if (d->includeNumber)
                     {
                         number = reader.attributes().value(QStringLiteral("number")).toString().toUInt();
@@ -152,7 +153,7 @@ void QuerySiteinfoUsergroups::doWorkProcessReply()
                     usergroup.setName(name);
                     usergroup.setRights(rights);
 
-                    if(d->includeNumber)
+                    if (d->includeNumber)
                     {
                         usergroup.setNumber(number);
                     }

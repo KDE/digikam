@@ -1372,6 +1372,8 @@ protected:
 
 private:
 
+    Q_DISABLE_COPY(CoreDB) // disable
+
     void readSettings();
     void writeSettings();
 

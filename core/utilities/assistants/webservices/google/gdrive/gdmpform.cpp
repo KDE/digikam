@@ -34,7 +34,6 @@
 #include <QFile>
 #include <QMimeDatabase>
 #include <QMimeType>
-#include <QTime>
 
 // local includes
 

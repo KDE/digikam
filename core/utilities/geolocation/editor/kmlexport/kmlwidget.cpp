@@ -98,7 +98,7 @@ KmlWidget::KmlWidget(GeolocationEdit* const dlg,
                                    "elevation of a particular location.</dd>"
                                    "<dt>absolute</dt>"
                                    "<dd>Sets the altitude of the coordinate relative to sea level, regardless "
-                                   "of the actual elevation of the terrain beneath the element.</dd></dl>"));
+                                   "of the actual elevation of the terrain beneath the element.</dd></dl></p>"));
 
     destinationDirectoryLabel_ = new QLabel(i18n("Destination Directory:"), TargetPreferenceGroupBox);
 

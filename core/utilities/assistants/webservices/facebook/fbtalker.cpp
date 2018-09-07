@@ -47,6 +47,7 @@
 #include <QDialogButtonBox>
 #include <QUrlQuery>
 #include <QMessageBox>
+#include <QNetworkAccessManager>
 
 // Local includes
 
@@ -105,7 +106,7 @@ public:
 
     FbUser                 user;
     FbNewAlbumDlg* const   albumDlg; // Pointer to FbNewAlbumDlg* const so that no modification can impact this pointer
-    
+
     //Ported to O2 here
     O2*                    o2;
     QString                scope;
@@ -116,13 +117,13 @@ public:
 FbTalker::FbTalker(QWidget* const parent, WSNewAlbumDialog* albumDlg)
     : WSTalker(parent),
       d(new Private(albumDlg))
-{           
-    d->parent  = parent;          
-    
+{
+    d->parent  = parent;
+
     //TODO: Ported to O2 here
-    
+
     d->o2      = new O2(this);
-    
+
     d->o2->setClientId(d->apikey);
     d->o2->setClientSecret(d->clientSecret);
 
@@ -134,16 +135,19 @@ FbTalker::FbTalker(QWidget* const parent, WSNewAlbumDialog* albumDlg)
     d->o2->setLocalPort(8000);
     d->o2->setGrantFlow(O2::GrantFlow::GrantFlowImplicit);
     d->o2->setScope(d->scope);
-    
+
     m_store->setGroupKey(QLatin1String("Facebook"));
     d->o2->setStore(m_store);
-    
+
     connect(d->o2, SIGNAL(linkingFailed()),
-            this, SLOT(slotLinkingFailed()));                    
+            this, SLOT(slotLinkingFailed()));
+
     connect(d->o2, SIGNAL(linkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
+
     connect(d->o2, SIGNAL(openBrowser(QUrl)),
             this, SLOT(slotOpenBrowser(QUrl)));
+
     connect(d->o2, SIGNAL(closeBrowser()),
             this, SLOT(slotCloseBrowser()));
 }
@@ -159,8 +163,8 @@ void FbTalker::link()
 {
     emit signalBusy(true);
 
-    d->loginInProgress = true;    
-    d->o2->link();                
+    d->loginInProgress = true;
+    d->o2->link();
 }
 
 void FbTalker::unlink()
@@ -196,14 +200,14 @@ void FbTalker::authenticate()
 {
     d->loginInProgress = true;
     emit signalLoginProgress(2, 9, i18n("Validate previous session..."));
-    
+
     WSTalker::authenticate();
 }
 
 void FbTalker::getLoggedInUser()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getLoggedInUser called ";
-    
+
     if (m_reply)
     {
         m_reply->abort();
@@ -212,7 +216,7 @@ void FbTalker::getLoggedInUser()
 
     emit signalBusy(true);
     emit signalLoginProgress(3);
-    
+
     QUrl url(d->apiURL.arg("me")
                       .arg(""));
     QUrlQuery q;
@@ -226,7 +230,7 @@ void FbTalker::getLoggedInUser()
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url = " << netRequest.url();
     m_reply = m_netMngr->get(netRequest);
-    
+
     m_state = WSTalker::GETUSER;
     m_buffer.resize(0);
 }
@@ -299,9 +303,9 @@ void FbTalker::listAlbums(long long userID)
     }
 
     emit signalBusy(true);
-    
+
     QUrl url;
-    
+
     /*
      * If userID is specified, load albums of that user,
      * else load albums of current user
@@ -328,7 +332,7 @@ void FbTalker::listAlbums(long long userID)
                             QLatin1String("application/x-www-form-urlencoded"));
 
     m_reply = m_netMngr->get(netRequest);
-    
+
     m_state = WSTalker::LISTALBUMS;
     m_buffer.resize(0);
 }
@@ -343,10 +347,10 @@ void FbTalker::createAlbum(const FbAlbum& album)
 
     emit signalBusy(true);
 
-    QUrlQuery params;            
+    QUrlQuery params;
     params.addQueryItem("access_token", d->o2->token().toUtf8());
     params.addQueryItem("name", album.title);
-    
+
     if (!album.location.isEmpty())
         params.addQueryItem("location", album.location);
     /*
@@ -375,19 +379,19 @@ void FbTalker::createAlbum(const FbAlbum& album)
             params.addQueryItem("privacy","{'value':'CUSTOM'}");
             break;
     }
-    
+
     QUrl url(QUrl(d->apiURL.arg(d->user.id)
                             .arg("albums")));
 //     url.setQuery(params);
-    
+
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, 
                         QLatin1String("application/x-www-form-urlencoded"));
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url to create new album " << netRequest.url() << params.query(); 
-    
+
     m_reply = m_netMngr->post(netRequest, params.query().toUtf8());
-    
+
     m_state = WSTalker::CREATEALBUM;
     m_buffer.resize(0);
 }
@@ -428,17 +432,19 @@ void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
     }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "FORM: " << endl << form.formData();
-    
+
     if (!form.addFile(QUrl::fromLocalFile(imgPath).fileName(), imgPath))
     {
-        emit signalBusy(false);
         emit signalAddPhotoDone(666, i18n("Cannot open file"));
+        emit signalBusy(false);
+        return;
     }
 
     form.finish();
 
     QVariant arg_1;
-    if(albumID.isEmpty())
+
+    if (albumID.isEmpty())
     {
         arg_1 = d->user.id;
     }
@@ -447,13 +453,11 @@ void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
         arg_1 = albumID;
     }
 
-
-    QNetworkRequest netRequest(QUrl(d->apiURL.arg(arg_1.toString())
-                                                .arg("photos")));
+    QNetworkRequest netRequest(QUrl(d->apiURL.arg(arg_1.toString()).arg("photos")));
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
 
     m_reply = m_netMngr->post(netRequest, form.formData());
-    
+
     m_state = WSTalker::ADDPHOTO;
     m_buffer.resize(0);
 }
@@ -527,7 +531,7 @@ void FbTalker::slotFinished(QNetworkReply* reply)
             QMessageBox::critical(QApplication::activeWindow(),
                                   i18n("Error"), reply->errorString());
         }
-        
+
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << reply->error() << " text :"<< QString(reply->readAll());
 
         reply->deleteLater();
@@ -566,7 +570,7 @@ void FbTalker::authenticationDone(int errCode, const QString &errMsg)
     {
         saveUserAccount(d->user.name, d->user.id, d->o2->expires(), d->o2->token(), d->o2->refreshToken());
     }
-    
+
     emit signalLoginDone(errCode, errMsg);
     d->loginInProgress = false;
 
@@ -607,7 +611,7 @@ void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Logged in data " << doc;
-    
+
     if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
@@ -616,7 +620,7 @@ void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
 
     QJsonObject jsonObject = doc.object();
     d->user.id             = jsonObject[QLatin1String("id")].toString();
-    
+
     if (!(QString::compare(jsonObject[QLatin1String("id")].toString(), QLatin1String(""), Qt::CaseInsensitive) == 0))
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "ID found in response of GetLoggedInUser";
@@ -656,7 +660,7 @@ void FbTalker::parseResponseAddPhoto(const QByteArray& data)
         errCode         = obj[QLatin1String("code")].toInt();
         errMsg          = obj[QLatin1String("message")].toString();
     }
-    
+
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "add photo : " << doc;
 
     emit signalBusy(false);
@@ -695,7 +699,7 @@ void FbTalker::parseResponseCreateAlbum(const QByteArray& data)
     }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "error create photo : " << doc;
-    
+
     emit signalBusy(false);
     emit signalCreateAlbumDone(errCode, errorToText(errCode, errMsg),
                                newAlbumID);
@@ -731,7 +735,7 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
             album.url         = obj[QLatin1String("link")].toString();
             album.description = obj[QLatin1String("description")].toString();
             album.uploadable  = obj[QLatin1String("can_upload")].toBool();
-            
+
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "can_upload " << album.uploadable;
 /*
             if (QString::compare(obj[QLatin1String("privacy")].toString(),

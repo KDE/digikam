@@ -65,30 +65,32 @@ public:
 
 public:
 
-    void updateLabels(const QString& userName = QString(), const QString& wikiName = QString(), const QString& url = QString());
+    void updateLabels(const QString& userName = QString(),
+                      const QString& wikiName = QString(),
+                      const QString& url = QString());
     void invertAccountLoginBox();
 
     DImagesList*  imagesList()  const;
     DProgressWdg* progressBar() const;
 
-    int  dimension()        const;
-    int  quality()          const;
-    bool resize()           const;
-    bool removeMeta()       const;
-    bool removeGeo()        const;
+    int  dimension()            const;
+    int  quality()              const;
+    bool resize()               const;
+    bool removeMeta()           const;
+    bool removeGeo()            const;
 
-    QString author()        const;
-    QString source()        const;
-    QString genCategories() const;
-    QString genText()       const;
-    QString genComments()   const;
-    QString license()       const;
-    QString categories()    const;
-    QString title()         const;
-    QString description()   const;
-    QString date()          const;
-    QString latitude()      const;
-    QString longitude()     const;
+    QString author()            const;
+    QString source()            const;
+    QString genCategories()     const;
+    QString genText()           const;
+    QString genComments()       const;
+    QString license()           const;
+    QString categories()        const;
+    QString title()             const;
+    QString description()       const;
+    QString date()              const;
+    QString latitude()          const;
+    QString longitude()         const;
 
     QMap <QString, QMap <QString, QString> > allImagesDesc();
 
@@ -102,7 +104,10 @@ public:
 Q_SIGNALS:
 
     void signalChangeUserRequest();
-    void signalLoginRequest(const QString& login, const QString& pass, const QString& wikiName, const QUrl& wikiUrl);
+    void signalLoginRequest(const QString& login,
+                            const QString& pass,
+                            const QString& wikiName,
+                            const QUrl& wikiUrl);
 
 private Q_SLOTS:
 

@@ -46,7 +46,7 @@ class Q_DECL_HIDDEN LogoutPrivate : public JobPrivate
 {
 public:
 
-    LogoutPrivate(Iface& MediaWiki)
+    explicit LogoutPrivate(Iface& MediaWiki)
         : JobPrivate(MediaWiki)
     {
     }

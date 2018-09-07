@@ -747,7 +747,7 @@ void MediaWikiWidget::loadImageInfoFirstLoad()
 
     d->imagesDescInfo.clear();
 
-    for (int j = 0; j < urls.size(); j++)
+    for (int j = 0 ; j < urls.size() ; ++j)
     {
         loadImageInfo(urls.at(j));
     }
@@ -764,7 +764,7 @@ void MediaWikiWidget::loadImageInfo(const QUrl& url)
     QString latitude;
     QString longitude;
 
-    for (int i = 0; i < keywar.size(); i++)
+    for (int i = 0 ; i < keywar.size() ; ++i)
     {
         if (i == keywar.size() - 1)
         {
@@ -805,7 +805,7 @@ void MediaWikiWidget::clearEditFields()
 void MediaWikiWidget::slotLoadImagesDesc(QTreeWidgetItem* item)
 {
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
-    DImagesListViewItem* const l_item    = dynamic_cast<DImagesListViewItem*>(item);
+    DImagesListViewItem* const l_item     = dynamic_cast<DImagesListViewItem*>(item);
 
     if (!l_item)
         return;
@@ -866,7 +866,7 @@ void MediaWikiWidget::slotRestoreExtension()
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
 
     // Build the list of items to rename
-    for (int i = 0; i < selectedItems.size(); ++i)
+    for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
         DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
 
@@ -874,7 +874,7 @@ void MediaWikiWidget::slotRestoreExtension()
             urls.append(l_item->url());
     }
 
-    for (int i = 0; i < urls.size(); ++i)
+    for (int i = 0 ; i < urls.size() ; ++i)
     {
         imageMetaData = d->imagesDescInfo[urls.at(i).toLocalFile()];
         imageTitle    = imageMetaData[QLatin1String("title")];
@@ -890,8 +890,8 @@ void MediaWikiWidget::slotRestoreExtension()
         }
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << urls.at(i).toLocalFile() << "renamed to" << imageTitle;
-        imageMetaData[QLatin1String("title")] = imageTitle;
-        d->imagesDescInfo[urls.at(i).toLocalFile()]  = imageMetaData;
+        imageMetaData[QLatin1String("title")]       = imageTitle;
+        d->imagesDescInfo[urls.at(i).toLocalFile()] = imageMetaData;
     }
 }
 
@@ -910,7 +910,7 @@ void MediaWikiWidget::slotApplyTitle()
     const int minLength = givenTitle.count(QLatin1Char('#'));
 
     // Build the list of items to rename
-    for (int i = 0; i < selectedItems.size(); ++i)
+    for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
         DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
 
@@ -918,7 +918,7 @@ void MediaWikiWidget::slotApplyTitle()
             urls.append(l_item->url());
     }
 
-    for (int i = 0; i < urls.size(); ++i)
+    for (int i = 0 ; i < urls.size() ; ++i)
     {
         imageMetaData = d->imagesDescInfo[urls.at(i).toLocalFile()];
         imageTitle    = givenTitle;
@@ -939,8 +939,8 @@ void MediaWikiWidget::slotApplyTitle()
         }
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << urls.at(i).toLocalFile() << "renamed to" << imageTitle;
-        imageMetaData[QLatin1String("title")] = imageTitle;
-        d->imagesDescInfo[urls.at(i).toLocalFile()]  = imageMetaData;
+        imageMetaData[QLatin1String("title")]       = imageTitle;
+        d->imagesDescInfo[urls.at(i).toLocalFile()] = imageMetaData;
     }
 }
 
@@ -949,7 +949,7 @@ void MediaWikiWidget::slotApplyDate()
     QList<QUrl> urls;
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
 
-    for (int i = 0; i < selectedItems.size(); ++i)
+    for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
         DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
 
@@ -957,7 +957,7 @@ void MediaWikiWidget::slotApplyDate()
             urls.append(l_item->url());
     }
 
-    for (int i = 0; i < urls.size(); ++i)
+    for (int i = 0 ; i < urls.size() ; ++i)
     {
         QMap<QString, QString> imageMetaData;
         imageMetaData                               = d->imagesDescInfo[urls.at(i).toLocalFile()];
@@ -971,7 +971,7 @@ void MediaWikiWidget::slotApplyCategories()
     QList<QUrl> urls;
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
 
-    for (int i = 0; i < selectedItems.size(); ++i)
+    for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
         DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
 
@@ -979,7 +979,7 @@ void MediaWikiWidget::slotApplyCategories()
             urls.append(l_item->url());
     }
 
-    for (int i = 0; i < urls.size(); ++i)
+    for (int i = 0 ; i < urls.size() ; ++i)
     {
         QMap<QString, QString> imageMetaData;
         imageMetaData                               = d->imagesDescInfo[urls.at(i).toLocalFile()];
@@ -993,7 +993,7 @@ void MediaWikiWidget::slotApplyDescription()
     QList<QUrl> urls;
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
 
-    for (int i = 0; i < selectedItems.size(); ++i)
+    for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
         DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
 
@@ -1001,7 +1001,7 @@ void MediaWikiWidget::slotApplyDescription()
             urls.append(l_item->url());
     }
 
-    for (int i = 0; i < urls.size(); ++i)
+    for (int i = 0 ; i < urls.size() ; ++i)
     {
         QMap<QString, QString> imageMetaData;
         imageMetaData                               = d->imagesDescInfo[urls.at(i).toLocalFile()];
@@ -1016,7 +1016,7 @@ void MediaWikiWidget::slotApplyLatitude()
     QList<QUrl> urls;
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
 
-    for (int i = 0; i < selectedItems.size(); ++i)
+    for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
         DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
 
@@ -1024,7 +1024,7 @@ void MediaWikiWidget::slotApplyLatitude()
             urls.append(l_item->url());
     }
 
-    for (int i = 0; i < urls.size(); ++i)
+    for (int i = 0 ; i < urls.size() ; ++i)
     {
         QMap<QString, QString> imageMetaData;
         imageMetaData                               = d->imagesDescInfo[urls.at(i).toLocalFile()];
@@ -1038,7 +1038,7 @@ void MediaWikiWidget::slotApplyLongitude()
     QList<QUrl> urls;
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
 
-    for (int i = 0; i < selectedItems.size(); ++i)
+    for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
         DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
 
@@ -1046,7 +1046,7 @@ void MediaWikiWidget::slotApplyLongitude()
             urls.append(l_item->url());
     }
 
-    for (int i = 0; i < urls.size(); ++i)
+    for (int i = 0 ; i < urls.size() ; ++i)
     {
         QMap<QString, QString> imageMetaData;
         imageMetaData                               = d->imagesDescInfo[urls.at(i).toLocalFile()];
@@ -1059,7 +1059,7 @@ QMap <QString,QMap <QString,QString> > MediaWikiWidget::allImagesDesc()
 {
     QList<QUrl> urls = d->imgList->imageUrls(false);
 
-    for (int i = 0; i < urls.size(); ++i)
+    for (int i = 0 ; i < urls.size() ; ++i)
     {
         QMap<QString, QString> imageMetaData          = d->imagesDescInfo[urls.at(i).toLocalFile()];
         imageMetaData[QLatin1String("author")]        = author();

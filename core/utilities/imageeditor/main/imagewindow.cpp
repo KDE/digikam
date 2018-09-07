@@ -484,8 +484,8 @@ void ImageWindow::slotUpdateItemInfo()
 {
     QString text = i18nc("<Image file name> (<Image number> of <Images in album>)",
                          "%1 (%2 of %3)", d->currentImageInfo.name(),
-                         QString::number(d->currentIndex().row() + 1),
-                         QString::number(d->imageFilterModel->rowCount()));
+                         d->currentIndex().row() + 1,
+                         d->imageFilterModel->rowCount());
     m_nameLabel->setText(text);
 
     if (!m_actionEnabledState)

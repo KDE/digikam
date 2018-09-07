@@ -46,10 +46,9 @@ namespace MediaWiki
 
 class Q_DECL_HIDDEN QueryInfoPrivate : public JobPrivate
 {
-
 public:
 
-    QueryInfoPrivate(Iface& MediaWiki)
+    explicit QueryInfoPrivate(Iface& MediaWiki)
         : JobPrivate(MediaWiki)
     {
     }

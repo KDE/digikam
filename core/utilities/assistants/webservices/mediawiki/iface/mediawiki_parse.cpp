@@ -46,7 +46,7 @@ class Q_DECL_HIDDEN ParsePrivate : public JobPrivate
 
 public:
 
-    ParsePrivate(Iface& MediaWiki)
+    explicit ParsePrivate(Iface& MediaWiki)
         : JobPrivate(MediaWiki)
     {
     }

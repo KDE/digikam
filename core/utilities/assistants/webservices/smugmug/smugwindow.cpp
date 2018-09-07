@@ -277,6 +277,8 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
 
 SmugWindow::~SmugWindow()
 {
+    WSToolUtils::removeTemporaryDir("smug");
+
     delete d->talker;
     delete d;
 }

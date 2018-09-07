@@ -44,12 +44,12 @@
 
 namespace MediaWiki
 {
+
 class Q_DECL_HIDDEN UploadPrivate : public JobPrivate
 {
-
 public:
 
-    UploadPrivate(Iface& MediaWiki)
+    explicit UploadPrivate(Iface& MediaWiki)
         : JobPrivate(MediaWiki)
     {
         file = 0;
@@ -73,11 +73,14 @@ public:
                 << QStringLiteral("filenametooshort")
                 << QStringLiteral("overwrite")
                 << QStringLiteral("stashfailed");
+
         ret = list.indexOf(temp.remove(QChar::fromLatin1('-')));
-        if(ret == -1)
+
+        if (ret == -1)
         {
             ret = 0;
         }
+
         return  ret + (int)Upload::InternalError ;
     }
 
@@ -125,7 +128,7 @@ void Upload::start()
 {
     Q_D(Upload);
 
-    QueryInfo* info = new QueryInfo(d->MediaWiki, this);
+    QueryInfo* const info = new QueryInfo(d->MediaWiki, this);
     info->setPageName(QStringLiteral("File:") + d->filename);
     info->setToken(QStringLiteral("edit"));
 
@@ -139,8 +142,8 @@ void Upload::doWorkSendRequest(Page page)
 {
     Q_D(Upload);
 
-    QString token = page.pageEditToken();
-    d->token      = token;
+    QString token        = page.pageEditToken();
+    d->token             = token;
 
     // Get the extension
     QStringList filename = d->filename.split(QChar::fromLatin1('.'));
@@ -160,7 +163,8 @@ void Upload::doWorkSendRequest(Page page)
     // Add the cookies
     QByteArray cookie = "";
     QList<QNetworkCookie> MediaWikiCookies = d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url());
-    for(int i = 0; i < MediaWikiCookies.size(); ++i)
+
+    for (int i = 0 ; i < MediaWikiCookies.size() ; ++i)
     {
         cookie += MediaWikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
         cookie += ';';
@@ -226,6 +230,7 @@ void Upload::doWorkSendRequest(Page page)
 
     d->reply = d->manager->post( request, out );
     connectReply();
+
     connect( d->reply, SIGNAL(finished()),
              this, SLOT(doWorkProcessReply()) );
 }

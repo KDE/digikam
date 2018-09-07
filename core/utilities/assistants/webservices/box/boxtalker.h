@@ -28,9 +28,7 @@
 #include <QList>
 #include <QPair>
 #include <QString>
-#include <QSettings>
 #include <QNetworkReply>
-#include <QNetworkAccessManager>
 
 // Local includes
 

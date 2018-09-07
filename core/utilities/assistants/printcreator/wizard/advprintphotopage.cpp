@@ -1085,7 +1085,7 @@ void AdvPrintPhotoPage::slotPageSetup()
     initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
 
     // restore photoSize
-    if (d->settings->savedPhotoSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
+    if (lastSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
     {
         d->photoUi->ListPhotoSizes->setCurrentRow(0);
     }

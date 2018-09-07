@@ -70,7 +70,7 @@ namespace Digikam
 
 void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_list warnings)
 {
-    if(DIGIKAM_DIMG_LOG_TIFF().isDebugEnabled())
+    if (DIGIKAM_DIMG_LOG_TIFF().isDebugEnabled())
     {
         char message[4096];
         vsnprintf(message, 4096, format, warnings);
@@ -80,7 +80,7 @@ void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_li
 
 void TIFFLoader::dimg_tiff_error(const char* module, const char* format, va_list errors)
 {
-    if(DIGIKAM_DIMG_LOG_TIFF().isDebugEnabled())
+    if (DIGIKAM_DIMG_LOG_TIFF().isDebugEnabled())
     {
         char message[4096];
         vsnprintf(message, 4096, format, errors);
@@ -103,7 +103,12 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     // TIFF error handling. If an errors/warnings occurs during reading,
     // libtiff will call these methods
 
+#ifdef Q_OS_WIN
+    TIFFSetWarningHandler(NULL);
+#else
     TIFFSetWarningHandler(dimg_tiff_warning);
+#endif
+
     TIFFSetErrorHandler(dimg_tiff_error);
 
     // -------------------------------------------------------------------

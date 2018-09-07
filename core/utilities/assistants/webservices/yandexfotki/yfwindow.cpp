@@ -227,6 +227,8 @@ YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const parent, bool impo
 YFWindow::~YFWindow()
 {
     reset();
+    WSToolUtils::removeTemporaryDir("yandexfotki");
+
     delete d;
 }
 

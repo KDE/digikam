@@ -39,6 +39,7 @@
 #include <QDesktopServices>
 #include <QUrlQuery>
 #include <QNetworkCookieJar>
+#include <QNetworkAccessManager>
 
 // KDE includes
 
@@ -90,9 +91,11 @@ public:
         redirectUrl  = QLatin1String("https://login.live.com/oauth20_desktop.srf");
 
         state        = OD_USERNAME;
+
+        parent       = 0;
         netMngr      = 0;
         reply        = 0;
-        accessToken  = QString();
+        view         = 0;
     }
 
 public:
@@ -117,19 +120,19 @@ public:
 
     DMetadata              meta;
 
-    QMap<QString,QString> urlParametersMap;
+    QMap<QString, QString> urlParametersMap;
 
-    WebWidget*            view;
+    WebWidget*             view;
 
-    QString               tokenKey;
+    QString                tokenKey;
 };
 
 ODTalker::ODTalker(QWidget* const parent)
     : d(new Private)
 {
-    d->parent   = parent;
-    d->netMngr  = new QNetworkAccessManager(this);
-    d->view = new WebWidget(d->parent);
+    d->parent  = parent;
+    d->netMngr = new QNetworkAccessManager(this);
+    d->view    = new WebWidget(d->parent);
 
     connect(this, SIGNAL(oneDriveLinkingFailed()),
             this, SLOT(slotLinkingFailed()));
@@ -151,12 +154,15 @@ ODTalker::~ODTalker()
         d->reply->abort();
     }
 
+    WSToolUtils::removeTemporaryDir("onedrive");
+
     delete d;
 }
 
 void ODTalker::link()
 {
     emit signalBusy(true);
+
     QUrl url(d->authUrl);
     QUrlQuery query(url);
     query.addQueryItem(QLatin1String("client_id"), d->clientId);
@@ -169,7 +175,8 @@ void ODTalker::link()
     d->view->load(url);
     d->view->show();
 
-    connect(d->view, SIGNAL(urlChanged(QUrl)), this, SLOT(slotCatchUrl(QUrl)));
+    connect(d->view, SIGNAL(urlChanged(QUrl)),
+            this, SLOT(slotCatchUrl(QUrl)));
 }
 
 void ODTalker::unLink()
@@ -206,7 +213,7 @@ void ODTalker::slotCatchUrl(const QUrl& url)
 
 QMap<QString, QString> ODTalker::ParseUrlParameters(const QString& url)
 {
-    QMap<QString,QString> urlParameters;
+    QMap<QString, QString> urlParameters;
 
     if (url.indexOf('?') == -1)
     {
@@ -338,6 +345,7 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     if (image.isNull())
     {
+        emit signalBusy(false);
         return false;
     }
 
@@ -377,7 +385,7 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     d->state = Private::OD_ADDPHOTO;
     d->buffer.resize(0);
-    emit signalBusy(true);
+
     return true;
 }
 
@@ -536,10 +544,9 @@ void ODTalker::readSettings()
     }
     else
     {
-        d->accessToken = grp.readEntry("access_token",QString());
+        d->accessToken = grp.readEntry("access_token", QString());
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Already Linked";
         emit oneDriveLinkingSucceeded();
-
     }
 }
 

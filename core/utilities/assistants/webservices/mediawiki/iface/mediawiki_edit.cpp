@@ -66,7 +66,7 @@ class Q_DECL_HIDDEN EditPrivate : public JobPrivate
 {
 public:
 
-    EditPrivate(Iface& MediaWiki)
+    explicit EditPrivate(Iface& MediaWiki)
         : JobPrivate(MediaWiki)
     {
     }

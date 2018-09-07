@@ -688,11 +688,11 @@ private Q_SLOTS:
     void slotDatesJobResult();
     void slotDatesJobData(const QMap<QDateTime, int>& datesStatMap);
     void slotAlbumsJobResult();
-    void slotAlbumsJobData(const QMap<int,int>& albumsStatMap);
+    void slotAlbumsJobData(const QMap<int, int>& albumsStatMap);
     void slotTagsJobResult();
-    void slotTagsJobData(const QMap<int,int>& tagsStatMap);
+    void slotTagsJobData(const QMap<int, int>& tagsStatMap);
     void slotPeopleJobResult();
-    void slotPeopleJobData(const QMap<QString,QMap<int,int> >& facesStatMap);
+    void slotPeopleJobData(const QMap<QString, QMap<int, int> >& facesStatMap);
 
     void slotCollectionLocationStatusChanged(const CollectionLocation&, int);
     void slotCollectionLocationPropertiesChanged(const CollectionLocation& location);
@@ -804,7 +804,7 @@ public:
     {
     }
 
-    AlbumPointer(T* const a)                          // krazy:exclude=explicit
+    AlbumPointer(T* const a)                    // krazy:exclude=explicit
         : album(a)
     {
         AlbumManager::instance()->addGuardedPointer(album, &album);

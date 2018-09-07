@@ -964,7 +964,8 @@ public:
     {
     public:
 
-        CatcherResult(const LoadingDescription& d)
+        CatcherResult(const LoadingDescription& d)   // krazy:exclude=explicit
+
             : description(d),
               received(false)
         {

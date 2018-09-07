@@ -26,29 +26,33 @@
 
 // Qt includes
 
-#include <QByteArray>
 #include <QDomDocument>
 #include <QDomElement>
-#include <QFile>
+#include <QByteArray>
 #include <QFileInfo>
-#include <QImage>
+#include <QFile>
 #include <QMap>
+#include <QImage>
 #include <QStringList>
-#include <QProgressDialog>
-#include <QApplication>
-#include <QDesktopServices>
 #include <QMessageBox>
+#include <QApplication>
+#include <QProgressDialog>
+#include <QDesktopServices>
+#include <QNetworkAccessManager>
 
 // Local includes
 
 #include "dmetadata.h"
 #include "wstoolutils.h"
 #include "flickrmpform.h"
-#include "flickritem.h"
 #include "flickrwindow.h"
 #include "digikam_debug.h"
 #include "digikam_version.h"
 #include "previewloadthread.h"
+#include "o1.h"
+#include "o0globals.h"
+#include "o1requestor.h"
+#include "o0settingsstore.h"
 
 namespace Digikam
 {
@@ -175,10 +179,9 @@ FlickrTalker::~FlickrTalker()
         d->reply->abort();
     }
 
-    delete m_photoSetsList;
-
     WSToolUtils::removeTemporaryDir(d->serviceName.toLatin1().constData());
 
+    delete m_photoSetsList;
     delete d;
 }
 
@@ -463,6 +466,8 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
     if (!d->o1->linked())
         return false;
 
+    emit signalBusy(true);
+
     QUrl url(d->uploadUrl);
     QNetworkRequest netRequest(url);
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
@@ -577,11 +582,13 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
     if (tempFileInfo.size() > (getMaxAllowedFileSize().toLongLong()))
     {
         emit signalAddPhotoFailed(i18n("File Size exceeds maximum allowed file size."));
+        emit signalBusy(false);
         return false;
     }
 
     if (!form.addFile(QLatin1String("photo"), path))
     {
+        emit signalBusy(false);
         return false;
     }
 
@@ -594,7 +601,6 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
     d->state = FE_ADDPHOTO;
     d->buffer.resize(0);
 
-    emit signalBusy(true);
     return true;
 }
 

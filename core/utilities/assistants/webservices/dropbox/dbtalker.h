@@ -28,16 +28,7 @@
 #include <QList>
 #include <QPair>
 #include <QString>
-#include <QSettings>
 #include <QNetworkReply>
-#include <QNetworkAccessManager>
-
-// Local includes
-
-#include "dbitem.h"
-#include "o2.h"
-#include "o0globals.h"
-#include "dmetadata.h"
 
 namespace Digikam
 {

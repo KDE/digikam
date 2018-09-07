@@ -454,6 +454,8 @@ void ImportImageModel::addCamItemInfosSynchronously(const CamItemInfoList& infos
 
 void ImportImageModel::clearCamItemInfos()
 {
+    beginResetModel();
+
     d->infos.clear();
     d->idHash.clear();
     d->fileUrlHash.clear();
@@ -465,7 +467,6 @@ void ImportImageModel::clearCamItemInfos()
     d->refreshing                  = false;
     d->incrementalRefreshRequested = false;
 
-    beginResetModel();
     camItemInfosCleared();
     endResetModel();
 }
