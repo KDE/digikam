@@ -144,6 +144,8 @@ private:
 
 private:
 
+    Q_DISABLE_COPY(ImageLister)
+
     class Private;
     Private* const d;
 };
