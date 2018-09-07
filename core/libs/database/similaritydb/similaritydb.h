@@ -233,6 +233,8 @@ private:
 
 private:
 
+    Q_DISABLE_COPY(SimilarityDb)
+
     class Private;
     Private* const d;
 

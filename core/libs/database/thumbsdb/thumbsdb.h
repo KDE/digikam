@@ -143,6 +143,8 @@ private:
 
 private:
 
+    Q_DISABLE_COPY(ThumbsDb)
+
     class Private;
     Private* const d;
 
