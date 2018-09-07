@@ -69,6 +69,8 @@ private:
 
 private:
 
+    Q_DISABLE_COPY(ImgQSort)
+
     class Private;
     Private* const d;
 };

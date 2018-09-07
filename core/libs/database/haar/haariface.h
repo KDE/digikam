@@ -241,6 +241,8 @@ private:
 
 private:
 
+    Q_DISABLE_COPY(HaarIface)
+
     class Private;
     Private* const d;
 };
