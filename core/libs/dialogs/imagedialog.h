@@ -114,6 +114,8 @@ public:
 
 private:
 
+    Q_DISABLE_COPY(ImageDialog)
+
     class Private;
     Private* const d;
 };
