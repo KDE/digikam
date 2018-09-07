@@ -73,6 +73,8 @@ public:
 
 private:
 
+    FaceDbOperationGroup(const FaceDbOperationGroup&); // Disable
+
     class Private;
     Private* const d;
 };

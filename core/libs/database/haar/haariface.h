@@ -159,11 +159,13 @@ public:
     QMap< double,QMap< qlonglong,QList<qlonglong> > > findDuplicates(const QSet<qlonglong>& images2Scan, double requiredPercentage,
             double maximumPercentage, DuplicatesSearchRestrictions searchResultRestriction = DuplicatesSearchRestrictions::None, HaarProgressObserver* const observer = 0);
 
-    /** Calls findDuplicates with all images in the given album ids */
+    /** Calls findDuplicates with all images in the given album ids
+     */
     QMap< double,QMap< qlonglong,QList<qlonglong> > > findDuplicatesInAlbums(const QList<int>& albums2Scan, double requiredPercentage,
             double maximumPercentage, HaarProgressObserver* const observer = 0);
 
-    /** Calls findDuplicates with all images in the given album and tag ids */
+    /** Calls findDuplicates with all images in the given album and tag ids
+     */
     QMap< double,QMap< qlonglong,QList<qlonglong> > > findDuplicatesInAlbumsAndTags(const QList<int>& albums2Scan,
             const QList<int>& tags2Scan,
             AlbumTagRelation relation,
@@ -180,12 +182,11 @@ public:
                                  DuplicatesSearchRestrictions searchResultRestriction = DuplicatesSearchRestrictions::None,
                                  HaarProgressObserver* const observer = 0);
 
-    /** 
-     * This method rebuilds the given SAlbums by searching duplicates and replacing the SAlbums by the updated versions.
-     * @param imageIds The set of images to scan for duplicates.
-     * @param requiredPercentage The minimum similarity for duplicate recognition.
-     * @param maximumPercentage The maximum similarity for duplicate recognition.
-     * @param observer The progress observer.
+    /** This method rebuilds the given SAlbums by searching duplicates and replacing the SAlbums by the updated versions.
+     *  @param imageIds The set of images to scan for duplicates.
+     *  @param requiredPercentage The minimum similarity for duplicate recognition.
+     *  @param maximumPercentage The maximum similarity for duplicate recognition.
+     *  @param observer The progress observer.
      */
     void rebuildDuplicatesAlbums(const QList<qlonglong>& imageIds, double requiredPercentage, double maximumPercentage,
                                  DuplicatesSearchRestrictions searchResultRestriction = DuplicatesSearchRestrictions::None,
@@ -202,10 +203,9 @@ public:
     void setAlbumRootsToSearch(QList<int> albumRootIds);
     void setAlbumRootsToSearch(QSet<int> albumRootIds);
 
-    /**
-     * This method loads a QImage from the given filename.
-     * @param filename the name of the file (path)
-     * @return A QImage, non-null on success.
+    /** This method loads a QImage from the given filename.
+     *  @param filename the name of the file (path)
+     *  @return A QImage, non-null on success.
      */
     QImage loadQImage(const QString& filename);
 
@@ -213,9 +213,8 @@ private:
 
     bool   indexImage(qlonglong imageid);
 
-    /**
-     * This method writes the search results to the SearchXml structure.
-     * @param searchResults The results to write as XML.
+    /** This method writes the search results to the SearchXml structure.
+     *  @param searchResults The results to write as XML.
      */
     QMap<QString, QString> writeSAlbumQueries(QMap< double,QMap< qlonglong,QList<qlonglong> > > searchResults);
 
@@ -224,14 +223,13 @@ private:
             double requiredPercentage, double maximumPercentage, QList<int>& targetAlbums,
             DuplicatesSearchRestrictions searchResultRestriction, SketchType type);
 
-    /**
-     * This function generates the scores for all images in database.
-     * @param data The signature of the original image for score calculation.
-     * @param type The type of the sketch, e.g. scanned.
-     * @param searchResultRestriction restrictions to apply to the generated map, i.e. None (default), same album or different album.
-     * @param originalImageId the id of the original image to compare to other images. -1 is only used for sketch search.
-     * @param albumId The album which images must or must not belong to (depending on searchResultRestriction).
-     * @return The map of image ids and scores which fulfill the restrictions, if any.
+    /** This function generates the scores for all images in database.
+     *  @param data The signature of the original image for score calculation.
+     *  @param type The type of the sketch, e.g. scanned.
+     *  @param searchResultRestriction restrictions to apply to the generated map, i.e. None (default), same album or different album.
+     *  @param originalImageId the id of the original image to compare to other images. -1 is only used for sketch search.
+     *  @param albumId The album which images must or must not belong to (depending on searchResultRestriction).
+     *  @return The map of image ids and scores which fulfill the restrictions, if any.
      */
     QMap<qlonglong, double> searchDatabase(Haar::SignatureData* const data, SketchType type, QList<int>& targetAlbums,
                                            DuplicatesSearchRestrictions searchResultRestriction = None,
@@ -241,7 +239,7 @@ private:
 
 private:
 
-    Q_DISABLE_COPY(HaarIface)
+    HaarIface(const HaarIface&); // Disable
 
     class Private;
     Private* const d;

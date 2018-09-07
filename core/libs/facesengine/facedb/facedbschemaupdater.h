@@ -61,6 +61,8 @@ private:
 
 private:
 
+    FaceDbSchemaUpdater(const FaceDbSchemaUpdater&); // Disable
+
     class Private;
     Private* const d;
 };

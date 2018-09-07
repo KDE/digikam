@@ -85,6 +85,8 @@ public:
 
 private:
 
+    ImageLevels(const ImageLevels&); // Disable
+
     class Private;
     Private* const d;
 };

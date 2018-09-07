@@ -102,6 +102,8 @@ private:
 
 private:
 
+    LensFunIface(const LensFunIface&); // Disable
+
     class Private;
     Private* const d;
 };

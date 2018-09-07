@@ -93,6 +93,8 @@ public:
 
 private:
 
+    DNGWriter(const DNGWriter&); // Disable
+
     Private* const d;
 };
 

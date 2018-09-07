@@ -102,6 +102,8 @@ public:
 
 private:
 
+    FaceDb(const FaceDb&); // Disable
+
     class Private;
     Private* const d;
 };
