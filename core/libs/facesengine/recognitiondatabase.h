@@ -229,6 +229,10 @@ public:
 
 private:
 
+// FIXME : Reported as cppcheck warning if not implemented.
+//         Disabling copy constructor do not compile.
+//    RecognitionDatabase(const RecognitionDatabase&); // Disable
+
     Private* const d;
 };
 
