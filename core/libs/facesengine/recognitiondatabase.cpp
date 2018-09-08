@@ -165,8 +165,10 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
 /** Training where the train method takes a list of identities and images,
  *  and updating per-identity is non-inferior to updating all at once.
  */
-static void trainIdentityBatchLBPH(OpenCVLBPHFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
-                                   TrainingDataProvider* const data, const QString& trainingContext,
+static void trainIdentityBatchLBPH(OpenCVLBPHFaceRecognizer* const r,
+                                   const QList<Identity>& identitiesToBeTrained,
+                                   TrainingDataProvider* const data,
+                                   const QString& trainingContext,
                                    RecognitionDatabase::Private* const d)
 {
     foreach (const Identity& identity, identitiesToBeTrained)
@@ -177,7 +179,7 @@ static void trainIdentityBatchLBPH(OpenCVLBPHFaceRecognizer* const r, const QLis
         ImageListProvider* const imageList = data->newImages(identity);
         images.reserve(imageList->size());
 
-        for (; !imageList->atEnd(); imageList->proceed())
+        for (; !imageList->atEnd() ; imageList->proceed())
         {
             try
             {
@@ -214,8 +216,10 @@ static void trainIdentityBatchLBPH(OpenCVLBPHFaceRecognizer* const r, const QLis
     }
 }
 
-static void trainIdentityBatchEIGEN(OpenCVEIGENFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
-                                    TrainingDataProvider* const data, const QString& trainingContext,
+static void trainIdentityBatchEIGEN(OpenCVEIGENFaceRecognizer* const r,
+                                    const QList<Identity>& identitiesToBeTrained,
+                                    TrainingDataProvider* const data,
+                                    const QString& trainingContext,
                                     RecognitionDatabase::Private* const d)
 {
     foreach (const Identity& identity, identitiesToBeTrained)
@@ -227,7 +231,7 @@ static void trainIdentityBatchEIGEN(OpenCVEIGENFaceRecognizer* const r, const QL
         ImageListProvider* const imageList = data->newImages(identity);
         images.reserve(imageList->size());
 
-        for (; !imageList->atEnd(); imageList->proceed())
+        for (; !imageList->atEnd() ; imageList->proceed())
         {
             try
             {
@@ -340,7 +344,7 @@ Identity RecognitionDatabase::Private::findByAttributes(const QString& attribute
 {
     QMap<QString, QString>::const_iterator it = valueMap.find(attribute);
 
-    for (; it != valueMap.end() && it.key() == attribute; ++it)
+    for (; it != valueMap.end() && it.key() == attribute ; ++it)
     {
         foreach (const Identity& identity, identityCache)
         {
@@ -477,14 +481,18 @@ cv::Mat RecognitionDatabase::Private::preprocessingChainRGB(const QImage& image)
     }
 }
 
-void RecognitionDatabase::Private::train(OpenCVLBPHFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
-                                         TrainingDataProvider* const data, const QString& trainingContext)
+void RecognitionDatabase::Private::train(OpenCVLBPHFaceRecognizer* const r,
+                                         const QList<Identity>& identitiesToBeTrained,
+                                         TrainingDataProvider* const data,
+                                         const QString& trainingContext)
 {
     trainIdentityBatchLBPH(r, identitiesToBeTrained, data, trainingContext, this);
 }
 
-void RecognitionDatabase::Private::train(OpenCVEIGENFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
-                                         TrainingDataProvider* const data, const QString& trainingContext)
+void RecognitionDatabase::Private::train(OpenCVEIGENFaceRecognizer* const r,
+                                         const QList<Identity>& identitiesToBeTrained,
+                                         TrainingDataProvider* const data,
+                                         const QString& trainingContext)
 {
     qCDebug(DIGIKAM_FACESENGINE_LOG) << "Training using opencv eigenfaces";
     trainIdentityBatchEIGEN(r, identitiesToBeTrained, data, trainingContext, this);
@@ -634,7 +642,7 @@ Identity RecognitionDatabase::findIdentity(const QMap<QString, QString>& attribu
 
     QMap<QString, QString>::const_iterator it;
 
-    for (it = attributes.begin(); it != attributes.end(); ++it)
+    for (it = attributes.begin() ; it != attributes.end() ; ++it)
     {
         if (it.key() == QLatin1String("uuid")     ||
             it.key() == QLatin1String("fullName") ||
@@ -790,7 +798,7 @@ void RecognitionDatabase::setParameters(const QVariantMap& parameters)
 
     QMutexLocker lock(&d->mutex);
 
-    for (QVariantMap::const_iterator it = parameters.begin(); it != parameters.end(); ++it)
+    for (QVariantMap::const_iterator it = parameters.begin() ; it != parameters.end() ; ++it)
     {
         d->parameters.insert(it.key(), it.value());
     }
@@ -943,7 +951,8 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
     }
 }
 
-void RecognitionDatabase::train(const Identity& identityToBeTrained, const QImage& image,
+void RecognitionDatabase::train(const Identity& identityToBeTrained,
+                                const QImage& image,
                                 const QString& trainingContext)
 {
     SimpleTrainingDataProvider* const data = new SimpleTrainingDataProvider(identityToBeTrained,
@@ -952,7 +961,8 @@ void RecognitionDatabase::train(const Identity& identityToBeTrained, const QImag
     delete data;
 }
 
-void RecognitionDatabase::train(const Identity& identityToBeTrained, const QList<QImage>& images,
+void RecognitionDatabase::train(const Identity& identityToBeTrained,
+                                const QList<QImage>& images,
                                 const QString& trainingContext)
 {
     SimpleTrainingDataProvider* const data = new SimpleTrainingDataProvider(identityToBeTrained, images);
