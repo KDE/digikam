@@ -50,6 +50,32 @@ class Q_DECL_HIDDEN VideoThumbnailer::Private
 {
 public:
 
+    template <typename T>
+    class Q_DECL_HIDDEN Histogram
+    {
+
+    public:
+
+        explicit Histogram()
+        {
+            memset(r, 0, 255 * sizeof(T));
+            memset(g, 0, 255 * sizeof(T));
+            memset(b, 0, 255 * sizeof(T));
+        }
+
+        ~Histogram()
+        {
+        }
+
+    public:
+
+        T r[256];
+        T g[256];
+        T b[256];
+    };
+
+public:
+
     explicit Private()
       : SMART_FRAME_ATTEMPTS(25)
     {
@@ -60,6 +86,12 @@ public:
         maintainAspectRatio = true;
         smartFrameSelection = false;
     }
+
+    void generateHistogram(const VideoFrame& videoFrame, Histogram<int>& histogram);
+    int  getBestThumbnailIndex(std::vector<VideoFrame>& videoFrames,
+                               const std::vector<Histogram<int> >& histograms);
+
+public:
 
     int                       thumbnailSize;
     quint16                   seekPercentage;
@@ -173,16 +205,16 @@ void VideoThumbnailer::generateSmartThumbnail(MovieDecoder& movieDecoder,
                                               VideoFrame& videoFrame)
 {
     vector<VideoFrame> videoFrames(d->SMART_FRAME_ATTEMPTS);
-    vector<Histogram<int> > histograms(d->SMART_FRAME_ATTEMPTS);
+    vector<Private::Histogram<int> > histograms(d->SMART_FRAME_ATTEMPTS);
 
-    for (int i = 0 ; i < d->SMART_FRAME_ATTEMPTS ; i++)
+    for (int i = 0 ; i < d->SMART_FRAME_ATTEMPTS ; ++i)
     {
         movieDecoder.decodeVideoFrame();
         movieDecoder.getScaledVideoFrame(d->thumbnailSize, d->maintainAspectRatio, videoFrames[i]);
-        generateHistogram(videoFrames[i], histograms[i]);
+        d->generateHistogram(videoFrames[i], histograms[i]);
     }
 
-    int bestFrame = getBestThumbnailIndex(videoFrames, histograms);
+    int bestFrame = d->getBestThumbnailIndex(videoFrames, histograms);
 
     Q_ASSERT(bestFrame != -1);
 
@@ -231,10 +263,10 @@ void VideoThumbnailer::applyFilters(VideoFrame& videoFrame)
     }
 }
 
-void VideoThumbnailer::generateHistogram(const VideoFrame& videoFrame,
-                                         Histogram<int>& histogram)
+void VideoThumbnailer::Private::generateHistogram(const VideoFrame& videoFrame,
+                                                  Private::Histogram<int>& histogram)
 {
-    for (quint32 i = 0 ; i < videoFrame.height ; i++)
+    for (quint32 i = 0 ; i < videoFrame.height ; ++i)
     {
         int pixelIndex = i * videoFrame.lineSize;
 
@@ -247,15 +279,15 @@ void VideoThumbnailer::generateHistogram(const VideoFrame& videoFrame,
     }
 }
 
-int VideoThumbnailer::getBestThumbnailIndex(vector<VideoFrame>& videoFrames,
-                                            const vector<Histogram<int> >& histograms)
+int VideoThumbnailer::Private::getBestThumbnailIndex(vector<VideoFrame>& videoFrames,
+                                                     const vector<Private::Histogram<int> >& histograms)
 {
     Q_UNUSED(videoFrames);
-    Histogram<float> avgHistogram;
+    Private::Histogram<float> avgHistogram;
 
-    for (size_t i = 0 ; i < histograms.size() ; i++)
+    for (size_t i = 0 ; i < histograms.size() ; ++i)
     {
-        for (int j = 0 ; j < 255 ; j++)
+        for (int j = 0 ; j < 255 ; ++j)
         {
             avgHistogram.r[j] += static_cast<float>(histograms[i].r[j]) / histograms.size();
             avgHistogram.g[j] += static_cast<float>(histograms[i].g[j]) / histograms.size();
@@ -266,12 +298,12 @@ int VideoThumbnailer::getBestThumbnailIndex(vector<VideoFrame>& videoFrames,
     int bestFrame = -1;
     float minRMSE = FLT_MAX;
 
-    for (size_t i = 0 ; i < histograms.size() ; i++)
+    for (size_t i = 0 ; i < histograms.size() ; ++i)
     {
         // calculate root mean squared error
         float rmse = 0.0;
 
-        for (int j = 0 ; j < 255 ; j++)
+        for (int j = 0 ; j < 255 ; ++j)
         {
             float error = qFabs(avgHistogram.r[j] - histograms[i].r[j]) +
                           qFabs(avgHistogram.g[j] - histograms[i].g[j]) +

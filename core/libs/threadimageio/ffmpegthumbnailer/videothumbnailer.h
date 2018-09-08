@@ -69,38 +69,9 @@ public:
 
 private:
 
-    template <typename T>
-    class Q_DECL_HIDDEN Histogram
-    {
-
-    public:
-
-        explicit Histogram()
-        {
-            memset(r, 0, 255 * sizeof(T));
-            memset(g, 0, 255 * sizeof(T));
-            memset(b, 0, 255 * sizeof(T));
-        }
-
-        ~Histogram()
-        {
-        }
-
-    public:
-
-        T r[256];
-        T g[256];
-        T b[256];
-    };
-
-private:
-
     void generateThumbnail(const QString& videoFile, ImageWriter& imageWriter, QImage& image);
     void generateSmartThumbnail(MovieDecoder& movieDecoder, VideoFrame& videoFrame);
 
-    void generateHistogram(const VideoFrame& videoFrame, Histogram<int>& histogram);
-    int  getBestThumbnailIndex(std::vector<VideoFrame>& videoFrames,
-                               const std::vector<Histogram<int> >& histograms);
     void applyFilters(VideoFrame& frameData);
     int  timeToSeconds(const QString& time) const;
 
