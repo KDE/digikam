@@ -72,6 +72,8 @@ private:
 
 private:
 
+    RajceCommand(const RajceCommand&); // Disable
+
     class Private;
     Private* const d;
 };

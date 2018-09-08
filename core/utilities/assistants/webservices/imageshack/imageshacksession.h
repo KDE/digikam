@@ -62,6 +62,8 @@ public:
 
 private:
 
+    ImageShackSession(const ImageShackSession&); // Disable
+
     class Private;
     Private* const d;
 };

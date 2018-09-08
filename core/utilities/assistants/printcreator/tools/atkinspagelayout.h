@@ -79,6 +79,8 @@ private:
 
 private:
 
+    AtkinsPageLayout(const AtkinsPageLayout&); // Disable
+
     class Private;
     Private* const d;
 };

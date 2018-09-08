@@ -79,6 +79,8 @@ public:
 
 private:
 
+    Iface(const Iface&); // Disable
+
     class Private;
     Private* const d;
 

@@ -110,7 +110,7 @@ PTOType* PTOFile::getPTO()
     PTOType* const out = new PTOType(d->huginVersion);
 
     // Project data conversion
-    for (int c = 0; c < panoScriptGetPanoPrevCommentsCount(d->script); c++)
+    for (int c = 0 ; c < panoScriptGetPanoPrevCommentsCount(d->script) ; ++c)
     {
         out->project.previousComments << QString::fromLocal8Bit(panoScriptGetPanoComment(d->script, c));
     }
@@ -131,7 +131,7 @@ PTOType* PTOFile::getPTO()
         case PTOType::Project::FileFormat::TIFF_multilayer:
         {
             out->project.fileFormat.savePositions = panoScriptGetPanoOutputSaveCoordinates(d->script) != 0;
-            out->project.fileFormat.cropped = panoScriptGetPanoOutputCropped(d->script) != 0;
+            out->project.fileFormat.cropped       = panoScriptGetPanoOutputCropped(d->script) != 0;
             break;
         }
 
@@ -168,7 +168,7 @@ PTOType* PTOFile::getPTO()
     // NOTE: there should not be any unmatched parameters at this point, because the parsing would otherwise have failed
 
     // Stitcher
-    for (int c = 0; c < panoScriptGetOptimizePrevCommentsCount(d->script); c++)
+    for (int c = 0 ; c < panoScriptGetOptimizePrevCommentsCount(d->script) ; ++c)
     {
         out->stitcher.previousComments << QString::fromLocal8Bit(panoScriptGetOptimizeComment(d->script, c));
     }
@@ -182,14 +182,14 @@ PTOType* PTOFile::getPTO()
     // Images
     out->images.clear();
 
-    for (int i = 0; i < panoScriptGetImagesCount(d->script); i++)
+    for (int i = 0 ; i < panoScriptGetImagesCount(d->script) ; ++i)
     {
         out->images.insert(i, PTOType::Image());
         PTOType::Image& image = out->images.last();
 
         int tmpRef;
 
-        for (int c = 0; c < panoScriptGetImagePrevCommentsCount(d->script, i); c++)
+        for (int c = 0 ; c < panoScriptGetImagePrevCommentsCount(d->script, i) ; ++c)
         {
             image.previousComments << QString::fromLocal8Bit(panoScriptGetImageComment(d->script, i, c));
         }
@@ -209,10 +209,10 @@ PTOType* PTOFile::getPTO()
             image.fieldOfView.referenceId = tmpRef;
         }
 
-        image.yaw = panoScriptGetImageYaw(d->script, i);
+        image.yaw   = panoScriptGetImageYaw(d->script, i);
         image.pitch = panoScriptGetImagePitch(d->script, i);
-        image.roll = panoScriptGetImageRoll(d->script, i);
-        tmpRef = panoScriptGetImageCoefARef(d->script, i);
+        image.roll  = panoScriptGetImageRoll(d->script, i);
+        tmpRef      = panoScriptGetImageCoefARef(d->script, i);
 
         if (tmpRef == -1)
         {
@@ -485,20 +485,20 @@ PTOType* PTOFile::getPTO()
     }
 
     // Masks
-    for (int m = 0; m < panoScriptGetMaskCount(d->script); m++)
+    for (int m = 0 ; m < panoScriptGetMaskCount(d->script) ; ++m)
     {
         int image           = panoScriptGetMaskImage(d->script, m);
         out->images[image].masks.append(PTOType::Mask());
         PTOType::Mask& mask = out->images[image].masks.last();
 
-        for (int c = 0; c < panoScriptGetMaskPrevCommentCount(d->script, m); c++)
+        for (int c = 0 ; c < panoScriptGetMaskPrevCommentCount(d->script, m) ; ++c)
         {
             mask.previousComments << QString::fromLocal8Bit(panoScriptGetMaskComment(d->script, m, c));
         }
 
         mask.type = PTOType::Mask::MaskType(panoScriptGetMaskType(d->script, m));
 
-        for (int pt = 0; pt < panoScriptGetMaskPointCount(d->script, m); pt++)
+        for (int pt = 0 ; pt < panoScriptGetMaskPointCount(d->script, m) ; ++pt)
         {
             int x = panoScriptGetMaskPointX(d->script, m, pt);
             int y = panoScriptGetMaskPointY(d->script, m, pt);
@@ -507,13 +507,13 @@ PTOType* PTOFile::getPTO()
     }
 
     // Variable optimization
-    for (int v = 0; v < panoScriptGetVarsToOptimizeCount(d->script); v++)
+    for (int v = 0 ; v < panoScriptGetVarsToOptimizeCount(d->script) ; ++v)
     {
         int image                = panoScriptGetVarsToOptimizeImageId(d->script, v);
         out->images[image].optimizationParameters.append(PTOType::Optimization());
         PTOType::Optimization& o = out->images[image].optimizationParameters.last();
 
-        for (int c = 0; c < panoScriptGetVarsToOptimizePrevCommentCount(d->script, v); c++)
+        for (int c = 0 ; c < panoScriptGetVarsToOptimizePrevCommentCount(d->script, v) ; ++c)
         {
             o.previousComments << QString::fromLocal8Bit(panoScriptGetVarsToOptimizeComment(d->script, v, c));
         }
@@ -522,12 +522,12 @@ PTOType* PTOFile::getPTO()
     }
 
     // Control Points
-    for (int cp = 0; cp < panoScriptGetCtrlPointCount(d->script); cp++)
+    for (int cp = 0 ; cp < panoScriptGetCtrlPointCount(d->script) ; ++cp)
     {
         out->controlPoints.append(PTOType::ControlPoint());
         PTOType::ControlPoint& ctrlPoint = out->controlPoints.last();
 
-        for (int c = 0; c < panoScriptGetCtrlPointPrevCommentCount(d->script, cp); c++)
+        for (int c = 0 ; c < panoScriptGetCtrlPointPrevCommentCount(d->script, cp) ; ++c)
         {
             ctrlPoint.previousComments << QString::fromLocal8Bit(panoScriptGetCtrlPointComment(d->script, cp, c));
         }
@@ -541,7 +541,7 @@ PTOType* PTOFile::getPTO()
     }
 
     // Ending comments
-    for (int c = 0; c < panoScriptGetEndingCommentCount(d->script); c++)
+    for (int c = 0 ; c < panoScriptGetEndingCommentCount(d->script) ; ++c)
     {
         out->lastComments << QString::fromLocal8Bit(panoScriptGetEndingComment(d->script, c));
     }
