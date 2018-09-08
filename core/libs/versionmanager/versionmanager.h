@@ -83,6 +83,8 @@ public:
 
 private:
 
+    VersionManager(const VersionManager&); // Disable
+
     class VersionManagerPriv;
     VersionManagerPriv* const d;
 };
