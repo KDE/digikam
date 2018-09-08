@@ -110,6 +110,8 @@ public:
 
 private:
 
+    IOJobData(const IOJobData&); // Disable
+
     class Private;
     Private* const d;
 };
