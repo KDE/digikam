@@ -70,7 +70,7 @@ public:
 private:
 
     template <typename T>
-    class Histogram
+    class Q_DECL_HIDDEN Histogram
     {
 
     public:
@@ -105,6 +105,8 @@ private:
     int  timeToSeconds(const QString& time) const;
 
 private:
+
+    VideoThumbnailer(const VideoThumbnailer&); // Disable
 
     class Private;
     Private* const d;

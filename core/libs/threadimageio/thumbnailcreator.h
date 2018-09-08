@@ -215,6 +215,8 @@ private:
 
 private:
 
+    ThumbnailCreator(const ThumbnailCreator&); // Disable
+
     class Private;
     Private* const d;
 };

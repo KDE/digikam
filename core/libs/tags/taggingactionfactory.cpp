@@ -43,7 +43,7 @@ class Q_DECL_HIDDEN TaggingActionFactory::Private
 public:
 
     explicit Private()
-        : parentTagId(0), // 0 means toplevel tag
+        : parentTagId(0),               // 0 means toplevel tag
           nameMatchMode(MatchStartingWithFragment),
           constraintInterface(0),
           defaultIndex(-1),
@@ -58,8 +58,8 @@ public:
     NameMatchMode        nameMatchMode;
     ConstraintInterface* constraintInterface;
 
-    int                  defaultIndex; // use if valid is true
-    QList<TaggingAction> actions;      // use if valid is true
+    int                  defaultIndex;  // use if valid is true
+    QList<TaggingAction> actions;       // use if valid is true
     bool                 valid;
 
     TaggingAction        defaultAction; // independent from valid
@@ -68,7 +68,7 @@ public:
 
     void invalidate()
     {
-        valid = false;
+        valid         = false;
         actions.clear();
         defaultAction = TaggingAction();
     }
@@ -116,7 +116,7 @@ void TaggingActionFactory::setParentTag(int parentTagId)
     d->invalidate();
 }
 
-void TaggingActionFactory::setConstraintInterface(ConstraintInterface* iface)
+void TaggingActionFactory::setConstraintInterface(ConstraintInterface* const iface)
 {
     if (d->constraintInterface == iface)
     {
@@ -210,7 +210,7 @@ QList<TaggingAction> TaggingActionFactory::actions() const
         }
     }
 
-    foreach(int id, completionEntries)
+    foreach (int id, completionEntries)
     {
         if (d->constraintInterface && !d->constraintInterface->matches(id))
         {
@@ -255,7 +255,7 @@ QList<TaggingAction> TaggingActionFactory::actions() const
         //Case C
         //the entire text currently written by the user exists as a tag
 
-        foreach(const TaggingAction& assignAction, assignActions)
+        foreach (const TaggingAction& assignAction, assignActions)
         {
             actions << assignAction;
 
@@ -269,10 +269,10 @@ QList<TaggingAction> TaggingActionFactory::actions() const
         actions << newToplevel;
     }
 
-    Private* ncd      = const_cast<Private*>(d);
-    ncd->valid        = true;
-    ncd->actions      = actions;
-    ncd->defaultIndex = defaultActionIndex;
+    Private* const ncd = const_cast<Private*>(d);
+    ncd->valid         = true;
+    ncd->actions       = actions;
+    ncd->defaultIndex  = defaultActionIndex;
 
     return actions;
 }
@@ -362,6 +362,7 @@ QString TaggingActionFactory::suggestedUIString(const TaggingAction& action) con
     {
         QString tagName     = TagsCache::instance()->tagName(action.tagId());
         int tagsParentTagId = TagsCache::instance()->parentTag(action.tagId());
+
         // check if it is a toplevel tag or there is only one tag with this name - then simply the tag name is sufficient
         if (tagsParentTagId == 0 || TagsCache::instance()->tagsForName(tagName).size() == 1)
         {
@@ -399,7 +400,7 @@ TaggingAction TaggingActionFactory::defaultTaggingAction() const
         return TaggingAction();
     }
 
-    Private* ncd       = const_cast<Private*>(d);
+    Private* const ncd = const_cast<Private*>(d);
     ncd->defaultAction = defaultTaggingAction(d->fragment, d->parentTagId);
 
     return d->defaultAction;
@@ -445,7 +446,7 @@ TaggingAction TaggingActionFactory::defaultTaggingAction(const QString& tagName,
                 // sort lexically
                 QMap<QString, int> map;
 
-                foreach(int id, tagIds)
+                foreach (int id, tagIds)
                 {
                     map[TagsCache::instance()->tagPath(id, TagsCache::NoLeadingSlash)] = id;
                 }

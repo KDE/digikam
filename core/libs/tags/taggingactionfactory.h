@@ -41,7 +41,10 @@ public:
     {
     public:
 
-        virtual ~ConstraintInterface() {}
+        virtual ~ConstraintInterface()
+        {
+        }
+
         virtual bool matches(int tagId) = 0;
     };
 
@@ -56,7 +59,7 @@ public:
     };
 
 public:
-    
+
     explicit TaggingActionFactory();
     virtual ~TaggingActionFactory();
 
@@ -70,7 +73,7 @@ public:
 
     // Allows to filter the scope of suggested tags. Pass an implementation of ConstraintInterface (reamins in your ownership).
     // actions() will then only suggest to assign tags for which matches() is true
-    void setConstraintInterface(ConstraintInterface* iface);
+    void setConstraintInterface(ConstraintInterface* const iface);
     ConstraintInterface* constraintInterface() const;
 
     // Set the matching mode for the tag name
@@ -96,9 +99,10 @@ public:
 
 private:
 
+    TaggingActionFactory(const TaggingActionFactory&); // Disable
+
     class Private;
     Private* const d;
-    Q_DISABLE_COPY(TaggingActionFactory)
 };
 
 } // namespace Digikam

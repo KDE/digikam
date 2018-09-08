@@ -180,7 +180,7 @@ void MovieDecoder::seek(int timeInSeconds)
 
     int ret = av_seek_frame(d->pFormatContext, -1, timestamp, 0);
 
-    if (ret >= 0) 
+    if (ret >= 0)
     {
         avcodec_flush_buffers(d->pVideoCodecContext);
     }

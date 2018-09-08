@@ -51,7 +51,7 @@ class Q_DECL_HIDDEN VideoThumbnailer::Private
 public:
 
     explicit Private()
-      :  SMART_FRAME_ATTEMPTS(25)
+      : SMART_FRAME_ATTEMPTS(25)
     {
         thumbnailSize       = 256;
         seekPercentage      = 10;
