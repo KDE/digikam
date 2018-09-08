@@ -77,6 +77,8 @@ public:
 
 private:
 
+    DWItemDelegatePool(const DWItemDelegatePool&); // Disable
+
     friend class DWItemDelegate;
     friend class DWItemDelegatePrivate;
     DWItemDelegatePoolPrivate* const d;
@@ -92,6 +94,8 @@ public:
 
     explicit DWItemDelegatePoolPrivate(DWItemDelegate* const d);
 
+public:
+
     DWItemDelegate*                                delegate;
     DWItemDelegateEventListener*                   eventListener;
 
@@ -100,6 +104,10 @@ public:
     QHash<QWidget*, QPersistentModelIndex>         widgetInIndex;
 
     bool                                           clearing;
+
+private:
+
+    DWItemDelegatePoolPrivate(const DWItemDelegatePoolPrivate&); // Disable
 };
 
 } // namespace Digikam
