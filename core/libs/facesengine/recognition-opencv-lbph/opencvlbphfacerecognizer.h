@@ -71,6 +71,8 @@ public:
 
 private:
 
+    OpenCVLBPHFaceRecognizer(const OpenCVLBPHFaceRecognizer&); // Disable
+
     class Private;
     Private* const d;
 };

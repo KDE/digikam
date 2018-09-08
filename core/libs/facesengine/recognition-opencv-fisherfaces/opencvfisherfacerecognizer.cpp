@@ -55,7 +55,7 @@ public:
         if (!loaded)
         {
             m_fisher = FaceDbAccess().db()->fisherFaceModel();
-            loaded = true;
+            loaded   = true;
         }
 
         return m_fisher;

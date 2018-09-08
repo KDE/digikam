@@ -102,12 +102,10 @@ void FisherFaceModel::setLabels(cv::Mat new_labels)
     ptr()->setLabels(new_labels);
 }
 
-
 OpenCVMatData FisherFaceModel::matData(int index) const
 {
     return OpenCVMatData(ptr()->getSrc().at(index));
 }
-
 
 QList<FisherFaceMatMetadata> FisherFaceModel::matMetadata() const
 {
@@ -153,7 +151,7 @@ void FisherFaceModel::setMats(const QList<OpenCVMatData>& mats, const QList<Fish
     //ptr()->setSrc(currentSrcs);
     //ptr()->setLabels(currentLabels);
     //make sure that there exits traing data
-    if(currentSrcs.size()>0)
+    if (currentSrcs.size()>0)
     {
         ptr()->train(currentSrcs, currentLabels);
     }

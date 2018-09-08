@@ -71,6 +71,8 @@ public:
 
 private:
 
+    OpenCVFISHERFaceRecognizer(const OpenCVFISHERFaceRecognizer&); // Disable
+
     class Private;
     Private* const d;
 };
