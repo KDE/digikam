@@ -45,12 +45,12 @@ using namespace cv;
 namespace Digikam
 {
 
-void DNNFaceRecognizer::train(std::vector<std::vector<float>> _in_src, InputArray _inm_labels)
+void DNNFaceRecognizer::train(std::vector<std::vector<float> > _in_src, InputArray _inm_labels)
 {
     this->train(_in_src, _inm_labels, false);
 }
 
-void DNNFaceRecognizer::update(std::vector<std::vector<float>> _in_src, InputArray _inm_labels)
+void DNNFaceRecognizer::update(std::vector<std::vector<float> > _in_src, InputArray _inm_labels)
 {
     // got no data, just return
     if (_in_src.size() == 0)
@@ -63,13 +63,13 @@ void DNNFaceRecognizer::update(std::vector<std::vector<float>> _in_src, InputArr
 
 /** This train function is used to store the face vectors, not training
  */
-void DNNFaceRecognizer::train(std::vector<std::vector<float>> _in_src, InputArray _inm_labels, bool preserveData)
+void DNNFaceRecognizer::train(std::vector<std::vector<float> > _in_src, InputArray _inm_labels, bool preserveData)
 {
     // get the vector of matrices
-    std::vector<std::vector<float>> src = _in_src;
+    std::vector<std::vector<float> > src = _in_src;
 
     // get the label matrix
-    cv::Mat labels = _inm_labels.getMat();
+    cv::Mat labels                       = _inm_labels.getMat();
 
     // check if data is well- aligned
     if (labels.total() != src.size())
@@ -101,15 +101,16 @@ void DNNFaceRecognizer::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
     frontal_face_detector detector = get_frontal_face_detector();
     qCDebug(DIGIKAM_FACEDB_LOG) << "Start reading model file";
     QString path1 = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                              QLatin1String("digikam/facesengine/dlib_face_recognition_resnet_model_v1.dat")); 
+                                           QLatin1String("digikam/facesengine/dlib_face_recognition_resnet_model_v1.dat")); 
     deserialize(path1.toStdString()) >> net;
     qCDebug(DIGIKAM_FACEDB_LOG) << "End reading model file";
     qCDebug(DIGIKAM_FACEDB_LOG) << "Start reading shape file";
     redeye::ShapePredictor sp;
     QString path2 = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                              QLatin1String("digikam/facesengine/shapepredictor.dat"));
+                                           QLatin1String("digikam/facesengine/shapepredictor.dat"));
     QFile model(path2);
     std::cout << "read file\n";
+
     if (model.open(QIODevice::ReadOnly))
     {
         redeye::ShapePredictor* const temp = new redeye::ShapePredictor();
@@ -128,14 +129,16 @@ void DNNFaceRecognizer::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
     matrix<rgb_pixel> img;
     std::vector<matrix<rgb_pixel>> faces;
     assign_image(img, cv_image<rgb_pixel>(tmp_mat));
-    bool face_flag = false;
+    bool face_flag  = false;
+
     for (auto face : detector(img))
     {
         face_flag = true;
         cv::Mat gray;
 
-        int type = tmp_mat.type();
-        if(type == CV_8UC3 || type == CV_16UC3)
+        int type  = tmp_mat.type();
+
+        if (type == CV_8UC3 || type == CV_16UC3)
         {
             cv::cvtColor(tmp_mat, gray, CV_RGB2GRAY);  // 3 channels
         }
@@ -156,16 +159,20 @@ void DNNFaceRecognizer::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
         faces.push_back(move(face_chip));
         break;
     }
+
     if(!face_flag)
     {
         cv::resize(tmp_mat, tmp_mat, cv::Size(150, 150));
         assign_image(img, cv_image<rgb_pixel>(tmp_mat));
         faces.push_back(img);
     }
+
     std::vector<matrix<float,0,1>> face_descriptors = net(faces);
-    if(face_descriptors.size()!=0)
+
+    if (face_descriptors.size()!=0)
     {
         vecdata.clear();
+
         for(int i = 0; i < face_descriptors[0].nr(); i++)
         {
             for(int j = 0; j < face_descriptors[0].nc(); j++)
@@ -184,14 +191,14 @@ void DNNFaceRecognizer::predict(cv::InputArray _src, int& minClass, double& minD
 {
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "Predicting face image";
 
-    cv::Mat src        = _src.getMat();//254*254
+    cv::Mat src              = _src.getMat();//254*254
     std::vector<float> vecdata;
-    FaceDb *tmp_facedb = new FaceDb();
+    FaceDb* const tmp_facedb = new FaceDb();
     tmp_facedb->getFaceVector(src, vecdata);
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "vecdata: " << vecdata[vecdata.size()-2] << " " << vecdata[vecdata.size()-1];
 
-    minDist      = DBL_MAX;
-    minClass     = -1;
+    minDist  = DBL_MAX;
+    minClass = -1;
 
     // find nearest neighbor
 
@@ -199,7 +206,7 @@ void DNNFaceRecognizer::predict(cv::InputArray _src, int& minClass, double& minD
     {
         double dist = 0;
 
-        for(size_t i = 0 ; i < m_src[sampleIdx].size() ; i++)
+        for (size_t i = 0 ; i < m_src[sampleIdx].size() ; i++)
         {
             dist += (vecdata[i]-m_src[sampleIdx][i])*(vecdata[i]-m_src[sampleIdx][i]);
         }
