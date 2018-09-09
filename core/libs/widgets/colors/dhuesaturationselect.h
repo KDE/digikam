@@ -50,7 +50,7 @@ public:
      * Constructs a two-dimensional selector widget which
      * has a value range of [0..100] in both directions.
      */
-    explicit DPointSelect(QWidget* const parent=0);
+    explicit DPointSelect(QWidget* const parent);
     ~DPointSelect();
 
     /**
@@ -144,11 +144,12 @@ private:
 
 private:
 
+    DPointSelect(); // Disable default constructor.
+    Q_DISABLE_COPY(DPointSelect)
+
     class Private;
     friend class Private;
     Private* const d;
-
-    Q_DISABLE_COPY(DPointSelect)
 };
 
 // --------------------------------------------------------------------------------
@@ -250,11 +251,11 @@ protected:
 
 private:
 
+    Q_DISABLE_COPY(DHueSaturationSelector)
+
     class Private;
     friend class Private;
     Private* const d;
-
-    Q_DISABLE_COPY(DHueSaturationSelector)
 };
 
 } // namespace Digikam
