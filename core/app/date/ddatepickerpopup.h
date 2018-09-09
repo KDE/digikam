@@ -75,9 +75,9 @@ public:
      * @param date Initial date of datepicker-widget.
      * @param parent The object's parent.
      */
-    explicit DDatePickerPopup(Items items = DatePicker,
-                              const QDate& date = QDate::currentDate(),
-                              QWidget* const parent = 0);
+    DDatePickerPopup(Items items = DatePicker,
+                     const QDate& date = QDate::currentDate(),
+                     QWidget* const parent = 0);
     ~DDatePickerPopup();
 
     /**
