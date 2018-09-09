@@ -118,6 +118,8 @@ private Q_SLOTS:
 
 private:
 
+    RegionFrameItem(); // Disable default constructor.
+
     class Private;
     Private* const d;
 };

@@ -56,7 +56,7 @@ public:
 
 public:
 
-    explicit SinglePhotoPreviewLayout(QObject* const parent = 0);
+    explicit SinglePhotoPreviewLayout(QObject* const parent);
     ~SinglePhotoPreviewLayout();
 
     /** Set the graphics view, and associated scene, to operate on. */
@@ -103,6 +103,8 @@ protected:
     void updateLayout();
 
 private:
+
+    SinglePhotoPreviewLayout(); // Disable default constructor.
 
     class Private;
     Private* const d;
