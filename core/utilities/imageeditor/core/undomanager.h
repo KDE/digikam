@@ -86,6 +86,8 @@ private:
 
 private:
 
+    UndoManager(const UndoManager&); // Disable
+
     class Private;
     Private* const d;
 };

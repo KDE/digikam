@@ -228,6 +228,10 @@ public:
 protected:
 
     ThumbnailImageCatcher* catcher;
+
+private:
+
+    FaceImageRetriever(const FaceImageRetriever&); // Disable
 };
 
 // ----------------------------------------------------------------------------------------

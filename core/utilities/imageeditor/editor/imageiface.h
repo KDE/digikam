@@ -171,6 +171,8 @@ public:
 
 private:
 
+    ImageIface(const ImageIface&); // Disable
+
     class Private;
     Private* const d;
 };

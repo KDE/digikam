@@ -47,6 +47,8 @@ public:
 
 private:
 
+    PrintHelper(const PrintHelper&); // Disable
+
     class Private;
     Private* const d;
 };

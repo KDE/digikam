@@ -60,6 +60,8 @@ private:
 
 private:
 
+    PresentationLoader(const PresentationLoader&); // Disable
+
     class Private;
     Private* const d;
 };

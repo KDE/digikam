@@ -85,6 +85,8 @@ public:
 
 private:
 
+    UndoAction(const UndoAction&); // Disable
+
     class Private;
     Private* const d;
 };

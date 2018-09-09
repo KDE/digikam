@@ -137,7 +137,7 @@ void AbstractMarkerTiler::tileDeleteChildren(AbstractMarkerTiler::Tile* const ti
 
     QVector<Tile*> tileChildren = tile->takeChildren();
 
-    foreach(Tile* tilec, tileChildren)
+    foreach (Tile* tilec, tileChildren)
     {
         tileDelete(tilec);
     }
@@ -332,7 +332,7 @@ TileIndex AbstractMarkerTiler::NonEmptyIterator::nextIndex()
             // check limit on the left side:
             bool onLimit = true;
 
-            for (int i=0; onLimit && (i <= compareLevel); ++i)
+            for (int i = 0 ; onLimit && (i <= compareLevel) ; ++i)
             {
                 onLimit = d->currentIndex.indexLat(i) == d->startIndex.indexLat(i);
             }
@@ -345,7 +345,7 @@ TileIndex AbstractMarkerTiler::NonEmptyIterator::nextIndex()
             // check limit on the bottom side:
             onLimit = true;
 
-            for (int i=0; onLimit && (i <= compareLevel); ++i)
+            for (int i = 0 ; onLimit && (i <= compareLevel) ; ++i)
             {
                 onLimit = d->currentIndex.indexLon(i) == d->startIndex.indexLon(i);
             }
@@ -358,7 +358,7 @@ TileIndex AbstractMarkerTiler::NonEmptyIterator::nextIndex()
             // check limit on the right side:
             onLimit = true;
 
-            for (int i=0; onLimit && (i <= compareLevel); ++i)
+            for (int i = 0 ; onLimit && (i <= compareLevel) ; ++i)
             {
                 onLimit = d->currentIndex.indexLat(i) == d->endIndex.indexLat(i);
             }
@@ -371,7 +371,7 @@ TileIndex AbstractMarkerTiler::NonEmptyIterator::nextIndex()
             // check limit on the top side:
             onLimit = true;
 
-            for (int i=0; onLimit && (i <= compareLevel); ++i)
+            for (int i = 0 ; onLimit && (i <= compareLevel) ; ++i)
             {
                 onLimit = d->currentIndex.indexLon(i) == d->endIndex.indexLon(i);
             }
@@ -450,7 +450,7 @@ TileIndex AbstractMarkerTiler::NonEmptyIterator::nextIndex()
         // check limit on the left side:
         bool onLimit   = true;
 
-        for (int i=0; onLimit&&(i<=compareLevel); ++i)
+        for (int i = 0 ; onLimit&&(i <= compareLevel) ; ++i)
         {
             onLimit = d->currentIndex.indexLat(i)==d->startIndex.indexLat(i);
         }
@@ -463,7 +463,7 @@ TileIndex AbstractMarkerTiler::NonEmptyIterator::nextIndex()
         // check limit on the bottom side:
         onLimit = true;
 
-        for (int i=0; onLimit && (i <= compareLevel); ++i)
+        for (int i = 0 ; onLimit && (i <= compareLevel) ; ++i)
         {
             onLimit = d->currentIndex.indexLon(i)==d->startIndex.indexLon(i);
         }
@@ -476,7 +476,7 @@ TileIndex AbstractMarkerTiler::NonEmptyIterator::nextIndex()
         // check limit on the right side:
         onLimit = true;
 
-        for (int i=0; onLimit && (i <= compareLevel); ++i)
+        for (int i = 0 ; onLimit && (i <= compareLevel) ; ++i)
         {
             onLimit = d->currentIndex.indexLat(i) == d->endIndex.indexLat(i);
         }
@@ -489,7 +489,7 @@ TileIndex AbstractMarkerTiler::NonEmptyIterator::nextIndex()
         // check limit on the top side:
         onLimit = true;
 
-        for (int i=0; onLimit && (i <= compareLevel); ++i)
+        for (int i = 0 ; onLimit && (i <= compareLevel) ; ++i)
         {
             onLimit = d->currentIndex.indexLon(i) == d->endIndex.indexLon(i);
         }
@@ -551,7 +551,7 @@ AbstractMarkerTiler::Tile* AbstractMarkerTiler::Tile::getChild(const int linearI
 
 void AbstractMarkerTiler::Tile::addChild(const int linearIndex, Tile* const tilePointer)
 {
-    if ( (tilePointer==0) && children.isEmpty() )
+    if ((tilePointer==0) && children.isEmpty())
     {
         return;
     }

@@ -48,14 +48,16 @@ public:
     void      setIdentities(const QList<Identity>& identities);
     void      setSimilarityImageIds(const QList<qlonglong>& ids);
 
-    qlonglong getImageId() const;
-    int       getThumbnailId() const;
-    QString   getImagePath() const;
-    ImageInfo getImageInfo() const;
-    Identity  getIdentity() const;
+    qlonglong getImageId()           const;
+    int       getThumbnailId()       const;
+    QString   getImagePath()         const;
+    ImageInfo getImageInfo()         const;
+    Identity  getIdentity()          const;
     qlonglong getSimilarityImageId() const;
 
 private:
+
+    MaintenanceData(const MaintenanceData&); // Disable
 
     class Private;
     Private* const d;

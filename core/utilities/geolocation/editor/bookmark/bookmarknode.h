@@ -75,6 +75,8 @@ public:
 
 private:
 
+    BookmarkNode(const BookmarkNode&); // Disable
+
     class Private;
     Private* const d;
 };
