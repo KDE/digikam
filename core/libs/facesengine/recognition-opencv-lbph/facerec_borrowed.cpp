@@ -60,21 +60,21 @@ void olbp_(InputArray _src, OutputArray _dst)
 
     // calculate patterns
 
-    for (int i = 1 ; i < src.rows-1 ; i++)
+    for (int i = 1 ; i < src.rows-1 ; ++i)
     {
-        for (int j = 1 ; j < src.cols-1 ; j++)
+        for (int j = 1 ; j < src.cols-1 ; ++j)
         {
-            _Tp center         = src.at<_Tp>(i,j);
+            _Tp center         = src.at<_Tp>(i, j);
             unsigned char code = 0;
-            code |= (src.at<_Tp>(i-1,j-1) >= center) << 7;
-            code |= (src.at<_Tp>(i-1,j)   >= center) << 6;
-            code |= (src.at<_Tp>(i-1,j+1) >= center) << 5;
-            code |= (src.at<_Tp>(i,j+1)   >= center) << 4;
-            code |= (src.at<_Tp>(i+1,j+1) >= center) << 3;
-            code |= (src.at<_Tp>(i+1,j)   >= center) << 2;
-            code |= (src.at<_Tp>(i+1,j-1) >= center) << 1;
-            code |= (src.at<_Tp>(i,j-1)   >= center) << 0;
-            dst.at<unsigned char>(i-1,j-1) = code;
+            code |= (src.at<_Tp>(i-1, j-1) >= center) << 7;
+            code |= (src.at<_Tp>(i-1, j)   >= center) << 6;
+            code |= (src.at<_Tp>(i-1, j+1) >= center) << 5;
+            code |= (src.at<_Tp>(i, j+1)   >= center) << 4;
+            code |= (src.at<_Tp>(i+1, j+1) >= center) << 3;
+            code |= (src.at<_Tp>(i+1, j)   >= center) << 2;
+            code |= (src.at<_Tp>(i+1, j-1) >= center) << 1;
+            code |= (src.at<_Tp>(i, j-1)   >= center) << 0;
+            dst.at<unsigned char>(i-1, j-1) = code;
         }
     }
 }
@@ -94,7 +94,7 @@ inline void elbp_(InputArray _src, OutputArray _dst, int radius, int neighbors)
     // zero
     dst.setTo(0);
 
-    for (int n = 0 ; n < neighbors ; n++)
+    for (int n = 0 ; n < neighbors ; ++n)
     {
         // sample points
         float x = static_cast<float>(radius  * cos(2.0*CV_PI*n/static_cast<float>(neighbors)));
@@ -117,14 +117,14 @@ inline void elbp_(InputArray _src, OutputArray _dst, int radius, int neighbors)
         float w4 =      tx  *      ty;
 
         // iterate through your data
-        for (int i = radius ; i < src.rows-radius ; i++)
+        for (int i = radius ; i < src.rows-radius ; ++i)
         {
-            for (int j = radius ; j < src.cols-radius ; j++)
+            for (int j = radius ; j < src.cols-radius ; ++j)
             {
                 // calculate interpolated value
-                float t                         = static_cast<float>(w1*src.at<_Tp>(i+fy,j+fx) + w2*src.at<_Tp>(i+fy,j+cx) + w3*src.at<_Tp>(i+cy,j+fx) + w4*src.at<_Tp>(i+cy,j+cx));
+                float t                          = static_cast<float>(w1*src.at<_Tp>(i+fy, j+fx) + w2*src.at<_Tp>(i+fy, j+cx) + w3*src.at<_Tp>(i+cy, j+fx) + w4*src.at<_Tp>(i+cy,j+cx));
                 // floating point precision, so check some machine-dependent epsilon
-                dst.at<int>(i-radius,j-radius) += ((t > src.at<_Tp>(i,j)) || (qAbs(t-src.at<_Tp>(i,j)) < std::numeric_limits<float>::epsilon())) << n;
+                dst.at<int>(i-radius, j-radius) += ((t > src.at<_Tp>(i,j)) || (qAbs(t-src.at<_Tp>(i, j)) < std::numeric_limits<float>::epsilon())) << n;
             }
         }
     }
@@ -217,8 +217,8 @@ static Mat spatial_histogram(InputArray _src, int numPatterns, int grid_x, int g
     Mat src    = _src.getMat();
 
     // calculate LBP patch size
-    int width  = src.cols/grid_x;
-    int height = src.rows/grid_y;
+    int width  = src.cols / grid_x;
+    int height = src.rows / grid_y;
 
     // allocate memory for the spatial histogram
     Mat result = Mat::zeros(grid_x * grid_y, numPatterns, CV_32FC1);
@@ -232,16 +232,16 @@ static Mat spatial_histogram(InputArray _src, int numPatterns, int grid_x, int g
 
     // iterate through grid
 
-    for (int i = 0 ; i < grid_y ; i++)
+    for (int i = 0 ; i < grid_y ; ++i)
     {
-        for (int j = 0 ; j < grid_x ; j++)
+        for (int j = 0 ; j < grid_x ; ++j)
         {
-            Mat src_cell   = Mat(src, Range(i*height,(i+1)*height), Range(j*width,(j+1)*width));
+            Mat src_cell   = Mat(src, Range(i*height, (i+1)*height), Range(j*width, (j+1)*width));
             Mat cell_hist  = histc(src_cell, 0, (numPatterns-1), true);
 
             // copy to the result matrix
             Mat result_row = result.row(resultRowIdx);
-            cell_hist.reshape(1,1).convertTo(result_row, CV_32FC1);
+            cell_hist.reshape(1, 1).convertTo(result_row, CV_32FC1);
 
             // increase row count in result matrix
             resultRowIdx++;
@@ -428,7 +428,7 @@ void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictC
         {
             double sum = 0;
 
-            for (std::vector<int>::const_iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+            for (std::vector<int>::const_iterator it2 = it->second.begin() ; it2 != it->second.end() ; ++it2)
             {
                 sum += *it2;
             }
@@ -465,9 +465,9 @@ void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictC
         // map "label -> number of nearest neighbors"
         std::map<int, int> scoreMap;
 
-        for (std::multimap<double, int>::iterator it = distancesMap.begin();
-             it != distancesMap.end() && nearestElementCount != 0; 
-             ++it, nearestElementCount--)
+        for (std::multimap<double, int>::iterator it = distancesMap.begin() ;
+             it != distancesMap.end() && nearestElementCount != 0 ; 
+             ++it, --nearestElementCount)
         {
             scoreMap[it->second]++;
         }
