@@ -564,6 +564,11 @@ RecognitionDatabase::~RecognitionDatabase()
     delete d;
 }
 
+RecognitionDatabase::RecognitionDatabase(const RecognitionDatabase& other)
+    : d(other.d)
+{
+}
+
 QList<Identity> RecognitionDatabase::allIdentities() const
 {
     if (!d || !d->dbAvailable)
