@@ -119,7 +119,7 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
     QString temp;
     ImageIface iface;
 
-    d->gboxSettings      = new EditorToolSettings;
+    d->gboxSettings      = new EditorToolSettings(0);
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     QLabel* const label1 = new QLabel(i18n("New width:"));

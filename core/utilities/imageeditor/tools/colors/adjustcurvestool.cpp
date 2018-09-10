@@ -98,7 +98,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings = new EditorToolSettings(0);
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(Digikam::LRGBA);
     d->gboxSettings->setButtons(EditorToolSettings::Default|

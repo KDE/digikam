@@ -139,6 +139,8 @@ protected Q_SLOTS:
 
 private:
 
+    FaceGroup(); // Disable
+
     class Private;
     Private* const d;
 };

@@ -101,7 +101,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings = new EditorToolSettings(0);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|

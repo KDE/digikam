@@ -90,7 +90,7 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
     setToolIcon(QIcon::fromTheme(QLatin1String("healimage")));
     setToolHelp(QLatin1String("healingclonetool.anchor"));
 
-    d->gboxSettings      = new EditorToolSettings;
+    d->gboxSettings      = new EditorToolSettings(0);
     d->previewWidget     = new ImageBrushGuideWidget(0, true, ImageGuideWidget::PickColorMode, Qt::red);
 
     setToolView(d->previewWidget);

@@ -40,7 +40,7 @@ class InvisibleButtonGroup : public QWidget
 
 public:
 
-    explicit InvisibleButtonGroup(QWidget* const parent = 0);
+    explicit InvisibleButtonGroup(QWidget* const parent);
     virtual ~InvisibleButtonGroup();
 
     int selected() const;
@@ -56,6 +56,8 @@ Q_SIGNALS:
     void selectionChanged(int id);
 
 private:
+
+    InvisibleButtonGroup(); // Disable
 
     class Private;
     Private* const d;

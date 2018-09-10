@@ -110,7 +110,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings = new EditorToolSettings(0);
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     QGridLayout* const gridSettings = new QGridLayout(d->gboxSettings->plainPage());

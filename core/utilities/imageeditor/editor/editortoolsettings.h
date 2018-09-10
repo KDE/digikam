@@ -71,7 +71,7 @@ public:
 
 public:
 
-    explicit EditorToolSettings(QWidget* const parent = 0);
+    explicit EditorToolSettings(QWidget* const parent);
     virtual ~EditorToolSettings();
 
     void setButtons(Buttons buttonMask);
@@ -114,6 +114,8 @@ Q_SIGNALS:
     void signalScaleChanged();
 
 private:
+
+    EditorToolSettings(); // Disable
 
     class Private;
     Private* const d;
