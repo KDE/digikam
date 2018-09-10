@@ -93,6 +93,13 @@ class Q_DECL_HIDDEN QueryRevisionTest : public QObject
 {
     Q_OBJECT
 
+public:
+
+    QueryRevisionTest()
+    {
+        revisionCount = 0;
+    }
+
 public Q_SLOTS:
 
     void revisionHandle(const QList<Revision>& revision)

@@ -45,6 +45,14 @@ class Q_DECL_HIDDEN LoginTest : public QObject
 {
     Q_OBJECT
 
+public:
+
+    LoginTest()
+    {
+        loginCount = 0;
+        m_server  = 0;
+    }
+
 public Q_SLOTS:
 
     void loginHandle(KJob* job)

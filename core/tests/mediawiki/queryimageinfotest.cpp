@@ -41,6 +41,13 @@ class Q_DECL_HIDDEN QueryImageinfoTest : public QObject
 {
     Q_OBJECT
 
+public:
+
+    QueryImageinfoTest()
+    {
+        requestWithMissingTitleHasBeenSent = false;
+    }
+
 public Q_SLOTS:
 
     void resultHandle(const QList<Imageinfo>& imageinfos)
@@ -201,7 +208,7 @@ private Q_SLOTS:
 private:
 
     QList<QList<Imageinfo> > imageinfosReceived;
-    bool requestWithMissingTitleHasBeenSent;
+    bool                     requestWithMissingTitleHasBeenSent;
 };
 
 QTEST_MAIN(QueryImageinfoTest)

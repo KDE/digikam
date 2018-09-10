@@ -45,6 +45,15 @@ class Q_DECL_HIDDEN LogoutTest : public QObject
 {
     Q_OBJECT
 
+public:
+
+    LogoutTest()
+    {
+        logoutCount = 0;
+        m_mediaWiki = 0;
+        m_server    = 0;
+    }
+
 public Q_SLOTS:
 
     void logoutHandle(KJob* job)
