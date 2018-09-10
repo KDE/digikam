@@ -114,7 +114,7 @@ void LightTableWindow::slotPrintCreator()
 
 void LightTableWindow::slotPresentation()
 {
-    PresentationMngr* const mngr = new PresentationMngr(this);
+    QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
 
     foreach(const ImageInfo& info, d->thumbView->allImageInfos())
     {
@@ -167,7 +167,7 @@ void LightTableWindow::slotSlideShowManualFrom(const ImageInfo& info)
 
 void LightTableWindow::slotSlideShowBuilderComplete(const SlideShowSettings& settings)
 {
-    SlideShow* const slide = new SlideShow(settings);
+    QPointer<Digikam::SlideShow> slide = new SlideShow(settings);
     TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
 
     d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode, QString());

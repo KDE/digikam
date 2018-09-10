@@ -2168,7 +2168,7 @@ void DigikamView::slotSlideShowManualFrom(const ImageInfo& info)
 
 void DigikamView::presentation()
 {
-    PresentationMngr* const mngr = new PresentationMngr(this);
+    QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
 
     foreach(const ImageInfo& info, selectedInfoList(ApplicationSettings::Slideshow))
     {
@@ -2191,7 +2191,7 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
 
 void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings)
 {
-    SlideShow* const slide = new SlideShow(settings);
+    QPointer<Digikam::SlideShow> slide = new SlideShow(settings);
     TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
 
     if (settings.imageUrl.isValid())
