@@ -39,6 +39,10 @@ class SearchTextBarTest : public QObject
 {
     Q_OBJECT
 
+public:
+
+    SearchTextBarTest();
+
 private Q_SLOTS:
 
     void testHighlighting();

@@ -215,7 +215,7 @@ public:
 
 public:
 
-    explicit DImagesList(QWidget* const parent = 0, int iconSize = -1);
+    explicit DImagesList(QWidget* const parent, int iconSize = -1);
     virtual ~DImagesList();
 
     void                setAllowRAW(bool allow);
@@ -292,6 +292,8 @@ private:
     void setIconSize(int size);
 
 private:
+
+    DImagesList(); // Disable default constructor.
 
     class Private;
     Private* const d;
