@@ -45,7 +45,7 @@ namespace Digikam
 Convert2TIFF::Convert2TIFF(QObject* const parent)
     : BatchTool(QLatin1String("Convert2TIFF"), ConvertTool, parent)
 {
-    m_settings = 0;
+    m_changeSettings = true;
 
     setToolTitle(i18n("Convert To TIFF"));
     setToolDescription(i18n("Convert images to TIFF format."));
@@ -58,11 +58,12 @@ Convert2TIFF::~Convert2TIFF()
 
 void Convert2TIFF::registerSettingsWidget()
 {
-    m_settings       = new TIFFSettings();
-    m_settingsWidget = m_settings;
+    TIFFSettings* const TIFBox = new TIFFSettings();
 
-    connect(m_settings, SIGNAL(signalSettingsChanged()),
+    connect(TIFBox, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
+
+    m_settingsWidget = TIFBox;
 
     BatchTool::registerSettingsWidget();
 }
@@ -79,14 +80,31 @@ BatchToolSettings Convert2TIFF::defaultSettings()
 
 void Convert2TIFF::slotAssignSettings2Widget()
 {
-    m_settings->setCompression(settings()[QLatin1String("compress")].toBool());
+    m_changeSettings = false;
+
+    TIFFSettings* const TIFBox = dynamic_cast<TIFFSettings*>(m_settingsWidget);
+
+    if (TIFBox)
+    {
+        TIFBox->setCompression(settings()[QLatin1String("compress")].toBool());
+    }
+
+    m_changeSettings = true;
 }
 
 void Convert2TIFF::slotSettingsChanged()
 {
-    BatchToolSettings settings;
-    settings.insert(QLatin1String("compress"), m_settings->getCompression());
-    BatchTool::slotSettingsChanged(settings);
+    if (m_changeSettings)
+    {
+        TIFFSettings* const TIFBox = dynamic_cast<TIFFSettings*>(m_settingsWidget);
+
+        if (TIFBox)
+        {
+            BatchToolSettings settings;
+            settings.insert(QLatin1String("compress"), TIFBox->getCompression());
+            BatchTool::slotSettingsChanged(settings);
+        }
+    }
 }
 
 QString Convert2TIFF::outputSuffix() const

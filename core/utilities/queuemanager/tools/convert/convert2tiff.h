@@ -31,8 +31,6 @@
 namespace Digikam
 {
 
-class TIFFSettings;
-
 class Convert2TIFF : public BatchTool
 {
     Q_OBJECT
@@ -60,7 +58,7 @@ private:
 
 private:
 
-    TIFFSettings* m_settings;
+    bool m_changeSettings;
 };
 
 } // namespace Digikam
