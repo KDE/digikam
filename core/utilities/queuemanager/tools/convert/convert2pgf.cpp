@@ -45,7 +45,6 @@ namespace Digikam
 Convert2PGF::Convert2PGF(QObject* const parent)
     : BatchTool(QLatin1String("Convert2PGF"), ConvertTool, parent)
 {
-    m_settings = 0;
     m_changeSettings = true;
 
     setToolTitle(i18n("Convert To PGF"));
@@ -59,11 +58,12 @@ Convert2PGF::~Convert2PGF()
 
 void Convert2PGF::registerSettingsWidget()
 {
-    m_settings       = new PGFSettings();
-    m_settingsWidget = m_settings;
+    PGFSettings* const PGFBox = new PGFSettings();
 
-    connect(m_settings, SIGNAL(signalSettingsChanged()),
+    connect(PGFBox, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
+
+    m_settingsWidget          = PGFBox;
 
     BatchTool::registerSettingsWidget();
 }
@@ -83,8 +83,15 @@ BatchToolSettings Convert2PGF::defaultSettings()
 void Convert2PGF::slotAssignSettings2Widget()
 {
     m_changeSettings = false;
-    m_settings->setCompressionValue(settings()[QLatin1String("quality")].toInt());
-    m_settings->setLossLessCompression(settings()[QLatin1String("lossless")].toBool());
+
+    PGFSettings* const PGFBox = dynamic_cast<PGFSettings*>(m_settingsWidget);
+
+    if (PGFBox)
+    {
+        PGFBox->setCompressionValue(settings()[QLatin1String("quality")].toInt());
+        PGFBox->setLossLessCompression(settings()[QLatin1String("lossless")].toBool());
+    }
+
     m_changeSettings = true;
 }
 
@@ -92,10 +99,15 @@ void Convert2PGF::slotSettingsChanged()
 {
     if (m_changeSettings)
     {
-        BatchToolSettings settings;
-        settings.insert(QLatin1String("quality"),  m_settings->getCompressionValue());
-        settings.insert(QLatin1String("lossless"), m_settings->getLossLessCompression());
-        BatchTool::slotSettingsChanged(settings);
+        PGFSettings* const PGFBox = dynamic_cast<PGFSettings*>(m_settingsWidget);
+
+        if (PGFBox)
+        {
+            BatchToolSettings settings;
+            settings.insert(QLatin1String("quality"),  PGFBox->getCompressionValue());
+            settings.insert(QLatin1String("lossless"), PGFBox->getLossLessCompression());
+            BatchTool::slotSettingsChanged(settings);
+        }
     }
 }
 

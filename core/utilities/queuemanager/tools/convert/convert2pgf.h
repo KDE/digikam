@@ -31,8 +31,6 @@
 namespace Digikam
 {
 
-class PGFSettings;
-
 class Convert2PGF : public BatchTool
 {
     Q_OBJECT
@@ -60,8 +58,7 @@ private:
 
 private:
 
-    PGFSettings* m_settings;
-    bool         m_changeSettings;
+    bool m_changeSettings;
 };
 
 } // namespace Digikam
