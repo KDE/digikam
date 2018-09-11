@@ -66,17 +66,20 @@ private:
 // -------------------------------------------------------------------------------------------
 
 ImageCopyright::ImageCopyright(qlonglong imageid)
-    : m_id(imageid), m_cache(0)
+    : m_id(imageid),
+      m_cache(0)
 {
 }
 
 ImageCopyright::ImageCopyright()
-    : m_id(0), m_cache(0)
+    : m_id(0),
+      m_cache(0)
 {
 }
 
 ImageCopyright::ImageCopyright(const ImageCopyright& other)
-    : m_id(other.m_id), m_cache(0)
+    : m_id(other.m_id),
+      m_cache(0)
 {
     // the cache is only short-lived, to keep complexity low
 }
@@ -113,7 +116,7 @@ void ImageCopyright::replaceFrom(const ImageCopyright& source)
 
     QList<CopyrightInfo> infos = access.db()->getImageCopyright(source.m_id, QString());
 
-    foreach(const CopyrightInfo& info, infos)
+    foreach (const CopyrightInfo& info, infos)
     {
         access.db()->setImageCopyrightProperty(m_id, info.property, info.value,
                                                info.extraValue, CoreDB::PropertyNoConstraint);
@@ -125,7 +128,7 @@ QStringList ImageCopyright::creator() const
     QList<CopyrightInfo> infos = copyrightInfos(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
     QStringList list;
 
-    foreach(const CopyrightInfo& info, infos)
+    foreach (const CopyrightInfo& info, infos)
     {
         list << info.value;
     }
@@ -147,7 +150,7 @@ void ImageCopyright::setCreator(const QString& creator, ReplaceMode mode)
     }
 
     CoreDbAccess().db()->setImageCopyrightProperty(m_id, ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator),
-                                                     creator, QString(), uniqueness);
+                                                   creator, QString(), uniqueness);
 }
 
 void ImageCopyright::removeCreators()
@@ -266,6 +269,7 @@ IptcCoreContactInfo ImageCopyright::contactInfo()
     info.email         = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoEmail));
     info.phone         = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPhone));
     info.webUrl        = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl));
+
     return info;
 }
 
@@ -309,7 +313,7 @@ void ImageCopyright::fillTemplate(Template& t)
 
 void ImageCopyright::setFromTemplate(const Template& t)
 {
-    foreach(const QString& author, t.authors()) // krazy:exclude=foreach
+    foreach (const QString& author, t.authors()) // krazy:exclude=foreach
     {
         setAuthor(author, ImageCopyright::AddEntryToExisting);
     }
@@ -356,7 +360,7 @@ CopyrightInfo ImageCopyright::copyrightInfo(const QString& property) const
 {
     if (m_cache)
     {
-        foreach(const CopyrightInfo& info, m_cache->infos)
+        foreach (const CopyrightInfo& info, m_cache->infos)
         {
             if (info.property == property)
             {
@@ -383,7 +387,7 @@ QList<CopyrightInfo> ImageCopyright::copyrightInfos(const QString& property) con
     {
         QList<CopyrightInfo> infos;
 
-        foreach(const CopyrightInfo& info, m_cache->infos)
+        foreach (const CopyrightInfo& info, m_cache->infos)
         {
             if (info.property == property)
             {
@@ -429,7 +433,7 @@ MetaEngine::AltLangMap ImageCopyright::readLanguageProperties(const QString& pro
     MetaEngine::AltLangMap map;
     QList<CopyrightInfo> infos = copyrightInfos(property);
 
-    foreach(const CopyrightInfo& info, infos)
+    foreach (const CopyrightInfo& info, infos)
     {
         map[info.extraValue] = info.value;
     }
@@ -531,7 +535,7 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
 
     QLatin1String defaultCode("x-default");
 
-    for (int i=0; i<infos.size(); ++i)
+    for (int i = 0 ; i < infos.size() ; ++i)
     {
         const CopyrightInfo& info = infos.at(i);
 
