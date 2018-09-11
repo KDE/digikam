@@ -31,8 +31,6 @@
 namespace Digikam
 {
 
-class JP2KSettings;
-
 class Convert2JP2 : public BatchTool
 {
     Q_OBJECT
@@ -60,8 +58,7 @@ private:
 
 private:
 
-    JP2KSettings* m_settings;
-    bool          m_changeSettings;
+    bool m_changeSettings;
 };
 
 } // namespace Digikam

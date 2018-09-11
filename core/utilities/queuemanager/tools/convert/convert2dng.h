@@ -33,8 +33,6 @@
 namespace Digikam
 {
 
-class DNGSettings;
-
 class Convert2DNG : public BatchTool
 {
     Q_OBJECT
@@ -63,9 +61,8 @@ private:
 
 private:
 
-    DNGSettings* m_settings;
-    DNGWriter    m_dngProcessor;
-    bool         m_changeSettings;
+    DNGWriter m_dngProcessor;
+    bool      m_changeSettings;
 };
 
 } // namespace Digikam
