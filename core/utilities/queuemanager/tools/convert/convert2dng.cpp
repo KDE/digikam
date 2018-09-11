@@ -38,7 +38,6 @@ namespace Digikam
 Convert2DNG::Convert2DNG(QObject* const parent)
     : BatchTool(QLatin1String("Convert2DNG"), ConvertTool, parent)
 {
-    m_settings       = 0;
     m_changeSettings = true;
 
     setToolTitle(i18n("Convert RAW To DNG"));
@@ -52,11 +51,12 @@ Convert2DNG::~Convert2DNG()
 
 void Convert2DNG::registerSettingsWidget()
 {
-    m_settings       = new DNGSettings;
-    m_settingsWidget = m_settings;
+    DNGSettings* const DNGBox = new DNGSettings;
 
-    connect(m_settings, SIGNAL(signalSettingsChanged()),
+    connect(DNGBox, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
+
+    m_settingsWidget = DNGBox;
 
     BatchTool::registerSettingsWidget();
 }
@@ -67,16 +67,23 @@ BatchToolSettings Convert2DNG::defaultSettings()
     settings.insert(QLatin1String("CompressLossLess"),      true);
     settings.insert(QLatin1String("PreviewMode"),           DNGWriter::MEDIUM);
     settings.insert(QLatin1String("BackupOriginalRawFile"), false);
+
     return settings;
 }
 
 void Convert2DNG::slotAssignSettings2Widget()
 {
-    m_changeSettings = false;
-    m_settings->setCompressLossLess(settings()[QLatin1String("CompressLossLess")].toBool());
-    m_settings->setPreviewMode(settings()[QLatin1String("PreviewMode")].toInt());
-    m_settings->setBackupOriginalRawFile(settings()[QLatin1String("BackupOriginalRawFile")].toBool());
-    m_changeSettings = true;
+    m_changeSettings          = false;
+    DNGSettings* const DNGBox = dynamic_cast<DNGSettings*>(m_settingsWidget);
+
+    if (DNGBox)
+    {
+        DNGBox->setCompressLossLess(settings()[QLatin1String("CompressLossLess")].toBool());
+        DNGBox->setPreviewMode(settings()[QLatin1String("PreviewMode")].toInt());
+        DNGBox->setBackupOriginalRawFile(settings()[QLatin1String("BackupOriginalRawFile")].toBool());
+    }
+
+    m_changeSettings          = true;
 }
 
 void Convert2DNG::slotSettingsChanged()
@@ -84,10 +91,15 @@ void Convert2DNG::slotSettingsChanged()
     if (m_changeSettings)
     {
         BatchToolSettings settings;
-        settings.insert(QLatin1String("CompressLossLess"),      m_settings->compressLossLess());
-        settings.insert(QLatin1String("PreviewMode"),           m_settings->previewMode());
-        settings.insert(QLatin1String("BackupOriginalRawFile"), m_settings->backupOriginalRawFile());
-        BatchTool::slotSettingsChanged(settings);
+        DNGSettings* const DNGBox = dynamic_cast<DNGSettings*>(m_settingsWidget);
+
+        if (DNGBox)
+        {
+            settings.insert(QLatin1String("CompressLossLess"),      DNGBox->compressLossLess());
+            settings.insert(QLatin1String("PreviewMode"),           DNGBox->previewMode());
+            settings.insert(QLatin1String("BackupOriginalRawFile"), DNGBox->backupOriginalRawFile());
+            BatchTool::slotSettingsChanged(settings);
+        }
     }
 }
 

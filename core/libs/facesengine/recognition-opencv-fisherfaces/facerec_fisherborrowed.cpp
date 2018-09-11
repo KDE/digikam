@@ -247,8 +247,7 @@ void FisherFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predic
     for (size_t sampleIdx = 0 ; sampleIdx < m_projections.size() ; sampleIdx++)
     {
         double dist = norm(m_projections[sampleIdx], q, NORM_L2);
-
-        int label = m_labels.at<int>((int) sampleIdx);
+        int label   = m_labels.at<int>((int) sampleIdx);
 
         if (!collector->collect(label, dist))
         {

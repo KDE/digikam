@@ -272,7 +272,9 @@ protected:
     void checkCreationDateFromMetadata(QVariant& dateFromMetadata)   const;
     bool checkRatingFromMetadata(const QVariant& ratingFromMetadata) const;
 
-protected:
+private:
+
+    ImageScanner(const ImageScanner&); // Disable
 
     class Private;
     Private* const d;

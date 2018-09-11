@@ -69,6 +69,8 @@ public:
 
 private:
 
+    EffectMngr(const EffectMngr&); // Disable
+
     class Private;
     Private* const d;
 };

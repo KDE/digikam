@@ -48,6 +48,8 @@ public:
 
 private:
 
+    FlandmarkAligner(const FlandmarkAligner&); // Disable
+
     class Private;
     Private* const d;
 };

@@ -62,6 +62,8 @@ private:
 
 private:
 
+    PiwigoSession(const PiwigoSession&); // Disable
+
     class Private;
     Private* const d;
 };

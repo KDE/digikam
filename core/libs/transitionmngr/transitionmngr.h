@@ -89,6 +89,8 @@ public:
 
 private:
 
+    TransitionMngr(const TransitionMngr&); // Disable
+
     class Private;
     Private* const d;
 };

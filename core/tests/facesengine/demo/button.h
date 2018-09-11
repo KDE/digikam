@@ -35,7 +35,8 @@
 namespace Digikam
 {
 
-class Button : public QObject, public QGraphicsItem
+class Button : public QObject,
+               public QGraphicsItem
 {
     Q_OBJECT
     Q_INTERFACES(QGraphicsItem)

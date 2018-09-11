@@ -54,6 +54,14 @@ class Q_DECL_HIDDEN QueryInfoTest : public QObject
 {
     Q_OBJECT
 
+public:
+
+    QueryInfoTest()
+    {
+        queryInfoCount = 0;
+        m_mediaWiki    = 0;
+    }
+
 public Q_SLOTS:
 
     void queryInfoHandlePages(const Page& page)

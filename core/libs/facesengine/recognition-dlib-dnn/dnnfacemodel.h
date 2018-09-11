@@ -77,18 +77,18 @@ public:
     const DNNFaceRecognizer* ptr() const;
 
     //Getter function
-    std::vector<std::vector<float>> getSrc() const;
-    void setSrc(std::vector<std::vector<float>> new_src);
+    std::vector<std::vector<float> > getSrc() const;
+    void setSrc(std::vector<std::vector<float> > new_src);
 
     cv::Mat getLabels() const;
     void setLabels(cv::Mat new_labels);
 
-    QList<DNNFaceVecMetadata>   matMetadata() const;
-    //OpenCVMatData               matData(int index) const;
+    QList<DNNFaceVecMetadata> matMetadata() const;
+    //OpenCVMatData             matData(int index) const;
 
     void setWrittenToDatabase(int index, int databaseId);
 
-    void setMats(const QList<std::vector<float>>& mats, const QList<DNNFaceVecMetadata>& matMetadata);
+    void setMats(const QList<std::vector<float> >& mats, const QList<DNNFaceVecMetadata>& matMetadata);
 
 //public:
 

@@ -54,7 +54,7 @@ void detectFaces(const QString& file)
 
     qDebug() << "Coordinates of detected faces : ";
 
-    foreach(const QRectF& r, faces)
+    foreach (const QRectF& r, faces)
     {
         qDebug() << r;
     }
@@ -66,7 +66,7 @@ void detectFaces(const QString& file)
     fullImage->setPixmap(QPixmap::fromImage(img.scaled(250, 250, Qt::KeepAspectRatio)));
     layout->addWidget(fullImage);
 
-    foreach(const QRectF& rr, faces)
+    foreach (const QRectF& rr, faces)
     {
         QLabel* const label = new QLabel;
         label->setScaledContents(false);
@@ -90,7 +90,7 @@ int main(int argc, char** argv)
 
     QApplication app(argc, argv);
 
-    for (int i = 1 ; i < argc ; i++)
+    for (int i = 1 ; i < argc ; ++i)
     {
         detectFaces(QString::fromLocal8Bit(argv[i]));
     }

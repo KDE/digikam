@@ -144,6 +144,8 @@ public:
 
 private:
 
+    RandomNumberGenerator(const RandomNumberGenerator&); // Disable
+
     class Private;
     Private* const d;
 };

@@ -38,6 +38,11 @@ using namespace QTest;
 
 QTEST_MAIN(SearchTextBarTest)
 
+SearchTextBarTest::SearchTextBarTest()
+{
+    callCount = 0;
+}
+
 void SearchTextBarTest::testHighlighting()
 {
     SearchTextBar textBar(0, QLatin1String("test"));
@@ -103,4 +108,3 @@ void SearchTextBarTest::newSearchTextSettings(const SearchTextSettings& settings
     lastSearchTextSettings = settings;
     callCount++;
 }
-

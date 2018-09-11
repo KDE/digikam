@@ -61,10 +61,10 @@ public:
     {
     public:
 
-        TileIndex::List   tileIndicesList;
-        QVariant          representativeIndex;
-        GeoGroupState        groupSelectionState;
-        GeoMouseModes        currentMouseMode;
+        TileIndex::List tileIndicesList;
+        QVariant        representativeIndex;
+        GeoGroupState   groupSelectionState;
+        GeoMouseModes   currentMouseMode;
     };
 
 public:
@@ -115,7 +115,6 @@ public:
     private:
 
         QVector<Tile*> children;
-
     };
 
 public:
@@ -139,6 +138,8 @@ public:
         bool initializeNextBounds();
 
     private:
+
+        NonEmptyIterator(const NonEmptyIterator&); // Disable
 
         class Private;
         Private* const d;

@@ -79,6 +79,8 @@ public:
 
 private:
 
+    TemplateIcon(const TemplateIcon&); // Disable
+
     class Private;
     Private* const d;
 };

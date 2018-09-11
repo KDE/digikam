@@ -49,6 +49,14 @@ class Q_DECL_HIDDEN EditTest : public QObject
 {
     Q_OBJECT
 
+public:
+
+    EditTest()
+    {
+        editCount   = 0;
+        m_mediaWiki = 0;
+    }
+
 Q_SIGNALS:
 
     void captchaSignal(const QString& CaptchaAnswer);

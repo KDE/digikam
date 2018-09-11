@@ -80,6 +80,8 @@ private:
 
 private:
 
+    GPSImageInfoSorter(); // Disable
+
     class Private;
     Private* const d;
 };

@@ -51,18 +51,19 @@ public:
 
 public:
 
-    // Initializes this LBPH Model. The current implementation is rather fixed
-    // as it uses the Extended Local Binary Patterns per default.
-    //
-    // radius, neighbors are used in the local binary patterns creation.
-    // grid_x, grid_y control the grid size of the spatial histograms.
-    explicit LBPHFaceRecognizer(int radius_=1,
-                                int neighbors_=8,
-                                int gridx=8,
-                                int gridy=8,
+    /** Initializes this LBPH Model. The current implementation is rather fixed
+     *  as it uses the Extended Local Binary Patterns per default.
+     *
+     *  radius, neighbors are used in the local binary patterns creation.
+     *  grid_x, grid_y control the grid size of the spatial histograms.
+     */
+    explicit LBPHFaceRecognizer(int radius_ = 1,
+                                int neighbors_ = 8,
+                                int gridx = 8,
+                                int gridy = 8,
                                 double threshold = DBL_MAX,
-                                PredictionStatistics statistics = NearestNeighbor) :
-        m_grid_x(gridx),
+                                PredictionStatistics statistics = NearestNeighbor)
+      : m_grid_x(gridx),
         m_grid_y(gridy),
         m_radius(radius_),
         m_neighbors(neighbors_),
@@ -71,18 +72,21 @@ public:
     {
     }
 
-    // Initializes and computes this LBPH Model. The current implementation is
-    // rather fixed as it uses the Extended Local Binary Patterns per default.
-    //
-    // (radius=1), (neighbors=8) are used in the local binary patterns creation.
-    // (grid_x=8), (grid_y=8) controls the grid size of the spatial histograms.
+    /** Initializes and computes this LBPH Model. The current implementation is
+     *  rather fixed as it uses the Extended Local Binary Patterns per default.
+     *
+     *  (radius=1), (neighbors=8) are used in the local binary patterns creation.
+     *  (grid_x=8), (grid_y=8) controls the grid size of the spatial histograms.
+     */
     LBPHFaceRecognizer(cv::InputArrayOfArrays src,
                        cv::InputArray labels,
-                       int radius_=1, int neighbors_=8,
-                       int gridx=8, int gridy=8,
+                       int radius_ = 1,
+                       int neighbors_= 8,
+                       int gridx = 8,
+                       int gridy = 8,
                        double threshold = DBL_MAX,
-                       PredictionStatistics statistics = NearestNeighbor) :
-        m_grid_x(gridx),
+                       PredictionStatistics statistics = NearestNeighbor)
+      : m_grid_x(gridx),
         m_grid_y(gridy),
         m_radius(radius_),
         m_neighbors(neighbors_),
@@ -106,10 +110,10 @@ public:
     using cv::face::FaceRecognizer::read;
 #endif
 
-    static cv::Ptr<LBPHFaceRecognizer> create(int radius=1,
-                                              int neighbors=8,
-                                              int grid_x=8,
-                                              int grid_y=8,
+    static cv::Ptr<LBPHFaceRecognizer> create(int radius = 1,
+                                              int neighbors = 8,
+                                              int grid_x = 8,
+                                              int grid_y = 8,
                                               double threshold = DBL_MAX,
                                               PredictionStatistics statistics = NearestNeighbor);
 
@@ -125,7 +129,7 @@ public:
      */
     void update(cv::InputArrayOfArrays src, cv::InputArray labels) override;
 
-    /*
+    /**
      * Predict
      */
     void predict(cv::InputArray src, cv::Ptr<cv::face::PredictCollector> collector) const override;

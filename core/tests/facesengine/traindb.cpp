@@ -42,8 +42,6 @@
 
 using namespace Digikam;
 
-
-
 // --------------------------------------------------------------------------------------------------
 
 const int firstMultiplier  = 20;
@@ -54,7 +52,8 @@ class Q_DECL_HIDDEN Runnable : public QRunnable
 public:
 
     Runnable(int number, RecognitionDatabase db)
-        : number(number), db(db)
+        : number(number),
+          db(db)
     {
     }
 
@@ -67,7 +66,7 @@ public:
 
         // Populate database.
 
-        for (int i = number * secondMultiplier ; i < number * secondMultiplier + secondMultiplier; i++)
+        for (int i = number * secondMultiplier ; i < number * secondMultiplier + secondMultiplier ; ++i)
         {
             QString name      = QString::fromLatin1("face%1").arg(i);
             qDebug() << "Record Identity " << name << " to DB";
@@ -81,7 +80,7 @@ public:
 
         // Check records in database.
 
-        for (int i=number*secondMultiplier ; i < number*secondMultiplier+secondMultiplier; i++)
+        for (int i = number * secondMultiplier ; i < number*secondMultiplier+secondMultiplier ; ++i)
         {
             QString name = QString::fromLatin1("face%1").arg(i);
             identity     = db.findIdentity(QString::fromLatin1("name"), name);
@@ -97,7 +96,9 @@ public:
         }
     }
 
-    const int number;
+public:
+
+    const int           number;
     RecognitionDatabase db;
 };
 
@@ -114,7 +115,7 @@ int main(int argc, char** argv)
     QThreadPool pool;
     pool.setMaxThreadCount(101);
 
-    for (int i = 0 ; i < firstMultiplier ; i++)
+    for (int i = 0 ; i < firstMultiplier ; ++i)
     {
         Runnable* r= new Runnable(i, db);
         pool.start(r);

@@ -46,20 +46,25 @@ public:
      * Delete all cache files
      */
     void clear();
+
     /**
      * Delete all cache files starting from the given level upwards
      */
     void clearFrom(int level);
+
     /**
-    * Write the image data into a cache file
-    */
+     * Write the image data into a cache file
+     */
     bool putData(int level, const DImg& img) const;
+
     /**
-    * Get the image data from a cache file
-    */
+     * Get the image data from a cache file
+     */
     DImg getData(int level) const;
 
 private:
+
+    UndoCache(const UndoCache&); // Disable
 
     class Private;
     Private* const d;

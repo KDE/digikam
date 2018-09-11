@@ -36,8 +36,6 @@
 
 #include <QImage>
 
-// Local includes
-
 namespace Digikam
 {
 
@@ -69,9 +67,14 @@ public:
     /**
      *  Trains the given images, representing faces of the given matched identities.
      */
-    void train(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context, const std::vector<cv::Mat>& images_rgb);
+    void train(const std::vector<cv::Mat>& images,
+               const std::vector<int>& labels,
+               const QString& context,
+               const std::vector<cv::Mat>& images_rgb);
 
 private:
+
+    OpenCVEIGENFaceRecognizer(const OpenCVEIGENFaceRecognizer&); // Disable
 
     class Private;
     Private* const d;

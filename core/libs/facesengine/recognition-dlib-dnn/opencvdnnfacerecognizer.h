@@ -67,6 +67,8 @@ public:
 
 private:
 
+    OpenCVDNNFaceRecognizer(const OpenCVDNNFaceRecognizer&); // Disable
+
     class Private;
     Private* const d;
 };

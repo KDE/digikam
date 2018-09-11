@@ -112,7 +112,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* const parent)
     ImageIface iface;
     DImg thumbImage       = iface.original()->smoothScale(128, 128, Qt::KeepAspectRatio);
     PreviewListItem* item = 0;
-    d->gboxSettings       = new EditorToolSettings;
+    d->gboxSettings       = new EditorToolSettings(0);
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(LRGBC);
     d->gboxSettings->setButtons(EditorToolSettings::Default|

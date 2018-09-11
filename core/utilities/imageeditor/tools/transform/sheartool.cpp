@@ -123,7 +123,7 @@ ShearTool::ShearTool(QObject* const parent)
     QString temp;
     ImageIface iface;
 
-    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings = new EditorToolSettings(0);
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     // -------------------------------------------------------------

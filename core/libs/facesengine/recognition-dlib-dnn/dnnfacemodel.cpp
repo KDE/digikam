@@ -78,12 +78,12 @@ const DNNFaceRecognizer* DNNFaceModel::ptr() const
     return ptr;
 }
 
-std::vector<std::vector<float>> DNNFaceModel::getSrc() const
+std::vector<std::vector<float> > DNNFaceModel::getSrc() const
 {
     return ptr()->getSrc();
 }
 
-void DNNFaceModel::setSrc(std::vector<std::vector<float>> new_src)
+void DNNFaceModel::setSrc(std::vector<std::vector<float> > new_src)
 {
     ptr()->setSrc(new_src);
 }
@@ -116,13 +116,13 @@ void DNNFaceModel::setWrittenToDatabase(int index, int id)
     m_vecMetadata[index].storageStatus = DNNFaceVecMetadata::InDatabase;
 }
 
-void DNNFaceModel::setMats(const QList<std::vector<float>>& mats, const QList<DNNFaceVecMetadata>& matMetadata)
+void DNNFaceModel::setMats(const QList<std::vector<float> >& mats, const QList<DNNFaceVecMetadata>& matMetadata)
 {
     /*
      * Does not work with standard OpenCV, as these two params are declared read-only in OpenCV.
      * One reason why we copied the code.
      */
-    std::vector<std::vector<float>> newSrc;
+    std::vector<std::vector<float> > newSrc;
     cv::Mat newLabels;
     newSrc.reserve(mats.size());
     newLabels.reserve(matMetadata.size());
@@ -140,16 +140,17 @@ void DNNFaceModel::setMats(const QList<std::vector<float>>& mats, const QList<DN
         m_vecMetadata << metadata;
     }
 
-    std::vector<std::vector<float>> currentSrcs = ptr()->getSrc();
-    cv::Mat currentLabels                       = ptr()->getLabels();
+    std::vector<std::vector<float> > currentSrcs = ptr()->getSrc();
+    cv::Mat currentLabels                        = ptr()->getLabels();
 
     currentSrcs.insert(currentSrcs.end(), newSrc.begin(), newSrc.end());
     currentLabels.push_back(newLabels);
 
     //ptr()->setSrc(currentSrcs);
     //ptr()->setLabels(currentLabels);
+
     //make sure that there exits traing data
-    if(currentSrcs.size()>0)
+    if (currentSrcs.size() > 0)
     {
         ptr()->train(currentSrcs, currentLabels);
     }

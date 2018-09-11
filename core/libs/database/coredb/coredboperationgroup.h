@@ -80,7 +80,7 @@ public:
 
 private:
 
-    Q_DISABLE_COPY(CoreDbOperationGroup)
+    CoreDbOperationGroup(const CoreDbOperationGroup&); // Disable
 
     class Private;
     Private* const d;

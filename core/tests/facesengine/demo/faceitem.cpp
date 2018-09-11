@@ -95,7 +95,8 @@ public:
 
 FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, const QRect& rect,
                    double scale, const QString& name, double originalscale)
-        : QGraphicsObject(parent), d(new Private)
+        : QGraphicsObject(parent),
+          d(new Private)
 {
     setAcceptHoverEvents(true);
 
@@ -178,18 +179,23 @@ FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, con
 
     d->acceptButton->hide();
 
-    connect(d->rejectButton, &Button::clicked, this, &FaceItem::reject);
+    connect(d->rejectButton, &Button::clicked,
+            this, &FaceItem::reject);
 
-    connect(d->acceptButton, &Button::clicked, this, &FaceItem::accepted);
+    connect(d->acceptButton, &Button::clicked,
+            this, &FaceItem::accepted);
 
-    connect(d->suggestionAcceptButton, &Button::clicked, this, &FaceItem::slotSuggestionAccepted);
+    connect(d->suggestionAcceptButton, &Button::clicked,
+            this, &FaceItem::slotSuggestionAccepted);
 
-    connect(d->suggestionRejectButton, &Button::clicked, this, &FaceItem::slotSuggestionRejected);
+    connect(d->suggestionRejectButton, &Button::clicked, this,
+            &FaceItem::slotSuggestionRejected);
 
     connect(doc, SIGNAL(contentsChanged()),
             this, SLOT(update()));
 
-    connect(d->faceMarquee, &Marquee::changed, this, &FaceItem::update);
+    connect(d->faceMarquee, &Marquee::changed,
+            this, &FaceItem::update);
 }
 
 FaceItem::~FaceItem()
@@ -216,7 +222,7 @@ QString FaceItem::text() const
 
 void FaceItem::update()
 {
-    if(text().isEmpty())
+    if (text().isEmpty())
     {
         d->faceName->setDefaultTextColor(QColor("white"));
         d->nameRect->setPen(QPen(QColor("white")));
@@ -228,7 +234,7 @@ void FaceItem::update()
         d->nameRect->setPen(QPen(QColor("yellow")));
         d->faceName->setDefaultTextColor(QColor("yellow"));
 
-        if(!d->suggestionMode)
+        if (!d->suggestionMode)
         {
             d->acceptButton->show();
             d->name = text();
@@ -272,7 +278,7 @@ void FaceItem::setControlsVisible(bool visible)
     d->nameRect->setVisible(visible);
     d->faceName->setVisible(visible);
 
-    if(d->suggestionMode)
+    if (d->suggestionMode)
     {
         d->suggestionAcceptButton->setVisible(visible);
         d->suggestionRejectButton->setVisible(visible);

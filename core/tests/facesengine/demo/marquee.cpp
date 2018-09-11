@@ -53,6 +53,8 @@ public:
         BottomRight
     };
 
+public:
+
     explicit Private()
       : handleSize(10)
     {
@@ -66,6 +68,8 @@ public:
         resizing   = false;
         resizeType = 0;
     }
+
+public:
 
     const int                handleSize;
     QPen                     rectPen;    // The pen used to draw the frames
@@ -87,9 +91,10 @@ public:
 };
 
 Marquee::Marquee(FancyRect* const rect, QGraphicsItem* const parent)
-    : QObject(0), QGraphicsItemGroup(parent), d(new Private)
+    : QObject(0), QGraphicsItemGroup(parent),
+      d(new Private)
 {
-    d->rect   = rect;
+    d->rect    = rect;
     d->rectPen.setColor(Qt::red);
     d->rectPen.setWidth(2);
     d->outlinePen.setColor(Qt::red);
@@ -213,7 +218,7 @@ void Marquee::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
     {
         QRectF r = d->rect->rect();
 
-        switch(d->resizeType)
+        switch (d->resizeType)
         {
             case Private::TopLeft:
                 r.setTopLeft(e->pos());

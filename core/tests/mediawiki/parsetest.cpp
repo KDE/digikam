@@ -70,6 +70,14 @@ class Q_DECL_HIDDEN ParseTest : public QObject
 {
     Q_OBJECT
 
+public:
+
+    ParseTest()
+    {
+        parseCount  = 0;
+        m_mediaWiki = 0;
+    }
+
 public Q_SLOTS:
 
     void parseHandle(KJob* job)

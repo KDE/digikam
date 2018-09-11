@@ -233,6 +233,8 @@ private:
 
 private:
 
+    SimilarityDb(const SimilarityDb&); // Disable
+
     class Private;
     Private* const d;
 

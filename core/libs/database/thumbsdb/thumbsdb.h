@@ -143,6 +143,8 @@ private:
 
 private:
 
+    ThumbsDb(const ThumbsDb&); // Disable
+
     class Private;
     Private* const d;
 

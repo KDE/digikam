@@ -62,7 +62,8 @@ public:
 
     explicit ImageCopyright(qlonglong imageid);
 
-    /** Create a null ImageCopyright object */
+    /** Create a null ImageCopyright object
+     */
     ImageCopyright();
 
     ImageCopyright(const ImageCopyright& other);

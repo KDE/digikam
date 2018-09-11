@@ -59,6 +59,8 @@ private:
 
 private:
 
+    SimilarityDbSchemaUpdater(const SimilarityDbSchemaUpdater&); // Disable
+
     class Private;
     Private* const d;
 };

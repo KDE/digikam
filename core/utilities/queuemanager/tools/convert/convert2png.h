@@ -31,8 +31,6 @@
 namespace Digikam
 {
 
-class PNGSettings;
-
 class Convert2PNG : public BatchTool
 {
     Q_OBJECT
@@ -60,8 +58,7 @@ private:
 
 private:
 
-    PNGSettings* m_settings;
-    bool         m_changeSettings;
+    bool m_changeSettings;
 };
 
 } // namespace Digikam

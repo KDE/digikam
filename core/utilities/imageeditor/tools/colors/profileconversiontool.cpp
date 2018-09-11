@@ -114,7 +114,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* const parent)
     ImageIface iface;
     d->currentProfile = iface.originalIccProfile();
 
-    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings = new EditorToolSettings(0);
     d->gboxSettings->setButtons(EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
 

@@ -36,14 +36,17 @@
 namespace Digikam
 {
 
-class VersionsDelegate : public QStyledItemDelegate, public ImageDelegateOverlayContainer
+class VersionsDelegate : public QStyledItemDelegate,
+                         public ImageDelegateOverlayContainer
 {
     Q_OBJECT
-    Q_PROPERTY(int animationState READ animationState WRITE setAnimationState NOTIFY animationStateChanged)
+    Q_PROPERTY(int animationState READ animationState
+                                  WRITE setAnimationState
+                                  NOTIFY animationStateChanged)
 
 public:
 
-    explicit VersionsDelegate(QObject* const parent = 0);
+    explicit VersionsDelegate(QObject* const parent);
     ~VersionsDelegate();
 
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
@@ -85,6 +88,8 @@ protected:
     }
 
 private:
+
+    VersionsDelegate(); // Disable default constructor.
 
     class Private;
     Private* const d;

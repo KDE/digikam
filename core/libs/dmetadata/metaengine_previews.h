@@ -94,6 +94,8 @@ public:
 
 private:
 
+    MetaEnginePreviews(const MetaEnginePreviews&); // Disable
+
     class Private;
     Private* const d;
 };

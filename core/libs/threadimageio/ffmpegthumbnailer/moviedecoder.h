@@ -62,9 +62,7 @@ public:
 
 private:
 
-    Q_DISABLE_COPY(MovieDecoder) // Disabled
-
-private:
+    MovieDecoder(const MovieDecoder&); // Disable
 
     class Private;
     Private* const d;

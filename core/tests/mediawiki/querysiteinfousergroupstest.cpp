@@ -52,6 +52,13 @@ class Q_DECL_HIDDEN QuerySiteinfoUsergroupsTest : public QObject
 {
     Q_OBJECT
 
+public:
+
+    QuerySiteinfoUsergroupsTest()
+    {
+        usergroupsCount = 0;
+    }
+
 public Q_SLOTS:
 
     void usergroupsHandle(const QList<UserGroup> & usergroups)

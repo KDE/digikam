@@ -129,6 +129,8 @@ private:
 
 private:
 
+    MetadataSelectorView(); // Disable default constructor.
+
     class Private;
     Private* const d;
 };

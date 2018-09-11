@@ -50,6 +50,8 @@ public:
 
 private:
 
+    PTOFile(const PTOFile&); // Disable
+
     class Private;
     Private* const d;
 };

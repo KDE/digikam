@@ -55,7 +55,7 @@ public:
         if (!loaded)
         {
             m_eigen = FaceDbAccess().db()->eigenFaceModel();
-            loaded = true;
+            loaded  = true;
         }
 
         return m_eigen;
@@ -67,7 +67,7 @@ public:
 
 private:
 
-    EigenFaceModel     m_eigen;
+    EigenFaceModel    m_eigen;
     bool              loaded;
 };
 
@@ -143,7 +143,10 @@ int OpenCVEIGENFaceRecognizer::recognize(const cv::Mat& inputImage)
     return predictedLabel;
 }
 
-void OpenCVEIGENFaceRecognizer::train(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context, const std::vector<cv::Mat>& images_rgb)
+void OpenCVEIGENFaceRecognizer::train(const std::vector<cv::Mat>& images,
+                                      const std::vector<int>& labels,
+                                      const QString& context,
+                                      const std::vector<cv::Mat>& images_rgb)
 {
     if (images.empty() || labels.size() != images.size())
     {

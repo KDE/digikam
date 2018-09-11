@@ -79,6 +79,7 @@ public:
 private:
 
     GalleryTheme();
+    GalleryTheme(const GalleryTheme&); // Disable
 
     class Private;
     Private* const d;

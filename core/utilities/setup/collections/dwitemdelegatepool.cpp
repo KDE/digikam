@@ -53,7 +53,8 @@ class Q_DECL_HIDDEN DWItemDelegateEventListener
 {
 public:
 
-    DWItemDelegateEventListener(DWItemDelegatePoolPrivate* const poolPrivate, QObject* const parent = 0)
+    DWItemDelegateEventListener(DWItemDelegatePoolPrivate* const poolPrivate,
+                                QObject* const parent = 0)
         : QObject(parent),
           poolPrivate(poolPrivate)
     {
@@ -208,7 +209,7 @@ bool DWItemDelegateEventListener::eventFilter(QObject* watched, QEvent* event)
     {
         QWidget* const viewport = poolPrivate->delegate->d->itemView->viewport();
 
-        switch(event->type())
+        switch (event->type())
         {
             case QEvent::MouseMove:
             case QEvent::MouseButtonPress:
@@ -219,8 +220,9 @@ bool DWItemDelegateEventListener::eventFilter(QObject* watched, QEvent* event)
                 QMouseEvent evt(event->type(), viewport->mapFromGlobal(mouseEvent->globalPos()),
                                 mouseEvent->button(), mouseEvent->buttons(), mouseEvent->modifiers());
                 QApplication::sendEvent(viewport, &evt);
-            }
                 break;
+            }
+
             case QEvent::Wheel:
             {
                 QWheelEvent* const wheelEvent = static_cast<QWheelEvent*>(event);
@@ -228,8 +230,9 @@ bool DWItemDelegateEventListener::eventFilter(QObject* watched, QEvent* event)
                                 wheelEvent->delta(), wheelEvent->buttons(), wheelEvent->modifiers(),
                                 wheelEvent->orientation());
                 QApplication::sendEvent(viewport, &evt);
-            }
                 break;
+            }
+
             case QEvent::TabletMove:
             case QEvent::TabletPress:
             case QEvent::TabletRelease:
@@ -243,8 +246,9 @@ bool DWItemDelegateEventListener::eventFilter(QObject* watched, QEvent* event)
                                     tabletEvent->yTilt(), tabletEvent->tangentialPressure(), tabletEvent->rotation(),
                                     tabletEvent->z(), tabletEvent->modifiers(), tabletEvent->uniqueId());
                 QApplication::sendEvent(viewport, &evt);
-            }
                 break;
+            }
+
             default:
                 QApplication::sendEvent(viewport, event);
                 break;

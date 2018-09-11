@@ -45,7 +45,6 @@ namespace Digikam
 Convert2JPEG::Convert2JPEG(QObject* const parent)
     : BatchTool(QLatin1String("Convert2JPEG"), ConvertTool, parent)
 {
-    m_settings = 0;
     m_changeSettings = true;
 
     setToolTitle(i18n("Convert To JPEG"));
@@ -59,11 +58,12 @@ Convert2JPEG::~Convert2JPEG()
 
 void Convert2JPEG::registerSettingsWidget()
 {
-    m_settings       = new JPEGSettings;
-    m_settingsWidget = m_settings;
+    JPEGSettings* const JPGBox = new JPEGSettings;
 
-    connect(m_settings, SIGNAL(signalSettingsChanged()),
+    connect(JPGBox, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
+
+    m_settingsWidget = JPGBox;
 
     BatchTool::registerSettingsWidget();
 }
@@ -83,8 +83,15 @@ BatchToolSettings Convert2JPEG::defaultSettings()
 void Convert2JPEG::slotAssignSettings2Widget()
 {
     m_changeSettings = false;
-    m_settings->setCompressionValue(settings()[QLatin1String("Quality")].toInt());
-    m_settings->setSubSamplingValue(settings()[QLatin1String("SubSampling")].toInt());
+
+    JPEGSettings* const JPGBox = dynamic_cast<JPEGSettings*>(m_settingsWidget);
+
+    if (JPGBox)
+    {
+        JPGBox->setCompressionValue(settings()[QLatin1String("Quality")].toInt());
+        JPGBox->setSubSamplingValue(settings()[QLatin1String("SubSampling")].toInt());
+    }
+
     m_changeSettings = true;
 }
 
@@ -92,10 +99,15 @@ void Convert2JPEG::slotSettingsChanged()
 {
     if (m_changeSettings)
     {
-        BatchToolSettings settings;
-        settings.insert(QLatin1String("Quality"),     m_settings->getCompressionValue());
-        settings.insert(QLatin1String("SubSampling"), m_settings->getSubSamplingValue());
-        BatchTool::slotSettingsChanged(settings);
+        JPEGSettings* const JPGBox = dynamic_cast<JPEGSettings*>(m_settingsWidget);
+
+        if (JPGBox)
+        {
+            BatchToolSettings settings;
+            settings.insert(QLatin1String("Quality"),     JPGBox->getCompressionValue());
+            settings.insert(QLatin1String("SubSampling"), JPGBox->getSubSamplingValue());
+            BatchTool::slotSettingsChanged(settings);
+        }
     }
 }
 

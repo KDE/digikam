@@ -149,7 +149,7 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings = new EditorToolSettings(0);
     d->textEdit     = new QTextEdit();
     d->textEdit->setWordWrapMode(QTextOption::NoWrap);
     d->textEdit->setWhatsThis( i18n("Here, enter the text you want to insert in your image."));

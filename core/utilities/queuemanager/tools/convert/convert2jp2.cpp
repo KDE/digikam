@@ -45,7 +45,6 @@ namespace Digikam
 Convert2JP2::Convert2JP2(QObject* const parent)
     : BatchTool(QLatin1String("Convert2JP2"), ConvertTool, parent)
 {
-    m_settings = 0;
     m_changeSettings = true;
 
     setToolTitle(i18n("Convert To JP2"));
@@ -59,11 +58,12 @@ Convert2JP2::~Convert2JP2()
 
 void Convert2JP2::registerSettingsWidget()
 {
-    m_settings       = new JP2KSettings();
-    m_settingsWidget = m_settings;
+    JP2KSettings* const JP2Box = new JP2KSettings();
 
-    connect(m_settings, SIGNAL(signalSettingsChanged()),
+    connect(JP2Box, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
+
+    m_settingsWidget = JP2Box;
 
     BatchTool::registerSettingsWidget();
 }
@@ -77,14 +77,21 @@ BatchToolSettings Convert2JP2::defaultSettings()
     BatchToolSettings settings;
     settings.insert(QLatin1String("quality"),  compression);
     settings.insert(QLatin1String("lossless"), lossLessCompression);
+
     return settings;
 }
 
 void Convert2JP2::slotAssignSettings2Widget()
 {
-    m_changeSettings = false;
-    m_settings->setCompressionValue(settings()[QLatin1String("quality")].toInt());
-    m_settings->setLossLessCompression(settings()[QLatin1String("lossless")].toBool());
+    m_changeSettings           = false;
+    JP2KSettings* const JP2Box = dynamic_cast<JP2KSettings*>(m_settingsWidget);
+
+    if (JP2Box)
+    {
+        JP2Box->setCompressionValue(settings()[QLatin1String("quality")].toInt());
+        JP2Box->setLossLessCompression(settings()[QLatin1String("lossless")].toBool());
+    }
+
     m_changeSettings = true;
 }
 
@@ -93,9 +100,14 @@ void Convert2JP2::slotSettingsChanged()
     if (m_changeSettings)
     {
         BatchToolSettings settings;
-        settings.insert(QLatin1String("quality"),  m_settings->getCompressionValue());
-        settings.insert(QLatin1String("lossless"), m_settings->getLossLessCompression());
-        BatchTool::slotSettingsChanged(settings);
+        JP2KSettings* const JP2Box = dynamic_cast<JP2KSettings*>(m_settingsWidget);
+
+        if (JP2Box)
+        {
+            settings.insert(QLatin1String("quality"),  JP2Box->getCompressionValue());
+            settings.insert(QLatin1String("lossless"), JP2Box->getLossLessCompression());
+            BatchTool::slotSettingsChanged(settings);
+        }
     }
 }
 

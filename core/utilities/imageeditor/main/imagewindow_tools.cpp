@@ -91,7 +91,7 @@ void ImageWindow::slotPrintCreator()
 
 void ImageWindow::slotPresentation()
 {
-    PresentationMngr* const mngr = new PresentationMngr(this);
+    QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
 
     foreach(const ImageInfo& info, d->imageInfoModel->imageInfos())
     {
@@ -164,7 +164,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
 
     if (!m_cancelSlideShow)
     {
-        SlideShow* const slide = new SlideShow(settings);
+        QPointer<Digikam::SlideShow> slide = new SlideShow(settings);
         TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
 
         if (settings.startWithCurrent)

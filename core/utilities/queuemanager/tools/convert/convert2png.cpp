@@ -45,7 +45,6 @@ namespace Digikam
 Convert2PNG::Convert2PNG(QObject* const parent)
     : BatchTool(QLatin1String("Convert2PNG"), ConvertTool, parent)
 {
-    m_settings = 0;
     m_changeSettings = true;
 
     setToolTitle(i18n("Convert To PNG"));
@@ -59,11 +58,12 @@ Convert2PNG::~Convert2PNG()
 
 void Convert2PNG::registerSettingsWidget()
 {
-    m_settings       = new PNGSettings();
-    m_settingsWidget = m_settings;
+    PNGSettings* const PNGBox = new PNGSettings();
 
-    connect(m_settings, SIGNAL(signalSettingsChanged()),
+    connect(PNGBox, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
+
+    m_settingsWidget = PNGBox;
 
     BatchTool::registerSettingsWidget();
 }
@@ -81,7 +81,14 @@ BatchToolSettings Convert2PNG::defaultSettings()
 void Convert2PNG::slotAssignSettings2Widget()
 {
     m_changeSettings = false;
-    m_settings->setCompressionValue(settings()[QLatin1String("Quality")].toInt());
+
+    PNGSettings* const PNGBox = dynamic_cast<PNGSettings*>(m_settingsWidget);
+
+    if (PNGBox)
+    {
+        PNGBox->setCompressionValue(settings()[QLatin1String("Quality")].toInt());
+    }
+
     m_changeSettings = true;
 }
 
@@ -89,9 +96,14 @@ void Convert2PNG::slotSettingsChanged()
 {
     if (m_changeSettings)
     {
-        BatchToolSettings settings;
-        settings.insert(QLatin1String("Quality"), m_settings->getCompressionValue());
-        BatchTool::slotSettingsChanged(settings);
+        PNGSettings* const PNGBox = dynamic_cast<PNGSettings*>(m_settingsWidget);
+
+        if (PNGBox)
+        {
+            BatchToolSettings settings;
+            settings.insert(QLatin1String("Quality"), PNGBox->getCompressionValue());
+            BatchTool::slotSettingsChanged(settings);
+        }
     }
 }
 

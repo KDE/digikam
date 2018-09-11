@@ -43,8 +43,8 @@ class Q_DECL_HIDDEN BookmarkNode::Private
 {
 public:
 
-    explicit Private() :
-        parent(0),
+    explicit Private()
+      : parent(0),
         type(BookmarkNode::Root)
     {
     }

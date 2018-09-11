@@ -144,6 +144,8 @@ private:
 
 private:
 
+    ImageLister(const ImageLister&); // Disable
+
     class Private;
     Private* const d;
 };

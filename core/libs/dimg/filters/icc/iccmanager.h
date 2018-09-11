@@ -138,6 +138,8 @@ protected:
 
 private:
 
+    IccManager(const IccManager&); // Disable
+
     class Private;
     Private* const d;
 };

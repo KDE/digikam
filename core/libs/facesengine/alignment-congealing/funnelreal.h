@@ -48,6 +48,8 @@ public:
 
 private:
 
+    FunnelReal(const FunnelReal&); // Disable
+
     class Private;
     Private* const d;
 };

@@ -51,8 +51,8 @@ class Q_DECL_HIDDEN HSLSettings::Private
 {
 public:
 
-    explicit Private() :
-        HSSelector(0),
+    explicit Private()
+      : HSSelector(0),
         hInput(0),
         sInput(0),
         vInput(0),
@@ -87,15 +87,14 @@ HSLSettings::HSLSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
+    const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QGridLayout* const grid = new QGridLayout(parent);
 
     d->HSSelector = new DHueSaturationSelector();
     d->HSSelector->setWhatsThis(i18n("Select the hue and saturation adjustments of the image."));
     d->HSSelector->setMinimumSize(256, 142);
 
-    d->HSPreview = new HSPreviewWidget();
+    d->HSPreview  = new HSPreviewWidget();
     d->HSPreview->setWhatsThis(i18n("You can see here a color preview of the hue and "
                                     "saturation adjustments."));
     d->HSPreview->setMinimumSize(256, 15);

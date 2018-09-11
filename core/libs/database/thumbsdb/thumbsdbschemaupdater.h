@@ -58,6 +58,8 @@ private:
 
 private:
 
+    ThumbsDbSchemaUpdater(const ThumbsDbSchemaUpdater&); // Disable
+
     class Private;
     Private* const d;
 };

@@ -69,6 +69,8 @@ private:
 
 private:
 
+    ImgQSort(const ImgQSort&); // Disable
+
     class Private;
     Private* const d;
 };

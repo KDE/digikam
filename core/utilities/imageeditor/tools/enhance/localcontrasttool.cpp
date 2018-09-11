@@ -94,7 +94,7 @@ LocalContrastTool::LocalContrastTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings = new EditorToolSettings(0);
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(LRGBC);
     d->gboxSettings->setButtons(EditorToolSettings::Default|

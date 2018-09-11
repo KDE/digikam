@@ -50,7 +50,7 @@ public:
     {
         if (!loaded)
         {
-            m_dnn = FaceDbAccess().db()->dnnFaceModel();
+            m_dnn  = FaceDbAccess().db()->dnnFaceModel();
             loaded = true;
         }
 

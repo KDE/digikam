@@ -69,7 +69,7 @@ inline Mat asRowMatrix(std::vector<Mat> src, int rtype, double alpha=1, double b
 
         // make reshape happy by cloning for non-continuous matrices
 
-        if(src[i].isContinuous())
+        if (src[i].isContinuous())
         {
             src[i].reshape(1, 1).convertTo(xi, rtype, alpha, beta);
         }
@@ -158,7 +158,7 @@ void EigenFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_labe
     // perform the PCA
     PCA pca(data, Mat(), PCA::DATA_AS_ROW, m_num_components);
     // copy the PCA results
-    m_mean = pca.mean.reshape(1,1); // store the mean vector
+    m_mean = pca.mean.reshape(1, 1); // store the mean vector
     transpose(pca.eigenvectors, m_eigenvectors); // eigenvectors by column
 
     // save projections
@@ -191,7 +191,7 @@ void EigenFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predict
 
     collector->init(0); // here need to confirm
 
-    Mat q    = LDA::subspaceProject(m_eigenvectors, m_mean, src.reshape(1, 1));
+    Mat q = LDA::subspaceProject(m_eigenvectors, m_mean, src.reshape(1, 1));
 
     // find nearest neighbor
 

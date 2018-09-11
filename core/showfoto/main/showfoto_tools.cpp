@@ -61,7 +61,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
 
     if (!m_cancelSlideShow)
     {
-        Digikam::SlideShow* const slide = new Digikam::SlideShow(settings);
+        QPointer<Digikam::SlideShow> slide = new Digikam::SlideShow(settings);
 
         if (settings.startWithCurrent)
         {
@@ -74,7 +74,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
 
 void ShowFoto::slotPresentation()
 {
-    Digikam::PresentationMngr* const mngr = new Digikam::PresentationMngr(this);
+    QPointer<Digikam::PresentationMngr> mngr = new Digikam::PresentationMngr(this);
     Digikam::DMetadata meta;
 
     QList<QUrl> urlList = d->thumbBar->urls();
@@ -83,7 +83,7 @@ void ShowFoto::slotPresentation()
     m_cancelSlideShow   = false;
 
     m_nameLabel->setProgressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
-                                 i18n("Preparing presentation. Please wait..."));
+                                    i18n("Preparing presentation. Please wait..."));
 
     for (QList<QUrl>::ConstIterator it = urlList.constBegin() ;
          !m_cancelSlideShow && (it != urlList.constEnd()) ; ++it)

@@ -51,6 +51,15 @@ class Q_DECL_HIDDEN UploadTest : public QObject
 {
     Q_OBJECT
 
+public:
+
+    UploadTest()
+    {
+        uploadCount = 0;
+        m_file      = 0;
+        m_mediaWiki = 0;
+    }
+
 public Q_SLOTS:
 
     void uploadHandle(KJob*)

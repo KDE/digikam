@@ -114,6 +114,8 @@ public:
 
 private:
 
+    ImageDialog(const ImageDialog&); // Disable
+
     class Private;
     Private* const d;
 };

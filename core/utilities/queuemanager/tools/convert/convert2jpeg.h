@@ -31,8 +31,6 @@
 namespace Digikam
 {
 
-class JPEGSettings;
-
 class Convert2JPEG : public BatchTool
 {
     Q_OBJECT
@@ -60,8 +58,7 @@ private:
 
 private:
 
-    JPEGSettings* m_settings;
-    bool          m_changeSettings;
+    bool m_changeSettings;
 };
 
 } // namespace Digikam

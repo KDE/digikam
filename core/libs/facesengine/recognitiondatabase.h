@@ -84,6 +84,8 @@ public:
     explicit RecognitionDatabase();
     ~RecognitionDatabase();
 
+    RecognitionDatabase(const RecognitionDatabase&);
+
     // ------------ Identity management --------------
 
     /// For the documentation of standard attributes, see identity.h
@@ -224,7 +226,7 @@ public:
 
 public:
 
-    // Declared as public to please with CLang compiler, due to use as argument with static methods.
+    // Declared as public to please with Clang compiler, due to use as argument with static methods.
     class Private;
 
 private:

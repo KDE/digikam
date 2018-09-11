@@ -52,10 +52,8 @@ public:
     virtual void init(const QByteArray& internalName, const KConfigGroup* configGroup);
 
     QByteArray internalName() const;
-
-    QString name() const;
-
-    QString defaultValue() const;
+    QString name()            const;
+    QString defaultValue()    const;
 
     /**
      * This method should return a QWidget representing the parameter,
@@ -70,6 +68,8 @@ public:
     virtual QString valueFromWidget(QWidget*) const = 0;
 
 private:
+
+    AbstractThemeParameter(const AbstractThemeParameter&); // Disable
 
     class Private;
     Private* const d;

@@ -196,6 +196,8 @@ protected:
 
 private:
 
+    StateSavingObject(const StateSavingObject&); // Disable
+
     class Private;
     Private* const d;
 };
