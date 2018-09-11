@@ -49,7 +49,7 @@ QStringList toPaths(char** argv, int startIndex, int argc)
 {
     QStringList files;
 
-    for (int i = startIndex ; i < argc ; i++)
+    for (int i = startIndex ; i < argc ; ++i)
     {
         files << QString::fromLocal8Bit(argv[i]);
     }
@@ -99,7 +99,7 @@ int main(int argc, char** argv)
 
         qDebug() << "Recognition took " << elapsed << " for " << images.size() << ", " << ((float)elapsed/images.size()) << " per image";
 
-        for (int i = 0 ; i < paths.size() ; i++)
+        for (int i = 0 ; i < paths.size() ; ++i)
         {
             qDebug() << "Identified " << identities[i].attribute(QString::fromLatin1("name")) << " in " << paths[i];
         }
@@ -153,7 +153,7 @@ int main(int argc, char** argv)
         QMap<int, Identity> idMap;
         QList<Identity> trainingToBeCleared;
 
-        for (int i = 1 ; i <= OrlIdentities ; i++)
+        for (int i = 1 ; i <= OrlIdentities ; ++i)
         {
             QMap<QString, QString> attributes;
             attributes[QString::fromLatin1("name")] = QString::number(i);
@@ -176,13 +176,13 @@ int main(int argc, char** argv)
         db.clearTraining(trainingToBeCleared, trainingContext);
         QMap<int, QStringList> trainingImages, recognitionImages;
 
-        for (int i=1 ; i <= OrlIdentities ; i++)
+        for (int i = 1 ; i <= OrlIdentities ; ++i)
         {
-            for (int j = 1 ; j <= OrlSamples ; j++)
+            for (int j = 1 ; j <= OrlSamples ; ++j)
             {
                 QString path = orlDir.path() + QString::fromLatin1("/s%1/%2.pgm").arg(i).arg(j);
 
-                if (j <= OrlSamples/2)
+                if (j <= OrlSamples / 2)
                 {
                     trainingImages[i] << path;
                 }
@@ -204,7 +204,8 @@ int main(int argc, char** argv)
 
         int correct = 0, notRecognized = 0, falsePositive = 0, totalTrained = 0, totalRecognized = 0, elapsed = 0;
 
-        for (QMap<int, QStringList>::const_iterator it = trainingImages.constBegin() ; it != trainingImages.constEnd() ; ++it)
+        for (QMap<int, QStringList>::const_iterator it = trainingImages.constBegin() ;
+             it != trainingImages.constEnd() ; ++it)
         {
             Identity identity = db.findIdentity(QString::fromLatin1("name"), QString::number(it.key()));
 
@@ -226,7 +227,8 @@ int main(int argc, char** argv)
             qDebug() << "Training 5/10 or ORL took " << elapsed << " ms, " << ((float)elapsed/totalTrained) << " ms per image";
         }
 
-        for (QMap<int, QStringList>::const_iterator it = recognitionImages.constBegin() ; it != recognitionImages.constEnd() ; ++it)
+        for (QMap<int, QStringList>::const_iterator it = recognitionImages.constBegin() ;
+             it != recognitionImages.constEnd() ; ++it)
         {
             Identity identity       = idMap.value(it.key());
             QList<QImage> images    = toImages(it.value());

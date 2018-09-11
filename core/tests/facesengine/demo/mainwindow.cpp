@@ -150,7 +150,7 @@ void MainWindow::clearScene()
 {
     QList<QGraphicsItem*> list = d->myScene->items();
 
-    for(int i = 0 ; i < list.size() ; i++)
+    for (int i = 0 ; i < list.size() ; ++i)
     {
         d->myScene->removeItem(list.at(i));
     }
@@ -198,19 +198,19 @@ void MainWindow::slotDetectFaces()
     qDebug() << "FacesEngine detected : " << currentFaces.size() << " faces.";
     qDebug() << "Coordinates of detected faces : ";
 
-    foreach(const QRectF& r, currentFaces)
+    foreach (const QRectF& r, currentFaces)
     {
         qDebug() << r;
     }
 
-    foreach(FaceItem* const item, d->faceitems)
+    foreach (FaceItem* const item, d->faceitems)
     {
         item->setVisible(false);
     }
 
     d->faceitems.clear();
 
-    for(int i = 0 ; i < currentFaces.size() ; ++i)
+    for (int i = 0 ; i < currentFaces.size() ; ++i)
     {
         QRect face = d->detector->toAbsoluteRect(currentFaces[i], d->currentPhoto.size());
         d->faceitems.append(new FaceItem(0, d->myScene, face, d->scale));
@@ -241,7 +241,7 @@ void MainWindow::slotRecognise()
 
     int i = 0;
 
-    foreach(FaceItem* const item, d->faceitems)
+    foreach (FaceItem* const item, d->faceitems)
     {
         QTime time;
         time.start();
@@ -274,7 +274,7 @@ void MainWindow::slotUpdateDatabase()
 
     int i = 0;
 
-    foreach(FaceItem* const item, d->faceitems)
+    foreach (FaceItem* const item, d->faceitems)
     {
         if (item->text() != QString::fromLatin1("?"))
         {
@@ -305,7 +305,7 @@ void MainWindow::slotUpdateDatabase()
             qDebug() << "Training took " << elapsed << " for Face #" << i+1;
         }
 
-        i++;
+        ++i;
     }
 
     unsetCursor();

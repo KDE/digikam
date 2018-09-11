@@ -48,7 +48,7 @@ QStringList toPaths(char** const argv, int startIndex, int argc)
 {
     QStringList files;
 
-    for (int i = startIndex; i < argc; i++)
+    for (int i = startIndex ; i < argc ; ++i)
     {
         files << QString::fromLocal8Bit(argv[i]);
     }
@@ -104,8 +104,8 @@ public:
             cv::cvtColor(scaledRight, scaledRight, CV_GRAY2BGR);
         }
 
-        scaledLeft.copyTo(bigImage.colRange(0, scaledLeft.cols).rowRange(top, top+scaledLeft.rows));
-        scaledRight.copyTo(bigImage.colRange(uiSize, uiSize+scaledRight.cols).rowRange(top, top+scaledRight.rows));
+        scaledLeft.copyTo(bigImage.colRange(0, scaledLeft.cols).rowRange(top, top + scaledLeft.rows));
+        scaledRight.copyTo(bigImage.colRange(uiSize, uiSize + scaledRight.cols).rowRange(top, top + scaledRight.rows));
 
         currentRow++;
     }
@@ -116,6 +116,8 @@ public:
         label.setPixmap(ASM::cvMatToQPixmap(bigImage));
         label.show();
     }
+
+public:
 
     cv::Mat   bigImage;
     const int uiSize;
@@ -152,7 +154,7 @@ int main(int argc, char** argv)
 
     int elapsed = time.elapsed();
     qDebug() << "Preprocessing took " << elapsed << " for " << images.size() << " , "
-                          << ((float)elapsed/images.size()) << " per image";
+             << ((float)elapsed/images.size()) << " per image";
 
     display.show();
     app.exec();

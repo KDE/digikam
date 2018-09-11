@@ -46,7 +46,7 @@ QStringList toPaths(char** const argv, int startIndex, int argc)
 {
     QStringList files;
 
-    for (int i = startIndex; i < argc; i++)
+    for (int i = startIndex ; i < argc ; ++i)
     {
         files << QString::fromLocal8Bit(argv[i]);
     }
@@ -71,7 +71,6 @@ QList<cv::Mat> toImages(const QStringList& paths)
 
 class Q_DECL_HIDDEN OpenCVSideBySideDisplay
 {
-
 public:
 
     OpenCVSideBySideDisplay(int rows, int uiSize = 200)
@@ -115,6 +114,8 @@ public:
         label.setPixmap(ASM::cvMatToQPixmap(bigImage));
         label.show();
     }
+
+public:
 
     cv::Mat   bigImage;
     const int uiSize;

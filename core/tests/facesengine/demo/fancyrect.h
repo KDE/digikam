@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #ifndef DIGIKAM_DEMO_FANCY_RECT_H
 #define DIGIKAM_DEMO_FANCY_RECT_H
 

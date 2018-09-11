@@ -46,18 +46,21 @@ public:
 };
 
 Button::Button(QGraphicsItem* const parent)
-      : QGraphicsItem(parent), d(new Private)
+    : QGraphicsItem(parent),
+      d(new Private)
 {
 }
 
 Button::Button(const QString& normal, const QString& pressed, QGraphicsItem* const parent)
-      : QGraphicsItem(parent), d(new Private)
+    : QGraphicsItem(parent),
+      d(new Private)
 {
     setPixmap(normal, pressed);
 }
 
 Button::Button(const QPixmap& normal, const QPixmap& pressed, QGraphicsItem* const parent)
-      : QGraphicsItem(parent), d(new Private)
+   : QGraphicsItem(parent),
+     d(new Private)
 {
     setPixmap(normal, pressed);
 }

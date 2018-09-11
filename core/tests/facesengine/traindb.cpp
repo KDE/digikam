@@ -115,7 +115,7 @@ int main(int argc, char** argv)
     QThreadPool pool;
     pool.setMaxThreadCount(101);
 
-    for (int i = 0 ; i < firstMultiplier ; i++)
+    for (int i = 0 ; i < firstMultiplier ; ++i)
     {
         Runnable* r= new Runnable(i, db);
         pool.start(r);

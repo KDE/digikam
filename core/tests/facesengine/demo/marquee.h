@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef MARQUEE_H
-#define MARQUEE_H
+#ifndef DIGIKAM_MARQUEE_H
+#define DIGIKAM_MARQUEE_H
 
 // Qt includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MARQUEE_H
+#endif // DIGIKAM_MARQUEE_H
