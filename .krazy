@@ -1,2 +1,2 @@
-SKIP /cimg/|/data/|/libjpeg/|/libpgf/|/libraw/|/extra/|/o2/|/upnpsdk/|/opencv3-face/|/dnnface/|/libstatgrab/|/project/|/build/|/build.scan/|/html/
+SKIP /core/libs/dimg/filters/greycstoration/cimg/|/core/tests/mediawiki/data/|/core/libs/jpegutils/libjpeg/|/core/libs/pgfutils/libpgf/|/core/libs/rawengine/libraw/|/core/libs/dngwriter/extra/|/core/utilities/assistants/webservices/common/o2/|/core/utilities/mediaserver/upnpsdk/|/core/libs/facesengine/opencv3-face/|/core/libs/facesengine/dnnface/|/core/libs/kmemoryinfo/libstatgrab/|/project/|/build/|/build.scan/|/html/
 EXCLUDE qclasses
