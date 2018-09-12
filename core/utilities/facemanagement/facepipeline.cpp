@@ -59,6 +59,8 @@ FacePipelineFaceTagsIface::FacePipelineFaceTagsIface(const FaceTagsIface& face)
 {
 }
 
+// ----------------------------------------------------------------------------------------
+
 FacePipelineFaceTagsIfaceList::FacePipelineFaceTagsIfaceList()
 {
 }
