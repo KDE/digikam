@@ -95,7 +95,7 @@ QList<FaceTagsIface> FaceUtils::toFaceTagsIfaces(qlonglong imageid,
 {
     QList<FaceTagsIface> faces;
 
-    for (int i=0; i<detectedFaces.size(); ++i)
+    for (int i = 0 ; i < detectedFaces.size() ; ++i)
     {
         Identity identity;
 
@@ -127,14 +127,14 @@ QList<FaceTagsIface> FaceUtils::toFaceTagsIfaces(qlonglong imageid,
 void FaceUtils::storeThumbnails(ThumbnailLoadThread* const thread, const QString& filePath,
                                 const QList<FaceTagsIface>& databaseFaces, const DImg& image)
 {
-    foreach(const FaceTagsIface& face, databaseFaces)
+    foreach (const FaceTagsIface& face, databaseFaces)
     {
         QList<QRect> rects;
         rects << face.region().toRect();
         const int margin = faceRectDisplayMargin();
         rects << face.region().toRect().adjusted(-margin, -margin, margin, margin);
 
-        foreach(const QRect& rect, rects)
+        foreach (const QRect& rect, rects)
         {
             QRect mapped  = TagRegion::mapFromOriginalSize(image, rect);
             QImage detail = image.copyQImage(mapped);
@@ -162,12 +162,12 @@ QList<FaceTagsIface> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
     QList<FaceTagsIface> currentFaces = databaseFaces(imageid);
 
     // merge new with existing entries
-    for (int i = 0; i < newFaces.size(); ++i)
+    for (int i = 0 ; i < newFaces.size() ; ++i)
     {
         FaceTagsIface& newFace = newFaces[i];
         QList<FaceTagsIface> overlappingEntries;
 
-        foreach(const FaceTagsIface& oldFace, currentFaces)
+        foreach (const FaceTagsIface& oldFace, currentFaces)
         {
             double minOverlap = oldFace.isConfirmedName() ? 0.25 : 0.5;
 
@@ -187,7 +187,7 @@ QList<FaceTagsIface> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
             if (newFace.isUnknownName())
             {
                 // we have no name in the new face. Do we have one in the old faces?
-                for (int i = 0; i < overlappingEntries.size(); ++i)
+                for (int i = 0 ; i < overlappingEntries.size() ; ++i)
                 {
                     const FaceTagsIface& oldFace = overlappingEntries.at(i);
 
@@ -206,7 +206,7 @@ QList<FaceTagsIface> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
             else
             {
                 // we have a name in the new face. Do we have names in overlapping faces?
-                for (int i = 0; i < overlappingEntries.size(); ++i)
+                for (int i = 0 ; i < overlappingEntries.size() ; ++i)
                 {
                     FaceTagsIface& oldFace = overlappingEntries[i];
 

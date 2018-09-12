@@ -417,7 +417,7 @@ class Q_DECL_HIDDEN FacePipeline::Private : public QObject
 
 public:
 
-    explicit Private(FacePipeline* q);
+    explicit Private(FacePipeline* const q);
 
     void processBatch(const QList<ImageInfo>& infos);
     void sendFromFilter(const QList<FacePipelineExtendedPackage::Ptr>& packages);

@@ -284,7 +284,7 @@ QList<RegionFrameItem*> FaceGroup::items() const
 {
     QList<RegionFrameItem*> items;
 
-    foreach(FaceItem* const item, d->items)
+    foreach (FaceItem* const item, d->items)
     {
         items << item;
     }
@@ -415,7 +415,7 @@ RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* const manhattan
     qreal minDistance            = 0;
     qreal minCenterDistance      = 0;
 
-    foreach(RegionFrameItem* const item, d->items)
+    foreach (RegionFrameItem* const item, d->items)
     {
         QRectF r       = item->boundingRect().translated(item->pos());
         qreal distance = (p - closestPointOfRect(p, r)).manhattanLength();
@@ -487,9 +487,9 @@ void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent* e)
             // this will be the one item shown by mouse over
             QList<QObject*> visible        = d->visibilityController->visibleItems(ItemVisibilityController::ExcludeFadingOut);
 
-            foreach(QGraphicsItem* const item, hotItems)
+            foreach (QGraphicsItem* const item, hotItems)
             {
-                foreach(QObject* const parent, visible)
+                foreach (QObject* const parent, visible)
                 {
                     if (static_cast<QGraphicsObject*>(parent)->isAncestorOf(item))
                     {
@@ -545,6 +545,7 @@ FaceItem* FaceGroup::Private::addItem(const FaceTagsIface& face)
     visibilityController->addItem(item);
 
     items << item;
+
     return item;
 }
 
@@ -624,7 +625,7 @@ void FaceGroup::load()
     QList<FaceTagsIface> faces = FaceTagsEditor().databaseFaces(d->info.id());
     d->visibilityController->clear();
 
-    foreach(const FaceTagsIface& face, faces)
+    foreach (const FaceTagsIface& face, faces)
     {
         d->addItem(face);
     }
@@ -642,7 +643,7 @@ void FaceGroup::clear()
     cancelAddItem();
     d->visibilityController->clear();
 
-    foreach(RegionFrameItem* const item, d->items)
+    foreach (RegionFrameItem* const item, d->items)
     {
         delete item;
     }
@@ -653,7 +654,7 @@ void FaceGroup::clear()
 
 void FaceGroup::rejectAll()
 {
-    foreach(FaceItem* const item, d->items)
+    foreach (FaceItem* const item, d->items)
     {
         d->editPipeline.remove(d->info, item->face());
         item->setFace(FaceTagsIface());
@@ -686,7 +687,7 @@ void FaceGroup::slotAlbumRenamed(Album* album)
         return;
     }
 
-    foreach(FaceItem* const item, d->items)
+    foreach (FaceItem* const item, d->items)
     {
         if (!item->face().isNull() &&
              item->face().tagId() == album->id())
@@ -833,7 +834,7 @@ void FaceGroup::cancelAddItem()
 
 void FaceGroup::applyItemGeometryChanges()
 {
-    foreach(FaceItem* const item, d->items)
+    foreach (FaceItem* const item, d->items)
     {
         if (item->face().isNull())
         {
@@ -853,15 +854,16 @@ void FaceGroup::applyItemGeometryChanges()
 void ImagePreviewView::trainFaces()
 {
     QList<Face> trainList;
-    foreach(Face f, d->currentFaces)
+
+    foreach (Face f, d->currentFaces)
     {
-        if(f.name() != "" && !d->faceIface->isFaceTrained(getImageInfo().id(), f.toRect(), f.name()))
+        if (f.name() != "" && !d->faceIface->isFaceTrained(getImageInfo().id(), f.toRect(), f.name()))
             trainList += f;
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Number of training faces" << trainList.size();
 
-    if(trainList.size()!=0)
+    if (trainList.size()!=0)
     {
         d->faceIface->trainWithFaces(trainList);
         d->faceIface->markFacesAsTrained(getImageInfo().id(), trainList);
@@ -873,15 +875,15 @@ void ImagePreviewView::suggestFaces()
     // Assign tentative names to the face list
     QList<Face> recogList;
 
-    foreach(Face f, d->currentFaces)
+    foreach (Face f, d->currentFaces)
     {
-        if(!d->faceIface->isFaceRecognized(getImageInfo().id(), f.toRect(), f.name()) && f.name().isEmpty())
+        if (!d->faceIface->isFaceRecognized(getImageInfo().id(), f.toRect(), f.name()) && f.name().isEmpty())
         {
             f.setName(d->faceIface->recognizedName(f));
             d->faceIface->markFaceAsRecognized(getImageInfo().id(), f.toRect(), f.name());
 
             // If the face wasn't recognized (too distant) don't suggest anything
-            if(f.name().isEmpty())
+            if (f.name().isEmpty())
                 continue;
             else
                 recogList += f;
@@ -892,11 +894,11 @@ void ImagePreviewView::suggestFaces()
     qCDebug(DIGIKAM_GENERAL_LOG) << "Number of faceitems = " << d->faceitems.size();
 
     // Now find the relevant face items and suggest faces
-    for(int i = 0; i < recogList.size(); ++i)
+    for (int i = 0 ; i < recogList.size() ; ++i)
     {
-        for(int j = 0; j < d->faceitems.size(); ++j)
+        for (int j = 0 ; j < d->faceitems.size() ; ++j)
         {
-            if(recogList[i].toRect() == d->faceitems[j]->originalRect())
+            if (recogList[i].toRect() == d->faceitems[j]->originalRect())
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Suggesting a name " << recogList[i].name();
                 d->faceitems[j]->suggest(recogList[i].name());

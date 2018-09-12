@@ -38,7 +38,8 @@
 namespace Digikam
 {
 
-class FaceScanDialog : public QDialog, public StateSavingObject
+class FaceScanDialog : public QDialog,
+                       public StateSavingObject
 {
     Q_OBJECT
 
