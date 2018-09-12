@@ -74,7 +74,7 @@ FacePipelineFaceTagsIfaceList& FacePipelineFaceTagsIfaceList::operator=(const QL
 {
     foreach (const FaceTagsIface& face, faces)
     {
-        operator<<(face);
+        operator<<(FacePipelineFaceTagsIface(face));
     }
 
     return *this;
@@ -688,7 +688,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
                     tagId = FaceTags::getOrCreateTagForIdentity(package->recognitionResults[i].attributesMap());
                 }
 
-                package->databaseFaces[i]        = utils.changeSuggestedName(package->databaseFaces[i], tagId);
+                package->databaseFaces[i]        = FacePipelineFaceTagsIface(utils.changeSuggestedName(package->databaseFaces[i], tagId));
                 package->databaseFaces[i].roles &= ~FacePipelineFaceTagsIface::ForRecognition;
            }
         }
@@ -705,7 +705,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
         {
             if (it->roles & FacePipelineFaceTagsIface::ForConfirmation)
             {
-                FacePipelineFaceTagsIface confirmed = utils.confirmName(*it, it->assignedTagId, it->assignedRegion);
+                FacePipelineFaceTagsIface confirmed = FacePipelineFaceTagsIface(utils.confirmName(*it, it->assignedTagId, it->assignedRegion));
                 confirmed.roles                    |= FacePipelineFaceTagsIface::Confirmed | FacePipelineFaceTagsIface::ForTraining;
                 add << confirmed;
             }
@@ -716,11 +716,11 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
                     // add Manually
                     FaceTagsIface newFace = utils.unconfirmedEntry(package->info.id(), it->assignedTagId, it->assignedRegion);
                     utils.addManually(newFace);
-                    add << newFace;
+                    add << FacePipelineFaceTagsIface(newFace);
                 }
                 else if (it->assignedRegion.isValid())
                 {
-                    add << utils.changeRegion(*it, it->assignedRegion);
+                    add << FacePipelineFaceTagsIface(utils.changeRegion(*it, it->assignedRegion));
                     // not implemented: changing tag id
                 }
                 else
@@ -1720,7 +1720,7 @@ FaceTagsIface FacePipeline::confirm(const ImageInfo& info,
                                     int assignedTagId,
                                     const TagRegion& assignedRegion)
 {
-    FacePipelineFaceTagsIface face            = databaseFace;
+    FacePipelineFaceTagsIface face            = FacePipelineFaceTagsIface(databaseFace);
     face.assignedTagId                        = assignedTagId;
     face.assignedRegion                       = assignedRegion;
     face.roles                               |= FacePipelineFaceTagsIface::ForConfirmation;
@@ -1752,7 +1752,7 @@ FaceTagsIface FacePipeline::editRegion(const ImageInfo& info,
                                        const FaceTagsIface& databaseFace,
                                        const TagRegion& newRegion)
 {
-    FacePipelineFaceTagsIface face            = databaseFace;
+    FacePipelineFaceTagsIface face            = FacePipelineFaceTagsIface(databaseFace);
     face.assignedTagId                        = -1;
     face.assignedRegion                       = newRegion;
     face.roles                               |= FacePipelineFaceTagsIface::ForEditing;
@@ -1768,7 +1768,9 @@ FaceTagsIface FacePipeline::editRegion(const ImageInfo& info,
 void FacePipeline::remove(const ImageInfo& info,
                           const FaceTagsIface& databaseFace)
 {
-    FacePipelineExtendedPackage::Ptr package = d->buildPackage(info, databaseFace, DImg());
+    FacePipelineExtendedPackage::Ptr package = d->buildPackage(info,
+                                                               FacePipelineFaceTagsIface(databaseFace),
+                                                               DImg());
     package->databaseFaces.setRole(FacePipelineFaceTagsIface::ForEditing);
     d->send(package);
 }
