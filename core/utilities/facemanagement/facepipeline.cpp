@@ -286,7 +286,7 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
             if (!databaseFaces.isEmpty())
             {
                 FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
-                package->databaseFaces = databaseFaces;
+                package->databaseFaces                   = databaseFaces;
                 //qCDebug(DIGIKAM_GENERAL_LOG) << "Prepared package with" << databaseFaces.size();
                 package->databaseFaces.setRole(FacePipelineFaceTagsIface::ReadFromDatabase);
 
@@ -466,6 +466,7 @@ void PreviewLoader::slotImageLoaded(const LoadingDescription& loadingDescription
 bool PreviewLoader::sentOutLimitReached()
 {
     int packagesInTheFollowingPipeline = d->packagesOnTheRoad - scheduledPackages.size();
+
     return (packagesInTheFollowingPipeline > maximumSentOutPackages);
 }
 
@@ -525,7 +526,7 @@ FaceImageRetriever::FaceImageRetriever(FacePipeline::Private* const d)
 {
 }
 
-ThumbnailImageCatcher* FaceImageRetriever::thumbnailCatcher()
+ThumbnailImageCatcher* FaceImageRetriever::thumbnailCatcher() const
 {
     return catcher;
 }
@@ -535,7 +536,7 @@ void FaceImageRetriever::cancel()
     catcher->cancel();
 }
 
-QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<QRectF>& rects)
+QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<QRectF>& rects) const
 {
     QList<QImage> images;
 
@@ -547,7 +548,7 @@ QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<QRectF
     return images;
 }
 
-QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<FaceTagsIface>& faces)
+QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<FaceTagsIface>& faces) const
 {
     QList<QImage> images;
 
@@ -560,7 +561,7 @@ QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<FaceTa
     return images;
 }
 
-QList<QImage> FaceImageRetriever::getThumbnails(const QString& filePath, const QList<FaceTagsIface>& faces)
+QList<QImage> FaceImageRetriever::getThumbnails(const QString& filePath, const QList<FaceTagsIface>& faces) const
 {
     Q_UNUSED(filePath)
     thumbnailCatcher()->setActive(true);
@@ -669,7 +670,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
     {
         FaceUtils utils;
 
-        for (int i = 0 ; i < package->databaseFaces.size() ; i++)
+        for (int i = 0 ; i < package->databaseFaces.size() ; ++i)
         {
             if (package->databaseFaces[i].roles & FacePipelineFaceTagsIface::ForRecognition)
             {
@@ -955,7 +956,7 @@ void RecognitionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
 {
     FaceUtils utils;
 
-    for (int i = 0 ; i < package->databaseFaces.size() ; i++)
+    for (int i = 0 ; i < package->databaseFaces.size() ; ++i)
     {
         Identity identity  = utils.identityForTag(package->databaseFaces[i].tagId(), database);
         Statistics& result = results[package->databaseFaces[i].tagId()];
@@ -1037,7 +1038,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
             dbFace.setType(FaceTagsIface::FaceForTraining);
             toTrain << dbFace;
 
-            Identity identity = utils.identityForTag(dbFace.tagId(), database);
+            Identity identity    = utils.identityForTag(dbFace.tagId(), database);
 
             identities  << identity.id();
 
@@ -1165,14 +1166,18 @@ FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const Image
     return package;
 }
 
-FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const ImageInfo& info, const FacePipelineFaceTagsIface& face, const DImg& image)
+FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const ImageInfo& info,
+                                                                     const FacePipelineFaceTagsIface& face,
+                                                                     const DImg& image)
 {
     FacePipelineFaceTagsIfaceList faces;
     faces << face;
     return buildPackage(info, faces, image);
 }
 
-FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const ImageInfo& info, const FacePipelineFaceTagsIfaceList& faces, const DImg& image)
+FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const ImageInfo& info,
+                                                                     const FacePipelineFaceTagsIfaceList& faces,
+                                                                     const DImg& image)
 {
     FacePipelineExtendedPackage::Ptr package = buildPackage(info);
     package->databaseFaces                   = faces;
@@ -1484,7 +1489,7 @@ void FacePipeline::plugParallelFaceDetectors()
     const int n          = qMin(3, QThread::idealThreadCount());
     d->parallelDetectors = new ParallelPipes;
 
-    for (int i = 0; i < n; ++i)
+    for (int i = 0 ; i < n ; ++i)
     {
         DetectionWorker* const worker = new DetectionWorker(d);
 
