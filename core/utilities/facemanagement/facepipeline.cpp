@@ -1658,7 +1658,8 @@ bool FacePipeline::process(const ImageInfo& info)
     return true;
 }
 
-bool FacePipeline::process(const ImageInfo& info, const DImg& image)
+bool FacePipeline::process(const ImageInfo& info,
+                           const DImg& image)
 {
     FacePipelineExtendedPackage::Ptr package = d->filterOrBuildPackage(info);
 
@@ -1674,7 +1675,9 @@ bool FacePipeline::process(const ImageInfo& info, const DImg& image)
 }
 
 /*
-bool FacePipeline::add(const ImageInfo& info, const QRect& rect, const DImg& image)
+bool FacePipeline::add(const ImageInfo& info,
+                       const QRect& rect,
+                       const DImg& image)
 {
     FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
     package->image                           = image;
@@ -1684,26 +1687,36 @@ bool FacePipeline::add(const ImageInfo& info, const QRect& rect, const DImg& ima
 }
 */
 
-void FacePipeline::train(const ImageInfo& info, const QList<FaceTagsIface>& databaseFaces)
+void FacePipeline::train(const ImageInfo& info,
+                         const QList<FaceTagsIface>& databaseFaces)
 {
     train(info, databaseFaces, DImg());
 }
 
-void FacePipeline::train(const ImageInfo& info, const QList<FaceTagsIface>& databaseFaces, const DImg& image)
+void FacePipeline::train(const ImageInfo& info,
+                         const QList<FaceTagsIface>& databaseFaces,
+                         const DImg& image)
 {
-    FacePipelineExtendedPackage::Ptr package = d->buildPackage(info, databaseFaces, image);
+    FacePipelineExtendedPackage::Ptr package = d->buildPackage(info,
+                                                               FacePipelineFaceTagsIfaceList(databaseFaces),
+                                                               image);
     package->databaseFaces.setRole(FacePipelineFaceTagsIface::ForTraining);
     d->send(package);
 }
 
-FaceTagsIface FacePipeline::confirm(const ImageInfo& info, const FaceTagsIface& databaseFace,
-                                    int assignedTagId, const TagRegion& assignedRegion)
+FaceTagsIface FacePipeline::confirm(const ImageInfo& info,
+                                    const FaceTagsIface& databaseFace,
+                                    int assignedTagId,
+                                    const TagRegion& assignedRegion)
 {
     return confirm(info, databaseFace, DImg(), assignedTagId, assignedRegion);
 }
 
-FaceTagsIface FacePipeline::confirm(const ImageInfo& info, const FaceTagsIface& databaseFace,
-                                    const DImg& image, int assignedTagId, const TagRegion& assignedRegion)
+FaceTagsIface FacePipeline::confirm(const ImageInfo& info,
+                                    const FaceTagsIface& databaseFace,
+                                    const DImg& image,
+                                    int assignedTagId,
+                                    const TagRegion& assignedRegion)
 {
     FacePipelineFaceTagsIface face            = databaseFace;
     face.assignedTagId                        = assignedTagId;
@@ -1716,7 +1729,9 @@ FaceTagsIface FacePipeline::confirm(const ImageInfo& info, const FaceTagsIface& 
     return FaceTagsEditor::confirmedEntry(face, assignedTagId, assignedRegion);
 }
 
-FaceTagsIface FacePipeline::addManually(const ImageInfo& info, const DImg& image, const TagRegion& assignedRegion)
+FaceTagsIface FacePipeline::addManually(const ImageInfo& info,
+                                        const DImg& image,
+                                        const TagRegion& assignedRegion)
 {
     FacePipelineFaceTagsIface face; // giving a null face => no existing face yet, add it
     face.assignedTagId                        = -1;
@@ -1730,7 +1745,8 @@ FaceTagsIface FacePipeline::addManually(const ImageInfo& info, const DImg& image
     return FaceTagsEditor::unconfirmedEntry(info.id(), face.assignedTagId, face.assignedRegion);
 }
 
-FaceTagsIface FacePipeline::editRegion(const ImageInfo& info, const DImg& image,
+FaceTagsIface FacePipeline::editRegion(const ImageInfo& info,
+                                       const DImg& image,
                                        const FaceTagsIface& databaseFace,
                                        const TagRegion& newRegion)
 {
@@ -1747,7 +1763,8 @@ FaceTagsIface FacePipeline::editRegion(const ImageInfo& info, const DImg& image,
     return face;
 }
 
-void FacePipeline::remove(const ImageInfo& info, const FaceTagsIface& databaseFace)
+void FacePipeline::remove(const ImageInfo& info,
+                          const FaceTagsIface& databaseFace)
 {
     FacePipelineExtendedPackage::Ptr package = d->buildPackage(info, databaseFace, DImg());
     package->databaseFaces.setRole(FacePipelineFaceTagsIface::ForEditing);

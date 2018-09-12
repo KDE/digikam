@@ -86,7 +86,7 @@ class FacePipelineFaceTagsIfaceList : public QList<FacePipelineFaceTagsIface>
 public:
 
     FacePipelineFaceTagsIfaceList();
-    FacePipelineFaceTagsIfaceList(const QList<FaceTagsIface>& faces);    // krazy:exclude=explicit
+    explicit FacePipelineFaceTagsIfaceList(const QList<FaceTagsIface>& faces);
 
     FacePipelineFaceTagsIfaceList& operator=(const QList<FaceTagsIface>& faces);
 
