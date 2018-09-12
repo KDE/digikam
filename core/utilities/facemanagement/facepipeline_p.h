@@ -45,7 +45,8 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN FacePipelineExtendedPackage : public FacePipelinePackage, public QSharedData
+class Q_DECL_HIDDEN FacePipelineExtendedPackage : public FacePipelinePackage,
+                                                  public QSharedData
 {
 public:
 
@@ -220,10 +221,10 @@ public:
     explicit FaceImageRetriever(FacePipeline::Private* const d);
     void cancel();
 
-    ThumbnailImageCatcher* thumbnailCatcher();
-    QList<QImage> getDetails(const DImg& src, const QList<QRectF>& rects);
-    QList<QImage> getDetails(const DImg& src, const QList<FaceTagsIface>& faces);
-    QList<QImage> getThumbnails(const QString& filePath, const QList<FaceTagsIface>& faces);
+    ThumbnailImageCatcher* thumbnailCatcher()                                               const;
+    QList<QImage> getDetails(const DImg& src, const QList<QRectF>& rects)                   const;
+    QList<QImage> getDetails(const DImg& src, const QList<FaceTagsIface>& faces)            const;
+    QList<QImage> getThumbnails(const QString& filePath, const QList<FaceTagsIface>& faces) const;
 
 protected:
 
@@ -400,6 +401,8 @@ protected:
         int correctlyRecognized;
     };
 
+protected:
+
     QMap<int, Statistics>        results;
 
     FacePipeline::Private* const d;
@@ -414,7 +417,7 @@ class Q_DECL_HIDDEN FacePipeline::Private : public QObject
 
 public:
 
-    explicit Private(FacePipeline* q);
+    explicit Private(FacePipeline* const q);
 
     void processBatch(const QList<ImageInfo>& infos);
     void sendFromFilter(const QList<FacePipelineExtendedPackage::Ptr>& packages);

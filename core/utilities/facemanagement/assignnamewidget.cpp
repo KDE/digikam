@@ -147,19 +147,19 @@ bool AssignNameWidget::Private::isValid() const
 void AssignNameWidget::Private::clearWidgets()
 {
     delete comboBox;
-    comboBox = 0;
+    comboBox       = 0;
 
     delete lineEdit;
-    lineEdit = 0;
+    lineEdit      = 0;
 
     delete confirmButton;
     confirmButton = 0;
 
     delete rejectButton;
-    rejectButton = 0;
+    rejectButton  = 0;
 
     delete clickLabel;
-    clickLabel = 0;
+    clickLabel    = 0;
 }
 
 QToolButton* AssignNameWidget::Private::createToolButton(const QIcon& icon, const QString& text, const QString& tip) const
@@ -169,6 +169,7 @@ QToolButton* AssignNameWidget::Private::createToolButton(const QIcon& icon, cons
     b->setText(text);
     b->setToolTip(tip);
     b->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+
     return b;
 }
 
@@ -387,6 +388,7 @@ static QString styleSheetFontDescriptor(const QFont& font)
     s += (font.pointSize() == -1) ? QString::fromUtf8("font-size: %1px; ").arg(font.pixelSize())
                                   : QString::fromUtf8("font-size: %1pt; ").arg(font.pointSize());
     s += QString::fromUtf8("font-family: \"%1\"; ").arg(font.family());
+
     return s;
 }
 

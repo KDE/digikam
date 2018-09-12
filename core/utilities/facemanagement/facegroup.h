@@ -115,8 +115,6 @@ public Q_SLOTS:
     /** Rejects (clears) all faces on the current image */
     void rejectAll();
 
-Q_SIGNALS:
-
 protected:
 
     void load();

@@ -102,13 +102,13 @@ public:
     TagEntryWidgetMode tagEntryWidgetMode() const;
 
     void setLayoutMode(LayoutMode mode);
-    LayoutMode layoutMode() const;
+    LayoutMode layoutMode()     const;
 
     void setVisualStyle(VisualStyle style);
-    VisualStyle visualStyle() const;
+    VisualStyle visualStyle()   const;
 
-    ImageInfo info()           const;
-    QVariant  faceIdentifier() const;
+    ImageInfo info()            const;
+    QVariant  faceIdentifier()  const;
 
     /// The combo box or line edit in use, if any
     AddTagsComboBox* comboBox() const;

@@ -48,7 +48,6 @@ class ThumbnailImageCatcher;
 
 class FaceUtils : public FaceTagsEditor
 {
-
 public:
 
     enum FaceRecognitionSteps
@@ -133,6 +132,6 @@ protected:
     virtual void removeNormalTags(qlonglong imageid, QList<int> tagId);
 };
 
-}  // Namespace Digikam
+} // Namespace Digikam
 
 #endif // DIGIKAM_FACE_UTILS_H
