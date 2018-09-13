@@ -562,4 +562,6 @@ BUGFIXES:
 501 ==> 386653 - Message error on face detectior.
 502 ==> 398287 - Print creator causes digiKam crash when orientation is changed.
 503 ==> 397305 - Failed to add tag to database.
-504 ==> 
+504 ==> 398462 - IPTC from Ligthroom.
+505 ==> 
+
