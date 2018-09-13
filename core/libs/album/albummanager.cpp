@@ -126,7 +126,7 @@ public:
     {
     }
 
-    PAlbumPath(PAlbum* const album)   // krazy:exclude=explicit
+    explicit PAlbumPath(PAlbum* const album)
     {
         if (album->isRoot())
         {
@@ -2377,7 +2377,7 @@ void AlbumManager::updateAlbumPathHash()
 
     while ((subAlbum = static_cast<PAlbum*>(it.current())) != 0)
     {
-        d->albumPathHash[subAlbum] = subAlbum;
+        d->albumPathHash[PAlbumPath(subAlbum)] = subAlbum;
         ++it;
     }
 
@@ -3083,7 +3083,7 @@ void AlbumManager::insertPAlbum(PAlbum* album, PAlbum* parent)
         album->setParent(parent);
     }
 
-    d->albumPathHash[album]  = album;
+    d->albumPathHash[PAlbumPath(album)]   = album;
     d->allAlbumsIdHash[album->globalID()] = album;
 
     emit signalAlbumAdded(album);
@@ -3115,7 +3115,7 @@ void AlbumManager::removePAlbum(PAlbum* album)
     }
 
     emit signalAlbumAboutToBeDeleted(album);
-    d->albumPathHash.remove(album);
+    d->albumPathHash.remove(PAlbumPath(album));
     d->allAlbumsIdHash.remove(album->globalID());
 
     CoreDbUrl url = album->databaseUrl();
