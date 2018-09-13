@@ -1225,7 +1225,20 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
         }
     }
 
-    if (!modificationDateEquals(fi.lastModified(), scanInfo.modificationDate) ||
+    QDateTime modificationDate = fi.lastModified();
+
+    if (DMetadata::hasSidecar(fi.filePath()))
+    {
+        QString filePath      = DMetadata::sidecarPath(fi.filePath());
+        QDateTime sidecarDate = QFileInfo(filePath).lastModified();
+
+        if (sidecarDate > modificationDate)
+        {
+            modificationDate = sidecarDate;
+        }
+    }
+
+    if (!modificationDateEquals(modificationDate, scanInfo.modificationDate) ||
         fi.size() != scanInfo.fileSize)
     {
         if (MetadataSettings::instance()->settings().rescanImageIfModified)
