@@ -166,6 +166,16 @@ QString MetaEngine::sidecarFilePathForFile(const QString& path)
         return QString();
     }
 
+    QFileInfo info(path);
+    QString pathForLR = path;
+    pathForLR.chop(info.suffix().size());
+    pathForLR.append(QLatin1String("xmp"));
+
+    if (QFileInfo::exists(pathForLR))
+    {
+        return pathForLR;
+    }
+
     return path + QLatin1String(".xmp");
 }
 
