@@ -439,7 +439,7 @@ void DatabaseTask::run()
     }
     else if (d->mode == Mode::CleanThumbsDb)
     {
-        BdEngineBackend::QueryState lastQueryState = BdEngineBackend::ConnectionError;
+        BdEngineBackend::QueryState lastQueryState = BdEngineBackend::QueryState(BdEngineBackend::ConnectionError);
 
         // Connect to the database
         lastQueryState                             = ThumbsDbAccess().backend()->beginTransaction();
