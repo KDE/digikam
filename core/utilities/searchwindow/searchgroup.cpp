@@ -162,6 +162,7 @@ void SearchGroup::setup(Type type)
     group = new SearchFieldGroup(this);
     group->setLabel(label);
 
+    group->addField(SearchField::createField(QLatin1String("creator"),       group));
     group->addField(SearchField::createField(QLatin1String("comment"),       group));
     group->addField(SearchField::createField(QLatin1String("commentauthor"), group));
     group->addField(SearchField::createField(QLatin1String("headline"),      group));

@@ -1411,6 +1411,15 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         sql += QString::fromUtf8(" (ImagePositions.latitudeNumber IS NULL AND ImagePositions.longitudeNumber IS NULL) ");
     }
+    else if (name == QLatin1String("creator"))
+    {
+        sql += QString::fromUtf8(" (Images.id IN "
+               " (SELECT imageid FROM ImageCopyright "
+               "  WHERE property='creator' and value ");
+        ImageQueryBuilder::addSqlRelation(sql, relation);
+        sql += QString::fromUtf8(" ?)) ");
+        *boundValues << fieldQuery.prepareForLike(reader.value());
+    }
     else if (name == QLatin1String("comment"))
     {
         sql += QString::fromUtf8(" (Images.id IN "

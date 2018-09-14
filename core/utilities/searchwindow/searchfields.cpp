@@ -598,7 +598,13 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setLabel(i18n("Not Geo-located"));
         return field;
     }
-
+    else if (name == QLatin1String("creator"))
+    {
+        SearchFieldText* const field = new SearchFieldText(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Creator"), i18n("Return items created by"));
+        return field;
+    }
     else if (name == QLatin1String("comment"))
     {
         SearchFieldText* const field = new SearchFieldText(parent);
