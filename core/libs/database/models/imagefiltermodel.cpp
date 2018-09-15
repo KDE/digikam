@@ -679,7 +679,7 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
 
     if (needPrepareTags || needPrepareGroups)
     {
-        infoList = package.infos.toList();
+        infoList = ImageInfoList(package.infos.toList());
     }
 
     if (needPrepareTags)

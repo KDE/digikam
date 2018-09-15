@@ -40,7 +40,7 @@ void LightTableWindow::slotImportFromScanner()
 void LightTableWindow::slotImportedImagefromScanner(const QUrl& url)
 {
     ImageInfo info = ScanController::instance()->scannedInfo(url.toLocalFile());
-    loadImageInfos(ImageInfoList() << info, info, true);
+    loadImageInfos(ImageInfoList(QList<ImageInfo>() << info), info, true);
 }
 
 void LightTableWindow::slotImportTool()

@@ -7,7 +7,7 @@
  * Description : ImageInfo common data
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C)      2014-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -94,6 +94,7 @@ DSharedDataPointer<T> toStrongRef(T* weakRef)
     DSharedDataPointer<ImageInfoData> ptr(weakRef);
     // decrease counter, which we incremented twice now
     weakRef->ref.deref();
+
     return ptr;
 }
 
@@ -130,6 +131,7 @@ DSharedDataPointer<ImageInfoData> ImageInfoCache::infoForId(qlonglong id)
     ImageInfoData* const data = new ImageInfoData();
     data->id                  = id;
     m_infos[id]               = data;
+
     return DSharedDataPointer<ImageInfoData>(data);
 }
 
@@ -243,7 +245,7 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
 {
     ImageInfoWriteLocker lock;
 
-    foreach(const qlonglong& imageId, changeset.ids())
+    foreach (const qlonglong& imageId, changeset.ids())
     {
         QHash<qlonglong, ImageInfoData*>::iterator it = m_infos.find(imageId);
 
@@ -349,7 +351,7 @@ void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset& changeset)
 
     ImageInfoWriteLocker lock;
 
-    foreach(const qlonglong& imageId, changeset.ids())
+    foreach (const qlonglong& imageId, changeset.ids())
     {
         QHash<qlonglong, ImageInfoData*>::iterator it = m_infos.find(imageId);
 

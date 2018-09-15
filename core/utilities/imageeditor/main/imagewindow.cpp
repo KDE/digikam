@@ -278,11 +278,11 @@ void ImageWindow::slotDroppedOnThumbbar(const QList<ImageInfo>& infos)
 
     QList<ImageInfo> toAdd;
 
-    foreach(const ImageInfo& it, infos)
+    foreach (const ImageInfo& it, infos)
     {
         QModelIndex index(d->imageFilterModel->indexForImageInfo(it));
 
-        if( !index.isValid() )
+        if (!index.isValid())
         {
             toAdd.append(it);
         }
@@ -292,7 +292,7 @@ void ImageWindow::slotDroppedOnThumbbar(const QList<ImageInfo>& infos)
 
     if (!toAdd.isEmpty())
     {
-        loadImageInfos(toAdd, toAdd.first(), QString());
+        loadImageInfos(ImageInfoList(toAdd), toAdd.first(), QString());
     }
 }
 
