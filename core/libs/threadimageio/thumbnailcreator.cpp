@@ -786,7 +786,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
     }
 
     ThumbsDbAccess access;
-    BdEngineBackend::QueryState lastQueryState = BdEngineBackend::ConnectionError;
+    BdEngineBackend::QueryState lastQueryState = BdEngineBackend::QueryState(BdEngineBackend::ConnectionError);
 
     while (lastQueryState == BdEngineBackend::ConnectionError)
     {
@@ -995,7 +995,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
 void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo& info) const
 {
     ThumbsDbAccess access;
-    BdEngineBackend::QueryState lastQueryState = BdEngineBackend::ConnectionError;
+    BdEngineBackend::QueryState lastQueryState = BdEngineBackend::QueryState(BdEngineBackend::ConnectionError);
 
     while (BdEngineBackend::ConnectionError == lastQueryState)
     {

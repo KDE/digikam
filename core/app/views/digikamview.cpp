@@ -2417,25 +2417,30 @@ ImageInfoList DigikamView::selectedInfoList(const bool currentFirst,
     switch (viewMode())
     {
         case StackedView::TableViewMode:
+            
             if (currentFirst)
             {
                 return d->tableView->selectedImageInfosCurrentFirst(grouping);
             }
+            
             return d->tableView->selectedImageInfos(grouping);
 
         case StackedView::PreviewImageMode:
         case StackedView::MediaPlayerMode:
         case StackedView::MapWidgetMode:
         case StackedView::IconViewMode:
+            
             // all of these modes use the same selection model and data as the IconViewMode
             if (currentFirst)
             {
                 return d->iconView->selectedImageInfosCurrentFirst(grouping);
             }
+            
             return d->iconView->selectedImageInfos(grouping);
 
         default:
-            return QList<ImageInfo>();
+            
+            return ImageInfoList();
     }
 }
 
@@ -2460,7 +2465,7 @@ ImageInfoList DigikamView::allInfo(const bool grouping) const
             return d->iconView->allImageInfos(grouping);
 
         default:
-            return QList<ImageInfo>();
+            return ImageInfoList();
     }
 }
 

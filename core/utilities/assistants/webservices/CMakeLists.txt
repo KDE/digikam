@@ -236,9 +236,9 @@ set(libwsgoogle_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/gdmpform.cpp
 
 # YandexFotki tool ----------------------------------------------------------------
 
-set(libwsyandexfotki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfalbum.cpp
-                          ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfauth.cpp
-                          ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfrsa.cpp
+set(libwsyandexfotki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfauth/yfauth.cpp
+                          ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfauth/yfrsa.cpp
+                          ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfalbum.cpp
                           ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yftalker.cpp
                           ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfphoto.cpp
                           ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfnewalbumdlg.cpp

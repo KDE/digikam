@@ -135,7 +135,7 @@ void LightTableWindow::slotThumbbarDroppedItems(const QList<ImageInfo>& list)
 {
     // Setting the third parameter of loadImageInfos to true
     // means that the images are added to the presently available images.
-    loadImageInfos(ImageInfoList() << list, ImageInfo(), true);
+    loadImageInfos(ImageInfoList(list), ImageInfo(), true);
 }
 
 // We get here either

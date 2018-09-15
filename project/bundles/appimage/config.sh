@@ -39,7 +39,7 @@ DK_EPOCH="-`date "+%Y%m%dT%H%M%S"`"
 DK_DEBUG=1
 
 # Sign bundles with GPG. Passphrase must be hosted in ~/.gnupg/dkorg-gpg-pwd.txt
-DK_SIGN=1
+DK_SIGN=0
 
 # Upload automatically bundle to files.kde.org (pre-release only).
 DK_UPLOAD=1

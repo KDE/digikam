@@ -269,10 +269,10 @@ ImageInfoList TableView::allImageInfos(bool grouping) const
 {
     if (grouping)
     {
-        return s->treeView->resolveGrouping(s->tableViewModel->allImageInfo());
+        return s->treeView->resolveGrouping(ImageInfoList(s->tableViewModel->allImageInfo()));
     }
 
-    return s->tableViewModel->allImageInfo();
+    return ImageInfoList(s->tableViewModel->allImageInfo());
 }
 
 bool TableView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
@@ -567,10 +567,13 @@ void TableView::slotSetActive(const bool isActive)
 
 ImageInfoList TableView::selectedImageInfos(bool grouping) const
 {
-    ImageInfoList infos = s->tableViewModel->imageInfos(s->tableViewSelectionModel->selectedRows());
-    if (grouping) {
+    ImageInfoList infos = ImageInfoList(s->tableViewModel->imageInfos(s->tableViewSelectionModel->selectedRows()));
+
+    if (grouping)
+    {
         return s->treeView->resolveGrouping(infos);
     }
+
     return infos;
 }
 
@@ -590,10 +593,12 @@ ImageInfoList TableView::selectedImageInfosCurrentFirst(bool grouping) const
         }
     }
 
-    if (grouping) {
-        return s->treeView->resolveGrouping(s->tableViewModel->imageInfos(indexes));
+    if (grouping)
+    {
+        return s->treeView->resolveGrouping(ImageInfoList(s->tableViewModel->imageInfos(indexes)));
     }
-    return s->tableViewModel->imageInfos(indexes);
+
+    return ImageInfoList(s->tableViewModel->imageInfos(indexes));
 }
 
 void TableView::rename()

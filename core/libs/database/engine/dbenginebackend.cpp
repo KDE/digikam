@@ -80,7 +80,8 @@ DbEngineThreadData::~DbEngineThreadData()
 {
     if (transactionCount)
     {
-        qCDebug(DIGIKAM_DBENGINE_LOG) << "WARNING !!! Transaction count is" << transactionCount << "when destroying database!!!";
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "WARNING !!! Transaction count is"
+                                      << transactionCount << "when destroying database!!!";
     }
 
     closeDatabase();
@@ -97,7 +98,6 @@ void DbEngineThreadData::closeDatabase()
 
     // Destroy object
     database         = QSqlDatabase();
-
     valid            = 0;
     transactionCount = 0;
     lastError        = QSqlError();
@@ -173,7 +173,8 @@ QSqlDatabase BdEngineBackendPrivate::databaseForThread()
         }
         else
         {
-            qCDebug(DIGIKAM_DBENGINE_LOG) << "Error while opening the database. Error was" << threadData->database.lastError();
+            qCDebug(DIGIKAM_DBENGINE_LOG) << "Error while opening the database. Error was"
+                                          << threadData->database.lastError();
         }
     }
 
@@ -283,7 +284,8 @@ bool BdEngineBackendPrivate::isSQLiteLockError(const DbEngineSqlQuery& query) co
 
 bool BdEngineBackendPrivate::isSQLiteLockTransactionError(const QSqlError& lastError) const
 {
-    return (parameters.isSQLite()                                   &&
+    return (
+            parameters.isSQLite()                                   &&
             lastError.type()         == QSqlError::TransactionError &&
             lastError.databaseText() == QLatin1String("database is locked")
            );
@@ -299,7 +301,8 @@ bool BdEngineBackendPrivate::isConnectionError(const DbEngineSqlQuery& query) co
         return false;
     }
 
-    return (query.lastError().type()   == QSqlError::ConnectionError ||
+    return (
+            query.lastError().type()   == QSqlError::ConnectionError ||
             query.lastError().number() == 2006
            );
 }
@@ -516,7 +519,7 @@ void BdEngineBackendPrivate::AbstractUnlocker::finishAcquire()
 BdEngineBackendPrivate::AbstractUnlocker::~AbstractUnlocker()
 {
     // lock main mutex as often as it was locked before
-    for (int i=0; i<count; ++i)
+    for (int i = 0 ; i < count ; ++i)
     {
         d->lock->mutex.lock();
     }
@@ -570,13 +573,16 @@ void BdEngineBackendPrivate::ErrorLocker::wait()
 
 // -----------------------------------------------------------------------------------------
 
-BdEngineBackend::BdEngineBackend(const QString& backendName, DbEngineLocking* const locking)
+BdEngineBackend::BdEngineBackend(const QString& backendName,
+                                 DbEngineLocking* const locking)
     : d_ptr(new BdEngineBackendPrivate(this))
 {
     d_ptr->init(backendName, locking);
 }
 
-BdEngineBackend::BdEngineBackend(const QString& backendName, DbEngineLocking* const locking, BdEngineBackendPrivate& dd)
+BdEngineBackend::BdEngineBackend(const QString& backendName,
+                                 DbEngineLocking* const locking,
+                                 BdEngineBackendPrivate& dd)
     : d_ptr(&dd)
 {
     d_ptr->init(backendName, locking);
@@ -617,36 +623,40 @@ BdEngineBackend::DbType BdEngineBackend::databaseType() const
     return d->parameters.isSQLite() ? DbType::SQLite : DbType::MySQL;
 }
 
-BdEngineBackend::QueryState BdEngineBackend::execDBAction(const DbEngineAction& action, QList<QVariant>* const values,
+BdEngineBackend::QueryState BdEngineBackend::execDBAction(const DbEngineAction& action,
+                                                          QList<QVariant>* const values,
                                                           QVariant* const lastInsertId)
 {
     return execDBAction(action, QMap<QString, QVariant>(), values, lastInsertId);
 }
 
-BdEngineBackend::QueryState BdEngineBackend::execDBAction(const QString& action, QList<QVariant>* const values,
+BdEngineBackend::QueryState BdEngineBackend::execDBAction(const QString& action,
+                                                          QList<QVariant>* const values,
                                                           QVariant* const lastInsertId)
 {
     return execDBAction(getDBAction(action), QMap<QString, QVariant>(), values, lastInsertId);
 }
 
-BdEngineBackend::QueryState BdEngineBackend::execDBAction(const QString& action, const QMap<QString, QVariant>& bindingMap,
+BdEngineBackend::QueryState BdEngineBackend::execDBAction(const QString& action,
+                                                          const QMap<QString, QVariant>& bindingMap,
                                                           QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     return execDBAction(getDBAction(action), bindingMap, values, lastInsertId);
 }
 
-BdEngineBackend::QueryState BdEngineBackend::execDBAction(const DbEngineAction& action, const QMap<QString, QVariant>& bindingMap,
+BdEngineBackend::QueryState BdEngineBackend::execDBAction(const DbEngineAction& action,
+                                                          const QMap<QString, QVariant>& bindingMap,
                                                           QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     Q_D(BdEngineBackend);
 
-    BdEngineBackend::QueryState returnResult = BdEngineBackend::NoErrors;
+    BdEngineBackend::QueryState returnResult = BdEngineBackend::QueryState(BdEngineBackend::NoErrors);
     QSqlDatabase db                          = d->databaseForThread();
 
     if (action.name.isNull())
     {
         qCWarning(DIGIKAM_DBENGINE_LOG) << "Attempt to execute null action";
-        return BdEngineBackend::SQLError;
+        return BdEngineBackend::QueryState(BdEngineBackend::SQLError);
     }
 
     //qCDebug(DIGIKAM_DBENGINE_LOG) << "Executing DBAction ["<<  action.name  <<"]";
@@ -708,7 +718,9 @@ BdEngineBackend::QueryState BdEngineBackend::execDBAction(const DbEngineAction& 
     return returnResult;
 }
 
-QSqlQuery BdEngineBackend::execDBActionQuery(const QString& action, const QMap<QString, QVariant>& bindingMap)
+QSqlQuery BdEngineBackend::execDBActionQuery(const QString& action,
+                                             const QMap<QString,
+                                             QVariant>& bindingMap)
 {
     return execDBActionQuery(getDBAction(action), bindingMap);
 }
@@ -723,7 +735,7 @@ QSqlQuery BdEngineBackend::execDBActionQuery(const DbEngineAction& action, const
 
     QSqlQuery result;
 
-    foreach(const DbEngineActionElement& actionElement, action.dbActionElements)
+    foreach (const DbEngineActionElement& actionElement, action.dbActionElements)
     {
         if (actionElement.mode == QLatin1String("query"))
         {
@@ -793,6 +805,7 @@ bool BdEngineBackend::open(const DbEngineParameters& parameters)
     }
 
     d->status = Open;
+
     return true;
 }
 
@@ -852,17 +865,19 @@ QList<QVariant> BdEngineBackend::readToList(DbEngineSqlQuery& query)
     return list;
 }
 
-BdEngineBackend::QueryState BdEngineBackend::handleQueryResult(DbEngineSqlQuery& query, QList<QVariant>* const values, QVariant* const lastInsertId)
+BdEngineBackend::QueryState BdEngineBackend::handleQueryResult(DbEngineSqlQuery& query,
+                                                               QList<QVariant>* const values,
+                                                               QVariant* const lastInsertId)
 {
     if (!query.isActive())
     {
         if (query.lastError().type() == QSqlError::ConnectionError)
         {
-            return BdEngineBackend::ConnectionError;
+            return BdEngineBackend::QueryState(BdEngineBackend::ConnectionError);
         }
         else
         {
-            return BdEngineBackend::SQLError;
+            return BdEngineBackend::QueryState(BdEngineBackend::SQLError);
         }
     }
 
@@ -876,35 +891,46 @@ BdEngineBackend::QueryState BdEngineBackend::handleQueryResult(DbEngineSqlQuery&
         (*values) = readToList(query);
     }
 
-    return BdEngineBackend::NoErrors;
+    return BdEngineBackend::QueryState(BdEngineBackend::NoErrors);
 }
 
 // -------------------------------------------------------------------------------------
 
-BdEngineBackend::QueryState BdEngineBackend::execSql(const QString& sql, QList<QVariant>* const values, QVariant* const lastInsertId)
+BdEngineBackend::QueryState BdEngineBackend::execSql(const QString& sql,
+                                                     QList<QVariant>* const values,
+                                                     QVariant* const lastInsertId)
 {
     DbEngineSqlQuery query = execQuery(sql);
+
     return handleQueryResult(query, values, lastInsertId);
 }
 
-BdEngineBackend::QueryState BdEngineBackend::execSql(const QString& sql, const QVariant& boundValue1,
-                                                     QList<QVariant>* const values, QVariant* const lastInsertId)
+BdEngineBackend::QueryState BdEngineBackend::execSql(const QString& sql,
+                                                     const QVariant& boundValue1,
+                                                     QList<QVariant>* const values,
+                                                     QVariant* const lastInsertId)
 {
     DbEngineSqlQuery query = execQuery(sql, boundValue1);
+
     return handleQueryResult(query, values, lastInsertId);
 }
 
 BdEngineBackend::QueryState BdEngineBackend::execSql(const QString& sql,
-                                                     const QVariant& boundValue1, const QVariant& boundValue2,
-                                                     QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                     const QVariant& boundValue1,
+                                                     const QVariant& boundValue2,
+                                                     QList<QVariant>* const values,
+                                                     QVariant* const lastInsertId)
 {
     DbEngineSqlQuery query = execQuery(sql, boundValue1, boundValue2);
+
     return handleQueryResult(query, values, lastInsertId);
 }
 
 BdEngineBackend::QueryState BdEngineBackend::execSql(const QString& sql,
-                                                     const QVariant& boundValue1, const QVariant& boundValue2,
-                                                     const QVariant& boundValue3, QList<QVariant>* const values,
+                                                     const QVariant& boundValue1,
+                                                     const QVariant& boundValue2,
+                                                     const QVariant& boundValue3,
+                                                     QList<QVariant>* const values,
                                                      QVariant* const lastInsertId)
 {
     DbEngineSqlQuery query = execQuery(sql, boundValue1, boundValue2, boundValue3);
@@ -912,18 +938,25 @@ BdEngineBackend::QueryState BdEngineBackend::execSql(const QString& sql,
 }
 
 BdEngineBackend::QueryState BdEngineBackend::execSql(const QString& sql,
-                                                     const QVariant& boundValue1, const QVariant& boundValue2,
-                                                     const QVariant& boundValue3, const QVariant& boundValue4,
-                                                     QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                     const QVariant& boundValue1,
+                                                     const QVariant& boundValue2,
+                                                     const QVariant& boundValue3,
+                                                     const QVariant& boundValue4,
+                                                     QList<QVariant>* const values,
+                                                     QVariant* const lastInsertId)
 {
     DbEngineSqlQuery query = execQuery(sql, boundValue1, boundValue2, boundValue3, boundValue4);
+
     return handleQueryResult(query, values, lastInsertId);
 }
 
-BdEngineBackend::QueryState BdEngineBackend::execSql(const QString& sql, const QList<QVariant>& boundValues,
-                                                     QList<QVariant>* const values, QVariant* const lastInsertId)
+BdEngineBackend::QueryState BdEngineBackend::execSql(const QString& sql,
+                                                     const QList<QVariant>& boundValues,
+                                                     QList<QVariant>* const values,
+                                                     QVariant* const lastInsertId)
 {
     DbEngineSqlQuery query = execQuery(sql, boundValues);
+
     return handleQueryResult(query, values, lastInsertId);
 }
 
@@ -931,52 +964,71 @@ BdEngineBackend::QueryState BdEngineBackend::execSql(const QString& sql, const Q
                                                      QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     DbEngineSqlQuery query = execQuery(sql, bindingMap);
+
     return handleQueryResult(query, values, lastInsertId);
 }
 
 // -------------------------------------------------------------------------------------
 
-BdEngineBackend::QueryState BdEngineBackend::execSql(DbEngineSqlQuery& preparedQuery, QList<QVariant>* const values, QVariant* const lastInsertId)
+BdEngineBackend::QueryState BdEngineBackend::execSql(DbEngineSqlQuery& preparedQuery,
+                                                     QList<QVariant>* const values,
+                                                     QVariant* const lastInsertId)
 {
     exec(preparedQuery);
+
     return handleQueryResult(preparedQuery, values, lastInsertId);
 }
 
-BdEngineBackend::QueryState BdEngineBackend::execSql(DbEngineSqlQuery& preparedQuery, const QVariant& boundValue1,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+BdEngineBackend::QueryState BdEngineBackend::execSql(DbEngineSqlQuery& preparedQuery,
+                                                     const QVariant& boundValue1,
+                                                     QList<QVariant>* const values,
+                                                     QVariant* const lastInsertId)
 {
     execQuery(preparedQuery, boundValue1);
+
     return handleQueryResult(preparedQuery, values, lastInsertId);
 }
 
 BdEngineBackend::QueryState BdEngineBackend::execSql(DbEngineSqlQuery& preparedQuery,
-        const QVariant& boundValue1, const QVariant& boundValue2,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                     const QVariant& boundValue1,
+                                                     const QVariant& boundValue2,
+                                                     QList<QVariant>* const values,
+                                                     QVariant* const lastInsertId)
 {
     execQuery(preparedQuery, boundValue1, boundValue2);
+
     return handleQueryResult(preparedQuery, values, lastInsertId);
 }
 
 BdEngineBackend::QueryState BdEngineBackend::execSql(DbEngineSqlQuery& preparedQuery,
-        const QVariant& boundValue1, const QVariant& boundValue2,
-        const QVariant& boundValue3, QList<QVariant>* const values,
-        QVariant* const lastInsertId)
+                                                     const QVariant& boundValue1,
+                                                     const QVariant& boundValue2,
+                                                     const QVariant& boundValue3,
+                                                     QList<QVariant>* const values,
+                                                     QVariant* const lastInsertId)
 {
     execQuery(preparedQuery, boundValue1, boundValue2, boundValue3);
+
     return handleQueryResult(preparedQuery, values, lastInsertId);
 }
 
 BdEngineBackend::QueryState BdEngineBackend::execSql(DbEngineSqlQuery& preparedQuery,
-        const QVariant& boundValue1, const QVariant& boundValue2,
-        const QVariant& boundValue3, const QVariant& boundValue4,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                     const QVariant& boundValue1,
+                                                     const QVariant& boundValue2,
+                                                     const QVariant& boundValue3,
+                                                     const QVariant& boundValue4,
+                                                     QList<QVariant>* const values,
+                                                     QVariant* const lastInsertId)
 {
     execQuery(preparedQuery, boundValue1, boundValue2, boundValue3, boundValue4);
+
     return handleQueryResult(preparedQuery, values, lastInsertId);
 }
 
-BdEngineBackend::QueryState BdEngineBackend::execSql(DbEngineSqlQuery& preparedQuery, const QList<QVariant>& boundValues,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+BdEngineBackend::QueryState BdEngineBackend::execSql(DbEngineSqlQuery& preparedQuery,
+                                                     const QList<QVariant>& boundValues,
+                                                     QList<QVariant>* const values,
+                                                     QVariant* const lastInsertId)
 {
     execQuery(preparedQuery, boundValues);
     return handleQueryResult(preparedQuery, values, lastInsertId);
@@ -991,6 +1043,7 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql, const QVariant& 
 //    qCDebug(DIGIKAM_DBENGINE_LOG) << "Trying to sql ["<< sql <<"] query ["<<query.lastQuery()<<"]";
 
     execQuery(query, boundValue1);
+
     return query;
 }
 
@@ -1000,6 +1053,7 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql,
 {
     DbEngineSqlQuery query = prepareQuery(sql);
     execQuery(query, boundValue1, boundValue2);
+
     return query;
 }
 
@@ -1010,6 +1064,7 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql,
 {
     DbEngineSqlQuery query = prepareQuery(sql);
     execQuery(query, boundValue1, boundValue2, boundValue3);
+
     return query;
 }
 
@@ -1021,6 +1076,7 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql,
 {
     DbEngineSqlQuery query = prepareQuery(sql);
     execQuery(query, boundValue1, boundValue2, boundValue3, boundValue4);
+
     return query;
 }
 
@@ -1029,6 +1085,7 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql,
 {
     DbEngineSqlQuery query = prepareQuery(sql);
     execQuery(query, boundValues);
+
     return query;
 }
 
@@ -1039,6 +1096,7 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql)
 //    qCDebug(DIGIKAM_DBENGINE_LOG)<<"execQuery: Using statement ["<< query.lastQuery() <<"]";
 
     exec(query);
+
     return query;
 }
 
@@ -1367,7 +1425,7 @@ BdEngineBackend::QueryState BdEngineBackend::execDirectSql(const QString& sql)
 
     if (!d->checkOperationStatus())
     {
-        return BdEngineBackend::SQLError;
+        return BdEngineBackend::QueryState(BdEngineBackend::SQLError);
     }
 
     DbEngineSqlQuery query = getQuery();
@@ -1387,12 +1445,12 @@ BdEngineBackend::QueryState BdEngineBackend::execDirectSql(const QString& sql)
             }
             else
             {
-                return BdEngineBackend::SQLError;
+                return BdEngineBackend::QueryState(BdEngineBackend::SQLError);
             }
         }
     }
 
-    return BdEngineBackend::NoErrors;
+    return BdEngineBackend::QueryState(BdEngineBackend::NoErrors);
 }
 
 BdEngineBackend::QueryState BdEngineBackend::execDirectSqlWithResult(const QString& sql,
@@ -1403,7 +1461,7 @@ BdEngineBackend::QueryState BdEngineBackend::execDirectSqlWithResult(const QStri
 
     if (!d->checkOperationStatus())
     {
-        return BdEngineBackend::SQLError;
+        return BdEngineBackend::QueryState(BdEngineBackend::SQLError);
     }
 
     DbEngineSqlQuery query = getQuery();
@@ -1424,12 +1482,12 @@ BdEngineBackend::QueryState BdEngineBackend::execDirectSqlWithResult(const QStri
             }
             else
             {
-                return BdEngineBackend::SQLError;
+                return BdEngineBackend::QueryState(BdEngineBackend::SQLError);
             }
         }
     }
 
-    return BdEngineBackend::NoErrors;
+    return BdEngineBackend::QueryState(BdEngineBackend::NoErrors);
 }
 
 bool BdEngineBackend::exec(DbEngineSqlQuery& query)
@@ -1596,11 +1654,11 @@ BdEngineBackend::QueryState BdEngineBackend::beginTransaction()
 
                     if (db.lastError().type() == QSqlError::ConnectionError)
                     {
-                        return BdEngineBackend::ConnectionError;
+                        return BdEngineBackend::QueryState(BdEngineBackend::ConnectionError);
                     }
                     else
                     {
-                        return BdEngineBackend::SQLError;
+                        return BdEngineBackend::QueryState(BdEngineBackend::SQLError);
                     }
                 }
             }
@@ -1609,7 +1667,7 @@ BdEngineBackend::QueryState BdEngineBackend::beginTransaction()
         d->isInTransaction = true;
     }
 
-    return BdEngineBackend::NoErrors;
+    return BdEngineBackend::QueryState(BdEngineBackend::NoErrors);
 }
 
 BdEngineBackend::QueryState BdEngineBackend::commitTransaction()
@@ -1642,11 +1700,11 @@ BdEngineBackend::QueryState BdEngineBackend::commitTransaction()
 
                     if (lastError.type() == QSqlError::ConnectionError)
                     {
-                        return BdEngineBackend::ConnectionError;
+                        return BdEngineBackend::QueryState(BdEngineBackend::ConnectionError);
                     }
                     else
                     {
-                        return BdEngineBackend::SQLError;
+                        return BdEngineBackend::QueryState(BdEngineBackend::SQLError);
                     }
                 }
             }
@@ -1656,7 +1714,7 @@ BdEngineBackend::QueryState BdEngineBackend::commitTransaction()
         d->transactionFinished();
     }
 
-    return BdEngineBackend::NoErrors;
+    return BdEngineBackend::QueryState(BdEngineBackend::NoErrors);
 }
 
 bool BdEngineBackend::isInTransaction() const

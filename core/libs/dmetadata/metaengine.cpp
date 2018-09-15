@@ -161,14 +161,22 @@ QString MetaEngine::Exiv2Version()
 
 QString MetaEngine::sidecarFilePathForFile(const QString& path)
 {
-    QString ret;
-
-    if (!path.isEmpty())
+    if (path.isEmpty())
     {
-        ret = path + QLatin1String(".xmp");
+        return QString();
     }
 
-    return ret;
+    QFileInfo info(path);
+    QString pathForLR = path;
+    pathForLR.chop(info.suffix().size());
+    pathForLR.append(QLatin1String("xmp"));
+
+    if (QFileInfo::exists(pathForLR))
+    {
+        return pathForLR;
+    }
+
+    return path + QLatin1String(".xmp");
 }
 
 QUrl MetaEngine::sidecarUrl(const QUrl& url)
@@ -188,7 +196,7 @@ QString MetaEngine::sidecarPath(const QString& path)
 
 bool MetaEngine::hasSidecar(const QString& path)
 {
-    return QFileInfo(sidecarFilePathForFile(path)).exists();
+    return QFileInfo::exists(sidecarFilePathForFile(path));
 }
 
 //-- General methods ----------------------------------------------

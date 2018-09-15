@@ -305,12 +305,12 @@ ImageInfo ImageCategorizedView::imageInfo(const QModelIndex& index) const
 
 ImageInfoList ImageCategorizedView::imageInfos(const QList<QModelIndex>& indexes) const
 {
-    return d->filterModel->imageInfos(indexes);
+    return ImageInfoList(d->filterModel->imageInfos(indexes));
 }
 
 ImageInfoList ImageCategorizedView::allImageInfos() const
 {
-    return d->filterModel->imageInfosSorted();
+    return ImageInfoList(d->filterModel->imageInfosSorted());
 }
 
 QList<QUrl> ImageCategorizedView::allUrls() const

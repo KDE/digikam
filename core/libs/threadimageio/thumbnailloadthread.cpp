@@ -443,7 +443,7 @@ QList<LoadingDescription> ThumbnailLoadThread::Private::makeDescriptions(const Q
     {
         LoadingDescription description = createLoadingDescription(ThumbnailIdentifier(), size, false);
 
-        foreach(const ThumbnailIdentifier& identifier, identifiers)
+        foreach (const ThumbnailIdentifier& identifier, identifiers)
         {
             description.filePath = identifier.filePath;
             description.previewParameters.storageReference = identifier.id;
@@ -469,7 +469,7 @@ QList<LoadingDescription> ThumbnailLoadThread::Private::makeDescriptions(const Q
         LoadingDescription description = createLoadingDescription(ThumbnailIdentifier(), size, QRect(1,1,1,1), false);
         typedef QPair<ThumbnailIdentifier, QRect> IdRectPair;
 
-        foreach(const IdRectPair& pair, identifiersAndRects)
+        foreach (const IdRectPair& pair, identifiersAndRects)
         {
             description.filePath = pair.first.filePath;
             description.previewParameters.storageReference = pair.first.id;
@@ -761,7 +761,7 @@ void ThumbnailLoadThread::slotThumbnailsAvailable()
         d->notifiedForResults = false;
     }
 
-    foreach(const ThumbnailResult& result, results)
+    foreach (const ThumbnailResult& result, results)
     {
         slotThumbnailLoaded(result.loadingDescription, result.image);
     }
@@ -927,7 +927,7 @@ void ThumbnailLoadThread::deleteThumbnail(const QString& filePath)
         LoadingCache::CacheLock lock(cache);
         QStringList possibleKeys  = LoadingDescription::possibleThumbnailCacheKeys(filePath);
 
-        foreach(const QString& cacheKey, possibleKeys)
+        foreach (const QString& cacheKey, possibleKeys)
         {
             cache->removeThumbnail(cacheKey);
         }
@@ -964,8 +964,7 @@ public:
     {
     public:
 
-        CatcherResult(const LoadingDescription& d)   // krazy:exclude=explicit
-
+        explicit CatcherResult(const LoadingDescription& d)
             : description(d),
               received(false)
         {
@@ -1158,9 +1157,9 @@ int ThumbnailImageCatcher::enqueue()
 
     QMutexLocker lock(&d->mutex);
 
-    foreach(const LoadingDescription& description, descriptions)
+    foreach (const LoadingDescription& description, descriptions)
     {
-        d->tasks << description;
+        d->tasks << Private::CatcherResult(description);
     }
 
     return descriptions.size();
@@ -1177,7 +1176,7 @@ QList<QImage> ThumbnailImageCatcher::waitForThumbnails()
     d->state = Private::Waiting;
 
     // first, handle results received between request and calling this method
-    foreach(const Private::CatcherResult& result, d->intermediate)
+    foreach (const Private::CatcherResult& result, d->intermediate)
     {
         d->harvest(result.description, result.image);
     }
@@ -1192,7 +1191,7 @@ QList<QImage> ThumbnailImageCatcher::waitForThumbnails()
 
     QList<QImage> result;
 
-    foreach(const Private::CatcherResult& task, d->tasks)
+    foreach (const Private::CatcherResult& task, d->tasks)
     {
         result << task.image;
     }
