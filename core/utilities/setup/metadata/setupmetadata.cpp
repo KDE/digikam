@@ -870,7 +870,7 @@ void SetupMetadata::slotWriteRawFilesToggled(bool b)
                       "<p><b>We strongly recommend not to enable this option.</b></p>"),
                  QMessageBox::Yes | QMessageBox::No, this);
 
-        msgBox->button(QMessageBox::Yes)->setText(i18n("I have understood"));
+        msgBox->button(QMessageBox::Yes)->setText(i18n("Yes I understand"));
         msgBox->setDefaultButton(QMessageBox::No);
 
         int result = msgBox->exec();
