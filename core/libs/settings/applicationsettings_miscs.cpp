@@ -439,9 +439,12 @@ QString ApplicationSettings::operationTypeExplanation(ApplicationSettings::Opera
 
 void ApplicationSettings::setApplicationFont(const QFont& font)
 {
-    d->applicationFont = font;
-    qApp->setFont(d->applicationFont);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to application font: " << d->applicationFont;
+    if (d->applicationFont != font)
+    {
+        d->applicationFont = font;
+        qApp->setFont(d->applicationFont);
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to application font: " << d->applicationFont;
+    }
 }
 
 QFont ApplicationSettings::getApplicationFont() const
