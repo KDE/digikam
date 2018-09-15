@@ -569,4 +569,7 @@ BUGFIXES:
 508 ==> 339342 - SCAN : Search for new items does not recognize modified tags in sidecar files.
 509 ==> 387351 - Meta data for RAW files checkbox disabled.
 510 ==> 398676 - Time Adjust in Batch Queue Manager jumps from hour to second.
-511 ==> 
+511 ==> 338533 - Sort by date should use picture created date not modified date.
+512 ==> 398675 - Image Rotation Inflates File Size.
+513 ==> 
+
