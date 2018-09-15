@@ -7,6 +7,7 @@
  * Description : Container for image info objects
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,9 +31,18 @@
 namespace Digikam
 {
 
+ImageInfoList::ImageInfoList()
+{
+}
+
+ImageInfoList::ImageInfoList(const QList<ImageInfo>& list)
+    : QList<ImageInfo>(list)
+{
+}
+
 ImageInfoList::ImageInfoList(const QList<qlonglong>& idList)
 {
-    foreach(const qlonglong& id, idList)
+    foreach (const qlonglong& id, idList)
     {
         append(ImageInfo(id));
     }
@@ -42,7 +52,7 @@ QList<qlonglong> ImageInfoList::toImageIdList() const
 {
     QList<qlonglong> idList;
 
-    foreach(const ImageInfo& info, *this)
+    foreach (const ImageInfo& info, *this)
     {
         idList << info.id();
     }
@@ -54,7 +64,7 @@ QList<QUrl> ImageInfoList::toImageUrlList() const
 {
     QList<QUrl> urlList;
 
-    foreach(const ImageInfo& info, *this)
+    foreach (const ImageInfo& info, *this)
     {
         urlList << info.fileUrl();
     }
@@ -97,7 +107,7 @@ ImageInfo ImageInfoList::singleGroupMainItem() const
 
     grouped << mainItem << mainItem.groupedImages();
 
-    foreach(const ImageInfo& info, *this)
+    foreach (const ImageInfo& info, *this)
     {
         if (!grouped.contains(info))
         {
@@ -107,7 +117,5 @@ ImageInfo ImageInfoList::singleGroupMainItem() const
 
     return mainItem;
 }
-
-// Implementations of batch loading methods: See imageinfo.cpp (next to the corresponding single-item implementation)
 
 } // namespace Digikam

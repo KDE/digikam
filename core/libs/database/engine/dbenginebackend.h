@@ -162,7 +162,7 @@ public:
         {
         }
 
-        QueryState(const QueryStateEnum value)    // krazy:exclude=explicit
+        explicit QueryState(const QueryStateEnum value)    // krazy:exclude=explicit
             : value(value)
         {
         }

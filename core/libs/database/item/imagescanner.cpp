@@ -1583,9 +1583,22 @@ void ImageScanner::loadFromDisk()
         d->hasImage = false;
     }
 
+    QDateTime modificationDate = d->fileInfo.lastModified();
+
+    if (DMetadata::hasSidecar(d->fileInfo.filePath()))
+    {
+        QString filePath      = DMetadata::sidecarPath(d->fileInfo.filePath());
+        QDateTime sidecarDate = QFileInfo(filePath).lastModified();
+
+        if (sidecarDate > modificationDate)
+        {
+            modificationDate = sidecarDate;
+        }
+    }
+
     d->scanInfo.itemName         = d->fileInfo.fileName();
-    d->scanInfo.modificationDate = d->fileInfo.lastModified();
     d->scanInfo.fileSize         = d->fileInfo.size();
+    d->scanInfo.modificationDate = modificationDate;
     // category is set by setCategory
     // NOTE: call uniqueHash after loading the image above, else it will fail
     d->scanInfo.uniqueHash       = uniqueHash();

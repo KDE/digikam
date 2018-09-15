@@ -563,5 +563,8 @@ BUGFIXES:
 502 ==> 398287 - Print creator causes digiKam crash when orientation is changed.
 503 ==> 397305 - Failed to add tag to database.
 504 ==> 398462 - IPTC from Ligthroom.
-505 ==> 
-
+505 ==> 397340 - Update image file timestamps if metadata is written to sidecar file [patch].
+506 ==> 398331 - xmp sidecar files are not reloaded on change.
+507 ==> 380341 - Modified sidecar not rescanned.
+508 ==> 339342 - SCAN : Search for new items does not recognize modified tags in sidecar files.
+509 ==> 

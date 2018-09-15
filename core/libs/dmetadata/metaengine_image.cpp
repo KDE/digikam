@@ -541,7 +541,7 @@ QDateTime MetaEngine::getImageDateTime() const
                 if (it != exifData.end())
                 {
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
-                    dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
+                    dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 2);
 
                     if (dateTime.isValid())
                     {
@@ -558,7 +558,7 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Exif.Photo.DateTimeDigitized =>" << dateTime;
                         return dateTime;
@@ -574,7 +574,7 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Exif.Image.DateTime =>" << dateTime;
                         return dateTime;
@@ -597,9 +597,9 @@ QDateTime MetaEngine::getImageDateTime() const
                 if (it != xmpData.end())
                 {
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
-                    dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
+                    dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 2);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.exif.DateTimeOriginal =>" << dateTime;
                         return dateTime;
@@ -615,7 +615,7 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.exif.DateTimeDigitized =>" << dateTime;
                         return dateTime;
@@ -631,7 +631,7 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.photoshop.DateCreated =>" << dateTime;
                         return dateTime;
@@ -647,7 +647,7 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.xmp.CreateDate =>" << dateTime;
                         return dateTime;
@@ -663,7 +663,7 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.tiff.DateTime =>" << dateTime;
                         return dateTime;
@@ -679,7 +679,7 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.xmp.ModifyDate =>" << dateTime;
                         return dateTime;
@@ -695,7 +695,7 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.xmp.MetadataDate =>" << dateTime;
                         return dateTime;
@@ -712,9 +712,9 @@ QDateTime MetaEngine::getImageDateTime() const
                 if (it != xmpData.end())
                 {
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
-                    dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
+                    dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 2);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.video.DateTimeOriginal =>" << dateTime;
                         return dateTime;
@@ -730,7 +730,7 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.video.DateUTC =>" << dateTime;
                         return dateTime;
@@ -746,7 +746,7 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.video.ModificationDate =>" << dateTime;
                         return dateTime;
@@ -762,7 +762,7 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(QLatin1String(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.video.DateTimeDigitized =>" << dateTime;
                         return dateTime;
@@ -798,7 +798,7 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime(date, time);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Iptc.Application2.DateCreated =>" << dateTime;
                         return dateTime;
@@ -825,7 +825,7 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime(date, time);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Iptc.Application2.DigitizationDate =>" << dateTime;
                         return dateTime;

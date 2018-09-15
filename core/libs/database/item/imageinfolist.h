@@ -7,6 +7,7 @@
  * Description : Container for image info objects
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,27 +40,22 @@ namespace Digikam
 
 class ImageInfo;
 
+// NOTE: implementations of batch loading methods:
+// See imageinfo.cpp (next to the corresponding single-item implementation)
+
 class DIGIKAM_DATABASE_EXPORT ImageInfoList : public QList<ImageInfo>
 {
-
 public:
 
-    ImageInfoList()
-    {
-    }
-
+    ImageInfoList();
+    explicit ImageInfoList(const QList<ImageInfo>& list);
     explicit ImageInfoList(const QList<qlonglong>& idList);
-
-    ImageInfoList(const QList<ImageInfo>& list)         // krazy:exclude=explicit
-        : QList<ImageInfo>(list)
-    {
-    }
 
     QList<qlonglong> toImageIdList()  const;
     QList<QUrl>      toImageUrlList() const;
 
     void loadGroupImageIds() const;
-    void loadTagIds() const;
+    void loadTagIds()        const;
 
     bool static namefileLessThan(const ImageInfo& d1, const ImageInfo& d2);
 

@@ -67,7 +67,8 @@ ImageViewUtilities::ImageViewUtilities(QWidget* const parentWidget)
             AlbumManager::instance(), SLOT(slotImagesDeleted(QList<qlonglong>)));
 }
 
-void ImageViewUtilities::setAsAlbumThumbnail(Album* album, const ImageInfo& imageInfo)
+void ImageViewUtilities::setAsAlbumThumbnail(Album* album,
+                                             const ImageInfo& imageInfo)
 {
     if (!album)
     {
@@ -90,7 +91,9 @@ void ImageViewUtilities::setAsAlbumThumbnail(Album* album, const ImageInfo& imag
     }
 }
 
-void ImageViewUtilities::rename(const QUrl& imageUrl, const QString& newName, bool overwrite)
+void ImageViewUtilities::rename(const QUrl& imageUrl,
+                                const QString& newName,
+                                bool overwrite)
 {
     if (imageUrl.isEmpty() || !imageUrl.isLocalFile() || newName.isEmpty())
     {
@@ -101,7 +104,8 @@ void ImageViewUtilities::rename(const QUrl& imageUrl, const QString& newName, bo
     DIO::rename(info, newName, overwrite);
 }
 
-bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, const DeleteMode deleteMode)
+bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos,
+                                      const DeleteMode deleteMode)
 {
     if (infos.isEmpty())
     {
@@ -114,9 +118,9 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, const Delet
     QList<qlonglong> imageIds;
 
     // Buffer the urls for deletion and imageids for notification of the AlbumManager
-    foreach(const ImageInfo& info, deleteInfos)
+    foreach (const ImageInfo& info, deleteInfos)
     {
-        urlList << info.fileUrl();
+        urlList  << info.fileUrl();
         imageIds << info.id();
     }
 
@@ -144,7 +148,8 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, const Delet
     return true;
 }
 
-void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, const DeleteMode deleteMode)
+void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos,
+                                              const DeleteMode deleteMode)
 {
     // This method deletes the selected items directly, without confirmation.
     // It is not used in the default setup.
@@ -156,7 +161,7 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, con
 
     QList<qlonglong> imageIds;
 
-    foreach(const ImageInfo& info, infos)
+    foreach (const ImageInfo& info, infos)
     {
         imageIds << info.id();
     }
@@ -171,7 +176,7 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, con
 
 void ImageViewUtilities::notifyFileContentChanged(const QList<QUrl>& urls)
 {
-    foreach(const QUrl& url, urls)
+    foreach (const QUrl& url, urls)
     {
         QString path = url.toLocalFile();
         ThumbnailLoadThread::deleteThumbnail(path);
@@ -180,7 +185,8 @@ void ImageViewUtilities::notifyFileContentChanged(const QList<QUrl>& urls)
     }
 }
 
-void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, Album* currentAlbum)
+void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos,
+                                                Album* currentAlbum)
 {
     if (infos.isEmpty())
     {
@@ -205,14 +211,16 @@ void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, A
     DIO::move(infos, (PAlbum*)album);
 }
 
-void ImageViewUtilities::insertToLightTableAuto(const QList<ImageInfo>& all, const QList<ImageInfo>& selected, const ImageInfo& current)
+void ImageViewUtilities::insertToLightTableAuto(const QList<ImageInfo>& all,
+                                                const QList<ImageInfo>& selected,
+                                                const ImageInfo& current)
 {
-    ImageInfoList list   = selected;
+    ImageInfoList list   = ImageInfoList(selected);
     ImageInfo singleInfo = current;
 
     if (list.isEmpty() || (list.size() == 1 && LightTableWindow::lightTableWindow()->isEmpty()))
     {
-        list = all;
+        list = ImageInfoList(all);
     }
 
     if (singleInfo.isNull() && !list.isEmpty())
@@ -223,14 +231,16 @@ void ImageViewUtilities::insertToLightTableAuto(const QList<ImageInfo>& all, con
     insertToLightTable(list, current, list.size() <= 1);
 }
 
-void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list, const ImageInfo& current, bool addTo)
+void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list,
+                                            const ImageInfo& current,
+                                            bool addTo)
 {
     LightTableWindow* const ltview = LightTableWindow::lightTableWindow();
 
     // If addTo is false, the light table will be emptied before adding
     // the images.
-    ltview->loadImageInfos(list, current, addTo);
-    ltview->setLeftRightItems(list, addTo);
+    ltview->loadImageInfos(ImageInfoList(list), current, addTo);
+    ltview->setLeftRightItems(ImageInfoList(list), addTo);
 
     if (ltview->isHidden())
     {
@@ -265,21 +275,25 @@ void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, cons
 
     if (newQueue)
     {
-        bqmview->loadImageInfosToNewQueue(list);
+        bqmview->loadImageInfosToNewQueue(ImageInfoList(list));
     }
     else
     {
-        bqmview->loadImageInfosToCurrentQueue(list);
+        bqmview->loadImageInfosToCurrentQueue(ImageInfoList(list));
     }
 }
 
-void ImageViewUtilities::insertSilentToQueueManager(const QList<ImageInfo>& list, const ImageInfo& /*current*/, int queueid)
+void ImageViewUtilities::insertSilentToQueueManager(const QList<ImageInfo>& list,
+                                                    const ImageInfo& /*current*/,
+                                                    int queueid)
 {
     QueueMgrWindow* const bqmview = QueueMgrWindow::queueManagerWindow();
-    bqmview->loadImageInfos(list, queueid);
+    bqmview->loadImageInfos(ImageInfoList(list), queueid);
 }
 
-void ImageViewUtilities::openInfos(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album* currentAlbum)
+void ImageViewUtilities::openInfos(const ImageInfo& info,
+                                   const QList<ImageInfo>& allInfosToOpen,
+                                   Album* currentAlbum)
 {
     if (info.isNull())
     {
@@ -307,8 +321,9 @@ void ImageViewUtilities::openInfos(const ImageInfo& info, const QList<ImageInfo>
     connect(imview, SIGNAL(signalURLChanged(QUrl)),
             this, SIGNAL(editorCurrentUrlChanged(QUrl)));
 
-    imview->loadImageInfos(allInfosToOpen, info,
-                           currentAlbum ? i18n("Album \"%1\"", currentAlbum->title()) : QString());
+    imview->loadImageInfos(ImageInfoList(allInfosToOpen), info,
+                           currentAlbum ? i18n("Album \"%1\"", currentAlbum->title())
+                                        : QString());
 
     if (imview->isHidden())
     {
@@ -368,13 +383,13 @@ void ImageViewUtilities::createGroupByTimeFromInfoList(const ImageInfoList& imag
 
     QList<ImageInfo>::iterator it, it2;
 
-    for (it = groupingList.begin(); it != groupingList.end(); )
+    for (it = groupingList.begin() ; it != groupingList.end() ; )
     {
         const ImageInfo& leader = *it;
         QList<ImageInfo> group;
         QDateTime time          = it->dateTime();
 
-        for (it2 = it + 1; it2 != groupingList.end(); ++it2)
+        for (it2 = it + 1 ; it2 != groupingList.end() ; ++it2)
         {
             if (qAbs(time.secsTo(it2->dateTime())) < 2)
             {
@@ -404,14 +419,14 @@ void ImageViewUtilities::createGroupByFilenameFromInfoList(const ImageInfoList& 
 
     QList<ImageInfo>::iterator it, it2;
 
-    for (it = groupingList.begin(); it != groupingList.end(); )
+    for (it = groupingList.begin() ; it != groupingList.end() ; )
     {
         QList<ImageInfo> group;
         QString fname = it->name().left(it->name().lastIndexOf(QLatin1Char('.')));
         // don't know the leader yet so put first element also in group
         group << *it;
 
-        for (it2 = it + 1; it2 != groupingList.end(); ++it2)
+        for (it2 = it + 1 ; it2 != groupingList.end() ; ++it2)
         {
             QString fname2 = it2->name().left(it2->name().lastIndexOf(QLatin1Char('.')));
 
