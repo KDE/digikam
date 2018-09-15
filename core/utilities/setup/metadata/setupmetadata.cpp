@@ -39,6 +39,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QPointer>
 #include <QRadioButton>
 #include <QStandardPaths>
 #include <QStyle>
@@ -641,6 +642,9 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     connect(d->clearMetadataIfRescanBox, SIGNAL(toggled(bool)),
             this, SLOT(slotClearMetadataToggled(bool)));
+
+    connect(d->writeRawFilesBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotWriteRawFilesToggled(bool)));
 }
 
 SetupMetadata::~SetupMetadata()
@@ -847,6 +851,48 @@ void SetupMetadata::slotClearMetadataToggled(bool b)
                                        "database only and not to the file or sidecar, you will be able to "
                                        "lose inserted metadata such as tags, keywords, or geographic "
                                        "coordinates."));
+    }
+}
+
+void SetupMetadata::slotWriteRawFilesToggled(bool b)
+{
+    // Show info if write metadata to raw files was switched on
+    if (b)
+    {
+        QApplication::beep();
+
+        QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
+                 qApp->applicationName(),
+                 i18n("<p><b>Do you really want to enable metadata writing to RAW files?</b></p>"
+                      "<p>DigiKam delegates this task to the Exiv2 library. With different RAW "
+                      "formats, problems are known which can lead to the destruction of RAW "
+                      "files. If you decide to do so, make a backup of your RAW files.</p>"
+                      "<p><b>We strongly recommend not to enable this option.</b></p>"),
+                 QMessageBox::Yes | QMessageBox::No, this);
+
+        msgBox->button(QMessageBox::Yes)->setText(i18n("I have understood"));
+        msgBox->setDefaultButton(QMessageBox::No);
+
+        int result = msgBox->exec();
+        delete msgBox;
+
+        if (result == QMessageBox::Yes)
+        {
+            QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
+                     qApp->applicationName(),
+                     i18n("You would rather disable writing metadata to RAW files?"),
+                     QMessageBox::Yes | QMessageBox::No, this);
+
+            int result = msgBox->exec();
+            delete msgBox;
+
+            if (result == QMessageBox::No)
+            {
+                return;
+            }
+        }
+
+        d->writeRawFilesBox->setChecked(false);
     }
 }
 

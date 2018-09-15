@@ -567,4 +567,5 @@ BUGFIXES:
 506 ==> 398331 - xmp sidecar files are not reloaded on change.
 507 ==> 380341 - Modified sidecar not rescanned.
 508 ==> 339342 - SCAN : Search for new items does not recognize modified tags in sidecar files.
-509 ==> 
+509 ==> 387351 - Meta data for RAW files checkbox disabled.
+510 ==> 
