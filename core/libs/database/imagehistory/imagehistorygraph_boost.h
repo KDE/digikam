@@ -91,7 +91,7 @@ class QMapForAdaptors : public QMap<Key, Value>
 {
 public:
 
-    typedef Key key_type;
+    typedef Key   key_type;
     typedef Value data_type;
     typedef typename std::pair<const Key, Value> value_type;
 
@@ -100,14 +100,13 @@ public:
     }
 };
 
+/**
+ * Each edge is directed: "vertex1 -> vertex2".
+ * This direction has a meaning with methods such as
+ * roots() or leaves().
+ */
 enum MeaningOfDirection
 {
-    /**
-        * Each edge is directed: "vertex1 -> vertex2".
-        * This direction has a meaning with methods such as
-        * roots() or leaves().
-        */
-
     /// Edges are directed from a parent to its child
     ParentToChild,
     /// Edges are direct from a child to its parent
@@ -129,7 +128,6 @@ public:
           boost::property<vertex_properties_t, VertexProperties> >,
           boost::property<edge_properties_t, EdgeProperties>            /// One property for each edge: EdgeProperties
           > GraphContainer;
-
 
     /**
      * a bunch of graph-specific typedefs that make the long boost types manageable
@@ -268,6 +266,8 @@ public:
         bool   null;
     };
 
+public:
+
     typedef QPair<Vertex, Vertex>                            VertexPair;
     typedef QPair<Edge, Edge>                                EdgePair;
 
@@ -277,14 +277,16 @@ public:
     typedef boost::associative_property_map<VertexVertexMap> VertexVertexMapAdaptor;
     typedef boost::associative_property_map<VertexIntMap>    VertexIntMapAdaptor;
 
+public:
+
     explicit Graph(MeaningOfDirection direction = ParentToChild)
         : direction(direction)
     {
     }
 
     Graph(const Graph& g)
-      : graph(g.graph),
-        direction(g.direction)
+        : graph(g.graph),
+          direction(g.direction)
     {
     }
 
@@ -439,7 +441,9 @@ public:
         return boost::get(edge_properties, graph, e);
     }
 
-    /** Accessing vertices and egdes */
+    /**
+     * Accessing vertices and egdes
+     */
     const GraphContainer& getGraph() const
     {
         return graph;
@@ -464,12 +468,14 @@ public:
     {
         if (flags & EdgesToLeaf)
         {
-            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? OutboundEdges : InboundEdges));
+            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? OutboundEdges
+                                                                         : InboundEdges));
         }
 
         if (flags & EdgesToRoot)
         {
-            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? InboundEdges : OutboundEdges));
+            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? InboundEdges
+                                                                         : OutboundEdges));
         }
 
         QList<Vertex> vertices;
@@ -533,12 +539,14 @@ public:
     {
         if (flags & EdgesToLeaf)
         {
-            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? OutboundEdges : InboundEdges));
+            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? OutboundEdges
+                                                                         : InboundEdges));
         }
 
         if (flags & EdgesToRoot)
         {
-            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? InboundEdges : OutboundEdges));
+            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? InboundEdges
+                                                                         : OutboundEdges));
         }
 
         QList<Edge> es;
@@ -565,12 +573,14 @@ public:
     {
         if (flags & EdgesToLeaf)
         {
-            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? OutboundEdges : InboundEdges));
+            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? OutboundEdges
+                                                                         : InboundEdges));
         }
 
         if (flags & EdgesToRoot)
         {
-            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? InboundEdges : OutboundEdges));
+            flags = (AdjacencyFlags)(flags | (direction == ParentToChild ? InboundEdges
+                                                                         : OutboundEdges));
         }
 
         if (flags & OutboundEdges)
@@ -607,7 +617,7 @@ public:
         QList<VertexPair> pairs;
         edge_range_t range = boost::edges(graph);
 
-        for (edge_iter it = range.first; it != range.second; ++it)
+        for (edge_iter it = range.first ; it != range.second ; ++it)
         {
             pairs << VertexPair(boost::source(*it, graph), boost::target(*it, graph));
         }
@@ -631,10 +641,12 @@ public:
         catch (boost::bad_graph& e)
         {
             qCDebug(DIGIKAM_DATABASE_LOG) << e.what();
+
             return QList<Vertex>();
         }
 
         typedef typename std::list<Vertex>::iterator vertex_list_iter;
+
         return toVertexList(std::pair<vertex_list_iter, vertex_list_iter>(vertices.begin(), vertices.end()));
     }
 
@@ -739,7 +751,11 @@ public:
         return findZeroDegreeFrom(v, direction == ParentToChild ? false : true);
     }
 
-    template <typename T> static bool alwaysFalse(const T&, const T&) { return false; }
+    template <typename T> static bool alwaysFalse(const T&, const T&)
+    {
+        return false;
+    }
+
     /**
      * Returns the longest path through the graph, starting from a vertex in roots(),
      * ending on a vertex in leaves(), and passing vertex v.
@@ -854,7 +870,7 @@ public:
         // change 2147483647 to -1
         typename QMap<Vertex, int>::iterator it;
 
-        for (it = path.distances.begin(); it != path.distances.end(); ++it)
+        for (it = path.distances.begin() ; it != path.distances.end() ; ++it)
         {
             if (it.value() == std::numeric_limits<int>::max())
                 it.value() = -1;
@@ -874,7 +890,9 @@ public:
      * returns, in depth-first or breadth-first order, all vertices dominated by v
      * starting from root.
      */
-    QList<Vertex> verticesDominatedBy(const Vertex& v, const Vertex& root, ReturnOrder order = BreadthFirstOrder) const
+    QList<Vertex> verticesDominatedBy(const Vertex& v,
+                                      const Vertex& root,
+                                      ReturnOrder order = BreadthFirstOrder) const
     {
         if (v.isNull() || isEmpty())
         {
@@ -901,7 +919,9 @@ public:
      * when discovering a vertex, sorting the adjacent vertices with the given lessThan.
      */
     template <typename LessThan>
-    QList<Vertex> verticesDominatedByDepthFirstSorted(const Vertex& v, const Vertex& root, LessThan lessThan) const
+    QList<Vertex> verticesDominatedByDepthFirstSorted(const Vertex& v,
+                                                      const Vertex& root,
+                                                      LessThan lessThan) const
     {
         return verticesDominatedBy(v, root, verticesDepthFirstSorted(root, lessThan));
     }
@@ -913,7 +933,9 @@ public:
      * (or all vertices expected to be returned. The returned list is the intersection
      *  of the dominated vertices and presortedVertices, in order of presortedVertices)
      */
-    QList<Vertex> verticesDominatedBy(const Vertex& v, const Vertex& root, const QList<Vertex> presortedVertices) const
+    QList<Vertex> verticesDominatedBy(const Vertex& v,
+                                      const Vertex& root,
+                                      const QList<Vertex> presortedVertices) const
     {
         if (v.isNull() || isEmpty())
         {
@@ -928,7 +950,7 @@ public:
         // remove all vertices from the DFS of v that are not in the dominated tree
         QList<Vertex> orderedTree;
 
-        foreach(const Vertex& v, presortedVertices)
+        foreach (const Vertex& v, presortedVertices)
         {
             if (dominatedTree.contains(v))
             {
@@ -967,7 +989,7 @@ public:
         search.breadthFirstSearch(graph, vertices.first(), direction == ChildToParent);
         QList<Vertex> bfs = search.vertices;
 
-        foreach(const Vertex& v, vertices)
+        foreach (const Vertex& v, vertices)
         {
             bfs.removeOne(v);
         }
@@ -980,7 +1002,7 @@ public:
         // sort in any so far unreachable nodes
         vertex_range_t range = boost::vertices(graph);
 
-        for (vertex_iter it = range.first; it != range.second; ++it)
+        for (vertex_iter it = range.first ; it != range.second ; ++it)
         {
             if (!vertices.contains(*it))
             {
@@ -992,7 +1014,7 @@ public:
                 // any item reachable from *it should come after it
                 int minIndex = vertices.size();
 
-                foreach(const Vertex& c, childBfs)
+                foreach (const Vertex& c, childBfs)
                 {
                     int foundAt = vertices.indexOf(c);
 
@@ -1006,7 +1028,7 @@ public:
                     }
                 }
 
-                foreach(const Vertex& c, toInsert)
+                foreach (const Vertex& c, toInsert)
                 {
                     vertices.insert(minIndex++, c);
                 }
@@ -1046,7 +1068,7 @@ public:
         search.depthFirstSearchSorted(graph, vertices.first(), direction == ChildToParent, lessThan);
         QList<Vertex> dfs = search.vertices;
 
-        foreach(const Vertex& v, vertices)
+        foreach (const Vertex& v, vertices)
         {
             dfs.removeOne(v);
         }
@@ -1063,15 +1085,18 @@ protected:
         QList<Vertex> vertices;
         vertices << v;
         treeFromPredecessorsRecursive(v, vertices, predecessors);
+
         return vertices;
     }
 
-    void treeFromPredecessorsRecursive(const Vertex& v, QList<Vertex>& vertices, const VertexVertexMap& predecessors) const
+    void treeFromPredecessorsRecursive(const Vertex& v,
+                                       QList<Vertex>& vertices,
+                                       const VertexVertexMap& predecessors) const
     {
         QList<Vertex> children = predecessors.keys(v);
         vertices << children;
 
-        foreach(const Vertex& child, children)
+        foreach (const Vertex& child, children)
         {
             treeFromPredecessorsRecursive(child, vertices, predecessors);
         }
@@ -1086,7 +1111,7 @@ protected:
         typedef typename range_t::first_type iterator_t;
         QList<Value> list;
 
-        for (iterator_t it = range.first; it != range.second; ++it)
+        for (iterator_t it = range.first ; it != range.second ; ++it)
         {
             list << *it;
         }
@@ -1121,9 +1146,9 @@ protected:
         if (flags & CopyVertexProperties)
         {
             vertex_index_map_t indexMap = boost::get(boost::vertex_index, graph);
-            vertex_range_t range = boost::vertices(graph);
+            vertex_range_t range        = boost::vertices(graph);
 
-            for (vertex_iter it = range.first; it != range.second; ++it)
+            for (vertex_iter it = range.first ; it != range.second ; ++it)
             {
                 Vertex copiedVertex = copiedVertices[boost::get(indexMap, *it)];
 
@@ -1141,7 +1166,7 @@ protected:
             vertex_index_map_t indexMap = boost::get(boost::vertex_index, graph);
             edge_range_t range          = boost::edges(graph);
 
-            for (edge_iter it = range.first; it != range.second; ++it)
+            for (edge_iter it = range.first ; it != range.second ; ++it)
             {
                 Vertex s       = boost::source(*it, graph);
                 Vertex t       = boost::target(*it, graph);
@@ -1173,7 +1198,7 @@ protected:
         vertex_index_map_t indexMap = boost::get(boost::vertex_index, graph);
         edge_range_t range          = boost::edges(graph);
 
-        for (edge_iter it = range.first; it != range.second; ++it)
+        for (edge_iter it = range.first ; it != range.second ; ++it)
         {
             Vertex s       = boost::source(*it, graph);
             Vertex t       = boost::target(*it, graph);
@@ -1204,7 +1229,7 @@ protected:
         QList<Vertex> vertices;
         vertex_range_t range = boost::vertices(graph);
 
-        for (vertex_iter it = range.first; it != range.second; ++it)
+        for (vertex_iter it = range.first ; it != range.second ; ++it)
         {
             if ( (inOrOut ? in_degree(*it, graph) : out_degree(*it, graph)) == 0)
             {
@@ -1227,9 +1252,10 @@ protected:
 
         QList<Vertex> vertices;
 
-        foreach(const Vertex& candidate, search.vertices)
+        foreach (const Vertex& candidate, search.vertices)
         {
-            if ( (inOrOut ? in_degree(candidate, graph) : out_degree(candidate, graph)) == 0)
+            if ( (inOrOut ? in_degree(candidate, graph)
+                          : out_degree(candidate, graph)) == 0)
             {
                 vertices << candidate;
             }
@@ -1237,7 +1263,6 @@ protected:
 
         return vertices;
      }
-
 
     /**
      * Helper class to find paths through the graph.
@@ -1407,7 +1432,10 @@ protected:
         {
         protected:
 
-            explicit CommonVisitor(GraphSearch* q) : q(q) {}
+            explicit CommonVisitor(GraphSearch* const q)
+                : q(q)
+            {
+            }
 
             void record(const Vertex& v) const
             {
@@ -1417,11 +1445,15 @@ protected:
             GraphSearch* const q;
         };
 
-        class DepthFirstSearchVisitor : public boost::default_dfs_visitor, public CommonVisitor
+        class DepthFirstSearchVisitor : public boost::default_dfs_visitor,
+                                        public CommonVisitor
         {
         public:
 
-            explicit DepthFirstSearchVisitor(GraphSearch* q) : CommonVisitor(q) {}
+            explicit DepthFirstSearchVisitor(GraphSearch* const q)
+                : CommonVisitor(q)
+            {
+            }
 
             template <typename VertexType, typename GraphType>
             void discover_vertex(VertexType u, const GraphType&) const
@@ -1434,7 +1466,10 @@ protected:
         {
         public:
 
-            explicit BreadthFirstSearchVisitor(GraphSearch* q) : CommonVisitor(q) {}
+            explicit BreadthFirstSearchVisitor(GraphSearch* const q)
+                : CommonVisitor(q)
+            {
+            }
 
             template <typename VertexType, typename GraphType>
             void discover_vertex(VertexType u, const GraphType&) const
@@ -1460,13 +1495,15 @@ protected:
             {
             }
 
-            const GraphType& g;
-            VertexLessThan vertexLessThan;
-
             bool operator()(const edge_descriptor& a, const edge_descriptor& b)
             {
                 return vertexLessThan(boost::target(a, g), boost::target(b, g));
             }
+
+        public:
+
+            const GraphType& g;
+            VertexLessThan   vertexLessThan;
         };
 
         // This is boost's simple, old, recursive DFS algorithm adapted with lessThan
@@ -1486,11 +1523,13 @@ protected:
             outEdges = toList<edge_descriptor>(boost::out_edges(u, g));
             // Sort edges. The lessThan we have takes vertices, so we use a lessThan which
             // maps the given edges to their targets, and calls our vertex lessThan.
-            std::sort(outEdges.begin(), outEdges.end(), lessThanMapEdgeToTarget<IncidenceGraph, LessThan>(g, lessThan));
+            std::sort(outEdges.begin(),
+                      outEdges.end(),
+                      lessThanMapEdgeToTarget<IncidenceGraph, LessThan>(g, lessThan));
 
-            foreach(const edge_descriptor& e, outEdges)
+            foreach (const edge_descriptor& e, outEdges)
             {
-                Vertex v = boost::target(e, g);
+                Vertex v                          = boost::target(e, g);
                 vis.examine_edge(e, g);
                 boost::default_color_type v_color = boost::get(color, v);
 
@@ -1521,7 +1560,7 @@ protected:
         int maxDist = 1;
         QList<Vertex> candidates;
 
-        for (it = distances.begin(); it != distances.end(); ++it)
+        for (it = distances.begin() ; it != distances.end() ; ++it)
         {
             if (it.value() > maxDist)
             {
@@ -1551,12 +1590,14 @@ protected:
      *  Get a list of vertex ids for the path from root to target, using the given predecessors.
      *  Depending on MeaningOfDirection, the ids are listed inverted, from target to root.
      */
-    QList<Vertex> listPath(const Vertex& root, const Vertex& target,
-                           const VertexVertexMap& predecessors, MeaningOfDirection dir = ParentToChild) const
+    QList<Vertex> listPath(const Vertex& root,
+                           const Vertex& target,
+                           const VertexVertexMap& predecessors,
+                           MeaningOfDirection dir = ParentToChild) const
     {
         QList<Vertex> vertices;
 
-        for (Vertex v = root; v != target; v = predecessors.value(v))
+        for (Vertex v = root ; v != target ; v = predecessors.value(v))
         {
             //qDebug() << "Adding waypoint" << id(v);
             if (dir == ParentToChild)
