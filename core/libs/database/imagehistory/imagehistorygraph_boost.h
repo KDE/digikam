@@ -172,6 +172,7 @@ public:
         {
         }
 
+        // cppcheck-suppress noExplicitConstructor
         Vertex(const vertex_t& v)    // krazy:exclude=explicit
           : v(v)
         {
@@ -217,6 +218,7 @@ public:
         {
         }
 
+        // cppcheck-suppress noExplicitConstructor
         Edge(const edge_t& e)    // krazy:exclude=explicit
           : e(e),
             null(false)
