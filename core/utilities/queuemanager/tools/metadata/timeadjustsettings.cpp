@@ -296,16 +296,16 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     connect(d->adjDetByClockPhotoBtn, SIGNAL(signalClockPhotoDropped(QUrl)),
             this, SLOT(slotDetAdjustmentByClockPhotoUrl(QUrl)));
 
-    connect(d->useCustDateInput, SIGNAL(dateChanged(QDate)),
+    connect(d->useCustDateInput, SIGNAL(editingFinished()),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->useCustTimeInput, SIGNAL(timeChanged(QTime)),
+    connect(d->useCustTimeInput, SIGNAL(editingFinished()),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->adjDaysInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->adjTimeInput, SIGNAL(timeChanged(QTime)),
+    connect(d->adjTimeInput, SIGNAL(editingFinished()),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->updEXIFModDateCheck, SIGNAL(toggled(bool)),
