@@ -116,7 +116,6 @@ public:
     void init(ShowfotoNormalDelegate* const q, ShowfotoThumbnailBar* const parent);
 };
 
-} // namespace Digikam
-
+} // namespace Showfoto
 
 #endif // SHOW_FOTO_DELEGATE_PRIV_H

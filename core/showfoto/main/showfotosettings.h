@@ -151,6 +151,6 @@ private:
     friend class ShowfotoSettingsCreator;
 };
 
-} // namespace Digikam
+} // namespace Showfoto
 
 #endif // SHOW_FOTO_SETTINGS_H
