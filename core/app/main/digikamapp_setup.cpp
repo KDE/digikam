@@ -595,14 +595,17 @@ void DigikamApp::setupActions()
     QAction* const noCategoriesAction     = d->imageSeparationAction->addAction(i18n("Flat List"));
     QAction* const separateByAlbumAction  = d->imageSeparationAction->addAction(i18n("By Album"));
     QAction* const separateByFormatAction = d->imageSeparationAction->addAction(i18n("By Format"));
+    QAction* const separateByMonthAction  = d->imageSeparationAction->addAction(i18n("By Month"));
 
-    connect(noCategoriesAction,  SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
+    connect(noCategoriesAction,     SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
     connect(separateByAlbumAction,  SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
     connect(separateByFormatAction, SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
+    connect(separateByMonthAction,  SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
 
-    imageSeparationMapper->setMapping(noCategoriesAction,  (int)ImageSortSettings::OneCategory);
+    imageSeparationMapper->setMapping(noCategoriesAction,     (int)ImageSortSettings::OneCategory);
     imageSeparationMapper->setMapping(separateByAlbumAction,  (int)ImageSortSettings::CategoryByAlbum);
     imageSeparationMapper->setMapping(separateByFormatAction, (int)ImageSortSettings::CategoryByFormat);
+    imageSeparationMapper->setMapping(separateByMonthAction,  (int)ImageSortSettings::CategoryByMonth);
 
     // -----------------------------------------------------------------
 

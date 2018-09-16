@@ -93,7 +93,8 @@ public:
         NoCategories, /// categorization switched off
         OneCategory, /// all items in one global category
         CategoryByAlbum,
-        CategoryByFormat
+        CategoryByFormat,
+        CategoryByMonth
     };
 
     CategorizationMode      categorizationMode;

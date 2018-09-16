@@ -68,6 +68,7 @@ private Q_SLOTS:
 
     void slotExifAutoRotateToggled(bool);
     void slotClearMetadataToggled(bool);
+    void slotWriteRawFilesToggled(bool);
 
 private:
 

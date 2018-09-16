@@ -39,26 +39,21 @@ namespace Digikam
 
 class ImageInfo;
 
+/**
+ * Every vertex has one associated object of this class
+ *
+ * All entries in a vertex refer to _identical_ images.
+ * There can be multiple referred images in a history entry.
+ * Each single HistoryImageId can resolve into none, one,
+ * or multiple ImageInfos.
+ * So there is no mapping between the two fields here.
+ *
+ * If an image is created from multiple source images (panorama etc.),
+ * there will be one vertex per source image!
+ */
 class HistoryVertexProperties
 {
 public:
-
-    /**
-     * Every vertex has one associated object of this class
-     *
-     * All entries in a vertex refer to _identical_ images.
-     * There can be multiple referred images in a history entry.
-     * Each single HistoryImageId can resolve into none, one,
-     * or multiple ImageInfos.
-     * So there is no mapping between the two fields here.
-     *
-     * If an image is created from multiple source images (panorama etc.),
-     * there will be one vertex per source image!
-     */
-
-    QString               uuid;
-    QList<HistoryImageId> referredImages;
-    QList<ImageInfo>      infos;
 
     ImageInfo firstImageInfo() const;
 
@@ -73,6 +68,12 @@ public:
     HistoryVertexProperties& operator+=(const QString& uuid);
     HistoryVertexProperties& operator+=(const ImageInfo& info);
     HistoryVertexProperties& operator+=(const HistoryImageId& info);
+
+public:
+
+    QString               uuid;
+    QList<HistoryImageId> referredImages;
+    QList<ImageInfo>      infos;
 };
 
 QDebug operator<<(QDebug dbg, const HistoryVertexProperties& props);
@@ -80,17 +81,16 @@ QDebug operator<<(QDebug dbg, const HistoryImageId& id);
 
 // ------------------------------------------------------------------------------
 
+/**
+ * Every edge has one associated object of this class.
+ *
+ * For two vertices v1, v2 with and edge e, v1 -> v2,
+ * describes the actions necessary to create v2 from v2:
+ * v1 -> actions[0] -> ... -> actions[n] = v2.
+ */
 class HistoryEdgeProperties
 {
 public:
-
-    /**
-     * Every edge has one associated object of this class.
-     *
-     * For two vertices v1, v2 with and edge e, v1 -> v2,
-     * describes the actions necessary to create v2 from v2:
-     * v1 -> actions[0] -> ... -> actions[n] = v2.
-     */
 
     QList<FilterAction> actions;
 
@@ -106,12 +106,12 @@ class ImageHistoryGraphData : public HistoryGraph, public QSharedData
 public:
 
     ImageHistoryGraphData()
-      : HistoryGraph(ChildToParent)
+        : HistoryGraph(ChildToParent)
     {
     }
 
-    ImageHistoryGraphData(const HistoryGraph& g)    // krazy:exclude=explicit
-      : HistoryGraph(g)
+    explicit ImageHistoryGraphData(const HistoryGraph& g)
+        : HistoryGraph(g)
     {
     }
 
@@ -135,7 +135,7 @@ public:
     {
         QList<ImageInfo> infos;
 
-        foreach(const HistoryGraph::Vertex& v, vertices)
+        foreach (const HistoryGraph::Vertex& v, vertices)
         {
             infos << properties(v).infos;
         }

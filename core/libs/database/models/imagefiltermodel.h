@@ -121,14 +121,16 @@ public:
         CategorizationModeRole      = ImageModel::FilterModelRoles + 1,
         /// Returns the current sort order
         SortOrderRole               = ImageModel::FilterModelRoles + 2,
-        // / Returns the number of items in the index' category
+        /// Returns the number of items in the index category
         //CategoryCountRole         = ImageModel::FilterModelRoles + 3,
         /// Returns the id of the PAlbum of the index which is used for category
         CategoryAlbumIdRole         = ImageModel::FilterModelRoles + 3,
         /// Returns the format of the index which is used for category
         CategoryFormatRole          = ImageModel::FilterModelRoles + 4,
+        /// Returns the date of the index which is used for category
+        CategoryDateRole            = ImageModel::FilterModelRoles + 5,
         /// Returns true if the given image is a group leader, and the group is opened
-        GroupIsOpenRole             = ImageModel::FilterModelRoles + 5,
+        GroupIsOpenRole             = ImageModel::FilterModelRoles + 6,
         ImageFilterModelPointerRole = ImageModel::FilterModelRoles + 50
     };
 

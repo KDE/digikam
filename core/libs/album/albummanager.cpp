@@ -464,16 +464,16 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
         if (digikam3DB.exists() || digikamVeryOldDB.exists())
         {
             QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
-                               i18n("Database Folder"),
-                               i18n("<p>You have chosen the folder \"%1\" as the place to store the database. "
-                                    "A database file from an older version of digiKam is found in this folder.</p> "
-                                    "<p>Would you like to upgrade the old database file - confirming "
-                                    "that this database file was indeed created for the pictures located in the folder \"%2\" - "
-                                    "or ignore the old file and start with a new database?</p> ",
-                                    QDir::toNativeSeparators(newDir.path()),
-                                    QDir::toNativeSeparators(albumDir.path())),
-                               QMessageBox::Yes | QMessageBox::No,
-                               qApp->activeWindow());
+                     i18n("Database Folder"),
+                     i18n("<p>You have chosen the folder \"%1\" as the place to store the database. "
+                          "A database file from an older version of digiKam is found in this folder.</p> "
+                          "<p>Would you like to upgrade the old database file - confirming "
+                          "that this database file was indeed created for the pictures located in the folder \"%2\" - "
+                          "or ignore the old file and start with a new database?</p> ",
+                          QDir::toNativeSeparators(newDir.path()),
+                          QDir::toNativeSeparators(albumDir.path())),
+                      QMessageBox::Yes | QMessageBox::No,
+                      qApp->activeWindow());
 
             msgBox->button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
             msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
@@ -528,14 +528,14 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                 if (params.isSQLite())
                 {
                     QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
-                                       i18n("New database folder"),
-                                       i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
-                                            "A database file from an older version of digiKam is found in this folder.</p> "
-                                            "<p>Would you like to upgrade the old database file, start with a new database, "
-                                            "or copy the current database to this location and continue using it?</p> ",
-                                            QDir::toNativeSeparators(newDir.path())),
-                                       QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                                       qApp->activeWindow());
+                             i18n("New database folder"),
+                             i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
+                                  "A database file from an older version of digiKam is found in this folder.</p> "
+                                  "<p>Would you like to upgrade the old database file, start with a new database, "
+                                  "or copy the current database to this location and continue using it?</p> ",
+                                  QDir::toNativeSeparators(newDir.path())),
+                             QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+                             qApp->activeWindow());
 
                     msgBox->button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
                     msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
@@ -551,13 +551,13 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                 else
                 {
                     QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
-                                       i18n("New database folder"),
-                                       i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
-                                            "A database file from an older version of digiKam is found in this folder.</p> "
-                                            "<p>Would you like to upgrade the old database file or start with a new database?</p>",
-                                            QDir::toNativeSeparators(newDir.path())),
-                                       QMessageBox::Yes | QMessageBox::No,
-                                       qApp->activeWindow());
+                             i18n("New database folder"),
+                             i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
+                                  "A database file from an older version of digiKam is found in this folder.</p> "
+                                  "<p>Would you like to upgrade the old database file or start with a new database?</p>",
+                                  QDir::toNativeSeparators(newDir.path())),
+                             QMessageBox::Yes | QMessageBox::No,
+                             qApp->activeWindow());
 
                     msgBox->button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
                     msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
@@ -600,13 +600,13 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                 if (params.isSQLite())
                 {
                     QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
-                                       i18n("New database folder"),
-                                       i18n("<p>You have chosen the folder \"%1\" as the new place to store the database.</p>"
-                                            "<p>Would you like to copy the current database to this location "
-                                            "and continue using it, or start with a new database?</p> ",
-                                            QDir::toNativeSeparators(newDir.path())),
-                                       QMessageBox::Yes | QMessageBox::No,
-                                       qApp->activeWindow());
+                             i18n("New database folder"),
+                             i18n("<p>You have chosen the folder \"%1\" as the new place to store the database.</p>"
+                                  "<p>Would you like to copy the current database to this location "
+                                  "and continue using it, or start with a new database?</p> ",
+                                  QDir::toNativeSeparators(newDir.path())),
+                             QMessageBox::Yes | QMessageBox::No,
+                             qApp->activeWindow());
 
                     msgBox->button(QMessageBox::Yes)->setText(i18n("Create New Database"));
                     msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
@@ -632,14 +632,14 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
             if (params.isSQLite())
             {
                 QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
-                                   i18n("New database folder"),
-                                   i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
-                                        "There is already a database file in this location.</p> "
-                                        "<p>Would you like to use this existing file as the new database, or remove it "
-                                        "and copy the current database to this place?</p> ",
-                                        QDir::toNativeSeparators(newDir.path())),
-                                   QMessageBox::Yes | QMessageBox::No,
-                                   qApp->activeWindow());
+                         i18n("New database folder"),
+                         i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
+                              "There is already a database file in this location.</p> "
+                              "<p>Would you like to use this existing file as the new database, or remove it "
+                              "and copy the current database to this place?</p> ",
+                              QDir::toNativeSeparators(newDir.path())),
+                         QMessageBox::Yes | QMessageBox::No,
+                         qApp->activeWindow());
 
                 msgBox->button(QMessageBox::Yes)->setText(i18n("Copy Current Database"));
                 msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
@@ -901,7 +901,7 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
 
     QList<CollectionLocation> disappearedLocations = CollectionManager::instance()->checkHardWiredLocations();
 
-    foreach(const CollectionLocation& loc, disappearedLocations)
+    foreach (const CollectionLocation& loc, disappearedLocations)
     {
         QString locDescription;
         QStringList candidateIds, candidateDescriptions;
@@ -1082,7 +1082,7 @@ void AlbumManager::startScan()
     emit signalAlbumAdded(d->rootDAlbum);
 
     // Create albums for album roots. Reuse logic implemented in the method
-    foreach(const CollectionLocation& location, CollectionManager::instance()->allLocations())
+    foreach (const CollectionLocation& location, CollectionManager::instance()->allLocations())
     {
         handleCollectionStatusChange(location, CollectionLocation::LocationNull);
     }
@@ -1328,7 +1328,7 @@ void AlbumManager::scanPAlbums()
     QList<AlbumInfo> newAlbums;
 
     // go through all the Albums and see which ones are already present
-    foreach(const AlbumInfo& info, currentAlbums)
+    foreach (const AlbumInfo& info, currentAlbums)
     {
         // check that location of album is available
         if (d->showOnlyAvailableAlbums && !CollectionManager::instance()->locationForAlbumRootId(info.albumRootId).isAvailable())
@@ -1356,7 +1356,7 @@ void AlbumManager::scanPAlbums()
     // So we only feed it the albums from oldAlbums topmost in hierarchy.
     QSet<PAlbum*> topMostOldAlbums;
 
-    foreach(PAlbum* const album, oldAlbums)
+    foreach (PAlbum* const album, oldAlbums)
     {
         if (album->isTrashAlbum())
         {
@@ -1369,7 +1369,7 @@ void AlbumManager::scanPAlbums()
         }
     }
 
-    foreach(PAlbum* const album, topMostOldAlbums)
+    foreach (PAlbum* const album, topMostOldAlbums)
     {
         // recursively removes all children and the album
         removePAlbum(album);
@@ -1379,7 +1379,7 @@ void AlbumManager::scanPAlbums()
     std::sort(newAlbums.begin(), newAlbums.end());
 
     // create all new albums
-    foreach(const AlbumInfo& info, newAlbums)
+    foreach (const AlbumInfo& info, newAlbums)
     {
         if (info.relativePath.isEmpty())
         {
@@ -1466,9 +1466,9 @@ void AlbumManager::updateChangedPAlbums()
     bool needScanPAlbums           = false;
 
     // Find the AlbumInfo for each id in changedPAlbums
-    foreach(int id, d->changedPAlbums)
+    foreach (int id, d->changedPAlbums)
     {
-        foreach(const AlbumInfo& info, currentAlbums)
+        foreach (const AlbumInfo& info, currentAlbums)
         {
             if (info.id == id)
             {
@@ -1768,7 +1768,7 @@ void AlbumManager::scanSAlbums()
     QList<SearchInfo> newSearches;
 
     // go through all the Albums and see which ones are already present
-    foreach(const SearchInfo& info, currentSearches)
+    foreach (const SearchInfo& info, currentSearches)
     {
         if (oldSearches.contains(info.id))
         {
@@ -1800,7 +1800,7 @@ void AlbumManager::scanSAlbums()
     }
 
     // remove old albums that have been deleted
-    foreach(SAlbum* const album, oldSearches)
+    foreach (SAlbum* const album, oldSearches)
     {
         emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
@@ -1811,7 +1811,7 @@ void AlbumManager::scanSAlbums()
     }
 
     // add new albums
-    foreach(const SearchInfo& info, newSearches)
+    foreach (const SearchInfo& info, newSearches)
     {
         SAlbum* const album = new SAlbum(info.name, info.id);
         album->setSearch(info.type, info.query);
@@ -1944,7 +1944,7 @@ void AlbumManager::setCurrentAlbums(const QList<Album*>& albums)
     /**
      * Filter out the null pointers
     */
-    foreach(Album* const album, albums)
+    foreach (Album* const album, albums)
     {
         if (album)
         {
@@ -2726,12 +2726,12 @@ bool AlbumManager::mergeTAlbum(TAlbum* album, TAlbum* destAlbum, bool dialog, QS
     CoreDbOperationGroup group;
     group.setMaximumTime(200);
 
-    foreach(const qlonglong& imageId, imageIds)
+    foreach (const qlonglong& imageId, imageIds)
     {
         QList<FaceTagsIface> facesList = FaceTagsEditor().databaseFaces(imageId);
         bool foundFace                 = false;
 
-        foreach(const FaceTagsIface& face, facesList)
+        foreach (const FaceTagsIface& face, facesList)
         {
             if (face.tagId() == oldId)
             {
@@ -2840,7 +2840,7 @@ QStringList AlbumManager::tagNames(const QList<int>& tagIDs, bool includeInterna
 {
     QStringList tagNames;
 
-    foreach(int id, tagIDs)
+    foreach (int id, tagIDs)
     {
         TAlbum* const album = findTAlbum(id);
 
@@ -2910,7 +2910,7 @@ AlbumList AlbumManager::findTagsWithProperty(const QString& property)
 
     QList<int> ids = TagsCache::instance()->tagsWithProperty(property);
 
-    foreach(int id, ids)
+    foreach (int id, ids)
     {
         TAlbum* const album = findTAlbum(id);
 
@@ -3267,7 +3267,7 @@ void AlbumManager::slotPeopleJobData(const QMap<QString, QMap<int, int> >& faces
     d->fAlbumsCount.clear();
     typedef QMap<int, int> IntIntMap;
 
-    foreach(const IntIntMap& counts, facesStatMap)
+    foreach (const IntIntMap& counts, facesStatMap)
     {
         QMap<int, int>::const_iterator it;
 
@@ -3656,7 +3656,7 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
 
     QList<SAlbum*> sAlbums = findSAlbumsBySearchType(DatabaseSearch::DuplicatesSearch);
 
-    foreach(SAlbum* const sAlbum, sAlbums)
+    foreach (SAlbum* const sAlbum, sAlbums)
     {
         // Read the search query XML and save the image ids
         SearchXmlReader reader(sAlbum->query());
