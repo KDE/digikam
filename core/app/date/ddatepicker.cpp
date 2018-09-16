@@ -427,6 +427,11 @@ DDateTable *DDatePicker::dateTable() const
 
 void DDatePicker::lineEnterPressed()
 {
+    if (!d->line->hasFocus())
+    {
+        return;
+    }
+
     QDate newDate = QDate::fromString(d->line->text(),
                                       locale().dateFormat(QLocale::ShortFormat));
 
