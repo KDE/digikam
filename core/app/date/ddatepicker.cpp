@@ -230,7 +230,14 @@ void DDatePicker::resizeEvent(QResizeEvent* e)
 
 void DDatePicker::dateChangedSlot(const QDate& dt)
 {
-    d->line->setText(locale().toString(dt, QLocale::ShortFormat));
+    QString format = locale().dateFormat(QLocale::ShortFormat);
+
+    if (format.count(QLatin1Char('y')) == 2)
+    {
+        format.replace(QLatin1String("yy"), QLatin1String("yyyy"));
+    }
+
+    d->line->setText(dt.toString(format));
     d->selectMonth->setText(locale().standaloneMonthName(dt.month(), QLocale::LongFormat));
     d->fillWeeksCombo();
 
@@ -427,13 +434,14 @@ DDateTable *DDatePicker::dateTable() const
 
 void DDatePicker::lineEnterPressed()
 {
-    if (!d->line->hasFocus())
+    QString format = locale().dateFormat(QLocale::ShortFormat);
+
+    if (format.count(QLatin1Char('y')) == 2)
     {
-        return;
+        format.replace(QLatin1String("yy"), QLatin1String("yyyy"));
     }
 
-    QDate newDate = QDate::fromString(d->line->text(),
-                                      locale().dateFormat(QLocale::ShortFormat));
+    QDate newDate = QDate::fromString(d->line->text(), format);
 
     if (newDate.isValid())
     {
