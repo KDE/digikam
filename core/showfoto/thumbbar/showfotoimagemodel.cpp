@@ -638,4 +638,4 @@ QVariant ShowfotoImageModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-} // namespace Digikam
+} // namespace Showfoto

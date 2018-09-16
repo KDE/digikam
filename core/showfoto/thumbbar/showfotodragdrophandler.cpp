@@ -96,10 +96,9 @@ QStringList ShowfotoDragDropHandler::mimeTypes() const
 QMimeData* ShowfotoDragDropHandler::createMimeData(const QList<QModelIndex>& indexes)
 {
     QList<ShowfotoItemInfo> infos = model()->showfotoItemInfos(indexes);
-    QMimeData* const mimeData     = new QMimeData();
     QList<QUrl> urls;
 
-    foreach(const ShowfotoItemInfo& info, infos)
+    foreach (const ShowfotoItemInfo& info, infos)
     {
         qCDebug(DIGIKAM_SHOWFOTO_LOG) << info.url.toLocalFile();
         urls.append(info.url);
@@ -110,6 +109,7 @@ QMimeData* ShowfotoDragDropHandler::createMimeData(const QList<QModelIndex>& ind
         return 0;
     }
 
+    QMimeData* const mimeData = new QMimeData();
     mimeData->setUrls(urls);
 
     return mimeData;
@@ -120,5 +120,4 @@ ShowfotoImageModel* ShowfotoDragDropHandler::model() const
     return static_cast<ShowfotoImageModel*>(m_model);
 }
 
-} // namespace Digikam
-
+} // namespace Showfoto

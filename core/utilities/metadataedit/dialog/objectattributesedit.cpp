@@ -82,10 +82,6 @@ ObjectAttributesEdit::ObjectAttributesEdit(QWidget* const parent, bool ascii, in
 {
     QGridLayout* const grid = new QGridLayout(this);
 
-    // IPTC only accept printable Ascii char.
-    QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
-    QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
-
     // --------------------------------------------------------
 
     d->valueCheck     = new MetadataCheckBox(i18n("Attribute:"), this);
@@ -148,6 +144,9 @@ ObjectAttributesEdit::ObjectAttributesEdit(QWidget* const parent, bool ascii, in
 
     if (ascii)
     {
+        // IPTC only accept printable Ascii char.
+        QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
+        QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
         d->valueEdit->setValidator(asciiValidator);
         whatsThis.append(i18n("<p>Printable ASCII characters.</p>"));
     }

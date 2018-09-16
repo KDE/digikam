@@ -73,6 +73,7 @@ enum ImagesField
     ImagesFirst        = Album,
     ImagesLast         = ManualOrder
 };
+
 typedef uint8_t ImagesMinSizeType;
 
 enum ImageInformationField
@@ -103,6 +104,7 @@ enum ImageInformationField
     ImageInformationFirst = Rating,
     ImageInformationLast  = PickLabel
 };
+
 typedef uint16_t ImageInformationMinSizeType;
 
 enum ImageMetadataField
@@ -143,6 +145,7 @@ enum ImageMetadataField
     ImageMetadataFirst           = Make,
     ImageMetadataLast            = SubjectDistanceCategory
 };
+
 typedef uint16_t ImageMetadataMinSizeType;
 
 enum ImagePositionsField
@@ -171,6 +174,7 @@ enum ImagePositionsField
     ImagePositionsFirst = Latitude,
     ImagePositionsLast  = PositionDescription
 };
+
 typedef uint16_t ImagePositionsMinSizeType;
 
 enum ImageCommentsField
@@ -189,6 +193,7 @@ enum ImageCommentsField
     ImageCommentsFirst = CommentType,
     ImageCommentsLast  = Comment
 };
+
 typedef uint8_t ImageCommentsMinSizeType;
 
 enum ImageHistoryInfoField
@@ -203,6 +208,7 @@ enum ImageHistoryInfoField
     ImageHistoryInfoFirst = ImageUUID,
     ImageHistoryInfoLast  = ImageRelations
 };
+
 typedef uint8_t ImageHistoryInfoMinSizeType;
 
 enum VideoMetadataField
@@ -218,13 +224,14 @@ enum VideoMetadataField
     VideoMetadataAll             = AspectRatio      |
                                    AudioBitRate     |
                                    AudioChannelType |
-                                   AudioCodec  |
+                                   AudioCodec       |
                                    Duration         |
                                    FrameRate        |
                                    VideoCodec,
     VideoMetadataFirst           = AspectRatio,
     VideoMetadataLast            = VideoCodec
 };
+
 typedef uint8_t VideoMetadataMinSizeType;
 
 Q_DECLARE_FLAGS(Images,           ImagesField)
@@ -261,9 +268,8 @@ DECLARE_FIELDMETAINFO(VideoMetadata)
 /**
  * You can iterate over each of the Enumerations defined above:
  * ImagesIterator, ImageMetadataIterator etc.
- * for (ImagesIterator it; !it.atEnd(); ++it) {}
+ * for (ImagesIterator it ; !it.atEnd() ; ++it) {...}
  */
-
 template<typename FieldName> class DatabaseFieldsEnumIterator
 {
 
@@ -361,6 +367,7 @@ enum CustomEnumFlags
 };
 Q_DECLARE_FLAGS(CustomEnum, CustomEnumFlags)
 
+// cppcheck-suppress noExplicitConstructor
 // krazy:exclude=explicit
 #define DATABASEFIELDS_SET_DECLARE_METHODS(Flag, variable)                     \
     Set(const Flag& f)                      { initialize(); variable = f;    } \
@@ -376,7 +383,7 @@ Q_DECLARE_FLAGS(CustomEnum, CustomEnumFlags)
     inline Flag get##Flag() const           { return variable;               }
 
 /**
- * This class provides a set of all DatabasFields enums,
+ * This class provides a set of all DatabaseFields enums,
  * without resorting to a QSet.
  */
 class Set
@@ -412,28 +419,28 @@ public:
 
     inline bool operator&(const Set& other)
     {
-        return (images & other.images)                     ||
+        return (images           & other.images)           ||
                (imageInformation & other.imageInformation) ||
-               (imageMetadata & other.imageMetadata)       ||
-               (imageComments & other.imageComments)       ||
-               (imagePositions & other.imagePositions)     ||
-               (imageHistory & other.imageHistory)         ||
-               (customEnum & other.customEnum)             ||
-               (videoMetadata & other.videoMetadata);
+               (imageMetadata    & other.imageMetadata)    ||
+               (imageComments    & other.imageComments)    ||
+               (imagePositions   & other.imagePositions)   ||
+               (imageHistory     & other.imageHistory)     ||
+               (customEnum       & other.customEnum)       ||
+               (videoMetadata    & other.videoMetadata);
     }
 
     // overloading operator|= creates ambiguity with the database fields'
     // operator|=, therefore we give it another name.
     inline Set& setFields(const Set& otherSet)
     {
-        images|= otherSet.images;
-        imageInformation|= otherSet.imageInformation;
-        imageMetadata|= otherSet.imageMetadata;
-        imageComments|= otherSet.imageComments;
-        imagePositions|= otherSet.imagePositions;
-        imageHistory|= otherSet.imageHistory;
-        customEnum|= otherSet.customEnum;
-        videoMetadata|= otherSet.videoMetadata;
+        images           |= otherSet.images;
+        imageInformation |= otherSet.imageInformation;
+        imageMetadata    |= otherSet.imageMetadata;
+        imageComments    |= otherSet.imageComments;
+        imagePositions   |= otherSet.imagePositions;
+        imageHistory     |= otherSet.imageHistory;
+        customEnum       |= otherSet.customEnum;
+        videoMetadata    |= otherSet.videoMetadata;
 
         return *this;
     }
@@ -492,7 +499,7 @@ private:
     int removeAllFields(const Key& key)                                                                                             \
     {                                                                                                                               \
         int removedCount = 0;                                                                                                       \
-        for (DatabaseFieldsEnumIteratorSetOnly<Key> it(key); !it.atEnd(); ++it)                                                     \
+        for (DatabaseFieldsEnumIteratorSetOnly<Key> it(key) ; !it.atEnd() ; ++it)                                                   \
         {                                                                                                                           \
             removedCount+=remove(*it);                                                                                              \
         }                                                                                                                           \
@@ -568,21 +575,21 @@ public:
     }
 
     // override relevant methods from QHash
-    DATABASEFIELDS_HASH_DECLARE_METHODS(Images, uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(Images,           uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageInformation, uniqueKey);
-    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageMetadata, uniqueKey);
-    DATABASEFIELDS_HASH_DECLARE_METHODS(VideoMetadata, uniqueKey);
-    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageComments, uniqueKey);
-    DATABASEFIELDS_HASH_DECLARE_METHODS(ImagePositions, uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageMetadata,    uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(VideoMetadata,    uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageComments,    uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(ImagePositions,   uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageHistoryInfo, uniqueKey);
-    DATABASEFIELDS_HASH_DECLARE_METHODS(CustomEnum, uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(CustomEnum,       uniqueKey);
 };
 
-} // end of namespace DatabaseFields
+} // namespace DatabaseFields
 
-} // end of namespace Digikam
+} // namespace Digikam
 
-// must be outside the namespace!
+// NOTE: must be outside the namespace!
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::Images)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageInformation)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageMetadata)

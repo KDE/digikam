@@ -254,4 +254,4 @@ bool ShowfotoItemSortSettings::lessThan(const QVariant& left, const QVariant& ri
     }
 }
 
-} // namespace Digikam
+} // namespace Showfoto
