@@ -368,10 +368,9 @@ enum CustomEnumFlags
 Q_DECLARE_FLAGS(CustomEnum, CustomEnumFlags)
 
 // krazy:exclude=explicit
-#define DATABASEFIELDS_SET_DECLARE_METHODS(Flag, variable)                     \
-    // cppcheck-suppress noExplicitConstructor                                 \
+// cppcheck-suppress noExplicitConstructor
+#define DATABASEFIELDS_SET_DECLARE_METHODS(Flag, variable)                    \
     Set(const Flag& f)                      { initialize(); variable = f;    } \
-    // cppcheck-suppress noExplicitConstructor                                 \
     Set(const Flag##Field& f)               { initialize(); variable = f;    } \
     inline Flag& operator=(const Flag& f)   { return variable.operator=(f);  } \
     inline Flag& operator|=(Flag f)         { return variable.operator|=(f); } \
