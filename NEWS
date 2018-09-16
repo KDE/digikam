@@ -573,4 +573,5 @@ BUGFIXES:
 511 ==> 338533 - Sort by date should use picture created date not modified date.
 512 ==> 398675 - Image Rotation Inflates File Size.
 513 ==> 309520 - GROUP : add 'group by month' into 'View.. | group by...' menu.
-514 ==> 
+514 ==> 398714 - MicrosoftPhoto:LastKeywordXMP does not show up in digkam tags list.
+515 ==> 
