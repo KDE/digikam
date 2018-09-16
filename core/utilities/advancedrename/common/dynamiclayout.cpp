@@ -87,7 +87,7 @@ void DynamicLayout::addItem(QLayoutItem* item)
     d->minItemWidth = 0;
     d->itemList.append(item);
 
-    foreach(QLayoutItem* const item, d->itemList)
+    foreach (QLayoutItem* const item, d->itemList)
     {
         QWidget* wid    = item->widget();
         d->spaceX       = qMax<int>(wid->style()->layoutSpacing(QSizePolicy::PushButton, QSizePolicy::PushButton,
@@ -167,7 +167,7 @@ QSize DynamicLayout::minimumSize() const
 {
     QSize size;
 
-    foreach(QLayoutItem* const item, d->itemList)
+    foreach (QLayoutItem* const item, d->itemList)
     {
         size = size.expandedTo(item->minimumSize());
     }
@@ -195,7 +195,7 @@ int DynamicLayout::reLayout(const QRect& rect, bool testOnly) const
     // --------------------------------------------------------
 
     int buttonWidth     = d->minItemWidth + d->spaceX;
-    
+
     if (buttonWidth == 0)
     {
         buttonWidth = 1;
@@ -208,18 +208,13 @@ int DynamicLayout::reLayout(const QRect& rect, bool testOnly) const
         maxButtonsInRow = d->minColumns;
     }
 
-    if (maxButtonsInRow == 0) 
-    {
-        maxButtonsInRow = d->minColumns;
-    }
-
     int maxButtonWidth  = d->minItemWidth + ((effectiveRect.width() - (maxButtonsInRow * buttonWidth)) / maxButtonsInRow);
 
     int currentBtnWidth = (maxButtonsInRow >= d->itemList.count()) ? buttonWidth : maxButtonWidth;
 
     // --------------------------------------------------------
 
-    foreach(QLayoutItem* const item, d->itemList)
+    foreach (QLayoutItem* const item, d->itemList)
     {
         int nextX = x + currentBtnWidth + d->spaceX;
 
