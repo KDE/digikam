@@ -160,6 +160,9 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
         case ImageSortSettings::CategoryByFormat:
             textForFormat(index, &header, &subLine);
             break;
+        case ImageSortSettings::CategoryByMonth:
+            textForMonth(index, &header, &subLine);
+            break;
     }
 
     p->setPen(qApp->palette().color(QPalette::HighlightedText));
@@ -249,6 +252,14 @@ void ImageCategoryDrawer::textForFormat(const QModelIndex& index, QString* heade
     *header        = format;
     int count      = d->view->categoryRange(index).height();
     *subLine       = i18np("1 Item", "%1 Items", count);
+}
+
+void ImageCategoryDrawer::textForMonth(const QModelIndex& index, QString* header, QString* subLine) const
+{
+    QDate date = index.data(ImageFilterModel::CategoryDateRole).toDate();
+    *header    = date.toString(QLatin1String("MMM yyyy"));
+    int count  = d->view->categoryRange(index).height();
+    *subLine   = i18np("1 Item", "%1 Items", count);
 }
 
 void ImageCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count, QString* header, QString* subLine) const

@@ -51,6 +51,7 @@ General      : Update internal Libraw to last 0.19.0.
 Tags         : Add possibility to merge tags by drag & drop.
 
 IconView     : Add capability to re-organize the contents manually.
+IconView     : Add capability to separate the contents by month.
 
 HTML Gallery : New Vanilla theme to emulate export to HTML from Adobe LightRoom.
 HTML Gallery : New Blue Frame theme.
@@ -571,5 +572,5 @@ BUGFIXES:
 510 ==> 398676 - Time Adjust in Batch Queue Manager jumps from hour to second.
 511 ==> 338533 - Sort by date should use picture created date not modified date.
 512 ==> 398675 - Image Rotation Inflates File Size.
-513 ==> 
-
+513 ==> 309520 - GROUP : add 'group by month' into 'View.. | group by...' menu.
+514 ==> 

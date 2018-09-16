@@ -326,6 +326,8 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
             return d->imageModel->imageInfoRef(mapToSource(index)).albumId();
         case CategoryFormatRole:
             return d->imageModel->imageInfoRef(mapToSource(index)).format();
+        case CategoryDateRole:
+            return d->imageModel->imageInfoRef(mapToSource(index)).dateTime();
         case GroupIsOpenRole:
             return d->groupFilter.isAllOpen() ||
                    d->groupFilter.isOpen(d->imageModel->imageInfoRef(mapToSource(index)).id());
@@ -951,6 +953,8 @@ QString ImageFilterModel::categoryIdentifier(const ImageInfo& i) const
             return fastNumberToString(info.albumId());
         case ImageSortSettings::CategoryByFormat:
             return info.format();
+        case ImageSortSettings::CategoryByMonth:
+            return info.dateTime().date().toString(QLatin1String("MMyyyy"));
         default:
             return QString();
     }

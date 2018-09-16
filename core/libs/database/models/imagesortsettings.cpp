@@ -122,6 +122,7 @@ Qt::SortOrder ImageSortSettings::defaultSortOrderForCategorizationMode(Categoriz
         case OneCategory:
         case CategoryByAlbum:
         case CategoryByFormat:
+        case CategoryByMonth:
         default:
             return Qt::AscendingOrder;
     }
@@ -168,7 +169,8 @@ int ImageSortSettings::compareCategories(const ImageInfo& left, const ImageInfo&
             {
                 return 0;
             }
-            else if (lessThanByOrder(leftAlbum, rightAlbum, currentCategorizationSortOrder))
+            else if (lessThanByOrder(leftAlbum, rightAlbum,
+                                     currentCategorizationSortOrder))
             {
                 return -1;
             }
@@ -180,7 +182,14 @@ int ImageSortSettings::compareCategories(const ImageInfo& left, const ImageInfo&
         case CategoryByFormat:
         {
             return naturalCompare(left.format(), right.format(),
-                                  currentCategorizationSortOrder, categorizationCaseSensitivity, strTypeNatural);
+                                  currentCategorizationSortOrder,
+                                  categorizationCaseSensitivity, strTypeNatural);
+        }
+        case CategoryByMonth:
+        {
+            return compareByOrder(left.dateTime().date(),
+                                  right.dateTime().date(),
+                                  currentCategorizationSortOrder);
         }
         default:
             return 0;
@@ -407,6 +416,9 @@ DatabaseFields::Set ImageSortSettings::watchFlags() const
             break;
         case CategoryByFormat:
             set |= DatabaseFields::Format;
+            break;
+        case CategoryByMonth:
+            set |= DatabaseFields::CreationDate;
             break;
     }
 
