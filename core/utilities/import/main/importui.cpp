@@ -193,6 +193,7 @@ ImportUI::~ImportUI()
     saveSettings();
     m_instance = 0;
     disconnect(d->view, 0, this, 0);
+
     delete d->view;
     delete d->rightSideBar;
     delete d->controller;
@@ -276,9 +277,9 @@ void ImportUI::setupUserArea()
 
 void ImportUI::setupActions()
 {
-    d->cameraActions = new QActionGroup(this);
+    d->cameraActions            = new QActionGroup(this);
+    KActionCollection* const ac = actionCollection();
 
-    KActionCollection *ac = actionCollection();
     // -- File menu ----------------------------------------------------
 
     d->cameraCancelAction = new QAction(QIcon::fromTheme(QLatin1String("process-stop")), i18nc("@action Cancel process", "Cancel"), this);
@@ -653,7 +654,7 @@ void ImportUI::updateActions()
         // selected image has not been downloaded
         bool haveNotDownloadedItem = false;
 
-        foreach(const CamItemInfo& info, list)
+        foreach (const CamItemInfo& info, list)
         {
             haveNotDownloadedItem = !(info.downloaded == CamItemInfo::DownloadedYes);
 
@@ -837,7 +838,7 @@ CameraThumbsCtrl* ImportUI::getCameraThumbsCtrl() const
 
 void ImportUI::setupAccelerators()
 {
-    KActionCollection *ac = actionCollection();
+    KActionCollection* const ac = actionCollection();
 
     QAction* const escapeAction = new QAction(i18nc("@action", "Exit Preview Mode"), this);
     ac->addAction(QLatin1String("exit_preview_mode"), escapeAction);
@@ -1186,8 +1187,8 @@ void ImportUI::slotFolderList(const QStringList& folderList)
     bool useMetadata          = group.readEntry(d->configUseFileMetadata, false);
 
     // when getting a list of subfolders, request their contents and also their subfolders
-    for (QStringList::const_iterator it = folderList.constBegin();
-         it != folderList.constEnd(); ++it)
+    for (QStringList::const_iterator it = folderList.constBegin() ;
+         it != folderList.constEnd() ; ++it)
     {
         d->controller->listFiles(*it, useMetadata);
         d->controller->listFolders(*it);
@@ -1760,7 +1761,7 @@ void ImportUI::slotSelectNew()
     CamItemInfoList infos = d->view->allItems();
     CamItemInfoList toBeSelected;
 
-    foreach(const CamItemInfo& info, infos)
+    foreach (const CamItemInfo& info, infos)
     {
         if (info.downloaded == CamItemInfo::DownloadedNo)
         {
@@ -1776,7 +1777,7 @@ void ImportUI::slotSelectLocked()
     CamItemInfoList allItems = d->view->allItems();
     CamItemInfoList toBeSelected;
 
-    foreach(const CamItemInfo& info, allItems)
+    foreach (const CamItemInfo& info, allItems)
     {
         if (info.writePermissions == 0)
         {
@@ -1811,7 +1812,7 @@ QMap<QString, int> ImportUI::countItemsByFolders() const
 
     CamItemInfoList infos = d->view->allItems();
 
-    foreach(const CamItemInfo& info, infos)
+    foreach (const CamItemInfo& info, infos)
     {
         path = info.folder;
 
@@ -1864,7 +1865,7 @@ void ImportUI::itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned long& dSi
     CamItemInfoList list      = d->view->allItems();
     DownloadSettings settings = downloadSettings();
 
-    foreach(const CamItemInfo& info, list)
+    foreach (const CamItemInfo& info, list)
     {
         if (selected.contains(info.url()))
         {
@@ -1937,7 +1938,7 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
     CamItemInfoList lockedList;
     CamItemInfoList list = onlySelected ? d->view->selectedCamItemInfos() : d->view->allItems();
 
-    foreach(const CamItemInfo& info, list)
+    foreach (const CamItemInfo& info, list)
     {
         if (onlyDownloaded)
         {
@@ -1992,7 +1993,7 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
         // enable cancel action.
         d->cameraCancelAction->setEnabled(true);
 
-        for (; itFolder != folders.constEnd(); ++itFolder, ++itFile)
+        for ( ; itFolder != folders.constEnd() ; ++itFolder, ++itFile)
         {
             d->controller->deleteFile(*itFolder, *itFile);
             // the currentlyDeleting list is used to prevent loading items which
@@ -2057,7 +2058,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
     CamItemInfoList list = d->view->allItems();
     QSet<QString> usedDownloadPaths;
 
-    foreach(const CamItemInfo& info, list)
+    foreach (const CamItemInfo& info, list)
     {
         if (onlySelected && !(selected.contains(info.url())))
         {
@@ -2404,7 +2405,7 @@ void ImportUI::autoRotateItems()
     ImageInfoList list;
     CollectionScanner scanner;
 
-    foreach(const QString& downloadPath, d->autoRotateItemsList)
+    foreach (const QString& downloadPath, d->autoRotateItemsList)
     {
         qlonglong id = scanner.scanFile(downloadPath,
                                         CollectionScanner::ModifiedScan);
@@ -2454,9 +2455,9 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
     // Create the album, with any parent albums required for the structure
     QUrl albumUrl(parentURL);
 
-    foreach(const QString& folder, sub.split(QLatin1Char('/'), QString::SkipEmptyParts))
+    foreach (const QString& folder, sub.split(QLatin1Char('/'), QString::SkipEmptyParts))
     {
-        albumUrl = albumUrl.adjusted(QUrl::StripTrailingSlash);
+        albumUrl      = albumUrl.adjusted(QUrl::StripTrailingSlash);
         albumUrl.setPath(albumUrl.path() + QLatin1Char('/') + folder);
 
         PAlbum* album = AlbumManager::instance()->findPAlbum(albumUrl);
@@ -2623,9 +2624,11 @@ void ImportUI::slotSwitchedToIconView()
 void ImportUI::slotSwitchedToMapView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+
 #ifdef HAVE_MARBLE
     d->imageViewSelectionAction->setCurrentAction(d->mapViewAction);
-#endif // HAVE_MARBLE
+#endif
+
     toogleShowBar();
 }
 
