@@ -135,7 +135,6 @@ void MediaWikiTalker::slotUploadHandle(KJob* j)
     {
         QList<QString> keys         = d->imageDesc.keys();
         QMap<QString, QString> info = d->imageDesc.take(keys.first());
-        Upload* const e1            = new Upload(*d->MediaWiki, this);
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Path:" << keys.first();
 
@@ -150,8 +149,9 @@ void MediaWikiTalker::slotUploadHandle(KJob* j)
 
         //emit fileUploadProgress(done = 0, total file.size());
 
+        Upload* const e1 = new Upload(*d->MediaWiki, this);
         e1->setFile(file);
-        d->currentFile = file->fileName();
+        d->currentFile   = file->fileName();
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Name:" << file->fileName();
         e1->setFilename(info[QLatin1String("title")].replace(QLatin1Char(' '), QLatin1Char('_')));
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Title:" << info[QLatin1String("title")];
