@@ -73,10 +73,6 @@ MultiStringsEdit::MultiStringsEdit(QWidget* const parent, const QString& title,
 {
     QGridLayout* const grid = new QGridLayout(this);
 
-    // IPTC only accept printable Ascii char.
-    QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
-    QValidator *asciiValidator = new QRegExpValidator(asciiRx, this);
-
     // --------------------------------------------------------
 
     d->valueCheck = new QCheckBox(title, this);
@@ -108,6 +104,9 @@ MultiStringsEdit::MultiStringsEdit(QWidget* const parent, const QString& title,
 
     if (ascii)
     {
+        // IPTC only accept printable Ascii char.
+        QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
+        QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
         d->valueEdit->setValidator(asciiValidator);
         whatsThis.append(i18n("<p>Printable ASCII characters.</p>"));
     }

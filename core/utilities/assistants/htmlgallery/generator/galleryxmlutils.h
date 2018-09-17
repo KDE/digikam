@@ -51,6 +51,7 @@ public:
     {
     }
 
+    // cppcheck-suppress noExplicitConstructor
     CWrapper(Ptr ptr)        // krazy:exclude=explicit
         : m_ptr(ptr)
     {
@@ -86,6 +87,8 @@ private:
     Ptr m_ptr;
 };
 
+// --------------------------------------------------------------------------
+
 /**
  * Simple wrapper around xmlTextWriter
  */
@@ -104,6 +107,8 @@ private:
     CWrapper<xmlTextWriterPtr, xmlFreeTextWriter> m_writer;
 };
 
+
+// --------------------------------------------------------------------------
 /**
  * A list of attributes for an XML element. To be used with @ref XMLElement
  */
@@ -121,6 +126,8 @@ private:
 
     Map m_map;
 };
+
+// --------------------------------------------------------------------------
 
 /**
  * A class to generate an XML element

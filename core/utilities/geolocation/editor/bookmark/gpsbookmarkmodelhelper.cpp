@@ -78,7 +78,7 @@ void GPSBookmarkModelHelper::Private::addBookmarkGroupToModel(BookmarkNode* cons
     if (list.isEmpty())
         return;
 
-    foreach(BookmarkNode* const currentBookmark, list)
+    foreach (BookmarkNode* const currentBookmark, list)
     {
         if (currentBookmark)
         {
@@ -214,16 +214,17 @@ GeoModelHelper::PropertyFlags GPSBookmarkModelHelper::itemFlags(const QModelInde
 void GPSBookmarkModelHelper::snapItemsTo(const QModelIndex& targetIndex,
                                          const QList<QModelIndex>& snappedIndices)
 {
-    GPSUndoCommand* const undoCommand = new GPSUndoCommand();
     GeoCoordinates targetCoordinates;
 
     if (!itemCoordinates(targetIndex, &targetCoordinates))
         return;
 
-    for (int i = 0; i < snappedIndices.count(); ++i)
+    GPSUndoCommand* const undoCommand = new GPSUndoCommand();
+
+    for (int i = 0 ; i < snappedIndices.count() ; ++i)
     {
         const QPersistentModelIndex itemIndex = snappedIndices.at(i);
-        GPSImageItem* const item             = d->imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item              = d->imageModel->itemFromIndex(itemIndex);
 
         GPSDataContainer newData;
         newData.setCoordinates(targetCoordinates);

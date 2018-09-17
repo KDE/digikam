@@ -62,6 +62,6 @@ private:
     QAction* addCancelAction(QMenu* const menu);
 };
 
-} // namespace Digikam
+} // namespace Showfoto
 
 #endif // SHOW_FOTO_DRAG_DROP_HANDLER_H

@@ -318,7 +318,7 @@ void DXmlGuiWindow::cleanupActions()
 /*
     QList<QAction*> lst = actionCollection()->actions();
 
-    foreach(QAction* const act, lst)
+    foreach (QAction* const act, lst)
         qCDebug(DIGIKAM_WIDGETS_LOG) << "action: " << act->objectName();
 */
 }
@@ -326,7 +326,7 @@ void DXmlGuiWindow::cleanupActions()
 void DXmlGuiWindow::createSidebarActions()
 {
     KActionCollection* const ac = actionCollection();
-    QAction* const tlsb = new QAction(i18n("Toggle Left Side-bar"), this);
+    QAction* const tlsb         = new QAction(i18n("Toggle Left Side-bar"), this);
     connect(tlsb, SIGNAL(triggered()), this, SLOT(slotToggleLeftSideBar()));
     ac->addAction(QLatin1String("toggle-left-sidebar"), tlsb);
     ac->setDefaultShortcut(tlsb, Qt::CTRL + Qt::META + Qt::Key_Left);
@@ -799,7 +799,7 @@ KToolBar* DXmlGuiWindow::mainToolBar() const
     QList<KToolBar*> toolbars = toolBars();
     KToolBar* mainToolbar     = 0;
 
-    foreach(KToolBar* const toolbar, toolbars)
+    foreach (KToolBar* const toolbar, toolbars)
     {
         if (toolbar && (toolbar->objectName() == QLatin1String("mainToolBar")))
         {
@@ -818,7 +818,7 @@ void DXmlGuiWindow::showToolBars(bool visible)
     {
         d->toolbarsVisibility.clear();
 
-        foreach(KToolBar* const toolbar, toolBars())
+        foreach (KToolBar* const toolbar, toolBars())
         {
             if (toolbar)
             {
@@ -930,7 +930,10 @@ QAction* DXmlGuiWindow::buildStdAction(StdActionType type, const QObject* const 
             return KStandardAction::zoomOut(recvr, slot, parent);
             break;
         case StdOpenAction:
+#ifndef __clang_analyzer__
+            // NOTE: disable false positive report from scan build about open()
             return KStandardAction::open(recvr, slot, parent);
+#endif
             break;
         case StdSaveAction:
             return KStandardAction::save(recvr, slot, parent);
@@ -1069,9 +1072,11 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportFacebookAction = new QAction(i18n("Export to &Facebook..."), this);
-/*    m_exportFacebookAction->setIcon(QIcon::fromTheme(QString::fromLatin1("facebook")));
+/*
+    m_exportFacebookAction->setIcon(QIcon::fromTheme(QString::fromLatin1("facebook")));
     actionCollection()->addAction(QLatin1String("export_facebook"), m_exportFacebookAction);
-    actionCollection()->setDefaultShortcut(m_exportFacebookAction, Qt::ALT + Qt::SHIFT + Qt::Key_F);*/
+    actionCollection()->setDefaultShortcut(m_exportFacebookAction, Qt::ALT + Qt::SHIFT + Qt::Key_F);
+*/
 
     connect(m_exportFacebookAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
