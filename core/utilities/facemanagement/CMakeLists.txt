@@ -14,6 +14,7 @@ set(libfacemanagement_SRCS
     facegroup.cpp
     facepipeline.cpp
     facepipeline_p.cpp
+    facebenchmarkers.cpp
     facescandialog.cpp
     assignnamewidget.cpp
 )

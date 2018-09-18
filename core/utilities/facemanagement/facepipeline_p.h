@@ -45,6 +45,9 @@
 namespace Digikam
 {
 
+class DetectionBenchmarker;
+class RecognitionBenchmarker;
+
 class Q_DECL_HIDDEN FacePipelineExtendedPackage : public FacePipelinePackage,
                                                   public QSharedData
 {
@@ -330,83 +333,6 @@ protected:
     RecognitionDatabase          database;
     FaceImageRetriever           imageRetriever;
     FacePipeline::Private* const d;
-};
-
-// ----------------------------------------------------------------------------------------
-
-class Q_DECL_HIDDEN DetectionBenchmarker : public WorkerObject
-{
-    Q_OBJECT
-
-public:
-
-    explicit DetectionBenchmarker(FacePipeline::Private* const d);
-    QString result() const;
-
-public Q_SLOTS:
-
-    void process(FacePipelineExtendedPackage::Ptr package);
-
-Q_SIGNALS:
-
-    void processed(FacePipelineExtendedPackage::Ptr package);
-
-protected:
-
-    int                          totalImages;
-    int                          faces;
-    double                       totalPixels;
-    double                       facePixels;
-
-    int                          trueNegativeImages;
-    int                          falsePositiveImages;
-
-    int                          truePositiveFaces;
-    int                          falseNegativeFaces;
-    int                          falsePositiveFaces;
-
-    FacePipeline::Private* const d;
-};
-
-// ----------------------------------------------------------------------------------------
-
-class Q_DECL_HIDDEN RecognitionBenchmarker : public WorkerObject
-{
-    Q_OBJECT
-
-public:
-
-    explicit RecognitionBenchmarker(FacePipeline::Private* const d);
-    QString result() const;
-
-public Q_SLOTS:
-
-    void process(FacePipelineExtendedPackage::Ptr package);
-
-Q_SIGNALS:
-
-    void processed(FacePipelineExtendedPackage::Ptr package);
-
-protected:
-
-    class Q_DECL_HIDDEN Statistics
-    {
-    public:
-
-        Statistics();
-
-    public:
-
-        int knownFaces;
-        int correctlyRecognized;
-    };
-
-protected:
-
-    QMap<int, Statistics>        results;
-
-    FacePipeline::Private* const d;
-    RecognitionDatabase          database;
 };
 
 // ----------------------------------------------------------------------------------------

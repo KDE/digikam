@@ -42,6 +42,7 @@
 #include "metadatasettings.h"
 #include "tagscache.h"
 #include "threadmanager.h"
+#include "facebenchmarkers.h"
 
 namespace Digikam
 {
