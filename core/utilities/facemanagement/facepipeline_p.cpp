@@ -43,6 +43,7 @@
 #include "tagscache.h"
 #include "threadmanager.h"
 #include "facebenchmarkers.h"
+#include "faceworkers.h"
 
 namespace Digikam
 {
@@ -392,47 +393,6 @@ void PreviewLoader::checkRestart()
 
 // ----------------------------------------------------------------------------------------
 
-DetectionWorker::DetectionWorker(FacePipeline::Private* const d)
-    : d(d)
-{
-}
-
-void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
-{
-    QImage detectionImage  = scaleForDetection(package->image);
-    package->detectedFaces = detector.detectFaces(detectionImage, package->image.originalSize());
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Found" << package->detectedFaces.size() << "faces in"
-                                 << package->info.name() << package->image.size()
-                                 << package->image.originalSize();
-
-    package->processFlags |= FacePipelinePackage::ProcessedByDetector;
-
-    emit processed(package);
-}
-
-QImage DetectionWorker::scaleForDetection(const DImg& image) const
-{
-    int recommendedSize = detector.recommendedImageSize(image.size());
-
-    if (qMax(image.width(), image.height()) > (uint)recommendedSize)
-    {
-        return image.smoothScale(recommendedSize, recommendedSize, Qt::KeepAspectRatio).copyQImage();
-    }
-
-    return image.copyQImage();
-}
-
-void DetectionWorker::setAccuracy(double accuracy)
-{
-    QVariantMap params;
-    params[QLatin1String("accuracy")]    = accuracy;
-    params[QLatin1String("specificity")] = 0.8; //TODO: add UI for sensitivity - specificity
-    detector.setParameters(params);
-}
-
-// ----------------------------------------------------------------------------------------
-
 FaceImageRetriever::FaceImageRetriever(FacePipeline::Private* const d)
     : catcher(new ThumbnailImageCatcher(d->createThumbnailLoadThread(), d))
 {
@@ -489,50 +449,6 @@ QList<QImage> FaceImageRetriever::getThumbnails(const QString& filePath, const Q
     thumbnailCatcher()->setActive(false);
 
     return images;
-}
-
-// ----------------------------------------------------------------------------------------
-
-RecognitionWorker::RecognitionWorker(FacePipeline::Private* const d)
-    : imageRetriever(d),
-      d(d)
-{
-}
-
-void RecognitionWorker::activeFaceRecognizer(RecognitionDatabase::RecognizeAlgorithm algorithmType)
-{
-    database.activeFaceRecognizer(algorithmType);
-}
-
-void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
-{
-    FaceUtils     utils;
-    QList<QImage> images;
-
-    if (package->processFlags & FacePipelinePackage::ProcessedByDetector)
-    {
-        // assume we have an image
-        images = imageRetriever.getDetails(package->image, package->detectedFaces);
-    }
-    else if (!package->databaseFaces.isEmpty())
-    {
-        images = imageRetriever.getThumbnails(package->filePath, package->databaseFaces.toFaceTagsIfaceList());
-    }
-
-    package->recognitionResults  = database.recognizeFaces(images);
-    package->processFlags       |= FacePipelinePackage::ProcessedByRecognizer;
-
-    emit processed(package);
-}
-
-void RecognitionWorker::setThreshold(double threshold)
-{
-    database.setParameter(QLatin1String("threshold"), threshold);
-}
-
-void RecognitionWorker::aboutToDeactivate()
-{
-    imageRetriever.cancel();
 }
 
 // ----------------------------------------------------------------------------------------
