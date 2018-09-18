@@ -13,6 +13,7 @@ set(libfacemanagement_SRCS
     faceutils.cpp
     facegroup.cpp
     facepipeline.cpp
+    facepipeline_p.cpp
     facescandialog.cpp
     assignnamewidget.cpp
 )
