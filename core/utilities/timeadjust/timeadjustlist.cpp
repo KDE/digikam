@@ -53,6 +53,16 @@ TimeAdjustList::~TimeAdjustList()
 
 void TimeAdjustList::setItemDates(const QMap<QUrl, QDateTime>& map, FieldType type)
 {
+    QString dateTimeFormat  = QLocale().dateFormat(QLocale::ShortFormat);
+
+    if (!dateTimeFormat.contains(QLatin1String("yyyy")))
+    {
+        dateTimeFormat.replace(QLatin1String("yy"),
+                               QLatin1String("yyyy"));
+    }
+
+    dateTimeFormat.append(QLatin1String(" hh:mm:ss"));
+
     foreach (const QUrl& url, map.keys())
     {
         DImagesListViewItem* const item = listView()->findItem(url);
@@ -63,7 +73,7 @@ void TimeAdjustList::setItemDates(const QMap<QUrl, QDateTime>& map, FieldType ty
 
             if (dt.isValid())
             {
-                item->setText(type, QLocale().toString(dt, QLocale::ShortFormat));
+                item->setText(type, dt.toString(dateTimeFormat));
             }
             else
             {
