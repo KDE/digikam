@@ -67,7 +67,8 @@ RedEyeCorrectionFilter::RedEyeCorrectionFilter(QObject* const parent)
     initFilter();
 }
 
-RedEyeCorrectionFilter::RedEyeCorrectionFilter(DImg* const orgImage, QObject* const parent,
+RedEyeCorrectionFilter::RedEyeCorrectionFilter(DImg* const orgImage,
+                                               QObject* const parent,
                                                const RedEyeCorrectionContainer& settings)
     : DImgThreadedFilter(orgImage, parent,
                          QLatin1String("RedEyeCorrection")),
@@ -79,8 +80,10 @@ RedEyeCorrectionFilter::RedEyeCorrectionFilter(DImg* const orgImage, QObject* co
 
 RedEyeCorrectionFilter::RedEyeCorrectionFilter(const RedEyeCorrectionContainer& settings,
                                                DImgThreadedFilter* const parentFilter,
-                                               const DImg& orgImage, const DImg& destImage,
-                                               int progressBegin, int progressEnd)
+                                               const DImg& orgImage,
+                                               const DImg& destImage,
+                                               int progressBegin,
+                                               int progressEnd)
     : DImgThreadedFilter(parentFilter, orgImage, destImage,
                          progressBegin, progressEnd,
                          parentFilter->filterName() + QLatin1String(": RedEyeCorrection")),
@@ -113,7 +116,7 @@ void RedEyeCorrectionFilter::filterImage()
             QDataStream dataStream(&model);
             dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
             dataStream >> *temp;
-            d->sp = temp;
+            d->sp                              = temp;
         }
         else
         {
@@ -157,12 +160,12 @@ void RedEyeCorrectionFilter::filterImage()
         QRectFtocvRect(qrectdets, dets);
 
         // Eye Detection
-        for (unsigned int i = 0 ; runningFlag() && (i < dets.size()) ; i++)
+        for (unsigned int i = 0 ; runningFlag() && (i < dets.size()) ; ++i)
         {
             FullObjectDetection object = sp(gray,dets[i]);
             std::vector<cv::Rect> eyes = geteyes(object);
 
-            for (unsigned int j = 0 ; runningFlag() && (j < eyes.size()) ; j++)
+            for (unsigned int j = 0 ; runningFlag() && (j < eyes.size()) ; ++j)
             {
                 correctRedEye(intermediateImage.data,
                               intermediateImage.type(),
@@ -203,9 +206,9 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
     bool sixteendepth = (type == CV_8UC3) || (type == CV_8UC4) ? false : true;
     double redratio   = d->settings.m_redToAvgRatio;
 
-    for (int i = eyerect.y ; i < eyerect.y + eyerect.height ; i++)
+    for (int i = eyerect.y ; i < eyerect.y + eyerect.height ; ++i)
     {
-        for (int j = eyerect.x ; j < eyerect.x + eyerect.width ; j++)
+        for (int j = eyerect.x ; j < eyerect.x + eyerect.width ; ++j)
         {
             int pixelindex = (i*imgRect.width + j) * pixeldepth;
             onebytedata    = &(reinterpret_cast<uchar*> (data)[pixelindex]);

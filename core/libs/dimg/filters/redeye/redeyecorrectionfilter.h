@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT RedEyeCorrectionFilter : public DImgThreadedFilter
 
 public:
 
-    explicit RedEyeCorrectionFilter(QObject* const parent = 0);
+    explicit RedEyeCorrectionFilter(QObject* const parent=0);
     explicit RedEyeCorrectionFilter(DImg* const orgImage, QObject* const parent=0,
                                     const RedEyeCorrectionContainer& settings=RedEyeCorrectionContainer());
 
