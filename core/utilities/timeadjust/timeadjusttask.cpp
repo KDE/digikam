@@ -120,25 +120,25 @@ void TimeAdjustTask::run()
                 if (d->settings.updEXIFModDate)
                 {
                     ret &= meta.setExifTagString("Exif.Image.DateTime",
-                        dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                                                 dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
                 }
 
                 if (d->settings.updEXIFOriDate)
                 {
                     ret &= meta.setExifTagString("Exif.Photo.DateTimeOriginal",
-                        dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                                                 dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
                 }
 
                 if (d->settings.updEXIFDigDate)
                 {
                     ret &= meta.setExifTagString("Exif.Photo.DateTimeDigitized",
-                        dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                                                 dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
                 }
 
                 if (d->settings.updEXIFThmDate)
                 {
                     ret &= meta.setExifTagString("Exif.Image.PreviewDateTime",
-                        dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                                                 dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
                 }
             }
             else if (d->settings.updEXIFModDate || d->settings.updEXIFOriDate || 
@@ -152,9 +152,9 @@ void TimeAdjustTask::run()
                 if (meta.canWriteIptc(d->url.path()))
                 {
                     ret &= meta.setIptcTagString("Iptc.Application2.DateCreated",
-                        dt.date().toString(Qt::ISODate));
+                                                 dt.date().toString(Qt::ISODate));
                     ret &= meta.setIptcTagString("Iptc.Application2.TimeCreated",
-                        dt.time().toString(Qt::ISODate));
+                                                 dt.time().toString(Qt::ISODate));
                 }
                 else
                 {
@@ -167,17 +167,17 @@ void TimeAdjustTask::run()
                 if (meta.supportXmp() && meta.canWriteXmp(d->url.path()))
                 {
                     ret &= meta.setXmpTagString("Xmp.exif.DateTimeOriginal",
-                        dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
                     ret &= meta.setXmpTagString("Xmp.photoshop.DateCreated",
-                        dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
                     ret &= meta.setXmpTagString("Xmp.tiff.DateTime",
-                        dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
                     ret &= meta.setXmpTagString("Xmp.xmp.CreateDate",
-                        dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
                     ret &= meta.setXmpTagString("Xmp.xmp.MetadataDate",
-                        dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
                     ret &= meta.setXmpTagString("Xmp.xmp.ModifyDate",
-                        dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
                 }
                 else
                 {
@@ -209,9 +209,19 @@ void TimeAdjustTask::run()
         // http://www.qtsoftware.com/developer/task-tracker/index_html?id=79427&method=entry
         // we have to use the utime() system call.
 
+        int modtime;
+        QDateTime unixDate;
+        unixDate.setDate(QDate(1970, 1, 1));
+        unixDate.setTime(QTime(0, 0, 0, 0));
+
+        if (dt < unixDate)
+            modtime = -(dt.secsTo(unixDate) + (60 * 60));
+        else
+            modtime = dt.toTime_t();
+
         utimbuf times;
         times.actime  = QDateTime::currentDateTime().toTime_t();
-        times.modtime = dt.toTime_t();
+        times.modtime = modtime;
 
         if (utime(QFile::encodeName(d->url.toLocalFile()).constData(), &times) != 0)
         {
