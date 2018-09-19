@@ -40,6 +40,7 @@
 #include "previewloadthread.h"
 #include "thumbnailloadthread.h"
 #include "workerobject.h"
+#include "faceimageretriever.h"
 
 namespace Digikam
 {

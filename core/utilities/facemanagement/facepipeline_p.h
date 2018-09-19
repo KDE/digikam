@@ -51,6 +51,8 @@ class DetectionWorker;
 class RecognitionWorker;
 class Trainer;
 class DatabaseWriter;
+class PreviewLoader;
+class FaceImageRetriever;
 
 class Q_DECL_HIDDEN FacePipelineExtendedPackage : public FacePipelinePackage,
                                                   public QSharedData
@@ -156,59 +158,6 @@ protected:
     QList<ImageInfo>                        toFilter;
     QList<FacePipelineExtendedPackage::Ptr> toSend;
     QList<ImageInfo>                        toBeSkipped;
-};
-
-// ----------------------------------------------------------------------------------------
-
-class Q_DECL_HIDDEN PreviewLoader : public PreviewLoadThread
-{
-    Q_OBJECT
-
-public:
-
-    explicit PreviewLoader(FacePipeline::Private* const d);
-
-    void cancel();
-    bool sentOutLimitReached();
-    void checkRestart();
-
-public Q_SLOTS:
-
-    void process(FacePipelineExtendedPackage::Ptr package);
-    void slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img);
-
-Q_SIGNALS:
-
-    void processed(FacePipelineExtendedPackage::Ptr package);
-
-protected:
-
-    PackageLoadingDescriptionList scheduledPackages;
-    int                           maximumSentOutPackages;
-    FacePipeline::Private* const  d;
-};
-
-// ----------------------------------------------------------------------------------------
-
-class Q_DECL_HIDDEN FaceImageRetriever
-{
-public:
-
-    explicit FaceImageRetriever(FacePipeline::Private* const d);
-    void cancel();
-
-    ThumbnailImageCatcher* thumbnailCatcher()                                               const;
-    QList<QImage> getDetails(const DImg& src, const QList<QRectF>& rects)                   const;
-    QList<QImage> getDetails(const DImg& src, const QList<FaceTagsIface>& faces)            const;
-    QList<QImage> getThumbnails(const QString& filePath, const QList<FaceTagsIface>& faces) const;
-
-protected:
-
-    ThumbnailImageCatcher* catcher;
-
-private:
-
-    FaceImageRetriever(const FaceImageRetriever&); // Disable
 };
 
 // ----------------------------------------------------------------------------------------
