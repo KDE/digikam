@@ -32,10 +32,6 @@
 
 #include <klocalizedstring.h>
 
-// Local includes
-
-#include "timeadjustthread.h"
-
 namespace Digikam
 {
 

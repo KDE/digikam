@@ -54,8 +54,6 @@ public:
     void setSettings(const TimeAdjustContainer& settings);
     void cancel();
 
-    static QUrl newUrl(const QUrl& url, const QDateTime& dt);
-
 Q_SIGNALS:
 
     void signalProcessStarted(const QUrl&);

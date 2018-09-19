@@ -108,26 +108,5 @@ void TimeAdjustThread::cancel()
 
     ActionThreadBase::cancel();
 }
-/** Static public method also called from GUI to update listview information about new filename
- *  computed with timeStamp.
- */
-QUrl TimeAdjustThread::newUrl(const QUrl& url, const QDateTime& dt)
-{
-    if (!dt.isValid())
-        return QUrl();
-
-    QFileInfo fi(url.path());
-
-    QString newFileName = fi.baseName();
-    newFileName += QLatin1Char('-');
-    newFileName += dt.toString(QLatin1String("yyyyMMddThhmmss"));
-    newFileName += QLatin1Char('.');
-    newFileName += fi.completeSuffix();
-
-    QUrl newUrl = url;
-    newUrl.setPath(newUrl.path() + newFileName);
-
-    return newUrl;
-}
 
 }  // namespace Digikam

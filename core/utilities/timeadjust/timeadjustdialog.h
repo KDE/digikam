@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-05-16
- * Description : a plugin to set time stamp of picture files.
+ * Description : dialog to set time stamp of picture files.
  *
  * Copyright (C) 2012      by Smit Mehta <smit dot meh at gmail dot com>
  * Copyright (C) 2003-2005 by Jesper Pedersen <blackie@kde.org>
