@@ -359,7 +359,11 @@ void PreviewLoader::slotImageLoaded(const LoadingDescription& loadingDescription
 
     // Avoid congestion before detection or recognition by pausing the thread.
     // We are throwing around serious amounts of memory!
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "sent out packages:" << d->packagesOnTheRoad - scheduledPackages.size() << "scheduled:" << scheduledPackages.size();
+/*
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "sent out packages:"
+                                   << d->packagesOnTheRoad - scheduledPackages.size()
+                                   << "scheduled:" << scheduledPackages.size();
+*/
     if (sentOutLimitReached() && !scheduledPackages.isEmpty())
     {
         stop();
@@ -570,6 +574,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
     }
 
     package->processFlags |= FacePipelinePackage::WrittenToDatabase;
+
     emit processed(package);
 }
 
@@ -589,6 +594,7 @@ public:
         {
             QListImageListProvider& provider = imagesToTrain[identity.id()];
             provider.reset();
+
             return &provider;
         }
 
@@ -597,7 +603,7 @@ public:
 
     ImageListProvider* images(const Identity&)
     {
-        // Unimplemented. Would be needed if we use a backend with a "holistic" approach that needs all images to train.
+        // Not iimplemented. Would be needed if we use a backend with a "holistic" approach that needs all images to train.
         return &empty;
     }
 
@@ -628,9 +634,9 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
     // Get a list of faces with type FaceForTraining (probably type is ConfirmedFace)
 
     QList<FaceTagsIface> toTrain;
-    QList<int> identities;
-    QList<Identity> identitySet;
-    FaceUtils utils;
+    QList<int>           identities;
+    QList<Identity>      identitySet;
+    FaceUtils            utils;
 
     foreach (const FacePipelineFaceTagsIface& face, package->databaseFaces)
     {
@@ -774,6 +780,7 @@ FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const Image
 {
     FacePipelineFaceTagsIfaceList faces;
     faces << face;
+
     return buildPackage(info, faces, image);
 }
 
@@ -784,6 +791,7 @@ FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const Image
     FacePipelineExtendedPackage::Ptr package = buildPackage(info);
     package->databaseFaces                   = faces;
     package->image                           = image;
+
     return package;
 }
 
@@ -996,6 +1004,7 @@ ThumbnailLoadThread* FacePipeline::Private::createThumbnailLoadThread()
     thumbnailLoadThread->setPriority(priority);
 
     thumbnailLoadThreads << thumbnailLoadThread;
+
     return thumbnailLoadThread;
 }
 
