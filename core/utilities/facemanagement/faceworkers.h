@@ -112,6 +112,64 @@ protected:
     FacePipeline::Private* const d;
 };
 
+// ----------------------------------------------------------------------------------------
+
+class Q_DECL_HIDDEN DatabaseWriter : public WorkerObject
+{
+    Q_OBJECT
+
+public:
+
+    DatabaseWriter(FacePipeline::WriteMode mode, FacePipeline::Private* const d);
+
+public Q_SLOTS:
+
+    void process(FacePipelineExtendedPackage::Ptr package);
+
+Q_SIGNALS:
+
+    void processed(FacePipelineExtendedPackage::Ptr package);
+
+protected:
+
+    FacePipeline::WriteMode      mode;
+    ThumbnailLoadThread*         thumbnailLoadThread;
+    FacePipeline::Private* const d;
+};
+
+// ----------------------------------------------------------------------------------------
+
+class Q_DECL_HIDDEN Trainer : public WorkerObject
+{
+    Q_OBJECT
+
+public:
+
+    explicit Trainer(FacePipeline::Private* const d);
+    ~Trainer()
+    {
+        wait();    // protect detector
+    }
+
+protected:
+
+    virtual void aboutToDeactivate();
+
+public Q_SLOTS:
+
+    void process(FacePipelineExtendedPackage::Ptr package);
+
+Q_SIGNALS:
+
+    void processed(FacePipelineExtendedPackage::Ptr package);
+
+protected:
+
+    RecognitionDatabase          database;
+    FaceImageRetriever           imageRetriever;
+    FacePipeline::Private* const d;
+};
+
 } // namespace Digikam
 
 #endif // DIGIKAM_FACE_WORKERS_H
