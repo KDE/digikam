@@ -20,14 +20,14 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_DET_BY_CLOCK_PHOTO_BUTTON_H
-#define DIGIKAM_BQM_DET_BY_CLOCK_PHOTO_BUTTON_H
+#ifndef DIGIKAM_DET_BY_CLOCK_PHOTO_BUTTON_H
+#define DIGIKAM_DET_BY_CLOCK_PHOTO_BUTTON_H
 
 // Qt includes
 
 #include <QWidget>
-#include <QDragEnterEvent>
 #include <QPushButton>
+#include <QDragEnterEvent>
 
 namespace Digikam
 {
@@ -54,4 +54,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_BQM_DET_BY_CLOCK_PHOTO_BUTTON_H
+#endif // DIGIKAM_DET_BY_CLOCK_PHOTO_BUTTON_H

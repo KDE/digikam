@@ -130,6 +130,7 @@
 #include "dfiledialog.h"
 #include "dmediaservermngr.h"
 #include "dmediaserverdlg.h"
+#include "timeadjustdialog.h"
 #include "wsstarter.h"
 
 #ifdef HAVE_MARBLE

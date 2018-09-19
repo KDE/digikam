@@ -4,10 +4,11 @@
  * http://www.digikam.org
  *
  * Date        : 2004-05-16
- * Description : time adjust settings widget.
+ * Description : time adjust thread.
  *
  * Copyright (C) 2012      by Smit Mehta <smit dot meh at gmail dot com>
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (c) 2018      by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,56 +22,55 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_TIME_ADJUST_SETTINGS_H
-#define DIGIKAM_BQM_TIME_ADJUST_SETTINGS_H
+#ifndef DIGIKAM_TIME_ADJUST_THREAD_H
+#define DIGIKAM_TIME_ADJUST_THREAD_H
 
 // Qt includes
 
+#include <QObject>
 #include <QDateTime>
-#include <QScrollArea>
+#include <QMutex>
+#include <QMap>
+#include <QUrl>
 
 // Local includes
 
+#include "actionthreadbase.h"
 #include "timeadjustcontainer.h"
 
 namespace Digikam
 {
 
-class TimeAdjustContainer;
-
-class TimeAdjustSettings : public QScrollArea
+class TimeAdjustThread : public ActionThreadBase
 {
     Q_OBJECT
 
 public:
 
-    explicit TimeAdjustSettings(QWidget* const parent = 0);
-    ~TimeAdjustSettings();
+    explicit TimeAdjustThread(QObject* const parent);
+    ~TimeAdjustThread();
 
-public:
-
+    void setUpdatedDates(const QMap<QUrl, QDateTime>& map);
     void setSettings(const TimeAdjustContainer& settings);
-    TimeAdjustContainer settings() const;
-    void detAdjustmentByClockPhotoUrl(const QUrl& url);
+    void cancel();
+
+    static QUrl newUrl(const QUrl& url, const QDateTime& dt);
 
 Q_SIGNALS:
 
-    void signalSettingsChanged();
+    void signalProcessStarted(const QUrl&);
+    void signalProcessEnded(const QUrl&, int);
+    void signalCancelTask();
 
-private Q_SLOTS:
+public:
 
-    void slotSrcTimestampChanged();
-    void slotResetDateToCurrent();
-    void slotAdjustmentTypeChanged();
-    void slotDetAdjustmentByClockPhotoDialog();
-    void slotDetAdjustmentByClockPhotoUrl(const QUrl& url);
+    class Private;
 
 private:
 
-    class Private;
     Private* const d;
 };
 
-} // namespace Digikam
+}  // namespace Digikam
 
-#endif // DIGIKAM_BQM_TIME_ADJUST_SETTINGS_H
+#endif // DIGIKAM_TIME_ADJUST_THREAD_H

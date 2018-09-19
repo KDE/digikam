@@ -161,6 +161,10 @@ public:
      */
     void createMediaServerAction();
 
+    /** Create Time Adjust tool action.
+     */
+    void createTimeAdjustAction();
+
     /** Create common actions to setup all digiKam main windows.
      */
     void createSettingsActions();
@@ -232,6 +236,7 @@ protected:
     QAction*     m_panoramaAction;
     QAction*     m_videoslideshowAction;
     QAction*     m_mediaServerAction;
+    QAction*     m_timeAdjustAction;
 
     QAction*     m_exportDropboxAction;
     QAction*     m_exportOnedriveAction;

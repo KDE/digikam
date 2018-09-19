@@ -20,6 +20,7 @@ add_subdirectory(metadataedit)
 add_subdirectory(extrasupport)
 add_subdirectory(facemanagement)
 add_subdirectory(mediaserver)
+add_subdirectory(timeadjust)
 
 if(${Marble_FOUND})
     add_subdirectory(geolocation)

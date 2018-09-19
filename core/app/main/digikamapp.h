@@ -183,6 +183,7 @@ private Q_SLOTS:
     void slotEditGeolocation();
     void slotPresentation();
     void slotPrintCreator();
+    void slotTimeAdjust();
 
 // -- Configure methods implemented in digikamapp_config.cpp ----------------------------------------
 
