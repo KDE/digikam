@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="607" name="digikam" translationDomain="digikam" >
+<gui version="608" name="digikam" translationDomain="digikam" >
 
  <MenuBar>
 
@@ -61,9 +61,9 @@
      <Action name="image_write_metadata" />
      <Action name="image_read_metadata" />
    <Separator />
-     <Action name="timeadjust_edit" />
      <Action name="metadata_edit" />
      <Action name="geolocation_edit" />
+     <Action name="timeadjust_edit" />
    <Separator />
      <Action name="image_rotate" />
      <Action name="image_flip" />

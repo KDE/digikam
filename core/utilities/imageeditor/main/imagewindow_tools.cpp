@@ -27,6 +27,27 @@
 namespace Digikam
 {
 
+void ImageWindow::slotTimeAdjust()
+{
+    QList<QUrl> urls = d->thumbBar->allUrls();
+
+    if (urls.isEmpty())
+        return;
+
+    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DBInfoIface(this, urls, ApplicationSettings::Metadata));
+    dialog->exec();
+
+    delete dialog;
+
+    // Refresh Database with new metadata from files.
+    CollectionScanner scanner;
+
+    foreach(const QUrl& url, urls)
+    {
+        scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
+    }
+}
+
 void ImageWindow::slotEditMetadata()
 {
     if (d->currentImageInfo.isNull())

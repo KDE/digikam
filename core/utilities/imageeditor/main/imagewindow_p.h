@@ -134,6 +134,7 @@
 #include "advprintwizard.h"
 #include "dmediaserverdlg.h"
 #include "facetagseditor.h"
+#include "timeadjustdialog.h"
 #include "wsstarter.h"
 
 #ifdef HAVE_MARBLE

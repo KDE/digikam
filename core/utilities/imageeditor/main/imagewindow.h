@@ -197,6 +197,7 @@ private Q_SLOTS:
 
 private Q_SLOTS:
 
+    void slotTimeAdjust();
     void slotEditMetadata();
     void slotEditGeolocation();
     void slotFilePrint();

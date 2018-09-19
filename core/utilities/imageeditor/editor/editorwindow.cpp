@@ -820,6 +820,7 @@ void EditorWindow::setupStandardActions()
 
     createMetadataEditAction();
     createGeolocationEditAction();
+    createTimeAdjustAction();
     createHtmlGalleryAction();
     createPanoramaAction();
     createExpoBlendingAction();
