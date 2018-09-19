@@ -50,7 +50,7 @@ public:
     explicit TimeAdjustThread(QObject* const parent);
     ~TimeAdjustThread();
 
-    void setUpdatedDates(const QMap<QUrl, QDateTime>& map);
+    void setUpdatedDates(const QMap<QUrl, QDateTime>& itemsMap);
     void setSettings(const TimeAdjustContainer& settings);
     void cancel();
 

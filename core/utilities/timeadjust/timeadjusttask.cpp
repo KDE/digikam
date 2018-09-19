@@ -35,7 +35,6 @@ extern "C"
 // Qt includes
 
 #include <QFile>
-#include <QFileInfo>
 
 // Local includes
 
@@ -83,7 +82,7 @@ void TimeAdjustTask::setSettings(const TimeAdjustContainer& settings)
     d->settings = settings;
 }
 
-void TimeAdjustTask::setItemsMap(QMap<QUrl, QDateTime> itemsMap)
+void TimeAdjustTask::setItemsMap(const QMap<QUrl, QDateTime>& itemsMap)
 {
     d->itemsMap = itemsMap;
 }

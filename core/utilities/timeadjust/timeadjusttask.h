@@ -47,7 +47,7 @@ public:
     ~TimeAdjustTask();
 
     void setSettings(const TimeAdjustContainer& settings);
-    void setItemsMap(QMap<QUrl, QDateTime> itemsMap);
+    void setItemsMap(const QMap<QUrl, QDateTime>& itemsMap);
 
 Q_SIGNALS:
 

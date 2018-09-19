@@ -70,16 +70,16 @@ TimeAdjustThread::~TimeAdjustThread()
     delete d;
 }
 
-void TimeAdjustThread::setUpdatedDates(const QMap<QUrl, QDateTime>& map)
+void TimeAdjustThread::setUpdatedDates(const QMap<QUrl, QDateTime>& itemsMap)
 {
-    d->itemsMap = map;
+    d->itemsMap = itemsMap;
     ActionJobCollection collection;
 
     foreach (const QUrl& url, d->itemsMap.keys())
     {
         TimeAdjustTask* const t = new TimeAdjustTask(url);
         t->setSettings(d->settings);
-        t->setItemsMap(map);
+        t->setItemsMap(d->itemsMap);
 
         connect(t, SIGNAL(signalProcessStarted(QUrl)),
                 this, SIGNAL(signalProcessStarted(QUrl)));

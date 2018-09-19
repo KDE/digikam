@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2012      by Smit Mehta <smit dot meh at gmail dot com>
  * Copyright (C) 2003-2005 by Jesper Pedersen <blackie@kde.org>
- * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (c) 2018      by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -51,16 +51,16 @@
 
 // KDE includes
 
-#include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 #include <klocalizedstring.h>
-#include <kwindowconfig.h>
 
 // Local includes
 
 #include "dmetadata.h"
 #include "dprogresswdg.h"
 #include "digikam_debug.h"
+#include "dxmlguiwindow.h"
 #include "dinfointerface.h"
 #include "timeadjustlist.h"
 #include "digikam_version.h"
@@ -229,7 +229,7 @@ void TimeAdjustDialog::readSettings()
 
     winId();
     KConfigGroup group2 = config->group(QLatin1String("Time Adjust Dialog"));
-    KWindowConfig::restoreWindowSize(windowHandle(), group2);
+    DXmlGuiWindow::restoreWindowSize(windowHandle(), group2);
     resize(windowHandle()->size());
 }
 
@@ -260,7 +260,7 @@ void TimeAdjustDialog::saveSettings()
     group.writeEntry(QLatin1String("File Timestamp Type"),           prm.fileDateSource);
 
     KConfigGroup group2 = config->group(QLatin1String("Time Adjust Dialog"));
-    KWindowConfig::saveWindowSize(windowHandle(), group2);
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group2);
 }
 
 void TimeAdjustDialog::disableApplTimestamp()
