@@ -162,6 +162,9 @@ TimeAdjustDialog::TimeAdjustDialog(QWidget* const parent, DInfoInterface* const 
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotReadTimestamps()));
 
+    connect(d->settingsView, SIGNAL(signalSettingsChangedTool()),
+            this, SLOT(slotReadTimestamps()));
+
     // -----------------------------------------------------------------------
 
     setBusy(false);

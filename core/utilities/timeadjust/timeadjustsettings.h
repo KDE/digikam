@@ -57,6 +57,7 @@ public:
 Q_SIGNALS:
 
     void signalSettingsChanged();
+    void signalSettingsChangedTool();
 
 private Q_SLOTS:
 
