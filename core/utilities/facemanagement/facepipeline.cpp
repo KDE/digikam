@@ -45,6 +45,7 @@
 #include "facebenchmarkers.h"
 #include "faceworkers.h"
 #include "faceimageretriever.h"
+#include "parallelpipes.h"
 
 namespace Digikam
 {

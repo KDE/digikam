@@ -53,6 +53,7 @@ class Trainer;
 class DatabaseWriter;
 class PreviewLoader;
 class FaceImageRetriever;
+class ParallelPipes;
 
 class Q_DECL_HIDDEN FacePipelineExtendedPackage : public FacePipelinePackage,
                                                   public QSharedData
@@ -82,42 +83,6 @@ public:
     }
 
     FacePipelineExtendedPackage::Ptr take(const LoadingDescription& description);
-};
-
-// ----------------------------------------------------------------------------------------
-
-class Q_DECL_HIDDEN ParallelPipes : public QObject
-{
-    Q_OBJECT
-
-public:
-
-    explicit ParallelPipes();
-    ~ParallelPipes();
-
-    void schedule();
-    void deactivate(WorkerObject::DeactivatingMode mode = WorkerObject::FlushSignals);
-    void wait();
-
-    void add(WorkerObject* const worker);
-    void setPriority(QThread::Priority priority);
-
-public:
-
-    QList<WorkerObject*> m_workers;
-
-public Q_SLOTS:
-
-    void process(FacePipelineExtendedPackage::Ptr package);
-
-Q_SIGNALS:
-
-    void processed(FacePipelineExtendedPackage::Ptr package);
-
-protected:
-
-    QList<QMetaMethod> m_methods;
-    int                m_currentIndex;
 };
 
 // ----------------------------------------------------------------------------------------
