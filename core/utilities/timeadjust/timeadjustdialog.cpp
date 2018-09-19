@@ -263,11 +263,6 @@ void TimeAdjustDialog::saveSettings()
     DXmlGuiWindow::saveWindowSize(windowHandle(), group2);
 }
 
-void TimeAdjustDialog::disableApplTimestamp()
-{
-    //d->settingsView->disableApplTimestamp();
-}
-
 void TimeAdjustDialog::slotReadTimestamps()
 {
     foreach (const QUrl& url, d->itemsUsedMap.keys())
@@ -403,7 +398,7 @@ void TimeAdjustDialog::slotApplyClicked()
     {
         d->progressBar->show();
         d->progressBar->progressScheduled(i18n("Adjust Time and Date"), true, true);
-        d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QLatin1String("kipi")).pixmap(22, 22));
+        d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QLatin1String("appointment-new")).pixmap(22, 22));
         d->progressBar->setMaximum(d->itemsUsedMap.keys().size());
         d->thread->setSettings(prm);
         d->thread->setUpdatedDates(d->itemsUpdatedMap);

@@ -51,8 +51,6 @@ public:
     explicit TimeAdjustDialog(QWidget* const parent, DInfoInterface* const iface);
     ~TimeAdjustDialog();
 
-    void disableApplTimestamp();
-
 Q_SIGNALS:
 
     void signalMyCloseClicked();
