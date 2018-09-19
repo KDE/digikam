@@ -53,7 +53,7 @@ TimeAdjustList::~TimeAdjustList()
 
 void TimeAdjustList::setItemDates(const QMap<QUrl, QDateTime>& map, FieldType type)
 {
-    QString dateTimeFormat  = QLocale().dateFormat(QLocale::ShortFormat);
+    QString dateTimeFormat = QLocale().dateFormat(QLocale::ShortFormat);
 
     if (!dateTimeFormat.contains(QLatin1String("yyyy")))
     {
