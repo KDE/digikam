@@ -201,10 +201,31 @@ void TimeAdjustDialog::slotDialogFinished()
 
 void TimeAdjustDialog::readSettings()
 {
+    TimeAdjustContainer prm;
+
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("Time Adjust Settings"));
 
-    //d->settingsView->readSettings(group);
+    prm.customDate     = group.readEntry(QLatin1String("Custom Date"),                   QDateTime());
+    prm.customTime     = group.readEntry(QLatin1String("Custom Time"),                   QDateTime());
+
+    prm.adjustmentType = group.readEntry(QLatin1String("Adjustment Type"),               0);
+    prm.adjustmentDays = group.readEntry(QLatin1String("Adjustment Days"),               0);
+    prm.adjustmentTime = group.readEntry(QLatin1String("Adjustment Time"),               QDateTime());
+
+    prm.updFileModDate = group.readEntry(QLatin1String("Update File Modification Time"), true);
+    prm.updEXIFModDate = group.readEntry(QLatin1String("Update EXIF Modification Time"), true);
+    prm.updEXIFOriDate = group.readEntry(QLatin1String("Update EXIF Original Time"),     true);
+    prm.updEXIFDigDate = group.readEntry(QLatin1String("Update EXIF Digitization Time"), true);
+    prm.updEXIFThmDate = group.readEntry(QLatin1String("Update EXIF Thumbnail Time"),    true);
+    prm.updIPTCDate    = group.readEntry(QLatin1String("Update IPTC Time"),              true);
+    prm.updXMPDate     = group.readEntry(QLatin1String("Update XMP Creation Time"),      true);
+
+    prm.dateSource     = group.readEntry(QLatin1String("Use Timestamp Type"),            0);
+    prm.metadataSource = group.readEntry(QLatin1String("Meta Timestamp Type"),           0);
+    prm.fileDateSource = group.readEntry(QLatin1String("File Timestamp Type"),           0);
+
+    d->settingsView->setSettings(prm);
 
     winId();
     KConfigGroup group2 = config->group(QLatin1String("Time Adjust Dialog"));
@@ -214,10 +235,29 @@ void TimeAdjustDialog::readSettings()
 
 void TimeAdjustDialog::saveSettings()
 {
+    TimeAdjustContainer prm   = d->settingsView->settings();
+
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group = config->group(QLatin1String("Time Adjust Settings"));
 
-    //d->settingsView->saveSettings(group);
+    group.writeEntry(QLatin1String("Custom Date"),                   prm.customDate);
+    group.writeEntry(QLatin1String("Custom Time"),                   prm.customTime);
+
+    group.writeEntry(QLatin1String("Adjustment Type"),               prm.adjustmentType);
+    group.writeEntry(QLatin1String("Adjustment Days"),               prm.adjustmentDays);
+    group.writeEntry(QLatin1String("Adjustment Time"),               prm.adjustmentTime);
+
+    group.writeEntry(QLatin1String("Update File Modification Time"), prm.updFileModDate);
+    group.writeEntry(QLatin1String("Update EXIF Modification Time"), prm.updEXIFModDate);
+    group.writeEntry(QLatin1String("Update EXIF Original Time"),     prm.updEXIFOriDate);
+    group.writeEntry(QLatin1String("Update EXIF Digitization Time"), prm.updEXIFDigDate);
+    group.writeEntry(QLatin1String("Update EXIF Thumbnail Time"),    prm.updEXIFThmDate);
+    group.writeEntry(QLatin1String("Update IPTC Time"),              prm.updIPTCDate);
+    group.writeEntry(QLatin1String("Update XMP Creation Time"),      prm.updXMPDate);
+
+    group.writeEntry(QLatin1String("Use Timestamp Type"),            prm.dateSource);
+    group.writeEntry(QLatin1String("Meta Timestamp Type"),           prm.metadataSource);
+    group.writeEntry(QLatin1String("File Timestamp Type"),           prm.fileDateSource);
 
     KConfigGroup group2 = config->group(QLatin1String("Time Adjust Dialog"));
     KWindowConfig::saveWindowSize(windowHandle(), group2);
