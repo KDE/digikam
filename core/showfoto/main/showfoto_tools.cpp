@@ -114,9 +114,7 @@ void ShowFoto::slotEditGeolocation()
         return;
     }
 
-    QPointer<GeolocationEdit> dialog = new GeolocationEdit(0,
-                                                           new DMetaInfoIface(this, d->thumbBar->urls()),
-                                                           QApplication::activeWindow());
+    QPointer<GeolocationEdit> dialog = new GeolocationEdit(0, new DMetaInfoIface(this, d->thumbBar->urls()), this);
     dialog->setImages(infos);
     dialog->exec();
 
@@ -127,6 +125,19 @@ void ShowFoto::slotEditGeolocation()
 #endif
 }
 
+void ShowFoto::slotTimeAdjust()
+{
+    QList<QUrl> urls = d->thumbBar->urls();
+
+    if (urls.isEmpty())
+        return;
+
+    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DMetaInfoIface(this, urls));
+    dialog->exec();
+
+    delete dialog;
+}
+
 void ShowFoto::slotEditMetadata()
 {
     if (d->thumbBar->currentInfo().isNull())
@@ -134,8 +145,7 @@ void ShowFoto::slotEditMetadata()
         return;
     }
 
-    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(QApplication::activeWindow(),
-                                                                 QList<QUrl>() << d->thumbBar->currentInfo().url);
+    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(this, QList<QUrl>() << d->thumbBar->currentInfo().url);
     dialog->exec();
 
     delete dialog;
