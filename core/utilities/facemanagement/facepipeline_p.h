@@ -77,7 +77,7 @@ class Q_DECL_HIDDEN PackageLoadingDescriptionList : public QList<FacePipelineExt
 {
 public:
 
-    PackageLoadingDescriptionList()
+    explicit PackageLoadingDescriptionList()
     {
     }
 
@@ -92,7 +92,7 @@ class Q_DECL_HIDDEN ParallelPipes : public QObject
 
 public:
 
-    ParallelPipes();
+    explicit ParallelPipes();
     ~ParallelPipes();
 
     void schedule();
