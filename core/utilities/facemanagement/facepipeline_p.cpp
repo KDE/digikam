@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-#include "facepipeline.h"
 #include "facepipeline_p.h"
 
 // Qt includes
