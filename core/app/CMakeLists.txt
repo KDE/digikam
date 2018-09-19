@@ -51,6 +51,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:printcreator_src>
             $<TARGET_OBJECTS:mediaserver_src>
             $<TARGET_OBJECTS:webservices_src>
+            $<TARGET_OBJECTS:timeadjust_src>
 
             utils/digikam_debug.cpp
 )
@@ -425,7 +426,6 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:queuemanager_src>
             $<TARGET_OBJECTS:importui_src>
             $<TARGET_OBJECTS:advancedrename_src>
-            $<TARGET_OBJECTS:timeadjust_src>
 )
 
 if(${Marble_FOUND})

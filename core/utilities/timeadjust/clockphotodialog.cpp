@@ -45,13 +45,11 @@
 
 // Local includes
 
-#include "albummanager.h"
 #include "dmetadata.h"
 #include "imagedialog.h"
 #include "timeadjustcontainer.h"
 #include "graphicsdimgview.h"
 #include "dimgpreviewitem.h"
-#include "collectionmanager.h"
 #include "dxmlguiwindow.h"
 
 namespace Digikam
@@ -225,28 +223,19 @@ void ClockPhotoDialog::saveSettings()
 
 void ClockPhotoDialog::slotLoadPhoto()
 {
-    QString place      = QDir::homePath();
-    QStringList pics   = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
-    Album* const album = AlbumManager::instance()->currentAlbums().first();
+    QUrl place;
+    QStringList pics = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
 
-    if (album->type() == Album::PHYSICAL)
+    if (pics.isEmpty())
     {
-        PAlbum* const p = dynamic_cast<PAlbum*>(album);
-
-        if (p)
-        {
-            place = p->folderPath();
-        }
+        place = QUrl::fromLocalFile(QDir::homePath());
     }
     else
     {
-        QStringList cols = CollectionManager::instance()->allAvailableAlbumRootPaths();
-
-        if (!cols.isEmpty())
-            place = cols.first();
+        place = QUrl::fromLocalFile(pics.first());
     }
 
-    ImageDialog dlg(this, QUrl(), true, i18n("Select Image to Extract Clock Photo"));
+    ImageDialog dlg(this, place, true, i18n("Select Image to Extract Clock Photo"));
 
     if (!dlg.url().isEmpty())
     {
