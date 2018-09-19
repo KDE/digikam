@@ -92,7 +92,7 @@ void FacePipelineFaceTagsIfaceList::setRole(FacePipelineFaceTagsIface::Roles rol
 
 void FacePipelineFaceTagsIfaceList::clearRole(FacePipelineFaceTagsIface::Roles role)
 {
-    for (iterator it = begin(); it != end() ; ++it)
+    for (iterator it = begin() ; it != end() ; ++it)
     {
         it->roles &= ~role;
     }
@@ -396,6 +396,7 @@ bool FacePipeline::process(const ImageInfo& info)
     }
 
     d->send(package);
+
     return true;
 }
 
@@ -501,6 +502,7 @@ FaceTagsIface FacePipeline::editRegion(const ImageInfo& info,
     d->send(package);
 
     face.setRegion(newRegion);
+
     return face;
 }
 
