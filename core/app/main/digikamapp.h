@@ -179,11 +179,11 @@ private Q_SLOTS:
     void slotMaintenance();
     void slotMaintenanceDone();
     void slotDatabaseMigration();
+    void slotTimeAdjust();
     void slotEditMetadata();
     void slotEditGeolocation();
     void slotPresentation();
     void slotPrintCreator();
-    void slotTimeAdjust();
 
 // -- Configure methods implemented in digikamapp_config.cpp ----------------------------------------
 
@@ -198,7 +198,7 @@ private Q_SLOTS:
     void slotSetupChanged();
     void slotEditKeys();
     void slotThemeChanged();
-    
+
 // -- Export tools methods implemented in digikamapp_export.cpp -------------------------------------
 
 private Q_SLOTS:

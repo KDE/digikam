@@ -628,8 +628,8 @@ void DigikamApp::setupActions()
 
     setupImageTransformActions();
     setupExifOrientationActions();
-    createMetadataEditAction();
     createTimeAdjustAction();
+    createMetadataEditAction();
     createGeolocationEditAction();
     createExportActions();
     createImportActions();

@@ -149,6 +149,7 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'Tools' menu actions ------------------------
 
+    createTimeAdjustAction();
     createMetadataEditAction();
     createGeolocationEditAction();
     createHtmlGalleryAction();

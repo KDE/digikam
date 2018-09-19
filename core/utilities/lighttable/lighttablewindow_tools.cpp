@@ -54,6 +54,27 @@ void LightTableWindow::slotEditItem(const ImageInfo& info)
     im->setFocus();
 }
 
+void LightTableWindow::slotTimeAdjust()
+{
+    QList<QUrl> urls = d->thumbView->allUrls();
+
+    if (urls.isEmpty())
+        return;
+
+    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DBInfoIface(this, urls, ApplicationSettings::Metadata));
+    dialog->exec();
+
+    delete dialog;
+
+    // Refresh Database with new metadata from files.
+    CollectionScanner scanner;
+
+    foreach(const QUrl& url, urls)
+    {
+        scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
+    }
+}
+
 void LightTableWindow::slotEditMetadata()
 {
     if (d->thumbView->currentInfo().isNull())

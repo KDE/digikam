@@ -139,6 +139,28 @@ void DigikamApp::slotDatabaseMigration()
     dlg.exec();
 }
 
+void DigikamApp::slotTimeAdjust()
+{
+    QList<QUrl> urls = view()->selectedUrls(ApplicationSettings::Metadata);
+
+    if (urls.isEmpty())
+        return;
+
+    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DBInfoIface(this, urls, ApplicationSettings::Metadata));
+    dialog->exec();
+
+    delete dialog;
+
+    // Refresh Database with new metadata from files.
+    CollectionScanner scanner;
+
+    foreach(const QUrl& url, urls)
+    {
+        scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
+        ImageAttributesWatch::instance()->fileMetadataChanged(url);
+    }
+}
+
 void DigikamApp::slotEditMetadata()
 {
     QList<QUrl> urls = view()->selectedUrls(ApplicationSettings::Metadata);
@@ -200,28 +222,6 @@ void DigikamApp::slotPrintCreator()
     QPointer<AdvPrintWizard> w = new AdvPrintWizard(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
     w->exec();
     delete w;
-}
-
-void DigikamApp::slotTimeAdjust()
-{
-    QList<QUrl> urls = view()->selectedUrls(ApplicationSettings::Metadata);
-
-    if (urls.isEmpty())
-        return;
-
-    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DBInfoIface(this, urls, ApplicationSettings::Metadata));
-    dialog->exec();
-
-    delete dialog;
-
-    // Refresh Database with new metadata from files.
-    CollectionScanner scanner;
-
-    foreach(const QUrl& url, urls)
-    {
-        scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
-        ImageAttributesWatch::instance()->fileMetadataChanged(url);
-    }
 }
 
 } // namespace Digikam
