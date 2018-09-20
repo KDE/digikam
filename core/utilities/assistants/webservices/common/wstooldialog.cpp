@@ -64,6 +64,11 @@ WSToolDialog::WSToolDialog(QWidget* const parent)
     : QDialog(parent),
       d(new Private)
 {
+    setWindowFlags((windowFlags() & ~Qt::Dialog) |
+                   Qt::Window                    |
+                   Qt::WindowCloseButtonHint     |
+                   Qt::WindowMinMaxButtonsHint);
+
     d->buttonBox   = new QDialogButtonBox(QDialogButtonBox::Close, this);
     d->startButton = new QPushButton(i18nc("@action:button", "&Start"), this);
     d->startButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
