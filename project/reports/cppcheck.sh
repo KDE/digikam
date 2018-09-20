@@ -47,6 +47,7 @@ cppcheck -j$CPU_CORES \
          --suppress=purgedConfiguration \
          --suppress=toomanyconfigs \
          --suppress=unreadVariable \
+         --suppress=unusedVariable \
          --suppress=class_X_Y \
          --suppress=ConfigurationNotChecked \
          --suppress=unmatchedSuppression \
