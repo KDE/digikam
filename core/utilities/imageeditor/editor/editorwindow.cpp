@@ -833,6 +833,7 @@ void EditorWindow::setupStandardActions()
     createImportActions();
 
     m_metadataEditAction->setEnabled(false);
+    m_timeAdjustAction->setEnabled(false);
     m_expoBlendingAction->setEnabled(false);
     m_calendarAction->setEnabled(false);
     m_sendByMailAction->setEnabled(false);
@@ -1415,6 +1416,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->openWithAction->setEnabled(val);
     d->filePrintAction->setEnabled(val);
     m_metadataEditAction->setEnabled(val);
+    m_timeAdjustAction->setEnabled(val);
     m_exportAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
     d->selectNoneAction->setEnabled(val);

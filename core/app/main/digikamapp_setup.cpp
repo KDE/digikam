@@ -1091,6 +1091,7 @@ void DigikamApp::initGui()
     d->openWithAction->setEnabled(false);
     d->slideShowSelectionAction->setEnabled(false);
     m_metadataEditAction->setEnabled(false);
+    m_timeAdjustAction->setEnabled(false);
     d->imageAutoExifActionMenu->setEnabled(false);
 
 #ifdef HAVE_MARBLE
