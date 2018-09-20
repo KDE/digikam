@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QLocale>
+#include <QHeaderView>
 
 // KDE includes
 
@@ -45,6 +46,8 @@ TimeAdjustList::TimeAdjustList(QWidget* const parent)
                           i18n("Timestamp Updated"), true);
     listView()->setColumn(static_cast<Digikam::DImagesListView::ColumnType>(STATUS),
                           i18n("Status"), true);
+
+    listView()->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
 
 TimeAdjustList::~TimeAdjustList()
