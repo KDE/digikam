@@ -28,6 +28,7 @@
 #include <QAbstractItemView>
 #include <QAbstractListModel>
 #include <QMouseEvent>
+#include <QPointer>
 #include <QPainter>
 #include <QPen>
 #include <QStyle>
@@ -343,7 +344,15 @@ TreeViewComboBox::TreeViewComboBox(QWidget* const parent)
 void TreeViewComboBox::installView(QAbstractItemView* view)
 {
     // parent does the heavy work
-    StayPoppedUpComboBox::installView(view ? view : new TreeViewComboBoxTreeView);
+    if (view)
+    {
+        StayPoppedUpComboBox::installView(view);
+    }
+    else
+    {
+        QPointer<TreeViewComboBoxTreeView> tview = new TreeViewComboBoxTreeView;
+        StayPoppedUpComboBox::installView(tview);
+    }
 }
 
 void TreeViewComboBox::sendViewportEventToView(QEvent* e)
@@ -383,8 +392,15 @@ ListViewComboBox::ListViewComboBox(QWidget* const parent)
 void ListViewComboBox::installView(QAbstractItemView* view)
 {
     // parent does the heavy work
-    StayPoppedUpComboBox::installView(view ? view
-                                           : new ListViewComboBoxListView);
+    if (view)
+    {
+        StayPoppedUpComboBox::installView(view);
+    }
+    else
+    {
+        QPointer<ListViewComboBoxListView> lview = new ListViewComboBoxListView;
+        StayPoppedUpComboBox::installView(lview);
+    }
 }
 
 void ListViewComboBox::sendViewportEventToView(QEvent* e)
