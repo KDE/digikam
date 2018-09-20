@@ -221,8 +221,9 @@ void TimeAdjustDialog::readSettings()
     prm.updEXIFOriDate = group.readEntry(QLatin1String("Update EXIF Original Time"),     true);
     prm.updEXIFDigDate = group.readEntry(QLatin1String("Update EXIF Digitization Time"), true);
     prm.updEXIFThmDate = group.readEntry(QLatin1String("Update EXIF Thumbnail Time"),    true);
-    prm.updIPTCDate    = group.readEntry(QLatin1String("Update IPTC Time"),              true);
-    prm.updXMPDate     = group.readEntry(QLatin1String("Update XMP Creation Time"),      true);
+    prm.updIPTCDate    = group.readEntry(QLatin1String("Update IPTC Time"),              false);
+    prm.updXMPVideo    = group.readEntry(QLatin1String("Update XMP Video Time"),         false);
+    prm.updXMPDate     = group.readEntry(QLatin1String("Update XMP Creation Time"),      false);
 
     prm.dateSource     = group.readEntry(QLatin1String("Use Timestamp Type"),            0);
     prm.metadataSource = group.readEntry(QLatin1String("Meta Timestamp Type"),           0);
@@ -256,6 +257,7 @@ void TimeAdjustDialog::saveSettings()
     group.writeEntry(QLatin1String("Update EXIF Digitization Time"), prm.updEXIFDigDate);
     group.writeEntry(QLatin1String("Update EXIF Thumbnail Time"),    prm.updEXIFThmDate);
     group.writeEntry(QLatin1String("Update IPTC Time"),              prm.updIPTCDate);
+    group.writeEntry(QLatin1String("Update XMP Video Time"),         prm.updXMPVideo);
     group.writeEntry(QLatin1String("Update XMP Creation Time"),      prm.updXMPDate);
 
     group.writeEntry(QLatin1String("Use Timestamp Type"),            prm.dateSource);

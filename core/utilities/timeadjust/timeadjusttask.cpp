@@ -184,6 +184,23 @@ void TimeAdjustTask::run()
                 }
             }
 
+            if (d->settings.updXMPVideo)
+            {
+                if (meta.supportXmp() && meta.canWriteXmp(d->url.path()))
+                {
+                    ret &= meta.setXmpTagString("Xmp.video.DateTimeOriginal",
+                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    ret &= meta.setXmpTagString("Xmp.video.DateTimeDigitized",
+                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    ret &= meta.setXmpTagString("Xmp.video.ModificationDate",
+                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                }
+                else
+                {
+                    ret = false;
+                }
+            }
+
             ret &= meta.save(d->url.path());
 
             if (!ret)

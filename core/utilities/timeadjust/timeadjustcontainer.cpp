@@ -37,6 +37,7 @@ TimeAdjustContainer::TimeAdjustContainer()
     updEXIFThmDate = false;
     updIPTCDate    = false;
     updXMPDate     = false;
+    updXMPVideo    = false;
     updFileModDate = false;
 
     dateSource     = APPDATE;
@@ -58,7 +59,8 @@ bool TimeAdjustContainer::atLeastOneUpdateToProcess() const
             updEXIFDigDate ||
             updEXIFThmDate ||
             updIPTCDate    ||
-            updXMPDate);
+            updXMPDate     ||
+            updXMPVideo);
 }
 
 QDateTime TimeAdjustContainer::calculateAdjustedDate(const QDateTime& originalTime) const

@@ -95,6 +95,7 @@ public:
     bool      updEXIFThmDate;
     bool      updIPTCDate;
     bool      updXMPDate;
+    bool      updXMPVideo;
     bool      updFileModDate;
 
     int       dateSource;

@@ -74,6 +74,7 @@ public:
         updEXIFDigDateCheck    = 0;
         updEXIFThmDateCheck    = 0;
         updIPTCDateCheck       = 0;
+        updXMPVideoCheck       = 0;
         updXMPDateCheck        = 0;
         useFileDateTypeChooser = 0;
         useMetaDateTypeChooser = 0;
@@ -106,6 +107,7 @@ public:
     QCheckBox*             updEXIFDigDateCheck;
     QCheckBox*             updEXIFThmDateCheck;
     QCheckBox*             updIPTCDateCheck;
+    QCheckBox*             updXMPVideoCheck;
     QCheckBox*             updXMPDateCheck;
 
     QComboBox*             useFileDateTypeChooser;
@@ -244,13 +246,15 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     d->updEXIFDigDateCheck      = new QCheckBox(i18n("EXIF: digitized"),    d->updateSettingsBox);
     d->updEXIFThmDateCheck      = new QCheckBox(i18n("EXIF: Thumbnail"),    d->updateSettingsBox);
     d->updIPTCDateCheck         = new QCheckBox(i18n("IPTC: created"),      d->updateSettingsBox);
+    d->updXMPVideoCheck         = new QCheckBox(i18n("XMP: Video"),         d->updateSettingsBox);
     d->updXMPDateCheck          = new QCheckBox(i18n("XMP"),                d->updateSettingsBox);
 
+    updateGBLayout->addWidget(d->updEXIFOriDateCheck, 0, 0, 1, 1);
     updateGBLayout->addWidget(d->updEXIFModDateCheck, 0, 1, 1, 1);
-    updateGBLayout->addWidget(d->updEXIFOriDateCheck, 1, 0, 1, 1);
-    updateGBLayout->addWidget(d->updEXIFDigDateCheck, 1, 1, 1, 1);
-    updateGBLayout->addWidget(d->updEXIFThmDateCheck, 2, 0, 1, 1);
-    updateGBLayout->addWidget(d->updXMPDateCheck,     2, 1, 1, 1);
+    updateGBLayout->addWidget(d->updEXIFDigDateCheck, 1, 0, 1, 1);
+    updateGBLayout->addWidget(d->updEXIFThmDateCheck, 1, 1, 1, 1);
+    updateGBLayout->addWidget(d->updXMPDateCheck,     2, 0, 1, 1);
+    updateGBLayout->addWidget(d->updXMPVideoCheck,    2, 1, 1, 1);
     updateGBLayout->addWidget(d->updIPTCDateCheck,    3, 0, 1, 1);
     updateGBLayout->addWidget(d->updFileModDateCheck, 3, 1, 1, 1);
     updateGBLayout->setContentsMargins(spacing, spacing, spacing, spacing);
@@ -260,6 +264,7 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
 
     if (!DMetadata::supportXmp())
     {
+        d->updXMPVideoCheck->setEnabled(false);
         d->updXMPDateCheck->setEnabled(false);
     }
 
@@ -329,6 +334,9 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     connect(d->updEXIFThmDateCheck, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
+    connect(d->updXMPVideoCheck, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
+
     connect(d->updXMPDateCheck, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
@@ -369,6 +377,7 @@ void TimeAdjustSettings::setSettings(const TimeAdjustContainer& settings)
     d->updEXIFDigDateCheck->setChecked(settings.updEXIFDigDate);
     d->updEXIFThmDateCheck->setChecked(settings.updEXIFThmDate);
     d->updIPTCDateCheck->setChecked(settings.updIPTCDate);
+    d->updXMPVideoCheck->setChecked(settings.updXMPVideo);
     d->updXMPDateCheck->setChecked(settings.updXMPDate);
 
     slotSrcTimestampChanged();
@@ -386,13 +395,14 @@ TimeAdjustContainer TimeAdjustSettings::settings() const
     settings.adjustmentDays = d->adjDaysInput->value();
     settings.adjustmentTime = d->adjTimeInput->dateTime();
 
+    settings.updFileModDate = d->updFileModDateCheck->isChecked();
     settings.updEXIFModDate = d->updEXIFModDateCheck->isChecked();
     settings.updEXIFOriDate = d->updEXIFOriDateCheck->isChecked();
     settings.updEXIFDigDate = d->updEXIFDigDateCheck->isChecked();
     settings.updEXIFThmDate = d->updEXIFThmDateCheck->isChecked();
     settings.updIPTCDate    = d->updIPTCDateCheck->isChecked();
+    settings.updXMPVideo    = d->updXMPVideoCheck->isChecked();
     settings.updXMPDate     = d->updXMPDateCheck->isChecked();
-    settings.updFileModDate = d->updFileModDateCheck->isChecked();
     settings.dateSource     = TimeAdjustContainer::APPDATE;
 
     if (d->useFileDateBtn->isChecked())   settings.dateSource = TimeAdjustContainer::FILEDATE;

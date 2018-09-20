@@ -322,6 +322,16 @@ bool TimeAdjust::toolOperations()
             meta.setXmpTagString("Xmp.xmp.ModifyDate",
                                  dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
         }
+
+        if (prm.updXMPVideo && meta.supportXmp())
+        {
+            meta.setXmpTagString("Xmp.video.DateTimeOriginal",
+                                 dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+            meta.setXmpTagString("Xmp.video.DateTimeDigitized",
+                                 dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+            meta.setXmpTagString("Xmp.video.ModificationDate",
+                                 dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+        }
     }
 
     bool ret = true;
