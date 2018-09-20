@@ -2967,7 +2967,7 @@ void EditorWindow::setupSelectToolsAction()
 
     // Builtin actions
 
-    QString transformCategory          = i18nc("@title Image Transform", "Transform");
+    QString transformCategory = i18nc("@title Image Transform",       "Transform");
     actionModel->addAction(d->rotateLeftAction,           transformCategory);
     actionModel->addAction(d->rotateRightAction,          transformCategory);
     actionModel->addAction(d->flipHorizAction,            transformCategory);
@@ -2984,12 +2984,12 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(d->contentAwareResizingAction, transformCategory);
 #endif
 
-    QString decorateCategory           = i18nc("@title Image Decorate",  "Decorate");
+    QString decorateCategory  = i18nc("@title Image Decorate",        "Decorate");
     actionModel->addAction(d->textureAction,              decorateCategory);
     actionModel->addAction(d->borderAction,               decorateCategory);
     actionModel->addAction(d->insertTextAction,           decorateCategory);
 
-    QString effectsCategory            = i18nc("@title Image Effect",    "Effects");
+    QString effectsCategory   = i18nc("@title Image Effect",          "Effects");
     actionModel->addAction(d->filmgrainAction,            effectsCategory);
     actionModel->addAction(d->raindropAction,             effectsCategory);
     actionModel->addAction(d->distortionfxAction,         effectsCategory);
@@ -2999,7 +2999,7 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(d->charcoalAction,             effectsCategory);
     actionModel->addAction(d->colorEffectsAction,         effectsCategory);
 
-    QString colorsCategory             = i18nc("@title Image Colors",    "Colors");
+    QString colorsCategory    = i18nc("@title Image Colors",          "Colors");
     actionModel->addAction(d->convertTo8Bits,             colorsCategory);
     actionModel->addAction(d->convertTo16Bits,            colorsCategory);
     actionModel->addAction(d->invertAction,               colorsCategory);
@@ -3015,7 +3015,7 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(d->filmAction,                 colorsCategory);
     actionModel->addAction(d->colorSpaceConverter,        colorsCategory);
 
-    QString enhanceCategory             = i18nc("@title Image Enhance",  "Enhance");
+    QString enhanceCategory   = i18nc("@title Image Enhance",         "Enhance");
     actionModel->addAction(d->restorationAction,          enhanceCategory);
     actionModel->addAction(d->blurAction,                 enhanceCategory);
     //actionModel->addAction(d->healCloneAction,            enhanceCategory);
@@ -3031,9 +3031,10 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(d->lensAutoFixAction,          enhanceCategory);
 #endif
 
-    QString postCategory             = i18nc("@title Post Processing Tools", "Post-Processing");
+    QString postCategory      = i18nc("@title Post Processing Tools", "Post-Processing");
     actionModel->addAction(m_calendarAction,              postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
+    actionModel->addAction(m_timeAdjustAction,            postCategory);
     actionModel->addAction(m_presentationAction,          postCategory);
     actionModel->addAction(m_expoBlendingAction,          postCategory);
     actionModel->addAction(m_sendByMailAction,            postCategory);
@@ -3056,14 +3057,14 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(m_geolocationEditAction,       postCategory);
 #endif
 
-    QString exportCategory           = i18nc("@title Export Tools",          "Export");
+    QString exportCategory    = i18nc("@title Export Tools",          "Export");
 
     foreach(QAction* const ac, exportActions())
     {
         actionModel->addAction(ac,                        exportCategory);
     }
 
-    QString importCategory           = i18nc("@title Import Tools",          "Import");
+    QString importCategory    = i18nc("@title Import Tools",          "Import");
 
     foreach(QAction* const ac, importActions())
     {

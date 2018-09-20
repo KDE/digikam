@@ -35,7 +35,7 @@ void DigikamApp::setupSelectToolsAction()
 
     // Builtin actions
 
-    QString mainCategory               = i18nc("@title Main Tools",          "Main Tools");
+    QString mainCategory   = i18nc("@title Main Tools",            "Main Tools");
     actionModel->addAction(d->ieAction,                   mainCategory);
     actionModel->addAction(d->openTagMngrAction,          mainCategory);
     actionModel->addAction(d->bqmAction,                  mainCategory);
@@ -43,10 +43,11 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(d->ltAction,                   mainCategory);
     actionModel->addAction(d->advSearchAction,            mainCategory);
 
-    QString postCategory             = i18nc("@title Post Processing Tools", "Post-Processing");
+    QString postCategory   = i18nc("@title Post Processing Tools", "Post-Processing");
     actionModel->addAction(m_expoBlendingAction,          postCategory);
     actionModel->addAction(m_calendarAction,              postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
+    actionModel->addAction(m_timeAdjustAction,            postCategory);
     actionModel->addAction(m_presentationAction,          postCategory);
     actionModel->addAction(m_sendByMailAction,            postCategory);
     actionModel->addAction(m_printCreatorAction,          postCategory);
@@ -68,14 +69,14 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(m_geolocationEditAction,       postCategory);
 #endif
 
-    QString exportCategory           = i18nc("@title Export Tools",          "Export");
+    QString exportCategory = i18nc("@title Export Tools",          "Export");
 
     foreach (QAction* const ac, exportActions())
     {
         actionModel->addAction(ac,                        exportCategory);
     }
 
-    QString importCategory           = i18nc("@title Import Tools",          "Import");
+    QString importCategory = i18nc("@title Import Tools",          "Import");
 
     foreach (QAction* const ac, importActions())
     {
