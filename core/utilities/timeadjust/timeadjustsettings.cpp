@@ -242,15 +242,15 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     d->updateSettingsBox              = new QWidget(d->settingsExpander);
     QGridLayout* const updateGBLayout = new QGridLayout(d->updateSettingsBox);
 
-    d->updIfAvailableCheck      = new QCheckBox(i18n("Write only if timestamp exist"), d->updateSettingsBox);
-    d->updFileModDateCheck      = new QCheckBox(i18n("File last modified"),            d->updateSettingsBox);
-    d->updEXIFModDateCheck      = new QCheckBox(i18n("EXIF: created"),                 d->updateSettingsBox);
-    d->updEXIFOriDateCheck      = new QCheckBox(i18n("EXIF: original"),                d->updateSettingsBox);
-    d->updEXIFDigDateCheck      = new QCheckBox(i18n("EXIF: digitized"),               d->updateSettingsBox);
-    d->updEXIFThmDateCheck      = new QCheckBox(i18n("EXIF: Thumbnail"),               d->updateSettingsBox);
-    d->updIPTCDateCheck         = new QCheckBox(i18n("IPTC: created"),                 d->updateSettingsBox);
-    d->updXMPVideoCheck         = new QCheckBox(i18n("XMP: Video"),                    d->updateSettingsBox);
-    d->updXMPDateCheck          = new QCheckBox(i18n("XMP"),                           d->updateSettingsBox);
+    d->updIfAvailableCheck      = new QCheckBox(i18n("Write only if the timestamp exists"), d->updateSettingsBox);
+    d->updFileModDateCheck      = new QCheckBox(i18n("File last modified"),                 d->updateSettingsBox);
+    d->updEXIFModDateCheck      = new QCheckBox(i18n("EXIF: created"),                      d->updateSettingsBox);
+    d->updEXIFOriDateCheck      = new QCheckBox(i18n("EXIF: original"),                     d->updateSettingsBox);
+    d->updEXIFDigDateCheck      = new QCheckBox(i18n("EXIF: digitized"),                    d->updateSettingsBox);
+    d->updEXIFThmDateCheck      = new QCheckBox(i18n("EXIF: Thumbnail"),                    d->updateSettingsBox);
+    d->updIPTCDateCheck         = new QCheckBox(i18n("IPTC: created"),                      d->updateSettingsBox);
+    d->updXMPVideoCheck         = new QCheckBox(i18n("XMP: Video"),                         d->updateSettingsBox);
+    d->updXMPDateCheck          = new QCheckBox(i18n("XMP"),                                d->updateSettingsBox);
 
     updateGBLayout->addWidget(d->updIfAvailableCheck, 0, 0, 1, 2);
     updateGBLayout->addWidget(d->updEXIFOriDateCheck, 1, 0, 1, 1);
