@@ -42,10 +42,6 @@ set(libqueuemanager_SRCS
     tools/metadata/assigntemplate.cpp
     tools/metadata/removemetadata.cpp
     tools/metadata/timeadjust.cpp
-    tools/metadata/timeadjustcontainer.cpp
-    tools/metadata/timeadjustsettings.cpp
-    tools/metadata/clockphotodialog.cpp
-    tools/metadata/detbyclockphotobutton.cpp
     tools/transform/flip.cpp
     tools/transform/resize.cpp
     tools/transform/rotate.cpp

@@ -13,8 +13,13 @@ set(libfacemanagement_SRCS
     faceutils.cpp
     facegroup.cpp
     facepipeline.cpp
+    facepipeline_p.cpp
+    facebenchmarkers.cpp
+    faceworkers.cpp
+    faceimageretriever.cpp
     facescandialog.cpp
     assignnamewidget.cpp
+    parallelpipes.cpp
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="604" name="imageeditor" translationDomain="digikam" >
+<gui version="606" name="imageeditor" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -136,6 +136,7 @@
     <Menu name="Tools"><text>&amp;Tools</text>
         <Action name="metadata_edit" />
         <Action name="geolocation_edit" />
+        <Action name="timeadjust_edit" />
         <Separator/>
         <Action name="expoblending" />
         <Action name="panorama" />

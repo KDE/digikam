@@ -20,20 +20,24 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_TIME_ADJUST_CONTAINER_H
-#define DIGIKAM_BQM_TIME_ADJUST_CONTAINER_H
+#ifndef DIGIKAM_TIME_ADJUST_CONTAINER_H
+#define DIGIKAM_TIME_ADJUST_CONTAINER_H
 
 // Qt includes
 
 #include <QDateTime>
 #include <QTime>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 /** Container that store all timestamp adjustments.
  */
-class TimeAdjustContainer
+class DIGIKAM_EXPORT TimeAdjustContainer
 {
 
 public:
@@ -128,4 +132,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_BQM_TIME_ADJUST_CONTAINER_H
+#endif // DIGIKAM_TIME_ADJUST_CONTAINER_H

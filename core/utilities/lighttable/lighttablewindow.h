@@ -182,7 +182,8 @@ private Q_SLOTS:
 
     void slotEditItem();
     void slotEditItem(const ImageInfo&);
-    
+
+    void slotTimeAdjust();
     void slotEditMetadata();
     void slotEditGeolocation();
     void slotPrintCreator();

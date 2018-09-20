@@ -136,8 +136,8 @@ void RedEyeCorrectionSettings::readSettings(KConfigGroup& group)
 {
     RedEyeCorrectionContainer prm;
     RedEyeCorrectionContainer defaultPrm = defaultSettings();
-
-    prm.m_redToAvgRatio = group.readEntry(d->configRedToAvgRatioAdjustmentEntry, defaultPrm.m_redToAvgRatio);
+    prm.m_redToAvgRatio                  = group.readEntry(d->configRedToAvgRatioAdjustmentEntry,
+                                                           defaultPrm.m_redToAvgRatio);
 
     setSettings(prm);
 }

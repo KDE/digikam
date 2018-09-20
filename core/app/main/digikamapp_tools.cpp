@@ -70,14 +70,14 @@ void DigikamApp::setupSelectToolsAction()
 
     QString exportCategory           = i18nc("@title Export Tools",          "Export");
 
-    foreach(QAction* const ac, exportActions())
+    foreach (QAction* const ac, exportActions())
     {
         actionModel->addAction(ac,                        exportCategory);
     }
 
     QString importCategory           = i18nc("@title Import Tools",          "Import");
 
-    foreach(QAction* const ac, importActions())
+    foreach (QAction* const ac, importActions())
     {
         actionModel->addAction(ac,                        importCategory);
     }
@@ -139,14 +139,14 @@ void DigikamApp::slotDatabaseMigration()
     dlg.exec();
 }
 
-void DigikamApp::slotEditMetadata()
+void DigikamApp::slotTimeAdjust()
 {
     QList<QUrl> urls = view()->selectedUrls(ApplicationSettings::Metadata);
 
     if (urls.isEmpty())
         return;
 
-    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(QApplication::activeWindow(), urls);
+    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DBInfoIface(this, urls, ApplicationSettings::Metadata));
     dialog->exec();
 
     delete dialog;
@@ -154,7 +154,29 @@ void DigikamApp::slotEditMetadata()
     // Refresh Database with new metadata from files.
     CollectionScanner scanner;
 
-    foreach(const QUrl& url, urls)
+    foreach (const QUrl& url, urls)
+    {
+        scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
+        ImageAttributesWatch::instance()->fileMetadataChanged(url);
+    }
+}
+
+void DigikamApp::slotEditMetadata()
+{
+    QList<QUrl> urls = view()->selectedUrls(ApplicationSettings::Metadata);
+
+    if (urls.isEmpty())
+        return;
+
+    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(this, urls);
+    dialog->exec();
+
+    delete dialog;
+
+    // Refresh Database with new metadata from files.
+    CollectionScanner scanner;
+
+    foreach (const QUrl& url, urls)
     {
         scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
         ImageAttributesWatch::instance()->fileMetadataChanged(url);
@@ -176,7 +198,7 @@ void DigikamApp::slotEditGeolocation()
 
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel,
                                                            new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools),
-                                                           QApplication::activeWindow());
+                                                           this);
     dialog->setItems(ImageGPS::infosToItems(infos));
     dialog->exec();
 

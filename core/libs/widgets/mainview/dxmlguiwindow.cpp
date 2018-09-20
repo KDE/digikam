@@ -184,6 +184,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_metadataEditAction       = 0;
     m_geolocationEditAction    = 0;
     m_mediaServerAction        = 0;
+    m_timeAdjustAction         = 0;
     m_animLogo                 = 0;
 
     // Export tools
@@ -576,6 +577,16 @@ void DXmlGuiWindow::createMediaServerAction()
 
     connect(m_mediaServerAction, SIGNAL(triggered(bool)),
             this, SLOT(slotMediaServer()));
+}
+
+void DXmlGuiWindow::createTimeAdjustAction()
+{
+    m_timeAdjustAction = new QAction(QIcon::fromTheme(QLatin1String("appointment-new")), i18n("Adjust Time && Date..."), this);
+    actionCollection()->addAction(QLatin1String("timeadjust_edit"), m_timeAdjustAction);
+    //actionCollection()->setDefaultShortcut(m_metadataEditAction, Qt::CTRL + Qt::SHIFT + Qt::Key_M);
+
+    connect(m_timeAdjustAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotTimeAdjust()));
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)

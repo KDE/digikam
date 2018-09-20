@@ -574,4 +574,6 @@ BUGFIXES:
 512 ==> 398675 - Image Rotation Inflates File Size.
 513 ==> 309520 - GROUP : add 'group by month' into 'View.. | group by...' menu.
 514 ==> 398714 - MicrosoftPhoto:LastKeywordXMP does not show up in digkam tags list.
-515 ==> 
+515 ==> 388386 - Time adjustment tool is misleading and potentially leads to data loss.
+516 ==> 366777 - No preview for Time Adjust tool.
+517 ==> 

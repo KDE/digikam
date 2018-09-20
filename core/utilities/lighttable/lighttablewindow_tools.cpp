@@ -54,6 +54,27 @@ void LightTableWindow::slotEditItem(const ImageInfo& info)
     im->setFocus();
 }
 
+void LightTableWindow::slotTimeAdjust()
+{
+    QList<QUrl> urls = d->thumbView->allUrls();
+
+    if (urls.isEmpty())
+        return;
+
+    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DBInfoIface(this, urls));
+    dialog->exec();
+
+    delete dialog;
+
+    // Refresh Database with new metadata from files.
+    CollectionScanner scanner;
+
+    foreach (const QUrl& url, urls)
+    {
+        scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
+    }
+}
+
 void LightTableWindow::slotEditMetadata()
 {
     if (d->thumbView->currentInfo().isNull())
@@ -63,8 +84,7 @@ void LightTableWindow::slotEditMetadata()
 
     QUrl url = d->thumbView->currentInfo().fileUrl();
 
-    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(QApplication::activeWindow(),
-                                                                 QList<QUrl>() << url);
+    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(this, QList<QUrl>() << url);
     dialog->exec();
 
     delete dialog;
@@ -90,15 +110,14 @@ void LightTableWindow::slotEditGeolocation()
     filterModel->sort(0);
 
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel,
-                                                           new DBInfoIface(this, d->thumbView->allUrls()),
-                                                           QApplication::activeWindow());
+                                                           new DBInfoIface(this, d->thumbView->allUrls()), this);
     dialog->setItems(ImageGPS::infosToItems(infos));
     dialog->exec();
 
     delete dialog;
 
     // Refresh Database with new metadata from files.
-    foreach(const ImageInfo& inf, infos)
+    foreach (const ImageInfo& inf, infos)
     {
         ScanController::instance()->scannedInfo(inf.fileUrl().toLocalFile());
     }
@@ -116,7 +135,7 @@ void LightTableWindow::slotPresentation()
 {
     QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
 
-    foreach(const ImageInfo& info, d->thumbView->allImageInfos())
+    foreach (const ImageInfo& info, d->thumbView->allImageInfos())
     {
         mngr->addFile(info.fileUrl(), info.comment());
         qApp->processEvents();

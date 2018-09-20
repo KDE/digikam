@@ -177,16 +177,18 @@ public:
      * 2) Call construct() to set up the pipeline.
      *
      * - Database filter: Prepares database records and/or filters out items.
-     *   See FilterMode for specification.
-     * - Preview loader: If no preview loader is plugged, you must provide
-     *   a DImg for face detection and recognition
-     * - Face Detector: If no recognizer is plugged, all detected face are marked
-     *   as the unknown person
+     *                    See FilterMode for specification.
+     * - Preview loader:  If no preview loader is plugged, you must provide
+     *                    a DImg for face detection and recognition
+     * - Face Detector:   If no recognizer is plugged, all detected face are marked
+     *                    as the unknown person
      * - Face Recognizer: If no detector is plugged, only already scanned faces
-     *   marked as unknown will be processed. They are implicitly read from the database.
-     * - DatabaseWriter: Writes the detection and recognition results to the database.
-     *   The trainer works on a completely different storage and is not affected by the database writer.
-     * - DatabaseEditor: Can confirm or reject faces
+     *                    marked as unknown will be processed.
+     *                    They are implicitly read from the database.
+     * - DatabaseWriter:  Writes the detection and recognition results to the database.
+     *                    The trainer works on a completely different storage
+     *                    and is not affected by the database writer.
+     * - DatabaseEditor:  Can confirm or reject faces
      *
      * PlugParallel: You can call this instead of the simple plugging method.
      * Depending on the number of processor cores of the machine and the memory cost,
@@ -194,8 +196,8 @@ public:
      *
      * Supported combinations:
      *  (Database Filter ->) (Preview Loader ->) Detector -> Recognizer (-> DatabaseWriter)
-     *  (Database Filter ->) (Preview Loader ->) Detector (-> DatabaseWriter)
-     *  (Database Filter ->) (Preview Loader ->) Recognizer (-> DatabaseWriter)
+     *  (Database Filter ->) (Preview Loader ->) Detector               (-> DatabaseWriter)
+     *  (Database Filter ->) (Preview Loader ->) Recognizer             (-> DatabaseWriter)
      *  DatabaseEditor
      *  Trainer
      *  DatabaseEditor -> Trainer
@@ -302,6 +304,7 @@ Q_SIGNALS:
 
     /// Emitted when one package begins processing
     void processing(const FacePipelinePackage& package);
+
     /// Emitted when one package has finished processing
     void processed(const FacePipelinePackage& package);
     void progressValueChanged(float progress);

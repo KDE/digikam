@@ -27,6 +27,27 @@
 namespace Digikam
 {
 
+void ImageWindow::slotTimeAdjust()
+{
+    QList<QUrl> urls = d->thumbBar->allUrls();
+
+    if (urls.isEmpty())
+        return;
+
+    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DBInfoIface(this, urls));
+    dialog->exec();
+
+    delete dialog;
+
+    // Refresh Database with new metadata from files.
+    CollectionScanner scanner;
+
+    foreach (const QUrl& url, urls)
+    {
+        scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
+    }
+}
+
 void ImageWindow::slotEditMetadata()
 {
     if (d->currentImageInfo.isNull())
@@ -34,8 +55,7 @@ void ImageWindow::slotEditMetadata()
 
     QUrl url = d->currentImageInfo.fileUrl();
 
-    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(QApplication::activeWindow(),
-                                                                 QList<QUrl>() << url);
+    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(this, QList<QUrl>() << url);
     dialog->exec();
 
     delete dialog;
@@ -63,14 +83,14 @@ void ImageWindow::slotEditGeolocation()
 
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel,
                                                            new DBInfoIface(this, d->thumbBar->allUrls()),
-                                                           QApplication::activeWindow());
+                                                           this);
     dialog->setItems(ImageGPS::infosToItems(infos));
     dialog->exec();
 
     delete dialog;
 
     // Refresh Database with new metadata from files.
-    foreach(const ImageInfo& inf, infos)
+    foreach (const ImageInfo& inf, infos)
     {
         ScanController::instance()->scannedInfo(inf.fileUrl().toLocalFile());
     }
@@ -93,7 +113,7 @@ void ImageWindow::slotPresentation()
 {
     QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
 
-    foreach(const ImageInfo& info, d->imageInfoModel->imageInfos())
+    foreach (const ImageInfo& info, d->imageInfoModel->imageInfos())
     {
         mngr->addFile(info.fileUrl(), info.comment());
         qApp->processEvents();
@@ -117,7 +137,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
         float cnt = (float)d->imageInfoModel->rowCount();
         int     i = 0;
 
-        foreach(const ImageInfo& info, d->imageInfoModel->imageInfos())
+        foreach (const ImageInfo& info, d->imageInfoModel->imageInfos())
         {
             SlidePictureInfo pictInfo;
             pictInfo.comment    = info.comment();

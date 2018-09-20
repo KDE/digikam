@@ -3,11 +3,12 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-05-16
- * Description : time adjust settings widget.
+ * Date        : 2012-12-31
+ * Description : time adjust actions using threads.
  *
  * Copyright (C) 2012      by Smit Mehta <smit dot meh at gmail dot com>
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (c) 2018      by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,49 +22,41 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_TIME_ADJUST_SETTINGS_H
-#define DIGIKAM_BQM_TIME_ADJUST_SETTINGS_H
+#ifndef DIGIKAM_TIME_ADJUST_TASK_H
+#define DIGIKAM_TIME_ADJUST_TASK_H
 
 // Qt includes
 
-#include <QDateTime>
-#include <QScrollArea>
+#include <QUrl>
 
 // Local includes
 
+#include "actionthreadbase.h"
 #include "timeadjustcontainer.h"
 
 namespace Digikam
 {
 
-class TimeAdjustContainer;
-
-class TimeAdjustSettings : public QScrollArea
+class TimeAdjustTask : public ActionJob
 {
     Q_OBJECT
 
 public:
 
-    explicit TimeAdjustSettings(QWidget* const parent = 0);
-    ~TimeAdjustSettings();
-
-public:
+    explicit TimeAdjustTask(const QUrl& url);
+    ~TimeAdjustTask();
 
     void setSettings(const TimeAdjustContainer& settings);
-    TimeAdjustContainer settings() const;
-    void detAdjustmentByClockPhotoUrl(const QUrl& url);
+    void setItemsMap(const QMap<QUrl, QDateTime>& itemsMap);
 
 Q_SIGNALS:
 
-    void signalSettingsChanged();
+    void signalProcessStarted(const QUrl&);
+    void signalProcessEnded(const QUrl&, int);
 
-private Q_SLOTS:
+protected:
 
-    void slotSrcTimestampChanged();
-    void slotResetDateToCurrent();
-    void slotAdjustmentTypeChanged();
-    void slotDetAdjustmentByClockPhotoDialog();
-    void slotDetAdjustmentByClockPhotoUrl(const QUrl& url);
+    void run();
 
 private:
 
@@ -71,6 +64,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+}  // namespace Digikam
 
-#endif // DIGIKAM_BQM_TIME_ADJUST_SETTINGS_H
+#endif // DIGIKAM_TIME_ADJUST_TASK

@@ -52,6 +52,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:printcreator_src>
             $<TARGET_OBJECTS:mediaserver_src>
             $<TARGET_OBJECTS:webservices_src>
+            $<TARGET_OBJECTS:timeadjust_src>
 
             utils/digikam_debug.cpp
 )
