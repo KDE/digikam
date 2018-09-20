@@ -349,6 +349,9 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
 
     connect(d->updFileModDateCheck, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->updIfAvailableCheck, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
 }
 
 TimeAdjustSettings::~TimeAdjustSettings()
