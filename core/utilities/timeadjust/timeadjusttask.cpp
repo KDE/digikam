@@ -194,6 +194,8 @@ void TimeAdjustTask::run()
                                                 dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
                     ret &= meta.setXmpTagString("Xmp.video.ModificationDate",
                                                 dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    ret &= meta.setXmpTagString("Xmp.video.DateUTC",
+                                                dt.toUTC().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
                 }
                 else
                 {

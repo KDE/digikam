@@ -331,6 +331,8 @@ bool TimeAdjust::toolOperations()
                                  dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
             meta.setXmpTagString("Xmp.video.ModificationDate",
                                  dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+            meta.setXmpTagString("Xmp.video.DateUTC",
+                                 dt.toUTC().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
         }
     }
 
