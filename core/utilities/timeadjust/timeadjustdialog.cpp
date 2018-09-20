@@ -103,8 +103,8 @@ TimeAdjustDialog::TimeAdjustDialog(QWidget* const parent, DInfoInterface* const 
       d(new Private)
 {
     setWindowTitle(i18n("Adjust Time & Date"));
-    setModal(true);
     setMinimumSize(900, 500);
+    setModal(true);
 
     d->iface = iface;
 
@@ -118,7 +118,6 @@ TimeAdjustDialog::TimeAdjustDialog(QWidget* const parent, DInfoInterface* const 
     QGridLayout* const mainLayout = new QGridLayout(mainWidget);
     d->listView                   = new TimeAdjustList(mainWidget);
     d->settingsView               = new TimeAdjustSettings(mainWidget);
-    //d->settingsView->setImageList(d->listView);
     d->progressBar                = new DProgressWdg(mainWidget);
     d->progressBar->reset();
     d->progressBar->hide();

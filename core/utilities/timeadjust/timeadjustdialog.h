@@ -74,7 +74,7 @@ private Q_SLOTS:
 
 private:
 
-    /** Called by readTimestamps() to get KIPI host timestamps
+    /** Called by readTimestamps() to get host timestamps
      */
     void readApplicationTimestamps();
 
