@@ -72,7 +72,7 @@ echo "Clang Report $TITLE to publish is located to $SCANBUILD_DIR"
 # Note: Clang do not have an option to ignore directories to scan at compilation time.
 # Se this entry in Clang bugzilla: https://bugs.llvm.org/show_bug.cgi?id=22594
 krazySkipConfig
-if [ ] ; then
+
 for DROP_ITEM in $KRAZY_FILTERS ; do
     echo -e "--- drop $DROP_ITEM from index.html with statistics adjustements"
 
@@ -139,7 +139,7 @@ for DROP_ITEM in $KRAZY_FILTERS ; do
     done
 
 done
-fi
+
 # update www.digikam.org report section.
 updateReportToWebsite "clang" $SCANBUILD_DIR $TITLE $(parseGitBranch)
 
