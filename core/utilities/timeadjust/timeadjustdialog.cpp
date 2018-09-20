@@ -75,7 +75,7 @@ class Q_DECL_HIDDEN TimeAdjustDialog::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         settingsView = 0;
         progressBar  = 0;
