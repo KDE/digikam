@@ -177,6 +177,7 @@ PointTransformAffine find_similarity_transform(const std::vector<std::vector<flo
     sigma_from = sigma_from / from_points.size();
     sigma_to   = sigma_to   / from_points.size();
     cov        = cov        / from_points.size();
+    (void)sigma_to; // to silent clang scan-build
 
     std::vector<std::vector<float> >  u(2,std::vector<float>(2));
     std::vector<std::vector<float> >  v(2,std::vector<float>(2));
