@@ -31,13 +31,14 @@ TimeAdjustContainer::TimeAdjustContainer()
     customTime     = QDateTime::currentDateTime();
     adjustmentTime = QDateTime();
 
+    updIfAvailable = true;
     updEXIFModDate = false;
     updEXIFOriDate = false;
     updEXIFDigDate = false;
     updEXIFThmDate = false;
     updIPTCDate    = false;
-    updXMPDate     = false;
     updXMPVideo    = false;
+    updXMPDate     = false;
     updFileModDate = false;
 
     dateSource     = APPDATE;
@@ -59,8 +60,8 @@ bool TimeAdjustContainer::atLeastOneUpdateToProcess() const
             updEXIFDigDate ||
             updEXIFThmDate ||
             updIPTCDate    ||
-            updXMPDate     ||
-            updXMPVideo);
+            updXMPVideo    ||
+            updXMPDate);
 }
 
 QDateTime TimeAdjustContainer::calculateAdjustedDate(const QDateTime& originalTime) const

@@ -118,26 +118,42 @@ void TimeAdjustTask::run()
             {
                 if (d->settings.updEXIFModDate)
                 {
-                    ret &= meta.setExifTagString("Exif.Image.DateTime",
-                                                 dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getExifTagString("Exif.Image.DateTime").isEmpty()))
+                    {
+                        ret &= meta.setExifTagString("Exif.Image.DateTime",
+                                                     dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                    }
                 }
 
                 if (d->settings.updEXIFOriDate)
                 {
-                    ret &= meta.setExifTagString("Exif.Photo.DateTimeOriginal",
-                                                 dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getExifTagString("Exif.Photo.DateTimeOriginal").isEmpty()))
+                    {
+                        ret &= meta.setExifTagString("Exif.Photo.DateTimeOriginal",
+                                                     dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                    }
                 }
 
                 if (d->settings.updEXIFDigDate)
                 {
-                    ret &= meta.setExifTagString("Exif.Photo.DateTimeDigitized",
-                                                 dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getExifTagString("Exif.Photo.DateTimeDigitized").isEmpty()))
+                    {
+                        ret &= meta.setExifTagString("Exif.Photo.DateTimeDigitized",
+                                                     dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                    }
                 }
 
                 if (d->settings.updEXIFThmDate)
                 {
-                    ret &= meta.setExifTagString("Exif.Image.PreviewDateTime",
-                                                 dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                   if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getExifTagString("Exif.Image.PreviewDateTime").isEmpty()))
+                   {
+                       ret &= meta.setExifTagString("Exif.Image.PreviewDateTime",
+                                                    dt.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                   }
                 }
             }
             else if (d->settings.updEXIFModDate || d->settings.updEXIFOriDate || 
@@ -150,10 +166,19 @@ void TimeAdjustTask::run()
             {
                 if (meta.canWriteIptc(d->url.path()))
                 {
-                    ret &= meta.setIptcTagString("Iptc.Application2.DateCreated",
-                                                 dt.date().toString(Qt::ISODate));
-                    ret &= meta.setIptcTagString("Iptc.Application2.TimeCreated",
-                                                 dt.time().toString(Qt::ISODate));
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getIptcTagString("Iptc.Application2.DateCreated").isEmpty()))
+                    {
+                        ret &= meta.setIptcTagString("Iptc.Application2.DateCreated",
+                                                     dt.date().toString(Qt::ISODate));
+                    }
+
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getIptcTagString("Iptc.Application2.TimeCreated").isEmpty()))
+                    {
+                        ret &= meta.setIptcTagString("Iptc.Application2.TimeCreated",
+                                                     dt.time().toString(Qt::ISODate));
+                    }
                 }
                 else
                 {
@@ -165,18 +190,47 @@ void TimeAdjustTask::run()
             {
                 if (meta.supportXmp() && meta.canWriteXmp(d->url.path()))
                 {
-                    ret &= meta.setXmpTagString("Xmp.exif.DateTimeOriginal",
-                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-                    ret &= meta.setXmpTagString("Xmp.photoshop.DateCreated",
-                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-                    ret &= meta.setXmpTagString("Xmp.tiff.DateTime",
-                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-                    ret &= meta.setXmpTagString("Xmp.xmp.CreateDate",
-                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-                    ret &= meta.setXmpTagString("Xmp.xmp.MetadataDate",
-                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-                    ret &= meta.setXmpTagString("Xmp.xmp.ModifyDate",
-                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getXmpTagString("Xmp.exif.DateTimeOriginal").isEmpty()))
+                    {
+                        ret &= meta.setXmpTagString("Xmp.exif.DateTimeOriginal",
+                                                    dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    }
+
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getXmpTagString("Xmp.photoshop.DateCreated").isEmpty()))
+                    {
+                        ret &= meta.setXmpTagString("Xmp.photoshop.DateCreated",
+                                                    dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    }
+
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getXmpTagString("Xmp.tiff.DateTime").isEmpty()))
+                    {
+                        ret &= meta.setXmpTagString("Xmp.tiff.DateTime",
+                                                    dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    }
+
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getXmpTagString("Xmp.xmp.CreateDate").isEmpty()))
+                    {
+                        ret &= meta.setXmpTagString("Xmp.xmp.CreateDate",
+                                                    dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    }
+
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getXmpTagString("Xmp.xmp.MetadataDate").isEmpty()))
+                    {
+                        ret &= meta.setXmpTagString("Xmp.xmp.MetadataDate",
+                                                    dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    }
+
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getXmpTagString("Xmp.xmp.ModifyDate").isEmpty()))
+                    {
+                        ret &= meta.setXmpTagString("Xmp.xmp.ModifyDate",
+                                                    dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    }
                 }
                 else
                 {
@@ -188,14 +242,33 @@ void TimeAdjustTask::run()
             {
                 if (meta.supportXmp() && meta.canWriteXmp(d->url.path()))
                 {
-                    ret &= meta.setXmpTagString("Xmp.video.DateTimeOriginal",
-                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-                    ret &= meta.setXmpTagString("Xmp.video.DateTimeDigitized",
-                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-                    ret &= meta.setXmpTagString("Xmp.video.ModificationDate",
-                                                dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-                    ret &= meta.setXmpTagString("Xmp.video.DateUTC",
-                                                dt.toUTC().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getXmpTagString("Xmp.video.DateTimeOriginal").isEmpty()))
+                    {
+                        ret &= meta.setXmpTagString("Xmp.video.DateTimeOriginal",
+                                                    dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    }
+
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getXmpTagString("Xmp.video.DateTimeDigitized").isEmpty()))
+                    {
+                        ret &= meta.setXmpTagString("Xmp.video.DateTimeDigitized",
+                                                    dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    }
+
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getXmpTagString("Xmp.video.ModificationDate").isEmpty()))
+                    {
+                        ret &= meta.setXmpTagString("Xmp.video.ModificationDate",
+                                                    dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    }
+
+                    if (!d->settings.updIfAvailable || (d->settings.updIfAvailable &&
+                        !meta.getXmpTagString("Xmp.video.DateUTC").isEmpty()))
+                    {
+                        ret &= meta.setXmpTagString("Xmp.video.DateUTC",
+                                                    dt.toUTC().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                    }
                 }
                 else
                 {

@@ -68,6 +68,7 @@ public:
         useFileDateBtn         = 0;
         useMetaDateBtn         = 0;
         useCustomDateBtn       = 0;
+        updIfAvailableCheck    = 0;
         updFileModDateCheck    = 0;
         updEXIFModDateCheck    = 0;
         updEXIFOriDateCheck    = 0;
@@ -101,6 +102,7 @@ public:
     QRadioButton*          useMetaDateBtn;
     QRadioButton*          useCustomDateBtn;
 
+    QCheckBox*             updIfAvailableCheck;
     QCheckBox*             updFileModDateCheck;
     QCheckBox*             updEXIFModDateCheck;
     QCheckBox*             updEXIFOriDateCheck;
@@ -240,23 +242,25 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     d->updateSettingsBox              = new QWidget(d->settingsExpander);
     QGridLayout* const updateGBLayout = new QGridLayout(d->updateSettingsBox);
 
-    d->updFileModDateCheck      = new QCheckBox(i18n("File last modified"), d->updateSettingsBox);
-    d->updEXIFModDateCheck      = new QCheckBox(i18n("EXIF: created"),      d->updateSettingsBox);
-    d->updEXIFOriDateCheck      = new QCheckBox(i18n("EXIF: original"),     d->updateSettingsBox);
-    d->updEXIFDigDateCheck      = new QCheckBox(i18n("EXIF: digitized"),    d->updateSettingsBox);
-    d->updEXIFThmDateCheck      = new QCheckBox(i18n("EXIF: Thumbnail"),    d->updateSettingsBox);
-    d->updIPTCDateCheck         = new QCheckBox(i18n("IPTC: created"),      d->updateSettingsBox);
-    d->updXMPVideoCheck         = new QCheckBox(i18n("XMP: Video"),         d->updateSettingsBox);
-    d->updXMPDateCheck          = new QCheckBox(i18n("XMP"),                d->updateSettingsBox);
+    d->updIfAvailableCheck      = new QCheckBox(i18n("Write only if timestamp exist"), d->updateSettingsBox);
+    d->updFileModDateCheck      = new QCheckBox(i18n("File last modified"),            d->updateSettingsBox);
+    d->updEXIFModDateCheck      = new QCheckBox(i18n("EXIF: created"),                 d->updateSettingsBox);
+    d->updEXIFOriDateCheck      = new QCheckBox(i18n("EXIF: original"),                d->updateSettingsBox);
+    d->updEXIFDigDateCheck      = new QCheckBox(i18n("EXIF: digitized"),               d->updateSettingsBox);
+    d->updEXIFThmDateCheck      = new QCheckBox(i18n("EXIF: Thumbnail"),               d->updateSettingsBox);
+    d->updIPTCDateCheck         = new QCheckBox(i18n("IPTC: created"),                 d->updateSettingsBox);
+    d->updXMPVideoCheck         = new QCheckBox(i18n("XMP: Video"),                    d->updateSettingsBox);
+    d->updXMPDateCheck          = new QCheckBox(i18n("XMP"),                           d->updateSettingsBox);
 
-    updateGBLayout->addWidget(d->updEXIFOriDateCheck, 0, 0, 1, 1);
-    updateGBLayout->addWidget(d->updEXIFModDateCheck, 0, 1, 1, 1);
-    updateGBLayout->addWidget(d->updEXIFDigDateCheck, 1, 0, 1, 1);
-    updateGBLayout->addWidget(d->updEXIFThmDateCheck, 1, 1, 1, 1);
-    updateGBLayout->addWidget(d->updXMPDateCheck,     2, 0, 1, 1);
-    updateGBLayout->addWidget(d->updXMPVideoCheck,    2, 1, 1, 1);
-    updateGBLayout->addWidget(d->updIPTCDateCheck,    3, 0, 1, 1);
-    updateGBLayout->addWidget(d->updFileModDateCheck, 3, 1, 1, 1);
+    updateGBLayout->addWidget(d->updIfAvailableCheck, 0, 0, 1, 2);
+    updateGBLayout->addWidget(d->updEXIFOriDateCheck, 1, 0, 1, 1);
+    updateGBLayout->addWidget(d->updEXIFModDateCheck, 1, 1, 1, 1);
+    updateGBLayout->addWidget(d->updEXIFDigDateCheck, 2, 0, 1, 1);
+    updateGBLayout->addWidget(d->updEXIFThmDateCheck, 2, 1, 1, 1);
+    updateGBLayout->addWidget(d->updXMPDateCheck,     3, 0, 1, 1);
+    updateGBLayout->addWidget(d->updXMPVideoCheck,    3, 1, 1, 1);
+    updateGBLayout->addWidget(d->updIPTCDateCheck,    4, 0, 1, 1);
+    updateGBLayout->addWidget(d->updFileModDateCheck, 4, 1, 1, 1);
     updateGBLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     updateGBLayout->setSpacing(spacing);
     updateGBLayout->setColumnStretch(0, 1);
@@ -371,6 +375,7 @@ void TimeAdjustSettings::setSettings(const TimeAdjustContainer& settings)
     d->adjDaysInput->setValue(settings.adjustmentDays);
     d->adjTimeInput->setDateTime(settings.adjustmentTime);
 
+    d->updIfAvailableCheck->setChecked(settings.updIfAvailable);
     d->updFileModDateCheck->setChecked(settings.updFileModDate);
     d->updEXIFModDateCheck->setChecked(settings.updEXIFModDate);
     d->updEXIFOriDateCheck->setChecked(settings.updEXIFOriDate);
@@ -395,6 +400,7 @@ TimeAdjustContainer TimeAdjustSettings::settings() const
     settings.adjustmentDays = d->adjDaysInput->value();
     settings.adjustmentTime = d->adjTimeInput->dateTime();
 
+    settings.updIfAvailable = d->updIfAvailableCheck->isChecked();
     settings.updFileModDate = d->updFileModDateCheck->isChecked();
     settings.updEXIFModDate = d->updEXIFModDateCheck->isChecked();
     settings.updEXIFOriDate = d->updEXIFOriDateCheck->isChecked();

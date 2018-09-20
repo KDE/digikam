@@ -89,13 +89,14 @@ public:
     QDateTime customTime;
     QDateTime adjustmentTime;
 
+    bool      updIfAvailable;
     bool      updEXIFModDate;
     bool      updEXIFOriDate;
     bool      updEXIFDigDate;
     bool      updEXIFThmDate;
     bool      updIPTCDate;
-    bool      updXMPDate;
     bool      updXMPVideo;
+    bool      updXMPDate;
     bool      updFileModDate;
 
     int       dateSource;

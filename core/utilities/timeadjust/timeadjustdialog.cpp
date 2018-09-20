@@ -216,6 +216,7 @@ void TimeAdjustDialog::readSettings()
     prm.adjustmentDays = group.readEntry(QLatin1String("Adjustment Days"),               0);
     prm.adjustmentTime = group.readEntry(QLatin1String("Adjustment Time"),               QDateTime());
 
+    prm.updIfAvailable = group.readEntry(QLatin1String("Update Only If Available Time"), true);
     prm.updFileModDate = group.readEntry(QLatin1String("Update File Modification Time"), true);
     prm.updEXIFModDate = group.readEntry(QLatin1String("Update EXIF Modification Time"), true);
     prm.updEXIFOriDate = group.readEntry(QLatin1String("Update EXIF Original Time"),     true);
@@ -251,6 +252,7 @@ void TimeAdjustDialog::saveSettings()
     group.writeEntry(QLatin1String("Adjustment Days"),               prm.adjustmentDays);
     group.writeEntry(QLatin1String("Adjustment Time"),               prm.adjustmentTime);
 
+    group.writeEntry(QLatin1String("Update Only If Available Time"), prm.updIfAvailable);
     group.writeEntry(QLatin1String("Update File Modification Time"), prm.updFileModDate);
     group.writeEntry(QLatin1String("Update EXIF Modification Time"), prm.updEXIFModDate);
     group.writeEntry(QLatin1String("Update EXIF Original Time"),     prm.updEXIFOriDate);
