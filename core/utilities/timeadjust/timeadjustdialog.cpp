@@ -377,14 +377,14 @@ void TimeAdjustDialog::readMetadataTimestamps()
                 break;
             case TimeAdjustContainer::IPTCCREATED:
                 // we have to truncate the timezone from the time, otherwise it cannot be converted to a QTime
-                curImageDateTime = QDateTime(QDate::fromString(meta.getIptcTagString("Iptc.Application2.DateCreated"), 
+                curImageDateTime = QDateTime(QDate::fromString(meta.getIptcTagString("Iptc.Application2.DateCreated"),
                                                                Qt::ISODate),
                                              QTime::fromString(meta.getIptcTagString("Iptc.Application2.TimeCreated").left(8),
                                                                Qt::ISODate));
                 break;
             case TimeAdjustContainer::XMPCREATED:
                 curImageDateTime = QDateTime::fromString(meta.getXmpTagString("Xmp.xmp.CreateDate"),
-                                                         QLatin1String("yyyy:MM:dd hh:mm:ss"));
+                                                         QLatin1String("yyyy:MM:ddThh:mm:ss"));
                 break;
             default:
                 // curImageDateTime stays invalid
