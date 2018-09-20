@@ -46,6 +46,7 @@
 #include "faceworkers.h"
 #include "faceimageretriever.h"
 #include "parallelpipes.h"
+#include "scanstatefilter.h"
 
 namespace Digikam
 {
@@ -138,6 +139,17 @@ FacePipelineFaceTagsIfaceList FacePipelineFaceTagsIfaceList::facesForRole(FacePi
     }
 
     return faces;
+}
+
+// -----------------------------------------------------------------------------------------
+
+FacePipelinePackage::FacePipelinePackage()
+    : processFlags(NotProcessed)
+{
+}
+
+FacePipelinePackage::~FacePipelinePackage()
+{
 }
 
 // -----------------------------------------------------------------------------------------
