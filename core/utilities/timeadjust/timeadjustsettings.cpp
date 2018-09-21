@@ -8,7 +8,8 @@
  *
  * Copyright (C) 2012      by Smit Mehta <smit dot meh at gmail dot com>
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- *
+ * Copyright (c) 2018      by Maik Qualmann <metzpinguin at gmail dot com>
+ * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -242,15 +243,15 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     d->updateSettingsBox              = new QWidget(d->settingsExpander);
     QGridLayout* const updateGBLayout = new QGridLayout(d->updateSettingsBox);
 
-    d->updIfAvailableCheck      = new QCheckBox(i18n("Write only if the timestamp exists"), d->updateSettingsBox);
-    d->updFileModDateCheck      = new QCheckBox(i18n("File last modified"),                 d->updateSettingsBox);
-    d->updEXIFModDateCheck      = new QCheckBox(i18n("EXIF: created"),                      d->updateSettingsBox);
-    d->updEXIFOriDateCheck      = new QCheckBox(i18n("EXIF: original"),                     d->updateSettingsBox);
-    d->updEXIFDigDateCheck      = new QCheckBox(i18n("EXIF: digitized"),                    d->updateSettingsBox);
-    d->updEXIFThmDateCheck      = new QCheckBox(i18n("EXIF: Thumbnail"),                    d->updateSettingsBox);
-    d->updIPTCDateCheck         = new QCheckBox(i18n("IPTC: created"),                      d->updateSettingsBox);
-    d->updXMPVideoCheck         = new QCheckBox(i18n("XMP: Video"),                         d->updateSettingsBox);
-    d->updXMPDateCheck          = new QCheckBox(i18n("XMP"),                                d->updateSettingsBox);
+    d->updIfAvailableCheck      = new QCheckBox(i18n("Update only existing timestamps"), d->updateSettingsBox);
+    d->updFileModDateCheck      = new QCheckBox(i18n("File last modified"),              d->updateSettingsBox);
+    d->updEXIFModDateCheck      = new QCheckBox(i18n("EXIF: created"),                   d->updateSettingsBox);
+    d->updEXIFOriDateCheck      = new QCheckBox(i18n("EXIF: original"),                  d->updateSettingsBox);
+    d->updEXIFDigDateCheck      = new QCheckBox(i18n("EXIF: digitized"),                 d->updateSettingsBox);
+    d->updEXIFThmDateCheck      = new QCheckBox(i18n("EXIF: Thumbnail"),                 d->updateSettingsBox);
+    d->updIPTCDateCheck         = new QCheckBox(i18n("IPTC: created"),                   d->updateSettingsBox);
+    d->updXMPVideoCheck         = new QCheckBox(i18n("XMP: Video"),                      d->updateSettingsBox);
+    d->updXMPDateCheck          = new QCheckBox(i18n("XMP"),                             d->updateSettingsBox);
 
     updateGBLayout->addWidget(d->updIfAvailableCheck, 0, 0, 1, 2);
     updateGBLayout->addWidget(d->updEXIFOriDateCheck, 1, 0, 1, 1);
