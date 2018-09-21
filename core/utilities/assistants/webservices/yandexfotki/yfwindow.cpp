@@ -618,9 +618,8 @@ void YFWindow::updateNextPhoto()
                     {
                         d->meta.setImageDimensions(image.size());
                         d->meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-                        d->meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
                         d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-                        d->meta.save(photo.localUrl());
+                        d->meta.save(photo.localUrl(), true);
                         prepared = true;
                     }
                 }

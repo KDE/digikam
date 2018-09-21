@@ -845,9 +845,8 @@ bool SmugWindow::prepareImageForUpload(const QString& imgPath) const
     {
         meta.setImageDimensions(image.size());
         meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-        meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
         meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-        meta.save(d->tmpPath);
+        meta.save(d->tmpPath, true);
     }
 
     return true;

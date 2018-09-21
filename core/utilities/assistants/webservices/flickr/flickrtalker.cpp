@@ -564,7 +564,7 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
 
                 meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
                 meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-                meta.save(path);
+                meta.save(path, true);
             }
             else
             {

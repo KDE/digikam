@@ -305,9 +305,8 @@ void WSAuthentication::prepareForUpload()
             {
                 meta.setImageDimensions(image.size());
                 meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-                meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
                 meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-                meta.save(d->tmpPath.last());
+                meta.save(d->tmpPath.last(), true);
                 caption = getImageCaption(imgPath);
             }
 

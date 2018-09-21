@@ -277,9 +277,8 @@ bool PiwigoTalker::addPhoto(int   albumId,
             {
                 meta.setImageDimensions(image.size());
                 meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-                meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
                 meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-                meta.save(d->path);
+                meta.save(d->path, true);
             }
             else
             {

@@ -279,7 +279,7 @@ bool MediaWikiWindow::prepareImageForUpload(const QString& imgPath)
             }
 
             meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            meta.save(d->tmpPath);
+            meta.save(d->tmpPath, true);
         }
     }
 

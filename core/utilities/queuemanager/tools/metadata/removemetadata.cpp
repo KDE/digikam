@@ -155,7 +155,7 @@ bool RemoveMetadata::toolOperations()
 
     if (ret && (removeExif || removeIptc || removeXmp))
     {
-        ret = meta.save(outputUrl().toLocalFile(), false);
+        ret = meta.save(outputUrl().toLocalFile());
     }
 
     return ret;

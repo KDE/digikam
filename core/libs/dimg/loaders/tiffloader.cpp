@@ -1084,7 +1084,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     // see bug #211758 for these special steps needed when writing a TIFF
     metaDataToFile.removeExifThumbnail();
     metaDataToFile.removeExifTag("Exif.Image.ProcessingSoftware");
-    metaDataToFile.applyChanges();
+    metaDataToFile.applyChanges(true);
 
     return true;
 }

@@ -407,7 +407,7 @@ void ExpoBlendingThread::run()
                             if (d->meta.load(destUrl.toLocalFile()))
                             {
                                 d->meta.setImageOrientation(orientation);
-                                d->meta.applyChanges();
+                                d->meta.applyChanges(true);
                             }
                         }
                     }
@@ -462,7 +462,7 @@ void ExpoBlendingThread::run()
                                 d->meta.setImagePreview(img.scaled(1280, 1024, Qt::KeepAspectRatio));
                         }
 
-                        d->meta.save(destUrl.toLocalFile());
+                        d->meta.save(destUrl.toLocalFile(), true);
                     }
 
                     // To be cleaned in destructor.
@@ -703,7 +703,7 @@ bool ExpoBlendingThread::computePreview(const QUrl& inUrl, QUrl& outUrl)
                 if (d->meta.load(outUrl.toLocalFile()))
                 {
                     d->meta.setImageOrientation(orientation);
-                    d->meta.applyChanges();
+                    d->meta.applyChanges(true);
                 }
             }
         }
@@ -730,7 +730,6 @@ bool ExpoBlendingThread::convertRaw(const QUrl& inUrl, QUrl& outUrl)
     {
         if (d->meta.load(inUrl.toLocalFile()))
         {
-            d->meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
             d->meta.setImageDimensions(img.size());
             d->meta.setExifTagString("Exif.Image.DocumentName", inUrl.fileName());
             d->meta.setXmpTagString("Xmp.tiff.Make",  d->meta.getExifTagString("Exif.Image.Make"));
@@ -749,7 +748,7 @@ bool ExpoBlendingThread::convertRaw(const QUrl& inUrl, QUrl& outUrl)
                 return false;
             }
 
-            d->meta.save(outUrl.toLocalFile());
+            d->meta.save(outUrl.toLocalFile(), true);
         }
     }
     else
