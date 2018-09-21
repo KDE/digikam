@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QDateTime>
 #include <QScrollArea>
 
 // Local includes

@@ -42,6 +42,7 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QSpinBox>
+#include <QDateTime>
 #include <QTimeEdit>
 #include <QToolButton>
 #include <QVBoxLayout>

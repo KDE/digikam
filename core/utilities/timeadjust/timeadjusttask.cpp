@@ -94,7 +94,8 @@ void TimeAdjustTask::run()
 
     QDateTime dt = d->itemsMap.value(d->url);
 
-    if (!dt.isValid()) return;
+    if (!dt.isValid())
+        return;
 
     emit signalProcessStarted(d->url);
 

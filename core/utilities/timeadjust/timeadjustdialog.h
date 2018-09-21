@@ -29,7 +29,6 @@
 // Qt includes
 
 #include <QUrl>
-#include <QDateTime>
 
 // Local includes
 

@@ -35,6 +35,7 @@
 #include <QRadioButton>
 #include <QSpinBox>
 #include <QToolButton>
+#include <QDateTime>
 #include <QTimeEdit>
 #include <QComboBox>
 #include <QPointer>
