@@ -300,9 +300,12 @@ void TimeAdjustDialog::slotReadTimestamps()
 
         default:  // CUSTOMDATE
         {
+            QDateTime dateTime(d->settingsView->settings().customDate.date(),
+                               d->settingsView->settings().customTime.time());
+
             foreach (const QUrl& url, d->itemsUsedMap.keys())
             {
-                d->itemsUsedMap.insert(url, d->settingsView->settings().customDate);
+                d->itemsUsedMap.insert(url, dateTime);
             }
             break;
         }

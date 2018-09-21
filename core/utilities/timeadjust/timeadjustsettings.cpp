@@ -518,7 +518,7 @@ void TimeAdjustSettings::slotDetAdjustmentByClockPhotoDialog()
     // Determine the currently selected item and preselect it as clock photo
     QUrl emptyUrl;
 
-   detAdjustmentByClockPhotoUrl(emptyUrl);
+    detAdjustmentByClockPhotoUrl(emptyUrl);
 }
 
 } // namespace Digikam
