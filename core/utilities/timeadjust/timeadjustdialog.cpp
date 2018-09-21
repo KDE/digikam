@@ -202,6 +202,21 @@ void TimeAdjustDialog::slotDialogFinished()
     saveSettings();
 }
 
+QList<QUrl> TimeAdjustDialog::getProccessedUrls() const
+{
+    QList<QUrl> proccessed;
+
+    foreach (const QUrl& url, d->itemsStatusMap.keys())
+    {
+        if (d->itemsStatusMap.value(url) == TimeAdjustList::NOPROCESS_ERROR)
+        {
+            proccessed << url;
+        }
+    }
+
+    return proccessed;
+}
+
 void TimeAdjustDialog::readSettings()
 {
     TimeAdjustContainer prm;

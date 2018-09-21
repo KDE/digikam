@@ -50,9 +50,7 @@ public:
     explicit TimeAdjustDialog(QWidget* const parent, DInfoInterface* const iface);
     ~TimeAdjustDialog();
 
-Q_SIGNALS:
-
-    void signalMyCloseClicked();
+    QList<QUrl> getProccessedUrls() const;
 
 private Q_SLOTS:
 

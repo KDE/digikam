@@ -150,16 +150,16 @@ void DigikamApp::slotTimeAdjust()
     QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DBInfoIface(this, urls, ApplicationSettings::Metadata));
     dialog->exec();
 
-    delete dialog;
-
     // Refresh Database with new metadata from files.
     CollectionScanner scanner;
 
-    foreach (const QUrl& url, urls)
+    foreach (const QUrl& url, dialog->getProccessedUrls())
     {
         scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
         ImageAttributesWatch::instance()->fileMetadataChanged(url);
     }
+
+    delete dialog;
 }
 
 void DigikamApp::slotEditMetadata()

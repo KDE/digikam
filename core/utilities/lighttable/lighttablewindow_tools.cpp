@@ -64,15 +64,15 @@ void LightTableWindow::slotTimeAdjust()
     QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DBInfoIface(this, urls));
     dialog->exec();
 
-    delete dialog;
-
     // Refresh Database with new metadata from files.
     CollectionScanner scanner;
 
-    foreach (const QUrl& url, urls)
+    foreach (const QUrl& url, dialog->getProccessedUrls())
     {
         scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
     }
+
+    delete dialog;
 }
 
 void LightTableWindow::slotEditMetadata()
