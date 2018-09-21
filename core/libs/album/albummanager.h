@@ -811,7 +811,8 @@ public:
         AlbumManager::instance()->addGuardedPointer(album, &album);
     }
 
-    AlbumPointer(const AlbumPointer<T>& p)
+    // cppcheck-suppress noExplicitConstructor
+    AlbumPointer(const AlbumPointer<T>& p)      // krazy:exclude=explicit
         : album(p.album)
     {
         AlbumManager::instance()->addGuardedPointer(album, &album);
