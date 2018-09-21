@@ -33,7 +33,7 @@
 
 #include <klocalizedstring.h>
 
-// Locale incudes
+// Locale includes
 
 #include "expoblendingintropage.h"
 #include "expoblendingitemspage.h"

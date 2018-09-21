@@ -62,7 +62,7 @@ int main(int argc, char** argv)
     DRawDecoder rawProcessor;
     if (!rawProcessor.rawFileIdentify(identify, filePath))
     {
-        qDebug() << "raw2png: Idendify RAW image failed. Aborted...";
+        qDebug() << "raw2png: Identifying RAW image failed. Aborted...";
         return -1;
     }
 

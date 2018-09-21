@@ -57,7 +57,7 @@ public:
      *  2) visible determines if the items shall be shown now.
      *     Only takes effect if shallBeShown is true.
      *     Default is false: Initially, controlled items are hidden.
-     *  3) Opacitiy and individual item visibility:
+     *  3) Opacity and individual item visibility:
      *     When showing, items are first set to individually visible,
      *     then their opacity is increased from 0 to 1.
      *     When hiding, opacity is first decreased from 1 to 0,

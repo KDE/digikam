@@ -330,7 +330,7 @@ void WSAuthentication::uploadNextPhoto()
     }
 
     /*
-     * This comparaison is a little bit complicated and may seem unnecessary, but it will be useful later
+     * This comparison is a little bit complicated and may seem unnecessary, but it will be useful later
      * when we will be able to choose to change or not image properties for EACH image.
      */
     QString imgPath = d->transferQueue.first().toLocalFile();

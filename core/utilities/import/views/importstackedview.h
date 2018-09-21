@@ -26,7 +26,7 @@
 #ifndef DIGIKAM_IMPORT_STACKED_VIEW_H
 #define DIGIKAM_IMPORT_STACKED_VIEW_H
 
-// Qt inclueds
+// Qt includes
 
 #include <QStackedWidget>
 

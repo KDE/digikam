@@ -149,7 +149,7 @@ void DNNFaceModel::setMats(const QList<std::vector<float> >& mats, const QList<D
     //ptr()->setSrc(currentSrcs);
     //ptr()->setLabels(currentLabels);
 
-    //make sure that there exits traing data
+    //make sure that there exits training data
     if (currentSrcs.size() > 0)
     {
         ptr()->train(currentSrcs, currentLabels);

@@ -360,7 +360,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         QString frm  = info.format();
 
         if (frm.contains(QLatin1Char('-')))
-            frm = frm.section(QLatin1Char('-'), -1);   // For RAW format annoted as "RAW-xxx" => "xxx"
+            frm = frm.section(QLatin1Char('-'), -1);   // For RAW format annotated as "RAW-xxx" => "xxx"
 
         drawImageFormat(p, actualPixmapRect, frm, d->drawImageFormatTop);
     }

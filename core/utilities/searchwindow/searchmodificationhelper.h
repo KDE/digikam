@@ -29,7 +29,7 @@
 
 #include <QObject>
 
-// Local inclues
+// Local includes
 
 #include "album.h"
 

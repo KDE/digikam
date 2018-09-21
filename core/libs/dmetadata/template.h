@@ -97,7 +97,7 @@ public:
 protected:
 
     /**
-     * Template title used internaly. This value always exist and cannot be empty.
+     * Template title used internally. This value always exist and cannot be empty.
      */
     QString                  m_templateTitle;
 

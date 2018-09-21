@@ -200,7 +200,7 @@ private:
 TestClient::TestClient(TestServer* server, int id) :
     m_Server(server), m_Id(id)
 {
-    // set ourself as the message handler
+    // set ourselves as the message handler
     SetHandler(this);
     
     // send commands to server

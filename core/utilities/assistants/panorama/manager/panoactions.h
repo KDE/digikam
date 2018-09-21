@@ -82,7 +82,7 @@ struct PanoramaPreprocessedUrls
     }
 
     QUrl preprocessedUrl;              // Can be an original file or a converted version, depending on the original file type
-    QUrl previewUrl;                   // The JPEG preview version, accordingly of preprocessedUrl constent.
+    QUrl previewUrl;                   // The JPEG preview version, accordingly of preprocessedUrl constant.
 };
 
 typedef QMap<QUrl, PanoramaPreprocessedUrls> PanoramaItemUrlsMap;   // Map between original Url and processed temp Urls.

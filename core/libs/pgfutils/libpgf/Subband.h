@@ -167,7 +167,7 @@ private:
 	UINT32 m_height;				///< height in pixels
 	UINT32 m_size;					///< size of data buffer m_data
 	int m_level;					///< recursion level
-	Orientation m_orientation;		///< 0=LL, 1=HL, 2=LH, 3=HH L=lowpass filtered, H=highpass filterd
+	Orientation m_orientation;		///< 0=LL, 1=HL, 2=LH, 3=HH L=lowpass filtered, H=highpass filtered
 	UINT32 m_dataPos;				///< current position in m_data
 	DataT* m_data;					///< buffer
 

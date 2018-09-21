@@ -519,7 +519,7 @@ void TagsActionMngr::slotAssignFromShortcut()
     }
 }
 
-// Special case with Slideshow which do not depand of database.
+// Special case with Slideshow which do not depend on database.
 
 void TagsActionMngr::slotImageTagChanged(const ImageTagChangeset&)
 {

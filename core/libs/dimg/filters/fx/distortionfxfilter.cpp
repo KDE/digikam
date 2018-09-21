@@ -356,9 +356,9 @@ void DistortionFXFilter::twirlMultithreaded(const Args& prm)
         {
             // we find the angle from the center
             lfAngle = qAtan2(th, tw);
-            // we get the accumuled angle
+            // we get the accumulated angle
             lfAngleSum = lfAngleStep * (-1.0 * (lfCurrentRadius - lfRadMax));
-            // ok, we sum angle with accumuled to find a new angle
+            // ok, we sum angle with accumulated to find a new angle
             lfNewAngle = lfAngle + lfAngleSum;
 
             // now we find the exact position's x and y
@@ -500,18 +500,18 @@ void DistortionFXFilter::cilindricalMultithreaded(const Args& prm)
     }
 }
 
-/* Function to apply the Cilindrical effect backported from ImageProcessing version 2
+/* Function to apply the Cylindrical effect backported from ImageProcessing version 2
  *
  * data             => The image data in RGBA mode.
  * Width            => Width of image.
  * Height           => Height of image.
- * Coeff            => Cilindrical value.
+ * Coeff            => Cylindrical value.
  * Horizontal       => Apply horizontally.
  * Vertical         => Apply vertically.
  * Antialias        => Smart blurring result.
  *
  * Theory           => This is a great effect, similar to Spherize (Photoshop).
- *                     If you understand FishEye, you will understand Cilindrical
+ *                     If you understand FishEye, you will understand Cylindrical
  *                     FishEye apply a logarithm function using a sphere radius,
  *                     Spherize use the same function but in a rectangular
  *                     environment.
@@ -596,7 +596,7 @@ void DistortionFXFilter::multipleCornersMultithreaded(const Args& prm)
         // we find the angle from the center
         lfAngle = qAtan2(nh, nw) * (double)prm.Factor;
 
-        // ok, we sum angle with accumuled to find a new angle
+        // ok, we sum angle with accumulated to find a new angle
         lfNewRadius = lfCurrentRadius * lfCurrentRadius / lfRadMax;
 
         // now we find the exact position's x and y
@@ -729,7 +729,7 @@ void DistortionFXFilter::wavesVerticalMultithreaded(const Args& prm)
  * data             => The image data in RGBA mode.
  * Width            => Width of image.
  * Height           => Height of image.
- * Amplitude        => Sinoidal maximum height.
+ * Amplitude        => Sinusoidal maximum height.
  * Frequency        => Frequency value.
  * FillSides        => Like a boolean variable.
  * Direction        => Vertical or horizontal flag.
@@ -844,7 +844,7 @@ void DistortionFXFilter::blockWavesMultithreaded(const Args& prm)
  * data             => The image data in RGBA mode.
  * Width            => Width of image.
  * Height           => Height of image.
- * Amplitude        => Sinoidal maximum height
+ * Amplitude        => Sinusoidal maximum height
  * Frequency        => Frequency value
  * Mode             => The mode to be applied.
  *
@@ -944,13 +944,13 @@ void DistortionFXFilter::circularWavesMultithreaded(const Args& prm)
  * Width            => Width of image.
  * Height           => Height of image.
  * X, Y             => Position of circle center on the image.
- * Amplitude        => Sinoidal maximum height
+ * Amplitude        => Sinusoidal maximum height
  * Frequency        => Frequency value.
  * Phase            => Phase value.
  * WavesType        => If true  the amplitude is proportional to radius.
- * Antialias        => Smart bluring result.
+ * Antialias        => Smart blurring result.
  *
- * Theory           => Similar to Waves effect, but here I apply a senoidal function
+ * Theory           => Similar to Waves effect, but here I apply a sinusoidal function
  *                     with the angle point.
  */
 void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, int Y, double Amplitude,

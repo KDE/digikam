@@ -501,7 +501,7 @@ void CoreDB::setAlbumCaption(int albumID, const QString& caption)
 
 void CoreDB::setAlbumCategory(int albumID, const QString& category)
 {
-    // TODO : change "collection" propertie in DB ALbum table to "category"
+    // TODO : change "collection" property in DB ALbum table to "category"
     d->db->execSql(QString::fromUtf8("UPDATE Albums SET collection=? WHERE id=?;"),
                    category, albumID);
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));

@@ -277,7 +277,7 @@ bool GPSImageItem::loadImageData()
         else if (speedRef.startsWith('N'))
         {
             // speed is in knots.
-            // knot = one nautic mile / hour = 1852 meters / hour = 1852 meters / 3600 seconds
+            // knot = one nautical mile / hour = 1852 meters / hour = 1852 meters / 3600 seconds
             FactorToMetersPerSecond = 1.0 / (1852.0 / 3600.0);
         }
         else

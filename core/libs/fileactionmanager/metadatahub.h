@@ -149,7 +149,7 @@ public:
      * @param info - image info to retrieve current tags
      * @param writeMode
      * @param settings
-     * @return true           - if everything is succesfull
+     * @return true           - if everything is successful
      */
     bool writeToMetadata(const ImageInfo& info, WriteComponent writeMode = WRITE_ALL,
                bool ignoreLazySync = false, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());

@@ -216,7 +216,7 @@ public:
      when necessary.
      @param name state variable name
      @param value new State Variable value.
-     @param clearonsend whether the State Variable should clear immediatly in ::OnSendingCompleted
+     @param clearonsend whether the State Variable should clear immediately in ::OnSendingCompleted
      */
     NPT_Result SetStateVariable(const char* name, const char* value, const bool clearonsend = false);
     

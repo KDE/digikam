@@ -595,7 +595,7 @@ typedef unsigned long long UINT64;
     int use_dngsdk;
     /* Disable Auto-scale */
     int no_auto_scale;
-    /* Disable intepolation */
+    /* Disable interpolation */
     int no_interpolation;
     /*  int x3f_flags; */
     /* Sony ARW2 digging mode */

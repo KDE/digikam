@@ -352,7 +352,7 @@ QList<QUrl> MailProcess::divideEmails()
 {
     qint64 myListSize = 0;
 
-    QList<QUrl> processedNow;            // List witch can be processed now.
+    QList<QUrl> processedNow;            // List which can be processed now.
     QList<QUrl> todoAttachement;         // Still todo list
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Attachment limit: " << d->settings->attachementLimit();

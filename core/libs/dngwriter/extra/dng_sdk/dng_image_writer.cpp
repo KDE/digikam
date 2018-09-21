@@ -492,7 +492,7 @@ tag_iptc::tag_iptc (const void *data,
 void tag_iptc::Put (dng_stream &stream) const
 	{
 
-	// Note: For historical compatiblity reasons, the standard TIFF data
+	// Note: For historical compatibility reasons, the standard TIFF data
 	// type for IPTC data is ttLong, but without byte swapping.  This really
 	// should be ttUndefined, but doing the right thing would break some
 	// existing readers.

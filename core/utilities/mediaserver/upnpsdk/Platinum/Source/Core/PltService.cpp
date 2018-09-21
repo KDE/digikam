@@ -835,7 +835,7 @@ PLT_Service::NotifyChanged()
         m_Subscribers.Erase(sub_iter++);
     }
 
-    // some state variables must be cleared immediatly after sending
+    // some state variables must be cleared immediately after sending
     iter = vars_ready.GetFirstItem();
     while (iter) {
       PLT_StateVariable* var = *iter;

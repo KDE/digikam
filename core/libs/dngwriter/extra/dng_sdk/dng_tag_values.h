@@ -261,12 +261,12 @@ enum
 enum
 	{
 
-	// Freely embedable and copyable into installations that encounter this
+	// Freely embeddable and copyable into installations that encounter this
 	// profile, so long as the profile is only used to process DNG files.
 
 	pepAllowCopying				= 0,
 
-	// Can be embeded in a DNG for portable processing, but cannot be used
+	// Can be embedded in a DNG for portable processing, but cannot be used
 	// to process other files that the profile is not embedded in.
 
 	pepEmbedIfUsed				= 1,

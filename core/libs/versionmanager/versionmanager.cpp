@@ -477,7 +477,7 @@ void VersionNameCreator::checkIntermediates()
         for (int i = firstStep; i <= lastStep; ++i)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "step" << i
-                                         << "is reproducable"
+                                         << "is reproducible"
                                          << (m_currentHistory.action(i).category() == FilterAction::ReproducibleFilter);
 
             switch (m_currentHistory.action(i).category())

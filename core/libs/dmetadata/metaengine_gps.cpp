@@ -377,7 +377,7 @@ bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude,
         // ALTITUDE.
         if (altitude)
         {
-            // Altitude reference: byte "00" meaning "above sea level", "01" mening "behing sea level".
+            // Altitude reference: byte "00" meaning "above sea level", "01" meaning "behind sea level".
             Exiv2::Value::AutoPtr value = Exiv2::Value::create(Exiv2::unsignedByte);
 
             if ((*altitude) >= 0) value->read("0");

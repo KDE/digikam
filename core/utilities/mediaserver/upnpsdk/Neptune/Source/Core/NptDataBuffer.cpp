@@ -184,7 +184,7 @@ NPT_DataBuffer::Reserve(NPT_Size size)
 {
     if (size <= m_BufferSize) return NPT_SUCCESS;
 
-    // try doubling the buffer to accomodate for the new size
+    // try doubling the buffer to accommodate for the new size
     NPT_Size new_size = m_BufferSize*2;
     if (new_size < size) new_size = size;
     return SetBufferSize(new_size);

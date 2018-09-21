@@ -466,7 +466,7 @@ void DAbstractSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
     d->isDragging = false;
 
     // Step up/down for buttons
-    // Emualting mouse grab too
+    // Emulating mouse grab too
     if (upButtonRect(spinOpts).contains(e->pos()) && d->upButtonDown)
     {
         setInternalValue(d->value + d->singleStep);

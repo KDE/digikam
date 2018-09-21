@@ -60,7 +60,7 @@ public:
     Revision(const Revision& other);
 
     /**
-     * @brief Assingning a revision from an other revision.
+     * @brief Assigning a revision from an other revision.
      * @param other an other revision
      */
     Revision& operator=(Revision other);
@@ -109,14 +109,14 @@ public:
     int size() const;
 
     /**
-     * @brief Set true if the revsion is minor.
-     * @param minor true if the revsion is minor
+     * @brief Set true if the revision is minor.
+     * @param minor true if the revision is minor
      */
     void setMinorRevision(bool minorRevision);
 
     /**
-     * @brief Get true if the revsion is minor.
-     * @return true if the revsion is minor
+     * @brief Get true if the revision is minor.
+     * @return true if the revision is minor
      */
     bool minorRevision() const;
 

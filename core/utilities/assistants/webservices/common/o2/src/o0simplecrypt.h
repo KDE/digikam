@@ -51,7 +51,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   If you do not provide a key, or if something else is wrong, the encryption and
   decryption function will return an empty string or will return a string containing nonsense.
-  lastError() will return a value indicating if the method was succesful, and if not, why not.
+  lastError() will return a value indicating if the method was successful, and if not, why not.
 
   SimpleCrypt is prepared for the case that the encryption and decryption
   algorithm is changed in a later version, by prepending a version identifier to the cypertext.
@@ -77,12 +77,12 @@ public:
       appears to be valid after decryption.
     */
     enum IntegrityProtectionMode {
-        ProtectionNone,    /*!< The integerity of the encrypted data is not protected. It is not really possible to detect a wrong key, for instance. */
+        ProtectionNone,    /*!< The integrity of the encrypted data is not protected. It is not really possible to detect a wrong key, for instance. */
         ProtectionChecksum,/*!< A simple checksum is used to verify that the data is in order. If not, an empty string is returned. */
         ProtectionHash     /*!< A cryptographic hash is used to verify the integrity of the data. This method produces a much stronger, but longer check */
     };
     /**
-      Error describes the type of error that occured.
+      Error describes the type of error that occurred.
       */
     enum Error {
         ErrorNoError,         /*!< No error occurred. */
@@ -158,7 +158,7 @@ public:
       Encrypts the @arg plaintext string with the key the class was initialized with, and returns
       a binary cyphertext in a QByteArray the result.
 
-      This method returns a byte array, that is useable for storing a binary format. If you need
+      This method returns a byte array, that is usable for storing a binary format. If you need
       a string you can store in a text file, use encryptToString() instead.
       */
     QByteArray encryptToByteArray(const QString& plaintext) ;
@@ -166,7 +166,7 @@ public:
       Encrypts the @arg plaintext QByteArray with the key the class was initialized with, and returns
       a binary cyphertext in a QByteArray the result.
 
-      This method returns a byte array, that is useable for storing a binary format. If you need
+      This method returns a byte array, that is usable for storing a binary format. If you need
       a string you can store in a text file, use encryptToString() instead.
       */
     QByteArray encryptToByteArray(QByteArray plaintext) ;
@@ -175,7 +175,7 @@ public:
       Decrypts a cyphertext string encrypted with this class with the set key back to the
       plain text version.
 
-      If an error occured, such as non-matching keys between encryption and decryption,
+      If an error occurred, such as non-matching keys between encryption and decryption,
       an empty string or a string containing nonsense may be returned.
       */
     QString decryptToString(const QString& cyphertext) ;
@@ -183,7 +183,7 @@ public:
       Decrypts a cyphertext string encrypted with this class with the set key back to the
       plain text version.
 
-      If an error occured, such as non-matching keys between encryption and decryption,
+      If an error occurred, such as non-matching keys between encryption and decryption,
       an empty string or a string containing nonsense may be returned.
       */
     QByteArray decryptToByteArray(const QString& cyphertext) ;
@@ -191,7 +191,7 @@ public:
       Decrypts a cyphertext binary encrypted with this class with the set key back to the
       plain text version.
 
-      If an error occured, such as non-matching keys between encryption and decryption,
+      If an error occurred, such as non-matching keys between encryption and decryption,
       an empty string or a string containing nonsense may be returned.
       */
     QString decryptToString(QByteArray cypher) ;
@@ -199,7 +199,7 @@ public:
       Decrypts a cyphertext binary encrypted with this class with the set key back to the
       plain text version.
 
-      If an error occured, such as non-matching keys between encryption and decryption,
+      If an error occurred, such as non-matching keys between encryption and decryption,
       an empty string or a string containing nonsense may be returned.
       */
     QByteArray decryptToByteArray(QByteArray cypher) ;

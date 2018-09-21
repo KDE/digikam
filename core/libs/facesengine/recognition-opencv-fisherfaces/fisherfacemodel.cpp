@@ -150,7 +150,7 @@ void FisherFaceModel::setMats(const QList<OpenCVMatData>& mats, const QList<Fish
 
     //ptr()->setSrc(currentSrcs);
     //ptr()->setLabels(currentLabels);
-    //make sure that there exits traing data
+    //make sure that there exits training data
     if (currentSrcs.size()>0)
     {
         ptr()->train(currentSrcs, currentLabels);

@@ -44,7 +44,7 @@ public:
     ~ClockPhotoDialog();
 
     /** Try to load the photo specified by the QUrl, and set the datetime widget
-     *  to the photo time. Return true on succes, or false if either the photo
+     *  to the photo time. Return true on success, or false if either the photo
      *  can't be read or the datetime information can't be read.
      */
     bool setImage(const QUrl&);

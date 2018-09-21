@@ -638,7 +638,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         if ((d->fsOptions & FS_SIDEBARS) && d->fullScreenHideSideBars)
             showSideBars(true);
 
-        // restore thummbbar
+        // restore thumbbar
 
         if ((d->fsOptions & FS_THUMBBAR) && d->fullScreenHideThumbBar)
             showThumbBar(d->thumbbarVisibility);
@@ -685,7 +685,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         if ((d->fsOptions & FS_SIDEBARS) && d->fullScreenHideSideBars)
             showSideBars(false);
 
-        // hide thummbbar
+        // hide thumbbar
 
         d->thumbbarVisibility = thumbbarVisibility();
 

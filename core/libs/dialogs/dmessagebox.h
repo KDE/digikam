@@ -94,7 +94,7 @@ public:
                                   const QString& text,
                                   const QString& dontAskAgainName = QString());
 
-    /** Show List of items to processs into a message box with Continue and Cancel buttons,
+    /** Show List of items to process into a message box with Continue and Cancel buttons,
      *  and wait user feedback.
      *  Return QMessageBox::Yes or QMessageBox::Cancel.
      */
@@ -127,7 +127,7 @@ public:
                          const QString& text,
                          const QString& dontAskAgainName = QString());
 
-    /** Show List of items to processs into a message box with Yes and No buttons,
+    /** Show List of items to process into a message box with Yes and No buttons,
      *  and wait user feedback.
      *  Return QMessageBox::Yes or QMessageBox::No.
      */

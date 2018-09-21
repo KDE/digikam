@@ -70,13 +70,13 @@ QList<QUrl> DMetaInfoIface::currentAlbumItems() const
 
 QList<QUrl> DMetaInfoIface::currentSelectedItems() const
 {
-    // No multiple items selection is avaialble in DMeta.
+    // No multiple items selection is available in DMeta.
     return currentAlbumItems();
 }
 
 QList<QUrl> DMetaInfoIface::allAlbumItems() const
 {
-    // No album management avaialble in DMeta.
+    // No album management available in DMeta.
     return currentAlbumItems();
 }
 

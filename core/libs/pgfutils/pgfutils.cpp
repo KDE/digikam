@@ -85,7 +85,7 @@ bool readPGFImageData(const QByteArray& data,
             qCDebug(DIGIKAM_GENERAL_LOG) << "PGFUtils: image data stream size is : " << stream.GetSize();
 
         CPGFImage pgfImg;
-        // NOTE: see bug #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
+        // NOTE: see bug #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properly with libppgf 6.11.24
         pgfImg.ConfigureDecoder(false);
 
         pgfImg.Open(&stream);
@@ -293,7 +293,7 @@ bool writePGFImageDataToStream(const QImage& image,
 #endif
         pgfImg.SetHeader(header);
 
-        // NOTE: see bug #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
+        // NOTE: see bug #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properly with libppgf 6.11.24
         pgfImg.ConfigureEncoder(false);
 
         if (verbose)

@@ -78,7 +78,7 @@
 
 // Operating system configuration.
 //
-// Define 'cimg_OS' to : 0 for an unknown OS (will try to minize library dependancies).
+// Define 'cimg_OS' to : 0 for an unknown OS (will try to minimize library dependencies).
 //                       1 for a Unix-like OS (Linux, Solaris, BSD, MacOSX, Irix, ...).
 //                       2 for Microsoft Windows.
 //
@@ -142,7 +142,7 @@
 #include <shlobj.h>
 #endif
 
-// Define defaut pipe for output messages
+// Define default pipe for output messages
 //
 // Define 'cimg_stdout' to : stdout to print CImg messages on the standard output.
 //                           stderr to print CImg messages on the standart error output (default behavior).
@@ -1909,7 +1909,7 @@ static struct _cimg_macosx_setcwd {
 /**
    This namespace is defined to avoid functions and class names collisions
    that could happen with the include of other C++ header files.
-   Anyway, it should not happen often and you should reasonnably start most of your
+   Anyway, it should not happen often and you should reasonably start most of your
    %CImg-based programs with
    \code
    #include "CImg.h"
@@ -1975,7 +1975,7 @@ namespace cimg_library {
      \section ex1 Overview
 
       CImgException is the base class of %CImg exceptions.
-      Exceptions are thrown by the %CImg Library when an error occured in a %CImg library function call.
+      Exceptions are thrown by the %CImg Library when an error occurred in a %CImg library function call.
       CImgException is seldom thrown itself. Children classes that specify the kind of error encountered
       are generally used instead. These sub-classes are :
 
@@ -1995,20 +1995,20 @@ namespace cimg_library {
       img = 0;                     // Try to fill pixels from the 0 pointer (invalid argument to operator=() ).
       \endcode
 
-      - \b CImgIOException : Thrown when an error occured when trying to load or save image files.
+      - \b CImgIOException : Thrown when an error occurred when trying to load or save image files.
       The example below will throw a \a CImgIOException.
       \code
       CImg<float> img("file_doesnt_exist.jpg");    // Try to load a file that doesn't exist.
       \endcode
 
-      - \b CImgDisplayException : Thrown when an error occured when trying to display an image in a window.
+      - \b CImgDisplayException : Thrown when an error occurred when trying to display an image in a window.
       This exception is thrown when image display request cannot be satisfied.
 
       The parent class CImgException may be thrown itself when errors that cannot be classified in one of
       the above type occur. It is recommended not to throw CImgExceptions yourself, since there are normally
       reserved to %CImg Library functions.
       \b CImgInstanceException, \b CImgArgumentException, \b CImgIOException and \b CImgDisplayException are simple
-      subclasses of CImgException and are thus not detailled more in this reference documentation.
+      subclasses of CImgException and are thus not detailed more in this reference documentation.
 
       \section ex2 Exception handling
 
@@ -2375,7 +2375,7 @@ namespace cimg_library {
       int windowCount;                 // Count of displays used on the screen
       pthread_t event_thread;          // The background event thread
       MPSemaphoreID sync_event;        // Event used to perform tasks synchronizations
-      MPSemaphoreID wait_event;        // Event used to notify that new events occured on the display
+      MPSemaphoreID wait_event;        // Event used to notify that new events occurred on the display
       MPQueueID com_queue;             // The message queue
       CarbonInfo(): windowCount(0),event_thread(0),sync_event(0),com_queue(0) {
         if (MPCreateCriticalRegion(&windowListCR) != noErr) // Create the critical region
@@ -5753,7 +5753,7 @@ namespace cimg_library {
       return 0;
     }
 
-    //! Print informations about %CImg environement variables.
+    //! Print information about %CImg environment variables.
     /**
        Printing is done on the standard error output.
     **/
@@ -6729,31 +6729,31 @@ namespace cimg_library {
       return *this;
     }
 
-    //! Wait for an event occuring on the current display.
+    //! Wait for an event occurring on the current display.
     CImgDisplay& wait() {
       if (!is_empty()) wait(*this);
       return *this;
     }
 
-    //! Wait for any event occuring on the display \c disp1.
+    //! Wait for any event occurring on the display \c disp1.
     static void wait(CImgDisplay& disp1) {
       disp1.is_event = 0;
       while (!disp1.is_event) wait_all();
     }
 
-    //! Wait for any event occuring either on the display \c disp1 or \c disp2.
+    //! Wait for any event occurring either on the display \c disp1 or \c disp2.
     static void wait(CImgDisplay& disp1, CImgDisplay& disp2) {
       disp1.is_event = disp2.is_event = 0;
       while (!disp1.is_event && !disp2.is_event) wait_all();
     }
 
-    //! Wait for any event occuring either on the display \c disp1, \c disp2 or \c disp3.
+    //! Wait for any event occurring either on the display \c disp1, \c disp2 or \c disp3.
     static void wait(CImgDisplay& disp1, CImgDisplay& disp2, CImgDisplay& disp3) {
       disp1.is_event = disp2.is_event = disp3.is_event = 0;
       while (!disp1.is_event && !disp2.is_event && !disp3.is_event) wait_all();
     }
 
-    //! Wait for any event occuring either on the display \c disp1, \c disp2, \c disp3 or \c disp4.
+    //! Wait for any event occurring either on the display \c disp1, \c disp2, \c disp3 or \c disp4.
     static void wait(CImgDisplay& disp1, CImgDisplay& disp2, CImgDisplay& disp3, CImgDisplay& disp4) {
       disp1.is_event = disp2.is_event = disp3.is_event = disp4.is_event = 0;
       while (!disp1.is_event && !disp2.is_event && !disp3.is_event && !disp4.is_event) wait_all();
@@ -6778,7 +6778,7 @@ namespace cimg_library {
         \param list     : The list of images to display.
         \param axis     : The axis used to append the image for visualization. Can be 'x' (default),'y','z' or 'v'.
         \param align : Defines the relative alignment of images when displaying images of different sizes.
-        Can be '\p c' (centered, which is the default), '\p p' (top alignment) and '\p n' (bottom aligment).
+        Can be '\p c' (centered, which is the default), '\p p' (top alignment) and '\p n' (bottom alignment).
     **/
     template<typename T>
     CImgDisplay& display(const CImgList<T>& list, const char axis='x', const char align='p') {
@@ -7776,7 +7776,7 @@ namespace cimg_library {
       XUnlockDisplay(cimg::X11attr().display);
 
       /* The code below was used to close the X11 display when not used anymore,
-         unfortunately, since the latest Xorg versions, it randomely hangs, so
+         unfortunately, since the latest Xorg versions, it randomly hangs, so
          I prefer to remove it. A fix would be needed anyway.
 
          if (!cimg::X11attr().nb_wins) {
@@ -8993,7 +8993,7 @@ namespace cimg_library {
       bool createFullScreenWindow; // Boolean value used for full-screen window creation
       bool createClosedWindow;     // Boolean value used for closed-window creation
       bool update;                 // Boolean value used for resize
-      bool success;                // Succes or failure of the message, used as return value
+      bool success;                // Success or failure of the message, used as return value
       CbSerializedQuery(CImgDisplay *s, CImgCarbonQueryKind k):sender(s),kind(k),success(false) {};
 
       inline static CbSerializedQuery BuildReleaseWindowQuery(CImgDisplay* sender) {
@@ -9040,7 +9040,7 @@ namespace cimg_library {
       }
     };
 
-    // Send a serialized query in a synchroneous way.
+    // Send a serialized query in a synchronous way.
     // @param c Application Carbon global settings.
     // @param m The query to send.
     // @result Success/failure of the operation returned by the event thread.
@@ -9066,7 +9066,7 @@ namespace cimg_library {
     // Create the window attached to the current display.
     // @param c Application Carbon global settings.
     // @param title The window title, if any.
-    // @param fullscreen Shoud we start in fullscreen mode ?
+    // @param fullscreen Should we start in fullscreen mode ?
     // @param create_closed If true, the window is created but not displayed.
     // @result Success/failure of the operation.
     void _CbCreateAttachedWindow(cimg::CarbonInfo& c, const char* title, const bool fullscreen, const bool create_closed) {
@@ -9118,7 +9118,7 @@ namespace cimg_library {
     // Convert a point having global coordonates into the window coordonates.
     // We use this function to replace the deprecated GlobalToLocal QuickDraw API.
     // @param mouseEvent The mouse event which triggered the event handler.
-    // @param window The window where the event occured.
+    // @param window The window where the event occurred.
     // @param point The modified point struct.
     // @result True if the point struct has been converted successfully.
     static bool _CbToLocalPointFromMouseEvent(EventRef mouseEvent, WindowRef window, HIPoint* point) {
@@ -10012,7 +10012,7 @@ namespace cimg_library {
     //! Get value type
     typedef T value_type;
 
-    // Define common T-dependant types.
+    // Define common T-dependent types.
     typedef typename cimg::superset<T,bool>::type Tbool;
     typedef typename cimg::superset<T,unsigned char>::type Tuchar;
     typedef typename cimg::superset<T,char>::type Tchar;
@@ -10903,7 +10903,7 @@ namespace cimg_library {
        \param z Z-coordinate of the pixel.
        \param v V-coordinate of the pixel.
 
-       - When called without parameters, ptr() returns a pointer to the begining of the pixel buffer.
+       - When called without parameters, ptr() returns a pointer to the beginning of the pixel buffer.
        - If the macro \c 'cimg_debug'>=3, boundary checking is performed and warning messages may appear if
        given coordinates are outside the image range (but function performances decrease).
 
@@ -11017,7 +11017,7 @@ namespace cimg_library {
 
     //! Fast access to pixel value for reading or writing, using an offset to the image pixel.
     /**
-       \param off Offset of the pixel according to the begining of the pixel buffer, given by ptr().
+       \param off Offset of the pixel according to the beginning of the pixel buffer, given by ptr().
 
        - If the macro \c 'cimg_debug'>=3, boundary checking is performed and warning messages may appear
        (but function performances decrease).
@@ -11990,7 +11990,7 @@ namespace cimg_library {
     }
 
     //! Return the kth smallest element of the image.
-    // (Adapted from the numerical recipies for CImg)
+    // (Adapted from the numerical recipes for CImg)
     T kth_smallest(const unsigned int k) const {
       if (is_empty())
         throw CImgInstanceException("CImg<%s>::kth_smallest() : Instance image (%u,%u,%u,%u,%p) is empty.",
@@ -12582,7 +12582,7 @@ namespace cimg_library {
       return (*this)<<img;
     }
 
-    //! Insert an image into the begining of an image list.
+    //! Insert an image into the beginning of an image list.
     template<typename t>
     CImgList<t>& operator>>(const CImgList<t>& list) const {
       return list.insert(*this,0);
@@ -15460,7 +15460,7 @@ namespace cimg_library {
     //! Compute the image histogram.
     /**
        The histogram H of an image I is a 1D-function where H(x) is the number of
-       occurences of the value x in I.
+       occurrences of the value x in I.
        \param nblevels = Number of different levels of the computed histogram.
        For classical images, this value is 256. You should specify more levels
        if you are working with CImg<float> or images with high range of pixel values.
@@ -15471,7 +15471,7 @@ namespace cimg_library {
        \note If val_min==val_max==0 (default values), the function first estimates the minimum and maximum
        pixel values of the current image, then uses these values for the histogram computation.
        \result The histogram is returned as a 1D CImg<float> image H, having a size of (nblevels,1,1,1) such that
-       H(0) and H(nblevels-1) are respectively equal to the number of occurences of the values val_min and val_max in I.
+       H(0) and H(nblevels-1) are respectively equal to the number of occurrences of the values val_min and val_max in I.
        \note Histogram computation always returns a 1D function. Histogram of multi-valued (such as color) images
        are not multi-dimensional.
     **/
@@ -19599,7 +19599,7 @@ namespace cimg_library {
     }
 
 #ifndef cimg_use_visualcpp6
-    // Otimized version (internal).
+    // Optimized version (internal).
     CImg<T>& draw_image(const int x0, const int y0, const int z0, const int v0,
                         const CImg<T>& sprite, const float opacity=1) {
       if (is_empty()) return *this;
@@ -27311,7 +27311,7 @@ namespace cimg_library {
       return res;
     }
 
-    // INNER ROUTINE : Compute the LU decomposition of a permuted matrix (c.f. numerical recipies)
+    // INNER ROUTINE : Compute the LU decomposition of a permuted matrix (c.f. numerical recipes)
     template<typename t>
     CImg<T>& _LU(CImg<t>& indx, bool& d) {
       const int N = dimx();
@@ -29838,7 +29838,7 @@ namespace cimg_library {
                   for (unsigned int col = 0; col<nx; col+=tw) {
                     if (TIFFReadTile(tif,buf,col,row,0,0)<0) {
                       _TIFFfree(buf); TIFFClose(tif);
-                      throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occure while reading a tile.",
+                      throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occurred while reading a tile.",
                                           pixel_type(),filename);
                     } else {
                       unsigned char *ptr = buf;
@@ -29858,7 +29858,7 @@ namespace cimg_library {
                   for (unsigned int col = 0; col<nx; col+=tw) {
                     if (TIFFReadTile(tif,buf,col,row,0,0)<0) {
                       _TIFFfree(buf); TIFFClose(tif);
-                      throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occure while reading a tile.",
+                      throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occurred while reading a tile.",
                                           pixel_type(),filename);
                     } else {
                       unsigned short *ptr = buf;
@@ -29878,7 +29878,7 @@ namespace cimg_library {
                   for (unsigned int col = 0; col<nx; col+=tw) {
                     if (TIFFReadTile(tif,buf,col,row,0,0)<0) {
                       _TIFFfree(buf); TIFFClose(tif);
-                      throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occure while reading a tile.",
+                      throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occurred while reading a tile.",
                                           pixel_type(),filename);
                     } else {
                       float *ptr = buf;
@@ -29900,7 +29900,7 @@ namespace cimg_library {
                     for (unsigned int col = 0; col<nx; col+=tw) {
                       if (TIFFReadTile(tif,buf,col,row,0,vv)<0) {
                         _TIFFfree(buf); TIFFClose(tif);
-                        throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occure while reading a tile.",
+                        throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occurred while reading a tile.",
                                             pixel_type(),filename);
                       } else {
                         unsigned char *ptr = buf;
@@ -29920,7 +29920,7 @@ namespace cimg_library {
                     for (unsigned int col = 0; col<nx; col+=tw) {
                       if (TIFFReadTile(tif,buf,col,row,0,vv)<0) {
                         _TIFFfree(buf); TIFFClose(tif);
-                        throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occure while reading a tile.",
+                        throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occurred while reading a tile.",
                                             pixel_type(),filename);
                       } else {
                         unsigned short *ptr = buf;
@@ -29940,7 +29940,7 @@ namespace cimg_library {
                     for (unsigned int col = 0; col<nx; col+=tw) {
                       if (TIFFReadTile(tif,buf,col,row,0,vv)<0) {
                         _TIFFfree(buf); TIFFClose(tif);
-                        throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occure while reading a tile.",
+                        throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occurred while reading a tile.",
                                             pixel_type(),filename);
                       } else {
                         float *ptr = buf;
@@ -29965,7 +29965,7 @@ namespace cimg_library {
                   tstrip_t strip = TIFFComputeStrip(tif, row, 0);
                   if ((TIFFReadEncodedStrip(tif,strip,buf,-1))<0) {
                     _TIFFfree(buf); TIFFClose(tif);
-                    throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occure while reading a strip.",
+                    throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occurred while reading a strip.",
                                         pixel_type(),filename);
                   }
                   unsigned char *ptr = buf;
@@ -30030,7 +30030,7 @@ namespace cimg_library {
                     tstrip_t strip = TIFFComputeStrip(tif, row, vv);
                     if ((TIFFReadEncodedStrip(tif,strip,buf,-1))<0) {
                       _TIFFfree(buf); TIFFClose(tif);
-                      throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occure while reading a strip.",
+                      throw CImgException("CImg<%s>::load_tiff() : File '%s', an error occurred while reading a strip.",
                                           pixel_type(),filename);
                     }
                     unsigned char *ptr = buf;
@@ -32061,7 +32061,7 @@ namespace cimg_library {
               for (unsigned int vv = 0; vv<spp; ++vv)
                 buf[i++] = (*this)(cc,row+rr,vv);
           if (TIFFWriteEncodedStrip(tif,strip,buf,i*sizeof(T))<0)
-            throw CImgException("CImg<%s>::save_tiff() : File '%s', an error has occured while writing a strip.",
+            throw CImgException("CImg<%s>::save_tiff() : File '%s', an error has occurred while writing a strip.",
                                 pixel_type(),filename?filename:"(FILE*)");
         }
         _TIFFfree(buf);
@@ -32782,7 +32782,7 @@ namespace cimg_library {
     //! Get value type.
     typedef T value_type;
 
-    // Define common T-dependant types.
+    // Define common T-dependent types.
     typedef typename cimg::superset<T,bool>::type Tbool;
     typedef typename cimg::superset<T,unsigned char>::type Tuchar;
     typedef typename cimg::superset<T,char>::type Tchar;
@@ -33453,7 +33453,7 @@ namespace cimg_library {
     //@}
     //------------------------------
     //
-    //! \name Arithmetics Operators
+    //! \name Arithmetic Operators
     //@{
     //------------------------------
 
@@ -36244,7 +36244,7 @@ namespace cimg_library {
           pkt.size = out_size;
           ret = av_write_frame(oc,&pkt);
         } else if (out_size<0) break;
-        if (ret) break; // Error occured in writing frame.
+        if (ret) break; // Error occurred in writing frame.
       }
 
       // Close codec.

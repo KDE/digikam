@@ -91,7 +91,7 @@ public:
      *  If isNoTransform() or the matrix is not supported returns an empty list. */
     QList<TransformationAction> transformations() const;
 
-    /** Returns the Exif orienation flag describing this matrix.
+    /** Returns the Exif orientation flag describing this matrix.
      *  Returns ORIENTATION_UNSPECIFIED if no flag matches this matrix.
      */
     MetaEngine::ImageOrientation exifOrientation() const;

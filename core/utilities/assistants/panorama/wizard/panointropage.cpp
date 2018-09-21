@@ -167,7 +167,7 @@ PanoIntroPage::PanoIntroPage(PanoManager* const mngr, QWizard* const dlg)
     d->addGPlusMetadataCheckBox->setWhatsThis(i18nc("@info:whatsthis", "<b>Add Photosphere Metadata</b>: Enabling this allows the program to add "
                                                     "metadata to the output image such that when uploaded to Google+, the "
                                                     "Google+ 3D viewer is activated and the panorama can be seen in 3D. Note "
-                                                    "that this feature is most insteresting for large panoramas."));
+                                                    "that this feature is most interesting for large panoramas."));
     settingsVBox->addWidget(d->addGPlusMetadataCheckBox);
     vbox->addWidget(d->settingsGroupBox);
 */

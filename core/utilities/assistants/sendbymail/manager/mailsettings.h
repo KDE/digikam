@@ -78,7 +78,7 @@ public:
 
     QString format()           const;
 
-    /** Return the attachement limit in bytes
+    /** Return the attachment limit in bytes
      */
     qint64  attachementLimit() const;
 

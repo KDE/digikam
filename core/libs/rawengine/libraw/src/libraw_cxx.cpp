@@ -92,7 +92,7 @@ extern "C"
     case LIBRAW_INPUT_CLOSED:
       return "No input stream, or input stream closed";
     case LIBRAW_UNSUFFICIENT_MEMORY:
-      return "Unsufficient memory";
+      return "Insufficient memory";
     case LIBRAW_DATA_ERROR:
       return "Corrupted data or unexpected EOF";
     case LIBRAW_IO_ERROR:

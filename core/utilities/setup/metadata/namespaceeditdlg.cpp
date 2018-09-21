@@ -262,7 +262,7 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
     d->subspaceCombo->addItem(QLatin1String("XMP"),  (int)NamespaceEntry::XMP);
     d->subspaceCombo->setCurrentIndex((int)entry.subspace);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Enrty subspace" << (int)entry.subspace;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Entry subspace" << (int)entry.subspace;
 
     // -------------------Tag Elements---------------------------------
 

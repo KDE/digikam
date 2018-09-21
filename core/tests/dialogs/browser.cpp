@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2017-05-25
- * Description : a stand alone tool to brower a web page.
+ * Description : a stand alone tool to browse a web page.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

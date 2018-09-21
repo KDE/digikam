@@ -601,7 +601,7 @@ decode (
 
         n->symbol = static_cast<unsigned short>(symbol);
 
-        // if nc is not a determnistic context
+        // if nc is not a deterministic context
         if (nc->total)
         {
             unsigned long temp2 = t-c+nc->total - nc->escapes - nc->escapes;

@@ -195,7 +195,7 @@ void O2::link() {
             redirectUri_ = localhostPolicy_.arg(replyServer_->serverPort());
         }
         
-        // Assemble intial authentication URL
+        // Assemble initial authentication URL
         QList<QPair<QString, QString> > parameters;
         parameters.append(qMakePair(QString(O2_OAUTH2_RESPONSE_TYPE),
                                     (grantFlow_ == GrantFlowAuthorizationCode)? QString(O2_OAUTH2_GRANT_TYPE_CODE): QString(O2_OAUTH2_GRANT_TYPE_TOKEN)));

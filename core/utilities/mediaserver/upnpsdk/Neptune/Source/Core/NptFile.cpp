@@ -223,7 +223,7 @@ NPT_File::Load(const char* path, NPT_String& data, NPT_FileInterface::OpenMode m
 {
     NPT_DataBuffer buffer;
 
-    // reset ouput params
+    // reset output params
     data = "";
 
     // create and open the file

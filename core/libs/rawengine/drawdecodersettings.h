@@ -65,7 +65,7 @@ public:
      *            maximize a homogeneity metric, thus typically minimizing color artifacts.
      *  DCB:      DCB interpolation (see http://www.linuxphoto.org/html/dcb.html for details)
      *  DHT:      DHT interpolation.
-     *  AAHD:     Enhanced Adaptative AHD interpolation.
+     *  AAHD:     Enhanced Adaptive AHD interpolation.
      */
     enum DecodingQuality
     {
@@ -83,7 +83,7 @@ public:
      *  CAMERA:   Use the camera embedded WB if available. Reverts to NONE if not.
      *  AUTO:     Averages an auto WB on the entire image.
      *  CUSTOM:   Let use set it's own temperature and green factor (later converted to RGBG factors).
-     *  AERA:     Let use an aera from image to average white balance (see whiteBalanceArea for details).
+     *  AERA:     Let use an area from image to average white balance (see whiteBalanceArea for details).
      */
     enum WhiteBalance
     {
@@ -152,14 +152,14 @@ public:
      */
     virtual ~DRawDecoderSettings();
 
-    /** Method to use a settings to optimize time loading, for exemple to compute image histogram
+    /** Method to use a settings to optimize time loading, for example to compute image histogram
      */
     void optimizeTimeLoading();
 
 public:
 
     /** If true, images with overblown channels are processed much more accurate,
-     *  without 'pink clouds' (and blue highlights under tungsteen lamps).
+     *  without 'pink clouds' (and blue highlights under tungsten lamps).
      */
     bool fixColorsHighlights;
 

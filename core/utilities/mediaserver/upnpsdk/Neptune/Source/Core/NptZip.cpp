@@ -71,7 +71,7 @@ NPT_ZipFile::NPT_ZipFile()
 NPT_Result
 NPT_ZipFile::Parse(NPT_InputStream& stream, NPT_ZipFile*& file)
 {
-    // defautl return value
+    // default return value
     file = NULL;
     
     // check that we know the size of the stream

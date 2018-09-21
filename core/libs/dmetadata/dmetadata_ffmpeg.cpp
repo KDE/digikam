@@ -55,7 +55,7 @@
 
 #include <klocalizedstring.h>
 
-// Local incudes
+// Local includes
 
 #include "captionvalues.h"
 #include "digikam_debug.h"

@@ -367,7 +367,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                         {
                             if(QLatin1String(l->Model) == d->lensDescription)
                             {
-                                qCDebug(DIGIKAM_DIMG_LOG) << "found exact match from" << lensMatches.count() << "possitibilites:" << l->Model;
+                                qCDebug(DIGIKAM_DIMG_LOG) << "found exact match from" << lensMatches.count() << "possibilities:" << l->Model;
                                 exact = l;
                             }
                         }

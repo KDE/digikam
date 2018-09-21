@@ -56,10 +56,10 @@ class dng_1d_table
 
 		virtual ~dng_1d_table ();
 
-		/// Set up table, initialize entries using functiion.
+		/// Set up table, initialize entries using function.
 		/// This method can throw an exception, e.g. if there is not enough memory.
 		/// \param allocator Memory allocator from which table memory is allocated.
-		/// \param function Table is initialized with values of finction.Evalluate(0.0) to function.Evaluate(1.0).
+		/// \param function Table is initialized with values of function.Evaluate(0.0) to function.Evaluate(1.0).
 		/// \param subSample If true, only sample the function a limited number of times and interpolate.
 
 		void Initialize (dng_memory_allocator &allocator,

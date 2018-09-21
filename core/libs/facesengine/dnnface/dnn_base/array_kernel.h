@@ -449,7 +449,7 @@ set_max_size(
             {
                 pool.deallocate_array(array_elements);
             }
-            // try to get more memroy
+            // try to get more memory
             try { array_elements = pool.allocate_array(max); }
             catch (...) { array_elements = 0;  max_array_size = 0; throw; }
             max_array_size = max;

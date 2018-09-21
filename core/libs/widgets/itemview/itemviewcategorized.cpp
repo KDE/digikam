@@ -427,8 +427,8 @@ void ItemViewCategorized::reset()
 {
     DCategorizedView::reset();
 
-    // FIXME : Emiting this causes a crash importstackedview, because the model is not yet set.
-    //         atm there's a check agaisnt null models though.
+    // FIXME : Emitting this causes a crash importstackedview, because the model is not yet set.
+    //         atm there's a check against null models though.
     emit selectionChanged();
     emit selectionCleared();
 

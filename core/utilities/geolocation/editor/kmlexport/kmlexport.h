@@ -56,7 +56,7 @@ public:
 
     void setUrls(const QList<QUrl>& urls);
 
-    /*! generate the kml element for pictures with tumbnails
+    /*! generate the kml element for pictures with thumbnails
      *  @param QUrl the URL of the picture
      *  @param kmlAlbum the album used
      */

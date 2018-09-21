@@ -220,7 +220,7 @@ void ImportIconView::deleteSelectedDirectly(bool /*permanently*/)
 
 void ImportIconView::createGroupFromSelection()
 {
-    //TODO: Impelemnt grouping in import tool.
+    //TODO: Implement grouping in import tool.
 /*
     QList<CamItemInfo> selectedInfos = selectedCamItemInfosCurrentFirst();
     CamItemInfo groupLeader          = selectedInfos.takeFirst();
@@ -230,7 +230,7 @@ void ImportIconView::createGroupFromSelection()
 
 void ImportIconView::createGroupByTimeFromSelection()
 {
-    //TODO: Impelemnt grouping in import tool.
+    //TODO: Implement grouping in import tool.
 /*
     QList<CamItemInfo> selectedInfos = selectedCamItemInfosCurrentFirst();
 
@@ -252,13 +252,13 @@ void ImportIconView::createGroupByTimeFromSelection()
 
 void ImportIconView::ungroupSelected()
 {
-    //TODO: Impelemnt grouping in import tool.
+    //TODO: Implement grouping in import tool.
     //FileActionMngr::instance()->ungroup(selectedCamItemInfos());
 }
 
 void ImportIconView::removeSelectedFromGroup()
 {
-    //TODO: Impelemnt grouping in import tool.
+    //TODO: Implement grouping in import tool.
     //FileActionMngr::instance()->removeFromGroup(selectedCamItemInfos());
 }
 

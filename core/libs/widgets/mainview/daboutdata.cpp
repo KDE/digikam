@@ -51,7 +51,7 @@ DAboutData::~DAboutData()
 
 const QString DAboutData::digiKamSloganFormated()
 {
-    return i18nc("This is the slogan formated string displayed in splashscreen. "
+    return i18nc("This is the slogan formatted string displayed in splashscreen. "
                  "Please translate using short words else the slogan can be truncated.",
                  "<qt><font color=\"white\">"
                  "<b>Professional</b> Photo <b>Management</b> with the Power of <b>Open Source</b>"

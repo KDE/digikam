@@ -56,10 +56,10 @@ public:
     /**
      * Describes the allowed and desired operation when rotating a picture.
      * The modes are in escalating order and describe if an operation is allowed.
-     * What is actually done will be goverend by what is possible:
+     * What is actually done will be governed by what is possible:
      * 1) RAW files cannot by rotated by content, setting the metadata may be problematic
      * 2) Read-Only files cannot edited, neither content nor metadata
-     * 3) Writable files wil have lossy compression
+     * 3) Writable files will have lossy compression
      * 4) Only JPEG and PGF offer lossless rotation
      * Using a contents-based rotation always implies resetting the flag.
      */

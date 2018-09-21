@@ -106,7 +106,7 @@ public:
     static void shortenedMakeInfo(QString& make);
     static void shortenedModelInfo(QString& model);
 
-    /** Write a string with apect ratio information formated
+    /** Write a string with aspect ratio information formatted
      */
     static bool aspectRatioToString(int width, int height, QString& arString);
 

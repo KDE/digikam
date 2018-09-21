@@ -704,7 +704,7 @@ bool dng_camera_profile::IsValid (uint32 channels) const
 
 		}
 
-	// Make sure ColorMatrix1 is invertable.
+	// Make sure ColorMatrix1 is invertible.
 
 	try
 		{
@@ -731,7 +731,7 @@ bool dng_camera_profile::IsValid (uint32 channels) const
 
 		#if qDNGValidate
 
-		ReportError ("ColorMatrix1 is not invertable");
+		ReportError ("ColorMatrix1 is not invertible");
 
 		#endif
 
@@ -739,7 +739,7 @@ bool dng_camera_profile::IsValid (uint32 channels) const
 
 		}
 
-	// Make sure ColorMatrix2 is invertable.
+	// Make sure ColorMatrix2 is invertible.
 
 	if (fColorMatrix2.NotEmpty ())
 		{
@@ -769,7 +769,7 @@ bool dng_camera_profile::IsValid (uint32 channels) const
 
 			#if qDNGValidate
 
-			ReportError ("ColorMatrix2 is not invertable");
+			ReportError ("ColorMatrix2 is not invertible");
 
 			#endif
 

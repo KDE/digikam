@@ -89,7 +89,7 @@ class dng_host
 
 		// The fraction of the image kept after a crop.  This is used to
 		// adjust the sizes to take into account the cropping that
-		// will be peformed.
+		// will be performed.
 
 		real64 fCropFactor;
 
@@ -107,7 +107,7 @@ class dng_host
 
 	public:
 
-		/// Allocate a dng_host object, possiblly with custom allocator and sniffer.
+		/// Allocate a dng_host object, possibly with custom allocator and sniffer.
 		/// \param allocator Allows controlling all memory allocation done via this
 		/// dng_host. Defaults to singleton global dng_memory_allocator, which calls
 		/// new/delete dng_malloc_block for appropriate size.
@@ -299,7 +299,7 @@ class dng_host
 		virtual bool SaveLinearDNG (const dng_negative &negative) const;
 
 		/// Setter for flag determining whether to keep original RAW file data.
-		/// \param keep If true, origianl RAW data will be kept.
+		/// \param keep If true, original RAW data will be kept.
 
 		void SetKeepOriginalFile (bool keep)
 			{
@@ -314,7 +314,7 @@ class dng_host
 			}
 
 		/// Determine if an error is the result of a temporary, but planned-for
-		/// occurence such as user cancellation or memory exhaustion. This method is
+		/// occurrence such as user cancellation or memory exhaustion. This method is
 		/// sometimes used to determine whether to try and continue processing a DNG
 		/// file despite errors in the file format, etc. In such cases, processing will
 		/// be continued if IsTransientError returns false. This is so that user cancellation
@@ -323,7 +323,7 @@ class dng_host
 
 		virtual bool IsTransientError (dng_error_code code);
 
-		/// General top-level botttleneck for image processing tasks.
+		/// General top-level bottleneck for image processing tasks.
 		/// Default implementation calls dng_area_task::PerformAreaTask method on
 		/// task. Can be overridden in derived classes to support multiprocessing,
 		/// for example.
@@ -360,7 +360,7 @@ class dng_host
 											uint32 planes,
 											uint32 pixelType);
 
-		/// Factory method for parsing dng_opcode based classs. Can be used to
+		/// Factory method for parsing dng_opcode based class. Can be used to
 		/// override opcode implementations.
 
 		virtual dng_opcode * Make_dng_opcode (uint32 opcodeID,

@@ -115,7 +115,7 @@ public:
      it is an allowed value. Once the value is validated, it is marked for eventing by
      calling the PLT_Service AddChanged function.
      @param value new state variable value. Can be a comma separated list of values.
-     @param clearonsend whether the statevariable should be cleared immediatly after sending
+     @param clearonsend whether the statevariable should be cleared immediately after sending
      */
     NPT_Result SetValue(const char* value, const bool clearonsend = false);
     

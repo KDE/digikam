@@ -389,7 +389,7 @@ double ImgQSort::noisedetector() const
     // Convert the image into YCrCb color model.
     NRFilter::srgb2ycbcr(d->fimg, d->neimage.numPixels());
 
-    // One dimentional CvMat which stores the image.
+    // One dimensional CvMat which stores the image.
     CvMat* points    = cvCreateMat(d->neimage.numPixels(), 3, CV_32FC1);
 
     // Matrix to store the index of the clusters.

@@ -283,7 +283,7 @@ public:
     DColorChooserMode       mode;
 
     /**
-     * Stores the values for hue, saturation and lumniousity
+     * Stores the values for hue, saturation and luminosity
      */
     int                     hue;
     int                     saturation;

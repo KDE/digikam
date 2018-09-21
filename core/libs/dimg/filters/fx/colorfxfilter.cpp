@@ -285,7 +285,7 @@ void ColorFXFilter::neon(DImg* const orgImage, DImg* const destImage, int Intens
  * BW               => Border Width
  *
  * Theory           => Wow, another Photoshop filter (FindEdges). Do you understand
- *                     Neon effect ? This is the same engine, but is inversed with
+ *                     Neon effect ? This is the same engine, but is inverted with
  *                     255 - color.
  */
 void ColorFXFilter::findEdges(DImg* const orgImage, DImg* const destImage, int Intensity, int BW)

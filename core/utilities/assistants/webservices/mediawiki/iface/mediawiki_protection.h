@@ -64,7 +64,7 @@ public:
     ~Protection();
 
     /**
-     * @brief Assingning an protection from an other protection.
+     * @brief Assigning an protection from an other protection.
      * @param other an other protection
      */
     Protection& operator=(Protection other);

@@ -90,7 +90,7 @@ public:
     QByteArray              buffer;
 
     // constants
-    // use QString insted of QUrl, we need .arg
+    // use QString instead of QUrl, we need .arg
     static const QString    SESSION_URL;
     static const QString    TOKEN_URL;
     static const QString    SERVICE_URL;
@@ -208,7 +208,7 @@ void YFTalker::getService()
 /*
 void YFTalker::checkToken()
 {
-    // try to get somthing with our token, if it is invalid catch 401
+    // try to get something with our token, if it is invalid catch 401
     d->state = STATE_CHECKTOKEN;
 
     QUrl url(d->apiAlbumsUrl);
@@ -872,7 +872,7 @@ void YFTalker::slotParseResponseListAlbums()
         {
             errorOccurred = true;
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Invalid XML data: invalid entry on line" << entryElem.lineNumber();
-            // simple skip this record, no addtional messages to user
+            // simple skip this record, no additional messages to user
             continue;
         }
 
@@ -970,7 +970,7 @@ bool YFTalker::slotParsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
     {
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Invalid XML data, error on line" << entryElem.lineNumber();
-        // simple skip this record, no addtional messages to user
+        // simple skip this record, no additional messages to user
         return false;
     }
 
@@ -1079,7 +1079,7 @@ void YFTalker::slotParseResponseListPhotos()
         }
         else
         {
-            // set error mark and conintinue
+            // set error mark and continue
             errorOccurred = true;
         }
     }

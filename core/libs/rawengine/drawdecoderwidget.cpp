@@ -879,7 +879,7 @@ void DRawDecoderWidget::slotExposureCorrectionToggled(bool b)
 
 void DRawDecoderWidget::slotExpoCorrectionShiftChanged(double ev)
 {
-    // Only enable Highligh exposure correction if Shift correction is >= 1.0, else this settings do not take effect.
+    // Only enable Highlight exposure correction if Shift correction is >= 1.0, else this settings do not take effect.
     bool b = (ev >= 1.0);
 
     d->expoCorrectionHighlightLabel->setEnabled(b);

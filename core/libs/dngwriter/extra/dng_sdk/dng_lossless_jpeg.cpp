@@ -2898,7 +2898,7 @@ inline void dng_lossless_encoder::EncodeOneDiff (int diff, HuffmanTable *dctbl)
 
     // If the number of bits is 16, there is only one possible difference
     // value (-32786), so the lossless JPEG spec says not to output anything
-    // in that case.  So we only need to output the diference value if
+    // in that case.  So we only need to output the difference value if
     // the number of bits is between 1 and 15.
 
     if (nbits & 15)
@@ -3370,8 +3370,8 @@ void dng_lossless_encoder::GenHuffCoding (HuffmanTable *htbl, uint32 *freq)
  *	the best PSV.
  *
  * Results:
- *	Optimal Huffman tables are retured in cPtr->dcHuffTblPtrs[tbl].
- *	Best PSV is retured in cPtr->Ss.
+ *	Optimal Huffman tables are returned in cPtr->dcHuffTblPtrs[tbl].
+ *	Best PSV is returned in cPtr->Ss.
  *
  * Side effects:
  *	None.
@@ -3480,7 +3480,7 @@ void dng_lossless_encoder::Emit2bytes (int value)
  *
  * EmitDht --
  *
- *	Emit a DHT marker, follwed by the huffman data.
+ *	Emit a DHT marker, followed by the huffman data.
  *
  * Results:
  *	None

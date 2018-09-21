@@ -122,7 +122,7 @@ public:
 
     /**
      * Checks the locations of type HardWired. If one of these is not available currently,
-     * it is added to the list of disappared locations.
+     * it is added to the list of disappeared locations.
      * This case may happen if a file system is changed, a backup restored or other actions
      * taken that change the UUID, although the data may still be available and mounted.
      * If there are hard-wired volumes available which are candidates for a newly appeared

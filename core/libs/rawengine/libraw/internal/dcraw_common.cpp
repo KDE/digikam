@@ -5125,9 +5125,9 @@ void CLASS wavelet_denoise()
     }
     free(temp);
   } /* end omp parallel */
-  /* the following loops are hard to parallize, no idea yes,
+  /* the following loops are hard to parallelize, no idea yes,
    * problem is wlast which is carrying dependency
-   * second part should be easyer, but did not yet get it right.
+   * second part should be easier, but did not yet get it right.
    */
   if (filters && colors == 3)
   { /* pull G1 and G3 closer together */
@@ -6134,7 +6134,7 @@ void CLASS xtrans_interpolate(int passes)
                   homo[d][row][col]++;
         }
 
-      /* Average the most homogenous pixels for the final result:	*/
+      /* Average the most homogeneous pixels for the final result:	*/
       if (height - top < TS + 4)
         mrow = height - top + 2;
       if (width - left < TS + 4)
@@ -6527,7 +6527,7 @@ void CLASS ahd_interpolate()
                 homo[d][tr][tc]++;
         }
       }
-      /*  Combine the most homogenous pixels for the final result:	*/
+      /*  Combine the most homogeneous pixels for the final result:	*/
       for (row = top + 3; row < top + TS - 3 && row < height - 5; row++)
       {
         tr = row - top;

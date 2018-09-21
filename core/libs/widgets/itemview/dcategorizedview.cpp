@@ -1549,7 +1549,7 @@ QModelIndex DCategorizedView::moveCursor(CursorAction cursorAction,
     {
         case QAbstractItemView::MovePageUp:
         {
-            // We need to reimplemt PageUp/Down as well because
+            // We need to reimplement PageUp/Down as well because
             // default QListView implementation will not work properly with our custom layout
             QModelIndexList visibleIndexes = d->intersectionSet(viewport()->rect());
 

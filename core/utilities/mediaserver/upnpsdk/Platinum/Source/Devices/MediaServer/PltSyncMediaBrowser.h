@@ -69,7 +69,7 @@ typedef struct PLT_CapabilitiesData {
 
 typedef NPT_Reference<PLT_CapabilitiesData> PLT_CapabilitiesDataReference;
 
-// explicitely specify res otherwise WMP won't return a URL!
+// explicitly specify res otherwise WMP won't return a URL!
 #define PLT_DEFAULT_FILTER  "dc:date,dc:description,upnp:longDescription,upnp:genre,res,res@duration,res@size,upnp:albumArtURI,upnp:rating,upnp:lastPlaybackPosition,upnp:lastPlaybackTime,upnp:playbackCount,upnp:originalTrackNumber,upnp:episodeNumber,upnp:programTitle,upnp:seriesTitle,upnp:album,upnp:artist,upnp:author,upnp:director,dc:publisher,searchable,childCount,dc:title,dc:creator,upnp:actor,res@resolution,upnp:episodeCount,upnp:episodeSeason,xbmc:lastPlayerState,xbmc:dateadded,xbmc:rating,xbmc:votes,xbmc:artwork,xbmc:uniqueidentifier,xbmc:country,xbmc:userrating"
 
 /*----------------------------------------------------------------------
@@ -163,7 +163,7 @@ protected:
                           const char*              search_criteria,
                           NPT_Int32                index, 
                           NPT_Int32                count,
-                          const char*              filter = PLT_DEFAULT_FILTER); // explicitely specify res otherwise WMP won't return a URL!
+                          const char*              filter = PLT_DEFAULT_FILTER); // explicitly specify res otherwise WMP won't return a URL!
 
 private:
     NPT_Result Find(const char* ip, PLT_DeviceDataReference& device);

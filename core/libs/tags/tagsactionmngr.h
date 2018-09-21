@@ -46,13 +46,13 @@ public:
     explicit TagsActionMngr(QWidget* const parent);
     ~TagsActionMngr();
 
-    /** Register all tag actions to collections managed with keyboard shorcuts.
+    /** Register all tag actions to collections managed with keyboard shortcuts.
      *  Because Tags shortcuts are stored in database this method must be called after
      *  database initialization and after that all root window instances have been created.
      */
     void registerTagsActionCollections();
 
-    /** Register all labels actions to collections managed with keyboard shorcuts.
+    /** Register all labels actions to collections managed with keyboard shortcuts.
      *  Unlike tags actions, labels shortcuts are stored in XML GUI file of each root windows,
      *  to be able to customize it through KDE keyboards shortcuts config panel.
      *  This method must be called before to DXmlGuiWindow::createGUI(), typically
@@ -87,7 +87,7 @@ private Q_SLOTS:
     void slotAlbumDeleted(Album*);
 
     /**
-      * Wrapper around windows to run relevant code about keyboard shorcuts in GUI.
+      * Wrapper around windows to run relevant code about keyboard shortcuts in GUI.
       */
     void slotAssignFromShortcut();
 

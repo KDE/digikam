@@ -468,7 +468,7 @@ public:
     void setRating(int value);
 
     /**
-     * Set the manul sorting order for the item
+     * Set the manual sorting order for the item
      */
     void setManualOrder(qlonglong value);
 

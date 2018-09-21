@@ -86,7 +86,7 @@ public:
     // Returns the sorted list of suggested tagging actions, based on the above settings
     QList<TaggingAction> actions() const;
 
-    // Returns one single action, which is decided to be the presumedly best action based on the settings.
+    // Returns one single action, which is decided to be the presumably best action based on the settings.
     TaggingAction defaultTaggingAction() const;
 
     // Returns the index of the default action in the list returned by generate()

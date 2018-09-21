@@ -679,8 +679,8 @@ int LibRaw::wf_remove_banding()
 double LibRaw::wf_filter_energy(int r1_greenmode, int r1, int r2_greenmode, int r2)
 {
 	/* 
-		This function caclulates energy of laplasyan piramid level.
-		Laplasyan level is difference between two 2D gaussian (exactly, binominal) convolutions with radius r1 and r2
+		This function calculates energy of laplasian pyramid level.
+		Laplasian level is difference between two 2D gaussian (exactly, binominal) convolutions with radius r1 and r2
 		Convolution is done on bayer data, 4 channels, and if (greenmode), additive on green channel.
 	
 		Not optimized, because now it's used only for precalculations.

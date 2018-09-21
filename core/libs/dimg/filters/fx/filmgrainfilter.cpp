@@ -119,18 +119,18 @@ void FilmGrainFilter::filmgrainMultithreaded(uint start, uint stop)
     // on the top left corner of matrix will be used to apply noise on whole matrix.
     // In first, for each matrix processed over the image, we compute the lead noise value
     // using Uniform noise generator.
-    // In second time, all others points from the matrix are process to add suplemental noise
+    // In second time, all others points from the matrix are process to add supplemental noise
     // generated with Gaussian or Poisson noise generator.
 
     DColor refCol, matCol;
     uint    progress=0, oldProgress=0, posX, posY;
 
-    // Reference point noise adjustements.
+    // Reference point noise adjustments.
     double refLumaNoise       = 0.0, refLumaRange       = 0.0;
     double refChromaBlueNoise = 0.0, refChromaBlueRange = 0.0;
     double refChromaRedNoise  = 0.0, refChromaRedRange  = 0.0;
 
-    // Current matrix point noise adjustements.
+    // Current matrix point noise adjustments.
     double matLumaNoise       = 0.0, matLumaRange       = 0.0;
     double matChromaBlueNoise = 0.0, matChromaBlueRange = 0.0;
     double matChromaRedNoise  = 0.0, matChromaRedRange  = 0.0;
@@ -261,7 +261,7 @@ void FilmGrainFilter::filterImage()
         t.waitForFinished();
 }
 
-/** This method compute lead noise of reference matrix point used to similate graininess size
+/** This method compute lead noise of reference matrix point used to simulate graininess size
  */
 void FilmGrainFilter::computeNoiseSettings(const DColor& col,
                                            double& luRange, double& luNoise,
@@ -290,9 +290,9 @@ void FilmGrainFilter::computeNoiseSettings(const DColor& col,
     }
 }
 
-/** This method apply grain adjustement on a pixel color channel from YCrCb color space.
+/** This method apply grain adjustment on a pixel color channel from YCrCb color space.
     NRand is the lead uniform noise set from matrix used to scan whole image step by step.
-    Additionally noise is applied on pixel using Poisson or Gausian distribution.
+    Additionally noise is applied on pixel using Poisson or Gaussian distribution.
  */
 void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int channel)
 {
@@ -337,7 +337,7 @@ double FilmGrainFilter::randomizeUniform(double range)
     return val;
 }
 
-/** This method compute Guaussian noise value used to randomize all matrix points.
+/** This method compute Gaussian noise value used to randomize all matrix points.
     This value is added to lead noise value.
  */
 double FilmGrainFilter::randomizeGauss(double sigma)
@@ -361,7 +361,7 @@ double FilmGrainFilter::randomizePoisson(double lambda)
     return (randomizeGauss(sqrt(lambda * d->settings.grainSize * d->settings.grainSize)));
 }
 
-/** This method interpolate gain adjustements to apply grain on shadows, midtones and highlights colors.
+/** This method interpolate gain adjustments to apply grain on shadows, midtones and highlights colors.
     The output value is a coefficient computed between 0.0 and 1.0.
  */
 double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, const DColor& col)

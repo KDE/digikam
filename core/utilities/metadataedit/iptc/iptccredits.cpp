@@ -130,7 +130,7 @@ IPTCCredits::IPTCCredits(QWidget* const parent)
     // --------------------------------------------------------
 
     d->contactEdit  = new MultiStringsEdit(this, i18n("Contact:"),
-                                           i18n("Set here the person or organisation to contact."),
+                                           i18n("Set here the person or organization to contact."),
                                            true, 128);
 
     // --------------------------------------------------------

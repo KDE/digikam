@@ -165,7 +165,7 @@ void EditorStackView::decreaseZoom()
 void EditorStackView::toggleFitToWindow()
 {
     // Fit to window action is common place to switch view in this mode.
-    // User want to see the same behavors between canvas and tool preview.
+    // User want to see the same behaviors between canvas and tool preview.
     // Both are toggle at the same time.
     d->canvas->layout()->toggleFitToWindow();
 

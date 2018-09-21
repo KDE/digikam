@@ -156,16 +156,16 @@ static cmsBool _cmsAdaptMatrixToD50(cmsMAT3* const r, const cmsCIExyY* const Sou
 
 /** Build a White point, primary chromas transfer matrix from RGB to CIE XYZ
     This is just an approximation, I am not handling all the non-linear
-    aspects of the RGB to XYZ process, and assumming that the gamma correction
-    has transitive property in the tranformation chain.
+    aspects of the RGB to XYZ process, and assuming that the gamma correction
+    has transitive property in the transformation chain.
 
-    the alghoritm:
+    the algorithm:
 
                - First I build the absolute conversion matrix using
                  primaries in XYZ. This matrix is next inverted
-               - Then I eval the source white point across this matrix
-                 obtaining the coeficients of the transformation
-               - Then, I apply these coeficients to the original matrix
+               - Then I evaluate the source white point across this matrix
+                 obtaining the coefficients of the transformation
+               - Then, I apply these coefficients to the original matrix
 */
 cmsBool _cmsBuildRGB2XYZtransferMatrix(cmsMAT3* const r, const cmsCIExyY* const WhitePt, const cmsCIExyYTRIPLE* const Primrs)
 {
@@ -362,7 +362,7 @@ QString dkCmsTakeProductInfo(cmsHPROFILE hProfile)
         /*
          *  _cmsIdentifyWhitePoint is complex and partly redundant
          *  with cietonguewidget, leave this part off
-         *  untill the full lcms2 implementation
+         *  until the full lcms2 implementation
          *
         cmsCIEXYZ WhitePt;
         char WhiteStr[1024];
@@ -442,7 +442,7 @@ int dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
 }
 
 // White Point & Primary chromas handling
-// Returns the final chrmatic adaptation from illuminant FromIll to Illuminant ToIll
+// Returns the final chromatic adaptation from illuminant FromIll to Illuminant ToIll
 // The cone matrix can be specified in ConeMatrix.
 // If NULL, assuming D50 source. White point is given in xyY
 

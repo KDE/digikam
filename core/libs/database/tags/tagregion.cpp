@@ -246,7 +246,7 @@ QRect TagRegion::ajustToRotatedImg(const QRect& region, const QSize &fullSize, i
     region.getRect(&x, &y, &w, &h);
     int newx, newy, neww, newh;
 
-    if (rotation == 0) // Rotate right 90 degress
+    if (rotation == 0) // Rotate right 90 degrees
     {
        newx = fullSize.height() - y -h;
        newy = x;
@@ -254,7 +254,7 @@ QRect TagRegion::ajustToRotatedImg(const QRect& region, const QSize &fullSize, i
        newh = w;
 
     }
-    else             // Rotate left 90 degress
+    else             // Rotate left 90 degrees
     {
         newx = y;
         newy = fullSize.width() - x -w;

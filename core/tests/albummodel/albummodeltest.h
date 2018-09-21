@@ -104,7 +104,7 @@ private:
 
     /**
      * This model is used to ensure that adding and changing signals are emitted
-     * correctly if the model is created beorre the scanning starts.
+     * correctly if the model is created before the scanning starts.
      */
     Digikam::AlbumModel* startModel;
     QList<int>           addedIds;

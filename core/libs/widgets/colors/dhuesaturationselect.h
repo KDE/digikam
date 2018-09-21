@@ -215,7 +215,7 @@ public:
     void setSaturation(int saturation);
 
     /**
-     * Returns the color value (also known as lumniousity, 0-255)
+     * Returns the color value (also known as luminosity, 0-255)
      *
      * @return  The color value (0-255)
      */

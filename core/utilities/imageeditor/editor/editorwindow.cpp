@@ -1369,7 +1369,7 @@ void EditorWindow::saveStandardSettings()
     config->sync();
 }
 
-/** Method used by Editor Tools. Only tools based on imageregionwidget support zoomming.
+/** Method used by Editor Tools. Only tools based on imageregionwidget support zooming.
     TODO: Fix this behavior when editor tool preview widgets will be factored.
  */
 void EditorWindow::toggleZoomActions(bool val)
@@ -1605,7 +1605,7 @@ bool EditorWindow::promptForOverWrite()
     }
     else
     {
-        // in this case wil will handles the overwrite request
+        // in this case it will handle the overwrite request
         return true;
     }
 }
@@ -2639,7 +2639,7 @@ bool EditorWindow::startingSaveVersion(const QUrl& url, bool fork, bool saveAs, 
     if (m_savingContext.destinationExisted)
     {
         // So, should we refuse to overwrite the original?
-        // It's a frontal crash againt non-destructive principles.
+        // It's a frontal crash against non-destructive principles.
         // It is tempting to refuse, yet I think the user has to decide in the end
         /*QUrl currURL(m_savingContext.srcURL);
         currURL.cleanPath();

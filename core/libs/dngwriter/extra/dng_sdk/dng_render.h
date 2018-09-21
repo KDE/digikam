@@ -43,7 +43,7 @@ class dng_function_exposure_ramp: public dng_1d_function
 
 		real64 fRadius;		// Rounding radius.
 
-		real64 fQScale;		// Quadradic scale.
+		real64 fQScale;		// Quadratic scale.
 
 	public:
 
@@ -57,7 +57,7 @@ class dng_function_exposure_ramp: public dng_1d_function
 
 /******************************************************************************/
 
-/// \brief Exposure compensation curve for a given compensation amount in stops using quadric for roll-off.
+/// \brief Exposure compensation curve for a given compensation amount in stops using quadratic for roll-off.
 
 class dng_function_exposure_tone: public dng_1d_function
 	{

@@ -731,7 +731,7 @@ public:
     void Terminate();
     
     /**
-     * Add a request handler. By default the ownership of the handler is NOT transfered to this object,
+     * Add a request handler. By default the ownership of the handler is NOT transferred to this object,
      * so the caller is responsible for the lifetime management of the handler object.
      */
     virtual NPT_Result AddRequestHandler(NPT_HttpRequestHandler* handler, 

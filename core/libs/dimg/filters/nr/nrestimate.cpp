@@ -134,7 +134,7 @@ void NREstimate::startAnalyse()
     // convert the image into YCrCb color model
     NRFilter::srgb2ycbcr(d->fimg, m_orgImage.numPixels());
 
-    // One dimentional CvMat which stores the image
+    // One dimensional CvMat which stores the image
     CvMat* points    = cvCreateMat(m_orgImage.numPixels(), 3, CV_32FC1);
 
     // matrix to store the index of the clusters

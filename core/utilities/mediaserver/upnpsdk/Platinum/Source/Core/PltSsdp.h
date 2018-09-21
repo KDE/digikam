@@ -178,7 +178,7 @@ protected:
 +---------------------------------------------------------------------*/
 /**
  The PLT_SsdpAnnounceInterfaceIterator class is used to send SSDP announcements 
- given a list of network interaces. 
+ given a list of network interfaces. 
  */
 class PLT_SsdpAnnounceInterfaceIterator
 {
@@ -356,7 +356,7 @@ protected:
 +---------------------------------------------------------------------*/
 /**
  The PLT_SsdpSearchTask class is a task used by a PLT_CtrlPoint to issue a SSDP
- M-SEARCH request. It can be set to repeat at a certain frequencey.
+ M-SEARCH request. It can be set to repeat at a certain frequency.
  */
 class PLT_SsdpSearchTask : public PLT_ThreadTask
 {

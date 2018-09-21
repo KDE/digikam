@@ -234,7 +234,7 @@ public:
     /**
      * Performs the database action on the current database.
      * Queries by the specified parameters can have named parameters which are
-     * substituded with values from the bindingMap parameter.
+     * substituted with values from the bindingMap parameter.
      * The result values (if any) are stored within the values list.
      */
     QueryState execDBAction(const DbEngineAction& action, const QMap<QString, QVariant>& bindingMap,
@@ -259,7 +259,7 @@ public:
     /**
      * Performs the database action on the current database.
      * Queries by the specified parameters can have named parameters which are
-     * substituded with values from the bindingMap parameter.
+     * substituted with values from the bindingMap parameter.
      * The result values (if any) are stored within the values list.
      * This method returns the last query, which is used to handle special cases.
      */

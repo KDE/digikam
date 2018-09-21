@@ -361,7 +361,7 @@ NPT_DateTime::ToString(Format format, NPT_Flags flags) const
                     // nanoseconds precision
                     AppendNumber(result, m_NanoSeconds, 9);
                 } else {
-                    // only miliseconds precision
+                    // only milliseconds precision
                     AppendNumber(result, m_NanoSeconds/1000000, 3);
                 }
             }

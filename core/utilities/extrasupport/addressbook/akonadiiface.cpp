@@ -91,7 +91,7 @@ void AkonadiIface::slotABCSearchResult(KJob* job)
 {
     if (job->error())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Akonadi search was not succesfull";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Akonadi search was not successful";
         return;
     }
 

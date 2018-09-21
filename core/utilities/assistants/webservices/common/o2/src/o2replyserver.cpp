@@ -27,7 +27,7 @@ void O2ReplyServer::onIncomingConnection() {
     connect(socket, SIGNAL(readyRead()), this, SLOT(onBytesReady()), Qt::UniqueConnection);
     connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
 
-    // Wait for a bit *after* first response, then close server if no useable data has arrived
+    // Wait for a bit *after* first response, then close server if no usable data has arrived
     // Helps with implicit flow, where a URL fragment may need processed by local user-agent and
     // sent as secondary query string callback, or additional requests make it through first,
     // like for favicons, etc., before such secondary callbacks are fired

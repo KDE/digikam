@@ -33,7 +33,7 @@
 ****************************************************************/
 
 /** @file
- UPnP AV Media Object reprensentation.
+ UPnP AV Media Object representation.
  */
 
 #ifndef _PLT_MEDIA_ITEM_H_

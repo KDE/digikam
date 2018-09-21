@@ -55,7 +55,7 @@ Q_SIGNALS:
 
     /**
      * @brief signalClone emitted when the src is set and the user initiated a brush click
-     * and keeps emmitting with motion
+     * and keeps emitting with motion
      */
     void signalClone(const QPoint& currentSrc, const QPoint& currentDst);
 

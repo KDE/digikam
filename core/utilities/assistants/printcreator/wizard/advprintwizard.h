@@ -24,7 +24,7 @@
 #ifndef DIGIKAM_ADV_PRINT_WIZARD_H
 #define DIGIKAM_ADV_PRINT_WIZARD_H
 
-// Qt incudes
+// Qt includes
 
 #include <QImage>
 

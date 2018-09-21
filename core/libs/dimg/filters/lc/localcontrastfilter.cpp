@@ -526,7 +526,7 @@ void LocalContrastFilter::stretchContrast(float* const data, int datasize)
         histogram[m]++;
     }
 
-    // I want to strip the lowest and upper 0.1 procents (in the histogram) of the pixels
+    // I want to strip the lowest and upper 0.1 percents (in the histogram) of the pixels
     int          min         = 0;
     int          max         = 255;
     unsigned int desired_sum = datasize / 1000;
