@@ -179,6 +179,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->boxWindow;
             d->boxWindow = new BOXWindow(iface, parent);
             d->boxWindow->show();
         }
@@ -191,6 +192,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->dbWindow;
             d->dbWindow = new DBWindow(iface, parent);
             d->dbWindow->show();
         }
@@ -203,6 +205,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->fbWindow;
             d->fbWindow = new FbWindow(iface, parent);
             d->fbWindow->show();
         }
@@ -217,6 +220,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->ftExportWindow;
             d->ftExportWindow = new FTExportWindow(iface, parent);
             d->ftExportWindow->show();
         }
@@ -231,6 +235,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->flickrWindow;
             d->flickrWindow = new FlickrWindow(iface, parent);
             d->flickrWindow->show();
         }
@@ -243,6 +248,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->gdWindow;
             d->gdWindow = new GSWindow(iface, parent, QLatin1String("googledriveexport"));
             d->gdWindow->show();
         }
@@ -255,6 +261,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->gpWindow;
             d->gpWindow = new GSWindow(iface, parent, QLatin1String("googlephotoexport"));
             d->gpWindow->show();
         }
@@ -267,6 +274,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->imageShackWindow;
             d->imageShackWindow = new ImageShackWindow(iface, parent);
             d->imageShackWindow->show();
         }
@@ -279,6 +287,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->imgurWindow;
             d->imgurWindow = new ImgurWindow(iface, parent);
             d->imgurWindow->show();
         }
@@ -291,6 +300,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->mediaWikiWindow;
             d->mediaWikiWindow = new MediaWikiWindow(iface, parent);
             d->mediaWikiWindow->show();
         }
@@ -303,6 +313,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->odWindow;
             d->odWindow = new ODWindow(iface, parent);
             d->odWindow->show();
         }
@@ -315,6 +326,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->pWindow;
             d->pWindow = new PWindow(iface, parent);
             d->pWindow->show();
         }
@@ -327,6 +339,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->piwigoWindow;
             d->piwigoWindow = new PiwigoWindow(iface, parent);
             d->piwigoWindow->show();
         }
@@ -339,6 +352,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->rajceWindow;
             d->rajceWindow = new RajceWindow(iface, parent);
             d->rajceWindow->show();
         }
@@ -351,6 +365,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->smugWindow;
             d->smugWindow = new SmugWindow(iface, parent);
             d->smugWindow->show();
         }
@@ -365,6 +380,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->vkWindow;
             d->vkWindow = new VKWindow(iface, parent);
             d->vkWindow->show();
         }
@@ -379,6 +395,7 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            delete d->yfWindow;
             d->yfWindow = new YFWindow(iface, parent);
             d->yfWindow->show();
         }
@@ -395,6 +412,7 @@ void WSStarter::fromWebService(int tool, DInfoInterface* const iface, QWidget* c
         }
         else
         {
+            delete d->gpImportWindow;
             d->gpImportWindow = new GSWindow(iface, parent, QLatin1String("googlephotoimport"));
             d->gpImportWindow->show();
         }
@@ -409,6 +427,7 @@ void WSStarter::fromWebService(int tool, DInfoInterface* const iface, QWidget* c
         }
         else
         {
+            delete d->ftImportWindow;
             d->ftImportWindow = new FTImportWindow(iface, parent);
             d->ftImportWindow->show();
         }
@@ -423,6 +442,7 @@ void WSStarter::fromWebService(int tool, DInfoInterface* const iface, QWidget* c
         }
         else
         {
+            delete d->smugImportWindow;
             d->smugImportWindow = new SmugWindow(iface, parent, true);
             d->smugImportWindow->show();
         }
