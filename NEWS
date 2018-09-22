@@ -593,4 +593,5 @@ BUGFIXES:
 529 ==> 366450 - Batch time adjust is ok, but time not adjusted in digikam thumbnail.
 530 ==> 378006 - Preview of the time adjust result.
 531 ==> 398624 - Cannot edit Date in XMP video metadata.
-532 ==> 
+532 ==> 398810 - "Dates" panel is not refreshed after a photo with a new year is added.
+533 ==> 
