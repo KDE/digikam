@@ -210,7 +210,8 @@ bool TimeAdjust::toolOperations()
 
     bool metadataChanged = prm.updEXIFModDate || prm.updEXIFOriDate ||
                            prm.updEXIFDigDate || prm.updEXIFThmDate ||
-                           prm.updIPTCDate    || prm.updXMPDate;
+                           prm.updIPTCDate    || prm.updXMPVideo    ||
+                           prm.updXMPDate;
 
     QDateTime orgDateTime;
 

@@ -101,7 +101,8 @@ void TimeAdjustTask::run()
 
     bool metadataChanged = d->settings.updEXIFModDate || d->settings.updEXIFOriDate ||
                            d->settings.updEXIFDigDate || d->settings.updEXIFThmDate ||
-                           d->settings.updIPTCDate    || d->settings.updXMPDate;
+                           d->settings.updIPTCDate    || d->settings.updXMPVideo    ||
+                           d->settings.updXMPDate;
 
     int status = TimeAdjustList::NOPROCESS_ERROR;
 
