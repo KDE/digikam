@@ -592,5 +592,5 @@ BUGFIXES:
 528 ==> 362104 - digiKam crashes when changing date and time of more than 25 selected pictures
 529 ==> 366450 - Batch time adjust is ok, but time not adjusted in digikam thumbnail.
 530 ==> 378006 - Preview of the time adjust result.
-531 ==> 
-
+531 ==> 398624 - Cannot edit Date in XMP video metadata.
+532 ==> 
