@@ -287,8 +287,8 @@ bool TimeAdjust::toolOperations()
     {
         if (prm.updEXIFModDate)
         {
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getExifTagString("Exif.Image.DateTime").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getExifTagString("Exif.Image.DateTime").isEmpty())
             {
                 meta.setExifTagString("Exif.Image.DateTime",
                                       dt.toString(exifDateTimeFormat));
@@ -297,8 +297,8 @@ bool TimeAdjust::toolOperations()
 
         if (prm.updEXIFOriDate)
         {
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getExifTagString("Exif.Photo.DateTimeOriginal").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getExifTagString("Exif.Photo.DateTimeOriginal").isEmpty())
             {
                 meta.setExifTagString("Exif.Photo.DateTimeOriginal",
                                       dt.toString(exifDateTimeFormat));
@@ -307,8 +307,8 @@ bool TimeAdjust::toolOperations()
 
         if (prm.updEXIFDigDate)
         {
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getExifTagString("Exif.Photo.DateTimeDigitized").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getExifTagString("Exif.Photo.DateTimeDigitized").isEmpty())
             {
                 meta.setExifTagString("Exif.Photo.DateTimeDigitized",
                                       dt.toString(exifDateTimeFormat));
@@ -317,8 +317,8 @@ bool TimeAdjust::toolOperations()
 
         if (prm.updEXIFThmDate)
         {
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getExifTagString("Exif.Image.PreviewDateTime").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getExifTagString("Exif.Image.PreviewDateTime").isEmpty())
             {
                 meta.setExifTagString("Exif.Image.PreviewDateTime",
                                       dt.toString(exifDateTimeFormat));
@@ -327,15 +327,15 @@ bool TimeAdjust::toolOperations()
 
         if (prm.updIPTCDate)
         {
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getIptcTagString("Iptc.Application2.DateCreated").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getIptcTagString("Iptc.Application2.DateCreated").isEmpty())
             {
                 meta.setIptcTagString("Iptc.Application2.DateCreated",
                                       dt.date().toString(Qt::ISODate));
             }
 
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getIptcTagString("Iptc.Application2.TimeCreated").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getIptcTagString("Iptc.Application2.TimeCreated").isEmpty())
             {
                 meta.setIptcTagString("Iptc.Application2.TimeCreated",
                                       dt.time().toString(Qt::ISODate));
@@ -344,43 +344,43 @@ bool TimeAdjust::toolOperations()
 
         if (prm.updXMPDate && meta.supportXmp())
         {
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getXmpTagString("Xmp.exif.DateTimeOriginal").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getXmpTagString("Xmp.exif.DateTimeOriginal").isEmpty())
             {
                 meta.setXmpTagString("Xmp.exif.DateTimeOriginal",
                                      dt.toString(xmpDateTimeFormat));
             }
 
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getXmpTagString("Xmp.photoshop.DateCreated").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getXmpTagString("Xmp.photoshop.DateCreated").isEmpty())
             {
                 meta.setXmpTagString("Xmp.photoshop.DateCreated",
                                      dt.toString(xmpDateTimeFormat));
             }
 
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getXmpTagString("Xmp.tiff.DateTime").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getXmpTagString("Xmp.tiff.DateTime").isEmpty())
             {
                 meta.setXmpTagString("Xmp.tiff.DateTime",
                                      dt.toString(xmpDateTimeFormat));
             }
 
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getXmpTagString("Xmp.xmp.CreateDate").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getXmpTagString("Xmp.xmp.CreateDate").isEmpty())
             {
                 meta.setXmpTagString("Xmp.xmp.CreateDate",
                                      dt.toString(xmpDateTimeFormat));
             }
 
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getXmpTagString("Xmp.xmp.MetadataDate").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getXmpTagString("Xmp.xmp.MetadataDate").isEmpty())
             {
                 meta.setXmpTagString("Xmp.xmp.MetadataDate",
                                      dt.toString(xmpDateTimeFormat));
             }
 
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getXmpTagString("Xmp.xmp.ModifyDate").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getXmpTagString("Xmp.xmp.ModifyDate").isEmpty())
             {
                 meta.setXmpTagString("Xmp.xmp.ModifyDate",
                                      dt.toString(xmpDateTimeFormat));
@@ -389,29 +389,29 @@ bool TimeAdjust::toolOperations()
 
         if (prm.updXMPVideo && meta.supportXmp())
         {
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getXmpTagString("Xmp.video.DateTimeOriginal").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getXmpTagString("Xmp.video.DateTimeOriginal").isEmpty())
             {
                 meta.setXmpTagString("Xmp.video.DateTimeOriginal",
                                      dt.toString(xmpDateTimeFormat));
             }
 
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getXmpTagString("Xmp.video.DateTimeDigitized").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getXmpTagString("Xmp.video.DateTimeDigitized").isEmpty())
             {
                 meta.setXmpTagString("Xmp.video.DateTimeDigitized",
                                      dt.toString(xmpDateTimeFormat));
             }
 
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getXmpTagString("Xmp.video.ModificationDate").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getXmpTagString("Xmp.video.ModificationDate").isEmpty())
             {
                 meta.setXmpTagString("Xmp.video.ModificationDate",
                                      dt.toString(xmpDateTimeFormat));
             }
 
-            if (!prm.updIfAvailable || (prm.updIfAvailable &&
-                !meta.getXmpTagString("Xmp.video.DateUTC").isEmpty()))
+            if (!prm.updIfAvailable ||
+                !meta.getXmpTagString("Xmp.video.DateUTC").isEmpty())
             {
                 meta.setXmpTagString("Xmp.video.DateUTC",
                                      dt.toUTC().toString(xmpDateTimeFormat));
