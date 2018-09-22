@@ -263,7 +263,6 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
         {
             meta.setImageDimensions(image.size());
             meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
             meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
             meta.save(path, true);
         }
