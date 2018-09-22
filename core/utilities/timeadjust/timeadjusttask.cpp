@@ -68,7 +68,7 @@ TimeAdjustTask::TimeAdjustTask(const QUrl& url)
     : ActionJob(),
       d(new Private)
 {
-    d->url   = url;
+    d->url = url;
 }
 
 TimeAdjustTask::~TimeAdjustTask()
@@ -94,10 +94,14 @@ void TimeAdjustTask::run()
 
     QDateTime dt = d->itemsMap.value(d->url);
 
-    if (!dt.isValid())
-        return;
-
     emit signalProcessStarted(d->url);
+
+    if (!dt.isValid())
+    {
+        emit signalProcessEnded(d->url, TimeAdjustList::META_TIME_ERROR);
+        emit signalDone();
+        return;
+    }
 
     bool metadataChanged = d->settings.updEXIFModDate || d->settings.updEXIFOriDate ||
                            d->settings.updEXIFDigDate || d->settings.updEXIFThmDate ||
