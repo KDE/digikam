@@ -92,9 +92,9 @@ void TimeAdjustTask::run()
     if (m_cancel)
         return;
 
-    QDateTime dt = d->itemsMap.value(d->url);
-
     emit signalProcessStarted(d->url);
+
+    QDateTime dt = d->itemsMap.value(d->url);
 
     if (!dt.isValid())
     {
@@ -305,8 +305,7 @@ void TimeAdjustTask::run()
 
     if (d->settings.updFileModDate)
     {
-        // Since QFileInfo does not support timestamp updates, see Qt suggestion #79427 at
-        // http://www.qtsoftware.com/developer/task-tracker/index_html?id=79427&method=entry
+        // Since QFileInfo does not support timestamp updates,
         // we have to use the utime() system call.
 
         int modtime;

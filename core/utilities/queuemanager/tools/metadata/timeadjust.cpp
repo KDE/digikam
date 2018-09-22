@@ -444,8 +444,7 @@ bool TimeAdjust::toolOperations()
 
     if (ret && prm.updFileModDate)
     {
-        // Since QFileInfo does not support timestamp updates, see Qt suggestion #79427 at
-        // http://www.qtsoftware.com/developer/task-tracker/index_html?id=79427&method=entry
+        // Since QFileInfo does not support timestamp updates,
         // we have to use the utime() system call.
 
         int modtime;
