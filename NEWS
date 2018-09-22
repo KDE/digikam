@@ -567,7 +567,7 @@ BUGFIXES:
 503 ==> 397305 - Failed to add tag to database.
 504 ==> 398462 - IPTC from Ligthroom.
 505 ==> 397340 - Update image file timestamps if metadata is written to sidecar file [patch].
-506 ==> 398331 - xmp sidecar files are not reloaded on change.
+506 ==> 398331 - Xmp sidecar files are not reloaded on change.
 507 ==> 380341 - Modified sidecar not rescanned.
 508 ==> 339342 - SCAN : Search for new items does not recognize modified tags in sidecar files.
 509 ==> 387351 - Meta data for RAW files checkbox disabled.
@@ -581,5 +581,16 @@ BUGFIXES:
 517 ==> 306092 - Creation date as file name - doesn't work in BQM.
 518 ==> 089993 - Allow setting time to specific date/time.
 519 ==> 099894 - TimeAdjust only modifies file modification date, not EXIF.
-520 ==> 
+520 ==> 119232 - Mass changing date for jpegs without EXIF.
+521 ==> 119634 - Batch operation to change the date to several images at the same time.
+522 ==> 134306 - Image mass tagging feature.
+523 ==> 211845 - Missing progress bar while changing images dates.
+524 ==> 249320 - Unable to change time file.
+525 ==> 282559 - Graphical interface for changing dates and time.
+526 ==> 354668 - Crashes when adjusting time and date on two or more photos at a time.
+527 ==> 360770 - Crash when adjusting time on many pictures.
+528 ==> 362104 - digiKam crashes when changing date and time of more than 25 selected pictures
+529 ==> 366450 - Batch time adjust is ok, but time not adjusted in digikam thumbnail.
+530 ==> 378006 - Preview of the time adjust result.
+531 ==> 
 
