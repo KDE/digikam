@@ -16,6 +16,8 @@ Search       : Add video support to find files based on properties registered on
 
 General      : Use DrMinGW has crash handler under Windows.
 General      : Port all export/import tool to OAuth2 authentification.
+General      : New tool to adjust quickly time and date information from items.
+               Tool will be available in AlbumView, ImageEditor, LightTable, and Showfoto.
 General      : New tool to export to Pinterest social network.
 General      : New tool to export to OneDrive webservice.
 General      : New tool to export to Box webservice.
@@ -576,4 +578,8 @@ BUGFIXES:
 514 ==> 398714 - MicrosoftPhoto:LastKeywordXMP does not show up in digkam tags list.
 515 ==> 388386 - Time adjustment tool is misleading and potentially leads to data loss.
 516 ==> 366777 - No preview for Time Adjust tool.
-517 ==> 
+517 ==> 306092 - Creation date as file name - doesn't work in BQM.
+518 ==> 089993 - Allow setting time to specific date/time.
+519 ==> 099894 - TimeAdjust only modifies file modification date, not EXIF.
+520 ==> 
+
