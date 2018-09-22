@@ -46,9 +46,10 @@ namespace Digikam
 RemoveMetadata::RemoveMetadata(QObject* const parent)
     : BatchTool(QLatin1String("RemoveMetadata"), MetadataTool, parent)
 {
-    m_removeExif = 0;
-    m_removeIptc = 0;
-    m_removeXmp  = 0;
+    m_removeExif     = 0;
+    m_removeIptc     = 0;
+    m_removeXmp      = 0;
+    m_removeXmpVideo = 0;
 
     setToolTitle(i18n("Remove Metadata"));
     setToolDescription(i18n("Remove Exif, Iptc, or Xmp metadata from images."));
@@ -61,11 +62,12 @@ RemoveMetadata::~RemoveMetadata()
 
 void RemoveMetadata::registerSettingsWidget()
 {
-    DVBox* const vbox = new DVBox;
-    m_removeExif      = new QCheckBox(i18n("Remove Exif"), vbox);
-    m_removeIptc      = new QCheckBox(i18n("Remove Iptc"), vbox);
-    m_removeXmp       = new QCheckBox(i18n("Remove Xmp"), vbox);
-    QLabel* space     = new QLabel(vbox);
+    DVBox* const vbox   = new DVBox;
+    m_removeExif        = new QCheckBox(i18n("Remove Exif"),      vbox);
+    m_removeIptc        = new QCheckBox(i18n("Remove Iptc"),      vbox);
+    m_removeXmp         = new QCheckBox(i18n("Remove Xmp"),       vbox);
+    m_removeXmpVideo    = new QCheckBox(i18n("Remove Xmp:Video"), vbox);
+    QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     m_settingsWidget = vbox;
@@ -79,15 +81,19 @@ void RemoveMetadata::registerSettingsWidget()
     connect(m_removeXmp, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
 
+    connect(m_removeXmpVideo, SIGNAL(toggled(bool)),
+            this, SLOT(slotSettingsChanged()));
+
     BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings RemoveMetadata::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert(QLatin1String("RemoveExif"), false);
-    settings.insert(QLatin1String("RemoveIptc"), false);
-    settings.insert(QLatin1String("RemoveXmp"),  false);
+    settings.insert(QLatin1String("RemoveExif"),     false);
+    settings.insert(QLatin1String("RemoveIptc"),     false);
+    settings.insert(QLatin1String("RemoveXmp"),      false);
+    settings.insert(QLatin1String("RemoveXmpVideo"), false);
     return settings;
 }
 
@@ -96,14 +102,16 @@ void RemoveMetadata::slotAssignSettings2Widget()
     m_removeExif->setChecked(settings()[QLatin1String("RemoveExif")].toBool());
     m_removeIptc->setChecked(settings()[QLatin1String("RemoveIptc")].toBool());
     m_removeXmp->setChecked(settings()[QLatin1String("RemoveXmp")].toBool());
+    m_removeXmpVideo->setChecked(settings()[QLatin1String("RemoveXmpVideo")].toBool());
 }
 
 void RemoveMetadata::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    settings.insert(QLatin1String("RemoveExif"), m_removeExif->isChecked());
-    settings.insert(QLatin1String("RemoveIptc"), m_removeIptc->isChecked());
-    settings.insert(QLatin1String("RemoveXmp"),  m_removeXmp->isChecked());
+    settings.insert(QLatin1String("RemoveExif"),     m_removeExif->isChecked());
+    settings.insert(QLatin1String("RemoveIptc"),     m_removeIptc->isChecked());
+    settings.insert(QLatin1String("RemoveXmp"),      m_removeXmp->isChecked());
+    settings.insert(QLatin1String("RemoveXmpVideo"), m_removeXmpVideo->isChecked());
     BatchTool::slotSettingsChanged(settings);
 }
 
@@ -134,9 +142,10 @@ bool RemoveMetadata::toolOperations()
         meta.setData(image().getMetadata());
     }
 
-    bool removeExif = settings()[QLatin1String("RemoveExif")].toBool();
-    bool removeIptc = settings()[QLatin1String("RemoveIptc")].toBool();
-    bool removeXmp  = settings()[QLatin1String("RemoveXmp")].toBool();
+    bool removeExif     = settings()[QLatin1String("RemoveExif")].toBool();
+    bool removeIptc     = settings()[QLatin1String("RemoveIptc")].toBool();
+    bool removeXmp      = settings()[QLatin1String("RemoveXmp")].toBool();
+    bool removeXmpVideo = settings()[QLatin1String("RemoveXmpVideo")].toBool();
 
     if (removeExif)
     {
@@ -153,7 +162,12 @@ bool RemoveMetadata::toolOperations()
         meta.clearXmp();
     }
 
-    if (ret && (removeExif || removeIptc || removeXmp))
+    if (!removeXmp && removeXmpVideo)
+    {
+        meta.removeXmpTags(QStringList() << QLatin1String("video"));
+    }
+
+    if (ret && (removeExif || removeIptc || removeXmp || removeXmpVideo))
     {
         ret = meta.save(outputUrl().toLocalFile());
     }
