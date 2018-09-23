@@ -38,6 +38,7 @@
 #include "digikam_debug.h"
 #include "albummodel.h"
 #include "contextmenuhelper.h"
+#include "tagmodificationhelper.h"
 
 namespace Digikam
 {
@@ -83,6 +84,10 @@ TagFilterView::TagFilterView(QWidget* const parent, TagModel* const tagFilterMod
     d->ignoreTagAction            = d->tagFilterModeAction->addAction(i18n("Ignore This Tag"));
     d->includeTagAction           = d->tagFilterModeAction->addAction(QIcon::fromTheme(QLatin1String("list-add")),    i18n("Must Have This Tag"));
     d->excludeTagAction           = d->tagFilterModeAction->addAction(QIcon::fromTheme(QLatin1String("list-remove")), i18n("Must Not Have This Tag"));
+
+    connect(tagModificationHelper(), SIGNAL(aboutToDeleteTag(TAlbum*)),
+            this, SLOT(slotDeleteTagByContextMenu(TAlbum*)));
+
 }
 
 TagFilterView::~TagFilterView()
@@ -147,6 +152,11 @@ void TagFilterView::handleCustomContextMenuAction(QAction* action, AlbumPointer<
     {
         albumModel()->setCheckState(album, Qt::PartiallyChecked);
     }
+}
+
+void TagFilterView::slotDeleteTagByContextMenu(TAlbum* tag)
+{
+    albumModel()->setCheckState(tag, Qt::Unchecked);
 }
 
 } // namespace Digikam
