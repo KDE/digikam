@@ -125,6 +125,10 @@ public:
      */
     void createMetadataEditAction();
 
+    /** Create Time Adjust tool action.
+     */
+    void createTimeAdjustAction();
+
     /** Create Presentation tool action.
      */
     void createPresentationAction();
@@ -160,10 +164,6 @@ public:
     /** Create Media Server action to share through DLNA.
      */
     void createMediaServerAction();
-
-    /** Create Time Adjust tool action.
-     */
-    void createTimeAdjustAction();
 
     /** Create common actions to setup all digiKam main windows.
      */
