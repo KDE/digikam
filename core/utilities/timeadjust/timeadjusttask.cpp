@@ -116,14 +116,14 @@ void TimeAdjustTask::run()
 
         DMetadata meta;
 
-        ret &= meta.load(d->url.path());
+        ret &= meta.load(d->url.toLocalFile());
 
         if (ret)
         {
             QString exifDateTimeFormat = QLatin1String("yyyy:MM:dd hh:mm:ss");
             QString xmpDateTimeFormat  = QLatin1String("yyyy:MM:ddThh:mm:ss");
 
-            if (meta.canWriteExif(d->url.path()))
+            if (meta.canWriteExif(d->url.toLocalFile()))
             {
                 if (d->settings.updEXIFModDate)
                 {
@@ -173,7 +173,7 @@ void TimeAdjustTask::run()
 
             if (d->settings.updIPTCDate)
             {
-                if (meta.canWriteIptc(d->url.path()))
+                if (meta.canWriteIptc(d->url.toLocalFile()))
                 {
                     if (!d->settings.updIfAvailable ||
                         !meta.getIptcTagString("Iptc.Application2.DateCreated").isEmpty())
@@ -197,7 +197,7 @@ void TimeAdjustTask::run()
 
             if (d->settings.updXMPDate)
             {
-                if (meta.supportXmp() && meta.canWriteXmp(d->url.path()))
+                if (meta.supportXmp() && meta.canWriteXmp(d->url.toLocalFile()))
                 {
                     if (!d->settings.updIfAvailable ||
                         !meta.getXmpTagString("Xmp.exif.DateTimeOriginal").isEmpty())
@@ -249,7 +249,7 @@ void TimeAdjustTask::run()
 
             if (d->settings.updXMPVideo)
             {
-                if (meta.supportXmp() && meta.canWriteXmp(d->url.path()))
+                if (meta.supportXmp() && meta.canWriteXmp(d->url.toLocalFile()))
                 {
                     if (!d->settings.updIfAvailable ||
                         !meta.getXmpTagString("Xmp.video.DateTimeOriginal").isEmpty())
@@ -285,7 +285,7 @@ void TimeAdjustTask::run()
                 }
             }
 
-            ret &= meta.save(d->url.path());
+            ret &= meta.save(d->url.toLocalFile());
 
             if (!ret)
             {
