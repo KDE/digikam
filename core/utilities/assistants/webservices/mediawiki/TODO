@@ -4,7 +4,7 @@ https://www.mediawiki.org/wiki/MediaWiki
 TODO:
 
 * Allow image resizing by a percentage of the initial size
-* Add explicit error messages (might require hacking libmediawiki)
+* Add explicit error messages (might require hacking MediaWiki interface)
 * Check for local duplicate file names (easy)
 * Check for distant duplicate file names (API)
 * Check for distant duplicate files (API)
