@@ -1833,7 +1833,7 @@ void CoreDB::addImageInformation(qlonglong imageID, const QVariantList& infos,
     boundValues << infos;
 
     d->db->execSql(query, boundValues);
-    d->db->recordChangeset(ImageChangeset(imageID, fields));
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(fields)));
 }
 
 void CoreDB::changeImageInformation(qlonglong imageId, const QVariantList& infos,
@@ -1848,7 +1848,7 @@ void CoreDB::changeImageInformation(qlonglong imageId, const QVariantList& infos
 
     d->db->execUpsertDBAction(QLatin1String("changeImageInformation"),
                               imageId, fieldNames, infos);
-    d->db->recordChangeset(ImageChangeset(imageId, fields));
+    d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::Set(fields)));
 }
 
 void CoreDB::addImageMetadata(qlonglong imageID, const QVariantList& infos,
@@ -1873,7 +1873,7 @@ void CoreDB::addImageMetadata(qlonglong imageID, const QVariantList& infos,
     boundValues << imageID << infos;
 
     d->db->execSql(query, boundValues);
-    d->db->recordChangeset(ImageChangeset(imageID, fields));
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(fields)));
 }
 
 void CoreDB::changeImageMetadata(qlonglong imageId, const QVariantList& infos,
@@ -1897,7 +1897,7 @@ void CoreDB::changeImageMetadata(qlonglong imageId, const QVariantList& infos,
     boundValues << infos << imageId;
 
     d->db->execSql(query, boundValues);
-    d->db->recordChangeset(ImageChangeset(imageId, fields));
+    d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::Set(fields)));
 }
 
 void CoreDB::addVideoMetadata(qlonglong imageID, const QVariantList& infos, DatabaseFields::VideoMetadata fields)
@@ -1921,7 +1921,7 @@ void CoreDB::addVideoMetadata(qlonglong imageID, const QVariantList& infos, Data
     boundValues << imageID << infos;
 
     d->db->execSql(query, boundValues);
-    d->db->recordChangeset(ImageChangeset(imageID, fields));
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(fields)));
 }
 
 void CoreDB::changeVideoMetadata(qlonglong imageId, const QVariantList& infos,
@@ -1944,7 +1944,7 @@ void CoreDB::changeVideoMetadata(qlonglong imageId, const QVariantList& infos,
     boundValues << infos << imageId;
 
     d->db->execSql(query, boundValues);
-    d->db->recordChangeset(ImageChangeset(imageId, fields));
+    d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::Set(fields)));
 }
 
 void CoreDB::addImagePosition(qlonglong imageID, const QVariantList& infos, DatabaseFields::ImagePositions fields)
@@ -1968,7 +1968,7 @@ void CoreDB::addImagePosition(qlonglong imageID, const QVariantList& infos, Data
     boundValues << imageID << infos;
 
     d->db->execSql(query, boundValues);
-    d->db->recordChangeset(ImageChangeset(imageID, fields));
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(fields)));
 }
 
 void CoreDB::changeImagePosition(qlonglong imageId, const QVariantList& infos,
@@ -1991,7 +1991,7 @@ void CoreDB::changeImagePosition(qlonglong imageId, const QVariantList& infos,
     boundValues << infos << imageId;
 
     d->db->execSql(query, boundValues);
-    d->db->recordChangeset(ImageChangeset(imageId, fields));
+    d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::Set(fields)));
 }
 
 void CoreDB::removeImagePosition(qlonglong imageid)
@@ -1999,7 +1999,7 @@ void CoreDB::removeImagePosition(qlonglong imageid)
     d->db->execSql(QString(QString::fromUtf8("DELETE FROM ImagePositions WHERE imageid=?;")),
                    imageid);
 
-    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::ImagePositionsAll));
+    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::Set(DatabaseFields::ImagePositionsAll)));
 }
 
 void CoreDB::removeImagePositionAltitude(qlonglong imageid)
@@ -2007,7 +2007,7 @@ void CoreDB::removeImagePositionAltitude(qlonglong imageid)
     d->db->execSql(QString(QString::fromUtf8("UPDATE ImagePositions SET altitude=NULL WHERE imageid=?;")),
                    imageid);
 
-    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::Altitude));
+    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::Set(DatabaseFields::Altitude)));
 }
 
 QList<CommentInfo> CoreDB::getImageComments(qlonglong imageID)
@@ -2055,7 +2055,7 @@ int CoreDB::setImageComment(qlonglong imageID, const QString& comment, DatabaseC
                            " VALUES (?,?,?,?,?,?);"),
                    boundValues, 0, &id);
 
-    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::ImageCommentsAll));
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(DatabaseFields::ImageCommentsAll)));
     return id.toInt();
 }
 
@@ -2078,7 +2078,7 @@ void CoreDB::changeImageComment(int commentId, qlonglong imageID, const QVariant
     boundValues << infos << commentId;
 
     d->db->execSql(query, boundValues);
-    d->db->recordChangeset(ImageChangeset(imageID, fields));
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(fields)));
 }
 
 void CoreDB::removeImageComment(int commentid, qlonglong imageid)
@@ -2086,7 +2086,7 @@ void CoreDB::removeImageComment(int commentid, qlonglong imageid)
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageComments WHERE id=?;"),
                    commentid);
 
-    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::ImageCommentsAll));
+    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::Set(DatabaseFields::ImageCommentsAll)));
 }
 
 QString CoreDB::getImageProperty(qlonglong imageID, const QString& property)
@@ -2336,20 +2336,21 @@ QString CoreDB::getImageUuid(qlonglong imageId)
 void CoreDB::setImageHistory(qlonglong imageId, const QString& history)
 {
     d->db->execUpsertDBAction(QLatin1String("changeImageHistory"), imageId, QStringList() << QLatin1String("history"), QVariantList() << history);
-    d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::ImageHistory));
+    d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::Set(DatabaseFields::ImageHistory)));
 }
 
 void CoreDB::setImageUuid(qlonglong imageId, const QString& uuid)
 {
     d->db->execUpsertDBAction(QLatin1String("changeImageHistory"), imageId, QStringList() << QLatin1String("uuid"), QVariantList() << uuid);
-    d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::ImageUUID));
+    d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::Set(DatabaseFields::ImageUUID)));
 }
 
 void CoreDB::addImageRelation(qlonglong subjectId, qlonglong objectId, DatabaseRelation::Type type)
 {
     d->db->execSql(QString::fromUtf8("REPLACE INTO ImageRelations (subject, object, type) VALUES (?, ?, ?);"),
                    subjectId, objectId, type);
-    d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << subjectId << objectId, DatabaseFields::ImageRelations));
+    d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << subjectId << objectId,
+                                          DatabaseFields::Set(DatabaseFields::ImageRelations)));
 }
 
 void CoreDB::addImageRelations(const QList<qlonglong>& subjectIds, const QList<qlonglong>& objectIds, DatabaseRelation::Type type)
@@ -2369,7 +2370,8 @@ void CoreDB::addImageRelations(const QList<qlonglong>& subjectIds, const QList<q
     query.addBindValue(objects);
     query.addBindValue(types);
     d->db->execBatch(query);
-    d->db->recordChangeset(ImageChangeset(subjectIds + objectIds, DatabaseFields::ImageRelations));
+    d->db->recordChangeset(ImageChangeset(subjectIds + objectIds,
+                                          DatabaseFields::Set(DatabaseFields::ImageRelations)));
 }
 
 
@@ -2382,7 +2384,8 @@ void CoreDB::removeImageRelation(qlonglong subjectId, qlonglong objectId, Databa
 {
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageRelations WHERE subject=? AND object=? AND type=?;"),
                    subjectId, objectId, type);
-    d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << subjectId << objectId, DatabaseFields::ImageRelations));
+    d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << subjectId << objectId,
+                                          DatabaseFields::Set(DatabaseFields::ImageRelations)));
 }
 
 void CoreDB::removeImageRelation(const ImageRelation& relation)
@@ -2401,7 +2404,8 @@ QList<qlonglong> CoreDB::removeAllImageRelationsTo(qlonglong objectId, DatabaseR
 
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageRelations WHERE object=? AND type=?;"),
                    objectId, type);
-    d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << affected << objectId, DatabaseFields::ImageRelations));
+    d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << affected << objectId,
+                                          DatabaseFields::Set(DatabaseFields::ImageRelations)));
 
     return affected;
 }
@@ -2417,7 +2421,8 @@ QList<qlonglong> CoreDB::removeAllImageRelationsFrom(qlonglong subjectId, Databa
 
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageRelations WHERE subject=? AND type=?;"),
                    subjectId, type);
-    d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << affected << subjectId, DatabaseFields::ImageRelations));
+    d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << affected << subjectId, 
+                                          DatabaseFields::Set(DatabaseFields::ImageRelations)));
 
     return affected;
 }
@@ -3728,8 +3733,9 @@ qlonglong CoreDB::addItem(int albumID, const QString& name,
         return -1;
     }
 
-    d->db->recordChangeset(ImageChangeset(id.toLongLong(), DatabaseFields::ImagesAll));
-    d->db->recordChangeset(CollectionImageChangeset(id.toLongLong(), albumID, CollectionImageChangeset::Added));
+    d->db->recordChangeset(ImageChangeset(id.toLongLong(), DatabaseFields::Set(DatabaseFields::ImagesAll)));
+    d->db->recordChangeset(CollectionImageChangeset(id.toLongLong(), albumID, 
+                                                    CollectionImageChangeset::Added));
     return id.toLongLong();
 }
 
@@ -3743,10 +3749,11 @@ void CoreDB::updateItem(qlonglong imageID, DatabaseItem::Category category,
     d->db->execSql(QString::fromUtf8("UPDATE Images SET category=?, modificationDate=?, fileSize=?, uniqueHash=? WHERE id=?;"),
                    boundValues);
 
-    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Category
-                                          | DatabaseFields::ModificationDate
-                                          | DatabaseFields::FileSize
-                                          | DatabaseFields::UniqueHash));
+    d->db->recordChangeset(ImageChangeset(imageID, 
+                                          DatabaseFields::Set(DatabaseFields::Category         |
+                                                              DatabaseFields::ModificationDate |
+                                                              DatabaseFields::FileSize         |
+                                                              DatabaseFields::UniqueHash)));
 }
 
 void CoreDB::setItemStatus(qlonglong imageID, DatabaseItem::Status status)
@@ -3755,7 +3762,7 @@ void CoreDB::setItemStatus(qlonglong imageID, DatabaseItem::Status status)
     boundValues << (int)status << imageID;
     d->db->execSql(QString::fromUtf8("UPDATE Images SET status=? WHERE id=?;"),
                    boundValues);
-    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Status));
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(DatabaseFields::Status)));
 }
 
 void CoreDB::setItemAlbum(qlonglong imageID, qlonglong album)
@@ -3766,7 +3773,7 @@ void CoreDB::setItemAlbum(qlonglong imageID, qlonglong album)
                    boundValues);
 
     // record that the image was assigned a new album
-    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Album));
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(DatabaseFields::Album)));
     // also record that the collection was changed by adding an image to an album.
     d->db->recordChangeset(CollectionImageChangeset(imageID, album, CollectionImageChangeset::Added));
 }
@@ -3778,7 +3785,7 @@ void CoreDB::setItemManualOrder(qlonglong imageID, qlonglong value)
     d->db->execSql(QString::fromUtf8("UPDATE Images SET manualOrder=? WHERE id=?;"),
                    boundValues);
 
-    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::ManualOrder));
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(DatabaseFields::ManualOrder)));
 }
 
 void CoreDB::renameItem(qlonglong imageID, const QString& newName)
@@ -4685,7 +4692,7 @@ int CoreDB::copyItem(int srcAlbumID, const QString& srcName,
         return -1;
     }
 
-    d->db->recordChangeset(ImageChangeset(id.toLongLong(), DatabaseFields::ImagesAll));
+    d->db->recordChangeset(ImageChangeset(id.toLongLong(), DatabaseFields::Set(DatabaseFields::ImagesAll)));
     d->db->recordChangeset(CollectionImageChangeset(id.toLongLong(), srcAlbumID, CollectionImageChangeset::Copied));
     d->db->recordChangeset(CollectionImageChangeset(id.toLongLong(), dstAlbumID, CollectionImageChangeset::Added));
 

@@ -167,44 +167,44 @@ void DatabaseFieldsTest::testSetHashAddSets()
     int itemCount = 0;
 
     QVERIFY(t.isEmpty());
-    t = SetHashAddSets(t, ImagesFirst);
+    t = SetHashAddSets(t, DatabaseFields::Set(ImagesFirst));
     ++itemCount;
     QCOMPARE(t.size(), itemCount);
     QCOMPARE(t.value(ImagesFirst).getImages(), ImagesFirst);
 
-    t = SetHashAddSets(t, ImagesLast);
+    t = SetHashAddSets(t, DatabaseFields::Set(ImagesLast));
     ++itemCount;
     QCOMPARE(t.size(), itemCount);
     QCOMPARE(t.value(ImagesFirst).getImages(), ImagesFirst);
 
     // test insertion of or`ed values
-    t = SetHashAddSets(t, ImageInformationFirst|ImageInformationLast);
+    t = SetHashAddSets(t, DatabaseFields::Set(ImageInformationFirst | ImageInformationLast));
     itemCount+=2;
     QCOMPARE(t.size(), itemCount);
     QCOMPARE(t.value(ImageInformationFirst).getImageInformation(), ImageInformationFirst);
     QCOMPARE(t.value(ImageInformationLast).getImageInformation(), ImageInformationLast);
 
-    t = SetHashAddSets(t, ImageMetadataFirst);
+    t = SetHashAddSets(t, DatabaseFields::Set(ImageMetadataFirst));
     ++itemCount;
     QCOMPARE(t.size(), itemCount);
     QCOMPARE(t.value(ImageMetadataFirst).getImageMetadata(), ImageMetadataFirst);
 
-    t = SetHashAddSets(t, VideoMetadataFirst);
+    t = SetHashAddSets(t, DatabaseFields::Set(VideoMetadataFirst));
     ++itemCount;
     QCOMPARE(t.size(), itemCount);
     QCOMPARE(t.value(VideoMetadataFirst).getVideoMetadata(), VideoMetadataFirst);
 
-    t = SetHashAddSets(t, ImageCommentsFirst);
+    t = SetHashAddSets(t, DatabaseFields::Set(ImageCommentsFirst));
     ++itemCount;
     QCOMPARE(t.size(), itemCount);
     QCOMPARE(t.value(ImageCommentsFirst).getImageComments(), ImageCommentsFirst);
 
-    t = SetHashAddSets(t, ImagePositionsFirst);
+    t = SetHashAddSets(t, DatabaseFields::Set(ImagePositionsFirst));
     ++itemCount;
     QCOMPARE(t.size(), itemCount);
     QCOMPARE(t.value(ImagePositionsFirst).getImagePositions(), ImagePositionsFirst);
 
-    t = SetHashAddSets(t, ImageHistoryInfoFirst);
+    t = SetHashAddSets(t, DatabaseFields::Set(ImageHistoryInfoFirst));
     ++itemCount;
     QCOMPARE(t.size(), itemCount);
     QCOMPARE(t.value(ImageHistoryInfoFirst).getImageHistoryInfo(), ImageHistoryInfoFirst);
@@ -214,13 +214,13 @@ void DatabaseFieldsTest::testSetHashAddSets()
 void DatabaseFieldsTest::testHashRemoveAll()
 {
     Set setToAdd =
-                Set(ImagesFirst|ImagesLast)
-                .setFields(ImageInformationFirst)
-                .setFields(ImageMetadataFirst)
-                .setFields(VideoMetadataFirst)
-                .setFields(ImageCommentsFirst)
-                .setFields(ImagePositionsFirst|ImagePositionsLast)
-                .setFields(ImageHistoryInfoFirst);
+                Set(DatabaseFields::Set(ImagesFirst | ImagesLast))
+                .setFields(DatabaseFields::Set(ImageInformationFirst))
+                .setFields(DatabaseFields::Set(ImageMetadataFirst))
+                .setFields(DatabaseFields::Set(VideoMetadataFirst))
+                .setFields(DatabaseFields::Set(ImageCommentsFirst))
+                .setFields(DatabaseFields::Set(ImagePositionsFirst | ImagePositionsLast))
+                .setFields(DatabaseFields::Set(ImageHistoryInfoFirst));
 
     SetHash t;
     t = SetHashAddSets(t, setToAdd);

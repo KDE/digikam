@@ -150,24 +150,28 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
     {
         case SubColumnCameraMaker:
         {
-            QString cameraMaker = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Make).toString();
+            QString cameraMaker = s->tableViewModel->itemDatabaseFieldRaw(item,
+                DatabaseFields::Set(DatabaseFields::Make)).toString();
             ImagePropertiesTab::shortenedMakeInfo(cameraMaker);
             return cameraMaker;
         }
         case SubColumnCameraModel:
         {
-            QString cameraModel = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Model).toString();
+            QString cameraModel = s->tableViewModel->itemDatabaseFieldRaw(item,
+                DatabaseFields::Set(DatabaseFields::Model)).toString();
             ImagePropertiesTab::shortenedModelInfo(cameraModel);
             return cameraModel;
         }
         case SubColumnLens:
         {
-            const QString cameraLens = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Lens).toString();
+            const QString cameraLens = s->tableViewModel->itemDatabaseFieldRaw(item,
+                DatabaseFields::Set(DatabaseFields::Lens)).toString();
             return cameraLens;
         }
         case SubColumnAperture:
         {
-            const QVariant apertureVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Aperture);
+            const QVariant apertureVariant = s->tableViewModel->itemDatabaseFieldRaw(item,
+                DatabaseFields::Set(DatabaseFields::Aperture));
             const QString apertureString   = DMetadata::valueToString(apertureVariant, MetadataInfo::Aperture);
 
             return apertureString;
@@ -175,7 +179,7 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
         case SubColumnFocal:
         {
             /// @todo Make this configurable
-            const DatabaseFields::Set requiredSet                 = DatabaseFields::FocalLength | DatabaseFields::FocalLength35;
+            const DatabaseFields::Set requiredSet                 = DatabaseFields::Set(DatabaseFields::FocalLength | DatabaseFields::FocalLength35);
             const TableViewModel::DatabaseFieldsHashRaw rawFields = s->tableViewModel->itemDatabaseFieldsRaw(item, requiredSet);
             const QVariant focalLengthVariant                     = rawFields.value(DatabaseFields::FocalLength);
             const QString focalLengthString                       = DMetadata::valueToString(focalLengthVariant, MetadataInfo::FocalLength);
@@ -198,7 +202,8 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
         case SubColumnExposure:
         {
             /// @todo Add a configuration option for fraction vs number, units s vs ms vs mus
-            const QVariant exposureVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::ExposureTime);
+            const QVariant exposureVariant = s->tableViewModel->itemDatabaseFieldRaw(item,
+                DatabaseFields::Set(DatabaseFields::ExposureTime));
 
             if (configuration.getSetting(QLatin1String("format"), QLatin1String("fraction")) == QLatin1String("fraction"))
             {
@@ -241,7 +246,8 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
         }
         case SubColumnSensitivity:
         {
-            const QVariant sensitivityVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Sensitivity);
+            const QVariant sensitivityVariant = s->tableViewModel->itemDatabaseFieldRaw(item,
+                DatabaseFields::Set(DatabaseFields::Sensitivity));
             const QString sensitivityString   = DMetadata::valueToString(sensitivityVariant, MetadataInfo::Sensitivity);
 
             if (sensitivityString.isEmpty())
@@ -253,7 +259,7 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
         }
         case SubColumnModeProgram:
         {
-            const DatabaseFields::Set requiredSet                 = DatabaseFields::ExposureMode | DatabaseFields::ExposureProgram;
+            const DatabaseFields::Set requiredSet                 = DatabaseFields::Set(DatabaseFields::ExposureMode | DatabaseFields::ExposureProgram);
             const TableViewModel::DatabaseFieldsHashRaw rawFields = s->tableViewModel->itemDatabaseFieldsRaw(item, requiredSet);
             const QVariant exposureModeVariant                    = rawFields.value(DatabaseFields::ExposureMode);
             const QString exposureModeString                      = DMetadata::valueToString(exposureModeVariant, MetadataInfo::ExposureMode);
@@ -277,14 +283,16 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
         }
         case SubColumnFlash:
         {
-            const QVariant flashModeVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::FlashMode);
+            const QVariant flashModeVariant = s->tableViewModel->itemDatabaseFieldRaw(item,
+                DatabaseFields::Set(DatabaseFields::FlashMode));
             const QString flashModeString   = DMetadata::valueToString(flashModeVariant, MetadataInfo::FlashMode);
 
             return flashModeString;
         }
         case SubColumnWhiteBalance:
         {
-            const QVariant whiteBalanceVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::WhiteBalance);
+            const QVariant whiteBalanceVariant = s->tableViewModel->itemDatabaseFieldRaw(item,
+                DatabaseFields::Set(DatabaseFields::WhiteBalance));
             const QString whiteBalanceString   = DMetadata::valueToString(whiteBalanceVariant, MetadataInfo::WhiteBalance);
 
             return whiteBalanceString;
@@ -304,8 +312,10 @@ TableViewColumn::ColumnCompareResult ColumnPhotoProperties::compare(TableViewMod
 
         case SubColumnAperture:
         {
-            const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::Aperture);
-            const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::Aperture);
+            const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA,
+                DatabaseFields::Set(DatabaseFields::Aperture));
+            const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, 
+                DatabaseFields::Set(DatabaseFields::Aperture));
             const double apertureA  = variantA.toDouble();
             const double apertureB  = variantB.toDouble();
 
@@ -315,8 +325,10 @@ TableViewColumn::ColumnCompareResult ColumnPhotoProperties::compare(TableViewMod
         case SubColumnFocal:
         {
             /// @todo This just works if both have focal length set, not if focal length 35 has to be used
-            const QVariant variantA   = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::FocalLength);
-            const QVariant variantB   = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::FocalLength);
+            const QVariant variantA   = s->tableViewModel->itemDatabaseFieldRaw(itemA, 
+                DatabaseFields::Set(DatabaseFields::FocalLength));
+            const QVariant variantB   = s->tableViewModel->itemDatabaseFieldRaw(itemB, 
+                DatabaseFields::Set(DatabaseFields::FocalLength));
             const double focalLengthA = variantA.toDouble();
             const double focalLengthB = variantB.toDouble();
 
@@ -325,8 +337,10 @@ TableViewColumn::ColumnCompareResult ColumnPhotoProperties::compare(TableViewMod
 
         case SubColumnExposure:
         {
-            const QVariant variantA    = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::ExposureTime);
-            const QVariant variantB    = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::ExposureTime);
+            const QVariant variantA    = s->tableViewModel->itemDatabaseFieldRaw(itemA,
+                DatabaseFields::Set(DatabaseFields::ExposureTime));
+            const QVariant variantB    = s->tableViewModel->itemDatabaseFieldRaw(itemB,
+                DatabaseFields::Set(DatabaseFields::ExposureTime));
             const double exposureTimeA = variantA.toDouble();
             const double exposureTimeB = variantB.toDouble();
 
@@ -335,8 +349,10 @@ TableViewColumn::ColumnCompareResult ColumnPhotoProperties::compare(TableViewMod
 
         case SubColumnSensitivity:
         {
-            const QVariant variantA   = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::Sensitivity);
-            const QVariant variantB   = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::Sensitivity);
+            const QVariant variantA   = s->tableViewModel->itemDatabaseFieldRaw(itemA,
+                DatabaseFields::Set(DatabaseFields::Sensitivity));
+            const QVariant variantB   = s->tableViewModel->itemDatabaseFieldRaw(itemB,
+                DatabaseFields::Set(DatabaseFields::Sensitivity));
             const double sensitivityA = variantA.toDouble();
             const double sensitivityB = variantB.toDouble();
 

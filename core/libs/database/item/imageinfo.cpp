@@ -1386,8 +1386,9 @@ ImageMetadataContainer ImageInfo::imageMetadataContainer() const
     }
 
     ImageMetadataContainer container;
-    const DatabaseFieldsHashRaw rawVideoMetadata = getDatabaseFieldsRaw(DatabaseFields::ImageMetadataAll);
-    bool allFieldsNull = true;
+    const DatabaseFieldsHashRaw rawVideoMetadata = getDatabaseFieldsRaw(DatabaseFields::Set(DatabaseFields::ImageMetadataAll));
+    bool allFieldsNull                           = true;
+
     for (DatabaseFields::ImageMetadataIterator it ; !it.atEnd() ; ++it)
     {
         const QVariant fieldValue = rawVideoMetadata.value(*it);
@@ -1397,7 +1398,7 @@ ImageMetadataContainer ImageInfo::imageMetadataContainer() const
         if (!fieldValue.isNull())
         {
             const MetadataInfo::Field mdField = DatabaseImageMetadataFieldsToMetadataInfoField(*it);
-            const QString fieldString = DMetadata::valueToString(fieldValue, mdField);
+            const QString fieldString         = DMetadata::valueToString(fieldValue, mdField);
 
             switch (*it)
             {
@@ -1481,9 +1482,9 @@ VideoMetadataContainer ImageInfo::videoMetadataContainer() const
     }
 
     VideoMetadataContainer container;
-    const DatabaseFieldsHashRaw rawVideoMetadata = getDatabaseFieldsRaw(DatabaseFields::VideoMetadataAll);
+    const DatabaseFieldsHashRaw rawVideoMetadata = getDatabaseFieldsRaw(DatabaseFields::Set(DatabaseFields::VideoMetadataAll));
+    bool allFieldsNull                           = true;
 
-    bool allFieldsNull = true;
     for (DatabaseFields::VideoMetadataIterator it ; !it.atEnd() ; ++it)
     {
         const QVariant fieldValue = rawVideoMetadata.value(*it);
@@ -1493,7 +1494,7 @@ VideoMetadataContainer ImageInfo::videoMetadataContainer() const
         if (!fieldValue.isNull())
         {
             const MetadataInfo::Field mdField = DatabaseVideoMetadataFieldsToMetadataInfoField(*it);
-            const QString fieldString = DMetadata::valueToString(fieldValue, mdField);
+            const QString fieldString         = DMetadata::valueToString(fieldValue, mdField);
 
             switch (*it)
             {
