@@ -41,6 +41,7 @@
 #include "digikam_debug.h"
 #include "albummanager.h"
 #include "albumpropsedit.h"
+#include "albumpointer.h"
 #include "applicationsettings.h"
 #include "collectionmanager.h"
 #include "deletedialog.h"

@@ -52,6 +52,7 @@
 #include "album.h"
 #include "coredb.h"
 #include "albummanager.h"
+#include "albumpointer.h"
 #include "albummodificationhelper.h"
 #include "abstractalbummodel.h"
 #include "coredbaccess.h"

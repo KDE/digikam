@@ -44,6 +44,7 @@
 
 #include "albumhistory.h"
 #include "albumlabelstreeview.h"
+#include "albumpointer.h"
 #include "coredbsearchxml.h"
 #include "digikam_config.h"
 #include "digikam_debug.h"

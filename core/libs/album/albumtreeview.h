@@ -35,6 +35,7 @@
 #include "albummanager.h"
 #include "albummodel.h"
 #include "albumfiltermodel.h"
+#include "albumpointer.h"
 #include "statesavingobject.h"
 
 namespace Digikam
