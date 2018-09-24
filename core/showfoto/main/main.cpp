@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
     QList<QUrl> urlList;
     QStringList urls = parser.positionalArguments();
 
-    foreach(const QString& url, urls)
+    foreach (const QString& url, urls)
     {
         urlList.append(QUrl::fromLocalFile(url));
     }

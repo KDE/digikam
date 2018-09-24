@@ -387,13 +387,12 @@ void ShowFoto::slotOpenFilesInFolder()
         return;
     }
 
-    QUrl url = QUrl::fromLocalFile(DFileDialog::getExistingDirectory(this, i18n("Open Images From Folder"),
-                                                                     d->lastOpenedDirectory.toLocalFile()));
+    QUrl url = DFileDialog::getExistingDirectoryUrl(this, i18n("Open Images From Folder"),
+                                                    d->lastOpenedDirectory);
     if (!url.isEmpty())
     {
         m_canvas->load(QString(), m_IOFileSettings);
         d->thumbBar->showfotoItemInfos().clear();
-        d->lastOpenedDirectory = url;
         emit signalNoCurrentItem();
 
         openFolder(url);
@@ -686,6 +685,8 @@ void ShowFoto::openFolder(const QUrl& url)
         return;
     }
 
+    d->lastOpenedDirectory = url;
+
     // Parse image IO mime types registration to get files filter pattern.
 
     QString filter;
@@ -749,8 +750,6 @@ void ShowFoto::openFolder(const QUrl& url)
         emit signalInfoList(d->infoList);
         slotOpenUrl(d->thumbBar->currentInfo());
     }
-
-    d->lastOpenedDirectory = QUrl::fromLocalFile(dir.absolutePath());
 }
 
 void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)
@@ -825,7 +824,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
     QList<QUrl> list = e->mimeData()->urls();
     QList<QUrl> urls;
 
-    foreach(const QUrl& url, list)
+    foreach (const QUrl& url, list)
     {
         QFileInfo fi(url.toLocalFile());
 
