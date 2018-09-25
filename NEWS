@@ -595,4 +595,5 @@ BUGFIXES:
 531 ==> 398624 - Cannot edit Date in XMP video metadata.
 532 ==> 398810 - "Dates" panel is not refreshed after a photo with a new year is added.
 533 ==> 398986 - Deleting a tag while using it as filter removes all images from the current view.
-534 ==> 
+534 ==> 370093 - Opening a picture (double-click) in Showfoto (default viewer) does not show the other pictures in the folder (similar to Bug 221245).
+535 ==> 

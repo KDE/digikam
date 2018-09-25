@@ -43,7 +43,7 @@ void ShowFoto::setupActions()
     actionCollection()->setDefaultShortcut(d->openFilesInFolderAction, Qt::CTRL+Qt::SHIFT+Qt::Key_O);
 
     connect(d->openFilesInFolderAction, &QAction::triggered,
-            this, &ShowFoto::slotOpenFilesInFolder);
+            this, &ShowFoto::slotOpenFolder);
 
     actionCollection()->addAction(QLatin1String("showfoto_open_folder"), d->openFilesInFolderAction);
 
@@ -88,8 +88,8 @@ void ShowFoto::setupConnections()
     connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
             this, SLOT(slotSetupMetadataFilters(int)));
 
-    connect(d->dDHandler, SIGNAL(signalDroppedUrls(QList<QUrl>)),
-            this, SLOT(slotDroppedUrls(QList<QUrl>)));
+    connect(d->dDHandler, SIGNAL(signalDroppedUrls(QList<QUrl>,bool)),
+            this, SLOT(slotDroppedUrls(QList<QUrl>,bool)));
 }
 
 void ShowFoto::setupUserArea()

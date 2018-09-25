@@ -135,7 +135,6 @@ public:
 
     explicit Private()
       : validIccPath(true),
-        droppedUrls(false),
         itemsNb(0),
         vSplitter(0),
         fileOpenAction(0),
@@ -156,7 +155,6 @@ public:
     }
 
     bool                             validIccPath;
-    bool                             droppedUrls;
 
     int                              itemsNb;
 
