@@ -28,7 +28,6 @@
 // Qt includes
 
 #include <QList>
-#include <QString>
 
 // Local includes
 
@@ -144,7 +143,7 @@ public:
 
     AlbumPointerList<T>& operator=(const QList<T*>& list)
     {
-        foreach(T* const t, list)
+        foreach (T* const t, list)
         {
             this->append(AlbumPointer<T>(t));
         }
