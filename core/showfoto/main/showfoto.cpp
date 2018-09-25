@@ -262,7 +262,6 @@ void ShowFoto::openUrls(const QList<QUrl> &urls)
         return;
     }
 
-    ShowfotoItemInfoList infos;
     ShowfotoItemInfo iteminfo;
     DMetadata meta;
 
@@ -282,10 +281,8 @@ void ShowFoto::openUrls(const QList<QUrl> &urls)
         iteminfo.photoInfo = meta.getPhotographInformation();
 
         if (!d->infoList.contains(iteminfo))
-            infos.append(iteminfo);
+            d->infoList << iteminfo;
     }
-
-    d->infoList << infos;
 }
 
 void ShowFoto::openFolder(const QUrl& url)
@@ -322,12 +319,10 @@ void ShowFoto::openFolder(const QUrl& url)
 
     if (fileinfolist.isEmpty())
     {
-        //emit signalSorry();
         return;
     }
 
     QFileInfoList::const_iterator fi;
-    ShowfotoItemInfoList infos;
     ShowfotoItemInfo iteminfo;
     DMetadata meta;
 
@@ -348,10 +343,8 @@ void ShowFoto::openFolder(const QUrl& url)
         iteminfo.photoInfo = meta.getPhotographInformation();
 
         if (!d->infoList.contains(iteminfo))
-            infos.append(iteminfo);
+            d->infoList << iteminfo;
     }
-
-    d->infoList << infos;
 }
 
 void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls, bool dropped)
