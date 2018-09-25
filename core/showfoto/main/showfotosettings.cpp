@@ -578,10 +578,13 @@ void ShowfotoSettings::setIconTheme(const QString& theme)
 
 void ShowfotoSettings::setApplicationFont(const QFont& font)
 {
-    d->applicationFont = font;
-    qApp->setFont(d->applicationFont);
-    qCDebug(DIGIKAM_SHOWFOTO_LOG) << "Switch to application font: " << d->applicationFont;
-    d->group.writeEntry(d->configApplicationFont, d->applicationFont);
+    if (d->applicationFont != font)
+    {
+        d->applicationFont = font;
+        qApp->setFont(d->applicationFont);
+        qCDebug(DIGIKAM_SHOWFOTO_LOG) << "Switch to application font: " << d->applicationFont;
+        d->group.writeEntry(d->configApplicationFont, d->applicationFont);
+    }
 }
 
 void ShowfotoSettings::setShowFormatOverThumbnail(bool show)
