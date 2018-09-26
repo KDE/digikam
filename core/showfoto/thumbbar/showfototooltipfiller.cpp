@@ -87,12 +87,12 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
             tip                   += str + cnt.cellEnd;
         }
 
-        if(settings->getShowFileType())
+        if (settings->getShowFileType())
         {
             tip += cnt.cellBeg + i18n("Type:") + cnt.cellMid + info.mime + cnt.cellEnd;
         }
 
-        if(settings->getShowFileDim())
+        if (settings->getShowFileDim())
         {
             if (info.width == 0 || info.height == 0 || info.width == -1 || info.height == -1)
             {

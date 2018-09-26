@@ -174,7 +174,7 @@ QList<ShowfotoItemInfo> ShowfotoSortFilterModel::showfotoItemInfosSorted() const
     QList<ShowfotoItemInfo> infos;
     const int size = rowCount();
 
-    for (int i = 0; i < size; i++)
+    for (int i = 0 ; i < size ; ++i)
     {
         infos << showfotoItemInfo(index(i, 0));
     }
@@ -335,7 +335,7 @@ void ShowfotoFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int st
 {
     QList<ShowfotoItemInfo> infos;
 
-    for (int i = start ; i < end ; i++)
+    for (int i = start ; i < end ; ++i)
     {
         infos << showfotoItemInfo(index(i, 0));
     }
@@ -347,7 +347,7 @@ void ShowfotoFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/
 {
     QList<ShowfotoItemInfo> infos;
 
-    for (int i = start ; i < end ; i++)
+    for (int i = start ; i < end ; ++i)
     {
         infos << showfotoItemInfo(index(i, 0));
     }

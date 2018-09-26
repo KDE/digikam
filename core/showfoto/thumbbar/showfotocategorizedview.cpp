@@ -322,7 +322,7 @@ QModelIndex ShowfotoCategorizedView::nextIndexHint(const QModelIndex& anchor, co
             int minDiff                                   = d->filterModel->rowCount();
             QList<QModelIndex> indexesForShowfotoItemInfo = d->filterModel->mapListFromSource(d->model->indexesForShowfotoItemInfo(info));
 
-            foreach(const QModelIndex& index, indexesForShowfotoItemInfo)
+            foreach (const QModelIndex& index, indexesForShowfotoItemInfo)
             {
                 if (index == anchor || !index.isValid() || removed.contains(index))
                 {
@@ -408,7 +408,7 @@ void ShowfotoCategorizedView::setSelectedUrls(const QList<QUrl>& urlList)
 {
     QItemSelection mySelection;
 
-    for (QList<QUrl>::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
+    for (QList<QUrl>::const_iterator it = urlList.constBegin() ; it!=urlList.constEnd() ; ++it)
     {
         const QModelIndex index = d->filterModel->indexForUrl(*it);
 

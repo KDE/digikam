@@ -108,7 +108,7 @@ QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos(const QList<QModel
 {
     QList<ShowfotoItemInfo> infos;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         infos << showfotoItemInfo(index);
     }
@@ -176,7 +176,7 @@ QModelIndex ShowfotoImageModel::indexForUrl(const QUrl& fileUrl) const
 {
         const int size = d->infos.size();
 
-        for (int i = 0; i < size; i++)
+        for (int i = 0 ; i < size ; ++i)
         {
             if (d->infos.at(i).url == fileUrl)
             {
@@ -192,7 +192,7 @@ QList<QModelIndex> ShowfotoImageModel::indexesForUrl(const QUrl& fileUrl) const
         QList<QModelIndex> indexes;
         const int          size = d->infos.size();
 
-        for (int i = 0; i < size; i++)
+        for (int i = 0 ; i < size ; ++i)
         {
             if (d->infos.at(i).url == fileUrl)
             {
@@ -205,7 +205,7 @@ QList<QModelIndex> ShowfotoImageModel::indexesForUrl(const QUrl& fileUrl) const
 
 ShowfotoItemInfo ShowfotoImageModel::showfotoItemInfo(const QUrl& fileUrl) const
 {
-        foreach(const ShowfotoItemInfo& info, d->infos)
+        foreach (const ShowfotoItemInfo& info, d->infos)
         {
             if (info.url == fileUrl)
             {
@@ -221,7 +221,7 @@ QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos(const QUrl& fileUr
     QList<ShowfotoItemInfo> infos;
 
 
-        foreach(const ShowfotoItemInfo& info, d->infos)
+        foreach (const ShowfotoItemInfo& info, d->infos)
         {
             if (info.url == fileUrl)
             {
@@ -310,7 +310,7 @@ void ShowfotoImageModel::emitDataChangedForSelections(const QItemSelection& sele
 {
     if (!selection.isEmpty())
     {
-        foreach(const QItemSelectionRange& range, selection)
+        foreach (const QItemSelectionRange& range, selection)
         {
             emit dataChanged(range.topLeft(), range.bottomRight());
         }
@@ -365,7 +365,7 @@ void ShowfotoImageModel::publiciseInfos(const QList<ShowfotoItemInfo>& infos)
     beginInsertRows(QModelIndex(), firstNewIndex, lastNewIndex);
     d->infos << infos;
 
-    for (int i = firstNewIndex; i <= lastNewIndex; ++i)
+    for (int i = firstNewIndex ; i <= lastNewIndex ; ++i)
     {
         const ShowfotoItemInfo& info = d->infos.at(i);
         qlonglong id                 = info.id;
@@ -422,7 +422,7 @@ void ShowfotoImageModel::removeIndexs(const QList<QModelIndex>& indexes)
 {
     QList<int> indexesList;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         if (d->isValid(index))
         {
@@ -458,7 +458,7 @@ void ShowfotoImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
     int                     offset      = 0;
     typedef QPair<int, int> IntPair;
 
-    foreach(const IntPair& pair, toRemove)
+    foreach (const IntPair& pair, toRemove)
     {
         const int begin = pair.first  - offset;
         const int end   = pair.second - offset;
@@ -481,7 +481,7 @@ void ShowfotoImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
         // update idHash - which points to indexes of d->infos
         QHash<qlonglong, int>::iterator it;
 
-        for (it = d->idHash.begin(); it != d->idHash.end(); )
+        for (it = d->idHash.begin() ; it != d->idHash.end() ;)
         {
             if (it.value() >= begin)
             {
@@ -517,7 +517,7 @@ void ShowfotoImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
     {
         QHash<QString, qlonglong>::iterator it;
 
-        for (it = d->fileUrlHash.begin(); it!= d->fileUrlHash.end(); )
+        for (it = d->fileUrlHash.begin() ; it!= d->fileUrlHash.end() ;)
         {
             if (pairsContain(toRemove, it.value()))
             {
@@ -547,7 +547,7 @@ QList<QPair<int, int> > ShowfotoImageModel::toContiguousPairs(const QList<int>& 
 
     QPair<int, int> pair(indices.first(), indices.first());
 
-    for (int i=1; i < indices.size(); i++)
+    for (int i = 1 ; i < indices.size() ; ++i)
     {
         const int &index = indices.at(i);
 

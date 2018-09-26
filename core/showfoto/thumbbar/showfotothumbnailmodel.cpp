@@ -42,13 +42,13 @@ class Q_DECL_HIDDEN ShowfotoThumbnailModel::Private
 {
 public:
 
-        explicit Private()
-          : thread(0),
-            preloadThread(0),
-            thumbSize(0),
-            lastGlobalThumbSize(0),
-            preloadThumbSize(0),
-            emitDataChanged(true)
+    explicit Private()
+      : thread(0),
+        preloadThread(0),
+        thumbSize(0),
+        lastGlobalThumbSize(0),
+        preloadThumbSize(0),
+        emitDataChanged(true)
     {
         maxThumbSize = ThumbnailSize::Huge;
     }
@@ -153,10 +153,10 @@ QVariant ShowfotoThumbnailModel::data(const QModelIndex& index, int role) const
         }
 
         //if pixmapForItem Failed
-        if(getThumbnail(info,thumbnailImage))
+        if (getThumbnail(info,thumbnailImage))
         {
-            thumbnailImage = thumbnailImage.scaled(d->thumbSize.size(),d->thumbSize.size(),Qt::KeepAspectRatio);
-            emit signalThumbInfo(info,thumbnailImage);
+            thumbnailImage = thumbnailImage.scaled(d->thumbSize.size(),d->thumbSize.size(), Qt::KeepAspectRatio);
+            emit signalThumbInfo(info, thumbnailImage);
             return thumbnailImage;
         }
 
@@ -217,7 +217,7 @@ void ShowfotoThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadi
     }
 
     // In case of multiple occurrence, we currently do not know which thumbnail is this. Signal change on all.
-    foreach(const QModelIndex& index, indexesForUrl(QUrl::fromLocalFile(loadingDescription.filePath)))
+    foreach (const QModelIndex& index, indexesForUrl(QUrl::fromLocalFile(loadingDescription.filePath)))
     {
         if (thumb.isNull())
         {

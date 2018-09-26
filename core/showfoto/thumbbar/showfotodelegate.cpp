@@ -264,7 +264,8 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
     drawOverlays(p, option, index);
 }
 
-QPixmap ShowfotoDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const
+QPixmap ShowfotoDelegate::pixmapForDrag(const QStyleOptionViewItem& option,
+                                        const QList<QModelIndex>& indexes) const
 {
     QPixmap icon;
 
@@ -508,7 +509,7 @@ int ShowfotoThumbnailDelegate::minimumSize() const
 }
 
 bool ShowfotoThumbnailDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect,
-                                                const QModelIndex& index, QRect* activationRect) const
+                                                  const QModelIndex& index, QRect* activationRect) const
 {
     // reuse implementation from grandparent
     return ItemViewShowfotoDelegate::acceptsActivation(pos, visualRect, index, activationRect);

@@ -203,7 +203,7 @@ bool ShowfotoKineticScroller::eventFilter(QObject* object, QEvent* event)
                         d->kineticTimer.start(gTimerInterval);
                 }
             }
-            else if(d->isPressed)
+            else if (d->isPressed)
             {
                 // manual scroll
                 if (d->scrollFlow == QListView::TopToBottom)
@@ -226,10 +226,14 @@ bool ShowfotoKineticScroller::eventFilter(QObject* object, QEvent* event)
 
             // Looks like the user wanted a single click. Simulate the click,
             // as the events were already consumed
-            if( !d->isMoving )
+            if (!d->isMoving)
             {
-                QMouseEvent* const mousePress   = new QMouseEvent(QEvent::MouseButtonPress,   d->lastPressPoint, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-                QMouseEvent* const mouseRelease = new QMouseEvent(QEvent::MouseButtonRelease, d->lastPressPoint, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+                QMouseEvent* const mousePress   = new QMouseEvent(QEvent::MouseButtonPress,
+                                                                  d->lastPressPoint, Qt::LeftButton,
+                                                                  Qt::LeftButton, Qt::NoModifier);
+                QMouseEvent* const mouseRelease = new QMouseEvent(QEvent::MouseButtonRelease,
+                                                                  d->lastPressPoint, Qt::LeftButton,
+                                                                  Qt::LeftButton, Qt::NoModifier);
                 d->ignoredMouseActions          = 2;
 
                 QApplication::postEvent(object, mousePress);
@@ -269,12 +273,12 @@ void ShowfotoKineticScroller::onKineticTimerElapsed()
         // use the previously recorded speed and gradually decelerate
         d->velocity = qBound(-gMaxDecelerationSpeed, d->velocity, gMaxDecelerationSpeed);
 
-        if( d->velocity > 0 )
+        if (d->velocity > 0)
             d->velocity -= gFriction;
-        else if( d->velocity < 0 )
+        else if (d->velocity < 0)
             d->velocity += gFriction;
 
-        if( qAbs(d->velocity) < qAbs(gFriction) )
+        if (qAbs(d->velocity) < qAbs(gFriction))
             d->stopMotion();
 
         if (d->scrollFlow == QListView::TopToBottom)
