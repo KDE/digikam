@@ -31,7 +31,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-fisherfaces
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-dlib-dnn
                     ${CMAKE_CURRENT_SOURCE_DIR}/alignment/congealing
-                    ${CMAKE_CURRENT_SOURCE_DIR}/shape-predictor
+                    ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing/shape-predictor
                     ${CMAKE_CURRENT_SOURCE_DIR}/dnnface/dnn_base
                     ${CMAKE_CURRENT_SOURCE_DIR}/dnnface/image_processing
                     ${CMAKE_CURRENT_SOURCE_DIR}/dnnface/image_transforms
@@ -40,12 +40,12 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/dnnface
 
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/alignment/flandmark
-#                   ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing-tantriggs
+#                   ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing/tantriggs
 )
 
 set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
-                         shape-predictor/fullobjectdetection.cpp
-                         shape-predictor/qdatastreamoverloads.cpp
+                         preprocessing/shape-predictor/fullobjectdetection.cpp
+                         preprocessing/shape-predictor/qdatastreamoverloads.cpp
                          facedetector.cpp
                          identity.cpp
                          dataproviders.cpp
@@ -57,7 +57,7 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
                          detection/opencv3-face/predict_collector.cpp
 
 #                        alignment/flandmark/flandmarkaligner.cpp
-#                        preprocessing-tantriggs/tantriggspreprocessor.cpp
+#                        preprocessing/tantriggs/tantriggspreprocessor.cpp
 )
 
 set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
