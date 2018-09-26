@@ -394,24 +394,21 @@ void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls, bool dropped)
         }
     }
 
-    d->model->clearShowfotoItemInfos();
-    emit signalInfoList(d->infoList);
-
     if (!d->infoList.isEmpty())
     {
-        if (foldersUrls.isEmpty() && imagesUrls.count() == 1)
+        if (!dropped && foldersUrls.isEmpty() && imagesUrls.count() == 1)
         {
-            if (!dropped)
-            {
-                openFolder(imagesUrls.first().adjusted(QUrl::RemoveFilename));
-                d->model->clearShowfotoItemInfos();
-                emit signalInfoList(d->infoList);
+            openFolder(imagesUrls.first().adjusted(QUrl::RemoveFilename));
+            d->model->clearShowfotoItemInfos();
+            emit signalInfoList(d->infoList);
 
-                slotOpenUrl(d->thumbBar->findItemByUrl(imagesUrls.first()));
-                d->thumbBar->setCurrentUrl(imagesUrls.first());
-                return;
-            }
+            slotOpenUrl(d->thumbBar->findItemByUrl(imagesUrls.first()));
+            d->thumbBar->setCurrentUrl(imagesUrls.first());
+            return;
         }
+
+        d->model->clearShowfotoItemInfos();
+        emit signalInfoList(d->infoList);
 
         slotOpenUrl(d->thumbBar->currentInfo());
     }
