@@ -25,7 +25,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/facedb
                     ${CMAKE_CURRENT_SOURCE_DIR}/detection
-                    ${CMAKE_CURRENT_SOURCE_DIR}/opencv3-face                    
+                    ${CMAKE_CURRENT_SOURCE_DIR}/opencv3-face
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-eigenfaces
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-fisherfaces
@@ -39,7 +39,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/dnnface/nn
                     ${CMAKE_CURRENT_SOURCE_DIR}/dnnface
 
-#                   ${CMAKE_CURRENT_SOURCE_DIR}/alignment-flandmark
+#                   ${CMAKE_CURRENT_SOURCE_DIR}/alignment/flandmark
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing-tantriggs
 )
 
@@ -56,7 +56,7 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
                          opencv3-face/fisher_faces.cpp
                          opencv3-face/predict_collector.cpp
 
-#                        alignment-flandmark/flandmarkaligner.cpp
+#                        alignment/flandmark/flandmarkaligner.cpp
 #                        preprocessing-tantriggs/tantriggspreprocessor.cpp
 )
 
@@ -75,7 +75,7 @@ set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
                                   recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
                                   recognition-opencv-lbph/opencvmatdata.cpp
                                   recognition-opencv-lbph/facerec_borrowed.cpp
-                                  alignment-congealing/funnelreal.cpp
+                                  alignment/congealing/funnelreal.cpp
                                   facedb/facedbaccess.cpp
                                   facedb/facedbbackend.cpp
                                   facedb/facedboperationgroup.cpp
