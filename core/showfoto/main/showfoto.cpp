@@ -315,10 +315,13 @@ void ShowFoto::openFolder(const QUrl& url)
         return;
     }
 
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     QFileInfoList fileinfolist = dir.entryInfoList();
 
     if (fileinfolist.isEmpty())
     {
+        QApplication::restoreOverrideCursor();
         return;
     }
 
@@ -345,6 +348,8 @@ void ShowFoto::openFolder(const QUrl& url)
         if (!d->infoList.contains(iteminfo))
             d->infoList << iteminfo;
     }
+
+    QApplication::restoreOverrideCursor();
 }
 
 void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls, bool dropped)
