@@ -598,4 +598,5 @@ BUGFIXES:
 534 ==> 370093 - Opening a picture (double-click) in Showfoto (default viewer) does not show the other pictures in the folder (similar to Bug 221245).
 535 ==> 398479 - DigiKam crashing at startup Thread 2 Crashed:: Digikam::ScanController.
 536 ==> 397808 - Digikam Mac Package crashes after resume when screen configuration changes.
-537 ==> 
+537 ==> 399071 - "Adjust Time Date" tool shows all times as "00:00:00".
+538 ==> 
