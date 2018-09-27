@@ -174,9 +174,9 @@ bool DRawDecoder::Private::loadFromLibraw(const QString& filePath, QByteArray& i
 {
     m_parent->m_cancel = false;
 
-    LibRaw raw;
+    LibRaw* const raw = new LibRaw;
     // Set progress call back function.
-    raw.set_progress_handler(callbackForLibRaw, this);
+    raw->set_progress_handler(callbackForLibRaw, this);
 
     QByteArray deadpixelPath = QFile::encodeName(m_parent->m_decoderSettings.deadPixelMap);
     QByteArray cameraProfile = QFile::encodeName(m_parent->m_decoderSettings.inputProfile);
@@ -185,64 +185,64 @@ bool DRawDecoder::Private::loadFromLibraw(const QString& filePath, QByteArray& i
     if (!m_parent->m_decoderSettings.autoBrightness)
     {
         // Use a fixed white level, ignoring the image histogram.
-        raw.imgdata.params.no_auto_bright = 1;
+        raw->imgdata.params.no_auto_bright = 1;
     }
 
     if (m_parent->m_decoderSettings.sixteenBitsImage)
     {
         // (-4) 16bit ppm output
-        raw.imgdata.params.output_bps = 16;
+        raw->imgdata.params.output_bps = 16;
     }
 
     if (m_parent->m_decoderSettings.halfSizeColorImage)
     {
         // (-h) Half-size color image (3x faster than -q).
-        raw.imgdata.params.half_size = 1;
+        raw->imgdata.params.half_size = 1;
     }
 
     if (m_parent->m_decoderSettings.RGBInterpolate4Colors)
     {
         // (-f) Interpolate RGB as four colors.
-        raw.imgdata.params.four_color_rgb = 1;
+        raw->imgdata.params.four_color_rgb = 1;
     }
 
     if (m_parent->m_decoderSettings.DontStretchPixels)
     {
         // (-j) Do not stretch the image to its correct aspect ratio.
-        raw.imgdata.params.use_fuji_rotate = 1;
+        raw->imgdata.params.use_fuji_rotate = 1;
     }
 
     // (-H) Unclip highlight color.
-    raw.imgdata.params.highlight = m_parent->m_decoderSettings.unclipColors;
+    raw->imgdata.params.highlight = m_parent->m_decoderSettings.unclipColors;
 
     if (m_parent->m_decoderSettings.brightness != 1.0)
     {
         // (-b) Set Brightness value.
-        raw.imgdata.params.bright = m_parent->m_decoderSettings.brightness;
+        raw->imgdata.params.bright = m_parent->m_decoderSettings.brightness;
     }
 
     if (m_parent->m_decoderSettings.enableBlackPoint)
     {
         // (-k) Set Black Point value.
-        raw.imgdata.params.user_black = m_parent->m_decoderSettings.blackPoint;
+        raw->imgdata.params.user_black = m_parent->m_decoderSettings.blackPoint;
     }
 
     if (m_parent->m_decoderSettings.enableWhitePoint)
     {
         // (-S) Set White Point value (saturation).
-        raw.imgdata.params.user_sat = m_parent->m_decoderSettings.whitePoint;
+        raw->imgdata.params.user_sat = m_parent->m_decoderSettings.whitePoint;
     }
 
     if (m_parent->m_decoderSettings.medianFilterPasses > 0)
     {
         // (-m) After interpolation, clean up color artifacts by repeatedly applying a 3x3 median filter to the R-G and B-G channels.
-        raw.imgdata.params.med_passes = m_parent->m_decoderSettings.medianFilterPasses;
+        raw->imgdata.params.med_passes = m_parent->m_decoderSettings.medianFilterPasses;
     }
 
     if (!m_parent->m_decoderSettings.deadPixelMap.isEmpty())
     {
         // (-P) Read the dead pixel list from this file.
-        raw.imgdata.params.bad_pixels = deadpixelPath.data();
+        raw->imgdata.params.bad_pixels = deadpixelPath.data();
     }
 
     switch (m_parent->m_decoderSettings.whiteBalance)
@@ -254,13 +254,13 @@ bool DRawDecoder::Private::loadFromLibraw(const QString& filePath, QByteArray& i
         case DRawDecoderSettings::CAMERA:
         {
             // (-w) Use camera white balance, if possible.
-            raw.imgdata.params.use_camera_wb = 1;
+            raw->imgdata.params.use_camera_wb = 1;
             break;
         }
         case DRawDecoderSettings::AUTO:
         {
             // (-a) Use automatic white balance.
-            raw.imgdata.params.use_auto_wb = 1;
+            raw->imgdata.params.use_auto_wb = 1;
             break;
         }
         case DRawDecoderSettings::CUSTOM:
@@ -334,59 +334,59 @@ bool DRawDecoder::Private::loadFromLibraw(const QString& filePath, QByteArray& i
             }
 
             // (-r) set Raw Color Balance Multipliers.
-            raw.imgdata.params.user_mul[0] = RGB[0];
-            raw.imgdata.params.user_mul[1] = RGB[1];
-            raw.imgdata.params.user_mul[2] = RGB[2];
-            raw.imgdata.params.user_mul[3] = RGB[1];
+            raw->imgdata.params.user_mul[0] = RGB[0];
+            raw->imgdata.params.user_mul[1] = RGB[1];
+            raw->imgdata.params.user_mul[2] = RGB[2];
+            raw->imgdata.params.user_mul[3] = RGB[1];
             break;
         }
         case DRawDecoderSettings::AERA:
         {
             // (-A) Calculate the white balance by averaging a rectangular area from image.
-            raw.imgdata.params.greybox[0] = m_parent->m_decoderSettings.whiteBalanceArea.left();
-            raw.imgdata.params.greybox[1] = m_parent->m_decoderSettings.whiteBalanceArea.top();
-            raw.imgdata.params.greybox[2] = m_parent->m_decoderSettings.whiteBalanceArea.width();
-            raw.imgdata.params.greybox[3] = m_parent->m_decoderSettings.whiteBalanceArea.height();
+            raw->imgdata.params.greybox[0] = m_parent->m_decoderSettings.whiteBalanceArea.left();
+            raw->imgdata.params.greybox[1] = m_parent->m_decoderSettings.whiteBalanceArea.top();
+            raw->imgdata.params.greybox[2] = m_parent->m_decoderSettings.whiteBalanceArea.width();
+            raw->imgdata.params.greybox[3] = m_parent->m_decoderSettings.whiteBalanceArea.height();
             break;
         }
     }
 
     // (-q) Use an interpolation method.
-    raw.imgdata.params.user_qual = m_parent->m_decoderSettings.RAWQuality;
+    raw->imgdata.params.user_qual = m_parent->m_decoderSettings.RAWQuality;
 
     switch (m_parent->m_decoderSettings.NRType)
     {
         case DRawDecoderSettings::WAVELETSNR:
         {
             // (-n) Use wavelets to erase noise while preserving real detail.
-            raw.imgdata.params.threshold    = m_parent->m_decoderSettings.NRThreshold;
+            raw->imgdata.params.threshold    = m_parent->m_decoderSettings.NRThreshold;
             break;
         }
         case DRawDecoderSettings::FBDDNR:
         {
             // (100 - 1000) => (1 - 10) conversion
-            raw.imgdata.params.fbdd_noiserd = lround(m_parent->m_decoderSettings.NRThreshold / 100.0);
+            raw->imgdata.params.fbdd_noiserd = lround(m_parent->m_decoderSettings.NRThreshold / 100.0);
             break;
         }
         default:   // No Noise Reduction
         {
-            raw.imgdata.params.threshold    = 0;
-            raw.imgdata.params.fbdd_noiserd = 0;
+            raw->imgdata.params.threshold    = 0;
+            raw->imgdata.params.fbdd_noiserd = 0;
             break;
         }
     }
 
     // Exposure Correction before interpolation.
-    raw.imgdata.params.exp_correc = m_parent->m_decoderSettings.expoCorrection;
-    raw.imgdata.params.exp_shift  = m_parent->m_decoderSettings.expoCorrectionShift;
-    raw.imgdata.params.exp_preser = m_parent->m_decoderSettings.expoCorrectionHighlight;
+    raw->imgdata.params.exp_correc = m_parent->m_decoderSettings.expoCorrection;
+    raw->imgdata.params.exp_shift  = m_parent->m_decoderSettings.expoCorrectionShift;
+    raw->imgdata.params.exp_preser = m_parent->m_decoderSettings.expoCorrectionHighlight;
 
     switch (m_parent->m_decoderSettings.inputColorSpace)
     {
         case DRawDecoderSettings::EMBEDDED:
         {
             // (-p embed) Use input profile from RAW file to define the camera's raw colorspace.
-            raw.imgdata.params.camera_profile = (char*)"embed";
+            raw->imgdata.params.camera_profile = (char*)"embed";
             break;
         }
         case DRawDecoderSettings::CUSTOMINPUTCS:
@@ -394,7 +394,7 @@ bool DRawDecoder::Private::loadFromLibraw(const QString& filePath, QByteArray& i
             if (!m_parent->m_decoderSettings.inputProfile.isEmpty())
             {
                 // (-p) Use input profile file to define the camera's raw colorspace.
-                raw.imgdata.params.camera_profile = cameraProfile.data();
+                raw->imgdata.params.camera_profile = cameraProfile.data();
             }
             break;
         }
@@ -412,22 +412,22 @@ bool DRawDecoder::Private::loadFromLibraw(const QString& filePath, QByteArray& i
             if (!m_parent->m_decoderSettings.outputProfile.isEmpty())
             {
                 // (-o) Use ICC profile file to define the output colorspace.
-                raw.imgdata.params.output_profile = outputProfile.data();
+                raw->imgdata.params.output_profile = outputProfile.data();
             }
             break;
         }
         default:
         {
             // (-o) Define the output colorspace.
-            raw.imgdata.params.output_color = m_parent->m_decoderSettings.outputColorSpace;
+            raw->imgdata.params.output_color = m_parent->m_decoderSettings.outputColorSpace;
             break;
         }
     }
 
     //-- Extended demosaicing settings ----------------------------------------------------------
 
-    raw.imgdata.params.dcb_iterations = m_parent->m_decoderSettings.dcbIterations;
-    raw.imgdata.params.dcb_enhance_fl = m_parent->m_decoderSettings.dcbEnhanceFl;
+    raw->imgdata.params.dcb_iterations = m_parent->m_decoderSettings.dcbIterations;
+    raw->imgdata.params.dcb_enhance_fl = m_parent->m_decoderSettings.dcbEnhanceFl;
 
     //-------------------------------------------------------------------------------------------
 
@@ -436,35 +436,39 @@ bool DRawDecoder::Private::loadFromLibraw(const QString& filePath, QByteArray& i
     qCDebug(DIGIKAM_RAWENGINE_LOG) << filePath;
     qCDebug(DIGIKAM_RAWENGINE_LOG) << m_parent->m_decoderSettings;
 
-    int ret = raw.open_file((const char*)(QFile::encodeName(filePath)).constData());
+    int ret = raw->open_file((const char*)(QFile::encodeName(filePath)).constData());
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
     if (m_parent->m_cancel)
     {
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
     setProgress(0.2);
 
-    ret = raw.unpack();
+    ret = raw->unpack();
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run unpack: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
     if (m_parent->m_cancel)
     {
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
@@ -474,46 +478,50 @@ bool DRawDecoder::Private::loadFromLibraw(const QString& filePath, QByteArray& i
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "Applying LibRaw highlights adjustments";
         // 1.0 is fallback to default value
-        raw.imgdata.params.adjust_maximum_thr = 1.0;
+        raw->imgdata.params.adjust_maximum_thr = 1.0;
     }
     else
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "Disabling LibRaw highlights adjustments";
         // 0.0 disables this feature
-        raw.imgdata.params.adjust_maximum_thr = 0.0;
+        raw->imgdata.params.adjust_maximum_thr = 0.0;
     }
 
-    ret = raw.dcraw_process();
+    ret = raw->dcraw_process();
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run dcraw_process: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
     if (m_parent->m_cancel)
     {
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
     setProgress(0.3);
 
-    libraw_processed_image_t* img = raw.dcraw_make_mem_image(&ret);
+    libraw_processed_image_t* img = raw->dcraw_make_mem_image(&ret);
 
-    if(!img)
+    if (!img)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
     if (m_parent->m_cancel)
     {
         // Clear memory allocation. Introduced with LibRaw 0.11.0
-        raw.dcraw_clear_mem(img);
-        raw.recycle();
+        raw->dcraw_clear_mem(img);
+        raw->recycle();
+        delete raw;
         return false;
     }
 
@@ -542,8 +550,9 @@ bool DRawDecoder::Private::loadFromLibraw(const QString& filePath, QByteArray& i
     }
 
     // Clear memory allocation. Introduced with LibRaw 0.11.0
-    raw.dcraw_clear_mem(img);
-    raw.recycle();
+    raw->dcraw_clear_mem(img);
+    raw->recycle();
+    delete raw;
 
     if (m_parent->m_cancel)
     {
@@ -559,28 +568,29 @@ bool DRawDecoder::Private::loadFromLibraw(const QString& filePath, QByteArray& i
     return true;
 }
 
-bool DRawDecoder::Private::loadEmbeddedPreview(QByteArray& imgData, LibRaw& raw)
+bool DRawDecoder::Private::loadEmbeddedPreview(QByteArray& imgData, LibRaw* const raw)
 {
-    int ret = raw.unpack_thumb();
+    int ret = raw->unpack_thumb();
 
     if (ret != LIBRAW_SUCCESS)
     {
-        raw.recycle();
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run unpack_thumb: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
-    libraw_processed_image_t* const thumb = raw.dcraw_make_mem_thumb(&ret);
+    libraw_processed_image_t* const thumb = raw->dcraw_make_mem_thumb(&ret);
 
-    if(!thumb)
+    if (!thumb)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run dcraw_make_mem_thumb: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
-    if(thumb->type == LIBRAW_IMAGE_BITMAP)
+    if (thumb->type == LIBRAW_IMAGE_BITMAP)
     {
         createPPMHeader(imgData, thumb);
     }
@@ -590,10 +600,11 @@ bool DRawDecoder::Private::loadEmbeddedPreview(QByteArray& imgData, LibRaw& raw)
     }
 
     // Clear memory allocation. Introduced with LibRaw 0.11.0
-    raw.dcraw_clear_mem(thumb);
-    raw.recycle();
+    raw->dcraw_clear_mem(thumb);
+    raw->recycle();
+    delete raw;
 
-    if ( imgData.isEmpty() )
+    if (imgData.isEmpty())
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "Failed to load JPEG thumb from LibRaw!";
         return false;
@@ -602,46 +613,50 @@ bool DRawDecoder::Private::loadEmbeddedPreview(QByteArray& imgData, LibRaw& raw)
     return true;
 }
 
-bool DRawDecoder::Private::loadHalfPreview(QImage& image, LibRaw& raw)
+bool DRawDecoder::Private::loadHalfPreview(QImage& image, LibRaw* const raw)
 {
-    raw.imgdata.params.use_auto_wb   = 1;         // Use automatic white balance.
-    raw.imgdata.params.use_camera_wb = 1;         // Use camera white balance, if possible.
-    raw.imgdata.params.half_size     = 1;         // Half-size color image (3x faster than -q).
+    raw->imgdata.params.use_auto_wb   = 1;         // Use automatic white balance.
+    raw->imgdata.params.use_camera_wb = 1;         // Use camera white balance, if possible.
+    raw->imgdata.params.half_size     = 1;         // Half-size color image (3x faster than -q).
     QByteArray imgData;
 
-    int ret = raw.unpack();
+    int ret = raw->unpack();
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run unpack: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
-    ret = raw.dcraw_process();
+    ret = raw->dcraw_process();
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run dcraw_process: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
-    libraw_processed_image_t* halfImg = raw.dcraw_make_mem_image(&ret);
+    libraw_processed_image_t* halfImg = raw->dcraw_make_mem_image(&ret);
 
-    if(!halfImg)
+    if (!halfImg)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
     Private::createPPMHeader(imgData, halfImg);
     // Clear memory allocation. Introduced with LibRaw 0.11.0
-    raw.dcraw_clear_mem(halfImg);
-    raw.recycle();
+    raw->dcraw_clear_mem(halfImg);
+    raw->recycle();
+    delete raw;
 
-    if ( imgData.isEmpty() )
+    if (imgData.isEmpty())
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "Failed to load half preview from LibRaw!";
         return false;

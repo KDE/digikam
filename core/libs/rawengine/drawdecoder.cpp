@@ -103,14 +103,15 @@ bool DRawDecoder::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
-    LibRaw raw;
+    LibRaw* const raw = new LibRaw;
 
-    int ret = raw.open_file((const char*)(QFile::encodeName(path)).constData());
+    int ret = raw->open_file((const char*)(QFile::encodeName(path)).constData());
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
@@ -120,15 +121,16 @@ bool DRawDecoder::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
 bool DRawDecoder::loadEmbeddedPreview(QByteArray& imgData, const QBuffer& buffer)
 {
     QString rawFilesExt = QString::fromUtf8(rawFiles());
-    LibRaw  raw;
+    LibRaw* const raw   = new LibRaw;
 
     QByteArray inData = buffer.data();
-    int ret           = raw.open_buffer((void*) inData.data(), (size_t) inData.size());
+    int ret           = raw->open_buffer((void*) inData.data(), (size_t) inData.size());
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run open_buffer: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
@@ -146,17 +148,18 @@ bool DRawDecoder::loadHalfPreview(QImage& image, const QString& path)
 
     qCDebug(DIGIKAM_RAWENGINE_LOG) << "Try to use reduced RAW picture extraction";
 
-    LibRaw raw;
-    raw.imgdata.params.use_auto_wb   = 1;         // Use automatic white balance.
-    raw.imgdata.params.use_camera_wb = 1;         // Use camera white balance, if possible.
-    raw.imgdata.params.half_size     = 1;         // Half-size color image (3x faster than -q).
+    LibRaw* const raw = new LibRaw;
+    raw->imgdata.params.use_auto_wb   = 1;         // Use automatic white balance.
+    raw->imgdata.params.use_camera_wb = 1;         // Use camera white balance, if possible.
+    raw->imgdata.params.half_size     = 1;         // Half-size color image (3x faster than -q).
 
-    int ret = raw.open_file((const char*)(QFile::encodeName(path)).constData());
+    int ret = raw->open_file((const char*)(QFile::encodeName(path)).constData());
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
@@ -183,13 +186,14 @@ bool DRawDecoder::loadHalfPreview(QByteArray& imgData, const QString& path)
 
     qCDebug(DIGIKAM_RAWENGINE_LOG) << "Try to use reduced RAW picture extraction";
 
-    LibRaw raw;
-    int ret = raw.open_file((const char*)(QFile::encodeName(path)).constData());
+    LibRaw* const raw = new LibRaw;
+    int ret = raw->open_file((const char*)(QFile::encodeName(path)).constData());
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run dcraw_process: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
@@ -211,15 +215,16 @@ bool DRawDecoder::loadHalfPreview(QByteArray& imgData, const QString& path)
 bool DRawDecoder::loadHalfPreview(QByteArray& imgData, const QBuffer& inBuffer)
 {
     QString rawFilesExt = QString::fromUtf8(rawFiles());
-    LibRaw  raw;
+    LibRaw* const raw   = new LibRaw;
 
     QByteArray inData = inBuffer.data();
-    int ret           = raw.open_buffer((void*) inData.data(), (size_t) inData.size());
+    int ret           = raw->open_buffer((void*) inData.data(), (size_t) inData.size());
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
@@ -303,28 +308,31 @@ bool DRawDecoder::rawFileIdentify(RawInfo& identify, const QString& path)
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
-    LibRaw raw;
+    LibRaw* const raw = new LibRaw;
 
-    int ret = raw.open_file((const char*)(QFile::encodeName(path)).constData());
+    int ret = raw->open_file((const char*)(QFile::encodeName(path)).constData());
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
-    ret = raw.adjust_sizes_info_only();
+    ret = raw->adjust_sizes_info_only();
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run adjust_sizes_info_only: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
-    Private::fillIndentifyInfo(&raw, identify);
-    raw.recycle();
+    Private::fillIndentifyInfo(raw, identify);
+    raw->recycle();
+    delete raw;
     return true;
 }
 
@@ -345,68 +353,75 @@ bool DRawDecoder::extractRAWData(const QString& filePath, QByteArray& rawData, R
 
     d->setProgress(0.1);
 
-    LibRaw raw;
+    LibRaw* const raw = new LibRaw;
     // Set progress call back function.
-    raw.set_progress_handler(callbackForLibRaw, d);
+    raw->set_progress_handler(callbackForLibRaw, d);
 
-    int ret = raw.open_file((const char*)(QFile::encodeName(filePath)).constData());
+    int ret = raw->open_file((const char*)(QFile::encodeName(filePath)).constData());
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
     if (m_cancel)
     {
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
     d->setProgress(0.3);
 
-    raw.imgdata.params.output_bps  = 16;
-    raw.imgdata.params.shot_select = shotSelect;
-    ret                            = raw.unpack();
+    raw->imgdata.params.output_bps  = 16;
+    raw->imgdata.params.shot_select = shotSelect;
+    ret                            = raw->unpack();
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run unpack: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
     if (m_cancel)
     {
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
     d->setProgress(0.4);
 
-    ret = raw.raw2image();
+    ret = raw->raw2image();
 
     if (ret != LIBRAW_SUCCESS)
     {
         qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run raw2image: " << libraw_strerror(ret);
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
     if (m_cancel)
     {
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
     d->setProgress(0.6);
 
-    Private::fillIndentifyInfo(&raw, identify);
+    Private::fillIndentifyInfo(raw, identify);
 
     if (m_cancel)
     {
-        raw.recycle();
+        raw->recycle();
+        delete raw;
         return false;
     }
 
@@ -414,19 +429,19 @@ bool DRawDecoder::extractRAWData(const QString& filePath, QByteArray& rawData, R
 
     rawData = QByteArray();
 
-    if (raw.imgdata.idata.filters == 0)
+    if (raw->imgdata.idata.filters == 0)
     {
-        rawData.resize((int)(raw.imgdata.sizes.iwidth * raw.imgdata.sizes.iheight  * raw.imgdata.idata.colors * sizeof(unsigned short)));
+        rawData.resize((int)(raw->imgdata.sizes.iwidth * raw->imgdata.sizes.iheight  * raw->imgdata.idata.colors * sizeof(unsigned short)));
 
         unsigned short* output = reinterpret_cast<unsigned short*>(rawData.data());
 
-        for (unsigned int row = 0; row < raw.imgdata.sizes.iheight; row++)
+        for (unsigned int row = 0; row < raw->imgdata.sizes.iheight; row++)
         {
-            for (unsigned int col = 0; col < raw.imgdata.sizes.iwidth; col++)
+            for (unsigned int col = 0; col < raw->imgdata.sizes.iwidth; col++)
             {
-                for (int color = 0; color < raw.imgdata.idata.colors; color++)
+                for (int color = 0; color < raw->imgdata.idata.colors; color++)
                 {
-                    *output = raw.imgdata.image[raw.imgdata.sizes.iwidth*row + col][color];
+                    *output = raw->imgdata.image[raw->imgdata.sizes.iwidth*row + col][color];
                     output++;
                 }
             }
@@ -434,21 +449,22 @@ bool DRawDecoder::extractRAWData(const QString& filePath, QByteArray& rawData, R
     }
     else
     {
-        rawData.resize((int)(raw.imgdata.sizes.iwidth * raw.imgdata.sizes.iheight * sizeof(unsigned short)));
+        rawData.resize((int)(raw->imgdata.sizes.iwidth * raw->imgdata.sizes.iheight * sizeof(unsigned short)));
 
         unsigned short* output = reinterpret_cast<unsigned short*>(rawData.data());
 
-        for (uint row = 0; row < raw.imgdata.sizes.iheight; row++)
+        for (uint row = 0; row < raw->imgdata.sizes.iheight; row++)
         {
-            for (uint col = 0; col < raw.imgdata.sizes.iwidth; col++)
+            for (uint col = 0; col < raw->imgdata.sizes.iwidth; col++)
             {
-                *output = raw.imgdata.image[raw.imgdata.sizes.iwidth*row + col][raw.COLOR(row, col)];
+                *output = raw->imgdata.image[raw->imgdata.sizes.iwidth*row + col][raw->COLOR(row, col)];
                 output++;
             }
         }
     }
 
-    raw.recycle();
+    raw->recycle();
+    delete raw;
     d->setProgress(1.0);
 
     return true;
