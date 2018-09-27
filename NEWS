@@ -599,4 +599,6 @@ BUGFIXES:
 535 ==> 398479 - DigiKam crashing at startup Thread 2 Crashed:: Digikam::ScanController.
 536 ==> 397808 - Digikam Mac Package crashes after resume when screen configuration changes.
 537 ==> 399071 - "Adjust Time Date" tool shows all times as "00:00:00".
-538 ==> 
+538 ==> 399134 - Progress bar or status when importing from camera/card reader.
+539 ==> 
+
