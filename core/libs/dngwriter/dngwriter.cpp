@@ -1017,7 +1017,8 @@ int DNGWriter::convert()
                 stream.SetReadPosition(0);
                 stream.Get(block->Buffer(), mkrnts.size());
 
-                if (identifyMake.make != QLatin1String("Canon"))
+                if (identifyMake.make != QLatin1String("Canon") &&
+                    identifyMake.make != QLatin1String("Panasonic"))
                 {
                     negative->SetMakerNote(block);
                     negative->SetMakerNoteSafety(true);
