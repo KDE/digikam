@@ -62,6 +62,7 @@ public:
           ratingChanged(false),
           templateChanged(false),
           tagsChanged(false),
+          withoutTags(false),
           pickLabel(-1),
           highestPickLabel(-1),
           colorLabel(-1),
@@ -88,6 +89,7 @@ public:
     bool                                ratingChanged;
     bool                                templateChanged;
     bool                                tagsChanged;
+    bool                                withoutTags;
 
     int                                 pickLabel;
     int                                 highestPickLabel;
@@ -477,7 +479,7 @@ bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
     {
         QList<int> keys = d->tags.keys();
 
-        foreach(int key, keys)
+        foreach (int key, keys)
         {
             if (d->tags.value(key) == DisjointMetadata::MetadataAvailable)
             {
@@ -595,7 +597,7 @@ void DisjointMetadata::loadTags(const QList<int>& tagIds)
 {
     QList<int> loadedTagIds;
 
-    foreach(int tagId, tagIds)
+    foreach (int tagId, tagIds)
     {
         if (!TagsCache::instance()->isInternalTag(tagId))
         {
@@ -605,6 +607,18 @@ void DisjointMetadata::loadTags(const QList<int>& tagIds)
 
     if (loadedTagIds.isEmpty())
     {
+        if (!d->withoutTags)
+        {
+            QMap<int, DisjointMetadata::Status>::iterator it;
+
+            for (it = d->tags.begin() ; it != d->tags.end() ; ++it)
+            {
+                it.value() = MetadataDisjoint;
+            }
+
+            d->withoutTags = true;
+        }
+
         return;
     }
 
@@ -612,9 +626,16 @@ void DisjointMetadata::loadTags(const QList<int>& tagIds)
 
     if (d->tags.isEmpty())
     {
-        foreach(int tagId, loadedTagIds)
+        foreach (int tagId, loadedTagIds)
         {
-            d->tags[tagId] = MetadataAvailable;
+            if (d->withoutTags)
+            {
+                d->tags[tagId] = MetadataDisjoint;
+            }
+            else
+            {
+                d->tags[tagId] = MetadataAvailable;
+            }
         }
 
         return;
@@ -640,7 +661,7 @@ void DisjointMetadata::loadTags(const QList<int>& tagIds)
 
     // new tags which are not yet in the set,
     // are added as Disjoint
-    foreach(int tagId, loadedTagIds)
+    foreach (int tagId, loadedTagIds)
     {
         if (!d->tags.contains(tagId))
         {
@@ -796,7 +817,7 @@ QStringList DisjointMetadata::keywords() const
 
     QList<int> keys = d->tags.keys();
 
-    foreach(int key, keys)
+    foreach (int key, keys)
     {
         if (d->tags.value(key) == MetadataAvailable)
         {
