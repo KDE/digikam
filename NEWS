@@ -601,4 +601,5 @@ BUGFIXES:
 537 ==> 399071 - "Adjust Time Date" tool shows all times as "00:00:00".
 538 ==> 399134 - Progress bar or status when importing from camera/card reader.
 539 ==> 399153 - Selecting a picture with a tag and another without that tag, the checkbox is black instead of gray. 
-540 ==> 
+540 ==> 384759 - Can't adjust timestamp of RAW files.
+541 ==> 
