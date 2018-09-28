@@ -70,7 +70,7 @@ public:
 
 private:
 
-    double rnd() const;
+    double rnd()     const;
     double rndSign() const;
 
 private:
