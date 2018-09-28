@@ -266,6 +266,7 @@ QList<int> SearchXmlReader::valueToIntOrIntList()
     {
         list << text().toString().toInt();
         readNext();
+
         return list;
     }
 
@@ -297,6 +298,7 @@ QList<double> SearchXmlReader::valueToDoubleOrDoubleList()
     {
         list << text().toString().toDouble();
         readNext();
+
         return list;
     }
 
@@ -328,6 +330,7 @@ QList<QString> SearchXmlReader::valueToStringOrStringList()
     {
         list << text().toString();
         readNext();
+
         return list;
     }
 
@@ -461,13 +464,19 @@ bool SearchXmlReader::readToStartOfElement(const QString& elementName)
         switch (QXmlStreamReader::readNext())
         {
             case StartElement:
+            {
                 atStart = true;
                 (void)atStart;  // Remove clang warning.
                 break;
-            default:
-                break;
+            }
             case EndDocument:
+            {
                 return false;
+            }
+            default:
+            {
+                break;
+            }
         }
     }
 
@@ -493,15 +502,17 @@ bool SearchXmlReader::readToStartOfElement(const QString& elementName)
                 {
                     return false;
                 }
+
                 break;
             }
             case EndDocument:
             {
                 return false;
-                break;
             }
             default:
+            {
                 break;
+            }
         }
     }
 
@@ -519,23 +530,27 @@ void SearchXmlReader::readToEndOfElement()
             switch (QXmlStreamReader::readNext())
             {
                 case StartElement:
+                {
                     ++stack;
                     break;
+                }
                 case EndElement:
                 {
                     if (!--stack)
                     {
                         return;
                     }
+
                     break;
                 }
                 case EndDocument:
                 {
                     return;
-                    break;
                 }
                 default:
+                {
                     break;
+                }
             }
         }
     }
@@ -1029,7 +1044,7 @@ QString KeywordSearchWriter::xml(const QStringList& keywordList)
 {
     writeGroup();
 
-    foreach(const QString& keyword, keywordList)
+    foreach (const QString& keyword, keywordList)
     {
         writeField(QLatin1String("keyword"), SearchXml::Like);
         writeValue(keyword);

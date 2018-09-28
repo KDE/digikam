@@ -85,7 +85,7 @@ enum Relation
 template <typename T>
 bool testRelation(T v1, T v2, Relation rel)
 {
-    if (rel == Equal)
+    if      (rel == Equal)
     {
         return v1 == v2;
     }
@@ -375,8 +375,7 @@ class DIGIKAM_DATABASE_EXPORT SearchXmlCachingReader : public SearchXmlReader
 {
 public:
 
-    /**
-     *  This class has the same semantics as SearchXmlReader,
+    /** This class has the same semantics as SearchXmlReader,
      *  but performs some caching and is thus much more relaxed than SearchXmlReader
      *  about the calling order of methods:
      *  With this class, you can access properties of a group until the next group
