@@ -98,13 +98,13 @@ QImage KmlExport::generateSquareThumbnail(const QImage& fullImage, int size) con
 
     int sx = 0, sy = 0;
 
-    if (image.width()>size)
+    if (image.width() > size)
     {
-        sx = (image.width() - size)/2;
+        sx = (image.width() - size) / 2;
     }
     else
     {
-        sy = (image.height() - size)/2;
+        sy = (image.height() - size) / 2;
     }
 
     painter.drawImage(0, 0, image, sx, sy, size, size);
@@ -123,8 +123,9 @@ QImage KmlExport::generateBorderedThumbnail(const QImage& fullImage, int size) c
     QPixmap croppedPix(image.width() + (2*image_border), image.height() + (2*image_border));
     QPainter painter(&croppedPix);
 
-    QColor BrushColor(255,255,255);
-    painter.fillRect(0,0,image.width() + (2*image_border),image.height() + (2*image_border),BrushColor);
+    QColor BrushColor(255, 255, 255);
+    painter.fillRect(0, 0, image.width() + (2*image_border),image.height() + (2*image_border), BrushColor);
+    
     /*! @todo add a corner to the thumbnail and a hotspot to the kml element */
 
     painter.drawImage(image_border, image_border, image);
@@ -195,12 +196,13 @@ void KmlExport::generateImagesthumb(const QUrl& imageURL, QDomElement& kmlAlbum)
     }
 
     // Save images
+
     /** @todo remove the extension of the file
      * it's appear with digikam but not with gwenview
      * which already seems to strip the extension
      */
     QString baseFileName = webifyFileName(info.name());
-    //baseFileName       = mUniqueNameHelper.makeNameUnique(baseFileName);
+    //baseFileName         = mUniqueNameHelper.makeNameUnique(baseFileName);
     QString fullFileName;
     fullFileName         = baseFileName + QLatin1Char('.') + imageFormat.toLower();
     QString destPath     = m_imageDir.filePath(fullFileName);
@@ -317,7 +319,7 @@ void KmlExport::generateImagesthumb(const QUrl& imageURL, QDomElement& kmlAlbum)
 
         if (!icon.save(destPath, imageFormat.toLatin1().constData(), 85))
         {
-            logWarning(i18n("Could not save icon for image '%1' to '%2'",path,destPath));
+            logWarning(i18n("Could not save icon for image '%1' to '%2'", path, destPath));
         }
         else
         {
@@ -355,7 +357,7 @@ void KmlExport::addTrack(QDomElement& kmlAlbum)
 
     if (!ret)
     {
-        logError(i18n("Cannot parse %1 GPX file.",m_GPXFile));
+        logError(i18n("Cannot parse %1 GPX file.", m_GPXFile));
         return;
     }
 
@@ -390,7 +392,7 @@ void KmlExport::addTrack(QDomElement& kmlAlbum)
 
     // the KML color is not #RRGGBB but AABBGGRR
     QString KMLColorValue = QString::fromUtf8("%1%2%3%4")
-        .arg((int)m_GPXOpacity*256/100, 2, 16)
+        .arg((int)m_GPXOpacity * 256 / 100, 2, 16)
         .arg((&m_GPXColor)->blue(), 2, 16)
         .arg((&m_GPXColor)->green(), 2, 16)
         .arg((&m_GPXColor)->red(), 2, 16);
@@ -432,8 +434,8 @@ void KmlExport::generate()
 
     QList<QUrl>::ConstIterator imagesEnd (images.constEnd());
 
-    for (QList<QUrl>::ConstIterator selIt = images.constBegin();
-         selIt != imagesEnd; ++selIt, ++pos)
+    for (QList<QUrl>::ConstIterator selIt = images.constBegin() ;
+         selIt != imagesEnd ; ++selIt, ++pos)
     {
         double alt, lat, lng;
         QUrl url        = *selIt;
@@ -445,6 +447,9 @@ void KmlExport::generate()
             lat = info.latitude();
             lng = info.longitude();
             alt = info.altitude();
+            (void)lat; // Remove clang warnings.
+            (void)lng; // Remove clang warnings.
+            (void)alt; // Remove clang warnings.
         }
         else if (m_meta.load(url.toLocalFile()))
         {
@@ -514,7 +519,7 @@ bool KmlExport::copyDir(const QString& srcFilePath, const QString& dstFilePath)
 
         QStringList files = srcDir.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
 
-        foreach(const QString& file, files)
+        foreach (const QString& file, files)
         {
             const QString newSrcFilePath = srcDir.absolutePath() + QLatin1Char('/') + file;
             const QString newDstFilePath = dstDir.absolutePath() + QLatin1Char('/') + file;
@@ -543,32 +548,32 @@ void KmlExport::getConfig()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("KMLExport Settings"));
 
-    m_localTarget        = group.readEntry(QLatin1String("localTarget"), true);
-    m_optimize_googlemap = group.readEntry(QLatin1String("optimize_googlemap"), false);
-    m_iconSize           = group.readEntry(QLatin1String("iconSize"), 33);
-    //    googlemapSize    = group.readNumEntry(QLatin1String("googlemapSize"));
-    m_size               = group.readEntry(QLatin1String("size"), 320);
+    m_localTarget             = group.readEntry(QLatin1String("localTarget"),        true);
+    m_optimize_googlemap      = group.readEntry(QLatin1String("optimize_googlemap"), false);
+    m_iconSize                = group.readEntry(QLatin1String("iconSize"),           33);
+    //googlemapSize             = group.readNumEntry(QLatin1String("googlemapSize"));
+    m_size                    = group.readEntry(QLatin1String("size"),               320);
 
     // UrlDestDir have to have the trailing
-    m_baseDestDir        = group.readEntry(QLatin1String("baseDestDir"),   QString::fromUtf8("/tmp/"));
-    m_UrlDestDir         = group.readEntry(QLatin1String("UrlDestDir"),    QString::fromUtf8("http://www.example.com/"));
-    m_KMLFileName        = group.readEntry(QLatin1String("KMLFileName"),   QString::fromUtf8("kmldocument"));
-    m_altitudeMode       = group.readEntry(QLatin1String("Altitude Mode"), 0);
+    m_baseDestDir             = group.readEntry(QLatin1String("baseDestDir"),        QString::fromUtf8("/tmp/"));
+    m_UrlDestDir              = group.readEntry(QLatin1String("UrlDestDir"),         QString::fromUtf8("http://www.example.com/"));
+    m_KMLFileName             = group.readEntry(QLatin1String("KMLFileName"),        QString::fromUtf8("kmldocument"));
+    m_altitudeMode            = group.readEntry(QLatin1String("Altitude Mode"),      0);
 
-    m_GPXtracks          = group.readEntry(QLatin1String("UseGPXTracks"),      false);
-    m_GPXFile            = group.readEntry(QLatin1String("GPXFile"),           QString());
-    m_TimeZone           = group.readEntry(QLatin1String("Time Zone"),         12);
-    m_LineWidth          = group.readEntry(QLatin1String("Line Width"),        4);
-    m_GPXColor           = group.readEntry(QLatin1String("Track Color"),       QColor("#17eeee"));
-    m_GPXOpacity         = group.readEntry(QLatin1String("Track Opacity"),     64);
-    m_GPXAltitudeMode    = group.readEntry(QLatin1String("GPX Altitude Mode"), 0);
+    m_GPXtracks               = group.readEntry(QLatin1String("UseGPXTracks"),       false);
+    m_GPXFile                 = group.readEntry(QLatin1String("GPXFile"),            QString());
+    m_TimeZone                = group.readEntry(QLatin1String("Time Zone"),          12);
+    m_LineWidth               = group.readEntry(QLatin1String("Line Width"),         4);
+    m_GPXColor                = group.readEntry(QLatin1String("Track Color"),        QColor("#17eeee"));
+    m_GPXOpacity              = group.readEntry(QLatin1String("Track Opacity"),      64);
+    m_GPXAltitudeMode         = group.readEntry(QLatin1String("GPX Altitude Mode"),  0);
 
-    m_tempDestDir        = QDir(QDir::temp().filePath(QString::fromLatin1("digiKam-kmlexport-%1").arg(qApp->applicationPid())));
+    m_tempDestDir             = QDir(QDir::temp().filePath(QString::fromLatin1("digiKam-kmlexport-%1").arg(qApp->applicationPid())));
 
-    m_imageDirBasename   = QLatin1String("images");
-    m_imageDir           = QDir(m_tempDestDir.filePath(m_imageDirBasename));
+    m_imageDirBasename        = QLatin1String("images");
+    m_imageDir                = QDir(m_tempDestDir.filePath(m_imageDirBasename));
 
-    m_googlemapSize      = 32;
+    m_googlemapSize           = 32;
 }
 
 void KmlExport::logInfo(const QString& msg)
@@ -591,8 +596,9 @@ void KmlExport::logWarning(const QString& msg)
 QDomElement KmlExport::addKmlElement(QDomElement& target,
                                      const QString& tag) const
 {
-    QDomElement kmlElement = m_kmlDocument->createElement( tag );
-    target.appendChild( kmlElement );
+    QDomElement kmlElement = m_kmlDocument->createElement(tag);
+    target.appendChild(kmlElement);
+
     return kmlElement;
 }
 
@@ -600,10 +606,11 @@ QDomElement KmlExport::addKmlTextElement(QDomElement& target,
                                          const QString& tag,
                                          const QString& text) const
 {
-    QDomElement kmlElement  = m_kmlDocument->createElement( tag );
+    QDomElement kmlElement  = m_kmlDocument->createElement(tag);
     target.appendChild( kmlElement );
-    QDomText kmlTextElement = m_kmlDocument->createTextNode( text );
-    kmlElement.appendChild( kmlTextElement );
+    QDomText kmlTextElement = m_kmlDocument->createTextNode(text);
+    kmlElement.appendChild(kmlTextElement);
+
     return kmlElement;
 }
 
@@ -611,10 +618,11 @@ QDomElement KmlExport::addKmlHtmlElement(QDomElement& target,
                                          const QString& tag,
                                          const QString& text) const
 {
-    QDomElement kmlElement  = m_kmlDocument->createElement( tag );
-    target.appendChild( kmlElement );
-    QDomText kmlTextElement = m_kmlDocument->createCDATASection( text );
-    kmlElement.appendChild( kmlTextElement );
+    QDomElement kmlElement  = m_kmlDocument->createElement(tag);
+    target.appendChild(kmlElement);
+    QDomText kmlTextElement = m_kmlDocument->createCDATASection(text);
+    kmlElement.appendChild(kmlTextElement);
+
     return kmlElement;
 }
 
