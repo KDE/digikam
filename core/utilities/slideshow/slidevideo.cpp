@@ -25,10 +25,11 @@
 
 // Qt includes
 
+#include <QApplication>
+#include <QProxyStyle>
+#include <QGridLayout>
 #include <QWidget>
 #include <QString>
-#include <QGridLayout>
-#include <QApplication>
 #include <QSlider>
 #include <QStyle>
 #include <QLabel>
@@ -51,6 +52,24 @@ using namespace QtAV;
 
 namespace Digikam
 {
+
+class Q_DECL_HIDDEN VideoStyle : public QProxyStyle
+{
+public:
+
+    using QProxyStyle::QProxyStyle;
+
+    int styleHint(QStyle::StyleHint hint, const QStyleOption* option = 0,
+                  const QWidget* widget = 0, QStyleHintReturn* returnData = 0) const
+    {
+        if (hint == QStyle::SH_Slider_AbsoluteSetButtons)
+        {
+            return (Qt::LeftButton | Qt::MidButton | Qt::RightButton);
+        }
+
+        return QProxyStyle::styleHint(hint, option, widget, returnData);
+    }
+};
 
 class Q_DECL_HIDDEN SlideVideo::Private
 {
@@ -90,6 +109,7 @@ SlideVideo::SlideVideo(QWidget* const parent)
 
     d->indicator      = new DHBox(this);
     d->slider         = new QSlider(Qt::Horizontal, d->indicator);
+    d->slider->setStyle(new VideoStyle(d->slider->style()));
     d->slider->setRange(0, 0);
     d->slider->setAutoFillBackground(true);
     d->tlabel         = new QLabel(d->indicator);
@@ -107,13 +127,10 @@ SlideVideo::SlideVideo(QWidget* const parent)
 
     // --------------------------------------------------------------------------
 
-    connect(d->slider, SIGNAL(sliderPressed()),
-            this, SLOT(slotSliderPressed()));
-
-    connect(d->slider, SIGNAL(sliderReleased()),
-            this, SLOT(slotSliderReleased()));
-
     connect(d->slider, SIGNAL(sliderMoved(int)),
+            this, SLOT(slotPosition(int)));
+
+    connect(d->slider, SIGNAL(valueChanged(int)),
             this, SLOT(slotPosition(int)));
 
     connect(d->player, SIGNAL(mediaStatusChanged(QtAV::MediaStatus)),
@@ -186,7 +203,9 @@ void SlideVideo::slotPositionChanged(qint64 position)
 {
     if (!d->slider->isSliderDown())
     {
+        d->slider->blockSignals(true);
         d->slider->setValue(position);
+        d->slider->blockSignals(false);
     }
 
     d->tlabel->setText(QString::fromLatin1("%1 / %2")
@@ -209,25 +228,6 @@ void SlideVideo::slotPosition(int position)
     if (d->player->isSeekable())
     {
         d->player->setPosition((qint64)position);
-    }
-}
-
-void SlideVideo::slotSliderPressed()
-{
-    if (!d->player->isPlaying())
-    {
-        d->player->play();
-        return;
-    }
-
-    d->player->pause(true);
-}
-
-void SlideVideo::slotSliderReleased()
-{
-    if (d->player->isPaused())
-    {
-        d->player->pause(false);
     }
 }
 
