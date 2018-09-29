@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QVBoxLayout>
 #include <QMouseEvent>
+#include <QProxyStyle>
 #include <QToolBar>
 #include <QAction>
 #include <QSlider>
@@ -106,6 +107,24 @@ protected:
 private:
 
     QObject* m_parent;
+};
+
+class Q_DECL_HIDDEN VideoStyle : public QProxyStyle
+{
+public:
+
+    using QProxyStyle::QProxyStyle;
+
+    int styleHint(QStyle::StyleHint hint, const QStyleOption* option = 0,
+                  const QWidget* widget = 0, QStyleHintReturn* returnData = 0) const
+    {
+        if (hint == QStyle::SH_Slider_AbsoluteSetButtons)
+        {
+            return (Qt::LeftButton | Qt::MidButton | Qt::RightButton);
+        }
+
+        return QProxyStyle::styleHint(hint, option, widget, returnData);
+    }
 };
 
 // --------------------------------------------------------
@@ -189,6 +208,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     DHBox* const hbox = new DHBox(this);
     d->slider         = new QSlider(Qt::Horizontal, hbox);
+    d->slider->setStyle(new VideoStyle(d->slider->style()));
     d->slider->setRange(0, 0);
     d->tlabel         = new QLabel(hbox);
     d->tlabel->setText(QLatin1String("00:00:00 / 00:00:00"));
@@ -232,13 +252,10 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     connect(d->playAction, SIGNAL(triggered()),
             this, SLOT(slotPausePlay()));
 
-    connect(d->slider, SIGNAL(sliderPressed()),
-            this, SLOT(slotPausePlay()));
-
-    connect(d->slider, SIGNAL(sliderReleased()),
-            this, SLOT(slotPausePlay()));
-
     connect(d->slider, SIGNAL(sliderMoved(int)),
+            this, SLOT(slotPosition(int)));
+
+    connect(d->slider, SIGNAL(valueChanged(int)),
             this, SLOT(slotPosition(int)));
 
     connect(d->player, SIGNAL(stateChanged(QtAV::AVPlayer::State)),
@@ -423,7 +440,9 @@ void MediaPlayerView::slotPositionChanged(qint64 position)
 {
     if (!d->slider->isSliderDown())
     {
+        d->slider->blockSignals(true);
         d->slider->setValue(position);
+        d->slider->blockSignals(false);
     }
 
     d->tlabel->setText(QString::fromLatin1("%1 / %2")
