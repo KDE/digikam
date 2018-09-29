@@ -62,7 +62,7 @@ public:
     ~Generalinfo();
 
     /**
-     * @brief Assingning an image from an other image.
+     * @brief Assigning an image from an other image.
      * @param other an other image
      */
     Generalinfo& operator=(const Generalinfo& other);

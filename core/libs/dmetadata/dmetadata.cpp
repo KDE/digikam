@@ -114,10 +114,10 @@ bool DMetadata::save(const QString& filePath, bool setVersion) const
     return MetaEngine::save(filePath, setVersion);
 }
 
-bool DMetadata::applyChanges() const
+bool DMetadata::applyChanges(bool setVersion) const
 {
     FileWriteLocker lock(getFilePath());
-    return MetaEngine::applyChanges();
+    return MetaEngine::applyChanges(setVersion);
 }
 
 bool DMetadata::loadUsingRawEngine(const QString& filePath)
@@ -713,7 +713,7 @@ int DMetadata::getImageRating(const DMetadataSettingsContainer& settings) const
         int index = entry.convertRatio.indexOf(rating);
 
         // Exact value was not found,but rating is in range,
-        // so we try to aproximate it
+        // so we try to approximate it
         if ((index == -1)                         &&
             (rating > entry.convertRatio.first()) &&
             (rating < entry.convertRatio.last()))

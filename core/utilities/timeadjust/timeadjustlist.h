@@ -27,8 +27,8 @@
 
 // Qt includes
 
-#include <QMap>
 #include <QDateTime>
+#include <QMap>
 #include <QUrl>
 
 // Local includes

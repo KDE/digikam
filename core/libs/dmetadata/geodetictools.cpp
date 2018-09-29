@@ -503,7 +503,7 @@ bool GeodeticCalculator::computeDirection()
         const double t4   = w*w;
         const double t6   = w*t4;
 
-        // the coefficents of type a
+        // the coefficients of type a
         const double ao   = f+a01*w+a02*t4+a03*t6;
         const double a2   =   a21*w+a22*t4+a23*t6;
         const double a4   =         a42*t4+a43*t6;

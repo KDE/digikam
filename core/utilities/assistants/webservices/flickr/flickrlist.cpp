@@ -406,7 +406,7 @@ void FlickrList::slotAddImages(const QList<QUrl>& list)
 
         if (!found)
         {
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Insterting new item " << imageUrl.fileName();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Inserting new item " << imageUrl.fileName();
             new FlickrListViewItem(listView(), imageUrl, d->is23,
                                    isPublic, isFamily, isFriends,
                                    safetyLevel, contentType);

@@ -283,7 +283,7 @@ class dng_negative
 
 		dng_urational fShadowScale;
 
-		// Colormetric reference.
+		// Colorimetric reference.
 
 		uint32 fColorimetricReference;
 
@@ -343,7 +343,7 @@ class dng_negative
 
 		mutable dng_fingerprint fRawImageDigest;
 
-		// Raw data unique ID.  This is an unique identifer for the actual
+		// Raw data unique ID.  This is an unique identifier for the actual
 		// raw image data in the file.  It can be used to index into caches
 		// for this data.
 
@@ -353,7 +353,7 @@ class dng_negative
 
 		dng_string fOriginalRawFileName;
 
-		// Is the original raw file data availaible?
+		// Is the original raw file data available?
 
 		bool fHasOriginalRawFileData;
 
@@ -417,7 +417,7 @@ class dng_negative
 
 		AutoPtr<dng_linearization_info> fLinearizationInfo;
 
-		// Information required to demoasic the raw data.
+		// Information required to demosaic the raw data.
 
 		AutoPtr<dng_mosaic_info> fMosaicInfo;
 
@@ -665,7 +665,7 @@ class dng_negative
 			}
 
 		/// Get default scale factor.
-		/// When specifing a single scale factor, we use the horizontal
+		/// When specifying a single scale factor, we use the horizontal
 		/// scale factor,  and let the vertical scale factor be calculated
 		/// based on the pixel aspect ratio.
 

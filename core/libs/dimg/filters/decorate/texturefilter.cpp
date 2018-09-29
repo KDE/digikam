@@ -131,13 +131,15 @@ void TextureFilter::filterImage()
 
     // Make textured transparent layout.
 
-    for (int x = 0; runningFlag() && x < w; ++x)
+    for (int x = 0 ; runningFlag() && x < w ; ++x)
     {
-        for (int y = 0; runningFlag() && y < h; ++y)
+        for (int y = 0 ; runningFlag() && y < h ; ++y)
         {
             offset = x * bytesDepth + (y * w * bytesDepth);
             ptr    = data + offset;
             tptr   = pTeData + offset;
+
+            (void)ptr; // Remove clang warnings.
 
             // Read color
             teData.setColor(tptr, sixteenBit);
@@ -172,9 +174,9 @@ void TextureFilter::filterImage()
 
     // Merge layout and image using overlay method.
 
-    for (int x = 0; runningFlag() && x < w; ++x)
+    for (int x = 0 ; runningFlag() && x < w ; ++x)
     {
-        for (int y = 0; runningFlag() && y < h; ++y)
+        for (int y = 0 ; runningFlag() && y < h ; ++y)
         {
             offset = x * bytesDepth + (y * w * bytesDepth);
             ptr    = data + offset;

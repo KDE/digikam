@@ -627,7 +627,7 @@ FixupQualifiedNode ( XMP_Node * xmpParent )
             } else {
                 xmpParent->qualifiers.insert ( xmpParent->qualifiers.begin(), currQual );
             }
-            xmpParent->children[childNum] = 0;	// We just moved it to the qualifers.
+            xmpParent->children[childNum] = 0;	// We just moved it to the qualifiers.
 
     }
 
@@ -894,7 +894,7 @@ RDF_PropertyElementList ( XMP_Node * xmpParent, const XML_Node & xmlParent, bool
 // are distinguished by their XML element content.
 //
 // NOTE: The RDF syntax does not explicitly include the xml:lang attribute although it can appear in
-// many of these. We have to allow for it in the attibute counts below.
+// many of these. We have to allow for it in the attribute counts below.
 
 static void
 RDF_PropertyElement ( XMP_Node * xmpParent, const XML_Node & xmlNode, bool isTopLevel )

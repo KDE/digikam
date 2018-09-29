@@ -227,7 +227,7 @@ void DImgHistoryGraphTest::testEditing()
     QVERIFY(graph2.data().vertexCount() == 4);
     qDebug() << graph2;
 
-    // Check that removal of current version leads to resetting of current verion tag
+    // Check that removal of current version leads to resetting of current version tag
     QFile fileThree(three.filePath());
     fileThree.remove();
     QFile fileFour(four.filePath());

@@ -519,6 +519,8 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
     defaultCodeMatch = -1;
     firstMatch       = -1;
 
+    (void)firstMatch; // Remove clang warning.
+
     if (infos.isEmpty())
     {
         return -1;

@@ -84,7 +84,7 @@ public:
 
     /**
      * @brief isCanceled
-     * @return true if the thread was inturrupted
+     * @return true if the thread was interrupted
      */
     bool isCanceled() const;
 

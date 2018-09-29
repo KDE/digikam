@@ -105,7 +105,7 @@ public:
      *        thus these fonts have limited number of sizes.
      *  @li @p SmoothScalableFont when included only return smooth scalable fonts.
      *        this will return only non-bitmap fonts which are scalable to any size requested.
-     *        Setting this option to true will mean the "scalable" flag is irrelavant.
+     *        Setting this option to true will mean the "scalable" flag is irrelevant.
      */
     enum FontListCriteria
     {

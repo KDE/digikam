@@ -24,7 +24,7 @@
 #ifndef TEMPLATE_ICON_H
 #define TEMPLATE_ICON_H
 
-// Qt incudes
+// Qt includes
 
 #include <QPainter>
 #include <QIcon>

@@ -161,7 +161,7 @@ bool PreProcessTask::computePreview(const QUrl& inUrl)
             d->meta.load(outUrl.toLocalFile());
             d->meta.setImageOrientation(orientation);
             d->meta.setImageDimensions(QSize(preview.width(), preview.height()));
-            d->meta.applyChanges();
+            d->meta.applyChanges(true);
         }
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Preview Image url: " << outUrl << ", saved: " << saved;
@@ -226,7 +226,7 @@ bool PreProcessTask::convertRaw()
         d->meta.setXmpTagString("Xmp.tiff.Make",  make);
         d->meta.setXmpTagString("Xmp.tiff.Model", model);
         d->meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-        d->meta.applyChanges();
+        d->meta.applyChanges(true);
     }
     else
     {

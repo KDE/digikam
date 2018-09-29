@@ -641,6 +641,7 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     d->cutItemsAction->setEnabled(selectionCount > 0);
     d->copyItemsAction->setEnabled(selectionCount > 0);
     m_metadataEditAction->setEnabled(selectionCount > 0);
+    m_timeAdjustAction->setEnabled(selectionCount > 0);
     d->openWithAction->setEnabled(selectionCount > 0);
     d->imageAutoExifActionMenu->setEnabled(selectionCount > 0);
 

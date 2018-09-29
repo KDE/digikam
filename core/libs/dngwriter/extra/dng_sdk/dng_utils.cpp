@@ -108,7 +108,7 @@ real64 TickTimeInSeconds ()
 
 	// One might think it prudent to cache the frequency here, however
 	// low-power CPU modes can, and do, change the value returned.
-	// Thus the frequencey needs to be retrieved each time.
+	// Thus the frequency needs to be retrieved each time.
 
 	// Note that the frequency changing can cause the return
 	// result to jump backwards, which is why the TickCountInSeconds

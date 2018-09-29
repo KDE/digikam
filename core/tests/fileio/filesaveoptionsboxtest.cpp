@@ -26,7 +26,7 @@
 
 #include <QTest>
 
-// Local inclues
+// Local includes
 
 #include "filesaveoptionsbox.h"
 #include "dimg.h"

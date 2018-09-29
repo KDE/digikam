@@ -61,7 +61,7 @@ public:
     ~Page();
 
     /**
-     * @brief Assingning a page from an other page.
+     * @brief Assigning a page from an other page.
      * @param other an other page
      */
     Page& operator=(Page other);

@@ -112,8 +112,8 @@ public:
      */
     static bool loadFullImage(QImage& image, const QString& path, const DRawDecoderSettings& settings = DRawDecoderSettings());
 
-    /** Get the camera settings witch have taken RAW file. Look into rawinfo.h
-        for more details. This is a fast and non cancelable method witch do not require
+    /** Get the camera settings which have taken RAW file. Look into rawinfo.h
+        for more details. This is a fast and non cancelable method which do not require
         a class instance to run.
      */
     static bool rawFileIdentify(RawInfo& identify, const QString& path);
@@ -158,7 +158,7 @@ public:
 
             - A byte array container 'rawData' with raw data.
             - All info about Raw image into 'identify' container.
-            - 'false' is returned if loadding failed, else 'true'.
+            - 'false' is returned if loading failed, else 'true'.
      */
     bool extractRAWData(const QString& filePath, QByteArray& rawData, RawInfo& identify, unsigned int shotSelect=0);
 
@@ -215,8 +215,8 @@ protected:
 
 protected:
 
-    /** Re-implement this method to control the cancelisation of loop witch wait data
-        from RAW decoding process with your propers envirronement.
+    /** Re-implement this method to control the cancelisation of loop which wait data
+        from RAW decoding process with your proper environment.
         By default, this method check if m_cancel is true.
      */
     virtual bool checkToCancelWaitingData();

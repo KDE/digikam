@@ -118,7 +118,7 @@ class dng_mosaic_info
 		/// Returns scaling factor relative to input size needed to capture output data.
 		/// Staggered (or rotated) sensing arrays are produced to a larger output than the number of input samples.
 		/// This method indicates how much larger.
-		/// \retval a point with integer scaling factors for the horizotal and vertical dimensions.
+		/// \retval a point with integer scaling factors for the horizontal and vertical dimensions.
 
 		virtual dng_point FullScale () const;
 

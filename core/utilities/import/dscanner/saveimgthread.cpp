@@ -240,7 +240,7 @@ void SaveImgThread::run()
 
     emit signalProgress(d->newUrl, 90);
 
-    meta.applyChanges();
+    meta.applyChanges(true);
 
     emit signalProgress(d->newUrl, 100);
     emit signalComplete(d->newUrl, success);

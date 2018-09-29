@@ -80,8 +80,8 @@ public:
      * ffmpeg probe methods if Exiv2 failed.
      */
     bool load(const QString& filePath);
-    bool save(const QString& filePath, bool setVersion = true) const;
-    bool applyChanges() const;
+    bool save(const QString& filePath, bool setVersion = false) const;
+    bool applyChanges(bool setVersion = false) const;
 
     /**
      * Try to extract metadata using Raw Engine identify method (libraw).

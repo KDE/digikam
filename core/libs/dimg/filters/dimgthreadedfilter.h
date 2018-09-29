@@ -89,12 +89,12 @@ public:
     };
 
     /** This method return a list of steps to process parallelized operation in filter using QtConcurrents API.
-     *  Ususally, start and stop are rows or columns from image to process. By defaut whole image will be processed
+     *  Usually, start and stop are rows or columns from image to process. By default, whole image will be processed
      *  and start value is 0. In this case stop will be last row or column to process.
-     *  Between range [start,stop], this method will divide by egal steps depending of number of CPU cores available.
-     *  To be sure that all vlaues will be processed, in case of CPU core division give rest, the last step compensate
+     *  Between range [start,stop], this method will divide by equal steps depending of number of CPU cores available.
+     *  To be sure that all values will be processed, in case of CPU core division give rest, the last step compensate
      *  the difference.
-     *  See Blur filter loop implementation for exemple to see how to use this method with QtConcurrents API.
+     *  See Blur filter loop implementation for example to see how to use this method with QtConcurrents API.
      */
     QList<int> multithreadedSteps(int stop, int start=0) const;
 

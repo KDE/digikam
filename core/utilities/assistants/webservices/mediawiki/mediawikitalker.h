@@ -35,7 +35,7 @@
 
 #include <kjob.h>
 
-// Local incudes
+// Local includes
 
 #include "dinfointerface.h"
 

@@ -195,7 +195,7 @@ public:
      @param icon the icon information including url path
      @param fileroot the file system root path 
      @param urlroot the url root path of the icon url to match to fileroot
-     Note: As an exemple, if the icon url path is "/images/icon1.jpg", the fileroot
+     Note: As an example, if the icon url path is "/images/icon1.jpg", the fileroot
      is "/Users/joe/www" and the urlroot is "/", when a request is made for
      "/images/icon1.jpg", the file is expected to be found at 
      "/Users/joe/www/images/icon1.jpg". If the urlroot were "/images", the file 
@@ -308,7 +308,7 @@ protected:
     
     /**
      This method is called when a request from a subscriber has been received. This is
-     for any new subscritions, existing subscrition renewal or cancellation.
+     for any new subscriptions, existing subscription renewal or cancellation.
      @param request the HTTP request
      @param context the context information including local and remote socket information.
      @param response the response to setup.

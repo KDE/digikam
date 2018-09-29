@@ -340,7 +340,7 @@ class dng_camera_profile
 		/// that direction in order to determine the clipping points for
 		/// highlight recovery logic based on the white point.  If cameras
 		/// were all three-color, the matrix could be stored as a forward matrix.
-		/// The inverse matrix is requried to support four-color cameras.
+		/// The inverse matrix is required to support four-color cameras.
 
 		void SetColorMatrix1 (const dng_matrix &m);
 
@@ -349,7 +349,7 @@ class dng_camera_profile
 		/// that direction in order to determine the clipping points for
 		/// highlight recovery logic based on the white point.  If cameras
 		/// were all three-color, the matrix could be stored as a forward matrix.
-		/// The inverse matrix is requried to support four-color cameras.
+		/// The inverse matrix is required to support four-color cameras.
 
 		void SetColorMatrix2 (const dng_matrix &m);
 

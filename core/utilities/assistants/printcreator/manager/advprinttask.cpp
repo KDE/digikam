@@ -260,6 +260,7 @@ QStringList AdvPrintTask::printPhotosToFile()
         if (dpi == 0.0)
         {
             dpi = getMaxDPI(photos, layouts->m_layouts, current) * 1.1;
+            (void)dpi; // Remove clang warnings.
         }
 
         int w            = AdvPrintWizard::normalizedInt(srcPage->width());
@@ -379,7 +380,7 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
                 AdvPrintWizard::normalizedInt((double) srcPage->width()  * xRatio),
                 AdvPrintWizard::normalizedInt((double) srcPage->height() * yRatio));
 
-    for (; (current < photos.count()) && !m_cancel ; ++current)
+    for ( ; (current < photos.count()) && !m_cancel ; ++current)
     {
         AdvPrintPhoto* const photo = photos.at(current);
         // crop
@@ -528,25 +529,25 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
 
             switch (orientatation)
             {
-                case 0 :
+                case 0:
                 {
                     tx += x1 + 1;
                     ty += y1 + (h - captionH - 1);
                     break;
                 }
-                case 90 :
+                case 90:
                 {
                     tx = top + y1 + 1;
                     ty = -left - x1 - captionH - 1;
                     break;
                 }
-                case 180 :
+                case 180:
                 {
                     tx = -left - x1 - w + 1;
                     ty = -top - y1 - (captionH + 1);
                     break;
                 }
-                case 270 :
+                case 270:
                 {
                     tx = -top - y1 - h + 1;
                     ty = left + x1 + (w - captionH) - 1;
@@ -584,7 +585,7 @@ double AdvPrintTask::getMaxDPI(const QList<AdvPrintPhoto*>& photos,
     QRect* layout                    = static_cast<QRect*>(*it);
     double maxDPI                    = 0.0;
 
-    for (; current < photos.count(); ++current)
+    for ( ; current < photos.count() ; ++current)
     {
         AdvPrintPhoto* const photo   = photos.at(current);
         double dpi                   = ((double) photo->m_cropRegion.width() +

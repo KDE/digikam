@@ -913,7 +913,7 @@ dng_date_time_format dng_date_time_storage_info::Format () const
 
 /*****************************************************************************
  * Win32 kernel time functions from Wine API used to implement
- * TzSpecificLocalTimeToSystemTime() from win32 which is unavialable with MinGW.
+ * TzSpecificLocalTimeToSystemTime() from win32 which is unavailable with MinGW.
  */
 
 #if qWinOS && defined(__GNUC__)

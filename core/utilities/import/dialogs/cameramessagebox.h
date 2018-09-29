@@ -103,7 +103,7 @@ public:
                                 const CamItemInfoList& items,
                                 const QString& dontShowAgainName = QString());
 
-    /** Show List of camera items to processs into a message box and wait user feedback.
+    /** Show List of camera items to process into a message box and wait user feedback.
      *  Return QMessageBox::Yes or QMessageBox::Cancel
      */
     static int warningContinueCancelList(CameraThumbsCtrl* const ctrl,

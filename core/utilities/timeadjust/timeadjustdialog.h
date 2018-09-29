@@ -29,7 +29,6 @@
 // Qt includes
 
 #include <QUrl>
-#include <QDateTime>
 
 // Local includes
 
@@ -51,9 +50,7 @@ public:
     explicit TimeAdjustDialog(QWidget* const parent, DInfoInterface* const iface);
     ~TimeAdjustDialog();
 
-Q_SIGNALS:
-
-    void signalMyCloseClicked();
+    QList<QUrl> getProccessedUrls() const;
 
 private Q_SLOTS:
 
@@ -74,7 +71,7 @@ private Q_SLOTS:
 
 private:
 
-    /** Called by readTimestamps() to get KIPI host timestamps
+    /** Called by readTimestamps() to get host timestamps
      */
     void readApplicationTimestamps();
 

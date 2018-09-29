@@ -3167,7 +3167,7 @@ bool ParseDateTimeTag (dng_stream &stream,
 
 	// Kludge: Some versions of PaintShop Pro write these fields
 	// with a length of 21 rather than 20.  Otherwise they are
-	// correctly formated.  So relax this test and allow these
+	// correctly formatted.  So relax this test and allow these
 	// these longer than standard tags to be parsed.
 
 	(void) CheckTagCount (parentCode, tagCode, tagCount, 20);

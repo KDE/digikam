@@ -143,7 +143,7 @@ protected:
       *
       * Internally and if not reimplemented, this method will ask for @p left and
       * @p right models for role CategorySortRole. In order to correctly sort
-      * categories, the data() metod of the model should return a qlonglong (or numeric) value, or
+      * categories, the data() method of the model should return a qlonglong (or numeric) value, or
       * a QString object. QString objects will be sorted with QString::localeAwareCompare if
       * sortCategoriesByNaturalComparison() is true.
       *

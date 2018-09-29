@@ -42,6 +42,7 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QSpinBox>
+#include <QDateTime>
 #include <QTimeEdit>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -75,7 +76,7 @@ class Q_DECL_HIDDEN TimeAdjustDialog::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         settingsView = 0;
         progressBar  = 0;
@@ -103,8 +104,8 @@ TimeAdjustDialog::TimeAdjustDialog(QWidget* const parent, DInfoInterface* const 
       d(new Private)
 {
     setWindowTitle(i18n("Adjust Time & Date"));
-    setModal(true);
     setMinimumSize(900, 500);
+    setModal(true);
 
     d->iface = iface;
 
@@ -118,7 +119,6 @@ TimeAdjustDialog::TimeAdjustDialog(QWidget* const parent, DInfoInterface* const 
     QGridLayout* const mainLayout = new QGridLayout(mainWidget);
     d->listView                   = new TimeAdjustList(mainWidget);
     d->settingsView               = new TimeAdjustSettings(mainWidget);
-    //d->settingsView->setImageList(d->listView);
     d->progressBar                = new DProgressWdg(mainWidget);
     d->progressBar->reset();
     d->progressBar->hide();
@@ -202,6 +202,21 @@ void TimeAdjustDialog::slotDialogFinished()
     saveSettings();
 }
 
+QList<QUrl> TimeAdjustDialog::getProccessedUrls() const
+{
+    QList<QUrl> proccessed;
+
+    foreach (const QUrl& url, d->itemsStatusMap.keys())
+    {
+        if (d->itemsStatusMap.value(url) == TimeAdjustList::NOPROCESS_ERROR)
+        {
+            proccessed << url;
+        }
+    }
+
+    return proccessed;
+}
+
 void TimeAdjustDialog::readSettings()
 {
     TimeAdjustContainer prm;
@@ -216,13 +231,15 @@ void TimeAdjustDialog::readSettings()
     prm.adjustmentDays = group.readEntry(QLatin1String("Adjustment Days"),               0);
     prm.adjustmentTime = group.readEntry(QLatin1String("Adjustment Time"),               QDateTime());
 
+    prm.updIfAvailable = group.readEntry(QLatin1String("Update Only If Available Time"), true);
     prm.updFileModDate = group.readEntry(QLatin1String("Update File Modification Time"), true);
     prm.updEXIFModDate = group.readEntry(QLatin1String("Update EXIF Modification Time"), true);
     prm.updEXIFOriDate = group.readEntry(QLatin1String("Update EXIF Original Time"),     true);
     prm.updEXIFDigDate = group.readEntry(QLatin1String("Update EXIF Digitization Time"), true);
     prm.updEXIFThmDate = group.readEntry(QLatin1String("Update EXIF Thumbnail Time"),    true);
-    prm.updIPTCDate    = group.readEntry(QLatin1String("Update IPTC Time"),              true);
-    prm.updXMPDate     = group.readEntry(QLatin1String("Update XMP Creation Time"),      true);
+    prm.updIPTCDate    = group.readEntry(QLatin1String("Update IPTC Time"),              false);
+    prm.updXMPVideo    = group.readEntry(QLatin1String("Update XMP Video Time"),         false);
+    prm.updXMPDate     = group.readEntry(QLatin1String("Update XMP Creation Time"),      false);
 
     prm.dateSource     = group.readEntry(QLatin1String("Use Timestamp Type"),            0);
     prm.metadataSource = group.readEntry(QLatin1String("Meta Timestamp Type"),           0);
@@ -250,12 +267,14 @@ void TimeAdjustDialog::saveSettings()
     group.writeEntry(QLatin1String("Adjustment Days"),               prm.adjustmentDays);
     group.writeEntry(QLatin1String("Adjustment Time"),               prm.adjustmentTime);
 
+    group.writeEntry(QLatin1String("Update Only If Available Time"), prm.updIfAvailable);
     group.writeEntry(QLatin1String("Update File Modification Time"), prm.updFileModDate);
     group.writeEntry(QLatin1String("Update EXIF Modification Time"), prm.updEXIFModDate);
     group.writeEntry(QLatin1String("Update EXIF Original Time"),     prm.updEXIFOriDate);
     group.writeEntry(QLatin1String("Update EXIF Digitization Time"), prm.updEXIFDigDate);
     group.writeEntry(QLatin1String("Update EXIF Thumbnail Time"),    prm.updEXIFThmDate);
     group.writeEntry(QLatin1String("Update IPTC Time"),              prm.updIPTCDate);
+    group.writeEntry(QLatin1String("Update XMP Video Time"),         prm.updXMPVideo);
     group.writeEntry(QLatin1String("Update XMP Creation Time"),      prm.updXMPDate);
 
     group.writeEntry(QLatin1String("Use Timestamp Type"),            prm.dateSource);
@@ -297,9 +316,12 @@ void TimeAdjustDialog::slotReadTimestamps()
 
         default:  // CUSTOMDATE
         {
+            QDateTime dateTime(d->settingsView->settings().customDate.date(),
+                               d->settingsView->settings().customTime.time());
+
             foreach (const QUrl& url, d->itemsUsedMap.keys())
             {
-                d->itemsUsedMap.insert(url, d->settingsView->settings().customDate);
+                d->itemsUsedMap.insert(url, dateTime);
             }
             break;
         }
@@ -373,14 +395,14 @@ void TimeAdjustDialog::readMetadataTimestamps()
                 break;
             case TimeAdjustContainer::IPTCCREATED:
                 // we have to truncate the timezone from the time, otherwise it cannot be converted to a QTime
-                curImageDateTime = QDateTime(QDate::fromString(meta.getIptcTagString("Iptc.Application2.DateCreated"), 
+                curImageDateTime = QDateTime(QDate::fromString(meta.getIptcTagString("Iptc.Application2.DateCreated"),
                                                                Qt::ISODate),
                                              QTime::fromString(meta.getIptcTagString("Iptc.Application2.TimeCreated").left(8),
                                                                Qt::ISODate));
                 break;
             case TimeAdjustContainer::XMPCREATED:
                 curImageDateTime = QDateTime::fromString(meta.getXmpTagString("Xmp.xmp.CreateDate"),
-                                                         QLatin1String("yyyy:MM:dd hh:mm:ss"));
+                                                         QLatin1String("yyyy:MM:ddThh:mm:ss"));
                 break;
             default:
                 // curImageDateTime stays invalid

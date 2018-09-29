@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QDateTime>
-#include <QTime>
 
 // Local includes
 
@@ -89,11 +88,13 @@ public:
     QDateTime customTime;
     QDateTime adjustmentTime;
 
+    bool      updIfAvailable;
     bool      updEXIFModDate;
     bool      updEXIFOriDate;
     bool      updEXIFDigDate;
     bool      updEXIFThmDate;
     bool      updIPTCDate;
+    bool      updXMPVideo;
     bool      updXMPDate;
     bool      updFileModDate;
 

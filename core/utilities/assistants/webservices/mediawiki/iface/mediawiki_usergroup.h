@@ -61,7 +61,7 @@ public:
     ~UserGroup();
 
     /**
-     * @brief Assingning a user group from an other user group.
+     * @brief Assigning a user group from an other user group.
      * @param other an other user group
      */
     UserGroup& operator=(UserGroup other);

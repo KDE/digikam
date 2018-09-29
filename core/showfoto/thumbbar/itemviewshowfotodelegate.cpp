@@ -101,7 +101,7 @@ void ItemViewShowfotoDelegate::setThumbnailSize(const ThumbnailSize& thumbSize)
 {
     Q_D(ItemViewShowfotoDelegate);
 
-    if ( d->thumbSize != thumbSize)
+    if (d->thumbSize != thumbSize)
     {
         d->thumbSize = thumbSize;
         invalidatePaintingCache();

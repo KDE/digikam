@@ -129,7 +129,7 @@ void LibRaw::init_fuji_compr(struct fuji_compressed_params *info)
       *qt = 4;
   }
 
-  // populting gradients
+  // populating gradients
   if (info->q_point[4] == 0x3FFF)
   {
     info->total_values = 0x4000;

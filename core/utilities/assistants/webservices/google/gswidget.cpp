@@ -51,21 +51,22 @@ GSWidget::GSWidget(QWidget* const parent,
                    const QString& serviceName)
     : WSSettingsWidget(parent, iface, serviceName)
 {
-    m_service               = service;
-    QGroupBox* m_LeafBox    = new QGroupBox(QLatin1String(""), getSettingsBox());
-    QGridLayout* leafLayout = new QGridLayout(m_LeafBox);
-    m_tagsBGrp              = new QButtonGroup(m_LeafBox);
+    m_service                = service;
+    m_tagsBGrp               = 0;
+    QGroupBox* const leafBox = new QGroupBox(QLatin1String(""), getSettingsBox());
 
     if (m_service == GoogleService::GPhotoExport)
     {
+        QGridLayout* leafLayout   = new QGridLayout(leafBox);
+        m_tagsBGrp                = new QButtonGroup(leafBox);
         QSpacerItem* const spacer = new QSpacerItem(1, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
-        QLabel* const tagsLbl     = new QLabel(i18n("Tag path behavior :"), m_LeafBox);
+        QLabel* const tagsLbl     = new QLabel(i18n("Tag path behavior :"), leafBox);
 
-        QRadioButton* const leafTagsBtn     = new QRadioButton(i18n("Leaf tags only"), m_LeafBox);
+        QRadioButton* const leafTagsBtn     = new QRadioButton(i18n("Leaf tags only"), leafBox);
         leafTagsBtn->setWhatsThis(i18n("Export only the leaf tags of tag hierarchies"));
-        QRadioButton* const splitTagsBtn    = new QRadioButton(i18n("Split tags"), m_LeafBox);
+        QRadioButton* const splitTagsBtn    = new QRadioButton(i18n("Split tags"), leafBox);
         splitTagsBtn->setWhatsThis(i18n("Export the leaf tag and all ancestors as single tags."));
-        QRadioButton* const combinedTagsBtn = new QRadioButton(i18n("Combined String"), m_LeafBox);
+        QRadioButton* const combinedTagsBtn = new QRadioButton(i18n("Combined String"), leafBox);
         combinedTagsBtn->setWhatsThis(i18n("Build a combined tag string."));
 
         m_tagsBGrp->addButton(leafTagsBtn,     GPTagLeaf);
@@ -78,27 +79,27 @@ GSWidget::GSWidget(QWidget* const parent,
         leafLayout->addWidget(splitTagsBtn,    3, 1, 1, 1);
         leafLayout->addWidget(combinedTagsBtn, 4, 1, 1, 1);
 
-        addWidgetToSettingsBox(m_LeafBox);
+        addWidgetToSettingsBox(leafBox);
     }
 
-    switch(m_service)
+    switch (m_service)
     {
         case GoogleService::GPhotoImport:
             getNewAlbmBtn()->hide();
             getOptionsBox()->hide();
             imagesList()->hide();
-            m_LeafBox->hide();
+            leafBox->hide();
             getSizeBox()->hide(); // (Trung) Hide this option temporary, until factorization 
             break;
         case GoogleService::GDrive:
             getUploadBox()->hide();
             getSizeBox()->hide();
-            m_LeafBox->hide();
+            leafBox->hide();
             break;
         default:
             getUploadBox()->hide();
             getSizeBox()->hide();
-            m_LeafBox->hide();    // Google has removed this function in the current API V3.
+            leafBox->hide();    // Google has removed this function in the current API V3.
             break;
     }
 }
@@ -109,7 +110,7 @@ GSWidget::~GSWidget()
 
 void GSWidget::updateLabels(const QString& name, const QString& url)
 {
-    switch(m_service)
+    switch (m_service)
     {
         case GoogleService::GDrive:
         {
@@ -120,12 +121,15 @@ void GSWidget::updateLabels(const QString& name, const QString& url)
                 "</a></h2></b>").arg(web));
             break;
         }
+
         default:
+        {
             getHeaderLbl()->setText(QString::fromLatin1(
                 "<b><h2><a href='https://photos.google.com/%1'>"
                 "<font color=\"#9ACD32\">Google Photos/PicasaWeb</font>"
                 "</a></h2></b>").arg(url));
             break;
+        }
     }
 
     if (name.isEmpty())

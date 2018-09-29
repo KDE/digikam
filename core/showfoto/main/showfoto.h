@@ -86,10 +86,9 @@ private Q_SLOTS:
     void slotShowfotoItemInfoActivated(const ShowfotoItemInfo& info);
 
     void slotOpenFile();
+    void slotOpenFolder();
     void slotOpenUrl(const ShowfotoItemInfo& info);
-    void slotOpenFolder(const QUrl&);
-    void slotOpenFilesInFolder();
-    void slotDroppedUrls(const QList<QUrl>& droppedUrls);
+    void slotDroppedUrls(const QList<QUrl>& droppedUrls, bool dropped);
     void slotDeleteCurrentItem();
 
     void slotChanged();

@@ -198,7 +198,7 @@ TestDateFromTimeStringW3C()
     SHOULD_EQUAL_I(date.m_NanoSeconds  , 0);
     SHOULD_EQUAL_I(date.m_TimeZone     , 180);
 
-    /* Valid date, no millimseconds */
+    /* Valid date, no milliseconds */
     SHOULD_SUCCEED(date.FromString("2006-04-14T12:01:10Z", NPT_DateTime::FORMAT_W3C));
     SHOULD_EQUAL_I(date.m_Year         , 2006);
     SHOULD_EQUAL_I(date.m_Month        , 4);

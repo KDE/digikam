@@ -833,6 +833,7 @@ void EditorWindow::setupStandardActions()
     createImportActions();
 
     m_metadataEditAction->setEnabled(false);
+    m_timeAdjustAction->setEnabled(false);
     m_expoBlendingAction->setEnabled(false);
     m_calendarAction->setEnabled(false);
     m_sendByMailAction->setEnabled(false);
@@ -1368,7 +1369,7 @@ void EditorWindow::saveStandardSettings()
     config->sync();
 }
 
-/** Method used by Editor Tools. Only tools based on imageregionwidget support zoomming.
+/** Method used by Editor Tools. Only tools based on imageregionwidget support zooming.
     TODO: Fix this behavior when editor tool preview widgets will be factored.
  */
 void EditorWindow::toggleZoomActions(bool val)
@@ -1415,6 +1416,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->openWithAction->setEnabled(val);
     d->filePrintAction->setEnabled(val);
     m_metadataEditAction->setEnabled(val);
+    m_timeAdjustAction->setEnabled(val);
     m_exportAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
     d->selectNoneAction->setEnabled(val);
@@ -1603,7 +1605,7 @@ bool EditorWindow::promptForOverWrite()
     }
     else
     {
-        // in this case wil will handles the overwrite request
+        // in this case it will handle the overwrite request
         return true;
     }
 }
@@ -2637,7 +2639,7 @@ bool EditorWindow::startingSaveVersion(const QUrl& url, bool fork, bool saveAs, 
     if (m_savingContext.destinationExisted)
     {
         // So, should we refuse to overwrite the original?
-        // It's a frontal crash againt non-destructive principles.
+        // It's a frontal crash against non-destructive principles.
         // It is tempting to refuse, yet I think the user has to decide in the end
         /*QUrl currURL(m_savingContext.srcURL);
         currURL.cleanPath();
@@ -2965,7 +2967,7 @@ void EditorWindow::setupSelectToolsAction()
 
     // Builtin actions
 
-    QString transformCategory          = i18nc("@title Image Transform", "Transform");
+    QString transformCategory = i18nc("@title Image Transform",       "Transform");
     actionModel->addAction(d->rotateLeftAction,           transformCategory);
     actionModel->addAction(d->rotateRightAction,          transformCategory);
     actionModel->addAction(d->flipHorizAction,            transformCategory);
@@ -2982,12 +2984,12 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(d->contentAwareResizingAction, transformCategory);
 #endif
 
-    QString decorateCategory           = i18nc("@title Image Decorate",  "Decorate");
+    QString decorateCategory  = i18nc("@title Image Decorate",        "Decorate");
     actionModel->addAction(d->textureAction,              decorateCategory);
     actionModel->addAction(d->borderAction,               decorateCategory);
     actionModel->addAction(d->insertTextAction,           decorateCategory);
 
-    QString effectsCategory            = i18nc("@title Image Effect",    "Effects");
+    QString effectsCategory   = i18nc("@title Image Effect",          "Effects");
     actionModel->addAction(d->filmgrainAction,            effectsCategory);
     actionModel->addAction(d->raindropAction,             effectsCategory);
     actionModel->addAction(d->distortionfxAction,         effectsCategory);
@@ -2997,7 +2999,7 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(d->charcoalAction,             effectsCategory);
     actionModel->addAction(d->colorEffectsAction,         effectsCategory);
 
-    QString colorsCategory             = i18nc("@title Image Colors",    "Colors");
+    QString colorsCategory    = i18nc("@title Image Colors",          "Colors");
     actionModel->addAction(d->convertTo8Bits,             colorsCategory);
     actionModel->addAction(d->convertTo16Bits,            colorsCategory);
     actionModel->addAction(d->invertAction,               colorsCategory);
@@ -3013,7 +3015,7 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(d->filmAction,                 colorsCategory);
     actionModel->addAction(d->colorSpaceConverter,        colorsCategory);
 
-    QString enhanceCategory             = i18nc("@title Image Enhance",  "Enhance");
+    QString enhanceCategory   = i18nc("@title Image Enhance",         "Enhance");
     actionModel->addAction(d->restorationAction,          enhanceCategory);
     actionModel->addAction(d->blurAction,                 enhanceCategory);
     //actionModel->addAction(d->healCloneAction,            enhanceCategory);
@@ -3029,9 +3031,10 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(d->lensAutoFixAction,          enhanceCategory);
 #endif
 
-    QString postCategory             = i18nc("@title Post Processing Tools", "Post-Processing");
+    QString postCategory      = i18nc("@title Post Processing Tools", "Post-Processing");
     actionModel->addAction(m_calendarAction,              postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
+    actionModel->addAction(m_timeAdjustAction,            postCategory);
     actionModel->addAction(m_presentationAction,          postCategory);
     actionModel->addAction(m_expoBlendingAction,          postCategory);
     actionModel->addAction(m_sendByMailAction,            postCategory);
@@ -3054,14 +3057,14 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(m_geolocationEditAction,       postCategory);
 #endif
 
-    QString exportCategory           = i18nc("@title Export Tools",          "Export");
+    QString exportCategory    = i18nc("@title Export Tools",          "Export");
 
     foreach(QAction* const ac, exportActions())
     {
         actionModel->addAction(ac,                        exportCategory);
     }
 
-    QString importCategory           = i18nc("@title Import Tools",          "Import");
+    QString importCategory    = i18nc("@title Import Tools",          "Import");
 
     foreach(QAction* const ac, importActions())
     {

@@ -54,7 +54,7 @@ public:
      */
     void setThumbnailSize(int size);
 
-    /** Add a film strip on the left side of video thumnails
+    /** Add a film strip on the left side of video thumbnails
      */
     void setCreateStrip(bool strip);
 
@@ -68,7 +68,7 @@ public:
 
 Q_SIGNALS:
 
-    /** Emit when thumnail is generated and ready to use.
+    /** Emit when thumbnail is generated and ready to use.
      */
     void signalThumbnailDone(const QString&, const QImage&);
 

@@ -47,6 +47,7 @@
 #include "coredb.h"
 #include "album.h"
 #include "albummanager.h"
+#include "albumpointer.h"
 #include "facepipeline.h"
 #include "facescansettings.h"
 #include "imageinfo.h"

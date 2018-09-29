@@ -93,7 +93,7 @@ dng_function_exposure_tone::dng_function_exposure_tone (real64 exposure)
 
 		fSlope = pow (2.0, exposure);
 
-		// Find quadradic parameters that match this darking at the crossover
+		// Find quadratic parameters that match this darking at the crossover
 		// point, yet still map pure white to pure white.
 
 		a = 16.0 / 9.0 * (1.0 - fSlope);
@@ -898,7 +898,7 @@ void dng_render_task::Start (uint32 threadCount,
 
 		{
 
-		// If there is any negative exposure compenation to perform
+		// If there is any negative exposure compensation to perform
 		// (beyond what the camera provides for with its baseline exposure),
 		// we fake this by darkening the tone curve.
 

@@ -113,12 +113,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
 
     // -- Load current items ---------------------------
 
-    slotDroppedUrls(urlList);
-
-    if (!d->infoList.isEmpty())
-    {
-        slotOpenUrl(d->thumbBar->currentInfo());
-    }
+    slotDroppedUrls(urlList, false);
 }
 
 ShowFoto::~ShowFoto()
@@ -182,7 +177,8 @@ void ShowFoto::show()
                                "select \"No\". In this case, \"Color Management\" feature "
                                "will be disabled until you solve this issue</p>");
 
-        if (QMessageBox::warning(this, qApp->applicationName(), message, QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+        if (QMessageBox::warning(this, qApp->applicationName(), message,
+                                 QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
         {
             if (!setup(true))
             {
@@ -212,46 +208,220 @@ void ShowFoto::slotOpenFile()
     }
 
     QList<QUrl> urls = Digikam::ImageDialog::getImageURLs(this, d->lastOpenedDirectory);
-    openUrls(urls);
+
+    if (urls.count() > 1)
+    {
+        d->infoList.clear();
+        d->model->clearShowfotoItemInfos();
+
+        openUrls(urls);
+        emit signalInfoList(d->infoList);
+
+        slotOpenUrl(d->thumbBar->currentInfo());
+        toggleNavigation(1);
+    }
+    else if (urls.count() == 1)
+    {
+        d->infoList.clear();
+        d->model->clearShowfotoItemInfos();
+
+        openFolder(urls.first().adjusted(QUrl::RemoveFilename));
+        emit signalInfoList(d->infoList);
+
+        slotOpenUrl(d->thumbBar->findItemByUrl(urls.first()));
+        d->thumbBar->setCurrentUrl(urls.first());
+    }
+}
+
+void ShowFoto::slotOpenFolder()
+{
+    if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->thumbBar->currentUrl()))
+    {
+        return;
+    }
+
+    QUrl url = DFileDialog::getExistingDirectoryUrl(this, i18n("Open Images From Folder"),
+                                                    d->lastOpenedDirectory);
+    if (!url.isEmpty())
+    {
+        d->infoList.clear();
+        d->model->clearShowfotoItemInfos();
+
+        openFolder(url);
+        emit signalInfoList(d->infoList);
+
+        slotOpenUrl(d->thumbBar->currentInfo());
+        toggleNavigation(1);
+    }
 }
 
 void ShowFoto::openUrls(const QList<QUrl> &urls)
 {
-    if (!urls.isEmpty())
+    if (urls.isEmpty())
     {
-        ShowfotoItemInfoList infos;
-        ShowfotoItemInfo iteminfo;
-        DMetadata meta;
+        return;
+    }
 
-        for (QList<QUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
+    ShowfotoItemInfo iteminfo;
+    DMetadata meta;
+
+    for (QList<QUrl>::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
+    {
+        QFileInfo fi((*it).toLocalFile());
+        iteminfo.name      = fi.fileName();
+        iteminfo.mime      = fi.suffix();
+        iteminfo.size      = fi.size();
+        iteminfo.url       = QUrl::fromLocalFile(fi.filePath());
+        iteminfo.folder    = fi.path();
+        iteminfo.dtime     = fi.created();
+        meta.load(fi.filePath());
+        iteminfo.ctime     = meta.getImageDateTime();
+        iteminfo.width     = meta.getImageDimensions().width();
+        iteminfo.height    = meta.getImageDimensions().height();
+        iteminfo.photoInfo = meta.getPhotographInformation();
+
+        if (!d->infoList.contains(iteminfo))
+            d->infoList << iteminfo;
+    }
+}
+
+void ShowFoto::openFolder(const QUrl& url)
+{
+    if (!url.isValid() || !url.isLocalFile())
+    {
+        return;
+    }
+
+    d->lastOpenedDirectory = url;
+
+    // Parse image IO mime types registration to get files filter pattern.
+
+    QString filter;
+    QStringList mimeTypes = supportedImageMimeTypes(QIODevice::ReadOnly, filter);
+
+    QString patterns = filter.toLower();
+    patterns.append (QLatin1Char(' '));
+    patterns.append (filter.toUpper());
+
+    qCDebug(DIGIKAM_SHOWFOTO_LOG) << "patterns=" << patterns;
+
+    // Get all image files from directory.
+
+    QDir dir(url.toLocalFile(), patterns);
+    dir.setFilter(QDir::Files);
+
+    if (!dir.exists())
+    {
+        return;
+    }
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
+    QFileInfoList fileinfolist = dir.entryInfoList();
+
+    if (fileinfolist.isEmpty())
+    {
+        QApplication::restoreOverrideCursor();
+        return;
+    }
+
+    QFileInfoList::const_iterator fi;
+    ShowfotoItemInfo iteminfo;
+    DMetadata meta;
+
+    // And open all items in image editor.
+
+    for (fi = fileinfolist.constBegin() ; fi != fileinfolist.constEnd() ; ++fi)
+    {
+        iteminfo.name      = (*fi).fileName();
+        iteminfo.mime      = (*fi).suffix();
+        iteminfo.size      = (*fi).size();
+        iteminfo.folder    = (*fi).path();
+        iteminfo.url       = QUrl::fromLocalFile((*fi).filePath());
+        iteminfo.dtime     = (*fi).created();
+        meta.load((*fi).filePath());
+        iteminfo.ctime     = meta.getImageDateTime();
+        iteminfo.width     = meta.getImageDimensions().width();
+        iteminfo.height    = meta.getImageDimensions().height();
+        iteminfo.photoInfo = meta.getPhotographInformation();
+
+        if (!d->infoList.contains(iteminfo))
+            d->infoList << iteminfo;
+    }
+
+    QApplication::restoreOverrideCursor();
+}
+
+void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls, bool dropped)
+{
+    if (droppedUrls.isEmpty())
+    {
+        return;
+    }
+
+    QList<QUrl> validUrls;
+
+    foreach (const QUrl& url, droppedUrls)
+    {
+        if (url.isValid())
         {
-            QFileInfo fi((*it).toLocalFile());
-            iteminfo.name      = fi.fileName();
-            iteminfo.mime      = fi.suffix();
-            iteminfo.size      = fi.size();
-            iteminfo.url       = QUrl::fromLocalFile(fi.filePath());
-            iteminfo.folder    = fi.path();
-            iteminfo.dtime     = fi.created();
-            meta.load(fi.filePath());
-            iteminfo.ctime     = meta.getImageDateTime();
-            iteminfo.width     = meta.getImageDimensions().width();
-            iteminfo.height    = meta.getImageDimensions().height();
-            iteminfo.photoInfo = meta.getPhotographInformation();
-            infos.append(iteminfo);
+            validUrls << url;
+        }
+    }
+
+    QList<QUrl> imagesUrls;
+    QList<QUrl> foldersUrls;
+
+    foreach (const QUrl& url, validUrls)
+    {
+        if (QMimeDatabase().mimeTypeForUrl(url).name().startsWith(QLatin1String("image"),
+                                                                  Qt::CaseInsensitive))
+        {
+            imagesUrls << url;
         }
 
-        if (d->droppedUrls)
+        if (QMimeDatabase().mimeTypeForUrl(url).name() == QLatin1String("inode/directory"))
         {
-            //replace the equal sign with "<<" to keep the previous pics in the list
-            d->infoList << infos;
+            foldersUrls << url;
         }
-        else
+    }
+
+    if (!imagesUrls.isEmpty())
+    {
+        openUrls(imagesUrls);
+    }
+
+    if (!foldersUrls.isEmpty())
+    {
+        foreach (const QUrl& fUrl, foldersUrls)
         {
-            d->infoList = infos;
+            openFolder(fUrl);
+        }
+    }
+
+    if (!d->infoList.isEmpty())
+    {
+        if (!dropped && foldersUrls.isEmpty() && imagesUrls.count() == 1)
+        {
+            openFolder(imagesUrls.first().adjusted(QUrl::RemoveFilename));
             d->model->clearShowfotoItemInfos();
             emit signalInfoList(d->infoList);
-            slotOpenUrl(d->thumbBar->currentInfo());
+
+            slotOpenUrl(d->thumbBar->findItemByUrl(imagesUrls.first()));
+            d->thumbBar->setCurrentUrl(imagesUrls.first());
+            return;
         }
+
+        d->model->clearShowfotoItemInfos();
+        emit signalInfoList(d->infoList);
+
+        slotOpenUrl(d->thumbBar->currentInfo());
+    }
+    else
+    {
+        QMessageBox::information(this, qApp->applicationName(),
+                                 i18n("There is no dropped item to process."));
+        qWarning(DIGIKAM_SHOWFOTO_LOG) << "infolist is empty..";
     }
 }
 
@@ -337,7 +507,7 @@ void ShowFoto::slotUpdateItemInfo()
     {
         index = 1;
 
-        for (int i = 0; i < d->itemsNb; i++)
+        for (int i = 0 ; i < d->itemsNb ; ++i)
         {
             QUrl url = d->thumbBar->showfotoItemInfos().at(i).url;
 
@@ -353,7 +523,8 @@ void ShowFoto::slotUpdateItemInfo()
                      "%1 (%2 of %3)", d->thumbBar->currentInfo().name,
                      index, d->itemsNb);
 
-        setCaption(QDir::toNativeSeparators(d->thumbBar->currentUrl().adjusted(QUrl::RemoveFilename).toLocalFile()));
+        setCaption(QDir::toNativeSeparators(d->thumbBar->currentUrl()
+                                            .adjusted(QUrl::RemoveFilename).toLocalFile()));
     }
     else
     {
@@ -363,42 +534,6 @@ void ShowFoto::slotUpdateItemInfo()
 
     m_nameLabel->setText(text);
     toggleNavigation(index);
-}
-
-void ShowFoto::slotOpenFolder(const QUrl& url)
-{
-    if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->thumbBar->currentUrl()))
-    {
-        return;
-    }
-
-    m_canvas->load(QString(), m_IOFileSettings);
-    d->thumbBar->showfotoItemInfos().clear();
-    emit signalNoCurrentItem();
-
-    openFolder(url);
-    toggleNavigation(1);
-}
-
-void ShowFoto::slotOpenFilesInFolder()
-{
-    if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->thumbBar->currentUrl()))
-    {
-        return;
-    }
-
-    QUrl url = QUrl::fromLocalFile(DFileDialog::getExistingDirectory(this, i18n("Open Images From Folder"),
-                                                                     d->lastOpenedDirectory.toLocalFile()));
-    if (!url.isEmpty())
-    {
-        m_canvas->load(QString(), m_IOFileSettings);
-        d->thumbBar->showfotoItemInfos().clear();
-        d->lastOpenedDirectory = url;
-        emit signalNoCurrentItem();
-
-        openFolder(url);
-        toggleNavigation(1);
-    }
 }
 
 void ShowFoto::slotFirst()
@@ -501,7 +636,8 @@ void ShowFoto::moveFile()
      *                            finishSaving(true)  save...IsComplete()
      */
 
-    qCDebug(DIGIKAM_SHOWFOTO_LOG) << m_savingContext.destinationURL << m_savingContext.destinationURL.isLocalFile();
+    qCDebug(DIGIKAM_SHOWFOTO_LOG) << m_savingContext.destinationURL
+                                  << m_savingContext.destinationURL.isLocalFile();
 
     if (m_savingContext.destinationURL.isLocalFile())
     {
@@ -612,7 +748,8 @@ void ShowFoto::slotDeleteCurrentItem()
     QString warnMsg(i18n("About to delete file \"%1\"\nAre you sure?",
                          urlCurrent.fileName()));
 
-    if (QMessageBox::warning(this, qApp->applicationName(), warnMsg, QMessageBox::Apply | QMessageBox::Abort)
+    if (QMessageBox::warning(this, qApp->applicationName(), warnMsg,
+                             QMessageBox::Apply | QMessageBox::Abort)
         !=  QMessageBox::Apply)
     {
         return;
@@ -623,7 +760,8 @@ void ShowFoto::slotDeleteCurrentItem()
 
         if (!ret)
         {
-            QMessageBox::critical(this, qApp->applicationName(), i18n("Cannot delete \"%1\"", urlCurrent.fileName()));
+            QMessageBox::critical(this, qApp->applicationName(),
+                                  i18n("Cannot delete \"%1\"", urlCurrent.fileName()));
             return;
         }
 
@@ -639,11 +777,11 @@ void ShowFoto::slotDeleteCurrentItem()
             slotUpdateItemInfo();
             toggleActions(false);
             m_canvas->load(QString(), m_IOFileSettings);
+            emit signalNoCurrentItem();
         }
         else
         {
             // If there is an image after the deleted one, make that selected.
-
             slotOpenUrl(d->thumbBar->currentInfo());
         }
     }
@@ -679,142 +817,6 @@ bool ShowFoto::saveNewVersionInFormat(const QString&)
     return false;
 }
 
-void ShowFoto::openFolder(const QUrl& url)
-{
-    if (!url.isValid() || !url.isLocalFile())
-    {
-        return;
-    }
-
-    // Parse image IO mime types registration to get files filter pattern.
-
-    QString filter;
-    QStringList mimeTypes = supportedImageMimeTypes(QIODevice::ReadOnly, filter);
-
-    QString patterns = filter.toLower();
-    patterns.append (QLatin1Char(' '));
-    patterns.append (filter.toUpper());
-
-    qCDebug(DIGIKAM_SHOWFOTO_LOG) << "patterns=" << patterns;
-
-    // Get all image files from directory.
-
-    QDir dir(url.toLocalFile(), patterns);
-    dir.setFilter(QDir::Files);
-
-    if (!dir.exists())
-    {
-        return;
-    }
-
-    QFileInfoList fileinfolist = dir.entryInfoList();
-
-    if (fileinfolist.isEmpty())
-    {
-        //emit signalSorry();
-        return;
-    }
-
-    QFileInfoList::const_iterator fi;
-    ShowfotoItemInfoList infos;
-    ShowfotoItemInfo iteminfo;
-    DMetadata meta;
-
-    // And open all items in image editor.
-
-    for (fi = fileinfolist.constBegin(); fi != fileinfolist.constEnd(); ++fi)
-    {
-        iteminfo.name      = (*fi).fileName();
-        iteminfo.mime      = (*fi).suffix();
-        iteminfo.size      = (*fi).size();
-        iteminfo.folder    = (*fi).path();
-        iteminfo.url       = QUrl::fromLocalFile((*fi).filePath());
-        iteminfo.dtime     = (*fi).created();
-        meta.load((*fi).filePath());
-        iteminfo.ctime     = meta.getImageDateTime();
-        iteminfo.width     = meta.getImageDimensions().width();
-        iteminfo.height    = meta.getImageDimensions().height();
-        iteminfo.photoInfo = meta.getPhotographInformation();
-        infos.append(iteminfo);
-    }
-
-    if (d->droppedUrls)
-    {
-        d->infoList << infos;
-    }
-    else
-    {
-        d->infoList = infos;
-        d->model->clearShowfotoItemInfos();
-        emit signalInfoList(d->infoList);
-        slotOpenUrl(d->thumbBar->currentInfo());
-    }
-
-    d->lastOpenedDirectory = QUrl::fromLocalFile(dir.absolutePath());
-}
-
-void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)
-{
-    if (!droppedUrls.isEmpty())
-    {
-        QList<QUrl> validUrls;
-
-        foreach (const QUrl& url, droppedUrls)
-        {
-            if (url.isValid())
-            {
-                validUrls << url;
-            }
-        }
-
-        d->droppedUrls = true;
-
-        QList<QUrl> imagesUrls;
-        QList<QUrl> foldersUrls;
-
-        foreach (const QUrl& url, validUrls)
-        {
-            if (QMimeDatabase().mimeTypeForUrl(url).name().startsWith(QLatin1String("image"), Qt::CaseInsensitive))
-            {
-                imagesUrls << url;
-            }
-
-            if (QMimeDatabase().mimeTypeForUrl(url).name() == QLatin1String("inode/directory"))
-            {
-                foldersUrls << url;
-            }
-        }
-
-        if (!imagesUrls.isEmpty())
-        {
-            openUrls(imagesUrls);
-        }
-
-        if (!foldersUrls.isEmpty())
-        {
-            foreach (const QUrl& fUrl, foldersUrls)
-            {
-                openFolder(fUrl);
-            }
-        }
-
-        d->model->clearShowfotoItemInfos();
-        emit signalInfoList(d->infoList);
-
-        if (!d->infoList.isEmpty())
-        {
-            slotOpenUrl(d->thumbBar->currentInfo());
-        }
-        else
-        {
-            QMessageBox::information(this, qApp->applicationName(), i18n("There is no dropped item to process."));
-            qWarning(DIGIKAM_SHOWFOTO_LOG) << "infolist is empty..";
-        }
-
-        d->droppedUrls = false;
-    }
-}
-
 void ShowFoto::slotSetupMetadataFilters(int tab)
 {
     Setup::execMetadataFilters(this, tab+1);
@@ -825,7 +827,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
     QList<QUrl> list = e->mimeData()->urls();
     QList<QUrl> urls;
 
-    foreach(const QUrl& url, list)
+    foreach (const QUrl& url, list)
     {
         QFileInfo fi(url.toLocalFile());
 
@@ -839,7 +841,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
 
     if (!urls.isEmpty())
     {
-        slotDroppedUrls(urls);
+        slotDroppedUrls(urls, true);
     }
 }
 

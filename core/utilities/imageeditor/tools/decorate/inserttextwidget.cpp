@@ -527,7 +527,7 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
     }
     else
     {
-        // We working on target image. Do no apply double CM adjustement here.
+        // We working on target image. Do no apply double CM adjustment here.
         pixmap = textNotDrawn.convertToPixmap();
     }
 

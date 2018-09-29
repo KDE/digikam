@@ -355,7 +355,7 @@ void ImageLevels::levelsCalculateTransfers()
 
     for (j = 0 ; j < 5 ; ++j)
     {
-        for (i = 0; i <= (d->sixteenBit ? 65535 : 255); ++i)
+        for (i = 0 ; i <= (d->sixteenBit ? 65535 : 255) ; ++i)
         {
             //  determine input intensity.
 
@@ -374,6 +374,7 @@ void ImageLevels::levelsCalculateTransfers()
             if (d->levels->gamma[j] != 0.0)
             {
                 inten = pow(inten, (1.0 / d->levels->gamma[j]));
+                (void)inten; // Remove clang warnings.
             }
         }
     }

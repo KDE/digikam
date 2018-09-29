@@ -110,7 +110,7 @@ protected:
     QMap<QString, QVariant> getUserAccountInfo(const QString& userName);
 
     /*
-     * Save all necessary information of user account to disk. That information wil be retrieved
+     * Save all necessary information of user account to disk. That information will be retrieved
      * by getUserAccountInfo(userName) when needed.
      */
     void saveUserAccount(const QString& userName,

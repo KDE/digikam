@@ -38,6 +38,7 @@
 
 #include "digikam_debug.h"
 #include "album.h"
+#include "albumpointer.h"
 #include "coredb.h"
 #include "coredbtransaction.h"
 #include "imageinfo.h"

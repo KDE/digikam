@@ -49,7 +49,7 @@ class dng_tile_buffer: public dng_pixel_buffer
 		/// Obtain a tile from an image.
 		/// \param image Image tile will come from.
 		/// \param tile Rectangle denoting extent of tile.
-		/// \param dirty Flag indicating whether this is read-only or read-write acesss.
+		/// \param dirty Flag indicating whether this is read-only or read-write access.
 
 		dng_tile_buffer (const dng_image &image,
 						 const dng_rect &tile,

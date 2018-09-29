@@ -46,7 +46,7 @@
 #define LANCZOS_TABLE_RES  256
 
 /** A support of 3 gives an overall sharper looking image, but
-    it is a) slower b) gives more sharpening artefacts
+    it is a) slower b) gives more sharpening artifacts
  */
 #define LANCZOS_SUPPORT    2
 

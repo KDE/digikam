@@ -54,6 +54,7 @@ class DatabaseWriter;
 class PreviewLoader;
 class FaceImageRetriever;
 class ParallelPipes;
+class ScanStateFilter;
 
 class Q_DECL_HIDDEN FacePipelineExtendedPackage : public FacePipelinePackage,
                                                   public QSharedData
@@ -83,46 +84,6 @@ public:
     }
 
     FacePipelineExtendedPackage::Ptr take(const LoadingDescription& description);
-};
-
-// ----------------------------------------------------------------------------------------
-
-class Q_DECL_HIDDEN ScanStateFilter : public DynamicThread
-{
-    Q_OBJECT
-
-public:
-
-    ScanStateFilter(FacePipeline::FilterMode mode, FacePipeline::Private* const d);
-
-    void process(const QList<ImageInfo>& infos);
-    void process(const ImageInfo& info);
-
-    FacePipelineExtendedPackage::Ptr filter(const ImageInfo& info);
-
-public:
-
-    FacePipeline::Private* const     d;
-    FacePipeline::FilterMode         mode;
-    FacePipelineFaceTagsIface::Roles tasks;
-
-protected Q_SLOTS:
-
-    void dispatch();
-
-Q_SIGNALS:
-
-    void infosToDispatch();
-
-protected:
-
-    virtual void run();
-
-protected:
-
-    QList<ImageInfo>                        toFilter;
-    QList<FacePipelineExtendedPackage::Ptr> toSend;
-    QList<ImageInfo>                        toBeSkipped;
 };
 
 // ----------------------------------------------------------------------------------------

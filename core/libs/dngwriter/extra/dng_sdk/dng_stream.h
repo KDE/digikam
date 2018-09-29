@@ -243,7 +243,7 @@ class dng_stream
 		void Flush ();
 
 		/// Set length of available data.
-		/// \param length Number of bytes of avialble data in stream.
+		/// \param length Number of bytes of available data in stream.
 
 		void SetLength (uint64 length);
 

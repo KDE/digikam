@@ -71,6 +71,7 @@ private:
     QCheckBox* m_removeExif;
     QCheckBox* m_removeIptc;
     QCheckBox* m_removeXmp;
+    QCheckBox* m_removeXmpVideo;
 
 private:
 

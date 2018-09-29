@@ -133,7 +133,7 @@ public:
         ParallelWorkers::add(worker);
     }
 
-    // Internal Implentation
+    // Internal Implementation
     // I know this is a hack
 
     int WorkerObjectQtMetacall(QMetaObject::Call _c, int _id, void** _a)

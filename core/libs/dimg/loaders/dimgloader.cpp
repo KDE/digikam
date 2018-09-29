@@ -282,7 +282,7 @@ bool DImgLoader::saveMetadata(const QString& filePath)
 {
     DMetadata metaDataToFile(filePath);
     metaDataToFile.setData(m_image->getMetadata());
-    return metaDataToFile.applyChanges();
+    return metaDataToFile.applyChanges(true);
 }
 
 bool DImgLoader::checkExifWorkingColorSpace() const

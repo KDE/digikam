@@ -1369,7 +1369,7 @@ void CPGFImage::SetColorTable(UINT32 iFirstColor, UINT32 nColors, const RGBQUAD*
 }
 
 //////////////////////////////////////////////////////////////////
-// Buffer transform from interleaved to channel seperated format
+// Buffer transform from interleaved to channel separated format
 // the absolute value of pitch is the number of bytes of an image row
 // if pitch is negative, then buff points to the last row of a bottom-up image (first byte on last row)
 // if pitch is positive, then buff points to the first row of a top-down image (first byte)

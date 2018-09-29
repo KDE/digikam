@@ -2,10 +2,10 @@
  *
  * This file is a part of digiKam
  *
- * Date        : 2017-06-10
- * Description : Face Recognition based on Fisherfaces
- *               http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#Fisherfaces
- *               Turk, Matthew A and Pentland, Alex P. "Face recognition using Fisherfaces." 
+ * Date        : 2017-05-22
+ * Description : Face Recognition based on Eigenfaces
+ *               http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#eigenfaces
+ *               Turk, Matthew A and Pentland, Alex P. "Face recognition using eigenfaces." 
  *               Computer Vision and Pattern Recognition, 1991. Proceedings {CVPR'91.},
  *               {IEEE} Computer Society Conference on 1991.
  *
@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "facerec_fisherborrowed.h"
+#include "facerec_eigenborrowed.h"
 
 // C++ includes
 
@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 //------------------------------------------------------------------------------
-// Fisherfaces
+// Eigenfaces
 //------------------------------------------------------------------------------
 
 inline Mat asRowMatrix(std::vector<Mat> src, int rtype, double alpha=1, double beta=0)
@@ -62,11 +62,13 @@ inline Mat asRowMatrix(std::vector<Mat> src, int rtype, double alpha=1, double b
     Mat data((int)n, (int)d, rtype);
 
     // now copy data
+
     for (unsigned int i = 0 ; i < n ; i++)
     {
         Mat xi = data.row(i);
 
         // make reshape happy by cloning for non-continuous matrices
+
         if (src[i].isContinuous())
         {
             src[i].reshape(1, 1).convertTo(xi, rtype, alpha, beta);
@@ -80,31 +82,12 @@ inline Mat asRowMatrix(std::vector<Mat> src, int rtype, double alpha=1, double b
     return data;
 }
 
-// Removes duplicate elements in a given vector.
-template<typename _Tp>
-inline std::vector<_Tp> remove_dups(const std::vector<_Tp>& src) 
-{
-    typedef typename std::set<_Tp>::const_iterator constSetIterator;
-    typedef typename std::vector<_Tp>::const_iterator constVecIterator;
-    std::set<_Tp> set_elems;
-
-    for (constVecIterator it = src.begin() ; it != src.end() ; ++it)
-        set_elems.insert(*it);
-
-    std::vector<_Tp> elems;
-
-    for (constSetIterator it = set_elems.begin() ; it != set_elems.end() ; ++it)
-        elems.push_back(*it);
-
-    return elems;
-}
-
-void FisherFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_labels)
+void EigenFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_labels)
 {
     this->train(_in_src, _inm_labels, false);
 }
 
-void FisherFaceRecognizer::update(InputArrayOfArrays _in_src, InputArray _inm_labels)
+void EigenFaceRecognizer::update(InputArrayOfArrays _in_src, InputArray _inm_labels)
 {
     // got no data, just return
     if (_in_src.total() == 0)
@@ -113,7 +96,7 @@ void FisherFaceRecognizer::update(InputArrayOfArrays _in_src, InputArray _inm_la
     this->train(_in_src, _inm_labels, true);
 }
 
-void FisherFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_labels, bool preserveData)
+void EigenFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_labels, bool preserveData)
 {
     if (_in_src.kind() != _InputArray::STD_VECTOR_MAT && _in_src.kind() != _InputArray::STD_VECTOR_VECTOR)
     {
@@ -154,7 +137,7 @@ void FisherFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_lab
     }
 
     // append labels to m_labels matrix
-    for (size_t labelIdx = 0; labelIdx < labels.total(); labelIdx++)
+    for (size_t labelIdx = 0 ; labelIdx < labels.total() ; labelIdx++)
     {
         m_labels.push_back(labels.at<int>((int)labelIdx));
         m_src.push_back(src[(int)labelIdx]);
@@ -164,54 +147,21 @@ void FisherFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_lab
     Mat data = asRowMatrix(m_src, CV_64FC1);
 
     // number of samples
-    int n = data.rows;
-
-    /*
-     LDA needs more than one class
-     We have to check the labels first
-    */
-    bool label_flag = false;
-
-    for (int i = 1 ; i < m_labels.rows ; i++)
-    {
-        if (m_labels.at<int>(i, 0)!=m_labels.at<int>(i-1, 0))
-        {
-            label_flag = true;
-            break;
-        }
-    }
-
-    if (!label_flag)
-    {
-        String error_message = format("The labels should contain more than one types.");
-        CV_Error(CV_StsBadArg, error_message);
-    }
+    int n    = data.rows;
 
     // clear existing model data
     m_projections.clear();
 
-    std::vector<int> ll;
-
-    for (unsigned int i = 0 ; i < m_labels.total() ; i++)
-    {
-        ll.push_back(m_labels.at<int>(i));
-    }
-
-    // get the number of unique classes
-    int C = (int) remove_dups(ll).size();
-
     // clip number of components to be valid
-    m_num_components = (C-1);
+    m_num_components = n;
 
     // perform the PCA
-    PCA pca(data, Mat(), PCA::DATA_AS_ROW, (n-C));
-    LDA lda(pca.project(data),m_labels, m_num_components);
+    PCA pca(data, Mat(), PCA::DATA_AS_ROW, m_num_components);
+    // copy the PCA results
+    m_mean = pca.mean.reshape(1, 1); // store the mean vector
+    transpose(pca.eigenvectors, m_eigenvectors); // eigenvectors by column
 
-    // Now calculate the projection matrix as pca.eigenvectors * lda.eigenvectors.
-    // Note: OpenCV stores the eigenvectors by row, so we need to transpose it!
-    gemm(pca.eigenvectors, lda.eigenvectors(), 1.0, Mat(), 0.0, m_eigenvectors, GEMM_1_T);
-
-    // store the projections of the original data
+    // save projections
     for (int sampleIdx = 0 ; sampleIdx < data.rows ; sampleIdx++)
     {
         Mat p = LDA::subspaceProject(m_eigenvectors, m_mean, data.row(sampleIdx));
@@ -219,31 +169,32 @@ void FisherFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_lab
     }
 }
 
-void FisherFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictCollector> collector) const
+void EigenFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictCollector> collector) const
 {
-    qCWarning(DIGIKAM_FACESENGINE_LOG) << "Predicting face image using fisherfaces";
+    qCWarning(DIGIKAM_FACESENGINE_LOG) << "Predicting face image";
 
     if (m_projections.empty())
     {
         // throw error if no data (or simply return -1?)
-        String error_message = "This Fisherfaces model is not computed yet. Did you call the train method?";
+        String error_message = "This Eigenfaces model is not computed yet. Did you call the train method?";
         CV_Error(CV_StsBadArg, error_message);
     }
 
-    Mat src = _src.getMat();//254*254
+    Mat src = _src.getMat(); //254*254
 
-    //make sure the size of input image is the same as traing image
+    // make sure the size of input image is the same as training image
+
     if (m_src.size() >= 1 && (src.rows != m_src[0].rows || src.cols != m_src[0].cols))
     {
-        //resize(src, src, Size(m_src[0].rows, m_src[0].cols), (0, 0), (0, 0), INTER_LINEAR);
-        resize(src, src, Size(m_src[0].rows, m_src[0].cols));
+        resize(src, src, Size(m_src[0].rows, m_src[0].cols), 0, 0, INTER_LINEAR);
     }
 
-    collector->init(0);//here need to confirm
+    collector->init(0); // here need to confirm
 
     Mat q = LDA::subspaceProject(m_eigenvectors, m_mean, src.reshape(1, 1));
 
-    //find nearest neighbor
+    // find nearest neighbor
+
     for (size_t sampleIdx = 0 ; sampleIdx < m_projections.size() ; sampleIdx++)
     {
         double dist = norm(m_projections[sampleIdx], q, NORM_L2);
@@ -258,23 +209,23 @@ void FisherFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predic
 
 // Static method ----------------------------------------------------
 
-Ptr<FisherFaceRecognizer> FisherFaceRecognizer::create(double threshold)
+Ptr<EigenFaceRecognizer> EigenFaceRecognizer::create(double threshold)
 {
-    Ptr<FisherFaceRecognizer> ptr;
+    Ptr<EigenFaceRecognizer> ptr;
 
-    FisherFaceRecognizer* const fr = new FisherFaceRecognizer(threshold);
+    EigenFaceRecognizer* const fr = new EigenFaceRecognizer(threshold);
 
     if (!fr)
     {
-        qCWarning(DIGIKAM_FACESENGINE_LOG) << "Cannot create FisherFaceRecognizer instance";
+        qCWarning(DIGIKAM_FACESENGINE_LOG) << "Cannot create EigenFaceRecognizer instance";
         return ptr;
     }
 
-    ptr = Ptr<FisherFaceRecognizer>(fr);
+    ptr = Ptr<EigenFaceRecognizer>(fr);
 
     if (ptr.empty())
     {
-        qCWarning(DIGIKAM_FACESENGINE_LOG) << "FisherFaceRecognizer instance is empty";
+        qCWarning(DIGIKAM_FACESENGINE_LOG) << "EigenFaceRecognizer instance is empty";
     }
 
     return ptr;

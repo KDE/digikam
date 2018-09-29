@@ -41,6 +41,7 @@
 #include "digikam_debug.h"
 #include "albummanager.h"
 #include "albumpropsedit.h"
+#include "albumpointer.h"
 #include "applicationsettings.h"
 #include "collectionmanager.h"
 #include "deletedialog.h"
@@ -309,7 +310,7 @@ void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
         ApplicationSettings::instance()->setAlbumCategoryNames(albumCategories);
 
         // Do this last : so that if anything else changed we can
-        // successfuly save to the db with the old name
+        // successfully save to the db with the old name
 
         if (title != oldTitle)
         {

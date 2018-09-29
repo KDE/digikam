@@ -313,7 +313,7 @@ dng_time_zone LocalTimeZone (const dng_date_time &dt);
 
 /*****************************************************************************/
 
-/// Tag to encode date represenation format
+/// Tag to encode date representation format
 
 enum dng_date_time_format
 	{

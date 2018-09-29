@@ -58,7 +58,7 @@ public:
     WSSettings*         settings() const;
 
     /*
-     * Instance of WSAuthentication (which wraps instance of WSTalker) and correspondant QSettings
+     * Instance of WSAuthentication (which wraps instance of WSTalker) and correspondent QSettings
      * are initialized only once in WSWizard.
      *
      * These 2 methods below are getters, used in other pages of wizard so as to facilitate

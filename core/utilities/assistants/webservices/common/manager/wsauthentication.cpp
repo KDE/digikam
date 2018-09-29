@@ -305,9 +305,8 @@ void WSAuthentication::prepareForUpload()
             {
                 meta.setImageDimensions(image.size());
                 meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-                meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
                 meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-                meta.save(d->tmpPath.last());
+                meta.save(d->tmpPath.last(), true);
                 caption = getImageCaption(imgPath);
             }
 
@@ -330,7 +329,7 @@ void WSAuthentication::uploadNextPhoto()
     }
 
     /*
-     * This comparaison is a little bit complicated and may seem unnecessary, but it will be useful later
+     * This comparison is a little bit complicated and may seem unnecessary, but it will be useful later
      * when we will be able to choose to change or not image properties for EACH image.
      */
     QString imgPath = d->transferQueue.first().toLocalFile();

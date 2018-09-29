@@ -314,8 +314,10 @@ void GSWindow::readSettings()
     d->widget->getDimensionSpB()->setValue(grp.readEntry("Maximum Width",  1600));
     d->widget->getImgQualitySpB()->setValue(grp.readEntry("Image Quality", 90));
 
-    if (d->service == GoogleService::GPhotoExport)
+    if (d->service == GoogleService::GPhotoExport && d->widget->m_tagsBGrp)
+    {
         d->widget->m_tagsBGrp->button(grp.readEntry("Tag Paths", 0))->setChecked(true);
+    }
 
     KConfigGroup dialogGroup;
 
@@ -357,8 +359,10 @@ void GSWindow::writeSettings()
     grp.writeEntry("Maximum Width", d->widget->getDimensionSpB()->value());
     grp.writeEntry("Image Quality", d->widget->getImgQualitySpB()->value());
 
-    if (d->service == GoogleService::GPhotoExport)
+    if (d->service == GoogleService::GPhotoExport && d->widget->m_tagsBGrp)
+    {
         grp.writeEntry("Tag Paths", d->widget->m_tagsBGrp->checkedId());
+    }
 
     KConfigGroup dialogGroup;
 
@@ -830,65 +834,68 @@ void GSWindow::uploadNextPhoto()
                 }
             }
 
-            //adjust tags according to radio button clicked
+            // adjust tags according to radio button clicked
 
-            switch (d->widget->m_tagsBGrp->checkedId())
+            if (d->widget->m_tagsBGrp)
             {
-                case GPTagLeaf:
+                switch (d->widget->m_tagsBGrp->checkedId())
                 {
-                    QStringList newTags;
-                    QStringList::const_iterator itT;
-
-                    for (itT = info.tags.constBegin() ; itT != info.tags.constEnd() ; ++itT)
+                    case GPTagLeaf:
                     {
-                        QString strTmp = *itT;
-                        int idx        = strTmp.lastIndexOf(QLatin1Char('/'));
+                        QStringList newTags;
+                        QStringList::const_iterator itT;
 
-                        if (idx > 0)
+                        for (itT = info.tags.constBegin() ; itT != info.tags.constEnd() ; ++itT)
                         {
-                            strTmp.remove(0, idx + 1);
+                            QString strTmp = *itT;
+                            int idx        = strTmp.lastIndexOf(QLatin1Char('/'));
+
+                            if (idx > 0)
+                            {
+                                strTmp.remove(0, idx + 1);
+                            }
+
+                            newTags.append(strTmp);
                         }
 
-                        newTags.append(strTmp);
+                        info.tags = newTags;
+                        break;
                     }
 
-                    info.tags = newTags;
-                    break;
-                }
-
-                case GPTagSplit:
-                {
-                    QSet<QString> newTagsSet;
-                    QStringList::const_iterator itT;
-
-                    for (itT = info.tags.constBegin() ; itT != info.tags.constEnd() ; ++itT)
+                    case GPTagSplit:
                     {
-                        QStringList strListTmp = itT->split(QLatin1Char('/'));
-                        QStringList::const_iterator itT2;
+                        QSet<QString> newTagsSet;
+                        QStringList::const_iterator itT;
 
-                        for (itT2 = strListTmp.constBegin() ; itT2 != strListTmp.constEnd() ; ++itT2)
+                        for (itT = info.tags.constBegin() ; itT != info.tags.constEnd() ; ++itT)
                         {
-                            if (!newTagsSet.contains(*itT2))
+                            QStringList strListTmp = itT->split(QLatin1Char('/'));
+                            QStringList::const_iterator itT2;
+
+                            for (itT2 = strListTmp.constBegin() ; itT2 != strListTmp.constEnd() ; ++itT2)
                             {
-                                newTagsSet.insert(*itT2);
+                                if (!newTagsSet.contains(*itT2))
+                                {
+                                    newTagsSet.insert(*itT2);
+                                }
                             }
                         }
+
+                        info.tags.clear();
+                        QSet<QString>::const_iterator itT3;
+
+                        for (itT3 = newTagsSet.begin() ; itT3 != newTagsSet.end() ; ++itT3)
+                        {
+                            info.tags.append(*itT3);
+                        }
+
+                        break;
                     }
 
-                    info.tags.clear();
-                    QSet<QString>::const_iterator itT3;
-
-                    for (itT3 = newTagsSet.begin() ; itT3 != newTagsSet.end() ; ++itT3)
-                    {
-                        info.tags.append(*itT3);
-                    }
-
-                    break;
+                    case GPTagCombined:
+                    default:
+                        break;
                 }
-
-                case GPTagCombined:
-                default:
-                    break;
             }
 
             if (bCancel)

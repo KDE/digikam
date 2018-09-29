@@ -186,6 +186,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
                    Qt::Window                    |
                    Qt::WindowCloseButtonHint     |
                    Qt::WindowMinMaxButtonsHint);
+
     setWindowTitle(i18n("Maintenance"));
     setModal(true);
 

@@ -189,7 +189,7 @@ void DSplashScreen::drawContents(QPainter* p)
         }
     }
 
-    // We use a device dependant font with a fixed size.
+    // We use a device dependent font with a fixed size.
     QFont fnt(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
     fnt.setPixelSize(10);
     fnt.setBold(false);

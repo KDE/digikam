@@ -34,7 +34,7 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 
-// Local inclues
+// Local includes
 
 #include "searchmodificationhelper.h"
 

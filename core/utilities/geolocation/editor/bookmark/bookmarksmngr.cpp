@@ -254,7 +254,7 @@ void BookmarksModel::entryAdded(BookmarkNode* item)
     int row                    = item->parent()->children().indexOf(item);
     BookmarkNode* const parent = item->parent();
 
-    // item was already added so remove beore beginInsertRows is called
+    // item was already added so remove before beginInsertRows is called
     parent->remove(item);
     beginInsertRows(index(parent), row, row);
     parent->add(item, row);

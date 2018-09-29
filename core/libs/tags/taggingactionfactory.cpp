@@ -408,7 +408,7 @@ TaggingAction TaggingActionFactory::defaultTaggingAction() const
 
 TaggingAction TaggingActionFactory::defaultTaggingAction(const QString& tagName, int parentTagId)
 {
-    // We now take the presumedly best action, without autocompletion popup.
+    // We now take the presumably best action, without autocompletion popup.
     // 1. Tag exists?
     //    a) Single tag? Assign.
     //    b) Multiple tags? 1. Existing tag under parent. 2. Toplevel tag 3. Alphabetically lowest tag

@@ -747,7 +747,7 @@ private:
             delete iface;
         }
         
-        // cleanup any remaining items in list if we breaked early
+        // cleanup any remaining items in list if we broke early
         _if_list.Apply(NPT_ObjectDeleter<NPT_NetworkInterface>());
         return NPT_SUCCESS;
     }

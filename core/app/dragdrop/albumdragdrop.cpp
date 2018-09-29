@@ -41,6 +41,7 @@
 
 #include "digikam_debug.h"
 #include "albummanager.h"
+#include "albumpointer.h"
 #include "importui.h"
 #include "ddragobjects.h"
 #include "dio.h"

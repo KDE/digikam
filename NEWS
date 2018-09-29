@@ -16,6 +16,8 @@ Search       : Add video support to find files based on properties registered on
 
 General      : Use DrMinGW has crash handler under Windows.
 General      : Port all export/import tool to OAuth2 authentification.
+General      : New tool to adjust quickly time and date information from items.
+               Tool will be available in AlbumView, ImageEditor, LightTable, and Showfoto.
 General      : New tool to export to Pinterest social network.
 General      : New tool to export to OneDrive webservice.
 General      : New tool to export to Box webservice.
@@ -565,7 +567,7 @@ BUGFIXES:
 503 ==> 397305 - Failed to add tag to database.
 504 ==> 398462 - IPTC from Ligthroom.
 505 ==> 397340 - Update image file timestamps if metadata is written to sidecar file [patch].
-506 ==> 398331 - xmp sidecar files are not reloaded on change.
+506 ==> 398331 - Xmp sidecar files are not reloaded on change.
 507 ==> 380341 - Modified sidecar not rescanned.
 508 ==> 339342 - SCAN : Search for new items does not recognize modified tags in sidecar files.
 509 ==> 387351 - Meta data for RAW files checkbox disabled.
@@ -576,4 +578,28 @@ BUGFIXES:
 514 ==> 398714 - MicrosoftPhoto:LastKeywordXMP does not show up in digkam tags list.
 515 ==> 388386 - Time adjustment tool is misleading and potentially leads to data loss.
 516 ==> 366777 - No preview for Time Adjust tool.
-517 ==> 
+517 ==> 306092 - Creation date as file name - doesn't work in BQM.
+518 ==> 089993 - Allow setting time to specific date/time.
+519 ==> 099894 - TimeAdjust only modifies file modification date, not EXIF.
+520 ==> 119232 - Mass changing date for jpegs without EXIF.
+521 ==> 119634 - Batch operation to change the date to several images at the same time.
+522 ==> 134306 - Image mass tagging feature.
+523 ==> 211845 - Missing progress bar while changing images dates.
+524 ==> 249320 - Unable to change time file.
+525 ==> 282559 - Graphical interface for changing dates and time.
+526 ==> 354668 - Crashes when adjusting time and date on two or more photos at a time.
+527 ==> 360770 - Crash when adjusting time on many pictures.
+528 ==> 362104 - digiKam crashes when changing date and time of more than 25 selected pictures
+529 ==> 366450 - Batch time adjust is ok, but time not adjusted in digikam thumbnail.
+530 ==> 378006 - Preview of the time adjust result.
+531 ==> 398624 - Cannot edit Date in XMP video metadata.
+532 ==> 398810 - "Dates" panel is not refreshed after a photo with a new year is added.
+533 ==> 398986 - Deleting a tag while using it as filter removes all images from the current view.
+534 ==> 370093 - Opening a picture (double-click) in Showfoto (default viewer) does not show the other pictures in the folder (similar to Bug 221245).
+535 ==> 398479 - DigiKam crashing at startup Thread 2 Crashed:: Digikam::ScanController.
+536 ==> 397808 - Digikam Mac Package crashes after resume when screen configuration changes.
+537 ==> 399071 - "Adjust Time Date" tool shows all times as "00:00:00".
+538 ==> 399134 - Progress bar or status when importing from camera/card reader.
+539 ==> 399153 - Selecting a picture with a tag and another without that tag, the checkbox is black instead of gray. 
+540 ==> 384759 - Can't adjust timestamp of RAW files.
+541 ==> 

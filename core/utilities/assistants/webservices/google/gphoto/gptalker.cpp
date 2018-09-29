@@ -282,7 +282,7 @@ void GPTalker::createAlbum(const GSFolder& album)
 
 /**
  * First a request is sent to the url below and then we will get an upload token
- * Upload token then will be sent with url in GPTlaker::uploadPhoto to create real photos on user accont
+ * Upload token then will be sent with url in GPTlaker::uploadPhoto to create real photos on user account
  */
 bool GPTalker::addPhoto(const QString& photoPath,
                         GSPhoto& /*info*/,
@@ -341,9 +341,8 @@ bool GPTalker::addPhoto(const QString& photoPath,
         {
             meta.setImageDimensions(image.size());
             meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
             meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-            meta.save(path);
+            meta.save(path, true);
         }
     }
 

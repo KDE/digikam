@@ -620,7 +620,7 @@ PLT_MediaServer::OnUpdate(PLT_ActionReference&          action,
 
     if (curr_values.GetEntryCount() != new_values.GetEntryCount()) {
         err = 706;
-        msg = "Paramater mismatch";
+        msg = "Parameters mismatch";
         goto failure;
     }
 

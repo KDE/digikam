@@ -712,7 +712,7 @@ bool dng_xmp::SyncString (const char *ns,
 
 		}
 
-	// Sync 2: From non-XMP to XMP if non-XMP is prefered.
+	// Sync 2: From non-XMP to XMP if non-XMP is preferred.
 
 	if ((options & preferNonXMP) && !isDefault)
 		{
@@ -723,7 +723,7 @@ bool dng_xmp::SyncString (const char *ns,
 
 		}
 
-	// Sync 3: From XMP to non-XMP if XMP is prefered or default non-XMP.
+	// Sync 3: From XMP to non-XMP if XMP is preferred or default non-XMP.
 
 	if ((options & preferXMP) || isDefault)
 		{
@@ -742,7 +742,7 @@ bool dng_xmp::SyncString (const char *ns,
 
 						// We prefer non-XMP, but we also require
 						// ASCII and the XMP contains non-ASCII
-						// charactors.  So keep the non-XMP as a
+						// characters.  So keep the non-XMP as a
 						// null string.
 
 						s.Clear ();
@@ -841,7 +841,7 @@ void dng_xmp::SyncStringList (const char *ns,
 
 		}
 
-	// Sync 2: From non-XMP to XMP if non-XMP is prefered.
+	// Sync 2: From non-XMP to XMP if non-XMP is preferred.
 
 	if ((options & preferNonXMP) && !isDefault)
 		{
@@ -852,7 +852,7 @@ void dng_xmp::SyncStringList (const char *ns,
 
 		}
 
-	// Sync 3: From XMP to non-XMP if XMP is prefered or default non-XMP.
+	// Sync 3: From XMP to non-XMP if XMP is preferred or default non-XMP.
 
 	if ((options & preferXMP) || isDefault)
 		{
@@ -989,7 +989,7 @@ bool dng_xmp::SyncAltLangDefault (const char *ns,
 
 		}
 
-	// Sync 2: From non-XMP to XMP if non-XMP is prefered.
+	// Sync 2: From non-XMP to XMP if non-XMP is preferred.
 
 	if ((options & preferNonXMP) && !isDefault)
 		{
@@ -1000,7 +1000,7 @@ bool dng_xmp::SyncAltLangDefault (const char *ns,
 
 		}
 
-	// Sync 3: From XMP to non-XMP if XMP is prefered or default non-XMP.
+	// Sync 3: From XMP to non-XMP if XMP is preferred or default non-XMP.
 
 	if ((options & preferXMP) || isDefault)
 		{
@@ -1019,7 +1019,7 @@ bool dng_xmp::SyncAltLangDefault (const char *ns,
 
 						// We prefer non-XMP, but we also require
 						// ASCII and the XMP contains non-ASCII
-						// charactors.  So keep the non-XMP as a
+						// characters.  So keep the non-XMP as a
 						// null string.
 
 						s.Clear ();
@@ -1243,7 +1243,7 @@ void dng_xmp::Sync_uint32 (const char *ns,
 
 		}
 
-	// Sync 2: From non-XMP to XMP if non-XMP is prefered.
+	// Sync 2: From non-XMP to XMP if non-XMP is preferred.
 
 	if ((options & preferNonXMP) && !isDefault)
 		{
@@ -1254,7 +1254,7 @@ void dng_xmp::Sync_uint32 (const char *ns,
 
 		}
 
-	// Sync 3: From XMP to non-XMP if XMP is prefered or default non-XMP.
+	// Sync 3: From XMP to non-XMP if XMP is preferred or default non-XMP.
 
 	if ((options & preferXMP) || isDefault)
 		{
@@ -1502,7 +1502,7 @@ void dng_xmp::Sync_urational (const char *ns,
 
 		}
 
-	// Sync 2: From non-XMP to XMP if non-XMP is prefered.
+	// Sync 2: From non-XMP to XMP if non-XMP is preferred.
 
 	if ((options & preferNonXMP) && !isDefault)
 		{
@@ -1513,7 +1513,7 @@ void dng_xmp::Sync_urational (const char *ns,
 
 		}
 
-	// Sync 3: From XMP to non-XMP if XMP is prefered or default non-XMP.
+	// Sync 3: From XMP to non-XMP if XMP is preferred or default non-XMP.
 
 	if ((options & preferXMP) || isDefault)
 		{
@@ -1629,7 +1629,7 @@ void dng_xmp::Sync_srational (const char *ns,
 
 		}
 
-	// Sync 2: From non-XMP to XMP if non-XMP is prefered.
+	// Sync 2: From non-XMP to XMP if non-XMP is preferred.
 
 	if ((options & preferNonXMP) && !isDefault)
 		{
@@ -1640,7 +1640,7 @@ void dng_xmp::Sync_srational (const char *ns,
 
 		}
 
-	// Sync 3: From XMP to non-XMP if XMP is prefered or default non-XMP.
+	// Sync 3: From XMP to non-XMP if XMP is preferred or default non-XMP.
 
 	if ((options & preferXMP) || isDefault)
 		{

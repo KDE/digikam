@@ -154,7 +154,7 @@ WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
 
     /*
      * Here we hide the web browser immediately after creation.
-     * If user has to login, we will show the browser again. Ohterwise,
+     * If user has to login, we will show the browser again. Otherwise,
      * we will keep it hiding to improve page's looking.
      */
     hide();

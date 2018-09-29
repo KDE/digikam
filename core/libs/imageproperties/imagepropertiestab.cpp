@@ -399,8 +399,8 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay4->addWidget(d->labelVideoAudioBitRate,     4, 1, 1, 1);
     glay4->addWidget(d->audioChannelType,           5, 0, 1, 1);
     glay4->addWidget(d->labelVideoAudioChannelType, 5, 1, 1, 1);
-    glay4->addWidget(d->audioCodec,            6, 0, 1, 1);
-    glay4->addWidget(d->labelVideoAudioCodec,  6, 1, 1, 1);
+    glay4->addWidget(d->audioCodec,                 6, 0, 1, 1);
+    glay4->addWidget(d->labelVideoAudioCodec,       6, 1, 1, 1);
     glay4->setContentsMargins(spacing, spacing, spacing, spacing);
     glay4->setSpacing(0);
     glay4->setColumnStretch(0, 10);
@@ -799,14 +799,14 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
 
     if (identifiers)
     {
-        for (int i = 0; i < tagPaths.size(); i++)
+        for (int i = 0 ; i < tagPaths.size() ; ++i)
         {
             tagsSorted << PathValuePair(tagPaths.at(i), (*identifiers).at(i));
         }
     }
     else
     {
-        for (int i = 0; i < tagPaths.size(); i++)
+        for (int i = 0 ; i < tagPaths.size() ; ++i)
         {
             tagsSorted << PathValuePair(tagPaths.at(i), QVariant());
         }
@@ -830,7 +830,7 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
         QStringList previousPath = previous.split(QLatin1Char('/'), QString::SkipEmptyParts);
         int depth;
 
-        for (depth = 0; depth < currentPath.size() && depth < previousPath.size(); ++depth)
+        for (depth = 0 ; depth < currentPath.size() && depth < previousPath.size() ; ++depth)
         {
             if (currentPath.at(depth) != previousPath.at(depth))
                 break;

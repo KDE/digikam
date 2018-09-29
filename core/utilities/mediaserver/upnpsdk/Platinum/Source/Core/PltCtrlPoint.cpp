@@ -1652,7 +1652,7 @@ PLT_CtrlPoint::ProcessSubscribeResponse(NPT_Result                    res,
             sub->SetTimeout(seconds);
         }
 
-        // Process any pending notifcations for that subscriber we got a bit too early
+        // Process any pending notifications for that subscriber we got a bit too early
         ProcessPendingEventNotifications();
         
         return NPT_SUCCESS;

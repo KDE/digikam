@@ -52,7 +52,7 @@ public:
     virtual ~ColorLabelWidget();
 
     /**
-     * Show or not on the bottom view the description of label with shorcuts.
+     * Show or not on the bottom view the description of label with shortcuts.
      */
     void setDescriptionBoxVisible(bool b);
 

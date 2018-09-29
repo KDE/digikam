@@ -200,7 +200,7 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
     }
     else
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << "Insupported Type in redeye correction filter";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Unsupported Type in redeye correction filter";
     }
 
     bool sixteendepth = (type == CV_8UC3) || (type == CV_8UC4) ? false : true;

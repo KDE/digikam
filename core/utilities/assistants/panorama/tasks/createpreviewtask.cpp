@@ -100,7 +100,7 @@ void CreatePreviewTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
         image.optimizationParameters.clear();
     }
 
-    // Remove unncessary stuff
+    // Remove unnecessary stuff
     data.controlPoints.clear();
 
     // Add two commented line for a JPEG output

@@ -260,7 +260,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
         // Detection / Recognition
         FaceUtils utils;
 
-        // OverwriteUnconfirmed means that a new scan discared unconfirmed results of previous scans
+        // OverwriteUnconfirmed means that a new scan discarded unconfirmed results of previous scans
         // (assuming at least equal or new, better methodology is in use compared to the previous scan)
         if (mode == FacePipeline::OverwriteUnconfirmed && (package->processFlags & FacePipelinePackage::ProcessedByDetector))
         {
@@ -298,7 +298,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
                 // Allow to overwrite existing recognition with new, possibly valid, "not recognized" status
                 int tagId = FaceTags::unknownPersonTagId();
 
-                // NOTE: See bug #338485 : check if index is not outside of containe size.
+                // NOTE: See bug #338485 : check if index is not outside of container size.
                 if (i < package->recognitionResults.size() &&
                     !package->recognitionResults[i].isNull())
                 {

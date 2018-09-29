@@ -235,7 +235,7 @@ void LensFunFilter::filterImage()
 
     QList<int> vals = multithreadedSteps(m_destImage.height());
 
-    // Stage 1: Chromatic Aberation Corrections
+    // Stage 1: Chromatic Aberration Corrections
 
     if (d->iface->settings().filterCCA)
     {
@@ -254,7 +254,7 @@ void LensFunFilter::filterImage()
         foreach(QFuture<void> t, tasks)
             t.waitForFinished();
 
-        qCDebug(DIGIKAM_DIMG_LOG) << "Chromatic Aberation Corrections applied.";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Chromatic Aberration Corrections applied.";
     }
 
     postProgress(30);

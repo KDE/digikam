@@ -102,7 +102,7 @@ typedef struct __XMPFiles__ *       XMPFilesRef;
 /// masks; see \c #kXMP_PropValueIsURI and following. A number of macros provide common set or set
 /// operations, such as \c XMP_PropIsSimple. For other tests use an expression like <code>options &
 /// kXMP_<theOption></code>. When passing multiple option flags use the bitwise-OR operator. '|',
-/// not the arithmatic plus, '+'.
+/// not the arithmetic plus, '+'.
 
 typedef const char * XMP_StringPtr;  // Points to a null terminated UTF-8 string.
 typedef XMP_Uns32    XMP_StringLen;

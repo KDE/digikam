@@ -423,7 +423,7 @@ QString EditorCore::ensureHasCurrentUuid() const
 {
     /*
      * 1) An image is loaded. The DImgLoader adds the HistoryImageId of the loaded file as "Current" entry.
-     * 2) The loaded image has no UUID (created by camera etc.). Highler level calls ensureHasCurrentUuid
+     * 2) The loaded image has no UUID (created by camera etc.). Higher level calls ensureHasCurrentUuid
      *    before any saving is started
      * 3) We create a new UUID and add it to the image's history. When the new image is saved,
      *    it references the original by UUID. Because we, here, do not touch the original,

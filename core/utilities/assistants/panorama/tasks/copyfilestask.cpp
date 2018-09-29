@@ -118,7 +118,7 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
             qCDebug(DIGIKAM_GENERAL_LOG) << "GPS info found and saved in " << panoUrl;
             m_meta.load(panoUrl.toLocalFile());
             m_meta.setGPSInfo(alt, lat, lng);
-            m_meta.applyChanges();
+            m_meta.applyChanges(true);
             break;
         }
     }
@@ -158,7 +158,7 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
         m_meta.setXmpTagString("Xmp.GPano.ProjectionType",    QLatin1String("equirectangular"));
     }
 
-    m_meta.applyChanges();
+    m_meta.applyChanges(true);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Copying panorama file...";
 

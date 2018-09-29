@@ -63,7 +63,7 @@ public:
     ~Imageinfo();
 
     /**
-     * @brief Assingning an image info from an other image info.
+     * @brief Assigning an image info from an other image info.
      * @param other an other image info
      */
     Imageinfo& operator=(Imageinfo other);

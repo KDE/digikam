@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DLIB_ENTROPY_DECODER_MODEL_KERNEl_5_
-#define DLIB_ENTROPY_DECODER_MODEL_KERNEl_5_
+#ifndef DLIB_ENTROPY_ENCODER_MODEL_KERNEl_5_
+#define DLIB_ENTROPY_ENCODER_MODEL_KERNEl_5_
 
 #include "algs.h"
 #include "dnn_assert.h"
@@ -32,7 +32,8 @@
 
 
 
-namespace edmk5
+
+namespace eemk5
 {
     struct node
     {            
@@ -50,11 +51,11 @@ namespace edmk5
 
 template <
     unsigned long alphabet_size,
-    typename entropy_decoder,
+    typename entropy_encoder,
     unsigned long total_nodes,
     unsigned long order
     >
-class entropy_decoder_model_kernel_5 
+class entropy_encoder_model_kernel_5 
 {
     /*!
         REQUIREMENTS ON total_nodes
@@ -65,7 +66,6 @@ class entropy_decoder_model_kernel_5
             - 0 <= order
             - this is the maximum depth-1 the tree will be allowed to go (note 
               that the root level is depth 0).  
-
 
         GENERAL NOTES
             This implementation follows more or less the implementation 
@@ -95,10 +95,10 @@ class entropy_decoder_model_kernel_5
             - for all i: exc[i] == 0
 
         CONVENTION
-            - exc_used == something_is_excluded()
             - pop() == stack[stack_size-1].n and stack[stack_size-1].nc
+            - exc_used == something_is_excluded()
             - is_excluded(symbol) == bit symbol&0x1F from exc[symbol>>5]
-            - &get_entropy_decoder() == coder
+            - &get_entropy_encoder() == coder
             - root == pointer to an array of total_nodes nodes.
               this is also the root of the tree.
             - if (next_node < total_nodes) then
@@ -135,7 +135,7 @@ class entropy_decoder_model_kernel_5
                 - if (child_context != 0) then
                     - child_context == pointer to the first node of the child 
                       context set for this node.
-                    - escapes > 0 
+                    - escapes > 0
                 - if (parent_context != 0) then
                     - parent_context == pointer to the parent context of this node.
                 - else
@@ -153,8 +153,8 @@ class entropy_decoder_model_kernel_5
                 - total == The sum of the counts of all the nodes 
                   in the child context set + escapes. 
                 - escapes == the escape count for the context represented
-                  by the node.
-                - count > 0
+                  by the node.                   
+                - count > 0                    
             }
 
 
@@ -167,27 +167,28 @@ class entropy_decoder_model_kernel_5
 
     !*/
 
-    typedef edmk5::node node;
+    typedef eemk5::node node;
+
 
 public:
 
-    typedef entropy_decoder entropy_decoder_type;
+    typedef entropy_encoder entropy_encoder_type;
 
-    entropy_decoder_model_kernel_5 (
-        entropy_decoder& coder
+    entropy_encoder_model_kernel_5 (
+        entropy_encoder& coder
     );
 
-    virtual ~entropy_decoder_model_kernel_5 (
+    virtual ~entropy_encoder_model_kernel_5 (
     );
     
     inline void clear(
     );
 
-    inline void decode (
-        unsigned long& symbol
+    inline void encode (
+        unsigned long symbol
     );
 
-    entropy_decoder& get_entropy_decoder (
+    entropy_encoder& get_entropy_encoder (
     ) { return coder; }
 
     static unsigned long get_alphabet_size (
@@ -195,30 +196,7 @@ public:
 
 private:
 
-
-    inline void push (
-        node* n,
-        node* nc
-    );
-    /*!
-        requires
-            - stack_size < order
-        ensures
-            - #pop(a,b): a == n && b == nc
-    !*/
-
-    inline void pop (
-        node*& n,
-        node*& nc
-    );
-    /*!
-        requires
-            - stack_size > 0
-        ensures
-            - returns the two nodes at the top of the stack
-    !*/
-
-    inline edmk5::node* allocate_node (
+    inline eemk5::node* allocate_node (
     );
     /*!
         requires
@@ -244,6 +222,14 @@ private:
             - #something_is_excluded() == true
     !*/
 
+    inline bool something_is_excluded (
+    );
+    /*!
+        ensures
+            - returns true if some symbol has been excluded.
+              returns false otherwise
+    !*/
+
     inline bool is_excluded (
         unsigned short symbol
     );
@@ -255,20 +241,12 @@ private:
                 - returns false
     !*/
 
-    inline bool something_is_excluded (
-    );
-    /*!
-        ensures
-            - returns true if some symbol has been excluded.
-              returns false otherwise
-    !*/
-
     inline void clear_exclusions (
     );
     /*!
         ensures
             - for all symbols #is_excluded(symbol) == false
-            - #something_is_excluded() == false
+            - #something_is_excluded() == true
     !*/
 
     inline void scale_counts (
@@ -280,25 +258,47 @@ private:
             - none of the nodes in the child context set will have a count of 0
     !*/
 
+    inline void push (
+        node* n,
+        node* nc
+    );
+    /*!
+        requires
+            - stack_size < order
+        ensures
+            - #pop(a,b): a == n && b == nc
+    !*/
+
+    inline void pop (
+        node*& n,
+        node*& nc
+    );
+    /*!
+        requires
+            - stack_size > 0
+        ensures
+            - returns the two nodes at the top of the stack
+    !*/
+
     struct nodes
     {
         node* n;
         node* nc;
     };
 
-    entropy_decoder& coder;
     unsigned long next_node;        
+    entropy_encoder& coder;
     node* root;
     node* cur;
     unsigned long cur_order;
     unsigned long exc[alphabet_size/32+1];
+    bool exc_used;
     nodes stack[order+1];
     unsigned long stack_size;
-    bool exc_used;
-
+    
     // restricted functions
-    entropy_decoder_model_kernel_5(entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>&);        // copy constructor
-    entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>& operator=(entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>&);    // assignment operator
+    entropy_encoder_model_kernel_5(entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>&);        // copy constructor
+    entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>& operator=(entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>&);    // assignment operator
 
 };   
 
@@ -310,20 +310,20 @@ private:
 
 template <
     unsigned long alphabet_size,
-    typename entropy_decoder,
+    typename entropy_encoder,
     unsigned long total_nodes,
     unsigned long order
     >
-entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>::
-entropy_decoder_model_kernel_5 (
-    entropy_decoder& coder_
+entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>::
+entropy_encoder_model_kernel_5 (
+    entropy_encoder& coder_
 ) : 
-    coder(coder_),
     next_node(1),
+    coder(coder_),
     cur_order(0),
-    stack_size(0)
+    stack_size(0) 
 {
-    COMPILE_TIME_ASSERT( 1 < alphabet_size && alphabet_size < 65535);
+    COMPILE_TIME_ASSERT( 1 < alphabet_size && alphabet_size < 65535 );
     COMPILE_TIME_ASSERT( 4096 < total_nodes );
 
     root = new node[total_nodes];  
@@ -333,7 +333,7 @@ entropy_decoder_model_kernel_5 (
     root->escapes = 0;
     root->next = 0;
     root->parent_context = 0;
-    root->total = 0; 
+    root->total = 0;
 
     clear_exclusions();
 }
@@ -342,12 +342,12 @@ entropy_decoder_model_kernel_5 (
 
 template <
     unsigned long alphabet_size,
-    typename entropy_decoder,
+    typename entropy_encoder,
     unsigned long total_nodes,
     unsigned long order
     >
-entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>::
-~entropy_decoder_model_kernel_5 (
+entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>::
+~entropy_encoder_model_kernel_5 (
 )
 {
     delete [] root;
@@ -357,11 +357,11 @@ entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>:
 
 template <
     unsigned long alphabet_size,
-    typename entropy_decoder,
+    typename entropy_encoder,
     unsigned long total_nodes,
     unsigned long order
     >
-void entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>::
+void entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>::
 clear(
 )
 {
@@ -380,19 +380,19 @@ clear(
 
 template <
     unsigned long alphabet_size,
-    typename entropy_decoder,
+    typename entropy_encoder,
     unsigned long total_nodes,
     unsigned long order
     >
-void entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>::
-decode (
-    unsigned long& symbol
+void entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>::
+encode (
+    unsigned long sym
 )
-{        
+{
+    unsigned short symbol = static_cast<unsigned short>(sym);
     node* temp = cur;
     cur = 0;
-    unsigned long low_count, high_count, total_count;
-    unsigned long target;
+    unsigned short low_count, high_count, total_count;
     node* new_node = 0;
 
     // local_order will track the level of temp in the tree
@@ -407,7 +407,8 @@ decode (
         clear_exclusions();
 
     while (true)
-    {            
+    {
+        low_count = 0;
         high_count = 0;
         if (space_left())
         {
@@ -422,62 +423,81 @@ decode (
                     total_count = temp->total;
                 }
 
+
+                // find the symbol we are looking for and put a pointer to it
+                // into found_symbol.  If it isn't found then found_symbol == 0.
+                // also, low_count and high_count will be correctly set.
+                node* n = temp->child_context;
+                node* found_symbol = 0;
+                node* last = 0;
                 if (something_is_excluded())
                 {
-                    node* n = temp->child_context;
-                    total_count = temp->escapes;
+                    node* templast = 0;
                     while (true)
                     {
                         if (is_excluded(n->symbol) == false)
                         {
-                            total_count += n->count;
+                            exclude(n->symbol);
+                            if (found_symbol == 0)
+                            {
+                                high_count += n->count;
+                                if (n->symbol == symbol)
+                                {
+                                    found_symbol = n;
+                                    last = templast;
+                                    low_count = high_count - n->count;
+                                }
+                            }
                         }
+                        else
+                        {
+                            total_count -= n->count;
+                        }
+                        
                         if (n->next == 0)
                             break;
+                        templast = n;
                         n = n->next;
-                    }
+                    }                         
                 }
-               
-
-
-                target = coder.get_target(total_count);
-
-                // find either the symbol we are looking for or the 
-                // end of the context set
-                node* n = temp->child_context;
-                node* last = 0;   
-                while (true)
+                else
                 {
-                    if (is_excluded(n->symbol) == false)
+                    while (true)
                     {
                         high_count += n->count;
                         exclude(n->symbol);
-                    }
+                       
+                        if (n->symbol == symbol)
+                        {
+                            found_symbol = n;
+                            low_count = high_count - n->count;
+                            break;
+                        }
 
-                    
-                    if (high_count > target || n->next == 0)
-                        break;
-                    last = n;
-                    n = n->next;
-                }             
+                        if (n->next == 0)
+                            break;
+                        last = n;
+                        n = n->next;
+                    }   
+                }
+
+
+
 
 
                 // if we found the symbol
-                if (high_count > target)
+                if (found_symbol)
                 {
-                    low_count = high_count - n->count;
-
+                    n = found_symbol;
                     if (new_node != 0)
                     {
-                        new_node->parent_context = n;                            
+                        new_node->parent_context = found_symbol;
                     }
 
-                    symbol = n->symbol;
-        
-                    coder.decode(low_count,high_count);
+
+                    coder.encode(low_count,high_count,total_count);
                     c = n->count += 8;
                     t = temp->total += 8;
-
 
                     // move this node to the front 
                     if (last)
@@ -487,27 +507,34 @@ decode (
                         temp->child_context = n;
                     }
 
+
                     if (cur == 0)
                     {
-                        if (local_order < order)
-                        {
-                            cur_order = local_order+1;
-                            cur = n;
-                        }  
-                        else
+                        if (local_order >= order)
                         {
                             cur = n->parent_context;
                             cur_order = local_order;
+                        }  
+                        else
+                        {
+                            cur_order = local_order+1;
+                            cur = n;
                         }
                     }
 
                     break;
-                 
-                 
+            
                 }
                 // if we hit the end of the context set without finding the symbol
                 else
                 {   
+                    // finish excluding all the symbols
+                    while (n->next)
+                    {
+                        exclude(n->symbol);
+                        n = n->next;
+                    }
+
                     if (new_node != 0)
                     {
                         new_node->parent_context = allocate_node();
@@ -520,8 +547,8 @@ decode (
 
                     n->next = new_node;
 
-                    // get the escape code
-                    coder.decode(high_count,total_count);
+                    // write an escape to a lower context
+                    coder.encode(high_count,total_count,total_count);
                 }
                     
             } 
@@ -551,17 +578,15 @@ decode (
             // fill out the new node
             new_node->child_context = 0;
             new_node->escapes = 0;
-            new_node->next = 0;
-            push(new_node,temp);
+            new_node->next = 0;           
             new_node->total = 0;
-
-
+            push(new_node,temp);
           
             if (temp != root)
             {
                 temp = temp->parent_context;
                 --local_order;
-                continue;
+                continue; 
             }
             
             t = 2056;
@@ -569,28 +594,27 @@ decode (
 
             // since this is the root we are going to the order-(-1) context
             // so we can just take care of that here.
-            target = coder.get_target(alphabet_size);
             new_node->parent_context = root;
-            coder.decode(target,target+1);
-            symbol = target;
+            coder.encode(symbol,symbol+1,alphabet_size);
 
             if (cur == 0)
             {
                 cur = root;
                 cur_order = 0;
             }
-            break;                          
+            break;
         }
         else 
         {
-            // there isn't enough space so we should rebuild the tree                
+            // there isn't enough space so we should throw away the tree
             clear();
             temp = cur;
             local_order = cur_order;
-            cur = 0;   
+            cur = 0;      
             new_node = 0;
         }
     } // while (true)
+
 
     // initialize the counts and symbol for any new nodes we have added
     // to the tree.
@@ -601,7 +625,7 @@ decode (
 
         n->symbol = static_cast<unsigned short>(symbol);
 
-        // if nc is not a determnistic context
+        // if nc is not a deterministic context
         if (nc->total)
         {
             unsigned long temp2 = t-c+nc->total - nc->escapes - nc->escapes;
@@ -639,11 +663,11 @@ decode (
 
 template <
     unsigned long alphabet_size,
-    typename entropy_decoder,
+    typename entropy_encoder,
     unsigned long total_nodes,
     unsigned long order
     >
-edmk5::node* entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>::
+eemk5::node* entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>::
 allocate_node (
 )    
 {
@@ -657,11 +681,11 @@ allocate_node (
 
 template <
     unsigned long alphabet_size,
-    typename entropy_decoder,
+    typename entropy_encoder,
     unsigned long total_nodes,
     unsigned long order
     >
-bool entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>::
+bool entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>::
 space_left (
 ) const
 {
@@ -672,11 +696,11 @@ space_left (
 
 template <
     unsigned long alphabet_size,
-    typename entropy_decoder,
+    typename entropy_encoder,
     unsigned long total_nodes,
     unsigned long order
     >
-void entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>::
+void entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>::
 exclude (
     unsigned short symbol
 )
@@ -691,11 +715,11 @@ exclude (
 
 template <
     unsigned long alphabet_size,
-    typename entropy_decoder,
+    typename entropy_encoder,
     unsigned long total_nodes,
     unsigned long order
     >
-bool entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>::
+bool entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>::
 is_excluded (
     unsigned short symbol
 )
@@ -709,11 +733,11 @@ is_excluded (
 
 template <
     unsigned long alphabet_size,
-    typename entropy_decoder,
+    typename entropy_encoder,
     unsigned long total_nodes,
     unsigned long order
     >
-void entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>::
+void entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>::
 clear_exclusions (
 )
 {
@@ -728,11 +752,26 @@ clear_exclusions (
 
 template <
     unsigned long alphabet_size,
-    typename entropy_decoder,
+    typename entropy_encoder,
     unsigned long total_nodes,
     unsigned long order
     >
-void entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>::
+bool entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>::
+something_is_excluded (
+)
+{
+    return exc_used;
+}
+
+// ----------------------------------------------------------------------------------------
+
+template <
+    unsigned long alphabet_size,
+    typename entropy_encoder,
+    unsigned long total_nodes,
+    unsigned long order
+    >
+void entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>::
 push (
     node* n,
     node* nc
@@ -747,11 +786,11 @@ push (
 
 template <
     unsigned long alphabet_size,
-    typename entropy_decoder,
+    typename entropy_encoder,
     unsigned long total_nodes,
     unsigned long order
     >
-void entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>::
+void entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>::
 pop (
     node*& n,
     node*& nc
@@ -766,26 +805,11 @@ pop (
 
 template <
     unsigned long alphabet_size,
-    typename entropy_decoder,
+    typename entropy_encoder,
     unsigned long total_nodes,
     unsigned long order
     >
-bool entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>::
-something_is_excluded (
-)
-{
-    return exc_used;
-}
-
-// ----------------------------------------------------------------------------------------
-
-template <
-    unsigned long alphabet_size,
-    typename entropy_decoder,
-    unsigned long total_nodes,
-    unsigned long order
-    >
-void entropy_decoder_model_kernel_5<alphabet_size,entropy_decoder,total_nodes,order>::
+void entropy_encoder_model_kernel_5<alphabet_size,entropy_encoder,total_nodes,order>::
 scale_counts (
     node* temp
 )
@@ -805,8 +829,10 @@ scale_counts (
     }
 }
 
+// ----------------------------------------------------------------------------------------
 
 
-#endif // DLIB_ENTROPY_DECODER_MODEL_KERNEl_5_
+
+#endif // DLIB_ENTROPY_ENCODER_MODEL_KERNEl_5_
 
 

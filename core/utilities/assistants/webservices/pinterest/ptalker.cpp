@@ -374,9 +374,8 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
     {
         d->meta.setImageDimensions(image.size());
         d->meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-        d->meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
         d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-        d->meta.save(path);
+        d->meta.save(path, true);
     }
 
     QString boardParam = d->userName + QLatin1Char('/') + uploadBoard;

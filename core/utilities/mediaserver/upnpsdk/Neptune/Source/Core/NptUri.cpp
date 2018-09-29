@@ -509,7 +509,7 @@ NPT_Url::Parse(const char* url, NPT_UInt16 default_port)
     // move to the scheme-specific part
     url += m_Scheme.GetLength()+1;
 
-    // intialize the parser
+    // initialize the parser
     NPT_UrlParserState state = NPT_URL_PARSER_STATE_START;
     const char* mark = url;
 
@@ -710,7 +710,7 @@ NPT_Url::ParsePathPlus(const char* path_plus)
     }
 #endif
 
-    // intialize the parser
+    // initialize the parser
     NPT_UrlParserState state = NPT_URL_PARSER_STATE_PATH;
     const char* mark = path_plus;
 

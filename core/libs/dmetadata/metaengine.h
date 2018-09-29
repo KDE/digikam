@@ -242,12 +242,12 @@ public:
     /** Save all metadata to a file. This one can be different than original picture to perform
         transfert operation Return true if metadata have been saved into file.
      */
-    bool save(const QString& filePath, bool setVersion = true) const;
+    bool save(const QString& filePath, bool setVersion = false) const;
 
     /** The same than save() method, but it apply on current image. Return true if metadata
         have been saved into file.
      */
-    bool applyChanges() const;
+    bool applyChanges(bool setVersion = false) const;
 
     /** Return 'true' if metadata container in memory as no Comments, Exif, Iptc, and Xmp.
      */
@@ -327,7 +327,7 @@ public:
      */
     bool setImageProgramId(const QString& program, const QString& version) const;
 
-    /** Return the size of image in pixels using Exif tags. Return a null dimmension if size cannot
+    /** Return the size of image in pixels using Exif tags. Return a null dimension if size cannot
         be found.
      */
     QSize getImageDimensions() const;
@@ -381,7 +381,7 @@ public:
     /** Set the Iptc preview image. The thumbnail image must have the right size before (64Kb max
         with JPEG file, else 256Kb). Look Iptc specification for details. Return true if preview
         have been changed in metadata.
-        Re-implemente this method if you want to use another image file format than JPEG to
+        Re-implement this method if you want to use another image file format than JPEG to
         save preview.
     */
     virtual bool setImagePreview(const QImage& preview) const;
@@ -593,7 +593,7 @@ public:
 
         List can be empty to not filter output.
 
-        ... this method will return a map of all Exif tags witch :
+        ... this method will return a map of all Exif tags which :
 
         - include "Iop", or "Thumbnail", or "Image", or "Photo" in the Exif tag keys
           if 'inverSelection' is false.
@@ -692,7 +692,7 @@ public:
 
         List can be empty to not filter output.
 
-        ... this method will return a map of all Iptc tags witch :
+        ... this method will return a map of all Iptc tags which :
 
         - include "Envelope", or "Application2" in the Iptc tag keys
           if 'inverSelection' is false.
@@ -802,7 +802,7 @@ public:
 
         List can be empty to not filter output.
 
-        ... this method will return a map of all Xmp tags witch :
+        ... this method will return a map of all Xmp tags which :
 
         - include "dc", or "xmp" in the Xmp tag keys
           if 'inverSelection' is false.
@@ -819,7 +819,7 @@ public:
     MetaEngine::AltLangMap getXmpTagStringListLangAlt(const char* xmpTagName, bool escapeCR=true) const;
 
     /** Set an Alternative Language Xmp tag content using a map. See AltLangMap class
-        description for details. If tag already exist, it wil be removed before.
+        description for details. If tag already exist, it will be removed before.
         Return true if tag is set successfully.
      */
     bool setXmpTagStringListLangAlt(const char* xmpTagName, const MetaEngine::AltLangMap& values) const;

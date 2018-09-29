@@ -103,7 +103,7 @@ do {                                         \
 /** Result indicating that the operation or call succeeded */
 #define NPT_SUCCESS                     0
 
-/** Result indicating an unspecififed failure condition */
+/** Result indicating an unspecified failure condition */
 #define NPT_FAILURE                     (-1)
 
 #if !defined(NPT_ERROR_BASE)

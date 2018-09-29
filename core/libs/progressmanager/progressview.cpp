@@ -125,7 +125,7 @@ void TransactionItemView::slotLayoutFirstItem()
     /*
         The below relies on some details in Qt's behaviour regarding deleting
         objects. This slot is called from the destroyed signal of an item just
-        going away. That item is at that point still in the  list of chilren, but
+        going away. That item is at that point still in the  list of children, but
         since the vtable is already gone, it will have type QObject. The first
         one with both the right name and the right class therefor is what will
         be the first item very shortly. That's the one we want to remove the

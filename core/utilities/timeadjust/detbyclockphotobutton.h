@@ -25,7 +25,6 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QPushButton>
 #include <QDragEnterEvent>
 

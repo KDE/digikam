@@ -468,12 +468,22 @@ void DXmlGuiWindow::createMetadataEditAction()
             this, SLOT(slotEditMetadata()));
 }
 
+void DXmlGuiWindow::createTimeAdjustAction()
+{
+    m_timeAdjustAction = new QAction(QIcon::fromTheme(QLatin1String("appointment-new")), i18n("Adjust Time && Date..."), this);
+    actionCollection()->addAction(QLatin1String("timeadjust_edit"), m_timeAdjustAction);
+    actionCollection()->setDefaultShortcut(m_timeAdjustAction, Qt::CTRL + Qt::SHIFT + Qt::Key_D);
+
+    connect(m_timeAdjustAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotTimeAdjust()));
+}
+
 void DXmlGuiWindow::createPresentationAction()
 {
     m_presentationAction = new QAction(QIcon::fromTheme(QLatin1String("view-presentation")), i18n("Presentation..."), this);
 
     actionCollection()->addAction(QLatin1String("presentation"), m_presentationAction);
-    actionCollection()->setDefaultShortcut(m_presentationAction, Qt::ALT+Qt::SHIFT+Qt::Key_F9);
+    actionCollection()->setDefaultShortcut(m_presentationAction, Qt::ALT + Qt::SHIFT + Qt::Key_F9);
 
     connect(m_presentationAction, SIGNAL(triggered()),
             this, SLOT(slotPresentation()));
@@ -558,7 +568,7 @@ void DXmlGuiWindow::createHtmlGalleryAction()
                                       i18nc("@action", "Create Html gallery..."),
                                       this);
 
-    actionCollection()->setDefaultShortcut(m_htmlGalleryAction, Qt::ALT+Qt::SHIFT+Qt::Key_H);
+    actionCollection()->setDefaultShortcut(m_htmlGalleryAction, Qt::ALT + Qt::SHIFT + Qt::Key_H);
     actionCollection()->addAction(QLatin1String("htmlgallery"), m_htmlGalleryAction);
 
     connect(m_htmlGalleryAction, SIGNAL(triggered(bool)),
@@ -577,16 +587,6 @@ void DXmlGuiWindow::createMediaServerAction()
 
     connect(m_mediaServerAction, SIGNAL(triggered(bool)),
             this, SLOT(slotMediaServer()));
-}
-
-void DXmlGuiWindow::createTimeAdjustAction()
-{
-    m_timeAdjustAction = new QAction(QIcon::fromTheme(QLatin1String("appointment-new")), i18n("Adjust Time && Date..."), this);
-    actionCollection()->addAction(QLatin1String("timeadjust_edit"), m_timeAdjustAction);
-    //actionCollection()->setDefaultShortcut(m_metadataEditAction, Qt::CTRL + Qt::SHIFT + Qt::Key_M);
-
-    connect(m_timeAdjustAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotTimeAdjust()));
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)
@@ -638,7 +638,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         if ((d->fsOptions & FS_SIDEBARS) && d->fullScreenHideSideBars)
             showSideBars(true);
 
-        // restore thummbbar
+        // restore thumbbar
 
         if ((d->fsOptions & FS_THUMBBAR) && d->fullScreenHideThumbBar)
             showThumbBar(d->thumbbarVisibility);
@@ -685,7 +685,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         if ((d->fsOptions & FS_SIDEBARS) && d->fullScreenHideSideBars)
             showSideBars(false);
 
-        // hide thummbbar
+        // hide thumbbar
 
         d->thumbbarVisibility = thumbbarVisibility();
 

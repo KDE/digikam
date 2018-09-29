@@ -454,7 +454,7 @@ NPT_HttpEntityBodyInputStream::Read(void*     buffer,
 }
 
 /*----------------------------------------------------------------------
-|   NPT_HttpEntityBodyInputStream::GetAvaialble
+|   NPT_HttpEntityBodyInputStream::GetAvailable
 +---------------------------------------------------------------------*/
 NPT_Result
 NPT_HttpEntityBodyInputStream::GetAvailable(NPT_LargeSize& available)
@@ -1188,7 +1188,7 @@ NPT_HttpProxySelector::GetDefault()
             return NPT_HttpEnvProxySelector::GetInstance();
             
         case NPT_HTTP_PROXY_SELECTOR_CONFIG_SYSTEM:
-            // use the sytem proxy selector
+            // use the system proxy selector
             return GetSystemSelector();
             
         default:

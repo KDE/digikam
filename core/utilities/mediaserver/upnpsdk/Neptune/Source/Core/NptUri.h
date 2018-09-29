@@ -166,7 +166,7 @@ public:
      * Parse a URL from its fully encoded form.
      *
      * @param url The URL string in its encoded form
-     * @param default port The defautl port number, or 0 if not specified
+     * @param default port The default port number, or 0 if not specified
      */
     NPT_Result Parse(const char* url, NPT_UInt16  default_port = 0);
     
@@ -291,7 +291,7 @@ public:
      * Return the string representation of the URL.
      *
      * @param default_port default port number for the scheme. If the port number of
-     * the URL is not equal to the default port, then port number is explicitely 
+     * the URL is not equal to the default port, then port number is explicitly 
      * included in the string representation of the URL. 
      * @param with_fragment Boolean flag specifiying whether the fragment part of 
      * the URL should be included in the returned string or not.

@@ -96,9 +96,8 @@ PreparedImage s_prepareImageForUpload(const QString& saveDir,
     {
         meta.setImageDimensions(image.size());
         meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-        meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
         meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-        meta.save(ret.scaledImagePath);
+        meta.save(ret.scaledImagePath, true);
     }
 
     return ret;

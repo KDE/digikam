@@ -1047,7 +1047,7 @@ PLT_MediaContainer::ToDidl(NPT_UInt64 mask, NPT_String& didl)
 			didl += "<upnp:searchClass includeDerived=\"";
 			didl += (*search_class).include_derived?"1\"":"0\"";
 
-			// frienly name is any
+			// friendly name is any
 			if (!(*search_class).friendly_name.IsEmpty()) {
 				didl += " name=\"" + (*search_class).friendly_name + "\"";
 			}

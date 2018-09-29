@@ -2659,7 +2659,7 @@ void dng_shared::PostParse (dng_host & /* host */,
 				}
 
 			// Default values of calibration signatures are required for legacy
-			// compatiblity.
+			// compatibility.
 
 			if (fCameraProfile.fCalibrationIlluminant1 == lsStandardLightA &&
 				fCameraProfile.fCalibrationIlluminant2 == lsD65            &&
@@ -2819,7 +2819,7 @@ bool dng_shared::IsValidDNG ()
 
 				}
 
-			// Make sure it is invertable.
+			// Make sure it is invertible.
 
 			try
 				{
@@ -2833,7 +2833,7 @@ bool dng_shared::IsValidDNG ()
 
 				#if qDNGValidate
 
-				ReportError ("CameraCalibration1 is not invertable");
+				ReportError ("CameraCalibration1 is not invertible");
 
 				#endif
 
@@ -2863,7 +2863,7 @@ bool dng_shared::IsValidDNG ()
 
 				}
 
-			// Make sure it is invertable.
+			// Make sure it is invertible.
 
 			try
 				{
@@ -2877,7 +2877,7 @@ bool dng_shared::IsValidDNG ()
 
 				#if qDNGValidate
 
-				ReportError ("CameraCalibration2 is not invertable");
+				ReportError ("CameraCalibration2 is not invertible");
 
 				#endif
 
@@ -2908,7 +2908,7 @@ bool dng_shared::IsValidDNG ()
 
 				#if qDNGValidate
 
-				ReportError ("AnalogBalance is not invertable");
+				ReportError ("AnalogBalance is not invertible");
 
 				#endif
 

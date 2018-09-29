@@ -79,7 +79,7 @@ public:
      * append  a new button to the button area. The button can later on be accessed with button(ID)
      * eg for connecting signals to it
      * @param pic a pixmap for the button
-     * @param id an arbitraty ID value. It will be emitted in the clicked signal for identifying the button
+     * @param id an arbitrary ID value. It will be emitted in the clicked signal for identifying the button
      *  if more than one button is connected to a signals.
      * @param popup A popup menu which should be displayed if the button is clicked
      * @param not_used_yet will be used for a popup text in the future
@@ -92,7 +92,7 @@ public:
     void removeButton(int id);
 
     /**
-     * append a new tab to the tab area. It can be accessed lateron with tabb(id);
+     * append a new tab to the tab area. It can be accessed later on with tabb(id);
      * @param pic a bitmap for the tab
      * @param id an arbitrary ID which can be used later on to identify the tab
      * @param text if a mode with text is used it will be the tab text, otherwise a mouse over hint
@@ -122,7 +122,7 @@ public:
     DMultiTabBarButton* button(int id) const;
 
     /**
-     * get a pointer to a tab within the tab area, identiifed by its ID
+     * get a pointer to a tab within the tab area, identified by its ID
      */
     DMultiTabBarTab* tab(int id) const;
 
@@ -221,13 +221,13 @@ public:
 public Q_SLOTS:
 
     /**
-     * this is used internaly, but can be used by the user.
+     * this is used internally, but can be used by the user.
      * It the according call of DMultiTabBar is invoked though this modifications will be overwritten
      */
     void setPosition(Qt::Edge);
 
     /**
-     * this is used internaly, but can be used by the user.
+     * this is used internally, but can be used by the user.
      * It the according call of DMultiTabBar is invoked though this modifications will be overwritten
      */
     void setStyle(DMultiTabBar::TextStyle);
@@ -359,12 +359,12 @@ public:
     void setActiveTab(QWidget* const w);
 
     /**
-     * Activates a next tab from current one. If current one is last, first one is actived.
+     * Activates a next tab from current one. If current one is last, first one is activated.
      */
     void activeNextTab();
 
     /**
-     * Activates a previous tab from current one. If current one is first, last one is actived.
+     * Activates a previous tab from current one. If current one is first, last one is activated.
      */
     void activePreviousTab();
 

@@ -53,7 +53,7 @@ public:
 
 public:
 
-    /** Constructor which sync all pictures metadata from an Albums list. If list is empty, whole Albums collection is procressed.
+    /** Constructor which sync all pictures metadata from an Albums list. If list is empty, whole Albums collection is processed.
      */
     explicit MetadataSynchronizer(const AlbumList& list=AlbumList(), SyncDirection direction = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
 

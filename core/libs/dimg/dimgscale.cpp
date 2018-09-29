@@ -7,7 +7,7 @@
  * Description : This is the normal smoothscale method,
  *               based on Imlib2's smoothscale. Added
  *               smoothScaleSection - Scaling only of a
- *               section of a image. Added 16bit image support
+ *               section of a image. Added 16 bits image support
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -193,7 +193,7 @@ DImg DImg::smoothScaleClipped(const QSize& destSize, const QRect& clip) const
 
 DImg DImg::smoothScaleClipped(int dw, int dh, int clipx, int clipy, int clipw, int cliph) const
 {
-    if (dw <= 0 || dh <= 0 || clipw <=0 || cliph <=0 || isNull())
+    if (dw <= 0 || dh <= 0 || clipw <= 0 || cliph <= 0 || isNull())
     {
         return DImg();
     }
@@ -408,7 +408,7 @@ uint** DImgScale::dimgCalcYPoints(uint* const src, int sw, int sh, int dh)
     val = 0;
     inc = (((ullong)sh) << 16) / dh;
 
-    for (i = 0; i < dh; ++i)
+    for (i = 0 ; i < dh ; ++i)
     {
         p[j++] = src + ((val >> 16) * sw);
         val += inc;
@@ -427,10 +427,10 @@ ullong** DImgScale::dimgCalcYPoints16(ullong* const src, int sw, int sh, int dh)
     val = 0;
     inc = (((ullong)sh) << 16) / dh;
 
-    for (i = 0; i < dh; ++i)
+    for (i = 0 ; i < dh ; ++i)
     {
         p[j++] = src + ((val >> 16) * sw);
-        val += inc;
+        val   += inc;
     }
 
     return p;
@@ -445,10 +445,10 @@ int* DImgScale::dimgCalcXPoints(int sw, int dw)
     val = 0;
     inc = (((ullong)sw) << 16) / dw;
 
-    for (i = 0; i < dw; ++i)
+    for (i = 0 ; i < dw ; ++i)
     {
         p[j++] = (val >> 16);
-        val    += inc;
+        val   += inc;
     }
 
     return(p);
@@ -468,7 +468,7 @@ int* DImgScale::dimgCalcApoints(int s, int d, int up)
         val = 0;
         inc = (((ullong)s) << 16) / d;
 
-        for (i = 0; i < d; ++i)
+        for (i = 0 ; i < d ; ++i)
         {
             p[j++] = (val >> 8) - ((val >> 8) & 0xffffff00);
 
@@ -489,7 +489,7 @@ int* DImgScale::dimgCalcApoints(int s, int d, int up)
         inc = (((ullong)s) << 16) / d;
         Cp  = ((d << 14) / s) + 1;
 
-        for (i = 0; i < d; ++i)
+        for (i = 0 ; i < d ; ++i)
         {
             ap   = ((0x100 - ((val >> 8) & 0xff)) * Cp) >> 8;
             p[j] = ap | (Cp << 16);
@@ -1079,8 +1079,10 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
 
                 if (j > 0)
                 {
-                    pix  = sptr;
+                    pix   = sptr;
                     sptr += sow;
+                    (void)sptr;    // disable clang warning.
+
                     rx   = (R_VAL(pix) * xap) >> 9;
                     gx   = (G_VAL(pix) * xap) >> 9;
                     bx   = (B_VAL(pix) * xap) >> 9;
@@ -1511,6 +1513,8 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
                 {
                     pix  = sptr;
                     sptr += sow;
+                    (void)sptr;    // disable clang warning.
+
                     rx   = (R_VAL(pix) * xap) >> 9;
                     gx   = (G_VAL(pix) * xap) >> 9;
                     bx   = (B_VAL(pix) * xap) >> 9;
@@ -1938,6 +1942,8 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* const isi, ullong* const dest,
                 {
                     pix  = sptr;
                     sptr += sow;
+                    (void)sptr;    // disable clang warning.
+
                     rx   = (R_VAL16(pix) * xap) >> 9;
                     gx   = (G_VAL16(pix) * xap) >> 9;
                     bx   = (B_VAL16(pix) * xap) >> 9;
@@ -2403,6 +2409,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* const isi, ullong* const dest,
                 {
                     pix  = sptr;
                     sptr += sow;
+                    (void)sptr;    // disable clang warning.
+
                     rx   = (R_VAL16(pix) * xap) >> 9;
                     gx   = (G_VAL16(pix) * xap) >> 9;
                     bx   = (B_VAL16(pix) * xap) >> 9;

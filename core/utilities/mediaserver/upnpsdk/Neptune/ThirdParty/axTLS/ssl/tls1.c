@@ -1100,7 +1100,7 @@ int send_packet(SSL *ssl, uint8_t protocol, const uint8_t *in, int length)
     {
         int mode = IS_SET_SSL_FLAG(SSL_IS_CLIENT) ? 
                             SSL_CLIENT_WRITE : SSL_SERVER_WRITE;
-        uint8_t hmac_header[SSL_RECORD_SIZE]; /* GBG: modified intializer */
+        uint8_t hmac_header[SSL_RECORD_SIZE]; /* GBG: modified initializer */
         hmac_header[0] = protocol;
         hmac_header[1] = 0x03; /* version = 3.1 or higher */
         hmac_header[2] = ssl->version & 0x0f;

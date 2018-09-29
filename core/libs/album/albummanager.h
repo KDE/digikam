@@ -35,6 +35,7 @@
 #include <QString>
 #include <QMap>
 #include <QUrl>
+#include <QDate>
 
 // Local includes
 
@@ -43,8 +44,6 @@
 #include "dbengineparameters.h"
 #include "digikam_export.h"
 #include "imagelisterrecord.h"
-
-class QDate;
 
 namespace Digikam
 {
@@ -786,129 +785,6 @@ private:
     friend class Album;
 };
 
-// ------------------------------------------------------------------------------------
-
-/**
- * You can use AlbumPointer to store a guarded pointer to Album
- * or one of the subclasses (use template parameter).
- * The pointer will be set to 0 when the album object is deleted.
- */
-template <class T = Album>
-
-class AlbumPointer
-{
-public:
-
-    AlbumPointer()
-        : album(0)
-    {
-    }
-
-    // cppcheck-suppress noExplicitConstructor
-    AlbumPointer(T* const a)                    // krazy:exclude=explicit
-        : album(a)
-    {
-        AlbumManager::instance()->addGuardedPointer(album, &album);
-    }
-
-    AlbumPointer(const AlbumPointer<T>& p)
-        : album(p.album)
-    {
-        AlbumManager::instance()->addGuardedPointer(album, &album);
-    }
-
-    ~AlbumPointer()
-    {
-        AlbumManager::instance()->removeGuardedPointer(album, &album);
-    }
-
-    AlbumPointer<T>& operator=(T* const a)
-    {
-        Album* const oldAlbum = album;
-        album                 = a;
-        AlbumManager::instance()->changeGuardedPointer(oldAlbum, album, &album);
-        return *this;
-    }
-
-    AlbumPointer<T>& operator=(const AlbumPointer<T>& p)
-    {
-        Album* const oldAlbum = album;
-        album                 = p.album;
-        AlbumManager::instance()->changeGuardedPointer(oldAlbum, album, &album);
-        return *this;
-    }
-
-    T* operator->() const
-    {
-        return static_cast<T*>(const_cast<Album*>(album));
-    }
-
-    T& operator*() const
-    {
-        return *static_cast<T*>(const_cast<Album*>(album));
-    }
-
-    operator T* () const
-    {
-        return static_cast<T*>(const_cast<Album*>(album));
-    }
-
-    bool operator!() const
-    {
-        return !album;
-    }
-
-private:
-
-    friend class AlbumManager;
-    Album* album;
-};
-
-// ------------------------------------------------------------------------------------
-
-template <class T = Album>
-
-class AlbumPointerList : public QList<AlbumPointer<T> >
-{
-public:
-
-    AlbumPointerList()
-    {
-    }
-
-    explicit AlbumPointerList(const AlbumPointerList<T>& list)
-        : QList<AlbumPointer<T> >(list)
-    {
-    }
-
-    explicit AlbumPointerList(const QList<T*>& list)
-    {
-        operator=(list);
-    }
-
-    AlbumPointerList<T>& operator=(const AlbumPointerList<T>& list)
-    {
-        return QList<AlbumPointer<T> >::operator=(list);
-    }
-
-    AlbumPointerList<T>& operator=(const QList<T*>& list)
-    {
-        foreach(T* const t, list)
-        {
-            this->append(AlbumPointer<T>(t));
-        }
-
-        return *this;
-    }
-};
-
 } // namespace Digikam
-
-Q_DECLARE_METATYPE(Digikam::AlbumPointer<>)
-Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::PAlbum>)
-Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::TAlbum>)
-Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::SAlbum>)
-Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::DAlbum>)
-Q_DECLARE_METATYPE(QList<Digikam::TAlbum*>)
 
 #endif // DIGIKAM_ALBUM_MANAGER_H

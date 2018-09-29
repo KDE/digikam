@@ -20,6 +20,7 @@ set(libfacemanagement_SRCS
     facescandialog.cpp
     assignnamewidget.cpp
     parallelpipes.cpp
+    scanstatefilter.cpp
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>

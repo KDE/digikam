@@ -27,9 +27,7 @@
 
 // Qt includes
 
-#include <QObject>
 #include <QDateTime>
-#include <QMutex>
 #include <QMap>
 #include <QUrl>
 

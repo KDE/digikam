@@ -324,7 +324,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     d->tabWidget->insertTab(Private::TAGS, sv3, i18n("Tags"));
 
-    // Information Managament View --------------------------------------
+    // Information Management View --------------------------------------
 
     QScrollArea* const sv2    = new QScrollArea(d->tabWidget);
     sv2->setFrameStyle(QFrame::NoFrame);

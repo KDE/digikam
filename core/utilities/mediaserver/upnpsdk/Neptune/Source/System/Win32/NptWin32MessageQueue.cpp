@@ -74,7 +74,7 @@ NPT_Win32WindowMessageQueue::NPT_Win32WindowMessageQueue()
         wclass.hInstance,     // handle to application instance 
         NULL);
 
-    // set a pointer to ourself as user data */
+    // set a pointer to ourselves as user data */
 #if defined(_MSC_VER)
 #pragma warning( push )
 #pragma warning( disable: 4244) // we have to test for this because SetWindowLongPtr
@@ -94,7 +94,7 @@ NPT_Win32WindowMessageQueue::NPT_Win32WindowMessageQueue()
 +---------------------------------------------------------------------*/
 NPT_Win32WindowMessageQueue::~NPT_Win32WindowMessageQueue() 
 {
-    // remove ourself as user data to ensure we're not called anymore
+    // remove ourselves as user data to ensure we're not called anymore
     SetWindowLongPtr(m_WindowHandle, GWLP_USERDATA, 0);
 
     // destroy the hidden window

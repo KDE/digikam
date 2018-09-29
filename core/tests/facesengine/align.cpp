@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "../../libs/facesengine/alignment-congealing/funnelreal.h"
+#include "../../libs/facesengine/alignment/congealing/funnelreal.h"
 
 using namespace Digikam;
 

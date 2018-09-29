@@ -2,10 +2,10 @@
  *
  * This file is a part of digiKam
  *
- * Date        : 2017-06-10
- * Description : Face Recognition based on Fisherfaces
- *               http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#Fisherfaces
- *               Turk, Matthew A and Pentland, Alex P. "Face recognition using Fisherfaces." 
+ * Date        : 2017-05-22
+ * Description : Face Recognition based on Eigenfaces
+ *               http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#eigenfaces
+ *               Turk, Matthew A and Pentland, Alex P. "Face recognition using eigenfaces." 
  *               Computer Vision and Pattern Recognition, 1991. Proceedings {CVPR'91.},
  *               {IEEE} Computer Society Conference on 1991.
  *
@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "fisherfacemodel.h"
+#include "eigenfacemodel.h"
 
 // Qt includes
 
@@ -38,87 +38,87 @@
 namespace Digikam
 {
 
-FisherFaceMatMetadata::FisherFaceMatMetadata()
+EigenFaceMatMetadata::EigenFaceMatMetadata()
     : databaseId(-1),
       identity(0),
       storageStatus(Created)
 {
 }
 
-FisherFaceMatMetadata::~FisherFaceMatMetadata()
+EigenFaceMatMetadata::~EigenFaceMatMetadata()
 {
 }
 
 // ------------------------------------------------------------------------------------
 
-FisherFaceModel::FisherFaceModel()
-    : cv::Ptr<FisherFaceRecognizer>(FisherFaceRecognizer::create())/*,
-      databaseId(0)*/
+EigenFaceModel::EigenFaceModel()
+    : cv::Ptr<EigenFaceRecognizer>(EigenFaceRecognizer::create())
+    /*, databaseId(0)*/
 {
-    ptr()->setThreshold(25000.0);
+    ptr()->setThreshold(20000.0);
 }
 
-FisherFaceModel::~FisherFaceModel()
+EigenFaceModel::~EigenFaceModel()
 {
 }
 
-FisherFaceRecognizer* FisherFaceModel::ptr()
+EigenFaceRecognizer* EigenFaceModel::ptr()
 {
-    FisherFaceRecognizer* const ptr = cv::Ptr<FisherFaceRecognizer>::operator Digikam::FisherFaceRecognizer*();
+    EigenFaceRecognizer* const ptr = cv::Ptr<EigenFaceRecognizer>::operator Digikam::EigenFaceRecognizer*();
 
     if (!ptr)
-        qCWarning(DIGIKAM_FACESENGINE_LOG) << "FisherFaceRecognizer pointer is null";
+        qCWarning(DIGIKAM_FACESENGINE_LOG) << "EigenFaceRecognizer pointer is null";
 
     return ptr;
 }
 
-const FisherFaceRecognizer* FisherFaceModel::ptr() const
+const EigenFaceRecognizer* EigenFaceModel::ptr() const
 {
-    const FisherFaceRecognizer* const ptr = cv::Ptr<FisherFaceRecognizer>::operator Digikam::FisherFaceRecognizer*();
+    const EigenFaceRecognizer* const ptr = cv::Ptr<EigenFaceRecognizer>::operator Digikam::EigenFaceRecognizer*();
 
     if (!ptr)
-        qCWarning(DIGIKAM_FACESENGINE_LOG) << "FisherFaceRecognizer pointer is null";
+        qCWarning(DIGIKAM_FACESENGINE_LOG) << "EigenFaceRecognizer pointer is null";
 
     return ptr;
 }
 
-std::vector<cv::Mat> FisherFaceModel::getSrc() const
+std::vector<cv::Mat> EigenFaceModel::getSrc() const
 {
     return ptr()->getSrc();
 }
 
-void FisherFaceModel::setSrc(std::vector<cv::Mat> new_src)
+void EigenFaceModel::setSrc(std::vector<cv::Mat> new_src)
 {
     ptr()->setSrc(new_src);
 }
 
-cv::Mat FisherFaceModel::getLabels() const
+cv::Mat EigenFaceModel::getLabels() const
 {
     return ptr()->getLabels();
 }
 
-void FisherFaceModel::setLabels(cv::Mat new_labels)
+void EigenFaceModel::setLabels(cv::Mat new_labels)
 {
     ptr()->setLabels(new_labels);
 }
 
-OpenCVMatData FisherFaceModel::matData(int index) const
+OpenCVMatData EigenFaceModel::matData(int index) const
 {
     return OpenCVMatData(ptr()->getSrc().at(index));
 }
 
-QList<FisherFaceMatMetadata> FisherFaceModel::matMetadata() const
+QList<EigenFaceMatMetadata> EigenFaceModel::matMetadata() const
 {
     return m_matMetadata;
 }
 
-void FisherFaceModel::setWrittenToDatabase(int index, int id)
+void EigenFaceModel::setWrittenToDatabase(int index, int id)
 {
     m_matMetadata[index].databaseId    = id;
-    m_matMetadata[index].storageStatus = FisherFaceMatMetadata::InDatabase;
+    m_matMetadata[index].storageStatus = EigenFaceMatMetadata::InDatabase;
 }
 
-void FisherFaceModel::setMats(const QList<OpenCVMatData>& mats, const QList<FisherFaceMatMetadata>& matMetadata)
+void EigenFaceModel::setMats(const QList<OpenCVMatData>& mats, const QList<EigenFaceMatMetadata>& matMetadata)
 {
     /*
      * Does not work with standard OpenCV, as these two params are declared read-only in OpenCV.
@@ -136,7 +136,7 @@ void FisherFaceModel::setMats(const QList<OpenCVMatData>& mats, const QList<Fish
 
     m_matMetadata.clear();
 
-    foreach (const FisherFaceMatMetadata& metadata, matMetadata)
+    foreach (const EigenFaceMatMetadata& metadata, matMetadata)
     {
         newLabels.push_back(metadata.identity);
         m_matMetadata << metadata;
@@ -150,14 +150,14 @@ void FisherFaceModel::setMats(const QList<OpenCVMatData>& mats, const QList<Fish
 
     //ptr()->setSrc(currentSrcs);
     //ptr()->setLabels(currentLabels);
-    //make sure that there exits traing data
+    //make sure that there exits training data
     if (currentSrcs.size()>0)
     {
         ptr()->train(currentSrcs, currentLabels);
     }
 }
 
-void FisherFaceModel::update(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context)
+void EigenFaceModel::update(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context)
 {
     ptr()->update(images, labels);
 
@@ -167,8 +167,8 @@ void FisherFaceModel::update(const std::vector<cv::Mat>& images, const std::vect
 
     for (int i = m_matMetadata.size() ; i < currentLabels.rows ; i++)
     {
-        FisherFaceMatMetadata metadata;
-        metadata.storageStatus = FisherFaceMatMetadata::Created;
+        EigenFaceMatMetadata metadata;
+        metadata.storageStatus = EigenFaceMatMetadata::Created;
         metadata.identity      = currentLabels.at<int>(i);
         metadata.context       = context;
         m_matMetadata << metadata;

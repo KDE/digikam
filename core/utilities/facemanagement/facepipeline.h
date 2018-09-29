@@ -120,10 +120,8 @@ public:
 
 public:
 
-    FacePipelinePackage()
-        : processFlags(NotProcessed)
-    {
-    }
+    explicit FacePipelinePackage();
+    ~FacePipelinePackage();
 
 public:
 

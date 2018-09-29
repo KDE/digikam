@@ -63,6 +63,10 @@ public:
      */
     virtual ~TagFilterView();
 
+private Q_SLOTS:
+
+    void slotDeleteTagByContextMenu(TAlbum* tag);
+
 protected:
 
     virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);

@@ -1167,7 +1167,7 @@ const QIcon SearchSideBarWidget::getIcon()
 
 const QString SearchSideBarWidget::getCaption()
 {
-    return i18nc("Avanced search images, access stored searches", "Search");
+    return i18nc("Advanced search images, access stored searches", "Search");
 }
 
 void SearchSideBarWidget::newKeywordSearch()
@@ -1256,7 +1256,7 @@ const QIcon FuzzySearchSideBarWidget::getIcon()
 
 const QString FuzzySearchSideBarWidget::getCaption()
 {
-    return i18nc("Fuzzy Search images, as dupplicates, sketch, searches by similarities", "Similarity");
+    return i18nc("Fuzzy Search images, as duplicates, sketch, searches by similarities", "Similarity");
 }
 
 void FuzzySearchSideBarWidget::newDuplicatesSearch(PAlbum* album)

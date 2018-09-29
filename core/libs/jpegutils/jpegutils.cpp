@@ -532,7 +532,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotati
     }
 
     // We update all new metadata now...
-    m_metadata.save(fileName);
+    m_metadata.save(fileName, true);
 
     // File properties restoration.
 

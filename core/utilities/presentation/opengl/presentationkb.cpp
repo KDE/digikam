@@ -218,15 +218,15 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::Popup);
 
     QRect deskRect = QApplication::desktop()->screenGeometry( QApplication::activeWindow() );
-    d->deskX        = deskRect.x();
-    d->deskY        = deskRect.y();
-    d->deskWidth    = deskRect.width();
-    d->deskHeight   = deskRect.height();
+    d->deskX       = deskRect.x();
+    d->deskY       = deskRect.y();
+    d->deskWidth   = deskRect.width();
+    d->deskHeight  = deskRect.height();
 
     move(d->deskX, d->deskY);
     resize(d->deskWidth, d->deskHeight);
 
-    d->sharedData   = sharedData;
+    d->sharedData  = sharedData;
 
     qsrand(QTime::currentTime().msec());
     readSettings();
@@ -310,6 +310,7 @@ PresentationKB::~PresentationKB()
     {
         d->imageLoadThread->terminate();
         terminated = d->imageLoadThread->wait(3000);
+        (void)terminated; // Remove clang warnings.
     }
 
     delete d->imageLoadThread;
@@ -330,7 +331,7 @@ void PresentationKB::setNewKBEffect()
 
     // we currently only have two effects
 
-    if (d->disableFadeInOut)
+    if      (d->disableFadeInOut)
         type = KBEffect::Blend;
     else if (d->disableCrossFade)
         type = KBEffect::Fade;
@@ -341,7 +342,6 @@ void PresentationKB::setNewKBEffect()
 
     switch (type)
     {
-
         case KBEffect::Fade:
             d->effect = new FadeKBEffect(this, needFadeIn);
             break;
@@ -377,7 +377,7 @@ bool PresentationKB::setupNewImage(int idx)
 {
     assert(idx >= 0 && idx < 2);
 
-    if ( !d->haveImages)
+    if (!d->haveImages)
         return false;
 
     bool ok  = false;
@@ -393,7 +393,7 @@ bool PresentationKB::setupNewImage(int idx)
         d->image[idx]                = new KBImage(viewTrans, imageAspect);
 
         applyTexture(d->image[idx], d->imageLoadThread->image());
-        ok = true;
+        ok                           = true;
 
     }
     else
@@ -425,8 +425,8 @@ void PresentationKB::startSlideShowOnce()
 void PresentationKB::swapImages()
 {
     KBImage* const tmp = d->image[0];
-    d->image[0]         = d->image[1];
-    d->image[1]         = tmp;
+    d->image[0]        = d->image[1];
+    d->image[1]        = tmp;
 }
 
 void PresentationKB::initializeGL()
@@ -543,7 +543,7 @@ void PresentationKB::paintTexture(KBImage* const img)
 void PresentationKB::readSettings()
 {
     KConfig config;
-    KConfigGroup group = config.group("Presentation Settings");
+    KConfigGroup group  = config.group("Presentation Settings");
 
     d->delay            = group.readEntry("Delay", 8000) / 1000;
     d->disableFadeInOut = group.readEntry("KB Disable FadeInOut", false);
@@ -569,7 +569,7 @@ void PresentationKB::endOfShow()
     QPainter p(&pix);
     p.setPen(Qt::white);
     p.setFont(fn);
-    p.drawText(20, 50, i18n("SlideShow Completed"));
+    p.drawText(20, 50,  i18n("SlideShow Completed"));
     p.drawText(20, 100, i18n("Click to Exit..."));
     p.end();
 
@@ -619,15 +619,14 @@ void PresentationKB::endOfShow()
 QStringList PresentationKB::effectNames()
 {
     QStringList effects;
-
     effects.append(QLatin1String("Ken Burns"));
+
     return effects;
 }
 
 QMap<QString, QString> PresentationKB::effectNamesI18N()
 {
     QMap<QString, QString> effects;
-
     effects[QLatin1String("Ken Burns")] = i18n("Ken Burns");
 
     return effects;
@@ -648,7 +647,7 @@ void PresentationKB::keyPressEvent(QKeyEvent* event)
 
 void PresentationKB::mousePressEvent(QMouseEvent* e)
 {
-    if ( !e )
+    if (!e)
         return;
 
     if (d->endOfShow && d->showingEnd)

@@ -60,7 +60,7 @@ public:
     ~Image();
 
     /**
-     * @brief Assingning an image from an other image.
+     * @brief Assigning an image from an other image.
      * @param other an other image
      */
     Image& operator=(Image other);

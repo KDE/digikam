@@ -455,7 +455,7 @@ bool MetaEngine::save(const QString& imageFilePath, bool setVersion) const
     return writtenToFile || writtenToSidecar;
 }
 
-bool MetaEngine::applyChanges() const
+bool MetaEngine::applyChanges(bool setVersion) const
 {
     if (d->filePath.isEmpty())
     {
@@ -463,7 +463,7 @@ bool MetaEngine::applyChanges() const
         return false;
     }
 
-    return save(d->filePath);
+    return save(d->filePath, setVersion);
 }
 
 bool MetaEngine::isEmpty() const

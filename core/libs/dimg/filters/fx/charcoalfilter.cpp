@@ -205,8 +205,6 @@ void CharcoalFilter::convolveImageMultithreaded(uint start, uint stop, double* n
 
     for (uint y = start ; runningFlag() && (y < stop) ; ++y)
     {
-        sy = y - (kernelWidth / 2);
-
         for (uint x = 0 ; runningFlag() && (x < width) ; ++x)
         {
             k   = normal_kernel;
@@ -275,7 +273,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
         return false;
     }
 
-    for (i = 0; i < (kernelWidth * kernelWidth); ++i)
+    for (i = 0 ; i < (kernelWidth * kernelWidth) ; ++i)
     {
         normalize += kernel[i];
     }
@@ -287,7 +285,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
 
     normalize = 1.0 / normalize;
 
-    for (i = 0; i < (kernelWidth * kernelWidth); ++i)
+    for (i = 0 ; i < (kernelWidth * kernelWidth) ; ++i)
     {
         normal_kernel[i] = normalize * kernel[i];
     }
@@ -308,7 +306,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
                                       ));
     }
 
-    foreach(QFuture<void> t, tasks)
+    foreach (QFuture<void> t, tasks)
         t.waitForFinished();
 
     return true;
@@ -325,7 +323,7 @@ int CharcoalFilter::getOptimalKernelWidth(double radius, double sigma)
         return((int)(2.0 * ceil(radius) + 1.0));
     }
 
-    for (kernelWidth = 5; ;)
+    for (kernelWidth = 5 ; ;)
     {
         normalize = 0.0;
 

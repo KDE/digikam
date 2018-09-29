@@ -37,8 +37,8 @@
 
 // Implementation not exported with digiKam core.
 
-#include "../../libs/facesengine/preprocessing-tantriggs/tantriggspreprocessor.h"
-#include "../../libs/facesengine/preprocessing-tantriggs/tantriggspreprocessor.cpp"
+#include "../../libs/facesengine/preprocessing/tantriggs/tantriggspreprocessor.h"
+#include "../../libs/facesengine/preprocessing/tantriggs/tantriggspreprocessor.cpp"
 
 using namespace Digikam;
 

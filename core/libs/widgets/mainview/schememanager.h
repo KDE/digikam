@@ -129,7 +129,7 @@ public:
          * Complementary areas.
          *
          * Some applications want some areas to have a different color scheme.
-         * Ususally dark areas over a light theme. For instance the fullscreen UI
+         * Usually dark areas over a light theme. For instance the fullscreen UI
          * of a picture viewer, or the logout/lock screen of the plasma workspace
          * ask for a dark color scheme even on light themes.
          * @since 5.19

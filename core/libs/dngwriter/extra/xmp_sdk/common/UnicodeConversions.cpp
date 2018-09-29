@@ -524,7 +524,7 @@ static void CodePoint_from_UTF8_Multi ( const UTF8Unit * utf8In, const size_t ut
 	// We've got a multibyte UTF-8 character. The first byte has the number of bytes and the
 	// highest order data bits. The other bytes each add 6 more data bits.
 
-	#if 0	// This might be a more effcient way to count the bytes.
+	#if 0	// This might be a more efficient way to count the bytes.
 		static XMP_Uns8 kByteCounts[16] = { 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 2, 3, 4 };
 		size_t bytesNeeded = kByteCounts [ inUnit >> 4 ];
 		if ( (bytesNeeded < 2) || ((bytesNeeded == 4) && ((inUnit & 0x08) != 0)) ) {

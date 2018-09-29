@@ -24,13 +24,8 @@
 
 #include "timeadjustthread.h"
 
-// Qt Includes
-
-#include <QFileInfo>
-
 // Local includes
 
-#include "digikam_debug.h"
 #include "dinfointerface.h"
 #include "timeadjusttask.h"
 

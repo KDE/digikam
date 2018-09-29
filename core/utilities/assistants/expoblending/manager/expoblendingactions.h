@@ -67,7 +67,7 @@ public:
     };
 
     QUrl preprocessedUrl;              // Can be original file or aligned version, depending of user choice.
-    QUrl previewUrl;                   // The JPEG preview version, accordingly of preprocessedUrl constent.
+    QUrl previewUrl;                   // The JPEG preview version, accordingly of preprocessedUrl constant.
 };
 
 typedef QMap<QUrl, ExpoBlendingItemPreprocessedUrls> ExpoBlendingItemUrlsMap;   // Map between original Url and processed temp Urls.

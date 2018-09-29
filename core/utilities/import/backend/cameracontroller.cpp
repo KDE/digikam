@@ -904,7 +904,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     }
     else
     {
-        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Rename done, emiting downloaded signals:" << file << " info.filename: " << info.fileName();
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Rename done, emitting downloaded signals:" << file << " info.filename: " << info.fileName();
         // TODO why two signals??
         emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());

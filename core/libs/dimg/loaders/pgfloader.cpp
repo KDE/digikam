@@ -233,7 +233,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
             qCDebug(DIGIKAM_DIMG_LOG_PGF) << "Is 16 bits   = " << m_sixteenBit;
         }
 
-        // NOTE: see bug #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
+        // NOTE: see bug #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properly with libppgf 6.11.24
         pgf.ConfigureDecoder(false);
 
         int width   = pgf.Width();
@@ -446,7 +446,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 
         pgf.SetHeader(header);
 
-        // NOTE: see bug #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
+        // NOTE: see bug #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properly with libppgf 6.11.24
         pgf.ConfigureEncoder(false);
 
         pgf.ImportBitmap(4 * imageWidth() * (imageSixteenBit() ? 2 : 1),

@@ -164,7 +164,7 @@ int ImageSortSettings::compareCategories(const ImageInfo& left, const ImageInfo&
             int leftAlbum = left.albumId();
             int rightAlbum = right.albumId();
 
-            // return comparation result
+            // return comparison result
             if (leftAlbum == rightAlbum)
             {
                 return 0;

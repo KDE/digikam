@@ -72,7 +72,7 @@ private:
 private:
 
     Ui::MainWindow* ui;
-    Iface       MediaWiki;
+    Iface           MediaWiki;
 };
 
 #endif // MAINWINDOW_H

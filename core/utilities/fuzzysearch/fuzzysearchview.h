@@ -30,7 +30,7 @@
 
 #include <QScrollArea>
 
-// Local includs
+// Local includes
 
 #include "statesavingobject.h"
 

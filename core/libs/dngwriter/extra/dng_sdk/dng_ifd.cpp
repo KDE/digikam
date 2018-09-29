@@ -2762,7 +2762,7 @@ bool dng_ifd::IsValidDNG (dng_shared &shared,
 			{
 
 			// Allow color previews even in monochrome DNG files, since the
-			// raw procesing software may be adding color effects.
+			// raw processing software may be adding color effects.
 
 			break;
 

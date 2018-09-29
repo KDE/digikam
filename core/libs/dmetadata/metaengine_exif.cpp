@@ -1078,7 +1078,7 @@ MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const
 
         while (gi->tagList_ != 0)
         {
-            // NOTE: See BUG #375809 : MPF tags = execption Exiv2 0.26
+            // NOTE: See BUG #375809 : MPF tags = exception Exiv2 0.26
 
             if (QLatin1String(gi->ifdName_) != QLatin1String("Makernote"))
             {

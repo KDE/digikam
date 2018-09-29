@@ -76,7 +76,7 @@ public:
 
     /**
      * Return the list of parameters defined in the desktop file. We need to
-     * parse the file ourself to preserve parameter order.
+     * parse the file ourselves to preserve parameter order.
      */
     QStringList readParameterNameList(const QString& desktopFileName)
     {

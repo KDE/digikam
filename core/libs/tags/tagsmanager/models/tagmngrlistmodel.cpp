@@ -221,7 +221,7 @@ bool TagMngrListModel::dropMimeData(const QMimeData* data, Qt::DropAction action
         {
             finalItems.append(newItems);
             /** After drag-n-drop selection is messed up, store the interval were
-             *  new items are and TagsMngrListView will update seelction
+             *  new items are and TagsMngrListView will update selection
              */
             d->dragNewSelection.clear();
             d->dragNewSelection << row;

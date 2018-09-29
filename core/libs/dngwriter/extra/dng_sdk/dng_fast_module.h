@@ -13,7 +13,7 @@
 
 /** \file
  * Include file to set optimization to highest level for performance-critical routines.
- * Normal files should have otpimization set to normal level to save code size as there is less
+ * Normal files should have optimization set to normal level to save code size as there is less
  * cache pollution this way.
  */
 

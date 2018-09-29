@@ -31,7 +31,7 @@
 
 #include <kdelibs4migration.h>
 
-// Local incudes
+// Local includes
 
 #include "dxmlguiwindow.h"
 #include "welcomepage.h"

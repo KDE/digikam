@@ -172,7 +172,7 @@ protected:
 +---------------------------------------------------------------------*/
 /**
  The PLT_CtrlPointHouseKeepingTask class is used by a PLT_CtrlPoint to keep 
- track of expired devices and autmatically renew event subscribers. 
+ track of expired devices and automatically renew event subscribers. 
  */
 class PLT_CtrlPointHouseKeepingTask : public PLT_ThreadTask
 {

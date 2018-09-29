@@ -232,20 +232,20 @@ public:
                     case CR:
                         ch = '\r';
                         if (out.sputn(&ch,1)!=1)
-                            throw std::ios_base::failure("error occured in the base64 object");
+                            throw std::ios_base::failure("error occurred in the base64 object");
                         break;
                     case LF:
                         ch = '\n';
                         if (out.sputn(&ch,1)!=1)
-                            throw std::ios_base::failure("error occured in the base64 object");
+                            throw std::ios_base::failure("error occurred in the base64 object");
                         break;
                     case CRLF:
                         ch = '\r';
                         if (out.sputn(&ch,1)!=1)
-                            throw std::ios_base::failure("error occured in the base64 object");
+                            throw std::ios_base::failure("error occurred in the base64 object");
                         ch = '\n';
                         if (out.sputn(&ch,1)!=1)
-                            throw std::ios_base::failure("error occured in the base64 object");
+                            throw std::ios_base::failure("error occurred in the base64 object");
                         break;
                     default:
                         DLIB_CASSERT(false,"this should never happen");
@@ -277,7 +277,7 @@ public:
                 // write the encoded bytes to the output stream
                 if (out.sputn(reinterpret_cast<char*>(&outbuf),4)!=4)
                 {
-                    throw std::ios_base::failure("error occured in the base64 object");
+                    throw std::ios_base::failure("error occurred in the base64 object");
                 }
 
                 // get 3 more input bytes
@@ -307,7 +307,7 @@ public:
                 // write the encoded bytes to the output stream
                 if (out.sputn(reinterpret_cast<char*>(&outbuf),4)!=4)
                 {
-                    throw std::ios_base::failure("error occured in the base64 object");
+                    throw std::ios_base::failure("error occurred in the base64 object");
                 }
 
 
@@ -334,7 +334,7 @@ public:
                 // write the encoded bytes to the output stream
                 if (out.sputn(reinterpret_cast<char*>(&outbuf),4)!=4)
                 {
-                    throw std::ios_base::failure("error occured in the base64 object");
+                    throw std::ios_base::failure("error occurred in the base64 object");
                 }
 
                 break;
@@ -409,7 +409,7 @@ public:
                 // write the encoded bytes to the output stream
                 if (out.sputn(reinterpret_cast<char*>(&outbuf),outsize)!=outsize)
                 {
-                    throw std::ios_base::failure("error occured in the base64 object");
+                    throw std::ios_base::failure("error occurred in the base64 object");
                 }
             }
 

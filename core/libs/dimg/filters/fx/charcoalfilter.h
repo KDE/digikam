@@ -40,7 +40,10 @@ class DIGIKAM_EXPORT CharcoalFilter : public DImgThreadedFilter
 public:
 
     explicit CharcoalFilter(QObject* const parent = 0);
-    explicit CharcoalFilter(DImg* const orgImage, QObject* const parent=0, double pencil=5.0, double smooth=10.0);
+    explicit CharcoalFilter(DImg* const orgImage,
+                            QObject* const parent=0,
+                            double pencil=5.0,
+                            double smooth=10.0);
     ~CharcoalFilter();
 
     static QString          FilterIdentifier()

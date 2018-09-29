@@ -56,7 +56,7 @@ static struct {
 static void
 PrintUsageAndExit(char** args)
 {
-    fprintf(stderr, "usage: %s [-v <variable> -h <header name>] <intput> <output>\n", args[0]);
+    fprintf(stderr, "usage: %s [-v <variable> -h <header name>] <input> <output>\n", args[0]);
     fprintf(stderr, "-v : optional variable name\n");
     fprintf(stderr, "-h : optional header name\n");
     fprintf(stderr, "<input>  : input scpd filename\n");

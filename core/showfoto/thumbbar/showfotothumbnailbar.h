@@ -58,7 +58,7 @@ public:
     void setScrollBarPolicy(Qt::ScrollBarPolicy policy);
     void setFlow(QListView::Flow newFlow);
 
-    ShowfotoItemInfo findItemByUrl(const QUrl url);
+    ShowfotoItemInfo findItemByUrl(const QUrl& url);
 
     void installOverlays();
 

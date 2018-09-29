@@ -300,9 +300,8 @@ bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     {
         d->meta.setImageDimensions(image.size());
         d->meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-        d->meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
         d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-        d->meta.save(path);
+        d->meta.save(path, true);
     }
 
     if (!form.addFile(path))

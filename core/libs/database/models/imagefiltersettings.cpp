@@ -947,7 +947,7 @@ bool GroupImageFilterSettings::isFiltering() const
 
 DatabaseFields::Set GroupImageFilterSettings::watchFlags() const
 {
-    return DatabaseFields::ImageRelations;
+    return DatabaseFields::Set(DatabaseFields::ImageRelations);
 }
 
 } // namespace Digikam

@@ -335,7 +335,7 @@ void DatabaseTask::run()
 
                         //qCDebug(DIGIKAM_GENERAL_LOG) << "URL: " << url.toString(); 
 
-                        // Remove the id that is found by the custom identifyer. Finding the id -1 does no harm
+                        // Remove the id that is found by the custom identifier. Finding the id -1 does no harm
                         thumbIds.remove(ThumbsDbAccess().db()->findByCustomIdentifier(url.toString()).id);
                     }
                 }
@@ -369,7 +369,7 @@ void DatabaseTask::run()
 
             QList<Identity> identities = RecognitionDatabase().allIdentities();
 
-            // Get all identitites to remove. Don't remove now in order to make sure no side effects occur.
+            // Get all identities to remove. Don't remove now in order to make sure no side effects occur.
 
             foreach(const Identity& identity, identities)
             {
@@ -471,7 +471,7 @@ void DatabaseTask::run()
 
             if (BdEngineBackend::NoErrors == lastQueryState)
             {
-                // Commit the removel if everything was fine.
+                // Commit the removal if everything was fine.
                 lastQueryState = ThumbsDbAccess().backend()->commitTransaction();
 
                 if (BdEngineBackend::NoErrors != lastQueryState)

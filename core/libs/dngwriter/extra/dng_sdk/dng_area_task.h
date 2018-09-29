@@ -60,10 +60,10 @@ class dng_area_task
 
 		/// Getter for minimum area of a partitioned rectangle.
 		/// Often it is not profitable to use more resources if it requires partitioning the input into chunks that are too small,
-		/// as the overhead increases more than the speedup. This method can be ovreridden for a specific task to indicate the smallest
+		/// as the overhead increases more than the speedup. This method can be overridden for a specific task to indicate the smallest
 		/// area for partitioning. Default is 256x256 pixels.
 		///
-		/// \retval Minimum area for a partitoned tile in order to give performant operation. (Partitions can be smaller due to small inputs and edge cases.)
+		/// \retval Minimum area for a partitioned tile in order to give performant operation. (Partitions can be smaller due to small inputs and edge cases.)
 
 		virtual uint32 MinTaskArea () const
 			{

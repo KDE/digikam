@@ -47,7 +47,7 @@ class DIGIKAM_DATABASE_EXPORT ImageTagPair
 public:
 
     /** This class provides a wrapper over the Database methods
-     *  to access the properties of tag / image assocation. It is meant to be a
+     *  to access the properties of tag / image association. It is meant to be a
      *  short-lived object, it does not listen to external database changes.
      */
 

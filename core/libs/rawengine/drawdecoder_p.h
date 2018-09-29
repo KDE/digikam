@@ -89,9 +89,9 @@ public:
 
     static void fillIndentifyInfo(LibRaw* const raw, RawInfo& identify);
 
-    static bool loadEmbeddedPreview(QByteArray&, LibRaw&);
+    static bool loadEmbeddedPreview(QByteArray&, LibRaw* const raw);
 
-    static bool loadHalfPreview(QImage&, LibRaw&);
+    static bool loadHalfPreview(QImage&, LibRaw* const raw);
 
 private:
 

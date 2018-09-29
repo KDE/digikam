@@ -47,7 +47,7 @@ target_link_libraries(recognize
 # -----------------------------------------------------------------------------
 
 set(align_SRCS align.cpp
-               ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/facesengine/alignment-congealing/funnelreal.cpp
+               ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/facesengine/alignment/congealing/funnelreal.cpp
 )
 add_executable(align ${align_SRCS})
 target_link_libraries(align

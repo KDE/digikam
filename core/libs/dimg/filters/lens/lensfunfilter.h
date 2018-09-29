@@ -57,8 +57,8 @@ public:
 
 public:
 
-    bool      filterCCA;       /// Chromatic Aberation Corrections
-    bool      filterVIG;       /// Vigneting Corrections
+    bool      filterCCA;       /// Chromatic Aberration Corrections
+    bool      filterVIG;       /// Vignetting Corrections
     bool      filterDST;       /// Distortion Corrections
     bool      filterGEO;       /// Geometry Corrections
 

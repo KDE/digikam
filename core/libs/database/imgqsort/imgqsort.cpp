@@ -59,7 +59,7 @@ public:
         clusterCount(30),                   //used for k-means clustering algorithm in noise detection
         size(512)
     {
-        for (int c = 0 ; c < 3 ; c++)
+        for (int c = 0 ; c < 3 ; ++c)
         {
             fimg[c] = 0;
         }
@@ -288,16 +288,16 @@ void ImgQSort::readImage() const
     {
         DColor col;
 
-        for (int c = 0; d->running && (c < 3); c++)
+        for (int c = 0 ; d->running && (c < 3) ; ++c)
         {
             d->fimg[c] = new float[d->neimage.numPixels()];
         }
 
         int j = 0;
 
-        for (uint y = 0; d->running && (y < d->neimage.height()); y++)
+        for (uint y = 0 ; d->running && (y < d->neimage.height()) ; ++y)
         {
-            for (uint x = 0; d->running && (x < d->neimage.width()); x++)
+            for (uint x = 0 ; d->running && (x < d->neimage.width()) ; ++x)
             {
                 col           = d->neimage.getPixelColor(x, y);
                 d->fimg[0][j] = col.red();
@@ -364,11 +364,11 @@ short ImgQSort::blurdetector2() const
 
     short maxLap = -32767;
 
-    for (int i = 0; i < out.rows; i++)
+    for (int i = 0 ; i < out.rows ; ++i)
     {
-        for (int j = 0; j < out.cols; j++)
+        for (int j = 0 ; j < out.cols ; ++j)
         {
-            short value = out.at<short>(i,j);
+            short value = out.at<short>(i, j);
 
             if (value > maxLap)
             {
@@ -389,7 +389,7 @@ double ImgQSort::noisedetector() const
     // Convert the image into YCrCb color model.
     NRFilter::srgb2ycbcr(d->fimg, d->neimage.numPixels());
 
-    // One dimentional CvMat which stores the image.
+    // One dimensional CvMat which stores the image.
     CvMat* points    = cvCreateMat(d->neimage.numPixels(), 3, CV_32FC1);
 
     // Matrix to store the index of the clusters.
@@ -398,9 +398,9 @@ double ImgQSort::noisedetector() const
     // Pointer variable to handle the CvMat* points (the image in CvMat format).
     float* pointsPtr = reinterpret_cast<float*>(points->data.ptr);
 
-    for (uint x=0 ; d->running && (x < d->neimage.numPixels()) ; x++)
+    for (uint x = 0 ; d->running && (x < d->neimage.numPixels()) ; ++x)
     {
-        for (int y=0 ; d->running && (y < 3) ; y++)
+        for (int y = 0 ; d->running && (y < 3) ; y++)
         {
             *pointsPtr++ = (float)d->fimg[y][x];
         }
@@ -427,7 +427,7 @@ double ImgQSort::noisedetector() const
 
     // The row position array would just make the hold the number of elements in each cluster.
 
-    for (uint i=0 ; d->running && (i < d->clusterCount) ; i++)
+    for (uint i = 0 ; d->running && (i < d->clusterCount) ; ++i)
     {
         // Initializing the cluster count array.
         rowPosition[i] = 0;
@@ -435,7 +435,7 @@ double ImgQSort::noisedetector() const
 
     int rowIndex, columnIndex;
 
-    for (uint i=0 ; d->running && (i < d->neimage.numPixels()) ; i++)
+    for (uint i = 0 ; d->running && (i < d->neimage.numPixels()) ; ++i)
     {
         columnIndex = clusters->data.i[i];
         rowPosition[columnIndex]++;
@@ -447,7 +447,7 @@ double ImgQSort::noisedetector() const
 
     int max = rowPosition[0];
 
-    for (uint i=1 ; d->running && (i < d->clusterCount) ; i++)
+    for (uint i = 1 ; d->running && (i < d->clusterCount) ; ++i)
     {
         if (rowPosition[i] > max)
         {
@@ -473,7 +473,7 @@ double ImgQSort::noisedetector() const
 
     QScopedArrayPointer<int> rPosition(new int[d->clusterCount]);
 
-    for (uint i=0 ; d->running && (i < d->clusterCount) ; i++)
+    for (uint i = 0 ; d->running && (i < d->clusterCount) ; ++i)
     {
         rPosition[i] = 0;
     }
@@ -482,7 +482,7 @@ double ImgQSort::noisedetector() const
 
     qCDebug(DIGIKAM_DATABASE_LOG) << "The rowPosition array is ready!";
 
-    for (uint i=0 ; d->running && (i < d->neimage.numPixels()) ; i++)
+    for (uint i = 0 ; d->running && (i < d->neimage.numPixels()) ; ++i)
     {
         columnIndex = clusters->data.i[i];
         rowIndex    = rPosition[columnIndex];
@@ -493,15 +493,15 @@ double ImgQSort::noisedetector() const
 
         // Moving to the right column.
 
-        for (int j=0 ; d->running && (j < columnIndex) ; j++)
+        for (int j = 0 ; d->running && (j < columnIndex) ; ++j)
         {
-            for (int z=0 ; d->running && (z < (points->cols)) ; z++)
+            for (int z = 0 ; d->running && (z < (points->cols)) ; ++z)
             {
                 ptr++;
             }
         }
 
-        for (int z=0 ; d->running && (z < (points->cols)) ; z++)
+        for (int z = 0 ; d->running && (z < (points->cols)) ; ++z)
         {
             *ptr++ = cvGet2D(points, i, z).val[0];
         }
@@ -529,14 +529,14 @@ double ImgQSort::noisedetector() const
         stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
     }
 
-    for (int i=0 ; d->running && (i < sd->cols) ; i++)
+    for (int i = 0 ; d->running && (i < sd->cols) ; ++i)
     {
         if (d->running && (rowPosition[(i/points->cols)] >= 1))
         {
             CvMat* workingArr = cvCreateMat(rowPosition[(i / points->cols)], 1, CV_32FC1);
             ptr               = reinterpret_cast<float*>(workingArr->data.ptr);
 
-            for (int j=0 ; d->running && (j < rowPosition[(i / (points->cols))]) ; j++)
+            for (int j = 0 ; d->running && (j < rowPosition[(i / (points->cols))]) ; ++j)
             {
                 *ptr++ = cvGet2D(sd, j, i).val[0];
             }
@@ -559,6 +559,10 @@ double ImgQSort::noisedetector() const
         stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
     }
 
+    // Remove clang warnings.
+    (void)meanStorePtr;
+    (void)stdStorePtr;
+
     qCDebug(DIGIKAM_DATABASE_LOG) << "Done with the basic work of storing the mean and the std";
 
     //-- Calculating weighted mean, and weighted std -----------------------------------------------------------
@@ -568,18 +572,18 @@ double ImgQSort::noisedetector() const
     float   weightedStd  = 0.0F;
     float   datasd[3]    = {0.0F, 0.0F, 0.0F};
 
-    for (int j=0 ; d->running && (j < points->cols) ; j++)
+    for (int j=0 ; d->running && (j < points->cols) ; ++j)
     {
         meanStorePtr = reinterpret_cast<float*>(meanStore->data.ptr);
         stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
 
-        for (int moveToChannel=0 ; moveToChannel <= j ; moveToChannel++)
+        for (int moveToChannel = 0 ; moveToChannel <= j ; ++moveToChannel)
         {
             meanStorePtr++;
             stdStorePtr++;
         }
 
-        for (uint i=0 ; i < d->clusterCount ; i++)
+        for (uint i = 0 ; i < d->clusterCount ; ++i)
         {
             if (rowPosition[i] >= 1)
             {
@@ -612,7 +616,7 @@ double ImgQSort::noisedetector() const
 
         if (d->neimage.sixteenBit())
         {
-            for (int i=0 ; i < points->cols ; i++)
+            for (int i = 0 ; i < points->cols ; ++i)
             {
                 datasd[i] = datasd[i] / 256;
             }
@@ -630,7 +634,7 @@ double ImgQSort::noisedetector() const
         cvReleaseMat(&points);
         cvReleaseMat(&clusters);
 
-        for (uint i = 0; i < 3; i++)
+        for (uint i = 0 ; i < 3 ; ++i)
         {
             delete [] d->fimg[i];
         }
@@ -653,57 +657,57 @@ int ImgQSort::compressiondetector() const
     // Go through 8 blocks at a time horizontally
     // iterating through columns.
 
-    for (int i = 0; d->running && i < d->src_gray.rows; i++)
+    for (int i = 0 ; d->running && i < d->src_gray.rows ; ++i)
     {
         // Calculating intensity of top column.
 
-        for (int j = 0; j < d->src_gray.cols; j+=8)
+        for (int j = 0 ; j < d->src_gray.cols ; j += 8)
         {
             sum = 0;
 
-            for (int k = j; k < block_size; k++)
+            for (int k = j ; k < block_size ; ++k)
             {
                 sum += (int)d->src_gray.at<uchar>(i, j);
             }
 
-            average_top.push_back(sum/8);
+            average_top.push_back(sum / 8);
         }
 
         // Calculating intensity of middle column.
 
-        for (int j = 0; j < d->src_gray.cols; j+=8)
+        for (int j = 0 ; j < d->src_gray.cols ; j += 8)
         {
             sum = 0;
 
-            for (int k = j; k < block_size; k++)
+            for (int k = j ; k < block_size ; ++k)
             {
                 sum += (int)d->src_gray.at<uchar>(i+1, j);
             }
 
-            average_middle.push_back(sum/8);
+            average_middle.push_back(sum / 8);
         }
 
         // Calculating intensity of bottom column.
 
         countblocks = 0;
 
-        for (int j = 0; j < d->src_gray.cols; j+=8)
+        for (int j = 0 ; j < d->src_gray.cols ; j += 8)
         {
             sum = 0;
 
-            for (int k = j; k < block_size; k++)
+            for (int k = j ; k < block_size ; ++k)
             {
                 sum += (int)d->src_gray.at<uchar>(i+2, j);
             }
 
-            average_bottom.push_back(sum/8);
+            average_bottom.push_back(sum / 8);
             countblocks++;
         }
 
         // Check if the average intensity of 8 blocks in the top, middle and bottom rows are equal.
         // If so increment number_of_blocks.
 
-        for (int j = 0; j < countblocks; j++)
+        for (int j = 0 ; j < countblocks ; ++j)
         {
             if ((average_middle[j] == (average_top[j]+average_bottom[j])/2) &&
                 average_middle[j] > THRESHOLD)
@@ -719,57 +723,57 @@ int ImgQSort::compressiondetector() const
 
     // Iterating through rows.
 
-    for (int j = 0; d->running && j < d->src_gray.cols; j++)
+    for (int j = 0 ; d->running && j < d->src_gray.cols ; ++j)
     {
         // Calculating intensity of top row.
 
-        for (int i = 0; i < d->src_gray.rows; i+=8)
+        for (int i = 0 ; i < d->src_gray.rows ; i += 8)
         {
             sum = 0;
 
-            for (int k = i; k < block_size; k++)
+            for (int k = i ; k < block_size ; ++k)
             {
                 sum += (int)d->src_gray.at<uchar>(i, j);
             }
 
-            average_top.push_back(sum/8);
+            average_top.push_back(sum / 8);
         }
 
         // Calculating intensity of middle row.
 
-        for (int i= 0; i < d->src_gray.rows; i+=8)
+        for (int i= 0 ; i < d->src_gray.rows ; i += 8)
         {
             sum = 0;
 
-            for (int k = i; k < block_size; k++)
+            for (int k = i ; k < block_size ; ++k)
             {
                 sum += (int)d->src_gray.at<uchar>(i, j+1);
             }
 
-            average_middle.push_back(sum/8);
+            average_middle.push_back(sum / 8);
         }
 
         // Calculating intensity of bottom row.
 
         countblocks = 0;
 
-        for (int i = 0; i < d->src_gray.rows; i+=8)
+        for (int i = 0 ; i < d->src_gray.rows ; i += 8)
         {
             sum = 0;
 
-            for (int k = i; k < block_size; k++)
+            for (int k = i ; k < block_size ; ++k)
             {
                 sum += (int)d->src_gray.at<uchar>(i, j+2);
             }
 
-            average_bottom.push_back(sum/8);
+            average_bottom.push_back(sum / 8);
             countblocks++;
         }
 
         // Check if the average intensity of 8 blocks in the top, middle and bottom rows are equal.
         // If so increment number_of_blocks.
 
-        for (int i = 0; i < countblocks; i++)
+        for (int i = 0 ; i < countblocks ; ++i)
         {
             if ((average_middle[i] == (average_top[i]+average_bottom[i])/2) &&
                 average_middle[i] > THRESHOLD)
