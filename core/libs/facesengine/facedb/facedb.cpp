@@ -234,7 +234,7 @@ void FaceDb::updateLBPHFaceModel(LBPHFaceModel& model)
 
     QList<LBPHistogramMetadata> metadataList = model.histogramMetadata();
 
-    for (int i = 0 ; i < metadataList.size() ; i++)
+    for (int i = 0 ; i < metadataList.size() ; ++i)
     {
         const LBPHistogramMetadata& metadata = metadataList[i];
 
@@ -409,7 +409,7 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::M
 {
     QList<EigenFaceMatMetadata> metadataList = model.matMetadata();
 
-    for (size_t i = 0, j = 0 ; i < (size_t)metadataList.size() ; i++)
+    for (size_t i = 0, j = 0 ; i < (size_t)metadataList.size() ; ++i)
     {
         const EigenFaceMatMetadata& metadata = metadataList[i];
 
@@ -443,7 +443,7 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::M
                 QByteArray vec_byte(vecdata.size()*sizeof(float), 0);
                 float* const fp = (float*)vec_byte.data();
 
-                for (size_t k = 0; k < vecdata.size(); k++)
+                for (size_t k = 0 ; k < vecdata.size() ; ++k)
                 {
                     *(fp + k) = vecdata[k];
                 }
@@ -601,9 +601,9 @@ FisherFaceModel FaceDb::fisherFaceModel() const
 
 void FaceDb::updateDNNFaceModel(DNNFaceModel& model, const std::vector<cv::Mat>& images_rgb)
 {
-    QList<DNNFaceVecMetadata> metadataList = model.matMetadata();
+    QList<DNNFaceVecMetadata> metadataList = model.vecMetadata();
 
-    for (size_t i = 0, j = 0 ; i < (size_t)metadataList.size() ; i++)
+    for (size_t i = 0, j = 0 ; i < (size_t)metadataList.size() ; ++i)
     {
         const DNNFaceVecMetadata& metadata = metadataList[i];
 
@@ -628,7 +628,7 @@ void FaceDb::updateDNNFaceModel(DNNFaceModel& model, const std::vector<cv::Mat>&
             QByteArray vec_byte(vecdata.size()*sizeof(float), 0);
             float* const fp = (float*)vec_byte.data();
 
-            for (size_t k = 0; k < vecdata.size(); k++)
+            for (size_t k = 0 ; k < vecdata.size() ; ++k)
             {
                 *(fp + k) = vecdata[k];
             }
@@ -698,7 +698,7 @@ DNNFaceModel FaceDb::dnnFaceModel() const
 
                 float* const it = (float *)new_vec.data();
 
-                for (int i = 0; i < 128; i++)
+                for (int i = 0; i < 128; ++i)
                 {
                     vecdata.push_back(*(it+i));
                 }

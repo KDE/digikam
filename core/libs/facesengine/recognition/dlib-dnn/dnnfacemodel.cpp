@@ -107,7 +107,7 @@ OpenCVMatData DNNFaceModel::matData(int index) const
 }
 */
 
-QList<DNNFaceVecMetadata> DNNFaceModel::matMetadata() const
+QList<DNNFaceVecMetadata> DNNFaceModel::vecMetadata() const
 {
     return m_vecMetadata;
 }
