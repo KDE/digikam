@@ -83,8 +83,8 @@ public:
     cv::Mat getLabels() const;
     void setLabels(cv::Mat new_labels);
 
-    QList<DNNFaceVecMetadata> vecMetadata() const;
-    //OpenCVMatData             matData(int index) const;
+    QList<DNNFaceVecMetadata> vecMetadata()      const;
+    std::vector<float>        vecData(int index) const;
 
     void setWrittenToDatabase(int index, int databaseId);
 

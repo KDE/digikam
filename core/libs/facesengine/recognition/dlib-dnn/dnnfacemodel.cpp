@@ -100,12 +100,10 @@ void DNNFaceModel::setLabels(cv::Mat new_labels)
     ptr()->setLabels(new_labels);
 }
 
-/*
-OpenCVMatData DNNFaceModel::matData(int index) const
+std::vector<float> DNNFaceModel::vecData(int index) const
 {
-    return OpenCVMatData(ptr()->getSrc().at(index));
+    return ptr()->getSrc().at(index);
 }
-*/
 
 QList<DNNFaceVecMetadata> DNNFaceModel::vecMetadata() const
 {

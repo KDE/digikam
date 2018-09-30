@@ -599,29 +599,17 @@ FisherFaceModel FaceDb::fisherFaceModel() const
     return model;
 }
 
-void FaceDb::updateDNNFaceModel(DNNFaceModel& model, const std::vector<cv::Mat>& images_rgb)
+void FaceDb::updateDNNFaceModel(DNNFaceModel& model)
 {
     QList<DNNFaceVecMetadata> metadataList = model.vecMetadata();
 
-    for (size_t i = 0, j = 0 ; i < (size_t)metadataList.size() ; ++i)
+    for (size_t i = 0 ; i < (size_t)metadataList.size() ; ++i)
     {
         const DNNFaceVecMetadata& metadata = metadataList[i];
 
         if (metadata.storageStatus == DNNFaceVecMetadata::Created)
         {
-            cv::Mat mat_rgb;
-
-            if (j >= images_rgb.size())
-            {
-                qCWarning(DIGIKAM_FACEDB_LOG) << "updateDNNFaceModel: the size of images_rgb is wrong";
-            }
-            else
-            {
-                mat_rgb = images_rgb[j++];
-            }
-
-            std::vector<float> vecdata;
-            this->getFaceVector(mat_rgb, vecdata);
+            std::vector<float> vecdata = model.vecData(i);
             qCDebug(DIGIKAM_FACEDB_LOG) << "vecdata: " << vecdata[vecdata.size()-2]
                                                        << vecdata[vecdata.size()-1];
 

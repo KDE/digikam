@@ -150,10 +150,10 @@ void OpenCVDNNFaceRecognizer::train(const std::vector<cv::Mat>& images,
         return;
     }
 
-    d->dnn().update(images, labels, context);
+    d->dnn().update(images_rgb, labels, context);
     qCDebug(DIGIKAM_FACESENGINE_LOG) << "DNN Train: Adding model to Facedb";
     // add to database waiting
-    FaceDbAccess().db()->updateDNNFaceModel(d->dnn(), images_rgb);
+    FaceDbAccess().db()->updateDNNFaceModel(d->dnn());
 }
 
 } // namespace Digikam

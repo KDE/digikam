@@ -82,10 +82,10 @@ public:
     void clearEIGENTraining(const QList<int>& identities, const QString& context = QString());
 
     /// OpenCV FISHER
-    void updateDNNFaceModel(DNNFaceModel& model, const std::vector<cv::Mat>& images_rgb);
     FisherFaceModel fisherFaceModel() const;
 
     /// DNN
+    void updateDNNFaceModel(DNNFaceModel& model);
     void getFaceVector(cv::Mat data, std::vector<float>& vecdata);
     DNNFaceModel dnnFaceModel() const;
 
