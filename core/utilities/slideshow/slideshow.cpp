@@ -226,6 +226,7 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
         case ImageView:
 #ifdef HAVE_MEDIAPLAYER
             d->videoView->stop();
+            d->osd->video(false);
 #endif
             setCurrentIndex(view);
             d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
@@ -233,7 +234,8 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
 
         case VideoView:
 #ifdef HAVE_MEDIAPLAYER
-            d->osd->pause(true);
+            d->osd->video(true);
+            d->osd->pause(false);
             setCurrentIndex(view);
             d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
 #endif
@@ -242,6 +244,7 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
         default : // EndView
 #ifdef HAVE_MEDIAPLAYER
             d->videoView->stop();
+            d->osd->video(false);
 #endif
             d->osd->pause(true);
             setCurrentIndex(view);
@@ -406,7 +409,7 @@ void SlideShow::slotVideoFinished()
 {
     if (d->fileIndex != -1)
     {
-        d->osd->pause(false);
+        d->osd->video(false);
         slotLoadNextItem();
     }
 }

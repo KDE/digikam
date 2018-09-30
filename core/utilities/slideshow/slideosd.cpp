@@ -58,6 +58,7 @@ public:
 
     explicit Private()
       : paused(false),
+        video(false),
         blink(false),
         refresh(1000),       // Progress bar refresh in ms
         progressBar(0),
@@ -74,6 +75,7 @@ public:
     }
 
     bool                paused;
+    bool                video;
     bool                blink;
     int const           refresh;
 
@@ -211,7 +213,6 @@ SlideOSD::~SlideOSD()
 {
     d->progressTimer->stop();
 
-    delete d->progressTimer;
     delete d;
 }
 
@@ -306,6 +307,10 @@ void SlideOSD::slotProgressTimer()
 
         d->progressBar->setFormat(str);
     }
+    else if (d->video)
+    {
+        return;
+    }
     else
     {
         d->progressBar->setFormat(str);
@@ -326,6 +331,11 @@ void SlideOSD::pause(bool b)
     {
         d->progressBar->setValue(0);
     }
+}
+
+void SlideOSD::video(bool b)
+{
+    d->video = b;
 }
 
 bool SlideOSD::isPaused() const
