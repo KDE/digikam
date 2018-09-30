@@ -309,6 +309,7 @@ void SlideOSD::slotProgressTimer()
     }
     else if (d->video)
     {
+        d->progressBar->setFormat(str);
         return;
     }
     else
