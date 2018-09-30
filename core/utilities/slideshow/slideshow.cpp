@@ -27,16 +27,17 @@
 
 // Qt includes
 
-#include <QColor>
-#include <QCursor>
 #include <QDesktopWidget>
-#include <QFont>
-#include <QKeyEvent>
+#include <QMimeDatabase>
+#include <QApplication>
+#include <QWheelEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QKeyEvent>
+#include <QCursor>
 #include <QTimer>
-#include <QWheelEvent>
-#include <QApplication>
+#include <QColor>
+#include <QFont>
 
 #ifdef HAVE_DBUS
 #   include <QDBusConnection>
@@ -52,9 +53,9 @@
 
 #include "digikam_debug.h"
 #include "slidetoolbar.h"
-#include "slideosd.h"
 #include "slideimage.h"
 #include "slideerror.h"
+#include "slideosd.h"
 #include "slideend.h"
 
 #ifdef HAVE_MEDIAPLAYER
@@ -287,6 +288,18 @@ void SlideShow::slotLoadNextItem()
 
     if (d->fileIndex >= 0 && d->fileIndex < num)
     {
+
+#ifdef HAVE_MEDIAPLAYER
+        QMimeDatabase mimeDB;
+
+        if (mimeDB.mimeTypeForFile(currentItem().toLocalFile())
+                                   .name().startsWith(QLatin1String("video/")))
+        {
+            d->videoView->setCurrentUrl(currentItem());
+            return;
+        }
+#endif
+
         d->imageView->setLoadUrl(currentItem());
     }
     else
@@ -319,6 +332,18 @@ void SlideShow::slotLoadPrevItem()
 
     if (d->fileIndex >= 0 && d->fileIndex < num)
     {
+
+#ifdef HAVE_MEDIAPLAYER
+        QMimeDatabase mimeDB;
+
+        if (mimeDB.mimeTypeForFile(currentItem().toLocalFile())
+                                   .name().startsWith(QLatin1String("video/")))
+        {
+            d->videoView->setCurrentUrl(currentItem());
+            return;
+        }
+#endif
+
         d->imageView->setLoadUrl(currentItem());
     }
     else
@@ -411,6 +436,17 @@ void SlideShow::preloadNextItem()
     if (index < num)
     {
         QUrl nextItem = d->settings.fileList.value(index);
+
+#ifdef HAVE_MEDIAPLAYER
+        QMimeDatabase mimeDB;
+
+        if (mimeDB.mimeTypeForFile(nextItem.toLocalFile())
+                                   .name().startsWith(QLatin1String("video/")))
+        {
+            return;
+        }
+#endif
+
         d->imageView->setPreloadUrl(nextItem);
     }
 }

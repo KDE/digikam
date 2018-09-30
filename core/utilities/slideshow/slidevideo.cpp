@@ -219,6 +219,12 @@ void SlideVideo::slotPlayerStateChanged(QtAV::MediaStatus newState)
 
 void SlideVideo::pause(bool b)
 {
+    if (!b && !d->player->isPlaying())
+    {
+        d->player->play();
+        return;
+    }
+
     d->player->pause(b);
 }
 
