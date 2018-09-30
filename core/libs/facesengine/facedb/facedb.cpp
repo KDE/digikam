@@ -401,8 +401,8 @@ void FaceDb::clearLBPHTraining(const QList<int>& identities, const QString& cont
 
 void FaceDb::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
 {
-    DNNFaceKernel dnnface_kernel;
-    dnnface_kernel.getFaceVector(data, vecdata);
+    DNNFaceKernel dnnFaceKernel;
+    dnnFaceKernel.getFaceVector(data, vecdata);
 }
 
 void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::Mat>& images_rgb)
@@ -643,7 +643,7 @@ void FaceDb::updateDNNFaceModel(DNNFaceModel& model)
 
                 model.setWrittenToDatabase(i, insertedId.toInt());
 
-                qCDebug(DIGIKAM_FACEDB_LOG) << "Commit compressed matData " << insertedId << " for identity "
+                qCDebug(DIGIKAM_FACEDB_LOG) << "Commit compressed vecData " << insertedId << " for identity "
                                             << metadata.identity << " with size " << compressed_vecdata.size();
             }
         }

@@ -137,7 +137,7 @@ void EigenFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_labe
     }
 
     // append labels to m_labels matrix
-    for (size_t labelIdx = 0 ; labelIdx < labels.total() ; labelIdx++)
+    for (size_t labelIdx = 0 ; labelIdx < labels.total() ; ++labelIdx)
     {
         m_labels.push_back(labels.at<int>((int)labelIdx));
         m_src.push_back(src[(int)labelIdx]);
@@ -162,7 +162,7 @@ void EigenFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_labe
     transpose(pca.eigenvectors, m_eigenvectors); // eigenvectors by column
 
     // save projections
-    for (int sampleIdx = 0 ; sampleIdx < data.rows ; sampleIdx++)
+    for (int sampleIdx = 0 ; sampleIdx < data.rows ; ++sampleIdx)
     {
         Mat p = LDA::subspaceProject(m_eigenvectors, m_mean, data.row(sampleIdx));
         m_projections.push_back(p);

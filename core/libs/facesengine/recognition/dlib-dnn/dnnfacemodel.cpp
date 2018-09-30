@@ -175,7 +175,7 @@ void DNNFaceModel::update(const std::vector<cv::Mat>& images, const std::vector<
     // We assume new labels are simply appended
     cv::Mat currentLabels = ptr()->getLabels();
 
-    for (int i = m_vecMetadata.size() ; i < currentLabels.rows ; i++)
+    for (int i = m_vecMetadata.size() ; i < currentLabels.rows ; ++i)
     {
         DNNFaceVecMetadata metadata;
         metadata.storageStatus = DNNFaceVecMetadata::Created;

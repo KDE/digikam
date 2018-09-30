@@ -165,7 +165,7 @@ void EigenFaceModel::update(const std::vector<cv::Mat>& images, const std::vecto
     // We assume new labels are simply appended
     cv::Mat currentLabels = ptr()->getLabels();
 
-    for (int i = m_matMetadata.size() ; i < currentLabels.rows ; i++)
+    for (int i = m_matMetadata.size() ; i < currentLabels.rows ; ++i)
     {
         EigenFaceMatMetadata metadata;
         metadata.storageStatus = EigenFaceMatMetadata::Created;
