@@ -215,6 +215,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     hbox->setStretchFactor(d->slider, 10);
 
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
+    d->videoWidget->setMouseTracking(true);
     d->player->setRenderer(d->videoWidget);
 
     d->playerView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);

@@ -105,11 +105,12 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 {
     d->settings = settings;
 
-    setWindowFlags(Qt::FramelessWindowHint);
     setAttribute(Qt::WA_DeleteOnClose);
-    setWindowState(windowState() | Qt::WindowFullScreen);
-    setWindowTitle(i18n("Slideshow"));
+    setWindowFlags(Qt::FramelessWindowHint);
     setContextMenuPolicy(Qt::PreventContextMenu);
+    setWindowState(windowState() | Qt::WindowFullScreen);
+
+    setWindowTitle(i18n("Slideshow"));
     setMouseTracking(true);
 
     // ---------------------------------------------------------------
@@ -160,6 +161,8 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     // ---------------------------------------------------------------
 
     d->mouseMoveTimer = new QTimer(this);
+    d->mouseMoveTimer->setSingleShot(true);
+    d->mouseMoveTimer->setInterval(1000);
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
@@ -202,11 +205,10 @@ SlideShow::~SlideShow()
 {
     emit signalLastItemUrl(currentItem());
 
-    allowScreenSaver();
-
     d->mouseMoveTimer->stop();
 
-    delete d->mouseMoveTimer;
+    allowScreenSaver();
+
     delete d;
 }
 
@@ -475,13 +477,12 @@ bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
     if (ev->type() == QEvent::MouseMove)
     {
         setCursor(QCursor(Qt::ArrowCursor));
-        d->mouseMoveTimer->setSingleShot(true);
-        d->mouseMoveTimer->start(1000);
 
 #ifdef HAVE_MEDIAPLAYER
         d->videoView->showIndicator(true);
 #endif
 
+        d->mouseMoveTimer->start();
         return false;
     }
 

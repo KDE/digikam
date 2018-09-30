@@ -100,11 +100,11 @@ SlideVideo::SlideVideo(QWidget* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setMouseTracking(true);
-    setAutoFillBackground(true);
 
     d->videoWidget    = new WidgetRenderer(this);
     d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
+    d->videoWidget->setMouseTracking(true);
 
     d->player         = new AVPlayer(this);
     d->player->setRenderer(d->videoWidget);
@@ -125,7 +125,7 @@ SlideVideo::SlideVideo(QWidget* const parent)
     grid->addWidget(d->indicator,   0, 0, 1, 1); // Widget will be over player to not change layout when visibility is changed.
     grid->setRowStretch(0, 1);
     grid->setRowStretch(1, 100);
-    grid->setContentsMargins(QMargins(0, 0, 0, 0));
+    grid->setContentsMargins(QMargins());
 
     // --------------------------------------------------------------------------
 

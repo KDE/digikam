@@ -27,8 +27,8 @@
 // Qt includes
 
 #include <QWidget>
-#include <QUrl>
 #include <QEvent>
+#include <QUrl>
 
 // QtAV includes
 
