@@ -218,7 +218,9 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
     switch(view)
     {
         case ErrorView:
+            d->osd->video(false);
             d->errorView->setCurrentUrl(currentItem());
+
             setCurrentIndex(view);
             d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
             break;
