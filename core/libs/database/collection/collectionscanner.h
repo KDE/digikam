@@ -267,9 +267,6 @@ protected:
     int  countItemsInFolder(const QString& directory);
     DatabaseItem::Category category(const QFileInfo& info);
 
-    bool pathContainsIgnoredDirectory(const QString& path);
-    bool ignoredDirectoryContainsFileName(const QString& fileName);
-
     qlonglong scanFile(const QFileInfo& fi, int albumId, qlonglong id, FileScanMode mode);
     qlonglong scanNewFile(const QFileInfo& info, int albumId);
     qlonglong scanNewFileFullScan(const QFileInfo& info, int albumId);

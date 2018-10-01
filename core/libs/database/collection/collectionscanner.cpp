@@ -859,6 +859,9 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
         emit startScanningForStaleAlbums();
     }
 
+    QStringList ignoreDirectoryList;
+    CoreDbAccess().db()->getIgnoreDirectoryFilterSettings(&ignoreDirectoryList);
+
     QList<AlbumShortInfo> albumList = CoreDbAccess().db()->getAlbumShortInfos();
     QList<int> toBeDeleted;
 
@@ -890,7 +893,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
 
             // let digikam think that ignored directories got deleted
             // (if they already exist in the database, this will delete them)
-            if (!fileInfo.exists() || !fileInfo.isDir() || ignoredDirectoryContainsFileName(fileInfo.fileName()))
+            if (!fileInfo.exists() || !fileInfo.isDir() || ignoreDirectoryList.contains(fileInfo.fileName()))
             {
                 toBeDeleted << (*it).id;
                 d->scannedAlbums << (*it).id;
@@ -943,7 +946,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
                     QFileInfo fileInfo(location.albumRootPath() + it.key().relativePath);
 
                     // Make sure ignored directories are not used in renaming operations
-                    if (fileInfo.exists() && fileInfo.isDir() && ignoredDirectoryContainsFileName(fileInfo.fileName()))
+                    if (fileInfo.exists() && fileInfo.isDir() && ignoreDirectoryList.contains(fileInfo.fileName()))
                     {
                         // Just set a new root/relativePath to the album. Further scanning will care for all cases or error.
                         CoreDbAccess().db()->renameAlbum(it.value().albumId, it.key().albumRootId, it.key().relativePath);
@@ -1037,6 +1040,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     int albumID                   = checkAlbum(location, album);
     QList<ItemScanInfo> scanInfos = CoreDbAccess().db()->getItemScanInfos(albumID);
 
+    QStringList ignoreDirectoryList;
+    CoreDbAccess().db()->getIgnoreDirectoryFilterSettings(&ignoreDirectoryList);
+
     // create a hash filename -> index in list
     QHash<QString, int> fileNameIndexHash;
     QSet<qlonglong> itemIdSet;
@@ -1080,9 +1086,12 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             }
 
             // ignore new files in subdirectories of ignored directories
-            if(pathContainsIgnoredDirectory(fi->dir().path()))
+            foreach (const QString& dir, ignoreDirectoryList)
             {
-                continue;
+                if (fi->dir().path().contains(dir))
+                {
+                    continue;
+                }
             }
 
             int index = fileNameIndexHash.value(fi->fileName(), -1);
@@ -1124,7 +1133,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
 #endif
             QString subalbum;
 
-            if (ignoredDirectoryContainsFileName(fi->fileName()))
+            if (ignoreDirectoryList.contains(fi->fileName()))
             {
                 continue;
             }
@@ -1687,40 +1696,6 @@ bool CollectionScanner::checkDeleteRemoved()
     return (daysPast > 7  && completeScans > 2) ||
            (daysPast > 30 && completeScans > 0) ||
            (completeScans > 30);
-}
-
-bool CollectionScanner::pathContainsIgnoredDirectory(const QString& path)
-{
-    QStringList ignoreDirectoryList;
-    CoreDbAccess().db()->getIgnoreDirectoryFilterSettings(&ignoreDirectoryList);
-
-    if (ignoreDirectoryList.isEmpty())
-    {
-        return false;
-    }
-
-    foreach(const QString& dir, ignoreDirectoryList)
-    {
-        if (path.contains(dir))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool CollectionScanner::ignoredDirectoryContainsFileName(const QString& fileName)
-{
-    QStringList ignoreDirectoryList;
-    CoreDbAccess().db()->getIgnoreDirectoryFilterSettings(&ignoreDirectoryList);
-
-    if (ignoreDirectoryList.isEmpty())
-    {
-        return false;
-    }
-
-    return ignoreDirectoryList.contains(fileName);
 }
 
 // ------------------------------------------------------------------------------------------
