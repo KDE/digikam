@@ -27,16 +27,17 @@
 
 // Qt includes
 
-#include <QColor>
-#include <QCursor>
 #include <QDesktopWidget>
-#include <QFont>
-#include <QKeyEvent>
+#include <QMimeDatabase>
+#include <QApplication>
+#include <QWheelEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QKeyEvent>
+#include <QCursor>
 #include <QTimer>
-#include <QWheelEvent>
-#include <QApplication>
+#include <QColor>
+#include <QFont>
 
 #ifdef HAVE_DBUS
 #   include <QDBusConnection>
@@ -52,9 +53,9 @@
 
 #include "digikam_debug.h"
 #include "slidetoolbar.h"
-#include "slideosd.h"
 #include "slideimage.h"
 #include "slideerror.h"
+#include "slideosd.h"
 #include "slideend.h"
 
 #ifdef HAVE_MEDIAPLAYER
@@ -105,11 +106,12 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 {
     d->settings = settings;
 
-    setWindowFlags(Qt::FramelessWindowHint);
     setAttribute(Qt::WA_DeleteOnClose);
-    setWindowState(windowState() | Qt::WindowFullScreen);
-    setWindowTitle(i18n("Slideshow"));
+    setWindowFlags(Qt::FramelessWindowHint);
     setContextMenuPolicy(Qt::PreventContextMenu);
+    setWindowState(windowState() | Qt::WindowFullScreen);
+
+    setWindowTitle(i18n("Slideshow"));
     setMouseTracking(true);
 
     // ---------------------------------------------------------------
@@ -160,6 +162,8 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     // ---------------------------------------------------------------
 
     d->mouseMoveTimer = new QTimer(this);
+    d->mouseMoveTimer->setSingleShot(true);
+    d->mouseMoveTimer->setInterval(1000);
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
@@ -202,11 +206,10 @@ SlideShow::~SlideShow()
 {
     emit signalLastItemUrl(currentItem());
 
-    allowScreenSaver();
-
     d->mouseMoveTimer->stop();
 
-    delete d->mouseMoveTimer;
+    allowScreenSaver();
+
     delete d;
 }
 
@@ -215,7 +218,9 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
     switch(view)
     {
         case ErrorView:
+            d->osd->video(false);
             d->errorView->setCurrentUrl(currentItem());
+
             setCurrentIndex(view);
             d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
             break;
@@ -223,6 +228,7 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
         case ImageView:
 #ifdef HAVE_MEDIAPLAYER
             d->videoView->stop();
+            d->osd->video(false);
 #endif
             setCurrentIndex(view);
             d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
@@ -230,7 +236,8 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
 
         case VideoView:
 #ifdef HAVE_MEDIAPLAYER
-            d->osd->pause(true);
+            d->osd->video(true);
+            d->osd->pause(false);
             setCurrentIndex(view);
             d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
 #endif
@@ -239,6 +246,7 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
         default : // EndView
 #ifdef HAVE_MEDIAPLAYER
             d->videoView->stop();
+            d->osd->video(false);
 #endif
             d->osd->pause(true);
             setCurrentIndex(view);
@@ -285,6 +293,18 @@ void SlideShow::slotLoadNextItem()
 
     if (d->fileIndex >= 0 && d->fileIndex < num)
     {
+
+#ifdef HAVE_MEDIAPLAYER
+        QMimeDatabase mimeDB;
+
+        if (mimeDB.mimeTypeForFile(currentItem().toLocalFile())
+                                   .name().startsWith(QLatin1String("video/")))
+        {
+            d->videoView->setCurrentUrl(currentItem());
+            return;
+        }
+#endif
+
         d->imageView->setLoadUrl(currentItem());
     }
     else
@@ -317,6 +337,18 @@ void SlideShow::slotLoadPrevItem()
 
     if (d->fileIndex >= 0 && d->fileIndex < num)
     {
+
+#ifdef HAVE_MEDIAPLAYER
+        QMimeDatabase mimeDB;
+
+        if (mimeDB.mimeTypeForFile(currentItem().toLocalFile())
+                                   .name().startsWith(QLatin1String("video/")))
+        {
+            d->videoView->setCurrentUrl(currentItem());
+            return;
+        }
+#endif
+
         d->imageView->setLoadUrl(currentItem());
     }
     else
@@ -379,7 +411,7 @@ void SlideShow::slotVideoFinished()
 {
     if (d->fileIndex != -1)
     {
-        d->osd->pause(false);
+        d->osd->video(false);
         slotLoadNextItem();
     }
 }
@@ -409,6 +441,17 @@ void SlideShow::preloadNextItem()
     if (index < num)
     {
         QUrl nextItem = d->settings.fileList.value(index);
+
+#ifdef HAVE_MEDIAPLAYER
+        QMimeDatabase mimeDB;
+
+        if (mimeDB.mimeTypeForFile(nextItem.toLocalFile())
+                                   .name().startsWith(QLatin1String("video/")))
+        {
+            return;
+        }
+#endif
+
         d->imageView->setPreloadUrl(nextItem);
     }
 }
@@ -475,13 +518,12 @@ bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
     if (ev->type() == QEvent::MouseMove)
     {
         setCursor(QCursor(Qt::ArrowCursor));
-        d->mouseMoveTimer->setSingleShot(true);
-        d->mouseMoveTimer->start(1000);
 
 #ifdef HAVE_MEDIAPLAYER
         d->videoView->showIndicator(true);
 #endif
 
+        d->mouseMoveTimer->start();
         return false;
     }
 

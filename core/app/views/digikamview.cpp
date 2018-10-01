@@ -373,7 +373,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     d->leftSideBarWidgets << d->peopleSideBar;
 
-    foreach(SidebarWidget* const leftWidget, d->leftSideBarWidgets)
+    foreach (SidebarWidget* const leftWidget, d->leftSideBarWidgets)
     {
         d->leftSideBar->appendTab(leftWidget, leftWidget->getIcon(), leftWidget->getCaption());
 
@@ -423,7 +423,7 @@ DigikamView::~DigikamView()
 
 void DigikamView::applySettings()
 {
-    foreach(SidebarWidget* const sidebarWidget, d->leftSideBarWidgets)
+    foreach (SidebarWidget* const sidebarWidget, d->leftSideBarWidgets)
     {
         sidebarWidget->applySettings();
     }
@@ -706,7 +706,7 @@ void DigikamView::slotPopupFiltersView()
 
 void DigikamView::loadViewState()
 {
-    foreach(SidebarWidget* const widget, d->leftSideBarWidgets)
+    foreach (SidebarWidget* const widget, d->leftSideBarWidgets)
     {
         widget->loadState();
     }
@@ -739,7 +739,7 @@ void DigikamView::saveViewState()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("MainWindow"));
 
-    foreach(SidebarWidget* const widget, d->leftSideBarWidgets)
+    foreach (SidebarWidget* const widget, d->leftSideBarWidgets)
     {
         widget->saveState();
     }
@@ -759,7 +759,7 @@ void DigikamView::saveViewState()
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
     Album* album            = 0;
 
-    if(!albumList.isEmpty())
+    if (!albumList.isEmpty())
     {
         album = albumList.first();
     }
@@ -972,6 +972,7 @@ void DigikamView::slotRenameAlbum()
 void DigikamView::slotNewTag()
 {
     QList<TAlbum*> talbums = AlbumManager::instance()->currentTAlbums();
+
     if (!talbums.isEmpty())
         d->tagModificationHelper->slotTagNew(talbums.first());
 }
@@ -979,6 +980,7 @@ void DigikamView::slotNewTag()
 void DigikamView::slotDeleteTag()
 {
     QList<TAlbum*> talbums = AlbumManager::instance()->currentTAlbums();
+
     if (!talbums.isEmpty())
         d->tagModificationHelper->slotTagDelete(talbums.first());
 }
@@ -986,6 +988,7 @@ void DigikamView::slotDeleteTag()
 void DigikamView::slotEditTag()
 {
     QList<TAlbum*> talbums = AlbumManager::instance()->currentTAlbums();
+
     if (!talbums.isEmpty())
         d->tagModificationHelper->slotTagEdit(talbums.first());
 }
@@ -1397,9 +1400,9 @@ void DigikamView::slotDispatchImageSelected()
                 nextInfo     = d->iconView->nextInfo(list.first());
             }
 
-            if ((viewMode() != StackedView::IconViewMode) &&
-                (viewMode() != StackedView::MapWidgetMode) &&
-                (viewMode() != StackedView::TableViewMode) )
+            if (viewMode() != StackedView::IconViewMode  &&
+                viewMode() != StackedView::MapWidgetMode &&
+                viewMode() != StackedView::TableViewMode)
             {
                 d->stackedview->setPreviewItem(list.first(), previousInfo, nextInfo);
             }
@@ -1439,9 +1442,9 @@ void DigikamView::setThumbSize(int size)
         double z = DZoomBar::zoomFromSize(size, zoomMin(), zoomMax());
         setZoomFactor(z);
     }
-    else if (   (viewMode() == StackedView::IconViewMode)
-             || (viewMode() == StackedView::TableViewMode)
-             || (viewMode() == StackedView::TrashViewMode))
+    else if (viewMode() == StackedView::IconViewMode  ||
+             viewMode() == StackedView::TableViewMode ||
+             viewMode() == StackedView::TrashViewMode)
     {
         if (size > ThumbnailSize::maxThumbsSize())
         {
@@ -1489,8 +1492,8 @@ void DigikamView::toggleZoomActions()
             d->parent->enableZoomMinusAction(false);
         }
     }
-    else if ((viewMode() == StackedView::IconViewMode) ||
-             (viewMode() == StackedView::TableViewMode))
+    else if (viewMode() == StackedView::IconViewMode ||
+             viewMode() == StackedView::TableViewMode)
     {
         d->parent->enableZoomMinusAction(true);
         d->parent->enableZoomPlusAction(true);
@@ -1514,8 +1517,8 @@ void DigikamView::toggleZoomActions()
 
 void DigikamView::slotZoomIn()
 {
-    if (   (viewMode() == StackedView::IconViewMode)
-        || (viewMode() == StackedView::TableViewMode) )
+    if (viewMode() == StackedView::IconViewMode ||
+        viewMode() == StackedView::TableViewMode)
     {
         setThumbSize(d->thumbSize + ThumbnailSize::Step);
         toggleZoomActions();
@@ -1529,8 +1532,8 @@ void DigikamView::slotZoomIn()
 
 void DigikamView::slotZoomOut()
 {
-    if (   (viewMode() == StackedView::IconViewMode)
-        || (viewMode() == StackedView::TableViewMode) )
+    if (viewMode() == StackedView::IconViewMode ||
+        viewMode() == StackedView::TableViewMode)
     {
         setThumbSize(d->thumbSize - ThumbnailSize::Step);
         toggleZoomActions();
@@ -1666,10 +1669,9 @@ void DigikamView::slotImagePreview()
  */
 void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
 {
-    if ( (viewMode() == StackedView::IconViewMode ||
-          viewMode() == StackedView::TableViewMode ||
-          viewMode() == StackedView::MapWidgetMode)   &&
-         !info.isNull() )
+    if ((viewMode() == StackedView::IconViewMode   ||
+         viewMode() == StackedView::TableViewMode  ||
+         viewMode() == StackedView::MapWidgetMode) && !info.isNull())
     {
         if (info.isLocationAvailable())
         {
@@ -2069,7 +2071,7 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
     // TODO update, temporary cast
     SidebarWidget* const widget = dynamic_cast<SidebarWidget*>(w);
 
-    foreach(SidebarWidget* const sideBarWidget, d->leftSideBarWidgets)
+    foreach (SidebarWidget* const sideBarWidget, d->leftSideBarWidgets)
     {
         bool active = (widget && (widget == sideBarWidget));
         sideBarWidget->setActive(active);
@@ -2081,7 +2083,7 @@ void DigikamView::toggleTag(int tagID)
     ImageInfoList tagToRemove, tagToAssign;
     const ImageInfoList selectedList = selectedInfoList(ApplicationSettings::Metadata);
 
-    foreach(const ImageInfo& info, selectedList)
+    foreach (const ImageInfo& info, selectedList)
     {
         if (info.tagIds().contains(tagID))
             tagToRemove.append(info);
@@ -2171,7 +2173,7 @@ void DigikamView::presentation()
 {
     QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
 
-    foreach(const ImageInfo& info, selectedInfoList(ApplicationSettings::Slideshow))
+    foreach (const ImageInfo& info, selectedInfoList(ApplicationSettings::Slideshow))
     {
         mngr->addFile(info.fileUrl(), info.comment());
         qApp->processEvents();
@@ -2723,7 +2725,7 @@ void DigikamView::slotShowGroupContextMenu(QContextMenuEvent* event,
 {
     QList<qlonglong> selectedImageIDs;
 
-    foreach(const ImageInfo& info, selectedInfos)
+    foreach (const ImageInfo& info, selectedInfos)
     {
         selectedImageIDs << info.id();
     }

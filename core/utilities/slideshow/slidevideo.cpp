@@ -25,10 +25,11 @@
 
 // Qt includes
 
+#include <QApplication>
+#include <QProxyStyle>
+#include <QGridLayout>
 #include <QWidget>
 #include <QString>
-#include <QGridLayout>
-#include <QApplication>
 #include <QSlider>
 #include <QStyle>
 #include <QLabel>
@@ -44,13 +45,33 @@
 
 // Local includes
 
+#include "metadatasettings.h"
 #include "digikam_debug.h"
 #include "dlayoutbox.h"
+#include "dmetadata.h"
 
 using namespace QtAV;
 
 namespace Digikam
 {
+
+class Q_DECL_HIDDEN VideoStyle : public QProxyStyle
+{
+public:
+
+    using QProxyStyle::QProxyStyle;
+
+    int styleHint(QStyle::StyleHint hint, const QStyleOption* option = 0,
+                  const QWidget* widget = 0, QStyleHintReturn* returnData = 0) const
+    {
+        if (hint == QStyle::SH_Slider_AbsoluteSetButtons)
+        {
+            return (Qt::LeftButton | Qt::MidButton | Qt::RightButton);
+        }
+
+        return QProxyStyle::styleHint(hint, option, widget, returnData);
+    }
+};
 
 class Q_DECL_HIDDEN SlideVideo::Private
 {
@@ -79,17 +100,18 @@ SlideVideo::SlideVideo(QWidget* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setMouseTracking(true);
-    setAutoFillBackground(true);
 
     d->videoWidget    = new WidgetRenderer(this);
     d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
+    d->videoWidget->setMouseTracking(true);
 
     d->player         = new AVPlayer(this);
     d->player->setRenderer(d->videoWidget);
 
     d->indicator      = new DHBox(this);
     d->slider         = new QSlider(Qt::Horizontal, d->indicator);
+    d->slider->setStyle(new VideoStyle(d->slider->style()));
     d->slider->setRange(0, 0);
     d->slider->setAutoFillBackground(true);
     d->tlabel         = new QLabel(d->indicator);
@@ -103,17 +125,14 @@ SlideVideo::SlideVideo(QWidget* const parent)
     grid->addWidget(d->indicator,   0, 0, 1, 1); // Widget will be over player to not change layout when visibility is changed.
     grid->setRowStretch(0, 1);
     grid->setRowStretch(1, 100);
-    grid->setContentsMargins(QMargins(0, 0, 0, 0));
+    grid->setContentsMargins(QMargins());
 
     // --------------------------------------------------------------------------
 
-    connect(d->slider, SIGNAL(sliderPressed()),
-            this, SLOT(slotSliderPressed()));
-
-    connect(d->slider, SIGNAL(sliderReleased()),
-            this, SLOT(slotSliderReleased()));
-
     connect(d->slider, SIGNAL(sliderMoved(int)),
+            this, SLOT(slotPosition(int)));
+
+    connect(d->slider, SIGNAL(valueChanged(int)),
             this, SLOT(slotPosition(int)));
 
     connect(d->player, SIGNAL(mediaStatusChanged(QtAV::MediaStatus)),
@@ -149,8 +168,34 @@ void SlideVideo::showIndicator(bool b)
 void SlideVideo::setCurrentUrl(const QUrl& url)
 {
     d->player->stop();
+
+    if (MetadataSettings::instance()->settings().exifRotate)
+    {
+        int orientation = 0;
+        DMetadata meta(url.toLocalFile());
+
+        switch (meta.getImageOrientation())
+        {
+            case MetaEngine::ORIENTATION_ROT_90:
+                orientation = 90;
+                break;
+            case MetaEngine::ORIENTATION_ROT_180:
+                orientation = 180;
+                break;
+            case MetaEngine::ORIENTATION_ROT_270:
+                orientation = 270;
+                break;
+            default:
+                break;
+        }
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Found video orientation:" << orientation;
+        d->videoWidget->setOrientation(orientation);
+    }
+
     d->player->setFile(url.toLocalFile());
     d->player->play();
+
     showIndicator(false);
 }
 
@@ -174,6 +219,12 @@ void SlideVideo::slotPlayerStateChanged(QtAV::MediaStatus newState)
 
 void SlideVideo::pause(bool b)
 {
+    if (!b && !d->player->isPlaying())
+    {
+        d->player->play();
+        return;
+    }
+
     d->player->pause(b);
 }
 
@@ -186,7 +237,9 @@ void SlideVideo::slotPositionChanged(qint64 position)
 {
     if (!d->slider->isSliderDown())
     {
+        d->slider->blockSignals(true);
         d->slider->setValue(position);
+        d->slider->blockSignals(false);
     }
 
     d->tlabel->setText(QString::fromLatin1("%1 / %2")
@@ -209,25 +262,6 @@ void SlideVideo::slotPosition(int position)
     if (d->player->isSeekable())
     {
         d->player->setPosition((qint64)position);
-    }
-}
-
-void SlideVideo::slotSliderPressed()
-{
-    if (!d->player->isPlaying())
-    {
-        d->player->play();
-        return;
-    }
-
-    d->player->pause(true);
-}
-
-void SlideVideo::slotSliderReleased()
-{
-    if (d->player->isPaused())
-    {
-        d->player->pause(false);
     }
 }
 

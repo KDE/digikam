@@ -48,7 +48,7 @@ public:
     }
 
     /// Initializes and computes this DNNFace Model.
-    DNNFaceRecognizer(const std::vector<std::vector<float>>& src,
+    DNNFaceRecognizer(const std::vector<std::vector<float> >& src,
                       cv::InputArray labels,
                       double threshold = DBL_MAX)
         : m_threshold(threshold)
@@ -68,13 +68,13 @@ public:
      * Computes a DNNFace model with images in src and
      * corresponding labels in labels.
      */
-    void train(std::vector<std::vector<float>> src, cv::InputArray labels);
+    void train(std::vector<std::vector<float> > src, cv::InputArray labels);
 
     /**
      * Updates this DNNFace model with images in src and
      * corresponding labels in labels.
      */
-    void update(std::vector<std::vector<float>> src, cv::InputArray labels);
+    void update(std::vector<std::vector<float> > src, cv::InputArray labels);
 
     /**
      * Predicts the label of a query image in src.
@@ -89,14 +89,14 @@ public:
     /**
      * Getter and setter functions.
      */
-    double getThreshold() const                            { return m_threshold;                  }
-    void   setThreshold(double _threshold)                 { m_threshold = _threshold;            }
+    double getThreshold() const                             { return m_threshold;                  }
+    void   setThreshold(double _threshold)                  { m_threshold = _threshold;            }
 
-    std::vector<std::vector<float>> getSrc() const         { return m_src;                        }
-    void setSrc(std::vector<std::vector<float>> _src)      { m_src = _src;                        }
+    std::vector<std::vector<float> > getSrc() const         { return m_src;                        }
+    void setSrc(std::vector<std::vector<float> > _src)      { m_src = _src;                        }
 
-    cv::Mat getLabels() const                              { return m_labels;                     }
-    void setLabels(cv::Mat _labels)                        { m_labels = _labels;                  }
+    cv::Mat getLabels() const                               { return m_labels;                     }
+    void setLabels(cv::Mat _labels)                         { m_labels = _labels;                  }
 
 private:
 
@@ -105,15 +105,15 @@ private:
      * corresponding labels in labels, possibly preserving
      * old training data.
      */
-    void train(std::vector<std::vector<float>> src, cv::InputArray labels, bool preserveData);
+    void train(std::vector<std::vector<float> > src, cv::InputArray labels, bool preserveData);
 
 private:
 
     // NOTE: Do not use a d private internal container here, this will crash OpenCV in cv::Algorithm::set()
-    double                          m_threshold;
+    double                           m_threshold;
 
-    std::vector<std::vector<float>> m_src;
-    cv::Mat                         m_labels;
+    std::vector<std::vector<float> > m_src;
+    cv::Mat                          m_labels;
 };
 
 } // namespace Digikam

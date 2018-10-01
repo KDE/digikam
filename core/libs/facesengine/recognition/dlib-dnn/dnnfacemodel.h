@@ -83,16 +83,15 @@ public:
     cv::Mat getLabels() const;
     void setLabels(cv::Mat new_labels);
 
-    QList<DNNFaceVecMetadata> matMetadata() const;
-    //OpenCVMatData             matData(int index) const;
+    QList<DNNFaceVecMetadata> vecMetadata()      const;
+    std::vector<float>        vecData(int index) const;
 
     void setWrittenToDatabase(int index, int databaseId);
 
     void setMats(const QList<std::vector<float> >& mats, const QList<DNNFaceVecMetadata>& matMetadata);
 
-//public:
-
-    //int databaseId;
+    /// Make sure to call this instead of FaceRecognizer::update directly!
+    void update(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context);
 
 protected:
 

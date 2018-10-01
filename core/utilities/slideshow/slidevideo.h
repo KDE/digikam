@@ -27,8 +27,8 @@
 // Qt includes
 
 #include <QWidget>
-#include <QUrl>
 #include <QEvent>
+#include <QUrl>
 
 // QtAV includes
 
@@ -67,8 +67,6 @@ private Q_SLOTS:
     void slotPositionChanged(qint64 position);
     void slotDurationChanged(qint64 duration);
     void slotPosition(int position);
-    void slotSliderPressed();
-    void slotSliderReleased();
 
 private:
 

@@ -787,7 +787,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
 
-    foreach(const ImageInfo& info, d->currInfos)
+    foreach (const ImageInfo& info, d->currInfos)
     {
         d->hub.load(info);
     }
@@ -816,7 +816,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 
     CollectionScanner scanner;
 
-    foreach(const ImageInfo& info, d->currInfos)
+    foreach (const ImageInfo& info, d->currInfos)
     {
         scanner.scanFile(info, CollectionScanner::Rescan);
 
@@ -842,7 +842,7 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
 
     int i = 0;
 
-    foreach(const ImageInfo& info, d->currInfos)
+    foreach (const ImageInfo& info, d->currInfos)
     {
         MetadataHub fileHub;
         // read in from database
@@ -988,7 +988,7 @@ void ImageDescEditTab::slotModified()
     d->applyBtn->setEnabled(true);
     d->revertBtn->setEnabled(true);
 
-    if(d->currInfos.size() == 1)
+    if (d->currInfos.size() == 1)
     {
         d->applyToAllVersionsButton->setEnabled(true);
     }
@@ -1311,7 +1311,7 @@ void ImageDescEditTab::slotReloadForMetadataChange()
     else
     {
         // if image id is in our list, update
-        foreach(const ImageInfo& info, d->currInfos)
+        foreach (const ImageInfo& info, d->currInfos)
         {
             if (d->metadataChangeIds.contains(info.id()))
             {
@@ -1442,7 +1442,7 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
     QSet<qlonglong>                     tmpSet;
     QList<QPair<qlonglong, qlonglong> > relations;
 
-    foreach(const ImageInfo& info, d->currInfos)
+    foreach (const ImageInfo& info, d->currInfos)
     {
         // Collect all ids in all image's relations
         relations.append(info.relationCloud());

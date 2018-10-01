@@ -139,4 +139,21 @@ int OpenCVDNNFaceRecognizer::recognize(const cv::Mat& inputImage)
     return predictedLabel;
 }
 
+void OpenCVDNNFaceRecognizer::train(const std::vector<cv::Mat>& images,
+                                    const std::vector<int>& labels,
+                                    const QString& context,
+                                    const std::vector<cv::Mat>& images_rgb)
+{
+    if (images.empty() || labels.size() != images.size())
+    {
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "DNN Train: nothing to train...";
+        return;
+    }
+
+    d->dnn().update(images_rgb, labels, context);
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "DNN Train: Adding model to Facedb";
+    // add to database waiting
+    FaceDbAccess().db()->updateDNNFaceModel(d->dnn());
+}
+
 } // namespace Digikam
