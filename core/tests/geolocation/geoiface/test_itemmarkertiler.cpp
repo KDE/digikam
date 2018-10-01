@@ -118,7 +118,7 @@ void TestItemMarkerTiler::testIndices()
 {
     const int maxLevel = TileIndex::MaxLevel;
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex = TileIndex::fromCoordinates(coord_1_2, l);
         QVERIFY(tileIndex.level() == l);
@@ -133,7 +133,7 @@ void TestItemMarkerTiler::testAddMarkers1()
     const int maxLevel = TileIndex::MaxLevel;
 
     // there should be no tiles in the model yet:
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         QVERIFY(mm.getTile(TileIndex::fromCoordinates(coord_50_60, l), true) == 0);
     }
@@ -141,11 +141,16 @@ void TestItemMarkerTiler::testAddMarkers1()
     itemModel->appendRow(MakeItemAt(coord_50_60));
 
     // now there should be tiles with one marker:
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QVERIFY(myTile->childrenEmpty());
         QVERIFY(mm.getTileMarkerCount(tileIndex) == 1);
     }
@@ -153,11 +158,16 @@ void TestItemMarkerTiler::testAddMarkers1()
     itemModel->appendRow(MakeItemAt(coord_50_60));
 
     // now there should be tiles with two markers:
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 2);
     }
 }
@@ -174,22 +184,32 @@ void TestItemMarkerTiler::testRemoveMarkers2()
     itemModel->appendRow(item2);
 
     // now there should be tiles with two markers:
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 2);
     }
 
     // remove one item:
     qDeleteAll(itemModel->takeRow(itemModel->indexFromItem(item2).row()));
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 1);
     }
 }
@@ -208,11 +228,16 @@ void TestItemMarkerTiler::testMoveMarkers1()
 
     GEOIFACE_ASSERT(markerIndex1.isValid());
 
-    for (int l = 1; l <= fillLevel; ++l)
+    for (int l = 1 ; l <= fillLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_1_2, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QVERIFY(myTile->childrenEmpty());
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 1);
     }
@@ -220,7 +245,7 @@ void TestItemMarkerTiler::testMoveMarkers1()
     // now move marker 1:
     itemModel->setData(markerIndex1, QVariant::fromValue(coord_50_60), CoordinatesRole);
 
-    for (int l = 0; l <= fillLevel; ++l)
+    for (int l = 0 ; l <= fillLevel ; ++l)
     {
         // make sure the marker can not be found at the old position any more
         TileIndex tileIndex = TileIndex::fromCoordinates(coord_1_2, l);
@@ -231,7 +256,12 @@ void TestItemMarkerTiler::testMoveMarkers1()
         // find it at the new position:
         tileIndex                           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QVERIFY(myTile->childrenEmpty());
         QVERIFY(mm.getTileMarkerCount(tileIndex) == 1);
     }
@@ -243,8 +273,7 @@ void TestItemMarkerTiler::testMoveMarkers2()
 {
     QScopedPointer<QStandardItemModel> itemModel(new QStandardItemModel());
     ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
-    const int maxLevel = TileIndex::MaxLevel;
-
+    const int maxLevel  = TileIndex::MaxLevel;
     const int fillLevel = maxLevel - 2;
 
     // add markers to the model and create tiles up to a certain level:
@@ -255,11 +284,16 @@ void TestItemMarkerTiler::testMoveMarkers2()
     itemModel->appendRow(item2);
 //    const QModelIndex markerIndex2 = itemModel->indexFromItem(item2);
 
-    for (int l = 1; l <= fillLevel; ++l)
+    for (int l = 1 ; l <= fillLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_1_2, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QVERIFY(myTile->childrenEmpty());
         QVERIFY(mm.getTileMarkerCount(tileIndex) == 2);
     }
@@ -268,11 +302,16 @@ void TestItemMarkerTiler::testMoveMarkers2()
     itemModel->appendRow(item3);
 //    const QModelIndex markerIndex3 = itemModel->indexFromItem(item3);
 
-    for (int l = 1; l <= fillLevel; ++l)
+    for (int l = 1 ; l <= fillLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QVERIFY(myTile->childrenEmpty());
         QVERIFY(mm.getTileMarkerCount(tileIndex) == 1);
     }
@@ -283,7 +322,7 @@ void TestItemMarkerTiler::testMoveMarkers2()
     // make sure the item model was also updated:
     QVERIFY(item1->data(CoordinatesRole).value<GeoCoordinates>() == coord_50_60);
 
-    for (int l = 0; l <= fillLevel; ++l)
+    for (int l = 0 ; l <= fillLevel ; ++l)
     {
         // make sure there is only one marker left at the old position:
         TileIndex tileIndex = TileIndex::fromCoordinates(coord_1_2, l);
@@ -292,7 +331,11 @@ void TestItemMarkerTiler::testMoveMarkers2()
         // find it at the new position:
         tileIndex                           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
 
         if (l > fillLevel)
         {
@@ -311,7 +354,7 @@ void TestItemMarkerTiler::testIteratorWholeWorldNoBackingModel()
     ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
     const int maxLevel = TileIndex::MaxLevel;
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         ItemMarkerTiler::NonEmptyIterator it(&mm, l);
         QVERIFY( CountMarkersInIterator(&it) == 0 );
@@ -324,7 +367,7 @@ void TestItemMarkerTiler::testIteratorWholeWorld()
     ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
     const int maxLevel = TileIndex::MaxLevel;
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         ItemMarkerTiler::NonEmptyIterator it(&mm, l);
         QVERIFY( CountMarkersInIterator(&it) == 0 );
@@ -333,7 +376,7 @@ void TestItemMarkerTiler::testIteratorWholeWorld()
     itemModel->appendRow(MakeItemAt(coord_1_2));
     itemModel->appendRow(MakeItemAt(coord_50_60));
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         // iterate over the whole world:
         ItemMarkerTiler::NonEmptyIterator it(&mm, l);
@@ -350,7 +393,7 @@ void TestItemMarkerTiler::testIteratorPartial1()
     itemModel->appendRow(MakeItemAt(coord_1_2));
     itemModel->appendRow(MakeItemAt(coord_50_60));
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         {
             // iterate over a part which should be empty:
@@ -429,7 +472,7 @@ void TestItemMarkerTiler::testIteratorPartial2()
     itemModel->appendRow(MakeItemAt(coordOutOfBounds3));
     itemModel->appendRow(MakeItemAt(coordOutOfBounds4));
 
-    for (int l = 3; l <= maxLevel; ++l)
+    for (int l = 3 ; l <= maxLevel ; ++l)
     {
         ItemMarkerTiler::NonEmptyIterator it(&mm, l, boundsList);
         QVERIFY( CountMarkersInIterator(&it) == 1 );
@@ -442,7 +485,7 @@ void TestItemMarkerTiler::testRemoveMarkers1()
     ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
     const int maxLevel = TileIndex::MaxLevel;
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         ItemMarkerTiler::NonEmptyIterator it(&mm, l);
         QVERIFY(CountMarkersInIterator(&it) == 0 );
@@ -452,7 +495,7 @@ void TestItemMarkerTiler::testRemoveMarkers1()
     itemModel->appendRow(item1);
     itemModel->appendRow(MakeItemAt(coord_50_60));
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         // iterate over the whole world:
         ItemMarkerTiler::NonEmptyIterator it(&mm, l);
@@ -469,7 +512,7 @@ void TestItemMarkerTiler::testRemoveMarkers1()
     delete item1;
     QCOMPARE(itemModel->rowCount(), 1);
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         // iterate over the whole world:
         ItemMarkerTiler::NonEmptyIterator it(&mm, l);
@@ -514,11 +557,16 @@ void TestItemMarkerTiler::testSelectionState1()
     // because we want to test whether the state is okay in newly created tiles
     const int preMaxLevel = maxLevel -2;
 
-    for (int l = 0; l <= preMaxLevel; ++l)
+    for (int l = 0 ; l <= preMaxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QVERIFY(mm.getTileMarkerCount(tileIndex) == 1);
         QVERIFY(mm.getTileGroupState(tileIndex)==SelectedNone);
     }
@@ -526,11 +574,16 @@ void TestItemMarkerTiler::testSelectionState1()
     selectionModel->select(item1Index, QItemSelectionModel::Select);
 
     // verify the selection state of the tiles:
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 1);
         QVERIFY(mm.getTileGroupState(tileIndex)==SelectedAll);
         QVERIFY(mm.getTileSelectedCount(tileIndex)==1);
@@ -542,11 +595,16 @@ void TestItemMarkerTiler::testSelectionState1()
     itemModel->appendRow(item2);
     const QPersistentModelIndex item2Index = itemModel->indexFromItem(item2);
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 2);
         QVERIFY(mm.getTileGroupState(tileIndex)==SelectedSome);
         QCOMPARE(mm.getTileSelectedCount(tileIndex), 1);
@@ -554,11 +612,16 @@ void TestItemMarkerTiler::testSelectionState1()
 
     selectionModel->select(item2Index, QItemSelectionModel::Select);
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 2);
         QCOMPARE(mm.getTileSelectedCount(tileIndex), 2);
         QVERIFY(mm.getTileGroupState(tileIndex)==SelectedAll);
@@ -569,11 +632,16 @@ void TestItemMarkerTiler::testSelectionState1()
     delete item2;
 
     // verify the selection state of the tiles:
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 1);
         QCOMPARE(mm.getTileSelectedCount(tileIndex), 1);
         QVERIFY(mm.getTileGroupState(tileIndex)==SelectedAll);
@@ -586,21 +654,31 @@ void TestItemMarkerTiler::testSelectionState1()
     const QPersistentModelIndex item3Index = itemModel->indexFromItem(item3);
     selectionModel->select(item3Index, QItemSelectionModel::Select);
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_1_2, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 1);
         QCOMPARE(mm.getTileSelectedCount(tileIndex), 1);
         QVERIFY(mm.getTileGroupState(tileIndex)==SelectedAll);
     }
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 1);
         QCOMPARE(mm.getTileSelectedCount(tileIndex), 1);
         QVERIFY(mm.getTileGroupState(tileIndex)==SelectedAll);
@@ -608,11 +686,16 @@ void TestItemMarkerTiler::testSelectionState1()
 
     itemModel->setData(item3Index, QVariant::fromValue(coord_50_60), CoordinatesRole);
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 2);
         QCOMPARE(mm.getTileSelectedCount(tileIndex), 2);
         QVERIFY(mm.getTileGroupState(tileIndex)==SelectedAll);
@@ -620,21 +703,31 @@ void TestItemMarkerTiler::testSelectionState1()
 
     itemModel->setData(item3Index, QVariant::fromValue(coord_m50_m60), CoordinatesRole);
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_50_60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 1);
         QCOMPARE(mm.getTileSelectedCount(tileIndex), 1);
         QVERIFY(mm.getTileGroupState(tileIndex)==SelectedAll);
     }
 
-    for (int l = 0; l <= maxLevel; ++l)
+    for (int l = 0 ; l <= maxLevel ; ++l)
     {
         const TileIndex tileIndex           = TileIndex::fromCoordinates(coord_m50_m60, l);
         ItemMarkerTiler::Tile* const myTile = mm.getTile(tileIndex, true);
-        QVERIFY(myTile != 0);
+
+        if (!myTile)
+        {
+            QFAIL("Tile instance is null");
+        }
+
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 1);
         QCOMPARE(mm.getTileSelectedCount(tileIndex), 1);
         QVERIFY(mm.getTileGroupState(tileIndex)==SelectedAll);
