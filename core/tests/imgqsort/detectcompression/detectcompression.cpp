@@ -39,10 +39,9 @@ using namespace std;
 Mat src, src_gray;
 #define block_size 8
 
-//TODO: should calibrate the THRESHOLD value
+// TODO: should calibrate the THRESHOLD value
 #define THRESHOLD 147
 
-/* @function main */
 int main( int /*argc*/, char** argv )
 {
     int countblocks      = 0;
@@ -51,31 +50,31 @@ int main( int /*argc*/, char** argv )
     vector<int> average_bottom, average_middle, average_top;
 
     // Load an image
-    src = imread( argv[1] );
+    src = imread(argv[1]);
 
-    if ( !src.data )
+    if (!src.data)
     {
         return -1;
     }
 
     // Convert the image to grayscale
-    cvtColor( src, src_gray, CV_BGR2GRAY );
+    cvtColor(src, src_gray, CV_BGR2GRAY);
 
     //go through 8 blocks at a time horizontally
     //iterating through columns
-    for (int i = 0 ; i < src_gray.rows ; i++)
+    for (int i = 0 ; i < src_gray.rows ; ++i)
     {
         //calculating intensity of top column
         for (int j = 0 ; j < src_gray.cols ; j+=8)
         {
             sum = 0;
 
-            for (int k = j ; k < block_size ; k++)
+            for (int k = j ; k < block_size ; ++k)
             {
                 sum += (int)src_gray.at<uchar>(i, j);
             }
 
-            average_top.push_back(sum/8);
+            average_top.push_back(sum / 8);
         }
 
         //calculating intensity of middle column
@@ -83,12 +82,12 @@ int main( int /*argc*/, char** argv )
         {
             sum = 0;
 
-            for (int k = j ; k < block_size ; k++)
+            for (int k = j ; k < block_size ; ++k)
             {
                 sum += (int)src_gray.at<uchar>(i+1, j);
             }
 
-            average_middle.push_back(sum/8);
+            average_middle.push_back(sum / 8);
         }
 
         //calculating intensity of bottom column
@@ -98,21 +97,21 @@ int main( int /*argc*/, char** argv )
         {
             sum = 0;
 
-            for (int k = j ; k < block_size ; k++)
+            for (int k = j ; k < block_size ; ++k)
             {
                 sum += (int)src_gray.at<uchar>(i+2, j);
             }
 
-            average_bottom.push_back(sum/8);
-            countblocks++;
+            average_bottom.push_back(sum / 8);
+            ++countblocks;
         }
 
         //check if the average intensity of 8 blocks in the top, middle and bottom rows are equal. If so increment number_of_blocks
-        for (int j = 0 ; j < countblocks ; j++)
+        for (int j = 0 ; j < countblocks ; ++j)
         {
-            if ((average_middle[j] == (average_top[j]+average_bottom[j])/2) && average_middle[j] > THRESHOLD)
+            if ((average_middle[j] == (average_top[j] + average_bottom[j]) / 2) && average_middle[j] > THRESHOLD)
             {
-                number_of_blocks++;
+                ++number_of_blocks;
             }
         }
     }
@@ -123,19 +122,19 @@ int main( int /*argc*/, char** argv )
 
     //iterating through rows
 
-    for (int j = 0 ; j < src_gray.cols ; j++)
+    for (int j = 0 ; j < src_gray.cols ; ++j)
     {
         //calculating intensity of top row
         for (int i = 0 ; i < src_gray.rows ; i+=8)
         {
             sum = 0;
 
-            for (int k = i ; k < block_size ; k++)
+            for (int k = i ; k < block_size ; ++k)
             {
                 sum += (int)src_gray.at<uchar>(i, j);
             }
 
-            average_top.push_back(sum/8);
+            average_top.push_back(sum / 8);
         }
 
         //calculating intensity of middle row
@@ -143,12 +142,12 @@ int main( int /*argc*/, char** argv )
         {
             sum = 0;
 
-            for (int k = i ; k < block_size ; k++)
+            for (int k = i ; k < block_size ; ++k)
             {
                 sum += (int)src_gray.at<uchar>(i, j+1);
             }
 
-            average_middle.push_back(sum/8);
+            average_middle.push_back(sum / 8);
         }
 
         //calculating intensity of bottom row
@@ -158,19 +157,19 @@ int main( int /*argc*/, char** argv )
         {
             sum = 0;
 
-            for (int k = i ; k < block_size ; k++)
+            for (int k = i ; k < block_size ; ++k)
             {
                 sum += (int)src_gray.at<uchar>(i, j+2);
             }
 
-            average_bottom.push_back(sum/8);
-            countblocks++;
+            average_bottom.push_back(sum / 8);
+            ++countblocks;
         }
 
         //check if the average intensity of 8 blocks in the top, middle and bottom rows are equal. If so increment number_of_blocks
-        for (int i = 0 ; i < countblocks ; i++)
+        for (int i = 0 ; i < countblocks ; ++i)
         {
-            if ((average_middle[i] == (average_top[i]+average_bottom[i])/2) && average_middle[i] > THRESHOLD)
+            if ((average_middle[i] == (average_top[i] + average_bottom[i]) / 2) && average_middle[i] > THRESHOLD)
             {
                 number_of_blocks++;
             }

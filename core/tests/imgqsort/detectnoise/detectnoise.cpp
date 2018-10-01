@@ -52,15 +52,15 @@ char    window_name[] = "Edge Map";
 void CannyThreshold(int, void*)
 {
     // Reduce noise with a kernel 3x3
-    blur( src_gray, detected_edges, Size(3,3) );
+    blur(src_gray, detected_edges, Size(3,3));
 
     // Canny detector
-    Canny( detected_edges, detected_edges, lowThreshold, lowThreshold*ratio_value, kernel_size );
+    Canny(detected_edges, detected_edges, lowThreshold, lowThreshold*ratio_value, kernel_size);
 
     // Using Canny's output as a mask, we display our result
     dst = Scalar::all(0);
 
-    src.copyTo( dst, detected_edges);
+    src.copyTo(dst, detected_edges);
 
     QLabel label;
     label.setPixmap(ASM::cvMatToQPixmap(dst));
@@ -72,18 +72,18 @@ int main(int argc, char** argv)
     QApplication app(argc, argv);
 
     // Load an image
-    src = imread( argv[1] );
+    src = imread(argv[1]);
 
-    if ( !src.data )
+    if (!src.data)
     {
         return -1;
     }
 
     // Create a matrix of the same type and size as src (for dst)
-    dst.create( src.size(), src.type() );
+    dst.create(src.size(), src.type());
 
     // Convert the image to grayscale
-    cvtColor( src, src_gray, CV_BGR2GRAY );
+    cvtColor(src, src_gray, CV_BGR2GRAY);
 
     // Apply Canny Edge Detector to get the edges
     CannyThreshold(0, 0);
