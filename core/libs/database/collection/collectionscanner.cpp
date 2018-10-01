@@ -1028,10 +1028,10 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
 
     QDir dir(location.albumRootPath() + album);
 
-    if ( !dir.exists() || !dir.isReadable() )
+    if (!dir.exists() || !dir.isReadable())
     {
         qCWarning(DIGIKAM_DATABASE_LOG) << "Folder does not exist or is not readable: "
-                   << dir.path();
+                                        << dir.path();
         return;
     }
 
@@ -1124,6 +1124,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
         }
         else if (fi->isDir())
         {
+
 #ifdef Q_OS_WIN
             //Hide album that starts with a dot, as under Linux.
             if (fi->fileName().startsWith(QLatin1Char('.')))
@@ -1131,12 +1132,13 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                 continue;
             }
 #endif
-            QString subalbum;
 
             if (d->ignoreDirectory.contains(fi->fileName()))
             {
                 continue;
             }
+
+            QString subalbum;
 
             if (album == QLatin1String("/"))
             {
