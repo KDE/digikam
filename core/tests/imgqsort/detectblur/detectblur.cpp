@@ -108,5 +108,7 @@ int main(int argc, char** argv )
 
     app.exec();
 
+    free (maxIdx);
+
     return 0;
 }

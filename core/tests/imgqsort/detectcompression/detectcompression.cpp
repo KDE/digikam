@@ -63,14 +63,14 @@ int main( int /*argc*/, char** argv )
 
     //go through 8 blocks at a time horizontally
     //iterating through columns
-    for (int i = 0; i < src_gray.rows; i++)
+    for (int i = 0 ; i < src_gray.rows ; i++)
     {
         //calculating intensity of top column
-        for (int j = 0; j < src_gray.cols; j+=8)
+        for (int j = 0 ; j < src_gray.cols ; j+=8)
         {
-            sum=0;
+            sum = 0;
 
-            for (int k=j; k<block_size; k++)
+            for (int k = j ; k < block_size ; k++)
             {
                 sum += (int)src_gray.at<uchar>(i, j);
             }
@@ -79,11 +79,11 @@ int main( int /*argc*/, char** argv )
         }
 
         //calculating intensity of middle column
-        for (int j = 0; j < src_gray.cols; j+=8)
+        for (int j = 0 ; j < src_gray.cols ; j+=8)
         {
-            sum=0;
+            sum = 0;
 
-            for (int k = j; k < block_size; k++)
+            for (int k = j ; k < block_size ; k++)
             {
                 sum += (int)src_gray.at<uchar>(i+1, j);
             }
@@ -92,13 +92,13 @@ int main( int /*argc*/, char** argv )
         }
 
         //calculating intensity of bottom column
-        countblocks=0;
+        countblocks = 0;
 
-        for (int j = 0; j < src_gray.cols; j+=8)
+        for (int j = 0 ; j < src_gray.cols ; j+=8)
         {
-            sum=0;
+            sum = 0;
 
-            for (int k = j; k < block_size; k++)
+            for (int k = j ; k < block_size ; k++)
             {
                 sum += (int)src_gray.at<uchar>(i+2, j);
             }
@@ -108,7 +108,7 @@ int main( int /*argc*/, char** argv )
         }
 
         //check if the average intensity of 8 blocks in the top, middle and bottom rows are equal. If so increment number_of_blocks
-        for (int j = 0; j < countblocks; j++)
+        for (int j = 0 ; j < countblocks ; j++)
         {
             if ((average_middle[j] == (average_top[j]+average_bottom[j])/2) && average_middle[j] > THRESHOLD)
             {
@@ -123,14 +123,14 @@ int main( int /*argc*/, char** argv )
 
     //iterating through rows
 
-    for (int j= 0; j < src_gray.cols; j++)
+    for (int j = 0 ; j < src_gray.cols ; j++)
     {
         //calculating intensity of top row
-        for (int i = 0; i < src_gray.rows; i+=8)
+        for (int i = 0 ; i < src_gray.rows ; i+=8)
         {
-            sum=0;
+            sum = 0;
 
-            for (int k=i; k<block_size; k++)
+            for (int k = i ; k < block_size ; k++)
             {
                 sum += (int)src_gray.at<uchar>(i, j);
             }
@@ -139,11 +139,11 @@ int main( int /*argc*/, char** argv )
         }
 
         //calculating intensity of middle row
-        for (int i = 0; i < src_gray.rows; i+=8)
+        for (int i = 0 ; i < src_gray.rows ; i+=8)
         {
-            sum=0;
+            sum = 0;
 
-            for (int k = i; k < block_size; k++)
+            for (int k = i ; k < block_size ; k++)
             {
                 sum += (int)src_gray.at<uchar>(i, j+1);
             }
@@ -152,13 +152,13 @@ int main( int /*argc*/, char** argv )
         }
 
         //calculating intensity of bottom row
-        countblocks=0;
+        countblocks = 0;
 
-        for (int i = 0; i< src_gray.rows; i+=8)
+        for (int i = 0 ; i < src_gray.rows ; i+=8)
         {
-            sum=0;
+            sum = 0;
 
-            for (int k=i; k<block_size; k++)
+            for (int k = i ; k < block_size ; k++)
             {
                 sum += (int)src_gray.at<uchar>(i, j+2);
             }
@@ -168,7 +168,7 @@ int main( int /*argc*/, char** argv )
         }
 
         //check if the average intensity of 8 blocks in the top, middle and bottom rows are equal. If so increment number_of_blocks
-        for (int i = 0; i < countblocks; i++)
+        for (int i = 0 ; i < countblocks ; i++)
         {
             if ((average_middle[i] == (average_top[i]+average_bottom[i])/2) && average_middle[i] > THRESHOLD)
             {
