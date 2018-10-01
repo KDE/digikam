@@ -99,13 +99,13 @@ void HTMLThemePage::initializePage()
 
     d->themeList->clear();
 
-    for (; it != end ; ++it)
+    for ( ; it != end ; ++it)
     {
         GalleryTheme::Ptr theme      = *it;
+        ThemeListBoxItem* const item = new ThemeListBoxItem(d->themeList, theme);
 
         if (theme->internalName() == info->theme())
         {
-            ThemeListBoxItem* const item = new ThemeListBoxItem(d->themeList, theme);
             d->themeList->setCurrentItem(item);
         }
     }
