@@ -324,6 +324,8 @@ public:
     QSet<QString>                                 imageFilterSet;
     QSet<QString>                                 videoFilterSet;
     QSet<QString>                                 audioFilterSet;
+    QSet<QString>                                 ignoreDirectory;
+
     QList<int>                                    scannedAlbums;
     bool                                          wantSignals;
     bool                                          needTotalFiles;
@@ -403,15 +405,18 @@ void CollectionScanner::loadNameFilters()
         return;
     }
 
-    QStringList imageFilter, audioFilter, videoFilter;
+    QStringList imageFilter, audioFilter, videoFilter, ignoreDirectory;
+
     CoreDbAccess().db()->getFilterSettings(&imageFilter, &videoFilter, &audioFilter);
+    CoreDbAccess().db()->getIgnoreDirectoryFilterSettings(&ignoreDirectory);
 
     // three sets to find category of a file
-    d->imageFilterSet = imageFilter.toSet();
-    d->audioFilterSet = audioFilter.toSet();
-    d->videoFilterSet = videoFilter.toSet();
+    d->imageFilterSet  = imageFilter.toSet();
+    d->audioFilterSet  = audioFilter.toSet();
+    d->videoFilterSet  = videoFilter.toSet();
 
-    d->nameFilters = d->imageFilterSet + d->audioFilterSet + d->videoFilterSet;
+    d->nameFilters     = d->imageFilterSet + d->audioFilterSet + d->videoFilterSet;
+    d->ignoreDirectory = ignoreDirectory.toSet();
 }
 
 void CollectionScanner::setObserver(CollectionScannerObserver* const observer)
@@ -860,9 +865,6 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
         emit startScanningForStaleAlbums();
     }
 
-    QStringList ignoreDirectoryList;
-    CoreDbAccess().db()->getIgnoreDirectoryFilterSettings(&ignoreDirectoryList);
-
     QList<AlbumShortInfo> albumList = CoreDbAccess().db()->getAlbumShortInfos();
     QList<int> toBeDeleted;
 
@@ -894,7 +896,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
 
             // let digikam think that ignored directories got deleted
             // (if they already exist in the database, this will delete them)
-            if (!fileInfo.exists() || !fileInfo.isDir() || ignoreDirectoryList.contains(fileInfo.fileName()))
+            if (!fileInfo.exists() || !fileInfo.isDir() || d->ignoreDirectory.contains(fileInfo.fileName()))
             {
                 toBeDeleted << (*it).id;
                 d->scannedAlbums << (*it).id;
@@ -947,7 +949,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
                     QFileInfo fileInfo(location.albumRootPath() + it.key().relativePath);
 
                     // Make sure ignored directories are not used in renaming operations
-                    if (fileInfo.exists() && fileInfo.isDir() && ignoreDirectoryList.contains(fileInfo.fileName()))
+                    if (fileInfo.exists() && fileInfo.isDir() && d->ignoreDirectory.contains(fileInfo.fileName()))
                     {
                         // Just set a new root/relativePath to the album. Further scanning will care for all cases or error.
                         CoreDbAccess().db()->renameAlbum(it.value().albumId, it.key().albumRootId, it.key().relativePath);
@@ -1041,9 +1043,6 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     int albumID                   = checkAlbum(location, album);
     QList<ItemScanInfo> scanInfos = CoreDbAccess().db()->getItemScanInfos(albumID);
 
-    QStringList ignoreDirectoryList;
-    CoreDbAccess().db()->getIgnoreDirectoryFilterSettings(&ignoreDirectoryList);
-
     // create a hash filename -> index in list
     QHash<QString, int> fileNameIndexHash;
     QSet<qlonglong> itemIdSet;
@@ -1087,7 +1086,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             }
 
             // ignore new files in subdirectories of ignored directories
-            foreach (const QString& dir, ignoreDirectoryList)
+            foreach (const QString& dir, d->ignoreDirectory)
             {
                 if (fi->dir().path().contains(dir))
                 {
@@ -1134,7 +1133,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
 #endif
             QString subalbum;
 
-            if (ignoreDirectoryList.contains(fi->fileName()))
+            if (d->ignoreDirectory.contains(fi->fileName()))
             {
                 continue;
             }
