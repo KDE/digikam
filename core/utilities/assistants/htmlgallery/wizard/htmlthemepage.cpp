@@ -102,7 +102,8 @@ void HTMLThemePage::initializePage()
     for ( ; it != end ; ++it)
     {
         GalleryTheme::Ptr theme      = *it;
-        ThemeListBoxItem* const item = new ThemeListBoxItem(d->themeList, theme);
+        ThemeListBoxItem* const item = new ThemeListBoxItem(theme);
+        d->themeList->addItem(item);
 
         if (theme->internalName() == info->theme())
         {
