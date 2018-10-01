@@ -51,7 +51,8 @@ private Q_SLOTS:
 
 class StubStateSaverPriv;
 
-class StubStateSaver: public QObject, public Digikam::StateSavingObject
+class StubStateSaver: public QObject,
+                      public Digikam::StateSavingObject
 {
     Q_OBJECT
 

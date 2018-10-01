@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QBuffer>
+#include <QPointer>
 
 // KDE includes
 
@@ -162,13 +163,12 @@ void StateSavingObjectTest::testDirectCalling()
 
 void StateSavingObjectTest::testDirectChildrenLoading()
 {
-    StubStateSaver* parentSaver = new StubStateSaver(0);
-    StubStateSaver* directChild1 = new StubStateSaver(parentSaver);
-    StubStateSaver* directChild2 = new StubStateSaver(parentSaver);
-    StubStateSaver* indirectChild = new StubStateSaver(directChild1);
+    StubStateSaver* const parentSaver      = new StubStateSaver(0);
+    QPointer<StubStateSaver> directChild1  = new StubStateSaver(parentSaver);
+    QPointer<StubStateSaver> directChild2  = new StubStateSaver(parentSaver);
+    QPointer<StubStateSaver> indirectChild = new StubStateSaver(directChild1);
 
     parentSaver->setStateSavingDepth(StateSavingObject::DIRECT_CHILDREN);
-
     parentSaver->loadState();
 
     QVERIFY(parentSaver->loadCalled());
@@ -186,13 +186,12 @@ void StateSavingObjectTest::testDirectChildrenLoading()
 
 void StateSavingObjectTest::testDirectChildrenSaving()
 {
-    StubStateSaver* parentSaver = new StubStateSaver(0);
-    StubStateSaver* directChild1 = new StubStateSaver(parentSaver);
-    StubStateSaver* directChild2 = new StubStateSaver(parentSaver);
-    StubStateSaver* indirectChild = new StubStateSaver(directChild1);
+    StubStateSaver* const parentSaver      = new StubStateSaver(0);
+    QPointer<StubStateSaver> directChild1  = new StubStateSaver(parentSaver);
+    QPointer<StubStateSaver> directChild2  = new StubStateSaver(parentSaver);
+    QPointer<StubStateSaver> indirectChild = new StubStateSaver(directChild1);
 
     parentSaver->setStateSavingDepth(StateSavingObject::DIRECT_CHILDREN);
-
     parentSaver->saveState();
 
     QVERIFY(parentSaver->saveCalled());
@@ -210,14 +209,14 @@ void StateSavingObjectTest::testDirectChildrenSaving()
 
 void StateSavingObjectTest::testRecursiveChildrenLoading()
 {
-    StubStateSaver* parentSaver = new StubStateSaver(0);
-    StubStateSaver* directChild1 = new StubStateSaver(parentSaver);
-    StubStateSaver* directChild2 = new StubStateSaver(parentSaver);
-    StubStateSaver* indirectChild1 = new StubStateSaver(directChild1);
-    StubStateSaver* indirectChild2 = new StubStateSaver(directChild2);
-    StubStateSaver* indirectChild3 = new StubStateSaver(directChild2);
-    QBuffer* directChildStateless = new QBuffer(parentSaver);
-    StubStateSaver* indirectStatelessChild = new StubStateSaver(directChildStateless);
+    StubStateSaver* const parentSaver               = new StubStateSaver(0);
+    QPointer<StubStateSaver> directChild1           = new StubStateSaver(parentSaver);
+    QPointer<StubStateSaver> directChild2           = new StubStateSaver(parentSaver);
+    QPointer<StubStateSaver> indirectChild1         = new StubStateSaver(directChild1);
+    QPointer<StubStateSaver> indirectChild2         = new StubStateSaver(directChild2);
+    QPointer<StubStateSaver> indirectChild3         = new StubStateSaver(directChild2);
+    QBuffer* const directChildStateless             = new QBuffer(parentSaver);
+    QPointer<StubStateSaver> indirectStatelessChild = new StubStateSaver(directChildStateless);
 
     parentSaver->setStateSavingDepth(StateSavingObject::RECURSIVE);
     directChild1->setStateSavingDepth(StateSavingObject::RECURSIVE);
@@ -248,14 +247,14 @@ void StateSavingObjectTest::testRecursiveChildrenLoading()
 
 void StateSavingObjectTest::testRecursiveChildrenSaving()
 {
-    StubStateSaver* parentSaver = new StubStateSaver(0);
-    StubStateSaver* directChild1 = new StubStateSaver(parentSaver);
-    StubStateSaver* directChild2 = new StubStateSaver(parentSaver);
-    StubStateSaver* indirectChild1 = new StubStateSaver(directChild1);
-    StubStateSaver* indirectChild2 = new StubStateSaver(directChild2);
-    StubStateSaver* indirectChild3 = new StubStateSaver(directChild2);
-    QBuffer* directChildStateless = new QBuffer(parentSaver);
-    StubStateSaver* indirectStatelessChild = new StubStateSaver(directChildStateless);
+    StubStateSaver* const parentSaver               = new StubStateSaver(0);
+    QPointer<StubStateSaver> directChild1           = new StubStateSaver(parentSaver);
+    QPointer<StubStateSaver> directChild2           = new StubStateSaver(parentSaver);
+    QPointer<StubStateSaver> indirectChild1         = new StubStateSaver(directChild1);
+    QPointer<StubStateSaver> indirectChild2         = new StubStateSaver(directChild2);
+    QPointer<StubStateSaver> indirectChild3         = new StubStateSaver(directChild2);
+    QBuffer* const directChildStateless             = new QBuffer(parentSaver);
+    QPointer<StubStateSaver> indirectStatelessChild = new StubStateSaver(directChildStateless);
 
     parentSaver->setStateSavingDepth(StateSavingObject::RECURSIVE);
     directChild1->setStateSavingDepth(StateSavingObject::RECURSIVE);
