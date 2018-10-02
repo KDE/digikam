@@ -75,7 +75,7 @@ int main(int argc, char** argv)
     ImageQualityParser parser (dimg, settings, &pick);
     parser.startAnalyse();
 
-    qDebug() << "Over exposure quality result is" << pick;
+    qDebug() << "Over exposure quality result is" << pick << "(0:None, 1:Rejected, 2:Pending, 3:Accepted)";
 
     return 0;
 }
