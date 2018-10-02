@@ -28,13 +28,14 @@
 // Local includes
 
 #include "dimg.h"
+#include "digikam_export.h"
 #include "digikam_globals.h"
 #include "imagequalitysettings.h"
 
 namespace Digikam
 {
 
-class ImgQSort
+class DIGIKAM_EXPORT ImgQSort
 {
 public:
 

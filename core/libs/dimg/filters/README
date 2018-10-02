@@ -8,6 +8,7 @@ fx            : Special Effects.
 greystoration : CImg library interface for Greystoration filter.
 hsl           : Hue / Saturation / Lightness.
 icc           : Color Management.
+imgqsort      : Image Quality Sorter.
 levels        : Histogram Levels Correction.
 lens          : Misc lens correction filters.
 lut3d         : 3D LUT color filters.

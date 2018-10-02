@@ -10,7 +10,7 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libmaintenance_SRCS
-	maintenancedata.cpp
+    maintenancedata.cpp
     imageinfojob.cpp
     imageinfoalbumsjob.cpp
     metadatatask.cpp
@@ -25,7 +25,6 @@ set(libmaintenance_SRCS
     fingerprintsgenerator.cpp
     fingerprintstask.cpp
     imagequalitysorter.cpp
-    imagequalitysettings.cpp
     imagequalitytask.cpp
     maintenancedlg.cpp
     maintenancemngr.cpp

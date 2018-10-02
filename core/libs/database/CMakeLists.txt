@@ -139,11 +139,6 @@ set(libhaar_SRCS
     haar/haariface.cpp
 )
 
-# Also part of digikam main app
-set(libimgqsort_SRCS
-    imgqsort/imgqsort.cpp
-)
-
 # Shared libdigikamdatabase ########################################################
 
 set(digikamdatabase_LIB_SRCS
@@ -171,7 +166,7 @@ if(ENABLE_DBUS)
 endif()
 
 add_library(digikamdatabase_src     OBJECT ${digikamdatabase_LIB_SRCS} ${libdatabasemodels_SRCS})
-add_library(digikamdatabasemain_src OBJECT ${libdatabaseutils_SRCS} ${libimgqsort_SRCS})
+add_library(digikamdatabasemain_src OBJECT ${libdatabaseutils_SRCS})
 add_library(digikamdatabasecore_src OBJECT ${libdatabasecore_SRCS})
 add_library(digikamdatabase         $<TARGET_OBJECTS:digikamdatabase_src>)
 
@@ -189,7 +184,6 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tags>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/server>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/thumbsdb>

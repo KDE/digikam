@@ -28,15 +28,19 @@
 
 #include <QDebug>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class ImageQualitySettings
+class DIGIKAM_EXPORT ImageQualitySettings
 {
 public:
 
     explicit ImageQualitySettings();
-    virtual ~ImageQualitySettings();
+    ~ImageQualitySettings();
 
 public:
 
@@ -65,7 +69,7 @@ public:
 };
 
 //! qDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.
-QDebug operator<<(QDebug dbg, const ImageQualitySettings& s);
+DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const ImageQualitySettings& s);
 
 } // namespace Digikam
 
