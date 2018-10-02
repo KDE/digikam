@@ -114,27 +114,15 @@ public:
     volatile bool        running;
 };
 
-ImageQualityParser::ImageQualityParser(const DImg& img, const ImageQualitySettings& imq, PickLabel* const label)
+ImageQualityParser::ImageQualityParser(const DImg& image,
+                                       const ImageQualitySettings& settings,
+                                       PickLabel* const label)
     : d(new Private)
 {
-    // Copy settings
-    d->imq.detectBlur         = imq.detectBlur;
-    d->imq.detectNoise        = imq.detectNoise;
-    d->imq.detectCompression  = imq.detectCompression;
-    d->imq.detectOverexposure = imq.detectOverexposure;
-    d->imq.lowQRejected       = imq.lowQRejected;
-    d->imq.mediumQPending     = imq.mediumQPending;
-    d->imq.highQAccepted      = imq.highQAccepted;
-    d->imq.speed              = imq.speed;
-    d->imq.rejectedThreshold  = imq.rejectedThreshold;
-    d->imq.pendingThreshold   = imq.pendingThreshold;
-    d->imq.acceptedThreshold  = imq.acceptedThreshold;
-    d->imq.blurWeight         = imq.blurWeight;
-    d->imq.noiseWeight        = imq.noiseWeight;
-    d->imq.compressionWeight  = imq.compressionWeight;
-    d->image                  = img;
-    d->neimage                = img;
-    d->label                  = label;
+    d->imq     = settings;
+    d->image   = image;
+    d->neimage = image;
+    d->label   = label;
 }
 
 ImageQualityParser::~ImageQualityParser()

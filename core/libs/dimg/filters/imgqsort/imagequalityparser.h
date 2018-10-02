@@ -41,7 +41,9 @@ public:
 
     /** Standard constructor with picklabel container to fill at end of analyze.
      */
-    explicit ImageQualityParser(const DImg& img, const ImageQualitySettings& imq, PickLabel* const label);
+    explicit ImageQualityParser(const DImg& image,
+                                const ImageQualitySettings& settings,
+                                PickLabel* const label);
     ~ImageQualityParser();
 
     /** Perform quality estimation and fill Pick Label value accordingly.

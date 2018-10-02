@@ -50,6 +50,46 @@ ImageQualitySettings::ImageQualitySettings()
     speed              = 1;
 }
 
+ImageQualitySettings::ImageQualitySettings(const ImageQualitySettings& other)
+{
+    enableSorter       = other.enableSorter;
+    detectBlur         = other.detectBlur;
+    detectNoise        = other.detectNoise;
+    detectCompression  = other.detectCompression;
+    detectOverexposure = other.detectOverexposure;
+    lowQRejected       = other.lowQRejected;
+    mediumQPending     = other.mediumQPending;
+    highQAccepted      = other.highQAccepted;
+    rejectedThreshold  = other.rejectedThreshold;
+    pendingThreshold   = other.pendingThreshold;
+    acceptedThreshold  = other.acceptedThreshold;
+    blurWeight         = other.blurWeight;
+    noiseWeight        = other.noiseWeight;
+    compressionWeight  = other.compressionWeight;
+    speed              = other.speed;
+}
+
+ImageQualitySettings& ImageQualitySettings::operator=(const ImageQualitySettings& other)
+{
+    enableSorter       = other.enableSorter;
+    detectBlur         = other.detectBlur;
+    detectNoise        = other.detectNoise;
+    detectCompression  = other.detectCompression;
+    detectOverexposure = other.detectOverexposure;
+    lowQRejected       = other.lowQRejected;
+    mediumQPending     = other.mediumQPending;
+    highQAccepted      = other.highQAccepted;
+    rejectedThreshold  = other.rejectedThreshold;
+    pendingThreshold   = other.pendingThreshold;
+    acceptedThreshold  = other.acceptedThreshold;
+    blurWeight         = other.blurWeight;
+    noiseWeight        = other.noiseWeight;
+    compressionWeight  = other.compressionWeight;
+    speed              = other.speed;
+
+    return *this;
+}
+
 ImageQualitySettings::~ImageQualitySettings()
 {
 }
@@ -59,21 +99,21 @@ void ImageQualitySettings::readFromConfig()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Image Quality Settings");
 
-    enableSorter      = group.readEntry("Enable Sorter",      false);
-    detectBlur        = group.readEntry("Detect Blur",        true);
-    detectNoise       = group.readEntry("Detect Noise",       true);
-    detectCompression = group.readEntry("Detect Compression", true);
-    detectOverexposure= group.readEntry("Detect Overexposure", true);
-    lowQRejected      = group.readEntry("LowQ Rejected",      true);
-    mediumQPending    = group.readEntry("MediumQ Pending",    true);
-    highQAccepted     = group.readEntry("HighQ Accepted",     true);
-    speed             = group.readEntry("Speed",              1);
-    rejectedThreshold = group.readEntry("Rejected Threshold", 10);
-    pendingThreshold  = group.readEntry("Pending Threshold",  40);
-    acceptedThreshold = group.readEntry("Accepted Threshold", 60);
-    blurWeight        = group.readEntry("Blur Weight",        100);
-    noiseWeight       = group.readEntry("Noise Weight",       100);
-    compressionWeight = group.readEntry("Compression Weight", 100);
+    enableSorter              = group.readEntry("Enable Sorter",      false);
+    detectBlur                = group.readEntry("Detect Blur",        true);
+    detectNoise               = group.readEntry("Detect Noise",       true);
+    detectCompression         = group.readEntry("Detect Compression", true);
+    detectOverexposure        = group.readEntry("Detect Overexposure", true);
+    lowQRejected              = group.readEntry("LowQ Rejected",      true);
+    mediumQPending            = group.readEntry("MediumQ Pending",    true);
+    highQAccepted             = group.readEntry("HighQ Accepted",     true);
+    speed                     = group.readEntry("Speed",              1);
+    rejectedThreshold         = group.readEntry("Rejected Threshold", 10);
+    pendingThreshold          = group.readEntry("Pending Threshold",  40);
+    acceptedThreshold         = group.readEntry("Accepted Threshold", 60);
+    blurWeight                = group.readEntry("Blur Weight",        100);
+    noiseWeight               = group.readEntry("Noise Weight",       100);
+    compressionWeight         = group.readEntry("Compression Weight", 100);
 }
 
 void ImageQualitySettings::writeToConfig()
@@ -81,21 +121,21 @@ void ImageQualitySettings::writeToConfig()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Image Quality Settings");
 
-    group.writeEntry("Enable Sorter",      enableSorter);
-    group.writeEntry("Detect Blur",        detectBlur);
-    group.writeEntry("Detect Noise",       detectNoise);
-    group.writeEntry("Detect Compression", detectCompression);
+    group.writeEntry("Enable Sorter",       enableSorter);
+    group.writeEntry("Detect Blur",         detectBlur);
+    group.writeEntry("Detect Noise",        detectNoise);
+    group.writeEntry("Detect Compression",  detectCompression);
     group.writeEntry("Detect Overexposure", detectOverexposure);
-    group.writeEntry("LowQ Rejected",      lowQRejected);
-    group.writeEntry("MediumQ Pending",    mediumQPending);
-    group.writeEntry("HighQ Accepted",     highQAccepted);
-    group.writeEntry("Speed",              speed);
-    group.writeEntry("Rejected Threshold", rejectedThreshold);
-    group.writeEntry("Pending Threshold",  pendingThreshold);
-    group.writeEntry("Accepted Threshold", acceptedThreshold);
-    group.writeEntry("Blur Weight",        blurWeight);
-    group.writeEntry("Noise Weight",       noiseWeight);
-    group.writeEntry("Compression Weight", compressionWeight);
+    group.writeEntry("LowQ Rejected",       lowQRejected);
+    group.writeEntry("MediumQ Pending",     mediumQPending);
+    group.writeEntry("HighQ Accepted",      highQAccepted);
+    group.writeEntry("Speed",               speed);
+    group.writeEntry("Rejected Threshold",  rejectedThreshold);
+    group.writeEntry("Pending Threshold",   pendingThreshold);
+    group.writeEntry("Accepted Threshold",  acceptedThreshold);
+    group.writeEntry("Blur Weight",         blurWeight);
+    group.writeEntry("Noise Weight",        noiseWeight);
+    group.writeEntry("Compression Weight",  compressionWeight);
 }
 
 QDebug operator<<(QDebug dbg, const ImageQualitySettings& s)

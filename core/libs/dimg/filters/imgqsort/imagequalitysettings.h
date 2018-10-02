@@ -39,8 +39,11 @@ class DIGIKAM_EXPORT ImageQualitySettings
 {
 public:
 
-    explicit ImageQualitySettings();
+    ImageQualitySettings();
+    ImageQualitySettings(const ImageQualitySettings& other);
     ~ImageQualitySettings();
+
+    ImageQualitySettings& operator=(const ImageQualitySettings& other);
 
 public:
 
