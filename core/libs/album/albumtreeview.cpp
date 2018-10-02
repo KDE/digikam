@@ -29,8 +29,9 @@
 
 // Qt includes
 
-#include <QMouseEvent>
 #include <QStyledItemDelegate>
+#include <QMouseEvent>
+#include <QScrollBar>
 #include <QTimer>
 #include <QDrag>
 #include <QMenu>
@@ -935,6 +936,7 @@ void AbstractAlbumTreeView::scrollToSelectedAlbum()
     if (!selected.isEmpty())
     {
         scrollTo(selected.first(), PositionAtCenter);
+        horizontalScrollBar()->setValue(0);
     }
 }
 
@@ -1408,6 +1410,7 @@ void AbstractCheckableAlbumTreeView::doLoadState()
 
     // initially sync with the albums that are already in the model
     restoreCheckStateForHierarchy(QModelIndex());
+    horizontalScrollBar()->setValue(0);
 }
 
 void AbstractCheckableAlbumTreeView::rowsInserted(const QModelIndex& parent, int start, int end)
