@@ -55,8 +55,8 @@ class Q_DECL_HIDDEN ImageQualityParser::Private
 {
 public:
 
-    explicit Private() :
-        clusterCount(30),                   //used for k-means clustering algorithm in noise detection
+    explicit Private()
+      : clusterCount(30),                   // used for k-means clustering algorithm in noise detection
         size(512)
     {
         for (int c = 0 ; c < 3 ; ++c)
@@ -117,7 +117,7 @@ public:
 ImageQualityParser::ImageQualityParser(const DImg& img, const ImageQualitySettings& imq, PickLabel* const label)
     : d(new Private)
 {
-    // Reading settings from GUI
+    // Copy settings
     d->imq.detectBlur         = imq.detectBlur;
     d->imq.detectNoise        = imq.detectNoise;
     d->imq.detectCompression  = imq.detectCompression;
@@ -231,13 +231,13 @@ void ImageQualityParser::startAnalyse()
     // All the results to have a range of 1 to 100.
     if (d->running)
     {
-        float finalblur        = (blur*100)  + ((blur2/32767)*100);
-        float finalnoise       = noise*100;
+        float finalblur        = (blur * 100)  + ((blur2 / 32767) * 100);
+        float finalnoise       = noise * 100;
         float finalcompression = (compressionlevel / 1024) * 100; // we are processing 1024 pixels size image
 
-        finalquality           = finalblur*d->imq.blurWeight   +
-                                 finalnoise*d->imq.noiseWeight +
-                                 finalcompression*d->imq.compressionWeight;
+        finalquality           = finalblur        * d->imq.blurWeight  +
+                                 finalnoise       * d->imq.noiseWeight +
+                                 finalcompression * d->imq.compressionWeight;
 
         finalquality           = finalquality / 100;
 
@@ -252,7 +252,8 @@ void ImageQualityParser::startAnalyse()
         {
             *d->label = RejectedLabel;
         }
-        else if (finalquality > d->imq.rejectedThreshold && finalquality < d->imq.acceptedThreshold)
+        else if ((finalquality > d->imq.rejectedThreshold) &&
+                 (finalquality < d->imq.acceptedThreshold))
         {
             *d->label = PendingLabel;
         }
@@ -303,7 +304,7 @@ void ImageQualityParser::readImage() const
                 d->fimg[0][j] = col.red();
                 d->fimg[1][j] = col.green();
                 d->fimg[2][j] = col.blue();
-                j++;
+                ++j;
             }
         }
     }
@@ -312,10 +313,14 @@ void ImageQualityParser::readImage() const
 void ImageQualityParser::CannyThreshold(int, void*) const
 {
     // Reduce noise with a kernel 3x3.
-    blur(d->src_gray, d->detected_edges, Size(3,3));
+    blur(d->src_gray, d->detected_edges, Size(3, 3));
 
     // Canny detector.
-    Canny(d->detected_edges, d->detected_edges, d->lowThreshold, d->lowThreshold*d->ratio,d-> kernel_size);
+    Canny(d->detected_edges,
+          d->detected_edges,
+          d->lowThreshold,
+          d->lowThreshold * d->ratio,
+          d-> kernel_size);
 }
 
 double ImageQualityParser::blurdetector() const
@@ -336,6 +341,7 @@ double ImageQualityParser::blurdetector() const
     qCDebug(DIGIKAM_DATABASE_LOG) << "The result of the edge intensity is  " << blurresult;
 
     delete [] maxIdx;
+
     return blurresult;
 }
 
@@ -347,7 +353,7 @@ short ImageQualityParser::blurdetector2() const
     qCDebug(DIGIKAM_DATABASE_LOG) << "Algorithm using LoG Filter started";
 
     // To remove noise from the image
-    GaussianBlur(d->src_gray, noise_free, Size(3,3), 0, 0, BORDER_DEFAULT);
+    GaussianBlur(d->src_gray, noise_free, Size(3, 3), 0, 0, BORDER_DEFAULT);
 
     // Aperture size of 1 corresponds to the correct matrix
     int kernel_size = 3;
@@ -400,7 +406,7 @@ double ImageQualityParser::noisedetector() const
 
     for (uint x = 0 ; d->running && (x < d->neimage.numPixels()) ; ++x)
     {
-        for (int y = 0 ; d->running && (y < 3) ; y++)
+        for (int y = 0 ; d->running && (y < 3) ; ++y)
         {
             *pointsPtr++ = (float)d->fimg[y][x];
         }
@@ -415,8 +421,15 @@ double ImageQualityParser::noisedetector() const
 
     if (d->running)
     {
-        cvKMeans2(points, d->clusterCount, clusters,
-                  cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
+        cvKMeans2(points,
+                  d->clusterCount,
+                  clusters,
+                  cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0),
+                  3,
+                  0,
+                  0,
+                  centers,
+                  0);
     }
 
     qCDebug(DIGIKAM_DATABASE_LOG) << "cvKmeans2 successfully run";
@@ -489,7 +502,7 @@ double ImageQualityParser::noisedetector() const
 
         // Moving to the right row.
 
-        ptr         = reinterpret_cast<float*>(sd->data.ptr + rowIndex*(sd->step));
+        ptr         = reinterpret_cast<float*>(sd->data.ptr + (rowIndex * sd->step));
 
         // Moving to the right column.
 
@@ -531,7 +544,7 @@ double ImageQualityParser::noisedetector() const
 
     for (int i = 0 ; d->running && (i < sd->cols) ; ++i)
     {
-        if (d->running && (rowPosition[(i/points->cols)] >= 1))
+        if (d->running && (rowPosition[(i / points->cols)] >= 1))
         {
             CvMat* workingArr = cvCreateMat(rowPosition[(i / points->cols)], 1, CV_32FC1);
             ptr               = reinterpret_cast<float*>(workingArr->data.ptr);
@@ -544,7 +557,7 @@ double ImageQualityParser::noisedetector() const
             cvAvgSdv(workingArr, &mean, &std);
             *meanStorePtr++ = (float)mean.val[0];
             *stdStorePtr++  = (float)std.val[0];
-            totalcount++;
+            ++totalcount;
             cvReleaseMat(&workingArr);
         }
     }
@@ -572,7 +585,7 @@ double ImageQualityParser::noisedetector() const
     float   weightedStd  = 0.0F;
     float   datasd[3]    = {0.0F, 0.0F, 0.0F};
 
-    for (int j=0 ; d->running && (j < points->cols) ; ++j)
+    for (int j = 0 ; d->running && (j < points->cols) ; ++j)
     {
         meanStorePtr = reinterpret_cast<float*>(meanStore->data.ptr);
         stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
@@ -622,7 +635,7 @@ double ImageQualityParser::noisedetector() const
             }
         }
 
-        noiseresult = ((datasd[0]/2)+(datasd[1]/2)+(datasd[2]/2))/3;
+        noiseresult = ((datasd[0] / 2) + (datasd[1] / 2) + (datasd[2] / 2)) / 3;
 
         qCDebug(DIGIKAM_DATABASE_LOG) << "All is completed";
 
@@ -657,7 +670,7 @@ int ImageQualityParser::compressiondetector() const
     // Go through 8 blocks at a time horizontally
     // iterating through columns.
 
-    for (int i = 0 ; d->running && i < d->src_gray.rows ; ++i)
+    for (int i = 0 ; d->running && (i < d->src_gray.rows) ; ++i)
     {
         // Calculating intensity of top column.
 
@@ -681,7 +694,7 @@ int ImageQualityParser::compressiondetector() const
 
             for (int k = j ; k < block_size ; ++k)
             {
-                sum += (int)d->src_gray.at<uchar>(i+1, j);
+                sum += (int)d->src_gray.at<uchar>(i + 1, j);
             }
 
             average_middle.push_back(sum / 8);
@@ -697,11 +710,11 @@ int ImageQualityParser::compressiondetector() const
 
             for (int k = j ; k < block_size ; ++k)
             {
-                sum += (int)d->src_gray.at<uchar>(i+2, j);
+                sum += (int)d->src_gray.at<uchar>(i + 2, j);
             }
 
             average_bottom.push_back(sum / 8);
-            countblocks++;
+            ++countblocks;
         }
 
         // Check if the average intensity of 8 blocks in the top, middle and bottom rows are equal.
@@ -709,10 +722,10 @@ int ImageQualityParser::compressiondetector() const
 
         for (int j = 0 ; j < countblocks ; ++j)
         {
-            if ((average_middle[j] == (average_top[j]+average_bottom[j])/2) &&
+            if ((average_middle[j] == (average_top[j] + average_bottom[j]) / 2) &&
                 average_middle[j] > THRESHOLD)
             {
-                number_of_blocks++;
+                ++number_of_blocks;
             }
         }
     }
@@ -747,7 +760,7 @@ int ImageQualityParser::compressiondetector() const
 
             for (int k = i ; k < block_size ; ++k)
             {
-                sum += (int)d->src_gray.at<uchar>(i, j+1);
+                sum += (int)d->src_gray.at<uchar>(i, j + 1);
             }
 
             average_middle.push_back(sum / 8);
@@ -763,11 +776,11 @@ int ImageQualityParser::compressiondetector() const
 
             for (int k = i ; k < block_size ; ++k)
             {
-                sum += (int)d->src_gray.at<uchar>(i, j+2);
+                sum += (int)d->src_gray.at<uchar>(i, j + 2);
             }
 
             average_bottom.push_back(sum / 8);
-            countblocks++;
+            ++countblocks;
         }
 
         // Check if the average intensity of 8 blocks in the top, middle and bottom rows are equal.
@@ -775,10 +788,10 @@ int ImageQualityParser::compressiondetector() const
 
         for (int i = 0 ; i < countblocks ; ++i)
         {
-            if ((average_middle[i] == (average_top[i]+average_bottom[i])/2) &&
+            if ((average_middle[i] == (average_top[i] + average_bottom[i]) / 2) &&
                 average_middle[i] > THRESHOLD)
             {
-                number_of_blocks++;
+                ++number_of_blocks;
             }
         }
     }
@@ -798,8 +811,8 @@ int ImageQualityParser::exposureamount() const
     int histSize           = 256;
 
     /// Set the ranges ( for B,G,R) )
-    float range[]          = { 0, 256 } ;
-    const float* histRange = { range };
+    float range[]          = { 0, 256 };
+    const float* histRange = { range  };
 
     bool uniform           = true;
     bool accumulate        = false;
@@ -815,7 +828,7 @@ int ImageQualityParser::exposureamount() const
     int hist_w = 512;
     int hist_h = 400;
 
-    Mat histImage( hist_h, hist_w, CV_8UC3, Scalar( 0,0,0) );
+    Mat histImage(hist_h, hist_w, CV_8UC3, Scalar(0, 0, 0));
 
     /// Normalize the histograms:
 
