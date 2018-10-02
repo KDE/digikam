@@ -4,6 +4,38 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-ADD_SUBDIRECTORY(detectblur)
-ADD_SUBDIRECTORY(detectcompression)
-ADD_SUBDIRECTORY(detectnoise)
+if (POLICY CMP0063)
+    cmake_policy(SET CMP0063 NEW)
+endif (POLICY CMP0063)
+
+include_directories(
+    $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+
+    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
+macro(IMGQSORT_BUILD_STANDALONE)
+
+    set(_filename ${ARGV0})
+    string(REPLACE "." ";" _temp ${_filename})
+    list(GET _temp 0 _target)
+
+    set(${_target}_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/${_filename})
+
+    add_executable(${_target} ${${_target}_SRCS})
+
+    target_link_libraries(${_target}
+                          digikamcore
+                          Qt5::Gui
+                          Qt5::Xml
+
+                          ${OpenCV_LIBRARIES}
+    )
+
+endmacro()
+
+IMGQSORT_BUILD_STANDALONE(detectblur.cpp)
+IMGQSORT_BUILD_STANDALONE(detectcompression.cpp)
+IMGQSORT_BUILD_STANDALONE(detectnoise.cpp)
+IMGQSORT_BUILD_STANDALONE(detectoverexpo.cpp)
