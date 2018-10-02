@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 25/08/2013
- * Description : Image Quality Sorter
+ * Description : Image Quality Parser
  *
  * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013-2014 by Gowtham Ashok <gwty93 at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMG_QSORT_H
-#define DIGIKAM_IMG_QSORT_H
+#ifndef DIGIKAM_IMAGE_QUALITY_PARSER_H
+#define DIGIKAM_IMAGE_QUALITY_PARSER_H
 
 // Local includes
 
@@ -35,14 +35,14 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImgQSort
+class DIGIKAM_EXPORT ImageQualityParser
 {
 public:
 
     /** Standard constructor with picklabel container to fill at end of analyze.
      */
-    explicit ImgQSort(const DImg& img, const ImageQualitySettings& imq, PickLabel* const label);
-    ~ImgQSort();
+    explicit ImageQualityParser(const DImg& img, const ImageQualitySettings& imq, PickLabel* const label);
+    ~ImageQualityParser();
 
     /** Perform quality estimation and fill Pick Label value accordingly.
      */
@@ -52,7 +52,7 @@ public:
 private:
 
     /** Internal method dedicated to convert DImg pixels from integer values to float values.
-     *  These ones will by used internally by ImgQSort through OpenCV API.
+     *  These ones will by used internally by ImageQualityParser through OpenCV API.
      */
     void readImage() const;
 
@@ -70,7 +70,7 @@ private:
 
 private:
 
-    ImgQSort(const ImgQSort&); // Disable
+    ImageQualityParser(const ImageQualityParser&); // Disable
 
     class Private;
     Private* const d;
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMG_QSORT_H
+#endif // DIGIKAM_IMAGE_QUALITY_PARSER_H

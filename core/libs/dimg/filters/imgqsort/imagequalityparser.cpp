@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 25/08/2013
- * Description : Image Quality Sorter
+ * Description : Image Quality Parser
  *
  * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013-2014 by Gowtham Ashok <gwty93 at gmail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imgqsort.h"
+#include "imagequalityparser.h"
 
 // C++ includes
 
@@ -51,7 +51,7 @@ using namespace cv;
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImgQSort::Private
+class Q_DECL_HIDDEN ImageQualityParser::Private
 {
 public:
 
@@ -114,7 +114,7 @@ public:
     volatile bool        running;
 };
 
-ImgQSort::ImgQSort(const DImg& img, const ImageQualitySettings& imq, PickLabel* const label)
+ImageQualityParser::ImageQualityParser(const DImg& img, const ImageQualitySettings& imq, PickLabel* const label)
     : d(new Private)
 {
     // Reading settings from GUI
@@ -137,12 +137,12 @@ ImgQSort::ImgQSort(const DImg& img, const ImageQualitySettings& imq, PickLabel* 
     d->label                  = label;
 }
 
-ImgQSort::~ImgQSort()
+ImageQualityParser::~ImageQualityParser()
 {
     delete d;
 }
 
-void ImgQSort::startAnalyse()
+void ImageQualityParser::startAnalyse()
 {
     // For Noise Estimation
     // Use the Top/Left corner of 256x256 pixels to analyze noise contents from image.
@@ -267,12 +267,12 @@ void ImgQSort::startAnalyse()
     }
 }
 
-void ImgQSort::cancelAnalyse()
+void ImageQualityParser::cancelAnalyse()
 {
     d->running = false;
 }
 
-void ImgQSort::readImage() const
+void ImageQualityParser::readImage() const
 {
     MixerContainer settings;
     settings.bMonochrome = true;
@@ -309,7 +309,7 @@ void ImgQSort::readImage() const
     }
 }
 
-void ImgQSort::CannyThreshold(int, void*) const
+void ImageQualityParser::CannyThreshold(int, void*) const
 {
     // Reduce noise with a kernel 3x3.
     blur(d->src_gray, d->detected_edges, Size(3,3));
@@ -318,12 +318,12 @@ void ImgQSort::CannyThreshold(int, void*) const
     Canny(d->detected_edges, d->detected_edges, d->lowThreshold, d->lowThreshold*d->ratio,d-> kernel_size);
 }
 
-double ImgQSort::blurdetector() const
+double ImageQualityParser::blurdetector() const
 {
     d->lowThreshold   = 0.4;
     d->ratio          = 3;
     double maxval     = 0.0;
-    ImgQSort::CannyThreshold(0, 0);
+    ImageQualityParser::CannyThreshold(0, 0);
 
     double average    = mean(d->detected_edges)[0];
     int* const maxIdx = new int[sizeof(d->detected_edges)];
@@ -339,7 +339,7 @@ double ImgQSort::blurdetector() const
     return blurresult;
 }
 
-short ImgQSort::blurdetector2() const
+short ImageQualityParser::blurdetector2() const
 {
     // Algorithm using Laplacian of Gaussian Filter to detect blur.
     Mat out;
@@ -380,7 +380,7 @@ short ImgQSort::blurdetector2() const
     return maxLap;
 }
 
-double ImgQSort::noisedetector() const
+double ImageQualityParser::noisedetector() const
 {
     double noiseresult = 0.0;
 
@@ -643,7 +643,7 @@ double ImgQSort::noisedetector() const
     return noiseresult;
 }
 
-int ImgQSort::compressiondetector() const
+int ImageQualityParser::compressiondetector() const
 {
     //FIXME: set threshold value to an acceptable standard to get the number of blocking artifacts
     const int THRESHOLD  = 30;
@@ -786,7 +786,7 @@ int ImgQSort::compressiondetector() const
     return number_of_blocks;
 }
 
-int ImgQSort::exposureamount() const
+int ImageQualityParser::exposureamount() const
 {
     /// Separate the image in 3 places ( B, G and R )
 

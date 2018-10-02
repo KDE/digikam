@@ -29,7 +29,7 @@
 #include "dimg.h"
 #include "previewloadthread.h"
 #include "imagequalitysettings.h"
-#include "imgqsort.h"
+#include "imagequalityparser.h"
 #include "imageinfo.h"
 #include "maintenancedata.h"
 
@@ -47,7 +47,7 @@ public:
     }
 
     ImageQualitySettings quality;
-    ImgQSort*            imgqsort;
+    ImageQualityParser*            imgqsort;
 
     MaintenanceData*     data;
 };
@@ -118,7 +118,7 @@ void ImageQualityTask::run()
             //                 must be processed. GUI calls are prohibited. ImageInfo and DImg can be used safety in thread.
 
             PickLabel pick;
-            d->imgqsort = new ImgQSort(dimg, d->quality, &pick);
+            d->imgqsort = new ImageQualityParser(dimg, d->quality, &pick);
             d->imgqsort->startAnalyse();
 
             ImageInfo info = ImageInfo::fromLocalFile(path);
