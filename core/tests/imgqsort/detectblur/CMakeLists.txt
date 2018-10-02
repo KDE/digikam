@@ -15,4 +15,5 @@ ecm_mark_nongui_executable(detectblur)
 target_link_libraries(detectblur
                       Qt5::Core
                       Qt5::Widgets
+                      Qt5::Test
                       ${OpenCV_LIBRARIES})

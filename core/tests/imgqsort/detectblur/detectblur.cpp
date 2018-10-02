@@ -27,19 +27,13 @@
 #include "digikam_opencv.h"
 #include "../../facesengine/asmopencv.h"
 
-// C++ includes
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <iostream>
-
 // Qt includes
 
 #include <QLabel>
 #include <QApplication>
+#include <QDebug>
 
 using namespace cv;
-using namespace std;
 
 // Global variable
 Mat src, src_gray;
@@ -74,15 +68,23 @@ void CannyThreshold(int, void*)
     label.show();
 }
 
-int main(int argc, char** argv )
+int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
+
+    if (argc != 2)
+    {
+        qDebug() << "detectblur - Load image and detect blur level";
+        qDebug() << "Usage: <image file>";
+        return -1;
+    }
 
     // Load an image
     src = imread(argv[1]);
 
     if (!src.data)
     {
+        qDebug() << "Cannot load image data to analyze.";
         return -1;
     }
 
@@ -96,19 +98,16 @@ int main(int argc, char** argv )
 
     double maxval;
     double average    = mean(detected_edges)[0];
-    int* const maxIdx = (int*)malloc(sizeof(detected_edges));
 
-    minMaxIdx(detected_edges, 0, &maxval, 0, maxIdx);
+    minMaxIdx(detected_edges, 0, &maxval, 0, 0);
 
     double blurresult = average / maxval;
 
-    cout << "The average of the edge intensity is " << average    << std::endl;
-    cout << "The maximum of the edge intensity is " << maxval     << std::endl;
-    cout << "The result of the edge intensity is "  << blurresult << std::endl;
+    qDebug() << "The average of the edge intensity is " << average;
+    qDebug() << "The maximum of the edge intensity is " << maxval;
+    qDebug() << "The result of the edge intensity is "  << blurresult;
 
     app.exec();
-
-    free(maxIdx);
 
     return 0;
 }
