@@ -238,7 +238,7 @@ int DNGWriter::convert()
 
         QString matrixVal;
 
-        for(int i=0; i<4; ++i)
+        for (int i = 0 ; i < 4 ; ++i)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "                   "
                      << QString().sprintf("%03.4f  %03.4f  %03.4f", identify.cameraXYZMatrix[i][0],
@@ -444,7 +444,7 @@ int DNGWriter::convert()
 
         ColorKeyCode colorCodes[4] = { colorKeyMaxEnum, colorKeyMaxEnum, colorKeyMaxEnum, colorKeyMaxEnum };
 
-        for(int i = 0; i < qMax(4, identify.colorKeys.length()); ++i)
+        for (int i = 0 ; i < qMax(4, identify.colorKeys.length()) ; ++i)
         {
             if (identify.colorKeys[i] == QLatin1Char('R'))
             {
@@ -921,7 +921,7 @@ int DNGWriter::convert()
 
             str = meta.getExifTagString("Exif.Pentax.LensType");
 
-            if (str.length())
+            if (!str.isEmpty())
             {
                 exif->fLensName.Set_ASCII(str.trimmed().toLatin1().constData());
                 exif->fLensName.TrimLeadingBlanks();
@@ -940,13 +940,13 @@ int DNGWriter::convert()
            // Olympus Makernotes
 
             str = meta.getExifTagString("Exif.OlympusEq.SerialNumber");
-            if (str.length()) exif->fCameraSerialNumber.Set_ASCII(str.trimmed().toLatin1().constData());
+            if (!str.isEmpty()) exif->fCameraSerialNumber.Set_ASCII(str.trimmed().toLatin1().constData());
 
             str = meta.getExifTagString("Exif.OlympusEq.LensSerialNumber");
-            if (str.length()) exif->fLensSerialNumber.Set_ASCII(str.trimmed().toLatin1().constData());
+            if (!str.isEmpty()) exif->fLensSerialNumber.Set_ASCII(str.trimmed().toLatin1().constData());
 
             str = meta.getExifTagString("Exif.OlympusEq.LensModel");
-            if (str.length()) exif->fLensName.Set_ASCII(str.trimmed().toLatin1().constData());
+            if (!str.isEmpty()) exif->fLensName.Set_ASCII(str.trimmed().toLatin1().constData());
 
             if (meta.getExifTagLong("Exif.OlympusEq.MinFocalLength", val))             exif->fLensInfo[0]              = dng_urational(val, 1);
             if (meta.getExifTagLong("Exif.OlympusEq.MaxFocalLength", val))             exif->fLensInfo[1]              = dng_urational(val, 1);
@@ -954,10 +954,10 @@ int DNGWriter::convert()
             // Panasonic Makernotes
 
             str = meta.getExifTagString("Exif.Panasonic.LensType");
-            if (str.length()) exif->fLensName.Set_ASCII(str.trimmed().toLatin1().constData());
+            if (!str.isEmpty()) exif->fLensName.Set_ASCII(str.trimmed().toLatin1().constData());
 
             str = meta.getExifTagString("Exif.Panasonic.LensSerialNumber");
-            if (str.length()) exif->fLensSerialNumber.Set_ASCII(str.trimmed().toLatin1().constData());
+            if (!str.isEmpty()) exif->fLensSerialNumber.Set_ASCII(str.trimmed().toLatin1().constData());
 
             // Sony Makernotes
 
@@ -967,7 +967,7 @@ int DNGWriter::convert()
             }
 
             str = meta.getExifTagString("Exif.Sony2.LensID");
-            if (str.length()) exif->fLensName.Set_ASCII(str.trimmed().toLatin1().constData());
+            if (!str.isEmpty()) exif->fLensName.Set_ASCII(str.trimmed().toLatin1().constData());
 
             // -------------------------------------------
 
