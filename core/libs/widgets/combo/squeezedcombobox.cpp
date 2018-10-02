@@ -113,7 +113,7 @@ void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index,
 
 void SqueezedComboBox::insertSqueezedList(const QStringList& newItems, int index)
 {
-    for(QStringList::const_iterator it = newItems.constBegin() ; it != newItems.constEnd() ; ++it)
+    for (QStringList::const_iterator it = newItems.constBegin() ; it != newItems.constEnd() ; ++it)
     {
         insertSqueezedItem(*it, index);
         index++;

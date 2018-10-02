@@ -80,7 +80,7 @@ ListItem* TagMngrListModel::addItem(QList<QVariant> values)
      */
     ListItem* const existingItem = d->rootItem->containsItem(item);
 
-    if(!existingItem)
+    if (!existingItem)
     {
         d->rootItem->appendChild(item);
         emit layoutChanged();
@@ -105,7 +105,7 @@ QList<int> TagMngrListModel::getDragNewSelection() const
 
 void TagMngrListModel::deleteItem(ListItem* const item)
 {
-    if(!item)
+    if (!item)
         return;
 
     emit layoutAboutToBeChanged();
@@ -137,7 +137,7 @@ bool TagMngrListModel::setData(const QModelIndex& index, const QVariant& value, 
     Q_UNUSED(role);
     ListItem* const parent = static_cast<ListItem*>(index.internalPointer());
 
-    if(!parent)
+    if (!parent)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "No node found";
         return false;
@@ -159,7 +159,7 @@ QMimeData* TagMngrListModel::mimeData(const QModelIndexList& indexes) const
 
     foreach(const QModelIndex& index, indexes)
     {
-        if(index.isValid())
+        if (index.isValid())
         {
             stream << index.row();
         }
@@ -175,10 +175,10 @@ bool TagMngrListModel::dropMimeData(const QMimeData* data, Qt::DropAction action
     Q_UNUSED(column);
     Q_UNUSED(parent);
 
-    if(action == Qt::IgnoreAction)
+    if (action == Qt::IgnoreAction)
         return true;
 
-    if(!(data->hasFormat(QLatin1String("application/vnd.text.list"))))
+    if (!(data->hasFormat(QLatin1String("application/vnd.text.list"))))
         return false;
 
     QByteArray       encodedData = data->data(QLatin1String("application/vnd.text.list"));
@@ -190,12 +190,12 @@ bool TagMngrListModel::dropMimeData(const QMimeData* data, Qt::DropAction action
     int itemPoz;
     int temp = 0;
 
-    while(!stream.atEnd())
+    while (!stream.atEnd())
     {
         stream >> itemPoz;
         newItems << d->rootItem->child(itemPoz);
 
-        if(itemPoz < row)
+        if (itemPoz < row)
         {
             temp++;
         }
@@ -206,18 +206,18 @@ bool TagMngrListModel::dropMimeData(const QMimeData* data, Qt::DropAction action
     row -= temp;
     emit layoutAboutToBeChanged();
 
-    for(QList<int>::iterator itr = toRemove.end() -1 ; itr != toRemove.begin() -1 ; --itr)
+    for (QList<int>::iterator itr = toRemove.end() -1 ; itr != toRemove.begin() -1 ; --itr)
     {
         d->rootItem->deleteChild(*itr);
     }
 
     emit layoutChanged();
 
-    for(int it = 0; it < d->rootItem->childCount(); it++)
+    for (int it = 0 ; it < d->rootItem->childCount() ; ++it)
     {
         finalItems.append(d->rootItem->child(it));
 
-        if(it == row)
+        if (it == row)
         {
             finalItems.append(newItems);
             /** After drag-n-drop selection is messed up, store the interval were
@@ -242,10 +242,10 @@ QVariant TagMngrListModel::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if(role == Qt::SizeHintRole)
+    if (role == Qt::SizeHintRole)
         return QSize(30,30);
 
-    if(role == Qt::TextAlignmentRole)
+    if (role == Qt::TextAlignmentRole)
         return Qt::AlignCenter;
 
     ListItem* const item = static_cast<ListItem*>(index.internalPointer());

@@ -500,8 +500,8 @@ bool MetaEngine::removeGPSInfo()
     {
         QStringList gpsTagsKeys;
 
-        for (Exiv2::ExifData::const_iterator it = d->exifMetadata().begin();
-             it != d->exifMetadata().end(); ++it)
+        for (Exiv2::ExifData::const_iterator it = d->exifMetadata().begin() ;
+             it != d->exifMetadata().end() ; ++it)
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
 
@@ -509,7 +509,7 @@ bool MetaEngine::removeGPSInfo()
                 gpsTagsKeys.append(key);
         }
 
-        for(QStringList::const_iterator it2 = gpsTagsKeys.constBegin(); it2 != gpsTagsKeys.constEnd(); ++it2)
+        for (QStringList::const_iterator it2 = gpsTagsKeys.constBegin() ; it2 != gpsTagsKeys.constEnd() ; ++it2)
         {
             Exiv2::ExifKey gpsKey((*it2).toLatin1().constData());
             Exiv2::ExifData::iterator it3 = d->exifMetadata().findKey(gpsKey);
@@ -665,7 +665,7 @@ void MetaEngine::convertToRationalSmallDenominator(const double number, long int
 
     criterion = 2 * value * DBL_EPSILON;
 
-    for (leasterr = value, num = 1; num < lastnum; ++num)
+    for (leasterr = value, num = 1 ; num < lastnum ; ++num)
     {
         approx = (int)(num / value + 0.5);
         error  = fabs((double)num / approx - value);
