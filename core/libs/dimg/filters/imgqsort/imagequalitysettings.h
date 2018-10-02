@@ -52,23 +52,23 @@ public:
 
 public:
 
-    bool enableSorter;
+    bool enableSorter;          /// Global quality dectection enabler/disabler.
 
-    bool detectBlur;
-    bool detectNoise;
-    bool detectCompression;
-    bool detectOverexposure;
-    bool lowQRejected;
-    bool mediumQPending;
-    bool highQAccepted;
+    bool detectBlur;            /// Enable image blur detection.
+    bool detectNoise;           /// Enable image noise detection.
+    bool detectCompression;     /// Enable image compression detection.
+    bool detectOverexposure;    /// Enable image over-exposure detection.
+    bool lowQRejected;          /// Assign Rejected property to low quality.
+    bool mediumQPending;        /// Assign Pending property to medium quality.
+    bool highQAccepted;         /// Assign Accepted property to high quality.
 
-    int  speed;
-    int  rejectedThreshold;
-    int  pendingThreshold;
-    int  acceptedThreshold ;
-    int  blurWeight;
-    int  noiseWeight;
-    int  compressionWeight;
+    int  speed;                 /// Calculation speed.
+    int  rejectedThreshold;     /// Item rejection threshold.
+    int  pendingThreshold;      /// Item pending threshold.
+    int  acceptedThreshold;     /// Item accepted threshold.
+    int  blurWeight;            /// Item blur level.
+    int  noiseWeight;           /// Item noise level.
+    int  compressionWeight;     /// Item compression level.
 };
 
 //! qDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.
