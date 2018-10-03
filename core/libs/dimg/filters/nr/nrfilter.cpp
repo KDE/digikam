@@ -324,7 +324,7 @@ void NRFilter::thresholdingMultithreaded(const Args& prm)
 {
     for (uint i = prm.start ; runningFlag() && (i < prm.stop) ; ++i)
     {
-        if (prm.fimg[*prm.lpass][i] > 0.8)
+        if      (prm.fimg[*prm.lpass][i] > 0.8)
         {
             *prm.thold = prm.threshold * prm.stdev[4];
         }
@@ -345,7 +345,7 @@ void NRFilter::thresholdingMultithreaded(const Args& prm)
             *prm.thold = prm.threshold * prm.stdev[0];
         }
 
-        if (prm.fimg[*prm.hpass][i] < -*prm.thold)
+        if      (prm.fimg[*prm.hpass][i] < -*prm.thold)
         {
             prm.fimg[*prm.hpass][i] += *prm.thold - *prm.thold * prm.softness;
         }
@@ -450,9 +450,9 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
             prm.start = vals[j];
             prm.stop  = vals[j+1];
             tasks.append(QtConcurrent::run(this,
-                                        &NRFilter::thresholdingMultithreaded,
-                                        prm
-                                        ));
+                                           &NRFilter::thresholdingMultithreaded,
+                                           prm
+                                          ));
         }
 
         foreach(QFuture<void> t, tasks)
@@ -461,7 +461,7 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
         hpass = lpass;
     }
 
-    for (uint i = 0; runningFlag() && (i < size); ++i)
+    for (uint i = 0 ; runningFlag() && (i < size) ; ++i)
     {
         fimg[0][i] = fimg[0][i] + fimg[lpass][i];
     }
@@ -476,12 +476,12 @@ void NRFilter::hatTransform(float* const temp, float* const base, int st, int si
         temp[i] = 2 * base[st * i] + base[st * (sc - i)] + base[st * (i + sc)];
     }
 
-    for (; i + sc < size ; ++i)
+    for ( ; i + sc < size ; ++i)
     {
         temp[i] = 2 * base[st * i] + base[st * (i - sc)] + base[st * (i + sc)];
     }
 
-    for (; i < size ; ++i)
+    for ( ; i < size ; ++i)
     {
         temp[i] = 2 * base[st * i] + base[st * (i - sc)] + base[st * (2 * size - 2 - (i + sc))];
     }
