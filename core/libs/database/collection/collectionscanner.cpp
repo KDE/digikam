@@ -414,9 +414,9 @@ void CollectionScanner::loadNameFilters()
     d->imageFilterSet  = imageFilter.toSet();
     d->audioFilterSet  = audioFilter.toSet();
     d->videoFilterSet  = videoFilter.toSet();
+    d->ignoreDirectory = ignoreDirectory.toSet();
 
     d->nameFilters     = d->imageFilterSet + d->audioFilterSet + d->videoFilterSet;
-    d->ignoreDirectory = ignoreDirectory.toSet();
 }
 
 void CollectionScanner::setObserver(CollectionScannerObserver* const observer)
@@ -1053,7 +1053,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
         itemIdSet << scanInfos.at(i).id;
     }
 
-    const QFileInfoList list = dir.entryInfoList(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot,
+    const QFileInfoList list = dir.entryInfoList(QDir::Files   |
+                                                 QDir::AllDirs |
+                                                 QDir::NoDotAndDotDot,
                                                  QDir::Name | QDir::DirsLast);
 
     QFileInfoList::const_iterator fi;
@@ -1565,8 +1567,9 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
     {
         return 0;
     }
-
-    QFileInfoList list = dir.entryInfoList();
+    const QFileInfoList list = dir.entryInfoList(QDir::Files   |
+                                                 QDir::AllDirs |
+                                                 QDir::NoDotAndDotDot);
 
     items += list.count();
 
@@ -1574,9 +1577,7 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
 
     for (fi = list.constBegin() ; fi != list.constEnd() ; ++fi)
     {
-        if (fi->isDir()                          &&
-            fi->fileName() != QLatin1String(".") &&
-            fi->fileName() != QLatin1String(".."))
+        if (fi->isDir())
         {
             items += countItemsInFolder(fi->filePath());
         }
