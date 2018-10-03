@@ -159,11 +159,8 @@ void NREstimate::startAnalyse()
 
     //-- KMEANS ---------------------------------------------------------------------------------------------
 
-    if (runningFlag())
-    {
-        cvKMeans2(points, d->clusterCount, clusters,
-                  cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
-    }
+    cvKMeans2(points, d->clusterCount, clusters,
+              cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
 
     qCDebug(DIGIKAM_DIMG_LOG) << "cvKmeans2 successfully run";
     postProgress(15);
@@ -172,7 +169,7 @@ void NREstimate::startAnalyse()
 
     QScopedArrayPointer<int> rowPosition(new int[d->clusterCount]);
 
-    //the row position array would just make the hold the number of elements in each cluster
+    // The row position array would just make the hold the number of elements in each cluster
 
     for (uint i = 0 ; runningFlag() && (i < d->clusterCount) ; ++i)
     {
@@ -180,7 +177,8 @@ void NREstimate::startAnalyse()
         rowPosition[i] = 0;
     }
 
-    int rowIndex, columnIndex;
+    int rowIndex    = 0;
+    int columnIndex = 0;
 
     for (uint i = 0 ; runningFlag() && (i < m_orgImage.numPixels()) ; ++i)
     {
@@ -191,7 +189,7 @@ void NREstimate::startAnalyse()
 /*
     qCDebug(DIGIKAM_DIMG_LOG) << "Lets see what the rowPosition array looks like : ";
 
-    for(uint i = 0 ; runningFlag() && (i < d->clusterCount) ; i++)
+    for (uint i = 0 ; runningFlag() && (i < d->clusterCount) ; i++)
     {
         qCDebug(DIGIKAM_DIMG_LOG) << "Cluster : "<< i << " the count is :" << rowPosition[i];
     }
@@ -220,12 +218,7 @@ void NREstimate::startAnalyse()
 
     //-- Divide and conquer ---------------------------------------------------------------------------------
 
-    CvMat* sd = 0;
-
-    if (runningFlag())
-    {
-        sd = cvCreateMat(max, (d->clusterCount * points->cols), CV_32FC1);
-    }
+    CvMat* sd = cvCreateMat(max, (d->clusterCount * points->cols), CV_32FC1);
 
     postProgress(30);
 
@@ -275,16 +268,11 @@ void NREstimate::startAnalyse()
 
     CvScalar std;
     CvScalar mean;
-    CvMat*   meanStore    = 0;
-    CvMat*   stdStore     = 0;
-    float*   meanStorePtr = 0;
-    float*   stdStorePtr  = 0;
-    int      totalcount   = 0; // Number of non-empty clusters
-
-    meanStore    = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
-    stdStore     = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
-    meanStorePtr = reinterpret_cast<float*>(meanStore->data.ptr);
-    stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
+    int      totalcount = 0; // Number of non-empty clusters
+    CvMat* meanStore    = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
+    CvMat* stdStore     = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
+    float* meanStorePtr = reinterpret_cast<float*>(meanStore->data.ptr);
+    float* stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
 
     for (int i = 0 ; runningFlag() && (i < sd->cols) ; ++i)
     {
@@ -434,7 +422,12 @@ void NREstimate::startAnalyse()
 
     // -- adaptation ---------------------------------------------------------------------------------------
 
-    double L = 1.2, LSoft = 0.9, Cr = 1.2, CrSoft = 0.9, Cb = 1.2, CbSoft = 0.9;
+    double L      = 1.2;
+    double LSoft  = 0.9;
+    double Cr     = 1.2;
+    double CrSoft = 0.9;
+    double Cb     = 1.2;
+    double CbSoft = 0.9;
 
     if (runningFlag())
     {
@@ -443,7 +436,8 @@ void NREstimate::startAnalyse()
         {
             for (int i = 0 ; i < points->cols ; ++i)
             {
-                datasd[i] = datasd[i] / 256;
+                if (i < 3)
+                    datasd[i] = datasd[i] / 256;
             }
         }
 
