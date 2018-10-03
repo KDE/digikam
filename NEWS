@@ -604,4 +604,5 @@ BUGFIXES:
 540 ==> 384759 - Can't adjust timestamp of RAW files.
 541 ==> 399221 - Cannot scroll in videos by clicking on the progress bar (only by moving the progress slider).
 542 ==> 399315 - Horizontal scroll bar aligned to the right by default.
-543 ==> 
+543 ==> 397962 - Digikam 6.0 does not start after install.
+544 ==> 
