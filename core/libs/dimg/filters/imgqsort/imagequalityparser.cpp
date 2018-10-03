@@ -298,7 +298,7 @@ void ImageQualityParser::readImage() const
     }
 }
 
-void ImageQualityParser::CannyThreshold(int, void*) const
+void ImageQualityParser::cannyThreshold(int, void*) const
 {
     // Reduce noise with a kernel 3x3.
     blur(d->src_gray, d->detected_edges, Size(3, 3));
@@ -316,7 +316,7 @@ double ImageQualityParser::blurdetector() const
     d->lowThreshold   = 0.4;
     d->ratio          = 3;
     double maxval     = 0.0;
-    ImageQualityParser::CannyThreshold(0, 0);
+    cannyThreshold(0, 0);
 
     double average    = mean(d->detected_edges)[0];
     int* const maxIdx = new int[sizeof(d->detected_edges)];
