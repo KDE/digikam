@@ -115,12 +115,6 @@ void LightTableWindow::slotEditGeolocation()
     dialog->exec();
 
     delete dialog;
-
-    // Refresh Database with new metadata from files.
-    foreach (const ImageInfo& inf, infos)
-    {
-        ScanController::instance()->scannedInfo(inf.fileUrl().toLocalFile());
-    }
 #endif
 }
 
