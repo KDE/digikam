@@ -606,4 +606,6 @@ BUGFIXES:
 542 ==> 399315 - Horizontal scroll bar aligned to the right by default.
 543 ==> 397962 - Digikam 6.0 does not start after install.
 544 ==> 399336 - Google maps – "For development purposes only" printed on the map.
-545 ==> 
+545 ==> 399338 - Count of items in Tree Views does not match total number of items.
+546 ==> 399292 - Video file datetime not shown correctly after editing.
+547 ==> 

@@ -45,6 +45,7 @@ bool ImageGPS::loadImageData()
 {
     // In first, we try to get GPS info from database.
     ImagePosition pos = m_info.imagePosition();
+    m_dateTime        = m_info.dateTime();
 
     if (!pos.isEmpty() && pos.hasCoordinates())
     {
@@ -54,8 +55,6 @@ bool ImageGPS::loadImageData()
         {
             m_gpsData.setAltitude(pos.altitude());
         }
-
-        m_dateTime   = m_info.dateTime();
 
         // mark us as not-dirty, because the data was just loaded:
         m_dirty      = false;
