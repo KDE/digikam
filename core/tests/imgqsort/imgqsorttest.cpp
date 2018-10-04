@@ -27,19 +27,14 @@
 
 #include <QtTest>
 #include <QStringList>
-#include <QString>
 #include <QFileInfoList>
 #include <QDebug>
-#include <QMultiMap>
 
 // Local includes
 
 #include "dimg.h"
 #include "previewloadthread.h"
-#include "imagequalitycontainer.h"
 #include "imagequalityparser.h"
-
-using namespace Digikam;
 
 QTEST_MAIN(ImgQSortTest)
 
@@ -58,15 +53,15 @@ QDir ImgQSortTest::imageDir() const
     return dir;
 }
 
-void ImgQSortTest::testParseTestImagesForBlurDetection()
+QMultiMap<int, QString> ImgQSortTest::parseTestImages(const QString& tname,
+                                                      const QFileInfoList& list,
+                                                      const ImageQualityContainer& settings) const
 {
-    QFileInfoList list = imageDir().entryInfoList(QStringList() << QLatin1String("test_blurred*.jpg"),
-                                                  QDir::Files, QDir::Name);
-    qDebug() << "Process images for Blur detection (" << list.size() << ")";
+    qDebug() << "Process images for" << tname << "detection (" << list.size() << ")";
 
     QMultiMap<int, QString> results;
 
-    foreach (QFileInfo inf, list)
+    foreach (const QFileInfo& inf, list)
     {
         QString path = inf.filePath();
         qDebug() << path;
@@ -78,37 +73,47 @@ void ImgQSortTest::testParseTestImagesForBlurDetection()
             qDebug() << path << "File cannot be loaded...";
         }
 
-        ImageQualityContainer settings;
-        settings.enableSorter       = true;
-        settings.detectBlur         = true;
-        settings.detectNoise        = false;
-        settings.detectCompression  = false;
-        settings.detectOverexposure = false;
-        settings.lowQRejected       = true;
-        settings.mediumQPending     = true;
-        settings.highQAccepted      = true;
-        settings.rejectedThreshold  = 10;
-        settings.pendingThreshold   = 40;
-        settings.acceptedThreshold  = 60;
-        settings.blurWeight         = 100;
-        settings.noiseWeight        = 100;
-        settings.compressionWeight  = 100;
-        settings.speed              = 1;
 
         PickLabel pick;
         ImageQualityParser parser (dimg, settings, &pick);
         parser.startAnalyse();
 
-        qDebug() << "==> Blur quality result is" << pick;
+        qDebug() << "==>" << tname << "quality result is" << pick;
         results.insert(pick, path);
     }
 
-    qInfo() << "Blur Quality results (0:None, 1:Rejected, 2:Pending, 3:Accepted):";
+    qInfo() << tname << "Quality Results (0:None, 1:Rejected, 2:Pending, 3:Accepted):";
 
     for (QMap<int, QString>::const_iterator it = results.constBegin() ; it != results.constEnd() ; ++it)
     {
         qInfo() << "==>" << it.value() << ":" << it.key();
     }
+
+    return results;
+}
+
+void ImgQSortTest::testParseTestImagesForBlurDetection()
+{
+    QFileInfoList list = imageDir().entryInfoList(QStringList() << QLatin1String("test_blurred*.jpg"),
+                                                  QDir::Files, QDir::Name);
+    ImageQualityContainer settings;
+    settings.enableSorter       = true;
+    settings.detectBlur         = true;
+    settings.detectNoise        = false;
+    settings.detectCompression  = false;
+    settings.detectOverexposure = false;
+    settings.lowQRejected       = true;
+    settings.mediumQPending     = true;
+    settings.highQAccepted      = true;
+    settings.rejectedThreshold  = 10;
+    settings.pendingThreshold   = 40;
+    settings.acceptedThreshold  = 60;
+    settings.blurWeight         = 100;
+    settings.noiseWeight        = 100;
+    settings.compressionWeight  = 100;
+    settings.speed              = 1;
+
+    QMultiMap<int, QString> results = parseTestImages(QLatin1String("Blur"), list, settings);
 
     QVERIFY(results.count(NoPickLabel)   == 0);
     QVERIFY(results.count(RejectedLabel) == 0);
@@ -120,53 +125,25 @@ void ImgQSortTest::testParseTestImagesForNoiseDetection()
 {
     QFileInfoList list = imageDir().entryInfoList(QStringList() << QLatin1String("test_noised*.jpg"),
                                                   QDir::Files, QDir::Name);
-    qDebug() << "Process images for Noise detection (" << list.size() << ")";
 
-    QMultiMap<int, QString> results;
+    ImageQualityContainer settings;
+    settings.enableSorter       = true;
+    settings.detectBlur         = false;
+    settings.detectNoise        = true;
+    settings.detectCompression  = false;
+    settings.detectOverexposure = false;
+    settings.lowQRejected       = true;
+    settings.mediumQPending     = true;
+    settings.highQAccepted      = true;
+    settings.rejectedThreshold  = 10;
+    settings.pendingThreshold   = 40;
+    settings.acceptedThreshold  = 60;
+    settings.blurWeight         = 100;
+    settings.noiseWeight        = 100;
+    settings.compressionWeight  = 100;
+    settings.speed              = 1;
 
-    foreach (QFileInfo inf, list)
-    {
-        QString path = inf.filePath();
-        qDebug() << path;
-
-        DImg dimg    = PreviewLoadThread::loadFastSynchronously(path, 1024);
-
-        if (dimg.isNull())
-        {
-            qDebug() << path << "File cannot be loaded...";
-        }
-
-        ImageQualityContainer settings;
-        settings.enableSorter       = true;
-        settings.detectBlur         = false;
-        settings.detectNoise        = true;
-        settings.detectCompression  = false;
-        settings.detectOverexposure = false;
-        settings.lowQRejected       = true;
-        settings.mediumQPending     = true;
-        settings.highQAccepted      = true;
-        settings.rejectedThreshold  = 10;
-        settings.pendingThreshold   = 40;
-        settings.acceptedThreshold  = 60;
-        settings.blurWeight         = 100;
-        settings.noiseWeight        = 100;
-        settings.compressionWeight  = 100;
-        settings.speed              = 1;
-
-        PickLabel pick;
-        ImageQualityParser parser (dimg, settings, &pick);
-        parser.startAnalyse();
-
-        qDebug() << "==> Noise quality result is" << pick;
-        results.insert(pick, path);
-    }
-
-    qInfo() << "Noise Quality results (0:None, 1:Rejected, 2:Pending, 3:Accepted):";
-
-    for (QMap<int, QString>::const_iterator it = results.constBegin() ; it != results.constEnd() ; ++it)
-    {
-        qInfo() << "==>" << it.value() << ":" << it.key();
-    }
+    QMultiMap<int, QString> results = parseTestImages(QLatin1String("Noise"), list, settings);
 
     QVERIFY(results.count(NoPickLabel)   == 0);
     QVERIFY(results.count(RejectedLabel) == 0);

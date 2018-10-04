@@ -28,6 +28,14 @@
 
 #include <QObject>
 #include <QDir>
+#include <QMultiMap>
+#include <QString>
+
+// Local includes
+
+#include "imagequalitycontainer.h"
+
+using namespace Digikam;
 
 class ImgQSortTest : public QObject
 {
@@ -36,6 +44,10 @@ class ImgQSortTest : public QObject
 private:
 
     QDir imageDir() const;
+
+    QMultiMap<int, QString> parseTestImages(const QString& tname,
+                                            const QFileInfoList& list,
+                                            const ImageQualityContainer& settings) const;
 
 private Q_SLOTS:
 
