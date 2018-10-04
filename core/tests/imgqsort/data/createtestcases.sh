@@ -4,11 +4,11 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
-# This creates testcases which artificially apply blur, noise and compression to given test image.
-# Dependency: ImageMagick
+# This creates image test-cases with ImageMagick which artificially apply
+# blur, noise, compression, and over-exposure to given test image.
 #
 
-echo "Enter image name (ending with .jpg)"
+echo "Enter jpg image name (without extension)"
 read imagename
 i=1
 
@@ -20,9 +20,11 @@ do
     blurred=$imagename"_blurred_"$i
     compressed=$imagename"_compressed_"$i
     noised=$imagename"_noised_"$i
+    overexposed=$imagename"_overexposed_"$i
 
     convert $imagename.jpg -blur 0x$i $blurred.jpg
     convert $imagename.jpg -quality $compressionlevel% $compressed.jpg
+    convert $imagename.jpg -fx "u*1.$i" $overexposed.jpg
 
     if [ $i -eq 1 ]; then
         convert $imagename.jpg +noise gaussian $noised.jpg
