@@ -41,12 +41,12 @@ using namespace Digikam;
 
 QTEST_GUILESS_MAIN(StateSavingObjectTest)
 
-class Q_DECL_HIDDEN StubStateSaverPriv
+class Q_DECL_HIDDEN StubStateSaver::Private
 {
 public:
 
-    StubStateSaverPriv() :
-        loadCalls(0),
+    Private()
+      : loadCalls(0),
         saveCalls(0)
     {
     }
@@ -55,10 +55,10 @@ public:
     unsigned int saveCalls;
 };
 
-StubStateSaver::StubStateSaver(QObject* parent)
+StubStateSaver::StubStateSaver(QObject* const parent)
     : QObject(parent),
       StateSavingObject(this),
-      d(new StubStateSaverPriv)
+      d(new Private)
 {
 }
 
