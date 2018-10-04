@@ -36,7 +36,7 @@
 #include "thumbstask.h"
 #include "fingerprintstask.h"
 #include "imagequalitytask.h"
-#include "imagequalitysettings.h"
+#include "imagequalitycontainer.h"
 #include "databasetask.h"
 #include "maintenancedata.h"
 
@@ -79,7 +79,7 @@ void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchro
 
     data->setImageInfos(items);
 
-    for (int i = 1; i <= maximumNumberOfThreads(); i++)
+    for (int i = 1 ; i <= maximumNumberOfThreads() ; ++i)
     {
         MetadataTask* const t = new MetadataTask();
         t->setTagsOnly(tagsOnly);
@@ -103,7 +103,7 @@ void MaintenanceThread::generateThumbs(const QStringList& paths)
 
     data->setImagePaths(paths);
 
-    for (int i = 1; i <= maximumNumberOfThreads(); i++)
+    for (int i = 1 ; i <= maximumNumberOfThreads() ; ++i)
     {
         ThumbsTask* const t = new ThumbsTask();
 
@@ -126,7 +126,7 @@ void MaintenanceThread::generateFingerprints(const QStringList& paths)
 
     data->setImagePaths(paths);
 
-    for (int i = 1; i <= (maximumNumberOfThreads()); i++)
+    for (int i = 1 ; i <= (maximumNumberOfThreads()) ; ++i)
     {
         FingerprintsTask* const t = new FingerprintsTask();
 
@@ -143,13 +143,13 @@ void MaintenanceThread::generateFingerprints(const QStringList& paths)
     appendJobs(collection);
 }
 
-void MaintenanceThread::sortByImageQuality(const QStringList& paths, const ImageQualitySettings& quality)
+void MaintenanceThread::sortByImageQuality(const QStringList& paths, const ImageQualityContainer& quality)
 {
     ActionJobCollection collection;
 
     data->setImagePaths(paths);
 
-    for (int i = 1; i <= maximumNumberOfThreads(); i++)
+    for (int i = 1 ; i <= maximumNumberOfThreads() ; ++i)
     {
         ImageQualityTask* const t = new ImageQualityTask();
         t->setQuality(quality);
@@ -197,7 +197,7 @@ void MaintenanceThread::cleanCoreDb(const QList<qlonglong>& imageIds)
 
     data->setImageIds(imageIds);
 
-    for (int i = 1; i <= maximumNumberOfThreads(); i++)
+    for (int i = 1 ; i <= maximumNumberOfThreads() ; ++i)
     {
         DatabaseTask* const t = new DatabaseTask();
 
@@ -221,7 +221,7 @@ void MaintenanceThread::cleanThumbsDb(const QList<int>& thumbnailIds)
 
     data->setThumbnailIds(thumbnailIds);
 
-    for (int i = 1; i <= maximumNumberOfThreads(); i++)
+    for (int i = 1 ; i <= maximumNumberOfThreads() ; ++i)
     {
         DatabaseTask* const t = new DatabaseTask();
 
@@ -245,7 +245,7 @@ void MaintenanceThread::cleanFacesDb(const QList<Identity>& staleIdentities)
 
     data->setIdentities(staleIdentities);
 
-    for (int i = 1; i <= maximumNumberOfThreads(); i++)
+    for (int i = 1 ; i <= maximumNumberOfThreads() ; ++i)
     {
         DatabaseTask* const t = new DatabaseTask();
 
@@ -269,7 +269,7 @@ void MaintenanceThread::cleanSimilarityDb(const QList<qlonglong>& imageIds)
 
     data->setSimilarityImageIds(imageIds);
 
-    for (int i = 1; i <= maximumNumberOfThreads(); i++)
+    for (int i = 1 ; i <= maximumNumberOfThreads() ; ++i)
     {
         DatabaseTask* const t = new DatabaseTask();
 

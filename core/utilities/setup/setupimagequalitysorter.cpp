@@ -44,7 +44,7 @@
 #include "dlayoutbox.h"
 #include "picklabelwidget.h"
 #include "dnuminput.h"
-#include "imagequalitysettings.h"
+#include "imagequalitycontainer.h"
 
 namespace Digikam
 {
@@ -250,7 +250,7 @@ SetupImageQualitySorter::~SetupImageQualitySorter()
 
 void SetupImageQualitySorter::applySettings()
 {
-    ImageQualitySettings imq;
+    ImageQualityContainer imq;
 
     imq.enableSorter      = d->enableSorter->isChecked();
     imq.speed             = d->setSpeed->value();
@@ -273,7 +273,7 @@ void SetupImageQualitySorter::applySettings()
 
 void SetupImageQualitySorter::readSettings()
 {
-    ImageQualitySettings imq;
+    ImageQualityContainer imq;
     imq.readFromConfig();
 
     d->enableSorter->setChecked(imq.enableSorter);

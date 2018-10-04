@@ -35,7 +35,7 @@
 
 #include "dimg.h"
 #include "previewloadthread.h"
-#include "imagequalitysettings.h"
+#include "imagequalitycontainer.h"
 #include "imagequalityparser.h"
 
 using namespace Digikam;
@@ -43,6 +43,10 @@ using namespace Digikam;
 QTEST_MAIN(ImgQSortTest)
 
 void ImgQSortTest::initTestCase()
+{
+}
+
+void ImgQSortTest::cleanupTestCase()
 {
 }
 
@@ -73,7 +77,7 @@ void ImgQSortTest::testParseTestImagesForBlurDetection()
             qDebug() << path << "File cannot be loaded...";
         }
 
-        ImageQualitySettings settings;
+        ImageQualityContainer settings;
         settings.enableSorter       = true;
         settings.detectBlur         = true;
         settings.detectNoise        = false;
@@ -104,3 +108,53 @@ void ImgQSortTest::testParseTestImagesForBlurDetection()
     QVERIFY(results[AcceptedLabel] == 1);
 }
 
+void ImgQSortTest::testParseTestImagesForNoiseDetection()
+{
+    QFileInfoList list = imageDir().entryInfoList(QStringList() << QLatin1String("test_noised*.jpg"),
+                                                  QDir::Files, QDir::Name);
+    qDebug() << "Process images for Noise detection (" << list.size() << ")";
+
+    int results[NumberOfPickLabels] = {0};
+
+    foreach (QFileInfo inf, list)
+    {
+        QString path = inf.filePath();
+        qDebug() << path;
+
+        DImg dimg    = PreviewLoadThread::loadFastSynchronously(path, 1024);
+
+        if (dimg.isNull())
+        {
+            qDebug() << path << "File cannot be loaded...";
+        }
+
+        ImageQualityContainer settings;
+        settings.enableSorter       = true;
+        settings.detectBlur         = false;
+        settings.detectNoise        = true;
+        settings.detectCompression  = false;
+        settings.detectOverexposure = false;
+        settings.lowQRejected       = true;
+        settings.mediumQPending     = true;
+        settings.highQAccepted      = true;
+        settings.rejectedThreshold  = 10;
+        settings.pendingThreshold   = 40;
+        settings.acceptedThreshold  = 60;
+        settings.blurWeight         = 100;
+        settings.noiseWeight        = 100;
+        settings.compressionWeight  = 100;
+        settings.speed              = 1;
+
+        PickLabel pick;
+        ImageQualityParser parser (dimg, settings, &pick);
+        parser.startAnalyse();
+
+        qDebug() << "==> Noise quality result is" << pick << "(0:None, 1:Rejected, 2:Pending, 3:Accepted)";
+        results[pick]++;
+    }
+
+    QVERIFY(results[NoPickLabel]   == 0);
+    QVERIFY(results[RejectedLabel] == 0);
+    QVERIFY(results[PendingLabel]  == 8);
+    QVERIFY(results[AcceptedLabel] == 1);
+}

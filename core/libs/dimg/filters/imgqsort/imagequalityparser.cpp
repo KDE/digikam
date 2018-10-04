@@ -79,43 +79,41 @@ public:
         running           = true;
     }
 
-    float*               fimg[3];
-    const uint           clusterCount;
-    const uint           size;              // Size of squared original image.
+    float*                fimg[3];
+    const uint            clusterCount;
+    const uint            size;              // Size of squared original image.
 
-    Mat                  src;               // Matrix of the original source image
-    Mat                  src_gray;          // Matrix of the grayscaled source image
-    Mat                  detected_edges;    // Matrix containing only edges in the image
+    Mat                   src;               // Matrix of the original source image
+    Mat                   src_gray;          // Matrix of the grayscaled source image
+    Mat                   detected_edges;    // Matrix containing only edges in the image
 
-    int                  edgeThresh;        // threshold above which we say that edges are present at a point
-    int                  ratio;             // lower:upper threshold for canny edge detector algorithm
-    int                  kernel_size;
-    // kernel size for the Sobel operations to be performed internally
-    // by the edge detector
+    int                   edgeThresh;        // threshold above which we say that edges are present at a point
+    int                   ratio;             // lower:upper threshold for canny edge detector algorithm
+    int                   kernel_size;       // kernel size for the Sobel operations to be performed internally by the edge detector
 
-    double               lowThreshold;
+    double                lowThreshold;
 
-    DImg                 image;             // original image
-    DImg                 neimage;           // noise estimation image[ for color]
+    DImg                  image;             // original image
+    DImg                  neimage;           // noise estimation image[ for color]
 
-    ImageQualitySettings imq;
+    ImageQualityContainer imq;
 
-    double               blurrejected;
-    double               blur;
+    double                blurrejected;
+    double                blur;
 
-    double               acceptedThreshold;
-    double               pendingThreshold;
-    double               rejectedThreshold;
+    double                acceptedThreshold;
+    double                pendingThreshold;
+    double                rejectedThreshold;
 
-    QString              path;              // Path to host result file
+    QString               path;              // Path to host result file
 
-    PickLabel*           label;
+    PickLabel*            label;
 
-    volatile bool        running;
+    volatile bool         running;
 };
 
 ImageQualityParser::ImageQualityParser(const DImg& image,
-                                       const ImageQualitySettings& settings,
+                                       const ImageQualityContainer& settings,
                                        PickLabel* const label)
     : d(new Private)
 {
@@ -151,12 +149,12 @@ void ImageQualityParser::startAnalyse()
         // Returns blur value between 0 and 1.
         // If NaN is returned just assign NoPickLabel
         blur  = blurdetector();
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Amount of Blur present in image is  : " << blur;
+        qCDebug(DIGIKAM_DIMG_LOG) << "Amount of Blur present in image is  : " << blur;
 
         // Returns blur value between 1 and 32767.
         // If 1 is returned just assign NoPickLabel
         blur2 = blurdetector2();
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
+        qCDebug(DIGIKAM_DIMG_LOG) << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
     }
 
     if (d->running && d->imq.detectNoise)
@@ -164,21 +162,21 @@ void ImageQualityParser::startAnalyse()
         // Some images give very low noise value. Assign NoPickLabel in that case.
         // Returns noise value between 0 and 1.
         noise = noisedetector();
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Amount of Noise present in image is : " << noise;
+        qCDebug(DIGIKAM_DIMG_LOG) << "Amount of Noise present in image is : " << noise;
     }
 
     if (d->running && d->imq.detectCompression)
     {
         // Returns number of blocks in the image.
         compressionlevel = compressiondetector();
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Amount of compression artifacts present in image is : " << compressionlevel;
+        qCDebug(DIGIKAM_DIMG_LOG) << "Amount of compression artifacts present in image is : " << compressionlevel;
     }
 
     if (d->running && d->imq.detectOverexposure)
     {
         // Returns if there is overexposure in the image
         exposurelevel = exposureamount();
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Exposure level present in image is : " << exposurelevel;
+        qCDebug(DIGIKAM_DIMG_LOG) << "Exposure level present in image is : " << exposurelevel;
     }
 
 #ifdef TRACE
@@ -324,9 +322,9 @@ double ImageQualityParser::blurdetector() const
 
     double blurresult = average / maxval;
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "The average of the edge intensity is " << average;
-    qCDebug(DIGIKAM_DATABASE_LOG) << "The maximum of the edge intensity is " << maxval;
-    qCDebug(DIGIKAM_DATABASE_LOG) << "The result of the edge intensity is  " << blurresult;
+    qCDebug(DIGIKAM_DIMG_LOG) << "The average of the edge intensity is " << average;
+    qCDebug(DIGIKAM_DIMG_LOG) << "The maximum of the edge intensity is " << maxval;
+    qCDebug(DIGIKAM_DIMG_LOG) << "The result of the edge intensity is  " << blurresult;
 
     delete [] maxIdx;
 
@@ -338,7 +336,7 @@ short ImageQualityParser::blurdetector2() const
     // Algorithm using Laplacian of Gaussian Filter to detect blur.
     Mat out;
     Mat noise_free;
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Algorithm using LoG Filter started";
+    qCDebug(DIGIKAM_DIMG_LOG) << "Algorithm using LoG Filter started";
 
     // To remove noise from the image
     GaussianBlur(d->src_gray, noise_free, Size(3, 3), 0, 0, BORDER_DEFAULT);
@@ -403,7 +401,7 @@ double ImageQualityParser::noisedetector() const
     // Array to store the centers of the clusters.
     CvArr* centers = 0;
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Everything ready for the cvKmeans2 or as it seems to";
+    qCDebug(DIGIKAM_DIMG_LOG) << "Everything ready for the cvKmeans2 or as it seems to";
 
     //-- KMEANS ---------------------------------------------------------------------------------------------
 
@@ -420,7 +418,7 @@ double ImageQualityParser::noisedetector() const
                   0);
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "cvKmeans2 successfully run";
+    qCDebug(DIGIKAM_DIMG_LOG) << "cvKmeans2 successfully run";
 
     //-- Divide into cluster->columns, sample->rows, in matrix standard deviation ---------------------------
 
@@ -442,7 +440,7 @@ double ImageQualityParser::noisedetector() const
         rowPosition[columnIndex]++;
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "array indexed, and ready to find maximum";
+    qCDebug(DIGIKAM_DIMG_LOG) << "array indexed, and ready to find maximum";
 
     //-- Finding maximum of the rowPosition array ------------------------------------------------------------
 
@@ -459,7 +457,7 @@ double ImageQualityParser::noisedetector() const
     QString maxString;
     maxString.append(QString::number(max));
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << QString::fromUtf8("maximum declared = %1").arg(maxString);
+    qCDebug(DIGIKAM_DIMG_LOG) << QString::fromUtf8("maximum declared = %1").arg(maxString);
 
     //-- Divide and conquer ---------------------------------------------------------------------------------
 
@@ -481,7 +479,7 @@ double ImageQualityParser::noisedetector() const
 
     float* ptr = 0;
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "The rowPosition array is ready!";
+    qCDebug(DIGIKAM_DIMG_LOG) << "The rowPosition array is ready!";
 
     for (uint i = 0 ; d->running && (i < d->neimage.numPixels()) ; ++i)
     {
@@ -510,7 +508,7 @@ double ImageQualityParser::noisedetector() const
         rPosition[columnIndex] = rPosition[columnIndex] + 1;
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "sd matrix creation over!";
+    qCDebug(DIGIKAM_DIMG_LOG) << "sd matrix creation over!";
 
     //-- This part of the code would involve the sd matrix and make the mean and the std of the data -------------
 
@@ -550,7 +548,7 @@ double ImageQualityParser::noisedetector() const
         }
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Make the mean and the std of the data";
+    qCDebug(DIGIKAM_DIMG_LOG) << "Make the mean and the std of the data";
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -564,7 +562,7 @@ double ImageQualityParser::noisedetector() const
     (void)meanStorePtr;
     (void)stdStorePtr;
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Done with the basic work of storing the mean and the std";
+    qCDebug(DIGIKAM_DIMG_LOG) << "Done with the basic work of storing the mean and the std";
 
     //-- Calculating weighted mean, and weighted std -----------------------------------------------------------
 
@@ -607,7 +605,7 @@ double ImageQualityParser::noisedetector() const
         info.append(QString::number(weightedStd));
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Info : " << info;
+    qCDebug(DIGIKAM_DIMG_LOG) << "Info : " << info;
 
     // -- adaptation ---------------------------------------------------------------------------------------
 
@@ -625,7 +623,7 @@ double ImageQualityParser::noisedetector() const
 
         noiseresult = ((datasd[0] / 2) + (datasd[1] / 2) + (datasd[2] / 2)) / 3;
 
-        qCDebug(DIGIKAM_DATABASE_LOG) << "All is completed";
+        qCDebug(DIGIKAM_DIMG_LOG) << "All is completed";
 
         //-- releasing matrices and closing files ----------------------------------------------------------------------
 

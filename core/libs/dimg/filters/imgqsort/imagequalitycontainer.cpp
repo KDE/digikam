@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagequalitysettings.h"
+#include "imagequalitycontainer.h"
 
 // KDE includes
 
@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-ImageQualitySettings::ImageQualitySettings()
+ImageQualityContainer::ImageQualityContainer()
 {
     enableSorter       = false;
     detectBlur         = true;
@@ -50,7 +50,7 @@ ImageQualitySettings::ImageQualitySettings()
     speed              = 1;
 }
 
-ImageQualitySettings::ImageQualitySettings(const ImageQualitySettings& other)
+ImageQualityContainer::ImageQualityContainer(const ImageQualityContainer& other)
 {
     enableSorter       = other.enableSorter;
     detectBlur         = other.detectBlur;
@@ -69,7 +69,7 @@ ImageQualitySettings::ImageQualitySettings(const ImageQualitySettings& other)
     speed              = other.speed;
 }
 
-ImageQualitySettings& ImageQualitySettings::operator=(const ImageQualitySettings& other)
+ImageQualityContainer& ImageQualityContainer::operator=(const ImageQualityContainer& other)
 {
     enableSorter       = other.enableSorter;
     detectBlur         = other.detectBlur;
@@ -90,11 +90,11 @@ ImageQualitySettings& ImageQualitySettings::operator=(const ImageQualitySettings
     return *this;
 }
 
-ImageQualitySettings::~ImageQualitySettings()
+ImageQualityContainer::~ImageQualityContainer()
 {
 }
 
-void ImageQualitySettings::readFromConfig()
+void ImageQualityContainer::readFromConfig()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Image Quality Settings");
@@ -116,7 +116,7 @@ void ImageQualitySettings::readFromConfig()
     compressionWeight         = group.readEntry("Compression Weight", 100);
 }
 
-void ImageQualitySettings::writeToConfig()
+void ImageQualityContainer::writeToConfig()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Image Quality Settings");
@@ -138,24 +138,24 @@ void ImageQualitySettings::writeToConfig()
     group.writeEntry("Compression Weight",  compressionWeight);
 }
 
-QDebug operator<<(QDebug dbg, const ImageQualitySettings& s)
+QDebug operator<<(QDebug dbg, const ImageQualityContainer& s)
 {
     dbg.nospace() << endl;
-    dbg.nospace() << "EnableSorter      : " << s.enableSorter << endl;
-    dbg.nospace() << "DetectBlur        : " << s.detectBlur << endl;
-    dbg.nospace() << "DetectNoise       : " << s.detectNoise << endl;
-    dbg.nospace() << "DetectCompression : " << s.detectCompression << endl;
+    dbg.nospace() << "EnableSorter       :" << s.enableSorter       << endl;
+    dbg.nospace() << "DetectBlur         :" << s.detectBlur         << endl;
+    dbg.nospace() << "DetectNoise        :" << s.detectNoise        << endl;
+    dbg.nospace() << "DetectCompression  :" << s.detectCompression  << endl;
     dbg.nospace() << "DetectOverexposure :" << s.detectOverexposure << endl;
-    dbg.nospace() << "LowQRejected      : " << s.lowQRejected << endl;
-    dbg.nospace() << "MediumQPending    : " << s.mediumQPending << endl;
-    dbg.nospace() << "HighQAccepted     : " << s.highQAccepted << endl;
-    dbg.nospace() << "Speed             : " << s.speed << endl;
-    dbg.nospace() << "Rejected Threshold: " << s.rejectedThreshold << endl;
-    dbg.nospace() << "Pending Threshold : " << s.pendingThreshold << endl;
-    dbg.nospace() << "Accepted Threshold: " << s.acceptedThreshold << endl;
-    dbg.nospace() << "Blur Weight       : " << s.blurWeight << endl;
-    dbg.nospace() << "Noise Weight      : " << s.noiseWeight << endl;
-    dbg.nospace() << "Compression Weight: " << s.compressionWeight << endl;
+    dbg.nospace() << "LowQRejected       :" << s.lowQRejected       << endl;
+    dbg.nospace() << "MediumQPending     :" << s.mediumQPending     << endl;
+    dbg.nospace() << "HighQAccepted      :" << s.highQAccepted      << endl;
+    dbg.nospace() << "Speed              :" << s.speed              << endl;
+    dbg.nospace() << "Rejected Threshold :" << s.rejectedThreshold  << endl;
+    dbg.nospace() << "Pending Threshold  :" << s.pendingThreshold   << endl;
+    dbg.nospace() << "Accepted Threshold :" << s.acceptedThreshold  << endl;
+    dbg.nospace() << "Blur Weight        :" << s.blurWeight         << endl;
+    dbg.nospace() << "Noise Weight       :" << s.noiseWeight        << endl;
+    dbg.nospace() << "Compression Weight :" << s.compressionWeight  << endl;
 
     return dbg.space();
 }

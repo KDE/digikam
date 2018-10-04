@@ -30,7 +30,7 @@
 #include "dimg.h"
 #include "digikam_export.h"
 #include "digikam_globals.h"
-#include "imagequalitysettings.h"
+#include "imagequalitycontainer.h"
 
 namespace Digikam
 {
@@ -42,7 +42,7 @@ public:
     /** Standard constructor with picklabel container to fill at end of analyze.
      */
     explicit ImageQualityParser(const DImg& image,
-                                const ImageQualitySettings& settings,
+                                const ImageQualityContainer& settings,
                                 PickLabel* const label);
     ~ImageQualityParser();
 

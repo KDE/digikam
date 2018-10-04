@@ -29,7 +29,7 @@
 
 #include "dimg.h"
 #include "previewloadthread.h"
-#include "imagequalitysettings.h"
+#include "imagequalitycontainer.h"
 #include "imagequalityparser.h"
 
 using namespace Digikam;
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    ImageQualitySettings settings;
+    ImageQualityContainer settings;
     settings.enableSorter       = true;
     settings.detectBlur         = true;
     settings.detectNoise        = false;

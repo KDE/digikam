@@ -115,7 +115,7 @@ set(libdimgfilters_SRCS
     filters/redeye/redeyecorrectionsettings.cpp
     filters/redeye/redeyecorrectioncontainer.cpp
     filters/imgqsort/imagequalityparser.cpp
-    filters/imgqsort/imagequalitysettings.cpp
+    filters/imgqsort/imagequalitycontainer.cpp
 )
 
 # ==================================================================================================

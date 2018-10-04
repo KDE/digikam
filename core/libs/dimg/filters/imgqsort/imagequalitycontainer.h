@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_QUALITY_SETTINGS_H
-#define DIGIKAM_IMAGE_QUALITY_SETTINGS_H
+#ifndef DIGIKAM_IMAGE_QUALITY_CONTAINER_H
+#define DIGIKAM_IMAGE_QUALITY_CONTAINER_H
 
 // Qt includes
 
@@ -35,15 +35,15 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImageQualitySettings
+class DIGIKAM_EXPORT ImageQualityContainer
 {
 public:
 
-    ImageQualitySettings();
-    ImageQualitySettings(const ImageQualitySettings& other);
-    ~ImageQualitySettings();
+    ImageQualityContainer();
+    ImageQualityContainer(const ImageQualityContainer& other);
+    ~ImageQualityContainer();
 
-    ImageQualitySettings& operator=(const ImageQualitySettings& other);
+    ImageQualityContainer& operator=(const ImageQualityContainer& other);
 
 public:
 
@@ -72,8 +72,8 @@ public:
 };
 
 //! qDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.
-DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const ImageQualitySettings& s);
+DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const ImageQualityContainer& s);
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_QUALITY_SETTINGS_H
+#endif // DIGIKAM_IMAGE_QUALITY_CONTAINER_H
