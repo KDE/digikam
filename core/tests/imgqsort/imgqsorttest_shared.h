@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-02-04
- * Description : an unit-test to detect image quality level
+ * Description : an unit-test to detect image quality level - shared code
  *
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,33 +21,23 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMGQSORT_TEST_H
-#define DIGIKAM_IMGQSORT_TEST_H
+#ifndef DIGIKAM_IMGQSORT_TEST_SHARED_H
+#define DIGIKAM_IMGQSORT_TEST_SHARED_H
 
 // Qt includes
 
-#include <QObject>
-#include <QDir>
 #include <QMultiMap>
 #include <QString>
+#include <QFileInfoList>
 
-class ImgQSortTest : public QObject
+enum DetectionType
 {
-    Q_OBJECT
-
-private:
-
-    QDir imageDir() const;
-
-private Q_SLOTS:
-
-    void initTestCase();
-    void cleanupTestCase();
-
-    void testParseTestImagesForBlurDetection();
-    void testParseTestImagesForNoiseDetection();
-    void testParseTestImagesForCompressionDetection();
-    void testParseTestImagesForOverExpoDetection();
+    DetectBlur = 0,
+    DetectNoise,
+    DetectCompression,
+    DetectOverExposure
 };
 
-#endif // DIGIKAM_IMGQSORT_TEST_H
+QMultiMap<int, QString> ImgQSortTest_ParseTestImages(DetectionType type, const QFileInfoList& list);
+
+#endif // DIGIKAM_IMGQSORT_TEST_SHARED_H

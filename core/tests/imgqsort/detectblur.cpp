@@ -27,10 +27,8 @@
 
 // Local includes
 
-#include "dimg.h"
-#include "previewloadthread.h"
-#include "imagequalitycontainer.h"
-#include "imagequalityparser.h"
+#include "imgqsorttest_shared.h"
+#include "digikam_globals.h"
 
 using namespace Digikam;
 
@@ -45,35 +43,10 @@ int main(int argc, char** argv)
 
     QApplication app(argc, argv);
 
-    QString path = QString::fromUtf8(argv[1]);
-    DImg dimg    = PreviewLoadThread::loadFastSynchronously(path, 1024);
-
-    if (dimg.isNull())
-    {
-        qDebug() << path << "cannot be loaded...";
-        return -1;
-    }
-
-    ImageQualityContainer settings;
-    settings.enableSorter       = true;
-    settings.detectBlur         = true;
-    settings.detectNoise        = false;
-    settings.detectCompression  = false;
-    settings.detectOverexposure = false;
-    settings.lowQRejected       = true;
-    settings.mediumQPending     = true;
-    settings.highQAccepted      = true;
-    settings.rejectedThreshold  = 10;
-    settings.pendingThreshold   = 40;
-    settings.acceptedThreshold  = 60;
-    settings.blurWeight         = 100;
-    settings.noiseWeight        = 100;
-    settings.compressionWeight  = 100;
-    settings.speed              = 1;
-
-    PickLabel pick;
-    ImageQualityParser parser(dimg, settings, &pick);
-    parser.startAnalyse();
+    QString path                = QString::fromUtf8(argv[1]);
+    QFileInfoList list          = QFileInfoList() << QFileInfo(path);
+    QMultiMap<int, QString> map = ImgQSortTest_ParseTestImages(DetectBlur, list);
+    PickLabel pick              = (PickLabel)map.key(path);
 
     qDebug() << "Blur quality result is" << pick << "(0:None, 1:Rejected, 2:Pending, 3:Accepted)";
 

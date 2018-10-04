@@ -21,7 +21,8 @@ macro(IMGQSORT_BUILD_STANDALONE)
     string(REPLACE "." ";" _temp ${_filename})
     list(GET _temp 0 _target)
 
-    set(${_target}_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/${_filename})
+    set(${_target}_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/${_filename}
+                        ${CMAKE_CURRENT_SOURCE_DIR}/imgqsorttest_shared.cpp)
 
     add_executable(${_target} ${${_target}_SRCS})
 
@@ -47,7 +48,8 @@ macro(IMGQSORT_BUILD_UNITTEST)
     string(REPLACE "." ";" _temp ${_filename})
     list(GET _temp 0 _target)
 
-    set(${_target}_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/${_filename})
+    set(${_target}_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/${_filename}
+                        ${CMAKE_CURRENT_SOURCE_DIR}/imgqsorttest_shared.cpp)
 
     add_executable(${_target} ${${_target}_SRCS})
 
