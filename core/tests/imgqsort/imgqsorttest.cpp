@@ -30,6 +30,7 @@
 #include <QString>
 #include <QFileInfoList>
 #include <QDebug>
+#include <QMultiMap>
 
 // Local includes
 
@@ -63,7 +64,7 @@ void ImgQSortTest::testParseTestImagesForBlurDetection()
                                                   QDir::Files, QDir::Name);
     qDebug() << "Process images for Blur detection (" << list.size() << ")";
 
-    int results[NumberOfPickLabels] = {0};
+    QMultiMap<int, QString> results;
 
     foreach (QFileInfo inf, list)
     {
@@ -98,16 +99,21 @@ void ImgQSortTest::testParseTestImagesForBlurDetection()
         ImageQualityParser parser (dimg, settings, &pick);
         parser.startAnalyse();
 
-        qDebug() << "==> Blur quality result is" << pick << "(0:None, 1:Rejected, 2:Pending, 3:Accepted)";
-        results[pick]++;
+        qDebug() << "==> Blur quality result is" << pick;
+        results.insert(pick, path);
     }
 
-    qInfo() << "Blur Quality results:" << results;
+    qInfo() << "Blur Quality results (0:None, 1:Rejected, 2:Pending, 3:Accepted):";
 
-    QVERIFY(results[NoPickLabel]   == 0);
-    QVERIFY(results[RejectedLabel] == 0);
-    QVERIFY(results[PendingLabel]  == 8);
-    QVERIFY(results[AcceptedLabel] == 1);
+    for (QMap<int, QString>::const_iterator it = results.constBegin() ; it != results.constEnd() ; ++it)
+    {
+        qInfo() << "==>" << it.value() << ":" << it.key();
+    }
+
+    QVERIFY(results.count(NoPickLabel)   == 0);
+    QVERIFY(results.count(RejectedLabel) == 0);
+    QVERIFY(results.count(PendingLabel)  == 8);
+    QVERIFY(results.count(AcceptedLabel) == 1);
 }
 
 void ImgQSortTest::testParseTestImagesForNoiseDetection()
@@ -116,7 +122,7 @@ void ImgQSortTest::testParseTestImagesForNoiseDetection()
                                                   QDir::Files, QDir::Name);
     qDebug() << "Process images for Noise detection (" << list.size() << ")";
 
-    int results[NumberOfPickLabels] = {0};
+    QMultiMap<int, QString> results;
 
     foreach (QFileInfo inf, list)
     {
@@ -151,14 +157,19 @@ void ImgQSortTest::testParseTestImagesForNoiseDetection()
         ImageQualityParser parser (dimg, settings, &pick);
         parser.startAnalyse();
 
-        qDebug() << "==> Noise quality result is" << pick << "(0:None, 1:Rejected, 2:Pending, 3:Accepted)";
-        results[pick]++;
+        qDebug() << "==> Noise quality result is" << pick;
+        results.insert(pick, path);
     }
 
-    qInfo() << "Noise Quality results:" << results;
+    qInfo() << "Noise Quality results (0:None, 1:Rejected, 2:Pending, 3:Accepted):";
 
-    QVERIFY(results[NoPickLabel]   == 0);
-    QVERIFY(results[RejectedLabel] == 0);
-    QVERIFY(results[PendingLabel]  == 9);
-    QVERIFY(results[AcceptedLabel] == 0);
+    for (QMap<int, QString>::const_iterator it = results.constBegin() ; it != results.constEnd() ; ++it)
+    {
+        qInfo() << "==>" << it.value() << ":" << it.key();
+    }
+
+    QVERIFY(results.count(NoPickLabel)   == 0);
+    QVERIFY(results.count(RejectedLabel) == 0);
+    QVERIFY(results.count(PendingLabel)  == 8);
+    QVERIFY(results.count(AcceptedLabel) == 1);
 }
