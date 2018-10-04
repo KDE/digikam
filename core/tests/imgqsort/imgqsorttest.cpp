@@ -102,6 +102,8 @@ void ImgQSortTest::testParseTestImagesForBlurDetection()
         results[pick]++;
     }
 
+    qInfo() << "Blur Quality results:" << results;
+
     QVERIFY(results[NoPickLabel]   == 0);
     QVERIFY(results[RejectedLabel] == 0);
     QVERIFY(results[PendingLabel]  == 8);
@@ -153,8 +155,10 @@ void ImgQSortTest::testParseTestImagesForNoiseDetection()
         results[pick]++;
     }
 
+    qInfo() << "Noise Quality results:" << results;
+
     QVERIFY(results[NoPickLabel]   == 0);
     QVERIFY(results[RejectedLabel] == 0);
-    QVERIFY(results[PendingLabel]  == 8);
-    QVERIFY(results[AcceptedLabel] == 1);
+    QVERIFY(results[PendingLabel]  == 9);
+    QVERIFY(results[AcceptedLabel] == 0);
 }
