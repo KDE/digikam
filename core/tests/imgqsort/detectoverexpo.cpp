@@ -56,10 +56,10 @@ int main(int argc, char** argv)
 
     ImageQualityContainer settings;
     settings.enableSorter       = true;
-    settings.detectBlur         = true;
+    settings.detectBlur         = false;
     settings.detectNoise        = false;
     settings.detectCompression  = false;
-    settings.detectOverexposure = false;
+    settings.detectOverexposure = true;
     settings.lowQRejected       = true;
     settings.mediumQPending     = true;
     settings.highQAccepted      = true;
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
     settings.speed              = 1;
 
     PickLabel pick;
-    ImageQualityParser parser (dimg, settings, &pick);
+    ImageQualityParser parser(dimg, settings, &pick);
     parser.startAnalyse();
 
     qDebug() << "Over exposure quality result is" << pick << "(0:None, 1:Rejected, 2:Pending, 3:Accepted)";

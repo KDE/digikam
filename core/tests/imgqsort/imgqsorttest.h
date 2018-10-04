@@ -56,6 +56,8 @@ private Q_SLOTS:
 
     void testParseTestImagesForBlurDetection();
     void testParseTestImagesForNoiseDetection();
+    void testParseTestImagesForCompressionDetection();
+    void testParseTestImagesForOverExpoDetection();
 };
 
 #endif // DIGIKAM_IMGQSORT_TEST_H

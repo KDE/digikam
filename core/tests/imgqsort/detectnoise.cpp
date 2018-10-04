@@ -72,7 +72,7 @@ int main(int argc, char** argv)
     settings.speed              = 1;
 
     PickLabel pick;
-    ImageQualityParser parser (dimg, settings, &pick);
+    ImageQualityParser parser(dimg, settings, &pick);
     parser.startAnalyse();
 
     qDebug() << "Noise quality result is" << pick << "(0:None, 1:Rejected, 2:Pending, 3:Accepted)";

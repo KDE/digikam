@@ -49,7 +49,7 @@ void ImgQSortTest::cleanupTestCase()
 QDir ImgQSortTest::imageDir() const
 {
     QDir dir(QFINDTESTDATA("data/"));
-    qDebug() << "Images Directory:" << dir;
+//    qDebug() << "Images Directory:" << dir;
     return dir;
 }
 
@@ -75,7 +75,7 @@ QMultiMap<int, QString> ImgQSortTest::parseTestImages(const QString& tname,
 
 
         PickLabel pick;
-        ImageQualityParser parser (dimg, settings, &pick);
+        ImageQualityParser parser(dimg, settings, &pick);
         parser.startAnalyse();
 
         qDebug() << "==>" << tname << "quality result is" << pick;
@@ -116,9 +116,9 @@ void ImgQSortTest::testParseTestImagesForBlurDetection()
     QMultiMap<int, QString> results = parseTestImages(QLatin1String("Blur"), list, settings);
 
     QVERIFY(results.count(NoPickLabel)   == 0);
-    QVERIFY(results.count(RejectedLabel) == 0);
+    QVERIFY(results.count(RejectedLabel) == 1);
     QVERIFY(results.count(PendingLabel)  == 8);
-    QVERIFY(results.count(AcceptedLabel) == 1);
+    QVERIFY(results.count(AcceptedLabel) == 0);
 }
 
 void ImgQSortTest::testParseTestImagesForNoiseDetection()
@@ -146,7 +146,67 @@ void ImgQSortTest::testParseTestImagesForNoiseDetection()
     QMultiMap<int, QString> results = parseTestImages(QLatin1String("Noise"), list, settings);
 
     QVERIFY(results.count(NoPickLabel)   == 0);
-    QVERIFY(results.count(RejectedLabel) == 0);
+    QVERIFY(results.count(RejectedLabel) == 1);
     QVERIFY(results.count(PendingLabel)  == 8);
-    QVERIFY(results.count(AcceptedLabel) == 1);
+    QVERIFY(results.count(AcceptedLabel) == 0);
+}
+
+void ImgQSortTest::testParseTestImagesForCompressionDetection()
+{
+    QFileInfoList list = imageDir().entryInfoList(QStringList() << QLatin1String("test_compressed*.jpg"),
+                                                  QDir::Files, QDir::Name);
+
+    ImageQualityContainer settings;
+    settings.enableSorter       = true;
+    settings.detectBlur         = false;
+    settings.detectNoise        = false;
+    settings.detectCompression  = true;
+    settings.detectOverexposure = false;
+    settings.lowQRejected       = true;
+    settings.mediumQPending     = true;
+    settings.highQAccepted      = true;
+    settings.rejectedThreshold  = 10;
+    settings.pendingThreshold   = 40;
+    settings.acceptedThreshold  = 60;
+    settings.blurWeight         = 100;
+    settings.noiseWeight        = 100;
+    settings.compressionWeight  = 100;
+    settings.speed              = 1;
+
+    QMultiMap<int, QString> results = parseTestImages(QLatin1String("Compression"), list, settings);
+
+    QVERIFY(results.count(NoPickLabel)   == 9);
+    QVERIFY(results.count(RejectedLabel) == 0);
+    QVERIFY(results.count(PendingLabel)  == 0);
+    QVERIFY(results.count(AcceptedLabel) == 0);
+}
+
+void ImgQSortTest::testParseTestImagesForOverExpoDetection()
+{
+    QFileInfoList list = imageDir().entryInfoList(QStringList() << QLatin1String("test_overexposed*.jpg"),
+                                                  QDir::Files, QDir::Name);
+
+    ImageQualityContainer settings;
+    settings.enableSorter       = true;
+    settings.detectBlur         = false;
+    settings.detectNoise        = false;
+    settings.detectCompression  = false;
+    settings.detectOverexposure = true;
+    settings.lowQRejected       = true;
+    settings.mediumQPending     = true;
+    settings.highQAccepted      = true;
+    settings.rejectedThreshold  = 10;
+    settings.pendingThreshold   = 40;
+    settings.acceptedThreshold  = 60;
+    settings.blurWeight         = 100;
+    settings.noiseWeight        = 100;
+    settings.compressionWeight  = 100;
+    settings.speed              = 1;
+
+    QMultiMap<int, QString> results = parseTestImages(QLatin1String("Over-Exposed"), list, settings);
+
+    QVERIFY(results.count(NoPickLabel)   == 9);
+    QVERIFY(results.count(RejectedLabel) == 0);
+    QVERIFY(results.count(PendingLabel)  == 0);
+    QVERIFY(results.count(AcceptedLabel) == 0);
 }
