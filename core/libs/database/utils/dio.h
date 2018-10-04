@@ -95,6 +95,11 @@ Q_SIGNALS:
     void signalRenameSucceeded(const QUrl& url);
     void signalRenameFailed(const QUrl& url);
 
+public Q_SLOTS:
+
+    // public helper slot for the Time Adjust Tool
+    void slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate);
+
 private:
 
     explicit DIO();

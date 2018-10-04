@@ -763,6 +763,11 @@ public:
     void setItemManualOrder(qlonglong imageID, qlonglong value);
 
     /**
+     * Updates the modification date field for the item.
+     */
+    void setItemModificationDate(qlonglong imageID, const QDateTime& modificationDate);
+
+    /**
      * Rename the item.
      * Note: we not use here ImageChangeset.
      */

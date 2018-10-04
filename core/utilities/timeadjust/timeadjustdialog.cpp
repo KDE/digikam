@@ -145,6 +145,9 @@ TimeAdjustDialog::TimeAdjustDialog(QWidget* const parent, DInfoInterface* const 
     connect(d->thread, SIGNAL(signalProcessEnded(QUrl,int)),
             this, SLOT(slotProcessEnded(QUrl,int)));
 
+    connect(d->thread, SIGNAL(signalDateTimeForUrl(QUrl,QDateTime,bool)),
+            this, SIGNAL(signalDateTimeForUrl(QUrl,QDateTime,bool)));
+
     connect(d->progressBar, SIGNAL(signalProgressCanceled()),
             this, SLOT(slotCancelThread()));
 
@@ -200,21 +203,6 @@ void TimeAdjustDialog::closeEvent(QCloseEvent* e)
 void TimeAdjustDialog::slotDialogFinished()
 {
     saveSettings();
-}
-
-QList<QUrl> TimeAdjustDialog::getProccessedUrls() const
-{
-    QList<QUrl> proccessed;
-
-    foreach (const QUrl& url, d->itemsStatusMap.keys())
-    {
-        if (d->itemsStatusMap.value(url) == TimeAdjustList::NOPROCESS_ERROR)
-        {
-            proccessed << url;
-        }
-    }
-
-    return proccessed;
 }
 
 void TimeAdjustDialog::readSettings()
@@ -419,28 +407,19 @@ void TimeAdjustDialog::slotApplyClicked()
 
     TimeAdjustContainer prm = d->settingsView->settings();
 
-    if (prm.atLeastOneUpdateToProcess())
-    {
-        d->progressBar->show();
-        d->progressBar->progressScheduled(i18n("Adjust Time and Date"), true, true);
-        d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QLatin1String("appointment-new")).pixmap(22, 22));
-        d->progressBar->setMaximum(d->itemsUsedMap.keys().size());
-        d->thread->setSettings(prm);
-        d->thread->setUpdatedDates(d->itemsUpdatedMap);
+    d->progressBar->show();
+    d->progressBar->progressScheduled(i18n("Adjust Time and Date"), true, true);
+    d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QLatin1String("appointment-new")).pixmap(22, 22));
+    d->progressBar->setMaximum(d->itemsUsedMap.keys().size());
+    d->thread->setSettings(prm);
+    d->thread->setUpdatedDates(d->itemsUpdatedMap);
 
-        if (!d->thread->isRunning())
-        {
-            d->thread->start();
-        }
-
-        setBusy(true);
-    }
-    else
+    if (!d->thread->isRunning())
     {
-        QMessageBox::critical(QApplication::activeWindow(),
-                              i18n("Adjust Time & Date"),
-                              i18n("Select at least one option"));
+        d->thread->start();
     }
+
+    setBusy(true);
 }
 
 void TimeAdjustDialog::slotCancelThread()

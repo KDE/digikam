@@ -50,7 +50,9 @@ public:
     explicit TimeAdjustDialog(QWidget* const parent, DInfoInterface* const iface);
     ~TimeAdjustDialog();
 
-    QList<QUrl> getProccessedUrls() const;
+Q_SIGNALS:
+
+    void signalDateTimeForUrl(const QUrl&, const QDateTime&, bool);
 
 private Q_SLOTS:
 

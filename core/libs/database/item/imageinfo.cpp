@@ -1759,6 +1759,20 @@ void ImageInfo::setDateTime(const QDateTime& dateTime)
     m_data->creationDateCached = true;
 }
 
+void ImageInfo::setModDateTime(const QDateTime& dateTime)
+{
+    if (!m_data || !dateTime.isValid())
+    {
+        return;
+    }
+
+    CoreDbAccess().db()->setItemModificationDate(m_data->id, dateTime);
+
+    ImageInfoWriteLocker lock;
+    m_data->modificationDate       = dateTime;
+    m_data->modificationDateCached = true;
+}
+
 void ImageInfo::setTag(int tagID)
 {
     if (!m_data || tagID <= 0)

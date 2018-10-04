@@ -332,6 +332,11 @@ void TimeAdjustTask::run()
         }
     }
 
+    if (status == TimeAdjustList::NOPROCESS_ERROR)
+    {
+        emit signalDateTimeForUrl(d->url, dt, d->settings.updFileModDate);
+    }
+
     emit signalProcessEnded(d->url, status);
     emit signalDone();
 }

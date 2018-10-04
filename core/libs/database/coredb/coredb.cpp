@@ -3788,6 +3788,16 @@ void CoreDB::setItemManualOrder(qlonglong imageID, qlonglong value)
     d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(DatabaseFields::ManualOrder)));
 }
 
+void CoreDB::setItemModificationDate(qlonglong imageID, const QDateTime& modificationDate)
+{
+    QVariantList boundValues;
+    boundValues << modificationDate << imageID;
+    d->db->execSql(QString::fromUtf8("UPDATE Images SET modificationDate=? WHERE id=?;"),
+                   boundValues);
+
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(DatabaseFields::ModificationDate)));
+}
+
 void CoreDB::renameItem(qlonglong imageID, const QString& newName)
 {
     d->db->execSql(QString::fromUtf8("UPDATE Images SET name=? WHERE id=?;"),

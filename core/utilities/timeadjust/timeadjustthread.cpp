@@ -82,6 +82,9 @@ void TimeAdjustThread::setUpdatedDates(const QMap<QUrl, QDateTime>& itemsMap)
         connect(t, SIGNAL(signalProcessEnded(QUrl,int)),
                 this, SIGNAL(signalProcessEnded(QUrl,int)));
 
+        connect(t, SIGNAL(signalDateTimeForUrl(QUrl,QDateTime,bool)),
+                this, SIGNAL(signalDateTimeForUrl(QUrl,QDateTime,bool)));
+
         connect(this, SIGNAL(signalCancelTask()),
                 t, SLOT(cancel()), Qt::QueuedConnection);
 

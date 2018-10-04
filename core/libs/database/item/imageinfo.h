@@ -431,6 +431,12 @@ public:
     void setDateTime(const QDateTime& dateTime);
 
     /**
+     * Set the modification date and time (write it to database)
+     * @param dateTime the new modification date and time.
+     */
+    void setModDateTime(const QDateTime& dateTime);
+
+    /**
      * Adds a tag to the item (writes it to database)
      * @param tagID the ID of the tag to add
      */
