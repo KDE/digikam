@@ -4,7 +4,8 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
-# This creates testcases which artificially apply blur, noise and compression to given test image
+# This creates testcases which artificially apply blur, noise and compression to given test image.
+# Dependency: ImageMagick
 #
 
 echo "Enter image name (ending with .jpg)"
