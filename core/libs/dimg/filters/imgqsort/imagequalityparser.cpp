@@ -338,10 +338,10 @@ short ImageQualityParser::blurdetector2() const
     Mat noise_free;
     qCDebug(DIGIKAM_DIMG_LOG) << "Algorithm using LoG Filter started";
 
-    // To remove noise from the image
+    // To remove noise from the image.
     GaussianBlur(d->src_gray, noise_free, Size(3, 3), 0, 0, BORDER_DEFAULT);
 
-    // Aperture size of 1 corresponds to the correct matrix
+    // Aperture size of 1 corresponds to the correct matrix.
     int kernel_size = 3;
     int scale       = 1;
     int delta       = 0;
@@ -350,9 +350,9 @@ short ImageQualityParser::blurdetector2() const
     Laplacian(noise_free, out, ddepth, kernel_size, scale, delta, BORDER_DEFAULT);
 
     // noise_free:  The input image without noise.
-    // out:         Destination (output) image
-    // ddepth:      Depth of the destination image. Since our input is CV_8U we define ddepth = CV_16S to avoid overflow
-    // kernel_size: The kernel size of the Sobel operator to be applied internally. We use 3 ihere
+    // out:         Destination (output) image.
+    // ddepth:      Depth of the destination image. Since our input is CV_8U we define ddepth = CV_16S to avoid overflow.
+    // kernel_size: The kernel size of the Sobel operator to be applied internally. We use 3 here.
 
     short maxLap = -32767;
 
