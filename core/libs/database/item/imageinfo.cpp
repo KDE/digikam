@@ -1578,7 +1578,7 @@ VideoInfoContainer ImageInfo::videoInfoContainer() const
     videoInfo.aspectRatio       = meta.aspectRatio;
     videoInfo.audioBitRate      = meta.audioBitRate;
     videoInfo.audioChannelType  = meta.audioChannelType;
-    videoInfo.audioCodec   = meta.audioCodec;
+    videoInfo.audioCodec        = meta.audioCodec;
     videoInfo.duration          = meta.duration;
     videoInfo.frameRate         = meta.frameRate;
     videoInfo.videoCodec        = meta.videoCodec;
@@ -1881,10 +1881,12 @@ QList<ImageInfo> ImageInfo::fromUniqueHash(const QString& uniqueHash, qlonglong 
 {
     QList<ItemScanInfo> scanInfos = CoreDbAccess().db()->getIdenticalFiles(uniqueHash, fileSize);
     QList<ImageInfo> infos;
+
     foreach (const ItemScanInfo& scanInfo, scanInfos)
     {
         infos << ImageInfo(scanInfo.id);
     }
+
     return infos;
 }
 
@@ -1911,20 +1913,22 @@ ThumbnailInfo ImageInfo::thumbnailInfo() const
     ThumbnailInfo thumbinfo;
     QVariantList values;
 
-    thumbinfo.id       = m_data->id;
-    thumbinfo.filePath = filePath();
-    thumbinfo.fileName = name();
+    thumbinfo.id           = m_data->id;
+    thumbinfo.filePath     = filePath();
+    thumbinfo.fileName     = name();
     thumbinfo.isAccessible = CollectionManager::instance()->locationForAlbumRootId(m_data->albumRootId).isAvailable();
 
     CoreDbAccess access;
     values = access.db()->getImagesFields(m_data->id,
-                                          DatabaseFields::ModificationDate | DatabaseFields::FileSize | DatabaseFields::UniqueHash);
+                                          DatabaseFields::ModificationDate |
+                                          DatabaseFields::FileSize         |
+                                          DatabaseFields::UniqueHash);
 
     if (!values.isEmpty())
     {
         thumbinfo.modificationDate = values.at(0).toDateTime();
-        thumbinfo.fileSize = values.at(1).toLongLong();
-        thumbinfo.uniqueHash = values.at(2).toString();
+        thumbinfo.fileSize         = values.at(1).toLongLong();
+        thumbinfo.uniqueHash       = values.at(2).toString();
     }
 
     values = access.db()->getImageInformation(m_data->id, DatabaseFields::Orientation);
@@ -1986,6 +1990,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             else
             {
                 int fieldsIndex = 0;
+
                 for (DatabaseFields::VideoMetadataIteratorSetOnly it(missingVideoMetadata) ; !it.atEnd() ; ++it)
                 {
                     const QVariant fieldValue = fieldValues.at(fieldsIndex);
@@ -2011,6 +2016,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             const QVariantList fieldValues = CoreDbAccess().db()->getImageMetadata(m_data->id, missingImageMetadata);
 
             ImageInfoWriteLocker lock;
+
             if (fieldValues.isEmpty())
             {
                 m_data.constCastData()->hasImageMetadata = false;
@@ -2020,6 +2026,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             else
             {
                 int fieldsIndex = 0;
+
                 for (DatabaseFields::ImageMetadataIteratorSetOnly it(missingImageMetadata) ; !it.atEnd() ; ++it)
                 {
                     const QVariant fieldValue = fieldValues.at(fieldsIndex);
@@ -2030,6 +2037,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
 
                 m_data.constCastData()->imageMetadataCached |= missingImageMetadata;
             }
+
             cachedHash = m_data->databaseFieldsHashRaw;
         }
     }
