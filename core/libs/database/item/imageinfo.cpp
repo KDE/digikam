@@ -769,7 +769,7 @@ void ImageInfoList::loadTagIds() const
 {
     ImageInfoList infoList;
 
-    foreach(const ImageInfo& info, *this)
+    foreach (const ImageInfo& info, *this)
     {
         if (info.m_data && !info.m_data->tagIdsCached)
         {
@@ -1004,7 +1004,7 @@ void ImageInfoList::loadGroupImageIds() const
 {
     ImageInfoList infoList;
 
-    foreach(const ImageInfo& info, *this)
+    foreach (const ImageInfo& info, *this)
     {
         if (info.m_data && !info.m_data->groupImageCached)
         {
@@ -1107,7 +1107,7 @@ void ImageInfo::addToGroup(const ImageInfo& givenLeader)
     // and finally, this image needs to be grouped
     idsToBeGrouped << m_data->id;
 
-    foreach(const qlonglong& ids, idsToBeGrouped)
+    foreach (const qlonglong& ids, idsToBeGrouped)
     {
         // remove current grouping
         CoreDbAccess().db()->removeAllImageRelationsFrom(ids, DatabaseRelation::Grouped);
@@ -1646,7 +1646,7 @@ void ImageInfo::setPickLabel(int pickId)
     {
         CoreDbAccess access;
 
-        foreach(int tagId, currentTagIds)
+        foreach (int tagId, currentTagIds)
         {
             if (pickLabelTags.contains(tagId))
             {
@@ -1677,7 +1677,7 @@ void ImageInfo::setColorLabel(int colorId)
     {
         CoreDbAccess access;
 
-        foreach(int tagId, currentTagIds)
+        foreach (int tagId, currentTagIds)
         {
             if (colorLabelTags.contains(tagId))
             {
