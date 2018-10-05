@@ -225,9 +225,9 @@ void TimeAdjustDialog::readSettings()
     prm.updEXIFOriDate = group.readEntry(QLatin1String("Update EXIF Original Time"),     true);
     prm.updEXIFDigDate = group.readEntry(QLatin1String("Update EXIF Digitization Time"), true);
     prm.updEXIFThmDate = group.readEntry(QLatin1String("Update EXIF Thumbnail Time"),    true);
-    prm.updIPTCDate    = group.readEntry(QLatin1String("Update IPTC Time"),              false);
-    prm.updXMPVideo    = group.readEntry(QLatin1String("Update XMP Video Time"),         false);
-    prm.updXMPDate     = group.readEntry(QLatin1String("Update XMP Creation Time"),      false);
+    prm.updIPTCDate    = group.readEntry(QLatin1String("Update IPTC Time"),              true);
+    prm.updXMPVideo    = group.readEntry(QLatin1String("Update XMP Video Time"),         true);
+    prm.updXMPDate     = group.readEntry(QLatin1String("Update XMP Creation Time"),      true);
 
     prm.dateSource     = group.readEntry(QLatin1String("Use Timestamp Type"),            0);
     prm.metadataSource = group.readEntry(QLatin1String("Meta Timestamp Type"),           0);
