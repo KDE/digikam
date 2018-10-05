@@ -364,7 +364,7 @@ short ImageQualityParser::blurdetector2() const
 
             if (value > maxLap)
             {
-                maxLap = value ;
+                maxLap = value;
             }
         }
     }
@@ -569,7 +569,7 @@ double ImageQualityParser::noisedetector() const
     QString info;
     float   weightedMean = 0.0F;
     float   weightedStd  = 0.0F;
-    float   datasd[3]    = {0.0F, 0.0F, 0.0F};
+    float   datasd[3]    = { 0.0F, 0.0F, 0.0F };
 
     for (int j = 0 ; d->running && (j < points->cols) ; ++j)
     {
@@ -823,11 +823,9 @@ int ImageQualityParser::exposureamount() const
     normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
 
     /// Sum the histograms
-    Scalar rmean,gmean,bmean;
-    rmean             = mean(r_hist);
-    gmean             = mean(g_hist);
-    bmean             = mean(b_hist);
-
+    Scalar rmean      = mean(r_hist);
+    Scalar gmean      = mean(g_hist);
+    Scalar bmean      = mean(b_hist);
     int exposurelevel = (rmean[0] + gmean[0] + bmean[0]) / 3;
 
     return exposurelevel;
