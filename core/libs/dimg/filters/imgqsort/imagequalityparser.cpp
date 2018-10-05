@@ -306,7 +306,7 @@ void ImageQualityParser::cannyThreshold(int, void*) const
           d->detected_edges,
           d->lowThreshold,
           d->lowThreshold * d->ratio,
-          d-> kernel_size);
+          d->kernel_size);
 }
 
 double ImageQualityParser::blurdetector() const
