@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-08-19
- * Description : Image Quality setup page
+ * Description : Image Quality settings widget
  *
  * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013-2014 by Gowtham Ashok <gwty93 at gmail dot com>
@@ -22,53 +22,38 @@
  *
  * ============================================================ */
 
-#include "setupimagequalitysorter.h"
+#ifndef DIGIKAM_IMAGE_QUALITY_SETTINGS_H
+#define DIGIKAM_IMAGE_QUALITY_SETTINGS_H
+
+// Qt includes
+
+#include <QWidget>
 
 // Local includes
 
-#include "imagequalitysettings.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN SetupImageQualitySorter::Private
+class DIGIKAM_EXPORT ImageQualitySettings : public QWidget
 {
+    Q_OBJECT
+
 public:
 
-    explicit Private()
-      : settingsWidget(0)
-    {
-    }
+    explicit ImageQualitySettings(QWidget* const parent = 0);
+    ~ImageQualitySettings();
 
-    ImageQualitySettings* settingsWidget;
+    void applySettings();
+    void readSettings();
+
+private:
+
+    class Private;
+    Private* const d;
 };
 
-// --------------------------------------------------------
-
-SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
-    : QScrollArea(parent),
-      d(new Private)
-{
-    d->settingsWidget = new ImageQualitySettings(viewport());
-    setWidget(d->settingsWidget);
-    setWidgetResizable(true);
-
-    d->settingsWidget->readSettings();
-}
-
-SetupImageQualitySorter::~SetupImageQualitySorter()
-{
-    delete d;
-}
-
-void SetupImageQualitySorter::applySettings()
-{
-    d->settingsWidget->applySettings();
-}
-
-void SetupImageQualitySorter::readSettings()
-{
-    d->settingsWidget->readSettings();
-}
-
 } // namespace Digikam
+
+#endif // DIGIKAM_IMAGE_QUALITY_SETTINGS_H
