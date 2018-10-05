@@ -64,11 +64,11 @@ private:
      */
     void   cannyThreshold(int, void*) const;
 
-    double blurdetector()             const;
-    short  blurdetector2()            const;
-    double noisedetector()            const;
-    int    compressiondetector()      const;
-    int    exposureamount()           const;
+    double blurDetector()             const;
+    short  blurDetector2()            const;
+    double noiseDetector()            const;
+    int    compressionDetector()      const;
+    int    exposureAmount()           const;
 
 private:
 

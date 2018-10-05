@@ -148,12 +148,12 @@ void ImageQualityParser::startAnalyse()
     {
         // Returns blur value between 0 and 1.
         // If NaN is returned just assign NoPickLabel
-        blur  = blurdetector();
+        blur  = blurDetector();
         qCDebug(DIGIKAM_DIMG_LOG) << "Amount of Blur present in image is  : " << blur;
 
         // Returns blur value between 1 and 32767.
         // If 1 is returned just assign NoPickLabel
-        blur2 = blurdetector2();
+        blur2 = blurDetector2();
         qCDebug(DIGIKAM_DIMG_LOG) << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
     }
 
@@ -161,21 +161,21 @@ void ImageQualityParser::startAnalyse()
     {
         // Some images give very low noise value. Assign NoPickLabel in that case.
         // Returns noise value between 0 and 1.
-        noise = noisedetector();
+        noise = noiseDetector();
         qCDebug(DIGIKAM_DIMG_LOG) << "Amount of Noise present in image is : " << noise;
     }
 
     if (d->running && d->imq.detectCompression)
     {
         // Returns number of blocks in the image.
-        compressionlevel = compressiondetector();
+        compressionlevel = compressionDetector();
         qCDebug(DIGIKAM_DIMG_LOG) << "Amount of compression artifacts present in image is : " << compressionlevel;
     }
 
     if (d->running && d->imq.detectOverexposure)
     {
         // Returns if there is overexposure in the image
-        exposurelevel = exposureamount();
+        exposurelevel = exposureAmount();
         qCDebug(DIGIKAM_DIMG_LOG) << "Exposure level present in image is : " << exposurelevel;
     }
 
@@ -309,7 +309,7 @@ void ImageQualityParser::cannyThreshold(int, void*) const
           d->kernel_size);
 }
 
-double ImageQualityParser::blurdetector() const
+double ImageQualityParser::blurDetector() const
 {
     d->lowThreshold   = 0.4;
     d->ratio          = 3;
@@ -331,7 +331,7 @@ double ImageQualityParser::blurdetector() const
     return blurresult;
 }
 
-short ImageQualityParser::blurdetector2() const
+short ImageQualityParser::blurDetector2() const
 {
     // Algorithm using Laplacian of Gaussian Filter to detect blur.
     Mat out;
@@ -372,7 +372,7 @@ short ImageQualityParser::blurdetector2() const
     return maxLap;
 }
 
-double ImageQualityParser::noisedetector() const
+double ImageQualityParser::noiseDetector() const
 {
     double noiseresult = 0.0;
 
@@ -642,7 +642,7 @@ double ImageQualityParser::noisedetector() const
     return noiseresult;
 }
 
-int ImageQualityParser::compressiondetector() const
+int ImageQualityParser::compressionDetector() const
 {
     // FIXME: set threshold value to an acceptable standard to get the number of blocking artifacts
     const int THRESHOLD  = 30;
@@ -787,7 +787,7 @@ int ImageQualityParser::compressiondetector() const
     return number_of_blocks;
 }
 
-int ImageQualityParser::exposureamount() const
+int ImageQualityParser::exposureAmount() const
 {
     /// Separate the image in 3 places ( B, G and R )
 
