@@ -231,8 +231,15 @@ void DIO::move(const QList<QUrl>& srcList, PAlbum* const dest)
 
 // Rename --------------------------------------------------------------
 
-void DIO::rename(const ImageInfo& info, const QString& newName, bool overwrite)
+void DIO::rename(const QUrl& src, const QString& newName, bool overwrite)
 {
+    if (src.isEmpty() || newName.isEmpty())
+    {
+        return;
+    }
+
+    ImageInfo info = ImageInfo::fromUrl(src);
+
     instance()->processJob(new IOJobData(IOJobData::Rename, info, newName, overwrite));
 }
 

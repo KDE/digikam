@@ -42,7 +42,6 @@
 // Local includes
 
 #include "dio.h"
-#include "imageviewutilities.h"
 #include "thumbnailloadthread.h"
 
 namespace Digikam
@@ -54,14 +53,12 @@ public:
 
     explicit Private()
       : thumbLoadThread(0),
-        utilities(0),
         overwrite(false),
         cancel(false)
     {
     }
 
     ThumbnailLoadThread* thumbLoadThread;
-    ImageViewUtilities*  utilities;
 
     NewNameInfo          currentInfo;
     NewNamesList         newNameList;
@@ -79,7 +76,6 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
       d(new Private)
 {
     d->newNameList     = list;
-    d->utilities       = new ImageViewUtilities(this);
     d->thumbLoadThread = new ThumbnailLoadThread;
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
@@ -106,7 +102,6 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
 AdvancedRenameProcessDialog::~AdvancedRenameProcessDialog()
 {
     delete d->thumbLoadThread;
-    delete d->utilities;
     delete d;
 }
 
@@ -133,8 +128,9 @@ void AdvancedRenameProcessDialog::processOne()
     addedAction(d->thumbPixmap, QDir::toNativeSeparators(d->thumbPath));
     setLabel(i18n("<b>Renaming images. Please wait...</b>"));
 
-    d->utilities->rename(d->currentInfo.first,
-                         d->currentInfo.second, d->overwrite);
+    DIO::rename(d->currentInfo.first,
+                d->currentInfo.second, d->overwrite);
+
     getNextThumbnail();
 }
 

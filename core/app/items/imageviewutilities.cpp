@@ -100,8 +100,7 @@ void ImageViewUtilities::rename(const QUrl& imageUrl,
         return;
     }
 
-    ImageInfo info = ImageInfo::fromUrl(imageUrl);
-    DIO::rename(info, newName, overwrite);
+    DIO::rename(imageUrl, newName, overwrite);
 }
 
 bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos,
