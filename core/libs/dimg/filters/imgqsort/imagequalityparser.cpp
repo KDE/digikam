@@ -644,14 +644,16 @@ double ImageQualityParser::noisedetector() const
 
 int ImageQualityParser::compressiondetector() const
 {
-    //FIXME: set threshold value to an acceptable standard to get the number of blocking artifacts
+    // FIXME: set threshold value to an acceptable standard to get the number of blocking artifacts
     const int THRESHOLD  = 30;
     const int block_size = 8;
     int countblocks      = 0;
     int number_of_blocks = 0;
     int sum              = 0;
 
-    std::vector<int> average_bottom, average_middle, average_top;
+    std::vector<int> average_bottom;
+    std::vector<int> average_middle;
+    std::vector<int> average_top;
 
     // Go through 8 blocks at a time horizontally
     // iterating through columns.
@@ -803,7 +805,9 @@ int ImageQualityParser::exposureamount() const
     bool uniform           = true;
     bool accumulate        = false;
 
-    Mat b_hist, g_hist, r_hist;
+    Mat b_hist;
+    Mat g_hist;
+    Mat r_hist;
 
     /// Compute the histograms
     calcHist(&bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate);
