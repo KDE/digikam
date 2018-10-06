@@ -68,7 +68,11 @@ private:
     short  blurDetector2()            const;
     double noiseDetector()            const;
     int    compressionDetector()      const;
-    int    exposureAmount()           const;
+
+    /** Detect over-exposure amount in image. A pure white mask is computed and
+     *  a count of pure color pixels is used to evaluate the over-exposition of shot.
+     */
+    double exposureAmount()           const;
 
 private:
 

@@ -34,6 +34,7 @@
 
 #include <QTextStream>
 #include <QFile>
+#include <QImage>
 
 // Local includes
 
@@ -42,6 +43,7 @@
 #include "mixerfilter.h"
 #include "nrfilter.h"
 #include "nrestimate.h"
+#include "exposurecontainer.h"
 
 // To switch on/off log trace file.
 // #define TRACE 1
@@ -178,9 +180,9 @@ void ImageQualityParser::startAnalyse()
     double blur             = 0.0;
     short  blur2            = 0;
     double noise            = 0.0;
-    int    compressionlevel = 0;
-    float  finalquality     = 0.0;
-    int    exposurelevel    = 0;
+    int    compressionLevel = 0;
+    double finalQuality     = 0.0;
+    double exposureLevel    = 0.0;
 
     // If blur option is selected in settings, run the blur detection algorithms
     if (d->running && d->imq.detectBlur)
@@ -188,12 +190,12 @@ void ImageQualityParser::startAnalyse()
         // Returns blur value between 0 and 1.
         // If NaN is returned just assign NoPickLabel
         blur  = blurDetector();
-        qCDebug(DIGIKAM_DIMG_LOG) << "Amount of Blur present in image is  : " << blur;
+        qCDebug(DIGIKAM_DIMG_LOG) << "Amount of Blur present in image is:" << blur;
 
         // Returns blur value between 1 and 32767.
         // If 1 is returned just assign NoPickLabel
         blur2 = blurDetector2();
-        qCDebug(DIGIKAM_DIMG_LOG) << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
+        qCDebug(DIGIKAM_DIMG_LOG) << "Amount of Blur present in image [using LoG Filter] is:" << blur2;
     }
 
     if (d->running && d->imq.detectNoise)
@@ -201,21 +203,21 @@ void ImageQualityParser::startAnalyse()
         // Some images give very low noise value. Assign NoPickLabel in that case.
         // Returns noise value between 0 and 1.
         noise = noiseDetector();
-        qCDebug(DIGIKAM_DIMG_LOG) << "Amount of Noise present in image is : " << noise;
+        qCDebug(DIGIKAM_DIMG_LOG) << "Amount of Noise present in image is:" << noise;
     }
 
     if (d->running && d->imq.detectCompression)
     {
         // Returns number of blocks in the image.
-        compressionlevel = compressionDetector();
-        qCDebug(DIGIKAM_DIMG_LOG) << "Amount of compression artifacts present in image is : " << compressionlevel;
+        compressionLevel = compressionDetector();
+        qCDebug(DIGIKAM_DIMG_LOG) << "Amount of compression artifacts present in image is:" << compressionLevel;
     }
 
     if (d->running && d->imq.detectOverexposure)
     {
-        // Returns if there is overexposure in the image
-        exposurelevel = exposureAmount();
-        qCDebug(DIGIKAM_DIMG_LOG) << "Exposure level present in image is : " << exposurelevel;
+        // Returns percents of over-exposure in the image
+        exposureLevel = exposureAmount();
+        qCDebug(DIGIKAM_DIMG_LOG) << "Over-exposure percents in image is: " << exposureLevel;
     }
 
 #ifdef TRACE
@@ -240,12 +242,12 @@ void ImageQualityParser::startAnalyse()
 
         if (d->imq.detectCompression)
         {
-            oms << "Compression Present:" << compressionlevel << endl;
+            oms << "Compression Present:" << compressionLevel << endl;
         }
 
         if (d->imq.detectOverexposure)
         {
-            oms << "Exposure Present:" << exposurelevel << endl;
+            oms << "Over-exposure Percents:" << exposureLevel << endl;
         }
     }
 
@@ -256,31 +258,35 @@ void ImageQualityParser::startAnalyse()
     // All the results to have a range of 1 to 100.
     if (d->running)
     {
-        float finalblur        = (blur * 100)  + ((blur2 / 32767) * 100);
-        float finalnoise       = noise * 100;
-        float finalcompression = (compressionlevel / 1024) * 100; // we are processing 1024 pixels size image
+        double finalBlur         = (blur * 100.0)  + ((blur2 / 32767) * 100.0);
+        double finalNoise        = noise * 100.0;
+        double finalCompression  = (compressionLevel / 1024.0) * 100.0; // we are processing 1024 pixels size image
+        double finalOverExposure = 100.0 - (exposureLevel * 100.0);
 
-        finalquality           = finalblur        * d->imq.blurWeight  +
-                                 finalnoise       * d->imq.noiseWeight +
-                                 finalcompression * d->imq.compressionWeight;
+        finalQuality            = finalBlur         * d->imq.blurWeight        +
+                                  finalNoise        * d->imq.noiseWeight       +
+                                  finalCompression  * d->imq.compressionWeight +
+                                  finalOverExposure * 100.0;
 
         // FIXME: the over-eposure detection is not handle here!
 
-        finalquality           = finalquality / 100;
+        finalQuality           = finalQuality / 100.0;
+
+        qCDebug(DIGIKAM_DIMG_LOG) << "Final Quality estimated: " << finalQuality;
 
         // Assigning PickLabels
 
-        if (finalquality == 0.0)
+        if (finalQuality == 0.0)
         {
             // Algorithms have not been run. So return noPickLabel
             *d->label = NoPickLabel;
         }
-        else if (finalquality < d->imq.rejectedThreshold)
+        else if ((int)finalQuality < d->imq.rejectedThreshold)
         {
             *d->label = RejectedLabel;
         }
-        else if ((finalquality > d->imq.rejectedThreshold) &&
-                 (finalquality < d->imq.acceptedThreshold))
+        else if (((int)finalQuality > d->imq.rejectedThreshold) &&
+                 ((int)finalQuality < d->imq.acceptedThreshold))
         {
             *d->label = PendingLabel;
         }
@@ -792,58 +798,39 @@ int ImageQualityParser::compressionDetector() const
     return number_of_blocks;
 }
 
-int ImageQualityParser::exposureAmount() const
+double ImageQualityParser::exposureAmount() const
 {
-    /// Separate the image in 3 places (Blue, Green and Red channels)
+    double exposureLevel = 0.0;
+    int overCount        = 0;
 
-    std::vector<Mat> bgr_planes(3);
-    split(d->src, bgr_planes);
+    ExposureSettingsContainer expo;
+    expo.underExposureIndicator = false;
+    expo.overExposureIndicator  = true;
+    expo.exposureIndicatorMode  = false;
+    expo.underExposurePercent   = 5.0;
+    expo.overExposurePercent    = 5.0;
+    expo.underExposureColor     = Qt::black;
+    expo.overExposureColor      = Qt::white;
 
-    /// Establish the number of bins
+    QImage mask = d->image.pureColorMask(&expo);
 
-    int histSize           = 256;
+    for (int x = 0 ; d->running && (x < mask.width()) ; ++x)
+    {
+        for (int y = 0 ; d->running && (y < mask.height()) ; ++y)
+        {
+            if (mask.pixelColor(x, y) == Qt::white)
+            {
+                ++overCount;
+            }
+        }
+    }
 
-    /// Set the ranges for Blue, Green, and Red channels
+    if (d->running)
+    {
+        exposureLevel = (double)(overCount) / (mask.width() * mask.height());
+    }
 
-    float range[]          = { 0, 256 };
-    const float* histRange = { range  };
-
-    bool uniform           = true;
-    bool accumulate        = false;
-
-    Mat b_hist;
-    Mat g_hist;
-    Mat r_hist;
-
-    /// Compute the histograms
-
-    calcHist(&bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate);
-    calcHist(&bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate);
-    calcHist(&bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate);
-
-    // Draw the histograms for Blue, Green, and Red channels
-
-    int hist_w = 512;
-    int hist_h = 400;
-    Mat histImage(hist_h, hist_w, CV_8UC3, Scalar(0, 0, 0));
-
-    /// Normalize the histograms
-
-    normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
-    normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
-    normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
-
-    /// Sum the histograms
-
-    Scalar rmean      = mean(r_hist);
-    Scalar gmean      = mean(g_hist);
-    Scalar bmean      = mean(b_hist);
-
-    qCDebug(DIGIKAM_DIMG_LOG) << "Histogram sums:" << rmean[0] << gmean[0] << bmean[0];
-
-    int exposurelevel = (rmean[0] + gmean[0] + bmean[0]) / 3.0;
-
-    return exposurelevel;
+    return exposureLevel;
 }
 
 } // namespace Digikam

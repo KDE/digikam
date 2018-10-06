@@ -117,6 +117,7 @@ QMultiMap<int, QString> ImgQSortTest_ParseTestImages(DetectionType type, const Q
             break;
     }
 
+    qDebug() << "Quality Detection Settings:" << settings;
     qDebug() << "Process images for" << tname << "detection (" << list.size() << ")";
 
     QMultiMap<int, QString> results;
@@ -132,7 +133,6 @@ QMultiMap<int, QString> ImgQSortTest_ParseTestImages(DetectionType type, const Q
         {
             qDebug() << path << "File cannot be loaded...";
         }
-
 
         PickLabel pick;
         ImageQualityParser parser(dimg, settings, &pick);
