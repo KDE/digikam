@@ -44,10 +44,11 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 
+    void testParseTestImagesForOverExpoDetection();
+
     void testParseTestImagesForBlurDetection();
     void testParseTestImagesForNoiseDetection();
     void testParseTestImagesForCompressionDetection();
-    void testParseTestImagesForOverExpoDetection();
 };
 
 #endif // DIGIKAM_IMGQSORT_TEST_H

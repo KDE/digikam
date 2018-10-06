@@ -55,6 +55,19 @@ QDir ImgQSortTest::imageDir() const
     return dir;
 }
 
+void ImgQSortTest::testParseTestImagesForOverExpoDetection()
+{
+    QFileInfoList list = imageDir().entryInfoList(QStringList() << QLatin1String("test_overexposed*.jpg"),
+                                                  QDir::Files, QDir::Name);
+
+    QMultiMap<int, QString> results = ImgQSortTest_ParseTestImages(DetectOverExposure, list);
+
+    QVERIFY(results.count(NoPickLabel)   == 0);
+    QVERIFY(results.count(RejectedLabel) == 0);
+    QVERIFY(results.count(PendingLabel)  == 5);
+    QVERIFY(results.count(AcceptedLabel) == 4);
+}
+
 void ImgQSortTest::testParseTestImagesForBlurDetection()
 {
     QFileInfoList list = imageDir().entryInfoList(QStringList() << QLatin1String("test_blurred*.jpg"),
@@ -87,19 +100,6 @@ void ImgQSortTest::testParseTestImagesForCompressionDetection()
                                                   QDir::Files, QDir::Name);
 
     QMultiMap<int, QString> results = ImgQSortTest_ParseTestImages(DetectCompression, list);
-
-    QVERIFY(results.count(NoPickLabel)   == 9);
-    QVERIFY(results.count(RejectedLabel) == 0);
-    QVERIFY(results.count(PendingLabel)  == 0);
-    QVERIFY(results.count(AcceptedLabel) == 0);
-}
-
-void ImgQSortTest::testParseTestImagesForOverExpoDetection()
-{
-    QFileInfoList list = imageDir().entryInfoList(QStringList() << QLatin1String("test_overexposed*.jpg"),
-                                                  QDir::Files, QDir::Name);
-
-    QMultiMap<int, QString> results = ImgQSortTest_ParseTestImages(DetectOverExposure, list);
 
     QVERIFY(results.count(NoPickLabel)   == 9);
     QVERIFY(results.count(RejectedLabel) == 0);
