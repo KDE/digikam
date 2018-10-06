@@ -1911,32 +1911,15 @@ ThumbnailInfo ImageInfo::thumbnailInfo() const
     }
 
     ThumbnailInfo thumbinfo;
-    QVariantList values;
 
-    thumbinfo.id           = m_data->id;
-    thumbinfo.filePath     = filePath();
-    thumbinfo.fileName     = name();
-    thumbinfo.isAccessible = CollectionManager::instance()->locationForAlbumRootId(m_data->albumRootId).isAvailable();
-
-    CoreDbAccess access;
-    values = access.db()->getImagesFields(m_data->id,
-                                          DatabaseFields::ModificationDate |
-                                          DatabaseFields::FileSize         |
-                                          DatabaseFields::UniqueHash);
-
-    if (!values.isEmpty())
-    {
-        thumbinfo.modificationDate = values.at(0).toDateTime();
-        thumbinfo.fileSize         = values.at(1).toLongLong();
-        thumbinfo.uniqueHash       = values.at(2).toString();
-    }
-
-    values = access.db()->getImageInformation(m_data->id, DatabaseFields::Orientation);
-
-    if (!values.isEmpty())
-    {
-        thumbinfo.orientationHint = values.first().toInt();
-    }
+    thumbinfo.id               = m_data->id;
+    thumbinfo.filePath         = filePath();
+    thumbinfo.fileName         = name();
+    thumbinfo.isAccessible     = CollectionManager::instance()->locationForAlbumRootId(m_data->albumRootId).isAvailable();
+    thumbinfo.modificationDate = modDateTime();
+    thumbinfo.orientationHint  = orientation();
+    thumbinfo.uniqueHash       = uniqueHash();
+    thumbinfo.fileSize         = fileSize();
 
     return thumbinfo;
 }
