@@ -789,7 +789,7 @@ int ImageQualityParser::compressionDetector() const
 
 int ImageQualityParser::exposureAmount() const
 {
-    /// Separate the image in 3 places (Bleu, Green and Red)
+    /// Separate the image in 3 places (Blue, Green and Red channels)
 
     std::vector<Mat> bgr_planes;
     split(d->src, bgr_planes);
@@ -798,7 +798,7 @@ int ImageQualityParser::exposureAmount() const
 
     int histSize           = 256;
 
-    /// Set the ranges (for Bleu, Green, and Red)
+    /// Set the ranges for Blue, Green, and Red channels
 
     float range[]          = { 0, 256 };
     const float* histRange = { range  };
