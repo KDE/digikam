@@ -82,14 +82,12 @@ QString ThumbsDb::getSetting(const QString& keyword)
     qCDebug(DIGIKAM_THUMBSDB_LOG) << "ThumbDB SelectThumbnailSetting val ret = "
                                   << (BdEngineBackend::QueryStateEnum)queryStateResult;
 
-    if (values.isEmpty())
-    {
-        return QString();
-    }
-    else
+    if (!values.isEmpty())
     {
         return values.first().toString();
     }
+
+    return QString();
 }
 
 QString ThumbsDb::getLegacySetting(const QString& keyword)
@@ -104,14 +102,12 @@ QString ThumbsDb::getLegacySetting(const QString& keyword)
     qCDebug(DIGIKAM_THUMBSDB_LOG) << "ThumbDB SelectThumbnailLegacySetting val ret = "
                                   << (BdEngineBackend::QueryStateEnum)queryStateResult;
 
-    if (values.isEmpty())
-    {
-        return QString();
-    }
-    else
+    if (!values.isEmpty())
     {
         return values.first().toString();
     }
+
+    return QString();
 }
 
 static void fillThumbnailInfo(const QList<QVariant> &values, ThumbsDbInfo& info)
@@ -180,18 +176,16 @@ ThumbsDbInfo ThumbsDb::findByFilePath(const QString& path, const QString& unique
     {
         return info;
     }
-    else
-    {
-        foreach(const QVariant& hash, values)
-        {
-            if (hash == uniqueHash)
-            {
-                return info;
-            }
-        }
 
-        return ThumbsDbInfo();
+    foreach (const QVariant& hash, values)
+    {
+        if (hash == uniqueHash)
+        {
+            return info;
+        }
     }
+
+    return ThumbsDbInfo();
 }
 
 ThumbsDbInfo ThumbsDb::findByCustomIdentifier(const QString& id)
@@ -216,7 +210,7 @@ QList<int> ThumbsDb::findAll()
 
     QList<int> thumbIds;
 
-    foreach(const QVariant& object, values)
+    foreach (const QVariant& object, values)
     {
         thumbIds << object.toInt();
     }
