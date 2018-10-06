@@ -95,7 +95,8 @@ public:
     double                lowThreshold;
 
     DImg                  image;             // original image
-    DImg                  neimage;           // noise estimation image[ for color]
+    DImg                  neimage;           // noise estimation image[for color]
+    DImg                  img8;              // compression detector image on 8 bits
 
     ImageQualityContainer imq;
 
@@ -134,17 +135,18 @@ void ImageQualityParser::readImage() const
     DColor col;
     int j = 0;
 
-    // 8 bits grayscale image creation
+    d->img8 = d->image;
+    d->img8.convertToEightBit();                        // Convert to 8 bits color depth.
 
-    DImg img8 = d->image;
-    img8.convertToEightBit();                        // Convert to 8 bits color depth.
-    d->src_gray = Mat(img8.numPixels(), 1, CV_8UC1); // Create a matrix containing the pixel values of grayscaled image
+    // grayscale image creation for noise detector
 
-    for (uint x = 0 ; d->running && (x < img8.width()) ; ++x)
+    d->src_gray = Mat(d->img8.numPixels(), 1, CV_8UC1); // Create a matrix containing the pixel values of grayscaled image
+
+    for (uint x = 0 ; d->running && (x < d->img8.width()) ; ++x)
     {
-        for (uint y = 0 ; d->running && (y < img8.height()) ; ++y)
+        for (uint y = 0 ; d->running && (y < d->img8.height()) ; ++y)
         {
-            col                         = img8.getPixelColor(x, y);
+            col                         = d->img8.getPixelColor(x, y);
             d->src_gray.at<uchar>(x, y) = (col.red() + col.green() + col.blue()) / 3;
         }
     }
@@ -667,24 +669,26 @@ int ImageQualityParser::compressionDetector() const
     int number_of_blocks = 0;
     float sum            = 0.0;
 
-    std::vector<float> average_bottom;
-    std::vector<float> average_middle;
-    std::vector<float> average_top;
+    QList<float> average_bottom;
+    QList<float> average_middle;
+    QList<float> average_top;
+    DColor col;
 
     // Go through 8 blocks at a time horizontally
     // iterating through columns.
 
-    for (int i = 0 ; d->running && (i < d->src_gray.rows) ; ++i)
+    for (uint i = 0 ; d->running && (i < d->img8.height()) ; ++i)
     {
         // Calculating intensity of top column.
 
-        for (int j = 0 ; j < d->src_gray.cols ; j += 8)
+        for (uint j = 0 ; j < d->img8.width() ; j += 8)
         {
             sum = 0.0;
 
             for (int k = j ; k < block_size ; ++k)
             {
-                sum += (float)d->src_gray.at<uchar>(i, j);
+                col  = d->img8.getPixelColor(i, j);
+                sum += (col.red() + col.green() + col.blue()) / 3.0;
             }
 
             average_top.push_back(sum / 8.0);
@@ -692,13 +696,14 @@ int ImageQualityParser::compressionDetector() const
 
         // Calculating intensity of middle column.
 
-        for (int j = 0 ; j < d->src_gray.cols ; j += 8)
+        for (uint j = 0 ; j < d->img8.width() ; j += 8)
         {
             sum = 0.0;
 
-            for (int k = j ; k < block_size ; ++k)
+            for (uint k = j ; k < block_size ; ++k)
             {
-                sum += (float)d->src_gray.at<uchar>(i + 1, j);
+                col  = d->img8.getPixelColor(i + 1, j);
+                sum += (col.red() + col.green() + col.blue()) / 3.0;
             }
 
             average_middle.push_back(sum / 8.0);
@@ -708,13 +713,14 @@ int ImageQualityParser::compressionDetector() const
 
         countblocks = 0;
 
-        for (int j = 0 ; j < d->src_gray.cols ; j += 8)
+        for (uint j = 0 ; j < d->img8.width() ; j += 8)
         {
             sum = 0.0;
 
-            for (int k = j ; k < block_size ; ++k)
+            for (uint k = j ; k < block_size ; ++k)
             {
-                sum += (float)d->src_gray.at<uchar>(i + 2, j);
+                col  = d->img8.getPixelColor(i + 2, j);
+                sum += (col.red() + col.green() + col.blue()) / 3.0;
             }
 
             average_bottom.push_back(sum / 8.0);
@@ -740,17 +746,18 @@ int ImageQualityParser::compressionDetector() const
 
     // Iterating through rows.
 
-    for (int j = 0 ; d->running && j < d->src_gray.cols ; ++j)
+    for (uint j = 0 ; d->running && (j < d->img8.width()) ; ++j)
     {
         // Calculating intensity of top row.
 
-        for (int i = 0 ; i < d->src_gray.rows ; i += 8)
+        for (uint i = 0 ; i < d->img8.height() ; i += 8)
         {
             sum = 0.0;
 
             for (int k = i ; k < block_size ; ++k)
             {
-                sum += (float)d->src_gray.at<uchar>(i, j);
+                col  = d->img8.getPixelColor(i, j);
+                sum += (col.red() + col.green() + col.blue()) / 3.0;
             }
 
             average_top.push_back(sum / 8.0);
@@ -758,13 +765,14 @@ int ImageQualityParser::compressionDetector() const
 
         // Calculating intensity of middle row.
 
-        for (int i = 0 ; i < d->src_gray.rows ; i += 8)
+        for (uint i = 0 ; i < d->img8.height() ; i += 8)
         {
             sum = 0.0;
 
-            for (int k = i ; k < block_size ; ++k)
+            for (uint k = i ; k < block_size ; ++k)
             {
-                sum += (float)d->src_gray.at<uchar>(i, j + 1);
+                col  = d->img8.getPixelColor(i, j + 1);
+                sum += (col.red() + col.green() + col.blue()) / 3.0;
             }
 
             average_middle.push_back(sum / 8.0);
@@ -774,13 +782,14 @@ int ImageQualityParser::compressionDetector() const
 
         countblocks = 0;
 
-        for (int i = 0 ; i < d->src_gray.rows ; i += 8)
+        for (uint i = 0 ; i < d->img8.height() ; i += 8)
         {
             sum = 0.0;
 
-            for (int k = i ; k < block_size ; ++k)
+            for (uint k = i ; k < block_size ; ++k)
             {
-                sum += (float)d->src_gray.at<uchar>(i, j + 2);
+                col  = d->img8.getPixelColor(i, j + 2);
+                sum += (col.red() + col.green() + col.blue()) / 3.0;
             }
 
             average_bottom.push_back(sum / 8.0);
