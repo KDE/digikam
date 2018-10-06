@@ -110,7 +110,7 @@ QString ThumbsDb::getLegacySetting(const QString& keyword)
     return QString();
 }
 
-static void fillThumbnailInfo(const QList<QVariant> &values, ThumbsDbInfo& info)
+static void fillThumbnailInfo(const QList<QVariant>& values, ThumbsDbInfo& info)
 {
     if (values.isEmpty())
     {
@@ -128,13 +128,14 @@ ThumbsDbInfo ThumbsDb::findByHash(const QString& uniqueHash, qlonglong fileSize)
 {
     QList<QVariant> values;
     d->db->execSql(QLatin1String("SELECT id, type, modificationDate, orientationHint, data "
-                                 "FROM UniqueHashes "
-                                 "   INNER JOIN Thumbnails ON thumbId = id "
-                                 "WHERE uniqueHash=? AND fileSize=?;"),
+                                 "FROM Thumbnails "
+                                 "WHERE id IN (SELECT thumbId FROM UniqueHashes "
+                                 "   WHERE uniqueHash=? AND fileSize=?);"),
                    uniqueHash, fileSize, &values);
 
     ThumbsDbInfo info;
     fillThumbnailInfo(values, info);
+
     return info;
 }
 
@@ -142,9 +143,9 @@ ThumbsDbInfo ThumbsDb::findByFilePath(const QString& path)
 {
     QList<QVariant> values;
     d->db->execSql(QLatin1String("SELECT id, type, modificationDate, orientationHint, data "
-                                 "FROM FilePaths "
-                                 "   INNER JOIN Thumbnails ON thumbId = id "
-                                 "WHERE path=?;"),
+                                 "FROM Thumbnails "
+                                 "WHERE id IN (SELECT thumbId FROM FilePaths "
+                                 "   WHERE path=?);"),
                    path, &values);
 
     ThumbsDbInfo info;
@@ -192,9 +193,9 @@ ThumbsDbInfo ThumbsDb::findByCustomIdentifier(const QString& id)
 {
     QList<QVariant> values;
     d->db->execSql(QLatin1String("SELECT id, type, modificationDate, orientationHint, data "
-                                 "FROM CustomIdentifiers "
-                                 "   INNER JOIN Thumbnails ON thumbId = id "
-                                 "WHERE identifier=?;"),
+                                 "FROM Thumbnails "
+                                 "WHERE id IN (SELECT thumbId FROM CustomIdentifiers "
+                                 "   WHERE identifier=?);"),
                    id, &values);
 
     ThumbsDbInfo info;
@@ -220,10 +221,10 @@ QList<int> ThumbsDb::findAll()
 
 QHash<QString, int> ThumbsDb::getFilePathsWithThumbnail()
 {
-    DbEngineSqlQuery query = d->db->prepareQuery(QString::fromLatin1("SELECT path, id "
-                                                             "FROM FilePaths "
-                                                             "   INNER JOIN Thumbnails ON FilePaths.thumbId=Thumbnails.id "
-                                                             "WHERE type BETWEEN %1 AND %2;")
+    DbEngineSqlQuery query = d->db->prepareQuery(QString::fromLatin1("SELECT path, thumbId "
+                                                        "FROM FilePaths "
+                                                        "WHERE thumbId IN (SELECT id FROM Thumbnails "
+                                                        "   WHERE type BETWEEN %1 AND %2);")
                                                  .arg(DatabaseThumbnail::PGF)
                                                  .arg(DatabaseThumbnail::PNG));
 
