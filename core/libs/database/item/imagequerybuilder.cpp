@@ -67,7 +67,7 @@ public:
 
 ImageQueryPostHooks::~ImageQueryPostHooks()
 {
-    foreach(ImageQueryPostHook* const hook, m_postHooks)
+    foreach (ImageQueryPostHook* const hook, m_postHooks)
     {
         delete hook;
     }
@@ -80,7 +80,7 @@ void ImageQueryPostHooks::addHook(ImageQueryPostHook* const hook)
 
 bool ImageQueryPostHooks::checkPosition(double latitudeNumber, double longitudeNumber)
 {
-    foreach(ImageQueryPostHook* const hook, m_postHooks)
+    foreach (ImageQueryPostHook* const hook, m_postHooks)
     {
         if (!hook->checkPosition(latitudeNumber, longitudeNumber))
         {
@@ -428,7 +428,7 @@ public:
                 sql += QLatin1String(") ");
             }
 
-            foreach(int v, values)
+            foreach (int v, values)
             {
                 *boundValues << v;
             }
@@ -450,7 +450,7 @@ public:
             CoreDB::addBoundValuePlaceholders(sql, values.size());
             sql += QLatin1String(") ");
 
-            foreach(const qlonglong& v, values)
+            foreach (const qlonglong& v, values)
             {
                 *boundValues << v;
             }
@@ -488,7 +488,7 @@ public:
                 sql += QLatin1String("OR ") + name + QLatin1String(" IS NULL ");
             }
 
-            foreach(int v, values)
+            foreach (int v, values)
             {
                 *boundValues << v;
             }
@@ -524,7 +524,7 @@ public:
 
             QStringList simpleValues, wildcards;
 
-            foreach(const QString& value, values)
+            foreach (const QString& value, values)
             {
                 if (value.contains(QLatin1Char('*')))
                 {
@@ -545,7 +545,7 @@ public:
                 sql            += name + QLatin1String(" IN (");
                 CoreDB::addBoundValuePlaceholders(sql, simpleValues.size());
 
-                foreach(const QString& value, simpleValues)
+                foreach (const QString& value, simpleValues)
                 {
                     *boundValues << value;
                 }
@@ -555,7 +555,7 @@ public:
 
             if (!wildcards.isEmpty())
             {
-                foreach(QString wildcard, wildcards) // krazy:exclude=foreach
+                foreach (QString wildcard, wildcards) // krazy:exclude=foreach
                 {
                     ImageQueryBuilder::addSqlOperator(sql, SearchXml::Or, firstCondition);
                     firstCondition = false;
@@ -812,7 +812,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                    "    FROM Albums WHERE ");
             bool firstCondition = true;
 
-            foreach(int albumID, ids)
+            foreach (int albumID, ids)
             {
                 addSqlOperator(sql, SearchXml::Or, firstCondition);
                 firstCondition = false;
@@ -895,7 +895,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             bool firstCondition = true;
 
-            foreach(int tagID, ids)
+            foreach (int tagID, ids)
             {
                 addSqlOperator(sql, SearchXml::Or, firstCondition);
                 firstCondition = false;
@@ -923,7 +923,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 sql += QLatin1String("))) ");
             }
 
-            foreach(int tagID, values)
+            foreach (int tagID, values)
             {
                 *boundValues << tagID;
             }
@@ -935,7 +935,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             bool firstCondition = true;
 
-            foreach(int tagID, ids)
+            foreach (int tagID, ids)
             {
                 addSqlOperator(sql, SearchXml::And, firstCondition);
                 firstCondition = false;
@@ -1124,7 +1124,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             QList<double> ratioValues;
 
-            foreach(const QString& value, values)
+            foreach (const QString& value, values)
             {
                  *boundValues << value;
 
@@ -1142,7 +1142,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             sql += QString::fromUtf8(") ");
             QString query = QString::fromUtf8("abs((CAST(VideoMetadata.aspectRatio as REAL) - ?)  < 0.1) ");
 
-            foreach(double value, ratioValues)
+            foreach (double value, ratioValues)
             {
                 *boundValues << value;
                 sql +=  QString::fromUtf8("OR ") + query;
@@ -1199,7 +1199,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 return false;
             }
 
-            foreach(const QString& value, values)
+            foreach (const QString& value, values)
             {
                  *boundValues << value;
 
@@ -1293,7 +1293,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 return false;
             }
 
-            foreach(const QString& value, values)
+            foreach (const QString& value, values)
             {
                 sql += QString::fromUtf8("( Upper(VideoMetadata.videoCodec) LIKE '%") + value.toUpper() + QString::fromUtf8("%' ");
 

@@ -178,7 +178,7 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
             return;
         }
 
-        foreach(int id, intAlbumIds)
+        foreach (int id, intAlbumIds)
         {
             albumIds << id;
         }
@@ -981,7 +981,7 @@ void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QLis
         // Unfortunately, we need to convert to QVariant
         QList<QVariant> variantIdList;
 
-        foreach(const qlonglong& id, imageIds)
+        foreach (const qlonglong& id, imageIds)
         {
             variantIdList << id;
         }
@@ -1012,7 +1012,7 @@ void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QLis
                              "       LEFT JOIN Albums ON Albums.id=Images.album "
                              " WHERE Images.status=1 AND Images.id = ?;"));
 
-        foreach(const qlonglong& id, imageIds)
+        foreach (const qlonglong& id, imageIds)
         {
             query.bindValue(0, id);
             executionSuccess = access.backend()->exec(query);
@@ -1082,7 +1082,7 @@ QSet<int> ImageLister::albumRootsToList() const
     QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
     QSet<int>                 ids;
 
-    foreach(const CollectionLocation& location, locations)
+    foreach (const CollectionLocation& location, locations)
     {
         ids << location.id();
     }
@@ -1104,7 +1104,7 @@ QString ImageLister::tagSearchXml(int tagId, const QString& type, bool includeCh
         properties << ImageTagPropertyName::autodetectedFace();
         properties << ImageTagPropertyName::tagRegion();
 
-        foreach(const QString& property, properties)
+        foreach (const QString& property, properties)
         {
             writer.writeField(QLatin1String("imagetagproperty"), includeChildTags ? SearchXml::InTree : SearchXml::Equal);
 
