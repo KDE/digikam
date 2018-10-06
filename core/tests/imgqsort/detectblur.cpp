@@ -45,10 +45,7 @@ int main(int argc, char** argv)
 
     QString path                = QString::fromUtf8(argv[1]);
     QFileInfoList list          = QFileInfoList() << QFileInfo(path);
-    QMultiMap<int, QString> map = ImgQSortTest_ParseTestImages(DetectBlur, list);
-    PickLabel pick              = (PickLabel)map.key(path);
-
-    qDebug() << "Blur quality result is" << pick << "(0:None, 1:Rejected, 2:Pending, 3:Accepted)";
+    ImgQSortTest_ParseTestImages(DetectBlur, list);
 
     return 0;
 }

@@ -791,7 +791,7 @@ int ImageQualityParser::exposureAmount() const
 {
     /// Separate the image in 3 places (Blue, Green and Red channels)
 
-    std::vector<Mat> bgr_planes;
+    std::vector<Mat> bgr_planes(3);
     split(d->src, bgr_planes);
 
     /// Establish the number of bins
@@ -833,6 +833,9 @@ int ImageQualityParser::exposureAmount() const
     Scalar rmean      = mean(r_hist);
     Scalar gmean      = mean(g_hist);
     Scalar bmean      = mean(b_hist);
+
+    qCDebug(DIGIKAM_DIMG_LOG) << "Histogram sums:" << rmean[0] << gmean[0] << bmean[0];
+
     int exposurelevel = (rmean[0] + gmean[0] + bmean[0]) / 3;
 
     return exposurelevel;
