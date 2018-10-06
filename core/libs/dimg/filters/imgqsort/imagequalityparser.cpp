@@ -264,6 +264,8 @@ void ImageQualityParser::startAnalyse()
                                  finalnoise       * d->imq.noiseWeight +
                                  finalcompression * d->imq.compressionWeight;
 
+        // FIXME: the over-eposure detection is not handle here!
+
         finalquality           = finalquality / 100;
 
         // Assigning PickLabels
