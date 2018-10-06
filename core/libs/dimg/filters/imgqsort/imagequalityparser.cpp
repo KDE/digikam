@@ -85,7 +85,6 @@ public:
     const uint            clusterCount;
     const uint            size;              // Size of squared original image.
 
-    Mat                   src;               // Matrix of the original source image
     Mat                   src_gray;          // Matrix of the grayscaled source image
     Mat                   detected_edges;    // Matrix containing only edges in the image
 
@@ -132,28 +131,34 @@ ImageQualityParser::~ImageQualityParser()
 
 void ImageQualityParser::readImage() const
 {
+    DColor col;
+    int j = 0;
+
+    // 8 bits grayscale image creation
+
     DImg img8 = d->image;
     img8.convertToEightBit();                        // Convert to 8 bits color depth.
-    d->src    = Mat(img8.numPixels(), 3, CV_8UC3);   // Create a matrix containing the pixel values of original image
+    d->src_gray = Mat(img8.numPixels(), 1, CV_8UC1); // Create a matrix containing the pixel values of grayscaled image
 
-    MixerContainer settings;
-    settings.bMonochrome = true;
-    MixerFilter mixer(&img8, 0L, settings);
-    mixer.startFilterDirectly();
-    DImg gray;
-    gray.putImageData(mixer.getTargetImage().bits());
-    d->src_gray = Mat(gray.numPixels(), 1, CV_8UC1); // Create a matrix containing the pixel values of grayscaled image
+    for (uint x = 0 ; d->running && (x < img8.width()) ; ++x)
+    {
+        for (uint y = 0 ; d->running && (y < img8.height()) ; ++y)
+        {
+            col                         = img8.getPixelColor(x, y);
+            d->src_gray.at<uchar>(x, y) = (col.red() + col.green() + col.blue()) / 3;
+        }
+    }
+
+    // For Noise detection
 
     if (d->imq.detectNoise)
     {
-        DColor col;
-
         for (int c = 0 ; d->running && (c < 3) ; ++c)
         {
             d->fimg[c] = new float[d->neimage.numPixels()];
         }
 
-        int j = 0;
+        j = 0;
 
         for (uint y = 0 ; d->running && (y < d->neimage.height()) ; ++y)
         {
@@ -660,11 +665,11 @@ int ImageQualityParser::compressionDetector() const
     const int block_size = 8;
     int countblocks      = 0;
     int number_of_blocks = 0;
-    int sum              = 0;
+    float sum            = 0.0;
 
-    std::vector<int> average_bottom;
-    std::vector<int> average_middle;
-    std::vector<int> average_top;
+    std::vector<float> average_bottom;
+    std::vector<float> average_middle;
+    std::vector<float> average_top;
 
     // Go through 8 blocks at a time horizontally
     // iterating through columns.
@@ -675,28 +680,28 @@ int ImageQualityParser::compressionDetector() const
 
         for (int j = 0 ; j < d->src_gray.cols ; j += 8)
         {
-            sum = 0;
+            sum = 0.0;
 
             for (int k = j ; k < block_size ; ++k)
             {
-                sum += (int)d->src_gray.at<uchar>(i, j);
+                sum += (float)d->src_gray.at<uchar>(i, j);
             }
 
-            average_top.push_back(sum / 8);
+            average_top.push_back(sum / 8.0);
         }
 
         // Calculating intensity of middle column.
 
         for (int j = 0 ; j < d->src_gray.cols ; j += 8)
         {
-            sum = 0;
+            sum = 0.0;
 
             for (int k = j ; k < block_size ; ++k)
             {
-                sum += (int)d->src_gray.at<uchar>(i + 1, j);
+                sum += (float)d->src_gray.at<uchar>(i + 1, j);
             }
 
-            average_middle.push_back(sum / 8);
+            average_middle.push_back(sum / 8.0);
         }
 
         // Calculating intensity of bottom column.
@@ -705,14 +710,14 @@ int ImageQualityParser::compressionDetector() const
 
         for (int j = 0 ; j < d->src_gray.cols ; j += 8)
         {
-            sum = 0;
+            sum = 0.0;
 
             for (int k = j ; k < block_size ; ++k)
             {
-                sum += (int)d->src_gray.at<uchar>(i + 2, j);
+                sum += (float)d->src_gray.at<uchar>(i + 2, j);
             }
 
-            average_bottom.push_back(sum / 8);
+            average_bottom.push_back(sum / 8.0);
             ++countblocks;
         }
 
@@ -721,7 +726,7 @@ int ImageQualityParser::compressionDetector() const
 
         for (int j = 0 ; j < countblocks ; ++j)
         {
-            if ((average_middle[j] == (average_top[j] + average_bottom[j]) / 2) &&
+            if ((average_middle[j] == (average_top[j] + average_bottom[j]) / 2.0) &&
                 average_middle[j] > THRESHOLD)
             {
                 ++number_of_blocks;
@@ -741,28 +746,28 @@ int ImageQualityParser::compressionDetector() const
 
         for (int i = 0 ; i < d->src_gray.rows ; i += 8)
         {
-            sum = 0;
+            sum = 0.0;
 
             for (int k = i ; k < block_size ; ++k)
             {
-                sum += (int)d->src_gray.at<uchar>(i, j);
+                sum += (float)d->src_gray.at<uchar>(i, j);
             }
 
-            average_top.push_back(sum / 8);
+            average_top.push_back(sum / 8.0);
         }
 
         // Calculating intensity of middle row.
 
-        for (int i= 0 ; i < d->src_gray.rows ; i += 8)
+        for (int i = 0 ; i < d->src_gray.rows ; i += 8)
         {
-            sum = 0;
+            sum = 0.0;
 
             for (int k = i ; k < block_size ; ++k)
             {
-                sum += (int)d->src_gray.at<uchar>(i, j + 1);
+                sum += (float)d->src_gray.at<uchar>(i, j + 1);
             }
 
-            average_middle.push_back(sum / 8);
+            average_middle.push_back(sum / 8.0);
         }
 
         // Calculating intensity of bottom row.
@@ -771,14 +776,14 @@ int ImageQualityParser::compressionDetector() const
 
         for (int i = 0 ; i < d->src_gray.rows ; i += 8)
         {
-            sum = 0;
+            sum = 0.0;
 
             for (int k = i ; k < block_size ; ++k)
             {
-                sum += (int)d->src_gray.at<uchar>(i, j + 2);
+                sum += (float)d->src_gray.at<uchar>(i, j + 2);
             }
 
-            average_bottom.push_back(sum / 8);
+            average_bottom.push_back(sum / 8.0);
             ++countblocks;
         }
 
@@ -787,7 +792,7 @@ int ImageQualityParser::compressionDetector() const
 
         for (int i = 0 ; i < countblocks ; ++i)
         {
-            if ((average_middle[i] == (average_top[i] + average_bottom[i]) / 2) &&
+            if ((average_middle[i] == (average_top[i] + average_bottom[i]) / 2.0) &&
                 average_middle[i] > THRESHOLD)
             {
                 ++number_of_blocks;
