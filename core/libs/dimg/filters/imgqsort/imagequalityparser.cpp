@@ -128,6 +128,45 @@ ImageQualityParser::~ImageQualityParser()
     delete d;
 }
 
+void ImageQualityParser::readImage() const
+{
+    DImg img8 = d->image;
+    img8.convertToEightBit();                        // Convert to 8 bits color depth.
+    d->src    = Mat(img8.numPixels(), 3, CV_8UC3);   // Create a matrix containing the pixel values of original image
+
+    MixerContainer settings;
+    settings.bMonochrome = true;
+    MixerFilter mixer(&img8, 0L, settings);
+    mixer.startFilterDirectly();
+    DImg gray;
+    gray.putImageData(mixer.getTargetImage().bits());
+    d->src_gray = Mat(gray.numPixels(), 1, CV_8UC1); // Create a matrix containing the pixel values of grayscaled image
+
+    if (d->imq.detectNoise)
+    {
+        DColor col;
+
+        for (int c = 0 ; d->running && (c < 3) ; ++c)
+        {
+            d->fimg[c] = new float[d->neimage.numPixels()];
+        }
+
+        int j = 0;
+
+        for (uint y = 0 ; d->running && (y < d->neimage.height()) ; ++y)
+        {
+            for (uint x = 0 ; d->running && (x < d->neimage.width()) ; ++x)
+            {
+                col           = d->neimage.getPixelColor(x, y);
+                d->fimg[0][j] = col.red();
+                d->fimg[1][j] = col.green();
+                d->fimg[2][j] = col.blue();
+                ++j;
+            }
+        }
+    }
+}
+
 void ImageQualityParser::startAnalyse()
 {
     // For Noise Estimation
@@ -259,42 +298,6 @@ void ImageQualityParser::cancelAnalyse()
     d->running = false;
 }
 
-void ImageQualityParser::readImage() const
-{
-    MixerContainer settings;
-    settings.bMonochrome = true;
-
-    MixerFilter mixer(&d->image, 0L, settings);
-    mixer.startFilterDirectly();
-    d->image.putImageData(mixer.getTargetImage().bits());
-
-    d->src      = Mat(d->image.numPixels(), 3, CV_8UC3); // Create a matrix containing the pixel values of original image
-    d->src_gray = Mat(d->image.numPixels(), 1, CV_8UC1); // Create a matrix containing the pixel values of grayscaled image
-
-    if (d->imq.detectNoise)
-    {
-        DColor col;
-
-        for (int c = 0 ; d->running && (c < 3) ; ++c)
-        {
-            d->fimg[c] = new float[d->neimage.numPixels()];
-        }
-
-        int j = 0;
-
-        for (uint y = 0 ; d->running && (y < d->neimage.height()) ; ++y)
-        {
-            for (uint x = 0 ; d->running && (x < d->neimage.width()) ; ++x)
-            {
-                col           = d->neimage.getPixelColor(x, y);
-                d->fimg[0][j] = col.red();
-                d->fimg[1][j] = col.green();
-                d->fimg[2][j] = col.blue();
-                ++j;
-            }
-        }
-    }
-}
 
 void ImageQualityParser::cannyThreshold(int, void*) const
 {
@@ -836,7 +839,7 @@ int ImageQualityParser::exposureAmount() const
 
     qCDebug(DIGIKAM_DIMG_LOG) << "Histogram sums:" << rmean[0] << gmean[0] << bmean[0];
 
-    int exposurelevel = (rmean[0] + gmean[0] + bmean[0]) / 3;
+    int exposurelevel = (rmean[0] + gmean[0] + bmean[0]) / 3.0;
 
     return exposurelevel;
 }
