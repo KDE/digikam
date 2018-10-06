@@ -789,16 +789,17 @@ int ImageQualityParser::compressionDetector() const
 
 int ImageQualityParser::exposureAmount() const
 {
-    /// Separate the image in 3 places ( B, G and R )
+    /// Separate the image in 3 places (Bleu, Green and Red)
 
     std::vector<Mat> bgr_planes;
-
     split(d->src, bgr_planes);
 
     /// Establish the number of bins
+
     int histSize           = 256;
 
-    /// Set the ranges ( for B,G,R) )
+    /// Set the ranges (for Bleu, Green, and Red)
+
     float range[]          = { 0, 256 };
     const float* histRange = { range  };
 
@@ -810,23 +811,25 @@ int ImageQualityParser::exposureAmount() const
     Mat r_hist;
 
     /// Compute the histograms
+
     calcHist(&bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate);
     calcHist(&bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate);
     calcHist(&bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate);
 
-    // Draw the histograms for B, G and R
+    // Draw the histograms for Blue, Green, and Red channels
+
     int hist_w = 512;
     int hist_h = 400;
-
     Mat histImage(hist_h, hist_w, CV_8UC3, Scalar(0, 0, 0));
 
-    /// Normalize the histograms:
+    /// Normalize the histograms
 
     normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
     normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
     normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
 
     /// Sum the histograms
+
     Scalar rmean      = mean(r_hist);
     Scalar gmean      = mean(g_hist);
     Scalar bmean      = mean(b_hist);
