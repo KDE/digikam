@@ -110,18 +110,22 @@ QString ThumbsDb::getLegacySetting(const QString& keyword)
     return QString();
 }
 
-static void fillThumbnailInfo(const QList<QVariant>& values, ThumbsDbInfo& info)
+ThumbsDbInfo ThumbsDb::fillThumbnailInfo(const QList<QVariant>& values)
 {
     if (values.isEmpty())
     {
-        return;
+        return ThumbsDbInfo();
     }
+
+    ThumbsDbInfo info;
 
     info.id               = values.at(0).toInt();
     info.type             = (DatabaseThumbnail::Type)values.at(1).toInt();
     info.modificationDate = values.at(2).toDateTime();
     info.orientationHint  = values.at(3).toInt();
     info.data             = values.at(4).toByteArray();
+
+    return info;
 }
 
 ThumbsDbInfo ThumbsDb::findByHash(const QString& uniqueHash, qlonglong fileSize)
@@ -133,10 +137,7 @@ ThumbsDbInfo ThumbsDb::findByHash(const QString& uniqueHash, qlonglong fileSize)
                                  "   WHERE uniqueHash=? AND fileSize=?);"),
                    uniqueHash, fileSize, &values);
 
-    ThumbsDbInfo info;
-    fillThumbnailInfo(values, info);
-
-    return info;
+    return fillThumbnailInfo(values);
 }
 
 ThumbsDbInfo ThumbsDb::findByFilePath(const QString& path)
@@ -148,10 +149,7 @@ ThumbsDbInfo ThumbsDb::findByFilePath(const QString& path)
                                  "   WHERE path=?);"),
                    path, &values);
 
-    ThumbsDbInfo info;
-    fillThumbnailInfo(values, info);
-
-    return info;
+    return fillThumbnailInfo(values);
 }
 
 ThumbsDbInfo ThumbsDb::findByFilePath(const QString& path, const QString& uniqueHash)
@@ -198,9 +196,7 @@ ThumbsDbInfo ThumbsDb::findByCustomIdentifier(const QString& id)
                                  "   WHERE identifier=?);"),
                    id, &values);
 
-    ThumbsDbInfo info;
-    fillThumbnailInfo(values, info);
-    return info;
+    return fillThumbnailInfo(values);
 }
 
 QList<int> ThumbsDb::findAll()

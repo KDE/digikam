@@ -141,6 +141,8 @@ private:
     explicit ThumbsDb(ThumbsDbBackend* const backend);
     ~ThumbsDb();
 
+    ThumbsDbInfo fillThumbnailInfo(const QList<QVariant>& values);
+
 private:
 
     ThumbsDb(const ThumbsDb&); // Disable
