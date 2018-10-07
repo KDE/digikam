@@ -256,6 +256,11 @@ void ImageInfoCache::invalidate()
 
     m_infos.clear();
     m_albums.clear();
+    m_grouped.clear();
+    m_nameHash.clear();
+    m_dataHash.clear();
+    m_needUpdateAlbums  = true;
+    m_needUpdateGrouped = true;
 }
 
 void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
