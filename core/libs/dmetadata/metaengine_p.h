@@ -61,6 +61,7 @@
 #endif
 
 #include <exiv2/exv_conf.h>
+#include <exiv2/version.hpp>
 #include <exiv2/error.hpp>
 #include <exiv2/image.hpp>
 #include <exiv2/jpgimage.hpp>
