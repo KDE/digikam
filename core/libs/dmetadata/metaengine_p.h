@@ -61,7 +61,6 @@
 #endif
 
 #include <exiv2/exv_conf.h>
-#include <exiv2/version.hpp>
 #include <exiv2/error.hpp>
 #include <exiv2/image.hpp>
 #include <exiv2/jpgimage.hpp>
@@ -96,6 +95,10 @@
 
 #ifdef Q_CC_GNU
 #   pragma GCC visibility pop
+#endif
+
+#if EXIV2_TEST_VERSION(0,27,0)
+    #include <exiv2/version.hpp>
 #endif
 
 // End of Exiv2 headers ------------------------------------------------------
