@@ -528,8 +528,7 @@ void CoreDB::setAlbumIcon(int albumID, qlonglong iconID)
     else
     {
         d->db->execSql(QString::fromUtf8("UPDATE Albums SET icon=? WHERE id=?;"),
-                       iconID,
-                       albumID);
+                       iconID, albumID);
     }
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
 }
