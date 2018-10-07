@@ -254,8 +254,8 @@ AlbumInfo::List CoreDB::scanAlbums()
     AlbumInfo::List aList;
 
     QList<QVariant> values;
-    d->db->execSql(QString::fromUtf8("SELECT albumRoot, id, relativePath, date, caption, collection, icon FROM Albums "
-                                     " WHERE albumRoot != 0;"), // exclude stale albums
+    d->db->execSql(QString::fromUtf8("SELECT albumRoot, id, relativePath, date, caption, collection, icon "
+                                     "FROM Albums WHERE albumRoot != 0;"), // exclude stale albums
                    &values);
 
     QString iconAlbumUrl, iconName;
@@ -2098,7 +2098,7 @@ void CoreDB::setImageProperty(qlonglong imageID, const QString& property, const 
 {
     d->db->execSql(QString::fromUtf8("REPLACE INTO ImageProperties "
                                      "(imageid, property, value) "
-                                     "VALUES(?, ?, ?);"),
+                                     " VALUES(?, ?, ?);"),
                    imageID, property, value);
 }
 
@@ -2169,7 +2169,7 @@ void CoreDB::setImageCopyrightProperty(qlonglong imageID, const QString& propert
 
     d->db->execSql(QString::fromUtf8("REPLACE INTO ImageCopyright "
                                      "(imageid, property, value, extraValue) "
-                                     "VALUES(?, ?, ?, ?);"),
+                                     " VALUES(?, ?, ?, ?);"),
                    imageID, property, value, extraValue);
 }
 
@@ -2728,7 +2728,7 @@ QList<ItemScanInfo> CoreDB::getIdenticalFiles(const QString& uniqueHash, qlonglo
 
     // find items with same fingerprint
     d->db->execSql(QString::fromUtf8("SELECT id, album, name, status, category, modificationDate, fileSize FROM Images "
-                                     " WHERE fileSize=? AND uniqueHash=? AND album IS NOT NULL;"),
+                                     "WHERE fileSize=? AND uniqueHash=? AND album IS NOT NULL;"),
                    fileSize, uniqueHash, &values);
 
     QList<ItemScanInfo> list;
@@ -3133,7 +3133,7 @@ int CoreDB::addToDownloadHistory(const QString& identifier, const QString& name,
     QVariant id;
     d->db->execSql(QString::fromUtf8("REPLACE INTO DownloadHistory "
                                      "(identifier, filename, filesize, filedate) "
-                                     "VALUES (?,?,?,?);"),
+                                     " VALUES (?,?,?,?);"),
                    identifier, name, fileSize, date, 0, &id);
 
     return id.toInt();
