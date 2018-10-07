@@ -2605,6 +2605,30 @@ QList<qlonglong> CoreDB::getOneRelatedImageEach(const QList<qlonglong>& ids, Dat
     return result.toList();
 }
 
+QList<qlonglong> CoreDB::getRelatedImagesToByType(DatabaseRelation::Type type)
+{
+    QList<QVariant> values;
+
+    d->db->execSql(QString::fromUtf8("SELECT object FROM ImageRelations "
+                                     "INNER JOIN Images ON ImageRelations.object=Images.id "
+                                     "WHERE type=? AND status!=3;"),
+                   type, &values);
+
+    QList<qlonglong> imageIds;
+
+    if (values.isEmpty())
+    {
+        return imageIds;
+    }
+
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
+    {
+        imageIds << (*it).toLongLong();
+    }
+
+    return imageIds;
+}
+
 QStringList CoreDB::getItemsURLsWithTag(int tagId)
 {
     QList<QVariant> values;

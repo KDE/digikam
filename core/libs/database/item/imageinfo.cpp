@@ -206,7 +206,6 @@ ImageInfoData::ImageInfoData()
     hasCoordinates         = false;
     hasAltitude            = false;
 
-    groupedImages          = 0;
     groupImage             = -1;
 
     defaultTitleCached     = false;
@@ -223,7 +222,6 @@ ImageInfoData::ImageInfoData()
     imageSizeCached        = false;
     tagIdsCached           = false;
     positionsCached        = false;
-    groupedImagesCached    = false;
     groupImageCached       = false;
     uniqueHashCached       = false;
 
@@ -973,14 +971,7 @@ int ImageInfo::numberOfGroupedImages() const
         return false;
     }
 
-    RETURN_IF_CACHED(groupedImages)
-
-    int groupedImages                           = CoreDbAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped).size();
-
-    ImageInfoWriteLocker lock;
-    m_data.constCastData()->groupedImages       = groupedImages;
-    m_data.constCastData()->groupedImagesCached = true;
-    return m_data->groupedImages;
+    return ImageInfoStatic::cache()->getImageGroupedCount(m_data->id);
 }
 
 qlonglong ImageInfo::groupImageId() const

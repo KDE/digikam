@@ -38,7 +38,8 @@ namespace Digikam
 {
 
 ImageInfoCache::ImageInfoCache()
-    : m_needUpdateAlbums(true)
+    : m_needUpdateAlbums(true),
+      m_needUpdateGrouped(true)
 {
     qRegisterMetaType<ImageInfo>("ImageInfo");
     qRegisterMetaType<ImageInfoList>("ImageInfoList");
@@ -109,10 +110,26 @@ void ImageInfoCache::checkAlbums()
     {
         // list comes sorted from db
         QList<AlbumShortInfo> infos = CoreDbAccess().db()->getAlbumShortInfos();
+
         ImageInfoWriteLocker lock;
         m_albums                    = infos;
         m_needUpdateAlbums          = false;
     }
+}
+
+int ImageInfoCache::getImageGroupedCount(qlonglong id)
+{
+    if (m_needUpdateGrouped)
+    {
+        QList<qlonglong> ids = CoreDbAccess().db()->getRelatedImagesToByType(DatabaseRelation::Grouped);
+
+        ImageInfoWriteLocker lock;
+        m_grouped            = ids;
+        m_needUpdateGrouped  = false;
+    }
+
+    ImageInfoReadLocker lock;
+    return m_grouped.count(id);
 }
 
 DSharedDataPointer<ImageInfoData> ImageInfoCache::infoForId(qlonglong id)
@@ -319,8 +336,8 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
 
             if (changes & DatabaseFields::ImageRelations)
             {
-                (*it)->groupedImagesCached = false;
                 (*it)->groupImageCached    = false;
+                m_needUpdateGrouped        = true;
             }
 
             if (changes.hasFieldsFromVideoMetadata())

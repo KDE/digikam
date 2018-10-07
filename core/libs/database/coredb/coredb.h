@@ -1108,6 +1108,11 @@ public:
                                             DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
 
     /**
+     * Retrieves all images that related to (retrieves objects) by given type.
+     */
+    QList<qlonglong> getRelatedImagesToByType(DatabaseRelation::Type type);
+
+    /**
      * Returns a list of all images where the Faces have either not been detected
      * yet, or is outdated because the file is identified as changed since
      * the generation of the fingerprint.
