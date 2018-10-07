@@ -232,11 +232,11 @@ void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo
     CoreDbOperationGroup group;
     group.setMaximumTime(200);
 
-    foreach(ImageInfo info, infoList)
+    foreach (ImageInfo info, infoList)
     {
         if (!found && info.id() == pick.id())
         {
-            foreach(ImageInfo dropInfo, infos)
+            foreach (ImageInfo dropInfo, infos)
             {
                 dropInfo.setManualOrder(counter);
                 counter += (order ? 1 : -1);

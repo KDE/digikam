@@ -426,7 +426,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             const QList<ImageInfo> imageInfoList =  d->model->imageInfos(indexList);
             GPSImageInfo::List gpsImageInfoList;
 
-            foreach(const ImageInfo& imageInfo, imageInfoList)
+            foreach (const ImageInfo& imageInfo, imageInfoList)
             {
                 GPSImageInfo gpsImageInfo;
 
@@ -468,7 +468,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             const QList<CamItemInfo> imageInfoList =  d->importModel->camItemInfos(indexList);
             GPSImageInfo::List       gpsImageInfoList;
 
-            foreach(const CamItemInfo& imageInfo, imageInfoList)
+            foreach (const CamItemInfo& imageInfo, imageInfoList)
             {
                 const DMetadata meta(imageInfo.url().toLocalFile());
                 double          lat, lng;
@@ -619,7 +619,7 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
         ( changes & DatabaseFields::LongitudeNumber ) ||
         ( changes & DatabaseFields::Altitude ) )
     {
-        foreach(const qlonglong& id, changeset.ids())
+        foreach (const qlonglong& id, changeset.ids())
         {
             const QModelIndex index = d->model->indexForImageId(id);
 

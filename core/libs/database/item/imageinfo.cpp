@@ -369,7 +369,6 @@ ImageInfo ImageInfo::fromLocationAlbumAndName(int locationId, const QString& alb
         info.m_data              = ImageInfoStatic::cache()->infoForId(shortInfo.id);
 
         ImageInfoWriteLocker lock;
-
         info.m_data->albumId     = shortInfo.albumID;
         info.m_data->albumRootId = shortInfo.albumRootID;
         info.m_data->name        = shortInfo.itemName;
@@ -738,6 +737,7 @@ QSize ImageInfo::dimensions() const
     RETURN_IF_CACHED(imageSize)
 
     QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
+
     ImageInfoWriteLocker lock;
     m_data.constCastData()->imageSizeCached = true;
 
@@ -759,6 +759,7 @@ QList<int> ImageInfo::tagIds() const
     RETURN_IF_CACHED(tagIds)
 
     QList<int> ids = CoreDbAccess().db()->getItemTagIDs(m_data->id);
+
     ImageInfoWriteLocker lock;
     m_data.constCastData()->tagIds       = ids;
     m_data.constCastData()->tagIdsCached = true;
@@ -975,6 +976,7 @@ int ImageInfo::numberOfGroupedImages() const
     RETURN_IF_CACHED(groupedImages)
 
     int groupedImages                           = CoreDbAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped).size();
+
     ImageInfoWriteLocker lock;
     m_data.constCastData()->groupedImages       = groupedImages;
     m_data.constCastData()->groupedImagesCached = true;
@@ -1964,6 +1966,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             const QVariantList fieldValues = CoreDbAccess().db()->getVideoMetadata(m_data->id, missingVideoMetadata);
 
             ImageInfoWriteLocker lock;
+
             if (fieldValues.isEmpty())
             {
                 m_data.constCastData()->hasVideoMetadata = false;

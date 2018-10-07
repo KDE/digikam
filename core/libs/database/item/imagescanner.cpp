@@ -941,7 +941,7 @@ void ImageScanner::commitTags()
     QVector<int> pickTags  = TagsCache::instance()->pickLabelTags();
     QList<int> removeTags;
 
-    foreach(int cTag, currentTags)
+    foreach (int cTag, currentTags)
     {
         if ((d->commit.hasColorTag && colorTags.contains(cTag)) ||
             (d->commit.hasPickTag && pickTags.contains(cTag)))
@@ -1179,19 +1179,19 @@ DImageHistory ImageScanner::resolvedImageHistory(const DImageHistory& history, b
 {
     DImageHistory h;
 
-    foreach(const DImageHistory::Entry& e, history.entries())
+    foreach (const DImageHistory::Entry& e, history.entries())
     {
         // Copy entry, without referredImages
         DImageHistory::Entry entry;
         entry.action = e.action;
 
         // resolve referredImages
-        foreach(const HistoryImageId& id, e.referredImages)
+        foreach (const HistoryImageId& id, e.referredImages)
         {
             QList<qlonglong> imageIds = resolveHistoryImageId(id);
 
             // append each image found in collection to referredImages
-            foreach(const qlonglong& imageId, imageIds)
+            foreach (const qlonglong& imageId, imageIds)
             {
                 ImageInfo info(imageId);
 
@@ -1290,7 +1290,7 @@ static QList<qlonglong> mergedIdLists(const HistoryImageId& referenceId,
 
     // Add a candidate if it has the same UUID, or either reference or candidate  have a UUID
     // (other way round: do not add a candidate which positively has a different UUID)
-    foreach(const qlonglong& candidate, candidates)
+    foreach (const qlonglong& candidate, candidates)
     {
         if (results.contains(candidate))
         {
@@ -1334,7 +1334,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
         {
             QList<qlonglong> ids;
 
-            foreach(const ItemScanInfo& info, infos)
+            foreach (const ItemScanInfo& info, infos)
             {
                 if (info.status != DatabaseItem::Status::Trashed && info.status != DatabaseItem::Status::Obsolete)
                 {

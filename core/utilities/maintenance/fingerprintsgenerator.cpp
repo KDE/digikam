@@ -113,7 +113,8 @@ void FingerPrintsGenerator::slotStart()
     // Get all image infos for images (category 1) that are visible (status 1)
     QList<ImageInfo> imageInfos;
     QList<qlonglong> imageIds = CoreDbAccess().db()->getImageIds(DatabaseItem::Status::Visible, DatabaseItem::Category::Image);
-    foreach(const qlonglong& id, imageIds)
+
+    foreach (const qlonglong& id, imageIds)
     {
         imageInfos << ImageInfo(id);
     }
@@ -122,8 +123,8 @@ void FingerPrintsGenerator::slotStart()
 
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
 
-    for (AlbumList::ConstIterator it = d->albumList.constBegin();
-         !canceled() && (it != d->albumList.constEnd()); ++it)
+    for (AlbumList::ConstIterator it = d->albumList.constBegin() ;
+         !canceled() && (it != d->albumList.constEnd()) ; ++it)
     {
         QStringList aPaths;
 
@@ -138,7 +139,7 @@ void FingerPrintsGenerator::slotStart()
 
         if (!d->rebuildAll)
         {
-            foreach(const QString& path, aPaths)
+            foreach (const QString& path, aPaths)
             {
                 if (dirty.contains(path))
                 {

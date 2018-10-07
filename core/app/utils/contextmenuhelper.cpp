@@ -271,7 +271,7 @@ void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
         QAction* const serviceAction = servicesMenu->menuAction();
         serviceAction->setText(i18n("Open With"));
 
-        foreach(const KService::Ptr& service, offers)
+        foreach (const KService::Ptr& service, offers)
         {
             QString name          = service->name().replace(QLatin1Char('&'), QLatin1String("&&"));
             QAction* const action = servicesMenu->addAction(name);
@@ -353,7 +353,7 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
     bool sameCategory = true;
     QVariantList varList;
 
-    foreach(const qlonglong& id, ids)
+    foreach (const qlonglong& id, ids)
     {
         varList = CoreDbAccess().db()->getImagesFields(id, DatabaseFields::Category);
 
@@ -882,7 +882,7 @@ void ContextMenuHelper::addGroupMenu(const imageIds &ids, const QList<QAction*>&
 
     QMenu* const menu = new QMenu(i18n("Group"));
 
-    foreach(QAction* const action, actions)
+    foreach (QAction* const action, actions)
     {
         menu->addAction(action);
     }
@@ -892,7 +892,7 @@ void ContextMenuHelper::addGroupMenu(const imageIds &ids, const QList<QAction*>&
 
 void ContextMenuHelper::addGroupActions(const imageIds &ids)
 {
-    foreach(QAction* const action, groupMenuActions(ids))
+    foreach (QAction* const action, groupMenuActions(ids))
     {
         d->parent->addAction(action);
     }
@@ -1023,7 +1023,7 @@ void ContextMenuHelper::setGroupsOpen(bool open)
 
     GroupImageFilterSettings settings = d->imageFilterModel->groupImageFilterSettings();
 
-    foreach(const qlonglong& id, d->selectedIds)
+    foreach (const qlonglong& id, d->selectedIds)
     {
         ImageInfo info(id);
 

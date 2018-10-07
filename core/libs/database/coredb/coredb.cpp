@@ -794,7 +794,7 @@ QList< int > CoreDB::getTagsWithProperty(const QString& property)
 
     QList<int> tagIds;
 
-    foreach(const QVariant& var, values)
+    foreach (const QVariant& var, values)
     {
         tagIds << var.toInt();
     }
@@ -946,7 +946,7 @@ static QStringList joinMainAndUserFilterString(const QChar& sep, const QString& 
     filterSet      = filter.split(sep, QString::SkipEmptyParts).toSet();
     userFilterList = userFilter.split(sep, QString::SkipEmptyParts);
 
-    foreach(const QString& userFormat, userFilterList)
+    foreach (const QString& userFormat, userFilterList)
     {
         if (userFormat.startsWith(QLatin1Char('-')))
         {
@@ -1221,7 +1221,7 @@ QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status)
 
     QList<qlonglong> imageIds;
 
-    foreach(const QVariant& object, values)
+    foreach (const QVariant& object, values)
     {
         imageIds << object.toLongLong();
     }
@@ -1239,7 +1239,7 @@ QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status, DatabaseItem::
 
     QList<qlonglong> imageIds;
 
-    foreach(const QVariant& object, values)
+    foreach (const QVariant& object, values)
     {
         imageIds << object.toLongLong();
     }
@@ -1355,7 +1355,7 @@ QVector<QList<int> > CoreDB::getItemsTagIDs(const QList<qlonglong> imageIds)
         d->db->execSql(query, imageIds[i], &values);
         QList<int>& tagIds = results[i];
 
-        foreach(const QVariant& v, values)
+        foreach (const QVariant& v, values)
         {
             tagIds << v.toInt();
         }
@@ -1769,7 +1769,7 @@ QVariantList CoreDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseFields
 
         DbEngineSqlQuery query = d->db->prepareQuery(sql);
 
-        foreach(const qlonglong& imageid, imageIDs)
+        foreach (const qlonglong& imageid, imageIDs)
         {
             QVariantList singleValueList;
             d->db->execSql(query, imageid, &singleValueList);
@@ -2244,7 +2244,7 @@ QList<qlonglong> CoreDB::findByNameAndCreationDate(const QString& fileName, cons
 
     QList<qlonglong> ids;
 
-    foreach(const QVariant& var, values)
+    foreach (const QVariant& var, values)
     {
         ids << var.toLongLong();
     }
@@ -2575,7 +2575,7 @@ QList<qlonglong> CoreDB::getOneRelatedImageEach(const QList<qlonglong>& ids, Dat
     QSet<qlonglong> result;
     QList<QVariant> values;
 
-    foreach(const qlonglong& id, ids)
+    foreach (const qlonglong& id, ids)
     {
         if (type == DatabaseRelation::UndefinedType)
         {
@@ -3206,9 +3206,9 @@ void CoreDB::addTagsToItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
     QVariantList images;
     QVariantList tags;
 
-    foreach(const qlonglong& imageid, imageIDs)
+    foreach (const qlonglong& imageid, imageIDs)
     {
-        foreach(int tagid, tagIDs)
+        foreach (int tagid, tagIDs)
         {
             images << imageid;
             tags << tagid;
@@ -3256,9 +3256,9 @@ void CoreDB::removeTagsFromItems(QList<qlonglong> imageIDs, const QList<int>& ta
     QVariantList images;
     QVariantList tags;
 
-    foreach(const qlonglong& imageid, imageIDs)
+    foreach (const qlonglong& imageid, imageIDs)
     {
-        foreach(int tagid, tagIDs)
+        foreach (int tagid, tagIDs)
         {
             images << imageid;
             tags << tagid;
@@ -3353,7 +3353,7 @@ QList<QDateTime> CoreDB::getAllCreationDates()
 
     QList<QDateTime> list;
 
-    foreach(const QVariant& value, values)
+    foreach (const QVariant& value, values)
     {
         if (!value.isNull())
         {
@@ -3373,7 +3373,7 @@ QMap<QDateTime, int> CoreDB::getAllCreationDatesAndNumberOfImages()
 
     QMap<QDateTime, int> datesStatMap;
 
-    foreach(const QVariant& value, values)
+    foreach (const QVariant& value, values)
     {
         if (!value.isNull())
         {
@@ -4221,7 +4221,7 @@ QList<qlonglong> CoreDB::getAllItems()
 
     QList<qlonglong> items;
 
-    foreach(const QVariant& item, values)
+    foreach (const QVariant& item, values)
     {
         items << item.toLongLong();
     }
@@ -4480,7 +4480,7 @@ QDate CoreDB::getAlbumAverageDate(int albumID)
 
     qint64 julianDays = 0;
 
-    foreach(const QDate& date, dates)
+    foreach (const QDate& date, dates)
     {
         julianDays += date.toJulianDay();
     }
@@ -4525,7 +4525,7 @@ void CoreDB::removeItems(QList<qlonglong> itemIDs, const QList<int>& albumIDs)
     QVariantList imageIds;
     QVariantList status;
 
-    foreach(const qlonglong& id, itemIDs)
+    foreach (const qlonglong& id, itemIDs)
     {
         status << (int)DatabaseItem::Trashed;
         imageIds << id;
@@ -4545,7 +4545,7 @@ void CoreDB::removeItemsPermanently(QList<qlonglong> itemIDs, const QList<int>& 
     QVariantList imageIds;
     QVariantList status;
 
-    foreach(const qlonglong& id, itemIDs)
+    foreach (const qlonglong& id, itemIDs)
     {
         status << (int)DatabaseItem::Obsolete;
         imageIds << id;
@@ -4574,7 +4574,7 @@ void CoreDB::deleteRemovedItems(QList<int> albumIds)
 
     QVariantList albumBindIds;
     QVariantList status;
-    foreach(int albumId, albumIds)
+    foreach (int albumId, albumIds)
     {
         status << (int)DatabaseItem::Removed;
         albumBindIds << albumId;
@@ -4916,7 +4916,7 @@ void CoreDB::clearMetadataFromImage(qlonglong imageID)
     {
         QList<int> tagIds;
 
-        foreach(const ImageTagProperty& property, properties)
+        foreach (const ImageTagProperty& property, properties)
         {
             tagIds << property.imageId;
         }

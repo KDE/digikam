@@ -641,7 +641,7 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
         needToResort                            = sortColumnObject->columnAffectedByChangeset(imageChangeset);
     }
 
-    foreach(const qlonglong& id, imageChangeset.ids())
+    foreach (const qlonglong& id, imageChangeset.ids())
     {
         // first clear the item's cached values
         /// @todo Clear only the fields which were changed
@@ -889,7 +889,7 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
             beginInsertRows(groupLeaderIndex, 0, groupedImages.count()-1);
         }
 
-        foreach(const ImageInfo& groupedInfo, groupedImages)
+        foreach (const ImageInfo& groupedInfo, groupedImages)
         {
             d->cachedImageInfos.insert(groupedInfo.id(), groupedInfo);
 
@@ -985,7 +985,7 @@ ImageInfoList TableViewModel::infosFromItems(QList<TableViewModel::Item*> const 
 {
     ImageInfoList infos;
 
-    foreach(TableViewModel::Item* const item, items)
+    foreach (TableViewModel::Item* const item, items)
     {
         infos << infoFromItem(item);
     }
@@ -1045,7 +1045,7 @@ QList<qlonglong> TableViewModel::imageIds(const QModelIndexList& indexList) cons
 {
     QList<qlonglong> idList;
 
-    foreach(const QModelIndex& index, indexList)
+    foreach (const QModelIndex& index, indexList)
     {
         ASSERT_MODEL(index, this);
 
@@ -1071,7 +1071,7 @@ QList<ImageInfo> TableViewModel::imageInfos(const QModelIndexList& indexList) co
 {
     QList<ImageInfo> infoList;
 
-    foreach(const QModelIndex& index, indexList)
+    foreach (const QModelIndex& index, indexList)
     {
         ASSERT_MODEL(index, this);
 
@@ -1166,7 +1166,7 @@ void TableViewModel::sort(int column, Qt::SortOrder order)
     {
         Item* const itemToSort = itemsRequiringSorting.takeFirst();
 
-        foreach(Item* const itemToCheck, itemToSort->children)
+        foreach (Item* const itemToCheck, itemToSort->children)
         {
             if (!itemToCheck->children.isEmpty())
             {
@@ -1223,7 +1223,7 @@ QMimeData* TableViewModel::mimeData(const QModelIndexList& indexes) const
 
     QModelIndexList imageModelIndexList;
 
-    foreach(const QModelIndex& i, indexes)
+    foreach (const QModelIndex& i, indexes)
     {
         if (i.column() > 0)
         {

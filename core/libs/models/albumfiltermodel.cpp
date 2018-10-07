@@ -697,7 +697,7 @@ bool TagPropertiesFilterModel::matches(Album* album) const
 
     TAlbum* const talbum = static_cast<TAlbum*>(album);
 
-    foreach(const QString& prop, m_propertiesBlackList)
+    foreach (const QString& prop, m_propertiesBlackList)
     {
         if (talbum->hasProperty(prop))
         {
@@ -705,7 +705,7 @@ bool TagPropertiesFilterModel::matches(Album* album) const
         }
     }
 
-    foreach(const QString& prop, m_propertiesWhiteList)
+    foreach (const QString& prop, m_propertiesWhiteList)
     {
         if (!talbum->hasProperty(prop))
         {
@@ -727,7 +727,7 @@ void TagsManagerFilterModel::setQuickListTags(QList<int> tags)
 {
     m_keywords.clear();
 
-    foreach(int tag, tags)
+    foreach (int tag, tags)
     {
         m_keywords << tag;
     }
