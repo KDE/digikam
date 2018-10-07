@@ -1023,7 +1023,8 @@ void CoreDB::getIgnoreDirectoryFilterSettings(QStringList* ignoreDirectoryFilter
 
     ignoreDirectoryFormats     = getSetting(QLatin1String("databaseIgnoreDirectoryFormats"));
     userIgnoreDirectoryFormats = getSetting(QLatin1String("databaseUserIgnoreDirectoryFormats"));
-    *ignoreDirectoryFilter     = joinMainAndUserFilterString(QLatin1Char(';'), ignoreDirectoryFormats, userIgnoreDirectoryFormats);
+    *ignoreDirectoryFilter     = joinMainAndUserFilterString(QLatin1Char(';'),
+                                                             ignoreDirectoryFormats, userIgnoreDirectoryFormats);
 }
 
 void CoreDB::setFilterSettings(const QStringList& imageFilter, const QStringList& videoFilter, const QStringList& audioFilter)
@@ -1294,8 +1295,8 @@ QStringList CoreDB::getItemTagNames(qlonglong imageID)
 
     d->db->execSql(QString::fromUtf8("SELECT name FROM Tags "
                                      "WHERE id IN (SELECT tagid FROM ImageTags "
-                                     "WHERE imageid=?) "
-                                     " ORDER BY name;"),
+                                     " WHERE imageid=?) "
+                                     "  ORDER BY name;"),
                    imageID, &values);
 
     QStringList names;
@@ -1488,8 +1489,8 @@ ItemShortInfo CoreDB::getItemShortInfo(int albumRootId, const QString& relativeP
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT Images.id, Albums.id FROM Images "
-                                     " INNER JOIN Albums ON Images.album=Albums.id "
-                                     "  WHERE name=? AND albumRoot=? AND relativePath=?;"),
+                                     "INNER JOIN Albums ON Images.album=Albums.id "
+                                     " WHERE name=? AND albumRoot=? AND relativePath=?;"),
                    name, albumRootId, relativePath, &values);
 
     ItemShortInfo info;
@@ -2226,8 +2227,8 @@ QList<qlonglong> CoreDB::findByNameAndCreationDate(const QString& fileName, cons
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                                     " LEFT JOIN ImageInformation ON id=imageid "
-                                     "  WHERE name=? AND creationDate=? AND status!=3;"),
+                                     "LEFT JOIN ImageInformation ON id=imageid "
+                                     " WHERE name=? AND creationDate=? AND status!=3;"),
                    fileName, creationDate, &values);
 
     QList<qlonglong> ids;
@@ -2280,8 +2281,8 @@ QList<qlonglong> CoreDB::getItemsForUuid(const QString& uuid)
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT imageid FROM ImageHistory "
-                                     " INNER JOIN Images ON imageid=id "
-                                     "  WHERE uuid=? AND status!=3;"),
+                                     "INNER JOIN Images ON imageid=id "
+                                     " WHERE uuid=? AND status!=3;"),
                    uuid, &values);
 
     QList<qlonglong> imageIds;
@@ -2323,27 +2324,32 @@ QString CoreDB::getImageUuid(qlonglong imageId)
 
 void CoreDB::setImageHistory(qlonglong imageId, const QString& history)
 {
-    d->db->execUpsertDBAction(QLatin1String("changeImageHistory"), imageId, QStringList() << QLatin1String("history"), QVariantList() << history);
+    d->db->execUpsertDBAction(QLatin1String("changeImageHistory"),
+                              imageId, QStringList() << QLatin1String("history"), QVariantList() << history);
     d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::Set(DatabaseFields::ImageHistory)));
 }
 
 void CoreDB::setImageUuid(qlonglong imageId, const QString& uuid)
 {
-    d->db->execUpsertDBAction(QLatin1String("changeImageHistory"), imageId, QStringList() << QLatin1String("uuid"), QVariantList() << uuid);
+    d->db->execUpsertDBAction(QLatin1String("changeImageHistory"),
+                              imageId, QStringList() << QLatin1String("uuid"), QVariantList() << uuid);
     d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::Set(DatabaseFields::ImageUUID)));
 }
 
 void CoreDB::addImageRelation(qlonglong subjectId, qlonglong objectId, DatabaseRelation::Type type)
 {
-    d->db->execSql(QString::fromUtf8("REPLACE INTO ImageRelations (subject, object, type) VALUES (?, ?, ?);"),
+    d->db->execSql(QString::fromUtf8("REPLACE INTO ImageRelations (subject, object, type) "
+                                     "VALUES (?, ?, ?);"),
                    subjectId, objectId, type);
     d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << subjectId << objectId,
                                           DatabaseFields::Set(DatabaseFields::ImageRelations)));
 }
 
-void CoreDB::addImageRelations(const QList<qlonglong>& subjectIds, const QList<qlonglong>& objectIds, DatabaseRelation::Type type)
+void CoreDB::addImageRelations(const QList<qlonglong>& subjectIds,
+                               const QList<qlonglong>& objectIds, DatabaseRelation::Type type)
 {
-    DbEngineSqlQuery query = d->db->prepareQuery(QString::fromUtf8("REPLACE INTO ImageRelations (subject, object, type) VALUES (?, ?, ?);"));
+    DbEngineSqlQuery query = d->db->prepareQuery(QString::fromUtf8("REPLACE INTO ImageRelations (subject, object, type) "
+                                                                   "VALUES (?, ?, ?);"));
 
     QVariantList subjects, objects, types;
 
@@ -2729,8 +2735,8 @@ QList<ItemScanInfo> CoreDB::getIdenticalFiles(const QString& uniqueHash, qlonglo
     QList<QVariant> values;
 
     // find items with same fingerprint
-    d->db->execSql(QString::fromUtf8("SELECT id, album, name, status, category, modificationDate, fileSize FROM Images "
-                                     "WHERE fileSize=? AND uniqueHash=? AND album IS NOT NULL;"),
+    d->db->execSql(QString::fromUtf8("SELECT id, album, name, status, category, modificationDate, fileSize "
+                                     "FROM Images WHERE fileSize=? AND uniqueHash=? AND album IS NOT NULL;"),
                    fileSize, uniqueHash, &values);
 
     QList<ItemScanInfo> list;
