@@ -539,7 +539,8 @@ void CoreDB::deleteAlbum(int albumID)
     QMap<QString, QVariant> parameters;
     parameters.insert(QLatin1String(":albumId"), albumID);
 
-    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumID")), parameters))
+    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumID")),
+                                                                            parameters))
     {
         return;
     }
@@ -570,7 +571,8 @@ void CoreDB::makeStaleAlbum(int albumID)
     parameters.insert(QLatin1String(":albumRoot"), 0);
     parameters.insert(QLatin1String(":relativePath"), newRelativePath);
 
-    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumRootPath")), parameters))
+    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumRootPath")),
+                                                                            parameters))
     {
         return;
     }
@@ -590,7 +592,8 @@ void CoreDB::deleteStaleAlbums()
     QMap<QString, QVariant> parameters;
     parameters.insert(QLatin1String(":albumRoot"), 0);
 
-    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumRoot")), parameters))
+    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumRoot")),
+                                                                            parameters))
     {
         return;
     }
@@ -598,8 +601,7 @@ void CoreDB::deleteStaleAlbums()
     // deliberately no changeset here, is done above
 }
 
-int CoreDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
-                    qlonglong iconID)
+int CoreDB::addTag(int parentTagID, const QString& name, const QString& iconKDE, qlonglong iconID)
 {
     QVariant                id;
     QMap<QString, QVariant> parameters;
@@ -607,7 +609,8 @@ int CoreDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
     parameters.insert(QLatin1String(":tagPID"), parentTagID);
     parameters.insert(QLatin1String(":tagname"), name);
 
-    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("InsertTag")), parameters, 0 , &id))
+    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("InsertTag")),
+                                                                            parameters, 0 , &id))
     {
         return -1;
     }
