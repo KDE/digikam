@@ -133,8 +133,8 @@ ThumbsDbInfo ThumbsDb::findByHash(const QString& uniqueHash, qlonglong fileSize)
     QList<QVariant> values;
     d->db->execSql(QLatin1String("SELECT id, type, modificationDate, orientationHint, data "
                                  "FROM Thumbnails "
-                                 "WHERE id IN (SELECT thumbId FROM UniqueHashes "
-                                 "   WHERE uniqueHash=? AND fileSize=?);"),
+                                 " INNER JOIN UniqueHashes ON id = thumbId "
+                                 "  WHERE uniqueHash=? AND fileSize=?;"),
                    uniqueHash, fileSize, &values);
 
     return fillThumbnailInfo(values);
@@ -145,8 +145,8 @@ ThumbsDbInfo ThumbsDb::findByFilePath(const QString& path)
     QList<QVariant> values;
     d->db->execSql(QLatin1String("SELECT id, type, modificationDate, orientationHint, data "
                                  "FROM Thumbnails "
-                                 "WHERE id IN (SELECT thumbId FROM FilePaths "
-                                 "   WHERE path=?);"),
+                                 " INNER JOIN FilePaths ON id = thumbId "
+                                 "  WHERE path=?;"),
                    path, &values);
 
     return fillThumbnailInfo(values);
@@ -192,8 +192,8 @@ ThumbsDbInfo ThumbsDb::findByCustomIdentifier(const QString& id)
     QList<QVariant> values;
     d->db->execSql(QLatin1String("SELECT id, type, modificationDate, orientationHint, data "
                                  "FROM Thumbnails "
-                                 "WHERE id IN (SELECT thumbId FROM CustomIdentifiers "
-                                 "   WHERE identifier=?);"),
+                                 " INNER JOIN CustomIdentifiers ON id = thumbId "
+                                 "  WHERE identifier=?;"),
                    id, &values);
 
     return fillThumbnailInfo(values);
@@ -219,8 +219,8 @@ QHash<QString, int> ThumbsDb::getFilePathsWithThumbnail()
 {
     DbEngineSqlQuery query = d->db->prepareQuery(QString::fromLatin1("SELECT path, thumbId "
                                                         "FROM FilePaths "
-                                                        "WHERE thumbId IN (SELECT id FROM Thumbnails "
-                                                        "   WHERE type BETWEEN %1 AND %2);")
+                                                        " INNER JOIN Thumbnails ON thumbId = id "
+                                                        "  WHERE type BETWEEN %1 AND %2;")
                                                  .arg(DatabaseThumbnail::PGF)
                                                  .arg(DatabaseThumbnail::PNG));
 
