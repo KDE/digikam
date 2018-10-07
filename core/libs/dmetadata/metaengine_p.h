@@ -72,21 +72,19 @@
 #include <exiv2/exif.hpp>
 #include <exiv2/xmpsidecar.hpp>
 
+#if (((EXIV2_MAJOR_VERSION) << 16) | ((EXIV2_MINOR_VERSION) << 8) | (EXIV2_PATCH_VERSION)) >= (((0) << 16) | ((27) << 8) | (0))
+#   include <exiv2/version.hpp>
+#endif
+
 // Check if Exiv2 support XMP
 
 #ifdef EXV_HAVE_XMP_TOOLKIT
 #   define _XMP_SUPPORT_ 1
 #endif
 
-// Make sure an EXIV2_TEST_VERSION macro exists:
-
-#ifdef EXIV2_VERSION
-#    ifndef EXIV2_TEST_VERSION
-#        define EXIV2_TEST_VERSION(major,minor,patch) \
+#ifndef EXIV2_TEST_VERSION
+#    define EXIV2_TEST_VERSION(major,minor,patch) \
          ( EXIV2_VERSION >= EXIV2_MAKE_VERSION(major,minor,patch) )
-#    endif
-#else
-#    define EXIV2_TEST_VERSION(major,minor,patch) (false)
 #endif
 
 // With exiv2 > 0.20.0, all makernote header files have been removed to increase binary compatibility.
@@ -95,10 +93,6 @@
 
 #ifdef Q_CC_GNU
 #   pragma GCC visibility pop
-#endif
-
-#if EXIV2_TEST_VERSION(0,27,0)
-    #include <exiv2/version.hpp>
 #endif
 
 // End of Exiv2 headers ------------------------------------------------------

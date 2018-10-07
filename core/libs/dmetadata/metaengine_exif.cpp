@@ -995,7 +995,11 @@ bool MetaEngine::setTiffThumbnail(const QImage& thumbImage) const
 
         if (pos == d->exifMetadata().end() || pos->count() != 1 || pos->toLong() != 0)
         {
+#if EXIV2_TEST_VERSION(0,27,0)
+            throw Exiv2::Error(Exiv2::kerErrorMessage, "Exif.Image.NewSubfileType missing or not set as main image");
+#else
             throw Exiv2::Error(1, "Exif.Image.NewSubfileType missing or not set as main image");
+#endif
         }
 
         // Remove sub-IFD tags
