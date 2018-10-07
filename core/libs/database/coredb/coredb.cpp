@@ -2604,7 +2604,7 @@ QList<qlonglong> CoreDB::getRelatedImagesToByType(DatabaseRelation::Type type)
     d->db->execSql(QString::fromUtf8("SELECT object FROM ImageRelations "
                                      "INNER JOIN Images ON ImageRelations.object=Images.id "
                                      " WHERE type=? AND status!=3;"),
-                   type, &values);
+                   (int)type, &values);
 
     QList<qlonglong> imageIds;
 
