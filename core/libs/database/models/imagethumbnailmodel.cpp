@@ -221,7 +221,6 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
     {
         QPixmap   thumbnail;
         ImageInfo info = imageInfo(index);
-        QString   path = info.filePath();
 
         if (info.isNull())
         {
