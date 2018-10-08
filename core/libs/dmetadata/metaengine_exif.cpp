@@ -1072,6 +1072,106 @@ MetaEngine::MetaDataMap MetaEngine::getExifTagsDataList(const QStringList& exifK
     return MetaDataMap();
 }
 
+#if EXIV2_TEST_VERSION(0,27,0)
+
+MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const
+{
+    try
+    {
+        TagsMap tagsMap;
+        std::ostringstream os;
+        Exiv2::ExifTags::taglist(os);
+        QStringList data = QString::fromLocal8Bit(os.str().c_str()).split(QLatin1Char('\n'));
+
+        foreach (const QString& str, data)
+        {
+            if (!str.isEmpty())
+            {
+                QStringList fields = str.split(QLatin1String(",\t"));
+
+                if (!fields.isEmpty())
+                {
+                    QString key   = fields[4];
+
+                    Exiv2::ExifKey tag(std::string(key.toLatin1().data()));
+                    QString name  = QString::fromUtf8(tag.tagName().c_str());
+                    QString title = QString::fromUtf8(tag.tagLabel().c_str());
+                    QString desc  = QString::fromUtf8(tag.tagDesc().c_str());
+
+                    if (!Exiv2::ExifTags::isMakerGroup(tag.groupName()))
+                    {
+                        QStringList values;
+                        values << name << title << desc;
+                        tagsMap.insert(key, values);
+                    }
+                }
+            }
+        }
+
+        return tagsMap;
+    }
+    catch (Exiv2::Error& e)
+    {
+        d->printExiv2ExceptionError(QLatin1String("Cannot parse EXIF metadata using Exiv2 "), e);
+    }
+    catch(...)
+    {
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
+    }
+
+    return TagsMap();
+}
+
+MetaEngine::TagsMap MetaEngine::getMakernoteTagsList() const
+{
+    try
+    {
+        TagsMap tagsMap;
+        std::ostringstream os;
+        Exiv2::ExifTags::taglist(os);
+        QStringList data = QString::fromLocal8Bit(os.str().c_str()).split(QLatin1Char('\n'));
+
+        foreach (const QString& str, data)
+        {
+            if (!str.isEmpty())
+            {
+                QStringList fields = str.split(QLatin1String(",\t"));
+
+                if (!fields.isEmpty())
+                {
+                    QString key   = fields[4];
+
+                    Exiv2::ExifKey tag(std::string(key.toLatin1().data()));
+                    QString name  = QString::fromUtf8(tag.tagName().c_str());
+                    QString title = QString::fromUtf8(tag.tagLabel().c_str());
+                    QString desc  = QString::fromUtf8(tag.tagDesc().c_str());
+
+                    if (Exiv2::ExifTags::isMakerGroup(tag.groupName()))
+                    {
+                        QStringList values;
+                        values << name << title << desc;
+                        tagsMap.insert(key, values);
+                    }
+                }
+            }
+        }
+
+        return tagsMap;
+    }
+    catch (Exiv2::Error& e)
+    {
+        d->printExiv2ExceptionError(QLatin1String("Cannot parse EXIF metadata using Exiv2 "), e);
+    }
+    catch(...)
+    {
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
+    }
+
+    return TagsMap();
+}
+
+#else
+
 MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const
 {
     try
@@ -1191,5 +1291,7 @@ MetaEngine::TagsMap MetaEngine::getMakernoteTagsList() const
 
     return TagsMap();
 }
+
+#endif
 
 } // namespace Digikam
