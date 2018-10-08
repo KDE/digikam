@@ -159,7 +159,7 @@ void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToP
 
     QList<ThumbnailIdentifier> ids;
 
-    foreach(const QModelIndex& index, indexesToPrepare)
+    foreach (const QModelIndex& index, indexesToPrepare)
     {
         ids << imageInfoRef(index).thumbnailIdentifier();
     }
@@ -176,7 +176,7 @@ void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
 
     QList<ThumbnailIdentifier> ids;
 
-    foreach(const ImageInfo& info, infos)
+    foreach (const ImageInfo& info, infos)
     {
         ids << info.thumbnailIdentifier();
     }
@@ -193,7 +193,7 @@ void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& indexesToP
 
     QList<ThumbnailIdentifier> ids;
 
-    foreach(const QModelIndex& index, indexesToPreload)
+    foreach (const QModelIndex& index, indexesToPreload)
     {
         ids << imageInfoRef(index).thumbnailIdentifier();
     }
@@ -311,7 +311,7 @@ void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingD
         indexes = indexesForPath(thumbId.filePath);
     }
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         if (thumb.isNull())
         {
