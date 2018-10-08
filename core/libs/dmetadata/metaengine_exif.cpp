@@ -1128,29 +1128,63 @@ MetaEngine::TagsMap MetaEngine::getMakernoteTagsList() const
     {
         TagsMap tagsMap;
         std::ostringstream os;
-        Exiv2::ExifTags::taglist(os);
-        QStringList data = QString::fromLocal8Bit(os.str().c_str()).split(QLatin1Char('\n'));
+        QStringList makerNote = QStringList() << QLatin1String("Exif")
+                                              << QLatin1String("Canon")
+                                              << QLatin1String("CanonCs")
+                                              << QLatin1String("CanonSi")
+                                              << QLatin1String("CanonCf")
+                                              << QLatin1String("Fujifilm")
+                                              << QLatin1String("Minolta")
+                                              << QLatin1String("Nikon1")
+                                              << QLatin1String("Nikon2")
+                                              << QLatin1String("Nikon3")
+                                              << QLatin1String("Olympus")
+                                              << QLatin1String("Panasonic")
+                                              << QLatin1String("Pentax")
+                                              << QLatin1String("Sigma")
+                                              << QLatin1String("Sony")
+                                              << QLatin1String("Iptc")
+                                              << QLatin1String("dc")
+                                              << QLatin1String("xmp")
+                                              << QLatin1String("xmpRights")
+                                              << QLatin1String("xmpMM")
+                                              << QLatin1String("xmpBJ")
+                                              << QLatin1String("xmpTPg")
+                                              << QLatin1String("xmpDM")
+                                              << QLatin1String("pdf")
+                                              << QLatin1String("photoshop")
+                                              << QLatin1String("crs")
+                                              << QLatin1String("tiff")
+                                              << QLatin1String("exif")
+                                              << QLatin1String("aux")
+                                              << QLatin1String("iptc");
 
-        foreach (const QString& str, data)
+        foreach (const QString& name, makerNote)
         {
-            if (!str.isEmpty())
+            Exiv2::ExifTags::taglist(os, name.toLatin1().data());
+            QStringList data = QString::fromLocal8Bit(os.str().c_str()).split(QLatin1Char('\n'));
+
+            foreach (const QString& str, data)
             {
-                QStringList fields = str.split(QLatin1String(",\t"));
-
-                if (!fields.isEmpty())
+                if (!str.isEmpty())
                 {
-                    QString key   = fields[4];
+                    QStringList fields = str.split(QLatin1String(",\t"));
 
-                    Exiv2::ExifKey tag(std::string(key.toLatin1().data()));
-                    QString name  = QString::fromUtf8(tag.tagName().c_str());
-                    QString title = QString::fromUtf8(tag.tagLabel().c_str());
-                    QString desc  = QString::fromUtf8(tag.tagDesc().c_str());
-
-                    if (Exiv2::ExifTags::isMakerGroup(tag.groupName()))
+                    if (!fields.isEmpty())
                     {
-                        QStringList values;
-                        values << name << title << desc;
-                        tagsMap.insert(key, values);
+                        QString key   = fields[4];
+
+                        Exiv2::ExifKey tag(std::string(key.toLatin1().data()));
+                        QString name  = QString::fromUtf8(tag.tagName().c_str());
+                        QString title = QString::fromUtf8(tag.tagLabel().c_str());
+                        QString desc  = QString::fromUtf8(tag.tagDesc().c_str());
+
+                        if (Exiv2::ExifTags::isMakerGroup(tag.groupName()))
+                        {
+                            QStringList values;
+                            values << name << title << desc;
+                            tagsMap.insert(key, values);
+                        }
                     }
                 }
             }
