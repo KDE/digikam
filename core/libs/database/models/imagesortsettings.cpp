@@ -118,11 +118,11 @@ Qt::SortOrder ImageSortSettings::defaultSortOrderForCategorizationMode(Categoriz
 {
     switch (mode)
     {
-        case NoCategories:
         case OneCategory:
+        case NoCategories:
         case CategoryByAlbum:
-        case CategoryByFormat:
         case CategoryByMonth:
+        case CategoryByFormat:
         default:
             return Qt::AscendingOrder;
     }
@@ -132,20 +132,17 @@ Qt::SortOrder ImageSortSettings::defaultSortOrderForSortRole(SortRole role)
 {
     switch (role)
     {
-        case SortByFileName:
         case SortByFilePath:
-            return Qt::AscendingOrder;
-        case SortByFileSize:
-            return Qt::DescendingOrder;
-        case SortByModificationDate:
+        case SortByFileName:
+        case SortByManualOrder:
         case SortByCreationDate:
+        case SortByModificationDate:
             return Qt::AscendingOrder;
         case SortByRating:
+        case SortByFileSize:
         case SortByImageSize:
-            return Qt::DescendingOrder;
-        case SortByAspectRatio:
-            return Qt::DescendingOrder;
         case SortBySimilarity:
+        case SortByAspectRatio:
             return Qt::DescendingOrder;
         default:
             return Qt::AscendingOrder;
@@ -280,16 +277,16 @@ int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right, So
         {
             QSize leftSize  = left.dimensions();
             QSize rightSize = right.dimensions();
-            int leftPixels  = leftSize.width() * leftSize.height();
+            int leftPixels  = leftSize.width()  * leftSize.height();
             int rightPixels = rightSize.width() * rightSize.height();
             return compareByOrder(leftPixels, rightPixels, currentSortOrder);
         }
         case SortByAspectRatio:
         {
-            QSize leftSize = left.dimensions();
+            QSize leftSize  = left.dimensions();
             QSize rightSize = right.dimensions();
-            int leftAR = (double(leftSize.width()) / double(leftSize.height())) * 1000000;
-            int rightAR = (double(rightSize.width()) / double(rightSize.height())) * 1000000;
+            int leftAR      = (double(leftSize.width())  / double(leftSize.height()))  * 1000000;
+            int rightAR     = (double(rightSize.width()) / double(rightSize.height())) * 1000000;
             return compareByOrder(leftAR, rightAR, currentSortOrder);
         }
         case SortBySimilarity:
@@ -297,7 +294,7 @@ int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right, So
             qlonglong leftReferenceImageId  = left.currentReferenceImage();
             qlonglong rightReferenceImageId = right.currentReferenceImage();
             // make sure that the original image has always the highest similarity.
-            double leftSimilarity  = left.id() == leftReferenceImageId ? 1.1 : left.currentSimilarity();
+            double leftSimilarity  = left.id()  == leftReferenceImageId  ? 1.1 : left.currentSimilarity();
             double rightSimilarity = right.id() == rightReferenceImageId ? 1.1 : right.currentSimilarity();
             return compareByOrder(leftSimilarity, rightSimilarity, currentSortOrder);
         }
@@ -410,8 +407,8 @@ DatabaseFields::Set ImageSortSettings::watchFlags() const
 
     switch (categorizationMode)
     {
-        case NoCategories:
         case OneCategory:
+        case NoCategories:
         case CategoryByAlbum:
             break;
         case CategoryByFormat:

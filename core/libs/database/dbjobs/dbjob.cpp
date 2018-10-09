@@ -244,7 +244,7 @@ void SearchesJob::run()
     {
         QList<SearchInfo> infos;
 
-        foreach(int id, m_jobInfo.searchIds())
+        foreach (int id, m_jobInfo.searchIds())
         {
             infos << CoreDbAccess().db()->getSearchInfo(id);
         }
@@ -255,7 +255,7 @@ void SearchesJob::run()
         // Send data every 200 images to be more responsive
         ImageListerJobPartsSendingReceiver receiver(this, 200);
 
-        foreach(const SearchInfo& info, infos)
+        foreach (const SearchInfo& info, infos)
         {
             if (info.type == DatabaseSearch::HaarSearch)
             {

@@ -129,7 +129,7 @@ public:
     QList<IntPairList>    modelRemovals;
 };
 
-ImageModel::ImageModel(QObject* parent)
+ImageModel::ImageModel(QObject* const parent)
     : QAbstractListModel(parent),
       d(new Private)
 {
@@ -668,13 +668,13 @@ void ImageModel::ensureHasGroupedImages(const ImageInfo& groupLeader)
 
 // ------------ Preprocessing -------------
 
-void ImageModel::setPreprocessor(QObject* preprocessor)
+void ImageModel::setPreprocessor(QObject* const preprocessor)
 {
     unsetPreprocessor(d->preprocessor);
     d->preprocessor = preprocessor;
 }
 
-void ImageModel::unsetPreprocessor(QObject* preprocessor)
+void ImageModel::unsetPreprocessor(QObject* const preprocessor)
 {
     if (preprocessor && d->preprocessor == preprocessor)
     {

@@ -309,7 +309,7 @@ void ItemViewCategorized::setSelectedIndexes(const QList<QModelIndex>& indexes)
 
     QItemSelection mySelection;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         mySelection.select(index, index);
     }
@@ -378,9 +378,9 @@ void ItemViewCategorized::slotActivated(const QModelIndex& index)
     if (d->currentMouseEvent)
     {
         // Ignore activation if Ctrl or Shift is pressed (for selection)
-        modifiers                       = d->currentMouseEvent->modifiers();
-        const bool shiftKeyPressed      = modifiers & Qt::ShiftModifier;
-        const bool controlKeyPressed    = modifiers & Qt::ControlModifier;
+        modifiers                    = d->currentMouseEvent->modifiers();
+        const bool shiftKeyPressed   = modifiers & Qt::ShiftModifier;
+        const bool controlKeyPressed = modifiers & Qt::ControlModifier;
 
         if (shiftKeyPressed || controlKeyPressed)
         {
@@ -524,7 +524,7 @@ void ItemViewCategorized::rowsAboutToBeRemoved(const QModelIndex& parent, int st
 
 void ItemViewCategorized::layoutAboutToBeChanged()
 {
-    if(selectionModel())
+    if (selectionModel())
     {
         d->ensureOneSelectedItem = selectionModel()->hasSelection();
     }
@@ -652,7 +652,7 @@ void ItemViewCategorized::ensureSelectionAfterChanges()
 
             if (!index.isValid())
             {
-                index = model()->index(0,0);
+                index = model()->index(0, 0);
             }
 
             d->hintAtSelectionRow   = -1;
@@ -941,7 +941,7 @@ void ItemViewCategorized::keyPressEvent(QKeyEvent* event)
     if (trigger)
     {
         const QModelIndexList indexList = selModel->selectedIndexes();
-        foreach(const QModelIndex& index, indexList)
+        foreach (const QModelIndex& index, indexList)
         {
             emit itemTriggered(itemForIndex(index));
         }
