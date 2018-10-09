@@ -262,6 +262,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->iconTreeThumbSize->addItem(QLatin1String("22"));
     d->iconTreeThumbSize->addItem(QLatin1String("32"));
     d->iconTreeThumbSize->addItem(QLatin1String("48"));
+    d->iconTreeThumbSize->addItem(QLatin1String("64"));
     d->iconTreeThumbSize->setToolTip(i18n("Set this option to configure the size in pixels of "
                                           "the Tree View icons in digiKam's sidebars."));
 
@@ -445,9 +446,13 @@ void SetupAlbumView::readSettings()
     {
         d->iconTreeThumbSize->setCurrentIndex(2);
     }
-    else
+    else if (settings->getTreeViewIconSize() == 48)
     {
         d->iconTreeThumbSize->setCurrentIndex(3);
+    }
+    else
+    {
+        d->iconTreeThumbSize->setCurrentIndex(4);
     }
 
     d->treeViewFontSelect->setFont(settings->getTreeViewFont());
