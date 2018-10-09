@@ -32,7 +32,7 @@ set(Exiv2_Conf -DBUILD_SHARED_LIBS=ON
 
 if(MINGW)
 
-    set(Exiv2_Conf ${Exiv2_Conf} 
+    set(Exiv2_Conf ${Exiv2_Conf}
                -DEXIV2_ENABLE_WIN_UNICODE=ON
     )
 
@@ -52,6 +52,8 @@ if(MINGW)
         # To use current implementation from Git
 
         GIT_REPOSITORY https://github.com/Exiv2/exiv2.git
+
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/exiv2-regex-detect-mxe.patch
 
         CONFIGURE_COMMAND cp -f ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.mxe <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.mxe ${MXE_BUILDROOT} RelWithDebInfo ${BASH_OPTIONS}
