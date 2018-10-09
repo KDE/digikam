@@ -8,28 +8,35 @@
 
 set(PREFIX_ext_exiv2 "${EXTPREFIX}")
 
-set(Exiv2_Conf -DEXIV2_ENABLE_SHARED=ON
+set(Exiv2_Conf -DBUILD_SHARED_LIBS=ON
                -DEXIV2_ENABLE_XMP=ON
                -DEXIV2_ENABLE_EXTERNAL_XMP=OFF
                -DEXIV2_ENABLE_PNG=ON
-               -DEXIV2_ENABLE_NLS=OFF
+               -DEXIV2_ENABLE_NLS=ON
                -DEXIV2_ENABLE_PRINTUCS2=ON
                -DEXIV2_ENABLE_LENSDATA=ON
-               -DEXIV2_ENABLE_COMMERCIAL=OFF
-               -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
-               -DEXIV2_ENABLE_BUILD_PO=OFF
                -DEXIV2_ENABLE_VIDEO=OFF
                -DEXIV2_ENABLE_WEBREADY=OFF
+               -DEXIV2_ENABLE_DYNAMIC_RUNTIME=OFF
                -DEXIV2_ENABLE_CURL=OFF
                -DEXIV2_ENABLE_SSH=OFF
-               -DEXIV2_ENABLE_DYNAMIC_RUNTIME=OFF
-               -DEXIV2_ENABLE_WIN_UNICODE=ON
+               -DEXIV2_BUILD_SAMPLES=OFF
+               -DEXIV2_BUILD_PO=OFF
                -DEXIV2_BUILD_EXIV2_COMMAND=OFF
                -DEXIV2_BUILD_UNIT_TESTS=OFF
                -DEXIV2_BUILD_DOC=OFF
-               -DEXIV2_TEAM_EXTRA_WARNINGS=OFF
+               -DEXIV2_TEAM_EXTRA_WARNINGS=OFF 
                -DEXIV2_TEAM_WARNINGS_AS_ERRORS=OFF
+               -DEXIV2_TEAM_USE_SANITIZERS=OFF
 )
+
+if(MINGW)
+
+    set(Exiv2_Conf ${Exiv2_Conf} 
+               -DEXIV2_ENABLE_WIN_UNICODE=ON
+    )
+
+endif()
 
 JoinListAsString("${Exiv2_Conf}" " " BASH_OPTIONS)
 
