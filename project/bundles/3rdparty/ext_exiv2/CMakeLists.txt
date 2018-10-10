@@ -25,7 +25,7 @@ set(Exiv2_Conf -DBUILD_SHARED_LIBS=ON
                -DEXIV2_BUILD_EXIV2_COMMAND=OFF
                -DEXIV2_BUILD_UNIT_TESTS=OFF
                -DEXIV2_BUILD_DOC=OFF
-               -DEXIV2_TEAM_EXTRA_WARNINGS=OFF 
+               -DEXIV2_TEAM_EXTRA_WARNINGS=OFF
                -DEXIV2_TEAM_WARNINGS_AS_ERRORS=OFF
                -DEXIV2_TEAM_USE_SANITIZERS=OFF
 )
@@ -53,7 +53,7 @@ if(MINGW)
 
         GIT_REPOSITORY https://github.com/Exiv2/exiv2.git
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/exiv2-regex-detect-mxe.patch
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/exiv2-enable-unicode-mxe.patch
 
         CONFIGURE_COMMAND cp -f ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.mxe <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.mxe ${MXE_BUILDROOT} RelWithDebInfo ${BASH_OPTIONS}

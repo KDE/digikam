@@ -1,0 +1,17 @@
+diff --git a/include/exiv2/config.h b/include/exiv2/config.h
+index 41082d83..7b28f15c 100644
+--- a/include/exiv2/config.h
++++ b/include/exiv2/config.h
+@@ -67,10 +67,10 @@ typedef int pid_t;
+ # ifndef  __MINGW__
+ #  define __MINGW__ 1
+ # endif
+-
++/*
+ #ifdef EXV_UNICODE_PATH
+ #error EXV_UNICODE_PATH is not supported for MinGW builds
+-#endif
++#endif*/
+ #endif
+ 
+ #ifndef __CYGWIN__
