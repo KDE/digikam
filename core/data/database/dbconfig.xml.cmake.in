@@ -1121,7 +1121,7 @@
                     date DATE,
                     caption LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     collection LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                    icon INTEGER,
+                    icon BIGINT,
                     CONSTRAINT Albums_AlbumRoots FOREIGN KEY (albumRoot) REFERENCES AlbumRoots (id) ON DELETE CASCADE ON UPDATE CASCADE,
                     UNIQUE(albumRoot, relativePath(255)))
                     ENGINE InnoDB;
@@ -1208,7 +1208,7 @@
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageComments
                     (id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                    imageid INTEGER,
+                    imageid BIGINT,
                     type INTEGER,
                     language VARCHAR(128) CHARACTER SET utf8 COLLATE utf8_general_ci,
                     author LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
@@ -1219,7 +1219,7 @@
                     ENGINE InnoDB;</statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageCopyright
                     (id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                    imageid INTEGER,
+                    imageid BIGINT,
                     property LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     extraValue LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
@@ -1231,7 +1231,7 @@
                     (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                     pid INTEGER,
                     name LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                    icon INTEGER,
+                    icon BIGINT,
                     iconkde LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     lft INTEGER NOT NULL,
                     rgt INTEGER NOT NULL,
