@@ -259,8 +259,6 @@ void DImgPreviewItem::slotGotImagePreview(const LoadingDescription& description,
         return;
     }
 
-    setImage(image);
-
     if (image.isNull())
     {
         d->state = ImageLoadingFailed;
@@ -269,6 +267,8 @@ void DImgPreviewItem::slotGotImagePreview(const LoadingDescription& description,
     }
     else
     {
+        setImage(image);
+
         d->state = ImageLoaded;
         emit stateChanged(d->state);
         emit loaded();
