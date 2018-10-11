@@ -24,6 +24,9 @@
 
 #include "imagequalityparser_p.h"
 
+namespace Digikam
+{
+
 ImageQualityParser::ImageQualityParser(const DImg& image,
                                        const ImageQualityContainer& settings,
                                        PickLabel* const label)
