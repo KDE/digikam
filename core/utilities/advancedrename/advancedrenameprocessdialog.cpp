@@ -176,10 +176,10 @@ void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& url)
                                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                                qApp->activeWindow());
 
-                    msgBox->button(QMessageBox::Yes)->setText(i18n("Rename Again"));
-                    msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
-                    msgBox->button(QMessageBox::No)->setText(i18n("Overwrite"));
-                    msgBox->button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
+            msgBox->button(QMessageBox::Yes)->setText(i18n("Rename Again"));
+            msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
+            msgBox->button(QMessageBox::No)->setText(i18n("Overwrite"));
+            msgBox->button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
 
             int result = msgBox->exec();
             delete msgBox;
@@ -251,7 +251,7 @@ QList<QUrl> AdvancedRenameProcessDialog::failedUrls() const
 {
     QList<QUrl> failedUrls;
 
-    foreach(const NewNameInfo& info, d->failedList)
+    foreach (const NewNameInfo& info, d->failedList)
     {
         failedUrls << info.first;
     }
@@ -261,7 +261,7 @@ QList<QUrl> AdvancedRenameProcessDialog::failedUrls() const
 
 void AdvancedRenameProcessDialog::getNextThumbnail()
 {
-    if (d->newNameList.count() > 0)
+    if (!d->newNameList.isEmpty())
     {
         QString path = d->newNameList.first().first.toLocalFile();
         d->thumbLoadThread->find(ThumbnailIdentifier(path));
