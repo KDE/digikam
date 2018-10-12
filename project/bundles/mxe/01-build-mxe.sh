@@ -173,7 +173,6 @@ ${MXE_BUILD_TARGETS}-cmake $ORIG_WD/../3rdparty \
 # NOTE: The order to compile each component here is very important.
 
 ${MXE_BUILD_TARGETS}-cmake --build . --config RelWithDebInfo --target ext_exiv2      -- -j$CPU_CORES
-exit
 ${MXE_BUILD_TARGETS}-cmake --build . --config RelWithDebInfo --target ext_qtav       -- -j$CPU_CORES
 ${MXE_BUILD_TARGETS}-cmake --build . --config RelWithDebInfo --target ext_lensfun    -- -j$CPU_CORES
 #${MXE_BUILD_TARGETS}-cmake --build . --config RelWithDebInfo --target ext_libgphoto2 -- -j$CPU_CORES
