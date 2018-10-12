@@ -537,6 +537,9 @@ void DigikamImageView::rename()
         newNamesList = dlg->newNames();
         delete dlg;
 
+        activateWindow();
+        qApp->processEvents();
+
         if (!newNamesList.isEmpty())
         {
             QPointer<AdvancedRenameProcessDialog> dlg = new AdvancedRenameProcessDialog(newNamesList, this);
