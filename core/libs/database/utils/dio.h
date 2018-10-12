@@ -92,7 +92,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalRenameSucceeded(const QUrl& url);
+    void signalRenameFinished();
     void signalRenameFailed(const QUrl& url);
 
 public Q_SLOTS:

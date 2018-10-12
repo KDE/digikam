@@ -364,6 +364,9 @@ void DIO::createJob(IOJobData* const data)
     {
         connect(jobThread, SIGNAL(signalRenameFailed(QUrl)),
                 this, SIGNAL(signalRenameFailed(QUrl)));
+
+        connect(jobThread, SIGNAL(finished()),
+                this, SIGNAL(signalRenameFinished()));
     }
 
     if (item)
@@ -495,8 +498,6 @@ void DIO::slotOneProccessed(const QUrl& url)
             // Rename in ImageInfo and database
             info.setName(newName);
         }
-
-        emit signalRenameSucceeded(url);
     }
 
     // Scan folders for changes
