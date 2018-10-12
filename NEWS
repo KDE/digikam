@@ -612,4 +612,5 @@ BUGFIXES:
 547 ==> 370553 - Adjust date - not possible to update "digikam timestamp".
 548 ==> 329091 - MySQL : needs to set "max-allowed-packet" server settings from 4.096 to 16.777.216 to prevent Maintenance tool crash.
 549 ==> 399406 - Digikam Crash on advance rename.
-550 ==> 
+550 ==> 397386 - Add a separate checkbox to "Show Rating".
+551 ==> 

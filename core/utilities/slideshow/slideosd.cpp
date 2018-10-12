@@ -138,9 +138,13 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     d->ratingWidget->setMouseTracking(true);
 
     d->labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter | Qt::AlignLeft);
-    d->labelsBox->setVisible(d->settings.printLabels);
     d->labelsBox->installEventFilter(d->parent);
     d->labelsBox->setMouseTracking(true);
+
+    d->labelsBox->setVisible(d->settings.printLabels || d->settings.printRating);
+    d->ratingWidget->setVisible(d->settings.printRating);
+    d->clWidget->setVisible(d->settings.printLabels);
+    d->plWidget->setVisible(d->settings.printLabels);
 
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
             parent, SLOT(slotAssignRating(int)));
@@ -238,15 +242,19 @@ void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const QUrl& url)
 
     if (d->settings.printLabels)
     {
-        d->ratingWidget->blockSignals(true);
         d->clWidget->blockSignals(true);
         d->plWidget->blockSignals(true);
-        d->ratingWidget->setRating(info.rating);
         d->clWidget->setColorLabel((ColorLabel)info.colorLabel);
         d->plWidget->setPickLabel((PickLabel)info.pickLabel);
-        d->ratingWidget->blockSignals(false);
         d->clWidget->blockSignals(false);
         d->plWidget->blockSignals(false);
+    }
+
+    if (d->settings.printRating)
+    {
+        d->ratingWidget->blockSignals(true);
+        d->ratingWidget->setRating(info.rating);
+        d->ratingWidget->blockSignals(false);
     }
 
     // Make the OSD the proper size
@@ -342,6 +350,15 @@ void SlideOSD::video(bool b)
 bool SlideOSD::isPaused() const
 {
     return d->toolBar->isPaused();
+}
+
+bool SlideOSD::isUnderMouse() const
+{
+    return (d->ratingWidget->underMouse() ||
+            d->progressBar->underMouse()  ||
+            d->clWidget->underMouse()     ||
+            d->plWidget->underMouse()     ||
+            d->toolBar->underMouse());
 }
 
 } // namespace Digikam

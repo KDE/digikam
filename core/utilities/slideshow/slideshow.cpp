@@ -533,7 +533,7 @@ bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
 
 void SlideShow::slotMouseMoveTimeOut()
 {
-    if (!d->osd->toolBar()->underMouse())
+    if (!d->osd->isUnderMouse())
     {
         setCursor(QCursor(Qt::BlankCursor));
     }
