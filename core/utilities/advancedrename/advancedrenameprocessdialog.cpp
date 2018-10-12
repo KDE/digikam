@@ -27,7 +27,6 @@
 
 #include <QDialogButtonBox>
 #include <QAbstractButton>
-#include <QApplication>
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QPixmap>
@@ -52,9 +51,9 @@ class Q_DECL_HIDDEN AdvancedRenameProcessDialog::Private
 public:
 
     explicit Private()
-      : thumbLoadThread(0),
-        overwrite(false),
-        cancel(false)
+        : thumbLoadThread(0),
+          overwrite(false),
+          cancel(false)
     {
     }
 
@@ -81,11 +80,11 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
 
-    connect(DIO::instance(), SIGNAL(signalRenameSucceeded(QUrl)),
-            this, SLOT(slotRenameSuccessded(QUrl)));
-
     connect(DIO::instance(), SIGNAL(signalRenameFailed(QUrl)),
             this, SLOT(slotRenameFailed(QUrl)));
+
+    connect(DIO::instance(), SIGNAL(signalRenameFinished()),
+            this, SLOT(slotRenameFinished()));
 
     setValue(0);
     setModal(true);
@@ -124,9 +123,7 @@ void AdvancedRenameProcessDialog::processOne()
     }
 
     d->currentInfo = d->newNameList.takeFirst();
-
     addedAction(d->thumbPixmap, QDir::toNativeSeparators(d->thumbPath));
-    setLabel(i18n("<b>Renaming images. Please wait...</b>"));
 
     DIO::rename(d->currentInfo.first,
                 d->currentInfo.second, d->overwrite);
@@ -151,9 +148,9 @@ void AdvancedRenameProcessDialog::slotCancel()
     done(QDialogButtonBox::Cancel);
 }
 
-void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& url)
+void AdvancedRenameProcessDialog::slotRenameFinished()
 {
-    if (d->cancel || d->currentInfo.first != url)
+    if (d->cancel)
     {
         return;
     }
@@ -165,16 +162,16 @@ void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& url)
         if (!d->failedList.isEmpty())
         {
             QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
-                               i18n("Renaming images"),
-                               i18np("An error occurred while renaming %1 image.\n"
-                                    "Do you want to rename this image again or "
-                                    "rename this image by overwriting?",
-                                    "An error occurred while renaming %1 images.\n"
-                                    "Do you want to rename these images again or "
-                                    "rename these images by overwriting?",
-                                    d->failedList.count()),
-                               QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                               qApp->activeWindow());
+                     i18n("Renaming images"),
+                     i18np("An error occurred while renaming %1 image.\n"
+                           "Do you want to rename this image again or "
+                           "rename this image by overwriting?",
+                           "An error occurred while renaming %1 images.\n"
+                           "Do you want to rename these images again or "
+                           "rename these images by overwriting?",
+                           d->failedList.count()),
+                           QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+                           this);
 
             msgBox->button(QMessageBox::Yes)->setText(i18n("Rename Again"));
             msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
@@ -223,16 +220,10 @@ void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& url)
         return;
     }
 
-    QPixmap pix = QIcon::fromTheme(QLatin1String("emblem-error")).pixmap(32, 32);
-    addedAction(pix, QDir::toNativeSeparators(url.toLocalFile()));
-    setLabel(i18n("<b>Renaming images has failed...</b>"));
-    qApp->processEvents();
-
     d->failedList << d->currentInfo;
 
-    QThread::msleep(250);
-
-    slotRenameSuccessded(url);
+    setLabel(i18n("<b>Renaming images. Errors: %1</b>",
+                  d->failedList.count()));
 }
 
 void AdvancedRenameProcessDialog::closeEvent(QCloseEvent* e)
