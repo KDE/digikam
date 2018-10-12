@@ -68,6 +68,7 @@ public:
 
     QPixmap              thumbPixmap;
     QString              thumbPath;
+    QString              infoLabel;
 };
 
 AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& list, QWidget* const parent)
@@ -76,6 +77,7 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
 {
     d->newNameList     = list;
     d->thumbLoadThread = new ThumbnailLoadThread;
+    d->infoLabel       = i18n("<b>Renaming images. Please wait...</b>");
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
@@ -88,10 +90,10 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
 
     setValue(0);
     setModal(true);
+    setLabel(d->infoLabel);
     setButtonText(i18n("&Abort"));
     setTitle(i18n("Processing..."));
     setWindowTitle(i18n("Renaming images"));
-    setLabel(i18n("<b>Renaming images. Please wait...</b>"));
 
     getNextThumbnail();
     setMaximum(d->newNameList.count());
@@ -194,6 +196,7 @@ void AdvancedRenameProcessDialog::slotRenameFinished()
 
                 setValue(0);
                 getNextThumbnail();
+                setLabel(d->infoLabel);
                 setMaximum(d->newNameList.count());
                 QTimer::singleShot(500, this, SLOT(slotRenameImages()));
             }
