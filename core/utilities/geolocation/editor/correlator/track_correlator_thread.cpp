@@ -57,7 +57,7 @@ void TrackCorrelatorThread::run()
     const int nFiles = fileList.count();
     QList<int> currentIndices;
 
-    for (int i = 0 ; i < nFiles ; i++)
+    for (int i = 0 ; i < nFiles ; ++i)
         currentIndices << 0;
 
     for (TrackCorrelator::Correlation::List::iterator it = itemsToCorrelate.begin() ; it != itemsToCorrelate.end() ; ++it)
@@ -77,7 +77,7 @@ void TrackCorrelatorThread::run()
         QDateTime       firstBiggerTime;
         QPair<int, int> firstIndexPair;
 
-        for (int f = 0 ; f < nFiles ; f++)
+        for (int f = 0 ; f < nFiles ; ++f)
         {
             if (doCancel)
             {
@@ -88,7 +88,7 @@ void TrackCorrelatorThread::run()
             const TrackManager::Track& currentFile = fileList.at(f);
             int index                              = currentIndices.at(f);
 
-            for (; index < currentFile.points.count(); ++index)
+            for ( ; index < currentFile.points.count() ; ++index)
             {
                 if (doCancel)
                 {
@@ -104,7 +104,7 @@ void TrackCorrelatorThread::run()
 
                     if (lastSmallerTime.isValid())
                     {
-                        timeIsBetter = (indexTime>lastSmallerTime);
+                        timeIsBetter = (indexTime > lastSmallerTime);
                     }
                     else
                     {
@@ -124,7 +124,7 @@ void TrackCorrelatorThread::run()
 
                     if (firstBiggerTime.isValid())
                     {
-                        timeIsBetter = (indexTime<firstBiggerTime);
+                        timeIsBetter = (indexTime < firstBiggerTime);
                     }
                     else
                     {
@@ -151,7 +151,7 @@ void TrackCorrelatorThread::run()
             // the stored index by 1 we ensure that we start our search at an index
             // corresponding to a time before the next item. Remember that the
             // items are sorted by time!
-            currentIndices[f] = (index>1)?(index-1):0;
+            currentIndices[f] = (index > 1) ? (index - 1) : 0;
         }
 
         TrackCorrelator::Correlation correlatedData = *it;
@@ -194,16 +194,17 @@ void TrackCorrelatorThread::run()
                     indexToUse = lastIndexPair;
                 }
 
-                if (indexToUse.first>=0)
+                if (indexToUse.first >= 0)
                 {
                     const TrackManager::TrackPoint& dataPoint = fileList.at(indexToUse.first).points.at(indexToUse.second);
-                    correlatedData.coordinates                          = dataPoint.coordinates;
-                    correlatedData.flags                                = static_cast<TrackCorrelator::CorrelationFlags>(correlatedData.flags|TrackCorrelator::CorrelationFlagCoordinates);
-                    correlatedData.nSatellites                          = dataPoint.nSatellites;
-                    correlatedData.hDop                                 = dataPoint.hDop;
-                    correlatedData.pDop                                 = dataPoint.pDop;
-                    correlatedData.fixType                              = dataPoint.fixType;
-                    correlatedData.speed                                = dataPoint.speed;
+                    correlatedData.coordinates                = dataPoint.coordinates;
+                    correlatedData.flags                      = static_cast<TrackCorrelator::CorrelationFlags>(correlatedData.flags |
+                                                                            TrackCorrelator::CorrelationFlagCoordinates);
+                    correlatedData.nSatellites                = dataPoint.nSatellites;
+                    correlatedData.hDop                       = dataPoint.hDop;
+                    correlatedData.pDop                       = dataPoint.pDop;
+                    correlatedData.fixType                    = dataPoint.fixType;
+                    correlatedData.speed                      = dataPoint.speed;
                 }
             }
         }
@@ -262,7 +263,7 @@ void TrackCorrelatorThread::run()
         {
             TrackCorrelator::Correlation::List readyItems;
             readyItems << correlatedData;
-            emit(signalItemsCorrelated(readyItems));
+            emit signalItemsCorrelated(readyItems);
         }
     }
 }
