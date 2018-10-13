@@ -636,7 +636,7 @@ void TableView::rename()
         newNamesList = dlg->newNames();
         delete dlg;
 
-        activateWindow();
+        setFocus();
         qApp->processEvents();
 
         if (!newNamesList.isEmpty())
