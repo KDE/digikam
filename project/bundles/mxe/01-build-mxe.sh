@@ -118,7 +118,6 @@ make MXE_TARGETS=$MXE_BUILD_TARGETS \
      eigen \
      jasper \
      zlib \
-     expat \
      mman-win32 \
      pthreads \
      qtbase \
