@@ -125,7 +125,9 @@ void AdvancedRenameProcessDialog::processOne()
     }
 
     d->currentInfo = d->newNameList.takeFirst();
-    addedAction(d->thumbPixmap, QDir::toNativeSeparators(d->thumbPath));
+
+    addedAction(d->thumbPixmap,
+                QDir::toNativeSeparators(d->thumbPath));
 
     DIO::rename(d->currentInfo.first,
                 d->currentInfo.second, d->overwrite);
@@ -172,8 +174,7 @@ void AdvancedRenameProcessDialog::slotRenameFinished()
                            "Do you want to rename these images again or "
                            "rename these images by overwriting?",
                            d->failedList.count()),
-                           QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                           this);
+                     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, this);
 
             msgBox->button(QMessageBox::Yes)->setText(i18n("Rename Again"));
             msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
