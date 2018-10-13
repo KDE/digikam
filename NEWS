@@ -613,4 +613,5 @@ BUGFIXES:
 548 ==> 329091 - MySQL : needs to set "max-allowed-packet" server settings from 4.096 to 16.777.216 to prevent Maintenance tool crash.
 549 ==> 399406 - Digikam Crash on advance rename.
 550 ==> 397386 - Add a separate checkbox to "Show Rating".
-551 ==> 
+551 ==> 335870 - Nexus 4 in PTP mode gets error: The specified camera ("/org/kde/solid/udev/...") is not supported.
+552 ==> 
