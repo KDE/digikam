@@ -10,6 +10,7 @@
  * Copyright (C) 2013-2014 by Gowtham Ashok <gwty93 at gmail dot com>
  *
  * References  : https://stackoverflow.com/questions/7765810/is-there-a-way-to-detect-if-an-image-is-blurry
+ *               https://stackoverflow.com/questions/35768416/is-here-any-way-to-find-out-whether-an-image-is-blurry-or-not-using-laplacian-op
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
