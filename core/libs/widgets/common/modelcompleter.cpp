@@ -65,10 +65,10 @@ public:
      * from the completion object.
      */
     //TODO: if we want to use models that return unique strings but not integer, add support
-    QMap<int, QString>           idToTextMap;
+    QHash<int, QString>           idToTextMap;
 };
 
-ModelCompleter::ModelCompleter(QObject* parent)
+ModelCompleter::ModelCompleter(QObject* const parent)
     : QCompleter(parent),
       d(new Private)
 {
@@ -158,9 +158,7 @@ void ModelCompleter::slotDelayedModelTimer()
 
 void ModelCompleter::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
-    //qCDebug(DIGIKAM_WIDGETS_LOG) << "rowInserted in parent " << parent << ", start = " << start
-    //         << ", end = " << end;
-    for (int i = start; i <= end; ++i)
+    for (int i = start ; i <= end ; ++i)
     {
         // this cannot work if this is called from rowsAboutToBeInserted
         // because then the model doesn't know the index yet. So never do this
@@ -173,9 +171,9 @@ void ModelCompleter::slotRowsInserted(const QModelIndex& parent, int start, int 
         }
         else
         {
-            qCDebug(DIGIKAM_WIDGETS_LOG) << "inserted rows are not valid for parent " << parent
-                     << parent.data(d->displayRole).toString() << "and child"
-                     << child;
+            qCDebug(DIGIKAM_WIDGETS_LOG) << "inserted rows are not valid for parent" << parent
+                                         << parent.data(d->displayRole).toString()
+                                         << "and child" << child;
         }
     }
 
@@ -184,9 +182,7 @@ void ModelCompleter::slotRowsInserted(const QModelIndex& parent, int start, int 
 
 void ModelCompleter::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
-    //qCDebug(DIGIKAM_WIDGETS_LOG) << "rows of parent " << parent << " removed, start = " << start
-    //         << ", end = " << end;
-    for (int i = start; i <= end; ++i)
+    for (int i = start ; i <= end ; ++i)
     {
         QModelIndex index = d->model->index(i, 0, parent);
 
@@ -211,8 +207,8 @@ void ModelCompleter::slotRowsAboutToBeRemoved(const QModelIndex& parent, int sta
         }
         else
         {
-            qCWarning(DIGIKAM_WIDGETS_LOG) << "idToTextMap seems to be out of sync with the model. "
-                       << "There is no entry for model index " << index;
+            qCWarning(DIGIKAM_WIDGETS_LOG) << "idToTextMap seems to be out of sync with the model."
+                                           << "There is no entry for model index" << index;
         }
     }
 }
@@ -224,14 +220,15 @@ void ModelCompleter::slotModelReset()
 
 void ModelCompleter::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
-    for (int row = topLeft.row(); row <= bottomRight.row(); ++row)
+    for (int row = topLeft.row() ; row <= bottomRight.row() ; ++row)
     {
         if (!d->model->hasIndex(row, topLeft.column(), topLeft.parent()))
         {
-            qCDebug(DIGIKAM_WIDGETS_LOG) << "Got wrong change event for index with row " << row
-                     << ", column " << topLeft.column()
-                     << " and parent " << topLeft.parent()
-                     << " in model " << d->model << ". Ignoring it.";
+            qCDebug(DIGIKAM_WIDGETS_LOG) << "Got wrong change event for index with row" << row
+                                         << ", column"   << topLeft.column()
+                                         << "and parent" << topLeft.parent()
+                                         << "in model"   << d->model
+                                         << ". Ignoring it.";
             continue;
         }
 
@@ -253,12 +250,9 @@ void ModelCompleter::slotDataChanged(const QModelIndex& topLeft, const QModelInd
 
 void ModelCompleter::sync(QAbstractItemModel* const model)
 {
-    //qCDebug(DIGIKAM_WIDGETS_LOG) << "Starting sync with model " << model
-    //         << ", rowCount for parent: " << model->rowCount();
-
     d->idToTextMap.clear();
 
-    for (int i = 0; i < model->rowCount(); ++i)
+    for (int i = 0 ; i < model->rowCount() ; ++i)
     {
         const QModelIndex index = model->index(i, 0);
         sync(model, index);
@@ -270,10 +264,9 @@ void ModelCompleter::sync(QAbstractItemModel* const model)
 void ModelCompleter::sync(QAbstractItemModel* const model, const QModelIndex& index)
 {
     QString itemName = index.data(d->displayRole).toString();
-    //qCDebug(DIGIKAM_WIDGETS_LOG) << "sync adding item '" << itemName << "' for index " << index;
     d->idToTextMap.insert(index.data(d->uniqueIdRole).toInt(), itemName);
 
-    for (int i = 0; i < model->rowCount(index); ++i)
+    for (int i = 0 ; i < model->rowCount(index) ; ++i)
     {
         const QModelIndex child = model->index(i, 0, index);
         sync(model, child);
