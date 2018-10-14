@@ -224,8 +224,20 @@ echo -n "SHA256 sum : "                                                         
 shasum -a256 "$ORIG_WD/bundle/$TARGET_INSTALLER" | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
 
 if [[ $DK_SIGN = 1 ]] ; then
+
     cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -sabv -o "$ORIG_WD/bundle/$TARGET_INSTALLER"
     mv -f $ORIG_WD/bundle/$TARGET_INSTALLER.asc $ORIG_WD/bundle/$TARGET_INSTALLER.sig
+
+    echo    "File       : $TARGET_INSTALLER.sig"                                                >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
+    echo -n "Size       : "                                                                     >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
+    du -h "$ORIG_WD/bundle/$TARGET_INSTALLER.sig"        | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
+    echo -n "MD5 sum    : "                                                                     >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
+    md5sum "$ORIG_WD/bundle/$TARGET_INSTALLER.sig"       | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
+    echo -n "SHA1 sum   : "                                                                     >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
+    shasum -a1 "$ORIG_WD/bundle/$TARGET_INSTALLER.sig"   | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
+    echo -n "SHA256 sum : "                                                                     >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
+    shasum -a256 "$ORIG_WD/bundle/$TARGET_INSTALLER.sig" | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
+
 fi
 
 cat $ORIG_WD/bundle/$TARGET_INSTALLER.sum
