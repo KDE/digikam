@@ -39,28 +39,27 @@
 #include "albummanager.h"
 #include "albumlabelstreeview.h"
 
-uint qHash(QList<Digikam::Album*> key)
+namespace Digikam
+{
+
+inline uint qHash(const QList<Album*>& key)
 {
     if (key.isEmpty())
         return 0;
 
-    uint value;
-    Digikam::Album* const temp = key.first();
-    quint64 myint              = (unsigned long long)temp;
-    value                      = qHash(myint);
+    Album* const temp = key.first();
+    quint64 myint     = (unsigned long long)temp;
+    uint value        = ::qHash(myint);
 
     for (int it = 1 ; it < key.size() ; ++it)
     {
-        Digikam::Album* const al = key.at(it);
-        quint64 myint            = (unsigned long long)al;
-        value                   ^= qHash(myint);
+        Album* const al = key.at(it);
+        quint64 myint   = (unsigned long long)al;
+        value          ^= ::qHash(myint);
     }
 
     return value;
 }
-
-namespace Digikam
-{
 
 /**
  * Stores an album along with the sidebar view, where the album
