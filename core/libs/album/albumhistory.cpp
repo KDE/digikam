@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-inline uint qHash(QList<Album*> key)
+inline uint qHash(const QList<Album*>& key)
 {
     if (key.isEmpty())
         return 0;

@@ -156,9 +156,9 @@ public:
 
 // -----------------------------------------------------------------------------------
 
-uint qHash(const PAlbumPath& id)
+inline uint qHash(const PAlbumPath& id)
 {
-    return ( ::qHash(id.albumRootId) ^ ::qHash(id.albumPath) );
+    return (::qHash(id.albumRootId) ^ ::qHash(id.albumPath));
 }
 
 // -----------------------------------------------------------------------------------
