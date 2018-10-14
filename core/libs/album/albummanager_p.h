@@ -23,6 +23,9 @@
  *
  * ============================================================ */
 
+#ifndef DIGIKAM_ALBUM_MANAGER_P_H
+#define DIGIKAM_ALBUM_MANAGER_P_H
+
 #include "albummanager.h"
 
 // C ANSI includes
@@ -282,3 +285,5 @@ public:
 Q_GLOBAL_STATIC(AlbumManagerCreator, creator)
 
 } // namespace Digikam
+
+#endif // DIGIKAM_ALBUM_MANAGER_P_H

@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class ImageQualitySettings;
+class ImageQualityContainer;
 class MaintenanceData;
 
 class ImageQualityTask : public ActionJob
@@ -47,7 +47,7 @@ public:
     explicit ImageQualityTask();
     ~ImageQualityTask();
 
-    void setQuality(const ImageQualitySettings& quality);
+    void setQuality(const ImageQualityContainer& quality);
     void setMaintenanceData(MaintenanceData* const data=0);
 
 Q_SIGNALS:

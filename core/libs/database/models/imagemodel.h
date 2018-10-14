@@ -82,7 +82,7 @@ public:
 
 public:
 
-    explicit ImageModel(QObject* parent = 0);
+    explicit ImageModel(QObject* const parent = 0);
     ~ImageModel();
 
     /** If a cache is kept, lookup by file path is fast,
@@ -216,8 +216,8 @@ public:
      * and make or already hold a connection modelReset() -> your slot.
      * There is only one preprocessor at a time, a previously set object will be disconnected.
      */
-    void setPreprocessor(QObject* processor);
-    void unsetPreprocessor(QObject* processor);
+    void setPreprocessor(QObject* const processor);
+    void unsetPreprocessor(QObject* const processor);
 
     /**
      * Returns true if this model is currently refreshing.

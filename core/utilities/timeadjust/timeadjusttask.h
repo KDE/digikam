@@ -53,6 +53,7 @@ Q_SIGNALS:
 
     void signalProcessStarted(const QUrl&);
     void signalProcessEnded(const QUrl&, int);
+    void signalDateTimeForUrl(const QUrl&, const QDateTime&, bool);
 
 protected:
 

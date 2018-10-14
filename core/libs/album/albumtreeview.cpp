@@ -29,8 +29,9 @@
 
 // Qt includes
 
-#include <QMouseEvent>
 #include <QStyledItemDelegate>
+#include <QMouseEvent>
+#include <QScrollBar>
 #include <QTimer>
 #include <QDrag>
 #include <QMenu>
@@ -60,7 +61,7 @@ static QList<A*> selectedAlbums(QItemSelectionModel* const selModel, AlbumFilter
     const QList<QModelIndex> indexes = selModel->selectedIndexes();
     QList<A*> albums;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         albums << static_cast<A*>(filterModel->albumForIndex(index));
     }
@@ -406,7 +407,7 @@ void AbstractAlbumTreeView::slotSearchTextSettingsAboutToChange(bool searched, b
 
         // selection is ignored here because the user may have changed this
         // while searching
-        foreach(const int& expandedId, expansion)
+        foreach (const int& expandedId, expansion)
         {
             d->searchBackup[expandedId].expanded = true;
         }
@@ -542,7 +543,7 @@ void AbstractAlbumTreeView::setCurrentAlbums(const QList<Album*>& albums, bool s
     QItemSelectionModel* const model = selectionModel();
     model->clearSelection();
 
-    for (int it = 0 ; it < albums.size() ; ++ it)
+    for (int it = 0 ; it < albums.size() ; ++it)
     {
         model->select(albumFilterModel()->indexForAlbum(albums.at(it)),
                       model->Select);
@@ -747,7 +748,7 @@ void AbstractAlbumTreeView::doLoadState()
     const QStringList selection = configGroup.readEntry(entryName(d->configSelectionEntry), QStringList());
     //qCDebug(DIGIKAM_GENERAL_LOG) << "selection: " << selection;
 
-    foreach(const QString& key, selection)
+    foreach (const QString& key, selection)
     {
         bool validId;
         const int id = key.toInt(&validId);
@@ -767,7 +768,7 @@ void AbstractAlbumTreeView::doLoadState()
     {
         QList<AlbumRootInfo> roots = CoreDbAccess().db()->getAlbumRoots();
 
-        foreach(const AlbumRootInfo& info, roots)
+        foreach (const AlbumRootInfo& info, roots)
         {
             int albumId = CoreDbAccess().db()->getAlbumForPath(info.id, QLatin1String("/"), false);
 
@@ -779,7 +780,7 @@ void AbstractAlbumTreeView::doLoadState()
     }
     else
     {
-        foreach(const QString& key, expansion)
+        foreach (const QString& key, expansion)
         {
             bool validId;
             const int id = key.toInt(&validId);
@@ -935,12 +936,13 @@ void AbstractAlbumTreeView::scrollToSelectedAlbum()
     if (!selected.isEmpty())
     {
         scrollTo(selected.first(), PositionAtCenter);
+        horizontalScrollBar()->setValue(0);
     }
 }
 
 void AbstractAlbumTreeView::expandEverything(const QModelIndex& index)
 {
-    for (int row = 0; row < albumFilterModel()->rowCount(index); ++row)
+    for (int row = 0 ; row < albumFilterModel()->rowCount(index) ; ++row)
     {
         const QModelIndex rowIndex = albumFilterModel()->index(row, 0, index);
         expand(rowIndex);
@@ -1008,7 +1010,7 @@ void AbstractAlbumTreeView::doSaveState()
 
     if (ApplicationSettings::instance()->getAlbumSortChanged())
     {
-        if ( int(albumFilterModel()->sortOrder()) == 0 )
+        if (int(albumFilterModel()->sortOrder()) == 0)
         {
             configGroup.writeEntry(entryName(d->configSortOrderEntry), 1);
         }
@@ -1135,7 +1137,7 @@ void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent* event)
 
     addCustomContextMenuActions(cmhelper, album);
 
-    foreach(ContextMenuElement* const element, d->contextMenuElements)
+    foreach (ContextMenuElement* const element, d->contextMenuElements)
     {
         element->addActions(this, cmhelper, album);
     }
@@ -1381,7 +1383,7 @@ void AbstractCheckableAlbumTreeView::doLoadState()
 
     d->checkedAlbumIds.clear();
 
-    foreach(const QString& albumId, checkedAlbums)
+    foreach (const QString& albumId, checkedAlbums)
     {
         bool ok;
         const int id = albumId.toInt(&ok);
@@ -1395,7 +1397,7 @@ void AbstractCheckableAlbumTreeView::doLoadState()
     const QStringList partiallyCheckedAlbums = group.readEntry(entryName(d->configPartiallyCheckedAlbumsEntry), QStringList());
     d->partiallyCheckedAlbumIds.clear();
 
-    foreach(const QString& albumId, partiallyCheckedAlbums)
+    foreach (const QString& albumId, partiallyCheckedAlbums)
     {
         bool ok;
         const int id = albumId.toInt(&ok);
@@ -1408,6 +1410,7 @@ void AbstractCheckableAlbumTreeView::doLoadState()
 
     // initially sync with the albums that are already in the model
     restoreCheckStateForHierarchy(QModelIndex());
+    horizontalScrollBar()->setValue(0);
 }
 
 void AbstractCheckableAlbumTreeView::rowsInserted(const QModelIndex& parent, int start, int end)
@@ -1473,7 +1476,7 @@ void AbstractCheckableAlbumTreeView::doSaveState()
     const QList<Album*> checkedAlbums = checkableModel()->checkedAlbums();
     QStringList checkedIds;
 
-    foreach(Album* const album, checkedAlbums)
+    foreach (Album* const album, checkedAlbums)
     {
         checkedIds << QString::number(album->id());
     }
@@ -1488,7 +1491,7 @@ void AbstractCheckableAlbumTreeView::doSaveState()
     const QList<Album*> partiallyCheckedAlbums = checkableModel()->partiallyCheckedAlbums();
     QStringList partiallyCheckedIds;
 
-    foreach(Album* const album, partiallyCheckedAlbums)
+    foreach (Album* const album, partiallyCheckedAlbums)
     {
         partiallyCheckedIds << QString::number(album->id());
     }

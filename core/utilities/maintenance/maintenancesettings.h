@@ -33,7 +33,7 @@
 #include "album.h"
 #include "facescansettings.h"
 #include "haariface.h"
-#include "imagequalitysettings.h"
+#include "imagequalitycontainer.h"
 #include "metadatasynchronizer.h"
 #include "imagequalitysorter.h"
 
@@ -91,7 +91,7 @@ public:
     /// Mode to assign Pick Labels to items.
     int                                     qualityScanMode;
     /// Image Quality Sorting Settings.
-    ImageQualitySettings                    quality;
+    ImageQualityContainer                   quality;
 
     /// Sync metadata and DB.
     bool                                    metadataSync;

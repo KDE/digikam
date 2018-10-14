@@ -86,14 +86,19 @@ public:
     static void del(PAlbum* const album, bool useTrash);
 
     /// Rename item to new name
-    static void rename(const ImageInfo& info, const QString& newName, bool overwrite = false);
+    static void rename(const QUrl& src, const QString& newName, bool overwrite = false);
 
     static DIO* instance();
 
 Q_SIGNALS:
 
-    void signalRenameSucceeded(const QUrl& url);
+    void signalRenameFinished();
     void signalRenameFailed(const QUrl& url);
+
+public Q_SLOTS:
+
+    // public helper slot for the Time Adjust Tool
+    void slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate);
 
 private:
 

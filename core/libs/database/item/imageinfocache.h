@@ -85,6 +85,11 @@ public:
     QString albumRelativePath(int albumId);
 
     /**
+     * Returns the cached grouped count for the given image id.
+     */
+    int getImageGroupedCount(qlonglong id);
+
+    /**
      * Invalidate the cache and all its cached data
      */
     void invalidate();
@@ -106,6 +111,8 @@ private:
     QHash<ImageInfoData*, QString>      m_dataHash;
     QMultiHash<QString, ImageInfoData*> m_nameHash;
     volatile bool                       m_needUpdateAlbums;
+    volatile bool                       m_needUpdateGrouped;
+    QList<qlonglong>                    m_grouped;
     QList<AlbumShortInfo>               m_albums;
 };
 

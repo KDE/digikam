@@ -206,7 +206,6 @@ ImageInfoData::ImageInfoData()
     hasCoordinates         = false;
     hasAltitude            = false;
 
-    groupedImages          = 0;
     groupImage             = -1;
 
     defaultTitleCached     = false;
@@ -223,7 +222,6 @@ ImageInfoData::ImageInfoData()
     imageSizeCached        = false;
     tagIdsCached           = false;
     positionsCached        = false;
-    groupedImagesCached    = false;
     groupImageCached       = false;
     uniqueHashCached       = false;
 
@@ -369,7 +367,6 @@ ImageInfo ImageInfo::fromLocationAlbumAndName(int locationId, const QString& alb
         info.m_data              = ImageInfoStatic::cache()->infoForId(shortInfo.id);
 
         ImageInfoWriteLocker lock;
-
         info.m_data->albumId     = shortInfo.albumID;
         info.m_data->albumRootId = shortInfo.albumRootID;
         info.m_data->name        = shortInfo.itemName;
@@ -738,6 +735,7 @@ QSize ImageInfo::dimensions() const
     RETURN_IF_CACHED(imageSize)
 
     QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
+
     ImageInfoWriteLocker lock;
     m_data.constCastData()->imageSizeCached = true;
 
@@ -759,6 +757,7 @@ QList<int> ImageInfo::tagIds() const
     RETURN_IF_CACHED(tagIds)
 
     QList<int> ids = CoreDbAccess().db()->getItemTagIDs(m_data->id);
+
     ImageInfoWriteLocker lock;
     m_data.constCastData()->tagIds       = ids;
     m_data.constCastData()->tagIdsCached = true;
@@ -769,7 +768,7 @@ void ImageInfoList::loadTagIds() const
 {
     ImageInfoList infoList;
 
-    foreach(const ImageInfo& info, *this)
+    foreach (const ImageInfo& info, *this)
     {
         if (info.m_data && !info.m_data->tagIdsCached)
         {
@@ -972,13 +971,7 @@ int ImageInfo::numberOfGroupedImages() const
         return false;
     }
 
-    RETURN_IF_CACHED(groupedImages)
-
-    int groupedImages                           = CoreDbAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped).size();
-    ImageInfoWriteLocker lock;
-    m_data.constCastData()->groupedImages       = groupedImages;
-    m_data.constCastData()->groupedImagesCached = true;
-    return m_data->groupedImages;
+    return ImageInfoStatic::cache()->getImageGroupedCount(m_data->id);
 }
 
 qlonglong ImageInfo::groupImageId() const
@@ -1004,7 +997,7 @@ void ImageInfoList::loadGroupImageIds() const
 {
     ImageInfoList infoList;
 
-    foreach(const ImageInfo& info, *this)
+    foreach (const ImageInfo& info, *this)
     {
         if (info.m_data && !info.m_data->groupImageCached)
         {
@@ -1107,7 +1100,7 @@ void ImageInfo::addToGroup(const ImageInfo& givenLeader)
     // and finally, this image needs to be grouped
     idsToBeGrouped << m_data->id;
 
-    foreach(const qlonglong& ids, idsToBeGrouped)
+    foreach (const qlonglong& ids, idsToBeGrouped)
     {
         // remove current grouping
         CoreDbAccess().db()->removeAllImageRelationsFrom(ids, DatabaseRelation::Grouped);
@@ -1578,7 +1571,7 @@ VideoInfoContainer ImageInfo::videoInfoContainer() const
     videoInfo.aspectRatio       = meta.aspectRatio;
     videoInfo.audioBitRate      = meta.audioBitRate;
     videoInfo.audioChannelType  = meta.audioChannelType;
-    videoInfo.audioCodec   = meta.audioCodec;
+    videoInfo.audioCodec        = meta.audioCodec;
     videoInfo.duration          = meta.duration;
     videoInfo.frameRate         = meta.frameRate;
     videoInfo.videoCodec        = meta.videoCodec;
@@ -1646,7 +1639,7 @@ void ImageInfo::setPickLabel(int pickId)
     {
         CoreDbAccess access;
 
-        foreach(int tagId, currentTagIds)
+        foreach (int tagId, currentTagIds)
         {
             if (pickLabelTags.contains(tagId))
             {
@@ -1677,7 +1670,7 @@ void ImageInfo::setColorLabel(int colorId)
     {
         CoreDbAccess access;
 
-        foreach(int tagId, currentTagIds)
+        foreach (int tagId, currentTagIds)
         {
             if (colorLabelTags.contains(tagId))
             {
@@ -1757,6 +1750,20 @@ void ImageInfo::setDateTime(const QDateTime& dateTime)
     ImageInfoWriteLocker lock;
     m_data->creationDate       = dateTime;
     m_data->creationDateCached = true;
+}
+
+void ImageInfo::setModDateTime(const QDateTime& dateTime)
+{
+    if (!m_data || !dateTime.isValid())
+    {
+        return;
+    }
+
+    CoreDbAccess().db()->setItemModificationDate(m_data->id, dateTime);
+
+    ImageInfoWriteLocker lock;
+    m_data->modificationDate       = dateTime;
+    m_data->modificationDateCached = true;
 }
 
 void ImageInfo::setTag(int tagID)
@@ -1867,10 +1874,12 @@ QList<ImageInfo> ImageInfo::fromUniqueHash(const QString& uniqueHash, qlonglong 
 {
     QList<ItemScanInfo> scanInfos = CoreDbAccess().db()->getIdenticalFiles(uniqueHash, fileSize);
     QList<ImageInfo> infos;
+
     foreach (const ItemScanInfo& scanInfo, scanInfos)
     {
         infos << ImageInfo(scanInfo.id);
     }
+
     return infos;
 }
 
@@ -1895,30 +1904,15 @@ ThumbnailInfo ImageInfo::thumbnailInfo() const
     }
 
     ThumbnailInfo thumbinfo;
-    QVariantList values;
 
-    thumbinfo.id       = m_data->id;
-    thumbinfo.filePath = filePath();
-    thumbinfo.fileName = name();
-    thumbinfo.isAccessible = CollectionManager::instance()->locationForAlbumRootId(m_data->albumRootId).isAvailable();
-
-    CoreDbAccess access;
-    values = access.db()->getImagesFields(m_data->id,
-                                          DatabaseFields::ModificationDate | DatabaseFields::FileSize | DatabaseFields::UniqueHash);
-
-    if (!values.isEmpty())
-    {
-        thumbinfo.modificationDate = values.at(0).toDateTime();
-        thumbinfo.fileSize = values.at(1).toLongLong();
-        thumbinfo.uniqueHash = values.at(2).toString();
-    }
-
-    values = access.db()->getImageInformation(m_data->id, DatabaseFields::Orientation);
-
-    if (!values.isEmpty())
-    {
-        thumbinfo.orientationHint = values.first().toInt();
-    }
+    thumbinfo.id               = m_data->id;
+    thumbinfo.filePath         = filePath();
+    thumbinfo.fileName         = name();
+    thumbinfo.isAccessible     = CollectionManager::instance()->locationForAlbumRootId(m_data->albumRootId).isAvailable();
+    thumbinfo.modificationDate = modDateTime();
+    thumbinfo.orientationHint  = orientation();
+    thumbinfo.uniqueHash       = uniqueHash();
+    thumbinfo.fileSize         = fileSize();
 
     return thumbinfo;
 }
@@ -1963,6 +1957,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             const QVariantList fieldValues = CoreDbAccess().db()->getVideoMetadata(m_data->id, missingVideoMetadata);
 
             ImageInfoWriteLocker lock;
+
             if (fieldValues.isEmpty())
             {
                 m_data.constCastData()->hasVideoMetadata = false;
@@ -1972,6 +1967,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             else
             {
                 int fieldsIndex = 0;
+
                 for (DatabaseFields::VideoMetadataIteratorSetOnly it(missingVideoMetadata) ; !it.atEnd() ; ++it)
                 {
                     const QVariant fieldValue = fieldValues.at(fieldsIndex);
@@ -1997,6 +1993,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             const QVariantList fieldValues = CoreDbAccess().db()->getImageMetadata(m_data->id, missingImageMetadata);
 
             ImageInfoWriteLocker lock;
+
             if (fieldValues.isEmpty())
             {
                 m_data.constCastData()->hasImageMetadata = false;
@@ -2006,6 +2003,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             else
             {
                 int fieldsIndex = 0;
+
                 for (DatabaseFields::ImageMetadataIteratorSetOnly it(missingImageMetadata) ; !it.atEnd() ; ++it)
                 {
                     const QVariant fieldValue = fieldValues.at(fieldsIndex);
@@ -2016,6 +2014,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
 
                 m_data.constCastData()->imageMetadataCached |= missingImageMetadata;
             }
+
             cachedHash = m_data->databaseFieldsHashRaw;
         }
     }

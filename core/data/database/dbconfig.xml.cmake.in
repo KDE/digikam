@@ -1121,13 +1121,13 @@
                     date DATE,
                     caption LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     collection LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                    icon INTEGER,
+                    icon BIGINT,
                     CONSTRAINT Albums_AlbumRoots FOREIGN KEY (albumRoot) REFERENCES AlbumRoots (id) ON DELETE CASCADE ON UPDATE CASCADE,
                     UNIQUE(albumRoot, relativePath(255)))
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS Images
-                    (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                    (id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
                     album INTEGER,
                     name LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
                     status INTEGER NOT NULL,
@@ -1135,7 +1135,7 @@
                     modificationDate DATETIME(3),
                     fileSize BIGINT,
                     uniqueHash VARCHAR(128),
-                    manualOrder INTEGER,
+                    manualOrder BIGINT,
                     CONSTRAINT Images_Albums FOREIGN KEY (album) REFERENCES Albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
                     UNIQUE (album, name(255)))
                     ENGINE InnoDB;
@@ -1144,7 +1144,7 @@
                     ADD CONSTRAINT Albums_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageInformation
-                    (imageid INTEGER PRIMARY KEY,
+                    (imageid BIGINT PRIMARY KEY,
                     rating INTEGER,
                     creationDate DATETIME(3),
                     digitizationDate DATETIME(3),
@@ -1158,7 +1158,7 @@
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageMetadata
-                    (imageid INTEGER PRIMARY KEY,
+                    (imageid BIGINT PRIMARY KEY,
                     make LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     model LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     lens LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
@@ -1179,7 +1179,7 @@
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS VideoMetadata
-                    (imageid INTEGER PRIMARY KEY,
+                    (imageid BIGINT PRIMARY KEY,
                     aspectRatio TEXT,
                     audioBitRate TEXT,
                     audioChannelType TEXT,
@@ -1192,7 +1192,7 @@
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImagePositions
-                    (imageid INTEGER PRIMARY KEY,
+                    (imageid BIGINT PRIMARY KEY,
                     latitude LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     latitudeNumber REAL,
                     longitude LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
@@ -1207,8 +1207,8 @@
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageComments
-                    (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                    imageid INTEGER,
+                    (id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                    imageid BIGINT,
                     type INTEGER,
                     language VARCHAR(128) CHARACTER SET utf8 COLLATE utf8_general_ci,
                     author LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
@@ -1218,8 +1218,8 @@
                     UNIQUE(imageid, type, language, author(202)))
                     ENGINE InnoDB;</statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageCopyright
-                    (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                    imageid INTEGER,
+                    (id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                    imageid BIGINT,
                     property LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     extraValue LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
@@ -1231,16 +1231,16 @@
                     (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                     pid INTEGER,
                     name LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                    icon INTEGER,
+                    icon BIGINT,
                     iconkde LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                    lft INT NOT NULL,
-                    rgt INT NOT NULL,
+                    lft INTEGER NOT NULL,
+                    rgt INTEGER NOT NULL,
                     CONSTRAINT Tags_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE,
                     UNIQUE(pid, name(100)))
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTags
-                    (imageid INTEGER NOT NULL,
+                    (imageid BIGINT NOT NULL,
                     tagid INTEGER NOT NULL,
                     CONSTRAINT ImageTags_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                     CONSTRAINT ImageTags_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -1248,9 +1248,9 @@
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain"> CREATE TABLE IF NOT EXISTS ImageProperties
-                    (imageid  INTEGER NOT NULL,
+                    (imageid BIGINT NOT NULL,
                     property LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                    value    LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
                     CONSTRAINT ImageProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                     UNIQUE (imageid, property(255)))
                     ENGINE InnoDB;
@@ -1263,7 +1263,7 @@
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS DownloadHistory
-                    (id  INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                    (id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
                     identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     filename LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     filesize BIGINT,
@@ -1278,15 +1278,15 @@
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHistory
-                    (imageid INTEGER PRIMARY KEY,
+                    (imageid BIGINT PRIMARY KEY,
                     uuid VARCHAR(128),
                     history LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     CONSTRAINT ImageHistory_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageRelations
-                    (subject INTEGER,
-                    object INTEGER,
+                    (subject BIGINT,
+                    object BIGINT,
                     type INTEGER,
                     CONSTRAINT ImageRelations_ImagesS FOREIGN KEY (subject) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                     CONSTRAINT ImageRelations_ImagesO FOREIGN KEY (object) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -1301,7 +1301,7 @@
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTagProperties
-                    (imageid INTEGER,
+                    (imageid BIGINT,
                     tagid INTEGER,
                     property TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
@@ -1592,7 +1592,7 @@
 
             <dbaction name="CreateThumbnailsDB" mode="transaction">
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS Thumbnails
-                    (id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    (id BIGINT PRIMARY KEY AUTO_INCREMENT,
                     type INTEGER,
                     modificationDate DATETIME(3),
                     orientationHint INTEGER,
@@ -1602,21 +1602,21 @@
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS UniqueHashes
                     (uniqueHash VARCHAR(128),
                     fileSize BIGINT,
-                    thumbId INTEGER,
+                    thumbId BIGINT,
                     CONSTRAINT UniqueHashes_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
                     UNIQUE(uniqueHash, fileSize))
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS FilePaths
                     (path LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                    thumbId INTEGER,
+                    thumbId BIGINT,
                     CONSTRAINT FilePaths_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
                     UNIQUE(path(255)))
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS CustomIdentifiers
                     (identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                    thumbId INTEGER,
+                    thumbId BIGINT,
                     CONSTRAINT CustomIdentifiers_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
                     UNIQUE(identifier(255)))
                     ENGINE InnoDB;
@@ -1804,15 +1804,15 @@
 
             <dbaction name="CreateSimilarityDB" mode="transaction">
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageSimilarity
-                    (imageid1 INTEGER NOT NULL,
-                    imageid2 INTEGER NOT NULL,
+                    (imageid1 BIGINT NOT NULL,
+                    imageid2 BIGINT NOT NULL,
                     algorithm INTEGER,
                     value DOUBLE,
                     CONSTRAINT Similar UNIQUE(imageid1, imageid2, algorithm))
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHaarMatrix
-                    (imageid INTEGER PRIMARY KEY,
+                    (imageid BIGINT PRIMARY KEY,
                     modificationDate DATETIME(3),
                     uniqueHash LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     matrix LONGBLOB)

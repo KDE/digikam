@@ -70,8 +70,9 @@ bool SimilarityDb::setSetting(const QString& keyword, const QString& value )
     QMap<QString, QVariant> parameters;
     parameters.insert(QLatin1String(":keyword"), keyword);
     parameters.insert(QLatin1String(":value"), value);
-    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("ReplaceSimilaritySetting")),
-                                                                       parameters);
+    BdEngineBackend::QueryState queryStateResult =
+            d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("ReplaceSimilaritySetting")),
+                                                   parameters);
 
     return (queryStateResult == BdEngineBackend::NoErrors);
 }
@@ -82,8 +83,9 @@ QString SimilarityDb::getSetting(const QString& keyword)
     parameters.insert(QLatin1String(":keyword"), keyword);
     QList<QVariant> values;
     // TODO Should really check return status here
-    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectSimilaritySetting")),
-                                                                       parameters, &values);
+    BdEngineBackend::QueryState queryStateResult =
+            d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("SelectSimilaritySetting")),
+                                                   parameters, &values);
     qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "SimilarityDb SelectSimilaritySetting val ret = "
                                       << (BdEngineBackend::QueryStateEnum)queryStateResult;
 
@@ -103,8 +105,9 @@ QString SimilarityDb::getLegacySetting(const QString& keyword)
     parameters.insert(QLatin1String(":keyword"), keyword);
     QList<QVariant> values;
     // TODO Should really check return status here
-    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectSimilarityLegacySetting")),
-                                                                       parameters, &values);
+    BdEngineBackend::QueryState queryStateResult =
+            d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("SelectSimilarityLegacySetting")),
+                                                   parameters, &values);
     qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "SimilarityDb SelectSimilaritySetting val ret = "
                                       << (BdEngineBackend::QueryStateEnum)queryStateResult;
 
@@ -130,7 +133,7 @@ QSet<qlonglong> SimilarityDb::registeredImageIds() const
         d->db->execSql(QString::fromUtf8("SELECT imageid1, imageId2 FROM ImageSimilarity;"),
                        &values);
 
-        for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+        for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; )
         {
             imageIds << (*it).toLongLong();
             ++it;
@@ -145,7 +148,7 @@ QSet<qlonglong> SimilarityDb::registeredImageIds() const
         d->db->execSql(QString::fromUtf8("SELECT imageid FROM ImageHaarMatrix;"),
                        &values);
 
-        foreach(const QVariant& var, values)
+        foreach (const QVariant& var, values)
         {
             imageIds << var.toLongLong();
         }
@@ -187,10 +190,10 @@ QList<qlonglong> SimilarityDb::getDirtyOrMissingFingerprints(QList<ImageInfo> im
 
     if (algorithm == FuzzyAlgorithm::Haar)
     {
-        foreach(const ImageInfo& info, imageInfos)
+        foreach (const ImageInfo& info, imageInfos)
         {
             QList<QVariant> values;
-            d->db->execSql(QString::fromUtf8("SELECT ImageHaarMatrix.modificationDate, ImageHaarMatrix.uniqueHash FROM ImageHaarMatrix "
+            d->db->execSql(QString::fromUtf8("SELECT modificationDate, uniqueHash FROM ImageHaarMatrix "
                                              "WHERE imageid=?;"),
                            info.id(), &values);
 
@@ -224,10 +227,10 @@ QStringList SimilarityDb::getDirtyOrMissingFingerprintURLs(QList<ImageInfo> imag
 
     if (algorithm == FuzzyAlgorithm::Haar)
     {
-        foreach(const ImageInfo& info, imageInfos)
+        foreach (const ImageInfo& info, imageInfos)
         {
             QList<QVariant> values;
-            d->db->execSql(QString::fromUtf8("SELECT ImageHaarMatrix.modificationDate, ImageHaarMatrix.uniqueHash FROM ImageHaarMatrix "
+            d->db->execSql(QString::fromUtf8("SELECT modificationDate, uniqueHash FROM ImageHaarMatrix "
                                              "WHERE imageid=?;"),
                            info.id(), &values);
 
@@ -259,9 +262,9 @@ void SimilarityDb::copySimilarityAttributes(qlonglong srcId, qlonglong dstId)
     // Go through ImageHaarMatrix table and copy the entries
 
     d->db->execSql(QString::fromUtf8("REPLACE INTO ImageHaarMatrix "
-                                     " (imageid, modificationDate, uniqueHash, matrix) "
+                                     "(imageid, modificationDate, uniqueHash, matrix) "
                                      "SELECT ?, modificationDate, uniqueHash, matrix "
-                                     "FROM ImageHaarMatrix WHERE imageid=?;"),
+                                     " FROM ImageHaarMatrix WHERE imageid=?;"),
                    dstId, srcId);
 }
 
@@ -356,7 +359,7 @@ void SimilarityDb::setImageSimilarity(qlonglong imageID1, qlonglong imageID2, do
     {
         d->db->execSql(QString::fromUtf8("REPLACE INTO ImageSimilarity "
                                          "(imageid1, imageid2, value, algorithm) "
-                                         "VALUES(?, ?, ?, ?);"),
+                                         " VALUES(?, ?, ?, ?);"),
                        orderedIds.first, orderedIds.second, value, (int)algorithm);
     }
 }
@@ -385,12 +388,11 @@ QList<FuzzyAlgorithm> SimilarityDb::getImageSimilarityAlgorithms(qlonglong image
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT algorithm FROM ImageSimilarity "
                                      "WHERE imageid1=? AND imageid2=?;"),
-                   orderedIds.first, orderedIds.second,
-                   &values);
+                   orderedIds.first, orderedIds.second, &values);
 
     QList<FuzzyAlgorithm> algorithms;
 
-    foreach(const QVariant& var, values)
+    foreach (const QVariant& var, values)
     {
         int algorithmId = var.toInt();
 

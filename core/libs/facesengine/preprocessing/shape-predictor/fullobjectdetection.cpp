@@ -76,7 +76,7 @@ std::vector<cv::Rect> geteyes(const FullObjectDetection& shape)
 {
     std::vector<cv::Rect> eyes;
 
-    for (int j = 0 ; j < 2 ; j++)
+    for (int j = 0 ; j < 2 ; ++j)
     {
         int start = j ? 36 : 42;
         int end   = j ? 41 : 47;
@@ -89,7 +89,7 @@ std::vector<cv::Rect> geteyes(const FullObjectDetection& shape)
         tly                           = firstpoint[1];
         bry                           = firstpoint[1];
 
-        for(int i = start ; i <= end ; i++)
+        for (int i = start ; i <= end ; ++i)
         {
             std::vector<float> x = shape.part(i);
 

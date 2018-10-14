@@ -768,7 +768,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
     // read cached signature map if possible
     else
     {
-        foreach(const qlonglong& imageid, signatureCache.keys())
+        foreach (const qlonglong& imageid, signatureCache.keys())
         {
             albumid = albumCache[imageid];
 
@@ -961,7 +961,7 @@ QMap< double,QMap< qlonglong,QList<qlonglong> > > HaarIface::findDuplicatesInAlb
     QSet<qlonglong> idList;
 
     // Get all items DB id from all albums and all collections
-    foreach(int albumId, albums2Scan)
+    foreach (int albumId, albums2Scan)
     {
         idList.unite(CoreDbAccess().db()->getItemIDsInAlbum(albumId).toSet());
     }
@@ -983,13 +983,13 @@ QMap< double,QMap< qlonglong,QList<qlonglong> > > HaarIface::findDuplicatesInAlb
     QSet<qlonglong> idList;
 
     // Get all items DB id from all albums and all collections
-    foreach(int albumId, albums2Scan)
+    foreach (int albumId, albums2Scan)
     {
         imagesFromAlbums.unite(CoreDbAccess().db()->getItemIDsInAlbum(albumId).toSet());
     }
 
     // Get all items DB id from all tags
-    foreach(int albumId, tags2Scan)
+    foreach (int albumId, tags2Scan)
     {
         imagesFromTags.unite(CoreDbAccess().db()->getItemIDsInTag(albumId).toSet());
     }

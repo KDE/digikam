@@ -182,7 +182,7 @@ void TagFolderView::slotExpandNode()
 
     QQueue<QModelIndex> greyNodes;
 
-    foreach(const QModelIndex& index, selected)
+    foreach (const QModelIndex& index, selected)
     {
         greyNodes.append(index);
         expand(index);
@@ -217,7 +217,7 @@ void TagFolderView::slotCollapseNode()
 
     QQueue<QModelIndex> greyNodes;
 
-    foreach(const QModelIndex& index, selected)
+    foreach (const QModelIndex& index, selected)
     {
         greyNodes.append(index);
         collapse(index);
@@ -243,6 +243,7 @@ void TagFolderView::slotCollapseNode()
         }
     }
 }
+
 void TagFolderView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album)
 {
     Album* const a    = album;
@@ -305,7 +306,7 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, const QList<TAlbu
     {
         cmh.addActionDeleteTags(tagModificationHelper(), albums);
         // If one of the selected tags is no face tag, add the action to mark them as face tags.
-        foreach(TAlbum* const tag, albums)
+        foreach (TAlbum* const tag, albums)
         {
             if (!FaceTags::isPerson(tag->id()))
             {
@@ -315,6 +316,7 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, const QList<TAlbu
             }
         }
     }
+
     cmh.addSeparator();
 }
 
@@ -350,7 +352,7 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
     std::sort(selectedItems.begin(), selectedItems.end());
     QList<TAlbum*> items;
 
-    foreach(const QModelIndex& mIndex, selectedItems)
+    foreach (const QModelIndex& mIndex, selectedItems)
     {
         TAlbum* const temp = static_cast<TAlbum*>(albumForIndex(mIndex));
         items.append(temp);
@@ -372,7 +374,7 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
     setContexMenuItems(cmhelper, items);
 
 /*
-    foreach(ContextMenuElement* const element, d->contextMenuElements)
+    foreach (ContextMenuElement* const element, d->contextMenuElements)
     {
         element->addActions(this, cmhelper, album);
     }

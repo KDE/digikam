@@ -313,7 +313,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum*>& tags)
     QString tagWithImages;
     QMultiMap<int, TAlbum*> sortedTags;
 
-    foreach(TAlbum* const t, tags)
+    foreach (TAlbum* const t, tags)
     {
 
         if (!t || t->isRoot())
@@ -451,7 +451,7 @@ void TagModificationHelper::slotMultipleFaceTagDel(QList<TAlbum*>& tags)
     QSet<qlonglong> allAssignedItems;
     int tagsWithImagesCount = 0;
 
-    foreach(TAlbum* const selectedTag, tags)
+    foreach (TAlbum* const selectedTag, tags)
     {
         if (!selectedTag || selectedTag->isRoot())
         {
@@ -480,7 +480,7 @@ void TagModificationHelper::slotMultipleFaceTagDel(QList<TAlbum*>& tags)
         }
 
         // Get the assigned faces for all person tags to delete
-        foreach(TAlbum* const tAlbum, personTagsToDelete)
+        foreach (TAlbum* const tAlbum, personTagsToDelete)
         {
             // If the global set does not yet contain the tag
             if (!allPersonTagsToDelete.contains(tAlbum))
@@ -565,7 +565,7 @@ void TagModificationHelper::slotMultipleFaceTagDel(QList<TAlbum*>& tags)
         MetadataHub metadataHub;
 
         // remove the face region from images and unassign the tag if wished
-        foreach(const qlonglong& imageId, allAssignedItems)
+        foreach (const qlonglong& imageId, allAssignedItems)
         {
             foreach (TAlbum* const tagToRemove, allPersonTagsToDelete)
             {
@@ -596,7 +596,7 @@ void TagModificationHelper::slotMultipleFaceTagDel(QList<TAlbum*>& tags)
             }
         }
 
-        foreach(TAlbum* const tAlbum, allPersonTagsToDelete)
+        foreach (TAlbum* const tAlbum, allPersonTagsToDelete)
         {
             TagProperties props(tAlbum->id());
             // Delete TagPropertyName::person() and TagPropertyName::faceEngineName()
@@ -645,7 +645,7 @@ void TagModificationHelper::slotTagToFaceTag()
 
 void TagModificationHelper::slotMultipleTagsToFaceTags(QList<TAlbum*>& tags)
 {
-    foreach(TAlbum* const selectedTag, tags)
+    foreach (TAlbum* const selectedTag, tags)
     {
         slotTagToFaceTag(selectedTag);
     }
@@ -674,7 +674,7 @@ QSet<TAlbum*> TagModificationHelper::getFaceTags(QList<TAlbum*> tags)
 {
     QSet<TAlbum*> faceTags;
 
-    foreach(TAlbum* const tAlbum, tags)
+    foreach (TAlbum* const tAlbum, tags)
     {
         if (FaceTags::isPerson(tAlbum->id()))
         {

@@ -49,6 +49,7 @@ const QString SlideShowSettings::configSlideShowPrintMakeModelEntry(QLatin1Strin
 const QString SlideShowSettings::configSlideShowPrintNameEntry(QLatin1String("SlideShowPrintName"));
 const QString SlideShowSettings::configSlideShowPrintTagsEntry(QLatin1String("SlideShowPrintTags"));
 const QString SlideShowSettings::configSlideShowPrintLabelsEntry(QLatin1String("SlideShowPrintLabels"));
+const QString SlideShowSettings::configSlideShowPrintRatingEntry(QLatin1String("SlideShowPrintRating"));
 const QString SlideShowSettings::configSlideShowProgressIndicatorEntry(QLatin1String("SlideShowProgressIndicator"));
 const QString SlideShowSettings::configSlideScreenEntry(QLatin1String("SlideScreen"));
 
@@ -64,6 +65,7 @@ SlideShowSettings::SlideShowSettings()
     printTitle            = false;
     printCapIfNoTitle     = false;
     printLabels           = false;
+    printRating           = false;
     printApertureFocal    = false;
     printMakeModel        = false;
     printExpoSensitivity  = false;
@@ -81,6 +83,7 @@ void SlideShowSettings::readFromConfig()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroupName);
+
     startWithCurrent          = group.readEntry(configSlideShowStartCurrentEntry,         false);
     delay                     = group.readEntry(configSlideShowDelayEntry,                5);
     loop                      = group.readEntry(configSlideShowLoopEntry,                 false);
@@ -94,6 +97,7 @@ void SlideShowSettings::readFromConfig()
     printCapIfNoTitle         = group.readEntry(configSlideShowPrintCapIfNoTitleEntry,    false);
     printTags                 = group.readEntry(configSlideShowPrintTagsEntry,            false);
     printLabels               = group.readEntry(configSlideShowPrintLabelsEntry,          false);
+    printRating               = group.readEntry(configSlideShowPrintRatingEntry,          false);
     showProgressIndicator     = group.readEntry(configSlideShowProgressIndicatorEntry,    true);
     slideScreen               = group.readEntry(configSlideScreenEntry,                   -2);
     exifRotate                = MetadataSettings::instance()->settings().exifRotate;
@@ -103,6 +107,7 @@ void SlideShowSettings::writeToConfig()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroupName);
+
     group.writeEntry(configSlideShowStartCurrentEntry,         startWithCurrent);
     group.writeEntry(configSlideShowDelayEntry,                delay);
     group.writeEntry(configSlideShowLoopEntry,                 loop);
@@ -116,6 +121,7 @@ void SlideShowSettings::writeToConfig()
     group.writeEntry(configSlideShowPrintCapIfNoTitleEntry,    printCapIfNoTitle);
     group.writeEntry(configSlideShowPrintTagsEntry,            printTags);
     group.writeEntry(configSlideShowPrintLabelsEntry,          printLabels);
+    group.writeEntry(configSlideShowPrintRatingEntry,          printRating);
     group.writeEntry(configSlideShowProgressIndicatorEntry,    showProgressIndicator);
     group.writeEntry(configSlideScreenEntry,                   slideScreen);
     group.sync();

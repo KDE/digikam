@@ -147,9 +147,13 @@ public:
      */
     bool                         printTags;
 
-    /** Print color label, pick label, and rating while slide
+    /** Print color label and pick label while slide
      */
     bool                         printLabels;
+
+    /** Print rating while slide
+     */
+    bool                         printRating;
 
     /** Slide pictures in loop
      */
@@ -203,6 +207,7 @@ private:
     static const QString         configSlideShowPrintNameEntry;
     static const QString         configSlideShowPrintTagsEntry;
     static const QString         configSlideShowPrintLabelsEntry;
+    static const QString         configSlideShowPrintRatingEntry;
     static const QString         configSlideShowProgressIndicatorEntry;
     static const QString         configSlideScreenEntry;
 };

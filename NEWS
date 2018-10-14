@@ -14,6 +14,7 @@ Database     : Similarity database has been moved to a dedicated file to not blo
 Database     : New video metadata parser based on ffmpeg to populate database.
 Search       : Add video support to find files based on properties registered on database.
 
+General      : Add new Exiv2 0.27 support.
 General      : Use DrMinGW has crash handler under Windows.
 General      : Port all export/import tool to OAuth2 authentification.
 General      : New tool to adjust quickly time and date information from items.
@@ -602,4 +603,15 @@ BUGFIXES:
 538 ==> 399134 - Progress bar or status when importing from camera/card reader.
 539 ==> 399153 - Selecting a picture with a tag and another without that tag, the checkbox is black instead of gray. 
 540 ==> 384759 - Can't adjust timestamp of RAW files.
-541 ==> 
+541 ==> 399221 - Cannot scroll in videos by clicking on the progress bar (only by moving the progress slider).
+542 ==> 399315 - Horizontal scroll bar aligned to the right by default.
+543 ==> 397962 - Digikam 6.0 does not start after install.
+544 ==> 399336 - Google maps – "For development purposes only" printed on the map.
+545 ==> 399338 - Count of items in Tree Views does not match total number of items.
+546 ==> 399292 - Video file datetime not shown correctly after editing.
+547 ==> 370553 - Adjust date - not possible to update "digikam timestamp".
+548 ==> 329091 - MySQL : needs to set "max-allowed-packet" server settings from 4.096 to 16.777.216 to prevent Maintenance tool crash.
+549 ==> 399406 - Digikam Crash on advance rename.
+550 ==> 397386 - Add a separate checkbox to "Show Rating".
+551 ==> 335870 - Nexus 4 in PTP mode gets error: The specified camera ("/org/kde/solid/udev/...") is not supported.
+552 ==> 

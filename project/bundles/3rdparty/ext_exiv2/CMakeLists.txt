@@ -8,21 +8,35 @@
 
 set(PREFIX_ext_exiv2 "${EXTPREFIX}")
 
-set(Exiv2_Conf -DEXIV2_ENABLE_SHARED=ON
+set(Exiv2_Conf -DBUILD_SHARED_LIBS=ON
                -DEXIV2_ENABLE_XMP=ON
-               -DEXIV2_ENABLE_LIBXMP=ON
+               -DEXIV2_ENABLE_EXTERNAL_XMP=OFF
                -DEXIV2_ENABLE_PNG=ON
-               -DEXIV2_ENABLE_NLS=OFF
+               -DEXIV2_ENABLE_NLS=ON
                -DEXIV2_ENABLE_PRINTUCS2=ON
                -DEXIV2_ENABLE_LENSDATA=ON
-               -DEXIV2_ENABLE_COMMERCIAL=OFF
-               -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
-               -DEXIV2_ENABLE_BUILD_PO=OFF
                -DEXIV2_ENABLE_VIDEO=OFF
                -DEXIV2_ENABLE_WEBREADY=OFF
+               -DEXIV2_ENABLE_DYNAMIC_RUNTIME=OFF
                -DEXIV2_ENABLE_CURL=OFF
                -DEXIV2_ENABLE_SSH=OFF
+               -DEXIV2_BUILD_SAMPLES=OFF
+               -DEXIV2_BUILD_PO=OFF
+               -DEXIV2_BUILD_EXIV2_COMMAND=OFF
+               -DEXIV2_BUILD_UNIT_TESTS=OFF
+               -DEXIV2_BUILD_DOC=OFF
+               -DEXIV2_TEAM_EXTRA_WARNINGS=OFF
+               -DEXIV2_TEAM_WARNINGS_AS_ERRORS=OFF
+               -DEXIV2_TEAM_USE_SANITIZERS=OFF
 )
+
+if(MINGW)
+
+    set(Exiv2_Conf ${Exiv2_Conf}
+               -DEXIV2_ENABLE_WIN_UNICODE=ON
+    )
+
+endif()
 
 JoinListAsString("${Exiv2_Conf}" " " BASH_OPTIONS)
 
@@ -32,15 +46,17 @@ if(MINGW)
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
         # To use official release tarball
-        URL http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
-        URL_MD5 5399e3b570d7f9205f0e76d47582da4c
+        #URL http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
+        #URL_MD5 5399e3b570d7f9205f0e76d47582da4c
 
-        # To use current implementation from SVN
+        # To use current implementation from Git
 
-        #SVN_REPOSITORY svn://dev.exiv2.org/svn/trunk
+        GIT_REPOSITORY https://github.com/Exiv2/exiv2.git
 
-        CONFIGURE_COMMAND cd <SOURCE_DIR> &&
-                          ./bootstrap.mxe ${MXE_BUILDROOT} RelWithDebInfo ${BASH_OPTIONS}
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/exiv2-0.27-mxe.patch
+
+        CONFIGURE_COMMAND cp -f ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.mxe <SOURCE_DIR>/. &&
+                          <SOURCE_DIR>/bootstrap.mxe ${MXE_BUILDROOT} RelWithDebInfo ${BASH_OPTIONS}
 
         BUILD_COMMAND cd <SOURCE_DIR>/build && $(MAKE) -j
 
@@ -60,12 +76,12 @@ elseif(APPLE)
 
         # To use official release tarball
 
-        URL http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
-        URL_MD5 5399e3b570d7f9205f0e76d47582da4c
+        #URL http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
+        #URL_MD5 5399e3b570d7f9205f0e76d47582da4c
 
-        # To use current implementation from SVN
+        # To use current implementation from Git
 
-        #SVN_REPOSITORY svn://dev.exiv2.org/svn/trunk
+        GIT_REPOSITORY https://github.com/Exiv2/exiv2.git
 
         CONFIGURE_COMMAND cp -f ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.macports <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.macports ${PREFIX_ext_exiv2} RelWithDebInfo x86_64 ${BASH_OPTIONS}
@@ -87,12 +103,12 @@ else() # Linux
 
         # To use official release tarball
 
-        URL http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
-        URL_MD5 5399e3b570d7f9205f0e76d47582da4c
+        #URL http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
+        #URL_MD5 5399e3b570d7f9205f0e76d47582da4c
 
-        # To use current implementation from SVN
+        # To use current implementation from Git
 
-        #SVN_REPOSITORY svn://dev.exiv2.org/svn/trunk
+        GIT_REPOSITORY https://github.com/Exiv2/exiv2.git
 
         CONFIGURE_COMMAND cd <SOURCE_DIR> &&
                    $(CMAKE_COMMAND) . -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_exiv2}

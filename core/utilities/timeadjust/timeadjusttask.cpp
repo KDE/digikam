@@ -43,6 +43,7 @@ extern "C"
 #include "dinfointerface.h"
 #include "timeadjustlist.h"
 #include "timeadjustthread.h"
+#include "metadatasettings.h"
 
 namespace Digikam
 {
@@ -103,6 +104,9 @@ void TimeAdjustTask::run()
         return;
     }
 
+    bool writeToSidecar  = (MetadataSettings::instance()->settings()
+                            .metadataWritingMode != DMetadata::WRITETOIMAGEONLY);
+
     bool metadataChanged = d->settings.updEXIFModDate || d->settings.updEXIFOriDate ||
                            d->settings.updEXIFDigDate || d->settings.updEXIFThmDate ||
                            d->settings.updIPTCDate    || d->settings.updXMPVideo    ||
@@ -123,7 +127,7 @@ void TimeAdjustTask::run()
             QString exifDateTimeFormat = QLatin1String("yyyy:MM:dd hh:mm:ss");
             QString xmpDateTimeFormat  = QLatin1String("yyyy:MM:ddThh:mm:ss");
 
-            if (meta.canWriteExif(d->url.toLocalFile()))
+            if (writeToSidecar || meta.canWriteExif(d->url.toLocalFile()))
             {
                 if (d->settings.updEXIFModDate)
                 {
@@ -165,7 +169,7 @@ void TimeAdjustTask::run()
                    }
                 }
             }
-            else if (d->settings.updEXIFModDate || d->settings.updEXIFOriDate || 
+            else if (d->settings.updEXIFModDate || d->settings.updEXIFOriDate ||
                      d->settings.updEXIFDigDate || d->settings.updEXIFThmDate)
             {
                 ret = false;
@@ -173,7 +177,7 @@ void TimeAdjustTask::run()
 
             if (d->settings.updIPTCDate)
             {
-                if (meta.canWriteIptc(d->url.toLocalFile()))
+                if (writeToSidecar || meta.canWriteIptc(d->url.toLocalFile()))
                 {
                     if (!d->settings.updIfAvailable ||
                         !meta.getIptcTagString("Iptc.Application2.DateCreated").isEmpty())
@@ -197,7 +201,7 @@ void TimeAdjustTask::run()
 
             if (d->settings.updXMPDate)
             {
-                if (meta.supportXmp() && meta.canWriteXmp(d->url.toLocalFile()))
+                if (writeToSidecar || (meta.supportXmp() && meta.canWriteXmp(d->url.toLocalFile())))
                 {
                     if (!d->settings.updIfAvailable ||
                         !meta.getXmpTagString("Xmp.exif.DateTimeOriginal").isEmpty())
@@ -249,7 +253,7 @@ void TimeAdjustTask::run()
 
             if (d->settings.updXMPVideo)
             {
-                if (meta.supportXmp() && meta.canWriteXmp(d->url.toLocalFile()))
+                if (writeToSidecar || (meta.supportXmp() && meta.canWriteXmp(d->url.toLocalFile())))
                 {
                     if (!d->settings.updIfAvailable ||
                         !meta.getXmpTagString("Xmp.video.DateTimeOriginal").isEmpty())
@@ -326,6 +330,11 @@ void TimeAdjustTask::run()
         {
             status |= TimeAdjustList::FILE_TIME_ERROR;
         }
+    }
+
+    if (status == TimeAdjustList::NOPROCESS_ERROR)
+    {
+        emit signalDateTimeForUrl(d->url, dt, d->settings.updFileModDate);
     }
 
     emit signalProcessEnded(d->url, status);

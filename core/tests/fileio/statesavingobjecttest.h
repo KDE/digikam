@@ -49,15 +49,16 @@ private Q_SLOTS:
     void testRecursiveChildrenSaving();
 };
 
-class StubStateSaverPriv;
+// ----------------------------------------------------------
 
-class StubStateSaver: public QObject, public Digikam::StateSavingObject
+class StubStateSaver: public QObject,
+                      public Digikam::StateSavingObject
 {
     Q_OBJECT
 
 public:
 
-    explicit StubStateSaver(QObject* parent = 0);
+    explicit StubStateSaver(QObject* const parent = 0);
     virtual ~StubStateSaver();
 
     KConfigGroup getGroup();
@@ -74,8 +75,8 @@ public:
 
 private:
 
-    StubStateSaverPriv* d;
-
+    class Private;
+    Private* const d;
 };
 
 #endif // DIGIKAM_STATE_SAVING_OBJECT_TEST_H

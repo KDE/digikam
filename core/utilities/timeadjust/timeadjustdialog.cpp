@@ -145,6 +145,9 @@ TimeAdjustDialog::TimeAdjustDialog(QWidget* const parent, DInfoInterface* const 
     connect(d->thread, SIGNAL(signalProcessEnded(QUrl,int)),
             this, SLOT(slotProcessEnded(QUrl,int)));
 
+    connect(d->thread, SIGNAL(signalDateTimeForUrl(QUrl,QDateTime,bool)),
+            this, SIGNAL(signalDateTimeForUrl(QUrl,QDateTime,bool)));
+
     connect(d->progressBar, SIGNAL(signalProgressCanceled()),
             this, SLOT(slotCancelThread()));
 
@@ -202,21 +205,6 @@ void TimeAdjustDialog::slotDialogFinished()
     saveSettings();
 }
 
-QList<QUrl> TimeAdjustDialog::getProccessedUrls() const
-{
-    QList<QUrl> proccessed;
-
-    foreach (const QUrl& url, d->itemsStatusMap.keys())
-    {
-        if (d->itemsStatusMap.value(url) == TimeAdjustList::NOPROCESS_ERROR)
-        {
-            proccessed << url;
-        }
-    }
-
-    return proccessed;
-}
-
 void TimeAdjustDialog::readSettings()
 {
     TimeAdjustContainer prm;
@@ -237,9 +225,9 @@ void TimeAdjustDialog::readSettings()
     prm.updEXIFOriDate = group.readEntry(QLatin1String("Update EXIF Original Time"),     true);
     prm.updEXIFDigDate = group.readEntry(QLatin1String("Update EXIF Digitization Time"), true);
     prm.updEXIFThmDate = group.readEntry(QLatin1String("Update EXIF Thumbnail Time"),    true);
-    prm.updIPTCDate    = group.readEntry(QLatin1String("Update IPTC Time"),              false);
-    prm.updXMPVideo    = group.readEntry(QLatin1String("Update XMP Video Time"),         false);
-    prm.updXMPDate     = group.readEntry(QLatin1String("Update XMP Creation Time"),      false);
+    prm.updIPTCDate    = group.readEntry(QLatin1String("Update IPTC Time"),              true);
+    prm.updXMPVideo    = group.readEntry(QLatin1String("Update XMP Video Time"),         true);
+    prm.updXMPDate     = group.readEntry(QLatin1String("Update XMP Creation Time"),      true);
 
     prm.dateSource     = group.readEntry(QLatin1String("Use Timestamp Type"),            0);
     prm.metadataSource = group.readEntry(QLatin1String("Meta Timestamp Type"),           0);
@@ -419,28 +407,19 @@ void TimeAdjustDialog::slotApplyClicked()
 
     TimeAdjustContainer prm = d->settingsView->settings();
 
-    if (prm.atLeastOneUpdateToProcess())
-    {
-        d->progressBar->show();
-        d->progressBar->progressScheduled(i18n("Adjust Time and Date"), true, true);
-        d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QLatin1String("appointment-new")).pixmap(22, 22));
-        d->progressBar->setMaximum(d->itemsUsedMap.keys().size());
-        d->thread->setSettings(prm);
-        d->thread->setUpdatedDates(d->itemsUpdatedMap);
+    d->progressBar->show();
+    d->progressBar->progressScheduled(i18n("Adjust Time and Date"), true, true);
+    d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QLatin1String("appointment-new")).pixmap(22, 22));
+    d->progressBar->setMaximum(d->itemsUsedMap.keys().size());
+    d->thread->setSettings(prm);
+    d->thread->setUpdatedDates(d->itemsUpdatedMap);
 
-        if (!d->thread->isRunning())
-        {
-            d->thread->start();
-        }
-
-        setBusy(true);
-    }
-    else
+    if (!d->thread->isRunning())
     {
-        QMessageBox::critical(QApplication::activeWindow(),
-                              i18n("Adjust Time & Date"),
-                              i18n("Select at least one option"));
+        d->thread->start();
     }
+
+    setBusy(true);
 }
 
 void TimeAdjustDialog::slotCancelThread()

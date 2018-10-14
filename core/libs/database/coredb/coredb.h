@@ -763,6 +763,11 @@ public:
     void setItemManualOrder(qlonglong imageID, qlonglong value);
 
     /**
+     * Updates the modification date field for the item.
+     */
+    void setItemModificationDate(qlonglong imageID, const QDateTime& modificationDate);
+
+    /**
      * Rename the item.
      * Note: we not use here ImageChangeset.
      */
@@ -1101,6 +1106,11 @@ public:
      */
     QList<qlonglong> getOneRelatedImageEach(const QList<qlonglong>& ids,
                                             DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
+
+    /**
+     * Retrieves all images that related to (retrieves objects) by given type.
+     */
+    QList<qlonglong> getRelatedImagesToByType(DatabaseRelation::Type type);
 
     /**
      * Returns a list of all images where the Faces have either not been detected

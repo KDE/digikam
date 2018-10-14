@@ -60,7 +60,7 @@ ListItem::ListItem(QList<QVariant>& data, ListItem* const parent)
 
     data.removeFirst();
 
-    foreach(const QVariant& val, data)
+    foreach (const QVariant& val, data)
     {
         d->tagIds.append(val.toInt());
     }
@@ -136,22 +136,22 @@ QVariant ListItem::data(int role) const
         {
             QString display;
 
-            foreach(int tagId, d->tagIds)
+            foreach (int tagId, d->tagIds)
             {
                 TAlbum* const album = AlbumManager::instance()->findTAlbum(tagId);
 
-                if(!album)
+                if (!album)
                 {
                     continue;
                 }
 
                 display.append(album->title()+ QLatin1String(", "));
 
-                if(role == Qt::DisplayRole && display.size() > 30)
+                if (role == Qt::DisplayRole && display.size() > 30)
                     break;
             }
 
-            if(display.isEmpty())
+            if (display.isEmpty())
                 display.append(i18n("All Tags"));
             else
                 display.remove(display.size()-2, 2);
@@ -189,9 +189,9 @@ ListItem* ListItem::containsItem(ListItem* const item) const
 {
     // We need to compare items and not pointers
 
-    for(int it=0; it < d->childItems.size(); ++it)
+    for (int it = 0 ; it < d->childItems.size() ; ++it)
     {
-        if(item->equal(d->childItems.at(it)))
+        if (item->equal(d->childItems.at(it)))
         {
             return d->childItems.at(it);
         }

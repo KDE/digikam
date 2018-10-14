@@ -85,6 +85,7 @@ public:
     FisherFaceModel fisherFaceModel() const;
 
     /// DNN
+    void updateDNNFaceModel(DNNFaceModel& model);
     void getFaceVector(cv::Mat data, std::vector<float>& vecdata);
     DNNFaceModel dnnFaceModel() const;
 

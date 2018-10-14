@@ -55,19 +55,21 @@ public:
     {
     }
 
-    QualityScanMode      mode;
+    QualityScanMode       mode;
 
-    ImageQualitySettings quality;
+    ImageQualityContainer quality;
 
-    QStringList          allPicturesPath;
+    QStringList           allPicturesPath;
 
-    AlbumList            albumList;
+    AlbumList             albumList;
 
-    MaintenanceThread*   thread;
+    MaintenanceThread*    thread;
 };
 
-ImageQualitySorter::ImageQualitySorter(QualityScanMode mode, const AlbumList& list,
-                                       const ImageQualitySettings& quality, ProgressItem* const parent)
+ImageQualitySorter::ImageQualitySorter(QualityScanMode mode,
+                                       const AlbumList& list,
+                                       const ImageQualityContainer& quality,
+                                       ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("ImageQualitySorter"), parent),
       d(new Private)
 {
@@ -116,8 +118,8 @@ void ImageQualitySorter::slotStart()
 
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
 
-    for (AlbumList::ConstIterator it = d->albumList.constBegin();
-         !canceled() && (it != d->albumList.constEnd()); ++it)
+    for (AlbumList::ConstIterator it = d->albumList.constBegin() ;
+         !canceled() && (it != d->albumList.constEnd()) ; ++it)
     {
         QStringList aPaths;
 
@@ -132,7 +134,7 @@ void ImageQualitySorter::slotStart()
 
         if (d->mode == NonAssignedItems)
         {
-            foreach(const QString& path, aPaths)
+            foreach (const QString& path, aPaths)
             {
                 if (dirty.contains(path))
                 {

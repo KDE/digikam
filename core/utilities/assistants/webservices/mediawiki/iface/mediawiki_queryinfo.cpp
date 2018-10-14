@@ -109,6 +109,7 @@ void QueryInfo::doWorkSendRequest()
     query.addQueryItem(QStringLiteral("inprop"), QStringLiteral("protection|talkid|watched|subjectid|url|readable|preload"));
 
     QMapIterator<QString, QString> i(d->requestParameter);
+
     while (i.hasNext())
     {
         i.next();
@@ -122,7 +123,7 @@ void QueryInfo::doWorkSendRequest()
     QByteArray cookie = "";
     QList<QNetworkCookie> MediaWikiCookies = d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url());
 
-    for(int i = 0 ; i < MediaWikiCookies.size(); ++i)
+    for (int i = 0 ; i < MediaWikiCookies.size() ; ++i)
     {
         cookie += MediaWikiCookies.at(i).toRawForm(QNetworkCookie::NameAndValueOnly);
         cookie += ';';
@@ -188,11 +189,11 @@ void QueryInfo::doWorkProcessReply()
                     QString type(attrs.value(QStringLiteral("type")).toString());
                     QString source;
 
-                    if(!attrs.value(QStringLiteral("source")).toString().isEmpty())
+                    if (!attrs.value(QStringLiteral("source")).toString().isEmpty())
                     {
                         source = attrs.value(QStringLiteral("source")).toString();
                     }
-                    else if(!attrs.value(QStringLiteral("cascade")).toString().isEmpty())
+                    else if (!attrs.value(QStringLiteral("cascade")).toString().isEmpty())
                     {
                         source = attrs.value(QStringLiteral("cascade")).toString();
                     }

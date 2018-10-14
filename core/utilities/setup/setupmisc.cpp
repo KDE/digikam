@@ -209,7 +209,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     QVBoxLayout* const layout2     = new QVBoxLayout(appearancePanel);
 
     d->showSplashCheck                        = new QCheckBox(i18n("&Show splash screen at startup"), appearancePanel);
-    d->useNativeFileDialogCheck               = new QCheckBox(i18n("Use native file dialogs from the system"), appearancePanel);
+    d->useNativeFileDialogCheck               = new QCheckBox(i18n("Use native file dialogs from system"), appearancePanel);
     d->drawFramesToGroupedCheck               = new QCheckBox(i18n("Draw frames around grouped items"), appearancePanel);
 
     DHBox* const tabStyleHbox = new DHBox(appearancePanel);

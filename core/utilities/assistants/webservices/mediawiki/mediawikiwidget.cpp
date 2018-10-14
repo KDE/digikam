@@ -613,7 +613,7 @@ void MediaWikiWidget::readSettings(KConfigGroup& group)
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UrlHistory.size: " << d->UrlsHistory.size() << "; WikisHistory.size:" << d->WikisHistory.size();
 
-    for(int i = 0 ; i < d->UrlsHistory.size() && i < d->WikisHistory.size() ; i++)
+    for (int i = 0 ; i < d->UrlsHistory.size() && i < d->WikisHistory.size() ; ++i)
     {
         d->wikiSelect->addItem(d->WikisHistory.at(i), d->UrlsHistory.at(i));
     }
@@ -836,8 +836,8 @@ void MediaWikiWidget::slotRemoveImagesDesc()
     QList<QUrl> items = d->imgList->imageUrls();
     QStringList toRemove;
 
-    for (QMap <QString, QMap <QString, QString> >::const_iterator it = d->imagesDescInfo.constBegin();
-         it != d->imagesDescInfo.constEnd(); ++it)
+    for (QMap <QString, QMap <QString, QString> >::const_iterator it = d->imagesDescInfo.constBegin() ;
+         it != d->imagesDescInfo.constEnd() ; ++it)
     {
         QString path = it.key();
 
@@ -847,7 +847,7 @@ void MediaWikiWidget::slotRemoveImagesDesc()
         }
     }
 
-    foreach(const QString& path, toRemove)
+    foreach (const QString& path, toRemove)
     {
         d->imagesDescInfo.remove(path);
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Remove" << path << "; new length:" << d->imagesDescInfo.size();

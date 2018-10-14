@@ -71,7 +71,6 @@
 |│   │   │   ├── engine                                       | The low level database engine classes                                   |
 |│   │   │   ├── haar                                         | The similarity low level algorithms to compute image finger-prints      |
 |│   │   │   ├── imagehistory                                 | The image history classes for the database                              |
-|│   │   │   ├── imgqsort                                     | The image quality sort algorithms                                       |
 |│   │   │   ├── item                                         | The database item classes                                               |
 |│   │   │   ├── models                                       | The databse model classes                                               |
 |│   │   │   ├── server                                       | The Mysql internal server                                               |
@@ -93,6 +92,7 @@
 |│   │   │   │   ├── greycstoration                           | Cimg based restoration filter                                           |
 |│   │   │   │   ├── hsl                                      | Hue-Saturation-Lightness filter                                         |
 |│   │   │   │   ├── icc                                      | Icc color profile filters                                               |
+|│   │   │   │   ├── imgqsort                                 | The image quality sort algorithms                                       |
 |│   │   │   │   ├── lc                                       | Local contrast filter (pseudo HDR)                                      |
 |│   │   │   │   ├── lens                                     | Lens corrections filters, including Qt Lensfun interface                |
 |│   │   │   │   ├── levels                                   | Color levels filter                                                     |

@@ -30,6 +30,8 @@
 // local includes
 
 #include "digikam_debug.h"
+#include "facedbaccess.h"
+#include "facedb.h"
 
 namespace Digikam
 {
@@ -98,14 +100,12 @@ void DNNFaceModel::setLabels(cv::Mat new_labels)
     ptr()->setLabels(new_labels);
 }
 
-/*
-OpenCVMatData DNNFaceModel::matData(int index) const
+std::vector<float> DNNFaceModel::vecData(int index) const
 {
-    return OpenCVMatData(ptr()->getSrc().at(index));
+    return ptr()->getSrc().at(index);
 }
-*/
 
-QList<DNNFaceVecMetadata> DNNFaceModel::matMetadata() const
+QList<DNNFaceVecMetadata> DNNFaceModel::vecMetadata() const
 {
     return m_vecMetadata;
 }
@@ -153,6 +153,35 @@ void DNNFaceModel::setMats(const QList<std::vector<float> >& mats, const QList<D
     if (currentSrcs.size() > 0)
     {
         ptr()->train(currentSrcs, currentLabels);
+    }
+}
+
+void DNNFaceModel::update(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context)
+{
+    std::vector<std::vector<float> > src;
+
+    foreach (const cv::Mat& mat, images)
+    {
+        std::vector<float> vecdata;
+        FaceDbAccess().db()->getFaceVector(mat, vecdata);
+        qCDebug(DIGIKAM_FACEDB_LOG) << "vecdata: " << vecdata[vecdata.size()-2]
+                                                   << vecdata[vecdata.size()-1];
+        src.push_back(vecdata);
+    }
+
+    ptr()->update(src, labels);
+
+    // Update local information
+    // We assume new labels are simply appended
+    cv::Mat currentLabels = ptr()->getLabels();
+
+    for (int i = m_vecMetadata.size() ; i < currentLabels.rows ; ++i)
+    {
+        DNNFaceVecMetadata metadata;
+        metadata.storageStatus = DNNFaceVecMetadata::Created;
+        metadata.identity      = currentLabels.at<int>(i);
+        metadata.context       = context;
+        m_vecMetadata << metadata;
     }
 }
 

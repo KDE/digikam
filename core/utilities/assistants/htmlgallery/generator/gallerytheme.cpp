@@ -130,7 +130,7 @@ public:
         QStringList::ConstIterator it  = list.constBegin();
         QStringList::ConstIterator end = list.constEnd();
 
-        for (; it != end ; ++it)
+        for ( ; it != end ; ++it)
         {
             QString groupName                 = QLatin1String(PARAMETER_GROUP_PREFIX) + *it;
             QByteArray internalName           = it->toUtf8();
@@ -190,11 +190,11 @@ const GalleryTheme::List& GalleryTheme::getList()
                                                                  QLatin1String("digikam/themes"),
                                                                  QStandardPaths::LocateDirectory);
 
-        foreach(const QString& themeDir, themesDirs)
+        foreach (const QString& themeDir, themesDirs)
         {
-            foreach(const QFileInfo& themeInfo, QDir(themeDir).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
+            foreach (const QFileInfo& themeInfo, QDir(themeDir).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
             {
-                foreach(const QFileInfo& deskFile, QDir(themeInfo.absoluteFilePath()).entryInfoList(filter))
+                foreach (const QFileInfo& deskFile, QDir(themeInfo.absoluteFilePath()).entryInfoList(filter))
                 {
                     list << deskFile.absoluteFilePath();
                 }
@@ -204,19 +204,21 @@ const GalleryTheme::List& GalleryTheme::getList()
         QStringList::ConstIterator it  = list.constBegin();
         QStringList::ConstIterator end = list.constEnd();
 
-        for (; it != end ; ++it)
+        for ( ; it != end ; ++it)
         {
-            GalleryTheme* const theme = new GalleryTheme;
+            GalleryTheme::Ptr theme(new GalleryTheme);
             theme->d->init(*it);
-            QString internalName      = theme->internalName();
+            QString internalName = theme->internalName();
 
             if (!internalNameList.contains(internalName))
             {
-                sList << GalleryTheme::Ptr(theme);
+                sList << theme;
                 internalNameList << internalName;
             }
         }
     }
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "HTML Gallery Themes found:" << sList.size();
 
     return sList;
 }
@@ -227,7 +229,7 @@ GalleryTheme::Ptr GalleryTheme::findByInternalName(const QString& internalName)
     GalleryTheme::List::ConstIterator it  = lst.constBegin();
     GalleryTheme::List::ConstIterator end = lst.constEnd();
 
-    for (; it != end ; ++it)
+    for ( ; it != end ; ++it)
     {
         GalleryTheme::Ptr theme = *it;
 

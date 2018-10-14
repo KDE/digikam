@@ -153,10 +153,11 @@ bool MetaEngine::supportMetadataWritting(const QString& typeMime)
 
 QString MetaEngine::Exiv2Version()
 {
-    // Since 0.14.0 release, we can extract run-time version of Exiv2.
-    // else we return make version.
-
+#if EXIV2_TEST_VERSION(0,27,0)
+    return QLatin1String(Exiv2::versionString().c_str());
+#else
     return QLatin1String(Exiv2::version());
+#endif
 }
 
 QString MetaEngine::sidecarFilePathForFile(const QString& path)

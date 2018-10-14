@@ -56,7 +56,7 @@ namespace Digikam
 
 SidecarFinder::SidecarFinder(const QList<QUrl>& files)
 {
-    foreach(const QUrl& url, files)
+    foreach (const QUrl& url, files)
     {
         if (DMetadata::hasSidecar(url.toLocalFile()))
         {
@@ -65,7 +65,7 @@ SidecarFinder::SidecarFinder(const QList<QUrl>& files)
             qCDebug(DIGIKAM_DATABASE_LOG) << "Detected a sidecar" << localFiles.last();
         }
 
-        foreach(QString suffix, MetadataSettings::instance()->settings().sidecarExtensions)
+        foreach (QString suffix, MetadataSettings::instance()->settings().sidecarExtensions)
         {
             suffix = QLatin1Char('.') + suffix;
             QString sidecarName = url.toLocalFile() + suffix;
@@ -92,20 +92,20 @@ GroupedImagesFinder::GroupedImagesFinder(const QList<ImageInfo>& source)
 {
     QSet<qlonglong> ids;
 
-    foreach(const ImageInfo& info, source)
+    foreach (const ImageInfo& info, source)
     {
         ids << info.id();
     }
 
     infos.reserve(source.size());
 
-    foreach(const ImageInfo& info, source)
+    foreach (const ImageInfo& info, source)
     {
         infos << info;
 
         if (info.hasGroupedImages())
         {
-            foreach(const ImageInfo& groupedImage, info.groupedImages())
+            foreach (const ImageInfo& groupedImage, info.groupedImages())
             {
                 if (ids.contains(groupedImage.id()))
                 {
@@ -231,8 +231,15 @@ void DIO::move(const QList<QUrl>& srcList, PAlbum* const dest)
 
 // Rename --------------------------------------------------------------
 
-void DIO::rename(const ImageInfo& info, const QString& newName, bool overwrite)
+void DIO::rename(const QUrl& src, const QString& newName, bool overwrite)
 {
+    if (src.isEmpty() || newName.isEmpty())
+    {
+        return;
+    }
+
+    ImageInfo info = ImageInfo::fromUrl(src);
+
     instance()->processJob(new IOJobData(IOJobData::Rename, info, newName, overwrite));
 }
 
@@ -279,7 +286,7 @@ void DIO::processJob(IOJobData* const data)
         QStringList      filenames;
         QList<qlonglong> ids;
 
-        foreach(const ImageInfo& info, data->imageInfos())
+        foreach (const ImageInfo& info, data->imageInfos())
         {
             filenames << info.name();
             ids << info.id();
@@ -357,6 +364,9 @@ void DIO::createJob(IOJobData* const data)
     {
         connect(jobThread, SIGNAL(signalRenameFailed(QUrl)),
                 this, SIGNAL(signalRenameFailed(QUrl)));
+
+        connect(jobThread, SIGNAL(finished()),
+                this, SIGNAL(signalRenameFinished()));
     }
 
     if (item)
@@ -428,12 +438,12 @@ void DIO::slotOneProccessed(const QUrl& url)
 
             addAlbumChildrenToList(albumsToDelete, album);
 
-            foreach(int albumId, albumsToDelete)
+            foreach (int albumId, albumsToDelete)
             {
                 imagesToRemove << access.db()->getItemIDsInAlbum(albumId);
             }
 
-            foreach(const qlonglong& imageId, imagesToRemove)
+            foreach (const qlonglong& imageId, imagesToRemove)
             {
                 access.db()->removeAllImageRelationsFrom(imageId,
                                                          DatabaseRelation::Grouped);
@@ -488,8 +498,6 @@ void DIO::slotOneProccessed(const QUrl& url)
             // Rename in ImageInfo and database
             info.setName(newName);
         }
-
-        emit signalRenameSucceeded(url);
     }
 
     // Scan folders for changes
@@ -605,6 +613,21 @@ void DIO::addAlbumChildrenToList(QList<int>& list, Album* const album)
         {
             addAlbumChildrenToList(list, *it);
             ++it;
+        }
+    }
+}
+
+void DIO::slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate)
+{
+    ImageInfo info = ImageInfo::fromUrl(url);
+
+    if (!info.isNull())
+    {
+        info.setDateTime(dt);
+
+        if (updModDate)
+        {
+            info.setModDateTime(dt);
         }
     }
 }

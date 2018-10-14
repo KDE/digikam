@@ -148,16 +148,11 @@ void DigikamApp::slotTimeAdjust()
         return;
 
     QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DBInfoIface(this, urls, ApplicationSettings::Metadata));
+
+    connect(dialog, SIGNAL(signalDateTimeForUrl(QUrl,QDateTime,bool)),
+            DIO::instance(), SLOT(slotDateTimeForUrl(QUrl,QDateTime,bool)));
+
     dialog->exec();
-
-    // Refresh Database with new metadata from files.
-    CollectionScanner scanner;
-
-    foreach (const QUrl& url, dialog->getProccessedUrls())
-    {
-        scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
-        ImageAttributesWatch::instance()->fileMetadataChanged(url);
-    }
 
     delete dialog;
 }
@@ -204,12 +199,6 @@ void DigikamApp::slotEditGeolocation()
     dialog->exec();
 
     delete dialog;
-
-    // Refresh Database with new metadata from files.
-    foreach(const ImageInfo& inf, infos)
-    {
-        ScanController::instance()->scannedInfo(inf.fileUrl().toLocalFile());
-    }
 #endif
 }
 

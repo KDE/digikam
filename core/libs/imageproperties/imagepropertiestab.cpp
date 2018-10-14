@@ -71,33 +71,11 @@ public:
 public:
 
     explicit Private()
-      : file(0),
-        folder(0),
-        modifiedDate(0),
-        size(0),
-        owner(0),
-        permissions(0),
-        mime(0),
-        dimensions(0),
-        ratio(0),
-        bitDepth(0),
-        colorMode(0),
-        make(0),
-        model(0),
-        photoDate(0),
-        lens(0),
-        aperture(0),
-        focalLength(0),
-        exposureTime(0),
-        sensitivity(0),
-        exposureMode(0),
-        flash(0),
-        whiteBalance(0),
-        caption(0),
-        tags(0),
+      : caption(0),
         pickLabel(0),
         colorLabel(0),
         rating(0),
+        tags(0),
         labelFile(0),
         labelFolder(0),
         labelFileModifiedDate(0),
@@ -125,13 +103,6 @@ public:
         labelPickLabel(0),
         labelColorLabel(0),
         labelRating(0),
-        aspectRatio(0),
-        duration(0),
-        frameRate(0),
-        videoCodec(0),
-        audioBitRate(0),
-        audioChannelType(0),
-        audioCodec(0),
         labelVideoAspectRatio(0),
         labelVideoDuration(0),
         labelVideoFrameRate(0),
@@ -142,36 +113,11 @@ public:
     {
     }
 
-    DTextLabelName*  file;
-    DTextLabelName*  folder;
-    DTextLabelName*  modifiedDate;
-    DTextLabelName*  size;
-    DTextLabelName*  owner;
-    DTextLabelName*  permissions;
-
-    DTextLabelName*  mime;
-    DTextLabelName*  dimensions;
-    DTextLabelName*  ratio;
-    DTextLabelName*  bitDepth;
-    DTextLabelName*  colorMode;
-
-    DTextLabelName*  make;
-    DTextLabelName*  model;
-    DTextLabelName*  photoDate;
-    DTextLabelName*  lens;
-    DTextLabelName*  aperture;
-    DTextLabelName*  focalLength;
-    DTextLabelName*  exposureTime;
-    DTextLabelName*  sensitivity;
-    DTextLabelName*  exposureMode;
-    DTextLabelName*  flash;
-    DTextLabelName*  whiteBalance;
-
-    DTextLabelName*  caption;
-    DTextLabelName*  tags;
-    DTextLabelName*  pickLabel;
-    DTextLabelName*  colorLabel;
-    DTextLabelName*  rating;
+    DTextLabelName* caption;
+    DTextLabelName* pickLabel;
+    DTextLabelName* colorLabel;
+    DTextLabelName* rating;
+    DTextLabelName* tags;
 
     DTextLabelValue* labelFile;
     DTextLabelValue* labelFolder;
@@ -204,14 +150,6 @@ public:
     DTextLabelValue* labelColorLabel;
     DTextLabelValue* labelRating;
 
-    DTextLabelName*  aspectRatio;
-    DTextLabelName*  duration;
-    DTextLabelName*  frameRate;
-    DTextLabelName*  videoCodec;
-    DTextLabelName*  audioBitRate;
-    DTextLabelName*  audioChannelType;
-    DTextLabelName*  audioCodec;
-
     DTextLabelValue* labelVideoAspectRatio;
     DTextLabelValue* labelVideoDuration;
     DTextLabelValue* labelVideoFrameRate;
@@ -232,39 +170,39 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    QWidget* const w1         = new QWidget(this);
-    QGridLayout* const glay1  = new QGridLayout(w1);
+    QWidget* const w1                  = new QWidget(this);
+    QGridLayout* const glay1           = new QGridLayout(w1);
 
-    d->file                   = new DTextLabelName(i18n("File: "),        w1);
-    d->folder                 = new DTextLabelName(i18n("Folder: "),      w1);
-    d->modifiedDate           = new DTextLabelName(i18n("Date: "),        w1);
-    d->size                   = new DTextLabelName(i18n("Size: "),        w1);
-    d->owner                  = new DTextLabelName(i18n("Owner: "),       w1);
-    d->permissions            = new DTextLabelName(i18n("Permissions: "), w1);
+    DTextLabelName* const file         = new DTextLabelName(i18n("File: "),        w1);
+    DTextLabelName* const folder       = new DTextLabelName(i18n("Folder: "),      w1);
+    DTextLabelName* const modifiedDate = new DTextLabelName(i18n("Date: "),        w1);
+    DTextLabelName* const size         = new DTextLabelName(i18n("Size: "),        w1);
+    DTextLabelName* const owner        = new DTextLabelName(i18n("Owner: "),       w1);
+    DTextLabelName* const permissions  = new DTextLabelName(i18n("Permissions: "), w1);
 
-    d->labelFile              = new DTextLabelValue(QString(), w1);
-    d->labelFolder            = new DTextLabelValue(QString(), w1);
-    d->labelFileModifiedDate  = new DTextLabelValue(QString(), w1);
-    d->labelFileSize          = new DTextLabelValue(QString(), w1);
-    d->labelFileOwner         = new DTextLabelValue(QString(), w1);
-    d->labelFilePermissions   = new DTextLabelValue(QString(), w1);
+    d->labelFile                       = new DTextLabelValue(QString(), w1);
+    d->labelFolder                     = new DTextLabelValue(QString(), w1);
+    d->labelFileModifiedDate           = new DTextLabelValue(QString(), w1);
+    d->labelFileSize                   = new DTextLabelValue(QString(), w1);
+    d->labelFileOwner                  = new DTextLabelValue(QString(), w1);
+    d->labelFilePermissions            = new DTextLabelValue(QString(), w1);
 
-    glay1->addWidget(d->file,                  0, 0, 1, 1);
+    glay1->addWidget(file,                     0, 0, 1, 1);
     glay1->addWidget(d->labelFile,             0, 1, 1, 1);
-    glay1->addWidget(d->folder,                1, 0, 1, 1);
+    glay1->addWidget(folder,                   1, 0, 1, 1);
     glay1->addWidget(d->labelFolder,           1, 1, 1, 1);
-    glay1->addWidget(d->modifiedDate,          2, 0, 1, 1);
+    glay1->addWidget(modifiedDate,             2, 0, 1, 1);
     glay1->addWidget(d->labelFileModifiedDate, 2, 1, 1, 1);
-    glay1->addWidget(d->size,                  3, 0, 1, 1);
+    glay1->addWidget(size,                     3, 0, 1, 1);
     glay1->addWidget(d->labelFileSize,         3, 1, 1, 1);
-    glay1->addWidget(d->owner,                 4, 0, 1, 1);
+    glay1->addWidget(owner,                    4, 0, 1, 1);
     glay1->addWidget(d->labelFileOwner,        4, 1, 1, 1);
-    glay1->addWidget(d->permissions,           5, 0, 1, 1);
+    glay1->addWidget(permissions,              5, 0, 1, 1);
     glay1->addWidget(d->labelFilePermissions,  5, 1, 1, 1);
     glay1->setContentsMargins(spacing, spacing, spacing, spacing);
-    glay1->setSpacing(0);
     glay1->setColumnStretch(0, 10);
     glay1->setColumnStretch(1, 10);
+    glay1->setSpacing(0);
 
     insertItem(ImagePropertiesTab::Private::FileProperties,
                w1, QIcon::fromTheme(QLatin1String("dialog-information")),
@@ -272,35 +210,35 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
 
     // --------------------------------------------------
 
-    QWidget* const w2         = new QWidget(this);
-    QGridLayout* const glay2  = new QGridLayout(w2);
+    QWidget* const w2                = new QWidget(this);
+    QGridLayout* const glay2         = new QGridLayout(w2);
 
-    d->mime                   = new DTextLabelName(i18n("Type: "),         w2);
-    d->dimensions             = new DTextLabelName(i18n("Dimensions: "),   w2);
-    d->ratio                  = new DTextLabelName(i18n("Aspect Ratio: "), w2);
-    d->bitDepth               = new DTextLabelName(i18n("Bit depth: "),    w2);
-    d->colorMode              = new DTextLabelName(i18n("Color mode: "),   w2);
+    DTextLabelName* const mime       = new DTextLabelName(i18n("Type: "),         w2);
+    DTextLabelName* const dimensions = new DTextLabelName(i18n("Dimensions: "),   w2);
+    DTextLabelName* const ratio      = new DTextLabelName(i18n("Aspect Ratio: "), w2);
+    DTextLabelName* const bitDepth   = new DTextLabelName(i18n("Bit depth: "),    w2);
+    DTextLabelName* const colorMode  = new DTextLabelName(i18n("Color mode: "),   w2);
 
-    d->labelImageMime         = new DTextLabelValue(QString(), w2);
-    d->labelImageDimensions   = new DTextLabelValue(QString(), w2);
-    d->labelImageRatio        = new DTextLabelValue(QString(), w2);
-    d->labelImageBitDepth     = new DTextLabelValue(QString(), w2);
-    d->labelImageColorMode    = new DTextLabelValue(QString(), w2);
+    d->labelImageMime                = new DTextLabelValue(QString(), w2);
+    d->labelImageDimensions          = new DTextLabelValue(QString(), w2);
+    d->labelImageRatio               = new DTextLabelValue(QString(), w2);
+    d->labelImageBitDepth            = new DTextLabelValue(QString(), w2);
+    d->labelImageColorMode           = new DTextLabelValue(QString(), w2);
 
-    glay2->addWidget(d->mime,                   0, 0, 1, 1);
-    glay2->addWidget(d->labelImageMime,         0, 1, 1, 1);
-    glay2->addWidget(d->dimensions,             1, 0, 1, 1);
-    glay2->addWidget(d->labelImageDimensions,   1, 1, 1, 1);
-    glay2->addWidget(d->ratio,                  2, 0, 1, 1);
-    glay2->addWidget(d->labelImageRatio,        2, 1, 1, 1);
-    glay2->addWidget(d->bitDepth,               3, 0, 1, 1);
-    glay2->addWidget(d->labelImageBitDepth,     3, 1, 1, 1);
-    glay2->addWidget(d->colorMode,              4, 0, 1, 1);
-    glay2->addWidget(d->labelImageColorMode,    4, 1, 1, 1);
+    glay2->addWidget(mime,                    0, 0, 1, 1);
+    glay2->addWidget(d->labelImageMime,       0, 1, 1, 1);
+    glay2->addWidget(dimensions,              1, 0, 1, 1);
+    glay2->addWidget(d->labelImageDimensions, 1, 1, 1, 1);
+    glay2->addWidget(ratio,                   2, 0, 1, 1);
+    glay2->addWidget(d->labelImageRatio,      2, 1, 1, 1);
+    glay2->addWidget(bitDepth,                3, 0, 1, 1);
+    glay2->addWidget(d->labelImageBitDepth,   3, 1, 1, 1);
+    glay2->addWidget(colorMode,               4, 0, 1, 1);
+    glay2->addWidget(d->labelImageColorMode,  4, 1, 1, 1);
     glay2->setContentsMargins(spacing, spacing, spacing, spacing);
-    glay2->setSpacing(0);
     glay2->setColumnStretch(0, 10);
     glay2->setColumnStretch(1, 10);
+    glay2->setSpacing(0);
 
     insertItem(ImagePropertiesTab::Private::ImageProperties,
                w2, QIcon::fromTheme(QLatin1String("view-preview")),
@@ -308,58 +246,58 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
 
     // --------------------------------------------------
 
-    QWidget* const w3         = new QWidget(this);
-    QGridLayout* const glay3  = new QGridLayout(w3);
+    QWidget* const w3                  = new QWidget(this);
+    QGridLayout* const glay3           = new QGridLayout(w3);
 
-    d->make                   = new DTextLabelName(i18n("Make: "),          w3);
-    d->model                  = new DTextLabelName(i18n("Model: "),         w3);
-    d->photoDate              = new DTextLabelName(i18n("Created: "),       w3);
-    d->lens                   = new DTextLabelName(i18n("Lens: "),          w3);
-    d->aperture               = new DTextLabelName(i18n("Aperture: "),      w3);
-    d->focalLength            = new DTextLabelName(i18n("Focal: "),         w3);
-    d->exposureTime           = new DTextLabelName(i18n("Exposure: "),      w3);
-    d->sensitivity            = new DTextLabelName(i18n("Sensitivity: "),   w3);
-    d->exposureMode           = new DTextLabelName(i18n("Mode/Program: "),  w3);
-    d->flash                  = new DTextLabelName(i18n("Flash: "),         w3);
-    d->whiteBalance           = new DTextLabelName(i18n("White balance: "), w3);
+    DTextLabelName* const make         = new DTextLabelName(i18n("Make: "),          w3);
+    DTextLabelName* const model        = new DTextLabelName(i18n("Model: "),         w3);
+    DTextLabelName* const photoDate    = new DTextLabelName(i18n("Created: "),       w3);
+    DTextLabelName* const lens         = new DTextLabelName(i18n("Lens: "),          w3);
+    DTextLabelName* const aperture     = new DTextLabelName(i18n("Aperture: "),      w3);
+    DTextLabelName* const focalLength  = new DTextLabelName(i18n("Focal: "),         w3);
+    DTextLabelName* const exposureTime = new DTextLabelName(i18n("Exposure: "),      w3);
+    DTextLabelName* const sensitivity  = new DTextLabelName(i18n("Sensitivity: "),   w3);
+    DTextLabelName* const exposureMode = new DTextLabelName(i18n("Mode/Program: "),  w3);
+    DTextLabelName* const flash        = new DTextLabelName(i18n("Flash: "),         w3);
+    DTextLabelName* const whiteBalance = new DTextLabelName(i18n("White balance: "), w3);
 
-    d->labelPhotoMake         = new DTextLabelValue(QString(), w3);
-    d->labelPhotoModel        = new DTextLabelValue(QString(), w3);
-    d->labelPhotoDateTime     = new DTextLabelValue(QString(), w3);
-    d->labelPhotoLens         = new DTextLabelValue(QString(), w3);
-    d->labelPhotoAperture     = new DTextLabelValue(QString(), w3);
-    d->labelPhotoFocalLength  = new DTextLabelValue(QString(), w3);
-    d->labelPhotoExposureTime = new DTextLabelValue(QString(), w3);
-    d->labelPhotoSensitivity  = new DTextLabelValue(QString(), w3);
-    d->labelPhotoExposureMode = new DTextLabelValue(QString(), w3);
-    d->labelPhotoFlash        = new DTextLabelValue(QString(), w3);
-    d->labelPhotoWhiteBalance = new DTextLabelValue(QString(), w3);
+    d->labelPhotoMake                  = new DTextLabelValue(QString(), w3);
+    d->labelPhotoModel                 = new DTextLabelValue(QString(), w3);
+    d->labelPhotoDateTime              = new DTextLabelValue(QString(), w3);
+    d->labelPhotoLens                  = new DTextLabelValue(QString(), w3);
+    d->labelPhotoAperture              = new DTextLabelValue(QString(), w3);
+    d->labelPhotoFocalLength           = new DTextLabelValue(QString(), w3);
+    d->labelPhotoExposureTime          = new DTextLabelValue(QString(), w3);
+    d->labelPhotoSensitivity           = new DTextLabelValue(QString(), w3);
+    d->labelPhotoExposureMode          = new DTextLabelValue(QString(), w3);
+    d->labelPhotoFlash                 = new DTextLabelValue(QString(), w3);
+    d->labelPhotoWhiteBalance          = new DTextLabelValue(QString(), w3);
 
-    glay3->addWidget(d->make,                   0,  0, 1, 1);
+    glay3->addWidget(make,                      0,  0, 1, 1);
     glay3->addWidget(d->labelPhotoMake,         0,  1, 1, 1);
-    glay3->addWidget(d->model,                  1,  0, 1, 1);
+    glay3->addWidget(model,                     1,  0, 1, 1);
     glay3->addWidget(d->labelPhotoModel,        1,  1, 1, 1);
-    glay3->addWidget(d->photoDate,              2,  0, 1, 1);
+    glay3->addWidget(photoDate,                 2,  0, 1, 1);
     glay3->addWidget(d->labelPhotoDateTime,     2,  1, 1, 1);
-    glay3->addWidget(d->lens,                   3,  0, 1, 1);
+    glay3->addWidget(lens,                      3,  0, 1, 1);
     glay3->addWidget(d->labelPhotoLens,         3,  1, 1, 1);
-    glay3->addWidget(d->aperture,               4,  0, 1, 1);
+    glay3->addWidget(aperture,                  4,  0, 1, 1);
     glay3->addWidget(d->labelPhotoAperture,     4,  1, 1, 1);
-    glay3->addWidget(d->focalLength,            5,  0, 1, 1);
+    glay3->addWidget(focalLength,               5,  0, 1, 1);
     glay3->addWidget(d->labelPhotoFocalLength,  5,  1, 1, 1);
-    glay3->addWidget(d->exposureTime,           6,  0, 1, 1);
+    glay3->addWidget(exposureTime,              6,  0, 1, 1);
     glay3->addWidget(d->labelPhotoExposureTime, 6,  1, 1, 1);
-    glay3->addWidget(d->sensitivity,            7,  0, 1, 1);
+    glay3->addWidget(sensitivity,               7,  0, 1, 1);
     glay3->addWidget(d->labelPhotoSensitivity,  7,  1, 1, 1);
-    glay3->addWidget(d->exposureMode,           8,  0, 1, 1);
+    glay3->addWidget(exposureMode,              8,  0, 1, 1);
     glay3->addWidget(d->labelPhotoExposureMode, 8,  1, 1, 1);
-    glay3->addWidget(d->flash,                  9,  0, 1, 1);
+    glay3->addWidget(flash,                     9,  0, 1, 1);
     glay3->addWidget(d->labelPhotoFlash,        9,  1, 1, 1);
-    glay3->addWidget(d->whiteBalance,           10, 0, 1, 1);
+    glay3->addWidget(whiteBalance,              10, 0, 1, 1);
     glay3->addWidget(d->labelPhotoWhiteBalance, 10, 1, 1, 1);
+    glay3->setContentsMargins(spacing, spacing, spacing, spacing);
     glay3->setColumnStretch(0, 10);
     glay3->setColumnStretch(1, 10);
-    glay3->setContentsMargins(spacing, spacing, spacing, spacing);
     glay3->setSpacing(0);
 
     insertItem(ImagePropertiesTab::Private::PhotoProperties,
@@ -368,43 +306,43 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
 
     // --------------------------------------------------
 
-    QWidget* const w4             = new QWidget(this);
-    QGridLayout* const glay4      = new QGridLayout(w4);
+    QWidget* const w4                      = new QWidget(this);
+    QGridLayout* const glay4               = new QGridLayout(w4);
 
-    d->aspectRatio                = new DTextLabelName(i18n("Aspect Ratio: "),       w4);
-    d->duration                   = new DTextLabelName(i18n("Duration: "),           w4);
-    d->frameRate                  = new DTextLabelName(i18n("Frame Rate: "),         w4);
-    d->videoCodec                 = new DTextLabelName(i18n("Video Codec: "),        w4);
-    d->audioBitRate               = new DTextLabelName(i18n("Audio Bit Rate: "),     w4);
-    d->audioChannelType           = new DTextLabelName(i18n("Audio Channel Type: "), w4);
-    d->audioCodec                 = new DTextLabelName(i18n("Audio Codec: "),        w4);
+    DTextLabelName* const aspectRatio      = new DTextLabelName(i18n("Aspect Ratio: "),       w4);
+    DTextLabelName* const duration         = new DTextLabelName(i18n("Duration: "),           w4);
+    DTextLabelName* const frameRate        = new DTextLabelName(i18n("Frame Rate: "),         w4);
+    DTextLabelName* const videoCodec       = new DTextLabelName(i18n("Video Codec: "),        w4);
+    DTextLabelName* const audioBitRate     = new DTextLabelName(i18n("Audio Bit Rate: "),     w4);
+    DTextLabelName* const audioChannelType = new DTextLabelName(i18n("Audio Channel Type: "), w4);
+    DTextLabelName* const audioCodec       = new DTextLabelName(i18n("Audio Codec: "),        w4);
 
-    d->labelVideoAspectRatio      = new DTextLabelValue(QString(), w4);
-    d->labelVideoDuration         = new DTextLabelValue(QString(), w4);
-    d->labelVideoFrameRate        = new DTextLabelValue(QString(), w4);
-    d->labelVideoVideoCodec       = new DTextLabelValue(QString(), w4);
-    d->labelVideoAudioBitRate     = new DTextLabelValue(QString(), w4);
-    d->labelVideoAudioChannelType = new DTextLabelValue(QString(), w4);
-    d->labelVideoAudioCodec       = new DTextLabelValue(QString(), w4);
+    d->labelVideoAspectRatio               = new DTextLabelValue(QString(), w4);
+    d->labelVideoDuration                  = new DTextLabelValue(QString(), w4);
+    d->labelVideoFrameRate                 = new DTextLabelValue(QString(), w4);
+    d->labelVideoVideoCodec                = new DTextLabelValue(QString(), w4);
+    d->labelVideoAudioBitRate              = new DTextLabelValue(QString(), w4);
+    d->labelVideoAudioChannelType          = new DTextLabelValue(QString(), w4);
+    d->labelVideoAudioCodec                = new DTextLabelValue(QString(), w4);
 
-    glay4->addWidget(d->aspectRatio,                0, 0, 1, 1);
+    glay4->addWidget(aspectRatio,                   0, 0, 1, 1);
     glay4->addWidget(d->labelVideoAspectRatio,      0, 1, 1, 1);
-    glay4->addWidget(d->duration,                   1, 0, 1, 1);
+    glay4->addWidget(duration,                      1, 0, 1, 1);
     glay4->addWidget(d->labelVideoDuration,         1, 1, 1, 1);
-    glay4->addWidget(d->frameRate,                  2, 0, 1, 1);
+    glay4->addWidget(frameRate,                     2, 0, 1, 1);
     glay4->addWidget(d->labelVideoFrameRate,        2, 1, 1, 1);
-    glay4->addWidget(d->videoCodec,                 3, 0, 1, 1);
+    glay4->addWidget(videoCodec,                    3, 0, 1, 1);
     glay4->addWidget(d->labelVideoVideoCodec,       3, 1, 1, 1);
-    glay4->addWidget(d->audioBitRate,               4, 0, 1, 1);
+    glay4->addWidget(audioBitRate,                  4, 0, 1, 1);
     glay4->addWidget(d->labelVideoAudioBitRate,     4, 1, 1, 1);
-    glay4->addWidget(d->audioChannelType,           5, 0, 1, 1);
+    glay4->addWidget(audioChannelType,              5, 0, 1, 1);
     glay4->addWidget(d->labelVideoAudioChannelType, 5, 1, 1, 1);
-    glay4->addWidget(d->audioCodec,                 6, 0, 1, 1);
+    glay4->addWidget(audioCodec,                    6, 0, 1, 1);
     glay4->addWidget(d->labelVideoAudioCodec,       6, 1, 1, 1);
     glay4->setContentsMargins(spacing, spacing, spacing, spacing);
-    glay4->setSpacing(0);
     glay4->setColumnStretch(0, 10);
     glay4->setColumnStretch(1, 10);
+    glay4->setSpacing(0);
 
     insertItem(ImagePropertiesTab::Private::VideoProperties,
                w4, QIcon::fromTheme(QLatin1String("video-x-generic")),
@@ -412,20 +350,20 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
 
     // --------------------------------------------------
 
-    QWidget* const w5         = new QWidget(this);
-    QGridLayout* const glay5  = new QGridLayout(w5);
+    QWidget* const w5        = new QWidget(this);
+    QGridLayout* const glay5 = new QGridLayout(w5);
 
-    d->caption                = new DTextLabelName(i18n("Caption: "),     w5);
-    d->pickLabel              = new DTextLabelName(i18n("Pick label: "),  w5);
-    d->colorLabel             = new DTextLabelName(i18n("Color label: "), w5);
-    d->rating                 = new DTextLabelName(i18n("Rating: "),      w5);
-    d->tags                   = new DTextLabelName(i18n("Tags: "),        w5);
+    d->caption               = new DTextLabelName(i18n("Caption: "),     w5);
+    d->pickLabel             = new DTextLabelName(i18n("Pick label: "),  w5);
+    d->colorLabel            = new DTextLabelName(i18n("Color label: "), w5);
+    d->rating                = new DTextLabelName(i18n("Rating: "),      w5);
+    d->tags                  = new DTextLabelName(i18n("Tags: "),        w5);
 
-    d->labelCaption           = new DTextLabelValue(QString(), w5);
-    d->labelPickLabel         = new DTextLabelValue(QString(), w5);
-    d->labelColorLabel        = new DTextLabelValue(QString(), w5);
-    d->labelRating            = new DTextLabelValue(QString(), w5);
-    d->labelTags              = new DTextLabelValue(QString(), w5);
+    d->labelCaption          = new DTextLabelValue(QString(), w5);
+    d->labelPickLabel        = new DTextLabelValue(QString(), w5);
+    d->labelColorLabel       = new DTextLabelValue(QString(), w5);
+    d->labelRating           = new DTextLabelValue(QString(), w5);
+    d->labelTags             = new DTextLabelValue(QString(), w5);
     d->labelTags->setElideMode(Qt::ElideLeft);
 
     glay5->addWidget(d->caption,         0, 0, 1, 1);
@@ -439,9 +377,9 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay5->addWidget(d->rating,          4, 0, 1, 1);
     glay5->addWidget(d->labelRating,     4, 1, 1, 1);
     glay5->setContentsMargins(spacing, spacing, spacing, spacing);
-    glay5->setSpacing(0);
     glay5->setColumnStretch(0, 10);
     glay5->setColumnStretch(1, 10);
+    glay5->setSpacing(0);
 
     insertItem(ImagePropertiesTab::Private::digiKamProperties,
                w5, QIcon::fromTheme(QLatin1String("edit-text-frame-update")),

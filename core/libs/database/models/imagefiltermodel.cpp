@@ -149,7 +149,7 @@ QList<QModelIndex> ImageSortFilterModel::mapListToSource(const QList<QModelIndex
 {
     QList<QModelIndex> sourceIndexes;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         sourceIndexes << mapToSourceImageModel(index);
     }
@@ -161,7 +161,7 @@ QList<QModelIndex> ImageSortFilterModel::mapListFromSource(const QList<QModelInd
 {
     QList<QModelIndex> indexes;
 
-    foreach(const QModelIndex& index, sourceIndexes)
+    foreach (const QModelIndex& index, sourceIndexes)
     {
         indexes << mapFromSourceImageModel(index);
     }
@@ -184,7 +184,7 @@ QList<ImageInfo> ImageSortFilterModel::imageInfos(const QList<QModelIndex>& inde
     QList<ImageInfo> infos;
     ImageModel* const model = sourceImageModel();
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         infos << model->imageInfo(mapToSourceImageModel(index));
     }
@@ -197,7 +197,7 @@ QList<qlonglong> ImageSortFilterModel::imageIds(const QList<QModelIndex>& indexe
     QList<qlonglong> ids;
     ImageModel* const model = sourceImageModel();
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         ids << model->imageId(mapToSourceImageModel(index));
     }
@@ -662,7 +662,7 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
     //TODO: Make efficient!!
     if (needPrepareComments)
     {
-        foreach(const ImageInfo& info, package.infos)
+        foreach (const ImageInfo& info, package.infos)
         {
             info.comment();
         }
@@ -694,7 +694,7 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
         infoList.loadGroupImageIds();
     }
 
-    foreach(ImageFilterModelPrepareHook* const hook, prepareHooks)
+    foreach (ImageFilterModelPrepareHook* const hook, prepareHooks)
     {
         hook->prepare(package.infos);
     }
@@ -729,7 +729,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     // Actual filtering. The variants to spare checking hasOneMatch over and over again.
     if (hasOneMatch && hasOneMatchForText)
     {
-        foreach(const ImageInfo& info, package.infos)
+        foreach (const ImageInfo& info, package.infos)
         {
             package.filterResults[info.id()] = localFilter.matches(info)        &&
                                                localVersionFilter.matches(info) &&
@@ -740,7 +740,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     {
         bool matchForText;
 
-        foreach(const ImageInfo& info, package.infos)
+        foreach (const ImageInfo& info, package.infos)
         {
             package.filterResults[info.id()] = localFilter.matches(info, &matchForText) &&
                                                localVersionFilter.matches(info)         &&
@@ -756,7 +756,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     {
         bool result, matchForText;
 
-        foreach(const ImageInfo& info, package.infos)
+        foreach (const ImageInfo& info, package.infos)
         {
             result                           = localFilter.matches(info, &matchForText) &&
                                                localVersionFilter.matches(info)         &&
@@ -992,7 +992,7 @@ void ImageFilterModel::slotImageTagChange(const ImageTagChangeset& changeset)
     }
 
     // is one of our images affected?
-    foreach(const qlonglong& id, changeset.ids())
+    foreach (const qlonglong& id, changeset.ids())
     {
         // if one matching image id is found, trigger a refresh
         if (d->imageModel->hasImage(id))
@@ -1031,7 +1031,7 @@ void ImageFilterModel::slotImageChange(const ImageChangeset& changeset)
     // is one of our images affected?
     bool imageAffected = false;
 
-    foreach(const qlonglong& id, changeset.ids())
+    foreach (const qlonglong& id, changeset.ids())
     {
         // if one matching image id is found, trigger a refresh
         if (d->imageModel->hasImage(id))

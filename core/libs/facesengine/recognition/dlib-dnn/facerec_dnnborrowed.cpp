@@ -86,7 +86,7 @@ void DNNFaceRecognizer::train(std::vector<std::vector<float> > _in_src, InputArr
     }
 
     // append labels to m_labels matrix
-    for (size_t labelIdx = 0 ; labelIdx < labels.total() ; labelIdx++)
+    for (size_t labelIdx = 0 ; labelIdx < labels.total() ; ++labelIdx)
     {
         m_labels.push_back(labels.at<int>((int)labelIdx));
         m_src.push_back(src[(int)labelIdx]);
@@ -202,11 +202,11 @@ void DNNFaceRecognizer::predict(cv::InputArray _src, int& minClass, double& minD
 
     // find nearest neighbor
 
-    for (size_t sampleIdx = 0 ; sampleIdx < m_src.size() ; sampleIdx++)
+    for (size_t sampleIdx = 0 ; sampleIdx < m_src.size() ; ++sampleIdx)
     {
         double dist = 0;
 
-        for (size_t i = 0 ; i < m_src[sampleIdx].size() ; i++)
+        for (size_t i = 0 ; i < m_src[sampleIdx].size() ; ++i)
         {
             dist += (vecdata[i]-m_src[sampleIdx][i])*(vecdata[i]-m_src[sampleIdx][i]);
         }

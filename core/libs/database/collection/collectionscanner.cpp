@@ -167,7 +167,7 @@ void CollectionScannerHintContainerImplementation::recordHints(const QList<Album
 {
     QWriteLocker locker(&lock);
 
-    foreach(const AlbumCopyMoveHint& hint, hints)
+    foreach (const AlbumCopyMoveHint& hint, hints)
     {
         // automagic casting to src and dst
         albumHints[hint] = hint;
@@ -178,12 +178,12 @@ void CollectionScannerHintContainerImplementation::recordHints(const QList<ItemC
 {
     QWriteLocker locker(&lock);
 
-    foreach(const ItemCopyMoveHint& hint, hints)
+    foreach (const ItemCopyMoveHint& hint, hints)
     {
         QList<qlonglong> ids = hint.srcIds();
         QStringList dstNames = hint.dstNames();
 
-        for (int i=0; i<ids.size(); ++i)
+        for (int i = 0 ; i < ids.size() ; ++i)
         {
             itemHints[NewlyAppearedFile(hint.albumIdDst(), dstNames.at(i))] = ids.at(i);
         }
@@ -194,11 +194,11 @@ void CollectionScannerHintContainerImplementation::recordHints(const QList<ItemC
 {
     QWriteLocker locker(&lock);
 
-    foreach(const ItemChangeHint& hint, hints)
+    foreach (const ItemChangeHint& hint, hints)
     {
         const QList<qlonglong>& ids = hint.ids();
 
-        for (int i=0; i<ids.size(); ++i)
+        for (int i = 0 ; i < ids.size() ; ++i)
         {
             if (hint.isModified())
             {
@@ -324,6 +324,8 @@ public:
     QSet<QString>                                 imageFilterSet;
     QSet<QString>                                 videoFilterSet;
     QSet<QString>                                 audioFilterSet;
+    QSet<QString>                                 ignoreDirectory;
+
     QList<int>                                    scannedAlbums;
     bool                                          wantSignals;
     bool                                          needTotalFiles;
@@ -403,15 +405,18 @@ void CollectionScanner::loadNameFilters()
         return;
     }
 
-    QStringList imageFilter, audioFilter, videoFilter;
+    QStringList imageFilter, audioFilter, videoFilter, ignoreDirectory;
+
     CoreDbAccess().db()->getFilterSettings(&imageFilter, &videoFilter, &audioFilter);
+    CoreDbAccess().db()->getIgnoreDirectoryFilterSettings(&ignoreDirectory);
 
     // three sets to find category of a file
-    d->imageFilterSet = imageFilter.toSet();
-    d->audioFilterSet = audioFilter.toSet();
-    d->videoFilterSet = videoFilter.toSet();
+    d->imageFilterSet  = imageFilter.toSet();
+    d->audioFilterSet  = audioFilter.toSet();
+    d->videoFilterSet  = videoFilter.toSet();
+    d->ignoreDirectory = ignoreDirectory.toSet();
 
-    d->nameFilters = d->imageFilterSet + d->audioFilterSet + d->videoFilterSet;
+    d->nameFilters     = d->imageFilterSet + d->audioFilterSet + d->videoFilterSet;
 }
 
 void CollectionScanner::setObserver(CollectionScannerObserver* const observer)
@@ -450,7 +455,7 @@ void CollectionScanner::completeScan()
         // count for progress info
         int count = 0;
 
-        foreach(const CollectionLocation& location, allLocations)
+        foreach (const CollectionLocation& location, allLocations)
         {
             count += countItemsInFolder(location.albumRootPath());
         }
@@ -483,7 +488,7 @@ void CollectionScanner::completeScan()
         emit startScanningAlbumRoots();
     }
 
-    foreach(const CollectionLocation& location, allLocations)
+    foreach (const CollectionLocation& location, allLocations)
     {
         scanAlbumRoot(location);
     }
@@ -534,10 +539,10 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
     std::sort(sortedPaths.begin(), sortedPaths.end());
     QStringList::iterator it, it2;
 
-    for (it = sortedPaths.begin(); it != sortedPaths.end(); )
+    for (it = sortedPaths.begin() ; it != sortedPaths.end() ; )
     {
         // remove all following entries as long as they have the same beginning (= are subalbums)
-        for (it2 = it + 1; it2 != sortedPaths.end() && it2->startsWith(*it); )
+        for (it2 = it + 1 ; it2 != sortedPaths.end() && it2->startsWith(*it) ; )
         {
             it2 = sortedPaths.erase(it2);
         }
@@ -550,7 +555,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
         // count for progress info
         int count = 0;
 
-        foreach(const QString& path, sortedPaths)
+        foreach (const QString& path, sortedPaths)
         {
             count += countItemsInFolder(path);
         }
@@ -558,7 +563,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
         emit totalFilesToScan(count);
     }
 
-    foreach(const QString& path, sortedPaths)
+    foreach (const QString& path, sortedPaths)
     {
         CollectionLocation location = CollectionManager::instance()->locationForPath(path);
         QString album               = CollectionManager::instance()->album(path);
@@ -598,7 +603,8 @@ void CollectionScanner::completeScanCleanupPart()
         // Only do this in a complete scan!
         CoreDbAccess access;
         QList<qlonglong> trashedItems = access.db()->getImageIds(DatabaseItem::Status::Trashed);
-        foreach(const qlonglong& item, trashedItems)
+
+        foreach (const qlonglong& item, trashedItems)
         {
             access.db()->setItemStatus(item, DatabaseItem::Status::Obsolete);
         }
@@ -671,7 +677,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
         QReadLocker locker(&d->hints->lock);
         QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album>::const_iterator it;
 
-        for (it = d->hints->albumHints.constBegin(); it != d->hints->albumHints.constEnd(); ++it)
+        for (it = d->hints->albumHints.constBegin() ; it != d->hints->albumHints.constEnd() ; ++it)
         {
             if (it.key().albumRootId == location.id())
             {
@@ -844,7 +850,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<CollectionLocation>& loca
 {
     QList<int> locationIdsToScan;
 
-    foreach(const CollectionLocation& location, locations)
+    foreach (const CollectionLocation& location, locations)
     {
         locationIdsToScan << location.id();
     }
@@ -874,7 +880,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
 
     QList<AlbumShortInfo>::const_iterator it;
 
-    for (it = albumList.constBegin(); it != albumList.constEnd(); ++it)
+    for (it = albumList.constBegin() ; it != albumList.constEnd() ; ++it)
     {
         if (!locationIdsToScan.contains((*it).albumRootId))
         {
@@ -890,7 +896,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
 
             // let digikam think that ignored directories got deleted
             // (if they already exist in the database, this will delete them)
-            if (!fileInfo.exists() || !fileInfo.isDir() || ignoredDirectoryContainsFileName(fileInfo.fileName()))
+            if (!fileInfo.exists() || !fileInfo.isDir() || d->ignoreDirectory.contains(fileInfo.fileName()))
             {
                 toBeDeleted << (*it).id;
                 d->scannedAlbums << (*it).id;
@@ -915,7 +921,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
         QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album>::const_iterator it;
         int toBeDeletedIndex;
 
-        for (it = albumHints.constBegin(); it != albumHints.constEnd(); ++it)
+        for (it = albumHints.constBegin() ; it != albumHints.constEnd() ; ++it)
         {
             // if the src entry of a hint is found in toBeDeleted, we have a move/rename, no copy. Handle these here.
             toBeDeletedIndex = toBeDeleted.indexOf(it.value().albumId);
@@ -923,7 +929,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
             // We must double check that not, for some reason, the target album has already been scanned.
             QList<AlbumShortInfo>::const_iterator it2;
 
-            for (it2 = albumList.constBegin(); it2 != albumList.constEnd(); ++it2)
+            for (it2 = albumList.constBegin() ; it2 != albumList.constEnd() ; ++it2)
             {
                 if (it2->albumRootId  == it.key().albumRootId &&
                     it2->relativePath == it.key().relativePath)
@@ -943,7 +949,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
                     QFileInfo fileInfo(location.albumRootPath() + it.key().relativePath);
 
                     // Make sure ignored directories are not used in renaming operations
-                    if (fileInfo.exists() && fileInfo.isDir() && ignoredDirectoryContainsFileName(fileInfo.fileName()))
+                    if (fileInfo.exists() && fileInfo.isDir() && d->ignoreDirectory.contains(fileInfo.fileName()))
                     {
                         // Just set a new root/relativePath to the album. Further scanning will care for all cases or error.
                         CoreDbAccess().db()->renameAlbum(it.value().albumId, it.key().albumRootId, it.key().relativePath);
@@ -970,7 +976,7 @@ void CollectionScanner::safelyRemoveAlbums(const QList<int>& albumIds)
     CoreDbAccess access;
     CoreDbTransaction transaction(&access);
 
-    foreach(int albumId, albumIds)
+    foreach (int albumId, albumIds)
     {
         QList<qlonglong> ids = access.db()->getItemIDsInAlbum(albumId);
         access.db()->removeItemsFromAlbum(albumId, ids);
@@ -1022,10 +1028,10 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
 
     QDir dir(location.albumRootPath() + album);
 
-    if ( !dir.exists() || !dir.isReadable() )
+    if (!dir.exists() || !dir.isReadable())
     {
         qCWarning(DIGIKAM_DATABASE_LOG) << "Folder does not exist or is not readable: "
-                   << dir.path();
+                                        << dir.path();
         return;
     }
 
@@ -1041,20 +1047,22 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     QHash<QString, int> fileNameIndexHash;
     QSet<qlonglong> itemIdSet;
 
-    for (int i = 0; i < scanInfos.size(); ++i)
+    for (int i = 0 ; i < scanInfos.size() ; ++i)
     {
         fileNameIndexHash[scanInfos.at(i).itemName] = i;
         itemIdSet << scanInfos.at(i).id;
     }
 
-    const QFileInfoList list = dir.entryInfoList(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot,
+    const QFileInfoList list = dir.entryInfoList(QDir::Files   |
+                                                 QDir::AllDirs |
+                                                 QDir::NoDotAndDotDot,
                                                  QDir::Name | QDir::DirsLast);
 
     QFileInfoList::const_iterator fi;
 
     int counter = -1;
 
-    for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
+    for (fi = list.constBegin() ; fi != list.constEnd() ; ++fi)
     {
         if (!d->checkObserver())
         {
@@ -1080,9 +1088,12 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             }
 
             // ignore new files in subdirectories of ignored directories
-            if(pathContainsIgnoredDirectory(fi->dir().path()))
+            foreach (const QString& dir, d->ignoreDirectory)
             {
-                continue;
+                if (fi->dir().path().contains(dir))
+                {
+                    continue;
+                }
             }
 
             int index = fileNameIndexHash.value(fi->fileName(), -1);
@@ -1115,6 +1126,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
         }
         else if (fi->isDir())
         {
+
 #ifdef Q_OS_WIN
             //Hide album that starts with a dot, as under Linux.
             if (fi->fileName().startsWith(QLatin1Char('.')))
@@ -1122,12 +1134,13 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                 continue;
             }
 #endif
-            QString subalbum;
 
-            if (ignoredDirectoryContainsFileName(fi->fileName()))
+            if (d->ignoreDirectory.contains(fi->fileName()))
             {
                 continue;
             }
+
+            QString subalbum;
 
             if (album == QLatin1String("/"))
             {
@@ -1171,7 +1184,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
 
     // if the date is null, this signals a full rescan
     if (scanInfo.modificationDate.isNull() ||
-        (hasAnyHint && d->hints->hasRescanHint(scanInfo.id)) )
+        (hasAnyHint && d->hints->hasRescanHint(scanInfo.id)))
     {
         if (hasAnyHint)
         {
@@ -1453,7 +1466,7 @@ void CollectionScanner::itemsWereRemoved(const QList<qlonglong>& removedIds)
 
     if (d->recordHistoryIds)
     {
-        foreach(const qlonglong& id, relatedImages)
+        foreach (const qlonglong& id, relatedImages)
         {
             d->needTaggingHistorySet << id;
         }
@@ -1504,7 +1517,7 @@ void CollectionScanner::finishHistoryScanning()
 
 void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
 {
-    foreach(const qlonglong& id, ids)
+    foreach (const qlonglong& id, ids)
     {
         if (!d->checkObserver())
         {
@@ -1518,7 +1531,7 @@ void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
             QList<qlonglong> needTaggingIds;
             ImageScanner::resolveImageHistory(id, &needTaggingIds);
 
-            foreach(const qlonglong& needTag, needTaggingIds)
+            foreach (const qlonglong& needTag, needTaggingIds)
             {
                 d->needTaggingHistorySet << needTag;
             }
@@ -1532,7 +1545,7 @@ void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
 
 void CollectionScanner::historyScanningStage3(const QList<qlonglong>& ids)
 {
-    foreach(const qlonglong& id, ids)
+    foreach (const qlonglong& id, ids)
     {
         if (!d->checkObserver())
         {
@@ -1548,26 +1561,26 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
 {
     int items = 0;
 
-    QDir dir( directory );
+    QDir dir(directory);
 
-    if ( !dir.exists() || !dir.isReadable() )
+    if (!dir.exists() || !dir.isReadable())
     {
         return 0;
     }
 
-    QFileInfoList list = dir.entryInfoList();
+    const QFileInfoList list = dir.entryInfoList(QDir::Files   |
+                                                 QDir::AllDirs |
+                                                 QDir::NoDotAndDotDot);
 
     items += list.count();
 
     QFileInfoList::const_iterator fi;
 
-    for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
+    for (fi = list.constBegin() ; fi != list.constEnd() ; ++fi)
     {
-        if ( fi->isDir()                          &&
-             fi->fileName() != QLatin1String(".") &&
-             fi->fileName() != QLatin1String(".."))
+        if (fi->isDir())
         {
-            items += countItemsInFolder( fi->filePath() );
+            items += countItemsInFolder(fi->filePath());
         }
     }
 
@@ -1687,40 +1700,6 @@ bool CollectionScanner::checkDeleteRemoved()
     return (daysPast > 7  && completeScans > 2) ||
            (daysPast > 30 && completeScans > 0) ||
            (completeScans > 30);
-}
-
-bool CollectionScanner::pathContainsIgnoredDirectory(const QString& path)
-{
-    QStringList ignoreDirectoryList;
-    CoreDbAccess().db()->getIgnoreDirectoryFilterSettings(&ignoreDirectoryList);
-
-    if (ignoreDirectoryList.isEmpty())
-    {
-        return false;
-    }
-
-    foreach(const QString& dir, ignoreDirectoryList)
-    {
-        if (path.contains(dir))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool CollectionScanner::ignoredDirectoryContainsFileName(const QString& fileName)
-{
-    QStringList ignoreDirectoryList;
-    CoreDbAccess().db()->getIgnoreDirectoryFilterSettings(&ignoreDirectoryList);
-
-    if (ignoreDirectoryList.isEmpty())
-    {
-        return false;
-    }
-
-    return ignoreDirectoryList.contains(fileName);
 }
 
 // ------------------------------------------------------------------------------------------

@@ -179,7 +179,7 @@ void MetadataHub::loadTags(const QList<int>& loadedTags)
 {
     d->tags.clear();
 
-    foreach(int tagId, loadedTags)
+    foreach (int tagId, loadedTags)
     {
         if (TagsCache::instance()->isInternalTag(tagId))
         {
@@ -529,7 +529,7 @@ QStringList MetadataHub::cleanupTags(const QStringList& toClean)
 {
     QSet<QString> deduplicator;
 
-    for (int index = 0; index < toClean.size(); index++)
+    for (int index = 0 ; index < toClean.size() ; ++index)
     {
         QString keyword = toClean.at(index);
 
@@ -598,7 +598,7 @@ void MetadataHub::writeToBaloo(const QString& filePath, const MetadataSettingsCo
 
     QStringList newKeywords;
 
-    for (QMap<int, MetadataHub::Status>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
+    for (QMap<int, MetadataHub::Status>::iterator it = d->tags.begin() ; it != d->tags.end() ; ++it)
     {
         if (!TagsCache::instance()->canBeWrittenToMetadata(it.key()))
         {
@@ -651,7 +651,7 @@ void Digikam::MetadataHub::loadFaceTags(const ImageInfo& info, const QSize& size
 
     if (!facesList.isEmpty())
     {
-        foreach(const FaceTagsIface& dface, facesList)
+        foreach (const FaceTagsIface& dface, facesList)
         {
             QString faceName = FaceTags::faceNameForTag(dface.tagId());
 
@@ -681,7 +681,7 @@ QMultiMap<QString, QVariant> Digikam::MetadataHub::loadIntegerFaceTags(const Ima
 
     if (!facesList.isEmpty())
     {
-        foreach(const FaceTagsIface& dface, facesList)
+        foreach (const FaceTagsIface& dface, facesList)
         {
             QString faceName = FaceTags::faceNameForTag(dface.tagId());
 
@@ -700,7 +700,7 @@ void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags,
     d->faceTagsList.clear();
     QMultiMap<QString, QVariant>::iterator it;
 
-    for(it = newFaceTags.begin() ; it != newFaceTags.end() ; ++it)
+    for (it = newFaceTags.begin() ; it != newFaceTags.end() ; ++it)
     {
         QRect  temprect  = it.value().toRect();
         QRectF faceRect  = TagRegion::absoluteToRelative(temprect,size);

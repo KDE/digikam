@@ -32,7 +32,7 @@
 
 #include "album.h"
 #include "maintenancetool.h"
-#include "imagequalitysettings.h"
+#include "imagequalitycontainer.h"
 
 class QImage;
 
@@ -55,8 +55,9 @@ public:
 
     /** Constructor using AlbumList as argument. If list is empty, whole Albums collection is processed.
      */
-    explicit ImageQualitySorter(QualityScanMode mode, const AlbumList& list=AlbumList(),
-                                const ImageQualitySettings& quality=ImageQualitySettings(),
+    explicit ImageQualitySorter(QualityScanMode mode,
+                                const AlbumList& list=AlbumList(),
+                                const ImageQualityContainer& quality=ImageQualityContainer(),
                                 ProgressItem* const parent = 0);
     ~ImageQualitySorter();
 

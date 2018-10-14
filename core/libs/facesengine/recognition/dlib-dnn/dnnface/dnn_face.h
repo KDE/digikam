@@ -136,7 +136,7 @@ public:
         delete temp;
 
         matrix<rgb_pixel> img;
-        std::vector<matrix<rgb_pixel>> faces;
+        std::vector<matrix<rgb_pixel> > faces;
 
         std::cout << "tmp_mat channels: " << tmp_mat.channels() << std::endl;
 
@@ -168,10 +168,10 @@ public:
             }
 
             cv::Rect new_rect(face.left(), face.top(), face.right()-face.left(), face.bottom()-face.top());
-            FullObjectDetection object = sp(gray,new_rect);
+            FullObjectDetection object = sp(gray, new_rect);
             qCDebug(DIGIKAM_FACEDB_LOG) << "Full object detection finished";
             matrix<rgb_pixel> face_chip;
-            extract_image_chip(img, get_face_chip_details(object,150,0.25), face_chip);
+            extract_image_chip(img, get_face_chip_details(object, 150, 0.25), face_chip);
             qCDebug(DIGIKAM_FACEDB_LOG) << "Extract image chip finished";
             faces.push_back(move(face_chip));
             break;
@@ -185,16 +185,16 @@ public:
         }
 
         qCDebug(DIGIKAM_FACEDB_LOG) << "Start neural network";
-        std::vector<matrix<float,0,1>> face_descriptors = net(faces);
+        std::vector<matrix<float, 0, 1> > face_descriptors = net(faces);
         qCDebug(DIGIKAM_FACEDB_LOG) << "Face descriptors size:" << face_descriptors.size();
 
         if (face_descriptors.size() != 0)
         {
             vecdata.clear();
 
-            for(int i = 0 ; i < face_descriptors[0].nr() ; i++)
+            for(int i = 0 ; i < face_descriptors[0].nr() ; ++i)
             {
-                for(int j = 0 ; j < face_descriptors[0].nc() ; j++)
+                for(int j = 0 ; j < face_descriptors[0].nc() ; ++j)
                 {
                     vecdata.push_back(face_descriptors[0](i, j));
                 }

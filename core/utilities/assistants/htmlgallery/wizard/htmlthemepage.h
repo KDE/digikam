@@ -43,8 +43,8 @@ class ThemeListBoxItem : public QListWidgetItem
 {
 public:
 
-    explicit ThemeListBoxItem(QListWidget* const list, GalleryTheme::Ptr theme)
-        : QListWidgetItem(theme->name(), list),
+    explicit ThemeListBoxItem(GalleryTheme::Ptr theme)
+        : QListWidgetItem(theme->name()),
           m_theme(theme)
     {
     }

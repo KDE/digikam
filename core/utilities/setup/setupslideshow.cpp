@@ -61,6 +61,7 @@ public:
         showExpoSensitivity(0),
         showMakeModel(0),
         showLabels(0),
+        showRating(0),
         showComment(0),
         showTitle(0),
         showTags(0),
@@ -79,6 +80,7 @@ public:
     QCheckBox*    showExpoSensitivity;
     QCheckBox*    showMakeModel;
     QCheckBox*    showLabels;
+    QCheckBox*    showRating;
     QCheckBox*    showComment;
     QCheckBox*    showTitle;
     QCheckBox*    showTags;
@@ -152,7 +154,10 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     d->showTags->setWhatsThis(i18n("Show the digiKam image tag names at the bottom of the screen."));
 
     d->showLabels          = new QCheckBox(i18n("Show image labels"), panel);
-    d->showLabels->setWhatsThis(i18n("Show the digiKam image color label, pick label, and rating at the bottom of the screen."));
+    d->showLabels->setWhatsThis(i18n("Show the digiKam image color label and pick label at the bottom of the screen."));
+
+    d->showRating          = new QCheckBox(i18n("Show image rating"), panel);
+    d->showRating->setWhatsThis(i18n("Show the digiKam image rating at the bottom of the screen."));
 
     DHBox* const screenSelectBox = new DHBox(panel);
     new QLabel(i18n("Screen placement:"), screenSelectBox);
@@ -180,9 +185,10 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     // Only digiKam support this feature, showFoto do not support digiKam database information.
     if (qApp->applicationName() == QLatin1String("showfoto"))
     {
-        d->showTitle->hide();
         d->showCapIfNoTitle->hide();
         d->showLabels->hide();
+        d->showRating->hide();
+        d->showTitle->hide();
         d->showTags->hide();
     }
 
@@ -200,6 +206,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     layout->addWidget(d->showCapIfNoTitle);
     layout->addWidget(d->showTags);
     layout->addWidget(d->showLabels);
+    layout->addWidget(d->showRating);
     layout->addWidget(screenSelectBox);
     layout->addStretch();
     layout->setContentsMargins(spacing, spacing, spacing, spacing);
@@ -221,6 +228,7 @@ void SetupSlideShow::slotSetUnchecked(int)
 void SetupSlideShow::applySettings()
 {
     SlideShowSettings settings;
+
     settings.delay                 = d->delayInput->value();
     settings.startWithCurrent      = d->startWithCurrent->isChecked();
     settings.loop                  = d->loopMode->isChecked();
@@ -234,6 +242,7 @@ void SetupSlideShow::applySettings()
     settings.printCapIfNoTitle     = d->showCapIfNoTitle->isChecked();
     settings.printTags             = d->showTags->isChecked();
     settings.printLabels           = d->showLabels->isChecked();
+    settings.printRating           = d->showRating->isChecked();
     settings.showProgressIndicator = d->showProgress->isChecked();
     settings.slideScreen           = d->screenPlacement->currentIndex() - 2;
     settings.writeToConfig();
@@ -243,6 +252,7 @@ void SetupSlideShow::readSettings()
 {
     SlideShowSettings settings;
     settings.readFromConfig();
+
     d->delayInput->setValue(settings.delay);
     d->startWithCurrent->setChecked(settings.startWithCurrent);
     d->loopMode->setChecked(settings.loop);
@@ -256,6 +266,7 @@ void SetupSlideShow::readSettings()
     d->showCapIfNoTitle->setChecked(settings.printCapIfNoTitle);
     d->showTags->setChecked(settings.printTags);
     d->showLabels->setChecked(settings.printLabels);
+    d->showRating->setChecked(settings.printRating);
     d->showProgress->setChecked(settings.showProgressIndicator);
 
     const int screen = settings.slideScreen;

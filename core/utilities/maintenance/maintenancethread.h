@@ -37,7 +37,7 @@ class QImage;
 namespace Digikam
 {
 
-class ImageQualitySettings;
+class ImageQualityContainer;
 class MaintenanceData;
 
 class MaintenanceThread : public ActionThreadBase
@@ -54,7 +54,7 @@ public:
     void syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir, bool tagsOnly);
     void generateThumbs(const QStringList& paths);
     void generateFingerprints(const QStringList& paths);
-    void sortByImageQuality(const QStringList& paths, const ImageQualitySettings& quality);
+    void sortByImageQuality(const QStringList& paths, const ImageQualityContainer& quality);
 
     void computeDatabaseJunk(bool thumbsDb=false, bool facesDb=false, bool similarityDb=false);
     void cleanCoreDb(const QList<qlonglong>& imageIds);

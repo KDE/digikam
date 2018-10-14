@@ -21,27 +21,27 @@ fi
 
 cd build
 
-export Exiv2Options='BUILD_SHARED_LIBS=ON \
-                     EXIV2_ENABLE_XMP=ON \
-                     EXIV2_ENABLE_EXTERNAL_XMP=OFF \
-                     EXIV2_ENABLE_PNG=ON \
-                     EXIV2_ENABLE_NLS=ON \
-                     EXIV2_ENABLE_PRINTUCS2=ON \
-                     EXIV2_ENABLE_LENSDATA=ON \
-                     EXIV2_ENABLE_COMMERCIAL=OFF \
-                     EXIV2_ENABLE_VIDEO=OFF \
-                     EXIV2_ENABLE_WEBREADY=OFF \
-                     EXIV2_ENABLE_DYNAMIC_RUNTIME=OFF \
-                     EXIV2_ENABLE_WIN_UNICODE=OFF \
-                     EXIV2_ENABLE_CURL=OFF \
-                     EXIV2_ENABLE_SSH=OFF \
-                     EXIV2_BUILD_SAMPLES=OFF \
-                     EXIV2_BUILD_PO=ON \
-                     EXIV2_BUILD_EXIV2_COMMAND=OFF \
-                     EXIV2_BUILD_UNIT_TESTS=OFF \
-                     EXIV2_BUILD_DOC=OFF \
-                     EXIV2_TEAM_EXTRA_WARNINGS=OFF \
-                     EXIV2_TEAM_WARNINGS_AS_ERRORS=OFF'
+export Exiv2Options='-DBUILD_SHARED_LIBS=ON \
+                     -DEXIV2_ENABLE_XMP=ON \
+                     -DEXIV2_ENABLE_EXTERNAL_XMP=OFF \
+                     -DEXIV2_ENABLE_PNG=ON \
+                     -DEXIV2_ENABLE_NLS=ON \
+                     -DEXIV2_ENABLE_PRINTUCS2=ON \
+                     -DEXIV2_ENABLE_LENSDATA=ON \
+                     -DEXIV2_ENABLE_VIDEO=OFF \
+                     -DEXIV2_ENABLE_WEBREADY=OFF \
+                     -DEXIV2_ENABLE_DYNAMIC_RUNTIME=OFF \
+                     -DEXIV2_ENABLE_CURL=OFF \
+                     -DEXIV2_ENABLE_SSH=OFF \
+                     -DEXIV2_BUILD_SAMPLES=OFF \
+                     -DEXIV2_BUILD_PO=OFF \
+                     -DEXIV2_BUILD_EXIV2_COMMAND=OFF \
+                     -DEXIV2_BUILD_UNIT_TESTS=OFF \
+                     -DEXIV2_BUILD_DOC=OFF \
+                     -DEXIV2_TEAM_EXTRA_WARNINGS=OFF \
+                     -DEXIV2_TEAM_WARNINGS_AS_ERRORS=OFF \
+                     -DEXIV2_TEAM_USE_SANITIZERS=OFF \
+                     -DEXIV2_ENABLE_WIN_UNICODE=OFF'
 
 cmake -G "$MAKEFILES_TYPE" . \
       -DCMAKE_INSTALL_PREFIX=/usr \

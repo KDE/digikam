@@ -123,8 +123,6 @@ public:
     double                 altitude;
     double                 currentSimilarity;
 
-    //! number of grouped images, if this is group leader
-    int                    groupedImages;
     //! group leader, if the image is grouped
     qlonglong              groupImage;
 
@@ -146,7 +144,6 @@ public:
     bool                   imageSizeCached        : 1;
     bool                   tagIdsCached           : 1;
     bool                   positionsCached        : 1;
-    bool                   groupedImagesCached    : 1;
     bool                   groupImageCached       : 1;
 
     bool                   invalid                : 1;

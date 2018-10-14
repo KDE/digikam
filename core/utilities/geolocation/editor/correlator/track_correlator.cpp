@@ -72,10 +72,12 @@ void TrackCorrelator::correlate(const Correlation::List& itemsToCorrelate,
     d->thread->itemsToCorrelate = itemsToCorrelate;
 
     connect(d->thread, SIGNAL(signalItemsCorrelated(Digikam::TrackCorrelator::Correlation::List)),
-            this, SLOT(slotThreadItemsCorrelated(Digikam::TrackCorrelator::Correlation::List)), Qt::QueuedConnection);
+            this, SLOT(slotThreadItemsCorrelated(Digikam::TrackCorrelator::Correlation::List)),
+            Qt::QueuedConnection);
 
     connect(d->thread, SIGNAL(finished()),
-            this, SLOT(slotThreadFinished()), Qt::QueuedConnection);
+            this, SLOT(slotThreadFinished()),
+            Qt::QueuedConnection);
 
     d->thread->start();
 }

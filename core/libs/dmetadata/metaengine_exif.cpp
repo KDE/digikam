@@ -158,84 +158,6 @@ bool MetaEngine::setExif(const QByteArray& data) const
     return false;
 }
 
-MetaEngine::MetaDataMap MetaEngine::getExifTagsDataList(const QStringList& exifKeysFilter, bool invertSelection) const
-{
-    if (d->exifMetadata().empty())
-       return MetaDataMap();
-
-    try
-    {
-        Exiv2::ExifData exifData = d->exifMetadata();
-        exifData.sortByKey();
-
-        QString     ifDItemName;
-        MetaDataMap metaDataMap;
-
-        for (Exiv2::ExifData::const_iterator md = exifData.begin() ; md != exifData.end() ; ++md)
-        {
-            QString key = QLatin1String(md->key().c_str());
-
-            // Decode the tag value with a user friendly output.
-            QString tagValue;
-
-            if (key == QLatin1String("Exif.Photo.UserComment"))
-            {
-                tagValue = d->convertCommentValue(*md);
-            }
-            else if (key == QLatin1String("Exif.Image.0x935c"))
-            {
-                tagValue = QString::number(md->value().size());
-            }
-            else if (key == QLatin1String("Exif.CanonCs.LensType") && md->toLong() == 65535)
-            {
-                // FIXME: workaround for a possible crash in Exiv2 pretty-print function for the Exif.CanonCs.LensType.
-                tagValue = QString::fromLocal8Bit(md->toString().c_str());
-            }
-            else
-            {
-                std::ostringstream os;
-                md->write(os, &exifData);
-
-                // Exif tag contents can be an translated strings, no only simple ascii.
-                tagValue = QString::fromLocal8Bit(os.str().c_str());
-            }
-
-            tagValue.replace(QLatin1Char('\n'), QLatin1String(" "));
-
-            // We apply a filter to get only the Exif tags that we need.
-
-            if (!exifKeysFilter.isEmpty())
-            {
-                if (!invertSelection)
-                {
-                    if (exifKeysFilter.contains(key.section(QLatin1Char('.'), 1, 1)))
-                        metaDataMap.insert(key, tagValue);
-                }
-                else
-                {
-                    if (!exifKeysFilter.contains(key.section(QLatin1Char('.'), 1, 1)))
-                        metaDataMap.insert(key, tagValue);
-                }
-            }
-            else // else no filter at all.
-            {
-                metaDataMap.insert(key, tagValue);
-            }
-        }
-
-        return metaDataMap;
-    }
-    catch (Exiv2::Error& e)
-    {
-        d->printExiv2ExceptionError(QLatin1String("Cannot parse EXIF metadata using Exiv2 "), e);
-    }
-    catch(...)
-    {
-        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
-    }
-
-    return MetaDataMap();
-}
 
 QString MetaEngine::getExifComment(bool readDescription) const
 {
@@ -514,7 +436,7 @@ bool MetaEngine::setExifTagData(const char* exifTagName, const QByteArray& data)
 }
 
 bool MetaEngine::setExifTagVariant(const char* exifTagName, const QVariant& val,
-                               bool rationalWantSmallDenominator) const
+                                   bool rationalWantSmallDenominator) const
 {
     switch (val.type())
     {
@@ -995,7 +917,11 @@ bool MetaEngine::setTiffThumbnail(const QImage& thumbImage) const
 
         if (pos == d->exifMetadata().end() || pos->count() != 1 || pos->toLong() != 0)
         {
+#if EXIV2_TEST_VERSION(0,27,0)
+            throw Exiv2::Error(Exiv2::kerErrorMessage, "Exif.Image.NewSubfileType missing or not set as main image");
+#else
             throw Exiv2::Error(1, "Exif.Image.NewSubfileType missing or not set as main image");
+#endif
         }
 
         // Remove sub-IFD tags
@@ -1065,6 +991,85 @@ bool MetaEngine::removeExifThumbnail() const
     }
 
     return false;
+}
+
+MetaEngine::MetaDataMap MetaEngine::getExifTagsDataList(const QStringList& exifKeysFilter, bool invertSelection) const
+{
+    if (d->exifMetadata().empty())
+       return MetaDataMap();
+
+    try
+    {
+        Exiv2::ExifData exifData = d->exifMetadata();
+        exifData.sortByKey();
+
+        QString     ifDItemName;
+        MetaDataMap metaDataMap;
+
+        for (Exiv2::ExifData::const_iterator md = exifData.begin() ; md != exifData.end() ; ++md)
+        {
+            QString key = QLatin1String(md->key().c_str());
+
+            // Decode the tag value with a user friendly output.
+            QString tagValue;
+
+            if (key == QLatin1String("Exif.Photo.UserComment"))
+            {
+                tagValue = d->convertCommentValue(*md);
+            }
+            else if (key == QLatin1String("Exif.Image.0x935c"))
+            {
+                tagValue = QString::number(md->value().size());
+            }
+            else if (key == QLatin1String("Exif.CanonCs.LensType") && md->toLong() == 65535)
+            {
+                // FIXME: workaround for a possible crash in Exiv2 pretty-print function for the Exif.CanonCs.LensType.
+                tagValue = QString::fromLocal8Bit(md->toString().c_str());
+            }
+            else
+            {
+                std::ostringstream os;
+                md->write(os, &exifData);
+
+                // Exif tag contents can be an translated strings, no only simple ascii.
+                tagValue = QString::fromLocal8Bit(os.str().c_str());
+            }
+
+            tagValue.replace(QLatin1Char('\n'), QLatin1String(" "));
+
+            // We apply a filter to get only the Exif tags that we need.
+
+            if (!exifKeysFilter.isEmpty())
+            {
+                if (!invertSelection)
+                {
+                    if (exifKeysFilter.contains(key.section(QLatin1Char('.'), 1, 1)))
+                        metaDataMap.insert(key, tagValue);
+                }
+                else
+                {
+                    if (!exifKeysFilter.contains(key.section(QLatin1Char('.'), 1, 1)))
+                        metaDataMap.insert(key, tagValue);
+                }
+            }
+            else // else no filter at all.
+            {
+                metaDataMap.insert(key, tagValue);
+            }
+        }
+
+        return metaDataMap;
+    }
+    catch (Exiv2::Error& e)
+    {
+        d->printExiv2ExceptionError(QLatin1String("Cannot parse EXIF metadata using Exiv2 "), e);
+    }
+    catch(...)
+    {
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
+    }
+
+    return MetaDataMap();
 }
 
 MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const

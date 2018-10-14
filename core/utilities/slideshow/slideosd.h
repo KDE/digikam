@@ -53,7 +53,9 @@ public:
     void setCurrentInfo(const SlidePictureInfo& info, const QUrl& url);
 
     void pause(bool b);
+    void video(bool b);
     bool isPaused() const;
+    bool isUnderMouse() const;
 
     SlideToolBar* toolBar() const;
 

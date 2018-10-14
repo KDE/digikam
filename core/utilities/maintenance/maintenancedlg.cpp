@@ -49,7 +49,7 @@
 #include "setup.h"
 #include "albumselectors.h"
 #include "facescansettings.h"
-#include "imagequalitysettings.h"
+#include "imagequalitycontainer.h"
 #include "metadatasynchronizer.h"
 #include "dxmlguiwindow.h"
 #include "applicationsettings.h"
@@ -431,7 +431,7 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
     prm.qualitySort                         = d->expanderBox->isChecked(Private::ImageQualitySorter);
     prm.qualityScanMode                     = d->qualityScanMode->itemData(d->qualityScanMode->currentIndex()).toInt();
-    ImageQualitySettings imgq;
+    ImageQualityContainer imgq;
     imgq.readFromConfig();
     prm.quality                             = imgq;
     prm.metadataSync                        = d->expanderBox->isChecked(Private::MetadataSync);

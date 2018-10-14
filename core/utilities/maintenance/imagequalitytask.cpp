@@ -28,8 +28,8 @@
 #include "digikam_debug.h"
 #include "dimg.h"
 #include "previewloadthread.h"
-#include "imagequalitysettings.h"
-#include "imgqsort.h"
+#include "imagequalitycontainer.h"
+#include "imagequalityparser.h"
 #include "imageinfo.h"
 #include "maintenancedata.h"
 
@@ -46,10 +46,10 @@ public:
     {
     }
 
-    ImageQualitySettings quality;
-    ImgQSort*            imgqsort;
+    ImageQualityContainer quality;
+    ImageQualityParser*   imgqsort;
 
-    MaintenanceData*     data;
+    MaintenanceData*      data;
 };
 
 // -------------------------------------------------------
@@ -67,7 +67,7 @@ ImageQualityTask::~ImageQualityTask()
     delete d;
 }
 
-void ImageQualityTask::setQuality(const ImageQualitySettings& quality)
+void ImageQualityTask::setQuality(const ImageQualityContainer& quality)
 {
     d->quality = quality;
 }
@@ -103,22 +103,22 @@ void ImageQualityTask::run()
         }
 
         // Get item preview to perform quality analysis. No need to load whole image, this will be slower.
-        // TODO : check if 1024 pixels size is enough to get suitable Quality results.
+        // 1024 pixels size image must be enough to get suitable Quality results.
         DImg dimg = PreviewLoadThread::loadFastSynchronously(path, 1024);
 
         if (!dimg.isNull() && !m_cancel)
         {
-            // TODO : run here Quality analysis backend and store Pick Label result to DB.
+            // Run Quality analysis backend and store Pick Label result to database.
             // Backend Input : d->quality as Quality analysis settings,
             //                 dimg       as reduced size image data to parse,
-            //                 path    as file path to patch DB properties.
+            //                 path       as file path to patch database properties.
             // Result        : Backend must scan Quality of image depending of settings and compute a Quality estimation accordingly.
-            //                 Finally, using file path, DB Pick Label properties must be assigned through ImageInfo interface.
+            //                 Finally, using file path, database Pick Label properties is assigned through ImageInfo interface.
             // Warning       : All code here will run in a separated thread and must be re-entrant/thread-safe. Only pure computation
             //                 must be processed. GUI calls are prohibited. ImageInfo and DImg can be used safety in thread.
 
             PickLabel pick;
-            d->imgqsort = new ImgQSort(dimg, d->quality, &pick);
+            d->imgqsort = new ImageQualityParser(dimg, d->quality, &pick);
             d->imgqsort->startAnalyse();
 
             ImageInfo info = ImageInfo::fromLocalFile(path);
@@ -127,6 +127,7 @@ void ImageQualityTask::run()
             delete d->imgqsort; //delete image data after setting label
             d->imgqsort = 0;
         }
+ 
         // Dispatch progress to Progress Manager
         QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
         emit signalFinished(qimg);
