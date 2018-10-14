@@ -71,10 +71,7 @@
 #include <exiv2/types.hpp>
 #include <exiv2/exif.hpp>
 #include <exiv2/xmpsidecar.hpp>
-
-#if (((EXIV2_MAJOR_VERSION) << 16) | ((EXIV2_MINOR_VERSION) << 8) | (EXIV2_PATCH_VERSION)) >= (((0) << 16) | ((27) << 8) | (0))
-#   include <exiv2/version.hpp>
-#endif
+#include <exiv2/version.hpp>
 
 // Check if Exiv2 support XMP
 
