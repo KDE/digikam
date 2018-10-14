@@ -167,15 +167,14 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent,
     connect(d->showTracksOnMap, SIGNAL(stateChanged(int)),
             this, SLOT(slotShowTracksStateChanged(int)));
 
-    QWidget* const offsetWidget = new QWidget(this);
+    QWidget* const offsetWidget     = new QWidget(this);
     QGridLayout* const offsetLayout = new QGridLayout(offsetWidget);
 
-    QLabel* offsetLabel         = new QLabel(i18n("Offset of pictures (hh:mm:ss):"),
-                                             offsetWidget);
+    QLabel* const offsetLabel       = new QLabel(i18n("Offset of pictures (hh:mm:ss):"),
+                                                      offsetWidget);
     offsetLabel->setWhatsThis(i18n("Sets the offset between picture times "
-                                        "and track times. E.g. to correct "
-                                        "wrong camera clock or different time "
-                                        "zone."));
+                                   "and track times. E.g. to correct wrong "
+                                   "camera clock or different time zone."));
 
     d->offsetSign = new QComboBox(offsetWidget);
     d->offsetSign->addItem(QLatin1String("+"));
@@ -190,7 +189,7 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent,
     offsetLayout->addWidget(d->offsetSign, 0, 1, 1, 1);
     offsetLayout->addWidget(d->offsetTime, 0, 2, 1, 1);
     offsetLayout->setColumnStretch(0, 10);
-    offsetLayout->setContentsMargins(this->contentsMargins());
+    offsetLayout->setContentsMargins(contentsMargins());
 
     // track to picture matching options
     QWidget* const matchWidget     = new QWidget(this);
@@ -218,15 +217,15 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent,
                                                 "If the time difference exceeds "
                                                 "this setting, no match will be attempted."));
 
-    matchLayout->addWidget(d->interpolateButton,       0, 0, 1, 3);
-    matchLayout->addWidget(d->interpolateLimitLabel,   1, 1, 1, 1);
-    matchLayout->addWidget(d->interpolateLimitInput,   1, 2, 1, 1);
-    matchLayout->addWidget(directMatchButton,          2, 0, 1, 3);
-    matchLayout->addWidget(d->directMatchLimitLabel,   3, 1, 1, 1);
-    matchLayout->addWidget(d->directMatchLimitInput,   3, 2, 1, 1);
+    matchLayout->addWidget(d->interpolateButton,     0, 0, 1, 3);
+    matchLayout->addWidget(d->interpolateLimitLabel, 1, 1, 1, 1);
+    matchLayout->addWidget(d->interpolateLimitInput, 1, 2, 1, 1);
+    matchLayout->addWidget(directMatchButton,        2, 0, 1, 3);
+    matchLayout->addWidget(d->directMatchLimitLabel, 3, 1, 1, 1);
+    matchLayout->addWidget(d->directMatchLimitInput, 3, 2, 1, 1);
     matchLayout->setColumnStretch(1, 10);
     matchLayout->setColumnMinimumWidth(0, 40);
-    matchLayout->setContentsMargins(this->contentsMargins());
+    matchLayout->setContentsMargins(contentsMargins());
 
     connect(d->interpolateButton, SIGNAL(toggled(bool)),
             this, SLOT(updateUIState()));
@@ -234,22 +233,15 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent,
     d->correlateButton = new QPushButton(i18n("Correlate"), this);
 
     // layout form
-    int row = 0;
-    settingsLayout->addWidget(d->gpxLoadFilesButton, row, 0, 1, 1);
-    row++;
-    settingsLayout->addWidget(d->gpxFileList,        row, 0, 1, 1);
-    row++;
-    settingsLayout->addWidget(d->showTracksOnMap,    row, 0, 1, 1);
-    row++;
-    settingsLayout->addWidget(line,                  row, 0, 1, 1);
-    row++;
-    settingsLayout->addWidget(offsetWidget,          row, 0, 1, 1);
-    row++;
-    settingsLayout->addWidget(matchWidget,           row, 0, 4, 1);
-    row += 4;
-    settingsLayout->addWidget(d->correlateButton,    row, 0, 1, 1);
 
-    settingsLayout->setRowStretch(row, 100);
+    settingsLayout->addWidget(d->gpxLoadFilesButton, 0, 0, 1, 1);
+    settingsLayout->addWidget(d->gpxFileList,        1, 0, 1, 1);
+    settingsLayout->addWidget(d->showTracksOnMap,    2, 0, 1, 1);
+    settingsLayout->addWidget(line,                  3, 0, 1, 1);
+    settingsLayout->addWidget(offsetWidget,          4, 0, 1, 1);
+    settingsLayout->addWidget(matchWidget,           5, 0, 4, 1);
+    settingsLayout->addWidget(d->correlateButton,    9, 0, 1, 1);
+    settingsLayout->setRowStretch(9, 100);
 
     connect(d->gpxLoadFilesButton, SIGNAL(clicked()),
             this, SLOT(slotLoadTrackFiles()));
@@ -280,7 +272,7 @@ void GPSCorrelatorWidget::slotLoadTrackFiles()
 
     QList<QUrl> list;
 
-    foreach(const QString& str, gpxFiles)
+    foreach (const QString& str, gpxFiles)
     {
         list << QUrl::fromLocalFile(str);
     }
@@ -294,29 +286,25 @@ void GPSCorrelatorWidget::slotAllTrackFilesReady()
     QStringList invalidFiles;
     const QList<QPair<QUrl, QString> > loadErrorFiles = d->trackManager->readLoadErrors();
 
-    for (int i = 0; i < loadErrorFiles.count(); ++i)
+    for (int i = 0 ; i < loadErrorFiles.count() ; ++i)
     {
         const QPair<QUrl, QString> currentError = loadErrorFiles.at(i);
-        const QString fileErrorString = QString::fromLatin1("%1: %2")
-            .arg(currentError.first.toLocalFile())
-            .arg(currentError.second);
+        const QString fileErrorString           = QString::fromLatin1("%1: %2")
+                                                  .arg(currentError.first.toLocalFile())
+                                                  .arg(currentError.second);
 
         invalidFiles << fileErrorString;
     }
 
     if (!invalidFiles.isEmpty())
     {
-        const QString errorString = i18np(
-                "The following GPX file could not be loaded:",
-                "The following %1 GPX files could not be loaded:",
-                invalidFiles.count()
-            );
+        const QString errorString      = i18np("The following GPX file could not be loaded:",
+                                               "The following %1 GPX files could not be loaded:",
+                                               invalidFiles.count());
 
-        const QString errorTitleString = i18np(
-                "Error loading GPX file",
-                "Error loading GPX files",
-                invalidFiles.count()
-            );
+        const QString errorTitleString = i18np("Error loading GPX file",
+                                               "Error loading GPX files",
+                                               invalidFiles.count());
 
         DMessageBox::showInformationList(QMessageBox::Critical,
                                          this,
@@ -325,7 +313,7 @@ void GPSCorrelatorWidget::slotAllTrackFilesReady()
                                          invalidFiles);
     }
 
-    emit(signalAllTrackFilesReady());
+    emit signalAllTrackFilesReady();
 
     setUIEnabledInternal(true);
 }
@@ -351,25 +339,27 @@ void GPSCorrelatorWidget::updateUIState()
     d->directMatchLimitInput->setEnabled(state && !d->interpolateButton->isChecked());
     d->interpolateLimitInput->setEnabled(state && d->interpolateButton->isChecked());
 
-    const bool haveValidGpxFiles = d->trackManager->trackCount()>0;
+    const bool haveValidGpxFiles = (d->trackManager->trackCount() > 0);
     d->correlateButton->setEnabled(state && haveValidGpxFiles);
 }
 
 void GPSCorrelatorWidget::slotCorrelate()
 {
     // disable the UI of the entire dialog:
-    emit(signalSetUIEnabled(false, this, QLatin1String(SLOT(slotCancelCorrelation()))));
+    emit signalSetUIEnabled(false, this, QLatin1String(SLOT(slotCancelCorrelation())));
 
     // store the options:
     TrackCorrelator::CorrelationOptions options;
     options.maxGapTime = d->directMatchLimitInput->time().msecsSinceStartOfDay() / 1000;
 
     int userOffset = d->offsetTime->time().msecsSinceStartOfDay() / 1000;
+
     if (d->offsetSign->currentText() == QLatin1String("-"))
     {
         userOffset = (-1) * userOffset;
     }
-    options.secondsOffset+=userOffset;
+
+    options.secondsOffset += userOffset;
 
     options.interpolate          = d->interpolateButton->isChecked();
     options.interpolationDstTime = d->interpolateLimitInput->time().msecsSinceStartOfDay() / 1000;
@@ -399,7 +389,7 @@ void GPSCorrelatorWidget::slotCorrelate()
     d->correlationTriedCount      = 0;
     d->correlationUndoCommand     = new GPSUndoCommand;
 
-    emit(signalProgressSetup(imageCount, i18n("Correlating images -")));
+    emit signalProgressSetup(imageCount, i18n("Correlating images -"));
 
     d->trackCorrelator->correlate(itemList, options);
 
@@ -461,7 +451,7 @@ void GPSCorrelatorWidget::slotItemsCorrelated(const Digikam::TrackCorrelator::Co
         }
     }
 
-    emit(signalProgressChanged(d->correlationTriedCount));
+    emit signalProgressChanged(d->correlationTriedCount);
 }
 
 void GPSCorrelatorWidget::slotAllItemsCorrelated()
@@ -469,19 +459,23 @@ void GPSCorrelatorWidget::slotAllItemsCorrelated()
     if (d->correlationCorrelatedCount == 0)
     {
         QMessageBox::warning(this, i18n("Correlation failed"),
-                             i18n("Could not correlate any image - please make sure the offset and gap settings are correct."));
+                             i18n("Could not correlate any image - please make "
+                                  "sure the offset and gap settings are correct."));
     }
     else if (d->correlationCorrelatedCount == d->correlationTotalCount)
     {
         QMessageBox::information(this, i18n("Correlation succeeded"),
-                                 i18n("All images have been correlated. You can now check their position on the map."));
+                                 i18n("All images have been correlated. You "
+                                      "can now check their position on the map."));
     }
     else
     {
         // note: no need for i18np here, because the case of correlationTotalCount==1 is covered in the other two cases.
         QMessageBox::warning(this, i18n("Correlation finished"),
-                           i18n("%1 out of %2 images have been correlated. Please check the offset and gap settings if you think that more images should have been correlated.",
-                                d->correlationCorrelatedCount, d->correlationTotalCount));
+                             i18n("%1 out of %2 images have been correlated. Please "
+                                  "check the offset and gap settings if you think "
+                                  "that more images should have been correlated.",
+                                  d->correlationCorrelatedCount, d->correlationTotalCount));
     }
 
     if (d->correlationCorrelatedCount == 0)
@@ -507,7 +501,7 @@ void GPSCorrelatorWidget::saveSettingsToGroup(KConfigGroup* const group)
     group->writeEntry("Max Inter Dist Time",          d->interpolateLimitInput->time().toString());
     group->writeEntry("Max Gap Time",                 d->directMatchLimitInput->time().toString());
     group->writeEntry("Offset Sign",                  d->offsetSign->currentIndex());
-    group->writeEntry("Offset Time",                   d->offsetTime->time().toString());
+    group->writeEntry("Offset Time",                  d->offsetTime->time().toString());
     group->writeEntry("GPX File Open Last Directory", d->gpxFileOpenLastDirectory);
 }
 
@@ -519,7 +513,8 @@ void GPSCorrelatorWidget::readSettingsFromGroup(const KConfigGroup* const group)
     d->directMatchLimitInput->setTime(QTime::fromString(group->readEntry("Max Gap Time", "00:00:30")));
     d->offsetSign->setCurrentIndex(group->readEntry("Offset Sign", 0));
     d->offsetTime->setTime(QTime::fromString(group->readEntry("Offset Time", "00:00:00")));
-    d->gpxFileOpenLastDirectory = group->readEntry("GPX File Open Last Directory", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    d->gpxFileOpenLastDirectory = group->readEntry("GPX File Open Last Directory",
+                                                   QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
 
     updateUIState();
 }
@@ -535,7 +530,7 @@ void GPSCorrelatorWidget::slotCorrelationCanceled()
 
     delete d->correlationUndoCommand;
 
-    emit(signalSetUIEnabled(true));
+    emit signalSetUIEnabled(true);
 }
 
 QList<GeoCoordinates::List> GPSCorrelatorWidget::getTrackCoordinates() const
