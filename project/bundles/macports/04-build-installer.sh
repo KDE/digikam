@@ -484,7 +484,7 @@ shasum -a256 "$TARGET_PKG_FILE" | { read first rest ; echo $first ; }       >> $
 
 if [[ $DK_SIGN = 1 ]] ; then
 
-    cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -sabv -o "$TARGET_PKG_FILE"
+    cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -sabv "$TARGET_PKG_FILE"
     mv -f $TARGET_PKG_FILE.asc $TARGET_PKG_FILE.sig
 
     echo    "File       : $TARGET_PKG_FILE.sig"                                     >> $TARGET_PKG_FILE.sum

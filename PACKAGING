@@ -9,8 +9,8 @@ Notice to make release tarballs from GIT
 3/  Update the release info in top of core/CMakeLists.txt and commit it to GIT.
 
 4/  Update ChangeLog file using git2cl script from root directory.
-    Extract all contents and append only new ones to ChangeLog file since the last release done previously.
-    Register the new release info on to of file inluding release date.
+    Extract all contents and append only new lines to ChangeLog file since the last release done previously.
+    Register the new release info on to of file including release date.
     Commit to GIT.
 
 5/  Update NEWS file. If ChangeLog is a dry historical record of development,
@@ -20,8 +20,10 @@ Notice to make release tarballs from GIT
 
 6/  Tag Git vith the release version in this format: vX.Y.Z-suffix.
     Use these commands:
+
        git tag -a vX.Y.Z-suffix -m "Create version X.Y.Z-suffix"
        git push origin vX.Y.Z-suffix
+
     Where X is major version, Y minor version, and Z the patch version.
     The optional suffix is to indicate a non final release, as "-beta1" for ex.
     Look with "git tag" command for exiting tags in git.
@@ -41,7 +43,7 @@ Notice to make release tarballs from GIT
 
 10/ Create bundles and installer. See README.BUNDLES for details.
 
-11/ Create a release announce page on digikam.org web site.
+11/ Create a release announcement page on digikam.org web site.
     Web-site is hosted in a dedicated release repository : https://cgit.kde.org/websites/digikam-org.git/
     Website repository use a staging branch to review changes before to post contents officialy.
     See this README file for details: https://cgit.kde.org/websites/digikam-org.git/tree/README
@@ -64,5 +66,6 @@ Notice to make release tarballs from GIT
     https://www.digikam.org/news/date-X.Y.Z-suffix_release_announcement/
 
     Best
+    digiKam team
 
 ---------------------------------------------------
