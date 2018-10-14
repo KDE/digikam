@@ -86,6 +86,18 @@ cat $TARBALL_CHECKSUMS
 # Compute GPG signature.
 
 if [[ $TARBALL_SIGN = 1 ]] ; then
+
     cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -stabv "$TARBALL_FILE"
     mv -f $TARBALL_FILE.asc $TARBALL_FILE.sig
+
+    echo    "File       : $TARBALL_FILE.sig"                                        >> $TARBALL_CHECKSUMS
+    echo -n "Size       : "                                                         >> $TARBALL_CHECKSUMS
+    du -h "$TARBALL_FILE.sig"     | { read first rest ; echo $first ; }             >> $TARBALL_CHECKSUMS
+    echo -n "MD5 sum    : "                                                         >> $TARBALL_CHECKSUMS
+    md5sum "$TARBALL_FILE.sig"    | { read first rest ; echo $first ; }             >> $TARBALL_CHECKSUMS
+    echo -n "SHA1 sum   : "                                                         >> $TARBALL_CHECKSUMS
+    sha1sum "$TARBALL_FILE.sig"   | { read first rest ; echo $first ; }             >> $TARBALL_CHECKSUMS
+    echo -n "SHA256 sum : "                                                         >> $TARBALL_CHECKSUMS
+    sha256sum "$TARBALL_FILE.sig" | { read first rest ; echo $first ; }             >> $TARBALL_CHECKSUMS
+
 fi
