@@ -68,7 +68,7 @@ namespace Digikam
 /**
  * Used by QSet
  */
-uint qHash(const ImageListerRecord& key)
+inline uint qHash(const ImageListerRecord& key)
 {
     return key.imageID;
 }

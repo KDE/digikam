@@ -472,7 +472,7 @@ mv "$PROJECTDIR/build/digikam.pkg" "$TARGET_PKG_FILE"
 # Show resume information and future instructions to host PKG file to remote server
 
 echo -e "\n---------- Compute package checksums for digiKam $DKRELEASEID\n" >  $TARGET_PKG_FILE.sum
-echo    "File       : $TARGET_INSTALLER"                                    >> $TARGET_PKG_FILE.sum
+echo    "File       : $TARGET_PKG_FILE"                                     >> $TARGET_PKG_FILE.sum
 echo -n "Size       : "                                                     >> $TARGET_PKG_FILE.sum
 du -h "$TARGET_PKG_FILE"        | { read first rest ; echo $first ; }       >> $TARGET_PKG_FILE.sum
 echo -n "MD5 sum    : "                                                     >> $TARGET_PKG_FILE.sum
@@ -483,8 +483,20 @@ echo -n "SHA256 sum : "                                                     >> $
 shasum -a256 "$TARGET_PKG_FILE" | { read first rest ; echo $first ; }       >> $TARGET_PKG_FILE.sum
 
 if [[ $DK_SIGN = 1 ]] ; then
-    cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -sabv -o "$TARGET_PKG_FILE"
+
+    cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -sabv "$TARGET_PKG_FILE"
     mv -f $TARGET_PKG_FILE.asc $TARGET_PKG_FILE.sig
+
+    echo    "File       : $TARGET_PKG_FILE.sig"                                     >> $TARGET_PKG_FILE.sum
+    echo -n "Size       : "                                                         >> $TARGET_PKG_FILE.sum
+    du -h "$TARGET_PKG_FILE.sig"        | { read first rest ; echo $first ; }       >> $TARGET_PKG_FILE.sum
+    echo -n "MD5 sum    : "                                                         >> $TARGET_PKG_FILE.sum
+    md5 -q "$TARGET_PKG_FILE.sig"                                                   >> $TARGET_PKG_FILE.sum
+    echo -n "SHA1 sum   : "                                                         >> $TARGET_PKG_FILE.sum
+    shasum -a1 "$TARGET_PKG_FILE.sig"   | { read first rest ; echo $first ; }       >> $TARGET_PKG_FILE.sum
+    echo -n "SHA256 sum : "                                                         >> $TARGET_PKG_FILE.sum
+    shasum -a256 "$TARGET_PKG_FILE.sig" | { read first rest ; echo $first ; }       >> $TARGET_PKG_FILE.sum
+
 fi
 
 cat $TARGET_PKG_FILE.sum
