@@ -2,7 +2,7 @@ Notice to make release tarballs from GIT
 ----------------------------------------
 
 1/  Release announcements can be send to kde-i18n-docs if internationalized strings are frozen.
-    The earlier the better.
+    The earlier is better.
 
 2/  Commit last changes from source code to GIT. The code MUST compile in all cases.
 
