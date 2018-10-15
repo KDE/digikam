@@ -99,17 +99,17 @@ void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
         int validRows = 0;
 
         // for every collection we got
-        for (int i = 0; i < rowCount(rootAlbumIndex()); ++i)
+        for (int i = 0 ; i < rowCount(rootAlbumIndex()) ; ++i)
         {
             QModelIndex collectionIndex = index(i, 0, rootAlbumIndex());
             // count the number of rows
-            validRows                   += rowCount(collectionIndex);
+            validRows                  += rowCount(collectionIndex);
         }
 
         bool hasResult = validRows > 0;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "new search text settings: " << settings.text
-                 << ": hasResult = " << hasResult << ", validRows = "
-                 << validRows;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "new search text settings:" << settings.text
+                                     << ": hasResult =" << hasResult
+                                     << ", validRows =" << validRows;
         emit hasSearchResult(hasResult);
     }
     else
@@ -134,7 +134,7 @@ SearchTextSettings AlbumFilterModel::searchTextSettings() const
     return m_settings;
 }
 
-void AlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel* source)
+void AlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel* const source)
 {
     if (m_chainedModel)
     {
@@ -149,11 +149,11 @@ void AlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel* source)
     }
 }
 
-void AlbumFilterModel::setSourceFilterModel(AlbumFilterModel* source)
+void AlbumFilterModel::setSourceFilterModel(AlbumFilterModel* const source)
 {
     if (source)
     {
-        AbstractAlbumModel* model = sourceAlbumModel();
+        AbstractAlbumModel* const model = sourceAlbumModel();
 
         if (model)
         {
@@ -168,7 +168,7 @@ void AlbumFilterModel::setSourceFilterModel(AlbumFilterModel* source)
     }
 }
 
-void AlbumFilterModel::setSourceModel(QAbstractItemModel* model)
+void AlbumFilterModel::setSourceModel(QAbstractItemModel* const model)
 {
     // made it protected, only setSourceAlbumModel is public
     QSortFilterProxyModel::setSourceModel(model);
@@ -216,7 +216,7 @@ Album* AlbumFilterModel::albumForIndex(const QModelIndex& index) const
 
 QModelIndex AlbumFilterModel::indexForAlbum(Album* album) const
 {
-    AbstractAlbumModel* model = sourceAlbumModel();
+    AbstractAlbumModel* const model = sourceAlbumModel();
 
     if (!model)
     {
@@ -228,7 +228,7 @@ QModelIndex AlbumFilterModel::indexForAlbum(Album* album) const
 
 QModelIndex AlbumFilterModel::rootAlbumIndex() const
 {
-    AbstractAlbumModel* model = sourceAlbumModel();
+    AbstractAlbumModel* const model = sourceAlbumModel();
 
     if (!model)
     {
@@ -386,7 +386,8 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
 
     ApplicationSettings::AlbumSortRole role = ApplicationSettings::instance()->getAlbumSortRole();
 
-    if ((role == ApplicationSettings::ByDate || role == ApplicationSettings::ByCategory)&&(valLeft == valRight))
+    if ((role == ApplicationSettings::ByDate      ||
+         role == ApplicationSettings::ByCategory) && (valLeft == valRight))
     {
         return QSortFilterProxyModel::lessThan(left, right);
     }
@@ -403,7 +404,7 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
     }
     else if ((valLeft.type() == QVariant::Date) && (valRight.type() == QVariant::Date))
     {
-        return compareByOrder(valLeft.toDate(),valRight.toDate(),Qt::AscendingOrder) < 0;
+        return (compareByOrder(valLeft.toDate(), valRight.toDate(), Qt::AscendingOrder) < 0);
     }
 
     return QSortFilterProxyModel::lessThan(left, right);
@@ -434,12 +435,12 @@ CheckableAlbumFilterModel::CheckableAlbumFilterModel(QObject* const parent) :
 {
 }
 
-void CheckableAlbumFilterModel::setSourceAlbumModel(AbstractCheckableAlbumModel* source)
+void CheckableAlbumFilterModel::setSourceAlbumModel(AbstractCheckableAlbumModel* const source)
 {
     AlbumFilterModel::setSourceAlbumModel(source);
 }
 
-void CheckableAlbumFilterModel::setSourceFilterModel(CheckableAlbumFilterModel* source)
+void CheckableAlbumFilterModel::setSourceFilterModel(CheckableAlbumFilterModel* const source)
 {
     AlbumFilterModel::setSourceFilterModel(source);
 }
@@ -503,7 +504,7 @@ SearchFilterModel::SearchFilterModel(QObject* const parent)
 {
 }
 
-void SearchFilterModel::setSourceSearchModel(SearchModel* source)
+void SearchFilterModel::setSourceSearchModel(SearchModel* const source)
 {
     setSourceAlbumModel(source);
 }
@@ -602,7 +603,7 @@ bool SearchFilterModel::matches(Album* album) const
     return true;
 }
 
-void SearchFilterModel::setSourceAlbumModel(AbstractAlbumModel* source)
+void SearchFilterModel::setSourceAlbumModel(AbstractAlbumModel* const source)
 {
     AlbumFilterModel::setSourceAlbumModel(source);
 }
@@ -616,7 +617,7 @@ TagPropertiesFilterModel::TagPropertiesFilterModel(QObject* const parent)
             this, SLOT(tagPropertiesChanged(TAlbum*)));
 }
 
-void TagPropertiesFilterModel::setSourceAlbumModel(TagModel* source)
+void TagPropertiesFilterModel::setSourceAlbumModel(TagModel* const source)
 {
     CheckableAlbumFilterModel::setSourceAlbumModel(source);
 }
@@ -723,7 +724,7 @@ TagsManagerFilterModel::TagsManagerFilterModel(QObject* const parent)
 {
 }
 
-void TagsManagerFilterModel::setQuickListTags(QList<int> tags)
+void TagsManagerFilterModel::setQuickListTags(const QList<int>& tags)
 {
     m_keywords.clear();
 
@@ -750,7 +751,7 @@ bool TagsManagerFilterModel::matches(Album* album) const
 
     bool dirty = false;
 
-    for (QSet<int>::const_iterator it = m_keywords.begin(); it != m_keywords.end(); ++it)
+    for (QSet<int>::const_iterator it = m_keywords.begin() ; it != m_keywords.end() ; ++it)
     {
         TAlbum* const talbum = AlbumManager::instance()->findTAlbum(*it);
 
