@@ -44,7 +44,7 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 
-    void testParseTestImagesForOverExpoDetection();
+    void testParseTestImagesForExposureDetection();
     void testParseTestImagesForNoiseDetection();
 
     void testParseTestImagesForBlurDetection();

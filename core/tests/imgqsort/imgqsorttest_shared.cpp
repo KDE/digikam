@@ -49,7 +49,7 @@ QMultiMap<int, QString> ImgQSortTest_ParseTestImages(DetectionType type, const Q
             settings.detectBlur         = false;
             settings.detectNoise        = true;
             settings.detectCompression  = false;
-            settings.detectOverexposure = false;
+            settings.detectExposure     = false;
             settings.lowQRejected       = true;
             settings.mediumQPending     = true;
             settings.highQAccepted      = true;
@@ -67,7 +67,7 @@ QMultiMap<int, QString> ImgQSortTest_ParseTestImages(DetectionType type, const Q
             settings.detectBlur         = false;
             settings.detectNoise        = false;
             settings.detectCompression  = true;
-            settings.detectOverexposure = false;
+            settings.detectExposure     = false;
             settings.lowQRejected       = true;
             settings.mediumQPending     = true;
             settings.highQAccepted      = true;
@@ -79,13 +79,13 @@ QMultiMap<int, QString> ImgQSortTest_ParseTestImages(DetectionType type, const Q
             settings.compressionWeight  = 100;
             settings.speed              = 1;
             break;
-        case DetectOverExposure:
-            tname = QLatin1String("Over-Exposure");
+        case DetectExposure:
+            tname = QLatin1String("Exposure");
             settings.enableSorter       = true;
             settings.detectBlur         = false;
             settings.detectNoise        = false;
             settings.detectCompression  = false;
-            settings.detectOverexposure = true;
+            settings.detectExposure     = true;
             settings.lowQRejected       = true;
             settings.mediumQPending     = true;
             settings.highQAccepted      = true;
@@ -103,7 +103,7 @@ QMultiMap<int, QString> ImgQSortTest_ParseTestImages(DetectionType type, const Q
             settings.detectBlur         = true;
             settings.detectNoise        = false;
             settings.detectCompression  = false;
-            settings.detectOverexposure = false;
+            settings.detectExposure     = false;
             settings.lowQRejected       = true;
             settings.mediumQPending     = true;
             settings.highQAccepted      = true;

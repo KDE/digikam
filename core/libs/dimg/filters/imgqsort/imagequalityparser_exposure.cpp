@@ -27,13 +27,15 @@
 namespace Digikam
 {
 
-double ImageQualityParser::exposureAmount() const
+void ImageQualityParser::exposureAmount(double& under, double& over) const
 {
-    double exposureLevel = 0.0;
-    int overCount        = 0;
+    under          = 0.0;
+    over           = 0.0;
+    int underCount = 0;
+    int overCount  = 0;
 
     ExposureSettingsContainer expo;
-    expo.underExposureIndicator = false;
+    expo.underExposureIndicator = true;
     expo.overExposureIndicator  = true;
     expo.exposureIndicatorMode  = false;
     expo.underExposurePercent   = 5.0;
@@ -51,15 +53,18 @@ double ImageQualityParser::exposureAmount() const
             {
                 ++overCount;
             }
+            else if (mask.pixelColor(x, y) == Qt::black)
+            {
+                ++underCount;
+            }
         }
     }
 
     if (d->running)
     {
-        exposureLevel = (double)(overCount) / (mask.width() * mask.height());
+        under = (double)(underCount) / (mask.width() * mask.height());
+        over  = (double)(overCount)  / (mask.width() * mask.height());
     }
-
-    return exposureLevel;
 }
 
 } // namespace Digikam

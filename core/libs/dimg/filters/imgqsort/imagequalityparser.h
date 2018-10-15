@@ -69,10 +69,10 @@ private:
     double noiseDetector()            const;
     int    compressionDetector()      const;
 
-    /** Detect over-exposure amount in image. A pure white mask is computed and
+    /** Detect under and over exposure amount in image. A pure white mask is computed and
      *  a count of pure color pixels is used to evaluate the over-exposition of shot.
      */
-    double exposureAmount()           const;
+    void exposureAmount(double& under, double& over) const;
 
 private:
 

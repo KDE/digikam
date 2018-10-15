@@ -20,10 +20,12 @@ do
     blurred=$imagename"_blurred_"$i
     compressed=$imagename"_compressed_"$i
     noised=$imagename"_noised_"$i
+    underexposed=$imagename"_underexposed_"$i
     overexposed=$imagename"_overexposed_"$i
 
     convert $imagename.jpg -blur 0x$i $blurred.jpg
     convert $imagename.jpg -quality $compressionlevel% $compressed.jpg
+    convert $imagename.jpg -fx "u*0.$i" $underexposed.jpg
     convert $imagename.jpg -fx "u*1.$i" $overexposed.jpg
 
     if [ $i -eq 1 ]; then

@@ -55,12 +55,15 @@ QDir ImgQSortTest::imageDir() const
     return dir;
 }
 
-void ImgQSortTest::testParseTestImagesForOverExpoDetection()
+void ImgQSortTest::testParseTestImagesForExposureDetection()
 {
     QFileInfoList list = imageDir().entryInfoList(QStringList() << QLatin1String("test_overexposed*.jpg"),
                                                   QDir::Files, QDir::Name);
 
-    QMultiMap<int, QString> results = ImgQSortTest_ParseTestImages(DetectOverExposure, list);
+    list += imageDir().entryInfoList(QStringList() << QLatin1String("test_underexposed*.jpg"),
+                                     QDir::Files, QDir::Name);
+
+    QMultiMap<int, QString> results = ImgQSortTest_ParseTestImages(DetectExposure, list);
 
     QVERIFY(results.count(NoPickLabel)   == 0);
     QVERIFY(results.count(RejectedLabel) == 0);

@@ -57,7 +57,8 @@ public:
     bool detectBlur;            /// Enable image blur detection.
     bool detectNoise;           /// Enable image noise detection.
     bool detectCompression;     /// Enable image compression detection.
-    bool detectOverexposure;    /// Enable image over-exposure detection.
+    bool detectExposure;        /// Enable image over and under exposure detection.
+
     bool lowQRejected;          /// Assign Rejected property to low quality.
     bool mediumQPending;        /// Assign Pending property to medium quality.
     bool highQAccepted;         /// Assign Accepted property to high quality.

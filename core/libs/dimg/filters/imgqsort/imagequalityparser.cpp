@@ -102,7 +102,8 @@ void ImageQualityParser::startAnalyse()
     double noise            = 0.0;
     int    compressionLevel = 0;
     double finalQuality     = 0.0;
-    double exposureLevel    = 0.0;
+    double underLevel       = 0.0;
+    double overLevel        = 0.0;
 
     // If blur option is selected in settings, run the blur detection algorithms
     if (d->running && d->imq.detectBlur)
@@ -133,11 +134,12 @@ void ImageQualityParser::startAnalyse()
         qCDebug(DIGIKAM_DIMG_LOG) << "Amount of compression artifacts present in image is:" << compressionLevel;
     }
 
-    if (d->running && d->imq.detectOverexposure)
+    if (d->running && d->imq.detectExposure)
     {
         // Returns percents of over-exposure in the image
-        exposureLevel = exposureAmount();
-        qCDebug(DIGIKAM_DIMG_LOG) << "Over-exposure percents in image is: " << exposureLevel;
+        exposureAmount(underLevel, overLevel);
+        qCDebug(DIGIKAM_DIMG_LOG) << "Under-exposure percents in image is: " << underLevel;
+        qCDebug(DIGIKAM_DIMG_LOG) << "Over-exposure percents in image is:  " << overLevel;
     }
 
 #ifdef TRACE
@@ -165,9 +167,10 @@ void ImageQualityParser::startAnalyse()
             oms << "Compression Present:" << compressionLevel << endl;
         }
 
-        if (d->imq.detectOverexposure)
+        if (d->imq.detectExposure)
         {
-            oms << "Over-exposure Percents:" << exposureLevel << endl;
+            oms << "Under-exposure Percents:" << underLevel << endl;
+            oms << "Over-exposure Percents:"  << overLevel << endl;
         }
     }
 
@@ -178,15 +181,17 @@ void ImageQualityParser::startAnalyse()
     // All the results to have a range of 1 to 100.
     if (d->running)
     {
-        double finalBlur         = (blur * 100.0)  + ((blur2 / 32767) * 100.0);
-        double finalNoise        = noise * 100.0;
-        double finalCompression  = (compressionLevel / 1024.0) * 100.0; // we are processing 1024 pixels size image
-        double finalOverExposure = 100.0 - (exposureLevel * 100.0);
+        double finalBlur          = (blur * 100.0)  + ((blur2 / 32767) * 100.0);
+        double finalNoise         = noise * 100.0;
+        double finalCompression   = (compressionLevel / 1024.0) * 100.0; // we are processing 1024 pixels size image
+        double finalUnderExposure = 100.0 - (underLevel * 100.0);
+        double finalOverExposure  = 100.0 - (overLevel  * 100.0);
 
-        finalQuality            = finalBlur         * d->imq.blurWeight        +
-                                  finalNoise        * d->imq.noiseWeight       +
-                                  finalCompression  * d->imq.compressionWeight +
-                                  finalOverExposure * 100.0;
+        finalQuality            = finalBlur          * d->imq.blurWeight        +
+                                  finalNoise         * d->imq.noiseWeight       +
+                                  finalCompression   * d->imq.compressionWeight +
+                                  finalUnderExposure * 100.0                    +
+                                  finalOverExposure  * 100.0;
 
         // FIXME: the over-eposure detection is not handle here!
 
