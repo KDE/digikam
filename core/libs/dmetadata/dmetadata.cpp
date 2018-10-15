@@ -38,8 +38,6 @@
 
 // Local includes
 
-#include "rawinfo.h"
-#include "drawdecoder.h"
 #include "filereadwritelock.h"
 #include "metadatasettings.h"
 #include "template.h"
@@ -118,71 +116,6 @@ bool DMetadata::applyChanges(bool setVersion) const
 {
     FileWriteLocker lock(getFilePath());
     return MetaEngine::applyChanges(setVersion);
-}
-
-bool DMetadata::loadUsingRawEngine(const QString& filePath)
-{
-    RawInfo identify;
-
-    if (DRawDecoder::rawFileIdentify(identify, filePath))
-    {
-        long int num=1, den=1;
-
-        if (!identify.model.isNull())
-        {
-            setExifTagString("Exif.Image.Model", identify.model);
-        }
-
-        if (!identify.make.isNull())
-        {
-            setExifTagString("Exif.Image.Make", identify.make);
-        }
-
-        if (!identify.owner.isNull())
-        {
-            setExifTagString("Exif.Image.Artist", identify.owner);
-        }
-
-        if (identify.sensitivity != -1)
-        {
-            setExifTagLong("Exif.Photo.ISOSpeedRatings", lroundf(identify.sensitivity));
-        }
-
-        if (identify.dateTime.isValid())
-        {
-            setImageDateTime(identify.dateTime, false);
-        }
-
-        if (identify.exposureTime != -1.0)
-        {
-            convertToRationalSmallDenominator(identify.exposureTime, &num, &den);
-            setExifTagRational("Exif.Photo.ExposureTime", num, den);
-        }
-
-        if (identify.aperture != -1.0)
-        {
-            convertToRational(identify.aperture, &num, &den, 8);
-            setExifTagRational("Exif.Photo.ApertureValue", num, den);
-        }
-
-        if (identify.focalLength != -1.0)
-        {
-            convertToRational(identify.focalLength, &num, &den, 8);
-            setExifTagRational("Exif.Photo.FocalLength", num, den);
-        }
-
-        if (identify.imageSize.isValid())
-        {
-            setImageDimensions(identify.imageSize);
-        }
-
-        // A RAW image is always uncalibrated. */
-        setImageColorWorkSpace(WORKSPACE_UNCALIBRATED);
-
-        return true;
-    }
-
-    return false;
 }
 
 int DMetadata::getMSecsInfo() const
