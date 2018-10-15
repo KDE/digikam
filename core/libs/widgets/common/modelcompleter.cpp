@@ -65,7 +65,7 @@ public:
      * from the completion object.
      */
     //TODO: if we want to use models that return unique strings but not integer, add support
-    QHash<int, QString>           idToTextMap;
+    QHash<int, QString>          idToTextHash;
 };
 
 ModelCompleter::ModelCompleter(QObject* const parent)
@@ -84,7 +84,7 @@ ModelCompleter::ModelCompleter(QObject* const parent)
     setCompletionColumn(0);
 
     d->delayedModelTimer = new QTimer(this);
-    d->delayedModelTimer->setInterval(250);
+    d->delayedModelTimer->setInterval(500);
     d->delayedModelTimer->setSingleShot(true);
 
     connect(d->delayedModelTimer, SIGNAL(timeout()),
@@ -102,7 +102,7 @@ void ModelCompleter::setItemModel(QAbstractItemModel* const model, int uniqueIdR
     if (d->model)
     {
         disconnect(d->model);
-        d->idToTextMap.clear();
+        d->idToTextHash.clear();
         d->stringModel->setStringList(QStringList());
     }
 
@@ -149,7 +149,7 @@ QStringList ModelCompleter::items() const
 
 void ModelCompleter::slotDelayedModelTimer()
 {
-    QStringList stringList = d->idToTextMap.values();
+    QStringList stringList = d->idToTextHash.values();
     stringList.removeDuplicates();
     stringList.sort();
 
@@ -194,20 +194,20 @@ void ModelCompleter::slotRowsAboutToBeRemoved(const QModelIndex& parent, int sta
 
         int id = index.data(d->uniqueIdRole).toInt();
 
-        if (d->idToTextMap.contains(id))
+        if (d->idToTextHash.contains(id))
         {
-            QString itemName = d->idToTextMap[id];
-            d->idToTextMap.remove(id);
+            QString itemName = d->idToTextHash.value(id);
+            d->idToTextHash.remove(id);
             // only delete an item in the completion object if there is no other
             // item with the same display name
-            if (d->idToTextMap.keys(itemName).isEmpty())
+            if (d->idToTextHash.keys(itemName).isEmpty())
             {
                 d->delayedModelTimer->start();
             }
         }
         else
         {
-            qCWarning(DIGIKAM_WIDGETS_LOG) << "idToTextMap seems to be out of sync with the model."
+            qCWarning(DIGIKAM_WIDGETS_LOG) << "idToTextHash seems to be out of sync with the model."
                                            << "There is no entry for model index" << index;
         }
     }
@@ -240,9 +240,9 @@ void ModelCompleter::slotDataChanged(const QModelIndex& topLeft, const QModelInd
             continue;
         }
 
-        int id             = index.data(d->uniqueIdRole).toInt();
-        QString itemName   = index.data(d->displayRole).toString();
-        d->idToTextMap[id] = itemName;
+        int id              = index.data(d->uniqueIdRole).toInt();
+        QString itemName    = index.data(d->displayRole).toString();
+        d->idToTextHash[id] = itemName;
 
         d->delayedModelTimer->start();
     }
@@ -250,7 +250,7 @@ void ModelCompleter::slotDataChanged(const QModelIndex& topLeft, const QModelInd
 
 void ModelCompleter::sync(QAbstractItemModel* const model)
 {
-    d->idToTextMap.clear();
+    d->idToTextHash.clear();
 
     for (int i = 0 ; i < model->rowCount() ; ++i)
     {
@@ -264,7 +264,7 @@ void ModelCompleter::sync(QAbstractItemModel* const model)
 void ModelCompleter::sync(QAbstractItemModel* const model, const QModelIndex& index)
 {
     QString itemName = index.data(d->displayRole).toString();
-    d->idToTextMap.insert(index.data(d->uniqueIdRole).toInt(), itemName);
+    d->idToTextHash.insert(index.data(d->uniqueIdRole).toInt(), itemName);
 
     for (int i = 0 ; i < model->rowCount(index) ; ++i)
     {
