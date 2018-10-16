@@ -199,6 +199,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_exportGphotoAction       = 0;
     m_exportImageshackAction   = 0;
     m_exportImgurAction        = 0;
+    m_exportIpfsAction         = 0;
     m_exportPiwigoAction       = 0;
     m_exportRajceAction        = 0;
     m_exportSmugmugAction      = 0;
@@ -1131,6 +1132,13 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportImgurAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
+    m_exportIpfsAction = new QAction(i18n("Export to &Ipfs.."), this);
+    m_exportIpfsAction->setIcon(QIcon::fromTheme(QLatin1String("ipfs")));
+    actionCollection()->addAction(QLatin1String("export_ipfs"), m_exportIpfsAction);
+
+    connect(m_exportIpfsAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
     m_exportPiwigoAction = new QAction(i18n("Export to &Piwigo..."), this);
     m_exportPiwigoAction->setIcon(QIcon::fromTheme(QLatin1String("piwigo")));
     actionCollection()->addAction(QLatin1String("export_piwigo"), m_exportPiwigoAction);
@@ -1238,6 +1246,7 @@ QList<QAction*> DXmlGuiWindow::exportActions() const
                              << m_exportGphotoAction
                              << m_exportImageshackAction
                              << m_exportImgurAction
+                             << m_exportIpfsAction
                              << m_exportPiwigoAction
                              << m_exportRajceAction
                              << m_exportSmugmugAction
@@ -1310,6 +1319,10 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     else if (action == m_exportImgurAction)
     {
         return WSStarter::ExportImgur;
+    }
+    else if (action == m_exportIpfsAction)
+    {
+        return WSStarter::ExportIpfs;
     }
     else if (action == m_exportMediawikiAction)
     {

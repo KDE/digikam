@@ -59,7 +59,7 @@ IpfsImagesList::IpfsImagesList(QWidget* const parent)
                          i18n("Submission description"));
 
     list->setColumn(static_cast<DImagesListView::ColumnType>(IpfsImagesList::Url),
-                    i18n("IPFS URL"), true);
+                    i18n("Ipfs Url"), true);
 
     connect(list, &DImagesListView::itemDoubleClicked,
             this, &IpfsImagesList::slotDoubleClick);

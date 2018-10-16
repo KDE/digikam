@@ -248,6 +248,7 @@ protected:
     QAction*     m_exportGphotoAction;
     QAction*     m_exportImageshackAction;
     QAction*     m_exportImgurAction;
+    QAction*     m_exportIpfsAction;
     QAction*     m_exportPiwigoAction;
     QAction*     m_exportRajceAction;
     QAction*     m_exportSmugmugAction;
