@@ -48,8 +48,36 @@ namespace Digikam
 
 static const QString ipfs_upload_url = QLatin1String("https://api.globalupload.io/transport/add");
 
+class Q_DECL_HIDDEN IpfsTalker::Private
+{
+public:
+
+    explicit Private()
+    {
+        workTimer       = 0;
+        reply           = 0;
+        image           = 0;
+    }
+
+    // Work queue
+    std::queue<IpfsTalkerAction> workQueue;
+
+    // ID of timer triggering on idle (0ms).
+    int                          workTimer;
+
+    // Current QNetworkReply
+    QNetworkReply*               reply;
+
+    // Current image being uploaded
+    QFile*                       image;
+
+    // The QNetworkAccessManager used for connections
+    QNetworkAccessManager        netMngr;
+};
+
 IpfsTalker::IpfsTalker(QObject* const parent)
-    : QObject(parent)
+    : QObject(parent),
+      d(new Private)
 {
 }
 
@@ -58,16 +86,17 @@ IpfsTalker::~IpfsTalker()
     // Disconnect all signals as cancelAllWork may emit
     disconnect(this, 0, 0, 0);
     cancelAllWork();
+    delete d;
 }
 
 unsigned int IpfsTalker::workQueueLength()
 {
-    return m_work_queue.size();
+    return d->workQueue.size();
 }
 
 void IpfsTalker::queueWork(const IpfsTalkerAction& action)
 {
-    m_work_queue.push(action);
+    d->workQueue.push(action);
     startWorkTimer();
 }
 
@@ -75,33 +104,33 @@ void IpfsTalker::cancelAllWork()
 {
     stopWorkTimer();
 
-    if (m_reply)
-        m_reply->abort();
+    if (d->reply)
+        d->reply->abort();
 
     // Should error be emitted for those actions?
-    while (!m_work_queue.empty())
-        m_work_queue.pop();
+    while (!d->workQueue.empty())
+        d->workQueue.pop();
 }
 
 void IpfsTalker::uploadProgress(qint64 sent, qint64 total)
 {
     if (total > 0) // Don't divide by 0
-        emit progress((sent * 100) / total, m_work_queue.front());
+        emit progress((sent * 100) / total, d->workQueue.front());
 }
 
 void IpfsTalker::replyFinished()
 {
-    auto* reply = m_reply;
+    auto* reply = d->reply;
     reply->deleteLater();
-    m_reply     = nullptr;
+    d->reply     = nullptr;
 
-    if (this->m_image)
+    if (this->d->image)
     {
-        delete this->m_image;
-        this->m_image = nullptr;
+        delete this->d->image;
+        this->d->image = nullptr;
     }
 
-    if (m_work_queue.empty())
+    if (d->workQueue.empty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received result without request";
         return;
@@ -115,7 +144,7 @@ void IpfsTalker::replyFinished()
     {
         /* Success! */
         IpfsTalkerResult result;
-        result.action = &m_work_queue.front();
+        result.action = &d->workQueue.front();
 
         switch (result.action->type)
         {
@@ -150,34 +179,34 @@ void IpfsTalker::replyFinished()
                        .toObject()[QLatin1String("error")]
                        .toString(QLatin1String("Could not read response."));
 
-            emit error(msg, m_work_queue.front());
+            emit error(msg, d->workQueue.front());
         }
     }
 
     // Next work item.
-    m_work_queue.pop();
+    d->workQueue.pop();
     startWorkTimer();
 }
 
 void IpfsTalker::timerEvent(QTimerEvent* event)
 {
-    if (event->timerId() != m_work_timer)
+    if (event->timerId() != d->workTimer)
         return QObject::timerEvent(event);
 
     event->accept();
 
     // One-shot only.
     QObject::killTimer(event->timerId());
-    m_work_timer = 0;
+    d->workTimer = 0;
 
     doWork();
 }
 
 void IpfsTalker::startWorkTimer()
 {
-    if (!m_work_queue.empty() && m_work_timer == 0)
+    if (!d->workQueue.empty() && d->workTimer == 0)
     {
-        m_work_timer = QObject::startTimer(0);
+        d->workTimer = QObject::startTimer(0);
         emit busy(true);
     }
     else
@@ -188,40 +217,40 @@ void IpfsTalker::startWorkTimer()
 
 void IpfsTalker::stopWorkTimer()
 {
-    if (m_work_timer != 0)
+    if (d->workTimer != 0)
     {
-        QObject::killTimer(m_work_timer);
-        m_work_timer = 0;
+        QObject::killTimer(d->workTimer);
+        d->workTimer = 0;
     }
 }
 
 void IpfsTalker::doWork()
 {
-    if (m_work_queue.empty() || m_reply != nullptr)
+    if (d->workQueue.empty() || d->reply != nullptr)
         return;
 
-    auto &work = m_work_queue.front();
+    auto &work = d->workQueue.front();
 
     switch (work.type)
     {
         case IpfsTalkerActionType::IMG_UPLOAD:
         {
-            this->m_image = new QFile(work.upload.imgpath);
+            this->d->image = new QFile(work.upload.imgpath);
 
-            if (!m_image->open(QIODevice::ReadOnly))
+            if (!d->image->open(QIODevice::ReadOnly))
             {
-                delete this->m_image;
-                this->m_image = nullptr;
+                delete this->d->image;
+                this->d->image = nullptr;
 
                 /* Failed. */
-                emit error(i18n("Could not open file"), m_work_queue.front());
+                emit error(i18n("Could not open file"), d->workQueue.front());
 
-                m_work_queue.pop();
+                d->workQueue.pop();
                 return doWork();
             }
 
-            /* Set ownership to m_image to delete that as well. */
-            auto* multipart = new QHttpMultiPart(QHttpMultiPart::FormDataType, m_image);
+            /* Set ownership to d->image to delete that as well. */
+            auto* multipart = new QHttpMultiPart(QHttpMultiPart::FormDataType, d->image);
             QHttpPart title;
             title.setHeader(QNetworkRequest::ContentDispositionHeader,
                             QLatin1String("form-data; name=\"keyphrase\""));
@@ -237,21 +266,21 @@ void IpfsTalker::doWork()
                             QVariant(QString::fromLatin1("form-data; name=\"file\";  filename=\"%1\"")
                             .arg(QLatin1String(QFileInfo(work.upload.imgpath).fileName().toUtf8().toPercentEncoding()))));
             image.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("image/jpeg"));
-            image.setBodyDevice(this->m_image);
+            image.setBodyDevice(this->d->image);
             multipart->append(image);
             QNetworkRequest request(QUrl(QLatin1String("https://api.globalupload.io/transport/add")));
-            this->m_reply = this->m_net.post(request, multipart);
+            this->d->reply = this->d->netMngr.post(request, multipart);
 
             break;
         }
     }
 
-    if (this->m_reply)
+    if (this->d->reply)
     {
-        connect(m_reply, &QNetworkReply::uploadProgress,
+        connect(d->reply, &QNetworkReply::uploadProgress,
                 this, &IpfsTalker::uploadProgress);
 
-        connect(m_reply, &QNetworkReply::finished,
+        connect(d->reply, &QNetworkReply::finished,
                 this, &IpfsTalker::replyFinished);
     }
 }

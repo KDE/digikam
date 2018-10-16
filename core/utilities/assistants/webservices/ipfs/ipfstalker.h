@@ -127,20 +127,8 @@ private:
 
 private:
 
-    // Work queue
-    std::queue<IpfsTalkerAction> m_work_queue;
-
-    // ID of timer triggering on idle (0ms).
-    int                          m_work_timer = 0;
-
-    // Current QNetworkReply
-    QNetworkReply*               m_reply = nullptr;
-
-    // Current image being uploaded
-    QFile*                       m_image = nullptr;
-
-    // The QNetworkAccessManager used for connections
-    QNetworkAccessManager        m_net;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
