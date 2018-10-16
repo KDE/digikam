@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class IpfsWindow : public WSToolDialog
+class DIGIKAM_EXPORT IpfsWindow : public WSToolDialog
 {
     Q_OBJECT
 
@@ -53,14 +53,14 @@ public:
 
 public Q_SLOTS:
 
-    /* UI callbacks
-     */
+    // UI callbacks
+
     void slotUpload();
     void slotFinished();
     void slotCancel();
 
-    /* IpfsTalker callbacks
-     */
+    // IpfsTalker callbacks
+
 /*
      void apiAuthorized(bool success, const QString& username);
      void apiAuthError(const QString& msg);
@@ -80,13 +80,8 @@ private:
 
 private:
 
-    IpfsImagesList* list = nullptr;
-    IpfsTalker*     api  = nullptr;
-
-    /* Contains the ipfs username if API authorized.
-     * If not, username is null.
-     */
-    QString         username;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

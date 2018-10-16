@@ -47,46 +47,68 @@
 namespace Digikam
 {
 
-IpfsWindow::IpfsWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0)
+class Q_DECL_HIDDEN IpfsWindow::Private
 {
-    api = new IpfsTalker(this);
+public:
 
-    /* Connect API signals */
+    explicit Private()
+    {
+        list = 0;
+        api  = 0;
+    }
 
-    connect(api, &IpfsTalker::progress,
+    IpfsImagesList* list;
+    IpfsTalker*     api;
+
+    /* Contains the ipfs username if API authorized.
+     * If not, username is null.
+     */
+    QString         username;
+};
+
+IpfsWindow::IpfsWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
+    : WSToolDialog(0),
+      d(new Private)
+{
+    d->api = new IpfsTalker(this);
+
+    // Connect API signals
+
+    connect(d->api, &IpfsTalker::progress,
             this, &IpfsWindow::apiProgress);
 
-    connect(api, &IpfsTalker::success,
+    connect(d->api, &IpfsTalker::success,
             this, &IpfsWindow::apiSuccess);
 
-    connect(api, &IpfsTalker::error,
+    connect(d->api, &IpfsTalker::error,
             this, &IpfsWindow::apiError);
 
-    connect(api, &IpfsTalker::busy,
+    connect(d->api, &IpfsTalker::busy,
             this, &IpfsWindow::apiBusy);
 
-    /* | List | Auth | */
-    auto* mainLayout = new QHBoxLayout;
-    auto* mainWidget = new QWidget(this);
+    // | List | Auth |
+    auto* const mainLayout = new QHBoxLayout;
+    auto* const mainWidget = new QWidget(this);
     mainWidget->setLayout(mainLayout);
-    this->setMainWidget(mainWidget);
+    setMainWidget(mainWidget);
 
-    this->list = new IpfsImagesList;
-    this->list->setIface(iface);
-    mainLayout->addWidget(list);
+    d->list = new IpfsImagesList;
+    d->list->setIface(iface);
+    mainLayout->addWidget(d->list);
 
     /* |  Logged in as:  |
      * | <Not logged in> |
-     * |     Forget      | */
+     * |     Forget      |
+     */
 
-    auto* authLayout = new QVBoxLayout;
+    auto* const authLayout = new QVBoxLayout;
     mainLayout->addLayout(authLayout);
 
     authLayout->insertStretch(-1, 1);
 
-    /* Add anonymous upload button */
-    /* Connect UI signals */
+    /* Add anonymous upload button
+     * Connect UI signals
+     */
     connect(startButton(), &QPushButton::clicked,
             this, &IpfsWindow::slotUpload);
 
@@ -112,17 +134,18 @@ IpfsWindow::IpfsWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
 IpfsWindow::~IpfsWindow()
 {
     saveSettings();
+    delete d;    
 }
 
 void IpfsWindow::reactivate()
 {
-    list->loadImagesFromCurrentSelection();
+    d->list->loadImagesFromCurrentSelection();
     show();
 }
 
 void IpfsWindow::slotUpload()
 {
-    QList<const IpfsImagesListViewItem*> pending = this->list->getPendingItems();
+    QList<const IpfsImagesListViewItem*> pending = d->list->getPendingItems();
 
     for (auto item : pending)
     {
@@ -132,7 +155,7 @@ void IpfsWindow::slotUpload()
         action.upload.title       = item->Title();
         action.upload.description = item->Description();
 
-        api->queueWork(action);
+        d->api->queueWork(action);
     }
 }
 
@@ -143,35 +166,38 @@ void IpfsWindow::slotFinished()
 
 void IpfsWindow::slotCancel()
 {
-    api->cancelAllWork();
+    d->api->cancelAllWork();
 }
 
-/* void IpfsWindow::apiAuthorized(bool success, const QString& username) */
-// {
-    // if (success)
-    // {
-        // this->username = username;
-        // this->userLabel->setText(this->username);
-        // this->forgetButton->setEnabled(true);
-        // return;
-    // }
-//
-    // this->username = QString();
-    // this->userLabel->setText(i18n("<Not logged in>"));
-    // this->forgetButton->setEnabled(false);
-/* } */
+/*
+void IpfsWindow::apiAuthorized(bool success, const QString& username)
+{
+    if (success)
+    {
+        d->username = username;
+        d->userLabel->setText(d->username);
+        d->forgetButton->setEnabled(true);
+        return;
+    }
 
-/* void IpfsWindow::apiAuthError(const QString& msg) */
-// {
-    // QMessageBox::critical(this,
-                          // i18n("Authorization Failed"),
-                          // i18n("Failed to log into IPFS: %1\n", msg));
-// }
-/*  */
+    d->username = QString();
+    d->userLabel->setText(i18n("<Not logged in>"));
+    d->forgetButton->setEnabled(false);
+}
+*/
+
+/*
+void IpfsWindow::apiAuthError(const QString& msg)
+{
+    QMessageBox::critical(this,
+                          i18n("Authorization Failed"),
+                          i18n("Failed to log into IPFS: %1\n", msg));
+}
+*/
 
 void IpfsWindow::apiProgress(unsigned int /*percent*/, const IpfsTalkerAction& action)
 {
-    list->processing(QUrl::fromLocalFile(action.upload.imgpath));
+    d->list->processing(QUrl::fromLocalFile(action.upload.imgpath));
 }
 
 void IpfsWindow::apiRequestPin(const QUrl& url)
@@ -181,15 +207,15 @@ void IpfsWindow::apiRequestPin(const QUrl& url)
 
 void IpfsWindow::apiSuccess(const IpfsTalkerResult& result)
 {
-    list->slotSuccess(result);
+    d->list->slotSuccess(result);
 }
 
 void IpfsWindow::apiError(const QString& msg, const IpfsTalkerAction& action)
 {
-    list->processed(QUrl::fromLocalFile(action.upload.imgpath), false);
+    d->list->processed(QUrl::fromLocalFile(action.upload.imgpath), false);
 
-    /* 1 here because the current item is still in the queue. */
-    if (api->workQueueLength() <= 1)
+    // 1 here because the current item is still in the queue.
+    if (d->api->workQueueLength() <= 1)
     {
         QMessageBox::critical(this,
                               i18n("Uploading Failed"),
@@ -197,14 +223,15 @@ void IpfsWindow::apiError(const QString& msg, const IpfsTalkerAction& action)
         return;
     }
 
-    QMessageBox::StandardButton cont =
-            QMessageBox::question(this,
-                                  i18n("Uploading Failed"),
-                                  i18n("Failed to upload photo to IPFS: %1\n"
-                                       "Do you want to continue?", msg));
+    QMessageBox::StandardButton cont = QMessageBox::question(this,
+                                           i18n("Uploading Failed"),
+                                           i18n("Failed to upload photo to IPFS: %1\n"
+                                                "Do you want to continue?", msg));
 
     if (cont != QMessageBox::Yes)
-        api->cancelAllWork();
+    {
+        d->api->cancelAllWork();
+    }
 }
 
 void IpfsWindow::apiBusy(bool busy)
@@ -216,7 +243,9 @@ void IpfsWindow::apiBusy(bool busy)
 void IpfsWindow::closeEvent(QCloseEvent* e)
 {
     if (!e)
+    {
         return;
+    }
 
     slotFinished();
     e->accept();
@@ -226,8 +255,8 @@ void IpfsWindow::readSettings()
 {
     KConfig config;
     KConfigGroup groupAuth = config.group("IPFS Auth");
-    username = groupAuth.readEntry("username", QString());
-    // apiAuthorized(!username.isEmpty(), username);
+    d->username               = groupAuth.readEntry("UserName", QString());
+    // apiAuthorized(!d->username.isEmpty(), d->username);
 
     winId();
     KConfigGroup groupDialog = config.group("IPFS Dialog");
@@ -238,8 +267,8 @@ void IpfsWindow::readSettings()
 void IpfsWindow::saveSettings()
 {
     KConfig config;
-    KConfigGroup groupAuth = config.group("IPFS Auth");
-    groupAuth.writeEntry("username", username);
+    KConfigGroup groupAuth   = config.group("IPFS Auth");
+    groupAuth.writeEntry("UserName", d->username);
 
     KConfigGroup groupDialog = config.group("IPFS Dialog");
     KWindowConfig::saveWindowSize(windowHandle(), groupDialog);
