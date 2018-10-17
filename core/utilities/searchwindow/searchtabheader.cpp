@@ -39,6 +39,7 @@
 #include <QInputDialog>
 #include <QIcon>
 #include <QMenu>
+#include <QContextMenuEvent>
 
 // KDE includes
 
