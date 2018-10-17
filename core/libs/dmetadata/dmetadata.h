@@ -152,14 +152,6 @@ public:
     /// Returns true if valid fields were read.
     bool getCopyrightInformation(Template& t) const;
 
-    IptcCoreContactInfo getCreatorContactInfo() const;
-    bool setCreatorContactInfo(const IptcCoreContactInfo& info) const;
-
-    IptcCoreLocationInfo getIptcCoreLocation() const;
-    bool setIptcCoreLocation(const IptcCoreLocationInfo& location) const;
-
-    QStringList getIptcCoreSubjects() const;
-
     /**
      * Return a string with Lens mounted on the front of camera.
      * There no standard Exif tag for Lens information.
@@ -168,42 +160,7 @@ public:
      * camera model/maker.
      */
     QString getLensDescription() const;
-
-    /**
-     * Reads an IccProfile that is described or embedded in the metadata.
-     * This method does not retrieve profiles embedded in the image but not the metadata,
-     * e.g. embedded profiles in JPEG images.
-     * Returns a null profile if no profile is found.
-     */
-    IccProfile getIccProfile() const;
-
-    /**
-     * Sets the IccProfile embedded in the Exif metadata.
-     */
-    bool setIccProfile(const IccProfile& profile);
-
-    /**
-     * Remove the Exif color space identification from the image.
-     */
-    bool removeExifColorSpace() const;
-
     PhotoInfoContainer getPhotographInformation() const;
-
-    /**
-     * Returns video metadata from Xmp tags.
-     */
-    VideoInfoContainer getVideoInformation() const;
-
-    /**
-     * Returns millisecond time-stamp from Exif tags or 0 if not found.
-     */
-    int  getMSecsInfo() const;
-
-    /**
-     * Extract milliseconds time-stamp of photo from an Exif tag and store it to 'ms'.
-     * Returns true if data are extracted.
-     */
-    bool mSecTimeStamp(const char* const exifTagName, int& ms) const;
 
     /**
      * Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
@@ -229,6 +186,63 @@ public:
     static double apexShutterSpeedToExposureTime(double shutterSpeed);
 
     static MetaEngine::AltLangMap toAltLangMap(const QVariant& var);
+
+public: // EXIF helpers
+
+    /**
+     * Reads an IccProfile that is described or embedded in the metadata.
+     * This method does not retrieve profiles embedded in the image but from the Exif metadata,
+     * e.g. embedded profiles in JPEG images.
+     * Returns a null profile if no profile is found.
+     */
+    IccProfile getIccProfile() const;
+
+    /**
+     * Sets the IccProfile embedded in the Exif metadata.
+     */
+    bool setIccProfile(const IccProfile& profile);
+
+    /**
+     * Remove the Exif color space identification from the image.
+     */
+    bool removeExifColorSpace() const;
+
+    /**
+     * Returns millisecond time-stamp from Exif tags or 0 if not found.
+     */
+    int  getMSecsInfo() const;
+
+    /**
+     * Extract milliseconds time-stamp of photo from an Exif tag and store it to 'ms'.
+     * Returns true if data are extracted.
+     */
+    bool mSecTimeStamp(const char* const exifTagName, int& ms) const;
+
+    bool removeExifTags(const QStringList& tagFilters);
+
+private:
+
+    QString getExifTagStringFromTagsList(const QStringList& tagsList) const;
+
+public: // IPTC helpers
+
+    IptcCoreContactInfo getCreatorContactInfo() const;
+    bool setCreatorContactInfo(const IptcCoreContactInfo& info) const;
+
+    IptcCoreLocationInfo getIptcCoreLocation() const;
+    bool setIptcCoreLocation(const IptcCoreLocationInfo& location) const;
+
+    QStringList getIptcCoreSubjects() const;
+
+    bool removeIptcTags(const QStringList& tagFilters);
+
+private:
+
+    bool setIptcTag(const QString& text, int maxLength, const char* const debugLabel, const char* const tagKey) const;
+    QVariant fromIptcEmulateList(const char* const iptcTagName) const;
+    QVariant fromIptcEmulateLangAlt(const char* const iptcTagName) const;
+
+public: // XMP helpers
 
     // These methods have been factored to libMetaEngine 2.3.0. Remove it after KDE 4.8.2
 
@@ -305,9 +319,19 @@ public:
      */
     bool removeXmpSubCategories(const QStringList& categoriesToRemove);
 
-    bool removeExifTags(const QStringList& tagFilters);
-    bool removeIptcTags(const QStringList& tagFilters);
     bool removeXmpTags(const QStringList& tagFilters);
+
+private:
+
+    QVariant fromXmpList(const char* const xmpTagName) const;
+    QVariant fromXmpLangAlt(const char* const xmpTagName) const;
+
+public: // Video helpers
+
+    /**
+     * Returns video metadata from Xmp tags.
+     */
+    VideoInfoContainer getVideoInformation() const;
 
     /**
      * Helper method to translate enum values to user presentable strings
@@ -316,16 +340,9 @@ public:
 
 private:
 
-    bool setIptcTag(const QString& text, int maxLength, const char* const debugLabel, const char* const tagKey) const;
-
     QVariant fromExifOrXmp(const char* const exifTagName, const char* const xmpTagName) const;
     QVariant fromIptcOrXmp(const char* const iptcTagName, const char* const xmpTagName) const;
-    QVariant fromXmpList(const char* const xmpTagName)                                  const;
-    QVariant fromIptcEmulateList(const char* const iptcTagName)                         const;
-    QVariant fromXmpLangAlt(const char* const xmpTagName)                               const;
-    QVariant fromIptcEmulateLangAlt(const char* const iptcTagName)                      const;
     QVariant toStringListVariant(const QStringList& list)                               const;
-    QString getExifTagStringFromTagsList(const QStringList& tagsList)                   const;
 };
 
 } // namespace Digikam
