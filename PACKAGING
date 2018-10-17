@@ -54,7 +54,7 @@ Notice to make release tarballs from GIT
 
     https://phabricator.kde.org/maniphest/task/edit/form/2/
 
-    Don't forget to join all file checksums.
+    Don't forget to join all file sha256 checksums generated in file sha256_release.sum.
 
 10/ Create bundles files with signatures for Linux, MacOS, and Windows. See README.BUNDLES for details.
     Use same worflow than source tarball.
