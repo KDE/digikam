@@ -533,13 +533,12 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             }
         }
 
-        if (qimage.isNull() || (fromEmbeddedPreview && qimage.isGrayscale()))
+        if (qimage.isNull())
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load half preview with libraw";
 
             //TODO: Use DImg based loader instead?
             DRawDecoder::loadHalfPreview(qimage, path);
-            fromEmbeddedPreview = false;
         }
 
         // Special case with DNG file. See bug #338081
