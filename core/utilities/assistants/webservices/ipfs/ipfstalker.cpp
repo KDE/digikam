@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QQueue>
 #include <QFileInfo>
 #include <QHttpMultiPart>
 #include <QJsonDocument>
@@ -54,13 +55,13 @@ public:
 
     explicit Private()
     {
-        workTimer       = 0;
-        reply           = 0;
-        image           = 0;
+        workTimer = 0;
+        reply     = 0;
+        image     = 0;
     }
 
     // Work queue
-    std::queue<IpfsTalkerAction> workQueue;
+    QQueue<IpfsTalkerAction>     workQueue;
 
     // ID of timer triggering on idle (0ms).
     int                          workTimer;
@@ -96,7 +97,7 @@ unsigned int IpfsTalker::workQueueLength()
 
 void IpfsTalker::queueWork(const IpfsTalkerAction& action)
 {
-    d->workQueue.push(action);
+    d->workQueue.enqueue(action);
     startWorkTimer();
 }
 
@@ -109,13 +110,13 @@ void IpfsTalker::cancelAllWork()
 
     // Should error be emitted for those actions?
     while (!d->workQueue.empty())
-        d->workQueue.pop();
+        d->workQueue.dequeue();
 }
 
 void IpfsTalker::uploadProgress(qint64 sent, qint64 total)
 {
     if (total > 0) // Don't divide by 0
-        emit progress((sent * 100) / total, d->workQueue.front());
+        emit progress((sent * 100) / total, d->workQueue.first());
 }
 
 void IpfsTalker::replyFinished()
@@ -124,10 +125,10 @@ void IpfsTalker::replyFinished()
     reply->deleteLater();
     d->reply     = nullptr;
 
-    if (this->d->image)
+    if (d->image)
     {
-        delete this->d->image;
-        this->d->image = nullptr;
+        delete d->image;
+        d->image = nullptr;
     }
 
     if (d->workQueue.empty())
@@ -144,7 +145,7 @@ void IpfsTalker::replyFinished()
     {
         /* Success! */
         IpfsTalkerResult result;
-        result.action = &d->workQueue.front();
+        result.action = &d->workQueue.first();
 
         switch (result.action->type)
         {
@@ -179,12 +180,12 @@ void IpfsTalker::replyFinished()
                        .toObject()[QLatin1String("error")]
                        .toString(QLatin1String("Could not read response."));
 
-            emit error(msg, d->workQueue.front());
+            emit error(msg, d->workQueue.first());
         }
     }
 
     // Next work item.
-    d->workQueue.pop();
+    d->workQueue.dequeue();
     startWorkTimer();
 }
 
@@ -229,23 +230,23 @@ void IpfsTalker::doWork()
     if (d->workQueue.empty() || d->reply != nullptr)
         return;
 
-    auto &work = d->workQueue.front();
+    auto &work = d->workQueue.first();
 
     switch (work.type)
     {
         case IpfsTalkerActionType::IMG_UPLOAD:
         {
-            this->d->image = new QFile(work.upload.imgpath);
+            d->image = new QFile(work.upload.imgpath);
 
             if (!d->image->open(QIODevice::ReadOnly))
             {
-                delete this->d->image;
-                this->d->image = nullptr;
+                delete d->image;
+                d->image = nullptr;
 
                 /* Failed. */
-                emit error(i18n("Could not open file"), d->workQueue.front());
+                emit error(i18n("Could not open file"), d->workQueue.first());
 
-                d->workQueue.pop();
+                d->workQueue.dequeue();
                 return doWork();
             }
 
@@ -266,16 +267,16 @@ void IpfsTalker::doWork()
                             QVariant(QString::fromLatin1("form-data; name=\"file\";  filename=\"%1\"")
                             .arg(QLatin1String(QFileInfo(work.upload.imgpath).fileName().toUtf8().toPercentEncoding()))));
             image.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("image/jpeg"));
-            image.setBodyDevice(this->d->image);
+            image.setBodyDevice(d->image);
             multipart->append(image);
             QNetworkRequest request(QUrl(QLatin1String("https://api.globalupload.io/transport/add")));
-            this->d->reply = this->d->netMngr.post(request, multipart);
+            d->reply = d->netMngr.post(request, multipart);
 
             break;
         }
     }
 
-    if (this->d->reply)
+    if (d->reply)
     {
         connect(d->reply, &QNetworkReply::uploadProgress,
                 this, &IpfsTalker::uploadProgress);
