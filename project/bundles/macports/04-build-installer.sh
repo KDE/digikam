@@ -482,6 +482,9 @@ shasum -a1 "$TARGET_PKG_FILE"   | { read first rest ; echo $first ; }       >> $
 echo -n "SHA256 sum : "                                                     >> $TARGET_PKG_FILE.sum
 shasum -a256 "$TARGET_PKG_FILE" | { read first rest ; echo $first ; }       >> $TARGET_PKG_FILE.sum
 
+# Checksums to post on Phabricator at release time.
+shasum -a256 "$TARGET_PKG_FILE" > $BUILDDIR/bundle/sha256_release.sum
+
 if [[ $DK_SIGN = 1 ]] ; then
 
     cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -sabv "$TARGET_PKG_FILE"
@@ -496,6 +499,9 @@ if [[ $DK_SIGN = 1 ]] ; then
     shasum -a1 "$TARGET_PKG_FILE.sig"   | { read first rest ; echo $first ; }       >> $TARGET_PKG_FILE.sum
     echo -n "SHA256 sum : "                                                         >> $TARGET_PKG_FILE.sum
     shasum -a256 "$TARGET_PKG_FILE.sig" | { read first rest ; echo $first ; }       >> $TARGET_PKG_FILE.sum
+
+    # Checksums to post on Phabricator at release time.
+    shasum -a256 "$TARGET_PKG_FILE.sig" >> $BUILDDIR/bundle/sha256_release.sum
 
 fi
 
