@@ -88,7 +88,8 @@ public:
           : interpolate(false),
             interpolationDstTime(0),
             maxGapTime(0),
-            secondsOffset(0)
+            secondsOffset(0),
+            timeZoneOffset(0)
         {
         }
 
@@ -96,6 +97,8 @@ public:
         int  interpolationDstTime;
         int  maxGapTime;
         int  secondsOffset;
+        int  timeZoneOffset;
+
     };
 
 public:

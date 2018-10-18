@@ -616,4 +616,5 @@ BUGFIXES:
 550 ==> 397386 - Add a separate checkbox to "Show Rating".
 551 ==> 335870 - Nexus 4 in PTP mode gets error: The specified camera ("/org/kde/solid/udev/...") is not supported.
 552 ==> 399917 - Fails to build with QT5.7.1
-553 ==> 
+553 ==> 399762 - Digikam Geolocation Correlator ignores time offset.
+554 ==> 
