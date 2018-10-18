@@ -33,6 +33,7 @@ set(libcombotools_SRCS
     combo/comboboxutilities.cpp
     combo/dcombobox.cpp
     combo/squeezedcombobox.cpp
+    combo/timezonecombobox.cpp
 )
 
 set(libcolorstools_SRCS

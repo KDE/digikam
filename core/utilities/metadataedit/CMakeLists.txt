@@ -38,7 +38,6 @@ set(libmetadataedit_SRCS exif/exifeditwidget.cpp
                          xmp/xmpproperties.cpp
 
                          dialog/metadatacheckbox.cpp
-                         dialog/timezonecombobox.cpp
                          dialog/altlangstringedit.cpp
                          dialog/multistringsedit.cpp
                          dialog/multivaluesedit.cpp
