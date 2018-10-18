@@ -30,16 +30,26 @@ TimeZoneComboBox::TimeZoneComboBox(QWidget* const parent)
     : QComboBox(parent)
 {
     QStringList timeZones;
-    timeZones << QLatin1String("")       << QLatin1String("-12:00") << QLatin1String("-11:00") << QLatin1String("-10:00")
-              << QLatin1String("-09:30") << QLatin1String("-09:00") << QLatin1String("-08:00") << QLatin1String("-07:00")
-              << QLatin1String("-06:00") << QLatin1String("-05:00") << QLatin1String("-04:30") << QLatin1String("-04:00")
-              << QLatin1String("-03:30") << QLatin1String("-03:00") << QLatin1String("-02:00") << QLatin1String("-01:00")
-              << QLatin1String("+00:00") << QLatin1String("+01:00") << QLatin1String("+02:00") << QLatin1String("+03:00")
-              << QLatin1String("+03:30") << QLatin1String("+04:00") << QLatin1String("+04:30") << QLatin1String("+05:00")
-              << QLatin1String("+05:30") << QLatin1String("+05:45") << QLatin1String("+06:00") << QLatin1String("+06:30")
-              << QLatin1String("+07:00") << QLatin1String("+08:00") << QLatin1String("+09:00") << QLatin1String("+09:30")
-              << QLatin1String("+10:00") << QLatin1String("+10:30") << QLatin1String("+11:00") << QLatin1String("+11:30")
-              << QLatin1String("+12:00") << QLatin1String("+12:45") << QLatin1String("+13:00") << QLatin1String("+13:45")
+    timeZones << QLatin1String("")       << QLatin1String("-12:00")
+              << QLatin1String("-11:00") << QLatin1String("-10:00")
+              << QLatin1String("-09:30") << QLatin1String("-09:00")
+              << QLatin1String("-08:00") << QLatin1String("-07:00")
+              << QLatin1String("-06:00") << QLatin1String("-05:00")
+              << QLatin1String("-04:30") << QLatin1String("-04:00")
+              << QLatin1String("-03:30") << QLatin1String("-03:00")
+              << QLatin1String("-02:00") << QLatin1String("-01:00")
+              << QLatin1String("+00:00") << QLatin1String("+01:00")
+              << QLatin1String("+02:00") << QLatin1String("+03:00")
+              << QLatin1String("+03:30") << QLatin1String("+04:00")
+              << QLatin1String("+04:30") << QLatin1String("+05:00")
+              << QLatin1String("+05:30") << QLatin1String("+05:45")
+              << QLatin1String("+06:00") << QLatin1String("+06:30")
+              << QLatin1String("+07:00") << QLatin1String("+08:00")
+              << QLatin1String("+09:00") << QLatin1String("+09:30")
+              << QLatin1String("+10:00") << QLatin1String("+10:30")
+              << QLatin1String("+11:00") << QLatin1String("+11:30")
+              << QLatin1String("+12:00") << QLatin1String("+12:45")
+              << QLatin1String("+13:00") << QLatin1String("+13:45")
               << QLatin1String("+14:00");
 
     addItems(timeZones);
@@ -97,7 +107,7 @@ int TimeZoneComboBox::timeZoneOffset() const
 
     int offset = hh*3600 + mm*60;
 
-    if (tz[0] == QLatin1String("-"))
+    if (tz[0] == QLatin1Char('-'))
     {
         offset = (-1) * offset;
     }
