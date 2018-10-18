@@ -29,13 +29,13 @@ set(libdmetadata_SRCS
     metaengine_xmp.cpp
     metaengine_previews.cpp
     metaengine_rotation.cpp
+    metaenginesettings.cpp
+    metaenginesettingscontainer.cpp
     dmetadata.cpp
     dmetadata_ffmpeg.cpp
     dmetadata_libraw.cpp
     dmetadatasettings.cpp
     dmetadatasettingscontainer.cpp
-    metadatasettings.cpp
-    metadatasettingscontainer.cpp
     geodetictools.cpp
     containers/metadatainfo.cpp
     containers/infocontainer.cpp

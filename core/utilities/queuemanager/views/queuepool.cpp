@@ -39,7 +39,7 @@
 #include "dmessagebox.h"
 #include "applicationsettings.h"
 #include "iccsettings.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "ddragobjects.h"
 #include "queuelist.h"
 #include "workflowmanager.h"
@@ -540,7 +540,7 @@ void QueuePool::applySettings()
 
             // Reset Exif Orientation settings.
             QueueSettings prm = queue->settings();
-            prm.exifSetOrientation = MetadataSettings::instance()->settings().exifRotate;
+            prm.exifSetOrientation = MetaEngineSettings::instance()->settings().exifRotate;
 
             // Apply Color Management rules to RAW images decoding settings
 

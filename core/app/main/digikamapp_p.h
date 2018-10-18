@@ -110,7 +110,7 @@
 #include "tagscache.h"
 #include "tagsactionmngr.h"
 #include "databaseserverstarter.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "statusbarprogresswidget.h"
 #include "dbmigrationdlg.h"
 #include "progressmanager.h"

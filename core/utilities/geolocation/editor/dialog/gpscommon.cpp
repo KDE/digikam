@@ -34,8 +34,8 @@
 
 #include "digikam_debug.h"
 #include "dmetadata.h"
-#include "metadatasettings.h"
-#include "metadatasettingscontainer.h"
+#include "metaenginesettings.h"
+#include "metaenginesettingscontainer.h"
 #include "dmessagebox.h"
 
 namespace Digikam
@@ -103,8 +103,8 @@ void coordinatesToClipboard(const GeoCoordinates& coordinates,
 
 bool checkSidecarSettings()
 {
-    if ( (MetadataSettings::instance()->settings().metadataWritingMode != DMetadata::WRITETOIMAGEONLY) &&
-         (!MetadataSettings::instance()->settings().useXMPSidecar4Reading) )
+    if ( (MetaEngineSettings::instance()->settings().metadataWritingMode != DMetadata::WRITETOIMAGEONLY) &&
+         (!MetaEngineSettings::instance()->settings().useXMPSidecar4Reading) )
     {
         const int result = DMessageBox::showContinueCancel(QMessageBox::Warning,
                                                            QApplication::activeWindow(),

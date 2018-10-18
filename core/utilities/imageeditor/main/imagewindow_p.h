@@ -106,7 +106,7 @@
 #include "dnotificationwrapper.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "metadataedit.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"

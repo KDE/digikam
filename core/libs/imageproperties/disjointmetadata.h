@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 
 namespace Digikam
 {
@@ -241,7 +241,7 @@ public:
         apply any changes.
      */
     bool willWriteMetadata(WriteMode writeMode,
-                           const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings()) const;
+                           const MetaEngineSettingsContainer& settings = MetaEngineSettings::instance()->settings()) const;
 
     /**
      * @brief changedFlags - used for selective metadata write. The result will be passed to metadatahub and it will

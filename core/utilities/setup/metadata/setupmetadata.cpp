@@ -59,7 +59,7 @@
 #include "digikam_debug.h"
 #include "metaengine.h"
 #include "metadatapanel.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "setuputils.h"
 
 namespace Digikam
@@ -664,29 +664,29 @@ void SetupMetadata::setActiveSubTab(int tab)
 
 void SetupMetadata::applySettings()
 {
-    MetadataSettings* const mSettings = MetadataSettings::instance();
+    MetaEngineSettings* const mSettings = MetaEngineSettings::instance();
 
     if (!mSettings)
     {
         return;
     }
 
-    MetadataSettingsContainer set;
+    MetaEngineSettingsContainer set;
 
-    set.rotationBehavior = MetadataSettingsContainer::RotateByInternalFlag;
+    set.rotationBehavior = MetaEngineSettingsContainer::RotateByInternalFlag;
 
     if (d->allowRotateByMetadata->isChecked())
     {
-        set.rotationBehavior |= MetadataSettingsContainer::RotateByMetadataFlag;
+        set.rotationBehavior |= MetaEngineSettingsContainer::RotateByMetadataFlag;
     }
 
     if (d->rotateByContents->isChecked())
     {
-        set.rotationBehavior |= MetadataSettingsContainer::RotateByLosslessRotation;
+        set.rotationBehavior |= MetaEngineSettingsContainer::RotateByLosslessRotation;
 
         if (d->allowLossyRotate->isChecked())
         {
-            set.rotationBehavior |= MetadataSettingsContainer::RotateByLossyRotation;
+            set.rotationBehavior |= MetaEngineSettingsContainer::RotateByLossyRotation;
         }
     }
 
@@ -750,16 +750,16 @@ void SetupMetadata::applySettings()
 
 void SetupMetadata::readSettings()
 {
-    MetadataSettings* const mSettings = MetadataSettings::instance();
+    MetaEngineSettings* const mSettings = MetaEngineSettings::instance();
 
     if (!mSettings)
     {
         return;
     }
 
-    MetadataSettingsContainer set = mSettings->settings();
+    MetaEngineSettingsContainer set = mSettings->settings();
 
-    if (set.rotationBehavior & MetadataSettingsContainer::RotatingPixels)
+    if (set.rotationBehavior & MetaEngineSettingsContainer::RotatingPixels)
     {
         d->rotateByContents->setChecked(true);
     }
@@ -768,8 +768,8 @@ void SetupMetadata::readSettings()
         d->rotateByFlag->setChecked(true);
     }
 
-    d->allowRotateByMetadata->setChecked(set.rotationBehavior & MetadataSettingsContainer::RotateByMetadataFlag);
-    d->allowLossyRotate->setChecked(set.rotationBehavior & MetadataSettingsContainer::RotateByLossyRotation);
+    d->allowRotateByMetadata->setChecked(set.rotationBehavior & MetaEngineSettingsContainer::RotateByMetadataFlag);
+    d->allowLossyRotate->setChecked(set.rotationBehavior & MetaEngineSettingsContainer::RotateByLossyRotation);
 
     d->exifAutoRotateOriginal = set.exifRotate;
     d->exifRotateBox->setChecked(d->exifAutoRotateOriginal);

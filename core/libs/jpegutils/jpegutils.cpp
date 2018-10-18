@@ -86,7 +86,7 @@ extern "C"
 
 #include "digikam_debug.h"
 #include "dimg.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "filereadwritelock.h"
 
 #ifdef Q_OS_WIN
@@ -542,7 +542,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotati
     {
         // See bug #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
 
-        if (!MetadataSettings::instance()->settings().updateFileTimeStamp)
+        if (!MetaEngineSettings::instance()->settings().updateFileTimeStamp)
         {
             struct utimbuf ut;
             ut.modtime = st.st_mtime;

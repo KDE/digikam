@@ -82,7 +82,7 @@
 #include "iofilesettings.h"
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "metadataedit.h"
 #include "presentationmngr.h"
 #include "savingcontext.h"

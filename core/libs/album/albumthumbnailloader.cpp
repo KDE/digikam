@@ -41,7 +41,7 @@
 #include "albummanager.h"
 #include "applicationsettings.h"
 #include "imageinfo.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 

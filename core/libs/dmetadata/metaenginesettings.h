@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-08-20
- * Description : central place for Metadata settings
+ * Description : central place for MetaEngine settings
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_META_DATA_SETTINGS_H
-#define DIGIKAM_META_DATA_SETTINGS_H
+#ifndef DIGIKAM_META_ENGINE_SETTINGS_H
+#define DIGIKAM_META_ENGINE_SETTINGS_H
 
 // Qt includes
 
@@ -31,12 +31,12 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "metadatasettingscontainer.h"
+#include "metaenginesettingscontainer.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT MetadataSettings : public QObject
+class DIGIKAM_EXPORT MetaEngineSettings : public QObject
 {
     Q_OBJECT
 
@@ -45,17 +45,17 @@ public:
     /**
      * Global container for Metadata settings. All accessor methods are thread-safe.
      */
-    static MetadataSettings* instance();
+    static MetaEngineSettings* instance();
 
     /**
      * Returns the current Metadata settings.
      */
-    MetadataSettingsContainer settings() const;
+    MetaEngineSettingsContainer settings() const;
 
     /**
      * Sets the current Metadata settings and writes them to config.
      */
-    void setSettings(const MetadataSettingsContainer& settings);
+    void setSettings(const MetaEngineSettingsContainer& settings);
 
     /**
      * Shortcut to get exif rotation settings from container.
@@ -65,12 +65,12 @@ public:
 Q_SIGNALS:
 
     void settingsChanged();
-    void settingsChanged(const MetadataSettingsContainer& current, const MetadataSettingsContainer& previous);
+    void settingsChanged(const MetaEngineSettingsContainer& current, const MetaEngineSettingsContainer& previous);
 
 private:
 
-    explicit MetadataSettings();
-    ~MetadataSettings();
+    explicit MetaEngineSettings();
+    ~MetaEngineSettings();
 
     void readFromConfig();
 
@@ -79,9 +79,9 @@ private:
     class Private;
     Private* const d;
 
-    friend class MetadataSettingsCreator;
+    friend class MetaEngineSettingsCreator;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_META_DATA_SETTINGS_H
+#endif // DIGIKAM_META_ENGINE_SETTINGS_H

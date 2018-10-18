@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-08-20
- * Description : central place for Metadata settings
+ * Description : central place for MetaEngine settings
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 
 // Qt includes
 
@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN MetadataSettings::Private
+class Q_DECL_HIDDEN MetaEngineSettings::Private
 {
 public:
 
@@ -51,38 +51,38 @@ public:
     {
     }
 
-    MetadataSettingsContainer settings;
-    QMutex                    mutex;
+    MetaEngineSettingsContainer settings;
+    QMutex                      mutex;
 
-    const QString             configGroup;
+    const QString               configGroup;
 
 public:
 
-    MetadataSettingsContainer readFromConfig() const;
-    void                      writeToConfig() const;
-    MetadataSettingsContainer setSettings(const MetadataSettingsContainer& s);
+    MetaEngineSettingsContainer readFromConfig() const;
+    void                        writeToConfig() const;
+    MetaEngineSettingsContainer setSettings(const MetaEngineSettingsContainer& s);
 };
 
-MetadataSettingsContainer MetadataSettings::Private::readFromConfig() const
+MetaEngineSettingsContainer MetaEngineSettings::Private::readFromConfig() const
 {
-    MetadataSettingsContainer s;
+    MetaEngineSettingsContainer s;
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroup);
     s.readFromConfig(group);
     return s;
 }
 
-void MetadataSettings::Private::writeToConfig() const
+void MetaEngineSettings::Private::writeToConfig() const
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroup);
     settings.writeToConfig(group);
 }
 
-MetadataSettingsContainer MetadataSettings::Private::setSettings(const MetadataSettingsContainer& s)
+MetaEngineSettingsContainer MetaEngineSettings::Private::setSettings(const MetaEngineSettingsContainer& s)
 {
     QMutexLocker lock(&mutex);
-    MetadataSettingsContainer old;
+    MetaEngineSettingsContainer old;
     old      = settings;
     settings = s;
     return old;
@@ -90,58 +90,58 @@ MetadataSettingsContainer MetadataSettings::Private::setSettings(const MetadataS
 
 // -----------------------------------------------------------------------------------------------
 
-class Q_DECL_HIDDEN MetadataSettingsCreator
+class Q_DECL_HIDDEN MetaEngineSettingsCreator
 {
 public:
 
-    MetadataSettings object;
+    MetaEngineSettings object;
 };
 
-Q_GLOBAL_STATIC(MetadataSettingsCreator, metatadaSettingsCreator)
+Q_GLOBAL_STATIC(MetaEngineSettingsCreator, metaEngineSettingsCreator)
 
 // -----------------------------------------------------------------------------------------------
 
-MetadataSettings* MetadataSettings::instance()
+MetaEngineSettings* MetaEngineSettings::instance()
 {
-    return &metatadaSettingsCreator->object;
+    return &metaEngineSettingsCreator->object;
 }
 
-MetadataSettings::MetadataSettings()
+MetaEngineSettings::MetaEngineSettings()
     : d(new Private)
 {
     readFromConfig();
-    qRegisterMetaType<MetadataSettingsContainer>("MetadataSettingsContainer");
+    qRegisterMetaType<MetaEngineSettingsContainer>("MetaEngineSettingsContainer");
 }
 
-MetadataSettings::~MetadataSettings()
+MetaEngineSettings::~MetaEngineSettings()
 {
     delete d;
 }
 
-MetadataSettingsContainer MetadataSettings::settings() const
+MetaEngineSettingsContainer MetaEngineSettings::settings() const
 {
     QMutexLocker lock(&d->mutex);
-    MetadataSettingsContainer s(d->settings);
+    MetaEngineSettingsContainer s(d->settings);
     return s;
 }
 
-bool MetadataSettings::exifRotate() const
+bool MetaEngineSettings::exifRotate() const
 {
     return d->settings.exifRotate;
 }
 
-void MetadataSettings::setSettings(const MetadataSettingsContainer& settings)
+void MetaEngineSettings::setSettings(const MetaEngineSettingsContainer& settings)
 {
-    MetadataSettingsContainer old = d->setSettings(settings);
+    MetaEngineSettingsContainer old = d->setSettings(settings);
     emit settingsChanged();
     emit settingsChanged(settings, old);
     d->writeToConfig();
 }
 
-void MetadataSettings::readFromConfig()
+void MetaEngineSettings::readFromConfig()
 {
-    MetadataSettingsContainer s   = d->readFromConfig();
-    MetadataSettingsContainer old = d->setSettings(s);
+    MetaEngineSettingsContainer s   = d->readFromConfig();
+    MetaEngineSettingsContainer old = d->setSettings(s);
     emit settingsChanged();
     emit settingsChanged(s, old);
 }

@@ -115,7 +115,7 @@ void ImageWindow::slotPresentation()
 void ImageWindow::slideShow(SlideShowSettings& settings)
 {
     m_cancelSlideShow   = false;
-    settings.exifRotate = MetadataSettings::instance()->settings().exifRotate;
+    settings.exifRotate = MetaEngineSettings::instance()->settings().exifRotate;
 
     if (!d->imageInfoModel->isEmpty())
     {

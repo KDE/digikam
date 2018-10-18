@@ -55,7 +55,7 @@
 #include "dimgpreviewitem.h"
 #include "imageinfo.h"
 #include "fileactionmngr.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "regionframeitem.h"
 #include "tagspopupmenu.h"
 #include "thememanager.h"

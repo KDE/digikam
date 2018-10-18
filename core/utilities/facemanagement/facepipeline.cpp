@@ -39,7 +39,7 @@
 
 #include "digikam_debug.h"
 #include "loadingdescription.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "tagscache.h"
 #include "threadmanager.h"
 #include "facebenchmarkers.h"

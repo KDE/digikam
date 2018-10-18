@@ -110,7 +110,7 @@
 #include "icctransform.h"
 #include "imagedialog.h"
 #include "iofilesettings.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "libsinfodlg.h"
 #include "loadingcacheinterface.h"
 #include "printhelper.h"
@@ -1271,14 +1271,14 @@ void EditorWindow::applyStandardSettings()
 
     // -- Metadata Settings --------------------------------------------------
 
-    MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();
-    m_setExifOrientationTag                 = writeSettings.exifSetOrientation;
+    MetaEngineSettingsContainer writeSettings = MetaEngineSettings::instance()->settings();
+    m_setExifOrientationTag                   = writeSettings.exifSetOrientation;
     m_canvas->setExifOrient(writeSettings.exifRotate);
 }
 
 void EditorWindow::applyIOSettings()
 {
-    // -- JPEG, PNG, TIFF JPEG2000 files format settings --------------------------------------
+    // -- JPEG, PNG, TIFF, JPEG2000, PGF files format settings ----------------
 
     KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
 

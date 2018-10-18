@@ -38,7 +38,7 @@
 
 #include "digikam_debug.h"
 #include "loadingdescription.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "tagscache.h"
 #include "threadmanager.h"
 #include "facebenchmarkers.h"
@@ -76,8 +76,8 @@ void PreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
 
     scheduledPackages << package;
     loadFastButLarge(package->filePath, 1600);
-    //load(package->filePath, 800, MetadataSettings::instance()->settings().exifRotate);
-    //loadHighQuality(package->filePath, MetadataSettings::instance()->settings().exifRotate);
+    //load(package->filePath, 800, MetaEngineSettings::instance()->settings().exifRotate);
+    //loadHighQuality(package->filePath, MetaEngineSettings::instance()->settings().exifRotate);
 
     checkRestart();
 }

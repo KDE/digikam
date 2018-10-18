@@ -50,7 +50,7 @@
 
 #include "digikam_debug.h"
 #include "digikam_globals.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 
 namespace Digikam
 {
@@ -104,7 +104,7 @@ bool DFileOperations::localFileRename(const QString& source,
     {
         // See bug #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
 
-        if (!ignoreSettings && !MetadataSettings::instance()->settings().updateFileTimeStamp)
+        if (!ignoreSettings && !MetaEngineSettings::instance()->settings().updateFileTimeStamp)
         {
             struct utimbuf ut;
             ut.modtime = st.st_mtime;

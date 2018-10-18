@@ -45,7 +45,7 @@
 
 // Local includes
 
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "digikam_debug.h"
 #include "dlayoutbox.h"
 #include "dmetadata.h"
@@ -169,7 +169,7 @@ void SlideVideo::setCurrentUrl(const QUrl& url)
 {
     d->player->stop();
 
-    if (MetadataSettings::instance()->settings().exifRotate)
+    if (MetaEngineSettings::instance()->settings().exifRotate)
     {
         int orientation = 0;
         DMetadata meta(url.toLocalFile());

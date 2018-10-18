@@ -40,7 +40,7 @@
 #include "digikam_debug.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "previewloadthread.h"
 
 namespace Digikam
@@ -101,7 +101,7 @@ void PreviewLoadingTask::execute()
 
             // rotate if needed - images are unrotated in the cache,
             // except for RAW images, which are already rotated by Raw engine.
-            if (MetadataSettings::instance()->settings().exifRotate)
+            if (MetaEngineSettings::instance()->settings().exifRotate)
             {
                 m_img = m_img.copy();
                 LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
@@ -172,7 +172,7 @@ void PreviewLoadingTask::execute()
         // exifRotate() and postProcess() will detect if work is needed.
         // We check before to find out if we need to provide a deep copy
 
-        const bool needExifRotate  = MetadataSettings::instance()->settings().exifRotate && !LoadSaveThread::wasExifRotated(m_img);
+        const bool needExifRotate  = MetaEngineSettings::instance()->settings().exifRotate && !LoadSaveThread::wasExifRotated(m_img);
         const bool needPostProcess = needsPostProcessing();
 
         if (accessMode() == LoadSaveThread::AccessModeReadWrite && (needExifRotate || needPostProcess))
@@ -180,7 +180,7 @@ void PreviewLoadingTask::execute()
             m_img.detach();
         }
 
-        if (MetadataSettings::instance()->settings().exifRotate)
+        if (MetaEngineSettings::instance()->settings().exifRotate)
         {
             LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
         }
@@ -379,7 +379,7 @@ void PreviewLoadingTask::execute()
 
         // Scale if hinted, Store previews rotated in the cache
 
-        if (MetadataSettings::instance()->settings().exifRotate)
+        if (MetaEngineSettings::instance()->settings().exifRotate)
         {
             LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
         }

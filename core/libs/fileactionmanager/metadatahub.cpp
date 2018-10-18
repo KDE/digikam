@@ -235,7 +235,7 @@ template <class T> void MetadataHub::Private::loadSingleValue(const T& data, T& 
 // ------------------------------------------------------------------------------------------------------------
 
 /** safe **/
-bool MetadataHub::writeToMetadata(const ImageInfo& info, WriteComponent writeMode, bool ignoreLazySync, const MetadataSettingsContainer &settings)
+bool MetadataHub::writeToMetadata(const ImageInfo& info, WriteComponent writeMode, bool ignoreLazySync, const MetaEngineSettingsContainer &settings)
 {
     applyChangeNotifications();
 
@@ -266,7 +266,7 @@ bool MetadataHub::writeToMetadata(const ImageInfo& info, WriteComponent writeMod
     return false;
 }
 
-bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const MetadataSettingsContainer& settings)
+bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const MetaEngineSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -349,7 +349,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
     return dirty;
 }
 
-bool MetadataHub::write(const QString& filePath, WriteComponent writeMode, bool ignoreLazySync, const MetadataSettingsContainer& settings)
+bool MetadataHub::write(const QString& filePath, WriteComponent writeMode, bool ignoreLazySync, const MetaEngineSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -381,7 +381,7 @@ bool MetadataHub::write(const QString& filePath, WriteComponent writeMode, bool 
     return false;
 }
 
-bool MetadataHub::write(DImg& image, WriteComponent writeMode, bool ignoreLazySync, const MetadataSettingsContainer& settings)
+bool MetadataHub::write(DImg& image, WriteComponent writeMode, bool ignoreLazySync, const MetaEngineSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -418,7 +418,7 @@ bool MetadataHub::write(DImg& image, WriteComponent writeMode, bool ignoreLazySy
 }
 
 bool MetadataHub::writeTags(const QString& filePath, WriteComponent writeMode,
-                            const MetadataSettingsContainer& settings)
+                            const MetaEngineSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -551,7 +551,7 @@ QStringList MetadataHub::cleanupTags(const QStringList& toClean)
     return deduplicator.toList();
 }
 
-bool MetadataHub::willWriteMetadata(WriteComponent writeMode, const MetadataSettingsContainer& settings) const
+bool MetadataHub::willWriteMetadata(WriteComponent writeMode, const MetaEngineSettingsContainer& settings) const
 {
     // This is the same logic as in write(DMetadata) but without actually writing.
     // Adapt if the method above changes
@@ -579,7 +579,7 @@ bool MetadataHub::willWriteMetadata(WriteComponent writeMode, const MetadataSett
            );
 }
 
-void MetadataHub::writeToBaloo(const QString& filePath, const MetadataSettingsContainer& settings)
+void MetadataHub::writeToBaloo(const QString& filePath, const MetaEngineSettingsContainer& settings)
 {
 #ifdef HAVE_KFILEMETADATA
 
@@ -771,7 +771,7 @@ void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags,
 //    }
 //}
 
-//bool MetadataHub::load(const QString& filePath, const MetadataSettingsContainer& settings)
+//bool MetadataHub::load(const QString& filePath, const MetaEngineSettingsContainer& settings)
 //{
 
 //    DMetadata metadata;

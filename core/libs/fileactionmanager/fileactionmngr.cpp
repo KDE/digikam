@@ -41,7 +41,7 @@
 #include "imageinfotasksplitter.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "thumbnailloadthread.h"
 #include "disjointmetadata.h"
 

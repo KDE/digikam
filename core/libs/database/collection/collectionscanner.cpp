@@ -60,7 +60,7 @@
 #include "imagecopyright.h"
 #include "imageinfo.h"
 #include "imagescanner.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "tagscache.h"
 #include "thumbsdbaccess.h"
 #include "thumbsdb.h"
@@ -1254,7 +1254,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
     if (!modificationDateEquals(modificationDate, scanInfo.modificationDate) ||
         fi.size() != scanInfo.fileSize)
     {
-        if (MetadataSettings::instance()->settings().rescanImageIfModified)
+        if (MetaEngineSettings::instance()->settings().rescanImageIfModified)
         {
             rescanFile(fi, scanInfo);
         }

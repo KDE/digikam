@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-08-20
- * Description : Metadata Settings Container.
+ * Description : MetaEngine Settings Container.
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "metadatasettingscontainer.h"
+#include "metaenginesettingscontainer.h"
 
 // Qt includes
 
@@ -33,12 +33,12 @@
 
 // Local includes
 
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 
 namespace Digikam
 {
 
-MetadataSettingsContainer::MetadataSettingsContainer()
+MetaEngineSettingsContainer::MetaEngineSettingsContainer()
     : exifRotate(true),
       exifSetOrientation(true),
       saveComments(false),
@@ -61,7 +61,7 @@ MetadataSettingsContainer::MetadataSettingsContainer()
 {
 }
 
-void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
+void MetaEngineSettingsContainer::readFromConfig(KConfigGroup& group)
 {
     exifRotate            = group.readEntry("EXIF Rotate",                 true);
     exifSetOrientation    = group.readEntry("EXIF Set Orientation",        true);
@@ -110,7 +110,7 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
     }
 }
 
-void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
+void MetaEngineSettingsContainer::writeToConfig(KConfigGroup& group) const
 {
     group.writeEntry("EXIF Rotate",                 exifRotate);
     group.writeEntry("EXIF Set Orientation",        exifSetOrientation);

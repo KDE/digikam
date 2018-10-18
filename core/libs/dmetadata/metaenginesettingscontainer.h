@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-08-20
- * Description : Metadata Settings Container.
+ * Description : MetaEngine Settings Container.
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_META_DATA_SETTINGS_CONTAINER_H
-#define DIGIKAM_META_DATA_SETTINGS_CONTAINER_H
+#ifndef DIGIKAM_META_ENGINE_SETTINGS_CONTAINER_H
+#define DIGIKAM_META_ENGINE_SETTINGS_CONTAINER_H
 
 // Qt includes
 
@@ -41,15 +41,15 @@ namespace Digikam
 {
 
 /**
- * The class MetadataSettingsContainer encapsulates all metadata related settings.
+ * The class MetaEngineSettingsContainer encapsulates all metadata related settings.
  * NOTE: this allows supply changed arguments to MetadataHub without changing the global settings.
  */
-class DIGIKAM_EXPORT MetadataSettingsContainer
+class DIGIKAM_EXPORT MetaEngineSettingsContainer
 {
 public:
 
-    explicit MetadataSettingsContainer();
-    ~MetadataSettingsContainer()
+    explicit MetaEngineSettingsContainer();
+    ~MetaEngineSettingsContainer()
     {
     };
 
@@ -112,6 +112,6 @@ public:
 
 } // namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::MetadataSettingsContainer::RotationBehaviorFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::MetaEngineSettingsContainer::RotationBehaviorFlags)
 
-#endif // DIGIKAM_META_DATA_SETTINGS_CONTAINER_H
+#endif // DIGIKAM_META_ENGINE_SETTINGS_CONTAINER_H

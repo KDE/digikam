@@ -82,7 +82,7 @@ DigikamApp::DigikamApp()
     AlbumManager::instance();
     LoadingCacheInterface::initialize();
     IccSettings::instance()->loadAllProfilesProperties();
-    MetadataSettings::instance();
+    MetaEngineSettings::instance();
     DMetadataSettings::instance();
     ProgressManager::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);

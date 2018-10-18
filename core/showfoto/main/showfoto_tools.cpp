@@ -34,7 +34,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
         return;
     }
 
-    settings.exifRotate = Digikam::MetadataSettings::instance()->settings().exifRotate;
+    settings.exifRotate = Digikam::MetaEngineSettings::instance()->settings().exifRotate;
     settings.fileList   = d->thumbBar->urls();
     int   i             = 0;
     float cnt           = settings.fileList.count();

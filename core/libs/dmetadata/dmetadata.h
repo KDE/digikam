@@ -34,8 +34,8 @@
 
 #include "metaengine.h"
 #include "metaengine_data.h"
+#include "metaenginesettingscontainer.h"
 #include "captionvalues.h"
-#include "metadatasettingscontainer.h"
 #include "infocontainer.h"
 #include "metadatainfo.h"
 #include "digikam_export.h"
@@ -73,7 +73,7 @@ public:
     ~DMetadata();
 
     void registerMetadataSettings();
-    void setSettings(const MetadataSettingsContainer& settings);
+    void setSettings(const MetaEngineSettingsContainer& settings);
 
     /**
      * Re-implemented from libMetaEngine to use libraw identify and 

@@ -39,7 +39,7 @@
 #include "coredbaccess.h"
 #include "album.h"
 #include "dmetadata.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "scancontroller.h"
 #include "thumbsdb.h"
 #include "thumbsdbaccess.h"
@@ -65,7 +65,7 @@ SidecarFinder::SidecarFinder(const QList<QUrl>& files)
             qCDebug(DIGIKAM_DATABASE_LOG) << "Detected a sidecar" << localFiles.last();
         }
 
-        foreach (QString suffix, MetadataSettings::instance()->settings().sidecarExtensions)
+        foreach (QString suffix, MetaEngineSettings::instance()->settings().sidecarExtensions)
         {
             suffix = QLatin1Char('.') + suffix;
             QString sidecarName = url.toLocalFile() + suffix;

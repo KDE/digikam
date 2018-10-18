@@ -39,7 +39,7 @@
 // Local includes
 
 #include "filereadwritelock.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "template.h"
 #include "dimg.h"
 #include "digikam_version.h"
@@ -74,10 +74,10 @@ DMetadata::~DMetadata()
 
 void DMetadata::registerMetadataSettings()
 {
-    setSettings(MetadataSettings::instance()->settings());
+    setSettings(MetaEngineSettings::instance()->settings());
 }
 
-void DMetadata::setSettings(const MetadataSettingsContainer& settings)
+void DMetadata::setSettings(const MetaEngineSettingsContainer& settings)
 {
     setUseXMPSidecar4Reading(settings.useXMPSidecar4Reading);
     setWriteRawFiles(settings.writeRawFiles);

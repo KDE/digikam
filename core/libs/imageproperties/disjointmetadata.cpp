@@ -498,7 +498,7 @@ bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
     return changed;
 }
 
-bool DisjointMetadata::willWriteMetadata(DisjointMetadata::WriteMode writeMode, const MetadataSettingsContainer& settings) const
+bool DisjointMetadata::willWriteMetadata(DisjointMetadata::WriteMode writeMode, const MetaEngineSettingsContainer& settings) const
 {
     // This is the same logic as in write(DMetadata) but without actually writing.
     // Adapt if the method above changes

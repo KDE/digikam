@@ -48,7 +48,7 @@
 #include "imagecopyright.h"
 #include "imageextendedproperties.h"
 #include "imagehistorygraph.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "tagregion.h"
 #include "tagscache.h"
 #include "iostream"
@@ -499,7 +499,7 @@ void ImageScanner::scanFile(ScanMode mode)
     else
     {
         if (d->scanMode == Rescan && d->scanInfo.id != -1 &&
-            MetadataSettings::instance()->settings().clearMetadataIfRescan)
+            MetaEngineSettings::instance()->settings().clearMetadataIfRescan)
         {
             CoreDbAccess().db()->clearMetadataFromImage(d->scanInfo.id);
         }

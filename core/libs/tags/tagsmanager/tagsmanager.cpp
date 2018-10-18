@@ -59,7 +59,7 @@
 #include "dlogoaction.h"
 #include "metadatasynchronizer.h"
 #include "fileactionmngr.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 
 namespace Digikam
 {
@@ -588,10 +588,10 @@ void TagsManager::slotWipeAll()
     }
 
     /** Disable writing tags to images **/
-    MetadataSettings* metaSettings = MetadataSettings::instance();
-    MetadataSettingsContainer backUpContainer = metaSettings->settings();
-    MetadataSettingsContainer newContainer = backUpContainer;
-    bool settingsChanged = false;
+    MetaEngineSettings* const metaSettings      = MetaEngineSettings::instance();
+    MetaEngineSettingsContainer backUpContainer = metaSettings->settings();
+    MetaEngineSettingsContainer newContainer    = backUpContainer;
+    bool settingsChanged                        = false;
 
     if (backUpContainer.saveTags == true || backUpContainer.saveFaceTags == true)
     {

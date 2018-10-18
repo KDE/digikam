@@ -36,7 +36,7 @@
 #include "collectionmanager.h"
 #include "collectionscanner.h"
 #include "imageinfo.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 
 const QString originalImageFolder(QFINDTESTDATA("data/"));
 const QString originalImageFile(QFINDTESTDATA("data/1.jpg"));
@@ -135,10 +135,10 @@ void TimeStampUpdateTest::cleanup()
 void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
 {
     // Setup metadata settings
-    MetadataSettingsContainer set;
+    MetaEngineSettingsContainer set;
     set.updateFileTimeStamp   = true; // Default value
     set.rescanImageIfModified = true;
-    MetadataSettings::instance()->setSettings(set);
+    MetaEngineSettings::instance()->setSettings(set);
 
     // Load the test image and verify that it's there
     QFileInfo originalFileInfo(originalImageFile);
@@ -181,10 +181,10 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
 void TimeStampUpdateTest::testRescanImageIfModifiedSet2False()
 {
     // Setup metadata settings
-    MetadataSettingsContainer set;
+    MetaEngineSettingsContainer set;
     set.updateFileTimeStamp   = true;  // Default value
     set.rescanImageIfModified = false; // Default value
-    MetadataSettings::instance()->setSettings(set);
+    MetaEngineSettings::instance()->setSettings(set);
 
     // Load the test image and verify that it's there
     QFileInfo originalFileInfo(originalImageFile);

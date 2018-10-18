@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 
 namespace Digikam
 {
@@ -100,7 +100,7 @@ void SlideShowSettings::readFromConfig()
     printRating               = group.readEntry(configSlideShowPrintRatingEntry,          false);
     showProgressIndicator     = group.readEntry(configSlideShowProgressIndicatorEntry,    true);
     slideScreen               = group.readEntry(configSlideScreenEntry,                   -2);
-    exifRotate                = MetadataSettings::instance()->settings().exifRotate;
+    exifRotate                = MetaEngineSettings::instance()->settings().exifRotate;
 }
 
 void SlideShowSettings::writeToConfig()

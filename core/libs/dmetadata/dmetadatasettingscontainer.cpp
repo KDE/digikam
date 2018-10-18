@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "metadatasettingscontainer.h"
+#include "dmetadatasettingscontainer.h"
 
 // KDE includes
 

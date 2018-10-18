@@ -48,7 +48,7 @@
 #include "iccmanager.h"
 #include "iccprofile.h"
 #include "iccsettings.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "thumbsdbaccess.h"
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"
@@ -814,7 +814,7 @@ void ThumbnailLoadThread::loadVideoThumbnail(const LoadingDescription& descripti
 #ifdef HAVE_MEDIAPLAYER
     d->videoJobHash.insert(description.filePath, description);
     d->videoThumbs->setThumbnailSize(d->creator->storedSize());
-    d->videoThumbs->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
+    d->videoThumbs->setExifRotate(MetaEngineSettings::instance()->settings().exifRotate);
     d->videoThumbs->addItems(QStringList() << description.filePath);
 #else
     qDebug(DIGIKAM_GENERAL_LOG) << "Cannot get video thumb for " << description.filePath;

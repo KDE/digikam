@@ -59,7 +59,7 @@
 #include "dio.h"
 #include "dmetadata.h"
 #include "dfileoperations.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "metadataedit.h"
 #include "applicationsettings.h"
 #include "albummanager.h"

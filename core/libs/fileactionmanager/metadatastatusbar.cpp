@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "dexpanderbox.h"
 
 namespace Digikam
@@ -96,7 +96,7 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
     vlay->setContentsMargins(QMargins());
     vlay->setStretchFactor(d->info, 10);
 
-    connect(MetadataSettings::instance(), SIGNAL(settingsChanged()),
+    connect(MetaEngineSettings::instance(), SIGNAL(settingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->applyBtn, SIGNAL(released()),
@@ -105,7 +105,7 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
     connect(MetadataHubMngr::instance(), SIGNAL(signalPendingMetadata(int)),
             this, SLOT(slotSetPendingItems(int)));
 
-    if (MetadataSettings::instance()->settings().useLazySync)
+    if (MetaEngineSettings::instance()->settings().useLazySync)
         this->show();
     else
         this->hide();
@@ -118,7 +118,7 @@ MetadataStatusBar::~MetadataStatusBar()
 
 void MetadataStatusBar::slotSettingsChanged()
 {
-    if (MetadataSettings::instance()->settings().useLazySync)
+    if (MetaEngineSettings::instance()->settings().useLazySync)
         this->show();
     else
         this->hide();

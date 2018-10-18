@@ -38,7 +38,7 @@
 // local includes
 
 #include "gpsimagemodel.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 
 namespace Digikam
 {
@@ -144,7 +144,7 @@ DMetadata* GPSImageItem::getMetadataForFile() const
     {
         // It is possible that no sidecar file has yet been created.
         // If writing to sidecar file is activated, we ignore the loading error of the metadata.
-        if (MetadataSettings::instance()->settings().metadataWritingMode == DMetadata::WRITETOIMAGEONLY)
+        if (MetaEngineSettings::instance()->settings().metadataWritingMode == DMetadata::WRITETOIMAGEONLY)
         {
             return 0;
         }

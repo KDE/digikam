@@ -47,7 +47,7 @@
 
 // Local includes
 
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "digikam_debug.h"
 #include "thememanager.h"
 #include "dlayoutbox.h"
@@ -408,7 +408,7 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
 
     d->player->stop();
 
-    if (MetadataSettings::instance()->settings().exifRotate)
+    if (MetaEngineSettings::instance()->settings().exifRotate)
     {
         int orientation = 0;
         DMetadata meta(url.toLocalFile());

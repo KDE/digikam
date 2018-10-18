@@ -3443,7 +3443,7 @@ void AlbumManager::askUserForWriteChangedTAlbumToFiles(TAlbum* const album)
 
 void AlbumManager::askUserForWriteChangedTAlbumToFiles(const QList<qlonglong>& imageIds)
 {
-    MetadataSettings* const settings = MetadataSettings::instance();
+    MetaEngineSettings* const settings = MetaEngineSettings::instance();
 
     if ((!settings->settings().saveTags &&
          !settings->settings().saveFaceTags) || imageIds.isEmpty())

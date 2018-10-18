@@ -30,7 +30,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "fileactionmngr_p.h"
 #include "imageattributeswatch.h"
 #include "imageinfotasksplitter.h"
@@ -99,7 +99,7 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
         hub.load(info);
         QString filePath = info.filePath();
 
-        if (MetadataSettings::instance()->settings().useLazySync)
+        if (MetaEngineSettings::instance()->settings().useLazySync)
         {
             hub.write(filePath, MetadataHub::WRITE_ALL);
         }
@@ -135,7 +135,7 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, int 
 
         hub.load(info);
         // apply to file metadata
-        if (MetadataSettings::instance()->settings().useLazySync)
+        if (MetaEngineSettings::instance()->settings().useLazySync)
         {
             hub.writeToMetadata(info, (MetadataHub::WriteComponents)flags);
         }
@@ -175,20 +175,20 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
         bool rotateAsJpeg                               = false;
         bool rotateLossy                                = false;
 
-        MetadataSettingsContainer::RotationBehaviorFlags behavior;
-        behavior              = MetadataSettings::instance()->settings().rotationBehavior;
-        bool rotateByMetadata = (behavior & MetadataSettingsContainer::RotateByMetadataFlag);
+        MetaEngineSettingsContainer::RotationBehaviorFlags behavior;
+        behavior              = MetaEngineSettings::instance()->settings().rotationBehavior;
+        bool rotateByMetadata = (behavior & MetaEngineSettingsContainer::RotateByMetadataFlag);
 
         // Check if rotation by content, as desired, is feasible
         // We'll later check again if it was successful
-        if (behavior & MetadataSettingsContainer::RotatingPixels)
+        if (behavior & MetaEngineSettingsContainer::RotatingPixels)
         {
             if (format == QLatin1String("JPG") && JPEGUtils::isJpegImage(path))
             {
                 rotateAsJpeg = true;
             }
 
-            if (behavior & MetadataSettingsContainer::RotateByLossyRotation)
+            if (behavior & MetaEngineSettingsContainer::RotateByLossyRotation)
             {
                 DImg::FORMAT format = DImg::fileFormat(path);
 

@@ -55,7 +55,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
     // Setup loading cache and thumbnails interface.
 
     Digikam::LoadingCacheInterface::initialize();
-    Digikam::MetadataSettings::instance();
+    Digikam::MetaEngineSettings::instance();
 
     d->thumbLoadThread = new Digikam::ThumbnailLoadThread();
     d->thumbLoadThread->setThumbnailSize(Digikam::ThumbnailSize::Huge);

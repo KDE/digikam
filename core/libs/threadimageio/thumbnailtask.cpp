@@ -42,7 +42,7 @@
 #include "dmetadata.h"
 #include "iccmanager.h"
 #include "jpegutils.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailcreator.h"
 
@@ -235,7 +235,7 @@ void ThumbnailLoadingTask::execute()
 void ThumbnailLoadingTask::setupCreator()
 {
     m_creator->setThumbnailSize(m_loadingDescription.previewParameters.size);
-    m_creator->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
+    m_creator->setExifRotate(MetaEngineSettings::instance()->settings().exifRotate);
     m_creator->setLoadingProperties(this, m_loadingDescription.rawDecodingSettings);
 }
 
