@@ -103,7 +103,7 @@
 |│   │   │   │   └── wb                                       | White balance filter                                                    |
 |│   │   │   ├── imagehistory                                 | Image history interface for image container                             |
 |│   │   │   └── loaders                                      | All DImg image loaders are here                                         |
-|│   │   ├── dmetadata                                        | The metadata wrapper based on Exiv2 for image and FFMpeg for video      |
+|│   │   ├── metadataengine                                   | The metadata wrapper based on Exiv2 for image and FFMpeg for video      |
 |│   │   ├── dngwriter                                        | Qt classes to convert RAW files to DNG format                           |
 |│   │   │   └── extra                                        | DNG and XMP sdks from Adobe                                             |
 |│   │   ├── dtrash                                           | digiKam trash manager full independant of desktop trash                 |

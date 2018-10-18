@@ -56,7 +56,7 @@ add_definitions(-DqDNGValidateTarget=1)
 #---------------------------------
 
 add_subdirectory(dimg)
-add_subdirectory(dmetadata)
+add_subdirectory(metadataengine)
 add_subdirectory(database)
 add_subdirectory(dngwriter)
 add_subdirectory(dtrash)

@@ -18,25 +18,25 @@ if( WIN32 )
 endif()
 
 set(libdmetadata_SRCS
-    metaengine.cpp
-    metaengine_p.cpp
-    metaengine_data.cpp
-    metaengine_image.cpp
-    metaengine_comments.cpp
-    metaengine_exif.cpp
-    metaengine_iptc.cpp
-    metaengine_gps.cpp
-    metaengine_xmp.cpp
-    metaengine_previews.cpp
-    metaengine_rotation.cpp
-    metaenginesettings.cpp
-    metaenginesettingscontainer.cpp
-    dmetadata.cpp
-    dmetadata_ffmpeg.cpp
-    dmetadata_libraw.cpp
-    dmetadatasettings.cpp
-    dmetadatasettingscontainer.cpp
-    geodetictools.cpp
+    engine/metaengine.cpp
+    engine/metaengine_p.cpp
+    engine/metaengine_data.cpp
+    engine/metaengine_image.cpp
+    engine/metaengine_comments.cpp
+    engine/metaengine_exif.cpp
+    engine/metaengine_iptc.cpp
+    engine/metaengine_gps.cpp
+    engine/metaengine_xmp.cpp
+    engine/metaengine_previews.cpp
+    engine/metaengine_rotation.cpp
+    engine/metaenginesettings.cpp
+    engine/metaenginesettingscontainer.cpp
+    engine/geodetictools.cpp
+    dmetadata/dmetadata.cpp
+    dmetadata/dmetadata_ffmpeg.cpp
+    dmetadata/dmetadata_libraw.cpp
+    dmetadata/dmetadatasettings.cpp
+    dmetadata/dmetadatasettingscontainer.cpp
     containers/metadatainfo.cpp
     containers/infocontainer.cpp
     containers/template.cpp
