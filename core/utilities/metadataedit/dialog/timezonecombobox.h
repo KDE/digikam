@@ -43,8 +43,8 @@ public:
     void setToUTC();
     void setTimeZone(const QString& timeStr);
 
-    QString getTimeZone() const;
-    int     getSeconds()  const;
+    QString getTimeZone()    const;
+    int     timeZoneOffset() const;
 };
 
 } // namespace Digikam

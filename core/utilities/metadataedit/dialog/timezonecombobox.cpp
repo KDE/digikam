@@ -85,7 +85,7 @@ QString TimeZoneComboBox::getTimeZone() const
     return currentText();
 }
 
-int TimeZoneComboBox::getSeconds() const
+int TimeZoneComboBox::timeZoneOffset() const
 {
     QString tz = currentText();
 

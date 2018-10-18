@@ -178,10 +178,11 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent,
 
     d->timeZoneCB                   = new TimeZoneComboBox(offsetWidget);
     d->timeZoneCB->setWhatsThis(i18n("<p>Sets the time zone the camera was set to "
-                                     "during photo shooting, so that the time stamps of the images "
-                                     "can be converted to GMT to match the GPS time reference.</p>"
-                                     "<p>Note: positive offsets count eastwards from zero longitude (GMT), "
-                                     "they are 'ahead of time'.</p>"));
+                                     "during photo shooting, so that the time stamps "
+                                     "of the images can be converted to GMT to match "
+                                     "the GPS time reference.</p>"
+                                     "<p>Note: positive offsets count eastwards from "
+                                     "zero longitude (GMT), they are 'ahead of time'.</p>"));
 
     QLabel* const offsetLabel       = new QLabel(i18n("Offset of pictures (hh:mm:ss):"),
                                                       offsetWidget);
@@ -375,7 +376,7 @@ void GPSCorrelatorWidget::slotCorrelate()
     }
 
     options.secondsOffset  = userOffset;
-    options.timeZoneOffset = d->timeZoneCB->getSeconds();
+    options.timeZoneOffset = d->timeZoneCB->timeZoneOffset();
 
     options.interpolate          = d->interpolateButton->isChecked();
     options.interpolationDstTime = d->interpolateLimitInput->time().msecsSinceStartOfDay() / 1000;
