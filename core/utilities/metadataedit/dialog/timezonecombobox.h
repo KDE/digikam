@@ -44,6 +44,7 @@ public:
     void setTimeZone(const QString& timeStr);
 
     QString getTimeZone() const;
+    int     getSeconds()  const;
 };
 
 } // namespace Digikam

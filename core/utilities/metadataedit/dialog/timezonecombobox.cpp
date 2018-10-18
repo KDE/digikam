@@ -64,13 +64,13 @@ void TimeZoneComboBox::setTimeZone(const QString& timeStr)
 
     QString timeZone = timeStr.right(6);
 
-    if (timeZone.endsWith(QLatin1String("Z")))
+    if (timeZone.endsWith(QLatin1Char('Z')))
     {
         setToUTC();
     }
-    else if (timeZone.mid(3, 1) == QLatin1String(":") &&
-            (timeZone.left(1) == QLatin1String("+") ||
-             timeZone.left(1) == QLatin1String("-")))
+    else if ((timeZone.startsWith(QLatin1Char('+'))  ||
+              timeZone.startsWith(QLatin1Char('-'))) &&
+              timeZone.mid(3, 1) == QLatin1String(":"))
     {
         setCurrentIndex(findText(timeZone));
     }
@@ -83,6 +83,26 @@ void TimeZoneComboBox::setTimeZone(const QString& timeStr)
 QString TimeZoneComboBox::getTimeZone() const
 {
     return currentText();
+}
+
+int TimeZoneComboBox::getSeconds() const
+{
+    QString tz = currentText();
+
+    if (tz.isEmpty())
+        return 0;
+
+    int hh     = QString(QString(tz[1]) + QString(tz[2])).toInt();
+    int mm     = QString(QString(tz[4]) + QString(tz[5])).toInt();
+
+    int offset = hh*3600 + mm*60;
+
+    if (tz[0] == QLatin1String("-"))
+    {
+        offset = (-1) * offset;
+    }
+
+    return offset;
 }
 
 } // namespace Digikam
