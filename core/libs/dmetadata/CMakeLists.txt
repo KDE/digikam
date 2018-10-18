@@ -36,11 +36,11 @@ set(libdmetadata_SRCS
     dmetadatasettingscontainer.cpp
     metadatasettings.cpp
     metadatasettingscontainer.cpp
-    metadatainfo.cpp
-    infocontainer.cpp
     geodetictools.cpp
-    template.cpp
-    captionvalues.cpp
+    containers/metadatainfo.cpp
+    containers/infocontainer.cpp
+    containers/template.cpp
+    containers/captionvalues.cpp
 )
 
 include_directories(
