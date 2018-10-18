@@ -17,6 +17,7 @@ set(libgeoiface_SRCS backends/mapbackend.cpp
                      lookup/lookupaltitude.cpp
                      lookup/lookupaltitudegeonames.cpp
                      lookup/lookupfactory.cpp
+                     core/geodetictools.cpp
                      core/geodragdrophandler.cpp
                      core/geocoordinates.cpp
                      core/geoifacecommon.cpp
