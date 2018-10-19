@@ -117,6 +117,7 @@ bool GPMPForm::addFile(const QString& name, const QString& path)
         return false;
 
     QByteArray imageData = imageFile.readAll();
+    imageFile.close();
 
     QByteArray str;
     str += "--";
@@ -134,8 +135,6 @@ bool GPMPForm::addFile(const QString& name, const QString& path)
     str += "Content-Type: ";
     str += mime.toLatin1();
     str += "\r\n\r\n";
-
-    imageFile.close();
 
     m_buffer.append(str);
     m_buffer.append(imageData);

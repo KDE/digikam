@@ -292,6 +292,7 @@ QByteArray IccProfile::data()
 
         d->data = file.readAll();
         file.close();
+
         return d->data;
     }
 
@@ -606,6 +607,7 @@ void IccProfile::considerOriginalAdobeRGB(const QString& filePath)
     {
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(&file);
+        file.close();
 
         if (md5.result().toHex() == QByteArray("dea88382d899d5f6e573b432473ae138"))
         {

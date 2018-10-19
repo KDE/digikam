@@ -468,12 +468,18 @@ bool SubjectWidget::loadSubjectCodesFromXML(const QUrl& url)
     QDomDocument xmlDoc(QLatin1String("NewsML"));
 
     if (!xmlDoc.setContent(&xmlfile))
+    {
+        xmlfile.close();
         return false;
+    }
 
     QDomElement xmlDocElem = xmlDoc.documentElement();
 
     if (xmlDocElem.tagName() != QLatin1String("NewsML"))
+    {
+        xmlfile.close();
         return false;
+    }
 
     for (QDomNode nbE1 = xmlDocElem.firstChild();
          !nbE1.isNull(); nbE1 = nbE1.nextSibling())
@@ -530,6 +536,8 @@ bool SubjectWidget::loadSubjectCodesFromXML(const QUrl& url)
             }
         }
     }
+
+    xmlfile.close();
 
     // Set the Subject Name everywhere on the map.
 

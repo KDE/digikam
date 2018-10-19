@@ -120,6 +120,7 @@ bool RajceMPForm::addFile(const QString& name,const QString& path)
 
     QByteArray str;
     QString file_size = QString::number(imageFile.size());
+    imageFile.close();
 
     str += "--";
     str += m_boundary;
@@ -136,8 +137,6 @@ bool RajceMPForm::addFile(const QString& name,const QString& path)
     str += "Content-Type: ";
     str += mime.toLatin1();
     str += "\r\n\r\n";
-
-    imageFile.close();
 
     m_buffer.append(str);
     m_buffer.append(imageData);
