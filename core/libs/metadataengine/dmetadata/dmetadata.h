@@ -35,9 +35,9 @@
 #include "metaengine.h"
 #include "metaengine_data.h"
 #include "metaenginesettingscontainer.h"
+#include "metadatainfo.h"
 #include "captionvalues.h"
 #include "infocontainer.h"
-#include "metadatainfo.h"
 #include "digikam_export.h"
 #include "dmetadatasettings.h"
 
@@ -72,8 +72,12 @@ public:
     explicit DMetadata(const MetaEngineData& data);
     ~DMetadata();
 
+public: // Settings
+
     void registerMetadataSettings();
     void setSettings(const MetaEngineSettingsContainer& settings);
+
+public: // File I/O
 
     /**
      * Re-implemented from libMetaEngine to use libraw identify and 
@@ -93,35 +97,16 @@ public:
      */
     bool loadUsingFFmpeg(const QString& filePath);
 
-    /**
-     * Metadata manipulation methods.
-     */
+public: // History helpers
 
-    CaptionsMap getImageComments(const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
-    bool setImageComments(const CaptionsMap& comments,
-                          const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
+    QString getImageHistory() const;
+    bool    setImageHistory(QString& imageHistoryXml) const;
+    bool    hasImageHistoryTag() const;
 
-    int  getImagePickLabel() const;
-    bool setImagePickLabel(int pickId) const;
+    QString getImageUniqueId() const;
+    bool    setImageUniqueId(const QString& uuid) const;
 
-    int  getImageColorLabel() const;
-    bool setImageColorLabel(int colorId) const;
-
-    CaptionsMap getImageTitles() const;
-    bool setImageTitles(const CaptionsMap& title) const;
-
-    int  getImageRating(const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
-    bool setImageRating(int rating,
-                        const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
-
-    bool getImageTagsPath(QStringList& tagsPath,
-                          const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
-    bool setImageTagsPath(const QStringList& tagsPath,
-                          const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
-
-    bool getACDSeeTagsPath(QStringList& tagsPath) const;
-
-    bool setACDSeeTagsPath(const QStringList& tagsPath) const;
+public: // Faces helpers
 
     /**
      * Get Images Face Map based on tags stored in Picassa/Metadatagroup
@@ -137,55 +122,51 @@ public:
      */
     bool setImageFacesMap(QMultiMap<QString,QVariant>& facesPath, bool write) const;
 
+public: // Tags helpers
+
+    bool getImageTagsPath(QStringList& tagsPath,
+                          const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
+    bool setImageTagsPath(const QStringList& tagsPath,
+                          const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
+
+    bool getACDSeeTagsPath(QStringList& tagsPath) const;
+
+    bool setACDSeeTagsPath(const QStringList& tagsPath) const;
+
+public: // Comments helpers
+
+    CaptionsMap getImageComments(const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
+    bool setImageComments(const CaptionsMap& comments,
+                          const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
+
+    CaptionsMap getImageTitles() const;
+    bool setImageTitles(const CaptionsMap& title) const;
+
+    static MetaEngine::AltLangMap toAltLangMap(const QVariant& var);
+
+public: // Labels helpers
+
+    int  getImageRating(const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
+    bool setImageRating(int rating,
+                        const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
+
+    int  getImagePickLabel() const;
+    bool setImagePickLabel(int pickId) const;
+
+    int  getImageColorLabel() const;
+    bool setImageColorLabel(int colorId) const;
+
+public: // Template helpers
+
     bool     setMetadataTemplate(const Template& t) const;
     Template getMetadataTemplate() const;
     bool     removeMetadataTemplate() const;
 
-    QString getImageHistory() const;
-    bool    setImageHistory(QString& imageHistoryXml) const;
-    bool    hasImageHistoryTag() const;
-
-    QString getImageUniqueId() const;
-    bool    setImageUniqueId(const QString& uuid) const;
-
-    /// Fills only the copyright values in the template. Use getMetadataTemplate() usually.
-    /// Returns true if valid fields were read.
+    /**
+     * Fills only the copyright values in the template. Use getMetadataTemplate() usually.
+     * Returns true if valid fields were read.
+     */
     bool getCopyrightInformation(Template& t) const;
-
-    /**
-     * Return a string with Lens mounted on the front of camera.
-     * There no standard Exif tag for Lens information.
-     * Camera makernotes and Xmp tags are parsed.
-     * Take a care : lens information are not standardized and string content is not homogeneous between
-     * camera model/maker.
-     */
-    QString getLensDescription() const;
-    PhotoInfoContainer getPhotographInformation() const;
-
-    /**
-     * Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
-     * of the format of the QVariant.
-     */
-    QVariant     getMetadataField(MetadataInfo::Field field) const;
-    QVariantList getMetadataFields(const MetadataFields& fields) const;
-
-    /**
-     * Convert a QVariant value of the specified field to a user-presentable, i18n'ed string.
-     * The QVariant must be of the type as specified in metadatainfo.h and as obtained by getMetadataField.
-     */
-    static QString     valueToString (const QVariant& value, MetadataInfo::Field field);
-    static QStringList valuesToString(const QVariantList& list, const MetadataFields& fields);
-
-    /**
-     * Returns a map of possible enum values and their user-presentable, i18n'ed representation.
-     * Valid fields are those which are described as "enum from" or "bit mask from" in metadatainfo.h.
-     */
-    static QMap<int, QString> possibleValuesForEnumField(MetadataInfo::Field field);
-
-    static double apexApertureToFNumber(double aperture);
-    static double apexShutterSpeedToExposureTime(double shutterSpeed);
-
-    static MetaEngine::AltLangMap toAltLangMap(const QVariant& var);
 
 public: // EXIF helpers
 
@@ -338,11 +319,50 @@ public: // Video helpers
      */
     static QString videoColorModelToString(VIDEOCOLORMODEL videoColorModel);
 
+public: // Others helpers 
+
+    /**
+     * Return a string with Lens mounted on the front of camera.
+     * There no standard Exif tag for Lens information.
+     * Camera makernotes and Xmp tags are parsed.
+     * Take a care : lens information are not standardized and string content is not homogeneous between
+     * camera model/maker.
+     */
+    QString getLensDescription() const;
+
+    PhotoInfoContainer getPhotographInformation() const;
+
+    /**
+     * Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
+     * of the format of the QVariant.
+     */
+    QVariant     getMetadataField(MetadataInfo::Field field) const;
+    QVariantList getMetadataFields(const MetadataFields& fields) const;
+
+    /**
+     * Convert a QVariant value of the specified field to a user-presentable, i18n'ed string.
+     * The QVariant must be of the type as specified in metadatainfo.h and as obtained by getMetadataField.
+     */
+    static QString     valueToString (const QVariant& value, MetadataInfo::Field field);
+    static QStringList valuesToString(const QVariantList& list, const MetadataFields& fields);
+
+    /**
+     * Returns a map of possible enum values and their user-presentable, i18n'ed representation.
+     * Valid fields are those which are described as "enum from" or "bit mask from" in metadatainfo.h.
+     */
+    static QMap<int, QString> possibleValuesForEnumField(MetadataInfo::Field field);
+
+    static double apexApertureToFNumber(double aperture);
+    static double apexShutterSpeedToExposureTime(double shutterSpeed);
+
 private:
 
     QVariant fromExifOrXmp(const char* const exifTagName, const char* const xmpTagName) const;
     QVariant fromIptcOrXmp(const char* const iptcTagName, const char* const xmpTagName) const;
     QVariant toStringListVariant(const QStringList& list)                               const;
+
+    bool hasValidField(const QVariantList& list)                                        const;
+
 };
 
 } // namespace Digikam

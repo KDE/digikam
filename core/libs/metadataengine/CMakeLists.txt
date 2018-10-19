@@ -34,6 +34,8 @@ set(libdmetadata_SRCS
     dmetadata/dmetadata.cpp
     dmetadata/dmetadata_ffmpeg.cpp
     dmetadata/dmetadata_libraw.cpp
+    dmetadata/dmetadata_comments.cpp
+    dmetadata/dmetadata_template.cpp
     dmetadata/dmetadatasettings.cpp
     dmetadata/dmetadatasettingscontainer.cpp
     containers/metadatainfo.cpp

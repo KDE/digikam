@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-02-26
- * Description : metadata extraction with FFMpeg (libav)
+ * Description : image metadata interface - ffmpeg loader (libav).
  *
  * References  :
  *
