@@ -1,0 +1,5 @@
+The file Metadata manipulation wrapper:
+
+- containers : all metadata classes to group information by categories.
+- engine     : the low level metadata extraction class based on Exiv2 API and managing C++ exception from this library.
+- dmetadata  : the high level metadata class, based on metadata engine, but not based on Exiv2 API.
