@@ -474,6 +474,11 @@ void FindDuplicatesView::slotComplete()
 
 void FindDuplicatesView::slotDuplicatesAlbumActived()
 {
+    if (!d->active)
+    {
+        return;
+    }
+
     QList<Album*> albums;
 
     foreach(QTreeWidgetItem* const item, d->listView->selectedItems())
