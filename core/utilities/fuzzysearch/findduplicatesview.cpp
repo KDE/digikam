@@ -313,7 +313,7 @@ QList<SAlbum*> FindDuplicatesView::currentFindDuplicatesAlbums() const
 
     QList<SAlbum*> albumList;
 
-    foreach(QTreeWidgetItem* const item, selectedItems)
+    foreach (QTreeWidgetItem* const item, selectedItems)
     {
         FindDuplicatesAlbumItem* const albumItem = dynamic_cast<FindDuplicatesAlbumItem*>(item);
 
@@ -481,7 +481,7 @@ void FindDuplicatesView::slotDuplicatesAlbumActived()
 
     QList<Album*> albums;
 
-    foreach(QTreeWidgetItem* const item, d->listView->selectedItems())
+    foreach (QTreeWidgetItem* const item, d->listView->selectedItems())
     {
         FindDuplicatesAlbumItem* const albumItem = dynamic_cast<FindDuplicatesAlbumItem*>(item);
 
@@ -529,7 +529,7 @@ void FindDuplicatesView::slotSetSelectedAlbums(const QList<PAlbum*>& albums)
     // @ODD : Why is singleton set to true? resetAlbumsAndTags already clears the selection.
     resetAlbumsAndTags();
 
-    foreach(PAlbum* const album, albums)
+    foreach (PAlbum* const album, albums)
     {
         d->albumSelectors->setAlbumSelected(album, false);
     }
@@ -542,7 +542,7 @@ void FindDuplicatesView::slotSetSelectedAlbums(const QList<TAlbum*>& albums)
 {
     resetAlbumsAndTags();
 
-    foreach(TAlbum* const album, albums)
+    foreach (TAlbum* const album, albums)
     {
         d->albumSelectors->setTagSelected(album, false);
     }
