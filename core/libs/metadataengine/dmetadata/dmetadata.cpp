@@ -1328,38 +1328,6 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
     return ok;
 }
 
-bool DMetadata::getCopyrightInformation(Template& t) const
-{
-    MetadataFields fields;
-    fields << MetadataInfo::IptcCoreCopyrightNotice
-           << MetadataInfo::IptcCoreCreator
-           << MetadataInfo::IptcCoreProvider
-           << MetadataInfo::IptcCoreRightsUsageTerms
-           << MetadataInfo::IptcCoreSource
-           << MetadataInfo::IptcCoreCreatorJobTitle
-           << MetadataInfo::IptcCoreInstructions;
-
-    QVariantList metadataInfos = getMetadataFields(fields);
-    IptcCoreContactInfo contactInfo = getCreatorContactInfo();
-
-    if (!hasValidField(metadataInfos) && contactInfo.isNull())
-    {
-        return false;
-    }
-
-    t.setCopyright(toAltLangMap(metadataInfos.at(0)));
-    t.setAuthors(metadataInfos.at(1).toStringList());
-    t.setCredit(metadataInfos.at(2).toString());
-    t.setRightUsageTerms(toAltLangMap(metadataInfos.at(3)));
-    t.setSource(metadataInfos.at(4).toString());
-    t.setAuthorsPosition(metadataInfos.at(5).toString());
-    t.setInstructions(metadataInfos.at(6).toString());
-
-    t.setContactInfo(contactInfo);
-
-    return true;
-}
-
 IptcCoreContactInfo DMetadata::getCreatorContactInfo() const
 {
     MetadataFields fields;
