@@ -406,9 +406,9 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
             md5.addData(size.setNum(qfile.size()));
             hash = md5.result().toHex();
         }
-    }
 
-    qfile.close();
+        qfile.close();
+    }
 
     if (!hash.isNull())
     {
