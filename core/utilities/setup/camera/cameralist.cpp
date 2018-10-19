@@ -111,6 +111,7 @@ bool CameraList::load()
 
     if (!doc.setContent(&cfile))
     {
+        cfile.close();
         return false;
     }
 
@@ -118,6 +119,7 @@ bool CameraList::load()
 
     if (docElem.tagName() != QLatin1String("cameralist"))
     {
+        cfile.close();
         return false;
     }
 
@@ -144,6 +146,7 @@ bool CameraList::load()
         insertPrivate(ctype);
     }
 
+    cfile.close();
     return true;
 }
 

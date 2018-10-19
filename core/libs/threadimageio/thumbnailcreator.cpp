@@ -753,6 +753,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::WriteOnly);
         image.qimage.save(&buffer, "JPEG", 90);  // Here we will use JPEG quality = 90 to reduce artifacts.
+        buffer.close();
 
         if (dbInfo.data.isNull())
         {
@@ -765,6 +766,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::WriteOnly);
         image.qimage.save(&buffer, "JP2");
+        buffer.close();
 
         if (dbInfo.data.isNull())
         {
@@ -777,6 +779,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::WriteOnly);
         image.qimage.save(&buffer, "PNG", 0);
+        buffer.close();
 
         if (dbInfo.data.isNull())
         {
@@ -942,6 +945,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::ReadOnly);
         image.qimage.load(&buffer, "JPEG");
+        buffer.close();
 
         if (dbInfo.data.isNull())
         {
@@ -954,6 +958,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::ReadOnly);
         image.qimage.load(&buffer, "JP2");
+        buffer.close();
 
         if (dbInfo.data.isNull())
         {
@@ -966,6 +971,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::ReadOnly);
         image.qimage.load(&buffer, "PNG");
+        buffer.close();
 
         if (dbInfo.data.isNull())
         {

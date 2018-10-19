@@ -78,8 +78,11 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
 
             if (urandom.read(data(), s) == s)
             {
+                urandom.close();
                 return;
             }
+
+            urandom.close();
         }
     }
 #endif

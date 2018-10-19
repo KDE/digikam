@@ -1144,6 +1144,7 @@ bool MetaEngine::setImagePreview(const QImage& preview) const
 
         // A little bit compressed preview jpeg image to limit IPTC size.
         preview.save(&buffer, "JPEG");
+        buffer.close();
         qCDebug(DIGIKAM_METAENGINE_LOG) << "JPEG image preview size: (" << preview.width() << "x"
                                         << preview.height() << ") pixels -" << data.size() << "bytes";
 

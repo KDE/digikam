@@ -172,6 +172,8 @@ void ImageQualityParser::startAnalyse()
             oms << "Under-exposure Percents:" << underLevel << endl;
             oms << "Over-exposure Percents:"  << overLevel << endl;
         }
+
+        filems.close();
     }
 
 #endif // TRACE

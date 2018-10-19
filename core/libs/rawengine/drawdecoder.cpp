@@ -239,6 +239,7 @@ bool DRawDecoder::loadHalfPreview(QByteArray& imgData, const QBuffer& inBuffer)
     QBuffer buffer(&imgData);
     buffer.open(QIODevice::WriteOnly);
     image.save(&buffer, "JPG");
+    buffer.close();
 
     return true;
 }

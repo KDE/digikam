@@ -126,6 +126,7 @@ public:
             dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
             dataStream >> *temp;
             sp = *temp;
+            model.close();
         }
         else
         {

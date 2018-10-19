@@ -356,6 +356,7 @@ bool WorkflowManager::load(QStringList& failed)
         if (!doc.setContent(&file))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot load Workflow XML file";
+            file.close();
             return false;
         }
 
@@ -364,6 +365,7 @@ bool WorkflowManager::load(QStringList& failed)
         if (docElem.tagName() != QLatin1String("queuelist"))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Workflow XML file do not content Queue List data";
+            file.close();
             return false;
         }
 
@@ -545,6 +547,7 @@ bool WorkflowManager::load(QStringList& failed)
             }
         }
 
+        file.close();
         return true;
     }
     else

@@ -124,10 +124,12 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
         if (imageFormat.isEmpty())
         {
             emitWarning(i18n("Format of image '%1' is unknown", QDir::toNativeSeparators(path)));
+            imageFile.close();
             return;
         }
 
         imageData = imageFile.readAll();
+        imageFile.close();
 
         if (!originalImage.loadFromData(imageData))
         {
@@ -451,9 +453,11 @@ bool GalleryElementFunctor::writeDataToFile(const QByteArray& data, const QStrin
     if (destFile.write(data) != data.size())
     {
         emitWarning(i18n("Could not save image to file '%1'", QDir::toNativeSeparators(destPath)));
+        destFile.close();
         return false;
     }
 
+    destFile.close();
     return true;
 }
 

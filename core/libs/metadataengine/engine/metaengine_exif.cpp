@@ -889,6 +889,7 @@ bool MetaEngine::setExifThumbnail(const QImage& thumbImage) const
         QBuffer buffer(&data);
         buffer.open(QIODevice::WriteOnly);
         thumbImage.save(&buffer, "JPEG");
+        buffer.close();
         Exiv2::ExifThumb thumb(d->exifMetadata());
         thumb.setJpegThumbnail((Exiv2::byte *)data.data(), data.size());
 
@@ -946,6 +947,7 @@ bool MetaEngine::setTiffThumbnail(const QImage& thumbImage) const
             QBuffer buffer(&data);
             buffer.open(QIODevice::WriteOnly);
             thumbImage.save(&buffer, "JPEG");
+            buffer.close();
 
             Exiv2::DataBuf buf((Exiv2::byte *)data.data(), data.size());
             Exiv2::ULongValue val;

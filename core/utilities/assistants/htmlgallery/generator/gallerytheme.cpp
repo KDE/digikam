@@ -111,6 +111,7 @@ public:
             list.append(line);
         }
 
+        file.close();
         return list;
     }
 

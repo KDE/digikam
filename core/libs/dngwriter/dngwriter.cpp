@@ -1114,6 +1114,7 @@ int DNGWriter::convert()
             tempDataStream.Put(compressedData.data(), compressedData.size());
 
             compressedFile.remove();
+            originalFile.close();
 
             tempDataStream.Put_uint32(0);
             tempDataStream.Put_uint32(0);
