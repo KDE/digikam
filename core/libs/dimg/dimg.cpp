@@ -424,91 +424,101 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
         case (JPEG):
         {
             qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : JPEG file identified";
-            JPEGLoader loader(this);
-            loader.setLoadFlags(loadFlags);
+            JPEGLoader* const loader = new JPEGLoader(this);
+            loader->setLoadFlags(loadFlags);
 
-            if (loader.load(filePath, observer))
+            if (loader->load(filePath, observer))
             {
-                m_priv->null       = !loader.hasLoadedData();
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
+                m_priv->null       = !loader->hasLoadedData();
+                m_priv->alpha      = loader->hasAlpha();
+                m_priv->sixteenBit = loader->sixteenBit();
+                setAttribute(QLatin1String("isreadonly"), loader->isReadOnly());
+                delete loader;
                 return true;
             }
 
+            delete loader;
             break;
         }
 
         case (TIFF):
         {
             qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : TIFF file identified";
-            TIFFLoader loader(this);
-            loader.setLoadFlags(loadFlags);
+            TIFFLoader* const loader = new TIFFLoader(this);
+            loader->setLoadFlags(loadFlags);
 
-            if (loader.load(filePath, observer))
+            if (loader->load(filePath, observer))
             {
-                m_priv->null       = !loader.hasLoadedData();
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
+                m_priv->null       = !loader->hasLoadedData();
+                m_priv->alpha      = loader->hasAlpha();
+                m_priv->sixteenBit = loader->sixteenBit();
+                setAttribute(QLatin1String("isreadonly"), loader->isReadOnly());
+                delete loader;
                 return true;
             }
 
+            delete loader;
             break;
         }
 
         case (PNG):
         {
             qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : PNG file identified";
-            PNGLoader loader(this);
-            loader.setLoadFlags(loadFlags);
+            PNGLoader* const loader = new PNGLoader(this);
+            loader->setLoadFlags(loadFlags);
 
-            if (loader.load(filePath, observer))
+            if (loader->load(filePath, observer))
             {
-                m_priv->null       = !loader.hasLoadedData();
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
+                m_priv->null       = !loader->hasLoadedData();
+                m_priv->alpha      = loader->hasAlpha();
+                m_priv->sixteenBit = loader->sixteenBit();
+                setAttribute(QLatin1String("isreadonly"), loader->isReadOnly());
+                delete loader;
                 return true;
             }
 
+            delete loader;
             break;
         }
 
         case (PPM):
         {
             qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : PPM file identified";
-            PPMLoader loader(this);
-            loader.setLoadFlags(loadFlags);
+            PPMLoader* const loader = new PPMLoader(this);
+            loader->setLoadFlags(loadFlags);
 
-            if (loader.load(filePath, observer))
+            if (loader->load(filePath, observer))
             {
-                m_priv->null       = !loader.hasLoadedData();
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
+                m_priv->null       = !loader->hasLoadedData();
+                m_priv->alpha      = loader->hasAlpha();
+                m_priv->sixteenBit = loader->sixteenBit();
+                setAttribute(QLatin1String("isreadonly"), loader->isReadOnly());
+                delete loader;
                 return true;
             }
 
+            delete loader;
             break;
         }
 
         case (RAW):
         {
             qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : RAW file identified";
-            RAWLoader loader(this, rawDecodingSettings);
-            loader.setLoadFlags(loadFlags);
+            RAWLoader* const loader = new RAWLoader(this, rawDecodingSettings);
+            loader->setLoadFlags(loadFlags);
 
-            if (loader.load(filePath, observer))
+            if (loader->load(filePath, observer))
             {
-                m_priv->null       = !loader.hasLoadedData();
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
-                loader.postProcess(observer);
+                m_priv->null       = !loader->hasLoadedData();
+                m_priv->alpha      = loader->hasAlpha();
+                m_priv->sixteenBit = loader->sixteenBit();
+                setAttribute(QLatin1String("isreadonly"), loader->isReadOnly());
+                loader->postProcess(observer);
+                delete loader;
                 return true;
             }
 
+            delete loader;
             break;
         }
 
@@ -516,18 +526,20 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
         case (JP2K):
         {
             qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : JPEG2000 file identified";
-            JP2KLoader loader(this);
-            loader.setLoadFlags(loadFlags);
+            JP2KLoader* const loader = new JP2KLoader(this);
+            loader->setLoadFlags(loadFlags);
 
-            if (loader.load(filePath, observer))
+            if (loader->load(filePath, observer))
             {
-                m_priv->null       = !loader.hasLoadedData();
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
+                m_priv->null       = !loader->hasLoadedData();
+                m_priv->alpha      = loader->hasAlpha();
+                m_priv->sixteenBit = loader->sixteenBit();
+                setAttribute(QLatin1String("isreadonly"), loader->isReadOnly());
+                delete loader;
                 return true;
             }
 
+            delete loader;
             break;
         }
 #endif // HAVE_JASPER
@@ -535,18 +547,20 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
         case (PGF):
         {
             qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : PGF file identified";
-            PGFLoader loader(this);
-            loader.setLoadFlags(loadFlags);
+            PGFLoader* const loader = new PGFLoader(this);
+            loader->setLoadFlags(loadFlags);
 
-            if (loader.load(filePath, observer))
+            if (loader->load(filePath, observer))
             {
-                m_priv->null       = !loader.hasLoadedData();
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
+                m_priv->null       = !loader->hasLoadedData();
+                m_priv->alpha      = loader->hasAlpha();
+                m_priv->sixteenBit = loader->sixteenBit();
+                setAttribute(QLatin1String("isreadonly"), loader->isReadOnly());
+                delete loader;
                 return true;
             }
 
+            delete loader;
             break;
         }
 
@@ -560,18 +574,20 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
     }
 
     qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : QIMAGE file identified";
-    QImageLoader loader(this);
-    loader.setLoadFlags(loadFlags);
+    QImageLoader* const loader = new QImageLoader(this);
+    loader->setLoadFlags(loadFlags);
 
-    if (loader.load(filePath, observer))
+    if (loader->load(filePath, observer))
     {
-        m_priv->null       = !loader.hasLoadedData();
-        m_priv->alpha      = loader.hasAlpha();
-        m_priv->sixteenBit = loader.sixteenBit();
-        setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
+        m_priv->null       = !loader->hasLoadedData();
+        m_priv->alpha      = loader->hasAlpha();
+        m_priv->sixteenBit = loader->sixteenBit();
+        setAttribute(QLatin1String("isreadonly"), loader->isReadOnly());
+        delete loader;
         return true;
     }
 
+    delete loader;
     return false;
 }
 
