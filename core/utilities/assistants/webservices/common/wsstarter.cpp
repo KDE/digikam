@@ -39,7 +39,6 @@
 #include "imageshackwindow.h"
 #include "imgurwindow.h"
 #include "ipfswindow.h"
-#include "ipfswindow.h"
 #include "mediawikiwindow.h"
 #include "odwindow.h"
 #include "pwindow.h"
