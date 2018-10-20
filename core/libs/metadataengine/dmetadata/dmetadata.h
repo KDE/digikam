@@ -207,20 +207,24 @@ private:
 
 public: // IPTC helpers
 
-    IptcCoreContactInfo getCreatorContactInfo() const;
-    bool setCreatorContactInfo(const IptcCoreContactInfo& info) const;
+    IptcCoreContactInfo getCreatorContactInfo()                    const;
+    bool setCreatorContactInfo(const IptcCoreContactInfo& info)    const;
 
-    IptcCoreLocationInfo getIptcCoreLocation() const;
+    IptcCoreLocationInfo getIptcCoreLocation()                     const;
     bool setIptcCoreLocation(const IptcCoreLocationInfo& location) const;
 
-    QStringList getIptcCoreSubjects() const;
+    QStringList getIptcCoreSubjects()                              const;
 
     bool removeIptcTags(const QStringList& tagFilters);
 
 private:
 
-    bool setIptcTag(const QString& text, int maxLength, const char* const debugLabel, const char* const tagKey) const;
-    QVariant fromIptcEmulateList(const char* const iptcTagName) const;
+    bool setIptcTag(const QString& text,
+                    int maxLength,
+                    const char* const debugLabel,
+                    const char* const tagKey)                      const;
+
+    QVariant fromIptcEmulateList(const char* const iptcTagName)    const;
     QVariant fromIptcEmulateLangAlt(const char* const iptcTagName) const;
 
 public: // XMP helpers

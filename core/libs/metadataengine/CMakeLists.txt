@@ -36,6 +36,7 @@ set(libdmetadata_SRCS
     dmetadata/dmetadata_libraw.cpp
     dmetadata/dmetadata_comments.cpp
     dmetadata/dmetadata_template.cpp
+    dmetadata/dmetadata_iptc.cpp
     dmetadata/dmetadatasettings.cpp
     dmetadata/dmetadatasettingscontainer.cpp
     containers/metadatainfo.cpp

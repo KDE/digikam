@@ -1328,182 +1328,6 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
     return ok;
 }
 
-IptcCoreContactInfo DMetadata::getCreatorContactInfo() const
-{
-    MetadataFields fields;
-    fields << MetadataInfo::IptcCoreContactInfoCity
-           << MetadataInfo::IptcCoreContactInfoCountry
-           << MetadataInfo::IptcCoreContactInfoAddress
-           << MetadataInfo::IptcCoreContactInfoPostalCode
-           << MetadataInfo::IptcCoreContactInfoProvinceState
-           << MetadataInfo::IptcCoreContactInfoEmail
-           << MetadataInfo::IptcCoreContactInfoPhone
-           << MetadataInfo::IptcCoreContactInfoWebUrl;
-
-    QVariantList metadataInfos = getMetadataFields(fields);
-
-    IptcCoreContactInfo info;
-
-    if (metadataInfos.size() == 8)
-    {
-        info.city          = metadataInfos.at(0).toString();
-        info.country       = metadataInfos.at(1).toString();
-        info.address       = metadataInfos.at(2).toString();
-        info.postalCode    = metadataInfos.at(3).toString();
-        info.provinceState = metadataInfos.at(4).toString();
-        info.email         = metadataInfos.at(5).toString();
-        info.phone         = metadataInfos.at(6).toString();
-        info.webUrl        = metadataInfos.at(7).toString();
-    }
-
-    return info;
-}
-
-bool DMetadata::setCreatorContactInfo(const IptcCoreContactInfo& info) const
-{
-    if (!supportXmp())
-    {
-        return false;
-    }
-
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCity", info.city))
-    {
-        return false;
-    }
-
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCtry", info.country))
-    {
-        return false;
-    }
-
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrExtadr", info.address))
-    {
-        return false;
-    }
-
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrPcode", info.postalCode))
-    {
-        return false;
-    }
-
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrRegion", info.provinceState))
-    {
-        return false;
-    }
-
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiEmailWork", info.email))
-    {
-        return false;
-    }
-
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiTelWork", info.phone))
-    {
-        return false;
-    }
-
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork", info.webUrl))
-    {
-        return false;
-    }
-
-    return true;
-}
-
-IptcCoreLocationInfo DMetadata::getIptcCoreLocation() const
-{
-    MetadataFields fields;
-    fields << MetadataInfo::IptcCoreCountry
-           << MetadataInfo::IptcCoreCountryCode
-           << MetadataInfo::IptcCoreCity
-           << MetadataInfo::IptcCoreLocation
-           << MetadataInfo::IptcCoreProvinceState;
-
-    QVariantList metadataInfos = getMetadataFields(fields);
-
-    IptcCoreLocationInfo location;
-
-    if (fields.size() == 5)
-    {
-        location.country       = metadataInfos.at(0).toString();
-        location.countryCode   = metadataInfos.at(1).toString();
-        location.city          = metadataInfos.at(2).toString();
-        location.location      = metadataInfos.at(3).toString();
-        location.provinceState = metadataInfos.at(4).toString();
-    }
-
-    return location;
-}
-
-bool DMetadata::setIptcCoreLocation(const IptcCoreLocationInfo& location) const
-{
-    if (supportXmp())
-    {
-        if (!setXmpTagString("Xmp.photoshop.Country", location.country))
-        {
-            return false;
-        }
-
-        if (!setXmpTagString("Xmp.iptc.CountryCode", location.countryCode))
-        {
-            return false;
-        }
-
-        if (!setXmpTagString("Xmp.photoshop.City", location.city))
-        {
-            return false;
-        }
-
-        if (!setXmpTagString("Xmp.iptc.Location", location.location))
-        {
-            return false;
-        }
-
-        if (!setXmpTagString("Xmp.photoshop.State", location.provinceState))
-        {
-            return false;
-        }
-    }
-
-    if (!setIptcTag(location.country,       64,  "Country",        "Iptc.Application2.CountryName"))
-    {
-        return false;
-    }
-
-    if (!setIptcTag(location.countryCode,    3,  "Country Code",   "Iptc.Application2.CountryCode"))
-    {
-        return false;
-    }
-
-    if (!setIptcTag(location.city,          32,  "City",           "Iptc.Application2.City"))
-    {
-        return false;
-    }
-
-    if (!setIptcTag(location.location,      32,  "SubLocation",    "Iptc.Application2.SubLocation"))
-    {
-        return false;
-    }
-
-    if (!setIptcTag(location.provinceState, 32,  "Province/State", "Iptc.Application2.ProvinceState"))
-    {
-        return false;
-    }
-
-    return true;
-}
-
-QStringList DMetadata::getIptcCoreSubjects() const
-{
-    QStringList list = getXmpSubjects();
-
-    if (!list.isEmpty())
-    {
-        return list;
-    }
-
-    return getIptcSubjects();
-}
-
 QString DMetadata::getLensDescription() const
 {
     QString     lens;
@@ -1628,15 +1452,6 @@ bool DMetadata::setIccProfile(const IccProfile& profile)
     return true;
 }
 
-bool DMetadata::setIptcTag(const QString& text, int maxLength,
-                           const char* const debugLabel, const char* const tagKey)  const
-{
-    QString truncatedText = text;
-    truncatedText.truncate(maxLength);
-    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
-    return setIptcTagString(tagKey, truncatedText);    // returns false if failed
-}
-
 inline QVariant DMetadata::fromExifOrXmp(const char* const exifTagName, const char* const xmpTagName) const
 {
     QVariant var;
@@ -1689,11 +1504,6 @@ inline QVariant DMetadata::fromIptcOrXmp(const char* const iptcTagName, const ch
     return QVariant(QVariant::String);
 }
 
-inline QVariant DMetadata::fromIptcEmulateList(const char* const iptcTagName) const
-{
-    return toStringListVariant(getIptcTagsStringList(iptcTagName));
-}
-
 inline QVariant DMetadata::fromXmpList(const char* const xmpTagName) const
 {
     QVariant var = getXmpTagVariant(xmpTagName);
@@ -1704,20 +1514,6 @@ inline QVariant DMetadata::fromXmpList(const char* const xmpTagName) const
     }
 
     return var;
-}
-
-inline QVariant DMetadata::fromIptcEmulateLangAlt(const char* const iptcTagName) const
-{
-    QString str = getIptcTagString(iptcTagName);
-
-    if (str.isNull())
-    {
-        return QVariant(QVariant::Map);
-    }
-
-    QMap<QString, QVariant> map;
-    map[QLatin1String("x-default")] = str;
-    return map;
 }
 
 inline QVariant DMetadata::fromXmpLangAlt(const char* const xmpTagName) const
@@ -2695,21 +2491,6 @@ bool DMetadata::removeExifTags(const QStringList& tagFilters)
     for (MetaDataMap::iterator it = m.begin() ; it != m.end() ; ++it)
     {
         removeExifTag(it.key().toLatin1().constData());
-    }
-
-    return true;
-}
-
-bool DMetadata::removeIptcTags(const QStringList& tagFilters)
-{
-    MetaDataMap m = getIptcTagsDataList(tagFilters);
-
-    if (m.isEmpty())
-        return false;
-
-    for (MetaDataMap::iterator it = m.begin() ; it != m.end() ; ++it)
-    {
-        removeIptcTag(it.key().toLatin1().constData());
     }
 
     return true;
