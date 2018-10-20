@@ -38,6 +38,7 @@ set(libdmetadata_SRCS
     dmetadata/dmetadata_template.cpp
     dmetadata/dmetadata_iptc.cpp
     dmetadata/dmetadata_labels.cpp
+    dmetadata/dmetadata_faces.cpp
     dmetadata/dmetadatasettings.cpp
     dmetadata/dmetadatasettingscontainer.cpp
     containers/metadatainfo.cpp
