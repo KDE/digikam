@@ -37,7 +37,8 @@
 #include "metaenginesettingscontainer.h"
 #include "metadatainfo.h"
 #include "captionvalues.h"
-#include "infocontainer.h"
+#include "photoinfocontainer.h"
+#include "videoinfocontainer.h"
 #include "digikam_export.h"
 #include "dmetadatasettings.h"
 

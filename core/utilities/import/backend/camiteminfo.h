@@ -35,7 +35,8 @@
 
 // Local includes
 
-#include "infocontainer.h"
+#include "photoinfocontainer.h"
+#include "videoinfocontainer.h"
 #include "digikam_export.h"
 
 class QDataStream;

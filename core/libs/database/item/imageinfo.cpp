@@ -57,7 +57,8 @@
 #include "tagscache.h"
 #include "template.h"
 #include "thumbnailinfo.h"
-#include "infocontainer.h"
+#include "photoinfocontainer.h"
+#include "videoinfocontainer.h"
 
 namespace Digikam
 {
@@ -157,7 +158,6 @@ MetadataInfo::Field DatabaseImageMetadataFieldsToMetadataInfoField(const Databas
     /// @todo Invalid request...
     return MetadataInfo::Field();
 }
-
 
 }
 

@@ -448,51 +448,6 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
     return photoInfo;
 }
 
-VideoInfoContainer DMetadata::getVideoInformation() const
-{
-    VideoInfoContainer videoInfo;
-
-    if (hasXmp())
-    {
-        if (videoInfo.aspectRatio.isEmpty())
-        {
-            videoInfo.aspectRatio = getMetadataField(MetadataInfo::AspectRatio).toString();
-        }
-
-        if (videoInfo.audioBitRate.isEmpty())
-        {
-            videoInfo.audioBitRate = getXmpTagString("Xmp.audio.SampleRate");
-        }
-
-        if (videoInfo.audioChannelType.isEmpty())
-        {
-            videoInfo.audioChannelType = getXmpTagString("Xmp.audio.ChannelType");
-        }
-
-        if (videoInfo.audioCodec.isEmpty())
-        {
-            videoInfo.audioCodec = getXmpTagString("Xmp.audio.Codec");
-        }
-
-        if (videoInfo.duration.isEmpty())
-        {
-            videoInfo.duration = getXmpTagString("Xmp.video.duration");
-        }
-
-        if (videoInfo.frameRate.isEmpty())
-        {
-            videoInfo.frameRate = getXmpTagString("Xmp.video.FrameRate");
-        }
-
-        if (videoInfo.videoCodec.isEmpty())
-        {
-            videoInfo.videoCodec = getXmpTagString("Xmp.video.Codec");
-        }
-    }
-
-    return videoInfo;
-}
-
 bool DMetadata::getImageTagsPath(QStringList& tagsPath,
                                  const DMetadataSettingsContainer& settings) const
 {

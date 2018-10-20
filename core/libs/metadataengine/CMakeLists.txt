@@ -32,7 +32,7 @@ set(libdmetadata_SRCS
     engine/metaenginesettings.cpp
     engine/metaenginesettingscontainer.cpp
     dmetadata/dmetadata.cpp
-    dmetadata/dmetadata_ffmpeg.cpp
+    dmetadata/dmetadata_video.cpp
     dmetadata/dmetadata_libraw.cpp
     dmetadata/dmetadata_comments.cpp
     dmetadata/dmetadata_template.cpp
@@ -41,7 +41,8 @@ set(libdmetadata_SRCS
     dmetadata/dmetadatasettings.cpp
     dmetadata/dmetadatasettingscontainer.cpp
     containers/metadatainfo.cpp
-    containers/infocontainer.cpp
+    containers/photoinfocontainer.cpp
+    containers/videoinfocontainer.cpp
     containers/template.cpp
     containers/captionvalues.cpp
 )

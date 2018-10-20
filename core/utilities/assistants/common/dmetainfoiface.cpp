@@ -31,7 +31,8 @@
 // Local includes
 
 #include "dmetadata.h"
-#include "infocontainer.h"
+#include "photoinfocontainer.h"
+#include "videoinfocontainer.h"
 #include "template.h"
 #include "dfileselector.h"
 

@@ -33,7 +33,8 @@
 
 // Local includes
 
-#include "infocontainer.h"
+#include "photoinfocontainer.h"
+#include "videoinfocontainer.h"
 
 using namespace Digikam;
 
@@ -46,7 +47,7 @@ class ShowfotoItemInfo
 {
 public:
 
-    ShowfotoItemInfo();
+    explicit ShowfotoItemInfo();
     ~ShowfotoItemInfo();
 
     /** Return true if all member in this container are null.

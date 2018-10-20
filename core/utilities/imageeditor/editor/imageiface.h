@@ -35,7 +35,8 @@
 #include "dimg.h"
 #include "dcolor.h"
 #include "filteraction.h"
-#include "infocontainer.h"
+#include "photoinfocontainer.h"
+#include "videoinfocontainer.h"
 #include "digikam_export.h"
 #include "digikam_globals.h"
 
