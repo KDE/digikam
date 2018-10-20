@@ -73,15 +73,15 @@ public:
     explicit DMetadata(const MetaEngineData& data);
     ~DMetadata();
 
-public: // Settings
+public: // Settings helpers
 
     void registerMetadataSettings();
     void setSettings(const MetaEngineSettingsContainer& settings);
 
-public: // File I/O
+public: // File I/O helpers
 
     /**
-     * Re-implemented from libMetaEngine to use libraw identify and 
+     * Re-implemented from libMetaEngine to use libraw identify and
      * ffmpeg probe methods if Exiv2 failed.
      */
     bool load(const QString& filePath);
@@ -324,7 +324,7 @@ public: // Video helpers
      */
     static QString videoColorModelToString(VIDEOCOLORMODEL videoColorModel);
 
-public: // Photo helpers 
+public: // Photo helpers
 
     /**
      * Return a string with Lens mounted on the front of camera.
@@ -340,7 +340,7 @@ public: // Photo helpers
     static double apexApertureToFNumber(double aperture);
     static double apexShutterSpeedToExposureTime(double shutterSpeed);
 
-public: // Generic helpers 
+public: // Generic helpers
 
     /**
      * Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification

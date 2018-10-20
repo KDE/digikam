@@ -85,39 +85,6 @@ void DMetadata::setSettings(const MetaEngineSettingsContainer& settings)
     setUpdateFileTimeStamp(settings.updateFileTimeStamp);
 }
 
-bool DMetadata::load(const QString& filePath)
-{
-    // In first, we trying to get metadata using Exiv2,
-    // else we will use other engine to extract minimal information.
-
-    FileReadLocker lock(filePath);
-
-    if (!MetaEngine::load(filePath))
-    {
-        if (!loadUsingRawEngine(filePath))
-        {
-            if (!loadUsingFFmpeg(filePath))
-            {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-bool DMetadata::save(const QString& filePath, bool setVersion) const
-{
-    FileWriteLocker lock(filePath);
-    return MetaEngine::save(filePath, setVersion);
-}
-
-bool DMetadata::applyChanges(bool setVersion) const
-{
-    FileWriteLocker lock(getFilePath());
-    return MetaEngine::applyChanges(setVersion);
-}
-
 int DMetadata::getMSecsInfo() const
 {
     int ms  = 0;

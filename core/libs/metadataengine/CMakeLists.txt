@@ -33,7 +33,7 @@ set(libdmetadata_SRCS
     engine/metaenginesettingscontainer.cpp
     dmetadata/dmetadata.cpp
     dmetadata/dmetadata_video.cpp
-    dmetadata/dmetadata_libraw.cpp
+    dmetadata/dmetadata_fileio.cpp
     dmetadata/dmetadata_comments.cpp
     dmetadata/dmetadata_template.cpp
     dmetadata/dmetadata_iptc.cpp

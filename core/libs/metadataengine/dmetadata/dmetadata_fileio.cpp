@@ -28,10 +28,15 @@
 // Qt includes
 
 #include <QString>
+#include <QFile>
 #include <QFileInfo>
+#include <QLocale>
+#include <QUuid>
 
 // Local includes
 
+#include "filereadwritelock.h"
+#include "metaenginesettings.h"
 #include "rawinfo.h"
 #include "drawdecoder.h"
 #include "digikam_version.h"
@@ -40,6 +45,39 @@
 
 namespace Digikam
 {
+
+bool DMetadata::load(const QString& filePath)
+{
+    // In first, we trying to get metadata using Exiv2,
+    // else we will use other engine to extract minimal information.
+
+    FileReadLocker lock(filePath);
+
+    if (!MetaEngine::load(filePath))
+    {
+        if (!loadUsingRawEngine(filePath))
+        {
+            if (!loadUsingFFmpeg(filePath))
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool DMetadata::save(const QString& filePath, bool setVersion) const
+{
+    FileWriteLocker lock(filePath);
+    return MetaEngine::save(filePath, setVersion);
+}
+
+bool DMetadata::applyChanges(bool setVersion) const
+{
+    FileWriteLocker lock(getFilePath());
+    return MetaEngine::applyChanges(setVersion);
+}
 
 bool DMetadata::loadUsingRawEngine(const QString& filePath)
 {
