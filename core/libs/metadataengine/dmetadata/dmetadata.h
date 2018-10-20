@@ -366,7 +366,16 @@ private:
 
     QVariant fromExifOrXmp(const char* const exifTagName, const char* const xmpTagName) const;
     QVariant fromIptcOrXmp(const char* const iptcTagName, const char* const xmpTagName) const;
-    QVariant toStringListVariant(const QStringList& list)                               const;
+
+    inline QVariant toStringListVariant(const QStringList& list) const
+    {
+        if (list.isEmpty())
+        {
+            return QVariant(QVariant::StringList);
+        }
+
+        return list;
+    }
 
     bool hasValidField(const QVariantList& list)                                        const;
 
