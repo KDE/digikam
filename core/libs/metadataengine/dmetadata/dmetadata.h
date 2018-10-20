@@ -92,11 +92,6 @@ public: // File I/O
      */
     bool loadUsingRawEngine(const QString& filePath);
 
-    /**
-     * Try to extract metadata using FFMpeg probe method (libav).
-     */
-    bool loadUsingFFmpeg(const QString& filePath);
-
 public: // History helpers
 
     QString getImageHistory() const;
@@ -314,6 +309,11 @@ private:
 public: // Video helpers
 
     /**
+     * Try to extract metadata using FFMpeg probe method (libav).
+     */
+    bool loadUsingFFmpeg(const QString& filePath);
+
+    /**
      * Returns video metadata from Xmp tags.
      */
     VideoInfoContainer getVideoInformation() const;
@@ -323,7 +323,7 @@ public: // Video helpers
      */
     static QString videoColorModelToString(VIDEOCOLORMODEL videoColorModel);
 
-public: // Others helpers 
+public: // Photo helpers 
 
     /**
      * Return a string with Lens mounted on the front of camera.
@@ -335,6 +335,8 @@ public: // Others helpers
     QString getLensDescription() const;
 
     PhotoInfoContainer getPhotographInformation() const;
+
+public: // Generic helpers 
 
     /**
      * Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
