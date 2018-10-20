@@ -40,6 +40,7 @@ set(libdmetadata_SRCS
     dmetadata/dmetadata_labels.cpp
     dmetadata/dmetadata_faces.cpp
     dmetadata/dmetadata_history.cpp
+    dmetadata/dmetadata_photo.cpp
     dmetadata/dmetadatasettings.cpp
     dmetadata/dmetadatasettingscontainer.cpp
     containers/metadatainfo.cpp

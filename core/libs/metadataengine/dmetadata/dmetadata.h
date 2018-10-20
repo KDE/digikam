@@ -337,6 +337,9 @@ public: // Photo helpers
 
     PhotoInfoContainer getPhotographInformation() const;
 
+    static double apexApertureToFNumber(double aperture);
+    static double apexShutterSpeedToExposureTime(double shutterSpeed);
+
 public: // Generic helpers 
 
     /**
@@ -358,9 +361,6 @@ public: // Generic helpers
      * Valid fields are those which are described as "enum from" or "bit mask from" in metadatainfo.h.
      */
     static QMap<int, QString> possibleValuesForEnumField(MetadataInfo::Field field);
-
-    static double apexApertureToFNumber(double aperture);
-    static double apexShutterSpeedToExposureTime(double shutterSpeed);
 
 private:
 
