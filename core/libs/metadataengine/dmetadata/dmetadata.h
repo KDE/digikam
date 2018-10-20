@@ -346,7 +346,7 @@ public: // Generic helpers
      * Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
      * of the format of the QVariant.
      */
-    QVariant     getMetadataField(MetadataInfo::Field field) const;
+    QVariant     getMetadataField(MetadataInfo::Field field)     const;
     QVariantList getMetadataFields(const MetadataFields& fields) const;
 
     /**

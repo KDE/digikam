@@ -116,7 +116,7 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 
     if (valid)
     {
-        foreach(const QString& str, mappingKeys())
+        foreach (const QString& str, mappingKeys())
         {
             readOneGroup(group, QLatin1String("read")  + str + QLatin1String("Namespaces"), getReadMapping(str));
             readOneGroup(group, QLatin1String("write") + str + QLatin1String("Namespaces"), getWriteMapping(str));
@@ -126,25 +126,26 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
     {
         defaultValues();
     }
-//    if (group.hasGroup("readTagNamespaces")     &&
-//        group.hasGroup("readRatingNamespaces")  &&
-//        group.hasGroup("readCommentNamespaces") &&
-//        group.hasGroup("writeTagNamespaces")    &&
-//        group.hasGroup("writeRatingNamespaces") &&
-//        group.hasGroup("writeCommentNamespaces"))
-//    {
-//        readOneGroup(group, QLatin1String("readTagNamespaces"),      readTagNamespaces);
-//        readOneGroup(group, QLatin1String("readRatingNamespaces"),   readRatingNamespaces);
-//        readOneGroup(group, QLatin1String("readCommentNamespaces"),  readCommentNamespaces);
-//        readOneGroup(group, QLatin1String("writeTagNamespaces"),     writeTagNamespaces);
-//        readOneGroup(group, QLatin1String("writeRatingNamespaces"),  writeRatingNamespaces);
-//        readOneGroup(group, QLatin1String("writeCommentNamespaces"), writeCommentNamespaces);
-//    }
-//    else
-//    {
-//        defaultValues();
-//    }
-
+/*
+    if (group.hasGroup("readTagNamespaces")     &&
+        group.hasGroup("readRatingNamespaces")  &&
+        group.hasGroup("readCommentNamespaces") &&
+        group.hasGroup("writeTagNamespaces")    &&
+        group.hasGroup("writeRatingNamespaces") &&
+        group.hasGroup("writeCommentNamespaces"))
+    {
+        readOneGroup(group, QLatin1String("readTagNamespaces"),      readTagNamespaces);
+        readOneGroup(group, QLatin1String("readRatingNamespaces"),   readRatingNamespaces);
+        readOneGroup(group, QLatin1String("readCommentNamespaces"),  readCommentNamespaces);
+        readOneGroup(group, QLatin1String("writeTagNamespaces"),     writeTagNamespaces);
+        readOneGroup(group, QLatin1String("writeRatingNamespaces"),  writeRatingNamespaces);
+        readOneGroup(group, QLatin1String("writeCommentNamespaces"), writeCommentNamespaces);
+    }
+    else
+    {
+        defaultValues();
+    }
+*/
 }
 
 void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
@@ -154,13 +155,14 @@ void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
         writeOneGroup(group, QLatin1String("read")  + str + QLatin1String("Namespaces"), getReadMapping(str));
         writeOneGroup(group, QLatin1String("write") + str + QLatin1String("Namespaces"), getWriteMapping(str));
     }
-//    writeOneGroup(group, QLatin1String("readTagNamespaces"),      readTagNamespaces);
-//    writeOneGroup(group, QLatin1String("readRatingNamespaces"),   readRatingNamespaces);
-//    writeOneGroup(group, QLatin1String("readCommentNamespaces"),  readCommentNamespaces);
-//    writeOneGroup(group, QLatin1String("writeTagNamespaces"),     writeTagNamespaces);
-//    writeOneGroup(group, QLatin1String("writeRatingNamespaces"),  writeRatingNamespaces);
-//    writeOneGroup(group, QLatin1String("writeCommentNamespaces"), writeCommentNamespaces);
-
+/*
+    writeOneGroup(group, QLatin1String("readTagNamespaces"),      readTagNamespaces);
+    writeOneGroup(group, QLatin1String("readRatingNamespaces"),   readRatingNamespaces);
+    writeOneGroup(group, QLatin1String("readCommentNamespaces"),  readCommentNamespaces);
+    writeOneGroup(group, QLatin1String("writeTagNamespaces"),     writeTagNamespaces);
+    writeOneGroup(group, QLatin1String("writeRatingNamespaces"),  writeRatingNamespaces);
+    writeOneGroup(group, QLatin1String("writeCommentNamespaces"), writeCommentNamespaces);
+*/
     group.sync();
 }
 

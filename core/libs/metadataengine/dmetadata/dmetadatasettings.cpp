@@ -69,6 +69,7 @@ DMetadataSettingsContainer DMetadataSettings::Private::readFromConfig() const
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroup);
     s.readFromConfig(group);
+
     return s;
 }
 
@@ -85,6 +86,7 @@ DMetadataSettingsContainer DMetadataSettings::Private::setSettings(const DMetada
     DMetadataSettingsContainer old;
     old      = settings;
     settings = s;
+
     return old;
 }
 

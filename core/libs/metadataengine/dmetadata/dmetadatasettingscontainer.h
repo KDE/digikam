@@ -105,20 +105,20 @@ public:
         tagPaths       = TAGPATH;
     }
 
-    NamespaceEntry(const NamespaceEntry& copy)
+    NamespaceEntry(const NamespaceEntry& other)
     {
-        this->namespaceName   = copy.namespaceName;
-        this->alternativeName = copy.alternativeName;
-        this->tagPaths        = copy.tagPaths;
-        this->separator       = copy.separator;
-        this->nsType          = copy.nsType;
-        this->convertRatio    = QList<int>(copy.convertRatio);
-        this->specialOpts     = copy.specialOpts;
-        this->secondNameOpts  = copy.secondNameOpts;
-        this->index           = copy.index;
-        this->subspace        = copy.subspace;
-        this->isDefault       = copy.isDefault;
-        this->isDisabled      = copy.isDisabled;
+        namespaceName   = other.namespaceName;
+        alternativeName = other.alternativeName;
+        tagPaths        = other.tagPaths;
+        separator       = other.separator;
+        nsType          = other.nsType;
+        convertRatio    = QList<int>(other.convertRatio);
+        specialOpts     = other.specialOpts;
+        secondNameOpts  = other.secondNameOpts;
+        index           = other.index;
+        subspace        = other.subspace;
+        isDefault       = other.isDefault;
+        isDisabled      = other.isDisabled;
     }
 
     ~NamespaceEntry()
@@ -160,6 +160,7 @@ public:
     explicit DMetadataSettingsContainer();
     DMetadataSettingsContainer(const DMetadataSettingsContainer& other);
     ~DMetadataSettingsContainer();
+
     DMetadataSettingsContainer& operator=(const DMetadataSettingsContainer& other);
 
 public:
@@ -177,11 +178,11 @@ public:
 
     void addMapping(const QString& key);
 
-    QList<NamespaceEntry>& getReadMapping(const QString& key) const;
+    QList<NamespaceEntry>& getReadMapping(const QString& key)  const;
 
     QList<NamespaceEntry>& getWriteMapping(const QString& key) const;
 
-    QList<QString> mappingKeys() const;
+    QList<QString>         mappingKeys()                       const;
 
 private:
 
@@ -190,6 +191,8 @@ private:
     void defaultCommentValues();
     void readOneGroup(KConfigGroup& group, const QString& name, QList<NamespaceEntry>& container);
     void writeOneGroup(KConfigGroup& group, const QString& name, QList<NamespaceEntry>& container) const;
+
+private:
 
     class Private;
     Private* d;
