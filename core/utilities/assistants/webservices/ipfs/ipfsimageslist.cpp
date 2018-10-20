@@ -92,11 +92,10 @@ void IpfsImagesList::slotAddImages(const QList<QUrl>& list)
         // Already in the list?
         if (listView()->findItem(*it) == nullptr)
         {
-            auto* item = new IpfsImagesListViewItem(listView(), *it);
-
             // Load URLs from meta data, if possible
             if (meta.load((*it).toLocalFile()))
             {
+                auto* const item = new IpfsImagesListViewItem(listView(), *it);
                 item->setIpfsUrl(meta.getXmpTagString("Xmp.digiKam.IPFSId"));
             }
         }
