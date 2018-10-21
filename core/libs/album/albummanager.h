@@ -146,6 +146,20 @@ public:
     void addFakeConnection();
     void removeFakeConnection();
 
+private:
+
+    bool handleCollectionStatusChange(const CollectionLocation& location, int oldStatus);
+    void addAlbumRoot(const CollectionLocation& location);
+    void removeAlbumRoot(const CollectionLocation& location);
+
+private Q_SLOTS:
+
+    void slotCollectionLocationStatusChanged(const CollectionLocation&, int);
+    void slotCollectionLocationPropertiesChanged(const CollectionLocation& location);
+    void slotCollectionImageChange(const CollectionImageChangeset& changeset);
+
+    void slotImagesDeleted(const QList<qlonglong>& imageIds);
+
     //@}
 
 public:
@@ -195,6 +209,23 @@ public:
      */
     bool isMovingAlbum(Album* album) const;
    
+private:
+   
+    bool hasDirectChildAlbumWithTitle(Album* parent, const QString& title);
+    void notifyAlbumDeletion(Album* album);
+    void updateAlbumPathHash();
+    void addGuardedPointer(Album* a, Album** pointer);
+    void removeGuardedPointer(Album* a, Album** pointer);
+    void changeGuardedPointer(Album* oldAlbum, Album* a, Album** pointer);
+    void invalidateGuardedPointers(Album* album);
+
+private Q_SLOTS:
+
+    void slotAlbumsJobResult();
+    void slotAlbumsJobData(const QMap<int, int>& albumsStatMap);
+    void slotAlbumChange(const AlbumChangeset& changeset);
+    void getAlbumItemsCount();
+    
     //@}
 
 public:
@@ -224,7 +255,12 @@ public:
      * @return count map for DAlbums
      */
     QMap<YearMonth, int> getDAlbumsCount() const;
-    
+
+private Q_SLOTS:
+
+    void slotDatesJobResult();
+    void slotDatesJobData(const QMap<QDateTime, int>& datesStatMap);
+
     //@}
 
 public:
@@ -344,6 +380,21 @@ public:
      * @return The item id or -1 if not existent.
      */
     qlonglong getItemFromAlbum(PAlbum* album, const QString& fileName);
+
+private:
+
+    void insertPAlbum(PAlbum* album, PAlbum* parent);
+    void removePAlbum(PAlbum* album);
+
+private Q_SLOTS:
+
+    /**
+     * Scan albums directly from database and creates new PAlbums
+     * It only creates those PAlbums which haven't already been
+     * created.
+     */
+    void scanPAlbums();
+    void updateChangedPAlbums();
 
     //@}
 
@@ -516,6 +567,39 @@ public:
      */
     QList<int> subTags(int tagId, bool recursive = false);
 
+private:
+    
+    /**
+     * Checks whether an Album has a direct child with the given name.
+     *
+     * @param parent album to check children for
+     * @param title title to search for
+     * @return <code>true</code> if there is a child with name, else
+     *         <code>false</code>
+     */
+    void askUserForWriteChangedTAlbumToFiles(TAlbum* const album);
+    void askUserForWriteChangedTAlbumToFiles(const QList<qlonglong>& imageIds);
+
+    void insertTAlbum(TAlbum* album, TAlbum* parent);
+    void removeTAlbum(TAlbum* album);
+
+private Q_SLOTS:
+
+    /**
+     * Scan tags directly from database and creates new TAlbums
+     * It only creates those TAlbums which haven't already been
+     * created.
+     */
+    void scanTAlbums();
+
+    void slotTagsJobResult();
+    void slotTagsJobData(const QMap<int, int>& tagsStatMap);
+    void slotTagChange(const TagChangeset& changeset);
+    void slotImageTagChange(const ImageTagChangeset& changeset);
+
+    void getTagItemsCount();
+    void tagItemsCount();
+
     //@}
 
 public:
@@ -583,6 +667,24 @@ public:
      * @param album the album to delete
      */
     bool deleteSAlbum(SAlbum* album);
+
+private Q_SLOTS:
+
+    /**
+     * Scan searches directly from database and creates new SAlbums
+     * It only creates those SAlbums which haven't already been
+     * created.
+     */
+    void scanSAlbums();
+
+    void slotSearchChange(const SearchChangeset& changeset);
+
+    /**
+     * Scan dates from the database (via IOSlave) and
+     * updates the DAlbums.
+     */
+    void scanDAlbumsScheduled();
+    void scanDAlbums();
 
     //@}
 
@@ -680,134 +782,93 @@ public:
      */
     QStringList namePaths(const QList<QString>& tagNames, bool leadingSlash=true) const;
 
+private Q_SLOTS:
+
+    void slotPeopleJobResult();
+    void slotPeopleJobData(const QMap<QString, QMap<int, int> >& facesStatMap);
+    void personItemsCount();
+
     //@}
 
 Q_SIGNALS:
 
-    /// An album is about to be added to the given parent (0 if album is root)
-    /// after the item given by prev (prev is 0 if parent has no children yet)
+    // Generic Album --------------------------------------------------------
+
+    /** Emitted when an album is about to be added to the given parent (0 if album is root)
+     *  after the item given by prev (prev is 0 if parent has no children yet).
+     */
     void signalAlbumAboutToBeAdded(Album* album, Album* parent, Album* prev);
-    /// The album has been added.
+
+    /** Emitted when the album has been added.
+     */
     void signalAlbumAdded(Album* album);
-    /// The album is about to be deleted, but is still fully valid.
+
+    /** Emitted when the album is about to be deleted, but is still fully valid.
+     */
     void signalAlbumAboutToBeDeleted(Album* album);
-    /// The album is deleted, but the object can still be accessed.
+
+    /** Emitted when the album is deleted, but the object can still be accessed.
+     */
     void signalAlbumDeleted(Album* album);
-    /// The album is deleted, the object can no longer be accessed.
-    /// For identification purposes, the former album pointer is passed.
+
+    /** Emitted when the album is deleted, the object can no longer be accessed.
+     *  For identification purposes, the former album pointer is passed.
+     */
     void signalAlbumHasBeenDeleted(quintptr);
+
     void signalAlbumsCleared();
     void signalAlbumCurrentChanged(const QList<Album*>& albums);
     void signalAllAlbumsLoaded();
-    void signalAllDAlbumsLoaded();
+
     void signalAlbumIconChanged(Album* album);
     void signalAlbumRenamed(Album* album);
     void signalAlbumNewPath(Album* album);
-    void signalSearchUpdated(SAlbum* album);
-    /// Indicates that an album is about to be moved. Signals for deleting and adding will be
-    /// sent afterwards, but the album object is guaranteed not to be deleted until after signalAlbumMoved.
+
+    /** Emittedd when an album is about to be moved. Signals for deleting and adding will be
+     *  sent afterwards, but the album object is guaranteed not to be deleted until after signalAlbumMoved.
+     */
     void signalAlbumAboutToBeMoved(Album* album);
-    /// Emitted when the album is moved to its new parent. After signalAlbumAboutToBeMoved,
-    /// all four signals for first deleting and then adding will have been sent.
+
+    /** Emitted when the album is moved to its new parent. After signalAlbumAboutToBeMoved,
+     *  all four signals for first deleting and then adding will have been sent.
+     */
     void signalAlbumMoved(Album* album);
-    void signalPAlbumsDirty(const QMap<int, int>&);
-    void signalTAlbumsDirty(const QMap<int, int>&);
-    void signalDAlbumsDirty(const QMap<YearMonth, int>&);
-    void signalFaceCountsDirty(const QMap<int, int>&);
-    void signalDatesMapDirty(const QMap<QDateTime, int>&);
-    void signalTagPropertiesChanged(TAlbum* album);
     void signalAlbumsUpdated(int type);
-    void signalUpdateDuplicatesAlbums(const QList<SAlbum*>& modifiedAlbums, const QList<qlonglong>& deletedImages);
-    // Signals a change in this property. Please note that affected albums may appear or disappear after this signal has been emitted.
+
+    /** Emitted when a change is done on available Albums.
+     *  Please note that affected albums may appear or disappear after this signal has been emitted.
+     */
     void signalShowOnlyAvailableAlbumsChanged(bool showsOnlyAvailableAlbums);
 
-private Q_SLOTS:
+    // Physical Album -------------------------------------------------------
 
-    void slotDatesJobResult();
-    void slotDatesJobData(const QMap<QDateTime, int>& datesStatMap);
-    void slotAlbumsJobResult();
-    void slotAlbumsJobData(const QMap<int, int>& albumsStatMap);
-    void slotTagsJobResult();
-    void slotTagsJobData(const QMap<int, int>& tagsStatMap);
-    void slotPeopleJobResult();
-    void slotPeopleJobData(const QMap<QString, QMap<int, int> >& facesStatMap);
+    void signalPAlbumsDirty(const QMap<int, int>&);
 
-    void slotCollectionLocationStatusChanged(const CollectionLocation&, int);
-    void slotCollectionLocationPropertiesChanged(const CollectionLocation& location);
-    void slotAlbumChange(const AlbumChangeset& changeset);
-    void slotTagChange(const TagChangeset& changeset);
-    void slotSearchChange(const SearchChangeset& changeset);
-    void slotCollectionImageChange(const CollectionImageChangeset& changeset);
-    void slotImageTagChange(const ImageTagChangeset& changeset);
-    void slotImagesDeleted(const QList<qlonglong>& imageIds);
+    // Tag Album ------------------------------------------------------------
 
-    /**
-     * Scan albums directly from database and creates new PAlbums
-     * It only creates those PAlbums which haven't already been
-     * created.
-     */
-    void scanPAlbums();
-    void updateChangedPAlbums();
+    void signalTAlbumsDirty(const QMap<int, int>&);
+    void signalTagPropertiesChanged(TAlbum* album);
 
-    /**
-     * Scan tags directly from database and creates new TAlbums
-     * It only creates those TAlbums which haven't already been
-     * created.
-     */
-    void scanTAlbums();
-    /**
-     * Scan searches directly from database and creates new SAlbums
-     * It only creates those SAlbums which haven't already been
-     * created.
-     */
-    void scanSAlbums();
-    /**
-     * Scan dates from the database (via IOSlave) and
-     * updates the DAlbums.
-     */
-    void scanDAlbumsScheduled();
-    void scanDAlbums();
+    // Date Album -----------------------------------------------------------
 
-    void getAlbumItemsCount();
-    void getTagItemsCount();
-    void tagItemsCount();
-    void personItemsCount();
+    void signalDAlbumsDirty(const QMap<YearMonth, int>&);
+    void signalDatesMapDirty(const QMap<QDateTime, int>&);
+    void signalAllDAlbumsLoaded();
+
+    // Face Album -----------------------------------------------------------
+
+    void signalFaceCountsDirty(const QMap<int, int>&);
+
+    // Search Album ---------------------------------------------------------
+
+    void signalUpdateDuplicatesAlbums(const QList<SAlbum*>& modifiedAlbums, const QList<qlonglong>& deletedImages);
+    void signalSearchUpdated(SAlbum* album);
 
 private:
 
     friend class AlbumManagerCreator;
     AlbumManager();
     ~AlbumManager();
-
-    /**
-     * Checks whether an Album has a direct child with the given name.
-     *
-     * @param parent album to check children for
-     * @param title title to search for
-     * @return <code>true</code> if there is a child with name, else
-     *         <code>false</code>
-     */
-    void askUserForWriteChangedTAlbumToFiles(TAlbum* const album);
-    void askUserForWriteChangedTAlbumToFiles(const QList<qlonglong>& imageIds);
-
-    bool hasDirectChildAlbumWithTitle(Album* parent, const QString& title);
-
-    bool handleCollectionStatusChange(const CollectionLocation& location, int oldStatus);
-    void insertPAlbum(PAlbum* album, PAlbum* parent);
-    void removePAlbum(PAlbum* album);
-    void insertTAlbum(TAlbum* album, TAlbum* parent);
-    void removeTAlbum(TAlbum* album);
-    void updateAlbumPathHash();
-
-    void notifyAlbumDeletion(Album* album);
-
-    void addAlbumRoot(const CollectionLocation& location);
-    void removeAlbumRoot(const CollectionLocation& location);
-
-    void addGuardedPointer(Album* a, Album** pointer);
-    void removeGuardedPointer(Album* a, Album** pointer);
-    void changeGuardedPointer(Album* oldAlbum, Album* a, Album** pointer);
-    void invalidateGuardedPointers(Album* album);
 
     static AlbumManager* internalInstance;
 
