@@ -23,8 +23,6 @@
  *
  * ============================================================ */
 
-/** @file albummanager.h */
-
 #ifndef DIGIKAM_ALBUM_MANAGER_H
 #define DIGIKAM_ALBUM_MANAGER_H
 
@@ -81,9 +79,15 @@ public:
      */
     static AlbumManager* instance();
 
-    /** @name Library path And Scanning
+public:
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations with database
      */
+
     //@{
+
     /**
      * Initialize. Informs the user about failures.
      * Returns true on success, false on failure.
@@ -120,7 +124,7 @@ public:
      * @see setLibraryPath
      * @see refresh
      */
-    void       startScan();
+    void startScan();
 
     /**
      * This is similar to startScan, except that it assumes you have run
@@ -129,42 +133,31 @@ public:
      * filesystem is detected (but the album library path hasn't changed)
      * @see startScan
      */
-    void       refresh();
+    void refresh();
 
     /**
      * Ensures that valid item counts for physical and tag albums are available
      */
-    void       prepareItemCounts();
+    void prepareItemCounts();
+
+    bool isShowingOnlyAvailableAlbums() const;
+    void setShowOnlyAvailableAlbums(bool onlyAvailable);
+
+    void addFakeConnection();
+    void removeFakeConnection();
+
     //@}
 
-    /** @name List of Albums and current Album
+public:
+
+    // -----------------------------------------------------------------------------
+
+    /**
+     * @name Operations on generic Album
      */
+
     //@{
-    /**
-     * @return a list of all PAlbums
-     */
-    AlbumList allPAlbums() const;
-
-    /**
-     * @return a list of all TAlbums
-     */
-    AlbumList allTAlbums() const;
-
-    /**
-     * @return a list of all SAlbums
-     */
-    AlbumList allSAlbums() const;
-
-    /**
-     * @return a list of all DAlbums
-     */
-    AlbumList allDAlbums() const;
-
-    /**
-     * @return a list of all FAlbums
-     */
-    AlbumList allFAlbums() const;
-
+    
     /**
      * set current album to @p albums. It's similar to setCurrentAlbum,
      * but supports multiple selected albums
@@ -177,24 +170,82 @@ public:
     AlbumList currentAlbums() const;
 
     /**
+     * @return a Album with the given globalID
+     * @param gid the global id for the album
+     */
+    Album*    findAlbum(int gid) const;
+
+    /**
+     * @return a Album with the given type and id
+     * @param id the id for the album (not the global id)
+     */
+    Album*    findAlbum(Album::Type type, int id) const;
+
+    /**
+     * @return A hash with the titles for all album IDs.
+     */
+    QHash<int, QString> albumTitles() const;
+
+    /**
+     * Returns if the given album is currently being moved, that is,
+     * if this album is in between signalAlbumAboutToBeMoved and
+     * signalAlbumMoved. In this case, you can preserve state of such an album
+     * because the object is guaranteed not to be deleted, even if
+     * signalAlbumAboutToBeDeleted is emitted.
+     */
+    bool isMovingAlbum(Album* album) const;
+   
+    //@}
+
+public:
+    
+    // -----------------------------------------------------------------------------
+    
+    /** @name Operations on Date Album
+     */
+
+    //@{
+
+    /**
+     * @return a list of all DAlbums
+     */
+    AlbumList allDAlbums() const;
+
+    /**
+     * @return a DAlbum with given ID
+     * @param id the id for the DAlbum
+     */
+    DAlbum*   findDAlbum(int id) const;    
+    
+    /**
+     * Returns the latest count for DAlbums as also emitted via
+     * signalDAlbumsDirty.
+     *
+     * @return count map for DAlbums
+     */
+    QMap<YearMonth, int> getDAlbumsCount() const;
+    
+    //@}
+
+public:
+    
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations on Physical Album
+     */
+    
+    //@{
+
+    /**
+     * @return a list of all PAlbums
+     */
+    AlbumList allPAlbums() const;
+
+    /**
      * @returns the current PAlbum or null if no one is selected
      */
     PAlbum* currentPAlbum() const;
 
-    /**
-     * @returns the current TAlbum or null if no one is selected
-     */
-    QList<TAlbum*> currentTAlbums() const;
-
-    /**
-     * @returns the current FAlbum or null if no one is selected
-     */
-    FAlbum* currentFAlbum() const;
-    //@}
-
-    /** @name Finding Albums
-     */
-    //@{
     /**
      * Given a complete file url (kde url with file protocol), it will try to find
      * a PAlbum corresponding to it.
@@ -211,64 +262,15 @@ public:
     PAlbum*   findPAlbum(int id) const;
 
     /**
-     * @return a TAlbum with given ID
-     * @param id the id for the TAlbum
+     * Returns the latest count for PAlbums as also emitted via
+     * signalPAlbumsDirty.
+     *
+     * @return count map for PAlbums
      */
-    TAlbum*   findTAlbum(int id) const;
+    QMap<int, int> getPAlbumsCount() const;
+    
+    void removeWatchedPAlbums(const PAlbum* const album);
 
-    /**
-     * @return a SAlbum with given ID
-     * @param id the id for the SAlbum
-     */
-    SAlbum*   findSAlbum(int id) const;
-
-    /**
-     * @return a DAlbum with given ID
-     * @param id the id for the DAlbum
-     */
-    DAlbum*   findDAlbum(int id) const;
-
-    /**
-     * @return a FAlbum with given name
-     * @param name the name for the FAlbum (name of the person which the FAlbum corresponds to
-     */
-    FAlbum*   findFAlbum(const QString& name) const;
-
-    /**
-     * @return a Album with the given globalID
-     * @param gid the global id for the album
-     */
-    Album*    findAlbum(int gid) const;
-
-    /**
-     * @return a Album with the given type and id
-     * @param id the id for the album (not the global id)
-     */
-    Album*    findAlbum(Album::Type type, int id) const;
-
-    /**
-     * @return a TAlbum with given tag path, or 0 if not found
-     * @param tagPath the tag path ("People/Friend/John")
-     */
-    TAlbum*   findTAlbum(const QString& tagPath) const;
-
-    /**
-     * @return a SAlbum with given name, or 0 if not found
-     * @param name the name of the search
-     */
-    SAlbum*   findSAlbum(const QString& name) const;
-
-    /**
-     * @return SAlbums with given type, empty list if not found
-     * @param searchType the type of the search
-     */
-    QList< SAlbum* > findSAlbumsBySearchType(int searchType) const;
-
-    //@}
-
-    /** @name Operations on PAlbum
-     */
-    //@{
     /**
      * Create a new PAlbum with supplied properties as a child of the parent
      * This is equivalent to creating a new folder on the disk with supplied
@@ -342,16 +344,48 @@ public:
      * @return The item id or -1 if not existent.
      */
     qlonglong getItemFromAlbum(PAlbum* album, const QString& fileName);
+
     //@}
 
-    /**
-     * @return A hash with the titles for all album IDs.
-     */
-    QHash<int, QString> albumTitles() const;
+public:
 
-    /** @name Operations on TAlbum
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations on Tag Album
      */
+
     //@{
+
+    /**
+     * @return a list of all TAlbums
+     */
+    AlbumList allTAlbums() const;
+
+    /**
+     * @returns the current TAlbum or null if no one is selected
+     */
+    QList<TAlbum*> currentTAlbums() const;
+
+    /**
+     * @return a TAlbum with given ID
+     * @param id the id for the TAlbum
+     */
+    TAlbum*   findTAlbum(int id) const;
+
+    /**
+     * @return a TAlbum with given tag path, or 0 if not found
+     * @param tagPath the tag path ("People/Friend/John")
+     */
+    TAlbum*   findTAlbum(const QString& tagPath) const;
+
+    /**
+     * Returns the latest count for TAlbums as also emitted via
+     * signalTAlbumsDirty.
+     *
+     * @return count map for TAlbums
+     */
+    QMap<int, int> getTAlbumsCount() const;
+
     /**
      * Create a new TAlbum with supplied properties as a child of the parent
      * The tag is added to the database
@@ -484,9 +518,38 @@ public:
 
     //@}
 
-    /** @name Operations on SAlbum
+public:
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations on Search Album
      */
+
     //@{
+
+    /**
+     * @return a list of all SAlbums
+     */
+    AlbumList allSAlbums() const;
+
+    /**
+     * @return a SAlbum with given ID
+     * @param id the id for the SAlbum
+     */
+    SAlbum*   findSAlbum(int id) const;
+
+    /**
+     * @return a SAlbum with given name, or 0 if not found
+     * @param name the name of the search
+     */
+    SAlbum*   findSAlbum(const QString& name) const;
+
+    /**
+     * @return SAlbums with given type, empty list if not found
+     * @param searchType the type of the search
+     */
+    QList< SAlbum* > findSAlbumsBySearchType(int searchType) const;
+
     /**
      * Create a new SAlbum with supplied url. If an existing SAlbum with same name
      * exists this function will return a pointer to that album, instead of creating
@@ -520,11 +583,42 @@ public:
      * @param album the album to delete
      */
     bool deleteSAlbum(SAlbum* album);
+
     //@}
 
-    /** @name Operations on TAlbum
+public:
+
+    // -----------------------------------------------------------------------------
+    
+    /** @name Operations on Face Album
      */
+
     //@{
+
+    /**
+     * @return a list of all FAlbums
+     */
+    AlbumList allFAlbums() const;
+
+    /**
+     * @returns the current FAlbum or null if no one is selected
+     */
+    FAlbum* currentFAlbum() const;
+
+    /**
+     * @return a FAlbum with given name
+     * @param name the name for the FAlbum (name of the person which the FAlbum corresponds to
+     */
+    FAlbum*   findFAlbum(const QString& name) const;
+
+    /**
+     * Returns the latest count for faces as also emitted via
+     * signalFaceCountsDirty.
+     *
+     * @return count map for faces (confirmed and unconfirmed combined)
+     */
+    QMap<int, int> getFaceCount() const;
+
     /**
      * Create a new FAlbum with supplied properties as a child of the parent
      * The person is added to the database
@@ -585,61 +679,6 @@ public:
      * @param leadingSlash if <code>true</code> return name paths with a leading slash
      */
     QStringList namePaths(const QList<QString>& tagNames, bool leadingSlash=true) const;
-
-    //@}
-
-    /** @name Accessors to counting maps
-     */
-    //@{
-
-    /**
-     * Returns the latest count for PAlbums as also emitted via
-     * signalPAlbumsDirty.
-     *
-     * @return count map for PAlbums
-     */
-    QMap<int, int> getPAlbumsCount() const;
-
-    /**
-     * Returns the latest count for TAlbums as also emitted via
-     * signalTAlbumsDirty.
-     *
-     * @return count map for TAlbums
-     */
-    QMap<int, int> getTAlbumsCount() const;
-
-    /**
-     * Returns the latest count for DAlbums as also emitted via
-     * signalDAlbumsDirty.
-     *
-     * @return count map for DAlbums
-     */
-    QMap<YearMonth, int> getDAlbumsCount() const;
-
-    /**
-     * Returns the latest count for faces as also emitted via
-     * signalFaceCountsDirty.
-     *
-     * @return count map for faces (confirmed and unconfirmed combined)
-     */
-    QMap<int, int> getFaceCount() const;
-
-    /**
-     * Returns if the given album is currently being moved, that is,
-     * if this album is in between signalAlbumAboutToBeMoved and
-     * signalAlbumMoved. In this case, you can preserve state of such an album
-     * because the object is guaranteed not to be deleted, even if
-     * signalAlbumAboutToBeDeleted is emitted.
-     */
-    bool isMovingAlbum(Album* album) const;
-
-    bool isShowingOnlyAvailableAlbums() const;
-    void setShowOnlyAvailableAlbums(bool onlyAvailable);
-
-    void removeWatchedPAlbums(const PAlbum* const album);
-
-    void addFakeConnection();
-    void removeFakeConnection();
 
     //@}
 
