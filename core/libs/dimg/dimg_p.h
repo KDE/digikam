@@ -80,9 +80,6 @@ public:
         lanczos_func = 0;
         alpha        = false;
         sixteenBit   = false;
-
-        attributes.setSharable(false);
-        embeddedText.setSharable(false);
     }
 
     ~Private()
