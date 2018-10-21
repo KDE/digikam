@@ -366,6 +366,7 @@ private:
 
     QVariant fromExifOrXmp(const char* const exifTagName, const char* const xmpTagName) const;
     QVariant fromIptcOrXmp(const char* const iptcTagName, const char* const xmpTagName) const;
+    bool hasValidField(const QVariantList& list)                                        const;
 
     inline QVariant toStringListVariant(const QStringList& list) const
     {
@@ -376,9 +377,6 @@ private:
 
         return list;
     }
-
-    bool hasValidField(const QVariantList& list)                                        const;
-
 };
 
 } // namespace Digikam

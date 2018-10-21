@@ -36,12 +36,15 @@ set(libdmetadata_SRCS
     dmetadata/dmetadata_fileio.cpp
     dmetadata/dmetadata_comments.cpp
     dmetadata/dmetadata_template.cpp
+    dmetadata/dmetadata_exif.cpp
     dmetadata/dmetadata_iptc.cpp
     dmetadata/dmetadata_labels.cpp
     dmetadata/dmetadata_faces.cpp
     dmetadata/dmetadata_history.cpp
     dmetadata/dmetadata_photo.cpp
     dmetadata/dmetadata_tags.cpp
+    dmetadata/dmetadata_generic.cpp
+    dmetadata/dmetadata_xmp.cpp
     dmetadata/dmetadatasettings.cpp
     dmetadata/dmetadatasettingscontainer.cpp
     containers/metadatainfo.cpp
