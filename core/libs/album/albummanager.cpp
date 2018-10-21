@@ -903,13 +903,17 @@ bool AlbumManager::handleCollectionStatusChange(const CollectionLocation& locati
             {
                 case CollectionLocation::LocationNull: // not possible
                     break;
+
                 case CollectionLocation::LocationHidden:
                     action = Remove;
                     break;
+
                 case CollectionLocation::LocationAvailable:
                     action = Add;
                     break;
+
                 case CollectionLocation::LocationUnavailable:
+
                     if (d->showOnlyAvailableAlbums)
                     {
                         action = Remove;
@@ -918,7 +922,9 @@ bool AlbumManager::handleCollectionStatusChange(const CollectionLocation& locati
                     {
                         action = Add;
                     }
+
                     break;
+
                 case CollectionLocation::LocationDeleted:
                     action = Remove;
                     break;
@@ -934,12 +940,16 @@ bool AlbumManager::handleCollectionStatusChange(const CollectionLocation& locati
                 case CollectionLocation::LocationDeleted:
                     action = Remove;
                     break;
+
                 case CollectionLocation::LocationUnavailable:
+
                     if (d->showOnlyAvailableAlbums)
                     {
                         action = Remove;
                     }
+
                     break;
+
                 case CollectionLocation::LocationAvailable: // not possible
                     break;
             }
@@ -960,6 +970,7 @@ bool AlbumManager::handleCollectionStatusChange(const CollectionLocation& locati
         removeAlbumRoot(location);
         return true;
     }
+
     return false;
 }
 
@@ -1022,6 +1033,7 @@ void AlbumManager::setShowOnlyAvailableAlbums(bool onlyAvailable)
 
     d->showOnlyAvailableAlbums = onlyAvailable;
     emit signalShowOnlyAvailableAlbumsChanged(d->showOnlyAvailableAlbums);
+
     // We need to update the unavailable locations.
     // We assume the handleCollectionStatusChange does the right thing (even though old status == current status)
     foreach (const CollectionLocation& location, CollectionManager::instance()->allLocations())
@@ -1132,7 +1144,8 @@ void AlbumManager::scanPAlbums()
             continue;
         }
 
-        PAlbum* album = 0, *parent = 0;
+        PAlbum* album  = 0;
+        PAlbum* parent = 0;
 
         if (info.relativePath == QLatin1String("/"))
         {
@@ -1303,7 +1316,7 @@ void AlbumManager::scanTAlbums()
     // list TAlbums directly from the db
     // first insert all the current TAlbums into a map for quick lookup
     typedef QMap<int, TAlbum*> TagMap;
-    TagMap tmap;
+    TagMap                     tmap;
 
     tmap.insert(0, d->rootTAlbum);
 
@@ -1331,10 +1344,9 @@ void AlbumManager::scanTAlbums()
         {
             TagInfo info        = *iter;
             TAlbum* const album = new TAlbum(info.name, info.id);
-
-            album->m_icon   = info.icon;
-            album->m_iconId = info.iconId;
-            album->m_pid    = info.pid;
+            album->m_icon       = info.icon;
+            album->m_iconId     = info.iconId;
+            album->m_pid        = info.pid;
             tagHash.insert(info.id, album);
         }
 
@@ -1559,7 +1571,7 @@ void AlbumManager::scanSAlbums()
     // add new albums
     foreach (const SearchInfo& info, newSearches)
     {
-        SAlbum* const album = new SAlbum(info.name, info.id);
+        SAlbum* const album                   = new SAlbum(info.name, info.id);
         album->setSearch(info.type, info.query);
         emit signalAlbumAboutToBeAdded(album, d->rootSAlbum, d->rootSAlbum->lastChild());
         album->setParent(d->rootSAlbum);
@@ -1849,17 +1861,20 @@ SAlbum* AlbumManager::findSAlbum(const QString& name) const
 QList<SAlbum*> AlbumManager::findSAlbumsBySearchType(int searchType) const
 {
     QList<SAlbum*> albums;
+
     for (Album* album = d->rootSAlbum->firstChild() ; album ; album = album->next())
     {
         if (album != 0)
         {
-            SAlbum* sAlbum = dynamic_cast<SAlbum*>(album);
+            SAlbum* const sAlbum = dynamic_cast<SAlbum*>(album);
+
             if ((sAlbum != 0) && (sAlbum->searchType() == searchType))
             {
                 albums.append(sAlbum);
             }
         }
     }
+
     return albums;
 }
 
@@ -1901,7 +1916,7 @@ void AlbumManager::invalidateGuardedPointers(Album* album)
 
     QMultiHash<Album*, Album**>::iterator it = d->guardedPointers.find(album);
 
-    for (; it != d->guardedPointers.end() && it.key() == album; ++it)
+    for ( ; it != d->guardedPointers.end() && it.key() == album ; ++it)
     {
         if (it.value())
         {
@@ -1916,6 +1931,7 @@ PAlbum* AlbumManager::createPAlbum(const QString& albumRootPath, const QString& 
                                    QString& errMsg)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRootPath);
+
     return createPAlbum(location, name, caption, date, category, errMsg);
 }
 
@@ -2126,7 +2142,6 @@ void AlbumManager::updateAlbumPathHash()
         d->albumPathHash[PAlbumPath(subAlbum)] = subAlbum;
         ++it;
     }
-
 }
 
 bool AlbumManager::updatePAlbumIcon(PAlbum* album, qlonglong iconID, QString& errMsg)
@@ -2199,7 +2214,7 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     }
 
     TAlbum* const album = new TAlbum(name, id, false);
-    album->m_icon = iconkde;
+    album->m_icon       = iconkde;
 
     insertTAlbum(album, parent);
 
@@ -2373,7 +2388,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
         if (result == QMessageBox::Yes)
         {
             TAlbum* const destAlbum = findTAlbum(newParent->tagPath() +
-                                                 QLatin1Char('/') +
+                                                 QLatin1Char('/')     +
                                                  album->title());
 
             return mergeTAlbum(album, destAlbum, false, errMsg);
@@ -2647,6 +2662,7 @@ QHash<int, QString> AlbumManager::tagNames(bool includeInternal) const
 QList< int > AlbumManager::subTags(int tagId, bool recursive)
 {
     TAlbum* const album = this->findTAlbum(tagId);
+
     return album->childAlbumIds(recursive);
 }
 
@@ -2748,7 +2764,7 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const QString& changedQuery,
     ChangingDB changing(d);
     CoreDbAccess().db()->updateSearch(album->id(), newType, newName, changedQuery);
 
-    QString oldName = album->title();
+    QString oldName              = album->title();
 
     album->setSearch(newType, changedQuery);
     album->setTitle(newName);
@@ -2883,6 +2899,7 @@ void AlbumManager::removePAlbum(PAlbum* album)
     emit signalAlbumDeleted(album);
     quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
     delete album;
+
     emit signalAlbumHasBeenDeleted(deletedAlbum);
 }
 
@@ -2943,8 +2960,10 @@ void AlbumManager::removeTAlbum(TAlbum* album)
     }
 
     emit signalAlbumDeleted(album);
+
     quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
     delete album;
+
     emit signalAlbumHasBeenDeleted(deletedAlbum);
 }
 
@@ -2980,6 +2999,7 @@ void AlbumManager::slotAlbumsJobData(const QMap<int, int> &albumsStatMap)
     }
 
     d->pAlbumsCount = albumsStatMap;
+
     emit signalPAlbumsDirty(albumsStatMap);
 }
 
@@ -3073,6 +3093,7 @@ void AlbumManager::slotDatesJobResult()
     }
 
     d->dateListJob = 0;
+
     emit signalAllDAlbumsLoaded();
 }
 
@@ -3176,9 +3197,12 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
 
         // Create Month album
         DAlbum* mAlbum = new DAlbum(md);
+
         emit signalAlbumAboutToBeAdded(mAlbum, yAlbum, yAlbum->lastChild());
+
         mAlbum->setParent(yAlbum);
         d->allAlbumsIdHash.insert(mAlbum->globalID(), mAlbum);
+
         emit signalAlbumAdded(mAlbum);
     }
 
@@ -3189,9 +3213,12 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
         DAlbum* const album = it.value();
         emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
+
         emit signalAlbumDeleted(album);
+
         quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
         delete album;
+
         emit signalAlbumHasBeenDeleted(deletedAlbum);
     }
 
@@ -3200,13 +3227,17 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
         DAlbum* const album = it.value();
         emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
+
         emit signalAlbumDeleted(album);
+
         quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
         delete album;
+
         emit signalAlbumHasBeenDeleted(deletedAlbum);
     }
 
     d->dAlbumsCount = yearMonthMap;
+
     emit signalDAlbumsDirty(yearMonthMap);
     emit signalDatesMapDirty(datesStatMap);
 }
@@ -3312,6 +3343,7 @@ void AlbumManager::slotSearchChange(const SearchChangeset& changeset)
             break;
 
         case SearchChangeset::Changed:
+
             if (!d->currentAlbums.isEmpty())
             {
                 Album* currentAlbum = d->currentAlbums.first();
@@ -3323,6 +3355,7 @@ void AlbumManager::slotSearchChange(const SearchChangeset& changeset)
                     emit signalAlbumCurrentChanged(d->currentAlbums);
                 }
             }
+
             break;
 
         case SearchChangeset::Unknown:

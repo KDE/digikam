@@ -171,7 +171,7 @@ public:
      */
 
     //@{
-    
+
     /**
      * set current album to @p albums. It's similar to setCurrentAlbum,
      * but supports multiple selected albums
@@ -208,9 +208,9 @@ public:
      * signalAlbumAboutToBeDeleted is emitted.
      */
     bool isMovingAlbum(Album* album) const;
-   
+
 private:
-   
+
     bool hasDirectChildAlbumWithTitle(Album* parent, const QString& title);
     void notifyAlbumDeletion(Album* album);
     void updateAlbumPathHash();
@@ -225,13 +225,13 @@ private Q_SLOTS:
     void slotAlbumsJobData(const QMap<int, int>& albumsStatMap);
     void slotAlbumChange(const AlbumChangeset& changeset);
     void getAlbumItemsCount();
-    
+
     //@}
 
 public:
-    
+
     // -----------------------------------------------------------------------------
-    
+
     /** @name Operations on Date Album
      */
 
@@ -246,8 +246,8 @@ public:
      * @return a DAlbum with given ID
      * @param id the id for the DAlbum
      */
-    DAlbum*   findDAlbum(int id) const;    
-    
+    DAlbum*   findDAlbum(int id) const;
+
     /**
      * Returns the latest count for DAlbums as also emitted via
      * signalDAlbumsDirty.
@@ -264,12 +264,12 @@ private Q_SLOTS:
     //@}
 
 public:
-    
+
     // -----------------------------------------------------------------------------
 
     /** @name Operations on Physical Album
      */
-    
+
     //@{
 
     /**
@@ -304,7 +304,7 @@ public:
      * @return count map for PAlbums
      */
     QMap<int, int> getPAlbumsCount() const;
-    
+
     void removeWatchedPAlbums(const PAlbum* const album);
 
     /**
@@ -568,7 +568,7 @@ public:
     QList<int> subTags(int tagId, bool recursive = false);
 
 private:
-    
+
     /**
      * Checks whether an Album has a direct child with the given name.
      *
@@ -691,7 +691,7 @@ private Q_SLOTS:
 public:
 
     // -----------------------------------------------------------------------------
-    
+
     /** @name Operations on Face Album
      */
 
