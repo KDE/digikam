@@ -30,6 +30,7 @@
 #include <QString>
 #include <QByteArray>
 #include <QVariant>
+#include <QMutex>
 #include <QMap>
 
 // Local includes
@@ -80,9 +81,6 @@ public:
         lanczos_func = 0;
         alpha        = false;
         sixteenBit   = false;
-
-        attributes.setSharable(false);
-        embeddedText.setSharable(false);
     }
 
     ~Private()
@@ -147,6 +145,8 @@ public:
     QMap<QString, QString>  embeddedText;
     IccProfile              iccProfile;
     DImageHistory           imageHistory;
+
+    QMutex                  mutex;
 };
 
 } // namespace Digikam
