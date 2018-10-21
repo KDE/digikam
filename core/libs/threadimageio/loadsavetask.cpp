@@ -56,8 +56,10 @@ LoadingTask::TaskType LoadingTask::type()
     return TaskTypeLoading;
 }
 
-void LoadingTask::progressInfo(const DImg* const, float progress)
+void LoadingTask::progressInfo(DImg* const img, float progress)
 {
+    Q_UNUSED(img);
+
     if (m_loadingTaskStatus == LoadingTaskStatusLoading)
     {
         if (m_thread->querySendNotifyEvent())
@@ -67,8 +69,10 @@ void LoadingTask::progressInfo(const DImg* const, float progress)
     }
 }
 
-bool LoadingTask::continueQuery(const DImg* const)
+bool LoadingTask::continueQuery(DImg* const img)
 {
+    Q_UNUSED(img);
+
     return m_loadingTaskStatus != LoadingTaskStatusStopping;
 }
 
@@ -342,8 +346,10 @@ void SharedLoadingTask::postProcess()
     removeListener(this);
 }
 
-void SharedLoadingTask::progressInfo(const DImg* const, float progress)
+void SharedLoadingTask::progressInfo(DImg* const img, float progress)
 {
+    Q_UNUSED(img);
+
     if (m_loadingTaskStatus == LoadingTaskStatusLoading)
     {
         LoadingCache* cache = LoadingCache::cache();
@@ -362,8 +368,9 @@ void SharedLoadingTask::progressInfo(const DImg* const, float progress)
     }
 }
 
-bool SharedLoadingTask::continueQuery(const DImg* const)
+bool SharedLoadingTask::continueQuery(DImg* const img)
 {
+    Q_UNUSED(img);
     // If this is called, the thread is currently loading an image.
     // In shared loading, we cannot stop until all listeners have been removed as well
     return (m_loadingTaskStatus != LoadingTaskStatusStopping) || (m_listeners.count() != 0);
@@ -466,16 +473,19 @@ LoadingTask::TaskType SavingTask::type()
     return TaskTypeSaving;
 }
 
-void SavingTask::progressInfo(const DImg* const, float progress)
+void SavingTask::progressInfo(DImg* const img, float progress)
 {
+    Q_UNUSED(img);
+
     if (m_thread->querySendNotifyEvent())
     {
         m_thread->savingProgress(m_filePath, progress);
     }
 }
 
-bool SavingTask::continueQuery(const DImg* const)
+bool SavingTask::continueQuery(DImg* const img)
 {
+    Q_UNUSED(img);
     return (m_savingTaskStatus != SavingTaskStatusStopping);
 }
 

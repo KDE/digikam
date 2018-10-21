@@ -78,8 +78,9 @@ public:
     {
     }
 
-    bool continueQuery(const DImg* const)
+    bool continueQuery(DImg* const img)
     {
+        Q_UNUSED(img);
         return (!parent->isAbortedFlag);
     }
 

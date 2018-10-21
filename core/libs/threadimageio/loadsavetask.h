@@ -117,8 +117,8 @@ public:
 
     // DImgLoaderObserver
 
-    virtual void progressInfo(const DImg* const, float progress);
-    virtual bool continueQuery(const DImg* const);
+    virtual void progressInfo(DImg* const img, float progress);
+    virtual bool continueQuery(DImg* const img);
 
     virtual void setStatus(LoadingTaskStatus status);
 
@@ -141,8 +141,8 @@ public:
                                LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading);
 
     virtual void execute();
-    virtual void progressInfo(const DImg* const, float progress);
-    virtual bool continueQuery(const DImg* const img = 0);
+    virtual void progressInfo(DImg* const img, float progress);
+    virtual bool continueQuery(DImg* const img = 0);
     virtual void setStatus(LoadingTaskStatus status);
 
     virtual bool needsPostProcessing() const;
@@ -215,8 +215,8 @@ public:
     virtual void     execute();
     virtual TaskType type();
 
-    virtual void     progressInfo(const DImg* const, float progress);
-    virtual bool     continueQuery(const DImg* const);
+    virtual void     progressInfo(DImg* const img, float progress);
+    virtual bool     continueQuery(DImg* const img);
 
     virtual void     setStatus(SavingTaskStatus status);
 

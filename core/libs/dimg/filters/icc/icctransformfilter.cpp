@@ -60,8 +60,9 @@ void IccTransformFilter::filterImage()
     m_destImage.setIccProfile(m_transform.outputProfile());
 }
 
-void IccTransformFilter::progressInfo(const DImg* const, float progress)
+void IccTransformFilter::progressInfo(DImg* const img, float progress)
 {
+    Q_UNUSED(img);
     postProgress(lround(progress * 100));
 }
 
