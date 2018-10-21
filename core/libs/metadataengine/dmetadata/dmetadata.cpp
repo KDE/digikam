@@ -254,6 +254,16 @@ inline QVariant DMetadata::fromXmpLangAlt(const char* const xmpTagName) const
     return var;
 }
 
+QVariant DMetadata::toStringListVariant(const QStringList& list) const
+{
+    if (list.isEmpty())
+    {
+        return QVariant(QVariant::StringList);
+    }
+
+    return list;
+}
+
 QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
 {
     switch (field)
