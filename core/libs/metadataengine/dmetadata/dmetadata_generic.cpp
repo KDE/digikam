@@ -793,4 +793,14 @@ bool DMetadata::hasValidField(const QVariantList& list) const
     return false;
 }
 
+QVariant DMetadata::toStringListVariant(const QStringList& list) const
+{
+    if (list.isEmpty())
+    {
+            return QVariant(QVariant::StringList);
+    }
+
+    return list;
+}
+
 } // namespace Digikam
