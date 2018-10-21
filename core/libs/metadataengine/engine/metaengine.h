@@ -199,27 +199,7 @@ public:
      */
     static QString Exiv2Version();
 
-    /** Return the XMP Sidecar file path for a image file path.
-     *  If image file path do not include a file name or is empty, this function return a null string.
-     */
-    static QString sidecarFilePathForFile(const QString& path);
-
-    /** Like sidecarFilePathForFile(), but works for local file path.
-     */
-    static QString sidecarPath(const QString& path);
-
-    /** Like sidecarFilePathForFile(), but works for remote URLs.
-     */
-    static QUrl sidecarUrl(const QUrl& url);
-
-    /** Gives a file url for a local path.
-     */
-    static QUrl sidecarUrl(const QString& path);
-
-    /** Performs a QFileInfo based check if the given local file has a sidecar.
-     */
-    static bool hasSidecar(const QString& path);
-
+ 
     //@}
 
     //-----------------------------------------------------------------
@@ -234,32 +214,9 @@ public:
      */
     bool loadFromData(const QByteArray& imgData);
 
-    /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG,
-        DNG, etc...). Return true if metadata have been loaded successfully from file.
-     */
-    virtual bool load(const QString& filePath);
-
-    /** Save all metadata to a file. This one can be different than original picture to perform
-        transfert operation Return true if metadata have been saved into file.
-     */
-    bool save(const QString& filePath, bool setVersion = false) const;
-
-    /** The same than save() method, but it apply on current image. Return true if metadata
-        have been saved into file.
-     */
-    bool applyChanges(bool setVersion = false) const;
-
     /** Return 'true' if metadata container in memory as no Comments, Exif, Iptc, and Xmp.
      */
     bool isEmpty() const;
-
-    /** Set the file path of current image.
-     */
-    void setFilePath(const QString& path);
-
-    /** Return the file path of current image.
-     */
-    QString getFilePath() const;
 
     /** Returns the pixel size of the current image. This information is read from the file,
      *  not from the metadata. The returned QSize is valid if the MetaEngine object was _constructed_
@@ -315,6 +272,56 @@ public:
     /** Return true if file timestamp is updated when metadata are saved.
      */
     bool updateFileTimeStamp() const;
+
+    //@}
+
+    //-------------------------------------------------------------------
+    /// @name File I/O methods
+    //@{
+
+    /** Set the file path of current image.
+     */
+    void setFilePath(const QString& path);
+
+    /** Return the file path of current image.
+     */
+    QString getFilePath() const;
+
+   /** Return the XMP Sidecar file path for a image file path.
+     *  If image file path do not include a file name or is empty, this function return a null string.
+     */
+    static QString sidecarFilePathForFile(const QString& path);
+
+    /** Like sidecarFilePathForFile(), but works for local file path.
+     */
+    static QString sidecarPath(const QString& path);
+
+    /** Like sidecarFilePathForFile(), but works for remote URLs.
+     */
+    static QUrl sidecarUrl(const QUrl& url);
+
+    /** Gives a file url for a local path.
+     */
+    static QUrl sidecarUrl(const QString& path);
+
+    /** Performs a QFileInfo based check if the given local file has a sidecar.
+     */
+    static bool hasSidecar(const QString& path);
+
+    /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG,
+        DNG, etc...). Return true if metadata have been loaded successfully from file.
+     */
+    virtual bool load(const QString& filePath);
+
+    /** Save all metadata to a file. This one can be different than original picture to perform
+        transfert operation Return true if metadata have been saved into file.
+     */
+    bool save(const QString& filePath, bool setVersion = false) const;
+
+    /** The same than save() method, but it apply on current image. Return true if metadata
+        have been saved into file.
+     */
+    bool applyChanges(bool setVersion = false) const;
 
     //@}
 
