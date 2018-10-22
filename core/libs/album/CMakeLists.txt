@@ -10,21 +10,21 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libalbum_SRCS
-    albumhistory.cpp
-    albummodificationhelper.cpp
-    albumpropsedit.cpp
-    albumselectors.cpp
-    albumselectcombobox.cpp
-    albumselectdialog.cpp
-    albumselectiontreeview.cpp
-    albumselectwidget.cpp
-    albumselecttabs.cpp
-    albumthumbnailloader.cpp
-    albumtreeview.cpp
-    albumwatch.cpp
-    albumlabelstreeview.cpp
-    album.cpp
-    albummanager.cpp
+    engine/album.cpp
+    engine/albumhistory.cpp
+    engine/albummodificationhelper.cpp
+    engine/albumthumbnailloader.cpp
+    engine/albumwatch.cpp
+    widgets/albumpropsedit.cpp
+    widgets/albumselectors.cpp
+    widgets/albumselectcombobox.cpp
+    widgets/albumselectdialog.cpp
+    widgets/albumselectwidget.cpp
+    widgets/albumselecttabs.cpp
+    treeview/albumlabelstreeview.cpp
+    treeview/albumtreeview.cpp
+    treeview/albumselectiontreeview.cpp
+    manager/albummanager.cpp
 )
 
 include_directories(
