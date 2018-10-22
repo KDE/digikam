@@ -50,7 +50,6 @@ extern "C"
 #include <QFileInfo>
 #include <QImage>
 #include <QImageReader>
-#include <QMap>
 #include <QPaintEngine>
 #include <QPainter>
 #include <QPixmap>
@@ -1106,7 +1105,7 @@ QVariant DImg::fileOriginData() const
 {
     QVariantMap map;
 
-    foreach(const QString& key, m_priv->fileOriginAttributes())
+    foreach (const QString& key, m_priv->fileOriginAttributes())
     {
         QVariant attr = attribute(key);
 
@@ -1164,7 +1163,7 @@ void DImg::setFileOriginData(const QVariant& data)
 {
     QVariantMap map = data.toMap();
 
-    foreach(const QString& key, m_priv->fileOriginAttributes())
+    foreach (const QString& key, m_priv->fileOriginAttributes())
     {
         removeAttribute(key);
         QVariant attr = map.value(key);
