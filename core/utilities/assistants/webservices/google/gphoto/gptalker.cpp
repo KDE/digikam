@@ -357,12 +357,13 @@ bool GPTalker::addPhoto(const QString& photoPath,
     QByteArray data = imageFile.readAll();
     imageFile.close();
 
-    QString imageName = QUrl::fromLocalFile(path).fileName().toLatin1();
+    QString imageName = QUrl::fromLocalFile(photoPath).fileName();
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/octet-stream"));
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
     netRequest.setRawHeader("X-Goog-Upload-File-Name", imageName.toLatin1());
+    netRequest.setRawHeader("X-Goog-Upload-Protocol", "raw");
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << imageName;
 
@@ -425,9 +426,8 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
         {
             meta.setImageDimensions(image.size());
             meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
             meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-            meta.save(path);
+            meta.save(path, true);
         }
     }
 
