@@ -302,7 +302,6 @@ bool GPTalker::addPhoto(const QString& photoPath,
     // Save album ID to upload
     d->albumIdToUpload = albumId;
 
-//     GPMPForm form;
     QString path = photoPath;
 
     QMimeDatabase mimeDB;
@@ -357,7 +356,7 @@ bool GPTalker::addPhoto(const QString& photoPath,
     QByteArray data = imageFile.readAll();
     imageFile.close();
 
-    QString imageName = QUrl::fromLocalFile(photoPath).fileName();
+    QString imageName = QUrl::fromLocalFile(path).fileName();
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/octet-stream"));
