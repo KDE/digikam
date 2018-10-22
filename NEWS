@@ -618,4 +618,5 @@ BUGFIXES:
 552 ==> 399917 - Fails to build with QT5.7.1
 553 ==> 399762 - Digikam Geolocation Correlator ignores time offset.
 554 ==> 400148 - Files exported in google photos does not have their filename as name, but their date.
-555 ==> 
+555 ==> 373678 - Videos exported in google photos are not available (still processing state).
+556 ==> 
