@@ -30,7 +30,6 @@
 #include <QString>
 #include <QByteArray>
 #include <QVariant>
-#include <QMutex>
 #include <QMap>
 
 // Local includes
@@ -145,8 +144,6 @@ public:
     QMap<QString, QString>  embeddedText;
     IccProfile              iccProfile;
     DImageHistory           imageHistory;
-
-    QMutex                  mutex;
 };
 
 } // namespace Digikam
