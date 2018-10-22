@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-06-15
- * Description : Albums manager interface.
+ * Description : Albums manager interface - private containers.
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -118,35 +118,11 @@ class Q_DECL_HIDDEN PAlbumPath
 {
 public:
 
-    PAlbumPath()
-        : albumRootId(-1)
-    {
-    }
+    PAlbumPath();
+    PAlbumPath(int albumRootId, const QString& albumPath);
+    explicit PAlbumPath(PAlbum* const album);
 
-    PAlbumPath(int albumRootId, const QString& albumPath)
-        : albumRootId(albumRootId),
-          albumPath(albumPath)
-    {
-    }
-
-    explicit PAlbumPath(PAlbum* const album)
-    {
-        if (album->isRoot())
-        {
-            albumRootId = -1;
-        }
-        else
-        {
-            albumRootId = album->albumRootId();
-            albumPath   = album->albumPath();
-        }
-    }
-
-    bool operator==(const PAlbumPath& other) const
-    {
-        return (other.albumRootId == albumRootId &&
-                other.albumPath   == albumPath);
-    }
+    bool operator==(const PAlbumPath& other) const;
 
 public:
 
@@ -167,31 +143,7 @@ class Q_DECL_HIDDEN AlbumManager::Private
 {
 public:
 
-    explicit Private()
-      : changed(false),
-        hasPriorizedDbPath(false),
-        dbFakeConnection(false),
-        showOnlyAvailableAlbums(false),
-        albumListJob(0),
-        dateListJob(0),
-        tagListJob(0),
-        personListJob(0),
-        albumWatch(0),
-        rootPAlbum(0),
-        rootTAlbum(0),
-        rootDAlbum(0),
-        rootSAlbum(0),
-        currentlyMovingAlbum(0),
-        changingDB(false),
-        scanPAlbumsTimer(0),
-        scanTAlbumsTimer(0),
-        scanSAlbumsTimer(0),
-        scanDAlbumsTimer(0),
-        updatePAlbumsTimer(0),
-        albumItemCountTimer(0),
-        tagItemCountTimer(0)
-    {
-    }
+    explicit Private();
 
     bool                        changed;
     bool                        hasPriorizedDbPath;
@@ -220,7 +172,9 @@ public:
 
     QMultiHash<Album*, Album**> guardedPointers;
 
-    /** For multiple selection support **/
+    /**
+     * For multiple selection support
+     */
     QList<Album*>               currentAlbums;
 
     bool                        changingDB;
@@ -240,17 +194,7 @@ public:
 
 public:
 
-    QString labelForAlbumRootAlbum(const CollectionLocation& location)
-    {
-        QString label = location.label();
-
-        if (label.isEmpty())
-        {
-            label = location.albumRootPath();
-        }
-
-        return label;
-    }
+    QString labelForAlbumRootAlbum(const CollectionLocation& location);
 };
 
 // -----------------------------------------------------------------------------------
@@ -259,16 +203,8 @@ class Q_DECL_HIDDEN ChangingDB
 {
 public:
 
-    explicit ChangingDB(AlbumManager::Private* const d)
-        : d(d)
-    {
-        d->changingDB = true;
-    }
-
-    ~ChangingDB()
-    {
-        d->changingDB = false;
-    }
+    explicit ChangingDB(AlbumManager::Private* const d);
+    ~ChangingDB();
 
     AlbumManager::Private* const d;
 };
@@ -281,8 +217,6 @@ public:
 
     AlbumManager object;
 };
-
-Q_GLOBAL_STATIC(AlbumManagerCreator, creator)
 
 } // namespace Digikam
 

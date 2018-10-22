@@ -25,6 +25,8 @@ set(libalbum_SRCS
     treeview/albumtreeview.cpp
     treeview/albumselectiontreeview.cpp
     manager/albummanager.cpp
+    manager/albummanager_p.cpp
+    manager/albummanager_dalbum.cpp
 )
 
 include_directories(
