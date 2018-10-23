@@ -22,6 +22,7 @@ set(libalbum_SRCS
     widgets/albumselectwidget.cpp
     widgets/albumselecttabs.cpp
     treeview/albumlabelstreeview.cpp
+    treeview/abstractalbumtreeview.cpp
     treeview/albumtreeview.cpp
     treeview/albumselectiontreeview.cpp
     manager/albummanager.cpp
