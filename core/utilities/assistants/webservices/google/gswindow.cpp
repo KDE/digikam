@@ -454,7 +454,7 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
 
     for (QList<QUrl>::ConstIterator it = urlList.constBegin() ; it != urlList.constEnd() ; ++it)
     {
-        DItemInfo info(d->iface->itemInfo((*it).toLocalFile()));
+        DItemInfo info(d->iface->itemInfo((*it)));
         GSPhoto temp;
         temp.title = info.name();
 
@@ -705,7 +705,7 @@ void GSWindow::slotStartTransfer()
 
     for (int i = 0 ; i < (d->widget->imagesList()->imageUrls().size()) ; ++i)
     {
-        DItemInfo info(d->iface->itemInfo(d->widget->imagesList()->imageUrls().value(i).toLocalFile()));
+        DItemInfo info(d->iface->itemInfo(d->widget->imagesList()->imageUrls().value(i)));
         GSPhoto temp;
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in start transfer info " <<info.title() << info.comment();
 

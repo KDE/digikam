@@ -113,6 +113,7 @@ public:
 
     State                  state;
 
+    QString                descriptionToUpload;
     QString                albumIdToUpload;
     QString                previousImageId;
     QStringList            uploadTokenList;
@@ -285,7 +286,7 @@ void GPTalker::createAlbum(const GSFolder& album)
  * Upload token then will be sent with url in GPTlaker::uploadPhoto to create real photos on user account
  */
 bool GPTalker::addPhoto(const QString& photoPath,
-                        GSPhoto& /*info*/,
+                        GSPhoto& info,
                         const QString& albumId,
                         bool rescale,
                         int maxDim,
@@ -299,8 +300,9 @@ bool GPTalker::addPhoto(const QString& photoPath,
 
     QUrl url(d->apiUrl.arg("uploads"));
 
-    // Save album ID to upload
-    d->albumIdToUpload = albumId;
+    // Save album ID and description to upload
+    d->descriptionToUpload = info.description;
+    d->albumIdToUpload     = albumId;
 
     QString path = photoPath;
 
@@ -706,7 +708,9 @@ void GPTalker::slotUploadPhoto()
     while (!d->uploadTokenList.isEmpty() && nbItemsUpload < NB_MAX_ITEM_UPLOAD)
     {
         const QString& uploadToken = d->uploadTokenList.takeFirst();
-        data += "{\"description\": \"\",";
+        data += "{\"description\": \"";
+        data += d->descriptionToUpload.toUtf8();
+        data += "\",";
         data += "\"simpleMediaItem\": {";
         data += "\"uploadToken\": \"";
         data += uploadToken;

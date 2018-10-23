@@ -619,4 +619,5 @@ BUGFIXES:
 553 ==> 399762 - Digikam Geolocation Correlator ignores time offset.
 554 ==> 400148 - Files exported in google photos does not have their filename as name, but their date.
 555 ==> 373678 - Videos exported in google photos are not available (still processing state).
-556 ==> 
+556 ==> 400139 - Titles are not exported anymore on google photos.
+557 ==> 
