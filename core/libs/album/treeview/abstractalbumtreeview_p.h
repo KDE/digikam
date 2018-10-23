@@ -59,7 +59,8 @@ namespace Digikam
 {
 
 template <class A>
-static QList<A*> selectedAlbums(QItemSelectionModel* const selModel, AlbumFilterModel* const filterModel)
+static QList<A*> selectedAlbums(QItemSelectionModel* const selModel,
+                                AlbumFilterModel* const filterModel)
 {
     const QList<QModelIndex> indexes = selModel->selectedIndexes();
     QList<A*> albums;
@@ -96,12 +97,14 @@ public:
 
     explicit AlbumTreeViewDelegate(AbstractAlbumTreeView* const treeView = 0)
         : QStyledItemDelegate(treeView),
-          m_treeView(treeView), m_height(0)
+          m_treeView(treeView),
+          m_height(0)
     {
         updateHeight();
     }
 
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+    virtual QSize sizeHint(const QStyleOptionViewItem& option,
+                           const QModelIndex& index) const
     {
         QSize size = QStyledItemDelegate::sizeHint(option, index);
         size.setHeight(qMax(size.height(), m_height));
@@ -110,7 +113,8 @@ public:
 
     void updateHeight()
     {
-        int h = qMax(AlbumThumbnailLoader::instance()->thumbnailSize() + 2, m_treeView->fontMetrics().height());
+        int h = qMax(AlbumThumbnailLoader::instance()->thumbnailSize() + 2,
+                     m_treeView->fontMetrics().height());
 
         if (h % 2 > 0)
         {
