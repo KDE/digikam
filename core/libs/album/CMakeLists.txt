@@ -26,6 +26,7 @@ set(libalbum_SRCS
     treeview/albumselectiontreeview.cpp
     manager/albummanager.cpp
     manager/albummanager_p.cpp
+    manager/albummanager_album.cpp
     manager/albummanager_dalbum.cpp
     manager/albummanager_falbum.cpp
     manager/albummanager_salbum.cpp
