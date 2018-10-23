@@ -34,6 +34,7 @@
 #include <QMap>
 #include <QUrl>
 #include <QDate>
+#include <QFileInfo>
 
 // Local includes
 
@@ -79,6 +80,40 @@ public:
      */
     static AlbumManager* instance();
 
+    /**
+     * starts scanning the libraryPath and listing the albums. If the
+     * libraryPath has not changed since the last scan, then nothing happens
+     * @see setLibraryPath
+     * @see refresh
+     */
+    void startScan();
+
+    /**
+     * Stop ongoing operations, prepare for application shutdown
+     */
+    void cleanUp();
+
+    /**
+     * This is similar to startScan, except that it assumes you have run
+     * startScan at least once. It checks the database to see if any new albums
+     * have been added and updates them accordingly. Use this when a change in the
+     * filesystem is detected (but the album library path hasn't changed)
+     * @see startScan
+     */
+    void refresh();
+
+    /**
+     * Ensures that valid item counts for physical and tag albums are available
+     */
+    void prepareItemCounts();
+
+    bool isShowingOnlyAvailableAlbums() const;
+    void setShowOnlyAvailableAlbums(bool onlyAvailable);
+
+private Q_SLOTS:
+
+    void slotImagesDeleted(const QList<qlonglong>& imageIds);
+
     // -----------------------------------------------------------------------------
 
     /** @name Operations with database
@@ -98,11 +133,6 @@ public:
                      const QString& suggestedAlbumRoot = QString());
 
     /**
-     * Some checks for settings done in first run wizard in case of QSlite Database.
-     */
-    static void checkDatabaseDirsAfterFirstRun(const QString& dbPath, const QString& albumPath);
-
-    /**
      * Sets new database when chosen by the user in setup.
      * Handles user notification about problems.
      * Call this instead of setDatabase when digiKam is up and running.
@@ -110,46 +140,40 @@ public:
     void changeDatabase(const DbEngineParameters& params);
 
     /**
-     * Stop ongoing operations, prepare for application shutdown
-     */
-    void cleanUp();
-
-    /**
      * Checks if the given database path is equal to the current one
      */
     bool databaseEqual(const DbEngineParameters& parameters) const;
 
-    /**
-     * starts scanning the libraryPath and listing the albums. If the
-     * libraryPath has not changed since the last scan, then nothing happens
-     * @see setLibraryPath
-     * @see refresh
-     */
-    void startScan();
-
-    /**
-     * This is similar to startScan, except that it assumes you have run
-     * startScan at least once. It checks the database to see if any new albums
-     * have been added and updates them accordingly. Use this when a change in the
-     * filesystem is detected (but the album library path hasn't changed)
-     * @see startScan
-     */
-    void refresh();
-
-    /**
-     * Ensures that valid item counts for physical and tag albums are available
-     */
-    void prepareItemCounts();
-
-    bool isShowingOnlyAvailableAlbums() const;
-    void setShowOnlyAvailableAlbums(bool onlyAvailable);
-
     void addFakeConnection();
     void removeFakeConnection();
 
+    /**
+     * Some checks for settings done in first run wizard in case of QSlite Database.
+     */
+    static void checkDatabaseDirsAfterFirstRun(const QString& dbPath, const QString& albumPath);
+
 private:
 
+    static bool moveToBackup(const QFileInfo& info);
+    static bool copyToNewLocation(const QFileInfo& oldFile,
+                                  const QFileInfo& newFile,
+                                  const QString otherMessage = QString());
+
+    //@}
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations with collections
+     */
+
+    //@{
+
+private:
+
+    /** Returns true if it added or removed an album.
+     */
     bool handleCollectionStatusChange(const CollectionLocation& location, int oldStatus);
+
     void addAlbumRoot(const CollectionLocation& location);
     void removeAlbumRoot(const CollectionLocation& location);
 
@@ -158,8 +182,6 @@ private Q_SLOTS:
     void slotCollectionLocationStatusChanged(const CollectionLocation&, int);
     void slotCollectionLocationPropertiesChanged(const CollectionLocation& location);
     void slotCollectionImageChange(const CollectionImageChangeset& changeset);
-
-    void slotImagesDeleted(const QList<qlonglong>& imageIds);
 
     //@}
 

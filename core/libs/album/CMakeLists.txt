@@ -28,6 +28,7 @@ set(libalbum_SRCS
     manager/albummanager_p.cpp
     manager/albummanager_dalbum.cpp
     manager/albummanager_falbum.cpp
+    manager/albummanager_database.cpp
 )
 
 include_directories(
