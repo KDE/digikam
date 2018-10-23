@@ -126,7 +126,7 @@ GPTalker::GPTalker(QWidget* const parent)
                    (QStringList() << QLatin1String("https://www.googleapis.com/auth/plus.login")                            // to get user login (temporary until gphoto supports it officially)
                                   << QLatin1String("https://www.googleapis.com/auth/photoslibrary")                         // to add and download photo in the library
                                   << QLatin1String("https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata") // to download photo created by digiKam on GPhoto
-                                  << QLatin1String(" https://www.googleapis.com/auth/photoslibrary.sharing")),              // for shared albums
+                                  << QLatin1String("https://www.googleapis.com/auth/photoslibrary.sharing")),              // for shared albums
                    QLatin1String("GooglePhotos")),
       d(new Private)
 {
@@ -376,8 +376,8 @@ bool GPTalker::addPhoto(const QString& photoPath,
     return true;
 }
 
-bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QString& albumId*/,
-                                  bool rescale, int maxDim, int imageQuality)
+bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info, /*const QString& albumId,*/
+                           bool rescale, int maxDim, int imageQuality)
 {
     if (m_reply)
     {

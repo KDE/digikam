@@ -105,7 +105,7 @@ public:
     QSettings* settings;
 };
 
-GSTalkerBase::GSTalkerBase(QWidget* const parent, const QStringList & scope, const QString& serviceName)
+GSTalkerBase::GSTalkerBase(QWidget* const parent, const QStringList& scope, const QString& serviceName)
     : d(new Private)
 {
     m_reply         = 0;
