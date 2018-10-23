@@ -332,6 +332,12 @@ private Q_SLOTS:
     void slotDatesJobResult();
     void slotDatesJobData(const QMap<QDateTime, int>& datesStatMap);
 
+   /**
+     * Scan dates from the database and updates the DAlbums.
+     */
+    void scanDAlbumsScheduled();
+    void scanDAlbums();
+
 Q_SIGNALS:
 
     void signalDAlbumsDirty(const QMap<YearMonth, int>&);
@@ -718,7 +724,7 @@ public:
      * @return SAlbums with given type, empty list if not found
      * @param searchType the type of the search
      */
-    QList< SAlbum* > findSAlbumsBySearchType(int searchType) const;
+    QList<SAlbum*> findSAlbumsBySearchType(int searchType) const;
 
     /**
      * Create a new SAlbum with supplied url. If an existing SAlbum with same name
@@ -764,13 +770,6 @@ private Q_SLOTS:
     void scanSAlbums();
 
     void slotSearchChange(const SearchChangeset& changeset);
-
-    /**
-     * Scan dates from the database (via IOSlave) and
-     * updates the DAlbums.
-     */
-    void scanDAlbumsScheduled();
-    void scanDAlbums();
 
 Q_SIGNALS:
 

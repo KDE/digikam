@@ -28,6 +28,27 @@
 namespace Digikam
 {
 
+void AlbumManager::scanDAlbums()
+{
+    d->scanDAlbumsTimer->stop();
+
+    if (d->dateListJob)
+    {
+        d->dateListJob->cancel();
+        d->dateListJob = 0;
+    }
+
+    DatesDBJobInfo jInfo;
+    jInfo.setFoldersJob();
+    d->dateListJob = DBJobsManager::instance()->startDatesJobThread(jInfo);
+
+    connect(d->dateListJob, SIGNAL(finished()),
+            this, SLOT(slotDatesJobResult()));
+
+    connect(d->dateListJob, SIGNAL(foldersData(QMap<QDateTime,int>)),
+            this, SLOT(slotDatesJobData(QMap<QDateTime,int>)));
+}
+
 AlbumList AlbumManager::allDAlbums() const
 {
     AlbumList list;
@@ -233,6 +254,18 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
 
     emit signalDAlbumsDirty(yearMonthMap);
     emit signalDatesMapDirty(datesStatMap);
+}
+
+void AlbumManager::scanDAlbumsScheduled()
+{
+    // Avoid a cycle of killing a job which takes longer than the timer interval
+    if (d->dateListJob)
+    {
+        d->scanDAlbumsTimer->start();
+        return;
+    }
+
+    scanDAlbums();
 }
 
 } // namespace Digikam

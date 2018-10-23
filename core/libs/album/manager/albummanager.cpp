@@ -254,6 +254,48 @@ void AlbumManager::prepareItemCounts()
     getTagItemsCount();
 }
 
+void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
+{
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Got image deletion notification from ImageViewUtilities for " << imageIds.size() << " images.";
+
+    QSet<SAlbum*> sAlbumsToUpdate;
+    QSet<qlonglong> deletedImages = imageIds.toSet();
+
+    QList<SAlbum*> sAlbums = findSAlbumsBySearchType(DatabaseSearch::DuplicatesSearch);
+
+    foreach (SAlbum* const sAlbum, sAlbums)
+    {
+        // Read the search query XML and save the image ids
+        SearchXmlReader reader(sAlbum->query());
+        SearchXml::Element element;
+        QSet<qlonglong> images;
+
+        while ((element = reader.readNext()) != SearchXml::End)
+        {
+            if ((element == SearchXml::Field) && (reader.fieldName().compare(QLatin1String("imageid")) == 0))
+            {
+                images = reader.valueToLongLongList().toSet();
+            }
+        }
+
+        // If the deleted images are part of the SAlbum,
+        // mark the album as ready for deletion and the images as ready for rescan.
+#if QT_VERSION >= 0x050600
+        if (images.intersects(deletedImages))
+#else
+        if (images.intersect(deletedImages).isEmpty())
+#endif
+        {
+            sAlbumsToUpdate.insert(sAlbum);
+        }
+    }
+
+    if (!sAlbumsToUpdate.isEmpty())
+    {
+        emit signalUpdateDuplicatesAlbums(sAlbumsToUpdate.toList(), deletedImages.toList());
+    }
+}
+
 void AlbumManager::scanPAlbums()
 {
     d->scanPAlbumsTimer->stop();
@@ -675,116 +717,6 @@ void AlbumManager::tagItemsCount()
             this, SLOT(slotTagsJobData(QMap<int,int>)));
 }
 
-void AlbumManager::scanSAlbums()
-{
-    d->scanSAlbumsTimer->stop();
-
-    // list SAlbums directly from the db
-    // first insert all the current SAlbums into a map for quick lookup
-    QMap<int, SAlbum*> oldSearches;
-
-    AlbumIterator it(d->rootSAlbum);
-
-    while (it.current())
-    {
-        SAlbum* const search      = (SAlbum*)(*it);
-        oldSearches[search->id()] = search;
-        ++it;
-    }
-
-    // scan db and get a list of all albums
-    QList<SearchInfo> currentSearches = CoreDbAccess().db()->scanSearches();
-
-    QList<SearchInfo> newSearches;
-
-    // go through all the Albums and see which ones are already present
-    foreach (const SearchInfo& info, currentSearches)
-    {
-        if (oldSearches.contains(info.id))
-        {
-            SAlbum* const album = oldSearches[info.id];
-
-            if (info.name  != album->title()      ||
-                info.type  != album->searchType() ||
-                info.query != album->query())
-            {
-                QString oldName = album->title();
-
-                album->setSearch(info.type, info.query);
-                album->setTitle(info.name);
-
-                if (oldName != album->title())
-                {
-                    emit signalAlbumRenamed(album);
-                }
-
-                emit signalSearchUpdated(album);
-            }
-
-            oldSearches.remove(info.id);
-        }
-        else
-        {
-            newSearches << info;
-        }
-    }
-
-    // remove old albums that have been deleted
-    foreach (SAlbum* const album, oldSearches)
-    {
-        emit signalAlbumAboutToBeDeleted(album);
-        d->allAlbumsIdHash.remove(album->globalID());
-        emit signalAlbumDeleted(album);
-        quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
-        delete album;
-        emit signalAlbumHasBeenDeleted(deletedAlbum);
-    }
-
-    // add new albums
-    foreach (const SearchInfo& info, newSearches)
-    {
-        SAlbum* const album                   = new SAlbum(info.name, info.id);
-        album->setSearch(info.type, info.query);
-        emit signalAlbumAboutToBeAdded(album, d->rootSAlbum, d->rootSAlbum->lastChild());
-        album->setParent(d->rootSAlbum);
-        d->allAlbumsIdHash[album->globalID()] = album;
-        emit signalAlbumAdded(album);
-    }
-}
-
-void AlbumManager::scanDAlbumsScheduled()
-{
-    // Avoid a cycle of killing a job which takes longer than the timer interval
-    if (d->dateListJob)
-    {
-        d->scanDAlbumsTimer->start();
-        return;
-    }
-
-    scanDAlbums();
-}
-
-void AlbumManager::scanDAlbums()
-{
-    d->scanDAlbumsTimer->stop();
-
-    if (d->dateListJob)
-    {
-        d->dateListJob->cancel();
-        d->dateListJob = 0;
-    }
-
-    DatesDBJobInfo jInfo;
-    jInfo.setFoldersJob();
-    d->dateListJob = DBJobsManager::instance()->startDatesJobThread(jInfo);
-
-    connect(d->dateListJob, SIGNAL(finished()),
-            this, SLOT(slotDatesJobResult()));
-
-    connect(d->dateListJob, SIGNAL(foldersData(QMap<QDateTime,int>)),
-            this, SLOT(slotDatesJobData(QMap<QDateTime,int>)));
-}
-
 AlbumList AlbumManager::allPAlbums() const
 {
     AlbumList list;
@@ -815,26 +747,6 @@ AlbumList AlbumManager::allTAlbums() const
     }
 
     AlbumIterator it(d->rootTAlbum);
-
-    while (it.current())
-    {
-        list.append(*it);
-        ++it;
-    }
-
-    return list;
-}
-
-AlbumList AlbumManager::allSAlbums() const
-{
-    AlbumList list;
-
-    if (d->rootSAlbum)
-    {
-        list.append(d->rootSAlbum);
-    }
-
-    AlbumIterator it(d->rootSAlbum);
 
     while (it.current())
     {
@@ -941,18 +853,6 @@ TAlbum* AlbumManager::findTAlbum(int id) const
     return static_cast<TAlbum*>((d->allAlbumsIdHash.value(gid)));
 }
 
-SAlbum* AlbumManager::findSAlbum(int id) const
-{
-    if (!d->rootSAlbum)
-    {
-        return 0;
-    }
-
-    int gid = d->rootSAlbum->globalID() + id;
-
-    return static_cast<SAlbum*>((d->allAlbumsIdHash.value(gid)));
-}
-
 Album* AlbumManager::findAlbum(int gid) const
 {
     return d->allAlbumsIdHash.value(gid);
@@ -983,39 +883,6 @@ TAlbum* AlbumManager::findTAlbum(const QString& tagPath) const
 
     return 0;
 
-}
-
-SAlbum* AlbumManager::findSAlbum(const QString& name) const
-{
-    for (Album* album = d->rootSAlbum->firstChild() ; album ; album = album->next())
-    {
-        if (album->title() == name)
-        {
-            return dynamic_cast<SAlbum*>(album);
-        }
-    }
-
-    return 0;
-}
-
-QList<SAlbum*> AlbumManager::findSAlbumsBySearchType(int searchType) const
-{
-    QList<SAlbum*> albums;
-
-    for (Album* album = d->rootSAlbum->firstChild() ; album ; album = album->next())
-    {
-        if (album != 0)
-        {
-            SAlbum* const sAlbum = dynamic_cast<SAlbum*>(album);
-
-            if ((sAlbum != 0) && (sAlbum->searchType() == searchType))
-            {
-                albums.append(sAlbum);
-            }
-        }
-    }
-
-    return albums;
 }
 
 void AlbumManager::addGuardedPointer(Album* album, Album** pointer)
@@ -1454,7 +1321,8 @@ bool AlbumManager::hasDirectChildAlbumWithTitle(Album* parent, const QString& ti
 
 }
 
-bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
+bool AlbumManager::renameTAlbum(TAlbum* album,
+                                const QString& name,
                                 QString& errMsg)
 {
     if (!album)
@@ -1715,7 +1583,9 @@ AlbumList AlbumManager::getRecentlyAssignedTags(bool includeInternal) const
     return resultList;
 }
 
-QStringList AlbumManager::tagPaths(const QList<int>& tagIDs, bool leadingSlash, bool includeInternal) const
+QStringList AlbumManager::tagPaths(const QList<int>& tagIDs,
+                                   bool leadingSlash,
+                                   bool includeInternal) const
 {
     QStringList tagPaths;
 
@@ -1857,93 +1727,6 @@ QHash<int, QString> AlbumManager::albumTitles() const
     }
 
     return hash;
-}
-
-SAlbum* AlbumManager::createSAlbum(const QString& name, DatabaseSearch::Type type, const QString& query)
-{
-    // first iterate through all the search albums and see if there's an existing
-    // SAlbum with same name. (Remember, SAlbums are arranged in a flat list)
-    SAlbum* album = findSAlbum(name);
-    ChangingDB changing(d);
-
-    if (album)
-    {
-        updateSAlbum(album, query, name, type);
-        return album;
-    }
-
-    int id = CoreDbAccess().db()->addSearch(type, name, query);
-
-    if (id == -1)
-    {
-        return 0;
-    }
-
-    album = new SAlbum(name, id);
-    emit signalAlbumAboutToBeAdded(album, d->rootSAlbum, d->rootSAlbum->lastChild());
-    album->setSearch(type, query);
-    album->setParent(d->rootSAlbum);
-
-    d->allAlbumsIdHash.insert(album->globalID(), album);
-    emit signalAlbumAdded(album);
-
-    return album;
-}
-
-bool AlbumManager::updateSAlbum(SAlbum* album, const QString& changedQuery,
-                                const QString& changedName, DatabaseSearch::Type type)
-{
-    if (!album)
-    {
-        return false;
-    }
-
-    QString newName              = changedName.isNull()                    ? album->title()      : changedName;
-    DatabaseSearch::Type newType = (type == DatabaseSearch::UndefinedType) ? album->searchType() : type;
-
-    ChangingDB changing(d);
-    CoreDbAccess().db()->updateSearch(album->id(), newType, newName, changedQuery);
-
-    QString oldName              = album->title();
-
-    album->setSearch(newType, changedQuery);
-    album->setTitle(newName);
-
-    if (oldName != album->title())
-    {
-        emit signalAlbumRenamed(album);
-    }
-
-    if (!d->currentAlbums.isEmpty())
-    {
-        if (d->currentAlbums.first() == album)
-        {
-            emit signalAlbumCurrentChanged(d->currentAlbums);
-        }
-    }
-
-    return true;
-}
-
-bool AlbumManager::deleteSAlbum(SAlbum* album)
-{
-    if (!album)
-    {
-        return false;
-    }
-
-    emit signalAlbumAboutToBeDeleted(album);
-
-    ChangingDB changing(d);
-    CoreDbAccess().db()->deleteSearch(album->id());
-
-    d->allAlbumsIdHash.remove(album->globalID());
-    emit signalAlbumDeleted(album);
-    quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
-    delete album;
-    emit signalAlbumHasBeenDeleted(deletedAlbum);
-
-    return true;
 }
 
 QMap<int, int> AlbumManager::getPAlbumsCount() const
@@ -2244,46 +2027,6 @@ void AlbumManager::slotTagChange(const TagChangeset& changeset)
     }
 }
 
-void AlbumManager::slotSearchChange(const SearchChangeset& changeset)
-{
-    if (d->changingDB || !d->rootSAlbum)
-    {
-        return;
-    }
-
-    switch (changeset.operation())
-    {
-        case SearchChangeset::Added:
-        case SearchChangeset::Deleted:
-
-            if (!d->scanSAlbumsTimer->isActive())
-            {
-                d->scanSAlbumsTimer->start();
-            }
-
-            break;
-
-        case SearchChangeset::Changed:
-
-            if (!d->currentAlbums.isEmpty())
-            {
-                Album* currentAlbum = d->currentAlbums.first();
-
-                if (currentAlbum && currentAlbum->type() == Album::SEARCH
-                    && currentAlbum->id() == changeset.searchId())
-                {
-                    // the pointer is the same, but the contents changed
-                    emit signalAlbumCurrentChanged(d->currentAlbums);
-                }
-            }
-
-            break;
-
-        case SearchChangeset::Unknown:
-            break;
-    }
-}
-
 void AlbumManager::slotImageTagChange(const ImageTagChangeset& changeset)
 {
     if (!d->rootTAlbum)
@@ -2313,48 +2056,6 @@ void AlbumManager::slotImageTagChange(const ImageTagChangeset& changeset)
 
         default:
             break;
-    }
-}
-
-void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
-{
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Got image deletion notification from ImageViewUtilities for " << imageIds.size() << " images.";
-
-    QSet<SAlbum*> sAlbumsToUpdate;
-    QSet<qlonglong> deletedImages = imageIds.toSet();
-
-    QList<SAlbum*> sAlbums = findSAlbumsBySearchType(DatabaseSearch::DuplicatesSearch);
-
-    foreach (SAlbum* const sAlbum, sAlbums)
-    {
-        // Read the search query XML and save the image ids
-        SearchXmlReader reader(sAlbum->query());
-        SearchXml::Element element;
-        QSet<qlonglong> images;
-
-        while ((element = reader.readNext()) != SearchXml::End)
-        {
-            if ((element == SearchXml::Field) && (reader.fieldName().compare(QLatin1String("imageid")) == 0))
-            {
-                images = reader.valueToLongLongList().toSet();
-            }
-        }
-
-        // If the deleted images are part of the SAlbum,
-        // mark the album as ready for deletion and the images as ready for rescan.
-#if QT_VERSION >= 0x050600
-        if (images.intersects(deletedImages))
-#else
-        if (images.intersect(deletedImages).isEmpty())
-#endif
-        {
-            sAlbumsToUpdate.insert(sAlbum);
-        }
-    }
-
-    if (!sAlbumsToUpdate.isEmpty())
-    {
-        emit signalUpdateDuplicatesAlbums(sAlbumsToUpdate.toList(), deletedImages.toList());
     }
 }
 
