@@ -27,10 +27,30 @@
 
 namespace Digikam
 {
-    
+
 QMap<int, int> AlbumManager::getFaceCount() const
 {
     return d->fAlbumsCount;
+}
+
+void AlbumManager::personItemsCount()
+{
+    if (d->personListJob)
+    {
+        d->personListJob->cancel();
+        d->personListJob = 0;
+    }
+
+    TagsDBJobInfo jInfo;
+    jInfo.setFaceFoldersJob();
+
+    d->personListJob = DBJobsManager::instance()->startTagsJobThread(jInfo);
+
+    connect(d->personListJob, SIGNAL(finished()),
+            this, SLOT(slotPeopleJobResult()));
+
+    connect(d->personListJob, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)),    // krazy:exclude=normalize
+            this, SLOT(slotPeopleJobData(QMap<QString,QMap<int,int> >)));               // krazy:exclude=normalize
 }
 
 void AlbumManager::slotPeopleJobResult()
@@ -74,26 +94,6 @@ void AlbumManager::slotPeopleJobData(const QMap<QString, QMap<int, int> >& faces
     }
 
     emit signalFaceCountsDirty(d->fAlbumsCount);
-}
-
-void AlbumManager::personItemsCount()
-{
-    if (d->personListJob)
-    {
-        d->personListJob->cancel();
-        d->personListJob = 0;
-    }
-
-    TagsDBJobInfo jInfo;
-    jInfo.setFaceFoldersJob();
-
-    d->personListJob = DBJobsManager::instance()->startTagsJobThread(jInfo);
-
-    connect(d->personListJob, SIGNAL(finished()),
-            this, SLOT(slotPeopleJobResult()));
-
-    connect(d->personListJob, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)),    // krazy:exclude=normalize
-            this, SLOT(slotPeopleJobData(QMap<QString,QMap<int,int> >)));               // krazy:exclude=normalize
 }
 
 } // namespace Digikam
