@@ -50,7 +50,6 @@ extern "C"
 #include <QFileInfo>
 #include <QImage>
 #include <QImageReader>
-#include <QMutexLocker>
 #include <QPaintEngine>
 #include <QPainter>
 #include <QPixmap>
@@ -278,9 +277,7 @@ void DImg::putImageData(uchar* const data, bool copyData)
 
 void DImg::resetMetaData()
 {
-    QMutexLocker locker(&m_priv->mutex);
-    m_priv->attributes.clear();
-    m_priv->embeddedText.clear();
+    m_priv->clearMaps();
     m_priv->metaData = MetaEngineData();
 }
 
@@ -294,7 +291,6 @@ uchar* DImg::stripImageData()
 
 void DImg::copyMetaData(const Private* const src)
 {
-    QMutexLocker locker(&m_priv->mutex);
     m_priv->metaData     = src->metaData;
     m_priv->attributes   = src->attributes;
     m_priv->embeddedText = src->embeddedText;
@@ -934,11 +930,9 @@ bool DImg::isReadOnly() const
 
 DImg::COLORMODEL DImg::originalColorModel() const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
-
-    if (m_priv->attributes.contains(QLatin1String("originalColorModel")))
+    if (m_priv->attributesContains(QLatin1String("originalColorModel")))
     {
-        return (COLORMODEL)m_priv->attributes.value(QLatin1String("originalColorModel")).toInt();
+        return (COLORMODEL)m_priv->attributesValue(QLatin1String("originalColorModel")).toInt();
     }
     else
     {
@@ -948,17 +942,14 @@ DImg::COLORMODEL DImg::originalColorModel() const
 
 int DImg::originalBitDepth() const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
-    return m_priv->attributes.value(QLatin1String("originalBitDepth")).toInt();
+    return m_priv->attributesValue(QLatin1String("originalBitDepth")).toInt();
 }
 
 QSize DImg::originalSize() const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
-
-    if (m_priv->attributes.contains(QLatin1String("originalSize")))
+    if (m_priv->attributesContains(QLatin1String("originalSize")))
     {
-        QSize size = m_priv->attributes.value(QLatin1String("originalSize")).toSize();
+        QSize size = m_priv->attributesValue(QLatin1String("originalSize")).toSize();
 
         if (size.isValid() && !size.isNull())
         {
@@ -971,11 +962,9 @@ QSize DImg::originalSize() const
 
 DImg::FORMAT DImg::detectedFormat() const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
-
-    if (m_priv->attributes.contains(QLatin1String("detectedFileFormat")))
+    if (m_priv->attributesContains(QLatin1String("detectedFileFormat")))
     {
-        return (FORMAT)m_priv->attributes.value(QLatin1String("detectedFileFormat")).toInt();
+        return (FORMAT)m_priv->attributesValue(QLatin1String("detectedFileFormat")).toInt();
     }
     else
     {
@@ -985,23 +974,19 @@ DImg::FORMAT DImg::detectedFormat() const
 
 QString DImg::format() const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
-    return m_priv->attributes.value(QLatin1String("format")).toString();
+    return m_priv->attributesValue(QLatin1String("format")).toString();
 }
 
 QString DImg::savedFormat() const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
-    return m_priv->attributes.value(QLatin1String("savedformat")).toString();
+    return m_priv->attributesValue(QLatin1String("savedformat")).toString();
 }
 
 DRawDecoding DImg::rawDecodingSettings() const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
-
-    if (m_priv->attributes.contains(QLatin1String("rawDecodingSettings")))
+    if (m_priv->attributesContains(QLatin1String("rawDecodingSettings")))
     {
-        return m_priv->attributes.value(QLatin1String("rawDecodingSettings")).value<DRawDecoding>();
+        return m_priv->attributesValue(QLatin1String("rawDecodingSettings")).value<DRawDecoding>();
     }
     else
     {
@@ -1011,25 +996,21 @@ DRawDecoding DImg::rawDecodingSettings() const
 
 IccProfile DImg::getIccProfile() const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
     return m_priv->iccProfile;
 }
 
 void DImg::setIccProfile(const IccProfile& profile)
 {
-    QMutexLocker locker(&m_priv->mutex);
     m_priv->iccProfile = profile;
 }
 
 MetaEngineData DImg::getMetadata() const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
     return m_priv->metaData;
 }
 
 void DImg::setMetadata(const MetaEngineData& data)
 {
-    QMutexLocker locker(&m_priv->mutex);
     m_priv->metaData = data;
 }
 
@@ -1065,17 +1046,14 @@ int DImg::bitsDepth() const
 
 void DImg::setAttribute(const QString& key, const QVariant& value)
 {
-    QMutexLocker locker(&m_priv->mutex);
-    m_priv->attributes.insert(key, value);
+    m_priv->attributesInsert(key, value);
 }
 
 QVariant DImg::attribute(const QString& key) const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
-
-    if (m_priv->attributes.contains(key))
+    if (m_priv->attributesContains(key))
     {
-        return m_priv->attributes[key];
+        return m_priv->attributesValue(key);
     }
 
     return QVariant();
@@ -1083,29 +1061,24 @@ QVariant DImg::attribute(const QString& key) const
 
 bool DImg::hasAttribute(const QString& key) const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
-    return m_priv->attributes.contains(key);
+    return m_priv->attributesContains(key);
 }
 
 void DImg::removeAttribute(const QString& key)
 {
-    QMutexLocker locker(&m_priv->mutex);
-    m_priv->attributes.remove(key);
+    m_priv->attributesRemove(key);
 }
 
 void DImg::setEmbeddedText(const QString& key, const QString& text)
 {
-    QMutexLocker locker(&m_priv->mutex);
-    m_priv->embeddedText.insert(key, text);
+    m_priv->embeddedTextInsert(key, text);
 }
 
 QString DImg::embeddedText(const QString& key) const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
-
-    if (m_priv->embeddedText.contains(key))
+    if (m_priv->embeddedTextContains(key))
     {
-        return m_priv->embeddedText[key];
+        return m_priv->embeddedTextValue(key);
     }
 
     return QString();
@@ -1131,7 +1104,7 @@ QVariant DImg::fileOriginData() const
 {
     QVariantMap map;
 
-    foreach(const QString& key, m_priv->fileOriginAttributes())
+    foreach (const QString& key, m_priv->fileOriginAttributes())
     {
         QVariant attr = attribute(key);
 
@@ -1189,7 +1162,7 @@ void DImg::setFileOriginData(const QVariant& data)
 {
     QVariantMap map = data.toMap();
 
-    foreach(const QString& key, m_priv->fileOriginAttributes())
+    foreach (const QString& key, m_priv->fileOriginAttributes())
     {
         removeAttribute(key);
         QVariant attr = map.value(key);
@@ -2495,15 +2468,13 @@ void DImg::rotate(ANGLE angle)
 
     if (switchDims)
     {
-        QMutexLocker locker(&m_priv->mutex);
-
         setImageDimension(height(), width());
-        QMap<QString, QVariant>::iterator it = m_priv->attributes.find(QLatin1String("originalSize"));
+        QString orgSize = QLatin1String("originalSize");
 
-        if (it != m_priv->attributes.end())
+        if (m_priv->attributesContains(orgSize))
         {
-            QSize size = it.value().toSize();
-            it.value() = QSize(size.height(), size.width());
+            QSize size = m_priv->attributesValue(orgSize).toSize();
+            m_priv->attributesInsert(orgSize, QSize(size.height(), size.width()));
         }
     }
 }
@@ -2913,27 +2884,23 @@ void DImg::fill(const DColor& color)
 
 QByteArray DImg::getUniqueHash() const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
-
-    if (m_priv->attributes.contains(QLatin1String("uniqueHash")))
+    if (m_priv->attributesContains(QLatin1String("uniqueHash")))
     {
-        return m_priv->attributes[QLatin1String("uniqueHash")].toByteArray();
+        return m_priv->attributesValue(QLatin1String("uniqueHash")).toByteArray();
     }
 
-    if (!m_priv->attributes.contains(QLatin1String("originalFilePath")))
+    if (!m_priv->attributesContains(QLatin1String("originalFilePath")))
     {
         qCWarning(DIGIKAM_DIMG_LOG) << "DImg::getUniqueHash called without originalFilePath property set!";
         return QByteArray();
     }
 
-    QString filePath = m_priv->attributes.value(QLatin1String("originalFilePath")).toString();
+    QString filePath = m_priv->attributesValue(QLatin1String("originalFilePath")).toString();
 
     if (filePath.isEmpty())
     {
         return QByteArray();
     }
-
-    locker.unlock();
 
     FileReadLocker lock(filePath);
     QByteArray hash = DImgLoader::uniqueHash(filePath, *this, false);
@@ -2950,27 +2917,23 @@ QByteArray DImg::getUniqueHash(const QString& filePath)
 
 QByteArray DImg::getUniqueHashV2() const
 {
-    QMutexLocker locker(const_cast<QMutex*>(&m_priv->mutex));
-
-    if (m_priv->attributes.contains(QLatin1String("uniqueHashV2")))
+    if (m_priv->attributesContains(QLatin1String("uniqueHashV2")))
     {
-        return m_priv->attributes[QLatin1String("uniqueHashV2")].toByteArray();
+        return m_priv->attributesValue(QLatin1String("uniqueHashV2")).toByteArray();
     }
 
-    if (!m_priv->attributes.contains(QLatin1String("originalFilePath")))
+    if (!m_priv->attributesContains(QLatin1String("originalFilePath")))
     {
         qCWarning(DIGIKAM_DIMG_LOG) << "DImg::getUniqueHash called without originalFilePath property set!";
         return QByteArray();
     }
 
-    QString filePath = m_priv->attributes.value(QLatin1String("originalFilePath")).toString();
+    QString filePath = m_priv->attributesValue(QLatin1String("originalFilePath")).toString();
 
     if (filePath.isEmpty())
     {
         return QByteArray();
     }
-
-    locker.unlock();
 
     FileReadLocker lock(filePath);
 
