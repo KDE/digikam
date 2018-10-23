@@ -27,6 +27,8 @@ set(libalbum_SRCS
     manager/albummanager.cpp
     manager/albummanager_p.cpp
     manager/albummanager_album.cpp
+    manager/albummanager_palbum.cpp
+    manager/albummanager_talbum.cpp
     manager/albummanager_dalbum.cpp
     manager/albummanager_falbum.cpp
     manager/albummanager_salbum.cpp

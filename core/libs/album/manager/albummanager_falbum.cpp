@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-06-15
- * Description : Albums manager interface - FAlbum helpers.
+ * Description : Albums manager interface - Face Album helpers.
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>

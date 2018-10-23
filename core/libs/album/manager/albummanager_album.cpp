@@ -265,4 +265,9 @@ void AlbumManager::slotAlbumChange(const AlbumChangeset& changeset)
     }
 }
 
+qlonglong AlbumManager::getItemFromAlbum(Album* const album, const QString& fileName)
+{
+    return CoreDbAccess().db()->getItemFromAlbum(album->id(), fileName);
+}
+
 } // namespace Digikam
