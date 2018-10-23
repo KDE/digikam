@@ -1487,26 +1487,6 @@ void AlbumManager::tagItemsCount()
             this, SLOT(slotTagsJobData(QMap<int,int>)));
 }
 
-void AlbumManager::personItemsCount()
-{
-    if (d->personListJob)
-    {
-        d->personListJob->cancel();
-        d->personListJob = 0;
-    }
-
-    TagsDBJobInfo jInfo;
-    jInfo.setFaceFoldersJob();
-
-    d->personListJob = DBJobsManager::instance()->startTagsJobThread(jInfo);
-
-    connect(d->personListJob, SIGNAL(finished()),
-            this, SLOT(slotPeopleJobResult()));
-
-    connect(d->personListJob, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)),    // krazy:exclude=normalize
-            this, SLOT(slotPeopleJobData(QMap<QString,QMap<int,int> >)));               // krazy:exclude=normalize
-}
-
 void AlbumManager::scanSAlbums()
 {
     d->scanSAlbumsTimer->stop();
@@ -2788,11 +2768,6 @@ QMap<int, int> AlbumManager::getTAlbumsCount() const
     return d->tAlbumsCount;
 }
 
-QMap<int, int> AlbumManager::getFaceCount() const
-{
-    return d->fAlbumsCount;
-}
-
 bool AlbumManager::isMovingAlbum(Album* album) const
 {
     return d->currentlyMovingAlbum == album;
@@ -2968,49 +2943,6 @@ void AlbumManager::slotAlbumsJobData(const QMap<int, int> &albumsStatMap)
     d->pAlbumsCount = albumsStatMap;
 
     emit signalPAlbumsDirty(albumsStatMap);
-}
-
-void AlbumManager::slotPeopleJobResult()
-{
-    if (!d->personListJob)
-    {
-        return;
-    }
-
-    if (d->personListJob->hasErrors())
-    {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list face tags";
-
-        // Pop-up a message about the error.
-        DNotificationWrapper(QString(), d->personListJob->errorsList().first(),
-                             0, i18n("digiKam"));
-    }
-
-    d->personListJob = 0;
-}
-
-void AlbumManager::slotPeopleJobData(const QMap<QString, QMap<int, int> >& facesStatMap)
-{
-    if (facesStatMap.isEmpty())
-    {
-        return;
-    }
-
-    // For now, we only use the sum of confirmed and unconfirmed faces
-    d->fAlbumsCount.clear();
-    typedef QMap<int, int> IntIntMap;
-
-    foreach (const IntIntMap& counts, facesStatMap)
-    {
-        QMap<int, int>::const_iterator it;
-
-        for (it = counts.begin() ; it != counts.end() ; ++it)
-        {
-            d->fAlbumsCount[it.key()] += it.value();
-        }
-    }
-
-    emit signalFaceCountsDirty(d->fAlbumsCount);
 }
 
 void AlbumManager::slotTagsJobResult()

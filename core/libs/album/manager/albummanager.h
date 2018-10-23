@@ -79,8 +79,6 @@ public:
      */
     static AlbumManager* instance();
 
-public:
-
     // -----------------------------------------------------------------------------
 
     /** @name Operations with database
@@ -88,13 +86,16 @@ public:
 
     //@{
 
+public:
+
     /**
      * Initialize. Informs the user about failures.
      * Returns true on success, false on failure.
      * A return value of false during startup indicates termination of the program
      * (user is informed)
      */
-    bool setDatabase(const DbEngineParameters& params, bool priority, const QString& suggestedAlbumRoot = QString());
+    bool setDatabase(const DbEngineParameters& params, bool priority,
+                     const QString& suggestedAlbumRoot = QString());
 
     /**
      * Some checks for settings done in first run wizard in case of QSlite Database.
@@ -162,8 +163,6 @@ private Q_SLOTS:
 
     //@}
 
-public:
-
     // -----------------------------------------------------------------------------
 
     /**
@@ -171,6 +170,8 @@ public:
      */
 
     //@{
+
+public:
 
     /**
      * set current album to @p albums. It's similar to setCurrentAlbum,
@@ -226,9 +227,55 @@ private Q_SLOTS:
     void slotAlbumChange(const AlbumChangeset& changeset);
     void getAlbumItemsCount();
 
-    //@}
+Q_SIGNALS:
 
-public:
+    /** Emitted when an album is about to be added to the given parent (0 if album is root)
+     *  after the item given by prev (prev is 0 if parent has no children yet).
+     */
+    void signalAlbumAboutToBeAdded(Album* album, Album* parent, Album* prev);
+
+    /** Emitted when the album has been added.
+     */
+    void signalAlbumAdded(Album* album);
+
+    /** Emitted when the album is about to be deleted, but is still fully valid.
+     */
+    void signalAlbumAboutToBeDeleted(Album* album);
+
+    /** Emitted when the album is deleted, but the object can still be accessed.
+     */
+    void signalAlbumDeleted(Album* album);
+
+    /** Emitted when the album is deleted, the object can no longer be accessed.
+     *  For identification purposes, the former album pointer is passed.
+     */
+    void signalAlbumHasBeenDeleted(quintptr);
+
+    void signalAlbumsCleared();
+    void signalAlbumCurrentChanged(const QList<Album*>& albums);
+    void signalAllAlbumsLoaded();
+
+    void signalAlbumIconChanged(Album* album);
+    void signalAlbumRenamed(Album* album);
+    void signalAlbumNewPath(Album* album);
+
+    /** Emittedd when an album is about to be moved. Signals for deleting and adding will be
+     *  sent afterwards, but the album object is guaranteed not to be deleted until after signalAlbumMoved.
+     */
+    void signalAlbumAboutToBeMoved(Album* album);
+
+    /** Emitted when the album is moved to its new parent. After signalAlbumAboutToBeMoved,
+     *  all four signals for first deleting and then adding will have been sent.
+     */
+    void signalAlbumMoved(Album* album);
+    void signalAlbumsUpdated(int type);
+
+    /** Emitted when a change is done on available Albums.
+     *  Please note that affected albums may appear or disappear after this signal has been emitted.
+     */
+    void signalShowOnlyAvailableAlbumsChanged(bool showsOnlyAvailableAlbums);
+
+    //@}
 
     // -----------------------------------------------------------------------------
 
@@ -236,6 +283,8 @@ public:
      */
 
     //@{
+
+public:
 
     /**
      * @return a list of all DAlbums
@@ -261,9 +310,13 @@ private Q_SLOTS:
     void slotDatesJobResult();
     void slotDatesJobData(const QMap<QDateTime, int>& datesStatMap);
 
-    //@}
+Q_SIGNALS:
 
-public:
+    void signalDAlbumsDirty(const QMap<YearMonth, int>&);
+    void signalDatesMapDirty(const QMap<QDateTime, int>&);
+    void signalAllDAlbumsLoaded();
+
+    //@}
 
     // -----------------------------------------------------------------------------
 
@@ -271,6 +324,8 @@ public:
      */
 
     //@{
+
+public:
 
     /**
      * @return a list of all PAlbums
@@ -396,9 +451,11 @@ private Q_SLOTS:
     void scanPAlbums();
     void updateChangedPAlbums();
 
-    //@}
+Q_SIGNALS:
 
-public:
+    void signalPAlbumsDirty(const QMap<int, int>&);
+
+    //@}
 
     // -----------------------------------------------------------------------------
 
@@ -406,6 +463,8 @@ public:
      */
 
     //@{
+
+public:
 
     /**
      * @return a list of all TAlbums
@@ -600,9 +659,12 @@ private Q_SLOTS:
     void getTagItemsCount();
     void tagItemsCount();
 
-    //@}
+Q_SIGNALS:
 
-public:
+    void signalTAlbumsDirty(const QMap<int, int>&);
+    void signalTagPropertiesChanged(TAlbum* album);
+
+    //@}
 
     // -----------------------------------------------------------------------------
 
@@ -610,6 +672,8 @@ public:
      */
 
     //@{
+
+public:
 
     /**
      * @return a list of all SAlbums
@@ -686,9 +750,13 @@ private Q_SLOTS:
     void scanDAlbumsScheduled();
     void scanDAlbums();
 
-    //@}
+Q_SIGNALS:
 
-public:
+    void signalUpdateDuplicatesAlbums(const QList<SAlbum*>& modifiedAlbums,
+                                      const QList<qlonglong>& deletedImages);
+    void signalSearchUpdated(SAlbum* album);
+
+    //@}
 
     // -----------------------------------------------------------------------------
 
@@ -697,21 +765,7 @@ public:
 
     //@{
 
-    /**
-     * @return a list of all FAlbums
-     */
-    AlbumList allFAlbums() const;
-
-    /**
-     * @returns the current FAlbum or null if no one is selected
-     */
-    FAlbum* currentFAlbum() const;
-
-    /**
-     * @return a FAlbum with given name
-     * @param name the name for the FAlbum (name of the person which the FAlbum corresponds to
-     */
-    FAlbum*   findFAlbum(const QString& name) const;
+public:
 
     /**
      * Returns the latest count for faces as also emitted via
@@ -721,148 +775,17 @@ public:
      */
     QMap<int, int> getFaceCount() const;
 
-    /**
-     * Create a new FAlbum with supplied properties as a child of the parent
-     * The person is added to the database
-     * \note the signalAlbumAdded will be fired before this function returns. Its
-     * recommended to connect to that signal to get notification of new album added
-     * @return the newly created FAlbum or 0 if it fails
-     * @param parent  the parent album under which to create the new FAlbum
-     * @param name    the name of the new album
-     * @param iconkde the iconkde for the new album (this is a filename which
-     * kde iconloader can load up
-     * @param errMsg  this will contain the error message describing why the
-     * operation failed
-     */
-    FAlbum* createFAlbum(FAlbum* parent, const QString& name,
-                         const QString& iconkde, QString& errMsg);
-
-    /**
-     * Delete a FAlbum.
-     * The person is removed from the database
-     * \note the signalAlbumDeleted will be fired before this function returns. Its
-     * recommended to connect to that signal to get notification of album deletes
-     * @return true if the operation succeeds or false otherwise
-     * @param album   the FAlbum to delete
-     * @param errMsg  this will contain the error message describing why the
-     * operation failed
-     */
-    bool deleteFAlbum(FAlbum* album, QString& errMsg);
-
-    /**
-     * Renames a FAlbum.
-     * This updates the person name in the database
-     * @return true if the operation succeeds, false otherwise
-     * @param album the Album which should be renamed
-     * @param name the new name for the album
-     * @param errMsg this will contain the error message describing why the
-     * operation failed
-     */
-    bool renameFAlbum(FAlbum* album, const QString& name, QString& errMsg);
-
-    /**
-     * Update the icon for a FAlbum.
-     * @return true if the operation succeeds, false otherwise
-     * @param album the album for which icon should be changed
-     * @param iconKDE  a simple filename which can be loaded by KIconLoader
-     * @param iconID   id of the icon image file
-     * @param errMsg this will contain the error message describing why the
-     * operation failed
-     * \note if iconKDE is not empty then iconID is used. So if you want to set
-     * the icon to a file which can be loaded by KIconLoader, pass it in as
-     * iconKDE. otherwise pass a null QString to iconKDE and set iconID
-     */
-    bool updateFAlbumIcon(FAlbum* album, const QString& iconKDE,
-                          qlonglong iconID, QString& errMsg);
-
-    /**
-     * @return A list with the name paths for a list of tag names.
-     * @param names list of tag album names
-     * @param leadingSlash if <code>true</code> return name paths with a leading slash
-     */
-    QStringList namePaths(const QList<QString>& tagNames, bool leadingSlash=true) const;
-
 private Q_SLOTS:
 
     void slotPeopleJobResult();
     void slotPeopleJobData(const QMap<QString, QMap<int, int> >& facesStatMap);
     void personItemsCount();
 
-    //@}
-
 Q_SIGNALS:
-
-    // Generic Album --------------------------------------------------------
-
-    /** Emitted when an album is about to be added to the given parent (0 if album is root)
-     *  after the item given by prev (prev is 0 if parent has no children yet).
-     */
-    void signalAlbumAboutToBeAdded(Album* album, Album* parent, Album* prev);
-
-    /** Emitted when the album has been added.
-     */
-    void signalAlbumAdded(Album* album);
-
-    /** Emitted when the album is about to be deleted, but is still fully valid.
-     */
-    void signalAlbumAboutToBeDeleted(Album* album);
-
-    /** Emitted when the album is deleted, but the object can still be accessed.
-     */
-    void signalAlbumDeleted(Album* album);
-
-    /** Emitted when the album is deleted, the object can no longer be accessed.
-     *  For identification purposes, the former album pointer is passed.
-     */
-    void signalAlbumHasBeenDeleted(quintptr);
-
-    void signalAlbumsCleared();
-    void signalAlbumCurrentChanged(const QList<Album*>& albums);
-    void signalAllAlbumsLoaded();
-
-    void signalAlbumIconChanged(Album* album);
-    void signalAlbumRenamed(Album* album);
-    void signalAlbumNewPath(Album* album);
-
-    /** Emittedd when an album is about to be moved. Signals for deleting and adding will be
-     *  sent afterwards, but the album object is guaranteed not to be deleted until after signalAlbumMoved.
-     */
-    void signalAlbumAboutToBeMoved(Album* album);
-
-    /** Emitted when the album is moved to its new parent. After signalAlbumAboutToBeMoved,
-     *  all four signals for first deleting and then adding will have been sent.
-     */
-    void signalAlbumMoved(Album* album);
-    void signalAlbumsUpdated(int type);
-
-    /** Emitted when a change is done on available Albums.
-     *  Please note that affected albums may appear or disappear after this signal has been emitted.
-     */
-    void signalShowOnlyAvailableAlbumsChanged(bool showsOnlyAvailableAlbums);
-
-    // Physical Album -------------------------------------------------------
-
-    void signalPAlbumsDirty(const QMap<int, int>&);
-
-    // Tag Album ------------------------------------------------------------
-
-    void signalTAlbumsDirty(const QMap<int, int>&);
-    void signalTagPropertiesChanged(TAlbum* album);
-
-    // Date Album -----------------------------------------------------------
-
-    void signalDAlbumsDirty(const QMap<YearMonth, int>&);
-    void signalDatesMapDirty(const QMap<QDateTime, int>&);
-    void signalAllDAlbumsLoaded();
-
-    // Face Album -----------------------------------------------------------
 
     void signalFaceCountsDirty(const QMap<int, int>&);
 
-    // Search Album ---------------------------------------------------------
-
-    void signalUpdateDuplicatesAlbums(const QList<SAlbum*>& modifiedAlbums, const QList<qlonglong>& deletedImages);
-    void signalSearchUpdated(SAlbum* album);
+    //@}
 
 private:
 
