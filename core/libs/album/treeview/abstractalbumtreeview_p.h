@@ -152,7 +152,12 @@ public:
         selectOnContextMenu(true),
         enableContextMenu(false),
         setInAlbumManager(false),
-        resizeColumnsTimer(0)
+        resizeColumnsTimer(0),
+        configSelectionEntry(QLatin1String("Selection")),
+        configExpansionEntry(QLatin1String("Expansion")),
+        configCurrentIndexEntry(QLatin1String("CurrentIndex")),
+        configSortColumnEntry(QLatin1String("SortColumn")),
+        configSortOrderEntry(QLatin1String("SortOrder"))
     {
     }
 
@@ -177,18 +182,12 @@ public:
     QPixmap                    contextMenuIcon;
     QString                    contextMenuTitle;
 
-    static const QString       configSelectionEntry;
-    static const QString       configExpansionEntry;
-    static const QString       configCurrentIndexEntry;
-    static const QString       configSortColumnEntry;
-    static const QString       configSortOrderEntry;
+    const QString              configSelectionEntry;
+    const QString              configExpansionEntry;
+    const QString              configCurrentIndexEntry;
+    const QString              configSortColumnEntry;
+    const QString              configSortOrderEntry;
 };
-
-const QString AbstractAlbumTreeView::Private::configSelectionEntry(QLatin1String("Selection"));
-const QString AbstractAlbumTreeView::Private::configExpansionEntry(QLatin1String("Expansion"));
-const QString AbstractAlbumTreeView::Private::configCurrentIndexEntry(QLatin1String("CurrentIndex"));
-const QString AbstractAlbumTreeView::Private::configSortColumnEntry(QLatin1String("SortColumn"));
-const QString AbstractAlbumTreeView::Private::configSortOrderEntry(QLatin1String("SortOrder"));
 
 } // namespace Digikam
 
