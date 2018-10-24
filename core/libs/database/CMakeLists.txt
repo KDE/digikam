@@ -114,6 +114,7 @@ set(libdatabase_SRCS
 
     item/scanner/itemscanner.cpp
     item/scanner/itemscanner_p.cpp
+    item/scanner/itemscanner_history.cpp
     item/scanner/itemscanner_baloo.cpp
 
     history/imagehistorygraph.cpp

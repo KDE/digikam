@@ -160,6 +160,47 @@ public:
     static QDateTime creationDateFromFilesystem(const QFileInfo& info);
 
     /**
+     * Sort a list of infos by proximity to the given subject.
+     * Infos are near if they are e.g. in the same album.
+     * They are not near if they are e.g. in different collections.
+     */
+    static void sortByProximity(QList<ImageInfo>& infos, const ImageInfo& subject);
+
+    /**
+     * Helper method to translate enum values to user presentable strings
+     */
+    static QString formatToString(const QString& format);
+
+    /**
+     * Helper method to return official property name by which
+     * IPTC core properties are stored in the database (ImageCopyright and ImageProperties table).
+     * Allowed arguments: All MetadataInfo::Fields starting with "IptcCore..."
+     */
+    static QString iptcCorePropertyName(MetadataInfo::Field field);
+
+    /**
+     * @brief scanBalooInfo - retrieve tags, comments and rating from Baloo
+     */
+    void scanBalooInfo();
+
+    /**
+     * Returns containers with user-presentable information.
+     * These methods provide the reverse service: Not writing into the db, but reading from the db.
+     */
+    static void fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container);
+    static void fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* const container);
+    static void fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* const container);
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations on Item History
+     */
+
+    //@{
+
+public:
+
+    /**
      * Resolves the image history of the image id by filling the ImageRelations table
      * for all contained referred images.
      * If needTaggingIds is given, all ids marked for needing tagging of the history graph are added.
@@ -196,37 +237,15 @@ public:
      */
     static QList<qlonglong> resolveHistoryImageId(const HistoryImageId& historyId);
 
-    /**
-     * Sort a list of infos by proximity to the given subject.
-     * Infos are near if they are e.g. in the same album.
-     * They are not near if they are e.g. in different collections.
-     */
-    static void sortByProximity(QList<ImageInfo>& infos, const ImageInfo& subject);
+protected:
 
-    /**
-     * Returns containers with user-presentable information.
-     * These methods provide the reverse service: Not writing into the db, but reading from the db.
-     */
-    static void fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container);
-    static void fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* const container);
-    static void fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* const container);
+    void scanImageHistory();
+    void commitImageHistory();
+    void scanImageHistoryIfModified();
 
-    /**
-     * Helper method to translate enum values to user presentable strings
-     */
-    static QString formatToString(const QString& format);
+    QString uniqueHash() const;
 
-    /**
-     * Helper method to return official property name by which
-     * IPTC core properties are stored in the database (ImageCopyright and ImageProperties table).
-     * Allowed arguments: All MetadataInfo::Fields starting with "IptcCore..."
-     */
-    static QString iptcCorePropertyName(MetadataInfo::Field field);
-
-    /**
-     * @brief scanBalooInfo - retrieve tags, comments and rating from Baloo
-     */
-    void scanBalooInfo();
+    //@}
 
 protected:
 
@@ -257,14 +276,10 @@ protected:
     void commitTags();
     void scanFaces();
     void commitFaces();
-    void scanImageHistory();
-    void commitImageHistory();
-    void scanImageHistoryIfModified();
     void scanVideoInformation();
     void scanVideoMetadata();
     void commitVideoMetadata();
 
-    QString uniqueHash()        const;
     QString detectImageFormat() const;
     QString detectVideoFormat() const;
     QString detectAudioFormat() const;
