@@ -26,18 +26,9 @@
 #ifndef DIGIKAM_ABSTRACT_COUNTING_ALBUM_TREE_VIEW_H
 #define DIGIKAM_ABSTRACT_COUNTING_ALBUM_TREE_VIEW_H
 
-// Qt includes
-
-#include <QTreeView>
-
 // Local includes
 
 #include "abstractalbumtreeview.h"
-#include "albummanager.h"
-#include "albummodel.h"
-#include "albumfiltermodel.h"
-#include "albumpointer.h"
-#include "statesavingobject.h"
 
 namespace Digikam
 {

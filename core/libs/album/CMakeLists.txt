@@ -24,6 +24,7 @@ set(libalbum_SRCS
     treeview/albumlabelstreeview.cpp
     treeview/abstractalbumtreeview.cpp
     treeview/abstractcountingalbumtreeview.cpp
+    treeview/abstractcheckablealbumtreeview.cpp
     treeview/albumtreeview.cpp
     treeview/albumselectiontreeview.cpp
     manager/albummanager.cpp

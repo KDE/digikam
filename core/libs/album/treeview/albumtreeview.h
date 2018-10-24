@@ -26,86 +26,12 @@
 #ifndef DIGIKAM_ALBUM_TREE_VIEW_H
 #define DIGIKAM_ALBUM_TREE_VIEW_H
 
-// Qt includes
-
-#include <QTreeView>
-
 // Local includes
 
-#include "abstractalbumtreeview.h"
-#include "abstractcountingalbumtreeview.h"
-#include "albummanager.h"
-#include "albummodel.h"
-#include "albumfiltermodel.h"
-#include "albumpointer.h"
-#include "statesavingobject.h"
+#include "abstractcheckablealbumtreeview.h"
 
 namespace Digikam
 {
-
-class AbstractCheckableAlbumTreeView : public AbstractCountingAlbumTreeView
-{
-    Q_OBJECT
-
-public:
-
-    /// Models of these view _can_ be checkable, they need _not_. You need to enable it on the model.
-
-    explicit AbstractCheckableAlbumTreeView(QWidget* const parent, Flags flags);
-
-    virtual ~AbstractCheckableAlbumTreeView();
-
-    /// Manage check state through the model directly
-    AbstractCheckableAlbumModel* albumModel()     const;
-    CheckableAlbumFilterModel* albumFilterModel() const;
-
-    AbstractCheckableAlbumModel* checkableModel() const
-    {
-        return albumModel();
-    }
-
-    CheckableAlbumFilterModel* checkableAlbumFilterModel() const
-    {
-        return albumFilterModel();
-    }
-
-    /// Enable checking on middle mouse button click (default: on)
-    void setCheckOnMiddleClick(bool doThat);
-
-    /**
-     * Tells if the check state is restored while loading / saving state.
-     *
-     * @return true if restoring check state is active
-     */
-    bool isRestoreCheckState() const;
-
-    /**
-     * Set whether to restore check state or not.
-     *
-     * @param restore if true, restore check state
-     */
-    void setRestoreCheckState(bool restore);
-
-    virtual void doLoadState();
-    virtual void doSaveState();
-
-protected:
-
-    virtual void middleButtonPressed(Album* a);
-    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
-
-private:
-
-    void restoreCheckStateForHierarchy(const QModelIndex& index);
-    void restoreCheckState(const QModelIndex& index);
-
-private:
-
-    class Private;
-    Private* d;
-};
-
-// -------------------------------------------------------------------------------------
 
 class AlbumTreeView : public AbstractCheckableAlbumTreeView
 {
