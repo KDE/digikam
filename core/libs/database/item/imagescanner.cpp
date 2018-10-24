@@ -55,10 +55,6 @@
 #include "dimagehistory.h"
 #include "imagehistorygraphdata.h"
 
-#ifdef HAVE_KFILEMETADATA
-#   include "baloowrap.h"
-#endif
-
 namespace Digikam
 {
 
@@ -127,6 +123,86 @@ public:
     QList<int>                       tagIds;
     QString                          historyXml;
     QString                          uuid;
+};
+
+// ---------------------------------------------------------------------------------------
+
+class Q_DECL_HIDDEN lessThanByProximityToSubject
+{
+public:
+
+    explicit lessThanByProximityToSubject(const ImageInfo& subject)
+        : subject(subject)
+    {
+    }
+
+    bool operator()(const ImageInfo& a, const ImageInfo& b)
+    {
+        if (a.isNull() || b.isNull())
+        {
+            // both null: false
+            // only a null: a greater than b (null infos at end of list)
+            //  (a && b) || (a && !b) = a
+            // only b null: a less than b
+            if (a.isNull())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        if (a == b)
+        {
+            return false;
+        }
+
+        // same collection
+        if (a.albumId() != b.albumId())
+        {
+            // same album
+            if (a.albumId() == subject.albumId())
+            {
+                return true;
+            }
+
+            if (b.albumId() == subject.albumId())
+            {
+                return false;
+            }
+
+            if (a.albumRootId() != b.albumRootId())
+            {
+                // different collection
+                if (a.albumRootId() == subject.albumRootId())
+                {
+                    return true;
+                }
+
+                if (b.albumRootId() == subject.albumRootId())
+                {
+                    return false;
+                }
+            }
+        }
+
+        if (a.modDateTime() != b.modDateTime())
+        {
+            return a.modDateTime() < b.modDateTime();
+        }
+
+        if (a.name() != b.name())
+        {
+            return qAbs(a.name().compare(subject.name())) < qAbs(b.name().compare(subject.name()));
+        }
+
+        // last resort
+        return (a.id() < b.id());
+    }
+
+public:
+
+    ImageInfo subject;
 };
 
 // ---------------------------------------------------------------------------
@@ -1282,7 +1358,8 @@ static bool uuidDoesNotDiffer(const HistoryImageId& referenceId, qlonglong id)
 }
 
 static QList<qlonglong> mergedIdLists(const HistoryImageId& referenceId,
-                         const QList<qlonglong>& uuidList, const QList<qlonglong>& candidates)
+                                      const QList<qlonglong>& uuidList,
+                                      const QList<qlonglong>& candidates)
 {
     QList<qlonglong> results;
     // uuidList are definite results
@@ -1387,85 +1464,6 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
     return uuidList;
 }
 
-// ---------------------------------------------------------------------------------------
-
-class Q_DECL_HIDDEN lessThanByProximityToSubject
-{
-public:
-
-    explicit lessThanByProximityToSubject(const ImageInfo& subject)
-        : subject(subject)
-    {
-    }
-
-    bool operator()(const ImageInfo& a, const ImageInfo& b)
-    {
-        if (a.isNull() || b.isNull())
-        {
-            // both null: false
-            // only a null: a greater than b (null infos at end of list)
-            //  (a && b) || (a && !b) = a
-            // only b null: a less than b
-            if (a.isNull())
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        if (a == b)
-        {
-            return false;
-        }
-
-        // same collection
-        if (a.albumId() != b.albumId())
-        {
-            // same album
-            if (a.albumId() == subject.albumId())
-            {
-                return true;
-            }
-
-            if (b.albumId() == subject.albumId())
-            {
-                return false;
-            }
-
-            if (a.albumRootId() != b.albumRootId())
-            {
-                // different collection
-                if (a.albumRootId() == subject.albumRootId())
-                {
-                    return true;
-                }
-
-                if (b.albumRootId() == subject.albumRootId())
-                {
-                    return false;
-                }
-            }
-        }
-
-        if (a.modDateTime() != b.modDateTime())
-        {
-            return a.modDateTime() < b.modDateTime();
-        }
-
-        if (a.name() != b.name())
-        {
-            return qAbs(a.name().compare(subject.name())) < qAbs(b.name().compare(subject.name()));
-        }
-
-        // last resort
-        return (a.id() < b.id());
-    }
-
-public:
-
-    ImageInfo subject;
-};
 
 void ImageScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subject)
 {
@@ -1877,51 +1875,6 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
         default:
             return QString();
     }
-}
-
-void ImageScanner::scanBalooInfo()
-{
-#ifdef HAVE_KFILEMETADATA
-
-    BalooWrap* const baloo = BalooWrap::instance();
-
-    if (!baloo->getSyncToDigikam())
-    {
-        return;
-    }
-
-    BalooInfo bInfo = baloo->getSemanticInfo(QUrl::fromLocalFile(d->fileInfo.absoluteFilePath()));
-
-    if (!bInfo.tags.isEmpty())
-    {
-        // get tag ids, create if necessary
-        QList<int> tagIds = TagsCache::instance()->getOrCreateTags(bInfo.tags);
-        d->commit.tagIds += tagIds;
-    }
-
-    if (bInfo.rating != -1)
-    {
-        if (!d->commit.imageInformationFields.testFlag(DatabaseFields::Rating))
-        {
-            d->commit.imageInformationFields |= DatabaseFields::Rating;
-            d->commit.imageInformationInfos.insert(0, QVariant(bInfo.rating));
-        }
-    }
-
-    if (!bInfo.comment.isEmpty())
-    {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Comment " << bInfo.comment;
-
-        if (!d->commit.captions.contains(QLatin1String("x-default")))
-        {
-            CaptionValues val;
-            val.caption                   = bInfo.comment;
-            d->commit.commitImageComments = true;
-            d->commit.captions.insert(QLatin1String("x-default"), val);
-        }
-    }
-
-#endif // HAVE_KFILEMETADATA
 }
 
 void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container)

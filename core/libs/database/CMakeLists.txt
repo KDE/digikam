@@ -106,6 +106,7 @@ set(libdatabase_SRCS
     item/imagecopyright.cpp
     item/imagequerybuilder.cpp
     item/imagescanner.cpp
+    item/imagescanner_baloo.cpp
     item/imagetagpair.cpp
     item/imageattributeswatch.cpp
 
