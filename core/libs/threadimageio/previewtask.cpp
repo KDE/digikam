@@ -210,7 +210,7 @@ void PreviewLoadingTask::execute()
         // If not valid, get original size from LibRaw
         if (!originalSize.isValid())
         {
-            RawInfo container;
+            DRawInfo container;
 
             if (DRawDecoder::rawFileIdentify(container, m_loadingDescription.filePath))
             {

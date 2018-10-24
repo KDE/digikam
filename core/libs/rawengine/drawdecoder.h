@@ -40,7 +40,7 @@
 // Local includes
 
 #include "drawdecodersettings.h"
-#include "rawinfo.h"
+#include "drawinfo.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -116,7 +116,7 @@ public:
         for more details. This is a fast and non cancelable method which do not require
         a class instance to run.
      */
-    static bool rawFileIdentify(RawInfo& identify, const QString& path);
+    static bool rawFileIdentify(DRawInfo& identify, const QString& path);
 
     /** Return the string of all RAW file type mime supported.
      */
@@ -160,7 +160,7 @@ public:
             - All info about Raw image into 'identify' container.
             - 'false' is returned if loading failed, else 'true'.
      */
-    bool extractRAWData(const QString& filePath, QByteArray& rawData, RawInfo& identify, unsigned int shotSelect=0);
+    bool extractRAWData(const QString& filePath, QByteArray& rawData, DRawInfo& identify, unsigned int shotSelect=0);
 
     /** Extract a small size of decode RAW data from 'filePath' picture file using
         'DRawDecoderSettings' settings. This is a cancelable method which require

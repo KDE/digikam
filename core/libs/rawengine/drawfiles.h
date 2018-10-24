@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_RAW_FILES_H
-#define DIGIKAM_RAW_FILES_H
+#ifndef DIGIKAM_DRAW_FILES_H
+#define DIGIKAM_DRAW_FILES_H
 
 namespace Digikam
 {
@@ -99,4 +99,4 @@ static const int raw_file_extensions_version = 4;
 
 } // namespace Digikam
 
-#endif // DIGIKAM_RAW_FILES_H
+#endif // DIGIKAM_DRAW_FILES_H

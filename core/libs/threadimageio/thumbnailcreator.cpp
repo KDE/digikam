@@ -46,7 +46,7 @@
 #include "metaengine_previews.h"
 #include "metaengine_rotation.h"
 #include "drawdecoder.h"
-#include "rawfiles.h"
+#include "drawfiles.h"
 #include "digikam_debug.h"
 #include "dimg.h"
 #include "dmetadata.h"

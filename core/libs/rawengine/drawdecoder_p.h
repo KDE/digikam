@@ -54,7 +54,7 @@
 
 // Local includes
 
-#include "rawinfo.h"
+#include "drawinfo.h"
 #include "drawdecoder.h"
 
 namespace Digikam
@@ -87,7 +87,7 @@ public:
 
     static void createPPMHeader(QByteArray& imgData, libraw_processed_image_t* const img);
 
-    static void fillIndentifyInfo(LibRaw* const raw, RawInfo& identify);
+    static void fillIndentifyInfo(LibRaw* const raw, DRawInfo& identify);
 
     static bool loadEmbeddedPreview(QByteArray&, LibRaw* const raw);
 

@@ -58,7 +58,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     readMetadata(filePath, DImg::RAW);
 
-    RawInfo dcrawIdentify;
+    DRawInfo dcrawIdentify;
 
     if (!DRawDecoder::rawFileIdentify(dcrawIdentify, filePath))
     {

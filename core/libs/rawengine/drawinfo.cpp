@@ -23,12 +23,12 @@
 
 // Local includes
 
-#include "rawinfo.h"
+#include "drawinfo.h"
 
 namespace Digikam
 {
 
-RawInfo::RawInfo()
+DRawInfo::DRawInfo()
 {
     sensitivity       = -1.0;
     exposureTime      = -1.0;
@@ -69,11 +69,11 @@ RawInfo::RawInfo()
     }
 }
 
-RawInfo::~RawInfo()
+DRawInfo::~DRawInfo()
 {
 }
 
-bool RawInfo::isEmpty()
+bool DRawInfo::isEmpty()
 {
     if (make.isEmpty()                  &&
         model.isEmpty()                 &&
@@ -147,24 +147,24 @@ bool RawInfo::isEmpty()
     }
 }
 
-QDebug operator<<(QDebug dbg, const RawInfo& c)
+QDebug operator<<(QDebug dbg, const DRawInfo& c)
 {
-    dbg.nospace() << "RawInfo::sensitivity: "      << c.sensitivity      << ", ";
-    dbg.nospace() << "RawInfo::exposureTime: "     << c.exposureTime     << ", ";
-    dbg.nospace() << "RawInfo::aperture: "         << c.aperture         << ", ";
-    dbg.nospace() << "RawInfo::focalLength: "      << c.focalLength      << ", ";
-    dbg.nospace() << "RawInfo::pixelAspectRatio: " << c.pixelAspectRatio << ", ";
-    dbg.nospace() << "RawInfo::rawColors: "        << c.rawColors        << ", ";
-    dbg.nospace() << "RawInfo::rawImages: "        << c.rawImages        << ", ";
-    dbg.nospace() << "RawInfo::hasIccProfile: "    << c.hasIccProfile    << ", ";
-    dbg.nospace() << "RawInfo::isDecodable: "      << c.isDecodable      << ", ";
-    dbg.nospace() << "RawInfo::daylightMult: "     << c.daylightMult     << ", ";
-    dbg.nospace() << "RawInfo::cameraMult: "       << c.cameraMult       << ", ";
-    dbg.nospace() << "RawInfo::blackPoint: "       << c.blackPoint       << ", ";
-    dbg.nospace() << "RawInfo::whitePoint: "       << c.whitePoint       << ", ";
-    dbg.nospace() << "RawInfo::topMargin: "        << c.topMargin        << ", ";
-    dbg.nospace() << "RawInfo::leftMargin: "       << c.leftMargin       << ", ";
-    dbg.nospace() << "RawInfo::orientation: "      << c.orientation;
+    dbg.nospace() << "DRawInfo::sensitivity: "      << c.sensitivity      << ", ";
+    dbg.nospace() << "DRawInfo::exposureTime: "     << c.exposureTime     << ", ";
+    dbg.nospace() << "DRawInfo::aperture: "         << c.aperture         << ", ";
+    dbg.nospace() << "DRawInfo::focalLength: "      << c.focalLength      << ", ";
+    dbg.nospace() << "DRawInfo::pixelAspectRatio: " << c.pixelAspectRatio << ", ";
+    dbg.nospace() << "DRawInfo::rawColors: "        << c.rawColors        << ", ";
+    dbg.nospace() << "DRawInfo::rawImages: "        << c.rawImages        << ", ";
+    dbg.nospace() << "DRawInfo::hasIccProfile: "    << c.hasIccProfile    << ", ";
+    dbg.nospace() << "DRawInfo::isDecodable: "      << c.isDecodable      << ", ";
+    dbg.nospace() << "DRawInfo::daylightMult: "     << c.daylightMult     << ", ";
+    dbg.nospace() << "DRawInfo::cameraMult: "       << c.cameraMult       << ", ";
+    dbg.nospace() << "DRawInfo::blackPoint: "       << c.blackPoint       << ", ";
+    dbg.nospace() << "DRawInfo::whitePoint: "       << c.whitePoint       << ", ";
+    dbg.nospace() << "DRawInfo::topMargin: "        << c.topMargin        << ", ";
+    dbg.nospace() << "DRawInfo::leftMargin: "       << c.leftMargin       << ", ";
+    dbg.nospace() << "DRawInfo::orientation: "      << c.orientation;
     return dbg.space();
 }
 

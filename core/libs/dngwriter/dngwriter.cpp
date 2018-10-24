@@ -177,8 +177,8 @@ int DNGWriter::convert()
 
         QFileInfo          outputInfo(dngFilePath);
         QByteArray         rawData;
-        RawInfo identify;
-        RawInfo identifyMake;
+        DRawInfo identify;
+        DRawInfo identifyMake;
 
         // -----------------------------------------------------------------------------------------
 
@@ -521,19 +521,19 @@ int DNGWriter::convert()
 
         switch (identify.orientation)
         {
-            case RawInfo::ORIENTATION_180:
+            case DRawInfo::ORIENTATION_180:
                 orientation = dng_orientation::Rotate180();
                 break;
 
-            case RawInfo::ORIENTATION_Mirror90CCW:
+            case DRawInfo::ORIENTATION_Mirror90CCW:
                 orientation = dng_orientation::Mirror90CCW();
                 break;
 
-            case RawInfo::ORIENTATION_90CCW:
+            case DRawInfo::ORIENTATION_90CCW:
                 orientation = dng_orientation::Rotate90CCW();
                 break;
 
-            case RawInfo::ORIENTATION_90CW:
+            case DRawInfo::ORIENTATION_90CW:
                 orientation = dng_orientation::Rotate90CW();
                 break;
 

@@ -41,7 +41,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "rawfiles.h"
+#include "drawfiles.h"
 
 namespace Digikam
 {
@@ -299,7 +299,7 @@ bool DRawDecoder::loadFullImage(QImage& image, const QString& path, const DRawDe
     return true;
 }
 
-bool DRawDecoder::rawFileIdentify(RawInfo& identify, const QString& path)
+bool DRawDecoder::rawFileIdentify(DRawInfo& identify, const QString& path)
 {
     QFileInfo fileInfo(path);
     QString rawFilesExt  = QString::fromUtf8(rawFiles());
@@ -339,7 +339,7 @@ bool DRawDecoder::rawFileIdentify(RawInfo& identify, const QString& path)
 
 // ----------------------------------------------------------------------------------
 
-bool DRawDecoder::extractRAWData(const QString& filePath, QByteArray& rawData, RawInfo& identify, unsigned int shotSelect)
+bool DRawDecoder::extractRAWData(const QString& filePath, QByteArray& rawData, DRawInfo& identify, unsigned int shotSelect)
 {
     QFileInfo fileInfo(filePath);
     QString rawFilesExt  = QString::fromUtf8(rawFiles());

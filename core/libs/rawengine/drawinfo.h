@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_RAW_INFO_H
-#define DIGIKAM_RAW_INFO_H
+#ifndef DIGIKAM_DRAW_INFO_H
+#define DIGIKAM_DRAW_INFO_H
 
 // Qt includes
 
@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT RawInfo
+class DIGIKAM_EXPORT DRawInfo
 {
 
 public:
@@ -57,10 +57,10 @@ public:
 public:
 
     /** Standard constructor */
-    RawInfo();
+    DRawInfo();
 
     /** Standard destructor */
-    virtual ~RawInfo();
+    virtual ~DRawInfo();
 
     /** Return 'true' if container is empty, else 'false' */
     bool isEmpty();
@@ -149,8 +149,8 @@ public:
 };
 
 //! qDebug() stream operator. Writes container @a c to the debug output in a nicely formatted way.
-QDebug operator<<(QDebug dbg, const RawInfo& c);
+QDebug operator<<(QDebug dbg, const DRawInfo& c);
 
 } // namespace Digikam
 
-#endif // DIGIKAM_RAW_INFO_H
+#endif // DIGIKAM_DRAW_INFO_H

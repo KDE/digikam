@@ -44,7 +44,7 @@
 #include "galleryelement.h"
 #include "metaengine_rotation.h"
 #include "drawdecoder.h"
-#include "rawinfo.h"
+#include "drawinfo.h"
 
 namespace Digikam
 {
@@ -356,7 +356,7 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
     {
         // Try to use Raw decoder to identify image.
 
-        RawInfo     info;
+        DRawInfo     info;
         DRawDecoder rawdecoder;
         rawdecoder.rawFileIdentify(info, path);
 

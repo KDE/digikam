@@ -37,7 +37,7 @@
 
 #include "filereadwritelock.h"
 #include "metaenginesettings.h"
-#include "rawinfo.h"
+#include "drawinfo.h"
 #include "drawdecoder.h"
 #include "digikam_version.h"
 #include "digikam_globals.h"
@@ -81,7 +81,7 @@ bool DMetadata::applyChanges(bool setVersion) const
 
 bool DMetadata::loadUsingRawEngine(const QString& filePath)
 {
-    RawInfo identify;
+    DRawInfo identify;
 
     if (DRawDecoder::rawFileIdentify(identify, filePath))
     {

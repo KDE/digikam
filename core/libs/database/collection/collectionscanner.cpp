@@ -45,7 +45,7 @@
 
 // Local includes
 
-#include "rawfiles.h"
+#include "drawfiles.h"
 #include "digikam_debug.h"
 #include "coredb.h"
 #include "collectionmanager.h"
