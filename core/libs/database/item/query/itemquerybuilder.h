@@ -23,48 +23,24 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_QUERY_BUILDER_H
-#define DIGIKAM_IMAGE_QUERY_BUILDER_H
+#ifndef DIGIKAM_ITEM_QUERY_BUILDER_H
+#define DIGIKAM_ITEM_QUERY_BUILDER_H
 
 // Qt includes
 
-#include <QList>
 #include <QVariant>
 #include <QString>
 
 // Local includes
 
 #include "coredbsearchxml.h"
+#include "itemqueryposthooks.h"
 #include "digikam_export.h"
 
 class QUrl;
 
 namespace Digikam
 {
-
-class ItemQueryPostHook;
-
-class ItemQueryPostHooks
-{
-public:
-
-    ~ItemQueryPostHooks();
-
-    /** Call this method after passing the object to buildQuery
-     *  and executing the statement. Returns true if the search is matched.
-     */
-    bool checkPosition(double latitudeNumber, double longitudeNumber);
-
-    /** Called by ItemQueryBuilder. Ownership of the object is passed.
-     */
-    void addHook(ItemQueryPostHook* const hook);
-
-protected:
-
-    QList<ItemQueryPostHook*> m_postHooks;
-};
-
-// ------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT ItemQueryBuilder
 {
@@ -107,4 +83,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_QUERY_BUILDER_H
+#endif // DIGIKAM_ITEM_QUERY_BUILDER_H

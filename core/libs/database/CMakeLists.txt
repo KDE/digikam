@@ -107,10 +107,13 @@ set(libdatabase_SRCS
     item/imagetagpair.cpp
     item/imageattributeswatch.cpp
 
-    item/itemquerybuilder.cpp
-    item/itemscanner.cpp
-    item/itemscanner_p.cpp
-    item/itemscanner_baloo.cpp
+    item/query/itemquerybuilder.cpp
+    item/query/itemqueryposthooks.cpp
+    item/query/fieldquerybuilder.cpp
+
+    item/scanner/itemscanner.cpp
+    item/scanner/itemscanner_p.cpp
+    item/scanner/itemscanner_baloo.cpp
 
     history/imagehistorygraph.cpp
     history/imagehistorygraphmodel.cpp
