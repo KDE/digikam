@@ -52,7 +52,7 @@
 #include "imagecopyright.h"
 #include "imageextendedproperties.h"
 #include "imageposition.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 #include "imagetagpair.h"
 #include "tagscache.h"
 #include "template.h"
@@ -1367,7 +1367,7 @@ ImageCommonContainer ImageInfo::imageCommonContainer() const
     }
 
     ImageCommonContainer container;
-    ImageScanner::fillCommonContainer(m_data->id, &container);
+    ItemScanner::fillCommonContainer(m_data->id, &container);
     return container;
 }
 

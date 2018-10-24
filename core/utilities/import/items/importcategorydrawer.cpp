@@ -37,7 +37,7 @@
 #include "importcategorizedview.h"
 #include "camitemsortsettings.h"
 #include "importfiltermodel.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 
 namespace Digikam
 {
@@ -203,7 +203,7 @@ void ImportCategoryDrawer::textForFormat(const QModelIndex& index, QString* head
     if (!format.isEmpty())
     {
         format     = format.split(QLatin1Char('/')).at(1);
-        format     = ImageScanner::formatToString(format);
+        format     = ItemScanner::formatToString(format);
         *header    = format;
     }
     else

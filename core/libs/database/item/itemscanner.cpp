@@ -22,25 +22,25 @@
  *
  * ============================================================ */
 
-#include "imagescanner_p.h"
+#include "itemscanner_p.h"
 
 namespace Digikam
 {
 
-ImageScanner::ImageScanner(const QFileInfo& info, const ItemScanInfo& scanInfo)
+ItemScanner::ItemScanner(const QFileInfo& info, const ItemScanInfo& scanInfo)
     : d(new Private)
 {
     d->fileInfo = info;
     d->scanInfo = scanInfo;
 }
 
-ImageScanner::ImageScanner(const QFileInfo& info)
+ItemScanner::ItemScanner(const QFileInfo& info)
     : d(new Private)
 {
     d->fileInfo = info;
 }
 
-ImageScanner::ImageScanner(qlonglong imageid)
+ItemScanner::ItemScanner(qlonglong imageid)
     : d(new Private)
 {
     ItemShortInfo shortInfo;
@@ -55,35 +55,35 @@ ImageScanner::ImageScanner(qlonglong imageid)
                                       shortInfo.album, QUrl::fromLocalFile(albumRootPath), shortInfo.albumRootID).fileUrl().toLocalFile());
 }
 
-ImageScanner::~ImageScanner()
+ItemScanner::~ItemScanner()
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "Finishing took" << d->time.elapsed() << "ms";
     delete d;
 }
 
-qlonglong ImageScanner::id() const
+qlonglong ItemScanner::id() const
 {
     return d->scanInfo.id;
 }
 
-void ImageScanner::setCategory(DatabaseItem::Category category)
+void ItemScanner::setCategory(DatabaseItem::Category category)
 {
     // we don't have the necessary information in this class, but in CollectionScanner
     d->scanInfo.category = category;
 }
 
-void ImageScanner::commit()
+void ItemScanner::commit()
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "Scanning took" << d->time.restart() << "ms";
 
     switch (d->commit.operation)
     {
-        case ImageScannerCommit::NoOp:
+        case ItemScannerCommit::NoOp:
             return;
-        case ImageScannerCommit::AddItem:
+        case ItemScannerCommit::AddItem:
             commitAddImage();
             break;
-        case ImageScannerCommit::UpdateItem:
+        case ItemScannerCommit::UpdateItem:
             commitUpdateImage();
             break;
     }
@@ -141,14 +141,14 @@ void ImageScanner::commit()
     commitImageHistory();
 }
 
-void ImageScanner::fileModified()
+void ItemScanner::fileModified()
 {
     loadFromDisk();
     prepareUpdateImage();
     scanFile(ModifiedScan);
 }
 
-void ImageScanner::newFile(int albumId)
+void ItemScanner::newFile(int albumId)
 {
     loadFromDisk();
     prepareAddImage(albumId);
@@ -159,21 +159,21 @@ void ImageScanner::newFile(int albumId)
     }
 }
 
-void ImageScanner::newFileFullScan(int albumId)
+void ItemScanner::newFileFullScan(int albumId)
 {
     loadFromDisk();
     prepareAddImage(albumId);
     scanFile(NewScan);
 }
 
-void ImageScanner::rescan()
+void ItemScanner::rescan()
 {
     loadFromDisk();
     prepareUpdateImage();
     scanFile(Rescan);
 }
 
-void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
+void ItemScanner::copiedFrom(int albumId, qlonglong srcId)
 {
     loadFromDisk();
     prepareAddImage(albumId);
@@ -190,12 +190,12 @@ void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
     }
 }
 
-const ItemScanInfo& ImageScanner::itemScanInfo() const
+const ItemScanInfo& ItemScanner::itemScanInfo() const
 {
     return d->scanInfo;
 }
 
-bool ImageScanner::hasHistoryToResolve() const
+bool ItemScanner::hasHistoryToResolve() const
 {
     return d->hasHistoryToResolve;
 }
@@ -222,7 +222,7 @@ bool lessThanForIdentity(const ItemScanInfo& a, const ItemScanInfo& b)
     }
 }
 
-bool ImageScanner::scanFromIdenticalFile()
+bool ItemScanner::scanFromIdenticalFile()
 {
     // Get a list of other images that are identical. Source image shall not be included.
     // When using the Commit functionality, d->scanInfo.id can be null.
@@ -248,7 +248,7 @@ bool ImageScanner::scanFromIdenticalFile()
     return false;
 }
 
-void ImageScanner::commitCopyImageAttributes()
+void ItemScanner::commitCopyImageAttributes()
 {
     CoreDbAccess().db()->copyImageAttributes(d->commit.copyImageAttributesId, d->scanInfo.id);
     // Also copy the similarity information
@@ -258,7 +258,7 @@ void ImageScanner::commitCopyImageAttributes()
     CoreDbAccess().db()->removeAllImageRelationsTo(d->scanInfo.id, DatabaseRelation::Grouped);
 }
 
-bool ImageScanner::copyFromSource(qlonglong srcId)
+bool ItemScanner::copyFromSource(qlonglong srcId)
 {
     CoreDbAccess access;
 
@@ -281,16 +281,16 @@ bool ImageScanner::copyFromSource(qlonglong srcId)
     return true;
 }
 
-void ImageScanner::prepareAddImage(int albumId)
+void ItemScanner::prepareAddImage(int albumId)
 {
     d->scanInfo.albumID          = albumId;
     d->scanInfo.status           = DatabaseItem::Visible;
 
     qCDebug(DIGIKAM_DATABASE_LOG) << "Adding new item" << d->fileInfo.filePath();
-    d->commit.operation = ImageScannerCommit::AddItem;
+    d->commit.operation = ItemScannerCommit::AddItem;
 }
 
-void ImageScanner::commitAddImage()
+void ItemScanner::commitAddImage()
 {
     // get the image id of a deleted image info if existent and mark it as valid.
     // otherwise, create a new item.
@@ -316,19 +316,19 @@ void ImageScanner::commitAddImage()
     }
 }
 
-void ImageScanner::prepareUpdateImage()
+void ItemScanner::prepareUpdateImage()
 {
-    d->commit.operation = ImageScannerCommit::UpdateItem;
+    d->commit.operation = ItemScannerCommit::UpdateItem;
 }
 
-void ImageScanner::commitUpdateImage()
+void ItemScanner::commitUpdateImage()
 {
     CoreDbAccess().db()->updateItem(d->scanInfo.id, d->scanInfo.category,
                                     d->scanInfo.modificationDate, d->scanInfo.fileSize,
                                     d->scanInfo.uniqueHash);
 }
 
-void ImageScanner::scanFile(ScanMode mode)
+void ItemScanner::scanFile(ScanMode mode)
 {
     d->scanMode = mode;
 
@@ -405,7 +405,7 @@ void ImageScanner::scanFile(ScanMode mode)
     }
 }
 
-void ImageScanner::checkCreationDateFromMetadata(QVariant& dateFromMetadata) const
+void ItemScanner::checkCreationDateFromMetadata(QVariant& dateFromMetadata) const
 {
     // creation date: fall back to file system property
     if (dateFromMetadata.isNull() || !dateFromMetadata.toDateTime().isValid())
@@ -414,7 +414,7 @@ void ImageScanner::checkCreationDateFromMetadata(QVariant& dateFromMetadata) con
     }
 }
 
-bool ImageScanner::checkRatingFromMetadata(const QVariant& ratingFromMetadata) const
+bool ItemScanner::checkRatingFromMetadata(const QVariant& ratingFromMetadata) const
 {
     // should only be overwritten if set in metadata
     if (d->scanMode == Rescan)
@@ -428,7 +428,7 @@ bool ImageScanner::checkRatingFromMetadata(const QVariant& ratingFromMetadata) c
     return true;
 }
 
-void ImageScanner::scanImageInformation()
+void ItemScanner::scanImageInformation()
 {
     d->commit.commitImageInformation = true;
 
@@ -486,7 +486,7 @@ void ImageScanner::scanImageInformation()
           << d->img.originalColorModel();
 }
 
-void ImageScanner::commitImageInformation()
+void ItemScanner::commitImageInformation()
 {
     if (d->scanMode == NewScan)
     {
@@ -539,7 +539,7 @@ static MetadataFields allImageMetadataFields()
     return fields;
 }
 
-void ImageScanner::scanImageMetadata()
+void ItemScanner::scanImageMetadata()
 {
     QVariantList metadataInfos = d->metadata.getMetadataFields(allImageMetadataFields());
 
@@ -550,12 +550,12 @@ void ImageScanner::scanImageMetadata()
     }
 }
 
-void ImageScanner::commitImageMetadata()
+void ItemScanner::commitImageMetadata()
 {
     CoreDbAccess().db()->addImageMetadata(d->scanInfo.id, d->commit.imageMetadataInfos);
 }
 
-void ImageScanner::scanImagePosition()
+void ItemScanner::scanImagePosition()
 {
     // This list must reflect the order required by CoreDB::addImagePosition
     MetadataFields fields;
@@ -579,12 +579,12 @@ void ImageScanner::scanImagePosition()
     }
 }
 
-void ImageScanner::commitImagePosition()
+void ItemScanner::commitImagePosition()
 {
     CoreDbAccess().db()->addImagePosition(d->scanInfo.id, d->commit.imagePositionInfos);
 }
 
-void ImageScanner::scanImageComments()
+void ItemScanner::scanImageComments()
 {
     MetadataFields fields;
     fields << MetadataInfo::Headline
@@ -616,7 +616,7 @@ void ImageScanner::scanImageComments()
     }
 }
 
-void ImageScanner::commitImageComments()
+void ItemScanner::commitImageComments()
 {
     CoreDbAccess access;
     ImageComments comments(access, d->scanInfo.id);
@@ -640,7 +640,7 @@ void ImageScanner::commitImageComments()
     }
 }
 
-void ImageScanner::scanImageCopyright()
+void ItemScanner::scanImageCopyright()
 {
     Template t;
 
@@ -653,7 +653,7 @@ void ImageScanner::scanImageCopyright()
     d->commit.copyrightTemplate    = t;
 }
 
-void ImageScanner::commitImageCopyright()
+void ItemScanner::commitImageCopyright()
 {
     ImageCopyright copyright(d->scanInfo.id);
     // It is not clear if removeAll() should be called if d->scanMode == Rescan
@@ -661,7 +661,7 @@ void ImageScanner::commitImageCopyright()
     copyright.setFromTemplate(d->commit.copyrightTemplate);
 }
 
-void ImageScanner::scanIPTCCore()
+void ItemScanner::scanIPTCCore()
 {
     MetadataFields fields;
     fields << MetadataInfo::IptcCoreLocationInfo
@@ -681,7 +681,7 @@ void ImageScanner::scanIPTCCore()
     d->commit.iptcCoreMetadataInfos = metadataInfos;
 }
 
-void ImageScanner::commitIPTCCore()
+void ItemScanner::commitIPTCCore()
 {
     ImageExtendedProperties props(d->scanInfo.id);
 
@@ -716,7 +716,7 @@ void ImageScanner::commitIPTCCore()
     }
 }
 
-void ImageScanner::scanTags()
+void ItemScanner::scanTags()
 {
     // Check Keywords tag paths.
 
@@ -796,7 +796,7 @@ void ImageScanner::scanTags()
     }
 }
 
-void ImageScanner::commitTags()
+void ItemScanner::commitTags()
 {
     QList<int> currentTags = CoreDbAccess().db()->getItemTagIDs(d->scanInfo.id);
     QVector<int> colorTags = TagsCache::instance()->colorLabelTags();
@@ -820,7 +820,7 @@ void ImageScanner::commitTags()
     CoreDbAccess().db()->addTagsToItems(QList<qlonglong>() << d->scanInfo.id, d->commit.tagIds);
 }
 
-void ImageScanner::scanFaces()
+void ItemScanner::scanFaces()
 {
     QSize size = d->img.size();
 
@@ -840,7 +840,7 @@ void ImageScanner::scanFaces()
     d->commit.metadataFacesMap = metadataFacesMap;
 }
 
-void ImageScanner::commitFaces()
+void ItemScanner::commitFaces()
 {
     QSize size = d->img.size();
     QMap<QString, QVariant>::const_iterator it;
@@ -870,7 +870,7 @@ void ImageScanner::commitFaces()
     }
 }
 
-void ImageScanner::scanImageHistory()
+void ItemScanner::scanImageHistory()
 {
     /** Stage 1 of history scanning */
 
@@ -878,7 +878,7 @@ void ImageScanner::scanImageHistory()
     d->commit.uuid       = d->metadata.getImageUniqueId();
 }
 
-void ImageScanner::commitImageHistory()
+void ItemScanner::commitImageHistory()
 {
     if (!d->commit.historyXml.isEmpty())
     {
@@ -896,7 +896,7 @@ void ImageScanner::commitImageHistory()
     }
 }
 
-void ImageScanner::scanImageHistoryIfModified()
+void ItemScanner::scanImageHistoryIfModified()
 {
     // If a file has a modified history, it must have a new UUID
     QString previousUuid = CoreDbAccess().db()->getImageUuid(d->scanInfo.id);
@@ -908,13 +908,13 @@ void ImageScanner::scanImageHistoryIfModified()
     }
 }
 
-bool ImageScanner::resolveImageHistory(qlonglong id, QList<qlonglong>* needTaggingIds)
+bool ItemScanner::resolveImageHistory(qlonglong id, QList<qlonglong>* needTaggingIds)
 {
     ImageHistoryEntry history = CoreDbAccess().db()->getImageHistory(id);
     return resolveImageHistory(id, history.history, needTaggingIds);
 }
 
-bool ImageScanner::resolveImageHistory(qlonglong imageId, const QString& historyXml,
+bool ItemScanner::resolveImageHistory(qlonglong imageId, const QString& historyXml,
                                        QList<qlonglong>* needTaggingIds)
 {
     /** Stage 2 of history scanning */
@@ -964,7 +964,7 @@ bool ImageScanner::resolveImageHistory(qlonglong imageId, const QString& history
     return !graph.hasUnresolvedEntries();
 }
 
-void ImageScanner::tagImageHistoryGraph(qlonglong id)
+void ItemScanner::tagImageHistoryGraph(qlonglong id)
 {
     /** Stage 3 of history scanning */
 
@@ -1037,7 +1037,7 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
     }
 }
 
-DImageHistory ImageScanner::resolvedImageHistory(const DImageHistory& history, bool mustBeAvailable)
+DImageHistory ItemScanner::resolvedImageHistory(const DImageHistory& history, bool mustBeAvailable)
 {
     DImageHistory h;
 
@@ -1085,7 +1085,7 @@ DImageHistory ImageScanner::resolvedImageHistory(const DImageHistory& history, b
     return h;
 }
 
-bool ImageScanner::sameReferredImage(const HistoryImageId& id1, const HistoryImageId& id2)
+bool ItemScanner::sameReferredImage(const HistoryImageId& id1, const HistoryImageId& id2)
 {
     if (!id1.isValid() || !id2.isValid())
     {
@@ -1169,7 +1169,7 @@ static QList<qlonglong> mergedIdLists(const HistoryImageId& referenceId,
     return results;
 }
 
-QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& historyId)
+QList<qlonglong> ItemScanner::resolveHistoryImageId(const HistoryImageId& historyId)
 {
     // first and foremost: UUID
     QList<qlonglong> uuidList;
@@ -1251,7 +1251,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
 }
 
 
-void ImageScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subject)
+void ItemScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subject)
 {
     if (!list.isEmpty() && !subject.isNull())
     {
@@ -1276,7 +1276,7 @@ static MetadataFields allVideoMetadataFields()
     return fields;
 }
 
-void ImageScanner::scanVideoInformation()
+void ItemScanner::scanVideoInformation()
 {
     d->commit.commitImageInformation = true;
 
@@ -1328,7 +1328,7 @@ void ImageScanner::scanVideoInformation()
 
 // commitImageInformation method is reused
 
-void ImageScanner::scanVideoMetadata()
+void ItemScanner::scanVideoMetadata()
 {
     QVariantList metadataInfos = d->metadata.getMetadataFields(allVideoMetadataFields());
 
@@ -1340,14 +1340,14 @@ void ImageScanner::scanVideoMetadata()
     }
 }
 
-void ImageScanner::commitVideoMetadata()
+void ItemScanner::commitVideoMetadata()
 {
     CoreDbAccess().db()->addVideoMetadata(d->scanInfo.id, d->commit.imageMetadataInfos);
 }
 
 // ---------------------------------------------------------------------------------------
 
-void ImageScanner::loadFromDisk()
+void ItemScanner::loadFromDisk()
 {
     if (d->loadedFromDisk)
     {
@@ -1394,7 +1394,7 @@ void ImageScanner::loadFromDisk()
     }
 }
 
-QString ImageScanner::uniqueHash() const
+QString ItemScanner::uniqueHash() const
 {
     // the QByteArray is an ASCII hex string
     if (d->scanInfo.category == DatabaseItem::Image)
@@ -1413,7 +1413,7 @@ QString ImageScanner::uniqueHash() const
     }
 }
 
-QString ImageScanner::detectImageFormat() const
+QString ItemScanner::detectImageFormat() const
 {
     DImg::FORMAT dimgFormat = d->img.detectedFormat();
 
@@ -1455,7 +1455,7 @@ QString ImageScanner::detectImageFormat() const
     return d->fileInfo.suffix().toUpper();
 }
 
-QString ImageScanner::detectVideoFormat() const
+QString ItemScanner::detectVideoFormat() const
 {
     QString suffix = d->fileInfo.suffix().toUpper();
 
@@ -1492,12 +1492,12 @@ QString ImageScanner::detectVideoFormat() const
     return suffix;
 }
 
-QString ImageScanner::detectAudioFormat() const
+QString ItemScanner::detectAudioFormat() const
 {
     return d->fileInfo.suffix().toUpper();
 }
 
-QDateTime ImageScanner::creationDateFromFilesystem(const QFileInfo& info)
+QDateTime ItemScanner::creationDateFromFilesystem(const QFileInfo& info)
 {
     // creation date is not what it seems on Unix
     QDateTime ctime = info.created();
@@ -1516,7 +1516,7 @@ QDateTime ImageScanner::creationDateFromFilesystem(const QFileInfo& info)
     return qMin(ctime, mtime);
 }
 
-QString ImageScanner::formatToString(const QString& format)
+QString ItemScanner::formatToString(const QString& format)
 {
     // image -------------------------------------------------------------------
 
@@ -1602,7 +1602,7 @@ QString ImageScanner::formatToString(const QString& format)
     }
 }
 
-QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
+QString ItemScanner::iptcCorePropertyName(MetadataInfo::Field field)
 {
     // These strings are specified in DBSCHEMA.ods
     switch (field)
@@ -1663,7 +1663,7 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
     }
 }
 
-void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container)
+void ItemScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container)
 {
     QVariantList imagesFields;
     QVariantList imageInformationFields;
@@ -1712,7 +1712,7 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
     }
 }
 
-void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* const container)
+void ItemScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* const container)
 {
     // read from database
     QVariantList fields      = CoreDbAccess().db()->getImageMetadata(imageid);
@@ -1746,7 +1746,7 @@ void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContain
     container->subjectDistanceCategory      = strings.at(15);
 }
 
-void ImageScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* const container)
+void ItemScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* const container)
 {
     // read from database
     QVariantList fields      = CoreDbAccess().db()->getVideoMetadata(imageid);

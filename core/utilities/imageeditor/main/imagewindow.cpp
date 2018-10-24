@@ -1169,7 +1169,7 @@ void ImageWindow::slotOpenOriginal()
     }
 
     // this time, with mustBeAvailable = true
-    DImageHistory availableResolved = ImageScanner::resolvedImageHistory(m_canvas->interface()->getImageHistory(), true);
+    DImageHistory availableResolved = ItemScanner::resolvedImageHistory(m_canvas->interface()->getImageHistory(), true);
 
     QList<HistoryImageId> originals = availableResolved.referredImagesOfType(HistoryImageId::Original);
     HistoryImageId originalId       = m_canvas->interface()->getImageHistory().originalReferredImage();
@@ -1193,7 +1193,7 @@ void ImageWindow::slotOpenOriginal()
         imageInfos << ImageInfo::fromUrl(url);
     }
 
-    ImageScanner::sortByProximity(imageInfos, d->currentImageInfo);
+    ItemScanner::sortByProximity(imageInfos, d->currentImageInfo);
 
     if (!imageInfos.isEmpty() && !imageInfos.first().isNull())
     {
@@ -1209,7 +1209,7 @@ bool ImageWindow::hasOriginalToRestore()
 
 DImageHistory ImageWindow::resolvedImageHistory(const DImageHistory& history)
 {
-    return ImageScanner::resolvedImageHistory(history);
+    return ItemScanner::resolvedImageHistory(history);
 }
 
 ThumbBarDock* ImageWindow::thumbBar() const

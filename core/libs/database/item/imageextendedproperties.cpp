@@ -29,7 +29,7 @@
 
 #include "coredb.h"
 #include "coredbaccess.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 #include "similaritydbaccess.h"
 #include "similaritydb.h"
 
@@ -48,12 +48,12 @@ ImageExtendedProperties::ImageExtendedProperties()
 
 QString ImageExtendedProperties::intellectualGenre()
 {
-    return readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreIntellectualGenre));
+    return readProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreIntellectualGenre));
 }
 
 void ImageExtendedProperties::setIntellectualGenre(const QString& intellectualGenre)
 {
-    setProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreIntellectualGenre), intellectualGenre);
+    setProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreIntellectualGenre), intellectualGenre);
 }
 
 void ImageExtendedProperties::removeIntellectualGenre()
@@ -63,12 +63,12 @@ void ImageExtendedProperties::removeIntellectualGenre()
 
 QString ImageExtendedProperties::jobId()
 {
-    return readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreJobID));
+    return readProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreJobID));
 }
 
 void ImageExtendedProperties::setJobId(const QString& jobId)
 {
-    setProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreJobID), jobId);
+    setProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreJobID), jobId);
 }
 
 void ImageExtendedProperties::removeJobId()
@@ -97,12 +97,12 @@ void ImageExtendedProperties::removeSimilarityTo(const qlonglong imageId)
 
 QStringList ImageExtendedProperties::scene()
 {
-    return readFakeListProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreScene));
+    return readFakeListProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreScene));
 }
 
 void ImageExtendedProperties::setScene(const QStringList& scene)
 {
-    setFakeListProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreScene), scene);
+    setFakeListProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreScene), scene);
 }
 
 void ImageExtendedProperties::removeScene()
@@ -112,12 +112,12 @@ void ImageExtendedProperties::removeScene()
 
 QStringList ImageExtendedProperties::subjectCode()
 {
-    return readFakeListProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSubjectCode));
+    return readFakeListProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSubjectCode));
 }
 
 void ImageExtendedProperties::setSubjectCode(const QStringList& subjectCode)
 {
-    setFakeListProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSubjectCode), subjectCode);
+    setFakeListProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSubjectCode), subjectCode);
 }
 
 void ImageExtendedProperties::removeSubjectCode()
@@ -128,21 +128,21 @@ void ImageExtendedProperties::removeSubjectCode()
 IptcCoreLocationInfo ImageExtendedProperties::location()
 {
     IptcCoreLocationInfo location;
-    location.country       = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountry));
-    location.countryCode   = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountryCode));
-    location.city          = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCity));
-    location.location      = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreLocation));
-    location.provinceState = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvinceState));
+    location.country       = readProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountry));
+    location.countryCode   = readProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountryCode));
+    location.city          = readProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCity));
+    location.location      = readProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreLocation));
+    location.provinceState = readProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvinceState));
     return location;
 }
 
 void ImageExtendedProperties::setLocation(const IptcCoreLocationInfo& location)
 {
-    setProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountry), location.country);
-    setProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountryCode), location.countryCode);
-    setProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCity), location.city);
-    setProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreLocation), location.location);
-    setProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvinceState), location.provinceState);
+    setProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountry), location.country);
+    setProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountryCode), location.countryCode);
+    setProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCity), location.city);
+    setProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreLocation), location.location);
+    setProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvinceState), location.provinceState);
 }
 
 void ImageExtendedProperties::removeLocation()

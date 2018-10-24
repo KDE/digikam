@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagescanner.h"
+#include "itemscanner.h"
 
 // Qt includes
 
@@ -58,7 +58,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageScannerCommit
+class Q_DECL_HIDDEN ItemScannerCommit
 {
 
 public:
@@ -72,7 +72,7 @@ public:
 
 public:
 
-    ImageScannerCommit();
+    ItemScannerCommit();
 
 public:
 
@@ -128,7 +128,7 @@ public:
 
 // ---------------------------------------------------------------------------
 
-class Q_DECL_HIDDEN ImageScanner::Private
+class Q_DECL_HIDDEN ItemScanner::Private
 {
 public:
 
@@ -145,11 +145,11 @@ public:
     DMetadata              metadata;
     DImg                   img;
     ItemScanInfo           scanInfo;
-    ImageScanner::ScanMode scanMode;
+    ItemScanner::ScanMode scanMode;
 
     bool                   hasHistoryToResolve;
 
-    ImageScannerCommit     commit;
+    ItemScannerCommit     commit;
 
     QTime                  time;
 };

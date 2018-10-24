@@ -107,12 +107,13 @@ set(libdatabase_SRCS
     item/imagequerybuilder.cpp
     item/imagetagpair.cpp
     item/imageattributeswatch.cpp
-    item/imagescanner.cpp
-    item/imagescanner_p.cpp
-    item/imagescanner_baloo.cpp
 
-    imagehistory/imagehistorygraph.cpp
-    imagehistory/imagehistorygraphmodel.cpp
+    item/itemscanner.cpp
+    item/itemscanner_p.cpp
+    item/itemscanner_baloo.cpp
+
+    history/imagehistorygraph.cpp
+    history/imagehistorygraphmodel.cpp
 
     similaritydb/similaritydb.cpp
     similaritydb/similaritydbschemaupdater.cpp

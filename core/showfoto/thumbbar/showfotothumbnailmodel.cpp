@@ -28,7 +28,7 @@
 #include "drawdecoder.h"
 #include "digikam_debug.h"
 #include "dmetadata.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
 #include "loadingdescription.h"

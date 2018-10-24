@@ -100,7 +100,7 @@
 #include "imagelistmodel.h"
 #include "imagepropertiessidebardb.h"
 #include "imagepropertiesversionstab.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 #include "imagethumbnailbar.h"
 #include "iofilesettings.h"
 #include "dnotificationwrapper.h"

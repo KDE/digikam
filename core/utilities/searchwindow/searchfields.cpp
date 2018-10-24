@@ -63,7 +63,7 @@
 #include "choicesearchutilities.h"
 #include "dimg.h"
 #include "dmetadata.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 #include "ddateedit.h"
 #include "tagtreeview.h"
 #include "ratingsearchutilities.h"

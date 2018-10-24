@@ -32,7 +32,7 @@
 
 #include "coredb.h"
 #include "coredbaccess.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 #include "template.h"
 
 namespace Digikam
@@ -125,7 +125,7 @@ void ImageCopyright::replaceFrom(const ImageCopyright& source)
 
 QStringList ImageCopyright::creator() const
 {
-    QList<CopyrightInfo> infos = copyrightInfos(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
+    QList<CopyrightInfo> infos = copyrightInfos(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
     QStringList list;
 
     foreach (const CopyrightInfo& info, infos)
@@ -149,152 +149,152 @@ void ImageCopyright::setCreator(const QString& creator, ReplaceMode mode)
         uniqueness = CoreDB::PropertyNoConstraint;
     }
 
-    CoreDbAccess().db()->setImageCopyrightProperty(m_id, ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator),
+    CoreDbAccess().db()->setImageCopyrightProperty(m_id, ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator),
                                                    creator, QString(), uniqueness);
 }
 
 void ImageCopyright::removeCreators()
 {
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
 }
 
 QString ImageCopyright::provider() const
 {
-    return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider));
+    return readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider));
 }
 
 void ImageCopyright::setProvider(const QString& provider)
 {
-    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider), provider);
+    setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider), provider);
 }
 
 void ImageCopyright::removeProvider()
 {
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider));
 }
 
 QString ImageCopyright::copyrightNotice(const QString& languageCode)
 {
-    return readLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), languageCode);
+    return readLanguageProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), languageCode);
 }
 
 MetaEngine::AltLangMap ImageCopyright::allCopyrightNotices()
 {
-    return readLanguageProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice));
+    return readLanguageProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice));
 }
 
 void ImageCopyright::setCopyrightNotice(const QString& notice, const QString& languageCode, ReplaceMode mode)
 {
-    setLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), notice, languageCode, mode);
+    setLanguageProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), notice, languageCode, mode);
 }
 
 void ImageCopyright::removeCopyrightNotices()
 {
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice));
 }
 
 QString ImageCopyright::rightsUsageTerms(const QString& languageCode)
 {
-    return readLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), languageCode);
+    return readLanguageProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), languageCode);
 }
 
 MetaEngine::AltLangMap ImageCopyright::allRightsUsageTerms()
 {
-    return readLanguageProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms));
+    return readLanguageProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms));
 }
 
 void ImageCopyright::setRightsUsageTerms(const QString& term, const QString& languageCode, ReplaceMode mode)
 {
-    setLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), term, languageCode, mode);
+    setLanguageProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), term, languageCode, mode);
 }
 
 void ImageCopyright::removeRightsUsageTerms()
 {
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms));
 }
 
 QString ImageCopyright::source()
 {
-    return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource));
+    return readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource));
 }
 
 void ImageCopyright::setSource(const QString& source)
 {
-    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource), source);
+    setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource), source);
 }
 
 void ImageCopyright::removeSource()
 {
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource));
 }
 
 QString ImageCopyright::creatorJobTitle() const
 {
-    return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle));
+    return readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle));
 }
 
 void ImageCopyright::setCreatorJobTitle(const QString& title)
 {
-    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle), title);
+    setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle), title);
 }
 
 void ImageCopyright::removeCreatorJobTitle()
 {
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle));
 }
 
 QString ImageCopyright::instructions()
 {
-    return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions));
+    return readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions));
 }
 
 void ImageCopyright::setInstructions(const QString& instructions)
 {
-    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions), instructions);
+    setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions), instructions);
 }
 
 void ImageCopyright::removeInstructions()
 {
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions));
 }
 
 IptcCoreContactInfo ImageCopyright::contactInfo()
 {
     IptcCoreContactInfo info;
-    info.city          = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity));
-    info.country       = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry));
-    info.address       = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoAddress));
-    info.postalCode    = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPostalCode));
-    info.provinceState = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoProvinceState));
-    info.email         = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoEmail));
-    info.phone         = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPhone));
-    info.webUrl        = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl));
+    info.city          = readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity));
+    info.country       = readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry));
+    info.address       = readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoAddress));
+    info.postalCode    = readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPostalCode));
+    info.provinceState = readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoProvinceState));
+    info.email         = readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoEmail));
+    info.phone         = readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPhone));
+    info.webUrl        = readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl));
 
     return info;
 }
 
 void ImageCopyright::setContactInfo(const IptcCoreContactInfo& info)
 {
-    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity), info.city);
-    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry), info.country);
-    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoAddress), info.address);
-    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPostalCode), info.postalCode);
-    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoProvinceState), info.provinceState);
-    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoEmail), info.email);
-    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPhone), info.phone);
-    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl), info.webUrl);
+    setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity), info.city);
+    setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry), info.country);
+    setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoAddress), info.address);
+    setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPostalCode), info.postalCode);
+    setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoProvinceState), info.provinceState);
+    setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoEmail), info.email);
+    setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPhone), info.phone);
+    setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl), info.webUrl);
 }
 
 void ImageCopyright::removeContactInfo()
 {
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity));
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry));
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoAddress));
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPostalCode));
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoProvinceState));
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoEmail));
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPhone));
-    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoAddress));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPostalCode));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoProvinceState));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoEmail));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPhone));
+    removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl));
 }
 
 void ImageCopyright::fillTemplate(Template& t)

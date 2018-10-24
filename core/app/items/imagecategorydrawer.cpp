@@ -43,7 +43,7 @@
 #include "imagedelegate.h"
 #include "imagefiltermodel.h"
 #include "imagemodel.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 #include "searchfolderview.h"
 
 namespace Digikam
@@ -248,7 +248,7 @@ void ImageCategoryDrawer::textForAlbum(const QModelIndex& index, QString* header
 void ImageCategoryDrawer::textForFormat(const QModelIndex& index, QString* header, QString* subLine) const
 {
     QString format = index.data(ImageFilterModel::CategoryFormatRole).toString();
-    format         = ImageScanner::formatToString(format);
+    format         = ItemScanner::formatToString(format);
     *header        = format;
     int count      = d->view->categoryRange(index).height();
     *subLine       = i18np("1 Item", "%1 Items", count);

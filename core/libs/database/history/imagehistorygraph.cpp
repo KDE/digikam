@@ -27,7 +27,7 @@
 
 #include "digikam_debug.h"
 #include "dimagehistory.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 #include "imagehistorygraphdata.h"
 
 namespace Digikam
@@ -124,7 +124,7 @@ bool HistoryVertexProperties::operator==(const HistoryImageId& other) const
 
     foreach (const HistoryImageId& id, referredImages)
     {
-        if (ImageScanner::sameReferredImage(id, other))
+        if (ItemScanner::sameReferredImage(id, other))
         {
             //qCDebug(DIGIKAM_DATABASE_LOG) << id << "is the same as" << other;
             return true;
@@ -246,7 +246,7 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const HistoryImageId& imag
     if (v.isNull())
     {
         // Resolve HistoryImageId, find by ImageInfo
-        foreach (const qlonglong& id, ImageScanner::resolveHistoryImageId(imageId))
+        foreach (const qlonglong& id, ItemScanner::resolveHistoryImageId(imageId))
         {
             ImageInfo info(id);
             //qCDebug(DIGIKAM_DATABASE_LOG) << "Found info id:" << info.id();
@@ -700,7 +700,7 @@ void ImageHistoryGraph::sortForInfo(const ImageInfo& subject)
     foreach(const HistoryGraph::Vertex& v, d->vertices())
     {
         HistoryVertexProperties& props = d->properties(v);
-        ImageScanner::sortByProximity(props.infos, subject);
+        ItemScanner::sortByProximity(props.infos, subject);
     }
 }
 

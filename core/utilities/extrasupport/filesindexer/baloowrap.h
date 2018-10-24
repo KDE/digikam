@@ -97,7 +97,7 @@ public:
     void setAllData(const QUrl& url, QStringList* const tags, QString* const comment, int rating);
 
     /**
-     * @brief getSemanticInfo - Used by ImageScanner to retrieve all information
+     * @brief getSemanticInfo - Used by ItemScanner to retrieve all information
      *                          tags, comment, rating
      * @param url  - image url
      * @return     - container class for tags, comment, rating

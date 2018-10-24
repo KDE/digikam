@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT ImageScanner
+class DIGIKAM_DATABASE_EXPORT ItemScanner
 {
 
 public:
@@ -55,25 +55,25 @@ public:
 public:
 
     /**
-     * Construct an ImageScanner object from an existing QFileInfo
+     * Construct an ItemScanner object from an existing QFileInfo
      * and ItemScanInfo object.
      * This constructor shall be used with fileModified() or fullScan().
      */
-    ImageScanner(const QFileInfo& info, const ItemScanInfo& Iteminfo);
+    ItemScanner(const QFileInfo& info, const ItemScanInfo& Iteminfo);
 
     /**
-     * Construct an ImageScanner from an existing QFileInfo object.
+     * Construct an ItemScanner from an existing QFileInfo object.
      * Use this constructor if you intend to call newFile().
      */
-    explicit ImageScanner(const QFileInfo& info);
+    explicit ItemScanner(const QFileInfo& info);
 
     /**
-     * Construct an ImageScanner for an image in the database.
+     * Construct an ItemScanner for an image in the database.
      * File info, Scan info and the category will be retrieved from the database.
      */
-    explicit ImageScanner(qlonglong imageid);
+    explicit ItemScanner(qlonglong imageid);
 
-    ~ImageScanner();
+    ~ItemScanner();
 
     /**
      * Commits the scanned information to the database.
@@ -112,13 +112,13 @@ public:
     void rescan();
 
     /**
-     * Call this when you want ImageScanner to add a new file to the database
+     * Call this when you want ItemScanner to add a new file to the database
      * and read all information into the database.
      */
     void newFile(int albumId);
 
     /**
-     * Call this when you want ImageScanner to add a new file to the database
+     * Call this when you want ItemScanner to add a new file to the database
      * and read all information into the database. This variant will not use
      * the unique hash to establish identify with an existing entry, but
      * read all information newly from the file.
@@ -127,7 +127,7 @@ public:
 
     /**
      * Similar to newFile.
-     * Call this when you want ImageScanner to add a new file to the database
+     * Call this when you want ItemScanner to add a new file to the database
      * which is a copy of another file, copying attributes from the src
      * and rescanning other attributes as appropriate.
      * Give the id of the album of the new file, and the id of the src file.
@@ -274,7 +274,7 @@ protected:
 
 private:
 
-    ImageScanner(const ImageScanner&); // Disable
+    ItemScanner(const ItemScanner&); // Disable
 
     class Private;
     Private* const d;

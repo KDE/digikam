@@ -63,7 +63,7 @@ extern "C"
 #include "digikam_config.h"
 #include "dimg.h"
 #include "dmetadata.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 
 namespace Digikam
 {
@@ -246,13 +246,13 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
             // Fall back to file system info
             if (info.ctime.isNull())
             {
-                info.ctime = ImageScanner::creationDateFromFilesystem(fi);
+                info.ctime = ItemScanner::creationDateFromFilesystem(fi);
             }
         }
         else
         {
             // Only use file system date
-            info.ctime = ImageScanner::creationDateFromFilesystem(fi);
+            info.ctime = ItemScanner::creationDateFromFilesystem(fi);
         }
     }
 
@@ -554,7 +554,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
         if (dt.isNull()) // fall back to file system info
         {
-            dt = ImageScanner::creationDateFromFilesystem(fi);
+            dt = ItemScanner::creationDateFromFilesystem(fi);
         }
 
         info.name             = fi.fileName();

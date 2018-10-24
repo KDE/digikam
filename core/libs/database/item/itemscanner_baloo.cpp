@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagescanner_p.h"
+#include "itemscanner_p.h"
 
 #ifdef HAVE_KFILEMETADATA
 #   include "baloowrap.h"
@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-void ImageScanner::scanBalooInfo()
+void ItemScanner::scanBalooInfo()
 {
 
 #ifdef HAVE_KFILEMETADATA

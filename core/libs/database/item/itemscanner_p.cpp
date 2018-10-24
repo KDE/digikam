@@ -22,12 +22,12 @@
  *
  * ============================================================ */
 
-#include "imagescanner_p.h"
+#include "itemscanner_p.h"
 
 namespace Digikam
 {
 
-ImageScannerCommit::ImageScannerCommit()
+ItemScannerCommit::ItemScannerCommit()
     : operation(NoOp),
       copyImageAttributesId(-1),
       commitImageInformation(false),
@@ -116,7 +116,7 @@ bool lessThanByProximityToSubject::operator()(const ImageInfo& a, const ImageInf
 
 // ---------------------------------------------------------------------------
 
-ImageScanner::Private::Private()
+ItemScanner::Private::Private()
     : hasImage(false),
       hasMetadata(false),
       loadedFromDisk(false),

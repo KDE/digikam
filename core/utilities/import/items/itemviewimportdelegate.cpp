@@ -41,7 +41,7 @@
 #include "digikam_debug.h"
 #include "imagedelegateoverlay.h"
 #include "thememanager.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 #include "imagepropertiestab.h"
 #include "camiteminfo.h"
 #include "colorlabelwidget.h"
@@ -324,7 +324,7 @@ void ItemViewImportDelegate::drawImageFormat(QPainter* p, const QRect& r, const 
     if (!mime.isEmpty() && !r.isNull())
     {
         QString type = mime.split(QLatin1Char('/')).at(1);
-        type         = ImageScanner::formatToString(type);
+        type         = ItemScanner::formatToString(type);
 
         p->save();
 

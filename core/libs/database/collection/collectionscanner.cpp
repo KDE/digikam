@@ -59,7 +59,7 @@
 #include "imagecomments.h"
 #include "imagecopyright.h"
 #include "imageinfo.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 #include "metaenginesettings.h"
 #include "tagscache.h"
 #include "thumbsdbaccess.h"
@@ -316,7 +316,7 @@ public:
         return false;
     }
 
-    void finishScanner(ImageScanner& scanner);
+    void finishScanner(ItemScanner& scanner);
 
 public:
 
@@ -346,7 +346,7 @@ public:
     CollectionScannerObserver*                    observer;
 };
 
-void CollectionScanner::Private::finishScanner(ImageScanner& scanner)
+void CollectionScanner::Private::finishScanner(ItemScanner& scanner)
 {
     // Perform the actual write operation to the database
     {
@@ -1272,7 +1272,7 @@ qlonglong CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
         return -1;
     }
 
-    ImageScanner scanner(info);
+    ItemScanner scanner(info);
     scanner.setCategory(category(info));
 
     // Check copy/move hints for single items
@@ -1322,7 +1322,7 @@ qlonglong CollectionScanner::scanNewFileFullScan(const QFileInfo& info, int albu
         return -1;
     }
 
-    ImageScanner scanner(info);
+    ItemScanner scanner(info);
     scanner.setCategory(category(info));
     scanner.newFileFullScan(albumId);
     d->finishScanner(scanner);
@@ -1337,7 +1337,7 @@ void CollectionScanner::scanModifiedFile(const QFileInfo& info, const ItemScanIn
         return;
     }
 
-    ImageScanner scanner(info, scanInfo);
+    ItemScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
     scanner.fileModified();
     d->finishScanner(scanner);
@@ -1350,7 +1350,7 @@ void CollectionScanner::scanFileUpdateHashReuseThumbnail(const QFileInfo& info, 
     qlonglong oldSize = scanInfo.fileSize;
 
     // same code as scanModifiedFile
-    ImageScanner scanner(info, scanInfo);
+    ItemScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
     scanner.fileModified();
 
@@ -1389,7 +1389,7 @@ void CollectionScanner::rescanFile(const QFileInfo& info, const ItemScanInfo& sc
         return;
     }
 
-    ImageScanner scanner(info, scanInfo);
+    ItemScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
     scanner.rescan();
     d->finishScanner(scanner);
@@ -1529,7 +1529,7 @@ void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
         if (d->recordHistoryIds)
         {
             QList<qlonglong> needTaggingIds;
-            ImageScanner::resolveImageHistory(id, &needTaggingIds);
+            ItemScanner::resolveImageHistory(id, &needTaggingIds);
 
             foreach (const qlonglong& needTag, needTaggingIds)
             {
@@ -1538,7 +1538,7 @@ void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
         }
         else
         {
-            ImageScanner::resolveImageHistory(id);
+            ItemScanner::resolveImageHistory(id);
         }
     }
 }
@@ -1553,7 +1553,7 @@ void CollectionScanner::historyScanningStage3(const QList<qlonglong>& ids)
         }
 
         CoreDbOperationGroup group;
-        ImageScanner::tagImageHistoryGraph(id);
+        ItemScanner::tagImageHistoryGraph(id);
     }
 }
 
