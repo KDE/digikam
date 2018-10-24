@@ -134,10 +134,6 @@ public:
      */
     void copiedFrom(int albumId, qlonglong srcId);
 
-    /**
-     * Returns true if this file has been marked as needing history resolution at a later stage
-     */
-    bool hasHistoryToResolve() const;
 
     /**
      * Provides access to the information retrieved by scanning.
@@ -201,6 +197,11 @@ public:
 public:
 
     /**
+     * Returns true if this file has been marked as needing history resolution at a later stage
+     */
+    bool hasHistoryToResolve() const;
+
+    /**
      * Resolves the image history of the image id by filling the ImageRelations table
      * for all contained referred images.
      * If needTaggingIds is given, all ids marked for needing tagging of the history graph are added.
@@ -247,6 +248,23 @@ protected:
 
     //@}
 
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations on Video Item
+     */
+
+    //@{
+
+protected:
+
+    void scanVideoInformation();
+    void scanVideoMetadata();
+    void commitVideoMetadata();
+    QString detectVideoFormat() const;
+    static MetadataFields allVideoMetadataFields();
+
+    //@}
+
 protected:
 
     bool scanFromIdenticalFile();
@@ -276,12 +294,8 @@ protected:
     void commitTags();
     void scanFaces();
     void commitFaces();
-    void scanVideoInformation();
-    void scanVideoMetadata();
-    void commitVideoMetadata();
 
     QString detectImageFormat() const;
-    QString detectVideoFormat() const;
     QString detectAudioFormat() const;
 
     void checkCreationDateFromMetadata(QVariant& dateFromMetadata)   const;
@@ -290,6 +304,9 @@ protected:
 private:
 
     ItemScanner(const ItemScanner&); // Disable
+    static bool hasValidField(const QVariantList& list);
+
+private:
 
     class Private;
     Private* const d;
