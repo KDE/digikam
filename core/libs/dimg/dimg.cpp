@@ -277,7 +277,8 @@ void DImg::putImageData(uchar* const data, bool copyData)
 
 void DImg::resetMetaData()
 {
-    m_priv->clearMaps();
+    m_priv->attributes.clear();
+    m_priv->embeddedText.clear();
     m_priv->metaData = MetaEngineData();
 }
 
@@ -930,9 +931,9 @@ bool DImg::isReadOnly() const
 
 DImg::COLORMODEL DImg::originalColorModel() const
 {
-    if (m_priv->attributesContains(QLatin1String("originalColorModel")))
+    if (m_priv->attributes.contains(QLatin1String("originalColorModel")))
     {
-        return (COLORMODEL)m_priv->attributesValue(QLatin1String("originalColorModel")).toInt();
+        return (COLORMODEL)m_priv->attributes.value(QLatin1String("originalColorModel")).toInt();
     }
     else
     {
@@ -942,14 +943,14 @@ DImg::COLORMODEL DImg::originalColorModel() const
 
 int DImg::originalBitDepth() const
 {
-    return m_priv->attributesValue(QLatin1String("originalBitDepth")).toInt();
+    return m_priv->attributes.value(QLatin1String("originalBitDepth")).toInt();
 }
 
 QSize DImg::originalSize() const
 {
-    if (m_priv->attributesContains(QLatin1String("originalSize")))
+    if (m_priv->attributes.contains(QLatin1String("originalSize")))
     {
-        QSize size = m_priv->attributesValue(QLatin1String("originalSize")).toSize();
+        QSize size = m_priv->attributes.value(QLatin1String("originalSize")).toSize();
 
         if (size.isValid() && !size.isNull())
         {
@@ -962,9 +963,9 @@ QSize DImg::originalSize() const
 
 DImg::FORMAT DImg::detectedFormat() const
 {
-    if (m_priv->attributesContains(QLatin1String("detectedFileFormat")))
+    if (m_priv->attributes.contains(QLatin1String("detectedFileFormat")))
     {
-        return (FORMAT)m_priv->attributesValue(QLatin1String("detectedFileFormat")).toInt();
+        return (FORMAT)m_priv->attributes.value(QLatin1String("detectedFileFormat")).toInt();
     }
     else
     {
@@ -974,19 +975,19 @@ DImg::FORMAT DImg::detectedFormat() const
 
 QString DImg::format() const
 {
-    return m_priv->attributesValue(QLatin1String("format")).toString();
+    return m_priv->attributes.value(QLatin1String("format")).toString();
 }
 
 QString DImg::savedFormat() const
 {
-    return m_priv->attributesValue(QLatin1String("savedformat")).toString();
+    return m_priv->attributes.value(QLatin1String("savedformat")).toString();
 }
 
 DRawDecoding DImg::rawDecodingSettings() const
 {
-    if (m_priv->attributesContains(QLatin1String("rawDecodingSettings")))
+    if (m_priv->attributes.contains(QLatin1String("rawDecodingSettings")))
     {
-        return m_priv->attributesValue(QLatin1String("rawDecodingSettings")).value<DRawDecoding>();
+        return m_priv->attributes.value(QLatin1String("rawDecodingSettings")).value<DRawDecoding>();
     }
     else
     {
@@ -1046,14 +1047,14 @@ int DImg::bitsDepth() const
 
 void DImg::setAttribute(const QString& key, const QVariant& value)
 {
-    m_priv->attributesInsert(key, value);
+    m_priv->attributes.insert(key, value);
 }
 
 QVariant DImg::attribute(const QString& key) const
 {
-    if (m_priv->attributesContains(key))
+    if (m_priv->attributes.contains(key))
     {
-        return m_priv->attributesValue(key);
+        return m_priv->attributes[key];
     }
 
     return QVariant();
@@ -1061,24 +1062,24 @@ QVariant DImg::attribute(const QString& key) const
 
 bool DImg::hasAttribute(const QString& key) const
 {
-    return m_priv->attributesContains(key);
+    return m_priv->attributes.contains(key);
 }
 
 void DImg::removeAttribute(const QString& key)
 {
-    m_priv->attributesRemove(key);
+    m_priv->attributes.remove(key);
 }
 
 void DImg::setEmbeddedText(const QString& key, const QString& text)
 {
-    m_priv->embeddedTextInsert(key, text);
+    m_priv->embeddedText.insert(key, text);
 }
 
 QString DImg::embeddedText(const QString& key) const
 {
-    if (m_priv->embeddedTextContains(key))
+    if (m_priv->embeddedText.contains(key))
     {
-        return m_priv->embeddedTextValue(key);
+        return m_priv->embeddedText[key];
     }
 
     return QString();
@@ -2469,12 +2470,12 @@ void DImg::rotate(ANGLE angle)
     if (switchDims)
     {
         setImageDimension(height(), width());
-        QString orgSize = QLatin1String("originalSize");
+        QMap<QString, QVariant>::iterator it = m_priv->attributes.find(QLatin1String("originalSize"));
 
-        if (m_priv->attributesContains(orgSize))
+        if (it != m_priv->attributes.end())
         {
-            QSize size = m_priv->attributesValue(orgSize).toSize();
-            m_priv->attributesInsert(orgSize, QSize(size.height(), size.width()));
+            QSize size = it.value().toSize();
+            it.value() = QSize(size.height(), size.width());
         }
     }
 }
@@ -2884,18 +2885,18 @@ void DImg::fill(const DColor& color)
 
 QByteArray DImg::getUniqueHash() const
 {
-    if (m_priv->attributesContains(QLatin1String("uniqueHash")))
+    if (m_priv->attributes.contains(QLatin1String("uniqueHash")))
     {
-        return m_priv->attributesValue(QLatin1String("uniqueHash")).toByteArray();
+        return m_priv->attributes[QLatin1String("uniqueHash")].toByteArray();
     }
 
-    if (!m_priv->attributesContains(QLatin1String("originalFilePath")))
+    if (!m_priv->attributes.contains(QLatin1String("originalFilePath")))
     {
         qCWarning(DIGIKAM_DIMG_LOG) << "DImg::getUniqueHash called without originalFilePath property set!";
         return QByteArray();
     }
 
-    QString filePath = m_priv->attributesValue(QLatin1String("originalFilePath")).toString();
+    QString filePath = m_priv->attributes.value(QLatin1String("originalFilePath")).toString();
 
     if (filePath.isEmpty())
     {
@@ -2917,18 +2918,18 @@ QByteArray DImg::getUniqueHash(const QString& filePath)
 
 QByteArray DImg::getUniqueHashV2() const
 {
-    if (m_priv->attributesContains(QLatin1String("uniqueHashV2")))
+    if (m_priv->attributes.contains(QLatin1String("uniqueHashV2")))
     {
-        return m_priv->attributesValue(QLatin1String("uniqueHashV2")).toByteArray();
+        return m_priv->attributes[QLatin1String("uniqueHashV2")].toByteArray();
     }
 
-    if (!m_priv->attributesContains(QLatin1String("originalFilePath")))
+    if (!m_priv->attributes.contains(QLatin1String("originalFilePath")))
     {
         qCWarning(DIGIKAM_DIMG_LOG) << "DImg::getUniqueHash called without originalFilePath property set!";
         return QByteArray();
     }
 
-    QString filePath = m_priv->attributesValue(QLatin1String("originalFilePath")).toString();
+    QString filePath = m_priv->attributes.value(QLatin1String("originalFilePath")).toString();
 
     if (filePath.isEmpty())
     {

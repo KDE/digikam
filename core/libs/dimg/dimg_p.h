@@ -27,11 +27,9 @@
 
 // Qt includes
 
-#include <QMutexLocker>
+#include <QString>
 #include <QByteArray>
 #include <QVariant>
-#include <QString>
-#include <QMutex>
 #include <QMap>
 
 // Local includes
@@ -129,55 +127,6 @@ public:
         return inner.isValid();
     }
 
-    void attributesInsert(const QString& key, const QVariant& value)
-    {
-        QMutexLocker lock(&mutex);
-        attributes.insert(key, value);
-    }
-
-    QVariant attributesValue(const QString& key) const
-    {
-        QMutexLocker lock(const_cast<QMutex*>(&mutex));
-        return attributes.value(key);
-    }
-
-    bool attributesContains(const QString& key) const
-    {
-        QMutexLocker lock(const_cast<QMutex*>(&mutex));
-        return attributes.contains(key);
-    }
-
-    void attributesRemove(const QString& key)
-    {
-        QMutexLocker lock(&mutex);
-        attributes.remove(key);
-    }
-
-    void embeddedTextInsert(const QString& key, const QString& value)
-    {
-        QMutexLocker lock(&mutex);
-        embeddedText.insert(key, value);
-    }
-
-    QString embeddedTextValue(const QString& key) const
-    {
-        QMutexLocker lock(const_cast<QMutex*>(&mutex));
-        return embeddedText.value(key);
-    }
-
-    bool embeddedTextContains(const QString& key) const
-    {
-        QMutexLocker lock(const_cast<QMutex*>(&mutex));
-        return embeddedText.contains(key);
-    }
-
-    void clearMaps()
-    {
-        QMutexLocker lock(&mutex);
-        attributes.clear();
-        embeddedText.clear();
-    }
-
 public:
 
     bool                    null;
@@ -195,8 +144,6 @@ public:
     QMap<QString, QString>  embeddedText;
     IccProfile              iccProfile;
     DImageHistory           imageHistory;
-
-    QMutex                  mutex;
 };
 
 } // namespace Digikam
