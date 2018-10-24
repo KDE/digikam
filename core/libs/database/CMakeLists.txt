@@ -105,10 +105,11 @@ set(libdatabase_SRCS
     item/imageposition.cpp
     item/imagecopyright.cpp
     item/imagequerybuilder.cpp
-    item/imagescanner.cpp
-    item/imagescanner_baloo.cpp
     item/imagetagpair.cpp
     item/imageattributeswatch.cpp
+    item/imagescanner.cpp
+    item/imagescanner_p.cpp
+    item/imagescanner_baloo.cpp
 
     imagehistory/imagehistorygraph.cpp
     imagehistory/imagehistorygraphmodel.cpp
