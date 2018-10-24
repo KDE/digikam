@@ -104,10 +104,10 @@ set(libdatabase_SRCS
     item/imagelisterreceiver.cpp
     item/imageposition.cpp
     item/imagecopyright.cpp
-    item/imagequerybuilder.cpp
     item/imagetagpair.cpp
     item/imageattributeswatch.cpp
 
+    item/itemquerybuilder.cpp
     item/itemscanner.cpp
     item/itemscanner_p.cpp
     item/itemscanner_baloo.cpp

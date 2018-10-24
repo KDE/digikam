@@ -47,7 +47,7 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "collectionscanner.h"
-#include "imagequerybuilder.h"
+#include "itemquerybuilder.h"
 #include "collectionscannerobserver.h"
 #include "digikam_config.h"
 
@@ -1022,7 +1022,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
     {
         QUrl url((*it).query);
 
-        ImageQueryBuilder builder;
+        ItemQueryBuilder builder;
         QString query = builder.convertFromUrlToXml(url);
         QString name  = (*it).name;
 
@@ -1257,7 +1257,7 @@ void CoreDbSchemaUpdater::preAlpha010Update1()
     {
         QUrl url((*it).query);
 
-        ImageQueryBuilder builder;
+        ItemQueryBuilder builder;
         QString query = builder.convertFromUrlToXml(url);
 
         if (QUrlQuery(url).queryItemValue(QLatin1String("type")) == QLatin1String("datesearch"))

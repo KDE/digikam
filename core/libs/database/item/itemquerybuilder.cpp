@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "imagequerybuilder.h"
+#include "itemquerybuilder.h"
 
 // C++ includes
 
@@ -50,12 +50,12 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageQueryPostHook
+class Q_DECL_HIDDEN ItemQueryPostHook
 {
 public:
 
-    // This is the single hook, ImageQueryPostHookS is the container
-    virtual ~ImageQueryPostHook()
+    // This is the single hook, ItemQueryPostHookS is the container
+    virtual ~ItemQueryPostHook()
     {
     };
 
@@ -65,22 +65,22 @@ public:
     };
 };
 
-ImageQueryPostHooks::~ImageQueryPostHooks()
+ItemQueryPostHooks::~ItemQueryPostHooks()
 {
-    foreach (ImageQueryPostHook* const hook, m_postHooks)
+    foreach (ItemQueryPostHook* const hook, m_postHooks)
     {
         delete hook;
     }
 }
 
-void ImageQueryPostHooks::addHook(ImageQueryPostHook* const hook)
+void ItemQueryPostHooks::addHook(ItemQueryPostHook* const hook)
 {
     m_postHooks << hook;
 }
 
-bool ImageQueryPostHooks::checkPosition(double latitudeNumber, double longitudeNumber)
+bool ItemQueryPostHooks::checkPosition(double latitudeNumber, double longitudeNumber)
 {
-    foreach (ImageQueryPostHook* const hook, m_postHooks)
+    foreach (ItemQueryPostHook* const hook, m_postHooks)
     {
         if (!hook->checkPosition(latitudeNumber, longitudeNumber))
         {
@@ -93,7 +93,7 @@ bool ImageQueryPostHooks::checkPosition(double latitudeNumber, double longitudeN
 
 // -----------------------------------------------------------------------------------------------
 
-ImageQueryBuilder::ImageQueryBuilder()
+ItemQueryBuilder::ItemQueryBuilder()
 {
     // build a lookup table for month names
 
@@ -106,12 +106,12 @@ ImageQueryBuilder::ImageQueryBuilder()
     m_imageTagPropertiesJoined = false;
 }
 
-void ImageQueryBuilder::setImageTagPropertiesJoined(bool isJoined)
+void ItemQueryBuilder::setImageTagPropertiesJoined(bool isJoined)
 {
     m_imageTagPropertiesJoined = isJoined;
 }
 
-QString ImageQueryBuilder::buildQuery(const QString& q, QList<QVariant> *boundValues, ImageQueryPostHooks* const hooks) const
+QString ItemQueryBuilder::buildQuery(const QString& q, QList<QVariant> *boundValues, ItemQueryPostHooks* const hooks) const
 {
     // Handle legacy query descriptions
     if (q.startsWith(QLatin1String("digikamsearch:")))
@@ -124,7 +124,7 @@ QString ImageQueryBuilder::buildQuery(const QString& q, QList<QVariant> *boundVa
     }
 }
 
-QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant> *boundValues, ImageQueryPostHooks* const hooks) const
+QString ItemQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant> *boundValues, ItemQueryPostHooks* const hooks) const
 {
     SearchXmlCachingReader reader(xml);
     QString                sql;
@@ -157,8 +157,8 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant>
     return sql;
 }
 
-void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
-                                   QList<QVariant> *boundValues, ImageQueryPostHooks* const hooks) const
+void ItemQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
+                                   QList<QVariant> *boundValues, ItemQueryPostHooks* const hooks) const
 {
     sql += QLatin1String(" (");
 
@@ -223,7 +223,7 @@ class Q_DECL_HIDDEN FieldQueryBuilder
 public:
 
     FieldQueryBuilder(QString& sql, SearchXmlCachingReader& reader,
-                      QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks, SearchXml::Relation relation)
+                      QList<QVariant>* boundValues, ItemQueryPostHooks* const hooks, SearchXml::Relation relation)
         : sql(sql),
           reader(reader),
           boundValues(boundValues),
@@ -237,7 +237,7 @@ public:
     QString&                sql;
     SearchXmlCachingReader& reader;
     QList<QVariant>*        boundValues;
-    ImageQueryPostHooks*    hooks;
+    ItemQueryPostHooks*    hooks;
     SearchXml::Relation     relation;
 
 public:
@@ -267,10 +267,10 @@ public:
             }
 
             sql += QLatin1String(" (") + name + QLatin1Char(' ');
-            ImageQueryBuilder::addSqlRelation(sql,
+            ItemQueryBuilder::addSqlRelation(sql,
                                               relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
             sql += QLatin1String(" ? AND ") + name + QLatin1Char(' ');
-            ImageQueryBuilder::addSqlRelation(sql,
+            ItemQueryBuilder::addSqlRelation(sql,
                                               relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
             sql += QLatin1String(" ?) ");
 
@@ -279,7 +279,7 @@ public:
         else
         {
             sql += QLatin1String(" (") + name + QLatin1Char(' ');
-            ImageQueryBuilder::addSqlRelation(sql, relation);
+            ItemQueryBuilder::addSqlRelation(sql, relation);
             sql += QLatin1String(" ?) ");
             *boundValues << reader.valueToInt();
         }
@@ -298,10 +298,10 @@ public:
             }
 
             sql += QLatin1String(" (") + name + QLatin1Char(' ');
-            ImageQueryBuilder::addSqlRelation(sql,
+            ItemQueryBuilder::addSqlRelation(sql,
                                               relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
             sql += QLatin1String(" ? AND ") + name + QLatin1Char(' ');
-            ImageQueryBuilder::addSqlRelation(sql,
+            ItemQueryBuilder::addSqlRelation(sql,
                                               relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
             sql += QLatin1String(" ?) ");
 
@@ -310,7 +310,7 @@ public:
         else
         {
             sql += QLatin1String(" (") + name + QLatin1Char(' ');
-            ImageQueryBuilder::addSqlRelation(sql, relation);
+            ItemQueryBuilder::addSqlRelation(sql, relation);
             sql += QLatin1String(" ?) ");
             *boundValues << reader.valueToDouble();
         }
@@ -319,7 +319,7 @@ public:
     void addStringField(const QString& name)
     {
         sql += QLatin1String(" (") + name + QLatin1Char(' ');
-        ImageQueryBuilder::addSqlRelation(sql, relation);
+        ItemQueryBuilder::addSqlRelation(sql, relation);
         sql += QLatin1String(" ?) ");
         *boundValues << prepareForLike(reader.value());
     }
@@ -376,9 +376,9 @@ public:
             }
 
             sql += QLatin1String(" (") + name + QLatin1Char(' ');
-            ImageQueryBuilder::addSqlRelation(sql, SearchXml::GreaterThan);
+            ItemQueryBuilder::addSqlRelation(sql, SearchXml::GreaterThan);
             sql += QLatin1String(" ? AND ") + name + QLatin1Char(' ');
-            ImageQueryBuilder::addSqlRelation(sql, SearchXml::LessThan);
+            ItemQueryBuilder::addSqlRelation(sql, SearchXml::LessThan);
             sql += QLatin1String(" ?) ");
         }
         else if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
@@ -392,10 +392,10 @@ public:
             }
 
             sql += QLatin1String(" (") + name + QLatin1Char(' ');
-            ImageQueryBuilder::addSqlRelation(sql,
+            ItemQueryBuilder::addSqlRelation(sql,
                                               relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
             sql += QLatin1String(" ? AND ") + name + QLatin1Char(' ');
-            ImageQueryBuilder::addSqlRelation(sql,
+            ItemQueryBuilder::addSqlRelation(sql,
                                               relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
             sql += QLatin1String(" ?) ");
 
@@ -404,7 +404,7 @@ public:
         else
         {
             sql += QLatin1String(" (") + name + QLatin1Char(' ');
-            ImageQueryBuilder::addSqlRelation(sql, relation);
+            ItemQueryBuilder::addSqlRelation(sql, relation);
             sql += QLatin1String(" ?) ");
             *boundValues << reader.value();
         }
@@ -557,11 +557,11 @@ public:
             {
                 foreach (QString wildcard, wildcards) // krazy:exclude=foreach
                 {
-                    ImageQueryBuilder::addSqlOperator(sql, SearchXml::Or, firstCondition);
+                    ItemQueryBuilder::addSqlOperator(sql, SearchXml::Or, firstCondition);
                     firstCondition = false;
                     wildcard.replace(QLatin1Char('*'), QLatin1Char('%'));
                     sql           += QLatin1Char(' ') + name + QLatin1Char(' ');
-                    ImageQueryBuilder::addSqlRelation(sql, SearchXml::Like);
+                    ItemQueryBuilder::addSqlRelation(sql, SearchXml::Like);
                     sql           += QLatin1String(" ? ");
                     *boundValues << wildcard;
                 }
@@ -578,7 +578,7 @@ public:
                 // Handle special case: * denotes the place if the wildcard,
                 // Don't automatically prepend and append %
                 sql += QLatin1String(" (") + name + QLatin1Char(' ');
-                ImageQueryBuilder::addSqlRelation(sql, SearchXml::Like);
+                ItemQueryBuilder::addSqlRelation(sql, SearchXml::Like);
                 sql += QLatin1String(" ?) ");
                 QString wildcard = reader.value();
                 wildcard.replace(QLatin1Char('*'), QLatin1Char('%'));
@@ -682,7 +682,7 @@ public:
                 // We precompute c.
                 */
 
-                class Q_DECL_HIDDEN HaversinePostHook : public ImageQueryPostHook
+                class Q_DECL_HIDDEN HaversinePostHook : public ItemQueryPostHook
                 {
                 public:
 
@@ -779,8 +779,8 @@ public:
 
 // ----------------------------------------------------------------------------------------------------
 
-bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
-                                   QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks) const
+bool ItemQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
+                                   QList<QVariant>* boundValues, ItemQueryPostHooks* const hooks) const
 {
     SearchXml::Relation relation = reader.fieldRelation();
     FieldQueryBuilder fieldQuery(sql, reader, boundValues, hooks, relation);
@@ -1044,7 +1044,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             {
                 // ignoring Exif orientation
                 sql += QString::fromUtf8(" ( ImageInformation.width ");
-                ImageQueryBuilder::addSqlRelation(sql, pageOrientation == 3 ? SearchXml::GreaterThanOrEqual : SearchXml::LessThanOrEqual);
+                ItemQueryBuilder::addSqlRelation(sql, pageOrientation == 3 ? SearchXml::GreaterThanOrEqual : SearchXml::LessThanOrEqual);
                 sql += QString::fromUtf8(" ImageInformation.height) ");
             }
         }
@@ -1178,10 +1178,10 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         }
 
         sql += QString::fromUtf8(" ( CAST(VideoMetadata.audioBitRate AS INTEGER)");
-        ImageQueryBuilder::addSqlRelation(sql,
+        ItemQueryBuilder::addSqlRelation(sql,
                                           relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
         sql += QString::fromUtf8(" ? AND CAST(VideoMetadata.audioBitRate AS INTEGER)");
-        ImageQueryBuilder::addSqlRelation(sql,
+        ItemQueryBuilder::addSqlRelation(sql,
                                           relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
         sql += QString::fromUtf8(" ?) ");
 
@@ -1251,10 +1251,10 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         }
 
         sql += QString::fromUtf8(" ( CAST(VideoMetadata.duration AS INTEGER)");
-        ImageQueryBuilder::addSqlRelation(sql,
+        ItemQueryBuilder::addSqlRelation(sql,
                                           relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
         sql += QString::fromUtf8(" ? AND CAST(VideoMetadata.duration AS INTEGER)");
-        ImageQueryBuilder::addSqlRelation(sql,
+        ItemQueryBuilder::addSqlRelation(sql,
                                           relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
         sql += QString::fromUtf8(" ?) ");
 
@@ -1272,10 +1272,10 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         }
 
         sql += QString::fromUtf8(" ( CAST(VideoMetadata.frameRate AS REAL)");
-        ImageQueryBuilder::addSqlRelation(sql,
+        ItemQueryBuilder::addSqlRelation(sql,
                                           relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
         sql += QString::fromUtf8(" ? AND CAST(VideoMetadata.frameRate AS REAL)");
-        ImageQueryBuilder::addSqlRelation(sql,
+        ItemQueryBuilder::addSqlRelation(sql,
                                           relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
         sql += QString::fromUtf8(" ?) ");
 
@@ -1416,7 +1416,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         sql += QString::fromUtf8(" (Images.id IN "
                " (SELECT imageid FROM ImageCopyright "
                "  WHERE property='creator' and value ");
-        ImageQueryBuilder::addSqlRelation(sql, relation);
+        ItemQueryBuilder::addSqlRelation(sql, relation);
         sql += QString::fromUtf8(" ?)) ");
         *boundValues << fieldQuery.prepareForLike(reader.value());
     }
@@ -1425,7 +1425,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         sql += QString::fromUtf8(" (Images.id IN "
                " (SELECT imageid FROM ImageComments "
                "  WHERE type=? AND comment ");
-        ImageQueryBuilder::addSqlRelation(sql, relation);
+        ItemQueryBuilder::addSqlRelation(sql, relation);
         sql += QString::fromUtf8(" ?)) ");
         *boundValues << DatabaseComment::Comment << fieldQuery.prepareForLike(reader.value());
     }
@@ -1434,7 +1434,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         sql += QString::fromUtf8(" (Images.id IN "
                " (SELECT imageid FROM ImageComments "
                "  WHERE type=? AND author ");
-        ImageQueryBuilder::addSqlRelation(sql, relation);
+        ItemQueryBuilder::addSqlRelation(sql, relation);
         sql += QString::fromUtf8(" ?)) ");
         *boundValues << DatabaseComment::Comment << fieldQuery.prepareForLike(reader.value());
     }
@@ -1443,7 +1443,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         sql += QString::fromUtf8(" (Images.id IN "
                " (SELECT imageid FROM ImageComments "
                "  WHERE type=? AND comment ");
-        ImageQueryBuilder::addSqlRelation(sql, relation);
+        ItemQueryBuilder::addSqlRelation(sql, relation);
         sql += QString::fromUtf8(" ?)) ");
         *boundValues << DatabaseComment::Headline << fieldQuery.prepareForLike(reader.value());
     }
@@ -1452,7 +1452,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         sql += QString::fromUtf8(" (Images.id IN "
                " (SELECT imageid FROM ImageComments "
                "  WHERE type=? AND comment ");
-        ImageQueryBuilder::addSqlRelation(sql, relation);
+        ItemQueryBuilder::addSqlRelation(sql, relation);
         sql += QString::fromUtf8(" ?)) ");
         *boundValues << DatabaseComment::Title << fieldQuery.prepareForLike(reader.value());
     }
@@ -1502,7 +1502,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             else if (values.size() == 2)
             {
                 selectQuery += QString::fromUtf8("%1property=? AND %1value ");
-                ImageQueryBuilder::addSqlRelation(selectQuery, relation);
+                ItemQueryBuilder::addSqlRelation(selectQuery, relation);
                 selectQuery += QString::fromUtf8(" ? ");
                 *boundValues << values.at(0) << fieldQuery.prepareForLike(values.at(1));
             }
@@ -1555,18 +1555,18 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == QLatin1String("similarity"))
     {
-        qCWarning(DIGIKAM_DATABASE_LOG) << "Search field \"similarity\" is not supported by ImageQueryBuilder";
+        qCWarning(DIGIKAM_DATABASE_LOG) << "Search field \"similarity\" is not supported by ItemQueryBuilder";
     }
     else
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Search field" << name << "not known by this version of ImageQueryBuilder";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Search field" << name << "not known by this version of ItemQueryBuilder";
         return false;
     }
 
     return true;
 }
 
-void ImageQueryBuilder::addSqlOperator(QString& sql, SearchXml::Operator op, bool isFirst)
+void ItemQueryBuilder::addSqlOperator(QString& sql, SearchXml::Operator op, bool isFirst)
 {
     if (isFirst)
     {
@@ -1595,7 +1595,7 @@ void ImageQueryBuilder::addSqlOperator(QString& sql, SearchXml::Operator op, boo
     }
 }
 
-void ImageQueryBuilder::addSqlRelation(QString& sql, SearchXml::Relation rel)
+void ItemQueryBuilder::addSqlRelation(QString& sql, SearchXml::Relation rel)
 {
     switch (rel)
     {
@@ -1630,7 +1630,7 @@ void ImageQueryBuilder::addSqlRelation(QString& sql, SearchXml::Relation rel)
     }
 }
 
-void ImageQueryBuilder::addNoEffectContent(QString& sql, SearchXml::Operator op)
+void ItemQueryBuilder::addNoEffectContent(QString& sql, SearchXml::Operator op)
 {
     // add a condition statement with no effect
     switch (op)
@@ -1662,7 +1662,7 @@ public:
     QString             val;
 };
 
-QString ImageQueryBuilder::convertFromUrlToXml(const QUrl& url) const
+QString ItemQueryBuilder::convertFromUrlToXml(const QUrl& url) const
 {
     int  count = QUrlQuery(url).queryItemValue(QLatin1String("count")).toInt();
 
@@ -1864,7 +1864,7 @@ public:
 
 // -------------------------------------------------------------------------
 
-QString ImageQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* boundValues) const
+QString ItemQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* boundValues) const
 {
     int count = QUrlQuery(url).queryItemValue(QLatin1String("count")).toInt();
 
@@ -2234,7 +2234,7 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
     return query;
 }
 
-QString ImageQueryBuilder::possibleDate(const QString& str, bool& exact) const
+QString ItemQueryBuilder::possibleDate(const QString& str, bool& exact) const
 {
     QDate date = QDate::fromString(str, Qt::ISODate);
 

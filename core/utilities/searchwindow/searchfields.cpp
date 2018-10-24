@@ -3044,7 +3044,7 @@ void SearchFieldLabels::write(SearchXmlWriter& writer)
     }
 
     // NOTE: As Color Labels are internal tags, we trig database on "tagid"
-    //       with "labels" in ImageQueryBuilder::buildField().
+    //       with "labels" in ItemQueryBuilder::buildField().
     writer.writeField(m_name, SearchXml::InTree);
 
     if (albumIds.size() > 1)

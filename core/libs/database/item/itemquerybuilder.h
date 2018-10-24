@@ -42,39 +42,39 @@ class QUrl;
 namespace Digikam
 {
 
-class ImageQueryPostHook;
+class ItemQueryPostHook;
 
-class ImageQueryPostHooks
+class ItemQueryPostHooks
 {
 public:
 
-    ~ImageQueryPostHooks();
+    ~ItemQueryPostHooks();
 
     /** Call this method after passing the object to buildQuery
      *  and executing the statement. Returns true if the search is matched.
      */
     bool checkPosition(double latitudeNumber, double longitudeNumber);
 
-    /** Called by ImageQueryBuilder. Ownership of the object is passed.
+    /** Called by ItemQueryBuilder. Ownership of the object is passed.
      */
-    void addHook(ImageQueryPostHook* const hook);
+    void addHook(ItemQueryPostHook* const hook);
 
 protected:
 
-    QList<ImageQueryPostHook*> m_postHooks;
+    QList<ItemQueryPostHook*> m_postHooks;
 };
 
 // ------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageQueryBuilder
+class DIGIKAM_DATABASE_EXPORT ItemQueryBuilder
 {
 public:
 
-    explicit ImageQueryBuilder();
+    explicit ItemQueryBuilder();
 
-    QString buildQuery(const QString& q, QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks) const;
+    QString buildQuery(const QString& q, QList<QVariant>* boundValues, ItemQueryPostHooks* const hooks) const;
     QString buildQueryFromUrl(const QUrl& url, QList<QVariant>* boundValues) const;
-    QString buildQueryFromXml(const QString& xml, QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks) const;
+    QString buildQueryFromXml(const QString& xml, QList<QVariant>* boundValues, ItemQueryPostHooks* const hooks) const;
     QString convertFromUrlToXml(const QUrl& url) const;
 
     /**
@@ -92,9 +92,9 @@ public:
 protected:
 
     void buildGroup(QString& sql, SearchXmlCachingReader& reader,
-                    QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks) const;
+                    QList<QVariant>* boundValues, ItemQueryPostHooks* const hooks) const;
     bool buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
-                    QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks) const;
+                    QList<QVariant>* boundValues, ItemQueryPostHooks* const hooks) const;
 
     QString possibleDate(const QString& str, bool& exact) const;
 

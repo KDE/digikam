@@ -51,7 +51,7 @@
 #include "coredbbackend.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
-#include "imagequerybuilder.h"
+#include "itemquerybuilder.h"
 #include "dmetadata.h"
 #include "haariface.h"
 #include "dbenginesqlquery.h"
@@ -535,8 +535,8 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
                "WHERE Images.status=1 AND ( ");
 
     // query body
-    ImageQueryBuilder   builder;
-    ImageQueryPostHooks hooks;
+    ItemQueryBuilder   builder;
+    ItemQueryPostHooks hooks;
 
     sqlQuery += builder.buildQuery(xml, &boundValues, &hooks);
 
@@ -666,8 +666,8 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
                "WHERE Images.status=1 AND ( ");
 
     // query body
-    ImageQueryBuilder builder;
-    ImageQueryPostHooks hooks;
+    ItemQueryBuilder builder;
+    ItemQueryPostHooks hooks;
     builder.setImageTagPropertiesJoined(true); // ImageTagProperties added by INNER JOIN
     sqlQuery += builder.buildQuery(xml, &boundValues, &hooks);
     sqlQuery += QString::fromUtf8(" );");
