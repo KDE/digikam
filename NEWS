@@ -621,4 +621,5 @@ BUGFIXES:
 555 ==> 373678 - Videos exported in google photos are not available (still processing state).
 556 ==> 400139 - Titles are not exported anymore on google photos.
 557 ==> 400216 - Components Information window: no standardized uppercase/lowercase.
-558 ==> 
+558 ==> 400217 - Incorrect Video date/time information: shifted by 2 hours.
+559 ==> 
