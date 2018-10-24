@@ -108,6 +108,7 @@ set(libdatabase_SRCS
     item/imageattributeswatch.cpp
 
     item/query/itemquerybuilder.cpp
+    item/query/itemquerybuilder_p.cpp
     item/query/itemqueryposthooks.cpp
     item/query/fieldquerybuilder.cpp
 

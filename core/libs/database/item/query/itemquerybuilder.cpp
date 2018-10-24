@@ -23,29 +23,7 @@
  *
  * ============================================================ */
 
-#include "itemquerybuilder.h"
-
-// C++ includes
-
-#include <cmath>
-
-// Qt includes
-
-#include <QFile>
-#include <QDir>
-#include <QMap>
-#include <QRectF>
-#include <QUrl>
-#include <QLocale>
-#include <QUrlQuery>
-
-// Local includes
-
-#include "metaengine.h"
-#include "digikam_debug.h"
-#include "coredbaccess.h"
-#include "coredb.h"
-#include "fieldquerybuilder.h"
+#include "itemquerybuilder_p.h"
 
 namespace Digikam
 {
@@ -1040,22 +1018,6 @@ void ItemQueryBuilder::addNoEffectContent(QString& sql, SearchXml::Operator op)
     }
 }
 
-// ----------- Legacy query description handling -------------- //
-
-class Q_DECL_HIDDEN RuleTypeForConversion
-{
-public:
-
-    RuleTypeForConversion()
-        : op(SearchXml::Equal)
-    {
-    }
-
-    QString             key;
-    SearchXml::Relation op;
-    QString             val;
-};
-
 QString ItemQueryBuilder::convertFromUrlToXml(const QUrl& url) const
 {
     int  count = QUrlQuery(url).queryItemValue(QLatin1String("count")).toInt();
@@ -1067,7 +1029,7 @@ QString ItemQueryBuilder::convertFromUrlToXml(const QUrl& url) const
 
     QMap<int, RuleTypeForConversion> rulesMap;
 
-    for (int i=1; i<=count; ++i)
+    for (int i = 1 ; i <= count ; ++i)
     {
         RuleTypeForConversion rule;
 
@@ -1206,58 +1168,6 @@ QString ItemQueryBuilder::convertFromUrlToXml(const QUrl& url) const
     return writer.xml();
 }
 
-// -------------------------------------------------------------------------
-
-enum SKey
-{
-    ALBUM = 0,
-    ALBUMNAME,
-    ALBUMCAPTION,
-    ALBUMCOLLECTION,
-    TAG,
-    TAGNAME,
-    IMAGENAME,
-    IMAGECAPTION,
-    IMAGEDATE,
-    KEYWORD,
-    RATING
-};
-
-enum SOperator
-{
-    EQ = 0,
-    NE,
-    LT,
-    GT,
-    LIKE,
-    NLIKE,
-    LTE,
-    GTE
-};
-
-// -------------------------------------------------------------------------
-
-class Q_DECL_HIDDEN RuleType
-{
-public:
-
-    SKey      key;
-    SOperator op;
-    QString   val;
-};
-
-// -------------------------------------------------------------------------
-
-class Q_DECL_HIDDEN SubQueryBuilder
-{
-public:
-
-    QString build(enum SKey key, enum SOperator op,
-                  const QString& passedVal, QList<QVariant>* boundValues) const;
-};
-
-// -------------------------------------------------------------------------
-
 QString ItemQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* boundValues) const
 {
     int count = QUrlQuery(url).queryItemValue(QLatin1String("count")).toInt();
@@ -1269,7 +1179,7 @@ QString ItemQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* bo
 
     QMap<int, RuleType> rulesMap;
 
-    for (int i=1; i<=count; ++i)
+    for (int i = 1 ; i <= count ; ++i)
     {
         RuleType rule;
 
@@ -1443,189 +1353,6 @@ QString ItemQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* bo
     }
 
     return sqlQuery;
-}
-
-QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
-                               const QString& passedVal, QList<QVariant>* boundValues) const
-{
-    QString query;
-    QString val = passedVal;
-
-    if (op == LIKE || op == NLIKE)
-    {
-        val = QLatin1Char('%') + val + QLatin1Char('%');
-    }
-
-    switch (key)
-    {
-        case(ALBUM):
-        {
-            query = QString::fromUtf8(" (Images.dirid $$##$$ ?) ");
-            *boundValues << val;
-            break;
-        }
-        case(ALBUMNAME):
-        {
-            query = QString::fromUtf8(" (Images.dirid IN "
-                    "  (SELECT id FROM Albums WHERE url $$##$$ ?)) ");
-            *boundValues << val;
-            break;
-        }
-        case(ALBUMCAPTION):
-        {
-            query = QString::fromUtf8(" (Images.dirid IN "
-                    "  (SELECT id FROM Albums WHERE caption $$##$$ ?)) ");
-            *boundValues << val;
-            break;
-        }
-        case(ALBUMCOLLECTION):
-        {
-            query = QString::fromUtf8(" (Images.dirid IN "
-                    "  (SELECT id FROM Albums WHERE collection $$##$$ ?)) ");
-            *boundValues << val;
-            break;
-        }
-        case(TAG):
-        {
-            if (op == EQ)
-            {
-                query = QString::fromUtf8(" (Images.id IN "
-                        "   (SELECT imageid FROM ImageTags "
-                        "    WHERE tagid = ?)) ");
-                *boundValues << val.toInt();
-            }
-            else if (op == NE)
-            {
-                query = QString::fromUtf8(" (Images.id NOT IN "
-                        "   (SELECT imageid FROM ImageTags "
-                        "    WHERE tagid = ?)) ");
-                *boundValues << val.toInt();
-            }
-            else if (op == LIKE)
-            {
-                query = QString::fromUtf8(" (Images.id IN "
-                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
-                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ");
-                *boundValues << val.toInt() << val.toInt();
-            }
-            else // op == NLIKE
-            {
-                query = QString::fromUtf8(" (Images.id NOT IN "
-                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
-                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ");
-                *boundValues << val.toInt() << val.toInt();
-            }
-
-            //         query = QString::fromUtf8(" (Images.id IN "
-            //                 "   (SELECT imageid FROM ImageTags "
-            //                 "    WHERE tagid $$##$$ ?)) ");
-
-            break;
-        }
-        case(TAGNAME):
-        {
-            query = QString::fromUtf8(" (Images.id IN "
-                    "  (SELECT imageid FROM ImageTags "
-                    "   WHERE tagid IN "
-                    "   (SELECT id FROM Tags WHERE name $$##$$ ?))) ");
-            *boundValues << val;
-            break;
-        }
-        case(IMAGENAME):
-        {
-            query = QString::fromUtf8(" (Images.name $$##$$ ?) ");
-            *boundValues << val;
-            break;
-        }
-        case(IMAGECAPTION):
-        {
-            query = QString::fromUtf8(" (Images.caption $$##$$ ?) ");
-            *boundValues << val;
-            break;
-        }
-        case(IMAGEDATE):
-        {
-            query = QString::fromUtf8(" (Images.datetime $$##$$ ?) ");
-            *boundValues << val;
-            break;
-        }
-        case (KEYWORD):
-        {
-            qCWarning(DIGIKAM_DATABASE_LOG) << "KEYWORD Detected which is not possible";
-            break;
-        }
-        case(RATING):
-        {
-            query = QString::fromUtf8(" (ImageProperties.value $$##$$ ? and ImageProperties.property='Rating') ");
-            *boundValues << val;
-            break;
-        }
-    }
-
-    if (key != TAG)
-    {
-        switch (op)
-        {
-            case(EQ):
-            {
-                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8("="));
-                break;
-            }
-            case(NE):
-            {
-                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8("<>"));
-                break;
-            }
-            case(LT):
-            {
-                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8("<"));
-                break;
-            }
-            case(GT):
-            {
-                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8(">"));
-                break;
-            }
-            case(LTE):
-            {
-                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8("<="));
-                break;
-            }
-            case(GTE):
-            {
-                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8(">="));
-                break;
-            }
-            case(LIKE):
-            {
-                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8("LIKE"));
-                break;
-            }
-            case(NLIKE):
-            {
-                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8("NOT LIKE"));
-                break;
-            }
-        }
-    }
-
-    // special case for imagedate. If the key is imagedate and the operator is EQ,
-    // we need to split it into two rules
-    if (key == IMAGEDATE && op == EQ)
-    {
-        QDate date = QDate::fromString(val, Qt::ISODate);
-
-        if (!date.isValid())
-        {
-            return query;
-        }
-
-        query = QString::fromUtf8(" (Images.datetime > ? AND Images.datetime < ?) ");
-        *boundValues << date.addDays(-1).toString(Qt::ISODate)
-                     << date.addDays( 1).toString(Qt::ISODate);
-    }
-
-    return query;
 }
 
 QString ItemQueryBuilder::possibleDate(const QString& str, bool& exact) const
