@@ -23,225 +23,12 @@
  *
  * ============================================================ */
 
-#include "scancontroller.h"
-
-// Qt includes
-
-#include <QStringList>
-#include <QFileInfo>
-#include <QPixmap>
-#include <QIcon>
-#include <QTime>
-#include <QMutex>
-#include <QMutexLocker>
-#include <QWaitCondition>
-#include <QTimer>
-#include <QEventLoop>
-#include <QApplication>
-#include <QMessageBox>
-
-// KDE includes
-
-#include <klocalizedstring.h>
-
-// Local includes
-
-#include "digikam_debug.h"
-#include "collectionscanner.h"
-#include "collectionscannerhints.h"
-#include "coredbaccess.h"
-#include "collectionmanager.h"
-#include "collectionlocation.h"
-#include "filereadwritelock.h"
-#include "coredbwatch.h"
-#include "dprogressdlg.h"
-#include "dmetadata.h"
-#include "coredb.h"
-#include "albummanager.h"
-#include "album.h"
-#include "coredbschemaupdater.h"
+#include "scancontroller_p.h"
 
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN SimpleCollectionScannerObserver : public CollectionScannerObserver
-{
-public:
-
-    explicit SimpleCollectionScannerObserver(bool* const var)
-        : m_continue(var)
-    {
-        *m_continue = true;
-    }
-
-    bool continueQuery()
-    {
-        return *m_continue;
-    }
-
-public:
-
-    bool* m_continue;
-};
-
-// ------------------------------------------------------------------------------
-
-class Q_DECL_HIDDEN ScanController::Private
-{
-public:
-
-    explicit Private() :
-        running(false),
-        needsInitialization(false),
-        needsCompleteScan(false),
-        needsUpdateUniqueHash(false),
-        idle(false),
-        scanSuspended(0),
-        deferFileScanning(false),
-        finishScanAllowed(true),
-        continueInitialization(false),
-        continueScan(false),
-        continuePartialScan(false),
-        fileWatchInstalled(false),
-        eventLoop(0),
-        showTimer(0),
-        relaxedTimer(0),
-        externalTimer(0),
-        hints(CollectionScanner::createHintContainer()),
-        progressDialog(0),
-        advice(ScanController::Success),
-        needTotalFiles(false),
-        totalFilesToScan(0)
-    {
-    }
-
-    bool                            running;
-    bool                            needsInitialization;
-    bool                            needsCompleteScan;
-    bool                            needsUpdateUniqueHash;
-    bool                            idle;
-
-    int                             scanSuspended;
-
-    QStringList                     scanTasks;
-
-    QStringList                     completeScanDeferredAlbums;
-    bool                            deferFileScanning;
-    bool                            finishScanAllowed;
-
-    QMutex                          mutex;
-    QWaitCondition                  condVar;
-
-    bool                            continueInitialization;
-    bool                            continueScan;
-    bool                            continuePartialScan;
-
-    bool                            fileWatchInstalled;
-
-    QEventLoop*                     eventLoop;
-
-    QTimer*                         showTimer;
-    QTimer*                         relaxedTimer;
-    QTimer*                         externalTimer;
-
-    QPixmap                         albumPix;
-    QPixmap                         rootPix;
-    QPixmap                         actionPix;
-    QPixmap                         errorPix;
-
-    CollectionScannerHintContainer* hints;
-
-    QDateTime                       lastHintAdded;
-
-    DProgressDlg*                   progressDialog;
-
-    ScanController::Advice          advice;
-
-    bool                            needTotalFiles;
-    int                             totalFilesToScan;
-
-public:
-
-    QPixmap albumPixmap()
-    {
-        if (albumPix.isNull())
-        {
-            albumPix = QIcon::fromTheme(QLatin1String("folder-pictures")).pixmap(32);
-        }
-
-        return albumPix;
-    }
-
-    QPixmap rootPixmap()
-    {
-        if (rootPix.isNull())
-        {
-            rootPix = QIcon::fromTheme(QLatin1String("folder-open")).pixmap(32);
-        }
-
-        return rootPix;
-    }
-
-    QPixmap actionPixmap()
-    {
-        if (actionPix.isNull())
-        {
-            actionPix = QIcon::fromTheme(QLatin1String("system-run")).pixmap(32);
-        }
-
-        return actionPix;
-    }
-
-    QPixmap errorPixmap()
-    {
-        if (errorPix.isNull())
-        {
-            errorPix = QIcon::fromTheme(QLatin1String("dialog-error")).pixmap(32);
-        }
-
-        return errorPix;
-    }
-
-    QPixmap restartPixmap()
-    {
-        if (errorPix.isNull())
-        {
-            errorPix = QIcon::fromTheme(QLatin1String("view-refresh")).pixmap(32);
-        }
-
-        return errorPix;
-    }
-
-    void garbageCollectHints(bool setAccessTime)
-    {
-        QDateTime current = QDateTime::currentDateTime();
-
-        if (idle                    &&
-            lastHintAdded.isValid() &&
-            lastHintAdded.secsTo(current) > (5*60))
-        {
-            hints->clear();
-        }
-
-        if (setAccessTime)
-        {
-            lastHintAdded = current;
-        }
-    }
-};
-
-// ------------------------------------------------------------------------------
-
-class Q_DECL_HIDDEN ScanControllerCreator
-{
-public:
-
-    ScanController object;
-};
-
 Q_GLOBAL_STATIC(ScanControllerCreator, creator)
-
-// ------------------------------------------------------------------------------
 
 ScanController* ScanController::instance()
 {
@@ -466,6 +253,7 @@ void ScanController::updateUniqueHash()
         d->needsUpdateUniqueHash = true;
         d->condVar.wakeAll();
     }
+
     // loop is quit by signal
     d->eventLoop->exec();
 
@@ -1103,33 +891,6 @@ void ScanController::finishFileMetadataWrite(const ImageInfo& info, bool changed
                                                     fi.lastModified(), fi.size()));
 
     scanFileDirectlyNormal(info);
-}
-
-// --------------------------------------------------------------------------------------------
-
-ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
-{
-    CoreDbWatch* const dbwatch = CoreDbAccess::databaseWatch();
-
-    // we opt for a queued connection to make stuff a bit relaxed
-    connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
-            this, SLOT(slotImageChanged(ImageChangeset)),
-            Qt::QueuedConnection);
-}
-
-void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset& changeset)
-{
-    foreach (const qlonglong& imageId, changeset.ids())
-    {
-        DatabaseFields::Set changes = changeset.changes();
-
-        if (changes & DatabaseFields::ModificationDate || changes & DatabaseFields::Orientation)
-        {
-            ImageInfo info(imageId);
-            //qCDebug(DIGIKAM_DATABASE_LOG) << imageId << info.filePath();
-            notifyFileChanged(info.filePath());
-        }
-    }
 }
 
 } // namespace Digikam

@@ -56,6 +56,7 @@ set(libdatabaseutils_SRCS
     utils/dbinfoiface.cpp
     utils/dio.cpp
     utils/scancontroller.cpp
+    utils/scancontroller_p.cpp
     utils/syncjob.cpp
 )
 

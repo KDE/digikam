@@ -284,26 +284,6 @@ private:
     Private* const d;
 };
 
-// ------------------------------------------------------------------------------
-
-class ScanControllerLoadingCacheFileWatch : public ClassicLoadingCacheFileWatch
-{
-    Q_OBJECT
-
-    /* This class is derived from the ClassicLoadingCacheFileWatch,
-     * which means it has the full functionality of the class
-     * and only extends it by listening to CollectionScanner information
-     */
-
-public:
-
-    explicit ScanControllerLoadingCacheFileWatch();
-
-private Q_SLOTS:
-
-    void slotImageChanged(const ImageChangeset& changeset);
-};
-
 } // namespace Digikam
 
 #endif // DIGIKAM_SCAN_CONTROLLER_H
