@@ -167,12 +167,6 @@ public:
      */
     static QString formatToString(const QString& format);
 
-    /**
-     * Helper method to return official property name by which
-     * IPTC core properties are stored in the database (ImageCopyright and ImageProperties table).
-     * Allowed arguments: All MetadataInfo::Fields starting with "IptcCore..."
-     */
-    static QString iptcCorePropertyName(MetadataInfo::Field field);
 
     /**
      * @brief scanBalooInfo - retrieve tags, comments and rating from Baloo
@@ -180,12 +174,12 @@ public:
     void scanBalooInfo();
 
     /**
-     * Returns containers with user-presentable information.
+     * Returns File-metadata container with user-presentable information.
      * These methods provide the reverse service: Not writing into the db, but reading from the db.
      */
     static void fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container);
-    static void fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* const container);
-    static void fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* const container);
+
+    static MetadataFields allImageMetadataFields();
 
     // -----------------------------------------------------------------------------
 
@@ -250,10 +244,18 @@ protected:
 
     // -----------------------------------------------------------------------------
 
-    /** @name Operations on Video Item
+    /** @name Operations on Video Metadata
      */
 
     //@{
+
+public:
+
+    /**
+     * Returns Video container with user-presentable information.
+     * These methods provide the reverse service: Not writing into the db, but reading from the db.
+     */
+    static void fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* const container);
 
 protected:
 
@@ -261,7 +263,54 @@ protected:
     void scanVideoMetadata();
     void commitVideoMetadata();
     QString detectVideoFormat() const;
+    QString detectAudioFormat() const;
     static MetadataFields allVideoMetadataFields();
+
+    //@}
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations on Photo Metadata
+     */
+
+    //@{
+
+public:
+
+    /**
+     * Returns Photo-metadata container with user-presentable information.
+     * These methods provide the reverse service: Not writing into the db, but reading from the db.
+     */
+    static void fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* const container);
+
+    /**
+     * Helper method to return official property name by which
+     * IPTC core properties are stored in the database (ImageCopyright and ImageProperties table).
+     * Allowed arguments: All MetadataInfo::Fields starting with "IptcCore..."
+     */
+    static QString iptcCorePropertyName(MetadataInfo::Field field);
+
+protected:
+
+    QString detectImageFormat() const;
+
+    void scanImageMetadata();
+    void commitImageMetadata();
+    void scanImagePosition();
+    void commitImagePosition();
+    void scanImageComments();
+    void commitImageComments();
+    void scanImageCopyright();
+    void commitImageCopyright();
+    void scanIPTCCore();
+    void commitIPTCCore();
+    void scanTags();
+    void commitTags();
+    void scanFaces();
+    void commitFaces();
+
+    bool checkRatingFromMetadata(const QVariant& ratingFromMetadata) const;
+    void checkCreationDateFromMetadata(QVariant& dateFromMetadata)   const;
 
     //@}
 
@@ -280,26 +329,6 @@ protected:
 
     void scanImageInformation();
     void commitImageInformation();
-    void scanImageMetadata();
-    void commitImageMetadata();
-    void scanImagePosition();
-    void commitImagePosition();
-    void scanImageComments();
-    void commitImageComments();
-    void scanImageCopyright();
-    void commitImageCopyright();
-    void scanIPTCCore();
-    void commitIPTCCore();
-    void scanTags();
-    void commitTags();
-    void scanFaces();
-    void commitFaces();
-
-    QString detectImageFormat() const;
-    QString detectAudioFormat() const;
-
-    void checkCreationDateFromMetadata(QVariant& dateFromMetadata)   const;
-    bool checkRatingFromMetadata(const QVariant& ratingFromMetadata) const;
 
 private:
 

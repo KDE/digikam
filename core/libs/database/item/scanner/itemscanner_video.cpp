@@ -88,6 +88,11 @@ QString ItemScanner::detectVideoFormat() const
     return suffix;
 }
 
+QString ItemScanner::detectAudioFormat() const
+{
+    return d->fileInfo.suffix().toUpper();
+}
+
 MetadataFields ItemScanner::allVideoMetadataFields()
 {
     // This list must reflect the order required by CoreDB::addVideoMetadata
