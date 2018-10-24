@@ -67,7 +67,7 @@ void PreviewLoadingTask::execute()
         // Scaling a full version takes longer!
         lookupKeys.prepend(m_loadingDescription.cacheKey());
 
-        foreach(const QString& key, lookupKeys)
+        foreach (const QString& key, lookupKeys)
         {
             if ((cachedImg = cache->retrieveImage(key)))
             {
@@ -93,26 +93,13 @@ void PreviewLoadingTask::execute()
         {
             // image is found in image cache, loading is successful
             m_img = *cachedImg;
-
-            if (accessMode() == LoadSaveThread::AccessModeReadWrite)
-            {
-                m_img = m_img.copy();
-            }
-
-            // rotate if needed - images are unrotated in the cache,
-            // except for RAW images, which are already rotated by Raw engine.
-            if (MetaEngineSettings::instance()->settings().exifRotate)
-            {
-                m_img = m_img.copy();
-                LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
-            }
         }
         else
         {
             // find possible running loading process
             m_usedProcess = 0;
 
-            for ( QStringList::const_iterator it = lookupKeys.constBegin() ; it != lookupKeys.constEnd() ; ++it )
+            for (QStringList::const_iterator it = lookupKeys.constBegin() ; it != lookupKeys.constEnd() ; ++it)
             {
                 if ((m_usedProcess = cache->retrieveLoadingProcess(*it)))
                 {
@@ -172,20 +159,25 @@ void PreviewLoadingTask::execute()
         // exifRotate() and postProcess() will detect if work is needed.
         // We check before to find out if we need to provide a deep copy
 
-        const bool needExifRotate  = MetaEngineSettings::instance()->settings().exifRotate && !LoadSaveThread::wasExifRotated(m_img);
+        const bool needExifRotate  = MetaEngineSettings::instance()->settings().exifRotate &&
+                                     !LoadSaveThread::wasExifRotated(m_img);
         const bool needPostProcess = needsPostProcessing();
 
-        if (accessMode() == LoadSaveThread::AccessModeReadWrite && (needExifRotate || needPostProcess))
+        if (accessMode() == LoadSaveThread::AccessModeReadWrite &&
+            (needExifRotate || needPostProcess))
         {
             m_img.detach();
         }
 
-        if (MetaEngineSettings::instance()->settings().exifRotate)
+        if (needExifRotate)
         {
             LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
         }
 
-        postProcess();
+        if (needPostProcess)
+        {
+            postProcess();
+        }
 
         if (m_thread)
         {
@@ -353,6 +345,11 @@ void PreviewLoadingTask::execute()
     {
         // Post processing
 
+        if (accessMode() == LoadSaveThread::AccessModeReadWrite)
+        {
+            m_img.detach();
+        }
+
         if (m_loadingDescription.previewParameters.previewSettings.convertToEightBit)
         {
             m_img.convertToEightBit();
@@ -366,7 +363,9 @@ void PreviewLoadingTask::execute()
 
         if (needToScale())
         {
-            scaledSize.scale(m_loadingDescription.previewParameters.size, m_loadingDescription.previewParameters.size, Qt::KeepAspectRatio);
+            scaledSize.scale(m_loadingDescription.previewParameters.size,
+                             m_loadingDescription.previewParameters.size,
+                             Qt::KeepAspectRatio);
             m_img = m_img.smoothScale(scaledSize.width(), scaledSize.height());
         }
 
@@ -427,9 +426,7 @@ void PreviewLoadingTask::execute()
             {
                 // If a listener requested ReadWrite access, it gets a deep copy.
                 // DImg is explicitly shared.
-
-                DImg copy = m_img.copy();
-                l->setResult(m_loadingDescription, copy);
+                l->setResult(m_loadingDescription, m_img.copy());
             }
             else
             {
@@ -490,6 +487,7 @@ bool PreviewLoadingTask::needToScale()
         case PreviewSettings::HighQualityPreview:
             break;
     }
+
     return false;
 }
 
@@ -523,13 +521,13 @@ bool PreviewLoadingTask::loadLibRawPreview(int sizeLimit)
         return false;
     }
 
-    QImage kdcrawPreview;
-    DRawDecoder::loadEmbeddedPreview(kdcrawPreview, m_loadingDescription.filePath);
+    QImage rawPreview;
+    DRawDecoder::loadEmbeddedPreview(rawPreview, m_loadingDescription.filePath);
 
-    if (!kdcrawPreview.isNull() &&
-        (sizeLimit == -1 || qMax(kdcrawPreview.width(), kdcrawPreview.height()) >= sizeLimit) )
+    if (!rawPreview.isNull() &&
+        (sizeLimit == -1 || qMax(rawPreview.width(), rawPreview.height()) >= sizeLimit))
     {
-        m_qimage                 = kdcrawPreview;
+        m_qimage                 = rawPreview;
         m_fromRawEmbeddedPreview = true;
         return true;
     }
