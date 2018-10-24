@@ -792,6 +792,7 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
         album.id            = obj[QLatin1String("id")].toString();
         album.title         = obj[QLatin1String("title")].toString();
         album.url           = obj[QLatin1String("productUrl")].toString();
+        album.isWriteable   = obj[QLatin1String("isWriteable")].toBool();
 
         albumList.append(album);
     }
