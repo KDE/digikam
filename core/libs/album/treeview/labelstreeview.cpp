@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "albumlabelstreeview.h"
+#include "labelstreeview.h"
 
 // QT includes
 
@@ -56,7 +56,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN AlbumLabelsTreeView::Private
+class Q_DECL_HIDDEN LabelsTreeView::Private
 {
 public:
 
@@ -89,12 +89,12 @@ public:
     static const QString       configExpansionEntry;
 };
 
-const QString AlbumLabelsTreeView::Private::configRatingSelectionEntry(QLatin1String("RatingSelection"));
-const QString AlbumLabelsTreeView::Private::configPickSelectionEntry(QLatin1String("PickSelection"));
-const QString AlbumLabelsTreeView::Private::configColorSelectionEntry(QLatin1String("ColorSelection"));
-const QString AlbumLabelsTreeView::Private::configExpansionEntry(QLatin1String("Expansion"));
+const QString LabelsTreeView::Private::configRatingSelectionEntry(QLatin1String("RatingSelection"));
+const QString LabelsTreeView::Private::configPickSelectionEntry(QLatin1String("PickSelection"));
+const QString LabelsTreeView::Private::configColorSelectionEntry(QLatin1String("ColorSelection"));
+const QString LabelsTreeView::Private::configExpansionEntry(QLatin1String("Expansion"));
 
-AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckable)
+LabelsTreeView::LabelsTreeView(QWidget* const parent, bool setCheckable)
     : QTreeWidget(parent),
       StateSavingObject(this),
       d(new Private)
@@ -132,22 +132,22 @@ AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckabl
             this, SLOT(slotSettingsChanged()));
 }
 
-AlbumLabelsTreeView::~AlbumLabelsTreeView()
+LabelsTreeView::~LabelsTreeView()
 {
     delete d;
 }
 
-bool AlbumLabelsTreeView::isCheckable() const
+bool LabelsTreeView::isCheckable() const
 {
     return d->isCheckableTreeView;
 }
 
-bool AlbumLabelsTreeView::isLoadingState() const
+bool LabelsTreeView::isLoadingState() const
 {
     return d->isLoadingState;
 }
 
-QPixmap AlbumLabelsTreeView::goldenStarPixmap(bool fillin) const
+QPixmap LabelsTreeView::goldenStarPixmap(bool fillin) const
 {
     QPixmap pixmap = QPixmap(60, 60);
     pixmap.fill(Qt::transparent);
@@ -171,7 +171,7 @@ QPixmap AlbumLabelsTreeView::goldenStarPixmap(bool fillin) const
     return pixmap;
 }
 
-QPixmap AlbumLabelsTreeView::colorRectPixmap(const QColor& color) const
+QPixmap LabelsTreeView::colorRectPixmap(const QColor& color) const
 {
     QRect rect(8, 8, 48, 48);
     QPixmap pixmap = QPixmap(60, 60);
@@ -187,7 +187,7 @@ QPixmap AlbumLabelsTreeView::colorRectPixmap(const QColor& color) const
     return pixmap;
 }
 
-QHash<AlbumLabelsTreeView::Labels, QList<int> > AlbumLabelsTreeView::selectedLabels()
+QHash<LabelsTreeView::Labels, QList<int> > LabelsTreeView::selectedLabels()
 {
     QHash<Labels, QList<int> > selectedLabelsHash;
     QList<int> selectedRatings;
@@ -231,7 +231,7 @@ QHash<AlbumLabelsTreeView::Labels, QList<int> > AlbumLabelsTreeView::selectedLab
     return selectedLabelsHash;
 }
 
-void AlbumLabelsTreeView::doLoadState()
+void LabelsTreeView::doLoadState()
 {
     d->isLoadingState                = true;
     KConfigGroup configGroup         = getConfigGroup();
@@ -288,7 +288,7 @@ void AlbumLabelsTreeView::doLoadState()
     d->isLoadingState = false;
 }
 
-void AlbumLabelsTreeView::doSaveState()
+void LabelsTreeView::doSaveState()
 {
     KConfigGroup configGroup = getConfigGroup();
     QList<int> expansion;
@@ -316,12 +316,12 @@ void AlbumLabelsTreeView::doSaveState()
     configGroup.writeEntry(entryName(d->configColorSelectionEntry),  labels[Colors]);
 }
 
-void AlbumLabelsTreeView::setCurrentAlbum()
+void LabelsTreeView::setCurrentAlbum()
 {
     emit signalSetCurrentAlbum();
 }
 
-void AlbumLabelsTreeView::initTreeView()
+void LabelsTreeView::initTreeView()
 {
     setIconSize(QSize(d->iconSizeFromSetting*5,d->iconSizeFromSetting));
     initRatingsTree();
@@ -331,7 +331,7 @@ void AlbumLabelsTreeView::initTreeView()
     setRootIsDecorated(false);
 }
 
-void AlbumLabelsTreeView::initRatingsTree()
+void LabelsTreeView::initRatingsTree()
 {
     d->ratings = new QTreeWidgetItem(this);
     d->ratings->setText(0, i18n("Rating"));
@@ -372,7 +372,7 @@ void AlbumLabelsTreeView::initRatingsTree()
     }
 }
 
-void AlbumLabelsTreeView::initPicksTree()
+void LabelsTreeView::initPicksTree()
 {
     d->picks = new QTreeWidgetItem(this);
     d->picks->setText(0, i18n("Pick"));
@@ -400,7 +400,7 @@ void AlbumLabelsTreeView::initPicksTree()
     }
 }
 
-void AlbumLabelsTreeView::initColorsTree()
+void LabelsTreeView::initColorsTree()
 {
     d->colors = new QTreeWidgetItem(this);
     d->colors->setText(0, i18n("Color"));
@@ -437,7 +437,7 @@ void AlbumLabelsTreeView::initColorsTree()
     }
 }
 
-void AlbumLabelsTreeView::slotSettingsChanged()
+void LabelsTreeView::slotSettingsChanged()
 {
     if (d->iconSizeFromSetting != ApplicationSettings::instance()->getTreeViewIconSize())
     {
@@ -474,7 +474,7 @@ void AlbumLabelsTreeView::slotSettingsChanged()
     }
 }
 
-void AlbumLabelsTreeView::restoreSelectionFromHistory(QHash<Labels, QList<int> > neededLabels)
+void LabelsTreeView::restoreSelectionFromHistory(QHash<Labels, QList<int> > neededLabels)
 {
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Selected);
 
@@ -515,7 +515,7 @@ public:
     {
     }
 
-    AlbumLabelsTreeView*  treeWidget;
+    LabelsTreeView*  treeWidget;
     SearchesDBJobsThread* dbJobThread;
     bool                  restoringSelectionFromHistory;
     bool                  currentXmlIsEmpty;
@@ -525,7 +525,7 @@ public:
     QList<QUrl>           urlListForSelectedAlbum;
 };
 
-AlbumLabelsSearchHandler::AlbumLabelsSearchHandler(AlbumLabelsTreeView* const treeWidget)
+AlbumLabelsSearchHandler::AlbumLabelsSearchHandler(LabelsTreeView* const treeWidget)
     : d(new Private)
 {
     d->treeWidget = treeWidget;
@@ -565,7 +565,7 @@ QString AlbumLabelsSearchHandler::generatedName() const
     return d->generatedAlbumName;
 }
 
-void AlbumLabelsSearchHandler::restoreSelectionFromHistory(const QHash<AlbumLabelsTreeView::Labels, QList<int> >& neededLabels)
+void AlbumLabelsSearchHandler::restoreSelectionFromHistory(const QHash<LabelsTreeView::Labels, QList<int> >& neededLabels)
 {
     d->restoringSelectionFromHistory = true;
     d->treeWidget->restoreSelectionFromHistory(neededLabels);
@@ -578,14 +578,14 @@ bool AlbumLabelsSearchHandler::isRestoringSelectionFromHistory() const
     return d->restoringSelectionFromHistory;
 }
 
-QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(const QHash<AlbumLabelsTreeView::Labels, QList<int> >& selectedLabels)
+QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(const QHash<LabelsTreeView::Labels, QList<int> >& selectedLabels)
 {
     SearchXmlWriter writer;
     writer.setFieldOperator(SearchXml::standardFieldOperator());
     QList<int>      ratings;
     QList<int>      colorsAndPicks;
 
-    foreach (int rate, selectedLabels[AlbumLabelsTreeView::Ratings])
+    foreach (int rate, selectedLabels[LabelsTreeView::Ratings])
     {
         if (rate == 0)
         {
@@ -594,12 +594,12 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(const QHash<Album
         ratings << rate;
     }
 
-    foreach (int color, selectedLabels[AlbumLabelsTreeView::Colors])
+    foreach (int color, selectedLabels[LabelsTreeView::Colors])
     {
         colorsAndPicks << TagsCache::instance()->tagForColorLabel(color);
     }
 
-    foreach (int pick, selectedLabels[AlbumLabelsTreeView::Picks])
+    foreach (int pick, selectedLabels[LabelsTreeView::Picks])
     {
         colorsAndPicks << TagsCache::instance()->tagForPickLabel(pick);
     }
@@ -649,9 +649,9 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(const QHash<Album
 
     writer.finish();
 
-    generateAlbumNameForExporting(selectedLabels[AlbumLabelsTreeView::Ratings],
-                                  selectedLabels[AlbumLabelsTreeView::Colors],
-                                  selectedLabels[AlbumLabelsTreeView::Picks]);
+    generateAlbumNameForExporting(selectedLabels[LabelsTreeView::Ratings],
+                                  selectedLabels[LabelsTreeView::Colors],
+                                  selectedLabels[LabelsTreeView::Picks]);
     return writer.xml();
 }
 

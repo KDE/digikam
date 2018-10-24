@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "albumtreeview.h"
+#include "tagtreeview.h"
 
 namespace Digikam
 {

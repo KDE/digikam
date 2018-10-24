@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class AlbumLabelsTreeView : public QTreeWidget, public StateSavingObject
+class LabelsTreeView : public QTreeWidget, public StateSavingObject
 {
     Q_OBJECT
 
@@ -54,8 +54,8 @@ public:
 
 public:
 
-    explicit AlbumLabelsTreeView(QWidget* const parent = 0, bool setCheckable = false);
-    ~AlbumLabelsTreeView();
+    explicit LabelsTreeView(QWidget* const parent = 0, bool setCheckable = false);
+    ~LabelsTreeView();
 
     /**
      * @return true if the tree widget is checkable
@@ -148,7 +148,7 @@ class AlbumLabelsSearchHandler : public QObject
 
 public:
 
-    explicit AlbumLabelsSearchHandler(AlbumLabelsTreeView* const treeWidget);
+    explicit AlbumLabelsSearchHandler(LabelsTreeView* const treeWidget);
     ~AlbumLabelsSearchHandler();
 
     /**
@@ -174,7 +174,7 @@ public:
      *
      * @param neededLabels a hash to restore selection from it
      */
-    void restoreSelectionFromHistory(const QHash<AlbumLabelsTreeView::Labels,
+    void restoreSelectionFromHistory(const QHash<LabelsTreeView::Labels,
                                      QList<int> >& neededLabels);
 
     /**
@@ -192,7 +192,7 @@ private:
      * @param selectedLabels to generate XML for it
      * @return XML generated
      */
-    QString createXMLForCurrentSelection(const QHash<AlbumLabelsTreeView::Labels, QList<int> >& selectedLabels);
+    QString createXMLForCurrentSelection(const QHash<LabelsTreeView::Labels, QList<int> >& selectedLabels);
 
     /**
      * @brief Passes the generated XML to CoreDB class

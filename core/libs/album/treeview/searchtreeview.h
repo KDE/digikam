@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ALBUM_TREE_VIEW_H
-#define DIGIKAM_ALBUM_TREE_VIEW_H
+#ifndef DIGIKAM_SEARCH_TREE_VIEW_H
+#define DIGIKAM_SEARCH_TREE_VIEW_H
 
 // Local includes
 
@@ -33,28 +33,35 @@
 namespace Digikam
 {
 
-class AlbumTreeView : public AbstractCheckableAlbumTreeView
+class SearchTreeView : public AbstractCheckableAlbumTreeView
 {
     Q_OBJECT
 
 public:
 
-    explicit AlbumTreeView(QWidget* const parent = 0, Flags flags = DefaultFlags);
-    virtual ~AlbumTreeView();
+    explicit SearchTreeView(QWidget* const parent = 0, Flags flags = DefaultFlags);
+    ~SearchTreeView();
 
-    AlbumModel* albumModel()                        const;
-    PAlbum* currentAlbum()                          const;
-    PAlbum* albumForIndex(const QModelIndex& index) const;
+    /// Note: not filtered by search type
+    SearchModel* albumModel()          const;
 
-    void setAlbumFilterModel(CheckableAlbumFilterModel* const filterModel);
-    void setAlbumModel(AlbumModel* const model);
+    /// Contains only the searches with appropriate type - prefer to albumModel()
+    SearchFilterModel* filteredModel() const;
+    SAlbum* currentAlbum()             const;
+
+    void setAlbumModel(SearchModel* const model);
+    void setAlbumFilterModel(SearchFilterModel* const filteredModel, CheckableAlbumFilterModel* const model);
 
 public Q_SLOTS:
 
     void setCurrentAlbums(const QList<Album*>& albums, bool selectInAlbumManager = true);
-    void setCurrentAlbum(int albumId, bool selectInAlbumManager = true);
+    void setCurrentAlbum(int searchId, bool selectInAlbumManager = true);
+
+protected:
+
+    SearchFilterModel* m_filteredModel;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ALBUM_TREE_VIEW_H
+#endif // DIGIKAM_SEARCH_TREE_VIEW_H

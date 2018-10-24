@@ -21,11 +21,14 @@ set(libalbum_SRCS
     widgets/albumselectdialog.cpp
     widgets/albumselectwidget.cpp
     widgets/albumselecttabs.cpp
-    treeview/albumlabelstreeview.cpp
     treeview/abstractalbumtreeview.cpp
     treeview/abstractcountingalbumtreeview.cpp
     treeview/abstractcheckablealbumtreeview.cpp
     treeview/albumtreeview.cpp
+    treeview/labelstreeview.cpp
+    treeview/tagtreeview.cpp
+    treeview/searchtreeview.cpp
+    treeview/datetreeview.cpp
     treeview/albumselectiontreeview.cpp
     manager/albummanager.cpp
     manager/albummanager_p.cpp

@@ -46,6 +46,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "searchtreeview.h"
 #include "editablesearchtreeview.h"
 #include "imageinfojob.h"
 #include "coredbsearchxml.h"

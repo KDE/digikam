@@ -44,6 +44,7 @@
 #include "digikam_debug.h"
 #include "albummanager.h"
 #include "contextmenuhelper.h"
+#include "tagtreeview.h"
 #include "tagmodificationhelper.h"
 #include "facetags.h"
 
@@ -70,7 +71,8 @@ public:
 };
 
 TagFolderView::TagFolderView(QWidget* const parent, TagModel* const model)
-    : TagTreeView(parent), d(new Private)
+    : TagTreeView(parent),
+      d(new Private)
 {
     setAlbumModel(model);
 

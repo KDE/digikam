@@ -43,7 +43,7 @@
 // Local includes
 
 #include "albumhistory.h"
-#include "albumlabelstreeview.h"
+#include "labelstreeview.h"
 #include "albumpointer.h"
 #include "coredbsearchxml.h"
 #include "digikam_config.h"

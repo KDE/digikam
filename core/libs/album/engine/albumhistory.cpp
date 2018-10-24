@@ -37,7 +37,7 @@
 #include "album.h"
 #include "imageinfo.h"
 #include "albummanager.h"
-#include "albumlabelstreeview.h"
+#include "labelstreeview.h"
 
 namespace Digikam
 {
@@ -80,7 +80,7 @@ public:
         widget = w;
     };
 
-    HistoryItem(QList<Album*> const a, QWidget* const w, QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels)
+    HistoryItem(QList<Album*> const a, QWidget* const w, QHash<LabelsTreeView::Labels, QList<int> > selectedLabels)
     {
         albums.append(a);
         widget = w;
@@ -99,7 +99,7 @@ public:
 
     QList<Album*>                                   albums;
     QWidget*                                        widget;
-    QHash<AlbumLabelsTreeView::Labels, QList<int> > labels;
+    QHash<LabelsTreeView::Labels, QList<int> > labels;
 };
 
 // ---------------------------------------------------------------------
@@ -149,7 +149,7 @@ public:
     QList<HistoryItem>                              backwardStack;
     QList<HistoryItem>                              forwardStack;
     QHash<QList<Album*>, HistoryPosition>           historyPos;
-    QHash<AlbumLabelsTreeView::Labels, QList<int> > neededLabels;
+    QHash<LabelsTreeView::Labels, QList<int> > neededLabels;
 };
 
 void AlbumHistory::Private::forward(unsigned int steps)
@@ -219,7 +219,7 @@ void AlbumHistory::addAlbums(const QList<Album*>& albums, QWidget* const widget)
  */
 void AlbumHistory::addAlbums(const QList<Album*>& albums,
                              QWidget* const widget,
-                             QHash<AlbumLabelsTreeView::Labels,
+                             QHash<LabelsTreeView::Labels,
                              QList<int> > selectedLabels)
 {
 
@@ -481,7 +481,7 @@ bool AlbumHistory::isBackwardEmpty() const
     return (d->backwardStack.count() <= 1) ? true : false;
 }
 
-QHash<AlbumLabelsTreeView::Labels, QList<int> > AlbumHistory::neededLabels()
+QHash<LabelsTreeView::Labels, QList<int> > AlbumHistory::neededLabels()
 {
     return d->neededLabels;
 }

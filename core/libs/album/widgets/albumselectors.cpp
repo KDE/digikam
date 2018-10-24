@@ -45,6 +45,7 @@
 #include "albummanager.h"
 #include "albumselectcombobox.h"
 #include "albumtreeview.h"
+#include "tagtreeview.h"
 #include "searchutilities.h"
 
 namespace Digikam

@@ -73,6 +73,7 @@
 #include "picklabelwidget.h"
 #include "fileactionprogress.h"
 #include "tagsmanager.h"
+#include "tagtreeview.h"
 #include "searchtextbar.h"
 #include "disjointmetadata.h"
 #include "altlangstredit.h"

@@ -43,7 +43,9 @@
 #include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "albumtreeview.h"
-#include "albumlabelstreeview.h"
+#include "tagtreeview.h"
+#include "searchtreeview.h"
+#include "labelstreeview.h"
 #include "abstractalbummodel.h"
 #include "searchtextbar.h"
 #include "albummanager.h"
@@ -98,7 +100,7 @@ public:
     SearchTextBar*            tagSearchBar;
     SearchTextBar*            searchSearchBar;
 
-    AlbumLabelsTreeView*      labelsTree;
+    LabelsTreeView*      labelsTree;
     AlbumLabelsSearchHandler* labelsSearchHandler;
 };
 
@@ -177,7 +179,7 @@ AlbumSelectTabs::AlbumSelectTabs(const QString& name, QWidget* const parent)
     // -------------------------------------------------------------------------------
 
     DVBox* const labelsBox = new DVBox(this);
-    d->labelsTree          = new AlbumLabelsTreeView(labelsBox, true);
+    d->labelsTree          = new LabelsTreeView(labelsBox, true);
     d->labelsTree->setEntryPrefix(QLatin1String("LabelsTreeView"));
     d->labelsTree->setConfigGroup(configGroup);
     d->labelsSearchHandler = new AlbumLabelsSearchHandler(d->labelsTree);

@@ -27,7 +27,7 @@
 
 // Local includes
 
-#include "albumtreeview.h"
+#include "searchtreeview.h"
 #include "searchmodificationhelper.h"
 
 namespace Digikam

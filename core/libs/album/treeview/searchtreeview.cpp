@@ -25,79 +25,74 @@
  *
  * ============================================================ */
 
-#include "albumtreeview.h"
+#include "searchtreeview.h"
 #include "abstractalbumtreeview_p.h"
 
 namespace Digikam
 {
 
-AlbumTreeView::AlbumTreeView(QWidget* const parent, Flags flags)
-    : AbstractCheckableAlbumTreeView(parent, flags)
+SearchTreeView::SearchTreeView(QWidget* const parent, Flags flags)
+    : AbstractCheckableAlbumTreeView(parent, flags),
+      m_filteredModel(0)
 {
     setRootIsDecorated(false);
-    setDragEnabled(true);
-    setAcceptDrops(true);
-    setDropIndicatorShown(false);
-    setAutoExpandDelay(AUTOEXPANDDELAY);
 
     if (flags & CreateDefaultModel)
     {
-        setAlbumModel(new AlbumModel(AlbumModel::IncludeRootAlbum, this));
+        setAlbumModel(new SearchModel(this));
     }
-}
 
-AlbumTreeView::~AlbumTreeView()
-{
-}
-
-void AlbumTreeView::setAlbumModel(AlbumModel* const model)
-{
-    // changing model is not implemented
-    if (m_albumModel)
+    if (flags & CreateDefaultFilterModel) // must set again!
     {
-        return;
+        setAlbumFilterModel(new SearchFilterModel(this), albumFilterModel());
     }
+}
 
+SearchTreeView::~SearchTreeView()
+{
+}
+
+void SearchTreeView::setAlbumModel(SearchModel* const model)
+{
     AbstractCheckableAlbumTreeView::setAlbumModel(model);
 
-    m_dragDropHandler = albumModel()->dragDropHandler();
-
-    if (!m_dragDropHandler)
+    if (m_filteredModel)
     {
-        m_dragDropHandler = new AlbumDragDropHandler(albumModel());
-
-        model->setDragDropHandler(m_dragDropHandler);
+        m_filteredModel->setSourceSearchModel(model);
     }
 }
 
-void AlbumTreeView::setAlbumFilterModel(CheckableAlbumFilterModel* const filterModel)
+SearchModel* SearchTreeView::albumModel() const
 {
+    return static_cast<SearchModel*>(m_albumModel);
+}
+
+void SearchTreeView::setAlbumFilterModel(SearchFilterModel* const filteredModel, CheckableAlbumFilterModel* const filterModel)
+{
+    m_filteredModel = filteredModel;
     AbstractCheckableAlbumTreeView::setAlbumFilterModel(filterModel);
+    // hook in: source album model -> filtered model -> album filter model
+    albumFilterModel()->setSourceFilterModel(m_filteredModel);
 }
 
-AlbumModel* AlbumTreeView::albumModel() const
+SearchFilterModel* SearchTreeView::filteredModel() const
 {
-    return dynamic_cast<AlbumModel*>(m_albumModel);
+    return m_filteredModel;
 }
 
-PAlbum* AlbumTreeView::currentAlbum() const
+SAlbum* SearchTreeView::currentAlbum() const
 {
-    return dynamic_cast<PAlbum*> (m_albumFilterModel->albumForIndex(currentIndex()));
+    return dynamic_cast<SAlbum*> (m_albumFilterModel->albumForIndex(currentIndex()));
 }
 
-PAlbum* AlbumTreeView::albumForIndex(const QModelIndex& index) const
-{
-    return dynamic_cast<PAlbum*> (m_albumFilterModel->albumForIndex(index));
-}
-
-void AlbumTreeView::setCurrentAlbums(const QList<Album*>& albums, bool selectInAlbumManager)
+void SearchTreeView::setCurrentAlbums(const QList<Album*>& albums, bool selectInAlbumManager)
 {
     AbstractCheckableAlbumTreeView::setCurrentAlbums(albums, selectInAlbumManager);
 }
 
-void AlbumTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
+void SearchTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
 {
-    PAlbum* const album = AlbumManager::instance()->findPAlbum(albumId);
+    SAlbum* const album = AlbumManager::instance()->findSAlbum(albumId);
     setCurrentAlbums(QList<Album*>() << album, selectInAlbumManager);
 }
 

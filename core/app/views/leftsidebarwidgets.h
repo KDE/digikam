@@ -39,7 +39,7 @@
 #include "searchmodificationhelper.h"
 #include "sidebarwidget.h"
 #include "imagefiltermodel.h"
-#include "albumlabelstreeview.h"
+#include "labelstreeview.h"
 
 #ifdef HAVE_MARBLE
 #   include "gpssearchview.h"
@@ -158,7 +158,7 @@ public:
     explicit LabelsSideBarWidget(QWidget* const parent);
     virtual ~LabelsSideBarWidget();
 
-    AlbumLabelsTreeView* labelsTree();
+    LabelsTreeView* labelsTree();
 
     void    setActive(bool active);
     void    applySettings();
@@ -168,7 +168,7 @@ public:
     const QIcon   getIcon();
     const QString getCaption();
 
-    QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels();
+    QHash<LabelsTreeView::Labels, QList<int> > selectedLabels();
 
 private:
 

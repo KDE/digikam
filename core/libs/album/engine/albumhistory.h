@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "albumlabelstreeview.h"
+#include "labelstreeview.h"
 
 namespace Digikam
 {
@@ -63,7 +63,7 @@ public:
     ~AlbumHistory();
 
     void addAlbums(const QList<Album*>& albums, QWidget* const widget = 0);
-    void addAlbums(const QList<Album*>& albums, QWidget* const widget, QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels);
+    void addAlbums(const QList<Album*>& albums, QWidget* const widget, QHash<LabelsTreeView::Labels, QList<int> > selectedLabels);
     void deleteAlbum(Album* const album);
     void clearHistory();
     void back(QList<Album*>& album, QWidget** const widget, unsigned int steps=1);
@@ -76,7 +76,7 @@ public:
     bool isForwardEmpty() const;
     bool isBackwardEmpty() const;
 
-    QHash<AlbumLabelsTreeView::Labels, QList<int> > neededLabels();
+    QHash<LabelsTreeView::Labels, QList<int> > neededLabels();
 
 Q_SIGNALS:
 

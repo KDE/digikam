@@ -59,6 +59,7 @@
 #include "albummanager.h"
 #include "albummodel.h"
 #include "albumselectors.h"
+#include "searchtreeview.h"
 #include "coredbaccess.h"
 #include "ddragobjects.h"
 #include "editablesearchtreeview.h"
@@ -77,6 +78,7 @@
 #include "dexpanderbox.h"
 #include "applicationsettings.h"
 #include "drangebox.h"
+#include "searchtreeview.h"
 #include "similaritydbaccess.h"
 #include "similaritydb.h"
 

@@ -35,7 +35,7 @@
 #include "album.h"
 #include "albummodel.h"
 #include "albumfiltermodel.h"
-#include "albumtreeview.h"
+#include "tagtreeview.h"
 #include "taggingactionfactory.h"
 
 namespace Digikam

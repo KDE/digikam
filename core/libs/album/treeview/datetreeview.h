@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ALBUM_TREE_VIEW_H
-#define DIGIKAM_ALBUM_TREE_VIEW_H
+#ifndef DIGIKAM_DATE_TREE_VIEW_H
+#define DIGIKAM_DATE_TREE_VIEW_H
 
 // Local includes
 
@@ -33,28 +33,27 @@
 namespace Digikam
 {
 
-class AlbumTreeView : public AbstractCheckableAlbumTreeView
+class DateTreeView : public AbstractCountingAlbumTreeView
 {
     Q_OBJECT
 
 public:
 
-    explicit AlbumTreeView(QWidget* const parent = 0, Flags flags = DefaultFlags);
-    virtual ~AlbumTreeView();
+    explicit DateTreeView(QWidget* const parent = 0, Flags flags = DefaultFlags);
 
-    AlbumModel* albumModel()                        const;
-    PAlbum* currentAlbum()                          const;
-    PAlbum* albumForIndex(const QModelIndex& index) const;
+    DateAlbumModel* albumModel()                    const;
+    DAlbum* currentAlbum()                          const;
+    DAlbum* albumForIndex(const QModelIndex& index) const;
 
-    void setAlbumFilterModel(CheckableAlbumFilterModel* const filterModel);
-    void setAlbumModel(AlbumModel* const model);
+    void setAlbumModel(DateAlbumModel* const model);
+    void setAlbumFilterModel(AlbumFilterModel* const filterModel);
 
 public Q_SLOTS:
 
     void setCurrentAlbums(const QList<Album*>& albums, bool selectInAlbumManager = true);
-    void setCurrentAlbum(int albumId, bool selectInAlbumManager = true);
+    void setCurrentAlbum(int dateId, bool selectInAlbumManager = true);
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ALBUM_TREE_VIEW_H
+#endif // DIGIKAM_DATE_TREE_VIEW_H

@@ -65,6 +65,7 @@
 #include "dmetadata.h"
 #include "imagescanner.h"
 #include "ddateedit.h"
+#include "tagtreeview.h"
 #include "ratingsearchutilities.h"
 #include "searchfieldgroup.h"
 #include "searchwindow.h"
@@ -2427,10 +2428,10 @@ void SearchFieldAlbum::setupValueWidgets(QGridLayout* layout, int row, int colum
     }
     else if (m_type == TypeTag)
     {
-        m_wrapperBox = new DHBox(0);
+        m_wrapperBox  = new DHBox(0);
         m_tagComboBox = new TagTreeViewSelectComboBox(m_wrapperBox);
 
-        m_operation = new SqueezedComboBox(m_wrapperBox);
+        m_operation   = new SqueezedComboBox(m_wrapperBox);
         m_operation->addSqueezedItem(i18nc("@label:listbox", "In All"),    Operation::All);
         m_operation->addSqueezedItem(i18nc("@label:listbox", "In One of"), Operation::OneOf);
 
@@ -2439,7 +2440,7 @@ void SearchFieldAlbum::setupValueWidgets(QGridLayout* layout, int row, int colum
         m_tagComboBox->setNoSelectionText(i18n("Any Tag"));
         m_tagComboBox->addCheckUncheckContextMenuActions();
 
-        m_model = m_tagComboBox->model();
+        m_model       = m_tagComboBox->model();
         layout->addWidget(m_wrapperBox, row, column, 1, 3);
     }
 

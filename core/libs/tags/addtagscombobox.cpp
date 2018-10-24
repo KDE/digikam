@@ -38,7 +38,7 @@
 
 #include "digikam_debug.h"
 #include "addtagslineedit.h"
-#include "albumtreeview.h"
+#include "tagtreeview.h"
 #include "albummodel.h"
 
 namespace Digikam
