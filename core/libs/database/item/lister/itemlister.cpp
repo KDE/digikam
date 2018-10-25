@@ -72,6 +72,7 @@ inline uint qHash(const ItemListerRecord& key)
 {
     return key.imageID;
 }
+
 /*
  * The binary field for file size is only 32 bit.
  * If the value fits, we pass it. If it does not, we pass -1,
@@ -132,7 +133,8 @@ void ItemLister::setAllowExtraValues(bool useExtraValue)
     d->allowExtraValues = useExtraValue;
 }
 
-void ItemLister::listAlbum(ItemListerReceiver* const receiver, const CoreDbUrl& url)
+void ItemLister::list(ItemListerReceiver* const receiver,
+                      const CoreDbUrl& url)
 {
     if (url.isAlbumUrl())
     {
@@ -157,7 +159,9 @@ void ItemLister::listAlbum(ItemListerReceiver* const receiver, const CoreDbUrl& 
     }
 }
 
-void ItemLister::listPAlbum(ItemListerReceiver* const receiver, int albumRootId, const QString& album)
+void ItemLister::listPAlbum(ItemListerReceiver* const receiver,
+                            int albumRootId,
+                            const QString& album)
 {
     if (d->listOnlyAvailableImages)
     {
@@ -270,7 +274,8 @@ void ItemLister::listPAlbum(ItemListerReceiver* const receiver, int albumRootId,
     }
 }
 
-void ItemLister::listTag(ItemListerReceiver* const receiver, const QList<int>& tagIds)
+void ItemLister::listTag(ItemListerReceiver* const receiver,
+                         const QList<int>& tagIds)
 {
     QSet<ItemListerRecord> records;
     QList<int>::const_iterator it;
@@ -379,7 +384,9 @@ void ItemLister::listFaces(ItemListerReceiver* const receiver, int personId)
     listFromIdList(receiver, list);
 }
 
-void ItemLister::listDateRange(ItemListerReceiver* const receiver, const QDate& startDate, const QDate& endDate)
+void ItemLister::listDateRange(ItemListerReceiver* const receiver,
+                               const QDate& startDate,
+                               const QDate& endDate)
 {
     QList<QVariant> values;
 
@@ -446,7 +453,11 @@ void ItemLister::listDateRange(ItemListerReceiver* const receiver, const QDate& 
     }
 }
 
-void ItemLister::listAreaRange(ItemListerReceiver* const receiver, double lat1, double lat2, double lon1, double lon2)
+void ItemLister::listAreaRange(ItemListerReceiver* const receiver,
+                               double lat1,
+                               double lat2,
+                               double lon1,
+                               double lon2)
 {
     QList<QVariant> values;
     QList<QVariant> boundValues;
@@ -475,9 +486,10 @@ void ItemLister::listAreaRange(ItemListerReceiver* const receiver, double lat1, 
     QSet<int> albumRoots = albumRootsToList();
     double    lat, lon;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; )
     {
-        ItemListerRecord record(d->allowExtraValues ? ItemListerRecord::ExtraValueFormat : ItemListerRecord::TraditionalFormat);
+        ItemListerRecord record(d->allowExtraValues ? ItemListerRecord::ExtraValueFormat
+                                                    : ItemListerRecord::TraditionalFormat);
 
         record.imageID           = (*it).toLongLong();
         ++it;
@@ -504,7 +516,10 @@ void ItemLister::listAreaRange(ItemListerReceiver* const receiver, double lat1, 
     }
 }
 
-void ItemLister::listSearch(ItemListerReceiver* const receiver, const QString& xml, int limit, qlonglong referenceImageId)
+void ItemLister::listSearch(ItemListerReceiver* const receiver,
+                            const QString& xml,
+                            int limit,
+                            qlonglong referenceImageId)
 {
     if (xml.isEmpty())
     {
@@ -762,7 +777,8 @@ void ItemLister::listImageTagPropertySearch(ItemListerReceiver* const receiver, 
     }
 }
 
-void ItemLister::listHaarSearch(ItemListerReceiver* const receiver, const QString& xml)
+void ItemLister::listHaarSearch(ItemListerReceiver* const receiver,
+                                const QString& xml)
 {
     //qCDebug(DIGIKAM_GENERAL_LOG) << "Query: " << xml;
     // ------------------------------------------------
@@ -971,7 +987,8 @@ void ItemLister::listFromHaarSearch(ItemListerReceiver* const receiver,
     }
 }
 
-void ItemLister::listFromIdList(ItemListerReceiver* const receiver, const QList<qlonglong>& imageIds)
+void ItemLister::listFromIdList(ItemListerReceiver* const receiver,
+                                const QList<qlonglong>& imageIds)
 {
     QList<QVariant> values;
     QString         errMsg;
@@ -1090,7 +1107,9 @@ QSet<int> ItemLister::albumRootsToList() const
     return ids;
 }
 
-QString ItemLister::tagSearchXml(int tagId, const QString& type, bool includeChildTags) const
+QString ItemLister::tagSearchXml(int tagId,
+                                 const QString& type,
+                                 bool includeChildTags) const
 {
     if (type == QLatin1String("faces"))
     {

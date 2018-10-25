@@ -70,12 +70,21 @@ public:
      */
     void setAllowExtraValues(bool useExtraValue);
 
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations with Album
+     */
+
+    //@{
+
+public:
+
     /**
      * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
      */
-    void listAlbum(ItemListerReceiver* const receiver,
-                   const CoreDbUrl& url);
-
+    void list(ItemListerReceiver* const receiver,
+              const CoreDbUrl& url);
+    
     /**
      * List images in the Album (physical album) specified by albumRoot, album.
      * The results will be fed to the specified receiver.
@@ -84,12 +93,86 @@ public:
                     int albumRootId,
                     const QString& album);
 
+private:
+
+    QSet<int> albumRootsToList() const;
+
+    //@}
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations with TAlbum
+     */
+
+    //@{
+
+public:
+
     /**
      * List the images which have assigned the tags specified by tagIds
      * Updated to support multiple tags
      */
     void listTag(ItemListerReceiver* const receiver,
                  const QList<int>& tagIds);
+
+    /**
+     * Execute the search specified by search XML describing a Tag Properties search.
+     * Two special add-ons: Non-unique by image id; if enabled, uses the extended ImageRecord protocol
+     * to pass the property value in the record's extraValue.
+     * @param receiver receiver for the searches
+     * @param xml SearchXml describing the query
+     */
+    void listImageTagPropertySearch(ItemListerReceiver* const receiver,
+                                    const QString& xml);
+
+    QString tagSearchXml(int tagId,
+                         const QString& type,
+                         bool includeChildTags) const;
+
+    //@}
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations with SAlbum
+     */
+
+    //@{
+
+public:
+
+    /**
+     * Execute the search specified by search XML
+     * @param receiver receiver for the searches
+     * @param xml SearchXml describing the query
+     * @param limit limit the count of the result set. If limit = 0, then no limit is set.
+     * @param referenceImageId the id of a reference image in the search query.
+     */
+    void listSearch(ItemListerReceiver* const receiver,
+                    const QString& xml,
+                    int limit = 0,
+                    qlonglong referenceImageId = -1);
+
+    /**
+     * Execute the search specified by search XML describing a Haar search
+     * @param receiver receiver for the searches
+     * @param xml SearchXml describing the query
+     */
+    void listHaarSearch(ItemListerReceiver* const receiver,
+                        const QString& xml);
+
+private:
+
+    /**
+     * This method generates image records for the receiver that contain the similarities.
+     * @param receiver for the searches
+     * @param imageSimilarityMap the map of image ids and their similarities in the HAAR search
+     */
+    void listFromHaarSearch(ItemListerReceiver* const receiver,
+                            const QMap<qlonglong,
+                            double>& imageSimilarityMap);
+    //@}
+
+public:
 
     /**
      * List the images which have faces. An image with n faces will be listed n times.
@@ -116,54 +199,10 @@ public:
                        double lon1,
                        double lon2);
 
-    /**
-     * Execute the search specified by search XML
-     * @param receiver receiver for the searches
-     * @param xml SearchXml describing the query
-     * @param limit limit the count of the result set. If limit = 0, then no limit is set.
-     * @param referenceImageId the id of a reference image in the search query.
-     */
-    void listSearch(ItemListerReceiver* const receiver,
-                    const QString& xml,
-                    int limit = 0,
-                    qlonglong referenceImageId = -1);
-
-    /**
-     * Execute the search specified by search XML describing a Tag Properties search.
-     * Two special add-ons: Non-unique by image id; if enabled, uses the extended ImageRecord protocol
-     * to pass the property value in the record's extraValue.
-     * @param receiver receiver for the searches
-     * @param xml SearchXml describing the query
-     */
-    void listImageTagPropertySearch(ItemListerReceiver* const receiver, const QString& xml);
-
-    /**
-     * Execute the search specified by search XML describing a Haar search
-     * @param receiver receiver for the searches
-     * @param xml SearchXml describing the query
-     */
-    void listHaarSearch(ItemListerReceiver* const receiver,
-                        const QString& xml);
-
-    QString tagSearchXml(int tagId,
-                         const QString& type,
-                         bool includeChildTags) const;
-
 private:
-
-    /**
-     * This method generates image records for the receiver that contain the similarities.
-     * @param receiver for the searches
-     * @param imageSimilarityMap the map of image ids and their similarities in the HAAR search
-     */
-    void listFromHaarSearch(ItemListerReceiver* const receiver,
-                            const QMap<qlonglong,
-                            double>& imageSimilarityMap);
 
     void listFromIdList(ItemListerReceiver* const receiver,
                         const QList<qlonglong>& imageIds);
-
-    QSet<int> albumRootsToList() const;
 
 private:
 
