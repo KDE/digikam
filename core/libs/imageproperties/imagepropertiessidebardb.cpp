@@ -47,7 +47,7 @@
 #include "coredbinfocontainers.h"
 #include "coredbwatch.h"
 #include "dimg.h"
-#include "imageattributeswatch.h"
+#include "itemattributeswatch.h"
 #include "imagedescedittab.h"
 #include "imageinfo.h"
 #include "imagepropertiestab.h"
@@ -120,7 +120,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
     connect(CoreDbAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
             this, SLOT(slotImageTagChanged(ImageTagChangeset)));
 
-    connect(ImageAttributesWatch::instance(), SIGNAL(signalFileMetadataChanged(QUrl)),
+    connect(ItemAttributesWatch::instance(), SIGNAL(signalFileMetadataChanged(QUrl)),
             this, SLOT(slotFileMetadataChanged(QUrl)));
 
     connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),

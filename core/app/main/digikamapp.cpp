@@ -175,7 +175,7 @@ DigikamApp::~DigikamApp()
 {
     ProgressManager::instance()->slotAbortAll();
 
-    ImageAttributesWatch::shutDown();
+    ItemAttributesWatch::shutDown();
 
     // Close and delete image editor instance.
 
@@ -245,7 +245,7 @@ DigikamApp::~DigikamApp()
 
     ScanController::instance()->shutDown();
     AlbumManager::instance()->cleanUp();
-    ImageAttributesWatch::cleanUp();
+    ItemAttributesWatch::cleanUp();
     ThumbnailLoadThread::cleanUp();
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();

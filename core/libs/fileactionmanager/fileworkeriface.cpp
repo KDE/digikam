@@ -32,7 +32,7 @@
 #include "digikam_debug.h"
 #include "metaenginesettings.h"
 #include "fileactionmngr_p.h"
-#include "imageattributeswatch.h"
+#include "itemattributeswatch.h"
 #include "imageinfotasksplitter.h"
 #include "scancontroller.h"
 #include "digikam_globals.h"
@@ -67,7 +67,7 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList i
         {
             emit imageDataChanged(path, true, true);
             QUrl url = QUrl::fromLocalFile(path);
-            ImageAttributesWatch::instance()->fileMetadataChanged(url);
+            ItemAttributesWatch::instance()->fileMetadataChanged(url);
         }
 
         infos.writtenToOne();
@@ -292,7 +292,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
         if (!failedItems.contains(info.name()))
         {
             emit imageDataChanged(path, true, true);
-            ImageAttributesWatch::instance()->fileMetadataChanged(info.fileUrl());
+            ItemAttributesWatch::instance()->fileMetadataChanged(info.fileUrl());
         }
 
         infos.writtenToOne();

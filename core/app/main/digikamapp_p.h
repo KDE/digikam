@@ -91,7 +91,7 @@
 #include "fileactionmngr.h"
 #include "filterstatusbar.h"
 #include "iccsettings.h"
-#include "imageattributeswatch.h"
+#include "itemattributeswatch.h"
 #include "imageinfo.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"

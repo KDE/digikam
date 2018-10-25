@@ -112,7 +112,7 @@ void ImageWindow::setupConnections()
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
-    ImageAttributesWatch* watch = ImageAttributesWatch::instance();
+    ItemAttributesWatch* watch = ItemAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalFileMetadataChanged(QUrl)),
             this, SLOT(slotFileMetadataChanged(QUrl)));

@@ -106,7 +106,7 @@ set(libdatabase_SRCS
 
     item/lister/imagelister.cpp
     item/lister/imagelisterreceiver.cpp
-    item/lister/imageattributeswatch.cpp
+    item/lister/itemattributeswatch.cpp
 
     item/query/itemquerybuilder.cpp
     item/query/itemquerybuilder_p.cpp

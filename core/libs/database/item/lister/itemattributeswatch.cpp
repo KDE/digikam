@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageattributeswatch.h"
+#include "itemattributeswatch.h"
 
 // Local includes
 
@@ -31,9 +31,9 @@
 namespace Digikam
 {
 
-ImageAttributesWatch* ImageAttributesWatch::m_instance = 0;
+ItemAttributesWatch* ItemAttributesWatch::m_instance = 0;
 
-ImageAttributesWatch::ImageAttributesWatch()
+ItemAttributesWatch::ItemAttributesWatch()
 {
     CoreDbWatch* const dbwatch = CoreDbAccess::databaseWatch();
 
@@ -44,18 +44,18 @@ ImageAttributesWatch::ImageAttributesWatch()
             this, SLOT(slotImageTagChange(ImageTagChangeset)));
 }
 
-ImageAttributesWatch::~ImageAttributesWatch()
+ItemAttributesWatch::~ItemAttributesWatch()
 {
     m_instance = 0;
 }
 
-void ImageAttributesWatch::cleanUp()
+void ItemAttributesWatch::cleanUp()
 {
     delete m_instance;
     m_instance = 0;
 }
 
-void ImageAttributesWatch::shutDown()
+void ItemAttributesWatch::shutDown()
 {
     if (m_instance)
     {
@@ -63,17 +63,17 @@ void ImageAttributesWatch::shutDown()
     }
 }
 
-ImageAttributesWatch* ImageAttributesWatch::instance()
+ItemAttributesWatch* ItemAttributesWatch::instance()
 {
     if (!m_instance)
     {
-        m_instance = new ImageAttributesWatch;
+        m_instance = new ItemAttributesWatch;
     }
 
     return m_instance;
 }
 
-void ImageAttributesWatch::slotImageChange(const ImageChangeset& changeset)
+void ItemAttributesWatch::slotImageChange(const ImageChangeset& changeset)
 {
     DatabaseFields::Set set = changeset.changes();
 
@@ -103,7 +103,7 @@ void ImageAttributesWatch::slotImageChange(const ImageChangeset& changeset)
     }
 }
 
-void ImageAttributesWatch::slotImageTagChange(const ImageTagChangeset& changeset)
+void ItemAttributesWatch::slotImageTagChange(const ImageTagChangeset& changeset)
 {
     foreach (const qlonglong& imageId, changeset.ids())
     {
@@ -111,14 +111,14 @@ void ImageAttributesWatch::slotImageTagChange(const ImageTagChangeset& changeset
     }
 }
 
-void ImageAttributesWatch::fileMetadataChanged(const QUrl& url)
+void ItemAttributesWatch::fileMetadataChanged(const QUrl& url)
 {
     emit signalFileMetadataChanged(url);
 }
 
 /*
 
-void ImageAttributesWatch::slotImageFieldChanged(qlonglong imageId, int field)
+void ItemAttributesWatch::slotImageFieldChanged(qlonglong imageId, int field)
 {
     // Translate signals
     // TODO: compress?
@@ -140,27 +140,27 @@ void ImageAttributesWatch::slotImageFieldChanged(qlonglong imageId, int field)
     }
 }
 
-void ImageAttributesWatch::imageTagsChanged(qint64 imageId)
+void ItemAttributesWatch::imageTagsChanged(qint64 imageId)
 {
     emit signalImageTagsChanged(imageId);
 }
 
-void ImageAttributesWatch::imagesChanged(int albumId)
+void ItemAttributesWatch::imagesChanged(int albumId)
 {
     emit signalImagesChanged(albumId);
 }
 
-void ImageAttributesWatch::imageRatingChanged(qint64 imageId)
+void ItemAttributesWatch::imageRatingChanged(qint64 imageId)
 {
     emit signalImageRatingChanged(imageId);
 }
 
-void ImageAttributesWatch::imageDateChanged(qint64 imageId)
+void ItemAttributesWatch::imageDateChanged(qint64 imageId)
 {
     emit signalImageDateChanged(imageId);
 }
 
-void ImageAttributesWatch::imageCaptionChanged(qint64 imageId)
+void ItemAttributesWatch::imageCaptionChanged(qint64 imageId)
 {
     emit signalImageCaptionChanged(imageId);
 }

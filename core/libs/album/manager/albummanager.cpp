@@ -205,7 +205,7 @@ void AlbumManager::startScan()
             this, SLOT(slotImageTagChange(ImageTagChangeset)));
 
     // listen to image attribute changes
-    connect(ImageAttributesWatch::instance(), SIGNAL(signalImageDateChanged(qlonglong)),
+    connect(ItemAttributesWatch::instance(), SIGNAL(signalImageDateChanged(qlonglong)),
             d->scanDAlbumsTimer, SLOT(start()));
 
     emit signalAllAlbumsLoaded();

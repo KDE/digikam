@@ -158,7 +158,7 @@ public:
     /**
         Constructs a DMetadata object for given filePath,
         calls the above method, writes the changes out to the file,
-        and notifies the ImageAttributesWatch.
+        and notifies the ItemAttributesWatch.
         WARNING: Do not use this method when multiple image infos are loaded
                  It will result in disjoint tags not being written
                  Use writeToMetadata(Image info ...) instead

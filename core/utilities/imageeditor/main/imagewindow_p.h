@@ -91,7 +91,7 @@
 #include "digikam_globals.h"
 #include "digikam_debug.h"
 #include "iccsettingscontainer.h"
-#include "imageattributeswatch.h"
+#include "itemattributeswatch.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
 #include "imagedescedittab.h"

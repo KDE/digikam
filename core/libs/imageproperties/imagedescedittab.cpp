@@ -63,7 +63,7 @@
 #include "tagcheckview.h"
 #include "templateselector.h"
 #include "templateviewer.h"
-#include "imageattributeswatch.h"
+#include "itemattributeswatch.h"
 #include "statusprogressbar.h"
 #include "tagmodificationhelper.h"
 #include "template.h"
@@ -96,7 +96,7 @@ public:
     explicit Private()
     {
         modified                   = false;
-        ignoreImageAttributesWatch = false;
+        ignoreItemAttributesWatch = false;
         ignoreTagChanges           = false;
         togglingSearchSettings     = false;
         recentTagsBtn              = 0;
@@ -127,7 +127,7 @@ public:
     }
 
     bool                 modified;
-    bool                 ignoreImageAttributesWatch;
+    bool                 ignoreItemAttributesWatch;
     bool                 ignoreTagChanges;
     bool                 togglingSearchSettings;
 
@@ -428,7 +428,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     // Connect to attribute watch ------------------------------
 
-    ImageAttributesWatch* const watch = ImageAttributesWatch::instance();
+    ItemAttributesWatch* const watch = ItemAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalImageTagsChanged(qlonglong)),
             this, SLOT(slotImageTagsChanged(qlonglong)));
@@ -810,7 +810,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 
     emit signalProgressMessageChanged(i18n("Reading metadata from files. Please wait..."));
 
-    d->ignoreImageAttributesWatch = true;
+    d->ignoreItemAttributesWatch = true;
     int i                         = 0;
 
     ScanController::instance()->suspendCollectionScan();
@@ -827,7 +827,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
     }
 
     ScanController::instance()->resumeCollectionScan();
-    d->ignoreImageAttributesWatch = false;
+    d->ignoreItemAttributesWatch = false;
 
     emit signalProgressFinished();
 
@@ -1238,7 +1238,7 @@ void ImageDescEditTab::slotOpenTagsManager()
 
 void ImageDescEditTab::slotImagesChanged(int albumId)
 {
-    if (d->ignoreImageAttributesWatch || d->modified)
+    if (d->ignoreItemAttributesWatch || d->modified)
     {
         return;
     }
@@ -1276,7 +1276,7 @@ void ImageDescEditTab::slotImageDateChanged(qlonglong imageId)
 // private common code for above methods
 void ImageDescEditTab::metadataChange(qlonglong imageId)
 {
-    if (d->ignoreImageAttributesWatch || d->modified)
+    if (d->ignoreItemAttributesWatch || d->modified)
     {
         // Don't lose modifications
         return;

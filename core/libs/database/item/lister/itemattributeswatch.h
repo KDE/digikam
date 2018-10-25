@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_ATTRIBUTES_WATCH_H
-#define DIGIKAM_IMAGE_ATTRIBUTES_WATCH_H
+#ifndef DIGIKAM_ITEM_ATTRIBUTES_WATCH_H
+#define DIGIKAM_ITEM_ATTRIBUTES_WATCH_H
 
 // Qt includes
 
@@ -37,13 +37,13 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT ImageAttributesWatch : public QObject
+class DIGIKAM_DATABASE_EXPORT ItemAttributesWatch : public QObject
 {
     Q_OBJECT
 
 public:
 
-    static ImageAttributesWatch* instance();
+    static ItemAttributesWatch* instance();
     static void cleanUp();
     static void shutDown();
 
@@ -94,12 +94,12 @@ private Q_SLOTS:
 
 private:
 
-    explicit ImageAttributesWatch();
-    ~ImageAttributesWatch();
+    explicit ItemAttributesWatch();
+    ~ItemAttributesWatch();
 
-    static ImageAttributesWatch* m_instance;
+    static ItemAttributesWatch* m_instance;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_ATTRIBUTES_WATCH_H
+#endif // DIGIKAM_ITEM_ATTRIBUTES_WATCH_H

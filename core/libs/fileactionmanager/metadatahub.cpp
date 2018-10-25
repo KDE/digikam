@@ -41,7 +41,7 @@
 #include "template.h"
 #include "templatemanager.h"
 #include "applicationsettings.h"
-#include "imageattributeswatch.h"
+#include "itemattributeswatch.h"
 #include "tagscache.h"
 #include "facetagseditor.h"
 #include "metadatahubmngr.h"
@@ -259,7 +259,7 @@ bool MetadataHub::writeToMetadata(const ImageInfo& info, WriteComponent writeMod
     if (write(metadata, writeMode, settings))
     {
         bool success = metadata.applyChanges();
-        ImageAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(info.filePath()));
+        ItemAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(info.filePath()));
         return success;
     }
 
@@ -374,7 +374,7 @@ bool MetadataHub::write(const QString& filePath, WriteComponent writeMode, bool 
     if (write(metadata, writeMode, settings))
     {
         bool success = metadata.applyChanges();
-        ImageAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(filePath));
+        ItemAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(filePath));
         return success;
     }
 
@@ -448,7 +448,7 @@ bool MetadataHub::writeTags(const QString& filePath, WriteComponent writeMode,
     if (writeTags(metadata, saveTags))
     {
         bool success = metadata.applyChanges();
-        ImageAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(filePath));
+        ItemAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(filePath));
         return success;
     }
     else
