@@ -95,17 +95,18 @@ set(libdatabase_SRCS
     dbjobs/dbjobsmanager.cpp
     dbjobs/duplicatesprogressobserver.cpp
 
-    item/imagecomments.cpp
-    item/imageextendedproperties.cpp
-    item/imageinfo.cpp
-    item/imageinfolist.cpp
-    item/imageinfocache.cpp
-    item/imagelister.cpp
-    item/imagelisterreceiver.cpp
-    item/imageposition.cpp
-    item/imagecopyright.cpp
-    item/imagetagpair.cpp
-    item/imageattributeswatch.cpp
+    item/containers/imagecomments.cpp
+    item/containers/imageextendedproperties.cpp
+    item/containers/imageinfo.cpp
+    item/containers/imageinfolist.cpp
+    item/containers/imageinfocache.cpp
+    item/containers/imageposition.cpp
+    item/containers/imagecopyright.cpp
+    item/containers/imagetagpair.cpp
+
+    item/lister/imagelister.cpp
+    item/lister/imagelisterreceiver.cpp
+    item/lister/imageattributeswatch.cpp
 
     item/query/itemquerybuilder.cpp
     item/query/itemquerybuilder_p.cpp
@@ -140,7 +141,7 @@ endif()
 if(Marble_FOUND)
     set(libdatabase_SRCS
         ${libdatabase_SRCS}
-        item/imagegps.cpp
+        item/containers/imagegps.cpp
        )
 endif()
 
