@@ -43,8 +43,8 @@
 #include "imageposition.h"
 #include "imagesortsettings.h"
 #include "coredbsearchxml.h"
-#include "imagelister.h"
-#include "imagelisterreceiver.h"
+#include "itemlister.h"
+#include "itemlisterreceiver.h"
 
 namespace Digikam
 {
@@ -177,10 +177,10 @@ public:
         else
         {
             // If we do not have a duplicates search, we use the image lister to get the images.
-            ImageLister lister;
+            ItemLister lister;
             lister.setListOnlyAvailable(true);
 
-            ImageListerValueListReceiver receiver;
+            ItemListerValueListReceiver receiver;
 
             if (album->searchType() == DatabaseSearch::HaarSearch)
             {
@@ -194,7 +194,7 @@ public:
             if (!receiver.hasError)
             {
                 // if there were no error, fetch and process the results.
-                foreach (const ImageListerRecord &record, receiver.records)
+                foreach (const ItemListerRecord &record, receiver.records)
                 {
                     ImageInfo imageInfo(record);
                     QUrl imageUrl = imageInfo.fileUrl();

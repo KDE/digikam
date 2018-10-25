@@ -39,7 +39,7 @@
 #include "coredburl.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
-#include "imagelister.h"
+#include "itemlister.h"
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
 #include "dbjobsmanager.h"
@@ -80,7 +80,7 @@ ImageAlbumModel::ImageAlbumModel(QObject* const parent)
     : ImageThumbnailModel(parent),
       d(new Private)
 {
-    qRegisterMetaType<QList<ImageListerRecord>>("QList<ImageListerRecord>");
+    qRegisterMetaType<QList<ItemListerRecord>>("QList<ItemListerRecord>");
 
     d->refreshTimer     = new QTimer(this);
     d->refreshTimer->setSingleShot(true);
@@ -418,8 +418,8 @@ void ImageAlbumModel::startListJob(const QList<Album*>& albums)
     connect(d->jobThread, SIGNAL(finished()),
             this, SLOT(slotResult()));
 
-    connect(d->jobThread, SIGNAL(data(QList<ImageListerRecord>)),
-            this, SLOT(slotData(QList<ImageListerRecord>)));
+    connect(d->jobThread, SIGNAL(data(QList<ItemListerRecord>)),
+            this, SLOT(slotData(QList<ItemListerRecord>)));
 }
 
 void ImageAlbumModel::slotResult()
@@ -447,7 +447,7 @@ void ImageAlbumModel::slotResult()
     finishIncrementalRefresh();
 }
 
-void ImageAlbumModel::slotData(const QList<ImageListerRecord>& records)
+void ImageAlbumModel::slotData(const QList<ItemListerRecord>& records)
 {
     if (d->jobThread != sender())
     {
@@ -466,7 +466,7 @@ void ImageAlbumModel::slotData(const QList<ImageListerRecord>& records)
     {
         QList<QVariant> extraValues;
 
-        foreach (const ImageListerRecord& record, records)
+        foreach (const ItemListerRecord& record, records)
         {
             ImageInfo info(record);
             newItemsList << info;
@@ -498,7 +498,7 @@ void ImageAlbumModel::slotData(const QList<ImageListerRecord>& records)
     }
     else
     {
-        foreach (const ImageListerRecord& record, records)
+        foreach (const ItemListerRecord& record, records)
         {
             ImageInfo info(record);
             newItemsList << info;

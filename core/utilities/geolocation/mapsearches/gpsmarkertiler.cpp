@@ -272,8 +272,8 @@ void GPSMarkerTiler::prepareTiles(const GeoCoordinates& upperLeft, const GeoCoor
     connect(currentJob, SIGNAL(finished()),
             this, SLOT(slotMapImagesJobResult()));
 
-    connect(currentJob, SIGNAL(data(QList<ImageListerRecord>)),
-            this, SLOT(slotMapImagesJobData(QList<ImageListerRecord>)));
+    connect(currentJob, SIGNAL(data(QList<ItemListerRecord>)),
+            this, SLOT(slotMapImagesJobData(QList<ItemListerRecord>)));
 }
 
 /**
@@ -512,7 +512,7 @@ GeoGroupState GPSMarkerTiler::getTileGroupState(const TileIndex& tileIndex)
 /**
  * @brief The marker data is returned from the database in batches. This function takes and unites the batches.
  */
-void GPSMarkerTiler::slotMapImagesJobData(const QList<ImageListerRecord>& records)
+void GPSMarkerTiler::slotMapImagesJobData(const QList<ItemListerRecord>& records)
 {
     if (records.isEmpty())
     {
@@ -536,7 +536,7 @@ void GPSMarkerTiler::slotMapImagesJobData(const QList<ImageListerRecord>& record
         return;
     }
 
-    foreach (const ImageListerRecord &record, records)
+    foreach (const ItemListerRecord &record, records)
     {
         if (record.extraValues.count() < 2)
         {

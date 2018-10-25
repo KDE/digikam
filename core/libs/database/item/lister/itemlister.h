@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_LISTER_H
-#define DIGIKAM_IMAGE_LISTER_H
+#ifndef DIGIKAM_ITEM_LISTER_H
+#define DIGIKAM_ITEM_LISTER_H
 
 // Qt includes
 
@@ -38,20 +38,20 @@
 #include "imageinfolist.h"
 #include "coredbaccess.h"
 #include "coredburl.h"
-#include "imagelisterrecord.h"
-#include "imagelisterreceiver.h"
+#include "itemlisterrecord.h"
+#include "itemlisterreceiver.h"
 #include "dbjobinfo.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT ImageLister
+class DIGIKAM_DATABASE_EXPORT ItemLister
 {
 
 public:
 
-    explicit ImageLister();
-    ~ImageLister();
+    explicit ItemLister();
+    ~ItemLister();
 
     /**
      * Adjust the setting if album or tags will be listed recursively (i.e. including subalbums / subtags)
@@ -65,7 +65,7 @@ public:
     void setListOnlyAvailable(bool listOnlyAvailable);
 
     /**
-     * Allow the binary protocol of ImageListerRecord using an extra value.
+     * Allow the binary protocol of ItemListerRecord using an extra value.
      * Currently used for AreaRand and TagPropertySearch.
      */
     void setAllowExtraValues(bool useExtraValue);
@@ -73,36 +73,36 @@ public:
     /**
      * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
      */
-    void list(ImageListerReceiver* const receiver, const CoreDbUrl& url);
+    void list(ItemListerReceiver* const receiver, const CoreDbUrl& url);
 
     /**
       * List images in the Album (physical album) specified by albumRoot, album.
       * The results will be fed to the specified receiver.
       */
-    void listAlbum(ImageListerReceiver* const receiver, int albumRootId, const QString& album);
+    void listAlbum(ItemListerReceiver* const receiver, int albumRootId, const QString& album);
 
     /**
      * List the images which have assigned the tags specified by tagIds
      * Updated to support multiple tags
      */
-    void listTag(ImageListerReceiver* const receiver, const QList<int>& tagIds);
+    void listTag(ItemListerReceiver* const receiver, const QList<int>& tagIds);
 
     /**
      * List the images which have faces. An image with n faces will be listed n times.
      * FIXME: Obviously an ugly way. Should be trashed later in favor of a better method.
      */
-    void listFaces(ImageListerReceiver* const receiver, int personId);
+    void listFaces(ItemListerReceiver* const receiver, int personId);
 
     /**
       * List those images whose date lies in the range beginning with startDate (inclusive)
       * and ending before endDate (exclusive).
       */
-    void listDateRange(ImageListerReceiver* const receiver, const QDate& startDate, const QDate& endDate);
+    void listDateRange(ItemListerReceiver* const receiver, const QDate& startDate, const QDate& endDate);
 
     /**
      * List the images whose coordinates are between coordinates contained in areaCoordinates(lat1, lat2, lng1, lng2)
      */
-    void listAreaRange(ImageListerReceiver* const receiver, double lat1, double lat2, double lon1, double lon2);
+    void listAreaRange(ItemListerReceiver* const receiver, double lat1, double lat2, double lon1, double lon2);
 
     /**
      * Execute the search specified by search XML
@@ -111,7 +111,7 @@ public:
      * @param limit limit the count of the result set. If limit = 0, then no limit is set.
      * @param referenceImageId the id of a reference image in the search query.
      */
-    void listSearch(ImageListerReceiver* const receiver, const QString& xml, int limit = 0, qlonglong referenceImageId = -1);
+    void listSearch(ItemListerReceiver* const receiver, const QString& xml, int limit = 0, qlonglong referenceImageId = -1);
 
     /**
      * Execute the search specified by search XML describing a Tag Properties search.
@@ -120,14 +120,14 @@ public:
      * @param receiver receiver for the searches
      * @param xml SearchXml describing the query
      */
-    void listImageTagPropertySearch(ImageListerReceiver* const receiver, const QString& xml);
+    void listImageTagPropertySearch(ItemListerReceiver* const receiver, const QString& xml);
 
     /**
      * Execute the search specified by search XML describing a Haar search
      * @param receiver receiver for the searches
      * @param xml SearchXml describing the query
      */
-    void listHaarSearch(ImageListerReceiver* const receiver, const QString& xml);
+    void listHaarSearch(ItemListerReceiver* const receiver, const QString& xml);
 
     QString tagSearchXml(int tagId, const QString& type, bool includeChildTags) const;
 
@@ -138,13 +138,13 @@ private:
      * @param receiver for the searches
      * @param imageSimilarityMap the map of image ids and their similarities in the HAAR search
      */
-    void listFromHaarSearch(ImageListerReceiver* const receiver, const QMap<qlonglong, double>& imageSimilarityMap);
-    void listFromIdList(ImageListerReceiver* const receiver, const QList<qlonglong>& imageIds);
+    void listFromHaarSearch(ItemListerReceiver* const receiver, const QMap<qlonglong, double>& imageSimilarityMap);
+    void listFromIdList(ItemListerReceiver* const receiver, const QList<qlonglong>& imageIds);
     QSet<int> albumRootsToList() const;
 
 private:
 
-    ImageLister(const ImageLister&); // Disable
+    ItemLister(const ItemLister&); // Disable
 
     class Private;
     Private* const d;
@@ -152,4 +152,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_LISTER_H
+#endif // DIGIKAM_ITEM_LISTER_H

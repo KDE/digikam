@@ -43,7 +43,7 @@
 #include "digikam_export.h"
 #include "imageposition.h"
 #include "coredbchangesets.h"
-#include "imagelister.h"
+#include "itemlister.h"
 #include "coredbaccess.h"
 #include "coredb.h"
 #include "imageinfo.h"
@@ -108,7 +108,7 @@ private Q_SLOTS:
 
     /// @todo Do we monitor all signals of the source models?
     void slotMapImagesJobResult();
-    void slotMapImagesJobData(const QList<ImageListerRecord>& records);
+    void slotMapImagesJobData(const QList<ItemListerRecord>& records);
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
     void slotImageChange(const ImageChangeset& changeset);
     void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);

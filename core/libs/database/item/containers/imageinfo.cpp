@@ -45,8 +45,8 @@
 #include "collectionlocation.h"
 #include "imageinfodata.h"
 #include "imageinfocache.h"
-#include "imagelister.h"
-#include "imagelisterrecord.h"
+#include "itemlister.h"
+#include "itemlisterrecord.h"
 #include "imageinfolist.h"
 #include "imagecomments.h"
 #include "imagecopyright.h"
@@ -244,7 +244,7 @@ ImageInfo::ImageInfo()
 {
 }
 
-ImageInfo::ImageInfo(const ImageListerRecord& record)
+ImageInfo::ImageInfo(const ItemListerRecord& record)
 {
     m_data                         = ImageInfoStatic::cache()->infoForId(record.imageID);
 

@@ -40,7 +40,7 @@
 #include "albummanager.h"
 #include "albumtreeview.h"
 #include "coredbconstants.h"
-#include "imagelister.h"
+#include "itemlister.h"
 #include "statesavingobject.h"
 #include "coredbaccess.h"
 #include "coredb.h"
@@ -865,8 +865,8 @@ void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
     connect(d->dbJobThread, SIGNAL(finished()),
             this, SLOT(slotResult()));
 
-    connect(d->dbJobThread, SIGNAL(data(QList<ImageListerRecord>)),
-            this, SLOT(slotData(QList<ImageListerRecord>)));
+    connect(d->dbJobThread, SIGNAL(data(QList<ItemListerRecord>)),
+            this, SLOT(slotData(QList<ItemListerRecord>)));
 }
 
 QString AlbumLabelsSearchHandler::getDefaultTitle() const
@@ -955,14 +955,14 @@ void AlbumLabelsSearchHandler::slotResult()
     }
 }
 
-void AlbumLabelsSearchHandler::slotData(const QList<ImageListerRecord>& data)
+void AlbumLabelsSearchHandler::slotData(const QList<ItemListerRecord>& data)
 {
     if (d->dbJobThread != sender() || data.isEmpty())
         return;
 
     QList<QUrl> urlList;
 
-    foreach (const ImageListerRecord &record, data)
+    foreach (const ItemListerRecord &record, data)
     {
         ImageInfo info(record);
         urlList << info.fileUrl();
