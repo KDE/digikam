@@ -113,11 +113,11 @@ public:
 
 // ---------------------------------------------------------------------------------------
 
-class Q_DECL_HIDDEN lessThanByProximityToSubject
+class Q_DECL_HIDDEN LessThanByProximityToSubject
 {
 public:
 
-    explicit lessThanByProximityToSubject(const ImageInfo& subject);
+    explicit LessThanByProximityToSubject(const ImageInfo& subject);
 
     bool operator()(const ImageInfo& a, const ImageInfo& b);
 

@@ -112,7 +112,7 @@ void ItemScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subje
 {
     if (!list.isEmpty() && !subject.isNull())
     {
-        std::stable_sort(list.begin(), list.end(), lessThanByProximityToSubject(subject));
+        std::stable_sort(list.begin(), list.end(), LessThanByProximityToSubject(subject));
     }
 }
 

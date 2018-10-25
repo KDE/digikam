@@ -45,12 +45,12 @@ ItemScannerCommit::ItemScannerCommit()
 
 // ---------------------------------------------------------------------------------------
 
-lessThanByProximityToSubject::lessThanByProximityToSubject(const ImageInfo& subject)
+LessThanByProximityToSubject::LessThanByProximityToSubject(const ImageInfo& subject)
     : subject(subject)
 {
 }
 
-bool lessThanByProximityToSubject::operator()(const ImageInfo& a, const ImageInfo& b)
+bool LessThanByProximityToSubject::operator()(const ImageInfo& a, const ImageInfo& b)
 {
     if (a.isNull() || b.isNull())
     {
