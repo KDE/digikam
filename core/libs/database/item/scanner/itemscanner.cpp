@@ -61,126 +61,10 @@ ItemScanner::~ItemScanner()
     delete d;
 }
 
-qlonglong ItemScanner::id() const
-{
-    return d->scanInfo.id;
-}
-
 void ItemScanner::setCategory(DatabaseItem::Category category)
 {
     // we don't have the necessary information in this class, but in CollectionScanner
     d->scanInfo.category = category;
-}
-
-void ItemScanner::commit()
-{
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Scanning took" << d->time.restart() << "ms";
-
-    switch (d->commit.operation)
-    {
-        case ItemScannerCommit::NoOp:
-            return;
-        case ItemScannerCommit::AddItem:
-            commitAddImage();
-            break;
-        case ItemScannerCommit::UpdateItem:
-            commitUpdateImage();
-            break;
-    }
-
-    if (d->commit.copyImageAttributesId != -1)
-    {
-        commitCopyImageAttributes();
-        return;
-    }
-
-    if (d->commit.commitImageInformation)
-    {
-        commitImageInformation();
-    }
-
-    if (d->commit.commitImageMetadata)
-    {
-        commitImageMetadata();
-    }
-    else if (d->commit.commitVideoMetadata)
-    {
-        commitVideoMetadata();
-    }
-
-    if (d->commit.commitImagePosition)
-    {
-        commitImagePosition();
-    }
-
-    if (d->commit.commitImageComments)
-    {
-        commitImageComments();
-    }
-
-    if (d->commit.commitImageCopyright)
-    {
-        commitImageCopyright();
-    }
-
-    if (d->commit.commitIPTCCore)
-    {
-        commitIPTCCore();
-    }
-
-    if (!d->commit.tagIds.isEmpty())
-    {
-        commitTags();
-    }
-
-    if (d->commit.commitFaces)
-    {
-        commitFaces();
-    }
-
-    commitImageHistory();
-}
-
-void ItemScanner::newFile(int albumId)
-{
-    loadFromDisk();
-    prepareAddImage(albumId);
-
-    if (!scanFromIdenticalFile())
-    {
-        scanFile(NewScan);
-    }
-}
-
-void ItemScanner::newFileFullScan(int albumId)
-{
-    loadFromDisk();
-    prepareAddImage(albumId);
-    scanFile(NewScan);
-}
-
-void ItemScanner::rescan()
-{
-    loadFromDisk();
-    prepareUpdateImage();
-    scanFile(Rescan);
-}
-
-void ItemScanner::copiedFrom(int albumId, qlonglong srcId)
-{
-    loadFromDisk();
-    prepareAddImage(albumId);
-
-    // first use source, if it exists
-    if (!copyFromSource(srcId))
-    {
-        // check if we can establish identity
-        if (!scanFromIdenticalFile())
-        {
-            // scan newly
-            scanFile(NewScan);
-        }
-    }
 }
 
 const ItemScanInfo& ItemScanner::itemScanInfo() const
@@ -208,39 +92,6 @@ bool ItemScanner::lessThanForIdentity(const ItemScanInfo& a, const ItemScanInfo&
         // Second: sort by modification date, descending
         return a.modificationDate > b.modificationDate;
     }
-}
-
-void ItemScanner::commitCopyImageAttributes()
-{
-    CoreDbAccess().db()->copyImageAttributes(d->commit.copyImageAttributesId, d->scanInfo.id);
-    // Also copy the similarity information
-    SimilarityDbAccess().db()->copySimilarityAttributes(d->commit.copyImageAttributesId, d->scanInfo.id);
-    // Remove grouping for copied or identical images.
-    CoreDbAccess().db()->removeAllImageRelationsFrom(d->scanInfo.id, DatabaseRelation::Grouped);
-    CoreDbAccess().db()->removeAllImageRelationsTo(d->scanInfo.id, DatabaseRelation::Grouped);
-}
-
-bool ItemScanner::copyFromSource(qlonglong srcId)
-{
-    CoreDbAccess access;
-
-    // some basic validity checking
-    if (srcId == d->scanInfo.id)
-    {
-        return false;
-    }
-
-    ItemScanInfo info = access.db()->getItemScanInfo(srcId);
-
-    if (!info.id)
-    {
-        return false;
-    }
-
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Recognized" << d->fileInfo.filePath() << "as copied from" << srcId;
-    d->commit.copyImageAttributesId = srcId;
-
-    return true;
 }
 
 bool ItemScanner::hasValidField(const QVariantList& list)

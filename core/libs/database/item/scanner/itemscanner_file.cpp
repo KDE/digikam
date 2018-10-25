@@ -260,41 +260,6 @@ void ItemScanner::scanFile(ScanMode mode)
     }
 }
 
-void ItemScanner::prepareAddImage(int albumId)
-{
-    d->scanInfo.albumID          = albumId;
-    d->scanInfo.status           = DatabaseItem::Visible;
-
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Adding new item" << d->fileInfo.filePath();
-    d->commit.operation = ItemScannerCommit::AddItem;
-}
-
-void ItemScanner::commitAddImage()
-{
-    // get the image id of a deleted image info if existent and mark it as valid.
-    // otherwise, create a new item.
-    qlonglong imageId = CoreDbAccess().db()->getImageId(-1, d->scanInfo.itemName, DatabaseItem::Status::Trashed,
-                                                         d->scanInfo.category, d->scanInfo.modificationDate,
-                                                         d->scanInfo.fileSize, d->scanInfo.uniqueHash);
-    if (imageId != -1)
-    {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Detected identical image info with id" << imageId
-                                      << "and album id NULL of a removed image for image" << d->scanInfo.itemName;
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Will reuse this image info and set the status to visible and the album id to" << d->scanInfo.albumID;
-
-        d->scanInfo.id = imageId;
-        CoreDbAccess().db()->setItemAlbum(imageId, d->scanInfo.albumID);
-        CoreDbAccess().db()->setItemStatus(imageId, DatabaseItem::Status::Visible);
-    }
-    else
-    {
-        d->scanInfo.id = CoreDbAccess().db()->addItem(d->scanInfo.albumID, d->scanInfo.itemName,
-                                                      d->scanInfo.status, d->scanInfo.category,
-                                                      d->scanInfo.modificationDate, d->scanInfo.fileSize,
-                                                      d->scanInfo.uniqueHash);
-    }
-}
-
 bool ItemScanner::scanFromIdenticalFile()
 {
     // Get a list of other images that are identical. Source image shall not be included.

@@ -107,7 +107,7 @@ private:
 
     static bool hasValidField(const QVariantList& list);
     static bool lessThanForIdentity(const ItemScanInfo& a, const ItemScanInfo& b);
-    
+
     // -----------------------------------------------------------------------------
 
     /** @name Operations with Database
@@ -175,7 +175,7 @@ protected:
     void commitAddImage();
 
     //@}
-    
+
     // -----------------------------------------------------------------------------
 
     /** @name Operations on File Metadata
@@ -224,7 +224,7 @@ protected:
 
     /** @name Operations on Photo Metadata
      */
-    
+
     //@{
 
 public:
