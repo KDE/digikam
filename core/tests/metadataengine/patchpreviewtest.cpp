@@ -69,12 +69,12 @@ void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDi
     }
 
     ret = image.isNull();
-    QVERIFY(ret);
+    QVERIFY(!ret);
 
     QString path = WSToolUtils::makeTemporaryDir("patchpreviewtest").filePath(QFileInfo(file)
                                                  .baseName().trimmed() + QLatin1String(".jpg"));
 
-    ret = path.isNull();
+    ret = !path.isNull();
     QVERIFY(ret);
 
     int imgQualityToApply = 100;
