@@ -62,7 +62,7 @@ void LoadingTask::progressInfo(DImg* const img, float progress)
 
     if (m_loadingTaskStatus == LoadingTaskStatusLoading)
     {
-        if (m_thread->querySendNotifyEvent())
+        if (m_thread && m_thread->querySendNotifyEvent())
         {
             m_thread->loadingProgress(m_loadingDescription, progress);
         }
@@ -357,8 +357,8 @@ void SharedLoadingTask::progressInfo(DImg* const img, float progress)
 
         for (int i = 0 ; i < m_listeners.size() ; ++i)
         {
-            LoadingProcessListener* l  = m_listeners[i];
-            LoadSaveNotifier* notifier = l->loadSaveNotifier();
+            LoadingProcessListener* const l  = m_listeners[i];
+            LoadSaveNotifier* const notifier = l->loadSaveNotifier();
 
             if (notifier && l->querySendNotifyEvent())
             {

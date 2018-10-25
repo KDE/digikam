@@ -66,6 +66,9 @@ public:
     virtual void execute() = 0;
     virtual TaskType type() = 0;
 
+    virtual void progressInfo(DImg* const img, float progress) = 0;
+    virtual bool continueQuery(DImg* const img) = 0;
+
 protected:
 
     LoadSaveThread* m_thread;
