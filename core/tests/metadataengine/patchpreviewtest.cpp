@@ -36,7 +36,7 @@
 #include "wstoolutils.h"
 #include "previewloadthread.h"
 
-QTEST_GUILESS_MAIN(PatchPreviewTest)
+QTEST_MAIN(PatchPreviewTest)
 
 using namespace Digikam;
 
