@@ -20,7 +20,7 @@ macro(METADATA_TESTS_BUILD)
 
     set(_filename ${ARGV0})
     string(REPLACE "." ";" _temp ${_filename})
-    list(GET _temp 0 _target) 
+    list(GET _temp 0 _target)
 
     set(${_target}_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/${_target}.cpp)
 
@@ -83,6 +83,18 @@ add_test(commentReadWriteTest commentReadWriteTest)
 ecm_mark_as_test(commentReadWriteTest)
 
 target_link_libraries(commentReadWriteTest
+                      digikamcore
+                      Qt5::Core
+                      Qt5::Test
+                      KF5::I18n
+)
+
+set(testPatchPreview_SRCS patchpreviewtest.cpp)
+add_executable(patchPreviewTest ${testPatchPreview_SRCS})
+add_test(patchPreviewTest patchPreviewTest)
+ecm_mark_as_test(patchPreviewTest)
+
+target_link_libraries(patchPreviewTest
                       digikamcore
                       Qt5::Core
                       Qt5::Test
