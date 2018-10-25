@@ -29,6 +29,7 @@
 #include <QDebug>
 #include <QTest>
 #include <QImage>
+#include <QByteArray>
 
 // Local includes
 
@@ -74,6 +75,8 @@ void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDi
     QString path = WSToolUtils::makeTemporaryDir("patchpreviewtest").filePath(QFileInfo(file)
                                                  .baseName().trimmed() + QLatin1String(".jpg"));
 
+    qDebug() << "Temporary target file:" << path;
+
     ret = !path.isNull();
     QVERIFY(ret);
 
@@ -94,9 +97,17 @@ void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDi
     ret = meta.load(file);
     QVERIFY(ret);
 
+    QByteArray exif = meta.getExifEncoded();
+    QByteArray iptc = meta.getIptc();
+    QByteArray xmp  = meta.getXmp();
+
+    meta.load(path);
+    meta.setExif(exif);
+    meta.setIptc(iptc);
+    meta.setXmp(xmp);
     meta.setImageDimensions(image.size());
     meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
     meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-    ret = meta.save(path, true);
+    ret = meta.applyChanges(true);
     QVERIFY(ret);
 }
