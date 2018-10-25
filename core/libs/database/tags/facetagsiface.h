@@ -128,7 +128,7 @@ public:
     QVariant toVariant() const;
 
     /**
-     * Create a FaceTagsIface from the extraValues returned from ImageLister.
+     * Create a FaceTagsIface from the extraValues returned from ItemLister.
      */
     static FaceTagsIface fromListing(qlonglong imageid, const QList<QVariant>& values);
 

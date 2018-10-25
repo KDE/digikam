@@ -4,10 +4,11 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-20
- * Description : Data set for image lister
+ * Description : Data set for item lister
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_LISTER_RECORD_H
-#define DIGIKAM_IMAGE_LISTER_RECORD_H
+#ifndef DIGIKAM_ITEM_LISTER_RECORD_H
+#define DIGIKAM_ITEM_LISTER_RECORD_H
 
 // Qt includes
 
@@ -31,6 +32,8 @@
 #include <QDataStream>
 #include <QDateTime>
 #include <QSize>
+#include <QList>
+#include <QVariant>
 
 // Local includes
 
@@ -40,7 +43,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT ImageListerRecord
+class DIGIKAM_DATABASE_EXPORT ItemListerRecord
 {
 
 public:
@@ -59,23 +62,9 @@ public:
 
 public:
 
-    explicit ImageListerRecord(BinaryFormat format = TraditionalFormat)
-        : binaryFormat(format)
-    {
-        imageID                          = -1;
-        albumID                          = -1;
-        albumRootID                      = -1;
-        rating                           = -1;
-        fileSize                         = -1;
-        currentSimilarity                = 0.0;
-        category                         = DatabaseItem::UndefinedCategory;
-        currentFuzzySearchReferenceImage = -1;
-    }
+    explicit ItemListerRecord(BinaryFormat format = TraditionalFormat);
 
-    bool operator==(const ImageListerRecord& record) const
-    {
-        return this->imageID == record.imageID;
-    }
+    bool operator==(const ItemListerRecord& record) const;
 
 public:
 
@@ -102,24 +91,11 @@ public:
     QList<QVariant>        extraValues;
 
     BinaryFormat           binaryFormat;
-
-public:
-    
-    /** Initializes the beginning of a data packet. For later check with checkStream().
-     */
-    static void initializeStream(ImageListerRecord::BinaryFormat format, QDataStream& ds);
-
-    /**
-     * Checks that the data accessible through the stream complies with
-     * the given protocol.
-     * Note: No check is possible for the TraditionalFormat, always returns true.
-     */
-    static bool checkStream(ImageListerRecord::BinaryFormat format, QDataStream& data);
 };
 
-DIGIKAM_DATABASE_EXPORT QDataStream& operator<<(QDataStream& os, const ImageListerRecord& record);
-DIGIKAM_DATABASE_EXPORT QDataStream& operator>>(QDataStream& ds, ImageListerRecord& record);
+DIGIKAM_DATABASE_EXPORT QDataStream& operator<<(QDataStream& os, const ItemListerRecord& record);
+DIGIKAM_DATABASE_EXPORT QDataStream& operator>>(QDataStream& ds, ItemListerRecord& record);
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_LISTER_RECORD_H
+#endif // DIGIKAM_ITEM_LISTER_RECORD_H

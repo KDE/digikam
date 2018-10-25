@@ -30,7 +30,7 @@
 #include "dbjobinfo.h"
 #include "dbjob.h"
 #include "haariface.h"
-#include "imagelisterrecord.h"
+#include "itemlisterrecord.h"
 #include "actionthreadbase.h"
 #include "digikam_export.h"
 
@@ -79,7 +79,7 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     void finished();
-    void data(const QList<ImageListerRecord>& records);
+    void data(const QList<ItemListerRecord>& records);
 
 private:
 

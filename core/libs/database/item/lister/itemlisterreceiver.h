@@ -4,11 +4,12 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-20
- * Description : Simple virtual interface for ImageLister
+ * Description : Simple virtual interface for ItemLister
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2015      by Mohamed_Anwer <m_dot_anwer at gmx dot com>
+ * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_LISTER_RECEIVER_H
-#define DIGIKAM_IMAGE_LISTER_RECEIVER_H
+#ifndef DIGIKAM_ITEM_LISTER_RECEIVER_H
+#define DIGIKAM_ITEM_LISTER_RECEIVER_H
 
 // Qt includes
 
@@ -34,48 +35,49 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "imagelisterrecord.h"
+#include "itemlisterrecord.h"
 #include "dbjob.h"
 
 namespace Digikam
 {
 
 //TODO: Docs
-class DIGIKAM_DATABASE_EXPORT ImageListerReceiver
+class DIGIKAM_DATABASE_EXPORT ItemListerReceiver
 {
 
 public:
 
-    virtual ~ImageListerReceiver() {};
-    virtual void receive(const ImageListerRecord& record) = 0;
+    virtual ~ItemListerReceiver() {};
+    virtual void receive(const ItemListerRecord& record) = 0;
     virtual void error(const QString& /*errMsg*/) {};
 };
 
 // ------------------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageListerValueListReceiver
-    : public ImageListerReceiver
+class DIGIKAM_DATABASE_EXPORT ItemListerValueListReceiver
+    : public ItemListerReceiver
 {
 
 public:
 
-    explicit ImageListerValueListReceiver();
+    explicit ItemListerValueListReceiver();
 
-    QList<ImageListerRecord> records;
+    QList<ItemListerRecord> records;
     bool                     hasError;
 
-    virtual void receive(const ImageListerRecord& record);
+    virtual void receive(const ItemListerRecord& record);
     virtual void error(const QString& errMsg);
 };
 
 // ------------------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageListerJobReceiver : public ImageListerValueListReceiver
+class DIGIKAM_DATABASE_EXPORT ItemListerJobReceiver
+    : public ItemListerValueListReceiver
 {
 
 public:
 
-    explicit ImageListerJobReceiver(DBJob* const job);
+    explicit ItemListerJobReceiver(DBJob* const job);
     virtual void error(const QString& errMsg);
     void sendData();
 
@@ -86,13 +88,14 @@ protected:
 
 // ------------------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageListerJobPartsSendingReceiver : public ImageListerJobReceiver
+class DIGIKAM_DATABASE_EXPORT ItemListerJobPartsSendingReceiver
+    : public ItemListerJobReceiver
 {
 
 public:
 
-    explicit ImageListerJobPartsSendingReceiver(DBJob* const job, int limit);
-    virtual void receive(const ImageListerRecord &record);
+    explicit ItemListerJobPartsSendingReceiver(DBJob* const job, int limit);
+    virtual void receive(const ItemListerRecord &record);
 
 protected:
 
@@ -102,14 +105,14 @@ protected:
 
 // ------------------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageListerJobGrowingPartsSendingReceiver
-    : public ImageListerJobPartsSendingReceiver
+class DIGIKAM_DATABASE_EXPORT ItemListerJobGrowingPartsSendingReceiver
+    : public ItemListerJobPartsSendingReceiver
 {
 
 public:
 
-    explicit ImageListerJobGrowingPartsSendingReceiver(DBJob* const job, int start, int end, int increment);
-    virtual void receive(const ImageListerRecord& record);
+    explicit ItemListerJobGrowingPartsSendingReceiver(DBJob* const job, int start, int end, int increment);
+    virtual void receive(const ItemListerRecord& record);
 
 protected:
 
@@ -119,4 +122,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_LISTER_RECEIVER_H
+#endif // DIGIKAM_ITEM_LISTER_RECEIVER_H

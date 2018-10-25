@@ -33,7 +33,7 @@
 
 #include "digikam_debug.h"
 #include "album.h"
-#include "imagelister.h"
+#include "itemlister.h"
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
 #include "dbjobsmanager.h"
@@ -120,8 +120,8 @@ void ImageInfoJob::allItemsFromAlbum(Album* const album)
     connect(d->jobThread, SIGNAL(finished()),
             this, SLOT(slotResult()));
 
-    connect(d->jobThread, SIGNAL(data(QList<ImageListerRecord>)),
-            this, SLOT(slotData(QList<ImageListerRecord>)));
+    connect(d->jobThread, SIGNAL(data(QList<ItemListerRecord>)),
+            this, SLOT(slotData(QList<ItemListerRecord>)));
 }
 
 void ImageInfoJob::stop()
@@ -159,7 +159,7 @@ void ImageInfoJob::slotResult()
     emit signalCompleted();
 }
 
-void ImageInfoJob::slotData(const QList<ImageListerRecord>& records)
+void ImageInfoJob::slotData(const QList<ItemListerRecord>& records)
 {
     if (records.isEmpty())
     {
@@ -168,7 +168,7 @@ void ImageInfoJob::slotData(const QList<ImageListerRecord>& records)
 
     ImageInfoList itemsList;
 
-    foreach(const ImageListerRecord& record, records)
+    foreach(const ItemListerRecord& record, records)
     {
         ImageInfo info(record);
         itemsList.append(info);

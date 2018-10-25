@@ -66,7 +66,7 @@
 #include "findduplicatesview.h"
 #include "haariface.h"
 #include "imageinfo.h"
-#include "imagelister.h"
+#include "itemlister.h"
 #include "searchmodificationhelper.h"
 #include "searchtextbar.h"
 #include "coredbsearchxml.h"

@@ -104,8 +104,9 @@ set(libdatabase_SRCS
     item/containers/imagecopyright.cpp
     item/containers/imagetagpair.cpp
 
-    item/lister/imagelister.cpp
-    item/lister/imagelisterreceiver.cpp
+    item/lister/itemlister.cpp
+    item/lister/itemlisterrecord.cpp
+    item/lister/itemlisterreceiver.cpp
     item/lister/itemattributeswatch.cpp
 
     item/query/itemquerybuilder.cpp

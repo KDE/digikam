@@ -34,7 +34,7 @@
 #include "coredbconstants.h"
 #include "album.h"
 #include "statesavingobject.h"
-#include "imagelisterrecord.h"
+#include "itemlisterrecord.h"
 
 namespace Digikam
 {
@@ -231,7 +231,7 @@ private Q_SLOTS:
     void slotCheckStateChanged();
     void slotSetCurrentAlbum();
     void slotResult();
-    void slotData(const QList<ImageListerRecord>& data);
+    void slotData(const QList<ItemListerRecord>& data);
 
 Q_SIGNALS:
 

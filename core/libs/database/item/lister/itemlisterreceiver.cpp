@@ -4,8 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-20
- * Description : Simple virtual interface for ImageLister
+ * Description : Simple virtual interface for ItemLister
  *
+ * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2015      by Mohamed_Anwer <m_dot_anwer at gmx dot com>
  *
@@ -22,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "imagelisterreceiver.h"
+#include "itemlisterreceiver.h"
 
 // Qt includes
 
@@ -31,53 +32,53 @@
 namespace Digikam
 {
 
-ImageListerValueListReceiver::ImageListerValueListReceiver()
+ItemListerValueListReceiver::ItemListerValueListReceiver()
     : hasError(false)
 {
 }
 
-void ImageListerValueListReceiver::error(const QString&)
+void ItemListerValueListReceiver::error(const QString&)
 {
     hasError = true;
 }
 
-void ImageListerValueListReceiver::receive(const ImageListerRecord& record)
+void ItemListerValueListReceiver::receive(const ItemListerRecord& record)
 {
     records << record;
 }
 
 // ----------------------------------------------
 
-ImageListerJobReceiver::ImageListerJobReceiver(DBJob* const job)
+ItemListerJobReceiver::ItemListerJobReceiver(DBJob* const job)
     : m_job(job)
 {
 }
 
-void ImageListerJobReceiver::sendData()
+void ItemListerJobReceiver::sendData()
 {
     emit m_job->data(records);
 
     records.clear();
 }
 
-void ImageListerJobReceiver::error(const QString& errMsg)
+void ItemListerJobReceiver::error(const QString& errMsg)
 {
     m_job->error(errMsg);
-    ImageListerValueListReceiver::error(errMsg);
+    ItemListerValueListReceiver::error(errMsg);
 }
 
 // ----------------------------------------------
 
-ImageListerJobPartsSendingReceiver::ImageListerJobPartsSendingReceiver(DBJob* const job, int limit)
-    : ImageListerJobReceiver(job), m_limit(limit), m_count(0)
+ItemListerJobPartsSendingReceiver::ItemListerJobPartsSendingReceiver(DBJob* const job, int limit)
+    : ItemListerJobReceiver(job), m_limit(limit), m_count(0)
 {
 
 }
 
-void ImageListerJobPartsSendingReceiver::receive(const ImageListerRecord &record)
+void ItemListerJobPartsSendingReceiver::receive(const ItemListerRecord &record)
 {
 
-    ImageListerJobReceiver::receive(record);
+    ItemListerJobReceiver::receive(record);
 
     if (++m_count > m_limit)
     {
@@ -88,16 +89,16 @@ void ImageListerJobPartsSendingReceiver::receive(const ImageListerRecord &record
 
 // ----------------------------------------------
 
-ImageListerJobGrowingPartsSendingReceiver::
-    ImageListerJobGrowingPartsSendingReceiver(DBJob* const job, int start, int end, int increment)
-    : ImageListerJobPartsSendingReceiver(job, start),
+ItemListerJobGrowingPartsSendingReceiver::
+    ItemListerJobGrowingPartsSendingReceiver(DBJob* const job, int start, int end, int increment)
+    : ItemListerJobPartsSendingReceiver(job, start),
       m_maxLimit(end), m_increment(increment)
 {
 }
 
-void ImageListerJobGrowingPartsSendingReceiver::receive(const ImageListerRecord& record)
+void ItemListerJobGrowingPartsSendingReceiver::receive(const ItemListerRecord& record)
 {
-    ImageListerJobPartsSendingReceiver::receive(record);
+    ItemListerJobPartsSendingReceiver::receive(record);
     // limit was reached?
     if (m_count == 0)
     {

@@ -315,7 +315,7 @@ void DigikamImageView::setFaceMode(bool on)
 
     if (on)
     {
-        // See ImageLister, which creates a search the implements listing tag in the ioslave
+        // See ItemLister, which creates a search the implements listing tag in the ioslave
         imageAlbumModel()->setSpecialTagListing(QLatin1String("faces"));
         setItemDelegate(d->faceDelegate);
         // grouping is not very much compatible with faces

@@ -42,7 +42,7 @@
 #include "coredbalbuminfo.h"
 #include "dbengineparameters.h"
 #include "digikam_export.h"
-#include "imagelisterrecord.h"
+#include "itemlisterrecord.h"
 
 namespace Digikam
 {

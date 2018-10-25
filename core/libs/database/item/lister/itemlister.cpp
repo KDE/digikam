@@ -10,7 +10,7 @@
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2015      by Mohamed_Anwer <m_dot_anwer at gmx dot com>
- * Copyright (C)      2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
+ * Copyright (C) 2018      by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "imagelister.h"
+#include "itemlister.h"
 
 // C++ includes
 
@@ -68,7 +68,7 @@ namespace Digikam
 /**
  * Used by QSet
  */
-inline uint qHash(const ImageListerRecord& key)
+inline uint qHash(const ItemListerRecord& key)
 {
     return key.imageID;
 }
@@ -90,7 +90,7 @@ static inline int toInt32BitSafe(const QList<QVariant>::const_iterator& it)
 
 // ---------------------------------------------------------------------------------
 
-class Q_DECL_HIDDEN ImageLister::Private
+class Q_DECL_HIDDEN ItemLister::Private
 {
 
 public:
@@ -107,32 +107,32 @@ public:
     bool allowExtraValues;
 };
 
-ImageLister::ImageLister()
+ItemLister::ItemLister()
     : d(new Private)
 {
 }
 
-ImageLister::~ImageLister()
+ItemLister::~ItemLister()
 {
     delete d;
 }
 
-void ImageLister::setRecursive(bool recursive)
+void ItemLister::setRecursive(bool recursive)
 {
     d->recursive = recursive;
 }
 
-void ImageLister::setListOnlyAvailable(bool listOnlyAvailable)
+void ItemLister::setListOnlyAvailable(bool listOnlyAvailable)
 {
     d->listOnlyAvailableImages = listOnlyAvailable;
 }
 
-void ImageLister::setAllowExtraValues(bool useExtraValue)
+void ItemLister::setAllowExtraValues(bool useExtraValue)
 {
     d->allowExtraValues = useExtraValue;
 }
 
-void ImageLister::list(ImageListerReceiver* const receiver, const CoreDbUrl& url)
+void ItemLister::list(ItemListerReceiver* const receiver, const CoreDbUrl& url)
 {
     if (url.isAlbumUrl())
     {
@@ -157,7 +157,7 @@ void ImageLister::list(ImageListerReceiver* const receiver, const CoreDbUrl& url
     }
 }
 
-void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId, const QString& album)
+void ItemLister::listAlbum(ItemListerReceiver* const receiver, int albumRootId, const QString& album)
 {
     if (d->listOnlyAvailableImages)
     {
@@ -238,7 +238,7 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
-        ImageListerRecord record;
+        ItemListerRecord record;
         record.imageID           = (*it).toLongLong();
         ++it;
         record.name              = (*it).toString();
@@ -270,9 +270,9 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
     }
 }
 
-void ImageLister::listTag(ImageListerReceiver* const receiver, const QList<int>& tagIds)
+void ItemLister::listTag(ItemListerReceiver* const receiver, const QList<int>& tagIds)
 {
-    QSet<ImageListerRecord> records;
+    QSet<ItemListerRecord> records;
     QList<int>::const_iterator it;
 
     for (it = tagIds.constBegin() ; it != tagIds.constEnd() ; ++it)
@@ -299,7 +299,7 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, const QList<int>&
 
         for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
         {
-            ImageListerRecord record;
+            ItemListerRecord record;
 
             record.imageID           = (*it).toLongLong();
             ++it;
@@ -337,14 +337,14 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, const QList<int>&
         }
     }
 
-    for (QSet<ImageListerRecord>::iterator it = records.begin() ; it != records.end() ; ++it)
+    for (QSet<ItemListerRecord>::iterator it = records.begin() ; it != records.end() ; ++it)
     {
         receiver->receive(*it);
     }
 
 }
 
-void ImageLister::listFaces(ImageListerReceiver* const receiver, int personId)
+void ItemLister::listFaces(ItemListerReceiver* const receiver, int personId)
 {
     QList<qlonglong> list;
     QList<QVariant>  values;
@@ -380,7 +380,7 @@ void ImageLister::listFaces(ImageListerReceiver* const receiver, int personId)
     listFromIdList(receiver, list);
 }
 
-void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate& startDate, const QDate& endDate)
+void ItemLister::listDateRange(ItemListerReceiver* const receiver, const QDate& startDate, const QDate& endDate)
 {
     QList<QVariant> values;
 
@@ -409,7 +409,7 @@ void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate
 
     for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
-        ImageListerRecord record;
+        ItemListerRecord record;
 
         record.imageID           = (*it).toLongLong();
         ++it;
@@ -447,7 +447,7 @@ void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate
     }
 }
 
-void ImageLister::listAreaRange(ImageListerReceiver* const receiver, double lat1, double lat2, double lon1, double lon2)
+void ItemLister::listAreaRange(ItemListerReceiver* const receiver, double lat1, double lat2, double lon1, double lon2)
 {
     QList<QVariant> values;
     QList<QVariant> boundValues;
@@ -478,7 +478,7 @@ void ImageLister::listAreaRange(ImageListerReceiver* const receiver, double lat1
 
     for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
-        ImageListerRecord record(d->allowExtraValues ? ImageListerRecord::ExtraValueFormat : ImageListerRecord::TraditionalFormat);
+        ItemListerRecord record(d->allowExtraValues ? ItemListerRecord::ExtraValueFormat : ItemListerRecord::TraditionalFormat);
 
         record.imageID           = (*it).toLongLong();
         ++it;
@@ -505,7 +505,7 @@ void ImageLister::listAreaRange(ImageListerReceiver* const receiver, double lat1
     }
 }
 
-void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString& xml, int limit, qlonglong referenceImageId)
+void ItemLister::listSearch(ItemListerReceiver* const receiver, const QString& xml, int limit, qlonglong referenceImageId)
 {
     if (xml.isEmpty())
     {
@@ -578,7 +578,7 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
 
     for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
-        ImageListerRecord record;
+        ItemListerRecord record;
 
         record.imageID           = (*it).toLongLong();
         ++it;
@@ -635,7 +635,7 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
     }
 }
 
-void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver, const QString& xml)
+void ItemLister::listImageTagPropertySearch(ItemListerReceiver* const receiver, const QString& xml)
 {
     if (xml.isEmpty())
     {
@@ -699,7 +699,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
 
     for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
-        ImageListerRecord record(d->allowExtraValues ? ImageListerRecord::ExtraValueFormat : ImageListerRecord::TraditionalFormat);
+        ItemListerRecord record(d->allowExtraValues ? ItemListerRecord::ExtraValueFormat : ItemListerRecord::TraditionalFormat);
 
         record.imageID           = (*it).toLongLong();
         ++it;
@@ -763,7 +763,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
     }
 }
 
-void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QString& xml)
+void ItemLister::listHaarSearch(ItemListerReceiver* const receiver, const QString& xml)
 {
     //qCDebug(DIGIKAM_GENERAL_LOG) << "Query: " << xml;
     // ------------------------------------------------
@@ -876,7 +876,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
     listFromHaarSearch(receiver, imageSimilarityMap);
 }
 
-void ImageLister::listFromHaarSearch(ImageListerReceiver* const receiver, const QMap<qlonglong,double>& imageSimilarityMap)
+void ItemLister::listFromHaarSearch(ItemListerReceiver* const receiver, const QMap<qlonglong,double>& imageSimilarityMap)
 {
     QList<QVariant> values;
     QString         errMsg;
@@ -934,7 +934,7 @@ void ImageLister::listFromHaarSearch(ImageListerReceiver* const receiver, const 
 
     for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
-        ImageListerRecord record;
+        ItemListerRecord record;
 
         record.imageID           = (*it).toLongLong();
         ++it;
@@ -970,7 +970,7 @@ void ImageLister::listFromHaarSearch(ImageListerReceiver* const receiver, const 
     }
 }
 
-void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QList<qlonglong>& imageIds)
+void ItemLister::listFromIdList(ItemListerReceiver* const receiver, const QList<qlonglong>& imageIds)
 {
     QList<QVariant> values;
     QString         errMsg;
@@ -1039,7 +1039,7 @@ void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QLis
 
     for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
-        ImageListerRecord record;
+        ItemListerRecord record;
 
         record.imageID           = (*it).toLongLong();
         ++it;
@@ -1072,7 +1072,7 @@ void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QLis
     }
 }
 
-QSet<int> ImageLister::albumRootsToList() const
+QSet<int> ItemLister::albumRootsToList() const
 {
     if (!d->listOnlyAvailableImages)
     {
@@ -1090,7 +1090,7 @@ QSet<int> ImageLister::albumRootsToList() const
     return ids;
 }
 
-QString ImageLister::tagSearchXml(int tagId, const QString& type, bool includeChildTags) const
+QString ItemLister::tagSearchXml(int tagId, const QString& type, bool includeChildTags) const
 {
     if (type == QLatin1String("faces"))
     {

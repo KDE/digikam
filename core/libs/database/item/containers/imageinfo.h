@@ -54,7 +54,7 @@ class ImageCommonContainer;
 class ImageCopyright;
 class ImageExtendedProperties;
 class ImageInfoData;
-class ImageListerRecord;
+class ItemListerRecord;
 class ImageMetadataContainer;
 class VideoMetadataContainer;
 class ImagePosition;
@@ -89,7 +89,7 @@ public:
      * Constructor. Creates an ImageInfo object where the provided information
      * will initially be available cached, without database access.
      */
-    explicit ImageInfo(const ImageListerRecord& record);
+    explicit ImageInfo(const ItemListerRecord& record);
 
     ImageInfo(const ImageInfo& info);
 
