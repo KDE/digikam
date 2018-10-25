@@ -134,7 +134,6 @@ public:
      */
     void copiedFrom(int albumId, qlonglong srcId);
 
-
     /**
      * Provides access to the information retrieved by scanning.
      * The validity depends on the previously executed scan.
@@ -167,23 +166,89 @@ public:
      */
     static QString formatToString(const QString& format);
 
-
-    /**
-     * @brief scanBalooInfo - retrieve tags, comments and rating from Baloo
-     */
-    void scanBalooInfo();
-
     /**
      * Returns File-metadata container with user-presentable information.
      * These methods provide the reverse service: Not writing into the db, but reading from the db.
      */
     static void fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container);
 
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations on Photo Metadata
+     */
+
+    //@{
+
+public:
+
+    /**
+     * Returns Photo-metadata container with user-presentable information.
+     * These methods provide the reverse service: Not writing into the db, but reading from the db.
+     */
+    static void fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* const container);
+
+    /**
+     * Helper method to return official property name by which
+     * IPTC core properties are stored in the database (ImageCopyright and ImageProperties table).
+     * Allowed arguments: All MetadataInfo::Fields starting with "IptcCore..."
+     */
+    static QString iptcCorePropertyName(MetadataInfo::Field field);
+
     static MetadataFields allImageMetadataFields();
+
+protected:
+
+    QString detectImageFormat() const;
+
+    void scanImageMetadata();
+    void commitImageMetadata();
+    void scanImagePosition();
+    void commitImagePosition();
+    void scanImageComments();
+    void commitImageComments();
+    void scanImageCopyright();
+    void commitImageCopyright();
+    void scanIPTCCore();
+    void commitIPTCCore();
+    void scanTags();
+    void commitTags();
+    void scanFaces();
+    void commitFaces();
+
+    bool checkRatingFromMetadata(const QVariant& ratingFromMetadata) const;
+    void checkCreationDateFromMetadata(QVariant& dateFromMetadata)   const;
+
+    //@}
 
     // -----------------------------------------------------------------------------
 
-    /** @name Operations on Item History
+    /** @name Operations on Video Metadata
+     */
+
+    //@{
+
+public:
+
+    /**
+     * Returns Video container with user-presentable information.
+     * These methods provide the reverse service: Not writing into the db, but reading from the db.
+     */
+    static void fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* const container);
+
+protected:
+
+    void scanVideoInformation();
+    void scanVideoMetadata();
+    void commitVideoMetadata();
+    QString detectVideoFormat() const;
+    QString detectAudioFormat() const;
+    static MetadataFields allVideoMetadataFields();
+
+    //@}
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations on History Metadata
      */
 
     //@{
@@ -242,77 +307,12 @@ protected:
 
     //@}
 
-    // -----------------------------------------------------------------------------
-
-    /** @name Operations on Video Metadata
-     */
-
-    //@{
-
 public:
 
     /**
-     * Returns Video container with user-presentable information.
-     * These methods provide the reverse service: Not writing into the db, but reading from the db.
+     * @brief scanBalooInfo - retrieve tags, comments and rating from Baloo Desktop service.
      */
-    static void fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* const container);
-
-protected:
-
-    void scanVideoInformation();
-    void scanVideoMetadata();
-    void commitVideoMetadata();
-    QString detectVideoFormat() const;
-    QString detectAudioFormat() const;
-    static MetadataFields allVideoMetadataFields();
-
-    //@}
-
-    // -----------------------------------------------------------------------------
-
-    /** @name Operations on Photo Metadata
-     */
-
-    //@{
-
-public:
-
-    /**
-     * Returns Photo-metadata container with user-presentable information.
-     * These methods provide the reverse service: Not writing into the db, but reading from the db.
-     */
-    static void fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* const container);
-
-    /**
-     * Helper method to return official property name by which
-     * IPTC core properties are stored in the database (ImageCopyright and ImageProperties table).
-     * Allowed arguments: All MetadataInfo::Fields starting with "IptcCore..."
-     */
-    static QString iptcCorePropertyName(MetadataInfo::Field field);
-
-protected:
-
-    QString detectImageFormat() const;
-
-    void scanImageMetadata();
-    void commitImageMetadata();
-    void scanImagePosition();
-    void commitImagePosition();
-    void scanImageComments();
-    void commitImageComments();
-    void scanImageCopyright();
-    void commitImageCopyright();
-    void scanIPTCCore();
-    void commitIPTCCore();
-    void scanTags();
-    void commitTags();
-    void scanFaces();
-    void commitFaces();
-
-    bool checkRatingFromMetadata(const QVariant& ratingFromMetadata) const;
-    void checkCreationDateFromMetadata(QVariant& dateFromMetadata)   const;
-
-    //@}
+    void scanBalooInfo();
 
 protected:
 
