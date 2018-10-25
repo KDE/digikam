@@ -88,8 +88,6 @@ public:
      */
     const ItemScanInfo& itemScanInfo() const;
 
-    bool lessThanForIdentity(const ItemScanInfo& a, const ItemScanInfo& b);
-    
     /**
      * Loads data from disk (metadata, image file properties).
      * This method is called from any of the main entry points above.
@@ -106,8 +104,10 @@ public:
 private:
 
     ItemScanner(const ItemScanner&); // Disable
-    static bool hasValidField(const QVariantList& list);
 
+    static bool hasValidField(const QVariantList& list);
+    static bool lessThanForIdentity(const ItemScanInfo& a, const ItemScanInfo& b);
+    
     // -----------------------------------------------------------------------------
 
     /** @name Operations with Database
