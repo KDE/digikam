@@ -488,29 +488,6 @@ bool ItemScanner::hasValidField(const QVariantList& list)
     return false;
 }
 
-MetadataFields ItemScanner::allImageMetadataFields()
-{
-    // This list must reflect the order required by CoreDB::addImageMetadata
-    MetadataFields fields;
-    fields << MetadataInfo::Make
-           << MetadataInfo::Model
-           << MetadataInfo::Lens
-           << MetadataInfo::Aperture
-           << MetadataInfo::FocalLength
-           << MetadataInfo::FocalLengthIn35mm
-           << MetadataInfo::ExposureTime
-           << MetadataInfo::ExposureProgram
-           << MetadataInfo::ExposureMode
-           << MetadataInfo::Sensitivity
-           << MetadataInfo::FlashMode
-           << MetadataInfo::WhiteBalance
-           << MetadataInfo::WhiteBalanceColorTemperature
-           << MetadataInfo::MeteringMode
-           << MetadataInfo::SubjectDistance
-           << MetadataInfo::SubjectDistanceCategory;
-    return fields;
-}
-
 void ItemScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subject)
 {
     if (!list.isEmpty() && !subject.isNull())

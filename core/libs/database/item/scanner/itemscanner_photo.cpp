@@ -518,4 +518,27 @@ bool ItemScanner::checkRatingFromMetadata(const QVariant& ratingFromMetadata) co
     return true;
 }
 
+MetadataFields ItemScanner::allImageMetadataFields()
+{
+    // This list must reflect the order required by CoreDB::addImageMetadata
+    MetadataFields fields;
+    fields << MetadataInfo::Make
+           << MetadataInfo::Model
+           << MetadataInfo::Lens
+           << MetadataInfo::Aperture
+           << MetadataInfo::FocalLength
+           << MetadataInfo::FocalLengthIn35mm
+           << MetadataInfo::ExposureTime
+           << MetadataInfo::ExposureProgram
+           << MetadataInfo::ExposureMode
+           << MetadataInfo::Sensitivity
+           << MetadataInfo::FlashMode
+           << MetadataInfo::WhiteBalance
+           << MetadataInfo::WhiteBalanceColorTemperature
+           << MetadataInfo::MeteringMode
+           << MetadataInfo::SubjectDistance
+           << MetadataInfo::SubjectDistanceCategory;
+    return fields;
+}
+
 } // namespace Digikam

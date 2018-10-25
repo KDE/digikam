@@ -75,6 +75,8 @@ public:
 
     ~ItemScanner();
 
+    // -----------------------------------------------------------------------------
+
     /**
      * Commits the scanned information to the database.
      * You must call this after scanning was done for any changes to take effect.
@@ -149,12 +151,6 @@ public:
     void loadFromDisk();
 
     /**
-     * Returns a suitable creation date from file system information.
-     * Use this as a fallback if metadata is not available.
-     */
-    static QDateTime creationDateFromFilesystem(const QFileInfo& info);
-
-    /**
      * Sort a list of infos by proximity to the given subject.
      * Infos are near if they are e.g. in the same album.
      * They are not near if they are e.g. in different collections.
@@ -166,11 +162,33 @@ public:
      */
     static QString formatToString(const QString& format);
 
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations on File Metadata
+     */
+
+    //@{
+
+public:
+
     /**
      * Returns File-metadata container with user-presentable information.
      * These methods provide the reverse service: Not writing into the db, but reading from the db.
      */
     static void fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container);
+
+    /**
+     * Returns a suitable creation date from file system information.
+     * Use this as a fallback if metadata is not available.
+     */
+    static QDateTime creationDateFromFilesystem(const QFileInfo& info);
+
+protected:
+
+    void scanImageInformation();
+    void commitImageInformation();
+
+    //@}
 
     // -----------------------------------------------------------------------------
 
@@ -326,9 +344,6 @@ protected:
     void commitUpdateImage();
 
     void scanFile(ScanMode mode);
-
-    void scanImageInformation();
-    void commitImageInformation();
 
 private:
 
