@@ -132,14 +132,14 @@ void ItemLister::setAllowExtraValues(bool useExtraValue)
     d->allowExtraValues = useExtraValue;
 }
 
-void ItemLister::list(ItemListerReceiver* const receiver, const CoreDbUrl& url)
+void ItemLister::listAlbum(ItemListerReceiver* const receiver, const CoreDbUrl& url)
 {
     if (url.isAlbumUrl())
     {
         int albumRootId = url.albumRootId();
         QString album   = url.album();
 
-        listAlbum(receiver, albumRootId, album);
+        listPAlbum(receiver, albumRootId, album);
     }
     else if (url.isTagUrl())
     {
@@ -157,7 +157,7 @@ void ItemLister::list(ItemListerReceiver* const receiver, const CoreDbUrl& url)
     }
 }
 
-void ItemLister::listAlbum(ItemListerReceiver* const receiver, int albumRootId, const QString& album)
+void ItemLister::listPAlbum(ItemListerReceiver* const receiver, int albumRootId, const QString& album)
 {
     if (d->listOnlyAvailableImages)
     {
@@ -341,14 +341,13 @@ void ItemLister::listTag(ItemListerReceiver* const receiver, const QList<int>& t
     {
         receiver->receive(*it);
     }
-
 }
 
 void ItemLister::listFaces(ItemListerReceiver* const receiver, int personId)
 {
     QList<qlonglong> list;
     QList<QVariant>  values;
-    CoreDbAccess   access;
+    CoreDbAccess     access;
 
     access.backend()->execSql(QString::fromUtf8("SELECT Images.id "
                                                 " FROM Images "
@@ -876,7 +875,8 @@ void ItemLister::listHaarSearch(ItemListerReceiver* const receiver, const QStrin
     listFromHaarSearch(receiver, imageSimilarityMap);
 }
 
-void ItemLister::listFromHaarSearch(ItemListerReceiver* const receiver, const QMap<qlonglong,double>& imageSimilarityMap)
+void ItemLister::listFromHaarSearch(ItemListerReceiver* const receiver,
+                                    const QMap<qlonglong,double>& imageSimilarityMap)
 {
     QList<QVariant> values;
     QString         errMsg;
@@ -901,7 +901,8 @@ void ItemLister::listFromHaarSearch(ItemListerReceiver* const receiver, const QM
         double similarity;
 
         // Iterate over the image similarity map and bind the image id and similarity to the query.
-        for (QMap<qlonglong, double>::const_iterator it = imageSimilarityMap.constBegin() ; it != imageSimilarityMap.constEnd() ; ++it)
+        for (QMap<qlonglong, double>::const_iterator it = imageSimilarityMap.constBegin() ;
+             it != imageSimilarityMap.constEnd() ; ++it)
         {
             similarity = it.value();
             imageId    = it.key();
@@ -932,7 +933,7 @@ void ItemLister::listFromHaarSearch(ItemListerReceiver* const receiver, const QM
 
     int width, height;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; )
     {
         ItemListerRecord record;
 
@@ -1026,7 +1027,6 @@ void ItemLister::listFromIdList(ItemListerReceiver* const receiver, const QList<
             // append results to list
             values << access.backend()->readToList(query);
         }
-
     }
 
     if (!executionSuccess)

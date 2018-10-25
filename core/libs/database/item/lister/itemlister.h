@@ -73,36 +73,48 @@ public:
     /**
      * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
      */
-    void list(ItemListerReceiver* const receiver, const CoreDbUrl& url);
+    void listAlbum(ItemListerReceiver* const receiver,
+                   const CoreDbUrl& url);
 
     /**
-      * List images in the Album (physical album) specified by albumRoot, album.
-      * The results will be fed to the specified receiver.
-      */
-    void listAlbum(ItemListerReceiver* const receiver, int albumRootId, const QString& album);
+     * List images in the Album (physical album) specified by albumRoot, album.
+     * The results will be fed to the specified receiver.
+     */
+    void listPAlbum(ItemListerReceiver* const receiver,
+                    int albumRootId,
+                    const QString& album);
 
     /**
      * List the images which have assigned the tags specified by tagIds
      * Updated to support multiple tags
      */
-    void listTag(ItemListerReceiver* const receiver, const QList<int>& tagIds);
+    void listTag(ItemListerReceiver* const receiver,
+                 const QList<int>& tagIds);
 
     /**
      * List the images which have faces. An image with n faces will be listed n times.
      * FIXME: Obviously an ugly way. Should be trashed later in favor of a better method.
      */
-    void listFaces(ItemListerReceiver* const receiver, int personId);
+    void listFaces(ItemListerReceiver* const receiver,
+                   int personId);
 
     /**
-      * List those images whose date lies in the range beginning with startDate (inclusive)
-      * and ending before endDate (exclusive).
-      */
-    void listDateRange(ItemListerReceiver* const receiver, const QDate& startDate, const QDate& endDate);
-
-    /**
-     * List the images whose coordinates are between coordinates contained in areaCoordinates(lat1, lat2, lng1, lng2)
+     * List those images whose date lies in the range beginning with startDate (inclusive)
+     * and ending before endDate (exclusive).
      */
-    void listAreaRange(ItemListerReceiver* const receiver, double lat1, double lat2, double lon1, double lon2);
+    void listDateRange(ItemListerReceiver* const receiver,
+                       const QDate& startDate,
+                       const QDate& endDate);
+
+    /**
+     * List the images whose coordinates are between coordinates contained
+     * in areaCoordinates(lat1, lat2, lng1, lng2).
+     */
+    void listAreaRange(ItemListerReceiver* const receiver,
+                       double lat1,
+                       double lat2,
+                       double lon1,
+                       double lon2);
 
     /**
      * Execute the search specified by search XML
@@ -111,7 +123,10 @@ public:
      * @param limit limit the count of the result set. If limit = 0, then no limit is set.
      * @param referenceImageId the id of a reference image in the search query.
      */
-    void listSearch(ItemListerReceiver* const receiver, const QString& xml, int limit = 0, qlonglong referenceImageId = -1);
+    void listSearch(ItemListerReceiver* const receiver,
+                    const QString& xml,
+                    int limit = 0,
+                    qlonglong referenceImageId = -1);
 
     /**
      * Execute the search specified by search XML describing a Tag Properties search.
@@ -127,9 +142,12 @@ public:
      * @param receiver receiver for the searches
      * @param xml SearchXml describing the query
      */
-    void listHaarSearch(ItemListerReceiver* const receiver, const QString& xml);
+    void listHaarSearch(ItemListerReceiver* const receiver,
+                        const QString& xml);
 
-    QString tagSearchXml(int tagId, const QString& type, bool includeChildTags) const;
+    QString tagSearchXml(int tagId,
+                         const QString& type,
+                         bool includeChildTags) const;
 
 private:
 
@@ -138,8 +156,13 @@ private:
      * @param receiver for the searches
      * @param imageSimilarityMap the map of image ids and their similarities in the HAAR search
      */
-    void listFromHaarSearch(ItemListerReceiver* const receiver, const QMap<qlonglong, double>& imageSimilarityMap);
-    void listFromIdList(ItemListerReceiver* const receiver, const QList<qlonglong>& imageIds);
+    void listFromHaarSearch(ItemListerReceiver* const receiver,
+                            const QMap<qlonglong,
+                            double>& imageSimilarityMap);
+
+    void listFromIdList(ItemListerReceiver* const receiver,
+                        const QList<qlonglong>& imageIds);
+
     QSet<int> albumRootsToList() const;
 
 private:

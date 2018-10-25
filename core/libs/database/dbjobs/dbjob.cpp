@@ -73,7 +73,7 @@ void AlbumsJob::run()
 
         // Send data every 200 images to be more responsive
         ItemListerJobGrowingPartsSendingReceiver receiver(this, 200, 2000, 100);
-        lister.listAlbum(&receiver, m_jobInfo.albumRootId(), m_jobInfo.album());
+        lister.listPAlbum(&receiver, m_jobInfo.albumRootId(), m_jobInfo.album());
         receiver.sendData();
     }
 
