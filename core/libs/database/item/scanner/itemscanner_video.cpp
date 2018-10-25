@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-09-19
- * Description : Scanning a single item - video helper.
+ * Description : Scanning a single item - video metadata helper.
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>

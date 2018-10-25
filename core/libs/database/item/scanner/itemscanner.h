@@ -75,20 +75,6 @@ public:
 
     ~ItemScanner();
 
-    // -----------------------------------------------------------------------------
-
-    /**
-     * Commits the scanned information to the database.
-     * You must call this after scanning was done for any changes to take effect.
-     * Only this method will perform write operations to the database.
-     */
-    void commit();
-
-    /**
-     * Returns the image id of the scanned file, if (yet) available.
-     */
-    qlonglong id() const;
-
     /**
      * Inform the scanner about the category of the file.
      * Required at least for newFile() calls, recommended for calls with the
@@ -97,21 +83,39 @@ public:
     void setCategory(DatabaseItem::Category category);
 
     /**
-     * Call this when you have detected that a file in the database has been
-     * modified on disk. Only two groups of fields will be updated in the database:
-     * - filesystem specific properties (those that signaled you that the file has been modified
-     *   because their state on disk differed from the state in the database)
-     * - image specific properties, for which a difference in the database independent from
-     *   the actual file does not make sense (width/height, bit depth, color model)
+     * Provides access to the information retrieved by scanning.
+     * The validity depends on the previously executed scan.
      */
-    void fileModified();
+    const ItemScanInfo& itemScanInfo() const;
+
+    bool lessThanForIdentity(const ItemScanInfo& a, const ItemScanInfo& b);
+    
+    /**
+     * Loads data from disk (metadata, image file properties).
+     * This method is called from any of the main entry points above.
+     * You can call it before if you want to control the time when it is executed.
+     * Calling it a second time with data already loaded will do nothing.
+     */
+    void loadFromDisk();
 
     /**
-     * Call this to take an existing image in the database, but re-read
-     * all information from the file into the database, possibly overwriting
-     * information there.
+     * Helper method to translate enum values to user presentable strings
      */
-    void rescan();
+    static QString formatToString(const QString& format);
+
+private:
+
+    ItemScanner(const ItemScanner&); // Disable
+    static bool hasValidField(const QVariantList& list);
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations with Database
+     */
+
+    //@{
+
+public:
 
     /**
      * Call this when you want ItemScanner to add a new file to the database
@@ -128,6 +132,25 @@ public:
     void newFileFullScan(int albumId);
 
     /**
+     * Call this to take an existing image in the database, but re-read
+     * all information from the file into the database, possibly overwriting
+     * information there.
+     */
+    void rescan();
+
+    /**
+     * Commits the scanned information to the database.
+     * You must call this after scanning was done for any changes to take effect.
+     * Only this method will perform write operations to the database.
+     */
+    void commit();
+
+    /**
+     * Returns the image id of the scanned file, if (yet) available.
+     */
+    qlonglong id() const;
+
+    /**
      * Similar to newFile.
      * Call this when you want ItemScanner to add a new file to the database
      * which is a copy of another file, copying attributes from the src
@@ -137,31 +160,22 @@ public:
     void copiedFrom(int albumId, qlonglong srcId);
 
     /**
-     * Provides access to the information retrieved by scanning.
-     * The validity depends on the previously executed scan.
-     */
-    const ItemScanInfo& itemScanInfo() const;
-
-    /**
-     * Loads data from disk (metadata, image file properties).
-     * This method is called from any of the main entry points above.
-     * You can call it before if you want to control the time when it is executed.
-     * Calling it a second time with data already loaded will do nothing.
-     */
-    void loadFromDisk();
-
-    /**
      * Sort a list of infos by proximity to the given subject.
      * Infos are near if they are e.g. in the same album.
      * They are not near if they are e.g. in different collections.
      */
     static void sortByProximity(QList<ImageInfo>& infos, const ImageInfo& subject);
 
-    /**
-     * Helper method to translate enum values to user presentable strings
-     */
-    static QString formatToString(const QString& format);
+protected:
 
+    bool copyFromSource(qlonglong src);
+    void commitCopyImageAttributes();
+
+    void prepareAddImage(int albumId);
+    void commitAddImage();
+
+    //@}
+    
     // -----------------------------------------------------------------------------
 
     /** @name Operations on File Metadata
@@ -170,6 +184,16 @@ public:
     //@{
 
 public:
+
+    /**
+     * Call this when you have detected that a file in the database has been
+     * modified on disk. Only two groups of fields will be updated in the database:
+     * - filesystem specific properties (those that signaled you that the file has been modified
+     *   because their state on disk differed from the state in the database)
+     * - image specific properties, for which a difference in the database independent from
+     *   the actual file does not make sense (width/height, bit depth, color model)
+     */
+    void fileModified();
 
     /**
      * Returns File-metadata container with user-presentable information.
@@ -185,6 +209,12 @@ public:
 
 protected:
 
+    void prepareUpdateImage();
+    void commitUpdateImage();
+
+    bool scanFromIdenticalFile();
+    void scanFile(ScanMode mode);
+
     void scanImageInformation();
     void commitImageInformation();
 
@@ -194,7 +224,7 @@ protected:
 
     /** @name Operations on Photo Metadata
      */
-
+    
     //@{
 
 public:
@@ -331,24 +361,6 @@ public:
      * @brief scanBalooInfo - retrieve tags, comments and rating from Baloo Desktop service.
      */
     void scanBalooInfo();
-
-protected:
-
-    bool scanFromIdenticalFile();
-    bool copyFromSource(qlonglong src);
-    void commitCopyImageAttributes();
-
-    void prepareAddImage(int albumId);
-    void commitAddImage();
-    void prepareUpdateImage();
-    void commitUpdateImage();
-
-    void scanFile(ScanMode mode);
-
-private:
-
-    ItemScanner(const ItemScanner&); // Disable
-    static bool hasValidField(const QVariantList& list);
 
 private:
 
