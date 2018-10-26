@@ -6,10 +6,10 @@
  * Date        : 2007-03-20
  * Description : Listing information from database.
  *
- * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju    <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2015      by Mohamed_Anwer <m_dot_anwer at gmx dot com>
+ * Copyright (C) 2015      by Mohamed_Anwer  <m_dot_anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -70,24 +70,32 @@ public:
      */
     void setAllowExtraValues(bool useExtraValue);
 
+    /**
+     * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
+     */
+    void list(ItemListerReceiver* const receiver,
+              const CoreDbUrl& url);
+
+    /**
+     * List those images whose date lies in the range beginning with startDate (inclusive)
+     * and ending before endDate (exclusive).
+     */
+    void listDateRange(ItemListerReceiver* const receiver,
+                       const QDate& startDate,
+                       const QDate& endDate);
+
 private:
 
     ItemLister(const ItemLister&); // Disable
 
     // -----------------------------------------------------------------------------
 
-    /** @name Operations with Album
+    /** @name Operations with PAlbum
      */
 
     //@{
 
 public:
-
-    /**
-     * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
-     */
-    void list(ItemListerReceiver* const receiver,
-              const CoreDbUrl& url);
 
     /**
      * List images in the Album (physical album) specified by albumRoot, album.
@@ -164,6 +172,16 @@ public:
     void listHaarSearch(ItemListerReceiver* const receiver,
                         const QString& xml);
 
+    /**
+     * List the images whose coordinates are between coordinates contained
+     * in areaCoordinates(lat1, lat2, lng1, lng2).
+     */
+    void listAreaRange(ItemListerReceiver* const receiver,
+                       double lat1,
+                       double lat2,
+                       double lon1,
+                       double lon2);
+
 private:
 
     /**
@@ -198,26 +216,6 @@ private:
                         const QList<qlonglong>& imageIds);
 
     //@}
-
-public:
-
-    /**
-     * List those images whose date lies in the range beginning with startDate (inclusive)
-     * and ending before endDate (exclusive).
-     */
-    void listDateRange(ItemListerReceiver* const receiver,
-                       const QDate& startDate,
-                       const QDate& endDate);
-
-    /**
-     * List the images whose coordinates are between coordinates contained
-     * in areaCoordinates(lat1, lat2, lng1, lng2).
-     */
-    void listAreaRange(ItemListerReceiver* const receiver,
-                       double lat1,
-                       double lat2,
-                       double lon1,
-                       double lon2);
 
 private:
 
