@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_SCANNER_H
-#define DIGIKAM_IMAGE_SCANNER_H
+#ifndef DIGIKAM_ITEM_SCANNER_H
+#define DIGIKAM_ITEM_SCANNER_H
 
 // Qt includes
 
@@ -370,4 +370,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_SCANNER_H
+#endif // DIGIKAM_ITEM_SCANNER_H

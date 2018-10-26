@@ -22,6 +22,9 @@
  *
  * ============================================================ */
 
+#ifndef DIGIKAM_ITEM_SCANNER_P_H
+#define DIGIKAM_ITEM_SCANNER_P_H
+
 #include "itemscanner.h"
 
 // Qt includes
@@ -91,7 +94,7 @@ public:
     bool                             hasColorTag;
     bool                             hasPickTag;
 
-    DatabaseFields::ItemInformation imageInformationFields;
+    DatabaseFields::ItemInformation  imageInformationFields;
     QVariantList                     imageInformationInfos;
 
     QVariantList                     imageMetadataInfos;
@@ -145,13 +148,15 @@ public:
     DMetadata              metadata;
     DImg                   img;
     ItemScanInfo           scanInfo;
-    ItemScanner::ScanMode scanMode;
+    ItemScanner::ScanMode  scanMode;
 
     bool                   hasHistoryToResolve;
 
-    ItemScannerCommit     commit;
+    ItemScannerCommit      commit;
 
     QTime                  time;
 };
 
 } // namespace Digikam
+
+#endif // DIGIKAM_ITEM_SCANNER_P_H
