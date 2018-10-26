@@ -58,7 +58,7 @@
 #include "haariface.h"
 #include "dbenginesqlquery.h"
 #include "tagscache.h"
-#include "imagetagpair.h"
+#include "itemtagpair.h"
 #include "dbjobsthread.h"
 #include "dbjobinfo.h"
 #include "similaritydbaccess.h"

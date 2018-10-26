@@ -58,7 +58,7 @@ class ItemListerRecord;
 class ImageMetadataContainer;
 class VideoMetadataContainer;
 class ImagePosition;
-class ImageTagPair;
+class ItemTagPair;
 class PhotoInfoContainer;
 class VideoInfoContainer;
 class Template;
@@ -290,12 +290,12 @@ public:
     bool   hasAltitude()     const;
 
     /**
-     * Retrieve an ImageTagPair object for a single tag, or for all
+     * Retrieve an ItemTagPair object for a single tag, or for all
      * image/tag pairs for which properties are available
      * (not necessarily the assigned tags)
      */
-    ImageTagPair imageTagPair(int tagId)         const;
-    QList<ImageTagPair> availableImageTagPairs() const;
+    ItemTagPair imageTagPair(int tagId)         const;
+    QList<ItemTagPair> availableItemTagPairs() const;
 
     /**
      * Retrieves and sets the image history from the database.

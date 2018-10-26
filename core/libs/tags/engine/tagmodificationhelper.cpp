@@ -42,7 +42,7 @@
 #include "coredb.h"
 #include "coredbtransaction.h"
 #include "imageinfo.h"
-#include "imagetagpair.h"
+#include "itemtagpair.h"
 #include "metadatahub.h"
 #include "scancontroller.h"
 #include "statusprogressbar.h"
@@ -569,7 +569,7 @@ void TagModificationHelper::slotMultipleFaceTagDel(QList<TAlbum*>& tags)
         {
             foreach (TAlbum* const tagToRemove, allPersonTagsToDelete)
             {
-                ImageTagPair imageTagAssociation(imageId,tagToRemove->id());
+                ItemTagPair imageTagAssociation(imageId,tagToRemove->id());
 
                 if (imageTagAssociation.isAssigned())
                 {

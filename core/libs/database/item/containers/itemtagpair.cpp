@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-07-05
- * Description : Access to the properties of an Image / Tag pair, i.e., a tag associated to an image
+ * Description : Access to the properties of an Item / Tag pair, i.e., a tag associated to an item
  *
  * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagetagpair.h"
+#include "itemtagpair.h"
 
 // Qt includes
 
@@ -38,16 +38,16 @@
 namespace Digikam
 {
 
-typedef QSharedDataPointer<ImageTagPairPriv> ImageTagPairPrivSharedPointer;
+typedef QSharedDataPointer<ItemTagPairPriv> ItemTagPairPrivSharedPointer;
 
-class Q_DECL_HIDDEN ImageTagPairPriv : public QSharedData
+class Q_DECL_HIDDEN ItemTagPairPriv : public QSharedData
 {
 
 public:
 
-    static ImageTagPairPrivSharedPointer createGuarded(qlonglong imageId, int tagId);
+    static ItemTagPairPrivSharedPointer createGuarded(qlonglong imageId, int tagId);
 
-    ImageTagPairPriv()
+    ItemTagPairPriv()
     {
         tagId            = -1;
         isAssigned       = false;
@@ -69,21 +69,21 @@ public:
 
 // -----------------------------------------------------------------------
 
-class Q_DECL_HIDDEN ImageTagPairPrivSharedNull : public ImageTagPairPrivSharedPointer
+class Q_DECL_HIDDEN ItemTagPairPrivSharedNull : public ItemTagPairPrivSharedPointer
 {
 public:
 
-    ImageTagPairPrivSharedNull()
-        : QSharedDataPointer<ImageTagPairPriv>(new ImageTagPairPriv)
+    ItemTagPairPrivSharedNull()
+        : QSharedDataPointer<ItemTagPairPriv>(new ItemTagPairPriv)
     {
     }
 };
 
-Q_GLOBAL_STATIC(ImageTagPairPrivSharedNull, imageTagPairPrivSharedNull)
+Q_GLOBAL_STATIC(ItemTagPairPrivSharedNull, imageTagPairPrivSharedNull)
 
 // -----------------------------------------------------------------------
 
-ImageTagPairPrivSharedPointer ImageTagPairPriv::createGuarded(qlonglong imageId, int tagId)
+ItemTagPairPrivSharedPointer ItemTagPairPriv::createGuarded(qlonglong imageId, int tagId)
 {
     if (imageId <= 0 || tagId <= 0)
     {
@@ -91,10 +91,10 @@ ImageTagPairPrivSharedPointer ImageTagPairPriv::createGuarded(qlonglong imageId,
         return *imageTagPairPrivSharedNull;
     }
 
-    return ImageTagPairPrivSharedPointer(new ImageTagPairPriv);
+    return ItemTagPairPrivSharedPointer(new ItemTagPairPriv);
 }
 
-void ImageTagPairPriv::init(const ImageInfo& i, int t)
+void ItemTagPairPriv::init(const ImageInfo& i, int t)
 {
     if (isNull())
     {
@@ -106,7 +106,7 @@ void ImageTagPairPriv::init(const ImageInfo& i, int t)
     isAssigned = info.tagIds().contains(tagId);
 }
 
-void ImageTagPairPriv::checkProperties()
+void ItemTagPairPriv::checkProperties()
 {
     if (!isNull() && !propertiesLoaded)
     {
@@ -121,56 +121,56 @@ void ImageTagPairPriv::checkProperties()
     }
 }
 
-bool ImageTagPairPriv::isNull() const
+bool ItemTagPairPriv::isNull() const
 {
     return this == imageTagPairPrivSharedNull->constData();
 }
 
-ImageTagPair::ImageTagPair()
+ItemTagPair::ItemTagPair()
     : d(*imageTagPairPrivSharedNull)
 {
 }
 
-ImageTagPair::ImageTagPair(qlonglong imageId, int tagId)
-    : d(ImageTagPairPriv::createGuarded(imageId, tagId))
+ItemTagPair::ItemTagPair(qlonglong imageId, int tagId)
+    : d(ItemTagPairPriv::createGuarded(imageId, tagId))
 {
     d->init(ImageInfo(imageId), tagId);
 }
 
-ImageTagPair::ImageTagPair(const ImageInfo& info, int tagId)
-    : d(ImageTagPairPriv::createGuarded(info.id(), tagId))
+ItemTagPair::ItemTagPair(const ImageInfo& info, int tagId)
+    : d(ItemTagPairPriv::createGuarded(info.id(), tagId))
 {
     d->init(info, tagId);
 }
 
-ImageTagPair::~ImageTagPair()
+ItemTagPair::~ItemTagPair()
 {
 }
 
-ImageTagPair::ImageTagPair(const ImageTagPair& other)
+ItemTagPair::ItemTagPair(const ItemTagPair& other)
 {
     d = other.d;
 }
 
-ImageTagPair& ImageTagPair::operator=(const ImageTagPair& other)
+ItemTagPair& ItemTagPair::operator=(const ItemTagPair& other)
 {
     d = other.d;
     return *this;
 }
 
-bool ImageTagPair::isNull() const
+bool ItemTagPair::isNull() const
 {
     return d == *imageTagPairPrivSharedNull;
 }
 
-QList<ImageTagPair> ImageTagPair::availablePairs(qlonglong imageId)
+QList<ItemTagPair> ItemTagPair::availablePairs(qlonglong imageId)
 {
     return availablePairs(ImageInfo(imageId));
 }
 
-QList<ImageTagPair> ImageTagPair::availablePairs(const ImageInfo& info)
+QList<ItemTagPair> ItemTagPair::availablePairs(const ImageInfo& info)
 {
-    QList<ImageTagPair> pairs;
+    QList<ItemTagPair> pairs;
 
     if (info.isNull())
     {
@@ -181,28 +181,28 @@ QList<ImageTagPair> ImageTagPair::availablePairs(const ImageInfo& info)
 
     foreach(int tagId, tagIds)
     {
-        pairs << ImageTagPair(info, tagId);
+        pairs << ItemTagPair(info, tagId);
     }
 
     return pairs;
 }
 
-qlonglong ImageTagPair::imageId() const
+qlonglong ItemTagPair::imageId() const
 {
     return d->info.id();
 }
 
-int ImageTagPair::tagId() const
+int ItemTagPair::tagId() const
 {
     return d->tagId;
 }
 
-bool ImageTagPair::isAssigned() const
+bool ItemTagPair::isAssigned() const
 {
     return d->isAssigned;
 }
 
-void ImageTagPair::assignTag()
+void ItemTagPair::assignTag()
 {
     if (!d->isNull() && !d->isAssigned)
     {
@@ -211,7 +211,7 @@ void ImageTagPair::assignTag()
     }
 }
 
-void ImageTagPair::unAssignTag()
+void ItemTagPair::unAssignTag()
 {
     if (!d->isNull() && d->isAssigned)
     {
@@ -220,13 +220,13 @@ void ImageTagPair::unAssignTag()
     }
 }
 
-bool ImageTagPair::hasProperty(const QString& key) const
+bool ItemTagPair::hasProperty(const QString& key) const
 {
     d->checkProperties();
     return d->properties.contains(key);
 }
 
-bool ImageTagPair::hasAnyProperty(const QStringList& keys) const
+bool ItemTagPair::hasAnyProperty(const QStringList& keys) const
 {
     d->checkProperties();
 
@@ -241,19 +241,19 @@ bool ImageTagPair::hasAnyProperty(const QStringList& keys) const
     return false;
 }
 
-bool ImageTagPair::hasValue(const QString& key, const QString& value) const
+bool ItemTagPair::hasValue(const QString& key, const QString& value) const
 {
     d->checkProperties();
     return d->properties.contains(key, value);
 }
 
-QString ImageTagPair::value(const QString& key) const
+QString ItemTagPair::value(const QString& key) const
 {
     d->checkProperties();
     return d->properties.value(key);
 }
 
-QStringList ImageTagPair::allValues(const QStringList& keys) const
+QStringList ItemTagPair::allValues(const QStringList& keys) const
 {
     d->checkProperties();
     QStringList values;
@@ -266,26 +266,26 @@ QStringList ImageTagPair::allValues(const QStringList& keys) const
     return values;
 }
 
-QStringList ImageTagPair::values(const QString& key) const
+QStringList ItemTagPair::values(const QString& key) const
 {
     d->checkProperties();
     return d->properties.values(key);
 }
 
 
-QStringList ImageTagPair::propertyKeys() const
+QStringList ItemTagPair::propertyKeys() const
 {
     d->checkProperties();
     return d->properties.keys();
 }
 
-QMap<QString, QString> ImageTagPair::properties() const
+QMap<QString, QString> ItemTagPair::properties() const
 {
     d->checkProperties();
     return d->properties;
 }
 
-void ImageTagPair::setProperty(const QString& key, const QString& value)
+void ItemTagPair::setProperty(const QString& key, const QString& value)
 {
     if (d->isNull() || d->info.isNull())
     {
@@ -300,7 +300,7 @@ void ImageTagPair::setProperty(const QString& key, const QString& value)
     CoreDbAccess().db()->addImageTagProperty(d->info.id(), d->tagId, key, value);
 }
 
-void ImageTagPair::addProperty(const QString& key, const QString& value)
+void ItemTagPair::addProperty(const QString& key, const QString& value)
 {
     if (d->isNull() || d->info.isNull())
     {
@@ -316,7 +316,7 @@ void ImageTagPair::addProperty(const QString& key, const QString& value)
     }
 }
 
-void ImageTagPair::removeProperty(const QString& key, const QString& value)
+void ItemTagPair::removeProperty(const QString& key, const QString& value)
 {
     if (d->isNull() || d->info.isNull())
     {
@@ -332,7 +332,7 @@ void ImageTagPair::removeProperty(const QString& key, const QString& value)
     }
 }
 
-void ImageTagPair::removeProperties(const QString& key)
+void ItemTagPair::removeProperties(const QString& key)
 {
     if (d->isNull() || d->info.isNull())
     {
@@ -348,7 +348,7 @@ void ImageTagPair::removeProperties(const QString& key)
     }
 }
 
-void ImageTagPair::clearProperties()
+void ItemTagPair::clearProperties()
 {
     if (d->isNull() || d->info.isNull())
     {

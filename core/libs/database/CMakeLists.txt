@@ -102,7 +102,7 @@ set(libdatabase_SRCS
     item/containers/imageinfocache.cpp
     item/containers/imageposition.cpp
     item/containers/imagecopyright.cpp
-    item/containers/imagetagpair.cpp
+    item/containers/itemtagpair.cpp
 
     item/lister/itemlister.cpp
     item/lister/itemlister_palbum.cpp

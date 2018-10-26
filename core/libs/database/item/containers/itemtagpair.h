@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-07-05
- * Description : Access to the properties of an Image / Tag pair, i.e., a tag associated to an image
+ * Description : Access to the properties of an Item / Tag pair, i.e., a tag associated to an item
  *
  * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_TAG_PAIR_H
-#define DIGIKAM_IMAGE_TAG_PAIR_H
+#ifndef DIGIKAM_ITEM_TAG_PAIR_H
+#define DIGIKAM_ITEM_TAG_PAIR_H
 
 // Qt includes
 
@@ -40,9 +40,9 @@ namespace Digikam
 {
 
 class ImageInfo;
-class ImageTagPairPriv;
+class ItemTagPairPriv;
 
-class DIGIKAM_DATABASE_EXPORT ImageTagPair
+class DIGIKAM_DATABASE_EXPORT ItemTagPair
 {
 public:
 
@@ -52,15 +52,15 @@ public:
      */
 
     /// Creates a null pair
-    ImageTagPair();
+    ItemTagPair();
 
     /** Access the properties of the given image - tag pair */
-    ImageTagPair(qlonglong imageId, int tagId);
-    ImageTagPair(const ImageInfo& info, int tagId);
+    ItemTagPair(qlonglong imageId, int tagId);
+    ItemTagPair(const ImageInfo& info, int tagId);
 
-    ~ImageTagPair();
-    ImageTagPair(const ImageTagPair& other);
-    ImageTagPair& operator=(const ImageTagPair& other);
+    ~ItemTagPair();
+    ItemTagPair(const ItemTagPair& other);
+    ItemTagPair& operator=(const ItemTagPair& other);
 
     bool isNull() const;
 
@@ -68,8 +68,8 @@ public:
      * Return all pairs for the given image for which entries exist.
      * This list of tags may not be identical to the tags assigned to the image.
      */
-    static QList<ImageTagPair> availablePairs(qlonglong imageId);
-    static QList<ImageTagPair> availablePairs(const ImageInfo& info);
+    static QList<ItemTagPair> availablePairs(qlonglong imageId);
+    static QList<ItemTagPair> availablePairs(const ImageInfo& info);
 
     qlonglong imageId() const;
     int tagId() const;
@@ -121,10 +121,9 @@ public:
 
 private:
 
-    QExplicitlySharedDataPointer<ImageTagPairPriv> d;
+    QExplicitlySharedDataPointer<ItemTagPairPriv> d;
 };
 
 } // namespace
 
-#endif // DIGIKAM_IMAGE_TAG_PAIR_H
-
+#endif // DIGIKAM_ITEM_TAG_PAIR_H

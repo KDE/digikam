@@ -53,7 +53,7 @@
 #include "imageextendedproperties.h"
 #include "imageposition.h"
 #include "itemscanner.h"
-#include "imagetagpair.h"
+#include "itemtagpair.h"
 #include "tagscache.h"
 #include "template.h"
 #include "thumbnailinfo.h"
@@ -1267,24 +1267,24 @@ bool ImageInfo::hasAltitude() const
     return m_data->hasAltitude;
 }
 
-ImageTagPair ImageInfo::imageTagPair(int tagId) const
+ItemTagPair ImageInfo::imageTagPair(int tagId) const
 {
     if (!m_data)
     {
-        return ImageTagPair();
+        return ItemTagPair();
     }
 
-    return ImageTagPair(*this, tagId);
+    return ItemTagPair(*this, tagId);
 }
 
-QList<ImageTagPair> ImageInfo::availableImageTagPairs() const
+QList<ItemTagPair> ImageInfo::availableItemTagPairs() const
 {
     if (!m_data)
     {
-        return QList<ImageTagPair>();
+        return QList<ItemTagPair>();
     }
 
-    return ImageTagPair::availablePairs(*this);
+    return ItemTagPair::availablePairs(*this);
 }
 
 DImageHistory ImageInfo::imageHistory() const

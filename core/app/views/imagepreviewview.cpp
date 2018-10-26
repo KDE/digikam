@@ -62,7 +62,7 @@
 #include "previewlayout.h"
 #include "previewsettings.h"
 #include "tagscache.h"
-#include "imagetagpair.h"
+#include "itemtagpair.h"
 #include "albummanager.h"
 #include "facegroup.h"
 

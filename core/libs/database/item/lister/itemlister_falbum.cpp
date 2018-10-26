@@ -50,7 +50,7 @@ void ItemLister::listFaces(ItemListerReceiver* const receiver, int personId)
     {
         TagsCache* const cache = TagsCache::instance();
 
-        ImageTagPair pair(list.last(), cache->tagForPath(QLatin1String("/People/Unknown")));
+        ItemTagPair pair(list.last(), cache->tagForPath(QLatin1String("/People/Unknown")));
         QList<QString> nameList = pair.values(QLatin1String("face"));
 
         // push the image into the list every time a face with the name is found in the image

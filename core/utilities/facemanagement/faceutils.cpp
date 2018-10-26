@@ -37,7 +37,7 @@
 #include "dimg.h"
 #include "facetags.h"
 #include "imageinfo.h"
-#include "imagetagpair.h"
+#include "itemtagpair.h"
 #include "fileactionmngr.h"
 #include "tagproperties.h"
 #include "tagscache.h"
@@ -247,13 +247,13 @@ QList<FaceTagsIface> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
             // list will contain all old entries that should still be removed
             removeFaces(overlappingEntries);
 
-            ImageTagPair pair(imageid, newFace.tagId());
+            ItemTagPair pair(imageid, newFace.tagId());
             // UnconfirmedName and UnknownName have the same attribute
             addFaceAndTag(pair, newFace, FaceTagsIface::attributesForFlags(FaceTagsIface::UnconfirmedName), false);
             // If the face is unconfirmed and the tag is not the unknown person tag, set the unconfirmed person property.
             if (newFace.isUnconfirmedType() && !FaceTags::isTheUnknownPerson(newFace.tagId()))
             {
-                ImageTagPair unconfirmedPair(imageid, FaceTags::unconfirmedPersonTagId());
+                ItemTagPair unconfirmedPair(imageid, FaceTags::unconfirmedPersonTagId());
                 unconfirmedPair.addProperty(ImageTagPropertyName::autodetectedPerson(),newFace.getAutodetectedPersonString());
             }
         }
