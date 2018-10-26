@@ -43,7 +43,7 @@
 #include "camerathumbsctrl.h"
 #include "itemposition.h"
 #include "iteminfo.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "importfiltermodel.h"
 #include "importimagemodel.h"
 #include "coredbwatch.h"
@@ -86,7 +86,7 @@ public:
     ItemFilterModel*           imageFilterModel;
     ImageAlbumModel*            imageModel;
     ImportFilterModel*          importFilterModel;
-    ImportImageModel*           importModel;
+    ImportItemModel*           importModel;
     QItemSelectionModel*        selectionModel;
     MapViewModelHelper*         mapViewModelHelper;
     GPSItemInfoSorter*         gpsItemInfoSorter;
@@ -120,7 +120,7 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
 
         case ApplicationImportUI:
             d->importFilterModel  = dynamic_cast<ImportFilterModel*>(imageFilterModel);
-            d->importModel        = dynamic_cast<ImportImageModel*>(imageFilterModel->sourceModel());
+            d->importModel        = dynamic_cast<ImportItemModel*>(imageFilterModel->sourceModel());
             d->mapViewModelHelper = new MapViewModelHelper(d->selectionModel, d->importFilterModel, this, ApplicationImportUI);
             break;
     }
@@ -386,7 +386,7 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
 
         case MapWidgetView::ApplicationImportUI:
         {
-            QPixmap thumbnail = index.data(ImportImageModel::ThumbnailRole).value<QPixmap>();
+            QPixmap thumbnail = index.data(ImportItemModel::ThumbnailRole).value<QPixmap>();
             return thumbnail.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
     }

@@ -91,9 +91,9 @@ DateFolderView::~DateFolderView()
     saveState();
 }
 
-void DateFolderView::setImageModel(ItemFilterModel* const model)
+void DateFolderView::setItemModel(ItemFilterModel* const model)
 {
-    d->monthview->setImageModel(model);
+    d->monthview->setItemModel(model);
 }
 
 void DateFolderView::setActive(const bool val)

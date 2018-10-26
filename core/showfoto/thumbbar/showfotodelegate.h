@@ -72,7 +72,7 @@ public:
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const;
 
     /**
-     * Retrieve the thumbnail pixmap in given size for the ShowfotoImageModel::ThumbnailRole for
+     * Retrieve the thumbnail pixmap in given size for the ShowfotoItemModel::ThumbnailRole for
      * the given index from the given index, which must adhere to ShowfotoThumbnailModel semantics.
      */
     static QPixmap retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize);

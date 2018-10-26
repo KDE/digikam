@@ -44,10 +44,10 @@ public:
     ~ShowfotoThumbnailBar();
 
     /**
-     * This installs a duplicate filter model, if the ShwofotoImageModel may contain duplicates.
+     * This installs a duplicate filter model, if the ShwofotoItemModel may contain duplicates.
      * Otherwise, just use setModels().
      */
-    void setModelsFiltered(ShowfotoImageModel* model, ShowfotoSortFilterModel* filterModel);
+    void setModelsFiltered(ShowfotoItemModel* model, ShowfotoSortFilterModel* filterModel);
 
     QModelIndex nextIndex(const QModelIndex& index)     const;
     QModelIndex previousIndex(const QModelIndex& index) const;

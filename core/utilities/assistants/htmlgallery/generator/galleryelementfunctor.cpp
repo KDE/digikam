@@ -238,11 +238,11 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
             element.m_exifImageMake = meta.getXmpTagString("Xmp.tiff.Make");
         }
 
-        element.m_exifImageModel = meta.getExifTagString("Exif.Image.Model");
+        element.m_exifItemModel = meta.getExifTagString("Exif.Image.Model");
 
-        if (element.m_exifImageModel.isEmpty())
+        if (element.m_exifItemModel.isEmpty())
         {
-            element.m_exifImageModel = meta.getXmpTagString("Xmp.tiff.Model");
+            element.m_exifItemModel = meta.getXmpTagString("Xmp.tiff.Model");
         }
 
         element.m_exifImageOrientation = meta.getExifTagString("Exif.Image.Orientation");
@@ -366,7 +366,7 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
                 element.m_exifImageMake = info.make;
 
             if (!info.model.isEmpty())
-                element.m_exifImageModel = info.model;
+                element.m_exifItemModel = info.model;
 
             if (info.dateTime.isValid())
                 element.m_exifImageDateTime = QLocale().toString(info.dateTime, QLocale::ShortFormat);
@@ -388,8 +388,8 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
     if (element.m_exifImageMake.isEmpty())
         element.m_exifImageMake = unavailable;
 
-    if (element.m_exifImageModel.isEmpty())
-        element.m_exifImageModel = unavailable;
+    if (element.m_exifItemModel.isEmpty())
+        element.m_exifItemModel = unavailable;
 
     if (element.m_exifImageOrientation.isEmpty())
         element.m_exifImageOrientation = unavailable;

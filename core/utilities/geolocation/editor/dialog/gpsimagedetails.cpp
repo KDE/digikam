@@ -84,7 +84,7 @@ public:
     {
     }
 
-    GPSImageModel*               imageModel;
+    GPSItemModel*               imageModel;
     GraphicsDImgView*            previewManager;
 
     QCheckBox*                   cbCoordinates;
@@ -110,7 +110,7 @@ public:
     bool                         haveDelayedState;
 };
 
-GPSImageDetails::GPSImageDetails(QWidget* const parent, GPSImageModel* const imageModel)
+GPSImageDetails::GPSImageDetails(QWidget* const parent, GPSItemModel* const imageModel)
     : QWidget(parent),
       d(new Private())
 {

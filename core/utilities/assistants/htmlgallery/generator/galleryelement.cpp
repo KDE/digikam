@@ -75,7 +75,7 @@ void GalleryElement::appendToXML(XMLWriter& xmlWriter, bool copyOriginalImage) c
     // TODO put all exif tags in a sub level
     XMLElement imageExif(xmlWriter, QLatin1String("exif"));
     xmlWriter.writeElement("exifimagemake",              m_exifImageMake);
-    xmlWriter.writeElement("exifimagemodel",             m_exifImageModel);
+    xmlWriter.writeElement("exifimagemodel",             m_exifItemModel);
     xmlWriter.writeElement("exifimageorientation",       m_exifImageOrientation);
     xmlWriter.writeElement("exifimagexresolution",       m_exifImageXResolution);
     xmlWriter.writeElement("exifimageyresolution",       m_exifImageYResolution);

@@ -62,7 +62,7 @@ public:
 
     bool                      editEnabled;
     bool                      dragEnabled;
-    GPSImageModel*            model;
+    GPSItemModel*            model;
     QItemSelectionModel*      selectionModel;
     GPSImageItemDelegate*     itemDelegate;
     GPSImageSortProxyModel*   imageSortProxyModel;
@@ -119,7 +119,7 @@ void GPSImageList::startDrag(Qt::DropActions supportedActions)
     drag->exec(Qt::CopyAction);
 }
 
-void GPSImageList::setModelAndSelectionModel(GPSImageModel* const model, QItemSelectionModel* const selectionModel)
+void GPSImageList::setModelAndSelectionModel(GPSItemModel* const model, QItemSelectionModel* const selectionModel)
 {
     d->model               = model;
     d->selectionModel      = selectionModel;
@@ -141,7 +141,7 @@ void GPSImageList::setDragDropHandler(ImageListDragDropHandler* const dragDropHa
     d->dragDropHandler = dragDropHandler;
 }
 
-GPSImageModel* GPSImageList::getModel() const
+GPSItemModel* GPSImageList::getModel() const
 {
     return d->model;
 }

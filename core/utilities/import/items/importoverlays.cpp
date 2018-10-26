@@ -96,7 +96,7 @@ void ImportCoordinatesOverlay::updatePosition()
 
 bool ImportCoordinatesOverlay::checkIndex(const QModelIndex& index) const
 {
-    CamItemInfo info = ImportImageModel::retrieveCamItemInfo(index);
+    CamItemInfo info = ImportItemModel::retrieveCamItemInfo(index);
     QRect rect       = static_cast<ImportDelegate*>(delegate())->coordinatesIndicatorRect();
 
     if (!rect.isNull() && info.photoInfo.hasCoordinates)
@@ -166,7 +166,7 @@ void ImportLockOverlay::updatePosition()
 
 bool ImportLockOverlay::checkIndex(const QModelIndex& index) const
 {
-    CamItemInfo info = ImportImageModel::retrieveCamItemInfo(index);
+    CamItemInfo info = ImportItemModel::retrieveCamItemInfo(index);
 
     if (info.writePermissions == 0)
     {
@@ -235,7 +235,7 @@ void ImportDownloadOverlay::updatePosition()
 
 bool ImportDownloadOverlay::checkIndex(const QModelIndex& index) const
 {
-    CamItemInfo info = ImportImageModel::retrieveCamItemInfo(index);
+    CamItemInfo info = ImportItemModel::retrieveCamItemInfo(index);
 
     if (info.downloaded == CamItemInfo::DownloadUnknown)
     {
@@ -364,7 +364,7 @@ void ImportRatingOverlay::updateRating()
         return;
     }
 
-    ImportImageModel* const model = m_index.data(ImportImageModel::ImportImageModelPointerRole).value<ImportImageModel*>();
+    ImportItemModel* const model = m_index.data(ImportItemModel::ImportItemModelPointerRole).value<ImportItemModel*>();
     ratingWidget()->setRating(model->camItemInfoRef(m_index).rating);
 }
 
@@ -488,7 +488,7 @@ void ImportRotateOverlay::slotClicked()
 
 bool ImportRotateOverlay::checkIndex(const QModelIndex& index) const
 {
-    CamItemInfo info = ImportImageModel::retrieveCamItemInfo(index);
+    CamItemInfo info = ImportItemModel::retrieveCamItemInfo(index);
     return (info.mime.contains(QLatin1String("image/")));
 }
 

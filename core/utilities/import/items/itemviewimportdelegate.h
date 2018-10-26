@@ -38,7 +38,7 @@ namespace Digikam
 class ImportCategoryDrawer;
 class ImportCategorizedView;
 class ImportFilterModel;
-class ImportImageModel;
+class ImportItemModel;
 class ItemViewImportDelegatePrivate;
 
 // Some reuse of the existing model-view classes.

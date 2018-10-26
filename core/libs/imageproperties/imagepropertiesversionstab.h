@@ -44,7 +44,7 @@ namespace Digikam
 
 class FiltersHistoryWidget;
 class ItemInfo;
-class ImageModel;
+class ItemModel;
 class VersionsWidget;
 
 class ImagePropertiesVersionsTab : public QTabWidget
@@ -67,7 +67,7 @@ public:
 
     void addShowHideOverlay();
     void addOpenImageAction();
-    void addOpenAlbumAction(const ImageModel* referenceModel);
+    void addOpenAlbumAction(const ItemModel* referenceModel);
 
 public Q_SLOTS:
 

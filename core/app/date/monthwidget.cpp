@@ -42,7 +42,7 @@
 // Local includes
 
 #include "itemfiltermodel.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 
 namespace Digikam
 {
@@ -409,7 +409,7 @@ void MonthWidget::setActive(bool val)
     }
 }
 
-void MonthWidget::setImageModel(ItemFilterModel* model)
+void MonthWidget::setItemModel(ItemFilterModel* model)
 {
     if (d->model)
     {
@@ -489,7 +489,7 @@ void MonthWidget::updateDays()
             continue;
         }
 
-        QDateTime dt = d->model->data(index, ImageModel::CreationDateRole).toDateTime();
+        QDateTime dt = d->model->data(index, ItemModel::CreationDateRole).toDateTime();
 
         if (dt.isNull())
         {

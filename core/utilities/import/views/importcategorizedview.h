@@ -49,9 +49,9 @@ public:
     explicit ImportCategorizedView(QWidget* const parent = 0);
     ~ImportCategorizedView();
 
-    void setModels(ImportImageModel* model, ImportSortFilterModel* filterModel);
+    void setModels(ImportItemModel* model, ImportSortFilterModel* filterModel);
 
-    ImportImageModel*      importImageModel()                 const;
+    ImportItemModel*      importItemModel()                 const;
     ImportSortFilterModel* importSortFilterModel()            const;
 
     QItemSelectionModel*   getSelectionModel()                const;
@@ -59,7 +59,7 @@ public:
     /// Returns any ImportFilterModel in chain. May not be sourceModel()
     ImportFilterModel*     importFilterModel()                const;
 
-    /// Returns 0 if the ImportImageModel is not an ImportThumbnailModel
+    /// Returns 0 if the ImportItemModel is not an ImportThumbnailModel
     ImportThumbnailModel*  importThumbnailModel()             const;
 
     ImportDelegate*        delegate()                         const;

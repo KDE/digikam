@@ -120,7 +120,7 @@ void ShowHideVersionsOverlay::updateButton(const QModelIndex& index)
     const int y      = rect.bottom() - gap - size.height();
     button()->move(QPoint(x, y));
 
-    ItemInfo info   = ImageModel::retrieveItemInfo(index);
+    ItemInfo info   = ItemModel::retrieveItemInfo(index);
     button()->setChecked(m_filter.isExemptedBySettings(info));
 }
 
@@ -130,7 +130,7 @@ void ShowHideVersionsOverlay::slotClicked(bool checked)
 
     if (index.isValid())
     {
-        ItemInfo info = ImageModel::retrieveItemInfo(index);
+        ItemInfo info = ItemModel::retrieveItemInfo(index);
         int tagId      = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::versionAlwaysVisible());
 
         if (checked)
@@ -148,7 +148,7 @@ bool ShowHideVersionsOverlay::checkIndex(const QModelIndex& index) const
 {
     if (index.data(ItemHistoryGraphModel::IsImageItemRole).toBool())
     {
-        ItemInfo info = ImageModel::retrieveItemInfo(index);
+        ItemInfo info = ItemModel::retrieveItemInfo(index);
         return m_filter.isHiddenBySettings(info);
     }
 
@@ -216,7 +216,7 @@ ActionVersionsOverlay::Button* ActionVersionsOverlay::button() const
     return static_cast<Button*>(HoverButtonDelegateOverlay::button());
 }
 
-void ActionVersionsOverlay::setReferenceModel(const ImageModel* model)
+void ActionVersionsOverlay::setReferenceModel(const ItemModel* model)
 {
     m_referenceModel = model;
 }
@@ -259,7 +259,7 @@ void ActionVersionsOverlay::slotClicked(bool checked)
 
     if (index.isValid())
     {
-        emit activated(ImageModel::retrieveItemInfo(index));
+        emit activated(ItemModel::retrieveItemInfo(index));
     }
 }
 
@@ -269,7 +269,7 @@ bool ActionVersionsOverlay::checkIndex(const QModelIndex& index) const
     {
         if (m_referenceModel)
         {
-            ItemInfo info = ImageModel::retrieveItemInfo(index);
+            ItemInfo info = ItemModel::retrieveItemInfo(index);
             // show overlay if image is not contained in reference model
             return !m_referenceModel->hasImage(info);
         }

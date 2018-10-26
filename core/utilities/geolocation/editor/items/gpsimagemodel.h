@@ -38,14 +38,14 @@
 namespace Digikam
 {
 
-class GPSImageModel : public QAbstractItemModel
+class GPSItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
 
-    explicit GPSImageModel(QObject* const parent = 0);
-    ~GPSImageModel();
+    explicit GPSItemModel(QObject* const parent = 0);
+    ~GPSItemModel();
 
     // own functions:
     void addItem(GPSImageItem* const newItem);

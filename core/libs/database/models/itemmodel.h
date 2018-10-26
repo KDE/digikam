@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_MODEL_H
-#define DIGIKAM_IMAGE_MODEL_H
+#ifndef DIGIKAM_ITEM_MODEL_H
+#define DIGIKAM_ITEM_MODEL_H
 
 // Qt includes
 
@@ -47,17 +47,17 @@ namespace DatabaseFields
 class Set;
 }
 
-class DIGIKAM_DATABASE_EXPORT ImageModel : public QAbstractListModel, public DragDropModelImplementation
+class DIGIKAM_DATABASE_EXPORT ItemModel : public QAbstractListModel, public DragDropModelImplementation
 {
     Q_OBJECT
 
 public:
 
-    enum ImageModelRoles
+    enum ItemModelRoles
     {
-        /// An ImageModel* pointer to this model
-        ImageModelPointerRole   = Qt::UserRole,
-        ImageModelInternalId    = Qt::UserRole + 1,
+        /// An ItemModel* pointer to this model
+        ItemModelPointerRole   = Qt::UserRole,
+        ItemModelInternalId    = Qt::UserRole + 1,
         /// Returns a thumbnail pixmap. May be implemented by subclasses.
         /// Returns either a valid pixmap or a null QVariant.
         ThumbnailRole           = Qt::UserRole + 2,
@@ -68,7 +68,7 @@ public:
         /// Returns the number of duplicate indexes for the same image id
         ExtraDataDuplicateCount = Qt::UserRole + 6,
 
-        // Roles which are defined here but not implemented by ImageModel
+        // Roles which are defined here but not implemented by ItemModel
         /// Returns position of item in Left Light Table preview.
         LTLeftPanelRole         = Qt::UserRole + 50,
         /// Returns position of item in Right Light Table preview.
@@ -82,8 +82,8 @@ public:
 
 public:
 
-    explicit ImageModel(QObject* const parent = 0);
-    ~ImageModel();
+    explicit ItemModel(QObject* const parent = 0);
+    ~ItemModel();
 
     /** If a cache is kept, lookup by file path is fast,
      *  without a cache it is O(n). Default is false.
@@ -102,19 +102,19 @@ public:
      *  If the index is not valid, imageInfo will return a null ItemInfo, imageId will
      *  return 0, imageInfoRef must not be called with an invalid index.
      */
-    ItemInfo        imageInfo(const QModelIndex& index) const;
-    ItemInfo&       imageInfoRef(const QModelIndex& index) const;
-    qlonglong        imageId(const QModelIndex& index) const;
-    QList<ItemInfo> imageInfos(const QList<QModelIndex>& indexes) const;
-    QList<qlonglong> imageIds(const QList<QModelIndex>& indexes) const;
+    ItemInfo         imageInfo(const QModelIndex& index)           const;
+    ItemInfo&        imageInfoRef(const QModelIndex& index)        const;
+    qlonglong        imageId(const QModelIndex& index)             const;
+    QList<ItemInfo>  imageInfos(const QList<QModelIndex>& indexes) const;
+    QList<qlonglong> imageIds(const QList<QModelIndex>& indexes)   const;
 
     /** Returns the ItemInfo object, reference or image id from the underlying data
      *  of the given row (parent is the invalid QModelIndex, column is 0).
      *  Note that imageInfoRef will crash if index is invalid.
      */
-    ItemInfo  imageInfo(int row) const;
-    ItemInfo& imageInfoRef(int row) const;
-    qlonglong  imageId(int row) const;
+    ItemInfo   imageInfo(int row)    const;
+    ItemInfo&  imageInfoRef(int row) const;
+    qlonglong  imageId(int row)      const;
 
     /** Return the index for the given ItemInfo or id, if contained in this model.
      */
@@ -134,10 +134,10 @@ public:
      *  In case of multiple occurrences of the same file, the simpler variants return
      *  any one found first, use the QList methods to retrieve all occurrences.
      */
-    QModelIndex        indexForPath(const QString& filePath) const;
-    ItemInfo          imageInfo(const QString& filePath) const;
+    QModelIndex        indexForPath(const QString& filePath)   const;
+    ItemInfo           imageInfo(const QString& filePath)      const;
     QList<QModelIndex> indexesForPath(const QString& filePath) const;
-    QList<ItemInfo>   imageInfos(const QString& filePath) const;
+    QList<ItemInfo>    imageInfos(const QString& filePath)     const;
 
     /** Main entry point for subclasses adding image infos to the model.
      *  If you list entries not unique per image id, you must add an extraValue
@@ -190,9 +190,9 @@ public:
      */
     void ensureHasGroupedImages(const ItemInfo& groupLeader);
 
-    QList<ItemInfo> imageInfos() const;
-    QList<qlonglong> imageIds()    const;
-    QList<ItemInfo> uniqueItemInfos() const;
+    QList<ItemInfo>  imageInfos()      const;
+    QList<qlonglong> imageIds()        const;
+    QList<ItemInfo>  uniqueItemInfos() const;
 
     bool hasImage(qlonglong id) const;
     bool hasImage(const ItemInfo& info) const;
@@ -239,7 +239,7 @@ public:
     virtual QModelIndex   index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;
 
     /** Retrieves the imageInfo object from the data() method of the given index.
-     *  The index may be from a QSortFilterProxyModel as long as an ImageModel is at the end. */
+     *  The index may be from a QSortFilterProxyModel as long as an ItemModel is at the end. */
     static ItemInfo retrieveItemInfo(const QModelIndex& index);
     static qlonglong retrieveImageId(const QModelIndex& index);
 
@@ -349,7 +349,7 @@ private:
 
 public:
 
-    // Declared public because it's used in ImageModelIncrementalUpdater class
+    // Declared public because it's used in ItemModelIncrementalUpdater class
     class Private;
 
 private:
@@ -359,6 +359,6 @@ private:
 
 } // namespace Digikam
 
-Q_DECLARE_METATYPE(Digikam::ImageModel*)
+Q_DECLARE_METATYPE(Digikam::ItemModel*)
 
-#endif // DIGIKAM_IMAGE_MODEL_H
+#endif // DIGIKAM_ITEM_MODEL_H

@@ -81,7 +81,7 @@ protected:
                 return QString();
             case ImageMode:
             {
-                ItemInfo info = ImageModel::retrieveItemInfo(currentIndex());
+                ItemInfo info = ItemModel::retrieveItemInfo(currentIndex());
                 return ToolTipFiller::imageInfoTipContents(info);
             }
             case FilterActionMode:

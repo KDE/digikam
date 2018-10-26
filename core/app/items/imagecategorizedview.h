@@ -38,7 +38,7 @@ namespace Digikam
 class Album;
 class ImageAlbumModel;
 class ImageAlbumFilterModel;
-class ImageModel;
+class ItemModel;
 class ItemFilterModel;
 class ImageSortFilterModel;
 class ImageDelegate;
@@ -54,9 +54,9 @@ public:
     explicit ImageCategorizedView(QWidget* const parent = 0);
     ~ImageCategorizedView();
 
-    void setModels(ImageModel* model, ImageSortFilterModel* filterModel);
+    void setModels(ItemModel* model, ImageSortFilterModel* filterModel);
 
-    ImageModel*            imageModel()            const;
+    ItemModel*            imageModel()            const;
     ImageSortFilterModel*  imageSortFilterModel()  const;
 
     QItemSelectionModel*   getSelectionModel()     const;
@@ -64,10 +64,10 @@ public:
     /// Returns any ItemFilterMode in chain. May not be sourceModel()
     ItemFilterModel*      imageFilterModel()      const;
 
-    /// Returns 0 if the ImageModel is not an ItemThumbnailModel
+    /// Returns 0 if the ItemModel is not an ItemThumbnailModel
     ItemThumbnailModel*   imageThumbnailModel()   const;
 
-    /// Returns 0 if the ImageModel is not an ImageAlbumModel
+    /// Returns 0 if the ItemModel is not an ImageAlbumModel
     ImageAlbumModel*       imageAlbumModel()       const;
     ImageAlbumFilterModel* imageAlbumFilterModel() const;
 

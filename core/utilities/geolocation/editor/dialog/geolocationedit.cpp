@@ -100,7 +100,7 @@ struct SaveChangedImagesHelper
 {
 public:
 
-    explicit SaveChangedImagesHelper(GPSImageModel* const model)
+    explicit SaveChangedImagesHelper(GPSItemModel* const model)
         : imageModel(model)
     {
     }
@@ -118,7 +118,7 @@ public:
 public:
 
     typedef QPair<QUrl, QString> result_type;
-    GPSImageModel* const         imageModel;
+    GPSItemModel* const         imageModel;
 };
 
 // ---------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ struct LoadFileMetadataHelper
 {
 public:
 
-    explicit LoadFileMetadataHelper(GPSImageModel* const model)
+    explicit LoadFileMetadataHelper(GPSItemModel* const model)
         : imageModel(model)
     {
     }
@@ -147,7 +147,7 @@ public:
 public:
 
     typedef QPair<QUrl, QString> result_type;
-    GPSImageModel* const         imageModel;
+    GPSItemModel* const         imageModel;
 };
 
 // ---------------------------------------------------------------------------------
@@ -201,7 +201,7 @@ public:
     }
 
     // General things
-    GPSImageModel*                           imageModel;
+    GPSItemModel*                           imageModel;
     QItemSelectionModel*                     selectionModel;
     bool                                     uiEnabled;
     GPSImageListContextMenu*                 listViewContextMenu;
@@ -278,7 +278,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
     setModal(true);
 
     d->iface          = iface;
-    d->imageModel     = new GPSImageModel(this);
+    d->imageModel     = new GPSItemModel(this);
     d->selectionModel = new QItemSelectionModel(d->imageModel);
     d->trackManager   = new TrackManager(this);
 

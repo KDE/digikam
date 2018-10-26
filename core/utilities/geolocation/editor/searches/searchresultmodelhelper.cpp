@@ -70,13 +70,13 @@ public:
 
     SearchResultModel*   model;
     QItemSelectionModel* selectionModel;
-    GPSImageModel*       imageModel;
+    GPSItemModel*       imageModel;
     bool                 visible;
 };
 
 SearchResultModelHelper::SearchResultModelHelper(SearchResultModel* const resultModel,
                                                  QItemSelectionModel* const selectionModel,
-                                                 GPSImageModel* const imageModel,
+                                                 GPSItemModel* const imageModel,
                                                  QObject* const parent)
     : GeoModelHelper(parent),
       d(new Private())

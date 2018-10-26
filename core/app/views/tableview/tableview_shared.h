@@ -29,7 +29,7 @@ namespace Digikam
 {
 
 class ItemFilterModel;
-class ImageModel;
+class ItemModel;
 class TableView;
 class TableViewColumnFactory;
 class TableViewCurrentToSortedSyncer;
@@ -43,7 +43,7 @@ class TableViewShared
 {
 public:
 
-    ImageModel*                    imageModel;
+    ItemModel*                    imageModel;
     ItemFilterModel*              imageFilterModel;
     QItemSelectionModel*           imageFilterSelectionModel;
     ThumbnailLoadThread*           thumbnailLoadThread;

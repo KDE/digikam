@@ -48,10 +48,10 @@ public:
     void installOverlays();
 
     /**
-     * This installs a duplicate filter model, if the ImageModel may contain duplicates.
+     * This installs a duplicate filter model, if the ItemModel may contain duplicates.
      * Otherwise, just use setModels().
      */
-    void setModelsFiltered(ImageModel* model, ImageSortFilterModel* filterModel);
+    void setModelsFiltered(ItemModel* model, ImageSortFilterModel* filterModel);
 
     QModelIndex nextIndex(const QModelIndex& index)     const;
     QModelIndex previousIndex(const QModelIndex& index) const;

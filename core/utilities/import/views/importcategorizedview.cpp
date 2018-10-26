@@ -61,7 +61,7 @@ protected:
 
     virtual QString tipContents()
     {
-        CamItemInfo info = ImportImageModel::retrieveCamItemInfo(currentIndex());
+        CamItemInfo info = ImportItemModel::retrieveCamItemInfo(currentIndex());
         return ImportToolTipFiller::CamItemInfoTipContents(info);
     }
 };
@@ -81,7 +81,7 @@ public:
     {
     }
 
-    ImportImageModel*      model;
+    ImportItemModel*      model;
     ImportSortFilterModel* filterModel;
 
     ImportDelegate*        delegate;
@@ -120,7 +120,7 @@ ImportCategorizedView::~ImportCategorizedView()
     delete d;
 }
 
-void ImportCategorizedView::setModels(ImportImageModel* model, ImportSortFilterModel* filterModel)
+void ImportCategorizedView::setModels(ImportItemModel* model, ImportSortFilterModel* filterModel)
 {
     if (d->delegate)
     {
@@ -165,7 +165,7 @@ void ImportCategorizedView::setModels(ImportImageModel* model, ImportSortFilterM
     }
 }
 
-ImportImageModel* ImportCategorizedView::importImageModel() const
+ImportItemModel* ImportCategorizedView::importItemModel() const
 {
     return d->model;
 }

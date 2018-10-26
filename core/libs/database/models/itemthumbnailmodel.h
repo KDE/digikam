@@ -27,7 +27,7 @@
 
 // Local includes
 
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "thumbnailsize.h"
 #include "digikam_export.h"
 
@@ -37,14 +37,14 @@ namespace Digikam
 class LoadingDescription;
 class ThumbnailLoadThread;
 
-class DIGIKAM_DATABASE_EXPORT ItemThumbnailModel : public ImageModel
+class DIGIKAM_DATABASE_EXPORT ItemThumbnailModel : public ItemModel
 {
     Q_OBJECT
 
 public:
 
     /**
-     *  An ImageModel that supports thumbnail loading.
+     *  An ItemModel that supports thumbnail loading.
      *  You need to set a ThumbnailLoadThread to enable thumbnail loading.
      *  Adjust the thumbnail size to your needs.
      *  Note that setKeepsFilePathCache is enabled per default.

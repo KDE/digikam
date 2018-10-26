@@ -41,9 +41,9 @@ void GPSUndoCommand::changeItemData(const bool redoIt)
     if (undoList.isEmpty())
         return;
 
-    // get a pointer to the GPSImageModel:
+    // get a pointer to the GPSItemModel:
     // TODO: why is the model returned as const?
-    GPSImageModel* const imageModel = const_cast<GPSImageModel*>(dynamic_cast<const GPSImageModel*>(undoList.first().modelIndex.model()));
+    GPSItemModel* const imageModel = const_cast<GPSItemModel*>(dynamic_cast<const GPSItemModel*>(undoList.first().modelIndex.model()));
 
     if (!imageModel)
         return;

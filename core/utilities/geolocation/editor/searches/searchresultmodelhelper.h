@@ -48,7 +48,7 @@ public:
 
     explicit SearchResultModelHelper(SearchResultModel* const resultModel,
                                      QItemSelectionModel* const selectionModel,
-                                     GPSImageModel* const imageModel,
+                                     GPSItemModel* const imageModel,
                                      QObject* const parent = 0);
     ~SearchResultModelHelper();
 

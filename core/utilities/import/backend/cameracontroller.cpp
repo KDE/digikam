@@ -509,7 +509,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 sendLogMsg(xi18n("Failed to list files in <filename>%1</filename>", folder), DHistoryView::ErrorEntry);
             }
 
-            // TODO would it be okay to pass this to the ImportImageModel and let it filter it for us?
+            // TODO would it be okay to pass this to the ImportItemModel and let it filter it for us?
             for (CamItemInfoList::iterator it = itemsList.begin() ; it != itemsList.end() ; )
             {
                 CamItemInfo &info = (*it);

@@ -727,7 +727,7 @@ ItemInfo ItemHistoryGraphModel::imageInfo(const QModelIndex& index) const
 {
     QModelIndex imageIndex = imageModelIndex(index);
 
-    return ImageModel::retrieveItemInfo(imageIndex);
+    return ItemModel::retrieveItemInfo(imageIndex);
 }
 
 QModelIndex ItemHistoryGraphModel::indexForInfo(const ItemInfo& info) const
@@ -740,7 +740,7 @@ QModelIndex ItemHistoryGraphModel::indexForInfo(const ItemInfo& info) const
     // try with primary info
     foreach(VertexItem* const item, d->vertexItems)
     {
-        if (ImageModel::retrieveItemInfo(item->index) == info)
+        if (ItemModel::retrieveItemInfo(item->index) == info)
         {
             return createIndex(item->parent->children.indexOf(item), 0, item);
         }

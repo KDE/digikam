@@ -86,7 +86,7 @@ ImageThumbnailBar::~ImageThumbnailBar()
     delete d;
 }
 
-void ImageThumbnailBar::setModelsFiltered(ImageModel* model, ImageSortFilterModel* filterModel)
+void ImageThumbnailBar::setModelsFiltered(ItemModel* model, ImageSortFilterModel* filterModel)
 {
     if (!d->duplicatesFilter)
     {

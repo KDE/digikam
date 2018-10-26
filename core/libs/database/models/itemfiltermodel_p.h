@@ -98,7 +98,7 @@ public:
 
     ItemFilterModel*                   q;
 
-    ImageModel*                         imageModel;
+    ItemModel*                         imageModel;
 
     ItemFilterSettings                 filter;
     ItemSortSettings                   sorter;

@@ -226,15 +226,15 @@ static DropAction groupAction(const QDropEvent* const, QWidget* const view)
 
 // -------------------------------------------------------------------------------------
 
-ImageDragDropHandler::ImageDragDropHandler(ImageModel* const model)
+ImageDragDropHandler::ImageDragDropHandler(ItemModel* const model)
     : AbstractItemDragDropHandler(model),
       m_readOnly(false)
 {
 }
 
-ImageModel* ImageDragDropHandler::model() const
+ItemModel* ImageDragDropHandler::model() const
 {
-    return static_cast<ImageModel*>(m_model);
+    return static_cast<ItemModel*>(m_model);
 }
 
 ImageAlbumModel* ImageDragDropHandler::albumModel() const
@@ -333,7 +333,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
             if (thumbBar)
             {
-                droppedOnInfo = model()->imageInfo(thumbBar->imageFilterModel()->mapToSourceImageModel(droppedOn));
+                droppedOnInfo = model()->imageInfo(thumbBar->imageFilterModel()->mapToSourceItemModel(droppedOn));
             }
             else
             {

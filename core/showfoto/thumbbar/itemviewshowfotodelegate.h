@@ -36,7 +36,7 @@ namespace ShowFoto
 {
 
 class ShowfotoFilterModel;
-class ShowfotoImageModel;
+class ShowfotoItemModel;
 class ItemViewShowfotoDelegatePrivate;
 
 class ItemViewShowfotoDelegate : public DItemDelegate, public ImageDelegateOverlayContainer

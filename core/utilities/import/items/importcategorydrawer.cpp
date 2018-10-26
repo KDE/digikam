@@ -179,7 +179,7 @@ void ImportCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole
 
 void ImportCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* header, QString* subLine) const
 {
-    ImportImageModel* sourceModel = index.data(ImportImageModel::ImportImageModelPointerRole).value<ImportImageModel*>();
+    ImportItemModel* sourceModel = index.data(ImportItemModel::ImportItemModelPointerRole).value<ImportItemModel*>();
 
     if (!sourceModel)
     {

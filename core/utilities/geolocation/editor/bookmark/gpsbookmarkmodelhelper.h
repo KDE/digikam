@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class GPSImageModel;
+class GPSItemModel;
 class GPSUndoCommand;
 
 class GPSBookmarkModelHelper : public GeoModelHelper
@@ -55,7 +55,7 @@ public:
 public:
 
     GPSBookmarkModelHelper(BookmarksManager* const bookmarkManager,
-                           GPSImageModel* const imageModel,
+                           GPSItemModel* const imageModel,
                            QObject* const parent = 0);
     virtual ~GPSBookmarkModelHelper();
 

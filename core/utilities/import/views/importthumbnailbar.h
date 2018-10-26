@@ -42,10 +42,10 @@ public:
     ~ImportThumbnailBar();
 
     /**
-     * This installs a duplicate filter model, if the ImportImageModel may contain duplicates.
+     * This installs a duplicate filter model, if the ImportItemModel may contain duplicates.
      * Otherwise, just use setModels().
      */
-    void setModelsFiltered(ImportImageModel* model, ImportSortFilterModel* filterModel);
+    void setModelsFiltered(ImportItemModel* model, ImportSortFilterModel* filterModel);
 
     QModelIndex nextIndex(const QModelIndex& index)     const;
     QModelIndex previousIndex(const QModelIndex& index) const;

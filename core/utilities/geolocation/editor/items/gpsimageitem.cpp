@@ -507,7 +507,7 @@ void GPSImageItem::setCoordinates(const GeoCoordinates& newCoordinates)
     emitDataChanged();
 }
 
-void GPSImageItem::setModel(GPSImageModel* const model)
+void GPSImageItem::setModel(GPSItemModel* const model)
 {
     m_model = model;
 }
@@ -520,7 +520,7 @@ void GPSImageItem::emitDataChanged()
     }
 }
 
-void GPSImageItem::setHeaderData(GPSImageModel* const model)
+void GPSImageItem::setHeaderData(GPSItemModel* const model)
 {
     model->setColumnCount(ColumnGPSImageItemCount);
     model->setHeaderData(ColumnThumbnail,   Qt::Horizontal, i18n("Thumbnail"),      Qt::DisplayRole);

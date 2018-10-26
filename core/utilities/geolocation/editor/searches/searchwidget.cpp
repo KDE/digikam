@@ -86,7 +86,7 @@ public:
         gpsBookmarkOwner                              = 0;
         actionBookmark                                = 0;
         mapWidget                                     = 0;
-        gpsImageModel                                 = 0;
+        gpsItemModel                                 = 0;
         gosImageSelectionModel                        = 0;
         searchTermLineEdit                            = 0;
         searchButton                                  = 0;
@@ -110,7 +110,7 @@ public:
 
     // Map
     MapWidget*               mapWidget;
-    GPSImageModel*           gpsImageModel;
+    GPSItemModel*           gpsItemModel;
     QItemSelectionModel*     gosImageSelectionModel;
     QLineEdit*               searchTermLineEdit;
     QPushButton*             searchButton;
@@ -139,7 +139,7 @@ public:
 };
 
 SearchWidget::SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
-                           GPSImageModel* const gpsImageModel,
+                           GPSItemModel* const gpsItemModel,
                            QItemSelectionModel* const gosImageSelectionModel,
                            QWidget* const parent
                           )
@@ -147,7 +147,7 @@ SearchWidget::SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
       d(new Private())
 {
     d->gpsBookmarkOwner       = gpsBookmarkOwner;
-    d->gpsImageModel          = gpsImageModel;
+    d->gpsItemModel          = gpsItemModel;
     d->gosImageSelectionModel = gosImageSelectionModel;
     d->searchBackend          = new SearchBackend(this);
     d->searchResultsModel     = new SearchResultModel(this);
@@ -158,7 +158,7 @@ SearchWidget::SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
 
     d->searchResultsSelectionModel = new QItemSelectionModel(d->searchResultsModel);
     d->searchResultsModel->setSelectionModel(d->searchResultsSelectionModel);
-    d->searchResultModelHelper     = new SearchResultModelHelper(d->searchResultsModel, d->searchResultsSelectionModel, d->gpsImageModel, this);
+    d->searchResultModelHelper     = new SearchResultModelHelper(d->searchResultsModel, d->searchResultsSelectionModel, d->gpsItemModel, this);
 
     d->mainVBox           = new QVBoxLayout(this);
     setLayout(d->mainVBox);
@@ -446,7 +446,7 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
     for (int i = 0 ; i < selectedImageIndices.count() ; ++i)
     {
         const QPersistentModelIndex itemIndex = selectedImageIndices.at(i);
-        GPSImageItem* const item              = d->gpsImageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item              = d->gpsItemModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(item);

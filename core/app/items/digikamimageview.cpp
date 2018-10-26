@@ -380,12 +380,12 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
 
     foreach (const QModelIndex& index, indexes)
     {
-        infos << ImageModel::retrieveItemInfo(index);
+        infos << ItemModel::retrieveItemInfo(index);
         faces << d->faceDelegate->face(index);
 
         if (needFastRemove)
         {
-            sourceIndexes << imageSortFilterModel()->mapToSourceImageModel(index);
+            sourceIndexes << imageSortFilterModel()->mapToSourceItemModel(index);
         }
     }
 
@@ -405,9 +405,9 @@ void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
 
     foreach (const QModelIndex& index, indexes)
     {
-        infos << ImageModel::retrieveItemInfo(index);
+        infos << ItemModel::retrieveItemInfo(index);
         faces << d->faceDelegate->face(index);
-        sourceIndexes << imageSortFilterModel()->mapToSourceImageModel(index);
+        sourceIndexes << imageSortFilterModel()->mapToSourceItemModel(index);
     }
 
     imageAlbumModel()->removeIndexes(sourceIndexes);

@@ -57,7 +57,7 @@ public:
     explicit DateFolderView(QWidget* const parent, DateAlbumModel* const dateAlbumModel);
     ~DateFolderView();
 
-    void setImageModel(ItemFilterModel* const model);
+    void setItemModel(ItemFilterModel* const model);
 
     void setActive(const bool val);
 

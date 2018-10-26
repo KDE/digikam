@@ -103,9 +103,9 @@ ImageAlbumFilterModel::~ImageAlbumFilterModel()
 {
 }
 
-void ImageAlbumFilterModel::setSourceImageModel(ImageAlbumModel* model)
+void ImageAlbumFilterModel::setSourceItemModel(ImageAlbumModel* model)
 {
-    ItemFilterModel::setSourceImageModel(model);
+    ItemFilterModel::setSourceItemModel(model);
 }
 
 ImageAlbumModel* ImageAlbumFilterModel::sourceModel() const

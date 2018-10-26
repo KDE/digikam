@@ -85,7 +85,7 @@ TableView::TableView(QItemSelectionModel* const selectionModel,
     s->tableView                     = this;
     s->thumbnailLoadThread           = new ThumbnailLoadThread(this);
     s->imageFilterModel              = dynamic_cast<ItemFilterModel*>(imageFilterModel);
-    s->imageModel                    = dynamic_cast<ImageModel*>(imageFilterModel->sourceModel());
+    s->imageModel                    = dynamic_cast<ItemModel*>(imageFilterModel->sourceModel());
     s->imageFilterSelectionModel     = selectionModel;
     s->columnFactory                 = new TableViewColumnFactory(s.data(), this);
 

@@ -124,7 +124,7 @@ public:
     TrackListModel*         trackListModel;
     bool                    uiEnabledInternal;
     bool                    uiEnabledExternal;
-    GPSImageModel*          imageModel;
+    GPSItemModel*          imageModel;
 
     int                     correlationTotalCount;
     int                     correlationCorrelatedCount;
@@ -133,7 +133,7 @@ public:
 };
 
 GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent,
-                                         GPSImageModel* const imageModel,
+                                         GPSItemModel* const imageModel,
                                          TrackManager* const trackManager)
     : QWidget(parent),
       d(new Private())

@@ -38,7 +38,7 @@ class KConfigGroup;
 namespace Digikam
 {
 
-class GPSImageModel;
+class GPSItemModel;
 class GPSUndoCommand;
 class GPSDataContainer;
 
@@ -49,7 +49,7 @@ class GPSImageDetails : public QWidget
 public:
 
     explicit GPSImageDetails(QWidget* const parent,
-                             GPSImageModel* const imageModel);
+                             GPSItemModel* const imageModel);
     ~GPSImageDetails();
 
     void setUIEnabledExternal(const bool state);

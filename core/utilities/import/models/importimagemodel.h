@@ -39,17 +39,17 @@ namespace Digikam
 {
 class AbstractItemDragDropHandler;
 
-class ImportImageModel : public QAbstractListModel, public DragDropModelImplementation
+class ImportItemModel : public QAbstractListModel, public DragDropModelImplementation
 {
     Q_OBJECT
 
 public:
 
-    enum ImportImageModelRoles
+    enum ImportItemModelRoles
     {
-        /// An ImportImageModel* pointer to this model
-        ImportImageModelPointerRole = Qt::UserRole,
-        ImportImageModelInternalId  = Qt::UserRole + 1,
+        /// An ImportItemModel* pointer to this model
+        ImportItemModelPointerRole = Qt::UserRole,
+        ImportItemModelInternalId  = Qt::UserRole + 1,
 
         /// Returns a thumbnail pixmap. May be implemented by subclasses.
         /// Returns either a valid pixmap or a null QVariant.
@@ -65,8 +65,8 @@ public:
 
 public:
 
-    explicit ImportImageModel(QObject* const parent = 0);
-    ~ImportImageModel();
+    explicit ImportItemModel(QObject* const parent = 0);
+    ~ImportItemModel();
 
     // Used to set the camera controller, and connect with it.
     virtual void setCameraThumbsController(CameraThumbsCtrl* const controller);
@@ -155,7 +155,7 @@ public:
 
     /**
      * Retrieve the CamItemInfo object from the data() function of the given index
-     * The index may be from a QSortFilterProxyModel as long as an ImportImageModel is at the end.
+     * The index may be from a QSortFilterProxyModel as long as an ImportItemModel is at the end.
      */
     static CamItemInfo retrieveCamItemInfo(const QModelIndex& index);
     static qlonglong   retrieveCamItemId(const QModelIndex& index);
@@ -287,7 +287,7 @@ private:
 
 public:
 
-    // NOTE: Declared public because it's used in ImageModelIncrementalUpdater class
+    // NOTE: Declared public because it's used in ItemModelIncrementalUpdater class
     class Private;
 
 private:
@@ -297,6 +297,6 @@ private:
 
 } // namespace Digikam
 
-Q_DECLARE_METATYPE(Digikam::ImportImageModel*)
+Q_DECLARE_METATYPE(Digikam::ImportItemModel*)
 
 #endif // DIGIKAM_IMPORT_IMAGE_MODEL_H

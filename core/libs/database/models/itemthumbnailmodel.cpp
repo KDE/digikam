@@ -50,7 +50,7 @@ public:
         preloadThumbSize(0),
         emitDataChanged(true)
     {
-        staticListContainingThumbnailRole << ImageModel::ThumbnailRole;
+        staticListContainingThumbnailRole << ItemModel::ThumbnailRole;
     }
 
     ThumbnailLoadThread*   thread;
@@ -75,7 +75,7 @@ public:
 };
 
 ItemThumbnailModel::ItemThumbnailModel(QObject* const parent)
-    : ImageModel(parent),
+    : ItemModel(parent),
       d(new Private)
 {
     setKeepsFilePathCache(true);
@@ -245,7 +245,7 @@ QVariant ItemThumbnailModel::data(const QModelIndex& index, int role) const
         return QVariant(QVariant::Pixmap);
     }
 
-    return ImageModel::data(index, role);
+    return ItemModel::data(index, role);
 }
 
 bool ItemThumbnailModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -288,7 +288,7 @@ bool ItemThumbnailModel::setData(const QModelIndex& index, const QVariant& value
         }
     }
 
-    return ImageModel::setData(index, value, role);
+    return ItemModel::setData(index, value, role);
 }
 
 void ItemThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)

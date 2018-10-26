@@ -44,7 +44,7 @@ public:
     explicit ItemListModel(QObject* parent = 0);
     ~ItemListModel();
 
-    // NOTE: necessary methods to add and remove ItemInfos to the model are inherited from ImageModel
+    // NOTE: necessary methods to add and remove ItemInfos to the model are inherited from ItemModel
 
 Q_SIGNALS:
 

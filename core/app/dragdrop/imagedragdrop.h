@@ -43,9 +43,9 @@ class ImageDragDropHandler : public AbstractItemDragDropHandler
 
 public:
 
-    explicit ImageDragDropHandler(ImageModel* const model);
+    explicit ImageDragDropHandler(ItemModel* const model);
 
-    ImageModel*      model()      const;
+    ItemModel*      model()      const;
     ImageAlbumModel* albumModel() const;
 
     /**

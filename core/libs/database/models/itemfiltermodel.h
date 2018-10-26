@@ -33,7 +33,7 @@
 #include "dcategorizedsortfilterproxymodel.h"
 #include "textfilter.h"
 #include "itemfiltersettings.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "itemsortsettings.h"
 #include "digikam_export.h"
 
@@ -62,17 +62,17 @@ public:
 
     explicit ImageSortFilterModel(QObject* const parent = 0);
 
-    void        setSourceImageModel(ImageModel* const model);
-    ImageModel* sourceImageModel() const;
+    void        setSourceItemModel(ItemModel* const model);
+    ItemModel* sourceItemModel() const;
 
     void                  setSourceFilterModel(ImageSortFilterModel* const model);
     ImageSortFilterModel* sourceFilterModel() const;
 
-    QModelIndex mapToSourceImageModel(const QModelIndex& index) const;
-    QModelIndex mapFromSourceImageModel(const QModelIndex& imagemodel_index) const;
-    QModelIndex mapFromDirectSourceToSourceImageModel(const QModelIndex& sourceModel_index) const;
+    QModelIndex mapToSourceItemModel(const QModelIndex& index) const;
+    QModelIndex mapFromSourceItemModel(const QModelIndex& imagemodel_index) const;
+    QModelIndex mapFromDirectSourceToSourceItemModel(const QModelIndex& sourceModel_index) const;
 
-    /// Convenience methods mapped to ImageModel.
+    /// Convenience methods mapped to ItemModel.
     /// Mentioned indexes returned come from the source image model.
     QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes) const;
     QList<QModelIndex> mapListFromSource(const QList<QModelIndex>& sourceIndexes) const;
@@ -87,7 +87,7 @@ public:
     QModelIndex indexForImageId(qlonglong id) const;
 
     /** Returns a list of all image infos, sorted according to this model.
-     *  If you do not need a sorted list, use ImageModel's imageInfos() method.
+     *  If you do not need a sorted list, use ItemModel's imageInfos() method.
      */
     QList<ItemInfo> imageInfosSorted() const;
 
@@ -97,7 +97,7 @@ public:
 protected:
 
     /// Reimplement if needed. Called only when model shall be set as (direct) sourceModel.
-    virtual void setDirectSourceImageModel(ImageModel* const model);
+    virtual void setDirectSourceItemModel(ItemModel* const model);
 
     // made protected
     virtual void setSourceModel(QAbstractItemModel* const model);
@@ -118,20 +118,20 @@ public:
     enum ItemFilterModelRoles
     {
         /// Returns the current categorization mode
-        CategorizationModeRole      = ImageModel::FilterModelRoles + 1,
+        CategorizationModeRole      = ItemModel::FilterModelRoles + 1,
         /// Returns the current sort order
-        SortOrderRole               = ImageModel::FilterModelRoles + 2,
+        SortOrderRole               = ItemModel::FilterModelRoles + 2,
         /// Returns the number of items in the index category
-        //CategoryCountRole         = ImageModel::FilterModelRoles + 3,
+        //CategoryCountRole         = ItemModel::FilterModelRoles + 3,
         /// Returns the id of the PAlbum of the index which is used for category
-        CategoryAlbumIdRole         = ImageModel::FilterModelRoles + 3,
+        CategoryAlbumIdRole         = ItemModel::FilterModelRoles + 3,
         /// Returns the format of the index which is used for category
-        CategoryFormatRole          = ImageModel::FilterModelRoles + 4,
+        CategoryFormatRole          = ItemModel::FilterModelRoles + 4,
         /// Returns the date of the index which is used for category
-        CategoryDateRole            = ImageModel::FilterModelRoles + 5,
+        CategoryDateRole            = ItemModel::FilterModelRoles + 5,
         /// Returns true if the given image is a group leader, and the group is opened
-        GroupIsOpenRole             = ImageModel::FilterModelRoles + 6,
-        ItemFilterModelPointerRole = ImageModel::FilterModelRoles + 50
+        GroupIsOpenRole             = ItemModel::FilterModelRoles + 6,
+        ItemFilterModelPointerRole = ItemModel::FilterModelRoles + 50
     };
 
 public:
@@ -143,7 +143,7 @@ public:
     void addPrepareHook(ItemFilterModelPrepareHook* const hook);
     void removePrepareHook(ItemFilterModelPrepareHook* const hook);
 
-    /** Returns a set of DatabaseFields suggested to set as watch flags on the source ImageModel.
+    /** Returns a set of DatabaseFields suggested to set as watch flags on the source ItemModel.
      *  The contained flags will be those that this model can sort or filter by. */
     DatabaseFields::Set suggestedWatchFlags() const;
 
@@ -241,7 +241,7 @@ protected:
 
     ItemFilterModel(ItemFilterModelPrivate& dd, QObject* const parent);
 
-    virtual void setDirectSourceImageModel(ImageModel* const model);
+    virtual void setDirectSourceItemModel(ItemModel* const model);
 
     virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 

@@ -43,7 +43,7 @@
 #include "facepipeline.h"
 #include "facetags.h"
 #include "imagedelegate.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "imagecategorizedview.h"
 #include "taggingaction.h"
 #include "tagscache.h"
@@ -233,9 +233,9 @@ void AssignNameOverlay::updateFace()
         return;
     }
 
-    QVariant extraData = index().data(ImageModel::ExtraDataRole);
+    QVariant extraData = index().data(ItemModel::ExtraDataRole);
     assignNameWidget()->setCurrentFace(FaceTagsIface::fromVariant(extraData));
-    assignNameWidget()->setUserData(ImageModel::retrieveItemInfo(index()), extraData);
+    assignNameWidget()->setUserData(ItemModel::retrieveItemInfo(index()), extraData);
 }
 
 /*
@@ -248,7 +248,7 @@ void AssignNameOverlay::slotDataChanged(const QModelIndex& / *topLeft* /, const 
 
 bool AssignNameOverlay::checkIndex(const QModelIndex& index) const
 {
-    QVariant extraData = index.data(ImageModel::ExtraDataRole);
+    QVariant extraData = index.data(ItemModel::ExtraDataRole);
 
     if (extraData.isNull())
     {

@@ -46,7 +46,7 @@ class GPSImageSortProxyModel : public QSortFilterProxyModel
 
 public:
 
-    explicit GPSImageSortProxyModel(GPSImageModel* const imageModel, QItemSelectionModel* const sourceSelectionModel);
+    explicit GPSImageSortProxyModel(GPSItemModel* const imageModel, QItemSelectionModel* const sourceSelectionModel);
     ~GPSImageSortProxyModel();
 
     QItemSelectionModel* mappedSelectionModel() const;

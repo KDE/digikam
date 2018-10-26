@@ -35,7 +35,7 @@
 #include "coredbchangesets.h"
 #include "coredbwatch.h"
 #include "iteminfolist.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 
 namespace Digikam
 {
@@ -46,15 +46,15 @@ ImageSortFilterModel::ImageSortFilterModel(QObject* const parent)
 {
 }
 
-void ImageSortFilterModel::setSourceImageModel(ImageModel* const source)
+void ImageSortFilterModel::setSourceItemModel(ItemModel* const source)
 {
     if (m_chainedModel)
     {
-        m_chainedModel->setSourceImageModel(source);
+        m_chainedModel->setSourceItemModel(source);
     }
     else
     {
-        setDirectSourceImageModel(source);
+        setDirectSourceItemModel(source);
     }
 }
 
@@ -62,11 +62,11 @@ void ImageSortFilterModel::setSourceFilterModel(ImageSortFilterModel* const sour
 {
     if (source)
     {
-        ImageModel* const model = sourceImageModel();
+        ItemModel* const model = sourceItemModel();
 
         if (model)
         {
-            source->setSourceImageModel(model);
+            source->setSourceItemModel(model);
         }
     }
 
@@ -74,25 +74,25 @@ void ImageSortFilterModel::setSourceFilterModel(ImageSortFilterModel* const sour
     setSourceModel(source);
 }
 
-void ImageSortFilterModel::setDirectSourceImageModel(ImageModel* const model)
+void ImageSortFilterModel::setDirectSourceItemModel(ItemModel* const model)
 {
     setSourceModel(model);
 }
 
 void ImageSortFilterModel::setSourceModel(QAbstractItemModel* const model)
 {
-    // made it protected, only setSourceImageModel is public
+    // made it protected, only setSourceItemModel is public
     DCategorizedSortFilterProxyModel::setSourceModel(model);
 }
 
-ImageModel* ImageSortFilterModel::sourceImageModel() const
+ItemModel* ImageSortFilterModel::sourceItemModel() const
 {
     if (m_chainedModel)
     {
-        return m_chainedModel->sourceImageModel();
+        return m_chainedModel->sourceItemModel();
     }
 
-    return static_cast<ImageModel*>(sourceModel());
+    return static_cast<ItemModel*>(sourceModel());
 }
 
 ImageSortFilterModel* ImageSortFilterModel::sourceFilterModel() const
@@ -111,32 +111,32 @@ ItemFilterModel* ImageSortFilterModel::imageFilterModel() const
     return 0;
 }
 
-QModelIndex ImageSortFilterModel::mapToSourceImageModel(const QModelIndex& index) const
+QModelIndex ImageSortFilterModel::mapToSourceItemModel(const QModelIndex& index) const
 {
     if (m_chainedModel)
     {
-        return m_chainedModel->mapToSourceImageModel(mapToSource(index));
+        return m_chainedModel->mapToSourceItemModel(mapToSource(index));
     }
 
     return mapToSource(index);
 }
 
-QModelIndex ImageSortFilterModel::mapFromSourceImageModel(const QModelIndex& albummodel_index) const
+QModelIndex ImageSortFilterModel::mapFromSourceItemModel(const QModelIndex& albummodel_index) const
 {
     if (m_chainedModel)
     {
-        return mapFromSource(m_chainedModel->mapFromSourceImageModel(albummodel_index));
+        return mapFromSource(m_chainedModel->mapFromSourceItemModel(albummodel_index));
     }
 
     return mapFromSource(albummodel_index);
 }
 
 
-QModelIndex ImageSortFilterModel::mapFromDirectSourceToSourceImageModel(const QModelIndex& sourceModel_index) const
+QModelIndex ImageSortFilterModel::mapFromDirectSourceToSourceItemModel(const QModelIndex& sourceModel_index) const
 {
     if (m_chainedModel)
     {
-        return m_chainedModel->mapToSourceImageModel(sourceModel_index);
+        return m_chainedModel->mapToSourceItemModel(sourceModel_index);
     }
 
     return sourceModel_index;
@@ -150,7 +150,7 @@ QList<QModelIndex> ImageSortFilterModel::mapListToSource(const QList<QModelIndex
 
     foreach (const QModelIndex& index, indexes)
     {
-        sourceIndexes << mapToSourceImageModel(index);
+        sourceIndexes << mapToSourceItemModel(index);
     }
 
     return sourceIndexes;
@@ -162,7 +162,7 @@ QList<QModelIndex> ImageSortFilterModel::mapListFromSource(const QList<QModelInd
 
     foreach (const QModelIndex& index, sourceIndexes)
     {
-        indexes << mapFromSourceImageModel(index);
+        indexes << mapFromSourceItemModel(index);
     }
 
     return indexes;
@@ -170,22 +170,22 @@ QList<QModelIndex> ImageSortFilterModel::mapListFromSource(const QList<QModelInd
 
 ItemInfo ImageSortFilterModel::imageInfo(const QModelIndex& index) const
 {
-    return sourceImageModel()->imageInfo(mapToSourceImageModel(index));
+    return sourceItemModel()->imageInfo(mapToSourceItemModel(index));
 }
 
 qlonglong ImageSortFilterModel::imageId(const QModelIndex& index) const
 {
-    return sourceImageModel()->imageId(mapToSourceImageModel(index));
+    return sourceItemModel()->imageId(mapToSourceItemModel(index));
 }
 
 QList<ItemInfo> ImageSortFilterModel::imageInfos(const QList<QModelIndex>& indexes) const
 {
     QList<ItemInfo> infos;
-    ImageModel* const model = sourceImageModel();
+    ItemModel* const model = sourceItemModel();
 
     foreach (const QModelIndex& index, indexes)
     {
-        infos << model->imageInfo(mapToSourceImageModel(index));
+        infos << model->imageInfo(mapToSourceItemModel(index));
     }
 
     return infos;
@@ -194,11 +194,11 @@ QList<ItemInfo> ImageSortFilterModel::imageInfos(const QList<QModelIndex>& index
 QList<qlonglong> ImageSortFilterModel::imageIds(const QList<QModelIndex>& indexes) const
 {
     QList<qlonglong> ids;
-    ImageModel* const model = sourceImageModel();
+    ItemModel* const model = sourceItemModel();
 
     foreach (const QModelIndex& index, indexes)
     {
-        ids << model->imageId(mapToSourceImageModel(index));
+        ids << model->imageId(mapToSourceItemModel(index));
     }
 
     return ids;
@@ -206,28 +206,28 @@ QList<qlonglong> ImageSortFilterModel::imageIds(const QList<QModelIndex>& indexe
 
 QModelIndex ImageSortFilterModel::indexForPath(const QString& filePath) const
 {
-    return mapFromSourceImageModel(sourceImageModel()->indexForPath(filePath));
+    return mapFromSourceItemModel(sourceItemModel()->indexForPath(filePath));
 }
 
 QModelIndex ImageSortFilterModel::indexForItemInfo(const ItemInfo& info) const
 {
-    return mapFromSourceImageModel(sourceImageModel()->indexForItemInfo(info));
+    return mapFromSourceItemModel(sourceItemModel()->indexForItemInfo(info));
 }
 
 QModelIndex ImageSortFilterModel::indexForImageId(qlonglong id) const
 {
-    return mapFromSourceImageModel(sourceImageModel()->indexForImageId(id));
+    return mapFromSourceItemModel(sourceItemModel()->indexForImageId(id));
 }
 
 QList<ItemInfo> ImageSortFilterModel::imageInfosSorted() const
 {
     QList<ItemInfo>  infos;
     const int         size  = rowCount();
-    ImageModel* const model = sourceImageModel();
+    ItemModel* const model = sourceItemModel();
 
     for (int i = 0 ; i < size ; ++i)
     {
-        infos << model->imageInfo(mapToSourceImageModel(index(i, 0)));
+        infos << model->imageInfo(mapToSourceItemModel(index(i, 0)));
     }
 
     return infos;
@@ -255,7 +255,7 @@ ItemFilterModel::~ItemFilterModel()
     delete d;
 }
 
-void ItemFilterModel::setDirectSourceImageModel(ImageModel* const sourceModel)
+void ItemFilterModel::setDirectSourceItemModel(ItemModel* const sourceModel)
 {
     Q_D(ItemFilterModel);
 
@@ -311,7 +311,7 @@ QVariant ItemFilterModel::data(const QModelIndex& index, int role) const
 
     switch (role)
     {
-            // Attention: This breaks should there ever be another filter model between this and the ImageModel
+            // Attention: This breaks should there ever be another filter model between this and the ItemModel
 
         case DCategorizedSortFilterProxyModel::CategoryDisplayRole:
             return categoryIdentifier(d->imageModel->imageInfoRef(mapToSource(index)));
@@ -875,7 +875,7 @@ bool ItemFilterModel::subSortLessThan(const QModelIndex& left, const QModelIndex
 
     if (leftInfo == rightInfo)
     {
-        return d->sorter.lessThan(left.data(ImageModel::ExtraDataRole), right.data(ImageModel::ExtraDataRole));
+        return d->sorter.lessThan(left.data(ItemModel::ExtraDataRole), right.data(ItemModel::ExtraDataRole));
     }
 
     // Check grouping
@@ -1066,7 +1066,7 @@ bool NoDuplicatesItemFilterModel::filterAcceptsRow(int source_row, const QModelI
 {
     QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
 
-    if (index.data(ImageModel::ExtraDataDuplicateCount).toInt() <= 1)
+    if (index.data(ItemModel::ExtraDataDuplicateCount).toInt() <= 1)
     {
         return true;
     }
@@ -1078,8 +1078,8 @@ bool NoDuplicatesItemFilterModel::filterAcceptsRow(int source_row, const QModelI
         return true;
     }
 
-    if (sourceImageModel()->imageId(mapFromDirectSourceToSourceImageModel(index)) ==
-        sourceImageModel()->imageId(mapFromDirectSourceToSourceImageModel(previousIndex)))
+    if (sourceItemModel()->imageId(mapFromDirectSourceToSourceItemModel(index)) ==
+        sourceItemModel()->imageId(mapFromDirectSourceToSourceItemModel(previousIndex)))
     {
         return false;
     }
@@ -1117,10 +1117,10 @@ void NoDuplicatesItemFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& pa
             continue;
         }
 
-        QModelIndex sourceIndex = mapFromDirectSourceToSourceImageModel(index);
-        qlonglong id = sourceImageModel()->imageId(sourceIndex);
+        QModelIndex sourceIndex = mapFromDirectSourceToSourceItemModel(index);
+        qlonglong id = sourceItemModel()->imageId(sourceIndex);
 
-        if (sourceImageModel()->numberOfIndexesForImageId(id) > 1)
+        if (sourceItemModel()->numberOfIndexesForImageId(id) > 1)
         {
             needInvalidate = true;
         }

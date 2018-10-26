@@ -42,7 +42,7 @@
 #include "imagecategorizedview.h"
 #include "imagedelegate.h"
 #include "itemfiltermodel.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "itemscanner.h"
 #include "searchfolderview.h"
 
@@ -186,7 +186,7 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
 
 void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* header, QString* subLine) const
 {
-    ImageModel* const sourceModel = index.data(ImageModel::ImageModelPointerRole).value<ImageModel*>();
+    ItemModel* const sourceModel = index.data(ItemModel::ItemModelPointerRole).value<ItemModel*>();
 
     if (!sourceModel)
     {

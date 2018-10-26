@@ -28,7 +28,7 @@
 // Local includes
 
 #include "imagedelegate.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "imagecategorizedview.h"
 #include "ratingwidget.h"
 
@@ -133,7 +133,7 @@ void ImageRatingOverlay::updateRating()
         return;
     }
 
-    ItemInfo info = ImageModel::retrieveItemInfo(m_index);
+    ItemInfo info = ItemModel::retrieveItemInfo(m_index);
     ratingWidget()->setRating(info.rating());
 }
 

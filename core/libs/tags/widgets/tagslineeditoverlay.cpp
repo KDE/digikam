@@ -30,7 +30,7 @@
 
 #include "digikam_debug.h"
 #include "imagedelegate.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "addtagslineedit.h"
 #include "tagscache.h"
 #include "abstractalbummodel.h"
@@ -141,7 +141,7 @@ void TagsLineEditOverlay::updateTag()
         return;
     }
 
-    ItemInfo info = ImageModel::retrieveItemInfo(m_index);
+    ItemInfo info = ItemModel::retrieveItemInfo(m_index);
     qCDebug(DIGIKAM_GENERAL_LOG) << "called updateTag()";
 
     //TODO: ADD ratingWidget()->setRating(info.rating());

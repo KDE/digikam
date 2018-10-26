@@ -34,7 +34,7 @@
 #include "coredbwatch.h"
 #include "fileactionmngr.h"
 #include "iteminfo.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "itemposition.h"
 #include "importfiltermodel.h"
 #include "importimagemodel.h"

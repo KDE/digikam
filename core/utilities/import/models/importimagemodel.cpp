@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImportImageModel::Private
+class Q_DECL_HIDDEN ImportItemModel::Private
 {
 public:
 
@@ -74,7 +74,7 @@ public:
 
     bool                                      sendRemovalSignals;
 
-    class ImportImageModelIncrementalUpdater* incrementalUpdater;
+    class ImportItemModelIncrementalUpdater* incrementalUpdater;
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -82,11 +82,11 @@ public:
 typedef QPair<int, int> IntPair;
 typedef QList<IntPair>  IntPairList;
 
-class Q_DECL_HIDDEN ImportImageModelIncrementalUpdater
+class Q_DECL_HIDDEN ImportItemModelIncrementalUpdater
 {
 public:
 
-    explicit ImportImageModelIncrementalUpdater(ImportImageModel::Private* const d);
+    explicit ImportItemModelIncrementalUpdater(ImportItemModel::Private* const d);
 
     void            appendInfos(const QList<CamItemInfo>& infos);
     void            aboutToBeRemovedInModel(const IntPairList& aboutToBeRemoved);
@@ -103,18 +103,18 @@ public:
 
 // ----------------------------------------------------------------------------------------------------
 
-ImportImageModel::ImportImageModel(QObject* const parent)
+ImportItemModel::ImportItemModel(QObject* const parent)
     : QAbstractListModel(parent),
       d(new Private)
 {
 }
 
-ImportImageModel::~ImportImageModel()
+ImportItemModel::~ImportItemModel()
 {
     delete d;
 }
 
-void ImportImageModel::setCameraThumbsController(CameraThumbsCtrl* const thumbsCtrl)
+void ImportItemModel::setCameraThumbsController(CameraThumbsCtrl* const thumbsCtrl)
 {
     d->controller = thumbsCtrl->cameraController();
 
@@ -128,22 +128,22 @@ void ImportImageModel::setCameraThumbsController(CameraThumbsCtrl* const thumbsC
             SLOT(slotFileUploaded(CamItemInfo)));
 }
 
-void ImportImageModel::setKeepsFileUrlCache(bool keepCache)
+void ImportItemModel::setKeepsFileUrlCache(bool keepCache)
 {
     d->keepFileUrlCache = keepCache;
 }
 
-bool ImportImageModel::keepsFileUrlCache() const
+bool ImportItemModel::keepsFileUrlCache() const
 {
     return d->keepFileUrlCache;
 }
 
-bool ImportImageModel::isEmpty() const
+bool ImportItemModel::isEmpty() const
 {
     return d->infos.isEmpty();
 }
 
-CamItemInfo ImportImageModel::camItemInfo(const QModelIndex& index) const
+CamItemInfo ImportItemModel::camItemInfo(const QModelIndex& index) const
 {
     if (!d->isValid(index))
     {
@@ -153,12 +153,12 @@ CamItemInfo ImportImageModel::camItemInfo(const QModelIndex& index) const
     return d->infos.at(index.row());
 }
 
-CamItemInfo& ImportImageModel::camItemInfoRef(const QModelIndex& index) const
+CamItemInfo& ImportItemModel::camItemInfoRef(const QModelIndex& index) const
 {
     return d->infos[index.row()];
 }
 
-qlonglong ImportImageModel::camItemId(const QModelIndex& index) const
+qlonglong ImportItemModel::camItemId(const QModelIndex& index) const
 {
     if (!d->isValid(index))
     {
@@ -168,7 +168,7 @@ qlonglong ImportImageModel::camItemId(const QModelIndex& index) const
     return d->infos.at(index.row()).id;
 }
 
-QList<CamItemInfo> ImportImageModel::camItemInfos(const QList<QModelIndex>& indexes) const
+QList<CamItemInfo> ImportItemModel::camItemInfos(const QList<QModelIndex>& indexes) const
 {
     QList<CamItemInfo> infos;
 
@@ -180,7 +180,7 @@ QList<CamItemInfo> ImportImageModel::camItemInfos(const QList<QModelIndex>& inde
     return infos;
 }
 
-QList<qlonglong> ImportImageModel::camItemIds(const QList<QModelIndex>& indexes) const
+QList<qlonglong> ImportItemModel::camItemIds(const QList<QModelIndex>& indexes) const
 {
     QList<qlonglong> ids;
 
@@ -192,7 +192,7 @@ QList<qlonglong> ImportImageModel::camItemIds(const QList<QModelIndex>& indexes)
     return ids;
 }
 
-CamItemInfo ImportImageModel::camItemInfo(int row) const
+CamItemInfo ImportItemModel::camItemInfo(int row) const
 {
     if (row >= d->infos.size())
     {
@@ -202,12 +202,12 @@ CamItemInfo ImportImageModel::camItemInfo(int row) const
     return d->infos.at(row);
 }
 
-CamItemInfo& ImportImageModel::camItemInfoRef(int row) const
+CamItemInfo& ImportItemModel::camItemInfoRef(int row) const
 {
     return d->infos[row];
 }
 
-qlonglong ImportImageModel::camItemId(int row) const
+qlonglong ImportItemModel::camItemId(int row) const
 {
     if (row < 0 || (row >= d->infos.size()))
     {
@@ -217,17 +217,17 @@ qlonglong ImportImageModel::camItemId(int row) const
     return d->infos.at(row).id;
 }
 
-QModelIndex ImportImageModel::indexForCamItemInfo(const CamItemInfo& info) const
+QModelIndex ImportItemModel::indexForCamItemInfo(const CamItemInfo& info) const
 {
     return indexForCamItemId(info.id);
 }
 
-QList<QModelIndex> ImportImageModel::indexesForCamItemInfo(const CamItemInfo& info) const
+QList<QModelIndex> ImportItemModel::indexesForCamItemInfo(const CamItemInfo& info) const
 {
     return indexesForCamItemId(info.id);
 }
 
-QModelIndex ImportImageModel::indexForCamItemId(qlonglong id) const
+QModelIndex ImportItemModel::indexForCamItemId(qlonglong id) const
 {
     int index = d->idHash.value(id, 0);
 
@@ -239,7 +239,7 @@ QModelIndex ImportImageModel::indexForCamItemId(qlonglong id) const
     return QModelIndex();
 }
 
-QList<QModelIndex> ImportImageModel::indexesForCamItemId(qlonglong id) const
+QList<QModelIndex> ImportItemModel::indexesForCamItemId(qlonglong id) const
 {
     QList<QModelIndex> indexes;
 
@@ -253,12 +253,12 @@ QList<QModelIndex> ImportImageModel::indexesForCamItemId(qlonglong id) const
     return indexes;
 }
 
-int ImportImageModel::numberOfIndexesForCamItemInfo(const CamItemInfo& info) const
+int ImportItemModel::numberOfIndexesForCamItemInfo(const CamItemInfo& info) const
 {
     return numberOfIndexesForCamItemId(info.id);
 }
 
-int ImportImageModel::numberOfIndexesForCamItemId(qlonglong id) const
+int ImportItemModel::numberOfIndexesForCamItemId(qlonglong id) const
 {
     int count = 0;
     QHash<qlonglong,int>::const_iterator it;
@@ -272,15 +272,15 @@ int ImportImageModel::numberOfIndexesForCamItemId(qlonglong id) const
 }
 
 // static method
-CamItemInfo ImportImageModel::retrieveCamItemInfo(const QModelIndex& index)
+CamItemInfo ImportItemModel::retrieveCamItemInfo(const QModelIndex& index)
 {
     if (!index.isValid())
     {
         return CamItemInfo();
     }
 
-    ImportImageModel* const model = index.data(ImportImageModelPointerRole).value<ImportImageModel*>();
-    int row                       = index.data(ImportImageModelInternalId).toInt();
+    ImportItemModel* const model = index.data(ImportItemModelPointerRole).value<ImportItemModel*>();
+    int row                       = index.data(ImportItemModelInternalId).toInt();
 
     if (!model)
     {
@@ -291,15 +291,15 @@ CamItemInfo ImportImageModel::retrieveCamItemInfo(const QModelIndex& index)
 }
 
 // static method
-qlonglong ImportImageModel::retrieveCamItemId(const QModelIndex& index)
+qlonglong ImportItemModel::retrieveCamItemId(const QModelIndex& index)
 {
     if (!index.isValid())
     {
         return -1;
     }
 
-    ImportImageModel* const model = index.data(ImportImageModelPointerRole).value<ImportImageModel*>();
-    int                     row   = index.data(ImportImageModelInternalId).toInt();
+    ImportItemModel* const model = index.data(ImportItemModelPointerRole).value<ImportItemModel*>();
+    int                     row   = index.data(ImportItemModelInternalId).toInt();
 
     if (!model)
     {
@@ -309,7 +309,7 @@ qlonglong ImportImageModel::retrieveCamItemId(const QModelIndex& index)
     return model->camItemId(row);
 }
 
-QModelIndex ImportImageModel::indexForUrl(const QUrl& fileUrl) const
+QModelIndex ImportItemModel::indexForUrl(const QUrl& fileUrl) const
 {
     if (d->keepFileUrlCache)
     {
@@ -331,7 +331,7 @@ QModelIndex ImportImageModel::indexForUrl(const QUrl& fileUrl) const
     return QModelIndex();
 }
 
-QList<QModelIndex> ImportImageModel::indexesForUrl(const QUrl& fileUrl) const
+QList<QModelIndex> ImportItemModel::indexesForUrl(const QUrl& fileUrl) const
 {
     if (d->keepFileUrlCache)
     {
@@ -354,7 +354,7 @@ QList<QModelIndex> ImportImageModel::indexesForUrl(const QUrl& fileUrl) const
     }
 }
 
-CamItemInfo ImportImageModel::camItemInfo(const QUrl& fileUrl) const
+CamItemInfo ImportItemModel::camItemInfo(const QUrl& fileUrl) const
 {
     if (d->keepFileUrlCache)
     {
@@ -384,7 +384,7 @@ CamItemInfo ImportImageModel::camItemInfo(const QUrl& fileUrl) const
     return CamItemInfo();
 }
 
-QList<CamItemInfo> ImportImageModel::camItemInfos(const QUrl& fileUrl) const
+QList<CamItemInfo> ImportItemModel::camItemInfos(const QUrl& fileUrl) const
 {
     QList<CamItemInfo> infos;
 
@@ -414,12 +414,12 @@ QList<CamItemInfo> ImportImageModel::camItemInfos(const QUrl& fileUrl) const
     return infos;
 }
 
-void ImportImageModel::addCamItemInfo(const CamItemInfo& info)
+void ImportItemModel::addCamItemInfo(const CamItemInfo& info)
 {
     addCamItemInfos(QList<CamItemInfo>() << info);
 }
 
-void ImportImageModel::addCamItemInfos(const CamItemInfoList& infos)
+void ImportItemModel::addCamItemInfos(const CamItemInfoList& infos)
 {
     if (infos.isEmpty())
     {
@@ -436,12 +436,12 @@ void ImportImageModel::addCamItemInfos(const CamItemInfoList& infos)
     }
 }
 
-void ImportImageModel::addCamItemInfoSynchronously(const CamItemInfo& info)
+void ImportItemModel::addCamItemInfoSynchronously(const CamItemInfo& info)
 {
     addCamItemInfosSynchronously(QList<CamItemInfo>() << info);
 }
 
-void ImportImageModel::addCamItemInfosSynchronously(const CamItemInfoList& infos)
+void ImportItemModel::addCamItemInfosSynchronously(const CamItemInfoList& infos)
 {
     if (infos.isEmpty())
     {
@@ -452,7 +452,7 @@ void ImportImageModel::addCamItemInfosSynchronously(const CamItemInfoList& infos
     emit processAdded(infos);
 }
 
-void ImportImageModel::clearCamItemInfos()
+void ImportItemModel::clearCamItemInfos()
 {
     beginResetModel();
 
@@ -472,23 +472,23 @@ void ImportImageModel::clearCamItemInfos()
 }
 
 // TODO unused
-void ImportImageModel::setCamItemInfos(const CamItemInfoList& infos)
+void ImportItemModel::setCamItemInfos(const CamItemInfoList& infos)
 {
     clearCamItemInfos();
     addCamItemInfos(infos);
 }
 
-QList<CamItemInfo> ImportImageModel::camItemInfos() const
+QList<CamItemInfo> ImportItemModel::camItemInfos() const
 {
     return d->infos;
 }
 
-QList<qlonglong> ImportImageModel::camItemIds() const
+QList<qlonglong> ImportItemModel::camItemIds() const
 {
     return d->idHash.keys();
 }
 
-QList<CamItemInfo> ImportImageModel::uniqueCamItemInfos() const
+QList<CamItemInfo> ImportItemModel::uniqueCamItemInfos() const
 {
     QList<CamItemInfo> uniqueInfos;
     const int          size = d->infos.size();
@@ -506,17 +506,17 @@ QList<CamItemInfo> ImportImageModel::uniqueCamItemInfos() const
     return uniqueInfos;
 }
 
-bool ImportImageModel::hasImage(qlonglong id) const
+bool ImportItemModel::hasImage(qlonglong id) const
 {
     return d->idHash.contains(id);
 }
 
-bool ImportImageModel::hasImage(const CamItemInfo& info) const
+bool ImportItemModel::hasImage(const CamItemInfo& info) const
 {
     return d->fileUrlHash.contains(info.url().toLocalFile());
 }
 
-void ImportImageModel::emitDataChangedForAll()
+void ImportItemModel::emitDataChangedForAll()
 {
     if (d->infos.isEmpty())
     {
@@ -528,7 +528,7 @@ void ImportImageModel::emitDataChangedForAll()
     emit dataChanged(first, last);
 }
 
-void ImportImageModel::emitDataChangedForSelections(const QItemSelection& selection)
+void ImportItemModel::emitDataChangedForSelections(const QItemSelection& selection)
 {
     if (!selection.isEmpty())
     {
@@ -539,7 +539,7 @@ void ImportImageModel::emitDataChangedForSelections(const QItemSelection& select
     }
 }
 
-void ImportImageModel::appendInfos(const CamItemInfoList& infos)
+void ImportItemModel::appendInfos(const CamItemInfoList& infos)
 {
     if (infos.isEmpty())
     {
@@ -549,18 +549,18 @@ void ImportImageModel::appendInfos(const CamItemInfoList& infos)
     publiciseInfos(infos);
 }
 
-void ImportImageModel::reAddCamItemInfos(const CamItemInfoList& infos)
+void ImportItemModel::reAddCamItemInfos(const CamItemInfoList& infos)
 {
     publiciseInfos(infos);
 }
 
-void ImportImageModel::reAddingFinished()
+void ImportItemModel::reAddingFinished()
 {
     d->reAdding = false;
     cleanSituationChecks();
 }
 
-void ImportImageModel::slotFileDeleted(const QString& folder, const QString& file, bool status)
+void ImportItemModel::slotFileDeleted(const QString& folder, const QString& file, bool status)
 {
     Q_UNUSED(status)
 
@@ -571,28 +571,28 @@ void ImportImageModel::slotFileDeleted(const QString& folder, const QString& fil
     removeCamItemInfo(info);
 }
 
-void ImportImageModel::slotFileUploaded(const CamItemInfo& info)
+void ImportItemModel::slotFileUploaded(const CamItemInfo& info)
 {
     addCamItemInfo(info);
 }
 
-void ImportImageModel::startRefresh()
+void ImportItemModel::startRefresh()
 {
     d->refreshing = true;
 }
 
-void ImportImageModel::finishRefresh()
+void ImportItemModel::finishRefresh()
 {
     d->refreshing = false;
     cleanSituationChecks();
 }
 
-bool ImportImageModel::isRefreshing() const
+bool ImportItemModel::isRefreshing() const
 {
     return d->refreshing;
 }
 
-void ImportImageModel::cleanSituationChecks()
+void ImportItemModel::cleanSituationChecks()
 {
     // For starting an incremental refresh we want a clear situation:
     // Any remaining batches from non-incremental refreshing subclasses have been received in appendInfos(),
@@ -613,7 +613,7 @@ void ImportImageModel::cleanSituationChecks()
     }
 }
 
-void ImportImageModel::publiciseInfos(const CamItemInfoList& infos)
+void ImportItemModel::publiciseInfos(const CamItemInfoList& infos)
 {
     if (infos.isEmpty())
     {
@@ -651,7 +651,7 @@ void ImportImageModel::publiciseInfos(const CamItemInfoList& infos)
     emit itemInfosAdded(infos);
 }
 
-void ImportImageModel::requestIncrementalRefresh()
+void ImportItemModel::requestIncrementalRefresh()
 {
     if (d->reAdding)
     {
@@ -663,19 +663,19 @@ void ImportImageModel::requestIncrementalRefresh()
     }
 }
 
-bool ImportImageModel::hasIncrementalRefreshPending() const
+bool ImportItemModel::hasIncrementalRefreshPending() const
 {
     return d->incrementalRefreshRequested;
 }
 
-void ImportImageModel::startIncrementalRefresh()
+void ImportItemModel::startIncrementalRefresh()
 {
     delete d->incrementalUpdater;
 
-    d->incrementalUpdater = new ImportImageModelIncrementalUpdater(d);
+    d->incrementalUpdater = new ImportItemModelIncrementalUpdater(d);
 }
 
-void ImportImageModel::finishIncrementalRefresh()
+void ImportItemModel::finishIncrementalRefresh()
 {
     if (!d->incrementalUpdater)
     {
@@ -724,12 +724,12 @@ static bool pairsContain(const List& list, T value)
     return false;
 }
 
-void ImportImageModel::removeIndex(const QModelIndex& index)
+void ImportItemModel::removeIndex(const QModelIndex& index)
 {
     removeIndexs(QList<QModelIndex>() << index);
 }
 
-void ImportImageModel::removeIndexs(const QList<QModelIndex>& indexes)
+void ImportItemModel::removeIndexs(const QList<QModelIndex>& indexes)
 {
     QList<int> indexesList;
 
@@ -746,15 +746,15 @@ void ImportImageModel::removeIndexs(const QList<QModelIndex>& indexes)
         return;
     }
 
-    removeRowPairsWithCheck(ImportImageModelIncrementalUpdater::toContiguousPairs(indexesList));
+    removeRowPairsWithCheck(ImportItemModelIncrementalUpdater::toContiguousPairs(indexesList));
 }
 
-void ImportImageModel::removeCamItemInfo(const CamItemInfo& info)
+void ImportItemModel::removeCamItemInfo(const CamItemInfo& info)
 {
     removeCamItemInfos(QList<CamItemInfo>() << info);
 }
 
-void ImportImageModel::removeCamItemInfos(const QList<CamItemInfo>& infos)
+void ImportItemModel::removeCamItemInfos(const QList<CamItemInfo>& infos)
 {
     QList<int> indexesList;
 
@@ -768,15 +768,15 @@ void ImportImageModel::removeCamItemInfos(const QList<CamItemInfo>& infos)
         }
     }
 
-    removeRowPairsWithCheck(ImportImageModelIncrementalUpdater::toContiguousPairs(indexesList));
+    removeRowPairsWithCheck(ImportItemModelIncrementalUpdater::toContiguousPairs(indexesList));
 }
 
-void ImportImageModel::setSendRemovalSignals(bool send)
+void ImportItemModel::setSendRemovalSignals(bool send)
 {
     d->sendRemovalSignals = send;
 }
 
-void ImportImageModel::removeRowPairsWithCheck(const QList<QPair<int, int> >& toRemove)
+void ImportItemModel::removeRowPairsWithCheck(const QList<QPair<int, int> >& toRemove)
 {
     if (d->incrementalUpdater)
     {
@@ -786,7 +786,7 @@ void ImportImageModel::removeRowPairsWithCheck(const QList<QPair<int, int> >& to
     removeRowPairs(toRemove);
 }
 
-void ImportImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
+void ImportItemModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
 {
     if (toRemove.isEmpty())
     {
@@ -873,19 +873,19 @@ void ImportImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
     }
 }
 
-// ------------ ImportImageModelIncrementalUpdater ------------
+// ------------ ImportItemModelIncrementalUpdater ------------
 
-ImportImageModelIncrementalUpdater::ImportImageModelIncrementalUpdater(ImportImageModel::Private* const d)
+ImportItemModelIncrementalUpdater::ImportItemModelIncrementalUpdater(ImportItemModel::Private* const d)
 {
     oldIds = d->idHash;
 }
 
-void ImportImageModelIncrementalUpdater::aboutToBeRemovedInModel(const IntPairList& toRemove)
+void ImportItemModelIncrementalUpdater::aboutToBeRemovedInModel(const IntPairList& toRemove)
 {
     modelRemovals << toRemove;
 }
 
-void ImportImageModelIncrementalUpdater::appendInfos(const QList<CamItemInfo>& infos)
+void ImportItemModelIncrementalUpdater::appendInfos(const QList<CamItemInfo>& infos)
 {
     for (int i = 0 ; i < infos.size() ; ++i)
     {
@@ -913,7 +913,7 @@ void ImportImageModelIncrementalUpdater::appendInfos(const QList<CamItemInfo>& i
     }
 }
 
-QList<QPair<int, int> > ImportImageModelIncrementalUpdater::toContiguousPairs(const QList<int>& unsorted)
+QList<QPair<int, int> > ImportItemModelIncrementalUpdater::toContiguousPairs(const QList<int>& unsorted)
 {
     // Take the given indices and return them as contiguous pairs [begin, end]
 
@@ -949,7 +949,7 @@ QList<QPair<int, int> > ImportImageModelIncrementalUpdater::toContiguousPairs(co
     return pairs;
 }
 
-QList<QPair<int, int> > ImportImageModelIncrementalUpdater::oldIndexes()
+QList<QPair<int, int> > ImportItemModelIncrementalUpdater::oldIndexes()
 {
     // first, apply all changes to indexes by direct removal in model
     // while the updater was active
@@ -999,7 +999,7 @@ QList<QPair<int, int> > ImportImageModelIncrementalUpdater::oldIndexes()
 
 // ------------ QAbstractItemModel implementation -------------
 
-QVariant ImportImageModel::data(const QModelIndex& index, int role) const
+QVariant ImportItemModel::data(const QModelIndex& index, int role) const
 {
     if (!d->isValid(index))
     {
@@ -1013,11 +1013,11 @@ QVariant ImportImageModel::data(const QModelIndex& index, int role) const
             return d->infos.at(index.row()).name;
             break;
 
-        case ImportImageModelPointerRole:
-            return QVariant::fromValue(const_cast<ImportImageModel*>(this));
+        case ImportItemModelPointerRole:
+            return QVariant::fromValue(const_cast<ImportItemModel*>(this));
             break;
 
-        case ImportImageModelInternalId:
+        case ImportItemModelInternalId:
             return index.row();
             break;
     }
@@ -1025,7 +1025,7 @@ QVariant ImportImageModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-QVariant ImportImageModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant ImportItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     Q_UNUSED(section)
     Q_UNUSED(orientation)
@@ -1034,7 +1034,7 @@ QVariant ImportImageModel::headerData(int section, Qt::Orientation orientation, 
     return QVariant();
 }
 
-int ImportImageModel::rowCount(const QModelIndex& parent) const
+int ImportItemModel::rowCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
     {
@@ -1044,7 +1044,7 @@ int ImportImageModel::rowCount(const QModelIndex& parent) const
     return d->infos.size();
 }
 
-Qt::ItemFlags ImportImageModel::flags(const QModelIndex& index) const
+Qt::ItemFlags ImportItemModel::flags(const QModelIndex& index) const
 {
     if (!d->isValid(index))
     {
@@ -1058,7 +1058,7 @@ Qt::ItemFlags ImportImageModel::flags(const QModelIndex& index) const
     return f;
 }
 
-QModelIndex ImportImageModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex ImportItemModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (column != 0 || row < 0 || parent.isValid() || row >= d->infos.size())
     {

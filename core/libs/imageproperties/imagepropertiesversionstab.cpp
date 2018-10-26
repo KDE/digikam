@@ -165,7 +165,7 @@ void ImagePropertiesVersionsTab::addOpenImageAction()
             this, SIGNAL(actionTriggered(ItemInfo)));
 }
 
-void ImagePropertiesVersionsTab::addOpenAlbumAction(const ImageModel* referenceModel)
+void ImagePropertiesVersionsTab::addOpenAlbumAction(const ItemModel* referenceModel)
 {
     ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(QIcon::fromTheme(QLatin1String("folder-pictures")),
                                                                                i18n("Go To Albums"),

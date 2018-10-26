@@ -38,14 +38,14 @@ namespace ShowFoto
 
 typedef QPair<ShowfotoItemInfo, QPixmap> CachedItem;
 
-class ShowfotoThumbnailModel : public ShowfotoImageModel
+class ShowfotoThumbnailModel : public ShowfotoItemModel
 {
     Q_OBJECT
 
 public:
 
     /**
-     *  An ImageModel that supports thumbnail loading.
+     *  An ItemModel that supports thumbnail loading.
      *  You need to set a ThumbnailLoadThread to enable thumbnail loading.
      *  Adjust the thumbnail size to your needs.
      *  Note that setKeepsFilePatindexesForPathhCache is enabled per default.

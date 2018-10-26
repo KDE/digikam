@@ -45,9 +45,9 @@ class DIGIKAM_EXPORT ImportDragDropHandler : public AbstractItemDragDropHandler
 
 public:
 
-    explicit ImportDragDropHandler(ImportImageModel* const model);
+    explicit ImportDragDropHandler(ImportItemModel* const model);
 
-    ImportImageModel* model() const;
+    ImportItemModel* model() const;
 
     virtual bool           dropEvent(QAbstractItemView* view, const QDropEvent* e, const QModelIndex& droppedOn);
     virtual Qt::DropAction accepts(const QDropEvent* e, const QModelIndex& dropIndex);

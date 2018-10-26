@@ -95,7 +95,7 @@ void ShowfotoCoordinatesOverlay::updatePosition()
 
 bool ShowfotoCoordinatesOverlay::checkIndex(const QModelIndex& index) const
 {
-    ShowfotoItemInfo info = ShowfotoImageModel::retrieveShowfotoItemInfo(index);
+    ShowfotoItemInfo info = ShowfotoItemModel::retrieveShowfotoItemInfo(index);
     QRect rect            = static_cast<ShowfotoDelegate*>(delegate())->coordinatesIndicatorRect();
 
     if (!rect.isNull() && info.photoInfo.hasCoordinates)

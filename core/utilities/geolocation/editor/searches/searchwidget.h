@@ -54,7 +54,7 @@ class SearchWidget : public QWidget
 public:
 
     explicit SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
-                          GPSImageModel* const gpsImageModel,
+                          GPSItemModel* const gpsItemModel,
                           QItemSelectionModel* const gpsImageSelectionModel,
                           QWidget* const parent);
     ~SearchWidget();

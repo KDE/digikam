@@ -534,7 +534,7 @@ DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent,
 
     d->dateFolderView         = new DateFolderView(this, model);
     d->dateFolderView->setConfigGroup(getConfigGroup());
-    d->dateFolderView->setImageModel(imageFilterModel);
+    d->dateFolderView->setItemModel(imageFilterModel);
 
     layout->addWidget(d->dateFolderView);
 }

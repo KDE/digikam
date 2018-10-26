@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 class ItemInfo;
-class ImageModel;
+class ItemModel;
 class VersionManagerSettings;
 
 class ShowHideVersionsOverlay : public HoverButtonDelegateOverlay
@@ -82,7 +82,7 @@ public:
                                    const QString& tip = QString());
     virtual void setActive(bool active);
 
-    void setReferenceModel(const ImageModel* model);
+    void setReferenceModel(const ItemModel* model);
 
 Q_SIGNALS:
 
@@ -108,7 +108,7 @@ protected:
     QIcon             m_icon;
     QString           m_text;
     QString           m_tip;
-    const ImageModel* m_referenceModel;
+    const ItemModel* m_referenceModel;
 };
 
 } // namespace Digikam

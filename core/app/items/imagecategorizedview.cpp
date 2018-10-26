@@ -70,7 +70,7 @@ protected:
 
     virtual QString tipContents()
     {
-        ItemInfo info = ImageModel::retrieveItemInfo(currentIndex());
+        ItemInfo info = ItemModel::retrieveItemInfo(currentIndex());
         return ToolTipFiller::imageInfoTipContents(info);
     }
 };
@@ -92,7 +92,7 @@ public:
     {
     }
 
-    ImageModel*           model;
+    ItemModel*           model;
     ImageSortFilterModel* filterModel;
 
     ImageDelegate*        delegate;
@@ -140,7 +140,7 @@ void ImageCategorizedView::installDefaultModels()
     ImageAlbumModel* model             = new ImageAlbumModel(this);
     ImageAlbumFilterModel* filterModel = new ImageAlbumFilterModel(this);
 
-    filterModel->setSourceImageModel(model);
+    filterModel->setSourceItemModel(model);
 
     filterModel->setSortRole(ItemSortSettings::SortByFileName);
     filterModel->setCategorizationMode(ItemSortSettings::CategoryByAlbum);
@@ -152,7 +152,7 @@ void ImageCategorizedView::installDefaultModels()
     setModels(model, filterModel);
 }
 
-void ImageCategorizedView::setModels(ImageModel* model, ImageSortFilterModel* filterModel)
+void ImageCategorizedView::setModels(ItemModel* model, ImageSortFilterModel* filterModel)
 {
     if (d->delegate)
     {
@@ -197,7 +197,7 @@ void ImageCategorizedView::setModels(ImageModel* model, ImageSortFilterModel* fi
     }
 }
 
-ImageModel* ImageCategorizedView::imageModel() const
+ItemModel* ImageCategorizedView::imageModel() const
 {
     return d->model;
 }

@@ -241,7 +241,7 @@ void ImageAlbumModel::incrementalRefresh()
 {
     // The path to this method is:
     // scheduleIncrementalRefresh -> incrementalTimer waits 100ms -> slotNextIncrementalRefresh
-    // -> ImageModel::requestIncrementalRefresh -> waits until model is ready, maybe immediately
+    // -> ItemModel::requestIncrementalRefresh -> waits until model is ready, maybe immediately
     // -> to this method via SIGNAL(readyForIncrementalRefresh())
 
     if (d->currentAlbums.isEmpty())
@@ -577,7 +577,7 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
         }
     }
 
-    ImageModel::slotImageChange(changeset);
+    ItemModel::slotImageChange(changeset);
 }
 
 void ImageAlbumModel::slotImageTagChange(const ImageTagChangeset& changeset)
@@ -622,7 +622,7 @@ void ImageAlbumModel::slotImageTagChange(const ImageTagChangeset& changeset)
         scheduleIncrementalRefresh();
     }
 
-    ImageModel::slotImageTagChange(changeset);
+    ItemModel::slotImageTagChange(changeset);
 }
 
 void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& changeset)

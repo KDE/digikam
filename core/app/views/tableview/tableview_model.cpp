@@ -187,9 +187,9 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
 
     // We only have to trigger population of the model if data is in the source model,
     // otherwise the source model will tell us about any new data.
-    const int itemsInImageModel = s->imageModel->rowCount();
+    const int itemsInItemModel = s->imageModel->rowCount();
 
-    if (itemsInImageModel > 0)
+    if (itemsInItemModel > 0)
     {
         // populate the model once later, not now
         QTimer::singleShot(0, this, SLOT(slotPopulateModelWithNotifications()));
@@ -223,7 +223,7 @@ QModelIndex TableViewModel::toItemFilterModelIndex(const QModelIndex& i) const
     return s->imageFilterModel->indexForImageId(item->imageId);
 }
 
-QModelIndex TableViewModel::toImageModelIndex(const QModelIndex& i) const
+QModelIndex TableViewModel::toItemModelIndex(const QModelIndex& i) const
 {
     Item* const item = itemFromIndex(i);
 
@@ -649,7 +649,7 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
 
         if (!item)
         {
-            // Item is not in this model. If it is in the ImageModel,
+            // Item is not in this model. If it is in the ItemModel,
             // it has been filtered out and we have to re-check the filtering.
             const QModelIndex& imageModelIndex = s->imageModel->indexForImageId(id);
 
@@ -950,7 +950,7 @@ QModelIndex TableViewModel::fromItemFilterModelIndex(const QModelIndex& imageFil
     return indexFromImageId(imageId, 0);
 }
 
-QModelIndex TableViewModel::fromImageModelIndex(const QModelIndex& imageModelIndex)
+QModelIndex TableViewModel::fromItemModelIndex(const QModelIndex& imageModelIndex)
 {
     ASSERT_MODEL(imageModelIndex, s->imageModel);
 
@@ -966,7 +966,7 @@ QModelIndex TableViewModel::fromImageModelIndex(const QModelIndex& imageModelInd
 
 ItemInfo TableViewModel::infoFromItem(TableViewModel::Item* const item) const
 {
-    /// @todo Is there a way to do it without first looking up the index in the ImageModel?
+    /// @todo Is there a way to do it without first looking up the index in the ItemModel?
     const QModelIndex imageModelIndex = s->imageModel->indexForImageId(item->imageId);
 
     if (!imageModelIndex.isValid())
@@ -1218,7 +1218,7 @@ bool TableViewModel::lessThan(TableViewModel::Item* const itemA, TableViewModel:
 
 QMimeData* TableViewModel::mimeData(const QModelIndexList& indexes) const
 {
-    // we pack the mime data via ImageModel's drag-drop handler
+    // we pack the mime data via ItemModel's drag-drop handler
     AbstractItemDragDropHandler* const ddHandler = s->imageModel->dragDropHandler();
 
     QModelIndexList imageModelIndexList;
@@ -1230,7 +1230,7 @@ QMimeData* TableViewModel::mimeData(const QModelIndexList& indexes) const
             continue;
         }
 
-        const QModelIndex imageModelIndex = toImageModelIndex(i);
+        const QModelIndex imageModelIndex = toItemModelIndex(i);
 
         if (imageModelIndex.isValid())
         {

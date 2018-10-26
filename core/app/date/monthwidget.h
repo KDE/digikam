@@ -50,7 +50,7 @@ public:
     explicit MonthWidget(QWidget* const parent);
     ~MonthWidget();
 
-    void setImageModel(ItemFilterModel* const model);
+    void setItemModel(ItemFilterModel* const model);
 
     void setYearMonth(int year, int month);
     QSize sizeHint() const;

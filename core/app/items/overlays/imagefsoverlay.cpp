@@ -32,7 +32,7 @@
 
 #include "imagecategorizedview.h"
 #include "iteminfo.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "itemviewhoverbutton.h"
 
 namespace Digikam
@@ -110,7 +110,7 @@ void ImageFsOverlay::slotClicked()
 
 bool ImageFsOverlay::checkIndex(const QModelIndex& index) const
 {
-    ItemInfo info = ImageModel::retrieveItemInfo(index);
+    ItemInfo info = ItemModel::retrieveItemInfo(index);
 
     return (info.category() == DatabaseItem::Image ||
             info.category() == DatabaseItem::Video);

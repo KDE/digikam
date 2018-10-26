@@ -37,7 +37,7 @@ class ImageCategoryDrawer;
 class ImageCategorizedView;
 class ImageDelegateOverlay;
 class ItemFilterModel;
-class ImageModel;
+class ItemModel;
 class ItemThumbnailModel;
 
 class ImageDelegate : public ItemViewImageDelegate
@@ -80,7 +80,7 @@ public:
     virtual void prepareThumbnails(ItemThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
 
     /**
-     * Retrieve the thumbnail pixmap in given size for the ImageModel::ThumbnailRole for
+     * Retrieve the thumbnail pixmap in given size for the ItemModel::ThumbnailRole for
      * the given index from the given index, which must adhere to ItemThumbnailModel semantics.
      */
     static QPixmap retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize);

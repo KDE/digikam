@@ -61,7 +61,7 @@ class DIGIKAM_EXPORT KmlWidget : public QWidget
 public:
 
     explicit KmlWidget(GeolocationEdit* const dlg,
-                       GPSImageModel* const imageModel,
+                       GPSItemModel* const imageModel,
                        DInfoInterface* const iface);
     ~KmlWidget();
 
@@ -107,7 +107,7 @@ public:
     QSpinBox*         GPXTracksOpacityInput_;
     QSpinBox*         GPXLineWidthInput_;
 
-    GPSImageModel*    m_model;
+    GPSItemModel*    m_model;
     GeolocationEdit*  m_dlg;
 
 Q_SIGNALS:

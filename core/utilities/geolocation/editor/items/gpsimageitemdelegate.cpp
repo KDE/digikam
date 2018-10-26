@@ -112,7 +112,7 @@ QSize GPSImageItemDelegate::sizeHint(const QStyleOptionViewItem& option, const Q
 void GPSImageItemDelegate::setThumbnailSize(const int size)
 {
     d->thumbnailSize                 = size;
-    GPSImageModel* const imageModel = d->imageList->getModel();
+    GPSItemModel* const imageModel = d->imageList->getModel();
 
     if (!imageModel)
         return;

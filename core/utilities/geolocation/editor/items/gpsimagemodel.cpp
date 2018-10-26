@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN GPSImageModel::Private
+class Q_DECL_HIDDEN GPSItemModel::Private
 {
 public:
 
@@ -48,7 +48,7 @@ public:
     ThumbnailLoadThread*            thumbnailLoadThread;
 };
 
-GPSImageModel::GPSImageModel(QObject* const parent)
+GPSItemModel::GPSItemModel(QObject* const parent)
     : QAbstractItemModel(parent),
       d(new Private)
 {
@@ -58,19 +58,19 @@ GPSImageModel::GPSImageModel(QObject* const parent)
             this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 }
 
-GPSImageModel::~GPSImageModel()
+GPSItemModel::~GPSItemModel()
 {
     // TODO: send a signal before deleting the items?
     qDeleteAll(d->items);
     delete d;
 }
 
-int GPSImageModel::columnCount(const QModelIndex& /*parent*/) const
+int GPSItemModel::columnCount(const QModelIndex& /*parent*/) const
 {
     return d->columnCount;
 }
 
-QVariant GPSImageModel::data(const QModelIndex& index, int role) const
+QVariant GPSItemModel::data(const QModelIndex& index, int role) const
 {
     if (index.isValid())
     {
@@ -87,7 +87,7 @@ QVariant GPSImageModel::data(const QModelIndex& index, int role) const
     return d->items.at(rowNumber)->data(index.column(), role);
 }
 
-QModelIndex GPSImageModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex GPSItemModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (parent.isValid())
     {
@@ -112,13 +112,13 @@ QModelIndex GPSImageModel::index(int row, int column, const QModelIndex& parent)
     return createIndex(row, column, (void*)0);
 }
 
-QModelIndex GPSImageModel::parent(const QModelIndex& /*index*/) const
+QModelIndex GPSItemModel::parent(const QModelIndex& /*index*/) const
 {
     // we have only top level items
     return QModelIndex();
 }
 
-void GPSImageModel::addItem(GPSImageItem* const newItem)
+void GPSItemModel::addItem(GPSImageItem* const newItem)
 {
     beginInsertRows(QModelIndex(), d->items.count(), d->items.count());
     newItem->setModel(this);
@@ -126,7 +126,7 @@ void GPSImageModel::addItem(GPSImageItem* const newItem)
     endInsertRows();
 }
 
-void GPSImageModel::setColumnCount(const int nColumns)
+void GPSItemModel::setColumnCount(const int nColumns)
 {
     emit(layoutAboutToBeChanged());
 
@@ -135,7 +135,7 @@ void GPSImageModel::setColumnCount(const int nColumns)
     emit(layoutChanged());
 }
 
-void GPSImageModel::itemChanged(GPSImageItem* const changedItem)
+void GPSItemModel::itemChanged(GPSImageItem* const changedItem)
 {
     const int itemIndex = d->items.indexOf(changedItem);
 
@@ -148,7 +148,7 @@ void GPSImageModel::itemChanged(GPSImageItem* const changedItem)
     emit(dataChanged(itemModelIndexStart, itemModelIndexEnd));
 }
 
-GPSImageItem* GPSImageModel::itemFromIndex(const QModelIndex& index) const
+GPSImageItem* GPSItemModel::itemFromIndex(const QModelIndex& index) const
 {
     if (index.isValid())
     {
@@ -166,7 +166,7 @@ GPSImageItem* GPSImageModel::itemFromIndex(const QModelIndex& index) const
     return d->items.at(row);
 }
 
-int GPSImageModel::rowCount(const QModelIndex& parent) const
+int GPSItemModel::rowCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
     {
@@ -179,7 +179,7 @@ int GPSImageModel::rowCount(const QModelIndex& parent) const
     return d->items.count();
 }
 
-bool GPSImageModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
+bool GPSItemModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
 {
     if ((section >= d->columnCount) || (orientation != Qt::Horizontal))
         return false;
@@ -190,7 +190,7 @@ bool GPSImageModel::setHeaderData(int section, Qt::Orientation orientation, cons
     return true;
 }
 
-QVariant GPSImageModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant GPSItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if ((section >= d->columnCount) || (orientation != Qt::Horizontal))
         return false;
@@ -200,7 +200,7 @@ QVariant GPSImageModel::headerData(int section, Qt::Orientation orientation, int
     return d->headerData.value(headerIndex);
 }
 
-bool GPSImageModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool GPSItemModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     Q_UNUSED(index);
     Q_UNUSED(value);
@@ -209,7 +209,7 @@ bool GPSImageModel::setData(const QModelIndex& index, const QVariant& value, int
     return false;
 }
 
-Qt::ItemFlags GPSImageModel::flags(const QModelIndex& index) const
+Qt::ItemFlags GPSItemModel::flags(const QModelIndex& index) const
 {
     if (index.isValid())
     {
@@ -222,7 +222,7 @@ Qt::ItemFlags GPSImageModel::flags(const QModelIndex& index) const
     return QAbstractItemModel::flags(index) | Qt::ItemIsDragEnabled;
 }
 
-GPSImageItem* GPSImageModel::itemFromUrl(const QUrl& url) const
+GPSImageItem* GPSItemModel::itemFromUrl(const QUrl& url) const
 {
     for (int i = 0 ; i < d->items.count() ; ++i)
     {
@@ -233,7 +233,7 @@ GPSImageItem* GPSImageModel::itemFromUrl(const QUrl& url) const
     return 0;
 }
 
-QModelIndex GPSImageModel::indexFromUrl(const QUrl& url) const
+QModelIndex GPSItemModel::indexFromUrl(const QUrl& url) const
 {
     for (int i = 0 ; i < d->items.count() ; ++i)
     {
@@ -244,7 +244,7 @@ QModelIndex GPSImageModel::indexFromUrl(const QUrl& url) const
     return QModelIndex();
 }
 
-QPixmap GPSImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex, const int size)
+QPixmap GPSItemModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex, const int size)
 {
     if (itemIndex.isValid())
     {
@@ -269,7 +269,7 @@ QPixmap GPSImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex,
     return QPixmap();
 }
 
-void GPSImageModel::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
+void GPSItemModel::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
     if (thumb.isNull())
     {
@@ -285,7 +285,7 @@ void GPSImageModel::slotThumbnailLoaded(const LoadingDescription& loadingDescrip
     }
 }
 
-Qt::DropActions GPSImageModel::supportedDragActions() const
+Qt::DropActions GPSItemModel::supportedDragActions() const
 {
     return Qt::CopyAction;
 }

@@ -35,7 +35,7 @@
 #include "digikam_debug.h"
 #include "contextmenuhelper.h"
 #include "iteminfo.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "tableview_column_configuration_dialog.h"
 #include "tableview_columnfactory.h"
 #include "tableview_model.h"
@@ -246,11 +246,11 @@ AbstractItemDragDropHandler* TableViewTreeView::dragDropHandler() const
 QModelIndex TableViewTreeView::mapIndexForDragDrop(const QModelIndex& index) const
 {
     // "index" is a TableViewModel index.
-    // We are using the drag-drop-handler of ImageModel, thus
-    // we have to convert it to an index of ImageModel.
+    // We are using the drag-drop-handler of ItemModel, thus
+    // we have to convert it to an index of ItemModel.
 
-    // map to ImageModel
-    const QModelIndex imageModelIndex = s->tableViewModel->toImageModelIndex(index);
+    // map to ItemModel
+    const QModelIndex imageModelIndex = s->tableViewModel->toItemModelIndex(index);
 
     return imageModelIndex;
 }
@@ -263,7 +263,7 @@ QPixmap TableViewTreeView::pixmapForDrag(const QList< QModelIndex >& indexes) co
 
     QPixmap thumbnailPixmap;
     /// @todo The first thumbnail load always fails. We have to add thumbnail pre-generation
-    ///       like in ImageModel. Getting thumbnails from ImageModel does not help, because it
+    ///       like in ItemModel. Getting thumbnails from ItemModel does not help, because it
     ///       does not necessarily prepare them the same way.
     /// @todo Make a central drag-drop thumbnail generator?
     if (!s->thumbnailLoadThread->find(info.thumbnailIdentifier(), thumbnailPixmap, d->dragDropThumbnailSize.size()))
@@ -277,15 +277,15 @@ QPixmap TableViewTreeView::pixmapForDrag(const QList< QModelIndex >& indexes) co
     return thumbnailPixmap;
 
 //     const QModelIndex& firstIndex = indexes.at(0);
-//     const QModelIndex& imageModelIndex = s->sortModel->toImageModelIndex(firstIndex);
-//     ImageModel* const imageModel = s->imageFilterModel->sourceImageModel();
+//     const QModelIndex& imageModelIndex = s->sortModel->toItemModelIndex(firstIndex);
+//     ItemModel* const imageModel = s->imageFilterModel->sourceItemModel();
 //
 //     /// @todo Determine how other views choose the size
 //     const QSize thumbnailSize(60, 60);
 //
-//     imageModel->setData(imageModelIndex, qMax(thumbnailSize.width(), thumbnailSize.height()), ImageModel::ThumbnailRole);
-//     QVariant thumbnailData = imageModel->data(imageModelIndex, ImageModel::ThumbnailRole);
-//     imageModel->setData(imageModelIndex, QVariant(), ImageModel::ThumbnailRole);
+//     imageModel->setData(imageModelIndex, qMax(thumbnailSize.width(), thumbnailSize.height()), ItemModel::ThumbnailRole);
+//     QVariant thumbnailData = imageModel->data(imageModelIndex, ItemModel::ThumbnailRole);
+//     imageModel->setData(imageModelIndex, QVariant(), ItemModel::ThumbnailRole);
 //
 //     QPixmap thumbnailPixmap = thumbnailData.value<QPixmap>();
 //

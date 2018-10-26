@@ -48,13 +48,13 @@ public:
     explicit ShowfotoSortFilterModel(QObject* const parent = 0);
     ~ShowfotoSortFilterModel();
 
-    void setSourceShowfotoModel(ShowfotoImageModel* const sourceModel);
-    ShowfotoImageModel* sourceShowfotoModel() const;
+    void setSourceShowfotoModel(ShowfotoItemModel* const sourceModel);
+    ShowfotoItemModel* sourceShowfotoModel() const;
 
     void setSourceFilterModel(ShowfotoSortFilterModel* const sourceModel);
     ShowfotoSortFilterModel* sourceFilterModel() const;
 
-    /// Convenience methods mapped to ShowfotoImageModel.
+    /// Convenience methods mapped to ShowfotoItemModel.
     /// Mentioned indexes returned come from the source Showfoto image model.
     QModelIndex mapToSourceShowfotoModel(const QModelIndex& proxyIndex)                       const;
     QModelIndex mapFromSourceShowfotoModel(const QModelIndex& ShowfotoModelIndex)             const;
@@ -73,7 +73,7 @@ public:
     QModelIndex indexForShowfotoItemId(qlonglong id)                   const;
 
     /** Returns a list of all showfoto infos, sorted according to this model.
-     *  If you do not need a sorted list, use ShowfotoImageModel's showfotoItemInfo() method.
+     *  If you do not need a sorted list, use ShowfotoItemModel's showfotoItemInfo() method.
      */
     QList<ShowfotoItemInfo> showfotoItemInfosSorted() const;
 
@@ -85,7 +85,7 @@ protected:
     virtual void setSourceModel(QAbstractItemModel* sourceModel);
 
     /// Reimplement if needed. Called only when model shall be set as (direct) sourceModel.
-    virtual void setDirectSourceShowfotoModel(ShowfotoImageModel* const sourceModel);
+    virtual void setDirectSourceShowfotoModel(ShowfotoItemModel* const sourceModel);
 
 protected:
 
@@ -103,17 +103,17 @@ public:
     enum ShowfotoFilterModelRoles
     {
         /// Returns the current categorization mode.
-        CategorizationModeRole         = ShowfotoImageModel::FilterModelRoles + 1,
+        CategorizationModeRole         = ShowfotoItemModel::FilterModelRoles + 1,
 
         /// Returns the current sort order.
-        SortOrderRole                  = ShowfotoImageModel::FilterModelRoles + 2,
+        SortOrderRole                  = ShowfotoItemModel::FilterModelRoles + 2,
 
         /// Returns the format of the index which is used for category.
-        CategoryFormatRole             = ShowfotoImageModel::FilterModelRoles + 3,
+        CategoryFormatRole             = ShowfotoItemModel::FilterModelRoles + 3,
 
         /// Returns true if the given showfoto item is a group leader, and the group is opened.
-        //TODO: GroupIsOpenRole        = ShowfotoImageModel::FilterModelRoles + 4
-        ShowfotoFilterModelPointerRole = ShowfotoImageModel::FilterModelRoles + 50
+        //TODO: GroupIsOpenRole        = ShowfotoItemModel::FilterModelRoles + 4
+        ShowfotoFilterModelPointerRole = ShowfotoItemModel::FilterModelRoles + 50
     };
 
 public:
@@ -176,7 +176,7 @@ protected:
 
 protected:
 
-    virtual void setDirectSourceShowfotoModel(ShowfotoImageModel* const sourceModel);
+    virtual void setDirectSourceShowfotoModel(ShowfotoItemModel* const sourceModel);
 
     //TODO: virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 

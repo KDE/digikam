@@ -51,8 +51,8 @@ public:
     explicit GPSImageList(QWidget* const parent = 0);
     ~GPSImageList();
 
-    void setModelAndSelectionModel(GPSImageModel* const model, QItemSelectionModel* const selectionModel);
-    GPSImageModel* getModel() const;
+    void setModelAndSelectionModel(GPSItemModel* const model, QItemSelectionModel* const selectionModel);
+    GPSItemModel* getModel() const;
     QItemSelectionModel* getSelectionModel() const;
     void setDragDropHandler(ImageListDragDropHandler* const dragDropHandler);
     void setThumbnailSize(const int size);

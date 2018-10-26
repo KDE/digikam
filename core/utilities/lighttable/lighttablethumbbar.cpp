@@ -184,7 +184,7 @@ LightTableThumbBar::LightTableThumbBar(QWidget* const parent)
     d->imageInfoModel->setExclusiveLightTableState(true);
 
     d->imageFilterModel = new ItemFilterModel(this);
-    d->imageFilterModel->setSourceImageModel(d->imageInfoModel);
+    d->imageFilterModel->setSourceItemModel(d->imageInfoModel);
 
     d->imageInfoModel->setWatchFlags(d->imageFilterModel->suggestedWatchFlags());
     d->imageInfoModel->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
@@ -398,7 +398,7 @@ void LightTableThumbBar::setOnLeftPanel(const ItemInfo& info)
 {
     QModelIndex index = d->imageInfoModel->indexForItemInfo(info);
     // model has exclusiveLightTableState, so any previous index will be reset
-    d->imageInfoModel->setData(index, true, ImageModel::LTLeftPanelRole);
+    d->imageInfoModel->setData(index, true, ItemModel::LTLeftPanelRole);
     viewport()->update();
 }
 
@@ -406,18 +406,18 @@ void LightTableThumbBar::setOnRightPanel(const ItemInfo& info)
 {
     QModelIndex index = d->imageInfoModel->indexForItemInfo(info);
     // model has exclusiveLightTableState, so any previous index will be reset
-    d->imageInfoModel->setData(index, true, ImageModel::LTRightPanelRole);
+    d->imageInfoModel->setData(index, true, ItemModel::LTRightPanelRole);
     viewport()->update();
 }
 
 bool LightTableThumbBar::isOnLeftPanel(const ItemInfo& info) const
 {
-    return d->imageInfoModel->indexForItemInfo(info).data(ImageModel::LTLeftPanelRole).toBool();
+    return d->imageInfoModel->indexForItemInfo(info).data(ItemModel::LTLeftPanelRole).toBool();
 }
 
 bool LightTableThumbBar::isOnRightPanel(const ItemInfo& info) const
 {
-    return d->imageInfoModel->indexForItemInfo(info).data(ImageModel::LTRightPanelRole).toBool();
+    return d->imageInfoModel->indexForItemInfo(info).data(ItemModel::LTRightPanelRole).toBool();
 }
 
 QModelIndex LightTableThumbBar::findItemByInfo(const ItemInfo& info) const

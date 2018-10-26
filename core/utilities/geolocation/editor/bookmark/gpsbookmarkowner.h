@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class GPSImageModel;
+class GPSItemModel;
 class GPSBookmarkModelHelper;
 
 class GPSBookmarkOwner : public QObject
@@ -47,7 +47,7 @@ class GPSBookmarkOwner : public QObject
 
 public:
 
-    GPSBookmarkOwner(GPSImageModel* const gpsImageModel, QWidget* const parent);
+    GPSBookmarkOwner(GPSItemModel* const gpsItemModel, QWidget* const parent);
     virtual ~GPSBookmarkOwner();
 
     void changeAddBookmark(const bool state);

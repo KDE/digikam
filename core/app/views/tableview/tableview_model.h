@@ -96,9 +96,9 @@ public:
     TableViewColumn*        getColumnObject(const int columnIndex);
     QList<TableViewColumn*> getColumnObjects();
     QModelIndex             fromItemFilterModelIndex(const QModelIndex& imageFilterModelIndex);
-    QModelIndex             fromImageModelIndex(const QModelIndex& imageModelIndex);
+    QModelIndex             fromItemModelIndex(const QModelIndex& imageModelIndex);
     QModelIndex             toItemFilterModelIndex(const QModelIndex& i) const;
-    QModelIndex             toImageModelIndex(const QModelIndex& i) const;
+    QModelIndex             toItemModelIndex(const QModelIndex& i) const;
     void                    loadColumnProfile(const TableViewColumnProfile& columnProfile);
     TableViewColumnProfile  getColumnProfile() const;
 

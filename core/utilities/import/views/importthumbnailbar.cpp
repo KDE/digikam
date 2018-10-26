@@ -79,7 +79,7 @@ ImportThumbnailBar::~ImportThumbnailBar()
     delete d;
 }
 
-void ImportThumbnailBar::setModelsFiltered(ImportImageModel* model, ImportSortFilterModel* filterModel)
+void ImportThumbnailBar::setModelsFiltered(ImportItemModel* model, ImportSortFilterModel* filterModel)
 {
     if (!d->duplicatesFilter)
     {
@@ -186,7 +186,7 @@ void ImportThumbnailBar::assignRating(const QList<QModelIndex>& indexes, int rat
    {
        if (index.isValid())
        {
-            importImageModel()->camItemInfoRef(index).rating = rating;
+            importItemModel()->camItemInfoRef(index).rating = rating;
        }
    }
 }

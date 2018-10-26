@@ -49,9 +49,9 @@ public:
     explicit ShowfotoCategorizedView(QWidget* const parent = 0);
     ~ShowfotoCategorizedView();
 
-    void setModels(ShowfotoImageModel* model, ShowfotoSortFilterModel* filterModel);
+    void setModels(ShowfotoItemModel* model, ShowfotoSortFilterModel* filterModel);
 
-    ShowfotoImageModel*         showfotoImageModel()                    const;
+    ShowfotoItemModel*         showfotoItemModel()                    const;
     ShowfotoSortFilterModel*    showfotoSortFilterModel()               const;
 
     QItemSelectionModel*        getSelectionModel()                     const;
@@ -59,7 +59,7 @@ public:
     /// Returns any ShowfotoFilterModel in chain. May not be sourceModel()
     ShowfotoFilterModel*        showfotoFilterModel()                   const;
 
-    /// Returns 0 if the ShowfotoImageModel is not an ShowfotoThumbnailModel
+    /// Returns 0 if the ShowfotoItemModel is not an ShowfotoThumbnailModel
     ShowfotoThumbnailModel*     showfotoThumbnailModel()                const;
 
     ShowfotoDelegate*           delegate()                              const;

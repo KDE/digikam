@@ -216,9 +216,9 @@ QPixmap ImportDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int th
     // work around constness
     QAbstractItemModel* const model = const_cast<QAbstractItemModel*>(index.model());
     // set requested thumbnail size
-    model->setData(index, thumbnailSize, ImportImageModel::ThumbnailRole);
+    model->setData(index, thumbnailSize, ImportItemModel::ThumbnailRole);
     // get data from model
-    QVariant thumbData              = index.data(ImportImageModel::ThumbnailRole);
+    QVariant thumbData              = index.data(ImportItemModel::ThumbnailRole);
     return (thumbData.value<QPixmap>());
 }
 
@@ -231,7 +231,7 @@ QPixmap ImportDelegate::thumbnailPixmap(const QModelIndex& index) const
 void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     Q_D(const ImportDelegate);
-    CamItemInfo info = ImportImageModel::retrieveCamItemInfo(index);
+    CamItemInfo info = ImportItemModel::retrieveCamItemInfo(index);
 
     if (info.isNull())
     {

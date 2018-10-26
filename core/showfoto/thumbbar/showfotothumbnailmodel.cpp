@@ -76,7 +76,7 @@ public:
 };
 
 ShowfotoThumbnailModel::ShowfotoThumbnailModel(QObject* const parent)
-    : ShowfotoImageModel(parent),
+    : ShowfotoItemModel(parent),
       d(new Private)
 {
     connect(this, &ShowfotoThumbnailModel::signalThumbInfo,
@@ -163,7 +163,7 @@ QVariant ShowfotoThumbnailModel::data(const QModelIndex& index, int role) const
         return QVariant(QVariant::Pixmap);
     }
 
-    return ShowfotoImageModel::data(index, role);
+    return ShowfotoItemModel::data(index, role);
 }
 
 bool ShowfotoThumbnailModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -206,7 +206,7 @@ bool ShowfotoThumbnailModel::setData(const QModelIndex& index, const QVariant& v
         }
     }
 
-    return ShowfotoImageModel::setData(index, value, role);
+    return ShowfotoItemModel::setData(index, value, role);
 }
 
 void ShowfotoThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
