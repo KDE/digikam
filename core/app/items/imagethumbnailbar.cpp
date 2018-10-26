@@ -32,7 +32,7 @@
 
 #include "digikam_debug.h"
 #include "applicationsettings.h"
-#include "imagealbumfiltermodel.h"
+#include "itemalbumfiltermodel.h"
 #include "imagealbummodel.h"
 #include "imagedragdrop.h"
 #include "imageratingoverlay.h"

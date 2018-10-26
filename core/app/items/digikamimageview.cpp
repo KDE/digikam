@@ -56,7 +56,7 @@
 #include "digikamimagefacedelegate.h"
 #include "dio.h"
 #include "groupindicatoroverlay.h"
-#include "imagealbumfiltermodel.h"
+#include "itemalbumfiltermodel.h"
 #include "imagealbummodel.h"
 #include "imagedragdrop.h"
 #include "imageratingoverlay.h"

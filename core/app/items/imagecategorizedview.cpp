@@ -37,7 +37,7 @@
 #include "coredbfields.h"
 #include "iccsettings.h"
 #include "imagealbummodel.h"
-#include "imagealbumfiltermodel.h"
+#include "itemalbumfiltermodel.h"
 #include "imagecategorydrawer.h"
 #include "imagedelegate.h"
 #include "imagedelegateoverlay.h"
@@ -138,7 +138,7 @@ ImageCategorizedView::~ImageCategorizedView()
 void ImageCategorizedView::installDefaultModels()
 {
     ImageAlbumModel* model             = new ImageAlbumModel(this);
-    ImageAlbumFilterModel* filterModel = new ImageAlbumFilterModel(this);
+    ItemAlbumFilterModel* filterModel = new ItemAlbumFilterModel(this);
 
     filterModel->setSourceItemModel(model);
 
@@ -222,9 +222,9 @@ ImageAlbumModel* ImageCategorizedView::imageAlbumModel() const
     return qobject_cast<ImageAlbumModel*>(d->model);
 }
 
-ImageAlbumFilterModel* ImageCategorizedView::imageAlbumFilterModel() const
+ItemAlbumFilterModel* ImageCategorizedView::imageAlbumFilterModel() const
 {
-    return qobject_cast<ImageAlbumFilterModel*>(d->filterModel->imageFilterModel());
+    return qobject_cast<ItemAlbumFilterModel*>(d->filterModel->imageFilterModel());
 }
 
 QSortFilterProxyModel* ImageCategorizedView::filterModel() const

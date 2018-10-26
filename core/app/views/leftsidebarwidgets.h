@@ -35,7 +35,7 @@
 #include "digikam_config.h"
 #include "albummodel.h"
 #include "albummodificationhelper.h"
-#include "imagealbumfiltermodel.h"
+#include "itemalbumfiltermodel.h"
 #include "searchmodificationhelper.h"
 #include "sidebarwidget.h"
 #include "itemfiltermodel.h"
@@ -191,7 +191,7 @@ public:
 
     explicit DateFolderViewSideBarWidget(QWidget* const parent,
                                          DateAlbumModel* const model,
-                                         ImageAlbumFilterModel* const imageFilterModel);
+                                         ItemAlbumFilterModel* const imageFilterModel);
     virtual ~DateFolderViewSideBarWidget();
 
     void    setActive(bool active);

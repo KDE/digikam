@@ -253,7 +253,7 @@ void ImportView::setupConnections()
 /*
 void ImportView::connectIconViewFilter(FilterStatusBar* filterbar)
 {
-    ImageAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
+    ItemAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
 
     connect(model, SIGNAL(filterMatches(bool)),
             filterbar, SLOT(slotFilterMatches(bool)));

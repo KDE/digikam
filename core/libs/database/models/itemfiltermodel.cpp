@@ -908,7 +908,7 @@ bool ItemFilterModel::subSortLessThan(const QModelIndex& left, const QModelIndex
 
 int ItemFilterModel::compareInfosCategories(const ItemInfo& left, const ItemInfo& right) const
 {
-    // Note: reimplemented in ImageAlbumFilterModel
+    // Note: reimplemented in ItemAlbumFilterModel
     Q_D(const ItemFilterModel);
     return d->sorter.compareCategories(left, right);
 }

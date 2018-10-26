@@ -11,7 +11,7 @@ endif (POLICY CMP0063)
 
 set(libalbummodels_SRCS
     imagealbummodel.cpp
-    imagealbumfiltermodel.cpp
+    itemalbumfiltermodel.cpp
     abstractalbummodel.cpp
     albummodel.cpp
     albumfiltermodel.cpp

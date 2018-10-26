@@ -523,7 +523,7 @@ public:
 
 DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent,
                                                          DateAlbumModel* const model,
-                                                         ImageAlbumFilterModel* const imageFilterModel)
+                                                         ItemAlbumFilterModel* const imageFilterModel)
     : SidebarWidget(parent),
       d(new Private)
 {

@@ -43,7 +43,7 @@
 #include "digikamimageview.h"
 #include "digikamview.h"
 #include "imagealbummodel.h"
-#include "imagealbumfiltermodel.h"
+#include "itemalbumfiltermodel.h"
 #include "imagepreviewview.h"
 #include "imagethumbnailbar.h"
 #include "loadingcacheinterface.h"

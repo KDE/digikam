@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_ALBUM_FILTER_MODEL_H
-#define DIGIKAM_IMAGE_ALBUM_FILTER_MODEL_H
+#ifndef DIGIKAM_ITEM_ALBUM_FILTER_MODEL_H
+#define DIGIKAM_ITEM_ALBUM_FILTER_MODEL_H
 
 // Local includes
 
@@ -33,16 +33,16 @@ namespace Digikam
 
 class Album;
 class ImageAlbumModel;
-class ImageAlbumFilterModelPrivate;
+class ItemAlbumFilterModelPrivate;
 
-class ImageAlbumFilterModel : public ItemFilterModel
+class ItemAlbumFilterModel : public ItemFilterModel
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageAlbumFilterModel(QObject* const parent = 0);
-    ~ImageAlbumFilterModel();
+    explicit ItemAlbumFilterModel(QObject* const parent = 0);
+    ~ItemAlbumFilterModel();
 
     void             setSourceItemModel(ImageAlbumModel* model);
     ImageAlbumModel* sourceModel() const;
@@ -74,9 +74,9 @@ private Q_SLOTS:
 
 private:
 
-    Q_DECLARE_PRIVATE(ImageAlbumFilterModel)
+    Q_DECLARE_PRIVATE(ItemAlbumFilterModel)
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_ALBUM_FILTER_MODEL_H
+#endif // DIGIKAM_ITEM_ALBUM_FILTER_MODEL_H

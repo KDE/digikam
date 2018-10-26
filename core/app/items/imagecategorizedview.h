@@ -37,7 +37,7 @@ namespace Digikam
 
 class Album;
 class ImageAlbumModel;
-class ImageAlbumFilterModel;
+class ItemAlbumFilterModel;
 class ItemModel;
 class ItemFilterModel;
 class ImageSortFilterModel;
@@ -69,7 +69,7 @@ public:
 
     /// Returns 0 if the ItemModel is not an ImageAlbumModel
     ImageAlbumModel*       imageAlbumModel()       const;
-    ImageAlbumFilterModel* imageAlbumFilterModel() const;
+    ItemAlbumFilterModel* imageAlbumFilterModel() const;
 
     ImageDelegate*         delegate()              const;
 

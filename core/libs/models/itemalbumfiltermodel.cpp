@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagealbumfiltermodel.h"
+#include "itemalbumfiltermodel.h"
 
 // Qt includes
 
@@ -41,11 +41,11 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageAlbumFilterModelPrivate : public ItemFilterModel::ItemFilterModelPrivate
+class Q_DECL_HIDDEN ItemAlbumFilterModelPrivate : public ItemFilterModel::ItemFilterModelPrivate
 {
 public:
 
-    ImageAlbumFilterModelPrivate()
+    ItemAlbumFilterModelPrivate()
     {
         delayedAlbumNamesTimer = 0;
         delayedTagNamesTimer   = 0;
@@ -57,10 +57,10 @@ public:
     QTimer*             delayedTagNamesTimer;
 };
 
-ImageAlbumFilterModel::ImageAlbumFilterModel(QObject* const parent)
-    : ItemFilterModel(*new ImageAlbumFilterModelPrivate, parent)
+ItemAlbumFilterModel::ItemAlbumFilterModel(QObject* const parent)
+    : ItemFilterModel(*new ItemAlbumFilterModelPrivate, parent)
 {
-    Q_D(ImageAlbumFilterModel);
+    Q_D(ItemAlbumFilterModel);
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
@@ -99,30 +99,30 @@ ImageAlbumFilterModel::ImageAlbumFilterModel(QObject* const parent)
     }
 }
 
-ImageAlbumFilterModel::~ImageAlbumFilterModel()
+ItemAlbumFilterModel::~ItemAlbumFilterModel()
 {
 }
 
-void ImageAlbumFilterModel::setSourceItemModel(ImageAlbumModel* model)
+void ItemAlbumFilterModel::setSourceItemModel(ImageAlbumModel* model)
 {
     ItemFilterModel::setSourceItemModel(model);
 }
 
-ImageAlbumModel* ImageAlbumFilterModel::sourceModel() const
+ImageAlbumModel* ItemAlbumFilterModel::sourceModel() const
 {
-    Q_D(const ImageAlbumFilterModel);
+    Q_D(const ItemAlbumFilterModel);
 
     return static_cast<ImageAlbumModel*>(d->imageModel);
 }
 
-void ImageAlbumFilterModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
+void ItemAlbumFilterModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
 {
     sourceModel()->prepareThumbnails(mapListToSource(indexesToPrepare));
 }
 
-void ImageAlbumFilterModel::setItemFilterSettings(const ItemFilterSettings& s)
+void ItemAlbumFilterModel::setItemFilterSettings(const ItemFilterSettings& s)
 {
-    Q_D(ImageAlbumFilterModel);
+    Q_D(ItemAlbumFilterModel);
 
     ItemFilterSettings settings(s);
     settings.setAlbumNames(d->albumNamesHash);
@@ -130,9 +130,9 @@ void ImageAlbumFilterModel::setItemFilterSettings(const ItemFilterSettings& s)
     ItemFilterModel::setItemFilterSettings(settings);
 }
 
-int ImageAlbumFilterModel::compareInfosCategories(const ItemInfo& left, const ItemInfo& right) const
+int ItemAlbumFilterModel::compareInfosCategories(const ItemInfo& left, const ItemInfo& right) const
 {
-    Q_D(const ImageAlbumFilterModel);
+    Q_D(const ItemAlbumFilterModel);
 
     switch (d->sorter.categorizationMode)
     {
@@ -181,9 +181,9 @@ int ImageAlbumFilterModel::compareInfosCategories(const ItemInfo& left, const It
     }
 }
 
-void ImageAlbumFilterModel::albumChange(Album* album)
+void ItemAlbumFilterModel::albumChange(Album* album)
 {
-    Q_D(const ImageAlbumFilterModel);
+    Q_D(const ItemAlbumFilterModel);
 
     if (album->type() == Album::PHYSICAL)
     {
@@ -195,31 +195,31 @@ void ImageAlbumFilterModel::albumChange(Album* album)
     }
 }
 
-void ImageAlbumFilterModel::slotAlbumRenamed(Album* album)
+void ItemAlbumFilterModel::slotAlbumRenamed(Album* album)
 {
     albumChange(album);
 }
 
-void ImageAlbumFilterModel::slotAlbumAdded(Album* album)
+void ItemAlbumFilterModel::slotAlbumAdded(Album* album)
 {
     albumChange(album);
 }
 
-void ImageAlbumFilterModel::slotAlbumAboutToBeDeleted(Album* album)
+void ItemAlbumFilterModel::slotAlbumAboutToBeDeleted(Album* album)
 {
     albumChange(album);
 }
 
-void ImageAlbumFilterModel::slotAlbumsCleared()
+void ItemAlbumFilterModel::slotAlbumsCleared()
 {
-    Q_D(ImageAlbumFilterModel);
+    Q_D(ItemAlbumFilterModel);
     d->albumNamesHash.clear();
     d->tagNamesHash.clear();
 }
 
-void ImageAlbumFilterModel::slotDelayedAlbumNamesTimer()
+void ItemAlbumFilterModel::slotDelayedAlbumNamesTimer()
 {
-    Q_D(ImageAlbumFilterModel);
+    Q_D(ItemAlbumFilterModel);
 
     d->albumNamesHash = AlbumManager::instance()->albumTitles();
 
@@ -229,9 +229,9 @@ void ImageAlbumFilterModel::slotDelayedAlbumNamesTimer()
     }
 }
 
-void ImageAlbumFilterModel::slotDelayedTagNamesTimer()
+void ItemAlbumFilterModel::slotDelayedTagNamesTimer()
 {
-    Q_D(ImageAlbumFilterModel);
+    Q_D(ItemAlbumFilterModel);
 
     d->tagNamesHash = AlbumManager::instance()->tagNames();
 
