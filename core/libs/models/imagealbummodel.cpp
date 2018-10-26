@@ -77,7 +77,7 @@ public:
 };
 
 ImageAlbumModel::ImageAlbumModel(QObject* const parent)
-    : ImageThumbnailModel(parent),
+    : ItemThumbnailModel(parent),
       d(new Private)
 {
     qRegisterMetaType<QList<ItemListerRecord>>("QList<ItemListerRecord>");

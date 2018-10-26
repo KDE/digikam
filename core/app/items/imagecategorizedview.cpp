@@ -41,7 +41,7 @@
 #include "imagecategorydrawer.h"
 #include "imagedelegate.h"
 #include "imagedelegateoverlay.h"
-#include "imagethumbnailmodel.h"
+#include "itemthumbnailmodel.h"
 #include "imageselectionoverlay.h"
 #include "itemviewtooltip.h"
 #include "loadingcacheinterface.h"
@@ -212,9 +212,9 @@ ItemFilterModel* ImageCategorizedView::imageFilterModel() const
     return d->filterModel->imageFilterModel();
 }
 
-ImageThumbnailModel* ImageCategorizedView::imageThumbnailModel() const
+ItemThumbnailModel* ImageCategorizedView::imageThumbnailModel() const
 {
-    return qobject_cast<ImageThumbnailModel*>(d->model);
+    return qobject_cast<ItemThumbnailModel*>(d->model);
 }
 
 ImageAlbumModel* ImageCategorizedView::imageAlbumModel() const
@@ -416,7 +416,7 @@ void ImageCategorizedView::openAlbum(const QList<Album*>& albums)
 ThumbnailSize ImageCategorizedView::thumbnailSize() const
 {
 /*
-    ImageThumbnailModel* const thumbModel = imageThumbnailModel();
+    ItemThumbnailModel* const thumbModel = imageThumbnailModel();
     if (thumbModel)
         return thumbModel->thumbnailSize();
 */
@@ -711,7 +711,7 @@ void ImageCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const ItemI
 void ImageCategorizedView::paintEvent(QPaintEvent* e)
 {
     // We want the thumbnails to be loaded in order.
-    ImageThumbnailModel* const thumbModel = imageThumbnailModel();
+    ItemThumbnailModel* const thumbModel = imageThumbnailModel();
 
     if (thumbModel)
     {

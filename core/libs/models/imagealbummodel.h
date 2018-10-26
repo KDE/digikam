@@ -27,7 +27,7 @@
 
 // Local includes
 
-#include "imagethumbnailmodel.h"
+#include "itemthumbnailmodel.h"
 #include "album.h"
 
 namespace Digikam
@@ -38,7 +38,7 @@ class CollectionImageChangeset;
 class SearchChangeset;
 class Album;
 
-class ImageAlbumModel : public ImageThumbnailModel
+class ImageAlbumModel : public ItemThumbnailModel
 {
     Q_OBJECT
 

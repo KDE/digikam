@@ -49,7 +49,7 @@ DigikamImageFaceDelegate::~DigikamImageFaceDelegate()
 {
 }
 
-void DigikamImageFaceDelegate::prepareThumbnails(ImageThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
+void DigikamImageFaceDelegate::prepareThumbnails(ItemThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
 {
     //TODO
     DigikamImageDelegate::prepareThumbnails(thumbModel, indexes);

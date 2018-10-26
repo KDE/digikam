@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagethumbnailmodel.h"
+#include "itemthumbnailmodel.h"
 
 // Qt includes
 
@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageThumbnailModel::Private
+class Q_DECL_HIDDEN ItemThumbnailModel::Private
 {
 public:
 
@@ -74,20 +74,20 @@ public:
     }
 };
 
-ImageThumbnailModel::ImageThumbnailModel(QObject* const parent)
+ItemThumbnailModel::ItemThumbnailModel(QObject* const parent)
     : ImageModel(parent),
       d(new Private)
 {
     setKeepsFilePathCache(true);
 }
 
-ImageThumbnailModel::~ImageThumbnailModel()
+ItemThumbnailModel::~ItemThumbnailModel()
 {
     delete d->preloadThread;
     delete d;
 }
 
-void ImageThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread* const thread)
+void ItemThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread* const thread)
 {
     d->thread = thread;
 
@@ -95,33 +95,33 @@ void ImageThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread* const thre
             this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 }
 
-ThumbnailLoadThread* ImageThumbnailModel::thumbnailLoadThread() const
+ThumbnailLoadThread* ItemThumbnailModel::thumbnailLoadThread() const
 {
     return d->thread;
 }
 
-ThumbnailSize ImageThumbnailModel::thumbnailSize() const
+ThumbnailSize ItemThumbnailModel::thumbnailSize() const
 {
     return d->thumbSize;
 }
 
-void ImageThumbnailModel::setThumbnailSize(const ThumbnailSize& size)
+void ItemThumbnailModel::setThumbnailSize(const ThumbnailSize& size)
 {
     d->lastGlobalThumbSize = size;
     d->thumbSize = size;
 }
 
-void ImageThumbnailModel::setPreloadThumbnailSize(const ThumbnailSize& size)
+void ItemThumbnailModel::setPreloadThumbnailSize(const ThumbnailSize& size)
 {
     d->preloadThumbSize = size;
 }
 
-void ImageThumbnailModel::setEmitDataChanged(bool emitSignal)
+void ItemThumbnailModel::setEmitDataChanged(bool emitSignal)
 {
     d->emitDataChanged = emitSignal;
 }
 
-void ImageThumbnailModel::setPreloadThumbnails(bool preload)
+void ItemThumbnailModel::setPreloadThumbnails(bool preload)
 {
     if (preload)
     {
@@ -145,12 +145,12 @@ void ImageThumbnailModel::setPreloadThumbnails(bool preload)
     }
 }
 
-void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
+void ItemThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
 {
     prepareThumbnails(indexesToPrepare, d->thumbSize);
 }
 
-void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare, const ThumbnailSize& thumbSize)
+void ItemThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare, const ThumbnailSize& thumbSize)
 {
     if (!d->thread)
     {
@@ -167,7 +167,7 @@ void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToP
     d->thread->findGroup(ids, thumbSize.size());
 }
 
-void ImageThumbnailModel::preloadThumbnails(const QList<ItemInfo>& infos)
+void ItemThumbnailModel::preloadThumbnails(const QList<ItemInfo>& infos)
 {
     if (!d->preloadThread)
     {
@@ -184,7 +184,7 @@ void ImageThumbnailModel::preloadThumbnails(const QList<ItemInfo>& infos)
     d->preloadThread->pregenerateGroup(ids, d->preloadThumbnailSize());
 }
 
-void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& indexesToPreload)
+void ItemThumbnailModel::preloadThumbnails(const QList<QModelIndex>& indexesToPreload)
 {
     if (!d->preloadThread)
     {
@@ -202,12 +202,12 @@ void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& indexesToP
     d->preloadThread->pregenerateGroup(ids, d->preloadThumbnailSize());
 }
 
-void ImageThumbnailModel::preloadAllThumbnails()
+void ItemThumbnailModel::preloadAllThumbnails()
 {
     preloadThumbnails(imageInfos());
 }
 
-void ImageThumbnailModel::imageInfosCleared()
+void ItemThumbnailModel::imageInfosCleared()
 {
     if (d->preloadThread)
     {
@@ -215,7 +215,7 @@ void ImageThumbnailModel::imageInfosCleared()
     }
 }
 
-QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
+QVariant ItemThumbnailModel::data(const QModelIndex& index, int role) const
 {
     if (role == ThumbnailRole && d->thread && index.isValid())
     {
@@ -248,7 +248,7 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
     return ImageModel::data(index, role);
 }
 
-bool ImageThumbnailModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool ItemThumbnailModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     if (role == ThumbnailRole)
     {
@@ -291,7 +291,7 @@ bool ImageThumbnailModel::setData(const QModelIndex& index, const QVariant& valu
     return ImageModel::setData(index, value, role);
 }
 
-void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
+void ItemThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
     if (thumb.isNull())
     {

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_THUMBNAIL_MODEL_H
-#define DIGIKAM_IMAGE_THUMBNAIL_MODEL_H
+#ifndef DIGIKAM_ITEM_THUMBNAIL_MODEL_H
+#define DIGIKAM_ITEM_THUMBNAIL_MODEL_H
 
 // Local includes
 
@@ -37,7 +37,7 @@ namespace Digikam
 class LoadingDescription;
 class ThumbnailLoadThread;
 
-class DIGIKAM_DATABASE_EXPORT ImageThumbnailModel : public ImageModel
+class DIGIKAM_DATABASE_EXPORT ItemThumbnailModel : public ImageModel
 {
     Q_OBJECT
 
@@ -49,8 +49,8 @@ public:
      *  Adjust the thumbnail size to your needs.
      *  Note that setKeepsFilePathCache is enabled per default.
      */
-    explicit ImageThumbnailModel(QObject* const parent);
-    ~ImageThumbnailModel();
+    explicit ItemThumbnailModel(QObject* const parent);
+    ~ItemThumbnailModel();
 
     /** Enable thumbnail loading and set the thread that shall be used.
      *  The thumbnail size of this thread will be adjusted.
@@ -137,4 +137,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_THUMBNAIL_MODEL_H
+#endif // DIGIKAM_ITEM_THUMBNAIL_MODEL_H

@@ -43,7 +43,7 @@ class ItemFilterModel;
 class ImageSortFilterModel;
 class ImageDelegate;
 class ImageDelegateOverlay;
-class ImageThumbnailModel;
+class ItemThumbnailModel;
 
 class ImageCategorizedView : public ItemViewCategorized
 {
@@ -64,8 +64,8 @@ public:
     /// Returns any ItemFilterMode in chain. May not be sourceModel()
     ItemFilterModel*      imageFilterModel()      const;
 
-    /// Returns 0 if the ImageModel is not an ImageThumbnailModel
-    ImageThumbnailModel*   imageThumbnailModel()   const;
+    /// Returns 0 if the ImageModel is not an ItemThumbnailModel
+    ItemThumbnailModel*   imageThumbnailModel()   const;
 
     /// Returns 0 if the ImageModel is not an ImageAlbumModel
     ImageAlbumModel*       imageAlbumModel()       const;

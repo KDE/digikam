@@ -20,9 +20,9 @@ set(libdatabasemodels_SRCS
     models/itemfiltermodelthreads.cpp
     models/itemfiltersettings.cpp
     models/itemversionsmodel.cpp
+    models/itemthumbnailmodel.cpp
     models/imagelistmodel.cpp
     models/imagesortsettings.cpp
-    models/imagethumbnailmodel.cpp
     models/imagemodel.cpp
 )
 

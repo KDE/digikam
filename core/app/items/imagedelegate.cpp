@@ -47,7 +47,7 @@
 #include "imagedelegateoverlay.h"
 #include "imagemodel.h"
 #include "itemfiltermodel.h"
-#include "imagethumbnailmodel.h"
+#include "itemthumbnailmodel.h"
 #include "thumbnailloadthread.h"
 #include "applicationsettings.h"
 
@@ -205,7 +205,7 @@ QRect ImageDelegate::coordinatesIndicatorRect() const
     return d->coordinatesRect;
 }
 
-void ImageDelegate::prepareThumbnails(ImageThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
+void ImageDelegate::prepareThumbnails(ItemThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
 {
     thumbModel->prepareThumbnails(indexes, thumbnailSize());
 }
