@@ -25,88 +25,10 @@
  *
  * ============================================================ */
 
-#include "itemlister.h"
-
-// C++ includes
-
-#include <cstdlib>
-#include <cstdio>
-#include <ctime>
-#include <cerrno>
-#include <limits>
-
-// Qt includes
-
-#include <QFile>
-#include <QFileInfo>
-#include <QDataStream>
-#include <QRegExp>
-#include <QDir>
-
-// Local includes
-
-#include "digikam_debug.h"
-#include "coredb.h"
-#include "coredbaccess.h"
-#include "coredbbackend.h"
-#include "collectionmanager.h"
-#include "collectionlocation.h"
-#include "itemquerybuilder.h"
-#include "dmetadata.h"
-#include "haariface.h"
-#include "dbenginesqlquery.h"
-#include "tagscache.h"
-#include "imagetagpair.h"
-#include "dbjobsthread.h"
-#include "dbjobinfo.h"
-#include "similaritydbaccess.h"
-#include "similaritydb.h"
+#include "itemlister_p.h"
 
 namespace Digikam
 {
-
-/**
- * Used by QSet
- */
-inline uint qHash(const ItemListerRecord& key)
-{
-    return key.imageID;
-}
-
-/*
- * The binary field for file size is only 32 bit.
- * If the value fits, we pass it. If it does not, we pass -1,
- * and the receiver shall get the full number itself
- */
-static inline int toInt32BitSafe(const QList<QVariant>::const_iterator& it)
-{
-    qlonglong v = (*it).toLongLong();
-
-    if (v > std::numeric_limits<int>::max() || v < 0)
-    {
-        return -1;
-    }
-    return (int)v;
-}
-
-// ---------------------------------------------------------------------------------
-
-class Q_DECL_HIDDEN ItemLister::Private
-{
-
-public:
-
-    explicit Private()
-    {
-        recursive               = true;
-        listOnlyAvailableImages = true;
-        allowExtraValues        = false;
-    }
-
-    bool recursive;
-    bool listOnlyAvailableImages;
-    bool allowExtraValues;
-};
 
 ItemLister::ItemLister()
     : d(new Private)
@@ -259,7 +181,7 @@ void ItemLister::listPAlbum(ItemListerReceiver* const receiver,
         ++it;
         record.modificationDate  = (*it).toDateTime();
         ++it;
-        record.fileSize          = toInt32BitSafe(it);
+        record.fileSize          = d->toInt32BitSafe(it);
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -324,7 +246,7 @@ void ItemLister::listTag(ItemListerReceiver* const receiver,
             ++it;
             record.modificationDate  = (*it).toDateTime();
             ++it;
-            record.fileSize          = toInt32BitSafe(it);
+            record.fileSize          = d->toInt32BitSafe(it);
             ++it;
             width                    = (*it).toInt();
             ++it;
@@ -435,7 +357,7 @@ void ItemLister::listDateRange(ItemListerReceiver* const receiver,
         ++it;
         record.modificationDate  = (*it).toDateTime();
         ++it;
-        record.fileSize          = toInt32BitSafe(it);
+        record.fileSize          = d->toInt32BitSafe(it);
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -612,7 +534,7 @@ void ItemLister::listSearch(ItemListerReceiver* const receiver,
         ++it;
         record.modificationDate  = (*it).toDateTime();
         ++it;
-        record.fileSize          = toInt32BitSafe(it);
+        record.fileSize          = d->toInt32BitSafe(it);
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -733,7 +655,7 @@ void ItemLister::listImageTagPropertySearch(ItemListerReceiver* const receiver, 
         ++it;
         record.modificationDate  = (*it).toDateTime();
         ++it;
-        record.fileSize          = toInt32BitSafe(it);
+        record.fileSize          = d->toInt32BitSafe(it);
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -971,7 +893,7 @@ void ItemLister::listFromHaarSearch(ItemListerReceiver* const receiver,
         ++it;
         record.modificationDate  = (*it).toDateTime();
         ++it;
-        record.fileSize          = toInt32BitSafe(it);
+        record.fileSize          = d->toInt32BitSafe(it);
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -1076,7 +998,7 @@ void ItemLister::listFromIdList(ItemListerReceiver* const receiver,
         ++it;
         record.modificationDate  = (*it).toDateTime();
         ++it;
-        record.fileSize          = toInt32BitSafe(it);
+        record.fileSize          = d->toInt32BitSafe(it);
         ++it;
         width                    = (*it).toInt();
         ++it;

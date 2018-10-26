@@ -70,6 +70,10 @@ public:
      */
     void setAllowExtraValues(bool useExtraValue);
 
+private:
+
+    ItemLister(const ItemLister&); // Disable
+
     // -----------------------------------------------------------------------------
 
     /** @name Operations with Album
@@ -84,7 +88,7 @@ public:
      */
     void list(ItemListerReceiver* const receiver,
               const CoreDbUrl& url);
-    
+
     /**
      * List images in the Album (physical album) specified by albumRoot, album.
      * The results will be fed to the specified receiver.
@@ -172,6 +176,13 @@ private:
                             double>& imageSimilarityMap);
     //@}
 
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations with FAlbum
+     */
+
+    //@{
+
 public:
 
     /**
@@ -180,6 +191,15 @@ public:
      */
     void listFaces(ItemListerReceiver* const receiver,
                    int personId);
+
+private:
+
+    void listFromIdList(ItemListerReceiver* const receiver,
+                        const QList<qlonglong>& imageIds);
+
+    //@}
+
+public:
 
     /**
      * List those images whose date lies in the range beginning with startDate (inclusive)
@@ -200,13 +220,6 @@ public:
                        double lon2);
 
 private:
-
-    void listFromIdList(ItemListerReceiver* const receiver,
-                        const QList<qlonglong>& imageIds);
-
-private:
-
-    ItemLister(const ItemLister&); // Disable
 
     class Private;
     Private* const d;
