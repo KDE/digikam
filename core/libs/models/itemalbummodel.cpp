@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-03-08
- * Description : Qt item model for database entries, listing done with ioslave
+ * Description : Qt item model for database entries, listing done with database job
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2015      by Mohamed_Anwer <m_dot_anwer at gmx dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagealbummodel.h"
+#include "itemalbummodel.h"
 
 // Qt includes
 
@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageAlbumModel::Private
+class Q_DECL_HIDDEN ItemAlbumModel::Private
 {
 public:
 
@@ -76,7 +76,7 @@ public:
     bool              extraValueJob;
 };
 
-ImageAlbumModel::ImageAlbumModel(QObject* const parent)
+ItemAlbumModel::ItemAlbumModel(QObject* const parent)
     : ItemThumbnailModel(parent),
       d(new Private)
 {
@@ -119,7 +119,7 @@ ImageAlbumModel::ImageAlbumModel(QObject* const parent)
             this, SLOT(setListOnlyAvailableImages(bool)));
 }
 
-ImageAlbumModel::~ImageAlbumModel()
+ItemAlbumModel::~ItemAlbumModel()
 {
     if (d->jobThread)
     {
@@ -130,12 +130,12 @@ ImageAlbumModel::~ImageAlbumModel()
     delete d;
 }
 
-QList<Album*> ImageAlbumModel::currentAlbums() const
+QList<Album*> ItemAlbumModel::currentAlbums() const
 {
     return d->currentAlbums;
 }
 
-void ImageAlbumModel::setRecurseAlbums(bool recursiveListing)
+void ItemAlbumModel::setRecurseAlbums(bool recursiveListing)
 {
     if (d->recurseAlbums != recursiveListing)
     {
@@ -144,7 +144,7 @@ void ImageAlbumModel::setRecurseAlbums(bool recursiveListing)
     }
 }
 
-void ImageAlbumModel::setRecurseTags(bool recursiveListing)
+void ItemAlbumModel::setRecurseTags(bool recursiveListing)
 {
     if (d->recurseTags != recursiveListing)
     {
@@ -153,7 +153,7 @@ void ImageAlbumModel::setRecurseTags(bool recursiveListing)
     }
 }
 
-void ImageAlbumModel::setListOnlyAvailableImages(bool onlyAvailable)
+void ItemAlbumModel::setListOnlyAvailableImages(bool onlyAvailable)
 {
     if (d->listOnlyAvailableImages!= onlyAvailable)
     {
@@ -162,22 +162,22 @@ void ImageAlbumModel::setListOnlyAvailableImages(bool onlyAvailable)
     }
 }
 
-bool ImageAlbumModel::isRecursingAlbums() const
+bool ItemAlbumModel::isRecursingAlbums() const
 {
     return d->recurseAlbums;
 }
 
-bool ImageAlbumModel::isRecursingTags() const
+bool ItemAlbumModel::isRecursingTags() const
 {
     return d->recurseTags;
 }
 
-bool ImageAlbumModel::isListingOnlyAvailableImages() const
+bool ItemAlbumModel::isListingOnlyAvailableImages() const
 {
     return d->listOnlyAvailableImages;
 }
 
-void ImageAlbumModel::setSpecialTagListing(const QString& specialListing)
+void ItemAlbumModel::setSpecialTagListing(const QString& specialListing)
 {
     if (d->specialListing != specialListing)
     {
@@ -186,7 +186,7 @@ void ImageAlbumModel::setSpecialTagListing(const QString& specialListing)
     }
 }
 
-void ImageAlbumModel::openAlbum(const QList<Album*>& albums)
+void ItemAlbumModel::openAlbum(const QList<Album*>& albums)
 {
     if (d->currentAlbums == albums)
     {
@@ -210,7 +210,7 @@ void ImageAlbumModel::openAlbum(const QList<Album*>& albums)
     refresh();
 }
 
-void ImageAlbumModel::refresh()
+void ItemAlbumModel::refresh()
 {
     if (d->jobThread)
     {
@@ -237,7 +237,7 @@ void ImageAlbumModel::refresh()
     startListJob(d->currentAlbums);
 }
 
-void ImageAlbumModel::incrementalRefresh()
+void ItemAlbumModel::incrementalRefresh()
 {
     // The path to this method is:
     // scheduleIncrementalRefresh -> incrementalTimer waits 100ms -> slotNextIncrementalRefresh
@@ -260,12 +260,12 @@ void ImageAlbumModel::incrementalRefresh()
     startListJob(d->currentAlbums);
 }
 
-bool ImageAlbumModel::hasScheduledRefresh() const
+bool ItemAlbumModel::hasScheduledRefresh() const
 {
     return d->refreshTimer->isActive() || d->incrementalTimer->isActive() || hasIncrementalRefreshPending();
 }
 
-void ImageAlbumModel::scheduleRefresh()
+void ItemAlbumModel::scheduleRefresh()
 {
     if (!d->refreshTimer->isActive())
     {
@@ -274,7 +274,7 @@ void ImageAlbumModel::scheduleRefresh()
     }
 }
 
-void ImageAlbumModel::scheduleIncrementalRefresh()
+void ItemAlbumModel::scheduleIncrementalRefresh()
 {
     if (!hasScheduledRefresh())
     {
@@ -282,7 +282,7 @@ void ImageAlbumModel::scheduleIncrementalRefresh()
     }
 }
 
-void ImageAlbumModel::slotNextRefresh()
+void ItemAlbumModel::slotNextRefresh()
 {
     // Refresh, unless job is running, then postpone restart until job is finished
     // Rationale: Let the job run, don't stop it possibly several times
@@ -296,7 +296,7 @@ void ImageAlbumModel::slotNextRefresh()
     }
 }
 
-void ImageAlbumModel::slotNextIncrementalRefresh()
+void ItemAlbumModel::slotNextIncrementalRefresh()
 {
     if (d->jobThread)
     {
@@ -308,7 +308,7 @@ void ImageAlbumModel::slotNextIncrementalRefresh()
     }
 }
 
-void ImageAlbumModel::startListJob(const QList<Album*>& albums)
+void ItemAlbumModel::startListJob(const QList<Album*>& albums)
 {
     if (albums.isEmpty())
     {
@@ -422,7 +422,7 @@ void ImageAlbumModel::startListJob(const QList<Album*>& albums)
             this, SLOT(slotData(QList<ItemListerRecord>)));
 }
 
-void ImageAlbumModel::slotResult()
+void ItemAlbumModel::slotResult()
 {
     if (d->jobThread != sender())
     {
@@ -447,7 +447,7 @@ void ImageAlbumModel::slotResult()
     finishIncrementalRefresh();
 }
 
-void ImageAlbumModel::slotData(const QList<ItemListerRecord>& records)
+void ItemAlbumModel::slotData(const QList<ItemListerRecord>& records)
 {
     if (d->jobThread != sender())
     {
@@ -508,7 +508,7 @@ void ImageAlbumModel::slotData(const QList<ItemListerRecord>& records)
     }
 }
 
-void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
+void ItemAlbumModel::slotImageChange(const ImageChangeset& changeset)
 {
     if (d->currentAlbums.isEmpty())
     {
@@ -580,7 +580,7 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
     ItemModel::slotImageChange(changeset);
 }
 
-void ImageAlbumModel::slotImageTagChange(const ImageTagChangeset& changeset)
+void ItemAlbumModel::slotImageTagChange(const ImageTagChangeset& changeset)
 {
     if (d->currentAlbums.isEmpty())
     {
@@ -625,7 +625,7 @@ void ImageAlbumModel::slotImageTagChange(const ImageTagChangeset& changeset)
     ItemModel::slotImageTagChange(changeset);
 }
 
-void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& changeset)
+void ItemAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& changeset)
 {
     if (d->currentAlbums.isEmpty())
     {
@@ -705,7 +705,7 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& 
     }
 }
 
-void ImageAlbumModel::slotSearchChange(const SearchChangeset& changeset)
+void ItemAlbumModel::slotSearchChange(const SearchChangeset& changeset)
 {
     if (d->currentAlbums.isEmpty())
     {
@@ -730,11 +730,11 @@ void ImageAlbumModel::slotSearchChange(const SearchChangeset& changeset)
     }
 }
 
-void ImageAlbumModel::slotAlbumAdded(Album* /*album*/)
+void ItemAlbumModel::slotAlbumAdded(Album* /*album*/)
 {
 }
 
-void ImageAlbumModel::slotAlbumDeleted(Album* album)
+void ItemAlbumModel::slotAlbumDeleted(Album* album)
 {
     if (d->currentAlbums.contains(album))
     {
@@ -750,7 +750,7 @@ void ImageAlbumModel::slotAlbumDeleted(Album* album)
     }
 }
 
-void ImageAlbumModel::slotAlbumRenamed(Album* album)
+void ItemAlbumModel::slotAlbumRenamed(Album* album)
 {
     // display changed names
     if (d->currentAlbums.contains(album))
@@ -759,7 +759,7 @@ void ImageAlbumModel::slotAlbumRenamed(Album* album)
     }
 }
 
-void ImageAlbumModel::slotAlbumsCleared()
+void ItemAlbumModel::slotAlbumsCleared()
 {
     d->currentAlbums.clear();
     clearItemInfos();

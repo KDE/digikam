@@ -38,7 +38,7 @@
 
 #include "album.h"
 #include "albummanager.h"
-#include "imagealbummodel.h"
+#include "itemalbummodel.h"
 #include "imagecategorizedview.h"
 #include "imagedelegate.h"
 #include "itemfiltermodel.h"
@@ -197,7 +197,7 @@ void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* head
 
     // Add here further model subclasses in use with ImageCategoryDrawer.
     // Note you need a Q_OBJECT in the class's header for this to work.
-    ImageAlbumModel* const albumModel = qobject_cast<ImageAlbumModel*>(sourceModel);
+    ItemAlbumModel* const albumModel = qobject_cast<ItemAlbumModel*>(sourceModel);
 
     if (albumModel)
     {

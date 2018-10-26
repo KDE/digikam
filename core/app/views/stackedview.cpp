@@ -42,7 +42,7 @@
 #include "applicationsettings.h"
 #include "digikamimageview.h"
 #include "digikamview.h"
-#include "imagealbummodel.h"
+#include "itemalbummodel.h"
 #include "itemalbumfiltermodel.h"
 #include "imagepreviewview.h"
 #include "imagethumbnailbar.h"

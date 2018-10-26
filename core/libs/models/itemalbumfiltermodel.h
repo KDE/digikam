@@ -32,7 +32,7 @@ namespace Digikam
 {
 
 class Album;
-class ImageAlbumModel;
+class ItemAlbumModel;
 class ItemAlbumFilterModelPrivate;
 
 class ItemAlbumFilterModel : public ItemFilterModel
@@ -44,8 +44,8 @@ public:
     explicit ItemAlbumFilterModel(QObject* const parent = 0);
     ~ItemAlbumFilterModel();
 
-    void             setSourceItemModel(ImageAlbumModel* model);
-    ImageAlbumModel* sourceModel() const;
+    void             setSourceItemModel(ItemAlbumModel* model);
+    ItemAlbumModel* sourceModel() const;
 
     // convenience mappers
     void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare);

@@ -297,7 +297,7 @@ Album* TableViewTreeView::albumAt(const QPoint& pos) const
 {
     Q_UNUSED(pos)
 
-    ImageAlbumModel* const albumModel = qobject_cast<ImageAlbumModel*>(s->imageModel);
+    ItemAlbumModel* const albumModel = qobject_cast<ItemAlbumModel*>(s->imageModel);
 
     if (albumModel)
     {

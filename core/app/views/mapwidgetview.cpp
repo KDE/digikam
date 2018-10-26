@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class ImageAlbumModel;
+class ItemAlbumModel;
 class ItemFilterModel;
 
 /**
@@ -84,7 +84,7 @@ public:
     DVBox*                      vbox;
     MapWidget*                  mapWidget;
     ItemFilterModel*           imageFilterModel;
-    ImageAlbumModel*            imageModel;
+    ItemAlbumModel*            imageModel;
     ImportFilterModel*          importFilterModel;
     ImportItemModel*           importModel;
     QItemSelectionModel*        selectionModel;
@@ -114,7 +114,7 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
     {
         case ApplicationDigikam:
             d->imageFilterModel   = dynamic_cast<ItemFilterModel*>(imageFilterModel);
-            d->imageModel         = dynamic_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
+            d->imageModel         = dynamic_cast<ItemAlbumModel*>(imageFilterModel->sourceModel());
             d->mapViewModelHelper = new MapViewModelHelper(d->selectionModel, imageFilterModel, this, ApplicationDigikam);
             break;
 

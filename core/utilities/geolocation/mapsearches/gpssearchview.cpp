@@ -87,7 +87,7 @@ public:
     QSplitter*                  splitter;
     MapWidget*                  mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;
-    ImageAlbumModel*            imageAlbumModel;
+    ItemAlbumModel*            imageAlbumModel;
     ItemFilterModel*           imageFilterModel;
     QItemSelectionModel*        selectionModel;
     SearchModel*                searchModel;
@@ -118,7 +118,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     /// @todo Really?
     setAcceptDrops(true);
 
-    d->imageAlbumModel        = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
+    d->imageAlbumModel        = qobject_cast<ItemAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel         = itemSelectionModel;
     d->imageFilterModel       = imageFilterModel;
     d->searchModel            = searchModel;

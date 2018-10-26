@@ -52,7 +52,7 @@
 #include "thumbsdb.h"
 #include "coredbwatch.h"
 #include "coredbfields.h"
-#include "imagealbummodel.h"
+#include "itemalbummodel.h"
 #include "itemfiltermodel.h"
 
 namespace Digikam

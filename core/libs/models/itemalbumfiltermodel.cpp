@@ -36,7 +36,7 @@
 #include "coredbaccess.h"
 #include "coredbchangesets.h"
 #include "coredbwatch.h"
-#include "imagealbummodel.h"
+#include "itemalbummodel.h"
 
 namespace Digikam
 {
@@ -103,16 +103,16 @@ ItemAlbumFilterModel::~ItemAlbumFilterModel()
 {
 }
 
-void ItemAlbumFilterModel::setSourceItemModel(ImageAlbumModel* model)
+void ItemAlbumFilterModel::setSourceItemModel(ItemAlbumModel* model)
 {
     ItemFilterModel::setSourceItemModel(model);
 }
 
-ImageAlbumModel* ItemAlbumFilterModel::sourceModel() const
+ItemAlbumModel* ItemAlbumFilterModel::sourceModel() const
 {
     Q_D(const ItemAlbumFilterModel);
 
-    return static_cast<ImageAlbumModel*>(d->imageModel);
+    return static_cast<ItemAlbumModel*>(d->imageModel);
 }
 
 void ItemAlbumFilterModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)

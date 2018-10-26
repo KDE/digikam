@@ -36,7 +36,7 @@ namespace Digikam
 {
 
 class Album;
-class ImageAlbumModel;
+class ItemAlbumModel;
 class ItemAlbumFilterModel;
 class ItemModel;
 class ItemFilterModel;
@@ -67,8 +67,8 @@ public:
     /// Returns 0 if the ItemModel is not an ItemThumbnailModel
     ItemThumbnailModel*   imageThumbnailModel()   const;
 
-    /// Returns 0 if the ItemModel is not an ImageAlbumModel
-    ImageAlbumModel*       imageAlbumModel()       const;
+    /// Returns 0 if the ItemModel is not an ItemAlbumModel
+    ItemAlbumModel*       imageAlbumModel()       const;
     ItemAlbumFilterModel* imageAlbumFilterModel() const;
 
     ImageDelegate*         delegate()              const;
@@ -183,7 +183,7 @@ protected Q_SLOTS:
 
 protected:
 
-    /// install default ImageAlbumModel and filter model, ready for use
+    /// install default ItemAlbumModel and filter model, ready for use
     void installDefaultModels();
 
     // reimplemented from parent class

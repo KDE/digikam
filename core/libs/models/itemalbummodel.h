@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-03-08
- * Description : Qt item model for database entries, listing done with ioslave
+ * Description : Qt item model for database entries, listing done with database job
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2015      by Mohamed_Anwer <m_dot_anwer at gmx dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_ALBUM_MODEL_H
-#define DIGIKAM_IMAGE_ALBUM_MODEL_H
+#ifndef DIGIKAM_ITEM_ALBUM_MODEL_H
+#define DIGIKAM_ITEM_ALBUM_MODEL_H
 
 // Local includes
 
@@ -38,14 +38,14 @@ class CollectionImageChangeset;
 class SearchChangeset;
 class Album;
 
-class ImageAlbumModel : public ItemThumbnailModel
+class ItemAlbumModel : public ItemThumbnailModel
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageAlbumModel(QObject* const parent = 0);
-    ~ImageAlbumModel();
+    explicit ItemAlbumModel(QObject* const parent = 0);
+    ~ItemAlbumModel();
 
     QList<Album*> currentAlbums() const;
 
@@ -111,4 +111,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_ALBUM_MODEL_H
+#endif // DIGIKAM_ITEM_ALBUM_MODEL_H

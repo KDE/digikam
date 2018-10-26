@@ -32,7 +32,7 @@
 
 #include "iteminfo.h"
 #include "abstractitemdragdrophandler.h"
-#include "imagealbummodel.h"
+#include "itemalbummodel.h"
 
 namespace Digikam
 {
@@ -46,7 +46,7 @@ public:
     explicit ImageDragDropHandler(ItemModel* const model);
 
     ItemModel*      model()      const;
-    ImageAlbumModel* albumModel() const;
+    ItemAlbumModel* albumModel() const;
 
     /**
      * Enables a mode in which dropping will never start an operation

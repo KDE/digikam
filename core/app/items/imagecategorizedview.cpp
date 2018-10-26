@@ -36,7 +36,7 @@
 #include "albummanager.h"
 #include "coredbfields.h"
 #include "iccsettings.h"
-#include "imagealbummodel.h"
+#include "itemalbummodel.h"
 #include "itemalbumfiltermodel.h"
 #include "imagecategorydrawer.h"
 #include "imagedelegate.h"
@@ -137,7 +137,7 @@ ImageCategorizedView::~ImageCategorizedView()
 
 void ImageCategorizedView::installDefaultModels()
 {
-    ImageAlbumModel* model             = new ImageAlbumModel(this);
+    ItemAlbumModel* model             = new ItemAlbumModel(this);
     ItemAlbumFilterModel* filterModel = new ItemAlbumFilterModel(this);
 
     filterModel->setSourceItemModel(model);
@@ -217,9 +217,9 @@ ItemThumbnailModel* ImageCategorizedView::imageThumbnailModel() const
     return qobject_cast<ItemThumbnailModel*>(d->model);
 }
 
-ImageAlbumModel* ImageCategorizedView::imageAlbumModel() const
+ItemAlbumModel* ImageCategorizedView::imageAlbumModel() const
 {
-    return qobject_cast<ImageAlbumModel*>(d->model);
+    return qobject_cast<ItemAlbumModel*>(d->model);
 }
 
 ItemAlbumFilterModel* ImageCategorizedView::imageAlbumFilterModel() const
@@ -278,7 +278,7 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
 
 Album* ImageCategorizedView::currentAlbum() const
 {
-    ImageAlbumModel* albumModel = imageAlbumModel();
+    ItemAlbumModel* albumModel = imageAlbumModel();
     /** TODO: Change to QList return type **/
     if (albumModel && !(albumModel->currentAlbums().isEmpty()))
     {
@@ -405,7 +405,7 @@ QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const
 
 void ImageCategorizedView::openAlbum(const QList<Album*>& albums)
 {
-    ImageAlbumModel* const albumModel = imageAlbumModel();
+    ItemAlbumModel* const albumModel = imageAlbumModel();
 
     if (albumModel)
     {

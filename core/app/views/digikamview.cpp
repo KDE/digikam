@@ -60,7 +60,7 @@
 #include "fileactionprogress.h"
 #include "filtersidebarwidget.h"
 #include "filterstatusbar.h"
-#include "imagealbummodel.h"
+#include "itemalbummodel.h"
 #include "imagedescedittab.h"
 #include "imagepreviewview.h"
 #include "imagepropertiessidebardb.h"

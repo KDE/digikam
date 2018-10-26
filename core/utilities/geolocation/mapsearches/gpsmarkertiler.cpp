@@ -126,7 +126,7 @@ public:
     bool                                   activeState;
     QHash<qlonglong, GPSItemInfo>         imagesHash;
     ItemFilterModel*                      imageFilterModel;
-    ImageAlbumModel*                       imageAlbumModel;
+    ItemAlbumModel*                       imageAlbumModel;
     QItemSelectionModel*                   selectionModel;
     GeoCoordinates::Pair          currentRegionSelection;
     GeoGroupState                    mapGlobalGroupState;
@@ -144,7 +144,7 @@ GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ItemFilterModel* const ima
 
     d->thumbnailLoadThread = new ThumbnailLoadThread(this);
     d->imageFilterModel    = imageFilterModel;
-    d->imageAlbumModel     = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
+    d->imageAlbumModel     = qobject_cast<ItemAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel      = selectionModel;
 
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),

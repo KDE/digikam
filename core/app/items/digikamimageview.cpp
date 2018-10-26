@@ -57,7 +57,7 @@
 #include "dio.h"
 #include "groupindicatoroverlay.h"
 #include "itemalbumfiltermodel.h"
-#include "imagealbummodel.h"
+#include "itemalbummodel.h"
 #include "imagedragdrop.h"
 #include "imageratingoverlay.h"
 #include "imagefsoverlay.h"

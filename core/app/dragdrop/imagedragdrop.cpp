@@ -237,9 +237,9 @@ ItemModel* ImageDragDropHandler::model() const
     return static_cast<ItemModel*>(m_model);
 }
 
-ImageAlbumModel* ImageDragDropHandler::albumModel() const
+ItemAlbumModel* ImageDragDropHandler::albumModel() const
 {
-    return qobject_cast<ImageAlbumModel*>(model());
+    return qobject_cast<ItemAlbumModel*>(model());
 }
 
 void ImageDragDropHandler::setReadOnlyDrop(bool readOnly)
