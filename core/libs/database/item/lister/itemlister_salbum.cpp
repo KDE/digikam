@@ -48,16 +48,16 @@ void ItemLister::listSearch(ItemListerReceiver* const receiver,
     sqlQuery = QString::fromUtf8(
                "SELECT DISTINCT Images.id, Images.name, Images.album, "
                "       Albums.albumRoot, "
-               "       ItemInformation.rating, Images.category, "
-               "       ItemInformation.format, ItemInformation.creationDate, "
+               "       ImageInformation.rating, Images.category, "
+               "       ImageInformation.format, ImageInformation.creationDate, "
                "       Images.modificationDate, Images.fileSize, "
-               "       ItemInformation.width, ItemInformation.height, "
-               "       ItemPositions.latitudeNumber, ItemPositions.longitudeNumber "
+               "       ImageInformation.width, ImageInformation.height, "
+               "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
                " FROM Images "
-               "       LEFT JOIN ItemInformation ON Images.id=ItemInformation.imageid "
+               "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                "       LEFT  JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
                "       LEFT  JOIN VideoMetadata    ON Images.id=VideoMetadata.imageid "
-               "       LEFT  JOIN ItemPositions   ON Images.id=ItemPositions.imageid "
+               "       LEFT  JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
                "       INNER JOIN Albums           ON Albums.id=Images.album "
                "WHERE Images.status=1 AND ( ");
 
@@ -289,12 +289,12 @@ void ItemLister::listFromHaarSearch(ItemListerReceiver* const receiver,
         DbEngineSqlQuery query = access.backend()->prepareQuery(QString::fromUtf8(
                              "SELECT DISTINCT Images.id, Images.name, Images.album, "
                              "       Albums.albumRoot, "
-                             "       ItemInformation.rating, Images.category, "
-                             "       ItemInformation.format, ItemInformation.creationDate, "
+                             "       ImageInformation.rating, Images.category, "
+                             "       ImageInformation.format, ImageInformation.creationDate, "
                              "       Images.modificationDate, Images.fileSize, "
-                             "       ItemInformation.width, ItemInformation.height "
+                             "       ImageInformation.width, ImageInformation.height "
                              " FROM Images "
-                             "       LEFT JOIN ItemInformation ON Images.id=ItemInformation.imageid "
+                             "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                              "       LEFT JOIN Albums ON Albums.id=Images.album "
                              " WHERE Images.status=1 AND Images.id = ?;"));
 
@@ -387,15 +387,15 @@ void ItemLister::listAreaRange(ItemListerReceiver* const receiver,
     CoreDbAccess access;
 
     access.backend()->execSql(QString::fromUtf8("SELECT DISTINCT Images.id, "
-                                      "       Albums.albumRoot, ItemInformation.rating, ItemInformation.creationDate, "
-                                      "       ItemPositions.latitudeNumber, ItemPositions.longitudeNumber "
+                                      "       Albums.albumRoot, ImageInformation.rating, ImageInformation.creationDate, "
+                                      "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
                                       " FROM Images "
-                                      "       LEFT JOIN ItemInformation ON Images.id=ItemInformation.imageid "
+                                      "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                                       "       INNER JOIN Albums ON Albums.id=Images.album "
-                                      "       INNER JOIN ItemPositions   ON Images.id=ItemPositions.imageid "
+                                      "       INNER JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
                                       " WHERE Images.status=1 "
-                                      "   AND (ItemPositions.latitudeNumber>? AND ItemPositions.latitudeNumber<?) "
-                                      "   AND (ItemPositions.longitudeNumber>? AND ItemPositions.longitudeNumber<?);"),
+                                      "   AND (ImagePositions.latitudeNumber>? AND ImagePositions.latitudeNumber<?) "
+                                      "   AND (ImagePositions.longitudeNumber>? AND ImagePositions.longitudeNumber<?);"),
                               boundValues,
                               &values);
 

@@ -37,7 +37,7 @@ void ItemLister::listFaces(ItemListerReceiver* const receiver, int personId)
 
     access.backend()->execSql(QString::fromUtf8("SELECT Images.id "
                                                 " FROM Images "
-                                                "       LEFT JOIN ItemInformation ON Images.id=ItemInformation.imageid "
+                                                "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                                                 "       INNER JOIN Albums ON Albums.id=")+
                               QString::number(personId)+
                               QString::fromUtf8(" WHERE Images.status=1 "
@@ -85,11 +85,11 @@ void ItemLister::listFromIdList(ItemListerReceiver* const receiver,
         CoreDbAccess access;
         QSqlQuery query = access.backend()->prepareQuery(QString::fromUtf8(
                     "SELECT DISTINCT Images.id, Images.name, Images.album, "
-                    "       ItemInformation.rating, ItemInformation.creationDate, "
+                    "       ImageInformation.rating, ImageInformation.creationDate, "
                     "       Images.modificationDate, Images.fileSize, "
-                    "       ItemInformation.width, ItemInformation.height "
+                    "       ImageInformation.width, ImageInformation.height "
                     " FROM Images "
-                    "       LEFT JOIN ItemInformation ON Images.id=ItemInformation.imageid "
+                    "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                     " WHERE Images.id = ?;"));
 
         query.addBindValue(variantIdList);
@@ -99,12 +99,12 @@ void ItemLister::listFromIdList(ItemListerReceiver* const receiver,
         DbEngineSqlQuery query = access.backend()->prepareQuery(QString::fromUtf8(
                              "SELECT DISTINCT Images.id, Images.name, Images.album, "
                              "       Albums.albumRoot, "
-                             "       ItemInformation.rating, Images.category, "
-                             "       ItemInformation.format, ItemInformation.creationDate, "
+                             "       ImageInformation.rating, Images.category, "
+                             "       ImageInformation.format, ImageInformation.creationDate, "
                              "       Images.modificationDate, Images.fileSize, "
-                             "       ItemInformation.width, ItemInformation.height "
+                             "       ImageInformation.width, ImageInformation.height "
                              " FROM Images "
-                             "       LEFT JOIN ItemInformation ON Images.id=ItemInformation.imageid "
+                             "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                              "       LEFT JOIN Albums ON Albums.id=Images.album "
                              " WHERE Images.status=1 AND Images.id = ?;"));
 

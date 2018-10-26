@@ -117,20 +117,20 @@ void ItemLister::listImageTagPropertySearch(ItemListerReceiver* const receiver, 
     QString errMsg;
 
     // Currently, for optimization, this does not allow a general-purpose search,
-    // ImageMetadata and ItemPositions are not joined and hooks are ignored.
+    // ImageMetadata and ImagePositions are not joined and hooks are ignored.
 
     // query head
     sqlQuery = QString::fromUtf8(
                "SELECT DISTINCT Images.id, Images.name, Images.album, "
                "       Albums.albumRoot, "
-               "       ItemInformation.rating, Images.category, "
-               "       ItemInformation.format, ItemInformation.creationDate, "
+               "       ImageInformation.rating, Images.category, "
+               "       ImageInformation.format, ImageInformation.creationDate, "
                "       Images.modificationDate, Images.fileSize, "
-               "       ItemInformation.width,  ItemInformation.height, "
+               "       ImageInformation.width,  ImageInformation.height, "
                "       ImageTagProperties.value, ImageTagProperties.property, ImageTagProperties.tagid "
                " FROM Images "
                "       INNER JOIN ImageTagProperties ON ImageTagProperties.imageid=Images.id "
-               "       LEFT JOIN ItemInformation ON Images.id=ItemInformation.imageid "
+               "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                "       INNER JOIN Albums           ON Albums.id=Images.album "
                "WHERE Images.status=1 AND ( ");
 

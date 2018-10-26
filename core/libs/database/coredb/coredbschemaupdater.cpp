@@ -982,7 +982,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
     }
 
     if (!d->dbAccess->backend()->execSql(QString::fromUtf8(
-                                          "REPLACE INTO ItemInformation (imageId) SELECT id FROM Images;"))
+                                          "REPLACE INTO ImageInformation (imageId) SELECT id FROM Images;"))
        )
     {
         return false;
@@ -1112,10 +1112,10 @@ bool CoreDbSchemaUpdater::updateV4toV7()
 
     // --- Port date, comment and rating (_after_ the scan) ---
 
-    // Port ImagesV3.date -> ItemInformation.creationDate
+    // Port ImagesV3.date -> ImageInformation.creationDate
     if (!d->backend->execSql(QString::fromUtf8(
-                                "UPDATE ItemInformation SET "
-                                " creationDate=(SELECT datetime FROM ImagesV3 WHERE ImagesV3.id=ItemInformation.imageid) "
+                                "UPDATE ImageInformation SET "
+                                " creationDate=(SELECT datetime FROM ImagesV3 WHERE ImagesV3.id=ImageInformation.imageid) "
                                 "WHERE imageid IN (SELECT id FROM ImagesV3);")
                            )
        )
@@ -1137,13 +1137,13 @@ bool CoreDbSchemaUpdater::updateV4toV7()
 
     // An author of NULL will inhibt the UNIQUE restriction to take effect (but #189080). Work around.
     d->backend->execSql(QString::fromUtf8(
-                           "DELETE FROM ItemComments WHERE "
+                           "DELETE FROM ImageComments WHERE "
                            "type=? AND language=? AND author IS NULL "
                            "AND imageid IN ( SELECT id FROM ImagesV3 ); "),
                        (int)DatabaseComment::Comment, QLatin1String("x-default"));
 
     if (!d->backend->execSql(QString::fromUtf8(
-                                "REPLACE INTO ItemComments "
+                                "REPLACE INTO ImageComments "
                                 " (imageid, type, language, comment) "
                                 "SELECT id, ?, ?, caption FROM ImagesV3;"
                             ),
@@ -1165,9 +1165,9 @@ bool CoreDbSchemaUpdater::updateV4toV7()
 
     // Port rating storage in ImageProperties to ItemInformation
     if (!d->backend->execSql(QString::fromUtf8(
-                                "UPDATE ItemInformation SET "
+                                "UPDATE ImageInformation SET "
                                 " rating=(SELECT value FROM ImageProperties "
-                                "         WHERE ItemInformation.imageid=ImageProperties.imageid AND ImageProperties.property=?) "
+                                "         WHERE ImageInformation.imageid=ImageProperties.imageid AND ImageProperties.property=?) "
                                 "WHERE imageid IN (SELECT imageid FROM ImageProperties WHERE property=?);"
                             ),
                             QString::fromUtf8("Rating"), QString::fromUtf8("Rating"))
@@ -1177,7 +1177,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
     }
 
     d->backend->execSql(QString::fromUtf8("DELETE FROM ImageProperties WHERE property=?;"), QString::fromUtf8("Rating"));
-    d->backend->execSql(QString::fromUtf8("UPDATE ItemInformation SET rating=0 WHERE rating<0;"));
+    d->backend->execSql(QString::fromUtf8("UPDATE ImageInformation SET rating=0 WHERE rating<0;"));
 
     if (d->observer)
     {
@@ -1288,7 +1288,7 @@ void CoreDbSchemaUpdater::preAlpha010Update2()
         return;
     }
 
-    if (!d->backend->execSql(QString::fromUtf8("ALTER TABLE ItemPositions RENAME TO ItemPositionsTemp;")))
+    if (!d->backend->execSql(QString::fromUtf8("ALTER TABLE ImagePositions RENAME TO ItemPositionsTemp;")))
     {
         return;
     }
@@ -1312,7 +1312,7 @@ void CoreDbSchemaUpdater::preAlpha010Update2()
                           "  accuracy REAL,\n"
                           "  description TEXT);") );
 
-    d->backend->execSql(QString::fromUtf8("REPLACE INTO ItemPositions "
+    d->backend->execSql(QString::fromUtf8("REPLACE INTO ImagePositions "
                                           " (imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
                                           "  altitude, orientation, tilt, roll, accuracy, description) "
                                           "SELECT imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
@@ -1422,7 +1422,7 @@ void CoreDbSchemaUpdater::beta010Update2()
         return;
     }
 
-    // force rescan and creation of ItemInformation entry for videos and audio
+    // force rescan and creation of ImageInformation entry for videos and audio
     d->backend->execSql(QString::fromUtf8("DELETE FROM Images WHERE category=2 OR category=3;"));
 
     d->albumDB->setSetting(QLatin1String("beta010Update2"), QLatin1String("true"));
