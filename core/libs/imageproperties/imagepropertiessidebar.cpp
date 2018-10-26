@@ -330,7 +330,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
 
     // -- Caption, ratings, tag information ---------------------
 
-    CaptionsMap captions = metaData.getImageComments();
+    CaptionsMap captions = metaData.getItemComments();
     QString caption;
 
     if (captions.contains(QLatin1String("x-default")))

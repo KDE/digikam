@@ -1133,17 +1133,17 @@ bool CoreDbSchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Imported creation dates"));
     }
 
-    // Port ImagesV3.comment to ImageComments
+    // Port ImagesV3.comment to ItemComments
 
     // An author of NULL will inhibt the UNIQUE restriction to take effect (but #189080). Work around.
     d->backend->execSql(QString::fromUtf8(
-                           "DELETE FROM ImageComments WHERE "
+                           "DELETE FROM ItemComments WHERE "
                            "type=? AND language=? AND author IS NULL "
                            "AND imageid IN ( SELECT id FROM ImagesV3 ); "),
                        (int)DatabaseComment::Comment, QLatin1String("x-default"));
 
     if (!d->backend->execSql(QString::fromUtf8(
-                                "REPLACE INTO ImageComments "
+                                "REPLACE INTO ItemComments "
                                 " (imageid, type, language, comment) "
                                 "SELECT id, ?, ?, caption FROM ImagesV3;"
                             ),
@@ -1398,7 +1398,7 @@ void CoreDbSchemaUpdater::beta010Update1()
                                           "    WHERE imageid=OLD.id;\n"
                                           "  DELETE From ItemPositions\n "
                                           "    WHERE imageid=OLD.id;\n"
-                                          "  DELETE From ImageComments\n "
+                                          "  DELETE From ItemComments\n "
                                           "    WHERE imageid=OLD.id;\n"
                                           "  DELETE From ItemCopyright\n "
                                           "    WHERE imageid=OLD.id;\n"

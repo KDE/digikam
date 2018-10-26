@@ -44,7 +44,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "facetagseditor.h"
-#include "imagecomments.h"
+#include "itemcomments.h"
 #include "itemcopyright.h"
 #include "itemextendedproperties.h"
 #include "itemhistorygraph.h"
@@ -84,7 +84,7 @@ public:
     bool                             commitImageMetadata;
     bool                             commitVideoMetadata;
     bool                             commitItemPosition;
-    bool                             commitImageComments;
+    bool                             commitItemComments;
     bool                             commitItemCopyright;
     bool                             commitFaces;
     bool                             commitIPTCCore;

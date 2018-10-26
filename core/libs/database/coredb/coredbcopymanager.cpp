@@ -93,7 +93,7 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
         << QLatin1String("ImageInformation")
         << QLatin1String("ImageMetadata")
         << QLatin1String("ItemPositions")
-        << QLatin1String("ImageComments")
+        << QLatin1String("ItemComments")
         << QLatin1String("ItemCopyright")
         << QLatin1String("Tags")
         << QLatin1String("TagProperties")

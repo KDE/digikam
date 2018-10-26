@@ -56,7 +56,7 @@
 #include "coredbbackend.h"
 #include "coredbtransaction.h"
 #include "coredboperationgroup.h"
-#include "imagecomments.h"
+#include "itemcomments.h"
 #include "itemcopyright.h"
 #include "imageinfo.h"
 #include "itemscanner.h"
@@ -1441,8 +1441,8 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
     // Comments
     {
         CoreDbAccess access;
-        ImageComments commentsSource(access, source.id());
-        ImageComments commentsDest(access, dest.id());
+        ItemComments commentsSource(access, source.id());
+        ItemComments commentsDest(access, dest.id());
         commentsDest.replaceFrom(commentsSource);
         commentsDest.apply(access);
     }

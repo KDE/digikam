@@ -63,7 +63,7 @@ void DatabaseFieldsTest::testIterators()
     DECLARE_ITERATOR_TEST(ImageMetadata)
     DECLARE_ITERATOR_TEST(VideoMetadata)
     DECLARE_ITERATOR_TEST(ItemPositions)
-    DECLARE_ITERATOR_TEST(ImageComments)
+    DECLARE_ITERATOR_TEST(ItemComments)
     DECLARE_ITERATOR_TEST(ImageHistoryInfo)
 }
 
@@ -77,7 +77,7 @@ void DatabaseFieldsTest::testMetaInfo()
     QCOMPARE(FieldMetaInfo<Images>::Last, ImagesLast);
     QCOMPARE(FieldMetaInfo<ImageInformation>::Last, ImageInformationLast);
     QCOMPARE(FieldMetaInfo<ImageMetadata>::Last, ImageMetadataLast);
-    QCOMPARE(FieldMetaInfo<ImageComments>::Last, ImageCommentsLast);
+    QCOMPARE(FieldMetaInfo<ItemComments>::Last, ItemCommentsLast);
     QCOMPARE(FieldMetaInfo<ItemPositions>::Last, ItemPositionsLast);
     QCOMPARE(FieldMetaInfo<ImageHistoryInfo>::Last, ImageHistoryInfoLast);
     QCOMPARE(FieldMetaInfo<VideoMetadata>::Last, VideoMetadataLast);
@@ -102,7 +102,7 @@ void DatabaseFieldsTest::testIteratorsSetOnly()
     DECLARE_ITERATORSETONLY_TEST(ImageMetadata)
     DECLARE_ITERATORSETONLY_TEST(VideoMetadata)
     DECLARE_ITERATORSETONLY_TEST(ItemPositions)
-    DECLARE_ITERATORSETONLY_TEST(ImageComments)
+    DECLARE_ITERATORSETONLY_TEST(ItemComments)
     DECLARE_ITERATORSETONLY_TEST(ImageHistoryInfo)
 }
 
@@ -113,7 +113,7 @@ void DatabaseFieldsTest::testSet()
     QCOMPARE(Set(ImageMetadataFirst).getImageMetadata(), ImageMetadataFirst);
     QCOMPARE(Set(VideoMetadataFirst).getVideoMetadata(), VideoMetadataFirst);
     QCOMPARE(Set(ItemPositionsFirst).getItemPositions(), ItemPositionsFirst);
-    QCOMPARE(Set(ImageCommentsFirst).getImageComments(), ImageCommentsFirst);
+    QCOMPARE(Set(ItemCommentsFirst).getItemComments(), ItemCommentsFirst);
     QCOMPARE(Set(ImageHistoryInfoFirst).getImageHistoryInfo(), ImageHistoryInfoFirst);
 }
 
@@ -143,7 +143,7 @@ SetHash SetHashAddSets(const SetHash& targetIn, const Set& bits)
         target.insertField(*it, Set(*it));
     }
 
-    for (DatabaseFieldsEnumIteratorSetOnly<ImageComments> it(bits.getImageComments()); !it.atEnd(); ++it)
+    for (DatabaseFieldsEnumIteratorSetOnly<ItemComments> it(bits.getItemComments()); !it.atEnd(); ++it)
     {
         target.insertField(*it, Set(*it));
     }
@@ -194,10 +194,10 @@ void DatabaseFieldsTest::testSetHashAddSets()
     QCOMPARE(t.size(), itemCount);
     QCOMPARE(t.value(VideoMetadataFirst).getVideoMetadata(), VideoMetadataFirst);
 
-    t = SetHashAddSets(t, DatabaseFields::Set(ImageCommentsFirst));
+    t = SetHashAddSets(t, DatabaseFields::Set(ItemCommentsFirst));
     ++itemCount;
     QCOMPARE(t.size(), itemCount);
-    QCOMPARE(t.value(ImageCommentsFirst).getImageComments(), ImageCommentsFirst);
+    QCOMPARE(t.value(ItemCommentsFirst).getItemComments(), ItemCommentsFirst);
 
     t = SetHashAddSets(t, DatabaseFields::Set(ItemPositionsFirst));
     ++itemCount;
@@ -218,7 +218,7 @@ void DatabaseFieldsTest::testHashRemoveAll()
                 .setFields(DatabaseFields::Set(ImageInformationFirst))
                 .setFields(DatabaseFields::Set(ImageMetadataFirst))
                 .setFields(DatabaseFields::Set(VideoMetadataFirst))
-                .setFields(DatabaseFields::Set(ImageCommentsFirst))
+                .setFields(DatabaseFields::Set(ItemCommentsFirst))
                 .setFields(DatabaseFields::Set(ItemPositionsFirst | ItemPositionsLast))
                 .setFields(DatabaseFields::Set(ImageHistoryInfoFirst));
 
@@ -253,7 +253,7 @@ void DatabaseFieldsTest::testMinSizeType()
     DECLARE_MINSIZE_TEST(Images)
     DECLARE_MINSIZE_TEST(ImageInformation)
     DECLARE_MINSIZE_TEST(ImageMetadata)
-    DECLARE_MINSIZE_TEST(ImageComments)
+    DECLARE_MINSIZE_TEST(ItemComments)
     DECLARE_MINSIZE_TEST(ItemPositions)
     DECLARE_MINSIZE_TEST(ImageHistoryInfo)
     DECLARE_MINSIZE_TEST(VideoMetadata)

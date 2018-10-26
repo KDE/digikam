@@ -795,7 +795,7 @@ bool ItemQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, 
     else if (name == QLatin1String("comment"))
     {
         sql += QString::fromUtf8(" (Images.id IN "
-               " (SELECT imageid FROM ImageComments "
+               " (SELECT imageid FROM ItemComments "
                "  WHERE type=? AND comment ");
         ItemQueryBuilder::addSqlRelation(sql, relation);
         sql += QString::fromUtf8(" ?)) ");
@@ -804,7 +804,7 @@ bool ItemQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, 
     else if (name == QLatin1String("commentauthor"))
     {
         sql += QString::fromUtf8(" (Images.id IN "
-               " (SELECT imageid FROM ImageComments "
+               " (SELECT imageid FROM ItemComments "
                "  WHERE type=? AND author ");
         ItemQueryBuilder::addSqlRelation(sql, relation);
         sql += QString::fromUtf8(" ?)) ");
@@ -813,7 +813,7 @@ bool ItemQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, 
     else if (name == QLatin1String("headline"))
     {
         sql += QString::fromUtf8(" (Images.id IN "
-               " (SELECT imageid FROM ImageComments "
+               " (SELECT imageid FROM ItemComments "
                "  WHERE type=? AND comment ");
         ItemQueryBuilder::addSqlRelation(sql, relation);
         sql += QString::fromUtf8(" ?)) ");
@@ -822,7 +822,7 @@ bool ItemQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, 
     else if (name == QLatin1String("title"))
     {
         sql += QString::fromUtf8(" (Images.id IN "
-               " (SELECT imageid FROM ImageComments "
+               " (SELECT imageid FROM ItemComments "
                "  WHERE type=? AND comment ");
         ItemQueryBuilder::addSqlRelation(sql, relation);
         sql += QString::fromUtf8(" ?)) ");

@@ -177,24 +177,24 @@ enum ItemPositionsField
 
 typedef uint16_t ItemPositionsMinSizeType;
 
-enum ImageCommentsField
+enum ItemCommentsField
 {
-    ImageCommentsNone  = 0,
+    ItemCommentsNone  = 0,
     CommentType        = 1 << 0,
     CommentLanguage    = 1 << 1,
     CommentAuthor      = 1 << 2,
     CommentDate        = 1 << 3,
     Comment            = 1 << 4,
-    ImageCommentsAll   = CommentType     |
+    ItemCommentsAll   = CommentType     |
                          CommentAuthor   |
                          CommentLanguage |
                          CommentDate     |
                          Comment,
-    ImageCommentsFirst = CommentType,
-    ImageCommentsLast  = Comment
+    ItemCommentsFirst = CommentType,
+    ItemCommentsLast  = Comment
 };
 
-typedef uint8_t ImageCommentsMinSizeType;
+typedef uint8_t ItemCommentsMinSizeType;
 
 enum ImageHistoryInfoField
 {
@@ -237,7 +237,7 @@ typedef uint8_t VideoMetadataMinSizeType;
 Q_DECLARE_FLAGS(Images,           ImagesField)
 Q_DECLARE_FLAGS(ImageInformation, ImageInformationField)
 Q_DECLARE_FLAGS(ImageMetadata,    ImageMetadataField)
-Q_DECLARE_FLAGS(ImageComments,    ImageCommentsField)
+Q_DECLARE_FLAGS(ItemComments,    ItemCommentsField)
 Q_DECLARE_FLAGS(ItemPositions,   ItemPositionsField)
 Q_DECLARE_FLAGS(ImageHistoryInfo, ImageHistoryInfoField)
 Q_DECLARE_FLAGS(VideoMetadata,    VideoMetadataField)
@@ -260,7 +260,7 @@ template<typename FieldName> class FieldMetaInfo
 DECLARE_FIELDMETAINFO(Images)
 DECLARE_FIELDMETAINFO(ImageInformation)
 DECLARE_FIELDMETAINFO(ImageMetadata)
-DECLARE_FIELDMETAINFO(ImageComments)
+DECLARE_FIELDMETAINFO(ItemComments)
 DECLARE_FIELDMETAINFO(ItemPositions)
 DECLARE_FIELDMETAINFO(ImageHistoryInfo)
 DECLARE_FIELDMETAINFO(VideoMetadata)
@@ -355,7 +355,7 @@ DATABASEFIELDS_ENUM_ITERATOR(ImageInformation)
 DATABASEFIELDS_ENUM_ITERATOR(ImageMetadata)
 DATABASEFIELDS_ENUM_ITERATOR(VideoMetadata)
 DATABASEFIELDS_ENUM_ITERATOR(ItemPositions)
-DATABASEFIELDS_ENUM_ITERATOR(ImageComments)
+DATABASEFIELDS_ENUM_ITERATOR(ItemComments)
 DATABASEFIELDS_ENUM_ITERATOR(ImageHistoryInfo)
 
 /**
@@ -398,7 +398,7 @@ public:
         images           = ImagesNone;
         imageInformation = ImageInformationNone;
         imageMetadata    = ImageMetadataNone;
-        imageComments    = ImageCommentsNone;
+        imageComments    = ItemCommentsNone;
         imagePositions   = ItemPositionsNone;
         imageHistory     = ImageHistoryInfoNone;
         videoMetadata    = VideoMetadataNone;
@@ -411,7 +411,7 @@ public:
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageInformation, imageInformation)
     DATABASEFIELDS_SET_DECLARE_METHODS(VideoMetadata,    videoMetadata)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageMetadata,    imageMetadata)
-    DATABASEFIELDS_SET_DECLARE_METHODS(ImageComments,    imageComments)
+    DATABASEFIELDS_SET_DECLARE_METHODS(ItemComments,    imageComments)
     DATABASEFIELDS_SET_DECLARE_METHODS(ItemPositions,   imagePositions)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageHistoryInfo, imageHistory)
 
@@ -485,7 +485,7 @@ private:
     ImageInformation imageInformation;
     ImageMetadata    imageMetadata;
     VideoMetadata    videoMetadata;
-    ImageComments    imageComments;
+    ItemComments    imageComments;
     ItemPositions   imagePositions;
     ImageHistoryInfo imageHistory;
     CustomEnum       customEnum;
@@ -547,7 +547,7 @@ public:
         return (int)f | (2 << 26);
     }
 
-    static inline unsigned int uniqueKey(ImageComments f)
+    static inline unsigned int uniqueKey(ItemComments f)
     {
         return (int)f | (3 << 26);
     }
@@ -577,7 +577,7 @@ public:
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageInformation, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageMetadata,    uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(VideoMetadata,    uniqueKey);
-    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageComments,    uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(ItemComments,    uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ItemPositions,   uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageHistoryInfo, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(CustomEnum,       uniqueKey);
@@ -592,7 +592,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::Images)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageInformation)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageMetadata)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::VideoMetadata)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageComments)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ItemComments)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ItemPositions)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageHistoryInfo)
 

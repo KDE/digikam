@@ -39,7 +39,7 @@
 #include "templatemanager.h"
 #include "tagscache.h"
 #include "coredbaccess.h"
-#include "imagecomments.h"
+#include "itemcomments.h"
 #include "imageinfo.h"
 #include "coredbwatch.h"
 #include "metadatahub.h"
@@ -198,7 +198,7 @@ void DisjointMetadata::load(const ImageInfo& info)
 
     {
         CoreDbAccess access;
-        ImageComments comments = info.imageComments(access);
+        ItemComments comments = info.imageComments(access);
         commentMap             = comments.toCaptionsMap();
         titleMap               = comments.toCaptionsMap(DatabaseComment::Title);
     }
@@ -417,7 +417,7 @@ bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
     if (saveTitle && (writeAllFields || d->titlesChanged))
     {
         CoreDbAccess access;
-        ImageComments comments = info.imageComments(access);
+        ItemComments comments = info.imageComments(access);
         comments.replaceComments(d->titles, DatabaseComment::Title);
         changed                = true;
     }
@@ -425,7 +425,7 @@ bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
     if (saveComment && (writeAllFields || d->commentsChanged))
     {
         CoreDbAccess access;
-        ImageComments comments = info.imageComments(access);
+        ItemComments comments = info.imageComments(access);
         comments.replaceComments(d->comments);
         changed                = true;
     }

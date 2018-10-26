@@ -409,7 +409,7 @@ bool Digikam::TableViewColumns::ColumnDigikamProperties::columnAffectedByChanges
         case SubColumnCaption:
             return true;
             /// @todo These are not the right flags for these columns
-//             return imageChangeset.changes() & DatabaseFields::ImageCommentsAll;
+//             return imageChangeset.changes() & DatabaseFields::ItemCommentsAll;
 
         case SubColumnRating:
             return imageChangeset.changes() & DatabaseFields::Rating;

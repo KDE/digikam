@@ -131,8 +131,8 @@ public: // Tags helpers
 
 public: // Comments helpers
 
-    CaptionsMap getImageComments(const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
-    bool setImageComments(const CaptionsMap& comments,
+    CaptionsMap getItemComments(const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
+    bool setItemComments(const CaptionsMap& comments,
                           const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
 
     CaptionsMap getImageTitles() const;

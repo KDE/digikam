@@ -406,7 +406,7 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
                     (set & DatabaseFields::ImageInformationAll) ||
                     (set & DatabaseFields::ImageMetadataAll)    ||
                     (set & DatabaseFields::VideoMetadataAll)    ||
-                    (set & DatabaseFields::ImageCommentsAll))
+                    (set & DatabaseFields::ItemCommentsAll))
                 {
                     m_dirtyPropertiesTab = false;
                 }

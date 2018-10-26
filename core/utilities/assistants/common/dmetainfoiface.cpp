@@ -93,7 +93,7 @@ DMetaInfoIface::DInfoMap DMetaInfoIface::itemInfo(const QUrl& url) const
 
         map.insert(QLatin1String("name"),        info.fileName());
         map.insert(QLatin1String("title"),       meta.getImageTitles()[def].caption);
-        map.insert(QLatin1String("comment"),     meta.getImageComments()[def].caption);
+        map.insert(QLatin1String("comment"),     meta.getItemComments()[def].caption);
         map.insert(QLatin1String("orientation"), (int)meta.getImageOrientation());
         map.insert(QLatin1String("datetime"),    meta.getImageDateTime());
         map.insert(QLatin1String("rating"),      meta.getImageRating());

@@ -276,7 +276,7 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
             // invalidate the relevant field. It will be lazy-loaded at first access.
             DatabaseFields::Set changes = changeset.changes();
 
-            if (changes & DatabaseFields::ImageCommentsAll)
+            if (changes & DatabaseFields::ItemCommentsAll)
             {
                 (*it)->defaultCommentCached = false;
                 (*it)->defaultTitleCached   = false;

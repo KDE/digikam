@@ -37,7 +37,7 @@
 #include "coredbaccess.h"
 #include "coredbwatch.h"
 #include "imageinfo.h"
-#include "imagecomments.h"
+#include "itemcomments.h"
 #include "template.h"
 #include "templatemanager.h"
 #include "applicationsettings.h"
@@ -151,7 +151,7 @@ void MetadataHub::load(const ImageInfo& info)
 
     {
         CoreDbAccess access;
-        ImageComments comments = info.imageComments(access);
+        ItemComments comments = info.imageComments(access);
         commentMap             = comments.toCaptionsMap();
         titleMap               = comments.toCaptionsMap(DatabaseComment::Title);
     }
@@ -295,7 +295,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
     if (saveComment)
     {
         // Store comments in image as JFIF comments, Exif comments, Iptc Caption, and Xmp.
-        dirty |= metadata.setImageComments(d->comments);
+        dirty |= metadata.setItemComments(d->comments);
     }
 
     if (saveDateTime)
@@ -729,7 +729,7 @@ void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags,
 //    // In second, from standard JPEG JFIF comments section,
 //    // In third, from Exif comments tag,
 //    // In four, from Iptc comments tag.
-//    comments = metadata.getImageComments();
+//    comments = metadata.getItemComments();
 
 //    // Try to get date and time from image :
 //    // In first, from Exif date & time tags,

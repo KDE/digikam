@@ -77,14 +77,14 @@ void ItemAttributesWatch::slotImageChange(const ImageChangeset& changeset)
 {
     DatabaseFields::Set set = changeset.changes();
 
-    if ((set & DatabaseFields::ImageCommentsAll) ||
+    if ((set & DatabaseFields::ItemCommentsAll) ||
         (set & DatabaseFields::CreationDate)     ||
         (set & DatabaseFields::ModificationDate) ||
         (set & DatabaseFields::Rating))
     {
         foreach (const qlonglong& imageId, changeset.ids())
         {
-            if (set & DatabaseFields::ImageCommentsAll)
+            if (set & DatabaseFields::ItemCommentsAll)
             {
                 emit signalImageCaptionChanged(imageId);
             }

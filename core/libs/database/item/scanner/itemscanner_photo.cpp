@@ -209,7 +209,7 @@ void ItemScanner::commitItemPosition()
     CoreDbAccess().db()->addItemPosition(d->scanInfo.id, d->commit.imagePositionInfos);
 }
 
-void ItemScanner::scanImageComments()
+void ItemScanner::scanItemComments()
 {
     MetadataFields fields;
     fields << MetadataInfo::Headline
@@ -218,14 +218,14 @@ void ItemScanner::scanImageComments()
     QVariantList metadataInfos = d->metadata.getMetadataFields(fields);
 
     // handles all possible fields, multi-language, author, date
-    CaptionsMap captions = d->metadata.getImageComments();
+    CaptionsMap captions = d->metadata.getItemComments();
 
     if (captions.isEmpty() && !hasValidField(metadataInfos))
     {
         return;
     }
 
-    d->commit.commitImageComments  = true;
+    d->commit.commitItemComments  = true;
     d->commit.captions             = captions;
 
     // Headline
@@ -241,10 +241,10 @@ void ItemScanner::scanImageComments()
     }
 }
 
-void ItemScanner::commitImageComments()
+void ItemScanner::commitItemComments()
 {
     CoreDbAccess access;
-    ImageComments comments(access, d->scanInfo.id);
+    ItemComments comments(access, d->scanInfo.id);
 
     // Description
     if (!d->commit.captions.isEmpty())

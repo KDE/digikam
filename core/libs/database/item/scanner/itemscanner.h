@@ -252,8 +252,8 @@ protected:
     void commitImageMetadata();
     void scanItemPosition();
     void commitItemPosition();
-    void scanImageComments();
-    void commitImageComments();
+    void scanItemComments();
+    void commitItemComments();
     void scanItemCopyright();
     void commitItemCopyright();
     void scanIPTCCore();

@@ -73,9 +73,9 @@ void ItemScanner::commit()
         commitItemPosition();
     }
 
-    if (d->commit.commitImageComments)
+    if (d->commit.commitItemComments)
     {
-        commitImageComments();
+        commitItemComments();
     }
 
     if (d->commit.commitItemCopyright)

@@ -1014,7 +1014,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         comMap.insert(QLatin1String("x-default"), data);
         capMap.setData(comMap, MetaEngine::AltLangMap(), QString(), MetaEngine::AltLangMap());
 
-        setImageComments(capMap);
+        setItemComments(capMap);
     }
 
     // --------------

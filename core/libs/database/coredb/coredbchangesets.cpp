@@ -456,7 +456,7 @@ DatabaseFields::Set& DatabaseFields::Set::operator<<(const QDBusArgument& argume
     images           = (DatabaseFields::Images)imagesInt;
     imageInformation = (DatabaseFields::ImageInformation)imageInformationInt;
     imageMetadata    = (DatabaseFields::ImageMetadata)imageMetadataInt;
-    imageComments    = (DatabaseFields::ImageComments)imageCommentsInt;
+    imageComments    = (DatabaseFields::ItemComments)imageCommentsInt;
     imagePositions   = (DatabaseFields::ItemPositions)imagePositionsInt;
     customEnum       = (DatabaseFields::CustomEnum)customEnumInt;
     videoMetadata    = (DatabaseFields::VideoMetadata)videoMetadataInt;

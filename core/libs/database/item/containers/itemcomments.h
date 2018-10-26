@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-09-19
- * Description : Access to comments of an image in the database
+ * Description : Access to comments of an item in the database
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_COMMENTS_H
-#define DIGIKAM_IMAGE_COMMENTS_H
+#ifndef DIGIKAM_ITEM_COMMENTS_H
+#define DIGIKAM_ITEM_COMMENTS_H
 
 // Qt includes
 
@@ -44,12 +44,12 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT ImageComments
+class DIGIKAM_DATABASE_EXPORT ItemComments
 {
 public:
 
     /**
-     * The ImageComments class shall provide short-lived objects that provide read/write access
+     * The ItemComments class shall provide short-lived objects that provide read/write access
      * to the comments stored in the database. It is a mere wrapper around the less
      * convenient access methods in CoreDB.
      * Database results are cached, but the object will not listen to database changes from other places.
@@ -84,24 +84,24 @@ public:
 
 public:
 
-    /** Create a null ImageComments object */
-    ImageComments();
+    /** Create a null ItemComments object */
+    ItemComments();
 
     /**
-     * Create a ImageComments object for the image with the specified id.
+     * Create a ItemComments object for the image with the specified id.
      */
-    explicit ImageComments(qlonglong imageid);
+    explicit ItemComments(qlonglong imageid);
 
     /**
-     * Create a ImageComments object for the image with the specified id.
+     * Create a ItemComments object for the image with the specified id.
      * The existing CoreDbAccess object will be used to access the database.
      */
-    ImageComments(CoreDbAccess& access, qlonglong imageid);
+    ItemComments(CoreDbAccess& access, qlonglong imageid);
 
-    ImageComments(const ImageComments& other);
-    ~ImageComments();
+    ItemComments(const ItemComments& other);
+    ~ItemComments();
 
-    ImageComments& operator=(const ImageComments& other);
+    ItemComments& operator=(const ItemComments& other);
 
     bool isNull() const;
 
@@ -109,7 +109,7 @@ public:
      * Changes the behavior to unique comments per language, see the enum above for possible
      * values.
      * Default value is UniquePerLanguage.
-     * Note: This is _not_ a property of the database, but only of this single ImageComments object,
+     * Note: This is _not_ a property of the database, but only of this single ItemComments object,
      */
     void setUniqueBehavior(UniqueBehavior behavior);
 
@@ -220,7 +220,7 @@ public:
     /**
      * Replaces all entries in this object with all entries from source.
      */
-    void replaceFrom(const ImageComments& source);
+    void replaceFrom(const ItemComments& source);
 
     // If you need more methods, add your methods here!
 
@@ -242,4 +242,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_COMMENTS_H
+#endif // DIGIKAM_ITEM_COMMENTS_H

@@ -65,9 +65,9 @@ void CommentReadWriteTest::testSimpleReadAfterWrite()
     // Trick dmetadata, so it will think that we have a file path
     dmeta.setFilePath(QLatin1String("random.org"));
 
-    dmeta.setImageComments(commentSet1);
+    dmeta.setItemComments(commentSet1);
 
-    result = dmeta.getImageComments();
+    result = dmeta.getItemComments();
 
     QString rezAuthor  = result.value(QLatin1String("x-default")).author;
     QString rezComment = result.value(QLatin1String("x-default")).caption;
@@ -108,7 +108,7 @@ void CommentReadWriteTest::testWriteToDisabledNamespaces()
              << commNs1
              << commNs2;
 
-    bool rez = dmeta.setImageComments(commentSet1, dmsettings);
+    bool rez = dmeta.setItemComments(commentSet1, dmsettings);
 
     QVERIFY(rez);
 
@@ -154,6 +154,6 @@ void CommentReadWriteTest::testReadFromDisabledNamespaces()
     dmeta.setXmpTagStringListLangAlt("Xmp.dc.description", commentSet1.toAltLangMap());
     dmeta.setXmpTagStringLangAlt("Xmp.exif.UserComment", commentSet2.value(QLatin1String("x-default")).caption, QString());
 
-    rez = dmeta.getImageComments(dmsettings);
+    rez = dmeta.getItemComments(dmsettings);
     QCOMPARE(rez.value(QLatin1String("x-default")).caption, commentSet2.value(QLatin1String("x-default")).caption);
 }

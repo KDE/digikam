@@ -96,7 +96,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
     switch (field)
     {
         case MetadataInfo::Comment:
-            return getImageComments()[QLatin1String("x-default")].caption;
+            return getItemComments()[QLatin1String("x-default")].caption;
         case MetadataInfo::CommentJfif:
             return getCommentsDecoded();
         case MetadataInfo::CommentExif:

@@ -69,7 +69,7 @@ void ItemScanner::scanBalooInfo()
         {
             CaptionValues val;
             val.caption                   = bInfo.comment;
-            d->commit.commitImageComments = true;
+            d->commit.commitItemComments = true;
             d->commit.captions.insert(QLatin1String("x-default"), val);
         }
     }

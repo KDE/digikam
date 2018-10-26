@@ -943,7 +943,7 @@ public:
     /**
      * Retrieves all available comments for the specified item.
      */
-    QList<CommentInfo> getImageComments(qlonglong imageID);
+    QList<CommentInfo> getItemComments(qlonglong imageID);
 
     /**
      * Sets the comments for the image. A comment for the image with the same
@@ -974,10 +974,10 @@ public:
      * 4) String    Comment
      */
     void changeImageComment(int commentId, qlonglong imageID, const QVariantList& infos,
-                            DatabaseFields::ImageComments fields = DatabaseFields::ImageCommentsAll);
+                            DatabaseFields::ItemComments fields = DatabaseFields::ItemCommentsAll);
 
     /**
-     * Remove the specified entry in ImageComments
+     * Remove the specified entry in ItemComments
      */
     void removeImageComment(int commentId, qlonglong imageid);
 
@@ -1358,7 +1358,7 @@ public:
     static QStringList videoMetadataFieldList(DatabaseFields::VideoMetadata fields);
     static QStringList imageMetadataFieldList(DatabaseFields::ImageMetadata fields);
     static QStringList imagePositionsFieldList(DatabaseFields::ItemPositions fields);
-    static QStringList imageCommentsFieldList(DatabaseFields::ImageComments fields);
+    static QStringList imageCommentsFieldList(DatabaseFields::ItemComments fields);
     static void addBoundValuePlaceholders(QString& query, int count);
 
 public:

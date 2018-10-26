@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer& settings) const
+CaptionsMap DMetadata::getItemComments(const DMetadataSettingsContainer& settings) const
 {
     if (getFilePath().isEmpty())
     {
@@ -147,7 +147,7 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer& settin
     return captionsMap;
 }
 
-bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSettingsContainer& settings) const
+bool DMetadata::setItemComments(const CaptionsMap& comments, const DMetadataSettingsContainer& settings) const
 {
 /*
     // See bug #139313: An empty string is also a valid value

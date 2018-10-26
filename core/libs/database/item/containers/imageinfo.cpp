@@ -48,7 +48,7 @@
 #include "itemlister.h"
 #include "itemlisterrecord.h"
 #include "imageinfolist.h"
-#include "imagecomments.h"
+#include "itemcomments.h"
 #include "itemcopyright.h"
 #include "itemextendedproperties.h"
 #include "itemposition.h"
@@ -563,7 +563,7 @@ QString ImageInfo::title() const
     QString title;
     {
         CoreDbAccess access;
-        ImageComments comments(access, m_data->id);
+        ItemComments comments(access, m_data->id);
         title = comments.defaultComment(DatabaseComment::Title);
     }
 
@@ -585,7 +585,7 @@ QString ImageInfo::comment() const
     QString comment;
     {
         CoreDbAccess access;
-        ImageComments comments(access, m_data->id);
+        ItemComments comments(access, m_data->id);
         comment = comments.defaultComment();
     }
 
@@ -1139,14 +1139,14 @@ void ImageInfo::clearGroup()
     CoreDbAccess().db()->removeAllImageRelationsTo(m_data->id, DatabaseRelation::Grouped);
 }
 
-ImageComments ImageInfo::imageComments(CoreDbAccess& access) const
+ItemComments ImageInfo::imageComments(CoreDbAccess& access) const
 {
     if (!m_data)
     {
-        return ImageComments();
+        return ItemComments();
     }
 
-    return ImageComments(access, m_data->id);
+    return ItemComments(access, m_data->id);
 }
 
 ItemCopyright ImageInfo::imageCopyright() const

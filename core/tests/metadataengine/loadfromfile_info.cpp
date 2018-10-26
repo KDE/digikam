@@ -50,7 +50,7 @@ int main (int argc, char** argv)
     meta.load(filePath);
 
     qDebug() << "--- Comments   -------------------------------";
-    qDebug() << meta.getImageComments();
+    qDebug() << meta.getItemComments();
     qDebug() << "--- Titles     -------------------------------";
     qDebug() << meta.getImageTitles();
     qDebug() << "--- IPTC info  -------------------------------";

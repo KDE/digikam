@@ -49,7 +49,7 @@ namespace Digikam
 
 class DImageHistory;
 class HistoryImageId;
-class ImageComments;
+class ItemComments;
 class ImageCommonContainer;
 class ItemCopyright;
 class ItemExtendedProperties;
@@ -252,13 +252,13 @@ public:
     int orientation() const;
 
     /**
-     * Retrieve the ImageComments object for this item.
+     * Retrieve the ItemComments object for this item.
      * This object allows full read and write access to all comments
      * and their properties.
      * You need to hold CoreDbAccess to ensure the validity.
      * For simple, cached read access see comment().
      */
-    ImageComments imageComments(CoreDbAccess& access) const;
+    ItemComments imageComments(CoreDbAccess& access) const;
 
     /**
      * Retrieve the ItemCopyright object for this item.

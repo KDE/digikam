@@ -347,7 +347,7 @@ QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo)
         imageSize = meta.getImageDimensions();
 
         format.replace(QString::fromUtf8("%c"),
-            meta.getImageComments()[QLatin1String("x-default")].caption);
+            meta.getItemComments()[QLatin1String("x-default")].caption);
         format.replace(QString::fromUtf8("%d"),
             QLocale().toString(meta.getImageDateTime(), QLocale::ShortFormat));
         format.replace(QString::fromUtf8("%f"), fi.fileName());
