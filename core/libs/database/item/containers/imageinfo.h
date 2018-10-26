@@ -52,7 +52,7 @@ class HistoryImageId;
 class ImageComments;
 class ImageCommonContainer;
 class ImageCopyright;
-class ImageExtendedProperties;
+class ItemExtendedProperties;
 class ImageInfoData;
 class ItemListerRecord;
 class ImageMetadataContainer;
@@ -268,11 +268,11 @@ public:
     ImageCopyright imageCopyright() const;
 
     /**
-     * Retrieve the ImageExtendedProperties object for this item.
+     * Retrieve the ItemExtendedProperties object for this item.
      * This object allows full read and write access to all extended properties
      * values.
      */
-    ImageExtendedProperties imageExtendedProperties() const;
+    ItemExtendedProperties imageExtendedProperties() const;
 
     /**
      * Retrieve the ImagePosition object for this item.

@@ -50,7 +50,7 @@
 #include "imageinfolist.h"
 #include "imagecomments.h"
 #include "imagecopyright.h"
-#include "imageextendedproperties.h"
+#include "itemextendedproperties.h"
 #include "imageposition.h"
 #include "itemscanner.h"
 #include "itemtagpair.h"
@@ -1159,14 +1159,14 @@ ImageCopyright ImageInfo::imageCopyright() const
     return ImageCopyright(m_data->id);
 }
 
-ImageExtendedProperties ImageInfo::imageExtendedProperties() const
+ItemExtendedProperties ImageInfo::imageExtendedProperties() const
 {
     if (!m_data)
     {
-        return ImageExtendedProperties();
+        return ItemExtendedProperties();
     }
 
-    return ImageExtendedProperties(m_data->id);
+    return ItemExtendedProperties(m_data->id);
 }
 
 ImagePosition ImageInfo::imagePosition() const
@@ -1589,7 +1589,7 @@ Template ImageInfo::metadataTemplate() const
     Template t;
     imageCopyright().fillTemplate(t);
 
-    ImageExtendedProperties ep = imageExtendedProperties();
+    ItemExtendedProperties ep = imageExtendedProperties();
     t.setLocationInfo(ep.location());
     t.setIptcSubjects(ep.subjectCode());
     return t;
@@ -1605,7 +1605,7 @@ void ImageInfo::setMetadataTemplate(const Template& t)
     removeMetadataTemplate();
     imageCopyright().setFromTemplate(t);
 
-    ImageExtendedProperties ep = imageExtendedProperties();
+    ItemExtendedProperties ep = imageExtendedProperties();
     ep.setLocation(t.locationInfo());
     ep.setSubjectCode(t.IptcSubjects());
 }
@@ -1619,7 +1619,7 @@ void ImageInfo::removeMetadataTemplate()
 
     imageCopyright().removeAll();
 
-    ImageExtendedProperties ep = imageExtendedProperties();
+    ItemExtendedProperties ep = imageExtendedProperties();
     ep.removeLocation();
     ep.removeSubjectCode();
 }

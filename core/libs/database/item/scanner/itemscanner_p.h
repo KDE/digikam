@@ -46,7 +46,7 @@
 #include "facetagseditor.h"
 #include "imagecomments.h"
 #include "imagecopyright.h"
-#include "imageextendedproperties.h"
+#include "itemextendedproperties.h"
 #include "itemhistorygraph.h"
 #include "metaenginesettings.h"
 #include "tagregion.h"

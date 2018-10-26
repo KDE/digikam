@@ -308,7 +308,7 @@ void ItemScanner::scanIPTCCore()
 
 void ItemScanner::commitIPTCCore()
 {
-    ImageExtendedProperties props(d->scanInfo.id);
+    ItemExtendedProperties props(d->scanInfo.id);
 
     if (!d->commit.iptcCoreMetadataInfos.at(0).isNull())
     {

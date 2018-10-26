@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-07-04
- * Description : Access to extended properties of an image in the database
+ * Description : Access to extended properties of an item in the database
  *
  * Copyright (C) 2009-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_EXTENDED_PROPERTIES_H
-#define DIGIKAM_IMAGE_EXTENDED_PROPERTIES_H
+#ifndef DIGIKAM_ITEM_EXTENDED_PROPERTIES_H
+#define DIGIKAM_ITEM_EXTENDED_PROPERTIES_H
 
 // Qt includes
 
@@ -40,16 +40,15 @@
 namespace Digikam
 {
 
-
-class DIGIKAM_DATABASE_EXPORT ImageExtendedProperties
+class DIGIKAM_DATABASE_EXPORT ItemExtendedProperties
 {
 
 public:
 
-    explicit ImageExtendedProperties(qlonglong imageid);
+    explicit ItemExtendedProperties(qlonglong imageid);
 
-    /** Create a null ImageExtendedProperties object */
-    ImageExtendedProperties();
+    /** Create a null ItemExtendedProperties object */
+    ItemExtendedProperties();
 
     /**
      * Return the Intellectual Genre.
@@ -130,4 +129,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_EXTENDED_PROPERTIES_H
+#endif // DIGIKAM_ITEM_EXTENDED_PROPERTIES_H

@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2009-07-04
- * Description : Access to extended properties of an image in the database
+ * Description : Access to extended properties of an item in the database
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009      by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2017-2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  *
@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "imageextendedproperties.h"
+#include "itemextendedproperties.h"
 
 // Local includes
 
@@ -36,96 +36,96 @@
 namespace Digikam
 {
 
-ImageExtendedProperties::ImageExtendedProperties(qlonglong imageid)
+ItemExtendedProperties::ItemExtendedProperties(qlonglong imageid)
     : m_id(imageid)
 {
 }
 
-ImageExtendedProperties::ImageExtendedProperties()
+ItemExtendedProperties::ItemExtendedProperties()
     : m_id(0)
 {
 }
 
-QString ImageExtendedProperties::intellectualGenre()
+QString ItemExtendedProperties::intellectualGenre()
 {
     return readProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreIntellectualGenre));
 }
 
-void ImageExtendedProperties::setIntellectualGenre(const QString& intellectualGenre)
+void ItemExtendedProperties::setIntellectualGenre(const QString& intellectualGenre)
 {
     setProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreIntellectualGenre), intellectualGenre);
 }
 
-void ImageExtendedProperties::removeIntellectualGenre()
+void ItemExtendedProperties::removeIntellectualGenre()
 {
     setIntellectualGenre(QString());
 }
 
-QString ImageExtendedProperties::jobId()
+QString ItemExtendedProperties::jobId()
 {
     return readProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreJobID));
 }
 
-void ImageExtendedProperties::setJobId(const QString& jobId)
+void ItemExtendedProperties::setJobId(const QString& jobId)
 {
     setProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreJobID), jobId);
 }
 
-void ImageExtendedProperties::removeJobId()
+void ItemExtendedProperties::removeJobId()
 {
     setJobId(QString());
 }
 
-double ImageExtendedProperties::similarityTo(const qlonglong imageId)
+double ItemExtendedProperties::similarityTo(const qlonglong imageId)
 {
     // TODO: extend for additional algorithms
     double similarity = SimilarityDbAccess().db()->getImageSimilarity(m_id, imageId);
     return (similarity > 0) ? similarity : 0.0;
 }
 
-void ImageExtendedProperties::setSimilarityTo(const qlonglong imageId, const double value)
+void ItemExtendedProperties::setSimilarityTo(const qlonglong imageId, const double value)
 {
     // TODO: extend for additional algorithms
     SimilarityDbAccess().db()->setImageSimilarity(m_id, imageId, value);
 }
 
-void ImageExtendedProperties::removeSimilarityTo(const qlonglong imageId)
+void ItemExtendedProperties::removeSimilarityTo(const qlonglong imageId)
 {
     // TODO: extend for additional algorithms
     SimilarityDbAccess().db()->removeImageSimilarity(m_id, imageId);
 }
 
-QStringList ImageExtendedProperties::scene()
+QStringList ItemExtendedProperties::scene()
 {
     return readFakeListProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreScene));
 }
 
-void ImageExtendedProperties::setScene(const QStringList& scene)
+void ItemExtendedProperties::setScene(const QStringList& scene)
 {
     setFakeListProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreScene), scene);
 }
 
-void ImageExtendedProperties::removeScene()
+void ItemExtendedProperties::removeScene()
 {
     setScene(QStringList());
 }
 
-QStringList ImageExtendedProperties::subjectCode()
+QStringList ItemExtendedProperties::subjectCode()
 {
     return readFakeListProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSubjectCode));
 }
 
-void ImageExtendedProperties::setSubjectCode(const QStringList& subjectCode)
+void ItemExtendedProperties::setSubjectCode(const QStringList& subjectCode)
 {
     setFakeListProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSubjectCode), subjectCode);
 }
 
-void ImageExtendedProperties::removeSubjectCode()
+void ItemExtendedProperties::removeSubjectCode()
 {
     setSubjectCode(QStringList());
 }
 
-IptcCoreLocationInfo ImageExtendedProperties::location()
+IptcCoreLocationInfo ItemExtendedProperties::location()
 {
     IptcCoreLocationInfo location;
     location.country       = readProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountry));
@@ -136,7 +136,7 @@ IptcCoreLocationInfo ImageExtendedProperties::location()
     return location;
 }
 
-void ImageExtendedProperties::setLocation(const IptcCoreLocationInfo& location)
+void ItemExtendedProperties::setLocation(const IptcCoreLocationInfo& location)
 {
     setProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountry), location.country);
     setProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountryCode), location.countryCode);
@@ -145,17 +145,17 @@ void ImageExtendedProperties::setLocation(const IptcCoreLocationInfo& location)
     setProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvinceState), location.provinceState);
 }
 
-void ImageExtendedProperties::removeLocation()
+void ItemExtendedProperties::removeLocation()
 {
     setLocation(IptcCoreLocationInfo());
 }
 
-QString ImageExtendedProperties::readProperty(const QString& property)
+QString ItemExtendedProperties::readProperty(const QString& property)
 {
     return CoreDbAccess().db()->getImageProperty(m_id, property);
 }
 
-void ImageExtendedProperties::setProperty(const QString& property, const QString& value)
+void ItemExtendedProperties::setProperty(const QString& property, const QString& value)
 {
     if (value.isNull()) // there is a NOT NULL restriction on the table.
     {
@@ -167,13 +167,13 @@ void ImageExtendedProperties::setProperty(const QString& property, const QString
     }
 }
 
-QStringList ImageExtendedProperties::readFakeListProperty(const QString& property)
+QStringList ItemExtendedProperties::readFakeListProperty(const QString& property)
 {
     QString value = CoreDbAccess().db()->getImageProperty(m_id, property);
     return value.split(QLatin1Char(';'), QString::SkipEmptyParts);
 }
 
-void ImageExtendedProperties::setFakeListProperty(const QString& property, const QStringList& value)
+void ItemExtendedProperties::setFakeListProperty(const QString& property, const QStringList& value)
 {
     if (value.isEmpty())
     {
@@ -185,7 +185,7 @@ void ImageExtendedProperties::setFakeListProperty(const QString& property, const
     }
 }
 
-void ImageExtendedProperties::removeProperty(const QString& property)
+void ItemExtendedProperties::removeProperty(const QString& property)
 {
     CoreDbAccess().db()->removeImageProperty(m_id, property);
 }

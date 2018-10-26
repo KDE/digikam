@@ -96,13 +96,13 @@ set(libdatabase_SRCS
     dbjobs/duplicatesprogressobserver.cpp
 
     item/containers/imagecomments.cpp
-    item/containers/imageextendedproperties.cpp
     item/containers/imageinfo.cpp
     item/containers/imageinfolist.cpp
     item/containers/imageinfocache.cpp
     item/containers/imageposition.cpp
     item/containers/imagecopyright.cpp
     item/containers/itemtagpair.cpp
+    item/containers/itemextendedproperties.cpp
 
     item/lister/itemlister.cpp
     item/lister/itemlister_palbum.cpp
