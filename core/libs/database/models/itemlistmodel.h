@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-12-06
- * Description : An image model based on a static list
+ * Description : An item model based on a static list
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_LIST_MODEL_H
-#define DIGIKAM_IMAGE_LIST_MODEL_H
+#ifndef DIGIKAM_ITEM_LIST_MODEL_H
+#define DIGIKAM_ITEM_LIST_MODEL_H
 
 // Local includes
 
@@ -35,14 +35,14 @@ namespace Digikam
 class ImageChangeset;
 class CollectionImageChangeset;
 
-class DIGIKAM_DATABASE_EXPORT ImageListModel : public ItemThumbnailModel
+class DIGIKAM_DATABASE_EXPORT ItemListModel : public ItemThumbnailModel
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageListModel(QObject* parent = 0);
-    ~ImageListModel();
+    explicit ItemListModel(QObject* parent = 0);
+    ~ItemListModel();
 
     // NOTE: necessary methods to add and remove ItemInfos to the model are inherited from ImageModel
 
@@ -60,4 +60,4 @@ protected Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_LIST_MODEL_H
+#endif // DIGIKAM_ITEM_LIST_MODEL_H

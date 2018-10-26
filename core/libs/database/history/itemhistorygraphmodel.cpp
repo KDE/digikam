@@ -37,7 +37,7 @@
 
 #include "dcategorizedsortfilterproxymodel.h"
 #include "dimgfiltermanager.h"
-#include "imagelistmodel.h"
+#include "itemlistmodel.h"
 #include "itemhistorygraphdata.h"
 
 namespace Digikam
@@ -276,7 +276,7 @@ public:
 
     HistoryTreeItem*                                   rootItem;
     QList<VertexItem*>                                 vertexItems;
-    ImageListModel                                     imageModel;
+    ItemListModel                                     imageModel;
     QList<HistoryGraph::Vertex>                        path;
     QHash<HistoryGraph::Vertex, HistoryImageId::Types> categories;
 
@@ -892,7 +892,7 @@ bool ItemHistoryGraphModel::setData(const QModelIndex& index, const QVariant& va
     return false;
 }
 
-ImageListModel* ItemHistoryGraphModel::imageModel() const
+ItemListModel* ItemHistoryGraphModel::imageModel() const
 {
     return &d->imageModel;
 }

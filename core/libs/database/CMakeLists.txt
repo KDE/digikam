@@ -22,7 +22,7 @@ set(libdatabasemodels_SRCS
     models/itemversionsmodel.cpp
     models/itemthumbnailmodel.cpp
     models/itemsortsettings.cpp
-    models/imagelistmodel.cpp
+    models/itemlistmodel.cpp
     models/imagemodel.cpp
 )
 

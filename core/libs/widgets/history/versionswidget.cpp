@@ -47,7 +47,7 @@
 #include "dimagehistory.h"
 #include "itemhistorygraphmodel.h"
 #include "iteminfo.h"
-#include "imagelistmodel.h"
+#include "itemlistmodel.h"
 #include "thumbnailloadthread.h"
 #include "versionsdelegate.h"
 #include "versionmanagersettings.h"

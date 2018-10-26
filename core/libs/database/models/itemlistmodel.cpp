@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-12-06
- * Description : An image model based on a static list
+ * Description : An item model based on a static list
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagelistmodel.h"
+#include "itemlistmodel.h"
 
 // Local includes
 
@@ -35,18 +35,18 @@
 namespace Digikam
 {
 
-ImageListModel::ImageListModel(QObject* parent)
+ItemListModel::ItemListModel(QObject* parent)
     : ItemThumbnailModel(parent)
 {
     connect(CoreDbAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
             this, SLOT(slotCollectionImageChange(CollectionImageChangeset)));
 }
 
-ImageListModel::~ImageListModel()
+ItemListModel::~ItemListModel()
 {
 }
 
-void ImageListModel::slotCollectionImageChange(const CollectionImageChangeset& changeset)
+void ItemListModel::slotCollectionImageChange(const CollectionImageChangeset& changeset)
 {
     if (isEmpty())
     {

@@ -28,7 +28,7 @@
 
 #include "imagethumbnailbar.h"
 #include "iteminfo.h"
-#include "imagelistmodel.h"
+#include "itemlistmodel.h"
 
 namespace Digikam
 {

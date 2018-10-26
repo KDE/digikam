@@ -36,7 +36,7 @@
 #include "versionsdelegate.h"
 #include "iteminfo.h"
 #include "iteminfolist.h"
-#include "imagelistmodel.h"
+#include "itemlistmodel.h"
 #include "ditemdelegate.h"
 #include "itemviewtooltip.h"
 #include "tooltipfiller.h"

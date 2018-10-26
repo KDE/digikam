@@ -97,7 +97,7 @@
 #include "imagedescedittab.h"
 #include "iteminfo.h"
 #include "itemgps.h"
-#include "imagelistmodel.h"
+#include "itemlistmodel.h"
 #include "imagepropertiessidebardb.h"
 #include "imagepropertiesversionstab.h"
 #include "itemscanner.h"
@@ -280,7 +280,7 @@ public:
     QAction*                     fileTrashDirectlyAction;
 
     ItemInfo                    currentItemInfo;
-    ImageListModel*              imageInfoModel;
+    ItemListModel*              imageInfoModel;
     ItemFilterModel*            imageFilterModel;
     ImageDragDropHandler*        dragDropHandler;
 

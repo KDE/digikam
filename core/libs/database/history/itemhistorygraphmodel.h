@@ -39,7 +39,7 @@ namespace Digikam
 
 class ItemHistoryGraph;
 class ItemInfo;
-class ImageListModel;
+class ItemListModel;
 class FilterAction;
 
 class DIGIKAM_DATABASE_EXPORT ItemHistoryGraphModel : public QAbstractItemModel, public DragDropModelImplementation
@@ -110,7 +110,7 @@ public:
      * Returns an internal image model used for entries representing images.
      * Note: Set a thumbnail thread on this model if you need thumbnails.
      */
-    ImageListModel* imageModel() const;
+    ItemListModel* imageModel() const;
     /**
      * If the given index is represented by the internal image model,
      * return the image model's index.

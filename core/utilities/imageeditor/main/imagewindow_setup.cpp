@@ -192,7 +192,7 @@ void ImageWindow::setupUserArea()
         group.deleteEntry(d->configHorizontalThumbbarEntry);
     }
 
-    d->imageInfoModel   = new ImageListModel(this);
+    d->imageInfoModel   = new ItemListModel(this);
 
     d->imageFilterModel = new ItemFilterModel(this);
     d->imageFilterModel->setSourceImageModel(d->imageInfoModel);

@@ -33,7 +33,7 @@
 #include "digikam_debug.h"
 #include "iteminfo.h"
 #include "itemhistorygraphmodel.h"
-#include "imagelistmodel.h"
+#include "itemlistmodel.h"
 #include "itemviewhoverbutton.h"
 #include "tagscache.h"
 #include "versionmanagersettings.h"

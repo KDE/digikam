@@ -70,12 +70,12 @@ void removeAnyInInterval(Container& list, const T& begin, const T& end)
     }
 }
 
-class Q_DECL_HIDDEN LightTableImageListModel : public ImageListModel
+class Q_DECL_HIDDEN LightTableItemListModel : public ItemListModel
 {
 public:
 
-    explicit LightTableImageListModel(QObject* const parent = 0)
-        : ImageListModel(parent), m_exclusive(false)
+    explicit LightTableItemListModel(QObject* const parent = 0)
+        : ItemListModel(parent), m_exclusive(false)
     {
     }
 
@@ -101,7 +101,7 @@ public:
             return m_rightIndexes.contains(index.row());
         }
 
-        return ImageListModel::data(index, role);
+        return ItemListModel::data(index, role);
     }
 
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::DisplayRole)
@@ -134,7 +134,7 @@ public:
             return true;
         }
 
-        return ImageListModel::setData(index, value, role);
+        return ItemListModel::setData(index, value, role);
     }
 
     virtual void imageInfosAboutToBeRemoved(int begin, int end)
@@ -170,7 +170,7 @@ public:
 
     bool                      navigateByPair;
 
-    LightTableImageListModel* imageInfoModel;
+    LightTableItemListModel* imageInfoModel;
     ItemFilterModel*         imageFilterModel;
     ImageDragDropHandler*     dragDropHandler;
 };
@@ -179,7 +179,7 @@ LightTableThumbBar::LightTableThumbBar(QWidget* const parent)
     : ImageThumbnailBar(parent),
       d(new Private)
 {
-    d->imageInfoModel   = new LightTableImageListModel(this);
+    d->imageInfoModel   = new LightTableItemListModel(this);
     // only one is left, only one is right at a time
     d->imageInfoModel->setExclusiveLightTableState(true);
 
