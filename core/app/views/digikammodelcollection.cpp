@@ -57,7 +57,7 @@ public:
     TagModel*           tagFacesModel;
     SearchModel*        searchModel;
     DateAlbumModel*     dateAlbumModel;
-    ImageVersionsModel* imageVersionModel;
+    ItemVersionsModel* imageVersionModel;
 };
 
 DigikamModelCollection::DigikamModelCollection() :
@@ -72,7 +72,7 @@ DigikamModelCollection::DigikamModelCollection() :
 
     d->searchModel       = new SearchModel();
     d->dateAlbumModel    = new DateAlbumModel();
-    d->imageVersionModel = new ImageVersionsModel();
+    d->imageVersionModel = new ItemVersionsModel();
 
     // set icons initially
     slotApplicationSettingsChanged();
@@ -122,7 +122,7 @@ DateAlbumModel* DigikamModelCollection::getDateAlbumModel() const
     return d->dateAlbumModel;
 }
 
-ImageVersionsModel* DigikamModelCollection::getImageVersionsModel() const
+ItemVersionsModel* DigikamModelCollection::getItemVersionsModel() const
 {
     return d->imageVersionModel;
 }

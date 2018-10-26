@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-03-05
- * Description : Qt item model for database entries
+ * Description : Qt item model for database entries - threads management
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>

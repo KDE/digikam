@@ -41,7 +41,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imageversionsmodel.h"
+#include "itemversionsmodel.h"
 #include "dmetadata.h"
 #include "dimagehistory.h"
 #include "iteminfo.h"

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-07-13
- * Description : Model for image versions
+ * Description : Model for item versions
  *
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageversionsmodel.h"
+#include "itemversionsmodel.h"
 
 // KDE includes
 
@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageVersionsModel::Private
+class Q_DECL_HIDDEN ItemVersionsModel::Private
 {
 public:
 
@@ -45,29 +45,32 @@ public:
         paintTree = false;
     }
 
-    ///Complete paths with filenames and tree level
+    /// Complete paths with filenames and tree level
     QList<QPair<QString, int> >* data;
-    ///This is for delegate to paint it as selected
+
+    /// This is for delegate to paint it as selected
     QString                      currentSelectedImage;
-    ///If true, the delegate will paint items as a tree
-    ///if false, it will be painted as a list
+
+    /** If true, the delegate will paint items as a tree
+     *  if false, it will be painted as a list
+     */
     bool                         paintTree;
 };
 
-ImageVersionsModel::ImageVersionsModel(QObject* parent)
+ItemVersionsModel::ItemVersionsModel(QObject* parent)
     : QAbstractListModel(parent),
       d(new Private)
 {
     d->data = new QList<QPair<QString, int> >;
 }
 
-ImageVersionsModel::~ImageVersionsModel()
+ItemVersionsModel::~ItemVersionsModel()
 {
     //qDeleteAll(d->data);
     delete d;
 }
 
-Qt::ItemFlags ImageVersionsModel::flags(const QModelIndex& index) const
+Qt::ItemFlags ItemVersionsModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
     {
@@ -77,7 +80,7 @@ Qt::ItemFlags ImageVersionsModel::flags(const QModelIndex& index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-QVariant ImageVersionsModel::data(const QModelIndex& index, int role) const
+QVariant ItemVersionsModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
     {
@@ -101,13 +104,13 @@ QVariant ImageVersionsModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int ImageVersionsModel::rowCount(const QModelIndex& parent) const
+int ItemVersionsModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
     return d->data->count();
 }
 
-void ImageVersionsModel::setupModelData(QList<QPair<QString, int> >& data)
+void ItemVersionsModel::setupModelData(QList<QPair<QString, int> >& data)
 {
     beginResetModel();
 
@@ -125,7 +128,7 @@ void ImageVersionsModel::setupModelData(QList<QPair<QString, int> >& data)
     endResetModel();
 }
 
-void ImageVersionsModel::clearModelData()
+void ItemVersionsModel::clearModelData()
 {
     beginResetModel();
 
@@ -137,39 +140,39 @@ void ImageVersionsModel::clearModelData()
     endResetModel();
 }
 
-void ImageVersionsModel::slotAnimationStep()
+void ItemVersionsModel::slotAnimationStep()
 {
     emit dataChanged(createIndex(0, 0), createIndex(rowCount()-1, 1));
 }
 
-QString ImageVersionsModel::currentSelectedImage() const
+QString ItemVersionsModel::currentSelectedImage() const
 {
     return d->currentSelectedImage;
 }
 
-void ImageVersionsModel::setCurrentSelectedImage(const QString& path)
+void ItemVersionsModel::setCurrentSelectedImage(const QString& path)
 {
     d->currentSelectedImage = path;
 }
 
-QModelIndex ImageVersionsModel::currentSelectedImageIndex() const
+QModelIndex ItemVersionsModel::currentSelectedImageIndex() const
 {
     return index(listIndexOf(d->currentSelectedImage), 0);
 }
 
-bool ImageVersionsModel::paintTree() const
+bool ItemVersionsModel::paintTree() const
 {
     return d->paintTree;
 }
 
-void ImageVersionsModel::setPaintTree(bool paint)
+void ItemVersionsModel::setPaintTree(bool paint)
 {
     d->paintTree = paint;
 }
 
-int ImageVersionsModel::listIndexOf(const QString& item) const
+int ItemVersionsModel::listIndexOf(const QString& item) const
 {
-    for (int i = 0; i < d->data->size(); ++i)
+    for (int i = 0 ; i < d->data->size() ; ++i)
     {
         if (d->data->at(i).first == item)
         {

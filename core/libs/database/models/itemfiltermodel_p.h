@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-03-11
- * Description : Qt item model for database entries - private shared header
+ * Description : Qt item model for database entries - private containers
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *

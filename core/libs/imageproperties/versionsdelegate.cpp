@@ -40,7 +40,7 @@
 #include "digikam_debug.h"
 #include "imagedelegate.h"
 #include "itemhistorygraphmodel.h"
-#include "imageversionsmodel.h"
+#include "itemversionsmodel.h"
 #include "thumbnailloadthread.h"
 #include "dcategorydrawer.h"
 #include "dlayoutbox.h"
@@ -268,7 +268,7 @@ void VersionsDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
     painter->setRenderHint(QPainter::Antialiasing, true);
     QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
     //qCDebug(DIGIKAM_GENERAL_LOG) << QApplication::style()->subElementRect(QStyle::SE_ItemViewItemDecoration, &option, 0);
-    if (dynamic_cast<const ImageVersionsModel*>(index.model())->paintTree())
+    if (dynamic_cast<const ItemVersionsModel*>(index.model())->paintTree())
     {
         const_cast<QStyleOptionViewItem&>(option).rect.setLeft(option.rect.left() + (index.data(Qt::UserRole).toInt() * 16));
     }
@@ -307,7 +307,7 @@ void VersionsDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
         d->workingWidget->toggleTimer(true);
 
         connect(d->workingWidget, SIGNAL(animationStep()),
-                dynamic_cast<const ImageVersionsModel*>(index.model()), SLOT(slotAnimationStep()));
+                dynamic_cast<const ItemVersionsModel*>(index.model()), SLOT(slotAnimationStep()));
 
         thumbnail = QPixmap::grabWidget(d->workingWidget);
     }

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-07-13
- * Description : Model for image versions
+ * Description : Model for item versions
  *
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_VERSIONS_MODEL_H
-#define DIGIKAM_IMAGE_VERSIONS_MODEL_H
+#ifndef DIGIKAM_ITEM_VERSIONS_MODEL_H
+#define DIGIKAM_ITEM_VERSIONS_MODEL_H
 
 // Qt includes
 
@@ -36,14 +36,14 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT ImageVersionsModel : public QAbstractListModel
+class DIGIKAM_DATABASE_EXPORT ItemVersionsModel : public QAbstractListModel
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageVersionsModel(QObject* parent = 0);
-    ~ImageVersionsModel();
+    explicit ItemVersionsModel(QObject* parent = 0);
+    ~ItemVersionsModel();
 
     Qt::ItemFlags flags(const QModelIndex& index) const;
     QVariant      data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -72,4 +72,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_VERSIONS_MODEL_H
+#endif // DIGIKAM_ITEM_VERSIONS_MODEL_H

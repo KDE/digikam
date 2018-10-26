@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-03-11
- * Description : Qt item model for database entries - private header
+ * Description : Qt item model for database entries - threads management
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *

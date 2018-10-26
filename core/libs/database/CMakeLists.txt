@@ -19,11 +19,11 @@ set(libdatabasemodels_SRCS
     models/itemfiltermodel_p.cpp
     models/itemfiltermodelthreads.cpp
     models/itemfiltersettings.cpp
-    models/imagemodel.cpp
+    models/itemversionsmodel.cpp
     models/imagelistmodel.cpp
     models/imagesortsettings.cpp
     models/imagethumbnailmodel.cpp
-    models/imageversionsmodel.cpp
+    models/imagemodel.cpp
 )
 
 set(libdatabasecore_SRCS
