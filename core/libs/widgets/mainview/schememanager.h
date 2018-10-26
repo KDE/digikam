@@ -69,7 +69,7 @@ class SchemeManagerPrivate;
  *
  * To facilitate working with potentially-varying states, two convenience API's
  * are provided. These are SchemeManager::adjustBackground and its sister
- * SchemeManager::adjustForeground, and the helper class ::KStatefulBrush.
+ * SchemeManager::adjustForeground, and the helper class KStatefulBrush.
  *
  * @see SchemeManager::ColorSet, SchemeManager::ForegroundRole,
  * SchemeManager::BackgroundRole, SchemeManager::DecorationRole,

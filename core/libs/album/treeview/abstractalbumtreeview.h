@@ -225,7 +225,7 @@ public Q_SLOTS:
     /**
      * Selects the given album.
      *
-     * @param album album to select
+     * @param albums albums to select
      * @param selectInAlbumManager the album will be set as current album, if both
      * this parameter is true and setAlbumManagerCurrentAlbum() was set to true.
      */

@@ -189,7 +189,7 @@ Q_SIGNALS:
      * @param searched <code>true</code> if filtering by text was enabled before
      *                 applying the new settings
      * @param willSearch <code>true</code> if the new settings can result in
-     *                   any filtering by text, else <code> false.
+     *                   any filtering by text, else <code>false</code>.
      */
     void searchTextSettingsAboutToChange(bool searched, bool willSearch);
 

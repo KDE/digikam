@@ -50,8 +50,8 @@ namespace Digikam
 {
 
 /**
- * Generate a thumbnail from @fullImage of @size x @size pixels
- * If square == true, crop the result to a square
+ * Generate a thumbnail from @p fullImage of @p size x @p size pixels
+ * If @p square == true, crop the result to a square
  */
 static QImage generateThumbnail(const QImage& fullImage, int size, bool square)
 {

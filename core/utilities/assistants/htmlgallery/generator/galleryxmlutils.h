@@ -37,8 +37,8 @@ namespace Digikam
 {
 
 /**
- * A simple wrapper for a C structure pointed to by @Ptr, which must be freed
- * with @freeFcn
+ * A simple wrapper for a C structure pointed to by @p Ptr, which must be freed
+ * with @p freeFcn
  */
 template <class Ptr, void(*freeFcn)(Ptr)>
 

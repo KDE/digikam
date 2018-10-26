@@ -200,7 +200,7 @@ Q_SIGNALS:
     /**
      * This signal is emitted whenever the current page has changed.
      *
-     * @param item The new current page or 0 if no current page is available.
+     * @param current The new current page or 0 if no current page is available.
      */
     void currentPageChanged(DConfigDlgWdgItem* current, DConfigDlgWdgItem* before);
 
