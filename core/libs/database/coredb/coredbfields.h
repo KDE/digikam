@@ -148,9 +148,9 @@ enum ImageMetadataField
 
 typedef uint16_t ImageMetadataMinSizeType;
 
-enum ImagePositionsField
+enum ItemPositionsField
 {
-    ImagePositionsNone  = 0,
+    ItemPositionsNone  = 0,
     Latitude            = 1 << 0,
     LatitudeNumber      = 1 << 1,
     Longitude           = 1 << 2,
@@ -161,7 +161,7 @@ enum ImagePositionsField
     PositionRoll        = 1 << 7,
     PositionAccuracy    = 1 << 8,
     PositionDescription = 1 << 9,
-    ImagePositionsAll   = Latitude            |
+    ItemPositionsAll   = Latitude            |
                           LatitudeNumber      |
                           Longitude           |
                           LongitudeNumber     |
@@ -171,11 +171,11 @@ enum ImagePositionsField
                           PositionTilt        |
                           PositionAccuracy    |
                           PositionDescription,
-    ImagePositionsFirst = Latitude,
-    ImagePositionsLast  = PositionDescription
+    ItemPositionsFirst = Latitude,
+    ItemPositionsLast  = PositionDescription
 };
 
-typedef uint16_t ImagePositionsMinSizeType;
+typedef uint16_t ItemPositionsMinSizeType;
 
 enum ImageCommentsField
 {
@@ -238,7 +238,7 @@ Q_DECLARE_FLAGS(Images,           ImagesField)
 Q_DECLARE_FLAGS(ImageInformation, ImageInformationField)
 Q_DECLARE_FLAGS(ImageMetadata,    ImageMetadataField)
 Q_DECLARE_FLAGS(ImageComments,    ImageCommentsField)
-Q_DECLARE_FLAGS(ImagePositions,   ImagePositionsField)
+Q_DECLARE_FLAGS(ItemPositions,   ItemPositionsField)
 Q_DECLARE_FLAGS(ImageHistoryInfo, ImageHistoryInfoField)
 Q_DECLARE_FLAGS(VideoMetadata,    VideoMetadataField)
 
@@ -261,7 +261,7 @@ DECLARE_FIELDMETAINFO(Images)
 DECLARE_FIELDMETAINFO(ImageInformation)
 DECLARE_FIELDMETAINFO(ImageMetadata)
 DECLARE_FIELDMETAINFO(ImageComments)
-DECLARE_FIELDMETAINFO(ImagePositions)
+DECLARE_FIELDMETAINFO(ItemPositions)
 DECLARE_FIELDMETAINFO(ImageHistoryInfo)
 DECLARE_FIELDMETAINFO(VideoMetadata)
 
@@ -354,7 +354,7 @@ DATABASEFIELDS_ENUM_ITERATOR(Images)
 DATABASEFIELDS_ENUM_ITERATOR(ImageInformation)
 DATABASEFIELDS_ENUM_ITERATOR(ImageMetadata)
 DATABASEFIELDS_ENUM_ITERATOR(VideoMetadata)
-DATABASEFIELDS_ENUM_ITERATOR(ImagePositions)
+DATABASEFIELDS_ENUM_ITERATOR(ItemPositions)
 DATABASEFIELDS_ENUM_ITERATOR(ImageComments)
 DATABASEFIELDS_ENUM_ITERATOR(ImageHistoryInfo)
 
@@ -399,7 +399,7 @@ public:
         imageInformation = ImageInformationNone;
         imageMetadata    = ImageMetadataNone;
         imageComments    = ImageCommentsNone;
-        imagePositions   = ImagePositionsNone;
+        imagePositions   = ItemPositionsNone;
         imageHistory     = ImageHistoryInfoNone;
         videoMetadata    = VideoMetadataNone;
         customEnum       = (CustomEnum)0;
@@ -412,7 +412,7 @@ public:
     DATABASEFIELDS_SET_DECLARE_METHODS(VideoMetadata,    videoMetadata)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageMetadata,    imageMetadata)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageComments,    imageComments)
-    DATABASEFIELDS_SET_DECLARE_METHODS(ImagePositions,   imagePositions)
+    DATABASEFIELDS_SET_DECLARE_METHODS(ItemPositions,   imagePositions)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageHistoryInfo, imageHistory)
 
     inline bool operator&(const Set& other)
@@ -486,7 +486,7 @@ private:
     ImageMetadata    imageMetadata;
     VideoMetadata    videoMetadata;
     ImageComments    imageComments;
-    ImagePositions   imagePositions;
+    ItemPositions   imagePositions;
     ImageHistoryInfo imageHistory;
     CustomEnum       customEnum;
 };
@@ -552,7 +552,7 @@ public:
         return (int)f | (3 << 26);
     }
 
-    static inline unsigned int uniqueKey(ImagePositions f)
+    static inline unsigned int uniqueKey(ItemPositions f)
     {
         return (int)f | (4 << 26);
     }
@@ -578,7 +578,7 @@ public:
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageMetadata,    uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(VideoMetadata,    uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageComments,    uniqueKey);
-    DATABASEFIELDS_HASH_DECLARE_METHODS(ImagePositions,   uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(ItemPositions,   uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageHistoryInfo, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(CustomEnum,       uniqueKey);
 };
@@ -593,7 +593,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageInformation)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageMetadata)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::VideoMetadata)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageComments)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImagePositions)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ItemPositions)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageHistoryInfo)
 
 #endif // DIGIKAM_CORE_DB_FIELDS_H

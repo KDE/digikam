@@ -24,7 +24,7 @@
 
 // Local includes
 
-#include "imageposition.h"
+#include "itemposition.h"
 #include "coredb.h"
 #include "tagscache.h"
 
@@ -44,7 +44,7 @@ ImageGPS::~ImageGPS()
 bool ImageGPS::loadImageData()
 {
     // In first, we try to get GPS info from database.
-    ImagePosition pos = m_info.imagePosition();
+    ItemPosition pos = m_info.imagePosition();
     m_dateTime        = m_info.dateTime();
 
     if (!pos.isEmpty() && pos.hasCoordinates())
@@ -76,7 +76,7 @@ QString ImageGPS::saveChanges()
 
     // Save info to database.
 
-    ImagePosition pos = m_info.imagePosition();
+    ItemPosition pos = m_info.imagePosition();
 
     if (p.shouldWriteCoordinates)
     {

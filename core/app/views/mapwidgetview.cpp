@@ -41,7 +41,7 @@
 
 #include "digikam_debug.h"
 #include "camerathumbsctrl.h"
-#include "imageposition.h"
+#include "itemposition.h"
 #include "imageinfo.h"
 #include "imagemodel.h"
 #include "importfiltermodel.h"
@@ -612,7 +612,7 @@ void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& cl
 void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 {
     const DatabaseFields::Set changes = changeset.changes();
-//    const DatabaseFields::ImagePositions imagePositionChanges = changes;
+//    const DatabaseFields::ItemPositions imagePositionChanges = changes;
 
     /// @todo More detailed check
     if (( changes & DatabaseFields::LatitudeNumber )  ||

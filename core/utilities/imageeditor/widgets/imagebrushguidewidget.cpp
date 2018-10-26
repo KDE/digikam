@@ -39,9 +39,9 @@ void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
 
         QPoint currentDst = QPoint(e->x(), e->y());
 
-        currentDst        = translateImagePosition(currentDst, false);
-        QPoint currentSrc = translateImagePosition(src, true);
-        QPoint orgDst     = translateImagePosition(dst, false);
+        currentDst        = translateItemPosition(currentDst, false);
+        QPoint currentSrc = translateItemPosition(src, true);
+        QPoint orgDst     = translateItemPosition(dst, false);
         currentSrc        = QPoint(currentSrc.x() + currentDst.x() - orgDst.x(), currentSrc.y() + currentDst.y() - orgDst.y());
 
         setSpotPosition(currentSrc);
@@ -83,8 +83,8 @@ void ImageBrushGuideWidget::mousePressEvent(QMouseEvent* e)
         {
             dst = QPoint(e->x(), e->y());
 
-            QPoint currentSrc = translateImagePosition(src, true);
-            QPoint currentDst = translateImagePosition(dst, false);
+            QPoint currentSrc = translateItemPosition(src, true);
+            QPoint currentDst = translateItemPosition(dst, false);
 
             emit signalClone(currentSrc, currentDst);
         }

@@ -250,8 +250,8 @@ protected:
 
     void scanImageMetadata();
     void commitImageMetadata();
-    void scanImagePosition();
-    void commitImagePosition();
+    void scanItemPosition();
+    void commitItemPosition();
     void scanImageComments();
     void commitImageComments();
     void scanImageCopyright();

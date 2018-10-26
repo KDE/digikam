@@ -895,7 +895,7 @@ public:
                                   DatabaseFields::VideoMetadata metadataFields = DatabaseFields::VideoMetadataAll);
 
     /**
-     * Add (or replace) the ImagePosition of the specified item.
+     * Add (or replace) the ItemPosition of the specified item.
      * If there is already an entry, it will be discarded.
      * The QVariantList shall have at most 10 entries, of types in this order:
      * 0) String    Latitude
@@ -911,34 +911,34 @@ public:
      * You can leave out entries from this list. Indicate the values that you have
      * passed in the ImageInfo flag in the third parameters.
      */
-    void addImagePosition(qlonglong imageID, const QVariantList& infos,
-                          DatabaseFields::ImagePositions fields = DatabaseFields::ImagePositionsAll);
+    void addItemPosition(qlonglong imageID, const QVariantList& infos,
+                          DatabaseFields::ItemPositions fields = DatabaseFields::ItemPositionsAll);
 
     /**
      * Change the indicated fields of the image information for the specified item.
      * This method does nothing if the item does not yet have an entry in the ImageInformation table.
      * The parameters are as for the method above.
      */
-    void changeImagePosition(qlonglong imageID, const QVariantList& infos,
-                             DatabaseFields::ImagePositions fields = DatabaseFields::ImagePositionsAll);
+    void changeItemPosition(qlonglong imageID, const QVariantList& infos,
+                             DatabaseFields::ItemPositions fields = DatabaseFields::ItemPositionsAll);
 
     /**
      * Read image metadata. Parameters as above.
      */
-    QVariantList getImagePosition(qlonglong imageID,
-                                  DatabaseFields::ImagePositions positionFields = DatabaseFields::ImagePositionsAll);
+    QVariantList getItemPosition(qlonglong imageID,
+                                  DatabaseFields::ItemPositions positionFields = DatabaseFields::ItemPositionsAll);
 
-    QVariantList getImagePositions(QList<qlonglong> imageIDs, DatabaseFields::ImagePositions fields);
-
-    /**
-     * Remove the entry in ImagePositions for the given image
-     */
-    void removeImagePosition(qlonglong imageid);
+    QVariantList getItemPositions(QList<qlonglong> imageIDs, DatabaseFields::ItemPositions fields);
 
     /**
-     * Remove the altitude in ImagePositions for the given image
+     * Remove the entry in ItemPositions for the given image
      */
-    void removeImagePositionAltitude(qlonglong imageid);
+    void removeItemPosition(qlonglong imageid);
+
+    /**
+     * Remove the altitude in ItemPositions for the given image
+     */
+    void removeItemPositionAltitude(qlonglong imageid);
 
     /**
      * Retrieves all available comments for the specified item.
@@ -1357,7 +1357,7 @@ public:
     static QStringList imageInformationFieldList(DatabaseFields::ImageInformation fields);
     static QStringList videoMetadataFieldList(DatabaseFields::VideoMetadata fields);
     static QStringList imageMetadataFieldList(DatabaseFields::ImageMetadata fields);
-    static QStringList imagePositionsFieldList(DatabaseFields::ImagePositions fields);
+    static QStringList imagePositionsFieldList(DatabaseFields::ItemPositions fields);
     static QStringList imageCommentsFieldList(DatabaseFields::ImageComments fields);
     static void addBoundValuePlaceholders(QString& query, int count);
 

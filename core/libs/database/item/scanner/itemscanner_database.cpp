@@ -68,9 +68,9 @@ void ItemScanner::commit()
         commitVideoMetadata();
     }
 
-    if (d->commit.commitImagePosition)
+    if (d->commit.commitItemPosition)
     {
-        commitImagePosition();
+        commitItemPosition();
     }
 
     if (d->commit.commitImageComments)

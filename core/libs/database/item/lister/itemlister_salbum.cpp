@@ -52,12 +52,12 @@ void ItemLister::listSearch(ItemListerReceiver* const receiver,
                "       ImageInformation.format, ImageInformation.creationDate, "
                "       Images.modificationDate, Images.fileSize, "
                "       ImageInformation.width, ImageInformation.height, "
-               "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
+               "       ItemPositions.latitudeNumber, ItemPositions.longitudeNumber "
                " FROM Images "
                "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                "       LEFT  JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
                "       LEFT  JOIN VideoMetadata    ON Images.id=VideoMetadata.imageid "
-               "       LEFT  JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
+               "       LEFT  JOIN ItemPositions   ON Images.id=ItemPositions.imageid "
                "       INNER JOIN Albums           ON Albums.id=Images.album "
                "WHERE Images.status=1 AND ( ");
 
@@ -388,14 +388,14 @@ void ItemLister::listAreaRange(ItemListerReceiver* const receiver,
 
     access.backend()->execSql(QString::fromUtf8("SELECT DISTINCT Images.id, "
                                       "       Albums.albumRoot, ImageInformation.rating, ImageInformation.creationDate, "
-                                      "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
+                                      "       ItemPositions.latitudeNumber, ItemPositions.longitudeNumber "
                                       " FROM Images "
                                       "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                                       "       INNER JOIN Albums ON Albums.id=Images.album "
-                                      "       INNER JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
+                                      "       INNER JOIN ItemPositions   ON Images.id=ItemPositions.imageid "
                                       " WHERE Images.status=1 "
-                                      "   AND (ImagePositions.latitudeNumber>? AND ImagePositions.latitudeNumber<?) "
-                                      "   AND (ImagePositions.longitudeNumber>? AND ImagePositions.longitudeNumber<?);"),
+                                      "   AND (ItemPositions.latitudeNumber>? AND ItemPositions.latitudeNumber<?) "
+                                      "   AND (ItemPositions.longitudeNumber>? AND ItemPositions.longitudeNumber<?);"),
                               boundValues,
                               &values);
 

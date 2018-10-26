@@ -4,11 +4,11 @@
  * http://www.digikam.org
  *
  * Date        : 2007-11-01
- * Description : Access image position stored in database.
+ * Description : Access item position stored in database.
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008 by Patrick Spendrin <ps_ml at gmx dot de>
+ * Copyright (C) 2008      by Patrick Spendrin <ps_ml at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_POSITION_H
-#define DIGIKAM_IMAGE_POSITION_H
+#ifndef DIGIKAM_ITEM_POSITION_H
+#define DIGIKAM_ITEM_POSITION_H
 
 // Qt includes
 
@@ -41,33 +41,33 @@ namespace Digikam
 {
 
 class CoreDbAccess;
-class ImagePositionPriv;
+class ItemPositionPriv;
 
-class DIGIKAM_DATABASE_EXPORT ImagePosition
+class DIGIKAM_DATABASE_EXPORT ItemPosition
 {
 
 public:
 
     /**
-     * Creates a null ImagePosition object
+     * Creates a null ItemPosition object
      */
-    ImagePosition();
+    ItemPosition();
 
     /**
-     * Creates an ImagePosition object for the given image.
+     * Creates an ItemPosition object for the given image.
      * The information is read from the database.
      */
-    explicit ImagePosition(qlonglong imageId);
-    ImagePosition(CoreDbAccess& access, qlonglong imageId);
+    explicit ItemPosition(qlonglong imageId);
+    ItemPosition(CoreDbAccess& access, qlonglong imageId);
 
-    ImagePosition(const ImagePosition& other);
-    ~ImagePosition();
+    ItemPosition(const ItemPosition& other);
+    ~ItemPosition();
 
-    ImagePosition& operator=(const ImagePosition& other);
+    ItemPosition& operator=(const ItemPosition& other);
 
     bool isNull() const;
     /**
-     * An object is empty if no entry exists in the ImagePosition
+     * An object is empty if no entry exists in the ItemPosition
      * table for the referenced image, or if the object is null.
      * An empty object is empty even if values have been set;
      * it becomes not empty after calling apply().
@@ -164,7 +164,7 @@ public:
     /**
      * Removes the whole data set for the referenced image
      * from the database.
-     * This object and any ImagePosition object created later
+     * This object and any ItemPosition object created later
      * will be empty.
      */
     void remove();
@@ -177,9 +177,9 @@ public:
 
 private:
 
-    QSharedDataPointer<ImagePositionPriv> d;
+    QSharedDataPointer<ItemPositionPriv> d;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_POSITION_H
+#endif // DIGIKAM_ITEM_POSITION_H

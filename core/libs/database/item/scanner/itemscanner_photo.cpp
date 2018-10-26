@@ -180,9 +180,9 @@ void ItemScanner::commitImageMetadata()
     CoreDbAccess().db()->addImageMetadata(d->scanInfo.id, d->commit.imageMetadataInfos);
 }
 
-void ItemScanner::scanImagePosition()
+void ItemScanner::scanItemPosition()
 {
-    // This list must reflect the order required by CoreDB::addImagePosition
+    // This list must reflect the order required by CoreDB::addItemPosition
     MetadataFields fields;
     fields << MetadataInfo::Latitude
            << MetadataInfo::LatitudeNumber
@@ -199,14 +199,14 @@ void ItemScanner::scanImagePosition()
 
     if (hasValidField(metadataInfos))
     {
-        d->commit.commitImagePosition = true;
+        d->commit.commitItemPosition = true;
         d->commit.imagePositionInfos  = metadataInfos;
     }
 }
 
-void ItemScanner::commitImagePosition()
+void ItemScanner::commitItemPosition()
 {
-    CoreDbAccess().db()->addImagePosition(d->scanInfo.id, d->commit.imagePositionInfos);
+    CoreDbAccess().db()->addItemPosition(d->scanInfo.id, d->commit.imagePositionInfos);
 }
 
 void ItemScanner::scanImageComments()

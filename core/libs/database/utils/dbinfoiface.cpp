@@ -40,7 +40,7 @@
 #include "imageinfo.h"
 #include "photoinfocontainer.h"
 #include "videoinfocontainer.h"
-#include "imageposition.h"
+#include "itemposition.h"
 #include "imagesortsettings.h"
 #include "coredbsearchxml.h"
 #include "itemlister.h"
@@ -392,7 +392,7 @@ DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
         map.insert(QLatin1String("keywords"),    tags);
 
         // Get GPS location of picture from database.
-        ImagePosition pos    = info.imagePosition();
+        ItemPosition pos    = info.imagePosition();
 
         if (!pos.isEmpty())
         {

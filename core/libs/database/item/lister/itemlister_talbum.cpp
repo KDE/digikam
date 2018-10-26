@@ -117,7 +117,7 @@ void ItemLister::listImageTagPropertySearch(ItemListerReceiver* const receiver, 
     QString errMsg;
 
     // Currently, for optimization, this does not allow a general-purpose search,
-    // ImageMetadata and ImagePositions are not joined and hooks are ignored.
+    // ImageMetadata and ItemPositions are not joined and hooks are ignored.
 
     // query head
     sqlQuery = QString::fromUtf8(

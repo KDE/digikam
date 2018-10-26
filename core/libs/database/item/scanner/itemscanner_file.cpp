@@ -228,7 +228,7 @@ void ItemScanner::scanFile(ScanMode mode)
             if (d->hasMetadata)
             {
                 scanImageMetadata();
-                scanImagePosition();
+                scanItemPosition();
                 scanImageComments();
                 scanImageCopyright();
                 scanIPTCCore();
@@ -246,7 +246,7 @@ void ItemScanner::scanFile(ScanMode mode)
             if (d->hasMetadata)
             {
                 scanVideoMetadata();
-                scanImagePosition();
+                scanItemPosition();
                 scanImageComments();
                 scanImageCopyright();
                 scanIPTCCore();

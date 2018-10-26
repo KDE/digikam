@@ -35,7 +35,7 @@
 #include "fileactionmngr.h"
 #include "imageinfo.h"
 #include "imagemodel.h"
-#include "imageposition.h"
+#include "itemposition.h"
 #include "importfiltermodel.h"
 #include "importimagemodel.h"
 #include "importui.h"

@@ -1431,11 +1431,11 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
     // important: skip other internal tags, such a history tags. Therefore CoreDB::copyImageTags is not to be used.
 
     // GPS data
-    QVariantList positionData = CoreDbAccess().db()->getImagePosition(source.id(), DatabaseFields::ImagePositionsAll);
+    QVariantList positionData = CoreDbAccess().db()->getItemPosition(source.id(), DatabaseFields::ItemPositionsAll);
 
     if (!positionData.isEmpty())
     {
-        CoreDbAccess().db()->addImagePosition(dest.id(), positionData, DatabaseFields::ImagePositionsAll);
+        CoreDbAccess().db()->addItemPosition(dest.id(), positionData, DatabaseFields::ItemPositionsAll);
     }
 
     // Comments

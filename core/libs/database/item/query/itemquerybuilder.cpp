@@ -753,35 +753,35 @@ bool ItemQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, 
     }
     else if (name == QLatin1String("latitude"))
     {
-        fieldQuery.addDoubleField(QLatin1String("ImagePositions.latitudeNumber"));
+        fieldQuery.addDoubleField(QLatin1String("ItemPositions.latitudeNumber"));
     }
     else if (name == QLatin1String("longitude"))
     {
-        fieldQuery.addDoubleField(QLatin1String("ImagePositions.longitudeNumber"));
+        fieldQuery.addDoubleField(QLatin1String("ItemPositions.longitudeNumber"));
     }
     else if (name == QLatin1String("altitude"))
     {
-        fieldQuery.addDoubleField(QLatin1String("ImagePositions.altitude"));
+        fieldQuery.addDoubleField(QLatin1String("ItemPositions.altitude"));
     }
     else if (name == QLatin1String("positionorientation"))
     {
-        fieldQuery.addDoubleField(QLatin1String("ImagePositions.orientation"));
+        fieldQuery.addDoubleField(QLatin1String("ItemPositions.orientation"));
     }
     else if (name == QLatin1String("positiontilt"))
     {
-        fieldQuery.addDoubleField(QLatin1String("ImagePositions.tilt"));
+        fieldQuery.addDoubleField(QLatin1String("ItemPositions.tilt"));
     }
     else if (name == QLatin1String("positionroll"))
     {
-        fieldQuery.addDoubleField(QLatin1String("ImagePositions.roll"));
+        fieldQuery.addDoubleField(QLatin1String("ItemPositions.roll"));
     }
     else if (name == QLatin1String("positiondescription"))
     {
-        fieldQuery.addStringField(QLatin1String("ImagePositions.description"));
+        fieldQuery.addStringField(QLatin1String("ItemPositions.description"));
     }
     else if (name == QLatin1String("nogps"))
     {
-        sql += QString::fromUtf8(" (ImagePositions.latitudeNumber IS NULL AND ImagePositions.longitudeNumber IS NULL) ");
+        sql += QString::fromUtf8(" (ItemPositions.latitudeNumber IS NULL AND ItemPositions.longitudeNumber IS NULL) ");
     }
     else if (name == QLatin1String("creator"))
     {

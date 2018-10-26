@@ -33,7 +33,7 @@ ItemScannerCommit::ItemScannerCommit()
       commitImageInformation(false),
       commitImageMetadata(false),
       commitVideoMetadata(false),
-      commitImagePosition(false),
+      commitItemPosition(false),
       commitImageComments(false),
       commitImageCopyright(false),
       commitFaces(false),

@@ -1288,7 +1288,7 @@ void CoreDbSchemaUpdater::preAlpha010Update2()
         return;
     }
 
-    if (!d->backend->execSql(QString::fromUtf8("ALTER TABLE ImagePositions RENAME TO ImagePositionsTemp;")))
+    if (!d->backend->execSql(QString::fromUtf8("ALTER TABLE ItemPositions RENAME TO ItemPositionsTemp;")))
     {
         return;
     }
@@ -1299,7 +1299,7 @@ void CoreDbSchemaUpdater::preAlpha010Update2()
     }
 
     d->backend->execSql(
-        QString::fromUtf8("CREATE TABLE ImagePositions\n"
+        QString::fromUtf8("CREATE TABLE ItemPositions\n"
                           " (imageid INTEGER PRIMARY KEY,\n"
                           "  latitude TEXT,\n"
                           "  latitudeNumber REAL,\n"
@@ -1312,12 +1312,12 @@ void CoreDbSchemaUpdater::preAlpha010Update2()
                           "  accuracy REAL,\n"
                           "  description TEXT);") );
 
-    d->backend->execSql(QString::fromUtf8("REPLACE INTO ImagePositions "
+    d->backend->execSql(QString::fromUtf8("REPLACE INTO ItemPositions "
                                           " (imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
                                           "  altitude, orientation, tilt, roll, accuracy, description) "
                                           "SELECT imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
                                           "  altitude, orientation, tilt, roll, 0, description "
-                                          " FROM ImagePositionsTemp;"));
+                                          " FROM ItemPositionsTemp;"));
 
     d->backend->execSql(
         QString::fromUtf8("CREATE TABLE ImageMetadata\n"
@@ -1348,7 +1348,7 @@ void CoreDbSchemaUpdater::preAlpha010Update2()
                                            "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory "
                                            "FROM ImageMetadataTemp;"));
 
-    d->backend->execSql(QString::fromUtf8("DROP TABLE ImagePositionsTemp;"));
+    d->backend->execSql(QString::fromUtf8("DROP TABLE ItemPositionsTemp;"));
     d->backend->execSql(QString::fromUtf8("DROP TABLE ImageMetadataTemp;"));
 
     d->albumDB->setSetting(QLatin1String("preAlpha010Update2"), QLatin1String("true"));
@@ -1396,7 +1396,7 @@ void CoreDbSchemaUpdater::beta010Update1()
                                           "    WHERE imageid=OLD.id;\n"
                                           "  DELETE From ImageMetadata\n "
                                           "    WHERE imageid=OLD.id;\n"
-                                          "  DELETE From ImagePositions\n "
+                                          "  DELETE From ItemPositions\n "
                                           "    WHERE imageid=OLD.id;\n"
                                           "  DELETE From ImageComments\n "
                                           "    WHERE imageid=OLD.id;\n"

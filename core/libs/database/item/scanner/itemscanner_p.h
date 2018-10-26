@@ -83,7 +83,7 @@ public:
     bool                             commitImageInformation;
     bool                             commitImageMetadata;
     bool                             commitVideoMetadata;
-    bool                             commitImagePosition;
+    bool                             commitItemPosition;
     bool                             commitImageComments;
     bool                             commitImageCopyright;
     bool                             commitFaces;

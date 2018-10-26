@@ -41,7 +41,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "imageposition.h"
+#include "itemposition.h"
 #include "coredbchangesets.h"
 #include "itemlister.h"
 #include "coredbaccess.h"

@@ -99,8 +99,8 @@ set(libdatabase_SRCS
     item/containers/imageinfo.cpp
     item/containers/imageinfolist.cpp
     item/containers/imageinfocache.cpp
-    item/containers/imageposition.cpp
     item/containers/imagecopyright.cpp
+    item/containers/itemposition.cpp
     item/containers/itemtagpair.cpp
     item/containers/itemextendedproperties.cpp
 

@@ -57,7 +57,7 @@ class ImageInfoData;
 class ItemListerRecord;
 class ImageMetadataContainer;
 class VideoMetadataContainer;
-class ImagePosition;
+class ItemPosition;
 class ItemTagPair;
 class PhotoInfoContainer;
 class VideoInfoContainer;
@@ -275,9 +275,9 @@ public:
     ItemExtendedProperties imageExtendedProperties() const;
 
     /**
-     * Retrieve the ImagePosition object for this item.
+     * Retrieve the ItemPosition object for this item.
      */
-    ImagePosition imagePosition() const;
+    ItemPosition imagePosition() const;
 
     /**
      * Retrieves the coordinates and the altitude.

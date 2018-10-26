@@ -86,7 +86,7 @@ DatabaseFields::Set ImageFilterSettings::watchFlags() const
 
     if (isFilteringByGeolocation())
     {
-        set |= DatabaseFields::ImagePositionsAll;
+        set |= DatabaseFields::ItemPositionsAll;
     }
 
     if (isFilteringByColorLabels())

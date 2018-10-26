@@ -556,7 +556,7 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
             }
             else if (salbum->isMapSearch())
             {
-                if (changeset.changes() & DatabaseFields::ImagePositionsAll)
+                if (changeset.changes() & DatabaseFields::ItemPositionsAll)
                 {
                     needCheckRefresh = true;
                 }

@@ -51,7 +51,7 @@
 #include "imagecomments.h"
 #include "imagecopyright.h"
 #include "itemextendedproperties.h"
-#include "imageposition.h"
+#include "itemposition.h"
 #include "itemscanner.h"
 #include "itemtagpair.h"
 #include "tagscache.h"
@@ -1169,14 +1169,14 @@ ItemExtendedProperties ImageInfo::imageExtendedProperties() const
     return ItemExtendedProperties(m_data->id);
 }
 
-ImagePosition ImageInfo::imagePosition() const
+ItemPosition ImageInfo::imagePosition() const
 {
     if (!m_data)
     {
-        return ImagePosition();
+        return ItemPosition();
     }
 
-    ImagePosition pos(m_data->id);
+    ItemPosition pos(m_data->id);
 
     if (!m_data->positionsCached)
     {

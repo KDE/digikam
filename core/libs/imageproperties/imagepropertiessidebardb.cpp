@@ -54,7 +54,7 @@
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
 #include "imagepropertiesversionstab.h"
-#include "imageposition.h"
+#include "itemposition.h"
 #include "tagscache.h"
 
 #ifdef HAVE_MARBLE
@@ -410,7 +410,7 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
                 {
                     m_dirtyPropertiesTab = false;
                 }
-                else if (set & DatabaseFields::ImagePositionsAll)
+                else if (set & DatabaseFields::ItemPositionsAll)
                 {
                     m_dirtyGpsTab = false;
                 }
@@ -678,7 +678,7 @@ void ImagePropertiesSideBarDB::slotPopupTagsView()
 
 bool ImagePropertiesSideBarDB::GPSImageInfofromImageInfo(const ImageInfo& imageInfo, GPSImageInfo* const gpsImageInfo)
 {
-    const ImagePosition pos = imageInfo.imagePosition();
+    const ItemPosition pos = imageInfo.imagePosition();
 
     if (pos.isEmpty() || !pos.hasCoordinates())
     {

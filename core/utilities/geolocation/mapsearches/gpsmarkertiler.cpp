@@ -658,7 +658,7 @@ void GPSMarkerTiler::tileDelete(AbstractMarkerTiler::Tile* const tile)
 void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 {
     const DatabaseFields::Set changes = changeset.changes();
-    //    const DatabaseFields::ImagePositions imagePositionChanges = changes;
+    //    const DatabaseFields::ItemPositions imagePositionChanges = changes;
 
     if (!((changes & DatabaseFields::LatitudeNumber)  ||
           (changes & DatabaseFields::LongitudeNumber) ||
