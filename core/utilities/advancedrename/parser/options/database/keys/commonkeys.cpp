@@ -31,7 +31,7 @@
 
 #include "coredbinfocontainers.h"
 #include "imageinfo.h"
-#include "imagecopyright.h"
+#include "itemcopyright.h"
 
 namespace
 {
@@ -75,7 +75,7 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
 {
     ImageInfo info = ImageInfo::fromUrl(settings.fileUrl);
     ImageCommonContainer container = info.imageCommonContainer();
-    ImageCopyright copyright       = info.imageCopyright();
+    ItemCopyright copyright       = info.imageCopyright();
     QString result;
 
     if (key == KEY_DEFAULTCOMMENT)

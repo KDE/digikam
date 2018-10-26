@@ -57,7 +57,7 @@
 #include "coredbtransaction.h"
 #include "coredboperationgroup.h"
 #include "imagecomments.h"
-#include "imagecopyright.h"
+#include "itemcopyright.h"
 #include "imageinfo.h"
 #include "itemscanner.h"
 #include "metaenginesettings.h"
@@ -1448,8 +1448,8 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
     }
 
     // Copyright info
-    ImageCopyright copyrightDest(dest.id());
-    copyrightDest.replaceFrom(ImageCopyright(source.id()));
+    ItemCopyright copyrightDest(dest.id());
+    copyrightDest.replaceFrom(ItemCopyright(source.id()));
 
     // Image Properties
     CoreDbAccess().db()->copyImageProperties(source.id(), dest.id());

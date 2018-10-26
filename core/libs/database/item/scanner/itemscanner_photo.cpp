@@ -265,7 +265,7 @@ void ItemScanner::commitImageComments()
     }
 }
 
-void ItemScanner::scanImageCopyright()
+void ItemScanner::scanItemCopyright()
 {
     Template t;
 
@@ -274,13 +274,13 @@ void ItemScanner::scanImageCopyright()
         return;
     }
 
-    d->commit.commitImageCopyright = true;
+    d->commit.commitItemCopyright = true;
     d->commit.copyrightTemplate    = t;
 }
 
-void ItemScanner::commitImageCopyright()
+void ItemScanner::commitItemCopyright()
 {
-    ImageCopyright copyright(d->scanInfo.id);
+    ItemCopyright copyright(d->scanInfo.id);
     // It is not clear if removeAll() should be called if d->scanMode == Rescan
     copyright.removeAll();
     copyright.setFromTemplate(d->commit.copyrightTemplate);

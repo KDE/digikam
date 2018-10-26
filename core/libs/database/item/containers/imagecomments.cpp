@@ -69,7 +69,7 @@ public:
                        int& firstMatch,
                        DatabaseComment::Type type = DatabaseComment::Comment) const
     {
-        // if you change the algorithm, please take a look at ImageCopyright as well
+        // if you change the algorithm, please take a look at ItemCopyright as well
         fullCodeMatch    = -1;
         langCodeMatch    = -1;
         defaultCodeMatch = -1;

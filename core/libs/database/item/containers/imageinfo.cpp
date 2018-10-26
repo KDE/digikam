@@ -49,7 +49,7 @@
 #include "itemlisterrecord.h"
 #include "imageinfolist.h"
 #include "imagecomments.h"
-#include "imagecopyright.h"
+#include "itemcopyright.h"
 #include "itemextendedproperties.h"
 #include "itemposition.h"
 #include "itemscanner.h"
@@ -1149,14 +1149,14 @@ ImageComments ImageInfo::imageComments(CoreDbAccess& access) const
     return ImageComments(access, m_data->id);
 }
 
-ImageCopyright ImageInfo::imageCopyright() const
+ItemCopyright ImageInfo::imageCopyright() const
 {
     if (!m_data)
     {
-        return ImageCopyright();
+        return ItemCopyright();
     }
 
-    return ImageCopyright(m_data->id);
+    return ItemCopyright(m_data->id);
 }
 
 ItemExtendedProperties ImageInfo::imageExtendedProperties() const

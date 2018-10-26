@@ -786,7 +786,7 @@ bool ItemQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, 
     else if (name == QLatin1String("creator"))
     {
         sql += QString::fromUtf8(" (Images.id IN "
-               " (SELECT imageid FROM ImageCopyright "
+               " (SELECT imageid FROM ItemCopyright "
                "  WHERE property='creator' and value ");
         ItemQueryBuilder::addSqlRelation(sql, relation);
         sql += QString::fromUtf8(" ?)) ");

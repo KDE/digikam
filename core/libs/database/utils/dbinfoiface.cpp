@@ -36,7 +36,7 @@
 #include "digikamapp.h"
 #include "digikam_debug.h"
 #include "digikamview.h"
-#include "imagecopyright.h"
+#include "itemcopyright.h"
 #include "imageinfo.h"
 #include "photoinfocontainer.h"
 #include "videoinfocontainer.h"
@@ -402,7 +402,7 @@ DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
         }
 
         // Get Copyright information of picture from database.
-        ImageCopyright rights        = info.imageCopyright();
+        ItemCopyright rights        = info.imageCopyright();
         map.insert(QLatin1String("creators"), rights.creator());
         map.insert(QLatin1String("credit"),   rights.credit());
         map.insert(QLatin1String("rights"),   rights.rights());

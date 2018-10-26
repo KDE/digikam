@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-05-12
- * Description : Access to copy-right info of an image in the database
+ * Description : Access to copy-right info of an item in the database
  *
  * Copyright (C) 2008-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagecopyright.h"
+#include "itemcopyright.h"
 
 // Qt includes
 
@@ -38,20 +38,20 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageCopyrightCache
+class Q_DECL_HIDDEN ItemCopyrightCache
 {
 public:
 
-    explicit ImageCopyrightCache(ImageCopyright* const object)
+    explicit ItemCopyrightCache(ItemCopyright* const object)
         : object(object)
     {
         // set this as cache
         object->m_cache = this;
         // read all properties
-        infos = CoreDbAccess().db()->getImageCopyright(object->m_id, QString());
+        infos = CoreDbAccess().db()->getItemCopyright(object->m_id, QString());
     }
 
-    ~ImageCopyrightCache()
+    ~ItemCopyrightCache()
     {
         object->m_cache = 0;
     }
@@ -60,37 +60,37 @@ public:
 
 private:
 
-    ImageCopyright* object;
+    ItemCopyright* object;
 };
 
 // -------------------------------------------------------------------------------------------
 
-ImageCopyright::ImageCopyright(qlonglong imageid)
+ItemCopyright::ItemCopyright(qlonglong imageid)
     : m_id(imageid),
       m_cache(0)
 {
 }
 
-ImageCopyright::ImageCopyright()
+ItemCopyright::ItemCopyright()
     : m_id(0),
       m_cache(0)
 {
 }
 
-ImageCopyright::ImageCopyright(const ImageCopyright& other)
+ItemCopyright::ItemCopyright(const ItemCopyright& other)
     : m_id(other.m_id),
       m_cache(0)
 {
     // the cache is only short-lived, to keep complexity low
 }
 
-ImageCopyright::~ImageCopyright()
+ItemCopyright::~ItemCopyright()
 {
     delete m_cache;
     m_cache = 0;
 }
 
-ImageCopyright& ImageCopyright::operator=(const ImageCopyright& other)
+ItemCopyright& ItemCopyright::operator=(const ItemCopyright& other)
 {
     delete m_cache;
     m_cache = 0;
@@ -99,7 +99,7 @@ ImageCopyright& ImageCopyright::operator=(const ImageCopyright& other)
     return *this;
 }
 
-void ImageCopyright::replaceFrom(const ImageCopyright& source)
+void ItemCopyright::replaceFrom(const ItemCopyright& source)
 {
     if (!m_id)
     {
@@ -107,23 +107,23 @@ void ImageCopyright::replaceFrom(const ImageCopyright& source)
     }
 
     CoreDbAccess access;
-    access.db()->removeImageCopyrightProperties(m_id);
+    access.db()->removeItemCopyrightProperties(m_id);
 
     if (!source.m_id)
     {
         return;
     }
 
-    QList<CopyrightInfo> infos = access.db()->getImageCopyright(source.m_id, QString());
+    QList<CopyrightInfo> infos = access.db()->getItemCopyright(source.m_id, QString());
 
     foreach (const CopyrightInfo& info, infos)
     {
-        access.db()->setImageCopyrightProperty(m_id, info.property, info.value,
+        access.db()->setItemCopyrightProperty(m_id, info.property, info.value,
                                                info.extraValue, CoreDB::PropertyNoConstraint);
     }
 }
 
-QStringList ImageCopyright::creator() const
+QStringList ItemCopyright::creator() const
 {
     QList<CopyrightInfo> infos = copyrightInfos(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
     QStringList list;
@@ -136,7 +136,7 @@ QStringList ImageCopyright::creator() const
     return list;
 }
 
-void ImageCopyright::setCreator(const QString& creator, ReplaceMode mode)
+void ItemCopyright::setCreator(const QString& creator, ReplaceMode mode)
 {
     CoreDB::CopyrightPropertyUnique uniqueness;
 
@@ -149,116 +149,116 @@ void ImageCopyright::setCreator(const QString& creator, ReplaceMode mode)
         uniqueness = CoreDB::PropertyNoConstraint;
     }
 
-    CoreDbAccess().db()->setImageCopyrightProperty(m_id, ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator),
+    CoreDbAccess().db()->setItemCopyrightProperty(m_id, ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator),
                                                    creator, QString(), uniqueness);
 }
 
-void ImageCopyright::removeCreators()
+void ItemCopyright::removeCreators()
 {
     removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
 }
 
-QString ImageCopyright::provider() const
+QString ItemCopyright::provider() const
 {
     return readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider));
 }
 
-void ImageCopyright::setProvider(const QString& provider)
+void ItemCopyright::setProvider(const QString& provider)
 {
     setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider), provider);
 }
 
-void ImageCopyright::removeProvider()
+void ItemCopyright::removeProvider()
 {
     removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider));
 }
 
-QString ImageCopyright::copyrightNotice(const QString& languageCode)
+QString ItemCopyright::copyrightNotice(const QString& languageCode)
 {
     return readLanguageProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), languageCode);
 }
 
-MetaEngine::AltLangMap ImageCopyright::allCopyrightNotices()
+MetaEngine::AltLangMap ItemCopyright::allCopyrightNotices()
 {
     return readLanguageProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice));
 }
 
-void ImageCopyright::setCopyrightNotice(const QString& notice, const QString& languageCode, ReplaceMode mode)
+void ItemCopyright::setCopyrightNotice(const QString& notice, const QString& languageCode, ReplaceMode mode)
 {
     setLanguageProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), notice, languageCode, mode);
 }
 
-void ImageCopyright::removeCopyrightNotices()
+void ItemCopyright::removeCopyrightNotices()
 {
     removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice));
 }
 
-QString ImageCopyright::rightsUsageTerms(const QString& languageCode)
+QString ItemCopyright::rightsUsageTerms(const QString& languageCode)
 {
     return readLanguageProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), languageCode);
 }
 
-MetaEngine::AltLangMap ImageCopyright::allRightsUsageTerms()
+MetaEngine::AltLangMap ItemCopyright::allRightsUsageTerms()
 {
     return readLanguageProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms));
 }
 
-void ImageCopyright::setRightsUsageTerms(const QString& term, const QString& languageCode, ReplaceMode mode)
+void ItemCopyright::setRightsUsageTerms(const QString& term, const QString& languageCode, ReplaceMode mode)
 {
     setLanguageProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), term, languageCode, mode);
 }
 
-void ImageCopyright::removeRightsUsageTerms()
+void ItemCopyright::removeRightsUsageTerms()
 {
     removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms));
 }
 
-QString ImageCopyright::source()
+QString ItemCopyright::source()
 {
     return readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource));
 }
 
-void ImageCopyright::setSource(const QString& source)
+void ItemCopyright::setSource(const QString& source)
 {
     setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource), source);
 }
 
-void ImageCopyright::removeSource()
+void ItemCopyright::removeSource()
 {
     removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource));
 }
 
-QString ImageCopyright::creatorJobTitle() const
+QString ItemCopyright::creatorJobTitle() const
 {
     return readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle));
 }
 
-void ImageCopyright::setCreatorJobTitle(const QString& title)
+void ItemCopyright::setCreatorJobTitle(const QString& title)
 {
     setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle), title);
 }
 
-void ImageCopyright::removeCreatorJobTitle()
+void ItemCopyright::removeCreatorJobTitle()
 {
     removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle));
 }
 
-QString ImageCopyright::instructions()
+QString ItemCopyright::instructions()
 {
     return readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions));
 }
 
-void ImageCopyright::setInstructions(const QString& instructions)
+void ItemCopyright::setInstructions(const QString& instructions)
 {
     setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions), instructions);
 }
 
-void ImageCopyright::removeInstructions()
+void ItemCopyright::removeInstructions()
 {
     removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions));
 }
 
-IptcCoreContactInfo ImageCopyright::contactInfo()
+IptcCoreContactInfo ItemCopyright::contactInfo()
 {
     IptcCoreContactInfo info;
     info.city          = readSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity));
@@ -273,7 +273,7 @@ IptcCoreContactInfo ImageCopyright::contactInfo()
     return info;
 }
 
-void ImageCopyright::setContactInfo(const IptcCoreContactInfo& info)
+void ItemCopyright::setContactInfo(const IptcCoreContactInfo& info)
 {
     setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity), info.city);
     setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry), info.country);
@@ -285,7 +285,7 @@ void ImageCopyright::setContactInfo(const IptcCoreContactInfo& info)
     setSimpleProperty(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl), info.webUrl);
 }
 
-void ImageCopyright::removeContactInfo()
+void ItemCopyright::removeContactInfo()
 {
     removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity));
     removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry));
@@ -297,9 +297,9 @@ void ImageCopyright::removeContactInfo()
     removeProperties(ItemScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl));
 }
 
-void ImageCopyright::fillTemplate(Template& t)
+void ItemCopyright::fillTemplate(Template& t)
 {
-    ImageCopyrightCache cache(this);
+    ItemCopyrightCache cache(this);
 
     t.setAuthors(author());
     t.setAuthorsPosition(authorsPosition());
@@ -311,11 +311,11 @@ void ImageCopyright::fillTemplate(Template& t)
     t.setContactInfo(contactInfo());
 }
 
-void ImageCopyright::setFromTemplate(const Template& t)
+void ItemCopyright::setFromTemplate(const Template& t)
 {
     foreach (const QString& author, t.authors()) // krazy:exclude=foreach
     {
-        setAuthor(author, ImageCopyright::AddEntryToExisting);
+        setAuthor(author, ItemCopyright::AddEntryToExisting);
     }
 
     setCredit(t.credit());
@@ -325,7 +325,7 @@ void ImageCopyright::setFromTemplate(const Template& t)
 
     for (it = copyrights.constBegin() ; it != copyrights.constEnd() ; ++it)
     {
-        setRights(it.value(), it.key(), ImageCopyright::AddEntryToExisting);
+        setRights(it.value(), it.key(), ItemCopyright::AddEntryToExisting);
     }
 
     MetaEngine::AltLangMap usages = t.rightUsageTerms();
@@ -333,7 +333,7 @@ void ImageCopyright::setFromTemplate(const Template& t)
 
     for (it2 = usages.constBegin() ; it2 != usages.constEnd() ; ++it2)
     {
-        setRightsUsageTerms(it2.value(), it2.key(), ImageCopyright::AddEntryToExisting);
+        setRightsUsageTerms(it2.value(), it2.key(), ItemCopyright::AddEntryToExisting);
     }
 
     setSource(t.source());
@@ -342,9 +342,9 @@ void ImageCopyright::setFromTemplate(const Template& t)
     setContactInfo(t.contactInfo());
 }
 
-void ImageCopyright::removeAll()
+void ItemCopyright::removeAll()
 {
-    ImageCopyrightCache cache(this);
+    ItemCopyrightCache cache(this);
 
     removeCreators();
     removeProvider();
@@ -356,7 +356,7 @@ void ImageCopyright::removeAll()
     removeContactInfo();
 }
 
-CopyrightInfo ImageCopyright::copyrightInfo(const QString& property) const
+CopyrightInfo ItemCopyright::copyrightInfo(const QString& property) const
 {
     if (m_cache)
     {
@@ -370,7 +370,7 @@ CopyrightInfo ImageCopyright::copyrightInfo(const QString& property) const
     }
     else
     {
-        QList<CopyrightInfo> infos = CoreDbAccess().db()->getImageCopyright(m_id, property);
+        QList<CopyrightInfo> infos = CoreDbAccess().db()->getItemCopyright(m_id, property);
 
         if (!infos.isEmpty())
         {
@@ -381,7 +381,7 @@ CopyrightInfo ImageCopyright::copyrightInfo(const QString& property) const
     return CopyrightInfo();
 }
 
-QList<CopyrightInfo> ImageCopyright::copyrightInfos(const QString& property) const
+QList<CopyrightInfo> ItemCopyright::copyrightInfos(const QString& property) const
 {
     if (m_cache)
     {
@@ -399,21 +399,21 @@ QList<CopyrightInfo> ImageCopyright::copyrightInfos(const QString& property) con
     }
     else
     {
-        return CoreDbAccess().db()->getImageCopyright(m_id, property);
+        return CoreDbAccess().db()->getItemCopyright(m_id, property);
     }
 }
 
-QString ImageCopyright::readSimpleProperty(const QString& property) const
+QString ItemCopyright::readSimpleProperty(const QString& property) const
 {
     return copyrightInfo(property).value;
 }
 
-void ImageCopyright::setSimpleProperty(const QString& property, const QString& value)
+void ItemCopyright::setSimpleProperty(const QString& property, const QString& value)
 {
-    CoreDbAccess().db()->setImageCopyrightProperty(m_id, property, value, QString(), CoreDB::PropertyUnique);
+    CoreDbAccess().db()->setItemCopyrightProperty(m_id, property, value, QString(), CoreDB::PropertyUnique);
 }
 
-QString ImageCopyright::readLanguageProperty(const QString& property, const QString& languageCode)
+QString ItemCopyright::readLanguageProperty(const QString& property, const QString& languageCode)
 {
     QList<CopyrightInfo> infos = copyrightInfos(property);
     int index                  = languageMatch(infos, languageCode);
@@ -428,7 +428,7 @@ QString ImageCopyright::readLanguageProperty(const QString& property, const QStr
     }
 }
 
-MetaEngine::AltLangMap ImageCopyright::readLanguageProperties(const QString& property)
+MetaEngine::AltLangMap ItemCopyright::readLanguageProperties(const QString& property)
 {
     MetaEngine::AltLangMap map;
     QList<CopyrightInfo> infos = copyrightInfos(property);
@@ -441,7 +441,7 @@ MetaEngine::AltLangMap ImageCopyright::readLanguageProperties(const QString& pro
     return map;
 }
 
-void ImageCopyright::setLanguageProperty(const QString& property, const QString& value,
+void ItemCopyright::setLanguageProperty(const QString& property, const QString& value,
                                          const QString& languageCode, ReplaceMode mode)
 {
     CoreDB::CopyrightPropertyUnique uniqueness;
@@ -466,10 +466,10 @@ void ImageCopyright::setLanguageProperty(const QString& property, const QString&
         language = QLatin1String("x-default");
     }
 
-    CoreDbAccess().db()->setImageCopyrightProperty(m_id, property, value, language, uniqueness);
+    CoreDbAccess().db()->setItemCopyrightProperty(m_id, property, value, language, uniqueness);
 }
 
-void ImageCopyright::removeProperties(const QString& property)
+void ItemCopyright::removeProperties(const QString& property)
 {
     // if we have a cache, find out if anything need to be done at all
     if (m_cache && copyrightInfo(property).isNull())
@@ -477,20 +477,20 @@ void ImageCopyright::removeProperties(const QString& property)
         return;
     }
 
-    CoreDbAccess().db()->removeImageCopyrightProperties(m_id, property);
+    CoreDbAccess().db()->removeItemCopyrightProperties(m_id, property);
 }
 
-void ImageCopyright::removeLanguageProperty(const QString& property, const QString& languageCode)
+void ItemCopyright::removeLanguageProperty(const QString& property, const QString& languageCode)
 {
     if (m_cache && copyrightInfo(property).isNull())
     {
         return;
     }
 
-    CoreDbAccess().db()->removeImageCopyrightProperties(m_id, property, languageCode);
+    CoreDbAccess().db()->removeItemCopyrightProperties(m_id, property, languageCode);
 }
 
-int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QString& languageCode) const
+int ItemCopyright::languageMatch(const QList<CopyrightInfo> infos, const QString& languageCode) const
 {
     QString langCode;
     QString fullCode = languageCode;

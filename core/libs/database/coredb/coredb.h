@@ -997,7 +997,7 @@ public:
      * Returns the copyright properties of the specified image.
      * If property is not null, only the given property is returned.
      */
-    QList<CopyrightInfo> getImageCopyright(qlonglong imageID, const QString& property = QString());
+    QList<CopyrightInfo> getItemCopyright(qlonglong imageID, const QString& property = QString());
 
     enum CopyrightPropertyUnique
     {
@@ -1009,7 +1009,7 @@ public:
     /**
      * Sets the property with the given name for the given image to the specified value and extraValue
      */
-    void setImageCopyrightProperty(qlonglong imageID, const QString& property,
+    void setItemCopyrightProperty(qlonglong imageID, const QString& property,
                                    const QString& value, const QString& extraValue = QString(),
                                    CopyrightPropertyUnique uniqueness = PropertyUnique);
 
@@ -1018,7 +1018,7 @@ public:
      *  extraValue; or property, extraValue and value).
      *  Note that extraValue is ordered before value in this method!
      */
-    void removeImageCopyrightProperties(qlonglong imageID, const QString& property = QString(),
+    void removeItemCopyrightProperties(qlonglong imageID, const QString& property = QString(),
                                         const QString& extraValue = QString(),
                                         const QString& value = QString() /* NOTE parameter order */);
 

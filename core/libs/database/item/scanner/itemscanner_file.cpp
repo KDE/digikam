@@ -230,7 +230,7 @@ void ItemScanner::scanFile(ScanMode mode)
                 scanImageMetadata();
                 scanItemPosition();
                 scanImageComments();
-                scanImageCopyright();
+                scanItemCopyright();
                 scanIPTCCore();
                 scanTags();
                 scanFaces();
@@ -248,7 +248,7 @@ void ItemScanner::scanFile(ScanMode mode)
                 scanVideoMetadata();
                 scanItemPosition();
                 scanImageComments();
-                scanImageCopyright();
+                scanItemCopyright();
                 scanIPTCCore();
                 scanTags();
             }

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-05-12
- * Description : Access to copy-right info of an image in the database
+ * Description : Access to copy-right info of an item in the database
  *
  * Copyright (C) 2008-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_COPYRIGHT_H
-#define DIGIKAM_IMAGE_COPYRIGHT_H
+#ifndef DIGIKAM_ITEM_COPYRIGHT_H
+#define DIGIKAM_ITEM_COPYRIGHT_H
 
 // Qt includes
 
@@ -41,10 +41,10 @@ namespace Digikam
 {
 
 class CopyrightInfo;
-class ImageCopyrightCache;
+class ItemCopyrightCache;
 class Template;
 
-class DIGIKAM_DATABASE_EXPORT ImageCopyright
+class DIGIKAM_DATABASE_EXPORT ItemCopyright
 {
 public:
 
@@ -60,16 +60,16 @@ public:
 
 public:
 
-    explicit ImageCopyright(qlonglong imageid);
+    explicit ItemCopyright(qlonglong imageid);
 
-    /** Create a null ImageCopyright object
+    /** Create a null ItemCopyright object
      */
-    ImageCopyright();
+    ItemCopyright();
 
-    ImageCopyright(const ImageCopyright& other);
-    ~ImageCopyright();
+    ItemCopyright(const ItemCopyright& other);
+    ~ItemCopyright();
 
-    ImageCopyright& operator=(const ImageCopyright& other);
+    ItemCopyright& operator=(const ItemCopyright& other);
 
     /** Returns the author/creator/byline.
      *  This is Photoshop Author.
@@ -278,7 +278,7 @@ public:
     void removeAll();
 
     /** Removes all entries and replaces them with the entries from source. */
-    void replaceFrom(const ImageCopyright& source);
+    void replaceFrom(const ItemCopyright& source);
 
 protected:
 
@@ -296,12 +296,12 @@ protected:
 
 protected:
 
-    friend class ImageCopyrightCache;
+    friend class ItemCopyrightCache;
 
     qlonglong            m_id;
-    ImageCopyrightCache* m_cache;
+    ItemCopyrightCache* m_cache;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_COPYRIGHT_H
+#endif // DIGIKAM_ITEM_COPYRIGHT_H

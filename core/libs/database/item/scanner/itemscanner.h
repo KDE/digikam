@@ -237,7 +237,7 @@ public:
 
     /**
      * Helper method to return official property name by which
-     * IPTC core properties are stored in the database (ImageCopyright and ImageProperties table).
+     * IPTC core properties are stored in the database (ItemCopyright and ImageProperties table).
      * Allowed arguments: All MetadataInfo::Fields starting with "IptcCore..."
      */
     static QString iptcCorePropertyName(MetadataInfo::Field field);
@@ -254,8 +254,8 @@ protected:
     void commitItemPosition();
     void scanImageComments();
     void commitImageComments();
-    void scanImageCopyright();
-    void commitImageCopyright();
+    void scanItemCopyright();
+    void commitItemCopyright();
     void scanIPTCCore();
     void commitIPTCCore();
     void scanTags();

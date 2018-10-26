@@ -1363,8 +1363,8 @@ void CoreDbSchemaUpdater::preAlpha010Update3()
         return;
     }
 
-    d->backend->execSql(QString::fromUtf8("DROP TABLE ImageCopyright;"));
-    d->backend->execSql(QString::fromUtf8("CREATE TABLE ImageCopyright\n"
+    d->backend->execSql(QString::fromUtf8("DROP TABLE ItemCopyright;"));
+    d->backend->execSql(QString::fromUtf8("CREATE TABLE ItemCopyright\n"
                                           " (imageid INTEGER,\n"
                                           "  property TEXT,\n"
                                           "  value TEXT,\n"
@@ -1400,7 +1400,7 @@ void CoreDbSchemaUpdater::beta010Update1()
                                           "    WHERE imageid=OLD.id;\n"
                                           "  DELETE From ImageComments\n "
                                           "    WHERE imageid=OLD.id;\n"
-                                          "  DELETE From ImageCopyright\n "
+                                          "  DELETE From ItemCopyright\n "
                                           "    WHERE imageid=OLD.id;\n"
                                           "  DELETE From ImageProperties\n "
                                           "    WHERE imageid=OLD.id;\n"

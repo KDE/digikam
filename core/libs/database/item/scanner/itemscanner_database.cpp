@@ -78,9 +78,9 @@ void ItemScanner::commit()
         commitImageComments();
     }
 
-    if (d->commit.commitImageCopyright)
+    if (d->commit.commitItemCopyright)
     {
-        commitImageCopyright();
+        commitItemCopyright();
     }
 
     if (d->commit.commitIPTCCore)

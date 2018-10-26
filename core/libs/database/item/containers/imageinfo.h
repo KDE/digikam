@@ -51,7 +51,7 @@ class DImageHistory;
 class HistoryImageId;
 class ImageComments;
 class ImageCommonContainer;
-class ImageCopyright;
+class ItemCopyright;
 class ItemExtendedProperties;
 class ImageInfoData;
 class ItemListerRecord;
@@ -261,11 +261,11 @@ public:
     ImageComments imageComments(CoreDbAccess& access) const;
 
     /**
-     * Retrieve the ImageCopyright object for this item.
+     * Retrieve the ItemCopyright object for this item.
      * This object allows full read and write access to all copyright
      * values.
      */
-    ImageCopyright imageCopyright() const;
+    ItemCopyright imageCopyright() const;
 
     /**
      * Retrieve the ItemExtendedProperties object for this item.

@@ -2117,20 +2117,20 @@ void CoreDB::removeImagePropertyByName(const QString& property)
                    property);
 }
 
-QList<CopyrightInfo> CoreDB::getImageCopyright(qlonglong imageID, const QString& property)
+QList<CopyrightInfo> CoreDB::getItemCopyright(qlonglong imageID, const QString& property)
 {
     QList<CopyrightInfo> list;
     QList<QVariant>      values;
 
     if (property.isNull())
     {
-        d->db->execSql(QString::fromUtf8("SELECT property, value, extraValue FROM ImageCopyright "
+        d->db->execSql(QString::fromUtf8("SELECT property, value, extraValue FROM ItemCopyright "
                                          "WHERE imageid=?;"),
                        imageID, &values);
     }
     else
     {
-        d->db->execSql(QString::fromUtf8("SELECT property, value, extraValue FROM ImageCopyright "
+        d->db->execSql(QString::fromUtf8("SELECT property, value, extraValue FROM ItemCopyright "
                                          "WHERE imageid=? and property=?;"),
                        imageID, property, &values);
     }
@@ -2153,30 +2153,30 @@ QList<CopyrightInfo> CoreDB::getImageCopyright(qlonglong imageID, const QString&
     return list;
 }
 
-void CoreDB::setImageCopyrightProperty(qlonglong imageID, const QString& property,
+void CoreDB::setItemCopyrightProperty(qlonglong imageID, const QString& property,
                                        const QString& value, const QString& extraValue,
                                        CopyrightPropertyUnique uniqueness)
 {
     if (uniqueness == PropertyUnique)
     {
-        d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright "
+        d->db->execSql(QString::fromUtf8("DELETE FROM ItemCopyright "
                                          "WHERE imageid=? AND property=?;"),
                        imageID, property);
     }
     else if (uniqueness == PropertyExtraValueUnique)
     {
-        d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright "
+        d->db->execSql(QString::fromUtf8("DELETE FROM ItemCopyright "
                                          "WHERE imageid=? AND property=? AND extraValue=?;"),
                        imageID, property, extraValue);
     }
 
-    d->db->execSql(QString::fromUtf8("REPLACE INTO ImageCopyright "
+    d->db->execSql(QString::fromUtf8("REPLACE INTO ItemCopyright "
                                      "(imageid, property, value, extraValue) "
                                      " VALUES(?, ?, ?, ?);"),
                    imageID, property, value, extraValue);
 }
 
-void CoreDB::removeImageCopyrightProperties(qlonglong imageID, const QString& property,
+void CoreDB::removeItemCopyrightProperties(qlonglong imageID, const QString& property,
                                             const QString& extraValue, const QString& value)
 {
     int removeBy = 0;
@@ -2197,25 +2197,25 @@ void CoreDB::removeImageCopyrightProperties(qlonglong imageID, const QString& pr
     switch (removeBy)
     {
         case 0:
-            d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright "
+            d->db->execSql(QString::fromUtf8("DELETE FROM ItemCopyright "
                                              "WHERE imageid=?;"),
                            imageID);
             break;
 
         case 1:
-            d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright "
+            d->db->execSql(QString::fromUtf8("DELETE FROM ItemCopyright "
                                              "WHERE imageid=? AND property=?;"),
                            imageID, property);
             break;
 
         case 2:
-            d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright "
+            d->db->execSql(QString::fromUtf8("DELETE FROM ItemCopyright "
                                              "WHERE imageid=? AND property=? AND extraValue=?;"),
                            imageID, property, extraValue);
             break;
 
         case 3:
-            d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright "
+            d->db->execSql(QString::fromUtf8("DELETE FROM ItemCopyright "
                                              "WHERE imageid=? AND property=? AND extraValue=? AND value=?;"),
                            imageID, property, extraValue, value);
             break;
@@ -4784,10 +4784,10 @@ void CoreDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
                    dstId, srcId);
     fields |= DatabaseFields::ImageCommentsAll;
 
-    d->db->execSql(QString::fromUtf8("REPLACE INTO ImageCopyright "
+    d->db->execSql(QString::fromUtf8("REPLACE INTO ItemCopyright "
                                      "(imageid, property, value, extraValue) "
                                      "SELECT ?, property, value, extraValue "
-                                     "FROM ImageCopyright WHERE imageid=?;"),
+                                     "FROM ItemCopyright WHERE imageid=?;"),
                    dstId, srcId);
 
     d->db->execSql(QString::fromUtf8("REPLACE INTO ImageHistory "
@@ -4905,7 +4905,7 @@ void CoreDB::clearMetadataFromImage(qlonglong imageID)
                    imageID);
     fields |= DatabaseFields::ItemPositionsAll;
 
-    d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright WHERE imageid=?;"),
+    d->db->execSql(QString::fromUtf8("DELETE FROM ItemCopyright WHERE imageid=?;"),
                    imageID);
 
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageComments WHERE imageid=?;"),

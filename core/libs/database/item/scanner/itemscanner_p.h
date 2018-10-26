@@ -45,7 +45,7 @@
 #include "collectionmanager.h"
 #include "facetagseditor.h"
 #include "imagecomments.h"
-#include "imagecopyright.h"
+#include "itemcopyright.h"
 #include "itemextendedproperties.h"
 #include "itemhistorygraph.h"
 #include "metaenginesettings.h"
@@ -85,7 +85,7 @@ public:
     bool                             commitVideoMetadata;
     bool                             commitItemPosition;
     bool                             commitImageComments;
-    bool                             commitImageCopyright;
+    bool                             commitItemCopyright;
     bool                             commitFaces;
     bool                             commitIPTCCore;
     bool                             hasColorTag;
