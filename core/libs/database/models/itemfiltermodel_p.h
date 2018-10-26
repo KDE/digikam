@@ -101,7 +101,7 @@ public:
     ImageModel*                         imageModel;
 
     ItemFilterSettings                 filter;
-    ImageSortSettings                   sorter;
+    ItemSortSettings                   sorter;
     VersionItemFilterSettings          versionFilter;
     GroupItemFilterSettings            groupFilter;
 

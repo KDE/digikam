@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagesortsettings.h"
+#include "itemsortsettings.h"
 
 // Qt includes
 
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-ImageSortSettings::ImageSortSettings()
+ItemSortSettings::ItemSortSettings()
 {
     categorizationMode             = NoCategories;
     categorizationSortOrder        = DefaultOrder;
@@ -50,7 +50,7 @@ ImageSortSettings::ImageSortSettings()
     currentSortOrder               = Qt::AscendingOrder;
 }
 
-bool ImageSortSettings::operator==(const ImageSortSettings& other) const
+bool ItemSortSettings::operator==(const ItemSortSettings& other) const
 {
     return
         categorizationMode            == other.categorizationMode            &&
@@ -61,7 +61,7 @@ bool ImageSortSettings::operator==(const ImageSortSettings& other) const
         sortCaseSensitivity           == other.sortCaseSensitivity;
 }
 
-void ImageSortSettings::setCategorizationMode(CategorizationMode mode)
+void ItemSortSettings::setCategorizationMode(CategorizationMode mode)
 {
     categorizationMode = mode;
 
@@ -71,7 +71,7 @@ void ImageSortSettings::setCategorizationMode(CategorizationMode mode)
     }
 }
 
-void ImageSortSettings::setCategorizationSortOrder(SortOrder order)
+void ItemSortSettings::setCategorizationSortOrder(SortOrder order)
 {
     categorizationSortOrder = order;
 
@@ -85,7 +85,7 @@ void ImageSortSettings::setCategorizationSortOrder(SortOrder order)
     }
 }
 
-void ImageSortSettings::setSortRole(SortRole role)
+void ItemSortSettings::setSortRole(SortRole role)
 {
     sortRole = role;
 
@@ -95,7 +95,7 @@ void ImageSortSettings::setSortRole(SortRole role)
     }
 }
 
-void ImageSortSettings::setSortOrder(SortOrder order)
+void ItemSortSettings::setSortOrder(SortOrder order)
 {
     sortOrder = order;
 
@@ -109,12 +109,12 @@ void ImageSortSettings::setSortOrder(SortOrder order)
     }
 }
 
-void ImageSortSettings::setStringTypeNatural(bool natural)
+void ItemSortSettings::setStringTypeNatural(bool natural)
 {
     strTypeNatural = natural;
 }
 
-Qt::SortOrder ImageSortSettings::defaultSortOrderForCategorizationMode(CategorizationMode mode)
+Qt::SortOrder ItemSortSettings::defaultSortOrderForCategorizationMode(CategorizationMode mode)
 {
     switch (mode)
     {
@@ -128,7 +128,7 @@ Qt::SortOrder ImageSortSettings::defaultSortOrderForCategorizationMode(Categoriz
     }
 }
 
-Qt::SortOrder ImageSortSettings::defaultSortOrderForSortRole(SortRole role)
+Qt::SortOrder ItemSortSettings::defaultSortOrderForSortRole(SortRole role)
 {
     switch (role)
     {
@@ -149,7 +149,7 @@ Qt::SortOrder ImageSortSettings::defaultSortOrderForSortRole(SortRole role)
     }
 }
 
-int ImageSortSettings::compareCategories(const ItemInfo& left, const ItemInfo& right) const
+int ItemSortSettings::compareCategories(const ItemInfo& left, const ItemInfo& right) const
 {
     switch (categorizationMode)
     {
@@ -193,7 +193,7 @@ int ImageSortSettings::compareCategories(const ItemInfo& left, const ItemInfo& r
     }
 }
 
-bool ImageSortSettings::lessThan(const ItemInfo& left, const ItemInfo& right) const
+bool ItemSortSettings::lessThan(const ItemInfo& left, const ItemInfo& right) const
 {
     int result = compare(left, right, sortRole);
 
@@ -247,12 +247,12 @@ bool ImageSortSettings::lessThan(const ItemInfo& left, const ItemInfo& right) co
     return false;
 }
 
-int ImageSortSettings::compare(const ItemInfo& left, const ItemInfo& right) const
+int ItemSortSettings::compare(const ItemInfo& left, const ItemInfo& right) const
 {
     return compare(left, right, sortRole);
 }
 
-int ImageSortSettings::compare(const ItemInfo& left, const ItemInfo& right, SortRole role) const
+int ItemSortSettings::compare(const ItemInfo& left, const ItemInfo& right, SortRole role) const
 {
     switch (role)
     {
@@ -305,7 +305,7 @@ int ImageSortSettings::compare(const ItemInfo& left, const ItemInfo& right, Sort
     }
 }
 
-bool ImageSortSettings::lessThan(const QVariant& left, const QVariant& right) const
+bool ItemSortSettings::lessThan(const QVariant& left, const QVariant& right) const
 {
     if (left.type() != right.type())
     {
@@ -366,7 +366,7 @@ bool ImageSortSettings::lessThan(const QVariant& left, const QVariant& right) co
     }
 }
 
-DatabaseFields::Set ImageSortSettings::watchFlags() const
+DatabaseFields::Set ItemSortSettings::watchFlags() const
 {
     DatabaseFields::Set set;
 

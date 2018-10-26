@@ -517,7 +517,7 @@ ItemFilterSettings ItemFilterModel::imageFilterSettings() const
     return d->filter;
 }
 
-ImageSortSettings ItemFilterModel::imageSortSettings() const
+ItemSortSettings ItemFilterModel::imageSortSettings() const
 {
     Q_D(const ItemFilterModel);
     return d->sorter;
@@ -786,47 +786,47 @@ void ItemFilterModelFilterer::process(ItemFilterModelTodoPackage package)
 
 // -------------- Sorting and Categorization -------------------------------------------------------
 
-void ItemFilterModel::setImageSortSettings(const ImageSortSettings& sorter)
+void ItemFilterModel::setItemSortSettings(const ItemSortSettings& sorter)
 {
     Q_D(ItemFilterModel);
     d->sorter = sorter;
-    setCategorizedModel(d->sorter.categorizationMode != ImageSortSettings::NoCategories);
+    setCategorizedModel(d->sorter.categorizationMode != ItemSortSettings::NoCategories);
     invalidate();
 }
 
-void ItemFilterModel::setCategorizationMode(ImageSortSettings::CategorizationMode mode)
+void ItemFilterModel::setCategorizationMode(ItemSortSettings::CategorizationMode mode)
 {
     Q_D(ItemFilterModel);
     d->sorter.setCategorizationMode(mode);
-    setImageSortSettings(d->sorter);
+    setItemSortSettings(d->sorter);
 }
 
-void ItemFilterModel::setCategorizationSortOrder(ImageSortSettings::SortOrder order)
+void ItemFilterModel::setCategorizationSortOrder(ItemSortSettings::SortOrder order)
 {
     Q_D(ItemFilterModel);
     d->sorter.setCategorizationSortOrder(order);
-    setImageSortSettings(d->sorter);
+    setItemSortSettings(d->sorter);
 }
 
-void ItemFilterModel::setSortRole(ImageSortSettings::SortRole role)
+void ItemFilterModel::setSortRole(ItemSortSettings::SortRole role)
 {
     Q_D(ItemFilterModel);
     d->sorter.setSortRole(role);
-    setImageSortSettings(d->sorter);
+    setItemSortSettings(d->sorter);
 }
 
-void ItemFilterModel::setSortOrder(ImageSortSettings::SortOrder order)
+void ItemFilterModel::setSortOrder(ItemSortSettings::SortOrder order)
 {
     Q_D(ItemFilterModel);
     d->sorter.setSortOrder(order);
-    setImageSortSettings(d->sorter);
+    setItemSortSettings(d->sorter);
 }
 
 void ItemFilterModel::setStringTypeNatural(bool natural)
 {
     Q_D(ItemFilterModel);
     d->sorter.setStringTypeNatural(natural);
-    setImageSortSettings(d->sorter);
+    setItemSortSettings(d->sorter);
 }
 
 int ItemFilterModel::compareCategories(const QModelIndex& left, const QModelIndex& right) const
@@ -944,15 +944,15 @@ QString ItemFilterModel::categoryIdentifier(const ItemInfo& i) const
 
     switch (d->sorter.categorizationMode)
     {
-        case ImageSortSettings::NoCategories:
+        case ItemSortSettings::NoCategories:
             return QString();
-        case ImageSortSettings::OneCategory:
+        case ItemSortSettings::OneCategory:
             return QString();
-        case ImageSortSettings::CategoryByAlbum:
+        case ItemSortSettings::CategoryByAlbum:
             return fastNumberToString(info.albumId());
-        case ImageSortSettings::CategoryByFormat:
+        case ItemSortSettings::CategoryByFormat:
             return info.format();
-        case ImageSortSettings::CategoryByMonth:
+        case ItemSortSettings::CategoryByMonth:
             return info.dateTime().date().toString(QLatin1String("MMyyyy"));
         default:
             return QString();

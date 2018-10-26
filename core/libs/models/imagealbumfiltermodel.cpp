@@ -136,7 +136,7 @@ int ImageAlbumFilterModel::compareInfosCategories(const ItemInfo& left, const It
 
     switch (d->sorter.categorizationMode)
     {
-        case ImageSortSettings::CategoryByAlbum:
+        case ItemSortSettings::CategoryByAlbum:
         {
             int leftAlbumId          = left.albumId();
             int rightAlbumId         = right.albumId();
@@ -153,8 +153,8 @@ int ImageAlbumFilterModel::compareInfosCategories(const ItemInfo& left, const It
                 return 0;
             }
 
-            if (d->sorter.sortRole == ImageSortSettings::SortByCreationDate ||
-                d->sorter.sortRole == ImageSortSettings::SortByModificationDate)
+            if (d->sorter.sortRole == ItemSortSettings::SortByCreationDate ||
+                d->sorter.sortRole == ItemSortSettings::SortByModificationDate)
             {
                 // Here we want to sort the _categories_ by _album_ date if images are sorted by date
                 // We must still make sure that categorization is unique!
@@ -164,12 +164,12 @@ int ImageAlbumFilterModel::compareInfosCategories(const ItemInfo& left, const It
                 if (leftDate != rightDate)
                 {
 
-                    return ImageSortSettings::compareByOrder(leftDate > rightDate ? 1 : -1,
+                    return ItemSortSettings::compareByOrder(leftDate > rightDate ? 1 : -1,
                                                              d->sorter.currentCategorizationSortOrder);
                 }
             }
 
-            return ImageSortSettings::naturalCompare(leftAlbum->albumPath(), rightAlbum->albumPath(),
+            return ItemSortSettings::naturalCompare(leftAlbum->albumPath(), rightAlbum->albumPath(),
                                                      d->sorter.currentCategorizationSortOrder,
                                                      d->sorter.categorizationCaseSensitivity,
                                                      d->sorter.strTypeNatural, true);

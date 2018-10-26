@@ -37,7 +37,7 @@
 // Local includes
 
 #include "itemfiltersettings.h"
-#include "imagesortsettings.h"
+#include "itemsortsettings.h"
 #include "thumbnailsize.h"
 
 namespace Digikam
@@ -278,10 +278,10 @@ void ApplicationSettings::Private::init()
     albumCategoryNames.sort();
 
     albumSortRole                        = ApplicationSettings::ByFolder;
-    imageSortOrder                       = ImageSortSettings::SortByFileName;
-    imageSorting                         = ImageSortSettings::AscendingOrder;
-    imageSeparationMode                  = ImageSortSettings::CategoryByAlbum;
-    imageSeparationSortOrder             = ImageSortSettings::AscendingOrder;
+    imageSortOrder                       = ItemSortSettings::SortByFileName;
+    imageSorting                         = ItemSortSettings::AscendingOrder;
+    imageSeparationMode                  = ItemSortSettings::CategoryByAlbum;
+    imageSeparationSortOrder             = ItemSortSettings::AscendingOrder;
 
     itemLeftClickAction                  = ApplicationSettings::ShowPreview;
 

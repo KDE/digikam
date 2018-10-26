@@ -97,7 +97,7 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
 
     ApplicationSettings* const settings = ApplicationSettings::instance();
 
-    imageFilterModel()->setCategorizationMode(ImageSortSettings::CategoryByAlbum);
+    imageFilterModel()->setCategorizationMode(ItemSortSettings::CategoryByAlbum);
 
     imageAlbumModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
     setThumbnailSize(ThumbnailSize(settings->getDefaultIconSize()));
@@ -110,10 +110,10 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
 
     setToolTipEnabled(settings->showToolTipsIsValid());
     imageFilterModel()->setStringTypeNatural(settings->isStringTypeNatural());
-    imageFilterModel()->setSortRole((ImageSortSettings::SortRole)settings->getImageSortOrder());
-    imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder)settings->getImageSorting());
-    imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode)settings->getImageSeparationMode());
-    imageFilterModel()->setCategorizationSortOrder((ImageSortSettings::SortOrder) settings->getImageSeparationSortOrder());
+    imageFilterModel()->setSortRole((ItemSortSettings::SortRole)settings->getImageSortOrder());
+    imageFilterModel()->setSortOrder((ItemSortSettings::SortOrder)settings->getImageSorting());
+    imageFilterModel()->setCategorizationMode((ItemSortSettings::CategorizationMode)settings->getImageSeparationMode());
+    imageFilterModel()->setCategorizationSortOrder((ItemSortSettings::SortOrder) settings->getImageSeparationSortOrder());
 
     // selection overlay
     addSelectionOverlay(d->normalDelegate);

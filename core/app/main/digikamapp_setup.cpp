@@ -531,7 +531,7 @@ void DigikamApp::setupActions()
     connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
     ac->addAction(QLatin1String("image_sort"), d->imageSortAction);
 
-    // map to ImageSortSettings enum
+    // map to ItemSortSettings enum
     QAction* const sortByNameAction        = d->imageSortAction->addAction(i18n("By Name"));
     QAction* const sortByPathAction        = d->imageSortAction->addAction(i18n("By Path"));
     QAction* const sortByDateAction        = d->imageSortAction->addAction(i18n("By Date"));
@@ -556,15 +556,15 @@ void DigikamApp::setupActions()
     connect(sortBySimilarityAction,  SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByManualOrderAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
 
-    imageSortMapper->setMapping(sortByNameAction,        (int)ImageSortSettings::SortByFileName);
-    imageSortMapper->setMapping(sortByPathAction,        (int)ImageSortSettings::SortByFilePath);
-    imageSortMapper->setMapping(sortByDateAction,        (int)ImageSortSettings::SortByCreationDate);
-    imageSortMapper->setMapping(sortByFileSizeAction,    (int)ImageSortSettings::SortByFileSize);
-    imageSortMapper->setMapping(sortByRatingAction,      (int)ImageSortSettings::SortByRating);
-    imageSortMapper->setMapping(sortByImageSizeAction,   (int)ImageSortSettings::SortByImageSize);
-    imageSortMapper->setMapping(sortByAspectRatioAction, (int)ImageSortSettings::SortByAspectRatio);
-    imageSortMapper->setMapping(sortBySimilarityAction,  (int)ImageSortSettings::SortBySimilarity);
-    imageSortMapper->setMapping(sortByManualOrderAction, (int)ImageSortSettings::SortByManualOrder);
+    imageSortMapper->setMapping(sortByNameAction,        (int)ItemSortSettings::SortByFileName);
+    imageSortMapper->setMapping(sortByPathAction,        (int)ItemSortSettings::SortByFilePath);
+    imageSortMapper->setMapping(sortByDateAction,        (int)ItemSortSettings::SortByCreationDate);
+    imageSortMapper->setMapping(sortByFileSizeAction,    (int)ItemSortSettings::SortByFileSize);
+    imageSortMapper->setMapping(sortByRatingAction,      (int)ItemSortSettings::SortByRating);
+    imageSortMapper->setMapping(sortByImageSizeAction,   (int)ItemSortSettings::SortByImageSize);
+    imageSortMapper->setMapping(sortByAspectRatioAction, (int)ItemSortSettings::SortByAspectRatio);
+    imageSortMapper->setMapping(sortBySimilarityAction,  (int)ItemSortSettings::SortBySimilarity);
+    imageSortMapper->setMapping(sortByManualOrderAction, (int)ItemSortSettings::SortByManualOrder);
 
     // -----------------------------------------------------------
 
@@ -580,8 +580,8 @@ void DigikamApp::setupActions()
     connect(sortAscendingAction,  SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
     connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
 
-    imageSortOrderMapper->setMapping(sortAscendingAction,  (int)ImageSortSettings::AscendingOrder);
-    imageSortOrderMapper->setMapping(sortDescendingAction, (int)ImageSortSettings::DescendingOrder);
+    imageSortOrderMapper->setMapping(sortAscendingAction,  (int)ItemSortSettings::AscendingOrder);
+    imageSortOrderMapper->setMapping(sortDescendingAction, (int)ItemSortSettings::DescendingOrder);
 
     // -----------------------------------------------------------
 
@@ -591,7 +591,7 @@ void DigikamApp::setupActions()
     connect(imageSeparationMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSeparateImages(int)));
     ac->addAction(QLatin1String("image_separation"), d->imageSeparationAction);
 
-    // map to ImageSortSettings enum
+    // map to ItemSortSettings enum
     QAction* const noCategoriesAction     = d->imageSeparationAction->addAction(i18n("Flat List"));
     QAction* const separateByAlbumAction  = d->imageSeparationAction->addAction(i18n("By Album"));
     QAction* const separateByFormatAction = d->imageSeparationAction->addAction(i18n("By Format"));
@@ -602,10 +602,10 @@ void DigikamApp::setupActions()
     connect(separateByFormatAction, SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
     connect(separateByMonthAction,  SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
 
-    imageSeparationMapper->setMapping(noCategoriesAction,     (int)ImageSortSettings::OneCategory);
-    imageSeparationMapper->setMapping(separateByAlbumAction,  (int)ImageSortSettings::CategoryByAlbum);
-    imageSeparationMapper->setMapping(separateByFormatAction, (int)ImageSortSettings::CategoryByFormat);
-    imageSeparationMapper->setMapping(separateByMonthAction,  (int)ImageSortSettings::CategoryByMonth);
+    imageSeparationMapper->setMapping(noCategoriesAction,     (int)ItemSortSettings::OneCategory);
+    imageSeparationMapper->setMapping(separateByAlbumAction,  (int)ItemSortSettings::CategoryByAlbum);
+    imageSeparationMapper->setMapping(separateByFormatAction, (int)ItemSortSettings::CategoryByFormat);
+    imageSeparationMapper->setMapping(separateByMonthAction,  (int)ItemSortSettings::CategoryByMonth);
 
     // -----------------------------------------------------------------
 
@@ -621,8 +621,8 @@ void DigikamApp::setupActions()
     connect(sortSeparationsAscending,  SIGNAL(triggered()), imageSeparationSortOrderMapper, SLOT(map()));
     connect(sortSeparationsDescending, SIGNAL(triggered()), imageSeparationSortOrderMapper, SLOT(map()));
 
-    imageSeparationSortOrderMapper->setMapping(sortSeparationsAscending, (int)ImageSortSettings::AscendingOrder);
-    imageSeparationSortOrderMapper->setMapping(sortSeparationsDescending, (int)ImageSortSettings::DescendingOrder);
+    imageSeparationSortOrderMapper->setMapping(sortSeparationsAscending, (int)ItemSortSettings::AscendingOrder);
+    imageSeparationSortOrderMapper->setMapping(sortSeparationsDescending, (int)ItemSortSettings::DescendingOrder);
 
     // -----------------------------------------------------------------
 

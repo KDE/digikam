@@ -125,7 +125,7 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
 
     p->translate(option.rect.topLeft());
 
-    ImageSortSettings::CategorizationMode mode = (ImageSortSettings::CategorizationMode)index.data(ItemFilterModel::CategorizationModeRole).toInt();
+    ItemSortSettings::CategorizationMode mode = (ItemSortSettings::CategorizationMode)index.data(ItemFilterModel::CategorizationModeRole).toInt();
 
     p->drawPixmap(0, 0, d->pixmap);
 
@@ -149,18 +149,18 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
 
     switch (mode)
     {
-        case ImageSortSettings::NoCategories:
+        case ItemSortSettings::NoCategories:
             break;
-        case ImageSortSettings::OneCategory:
+        case ItemSortSettings::OneCategory:
             viewHeaderText(index, &header, &subLine);
             break;
-        case ImageSortSettings::CategoryByAlbum:
+        case ItemSortSettings::CategoryByAlbum:
             textForAlbum(index, &header, &subLine);
             break;
-        case ImageSortSettings::CategoryByFormat:
+        case ItemSortSettings::CategoryByFormat:
             textForFormat(index, &header, &subLine);
             break;
-        case ImageSortSettings::CategoryByMonth:
+        case ItemSortSettings::CategoryByMonth:
             textForMonth(index, &header, &subLine);
             break;
     }

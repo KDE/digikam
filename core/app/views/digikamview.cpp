@@ -2002,7 +2002,7 @@ void DigikamView::slotSortImages(int sortRole)
     }
 
     settings->setImageSortOrder(sortRole);
-    d->iconView->imageFilterModel()->setSortRole((ImageSortSettings::SortRole) sortRole);
+    d->iconView->imageFilterModel()->setSortRole((ItemSortSettings::SortRole) sortRole);
     settings->emitSetupChanged();
 }
 
@@ -2016,7 +2016,7 @@ void DigikamView::slotSortImagesOrder(int order)
     }
 
     settings->setImageSorting(order);
-    d->iconView->imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder) order);
+    d->iconView->imageFilterModel()->setSortOrder((ItemSortSettings::SortOrder) order);
     settings->emitSetupChanged();
 }
 
@@ -2030,7 +2030,7 @@ void DigikamView::slotSeparateImages(int categoryMode)
     }
 
     settings->setImageSeparationMode(categoryMode);
-    d->iconView->imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode) categoryMode);
+    d->iconView->imageFilterModel()->setCategorizationMode((ItemSortSettings::CategorizationMode) categoryMode);
 }
 
 void DigikamView::slotImageSeparationSortOrder(int order)
@@ -2043,7 +2043,7 @@ void DigikamView::slotImageSeparationSortOrder(int order)
     }
 
     settings->setImageSeparationSortOrder(order);
-    d->iconView->imageFilterModel()->setCategorizationSortOrder((ImageSortSettings::SortOrder) order);
+    d->iconView->imageFilterModel()->setCategorizationSortOrder((ItemSortSettings::SortOrder) order);
 }
 
 void DigikamView::slotMoveSelectionToAlbum()

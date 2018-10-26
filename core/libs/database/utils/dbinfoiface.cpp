@@ -41,7 +41,7 @@
 #include "photoinfocontainer.h"
 #include "videoinfocontainer.h"
 #include "itemposition.h"
-#include "imagesortsettings.h"
+#include "itemsortsettings.h"
 #include "coredbsearchxml.h"
 #include "itemlister.h"
 #include "itemlisterreceiver.h"
@@ -86,19 +86,19 @@ public:
         switch (ApplicationSettings::instance()->getImageSortOrder())
         {
             default:
-            case ImageSortSettings::SortByFileName:
+            case ItemSortSettings::SortByFileName:
                 sortOrder = CoreDB::ByItemName;
                 break;
 
-            case ImageSortSettings::SortByFilePath:
+            case ItemSortSettings::SortByFilePath:
                 sortOrder = CoreDB::ByItemPath;
                 break;
 
-            case ImageSortSettings::SortByCreationDate:
+            case ItemSortSettings::SortByCreationDate:
                 sortOrder = CoreDB::ByItemDate;
                 break;
 
-            case ImageSortSettings::SortByRating:
+            case ItemSortSettings::SortByRating:
                 sortOrder = CoreDB::ByItemRating;
                 break;
                 // ByISize not supported

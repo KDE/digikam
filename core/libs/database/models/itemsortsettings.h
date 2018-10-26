@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_SORT_SETTINGS_H
-#define DIGIKAM_IMAGE_SORT_SETTINGS_H
+#ifndef DIGIKAM_ITEM_SORT_SETTINGS_H
+#define DIGIKAM_ITEM_SORT_SETTINGS_H
 
 // Qt includes
 
@@ -46,13 +46,13 @@ namespace DatabaseFields
     class Set;
 }
 
-class DIGIKAM_DATABASE_EXPORT ImageSortSettings
+class DIGIKAM_DATABASE_EXPORT ItemSortSettings
 {
 public:
 
-    explicit ImageSortSettings();
+    explicit ItemSortSettings();
 
-    bool operator==(const ImageSortSettings& other) const;
+    bool operator==(const ItemSortSettings& other) const;
 
     /** Compares the categories of left and right.
      *  Return -1 if left is less than right, 0 if both fall in the same category,
@@ -224,4 +224,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_SORT_SETTINGS_H
+#endif // DIGIKAM_ITEM_SORT_SETTINGS_H

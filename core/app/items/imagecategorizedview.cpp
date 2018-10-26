@@ -142,8 +142,8 @@ void ImageCategorizedView::installDefaultModels()
 
     filterModel->setSourceImageModel(model);
 
-    filterModel->setSortRole(ImageSortSettings::SortByFileName);
-    filterModel->setCategorizationMode(ImageSortSettings::CategoryByAlbum);
+    filterModel->setSortRole(ItemSortSettings::SortByFileName);
+    filterModel->setCategorizationMode(ItemSortSettings::CategoryByAlbum);
     filterModel->sort(0); // an initial sorting is necessary
 
     // set flags that we want to get dataChanged() signals for
@@ -679,7 +679,7 @@ void ImageCategorizedView::selectionChanged(const QItemSelection& selectedItems,
 
 Album* ImageCategorizedView::albumAt(const QPoint& pos) const
 {
-    if (imageFilterModel()->imageSortSettings().categorizationMode == ImageSortSettings::CategoryByAlbum)
+    if (imageFilterModel()->imageSortSettings().categorizationMode == ItemSortSettings::CategoryByAlbum)
     {
         QModelIndex categoryIndex = indexForCategoryAt(pos);
 

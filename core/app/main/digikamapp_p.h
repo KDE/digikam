@@ -120,7 +120,7 @@
 #include "newitemsfinder.h"
 #include "dbcleaner.h"
 #include "tagsmanager.h"
-#include "imagesortsettings.h"
+#include "itemsortsettings.h"
 #include "metadatahubmngr.h"
 #include "metadataedit.h"
 #include "expoblendingmanager.h"

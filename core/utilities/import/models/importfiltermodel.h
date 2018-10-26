@@ -157,7 +157,7 @@ public Q_SLOTS:
     //virtual void setItemFilterSettings(const ItemFilterSettings& settings);
 
     /** Changes the current image sort settings and resorts. */
-    //TODO: virtual void setImageSortSettings(const ImageSortSettings& settings);
+    //TODO: virtual void setItemSortSettings(const ItemSortSettings& settings);
 
 Q_SIGNALS:
 

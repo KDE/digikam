@@ -34,7 +34,7 @@
 #include "textfilter.h"
 #include "itemfiltersettings.h"
 #include "imagemodel.h"
-#include "imagesortsettings.h"
+#include "itemsortsettings.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -150,7 +150,7 @@ public:
     ItemFilterSettings        imageFilterSettings() const;
     VersionItemFilterSettings versionItemFilterSettings() const;
     GroupItemFilterSettings   groupItemFilterSettings() const;
-    ImageSortSettings          imageSortSettings() const;
+    ItemSortSettings          imageSortSettings() const;
 
     // group is identified by the id of its group leader
     bool isGroupOpen(qlonglong group) const;
@@ -186,10 +186,10 @@ public Q_SLOTS:
     void setGeolocationFilter(const ItemFilterSettings::GeolocationCondition& condition);
     void setTextFilter(const SearchTextFilterSettings& settings);
 
-    void setCategorizationMode(ImageSortSettings::CategorizationMode mode);
-    void setCategorizationSortOrder(ImageSortSettings::SortOrder order);
-    void setSortRole(ImageSortSettings::SortRole role);
-    void setSortOrder(ImageSortSettings::SortOrder order);
+    void setCategorizationMode(ItemSortSettings::CategorizationMode mode);
+    void setCategorizationSortOrder(ItemSortSettings::SortOrder order);
+    void setSortRole(ItemSortSettings::SortRole role);
+    void setSortOrder(ItemSortSettings::SortOrder order);
     void setStringTypeNatural(bool natural);
     void setUrlWhitelist(const QList<QUrl> urlList, const QString& id);
     void setIdWhitelist(const QList<qlonglong>& idList, const QString& id);
@@ -205,7 +205,7 @@ public Q_SLOTS:
     virtual void setItemFilterSettings(const ItemFilterSettings& settings);
 
     /** Changes the current image sort settings and resorts. */
-    virtual void setImageSortSettings(const ImageSortSettings& settings);
+    virtual void setItemSortSettings(const ItemSortSettings& settings);
 
 Q_SIGNALS:
 

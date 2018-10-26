@@ -199,7 +199,7 @@ static DropAction groupAction(const QDropEvent* const, QWidget* const view)
     QMenu popMenu(view);
     QAction* sortAction        = 0;
 
-    if (imgView && sortOrder == ImageSortSettings::SortByManualOrder)
+    if (imgView && sortOrder == ItemSortSettings::SortByManualOrder)
     {
         sortAction             = addSortAction(&popMenu);
         popMenu.addSeparator();

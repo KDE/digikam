@@ -21,8 +21,8 @@ set(libdatabasemodels_SRCS
     models/itemfiltersettings.cpp
     models/itemversionsmodel.cpp
     models/itemthumbnailmodel.cpp
+    models/itemsortsettings.cpp
     models/imagelistmodel.cpp
-    models/imagesortsettings.cpp
     models/imagemodel.cpp
 )
 
