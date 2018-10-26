@@ -320,7 +320,7 @@ public:
      * Takes the history graph reachable from the given image, and assigns
      * versioning tags to all entries based on history image types and graph structure
      */
-    static void tagImageHistoryGraph(qlonglong id);
+    static void tagItemHistoryGraph(qlonglong id);
 
     /**
      * All referred images of the given history will be resolved.

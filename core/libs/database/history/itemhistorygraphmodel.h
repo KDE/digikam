@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-10-27
- * Description : Model to an ImageHistoryGraph
+ * Description : Model to an ItemHistoryGraph
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_HISTORY_GRAPH_MODEL_H
-#define DIGIKAM_IMAGE_HISTORY_GRAPH_MODEL_H
+#ifndef DIGIKAM_ITEM_HISTORY_GRAPH_MODEL_H
+#define DIGIKAM_ITEM_HISTORY_GRAPH_MODEL_H
 
 // Qt includes
 
@@ -31,18 +31,18 @@
 // Local includes
 
 #include "dragdropimplementations.h"
-#include "imagehistorygraph.h"
+#include "itemhistorygraph.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class ImageHistoryGraph;
+class ItemHistoryGraph;
 class ImageInfo;
 class ImageListModel;
 class FilterAction;
 
-class DIGIKAM_DATABASE_EXPORT ImageHistoryGraphModel : public QAbstractItemModel, public DragDropModelImplementation
+class DIGIKAM_DATABASE_EXPORT ItemHistoryGraphModel : public QAbstractItemModel, public DragDropModelImplementation
 {
     Q_OBJECT
 
@@ -70,8 +70,8 @@ public:
 
 public:
 
-    explicit ImageHistoryGraphModel(QObject* const parent = 0);
-    ~ImageHistoryGraphModel();
+    explicit ItemHistoryGraphModel(QObject* const parent = 0);
+    ~ItemHistoryGraphModel();
 
     void setMode(Mode mode);
     Mode mode() const;
@@ -80,7 +80,7 @@ public:
      *  Set the history subject and the history graph.
      *  Per default, the subject's history graph is read.
      */
-    void setHistory(const ImageInfo& subject, const ImageHistoryGraph& graph = ImageHistoryGraph());
+    void setHistory(const ImageInfo& subject, const ItemHistoryGraph& graph = ItemHistoryGraph());
 
     ImageInfo subject() const;
 
@@ -126,4 +126,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_HISTORY_GRAPH_MODEL_H
+#endif // DIGIKAM_ITEM_HISTORY_GRAPH_MODEL_H

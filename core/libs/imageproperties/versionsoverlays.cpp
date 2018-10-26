@@ -32,7 +32,7 @@
 
 #include "digikam_debug.h"
 #include "imageinfo.h"
-#include "imagehistorygraphmodel.h"
+#include "itemhistorygraphmodel.h"
 #include "imagelistmodel.h"
 #include "itemviewhoverbutton.h"
 #include "tagscache.h"
@@ -146,7 +146,7 @@ void ShowHideVersionsOverlay::slotClicked(bool checked)
 
 bool ShowHideVersionsOverlay::checkIndex(const QModelIndex& index) const
 {
-    if (index.data(ImageHistoryGraphModel::IsImageItemRole).toBool())
+    if (index.data(ItemHistoryGraphModel::IsImageItemRole).toBool())
     {
         ImageInfo info = ImageModel::retrieveImageInfo(index);
         return m_filter.isHiddenBySettings(info);
@@ -265,7 +265,7 @@ void ActionVersionsOverlay::slotClicked(bool checked)
 
 bool ActionVersionsOverlay::checkIndex(const QModelIndex& index) const
 {
-    if (index.data(ImageHistoryGraphModel::IsImageItemRole).toBool())
+    if (index.data(ItemHistoryGraphModel::IsImageItemRole).toBool())
     {
         if (m_referenceModel)
         {

@@ -1553,7 +1553,7 @@ void CollectionScanner::historyScanningStage3(const QList<qlonglong>& ids)
         }
 
         CoreDbOperationGroup group;
-        ItemScanner::tagImageHistoryGraph(id);
+        ItemScanner::tagItemHistoryGraph(id);
     }
 }
 

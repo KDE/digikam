@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_HISTORY_GRAPH_BOOST_H
-#define DIGIKAM_IMAGE_HISTORY_GRAPH_BOOST_H
+#ifndef DIGIKAM_ITEM_HISTORY_GRAPH_BOOST_H
+#define DIGIKAM_ITEM_HISTORY_GRAPH_BOOST_H
 
 // To include pragma directives for MSVC
 #include "digikam_config.h"
@@ -1639,4 +1639,4 @@ protected:
 #   pragma clang diagnostic pop
 #endif
 
-#endif // DIGIKAM_IMAGE_HISTORY_GRAPH_BOOST_H
+#endif // DIGIKAM_ITEM_HISTORY_GRAPH_BOOST_H

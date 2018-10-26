@@ -45,7 +45,7 @@
 #include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "dimagehistory.h"
-#include "imagehistorygraphmodel.h"
+#include "itemhistorygraphmodel.h"
 #include "imageinfo.h"
 #include "imagelistmodel.h"
 #include "thumbnailloadthread.h"
@@ -74,7 +74,7 @@ public:
     }
 
     VersionsTreeView*        view;
-    ImageHistoryGraphModel*  model;
+    ItemHistoryGraphModel*  model;
     VersionsDelegate*        delegate;
 
     ShowHideVersionsOverlay* showHideOverlay;
@@ -100,26 +100,26 @@ VersionsWidget::VersionsWidget(QWidget* const parent)
     d->listModeButton->setIcon(QIcon::fromTheme(QLatin1String("view-list-icons")));
     d->listModeButton->setCheckable(true);
     d->listModeButton->setToolTip(i18n("Show available versions in a list"));
-    d->viewButtonGroup->addButton(d->listModeButton, ImageHistoryGraphModel::ImagesListMode);
+    d->viewButtonGroup->addButton(d->listModeButton, ItemHistoryGraphModel::ImagesListMode);
 
     d->treeModeButton         = new QToolButton;
     d->treeModeButton->setIcon(QIcon::fromTheme(QLatin1String("view-list-tree")));
     d->treeModeButton->setCheckable(true);
     d->treeModeButton->setToolTip(i18n("Show available versions as a tree"));
-    d->viewButtonGroup->addButton(d->treeModeButton, ImageHistoryGraphModel::ImagesTreeMode);
+    d->viewButtonGroup->addButton(d->treeModeButton, ItemHistoryGraphModel::ImagesTreeMode);
 
     d->combinedModeButton     = new QToolButton;
     d->combinedModeButton->setIcon(QIcon::fromTheme(QLatin1String("view-list-details")));
     d->combinedModeButton->setCheckable(true);
     d->combinedModeButton->setToolTip(i18n("Show available versions and the applied filters in a combined list"));
-    d->viewButtonGroup->addButton(d->combinedModeButton, ImageHistoryGraphModel::CombinedTreeMode);
+    d->viewButtonGroup->addButton(d->combinedModeButton, ItemHistoryGraphModel::CombinedTreeMode);
 
     QHBoxLayout* const buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(d->listModeButton);
     buttonLayout->addWidget(d->treeModeButton);
     buttonLayout->addWidget(d->combinedModeButton);
 
-    d->model                = new ImageHistoryGraphModel(this);
+    d->model                = new ItemHistoryGraphModel(this);
     d->model->imageModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
 
     d->view                 = new VersionsTreeView;
@@ -159,17 +159,17 @@ VersionsWidget::~VersionsWidget()
 
 void VersionsWidget::readSettings(const KConfigGroup& group)
 {
-    int mode = group.readEntry(d->configCurrentMode, (int)ImageHistoryGraphModel::CombinedTreeMode);
+    int mode = group.readEntry(d->configCurrentMode, (int)ItemHistoryGraphModel::CombinedTreeMode);
 
     switch (mode)
     {
-        case ImageHistoryGraphModel::ImagesListMode:
+        case ItemHistoryGraphModel::ImagesListMode:
             d->listModeButton->setChecked(true);
             break;
-        case ImageHistoryGraphModel::ImagesTreeMode:
+        case ItemHistoryGraphModel::ImagesTreeMode:
             d->treeModeButton->setChecked(true);
             break;
-        case ImageHistoryGraphModel::CombinedTreeMode:
+        case ItemHistoryGraphModel::CombinedTreeMode:
         default:
             d->combinedModeButton->setChecked(true);
             break;
@@ -225,10 +225,10 @@ void VersionsWidget::slotViewCurrentChanged(const QModelIndex& current, const QM
 
     switch (d->model->mode())
     {
-        case ImageHistoryGraphModel::ImagesListMode:
-        case ImageHistoryGraphModel::ImagesTreeMode:
+        case ItemHistoryGraphModel::ImagesListMode:
+        case ItemHistoryGraphModel::ImagesTreeMode:
             break;
-        case ImageHistoryGraphModel::CombinedTreeMode:
+        case ItemHistoryGraphModel::CombinedTreeMode:
             // toplevel image index
             if (!info.isNull() && !current.parent().isValid())
             {
@@ -245,7 +245,7 @@ void VersionsWidget::slotViewCurrentChanged(const QModelIndex& current, const QM
 
 void VersionsWidget::slotViewModeChanged(int mode)
 {
-    d->model->setMode((ImageHistoryGraphModel::Mode)mode);
+    d->model->setMode((ItemHistoryGraphModel::Mode)mode);
     applyViewMode();
 }
 
@@ -253,12 +253,12 @@ void VersionsWidget::applyViewMode()
 {
     switch (d->model->mode())
     {
-        case ImageHistoryGraphModel::ImagesListMode:
+        case ItemHistoryGraphModel::ImagesListMode:
             break;
-        case ImageHistoryGraphModel::ImagesTreeMode:
+        case ItemHistoryGraphModel::ImagesTreeMode:
             d->view->expandAll();
             break;
-        case ImageHistoryGraphModel::CombinedTreeMode:
+        case ItemHistoryGraphModel::CombinedTreeMode:
             d->view->collapseAll();
             break;
     }

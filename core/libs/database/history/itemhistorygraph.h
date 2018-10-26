@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-10-23
- * Description : Graph data class for image history
+ * Description : Graph data class for item history
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_HISTORY_GRAPH_H
-#define DIGIKAM_IMAGE_HISTORY_GRAPH_H
+#ifndef DIGIKAM_ITEM_HISTORY_GRAPH_H
+#define DIGIKAM_ITEM_HISTORY_GRAPH_H
 
 // Qt includes
 
@@ -39,18 +39,18 @@
 namespace Digikam
 {
 
-class ImageHistoryGraphData;
+class ItemHistoryGraphData;
 class DImageHistory;
 
-class DIGIKAM_DATABASE_EXPORT ImageHistoryGraph
+class DIGIKAM_DATABASE_EXPORT ItemHistoryGraph
 {
 public:
 
-    ImageHistoryGraph();
-    ImageHistoryGraph(const ImageHistoryGraph& other);
-    ~ImageHistoryGraph();
+    ItemHistoryGraph();
+    ItemHistoryGraph(const ItemHistoryGraph& other);
+    ~ItemHistoryGraph();
 
-    ImageHistoryGraph& operator=(const ImageHistoryGraph& other);
+    ItemHistoryGraph& operator=(const ItemHistoryGraph& other);
 
     bool isNull() const;
     bool isEmpty() const;
@@ -61,8 +61,8 @@ public:
      */
     bool hasEdges() const;
 
-    ImageHistoryGraphData& data();
-    const ImageHistoryGraphData& data() const;
+    ItemHistoryGraphData& data();
+    const ItemHistoryGraphData& data() const;
 
     enum HistoryLoadingFlag
     {
@@ -89,7 +89,7 @@ public:
      * Depending on mode, the graph will be preparedForDisplay().
      * If no history is recorded and no relations found, a single-vertex graph is returned.
      */
-    static ImageHistoryGraph fromInfo(const ImageInfo& info,
+    static ItemHistoryGraph fromInfo(const ImageInfo& info,
                                       HistoryLoadingMode loadingMode = LoadAll,
                                       ProcessingMode processingMode  = PrepareForDisplay);
 
@@ -181,13 +181,13 @@ public:
 
 private:
 
-    QSharedDataPointer<ImageHistoryGraphData> d;
+    QSharedDataPointer<ItemHistoryGraphData> d;
 };
 
-QDebug DIGIKAM_DATABASE_EXPORT operator<<(QDebug dbg, const ImageHistoryGraph& g);
+QDebug DIGIKAM_DATABASE_EXPORT operator<<(QDebug dbg, const ItemHistoryGraph& g);
 
 } // namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ImageHistoryGraph::HistoryLoadingMode)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ItemHistoryGraph::HistoryLoadingMode)
 
-#endif // DIGIKAM_IMAGE_HISTORY_GRAPH_H
+#endif // DIGIKAM_ITEM_HISTORY_GRAPH_H

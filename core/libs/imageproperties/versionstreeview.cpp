@@ -32,7 +32,7 @@
 
 #include "digikam_debug.h"
 #include "dimagehistory.h"
-#include "imagehistorygraphmodel.h"
+#include "itemhistorygraphmodel.h"
 #include "versionsdelegate.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
@@ -86,7 +86,7 @@ protected:
             }
             case FilterActionMode:
             {
-                FilterAction action = currentIndex().data(ImageHistoryGraphModel::FilterActionRole).value<FilterAction>();
+                FilterAction action = currentIndex().data(ItemHistoryGraphModel::FilterActionRole).value<FilterAction>();
                 return ToolTipFiller::filterActionTipContents(action);
             }
         }
@@ -227,11 +227,11 @@ bool VersionsTreeView::viewportEvent(QEvent* event)
 
             ToolTip::Mode mode;
 
-            if (index.data(ImageHistoryGraphModel::IsImageItemRole).toBool())
+            if (index.data(ItemHistoryGraphModel::IsImageItemRole).toBool())
             {
                 mode = ToolTip::ImageMode;
             }
-            else if (index.data(ImageHistoryGraphModel::IsFilterActionItemRole).toBool())
+            else if (index.data(ItemHistoryGraphModel::IsFilterActionItemRole).toBool())
             {
                 mode = ToolTip::FilterActionMode;
             }

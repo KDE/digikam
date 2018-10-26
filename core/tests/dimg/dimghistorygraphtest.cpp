@@ -43,9 +43,9 @@
 #include "editorcore.h"
 #include "dmetadata.h"
 #include "imageinfo.h"
-#include "imagehistorygraph.h"
-#include "imagehistorygraphdata.h"
-#include "imagehistorygraphmodel.h"
+#include "itemhistorygraph.h"
+#include "itemhistorygraphdata.h"
+#include "itemhistorygraphmodel.h"
 #include "iofilesettings.h"
 #include "tagscache.h"
 #include "../modeltest/modeltest.h"
@@ -185,11 +185,11 @@ void DImgHistoryGraphTest::testEditing()
     controlCloud << IdPair(four.id(),  orig.id());
     std::sort(controlCloud.begin(), controlCloud.end());
 
-    ImageHistoryGraph graph1 = ImageHistoryGraph::fromInfo(three);
+    ItemHistoryGraph graph1 = ItemHistoryGraph::fromInfo(three);
     qDebug() << graph1;
-    ImageHistoryGraph graph2 = ImageHistoryGraph::fromInfo(four);
+    ItemHistoryGraph graph2 = ItemHistoryGraph::fromInfo(four);
     qDebug() << graph2;
-    ImageHistoryGraph graph3 = ImageHistoryGraph::fromInfo(one);
+    ItemHistoryGraph graph3 = ItemHistoryGraph::fromInfo(one);
     qDebug() << graph3;
 
     // all three must have the full cloud
@@ -222,7 +222,7 @@ void DImgHistoryGraphTest::testEditing()
     fileTwo.remove();
     QVERIFY(!fileTwo.exists());
     CollectionScanner().completeScan();
-    graph2 = ImageHistoryGraph::fromInfo(four);
+    graph2 = ItemHistoryGraph::fromInfo(four);
     // graph is prepared for display, vertex of removed file cleared
     QVERIFY(graph2.data().vertexCount() == 4);
     qDebug() << graph2;
@@ -240,7 +240,7 @@ void DImgHistoryGraphTest::testEditing()
 
 void DImgHistoryGraphTest::testHistory()
 {
-    ImageHistoryGraph graph;
+    ItemHistoryGraph graph;
     ImageInfo subject(ids.first());
     graph.addHistory(history1(), subject);
     graph.reduceEdges();
@@ -392,7 +392,7 @@ void DImgHistoryGraphTest::testGraph()
     pairs << IdPair(24,1);
     pairs << IdPair(24,12);
 
-    ImageHistoryGraph graph;
+    ItemHistoryGraph graph;
     graph.addRelations(pairs);
 
     qDebug() << "Initial graph:" << graph;
@@ -411,7 +411,7 @@ void DImgHistoryGraphTest::testGraph()
     /*
     QBENCHMARK
     {
-        ImageHistoryGraph benchGraph;
+        ItemHistoryGraph benchGraph;
         graph.addRelations(pairs);
         graph.finish();
         graph.relationCloud();

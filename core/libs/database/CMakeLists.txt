@@ -127,8 +127,8 @@ set(libdatabase_SRCS
     item/scanner/itemscanner_history.cpp
     item/scanner/itemscanner_baloo.cpp
 
-    history/imagehistorygraph.cpp
-    history/imagehistorygraphmodel.cpp
+    history/itemhistorygraph.cpp
+    history/itemhistorygraphmodel.cpp
 
     similaritydb/similaritydb.cpp
     similaritydb/similaritydbschemaupdater.cpp

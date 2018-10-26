@@ -88,7 +88,7 @@ bool ItemScanner::resolveImageHistory(qlonglong imageId, const QString& historyX
         return true;
     }
 
-    ImageHistoryGraph graph;
+    ItemHistoryGraph graph;
     graph.addScannedHistory(history, imageId);
 
     if (!graph.hasEdges())
@@ -121,7 +121,7 @@ bool ItemScanner::resolveImageHistory(qlonglong imageId, const QString& historyX
     return !graph.hasUnresolvedEntries();
 }
 
-void ItemScanner::tagImageHistoryGraph(qlonglong id)
+void ItemScanner::tagItemHistoryGraph(qlonglong id)
 {
     /** Stage 3 of history scanning */
 
@@ -131,10 +131,10 @@ void ItemScanner::tagImageHistoryGraph(qlonglong id)
     {
         return;
     }
-    //qCDebug(DIGIKAM_DATABASE_LOG) << "tagImageHistoryGraph" << id;
+    //qCDebug(DIGIKAM_DATABASE_LOG) << "tagItemHistoryGraph" << id;
 
     // Load relation cloud, history of info and of all leaves of the tree into the graph, fully resolved
-    ImageHistoryGraph graph    = ImageHistoryGraph::fromInfo(info, ImageHistoryGraph::LoadAll, ImageHistoryGraph::NoProcessing);
+    ItemHistoryGraph graph    = ItemHistoryGraph::fromInfo(info, ItemHistoryGraph::LoadAll, ItemHistoryGraph::NoProcessing);
     qCDebug(DIGIKAM_DATABASE_LOG) << graph;
 
     int originalVersionTag     = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::originalVersion());

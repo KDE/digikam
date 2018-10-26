@@ -47,13 +47,13 @@
 #include "imagecomments.h"
 #include "imagecopyright.h"
 #include "imageextendedproperties.h"
-#include "imagehistorygraph.h"
+#include "itemhistorygraph.h"
 #include "metaenginesettings.h"
 #include "tagregion.h"
 #include "tagscache.h"
 #include "iostream"
 #include "dimagehistory.h"
-#include "imagehistorygraphdata.h"
+#include "itemhistorygraphdata.h"
 
 namespace Digikam
 {

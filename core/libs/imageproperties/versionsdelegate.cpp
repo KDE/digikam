@@ -39,7 +39,7 @@
 
 #include "digikam_debug.h"
 #include "imagedelegate.h"
-#include "imagehistorygraphmodel.h"
+#include "itemhistorygraphmodel.h"
 #include "imageversionsmodel.h"
 #include "thumbnailloadthread.h"
 #include "dcategorydrawer.h"
@@ -155,26 +155,26 @@ void VersionsDelegate::finishPainting()
 
 QSize VersionsDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    if (index.data(ImageHistoryGraphModel::IsImageItemRole).toBool())
+    if (index.data(ItemHistoryGraphModel::IsImageItemRole).toBool())
     {
         d->inSizeHint = true;
         QSize size    = QStyledItemDelegate::sizeHint(option, index);
         d->inSizeHint = false;
         return size;
     }
-    else if (index.data(ImageHistoryGraphModel::IsFilterActionItemRole).toBool())
+    else if (index.data(ItemHistoryGraphModel::IsFilterActionItemRole).toBool())
     {
         QSize size = QStyledItemDelegate::sizeHint(option, index);
         size      += QSize(0, d->filterItemExtraSpacing);
         return size;
     }
-    else if (index.data(ImageHistoryGraphModel::IsCategoryItemRole).toBool())
+    else if (index.data(ItemHistoryGraphModel::IsCategoryItemRole).toBool())
     {
         int height = d->categoryDrawer->categoryHeight(index, option) + d->categoryExtraSpacing;
         QSize size = QStyledItemDelegate::sizeHint(option, index);
         return size.expandedTo(QSize(0, height));
     }
-    else if (index.data(ImageHistoryGraphModel::IsSeparatorItemRole).toBool())
+    else if (index.data(ItemHistoryGraphModel::IsSeparatorItemRole).toBool())
     {
         //int pm = d->style(option)->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, d->widget(option));
         int pm = d->style(option)->pixelMetric(QStyle::PM_ToolBarSeparatorExtent, 0, d->widget(option));
@@ -189,14 +189,14 @@ QSize VersionsDelegate::sizeHint(const QStyleOptionViewItem& option, const QMode
 
 void VersionsDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    if (index.data(ImageHistoryGraphModel::IsCategoryItemRole).toBool())
+    if (index.data(ItemHistoryGraphModel::IsCategoryItemRole).toBool())
     {
         QStyleOption opt = option;
         opt.rect.adjust(d->categoryExtraSpacing / 2, d->categoryExtraSpacing / 2, - d->categoryExtraSpacing / 2, 0);
         // purpose of sortRole is unclear, give Qt::DisplayRole
         d->categoryDrawer->drawCategory(index, Qt::DisplayRole, opt, painter);
     }
-    else if (index.data(ImageHistoryGraphModel::IsSeparatorItemRole).toBool())
+    else if (index.data(ItemHistoryGraphModel::IsSeparatorItemRole).toBool())
     {
         d->style(option)->drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, &option, painter, d->widget(option));
     }
@@ -205,7 +205,7 @@ void VersionsDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
         return QStyledItemDelegate::paint(painter, option, index);
 
 /*
-        if (index.data(ImageHistoryGraphModel::IsSubjectImageRole).toBool())
+        if (index.data(ItemHistoryGraphModel::IsSubjectImageRole).toBool())
         {
             // draw 1px border
             QPen oldPen = painter->pen();
@@ -225,12 +225,12 @@ void VersionsDelegate::initStyleOption(QStyleOptionViewItem* option, const QMode
     // Don't show the separator-like focus indicator
     option->state &= ~QStyle::State_HasFocus;
 
-    if (!index.data(ImageHistoryGraphModel::IsImageItemRole).toBool())
+    if (!index.data(ItemHistoryGraphModel::IsImageItemRole).toBool())
     {
         return;
     }
 /*
-    if (index.data(ImageHistoryGraphModel::IsSubjectImageRole).toBool())
+    if (index.data(ItemHistoryGraphModel::IsSubjectImageRole).toBool())
     {
         option->font.setWeight(QFont::Bold);
     }

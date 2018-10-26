@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-10-23
- * Description : Graph data class for image history
+ * Description : Graph data class for item history
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_HISTORY_GRAPH_DATA_H
-#define DIGIKAM_IMAGE_HISTORY_GRAPH_DATA_H
+#ifndef DIGIKAM_ITEM_HISTORY_GRAPH_DATA_H
+#define DIGIKAM_ITEM_HISTORY_GRAPH_DATA_H
 
 // Qt includes
 
@@ -32,7 +32,7 @@
 
 #include "filteraction.h"
 #include "historyimageid.h"
-#include "imagehistorygraph_boost.h"
+#include "itemhistorygraph_boost.h"
 
 namespace Digikam
 {
@@ -101,21 +101,21 @@ typedef Graph<HistoryVertexProperties, HistoryEdgeProperties> HistoryGraph;
 
 // ------------------------------------------------------------------------------
 
-class ImageHistoryGraphData : public HistoryGraph, public QSharedData
+class ItemHistoryGraphData : public HistoryGraph, public QSharedData
 {
 public:
 
-    ImageHistoryGraphData()
+    ItemHistoryGraphData()
         : HistoryGraph(ChildToParent)
     {
     }
 
-    explicit ImageHistoryGraphData(const HistoryGraph& g)
+    explicit ItemHistoryGraphData(const HistoryGraph& g)
         : HistoryGraph(g)
     {
     }
 
-    ImageHistoryGraphData& operator=(const HistoryGraph& g)
+    ItemHistoryGraphData& operator=(const HistoryGraph& g)
     {
         HistoryGraph::operator=(g);
         return *this;
@@ -152,4 +152,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_HISTORY_GRAPH_DATA_H
+#endif // DIGIKAM_ITEM_HISTORY_GRAPH_DATA_H
