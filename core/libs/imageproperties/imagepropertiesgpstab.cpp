@@ -111,7 +111,7 @@ public:
     GPSItemInfo::List         gpsInfoList;
 
     QStandardItemModel*        itemModel;
-    ImageGPSModelHelper*       gpsModelHelper;
+    ItemGPSModelHelper*       gpsModelHelper;
     GPSItemInfoSorter*        gpsImageInfoSorter;
     bool                       boundariesShouldBeAdjusted;
 };
@@ -146,7 +146,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
     // --------------------------------------------------------
 
     d->itemModel        = new QStandardItemModel(this);
-    d->gpsModelHelper   = new ImageGPSModelHelper(d->itemModel, this);
+    d->gpsModelHelper   = new ItemGPSModelHelper(d->itemModel, this);
     d->itemMarkerTiler  = new ItemMarkerTiler(d->gpsModelHelper, this);
     d->map->setGroupedModel(d->itemMarkerTiler);
 
@@ -409,9 +409,9 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSItemInfo::List& list)
 
     for (int i = 0 ; i < d->gpsInfoList.count() ; ++i)
     {
-        QStandardItem* const currentImageGPSItem = new QStandardItem();
-        currentImageGPSItem->setData(QVariant::fromValue(d->gpsInfoList.at(i)), RoleGPSItemInfo);
-        d->itemModel->appendRow(currentImageGPSItem);
+        QStandardItem* const currentItemGPSItem = new QStandardItem();
+        currentItemGPSItem->setData(QVariant::fromValue(d->gpsInfoList.at(i)), RoleGPSItemInfo);
+        d->itemModel->appendRow(currentItemGPSItem);
     }
 
     if (!d->map->getStickyModeState())

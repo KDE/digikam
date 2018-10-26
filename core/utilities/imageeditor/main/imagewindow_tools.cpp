@@ -80,7 +80,7 @@ void ImageWindow::slotEditGeolocation()
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel,
                                                            new DBInfoIface(this, d->thumbBar->allUrls()),
                                                            this);
-    dialog->setItems(ImageGPS::infosToItems(infos));
+    dialog->setItems(ItemGPS::infosToItems(infos));
     dialog->exec();
 
     delete dialog;

@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-21
- * Description : An item to hold information about an image.
+ * Description : a class to hold GPS information about an item.
  *
  * Copyright (C) 2010-2014 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagegps.h"
+#include "itemgps.h"
 
 // Local includes
 
@@ -31,17 +32,17 @@
 namespace Digikam
 {
 
-ImageGPS::ImageGPS(const ImageInfo& info)
+ItemGPS::ItemGPS(const ImageInfo& info)
     : GPSImageItem(info.fileUrl()),
       m_info(info)
 {
 }
 
-ImageGPS::~ImageGPS()
+ItemGPS::~ItemGPS()
 {
 }
 
-bool ImageGPS::loadImageData()
+bool ItemGPS::loadImageData()
 {
     // In first, we try to get GPS info from database.
     ItemPosition pos = m_info.imagePosition();
@@ -70,7 +71,7 @@ bool ImageGPS::loadImageData()
     return GPSImageItem::loadImageData();
 }
 
-QString ImageGPS::saveChanges()
+QString ItemGPS::saveChanges()
 {
     SaveProperties p = saveProperties();
 
@@ -133,13 +134,13 @@ QString ImageGPS::saveChanges()
     return GPSImageItem::saveChanges();
 }
 
-QList<GPSImageItem*> ImageGPS::infosToItems(const ImageInfoList& infos)
+QList<GPSImageItem*> ItemGPS::infosToItems(const ImageInfoList& infos)
 {
     QList<GPSImageItem*> items;
 
     foreach(const ImageInfo& inf, infos)
     {
-        items << new ImageGPS(inf);
+        items << new ItemGPS(inf);
     }
 
     return items;

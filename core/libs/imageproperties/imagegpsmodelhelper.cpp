@@ -26,7 +26,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageGPSModelHelper::Private
+class Q_DECL_HIDDEN ItemGPSModelHelper::Private
 {
 public:
 
@@ -42,7 +42,7 @@ public:
     ThumbnailLoadThread* thumbnailLoadThread;
 };
 
-ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent)
+ItemGPSModelHelper::ItemGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent)
     : GeoModelHelper(parent),
       d(new Private())
 {
@@ -58,22 +58,22 @@ ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QO
             this, SIGNAL(signalModelChangedDrastically()));
 }
 
-ImageGPSModelHelper::~ImageGPSModelHelper()
+ItemGPSModelHelper::~ItemGPSModelHelper()
 {
     delete d;
 }
 
-QAbstractItemModel* ImageGPSModelHelper::model() const
+QAbstractItemModel* ItemGPSModelHelper::model() const
 {
     return d->itemModel;
 }
 
-QItemSelectionModel* ImageGPSModelHelper::selectionModel() const
+QItemSelectionModel* ItemGPSModelHelper::selectionModel() const
 {
     return d->itemSelectionModel;
 }
 
-bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index,
+bool ItemGPSModelHelper::itemCoordinates(const QModelIndex& index,
                                           GeoCoordinates* const coordinates) const
 {
     const GPSItemInfo currentGPSItemInfo = index.data(RoleGPSItemInfo).value<GPSItemInfo>();
@@ -89,7 +89,7 @@ bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index,
     }
 }
 
-QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index,
+QPixmap ItemGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index,
                                                            const QSize& size)
 {
     if (!index.isValid())
@@ -117,7 +117,7 @@ QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentMode
     }
 }
 
-QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
+QPersistentModelIndex ItemGPSModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
                                                                            const int sortKey)
 {
     QModelIndex bestIndex         = list.first();
@@ -144,7 +144,7 @@ QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const
     return QPersistentModelIndex(bestIndex);
 }
 
-void ImageGPSModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDescription,
+void ItemGPSModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDescription,
                                               const QPixmap& thumb)
 {
     for (int i = 0; i < d->itemModel->rowCount(); ++i)

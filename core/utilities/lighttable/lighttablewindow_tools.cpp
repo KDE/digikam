@@ -107,7 +107,7 @@ void LightTableWindow::slotEditGeolocation()
 
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel,
                                                            new DBInfoIface(this, d->thumbView->allUrls()), this);
-    dialog->setItems(ImageGPS::infosToItems(infos));
+    dialog->setItems(ItemGPS::infosToItems(infos));
     dialog->exec();
 
     delete dialog;

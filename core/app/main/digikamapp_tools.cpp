@@ -195,7 +195,7 @@ void DigikamApp::slotEditGeolocation()
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel,
                                                            new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools),
                                                            this);
-    dialog->setItems(ImageGPS::infosToItems(infos));
+    dialog->setItems(ItemGPS::infosToItems(infos));
     dialog->exec();
 
     delete dialog;

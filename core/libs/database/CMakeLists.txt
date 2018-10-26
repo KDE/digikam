@@ -146,7 +146,7 @@ endif()
 if(Marble_FOUND)
     set(libdatabase_SRCS
         ${libdatabase_SRCS}
-        item/containers/imagegps.cpp
+        item/containers/itemgps.cpp
        )
 endif()
 

@@ -41,14 +41,14 @@ namespace Digikam
 
 const int RoleGPSItemInfo = Qt::UserRole + 1;
 
-class ImageGPSModelHelper : public GeoModelHelper
+class ItemGPSModelHelper : public GeoModelHelper
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent = 0);
-    virtual ~ImageGPSModelHelper();
+    explicit ItemGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent = 0);
+    virtual ~ItemGPSModelHelper();
 
     virtual QAbstractItemModel* model()           const;
     virtual QItemSelectionModel* selectionModel() const;

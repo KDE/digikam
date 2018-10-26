@@ -96,7 +96,7 @@
 #include "imagedragdrop.h"
 #include "imagedescedittab.h"
 #include "imageinfo.h"
-#include "imagegps.h"
+#include "itemgps.h"
 #include "imagelistmodel.h"
 #include "imagepropertiessidebardb.h"
 #include "imagepropertiesversionstab.h"

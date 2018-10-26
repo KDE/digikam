@@ -67,7 +67,7 @@
 #include "deletedialog.h"
 #include "iccsettings.h"
 #include "imagewindow.h"
-#include "imagegps.h"
+#include "itemgps.h"
 #include "imagedescedittab.h"
 #include "presentationmngr.h"
 #include "slideshowbuilder.h"

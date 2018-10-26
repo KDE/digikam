@@ -3,9 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2015-09-24
- * Description : an databse wrapper for GPSImageItem
+ * Date        : 2010-03-21
+ * Description : a class to hold GPS information about an item.
  *
+ * Copyright (C) 2010-2014 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2015-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -21,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_GPS_H
-#define DIGIKAM_IMAGE_GPS_H
+#ifndef DIGIKAM_ITEM_GPS_H
+#define DIGIKAM_ITEM_GPS_H
 
 // Qt includes
 
@@ -37,13 +38,13 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT ImageGPS : public GPSImageItem
+class DIGIKAM_DATABASE_EXPORT ItemGPS : public GPSImageItem
 {
 
 public:
 
-    explicit ImageGPS(const ImageInfo& info);
-    virtual ~ImageGPS();
+    explicit ItemGPS(const ImageInfo& info);
+    virtual ~ItemGPS();
 
     QString saveChanges();
     bool loadImageData();
@@ -57,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_GPS_H
+#endif // DIGIKAM_ITEM_GPS_H
