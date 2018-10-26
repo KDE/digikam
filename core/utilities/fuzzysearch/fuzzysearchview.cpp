@@ -78,7 +78,6 @@
 #include "dexpanderbox.h"
 #include "applicationsettings.h"
 #include "drangebox.h"
-#include "searchtreeview.h"
 #include "similaritydbaccess.h"
 #include "similaritydb.h"
 
