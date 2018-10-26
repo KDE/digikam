@@ -6,7 +6,8 @@
  * Date        : 2011-01-06
  * Description : Helper class for geomap interaction
  *
- * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2011      by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_GPS_IMAGE_INFO_H
-#define DIGIKAM_GPS_IMAGE_INFO_H
+#ifndef DIGIKAM_GPS_ITEM_INFO_H
+#define DIGIKAM_GPS_ITEM_INFO_H
 
 // Qt includes
 
@@ -37,16 +38,16 @@
 namespace Digikam
 {
 
-class GPSImageInfo
+class GPSItemInfo
 {
 public:
 
-    explicit GPSImageInfo();
-    ~GPSImageInfo();
+    explicit GPSItemInfo();
+    ~GPSItemInfo();
 
 public:
 
-    static GPSImageInfo fromIdCoordinatesRatingDateTime(const qlonglong p_id,
+    static GPSItemInfo fromIdCoordinatesRatingDateTime(const qlonglong p_id,
                                                         const GeoCoordinates& p_coordinates,
                                                         const int p_rating,
                                                         const QDateTime& p_creationDate);
@@ -59,11 +60,11 @@ public:
     QDateTime                   dateTime;
     QUrl                        url;
 
-    typedef QList<GPSImageInfo> List;
+    typedef QList<GPSItemInfo> List;
 };
 
 } // namespace Digikam
 
-Q_DECLARE_METATYPE(Digikam::GPSImageInfo)
+Q_DECLARE_METATYPE(Digikam::GPSItemInfo)
 
-#endif // DIGIKAM_GPS_IMAGE_INFO_H
+#endif // DIGIKAM_GPS_ITEM_INFO_H

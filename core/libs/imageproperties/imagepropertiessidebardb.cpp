@@ -59,7 +59,7 @@
 
 #ifdef HAVE_MARBLE
 #   include "imagepropertiesgpstab.h"
-#   include "gpsimageinfosorter.h"
+#   include "gpsiteminfosorter.h"
 #endif // HAVE_MARBLE
 
 namespace Digikam
@@ -314,14 +314,14 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else
         {
-            GPSImageInfo::List list;
+            GPSItemInfo::List list;
 
             for (ImageInfoList::const_iterator it = d->currentInfos.constBegin();
                  it != d->currentInfos.constEnd(); ++it)
             {
-                GPSImageInfo info;
+                GPSItemInfo info;
 
-                if (GPSImageInfofromImageInfo(*it, &info))
+                if (GPSItemInfofromImageInfo(*it, &info))
                 {
                     list << info;
                 }
@@ -676,7 +676,7 @@ void ImagePropertiesSideBarDB::slotPopupTagsView()
 
 #ifdef HAVE_MARBLE
 
-bool ImagePropertiesSideBarDB::GPSImageInfofromImageInfo(const ImageInfo& imageInfo, GPSImageInfo* const gpsImageInfo)
+bool ImagePropertiesSideBarDB::GPSItemInfofromImageInfo(const ImageInfo& imageInfo, GPSItemInfo* const gpsImageInfo)
 {
     const ItemPosition pos = imageInfo.imagePosition();
 

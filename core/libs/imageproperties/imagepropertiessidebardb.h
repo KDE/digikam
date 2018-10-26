@@ -50,7 +50,7 @@ class ImageChangeset;
 class ImageDescEditTab;
 class ImageTagChangeset;
 class ImagePropertiesVersionsTab;
-class GPSImageInfo;
+class GPSItemInfo;
 
 class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 {
@@ -81,7 +81,7 @@ public:
 
 #ifdef HAVE_MARBLE
 
-    static bool GPSImageInfofromImageInfo(const ImageInfo&, GPSImageInfo* const);
+    static bool GPSItemInfofromImageInfo(const ImageInfo&, GPSItemInfo* const);
 
 #endif // HAVE_MARBLE
 

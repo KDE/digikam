@@ -58,7 +58,7 @@
 namespace Digikam
 {
 
-class GPSImageInfo;
+class GPSItemInfo;
 
 class GPSMarkerTiler : public AbstractMarkerTiler
 {

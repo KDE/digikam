@@ -6,7 +6,8 @@
  * Date        : 2011-01-06
  * Description : Helper functions for geolocation interface interaction
  *
- * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2011      by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "gpsimageinfosorter.h"
+#include "gpsiteminfosorter.h"
 
 // Qt includes
 
@@ -41,13 +42,13 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN GPSImageInfoSorter::Private
+class Q_DECL_HIDDEN GPSItemInfoSorter::Private
 {
 public:
 
     explicit Private()
       : mapWidgets(),
-        sortOrder(GPSImageInfoSorter::SortYoungestFirst),
+        sortOrder(GPSItemInfoSorter::SortYoungestFirst),
         sortMenu(0),
         sortActionOldestFirst(0),
         sortActionYoungestFirst(0),
@@ -56,7 +57,7 @@ public:
     }
 
     QList<QPointer<MapWidget> > mapWidgets;
-    GPSImageInfoSorter::SortOptions      sortOrder;
+    GPSItemInfoSorter::SortOptions      sortOrder;
     QPointer<QMenu>                      sortMenu;
     QAction*                             sortActionOldestFirst;
     QAction*                             sortActionYoungestFirst;
@@ -64,13 +65,13 @@ public:
 
 };
 
-GPSImageInfoSorter::GPSImageInfoSorter(QObject* const parent)
+GPSItemInfoSorter::GPSItemInfoSorter(QObject* const parent)
     : QObject(parent),
       d(new Private())
 {
 }
 
-GPSImageInfoSorter::~GPSImageInfoSorter()
+GPSItemInfoSorter::~GPSItemInfoSorter()
 {
     if (d->sortMenu)
     {
@@ -80,8 +81,8 @@ GPSImageInfoSorter::~GPSImageInfoSorter()
     delete d;
 }
 
-bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const GeoGroupState oldState,
-                                    const GPSImageInfo& newInfo, const GeoGroupState newState,
+bool GPSItemInfoSorter::fitsBetter(const GPSItemInfo& oldInfo, const GeoGroupState oldState,
+                                    const GPSItemInfo& newInfo, const GeoGroupState newState,
                                     const GeoGroupState globalGroupState, const SortOptions sortOptions)
 {
     // the best index for a tile is determined like this:
@@ -169,7 +170,7 @@ bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const GeoGroupS
     return oldInfo.id > newInfo.id;
 }
 
-void GPSImageInfoSorter::addToMapWidget(MapWidget* const mapWidget)
+void GPSItemInfoSorter::addToMapWidget(MapWidget* const mapWidget)
 {
     initializeSortMenu();
 
@@ -177,7 +178,7 @@ void GPSImageInfoSorter::addToMapWidget(MapWidget* const mapWidget)
     mapWidget->setSortOptionsMenu(d->sortMenu);
 }
 
-void GPSImageInfoSorter::initializeSortMenu()
+void GPSItemInfoSorter::initializeSortMenu()
 {
     if (d->sortMenu)
     {
@@ -210,7 +211,7 @@ void GPSImageInfoSorter::initializeSortMenu()
     /// @todo Should we initialize the checked state already or wait for a call to setSortOptions?
 }
 
-void GPSImageInfoSorter::setSortOptions(const SortOptions sortOptions)
+void GPSItemInfoSorter::setSortOptions(const SortOptions sortOptions)
 {
     d->sortOrder = sortOptions;
 
@@ -222,17 +223,17 @@ void GPSImageInfoSorter::setSortOptions(const SortOptions sortOptions)
         }
     }
 
-    d->sortActionRating->setChecked(d->sortOrder & GPSImageInfoSorter::SortRating);
-    d->sortActionOldestFirst->setChecked(d->sortOrder & GPSImageInfoSorter::SortOldestFirst);
-    d->sortActionYoungestFirst->setChecked(!(d->sortOrder & GPSImageInfoSorter::SortOldestFirst));
+    d->sortActionRating->setChecked(d->sortOrder & GPSItemInfoSorter::SortRating);
+    d->sortActionOldestFirst->setChecked(d->sortOrder & GPSItemInfoSorter::SortOldestFirst);
+    d->sortActionYoungestFirst->setChecked(!(d->sortOrder & GPSItemInfoSorter::SortOldestFirst));
 }
 
-GPSImageInfoSorter::SortOptions GPSImageInfoSorter::getSortOptions() const
+GPSItemInfoSorter::SortOptions GPSItemInfoSorter::getSortOptions() const
 {
     return d->sortOrder;
 }
 
-void GPSImageInfoSorter::slotSortOptionTriggered()
+void GPSItemInfoSorter::slotSortOptionTriggered()
 {
     SortOptions newSortKey = SortYoungestFirst;
 

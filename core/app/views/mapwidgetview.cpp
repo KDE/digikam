@@ -49,7 +49,7 @@
 #include "coredbwatch.h"
 #include "coredbfields.h"
 #include "imagepropertiessidebardb.h"
-#include "gpsimageinfosorter.h"
+#include "gpsiteminfosorter.h"
 #include "importui.h"
 
 namespace Digikam
@@ -89,7 +89,7 @@ public:
     ImportImageModel*           importModel;
     QItemSelectionModel*        selectionModel;
     MapViewModelHelper*         mapViewModelHelper;
-    GPSImageInfoSorter*         gpsImageInfoSorter;
+    GPSItemInfoSorter*         gpsImageInfoSorter;
     MapWidgetView::Application  application;
 };
 
@@ -133,7 +133,7 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
     d->mapWidget->setGroupedModel(geoifaceMarkerModel);
     d->mapWidget->setBackend(QLatin1String("marble"));
 
-    d->gpsImageInfoSorter         = new GPSImageInfoSorter(this);
+    d->gpsImageInfoSorter         = new GPSItemInfoSorter(this);
     d->gpsImageInfoSorter->addToMapWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget->getControlWidget());
@@ -151,7 +151,7 @@ void MapWidgetView::doLoadState()
 {
     KConfigGroup group = getConfigGroup();
 
-    d->gpsImageInfoSorter->setSortOptions(GPSImageInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"),
+    d->gpsImageInfoSorter->setSortOptions(GPSItemInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"),
                                                                                           int(d->gpsImageInfoSorter->getSortOptions()))));
 
     const KConfigGroup groupCentralMap = KConfigGroup(&group, QLatin1String("Central Map Widget"));
@@ -397,7 +397,7 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
 /**
  * @brief This function finds the best representative marker from a group of markers. This is needed to display a thumbnail for a marker group.
  * @param indices A list containing markers.
- * @param sortKey Determines the sorting options and is actually of type GPSImageInfoSorter::SortOptions
+ * @param sortKey Determines the sorting options and is actually of type GPSItemInfoSorter::SortOptions
  * @return Returns the index of the marker.
  */
 QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
@@ -422,15 +422,15 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
     {
         case MapWidgetView::ApplicationDigikam:
         {
-            // now get the ImageInfos and convert them to GPSImageInfos
+            // now get the ImageInfos and convert them to GPSItemInfos
             const QList<ImageInfo> imageInfoList =  d->model->imageInfos(indexList);
-            GPSImageInfo::List gpsImageInfoList;
+            GPSItemInfo::List gpsImageInfoList;
 
             foreach (const ImageInfo& imageInfo, imageInfoList)
             {
-                GPSImageInfo gpsImageInfo;
+                GPSItemInfo gpsImageInfo;
 
-                if (ImagePropertiesSideBarDB::GPSImageInfofromImageInfo(imageInfo, &gpsImageInfo))
+                if (ImagePropertiesSideBarDB::GPSItemInfofromImageInfo(imageInfo, &gpsImageInfo))
                 {
                     gpsImageInfoList << gpsImageInfo;
                 }
@@ -444,18 +444,18 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
 
             // now determine the best available index
             bestIndex                     = indexList.first();
-            GPSImageInfo bestGPSImageInfo = gpsImageInfoList.first();
+            GPSItemInfo bestGPSItemInfo = gpsImageInfoList.first();
 
             for (int i=1; i < gpsImageInfoList.count(); ++i)
             {
-                const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
+                const GPSItemInfo& currentInfo = gpsImageInfoList.at(i);
 
-                if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, SelectedNone,
+                if (GPSItemInfoSorter::fitsBetter(bestGPSItemInfo, SelectedNone,
                                                    currentInfo, SelectedNone,
-                                                   SelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
+                                                   SelectedNone, GPSItemInfoSorter::SortOptions(sortKey)))
                 {
                     bestIndex        = indexList.at(i);
-                    bestGPSImageInfo = currentInfo;
+                    bestGPSItemInfo = currentInfo;
                 }
             }
 
@@ -464,9 +464,9 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
 
         case MapWidgetView::ApplicationImportUI:
         {
-            // now get the CamItemInfo and convert them to GPSImageInfos
+            // now get the CamItemInfo and convert them to GPSItemInfos
             const QList<CamItemInfo> imageInfoList =  d->importModel->camItemInfos(indexList);
-            GPSImageInfo::List       gpsImageInfoList;
+            GPSItemInfo::List       gpsImageInfoList;
 
             foreach (const CamItemInfo& imageInfo, imageInfoList)
             {
@@ -489,7 +489,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
                     coordinates.setAlt(alt);
                 }
 
-                GPSImageInfo gpsImageInfo;
+                GPSItemInfo gpsImageInfo;
                 gpsImageInfo.coordinates = coordinates;
                 gpsImageInfo.dateTime    = meta.getImageDateTime();
                 gpsImageInfo.rating      = meta.getImageRating();
@@ -505,18 +505,18 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
 
             // now determine the best available index
             bestIndex                     = indexList.first();
-            GPSImageInfo bestGPSImageInfo = gpsImageInfoList.first();
+            GPSItemInfo bestGPSItemInfo = gpsImageInfoList.first();
 
             for (int i=1; i < gpsImageInfoList.count(); ++i)
             {
-                const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
+                const GPSItemInfo& currentInfo = gpsImageInfoList.at(i);
 
-                if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, SelectedNone,
+                if (GPSItemInfoSorter::fitsBetter(bestGPSItemInfo, SelectedNone,
                                                    currentInfo, SelectedNone,
-                                                   SelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
+                                                   SelectedNone, GPSItemInfoSorter::SortOptions(sortKey)))
                 {
                     bestIndex        = indexList.at(i);
-                    bestGPSImageInfo = currentInfo;
+                    bestGPSItemInfo = currentInfo;
                 }
             }
 

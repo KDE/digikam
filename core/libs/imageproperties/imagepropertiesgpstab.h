@@ -34,7 +34,7 @@
 
 #include "dmetadata.h"
 #include "digikam_export.h"
-#include "gpsimageinfosorter.h"
+#include "gpsiteminfosorter.h"
 
 namespace Digikam
 {
@@ -60,7 +60,7 @@ public:
     ~ImagePropertiesGPSTab();
 
     void clearGPSInfo();
-    void setGPSInfoList(const GPSImageInfo::List& list);
+    void setGPSInfoList(const GPSItemInfo::List& list);
     void setCurrentURL(const QUrl& url=QUrl());
 
     void setMetadata(const DMetadata& meta, const QUrl& url);

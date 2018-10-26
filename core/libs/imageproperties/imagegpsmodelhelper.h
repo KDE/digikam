@@ -34,12 +34,12 @@
 
 #include "geomodelhelper.h"
 #include "thumbnailloadthread.h"
-#include "gpsimageinfosorter.h"
+#include "gpsiteminfosorter.h"
 
 namespace Digikam
 {
 
-const int RoleGPSImageInfo = Qt::UserRole + 1;
+const int RoleGPSItemInfo = Qt::UserRole + 1;
 
 class ImageGPSModelHelper : public GeoModelHelper
 {

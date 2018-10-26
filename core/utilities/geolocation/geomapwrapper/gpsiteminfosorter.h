@@ -6,7 +6,8 @@
  * Date        : 2011-01-06
  * Description : Helper class for geomap interaction
  *
- * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2011      by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_GPS_IMAGE_INFO_SORTER_H
-#define DIGIKAM_GPS_IMAGE_INFO_SORTER_H
+#ifndef DIGIKAM_GPS_ITEM_INFO_SORTER_H
+#define DIGIKAM_GPS_ITEM_INFO_SORTER_H
 
 // Qt includes
 
@@ -35,13 +36,13 @@
 
 #include "geocoordinates.h"
 #include "geogroupstate.h"
-#include "gpsimageinfo.h"
+#include "gpsiteminfo.h"
 #include "mapwidget.h"
 
 namespace Digikam
 {
 
-class GPSImageInfoSorter : public QObject
+class GPSItemInfoSorter : public QObject
 {
     Q_OBJECT
 
@@ -57,8 +58,8 @@ public:
 
 public:
 
-    explicit GPSImageInfoSorter(QObject* const parent);
-    ~GPSImageInfoSorter();
+    explicit GPSItemInfoSorter(QObject* const parent);
+    ~GPSItemInfoSorter();
 
     void addToMapWidget(MapWidget* const mapWidget);
     void setSortOptions(const SortOptions sortOptions);
@@ -66,8 +67,8 @@ public:
 
 public:
 
-    static bool fitsBetter(const GPSImageInfo& oldInfo, const GeoGroupState oldState,
-                           const GPSImageInfo& newInfo, const GeoGroupState newState,
+    static bool fitsBetter(const GPSItemInfo& oldInfo, const GeoGroupState oldState,
+                           const GPSItemInfo& newInfo, const GeoGroupState newState,
                            const GeoGroupState globalGroupState, const SortOptions sortOptions);
 
 private Q_SLOTS:
@@ -80,7 +81,7 @@ private:
 
 private:
 
-    GPSImageInfoSorter(); // Disable
+    GPSItemInfoSorter(); // Disable
 
     class Private;
     Private* const d;
@@ -88,6 +89,6 @@ private:
 
 } // namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSImageInfoSorter::SortOptions)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSItemInfoSorter::SortOptions)
 
-#endif // DIGIKAM_GPS_IMAGE_INFO_SORTER_H
+#endif // DIGIKAM_GPS_ITEM_INFO_SORTER_H

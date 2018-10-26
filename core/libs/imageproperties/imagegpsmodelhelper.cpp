@@ -76,10 +76,10 @@ QItemSelectionModel* ImageGPSModelHelper::selectionModel() const
 bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index,
                                           GeoCoordinates* const coordinates) const
 {
-    const GPSImageInfo currentGPSImageInfo = index.data(RoleGPSImageInfo).value<GPSImageInfo>();
-    *coordinates                           = currentGPSImageInfo.coordinates;
+    const GPSItemInfo currentGPSItemInfo = index.data(RoleGPSItemInfo).value<GPSItemInfo>();
+    *coordinates                           = currentGPSItemInfo.coordinates;
 
-    if (currentGPSImageInfo.coordinates.hasCoordinates())
+    if (currentGPSItemInfo.coordinates.hasCoordinates())
     {
         return true;
     }
@@ -98,12 +98,12 @@ QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentMode
     }
 
     const QModelIndex currentIndex(index);
-    const GPSImageInfo currentGPSImageInfo = currentIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
+    const GPSItemInfo currentGPSItemInfo = currentIndex.data(RoleGPSItemInfo).value<GPSItemInfo>();
 
     QPixmap thumbnail;
     ThumbnailIdentifier thumbId;
-    thumbId.filePath = currentGPSImageInfo.url.toLocalFile();
-    thumbId.id       = currentGPSImageInfo.id;
+    thumbId.filePath = currentGPSItemInfo.url.toLocalFile();
+    thumbId.id       = currentGPSItemInfo.id;
 
     if (d->thumbnailLoadThread->find(thumbId, thumbnail, qMax(size.width(), size.height())))
     {
@@ -121,22 +121,22 @@ QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const
                                                                            const int sortKey)
 {
     QModelIndex bestIndex         = list.first();
-    GPSImageInfo bestGPSImageInfo = bestIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
+    GPSItemInfo bestGPSItemInfo = bestIndex.data(RoleGPSItemInfo).value<GPSItemInfo>();
 
     for (int i = 1; i < list.count(); ++i)
     {
         const QModelIndex currentIndex(list.at(i));
-        const GPSImageInfo currentGPSImageInfo = currentIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
-        const bool currentFitsBetter           = GPSImageInfoSorter::fitsBetter(bestGPSImageInfo,
+        const GPSItemInfo currentGPSItemInfo = currentIndex.data(RoleGPSItemInfo).value<GPSItemInfo>();
+        const bool currentFitsBetter           = GPSItemInfoSorter::fitsBetter(bestGPSItemInfo,
                                                                                 SelectedNone,
-                                                                                currentGPSImageInfo,
+                                                                                currentGPSItemInfo,
                                                                                 SelectedNone,
                                                                                 SelectedNone,
-                                                                                GPSImageInfoSorter::SortOptions(sortKey));
+                                                                                GPSItemInfoSorter::SortOptions(sortKey));
 
         if (currentFitsBetter)
         {
-            bestGPSImageInfo = currentGPSImageInfo;
+            bestGPSItemInfo = currentGPSItemInfo;
             bestIndex        = currentIndex;
         }
     }
@@ -150,9 +150,9 @@ void ImageGPSModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingD
     for (int i = 0; i < d->itemModel->rowCount(); ++i)
     {
         const QStandardItem* const item        = static_cast<QStandardItem*>(d->itemModel->item(i));
-        const GPSImageInfo currentGPSImageInfo = item->data(RoleGPSImageInfo).value<GPSImageInfo>();
+        const GPSItemInfo currentGPSItemInfo = item->data(RoleGPSItemInfo).value<GPSItemInfo>();
 
-        if (currentGPSImageInfo.url.toLocalFile() == loadingDescription.filePath)
+        if (currentGPSItemInfo.url.toLocalFile() == loadingDescription.filePath)
         {
             const QPersistentModelIndex goodIndex(d->itemModel->index(i,0));
 

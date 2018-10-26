@@ -51,7 +51,7 @@
 #include "imageinfojob.h"
 #include "coredbsearchxml.h"
 #include "gpsmarkertiler.h"
-#include "gpsimageinfosorter.h"
+#include "gpsiteminfosorter.h"
 
 namespace Digikam
 {
@@ -91,7 +91,7 @@ public:
     ImageFilterModel*           imageFilterModel;
     QItemSelectionModel*        selectionModel;
     SearchModel*                searchModel;
-    GPSImageInfoSorter*         sortOrderOptionsHelper;
+    GPSItemInfoSorter*         sortOrderOptionsHelper;
     QString                     nonGeonlocatedItemsXml;
 };
 
@@ -141,7 +141,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
-    d->sortOrderOptionsHelper = new GPSImageInfoSorter(this);
+    d->sortOrderOptionsHelper = new GPSItemInfoSorter(this);
     d->sortOrderOptionsHelper->addToMapWidget(d->mapSearchWidget);
 
     vlay2->addWidget(d->mapSearchWidget);
@@ -320,7 +320,7 @@ void GPSSearchView::doLoadState()
         }
     }
 
-    d->sortOrderOptionsHelper->setSortOptions(GPSImageInfoSorter::SortOptions(group.readEntry(entryName(QLatin1String("Sort Order")), int(d->sortOrderOptionsHelper->getSortOptions()))));
+    d->sortOrderOptionsHelper->setSortOptions(GPSItemInfoSorter::SortOptions(group.readEntry(entryName(QLatin1String("Sort Order")), int(d->sortOrderOptionsHelper->getSortOptions()))));
 
     const KConfigGroup groupMapWidget = KConfigGroup(&group, entryName(QLatin1String("GPSSearch Map Widget")));
 

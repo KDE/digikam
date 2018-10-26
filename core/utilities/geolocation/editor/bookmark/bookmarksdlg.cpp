@@ -57,7 +57,7 @@
 #include "bookmarknode.h"
 #include "dxmlguiwindow.h"
 #include "imagepropertiesgpstab.h"
-#include "gpsimageinfo.h"
+#include "gpsiteminfo.h"
 
 namespace Digikam
 {
@@ -371,13 +371,13 @@ void BookmarksDialog::slotOpenInMap(const QModelIndex& index)
 {
     if (!index.isValid())
     {
-        d->mapView->setGPSInfoList(GPSImageInfo::List());
+        d->mapView->setGPSInfoList(GPSItemInfo::List());
         d->mapView->setActive(false);
         return;
     }
 
     QModelIndexList list = d->tree->selectionModel()->selectedIndexes();
-    GPSImageInfo::List ilst;
+    GPSItemInfo::List ilst;
 
     foreach (const QModelIndex& item, list)
     {
@@ -388,7 +388,7 @@ void BookmarksDialog::slotOpenInMap(const QModelIndex& index)
 
         if (ok)
         {
-            GPSImageInfo gpsInfo;
+            GPSItemInfo gpsInfo;
             gpsInfo.coordinates = coordinate;
             gpsInfo.dateTime    = item.sibling(index.row(), 1)
                                       .data(BookmarksModel::DateAddedRole).toDateTime();
@@ -398,7 +398,7 @@ void BookmarksDialog::slotOpenInMap(const QModelIndex& index)
         }
     }
 
-    d->mapView->setGPSInfoList(GPSImageInfo::List() << ilst);
+    d->mapView->setGPSInfoList(GPSItemInfo::List() << ilst);
     d->mapView->setActive(!ilst.isEmpty());
 }
 

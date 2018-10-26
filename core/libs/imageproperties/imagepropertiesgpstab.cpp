@@ -108,11 +108,11 @@ public:
 
     MapWidget*                 map;
     ItemMarkerTiler*           itemMarkerTiler;
-    GPSImageInfo::List         gpsInfoList;
+    GPSItemInfo::List         gpsInfoList;
 
     QStandardItemModel*        itemModel;
     ImageGPSModelHelper*       gpsModelHelper;
-    GPSImageInfoSorter*        gpsImageInfoSorter;
+    GPSItemInfoSorter*        gpsImageInfoSorter;
     bool                       boundariesShouldBeAdjusted;
 };
 
@@ -137,7 +137,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
     d->map->setEnabledExtraActions(ExtraActionSticky);
     d->map->setVisibleExtraActions(ExtraActionSticky);
     d->map->setBackend(QLatin1String("marble"));
-    d->gpsImageInfoSorter     = new GPSImageInfoSorter(this);
+    d->gpsImageInfoSorter     = new GPSItemInfoSorter(this);
     d->gpsImageInfoSorter->addToMapWidget(d->map);
     vlay2->addWidget(d->map);
     vlay2->setContentsMargins(QMargins());
@@ -214,7 +214,7 @@ ImagePropertiesGPSTab::~ImagePropertiesGPSTab()
 
 void ImagePropertiesGPSTab::readSettings(const KConfigGroup& group)
 {
-    d->gpsImageInfoSorter->setSortOptions(GPSImageInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"),
+    d->gpsImageInfoSorter->setSortOptions(GPSItemInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"),
                                           int(d->gpsImageInfoSorter->getSortOptions()))));
     setWebGPSLocator(group.readEntry(QLatin1String("Web GPS Locator"), getWebGPSLocator()));
 
@@ -250,7 +250,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
         return;
     }
 
-    const GPSImageInfo info = d->gpsInfoList.first();
+    const GPSItemInfo info = d->gpsInfoList.first();
 
     switch ( getWebGPSLocator() )
     {
@@ -347,12 +347,12 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const QUrl& url)
             coordinates.setAlt(alt);
         }
 
-        GPSImageInfo gpsInfo;
+        GPSItemInfo gpsInfo;
         gpsInfo.coordinates = coordinates;
         gpsInfo.dateTime    = meta.getImageDateTime();
         gpsInfo.rating      = meta.getImageRating();
         gpsInfo.url         = url;
-        setGPSInfoList(GPSImageInfo::List() << gpsInfo);
+        setGPSInfoList(GPSItemInfo::List() << gpsInfo);
     }
     else
     {
@@ -370,7 +370,7 @@ void ImagePropertiesGPSTab::clearGPSInfo()
     setEnabled(false);
 }
 
-void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
+void ImagePropertiesGPSTab::setGPSInfoList(const GPSItemInfo::List& list)
 {
     // Clear info label
     d->altitude->setAdjustedText();
@@ -390,7 +390,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
 
     if (list.count() == 1)
     {
-        const GPSImageInfo info           = list.first();
+        const GPSItemInfo info           = list.first();
         const GeoCoordinates& coordinates = info.coordinates;
 
         if (!coordinates.hasAltitude())
@@ -410,7 +410,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
     for (int i = 0 ; i < d->gpsInfoList.count() ; ++i)
     {
         QStandardItem* const currentImageGPSItem = new QStandardItem();
-        currentImageGPSItem->setData(QVariant::fromValue(d->gpsInfoList.at(i)), RoleGPSImageInfo);
+        currentImageGPSItem->setData(QVariant::fromValue(d->gpsInfoList.at(i)), RoleGPSItemInfo);
         d->itemModel->appendRow(currentImageGPSItem);
     }
 
