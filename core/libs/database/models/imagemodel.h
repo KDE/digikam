@@ -31,7 +31,7 @@
 // Local includes
 
 #include "dragdropimplementations.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "digikam_export.h"
 
 class QItemSelection;
@@ -97,106 +97,106 @@ public:
      */
     void setWatchFlags(const DatabaseFields::Set& set);
 
-    /** Returns the ImageInfo object, reference or image id from the underlying data
+    /** Returns the ItemInfo object, reference or image id from the underlying data
      *  pointed to by the index.
-     *  If the index is not valid, imageInfo will return a null ImageInfo, imageId will
+     *  If the index is not valid, imageInfo will return a null ItemInfo, imageId will
      *  return 0, imageInfoRef must not be called with an invalid index.
      */
-    ImageInfo        imageInfo(const QModelIndex& index) const;
-    ImageInfo&       imageInfoRef(const QModelIndex& index) const;
+    ItemInfo        imageInfo(const QModelIndex& index) const;
+    ItemInfo&       imageInfoRef(const QModelIndex& index) const;
     qlonglong        imageId(const QModelIndex& index) const;
-    QList<ImageInfo> imageInfos(const QList<QModelIndex>& indexes) const;
+    QList<ItemInfo> imageInfos(const QList<QModelIndex>& indexes) const;
     QList<qlonglong> imageIds(const QList<QModelIndex>& indexes) const;
 
-    /** Returns the ImageInfo object, reference or image id from the underlying data
+    /** Returns the ItemInfo object, reference or image id from the underlying data
      *  of the given row (parent is the invalid QModelIndex, column is 0).
      *  Note that imageInfoRef will crash if index is invalid.
      */
-    ImageInfo  imageInfo(int row) const;
-    ImageInfo& imageInfoRef(int row) const;
+    ItemInfo  imageInfo(int row) const;
+    ItemInfo& imageInfoRef(int row) const;
     qlonglong  imageId(int row) const;
 
-    /** Return the index for the given ImageInfo or id, if contained in this model.
+    /** Return the index for the given ItemInfo or id, if contained in this model.
      */
-    QModelIndex        indexForImageInfo(const ImageInfo& info) const;
-    QModelIndex        indexForImageInfo(const ImageInfo& info, const QVariant& extraValue) const;
+    QModelIndex        indexForItemInfo(const ItemInfo& info) const;
+    QModelIndex        indexForItemInfo(const ItemInfo& info, const QVariant& extraValue) const;
     QModelIndex        indexForImageId(qlonglong id) const;
     QModelIndex        indexForImageId(qlonglong id, const QVariant& extraValue) const;
-    QList<QModelIndex> indexesForImageInfo(const ImageInfo& info) const;
+    QList<QModelIndex> indexesForItemInfo(const ItemInfo& info) const;
     QList<QModelIndex> indexesForImageId(qlonglong id) const;
 
-    int numberOfIndexesForImageInfo(const ImageInfo& info) const;
+    int numberOfIndexesForItemInfo(const ItemInfo& info) const;
     int numberOfIndexesForImageId(qlonglong id) const;
 
-    /** Returns the index or ImageInfo object from the underlying data
+    /** Returns the index or ItemInfo object from the underlying data
      *  for the given file path. This is fast if keepsFilePathCache is enabled.
-     *  The file path is as returned by ImageInfo.filePath().
+     *  The file path is as returned by ItemInfo.filePath().
      *  In case of multiple occurrences of the same file, the simpler variants return
      *  any one found first, use the QList methods to retrieve all occurrences.
      */
     QModelIndex        indexForPath(const QString& filePath) const;
-    ImageInfo          imageInfo(const QString& filePath) const;
+    ItemInfo          imageInfo(const QString& filePath) const;
     QList<QModelIndex> indexesForPath(const QString& filePath) const;
-    QList<ImageInfo>   imageInfos(const QString& filePath) const;
+    QList<ItemInfo>   imageInfos(const QString& filePath) const;
 
     /** Main entry point for subclasses adding image infos to the model.
      *  If you list entries not unique per image id, you must add an extraValue
      *  so that every entry is unique by imageId and extraValues.
      *  Please note that these methods do not prevent addition of duplicate entries.
      */
-    void addImageInfo(const ImageInfo& info);
-    void addImageInfos(const QList<ImageInfo>& infos);
-    void addImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void addItemInfo(const ItemInfo& info);
+    void addItemInfos(const QList<ItemInfo>& infos);
+    void addItemInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
 
     /** Clears image infos and resets model.
      */
-    void clearImageInfos();
+    void clearItemInfos();
 
     /** Clears and adds the infos.
      */
-    void setImageInfos(const QList<ImageInfo>& infos);
+    void setItemInfos(const QList<ItemInfo>& infos);
 
     /**
      * Directly remove the given indexes or infos from the model.
      */
     void removeIndex(const QModelIndex& indexes);
     void removeIndexes(const QList<QModelIndex>& indexes);
-    void removeImageInfo(const ImageInfo& info);
-    void removeImageInfos(const QList<ImageInfo>& infos);
-    void removeImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void removeItemInfo(const ItemInfo& info);
+    void removeItemInfos(const QList<ItemInfo>& infos);
+    void removeItemInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
 
     /**
-     * addImageInfo() is asynchronous if a prepocessor is set.
+     * addItemInfo() is asynchronous if a prepocessor is set.
      * This method first adds the info, synchronously.
      * Only afterwards, the preprocessor will have the opportunity to process it.
      * This method also bypasses any incremental updates.
      * Please note that these methods do not prevent addition of duplicate entries.
      */
-    void addImageInfoSynchronously(const ImageInfo& info);
-    void addImageInfosSynchronously(const QList<ImageInfo>& infos);
-    void addImageInfosSynchronously(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void addItemInfoSynchronously(const ItemInfo& info);
+    void addItemInfosSynchronously(const QList<ItemInfo>& infos);
+    void addItemInfosSynchronously(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
 
     /**
      * Add the given entries. Method returns immediately, the
      * addition may happen later asynchronously.
      * These methods prevent the addition of duplicate entries.
      */
-    void ensureHasImageInfo(const ImageInfo& info);
-    void ensureHasImageInfos(const QList<ImageInfo>& infos);
-    void ensureHasImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void ensureHasItemInfo(const ItemInfo& info);
+    void ensureHasItemInfos(const QList<ItemInfo>& infos);
+    void ensureHasItemInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
 
     /**
      * Ensure that all images grouped on the given leader are contained in the model.
      */
-    void ensureHasGroupedImages(const ImageInfo& groupLeader);
+    void ensureHasGroupedImages(const ItemInfo& groupLeader);
 
-    QList<ImageInfo> imageInfos() const;
+    QList<ItemInfo> imageInfos() const;
     QList<qlonglong> imageIds()    const;
-    QList<ImageInfo> uniqueImageInfos() const;
+    QList<ItemInfo> uniqueItemInfos() const;
 
     bool hasImage(qlonglong id) const;
-    bool hasImage(const ImageInfo& info) const;
-    bool hasImage(const ImageInfo& info, const QVariant& extraValue) const;
+    bool hasImage(const ItemInfo& info) const;
+    bool hasImage(const ItemInfo& info, const QVariant& extraValue) const;
     bool hasImage(qlonglong id, const QVariant& extraValue) const;
 
     bool isEmpty() const;
@@ -205,14 +205,14 @@ public:
     DECLARE_MODEL_DRAG_DROP_METHODS
 
     /**
-     * Install an object as a preprocessor for ImageInfos added to this model.
-     * For every QList of ImageInfos added to addImageInfo, the signal preprocess()
+     * Install an object as a preprocessor for ItemInfos added to this model.
+     * For every QList of ItemInfos added to addItemInfo, the signal preprocess()
      * will be emitted. The preprocessor may process the items and shall then readd
-     * them by calling reAddImageInfos(). It may take some time to process.
+     * them by calling reAddItemInfos(). It may take some time to process.
      * It shall discard any held infos when the modelReset() signal is sent.
      * It shall call readdFinished() when no reset occurred and all infos on the way have been readded.
      * This means that only after calling this method, you shall make three connections
-     * (preprocess -> your slot, your signal -> reAddImageInfos, your signal -> reAddingFinished)
+     * (preprocess -> your slot, your signal -> reAddItemInfos, your signal -> reAddingFinished)
      * and make or already hold a connection modelReset() -> your slot.
      * There is only one preprocessor at a time, a previously set object will be disconnected.
      */
@@ -240,39 +240,39 @@ public:
 
     /** Retrieves the imageInfo object from the data() method of the given index.
      *  The index may be from a QSortFilterProxyModel as long as an ImageModel is at the end. */
-    static ImageInfo retrieveImageInfo(const QModelIndex& index);
+    static ItemInfo retrieveItemInfo(const QModelIndex& index);
     static qlonglong retrieveImageId(const QModelIndex& index);
 
 Q_SIGNALS:
 
-    /** Informs that ImageInfos will be added to the model.
+    /** Informs that ItemInfos will be added to the model.
      *  This signal is sent before the model data is changed and views are informed.
      */
-    void imageInfosAboutToBeAdded(const QList<ImageInfo>& infos);
+    void imageInfosAboutToBeAdded(const QList<ItemInfo>& infos);
 
-    /** Informs that ImageInfos have been added to the model.
+    /** Informs that ItemInfos have been added to the model.
      *  This signal is sent after the model data is changed and views are informed.
      */
-    void imageInfosAdded(const QList<ImageInfo>& infos);
+    void imageInfosAdded(const QList<ItemInfo>& infos);
 
-    /** Informs that ImageInfos will be removed from the model.
+    /** Informs that ItemInfos will be removed from the model.
      *  This signal is sent before the model data is changed and views are informed.
      *  Note: You need to explicitly enable sending of this signal. It is not sent
-     *  in clearImageInfos().
+     *  in clearItemInfos().
      */
-    void imageInfosAboutToBeRemoved(const QList<ImageInfo>& infos);
+    void imageInfosAboutToBeRemoved(const QList<ItemInfo>& infos);
 
-    /** Informs that ImageInfos have been removed from the model.
+    /** Informs that ItemInfos have been removed from the model.
      *  This signal is sent after the model data is changed and views are informed. *
      *  Note: You need to explicitly enable sending of this signal. It is not sent
-     *  in clearImageInfos().
+     *  in clearItemInfos().
      */
-    void imageInfosRemoved(const QList<ImageInfo>& infos);
+    void imageInfosRemoved(const QList<ItemInfo>& infos);
 
     /** Connect to this signal only if you are the current preprocessor.
      */
-    void preprocess(const QList<ImageInfo>& infos, const QList<QVariant>&);
-    void processAdded(const QList<ImageInfo>& infos, const QList<QVariant>&);
+    void preprocess(const QList<ItemInfo>& infos, const QList<QVariant>&);
+    void processAdded(const QList<ItemInfo>& infos, const QList<QVariant>&);
 
     /** If an ImageChangeset affected indexes of this model with changes as set in watchFlags(),
      *  this signal contains the changeset and the affected indexes.
@@ -297,15 +297,15 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void reAddImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void reAddItemInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
     void reAddingFinished();
 
 protected:
 
-    /** Subclasses that add ImageInfos in batches shall call startRefresh()
+    /** Subclasses that add ItemInfos in batches shall call startRefresh()
      *  when they start sending batches and finishRefresh() when they have finished.
      *  No incremental refreshes will be started while listing.
-     *  A clearImageInfos() always stops listing, calling finishRefresh() is then not necessary.
+     *  A clearItemInfos() always stops listing, calling finishRefresh() is then not necessary.
      */
     void startRefresh();
     void finishRefresh();
@@ -340,9 +340,9 @@ protected Q_SLOTS:
 
 private:
 
-    void appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
-    void appendInfosChecked(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
-    void publiciseInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void appendInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
+    void appendInfosChecked(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
+    void publiciseInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
     void cleanSituationChecks();
     void removeRowPairsWithCheck(const QList<QPair<int, int> >& toRemove);
     void removeRowPairs(const QList<QPair<int, int> >& toRemove);

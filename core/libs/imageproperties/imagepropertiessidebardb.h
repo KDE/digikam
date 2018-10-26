@@ -35,7 +35,7 @@
 // Local includes
 
 #include "dimagehistory.h"
-#include "imageinfolist.h"
+#include "iteminfolist.h"
 #include "imagepropertiessidebar.h"
 #include "digikam_export.h"
 #include "digikam_config.h"
@@ -45,7 +45,7 @@ namespace Digikam
 
 class DImg;
 class SidebarSplitter;
-class ImageInfo;
+class ItemInfo;
 class ImageChangeset;
 class ImageDescEditTab;
 class ImageTagChangeset;
@@ -73,15 +73,15 @@ public:
 
     virtual void itemChanged(const QUrl& url, const QRect& rect = QRect(), DImg* const img = 0);
 
-    virtual void itemChanged(const ImageInfo& info, const QRect& rect = QRect(),
+    virtual void itemChanged(const ItemInfo& info, const QRect& rect = QRect(),
                              DImg* const img = 0, const DImageHistory& history = DImageHistory());
 
-    virtual void itemChanged(const ImageInfoList& infos);
+    virtual void itemChanged(const ItemInfoList& infos);
 
 
 #ifdef HAVE_MARBLE
 
-    static bool GPSItemInfofromImageInfo(const ImageInfo&, GPSItemInfo* const);
+    static bool GPSItemInfofromItemInfo(const ItemInfo&, GPSItemInfo* const);
 
 #endif // HAVE_MARBLE
 
@@ -115,8 +115,8 @@ private Q_SLOTS:
 
 private:
 
-    void itemChanged(const QUrl& url, const ImageInfo& info, const QRect& rect, DImg* const img, const DImageHistory& history);
-    void itemChanged(const ImageInfoList& infos, const QRect& rect, DImg* const img, const DImageHistory& history);
+    void itemChanged(const QUrl& url, const ItemInfo& info, const QRect& rect, DImg* const img, const DImageHistory& history);
+    void itemChanged(const ItemInfoList& infos, const QRect& rect, DImg* const img, const DImageHistory& history);
     void setImagePropertiesInformation(const QUrl& url);
 
 protected:

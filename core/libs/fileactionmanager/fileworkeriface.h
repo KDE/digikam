@@ -28,7 +28,7 @@
 
 #include "fileactionmngr.h"
 #include "fileactionimageinfolist.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "workerobject.h"
 
 namespace Digikam
@@ -42,10 +42,10 @@ class FileWorkerInterface : public WorkerObject
 
 public Q_SLOTS:
 
-    virtual void writeOrientationToFiles(FileActionImageInfoList, int){};
-    virtual void writeMetadataToFiles(FileActionImageInfoList)        {};
-    virtual void writeMetadata(FileActionImageInfoList, int)          {};
-    virtual void transform(FileActionImageInfoList, int)              {};
+    virtual void writeOrientationToFiles(FileActionItemInfoList, int){};
+    virtual void writeMetadataToFiles(FileActionItemInfoList)        {};
+    virtual void writeMetadata(FileActionItemInfoList, int)          {};
+    virtual void transform(FileActionItemInfoList, int)              {};
 
 Q_SIGNALS:
 
@@ -67,11 +67,11 @@ public:
 
 public:
 
-    void writeOrientationToFiles(FileActionImageInfoList infos, int orientation);
-    void writeMetadataToFiles(FileActionImageInfoList infos);
-    void writeMetadata(FileActionImageInfoList infos, int flags);
-    void transform(FileActionImageInfoList infos, int orientation);
-    void ajustFaceRectangles(const ImageInfo& info, int action);
+    void writeOrientationToFiles(FileActionItemInfoList infos, int orientation);
+    void writeMetadataToFiles(FileActionItemInfoList infos);
+    void writeMetadata(FileActionItemInfoList infos, int flags);
+    void transform(FileActionItemInfoList infos, int orientation);
+    void ajustFaceRectangles(const ItemInfo& info, int action);
 
 private:
 

@@ -509,11 +509,11 @@ void DigikamApp::slotAlbumSelected(Album* album)
     }
 }
 
-void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageInfoList& listAll)
+void DigikamApp::slotImageSelected(const ItemInfoList& selection, const ItemInfoList& listAll)
 {
     int numImagesWithGrouped              = listAll.count();
     int numImagesWithoutGrouped           = d->view->allUrls(false).count();
-    ImageInfoList selectionWithoutGrouped = d->view->selectedInfoList(true, false);
+    ItemInfoList selectionWithoutGrouped = d->view->selectedInfoList(true, false);
 
     QString statusBarSelectionText;
     QString statusBarSelectionToolTip;
@@ -754,7 +754,7 @@ void DigikamApp::slotResetExifOrientationActions()
     d->imageSetExifOrientation8Action->setChecked(false);
 }
 
-void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
+void DigikamApp::slotSetCheckedExifOrientationAction(const ItemInfo& info)
 {
     //DMetadata meta(info.fileUrl().toLocalFile());
     //int orientation = (meta.isEmpty()) ? 0 : meta.getImageOrientation();

@@ -35,7 +35,7 @@
 
 #include "digikam_export.h"
 #include "collectionscannerobserver.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "loadingcache.h"
 #include "coredbchangesets.h"
 
@@ -126,30 +126,30 @@ public:
 
     /**
      * If necessary (modified or newly created, scans the file directly
-     * Returns the up-to-date ImageInfo.
+     * Returns the up-to-date ItemInfo.
      */
-    ImageInfo scannedInfo(const QString& filePath);
+    ItemInfo scannedInfo(const QString& filePath);
 
     /**
      * When writing metadata to the file, the file content on disk changes,
      * but the information is taken from the database; therefore,
      * the resulting scanning process can be optimized.
      *
-     * Thus, if you write metadata of an ImageInfo from the database to disk,
+     * Thus, if you write metadata of an ItemInfo from the database to disk,
      * do this in the scope of a FileMetadataWrite object.
      */
     class FileMetadataWrite
     {
     public:
 
-        explicit FileMetadataWrite(const ImageInfo& info);
+        explicit FileMetadataWrite(const ItemInfo& info);
         ~FileMetadataWrite();
 
         void changed(bool wasChanged);
 
     protected:
 
-        ImageInfo m_info;
+        ItemInfo m_info;
         bool      m_changed;
     };
 
@@ -206,8 +206,8 @@ public:
     /**
      * Implementation of FileMetadataWrite, see there. Calling these methods is equivalent.
      */
-    void beginFileMetadataWrite(const ImageInfo& info);
-    void finishFileMetadataWrite(const ImageInfo& info, bool changed);
+    void beginFileMetadataWrite(const ItemInfo& info);
+    void finishFileMetadataWrite(const ItemInfo& info, bool changed);
 
 Q_SIGNALS:
 
@@ -257,7 +257,7 @@ private:
      * The scan is finished when returning from the method.
      */
     void scanFileDirectly(const QString& filePath);
-    void scanFileDirectlyNormal(const ImageInfo& info);
+    void scanFileDirectlyNormal(const ItemInfo& info);
 
     void createProgressDialog();
     void setInitializationMessage();

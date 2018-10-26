@@ -29,12 +29,12 @@
 
 // Local includes
 
-#include "imageinfolist.h"
+#include "iteminfolist.h"
 
 namespace Digikam
 {
 
-bool GroupingViewImplementation::needGroupResolving(ApplicationSettings::OperationType type, const ImageInfoList& infos) const
+bool GroupingViewImplementation::needGroupResolving(ApplicationSettings::OperationType type, const ItemInfoList& infos) const
 {
     ApplicationSettings::ApplyToEntireGroup applyAll =
             ApplicationSettings::instance()->getGroupingOperateOnAll(type);
@@ -44,7 +44,7 @@ bool GroupingViewImplementation::needGroupResolving(ApplicationSettings::Operati
         return false;
     }
 
-    foreach(const ImageInfo& info, infos)
+    foreach(const ItemInfo& info, infos)
     {
         if (hasHiddenGroupedImages(info))
         {
@@ -60,11 +60,11 @@ bool GroupingViewImplementation::needGroupResolving(ApplicationSettings::Operati
     return false;
 }
 
-ImageInfoList GroupingViewImplementation::resolveGrouping(const ImageInfoList& infos) const
+ItemInfoList GroupingViewImplementation::resolveGrouping(const ItemInfoList& infos) const
 {
-    ImageInfoList outInfos;
+    ItemInfoList outInfos;
 
-    foreach(const ImageInfo& info, infos)
+    foreach(const ItemInfo& info, infos)
     {
         outInfos << info;
 
@@ -77,11 +77,11 @@ ImageInfoList GroupingViewImplementation::resolveGrouping(const ImageInfoList& i
     return outInfos;
 }
 
-ImageInfoList GroupingViewImplementation::getHiddenGroupedInfos(const ImageInfoList& infos) const
+ItemInfoList GroupingViewImplementation::getHiddenGroupedInfos(const ItemInfoList& infos) const
 {
-    ImageInfoList outInfos;
+    ItemInfoList outInfos;
 
-    foreach(const ImageInfo& info, infos)
+    foreach(const ItemInfo& info, infos)
     {
         if (hasHiddenGroupedImages(info))
         {

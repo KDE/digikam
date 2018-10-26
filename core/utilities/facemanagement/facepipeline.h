@@ -35,7 +35,7 @@
 #include "digikam_debug.h"
 #include "facetagsiface.h"
 #include "dimg.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "recognitiondatabase.h"
 
 namespace Digikam
@@ -125,7 +125,7 @@ public:
 
 public:
 
-    ImageInfo                     info;
+    ItemInfo                     info;
     DImg                          image;
     QList<QRectF>                 detectedFaces;
     QList<Identity>               recognitionResults;
@@ -247,8 +247,8 @@ public Q_SLOTS:
      * If no preview loader is plugged, you must provide a DImg for detection or recognition.
      * Any of the signals below will only be emitted if true is returned.
      */
-    bool process(const ImageInfo& info);
-    bool process(const ImageInfo& info, const DImg& image);
+    bool process(const ItemInfo& info);
+    bool process(const ItemInfo& info, const DImg& image);
 
     /**
      * Confirm the face. Pass the original face, and additionally tag id or region
@@ -256,31 +256,31 @@ public Q_SLOTS:
      * it is not yet in the database (connect to signal processed() to react when the processing finished).
      * If a trainer is plugged, the face will be trained.
      */
-    FaceTagsIface confirm(const ImageInfo& info, const FaceTagsIface& face,
+    FaceTagsIface confirm(const ItemInfo& info, const FaceTagsIface& face,
                          int assignedTagId = 0, const TagRegion& assignedRegion = TagRegion());
-    FaceTagsIface confirm(const ImageInfo& info, const FaceTagsIface& face, const DImg& image,
+    FaceTagsIface confirm(const ItemInfo& info, const FaceTagsIface& face, const DImg& image,
                          int assignedTagId = 0, const TagRegion& assignedRegion = TagRegion());
     /**
      * Train the given faces.
      */
-    void train(const ImageInfo& info, const QList<FaceTagsIface>& faces);
-    void train(const ImageInfo& info, const QList<FaceTagsIface>& faces, const DImg& image);
+    void train(const ItemInfo& info, const QList<FaceTagsIface>& faces);
+    void train(const ItemInfo& info, const QList<FaceTagsIface>& faces, const DImg& image);
 
     /**
      * Remove the given face.
      */
-    void remove(const ImageInfo& info, const FaceTagsIface& face);
+    void remove(const ItemInfo& info, const FaceTagsIface& face);
 
     /**
      * Add an entry manually.
      */
-    FaceTagsIface addManually(const ImageInfo& info, const DImg& image, const TagRegion& assignedRegion);
+    FaceTagsIface addManually(const ItemInfo& info, const DImg& image, const TagRegion& assignedRegion);
 
     /**
      * Change the given face's region to newRegion.
      * Does not care for training atm.
      */
-    FaceTagsIface editRegion(const ImageInfo& info, const DImg& image,
+    FaceTagsIface editRegion(const ItemInfo& info, const DImg& image,
                             const FaceTagsIface& databaseFace, const TagRegion& newRegion);
 
     /**
@@ -288,7 +288,7 @@ public Q_SLOTS:
      * will inform about skipped infos. Filtering is done in a thread, returns immediately.
      * Some of the signals below will be emitted in any case.
      */
-    void process(const QList<ImageInfo>& infos);
+    void process(const QList<ItemInfo>& infos);
 
     void setDetectionAccuracy(double accuracy);
 
@@ -311,7 +311,7 @@ Q_SIGNALS:
     void finished();
 
     /// Emitted when one or several packages were skipped, usually because they have already been scanned.
-    void skipped(const QList<ImageInfo>& skippedInfos);
+    void skipped(const QList<ItemInfo>& skippedInfos);
 
 public:
 

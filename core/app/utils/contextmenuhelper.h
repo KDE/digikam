@@ -51,7 +51,7 @@ class AbstractCheckableAlbumModel;
 class Album;
 class AlbumIconItem;
 class AlbumModificationHelper;
-class ImageInfo;
+class ItemInfo;
 class ImageFilterModel;
 class PAlbum;
 class TagModificationHelper;
@@ -88,9 +88,9 @@ public:
 
 Q_SIGNALS:
 
-    void signalSetThumbnail(const ImageInfo&);
-    void signalGotoAlbum(const ImageInfo&);
-    void signalGotoDate(const ImageInfo&);
+    void signalSetThumbnail(const ItemInfo&);
+    void signalGotoAlbum(const ItemInfo&);
+    void signalGotoDate(const ItemInfo&);
     void signalGotoTag(int);
     void signalAssignTag(int);
     void signalRemoveTag(int);

@@ -49,7 +49,7 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModelPrepareHook
 public:
 
     virtual ~ImageFilterModelPrepareHook() {};
-    virtual void prepare(const QVector<ImageInfo>& infos) = 0;
+    virtual void prepare(const QVector<ItemInfo>& infos) = 0;
 };
 
 // -----------------------------------------------------------------------------------------------
@@ -77,19 +77,19 @@ public:
     QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes) const;
     QList<QModelIndex> mapListFromSource(const QList<QModelIndex>& sourceIndexes) const;
 
-    ImageInfo        imageInfo(const QModelIndex& index) const;
+    ItemInfo        imageInfo(const QModelIndex& index) const;
     qlonglong        imageId(const QModelIndex& index) const;
-    QList<ImageInfo> imageInfos(const QList<QModelIndex>& indexes) const;
+    QList<ItemInfo> imageInfos(const QList<QModelIndex>& indexes) const;
     QList<qlonglong> imageIds(const QList<QModelIndex>& indexes) const;
 
     QModelIndex indexForPath(const QString& filePath) const;
-    QModelIndex indexForImageInfo(const ImageInfo& info) const;
+    QModelIndex indexForItemInfo(const ItemInfo& info) const;
     QModelIndex indexForImageId(qlonglong id) const;
 
     /** Returns a list of all image infos, sorted according to this model.
      *  If you do not need a sorted list, use ImageModel's imageInfos() method.
      */
-    QList<ImageInfo> imageInfosSorted() const;
+    QList<ItemInfo> imageInfosSorted() const;
 
     /// Returns this, any chained ImageFilterModel, or 0.
     virtual ImageFilterModel* imageFilterModel() const;
@@ -157,7 +157,7 @@ public:
     bool isAllGroupsOpen() const;
 
     /// Enables sending imageInfosAdded and imageInfosAboutToBeRemoved
-    void setSendImageInfoSignals(bool sendSignals);
+    void setSendItemInfoSignals(bool sendSignals);
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual ImageFilterModel* imageFilterModel() const;
@@ -223,10 +223,10 @@ Q_SIGNALS:
      */
     void filterSettingsChanged(const ImageFilterSettings& settings);
 
-    /** These signals need to be explicitly enabled with setSendImageInfoSignals()
+    /** These signals need to be explicitly enabled with setSendItemInfoSignals()
      */
-    void imageInfosAdded(const QList<ImageInfo>& infos);
-    void imageInfosAboutToBeRemoved(const QList<ImageInfo>& infos);
+    void imageInfosAdded(const QList<ItemInfo>& infos);
+    void imageInfosAboutToBeRemoved(const QList<ItemInfo>& infos);
 
 public:
 
@@ -247,21 +247,21 @@ protected:
 
     virtual int  compareCategories(const QModelIndex& left, const QModelIndex& right) const;
     virtual bool subSortLessThan(const QModelIndex& left, const QModelIndex& right) const;
-    //virtual int  categoryCount(const ImageInfo& info) const;
+    //virtual int  categoryCount(const ItemInfo& info) const;
 
     /** Reimplement to customize category sorting,
      *  Return negative if category of left < category right,
      *  Return 0 if left and right are in the same category, else return positive.
      */
-    virtual int compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const;
+    virtual int compareInfosCategories(const ItemInfo& left, const ItemInfo& right) const;
 
     /** Reimplement to customize sorting. Do not take categories into account here.
      */
-    virtual bool infosLessThan(const ImageInfo& left, const ImageInfo& right) const;
+    virtual bool infosLessThan(const ItemInfo& left, const ItemInfo& right) const;
 
     /** Returns a unique identifier for the category if info. The string need not be for user display.
      */
-    virtual QString categoryIdentifier(const ImageInfo& info) const;
+    virtual QString categoryIdentifier(const ItemInfo& info) const;
 
 protected Q_SLOTS:
 

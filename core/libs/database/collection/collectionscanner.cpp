@@ -58,7 +58,7 @@
 #include "coredboperationgroup.h"
 #include "itemcomments.h"
 #include "itemcopyright.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "itemscanner.h"
 #include "metaenginesettings.h"
 #include "tagscache.h"
@@ -216,7 +216,7 @@ void CollectionScannerHintContainerImplementation::recordHint(const ItemMetadata
 {
     if (hint.isAboutToEdit())
     {
-        ImageInfo info(hint.id());
+        ItemInfo info(hint.id());
 
         if (!
             (modificationDateEquals(hint.modificationDate(), info.modDateTime())
@@ -763,7 +763,7 @@ qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& a
     return imageId;
 }
 
-void CollectionScanner::scanFile(const ImageInfo& info, FileScanMode mode)
+void CollectionScanner::scanFile(const ItemInfo& info, FileScanMode mode)
 {
     if (info.isNull())
     {
@@ -1395,28 +1395,28 @@ void CollectionScanner::rescanFile(const QFileInfo& info, const ItemScanInfo& sc
     d->finishScanner(scanner);
 }
 
-void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageInfo& d)
+void CollectionScanner::copyFileProperties(const ItemInfo& source, const ItemInfo& d)
 {
     if (source.isNull() || d.isNull())
     {
         return;
     }
 
-    ImageInfo dest(d);
+    ItemInfo dest(d);
     CoreDbOperationGroup group;
 
     qCDebug(DIGIKAM_DATABASE_LOG) << "Copying properties from" << source.id() << "to" << dest.id();
 
     // Rating, creation dates
-    DatabaseFields::ImageInformation imageInfoFields = DatabaseFields::Rating       |
+    DatabaseFields::ItemInformation imageInfoFields = DatabaseFields::Rating       |
                                                        DatabaseFields::CreationDate |
                                                        DatabaseFields::DigitizationDate;
 
-    QVariantList imageInfos = CoreDbAccess().db()->getImageInformation(source.id(), imageInfoFields);
+    QVariantList imageInfos = CoreDbAccess().db()->getItemInformation(source.id(), imageInfoFields);
 
     if (!imageInfos.isEmpty())
     {
-        CoreDbAccess().db()->changeImageInformation(dest.id(), imageInfos, imageInfoFields);
+        CoreDbAccess().db()->changeItemInformation(dest.id(), imageInfos, imageInfoFields);
     }
 
     // Copy public tags

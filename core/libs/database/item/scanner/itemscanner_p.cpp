@@ -30,7 +30,7 @@ namespace Digikam
 ItemScannerCommit::ItemScannerCommit()
     : operation(NoOp),
       copyImageAttributesId(-1),
-      commitImageInformation(false),
+      commitItemInformation(false),
       commitImageMetadata(false),
       commitVideoMetadata(false),
       commitItemPosition(false),
@@ -45,12 +45,12 @@ ItemScannerCommit::ItemScannerCommit()
 
 // ---------------------------------------------------------------------------------------
 
-LessThanByProximityToSubject::LessThanByProximityToSubject(const ImageInfo& subject)
+LessThanByProximityToSubject::LessThanByProximityToSubject(const ItemInfo& subject)
     : subject(subject)
 {
 }
 
-bool LessThanByProximityToSubject::operator()(const ImageInfo& a, const ImageInfo& b)
+bool LessThanByProximityToSubject::operator()(const ItemInfo& a, const ItemInfo& b)
 {
     if (a.isNull() || b.isNull())
     {

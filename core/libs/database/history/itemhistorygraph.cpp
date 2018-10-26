@@ -46,11 +46,11 @@ Q_GLOBAL_STATIC(ItemHistoryGraphDataSharedNull, imageHistoryGraphDataSharedNull)
 
 // -----------------------------------------------------------------------------------------------
 
-ImageInfo HistoryVertexProperties::firstImageInfo() const
+ItemInfo HistoryVertexProperties::firstItemInfo() const
 {
     if (infos.isEmpty())
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
     return infos.first();
@@ -97,14 +97,14 @@ bool HistoryVertexProperties::operator==(const QString& id) const
     return uuid == id;
 }
 
-bool HistoryVertexProperties::operator==(const ImageInfo& info) const
+bool HistoryVertexProperties::operator==(const ItemInfo& info) const
 {
     return infos.contains(info);
 }
 
 bool HistoryVertexProperties::operator==(qlonglong id) const
 {
-    foreach (const ImageInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         if (info.id() == id)
         {
@@ -144,7 +144,7 @@ HistoryVertexProperties& HistoryVertexProperties::operator+=(const QString& id)
     return *this;
 }
 
-HistoryVertexProperties& HistoryVertexProperties::operator+=(const ImageInfo& info)
+HistoryVertexProperties& HistoryVertexProperties::operator+=(const ItemInfo& info)
 {
     if (!info.isNull() && !infos.contains(info))
     {
@@ -176,7 +176,7 @@ HistoryVertexProperties& HistoryVertexProperties::operator+=(const HistoryImageI
 
 QDebug operator<<(QDebug dbg, const HistoryVertexProperties& props)
 {
-    foreach (const ImageInfo& info, props.infos)
+    foreach (const ItemInfo& info, props.infos)
     {
         dbg.space() << info.id();
     }
@@ -220,7 +220,7 @@ HistoryGraph::Vertex ItemHistoryGraphData::addVertex(const QList<HistoryImageId>
 
     if (imageIds.size() > 1)
     {
-        applyProperties(v, QList<ImageInfo>(), imageIds);
+        applyProperties(v, QList<ItemInfo>(), imageIds);
     }
 
     return v;
@@ -234,7 +234,7 @@ HistoryGraph::Vertex ItemHistoryGraphData::addVertex(const HistoryImageId& image
     }
 
     Vertex v;
-    QList<ImageInfo> infos;
+    QList<ItemInfo> infos;
     //qCDebug(DIGIKAM_DATABASE_LOG) << "Adding vertex" << imageId.m_uuid.left(6) << imageId.fileName();
 
     // find by UUID
@@ -245,10 +245,10 @@ HistoryGraph::Vertex ItemHistoryGraphData::addVertex(const HistoryImageId& image
 
     if (v.isNull())
     {
-        // Resolve HistoryImageId, find by ImageInfo
+        // Resolve HistoryImageId, find by ItemInfo
         foreach (const qlonglong& id, ItemScanner::resolveHistoryImageId(imageId))
         {
-            ImageInfo info(id);
+            ItemInfo info(id);
             //qCDebug(DIGIKAM_DATABASE_LOG) << "Found info id:" << info.id();
             infos << info;
 
@@ -266,10 +266,10 @@ HistoryGraph::Vertex ItemHistoryGraphData::addVertex(const HistoryImageId& image
 
 HistoryGraph::Vertex ItemHistoryGraphData::addVertex(qlonglong id)
 {
-    return addVertex(ImageInfo(id));
+    return addVertex(ItemInfo(id));
 }
 
-HistoryGraph::Vertex ItemHistoryGraphData::addVertex(const ImageInfo& info)
+HistoryGraph::Vertex ItemHistoryGraphData::addVertex(const ItemInfo& info)
 {
     Vertex         v;
     QString        uuid;
@@ -304,7 +304,7 @@ HistoryGraph::Vertex ItemHistoryGraphData::addVertex(const ImageInfo& info)
         }
     }
 
-    applyProperties(v, QList<ImageInfo>() << info, QList<HistoryImageId>() << id);
+    applyProperties(v, QList<ItemInfo>() << info, QList<HistoryImageId>() << id);
     //qCDebug(DIGIKAM_DATABASE_LOG) << "Returning vertex" << v << properties(v).infos.size();
 
     return v;
@@ -312,16 +312,16 @@ HistoryGraph::Vertex ItemHistoryGraphData::addVertex(const ImageInfo& info)
 
 HistoryGraph::Vertex ItemHistoryGraphData::addVertexScanned(qlonglong id)
 {
-    // short version where we do not read information about id from an ImageInfo
+    // short version where we do not read information about id from an ItemInfo
     Vertex v = findVertexByProperties(id);
 
-    applyProperties(v, QList<ImageInfo>() << ImageInfo(id), QList<HistoryImageId>());
+    applyProperties(v, QList<ItemInfo>() << ItemInfo(id), QList<HistoryImageId>());
 
     return v;
 }
 
 void ItemHistoryGraphData::applyProperties(Vertex& v,
-                                            const QList<ImageInfo>& infos,
+                                            const QList<ItemInfo>& infos,
                                             const QList<HistoryImageId>& ids)
 {
     // if needed, add a new vertex; or retrieve properties to add possibly new entries
@@ -333,7 +333,7 @@ void ItemHistoryGraphData::applyProperties(Vertex& v,
     HistoryVertexProperties& props = properties(v);
 
     // adjust properties
-    foreach (const ImageInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         props += info;
     }
@@ -503,7 +503,7 @@ void ItemHistoryGraph::clear()
     *d = HistoryGraph();
 }
 
-ItemHistoryGraph ItemHistoryGraph::fromInfo(const ImageInfo& info, HistoryLoadingMode loadingMode,
+ItemHistoryGraph ItemHistoryGraph::fromInfo(const ItemInfo& info, HistoryLoadingMode loadingMode,
         ProcessingMode processingMode)
 {
     ItemHistoryGraph graph;
@@ -520,7 +520,7 @@ ItemHistoryGraph ItemHistoryGraph::fromInfo(const ImageInfo& info, HistoryLoadin
 
     if (loadingMode & LoadLeavesHistory)
     {
-        foreach (const ImageInfo& leaf, graph.leafImages())
+        foreach (const ItemInfo& leaf, graph.leafImages())
         {
             if (leaf != info)
             {
@@ -537,7 +537,7 @@ ItemHistoryGraph ItemHistoryGraph::fromInfo(const ImageInfo& info, HistoryLoadin
     return graph;
 }
 
-void ItemHistoryGraph::addHistory(const DImageHistory& givenHistory, const ImageInfo& historySubject)
+void ItemHistoryGraph::addHistory(const DImageHistory& givenHistory, const ItemInfo& historySubject)
 {
     addHistory(givenHistory, historySubject.historyImageId());
 }
@@ -692,7 +692,7 @@ void ItemHistoryGraph::dropUnresolvedEntries()
     }
 }
 
-void ItemHistoryGraph::sortForInfo(const ImageInfo& subject)
+void ItemHistoryGraph::sortForInfo(const ItemInfo& subject)
 {
     // Remove nodes which could not be resolved into image infos
     QList<HistoryGraph::Vertex> toRemove;
@@ -704,7 +704,7 @@ void ItemHistoryGraph::sortForInfo(const ImageInfo& subject)
     }
 }
 
-void ItemHistoryGraph::prepareForDisplay(const ImageInfo& subject)
+void ItemHistoryGraph::prepareForDisplay(const ItemInfo& subject)
 {
     reduceEdges();
     dropUnresolvedEntries();
@@ -719,9 +719,9 @@ QList<QPair<qlonglong, qlonglong> > ItemHistoryGraph::relationCloud() const
 
     foreach (const HistoryGraph::VertexPair& edge, edges)
     {
-        foreach (const ImageInfo& source, closure.properties(edge.first).infos)
+        foreach (const ItemInfo& source, closure.properties(edge.first).infos)
         {
-            foreach (const ImageInfo& target, closure.properties(edge.second).infos)
+            foreach (const ItemInfo& target, closure.properties(edge.second).infos)
             {
                 pairs << QPair<qlonglong, qlonglong>(source.id(), target.id());
             }
@@ -739,9 +739,9 @@ QPair<QList<qlonglong>, QList<qlonglong> > ItemHistoryGraph::relationCloudParall
 
     foreach (const HistoryGraph::VertexPair& edge, edges)
     {
-        foreach (const ImageInfo& source, closure.properties(edge.first).infos)
+        foreach (const ItemInfo& source, closure.properties(edge.first).infos)
         {
-            foreach (const ImageInfo& target, closure.properties(edge.second).infos)
+            foreach (const ItemInfo& target, closure.properties(edge.second).infos)
             {
                 subjects << source.id();
                 objects  << target.id();
@@ -752,7 +752,7 @@ QPair<QList<qlonglong>, QList<qlonglong> > ItemHistoryGraph::relationCloudParall
     return qMakePair(subjects, objects);
 }
 
-QList<ImageInfo> ItemHistoryGraph::allImages() const
+QList<ItemInfo> ItemHistoryGraph::allImages() const
 {
     return d->toInfoList(d->vertices());
 }
@@ -763,7 +763,7 @@ QList<qlonglong> ItemHistoryGraph::allImageIds() const
 
     foreach (const HistoryGraph::Vertex& v, d->vertices())
     {
-        foreach (const ImageInfo& info, d->properties(v).infos)
+        foreach (const ItemInfo& info, d->properties(v).infos)
         {
             ids << info.id();
         }
@@ -772,21 +772,21 @@ QList<qlonglong> ItemHistoryGraph::allImageIds() const
     return ids;
 }
 
-QList<ImageInfo> ItemHistoryGraph::rootImages() const
+QList<ItemInfo> ItemHistoryGraph::rootImages() const
 {
     return d->toInfoList(d->roots());
 }
 
-QList<ImageInfo> ItemHistoryGraph::leafImages() const
+QList<ItemInfo> ItemHistoryGraph::leafImages() const
 {
     return d->toInfoList(d->leaves());
 }
 
-QHash<ImageInfo, HistoryImageId::Types> ItemHistoryGraph::categorize() const
+QHash<ItemInfo, HistoryImageId::Types> ItemHistoryGraph::categorize() const
 {
     QHash<HistoryGraph::Vertex, HistoryImageId::Types> vertexType = d->categorize();
 
-    QHash<ImageInfo, HistoryImageId::Types> types;
+    QHash<ItemInfo, HistoryImageId::Types> types;
 
     foreach(const HistoryGraph::Vertex& v, d->vertices())
     {
@@ -799,7 +799,7 @@ QHash<ImageInfo, HistoryImageId::Types> ItemHistoryGraph::categorize() const
 
         HistoryImageId::Types type = vertexType.value(v);
 
-        foreach(const ImageInfo& info, props.infos)
+        foreach(const ItemInfo& info, props.infos)
         {
             types[info] = type;
         }
@@ -814,7 +814,7 @@ static QString toString(const HistoryVertexProperties& props)
     s = QLatin1String("Ids: ");
     QStringList ids;
 
-    foreach(const ImageInfo& info, props.infos)
+    foreach(const ItemInfo& info, props.infos)
     {
         ids << QString::number(info.id());
     }

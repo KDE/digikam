@@ -31,7 +31,7 @@
 // Local includes
 
 #include "imagecategorizedview.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "imagemodel.h"
 #include "itemviewhoverbutton.h"
 
@@ -110,7 +110,7 @@ void ImageFsOverlay::slotClicked()
 
 bool ImageFsOverlay::checkIndex(const QModelIndex& index) const
 {
-    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    ItemInfo info = ImageModel::retrieveItemInfo(index);
 
     return (info.category() == DatabaseItem::Image ||
             info.category() == DatabaseItem::Video);

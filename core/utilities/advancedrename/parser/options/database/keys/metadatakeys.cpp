@@ -30,7 +30,7 @@
 // Local includes
 
 #include "coredbinfocontainers.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace
 {
@@ -94,7 +94,7 @@ MetadataKeys::MetadataKeys()
 
 QString MetadataKeys::getDbValue(const QString& key, ParseSettings& settings)
 {
-    ImageInfo info                        = ImageInfo::fromUrl(settings.fileUrl);
+    ItemInfo info                        = ItemInfo::fromUrl(settings.fileUrl);
     ImageMetadataContainer container      = info.imageMetadataContainer();
     VideoMetadataContainer videoContainer = info.videoMetadataContainer();
     QString result;

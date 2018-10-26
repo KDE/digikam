@@ -239,7 +239,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
         dims = metaData.getPixelSize();
 
         DImg img;
-        img.loadImageInfo(url.toLocalFile(), false, false, false, false);
+        img.loadItemInfo(url.toLocalFile(), false, false, false, false);
         bitDepth.number(img.originalBitDepth());
         colorMode = DImg::colorModelToString(img.originalColorModel());
     }

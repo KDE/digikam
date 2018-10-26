@@ -44,14 +44,14 @@ public:
     explicit ImageListModel(QObject* parent = 0);
     ~ImageListModel();
 
-    // NOTE: necessary methods to add and remove ImageInfos to the model are inherited from ImageModel
+    // NOTE: necessary methods to add and remove ItemInfos to the model are inherited from ImageModel
 
 Q_SIGNALS:
 
     /**
      * Emitted when images are removed from the model because they are removed in the database
      */
-    void imageInfosRemoved(const QList<ImageInfo>& infos);
+    void imageInfosRemoved(const QList<ItemInfo>& infos);
 
 protected Q_SLOTS:
 

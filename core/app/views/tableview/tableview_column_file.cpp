@@ -37,7 +37,7 @@
 
 #include "digikam_debug.h"
 #include "imagepropertiestab.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace Digikam
 {
@@ -124,7 +124,7 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
         }
     }
 
-    const ImageInfo info = s->tableViewModel->infoFromItem(item);
+    const ItemInfo info = s->tableViewModel->infoFromItem(item);
 
     switch (subColumn)
     {
@@ -167,8 +167,8 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
 
 TableViewColumn::ColumnCompareResult ColumnFileProperties::compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const
 {
-    const ImageInfo infoA = s->tableViewModel->infoFromItem(itemA);
-    const ImageInfo infoB = s->tableViewModel->infoFromItem(itemB);
+    const ItemInfo infoA = s->tableViewModel->infoFromItem(itemA);
+    const ItemInfo infoB = s->tableViewModel->infoFromItem(itemB);
 
     switch (subColumn)
     {

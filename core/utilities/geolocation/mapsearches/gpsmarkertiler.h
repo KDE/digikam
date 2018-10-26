@@ -46,7 +46,7 @@
 #include "itemlister.h"
 #include "coredbaccess.h"
 #include "coredb.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "thumbnailloadthread.h"
 #include "thumbsdbaccess.h"
 #include "thumbsdb.h"
@@ -102,7 +102,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void slotNewModelData(const QList<ImageInfo>& infoList);
+    void slotNewModelData(const QList<ItemInfo>& infoList);
 
 private Q_SLOTS:
 

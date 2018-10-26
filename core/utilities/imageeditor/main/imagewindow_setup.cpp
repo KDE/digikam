@@ -103,8 +103,8 @@ void ImageWindow::setupConnections()
     connect(d->rightSideBar, SIGNAL(signalPrevItem()),
             this, SLOT(slotBackward()));
 
-    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(ImageInfo)),
-            this, SLOT(openImage(ImageInfo)));
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(ItemInfo)),
+            this, SLOT(openImage(ItemInfo)));
 
     connect(this, SIGNAL(signalSelectionChanged(QRect)),
             d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
@@ -126,11 +126,11 @@ void ImageWindow::setupConnections()
             this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
 */
 
-    connect(d->thumbBar, SIGNAL(currentChanged(ImageInfo)),
-            this, SLOT(slotThumbBarImageSelected(ImageInfo)));
+    connect(d->thumbBar, SIGNAL(currentChanged(ItemInfo)),
+            this, SLOT(slotThumbBarImageSelected(ItemInfo)));
 
-    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(QList<ImageInfo>)),
-            this, SLOT(slotDroppedOnThumbbar(QList<ImageInfo>)));
+    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(QList<ItemInfo>)),
+            this, SLOT(slotDroppedOnThumbbar(QList<ItemInfo>)));
 
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
@@ -246,7 +246,7 @@ void ImageWindow::slotContextMenu()
         // Bulk assignment/removal of tags --------------------------
 
         QList<qlonglong> idList;
-        idList << d->currentImageInfo.id();
+        idList << d->currentItemInfo.id();
 
         assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::RECENTLYASSIGNED, this);
         removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE, this);

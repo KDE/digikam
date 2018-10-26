@@ -95,7 +95,7 @@ void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
                 this, SIGNAL(signalStarting(Digikam::ActionData)));
 
         connect(t, SIGNAL(signalFinished(Digikam::ActionData)),
-                this, SLOT(slotUpdateImageInfo(Digikam::ActionData)),
+                this, SLOT(slotUpdateItemInfo(Digikam::ActionData)),
                 Qt::BlockingQueuedConnection);
 
         connect(this, SIGNAL(signalCancelTask()),
@@ -116,14 +116,14 @@ void ActionThread::cancel()
     ActionThreadBase::cancel();
 }
 
-void ActionThread::slotUpdateImageInfo(const Digikam::ActionData& ad)
+void ActionThread::slotUpdateItemInfo(const Digikam::ActionData& ad)
 {
     if (ad.status == ActionData::BatchDone)
     {
         CollectionScanner scanner;
-        ImageInfo source = ImageInfo::fromUrl(ad.fileUrl);
+        ItemInfo source = ItemInfo::fromUrl(ad.fileUrl);
         qlonglong id     = scanner.scanFile(ad.destUrl.toLocalFile(), CollectionScanner::NormalScan);
-        ImageInfo info(id);
+        ItemInfo info(id);
         // Copy the digiKam attributes from original file to the new file
         CollectionScanner::copyFileProperties(source, info);
         // Read again new file that the database is up to date

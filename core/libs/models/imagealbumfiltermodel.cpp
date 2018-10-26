@@ -130,7 +130,7 @@ void ImageAlbumFilterModel::setImageFilterSettings(const ImageFilterSettings& s)
     ImageFilterModel::setImageFilterSettings(settings);
 }
 
-int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const
+int ImageAlbumFilterModel::compareInfosCategories(const ItemInfo& left, const ItemInfo& right) const
 {
     Q_D(const ImageAlbumFilterModel);
 

@@ -45,8 +45,8 @@
 #include "importui.h"
 #include "ddragobjects.h"
 #include "dio.h"
-#include "imageinfo.h"
-#include "imageinfolist.h"
+#include "iteminfo.h"
+#include "iteminfolist.h"
 
 namespace Digikam
 {
@@ -131,11 +131,11 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
 
         // Check if items dropped come from outside current album.
         // This can be the case with recursive content album mode.
-        ImageInfoList extImgInfList;
+        ItemInfoList extImgInfList;
 
         for (QList<qlonglong>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
         {
-            ImageInfo info(*it);
+            ItemInfo info(*it);
 
             if (info.albumId() != destAlbum->id())
             {

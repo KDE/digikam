@@ -72,12 +72,12 @@ void ItemLister::listPAlbum(ItemListerReceiver* const receiver,
     QList<QVariant> values;
 
     QString query = QString::fromUtf8("SELECT DISTINCT Images.id, Images.name, Images.album, "
-                    "       ImageInformation.rating, Images.category, "
-                    "       ImageInformation.format, ImageInformation.creationDate, "
+                    "       ItemInformation.rating, Images.category, "
+                    "       ItemInformation.format, ItemInformation.creationDate, "
                     "       Images.modificationDate, Images.fileSize, "
-                    "       ImageInformation.width, ImageInformation.height "
+                    "       ItemInformation.width, ItemInformation.height "
                     " FROM Images "
-                    "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                    "       LEFT JOIN ItemInformation ON Images.id=ItemInformation.imageid "
                     " WHERE Images.status=1 AND ");
 
     if (d->recursive)

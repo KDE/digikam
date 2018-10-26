@@ -41,7 +41,7 @@
 #include "digikam_debug.h"
 #include "albummanager.h"
 #include "ddragobjects.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "albumtreeview.h"
 
 namespace Digikam
@@ -169,7 +169,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             return false;
         }
 
-        if (imageIDs.size() == 1 && ImageInfo(imageIDs.first()).tagIds().contains(destAlbum->id()))
+        if (imageIDs.size() == 1 && ItemInfo(imageIDs.first()).tagIds().contains(destAlbum->id()))
         {
             // Setting the dropped image as the album thumbnail
             // If the ctrl key is pressed, when dropping the image, the

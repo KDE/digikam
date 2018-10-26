@@ -114,8 +114,8 @@ LightTableView::LightTableView(QWidget* const parent)
     connect(d->leftPreview, SIGNAL(signalSlideShowCurrent()),
             this, SIGNAL(signalLeftSlideShowCurrent()));
 
-    connect(d->leftPreview, SIGNAL(signalDroppedItems(ImageInfoList)),
-            this, SIGNAL(signalLeftDroppedItems(ImageInfoList)));
+    connect(d->leftPreview, SIGNAL(signalDroppedItems(ItemInfoList)),
+            this, SIGNAL(signalLeftDroppedItems(ItemInfoList)));
 
     connect(d->leftPreview, SIGNAL(signalPreviewLoaded(bool)),
             this, SLOT(slotLeftPreviewLoaded(bool)));
@@ -137,8 +137,8 @@ LightTableView::LightTableView(QWidget* const parent)
     connect(d->rightPreview, SIGNAL(contentsMoving(int,int)),
             this, SLOT(slotRightContentsMoved(int,int)));
 
-    connect(d->rightPreview, SIGNAL(signalDroppedItems(ImageInfoList)),
-            this, SIGNAL(signalRightDroppedItems(ImageInfoList)));
+    connect(d->rightPreview, SIGNAL(signalDroppedItems(ItemInfoList)),
+            this, SIGNAL(signalRightDroppedItems(ItemInfoList)));
 
     connect(d->rightPreview, SIGNAL(signalSlideShowCurrent()),
             this, SIGNAL(signalRightSlideShowCurrent()));
@@ -353,19 +353,19 @@ void LightTableView::slotRightZoomFactorChanged(double zoom)
     emit signalRightZoomFactorChanged(zoom);
 }
 
-ImageInfo LightTableView::leftImageInfo() const
+ItemInfo LightTableView::leftItemInfo() const
 {
-    return d->leftPreview->getImageInfo();
+    return d->leftPreview->getItemInfo();
 }
 
-ImageInfo LightTableView::rightImageInfo() const
+ItemInfo LightTableView::rightItemInfo() const
 {
-    return d->rightPreview->getImageInfo();
+    return d->rightPreview->getItemInfo();
 }
 
-void LightTableView::setLeftImageInfo(const ImageInfo& info)
+void LightTableView::setLeftItemInfo(const ItemInfo& info)
 {
-    d->leftPreview->setImageInfo(info);
+    d->leftPreview->setItemInfo(info);
 
     if (info.isNull())
     {
@@ -373,9 +373,9 @@ void LightTableView::setLeftImageInfo(const ImageInfo& info)
     }
 }
 
-void LightTableView::setRightImageInfo(const ImageInfo& info)
+void LightTableView::setRightItemInfo(const ItemInfo& info)
 {
-    d->rightPreview->setImageInfo(info);
+    d->rightPreview->setItemInfo(info);
 
     if (info.isNull())
     {
@@ -401,8 +401,8 @@ void LightTableView::slotRightPreviewLoaded(bool success)
 
 void LightTableView::checkForSyncPreview()
 {
-    if (!d->leftPreview->getImageInfo().isNull()  &&
-        !d->rightPreview->getImageInfo().isNull() &&
+    if (!d->leftPreview->getItemInfo().isNull()  &&
+        !d->rightPreview->getItemInfo().isNull() &&
         d->leftPreview->previewItem()->image().size() == d->rightPreview->previewItem()->image().size())
     {
         d->syncPreview = true;
@@ -415,7 +415,7 @@ void LightTableView::checkForSyncPreview()
     emit signalToggleOnSyncPreview(d->syncPreview);
 }
 
-void LightTableView::checkForSelection(const ImageInfo& info)
+void LightTableView::checkForSelection(const ItemInfo& info)
 {
     QString selected    = QString::fromUtf8("QLabel { background-color: %1; }")
                           .arg(qApp->palette().color(QPalette::Highlight).name());
@@ -430,27 +430,27 @@ void LightTableView::checkForSelection(const ImageInfo& info)
         return;
     }
 
-    if (!d->leftPreview->getImageInfo().isNull())
+    if (!d->leftPreview->getItemInfo().isNull())
     {
-        bool onLeft = (d->leftPreview->getImageInfo() == info);
+        bool onLeft = (d->leftPreview->getItemInfo() == info);
         d->leftFrame->setStyleSheet(onLeft ? selected : notSelected);
     }
 
-    if (!d->rightPreview->getImageInfo().isNull())
+    if (!d->rightPreview->getItemInfo().isNull())
     {
-        bool onRight = (d->rightPreview->getImageInfo() == info);
+        bool onRight = (d->rightPreview->getItemInfo() == info);
         d->rightFrame->setStyleSheet(onRight ? selected : notSelected);
     }
 }
 
 void LightTableView::slotDeleteLeftItem()
 {
-    emit signalDeleteItem(d->leftPreview->getImageInfo());
+    emit signalDeleteItem(d->leftPreview->getItemInfo());
 }
 
 void LightTableView::slotDeleteRightItem()
 {
-    emit signalDeleteItem(d->rightPreview->getImageInfo());
+    emit signalDeleteItem(d->rightPreview->getItemInfo());
 }
 
 bool LightTableView::leftPreviewLoading() const

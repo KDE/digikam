@@ -133,7 +133,7 @@ void ImageRatingOverlay::updateRating()
         return;
     }
 
-    ImageInfo info = ImageModel::retrieveImageInfo(m_index);
+    ItemInfo info = ImageModel::retrieveItemInfo(m_index);
     ratingWidget()->setRating(info.rating());
 }
 

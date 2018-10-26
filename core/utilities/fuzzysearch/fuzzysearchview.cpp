@@ -65,7 +65,7 @@
 #include "editablesearchtreeview.h"
 #include "findduplicatesview.h"
 #include "haariface.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "itemlister.h"
 #include "searchmodificationhelper.h"
 #include "searchtextbar.h"
@@ -181,7 +181,7 @@ public:
     DAdjustableLabel*         labelFile;
     DAdjustableLabel*         labelFolder;
 
-    ImageInfo                 imageInfo;
+    ItemInfo                 imageInfo;
     QUrl                      imageUrl;
 
     SearchTextBar*            searchFuzzyBar;
@@ -977,7 +977,7 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
             return;
         }
 
-        setImageInfo(ImageInfo(imageIDs.first()));
+        setItemInfo(ItemInfo(imageIDs.first()));
 
         e->acceptProposedAction();
     }
@@ -999,7 +999,7 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
                 if (!image.isNull())
                 {
                     // Set a temporary image id
-                    d->imageInfo = ImageInfo(-1);
+                    d->imageInfo = ItemInfo(-1);
                     d->imageUrl  = urls.first();
 
                     d->imageWidget->setPixmap(QPixmap::fromImage(image).scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -1068,16 +1068,16 @@ void FuzzySearchView::slotTimerImageDone()
 
     if (!d->imageInfo.isNull() && d->active)
     {
-        setImageInfo(d->imageInfo);
+        setItemInfo(d->imageInfo);
     }
 }
 
 void FuzzySearchView::setCurrentImage(qlonglong imageid)
 {
-    setCurrentImage(ImageInfo(imageid));
+    setCurrentImage(ItemInfo(imageid));
 }
 
-void FuzzySearchView::setCurrentImage(const ImageInfo& info)
+void FuzzySearchView::setCurrentImage(const ItemInfo& info)
 {
     d->imageInfo = info;
     d->imageUrl  = info.fileUrl();
@@ -1086,7 +1086,7 @@ void FuzzySearchView::setCurrentImage(const ImageInfo& info)
     d->thumbLoadThread->find(d->imageInfo.thumbnailIdentifier());
 }
 
-void FuzzySearchView::setImageInfo(const ImageInfo& info)
+void FuzzySearchView::setItemInfo(const ItemInfo& info)
 {
     setCurrentImage(info);
     slotCheckNameEditImageConditions();

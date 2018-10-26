@@ -3143,7 +3143,7 @@ void dng_image_writer::WriteTIFFWithProfile (dng_host &host,
 
 		xmp->ClearOrientation ();
 
-		xmp->ClearImageInfo ();
+		xmp->ClearItemInfo ();
 
 		xmp->SetImageSize (image.Size ());
 

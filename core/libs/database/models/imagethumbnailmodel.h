@@ -112,7 +112,7 @@ public Q_SLOTS:
      *  include them in prepareThumbnails().
      *  Note: Stops preloading of previously added thumbnails.
      */
-    void preloadThumbnails(const QList<ImageInfo>&);
+    void preloadThumbnails(const QList<ItemInfo>&);
     void preloadThumbnails(const QList<QModelIndex>&);
     void preloadAllThumbnails();
 

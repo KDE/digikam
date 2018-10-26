@@ -11,8 +11,8 @@ endif (POLICY CMP0063)
 
 set(libmaintenance_SRCS
     maintenancedata.cpp
-    imageinfojob.cpp
-    imageinfoalbumsjob.cpp
+    iteminfojob.cpp
+    iteminfoalbumsjob.cpp
     metadatatask.cpp
     metadatasynchronizer.cpp
     duplicatesfinder.cpp

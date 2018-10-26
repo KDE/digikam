@@ -67,8 +67,8 @@
 #include "statusprogressbar.h"
 #include "tagmodificationhelper.h"
 #include "template.h"
-#include "imageinfolist.h"
-#include "imageinfo.h"
+#include "iteminfolist.h"
+#include "iteminfo.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
 #include "fileactionprogress.h"
@@ -157,7 +157,7 @@ public:
     SearchTextBar*       tagsSearchBar;
     AddTagsLineEdit*     newTagEdit;
 
-    ImageInfoList        currInfos;
+    ItemInfoList        currInfos;
 
     TagCheckView*        tagCheckView;
 
@@ -409,8 +409,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     connect(d->metadataChangeTimer, SIGNAL(timeout()),
             this, SLOT(slotReloadForMetadataChange()));
 
-    connect(this, SIGNAL(askToApplyChanges(QList<ImageInfo>,DisjointMetadata*)),
-            this, SLOT(slotAskToApplyChanges(QList<ImageInfo>,DisjointMetadata*)),
+    connect(this, SIGNAL(askToApplyChanges(QList<ItemInfo>,DisjointMetadata*)),
+            this, SLOT(slotAskToApplyChanges(QList<ItemInfo>,DisjointMetadata*)),
             Qt::QueuedConnection);
 
     // Initialize ---------------------------------------------
@@ -550,7 +550,7 @@ void ImageDescEditTab::slotChangingItems()
     }
 }
 
-void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, DisjointMetadata* hub)
+void ImageDescEditTab::slotAskToApplyChanges(const QList<ItemInfo>& infos, DisjointMetadata* hub)
 {
     int changedFields = 0;
 
@@ -744,10 +744,10 @@ void ImageDescEditTab::slotRevertAllChanges()
     setInfos(d->currInfos);
 }
 
-void ImageDescEditTab::setItem(const ImageInfo& info)
+void ImageDescEditTab::setItem(const ItemInfo& info)
 {
     slotChangingItems();
-    ImageInfoList list;
+    ItemInfoList list;
 
     if (!info.isNull())
     {
@@ -757,13 +757,13 @@ void ImageDescEditTab::setItem(const ImageInfo& info)
     setInfos(list);
 }
 
-void ImageDescEditTab::setItems(const ImageInfoList& infos)
+void ImageDescEditTab::setItems(const ItemInfoList& infos)
 {
     slotChangingItems();
     setInfos(infos);
 }
 
-void ImageDescEditTab::setInfos(const ImageInfoList& infos)
+void ImageDescEditTab::setInfos(const ItemInfoList& infos)
 {
     if (infos.isEmpty())
     {
@@ -788,7 +788,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
 
-    foreach (const ImageInfo& info, d->currInfos)
+    foreach (const ItemInfo& info, d->currInfos)
     {
         d->hub.load(info);
     }
@@ -817,7 +817,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 
     CollectionScanner scanner;
 
-    foreach (const ImageInfo& info, d->currInfos)
+    foreach (const ItemInfo& info, d->currInfos)
     {
         scanner.scanFile(info, CollectionScanner::Rescan);
 
@@ -843,7 +843,7 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
 
     int i = 0;
 
-    foreach (const ImageInfo& info, d->currInfos)
+    foreach (const ItemInfo& info, d->currInfos)
     {
         MetadataHub fileHub;
         // read in from database
@@ -1312,7 +1312,7 @@ void ImageDescEditTab::slotReloadForMetadataChange()
     else
     {
         // if image id is in our list, update
-        foreach (const ImageInfo& info, d->currInfos)
+        foreach (const ItemInfo& info, d->currInfos)
         {
             if (d->metadataChangeIds.contains(info.id()))
             {
@@ -1443,7 +1443,7 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
     QSet<qlonglong>                     tmpSet;
     QList<QPair<qlonglong, qlonglong> > relations;
 
-    foreach (const ImageInfo& info, d->currInfos)
+    foreach (const ItemInfo& info, d->currInfos)
     {
         // Collect all ids in all image's relations
         relations.append(info.relationCloud());
@@ -1462,7 +1462,7 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
         tmpSet.insert(relations.at(i).second);
     }
 
-    FileActionMngr::instance()->applyMetadata(ImageInfoList(tmpSet.toList()), d->hub);
+    FileActionMngr::instance()->applyMetadata(ItemInfoList(tmpSet.toList()), d->hub);
 
     d->modified = false;
     d->hub.resetChanged();

@@ -982,7 +982,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
     }
 
     if (!d->dbAccess->backend()->execSql(QString::fromUtf8(
-                                          "REPLACE INTO ImageInformation (imageId) SELECT id FROM Images;"))
+                                          "REPLACE INTO ItemInformation (imageId) SELECT id FROM Images;"))
        )
     {
         return false;
@@ -1112,10 +1112,10 @@ bool CoreDbSchemaUpdater::updateV4toV7()
 
     // --- Port date, comment and rating (_after_ the scan) ---
 
-    // Port ImagesV3.date -> ImageInformation.creationDate
+    // Port ImagesV3.date -> ItemInformation.creationDate
     if (!d->backend->execSql(QString::fromUtf8(
-                                "UPDATE ImageInformation SET "
-                                " creationDate=(SELECT datetime FROM ImagesV3 WHERE ImagesV3.id=ImageInformation.imageid) "
+                                "UPDATE ItemInformation SET "
+                                " creationDate=(SELECT datetime FROM ImagesV3 WHERE ImagesV3.id=ItemInformation.imageid) "
                                 "WHERE imageid IN (SELECT id FROM ImagesV3);")
                            )
        )
@@ -1163,11 +1163,11 @@ bool CoreDbSchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Imported comments"));
     }
 
-    // Port rating storage in ImageProperties to ImageInformation
+    // Port rating storage in ImageProperties to ItemInformation
     if (!d->backend->execSql(QString::fromUtf8(
-                                "UPDATE ImageInformation SET "
+                                "UPDATE ItemInformation SET "
                                 " rating=(SELECT value FROM ImageProperties "
-                                "         WHERE ImageInformation.imageid=ImageProperties.imageid AND ImageProperties.property=?) "
+                                "         WHERE ItemInformation.imageid=ImageProperties.imageid AND ImageProperties.property=?) "
                                 "WHERE imageid IN (SELECT imageid FROM ImageProperties WHERE property=?);"
                             ),
                             QString::fromUtf8("Rating"), QString::fromUtf8("Rating"))
@@ -1177,7 +1177,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
     }
 
     d->backend->execSql(QString::fromUtf8("DELETE FROM ImageProperties WHERE property=?;"), QString::fromUtf8("Rating"));
-    d->backend->execSql(QString::fromUtf8("UPDATE ImageInformation SET rating=0 WHERE rating<0;"));
+    d->backend->execSql(QString::fromUtf8("UPDATE ItemInformation SET rating=0 WHERE rating<0;"));
 
     if (d->observer)
     {
@@ -1392,7 +1392,7 @@ void CoreDbSchemaUpdater::beta010Update1()
                                           "    WHERE imageid=OLD.id;\n"
                                           "  DELETE From ImageHaarMatrix\n "
                                           "    WHERE imageid=OLD.id;\n"
-                                          "  DELETE From ImageInformation\n "
+                                          "  DELETE From ItemInformation\n "
                                           "    WHERE imageid=OLD.id;\n"
                                           "  DELETE From ImageMetadata\n "
                                           "    WHERE imageid=OLD.id;\n"
@@ -1422,7 +1422,7 @@ void CoreDbSchemaUpdater::beta010Update2()
         return;
     }
 
-    // force rescan and creation of ImageInformation entry for videos and audio
+    // force rescan and creation of ItemInformation entry for videos and audio
     d->backend->execSql(QString::fromUtf8("DELETE FROM Images WHERE category=2 OR category=3;"));
 
     d->albumDB->setSetting(QLatin1String("beta010Update2"), QLatin1String("true"));

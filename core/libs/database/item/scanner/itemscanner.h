@@ -32,7 +32,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "dmetadata.h"
 #include "coredbalbuminfo.h"
 #include "coredbinfocontainers.h"
@@ -164,7 +164,7 @@ public:
      * Infos are near if they are e.g. in the same album.
      * They are not near if they are e.g. in different collections.
      */
-    static void sortByProximity(QList<ImageInfo>& infos, const ImageInfo& subject);
+    static void sortByProximity(QList<ItemInfo>& infos, const ItemInfo& subject);
 
 protected:
 
@@ -215,8 +215,8 @@ protected:
     bool scanFromIdenticalFile();
     void scanFile(ScanMode mode);
 
-    void scanImageInformation();
-    void commitImageInformation();
+    void scanItemInformation();
+    void commitItemInformation();
 
     //@}
 

@@ -92,7 +92,7 @@
 #include "filterstatusbar.h"
 #include "iccsettings.h"
 #include "itemattributeswatch.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
 #include "queuemgrwindow.h"

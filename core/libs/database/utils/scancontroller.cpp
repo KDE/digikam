@@ -311,17 +311,17 @@ void ScanController::slotRelaxedScanning()
     d->condVar.wakeAll();
 }
 
-ImageInfo ScanController::scannedInfo(const QString& filePath)
+ItemInfo ScanController::scannedInfo(const QString& filePath)
 {
     CollectionScanner scanner;
     scanner.setHintContainer(d->hints);
 
-    ImageInfo info = ImageInfo::fromLocalFile(filePath);
+    ItemInfo info = ItemInfo::fromLocalFile(filePath);
 
     if (info.isNull())
     {
         qlonglong id = scanner.scanFile(filePath, CollectionScanner::NormalScan);
-        return ImageInfo(id);
+        return ItemInfo(id);
     }
     else
     {
@@ -330,7 +330,7 @@ ImageInfo ScanController::scannedInfo(const QString& filePath)
     }
 }
 
-ScanController::FileMetadataWrite::FileMetadataWrite(const ImageInfo& info)
+ScanController::FileMetadataWrite::FileMetadataWrite(const ItemInfo& info)
     : m_info(info),
       m_changed(false)
 {
@@ -358,7 +358,7 @@ void ScanController::scanFileDirectly(const QString& filePath)
     resumeCollectionScan();
 }
 
-void ScanController::scanFileDirectlyNormal(const ImageInfo& info)
+void ScanController::scanFileDirectlyNormal(const ItemInfo& info)
 {
     CollectionScanner scanner;
     scanner.setHintContainer(d->hints);
@@ -378,7 +378,7 @@ void ScanController::scanFileDirectlyCopyAttributes(const QString& filePath, qlo
     scanner.recordHints(d->itemHints);
     scanner.recordHints(d->itemChangeHints);
     qlonglong id = scanner.scanFile(filePath);
-    ImageInfo dest(id), source(parentVersion);
+    ItemInfo dest(id), source(parentVersion);
     scanner.copyFileProperties(source, dest);
 
     resumeCollectionScan();
@@ -871,7 +871,7 @@ void ScanController::hintAtModificationOfItem(qlonglong id)
     d->hints->recordHints(QList<ItemChangeHint>() << hint);
 }
 
-void ScanController::beginFileMetadataWrite(const ImageInfo& info)
+void ScanController::beginFileMetadataWrite(const ItemInfo& info)
 {
     {
         // throw in a lock to synchronize with all parallel writing
@@ -882,7 +882,7 @@ void ScanController::beginFileMetadataWrite(const ImageInfo& info)
                                                     fi.lastModified(), fi.size()));
 }
 
-void ScanController::finishFileMetadataWrite(const ImageInfo& info, bool changed)
+void ScanController::finishFileMetadataWrite(const ItemInfo& info, bool changed)
 {
     QFileInfo fi(info.filePath());
     d->hints->recordHint(ItemMetadataAdjustmentHint(info.id(),

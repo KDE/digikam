@@ -1275,14 +1275,14 @@ void FuzzySearchSideBarWidget::newDuplicatesSearch(const QList<TAlbum*>& albums)
     d->fuzzySearchView->newDuplicatesSearch(albums);
 }
 
-void FuzzySearchSideBarWidget::newSimilarSearch(const ImageInfo& imageInfo)
+void FuzzySearchSideBarWidget::newSimilarSearch(const ItemInfo& imageInfo)
 {
     if (imageInfo.isNull())
     {
         return;
     }
 
-    d->fuzzySearchView->setImageInfo(imageInfo);
+    d->fuzzySearchView->setItemInfo(imageInfo);
 }
 
 // -----------------------------------------------------------------------------

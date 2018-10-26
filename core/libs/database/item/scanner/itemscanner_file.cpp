@@ -40,7 +40,7 @@ void ItemScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* c
                                                     DatabaseFields::ModificationDate |
                                                     DatabaseFields::FileSize);
 
-        imageInformationFields = access.db()->getImageInformation(imageid,
+        imageInformationFields = access.db()->getItemInformation(imageid,
                                                                   DatabaseFields::Rating           |
                                                                   DatabaseFields::CreationDate     |
                                                                   DatabaseFields::DigitizationDate |
@@ -95,13 +95,13 @@ QDateTime ItemScanner::creationDateFromFilesystem(const QFileInfo& info)
     return qMin(ctime, mtime);
 }
 
-void ItemScanner::scanImageInformation()
+void ItemScanner::scanItemInformation()
 {
-    d->commit.commitImageInformation = true;
+    d->commit.commitItemInformation = true;
 
     if (d->scanMode == NewScan || d->scanMode == Rescan)
     {
-        d->commit.imageInformationFields = DatabaseFields::ImageInformationAll;
+        d->commit.imageInformationFields = DatabaseFields::ItemInformationAll;
 
         MetadataFields fields;
         fields << MetadataInfo::Rating
@@ -125,7 +125,7 @@ void ItemScanner::scanImageInformation()
         // Does _not_ update rating and orientation (unless dims were exchanged)!
 /*
         int orientation = d->metadata.getImageOrientation();
-        QVariantList data = CoreDbAccess().db()->getImageInformation(d->scanInfo.id,
+        QVariantList data = CoreDbAccess().db()->getItemInformation(d->scanInfo.id,
                                                                        DatabaseFields::Width |
                                                                        DatabaseFields::Height |
                                                                        DatabaseFields::Orientation);
@@ -153,17 +153,17 @@ void ItemScanner::scanImageInformation()
           << d->img.originalColorModel();
 }
 
-void ItemScanner::commitImageInformation()
+void ItemScanner::commitItemInformation()
 {
     if (d->scanMode == NewScan)
     {
-        CoreDbAccess().db()->addImageInformation(d->scanInfo.id,
+        CoreDbAccess().db()->addItemInformation(d->scanInfo.id,
                                                  d->commit.imageInformationInfos,
                                                  d->commit.imageInformationFields);
     }
     else // d->scanMode == Rescan or d->scanMode == ModifiedScan
     {
-        CoreDbAccess().db()->changeImageInformation(d->scanInfo.id,
+        CoreDbAccess().db()->changeItemInformation(d->scanInfo.id,
                                                     d->commit.imageInformationInfos,
                                                     d->commit.imageInformationFields);
     }
@@ -191,7 +191,7 @@ void ItemScanner::scanFile(ScanMode mode)
     {
         if (d->scanInfo.category == DatabaseItem::Image)
         {
-            scanImageInformation();
+            scanItemInformation();
             scanImageHistoryIfModified();
         }
         else if (d->scanInfo.category == DatabaseItem::Video ||
@@ -223,7 +223,7 @@ void ItemScanner::scanFile(ScanMode mode)
 
         if (d->scanInfo.category == DatabaseItem::Image)
         {
-            scanImageInformation();
+            scanItemInformation();
 
             if (d->hasMetadata)
             {

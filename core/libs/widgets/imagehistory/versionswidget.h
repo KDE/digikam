@@ -40,7 +40,7 @@ namespace Digikam
 {
 
 class ActionVersionsOverlay;
-class ImageInfo;
+class ItemInfo;
 class ShowHideVersionsOverlay;
 class VersionsDelegate;
 class VersionsTreeView;
@@ -65,11 +65,11 @@ public:
 
 public Q_SLOTS:
 
-    void setCurrentItem(const ImageInfo& info);
+    void setCurrentItem(const ItemInfo& info);
 
 Q_SIGNALS:
 
-    void imageSelected(const ImageInfo& info);
+    void imageSelected(const ItemInfo& info);
 
 protected Q_SLOTS:
 

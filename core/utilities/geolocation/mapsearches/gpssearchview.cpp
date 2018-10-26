@@ -48,7 +48,7 @@
 #include "digikam_debug.h"
 #include "searchtreeview.h"
 #include "editablesearchtreeview.h"
-#include "imageinfojob.h"
+#include "iteminfojob.h"
 #include "coredbsearchxml.h"
 #include "gpsmarkertiler.h"
 #include "gpsiteminfosorter.h"
@@ -81,7 +81,7 @@ public:
     static const QString        configSplitterStateEntry;
     QToolButton*                saveBtn;
     QLineEdit*                  nameEdit;
-    ImageInfoJob                imageInfoJob;
+    ItemInfoJob                imageInfoJob;
     SearchTextBar*              searchGPSBar;
     EditableSearchTreeView*     searchTreeView;
     QSplitter*                  splitter;
@@ -662,7 +662,7 @@ void GPSSearchView::slotClearImages()
 {
     if (d->mapSearchWidget->getActiveState())
     {
-        d->imageAlbumModel->clearImageInfos();
+        d->imageAlbumModel->clearItemInfos();
     }
 }
 

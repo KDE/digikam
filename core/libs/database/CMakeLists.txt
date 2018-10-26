@@ -95,9 +95,9 @@ set(libdatabase_SRCS
     dbjobs/dbjobsmanager.cpp
     dbjobs/duplicatesprogressobserver.cpp
 
-    item/containers/imageinfo.cpp
-    item/containers/imageinfolist.cpp
-    item/containers/imageinfocache.cpp
+    item/containers/iteminfo.cpp
+    item/containers/iteminfolist.cpp
+    item/containers/iteminfocache.cpp
     item/containers/itemcomments.cpp
     item/containers/itemcopyright.cpp
     item/containers/itemposition.cpp

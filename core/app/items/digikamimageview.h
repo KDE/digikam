@@ -36,7 +36,7 @@ namespace Digikam
 {
 
 class ImageViewUtilities;
-class ImageInfoList;
+class ItemInfoList;
 
 class DigikamImageView : public ImageCategorizedView, public GroupingViewImplementation
 {
@@ -53,15 +53,15 @@ public:
 
     virtual void setThumbnailSize(const ThumbnailSize& size);
 
-    ImageInfoList allImageInfos(bool grouping = false) const;
-    ImageInfoList selectedImageInfos(bool grouping = false) const;
-    ImageInfoList selectedImageInfosCurrentFirst(bool grouping = false) const;
+    ItemInfoList allItemInfos(bool grouping = false) const;
+    ItemInfoList selectedItemInfos(bool grouping = false) const;
+    ItemInfoList selectedItemInfosCurrentFirst(bool grouping = false) const;
     bool          allNeedGroupResolving(const ApplicationSettings::OperationType type) const;
     bool          selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const;
 
 public Q_SLOTS:
 
-    void openFile(const ImageInfo& info);
+    void openFile(const ItemInfo& info);
 
     void deleteSelected(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
     void deleteSelectedDirectly(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
@@ -74,21 +74,21 @@ public Q_SLOTS:
     void confirmFaces(const QList<QModelIndex>& indexes, int tagId);
     void removeFaces(const QList<QModelIndex>& indexes);
 
-    void dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos);
+    void dragDropSort(const ItemInfo& pick, const QList<ItemInfo>& infos);
 
 Q_SIGNALS:
 
-    void previewRequested(const ImageInfo& info);
-    void fullscreenRequested(const ImageInfo& info);
+    void previewRequested(const ItemInfo& info);
+    void fullscreenRequested(const ItemInfo& info);
     void signalShowContextMenu(QContextMenuEvent* event,
                                const QList<QAction*>& actions = QList<QAction*>());
 
-    void signalShowContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info,
+    void signalShowContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info,
                                      const QList<QAction*>& actions,
                                      ImageFilterModel* filterModel);
 
     void signalShowGroupContextMenu(QContextMenuEvent* event,
-                                    const QList<ImageInfo>& selectedInfos,
+                                    const QList<ItemInfo>& selectedInfos,
                                     ImageFilterModel* filterModel);
 
 protected Q_SLOTS:
@@ -101,14 +101,14 @@ protected:
     void addRejectionOverlay(ImageDelegate* delegate = 0);
     void addAssignNameOverlay(ImageDelegate* delegate = 0);
 
-    virtual void activated(const ImageInfo& info, Qt::KeyboardModifiers modifiers);
-    virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info);
+    virtual void activated(const ItemInfo& info, Qt::KeyboardModifiers modifiers);
+    virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info);
     virtual void showContextMenu(QContextMenuEvent* event);
     virtual void slotSetupChanged();
 
-    virtual bool hasHiddenGroupedImages(const ImageInfo& info) const;
+    virtual bool hasHiddenGroupedImages(const ItemInfo& info) const;
 
-    ImageInfoList imageInfos(const QList<QModelIndex>& indexes,
+    ItemInfoList imageInfos(const QList<QModelIndex>& indexes,
                              ApplicationSettings::OperationType type) const;
 
 private Q_SLOTS:

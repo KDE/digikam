@@ -34,8 +34,8 @@
 #include "dimagehistory.h"
 #include "itemhistorygraphmodel.h"
 #include "versionsdelegate.h"
-#include "imageinfo.h"
-#include "imageinfolist.h"
+#include "iteminfo.h"
+#include "iteminfolist.h"
 #include "imagelistmodel.h"
 #include "ditemdelegate.h"
 #include "itemviewtooltip.h"
@@ -81,7 +81,7 @@ protected:
                 return QString();
             case ImageMode:
             {
-                ImageInfo info = ImageModel::retrieveImageInfo(currentIndex());
+                ItemInfo info = ImageModel::retrieveItemInfo(currentIndex());
                 return ToolTipFiller::imageInfoTipContents(info);
             }
             case FilterActionMode:

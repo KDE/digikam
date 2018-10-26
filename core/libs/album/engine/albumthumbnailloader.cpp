@@ -40,7 +40,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "applicationsettings.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "metaenginesettings.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
@@ -328,7 +328,7 @@ void AlbumThumbnailLoader::addUrl(Album* const album, qlonglong id)
             }
 
             // use the asynchronous version - with queued connections, see above
-            d->iconTagThumbThread->find(ImageInfo::thumbnailIdentifier(id));
+            d->iconTagThumbThread->find(ItemInfo::thumbnailIdentifier(id));
         }
         else
         {
@@ -344,7 +344,7 @@ void AlbumThumbnailLoader::addUrl(Album* const album, qlonglong id)
                         Qt::QueuedConnection);
             }
 
-            d->iconAlbumThumbThread->find(ImageInfo::thumbnailIdentifier(id));
+            d->iconAlbumThumbThread->find(ItemInfo::thumbnailIdentifier(id));
         }
 
         // insert new entry to map, add album globalID

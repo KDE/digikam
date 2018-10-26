@@ -161,7 +161,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    /** These signals need to be explicitly enabled with setSendImageInfoSignals().
+    /** These signals need to be explicitly enabled with setSendItemInfoSignals().
      */
     void camItemInfosAdded(const QList<CamItemInfo>& infos);
     void camItemInfosAboutToBeRemoved(const QList<CamItemInfo>& infos);

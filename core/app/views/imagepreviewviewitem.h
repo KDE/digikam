@@ -30,7 +30,7 @@
 
 #include "digikam_config.h"
 #include "dimgpreviewitem.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 class QGraphicsSceneContextMenuEvent;
 class QGraphicsSceneHoverEvent;
@@ -47,8 +47,8 @@ public:
     explicit ImagePreviewViewItem();
     virtual ~ImagePreviewViewItem();
 
-    void setImageInfo(const ImageInfo& info);
-    ImageInfo imageInfo() const;
+    void setItemInfo(const ItemInfo& info);
+    ItemInfo imageInfo() const;
 
     void setFaceGroup(FaceGroup* const group);
 

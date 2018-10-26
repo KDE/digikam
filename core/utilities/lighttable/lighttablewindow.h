@@ -33,7 +33,7 @@
 // Local includes
 
 #include "dxmlguiwindow.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace Digikam
 {
@@ -51,8 +51,8 @@ public:
     static LightTableWindow* lightTableWindow();
     static bool              lightTableWindowCreated();
 
-    void loadImageInfos(const ImageInfoList& list, const ImageInfo& imageInfoCurrent, bool addTo);
-    void setLeftRightItems(const ImageInfoList& list, bool addTo);
+    void loadItemInfos(const ItemInfoList& list, const ItemInfo& imageInfoCurrent, bool addTo);
+    void setLeftRightItems(const ItemInfoList& list, bool addTo);
     void refreshView();
     bool isEmpty() const;
 
@@ -81,7 +81,7 @@ private:
     void showEvent(QShowEvent*);
 
     void deleteItem(bool permanently);
-    void deleteItem(const ImageInfo& info, bool permanently);
+    void deleteItem(const ItemInfo& info, bool permanently);
 
     LightTableWindow();
 
@@ -94,10 +94,10 @@ private Q_SLOTS:
 
     void slotSetItemLeft();
     void slotSetItemRight();
-    void slotSetItemOnLeftPanel(const ImageInfo&);
-    void slotSetItemOnRightPanel(const ImageInfo&);
-    void slotLeftDroppedItems(const ImageInfoList&);
-    void slotRightDroppedItems(const ImageInfoList&);
+    void slotSetItemOnLeftPanel(const ItemInfo&);
+    void slotSetItemOnRightPanel(const ItemInfo&);
+    void slotLeftDroppedItems(const ItemInfoList&);
+    void slotRightDroppedItems(const ItemInfoList&);
 
     void slotLeftPanelLeftButtonClicked();
     void slotRightPanelLeftButtonClicked();
@@ -113,18 +113,18 @@ private Q_SLOTS:
     void slotToggleNavigateByPair();
 
     void slotDeleteItem();
-    void slotDeleteItem(const ImageInfo&);
+    void slotDeleteItem(const ItemInfo&);
 
     void slotDeleteFinalItem();
-    void slotDeleteFinalItem(const ImageInfo&);
+    void slotDeleteFinalItem(const ItemInfo&);
 
     void slotRemoveItem();
-    void slotRemoveItem(const ImageInfo&);
+    void slotRemoveItem(const ItemInfo&);
 
-    void slotItemSelected(const ImageInfo&);
+    void slotItemSelected(const ItemInfo&);
     void slotClearItemsList();
 
-    void slotThumbbarDroppedItems(const QList<ImageInfo>&);
+    void slotThumbbarDroppedItems(const QList<ItemInfo>&);
 
     void slotToggleColorManagedView();
     void slotComponentsInfo();
@@ -181,7 +181,7 @@ private:
 private Q_SLOTS:
 
     void slotEditItem();
-    void slotEditItem(const ImageInfo&);
+    void slotEditItem(const ItemInfo&);
 
     void slotTimeAdjust();
     void slotEditMetadata();
@@ -193,7 +193,7 @@ private Q_SLOTS:
     void slotLeftSlideShowManualFromCurrent();
     void slotRightSlideShowManualFromCurrent();
     void slotSlideShowLastItemUrl(const QUrl&);
-    void slotSlideShowManualFrom(const ImageInfo&);
+    void slotSlideShowManualFrom(const ItemInfo&);
     void slotSlideShowBuilderComplete(const SlideShowSettings&);
 
 // -- Export tools methods implemented in lighttablewindow_export.cpp -------------------------------------

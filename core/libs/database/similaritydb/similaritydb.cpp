@@ -183,14 +183,14 @@ bool SimilarityDb::hasFingerprints(FuzzyAlgorithm algorithm) const
     }
 }
 
-QList<qlonglong> SimilarityDb::getDirtyOrMissingFingerprints(QList<ImageInfo> imageInfos,
+QList<qlonglong> SimilarityDb::getDirtyOrMissingFingerprints(QList<ItemInfo> imageInfos,
                                                              FuzzyAlgorithm algorithm)
 {
     QList<qlonglong> itemIDs;
 
     if (algorithm == FuzzyAlgorithm::Haar)
     {
-        foreach (const ImageInfo& info, imageInfos)
+        foreach (const ItemInfo& info, imageInfos)
         {
             QList<QVariant> values;
             d->db->execSql(QString::fromUtf8("SELECT modificationDate, uniqueHash FROM ImageHaarMatrix "
@@ -220,14 +220,14 @@ QList<qlonglong> SimilarityDb::getDirtyOrMissingFingerprints(QList<ImageInfo> im
     return itemIDs;
 }
 
-QStringList SimilarityDb::getDirtyOrMissingFingerprintURLs(QList<ImageInfo> imageInfos,
+QStringList SimilarityDb::getDirtyOrMissingFingerprintURLs(QList<ItemInfo> imageInfos,
                                                            FuzzyAlgorithm algorithm)
 {
     QStringList urls;
 
     if (algorithm == FuzzyAlgorithm::Haar)
     {
-        foreach (const ImageInfo& info, imageInfos)
+        foreach (const ItemInfo& info, imageInfos)
         {
             QList<QVariant> values;
             d->db->execSql(QString::fromUtf8("SELECT modificationDate, uniqueHash FROM ImageHaarMatrix "

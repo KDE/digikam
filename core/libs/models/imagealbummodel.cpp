@@ -37,8 +37,8 @@
 #include "facetagsiface.h"
 #include "coredbwatch.h"
 #include "coredburl.h"
-#include "imageinfo.h"
-#include "imageinfolist.h"
+#include "iteminfo.h"
+#include "iteminfolist.h"
 #include "itemlister.h"
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
@@ -218,7 +218,7 @@ void ImageAlbumModel::refresh()
         d->jobThread = 0;
     }
 
-    clearImageInfos();
+    clearItemInfos();
 
     if (d->currentAlbums.isEmpty())
     {
@@ -460,7 +460,7 @@ void ImageAlbumModel::slotData(const QList<ItemListerRecord>& records)
         return;
     }
 
-    ImageInfoList newItemsList;
+    ItemInfoList newItemsList;
 
     if (d->extraValueJob)
     {
@@ -468,7 +468,7 @@ void ImageAlbumModel::slotData(const QList<ItemListerRecord>& records)
 
         foreach (const ItemListerRecord& record, records)
         {
-            ImageInfo info(record);
+            ItemInfo info(record);
             newItemsList << info;
 
             if (d->specialListing == QLatin1String("faces"))
@@ -494,17 +494,17 @@ void ImageAlbumModel::slotData(const QList<ItemListerRecord>& records)
             }
         }
 
-        addImageInfos(newItemsList, extraValues);
+        addItemInfos(newItemsList, extraValues);
     }
     else
     {
         foreach (const ItemListerRecord& record, records)
         {
-            ImageInfo info(record);
+            ItemInfo info(record);
             newItemsList << info;
         }
 
-        addImageInfos(newItemsList);
+        addItemInfos(newItemsList);
     }
 }
 
@@ -739,7 +739,7 @@ void ImageAlbumModel::slotAlbumDeleted(Album* album)
     if (d->currentAlbums.contains(album))
     {
         d->currentAlbums.removeOne(album);
-        clearImageInfos();
+        clearItemInfos();
         return;
     }
 
@@ -762,7 +762,7 @@ void ImageAlbumModel::slotAlbumRenamed(Album* album)
 void ImageAlbumModel::slotAlbumsCleared()
 {
     d->currentAlbums.clear();
-    clearImageInfos();
+    clearItemInfos();
 }
 
 } // namespace Digikam

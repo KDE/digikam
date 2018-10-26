@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "historyimageid.h"
 #include "digikam_export.h"
 
@@ -89,7 +89,7 @@ public:
      * Depending on mode, the graph will be preparedForDisplay().
      * If no history is recorded and no relations found, a single-vertex graph is returned.
      */
-    static ItemHistoryGraph fromInfo(const ImageInfo& info,
+    static ItemHistoryGraph fromInfo(const ItemInfo& info,
                                       HistoryLoadingMode loadingMode = LoadAll,
                                       ProcessingMode processingMode  = PrepareForDisplay);
 
@@ -99,12 +99,12 @@ public:
      * If you read a history from a file's metadata or the database, you shall give the
      * relevant subject.
      */
-    void addHistory(const DImageHistory& history, const ImageInfo& historySubject = ImageInfo());
+    void addHistory(const DImageHistory& history, const ItemInfo& historySubject = ItemInfo());
     void addHistory(const DImageHistory& history, const HistoryImageId& historySubject = HistoryImageId());
 
     /**
      * This is very similar to addHistory. The only difference is that
-     * no attempt is made to retrieve an ImageInfo for the historySubjectId.
+     * no attempt is made to retrieve an ItemInfo for the historySubjectId.
      * Can be useful in the context of scanning
      */
     void addScannedHistory(const DImageHistory& history, qlonglong historySubjectId);
@@ -126,12 +126,12 @@ public:
     void reduceEdges();
 
     /**
-     * Returns true if for any entry no ImageInfo could be located.
+     * Returns true if for any entry no ItemInfo could be located.
      */
     bool hasUnresolvedEntries() const;
 
     /**
-     * Remove all vertices from the graph for which no existing ImageInfo
+     * Remove all vertices from the graph for which no existing ItemInfo
      * could be found in the database
      */
     void dropUnresolvedEntries();
@@ -139,12 +139,12 @@ public:
     /**
      * Sort vertex information prioritizing for the given vertex
      */
-    void sortForInfo(const ImageInfo& subject);
+    void sortForInfo(const ItemInfo& subject);
 
     /**
      * Combines reduceEdges(), dropOrphans() and sortForInfo()
      */
-    void prepareForDisplay(const ImageInfo& subject);
+    void prepareForDisplay(const ItemInfo& subject);
 
     /**
      * Returns all possible relations between images in this graph,
@@ -157,27 +157,27 @@ public:
     /**
      * Returns image infos / ids from all vertices in this graph
      */
-    QList<ImageInfo> allImages() const;
+    QList<ItemInfo> allImages() const;
     QList<qlonglong> allImageIds() const;
 
     /**
      * Returns image infos / ids from all root vertices in this graph,
      * i.e. vertices with no precedent history.
      */
-    QList<ImageInfo> rootImages() const;
+    QList<ItemInfo> rootImages() const;
 
     /**
      * Returns image infos / ids from all leaf vertices in this graph,
      * i.e. vertices with no subsequent history.
      */
-    QList<ImageInfo> leafImages() const;
+    QList<ItemInfo> leafImages() const;
 
     /**
      * Attempts at a categorization of all images in the graph
      * into the types defined by HistoryImageId.
      * The type will be invalid if no decision can be made due to conflicting data.
      */
-    QHash<ImageInfo, HistoryImageId::Types> categorize() const;
+    QHash<ItemInfo, HistoryImageId::Types> categorize() const;
 
 private:
 

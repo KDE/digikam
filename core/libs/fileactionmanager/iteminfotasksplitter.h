@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-03-03
- * Description : queue tool tip
+ * Date        : 2012-01-18
+ * Description : item info task splitter
  *
- * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,40 +21,31 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_QUEUE_TOOL_TIP_H
-#define DIGIKAM_BQM_QUEUE_TOOL_TIP_H
+#ifndef DIGIKAM_ITEM_INFO_TASK_SPLITTER_H
+#define DIGIKAM_ITEM_INFO_TASK_SPLITTER_H
 
 // Local includes
 
-#include "iteminfo.h"
-#include "ditemtooltip.h"
+#include "fileactionimageinfolist.h"
 
 namespace Digikam
 {
 
-class QueueListView;
-class QueueListViewItem;
-
-class QueueToolTip : public DItemToolTip
+class ItemInfoTaskSplitter : public FileActionItemInfoList
 {
 public:
 
-    explicit QueueToolTip(QueueListView* const view);
-    ~QueueToolTip();
+    explicit ItemInfoTaskSplitter(const FileActionItemInfoList& list);
+    ~ItemInfoTaskSplitter();
 
-    void setQueueItem(QueueListViewItem* const item);
+    FileActionItemInfoList next();
+    bool hasNext() const;
 
-private:
+protected:
 
-    QRect   repositionRect();
-    QString tipContents();
-
-private:
-
-    class Private;
-    Private* const d;
+    int m_n;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_BQM_QUEUE_TOOL_TIP_H
+#endif // DIGIKAM_ITEM_INFO_TASK_SPLITTER_H

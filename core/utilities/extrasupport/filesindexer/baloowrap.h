@@ -39,7 +39,7 @@ class QUrl;
 namespace Digikam
 {
 
-class ImageInfo;
+class ItemInfo;
 
 class BalooInfo
 {

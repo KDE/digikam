@@ -37,7 +37,7 @@
 #include "digikam_debug.h"
 #include "digikamview.h"
 #include "itemcopyright.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "photoinfocontainer.h"
 #include "videoinfocontainer.h"
 #include "itemposition.h"
@@ -157,7 +157,7 @@ public:
 
             foreach (int imageId, list)
             {
-                ImageInfo imageInfo(imageId);
+                ItemInfo imageInfo(imageId);
                 if (imageInfo.isVisible())
                 {
                     // if the image is visible, i.e. existent and not deleted,
@@ -196,7 +196,7 @@ public:
                 // if there were no error, fetch and process the results.
                 foreach (const ItemListerRecord &record, receiver.records)
                 {
-                    ImageInfo imageInfo(record);
+                    ItemInfo imageInfo(record);
                     QUrl imageUrl = imageInfo.fileUrl();
 /*
                     qCDebug(DIGIKAM_GENERAL_LOG) << "Fuzzy/other search Image url "
@@ -223,7 +223,7 @@ public:
         {
             foreach(const QUrl& url, urlList)
             {
-                ImageInfo info = ImageInfo::fromUrl(url);
+                ItemInfo info = ItemInfo::fromUrl(url);
 
                 if (info.hasGroupedImages())
                 {
@@ -238,7 +238,7 @@ public:
                         }
                     }
 
-                    foreach(const ImageInfo& i, info.groupedImages())
+                    foreach(const ItemInfo& i, info.groupedImages())
                     {
                         lst.removeOne(i.fileUrl());
                     }
@@ -365,7 +365,7 @@ DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
 {
     DInfoMap map;
 
-    ImageInfo info = ImageInfo::fromUrl(url);
+    ItemInfo info = ItemInfo::fromUrl(url);
 
     if (!info.isNull())
     {

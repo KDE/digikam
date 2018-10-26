@@ -155,7 +155,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    /** These signals need to be explicitly enabled with setSendImageInfoSignals().
+    /** These signals need to be explicitly enabled with setSendItemInfoSignals().
      */
     void showfotoItemInfosAdded(const QList<ShowfotoItemInfo>& infos);
     void showfotoItemInfosAboutToBeRemoved(const QList<ShowfotoItemInfo>& infos);

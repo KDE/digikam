@@ -30,7 +30,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "thumbsdb.h"
 #include "thumbsdbaccess.h"
 #include "coredb.h"
@@ -299,7 +299,7 @@ void DatabaseTask::run()
                     return;
                 }
 
-                ImageInfo info(item);
+                ItemInfo info(item);
 
                 if (!info.isNull())
                 {

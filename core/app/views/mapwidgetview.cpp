@@ -42,7 +42,7 @@
 #include "digikam_debug.h"
 #include "camerathumbsctrl.h"
 #include "itemposition.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "imagemodel.h"
 #include "importfiltermodel.h"
 #include "importimagemodel.h"
@@ -76,7 +76,7 @@ public:
          importModel(0),
          selectionModel(0),
          mapViewModelHelper(0),
-         gpsImageInfoSorter(0),
+         gpsItemInfoSorter(0),
          application(MapWidgetView::ApplicationDigikam)
     {
     }
@@ -89,7 +89,7 @@ public:
     ImportImageModel*           importModel;
     QItemSelectionModel*        selectionModel;
     MapViewModelHelper*         mapViewModelHelper;
-    GPSItemInfoSorter*         gpsImageInfoSorter;
+    GPSItemInfoSorter*         gpsItemInfoSorter;
     MapWidgetView::Application  application;
 };
 
@@ -133,8 +133,8 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
     d->mapWidget->setGroupedModel(geoifaceMarkerModel);
     d->mapWidget->setBackend(QLatin1String("marble"));
 
-    d->gpsImageInfoSorter         = new GPSItemInfoSorter(this);
-    d->gpsImageInfoSorter->addToMapWidget(d->mapWidget);
+    d->gpsItemInfoSorter         = new GPSItemInfoSorter(this);
+    d->gpsItemInfoSorter->addToMapWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget->getControlWidget());
 }
@@ -151,8 +151,8 @@ void MapWidgetView::doLoadState()
 {
     KConfigGroup group = getConfigGroup();
 
-    d->gpsImageInfoSorter->setSortOptions(GPSItemInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"),
-                                                                                          int(d->gpsImageInfoSorter->getSortOptions()))));
+    d->gpsItemInfoSorter->setSortOptions(GPSItemInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"),
+                                                                                          int(d->gpsItemInfoSorter->getSortOptions()))));
 
     const KConfigGroup groupCentralMap = KConfigGroup(&group, QLatin1String("Central Map Widget"));
     d->mapWidget->readSettingsFromGroup(&groupCentralMap);
@@ -162,7 +162,7 @@ void MapWidgetView::doSaveState()
 {
     KConfigGroup group = getConfigGroup();
 
-    group.writeEntry(QLatin1String("Sort Order"), int(d->gpsImageInfoSorter->getSortOptions()));
+    group.writeEntry(QLatin1String("Sort Order"), int(d->gpsItemInfoSorter->getSortOptions()));
 
     KConfigGroup groupCentralMap = KConfigGroup(&group, QLatin1String("Central Map Widget"));
     d->mapWidget->saveSettingsToGroup(&groupCentralMap);
@@ -301,7 +301,7 @@ bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinate
     {
         case MapWidgetView::ApplicationDigikam:
         {
-            const ImageInfo info = d->model->imageInfo(index);
+            const ItemInfo info = d->model->imageInfo(index);
 
             if (info.isNull() || !info.hasCoordinates())
             {
@@ -365,7 +365,7 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
     {
         case MapWidgetView::ApplicationDigikam:
         {
-            const ImageInfo info = d->model->imageInfo(index);
+            const ItemInfo info = d->model->imageInfo(index);
 
             if (!info.isNull())
             {
@@ -422,21 +422,21 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
     {
         case MapWidgetView::ApplicationDigikam:
         {
-            // now get the ImageInfos and convert them to GPSItemInfos
-            const QList<ImageInfo> imageInfoList =  d->model->imageInfos(indexList);
-            GPSItemInfo::List gpsImageInfoList;
+            // now get the ItemInfos and convert them to GPSItemInfos
+            const QList<ItemInfo> imageInfoList =  d->model->imageInfos(indexList);
+            GPSItemInfo::List gpsItemInfoList;
 
-            foreach (const ImageInfo& imageInfo, imageInfoList)
+            foreach (const ItemInfo& imageInfo, imageInfoList)
             {
-                GPSItemInfo gpsImageInfo;
+                GPSItemInfo gpsItemInfo;
 
-                if (ImagePropertiesSideBarDB::GPSItemInfofromImageInfo(imageInfo, &gpsImageInfo))
+                if (ImagePropertiesSideBarDB::GPSItemInfofromItemInfo(imageInfo, &gpsItemInfo))
                 {
-                    gpsImageInfoList << gpsImageInfo;
+                    gpsItemInfoList << gpsItemInfo;
                 }
             }
 
-            if (gpsImageInfoList.size()!=indexList.size())
+            if (gpsItemInfoList.size()!=indexList.size())
             {
                 // this is a problem, and unexpected
                 return indexList.first();
@@ -444,11 +444,11 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
 
             // now determine the best available index
             bestIndex                     = indexList.first();
-            GPSItemInfo bestGPSItemInfo = gpsImageInfoList.first();
+            GPSItemInfo bestGPSItemInfo = gpsItemInfoList.first();
 
-            for (int i=1; i < gpsImageInfoList.count(); ++i)
+            for (int i=1; i < gpsItemInfoList.count(); ++i)
             {
-                const GPSItemInfo& currentInfo = gpsImageInfoList.at(i);
+                const GPSItemInfo& currentInfo = gpsItemInfoList.at(i);
 
                 if (GPSItemInfoSorter::fitsBetter(bestGPSItemInfo, SelectedNone,
                                                    currentInfo, SelectedNone,
@@ -466,7 +466,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
         {
             // now get the CamItemInfo and convert them to GPSItemInfos
             const QList<CamItemInfo> imageInfoList =  d->importModel->camItemInfos(indexList);
-            GPSItemInfo::List       gpsImageInfoList;
+            GPSItemInfo::List       gpsItemInfoList;
 
             foreach (const CamItemInfo& imageInfo, imageInfoList)
             {
@@ -489,15 +489,15 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
                     coordinates.setAlt(alt);
                 }
 
-                GPSItemInfo gpsImageInfo;
-                gpsImageInfo.coordinates = coordinates;
-                gpsImageInfo.dateTime    = meta.getImageDateTime();
-                gpsImageInfo.rating      = meta.getImageRating();
-                gpsImageInfo.url         = imageInfo.url();
-                gpsImageInfoList << gpsImageInfo;
+                GPSItemInfo gpsItemInfo;
+                gpsItemInfo.coordinates = coordinates;
+                gpsItemInfo.dateTime    = meta.getImageDateTime();
+                gpsItemInfo.rating      = meta.getImageRating();
+                gpsItemInfo.url         = imageInfo.url();
+                gpsItemInfoList << gpsItemInfo;
             }
 
-            if (gpsImageInfoList.size()!=indexList.size())
+            if (gpsItemInfoList.size()!=indexList.size())
             {
                 // this is a problem, and unexpected
                 return indexList.first();
@@ -505,11 +505,11 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
 
             // now determine the best available index
             bestIndex                     = indexList.first();
-            GPSItemInfo bestGPSItemInfo = gpsImageInfoList.first();
+            GPSItemInfo bestGPSItemInfo = gpsItemInfoList.first();
 
-            for (int i=1; i < gpsImageInfoList.count(); ++i)
+            for (int i=1; i < gpsItemInfoList.count(); ++i)
             {
-                const GPSItemInfo& currentInfo = gpsImageInfoList.at(i);
+                const GPSItemInfo& currentInfo = gpsItemInfoList.at(i);
 
                 if (GPSItemInfoSorter::fitsBetter(bestGPSItemInfo, SelectedNone,
                                                    currentInfo, SelectedNone,
@@ -594,7 +594,7 @@ void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& cl
         indexList.append(newIndex);
     }
 
-    const QList<ImageInfo> imageInfoList = d->model->imageInfos(indexList);
+    const QList<ItemInfo> imageInfoList = d->model->imageInfos(indexList);
 
     QList<qlonglong> imagesIdList;
 
@@ -633,9 +633,9 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 }
 
 /**
- * @brief Returns the ImageInfo for the current image
+ * @brief Returns the ItemInfo for the current image
  */
-ImageInfo MapWidgetView::currentImageInfo() const
+ItemInfo MapWidgetView::currentItemInfo() const
 {
     /// @todo Have geoifacewidget honor the 'current index'
     QModelIndex currentIndex = d->selectionModel->currentIndex();
@@ -645,7 +645,7 @@ ImageInfo MapWidgetView::currentImageInfo() const
         /// @todo This is temporary until geoifacewidget marks a 'current index'
         if (!d->selectionModel->hasSelection())
         {
-            return ImageInfo();
+            return ItemInfo();
         }
 
         currentIndex = d->selectionModel->selectedIndexes().first();

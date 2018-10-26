@@ -22,37 +22,37 @@
  *
  * ============================================================ */
 
-#include "imageinfolist.h"
+#include "iteminfolist.h"
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace Digikam
 {
 
-ImageInfoList::ImageInfoList()
+ItemInfoList::ItemInfoList()
 {
 }
 
-ImageInfoList::ImageInfoList(const QList<ImageInfo>& list)
-    : QList<ImageInfo>(list)
+ItemInfoList::ItemInfoList(const QList<ItemInfo>& list)
+    : QList<ItemInfo>(list)
 {
 }
 
-ImageInfoList::ImageInfoList(const QList<qlonglong>& idList)
+ItemInfoList::ItemInfoList(const QList<qlonglong>& idList)
 {
     foreach (const qlonglong& id, idList)
     {
-        append(ImageInfo(id));
+        append(ItemInfo(id));
     }
 }
 
-QList<qlonglong> ImageInfoList::toImageIdList() const
+QList<qlonglong> ItemInfoList::toImageIdList() const
 {
     QList<qlonglong> idList;
 
-    foreach (const ImageInfo& info, *this)
+    foreach (const ItemInfo& info, *this)
     {
         idList << info.id();
     }
@@ -60,11 +60,11 @@ QList<qlonglong> ImageInfoList::toImageIdList() const
     return idList;
 }
 
-QList<QUrl> ImageInfoList::toImageUrlList() const
+QList<QUrl> ItemInfoList::toImageUrlList() const
 {
     QList<QUrl> urlList;
 
-    foreach (const ImageInfo& info, *this)
+    foreach (const ItemInfo& info, *this)
     {
         urlList << info.fileUrl();
     }
@@ -72,20 +72,20 @@ QList<QUrl> ImageInfoList::toImageUrlList() const
     return urlList;
 }
 
-bool ImageInfoList::namefileLessThan(const ImageInfo& d1, const ImageInfo& d2)
+bool ItemInfoList::namefileLessThan(const ItemInfo& d1, const ItemInfo& d2)
 {
     return d1.name().toLower() < d2.name().toLower(); // sort by name
 }
 
-ImageInfo ImageInfoList::singleGroupMainItem() const
+ItemInfo ItemInfoList::singleGroupMainItem() const
 {
     if (length() == 1)
     {
         return first();
     }
 
-    ImageInfo mainItem;
-    ImageInfoList grouped;
+    ItemInfo mainItem;
+    ItemInfoList grouped;
 
     if (first().isGrouped())
     {
@@ -93,7 +93,7 @@ ImageInfo ImageInfoList::singleGroupMainItem() const
 
         if (!this->contains(mainItem))
         {
-            return ImageInfo();
+            return ItemInfo();
         }
     }
     else if (first().hasGroupedImages())
@@ -102,16 +102,16 @@ ImageInfo ImageInfoList::singleGroupMainItem() const
     }
     else
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
     grouped << mainItem << mainItem.groupedImages();
 
-    foreach (const ImageInfo& info, *this)
+    foreach (const ItemInfo& info, *this)
     {
         if (!grouped.contains(info))
         {
-            return ImageInfo();
+            return ItemInfo();
         }
     }
 

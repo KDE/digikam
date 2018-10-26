@@ -323,7 +323,7 @@ public:
     void newDuplicatesSearch(PAlbum* album);
     void newDuplicatesSearch(const QList<PAlbum*>& albums);
     void newDuplicatesSearch(const QList<TAlbum*>& albums);
-    void newSimilarSearch(const ImageInfo& imageInfo);
+    void newSimilarSearch(const ItemInfo& imageInfo);
 
 Q_SIGNALS:
 

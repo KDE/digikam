@@ -34,8 +34,8 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "imageinfo.h"
-#include "imageinfolist.h"
+#include "iteminfo.h"
+#include "iteminfolist.h"
 #include "coredbaccess.h"
 #include "coredburl.h"
 #include "itemlisterrecord.h"

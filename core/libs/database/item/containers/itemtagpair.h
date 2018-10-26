@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class ImageInfo;
+class ItemInfo;
 class ItemTagPairPriv;
 
 class DIGIKAM_DATABASE_EXPORT ItemTagPair
@@ -56,7 +56,7 @@ public:
 
     /** Access the properties of the given image - tag pair */
     ItemTagPair(qlonglong imageId, int tagId);
-    ItemTagPair(const ImageInfo& info, int tagId);
+    ItemTagPair(const ItemInfo& info, int tagId);
 
     ~ItemTagPair();
     ItemTagPair(const ItemTagPair& other);
@@ -69,7 +69,7 @@ public:
      * This list of tags may not be identical to the tags assigned to the image.
      */
     static QList<ItemTagPair> availablePairs(qlonglong imageId);
-    static QList<ItemTagPair> availablePairs(const ImageInfo& info);
+    static QList<ItemTagPair> availablePairs(const ItemInfo& info);
 
     qlonglong imageId() const;
     int tagId() const;

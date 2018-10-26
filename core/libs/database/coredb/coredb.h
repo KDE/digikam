@@ -788,7 +788,7 @@ public:
     QVariantList getImagesFields(qlonglong imageID, DatabaseFields::Images imagesFields);
 
     /**
-     * Add (or replace) the ImageInformation of the specified item.
+     * Add (or replace) the ItemInformation of the specified item.
      * If there is already an entry, it will be discarded.
      * The QVariantList shall have 9 entries, of types in this order:
      * 0) Int       rating
@@ -802,25 +802,25 @@ public:
      * 8) Int       colorModel
      * ( (*) You can provide the date also as a string in the format Qt::IsoDate)
      * You can leave out entries from this list, which will then be filled with null values.
-     * Indicate the values that you have passed in the ImageInformation flag in the third parameters.
+     * Indicate the values that you have passed in the ItemInformation flag in the third parameters.
      */
-    void addImageInformation(qlonglong imageID, const QVariantList& infos,
-                             DatabaseFields::ImageInformation fields = DatabaseFields::ImageInformationAll);
+    void addItemInformation(qlonglong imageID, const QVariantList& infos,
+                             DatabaseFields::ItemInformation fields = DatabaseFields::ItemInformationAll);
 
     /**
      * Change the indicated fields of the image information for the specified item.
      * Fields not indicated by the fields parameter will not be touched.
-     * This method does nothing if the item does not yet have an entry in the ImageInformation table.
+     * This method does nothing if the item does not yet have an entry in the ItemInformation table.
      * The parameters are as for the method above.
      */
-    void changeImageInformation(qlonglong imageID, const QVariantList& infos,
-                                DatabaseFields::ImageInformation fields = DatabaseFields::ImageInformationAll);
+    void changeItemInformation(qlonglong imageID, const QVariantList& infos,
+                                DatabaseFields::ItemInformation fields = DatabaseFields::ItemInformationAll);
 
     /**
      * Read image information. Parameters as above.
      */
-    QVariantList getImageInformation(qlonglong imageID,
-                                     DatabaseFields::ImageInformation infoFields = DatabaseFields::ImageInformationAll);
+    QVariantList getItemInformation(qlonglong imageID,
+                                     DatabaseFields::ItemInformation infoFields = DatabaseFields::ItemInformationAll);
 
     /**
      * Add (or replace) the ImageMetadata of the specified item.
@@ -851,7 +851,7 @@ public:
 
     /**
      * Change the indicated fields of the image information for the specified item.
-     * This method does nothing if the item does not yet have an entry in the ImageInformation table.
+     * This method does nothing if the item does not yet have an entry in the ItemInformation table.
      * The parameters are as for the method above.
      */
     void changeImageMetadata(qlonglong imageID, const QVariantList& infos,
@@ -882,7 +882,7 @@ public:
 
     /**
      * Change the indicated fields of the video information for the specified item.
-     * This method does nothing if the item does not yet have an entry in the ImageInformation table.
+     * This method does nothing if the item does not yet have an entry in the ItemInformation table.
      * The parameters are as for the method above.
      */
     void changeVideoMetadata(qlonglong imageID, const QVariantList& infos,
@@ -909,14 +909,14 @@ public:
      * 8) Double    Accuracy
      * 9) String    Description
      * You can leave out entries from this list. Indicate the values that you have
-     * passed in the ImageInfo flag in the third parameters.
+     * passed in the ItemInfo flag in the third parameters.
      */
     void addItemPosition(qlonglong imageID, const QVariantList& infos,
                           DatabaseFields::ItemPositions fields = DatabaseFields::ItemPositionsAll);
 
     /**
      * Change the indicated fields of the image information for the specified item.
-     * This method does nothing if the item does not yet have an entry in the ImageInformation table.
+     * This method does nothing if the item does not yet have an entry in the ItemInformation table.
      * The parameters are as for the method above.
      */
     void changeItemPosition(qlonglong imageID, const QVariantList& infos,
@@ -1268,7 +1268,7 @@ public:
     QList<qlonglong> getImagesWithImageTagProperty(int tagId, const QString& property);
 
     /**
-     * Returns a QMap<QString,int> of ImageInformation.format
+     * Returns a QMap<QString,int> of ItemInformation.format
      * -> count of items with that format.
      */
     QMap<QString, int> getFormatStatistics();
@@ -1354,7 +1354,7 @@ public:
     // ----------- Static helper methods for constructing SQL queries -----------
 
     static QStringList imagesFieldList(DatabaseFields::Images fields);
-    static QStringList imageInformationFieldList(DatabaseFields::ImageInformation fields);
+    static QStringList imageInformationFieldList(DatabaseFields::ItemInformation fields);
     static QStringList videoMetadataFieldList(DatabaseFields::VideoMetadata fields);
     static QStringList imageMetadataFieldList(DatabaseFields::ImageMetadata fields);
     static QStringList imagePositionsFieldList(DatabaseFields::ItemPositions fields);

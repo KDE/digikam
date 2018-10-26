@@ -32,7 +32,7 @@
 
 #include "itemviewhoverbutton.h"
 #include "imagedelegateoverlay.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace Digikam
 {

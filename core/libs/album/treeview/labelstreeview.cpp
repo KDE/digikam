@@ -964,7 +964,7 @@ void AlbumLabelsSearchHandler::slotData(const QList<ItemListerRecord>& data)
 
     foreach (const ItemListerRecord &record, data)
     {
-        ImageInfo info(record);
+        ItemInfo info(record);
         urlList << info.fileUrl();
     }
 

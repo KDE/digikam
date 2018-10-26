@@ -54,7 +54,7 @@ public:
 
 protected:
 
-    virtual int compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const;
+    virtual int compareInfosCategories(const ItemInfo& left, const ItemInfo& right) const;
 
 protected Q_SLOTS:
 

@@ -233,11 +233,11 @@ QueuePoolItemsList QueuePool::queueItemsList(int index) const
 
     if (queue)
     {
-        ImageInfoList list = queue->pendingItemsList();
+        ItemInfoList list = queue->pendingItemsList();
 
-        for (ImageInfoList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+        for (ItemInfoList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
         {
-            ImageInfo info = *it;
+            ItemInfo info = *it;
             ItemInfoSet set(index, info);
             qpool.append(set);
         }
@@ -354,7 +354,7 @@ void QueuePool::slotRemoveItemsDone()
     }
 }
 
-void QueuePool::slotAddItems(const ImageInfoList& list, int queueId)
+void QueuePool::slotAddItems(const ItemInfoList& list, int queueId)
 {
     QueueListView* const queue = findQueueByIndex(queueId);
 

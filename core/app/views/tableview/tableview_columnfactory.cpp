@@ -26,7 +26,7 @@
 
 #include "digikam_debug.h"
 #include "imagefiltermodel.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "tableview_columns.h"
 
 namespace Digikam

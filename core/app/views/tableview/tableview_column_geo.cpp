@@ -35,7 +35,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace
 {
@@ -142,7 +142,7 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
         }
     }
 
-    const ImageInfo info = s->tableViewModel->infoFromItem(item);
+    const ItemInfo info = s->tableViewModel->infoFromItem(item);
 
     switch (subColumn)
     {
@@ -195,8 +195,8 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
 TableViewColumn::ColumnCompareResult ColumnGeoProperties::compare(TableViewModel::Item* const itemA,
                                                                   TableViewModel::Item* const itemB) const
 {
-    const ImageInfo infoA = s->tableViewModel->infoFromItem(itemA);
-    const ImageInfo infoB = s->tableViewModel->infoFromItem(itemB);
+    const ItemInfo infoA = s->tableViewModel->infoFromItem(itemA);
+    const ItemInfo infoB = s->tableViewModel->infoFromItem(itemB);
 
     if (subColumn == SubColumnAltitude)
     {

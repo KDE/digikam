@@ -182,7 +182,7 @@ void DigikamApp::slotEditMetadata()
 void DigikamApp::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    ImageInfoList infos = d->view->selectedInfoList(ApplicationSettings::Metadata);
+    ItemInfoList infos = d->view->selectedInfoList(ApplicationSettings::Metadata);
 
     if (infos.isEmpty())
         return;

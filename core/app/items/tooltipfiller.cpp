@@ -45,7 +45,7 @@
 #include "dimgfiltermanager.h"
 #include "ditemtooltip.h"
 #include "filteraction.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "imagepropertiestab.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
+QString ToolTipFiller::imageInfoTipContents(const ItemInfo& info)
 {
     QString              str;
     ApplicationSettings* const settings = ApplicationSettings::instance();

@@ -331,26 +331,26 @@ void LightTableWindow::setupConnections()
 
     // Thumbs bar connections ---------------------------------------
 
-    connect(d->thumbView, SIGNAL(signalSetItemOnLeftPanel(ImageInfo)),
-            this, SLOT(slotSetItemOnLeftPanel(ImageInfo)));
+    connect(d->thumbView, SIGNAL(signalSetItemOnLeftPanel(ItemInfo)),
+            this, SLOT(slotSetItemOnLeftPanel(ItemInfo)));
 
-    connect(d->thumbView, SIGNAL(signalSetItemOnRightPanel(ImageInfo)),
-            this, SLOT(slotSetItemOnRightPanel(ImageInfo)));
+    connect(d->thumbView, SIGNAL(signalSetItemOnRightPanel(ItemInfo)),
+            this, SLOT(slotSetItemOnRightPanel(ItemInfo)));
 
-    connect(d->thumbView, SIGNAL(signalRemoveItem(ImageInfo)),
-            this, SLOT(slotRemoveItem(ImageInfo)));
+    connect(d->thumbView, SIGNAL(signalRemoveItem(ItemInfo)),
+            this, SLOT(slotRemoveItem(ItemInfo)));
 
-    connect(d->thumbView, SIGNAL(signalEditItem(ImageInfo)),
-            this, SLOT(slotEditItem(ImageInfo)));
+    connect(d->thumbView, SIGNAL(signalEditItem(ItemInfo)),
+            this, SLOT(slotEditItem(ItemInfo)));
 
     connect(d->thumbView, SIGNAL(signalClearAll()),
             this, SLOT(slotClearItemsList()));
 
-    connect(d->thumbView, SIGNAL(signalDroppedItems(QList<ImageInfo>)),
-            this, SLOT(slotThumbbarDroppedItems(QList<ImageInfo>)));
+    connect(d->thumbView, SIGNAL(signalDroppedItems(QList<ItemInfo>)),
+            this, SLOT(slotThumbbarDroppedItems(QList<ItemInfo>)));
 
-    connect(d->thumbView, SIGNAL(currentChanged(ImageInfo)),
-            this, SLOT(slotItemSelected(ImageInfo)));
+    connect(d->thumbView, SIGNAL(currentChanged(ItemInfo)),
+            this, SLOT(slotItemSelected(ItemInfo)));
 
     connect(d->thumbView, SIGNAL(signalContentChanged()),
             this, SLOT(slotRefreshStatusBar()));
@@ -383,11 +383,11 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalRightZoomFactorChanged(double)),
             this, SLOT(slotRightZoomFactorChanged(double)));
 
-    connect(d->previewView, SIGNAL(signalEditItem(ImageInfo)),
-            this, SLOT(slotEditItem(ImageInfo)));
+    connect(d->previewView, SIGNAL(signalEditItem(ItemInfo)),
+            this, SLOT(slotEditItem(ItemInfo)));
 
-    connect(d->previewView, SIGNAL(signalDeleteItem(ImageInfo)),
-            this, SLOT(slotDeleteItem(ImageInfo)));
+    connect(d->previewView, SIGNAL(signalDeleteItem(ItemInfo)),
+            this, SLOT(slotDeleteItem(ItemInfo)));
 
     connect(d->previewView, SIGNAL(signalLeftSlideShowCurrent()),
             this, SLOT(slotLeftSlideShowManualFromCurrent()));
@@ -395,11 +395,11 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalRightSlideShowCurrent()),
             this, SLOT(slotRightSlideShowManualFromCurrent()));
 
-    connect(d->previewView, SIGNAL(signalLeftDroppedItems(ImageInfoList)),
-            this, SLOT(slotLeftDroppedItems(ImageInfoList)));
+    connect(d->previewView, SIGNAL(signalLeftDroppedItems(ItemInfoList)),
+            this, SLOT(slotLeftDroppedItems(ItemInfoList)));
 
-    connect(d->previewView, SIGNAL(signalRightDroppedItems(ImageInfoList)),
-            this, SLOT(slotRightDroppedItems(ImageInfoList)));
+    connect(d->previewView, SIGNAL(signalRightDroppedItems(ItemInfoList)),
+            this, SLOT(slotRightDroppedItems(ItemInfoList)));
 
     connect(d->previewView, SIGNAL(signalToggleOnSyncPreview(bool)),
             this, SLOT(slotToggleOnSyncPreview(bool)));

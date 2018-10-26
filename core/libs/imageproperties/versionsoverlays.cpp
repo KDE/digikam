@@ -31,7 +31,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "itemhistorygraphmodel.h"
 #include "imagelistmodel.h"
 #include "itemviewhoverbutton.h"
@@ -120,7 +120,7 @@ void ShowHideVersionsOverlay::updateButton(const QModelIndex& index)
     const int y      = rect.bottom() - gap - size.height();
     button()->move(QPoint(x, y));
 
-    ImageInfo info   = ImageModel::retrieveImageInfo(index);
+    ItemInfo info   = ImageModel::retrieveItemInfo(index);
     button()->setChecked(m_filter.isExemptedBySettings(info));
 }
 
@@ -130,7 +130,7 @@ void ShowHideVersionsOverlay::slotClicked(bool checked)
 
     if (index.isValid())
     {
-        ImageInfo info = ImageModel::retrieveImageInfo(index);
+        ItemInfo info = ImageModel::retrieveItemInfo(index);
         int tagId      = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::versionAlwaysVisible());
 
         if (checked)
@@ -148,7 +148,7 @@ bool ShowHideVersionsOverlay::checkIndex(const QModelIndex& index) const
 {
     if (index.data(ItemHistoryGraphModel::IsImageItemRole).toBool())
     {
-        ImageInfo info = ImageModel::retrieveImageInfo(index);
+        ItemInfo info = ImageModel::retrieveItemInfo(index);
         return m_filter.isHiddenBySettings(info);
     }
 
@@ -259,7 +259,7 @@ void ActionVersionsOverlay::slotClicked(bool checked)
 
     if (index.isValid())
     {
-        emit activated(ImageModel::retrieveImageInfo(index));
+        emit activated(ImageModel::retrieveItemInfo(index));
     }
 }
 
@@ -269,7 +269,7 @@ bool ActionVersionsOverlay::checkIndex(const QModelIndex& index) const
     {
         if (m_referenceModel)
         {
-            ImageInfo info = ImageModel::retrieveImageInfo(index);
+            ItemInfo info = ImageModel::retrieveItemInfo(index);
             // show overlay if image is not contained in reference model
             return !m_referenceModel->hasImage(info);
         }

@@ -154,7 +154,7 @@ void MediaWikiWindow::reactivate()
 {
     d->widget->imagesList()->listView()->clear();
     d->widget->imagesList()->loadImagesFromCurrentSelection();
-    d->widget->loadImageInfoFirstLoad();
+    d->widget->loadItemInfoFirstLoad();
     d->widget->clearEditFields();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "imagesList items count:" << d->widget->imagesList()->listView()->topLevelItemCount();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "imagesList url length:"  << d->widget->imagesList()->imageUrls(false).size();

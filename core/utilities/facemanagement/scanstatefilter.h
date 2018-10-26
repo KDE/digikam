@@ -52,10 +52,10 @@ public:
 
     ScanStateFilter(FacePipeline::FilterMode mode, FacePipeline::Private* const d);
 
-    void process(const QList<ImageInfo>& infos);
-    void process(const ImageInfo& info);
+    void process(const QList<ItemInfo>& infos);
+    void process(const ItemInfo& info);
 
-    FacePipelineExtendedPackage::Ptr filter(const ImageInfo& info);
+    FacePipelineExtendedPackage::Ptr filter(const ItemInfo& info);
 
 public:
 
@@ -77,9 +77,9 @@ protected:
 
 protected:
 
-    QList<ImageInfo>                        toFilter;
+    QList<ItemInfo>                        toFilter;
     QList<FacePipelineExtendedPackage::Ptr> toSend;
-    QList<ImageInfo>                        toBeSkipped;
+    QList<ItemInfo>                        toBeSkipped;
 };
 
 } // namespace Digikam

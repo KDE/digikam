@@ -72,7 +72,7 @@ protected:
     virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
     virtual void wheelEvent(QWheelEvent* event);
 
-    virtual bool hasHiddenGroupedImages(const ImageInfo& info) const;
+    virtual bool hasHiddenGroupedImages(const ItemInfo& info) const;
 
 private:
 

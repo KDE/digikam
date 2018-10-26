@@ -33,7 +33,7 @@
 #include "coredbfields.h"
 #include "coredbwatch.h"
 #include "fileactionmngr.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "imagemodel.h"
 #include "itemposition.h"
 #include "importfiltermodel.h"

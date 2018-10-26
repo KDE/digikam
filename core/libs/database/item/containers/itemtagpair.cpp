@@ -32,7 +32,7 @@
 #include "digikam_debug.h"
 #include "coredb.h"
 #include "coredbaccess.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "tagscache.h"
 
 namespace Digikam
@@ -55,12 +55,12 @@ public:
     }
 
     bool isNull() const;
-    void init(const ImageInfo& info, int tagId);
+    void init(const ItemInfo& info, int tagId);
     void checkProperties();
 
 public:
 
-    ImageInfo                   info;
+    ItemInfo                   info;
     int                         tagId;
     bool                        isAssigned;
     bool                        propertiesLoaded;
@@ -94,7 +94,7 @@ ItemTagPairPrivSharedPointer ItemTagPairPriv::createGuarded(qlonglong imageId, i
     return ItemTagPairPrivSharedPointer(new ItemTagPairPriv);
 }
 
-void ItemTagPairPriv::init(const ImageInfo& i, int t)
+void ItemTagPairPriv::init(const ItemInfo& i, int t)
 {
     if (isNull())
     {
@@ -134,10 +134,10 @@ ItemTagPair::ItemTagPair()
 ItemTagPair::ItemTagPair(qlonglong imageId, int tagId)
     : d(ItemTagPairPriv::createGuarded(imageId, tagId))
 {
-    d->init(ImageInfo(imageId), tagId);
+    d->init(ItemInfo(imageId), tagId);
 }
 
-ItemTagPair::ItemTagPair(const ImageInfo& info, int tagId)
+ItemTagPair::ItemTagPair(const ItemInfo& info, int tagId)
     : d(ItemTagPairPriv::createGuarded(info.id(), tagId))
 {
     d->init(info, tagId);
@@ -165,10 +165,10 @@ bool ItemTagPair::isNull() const
 
 QList<ItemTagPair> ItemTagPair::availablePairs(qlonglong imageId)
 {
-    return availablePairs(ImageInfo(imageId));
+    return availablePairs(ItemInfo(imageId));
 }
 
-QList<ItemTagPair> ItemTagPair::availablePairs(const ImageInfo& info)
+QList<ItemTagPair> ItemTagPair::availablePairs(const ItemInfo& info)
 {
     QList<ItemTagPair> pairs;
 

@@ -1610,16 +1610,16 @@ QVariantList CoreDB::getImagesFields(qlonglong imageID, DatabaseFields::Images f
     return values;
 }
 
-QVariantList CoreDB::getImageInformation(qlonglong imageID, DatabaseFields::ImageInformation fields)
+QVariantList CoreDB::getItemInformation(qlonglong imageID, DatabaseFields::ItemInformation fields)
 {
     QVariantList values;
 
-    if (fields != DatabaseFields::ImageInformationNone)
+    if (fields != DatabaseFields::ItemInformationNone)
     {
         QString query(QString::fromUtf8("SELECT "));
         QStringList fieldNames = imageInformationFieldList(fields);
         query                 += fieldNames.join(QString::fromUtf8(", "));
-        query                 += QString::fromUtf8(" FROM ImageInformation WHERE imageid=?;");
+        query                 += QString::fromUtf8(" FROM ItemInformation WHERE imageid=?;");
 
         d->db->execSql(query, imageID, &values);
 
@@ -1799,15 +1799,15 @@ QVariantList CoreDB::getItemPositions(QList<qlonglong> imageIDs, DatabaseFields:
     return values;
 }
 
-void CoreDB::addImageInformation(qlonglong imageID, const QVariantList& infos,
-                                 DatabaseFields::ImageInformation fields)
+void CoreDB::addItemInformation(qlonglong imageID, const QVariantList& infos,
+                                 DatabaseFields::ItemInformation fields)
 {
-    if (fields == DatabaseFields::ImageInformationNone)
+    if (fields == DatabaseFields::ItemInformationNone)
     {
         return;
     }
 
-    QString query(QString::fromUtf8("REPLACE INTO ImageInformation ( imageid, "));
+    QString query(QString::fromUtf8("REPLACE INTO ItemInformation ( imageid, "));
 
     QStringList fieldNames = imageInformationFieldList(fields);
 
@@ -1826,17 +1826,17 @@ void CoreDB::addImageInformation(qlonglong imageID, const QVariantList& infos,
     d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(fields)));
 }
 
-void CoreDB::changeImageInformation(qlonglong imageId, const QVariantList& infos,
-                                    DatabaseFields::ImageInformation fields)
+void CoreDB::changeItemInformation(qlonglong imageId, const QVariantList& infos,
+                                    DatabaseFields::ItemInformation fields)
 {
-    if (fields == DatabaseFields::ImageInformationNone)
+    if (fields == DatabaseFields::ItemInformationNone)
     {
         return;
     }
 
     QStringList fieldNames = imageInformationFieldList(fields);
 
-    d->db->execUpsertDBAction(QLatin1String("changeImageInformation"),
+    d->db->execUpsertDBAction(QLatin1String("changeItemInformation"),
                               imageId, fieldNames, infos);
     d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::Set(fields)));
 }
@@ -2227,7 +2227,7 @@ QList<qlonglong> CoreDB::findByNameAndCreationDate(const QString& fileName, cons
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                                     "LEFT JOIN ImageInformation ON id=imageid "
+                                     "LEFT JOIN ItemInformation ON id=imageid "
                                      " WHERE name=? AND creationDate=? AND status!=3;"),
                    fileName, creationDate, &values);
 
@@ -2823,7 +2823,7 @@ QStringList CoreDB::imagesFieldList(DatabaseFields::Images fields)
     return list;
 }
 
-QStringList CoreDB::imageInformationFieldList(DatabaseFields::ImageInformation fields)
+QStringList CoreDB::imageInformationFieldList(DatabaseFields::ItemInformation fields)
 {
     // adds no spaces at beginning or end
     QStringList list;
@@ -3365,8 +3365,8 @@ QStringList CoreDB::getAllItemURLsWithoutDate()
 QList<QDateTime> CoreDB::getAllCreationDates()
 {
     QList<QVariant> values;
-    d->db->execSql(QString::fromUtf8("SELECT creationDate FROM ImageInformation "
-                                     "INNER JOIN Images ON Images.id=ImageInformation.imageid "
+    d->db->execSql(QString::fromUtf8("SELECT creationDate FROM ItemInformation "
+                                     "INNER JOIN Images ON Images.id=ItemInformation.imageid "
                                      " WHERE Images.status=1;"),
                    &values);
 
@@ -3386,8 +3386,8 @@ QList<QDateTime> CoreDB::getAllCreationDates()
 QMap<QDateTime, int> CoreDB::getAllCreationDatesAndNumberOfImages()
 {
     QList<QVariant> values;
-    d->db->execSql(QString::fromUtf8("SELECT creationDate FROM ImageInformation "
-                                     "INNER JOIN Images ON Images.id=ImageInformation.imageid "
+    d->db->execSql(QString::fromUtf8("SELECT creationDate FROM ItemInformation "
+                                     "INNER JOIN Images ON Images.id=ItemInformation.imageid "
                                      " WHERE Images.status=1;"),
                    &values);
 
@@ -3566,7 +3566,7 @@ QMap<QString, int> CoreDB::getFormatStatistics(DatabaseItem::Category category)
     QMap<QString, int>  map;
 
     QString queryString = QString::fromUtf8("SELECT COUNT(*), II.format "
-                                            "FROM ImageInformation AS II "
+                                            "FROM ItemInformation AS II "
                                             "INNER JOIN Images ON II.imageid=Images.id "
                                             " WHERE Images.status=1 ");
 
@@ -4442,8 +4442,8 @@ int CoreDB::getAlbumRootId(int albumID)
 QDate CoreDB::getAlbumLowestDate(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql(QString::fromUtf8("SELECT MIN(creationDate) FROM ImageInformation "
-                                     "INNER JOIN Images ON Images.id=ImageInformation.imageid "
+    d->db->execSql(QString::fromUtf8("SELECT MIN(creationDate) FROM ItemInformation "
+                                     "INNER JOIN Images ON Images.id=ItemInformation.imageid "
                                      " WHERE Images.album=? GROUP BY Images.album;"),
                    albumID, &values);
 
@@ -4460,8 +4460,8 @@ QDate CoreDB::getAlbumLowestDate(int albumID)
 QDate CoreDB::getAlbumHighestDate(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql(QString::fromUtf8("SELECT MAX(creationDate) FROM ImageInformation "
-                                     "INNER JOIN Images ON Images.id=ImageInformation.imageid "
+    d->db->execSql(QString::fromUtf8("SELECT MAX(creationDate) FROM ItemInformation "
+                                     "INNER JOIN Images ON Images.id=ItemInformation.imageid "
                                      " WHERE Images.album=? GROUP BY Images.album;"),
                    albumID , &values);
 
@@ -4478,8 +4478,8 @@ QDate CoreDB::getAlbumHighestDate(int albumID)
 QDate CoreDB::getAlbumAverageDate(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql(QString::fromUtf8("SELECT creationDate FROM ImageInformation "
-                                     "INNER JOIN Images ON Images.id=ImageInformation.imageid "
+    d->db->execSql(QString::fromUtf8("SELECT creationDate FROM ItemInformation "
+                                     "INNER JOIN Images ON Images.id=ItemInformation.imageid "
                                      " WHERE Images.album=?;"),
                    albumID , &values);
 
@@ -4739,14 +4739,14 @@ void CoreDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
 
     DatabaseFields::Set fields;
 
-    d->db->execSql(QString::fromUtf8("REPLACE INTO ImageInformation "
+    d->db->execSql(QString::fromUtf8("REPLACE INTO ItemInformation "
                                      "(imageid, rating, creationDate, digitizationDate, orientation, "
                                      " width, height, format, colorDepth, colorModel) "
                                      "SELECT ?, rating, creationDate, digitizationDate, orientation, "
                                      " width, height, format, colorDepth, colorModel "
-                                     "FROM ImageInformation WHERE imageid=?;"),
+                                     "FROM ItemInformation WHERE imageid=?;"),
                    dstId, srcId);
-    fields |= DatabaseFields::ImageInformationAll;
+    fields |= DatabaseFields::ItemInformationAll;
 
     d->db->execSql(QString::fromUtf8("REPLACE INTO ImageMetadata "
                                      "(imageid, make, model, lens, aperture, focalLength, focalLength35, "
@@ -4883,10 +4883,10 @@ QList<QVariant> CoreDB::getImageIdsFromArea(qreal lat1, qreal lat2, qreal lng1, 
 
     //CoreDbAccess access;
 
-    d->db->execSql(QString::fromUtf8("Select ImageInformation.imageid, ImageInformation.rating, "
+    d->db->execSql(QString::fromUtf8("Select ItemInformation.imageid, ItemInformation.rating, "
                                      "ItemPositions.latitudeNumber, ItemPositions.longitudeNumber "
-                                     "FROM ImageInformation INNER JOIN ItemPositions "
-                                     " ON ImageInformation.imageid = ItemPositions.imageid "
+                                     "FROM ItemInformation INNER JOIN ItemPositions "
+                                     " ON ItemInformation.imageid = ItemPositions.imageid "
                                      "  WHERE (ItemPositions.latitudeNumber>? AND ItemPositions.latitudeNumber<?) "
                                      "  AND (ItemPositions.longitudeNumber>? AND ItemPositions.longitudeNumber<?);"),
                    boundValues, &values);

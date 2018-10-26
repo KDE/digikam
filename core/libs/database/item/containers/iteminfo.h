@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-21
- * Description : Handling accesses to one image and associated data
+ * Description : Handling access to one item and associated data
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_INFO_H
-#define DIGIKAM_IMAGE_INFO_H
+#ifndef DIGIKAM_ITEM_INFO_H
+#define DIGIKAM_ITEM_INFO_H
 
 // Qt includes
 
@@ -41,7 +41,7 @@
 #include "digikam_export.h"
 #include "dshareddata.h"
 #include "coredburl.h"
-#include "imageinfolist.h"
+#include "iteminfolist.h"
 #include "coredbfields.h"
 
 namespace Digikam
@@ -53,7 +53,7 @@ class ItemComments;
 class ImageCommonContainer;
 class ItemCopyright;
 class ItemExtendedProperties;
-class ImageInfoData;
+class ItemInfoData;
 class ItemListerRecord;
 class ImageMetadataContainer;
 class VideoMetadataContainer;
@@ -66,10 +66,10 @@ class ThumbnailIdentifier;
 class ThumbnailInfo;
 
 /**
- * The ImageInfo class contains provides access to the database for a single image.
+ * The ItemInfo class contains provides access to the database for a single image.
  * The properties can be read and written. Information will be cached.
  */
-class DIGIKAM_DATABASE_EXPORT ImageInfo
+class DIGIKAM_DATABASE_EXPORT ItemInfo
 {
 public:
 
@@ -77,47 +77,47 @@ public:
      * Constructor
      * Creates a null image info
      */
-    ImageInfo();
+    ItemInfo();
 
     /**
-     * Constructor. Creates an ImageInfo object without any cached data initially.
+     * Constructor. Creates an ItemInfo object without any cached data initially.
      * @param    ID       unique ID for this image
      */
-    explicit ImageInfo(qlonglong ID);
+    explicit ItemInfo(qlonglong ID);
 
     /**
-     * Constructor. Creates an ImageInfo object where the provided information
+     * Constructor. Creates an ItemInfo object where the provided information
      * will initially be available cached, without database access.
      */
-    explicit ImageInfo(const ItemListerRecord& record);
+    explicit ItemInfo(const ItemListerRecord& record);
 
-    ImageInfo(const ImageInfo& info);
+    ItemInfo(const ItemInfo& info);
 
     /**
-     * Creates an ImageInfo object from a file url.
+     * Creates an ItemInfo object from a file url.
      */
-    static ImageInfo fromLocalFile(const QString& path);
-    static ImageInfo fromUrl(const QUrl& url);
+    static ItemInfo fromLocalFile(const QString& path);
+    static ItemInfo fromUrl(const QUrl& url);
 
     /**
-     * Create an ImageInfo object from the given combination, which
+     * Create an ItemInfo object from the given combination, which
      * must be cleaned and corresponding to the values in the database
      */
-    static ImageInfo fromLocationAlbumAndName(int locationId, const QString& album, const QString& name);
+    static ItemInfo fromLocationAlbumAndName(int locationId, const QString& album, const QString& name);
 
     /**
      * Destructor
      */
-    ~ImageInfo();
+    ~ItemInfo();
 
-    ImageInfo& operator=(const ImageInfo& info);
+    ItemInfo& operator=(const ItemInfo& info);
 
-    bool operator==(const ImageInfo& info) const;
-    bool operator!=(const ImageInfo& info) const
+    bool operator==(const ItemInfo& info) const;
+    bool operator!=(const ItemInfo& info) const
     {
         return !operator==(info);
     }
-    bool operator<(const ImageInfo& info)  const;
+    bool operator<(const ItemInfo& info)  const;
     uint hash()                            const;
 
     /**
@@ -327,8 +327,8 @@ public:
     bool hasDerivedImages()           const;
     bool hasAncestorImages()          const;
 
-    QList<ImageInfo> derivedImages()  const;
-    QList<ImageInfo> ancestorImages() const;
+    QList<ItemInfo> derivedImages()  const;
+    QList<ItemInfo> ancestorImages() const;
 
     /**
      * Returns the cloud of all directly or indirectly related images,
@@ -340,7 +340,7 @@ public:
      * Add a relation to the database:
      * This image is derived from the ancestorImage.
      */
-    void markDerivedFrom(const ImageInfo& ancestorImage);
+    void markDerivedFrom(const ItemInfo& ancestorImage);
 
     /**
      * The image is grouped in the group of another (leading) image.
@@ -357,19 +357,19 @@ public:
      * Returns the leading image of the group.
      * Returns a null image if this image is not grouped (isGrouped())
      */
-    ImageInfo groupImage()   const;
+    ItemInfo groupImage()   const;
     qlonglong groupImageId() const;
 
     /**
      * Returns the list of images grouped behind this image (not including this
      * image itself) and an empty list if there is none.
      */
-    QList<ImageInfo> groupedImages() const;
+    QList<ItemInfo> groupedImages() const;
 
     /**
      * Group this image behind the given image
      */
-    void addToGroup(const ImageInfo& info);
+    void addToGroup(const ItemInfo& info);
 
     /**
      * This image is grouped behind another image:
@@ -492,13 +492,13 @@ public:
      * Copy database information of this item to a newly created item
      * @param  dstAlbumID  destination album id
      * @param  dstFileName new filename
-     * @return an ImageInfo object of the new item
+     * @return an ItemInfo object of the new item
      */
     //TODO: Move to album?
-    ImageInfo copyItem(int dstAlbumID, const QString& dstFileName);
+    ItemInfo copyItem(int dstAlbumID, const QString& dstFileName);
 
     /**
-     * Returns true if this is a valid ImageInfo,
+     * Returns true if this is a valid ItemInfo,
      * and the location of the image is currently available
      * (information freshly obtained from CollectionManager)
      */
@@ -507,10 +507,10 @@ public:
     /**
      * Scans the database for items with the given signature.
      */
-    QList<ImageInfo> fromUniqueHash(const QString& uniqueHash, qlonglong fileSize);
+    QList<ItemInfo> fromUniqueHash(const QString& uniqueHash, qlonglong fileSize);
 
     /**
-     * Fills a ThumbnailIdentifier / ThumbnailInfo from this ImageInfo
+     * Fills a ThumbnailIdentifier / ThumbnailInfo from this ItemInfo
      */
     ThumbnailIdentifier thumbnailIdentifier() const;
     ThumbnailInfo thumbnailInfo() const;
@@ -525,23 +525,23 @@ public:
 
 private:
 
-    friend class ImageInfoCache;
-    friend class ImageInfoList;
+    friend class ItemInfoCache;
+    friend class ItemInfoList;
 
-    DSharedDataPointer<ImageInfoData> m_data;
+    DSharedDataPointer<ItemInfoData> m_data;
 };
 
-inline uint qHash(const ImageInfo& info)
+inline uint qHash(const ItemInfo& info)
 {
     return info.hash();
 }
 
 //! qDebug() stream operator. Writes property @a info to the debug output in a nicely formatted way.
-DIGIKAM_DATABASE_EXPORT QDebug operator<<(QDebug stream, const ImageInfo& info);
+DIGIKAM_DATABASE_EXPORT QDebug operator<<(QDebug stream, const ItemInfo& info);
 
 } // namespace Digikam
 
-Q_DECLARE_TYPEINFO(Digikam::ImageInfo, Q_MOVABLE_TYPE);
-Q_DECLARE_METATYPE(Digikam::ImageInfo)
+Q_DECLARE_TYPEINFO(Digikam::ItemInfo, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Digikam::ItemInfo)
 
-#endif // DIGIKAM_IMAGE_INFO_H
+#endif // DIGIKAM_ITEM_INFO_H

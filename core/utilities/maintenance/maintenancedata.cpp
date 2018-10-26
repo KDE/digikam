@@ -45,7 +45,7 @@ public:
     QList<qlonglong>              imageIdList;
     QList<int>                    thumbnailIdList;
     QList<QString>                imagePathList;
-    QList<ImageInfo>              imageInfoList;
+    QList<ItemInfo>              imageInfoList;
     QList<Identity>               identitiesList;
     QList<qlonglong>              similarityImageIdList;
 
@@ -77,7 +77,7 @@ void MaintenanceData::setImagePaths(const QList<QString>& paths)
     d->imagePathList = paths;
 }
 
-void MaintenanceData::setImageInfos(const QList<ImageInfo>& infos)
+void MaintenanceData::setItemInfos(const QList<ItemInfo>& infos)
 {
     d->imageInfoList = infos;
 }
@@ -134,10 +134,10 @@ QString MaintenanceData::getImagePath() const
     return path;
 }
 
-ImageInfo MaintenanceData::getImageInfo() const
+ItemInfo MaintenanceData::getItemInfo() const
 {
     d->mutex.lock();
-    ImageInfo info;
+    ItemInfo info;
 
     if (!d->imageInfoList.isEmpty())
     {

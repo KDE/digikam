@@ -658,7 +658,7 @@ void TagsManager::slotRemoveTagsFromImgs()
         }
 
         QList<qlonglong> assignedItems = CoreDbAccess().db()->getItemIDsInTag(tag->id());
-        ImageInfoList imgList(assignedItems);
+        ItemInfoList imgList(assignedItems);
         FileActionMngr::instance()->removeTag(imgList, tag->id());
     }
 }

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-01-18
- * Description : image info task splitter
+ * Description : item info task splitter
  *
  * Copyright (C) 2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,31 +21,51 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_INFO_TASK_SPLITTER_H
-#define DIGIKAM_IMAGE_INFO_TASK_SPLITTER_H
-
 // Local includes
 
-#include "fileactionimageinfolist.h"
+#include "iteminfotasksplitter.h"
+#include "parallelworkers.h"
 
 namespace Digikam
 {
 
-class ImageInfoTaskSplitter : public FileActionImageInfoList
+ItemInfoTaskSplitter::ItemInfoTaskSplitter(const FileActionItemInfoList& list)
+    : FileActionItemInfoList(list)
 {
-public:
+    int parts = ParallelWorkers::optimalWorkerCount();
+    m_n       = qMax(1, list.size() / parts);
+}
 
-    explicit ImageInfoTaskSplitter(const FileActionImageInfoList& list);
-    ~ImageInfoTaskSplitter();
+ItemInfoTaskSplitter::~ItemInfoTaskSplitter()
+{
+}
 
-    FileActionImageInfoList next();
-    bool hasNext() const;
+FileActionItemInfoList ItemInfoTaskSplitter::next()
+{
+    QList<ItemInfo> list;
 
-protected:
+    if (size() <= m_n)
+    {
+        list = *this;
+        clear();
+    }
+    else
+    {
+        list.reserve(m_n);
 
-    int m_n;
-};
+        // qCopy does not work with QList
+        for (int i = 0;  i < m_n ; i++)
+            list << at(i);
+
+        erase(begin(), begin() + m_n);
+    }
+
+    return FileActionItemInfoList::continueTask(list, progress());
+}
+
+bool ItemInfoTaskSplitter::hasNext() const
+{
+    return !isEmpty();
+}
 
 } // namespace Digikam
-
-#endif // DIGIKAM_IMAGE_INFO_TASK_SPLITTER_H

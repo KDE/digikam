@@ -54,13 +54,13 @@ public:
 
     enum LoadFlag
     {
-        LoadImageInfo    = 1,
+        LoadItemInfo    = 1,
         LoadMetadata     = 2,
         LoadICCData      = 4,
         LoadImageData    = 8,
         LoadUniqueHash   = 16,
         LoadImageHistory = 32,
-        LoadAll          = LoadImageInfo | LoadMetadata | LoadUniqueHash | LoadICCData | LoadImageData | LoadImageHistory
+        LoadAll          = LoadItemInfo | LoadMetadata | LoadUniqueHash | LoadICCData | LoadImageData | LoadImageHistory
     };
     Q_DECLARE_FLAGS(LoadFlags, LoadFlag)
 

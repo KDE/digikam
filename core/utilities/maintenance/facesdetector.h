@@ -39,8 +39,8 @@ namespace Digikam
 class DImg;
 class FacePipelinePackage;
 class FaceScanSettings;
-class ImageInfo;
-class ImageInfoList;
+class ItemInfo;
+class ItemInfoList;
 
 class FacesDetector : public MaintenanceTool
 {
@@ -55,8 +55,8 @@ private Q_SLOTS:
 
     void slotStart();
     void slotContinueAlbumListing();
-    void slotItemsInfo(const ImageInfoList&);
-    void slotImagesSkipped(const QList<ImageInfo>&);
+    void slotItemsInfo(const ItemInfoList&);
+    void slotImagesSkipped(const QList<ItemInfo>&);
     void slotShowOneDetected(const FacePipelinePackage&);
     void slotDone();
     void slotCancel();

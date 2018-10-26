@@ -30,12 +30,12 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace Digikam
 {
 
-/** A container of associated ImageInfo and queue id.
+/** A container of associated ItemInfo and queue id.
  */
 class ItemInfoSet
 {
@@ -46,7 +46,7 @@ public:
     {
     };
 
-    ItemInfoSet(int id, const ImageInfo& inf)
+    ItemInfoSet(int id, const ItemInfo& inf)
     {
         queueId = id;
         info    = inf;
@@ -57,7 +57,7 @@ public:
     };
 
     int       queueId;
-    ImageInfo info;
+    ItemInfo info;
 };
 
 /** A list of all queued items from the pool.

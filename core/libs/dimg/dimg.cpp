@@ -341,9 +341,9 @@ void DImg::setImageData(bool null, uint width, uint height, bool sixteenBit, boo
 //---------------------------------------------------------------------------------------------------
 // load and save
 
-bool DImg::loadImageInfo(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadImageHistory)
+bool DImg::loadItemInfo(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadImageHistory)
 {
-    DImgLoader::LoadFlags loadFlags = DImgLoader::LoadImageInfo;
+    DImgLoader::LoadFlags loadFlags = DImgLoader::LoadItemInfo;
 
     if (loadMetadata)
     {
@@ -376,7 +376,7 @@ bool DImg::load(const QString& filePath, DImgLoaderObserver* const observer, con
 bool DImg::load(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadImageHistory,
                 DImgLoaderObserver* const observer, const DRawDecoding& rawDecodingSettings)
 {
-    DImgLoader::LoadFlags loadFlags = DImgLoader::LoadImageInfo | DImgLoader::LoadImageData;
+    DImgLoader::LoadFlags loadFlags = DImgLoader::LoadItemInfo | DImgLoader::LoadImageData;
 
     if (loadMetadata)
     {

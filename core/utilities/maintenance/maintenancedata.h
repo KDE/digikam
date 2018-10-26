@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace Digikam
 {
@@ -44,14 +44,14 @@ public:
     void      setImageIds(const QList<qlonglong>& ids);
     void      setThumbnailIds(const QList<int>& ids);
     void      setImagePaths(const QList<QString>& paths);
-    void      setImageInfos(const QList<ImageInfo>& infos);
+    void      setItemInfos(const QList<ItemInfo>& infos);
     void      setIdentities(const QList<Identity>& identities);
     void      setSimilarityImageIds(const QList<qlonglong>& ids);
 
     qlonglong getImageId()           const;
     int       getThumbnailId()       const;
     QString   getImagePath()         const;
-    ImageInfo getImageInfo()         const;
+    ItemInfo getItemInfo()         const;
     Identity  getIdentity()          const;
     qlonglong getSimilarityImageId() const;
 

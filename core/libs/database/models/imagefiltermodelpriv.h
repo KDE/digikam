@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "imagefiltermodel.h"
 #include "digikam_export.h"
 
@@ -60,7 +60,7 @@ public:
     {
     }
 
-    ImageFilterModelTodoPackage(const QVector<ImageInfo>& infos, const QVector<QVariant>& extraValues, int version, bool isForReAdd)
+    ImageFilterModelTodoPackage(const QVector<ItemInfo>& infos, const QVector<QVariant>& extraValues, int version, bool isForReAdd)
         : infos(infos),
           extraValues(extraValues),
           version(version),
@@ -68,7 +68,7 @@ public:
     {
     }
 
-    QVector<ImageInfo>     infos;
+    QVector<ItemInfo>     infos;
     QVector<QVariant>      extraValues;
     unsigned int           version;
     bool                   isForReAdd;
@@ -91,8 +91,8 @@ public:
 
     void init(ImageFilterModel* q);
     void setupWorkers();
-    void infosToProcess(const QList<ImageInfo>& infos);
-    void infosToProcess(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd = true);
+    void infosToProcess(const QList<ItemInfo>& infos);
+    void infosToProcess(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd = true);
 
 public:
 
@@ -145,8 +145,8 @@ public:
 
 public Q_SLOTS:
 
-    void preprocessInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
-    void processAddedInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void preprocessInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
+    void processAddedInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
     void packageFinished(const ImageFilterModelTodoPackage& package);
     void packageDiscarded(const ImageFilterModelTodoPackage& package);
 
@@ -154,7 +154,7 @@ Q_SIGNALS:
 
     void packageToPrepare(const ImageFilterModelTodoPackage& package);
     void packageToFilter(const ImageFilterModelTodoPackage& package);
-    void reAddImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void reAddItemInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
     void reAddingFinished();
 };
 

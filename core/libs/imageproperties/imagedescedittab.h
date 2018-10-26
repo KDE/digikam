@@ -36,7 +36,7 @@
 
 #include "dlayoutbox.h"
 #include "digikam_export.h"
-#include "imageinfolist.h"
+#include "iteminfolist.h"
 #include "albummanager.h"
 #include "albummodel.h"
 #include "metadatahub.h"
@@ -46,7 +46,7 @@
 
 namespace Digikam
 {
-class ImageInfo;
+class ItemInfo;
 class TaggingAction;
 
 class ImageDescEditTab : public DVBox
@@ -61,8 +61,8 @@ public:
     void assignPickLabel(int pickId);
     void assignColorLabel(int colorId);
     void assignRating(int rating);
-    void setItem(const ImageInfo& info = ImageInfo());
-    void setItems(const ImageInfoList& infos);
+    void setItem(const ItemInfo& info = ItemInfo());
+    void setItems(const ItemInfoList& infos);
     void populateTags();
     void setFocusToTagsView();
     void setFocusToNewTagEdit();
@@ -94,7 +94,7 @@ private:
     void reset();
     void setTagState(TAlbum* const tag, DisjointMetadata::Status status);
 
-    void setInfos(const ImageInfoList& infos);
+    void setInfos(const ItemInfoList& infos);
     void setFocusToLastSelectedWidget();
 
     void updateTagsView();
@@ -114,7 +114,7 @@ private:
 
 Q_SIGNALS:
 
-    void askToApplyChanges(const QList<ImageInfo>& infos, DisjointMetadata* hub);
+    void askToApplyChanges(const QList<ItemInfo>& infos, DisjointMetadata* hub);
 
 private Q_SLOTS:
 
@@ -150,7 +150,7 @@ private Q_SLOTS:
     void slotReadFromFileMetadataToDatabase();
     void slotWriteToFileMetadataFromDatabase();
 
-    void slotAskToApplyChanges(const QList<ImageInfo>& infos, DisjointMetadata* hub);
+    void slotAskToApplyChanges(const QList<ItemInfo>& infos, DisjointMetadata* hub);
 
 private:
 

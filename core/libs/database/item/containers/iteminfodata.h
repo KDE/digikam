@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-05-01
- * Description : ImageInfo common data
+ * Description : ItemInfo common data
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C)      2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_INFO_DATA_H
-#define DIGIKAM_IMAGE_INFO_DATA_H
+#ifndef DIGIKAM_ITEM_INFO_DATA_H
+#define DIGIKAM_ITEM_INFO_DATA_H
 
 // Qt includes
 
@@ -40,60 +40,60 @@
 #include "coredburl.h"
 #include "dshareddata.h"
 #include "coredbalbuminfo.h"
-#include "imageinfocache.h"
+#include "iteminfocache.h"
 
 namespace Digikam
 {
 
-class ImageInfoStatic
+class ItemInfoStatic
 {
 public:
 
     static void create();
     static void destroy();
 
-    static ImageInfoCache* cache();
+    static ItemInfoCache* cache();
 
 public:
 
-    ImageInfoCache          m_cache;
+    ItemInfoCache          m_cache;
     QReadWriteLock          m_lock;
 
-    static ImageInfoStatic* m_instance;
+    static ItemInfoStatic* m_instance;
 };
 
 // -----------------------------------------------------------------------------------
 
-class ImageInfoReadLocker : public QReadLocker
+class ItemInfoReadLocker : public QReadLocker
 {
 public:
 
-    explicit ImageInfoReadLocker()
-        : QReadLocker(&ImageInfoStatic::m_instance->m_lock)
+    explicit ItemInfoReadLocker()
+        : QReadLocker(&ItemInfoStatic::m_instance->m_lock)
     {
     }
 };
 
 // -----------------------------------------------------------------------------------
 
-class ImageInfoWriteLocker : public QWriteLocker
+class ItemInfoWriteLocker : public QWriteLocker
 {
 public:
 
-    explicit ImageInfoWriteLocker()
-        : QWriteLocker(&ImageInfoStatic::m_instance->m_lock)
+    explicit ItemInfoWriteLocker()
+        : QWriteLocker(&ItemInfoStatic::m_instance->m_lock)
     {
     }
 };
 
 // -----------------------------------------------------------------------------------
 
-class ImageInfoData : public DSharedData
+class ItemInfoData : public DSharedData
 {
 public:
 
-    explicit ImageInfoData();
-    ~ImageInfoData();
+    explicit ItemInfoData();
+    ~ItemInfoData();
 
 public:
 
@@ -162,4 +162,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_INFO_DATA_H
+#endif // DIGIKAM_ITEM_INFO_DATA_H

@@ -29,8 +29,8 @@
 #include "coredbaccess.h"
 #include "coredbchangesets.h"
 #include "coredbwatch.h"
-#include "imageinfo.h"
-#include "imageinfolist.h"
+#include "iteminfo.h"
+#include "iteminfolist.h"
 
 namespace Digikam
 {
@@ -60,7 +60,7 @@ void ImageListModel::slotCollectionImageChange(const CollectionImageChangeset& c
         case CollectionImageChangeset::Deleted:
         case CollectionImageChangeset::Removed:
         case CollectionImageChangeset::RemovedAll:
-            removeImageInfos(ImageInfoList(changeset.ids()));
+            removeItemInfos(ItemInfoList(changeset.ids()));
             break;
 
         default:

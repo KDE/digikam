@@ -35,7 +35,7 @@
 #include "coredbaccess.h"
 #include "coredbchangesets.h"
 #include "coredbwatch.h"
-#include "imageinfolist.h"
+#include "iteminfolist.h"
 #include "imagemodel.h"
 
 namespace Digikam
@@ -169,7 +169,7 @@ QList<QModelIndex> ImageSortFilterModel::mapListFromSource(const QList<QModelInd
     return indexes;
 }
 
-ImageInfo ImageSortFilterModel::imageInfo(const QModelIndex& index) const
+ItemInfo ImageSortFilterModel::imageInfo(const QModelIndex& index) const
 {
     return sourceImageModel()->imageInfo(mapToSourceImageModel(index));
 }
@@ -179,9 +179,9 @@ qlonglong ImageSortFilterModel::imageId(const QModelIndex& index) const
     return sourceImageModel()->imageId(mapToSourceImageModel(index));
 }
 
-QList<ImageInfo> ImageSortFilterModel::imageInfos(const QList<QModelIndex>& indexes) const
+QList<ItemInfo> ImageSortFilterModel::imageInfos(const QList<QModelIndex>& indexes) const
 {
-    QList<ImageInfo> infos;
+    QList<ItemInfo> infos;
     ImageModel* const model = sourceImageModel();
 
     foreach (const QModelIndex& index, indexes)
@@ -210,9 +210,9 @@ QModelIndex ImageSortFilterModel::indexForPath(const QString& filePath) const
     return mapFromSourceImageModel(sourceImageModel()->indexForPath(filePath));
 }
 
-QModelIndex ImageSortFilterModel::indexForImageInfo(const ImageInfo& info) const
+QModelIndex ImageSortFilterModel::indexForItemInfo(const ItemInfo& info) const
 {
-    return mapFromSourceImageModel(sourceImageModel()->indexForImageInfo(info));
+    return mapFromSourceImageModel(sourceImageModel()->indexForItemInfo(info));
 }
 
 QModelIndex ImageSortFilterModel::indexForImageId(qlonglong id) const
@@ -220,9 +220,9 @@ QModelIndex ImageSortFilterModel::indexForImageId(qlonglong id) const
     return mapFromSourceImageModel(sourceImageModel()->indexForImageId(id));
 }
 
-QList<ImageInfo> ImageSortFilterModel::imageInfosSorted() const
+QList<ItemInfo> ImageSortFilterModel::imageInfosSorted() const
 {
-    QList<ImageInfo>  infos;
+    QList<ItemInfo>  infos;
     const int         size  = rowCount();
     ImageModel* const model = sourceImageModel();
 
@@ -276,14 +276,14 @@ void ImageFilterModel::setDirectSourceImageModel(ImageModel* const sourceModel)
     {
         d->imageModel->setPreprocessor(d);
 
-        connect(d->imageModel, SIGNAL(preprocess(QList<ImageInfo>,QList<QVariant>)),
-                d, SLOT(preprocessInfos(QList<ImageInfo>,QList<QVariant>)));
+        connect(d->imageModel, SIGNAL(preprocess(QList<ItemInfo>,QList<QVariant>)),
+                d, SLOT(preprocessInfos(QList<ItemInfo>,QList<QVariant>)));
 
-        connect(d->imageModel, SIGNAL(processAdded(QList<ImageInfo>,QList<QVariant>)),
-                d, SLOT(processAddedInfos(QList<ImageInfo>,QList<QVariant>)));
+        connect(d->imageModel, SIGNAL(processAdded(QList<ItemInfo>,QList<QVariant>)),
+                d, SLOT(processAddedInfos(QList<ItemInfo>,QList<QVariant>)));
 
-        connect(d, SIGNAL(reAddImageInfos(QList<ImageInfo>,QList<QVariant>)),
-                d->imageModel, SLOT(reAddImageInfos(QList<ImageInfo>,QList<QVariant>)));
+        connect(d, SIGNAL(reAddItemInfos(QList<ItemInfo>,QList<QVariant>)),
+                d->imageModel, SLOT(reAddItemInfos(QList<ItemInfo>,QList<QVariant>)));
 
         connect(d, SIGNAL(reAddingFinished()),
                 d->imageModel, SLOT(reAddingFinished()));
@@ -572,14 +572,14 @@ bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
     }
 
     // usually done in thread and cache, unless source model changed
-    ImageInfo info = d->imageModel->imageInfo(source_row);
+    ItemInfo info = d->imageModel->imageInfo(source_row);
     bool match     = d->filter.matches(info);
     match          = match ? d->versionFilter.matches(info) : false;
 
     return match ? d->groupFilter.matches(info) : false;
 }
 
-void ImageFilterModel::setSendImageInfoSignals(bool sendSignals)
+void ImageFilterModel::setSendItemInfoSignals(bool sendSignals)
 {
     if (sendSignals)
     {
@@ -601,7 +601,7 @@ void ImageFilterModel::setSendImageInfoSignals(bool sendSignals)
 
 void ImageFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int start, int end)
 {
-    QList<ImageInfo> infos;
+    QList<ItemInfo> infos;
 
     for (int i = start ; i <= end ; ++i)
     {
@@ -613,7 +613,7 @@ void ImageFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int start
 
 void ImageFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end)
 {
-    QList<ImageInfo> infos;
+    QList<ItemInfo> infos;
 
     for (int i = start ; i <= end; ++i)
     {
@@ -662,7 +662,7 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
     //TODO: Make efficient!!
     if (needPrepareComments)
     {
-        foreach (const ImageInfo& info, package.infos)
+        foreach (const ItemInfo& info, package.infos)
         {
             info.comment();
         }
@@ -675,13 +675,13 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
     }
 
     // The downside of QVector: At some point, we may need a QList for an API.
-    // Nonetheless, QList and ImageInfo is fast. We could as well
-    // reimplement ImageInfoList to ImageInfoVector (internally with templates?)
-    ImageInfoList infoList;
+    // Nonetheless, QList and ItemInfo is fast. We could as well
+    // reimplement ItemInfoList to ItemInfoVector (internally with templates?)
+    ItemInfoList infoList;
 
     if (needPrepareTags || needPrepareGroups)
     {
-        infoList = ImageInfoList(package.infos.toList());
+        infoList = ItemInfoList(package.infos.toList());
     }
 
     if (needPrepareTags)
@@ -729,7 +729,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     // Actual filtering. The variants to spare checking hasOneMatch over and over again.
     if (hasOneMatch && hasOneMatchForText)
     {
-        foreach (const ImageInfo& info, package.infos)
+        foreach (const ItemInfo& info, package.infos)
         {
             package.filterResults[info.id()] = localFilter.matches(info)        &&
                                                localVersionFilter.matches(info) &&
@@ -740,7 +740,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     {
         bool matchForText;
 
-        foreach (const ImageInfo& info, package.infos)
+        foreach (const ItemInfo& info, package.infos)
         {
             package.filterResults[info.id()] = localFilter.matches(info, &matchForText) &&
                                                localVersionFilter.matches(info)         &&
@@ -756,7 +756,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     {
         bool result, matchForText;
 
-        foreach (const ImageInfo& info, package.infos)
+        foreach (const ItemInfo& info, package.infos)
         {
             result                           = localFilter.matches(info, &matchForText) &&
                                                localVersionFilter.matches(info)         &&
@@ -845,15 +845,15 @@ int ImageFilterModel::compareCategories(const QModelIndex& left, const QModelInd
         return -1;
     }
 
-    const ImageInfo& leftInfo  = d->imageModel->imageInfoRef(left);
-    const ImageInfo& rightInfo = d->imageModel->imageInfoRef(right);
+    const ItemInfo& leftInfo  = d->imageModel->imageInfoRef(left);
+    const ItemInfo& rightInfo = d->imageModel->imageInfoRef(right);
 
     // Check grouping
     qlonglong leftGroupImageId  = leftInfo.groupImageId();
     qlonglong rightGroupImageId = rightInfo.groupImageId();
 
-    return compareInfosCategories(leftGroupImageId  == -1 ? leftInfo  : ImageInfo(leftGroupImageId),
-                                  rightGroupImageId == -1 ? rightInfo : ImageInfo(rightGroupImageId));
+    return compareInfosCategories(leftGroupImageId  == -1 ? leftInfo  : ItemInfo(leftGroupImageId),
+                                  rightGroupImageId == -1 ? rightInfo : ItemInfo(rightGroupImageId));
 }
 
 bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelIndex& right) const
@@ -871,8 +871,8 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelInde
         return false;
     }
 
-    const ImageInfo& leftInfo  = d->imageModel->imageInfoRef(left);
-    const ImageInfo& rightInfo = d->imageModel->imageInfoRef(right);
+    const ItemInfo& leftInfo  = d->imageModel->imageInfoRef(left);
+    const ItemInfo& rightInfo = d->imageModel->imageInfoRef(right);
 
     if (leftInfo == rightInfo)
     {
@@ -903,11 +903,11 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelInde
     }
 
     // Use the group leader for sorting
-    return infosLessThan(leftGroupImageId  == -1 ? leftInfo  : ImageInfo(leftGroupImageId),
-                         rightGroupImageId == -1 ? rightInfo : ImageInfo(rightGroupImageId));
+    return infosLessThan(leftGroupImageId  == -1 ? leftInfo  : ItemInfo(leftGroupImageId),
+                         rightGroupImageId == -1 ? rightInfo : ItemInfo(rightGroupImageId));
 }
 
-int ImageFilterModel::compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const
+int ImageFilterModel::compareInfosCategories(const ItemInfo& left, const ItemInfo& right) const
 {
     // Note: reimplemented in ImageAlbumFilterModel
     Q_D(const ImageFilterModel);
@@ -931,7 +931,7 @@ static inline QString fastNumberToString(int id)
     return QLatin1String(c);
 }
 
-QString ImageFilterModel::categoryIdentifier(const ImageInfo& i) const
+QString ImageFilterModel::categoryIdentifier(const ItemInfo& i) const
 {
     Q_D(const ImageFilterModel);
 
@@ -941,7 +941,7 @@ QString ImageFilterModel::categoryIdentifier(const ImageInfo& i) const
     }
 
     qlonglong groupedImageId = i.groupImageId();
-    ImageInfo info = groupedImageId == -1 ? i : ImageInfo(groupedImageId);
+    ItemInfo info = groupedImageId == -1 ? i : ItemInfo(groupedImageId);
 
     switch (d->sorter.categorizationMode)
     {
@@ -960,7 +960,7 @@ QString ImageFilterModel::categoryIdentifier(const ImageInfo& i) const
     }
 }
 
-bool ImageFilterModel::infosLessThan(const ImageInfo& left, const ImageInfo& right) const
+bool ImageFilterModel::infosLessThan(const ItemInfo& left, const ItemInfo& right) const
 {
     Q_D(const ImageFilterModel);
     return d->sorter.lessThan(left, right);

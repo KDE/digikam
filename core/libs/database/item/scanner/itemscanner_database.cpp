@@ -54,9 +54,9 @@ void ItemScanner::commit()
         return;
     }
 
-    if (d->commit.commitImageInformation)
+    if (d->commit.commitItemInformation)
     {
-        commitImageInformation();
+        commitItemInformation();
     }
 
     if (d->commit.commitImageMetadata)

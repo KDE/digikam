@@ -35,7 +35,7 @@
 
 #include "digikam_debug.h"
 #include "album.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "albummanager.h"
 #include "labelstreeview.h"
 
@@ -112,7 +112,7 @@ public:
     {
     };
 
-    HistoryPosition(const ImageInfo& c, const QList<ImageInfo>& s)
+    HistoryPosition(const ItemInfo& c, const QList<ItemInfo>& s)
         : current(c),
           select(s)
     {
@@ -123,8 +123,8 @@ public:
         return (current == item.current) && (select == item.select);
     }
 
-    ImageInfo        current;
-    QList<ImageInfo> select;
+    ItemInfo        current;
+    QList<ItemInfo> select;
 };
 
 // ---------------------------------------------------------------------
@@ -512,7 +512,7 @@ void AlbumHistory::slotAlbumCurrentChanged()
     d->blockSelection = false;
 }
 
-void AlbumHistory::slotCurrentChange(const ImageInfo& info)
+void AlbumHistory::slotCurrentChange(const ItemInfo& info)
 {
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
 
@@ -524,7 +524,7 @@ void AlbumHistory::slotCurrentChange(const ImageInfo& info)
     d->historyPos[albumList].current = info;
 }
 
-void AlbumHistory::slotImageSelected(const ImageInfoList& selectedImages)
+void AlbumHistory::slotImageSelected(const ItemInfoList& selectedImages)
 {
     if (d->blockSelection)
     {
@@ -539,7 +539,7 @@ void AlbumHistory::slotImageSelected(const ImageInfoList& selectedImages)
     }
 }
 
-void AlbumHistory::slotClearSelectPAlbum(const ImageInfo& imageInfo)
+void AlbumHistory::slotClearSelectPAlbum(const ItemInfo& imageInfo)
 {
     Album* const album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(imageInfo.albumId()));
     QList<Album*> albums;

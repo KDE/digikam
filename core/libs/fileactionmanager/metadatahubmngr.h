@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-class ImageInfo;
+class ItemInfo;
 
 class MetadataHubMngr : public QObject
 {
@@ -45,7 +45,7 @@ public:
     static QPointer<MetadataHubMngr> internalPtr;
     static bool                      isCreated();
 
-    void addPending(const ImageInfo& info);
+    void addPending(const ItemInfo& info);
     void requestShutDown();
 
 Q_SIGNALS:

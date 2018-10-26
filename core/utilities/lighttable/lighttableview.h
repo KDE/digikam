@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace Digikam
 {
@@ -51,15 +51,15 @@ public:
     void   setSyncPreview(bool sync);
     void   setNavigateByPair(bool b);
 
-    void   setLeftImageInfo(const ImageInfo& info = ImageInfo());
-    void   setRightImageInfo(const ImageInfo& info = ImageInfo());
+    void   setLeftItemInfo(const ItemInfo& info = ItemInfo());
+    void   setRightItemInfo(const ItemInfo& info = ItemInfo());
 
-    ImageInfo leftImageInfo() const;
-    ImageInfo rightImageInfo() const;
+    ItemInfo leftItemInfo() const;
+    ItemInfo rightItemInfo() const;
 
     void setPreviewSettings(const PreviewSettings& settings);
 
-    void   checkForSelection(const ImageInfo& info);
+    void   checkForSelection(const ItemInfo& info);
     void   toggleFullScreen(bool set);
 
     double leftZoomMax()  const;
@@ -85,8 +85,8 @@ Q_SIGNALS:
     void signalLeftZoomFactorChanged(double);
     void signalRightZoomFactorChanged(double);
 
-    void signalLeftDroppedItems(const ImageInfoList&);
-    void signalRightDroppedItems(const ImageInfoList&);
+    void signalLeftDroppedItems(const ItemInfoList&);
+    void signalRightDroppedItems(const ItemInfoList&);
 
     void signalLeftPanelLeftButtonClicked();
     void signalRightPanelLeftButtonClicked();
@@ -97,8 +97,8 @@ Q_SIGNALS:
     void signalLeftSlideShowCurrent();
     void signalRightSlideShowCurrent();
 
-    void signalDeleteItem(const ImageInfo&);
-    void signalEditItem(const ImageInfo&);
+    void signalDeleteItem(const ItemInfo&);
+    void signalEditItem(const ItemInfo&);
     void signalToggleOnSyncPreview(bool);
 
 public Q_SLOTS:

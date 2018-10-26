@@ -59,8 +59,8 @@ void DigikamApp::setupViewConnections()
     connect(d->view, SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
 
-    connect(d->view, SIGNAL(signalImageSelected(ImageInfoList,ImageInfoList)),
-            this, SLOT(slotImageSelected(ImageInfoList,ImageInfoList)));
+    connect(d->view, SIGNAL(signalImageSelected(ItemInfoList,ItemInfoList)),
+            this, SLOT(slotImageSelected(ItemInfoList,ItemInfoList)));
 
     connect(d->view, SIGNAL(signalSwitchedToPreview()),
             this, SLOT(slotSwitchedToPreview()));

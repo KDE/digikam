@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -58,26 +58,26 @@ public:
 
 public Q_SLOTS:
 
-    void createNewAlbumForInfos(const QList<ImageInfo>& infos, Album* currentAlbum);
-    bool deleteImages(const QList<ImageInfo>& infos, const DeleteMode deleteMode);
-    void deleteImagesDirectly(const QList<ImageInfo>& infos, const DeleteMode deleteMode);
+    void createNewAlbumForInfos(const QList<ItemInfo>& infos, Album* currentAlbum);
+    bool deleteImages(const QList<ItemInfo>& infos, const DeleteMode deleteMode);
+    void deleteImagesDirectly(const QList<ItemInfo>& infos, const DeleteMode deleteMode);
 
-    void insertToLightTableAuto(const QList<ImageInfo>& all, const QList<ImageInfo>& selected, const ImageInfo& current);
-    void insertToLightTable(const QList<ImageInfo>& list, const ImageInfo& current, bool addTo);
+    void insertToLightTableAuto(const QList<ItemInfo>& all, const QList<ItemInfo>& selected, const ItemInfo& current);
+    void insertToLightTable(const QList<ItemInfo>& list, const ItemInfo& current, bool addTo);
 
-    void insertToQueueManager(const QList<ImageInfo>& list, const ImageInfo& currentInfo, bool newQueue);
-    void insertSilentToQueueManager(const QList<ImageInfo>& list, const ImageInfo& currentInfo, int queueid);
+    void insertToQueueManager(const QList<ItemInfo>& list, const ItemInfo& currentInfo, bool newQueue);
+    void insertSilentToQueueManager(const QList<ItemInfo>& list, const ItemInfo& currentInfo, int queueid);
 
     void notifyFileContentChanged(const QList<QUrl>& urls);
 
-    void openInfos(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album* currentAlbum);
-    void openInfosWithDefaultApplication(const QList<ImageInfo>& allInfosToOpen);
+    void openInfos(const ItemInfo& info, const QList<ItemInfo>& allInfosToOpen, Album* currentAlbum);
+    void openInfosWithDefaultApplication(const QList<ItemInfo>& allInfosToOpen);
 
     void rename(const QUrl& imageUrl, const QString& newName, bool overwrite = false);
-    void setAsAlbumThumbnail(Album* album, const ImageInfo& imageInfo);
+    void setAsAlbumThumbnail(Album* album, const ItemInfo& imageInfo);
 
-    void createGroupByTimeFromInfoList(const ImageInfoList& imageInfoList);
-    void createGroupByFilenameFromInfoList(const ImageInfoList& imageInfoList);
+    void createGroupByTimeFromInfoList(const ItemInfoList& imageInfoList);
+    void createGroupByFilenameFromInfoList(const ItemInfoList& imageInfoList);
 
 Q_SIGNALS:
 

@@ -30,7 +30,7 @@
 // Local includes
 
 #include "imagecategorizedview.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "imagemodel.h"
 #include "itemviewhoverbutton.h"
 
@@ -126,7 +126,7 @@ void ImageRotateOverlay::slotClicked()
 
 bool ImageRotateOverlay::checkIndex(const QModelIndex& index) const
 {
-    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    ItemInfo info = ImageModel::retrieveItemInfo(index);
     return (info.category() == DatabaseItem::Image);
 }
 

@@ -35,7 +35,7 @@
 #include "digikam_debug.h"
 #include "coredbfields.h"
 #include "digikam_globals.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace Digikam
 {
@@ -142,7 +142,7 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
         {
             case SubColumnPickLabel:
             {
-                const ImageInfo info      = s->tableViewModel->infoFromItem(item);
+                const ItemInfo info      = s->tableViewModel->infoFromItem(item);
                 const PickLabel pickLabel = PickLabel(info.pickLabel());
                 QColor labelColor;
 
@@ -177,7 +177,7 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
 
             case SubColumnColorLabel:
             {
-                const ImageInfo info        = s->tableViewModel->infoFromItem(item);
+                const ItemInfo info        = s->tableViewModel->infoFromItem(item);
                 const ColorLabel colorLabel = ColorLabel(info.colorLabel());
                 QColor labelColor;
 
@@ -237,7 +237,7 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
         }
     }
 
-    const ImageInfo info = s->tableViewModel->infoFromItem(item);
+    const ItemInfo info = s->tableViewModel->infoFromItem(item);
 
     /// @todo Also display the pick label icon?
     /// @todo Make display of text/icon configurable.
@@ -361,8 +361,8 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
 TableViewColumn::ColumnCompareResult ColumnDigikamProperties::compare(TableViewModel::Item* const itemA,
                                                                       TableViewModel::Item* const itemB) const
 {
-    const ImageInfo infoA = s->tableViewModel->infoFromItem(itemA);
-    const ImageInfo infoB = s->tableViewModel->infoFromItem(itemB);
+    const ItemInfo infoA = s->tableViewModel->infoFromItem(itemA);
+    const ItemInfo infoB = s->tableViewModel->infoFromItem(itemB);
 
     switch (subColumn)
     {

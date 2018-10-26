@@ -30,7 +30,7 @@
 #include "previewloadthread.h"
 #include "imagequalitycontainer.h"
 #include "imagequalityparser.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "maintenancedata.h"
 
 namespace Digikam
@@ -113,15 +113,15 @@ void ImageQualityTask::run()
             //                 dimg       as reduced size image data to parse,
             //                 path       as file path to patch database properties.
             // Result        : Backend must scan Quality of image depending of settings and compute a Quality estimation accordingly.
-            //                 Finally, using file path, database Pick Label properties is assigned through ImageInfo interface.
+            //                 Finally, using file path, database Pick Label properties is assigned through ItemInfo interface.
             // Warning       : All code here will run in a separated thread and must be re-entrant/thread-safe. Only pure computation
-            //                 must be processed. GUI calls are prohibited. ImageInfo and DImg can be used safety in thread.
+            //                 must be processed. GUI calls are prohibited. ItemInfo and DImg can be used safety in thread.
 
             PickLabel pick;
             d->imgqsort = new ImageQualityParser(dimg, d->quality, &pick);
             d->imgqsort->startAnalyse();
 
-            ImageInfo info = ImageInfo::fromLocalFile(path);
+            ItemInfo info = ItemInfo::fromLocalFile(path);
             info.setPickLabel(pick);
 
             delete d->imgqsort; //delete image data after setting label

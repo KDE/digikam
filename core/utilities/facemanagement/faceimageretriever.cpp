@@ -179,7 +179,7 @@ QList<QImage> FaceImageRetriever::getThumbnails(const QString& filePath, const Q
     foreach (const FaceTagsIface& face, faces)
     {
         QRect rect = face.region().toRect();
-        catcher->thread()->find(ImageInfo::thumbnailIdentifier(face.imageId()), rect);
+        catcher->thread()->find(ItemInfo::thumbnailIdentifier(face.imageId()), rect);
         catcher->enqueue();
     }
 

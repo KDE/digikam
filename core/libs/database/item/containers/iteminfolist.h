@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_INFO_LIST_H
-#define DIGIKAM_IMAGE_INFO_LIST_H
+#ifndef DIGIKAM_ITEM_INFO_LIST_H
+#define DIGIKAM_ITEM_INFO_LIST_H
 
 // Qt includes
 
@@ -31,25 +31,25 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "digikam_export.h"
 #include "digikam_config.h"
 
 namespace Digikam
 {
 
-class ImageInfo;
+class ItemInfo;
 
 // NOTE: implementations of batch loading methods:
 // See imageinfo.cpp (next to the corresponding single-item implementation)
 
-class DIGIKAM_DATABASE_EXPORT ImageInfoList : public QList<ImageInfo>
+class DIGIKAM_DATABASE_EXPORT ItemInfoList : public QList<ItemInfo>
 {
 public:
 
-    ImageInfoList();
-    explicit ImageInfoList(const QList<ImageInfo>& list);
-    explicit ImageInfoList(const QList<qlonglong>& idList);
+    ItemInfoList();
+    explicit ItemInfoList(const QList<ItemInfo>& list);
+    explicit ItemInfoList(const QList<qlonglong>& idList);
 
     QList<qlonglong> toImageIdList()  const;
     QList<QUrl>      toImageUrlList() const;
@@ -57,20 +57,20 @@ public:
     void loadGroupImageIds() const;
     void loadTagIds()        const;
 
-    bool static namefileLessThan(const ImageInfo& d1, const ImageInfo& d2);
+    bool static namefileLessThan(const ItemInfo& d1, const ItemInfo& d2);
 
     /**
      * @brief singleGroupMainItem
      * @return If the list contains of items of only one group including the
-     * main item, this main item is returned, otherwise a null ImageInfo.
+     * main item, this main item is returned, otherwise a null ItemInfo.
      */
-    ImageInfo singleGroupMainItem() const;
+    ItemInfo singleGroupMainItem() const;
 };
 
-typedef ImageInfoList::iterator ImageInfoListIterator;
+typedef ItemInfoList::iterator ItemInfoListIterator;
 
 } // namespace Digikam
 
-Q_DECLARE_METATYPE(Digikam::ImageInfoList)
+Q_DECLARE_METATYPE(Digikam::ItemInfoList)
 
-#endif // DIGIKAM_IMAGE_INFO_LIST_H
+#endif // DIGIKAM_ITEM_INFO_LIST_H

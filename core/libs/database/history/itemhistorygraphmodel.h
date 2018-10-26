@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 class ItemHistoryGraph;
-class ImageInfo;
+class ItemInfo;
 class ImageListModel;
 class FilterAction;
 
@@ -80,15 +80,15 @@ public:
      *  Set the history subject and the history graph.
      *  Per default, the subject's history graph is read.
      */
-    void setHistory(const ImageInfo& subject, const ItemHistoryGraph& graph = ItemHistoryGraph());
+    void setHistory(const ItemInfo& subject, const ItemHistoryGraph& graph = ItemHistoryGraph());
 
-    ImageInfo subject() const;
+    ItemInfo subject() const;
 
     bool isImage(const QModelIndex& index) const;
-    bool hasImage(const ImageInfo& info);
-    ImageInfo imageInfo(const QModelIndex& index) const;
+    bool hasImage(const ItemInfo& info);
+    ItemInfo imageInfo(const QModelIndex& index) const;
     /// Note: There may be multiple indexes for an info. The index found first is returned.
-    QModelIndex indexForInfo(const ImageInfo& info) const;
+    QModelIndex indexForInfo(const ItemInfo& info) const;
 
     bool isFilterAction(const QModelIndex& index) const;
     FilterAction filterAction(const QModelIndex& index) const;

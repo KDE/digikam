@@ -37,7 +37,7 @@
 
 #include "album.h"
 #include "albummanager.h"
-#include "imageinfoalbumsjob.h"
+#include "iteminfoalbumsjob.h"
 #include "applicationsettings.h"
 
 namespace Digikam
@@ -55,13 +55,13 @@ public:
     }
 
     bool          cancel;
-    ImageInfoList infoList;
+    ItemInfoList infoList;
     Album*        album;
     bool          autoPlayEnabled;
     QUrl          startFrom;           // Overrides the startFromCurrent flag read from settings.
 };
 
-SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
+SlideShowBuilder::SlideShowBuilder(const ItemInfoList& infoList)
     : ProgressItem(0, QLatin1String("SlideShowBuilder"), QString(), QString(), true, true),
       d(new Private)
 {
@@ -84,7 +84,7 @@ SlideShowBuilder::~SlideShowBuilder()
     delete d;
 }
 
-void SlideShowBuilder::setOverrideStartFrom(const ImageInfo& info)
+void SlideShowBuilder::setOverrideStartFrom(const ItemInfo& info)
 {
    d->startFrom = info.fileUrl();
 }
@@ -119,20 +119,20 @@ void SlideShowBuilder::slotRun()
             ++it;
         }
 
-        ImageInfoAlbumsJob* const job = new ImageInfoAlbumsJob;
+        ItemInfoAlbumsJob* const job = new ItemInfoAlbumsJob;
 
-        connect(job, SIGNAL(signalCompleted(ImageInfoList)),
-                this, SLOT(slotParseImageInfoList(ImageInfoList)));
+        connect(job, SIGNAL(signalCompleted(ItemInfoList)),
+                this, SLOT(slotParseItemInfoList(ItemInfoList)));
 
         job->allItemsFromAlbums(albumList);
     }
     else
     {
-        slotParseImageInfoList(d->infoList);
+        slotParseItemInfoList(d->infoList);
     }
 }
 
-void SlideShowBuilder::slotParseImageInfoList(const ImageInfoList& list)
+void SlideShowBuilder::slotParseItemInfoList(const ItemInfoList& list)
 {
     setTotalItems(list.count());
 
@@ -147,10 +147,10 @@ void SlideShowBuilder::slotParseImageInfoList(const ImageInfoList& list)
         settings.imageUrl = d->startFrom;
     }
 
-    for (ImageInfoList::const_iterator it = list.constBegin();
+    for (ItemInfoList::const_iterator it = list.constBegin();
          !d->cancel && (it != list.constEnd()) ; ++it)
     {
-        ImageInfo info       = *it;
+        ItemInfo info       = *it;
         settings.fileList.append(info.fileUrl());
         SlidePictureInfo pictInfo;
         pictInfo.comment     = info.comment();

@@ -33,7 +33,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "albummanager.h"
 #include "coredb.h"
 #include "coredbaccess.h"
@@ -88,24 +88,24 @@ SidecarFinder::SidecarFinder(const QList<QUrl>& files)
 // TODO
 // Groups should not be resolved in dio, it should be handled in views.
 // This is already done for most things except for drag&drop, which is hard :)
-GroupedImagesFinder::GroupedImagesFinder(const QList<ImageInfo>& source)
+GroupedImagesFinder::GroupedImagesFinder(const QList<ItemInfo>& source)
 {
     QSet<qlonglong> ids;
 
-    foreach (const ImageInfo& info, source)
+    foreach (const ItemInfo& info, source)
     {
         ids << info.id();
     }
 
     infos.reserve(source.size());
 
-    foreach (const ImageInfo& info, source)
+    foreach (const ItemInfo& info, source)
     {
         infos << info;
 
         if (info.hasGroupedImages())
         {
-            foreach (const ImageInfo& groupedImage, info.groupedImages())
+            foreach (const ItemInfo& groupedImage, info.groupedImages())
             {
                 if (ids.contains(groupedImage.id()))
                 {
@@ -177,7 +177,7 @@ void DIO::move(PAlbum* const src, PAlbum* const dest)
 
 // Images -> Album ----------------------------------------------------
 
-void DIO::copy(const QList<ImageInfo>& infos, PAlbum* const dest)
+void DIO::copy(const QList<ItemInfo>& infos, PAlbum* const dest)
 {
     if (!dest)
     {
@@ -187,7 +187,7 @@ void DIO::copy(const QList<ImageInfo>& infos, PAlbum* const dest)
     instance()->processJob(new IOJobData(IOJobData::CopyImage, infos, dest));
 }
 
-void DIO::move(const QList<ImageInfo>& infos, PAlbum* const dest)
+void DIO::move(const QList<ItemInfo>& infos, PAlbum* const dest)
 {
     if (!dest)
     {
@@ -238,22 +238,22 @@ void DIO::rename(const QUrl& src, const QString& newName, bool overwrite)
         return;
     }
 
-    ImageInfo info = ImageInfo::fromUrl(src);
+    ItemInfo info = ItemInfo::fromUrl(src);
 
     instance()->processJob(new IOJobData(IOJobData::Rename, info, newName, overwrite));
 }
 
 // Delete --------------------------------------------------------------
 
-void DIO::del(const QList<ImageInfo>& infos, bool useTrash)
+void DIO::del(const QList<ItemInfo>& infos, bool useTrash)
 {
     instance()->processJob(new IOJobData(useTrash ? IOJobData::Trash 
                                                   : IOJobData::Delete, infos));
 }
 
-void DIO::del(const ImageInfo& info, bool useTrash)
+void DIO::del(const ItemInfo& info, bool useTrash)
 {
-    del(QList<ImageInfo>() << info, useTrash);
+    del(QList<ItemInfo>() << info, useTrash);
 }
 
 void DIO::del(PAlbum* const album, bool useTrash)
@@ -281,12 +281,12 @@ void DIO::processJob(IOJobData* const data)
     {
         // this is a fast db operation, do here
         GroupedImagesFinder finder(data->imageInfos());
-        data->setImageInfos(finder.infos);
+        data->setItemInfos(finder.infos);
 
         QStringList      filenames;
         QList<qlonglong> ids;
 
-        foreach (const ImageInfo& info, data->imageInfos())
+        foreach (const ItemInfo& info, data->imageInfos())
         {
             filenames << info.name();
             ids << info.id();
@@ -312,7 +312,7 @@ void DIO::processJob(IOJobData* const data)
     {
         if (!data->imageInfos().isEmpty())
         {
-            ImageInfo info      = data->imageInfos().first();
+            ItemInfo info      = data->imageInfos().first();
             PAlbum* const album = AlbumManager::instance()->findPAlbum(info.albumId());
 
             if (album)
@@ -415,7 +415,7 @@ void DIO::slotOneProccessed(const QUrl& url)
 
     if (operation == IOJobData::MoveImage)
     {
-        ImageInfo info = data->findImageInfo(url);
+        ItemInfo info = data->findItemInfo(url);
 
         if (!info.isNull() && data->destAlbum())
         {
@@ -453,7 +453,7 @@ void DIO::slotOneProccessed(const QUrl& url)
         }
         else
         {
-            ImageInfo info = data->findImageInfo(url);
+            ItemInfo info = data->findItemInfo(url);
 
             if (!info.isNull())
             {
@@ -467,7 +467,7 @@ void DIO::slotOneProccessed(const QUrl& url)
     }
     else if (operation == IOJobData::Trash)
     {
-        ImageInfo info = data->findImageInfo(url);
+        ItemInfo info = data->findItemInfo(url);
 
         if (!info.isNull())
         {
@@ -477,7 +477,7 @@ void DIO::slotOneProccessed(const QUrl& url)
     }
     else if (operation == IOJobData::Rename)
     {
-        ImageInfo info = data->findImageInfo(url);
+        ItemInfo info = data->findItemInfo(url);
 
         if (!info.isNull())
         {
@@ -495,7 +495,7 @@ void DIO::slotOneProccessed(const QUrl& url)
             ThumbsDbAccess().db()->renameByFilePath(oldPath, newPath);
             // Remove old thumbnails and images from the cache
             LoadingCacheInterface::fileChanged(oldPath, false);
-            // Rename in ImageInfo and database
+            // Rename in ItemInfo and database
             info.setName(newName);
         }
     }
@@ -619,7 +619,7 @@ void DIO::addAlbumChildrenToList(QList<int>& list, Album* const album)
 
 void DIO::slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate)
 {
-    ImageInfo info = ImageInfo::fromUrl(url);
+    ItemInfo info = ItemInfo::fromUrl(url);
 
     if (!info.isNull())
     {

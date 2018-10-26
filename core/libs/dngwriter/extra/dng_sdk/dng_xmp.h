@@ -230,7 +230,7 @@ class dng_xmp
 		void SyncOrientation (dng_negative &negative,
 					   		  bool xmpIsMaster);
 
-		void ClearImageInfo ();
+		void ClearItemInfo ();
 
 		void SetImageSize (const dng_point &size);
 

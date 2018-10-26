@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "progressmanager.h"
 
 namespace Digikam
@@ -88,28 +88,28 @@ Q_SIGNALS:
 
 // -------------------------------------------------------------------------------------------------------------------
 
-class FileActionImageInfoList : public QList<ImageInfo>
+class FileActionItemInfoList : public QList<ItemInfo>
 {
 public:
 
-    FileActionImageInfoList()
+    FileActionItemInfoList()
     {
     }
 
-    FileActionImageInfoList(const FileActionImageInfoList& copy)
+    FileActionItemInfoList(const FileActionItemInfoList& copy)
         : QList(copy)
     {
         this->container = copy.container;
     }
 
-    ~FileActionImageInfoList()
+    ~FileActionItemInfoList()
     {
     }
 
 public:
 
-    static FileActionImageInfoList create(const QList<ImageInfo>& list);
-    static FileActionImageInfoList continueTask(const QList<ImageInfo>& list, FileActionProgressItemContainer* const container);
+    static FileActionItemInfoList create(const QList<ItemInfo>& list);
+    static FileActionItemInfoList continueTask(const QList<ItemInfo>& list, FileActionProgressItemContainer* const container);
 
     FileActionProgressItemContainer* progress() const
     {
@@ -158,14 +158,14 @@ public:
 
 private:
 
-    explicit FileActionImageInfoList(const QList<ImageInfo>& list)
-        : QList<ImageInfo>(list)
+    explicit FileActionItemInfoList(const QList<ItemInfo>& list)
+        : QList<ItemInfo>(list)
     {
     }
 };
 
 } // namespace Digikam
 
-Q_DECLARE_METATYPE(Digikam::FileActionImageInfoList)
+Q_DECLARE_METATYPE(Digikam::FileActionItemInfoList)
 
 #endif // DIGIKAM_FILE_ACTION_IMAGE_INFO_LIST_H

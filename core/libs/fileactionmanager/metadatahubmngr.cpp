@@ -31,9 +31,9 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "metadatahub.h"
-#include "imageinfolist.h"
+#include "iteminfolist.h"
 #include "metadatasynchronizer.h"
 
 namespace Digikam
@@ -50,7 +50,7 @@ public:
     {
     }
 
-    ImageInfoList pendingItems;
+    ItemInfoList pendingItems;
     QMutex        mutex;
 };
 
@@ -77,7 +77,7 @@ bool MetadataHubMngr::isCreated()
     return (!internalPtr.isNull());
 }
 
-void MetadataHubMngr::addPending(const ImageInfo& info)
+void MetadataHubMngr::addPending(const ItemInfo& info)
 {
     QMutexLocker locker(&d->mutex);
 
@@ -94,7 +94,7 @@ void MetadataHubMngr::slotApplyPending()
     if (d->pendingItems.isEmpty())
         return;
 
-    ImageInfoList infos(d->pendingItems);
+    ItemInfoList infos(d->pendingItems);
     d->pendingItems.clear();
 
     emit signalPendingMetadata(0);
@@ -117,7 +117,7 @@ void MetadataHubMngr::requestShutDown()
     dialog->setMinimumDuration(100);
     dialog->setLabelText(i18nc("@label", "Apply pending changes to metadata"));
 
-    ImageInfoList infos(d->pendingItems);
+    ItemInfoList infos(d->pendingItems);
     d->pendingItems.clear();
 
     emit signalPendingMetadata(0);

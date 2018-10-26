@@ -32,7 +32,7 @@
 // Local includes
 
 #include "coredbfields.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace Digikam
 {
@@ -149,7 +149,7 @@ Qt::SortOrder ImageSortSettings::defaultSortOrderForSortRole(SortRole role)
     }
 }
 
-int ImageSortSettings::compareCategories(const ImageInfo& left, const ImageInfo& right) const
+int ImageSortSettings::compareCategories(const ItemInfo& left, const ItemInfo& right) const
 {
     switch (categorizationMode)
     {
@@ -193,7 +193,7 @@ int ImageSortSettings::compareCategories(const ImageInfo& left, const ImageInfo&
     }
 }
 
-bool ImageSortSettings::lessThan(const ImageInfo& left, const ImageInfo& right) const
+bool ImageSortSettings::lessThan(const ItemInfo& left, const ItemInfo& right) const
 {
     int result = compare(left, right, sortRole);
 
@@ -247,12 +247,12 @@ bool ImageSortSettings::lessThan(const ImageInfo& left, const ImageInfo& right) 
     return false;
 }
 
-int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right) const
+int ImageSortSettings::compare(const ItemInfo& left, const ItemInfo& right) const
 {
     return compare(left, right, sortRole);
 }
 
-int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right, SortRole role) const
+int ImageSortSettings::compare(const ItemInfo& left, const ItemInfo& right, SortRole role) const
 {
     switch (role)
     {

@@ -150,14 +150,14 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
 
     d->utilities = new ImageViewUtilities(this);
 
-    connect(imageModel()->dragDropHandler(), SIGNAL(assignTags(QList<ImageInfo>,QList<int>)),
-            FileActionMngr::instance(), SLOT(assignTags(QList<ImageInfo>,QList<int>)));
+    connect(imageModel()->dragDropHandler(), SIGNAL(assignTags(QList<ItemInfo>,QList<int>)),
+            FileActionMngr::instance(), SLOT(assignTags(QList<ItemInfo>,QList<int>)));
 
-    connect(imageModel()->dragDropHandler(), SIGNAL(addToGroup(ImageInfo,QList<ImageInfo>)),
-            FileActionMngr::instance(), SLOT(addToGroup(ImageInfo,QList<ImageInfo>)));
+    connect(imageModel()->dragDropHandler(), SIGNAL(addToGroup(ItemInfo,QList<ItemInfo>)),
+            FileActionMngr::instance(), SLOT(addToGroup(ItemInfo,QList<ItemInfo>)));
 
-    connect(imageModel()->dragDropHandler(), SIGNAL(dragDropSort(ImageInfo,QList<ImageInfo>)),
-            this, SLOT(dragDropSort(ImageInfo,QList<ImageInfo>)));
+    connect(imageModel()->dragDropHandler(), SIGNAL(dragDropSort(ItemInfo,QList<ItemInfo>)),
+            this, SLOT(dragDropSort(ItemInfo,QList<ItemInfo>)));
 
     connect(d->utilities, SIGNAL(editorCurrentUrlChanged(QUrl)),
             this, SLOT(setCurrentUrlWhenAvailable(QUrl)));
@@ -184,44 +184,44 @@ void DigikamImageView::setThumbnailSize(const ThumbnailSize& size)
     ImageCategorizedView::setThumbnailSize(size);
 }
 
-ImageInfoList DigikamImageView::allImageInfos(bool grouping) const
+ItemInfoList DigikamImageView::allItemInfos(bool grouping) const
 {
     if (grouping)
     {
-        return resolveGrouping(ImageCategorizedView::allImageInfos());
+        return resolveGrouping(ImageCategorizedView::allItemInfos());
     }
 
-    return ImageCategorizedView::allImageInfos();
+    return ImageCategorizedView::allItemInfos();
 }
 
-ImageInfoList DigikamImageView::selectedImageInfos(bool grouping) const
+ItemInfoList DigikamImageView::selectedItemInfos(bool grouping) const
 {
     if (grouping)
     {
-        return resolveGrouping(ImageCategorizedView::selectedImageInfos());
+        return resolveGrouping(ImageCategorizedView::selectedItemInfos());
     }
 
-    return ImageCategorizedView::selectedImageInfos();
+    return ImageCategorizedView::selectedItemInfos();
 }
 
-ImageInfoList DigikamImageView::selectedImageInfosCurrentFirst(bool grouping) const
+ItemInfoList DigikamImageView::selectedItemInfosCurrentFirst(bool grouping) const
 {
     if (grouping)
     {
-        return resolveGrouping(ImageCategorizedView::selectedImageInfosCurrentFirst());
+        return resolveGrouping(ImageCategorizedView::selectedItemInfosCurrentFirst());
     }
 
-    return ImageCategorizedView::selectedImageInfosCurrentFirst();
+    return ImageCategorizedView::selectedItemInfosCurrentFirst();
 }
 
-void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos)
+void DigikamImageView::dragDropSort(const ItemInfo& pick, const QList<ItemInfo>& infos)
 {
     if (pick.isNull() || infos.isEmpty())
     {
         return;
     }
 
-    ImageInfoList infoList = allImageInfos(false);
+    ItemInfoList infoList = allItemInfos(false);
     qlonglong counter      = pick.manualOrder();
     bool order             = (ApplicationSettings::instance()->
                                 getImageSorting() == Qt::AscendingOrder);
@@ -232,11 +232,11 @@ void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo
     CoreDbOperationGroup group;
     group.setMaximumTime(200);
 
-    foreach (ImageInfo info, infoList)
+    foreach (ItemInfo info, infoList)
     {
         if (!found && info.id() == pick.id())
         {
-            foreach (ImageInfo dropInfo, infos)
+            foreach (ItemInfo dropInfo, infos)
             {
                 dropInfo.setManualOrder(counter);
                 counter += (order ? 1 : -1);
@@ -267,12 +267,12 @@ void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo
 
 bool DigikamImageView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
 {
-    return needGroupResolving(type, allImageInfos());
+    return needGroupResolving(type, allItemInfos());
 }
 
 bool DigikamImageView::selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const
 {
-    return needGroupResolving(type, selectedImageInfos());
+    return needGroupResolving(type, selectedItemInfos());
 }
 
 int DigikamImageView::fitToWidthIcons()
@@ -291,15 +291,15 @@ void DigikamImageView::slotSetupChanged()
     ImageCategorizedView::slotSetupChanged();
 }
 
-bool DigikamImageView::hasHiddenGroupedImages(const ImageInfo& info) const
+bool DigikamImageView::hasHiddenGroupedImages(const ItemInfo& info) const
 {
     return info.hasGroupedImages() && !imageFilterModel()->isGroupOpen(info.id());
 }
 
-ImageInfoList DigikamImageView::imageInfos(const QList<QModelIndex>& indexes,
+ItemInfoList DigikamImageView::imageInfos(const QList<QModelIndex>& indexes,
                                            ApplicationSettings::OperationType type) const
 {
-    ImageInfoList infos = ImageCategorizedView::imageInfos(indexes);
+    ItemInfoList infos = ImageCategorizedView::imageInfos(indexes);
 
     if (needGroupResolving(type, infos))
     {
@@ -365,7 +365,7 @@ void DigikamImageView::addAssignNameOverlay(ImageDelegate* delegate)
 
 void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId)
 {
-    QList<ImageInfo>    infos;
+    QList<ItemInfo>    infos;
     QList<FaceTagsIface> faces;
     QList<QModelIndex>  sourceIndexes;
 
@@ -380,7 +380,7 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
 
     foreach (const QModelIndex& index, indexes)
     {
-        infos << ImageModel::retrieveImageInfo(index);
+        infos << ImageModel::retrieveItemInfo(index);
         faces << d->faceDelegate->face(index);
 
         if (needFastRemove)
@@ -399,13 +399,13 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
 
 void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
 {
-    QList<ImageInfo> infos;
+    QList<ItemInfo> infos;
     QList<FaceTagsIface> faces;
     QList<QModelIndex> sourceIndexes;
 
     foreach (const QModelIndex& index, indexes)
     {
-        infos << ImageModel::retrieveImageInfo(index);
+        infos << ImageModel::retrieveItemInfo(index);
         faces << d->faceDelegate->face(index);
         sourceIndexes << imageSortFilterModel()->mapToSourceImageModel(index);
     }
@@ -418,7 +418,7 @@ void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
     }
 }
 
-void DigikamImageView::activated(const ImageInfo& info, Qt::KeyboardModifiers modifiers)
+void DigikamImageView::activated(const ItemInfo& info, Qt::KeyboardModifiers modifiers)
 {
     if (info.isNull())
     {
@@ -438,11 +438,11 @@ void DigikamImageView::activated(const ImageInfo& info, Qt::KeyboardModifiers mo
     }
     else
     {
-        d->utilities->openInfosWithDefaultApplication(QList<ImageInfo>() << info);
+        d->utilities->openInfosWithDefaultApplication(QList<ItemInfo>() << info);
     }
 }
 
-void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info)
+void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info)
 {
     emit signalShowContextMenuOnInfo(event, info, QList<QAction*>(), imageFilterModel());
 }
@@ -450,7 +450,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMenuEvent* event)
 {
     Q_UNUSED(index);
-    emit signalShowGroupContextMenu(event, selectedImageInfosCurrentFirst(), imageFilterModel());
+    emit signalShowGroupContextMenu(event, selectedItemInfosCurrentFirst(), imageFilterModel());
 }
 
 void DigikamImageView::showContextMenu(QContextMenuEvent* event)
@@ -458,14 +458,14 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
     emit signalShowContextMenu(event);
 }
 
-void DigikamImageView::openFile(const ImageInfo& info)
+void DigikamImageView::openFile(const ItemInfo& info)
 {
-    d->utilities->openInfos(info, allImageInfos(), currentAlbum());
+    d->utilities->openInfos(info, allItemInfos(), currentAlbum());
 }
 
 void DigikamImageView::deleteSelected(const ImageViewUtilities::DeleteMode deleteMode)
 {
-    ImageInfoList imageInfoList = selectedImageInfos(true);
+    ItemInfoList imageInfoList = selectedItemInfos(true);
 
     if (d->utilities->deleteImages(imageInfoList, deleteMode))
     {
@@ -475,7 +475,7 @@ void DigikamImageView::deleteSelected(const ImageViewUtilities::DeleteMode delet
 
 void DigikamImageView::deleteSelectedDirectly(const ImageViewUtilities::DeleteMode deleteMode)
 {
-    ImageInfoList imageInfoList = selectedImageInfos(true);
+    ItemInfoList imageInfoList = selectedItemInfos(true);
 
     d->utilities->deleteImagesDirectly(imageInfoList, deleteMode);
     awayFromSelection();
@@ -483,13 +483,13 @@ void DigikamImageView::deleteSelectedDirectly(const ImageViewUtilities::DeleteMo
 
 void DigikamImageView::assignRating(const QList<QModelIndex>& indexes, int rating)
 {
-    ImageInfoList infos = imageInfos(indexes, ApplicationSettings::Metadata);
+    ItemInfoList infos = imageInfos(indexes, ApplicationSettings::Metadata);
     FileActionMngr::instance()->assignRating(infos, rating);
 }
 
 void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
 {
-    ImageInfo info = imageFilterModel()->imageInfo(index);
+    ItemInfo info = imageFilterModel()->imageInfo(index);
 
     if (info.isNull())
     {
@@ -503,7 +503,7 @@ void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
 
 void DigikamImageView::rename()
 {
-    ImageInfoList infos = selectedImageInfos();
+    ItemInfoList infos = selectedItemInfos();
 
     if (needGroupResolving(ApplicationSettings::Rename, infos))
     {
@@ -555,19 +555,19 @@ void DigikamImageView::rename()
 
 void DigikamImageView::slotRotateLeft(const QList<QModelIndex>& indexes)
 {
-    ImageInfoList infos = imageInfos(indexes, ApplicationSettings::Metadata);
+    ItemInfoList infos = imageInfos(indexes, ApplicationSettings::Metadata);
     FileActionMngr::instance()->transform(infos, MetaEngineRotation::Rotate270);
 }
 
 void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 {
-    ImageInfoList infos = imageInfos(indexes, ApplicationSettings::Metadata);
+    ItemInfoList infos = imageInfos(indexes, ApplicationSettings::Metadata);
     FileActionMngr::instance()->transform(infos, MetaEngineRotation::Rotate90);
 }
 
 void DigikamImageView::slotFullscreen(const QList<QModelIndex>& indexes)
 {
-   QList<ImageInfo> infos = imageInfos(indexes, ApplicationSettings::Slideshow);
+   QList<ItemInfo> infos = imageInfos(indexes, ApplicationSettings::Slideshow);
 
    if (infos.isEmpty())
    {
@@ -575,7 +575,7 @@ void DigikamImageView::slotFullscreen(const QList<QModelIndex>& indexes)
    }
 
    // Just fullscreen the first.
-   const ImageInfo& info = infos.at(0);
+   const ItemInfo& info = infos.at(0);
 
    emit fullscreenRequested(info);
 }

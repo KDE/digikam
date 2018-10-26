@@ -44,8 +44,8 @@
 #include "imageversionsmodel.h"
 #include "dmetadata.h"
 #include "dimagehistory.h"
-#include "imageinfo.h"
-#include "imageinfolist.h"
+#include "iteminfo.h"
+#include "iteminfolist.h"
 #include "versionswidget.h"
 #include "filtershistorywidget.h"
 #include "applicationsettings.h"
@@ -67,7 +67,7 @@ public:
     VersionsWidget*       versionsWidget;
     FiltersHistoryWidget* filtersHistoryWidget;
     DImageHistory         history;
-    ImageInfo             info;
+    ItemInfo             info;
 
     static const QString  configActiveTab;
 };
@@ -84,8 +84,8 @@ ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* const parent)
     d->filtersHistoryWidget = new FiltersHistoryWidget(this);
     insertTab(1, d->filtersHistoryWidget, i18n("Used Filters"));
 
-    connect(d->versionsWidget, SIGNAL(imageSelected(ImageInfo)),
-            this, SIGNAL(imageSelected(ImageInfo)));
+    connect(d->versionsWidget, SIGNAL(imageSelected(ItemInfo)),
+            this, SIGNAL(imageSelected(ItemInfo)));
 }
 
 ImagePropertiesVersionsTab::~ImagePropertiesVersionsTab()
@@ -125,10 +125,10 @@ FiltersHistoryWidget* ImagePropertiesVersionsTab::filtersHistoryWidget() const
 void ImagePropertiesVersionsTab::clear()
 {
     d->filtersHistoryWidget->clearData();
-    d->versionsWidget->setCurrentItem(ImageInfo());
+    d->versionsWidget->setCurrentItem(ItemInfo());
 }
 
-void ImagePropertiesVersionsTab::setItem(const ImageInfo& info, const DImageHistory& history)
+void ImagePropertiesVersionsTab::setItem(const ItemInfo& info, const DImageHistory& history)
 {
     clear();
 
@@ -161,8 +161,8 @@ void ImagePropertiesVersionsTab::addOpenImageAction()
                                                                                i18n("Open"),
                                                                                i18n("Open file"));
 
-    connect(overlay, SIGNAL(activated(ImageInfo)),
-            this, SIGNAL(actionTriggered(ImageInfo)));
+    connect(overlay, SIGNAL(activated(ItemInfo)),
+            this, SIGNAL(actionTriggered(ItemInfo)));
 }
 
 void ImagePropertiesVersionsTab::addOpenAlbumAction(const ImageModel* referenceModel)
@@ -172,8 +172,8 @@ void ImagePropertiesVersionsTab::addOpenAlbumAction(const ImageModel* referenceM
                                                                                i18nc("@info:tooltip", "Go to the album of this image"));
     overlay->setReferenceModel(referenceModel);
 
-    connect(overlay, SIGNAL(activated(ImageInfo)),
-            this, SIGNAL(actionTriggered(ImageInfo)));
+    connect(overlay, SIGNAL(activated(ItemInfo)),
+            this, SIGNAL(actionTriggered(ItemInfo)));
 }
 
 void ImagePropertiesVersionsTab::setEnabledHistorySteps(int count)

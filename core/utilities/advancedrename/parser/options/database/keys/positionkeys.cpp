@@ -30,7 +30,7 @@
 // Local includes
 
 #include "coredbinfocontainers.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "itemposition.h"
 
 namespace
@@ -73,7 +73,7 @@ PositionKeys::PositionKeys()
 
 QString PositionKeys::getDbValue(const QString& key, ParseSettings& settings)
 {
-    ImageInfo info         = ImageInfo::fromUrl(settings.fileUrl);
+    ItemInfo info         = ItemInfo::fromUrl(settings.fileUrl);
     ItemPosition position = info.imagePosition();
 
     QString result;

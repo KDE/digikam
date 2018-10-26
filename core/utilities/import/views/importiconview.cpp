@@ -265,11 +265,11 @@ void ImportIconView::removeSelectedFromGroup()
 void ImportIconView::slotRotateLeft(const QList<QModelIndex>& /*indexes*/)
 {
 /*
-    QList<ImageInfo> imageInfos;
+    QList<ItemInfo> imageInfos;
 
     foreach(const QModelIndex& index, indexes)
     {
-        ImageInfo imageInfo(importFilterModel()->camItemInfo(index).url());
+        ItemInfo imageInfo(importFilterModel()->camItemInfo(index).url());
         imageInfos << imageInfo;
     }
 
@@ -280,11 +280,11 @@ void ImportIconView::slotRotateLeft(const QList<QModelIndex>& /*indexes*/)
 void ImportIconView::slotRotateRight(const QList<QModelIndex>& /*indexes*/)
 {
 /*
-    QList<ImageInfo> imageInfos;
+    QList<ItemInfo> imageInfos;
 
     foreach(const QModelIndex& index, indexes)
     {
-        ImageInfo imageInfo(importFilterModel()->camItemInfo(index).url());
+        ItemInfo imageInfo(importFilterModel()->camItemInfo(index).url());
         imageInfos << imageInfo;
     }
 

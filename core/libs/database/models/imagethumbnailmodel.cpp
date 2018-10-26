@@ -167,7 +167,7 @@ void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToP
     d->thread->findGroup(ids, thumbSize.size());
 }
 
-void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
+void ImageThumbnailModel::preloadThumbnails(const QList<ItemInfo>& infos)
 {
     if (!d->preloadThread)
     {
@@ -176,7 +176,7 @@ void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
 
     QList<ThumbnailIdentifier> ids;
 
-    foreach (const ImageInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         ids << info.thumbnailIdentifier();
     }
@@ -220,7 +220,7 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
     if (role == ThumbnailRole && d->thread && index.isValid())
     {
         QPixmap   thumbnail;
-        ImageInfo info = imageInfo(index);
+        ItemInfo info = imageInfo(index);
 
         if (info.isNull())
         {

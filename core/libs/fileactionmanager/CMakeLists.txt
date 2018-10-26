@@ -16,7 +16,7 @@ set(fileactionmanager_SRCS
     fileactionprogress.cpp
     fileactionmngr.cpp
     fileactionmngr_p.cpp
-    imageinfotasksplitter.cpp
+    iteminfotasksplitter.cpp
     databaseworkeriface.cpp
     fileworkeriface.cpp
     fileactionimageinfolist.cpp

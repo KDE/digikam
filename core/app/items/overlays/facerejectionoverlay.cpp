@@ -32,7 +32,7 @@
 
 #include "imagecategorizedview.h"
 #include "itemviewhoverbutton.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "digikamimagefacedelegate.h"
 #include "imagemodel.h"
 

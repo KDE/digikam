@@ -36,7 +36,7 @@
 #include "digikam_debug.h"
 #include "coredbaccess.h"
 #include "coredbwatch.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "itemcomments.h"
 #include "template.h"
 #include "templatemanager.h"
@@ -141,10 +141,10 @@ void MetadataHub::reset()
 
 // --------------------------------------------------
 
-void MetadataHub::load(const ImageInfo& info)
+void MetadataHub::load(const ItemInfo& info)
 {
     d->count++;
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "---------------------------------Load from ImageInfo ----------------";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "---------------------------------Load from ItemInfo ----------------";
 
     CaptionsMap commentMap;
     CaptionsMap titleMap;
@@ -235,7 +235,7 @@ template <class T> void MetadataHub::Private::loadSingleValue(const T& data, T& 
 // ------------------------------------------------------------------------------------------------------------
 
 /** safe **/
-bool MetadataHub::writeToMetadata(const ImageInfo& info, WriteComponent writeMode, bool ignoreLazySync, const MetaEngineSettingsContainer &settings)
+bool MetadataHub::writeToMetadata(const ItemInfo& info, WriteComponent writeMode, bool ignoreLazySync, const MetaEngineSettingsContainer &settings)
 {
     applyChangeNotifications();
 
@@ -362,7 +362,7 @@ bool MetadataHub::write(const QString& filePath, WriteComponent writeMode, bool 
 
     if (!ignoreLazySync && settings.useLazySync)
     {
-        ImageInfo info = ImageInfo::fromLocalFile(filePath);
+        ItemInfo info = ItemInfo::fromLocalFile(filePath);
         MetadataHubMngr::instance()->addPending(info);
         return true;
     }
@@ -404,7 +404,7 @@ bool MetadataHub::write(DImg& image, WriteComponent writeMode, bool ignoreLazySy
 
     if (!ignoreLazySync && settings.useLazySync && !filePath.isEmpty())
     {
-        ImageInfo info = ImageInfo::fromLocalFile(filePath);
+        ItemInfo info = ItemInfo::fromLocalFile(filePath);
         MetadataHubMngr::instance()->addPending(info);
         return true;
     }
@@ -483,7 +483,7 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
             }
 
             // WARNING: Do not use write(QFilePath ...) when multiple image info are loaded
-            // otherwise disjoint tags will not be used, use writeToMetadata(ImageInfo...)
+            // otherwise disjoint tags will not be used, use writeToMetadata(ItemInfo...)
             if (d->tags.value(tagId) == MetadataAvailable)
             {
                 // This works for single and multiple selection.
@@ -641,7 +641,7 @@ void MetadataHub::applyChangeNotifications()
 {
 }
 
-void Digikam::MetadataHub::loadFaceTags(const ImageInfo& info, const QSize& size)
+void Digikam::MetadataHub::loadFaceTags(const ItemInfo& info, const QSize& size)
 {
     FaceTagsEditor editor;
     //qCDebug(DIGIKAM_GENERAL_LOG) << "Image Dimensions ----------------" << info.dimensions();
@@ -671,7 +671,7 @@ QMultiMap<QString, QVariant> Digikam::MetadataHub::getFaceTags()
     return d->faceTagsList;
 }
 
-QMultiMap<QString, QVariant> Digikam::MetadataHub::loadIntegerFaceTags(const ImageInfo& info)
+QMultiMap<QString, QVariant> Digikam::MetadataHub::loadIntegerFaceTags(const ItemInfo& info)
 {
     FaceTagsEditor editor;
     QMultiMap<QString, QVariant> faceTagsList;

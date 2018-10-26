@@ -41,8 +41,8 @@ namespace Digikam
 class ImageChangeset;
 class ImageFilterModel;
 class ImageFilterSettings;
-class ImageInfo;
-class ImageInfoList;
+class ItemInfo;
+class ItemInfoList;
 class TableViewColumn;
 class TableViewColumnConfiguration;
 class TableViewColumnDescription;
@@ -112,17 +112,17 @@ public:
     QModelIndex   indexFromImageId(const qlonglong imageId, const int columnIndex) const;
     Item*         itemFromImageId(const qlonglong imageId) const;
     Item*         itemFromIndex(const QModelIndex& i) const;
-    ImageInfo     infoFromItem(Item* const item) const;
-    ImageInfoList infosFromItems(QList<Item*> const items) const;
+    ItemInfo     infoFromItem(Item* const item) const;
+    ItemInfoList infosFromItems(QList<Item*> const items) const;
 
     QVariant              itemDatabaseFieldRaw(Item* const item, const DatabaseFields::Set requestedField);
     DatabaseFieldsHashRaw itemDatabaseFieldsRaw(Item* const item, const DatabaseFields::Set requestedSet);
 
     qlonglong        imageId(const QModelIndex& anIndex) const;
     QList<qlonglong> imageIds(const QModelIndexList& indexList) const;
-    QList<ImageInfo> imageInfos(const QModelIndexList& indexList) const;
-    ImageInfo        imageInfo(const QModelIndex& index) const;
-    QList<ImageInfo> allImageInfo() const;
+    QList<ItemInfo> imageInfos(const QModelIndexList& indexList) const;
+    ItemInfo        imageInfo(const QModelIndex& index) const;
+    QList<ItemInfo> allItemInfo() const;
 
     QList<Item*> sortItems(const QList<Item*> itemList);
     class LessThan;

@@ -44,7 +44,7 @@ class QStyleOptionViewItem;
 namespace Digikam
 {
 
-class ImageInfo;
+class ItemInfo;
 class ThumbnailSize;
 
 class TableViewColumnConfiguration

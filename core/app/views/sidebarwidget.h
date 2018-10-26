@@ -36,7 +36,7 @@
 // Local includes
 
 #include "album.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "statesavingobject.h"
 
 namespace Digikam

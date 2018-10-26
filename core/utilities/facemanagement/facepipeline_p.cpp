@@ -90,7 +90,7 @@ FacePipeline::Private::Private(FacePipeline* const q)
     totalPackagesAdded     = 0;
 }
 
-void FacePipeline::Private::processBatch(const QList<ImageInfo>& infos)
+void FacePipeline::Private::processBatch(const QList<ItemInfo>& infos)
 {
     if (databaseFilter)
     {
@@ -99,7 +99,7 @@ void FacePipeline::Private::processBatch(const QList<ImageInfo>& infos)
     }
     else
     {
-        foreach (const ImageInfo& info, infos)
+        foreach (const ItemInfo& info, infos)
         {
             send(buildPackage(info));
         }
@@ -118,7 +118,7 @@ void FacePipeline::Private::sendFromFilter(const QList<FacePipelineExtendedPacka
 }
 
 // called by filter
-void FacePipeline::Private::skipFromFilter(const QList<ImageInfo>& infosForSkipping)
+void FacePipeline::Private::skipFromFilter(const QList<ItemInfo>& infosForSkipping)
 {
     infosForFiltering -= infosForSkipping.size();
 
@@ -128,7 +128,7 @@ void FacePipeline::Private::skipFromFilter(const QList<ImageInfo>& infosForSkipp
     checkFinished();
 }
 
-FacePipelineExtendedPackage::Ptr FacePipeline::Private::filterOrBuildPackage(const ImageInfo& info)
+FacePipelineExtendedPackage::Ptr FacePipeline::Private::filterOrBuildPackage(const ItemInfo& info)
 {
     if (databaseFilter)
     {
@@ -140,7 +140,7 @@ FacePipelineExtendedPackage::Ptr FacePipeline::Private::filterOrBuildPackage(con
     }
 }
 
-FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const ImageInfo& info)
+FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const ItemInfo& info)
 {
     FacePipelineExtendedPackage::Ptr package(new FacePipelineExtendedPackage);
     package->info     = info;
@@ -149,7 +149,7 @@ FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const Image
     return package;
 }
 
-FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const ImageInfo& info,
+FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const ItemInfo& info,
                                                                      const FacePipelineFaceTagsIface& face,
                                                                      const DImg& image)
 {
@@ -159,7 +159,7 @@ FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const Image
     return buildPackage(info, faces, image);
 }
 
-FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const ImageInfo& info,
+FacePipelineExtendedPackage::Ptr FacePipeline::Private::buildPackage(const ItemInfo& info,
                                                                      const FacePipelineFaceTagsIfaceList& faces,
                                                                      const DImg& image)
 {

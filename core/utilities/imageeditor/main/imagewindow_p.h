@@ -95,7 +95,7 @@
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
 #include "imagedescedittab.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "itemgps.h"
 #include "imagelistmodel.h"
 #include "imagepropertiessidebardb.h"
@@ -199,22 +199,22 @@ public:
 
     QModelIndex currentIndex() const
     {
-        return imageFilterModel->indexForImageInfo(currentImageInfo);
+        return imageFilterModel->indexForItemInfo(currentItemInfo);
     }
 
     QModelIndex currentSourceIndex() const
     {
-        return imageInfoModel->indexForImageInfo(currentImageInfo);
+        return imageInfoModel->indexForItemInfo(currentItemInfo);
     }
 
     bool currentIsValid() const
     {
-        return !currentImageInfo.isNull();
+        return !currentItemInfo.isNull();
     }
 
     QUrl currentUrl() const
     {
-        return currentImageInfo.fileUrl();
+        return currentItemInfo.fileUrl();
     }
 
     QModelIndex nextIndex() const
@@ -237,14 +237,14 @@ public:
         return imageFilterModel->index(imageFilterModel->rowCount() - 1, 0);
     }
 
-    ImageInfo imageInfo(const QModelIndex& index) const
+    ItemInfo imageInfo(const QModelIndex& index) const
     {
         return imageFilterModel->imageInfo(index);
     }
 
     void setThumbBarToCurrent()
     {
-        QModelIndex index = imageFilterModel->indexForImageInfo(currentImageInfo);
+        QModelIndex index = imageFilterModel->indexForItemInfo(currentItemInfo);
 
         if (index.isValid())
         {
@@ -252,15 +252,15 @@ public:
         }
         else
         {
-            thumbBar->setCurrentWhenAvailable(currentImageInfo.id());
+            thumbBar->setCurrentWhenAvailable(currentItemInfo.id());
         }
     }
 
-    void ensureModelContains(const ImageInfo& info)
+    void ensureModelContains(const ItemInfo& info)
     {
         if (!imageInfoModel->hasImage(info))
         {
-            imageInfoModel->addImageInfoSynchronously(info);
+            imageInfoModel->addItemInfoSynchronously(info);
             imageFilterModel->sort(imageFilterModel->sortColumn());
         }
     }
@@ -279,7 +279,7 @@ public:
     QAction*                     fileDeletePermanentlyDirectlyAction;
     QAction*                     fileTrashDirectlyAction;
 
-    ImageInfo                    currentImageInfo;
+    ItemInfo                    currentItemInfo;
     ImageListModel*              imageInfoModel;
     ImageFilterModel*            imageFilterModel;
     ImageDragDropHandler*        dragDropHandler;

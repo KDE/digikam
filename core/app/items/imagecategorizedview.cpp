@@ -70,7 +70,7 @@ protected:
 
     virtual QString tipContents()
     {
-        ImageInfo info = ImageModel::retrieveImageInfo(currentIndex());
+        ItemInfo info = ImageModel::retrieveItemInfo(currentIndex());
         return ToolTipFiller::imageInfoTipContents(info);
     }
 };
@@ -170,8 +170,8 @@ void ImageCategorizedView::setModels(ImageModel* model, ImageSortFilterModel* fi
 
     if (d->model)
     {
-        disconnect(d->model, SIGNAL(imageInfosAdded(QList<ImageInfo>)),
-                   this, SLOT(slotImageInfosAdded()));
+        disconnect(d->model, SIGNAL(imageInfosAdded(QList<ItemInfo>)),
+                   this, SLOT(slotItemInfosAdded()));
     }
 
     d->model       = model;
@@ -186,8 +186,8 @@ void ImageCategorizedView::setModels(ImageModel* model, ImageSortFilterModel* fi
             this, SLOT(layoutWasChanged()),
             Qt::QueuedConnection);
 
-    connect(d->model, SIGNAL(imageInfosAdded(QList<ImageInfo>)),
-            this, SLOT(slotImageInfosAdded()));
+    connect(d->model, SIGNAL(imageInfosAdded(QList<ItemInfo>)),
+            this, SLOT(slotItemInfosAdded()));
 
     emit modelChanged();
 
@@ -288,7 +288,7 @@ Album* ImageCategorizedView::currentAlbum() const
     return 0;
 }
 
-ImageInfo ImageCategorizedView::currentInfo() const
+ItemInfo ImageCategorizedView::currentInfo() const
 {
     return imageInfo(currentIndex());
 }
@@ -298,32 +298,32 @@ QUrl ImageCategorizedView::currentUrl() const
     return currentInfo().fileUrl();
 }
 
-ImageInfo ImageCategorizedView::imageInfo(const QModelIndex& index) const
+ItemInfo ImageCategorizedView::imageInfo(const QModelIndex& index) const
 {
     return d->filterModel->imageInfo(index);
 }
 
-ImageInfoList ImageCategorizedView::imageInfos(const QList<QModelIndex>& indexes) const
+ItemInfoList ImageCategorizedView::imageInfos(const QList<QModelIndex>& indexes) const
 {
-    return ImageInfoList(d->filterModel->imageInfos(indexes));
+    return ItemInfoList(d->filterModel->imageInfos(indexes));
 }
 
-ImageInfoList ImageCategorizedView::allImageInfos() const
+ItemInfoList ImageCategorizedView::allItemInfos() const
 {
-    return ImageInfoList(d->filterModel->imageInfosSorted());
+    return ItemInfoList(d->filterModel->imageInfosSorted());
 }
 
 QList<QUrl> ImageCategorizedView::allUrls() const
 {
-    return allImageInfos().toImageUrlList();
+    return allItemInfos().toImageUrlList();
 }
 
-ImageInfoList ImageCategorizedView::selectedImageInfos() const
+ItemInfoList ImageCategorizedView::selectedItemInfos() const
 {
     return imageInfos(selectedIndexes());
 }
 
-ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst() const
+ItemInfoList ImageCategorizedView::selectedItemInfosCurrentFirst() const
 {
     QModelIndexList indexes   = selectedIndexes();
     const QModelIndex current = currentIndex();
@@ -347,18 +347,18 @@ void ImageCategorizedView::toIndex(const QUrl& url)
     ItemViewCategorized::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
 }
 
-QModelIndex ImageCategorizedView::indexForInfo(const ImageInfo& info) const
+QModelIndex ImageCategorizedView::indexForInfo(const ItemInfo& info) const
 {
-    return d->filterModel->indexForImageInfo(info);
+    return d->filterModel->indexForItemInfo(info);
 }
 
-ImageInfo ImageCategorizedView::nextInOrder(const ImageInfo& startingPoint, int nth)
+ItemInfo ImageCategorizedView::nextInOrder(const ItemInfo& startingPoint, int nth)
 {
-    QModelIndex index = d->filterModel->indexForImageInfo(startingPoint);
+    QModelIndex index = d->filterModel->indexForItemInfo(startingPoint);
 
     if (!index.isValid())
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
     return imageInfo(d->filterModel->index(index.row() + nth, 0, QModelIndex()));
@@ -367,21 +367,21 @@ ImageInfo ImageCategorizedView::nextInOrder(const ImageInfo& startingPoint, int 
 QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const QItemSelectionRange& removed) const
 {
     QModelIndex hint = ItemViewCategorized::nextIndexHint(anchor, removed);
-    ImageInfo info   = imageInfo(anchor);
+    ItemInfo info   = imageInfo(anchor);
 
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForImageInfo(info);
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForItemInfo(info);
 
     // Fixes a special case of multiple (face) entries for the same image.
     // If one is removed, any entry of the same image shall be preferred.
-    if (d->model->numberOfIndexesForImageInfo(info) > 1)
+    if (d->model->numberOfIndexesForItemInfo(info) > 1)
     {
         // The hint is for a different info, but we may have a hint for the same info
         if (info != imageInfo(hint))
         {
             int minDiff                            = d->filterModel->rowCount();
-            QList<QModelIndex> indexesForImageInfo = d->filterModel->mapListFromSource(d->model->indexesForImageInfo(info));
+            QList<QModelIndex> indexesForItemInfo = d->filterModel->mapListFromSource(d->model->indexesForItemInfo(info));
 
-            foreach(const QModelIndex& index, indexesForImageInfo)
+            foreach(const QModelIndex& index, indexesForItemInfo)
             {
                 if (index == anchor || !index.isValid() || removed.contains(index))
                 {
@@ -490,9 +490,9 @@ void ImageCategorizedView::setCurrentUrl(const QUrl& url)
     setCurrentIndex(index);
 }
 
-void ImageCategorizedView::setCurrentInfo(const ImageInfo& info)
+void ImageCategorizedView::setCurrentInfo(const ItemInfo& info)
 {
-    QModelIndex index = d->filterModel->indexForImageInfo(info);
+    QModelIndex index = d->filterModel->indexForItemInfo(info);
     clearSelection();
     setCurrentIndex(index);
 }
@@ -521,27 +521,27 @@ void ImageCategorizedView::setSelectedUrls(const QList<QUrl>& urlList)
     selectionModel()->select(mySelection, QItemSelectionModel::Select);
 }
 
-void ImageCategorizedView::setSelectedImageInfos(const QList<ImageInfo>& infos)
+void ImageCategorizedView::setSelectedItemInfos(const QList<ItemInfo>& infos)
 {
     QItemSelection mySelection;
 
-    foreach(const ImageInfo& info, infos)
+    foreach(const ItemInfo& info, infos)
     {
-        QModelIndex index = d->filterModel->indexForImageInfo(info);
+        QModelIndex index = d->filterModel->indexForItemInfo(info);
         mySelection.select(index, index);
     }
 
     selectionModel()->select(mySelection, QItemSelectionModel::ClearAndSelect);
 }
 
-void ImageCategorizedView::hintAt(const ImageInfo& info)
+void ImageCategorizedView::hintAt(const ItemInfo& info)
 {
     if (info.isNull())
     {
         return;
     }
 
-    QModelIndex index = d->filterModel->indexForImageInfo(info);
+    QModelIndex index = d->filterModel->indexForItemInfo(info);
 
     if (!index.isValid())
     {
@@ -616,7 +616,7 @@ void ImageCategorizedView::scrollToStoredItem()
     }
 }
 
-void ImageCategorizedView::slotImageInfosAdded()
+void ImageCategorizedView::slotItemInfosAdded()
 {
     if (d->scrollToItemId)
     {
@@ -646,7 +646,7 @@ void ImageCategorizedView::slotFileChanged(const QString& filePath)
 
 void ImageCategorizedView::indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
 {
-    ImageInfo info = imageInfo(index);
+    ItemInfo info = imageInfo(index);
 
     if (!info.isNull())
     {
@@ -693,7 +693,7 @@ Album* ImageCategorizedView::albumAt(const QPoint& pos) const
     return currentAlbum();
 }
 
-void ImageCategorizedView::activated(const ImageInfo&, Qt::KeyboardModifiers)
+void ImageCategorizedView::activated(const ItemInfo&, Qt::KeyboardModifiers)
 {
     // implemented in subclass
 }
@@ -703,7 +703,7 @@ void ImageCategorizedView::showContextMenuOnIndex(QContextMenuEvent* event, cons
     showContextMenuOnInfo(event, imageInfo(index));
 }
 
-void ImageCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const ImageInfo&)
+void ImageCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const ItemInfo&)
 {
     // implemented in subclass
 }

@@ -40,8 +40,8 @@
 #include "digikam_debug.h"
 #include "coredb.h"
 #include "collectionscannerobserver.h"
-#include "imageinfodata.h"
-#include "imageinfocache.h"
+#include "iteminfodata.h"
+#include "iteminfocache.h"
 #include "coredbschemaupdater.h"
 #include "collectionmanager.h"
 #include "coredbwatch.h"
@@ -236,7 +236,7 @@ void CoreDbAccess::setParameters(const DbEngineParameters& parameters, Applicati
         }
     }
 
-    ImageInfoStatic::create();
+    ItemInfoStatic::create();
 
     if (!d->backend || !d->backend->isCompatible(parameters))
     {
@@ -249,7 +249,7 @@ void CoreDbAccess::setParameters(const DbEngineParameters& parameters, Applicati
     }
 
     d->databaseWatch->sendDatabaseChanged();
-    ImageInfoStatic::cache()->invalidate();
+    ItemInfoStatic::cache()->invalidate();
     TagsCache::instance()->invalidate();
     d->databaseWatch->setDatabaseIdentifier(QString());
     CollectionManager::instance()->clear_locked();
@@ -352,7 +352,7 @@ void CoreDbAccess::cleanUpDatabase()
         }
     }
 
-    ImageInfoStatic::destroy();
+    ItemInfoStatic::destroy();
     delete d;
     d = 0;
 }

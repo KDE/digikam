@@ -123,14 +123,14 @@ void ItemLister::listImageTagPropertySearch(ItemListerReceiver* const receiver, 
     sqlQuery = QString::fromUtf8(
                "SELECT DISTINCT Images.id, Images.name, Images.album, "
                "       Albums.albumRoot, "
-               "       ImageInformation.rating, Images.category, "
-               "       ImageInformation.format, ImageInformation.creationDate, "
+               "       ItemInformation.rating, Images.category, "
+               "       ItemInformation.format, ItemInformation.creationDate, "
                "       Images.modificationDate, Images.fileSize, "
-               "       ImageInformation.width,  ImageInformation.height, "
+               "       ItemInformation.width,  ItemInformation.height, "
                "       ImageTagProperties.value, ImageTagProperties.property, ImageTagProperties.tagid "
                " FROM Images "
                "       INNER JOIN ImageTagProperties ON ImageTagProperties.imageid=Images.id "
-               "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+               "       LEFT JOIN ItemInformation ON Images.id=ItemInformation.imageid "
                "       INNER JOIN Albums           ON Albums.id=Images.album "
                "WHERE Images.status=1 AND ( ");
 

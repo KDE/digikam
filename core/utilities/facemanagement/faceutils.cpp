@@ -36,7 +36,7 @@
 #include "coredboperationgroup.h"
 #include "dimg.h"
 #include "facetags.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "itemtagpair.h"
 #include "fileactionmngr.h"
 #include "tagproperties.h"
@@ -61,28 +61,28 @@ FaceUtils::~FaceUtils()
 
 bool FaceUtils::hasBeenScanned(qlonglong imageid) const
 {
-    return hasBeenScanned(ImageInfo(imageid));
+    return hasBeenScanned(ItemInfo(imageid));
 }
 
-bool FaceUtils::hasBeenScanned(const ImageInfo& info) const
+bool FaceUtils::hasBeenScanned(const ItemInfo& info) const
 {
     return info.tagIds().contains(FaceTags::scannedForFacesTagId());
 }
 
 void FaceUtils::markAsScanned(qlonglong imageid, bool hasBeenScanned) const
 {
-    return markAsScanned(ImageInfo(imageid), hasBeenScanned);
+    return markAsScanned(ItemInfo(imageid), hasBeenScanned);
 }
 
-void FaceUtils::markAsScanned(const ImageInfo& info, bool hasBeenScanned) const
+void FaceUtils::markAsScanned(const ItemInfo& info, bool hasBeenScanned) const
 {
     if (hasBeenScanned)
     {
-        ImageInfo(info).setTag(FaceTags::scannedForFacesTagId());
+        ItemInfo(info).setTag(FaceTags::scannedForFacesTagId());
     }
     else
     {
-        ImageInfo(info).removeTag(FaceTags::scannedForFacesTagId());
+        ItemInfo(info).removeTag(FaceTags::scannedForFacesTagId());
     }
 }
 
@@ -290,17 +290,17 @@ int FaceUtils::tagForIdentity(const Identity& identity) const
 
 void FaceUtils::addNormalTag(qlonglong imageid, int tagId)
 {
-    FileActionMngr::instance()->assignTag(ImageInfo(imageid), tagId);
+    FileActionMngr::instance()->assignTag(ItemInfo(imageid), tagId);
 }
 
 void FaceUtils::removeNormalTag(qlonglong imageId, int tagId)
 {
-    FileActionMngr::instance()->removeTag(ImageInfo(imageId), tagId);
+    FileActionMngr::instance()->removeTag(ItemInfo(imageId), tagId);
 }
 
 void FaceUtils::removeNormalTags(qlonglong imageId, QList<int> tagIds)
 {
-    FileActionMngr::instance()->removeTags(ImageInfo(imageId), tagIds);
+    FileActionMngr::instance()->removeTags(ItemInfo(imageId), tagIds);
 }
 
 // --- Utilities ---

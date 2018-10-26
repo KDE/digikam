@@ -43,7 +43,7 @@
 #include "facetags.h"
 #include "facetagseditor.h"
 #include "graphicsdimgview.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "regionframeitem.h"
 #include "taggingaction.h"
 #include "itemvisibilitycontroller.h"
@@ -196,7 +196,7 @@ public:
 public:
 
     GraphicsDImgView*          view;
-    ImageInfo                  info;
+    ItemInfo                  info;
     bool                       autoSuggest;
     bool                       showOnHover;
 
@@ -275,7 +275,7 @@ bool FaceGroup::hasVisibleItems() const
     return d->visibilityController->hasVisibleItems();
 }
 
-ImageInfo FaceGroup::info() const
+ItemInfo FaceGroup::info() const
 {
     return d->info;
 }
@@ -346,7 +346,7 @@ void FaceGroup::setVisibleItem(RegionFrameItem* item)
     d->applyVisible();
 }
 
-void FaceGroup::setInfo(const ImageInfo& info)
+void FaceGroup::setInfo(const ItemInfo& info)
 {
     if (d->info == info && d->state != NoFaces)
     {
@@ -362,7 +362,7 @@ void FaceGroup::setInfo(const ImageInfo& info)
     }
 }
 
-void FaceGroup::aboutToSetInfo(const ImageInfo& info)
+void FaceGroup::aboutToSetInfo(const ItemInfo& info)
 {
     if (d->info == info)
     {
@@ -373,7 +373,7 @@ void FaceGroup::aboutToSetInfo(const ImageInfo& info)
     clear();
 }
 
-void FaceGroup::aboutToSetInfoAfterRotate(const ImageInfo& info)
+void FaceGroup::aboutToSetInfoAfterRotate(const ItemInfo& info)
 {
     if (d->info == info)
     {
@@ -595,14 +595,14 @@ AssignNameWidget* FaceGroup::Private::createAssignNameWidget(const FaceTagsIface
     assignWidget->setModel(tagModel, filteredModel, filterModel);
     assignWidget->setParentTag(AlbumManager::instance()->findTAlbum(FaceTags::personParentTag()));
 
-    q->connect(assignWidget, SIGNAL(assigned(TaggingAction,ImageInfo,QVariant)),
-               q, SLOT(slotAssigned(TaggingAction,ImageInfo,QVariant)));
+    q->connect(assignWidget, SIGNAL(assigned(TaggingAction,ItemInfo,QVariant)),
+               q, SLOT(slotAssigned(TaggingAction,ItemInfo,QVariant)));
 
-    q->connect(assignWidget, SIGNAL(rejected(ImageInfo,QVariant)),
-               q, SLOT(slotRejected(ImageInfo,QVariant)));
+    q->connect(assignWidget, SIGNAL(rejected(ItemInfo,QVariant)),
+               q, SLOT(slotRejected(ItemInfo,QVariant)));
 
-    q->connect(assignWidget, SIGNAL(labelClicked(ImageInfo,QVariant)),
-               q, SLOT(slotLabelClicked(ImageInfo,QVariant)));
+    q->connect(assignWidget, SIGNAL(labelClicked(ItemInfo,QVariant)),
+               q, SLOT(slotLabelClicked(ItemInfo,QVariant)));
 
     return assignWidget;
 }
@@ -697,7 +697,7 @@ void FaceGroup::slotAlbumRenamed(Album* album)
     }
 }
 
-void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, const QVariant& faceIdentifier)
+void FaceGroup::slotAssigned(const TaggingAction& action, const ItemInfo&, const QVariant& faceIdentifier)
 {
     FaceItem* const item    = d->items[faceIdentifier.toInt()];
     FaceTagsIface face      = item->face();
@@ -739,7 +739,7 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, cons
     item->switchMode(AssignNameWidget::ConfirmedMode);
 }
 
-void FaceGroup::slotRejected(const ImageInfo&, const QVariant& faceIdentifier)
+void FaceGroup::slotRejected(const ItemInfo&, const QVariant& faceIdentifier)
 {
     FaceItem* const item = d->items[faceIdentifier.toInt()];
     d->editPipeline.remove(d->info, item->face());
@@ -748,7 +748,7 @@ void FaceGroup::slotRejected(const ImageInfo&, const QVariant& faceIdentifier)
     d->visibilityController->hideAndRemoveItem(item);
 }
 
-void FaceGroup::slotLabelClicked(const ImageInfo&, const QVariant& faceIdentifier)
+void FaceGroup::slotLabelClicked(const ItemInfo&, const QVariant& faceIdentifier)
 {
     FaceItem* const item = d->items[faceIdentifier.toInt()];
     item->switchMode(AssignNameWidget::ConfirmedEditMode);
@@ -857,7 +857,7 @@ void ImagePreviewView::trainFaces()
 
     foreach (Face f, d->currentFaces)
     {
-        if (f.name() != "" && !d->faceIface->isFaceTrained(getImageInfo().id(), f.toRect(), f.name()))
+        if (f.name() != "" && !d->faceIface->isFaceTrained(getItemInfo().id(), f.toRect(), f.name()))
             trainList += f;
     }
 
@@ -866,7 +866,7 @@ void ImagePreviewView::trainFaces()
     if (trainList.size()!=0)
     {
         d->faceIface->trainWithFaces(trainList);
-        d->faceIface->markFacesAsTrained(getImageInfo().id(), trainList);
+        d->faceIface->markFacesAsTrained(getItemInfo().id(), trainList);
     }
 }
 
@@ -877,10 +877,10 @@ void ImagePreviewView::suggestFaces()
 
     foreach (Face f, d->currentFaces)
     {
-        if (!d->faceIface->isFaceRecognized(getImageInfo().id(), f.toRect(), f.name()) && f.name().isEmpty())
+        if (!d->faceIface->isFaceRecognized(getItemInfo().id(), f.toRect(), f.name()) && f.name().isEmpty())
         {
             f.setName(d->faceIface->recognizedName(f));
-            d->faceIface->markFaceAsRecognized(getImageInfo().id(), f.toRect(), f.name());
+            d->faceIface->markFaceAsRecognized(getItemInfo().id(), f.toRect(), f.name());
 
             // If the face wasn't recognized (too distant) don't suggest anything
             if (f.name().isEmpty())

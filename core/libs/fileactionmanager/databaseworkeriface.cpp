@@ -32,7 +32,7 @@
 #include "digikam_debug.h"
 #include "collectionscanner.h"
 #include "coredboperationgroup.h"
-#include "imageinfotasksplitter.h"
+#include "iteminfotasksplitter.h"
 #include "fileactionmngr_p.h"
 #include "scancontroller.h"
 #include "disjointmetadata.h"
@@ -40,27 +40,27 @@
 namespace Digikam
 {
 
-void FileActionMngrDatabaseWorker::assignTags(FileActionImageInfoList infos, const QList<int>& tagIDs)
+void FileActionMngrDatabaseWorker::assignTags(FileActionItemInfoList infos, const QList<int>& tagIDs)
 {
     changeTags(infos, tagIDs, true);
 }
 
-void FileActionMngrDatabaseWorker::removeTags(FileActionImageInfoList infos, const QList<int>& tagIDs)
+void FileActionMngrDatabaseWorker::removeTags(FileActionItemInfoList infos, const QList<int>& tagIDs)
 {
     changeTags(infos, tagIDs, false);
 }
 
-void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
+void FileActionMngrDatabaseWorker::changeTags(FileActionItemInfoList infos,
                                               const QList<int>& tagIDs, bool addOrRemove)
 {
     DisjointMetadata hub;
-    QList<ImageInfo> forWriting;
+    QList<ItemInfo> forWriting;
 
     {
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(const ImageInfo& info, infos)
+        foreach(const ItemInfo& info, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
@@ -96,30 +96,30 @@ void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
     // send for writing file metadata
     if (!forWriting.isEmpty())
     {
-        FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
+        FileActionItemInfoList forWritingTaskList = FileActionItemInfoList::continueTask(forWriting, infos.progress());
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Scheduled to write";
 
-        for (ImageInfoTaskSplitter splitter(forWritingTaskList) ; splitter.hasNext() ; )
+        for (ItemInfoTaskSplitter splitter(forWritingTaskList) ; splitter.hasNext() ; )
         {
-            emit writeMetadata(FileActionImageInfoList(splitter.next()), MetadataHub::WRITE_TAGS);
+            emit writeMetadata(FileActionItemInfoList(splitter.next()), MetadataHub::WRITE_TAGS);
         }
     }
 
     infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos, int pickId)
+void FileActionMngrDatabaseWorker::assignPickLabel(FileActionItemInfoList infos, int pickId)
 {
     DisjointMetadata hub;
-    QList<ImageInfo> forWriting;
+    QList<ItemInfo> forWriting;
 
     {
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(const ImageInfo& info, infos)
+        foreach(const ItemInfo& info, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
@@ -143,28 +143,28 @@ void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos
     // send for writing file metadata
     if (!forWriting.isEmpty())
     {
-        FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
+        FileActionItemInfoList forWritingTaskList = FileActionItemInfoList::continueTask(forWriting, infos.progress());
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
-        for (ImageInfoTaskSplitter splitter(forWritingTaskList) ; splitter.hasNext() ; )
+        for (ItemInfoTaskSplitter splitter(forWritingTaskList) ; splitter.hasNext() ; )
         {
-            emit writeMetadata(FileActionImageInfoList(splitter.next()), MetadataHub::WRITE_PICKLABEL);
+            emit writeMetadata(FileActionItemInfoList(splitter.next()), MetadataHub::WRITE_PICKLABEL);
         }
     }
 
     infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::assignColorLabel(FileActionImageInfoList infos, int colorId)
+void FileActionMngrDatabaseWorker::assignColorLabel(FileActionItemInfoList infos, int colorId)
 {
     DisjointMetadata hub;
-    QList<ImageInfo> forWriting;
+    QList<ItemInfo> forWriting;
 
     {
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(const ImageInfo& info, infos)
+        foreach(const ItemInfo& info, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
@@ -188,29 +188,29 @@ void FileActionMngrDatabaseWorker::assignColorLabel(FileActionImageInfoList info
     // send for writing file metadata
     if (!forWriting.isEmpty())
     {
-        FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
+        FileActionItemInfoList forWritingTaskList = FileActionItemInfoList::continueTask(forWriting, infos.progress());
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
-        for (ImageInfoTaskSplitter splitter(forWritingTaskList) ; splitter.hasNext() ; )
+        for (ItemInfoTaskSplitter splitter(forWritingTaskList) ; splitter.hasNext() ; )
         {
-            emit writeMetadata(FileActionImageInfoList(splitter.next()), MetadataHub::WRITE_COLORLABEL);
+            emit writeMetadata(FileActionItemInfoList(splitter.next()), MetadataHub::WRITE_COLORLABEL);
         }
     }
 
     infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::assignRating(FileActionImageInfoList infos, int rating)
+void FileActionMngrDatabaseWorker::assignRating(FileActionItemInfoList infos, int rating)
 {
     DisjointMetadata hub;
-    QList<ImageInfo> forWriting;
+    QList<ItemInfo> forWriting;
     rating = qMin(RatingMax, qMax(RatingMin, rating));
 
     {
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(const ImageInfo& info, infos)
+        foreach(const ItemInfo& info, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
@@ -234,32 +234,32 @@ void FileActionMngrDatabaseWorker::assignRating(FileActionImageInfoList infos, i
     // send for writing file metadata
     if (!forWriting.isEmpty())
     {
-        FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
+        FileActionItemInfoList forWritingTaskList = FileActionItemInfoList::continueTask(forWriting, infos.progress());
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
-        for (ImageInfoTaskSplitter splitter(forWritingTaskList) ; splitter.hasNext() ; )
+        for (ItemInfoTaskSplitter splitter(forWritingTaskList) ; splitter.hasNext() ; )
         {
-            emit writeMetadata(FileActionImageInfoList(splitter.next()), MetadataHub::WRITE_RATING);
+            emit writeMetadata(FileActionItemInfoList(splitter.next()), MetadataHub::WRITE_RATING);
         }
     }
 
     infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ImageInfo& pick, FileActionImageInfoList infos)
+void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ItemInfo& pick, FileActionItemInfoList infos)
 {
     {
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(const ImageInfo& constInfo, infos)
+        foreach(const ItemInfo& constInfo, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
                 break;
             }
 
-            ImageInfo info(constInfo);
+            ItemInfo info(constInfo);
 
             switch (groupAction)
             {
@@ -282,13 +282,13 @@ void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ImageInfo& p
     infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::setExifOrientation(FileActionImageInfoList infos, int orientation)
+void FileActionMngrDatabaseWorker::setExifOrientation(FileActionItemInfoList infos, int orientation)
 {
     {
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(ImageInfo info, infos)
+        foreach(ItemInfo info, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
@@ -302,21 +302,21 @@ void FileActionMngrDatabaseWorker::setExifOrientation(FileActionImageInfoList in
     infos.dbProcessed(infos.count());
     infos.schedulingForWrite(infos.count(), i18n("Revising Exif Orientation tags"), d->fileProgressCreator());
 
-    for (ImageInfoTaskSplitter splitter(infos) ; splitter.hasNext() ; )
+    for (ItemInfoTaskSplitter splitter(infos) ; splitter.hasNext() ; )
     {
-        emit writeOrientationToFiles(FileActionImageInfoList(splitter.next()), orientation);
+        emit writeOrientationToFiles(FileActionItemInfoList(splitter.next()), orientation);
     }
 
     infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, DisjointMetadata *hub)
+void FileActionMngrDatabaseWorker::applyMetadata(FileActionItemInfoList infos, DisjointMetadata *hub)
 {
     {
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(const ImageInfo& info, infos)
+        foreach(const ItemInfo& info, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
@@ -336,9 +336,9 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
         // don't filter by shallSendForWriting here; we write from the hub, not from freshly loaded data
         infos.schedulingForWrite(infos.size(), i18n("Writing metadata to files"), d->fileProgressCreator());
 
-        for (ImageInfoTaskSplitter splitter(infos) ; splitter.hasNext() ; )
+        for (ItemInfoTaskSplitter splitter(infos) ; splitter.hasNext() ; )
         {
-            emit writeMetadata(FileActionImageInfoList(splitter.next()), flags);
+            emit writeMetadata(FileActionItemInfoList(splitter.next()), flags);
         }
     }
 
@@ -346,7 +346,7 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
     infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::copyAttributes(FileActionImageInfoList infos, const QStringList& derivedPaths)
+void FileActionMngrDatabaseWorker::copyAttributes(FileActionItemInfoList infos, const QStringList& derivedPaths)
 {
     if (infos.size() == 1)
     {
@@ -357,7 +357,7 @@ void FileActionMngrDatabaseWorker::copyAttributes(FileActionImageInfoList infos,
                 break;
             }
 
-            ImageInfo dest = ScanController::instance()->scannedInfo(path);
+            ItemInfo dest = ScanController::instance()->scannedInfo(path);
             CollectionScanner::copyFileProperties(infos.first(), dest);
         }
 

@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 class FiltersHistoryWidget;
-class ImageInfo;
+class ItemInfo;
 class ImageModel;
 class VersionsWidget;
 
@@ -60,7 +60,7 @@ public:
     void writeSettings(KConfigGroup& group);
 
     void clear();
-    void setItem(const ImageInfo& info, const DImageHistory& history);
+    void setItem(const ItemInfo& info, const DImageHistory& history);
 
     VersionsWidget* versionsWidget()             const;
     FiltersHistoryWidget* filtersHistoryWidget() const;
@@ -75,8 +75,8 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void imageSelected(const ImageInfo& info);
-    void actionTriggered(const ImageInfo& info);
+    void imageSelected(const ItemInfo& info);
+    void actionTriggered(const ItemInfo& info);
 
 private:
 

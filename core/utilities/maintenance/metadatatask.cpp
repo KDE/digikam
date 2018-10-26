@@ -90,7 +90,7 @@ void MetadataTask::run()
             return;
         }
 
-        ImageInfo item = d->data->getImageInfo();
+        ItemInfo item = d->data->getItemInfo();
 
         // If the item is null, we are done.
         if (item.isNull())

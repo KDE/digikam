@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-21
- * Description : Handling accesss to one image and associated data
+ * Description : Handling access to one item and associated data
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 // Qt includes
 
@@ -43,11 +43,11 @@
 #include "dimagehistory.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
-#include "imageinfodata.h"
-#include "imageinfocache.h"
+#include "iteminfodata.h"
+#include "iteminfocache.h"
 #include "itemlister.h"
 #include "itemlisterrecord.h"
-#include "imageinfolist.h"
+#include "iteminfolist.h"
 #include "itemcomments.h"
 #include "itemcopyright.h"
 #include "itemextendedproperties.h"
@@ -161,30 +161,30 @@ MetadataInfo::Field DatabaseImageMetadataFieldsToMetadataInfoField(const Databas
 
 }
 
-ImageInfoStatic* ImageInfoStatic::m_instance = 0;
+ItemInfoStatic* ItemInfoStatic::m_instance = 0;
 
-void ImageInfoStatic::create()
+void ItemInfoStatic::create()
 {
     if (!m_instance)
     {
-        m_instance = new ImageInfoStatic;
+        m_instance = new ItemInfoStatic;
     }
 }
 
-void ImageInfoStatic::destroy()
+void ItemInfoStatic::destroy()
 {
     delete m_instance;
     m_instance = 0;
 }
 
-ImageInfoCache* ImageInfoStatic::cache()
+ItemInfoCache* ItemInfoStatic::cache()
 {
     return &m_instance->m_cache;
 }
 
 // ---------------------------------------------------------------
 
-ImageInfoData::ImageInfoData()
+ItemInfoData::ItemInfoData()
 {
     id                     = -1;
     currentReferenceImage  = -1;
@@ -233,22 +233,22 @@ ImageInfoData::ImageInfoData()
     hasImageMetadata       = true;
 }
 
-ImageInfoData::~ImageInfoData()
+ItemInfoData::~ItemInfoData()
 {
 }
 
 // ---------------------------------------------------------------
 
-ImageInfo::ImageInfo()
+ItemInfo::ItemInfo()
     : m_data(0)
 {
 }
 
-ImageInfo::ImageInfo(const ItemListerRecord& record)
+ItemInfo::ItemInfo(const ItemListerRecord& record)
 {
-    m_data                         = ImageInfoStatic::cache()->infoForId(record.imageID);
+    m_data                         = ItemInfoStatic::cache()->infoForId(record.imageID);
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     bool newlyCreated              = m_data->albumId == -1;
 
     m_data->albumId                = record.albumID;
@@ -281,13 +281,13 @@ ImageInfo::ImageInfo(const ItemListerRecord& record)
 
     if (newlyCreated)
     {
-        ImageInfoStatic::cache()->cacheByName(m_data);
+        ItemInfoStatic::cache()->cacheByName(m_data);
     }
 }
 
-ImageInfo::ImageInfo(qlonglong ID)
+ItemInfo::ItemInfo(qlonglong ID)
 {
-    m_data = ImageInfoStatic::cache()->infoForId(ID);
+    m_data = ItemInfoStatic::cache()->infoForId(ID);
 
     // is this a newly created structure, need to populate?
     if (m_data->albumId == -1)
@@ -297,20 +297,20 @@ ImageInfo::ImageInfo(qlonglong ID)
 
         if (info.id)
         {
-            ImageInfoWriteLocker lock;
+            ItemInfoWriteLocker lock;
             m_data->albumId     = info.albumID;
             m_data->albumRootId = info.albumRootID;
             m_data->name        = info.itemName;
-            ImageInfoStatic::cache()->cacheByName(m_data);
+            ItemInfoStatic::cache()->cacheByName(m_data);
         }
         else
         {
             // invalid image id
-            ImageInfoData* const olddata = m_data.unassign();
+            ItemInfoData* const olddata = m_data.unassign();
 
             if (olddata)
             {
-                ImageInfoStatic::cache()->dropInfo(olddata);
+                ItemInfoStatic::cache()->dropInfo(olddata);
             }
 
             m_data = 0;
@@ -318,19 +318,19 @@ ImageInfo::ImageInfo(qlonglong ID)
     }
 }
 
-ImageInfo ImageInfo::fromUrl(const QUrl& url)
+ItemInfo ItemInfo::fromUrl(const QUrl& url)
 {
     return fromLocalFile(url.toLocalFile());
 }
 
-ImageInfo ImageInfo::fromLocalFile(const QString& path)
+ItemInfo ItemInfo::fromLocalFile(const QString& path)
 {
     CollectionLocation location = CollectionManager::instance()->locationForPath(path);
 
     if (location.isNull())
     {
         qCWarning(DIGIKAM_DATABASE_LOG) << "No location could be retrieved for" << path;
-        return ImageInfo();
+        return ItemInfo();
     }
 
     QUrl url      = QUrl::fromLocalFile(path);
@@ -340,17 +340,17 @@ ImageInfo ImageInfo::fromLocalFile(const QString& path)
     return fromLocationAlbumAndName(location.id(), album, name);
 }
 
-ImageInfo ImageInfo::fromLocationAlbumAndName(int locationId, const QString& album, const QString& name)
+ItemInfo ItemInfo::fromLocationAlbumAndName(int locationId, const QString& album, const QString& name)
 {
     if (!locationId || album.isEmpty() || name.isEmpty())
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
-    ImageInfo info;
+    ItemInfo info;
 
     // Cached ?
-    info.m_data = ImageInfoStatic::cache()->infoForPath(locationId, album, name);
+    info.m_data = ItemInfoStatic::cache()->infoForPath(locationId, album, name);
 
     if (!info.m_data)
     {
@@ -364,57 +364,57 @@ ImageInfo ImageInfo::fromLocationAlbumAndName(int locationId, const QString& alb
             return info;
         }
 
-        info.m_data              = ImageInfoStatic::cache()->infoForId(shortInfo.id);
+        info.m_data              = ItemInfoStatic::cache()->infoForId(shortInfo.id);
 
-        ImageInfoWriteLocker lock;
+        ItemInfoWriteLocker lock;
         info.m_data->albumId     = shortInfo.albumID;
         info.m_data->albumRootId = shortInfo.albumRootID;
         info.m_data->name        = shortInfo.itemName;
 
-        ImageInfoStatic::cache()->cacheByName(info.m_data);
+        ItemInfoStatic::cache()->cacheByName(info.m_data);
     }
 
     return info;
 }
 
-ImageInfo::~ImageInfo()
+ItemInfo::~ItemInfo()
 {
-    ImageInfoData* const olddata = m_data.unassign();
+    ItemInfoData* const olddata = m_data.unassign();
 
     if (olddata)
     {
-        ImageInfoStatic::cache()->dropInfo(olddata);
+        ItemInfoStatic::cache()->dropInfo(olddata);
     }
 }
 
-ImageInfo::ImageInfo(const ImageInfo& info)
+ItemInfo::ItemInfo(const ItemInfo& info)
 {
     m_data = info.m_data;
 }
 
-ImageInfo& ImageInfo::operator=(const ImageInfo& info)
+ItemInfo& ItemInfo::operator=(const ItemInfo& info)
 {
     if (m_data == info.m_data)
     {
         return *this;
     }
 
-    ImageInfoData* const olddata = m_data.assign(info.m_data);
+    ItemInfoData* const olddata = m_data.assign(info.m_data);
 
     if (olddata)
     {
-        ImageInfoStatic::cache()->dropInfo(olddata);
+        ItemInfoStatic::cache()->dropInfo(olddata);
     }
 
     return *this;
 }
 
-bool ImageInfo::isNull() const
+bool ItemInfo::isNull() const
 {
     return !m_data;
 }
 
-bool ImageInfo::operator==(const ImageInfo& info) const
+bool ItemInfo::operator==(const ItemInfo& info) const
 {
     if (m_data && info.m_data)
     {
@@ -428,7 +428,7 @@ bool ImageInfo::operator==(const ImageInfo& info) const
     }
 }
 
-bool ImageInfo::operator<(const ImageInfo& info) const
+bool ItemInfo::operator<(const ItemInfo& info) const
 {
     if (m_data)
     {
@@ -450,7 +450,7 @@ bool ImageInfo::operator<(const ImageInfo& info) const
     }
 }
 
-uint ImageInfo::hash() const
+uint ItemInfo::hash() const
 {
     if (m_data)
     {
@@ -464,40 +464,40 @@ uint ImageInfo::hash() const
 
 /**
  * Access rules for all methods in this class:
- * ImageInfoData members shall be accessed only under CoreDbAccess lock.
+ * ItemInfoData members shall be accessed only under CoreDbAccess lock.
  * The id and albumId are the exception to this rule, as they are
  * primitive and will never change during the lifetime of an object.
  */
-qlonglong ImageInfo::id() const
+qlonglong ItemInfo::id() const
 {
     return m_data ? m_data->id : -1;
 }
 
-int ImageInfo::albumId() const
+int ItemInfo::albumId() const
 {
     return m_data ? m_data->albumId : -1;
 }
 
-int ImageInfo::albumRootId() const
+int ItemInfo::albumRootId() const
 {
     return m_data ? m_data->albumRootId : -1;
 }
 
-QString ImageInfo::name() const
+QString ItemInfo::name() const
 {
     if (!m_data)
     {
         return QString();
     }
 
-    ImageInfoReadLocker lock;
+    ItemInfoReadLocker lock;
     return m_data->name;
 }
 
 #define RETURN_IF_CACHED(x)       \
     if (m_data->x##Cached)        \
     {                             \
-        ImageInfoReadLocker lock; \
+        ItemInfoReadLocker lock; \
         if (m_data->x##Cached)    \
         {                         \
             return m_data->x;     \
@@ -507,7 +507,7 @@ QString ImageInfo::name() const
 #define RETURN_ASPECTRATIO_IF_IMAGESIZE_CACHED()       \
     if (m_data->imageSizeCached)  \
     {                             \
-        ImageInfoReadLocker lock; \
+        ItemInfoReadLocker lock; \
         if (m_data->imageSizeCached)    \
         {                         \
     return (double)m_data->imageSize.width()/m_data->imageSize.height();     \
@@ -515,7 +515,7 @@ QString ImageInfo::name() const
     }
 
 #define STORE_IN_CACHE_AND_RETURN(x, retrieveMethod) \
-    ImageInfoWriteLocker lock;                       \
+    ItemInfoWriteLocker lock;                       \
     m_data.constCastData()->x##Cached = true;        \
     if (!values.isEmpty())                           \
     {                                                \
@@ -523,7 +523,7 @@ QString ImageInfo::name() const
     }                                                \
     return m_data->x;
 
-qlonglong ImageInfo::fileSize() const
+qlonglong ItemInfo::fileSize() const
 {
     if (!m_data)
     {
@@ -537,7 +537,7 @@ qlonglong ImageInfo::fileSize() const
     STORE_IN_CACHE_AND_RETURN(fileSize, values.first().toLongLong())
 }
 
-QString ImageInfo::uniqueHash() const
+QString ItemInfo::uniqueHash() const
 {
     if (!m_data)
     {
@@ -551,7 +551,7 @@ QString ImageInfo::uniqueHash() const
     STORE_IN_CACHE_AND_RETURN(uniqueHash, values.first().toString())
 }
 
-QString ImageInfo::title() const
+QString ItemInfo::title() const
 {
     if (!m_data)
     {
@@ -567,13 +567,13 @@ QString ImageInfo::title() const
         title = comments.defaultComment(DatabaseComment::Title);
     }
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data.constCastData()->defaultTitle       = title;
     m_data.constCastData()->defaultTitleCached = true;
     return m_data->defaultTitle;
 }
 
-QString ImageInfo::comment() const
+QString ItemInfo::comment() const
 {
     if (!m_data)
     {
@@ -589,13 +589,13 @@ QString ImageInfo::comment() const
         comment = comments.defaultComment();
     }
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data.constCastData()->defaultComment       = comment;
     m_data.constCastData()->defaultCommentCached = true;
     return m_data->defaultComment;
 }
 
-double ImageInfo::aspectRatio() const
+double ItemInfo::aspectRatio() const
 {
     if (!m_data)
     {
@@ -607,7 +607,7 @@ double ImageInfo::aspectRatio() const
     return (double)m_data->imageSize.width() / m_data->imageSize.height();
 }
 
-int ImageInfo::pickLabel() const
+int ItemInfo::pickLabel() const
 {
     if (!m_data)
     {
@@ -618,13 +618,13 @@ int ImageInfo::pickLabel() const
 
     int pickLabel = TagsCache::instance()->pickLabelFromTags(tagIds());
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data.constCastData()->pickLabel       = (pickLabel == -1) ? NoPickLabel : pickLabel;
     m_data.constCastData()->pickLabelCached = true;
     return m_data->pickLabel;
 }
 
-int ImageInfo::colorLabel() const
+int ItemInfo::colorLabel() const
 {
     if (!m_data)
     {
@@ -635,13 +635,13 @@ int ImageInfo::colorLabel() const
 
     int colorLabel = TagsCache::instance()->colorLabelFromTags(tagIds());
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data.constCastData()->colorLabel       = (colorLabel == -1) ? NoColorLabel : colorLabel;
     m_data.constCastData()->colorLabelCached = true;
     return m_data->colorLabel;
 }
 
-int ImageInfo::rating() const
+int ItemInfo::rating() const
 {
     if (!m_data)
     {
@@ -650,12 +650,12 @@ int ImageInfo::rating() const
 
     RETURN_IF_CACHED(rating)
 
-    QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Rating);
+    QVariantList values = CoreDbAccess().db()->getItemInformation(m_data->id, DatabaseFields::Rating);
 
     STORE_IN_CACHE_AND_RETURN(rating, values.first().toLongLong())
 }
 
-qlonglong ImageInfo::manualOrder() const
+qlonglong ItemInfo::manualOrder() const
 {
     if (!m_data)
     {
@@ -669,7 +669,7 @@ qlonglong ImageInfo::manualOrder() const
     STORE_IN_CACHE_AND_RETURN(manualOrder, values.first().toLongLong())
 }
 
-QString ImageInfo::format() const
+QString ItemInfo::format() const
 {
     if (!m_data)
     {
@@ -678,12 +678,12 @@ QString ImageInfo::format() const
 
     RETURN_IF_CACHED(format)
 
-    QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Format);
+    QVariantList values = CoreDbAccess().db()->getItemInformation(m_data->id, DatabaseFields::Format);
 
     STORE_IN_CACHE_AND_RETURN(format, values.first().toString())
 }
 
-DatabaseItem::Category ImageInfo::category() const
+DatabaseItem::Category ItemInfo::category() const
 {
     if (!m_data)
     {
@@ -697,7 +697,7 @@ DatabaseItem::Category ImageInfo::category() const
     STORE_IN_CACHE_AND_RETURN(category, (DatabaseItem::Category)values.first().toInt())
 }
 
-QDateTime ImageInfo::dateTime() const
+QDateTime ItemInfo::dateTime() const
 {
     if (!m_data)
     {
@@ -706,12 +706,12 @@ QDateTime ImageInfo::dateTime() const
 
     RETURN_IF_CACHED(creationDate)
 
-    QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::CreationDate);
+    QVariantList values = CoreDbAccess().db()->getItemInformation(m_data->id, DatabaseFields::CreationDate);
 
     STORE_IN_CACHE_AND_RETURN(creationDate, values.first().toDateTime())
 }
 
-QDateTime ImageInfo::modDateTime() const
+QDateTime ItemInfo::modDateTime() const
 {
     if (!m_data)
     {
@@ -725,7 +725,7 @@ QDateTime ImageInfo::modDateTime() const
     STORE_IN_CACHE_AND_RETURN(modificationDate, values.first().toDateTime())
 }
 
-QSize ImageInfo::dimensions() const
+QSize ItemInfo::dimensions() const
 {
     if (!m_data)
     {
@@ -734,9 +734,9 @@ QSize ImageInfo::dimensions() const
 
     RETURN_IF_CACHED(imageSize)
 
-    QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
+    QVariantList values = CoreDbAccess().db()->getItemInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data.constCastData()->imageSizeCached = true;
 
     if (values.size() == 2)
@@ -747,7 +747,7 @@ QSize ImageInfo::dimensions() const
     return m_data->imageSize;
 }
 
-QList<int> ImageInfo::tagIds() const
+QList<int> ItemInfo::tagIds() const
 {
     if (!m_data)
     {
@@ -758,17 +758,17 @@ QList<int> ImageInfo::tagIds() const
 
     QList<int> ids = CoreDbAccess().db()->getItemTagIDs(m_data->id);
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data.constCastData()->tagIds       = ids;
     m_data.constCastData()->tagIdsCached = true;
     return ids;
 }
 
-void ImageInfoList::loadTagIds() const
+void ItemInfoList::loadTagIds() const
 {
-    ImageInfoList infoList;
+    ItemInfoList infoList;
 
-    foreach (const ImageInfo& info, *this)
+    foreach (const ItemInfo& info, *this)
     {
         if (info.m_data && !info.m_data->tagIdsCached)
         {
@@ -783,11 +783,11 @@ void ImageInfoList::loadTagIds() const
 
     QVector<QList<int> > allTagIds = CoreDbAccess().db()->getItemsTagIDs(infoList.toImageIdList());
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
 
     for (int i = 0 ; i < infoList.size() ; ++i)
     {
-        const ImageInfo& info = infoList.at(i);
+        const ItemInfo& info = infoList.at(i);
         const QList<int>& ids = allTagIds.at(i);
 
         if (!info.m_data)
@@ -800,14 +800,14 @@ void ImageInfoList::loadTagIds() const
     }
 }
 
-int ImageInfo::orientation() const
+int ItemInfo::orientation() const
 {
     if (!m_data)
     {
         return 0; // ORIENTATION_UNSPECIFIED
     }
 
-    QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Orientation);
+    QVariantList values = CoreDbAccess().db()->getItemInformation(m_data->id, DatabaseFields::Orientation);
 
     if (values.isEmpty())
     {
@@ -817,12 +817,12 @@ int ImageInfo::orientation() const
     return values.first().toInt();
 }
 
-QUrl ImageInfo::fileUrl() const
+QUrl ItemInfo::fileUrl() const
 {
     return QUrl::fromLocalFile(filePath());
 }
 
-QString ImageInfo::filePath() const
+QString ItemInfo::filePath() const
 {
     if (!m_data)
     {
@@ -836,8 +836,8 @@ QString ImageInfo::filePath() const
         return QString();
     }
 
-    QString album = ImageInfoStatic::cache()->albumRelativePath(m_data->albumId);
-    ImageInfoReadLocker lock;
+    QString album = ItemInfoStatic::cache()->albumRelativePath(m_data->albumId);
+    ItemInfoReadLocker lock;
 
     if (album == QLatin1String("/"))
     {
@@ -849,7 +849,7 @@ QString ImageInfo::filePath() const
     }
 }
 
-bool ImageInfo::isVisible() const
+bool ItemInfo::isVisible() const
 {
     if (!m_data)
     {
@@ -866,7 +866,7 @@ bool ImageInfo::isVisible() const
     return false;
 }
 
-bool ImageInfo::isRemoved() const
+bool ItemInfo::isRemoved() const
 {
     if (!m_data)
     {
@@ -883,7 +883,7 @@ bool ImageInfo::isRemoved() const
     return false;
 }
 
-void ImageInfo::setVisible(bool isVisible)
+void ItemInfo::setVisible(bool isVisible)
 {
     if (!m_data)
     {
@@ -892,14 +892,14 @@ void ImageInfo::setVisible(bool isVisible)
 
     if (m_data->albumId == 0)
     {
-        qCWarning(DIGIKAM_DATABASE_LOG) << "Attempt to make a Removed item visible with ImageInfo::setVisible";
+        qCWarning(DIGIKAM_DATABASE_LOG) << "Attempt to make a Removed item visible with ItemInfo::setVisible";
         return;
     }
 
     CoreDbAccess().db()->setItemStatus(m_data->id, isVisible ? DatabaseItem::Visible : DatabaseItem::Hidden);
 }
 
-bool ImageInfo::hasDerivedImages() const
+bool ItemInfo::hasDerivedImages() const
 {
     if (!m_data)
     {
@@ -909,7 +909,7 @@ bool ImageInfo::hasDerivedImages() const
     return CoreDbAccess().db()->hasImagesRelatingTo(m_data->id, DatabaseRelation::DerivedFrom);
 }
 
-bool ImageInfo::hasAncestorImages() const
+bool ItemInfo::hasAncestorImages() const
 {
     if (!m_data)
     {
@@ -919,27 +919,27 @@ bool ImageInfo::hasAncestorImages() const
     return CoreDbAccess().db()->hasImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom);
 }
 
-QList<ImageInfo> ImageInfo::derivedImages() const
+QList<ItemInfo> ItemInfo::derivedImages() const
 {
     if (!m_data)
     {
-        return QList<ImageInfo>();
+        return QList<ItemInfo>();
     }
 
-    return ImageInfoList(CoreDbAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::DerivedFrom));
+    return ItemInfoList(CoreDbAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::DerivedFrom));
 }
 
-QList<ImageInfo> ImageInfo::ancestorImages() const
+QList<ItemInfo> ItemInfo::ancestorImages() const
 {
     if (!m_data)
     {
-        return QList<ImageInfo>();
+        return QList<ItemInfo>();
     }
 
-    return ImageInfoList(CoreDbAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom));
+    return ItemInfoList(CoreDbAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom));
 }
 
-QList<QPair<qlonglong, qlonglong> > ImageInfo::relationCloud() const
+QList<QPair<qlonglong, qlonglong> > ItemInfo::relationCloud() const
 {
     if (!m_data)
     {
@@ -949,7 +949,7 @@ QList<QPair<qlonglong, qlonglong> > ImageInfo::relationCloud() const
     return CoreDbAccess().db()->getRelationCloud(m_data->id, DatabaseRelation::DerivedFrom);
 }
 
-void ImageInfo::markDerivedFrom(const ImageInfo& ancestor)
+void ItemInfo::markDerivedFrom(const ItemInfo& ancestor)
 {
     if (!m_data || ancestor.isNull())
     {
@@ -959,22 +959,22 @@ void ImageInfo::markDerivedFrom(const ImageInfo& ancestor)
     CoreDbAccess().db()->addImageRelation(m_data->id, ancestor.id(), DatabaseRelation::DerivedFrom);
 }
 
-bool ImageInfo::hasGroupedImages() const
+bool ItemInfo::hasGroupedImages() const
 {
     return numberOfGroupedImages();
 }
 
-int ImageInfo::numberOfGroupedImages() const
+int ItemInfo::numberOfGroupedImages() const
 {
     if (!m_data)
     {
         return false;
     }
 
-    return ImageInfoStatic::cache()->getImageGroupedCount(m_data->id);
+    return ItemInfoStatic::cache()->getImageGroupedCount(m_data->id);
 }
 
-qlonglong ImageInfo::groupImageId() const
+qlonglong ItemInfo::groupImageId() const
 {
     if (!m_data)
     {
@@ -987,17 +987,17 @@ qlonglong ImageInfo::groupImageId() const
     // list size should be 0 or 1
     int groupImage       = ids.isEmpty() ? -1 : ids.first();
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data.constCastData()->groupImage       = groupImage;
     m_data.constCastData()->groupImageCached = true;
     return m_data->groupImage;
 }
 
-void ImageInfoList::loadGroupImageIds() const
+void ItemInfoList::loadGroupImageIds() const
 {
-    ImageInfoList infoList;
+    ItemInfoList infoList;
 
-    foreach (const ImageInfo& info, *this)
+    foreach (const ItemInfo& info, *this)
     {
         if (info.m_data && !info.m_data->groupImageCached)
         {
@@ -1013,11 +1013,11 @@ void ImageInfoList::loadGroupImageIds() const
     QVector<QList<qlonglong> > allGroupIds = CoreDbAccess().db()->getImagesRelatedFrom(infoList.toImageIdList(),
                                                                                        DatabaseRelation::Grouped);
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
 
     for (int i = 0 ; i < infoList.size() ; ++i)
     {
-        const ImageInfo& info            = infoList.at(i);
+        const ItemInfo& info            = infoList.at(i);
         const QList<qlonglong>& groupIds = allGroupIds.at(i);
 
         if (!info.m_data)
@@ -1030,34 +1030,34 @@ void ImageInfoList::loadGroupImageIds() const
     }
 }
 
-bool ImageInfo::isGrouped() const
+bool ItemInfo::isGrouped() const
 {
     return groupImageId() != -1;
 }
 
-ImageInfo ImageInfo::groupImage() const
+ItemInfo ItemInfo::groupImage() const
 {
     qlonglong id = groupImageId();
 
     if (id == -1)
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
-    return ImageInfo(id);
+    return ItemInfo(id);
 }
 
-QList<ImageInfo> ImageInfo::groupedImages() const
+QList<ItemInfo> ItemInfo::groupedImages() const
 {
     if (!m_data || !hasGroupedImages())
     {
-        return QList<ImageInfo>();
+        return QList<ItemInfo>();
     }
 
-    return ImageInfoList(CoreDbAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped));
+    return ItemInfoList(CoreDbAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped));
 }
 
-void ImageInfo::addToGroup(const ImageInfo& givenLeader)
+void ItemInfo::addToGroup(const ItemInfo& givenLeader)
 {
     if (!m_data || givenLeader.isNull() || givenLeader.id() == m_data->id)
     {
@@ -1068,13 +1068,13 @@ void ImageInfo::addToGroup(const ImageInfo& givenLeader)
     CoreDbOperationGroup group;
 
     // Handle grouping on an already grouped image, and prevent circular grouping
-    ImageInfo leader;
+    ItemInfo leader;
     QList<qlonglong> alreadySeen;
     alreadySeen << m_data->id;
 
     for (leader = givenLeader ; leader.isGrouped() ;)
     {
-        ImageInfo nextLeader = leader.groupImage();
+        ItemInfo nextLeader = leader.groupImage();
         // is the new leader currently grouped on this image, or do we have a circular grouping?
         if (alreadySeen.contains(nextLeader.id()))
         {
@@ -1109,7 +1109,7 @@ void ImageInfo::addToGroup(const ImageInfo& givenLeader)
     }
 }
 
-void ImageInfo::removeFromGroup()
+void ItemInfo::removeFromGroup()
 {
     if (!m_data)
     {
@@ -1124,7 +1124,7 @@ void ImageInfo::removeFromGroup()
     CoreDbAccess().db()->removeAllImageRelationsFrom(m_data->id, DatabaseRelation::Grouped);
 }
 
-void ImageInfo::clearGroup()
+void ItemInfo::clearGroup()
 {
     if (!m_data)
     {
@@ -1139,7 +1139,7 @@ void ImageInfo::clearGroup()
     CoreDbAccess().db()->removeAllImageRelationsTo(m_data->id, DatabaseRelation::Grouped);
 }
 
-ItemComments ImageInfo::imageComments(CoreDbAccess& access) const
+ItemComments ItemInfo::imageComments(CoreDbAccess& access) const
 {
     if (!m_data)
     {
@@ -1149,7 +1149,7 @@ ItemComments ImageInfo::imageComments(CoreDbAccess& access) const
     return ItemComments(access, m_data->id);
 }
 
-ItemCopyright ImageInfo::imageCopyright() const
+ItemCopyright ItemInfo::imageCopyright() const
 {
     if (!m_data)
     {
@@ -1159,7 +1159,7 @@ ItemCopyright ImageInfo::imageCopyright() const
     return ItemCopyright(m_data->id);
 }
 
-ItemExtendedProperties ImageInfo::imageExtendedProperties() const
+ItemExtendedProperties ItemInfo::imageExtendedProperties() const
 {
     if (!m_data)
     {
@@ -1169,7 +1169,7 @@ ItemExtendedProperties ImageInfo::imageExtendedProperties() const
     return ItemExtendedProperties(m_data->id);
 }
 
-ItemPosition ImageInfo::imagePosition() const
+ItemPosition ItemInfo::imagePosition() const
 {
     if (!m_data)
     {
@@ -1180,7 +1180,7 @@ ItemPosition ImageInfo::imagePosition() const
 
     if (!m_data->positionsCached)
     {
-        ImageInfoWriteLocker lock;
+        ItemInfoWriteLocker lock;
         m_data.constCastData()->longitude       = pos.longitudeNumber();
         m_data.constCastData()->latitude        = pos.latitudeNumber();
         m_data.constCastData()->altitude        = pos.altitude();
@@ -1192,7 +1192,7 @@ ItemPosition ImageInfo::imagePosition() const
     return pos;
 }
 
-double ImageInfo::longitudeNumber() const
+double ItemInfo::longitudeNumber() const
 {
     if (!m_data)
     {
@@ -1207,7 +1207,7 @@ double ImageInfo::longitudeNumber() const
     return m_data->longitude;
 }
 
-double ImageInfo::latitudeNumber() const
+double ItemInfo::latitudeNumber() const
 {
     if (!m_data)
     {
@@ -1222,7 +1222,7 @@ double ImageInfo::latitudeNumber() const
     return m_data->latitude;
 }
 
-double ImageInfo::altitudeNumber() const
+double ItemInfo::altitudeNumber() const
 {
     if (!m_data)
     {
@@ -1237,7 +1237,7 @@ double ImageInfo::altitudeNumber() const
     return m_data->altitude;
 }
 
-bool ImageInfo::hasCoordinates() const
+bool ItemInfo::hasCoordinates() const
 {
     if (!m_data)
     {
@@ -1252,7 +1252,7 @@ bool ImageInfo::hasCoordinates() const
     return m_data->hasCoordinates;
 }
 
-bool ImageInfo::hasAltitude() const
+bool ItemInfo::hasAltitude() const
 {
     if (!m_data)
     {
@@ -1267,7 +1267,7 @@ bool ImageInfo::hasAltitude() const
     return m_data->hasAltitude;
 }
 
-ItemTagPair ImageInfo::imageTagPair(int tagId) const
+ItemTagPair ItemInfo::imageTagPair(int tagId) const
 {
     if (!m_data)
     {
@@ -1277,7 +1277,7 @@ ItemTagPair ImageInfo::imageTagPair(int tagId) const
     return ItemTagPair(*this, tagId);
 }
 
-QList<ItemTagPair> ImageInfo::availableItemTagPairs() const
+QList<ItemTagPair> ItemInfo::availableItemTagPairs() const
 {
     if (!m_data)
     {
@@ -1287,7 +1287,7 @@ QList<ItemTagPair> ImageInfo::availableItemTagPairs() const
     return ItemTagPair::availablePairs(*this);
 }
 
-DImageHistory ImageInfo::imageHistory() const
+DImageHistory ItemInfo::imageHistory() const
 {
     if (!m_data)
     {
@@ -1298,7 +1298,7 @@ DImageHistory ImageInfo::imageHistory() const
     return DImageHistory::fromXml(entry.history);
 }
 
-void ImageInfo::setImageHistory(const DImageHistory& history)
+void ItemInfo::setImageHistory(const DImageHistory& history)
 {
     if (!m_data)
     {
@@ -1308,7 +1308,7 @@ void ImageInfo::setImageHistory(const DImageHistory& history)
     CoreDbAccess().db()->setImageHistory(m_data->id, history.toXml());
 }
 
-bool ImageInfo::hasImageHistory() const
+bool ItemInfo::hasImageHistory() const
 {
     if (!m_data)
     {
@@ -1318,7 +1318,7 @@ bool ImageInfo::hasImageHistory() const
     return CoreDbAccess().db()->hasImageHistory(m_data->id);
 }
 
-QString ImageInfo::uuid() const
+QString ItemInfo::uuid() const
 {
     if (!m_data)
     {
@@ -1328,7 +1328,7 @@ QString ImageInfo::uuid() const
     return CoreDbAccess().db()->getImageUuid(m_data->id);
 }
 
-void ImageInfo::setUuid(const QString& uuid)
+void ItemInfo::setUuid(const QString& uuid)
 {
     if (!m_data)
     {
@@ -1338,7 +1338,7 @@ void ImageInfo::setUuid(const QString& uuid)
     CoreDbAccess().db()->setImageUuid(m_data->id, uuid);
 }
 
-HistoryImageId ImageInfo::historyImageId() const
+HistoryImageId ItemInfo::historyImageId() const
 {
     if (!m_data)
     {
@@ -1359,7 +1359,7 @@ HistoryImageId ImageInfo::historyImageId() const
     return id;
 }
 
-ImageCommonContainer ImageInfo::imageCommonContainer() const
+ImageCommonContainer ItemInfo::imageCommonContainer() const
 {
     if (!m_data)
     {
@@ -1371,7 +1371,7 @@ ImageCommonContainer ImageInfo::imageCommonContainer() const
     return container;
 }
 
-ImageMetadataContainer ImageInfo::imageMetadataContainer() const
+ImageMetadataContainer ItemInfo::imageMetadataContainer() const
 {
     if (!m_data)
     {
@@ -1467,7 +1467,7 @@ ImageMetadataContainer ImageInfo::imageMetadataContainer() const
     return container;
 }
 
-VideoMetadataContainer ImageInfo::videoMetadataContainer() const
+VideoMetadataContainer ItemInfo::videoMetadataContainer() const
 {
     if (!m_data)
     {
@@ -1531,7 +1531,7 @@ VideoMetadataContainer ImageInfo::videoMetadataContainer() const
     return container;
 }
 
-PhotoInfoContainer ImageInfo::photoInfoContainer() const
+PhotoInfoContainer ItemInfo::photoInfoContainer() const
 {
     if (!m_data)
     {
@@ -1558,7 +1558,7 @@ PhotoInfoContainer ImageInfo::photoInfoContainer() const
     return photoInfo;
 }
 
-VideoInfoContainer ImageInfo::videoInfoContainer() const
+VideoInfoContainer ItemInfo::videoInfoContainer() const
 {
     if (!m_data)
     {
@@ -1579,7 +1579,7 @@ VideoInfoContainer ImageInfo::videoInfoContainer() const
     return videoInfo;
 }
 
-Template ImageInfo::metadataTemplate() const
+Template ItemInfo::metadataTemplate() const
 {
     if (!m_data)
     {
@@ -1595,7 +1595,7 @@ Template ImageInfo::metadataTemplate() const
     return t;
 }
 
-void ImageInfo::setMetadataTemplate(const Template& t)
+void ItemInfo::setMetadataTemplate(const Template& t)
 {
     if (!m_data)
     {
@@ -1610,7 +1610,7 @@ void ImageInfo::setMetadataTemplate(const Template& t)
     ep.setSubjectCode(t.IptcSubjects());
 }
 
-void ImageInfo::removeMetadataTemplate()
+void ItemInfo::removeMetadataTemplate()
 {
     if (!m_data)
     {
@@ -1624,7 +1624,7 @@ void ImageInfo::removeMetadataTemplate()
     ep.removeSubjectCode();
 }
 
-void ImageInfo::setPickLabel(int pickId)
+void ItemInfo::setPickLabel(int pickId)
 {
     if (!m_data || pickId < FirstPickLabel || pickId > LastPickLabel)
     {
@@ -1650,12 +1650,12 @@ void ImageInfo::setPickLabel(int pickId)
         setTag(pickLabelTags[pickId]);
     }
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data->pickLabel       = pickId;
     m_data->pickLabelCached = true;
 }
 
-void ImageInfo::setColorLabel(int colorId)
+void ItemInfo::setColorLabel(int colorId)
 {
     if (!m_data || colorId < FirstColorLabel || colorId > LastColorLabel)
     {
@@ -1681,26 +1681,26 @@ void ImageInfo::setColorLabel(int colorId)
         setTag(colorLabelTags[colorId]);
     }
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data->colorLabel       = colorId;
     m_data->colorLabelCached = true;
 }
 
-void ImageInfo::setRating(int value)
+void ItemInfo::setRating(int value)
 {
     if (!m_data)
     {
         return;
     }
 
-    CoreDbAccess().db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Rating);
+    CoreDbAccess().db()->changeItemInformation(m_data->id, QVariantList() << value, DatabaseFields::Rating);
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data->rating       = value;
     m_data->ratingCached = true;
 }
 
-void ImageInfo::setManualOrder(qlonglong value)
+void ItemInfo::setManualOrder(qlonglong value)
 {
     if (!m_data)
     {
@@ -1709,22 +1709,22 @@ void ImageInfo::setManualOrder(qlonglong value)
 
     CoreDbAccess().db()->setItemManualOrder(m_data->id, value);
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data->manualOrder       = value;
     m_data->manualOrderCached = true;
 }
 
-void ImageInfo::setOrientation(int value)
+void ItemInfo::setOrientation(int value)
 {
     if (!m_data)
     {
         return;
     }
 
-    CoreDbAccess().db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Orientation);
+    CoreDbAccess().db()->changeItemInformation(m_data->id, QVariantList() << value, DatabaseFields::Orientation);
 }
 
-void ImageInfo::setName(const QString& newName)
+void ItemInfo::setName(const QString& newName)
 {
     if (!m_data || newName.isEmpty())
     {
@@ -1733,26 +1733,26 @@ void ImageInfo::setName(const QString& newName)
 
     CoreDbAccess().db()->renameItem(m_data->id, newName);
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data->name = newName;
-    ImageInfoStatic::cache()->cacheByName(m_data);
+    ItemInfoStatic::cache()->cacheByName(m_data);
 }
 
-void ImageInfo::setDateTime(const QDateTime& dateTime)
+void ItemInfo::setDateTime(const QDateTime& dateTime)
 {
     if (!m_data || !dateTime.isValid())
     {
         return;
     }
 
-    CoreDbAccess().db()->changeImageInformation(m_data->id, QVariantList() << dateTime, DatabaseFields::CreationDate);
+    CoreDbAccess().db()->changeItemInformation(m_data->id, QVariantList() << dateTime, DatabaseFields::CreationDate);
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data->creationDate       = dateTime;
     m_data->creationDateCached = true;
 }
 
-void ImageInfo::setModDateTime(const QDateTime& dateTime)
+void ItemInfo::setModDateTime(const QDateTime& dateTime)
 {
     if (!m_data || !dateTime.isValid())
     {
@@ -1761,12 +1761,12 @@ void ImageInfo::setModDateTime(const QDateTime& dateTime)
 
     CoreDbAccess().db()->setItemModificationDate(m_data->id, dateTime);
 
-    ImageInfoWriteLocker lock;
+    ItemInfoWriteLocker lock;
     m_data->modificationDate       = dateTime;
     m_data->modificationDateCached = true;
 }
 
-void ImageInfo::setTag(int tagID)
+void ItemInfo::setTag(int tagID)
 {
     if (!m_data || tagID <= 0)
     {
@@ -1776,7 +1776,7 @@ void ImageInfo::setTag(int tagID)
     CoreDbAccess().db()->addItemTag(m_data->id, tagID);
 }
 
-void ImageInfo::removeTag(int tagID)
+void ItemInfo::removeTag(int tagID)
 {
     if (!m_data)
     {
@@ -1788,7 +1788,7 @@ void ImageInfo::removeTag(int tagID)
     access.db()->removeImageTagProperties(m_data->id, tagID);
 }
 
-void ImageInfo::removeAllTags()
+void ItemInfo::removeAllTags()
 {
     if (!m_data)
     {
@@ -1798,7 +1798,7 @@ void ImageInfo::removeAllTags()
     CoreDbAccess().db()->removeItemAllTags(m_data->id, tagIds());
 }
 
-void ImageInfo::addTagPaths(const QStringList& tagPaths)
+void ItemInfo::addTagPaths(const QStringList& tagPaths)
 {
     if (!m_data)
     {
@@ -1809,15 +1809,15 @@ void ImageInfo::addTagPaths(const QStringList& tagPaths)
     CoreDbAccess().db()->addTagsToItems(QList<qlonglong>() << m_data->id, tagIds);
 }
 
-ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
+ItemInfo ItemInfo::copyItem(int dstAlbumID, const QString& dstFileName)
 {
     if (!m_data)
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
     {
-        ImageInfoReadLocker lock;
+        ItemInfoReadLocker lock;
 
         if (dstAlbumID == m_data->albumId && dstFileName == m_data->name)
         {
@@ -1829,13 +1829,13 @@ ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
 
     if (id == -1)
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
-    return ImageInfo(id);
+    return ItemInfo(id);
 }
 
-bool ImageInfo::isLocationAvailable() const
+bool ItemInfo::isLocationAvailable() const
 {
     if (!m_data)
     {
@@ -1845,12 +1845,12 @@ bool ImageInfo::isLocationAvailable() const
     return CollectionManager::instance()->locationForAlbumRootId(m_data->albumRootId).isAvailable();
 }
 
-double ImageInfo::similarityTo(const qlonglong imageId) const
+double ItemInfo::similarityTo(const qlonglong imageId) const
 {
     return imageExtendedProperties().similarityTo(imageId);
 }
 
-double ImageInfo::currentSimilarity() const
+double ItemInfo::currentSimilarity() const
 {
     if (!m_data)
     {
@@ -1860,7 +1860,7 @@ double ImageInfo::currentSimilarity() const
     return m_data->currentSimilarity;
 }
 
-qlonglong ImageInfo::currentReferenceImage() const
+qlonglong ItemInfo::currentReferenceImage() const
 {
     if (!m_data)
     {
@@ -1870,20 +1870,20 @@ qlonglong ImageInfo::currentReferenceImage() const
     return m_data->currentReferenceImage;
 }
 
-QList<ImageInfo> ImageInfo::fromUniqueHash(const QString& uniqueHash, qlonglong fileSize)
+QList<ItemInfo> ItemInfo::fromUniqueHash(const QString& uniqueHash, qlonglong fileSize)
 {
     QList<ItemScanInfo> scanInfos = CoreDbAccess().db()->getIdenticalFiles(uniqueHash, fileSize);
-    QList<ImageInfo> infos;
+    QList<ItemInfo> infos;
 
     foreach (const ItemScanInfo& scanInfo, scanInfos)
     {
-        infos << ImageInfo(scanInfo.id);
+        infos << ItemInfo(scanInfo.id);
     }
 
     return infos;
 }
 
-ThumbnailIdentifier ImageInfo::thumbnailIdentifier() const
+ThumbnailIdentifier ItemInfo::thumbnailIdentifier() const
 {
     if (!m_data)
     {
@@ -1896,7 +1896,7 @@ ThumbnailIdentifier ImageInfo::thumbnailIdentifier() const
     return id;
 }
 
-ThumbnailInfo ImageInfo::thumbnailInfo() const
+ThumbnailInfo ItemInfo::thumbnailInfo() const
 {
     if (!m_data)
     {
@@ -1917,19 +1917,19 @@ ThumbnailInfo ImageInfo::thumbnailInfo() const
     return thumbinfo;
 }
 
-ThumbnailIdentifier ImageInfo::thumbnailIdentifier(qlonglong id)
+ThumbnailIdentifier ItemInfo::thumbnailIdentifier(qlonglong id)
 {
-    ImageInfo info(id);
+    ItemInfo info(id);
     return info.thumbnailIdentifier();
 }
 
-QDebug operator<<(QDebug stream, const ImageInfo& info)
+QDebug operator<<(QDebug stream, const ItemInfo& info)
 {
-    return stream << "ImageInfo [id = " << info.id() << ", path = "
+    return stream << "ItemInfo [id = " << info.id() << ", path = "
                   << info.filePath() << "]";
 }
 
-ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseFields::Set& requestedSet) const
+ItemInfo::DatabaseFieldsHashRaw ItemInfo::getDatabaseFieldsRaw(const DatabaseFields::Set& requestedSet) const
 {
     if (!m_data || (!m_data->hasVideoMetadata && !m_data->hasImageMetadata))
     {
@@ -1938,10 +1938,10 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
 
     DatabaseFields::VideoMetadataMinSizeType cachedVideoMetadata;
     DatabaseFields::ImageMetadataMinSizeType cachedImageMetadata;
-    ImageInfo::DatabaseFieldsHashRaw cachedHash;
+    ItemInfo::DatabaseFieldsHashRaw cachedHash;
     // consolidate to one ReadLocker. In particular, the shallow copy of the QHash must be done under protection
     {
-        ImageInfoReadLocker lock;
+        ItemInfoReadLocker lock;
         cachedVideoMetadata = m_data->videoMetadataCached;
         cachedImageMetadata = m_data->imageMetadataCached;
         cachedHash = m_data->databaseFieldsHashRaw;
@@ -1956,7 +1956,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
         {
             const QVariantList fieldValues = CoreDbAccess().db()->getVideoMetadata(m_data->id, missingVideoMetadata);
 
-            ImageInfoWriteLocker lock;
+            ItemInfoWriteLocker lock;
 
             if (fieldValues.isEmpty())
             {
@@ -1992,7 +1992,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
         {
             const QVariantList fieldValues = CoreDbAccess().db()->getImageMetadata(m_data->id, missingImageMetadata);
 
-            ImageInfoWriteLocker lock;
+            ItemInfoWriteLocker lock;
 
             if (fieldValues.isEmpty())
             {
@@ -2023,7 +2023,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
     return cachedHash;
 }
 
-QVariant ImageInfo::getDatabaseFieldRaw(const DatabaseFields::Set& requestedField) const
+QVariant ItemInfo::getDatabaseFieldRaw(const DatabaseFields::Set& requestedField) const
 {
     DatabaseFieldsHashRaw rawHash = getDatabaseFieldsRaw(requestedField);
 

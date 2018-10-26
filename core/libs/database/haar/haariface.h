@@ -45,7 +45,7 @@ namespace Digikam
 {
 
 class DImg;
-class ImageInfo;
+class ItemInfo;
 
 class HaarProgressObserver
 {

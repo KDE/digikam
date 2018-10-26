@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class ImageInfo;
+class ItemInfo;
 class VersionManagerSettings;
 
 namespace DatabaseFields
@@ -100,10 +100,10 @@ public:
     explicit ImageFilterSettings();
 
     /**
-     *  Returns true if the given ImageInfo matches the filter criteria.
+     *  Returns true if the given ItemInfo matches the filter criteria.
      *  Optionally, foundText is set to true if it matched by text search.
      */
-    bool matches(const ImageInfo& info, bool* const foundText = 0) const;
+    bool matches(const ItemInfo& info, bool* const foundText = 0) const;
 
 public:
 
@@ -272,12 +272,12 @@ public:
     bool operator==(const VersionImageFilterSettings& other) const;
 
     /**
-     *  Returns true if the given ImageInfo matches the filter criteria.
+     *  Returns true if the given ItemInfo matches the filter criteria.
      */
-    bool matches(const ImageInfo& info) const;
+    bool matches(const ItemInfo& info) const;
 
-    bool isHiddenBySettings(const ImageInfo& info)   const;
-    bool isExemptedBySettings(const ImageInfo& info) const;
+    bool isHiddenBySettings(const ItemInfo& info)   const;
+    bool isExemptedBySettings(const ItemInfo& info) const;
 
     /// --- Tags filter ---
 
@@ -315,9 +315,9 @@ public:
     bool operator==(const GroupImageFilterSettings& other) const;
 
     /**
-     *  Returns true if the given ImageInfo matches the filter criteria.
+     *  Returns true if the given ItemInfo matches the filter criteria.
      */
-    bool matches(const ImageInfo& info) const;
+    bool matches(const ItemInfo& info) const;
 
     /**
      * Open or close a group.

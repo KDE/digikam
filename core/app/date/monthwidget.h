@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 class QResizeEvent;
 class QPaintEvent;

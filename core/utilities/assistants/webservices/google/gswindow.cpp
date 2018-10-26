@@ -1099,7 +1099,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
 /* TODO
     else
     {
-        KPImageInfo info(newUrl);
+        KPItemInfo info(newUrl);
         info.setName(item.title);
         info.setDescription(item.description);
         info.setTagsPath(item.tags);

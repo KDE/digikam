@@ -88,7 +88,7 @@ public:
         itemMarkerTiler(0),
         itemModel(0),
         gpsModelHelper(0),
-        gpsImageInfoSorter(0),
+        gpsItemInfoSorter(0),
         boundariesShouldBeAdjusted(false)
     {
     }
@@ -112,7 +112,7 @@ public:
 
     QStandardItemModel*        itemModel;
     ItemGPSModelHelper*       gpsModelHelper;
-    GPSItemInfoSorter*        gpsImageInfoSorter;
+    GPSItemInfoSorter*        gpsItemInfoSorter;
     bool                       boundariesShouldBeAdjusted;
 };
 
@@ -137,8 +137,8 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
     d->map->setEnabledExtraActions(ExtraActionSticky);
     d->map->setVisibleExtraActions(ExtraActionSticky);
     d->map->setBackend(QLatin1String("marble"));
-    d->gpsImageInfoSorter     = new GPSItemInfoSorter(this);
-    d->gpsImageInfoSorter->addToMapWidget(d->map);
+    d->gpsItemInfoSorter     = new GPSItemInfoSorter(this);
+    d->gpsItemInfoSorter->addToMapWidget(d->map);
     vlay2->addWidget(d->map);
     vlay2->setContentsMargins(QMargins());
     vlay2->setSpacing(0);
@@ -214,8 +214,8 @@ ImagePropertiesGPSTab::~ImagePropertiesGPSTab()
 
 void ImagePropertiesGPSTab::readSettings(const KConfigGroup& group)
 {
-    d->gpsImageInfoSorter->setSortOptions(GPSItemInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"),
-                                          int(d->gpsImageInfoSorter->getSortOptions()))));
+    d->gpsItemInfoSorter->setSortOptions(GPSItemInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"),
+                                          int(d->gpsItemInfoSorter->getSortOptions()))));
     setWebGPSLocator(group.readEntry(QLatin1String("Web GPS Locator"), getWebGPSLocator()));
 
     KConfigGroup groupMapWidget = KConfigGroup(&group, QLatin1String("Map Widget"));
@@ -224,7 +224,7 @@ void ImagePropertiesGPSTab::readSettings(const KConfigGroup& group)
 }
 void ImagePropertiesGPSTab::writeSettings(KConfigGroup& group)
 {
-    group.writeEntry(QLatin1String("Sort Order"),      int(d->gpsImageInfoSorter->getSortOptions()));
+    group.writeEntry(QLatin1String("Sort Order"),      int(d->gpsItemInfoSorter->getSortOptions()));
     group.writeEntry(QLatin1String("Web GPS Locator"), getWebGPSLocator());
 
     KConfigGroup groupMapWidget = KConfigGroup(&group, QLatin1String("Map Widget"));

@@ -30,7 +30,7 @@
 // Local includes
 
 #include "coredbinfocontainers.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "itemcopyright.h"
 
 namespace
@@ -73,7 +73,7 @@ CommonKeys::CommonKeys()
 
 QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
 {
-    ImageInfo info = ImageInfo::fromUrl(settings.fileUrl);
+    ItemInfo info = ItemInfo::fromUrl(settings.fileUrl);
     ImageCommonContainer container = info.imageCommonContainer();
     ItemCopyright copyright       = info.imageCopyright();
     QString result;

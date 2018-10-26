@@ -41,7 +41,7 @@ namespace Digikam
 
 class Album;
 class PAlbum;
-class ImageInfo;
+class ItemInfo;
 class IOJobData;
 class ProgressItem;
 
@@ -61,7 +61,7 @@ public:
     static void copy(PAlbum* const src, PAlbum* const dest);
 
     /// Copy items to another album
-    static void copy(const QList<ImageInfo>& infos, PAlbum* const dest);
+    static void copy(const QList<ItemInfo>& infos, PAlbum* const dest);
 
     /// Copy an external file to another album
     static void copy(const QUrl& src, PAlbum* const dest);
@@ -73,7 +73,7 @@ public:
     static void move(PAlbum* const src, PAlbum* const dest);
 
     /// Move items to another album
-    static void move(const QList<ImageInfo>& infos, PAlbum* const dest);
+    static void move(const QList<ItemInfo>& infos, PAlbum* const dest);
 
     /// Move external files another album
     static void move(const QUrl& src, PAlbum* const dest);
@@ -81,8 +81,8 @@ public:
     /// Move external files into another album
     static void move(const QList<QUrl>& srcList, PAlbum* const dest);
 
-    static void del(const QList<ImageInfo>& infos, bool useTrash);
-    static void del(const ImageInfo& info, bool useTrash);
+    static void del(const QList<ItemInfo>& infos, bool useTrash);
+    static void del(const ItemInfo& info, bool useTrash);
     static void del(PAlbum* const album, bool useTrash);
 
     /// Rename item to new name
@@ -143,9 +143,9 @@ class GroupedImagesFinder
 
 public:
 
-    explicit GroupedImagesFinder(const QList<ImageInfo>& source);
+    explicit GroupedImagesFinder(const QList<ItemInfo>& source);
 
-    QList<ImageInfo> infos;
+    QList<ItemInfo> infos;
 };
 
 } // namespace Digikam

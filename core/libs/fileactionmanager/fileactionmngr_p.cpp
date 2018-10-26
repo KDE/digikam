@@ -41,9 +41,9 @@ FileActionMngr::Private::Private(FileActionMngr* const qq)
     : q(qq)
 {
     qRegisterMetaType<MetadataHub*>("MetadataHub*");
-    qRegisterMetaType<FileActionImageInfoList>("FileActionImageInfoList");
-    qRegisterMetaType<FileActionImageInfoList*>("FileActionImageInfoList*");
-    qRegisterMetaType<QList<ImageInfo> >("QList<ImageInfo>");
+    qRegisterMetaType<FileActionItemInfoList>("FileActionItemInfoList");
+    qRegisterMetaType<FileActionItemInfoList*>("FileActionItemInfoList*");
+    qRegisterMetaType<QList<ItemInfo> >("QList<ItemInfo>");
 
     dbWorker   = new FileActionMngrDatabaseWorker(this);
     fileWorker = new ParallelAdapter<FileWorkerInterface>();
@@ -64,8 +64,8 @@ FileActionMngr::Private::Private(FileActionMngr* const qq)
     //connect(fileWorker, SIGNAL(imageTransformFinished()),
     //        this, SIGNAL(signalTransformFinished()));
 
-    connect(this, SIGNAL(signalTransform(FileActionImageInfoList,int)),
-            fileWorker, SLOT(transform(FileActionImageInfoList,int)),
+    connect(this, SIGNAL(signalTransform(FileActionItemInfoList,int)),
+            fileWorker, SLOT(transform(FileActionItemInfoList,int)),
             Qt::DirectConnection);
 
     connect(fileWorker, SIGNAL(imageDataChanged(QString,bool,bool)),
@@ -84,46 +84,46 @@ FileActionMngr::Private::Private(FileActionMngr* const qq)
 void FileActionMngr::Private::connectToDatabaseWorker()
 {
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAddTags(FileActionImageInfoList,QList<int>)),
-                                     dbWorker, SLOT(assignTags(FileActionImageInfoList,QList<int>)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAddTags(FileActionItemInfoList,QList<int>)),
+                                     dbWorker, SLOT(assignTags(FileActionItemInfoList,QList<int>)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalRemoveTags(FileActionImageInfoList,QList<int>)),
-                                     dbWorker, SLOT(removeTags(FileActionImageInfoList,QList<int>)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalRemoveTags(FileActionItemInfoList,QList<int>)),
+                                     dbWorker, SLOT(removeTags(FileActionItemInfoList,QList<int>)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignPickLabel(FileActionImageInfoList,int)),
-                                     dbWorker, SLOT(assignPickLabel(FileActionImageInfoList,int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignPickLabel(FileActionItemInfoList,int)),
+                                     dbWorker, SLOT(assignPickLabel(FileActionItemInfoList,int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignColorLabel(FileActionImageInfoList,int)),
-                                     dbWorker, SLOT(assignColorLabel(FileActionImageInfoList,int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignColorLabel(FileActionItemInfoList,int)),
+                                     dbWorker, SLOT(assignColorLabel(FileActionItemInfoList,int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignRating(FileActionImageInfoList,int)),
-                                     dbWorker, SLOT(assignRating(FileActionImageInfoList,int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignRating(FileActionItemInfoList,int)),
+                                     dbWorker, SLOT(assignRating(FileActionItemInfoList,int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalEditGroup(int,ImageInfo,FileActionImageInfoList)),
-                                     dbWorker, SLOT(editGroup(int,ImageInfo,FileActionImageInfoList)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalEditGroup(int,ItemInfo,FileActionItemInfoList)),
+                                     dbWorker, SLOT(editGroup(int,ItemInfo,FileActionItemInfoList)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalSetExifOrientation(FileActionImageInfoList,int)),
-                                     dbWorker, SLOT(setExifOrientation(FileActionImageInfoList,int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalSetExifOrientation(FileActionItemInfoList,int)),
+                                     dbWorker, SLOT(setExifOrientation(FileActionItemInfoList,int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalApplyMetadata(FileActionImageInfoList,DisjointMetadata*)),
-                                     dbWorker, SLOT(applyMetadata(FileActionImageInfoList,DisjointMetadata*)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalApplyMetadata(FileActionItemInfoList,DisjointMetadata*)),
+                                     dbWorker, SLOT(applyMetadata(FileActionItemInfoList,DisjointMetadata*)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalCopyAttributes(FileActionImageInfoList,QStringList)),
-                                     dbWorker, SLOT(copyAttributes(FileActionImageInfoList,QStringList)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalCopyAttributes(FileActionItemInfoList,QStringList)),
+                                     dbWorker, SLOT(copyAttributes(FileActionItemInfoList,QStringList)));
 }
 
 void FileActionMngr::Private::connectDatabaseToFileWorker()
 {
-    connect(dbWorker, SIGNAL(writeMetadataToFiles(FileActionImageInfoList)),
-            fileWorker, SLOT(writeMetadataToFiles(FileActionImageInfoList)),
+    connect(dbWorker, SIGNAL(writeMetadataToFiles(FileActionItemInfoList)),
+            fileWorker, SLOT(writeMetadataToFiles(FileActionItemInfoList)),
             Qt::DirectConnection);
 
-    connect(dbWorker, SIGNAL(writeMetadata(FileActionImageInfoList,int)),
-            fileWorker, SLOT(writeMetadata(FileActionImageInfoList,int)),
+    connect(dbWorker, SIGNAL(writeMetadata(FileActionItemInfoList,int)),
+            fileWorker, SLOT(writeMetadata(FileActionItemInfoList,int)),
             Qt::DirectConnection);
 
-    connect(dbWorker, SIGNAL(writeOrientationToFiles(FileActionImageInfoList,int)),
-            fileWorker, SLOT(writeOrientationToFiles(FileActionImageInfoList,int)),
+    connect(dbWorker, SIGNAL(writeOrientationToFiles(FileActionItemInfoList,int)),
+            fileWorker, SLOT(writeOrientationToFiles(FileActionItemInfoList,int)),
             Qt::DirectConnection);
 
 }
@@ -152,11 +152,11 @@ bool FileActionMngr::Private::shallSendForWriting(qlonglong id)
     return true;
 }
 
-void FileActionMngr::Private::startingToWrite(const QList<ImageInfo>& infos)
+void FileActionMngr::Private::startingToWrite(const QList<ItemInfo>& infos)
 {
     QMutexLocker lock(&mutex);
 
-    foreach(const ImageInfo& info, infos)
+    foreach(const ItemInfo& info, infos)
     {
         scheduledToWrite.remove(info.id());
     }

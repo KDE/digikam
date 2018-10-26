@@ -46,10 +46,10 @@ void ImageWindow::slotTimeAdjust()
 
 void ImageWindow::slotEditMetadata()
 {
-    if (d->currentImageInfo.isNull())
+    if (d->currentItemInfo.isNull())
         return;
 
-    QUrl url = d->currentImageInfo.fileUrl();
+    QUrl url = d->currentItemInfo.fileUrl();
 
     QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(this, QList<QUrl>() << url);
     dialog->exec();
@@ -65,7 +65,7 @@ void ImageWindow::slotEditMetadata()
 void ImageWindow::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    ImageInfoList infos = d->thumbBar->allImageInfos();
+    ItemInfoList infos = d->thumbBar->allItemInfos();
 
     if (infos.isEmpty())
     {
@@ -103,7 +103,7 @@ void ImageWindow::slotPresentation()
 {
     QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
 
-    foreach (const ImageInfo& info, d->imageInfoModel->imageInfos())
+    foreach (const ItemInfo& info, d->imageInfoModel->imageInfos())
     {
         mngr->addFile(info.fileUrl(), info.comment());
         qApp->processEvents();
@@ -127,7 +127,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
         float cnt = (float)d->imageInfoModel->rowCount();
         int     i = 0;
 
-        foreach (const ImageInfo& info, d->imageInfoModel->imageInfos())
+        foreach (const ItemInfo& info, d->imageInfoModel->imageInfos())
         {
             SlidePictureInfo pictInfo;
             pictInfo.comment    = info.comment();

@@ -70,7 +70,7 @@ public:
     void setActive(const bool state);
     bool getActiveState() const;
 
-    ImageInfo   currentImageInfo()   const;
+    ItemInfo   currentItemInfo()   const;
     CamItemInfo currentCamItemInfo() const;
 
 protected:

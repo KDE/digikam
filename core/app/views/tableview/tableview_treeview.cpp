@@ -34,7 +34,7 @@
 
 #include "digikam_debug.h"
 #include "contextmenuhelper.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "imagemodel.h"
 #include "tableview_column_configuration_dialog.h"
 #include "tableview_columnfactory.h"
@@ -258,7 +258,7 @@ QModelIndex TableViewTreeView::mapIndexForDragDrop(const QModelIndex& index) con
 QPixmap TableViewTreeView::pixmapForDrag(const QList< QModelIndex >& indexes) const
 {
     const QModelIndex& firstIndex = indexes.at(0);
-    const ImageInfo info          = s->tableViewModel->imageInfo(firstIndex);
+    const ItemInfo info          = s->tableViewModel->imageInfo(firstIndex);
     const QString path            = info.filePath();
 
     QPixmap thumbnailPixmap;
@@ -330,7 +330,7 @@ void TableViewTreeView::wheelEvent(QWheelEvent* event)
     QTreeView::wheelEvent(event);
 }
 
-bool TableViewTreeView::hasHiddenGroupedImages(const ImageInfo& info) const
+bool TableViewTreeView::hasHiddenGroupedImages(const ItemInfo& info) const
 {
         return (info.hasGroupedImages()
             && (s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingHideGrouped

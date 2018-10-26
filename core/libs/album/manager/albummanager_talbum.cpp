@@ -586,7 +586,7 @@ bool AlbumManager::mergeTAlbum(TAlbum* album, TAlbum* destAlbum, bool dialog, QS
 
         if (!foundFace)
         {
-            ImageInfo info(imageId);
+            ItemInfo info(imageId);
             info.removeTag(oldId);
             info.setTag(mergeId);
             group.allowLift();
@@ -999,7 +999,7 @@ void AlbumManager::askUserForWriteChangedTAlbumToFiles(const QList<qlonglong>& i
         }
     }
 
-    ImageInfoList infos(imageIds);
+    ItemInfoList infos(imageIds);
     MetadataSynchronizer* const tool = new MetadataSynchronizer(infos, MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->start();
 }

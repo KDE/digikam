@@ -35,7 +35,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "collectionscanner.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "metaenginesettings.h"
 
 const QString originalImageFolder(QFINDTESTDATA("data/"));
@@ -89,7 +89,7 @@ void TimeStampUpdateTest::initTestCase()
 
     foreach(const QString& file, readOnlyImages)
     {
-        ids << ImageInfo::fromLocalFile(file).id();
+        ids << ItemInfo::fromLocalFile(file).id();
     }
 
     QVERIFY(!ids.contains(-1));

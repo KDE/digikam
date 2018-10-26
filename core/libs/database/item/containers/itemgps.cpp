@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-ItemGPS::ItemGPS(const ImageInfo& info)
+ItemGPS::ItemGPS(const ItemInfo& info)
     : GPSImageItem(info.fileUrl()),
       m_info(info)
 {
@@ -134,11 +134,11 @@ QString ItemGPS::saveChanges()
     return GPSImageItem::saveChanges();
 }
 
-QList<GPSImageItem*> ItemGPS::infosToItems(const ImageInfoList& infos)
+QList<GPSImageItem*> ItemGPS::infosToItems(const ItemInfoList& infos)
 {
     QList<GPSImageItem*> items;
 
-    foreach(const ImageInfo& inf, infos)
+    foreach(const ItemInfo& inf, infos)
     {
         items << new ItemGPS(inf);
     }

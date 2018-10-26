@@ -46,7 +46,7 @@
 #include "digikam_debug.h"
 #include "jpegutils.h"
 #include "dimg.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "coredbaccess.h"
 #include "coredbtransaction.h"
 #include "coredb.h"
@@ -257,8 +257,8 @@ public:
         {
             imageid = query.value(0).toLongLong();
 
-            // Get the album id and status of the item with the ImageInfo.
-            ImageInfo info(imageid);
+            // Get the album id and status of the item with the ItemInfo.
+            ItemInfo info(imageid);
             if (!info.isNull() && info.isVisible())
             {
                 blob.read(query.value(1).toByteArray(), &targetSig);
@@ -318,7 +318,7 @@ bool HaarIface::indexImage(const QString& filename)
 
 bool HaarIface::indexImage(const QString& filename, const QImage& image)
 {
-    ImageInfo info = ImageInfo::fromLocalFile(filename);
+    ItemInfo info = ItemInfo::fromLocalFile(filename);
 
     if (info.isNull())
     {
@@ -330,7 +330,7 @@ bool HaarIface::indexImage(const QString& filename, const QImage& image)
 
 bool HaarIface::indexImage(const QString& filename, const DImg& image)
 {
-    ImageInfo info = ImageInfo::fromLocalFile(filename);
+    ItemInfo info = ItemInfo::fromLocalFile(filename);
 
     if (info.isNull())
     {
@@ -383,7 +383,7 @@ bool HaarIface::indexImage(qlonglong imageid)
         DatabaseBlob blob;
         QByteArray array = blob.write(&sig);
 
-        ImageInfo info(imageid);
+        ItemInfo info(imageid);
 
         if (!info.isNull() && info.isVisible()) {
 
@@ -725,8 +725,8 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
         {
             imageid = query.value(0).toLongLong();
 
-            // Get the album id, album root id and status of the item with the ImageInfo.
-            ImageInfo info(imageid);
+            // Get the album id, album root id and status of the item with the ItemInfo.
+            ItemInfo info(imageid);
             if (!info.isNull() && info.isVisible())
             {
                 if (filterByAlbumRoots)

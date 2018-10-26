@@ -30,7 +30,7 @@
 // Local includes
 
 #include "album.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "digikam_debug.h"
 
 namespace Digikam
@@ -56,7 +56,7 @@ public:
     PAlbum*          destAlbum;
 
     QMap<QUrl, QUrl> changeDestMap;
-    QList<ImageInfo> imageInfoList;
+    QList<ItemInfo> imageInfoList;
     QList<QUrl>      sourceUrlList;
 
     QUrl             destUrl;
@@ -67,14 +67,14 @@ public:
 };
 
 IOJobData::IOJobData(int operation,
-                     const QList<ImageInfo>& infos,
+                     const QList<ItemInfo>& infos,
                      PAlbum* const dest)
     : d(new Private)
 {
     d->operation = operation;
     d->destAlbum = dest;
 
-    setImageInfos(infos);
+    setItemInfos(infos);
 
     if (d->destAlbum)
     {
@@ -128,7 +128,7 @@ IOJobData::IOJobData(int operation,
 }
 
 IOJobData::IOJobData(int operation,
-                     const ImageInfo& info,
+                     const ItemInfo& info,
                      const QString& newName,
                      bool overwrite)
     : d(new Private)
@@ -136,7 +136,7 @@ IOJobData::IOJobData(int operation,
     d->operation = operation;
     d->overwrite = overwrite;
 
-    setImageInfos(QList<ImageInfo>() << info);
+    setItemInfos(QList<ItemInfo>() << info);
 
     d->destUrl = info.fileUrl().adjusted(QUrl::RemoveFilename);
     d->destUrl.setPath(d->destUrl.path() + newName);
@@ -147,13 +147,13 @@ IOJobData::~IOJobData()
     delete d;
 }
 
-void IOJobData::setImageInfos(const QList<ImageInfo>& infos)
+void IOJobData::setItemInfos(const QList<ItemInfo>& infos)
 {
     d->imageInfoList = infos;
 
     d->sourceUrlList.clear();
 
-    foreach(const ImageInfo& info, d->imageInfoList)
+    foreach(const ItemInfo& info, d->imageInfoList)
     {
         d->sourceUrlList << info.fileUrl();
     }
@@ -224,9 +224,9 @@ QString IOJobData::getProgressId() const
     return d->progressId;
 }
 
-ImageInfo IOJobData::findImageInfo(const QUrl& url) const
+ItemInfo IOJobData::findItemInfo(const QUrl& url) const
 {
-    foreach(const ImageInfo& info, d->imageInfoList)
+    foreach(const ItemInfo& info, d->imageInfoList)
     {
         if (info.fileUrl() == url)
         {
@@ -234,7 +234,7 @@ ImageInfo IOJobData::findImageInfo(const QUrl& url) const
         }
     }
 
-    return ImageInfo();
+    return ItemInfo();
 }
 
 QList<QUrl> IOJobData::sourceUrls() const
@@ -242,7 +242,7 @@ QList<QUrl> IOJobData::sourceUrls() const
     return d->sourceUrlList;
 }
 
-QList<ImageInfo> IOJobData::imageInfos() const
+QList<ItemInfo> IOJobData::imageInfos() const
 {
     return d->imageInfoList;
 }

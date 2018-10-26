@@ -109,7 +109,7 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
         painter->fillRect(option.rect, option.palette.highlight());
     }
 
-    const ImageInfo info = s->tableViewModel->infoFromItem(item);
+    const ItemInfo info = s->tableViewModel->infoFromItem(item);
 
     if (!info.isNull())
     {

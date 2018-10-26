@@ -38,7 +38,7 @@
 
 #include "digikam_debug.h"
 #include "applicationsettings.h"
-#include "imageinfotasksplitter.h"
+#include "iteminfotasksplitter.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
 #include "metaenginesettings.h"
@@ -114,144 +114,144 @@ bool FileActionMngr::isActive()
 
 void FileActionMngr::assignTags(const QList<qlonglong>& ids, const QList<int>& tagIDs)
 {
-    assignTags(ImageInfoList(ids), tagIDs);
+    assignTags(ItemInfoList(ids), tagIDs);
 }
 
-void FileActionMngr::assignTag(const ImageInfo& info, int tagID)
+void FileActionMngr::assignTag(const ItemInfo& info, int tagID)
 {
-    assignTags(QList<ImageInfo>() << info, QList<int>() << tagID);
+    assignTags(QList<ItemInfo>() << info, QList<int>() << tagID);
 }
 
-void FileActionMngr::assignTag(const QList<ImageInfo>& infos, int tagID)
+void FileActionMngr::assignTag(const QList<ItemInfo>& infos, int tagID)
 {
     assignTags(infos, QList<int>() << tagID);
 }
 
-void FileActionMngr::assignTags(const ImageInfo& info, const QList<int>& tagIDs)
+void FileActionMngr::assignTags(const ItemInfo& info, const QList<int>& tagIDs)
 {
-    assignTags(QList<ImageInfo>() << info, tagIDs);
+    assignTags(QList<ItemInfo>() << info, tagIDs);
 }
 
-void FileActionMngr::assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
+void FileActionMngr::assignTags(const QList<ItemInfo>& infos, const QList<int>& tagIDs)
 {
-    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    FileActionItemInfoList taskList = FileActionItemInfoList::create(infos);
     taskList.schedulingForDB(i18n("Assigning image tags"), d->dbProgressCreator());
     d->assignTags(taskList, tagIDs);
 }
 
-void FileActionMngr::removeTag(const ImageInfo& info, int tagID)
+void FileActionMngr::removeTag(const ItemInfo& info, int tagID)
 {
-    removeTags(QList<ImageInfo>() << info, QList<int>() << tagID);
+    removeTags(QList<ItemInfo>() << info, QList<int>() << tagID);
 }
 
-void FileActionMngr::removeTag(const QList<ImageInfo>& infos, int tagID)
+void FileActionMngr::removeTag(const QList<ItemInfo>& infos, int tagID)
 {
     removeTags(infos, QList<int>() << tagID);
 }
 
-void FileActionMngr::removeTags(const ImageInfo& info, const QList<int>& tagIDs)
+void FileActionMngr::removeTags(const ItemInfo& info, const QList<int>& tagIDs)
 {
-    removeTags(QList<ImageInfo>() << info, tagIDs);
+    removeTags(QList<ItemInfo>() << info, tagIDs);
 }
 
-void FileActionMngr::removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
+void FileActionMngr::removeTags(const QList<ItemInfo>& infos, const QList<int>& tagIDs)
 {
-    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    FileActionItemInfoList taskList = FileActionItemInfoList::create(infos);
     taskList.schedulingForDB(i18n("Removing image tags"), d->dbProgressCreator());
     d->removeTags(taskList, tagIDs);
 }
 
-void FileActionMngr::assignPickLabel(const ImageInfo& info, int pickId)
+void FileActionMngr::assignPickLabel(const ItemInfo& info, int pickId)
 {
-    assignPickLabel(QList<ImageInfo>() << info, pickId);
+    assignPickLabel(QList<ItemInfo>() << info, pickId);
 }
 
-void FileActionMngr::assignColorLabel(const ImageInfo& info, int colorId)
+void FileActionMngr::assignColorLabel(const ItemInfo& info, int colorId)
 {
-    assignColorLabel(QList<ImageInfo>() << info, colorId);
+    assignColorLabel(QList<ItemInfo>() << info, colorId);
 }
 
-void FileActionMngr::assignPickLabel(const QList<ImageInfo>& infos, int pickId)
+void FileActionMngr::assignPickLabel(const QList<ItemInfo>& infos, int pickId)
 {
-    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    FileActionItemInfoList taskList = FileActionItemInfoList::create(infos);
     taskList.schedulingForDB(i18n("Assigning image pick label"), d->dbProgressCreator());
     d->assignPickLabel(taskList, pickId);
 }
 
-void FileActionMngr::assignColorLabel(const QList<ImageInfo>& infos, int colorId)
+void FileActionMngr::assignColorLabel(const QList<ItemInfo>& infos, int colorId)
 {
-    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    FileActionItemInfoList taskList = FileActionItemInfoList::create(infos);
     taskList.schedulingForDB(i18n("Assigning image color label"), d->dbProgressCreator());
     d->assignColorLabel(taskList, colorId);
 }
 
-void FileActionMngr::assignRating(const ImageInfo& info, int rating)
+void FileActionMngr::assignRating(const ItemInfo& info, int rating)
 {
-    assignRating(QList<ImageInfo>() << info, rating);
+    assignRating(QList<ItemInfo>() << info, rating);
 }
 
-void FileActionMngr::assignRating(const QList<ImageInfo>& infos, int rating)
+void FileActionMngr::assignRating(const QList<ItemInfo>& infos, int rating)
 {
-    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    FileActionItemInfoList taskList = FileActionItemInfoList::create(infos);
     taskList.schedulingForDB(i18n("Assigning image ratings"), d->dbProgressCreator());
     d->assignRating(taskList, rating);
 }
 
-void FileActionMngr::addToGroup(const ImageInfo& pick, const QList<ImageInfo>& infos)
+void FileActionMngr::addToGroup(const ItemInfo& pick, const QList<ItemInfo>& infos)
 {
-    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    FileActionItemInfoList taskList = FileActionItemInfoList::create(infos);
     taskList.schedulingForDB(i18n("Editing group"), d->dbProgressCreator());
     d->editGroup(AddToGroup, pick, taskList);
 }
 
-void FileActionMngr::removeFromGroup(const ImageInfo& info)
+void FileActionMngr::removeFromGroup(const ItemInfo& info)
 {
-    removeFromGroup(QList<ImageInfo>() << info);
+    removeFromGroup(QList<ItemInfo>() << info);
 }
 
-void FileActionMngr::removeFromGroup(const QList<ImageInfo>& infos)
+void FileActionMngr::removeFromGroup(const QList<ItemInfo>& infos)
 {
-    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    FileActionItemInfoList taskList = FileActionItemInfoList::create(infos);
     taskList.schedulingForDB(i18n("Editing group"), d->dbProgressCreator());
-    d->editGroup(RemoveFromGroup, ImageInfo(), taskList);
+    d->editGroup(RemoveFromGroup, ItemInfo(), taskList);
 }
 
-void FileActionMngr::ungroup(const ImageInfo& info)
+void FileActionMngr::ungroup(const ItemInfo& info)
 {
-    ungroup(QList<ImageInfo>() << info);
+    ungroup(QList<ItemInfo>() << info);
 }
 
-void FileActionMngr::ungroup(const QList<ImageInfo>& infos)
+void FileActionMngr::ungroup(const QList<ItemInfo>& infos)
 {
-    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    FileActionItemInfoList taskList = FileActionItemInfoList::create(infos);
     taskList.schedulingForDB(i18n("Editing group"), d->dbProgressCreator());
-    d->editGroup(Ungroup, ImageInfo(), taskList);
+    d->editGroup(Ungroup, ItemInfo(), taskList);
 }
 
-void FileActionMngr::setExifOrientation(const QList<ImageInfo>& infos, int orientation)
+void FileActionMngr::setExifOrientation(const QList<ItemInfo>& infos, int orientation)
 {
-    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    FileActionItemInfoList taskList = FileActionItemInfoList::create(infos);
     taskList.schedulingForDB(i18n("Updating orientation in database"), d->dbProgressCreator());
     d->setExifOrientation(taskList, orientation);
 }
 
-//void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const MetadataHub& hub)
+//void FileActionMngr::applyMetadata(const QList<ItemInfo>& infos, const MetadataHub& hub)
 //{
-//    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+//    FileActionItemInfoList taskList = FileActionItemInfoList::create(infos);
 //    taskList.schedulingForDB(i18n("Applying metadata"), d->dbProgressCreator());
 //    // create hub parent-less, we will need to clone() it in a thread,
 //    // and that does not work with parent in a different thread
 ////    d->applyMetadata(taskList, new MetadataHubOnTheRoad(hub));
 //}
 
-void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const DisjointMetadata &hub)
+void FileActionMngr::applyMetadata(const QList<ItemInfo>& infos, const DisjointMetadata &hub)
 {
-    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    FileActionItemInfoList taskList = FileActionItemInfoList::create(infos);
     taskList.schedulingForDB(i18n("Applying metadata"), d->dbProgressCreator());
     d->applyMetadata(taskList, new DisjointMetadata(hub));
 }
 
-void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, DisjointMetadata* hub)
+void FileActionMngr::applyMetadata(const QList<ItemInfo>& infos, DisjointMetadata* hub)
 {
 //    if (hub->parent())
 //    {
@@ -260,30 +260,30 @@ void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, DisjointMetada
 //        return;
 //    }
 
-    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    FileActionItemInfoList taskList = FileActionItemInfoList::create(infos);
     taskList.schedulingForDB(i18n("Applying metadata"), d->dbProgressCreator());
     d->applyMetadata(taskList, hub);
 }
 
-void FileActionMngr::transform(const QList<ImageInfo>& infos, MetaEngineRotation::TransformationAction action)
+void FileActionMngr::transform(const QList<ItemInfo>& infos, MetaEngineRotation::TransformationAction action)
 {
-    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    FileActionItemInfoList taskList = FileActionItemInfoList::create(infos);
     taskList.schedulingForWrite(i18n("Rotating images"), d->fileProgressCreator());
 
-    for (ImageInfoTaskSplitter splitter(taskList); splitter.hasNext();)
+    for (ItemInfoTaskSplitter splitter(taskList); splitter.hasNext();)
     {
         d->transform(splitter.next(), action);
     }
 }
 
-void FileActionMngr::copyAttributes(const ImageInfo& source, const QString& derivedPath)
+void FileActionMngr::copyAttributes(const ItemInfo& source, const QString& derivedPath)
 {
     copyAttributes(source, QStringList() << derivedPath);
 }
 
-void FileActionMngr::copyAttributes(const ImageInfo& source, const QStringList& derivedPaths)
+void FileActionMngr::copyAttributes(const ItemInfo& source, const QStringList& derivedPaths)
 {
-    FileActionImageInfoList taskList = FileActionImageInfoList::create(QList<ImageInfo>() << source);
+    FileActionItemInfoList taskList = FileActionItemInfoList::create(QList<ItemInfo>() << source);
     taskList.schedulingForDB(i18n("Copying attributes"), d->dbProgressCreator());
     d->copyAttributes(taskList, derivedPaths);
 }

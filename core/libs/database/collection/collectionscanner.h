@@ -47,7 +47,7 @@ namespace Digikam
 class AlbumCopyMoveHint;
 class CollectionLocation;
 class CollectionScannerObserver;
-class ImageInfo;
+class ItemInfo;
 class ItemCopyMoveHint;
 class ItemChangeHint;
 class ItemMetadataAdjustmentHint;
@@ -146,9 +146,9 @@ public:
     qlonglong scanFile(const QString& albumRoot, const QString& album, const QString& fileName, FileScanMode mode = ModifiedScan);
 
     /**
-     * The given file represented by the ImageInfo will be scanned according to mode
+     * The given file represented by the ItemInfo will be scanned according to mode
      */
-    void scanFile(const ImageInfo& info, FileScanMode mode = ModifiedScan);
+    void scanFile(const ItemInfo& info, FileScanMode mode = ModifiedScan);
 
     /**
      * Hints give the scanner additional info about things that happened in the past
@@ -191,7 +191,7 @@ public:
      * When a file is derived from another file, typically through editing,
      * copy all relevant attributes from source file to the new file.
      */
-    static void copyFileProperties(const ImageInfo& source, const ImageInfo& dest);
+    static void copyFileProperties(const ItemInfo& source, const ItemInfo& dest);
 
     /**
      * Returns if the initial scan of the database has been done.

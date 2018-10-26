@@ -30,7 +30,7 @@
 #include "coredbconstants.h"
 #include "coredboperationgroup.h"
 #include "facetags.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "itemtagpair.h"
 #include "tagproperties.h"
 #include "tagscache.h"
@@ -425,19 +425,19 @@ FaceTagsIface FaceTagsEditor::changeRegion(const FaceTagsIface& face, const TagR
 
 void FaceTagsEditor::addNormalTag(qlonglong imageId, int tagId)
 {
-    ImageInfo(imageId).setTag(tagId);
+    ItemInfo(imageId).setTag(tagId);
 }
 
 void FaceTagsEditor::removeNormalTag(qlonglong imageId, int tagId)
 {
-    ImageInfo(imageId).removeTag(tagId);
+    ItemInfo(imageId).removeTag(tagId);
 }
 
 void FaceTagsEditor::removeNormalTags(qlonglong imageId, QList<int> tagIds)
 {
     CoreDbOperationGroup group;
     group.setMaximumTime(200);
-    ImageInfo info(imageId);
+    ItemInfo info(imageId);
 
     foreach(int tagId, tagIds)
     {

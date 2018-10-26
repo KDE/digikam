@@ -94,7 +94,7 @@ void ImageCoordinatesOverlay::updatePosition()
 
 bool ImageCoordinatesOverlay::checkIndex(const QModelIndex& index) const
 {
-    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    ItemInfo info = ImageModel::retrieveItemInfo(index);
     QRect rect     = static_cast<ImageDelegate*>(delegate())->coordinatesIndicatorRect();
 
     if (!rect.isNull() && info.hasCoordinates())

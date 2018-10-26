@@ -379,19 +379,19 @@ bool ItemQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, 
     }
     else if (name == QLatin1String("rating"))
     {
-        fieldQuery.addIntField(QLatin1String("ImageInformation.rating"));
+        fieldQuery.addIntField(QLatin1String("ItemInformation.rating"));
     }
     else if (name == QLatin1String("creationdate"))
     {
-        fieldQuery.addDateField(QLatin1String("ImageInformation.creationDate"));
+        fieldQuery.addDateField(QLatin1String("ItemInformation.creationDate"));
     }
     else if (name == QLatin1String("digitizationdate"))
     {
-        fieldQuery.addDateField(QLatin1String("ImageInformation.digitizationDate"));
+        fieldQuery.addDateField(QLatin1String("ItemInformation.digitizationDate"));
     }
     else if (name == QLatin1String("orientation"))
     {
-        fieldQuery.addChoiceIntField(QLatin1String("ImageInformation.orientation"));
+        fieldQuery.addChoiceIntField(QLatin1String("ItemInformation.orientation"));
     }
     else if (name == QLatin1String("pageorientation"))
     {
@@ -402,43 +402,43 @@ bool ItemQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, 
             // "1" is landscape, "2" is portrait, "3" is landscape regardless of Exif, "4" is portrait regardless of Exif
             if (pageOrientation == 1)
             {
-                sql += QString::fromUtf8(" ( (ImageInformation.orientation <= ? AND ImageInformation.width >= ImageInformation.height) "
-                       "  OR (ImageInformation.orientation >= ? AND ImageInformation.width <= ImageInformation.height) ) ");
+                sql += QString::fromUtf8(" ( (ItemInformation.orientation <= ? AND ItemInformation.width >= ItemInformation.height) "
+                       "  OR (ItemInformation.orientation >= ? AND ItemInformation.width <= ItemInformation.height) ) ");
                 *boundValues << MetaEngine::ORIENTATION_VFLIP << MetaEngine::ORIENTATION_ROT_90_HFLIP;
             }
             else if (pageOrientation == 2)
             {
-                sql += QString::fromUtf8(" ( (ImageInformation.orientation <= ? AND ImageInformation.width < ImageInformation.height) "
-                       "  OR (ImageInformation.orientation >= ? AND ImageInformation.width > ImageInformation.height) ) ");
+                sql += QString::fromUtf8(" ( (ItemInformation.orientation <= ? AND ItemInformation.width < ItemInformation.height) "
+                       "  OR (ItemInformation.orientation >= ? AND ItemInformation.width > ItemInformation.height) ) ");
                 *boundValues << MetaEngine::ORIENTATION_VFLIP << MetaEngine::ORIENTATION_ROT_90_HFLIP;
             }
             else if (pageOrientation == 3 || pageOrientation == 4)
             {
                 // ignoring Exif orientation
-                sql += QString::fromUtf8(" ( ImageInformation.width ");
+                sql += QString::fromUtf8(" ( ItemInformation.width ");
                 ItemQueryBuilder::addSqlRelation(sql, pageOrientation == 3 ? SearchXml::GreaterThanOrEqual : SearchXml::LessThanOrEqual);
-                sql += QString::fromUtf8(" ImageInformation.height) ");
+                sql += QString::fromUtf8(" ItemInformation.height) ");
             }
         }
     }
     else if (name == QLatin1String("width"))
     {
-        sql += QString::fromUtf8(" ( (ImageInformation.orientation <= ? AND ");
+        sql += QString::fromUtf8(" ( (ItemInformation.orientation <= ? AND ");
         *boundValues << MetaEngine::ORIENTATION_VFLIP;
-        fieldQuery.addIntField(QLatin1String("ImageInformation.width"));
-        sql += QString::fromUtf8(") OR (ImageInformation.orientation >= ? AND ");
+        fieldQuery.addIntField(QLatin1String("ItemInformation.width"));
+        sql += QString::fromUtf8(") OR (ItemInformation.orientation >= ? AND ");
         *boundValues << MetaEngine::ORIENTATION_ROT_90_HFLIP;
-        fieldQuery.addIntField(QLatin1String("ImageInformation.height"));
+        fieldQuery.addIntField(QLatin1String("ItemInformation.height"));
         sql += QString::fromUtf8(" ) ) ");
     }
     else if (name == QLatin1String("height"))
     {
-        sql += QString::fromUtf8(" ( (ImageInformation.orientation <= ? AND ");
+        sql += QString::fromUtf8(" ( (ItemInformation.orientation <= ? AND ");
         *boundValues << MetaEngine::ORIENTATION_VFLIP;
-        fieldQuery.addIntField(QLatin1String("ImageInformation.height"));
-        sql += QString::fromUtf8(") OR (ImageInformation.orientation >= ? AND ");
+        fieldQuery.addIntField(QLatin1String("ItemInformation.height"));
+        sql += QString::fromUtf8(") OR (ItemInformation.orientation >= ? AND ");
         *boundValues << MetaEngine::ORIENTATION_ROT_90_HFLIP;
-        fieldQuery.addIntField(QLatin1String("ImageInformation.width"));
+        fieldQuery.addIntField(QLatin1String("ItemInformation.width"));
         sql += QString::fromUtf8(" ) ) ");
     }
     else if (name == QLatin1String("aspectratioimg"))
@@ -451,36 +451,36 @@ bool ItemQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, 
             QStringList ratioNum = readerString.split(QLatin1Char(':'), QString::SkipEmptyParts);
             int num              = ratioNum.at(0).toInt();
             int denominator = ratioNum.at(1).toInt();
-            query                = QString::fromUtf8("abs((ImageInformation.width/CAST(ImageInformation.height as REAL)) - ?)  < 0.1");
+            query                = QString::fromUtf8("abs((ItemInformation.width/CAST(ItemInformation.height as REAL)) - ?)  < 0.1");
             sql                 += QString::fromUtf8(" (") + query + QString::fromUtf8(") ");
             *boundValues << (double)num/denominator;
         }
         else if(readerString.contains(QRegExp(QLatin1String("^\\d+(.\\d+)?$"))))
         {
-            query = QString::fromUtf8("abs((ImageInformation.width/CAST(ImageInformation.height as REAL)) - ?)  < 0.1");
+            query = QString::fromUtf8("abs((ItemInformation.width/CAST(ItemInformation.height as REAL)) - ?)  < 0.1");
             sql  += QString::fromUtf8(" (") + query + QString::fromUtf8(") ");
             *boundValues << readerString.toDouble();
         }
     }
     else if (name == QLatin1String("pixelsize"))
     {
-        fieldQuery.addIntField(QLatin1String("(ImageInformation.width * ImageInformation.height)"));
+        fieldQuery.addIntField(QLatin1String("(ItemInformation.width * ItemInformation.height)"));
     }
     else if (name == QLatin1String("pixels"))
     {
-        fieldQuery.addIntField(QLatin1String("(ImageInformation.width * ImageInformation.height)"));
+        fieldQuery.addIntField(QLatin1String("(ItemInformation.width * ItemInformation.height)"));
     }
     else if (name == QLatin1String("format"))
     {
-        fieldQuery.addChoiceStringField(QLatin1String("ImageInformation.format"));
+        fieldQuery.addChoiceStringField(QLatin1String("ItemInformation.format"));
     }
     else if (name == QLatin1String("colordepth"))
     {
-        fieldQuery.addIntField(QLatin1String("ImageInformation.colorDepth"));
+        fieldQuery.addIntField(QLatin1String("ItemInformation.colorDepth"));
     }
     else if (name == QLatin1String("colormodel"))
     {
-        fieldQuery.addIntField(QLatin1String("ImageInformation.colorModel"));
+        fieldQuery.addIntField(QLatin1String("ItemInformation.colorModel"));
     }
     else if (name == QLatin1String("videoaspectratio"))
     {

@@ -76,9 +76,9 @@ enum ImagesField
 
 typedef uint8_t ImagesMinSizeType;
 
-enum ImageInformationField
+enum ItemInformationField
 {
-    ImageInformationNone  = 0,
+    ItemInformationNone  = 0,
     Rating                = 1 << 0,
     CreationDate          = 1 << 1,
     DigitizationDate      = 1 << 2,
@@ -90,7 +90,7 @@ enum ImageInformationField
     ColorModel            = 1 << 8,
     ColorLabel            = 1 << 9,
     PickLabel             = 1 << 10,
-    ImageInformationAll   = Rating           |
+    ItemInformationAll   = Rating           |
                             CreationDate     |
                             DigitizationDate |
                             Orientation      |
@@ -101,11 +101,11 @@ enum ImageInformationField
                             ColorModel       |
                             ColorLabel       |
                             PickLabel,
-    ImageInformationFirst = Rating,
-    ImageInformationLast  = PickLabel
+    ItemInformationFirst = Rating,
+    ItemInformationLast  = PickLabel
 };
 
-typedef uint16_t ImageInformationMinSizeType;
+typedef uint16_t ItemInformationMinSizeType;
 
 enum ImageMetadataField
 {
@@ -235,7 +235,7 @@ enum VideoMetadataField
 typedef uint8_t VideoMetadataMinSizeType;
 
 Q_DECLARE_FLAGS(Images,           ImagesField)
-Q_DECLARE_FLAGS(ImageInformation, ImageInformationField)
+Q_DECLARE_FLAGS(ItemInformation, ItemInformationField)
 Q_DECLARE_FLAGS(ImageMetadata,    ImageMetadataField)
 Q_DECLARE_FLAGS(ItemComments,    ItemCommentsField)
 Q_DECLARE_FLAGS(ItemPositions,   ItemPositionsField)
@@ -258,7 +258,7 @@ template<typename FieldName> class FieldMetaInfo
     };
 
 DECLARE_FIELDMETAINFO(Images)
-DECLARE_FIELDMETAINFO(ImageInformation)
+DECLARE_FIELDMETAINFO(ItemInformation)
 DECLARE_FIELDMETAINFO(ImageMetadata)
 DECLARE_FIELDMETAINFO(ItemComments)
 DECLARE_FIELDMETAINFO(ItemPositions)
@@ -351,7 +351,7 @@ private:
     typedef DatabaseFieldsEnumIteratorSetOnly<Flag> Flag##IteratorSetOnly;
 
 DATABASEFIELDS_ENUM_ITERATOR(Images)
-DATABASEFIELDS_ENUM_ITERATOR(ImageInformation)
+DATABASEFIELDS_ENUM_ITERATOR(ItemInformation)
 DATABASEFIELDS_ENUM_ITERATOR(ImageMetadata)
 DATABASEFIELDS_ENUM_ITERATOR(VideoMetadata)
 DATABASEFIELDS_ENUM_ITERATOR(ItemPositions)
@@ -396,7 +396,7 @@ public:
     void initialize()
     {
         images           = ImagesNone;
-        imageInformation = ImageInformationNone;
+        imageInformation = ItemInformationNone;
         imageMetadata    = ImageMetadataNone;
         imageComments    = ItemCommentsNone;
         imagePositions   = ItemPositionsNone;
@@ -408,7 +408,7 @@ public:
 public:
 
     DATABASEFIELDS_SET_DECLARE_METHODS(Images,           images)
-    DATABASEFIELDS_SET_DECLARE_METHODS(ImageInformation, imageInformation)
+    DATABASEFIELDS_SET_DECLARE_METHODS(ItemInformation, imageInformation)
     DATABASEFIELDS_SET_DECLARE_METHODS(VideoMetadata,    videoMetadata)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageMetadata,    imageMetadata)
     DATABASEFIELDS_SET_DECLARE_METHODS(ItemComments,    imageComments)
@@ -482,7 +482,7 @@ public:
 private:
 
     Images           images;
-    ImageInformation imageInformation;
+    ItemInformation imageInformation;
     ImageMetadata    imageMetadata;
     VideoMetadata    videoMetadata;
     ItemComments    imageComments;
@@ -537,7 +537,7 @@ public:
         return (int)f | (0 << 26);
     }
 
-    static inline unsigned int uniqueKey(ImageInformation f)
+    static inline unsigned int uniqueKey(ItemInformation f)
     {
         return (int)f | (1 << 26);
     }
@@ -574,7 +574,7 @@ public:
 
     // override relevant methods from QHash
     DATABASEFIELDS_HASH_DECLARE_METHODS(Images,           uniqueKey);
-    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageInformation, uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(ItemInformation, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageMetadata,    uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(VideoMetadata,    uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ItemComments,    uniqueKey);
@@ -589,7 +589,7 @@ public:
 
 // NOTE: must be outside the namespace!
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::Images)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageInformation)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ItemInformation)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageMetadata)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::VideoMetadata)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ItemComments)

@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class ImageInfo;
+class ItemInfo;
 
 /**
  * Every vertex has one associated object of this class
@@ -45,7 +45,7 @@ class ImageInfo;
  * All entries in a vertex refer to _identical_ images.
  * There can be multiple referred images in a history entry.
  * Each single HistoryImageId can resolve into none, one,
- * or multiple ImageInfos.
+ * or multiple ItemInfos.
  * So there is no mapping between the two fields here.
  *
  * If an image is created from multiple source images (panorama etc.),
@@ -55,25 +55,25 @@ class HistoryVertexProperties
 {
 public:
 
-    ImageInfo firstImageInfo() const;
+    ItemInfo firstItemInfo() const;
 
     bool markedAs(HistoryImageId::Type) const;
     bool alwaysMarkedAs(HistoryImageId::Type) const;
 
     bool operator==(const QString& uuid) const;
-    bool operator==(const ImageInfo& info) const;
+    bool operator==(const ItemInfo& info) const;
     bool operator==(qlonglong id) const;
     bool operator==(const HistoryImageId& info) const;
 
     HistoryVertexProperties& operator+=(const QString& uuid);
-    HistoryVertexProperties& operator+=(const ImageInfo& info);
+    HistoryVertexProperties& operator+=(const ItemInfo& info);
     HistoryVertexProperties& operator+=(const HistoryImageId& info);
 
 public:
 
     QString               uuid;
     QList<HistoryImageId> referredImages;
-    QList<ImageInfo>      infos;
+    QList<ItemInfo>      infos;
 };
 
 QDebug operator<<(QDebug dbg, const HistoryVertexProperties& props);
@@ -125,15 +125,15 @@ public:
     Vertex addVertex(const QList<HistoryImageId>& imageIds);
     Vertex addVertex(qlonglong id);
     Vertex addVertexScanned(qlonglong id);
-    Vertex addVertex(const ImageInfo& info);
+    Vertex addVertex(const ItemInfo& info);
 
     void addHistory(const DImageHistory& givenHistory, qlonglong extraCurrent = 0);
 
     int removeNextUnresolvedVertex(int begin);
 
-    inline QList<ImageInfo> toInfoList(const QList<Vertex>& vertices) const
+    inline QList<ItemInfo> toInfoList(const QList<Vertex>& vertices) const
     {
-        QList<ImageInfo> infos;
+        QList<ItemInfo> infos;
 
         foreach (const HistoryGraph::Vertex& v, vertices)
         {
@@ -147,7 +147,7 @@ public:
 
 protected:
 
-    void applyProperties(Vertex& v, const QList<ImageInfo>& infos, const QList<HistoryImageId>& ids);
+    void applyProperties(Vertex& v, const QList<ItemInfo>& infos, const QList<HistoryImageId>& ids);
 };
 
 } // namespace Digikam

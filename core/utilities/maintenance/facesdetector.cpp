@@ -50,8 +50,8 @@
 #include "albumpointer.h"
 #include "facepipeline.h"
 #include "facescansettings.h"
-#include "imageinfo.h"
-#include "imageinfojob.h"
+#include "iteminfo.h"
+#include "iteminfojob.h"
 
 namespace Digikam
 {
@@ -93,16 +93,16 @@ public:
 
     explicit Private() :
         benchmark(false),
-        useImageInfos(false)
+        useItemInfos(false)
     {
     }
 
     bool                 benchmark;
-    bool                 useImageInfos;
+    bool                 useItemInfos;
 
     AlbumPointerList<>   albumTodoList;
-    ImageInfoList        infoTodoList;
-    ImageInfoJob         albumListing;
+    ItemInfoList        infoTodoList;
+    ItemInfoJob         albumListing;
     FacePipeline         pipeline;
 };
 
@@ -203,8 +203,8 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
         d->pipeline.construct();
     }
 
-    connect(&d->albumListing, SIGNAL(signalItemsInfo(ImageInfoList)),
-            this, SLOT(slotItemsInfo(ImageInfoList)));
+    connect(&d->albumListing, SIGNAL(signalItemsInfo(ItemInfoList)),
+            this, SLOT(slotItemsInfo(ItemInfoList)));
 
     connect(&d->albumListing, SIGNAL(signalCompleted()),
             this, SLOT(slotContinueAlbumListing()));
@@ -215,8 +215,8 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
     connect(&d->pipeline, SIGNAL(processed(FacePipelinePackage)),
             this, SLOT(slotShowOneDetected(FacePipelinePackage)));
 
-    connect(&d->pipeline, SIGNAL(skipped(QList<ImageInfo>)),
-            this, SLOT(slotImagesSkipped(QList<ImageInfo>)));
+    connect(&d->pipeline, SIGNAL(skipped(QList<ItemInfo>)),
+            this, SLOT(slotImagesSkipped(QList<ItemInfo>)));
 
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
@@ -233,7 +233,7 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
     else
     {
         d->infoTodoList  = settings.infos;
-        d->useImageInfos = true;
+        d->useItemInfos = true;
     }
 }
 
@@ -248,7 +248,7 @@ void FacesDetector::slotStart()
 
     setThumbnail(QIcon::fromTheme(QLatin1String("edit-image-face-show")).pixmap(22));
 
-    if (d->useImageInfos)
+    if (d->useItemInfos)
     {
         int total = d->infoTodoList.count();
         qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << total;
@@ -333,7 +333,7 @@ void FacesDetector::slotStart()
 
 void FacesDetector::slotContinueAlbumListing()
 {
-    if (d->useImageInfos)
+    if (d->useItemInfos)
     {
         return slotDone();
     }
@@ -363,7 +363,7 @@ void FacesDetector::slotContinueAlbumListing()
     d->albumListing.allItemsFromAlbum(album);
 }
 
-void FacesDetector::slotItemsInfo(const ImageInfoList& items)
+void FacesDetector::slotItemsInfo(const ItemInfoList& items)
 {
     d->pipeline.process(items);
 }
@@ -387,7 +387,7 @@ void FacesDetector::slotCancel()
     MaintenanceTool::slotCancel();
 }
 
-void FacesDetector::slotImagesSkipped(const QList<ImageInfo>& infos)
+void FacesDetector::slotImagesSkipped(const QList<ItemInfo>& infos)
 {
     advance(infos.size());
 }

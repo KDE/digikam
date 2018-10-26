@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class ImageInfo;
+class ItemInfo;
 class CaptionsMap;
 class Template;
 
@@ -92,7 +92,7 @@ public:
 
     void reset();
 
-    void load(const ImageInfo& info);
+    void load(const ItemInfo& info);
 
     //** Status **//
     Status dateTimeStatus()   const;
@@ -231,10 +231,10 @@ public:
 
     /**
         Applies the set of metadata contained in this MetadataHub
-        to the given ImageInfo object.
+        to the given ItemInfo object.
         @return Returns true if the info object has been changed
      */
-    bool write(ImageInfo info, WriteMode writeMode = FullWrite);
+    bool write(ItemInfo info, WriteMode writeMode = FullWrite);
     /**
         With the currently applied changes, the given writeMode and settings,
         returns if write(DMetadata), write(QString) or write(DImg) will actually

@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "parseresults.h"
 #include "advancedrenamemanager.h"
 
@@ -55,13 +55,13 @@ public:
         init();
     };
 
-    // ImageInfo ctors
-    explicit ParseSettings(const ImageInfo& info)
+    // ItemInfo ctors
+    explicit ParseSettings(const ItemInfo& info)
     {
         init(info);
     };
 
-    ParseSettings(const QString& _parseString, const ImageInfo& info)
+    ParseSettings(const QString& _parseString, const ItemInfo& info)
         : parseString(_parseString)
     {
         init(info);
@@ -99,7 +99,7 @@ private:
         str2Modify.clear();
     }
 
-    void init(const ImageInfo& info)
+    void init(const ItemInfo& info)
     {
         init();
         fileUrl = info.fileUrl();

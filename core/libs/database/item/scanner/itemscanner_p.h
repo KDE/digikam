@@ -80,7 +80,7 @@ public:
 
     qlonglong                        copyImageAttributesId;
 
-    bool                             commitImageInformation;
+    bool                             commitItemInformation;
     bool                             commitImageMetadata;
     bool                             commitVideoMetadata;
     bool                             commitItemPosition;
@@ -91,7 +91,7 @@ public:
     bool                             hasColorTag;
     bool                             hasPickTag;
 
-    DatabaseFields::ImageInformation imageInformationFields;
+    DatabaseFields::ItemInformation imageInformationFields;
     QVariantList                     imageInformationInfos;
 
     QVariantList                     imageMetadataInfos;
@@ -117,13 +117,13 @@ class Q_DECL_HIDDEN LessThanByProximityToSubject
 {
 public:
 
-    explicit LessThanByProximityToSubject(const ImageInfo& subject);
+    explicit LessThanByProximityToSubject(const ItemInfo& subject);
 
-    bool operator()(const ImageInfo& a, const ImageInfo& b);
+    bool operator()(const ItemInfo& a, const ItemInfo& b);
 
 public:
 
-    ImageInfo subject;
+    ItemInfo subject;
 };
 
 // ---------------------------------------------------------------------------

@@ -108,7 +108,7 @@ bool ItemScanner::hasValidField(const QVariantList& list)
     return false;
 }
 
-void ItemScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subject)
+void ItemScanner::sortByProximity(QList<ItemInfo>& list, const ItemInfo& subject)
 {
     if (!list.isEmpty() && !subject.isNull())
     {
@@ -129,7 +129,7 @@ void ItemScanner::loadFromDisk()
 
     if (d->scanInfo.category == DatabaseItem::Image)
     {
-        d->hasImage = d->img.loadImageInfo(d->fileInfo.filePath(), false, false, false, false);
+        d->hasImage = d->img.loadItemInfo(d->fileInfo.filePath(), false, false, false, false);
     }
     else
     {

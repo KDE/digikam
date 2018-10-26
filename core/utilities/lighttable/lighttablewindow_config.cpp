@@ -44,8 +44,8 @@ void LightTableWindow::slotColorManagementOptionsChanged()
 
 void LightTableWindow::slotThemeChanged()
 {
-    d->previewView->checkForSelection(d->previewView->leftImageInfo());
-    d->previewView->checkForSelection(d->previewView->rightImageInfo());
+    d->previewView->checkForSelection(d->previewView->leftItemInfo());
+    d->previewView->checkForSelection(d->previewView->rightItemInfo());
 }
 
 void LightTableWindow::slotApplicationSettingsChanged()

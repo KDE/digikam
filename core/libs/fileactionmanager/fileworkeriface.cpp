@@ -33,7 +33,7 @@
 #include "metaenginesettings.h"
 #include "fileactionmngr_p.h"
 #include "itemattributeswatch.h"
-#include "imageinfotasksplitter.h"
+#include "iteminfotasksplitter.h"
 #include "scancontroller.h"
 #include "digikam_globals.h"
 #include "jpegutils.h"
@@ -43,11 +43,11 @@
 namespace Digikam
 {
 
-void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList infos, int orientation)
+void FileActionMngrFileWorker::writeOrientationToFiles(FileActionItemInfoList infos, int orientation)
 {
     QStringList failedItems;
 
-    foreach(const ImageInfo& info, infos)
+    foreach(const ItemInfo& info, infos)
     {
         if (state() == WorkerObject::Deactivating)
         {
@@ -81,13 +81,13 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList i
     infos.finishedWriting();
 }
 
-void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList infos)
+void FileActionMngrFileWorker::writeMetadataToFiles(FileActionItemInfoList infos)
 {
     d->startingToWrite(infos);
 
     ScanController::instance()->suspendCollectionScan();
 
-    foreach(const ImageInfo& info, infos)
+    foreach(const ItemInfo& info, infos)
     {
         MetadataHub hub;
 
@@ -118,13 +118,13 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
     infos.finishedWriting();
 }
 
-void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, int flags)
+void FileActionMngrFileWorker::writeMetadata(FileActionItemInfoList infos, int flags)
 {
     d->startingToWrite(infos);
 
     ScanController::instance()->suspendCollectionScan();
 
-    foreach(const ImageInfo& info, infos)
+    foreach(const ItemInfo& info, infos)
     {
         MetadataHub hub;
 
@@ -154,14 +154,14 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, int 
     infos.finishedWriting();
 }
 
-void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int action)
+void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int action)
 {
     d->startingToWrite(infos);
 
     QStringList failedItems;
     ScanController::instance()->suspendCollectionScan();
 
-    foreach(const ImageInfo& info, infos)
+    foreach(const ItemInfo& info, infos)
     {
         if (state() == WorkerObject::Deactivating)
         {
@@ -287,7 +287,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
         }
 
         // DB rotation
-        ImageInfo(info).setOrientation(finalOrientation);
+        ItemInfo(info).setOrientation(finalOrientation);
 
         if (!failedItems.contains(info.name()))
         {
@@ -308,7 +308,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
     ScanController::instance()->resumeCollectionScan();
 }
 
-void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int action)
+void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int action)
 {
     /**
      *  Get all faces from database and rotate them

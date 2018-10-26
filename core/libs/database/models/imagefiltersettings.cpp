@@ -40,7 +40,7 @@
 #include "digikam_debug.h"
 #include "coredbfields.h"
 #include "digikam_globals.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "tagscache.h"
 #include "versionmanagersettings.h"
 
@@ -301,7 +301,7 @@ bool containsNoneOfExcept(const ContainerA& list, const ContainerB& noneOfList, 
     return true;
 }
 
-bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) const
+bool ImageFilterSettings::matches(const ItemInfo& info, bool* const foundText) const
 {
     if (foundText)
     {
@@ -775,7 +775,7 @@ bool VersionImageFilterSettings::operator==(const VersionImageFilterSettings& ot
            m_exceptionLists   == other.m_exceptionLists;
 }
 
-bool VersionImageFilterSettings::matches(const ImageInfo& info) const
+bool VersionImageFilterSettings::matches(const ItemInfo& info) const
 {
     if (!isFiltering())
     {
@@ -820,7 +820,7 @@ bool VersionImageFilterSettings::matches(const ImageInfo& info) const
     return match;
 }
 
-bool VersionImageFilterSettings::isHiddenBySettings(const ImageInfo& info) const
+bool VersionImageFilterSettings::isHiddenBySettings(const ItemInfo& info) const
 {
     QList<int> tagIds = info.tagIds();
 
@@ -835,7 +835,7 @@ bool VersionImageFilterSettings::isHiddenBySettings(const ImageInfo& info) const
     return false;
 }
 
-bool VersionImageFilterSettings::isExemptedBySettings(const ImageInfo& info) const
+bool VersionImageFilterSettings::isExemptedBySettings(const ItemInfo& info) const
 {
     return info.tagIds().contains(m_exceptionTagFilter);
 }
@@ -898,7 +898,7 @@ bool GroupImageFilterSettings::operator==(const GroupImageFilterSettings& other)
             m_openGroups == other.m_openGroups);
 }
 
-bool GroupImageFilterSettings::matches(const ImageInfo& info) const
+bool GroupImageFilterSettings::matches(const ItemInfo& info) const
 {
     if (m_allOpen)
     {

@@ -32,7 +32,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "gpsimageitem.h"
 
 namespace Digikam
@@ -43,17 +43,17 @@ class DIGIKAM_DATABASE_EXPORT ItemGPS : public GPSImageItem
 
 public:
 
-    explicit ItemGPS(const ImageInfo& info);
+    explicit ItemGPS(const ItemInfo& info);
     virtual ~ItemGPS();
 
     QString saveChanges();
     bool loadImageData();
 
-    static QList<GPSImageItem*> infosToItems(const ImageInfoList& infos);
+    static QList<GPSImageItem*> infosToItems(const ItemInfoList& infos);
 
 private:
 
-    ImageInfo m_info;
+    ItemInfo m_info;
 };
 
 } // namespace Digikam

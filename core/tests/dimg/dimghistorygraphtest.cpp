@@ -42,7 +42,7 @@
 #include "collectionscanner.h"
 #include "editorcore.h"
 #include "dmetadata.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "itemhistorygraph.h"
 #include "itemhistorygraphdata.h"
 #include "itemhistorygraphmodel.h"
@@ -92,7 +92,7 @@ void DImgHistoryGraphTest::initTestCase()
 
     foreach(const QString& file, readOnlyImages)
     {
-        ids << ImageInfo::fromLocalFile(file).id();
+        ids << ItemInfo::fromLocalFile(file).id();
     }
 
     QVERIFY(!ids.contains(-1));
@@ -166,11 +166,11 @@ void DImgHistoryGraphTest::testEditing()
 
     CollectionScanner().completeScan();
 
-    ImageInfo orig  = ImageInfo::fromLocalFile(readOnlyImages.first());
-    ImageInfo one   = ImageInfo::fromLocalFile(collectionDir.filePath(QLatin1String("1.jpg"))),
-              two   = ImageInfo::fromLocalFile(collectionDir.filePath(QLatin1String("2.jpg"))),
-              three = ImageInfo::fromLocalFile(collectionDir.filePath(QLatin1String("3.jpg"))),
-              four  = ImageInfo::fromLocalFile(collectionDir.filePath(QLatin1String("4.jpg")));
+    ItemInfo orig  = ItemInfo::fromLocalFile(readOnlyImages.first());
+    ItemInfo one   = ItemInfo::fromLocalFile(collectionDir.filePath(QLatin1String("1.jpg"))),
+              two   = ItemInfo::fromLocalFile(collectionDir.filePath(QLatin1String("2.jpg"))),
+              three = ItemInfo::fromLocalFile(collectionDir.filePath(QLatin1String("3.jpg"))),
+              four  = ItemInfo::fromLocalFile(collectionDir.filePath(QLatin1String("4.jpg")));
 
     typedef QPair<qlonglong, qlonglong> IdPair;
     QList<IdPair> controlCloud;
@@ -241,7 +241,7 @@ void DImgHistoryGraphTest::testEditing()
 void DImgHistoryGraphTest::testHistory()
 {
     ItemHistoryGraph graph;
-    ImageInfo subject(ids.first());
+    ItemInfo subject(ids.first());
     graph.addHistory(history1(), subject);
     graph.reduceEdges();
 

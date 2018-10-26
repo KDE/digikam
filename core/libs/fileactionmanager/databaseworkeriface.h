@@ -32,7 +32,7 @@
 
 #include "fileactionmngr.h"
 #include "fileactionimageinfolist.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "workerobject.h"
 
 namespace Digikam
@@ -46,21 +46,21 @@ class DatabaseWorkerInterface : public WorkerObject
 
 public Q_SLOTS:
 
-    virtual void assignTags(FileActionImageInfoList, const QList<int>&)      {};
-    virtual void removeTags(FileActionImageInfoList, const QList<int>&)      {};
-    virtual void assignPickLabel(FileActionImageInfoList, int)               {};
-    virtual void assignColorLabel(FileActionImageInfoList, int)              {};
-    virtual void assignRating(FileActionImageInfoList, int)                  {};
-    virtual void editGroup(int, const ImageInfo&, FileActionImageInfoList)   {};
-    virtual void setExifOrientation(FileActionImageInfoList, int)            {};
-    virtual void applyMetadata(FileActionImageInfoList, DisjointMetadata*)   {};
-    virtual void copyAttributes(FileActionImageInfoList, const QStringList&) {};
+    virtual void assignTags(FileActionItemInfoList, const QList<int>&)      {};
+    virtual void removeTags(FileActionItemInfoList, const QList<int>&)      {};
+    virtual void assignPickLabel(FileActionItemInfoList, int)               {};
+    virtual void assignColorLabel(FileActionItemInfoList, int)              {};
+    virtual void assignRating(FileActionItemInfoList, int)                  {};
+    virtual void editGroup(int, const ItemInfo&, FileActionItemInfoList)   {};
+    virtual void setExifOrientation(FileActionItemInfoList, int)            {};
+    virtual void applyMetadata(FileActionItemInfoList, DisjointMetadata*)   {};
+    virtual void copyAttributes(FileActionItemInfoList, const QStringList&) {};
 
 Q_SIGNALS:
 
-    void writeMetadataToFiles(FileActionImageInfoList infos);
-    void writeOrientationToFiles(FileActionImageInfoList infos, int orientation);
-    void writeMetadata(FileActionImageInfoList infos, int flag);
+    void writeMetadataToFiles(FileActionItemInfoList infos);
+    void writeOrientationToFiles(FileActionItemInfoList infos, int orientation);
+    void writeMetadata(FileActionItemInfoList infos, int flag);
 };
 
 // ------------------------------------------------------------------------------------
@@ -76,19 +76,19 @@ public:
 
 public:
 
-    void assignTags(FileActionImageInfoList infos, const QList<int>& tagIDs);
-    void removeTags(FileActionImageInfoList infos, const QList<int>& tagIDs);
-    void assignPickLabel(FileActionImageInfoList infos, int pickId);
-    void assignColorLabel(FileActionImageInfoList infos, int colorId);
-    void assignRating(FileActionImageInfoList infos, int rating);
-    void editGroup(int groupAction, const ImageInfo& pick, FileActionImageInfoList infos);
-    void setExifOrientation(FileActionImageInfoList infos, int orientation);
-    void applyMetadata(FileActionImageInfoList infos, DisjointMetadata* hub);
-    void copyAttributes(FileActionImageInfoList infos, const QStringList& derivedPaths);
+    void assignTags(FileActionItemInfoList infos, const QList<int>& tagIDs);
+    void removeTags(FileActionItemInfoList infos, const QList<int>& tagIDs);
+    void assignPickLabel(FileActionItemInfoList infos, int pickId);
+    void assignColorLabel(FileActionItemInfoList infos, int colorId);
+    void assignRating(FileActionItemInfoList infos, int rating);
+    void editGroup(int groupAction, const ItemInfo& pick, FileActionItemInfoList infos);
+    void setExifOrientation(FileActionItemInfoList infos, int orientation);
+    void applyMetadata(FileActionItemInfoList infos, DisjointMetadata* hub);
+    void copyAttributes(FileActionItemInfoList infos, const QStringList& derivedPaths);
 
 private:
 
-    void changeTags(FileActionImageInfoList infos, const QList<int>& tagIDs, bool addOrRemove);
+    void changeTags(FileActionItemInfoList infos, const QList<int>& tagIDs, bool addOrRemove);
 
 private:
 

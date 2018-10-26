@@ -37,7 +37,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "dtrash.h"
 #include "coredb.h"
 #include "coredbaccess.h"
@@ -417,7 +417,7 @@ void DeleteDTrashItemsJob::run()
         QFile::remove(item.jsonFilePath);
 
         imagesToRemove   << item.imageId;
-        albumsFromImages << ImageInfo(item.imageId).albumId();
+        albumsFromImages << ItemInfo(item.imageId).albumId();
 
         access.db()->removeAllImageRelationsFrom(item.imageId, DatabaseRelation::Grouped);
     }

@@ -35,8 +35,8 @@
 
 #include "batchtool.h"
 #include "batchtoolutils.h"
-#include "imageinfo.h"
-#include "imageinfolist.h"
+#include "iteminfo.h"
+#include "iteminfolist.h"
 #include "loadingdescription.h"
 #include "queuesettingsview.h"
 
@@ -50,13 +50,13 @@ class QueueListViewItem : public QTreeWidgetItem
 
 public:
 
-    QueueListViewItem(QueueListView* const view, const ImageInfo& info);
+    QueueListViewItem(QueueListView* const view, const ItemInfo& info);
     ~QueueListViewItem();
 
     bool hasValidThumbnail() const;
 
-    void setInfo(const ImageInfo& info);
-    ImageInfo info() const;
+    void setInfo(const ItemInfo& info);
+    ItemInfo info() const;
 
     void assignTool(int index, const BatchToolSet& set);
     void unassignTool(int index);
@@ -106,10 +106,10 @@ public:
 
     void cancelItems();
     int  itemsCount();
-    void removeItemByInfo(const ImageInfo& info);
+    void removeItemByInfo(const ItemInfo& info);
     void removeItemById(qlonglong id);
 
-    ImageInfoList pendingItemsList();
+    ItemInfoList pendingItemsList();
     int           pendingItemsCount();
     int           pendingTasksCount();
 
@@ -138,7 +138,7 @@ public Q_SLOTS:
     void slotClearList();
     void slotRemoveSelectedItems();
     void slotRemoveItemsDone();
-    void slotAddItems(const ImageInfoList&);
+    void slotAddItems(const ItemInfoList&);
     void slotAssignedToolsChanged(const AssignedBatchTools&);
 
 private Q_SLOTS:
@@ -151,7 +151,7 @@ private Q_SLOTS:
 
 private:
 
-    bool findItemByInfo(const ImageInfo& info);
+    bool findItemByInfo(const ItemInfo& info);
 
     void removeItems(int removeType);
     void updateDestFileNames();

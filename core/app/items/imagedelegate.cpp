@@ -233,7 +233,7 @@ QPixmap ImageDelegate::thumbnailPixmap(const QModelIndex& index) const
 void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     Q_D(const ImageDelegate);
-    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    ItemInfo info = ImageModel::retrieveItemInfo(index);
 
     if (info.isNull())
     {

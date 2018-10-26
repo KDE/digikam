@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-22-01
- * Description : interface to get image info from database.
+ * Description : interface to get item info from database.
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageinfojob.h"
+#include "iteminfojob.h"
 
 // Qt includes
 
@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageInfoJob::Private
+class Q_DECL_HIDDEN ItemInfoJob::Private
 {
 public:
 
@@ -53,12 +53,12 @@ public:
     DBJobsThread* jobThread;
 };
 
-ImageInfoJob::ImageInfoJob()
+ItemInfoJob::ItemInfoJob()
     : d(new Private)
 {
 }
 
-ImageInfoJob::~ImageInfoJob()
+ItemInfoJob::~ItemInfoJob()
 {
     if (d->jobThread)
     {
@@ -68,7 +68,7 @@ ImageInfoJob::~ImageInfoJob()
     delete d;
 }
 
-void ImageInfoJob::allItemsFromAlbum(Album* const album)
+void ItemInfoJob::allItemsFromAlbum(Album* const album)
 {
     if (d->jobThread)
     {
@@ -124,7 +124,7 @@ void ImageInfoJob::allItemsFromAlbum(Album* const album)
             this, SLOT(slotData(QList<ItemListerRecord>)));
 }
 
-void ImageInfoJob::stop()
+void ItemInfoJob::stop()
 {
     if (d->jobThread)
     {
@@ -133,12 +133,12 @@ void ImageInfoJob::stop()
     }
 }
 
-bool ImageInfoJob::isRunning() const
+bool ItemInfoJob::isRunning() const
 {
     return d->jobThread;
 }
 
-void ImageInfoJob::slotResult()
+void ItemInfoJob::slotResult()
 {
     if (d->jobThread != sender())
     {
@@ -159,23 +159,23 @@ void ImageInfoJob::slotResult()
     emit signalCompleted();
 }
 
-void ImageInfoJob::slotData(const QList<ItemListerRecord>& records)
+void ItemInfoJob::slotData(const QList<ItemListerRecord>& records)
 {
     if (records.isEmpty())
     {
         return;
     }
 
-    ImageInfoList itemsList;
+    ItemInfoList itemsList;
 
     foreach(const ItemListerRecord& record, records)
     {
-        ImageInfo info(record);
+        ItemInfo info(record);
         itemsList.append(info);
     }
 
     // Sort the itemList based on name
-    std::sort(itemsList.begin(), itemsList.end(), ImageInfoList::namefileLessThan);
+    std::sort(itemsList.begin(), itemsList.end(), ItemInfoList::namefileLessThan);
 
     emit signalItemsInfo(itemsList);
 }

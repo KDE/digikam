@@ -46,7 +46,7 @@
 #include "applicationsettings.h"
 #include "dimagehistory.h"
 #include "itemhistorygraphmodel.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "imagelistmodel.h"
 #include "thumbnailloadthread.h"
 #include "versionsdelegate.h"
@@ -208,7 +208,7 @@ void VersionsWidget::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configCurrentMode, d->viewButtonGroup->checkedId());
 }
 
-void VersionsWidget::setCurrentItem(const ImageInfo& info)
+void VersionsWidget::setCurrentItem(const ItemInfo& info)
 {
     d->model->setHistory(info);
     applyViewMode();
@@ -216,7 +216,7 @@ void VersionsWidget::setCurrentItem(const ImageInfo& info)
 
 void VersionsWidget::slotViewCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
 {
-    ImageInfo info = d->model->imageInfo(current);
+    ItemInfo info = d->model->imageInfo(current);
 
     if (!info.isNull())
     {

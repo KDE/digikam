@@ -35,12 +35,12 @@ void LightTableWindow::slotEditItem()
     }
 }
 
-void LightTableWindow::slotEditItem(const ImageInfo& info)
+void LightTableWindow::slotEditItem(const ItemInfo& info)
 {
     ImageWindow* const im = ImageWindow::imageWindow();
-    ImageInfoList list    = d->thumbView->allImageInfos();
+    ItemInfoList list    = d->thumbView->allItemInfos();
 
-    im->loadImageInfos(list, info, i18n("Light Table"));
+    im->loadItemInfos(list, info, i18n("Light Table"));
 
     if (im->isHidden())
     {
@@ -93,7 +93,7 @@ void LightTableWindow::slotEditMetadata()
 void LightTableWindow::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    ImageInfoList infos = d->thumbView->allImageInfos();
+    ItemInfoList infos = d->thumbView->allItemInfos();
 
     if (infos.isEmpty())
     {
@@ -125,7 +125,7 @@ void LightTableWindow::slotPresentation()
 {
     QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
 
-    foreach (const ImageInfo& info, d->thumbView->allImageInfos())
+    foreach (const ItemInfo& info, d->thumbView->allItemInfos())
     {
         mngr->addFile(info.fileUrl(), info.comment());
         qApp->processEvents();
@@ -136,7 +136,7 @@ void LightTableWindow::slotPresentation()
 
 void LightTableWindow::slotSlideShowAll()
 {
-   SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->allImageInfos());
+   SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->allItemInfos());
 
    d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
                                             i18n("Preparing slideshow. Please wait..."));
@@ -149,19 +149,19 @@ void LightTableWindow::slotSlideShowAll()
 
 void LightTableWindow::slotLeftSlideShowManualFromCurrent()
 {
-    slotSlideShowManualFrom(d->previewView->leftImageInfo());
+    slotSlideShowManualFrom(d->previewView->leftItemInfo());
     d->fromLeftPreview = true;
 }
 
 void LightTableWindow::slotRightSlideShowManualFromCurrent()
 {
-    slotSlideShowManualFrom(d->previewView->rightImageInfo());
+    slotSlideShowManualFrom(d->previewView->rightItemInfo());
     d->fromLeftPreview = false;
 }
 
-void LightTableWindow::slotSlideShowManualFrom(const ImageInfo& info)
+void LightTableWindow::slotSlideShowManualFrom(const ItemInfo& info)
 {
-   SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->allImageInfos());
+   SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->allItemInfos());
    builder->setOverrideStartFrom(info);
    builder->setAutoPlayEnabled(false);
 

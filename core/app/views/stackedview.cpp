@@ -173,11 +173,11 @@ StackedView::StackedView(QWidget* const parent)
     connect(d->imagePreviewView, SIGNAL(signalPopupTagsView()),
             this, SIGNAL(signalPopupTagsView()));
 
-    connect(d->imagePreviewView, SIGNAL(signalGotoAlbumAndItem(ImageInfo)),
-            this, SIGNAL(signalGotoAlbumAndItem(ImageInfo)));
+    connect(d->imagePreviewView, SIGNAL(signalGotoAlbumAndItem(ItemInfo)),
+            this, SIGNAL(signalGotoAlbumAndItem(ItemInfo)));
 
-    connect(d->imagePreviewView, SIGNAL(signalGotoDateAndItem(ImageInfo)),
-            this, SIGNAL(signalGotoDateAndItem(ImageInfo)));
+    connect(d->imagePreviewView, SIGNAL(signalGotoDateAndItem(ItemInfo)),
+            this, SIGNAL(signalGotoDateAndItem(ItemInfo)));
 
     connect(d->imagePreviewView, SIGNAL(signalGotoTagAndItem(int)),
             this, SIGNAL(signalGotoTagAndItem(int)));
@@ -319,7 +319,7 @@ bool StackedView::isInAbstractMode() const
     return currentIndex() == WelcomePageMode;
 }
 
-void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
+void StackedView::setPreviewItem(const ItemInfo& info, const ItemInfo& previous, const ItemInfo& next)
 {
     if (info.isNull())
     {
@@ -331,7 +331,7 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
         }
         else if (viewMode() == PreviewImageMode)
         {
-            d->imagePreviewView->setImageInfo();
+            d->imagePreviewView->setItemInfo();
         }
     }
     else
@@ -344,7 +344,7 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
 
             if (viewMode() == PreviewImageMode)
             {
-                d->imagePreviewView->setImageInfo();
+                d->imagePreviewView->setItemInfo();
             }
 
 #ifdef HAVE_MEDIAPLAYER
@@ -363,7 +363,7 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
 #endif //HAVE_MEDIAPLAYER
             }
 
-            d->imagePreviewView->setImageInfo(info, previous, next);
+            d->imagePreviewView->setItemInfo(info, previous, next);
 
             // NOTE: No need to toggle immediately in PreviewImageMode here,
             // because we will receive a signal for that when the image preview will be loaded.
@@ -371,7 +371,7 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
         }
 
         // do not touch the selection, only adjust current info
-        QModelIndex currentIndex = d->thumbBar->imageSortFilterModel()->indexForImageInfo(info);
+        QModelIndex currentIndex = d->thumbBar->imageSortFilterModel()->indexForItemInfo(info);
         d->thumbBar->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::NoUpdate);
     }
 }
@@ -440,7 +440,7 @@ void StackedView::syncSelection(ImageCategorizedView* from, ImageCategorizedView
 {
     ImageSortFilterModel* const fromModel = from->imageSortFilterModel();
     ImageSortFilterModel* const toModel   = to->imageSortFilterModel();
-    QModelIndex currentIndex              = toModel->indexForImageInfo(from->currentInfo());
+    QModelIndex currentIndex              = toModel->indexForItemInfo(from->currentInfo());
 
     // sync selection
     QItemSelection selection              = from->selectionModel()->selection();
@@ -448,8 +448,8 @@ void StackedView::syncSelection(ImageCategorizedView* from, ImageCategorizedView
 
     foreach(const QItemSelectionRange& range, selection)
     {
-        QModelIndex topLeft     = toModel->indexForImageInfo(fromModel->imageInfo(range.topLeft()));
-        QModelIndex bottomRight = toModel->indexForImageInfo(fromModel->imageInfo(range.bottomRight()));
+        QModelIndex topLeft     = toModel->indexForItemInfo(fromModel->imageInfo(range.topLeft()));
+        QModelIndex bottomRight = toModel->indexForItemInfo(fromModel->imageInfo(range.bottomRight()));
         newSelection.select(topLeft, bottomRight);
     }
 

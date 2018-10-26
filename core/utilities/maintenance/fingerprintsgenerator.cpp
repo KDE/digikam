@@ -111,12 +111,12 @@ void FingerPrintsGenerator::slotStart()
     }
 
     // Get all image infos for images (category 1) that are visible (status 1)
-    QList<ImageInfo> imageInfos;
+    QList<ItemInfo> imageInfos;
     QList<qlonglong> imageIds = CoreDbAccess().db()->getImageIds(DatabaseItem::Status::Visible, DatabaseItem::Category::Image);
 
     foreach (const qlonglong& id, imageIds)
     {
-        imageInfos << ImageInfo(id);
+        imageInfos << ItemInfo(id);
     }
 
     QStringList dirty = SimilarityDbAccess().db()->getDirtyOrMissingFingerprintURLs(imageInfos);

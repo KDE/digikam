@@ -41,7 +41,7 @@
 #include "albumpointer.h"
 #include "coredb.h"
 #include "coredbtransaction.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "itemtagpair.h"
 #include "metadatahub.h"
 #include "scancontroller.h"
@@ -580,7 +580,7 @@ void TagModificationHelper::slotMultipleFaceTagDel(QList<TAlbum*>& tags)
                     {
                         imageTagAssociation.unAssignTag();
                         // Load the current metadata and sync the tags
-                        ImageInfo info(imageId);
+                        ItemInfo info(imageId);
 
                         if (!info.isNull())
                         {

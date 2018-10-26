@@ -80,12 +80,12 @@ void ImageFilterModel::ImageFilterModelPrivate::init(ImageFilterModel* _q)
     qRegisterMetaType<ImageFilterModelTodoPackage>("ImageFilterModelTodoPackage");
 }
 
-void ImageFilterModel::ImageFilterModelPrivate::preprocessInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+void ImageFilterModel::ImageFilterModelPrivate::preprocessInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
 {
     infosToProcess(infos, extraValues, true);
 }
 
-void ImageFilterModel::ImageFilterModelPrivate::processAddedInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+void ImageFilterModel::ImageFilterModelPrivate::processAddedInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
 {
     // These have already been added, we just process them afterwards
     infosToProcess(infos, extraValues, false);
@@ -120,12 +120,12 @@ void ImageFilterModel::ImageFilterModelPrivate::setupWorkers()
             this, SLOT(packageDiscarded(ImageFilterModelTodoPackage)));
 }
 
-void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos)
+void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<ItemInfo>& infos)
 {
     infosToProcess(infos, QList<QVariant>(), false);
 }
 
-void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd)
+void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd)
 {
     if (infos.isEmpty())
     {
@@ -145,10 +145,10 @@ void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<Image
     const int size                      = infos.size();
     const int maxChunkSize              = needPrepare ? PrepareChunkSize : FilterChunkSize;
     const bool hasExtraValues           = !extraValues.isEmpty();
-    QList<ImageInfo>::const_iterator it = infos.constBegin(), end;
+    QList<ItemInfo>::const_iterator it = infos.constBegin(), end;
     QList<QVariant>::const_iterator xit = extraValues.constBegin(), xend;
     int index                           = 0;
-    QVector<ImageInfo>  infoVector;
+    QVector<ItemInfo>  infoVector;
     QVector<QVariant> extraValueVector;
 
     while (it != infos.constEnd())
@@ -207,7 +207,7 @@ void ImageFilterModel::ImageFilterModelPrivate::packageFinished(const ImageFilte
     // re-add if necessary
     if (package.isForReAdd)
     {
-        emit reAddImageInfos(package.infos.toList(), package.extraValues.toList());
+        emit reAddItemInfos(package.infos.toList(), package.extraValues.toList());
 
         if (sentOutForReAdd == 1) // last package
         {

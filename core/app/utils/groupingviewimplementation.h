@@ -32,8 +32,8 @@
 namespace Digikam
 {
 
-class ImageInfo;
-class ImageInfoList;
+class ItemInfo;
+class ItemInfoList;
 
 class DIGIKAM_EXPORT GroupingViewImplementation
 {
@@ -45,16 +45,16 @@ public:
     }
 
     // must be implemented by parent view
-    virtual bool  hasHiddenGroupedImages(const ImageInfo&) const
+    virtual bool  hasHiddenGroupedImages(const ItemInfo&) const
     {
         return false;
     }
 
     bool          needGroupResolving(ApplicationSettings::OperationType type,
-                                     const ImageInfoList& infos)    const;
+                                     const ItemInfoList& infos)    const;
 
-    ImageInfoList resolveGrouping(const ImageInfoList& infos)       const;
-    ImageInfoList getHiddenGroupedInfos(const ImageInfoList& infos) const;
+    ItemInfoList resolveGrouping(const ItemInfoList& infos)       const;
+    ItemInfoList getHiddenGroupedInfos(const ItemInfoList& infos) const;
 };
 
 } // namespace Digikam

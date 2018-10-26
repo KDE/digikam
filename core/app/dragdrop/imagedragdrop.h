@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "abstractitemdragdrophandler.h"
 #include "imagealbummodel.h"
 
@@ -62,11 +62,11 @@ public:
 
 Q_SIGNALS:
 
-    void imageInfosDropped(const QList<ImageInfo>& infos);
+    void imageInfosDropped(const QList<ItemInfo>& infos);
     void urlsDropped(const QList<QUrl>& urls);
-    void assignTags(const QList<ImageInfo>& list, const QList<int>& tagIDs);
-    void addToGroup(const ImageInfo& pick, const QList<ImageInfo>& infos);
-    void dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos);
+    void assignTags(const QList<ItemInfo>& list, const QList<int>& tagIDs);
+    void addToGroup(const ItemInfo& pick, const QList<ItemInfo>& infos);
+    void dragDropSort(const ItemInfo& pick, const QList<ItemInfo>& infos);
 
 protected:
 

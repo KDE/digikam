@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2007-14-02
- * Description : interface to get image info from an albums list.
+ * Date        : 2006-22-01
+ * Description : interface to get item info from database.
  *
- * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,45 +21,45 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_INFO_ALBUMS_JOB_H
-#define DIGIKAM_IMAGE_INFO_ALBUMS_JOB_H
+#ifndef DIGIKAM_ITEM_INFO_JOB_H
+#define DIGIKAM_ITEM_INFO_JOB_H
 
 // Qt includes
 
 #include <QObject>
+#include <QByteArray>
 
 // Local includes
 
-#include "imageinfo.h"
-#include "albummanager.h"
+#include "iteminfo.h"
 
 namespace Digikam
 {
 
-class ImageInfoAlbumsJob : public QObject
+class Album;
+
+class ItemInfoJob : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageInfoAlbumsJob();
-    ~ImageInfoAlbumsJob();
+    explicit ItemInfoJob();
+    ~ItemInfoJob();
 
-    void allItemsFromAlbums(const AlbumList& albumsList);
+    void allItemsFromAlbum(Album* const album);
     void stop();
+    bool isRunning() const;
 
 Q_SIGNALS:
 
-    void signalCompleted(const ImageInfoList& items);
+    void signalItemsInfo(const ItemInfoList& items);
+    void signalCompleted();
 
 private Q_SLOTS:
 
-    void slotItemsInfo(const ImageInfoList&);
-    void slotComplete();
-
-private:
-
-    void parseAlbum();
+    void slotResult();
+    void slotData(const QList<ItemListerRecord>& data);
 
 private:
 
@@ -69,4 +69,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_INFO_ALBUMS_JOB_H
+#endif // DIGIKAM_ITEM_INFO_JOB_H

@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class ImageInfo;
+class ItemInfo;
 
 namespace DatabaseFields
 {
@@ -59,19 +59,19 @@ public:
      *  and 1 if left is greater than right.
      *  Adheres to set categorization mode and current category sort order.
      */
-    int compareCategories(const ImageInfo& left, const ImageInfo& right) const;
+    int compareCategories(const ItemInfo& left, const ItemInfo& right) const;
 
     /** Returns true if left is less than right.
      *  Adheres to current sort role and sort order.
      */
-    bool lessThan(const ImageInfo& left, const ImageInfo& right) const;
+    bool lessThan(const ItemInfo& left, const ItemInfo& right) const;
 
-    /** Compares the ImageInfos left and right.
+    /** Compares the ItemInfos left and right.
      *  Return -1 if left is less than right, 1 if left is greater than right,
      *  and 0 if left equals right comparing the current sort role's value.
      *  Adheres to set sort role and sort order.
      */
-    int compare(const ImageInfo& left, const ImageInfo& right) const;
+    int compare(const ItemInfo& left, const ItemInfo& right) const;
 
     /** Returns true if left QVariant is less than right.
      *  Adheres to current sort role and sort order.
@@ -137,7 +137,7 @@ public:
     Qt::SortOrder           currentSortOrder;
     Qt::CaseSensitivity     sortCaseSensitivity;
 
-    int compare(const ImageInfo& left, const ImageInfo& right, SortRole sortRole) const;
+    int compare(const ItemInfo& left, const ItemInfo& right, SortRole sortRole) const;
 
     // --- ---
 

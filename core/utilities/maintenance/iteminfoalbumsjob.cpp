@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-14-02
- * Description : interface to get image info from an albums list.
+ * Description : interface to get item info from an albums list.
  *
  * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageinfoalbumsjob.h"
+#include "iteminfoalbumsjob.h"
 
 // Qt includes
 
@@ -30,12 +30,12 @@
 
 // Local includes
 
-#include "imageinfojob.h"
+#include "iteminfojob.h"
 
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageInfoAlbumsJob::Private
+class Q_DECL_HIDDEN ItemInfoAlbumsJob::Private
 {
 public:
 
@@ -44,27 +44,27 @@ public:
     AlbumList           albumsList;
     AlbumList::Iterator albumIt;
 
-    ImageInfoList       itemsList;
+    ItemInfoList       itemsList;
 
-    ImageInfoJob        imageInfoJob;
+    ItemInfoJob        imageInfoJob;
 };
 
-ImageInfoAlbumsJob::ImageInfoAlbumsJob()
+ItemInfoAlbumsJob::ItemInfoAlbumsJob()
     : d(new Private)
 {
-    connect(&d->imageInfoJob, SIGNAL(signalItemsInfo(ImageInfoList)),
-            this, SLOT(slotItemsInfo(ImageInfoList)));
+    connect(&d->imageInfoJob, SIGNAL(signalItemsInfo(ItemInfoList)),
+            this, SLOT(slotItemsInfo(ItemInfoList)));
 
     connect(&d->imageInfoJob, SIGNAL(signalCompleted()),
             this, SLOT(slotComplete()));
 }
 
-ImageInfoAlbumsJob::~ImageInfoAlbumsJob()
+ItemInfoAlbumsJob::~ItemInfoAlbumsJob()
 {
     delete d;
 }
 
-void ImageInfoAlbumsJob::allItemsFromAlbums(const AlbumList& albumsList)
+void ItemInfoAlbumsJob::allItemsFromAlbums(const AlbumList& albumsList)
 {
     if (albumsList.isEmpty())
     {
@@ -76,23 +76,23 @@ void ImageInfoAlbumsJob::allItemsFromAlbums(const AlbumList& albumsList)
     parseAlbum();
 }
 
-void ImageInfoAlbumsJob::parseAlbum()
+void ItemInfoAlbumsJob::parseAlbum()
 {
     d->imageInfoJob.allItemsFromAlbum(*d->albumIt);
 }
 
-void ImageInfoAlbumsJob::stop()
+void ItemInfoAlbumsJob::stop()
 {
     d->imageInfoJob.stop();
     d->albumsList.clear();
 }
 
-void ImageInfoAlbumsJob::slotItemsInfo(const ImageInfoList& items)
+void ItemInfoAlbumsJob::slotItemsInfo(const ItemInfoList& items)
 {
     d->itemsList += items;
 }
 
-void ImageInfoAlbumsJob::slotComplete()
+void ItemInfoAlbumsJob::slotComplete()
 {
     ++d->albumIt;
 

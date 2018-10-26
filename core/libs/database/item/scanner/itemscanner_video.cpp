@@ -110,7 +110,7 @@ MetadataFields ItemScanner::allVideoMetadataFields()
 
 void ItemScanner::scanVideoInformation()
 {
-    d->commit.commitImageInformation = true;
+    d->commit.commitItemInformation = true;
 
     if (d->scanMode == NewScan || d->scanMode == Rescan)
     {
@@ -158,7 +158,7 @@ void ItemScanner::scanVideoInformation()
     d->commit.imageInformationFields |= DatabaseFields::ColorModel;
 }
 
-// commitImageInformation method is reused
+// commitItemInformation method is reused
 
 void ItemScanner::scanVideoMetadata()
 {

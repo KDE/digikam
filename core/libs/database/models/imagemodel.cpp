@@ -34,8 +34,8 @@
 #include "coredbchangesets.h"
 #include "coredbfields.h"
 #include "coredbwatch.h"
-#include "imageinfo.h"
-#include "imageinfolist.h"
+#include "iteminfo.h"
+#include "iteminfolist.h"
 #include "abstractitemdragdrophandler.h"
 
 namespace Digikam
@@ -56,7 +56,7 @@ public:
         incrementalRefreshRequested = false;
     }
 
-    ImageInfoList                       infos;
+    ItemInfoList                       infos;
     QList<QVariant>                     extraValues;
     QHash<qlonglong, int>               idHash;
 
@@ -74,7 +74,7 @@ public:
 
     class ImageModelIncrementalUpdater* incrementalUpdater;
 
-    ImageInfoList                       pendingInfos;
+    ItemInfoList                       pendingInfos;
     QList<QVariant>                     pendingExtraValues;
 
     inline bool isValid(const QModelIndex& index)
@@ -114,7 +114,7 @@ public:
 
     explicit ImageModelIncrementalUpdater(ImageModel::Private* d);
 
-    void                  appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void                  appendInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
     void                  aboutToBeRemovedInModel(const IntPairList& aboutToBeRemoved);
     QList<IntPair>        oldIndexes();
 
@@ -124,7 +124,7 @@ public:
 
     QHash<qlonglong, int> oldIds;
     QList<QVariant>       oldExtraValues;
-    QList<ImageInfo>      newInfos;
+    QList<ItemInfo>      newInfos;
     QList<QVariant>       newExtraValues;
     QList<IntPairList>    modelRemovals;
 };
@@ -168,17 +168,17 @@ void ImageModel::setWatchFlags(const DatabaseFields::Set& set)
     d->watchFlags = set;
 }
 
-ImageInfo ImageModel::imageInfo(const QModelIndex& index) const
+ItemInfo ImageModel::imageInfo(const QModelIndex& index) const
 {
     if (!d->isValid(index))
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
     return d->infos.at(index.row());
 }
 
-ImageInfo& ImageModel::imageInfoRef(const QModelIndex& index) const
+ItemInfo& ImageModel::imageInfoRef(const QModelIndex& index) const
 {
     return d->infos[index.row()];
 }
@@ -193,9 +193,9 @@ qlonglong ImageModel::imageId(const QModelIndex& index) const
     return d->infos.at(index.row()).id();
 }
 
-QList<ImageInfo> ImageModel::imageInfos(const QList<QModelIndex>& indexes) const
+QList<ItemInfo> ImageModel::imageInfos(const QList<QModelIndex>& indexes) const
 {
-    QList<ImageInfo> infos;
+    QList<ItemInfo> infos;
 
     foreach (const QModelIndex& index, indexes)
     {
@@ -217,17 +217,17 @@ QList<qlonglong> ImageModel::imageIds(const QList<QModelIndex>& indexes) const
     return ids;
 }
 
-ImageInfo ImageModel::imageInfo(int row) const
+ItemInfo ImageModel::imageInfo(int row) const
 {
     if (row >= d->infos.size())
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
     return d->infos.at(row);
 }
 
-ImageInfo& ImageModel::imageInfoRef(int row) const
+ItemInfo& ImageModel::imageInfoRef(int row) const
 {
     return d->infos[row];
 }
@@ -242,17 +242,17 @@ qlonglong ImageModel::imageId(int row) const
     return d->infos.at(row).id();
 }
 
-QModelIndex ImageModel::indexForImageInfo(const ImageInfo& info) const
+QModelIndex ImageModel::indexForItemInfo(const ItemInfo& info) const
 {
     return indexForImageId(info.id());
 }
 
-QModelIndex ImageModel::indexForImageInfo(const ImageInfo& info, const QVariant& extraValue) const
+QModelIndex ImageModel::indexForItemInfo(const ItemInfo& info, const QVariant& extraValue) const
 {
     return indexForImageId(info.id(), extraValue);
 }
 
-QList<QModelIndex> ImageModel::indexesForImageInfo(const ImageInfo& info) const
+QList<QModelIndex> ImageModel::indexesForItemInfo(const ItemInfo& info) const
 {
     return indexesForImageId(info.id());
 }
@@ -298,7 +298,7 @@ QList<QModelIndex> ImageModel::indexesForImageId(qlonglong id) const
     return indexes;
 }
 
-int ImageModel::numberOfIndexesForImageInfo(const ImageInfo& info) const
+int ImageModel::numberOfIndexesForItemInfo(const ItemInfo& info) const
 {
     return numberOfIndexesForImageId(info.id());
 }
@@ -322,11 +322,11 @@ int ImageModel::numberOfIndexesForImageId(qlonglong id) const
 }
 
 // static method
-ImageInfo ImageModel::retrieveImageInfo(const QModelIndex& index)
+ItemInfo ImageModel::retrieveItemInfo(const QModelIndex& index)
 {
     if (!index.isValid())
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
     ImageModel* const model = index.data(ImageModelPointerRole).value<ImageModel*>();
@@ -334,7 +334,7 @@ ImageInfo ImageModel::retrieveImageInfo(const QModelIndex& index)
 
     if (!model)
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
     return model->imageInfo(row);
@@ -404,7 +404,7 @@ QList<QModelIndex> ImageModel::indexesForPath(const QString& filePath) const
     }
 }
 
-ImageInfo ImageModel::imageInfo(const QString& filePath) const
+ItemInfo ImageModel::imageInfo(const QString& filePath) const
 {
     if (d->keepFilePathCache)
     {
@@ -422,7 +422,7 @@ ImageInfo ImageModel::imageInfo(const QString& filePath) const
     }
     else
     {
-        foreach (const ImageInfo& info, d->infos)
+        foreach (const ItemInfo& info, d->infos)
         {
             if (info.filePath() == filePath)
             {
@@ -431,12 +431,12 @@ ImageInfo ImageModel::imageInfo(const QString& filePath) const
         }
     }
 
-    return ImageInfo();
+    return ItemInfo();
 }
 
-QList<ImageInfo> ImageModel::imageInfos(const QString& filePath) const
+QList<ItemInfo> ImageModel::imageInfos(const QString& filePath) const
 {
-    QList<ImageInfo> infos;
+    QList<ItemInfo> infos;
 
     if (d->keepFilePathCache)
     {
@@ -452,7 +452,7 @@ QList<ImageInfo> ImageModel::imageInfos(const QString& filePath) const
     }
     else
     {
-        foreach (const ImageInfo& info, d->infos)
+        foreach (const ItemInfo& info, d->infos)
         {
             if (info.filePath() == filePath)
             {
@@ -464,17 +464,17 @@ QList<ImageInfo> ImageModel::imageInfos(const QString& filePath) const
     return infos;
 }
 
-void ImageModel::addImageInfo(const ImageInfo& info)
+void ImageModel::addItemInfo(const ItemInfo& info)
 {
-    addImageInfos(QList<ImageInfo>() << info, QList<QVariant>());
+    addItemInfos(QList<ItemInfo>() << info, QList<QVariant>());
 }
 
-void ImageModel::addImageInfos(const QList<ImageInfo>& infos)
+void ImageModel::addItemInfos(const QList<ItemInfo>& infos)
 {
-    addImageInfos(infos, QList<QVariant>());
+    addItemInfos(infos, QList<QVariant>());
 }
 
-void ImageModel::addImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+void ImageModel::addItemInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
 {
     if (infos.isEmpty())
     {
@@ -491,17 +491,17 @@ void ImageModel::addImageInfos(const QList<ImageInfo>& infos, const QList<QVaria
     }
 }
 
-void ImageModel::addImageInfoSynchronously(const ImageInfo& info)
+void ImageModel::addItemInfoSynchronously(const ItemInfo& info)
 {
-    addImageInfosSynchronously(QList<ImageInfo>() << info, QList<QVariant>());
+    addItemInfosSynchronously(QList<ItemInfo>() << info, QList<QVariant>());
 }
 
-void ImageModel::addImageInfosSynchronously(const QList<ImageInfo>& infos)
+void ImageModel::addItemInfosSynchronously(const QList<ItemInfo>& infos)
 {
-    addImageInfos(infos, QList<QVariant>());
+    addItemInfos(infos, QList<QVariant>());
 }
 
-void ImageModel::addImageInfosSynchronously(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+void ImageModel::addItemInfosSynchronously(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
 {
     if (infos.isEmpty())
     {
@@ -512,17 +512,17 @@ void ImageModel::addImageInfosSynchronously(const QList<ImageInfo>& infos, const
     emit processAdded(infos, extraValues);
 }
 
-void ImageModel::ensureHasImageInfo(const ImageInfo& info)
+void ImageModel::ensureHasItemInfo(const ItemInfo& info)
 {
-    ensureHasImageInfos(QList<ImageInfo>() << info, QList<QVariant>());
+    ensureHasItemInfos(QList<ItemInfo>() << info, QList<QVariant>());
 }
 
-void ImageModel::ensureHasImageInfos(const QList<ImageInfo>& infos)
+void ImageModel::ensureHasItemInfos(const QList<ItemInfo>& infos)
 {
-    ensureHasImageInfos(infos, QList<QVariant>());
+    ensureHasItemInfos(infos, QList<QVariant>());
 }
 
-void ImageModel::ensureHasImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+void ImageModel::ensureHasItemInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
 {
     if (extraValues.isEmpty())
     {
@@ -546,7 +546,7 @@ void ImageModel::ensureHasImageInfos(const QList<ImageInfo>& infos, const QList<
     cleanSituationChecks();
 }
 
-void ImageModel::clearImageInfos()
+void ImageModel::clearItemInfos()
 {
     beginResetModel();
 
@@ -568,13 +568,13 @@ void ImageModel::clearImageInfos()
     endResetModel();
 }
 
-void ImageModel::setImageInfos(const QList<ImageInfo>& infos)
+void ImageModel::setItemInfos(const QList<ItemInfo>& infos)
 {
-    clearImageInfos();
-    addImageInfos(infos);
+    clearItemInfos();
+    addItemInfos(infos);
 }
 
-QList<ImageInfo> ImageModel::imageInfos() const
+QList<ItemInfo> ImageModel::imageInfos() const
 {
     return d->infos;
 }
@@ -589,12 +589,12 @@ bool ImageModel::hasImage(qlonglong id) const
     return d->idHash.contains(id);
 }
 
-bool ImageModel::hasImage(const ImageInfo& info) const
+bool ImageModel::hasImage(const ItemInfo& info) const
 {
     return d->idHash.contains(info.id());
 }
 
-bool ImageModel::hasImage(const ImageInfo& info, const QVariant& extraValue) const
+bool ImageModel::hasImage(const ItemInfo& info, const QVariant& extraValue) const
 {
     return hasImage(info.id(), extraValue);
 }
@@ -615,19 +615,19 @@ bool ImageModel::hasImage(qlonglong id, const QVariant& extraValue) const
     return false;;
 }
 
-QList<ImageInfo> ImageModel::uniqueImageInfos() const
+QList<ItemInfo> ImageModel::uniqueItemInfos() const
 {
     if (d->extraValues.isEmpty())
     {
         return d->infos;
     }
 
-    QList<ImageInfo> uniqueInfos;
+    QList<ItemInfo> uniqueInfos;
     const int size = d->infos.size();
 
     for (int i = 0 ; i < size ; ++i)
     {
-        const ImageInfo& info = d->infos.at(i);
+        const ItemInfo& info = d->infos.at(i);
 
         if (d->idHash.value(info.id()) == i)
         {
@@ -661,9 +661,9 @@ void ImageModel::emitDataChangedForSelection(const QItemSelection& selection)
     }
 }
 
-void ImageModel::ensureHasGroupedImages(const ImageInfo& groupLeader)
+void ImageModel::ensureHasGroupedImages(const ItemInfo& groupLeader)
 {
-    ensureHasImageInfos(groupLeader.groupedImages());
+    ensureHasItemInfos(groupLeader.groupedImages());
 }
 
 // ------------ Preprocessing -------------
@@ -678,13 +678,13 @@ void ImageModel::unsetPreprocessor(QObject* const preprocessor)
 {
     if (preprocessor && d->preprocessor == preprocessor)
     {
-        disconnect(this, SIGNAL(preprocess(QList<ImageInfo>,QList<QVariant>)), 0, 0);
-        disconnect(d->preprocessor, 0, this, SLOT(reAddImageInfos(QList<ImageInfo>,QList<QVariant>)));
+        disconnect(this, SIGNAL(preprocess(QList<ItemInfo>,QList<QVariant>)), 0, 0);
+        disconnect(d->preprocessor, 0, this, SLOT(reAddItemInfos(QList<ItemInfo>,QList<QVariant>)));
         disconnect(d->preprocessor, 0, this, SLOT(reAddingFinished()));
     }
 }
 
-void ImageModel::appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+void ImageModel::appendInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
 {
     if (infos.isEmpty())
     {
@@ -702,15 +702,15 @@ void ImageModel::appendInfos(const QList<ImageInfo>& infos, const QList<QVariant
     }
 }
 
-void ImageModel::appendInfosChecked(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+void ImageModel::appendInfosChecked(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
 {
     // This method does deduplication. It is private because in context of readding or refreshing it is of no use.
 
     if (extraValues.isEmpty())
     {
-        QList<ImageInfo> checkedInfos;
+        QList<ItemInfo> checkedInfos;
 
-        foreach (const ImageInfo& info, infos)
+        foreach (const ItemInfo& info, infos)
         {
             if (!hasImage(info))
             {
@@ -722,7 +722,7 @@ void ImageModel::appendInfosChecked(const QList<ImageInfo>& infos, const QList<Q
     }
     else
     {
-        QList<ImageInfo> checkedInfos;
+        QList<ItemInfo> checkedInfos;
         QList<QVariant>  checkedExtraValues;
         const int size = infos.size();
 
@@ -739,9 +739,9 @@ void ImageModel::appendInfosChecked(const QList<ImageInfo>& infos, const QList<Q
     }
 }
 
-void ImageModel::reAddImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+void ImageModel::reAddItemInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
 {
-    // addImageInfos -> appendInfos -> preprocessor -> reAddImageInfos
+    // addItemInfos -> appendInfos -> preprocessor -> reAddItemInfos
     publiciseInfos(infos, extraValues);
 }
 
@@ -797,7 +797,7 @@ void ImageModel::cleanSituationChecks()
     }
 }
 
-void ImageModel::publiciseInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+void ImageModel::publiciseInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
 {
     if (infos.isEmpty())
     {
@@ -815,7 +815,7 @@ void ImageModel::publiciseInfos(const QList<ImageInfo>& infos, const QList<QVari
 
     for (int i = firstNewIndex ; i <= lastNewIndex ; ++i)
     {
-        const ImageInfo& info = d->infos.at(i);
+        const ItemInfo& info = d->infos.at(i);
         qlonglong id          = info.id();
         d->idHash.insertMulti(id, i);
 
@@ -896,16 +896,16 @@ void ImageModel::removeIndexes(const QList<QModelIndex>& indexes)
     removeRowPairsWithCheck(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
 
-void ImageModel::removeImageInfo(const ImageInfo& info)
+void ImageModel::removeItemInfo(const ItemInfo& info)
 {
-    removeImageInfos(QList<ImageInfo>() << info);
+    removeItemInfos(QList<ItemInfo>() << info);
 }
 
-void ImageModel::removeImageInfos(const QList<ImageInfo>& infos)
+void ImageModel::removeItemInfos(const QList<ItemInfo>& infos)
 {
     QList<int> listIndexes;
 
-    foreach (const ImageInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         QModelIndex index = indexForImageId(info.id());
 
@@ -917,11 +917,11 @@ void ImageModel::removeImageInfos(const QList<ImageInfo>& infos)
     removeRowPairsWithCheck(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
 
-void ImageModel::removeImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+void ImageModel::removeItemInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
 {
     if (extraValues.isEmpty())
     {
-        removeImageInfos(infos);
+        removeItemInfos(infos);
         return;
     }
 
@@ -1010,7 +1010,7 @@ void ImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
         // when removing from the list, all subsequent indexes are affected
         offset += removedRows;
 
-        QList<ImageInfo> removedInfos;
+        QList<ItemInfo> removedInfos;
 
         if (d->sendRemovalSignals)
         {
@@ -1085,11 +1085,11 @@ ImageModelIncrementalUpdater::ImageModelIncrementalUpdater(ImageModel::Private* 
     oldExtraValues = d->extraValues;
 }
 
-void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+void ImageModelIncrementalUpdater::appendInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
 {
     if (extraValues.isEmpty())
     {
-        foreach (const ImageInfo& info, infos)
+        foreach (const ItemInfo& info, infos)
         {
             QHash<qlonglong, int>::iterator it = oldIds.find(info.id());
 
@@ -1107,7 +1107,7 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
     {
         for (int i = 0 ; i < infos.size() ; ++i)
         {
-            const ImageInfo& info = infos.at(i);
+            const ItemInfo& info = infos.at(i);
             bool found            = false;
             QHash<qlonglong, int>::iterator it;
 

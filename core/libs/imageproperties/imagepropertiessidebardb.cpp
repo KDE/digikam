@@ -49,7 +49,7 @@
 #include "dimg.h"
 #include "itemattributeswatch.h"
 #include "imagedescedittab.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
@@ -73,7 +73,7 @@ public:
       : dirtyDesceditTab(false),
         hasPrevious(false),
         hasNext(false),
-        hasImageInfoOwnership(false),
+        hasItemInfoOwnership(false),
         desceditTab(0)
     {
         desceditTab        = 0;
@@ -84,9 +84,9 @@ public:
     bool                        dirtyDesceditTab;
     bool                        hasPrevious;
     bool                        hasNext;
-    bool                        hasImageInfoOwnership;
+    bool                        hasItemInfoOwnership;
 
-    ImageInfoList               currentInfos;
+    ItemInfoList               currentInfos;
     DImageHistory               currentHistory;
     ImageDescEditTab*           desceditTab;
     ImagePropertiesVersionsTab* versionsHistoryTab;
@@ -132,7 +132,7 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
     delete d;
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const ImageInfo& info, const QRect& rect,
+void ImagePropertiesSideBarDB::itemChanged(const ItemInfo& info, const QRect& rect,
                                            DImg* const img, const DImageHistory& history)
 {
     itemChanged(info.fileUrl(), info, rect, img, history);
@@ -140,10 +140,10 @@ void ImagePropertiesSideBarDB::itemChanged(const ImageInfo& info, const QRect& r
 
 void ImagePropertiesSideBarDB::itemChanged(const QUrl& url, const QRect& rect, DImg* const img)
 {
-    itemChanged(url, ImageInfo(), rect, img, DImageHistory());
+    itemChanged(url, ItemInfo(), rect, img, DImageHistory());
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const QUrl& url, const ImageInfo& info,
+void ImagePropertiesSideBarDB::itemChanged(const QUrl& url, const ItemInfo& info,
                                            const QRect& rect, DImg* const img, const DImageHistory& history)
 {
     if (!url.isValid())
@@ -153,7 +153,7 @@ void ImagePropertiesSideBarDB::itemChanged(const QUrl& url, const ImageInfo& inf
 
     m_currentURL = url;
 
-    ImageInfoList list;
+    ItemInfoList list;
 
     if (!info.isNull())
     {
@@ -163,7 +163,7 @@ void ImagePropertiesSideBarDB::itemChanged(const QUrl& url, const ImageInfo& inf
     itemChanged(list, rect, img, history);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos)
+void ImagePropertiesSideBarDB::itemChanged(const ItemInfoList& infos)
 {
     if (infos.isEmpty())
     {
@@ -175,7 +175,7 @@ void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos)
     itemChanged(infos, QRect(), 0, DImageHistory());
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos, const QRect& rect, DImg* const img, const DImageHistory& history)
+void ImagePropertiesSideBarDB::itemChanged(const ItemInfoList& infos, const QRect& rect, DImg* const img, const DImageHistory& history)
 {
     m_currentRect        = rect;
     m_image              = img;
@@ -203,7 +203,7 @@ void ImagePropertiesSideBarDB::slotNoCurrentItem()
 {
     ImagePropertiesSideBar::slotNoCurrentItem();
 
-    // All tabs that store the ImageInfo list and access it after selection change
+    // All tabs that store the ItemInfo list and access it after selection change
     // must release the image info here. slotChangedTab only handles the active tab!
     d->desceditTab->setItem();
     d->currentInfos.clear();
@@ -240,7 +240,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             // No multiple selection supported. Only if all items belong to
             // the same group display metadata of main item.
-            ImageInfo mainItem = d->currentInfos.singleGroupMainItem();
+            ItemInfo mainItem = d->currentInfos.singleGroupMainItem();
 
             if (!mainItem.isNull())
             {
@@ -269,7 +269,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             // No multiple selection supported. Only if all items belong to
             // the same group display metadata of main item.
-            ImageInfo mainItem = d->currentInfos.singleGroupMainItem();
+            ItemInfo mainItem = d->currentInfos.singleGroupMainItem();
 
             if (!mainItem.isNull())
             {
@@ -316,12 +316,12 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             GPSItemInfo::List list;
 
-            for (ImageInfoList::const_iterator it = d->currentInfos.constBegin();
+            for (ItemInfoList::const_iterator it = d->currentInfos.constBegin();
                  it != d->currentInfos.constEnd(); ++it)
             {
                 GPSItemInfo info;
 
-                if (GPSItemInfofromImageInfo(*it, &info))
+                if (GPSItemInfofromItemInfo(*it, &info))
                 {
                     list << info;
                 }
@@ -395,7 +395,7 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
 #endif // HAVE_MARBLE
            )
         {
-            ImageInfo& info = d->currentInfos.first();
+            ItemInfo& info = d->currentInfos.first();
 
             if (changeset.ids().contains(info.id()))
             {
@@ -403,7 +403,7 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
                 DatabaseFields::Set set = changeset.changes();
 
                 if ((set & DatabaseFields::ImagesAll)           ||
-                    (set & DatabaseFields::ImageInformationAll) ||
+                    (set & DatabaseFields::ItemInformationAll) ||
                     (set & DatabaseFields::ImageMetadataAll)    ||
                     (set & DatabaseFields::VideoMetadataAll)    ||
                     (set & DatabaseFields::ItemCommentsAll))
@@ -442,7 +442,7 @@ void ImagePropertiesSideBarDB::slotImageTagChanged(const ImageTagChangeset& chan
 
         if (tab == m_propertiesTab)
         {
-            ImageInfo& info = d->currentInfos.first();
+            ItemInfo& info = d->currentInfos.first();
 
             if (changeset.ids().contains(info.id()))
             {
@@ -496,7 +496,7 @@ void ImagePropertiesSideBarDB::refreshTagsView()
 
 void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
 {
-    foreach(const ImageInfo& info, d->currentInfos)
+    foreach(const ItemInfo& info, d->currentInfos)
     {
         if (info.fileUrl() == url)
         {
@@ -676,7 +676,7 @@ void ImagePropertiesSideBarDB::slotPopupTagsView()
 
 #ifdef HAVE_MARBLE
 
-bool ImagePropertiesSideBarDB::GPSItemInfofromImageInfo(const ImageInfo& imageInfo, GPSItemInfo* const gpsImageInfo)
+bool ImagePropertiesSideBarDB::GPSItemInfofromItemInfo(const ItemInfo& imageInfo, GPSItemInfo* const gpsItemInfo)
 {
     const ItemPosition pos = imageInfo.imagePosition();
 
@@ -685,17 +685,17 @@ bool ImagePropertiesSideBarDB::GPSItemInfofromImageInfo(const ImageInfo& imageIn
         return false;
     }
 
-    gpsImageInfo->coordinates.setLatLon(pos.latitudeNumber(), pos.longitudeNumber());
+    gpsItemInfo->coordinates.setLatLon(pos.latitudeNumber(), pos.longitudeNumber());
 
     if (pos.hasAltitude())
     {
-        gpsImageInfo->coordinates.setAlt(pos.altitude());
+        gpsItemInfo->coordinates.setAlt(pos.altitude());
     }
 
-    gpsImageInfo->dateTime  = imageInfo.dateTime();
-    gpsImageInfo->rating    = imageInfo.rating();
-    gpsImageInfo->url       = imageInfo.fileUrl();
-    gpsImageInfo->id        = imageInfo.id();
+    gpsItemInfo->dateTime  = imageInfo.dateTime();
+    gpsItemInfo->rating    = imageInfo.rating();
+    gpsItemInfo->url       = imageInfo.fileUrl();
+    gpsItemInfo->id        = imageInfo.id();
 
     return true;
 }

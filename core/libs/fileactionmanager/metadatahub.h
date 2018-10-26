@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 class ApplicationSettings;
-class ImageInfo;
+class ItemInfo;
 class Template;
 
 class MetadataHub
@@ -122,12 +122,12 @@ public:
     // --------------------------------------------------
 
     /**
-        Add metadata information contained in the ImageInfo object.
+        Add metadata information contained in the ItemInfo object.
         This method (or in combination with the other load methods)
         can be called multiple times on the same MetadataHub object.
         In this case, the metadata will be combined.
     */
-    void load(const ImageInfo& info);
+    void load(const ItemInfo& info);
 
 //    /**
 //        Add metadata information from the DMetadata object
@@ -151,7 +151,7 @@ public:
      * @param settings
      * @return true           - if everything is successful
      */
-    bool writeToMetadata(const ImageInfo& info, WriteComponent writeMode = WRITE_ALL,
+    bool writeToMetadata(const ItemInfo& info, WriteComponent writeMode = WRITE_ALL,
                bool ignoreLazySync = false, const MetaEngineSettingsContainer& settings = MetaEngineSettings::instance()->settings());
 
 
@@ -218,11 +218,11 @@ public:
 
     /**
         Dedicated method to set face rectangles from database
-        When called from outside the metadatahub and  ImageInfo is cached,
+        When called from outside the metadatahub and  ItemInfo is cached,
         method dimension() can return wrong values, QSize must be specified
         manually
      */
-    void loadFaceTags(const ImageInfo& info, const QSize& size);
+    void loadFaceTags(const ItemInfo& info, const QSize& size);
 
     /**
         Get face tag names and face tag regions.
@@ -233,7 +233,7 @@ public:
         load the integer face tags.
         This is used in face tag transformation
      */
-    QMultiMap<QString, QVariant> loadIntegerFaceTags(const ImageInfo& info);
+    QMultiMap<QString, QVariant> loadIntegerFaceTags(const ItemInfo& info);
     /**
         Set new face tags
      */

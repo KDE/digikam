@@ -44,8 +44,8 @@ namespace Digikam
 class Album;
 class HistoryItem;
 class HistoryPosition;
-class ImageInfo;
-class ImageInfoList;
+class ItemInfo;
+class ItemInfoList;
 
 /**
  * Manages the history of the last visited albums.
@@ -81,7 +81,7 @@ public:
 Q_SIGNALS:
 
     void signalSetCurrent(qlonglong imageId);
-    void signalSetSelectedInfos(const QList<ImageInfo>&);
+    void signalSetSelectedInfos(const QList<ItemInfo>&);
 
 public Q_SLOTS:
 
@@ -89,10 +89,10 @@ public Q_SLOTS:
     void slotAlbumDeleted(Album* album);
     void slotAlbumsCleared();
     void slotAlbumSelected();
-    void slotClearSelectPAlbum(const ImageInfo& imageInfo);
+    void slotClearSelectPAlbum(const ItemInfo& imageInfo);
     void slotClearSelectTAlbum(int id);
-    void slotCurrentChange(const ImageInfo& info);
-    void slotImageSelected(const ImageInfoList& selectedImage);
+    void slotCurrentChange(const ItemInfo& info);
+    void slotImageSelected(const ItemInfoList& selectedImage);
 
 private:
 

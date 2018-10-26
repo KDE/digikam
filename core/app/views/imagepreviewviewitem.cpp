@@ -47,7 +47,7 @@ public:
     }
 
     FaceGroup*        group;
-    ImageInfo         info;
+    ItemInfo         info;
 };
 
 ImagePreviewViewItem::ImagePreviewViewItem()
@@ -66,13 +66,13 @@ void ImagePreviewViewItem::setFaceGroup(FaceGroup* const group)
     d->group = group;
 }
 
-void ImagePreviewViewItem::setImageInfo(const ImageInfo& info)
+void ImagePreviewViewItem::setItemInfo(const ItemInfo& info)
 {
     d->info = info;
     setPath(info.filePath());
 }
 
-ImageInfo ImagePreviewViewItem::imageInfo() const
+ItemInfo ImagePreviewViewItem::imageInfo() const
 {
     return d->info;
 }

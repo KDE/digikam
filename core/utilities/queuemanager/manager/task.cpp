@@ -38,7 +38,7 @@
 #include "digikam_config.h"
 #include "dimg.h"
 #include "dmetadata.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "batchtool.h"
 #include "batchtoolsfactory.h"
 #include "dfileoperations.h"
@@ -141,8 +141,8 @@ void Task::run()
     DImg        tmpImage;
     QString     errMsg;
 
-    // ImageInfo must be tread-safe.
-    ImageInfo source = ImageInfo::fromUrl(d->tools.m_itemUrl);
+    // ItemInfo must be tread-safe.
+    ItemInfo source = ItemInfo::fromUrl(d->tools.m_itemUrl);
     bool timeAdjust  = false;
 
     foreach (const BatchToolSet& set, d->tools.m_toolsList)
@@ -158,7 +158,7 @@ void Task::run()
                  << " :: wurl= "     << workUrl;
 
         d->tool->setImageData(tmpImage);
-        d->tool->setImageInfo(source);
+        d->tool->setItemInfo(source);
         d->tool->setInputUrl(inUrl);
         d->tool->setWorkingUrl(workUrl);
         d->tool->setSettings(set.settings);

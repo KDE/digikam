@@ -40,7 +40,7 @@
 #include "tagscache.h"
 #include "coredbaccess.h"
 #include "itemcomments.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "coredbwatch.h"
 #include "metadatahub.h"
 
@@ -191,7 +191,7 @@ void DisjointMetadata::reset()
     d =  new Private();
 }
 
-void DisjointMetadata::load(const ImageInfo& info)
+void DisjointMetadata::load(const ItemInfo& info)
 {
     CaptionsMap commentMap;
     CaptionsMap titleMap;
@@ -374,7 +374,7 @@ void DisjointMetadata::resetChanged()
     d->tagsChanged       = false;
 }
 
-bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
+bool DisjointMetadata::write(ItemInfo info, WriteMode writeMode)
 {
     applyChangeNotifications();
 

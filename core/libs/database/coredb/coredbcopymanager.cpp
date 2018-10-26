@@ -90,7 +90,7 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
         << QLatin1String("Images")
         // Virtual table used to allow population of Albums.icon after Images migration
         << QLatin1String("AlbumsExtra")
-        << QLatin1String("ImageInformation")
+        << QLatin1String("ItemInformation")
         << QLatin1String("ImageMetadata")
         << QLatin1String("ItemPositions")
         << QLatin1String("ItemComments")

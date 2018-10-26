@@ -141,7 +141,7 @@ void TagsLineEditOverlay::updateTag()
         return;
     }
 
-    ImageInfo info = ImageModel::retrieveImageInfo(m_index);
+    ItemInfo info = ImageModel::retrieveItemInfo(m_index);
     qCDebug(DIGIKAM_GENERAL_LOG) << "called updateTag()";
 
     //TODO: ADD ratingWidget()->setRating(info.rating());

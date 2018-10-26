@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-05-01
- * Description : ImageInfo common data
+ * Description : ItemInfo common data
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_INFO_CACHE_H
-#define DIGIKAM_IMAGE_INFO_CACHE_H
+#ifndef DIGIKAM_ITEM_INFO_CACHE_H
+#define DIGIKAM_ITEM_INFO_CACHE_H
 
 // Qt includes
 
@@ -40,44 +40,44 @@ namespace Digikam
 {
 
 class AlbumShortInfo;
-class ImageInfoData;
+class ItemInfoData;
 
 // No EXPORT class
-class ImageInfoCache : public QObject
+class ItemInfoCache : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageInfoCache();
-    ~ImageInfoCache();
+    explicit ItemInfoCache();
+    ~ItemInfoCache();
 
     /**
-     * Return an ImageInfoData object for the given image id.
+     * Return an ItemInfoData object for the given image id.
      * A new object is created, or an existing object is returned.
      * If a new object is created, the id field will be initialized.
      */
-    DSharedDataPointer<ImageInfoData> infoForId(qlonglong id);
+    DSharedDataPointer<ItemInfoData> infoForId(qlonglong id);
 
     /**
      * Call this when the data has been dereferenced,
      * before deletion.
      */
-    void dropInfo(ImageInfoData* const infodata);
+    void dropInfo(ItemInfoData* const infodata);
 
     /**
      * Call this to put data in the hash by file name if you have newly created data
      * and the name is filled.
      * Call under write lock.
      */
-    void cacheByName(ImageInfoData* const data);
+    void cacheByName(ItemInfoData* const data);
 
     /**
-     * Return an ImageInfoData object for the given album root, relativePath and file name triple.
+     * Return an ItemInfoData object for the given album root, relativePath and file name triple.
      * Works if previously cached with cacheByName.
      * Returns 0 if not found.
      */
-    DSharedDataPointer<ImageInfoData> infoForPath(int albumRootId, const QString& relativePath, const QString& name);
+    DSharedDataPointer<ItemInfoData> infoForPath(int albumRootId, const QString& relativePath, const QString& name);
 
     /**
      * Returns the cached relativePath for the given album id.
@@ -107,9 +107,9 @@ private:
 
 private:
 
-    QHash<qlonglong, ImageInfoData*>    m_infos;
-    QHash<ImageInfoData*, QString>      m_dataHash;
-    QMultiHash<QString, ImageInfoData*> m_nameHash;
+    QHash<qlonglong, ItemInfoData*>    m_infos;
+    QHash<ItemInfoData*, QString>      m_dataHash;
+    QMultiHash<QString, ItemInfoData*> m_nameHash;
     volatile bool                       m_needUpdateAlbums;
     volatile bool                       m_needUpdateGrouped;
     QList<qlonglong>                    m_grouped;
@@ -118,4 +118,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_INFO_CACHE_H
+#endif // DIGIKAM_ITEM_INFO_CACHE_H

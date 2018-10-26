@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class ImageInfo;
+class ItemInfo;
 class ImageModel;
 class VersionManagerSettings;
 
@@ -86,7 +86,7 @@ public:
 
 Q_SIGNALS:
 
-    void activated(const ImageInfo& info);
+    void activated(const ItemInfo& info);
 
 protected:
 

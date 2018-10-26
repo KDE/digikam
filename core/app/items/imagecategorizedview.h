@@ -27,7 +27,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "itemviewcategorized.h"
 #include "thumbnailsize.h"
 #include "iccsettingscontainer.h"
@@ -74,13 +74,13 @@ public:
     ImageDelegate*         delegate()              const;
 
     Album*                 currentAlbum()          const;
-    ImageInfo              currentInfo()           const;
+    ItemInfo              currentInfo()           const;
     QUrl                   currentUrl()            const;
 
-    ImageInfoList          allImageInfos() const;
+    ItemInfoList          allItemInfos() const;
     QList<QUrl>            allUrls() const;
-    ImageInfoList          selectedImageInfos() const;
-    ImageInfoList          selectedImageInfosCurrentFirst() const;
+    ItemInfoList          selectedItemInfos() const;
+    ItemInfoList          selectedItemInfosCurrentFirst() const;
 
     /** Selects the index as current and scrolls to it.
      */
@@ -92,19 +92,19 @@ public:
      *  Returns a null info if either startingPoint or the nth info are
      *  not contained in the model.
      */
-    ImageInfo nextInOrder(const ImageInfo& startingPoint, int nth);
+    ItemInfo nextInOrder(const ItemInfo& startingPoint, int nth);
 
-    ImageInfo previousInfo(const ImageInfo& info)
+    ItemInfo previousInfo(const ItemInfo& info)
     {
         return nextInOrder(info, -1);
     }
 
-    ImageInfo nextInfo(const ImageInfo& info)
+    ItemInfo nextInfo(const ItemInfo& info)
     {
         return nextInOrder(info, 1);
     }
 
-    QModelIndex indexForInfo(const ImageInfo& info) const;
+    QModelIndex indexForInfo(const ItemInfo& info) const;
 
     ThumbnailSize thumbnailSize() const;
 
@@ -144,7 +144,7 @@ public Q_SLOTS:
 
     /** Set as current item the item identified by the imageinfo.
      */
-    void setCurrentInfo(const ImageInfo& info);
+    void setCurrentInfo(const ItemInfo& info);
 
     /** Set selected items identified by their file urls.
      */
@@ -152,33 +152,33 @@ public Q_SLOTS:
 
     /** Set selected items.
      */
-    void setSelectedImageInfos(const QList<ImageInfo>& infos);
+    void setSelectedItemInfos(const QList<ItemInfo>& infos);
 
     /** Does something to gain attention for info, but not changing current selection.
      */
-    void hintAt(const ImageInfo& info);
+    void hintAt(const ItemInfo& info);
 
 Q_SIGNALS:
 
-    void currentChanged(const ImageInfo& info);
+    void currentChanged(const ItemInfo& info);
 
     /// Emitted when new items are selected. The parameter includes only the newly selected infos,
     /// there may be other already selected infos.
-    void selected(const QList<ImageInfo>& newSelectedInfos);
+    void selected(const QList<ItemInfo>& newSelectedInfos);
 
     /// Emitted when items are deselected. There may be other selected infos left.
     /// This signal is not emitted when the model is reset; then only selectionCleared is emitted.
-    void deselected(const QList<ImageInfo>& nowDeselectedInfos);
+    void deselected(const QList<ItemInfo>& nowDeselectedInfos);
 
     /// Emitted when the given image is activated. Info is never null.
-    void imageActivated(const ImageInfo& info);
+    void imageActivated(const ItemInfo& info);
 
     /// Emitted when a new model is set
     void modelChanged();
 
 protected Q_SLOTS:
 
-    void slotImageInfosAdded();
+    void slotItemInfosAdded();
     void slotCurrentUrlTimer();
 
 protected:
@@ -200,12 +200,12 @@ protected:
     void updateGeometries();
 
     /// Reimplement these in a subclass
-    virtual void activated(const ImageInfo& info, Qt::KeyboardModifiers modifiers);
-    virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info);
+    virtual void activated(const ItemInfo& info, Qt::KeyboardModifiers modifiers);
+    virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info);
     virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
 
-    ImageInfo     imageInfo(const QModelIndex& index) const;
-    ImageInfoList imageInfos(const QList<QModelIndex>& indexes) const;
+    ItemInfo     imageInfo(const QModelIndex& index) const;
+    ItemInfoList imageInfos(const QList<QModelIndex>& indexes) const;
 
 private Q_SLOTS:
 

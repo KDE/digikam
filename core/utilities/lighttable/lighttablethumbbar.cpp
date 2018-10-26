@@ -203,10 +203,10 @@ LightTableThumbBar::LightTableThumbBar(QWidget* const parent)
     setModels(d->imageInfoModel, d->imageFilterModel);
     setSelectionMode(QAbstractItemView::SingleSelection);
 
-    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(QList<ImageInfo>)),
-            this, SIGNAL(signalDroppedItems(QList<ImageInfo>)));
+    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(QList<ItemInfo>)),
+            this, SIGNAL(signalDroppedItems(QList<ItemInfo>)));
 
-    connect(d->imageInfoModel, SIGNAL(imageInfosAdded(QList<ImageInfo>)),
+    connect(d->imageInfoModel, SIGNAL(imageInfosAdded(QList<ItemInfo>)),
             this, SIGNAL(signalContentChanged()));
 
     connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
@@ -218,13 +218,13 @@ LightTableThumbBar::~LightTableThumbBar()
     delete d;
 }
 
-void LightTableThumbBar::setItems(const ImageInfoList& list)
+void LightTableThumbBar::setItems(const ItemInfoList& list)
 {
-    foreach(const ImageInfo& info, list)
+    foreach(const ItemInfo& info, list)
     {
         if (!d->imageInfoModel->hasImage(info))
         {
-            d->imageInfoModel->addImageInfo(info);
+            d->imageInfoModel->addItemInfo(info);
         }
     }
 }
@@ -245,7 +245,7 @@ void LightTableThumbBar::slotDockLocationChanged(Qt::DockWidgetArea area)
 
 void LightTableThumbBar::clear()
 {
-    d->imageInfoModel->clearImageInfos();
+    d->imageInfoModel->clearItemInfos();
     emit signalContentChanged();
 }
 
@@ -254,7 +254,7 @@ void LightTableThumbBar::setNavigateByPair(bool b)
     d->navigateByPair = b;
 }
 
-void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const ImageInfo& info)
+void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const ItemInfo& info)
 {
     // temporary actions ----------------------------------
 
@@ -325,12 +325,12 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
 
 void LightTableThumbBar::slotColorLabelChanged(const QUrl& url, int color)
 {
-    assignColorLabel(ImageInfo::fromUrl(url), color);
+    assignColorLabel(ItemInfo::fromUrl(url), color);
 }
 
 void LightTableThumbBar::slotPickLabelChanged(const QUrl& url, int pick)
 {
-    assignPickLabel(ImageInfo::fromUrl(url), pick);
+    assignPickLabel(ItemInfo::fromUrl(url), pick);
 }
 
 void LightTableThumbBar::slotAssignPickLabel(int pickId)
@@ -345,7 +345,7 @@ void LightTableThumbBar::slotAssignColorLabel(int colorId)
 
 void LightTableThumbBar::slotRatingChanged(const QUrl& url, int rating)
 {
-    assignRating(ImageInfo::fromUrl(url), rating);
+    assignRating(ItemInfo::fromUrl(url), rating);
 }
 
 void LightTableThumbBar::slotAssignRating(int rating)
@@ -353,25 +353,25 @@ void LightTableThumbBar::slotAssignRating(int rating)
     assignRating(currentInfo(), rating);
 }
 
-void LightTableThumbBar::assignPickLabel(const ImageInfo& info, int pickId)
+void LightTableThumbBar::assignPickLabel(const ItemInfo& info, int pickId)
 {
     FileActionMngr::instance()->assignPickLabel(info, pickId);
 }
 
-void LightTableThumbBar::assignRating(const ImageInfo& info, int rating)
+void LightTableThumbBar::assignRating(const ItemInfo& info, int rating)
 {
     rating = qMin(RatingMax, qMax(RatingMin, rating));
     FileActionMngr::instance()->assignRating(info, rating);
 }
 
-void LightTableThumbBar::assignColorLabel(const ImageInfo& info, int colorId)
+void LightTableThumbBar::assignColorLabel(const ItemInfo& info, int colorId)
 {
     FileActionMngr::instance()->assignColorLabel(info, colorId);
 }
 
 void LightTableThumbBar::slotToggleTag(const QUrl& url, int tagID)
 {
-    toggleTag(ImageInfo::fromUrl(url), tagID);
+    toggleTag(ItemInfo::fromUrl(url), tagID);
 }
 
 void LightTableThumbBar::toggleTag(int tagID)
@@ -379,7 +379,7 @@ void LightTableThumbBar::toggleTag(int tagID)
     toggleTag(currentInfo(), tagID);
 }
 
-void LightTableThumbBar::toggleTag(const ImageInfo& info, int tagID)
+void LightTableThumbBar::toggleTag(const ItemInfo& info, int tagID)
 {
     if (!info.isNull())
     {
@@ -394,60 +394,60 @@ void LightTableThumbBar::toggleTag(const ImageInfo& info, int tagID)
     }
 }
 
-void LightTableThumbBar::setOnLeftPanel(const ImageInfo& info)
+void LightTableThumbBar::setOnLeftPanel(const ItemInfo& info)
 {
-    QModelIndex index = d->imageInfoModel->indexForImageInfo(info);
+    QModelIndex index = d->imageInfoModel->indexForItemInfo(info);
     // model has exclusiveLightTableState, so any previous index will be reset
     d->imageInfoModel->setData(index, true, ImageModel::LTLeftPanelRole);
     viewport()->update();
 }
 
-void LightTableThumbBar::setOnRightPanel(const ImageInfo& info)
+void LightTableThumbBar::setOnRightPanel(const ItemInfo& info)
 {
-    QModelIndex index = d->imageInfoModel->indexForImageInfo(info);
+    QModelIndex index = d->imageInfoModel->indexForItemInfo(info);
     // model has exclusiveLightTableState, so any previous index will be reset
     d->imageInfoModel->setData(index, true, ImageModel::LTRightPanelRole);
     viewport()->update();
 }
 
-bool LightTableThumbBar::isOnLeftPanel(const ImageInfo& info) const
+bool LightTableThumbBar::isOnLeftPanel(const ItemInfo& info) const
 {
-    return d->imageInfoModel->indexForImageInfo(info).data(ImageModel::LTLeftPanelRole).toBool();
+    return d->imageInfoModel->indexForItemInfo(info).data(ImageModel::LTLeftPanelRole).toBool();
 }
 
-bool LightTableThumbBar::isOnRightPanel(const ImageInfo& info) const
+bool LightTableThumbBar::isOnRightPanel(const ItemInfo& info) const
 {
-    return d->imageInfoModel->indexForImageInfo(info).data(ImageModel::LTRightPanelRole).toBool();
+    return d->imageInfoModel->indexForItemInfo(info).data(ImageModel::LTRightPanelRole).toBool();
 }
 
-QModelIndex LightTableThumbBar::findItemByInfo(const ImageInfo& info) const
+QModelIndex LightTableThumbBar::findItemByInfo(const ItemInfo& info) const
 {
     if (!info.isNull())
     {
-        return d->imageInfoModel->indexForImageInfo(info);
+        return d->imageInfoModel->indexForItemInfo(info);
     }
 
     return QModelIndex();
 }
 
-ImageInfo LightTableThumbBar::findItemByIndex(const QModelIndex& index) const
+ItemInfo LightTableThumbBar::findItemByIndex(const QModelIndex& index) const
 {
     if (index.isValid())
     {
         return d->imageInfoModel->imageInfo(index);
     }
 
-    return ImageInfo();
+    return ItemInfo();
 }
 
-void LightTableThumbBar::removeItemByInfo(const ImageInfo& info)
+void LightTableThumbBar::removeItemByInfo(const ItemInfo& info)
 {
     if (info.isNull())
     {
         return;
     }
 
-    d->imageInfoModel->removeImageInfo(info);
+    d->imageInfoModel->removeItemInfo(info);
     emit signalContentChanged();
 }
 

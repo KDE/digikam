@@ -47,8 +47,8 @@
 #include "ddragobjects.h"
 #include "dio.h"
 #include "imagecategorizedview.h"
-#include "imageinfo.h"
-#include "imageinfolist.h"
+#include "iteminfo.h"
+#include "iteminfolist.h"
 #include "tableview_treeview.h"
 
 namespace Digikam
@@ -325,7 +325,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         DropAction action = NoAction;
 
-        ImageInfo droppedOnInfo;
+        ItemInfo droppedOnInfo;
 
         if (droppedOn.isValid())
         {
@@ -343,13 +343,13 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         if (m_readOnly)
         {
-            emit imageInfosDropped(ImageInfoList(imageIDs));
+            emit imageInfosDropped(ItemInfoList(imageIDs));
             return true;
         }
         else if (palbum)
         {
             // Check if items dropped come from outside current album.
-            QList<ImageInfo> extImages, intImages;
+            QList<ItemInfo> extImages, intImages;
 
             if (imageIDs.isEmpty())
             {
@@ -358,7 +358,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
             for (QList<qlonglong>::const_iterator it = imageIDs.constBegin() ; it != imageIDs.constEnd() ; ++it)
             {
-                ImageInfo info(*it);
+                ItemInfo info(*it);
 
                 if (info.albumId() != album->id())
                 {
@@ -446,7 +446,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
             if (action == AssignTagAction)
             {
-                emit assignTags(ImageInfoList(imageIDs), QList<int>() << talbum->id());
+                emit assignTags(ItemInfoList(imageIDs), QList<int>() << talbum->id());
                 return true;
             }
         }
@@ -466,7 +466,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                 return false;
             }
 
-            emit addToGroup(droppedOnInfo, ImageInfoList(imageIDs));
+            emit addToGroup(droppedOnInfo, ItemInfoList(imageIDs));
             return true;
         }
 
@@ -477,7 +477,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                 return false;
             }
 
-            emit dragDropSort(droppedOnInfo, ImageInfoList(imageIDs));
+            emit dragDropSort(droppedOnInfo, ItemInfoList(imageIDs));
             return true;
         }
 
@@ -488,8 +488,8 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                 return false;
             }
 
-            emit addToGroup(droppedOnInfo, ImageInfoList(imageIDs));
-            DIO::move(ImageInfoList(imageIDs), palbum);
+            emit addToGroup(droppedOnInfo, ItemInfoList(imageIDs));
+            DIO::move(ItemInfoList(imageIDs), palbum);
             return true;
         }
 
@@ -544,7 +544,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         QMenu popMenu(view);
 
-        QList<ImageInfo> selectedInfos  = view->selectedImageInfosCurrentFirst();
+        QList<ItemInfo> selectedInfos  = view->selectedItemInfosCurrentFirst();
         QAction* assignToSelectedAction = 0;
 
         if (selectedInfos.count() > 1)
@@ -575,11 +575,11 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             }
             else if (choice == assignToAllAction)    // All Items
             {
-                emit assignTags(view->allImageInfos(), tagIDs);
+                emit assignTags(view->allItemInfos(), tagIDs);
             }
             else if (choice == assignToThisAction)    // Dropped item only.
             {
-                emit assignTags(QList<ImageInfo>() << model()->imageInfo(droppedOn), tagIDs);
+                emit assignTags(QList<ItemInfo>() << model()->imageInfo(droppedOn), tagIDs);
             }
         }
 
@@ -674,13 +674,13 @@ QStringList ImageDragDropHandler::mimeTypes() const
 
 QMimeData* ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexes)
 {
-    QList<ImageInfo> infos = model()->imageInfos(indexes);
+    QList<ItemInfo> infos = model()->imageInfos(indexes);
 
     QList<QUrl>      urls;
     QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
 
-    foreach(const ImageInfo& info, infos)
+    foreach(const ItemInfo& info, infos)
     {
         urls.append(info.fileUrl());
         albumIDs.append(info.albumId());

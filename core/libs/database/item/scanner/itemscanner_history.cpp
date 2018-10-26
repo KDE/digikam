@@ -106,7 +106,7 @@ bool ItemScanner::resolveImageHistory(qlonglong imageId, const QString& historyX
     CoreDbAccess().db()->removeTagsFromItems(graph.allImageIds(), QList<int>() << needResolvingTag);
 
     // mark a single image from the graph (sufficient for find the full relation cloud)
-    QList<ImageInfo> roots = graph.rootImages();
+    QList<ItemInfo> roots = graph.rootImages();
 
     if (!roots.isEmpty())
     {
@@ -125,7 +125,7 @@ void ItemScanner::tagItemHistoryGraph(qlonglong id)
 {
     /** Stage 3 of history scanning */
 
-    ImageInfo info(id);
+    ItemInfo info(id);
 
     if (info.isNull())
     {
@@ -154,8 +154,8 @@ void ItemScanner::tagItemHistoryGraph(qlonglong id)
 
     // get category info
     QList<qlonglong>                                        originals, intermediates, currents;
-    QHash<ImageInfo, HistoryImageId::Types>                 types = graph.categorize();
-    QHash<ImageInfo, HistoryImageId::Types>::const_iterator it;
+    QHash<ItemInfo, HistoryImageId::Types>                 types = graph.categorize();
+    QHash<ItemInfo, HistoryImageId::Types>::const_iterator it;
 
     for (it = types.constBegin() ; it != types.constEnd() ; ++it)
     {
@@ -212,7 +212,7 @@ DImageHistory ItemScanner::resolvedImageHistory(const DImageHistory& history, bo
             // append each image found in collection to referredImages
             foreach (const qlonglong& imageId, imageIds)
             {
-                ImageInfo info(imageId);
+                ItemInfo info(imageId);
 
                 if (info.isNull())
                 {

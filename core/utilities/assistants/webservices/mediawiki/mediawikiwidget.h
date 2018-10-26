@@ -97,8 +97,8 @@ public:
     void clearImagesDesc();
     void readSettings(KConfigGroup& group);
     void saveSettings(KConfigGroup& group);
-    void loadImageInfoFirstLoad();
-    void loadImageInfo(const QUrl& url);
+    void loadItemInfoFirstLoad();
+    void loadItemInfo(const QUrl& url);
     void clearEditFields();
 
 Q_SIGNALS:

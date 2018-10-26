@@ -90,7 +90,7 @@ public:
 
     DImg                          image;
 
-    ImageInfo                     imageinfo;
+    ItemInfo                     imageinfo;
 
     DRawDecoderSettings           rawDecodingSettings;
 
@@ -248,12 +248,12 @@ DImg BatchTool::imageData() const
     return d->image;
 }
 
-void BatchTool::setImageInfo(const ImageInfo& info)
+void BatchTool::setItemInfo(const ItemInfo& info)
 {
     d->imageinfo = info;
 }
 
-ImageInfo BatchTool::imageInfo() const
+ItemInfo BatchTool::imageInfo() const
 {
     return d->imageinfo;
 }
