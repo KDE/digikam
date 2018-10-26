@@ -70,8 +70,8 @@
 |│   │   │   ├── dbjobs                                       | All database multi-threaded jobs                                        |
 |│   │   │   ├── engine                                       | The low level database engine classes                                   |
 |│   │   │   ├── haar                                         | The similarity low level algorithms to compute image finger-prints      |
-|│   │   │   ├── imagehistory                                 | The image history classes for the database                              |
-|│   │   │   ├── item                                         | The database item classes                                               |
+|│   │   │   ├── history                                      | The item history classes for the database                               |
+|│   │   │   ├── item                                         | The database item classes, including containers, lister, and scanner    |
 |│   │   │   ├── models                                       | The databse model classes                                               |
 |│   │   │   ├── server                                       | The Mysql internal server                                               |
 |│   │   │   ├── similaritydb                                 | The similarity database                                                 |
