@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_FILTER_MODEL_PRIV_H
-#define DIGIKAM_IMAGE_FILTER_MODEL_PRIV_H
+#ifndef DIGIKAM_IMAGE_FILTER_MODEL_P_H
+#define DIGIKAM_IMAGE_FILTER_MODEL_P_H
 
 // Qt includes
 
@@ -160,4 +160,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_FILTER_MODEL_PRIV_H
+#endif // DIGIKAM_IMAGE_FILTER_MODEL_P_H

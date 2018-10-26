@@ -26,7 +26,7 @@
  * ============================================================ */
 
 #include "imagefiltermodelthreads.h"
-#include "imagefiltermodelpriv.h"
+#include "imagefiltermodel_p.h"
 
 namespace Digikam
 {

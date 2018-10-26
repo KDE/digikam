@@ -25,8 +25,7 @@
  *
  * ============================================================ */
 
-#include "imagefiltermodel.h"
-#include "imagefiltermodelpriv.h"
+#include "imagefiltermodel_p.h"
 #include "imagefiltermodelthreads.h"
 
 // Local includes

@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "imagefiltermodelpriv.h"
+#include "imagefiltermodel_p.h"
 #include "album.h"
 #include "albummanager.h"
 #include "coredbaccess.h"

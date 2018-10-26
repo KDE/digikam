@@ -17,7 +17,7 @@ string(REPLACE "-fno-operator-names" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 set(libdatabasemodels_SRCS
     models/imagemodel.cpp
     models/imagefiltermodel.cpp
-    models/imagefiltermodelpriv.cpp
+    models/imagefiltermodel_p.cpp
     models/imagefiltermodelthreads.cpp
     models/imagefiltersettings.cpp
     models/imagelistmodel.cpp
