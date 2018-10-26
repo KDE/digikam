@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "imagefiltersettings.h"
+#include "itemfiltersettings.h"
 #include "imagesortsettings.h"
 #include "thumbnailsize.h"
 
@@ -290,7 +290,7 @@ void ApplicationSettings::Private::init()
     treeviewFont                         = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     sidebarTitleStyle                    = DMultiTabBar::AllIconsText;
 
-    ratingFilterCond                     = ImageFilterSettings::GreaterEqualCondition;
+    ratingFilterCond                     = ItemFilterSettings::GreaterEqualCondition;
 
     showSplash                           = true;
     useTrash                             = true;

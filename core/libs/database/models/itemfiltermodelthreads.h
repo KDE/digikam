@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_FILTER_MODEL_THREADS_H
-#define DIGIKAM_IMAGE_FILTER_MODEL_THREADS_H
+#ifndef DIGIKAM_ITEM_FILTER_MODEL_THREADS_H
+#define DIGIKAM_ITEM_FILTER_MODEL_THREADS_H
 
 // Qt includes
 
@@ -32,69 +32,69 @@
 
 #include "digikam_export.h"
 #include "workerobject.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 
 namespace Digikam
 {
 
-class ImageFilterModelTodoPackage;
+class ItemFilterModelTodoPackage;
     
-class DIGIKAM_DATABASE_EXPORT ImageFilterModelWorker : public WorkerObject
+class DIGIKAM_DATABASE_EXPORT ItemFilterModelWorker : public WorkerObject
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageFilterModelWorker(ImageFilterModel::ImageFilterModelPrivate* const d);
+    explicit ItemFilterModelWorker(ItemFilterModel::ItemFilterModelPrivate* const d);
 
-    bool checkVersion(const ImageFilterModelTodoPackage& package);
+    bool checkVersion(const ItemFilterModelTodoPackage& package);
 
 public Q_SLOTS:
 
-    virtual void process(ImageFilterModelTodoPackage package) = 0;
+    virtual void process(ItemFilterModelTodoPackage package) = 0;
 
 Q_SIGNALS:
 
-    void processed(const ImageFilterModelTodoPackage& package);
-    void discarded(const ImageFilterModelTodoPackage& package);
+    void processed(const ItemFilterModelTodoPackage& package);
+    void discarded(const ItemFilterModelTodoPackage& package);
 
 protected:
 
-    ImageFilterModel::ImageFilterModelPrivate* d;
+    ItemFilterModel::ItemFilterModelPrivate* d;
 };
 
 // -----------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageFilterModelPreparer : public ImageFilterModelWorker
+class DIGIKAM_DATABASE_EXPORT ItemFilterModelPreparer : public ItemFilterModelWorker
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageFilterModelPreparer(ImageFilterModel::ImageFilterModelPrivate* const d)
-        : ImageFilterModelWorker(d)
+    explicit ItemFilterModelPreparer(ItemFilterModel::ItemFilterModelPrivate* const d)
+        : ItemFilterModelWorker(d)
     {
     }
 
-    void process(ImageFilterModelTodoPackage package);
+    void process(ItemFilterModelTodoPackage package);
 };
 
 // ----------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageFilterModelFilterer : public ImageFilterModelWorker
+class DIGIKAM_DATABASE_EXPORT ItemFilterModelFilterer : public ItemFilterModelWorker
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageFilterModelFilterer(ImageFilterModel::ImageFilterModelPrivate* const d)
-        : ImageFilterModelWorker(d)
+    explicit ItemFilterModelFilterer(ItemFilterModel::ItemFilterModelPrivate* const d)
+        : ItemFilterModelWorker(d)
     {
     }
 
-    void process(ImageFilterModelTodoPackage package);
+    void process(ItemFilterModelTodoPackage package);
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_FILTER_MODEL_THREADS_H
+#endif // DIGIKAM_ITEM_FILTER_MODEL_THREADS_H

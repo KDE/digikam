@@ -66,7 +66,7 @@ public:
         tagFilterModel(0),
         tagOrCondAction(0),
         tagAndCondAction(0),
-        tagMatchCond(ImageFilterSettings::OrCondition),
+        tagMatchCond(ItemFilterSettings::OrCondition),
         colorLabelFilter(0),
         geolocationFilter(0),
         pickLabelFilter(0),
@@ -92,7 +92,7 @@ public:
     TagModel*                              tagFilterModel;
     QAction*                               tagOrCondAction;
     QAction*                               tagAndCondAction;
-    ImageFilterSettings::MatchingCondition tagMatchCond;
+    ItemFilterSettings::MatchingCondition tagMatchCond;
 
     ColorLabelFilter*                      colorLabelFilter;
     GeolocationFilter*                     geolocationFilter;
@@ -212,8 +212,8 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     connect(d->mimeFilter, SIGNAL(activated(int)),
             this, SIGNAL(signalMimeTypeFilterChanged(int)));
 
-    connect(d->geolocationFilter, SIGNAL(signalFilterChanged(ImageFilterSettings::GeolocationCondition)),
-            this, SIGNAL(signalGeolocationFilterChanged(ImageFilterSettings::GeolocationCondition)));
+    connect(d->geolocationFilter, SIGNAL(signalFilterChanged(ItemFilterSettings::GeolocationCondition)),
+            this, SIGNAL(signalGeolocationFilterChanged(ItemFilterSettings::GeolocationCondition)));
 
     connect(d->textFilter, SIGNAL(signalSearchTextFilterSettings(SearchTextFilterSettings)),
             this, SIGNAL(signalSearchTextFilterChanged(SearchTextFilterSettings)));
@@ -236,8 +236,8 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     connect(d->tagOptionsMenu, SIGNAL(aboutToShow()),
             this, SLOT(slotTagOptionsMenu()));
 
-    connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition,bool)),
-            this, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition,bool)));
+    connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int,ItemFilterSettings::RatingCondition,bool)),
+            this, SIGNAL(signalRatingFilterChanged(int,ItemFilterSettings::RatingCondition,bool)));
 }
 
 FilterSideBarWidget::~FilterSideBarWidget()
@@ -252,10 +252,10 @@ void FilterSideBarWidget::slotTagOptionsMenu()
 
     switch (d->tagMatchCond)
     {
-        case ImageFilterSettings::OrCondition:
+        case ItemFilterSettings::OrCondition:
             d->tagOrCondAction->setChecked(true);
             break;
-        case ImageFilterSettings::AndCondition:
+        case ItemFilterSettings::AndCondition:
             d->tagAndCondAction->setChecked(true);
             break;
     }
@@ -283,15 +283,15 @@ void FilterSideBarWidget::slotResetFilters()
 {
     d->textFilter->reset();
     d->mimeFilter->setMimeFilter(MimeFilter::AllFiles);
-    d->geolocationFilter->setGeolocationFilter(ImageFilterSettings::GeolocationNoFilter);
+    d->geolocationFilter->setGeolocationFilter(ItemFilterSettings::GeolocationNoFilter);
     d->tagFilterView->slotResetCheckState();
     d->withoutTagCheckBox->setChecked(false);
     d->colorLabelFilter->reset();
     d->pickLabelFilter->reset();
     d->ratingFilter->setRating(0);
-    d->ratingFilter->setRatingFilterCondition(ImageFilterSettings::GreaterEqualCondition);
+    d->ratingFilter->setRatingFilterCondition(ItemFilterSettings::GreaterEqualCondition);
     d->ratingFilter->setExcludeUnratedItems(false);
-    d->tagMatchCond = ImageFilterSettings::OrCondition;
+    d->tagMatchCond = ItemFilterSettings::OrCondition;
 }
 
 void FilterSideBarWidget::slotTagOptionsTriggered(QAction* action)
@@ -300,11 +300,11 @@ void FilterSideBarWidget::slotTagOptionsTriggered(QAction* action)
     {
         if (action == d->tagOrCondAction)
         {
-            d->tagMatchCond = ImageFilterSettings::OrCondition;
+            d->tagMatchCond = ItemFilterSettings::OrCondition;
         }
         else if (action == d->tagAndCondAction)
         {
-            d->tagMatchCond = ImageFilterSettings::AndCondition;
+            d->tagMatchCond = ItemFilterSettings::AndCondition;
         }
     }
 
@@ -346,7 +346,7 @@ void FilterSideBarWidget::filterChanged()
     QList<int> clTagIds;
     QList<int> plTagIds;
 
-    if (!showUntagged || d->tagMatchCond == ImageFilterSettings::OrCondition)
+    if (!showUntagged || d->tagMatchCond == ItemFilterSettings::OrCondition)
     {
         foreach(TAlbum* tag, d->tagFilterView->getCheckedTags())
         {
@@ -400,12 +400,12 @@ void FilterSideBarWidget::doLoadState()
                                                                    (int)SearchTextFilterSettings::All)));
 
 
-    d->ratingFilter->setRatingFilterCondition((ImageFilterSettings::RatingCondition)
+    d->ratingFilter->setRatingFilterCondition((ItemFilterSettings::RatingCondition)
                                               (ApplicationSettings::instance()->getRatingFilterCond()));
 
-    d->tagMatchCond = (ImageFilterSettings::MatchingCondition)
+    d->tagMatchCond = (ItemFilterSettings::MatchingCondition)
                       (group.readEntry(entryName(d->configMatchingConditionEntry),
-                                                  (int)ImageFilterSettings::OrCondition));
+                                                  (int)ItemFilterSettings::OrCondition));
 
     d->tagFilterView->loadState();
 

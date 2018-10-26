@@ -31,12 +31,12 @@
 namespace Digikam
 {
 
-class ImageFiltersHistoryItemDelegate : public QStyledItemDelegate
+class ItemFiltersHistoryItemDelegate : public QStyledItemDelegate
 {
 public:
 
-    explicit ImageFiltersHistoryItemDelegate(QObject* const parent = 0);
-    ~ImageFiltersHistoryItemDelegate();
+    explicit ItemFiltersHistoryItemDelegate(QObject* const parent = 0);
+    ~ItemFiltersHistoryItemDelegate();
 
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;

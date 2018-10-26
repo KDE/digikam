@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_FILTER_MODEL_P_H
-#define DIGIKAM_IMAGE_FILTER_MODEL_P_H
+#ifndef DIGIKAM_ITEM_FILTER_MODEL_P_H
+#define DIGIKAM_ITEM_FILTER_MODEL_P_H
 
 // Qt includes
 
@@ -37,7 +37,7 @@
 // Local includes
 
 #include "iteminfo.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "digikam_export.h"
 
 // NOTE: we need the EXPORT macro in a private header because
@@ -50,17 +50,17 @@ namespace Digikam
 const int PrepareChunkSize = 101;
 const int FilterChunkSize  = 2001;
 
-class ImageFilterModelTodoPackage
+class ItemFilterModelTodoPackage
 {
 public:
 
-    ImageFilterModelTodoPackage()
+    ItemFilterModelTodoPackage()
         : version(0),
           isForReAdd(false)
     {
     }
 
-    ImageFilterModelTodoPackage(const QVector<ItemInfo>& infos, const QVector<QVariant>& extraValues, int version, bool isForReAdd)
+    ItemFilterModelTodoPackage(const QVector<ItemInfo>& infos, const QVector<QVariant>& extraValues, int version, bool isForReAdd)
         : infos(infos),
           extraValues(extraValues),
           version(version),
@@ -77,33 +77,33 @@ public:
 
 // ------------------------------------------------------------------------------------------------
 
-class ImageFilterModelPreparer;
-class ImageFilterModelFilterer;
+class ItemFilterModelPreparer;
+class ItemFilterModelFilterer;
 
-class DIGIKAM_DATABASE_EXPORT ImageFilterModel::ImageFilterModelPrivate : public QObject
+class DIGIKAM_DATABASE_EXPORT ItemFilterModel::ItemFilterModelPrivate : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageFilterModelPrivate();
-    ~ImageFilterModelPrivate();
+    explicit ItemFilterModelPrivate();
+    ~ItemFilterModelPrivate();
 
-    void init(ImageFilterModel* q);
+    void init(ItemFilterModel* q);
     void setupWorkers();
     void infosToProcess(const QList<ItemInfo>& infos);
     void infosToProcess(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd = true);
 
 public:
 
-    ImageFilterModel*                   q;
+    ItemFilterModel*                   q;
 
     ImageModel*                         imageModel;
 
-    ImageFilterSettings                 filter;
+    ItemFilterSettings                 filter;
     ImageSortSettings                   sorter;
-    VersionImageFilterSettings          versionFilter;
-    GroupImageFilterSettings            groupFilter;
+    VersionItemFilterSettings          versionFilter;
+    GroupItemFilterSettings            groupFilter;
 
     volatile unsigned int               version;
     unsigned int                        lastDiscardVersion;
@@ -119,17 +119,17 @@ public:
     bool                                needPrepareGroups;
 
     QMutex                              mutex;
-    ImageFilterSettings                 filterCopy;
-    VersionImageFilterSettings          versionFilterCopy;
-    GroupImageFilterSettings            groupFilterCopy;
-    ImageFilterModelPreparer*           preparer;
-    ImageFilterModelFilterer*           filterer;
+    ItemFilterSettings                 filterCopy;
+    VersionItemFilterSettings          versionFilterCopy;
+    GroupItemFilterSettings            groupFilterCopy;
+    ItemFilterModelPreparer*           preparer;
+    ItemFilterModelFilterer*           filterer;
 
     QHash<qlonglong, bool>              filterResults;
     bool                                hasOneMatch;
     bool                                hasOneMatchForText;
 
-    QList<ImageFilterModelPrepareHook*> prepareHooks;
+    QList<ItemFilterModelPrepareHook*> prepareHooks;
 
 /*
     QHash<int, QSet<qlonglong> >        categoryCountHashInt;
@@ -138,26 +138,26 @@ public:
 public:
 
         void cacheCategoryCount(int id, qlonglong imageid) const
-        { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashInt[id].insert(imageid); }
+        { const_cast<ItemFilterModelPrivate*>(this)->categoryCountHashInt[id].insert(imageid); }
         void cacheCategoryCount(const QString& id, qlonglong imageid) const
-        { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashString[id].insert(imageid); }
+        { const_cast<ItemFilterModelPrivate*>(this)->categoryCountHashString[id].insert(imageid); }
 */
 
 public Q_SLOTS:
 
     void preprocessInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
     void processAddedInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
-    void packageFinished(const ImageFilterModelTodoPackage& package);
-    void packageDiscarded(const ImageFilterModelTodoPackage& package);
+    void packageFinished(const ItemFilterModelTodoPackage& package);
+    void packageDiscarded(const ItemFilterModelTodoPackage& package);
 
 Q_SIGNALS:
 
-    void packageToPrepare(const ImageFilterModelTodoPackage& package);
-    void packageToFilter(const ImageFilterModelTodoPackage& package);
+    void packageToPrepare(const ItemFilterModelTodoPackage& package);
+    void packageToFilter(const ItemFilterModelTodoPackage& package);
     void reAddItemInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues);
     void reAddingFinished();
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_FILTER_MODEL_P_H
+#endif // DIGIKAM_ITEM_FILTER_MODEL_P_H

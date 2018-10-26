@@ -25,7 +25,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "iteminfo.h"
 #include "tableview_columns.h"
 

@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 class ImageAlbumModel;
-class ImageFilterModel;
+class ItemFilterModel;
 
 class Q_DECL_HIDDEN TableViewConfigurationDialog::Private
 {

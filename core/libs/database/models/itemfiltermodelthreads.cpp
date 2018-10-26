@@ -25,18 +25,18 @@
  *
  * ============================================================ */
 
-#include "imagefiltermodelthreads.h"
-#include "imagefiltermodel_p.h"
+#include "itemfiltermodelthreads.h"
+#include "itemfiltermodel_p.h"
 
 namespace Digikam
 {
 
-ImageFilterModelWorker::ImageFilterModelWorker(ImageFilterModel::ImageFilterModelPrivate* const d)
+ItemFilterModelWorker::ItemFilterModelWorker(ItemFilterModel::ItemFilterModelPrivate* const d)
     : d(d)
 {
 }
 
-bool ImageFilterModelWorker::checkVersion(const ImageFilterModelTodoPackage& package)
+bool ItemFilterModelWorker::checkVersion(const ItemFilterModelTodoPackage& package)
 {
     return d->version == package.version;
 }

@@ -36,29 +36,29 @@
 namespace Digikam
 {
 
-class ImageFiltersHistoryTreeItem
+class ItemFiltersHistoryTreeItem
 {
 public:
 
-    explicit ImageFiltersHistoryTreeItem(const QList<QVariant>& data, ImageFiltersHistoryTreeItem* const parent = 0);
-    explicit ImageFiltersHistoryTreeItem(const QString& data, ImageFiltersHistoryTreeItem* const parent = 0);
-    ~ImageFiltersHistoryTreeItem();
+    explicit ItemFiltersHistoryTreeItem(const QList<QVariant>& data, ItemFiltersHistoryTreeItem* const parent = 0);
+    explicit ItemFiltersHistoryTreeItem(const QString& data, ItemFiltersHistoryTreeItem* const parent = 0);
+    ~ItemFiltersHistoryTreeItem();
 
-    void appendChild(ImageFiltersHistoryTreeItem* const child);
+    void appendChild(ItemFiltersHistoryTreeItem* const child);
     void removeChild(int row);
 
-    ImageFiltersHistoryTreeItem* child(int row) const;
+    ItemFiltersHistoryTreeItem* child(int row) const;
     int childCount()                      const;
     int columnCount()                     const;
     QVariant data(int column)             const;
     int row()                             const;
-    ImageFiltersHistoryTreeItem* parent() const;
+    ItemFiltersHistoryTreeItem* parent() const;
     void setDisabled(bool disabled)       const;
     bool isDisabled()                     const;
 
 private:
 
-    ImageFiltersHistoryTreeItem(const ImageFiltersHistoryTreeItem&); // disable
+    ItemFiltersHistoryTreeItem(const ItemFiltersHistoryTreeItem&); // disable
 
 private:
 

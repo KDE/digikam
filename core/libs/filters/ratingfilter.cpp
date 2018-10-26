@@ -52,7 +52,7 @@ public:
     {
         dirty          = false;
         ratingTracker  = 0;
-        filterCond     = ImageFilterSettings::GreaterEqualCondition;
+        filterCond     = ItemFilterSettings::GreaterEqualCondition;
         excludeUnrated = 0;
     }
 
@@ -60,7 +60,7 @@ public:
 
     DCursorTracker*                      ratingTracker;
 
-    ImageFilterSettings::RatingCondition filterCond;
+    ItemFilterSettings::RatingCondition filterCond;
     bool                                 excludeUnrated;
 };
 
@@ -91,14 +91,14 @@ void RatingFilterWidget::slotRatingChanged()
     emit signalRatingFilterChanged(rating(), d->filterCond, d->excludeUnrated);
 }
 
-void RatingFilterWidget::setRatingFilterCondition(ImageFilterSettings::RatingCondition cond)
+void RatingFilterWidget::setRatingFilterCondition(ItemFilterSettings::RatingCondition cond)
 {
     d->filterCond = cond;
     updateRatingTooltip();
     slotRatingChanged();
 }
 
-ImageFilterSettings::RatingCondition RatingFilterWidget::ratingFilterCondition()
+ItemFilterSettings::RatingCondition RatingFilterWidget::ratingFilterCondition()
 {
     return d->filterCond;
 }
@@ -168,17 +168,17 @@ void RatingFilterWidget::updateRatingTooltip()
 
     switch (d->filterCond)
     {
-        case ImageFilterSettings::GreaterEqualCondition:
+        case ItemFilterSettings::GreaterEqualCondition:
         {
             d->ratingTracker->setText(i18n("Rating greater than or equal to %1.", rating()));
             break;
         }
-        case ImageFilterSettings::EqualCondition:
+        case ItemFilterSettings::EqualCondition:
         {
             d->ratingTracker->setText(i18n("Rating equal to %1.", rating()));
             break;
         }
-        case ImageFilterSettings::LessEqualCondition:
+        case ItemFilterSettings::LessEqualCondition:
         {
             d->ratingTracker->setText( i18n("Rating less than or equal to %1.", rating()));
             break;
@@ -250,8 +250,8 @@ RatingFilter::RatingFilter(QWidget* const parent)
     connect(d->optionsMenu, SIGNAL(aboutToShow()),
             this, SLOT(slotOptionsMenu()));
 
-    connect(d->ratingWidget, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition,bool)),
-            this, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition,bool)));
+    connect(d->ratingWidget, SIGNAL(signalRatingFilterChanged(int,ItemFilterSettings::RatingCondition,bool)),
+            this, SIGNAL(signalRatingFilterChanged(int,ItemFilterSettings::RatingCondition,bool)));
 }
 
 RatingFilter::~RatingFilter()
@@ -259,12 +259,12 @@ RatingFilter::~RatingFilter()
     delete d;
 }
 
-void RatingFilter::setRatingFilterCondition(ImageFilterSettings::RatingCondition cond)
+void RatingFilter::setRatingFilterCondition(ItemFilterSettings::RatingCondition cond)
 {
     d->ratingWidget->setRatingFilterCondition(cond);
 }
 
-ImageFilterSettings::RatingCondition RatingFilter::ratingFilterCondition()
+ItemFilterSettings::RatingCondition RatingFilter::ratingFilterCondition()
 {
     return d->ratingWidget->ratingFilterCondition();
 }
@@ -288,13 +288,13 @@ void RatingFilter::slotOptionsMenu()
 
     switch (ratingFilterCondition())
     {
-        case ImageFilterSettings::GreaterEqualCondition:
+        case ItemFilterSettings::GreaterEqualCondition:
             d->geCondAction->setChecked(true);
             break;
-        case ImageFilterSettings::EqualCondition:
+        case ItemFilterSettings::EqualCondition:
             d->eqCondAction->setChecked(true);
             break;
-        case ImageFilterSettings::LessEqualCondition:
+        case ItemFilterSettings::LessEqualCondition:
             d->leCondAction->setChecked(true);
             break;
     }
@@ -306,15 +306,15 @@ void RatingFilter::slotOptionsTriggered(QAction* action)
     {
         if (action == d->geCondAction)
         {
-            setRatingFilterCondition(ImageFilterSettings::GreaterEqualCondition);
+            setRatingFilterCondition(ItemFilterSettings::GreaterEqualCondition);
         }
         else if (action == d->eqCondAction)
         {
-            setRatingFilterCondition(ImageFilterSettings::EqualCondition);
+            setRatingFilterCondition(ItemFilterSettings::EqualCondition);
         }
         else if (action == d->leCondAction)
         {
-            setRatingFilterCondition(ImageFilterSettings::LessEqualCondition);
+            setRatingFilterCondition(ItemFilterSettings::LessEqualCondition);
         }
         else if(action == d->excludeUnrated)
         {

@@ -92,7 +92,7 @@
 #include "digikam_debug.h"
 #include "iccsettingscontainer.h"
 #include "itemattributeswatch.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "imagedragdrop.h"
 #include "imagedescedittab.h"
 #include "iteminfo.h"
@@ -281,7 +281,7 @@ public:
 
     ItemInfo                    currentItemInfo;
     ImageListModel*              imageInfoModel;
-    ImageFilterModel*            imageFilterModel;
+    ItemFilterModel*            imageFilterModel;
     ImageDragDropHandler*        dragDropHandler;
 
     ImageThumbnailBar*           thumbBar;

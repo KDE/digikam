@@ -38,20 +38,20 @@
 namespace Digikam
 {
 
-class ImageFiltersHistoryTreeItem;
+class ItemFiltersHistoryTreeItem;
 
-class ImageFiltersHistoryModel : public QAbstractItemModel
+class ItemFiltersHistoryModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageFiltersHistoryModel(QObject* const parent = 0, const QUrl& url = QUrl());
-    ~ImageFiltersHistoryModel();
+    explicit ItemFiltersHistoryModel(QObject* const parent = 0, const QUrl& url = QUrl());
+    ~ItemFiltersHistoryModel();
 
     void setUrl(const QUrl& url);
     bool removeRows(int row, int count, const QModelIndex& parent);
-    void setupModelData(const QList<DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* parent = 0);
+    void setupModelData(const QList<DImageHistory::Entry>& entries, ItemFiltersHistoryTreeItem* parent = 0);
 
     Qt::ItemFlags flags(const QModelIndex& index)                                             const;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;

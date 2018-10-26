@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-03-05
- * Description : Filter values for use with ImageFilterModel
+ * Description : Filter values for use with ItemFilterModel
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "imagefiltersettings.h"
+#include "itemfiltersettings.h"
 
 // C++ includes
 
@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-ImageFilterSettings::ImageFilterSettings()
+ItemFilterSettings::ItemFilterSettings()
 {
     m_untaggedFilter       = false;
     m_isUnratedExcluded    = false;
@@ -58,7 +58,7 @@ ImageFilterSettings::ImageFilterSettings()
     m_geolocationCondition = GeolocationNoFilter;
 }
 
-DatabaseFields::Set ImageFilterSettings::watchFlags() const
+DatabaseFields::Set ItemFilterSettings::watchFlags() const
 {
     DatabaseFields::Set set;
 
@@ -102,7 +102,7 @@ DatabaseFields::Set ImageFilterSettings::watchFlags() const
     return set;
 }
 
-bool ImageFilterSettings::isFilteringByDay() const
+bool ItemFilterSettings::isFilteringByDay() const
 {
     if (!m_dayFilter.isEmpty())
     {
@@ -112,7 +112,7 @@ bool ImageFilterSettings::isFilteringByDay() const
     return false;
 }
 
-bool ImageFilterSettings::isFilteringByTags() const
+bool ItemFilterSettings::isFilteringByTags() const
 {
     if (!m_includeTagFilter.isEmpty() || !m_excludeTagFilter.isEmpty() || m_untaggedFilter)
     {
@@ -122,7 +122,7 @@ bool ImageFilterSettings::isFilteringByTags() const
     return false;
 }
 
-bool ImageFilterSettings::isFilteringByColorLabels() const
+bool ItemFilterSettings::isFilteringByColorLabels() const
 {
     if (!m_colorLabelTagFilter.isEmpty())
     {
@@ -132,7 +132,7 @@ bool ImageFilterSettings::isFilteringByColorLabels() const
     return false;
 }
 
-bool ImageFilterSettings::isFilteringByPickLabels() const
+bool ItemFilterSettings::isFilteringByPickLabels() const
 {
     if (!m_pickLabelTagFilter.isEmpty())
     {
@@ -142,7 +142,7 @@ bool ImageFilterSettings::isFilteringByPickLabels() const
     return false;
 }
 
-bool ImageFilterSettings::isFilteringByText() const
+bool ItemFilterSettings::isFilteringByText() const
 {
     if (!m_textFilterSettings.text.isEmpty())
     {
@@ -152,7 +152,7 @@ bool ImageFilterSettings::isFilteringByText() const
     return false;
 }
 
-bool ImageFilterSettings::isFilteringByTypeMime() const
+bool ItemFilterSettings::isFilteringByTypeMime() const
 {
     if (m_mimeTypeFilter != MimeFilter::AllFiles)
     {
@@ -162,12 +162,12 @@ bool ImageFilterSettings::isFilteringByTypeMime() const
     return false;
 }
 
-bool ImageFilterSettings::isFilteringByGeolocation() const
+bool ItemFilterSettings::isFilteringByGeolocation() const
 {
     return (m_geolocationCondition != GeolocationNoFilter);
 }
 
-bool ImageFilterSettings::isFilteringByRating() const
+bool ItemFilterSettings::isFilteringByRating() const
 {
     if (m_ratingFilter != 0 || m_ratingCond != GreaterEqualCondition || m_isUnratedExcluded)
     {
@@ -177,12 +177,12 @@ bool ImageFilterSettings::isFilteringByRating() const
     return false;
 }
 
-bool ImageFilterSettings::isFilteringInternally() const
+bool ItemFilterSettings::isFilteringInternally() const
 {
     return (isFiltering() || !m_urlWhitelists.isEmpty() || !m_idWhitelists.isEmpty());
 }
 
-bool ImageFilterSettings::isFiltering() const
+bool ItemFilterSettings::isFiltering() const
 {
     return isFilteringByDay()         ||
            isFilteringByTags()        ||
@@ -194,7 +194,7 @@ bool ImageFilterSettings::isFiltering() const
            isFilteringByGeolocation();
 }
 
-void ImageFilterSettings::setDayFilter(const QList<QDateTime>& days)
+void ItemFilterSettings::setDayFilter(const QList<QDateTime>& days)
 {
     m_dayFilter.clear();
 
@@ -204,7 +204,7 @@ void ImageFilterSettings::setDayFilter(const QList<QDateTime>& days)
     }
 }
 
-void ImageFilterSettings::setTagFilter(const QList<int>& includedTags,
+void ItemFilterSettings::setTagFilter(const QList<int>& includedTags,
                                        const QList<int>& excludedTags,
                                        MatchingCondition matchingCondition,
                                        bool showUnTagged,
@@ -219,39 +219,39 @@ void ImageFilterSettings::setTagFilter(const QList<int>& includedTags,
     m_pickLabelTagFilter  = plTagIds;
 }
 
-void ImageFilterSettings::setRatingFilter(int rating, RatingCondition ratingCondition, bool isUnratedExcluded)
+void ItemFilterSettings::setRatingFilter(int rating, RatingCondition ratingCondition, bool isUnratedExcluded)
 {
     m_ratingFilter      = rating;
     m_ratingCond        = ratingCondition;
     m_isUnratedExcluded = isUnratedExcluded;
 }
 
-void ImageFilterSettings::setMimeTypeFilter(int mime)
+void ItemFilterSettings::setMimeTypeFilter(int mime)
 {
     m_mimeTypeFilter = (MimeFilter::TypeMimeFilter)mime;
 }
 
-void ImageFilterSettings::setGeolocationFilter(const GeolocationCondition& condition)
+void ItemFilterSettings::setGeolocationFilter(const GeolocationCondition& condition)
 {
     m_geolocationCondition = condition;
 }
 
-void ImageFilterSettings::setTextFilter(const SearchTextFilterSettings& settings)
+void ItemFilterSettings::setTextFilter(const SearchTextFilterSettings& settings)
 {
     m_textFilterSettings = settings;
 }
 
-void ImageFilterSettings::setTagNames(const QHash<int, QString>& hash)
+void ItemFilterSettings::setTagNames(const QHash<int, QString>& hash)
 {
     m_tagNameHash = hash;
 }
 
-void ImageFilterSettings::setAlbumNames(const QHash<int, QString>& hash)
+void ItemFilterSettings::setAlbumNames(const QHash<int, QString>& hash)
 {
     m_albumNameHash = hash;
 }
 
-void ImageFilterSettings::setUrlWhitelist(const QList<QUrl>& urlList, const QString& id)
+void ItemFilterSettings::setUrlWhitelist(const QList<QUrl>& urlList, const QString& id)
 {
     if (urlList.isEmpty())
     {
@@ -263,7 +263,7 @@ void ImageFilterSettings::setUrlWhitelist(const QList<QUrl>& urlList, const QStr
     }
 }
 
-void ImageFilterSettings::setIdWhitelist(const QList<qlonglong>& idList, const QString& id)
+void ItemFilterSettings::setIdWhitelist(const QList<qlonglong>& idList, const QString& id)
 {
     if (idList.isEmpty())
     {
@@ -301,7 +301,7 @@ bool containsNoneOfExcept(const ContainerA& list, const ContainerB& noneOfList, 
     return true;
 }
 
-bool ImageFilterSettings::matches(const ItemInfo& info, bool* const foundText) const
+bool ItemFilterSettings::matches(const ItemInfo& info, bool* const foundText) const
 {
     if (foundText)
     {
@@ -758,24 +758,24 @@ bool ImageFilterSettings::matches(const ItemInfo& info, bool* const foundText) c
 
 // -------------------------------------------------------------------------------------------------
 
-VersionImageFilterSettings::VersionImageFilterSettings()
+VersionItemFilterSettings::VersionItemFilterSettings()
 {
     m_includeTagFilter   = 0;
     m_exceptionTagFilter = 0;
 }
 
-VersionImageFilterSettings::VersionImageFilterSettings(const VersionManagerSettings& settings)
+VersionItemFilterSettings::VersionItemFilterSettings(const VersionManagerSettings& settings)
 {
     setVersionManagerSettings(settings);
 }
 
-bool VersionImageFilterSettings::operator==(const VersionImageFilterSettings& other) const
+bool VersionItemFilterSettings::operator==(const VersionItemFilterSettings& other) const
 {
     return m_excludeTagFilter == other.m_excludeTagFilter &&
            m_exceptionLists   == other.m_exceptionLists;
 }
 
-bool VersionImageFilterSettings::matches(const ItemInfo& info) const
+bool VersionItemFilterSettings::matches(const ItemInfo& info) const
 {
     if (!isFiltering())
     {
@@ -820,7 +820,7 @@ bool VersionImageFilterSettings::matches(const ItemInfo& info) const
     return match;
 }
 
-bool VersionImageFilterSettings::isHiddenBySettings(const ItemInfo& info) const
+bool VersionItemFilterSettings::isHiddenBySettings(const ItemInfo& info) const
 {
     QList<int> tagIds = info.tagIds();
 
@@ -835,12 +835,12 @@ bool VersionImageFilterSettings::isHiddenBySettings(const ItemInfo& info) const
     return false;
 }
 
-bool VersionImageFilterSettings::isExemptedBySettings(const ItemInfo& info) const
+bool VersionItemFilterSettings::isExemptedBySettings(const ItemInfo& info) const
 {
     return info.tagIds().contains(m_exceptionTagFilter);
 }
 
-void VersionImageFilterSettings::setVersionManagerSettings(const VersionManagerSettings& settings)
+void VersionItemFilterSettings::setVersionManagerSettings(const VersionManagerSettings& settings)
 {
     m_excludeTagFilter.clear();
 
@@ -863,7 +863,7 @@ void VersionImageFilterSettings::setVersionManagerSettings(const VersionManagerS
     m_exceptionTagFilter = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::versionAlwaysVisible());
 }
 
-void VersionImageFilterSettings::setExceptionList(const QList<qlonglong>& idList, const QString& id)
+void VersionItemFilterSettings::setExceptionList(const QList<qlonglong>& idList, const QString& id)
 {
     if (idList.isEmpty())
     {
@@ -875,30 +875,30 @@ void VersionImageFilterSettings::setExceptionList(const QList<qlonglong>& idList
     }
 }
 
-bool VersionImageFilterSettings::isFiltering() const
+bool VersionItemFilterSettings::isFiltering() const
 {
     return !m_excludeTagFilter.isEmpty();
 }
 
-bool VersionImageFilterSettings::isFilteringByTags() const
+bool VersionItemFilterSettings::isFilteringByTags() const
 {
     return isFiltering();
 }
 
 // -------------------------------------------------------------------------------------------------
 
-GroupImageFilterSettings::GroupImageFilterSettings()
+GroupItemFilterSettings::GroupItemFilterSettings()
     : m_allOpen(false)
 {
 }
 
-bool GroupImageFilterSettings::operator==(const GroupImageFilterSettings& other) const
+bool GroupItemFilterSettings::operator==(const GroupItemFilterSettings& other) const
 {
     return (m_allOpen    == other.m_allOpen &&
             m_openGroups == other.m_openGroups);
 }
 
-bool GroupImageFilterSettings::matches(const ItemInfo& info) const
+bool GroupItemFilterSettings::matches(const ItemInfo& info) const
 {
     if (m_allOpen)
     {
@@ -913,7 +913,7 @@ bool GroupImageFilterSettings::matches(const ItemInfo& info) const
     return true;
 }
 
-void GroupImageFilterSettings::setOpen(qlonglong group, bool open)
+void GroupItemFilterSettings::setOpen(qlonglong group, bool open)
 {
     if (open)
     {
@@ -925,27 +925,27 @@ void GroupImageFilterSettings::setOpen(qlonglong group, bool open)
     }
 }
 
-bool GroupImageFilterSettings::isOpen(qlonglong group) const
+bool GroupItemFilterSettings::isOpen(qlonglong group) const
 {
     return m_openGroups.contains(group);
 }
 
-void GroupImageFilterSettings::setAllOpen(bool open)
+void GroupItemFilterSettings::setAllOpen(bool open)
 {
     m_allOpen = open;
 }
 
-bool GroupImageFilterSettings::isAllOpen() const
+bool GroupItemFilterSettings::isAllOpen() const
 {
     return m_allOpen;
 }
 
-bool GroupImageFilterSettings::isFiltering() const
+bool GroupItemFilterSettings::isFiltering() const
 {
     return !m_allOpen;
 }
 
-DatabaseFields::Set GroupImageFilterSettings::watchFlags() const
+DatabaseFields::Set GroupItemFilterSettings::watchFlags() const
 {
     return DatabaseFields::Set(DatabaseFields::ImageRelations);
 }

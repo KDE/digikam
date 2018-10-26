@@ -43,7 +43,7 @@ namespace Digikam
 class Album;
 class DAlbum;
 class DateAlbumModel;
-class ImageFilterModel;
+class ItemFilterModel;
 
 template <class T>
 class AlbumPointer;
@@ -57,7 +57,7 @@ public:
     explicit DateFolderView(QWidget* const parent, DateAlbumModel* const dateAlbumModel);
     ~DateFolderView();
 
-    void setImageModel(ImageFilterModel* const model);
+    void setImageModel(ItemFilterModel* const model);
 
     void setActive(const bool val);
 

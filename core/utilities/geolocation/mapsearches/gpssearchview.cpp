@@ -88,7 +88,7 @@ public:
     MapWidget*                  mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;
     ImageAlbumModel*            imageAlbumModel;
-    ImageFilterModel*           imageFilterModel;
+    ItemFilterModel*           imageFilterModel;
     QItemSelectionModel*        selectionModel;
     SearchModel*                searchModel;
     GPSItemInfoSorter*         sortOrderOptionsHelper;
@@ -107,7 +107,7 @@ const QString GPSSearchView::Private::configSplitterStateEntry(QLatin1String("Sp
 GPSSearchView::GPSSearchView(QWidget* const parent,
                              SearchModel* const searchModel,
                              SearchModificationHelper* const searchModificationHelper,
-                             ImageFilterModel* const imageFilterModel,
+                             ItemFilterModel* const imageFilterModel,
                              QItemSelectionModel* const itemSelectionModel)
     : QWidget(parent),
       StateSavingObject(this),

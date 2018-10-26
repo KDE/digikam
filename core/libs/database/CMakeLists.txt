@@ -15,11 +15,11 @@ endif (POLICY CMP0063)
 string(REPLACE "-fno-operator-names" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 set(libdatabasemodels_SRCS
+    models/itemfiltermodel.cpp
+    models/itemfiltermodel_p.cpp
+    models/itemfiltermodelthreads.cpp
+    models/itemfiltersettings.cpp
     models/imagemodel.cpp
-    models/imagefiltermodel.cpp
-    models/imagefiltermodel_p.cpp
-    models/imagefiltermodelthreads.cpp
-    models/imagefiltersettings.cpp
     models/imagelistmodel.cpp
     models/imagesortsettings.cpp
     models/imagethumbnailmodel.cpp

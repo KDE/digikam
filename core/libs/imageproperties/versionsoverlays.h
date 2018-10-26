@@ -32,7 +32,7 @@
 
 #include "digikam_export.h"
 #include "imagedelegateoverlay.h"
-#include "imagefiltersettings.h"
+#include "itemfiltersettings.h"
 
 namespace Digikam
 {
@@ -64,7 +64,7 @@ protected Q_SLOTS:
 
 protected:
 
-    VersionImageFilterSettings m_filter;
+    VersionItemFilterSettings m_filter;
     class Button;
 };
 

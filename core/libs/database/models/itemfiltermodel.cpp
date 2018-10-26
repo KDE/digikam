@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#include "imagefiltermodel_p.h"
-#include "imagefiltermodelthreads.h"
+#include "itemfiltermodel_p.h"
+#include "itemfiltermodelthreads.h"
 
 // Local includes
 
@@ -100,9 +100,9 @@ ImageSortFilterModel* ImageSortFilterModel::sourceFilterModel() const
     return m_chainedModel;
 }
 
-ImageFilterModel* ImageSortFilterModel::imageFilterModel() const
+ItemFilterModel* ImageSortFilterModel::imageFilterModel() const
 {
-    // reimplemented in ImageFilterModel
+    // reimplemented in ItemFilterModel
     if (m_chainedModel)
     {
         return m_chainedModel->imageFilterModel();
@@ -235,29 +235,29 @@ QList<ItemInfo> ImageSortFilterModel::imageInfosSorted() const
 
 // --------------------------------------------------------------------------------------------
 
-ImageFilterModel::ImageFilterModel(QObject* const parent)
+ItemFilterModel::ItemFilterModel(QObject* const parent)
     : ImageSortFilterModel(parent),
-      d_ptr(new ImageFilterModelPrivate)
+      d_ptr(new ItemFilterModelPrivate)
 {
     d_ptr->init(this);
 }
 
-ImageFilterModel::ImageFilterModel(ImageFilterModelPrivate& dd, QObject* const parent)
+ItemFilterModel::ItemFilterModel(ItemFilterModelPrivate& dd, QObject* const parent)
     : ImageSortFilterModel(parent),
       d_ptr(&dd)
 {
     d_ptr->init(this);
 }
 
-ImageFilterModel::~ImageFilterModel()
+ItemFilterModel::~ItemFilterModel()
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     delete d;
 }
 
-void ImageFilterModel::setDirectSourceImageModel(ImageModel* const sourceModel)
+void ItemFilterModel::setDirectSourceImageModel(ImageModel* const sourceModel)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
 
     if (d->imageModel)
     {
@@ -300,9 +300,9 @@ void ImageFilterModel::setDirectSourceImageModel(ImageModel* const sourceModel)
     setSourceModel(d->imageModel);
 }
 
-QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
+QVariant ItemFilterModel::data(const QModelIndex& index, int role) const
 {
-    Q_D(const ImageFilterModel);
+    Q_D(const ItemFilterModel);
 
     if (!index.isValid())
     {
@@ -330,19 +330,19 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
         case GroupIsOpenRole:
             return d->groupFilter.isAllOpen() ||
                    d->groupFilter.isOpen(d->imageModel->imageInfoRef(mapToSource(index)).id());
-        case ImageFilterModelPointerRole:
-            return QVariant::fromValue(const_cast<ImageFilterModel*>(this));
+        case ItemFilterModelPointerRole:
+            return QVariant::fromValue(const_cast<ItemFilterModel*>(this));
     }
 
     return DCategorizedSortFilterProxyModel::data(index, role);
 }
 
-ImageFilterModel* ImageFilterModel::imageFilterModel() const
+ItemFilterModel* ItemFilterModel::imageFilterModel() const
 {
-    return const_cast<ImageFilterModel*>(this);
+    return const_cast<ItemFilterModel*>(this);
 }
 
-DatabaseFields::Set ImageFilterModel::suggestedWatchFlags() const
+DatabaseFields::Set ItemFilterModel::suggestedWatchFlags() const
 {
     DatabaseFields::Set watchFlags;
     watchFlags |= DatabaseFields::Name   | DatabaseFields::FileSize     | DatabaseFields::ModificationDate;
@@ -355,67 +355,67 @@ DatabaseFields::Set ImageFilterModel::suggestedWatchFlags() const
 
 // -------------- Filter settings --------------
 
-void ImageFilterModel::setDayFilter(const QList<QDateTime>& days)
+void ItemFilterModel::setDayFilter(const QList<QDateTime>& days)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->filter.setDayFilter(days);
-    setImageFilterSettings(d->filter);
+    setItemFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags,
-                                    ImageFilterSettings::MatchingCondition matchingCond,
+void ItemFilterModel::setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags,
+                                    ItemFilterSettings::MatchingCondition matchingCond,
                                     bool showUnTagged, const QList<int>& clTagIds, const QList<int>& plTagIds)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->filter.setTagFilter(includedTags, excludedTags, matchingCond, showUnTagged, clTagIds, plTagIds);
-    setImageFilterSettings(d->filter);
+    setItemFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setRatingFilter(int rating, ImageFilterSettings::RatingCondition ratingCond, bool isUnratedExcluded)
+void ItemFilterModel::setRatingFilter(int rating, ItemFilterSettings::RatingCondition ratingCond, bool isUnratedExcluded)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->filter.setRatingFilter(rating, ratingCond, isUnratedExcluded);
-    setImageFilterSettings(d->filter);
+    setItemFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setUrlWhitelist(const QList<QUrl> urlList, const QString& id)
+void ItemFilterModel::setUrlWhitelist(const QList<QUrl> urlList, const QString& id)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->filter.setUrlWhitelist(urlList, id);
-    setImageFilterSettings(d->filter);
+    setItemFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setIdWhitelist(const QList<qlonglong>& idList, const QString& id)
+void ItemFilterModel::setIdWhitelist(const QList<qlonglong>& idList, const QString& id)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->filter.setIdWhitelist(idList, id);
-    setImageFilterSettings(d->filter);
+    setItemFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setMimeTypeFilter(int mimeTypeFilter)
+void ItemFilterModel::setMimeTypeFilter(int mimeTypeFilter)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->filter.setMimeTypeFilter(mimeTypeFilter);
-    setImageFilterSettings(d->filter);
+    setItemFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setGeolocationFilter(const ImageFilterSettings::GeolocationCondition& condition)
+void ItemFilterModel::setGeolocationFilter(const ItemFilterSettings::GeolocationCondition& condition)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->filter.setGeolocationFilter(condition);
-    setImageFilterSettings(d->filter);
+    setItemFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setTextFilter(const SearchTextFilterSettings& settings)
+void ItemFilterModel::setTextFilter(const SearchTextFilterSettings& settings)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->filter.setTextFilter(settings);
-    setImageFilterSettings(d->filter);
+    setItemFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& settings)
+void ItemFilterModel::setItemFilterSettings(const ItemFilterSettings& settings)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
 
     {
         QMutexLocker lock(&d->mutex);
@@ -446,98 +446,98 @@ void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& setting
     emit filterSettingsChanged(settings);
 }
 
-void ImageFilterModel::setVersionManagerSettings(const VersionManagerSettings& settings)
+void ItemFilterModel::setVersionManagerSettings(const VersionManagerSettings& settings)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->versionFilter.setVersionManagerSettings(settings);
-    setVersionImageFilterSettings(d->versionFilter);
+    setVersionItemFilterSettings(d->versionFilter);
 }
 
-void ImageFilterModel::setExceptionList(const QList<qlonglong>& idList, const QString& id)
+void ItemFilterModel::setExceptionList(const QList<qlonglong>& idList, const QString& id)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->versionFilter.setExceptionList(idList, id);
-    setVersionImageFilterSettings(d->versionFilter);
+    setVersionItemFilterSettings(d->versionFilter);
 }
 
-void ImageFilterModel::setVersionImageFilterSettings(const VersionImageFilterSettings& settings)
+void ItemFilterModel::setVersionItemFilterSettings(const VersionItemFilterSettings& settings)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->versionFilter = settings;
     slotUpdateFilter();
 }
 
-bool ImageFilterModel::isGroupOpen(qlonglong group) const
+bool ItemFilterModel::isGroupOpen(qlonglong group) const
 {
-    Q_D(const ImageFilterModel);
+    Q_D(const ItemFilterModel);
     return d->groupFilter.isOpen(group);
 }
 
-bool ImageFilterModel::isAllGroupsOpen() const
+bool ItemFilterModel::isAllGroupsOpen() const
 {
-    Q_D(const ImageFilterModel);
+    Q_D(const ItemFilterModel);
     return d->groupFilter.isAllOpen();
 }
 
-void ImageFilterModel::setGroupOpen(qlonglong group, bool open)
+void ItemFilterModel::setGroupOpen(qlonglong group, bool open)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->groupFilter.setOpen(group, open);
-    setGroupImageFilterSettings(d->groupFilter);
+    setGroupItemFilterSettings(d->groupFilter);
 }
 
-void ImageFilterModel::toggleGroupOpen(qlonglong group)
+void ItemFilterModel::toggleGroupOpen(qlonglong group)
 {
     setGroupOpen(group, !isGroupOpen(group));
 }
 
-void ImageFilterModel::setAllGroupsOpen(bool open)
+void ItemFilterModel::setAllGroupsOpen(bool open)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->groupFilter.setAllOpen(open);
-    setGroupImageFilterSettings(d->groupFilter);
+    setGroupItemFilterSettings(d->groupFilter);
 }
 
-void ImageFilterModel::setGroupImageFilterSettings(const GroupImageFilterSettings& settings)
+void ItemFilterModel::setGroupItemFilterSettings(const GroupItemFilterSettings& settings)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->groupFilter = settings;
     slotUpdateFilter();
 }
 
-void ImageFilterModel::slotUpdateFilter()
+void ItemFilterModel::slotUpdateFilter()
 {
-    Q_D(ImageFilterModel);
-    setImageFilterSettings(d->filter);
+    Q_D(ItemFilterModel);
+    setItemFilterSettings(d->filter);
 }
 
-ImageFilterSettings ImageFilterModel::imageFilterSettings() const
+ItemFilterSettings ItemFilterModel::imageFilterSettings() const
 {
-    Q_D(const ImageFilterModel);
+    Q_D(const ItemFilterModel);
     return d->filter;
 }
 
-ImageSortSettings ImageFilterModel::imageSortSettings() const
+ImageSortSettings ItemFilterModel::imageSortSettings() const
 {
-    Q_D(const ImageFilterModel);
+    Q_D(const ItemFilterModel);
     return d->sorter;
 }
 
-VersionImageFilterSettings ImageFilterModel::versionImageFilterSettings() const
+VersionItemFilterSettings ItemFilterModel::versionItemFilterSettings() const
 {
-    Q_D(const ImageFilterModel);
+    Q_D(const ItemFilterModel);
     return d->versionFilter;
 }
 
-GroupImageFilterSettings ImageFilterModel::groupImageFilterSettings() const
+GroupItemFilterSettings ItemFilterModel::groupItemFilterSettings() const
 {
-    Q_D(const ImageFilterModel);
+    Q_D(const ItemFilterModel);
     return d->groupFilter;
 }
 
-void ImageFilterModel::slotModelReset()
+void ItemFilterModel::slotModelReset()
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     {
         QMutexLocker lock(&d->mutex);
         // discard all packages on the way that are marked as send out for re-add
@@ -553,9 +553,9 @@ void ImageFilterModel::slotModelReset()
     d->filterResults.clear();
 }
 
-bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+bool ItemFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
-    Q_D(const ImageFilterModel);
+    Q_D(const ItemFilterModel);
 
     if (source_parent.isValid())
     {
@@ -578,7 +578,7 @@ bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
     return match ? d->groupFilter.matches(info) : false;
 }
 
-void ImageFilterModel::setSendItemInfoSignals(bool sendSignals)
+void ItemFilterModel::setSendItemInfoSignals(bool sendSignals)
 {
     if (sendSignals)
     {
@@ -598,7 +598,7 @@ void ImageFilterModel::setSendItemInfoSignals(bool sendSignals)
     }
 }
 
-void ImageFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int start, int end)
+void ItemFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int start, int end)
 {
     QList<ItemInfo> infos;
 
@@ -610,7 +610,7 @@ void ImageFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int start
     emit imageInfosAdded(infos);
 }
 
-void ImageFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end)
+void ItemFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end)
 {
     QList<ItemInfo> infos;
 
@@ -624,21 +624,21 @@ void ImageFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, i
 
 // -------------- Threaded preparation & filtering --------------
 
-void ImageFilterModel::addPrepareHook(ImageFilterModelPrepareHook* const hook)
+void ItemFilterModel::addPrepareHook(ItemFilterModelPrepareHook* const hook)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     QMutexLocker lock(&d->mutex);
     d->prepareHooks << hook;
 }
 
-void ImageFilterModel::removePrepareHook(ImageFilterModelPrepareHook* const hook)
+void ItemFilterModel::removePrepareHook(ItemFilterModelPrepareHook* const hook)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     QMutexLocker lock(&d->mutex);
     d->prepareHooks.removeAll(hook);
 }
 
-void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
+void ItemFilterModelPreparer::process(ItemFilterModelTodoPackage package)
 {
     if (!checkVersion(package))
     {
@@ -648,7 +648,7 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
 
     // get thread-local copy
     bool needPrepareTags, needPrepareComments, needPrepareGroups;
-    QList<ImageFilterModelPrepareHook*> prepareHooks;
+    QList<ItemFilterModelPrepareHook*> prepareHooks;
 
     {
         QMutexLocker lock(&d->mutex);
@@ -693,7 +693,7 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
         infoList.loadGroupImageIds();
     }
 
-    foreach (ImageFilterModelPrepareHook* const hook, prepareHooks)
+    foreach (ItemFilterModelPrepareHook* const hook, prepareHooks)
     {
         hook->prepare(package.infos);
     }
@@ -701,7 +701,7 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
     emit processed(package);
 }
 
-void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
+void ItemFilterModelFilterer::process(ItemFilterModelTodoPackage package)
 {
     if (!checkVersion(package))
     {
@@ -710,9 +710,9 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     }
 
     // get thread-local copy
-    ImageFilterSettings        localFilter;
-    VersionImageFilterSettings localVersionFilter;
-    GroupImageFilterSettings   localGroupFilter;
+    ItemFilterSettings        localFilter;
+    VersionItemFilterSettings localVersionFilter;
+    GroupItemFilterSettings   localGroupFilter;
     bool                       hasOneMatch;
     bool                       hasOneMatchForText;
 
@@ -786,53 +786,53 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
 
 // -------------- Sorting and Categorization -------------------------------------------------------
 
-void ImageFilterModel::setImageSortSettings(const ImageSortSettings& sorter)
+void ItemFilterModel::setImageSortSettings(const ImageSortSettings& sorter)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->sorter = sorter;
     setCategorizedModel(d->sorter.categorizationMode != ImageSortSettings::NoCategories);
     invalidate();
 }
 
-void ImageFilterModel::setCategorizationMode(ImageSortSettings::CategorizationMode mode)
+void ItemFilterModel::setCategorizationMode(ImageSortSettings::CategorizationMode mode)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->sorter.setCategorizationMode(mode);
     setImageSortSettings(d->sorter);
 }
 
-void ImageFilterModel::setCategorizationSortOrder(ImageSortSettings::SortOrder order)
+void ItemFilterModel::setCategorizationSortOrder(ImageSortSettings::SortOrder order)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->sorter.setCategorizationSortOrder(order);
     setImageSortSettings(d->sorter);
 }
 
-void ImageFilterModel::setSortRole(ImageSortSettings::SortRole role)
+void ItemFilterModel::setSortRole(ImageSortSettings::SortRole role)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->sorter.setSortRole(role);
     setImageSortSettings(d->sorter);
 }
 
-void ImageFilterModel::setSortOrder(ImageSortSettings::SortOrder order)
+void ItemFilterModel::setSortOrder(ImageSortSettings::SortOrder order)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->sorter.setSortOrder(order);
     setImageSortSettings(d->sorter);
 }
 
-void ImageFilterModel::setStringTypeNatural(bool natural)
+void ItemFilterModel::setStringTypeNatural(bool natural)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
     d->sorter.setStringTypeNatural(natural);
     setImageSortSettings(d->sorter);
 }
 
-int ImageFilterModel::compareCategories(const QModelIndex& left, const QModelIndex& right) const
+int ItemFilterModel::compareCategories(const QModelIndex& left, const QModelIndex& right) const
 {
     // source indexes
-    Q_D(const ImageFilterModel);
+    Q_D(const ItemFilterModel);
 
     if (!d->sorter.isCategorized())
     {
@@ -855,10 +855,10 @@ int ImageFilterModel::compareCategories(const QModelIndex& left, const QModelInd
                                   rightGroupImageId == -1 ? rightInfo : ItemInfo(rightGroupImageId));
 }
 
-bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelIndex& right) const
+bool ItemFilterModel::subSortLessThan(const QModelIndex& left, const QModelIndex& right) const
 {
     // source indexes
-    Q_D(const ImageFilterModel);
+    Q_D(const ItemFilterModel);
 
     if (!left.isValid() || !right.isValid())
     {
@@ -906,10 +906,10 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelInde
                          rightGroupImageId == -1 ? rightInfo : ItemInfo(rightGroupImageId));
 }
 
-int ImageFilterModel::compareInfosCategories(const ItemInfo& left, const ItemInfo& right) const
+int ItemFilterModel::compareInfosCategories(const ItemInfo& left, const ItemInfo& right) const
 {
     // Note: reimplemented in ImageAlbumFilterModel
-    Q_D(const ImageFilterModel);
+    Q_D(const ItemFilterModel);
     return d->sorter.compareCategories(left, right);
 }
 
@@ -930,9 +930,9 @@ static inline QString fastNumberToString(int id)
     return QLatin1String(c);
 }
 
-QString ImageFilterModel::categoryIdentifier(const ItemInfo& i) const
+QString ItemFilterModel::categoryIdentifier(const ItemInfo& i) const
 {
-    Q_D(const ImageFilterModel);
+    Q_D(const ItemFilterModel);
 
     if (!d->sorter.isCategorized())
     {
@@ -959,17 +959,17 @@ QString ImageFilterModel::categoryIdentifier(const ItemInfo& i) const
     }
 }
 
-bool ImageFilterModel::infosLessThan(const ItemInfo& left, const ItemInfo& right) const
+bool ItemFilterModel::infosLessThan(const ItemInfo& left, const ItemInfo& right) const
 {
-    Q_D(const ImageFilterModel);
+    Q_D(const ItemFilterModel);
     return d->sorter.lessThan(left, right);
 }
 
 // -------------- Watching changes -----------------------------------------------------------------
 
-void ImageFilterModel::slotImageTagChange(const ImageTagChangeset& changeset)
+void ItemFilterModel::slotImageTagChange(const ImageTagChangeset& changeset)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
 
     if (!d->imageModel || d->imageModel->isEmpty())
     {
@@ -1002,9 +1002,9 @@ void ImageFilterModel::slotImageTagChange(const ImageTagChangeset& changeset)
     }
 }
 
-void ImageFilterModel::slotImageChange(const ImageChangeset& changeset)
+void ItemFilterModel::slotImageChange(const ImageChangeset& changeset)
 {
-    Q_D(ImageFilterModel);
+    Q_D(ItemFilterModel);
 
     if (!d->imageModel || d->imageModel->isEmpty())
     {
@@ -1057,12 +1057,12 @@ void ImageFilterModel::slotImageChange(const ImageChangeset& changeset)
 
 // -------------------------------------------------------------------------------------------------------
 
-NoDuplicatesImageFilterModel::NoDuplicatesImageFilterModel(QObject* const parent)
+NoDuplicatesItemFilterModel::NoDuplicatesItemFilterModel(QObject* const parent)
     : ImageSortFilterModel(parent)
 {
 }
 
-bool NoDuplicatesImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+bool NoDuplicatesItemFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
     QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
 
@@ -1088,7 +1088,7 @@ bool NoDuplicatesImageFilterModel::filterAcceptsRow(int source_row, const QModel
 }
 
 /*
-void NoDuplicatesImageFilterModel::setSourceModel(QAbstractItemModel* model)
+void NoDuplicatesItemFilterModel::setSourceModel(QAbstractItemModel* model)
 {
     if (sourceModel())
     {
@@ -1103,7 +1103,7 @@ void NoDuplicatesImageFilterModel::setSourceModel(QAbstractItemModel* model)
     }
 }
 
-void NoDuplicatesImageFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int begin, int end)
+void NoDuplicatesItemFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int begin, int end)
 {
     bool needInvalidate = false;
 

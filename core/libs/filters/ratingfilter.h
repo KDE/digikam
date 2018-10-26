@@ -29,7 +29,7 @@
 // Local includes
 
 #include "dlayoutbox.h"
-#include "imagefiltersettings.h"
+#include "itemfiltersettings.h"
 #include "ratingwidget.h"
 
 class QAction;
@@ -46,15 +46,15 @@ public:
     explicit RatingFilterWidget(QWidget* const parent);
     ~RatingFilterWidget();
 
-    void setRatingFilterCondition(ImageFilterSettings::RatingCondition cond);
-    ImageFilterSettings::RatingCondition ratingFilterCondition();
+    void setRatingFilterCondition(ItemFilterSettings::RatingCondition cond);
+    ItemFilterSettings::RatingCondition ratingFilterCondition();
 
     void setExcludeUnratedItems(bool excluded);
     bool isUnratedItemsExcluded();
 
 Q_SIGNALS:
 
-    void signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition, bool);
+    void signalRatingFilterChanged(int, ItemFilterSettings::RatingCondition, bool);
 
 protected:
 
@@ -90,15 +90,15 @@ public:
     void setRating(int val);
     int  rating() const;
 
-    void setRatingFilterCondition(ImageFilterSettings::RatingCondition cond);
-    ImageFilterSettings::RatingCondition ratingFilterCondition();
+    void setRatingFilterCondition(ItemFilterSettings::RatingCondition cond);
+    ItemFilterSettings::RatingCondition ratingFilterCondition();
 
     void setExcludeUnratedItems(bool excluded);
     bool isUnratedItemsExcluded();
 
 Q_SIGNALS:
 
-    void signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition, bool);
+    void signalRatingFilterChanged(int, ItemFilterSettings::RatingCondition, bool);
 
 private Q_SLOTS:
 

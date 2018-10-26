@@ -54,7 +54,7 @@ public:
     }
 
     Qt::ScrollBarPolicy           scrollPolicy;
-    NoDuplicatesImageFilterModel* duplicatesFilter;
+    NoDuplicatesItemFilterModel* duplicatesFilter;
 };
 
 ImageThumbnailBar::ImageThumbnailBar(QWidget* const parent)
@@ -90,7 +90,7 @@ void ImageThumbnailBar::setModelsFiltered(ImageModel* model, ImageSortFilterMode
 {
     if (!d->duplicatesFilter)
     {
-        d->duplicatesFilter = new NoDuplicatesImageFilterModel(this);
+        d->duplicatesFilter = new NoDuplicatesItemFilterModel(this);
     }
 
     d->duplicatesFilter->setSourceFilterModel(filterModel);

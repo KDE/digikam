@@ -85,11 +85,11 @@ Q_SIGNALS:
 
     void signalShowContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info,
                                      const QList<QAction*>& actions,
-                                     ImageFilterModel* filterModel);
+                                     ItemFilterModel* filterModel);
 
     void signalShowGroupContextMenu(QContextMenuEvent* event,
                                     const QList<ItemInfo>& selectedInfos,
-                                    ImageFilterModel* filterModel);
+                                    ItemFilterModel* filterModel);
 
 protected Q_SLOTS:
 

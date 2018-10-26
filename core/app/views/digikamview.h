@@ -55,7 +55,7 @@ class BatchSyncMetadata;
 class FilterStatusBar;
 class SlideShowSettings;
 class DCategorizedView;
-class ImageFilterModel;
+class ItemFilterModel;
 
 class DigikamView : public DHBox
 {
@@ -326,11 +326,11 @@ private Q_SLOTS:
 
     void slotShowContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info,
                                    const QList<QAction*>& extraGroupingActions = QList<QAction*>(),
-                                   ImageFilterModel* imageFilterModel = 0);
+                                   ItemFilterModel* imageFilterModel = 0);
 
     void slotShowGroupContextMenu(QContextMenuEvent* event,
                                   const QList<ItemInfo>& selectedInfos,
-                                  ImageFilterModel* imageFilterModel = 0);
+                                  ItemFilterModel* imageFilterModel = 0);
 
 private:
 

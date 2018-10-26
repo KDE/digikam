@@ -28,7 +28,7 @@
 
 #include "dlayoutbox.h"
 #include "searchtextbar.h"
-#include "imagefiltersettings.h"
+#include "itemfiltersettings.h"
 
 class QAction;
 

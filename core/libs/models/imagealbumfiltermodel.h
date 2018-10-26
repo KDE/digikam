@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 
 namespace Digikam
 {
@@ -35,7 +35,7 @@ class Album;
 class ImageAlbumModel;
 class ImageAlbumFilterModelPrivate;
 
-class ImageAlbumFilterModel : public ImageFilterModel
+class ImageAlbumFilterModel : public ItemFilterModel
 {
     Q_OBJECT
 
@@ -50,7 +50,7 @@ public:
     // convenience mappers
     void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare);
 
-    virtual void setImageFilterSettings(const ImageFilterSettings& settings);
+    virtual void setItemFilterSettings(const ItemFilterSettings& settings);
 
 protected:
 

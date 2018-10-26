@@ -41,7 +41,7 @@
 
 // Local includes
 
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "imagemodel.h"
 
 namespace Digikam
@@ -85,7 +85,7 @@ public:
 
     bool              active;
 
-    ImageFilterModel* model;
+    ItemFilterModel* model;
     QTimer*           timer;
 
     int               year;
@@ -409,7 +409,7 @@ void MonthWidget::setActive(bool val)
     }
 }
 
-void MonthWidget::setImageModel(ImageFilterModel* model)
+void MonthWidget::setImageModel(ItemFilterModel* model)
 {
     if (d->model)
     {
@@ -426,16 +426,16 @@ void MonthWidget::connectModel()
 {
     if (d->model)
     {
-        connect(d->model, &ImageFilterModel::destroyed,
+        connect(d->model, &ItemFilterModel::destroyed,
                 this, &MonthWidget::slotModelDestroyed);
 
-        connect(d->model, &ImageFilterModel::rowsInserted,
+        connect(d->model, &ItemFilterModel::rowsInserted,
                 this, &MonthWidget::triggerUpdateDays);
 
-        connect(d->model, &ImageFilterModel::rowsRemoved,
+        connect(d->model, &ItemFilterModel::rowsRemoved,
                 this, &MonthWidget::triggerUpdateDays);
 
-        connect(d->model, &ImageFilterModel::modelReset,
+        connect(d->model, &ItemFilterModel::modelReset,
                 this, &MonthWidget::triggerUpdateDays);
 /*
         connect(d->model, SIGNAL(triggerUpdateDays()),

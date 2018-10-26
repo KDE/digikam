@@ -87,7 +87,7 @@ ShowHideVersionsOverlay::ShowHideVersionsOverlay(QObject* const parent)
 
 void ShowHideVersionsOverlay::setSettings(const VersionManagerSettings& settings)
 {
-    m_filter = VersionImageFilterSettings(settings);
+    m_filter = VersionItemFilterSettings(settings);
 }
 
 void ShowHideVersionsOverlay::setActive(bool active)

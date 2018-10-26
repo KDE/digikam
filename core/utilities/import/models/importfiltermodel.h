@@ -154,7 +154,7 @@ public Q_SLOTS:
 
     /** Changes the current image filter settings and refilters. */
     //TODO: Implement filtering in import tool.
-    //virtual void setImageFilterSettings(const ImageFilterSettings& settings);
+    //virtual void setItemFilterSettings(const ItemFilterSettings& settings);
 
     /** Changes the current image sort settings and resorts. */
     //TODO: virtual void setImageSortSettings(const ImageSortSettings& settings);

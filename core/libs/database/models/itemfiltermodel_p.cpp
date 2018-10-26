@@ -25,17 +25,17 @@
  *
  * ============================================================ */
 
-#include "imagefiltermodel_p.h"
+#include "itemfiltermodel_p.h"
 
 // Local includes
 
 #include "digikam_debug.h"
-#include "imagefiltermodelthreads.h"
+#include "itemfiltermodelthreads.h"
 
 namespace Digikam
 {
 
-ImageFilterModel::ImageFilterModelPrivate::ImageFilterModelPrivate()
+ItemFilterModel::ItemFilterModelPrivate::ItemFilterModelPrivate()
 {
     imageModel            = 0;
     version               = 0;
@@ -55,7 +55,7 @@ ImageFilterModel::ImageFilterModelPrivate::ImageFilterModelPrivate()
     setupWorkers();
 }
 
-ImageFilterModel::ImageFilterModelPrivate::~ImageFilterModelPrivate()
+ItemFilterModel::ItemFilterModelPrivate::~ItemFilterModelPrivate()
 {
     // facilitate thread stopping
     ++version;
@@ -65,7 +65,7 @@ ImageFilterModel::ImageFilterModelPrivate::~ImageFilterModelPrivate()
     delete filterer;
 }
 
-void ImageFilterModel::ImageFilterModelPrivate::init(ImageFilterModel* _q)
+void ItemFilterModel::ItemFilterModelPrivate::init(ItemFilterModel* _q)
 {
     q = _q;
 
@@ -77,55 +77,55 @@ void ImageFilterModel::ImageFilterModelPrivate::init(ImageFilterModel* _q)
             q, SLOT(slotUpdateFilter()));
 
     // inter-thread redirection
-    qRegisterMetaType<ImageFilterModelTodoPackage>("ImageFilterModelTodoPackage");
+    qRegisterMetaType<ItemFilterModelTodoPackage>("ItemFilterModelTodoPackage");
 }
 
-void ImageFilterModel::ImageFilterModelPrivate::preprocessInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
+void ItemFilterModel::ItemFilterModelPrivate::preprocessInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
 {
     infosToProcess(infos, extraValues, true);
 }
 
-void ImageFilterModel::ImageFilterModelPrivate::processAddedInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
+void ItemFilterModel::ItemFilterModelPrivate::processAddedInfos(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues)
 {
     // These have already been added, we just process them afterwards
     infosToProcess(infos, extraValues, false);
 }
 
-void ImageFilterModel::ImageFilterModelPrivate::setupWorkers()
+void ItemFilterModel::ItemFilterModelPrivate::setupWorkers()
 {
-    preparer = new ImageFilterModelPreparer(this);
-    filterer = new ImageFilterModelFilterer(this);
+    preparer = new ItemFilterModelPreparer(this);
+    filterer = new ItemFilterModelFilterer(this);
 
     // A package in constructed in infosToProcess.
     // Normal flow is infosToProcess -> preparer::process -> filterer::process -> packageFinished.
     // If no preparation is needed, the first step is skipped.
     // If filter version changes, both will discard old package and send them to packageDiscarded.
 
-    connect(this, SIGNAL(packageToPrepare(ImageFilterModelTodoPackage)),
-            preparer, SLOT(process(ImageFilterModelTodoPackage)));
+    connect(this, SIGNAL(packageToPrepare(ItemFilterModelTodoPackage)),
+            preparer, SLOT(process(ItemFilterModelTodoPackage)));
 
-    connect(this, SIGNAL(packageToFilter(ImageFilterModelTodoPackage)),
-            filterer, SLOT(process(ImageFilterModelTodoPackage)));
+    connect(this, SIGNAL(packageToFilter(ItemFilterModelTodoPackage)),
+            filterer, SLOT(process(ItemFilterModelTodoPackage)));
 
-    connect(preparer, SIGNAL(processed(ImageFilterModelTodoPackage)),
-            filterer, SLOT(process(ImageFilterModelTodoPackage)));
+    connect(preparer, SIGNAL(processed(ItemFilterModelTodoPackage)),
+            filterer, SLOT(process(ItemFilterModelTodoPackage)));
 
-    connect(filterer, SIGNAL(processed(ImageFilterModelTodoPackage)),
-            this, SLOT(packageFinished(ImageFilterModelTodoPackage)));
+    connect(filterer, SIGNAL(processed(ItemFilterModelTodoPackage)),
+            this, SLOT(packageFinished(ItemFilterModelTodoPackage)));
 
-    connect(preparer, SIGNAL(discarded(ImageFilterModelTodoPackage)),
-            this, SLOT(packageDiscarded(ImageFilterModelTodoPackage)));
+    connect(preparer, SIGNAL(discarded(ItemFilterModelTodoPackage)),
+            this, SLOT(packageDiscarded(ItemFilterModelTodoPackage)));
 
-    connect(filterer, SIGNAL(discarded(ImageFilterModelTodoPackage)),
-            this, SLOT(packageDiscarded(ImageFilterModelTodoPackage)));
+    connect(filterer, SIGNAL(discarded(ItemFilterModelTodoPackage)),
+            this, SLOT(packageDiscarded(ItemFilterModelTodoPackage)));
 }
 
-void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<ItemInfo>& infos)
+void ItemFilterModel::ItemFilterModelPrivate::infosToProcess(const QList<ItemInfo>& infos)
 {
     infosToProcess(infos, QList<QVariant>(), false);
 }
 
-void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd)
+void ItemFilterModel::ItemFilterModelPrivate::infosToProcess(const QList<ItemInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd)
 {
     if (infos.isEmpty())
     {
@@ -178,16 +178,16 @@ void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<ItemI
 
         if (needPrepare)
         {
-            emit packageToPrepare(ImageFilterModelTodoPackage(infoVector, extraValueVector, version, forReAdd));
+            emit packageToPrepare(ItemFilterModelTodoPackage(infoVector, extraValueVector, version, forReAdd));
         }
         else
         {
-            emit packageToFilter(ImageFilterModelTodoPackage(infoVector, extraValueVector, version, forReAdd));
+            emit packageToFilter(ItemFilterModelTodoPackage(infoVector, extraValueVector, version, forReAdd));
         }
     }
 }
 
-void ImageFilterModel::ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage& package)
+void ItemFilterModel::ItemFilterModelPrivate::packageFinished(const ItemFilterModelTodoPackage& package)
 {
     // check if it got discarded on the journey
     if (package.version != version)
@@ -235,7 +235,7 @@ void ImageFilterModel::ImageFilterModelPrivate::packageFinished(const ImageFilte
     }
 }
 
-void ImageFilterModel::ImageFilterModelPrivate::packageDiscarded(const ImageFilterModelTodoPackage& package)
+void ItemFilterModel::ItemFilterModelPrivate::packageDiscarded(const ItemFilterModelTodoPackage& package)
 {
     // Either, the model was reset, or the filter changed
     // In the former case throw all away, in the latter case, recycle
@@ -246,11 +246,11 @@ void ImageFilterModel::ImageFilterModelPrivate::packageDiscarded(const ImageFilt
 
         if (needPrepare)
         {
-            emit packageToPrepare(ImageFilterModelTodoPackage(package.infos, package.extraValues, version, package.isForReAdd));
+            emit packageToPrepare(ItemFilterModelTodoPackage(package.infos, package.extraValues, version, package.isForReAdd));
         }
         else
         {
-            emit packageToFilter(ImageFilterModelTodoPackage(package.infos, package.extraValues, version, package.isForReAdd));
+            emit packageToFilter(ItemFilterModelTodoPackage(package.infos, package.extraValues, version, package.isForReAdd));
         }
     }
 }

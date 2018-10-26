@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-02-18
- * Description : Sync QItemSelectionModel of ImageFilterModel and TableViewModel
+ * Description : Sync QItemSelectionModel of ItemFilterModel and TableViewModel
  *
  * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *

@@ -39,8 +39,8 @@
 #include "coredbchangesets.h"
 #include "coredbfields.h"
 #include "coredbwatch.h"
-#include "imagefiltermodel.h"
-#include "imagefiltersettings.h"
+#include "itemfiltermodel.h"
+#include "itemfiltersettings.h"
 #include "iteminfo.h"
 #include "tableview_columnfactory.h"
 #include "tableview_selection_model_syncer.h"
@@ -126,7 +126,7 @@ public:
 
     QList<TableViewColumn*>     columnObjects;
     TableViewModel::Item*       rootItem;
-    ImageFilterSettings         imageFilterSettings;
+    ItemFilterSettings         imageFilterSettings;
     int                         sortColumn;
     Qt::SortOrder               sortOrder;
     bool                        sortRequired;
@@ -173,10 +173,10 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
     connect(s->imageModel, SIGNAL(layoutChanged()),
             this, SLOT(slotSourceLayoutChanged()));
 
-    connect(s->imageFilterModel, SIGNAL(filterSettingsChanged(ImageFilterSettings)),
-            this, SLOT(slotFilterSettingsChanged(ImageFilterSettings)));
+    connect(s->imageFilterModel, SIGNAL(filterSettingsChanged(ItemFilterSettings)),
+            this, SLOT(slotFilterSettingsChanged(ItemFilterSettings)));
 
-    // We do not connect to ImageFilterModel::dataChanged, because we monitor changes directly from the database.
+    // We do not connect to ItemFilterModel::dataChanged, because we monitor changes directly from the database.
 
     connect(CoreDbAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotDatabaseImageChanged(ImageChangeset)), Qt::QueuedConnection);
@@ -211,7 +211,7 @@ int TableViewModel::columnCount(const QModelIndex& i) const
     return d->columnObjects.count();
 }
 
-QModelIndex TableViewModel::toImageFilterModelIndex(const QModelIndex& i) const
+QModelIndex TableViewModel::toItemFilterModelIndex(const QModelIndex& i) const
 {
     Item* const item = itemFromIndex(i);
 
@@ -596,7 +596,7 @@ void TableViewModel::slotSourceLayoutAboutToBeChanged()
 
     /// @todo Emitting layoutAboutToBeChanged and layoutChanged is tricky,
     ///       because we do not know what will change.
-    ///       It looks like ImageFilterModel emits layoutAboutToBeChanged and layoutChanged
+    ///       It looks like ItemFilterModel emits layoutAboutToBeChanged and layoutChanged
     ///       even when the resulting dataset will be empty, and ModelTest does not like that.
     ///       For now, the easiest workaround is resetting the model
 //     emit(layoutAboutToBeChanged());
@@ -936,7 +936,7 @@ TableViewModel::Item* TableViewModel::itemFromIndex(const QModelIndex& i) const
     return item;
 }
 
-QModelIndex TableViewModel::fromImageFilterModelIndex(const QModelIndex& imageFilterModelIndex)
+QModelIndex TableViewModel::fromItemFilterModelIndex(const QModelIndex& imageFilterModelIndex)
 {
     ASSERT_MODEL(imageFilterModelIndex, s->imageFilterModel);
 
@@ -1107,7 +1107,7 @@ ItemInfo TableViewModel::imageInfo(const QModelIndex& index) const
     return infoFromItem(item);
 }
 
-void TableViewModel::slotFilterSettingsChanged(const ImageFilterSettings& settings)
+void TableViewModel::slotFilterSettingsChanged(const ItemFilterSettings& settings)
 {
     d->imageFilterSettings = settings;
 

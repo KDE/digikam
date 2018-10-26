@@ -36,7 +36,7 @@ namespace Digikam
 class ImageCategoryDrawer;
 class ImageCategorizedView;
 class ImageDelegateOverlay;
-class ImageFilterModel;
+class ItemFilterModel;
 class ImageModel;
 class ImageThumbnailModel;
 

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-03-05
- * Description : Filter values for use with ImageFilterModel
+ * Description : Filter values for use with ItemFilterModel
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_FILTER_SETTINGS_H
-#define DIGIKAM_IMAGE_FILTER_SETTINGS_H
+#ifndef DIGIKAM_ITEM_FILTER_SETTINGS_H
+#define DIGIKAM_ITEM_FILTER_SETTINGS_H
 
 // Qt includes
 
@@ -93,11 +93,11 @@ public:
 
 // ---------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageFilterSettings
+class DIGIKAM_DATABASE_EXPORT ItemFilterSettings
 {
 public:
 
-    explicit ImageFilterSettings();
+    explicit ItemFilterSettings();
 
     /**
      *  Returns true if the given ItemInfo matches the filter criteria.
@@ -262,14 +262,14 @@ private:
 
 // ---------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT VersionImageFilterSettings
+class DIGIKAM_DATABASE_EXPORT VersionItemFilterSettings
 {
 public:
 
-    VersionImageFilterSettings();
-    explicit VersionImageFilterSettings(const VersionManagerSettings& settings);
+    VersionItemFilterSettings();
+    explicit VersionItemFilterSettings(const VersionManagerSettings& settings);
 
-    bool operator==(const VersionImageFilterSettings& other) const;
+    bool operator==(const VersionItemFilterSettings& other) const;
 
     /**
      *  Returns true if the given ItemInfo matches the filter criteria.
@@ -306,13 +306,13 @@ protected:
 
 // ---------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT GroupImageFilterSettings
+class DIGIKAM_DATABASE_EXPORT GroupItemFilterSettings
 {
 public:
 
-    explicit GroupImageFilterSettings();
+    explicit GroupItemFilterSettings();
 
-    bool operator==(const GroupImageFilterSettings& other) const;
+    bool operator==(const GroupItemFilterSettings& other) const;
 
     /**
      *  Returns true if the given ItemInfo matches the filter criteria.
@@ -344,6 +344,6 @@ protected:
 
 } // namespace Digikam
 
-Q_DECLARE_METATYPE(Digikam::ImageFilterSettings::GeolocationCondition)
+Q_DECLARE_METATYPE(Digikam::ItemFilterSettings::GeolocationCondition)
 
-#endif // DIGIKAM_IMAGE_FILTER_SETTINGS_H
+#endif // DIGIKAM_ITEM_FILTER_SETTINGS_H

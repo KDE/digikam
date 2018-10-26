@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "imagefiltersettings.h"
+#include "itemfiltersettings.h"
 #include "tagfolderview.h"
 
 namespace Digikam

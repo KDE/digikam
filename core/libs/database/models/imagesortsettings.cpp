@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-03-05
- * Description : Filter values for use with ImageFilterModel
+ * Description : Filter values for use with ItemFilterModel
  *
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2014 by Mohamed_Anwer <m_dot_anwer at gmx dot com>

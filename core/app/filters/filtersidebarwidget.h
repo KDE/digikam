@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "imagefiltersettings.h"
+#include "itemfiltersettings.h"
 #include "statesavingobject.h"
 #include "textfilter.h"
 #include "digikam_globals.h"
@@ -97,12 +97,12 @@ Q_SIGNALS:
      * @param plTagIds     a list of pick label tag ids
      */
     void signalTagFilterChanged(const QList<int>& includedTags, const QList<int>& excludedTags,
-                                ImageFilterSettings::MatchingCondition matchingCond, bool showUnTagged,
+                                ItemFilterSettings::MatchingCondition matchingCond, bool showUnTagged,
                                 const QList<int>& clTagIds, const QList<int>& plTagIds);
 
-    void signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition, bool);
+    void signalRatingFilterChanged(int, ItemFilterSettings::RatingCondition, bool);
     void signalMimeTypeFilterChanged(int);
-    void signalGeolocationFilterChanged(ImageFilterSettings::GeolocationCondition);
+    void signalGeolocationFilterChanged(ItemFilterSettings::GeolocationCondition);
     void signalSearchTextFilterChanged(const SearchTextFilterSettings&);
 
 public Q_SLOTS:

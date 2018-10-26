@@ -38,9 +38,9 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imagefiltershistorymodel.h"
-#include "imagefiltershistorytreeitem.h"
-#include "imagefiltershistoryitemdelegate.h"
+#include "itemfiltershistorymodel.h"
+#include "itemfiltershistorytreeitem.h"
+#include "itemfiltershistoryitemdelegate.h"
 
 namespace Digikam
 {
@@ -67,9 +67,9 @@ public:
     }
 
     QTreeView*                       view;
-    ImageFiltersHistoryModel*        model;
+    ItemFiltersHistoryModel*        model;
     QGridLayout*                     layout;
-    ImageFiltersHistoryItemDelegate* delegate;
+    ItemFiltersHistoryItemDelegate* delegate;
     QLabel*                          headerLabel;
 };
 
@@ -79,8 +79,8 @@ FiltersHistoryWidget::FiltersHistoryWidget(QWidget* const parent)
 {
     d->layout      = new QGridLayout(this);
     d->view        = new QTreeView(this);
-    d->delegate    = new ImageFiltersHistoryItemDelegate(this);
-    d->model       = new ImageFiltersHistoryModel(0, QUrl());
+    d->delegate    = new ItemFiltersHistoryItemDelegate(this);
+    d->model       = new ItemFiltersHistoryModel(0, QUrl());
     d->headerLabel = new QLabel(this);
 
     d->headerLabel->setText(i18n("Used filters"));

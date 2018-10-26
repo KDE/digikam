@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "imagefiltermodel_p.h"
+#include "itemfiltermodel_p.h"
 #include "album.h"
 #include "albummanager.h"
 #include "coredbaccess.h"
@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageAlbumFilterModelPrivate : public ImageFilterModel::ImageFilterModelPrivate
+class Q_DECL_HIDDEN ImageAlbumFilterModelPrivate : public ItemFilterModel::ItemFilterModelPrivate
 {
 public:
 
@@ -58,7 +58,7 @@ public:
 };
 
 ImageAlbumFilterModel::ImageAlbumFilterModel(QObject* const parent)
-    : ImageFilterModel(*new ImageAlbumFilterModelPrivate, parent)
+    : ItemFilterModel(*new ImageAlbumFilterModelPrivate, parent)
 {
     Q_D(ImageAlbumFilterModel);
 
@@ -105,7 +105,7 @@ ImageAlbumFilterModel::~ImageAlbumFilterModel()
 
 void ImageAlbumFilterModel::setSourceImageModel(ImageAlbumModel* model)
 {
-    ImageFilterModel::setSourceImageModel(model);
+    ItemFilterModel::setSourceImageModel(model);
 }
 
 ImageAlbumModel* ImageAlbumFilterModel::sourceModel() const
@@ -120,14 +120,14 @@ void ImageAlbumFilterModel::prepareThumbnails(const QList<QModelIndex>& indexesT
     sourceModel()->prepareThumbnails(mapListToSource(indexesToPrepare));
 }
 
-void ImageAlbumFilterModel::setImageFilterSettings(const ImageFilterSettings& s)
+void ImageAlbumFilterModel::setItemFilterSettings(const ItemFilterSettings& s)
 {
     Q_D(ImageAlbumFilterModel);
 
-    ImageFilterSettings settings(s);
+    ItemFilterSettings settings(s);
     settings.setAlbumNames(d->albumNamesHash);
     settings.setTagNames(d->tagNamesHash);
-    ImageFilterModel::setImageFilterSettings(settings);
+    ItemFilterModel::setItemFilterSettings(settings);
 }
 
 int ImageAlbumFilterModel::compareInfosCategories(const ItemInfo& left, const ItemInfo& right) const
@@ -176,7 +176,7 @@ int ImageAlbumFilterModel::compareInfosCategories(const ItemInfo& left, const It
         }
         default:
         {
-            return ImageFilterModel::compareInfosCategories(left, right);
+            return ItemFilterModel::compareInfosCategories(left, right);
         }
     }
 }
@@ -225,7 +225,7 @@ void ImageAlbumFilterModel::slotDelayedAlbumNamesTimer()
 
     if (d->filter.isFilteringByText())
     {
-        setImageFilterSettings(d->filter);
+        setItemFilterSettings(d->filter);
     }
 }
 
@@ -237,7 +237,7 @@ void ImageAlbumFilterModel::slotDelayedTagNamesTimer()
 
     if (d->filter.isFilteringByText() || d->filter.isFilteringByTags())
     {
-        setImageFilterSettings(d->filter);
+        setItemFilterSettings(d->filter);
     }
 }
 

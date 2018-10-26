@@ -428,7 +428,7 @@ void DigikamView::applySettings()
         sidebarWidget->applySettings();
     }
 
-    d->iconView->imageFilterModel()->setVersionImageFilterSettings(VersionImageFilterSettings(ApplicationSettings::instance()->getVersionManagerSettings()));
+    d->iconView->imageFilterModel()->setVersionItemFilterSettings(VersionItemFilterSettings(ApplicationSettings::instance()->getVersionManagerSettings()));
 
     refreshView();
 }
@@ -509,11 +509,11 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(signalShowContextMenu(QContextMenuEvent*,QList<QAction*>)),
             this, SLOT(slotShowContextMenu(QContextMenuEvent*,QList<QAction*>)));
 
-    connect(d->iconView, SIGNAL(signalShowContextMenuOnInfo(QContextMenuEvent*,ItemInfo,QList<QAction*>,ImageFilterModel*)),
-            this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ItemInfo,QList<QAction*>,ImageFilterModel*)));
+    connect(d->iconView, SIGNAL(signalShowContextMenuOnInfo(QContextMenuEvent*,ItemInfo,QList<QAction*>,ItemFilterModel*)),
+            this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ItemInfo,QList<QAction*>,ItemFilterModel*)));
 
-    connect(d->iconView, SIGNAL(signalShowGroupContextMenu(QContextMenuEvent*,QList<ItemInfo>,ImageFilterModel*)),
-            this, SLOT(slotShowGroupContextMenu(QContextMenuEvent*,QList<ItemInfo>,ImageFilterModel*)));
+    connect(d->iconView, SIGNAL(signalShowGroupContextMenu(QContextMenuEvent*,QList<ItemInfo>,ItemFilterModel*)),
+            this, SLOT(slotShowGroupContextMenu(QContextMenuEvent*,QList<ItemInfo>,ItemFilterModel*)));
 
     // -- TableView Connections -----------------------------------
 
@@ -529,8 +529,8 @@ void DigikamView::setupConnections()
     connect(d->tableView, SIGNAL(signalShowContextMenu(QContextMenuEvent*,QList<QAction*>)),
             this, SLOT(slotShowContextMenu(QContextMenuEvent*,QList<QAction*>)));
 
-    connect(d->tableView, SIGNAL(signalShowContextMenuOnInfo(QContextMenuEvent*,ItemInfo,QList<QAction*>,ImageFilterModel*)),
-            this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ItemInfo,QList<QAction*>,ImageFilterModel*)));
+    connect(d->tableView, SIGNAL(signalShowContextMenuOnInfo(QContextMenuEvent*,ItemInfo,QList<QAction*>,ItemFilterModel*)),
+            this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ItemInfo,QList<QAction*>,ItemFilterModel*)));
 
     // TableView::signalItemsChanged is emitted when something changes in the model that
     // DigikamView should care about, not only the selection.
@@ -572,11 +572,11 @@ void DigikamView::setupConnections()
     ImageAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
 
     connect(d->filterWidget,
-            SIGNAL(signalTagFilterChanged(QList<int>,QList<int>,ImageFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)),
-            d->iconView->imageFilterModel(), SLOT(setTagFilter(QList<int>,QList<int>,ImageFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)));
+            SIGNAL(signalTagFilterChanged(QList<int>,QList<int>,ItemFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)),
+            d->iconView->imageFilterModel(), SLOT(setTagFilter(QList<int>,QList<int>,ItemFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)));
 
-    connect(d->filterWidget, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition,bool)),
-            model, SLOT(setRatingFilter(int,ImageFilterSettings::RatingCondition,bool)));
+    connect(d->filterWidget, SIGNAL(signalRatingFilterChanged(int,ItemFilterSettings::RatingCondition,bool)),
+            model, SLOT(setRatingFilter(int,ItemFilterSettings::RatingCondition,bool)));
 
     connect(d->filterWidget, SIGNAL(signalSearchTextFilterChanged(SearchTextFilterSettings)),
             model, SLOT(setTextFilter(SearchTextFilterSettings)));
@@ -587,8 +587,8 @@ void DigikamView::setupConnections()
     connect(d->filterWidget, SIGNAL(signalMimeTypeFilterChanged(int)),
             model, SLOT(setMimeTypeFilter(int)));
 
-    connect(d->filterWidget, SIGNAL(signalGeolocationFilterChanged(ImageFilterSettings::GeolocationCondition)),
-            model, SLOT(setGeolocationFilter(ImageFilterSettings::GeolocationCondition)));
+    connect(d->filterWidget, SIGNAL(signalGeolocationFilterChanged(ItemFilterSettings::GeolocationCondition)),
+            model, SLOT(setGeolocationFilter(ItemFilterSettings::GeolocationCondition)));
 
     // -- Preview image widget Connections ------------------------
 
@@ -688,8 +688,8 @@ void DigikamView::connectIconViewFilter(FilterStatusBar* const filterbar)
     connect(model, SIGNAL(filterMatches(bool)),
             filterbar, SLOT(slotFilterMatches(bool)));
 
-    connect(model, SIGNAL(filterSettingsChanged(ImageFilterSettings)),
-            filterbar, SLOT(slotFilterSettingsChanged(ImageFilterSettings)));
+    connect(model, SIGNAL(filterSettingsChanged(ItemFilterSettings)),
+            filterbar, SLOT(slotFilterSettingsChanged(ItemFilterSettings)));
 
     connect(filterbar, SIGNAL(signalResetFilters()),
             d->filterWidget, SLOT(slotResetFilters()));
@@ -2598,14 +2598,14 @@ void DigikamView::slotShowContextMenu(QContextMenuEvent* event,
 
 void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info,
                                             const QList<QAction*>& extraGroupingActions,
-                                            ImageFilterModel* imageFilterModel)
+                                            ItemFilterModel* imageFilterModel)
 {
     QList<qlonglong> selectedImageIds = selectedInfoList(true, true).toImageIdList();
 
     // --------------------------------------------------------
     QMenu menu(this);
     ContextMenuHelper cmHelper(&menu);
-    cmHelper.setImageFilterModel(imageFilterModel);
+    cmHelper.setItemFilterModel(imageFilterModel);
 
     cmHelper.addAction(QLatin1String("full_screen"));
     cmHelper.addAction(QLatin1String("options_show_menubar"));
@@ -2721,7 +2721,7 @@ void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const Item
 
 void DigikamView::slotShowGroupContextMenu(QContextMenuEvent* event,
                                            const QList<ItemInfo>& selectedInfos,
-                                           ImageFilterModel* imageFilterModel)
+                                           ItemFilterModel* imageFilterModel)
 {
     QList<qlonglong> selectedImageIDs;
 
@@ -2732,7 +2732,7 @@ void DigikamView::slotShowGroupContextMenu(QContextMenuEvent* event,
 
     QMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
-    cmhelper.setImageFilterModel(imageFilterModel);
+    cmhelper.setItemFilterModel(imageFilterModel);
     cmhelper.addGroupActions(selectedImageIDs);
 
     // special action handling --------------------------------

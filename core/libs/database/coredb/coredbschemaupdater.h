@@ -71,7 +71,7 @@ private:
     bool makeUpdates();
     bool beginWrapSchemaUpdateStep();
     bool endWrapSchemaUpdateStep(bool stepOperationSuccess, const QString& errorMsg);
-    void defaultFilterSettings(QStringList& defaultImageFilter,
+    void defaultFilterSettings(QStringList& defaultItemFilter,
                                QStringList& defaultVideoFilter,
                                QStringList& defaultAudioFilter);
     void defaultIgnoreDirectoryFilterSettings(QStringList& defaultIgnoreDirectoryFilter);

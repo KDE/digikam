@@ -38,7 +38,7 @@
 #include "imagealbumfiltermodel.h"
 #include "searchmodificationhelper.h"
 #include "sidebarwidget.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "labelstreeview.h"
 
 #ifdef HAVE_MARBLE
@@ -353,7 +353,7 @@ public:
     explicit GPSSearchSideBarWidget(QWidget* const parent,
                                     SearchModel* const searchModel,
                                     SearchModificationHelper* const searchModificationHelper,
-                                    ImageFilterModel* const imageFilterModel,
+                                    ItemFilterModel* const imageFilterModel,
                                     QItemSelectionModel* const itemSelectionModel);
     virtual ~GPSSearchSideBarWidget();
 

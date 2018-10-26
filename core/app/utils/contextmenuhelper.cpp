@@ -59,7 +59,7 @@
 #include "digikamapp.h"
 #include "dfileoperations.h"
 #include "iteminfo.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "lighttablewindow.h"
 #include "queuemgrwindow.h"
 #include "picklabelwidget.h"
@@ -105,7 +105,7 @@ public:
     QMap<int, QAction*>          queueActions;
     QMap<QString, KService::Ptr> servicesMap;
 
-    ImageFilterModel*            imageFilterModel;
+    ItemFilterModel*            imageFilterModel;
     AbstractCheckableAlbumModel* albumModel;
 
     QMenu*                       parent;
@@ -898,7 +898,7 @@ void ContextMenuHelper::addGroupActions(const imageIds &ids)
     }
 }
 
-void ContextMenuHelper::setImageFilterModel(ImageFilterModel* model)
+void ContextMenuHelper::setItemFilterModel(ItemFilterModel* model)
 {
     d->imageFilterModel = model;
 }
@@ -1021,7 +1021,7 @@ void ContextMenuHelper::setGroupsOpen(bool open)
         return;
     }
 
-    GroupImageFilterSettings settings = d->imageFilterModel->groupImageFilterSettings();
+    GroupItemFilterSettings settings = d->imageFilterModel->groupItemFilterSettings();
 
     foreach (const qlonglong& id, d->selectedIds)
     {
@@ -1033,7 +1033,7 @@ void ContextMenuHelper::setGroupsOpen(bool open)
         }
     }
 
-    d->imageFilterModel->setGroupImageFilterSettings(settings);
+    d->imageFilterModel->setGroupItemFilterSettings(settings);
 }
 
 void ContextMenuHelper::slotOpenGroups()

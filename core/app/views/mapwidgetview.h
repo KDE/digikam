@@ -37,7 +37,7 @@
 #include "statesavingobject.h"
 #include "imagealbummodel.h"
 #include "thumbnailloadthread.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "camiteminfo.h"
 
 namespace Digikam

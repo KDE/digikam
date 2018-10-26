@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "tableview.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
@@ -172,7 +172,7 @@ void ColumnThumbnail::slotThumbnailLoaded(const LoadingDescription& loadingDescr
         return;
     }
 
-    /// @todo Find a way to do this without the ImageFilterModel
+    /// @todo Find a way to do this without the ItemFilterModel
     const QModelIndex imageModelIndex = s->imageModel->indexForPath(loadingDescription.filePath);
 
     if (!imageModelIndex.isValid())

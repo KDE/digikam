@@ -53,7 +53,7 @@
 #include "coredbwatch.h"
 #include "coredbfields.h"
 #include "imagealbummodel.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 
 namespace Digikam
 {
@@ -69,7 +69,7 @@ public:
     class MyTile;
 
     explicit GPSMarkerTiler(QObject* const parent,
-                            ImageFilterModel* const imageFilterModel,
+                            ItemFilterModel* const imageFilterModel,
                             QItemSelectionModel* const selectionModel);
     virtual ~GPSMarkerTiler();
 

@@ -258,8 +258,8 @@ void ImportView::connectIconViewFilter(FilterStatusBar* filterbar)
     connect(model, SIGNAL(filterMatches(bool)),
             filterbar, SLOT(slotFilterMatches(bool)));
 
-    connect(model, SIGNAL(filterSettingsChanged(ImageFilterSettings)),
-            filterbar, SLOT(slotFilterSettingsChanged(ImageFilterSettings)));
+    connect(model, SIGNAL(filterSettingsChanged(ItemFilterSettings)),
+            filterbar, SLOT(slotFilterSettingsChanged(ItemFilterSettings)));
 
     connect(filterbar, SIGNAL(signalResetFilters()),
             d->filterWidget, SLOT(slotResetFilters()));

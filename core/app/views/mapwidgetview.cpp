@@ -56,7 +56,7 @@ namespace Digikam
 {
 
 class ImageAlbumModel;
-class ImageFilterModel;
+class ItemFilterModel;
 
 /**
  * @class MapWidgetView
@@ -83,7 +83,7 @@ public:
 
     DVBox*                      vbox;
     MapWidget*                  mapWidget;
-    ImageFilterModel*           imageFilterModel;
+    ItemFilterModel*           imageFilterModel;
     ImageAlbumModel*            imageModel;
     ImportFilterModel*          importFilterModel;
     ImportImageModel*           importModel;
@@ -113,7 +113,7 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
     switch(d->application)
     {
         case ApplicationDigikam:
-            d->imageFilterModel   = dynamic_cast<ImageFilterModel*>(imageFilterModel);
+            d->imageFilterModel   = dynamic_cast<ItemFilterModel*>(imageFilterModel);
             d->imageModel         = dynamic_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
             d->mapViewModelHelper = new MapViewModelHelper(d->selectionModel, imageFilterModel, this, ApplicationDigikam);
             break;
@@ -214,7 +214,7 @@ public:
     {
     }
 
-    ImageFilterModel*           model;
+    ItemFilterModel*           model;
     ImportFilterModel*          importModel;
     QItemSelectionModel*        selectionModel;
     ThumbnailLoadThread*        thumbnailLoadThread;
@@ -234,7 +234,7 @@ MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
     switch (d->application)
     {
         case MapWidgetView::ApplicationDigikam:
-            d->model               = dynamic_cast<ImageFilterModel*>(filterModel);
+            d->model               = dynamic_cast<ItemFilterModel*>(filterModel);
             d->thumbnailLoadThread = new ThumbnailLoadThread(this);
 
             connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),

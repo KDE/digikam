@@ -125,7 +125,7 @@ public:
     QList<int>                             rectLevel;
     bool                                   activeState;
     QHash<qlonglong, GPSItemInfo>         imagesHash;
-    ImageFilterModel*                      imageFilterModel;
+    ItemFilterModel*                      imageFilterModel;
     ImageAlbumModel*                       imageAlbumModel;
     QItemSelectionModel*                   selectionModel;
     GeoCoordinates::Pair          currentRegionSelection;
@@ -136,7 +136,7 @@ public:
  * @brief Constructor
  * @param parent Parent object
  */
-GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* const imageFilterModel, QItemSelectionModel* const selectionModel)
+GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ItemFilterModel* const imageFilterModel, QItemSelectionModel* const selectionModel)
     : AbstractMarkerTiler(parent),
       d(new Private())
 {

@@ -34,7 +34,7 @@
 #include "imagecategorizedview.h"
 #include "imagedelegateoverlay.h"
 #include "imagemodel.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "thumbnailloadthread.h"
 #include "imagethumbnaildelegatepriv.h"
 

@@ -55,7 +55,7 @@ namespace Digikam
 {
 
 class ImageAlbumModel;
-class ImageFilterModel;
+class ItemFilterModel;
 
 class Q_DECL_HIDDEN TableView::Private
 {
@@ -84,7 +84,7 @@ TableView::TableView(QItemSelectionModel* const selectionModel,
     s->isActive                      = false;
     s->tableView                     = this;
     s->thumbnailLoadThread           = new ThumbnailLoadThread(this);
-    s->imageFilterModel              = dynamic_cast<ImageFilterModel*>(imageFilterModel);
+    s->imageFilterModel              = dynamic_cast<ItemFilterModel*>(imageFilterModel);
     s->imageModel                    = dynamic_cast<ImageModel*>(imageFilterModel->sourceModel());
     s->imageFilterSelectionModel     = selectionModel;
     s->columnFactory                 = new TableViewColumnFactory(s.data(), this);

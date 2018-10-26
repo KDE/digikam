@@ -46,7 +46,7 @@
 #include "imagecategorizedview.h"
 #include "imagedelegateoverlay.h"
 #include "imagemodel.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "imagethumbnailmodel.h"
 #include "thumbnailloadthread.h"
 #include "applicationsettings.h"
@@ -260,7 +260,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     }
 
     bool groupedAndClosed  = (info.hasGroupedImages() &&
-                              !index.data(ImageFilterModel::GroupIsOpenRole).toBool() &&
+                              !index.data(ItemFilterModel::GroupIsOpenRole).toBool() &&
                               ApplicationSettings::instance()->getDrawFramesToGrouped());
 
     QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect,
@@ -335,7 +335,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     if (!d->groupRect.isNull())
     {
         drawGroupIndicator(p, d->groupRect, info.numberOfGroupedImages(),
-                           index.data(ImageFilterModel::GroupIsOpenRole).toBool());
+                           index.data(ItemFilterModel::GroupIsOpenRole).toBool());
     }
 
     if (!d->tagRect.isNull())

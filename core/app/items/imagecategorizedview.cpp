@@ -207,7 +207,7 @@ ImageSortFilterModel* ImageCategorizedView::imageSortFilterModel() const
     return d->filterModel;
 }
 
-ImageFilterModel* ImageCategorizedView::imageFilterModel() const
+ItemFilterModel* ImageCategorizedView::imageFilterModel() const
 {
     return d->filterModel->imageFilterModel();
 }
@@ -685,7 +685,7 @@ Album* ImageCategorizedView::albumAt(const QPoint& pos) const
 
         if (categoryIndex.isValid())
         {
-            int albumId = categoryIndex.data(ImageFilterModel::CategoryAlbumIdRole).toInt();
+            int albumId = categoryIndex.data(ItemFilterModel::CategoryAlbumIdRole).toInt();
             return AlbumManager::instance()->findPAlbum(albumId);
         }
     }

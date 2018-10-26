@@ -25,14 +25,14 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_FILTER_MODEL_H
-#define DIGIKAM_IMAGE_FILTER_MODEL_H
+#ifndef DIGIKAM_ITEM_FILTER_MODEL_H
+#define DIGIKAM_ITEM_FILTER_MODEL_H
 
 // Local includes
 
 #include "dcategorizedsortfilterproxymodel.h"
 #include "textfilter.h"
-#include "imagefiltersettings.h"
+#include "itemfiltersettings.h"
 #include "imagemodel.h"
 #include "imagesortsettings.h"
 #include "digikam_export.h"
@@ -41,14 +41,14 @@ namespace Digikam
 {
 
 class ImageChangeset;
-class ImageFilterModel;
+class ItemFilterModel;
 class ImageTagChangeset;
 
-class DIGIKAM_DATABASE_EXPORT ImageFilterModelPrepareHook
+class DIGIKAM_DATABASE_EXPORT ItemFilterModelPrepareHook
 {
 public:
 
-    virtual ~ImageFilterModelPrepareHook() {};
+    virtual ~ItemFilterModelPrepareHook() {};
     virtual void prepare(const QVector<ItemInfo>& infos) = 0;
 };
 
@@ -91,8 +91,8 @@ public:
      */
     QList<ItemInfo> imageInfosSorted() const;
 
-    /// Returns this, any chained ImageFilterModel, or 0.
-    virtual ImageFilterModel* imageFilterModel() const;
+    /// Returns this, any chained ItemFilterModel, or 0.
+    virtual ItemFilterModel* imageFilterModel() const;
 
 protected:
 
@@ -109,13 +109,13 @@ protected:
 
 // -----------------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageFilterModel : public ImageSortFilterModel
+class DIGIKAM_DATABASE_EXPORT ItemFilterModel : public ImageSortFilterModel
 {
     Q_OBJECT
 
 public:
 
-    enum ImageFilterModelRoles
+    enum ItemFilterModelRoles
     {
         /// Returns the current categorization mode
         CategorizationModeRole      = ImageModel::FilterModelRoles + 1,
@@ -131,25 +131,25 @@ public:
         CategoryDateRole            = ImageModel::FilterModelRoles + 5,
         /// Returns true if the given image is a group leader, and the group is opened
         GroupIsOpenRole             = ImageModel::FilterModelRoles + 6,
-        ImageFilterModelPointerRole = ImageModel::FilterModelRoles + 50
+        ItemFilterModelPointerRole = ImageModel::FilterModelRoles + 50
     };
 
 public:
 
-    explicit ImageFilterModel(QObject* const parent = 0);
-    ~ImageFilterModel();
+    explicit ItemFilterModel(QObject* const parent = 0);
+    ~ItemFilterModel();
 
     /** Add a hook to get added images for preparation tasks before they are added in the model */
-    void addPrepareHook(ImageFilterModelPrepareHook* const hook);
-    void removePrepareHook(ImageFilterModelPrepareHook* const hook);
+    void addPrepareHook(ItemFilterModelPrepareHook* const hook);
+    void removePrepareHook(ItemFilterModelPrepareHook* const hook);
 
     /** Returns a set of DatabaseFields suggested to set as watch flags on the source ImageModel.
      *  The contained flags will be those that this model can sort or filter by. */
     DatabaseFields::Set suggestedWatchFlags() const;
 
-    ImageFilterSettings        imageFilterSettings() const;
-    VersionImageFilterSettings versionImageFilterSettings() const;
-    GroupImageFilterSettings   groupImageFilterSettings() const;
+    ItemFilterSettings        imageFilterSettings() const;
+    VersionItemFilterSettings versionItemFilterSettings() const;
+    GroupItemFilterSettings   groupItemFilterSettings() const;
     ImageSortSettings          imageSortSettings() const;
 
     // group is identified by the id of its group leader
@@ -160,30 +160,30 @@ public:
     void setSendItemInfoSignals(bool sendSignals);
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual ImageFilterModel* imageFilterModel() const;
+    virtual ItemFilterModel* imageFilterModel() const;
 
 public Q_SLOTS:
 
     /** Changes the current version image filter settings and refilters. */
-    void setVersionImageFilterSettings(const VersionImageFilterSettings& settings);
+    void setVersionItemFilterSettings(const VersionItemFilterSettings& settings);
 
     /** Changes the current version image filter settings and refilters. */
-    void setGroupImageFilterSettings(const GroupImageFilterSettings& settings);
+    void setGroupItemFilterSettings(const GroupItemFilterSettings& settings);
 
-    /** Adjust the current ImageFilterSettings.
+    /** Adjust the current ItemFilterSettings.
      *  Equivalent to retrieving the current filter settings, adjusting the parameter
-     *  and calling setImageFilterSettings.
+     *  and calling setItemFilterSettings.
      *  Provided for convenience.
-     *  It is encouraged to use setImageFilterSettings if you change more than one
+     *  It is encouraged to use setItemFilterSettings if you change more than one
      *  parameter at a time.
      */
     void setDayFilter(const QList<QDateTime>& days);
     void setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags,
-                      ImageFilterSettings::MatchingCondition matchingCond, bool showUnTagged,
+                      ItemFilterSettings::MatchingCondition matchingCond, bool showUnTagged,
                       const QList<int>& clTagIds, const QList<int>& plTagIds);
-    void setRatingFilter(int rating, ImageFilterSettings::RatingCondition ratingCond, bool isUnratedExcluded);
+    void setRatingFilter(int rating, ItemFilterSettings::RatingCondition ratingCond, bool isUnratedExcluded);
     void setMimeTypeFilter(int mimeTypeFilter);
-    void setGeolocationFilter(const ImageFilterSettings::GeolocationCondition& condition);
+    void setGeolocationFilter(const ItemFilterSettings::GeolocationCondition& condition);
     void setTextFilter(const SearchTextFilterSettings& settings);
 
     void setCategorizationMode(ImageSortSettings::CategorizationMode mode);
@@ -202,7 +202,7 @@ public Q_SLOTS:
     void setAllGroupsOpen(bool open);
 
     /** Changes the current image filter settings and refilters. */
-    virtual void setImageFilterSettings(const ImageFilterSettings& settings);
+    virtual void setItemFilterSettings(const ItemFilterSettings& settings);
 
     /** Changes the current image sort settings and resorts. */
     virtual void setImageSortSettings(const ImageSortSettings& settings);
@@ -221,7 +221,7 @@ Q_SIGNALS:
     /** Emitted when the filter settings have been changed
         (the model may not yet have been updated)
      */
-    void filterSettingsChanged(const ImageFilterSettings& settings);
+    void filterSettingsChanged(const ItemFilterSettings& settings);
 
     /** These signals need to be explicitly enabled with setSendItemInfoSignals()
      */
@@ -231,15 +231,15 @@ Q_SIGNALS:
 public:
 
     // Declared as public because of use in sub-classes.
-    class ImageFilterModelPrivate;
+    class ItemFilterModelPrivate;
 
 protected:
 
-    ImageFilterModelPrivate* const d_ptr;
+    ItemFilterModelPrivate* const d_ptr;
 
 protected:
 
-    ImageFilterModel(ImageFilterModelPrivate& dd, QObject* const parent);
+    ItemFilterModel(ItemFilterModelPrivate& dd, QObject* const parent);
 
     virtual void setDirectSourceImageModel(ImageModel* const model);
 
@@ -276,18 +276,18 @@ protected Q_SLOTS:
 
 private:
 
-    Q_DECLARE_PRIVATE(ImageFilterModel)
+    Q_DECLARE_PRIVATE(ItemFilterModel)
 };
 
 // -----------------------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT NoDuplicatesImageFilterModel : public ImageSortFilterModel
+class DIGIKAM_DATABASE_EXPORT NoDuplicatesItemFilterModel : public ImageSortFilterModel
 {
     Q_OBJECT
 
 public:
 
-    explicit NoDuplicatesImageFilterModel(QObject* const parent = 0);
+    explicit NoDuplicatesItemFilterModel(QObject* const parent = 0);
 
 protected:
 
@@ -296,6 +296,6 @@ protected:
 
 } // namespace Digikam
 
-Q_DECLARE_METATYPE(Digikam::ImageFilterModel*)
+Q_DECLARE_METATYPE(Digikam::ItemFilterModel*)
 
-#endif // DIGIKAM_IMAGE_FILTER_MODEL_H
+#endif // DIGIKAM_ITEM_FILTER_MODEL_H

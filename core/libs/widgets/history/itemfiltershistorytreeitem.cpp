@@ -21,12 +21,12 @@
  *
  * ============================================================ */
 
-#include "imagefiltershistorytreeitem.h"
+#include "itemfiltershistorytreeitem.h"
 
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageFiltersHistoryTreeItem::Private
+class Q_DECL_HIDDEN ItemFiltersHistoryTreeItem::Private
 {
 public:
 
@@ -36,89 +36,89 @@ public:
         disabled   = false;
     }
 
-    QList<ImageFiltersHistoryTreeItem*> childItems;
+    QList<ItemFiltersHistoryTreeItem*> childItems;
     QList<QVariant>                     itemData;
-    ImageFiltersHistoryTreeItem*        parentItem;
+    ItemFiltersHistoryTreeItem*        parentItem;
     bool                                disabled;
 };
 
-ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QList<QVariant>& data, ImageFiltersHistoryTreeItem* const parent)
+ItemFiltersHistoryTreeItem::ItemFiltersHistoryTreeItem(const QList<QVariant>& data, ItemFiltersHistoryTreeItem* const parent)
     : d(new Private)
 {
     d->parentItem = parent;
     d->itemData   = data;
 }
 
-ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QString& data, ImageFiltersHistoryTreeItem* const parent)
+ItemFiltersHistoryTreeItem::ItemFiltersHistoryTreeItem(const QString& data, ItemFiltersHistoryTreeItem* const parent)
     : d(new Private)
 {
     d->parentItem = parent;
     d->itemData.append(data);
 }
 
-ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const ImageFiltersHistoryTreeItem& other)
+ItemFiltersHistoryTreeItem::ItemFiltersHistoryTreeItem(const ItemFiltersHistoryTreeItem& other)
     : d(new Private(*other.d))
 {
 }
 
-ImageFiltersHistoryTreeItem::~ImageFiltersHistoryTreeItem()
+ItemFiltersHistoryTreeItem::~ItemFiltersHistoryTreeItem()
 {
     qDeleteAll(d->childItems);
     delete d;
 }
 
-void ImageFiltersHistoryTreeItem::appendChild(ImageFiltersHistoryTreeItem* const item)
+void ItemFiltersHistoryTreeItem::appendChild(ItemFiltersHistoryTreeItem* const item)
 {
     d->childItems.append(item);
 }
 
-ImageFiltersHistoryTreeItem* ImageFiltersHistoryTreeItem::child(int row) const
+ItemFiltersHistoryTreeItem* ItemFiltersHistoryTreeItem::child(int row) const
 {
     return d->childItems.value(row);
 }
 
-int ImageFiltersHistoryTreeItem::childCount() const
+int ItemFiltersHistoryTreeItem::childCount() const
 {
     return d->childItems.count();
 }
 
-int ImageFiltersHistoryTreeItem::columnCount() const
+int ItemFiltersHistoryTreeItem::columnCount() const
 {
     return d->itemData.count();
 }
 
-QVariant ImageFiltersHistoryTreeItem::data(int column) const
+QVariant ItemFiltersHistoryTreeItem::data(int column) const
 {
     return d->itemData.value(column);
 }
 
-ImageFiltersHistoryTreeItem* ImageFiltersHistoryTreeItem::parent() const
+ItemFiltersHistoryTreeItem* ItemFiltersHistoryTreeItem::parent() const
 {
     return d->parentItem;
 }
 
-int ImageFiltersHistoryTreeItem::row() const
+int ItemFiltersHistoryTreeItem::row() const
 {
     if (d->parentItem)
     {
-        return d->parentItem->d->childItems.indexOf(const_cast<ImageFiltersHistoryTreeItem*>(this));
+        return d->parentItem->d->childItems.indexOf(const_cast<ItemFiltersHistoryTreeItem*>(this));
     }
 
     return 0;
 }
 
-void ImageFiltersHistoryTreeItem::removeChild(int row)
+void ItemFiltersHistoryTreeItem::removeChild(int row)
 {
     delete child(row);
     d->childItems.removeAt(row);
 }
 
-bool ImageFiltersHistoryTreeItem::isDisabled() const
+bool ItemFiltersHistoryTreeItem::isDisabled() const
 {
     return d->disabled;
 }
 
-void ImageFiltersHistoryTreeItem::setDisabled(bool disabled) const
+void ItemFiltersHistoryTreeItem::setDisabled(bool disabled) const
 {
     d->disabled = disabled;
 }

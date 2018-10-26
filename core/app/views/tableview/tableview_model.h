@@ -39,8 +39,8 @@ namespace Digikam
 {
 
 class ImageChangeset;
-class ImageFilterModel;
-class ImageFilterSettings;
+class ItemFilterModel;
+class ItemFilterSettings;
 class ItemInfo;
 class ItemInfoList;
 class TableViewColumn;
@@ -95,9 +95,9 @@ public:
     void                    removeColumnAt(const int columnIndex);
     TableViewColumn*        getColumnObject(const int columnIndex);
     QList<TableViewColumn*> getColumnObjects();
-    QModelIndex             fromImageFilterModelIndex(const QModelIndex& imageFilterModelIndex);
+    QModelIndex             fromItemFilterModelIndex(const QModelIndex& imageFilterModelIndex);
     QModelIndex             fromImageModelIndex(const QModelIndex& imageModelIndex);
-    QModelIndex             toImageFilterModelIndex(const QModelIndex& i) const;
+    QModelIndex             toItemFilterModelIndex(const QModelIndex& i) const;
     QModelIndex             toImageModelIndex(const QModelIndex& i) const;
     void                    loadColumnProfile(const TableViewColumnProfile& columnProfile);
     TableViewColumnProfile  getColumnProfile() const;
@@ -177,7 +177,7 @@ private Q_SLOTS:
 
     void slotDatabaseImageChanged(const ImageChangeset& imageChangeset);
 
-    void slotFilterSettingsChanged(const ImageFilterSettings& settings);
+    void slotFilterSettingsChanged(const ItemFilterSettings& settings);
     void slotResortModel();
     void slotClearModel(const bool sendNotifications);
 

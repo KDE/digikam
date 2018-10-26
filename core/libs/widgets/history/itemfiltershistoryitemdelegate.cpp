@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagefiltershistoryitemdelegate.h"
+#include "itemfiltershistoryitemdelegate.h"
 
 // Qt includes
 
@@ -44,16 +44,16 @@
 namespace Digikam
 {
 
-ImageFiltersHistoryItemDelegate::ImageFiltersHistoryItemDelegate(QObject* const parent)
+ItemFiltersHistoryItemDelegate::ItemFiltersHistoryItemDelegate(QObject* const parent)
     : QStyledItemDelegate(parent)
 {
 }
 
-ImageFiltersHistoryItemDelegate::~ImageFiltersHistoryItemDelegate()
+ItemFiltersHistoryItemDelegate::~ItemFiltersHistoryItemDelegate()
 {
 }
 
-QSize ImageFiltersHistoryItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QSize ItemFiltersHistoryItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     // Add padding of 6px
     QSize size = QStyledItemDelegate::sizeHint(option, index);
@@ -66,7 +66,7 @@ QSize ImageFiltersHistoryItemDelegate::sizeHint(const QStyleOptionViewItem& opti
     return size;
 }
 
-void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void ItemFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     if (!(option.state & QStyle::State_Enabled))
     {

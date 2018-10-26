@@ -39,7 +39,7 @@ class Album;
 class ImageAlbumModel;
 class ImageAlbumFilterModel;
 class ImageModel;
-class ImageFilterModel;
+class ItemFilterModel;
 class ImageSortFilterModel;
 class ImageDelegate;
 class ImageDelegateOverlay;
@@ -61,8 +61,8 @@ public:
 
     QItemSelectionModel*   getSelectionModel()     const;
 
-    /// Returns any ImageFilterMode in chain. May not be sourceModel()
-    ImageFilterModel*      imageFilterModel()      const;
+    /// Returns any ItemFilterMode in chain. May not be sourceModel()
+    ItemFilterModel*      imageFilterModel()      const;
 
     /// Returns 0 if the ImageModel is not an ImageThumbnailModel
     ImageThumbnailModel*   imageThumbnailModel()   const;

@@ -194,7 +194,7 @@ void ImageWindow::setupUserArea()
 
     d->imageInfoModel   = new ImageListModel(this);
 
-    d->imageFilterModel = new ImageFilterModel(this);
+    d->imageFilterModel = new ItemFilterModel(this);
     d->imageFilterModel->setSourceImageModel(d->imageInfoModel);
 
     d->imageInfoModel->setWatchFlags(d->imageFilterModel->suggestedWatchFlags());

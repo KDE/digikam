@@ -37,7 +37,7 @@
 // Local includes
 
 #include "digikam_config.h"
-#include "imagefiltersettings.h"
+#include "itemfiltersettings.h"
 #include "imagesortsettings.h"
 #include "mimefilter.h"
 #include "thumbnailsize.h"
@@ -141,7 +141,7 @@ void ApplicationSettings::readSettings()
                                                                                                        (int)DMultiTabBar::AllIconsText);
 
     d->ratingFilterCond                  = group.readEntry(d->configRatingFilterConditionEntry,
-                                                                                                       (int)ImageFilterSettings::GreaterEqualCondition);
+                                                                                                       (int)ItemFilterSettings::GreaterEqualCondition);
 
     d->recursiveAlbums                   = group.readEntry(d->configRecursiveAlbumsEntry,              false);
     d->recursiveTags                     = group.readEntry(d->configRecursiveTagsEntry,                true);

@@ -459,7 +459,7 @@ bool CoreDbSchemaUpdater::makeUpdates()
     return true;
 }
 
-void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter, QStringList& defaultVideoFilter,
+void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultItemFilter, QStringList& defaultVideoFilter,
                                                 QStringList& defaultAudioFilter)
 {
     //NOTE for updating:
@@ -467,7 +467,7 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
 
     // https://en.wikipedia.org/wiki/Image_file_formats
 
-    defaultImageFilter << QLatin1String("jpg") << QLatin1String("jpeg") << QLatin1String("jpe")                                                 // JPEG
+    defaultItemFilter << QLatin1String("jpg") << QLatin1String("jpeg") << QLatin1String("jpe")                                                 // JPEG
                        << QLatin1String("jp2") << QLatin1String("j2k")  << QLatin1String("jpx") << QLatin1String("jpc") << QLatin1String("pgx") // JPEG-2000
                        << QLatin1String("tif") << QLatin1String("tiff")                                                                         // TIFF
                        << QLatin1String("png")                                                                                                  // PNG
@@ -477,13 +477,13 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
 
     // Raster graphics editor containers: https://en.wikipedia.org/wiki/Raster_graphics_editor
 
-    defaultImageFilter << QLatin1String("xcf")
+    defaultItemFilter << QLatin1String("xcf")
                        << QLatin1String("psd") << QLatin1String("psb")
                        << QLatin1String("kra") << QLatin1String("ora");
 
     // Raw images: https://en.wikipedia.org/wiki/Raw_image_format
 
-    defaultImageFilter << DRawDecoder::rawFilesList();
+    defaultItemFilter << DRawDecoder::rawFilesList();
 
     // Video files: https://en.wikipedia.org/wiki/Video_file_format
 
@@ -514,11 +514,11 @@ void CoreDbSchemaUpdater::defaultIgnoreDirectoryFilterSettings(QStringList& defa
 
 bool CoreDbSchemaUpdater::createFilterSettings()
 {
-    QStringList defaultImageFilter, defaultVideoFilter, defaultAudioFilter, defaultIgnoreDirectoryFilter;
-    defaultFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
+    QStringList defaultItemFilter, defaultVideoFilter, defaultAudioFilter, defaultIgnoreDirectoryFilter;
+    defaultFilterSettings(defaultItemFilter, defaultVideoFilter, defaultAudioFilter);
     defaultIgnoreDirectoryFilterSettings(defaultIgnoreDirectoryFilter);
 
-    d->albumDB->setFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
+    d->albumDB->setFilterSettings(defaultItemFilter, defaultVideoFilter, defaultAudioFilter);
     d->albumDB->setIgnoreDirectoryFilterSettings(defaultIgnoreDirectoryFilter);
     d->albumDB->setSetting(QLatin1String("FilterSettingsVersion"),      QString::number(filterSettingsVersion()));
     d->albumDB->setSetting(QLatin1String("DcrawFilterSettingsVersion"), QString::number(DRawDecoder::rawFilesVersion()));
@@ -1060,23 +1060,23 @@ bool CoreDbSchemaUpdater::updateV4toV7()
 
     // --- Set user settings from config ---
 
-    QStringList defaultImageFilter, defaultVideoFilter, defaultAudioFilter;
-    defaultFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
+    QStringList defaultItemFilter, defaultVideoFilter, defaultAudioFilter;
+    defaultFilterSettings(defaultItemFilter, defaultVideoFilter, defaultAudioFilter);
 
-    QSet<QString> configImageFilter, configVideoFilter, configAudioFilter;
+    QSet<QString> configItemFilter, configVideoFilter, configAudioFilter;
 
-    configImageFilter   = cleanUserFilterString(group.readEntry(QLatin1String("File Filter"),       QString())).toSet();
-    configImageFilter  += cleanUserFilterString(group.readEntry(QLatin1String("Raw File Filter"),   QString())).toSet();
+    configItemFilter   = cleanUserFilterString(group.readEntry(QLatin1String("File Filter"),       QString())).toSet();
+    configItemFilter  += cleanUserFilterString(group.readEntry(QLatin1String("Raw File Filter"),   QString())).toSet();
     configVideoFilter   = cleanUserFilterString(group.readEntry(QLatin1String("Movie File Filter"), QString())).toSet();
     configAudioFilter   = cleanUserFilterString(group.readEntry(QLatin1String("Audio File Filter"), QString())).toSet();
 
     // remove those that are included in the default filter
-    configImageFilter.subtract(defaultImageFilter.toSet());
+    configItemFilter.subtract(defaultItemFilter.toSet());
     configVideoFilter.subtract(defaultVideoFilter.toSet());
     configAudioFilter.subtract(defaultAudioFilter.toSet());
 
-    d->albumDB->setUserFilterSettings(configImageFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
-    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: set initial filter settings with user settings" << configImageFilter;
+    d->albumDB->setUserFilterSettings(configItemFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: set initial filter settings with user settings" << configItemFilter;
 
     if (d->observer)
     {

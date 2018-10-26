@@ -44,7 +44,7 @@
 #include "coredb.h"
 #include "applicationsettings.h"
 #include "contextmenuhelper.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "imagedragdrop.h"
 #include "fileactionmngr.h"
 #include "thumbnailloadthread.h"
@@ -171,7 +171,7 @@ public:
     bool                      navigateByPair;
 
     LightTableImageListModel* imageInfoModel;
-    ImageFilterModel*         imageFilterModel;
+    ItemFilterModel*         imageFilterModel;
     ImageDragDropHandler*     dragDropHandler;
 };
 
@@ -183,7 +183,7 @@ LightTableThumbBar::LightTableThumbBar(QWidget* const parent)
     // only one is left, only one is right at a time
     d->imageInfoModel->setExclusiveLightTableState(true);
 
-    d->imageFilterModel = new ImageFilterModel(this);
+    d->imageFilterModel = new ItemFilterModel(this);
     d->imageFilterModel->setSourceImageModel(d->imageInfoModel);
 
     d->imageInfoModel->setWatchFlags(d->imageFilterModel->suggestedWatchFlags());
