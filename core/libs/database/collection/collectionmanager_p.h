@@ -274,7 +274,4 @@ public:
 
 } // namespace Digikam
 
-// This is because of the CollectionManager private slot.
-#include "collectionmanager.h"  // krazy:exclude=includes
-
 #endif // DIGIKAM_COLLECTION_MANAGER_P_H

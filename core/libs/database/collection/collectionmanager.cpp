@@ -23,6 +23,9 @@
 
 #include "collectionmanager_p.h"
 
+// This is because of the CollectionManager private slot.
+#include "moc_collectionmanager.cpp"
+
 namespace Digikam
 {
 
@@ -141,6 +144,3 @@ void CollectionManager::clear_locked()
 }
 
 } // namespace Digikam
-
-// This is because of the CollectionManager private slot.
-#include "moc_collectionmanager.cpp"
