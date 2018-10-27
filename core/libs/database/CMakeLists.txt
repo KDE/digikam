@@ -54,10 +54,10 @@ set(libdatabaseutils_SRCS
     utils/dbsettingswidget.cpp
     utils/dbmigrationdlg.cpp
     utils/dbinfoiface.cpp
-    utils/dio.cpp
     utils/scancontroller.cpp
     utils/scancontroller_p.cpp
     utils/syncjob.cpp
+    utils/dio.cpp
 )
 
 set(libdatabase_SRCS
