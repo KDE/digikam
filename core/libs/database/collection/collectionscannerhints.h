@@ -33,8 +33,8 @@
 #include <QStringList>
 
 #ifdef HAVE_DBUS
-#include <QDBusArgument>
-#include "dbenginedbusutils.h"
+#   include <QDBusArgument>
+#   include "dbenginedbusutils.h"
 #endif
 
 // Local includes
