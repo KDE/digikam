@@ -50,7 +50,6 @@
 #include "coredb.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
-#include "collectionscannerhints.h"
 #include "collectionscannerobserver.h"
 #include "coredbaccess.h"
 #include "coredbbackend.h"

@@ -38,37 +38,12 @@
 #include "digikam_export.h"
 #include "coredbaccess.h"
 #include "coredbalbuminfo.h"
+#include "collectionscannerhints.h"
 
 class QFileInfo;
 
 namespace Digikam
 {
-
-class AlbumCopyMoveHint;
-class CollectionLocation;
-class CollectionScannerObserver;
-class ItemInfo;
-class ItemCopyMoveHint;
-class ItemChangeHint;
-class ItemMetadataAdjustmentHint;
-
-class CollectionScannerHintContainer
-{
-public:
-
-    /// Note: All methods of this class must be thread-safe.
-
-    virtual ~CollectionScannerHintContainer() {};
-
-    virtual void recordHints(const QList<AlbumCopyMoveHint>& hints) = 0;
-    virtual void recordHints(const QList<ItemCopyMoveHint>& hints) = 0;
-    virtual void recordHints(const QList<ItemChangeHint>& hints) = 0;
-    virtual void recordHint(const ItemMetadataAdjustmentHint& hints) = 0;
-
-    virtual void clear() = 0;
-};
-
-// ------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT CollectionScanner : public QObject
 {
@@ -78,19 +53,27 @@ public:
 
     enum FileScanMode
     {
-        /** The file will be scanned like it is done for any usual scan.
-         *  If it was not modified, no further action is taken.
-         *  If the file is not known yet, it will be fully scanned, or,
-         *  if an identical file is found, this data will be copied. */
+        /**
+         * The file will be scanned like it is done for any usual scan.
+         * If it was not modified, no further action is taken.
+         * If the file is not known yet, it will be fully scanned, or,
+         * if an identical file is found, this data will be copied.
+         */
         NormalScan,
-        /** The file will scanned like a modified file. Only a selected portion
-         *  of the metadata will be updated into the database.
-         *  If the file is not known yet, it will be fully scanned, or,
-         *  if an identical file is found, this data will be copied.  */
+
+        /**
+         * The file will scanned like a modified file. Only a selected portion
+         * of the metadata will be updated into the database.
+         * If the file is not known yet, it will be fully scanned, or,
+         * if an identical file is found, this data will be copied.
+         */
         ModifiedScan,
-        /** The file will be scanned like a completely new file.
-         *  The complete metadata is re-read into the database.
-         *  No search for identical files will be done. */
+
+        /**
+         * The file will be scanned like a completely new file.
+         * The complete metadata is re-read into the database.
+         * No search for identical files will be done.
+         */
         Rescan
     };
 
@@ -143,7 +126,10 @@ public:
      * If you already have this info it need not be retrieved.
      * Returns the image id of the file, or -1 on failure.
      */
-    qlonglong scanFile(const QString& albumRoot, const QString& album, const QString& fileName, FileScanMode mode = ModifiedScan);
+    qlonglong scanFile(const QString& albumRoot,
+                       const QString& album,
+                       const QString& fileName,
+                       FileScanMode mode = ModifiedScan);
 
     /**
      * The given file represented by the ItemInfo will be scanned according to mode
