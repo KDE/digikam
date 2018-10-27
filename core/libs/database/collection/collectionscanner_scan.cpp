@@ -1012,5 +1012,10 @@ void CollectionScanner::historyScanningStage3(const QList<qlonglong>& ids)
     }
 }
 
+bool CollectionScanner::databaseInitialScanDone()
+{
+    CoreDbAccess access;
+    return !access.db()->getSetting(QLatin1String("Scanned")).isEmpty();
+}
 
 } // namespace Digikam

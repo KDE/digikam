@@ -64,6 +64,7 @@ set(libdatabase_SRCS
     collection/collectionscanner.cpp
     collection/collectionscanner_p.cpp
     collection/collectionscanner_scan.cpp
+    collection/collectionscanner_utils.cpp
     collection/collectionmanager.cpp
     collection/collectionlocation.cpp
     collection/collectionscannerhints.cpp
