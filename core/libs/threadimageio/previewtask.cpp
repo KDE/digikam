@@ -151,218 +151,233 @@ void PreviewLoadingTask::execute()
         }
     }
 
-    if (!m_img.isNull())
+    if (m_img.isNull())
     {
-        // following the golden rule to avoid deadlocks, do this when CacheLock is not held
+        // Preview is not in cache, we will load image from file.
 
-        // The image from the cache may or may not be rotated and post processed.
-        // exifRotate() and postProcess() will detect if work is needed.
-        // We check before to find out if we need to provide a deep copy
+        DImg::FORMAT format      = DImg::fileFormat(m_loadingDescription.filePath);
+        m_fromRawEmbeddedPreview = false;
 
-        const bool needExifRotate  = MetaEngineSettings::instance()->settings().exifRotate &&
-                                     !LoadSaveThread::wasExifRotated(m_img);
-        const bool needPostProcess = needsPostProcessing();
-
-        if (accessMode() == LoadSaveThread::AccessModeReadWrite &&
-            (needExifRotate || needPostProcess))
+        if (format == DImg::RAW)
         {
-            m_img.detach();
-        }
+            MetaEnginePreviews previews(m_loadingDescription.filePath);
+            // Check original image size using Exiv2.
+            QSize originalSize  = previews.originalSize();
 
-        if (needExifRotate)
-        {
-            LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
-        }
-
-        if (needPostProcess)
-        {
-            postProcess();
-        }
-
-        if (m_thread)
-        {
-            m_thread->taskHasFinished();
-            m_thread->imageLoaded(m_resultLoadingDescription, m_img);
-        }
-
-        return;
-    }
-
-    // Preview is not in cache, we will load image from file.
-
-    DImg::FORMAT format      = DImg::fileFormat(m_loadingDescription.filePath);
-    m_fromRawEmbeddedPreview = false;
-
-    if (format == DImg::RAW)
-    {
-        MetaEnginePreviews previews(m_loadingDescription.filePath);
-        // Check original image size using Exiv2.
-        QSize originalSize  = previews.originalSize();
-
-        // If not valid, get original size from LibRaw
-        if (!originalSize.isValid())
-        {
-            DRawInfo container;
-
-            if (DRawDecoder::rawFileIdentify(container, m_loadingDescription.filePath))
+            // If not valid, get original size from LibRaw
+            if (!originalSize.isValid())
             {
-                originalSize = container.imageSize;
-            }
-        }
+                DRawInfo container;
 
-        switch (m_loadingDescription.previewParameters.previewSettings.quality)
-        {
-            case PreviewSettings::FastPreview:
-            case PreviewSettings::FastButLargePreview:
-            {
-                // Size calculations
-                int sizeLimit = -1;
-                int bestSize  = qMax(originalSize.width(), originalSize.height());
-                // for RAWs, the alternative is the half preview, so best size is already originalSize / 2
-                bestSize     /= 2;
-
-                if (m_loadingDescription.previewParameters.previewSettings.quality == PreviewSettings::FastButLargePreview)
+                if (DRawDecoder::rawFileIdentify(container, m_loadingDescription.filePath))
                 {
-                    sizeLimit = qMin(m_loadingDescription.previewParameters.size, bestSize);
+                    originalSize = container.imageSize;
                 }
-
-                if (loadExiv2Preview(previews, sizeLimit))
-                {
-                    break;
-                }
-
-                if (loadLibRawPreview(sizeLimit))
-                {
-                    break;
-                }
-
-                loadHalfSizeRaw();
-                break;
             }
 
-            case PreviewSettings::HighQualityPreview:
+            switch (m_loadingDescription.previewParameters.previewSettings.quality)
             {
-                switch (m_loadingDescription.previewParameters.previewSettings.rawLoading)
+                case PreviewSettings::FastPreview:
+                case PreviewSettings::FastButLargePreview:
                 {
-                    case PreviewSettings::RawPreviewAutomatic:
+                    // Size calculations
+                    int sizeLimit = -1;
+                    int bestSize  = qMax(originalSize.width(), originalSize.height());
+                    // for RAWs, the alternative is the half preview, so best size is already originalSize / 2
+                    bestSize     /= 2;
+
+                    if (m_loadingDescription.previewParameters.previewSettings.quality == PreviewSettings::FastButLargePreview)
                     {
-                        // If we find a preview that is larger than half size (which is what we get from half-size original data), we take it
-                        int acceptableSize = qMax(lround(originalSize.width()  * 0.48), lround(originalSize.height() * 0.48));
+                        sizeLimit = qMin(m_loadingDescription.previewParameters.size, bestSize);
+                    }
 
-                        if (loadExiv2Preview(previews, acceptableSize))
-                        {
-                            break;
-                        }
-
-                        if (loadLibRawPreview(acceptableSize))
-                        {
-                            break;
-                        }
-
-                        loadHalfSizeRaw();
+                    if (loadExiv2Preview(previews, sizeLimit))
+                    {
                         break;
                     }
 
-                    case PreviewSettings::RawPreviewFromEmbeddedPreview:
+                    if (loadLibRawPreview(sizeLimit))
                     {
-                        if (loadExiv2Preview(previews))
-                        {
-                            break;
-                        }
-
-                        if (loadLibRawPreview())
-                        {
-                            break;
-                        }
-
-                        loadHalfSizeRaw();
                         break;
                     }
 
-                    case PreviewSettings::RawPreviewFromRawHalfSize:
+                    loadHalfSizeRaw();
+                    break;
+                }
+
+                case PreviewSettings::HighQualityPreview:
+                {
+                    switch (m_loadingDescription.previewParameters.previewSettings.rawLoading)
                     {
-                        loadHalfSizeRaw();
+                        case PreviewSettings::RawPreviewAutomatic:
+                        {
+                            // If we find a preview that is larger than half size (which is what we get from half-size original data), we take it
+                            int acceptableSize = qMax(lround(originalSize.width()  * 0.48), lround(originalSize.height() * 0.48));
+
+                            if (loadExiv2Preview(previews, acceptableSize))
+                            {
+                                break;
+                            }
+
+                            if (loadLibRawPreview(acceptableSize))
+                            {
+                                break;
+                            }
+
+                            loadHalfSizeRaw();
+                            break;
+                        }
+
+                        case PreviewSettings::RawPreviewFromEmbeddedPreview:
+                        {
+                            if (loadExiv2Preview(previews))
+                            {
+                                break;
+                            }
+
+                            if (loadLibRawPreview())
+                            {
+                                break;
+                            }
+
+                            loadHalfSizeRaw();
+                            break;
+                        }
+
+                        case PreviewSettings::RawPreviewFromRawHalfSize:
+                        {
+                            loadHalfSizeRaw();
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // So far, everything loaded QImage. Convert to DImg.
+            convertQImageToDImg();
+        }
+        else // Non-RAW images
+        {
+            bool isFast = (m_loadingDescription.previewParameters.previewSettings.quality == PreviewSettings::FastPreview);
+
+            switch (m_loadingDescription.previewParameters.previewSettings.quality)
+            {
+                case PreviewSettings::FastPreview:
+                case PreviewSettings::FastButLargePreview:
+                {
+                    if (isFast && loadImagePreview(m_loadingDescription.previewParameters.size))
+                    {
+                        convertQImageToDImg();
                         break;
                     }
+
+                    if (continueQuery())
+                    {
+                        // Set a hint to try to load a JPEG or PGF with the fast scale-before-decoding method
+                        if (isFast)
+                        {
+                            m_img.setAttribute(QLatin1String("scaledLoadingSize"), m_loadingDescription.previewParameters.size);
+                        }
+
+                        m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
+                    }
+
+                    break;
+                }
+
+                case PreviewSettings::HighQualityPreview:
+                {
+                    if (continueQuery())
+                    {
+                        m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
+                    }
+
+                    break;
                 }
             }
         }
 
-        // So far, everything loaded QImage. Convert to DImg.
-        convertQImageToDImg();
-    }
-    else // Non-RAW images
-    {
-        bool isFast = (m_loadingDescription.previewParameters.previewSettings.quality == PreviewSettings::FastPreview);
-
-        switch (m_loadingDescription.previewParameters.previewSettings.quality)
         {
-            case PreviewSettings::FastPreview:
-            case PreviewSettings::FastButLargePreview:
+            LoadingCache::CacheLock lock(cache);
+
+            // Put valid image into cache of loaded images
+
+            if (!m_img.isNull())
             {
-                if (isFast && loadImagePreview(m_loadingDescription.previewParameters.size))
-                {
-                    convertQImageToDImg();
-                    break;
-                }
-
-                if (continueQuery())
-                {
-                    // Set a hint to try to load a JPEG or PGF with the fast scale-before-decoding method
-                    if (isFast)
-                    {
-                        m_img.setAttribute(QLatin1String("scaledLoadingSize"), m_loadingDescription.previewParameters.size);
-                    }
-
-                    m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
-                }
-
-                break;
+                cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img.copy()), m_loadingDescription.filePath);
             }
 
-            case PreviewSettings::HighQualityPreview:
+            // remove this from the list of loading processes in cache
+            cache->removeLoadingProcess(this);
+        }
+
+        {
+            LoadingCache::CacheLock lock(cache);
+
+            // indicate that loading has finished so that listeners can stop waiting
+            m_completed = true;
+
+            // dispatch image to all listeners, including this
+
+            for (int i = 0 ; i < m_listeners.count() ; ++i)
             {
-                if (continueQuery())
+                LoadingProcessListener* const l = m_listeners[i];
+
+                if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
                 {
-                    m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
-
-                    // Now that we did a full load of the image, consider putting it in the cache
-                    // but not for RAWs, there are so many cases to consider
-                    if (!m_img.isNull())
-                    {
-                        LoadingCache::CacheLock lock(cache);
-                        LoadingDescription fullDescription(m_loadingDescription.filePath);
-                        cache->putImage(fullDescription.cacheKey(), new DImg(m_img.copy()), m_loadingDescription.filePath);
-                    }
+                    // If a listener requested ReadWrite access, it gets a deep copy.
+                    // DImg is explicitly shared.
+                    l->setResult(m_loadingDescription, m_img.copy());
                 }
-
-                break;
+                else
+                {
+                    l->setResult(m_loadingDescription, m_img);
+                }
             }
+
+            for (int i = 0 ; i < m_listeners.count() ; ++i)
+            {
+                LoadSaveNotifier* notifier = m_listeners[i]->loadSaveNotifier();
+
+                if (notifier)
+                {
+                    notifier->imageLoaded(m_loadingDescription, m_img);
+                }
+            }
+
+            // remove myself from list of listeners
+            removeListener(this);
+
+            // wake all listeners waiting on cache condVar, so that they remove themselves
+            lock.wakeAll();
+
+            // wait until all listeners have removed themselves
+
+            while (m_listeners.count() != 0)
+            {
+                lock.timedWait();
+            }
+
+            // set to 0, as checked in setStatus
+            m_usedProcess = 0;
         }
     }
 
     if (!m_img.isNull() && continueQuery())
     {
-        // Post processing
+        // following the golden rule to avoid deadlocks, do this when CacheLock is not held
+
+        // The image from the cache may or may not be rotated and post processed.
+        // exifRotate() and postProcess() will detect if work is needed.
 
         if (accessMode() == LoadSaveThread::AccessModeReadWrite)
         {
             m_img.detach();
         }
 
-        if (m_loadingDescription.previewParameters.previewSettings.convertToEightBit)
-        {
-            m_img.convertToEightBit();
-        }
-
-        // Reduce size of image:
-        // - only scale down if size is considerably larger
-        // - only scale down, do not scale up
-
-        QSize scaledSize = m_img.size();
-
         if (needToScale())
         {
+            QSize scaledSize = m_img.size();
             scaledSize.scale(m_loadingDescription.previewParameters.size,
                              m_loadingDescription.previewParameters.size,
                              Qt::KeepAspectRatio);
@@ -376,16 +391,20 @@ void PreviewLoadingTask::execute()
             m_img.setAttribute(QLatin1String("originalSize"), m_img.size());
         }
 
-        // Scale if hinted, Store previews rotated in the cache
+        if (m_loadingDescription.previewParameters.previewSettings.convertToEightBit)
+        {
+            m_img.convertToEightBit();
+        }
 
         if (MetaEngineSettings::instance()->settings().exifRotate)
         {
             LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
         }
 
-        // For previews, we put the image post processed in the cache
-
-        postProcess();
+        if (needsPostProcessing())
+        {
+            postProcess();
+        }
     }
     else if (continueQuery())
     {
@@ -394,71 +413,6 @@ void PreviewLoadingTask::execute()
     else
     {
         m_img = DImg();
-    }
-
-    {
-        LoadingCache::CacheLock lock(cache);
-
-        // Put valid image into cache of loaded images
-
-        if (!m_img.isNull())
-        {
-            cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img), m_loadingDescription.filePath);
-        }
-
-        // remove this from the list of loading processes in cache
-        cache->removeLoadingProcess(this);
-    }
-
-    {
-        LoadingCache::CacheLock lock(cache);
-
-        // indicate that loading has finished so that listeners can stop waiting
-        m_completed = true;
-
-        // dispatch image to all listeners, including this
-
-        for (int i = 0 ; i < m_listeners.count() ; ++i)
-        {
-            LoadingProcessListener* const l = m_listeners[i];
-
-            if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
-            {
-                // If a listener requested ReadWrite access, it gets a deep copy.
-                // DImg is explicitly shared.
-                l->setResult(m_loadingDescription, m_img.copy());
-            }
-            else
-            {
-                l->setResult(m_loadingDescription, m_img);
-            }
-        }
-
-        for (int i = 0 ; i < m_listeners.count() ; ++i)
-        {
-            LoadSaveNotifier* notifier = m_listeners[i]->loadSaveNotifier();
-
-            if (notifier)
-            {
-                notifier->imageLoaded(m_loadingDescription, m_img);
-            }
-        }
-
-        // remove myself from list of listeners
-        removeListener(this);
-
-        // wake all listeners waiting on cache condVar, so that they remove themselves
-        lock.wakeAll();
-
-        // wait until all listeners have removed themselves
-
-        while (m_listeners.count() != 0)
-        {
-            lock.timedWait();
-        }
-
-        // set to 0, as checked in setStatus
-        m_usedProcess = 0;
     }
 
     // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
