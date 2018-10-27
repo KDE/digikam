@@ -83,6 +83,47 @@ public:
     virtual ~CollectionScanner();
 
     /**
+     * Hints give the scanner additional info about things that happened in the past
+     * carried out by higher level which the collection scanner cannot know.
+     * They allow to carry out optimizations.
+     * Record hints in a container, and provide the container to the collection scanner.
+     * The Container set in setHintContainer must be one created by createContainer.
+     */
+    static CollectionScannerHintContainer* createHintContainer();
+    void setHintContainer(CollectionScannerHintContainer* const container);
+    void setUpdateHashHint(bool hint = true);
+
+    /**
+     * Call this to enable the progress info signals.
+     * Default is off.
+     */
+    void setSignalsEnabled(bool on);
+
+    /**
+     * Call this to enable emitting the total files to scan
+     * (for progress info) before a complete collection scan.
+     * Default is off. If on, setSignalEnabled() must be on to take effect.
+     */
+    void setNeedFileCount(bool on);
+
+    /**
+     * Set an observer to be able to cancel a running scan
+     */
+    void setObserver(CollectionScannerObserver* const observer);
+
+    void setDeferredFileScanning(bool defer);
+    QStringList deferredAlbumPaths() const;
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Scan operations
+     */
+
+    //@{
+
+public:
+
+    /**
      * Carries out a full scan on all available parts of the collection.
      * Only a full scan can finally remove deleted files from the database,
      * only a full scan will mark the database as scanned.
@@ -99,8 +140,12 @@ public:
      */
     void finishCompleteScan(const QStringList& albumPaths);
 
-    void setDeferredFileScanning(bool defer);
-    QStringList deferredAlbumPaths() const;
+    /**
+     * Returns if the initial scan of the database has been done.
+     * This is the first complete scan after creation of a new database file
+     * (or update requiring a rescan)
+     */
+    static bool databaseInitialScanDone();
 
     /**
      * Carries out a partial scan on the specified path of the collection.
@@ -136,32 +181,39 @@ public:
      */
     void scanFile(const ItemInfo& info, FileScanMode mode = ModifiedScan);
 
-    /**
-     * Hints give the scanner additional info about things that happened in the past
-     * carried out by higher level which the collection scanner cannot know.
-     * They allow to carry out optimizations.
-     * Record hints in a container, and provide the container to the collection scanner.
-     * The Container set in setHintContainer must be one created by createContainer.
+protected:
+
+    void scanForStaleAlbums(const QList<CollectionLocation>& locations);
+    void scanForStaleAlbums(const QList<int>& locationIdsToScan);
+    void scanAlbumRoot(const CollectionLocation& location);
+    void scanAlbum(const CollectionLocation& location, const QString& album);
+    void scanExistingFile(const QFileInfo& fi, qlonglong id);
+    void scanFileNormal(const QFileInfo& info, const ItemScanInfo& scanInfo);
+    void scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
+    void scanFileUpdateHashReuseThumbnail(const QFileInfo& fi, const ItemScanInfo& scanInfo, bool fileWasEdited);
+    void rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
+    void completeScanCleanupPart();
+    void completeHistoryScanning();
+    void finishHistoryScanning();
+    void historyScanningStage2(const QList<qlonglong>& ids);
+    void historyScanningStage3(const QList<qlonglong>& ids);
+
+    qlonglong scanFile(const QFileInfo& fi, int albumId, qlonglong id, FileScanMode mode);
+    qlonglong scanNewFile(const QFileInfo& info, int albumId);
+    qlonglong scanNewFileFullScan(const QFileInfo& info, int albumId);
+
+    //@}
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Scan utilities
      */
-    static CollectionScannerHintContainer* createHintContainer();
-    void setHintContainer(CollectionScannerHintContainer* const container);
-    void setUpdateHashHint(bool hint = true);
+
+    //@{
+
+public:
 
     /**
-     * Call this to enable the progress info signals.
-     * Default is off.
-     */
-    void setSignalsEnabled(bool on);
-
-    /**
-     * Call this to enable emitting the total files to scan
-     * (for progress info) before a complete collection scan.
-     * Default is off. If on, setSignalEnabled() must be on to take effect.
-     */
-    void setNeedFileCount(bool on);
-
-    /**
-     * Utility method:
      * Prepare the given albums to be removed,
      * typically by setting the albums as orphan
      * and removing all entries from the albums
@@ -169,22 +221,26 @@ public:
     void safelyRemoveAlbums(const QList<int>& albumIds);
 
     /**
-     * Set an observer to be able to cancel a running scan
-     */
-    void setObserver(CollectionScannerObserver* const observer);
-
-    /**
      * When a file is derived from another file, typically through editing,
      * copy all relevant attributes from source file to the new file.
      */
     static void copyFileProperties(const ItemInfo& source, const ItemInfo& dest);
 
-    /**
-     * Returns if the initial scan of the database has been done.
-     * This is the first complete scan after creation of a new database file
-     * (or update requiring a rescan)
-     */
-    static bool databaseInitialScanDone();
+protected:
+
+    void markDatabaseAsScanned();
+    void mainEntryPoint(bool complete);
+    int  checkAlbum(const CollectionLocation& location, const QString& album);
+    void itemsWereRemoved(const QList<qlonglong> &removedIds);
+    void updateRemovedItemsTime();
+    void incrementDeleteRemovedCompleteScanCount();
+    void resetDeleteRemovedSettings();
+    bool checkDeleteRemoved();
+    void loadNameFilters();
+    int  countItemsInFolder(const QString& directory);
+    DatabaseItem::Category category(const QFileInfo& info);
+
+    //@}
 
 Q_SIGNALS:
 
@@ -223,39 +279,6 @@ Q_SIGNALS:
      * Emitted when the observer told to cancel the scan
      */
     void cancelled();
-
-protected:
-
-    void completeScanCleanupPart();
-    void mainEntryPoint(bool complete);
-    void scanForStaleAlbums(const QList<CollectionLocation>& locations);
-    void scanForStaleAlbums(const QList<int>& locationIdsToScan);
-    void scanAlbumRoot(const CollectionLocation& location);
-    void scanAlbum(const CollectionLocation& location, const QString& album);
-    int  checkAlbum(const CollectionLocation& location, const QString& album);
-    void scanExistingFile(const QFileInfo& fi, qlonglong id);
-    void scanFileNormal(const QFileInfo& info, const ItemScanInfo& scanInfo);
-    void scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
-    void scanFileUpdateHashReuseThumbnail(const QFileInfo& fi, const ItemScanInfo& scanInfo, bool fileWasEdited);
-    void rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
-    void itemsWereRemoved(const QList<qlonglong> &removedIds);
-    void completeHistoryScanning();
-    void finishHistoryScanning();
-    void historyScanningStage2(const QList<qlonglong>& ids);
-    void historyScanningStage3(const QList<qlonglong>& ids);
-
-    void markDatabaseAsScanned();
-    void updateRemovedItemsTime();
-    void incrementDeleteRemovedCompleteScanCount();
-    void resetDeleteRemovedSettings();
-    bool checkDeleteRemoved();
-    void loadNameFilters();
-    int  countItemsInFolder(const QString& directory);
-    DatabaseItem::Category category(const QFileInfo& info);
-
-    qlonglong scanFile(const QFileInfo& fi, int albumId, qlonglong id, FileScanMode mode);
-    qlonglong scanNewFile(const QFileInfo& info, int albumId);
-    qlonglong scanNewFileFullScan(const QFileInfo& info, int albumId);
 
 private:
 
