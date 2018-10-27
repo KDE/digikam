@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-09
- * Description : Collection location management
+ * Description : Collection location management - private containers.
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -20,6 +20,9 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+#ifndef DIGIKAM_COLLECTION_MANAGER_P_H
+#define DIGIKAM_COLLECTION_MANAGER_P_H
 
 #include "collectionmanager.h"
 
@@ -270,3 +273,8 @@ public:
 };
 
 } // namespace Digikam
+
+// This is because of the CollectionManager private slot.
+#include "collectionmanager.h"  // krazy:exclude=includes
+
+#endif // DIGIKAM_COLLECTION_MANAGER_P_H

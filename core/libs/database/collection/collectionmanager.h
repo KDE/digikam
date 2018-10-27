@@ -47,6 +47,23 @@ class DIGIKAM_DATABASE_EXPORT CollectionManager : public QObject
 
 public:
 
+    enum LocationCheckResult
+    {
+        /// The check did not succeed, status unknown
+        LocationInvalidCheck,
+
+        /// All right. The accompanying message may be empty.
+        LocationAllRight,
+
+        /// Location can be added, but the user should be aware of a problem
+        LocationHasProblems,
+
+        /// Adding the location will fail (e.g. there is already a location for the path)
+        LocationNotAllowed
+    };
+
+public:
+
     static CollectionManager* instance();
     static void cleanUp();
 
@@ -63,6 +80,34 @@ public:
      */
     void refresh();
 
+private Q_SLOTS:
+
+    void deviceAdded(const QString&);
+    void deviceRemoved(const QString&);
+    void accessibilityChanged(bool, const QString&);
+
+private:
+
+    CollectionManager();
+    ~CollectionManager();
+
+    void clear_locked();
+
+    Q_PRIVATE_SLOT(d, void slotTriggerUpdateVolumesList())
+
+Q_SIGNALS: // internal use only with slotTriggerUpdateVolumesList()
+
+    void triggerUpdateVolumesList();
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations on Collection Location
+     */
+
+    //@{
+
+public:
+
     /**
      * Add the given file system location as new collection location.
      * Type and availability will be detected.
@@ -78,21 +123,6 @@ public:
      */
     CollectionLocation addLocation(const QUrl& fileUrl, const QString& label = QString());
     CollectionLocation addNetworkLocation(const QUrl& fileUrl, const QString& label = QString());
-
-    enum LocationCheckResult
-    {
-        /// The check did not succeed, status unknown
-        LocationInvalidCheck,
-
-        /// All right. The accompanying message may be empty.
-        LocationAllRight,
-
-        /// Location can be added, but the user should be aware of a problem
-        LocationHasProblems,
-
-        /// Adding the location will fail (e.g. there is already a location for the path)
-        LocationNotAllowed
-    };
 
     /**
      * Analyzes the given file path. Creates an info message
@@ -163,11 +193,6 @@ public:
     QList<CollectionLocation> allAvailableLocations();
 
     /**
-     * Returns a list of the paths of all currently available CollectionLocations
-     */
-    QStringList allAvailableAlbumRootPaths();
-
-    /**
      * Returns the location for the given album root id
      */
     CollectionLocation locationForAlbumRootId(int id);
@@ -189,15 +214,58 @@ public:
     CollectionLocation locationForUrl(const QUrl& fileUrl);
     CollectionLocation locationForPath(const QString& filePath);
 
+private:
+
+    void updateLocations();
+
+Q_SIGNALS:
+
     /**
-     * Returns the album root path for the location with the given id.
-     * Returns a null QString if the location does not exist or is not available.
+     * Emitted when the status of a collection location changed.
+     * This means that the location became available, hidden or unavailable.
+     *
+     * An added location will change its status after addition,
+     * from Null to Available, Hidden or Unavailable.
+     *
+     * A removed location will change its status to Deleted
+     * during the removal; in this case, you shall not use the object
+     * passed with this signal with any method of CollectionManager.
+     *
+     * The second signal argument is of type CollectionLocation::Status
+     * and describes the status before the state change occurred
+     */
+    void locationStatusChanged(const CollectionLocation& location, int oldStatus);
+
+    /**
+     * Emitted when the label of a collection location is changed
+     */
+    void locationPropertiesChanged(const CollectionLocation& location);
+
+    //@}
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Operations on Albums
+     */
+
+    //@{
+
+public:
+
+    /**
+     * Returns a list of the paths of all currently available root paths
+     */
+    QStringList allAvailableAlbumRootPaths();
+
+    /**
+     * Returns the album root path with the given id.
+     * Returns a null QString if the root path does not exist or is not available.
      */
     QString albumRootPath(int id);
 
     /**
-     * Returns the album root label for the location with the given id.
-     * Returns a null QString if the location does not exist or is not available.
+     * Returns the album root label with the given id.
+     * Returns a null QString if the root path does not exist or is not available.
      */
     QString albumRootLabel(int id);
 
@@ -246,49 +314,14 @@ public:
      * the one that is most suitable to serve as a default, e.g.
      * to suggest as default place when the user wants to add files.
      */
-    QUrl oneAlbumRoot();
+    QUrl    oneAlbumRoot();
     QString oneAlbumRootPath();
-
-Q_SIGNALS:
-
-    /**
-     * Emitted when the status of a collection location changed.
-     * This means that the location became available, hidden or unavailable.
-     *
-     * An added location will change its status after addition,
-     * from Null to Available, Hidden or Unavailable.
-     *
-     * A removed location will change its status to Deleted
-     * during the removal; in this case, you shall not use the object
-     * passed with this signal with any method of CollectionManager.
-     *
-     * The second signal argument is of type CollectionLocation::Status
-     * and describes the status before the state change occurred
-     */
-    void locationStatusChanged(const CollectionLocation& location, int oldStatus);
-
-    /**
-     * Emitted when the label of a collection location is changed
-     */
-    void locationPropertiesChanged(const CollectionLocation& location);
 
 private Q_SLOTS:
 
-    void deviceAdded(const QString&);
-    void deviceRemoved(const QString&);
-    void accessibilityChanged(bool, const QString&);
     void slotAlbumRootChange(const AlbumRootChangeset& changeset);
 
-private:
-
-    CollectionManager();
-    ~CollectionManager();
-
-    void updateLocations();
-
-    void clear_locked();
-
-    Q_PRIVATE_SLOT(d, void slotTriggerUpdateVolumesList())
+    //@}
 
 public:
 
@@ -303,10 +336,6 @@ private:
     friend class Private;
     friend class CoreDbWatch;
     friend class CoreDbAccess;
-
-Q_SIGNALS: // private
-
-    void triggerUpdateVolumesList();
 };
 
 } // namespace Digikam
