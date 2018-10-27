@@ -63,12 +63,6 @@ public:
      */
     void refresh();
 
-    /** CollectionLocation objects returned are simple data containers.
-     *  If the corresponding location is returned, the data is still safe to access,
-     *  but does not represent anything.
-     *  Therefore, do not store returned objects, but prefer to retrieve them freshly.
-     */
-
     /**
      * Add the given file system location as new collection location.
      * Type and availability will be detected.
@@ -76,6 +70,11 @@ public:
      * url is already contained in another collection location.
      * You may pass an optional user-visible label that will be stored in the database.
      * The label has no further meaning and can be freely chosen.
+     *
+     * CollectionLocation objects returned are simple data containers.
+     * If the corresponding location is returned, the data is still safe to access,
+     * but does not represent anything.
+     * Therefore, do not store returned objects, but prefer to retrieve them freshly.
      */
     CollectionLocation addLocation(const QUrl& fileUrl, const QString& label = QString());
     CollectionLocation addNetworkLocation(const QUrl& fileUrl, const QString& label = QString());
@@ -84,10 +83,13 @@ public:
     {
         /// The check did not succeed, status unknown
         LocationInvalidCheck,
+
         /// All right. The accompanying message may be empty.
         LocationAllRight,
+
         /// Location can be added, but the user should be aware of a problem
         LocationHasProblems,
+
         /// Adding the location will fail (e.g. there is already a location for the path)
         LocationNotAllowed
     };
@@ -154,10 +156,12 @@ public:
      * Returns a list of all CollectionLocations stored in the database
      */
     QList<CollectionLocation> allLocations();
+
     /**
      * Returns a list of all currently available CollectionLocations
      */
     QList<CollectionLocation> allAvailableLocations();
+
     /**
      * Returns a list of the paths of all currently available CollectionLocations
      */
@@ -205,6 +209,7 @@ public:
     QUrl    albumRoot(const QUrl& fileUrl);
     QString albumRootPath(const QUrl& fileUrl);
     QString albumRootPath(const QString& filePath);
+
     /**
      * Returns true if the given path forms an album root.
      * It will return false if the path is a path below an album root,
@@ -214,7 +219,10 @@ public:
      * Only available (or hidden, but available) album roots are guaranteed to be found.
      */
     bool    isAlbumRoot(const QUrl& fileUrl);
-    /// the file path should not end with the directory slash. Using CoreDbUrl's method is fine.
+
+    /**
+     * The file path should not end with the directory slash. Using CoreDbUrl's method is fine.
+     */
     bool    isAlbumRoot(const QString& filePath);
 
     /**
@@ -243,22 +251,25 @@ public:
 
 Q_SIGNALS:
 
-    /** Emitted when the status of a collection location changed.
-     *  This means that the location became available, hidden or unavailable.
+    /**
+     * Emitted when the status of a collection location changed.
+     * This means that the location became available, hidden or unavailable.
      *
-     *  An added location will change its status after addition,
-     *  from Null to Available, Hidden or Unavailable.
+     * An added location will change its status after addition,
+     * from Null to Available, Hidden or Unavailable.
      *
-     *  A removed location will change its status to Deleted
-     *  during the removal; in this case, you shall not use the object
-     *  passed with this signal with any method of CollectionManager.
+     * A removed location will change its status to Deleted
+     * during the removal; in this case, you shall not use the object
+     * passed with this signal with any method of CollectionManager.
      *
-     *  The second signal argument is of type CollectionLocation::Status
-     *  and describes the status before the state change occurred
+     * The second signal argument is of type CollectionLocation::Status
+     * and describes the status before the state change occurred
      */
     void locationStatusChanged(const CollectionLocation& location, int oldStatus);
 
-    /** Emitted when the label of a collection location is changed */
+    /**
+     * Emitted when the label of a collection location is changed
+     */
     void locationPropertiesChanged(const CollectionLocation& location);
 
 private Q_SLOTS:
