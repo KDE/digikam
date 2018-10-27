@@ -68,6 +68,7 @@ set(libdatabase_SRCS
     collection/collectionmanager.cpp
     collection/collectionmanager_p.cpp
     collection/collectionmanager_location.cpp
+    collection/collectionmanager_album.cpp
     collection/collectionlocation.cpp
     collection/collectionscannerhints.cpp
 
