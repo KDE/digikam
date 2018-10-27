@@ -185,12 +185,12 @@ public:
 
 // -------------------------------------------------
 
-class Q_DECL_HIDDEN CollectionManagerPrivate
+class Q_DECL_HIDDEN CollectionManager::Private
 {
 
 public:
 
-    explicit CollectionManagerPrivate(CollectionManager* s);
+    explicit Private(CollectionManager* const s);
 
     // hack for Solid's threading problems
     QList<SolidVolumeInfo> actuallyListVolumes();
@@ -253,7 +253,7 @@ class Q_DECL_HIDDEN ChangingDB
 
 public:
 
-    explicit ChangingDB(CollectionManagerPrivate* const d)
+    explicit ChangingDB(CollectionManager::Private* const d)
         : d(d)
     {
         d->changingDB = true;
@@ -266,7 +266,7 @@ public:
 
 public:
 
-    CollectionManagerPrivate* const d;
+    CollectionManager::Private* const d;
 };
 
 } // namespace Digikam
@@ -277,7 +277,7 @@ public:
 namespace Digikam
 {
 
-CollectionManagerPrivate::CollectionManagerPrivate(CollectionManager* s)
+CollectionManager::Private::Private(CollectionManager* const s)
     : changingDB(false),
       watchEnabled(false),
       s(s)
@@ -287,7 +287,7 @@ CollectionManagerPrivate::CollectionManagerPrivate(CollectionManager* s)
                      Qt::BlockingQueuedConnection);
 }
 
-QList<SolidVolumeInfo> CollectionManagerPrivate::listVolumes()
+QList<SolidVolumeInfo> CollectionManager::Private::listVolumes()
 {
     // Move calls to Solid to the main thread.
     // Solid was meant to be thread-safe, but it is not (KDE4.0),
@@ -305,12 +305,12 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::listVolumes()
     }
 }
 
-void CollectionManagerPrivate::slotTriggerUpdateVolumesList()
+void CollectionManager::Private::slotTriggerUpdateVolumesList()
 {
     volumesListCache = actuallyListVolumes();
 }
 
-QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
+QList<SolidVolumeInfo> CollectionManager::Private::actuallyListVolumes()
 {
     QList<SolidVolumeInfo> volumes;
 
@@ -420,7 +420,7 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
     return volumes;
 }
 
-QString CollectionManagerPrivate::volumeIdentifier(const SolidVolumeInfo& volume)
+QString CollectionManager::Private::volumeIdentifier(const SolidVolumeInfo& volume)
 {
     QUrl url;
     url.setScheme(QLatin1String("volumeid"));
@@ -468,7 +468,7 @@ QString CollectionManagerPrivate::volumeIdentifier(const SolidVolumeInfo& volume
     return url.url();
 }
 
-QString CollectionManagerPrivate::volumeIdentifier(const QString& path)
+QString CollectionManager::Private::volumeIdentifier(const QString& path)
 {
     QUrl url;
     url.setScheme(QLatin1String("volumeid"));
@@ -480,7 +480,7 @@ QString CollectionManagerPrivate::volumeIdentifier(const QString& path)
     return url.url();
 }
 
-QString CollectionManagerPrivate::networkShareIdentifier(const QString& path)
+QString CollectionManager::Private::networkShareIdentifier(const QString& path)
 {
     QUrl url;
     url.setScheme(QLatin1String("networkshareid"));
@@ -492,7 +492,7 @@ QString CollectionManagerPrivate::networkShareIdentifier(const QString& path)
     return url.url();
 }
 
-QString CollectionManagerPrivate::pathFromIdentifier(const AlbumRootLocation* location)
+QString CollectionManager::Private::pathFromIdentifier(const AlbumRootLocation* location)
 {
     QUrl url(location->identifier);
 
@@ -504,7 +504,7 @@ QString CollectionManagerPrivate::pathFromIdentifier(const AlbumRootLocation* lo
     return QUrlQuery(url).queryItemValue(QLatin1String("path"));
 }
 
-QStringList CollectionManagerPrivate::networkShareMountPathsFromIdentifier(const AlbumRootLocation* location)
+QStringList CollectionManager::Private::networkShareMountPathsFromIdentifier(const AlbumRootLocation* location)
 {
     // using a QUrl because QUrl cannot handle duplicate query items
     QUrl url(location->identifier);
@@ -517,7 +517,7 @@ QStringList CollectionManagerPrivate::networkShareMountPathsFromIdentifier(const
     return QUrlQuery(url).allQueryItemValues(QLatin1String("mountpath"));
 }
 
-QString CollectionManagerPrivate::directoryHash(const QString& path)
+QString CollectionManager::Private::directoryHash(const QString& path)
 {
     QDir dir(path);
 
@@ -537,7 +537,8 @@ QString CollectionManagerPrivate::directoryHash(const QString& path)
     return QString();
 }
 
-SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootLocation* location, const QList<SolidVolumeInfo> volumes)
+SolidVolumeInfo CollectionManager::Private::findVolumeForLocation(const AlbumRootLocation* location,
+                                                                  const QList<SolidVolumeInfo> volumes)
 {
     QUrl url(location->identifier);
     QString queryItem;
@@ -647,7 +648,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
     return SolidVolumeInfo();
 }
 
-QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation* albumLoc)
+QString CollectionManager::Private::technicalDescription(const AlbumRootLocation* albumLoc)
 {
     QUrl url(albumLoc->identifier);
     QString queryItem;
@@ -682,7 +683,8 @@ QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation* 
     return QString();
 }
 
-SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const QUrl& fileUrl, const QList<SolidVolumeInfo> volumes)
+SolidVolumeInfo CollectionManager::Private::findVolumeForUrl(const QUrl& fileUrl,
+                                                             const QList<SolidVolumeInfo> volumes)
 {
     SolidVolumeInfo volume;
     // v.path is specified to have a trailing slash. path needs one as well.
@@ -713,7 +715,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const QUrl& fileUrl, 
     return volume;
 }
 
-bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<CollectionLocation> assumeDeleted)
+bool CollectionManager::Private::checkIfExists(const QString& filePath, QList<CollectionLocation> assumeDeleted)
 {
     const QUrl filePathUrl = QUrl::fromLocalFile(filePath);
 
@@ -752,7 +754,7 @@ bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<Coll
     return false;
 }
 
-// -------------------------------------------------
+// ------------------------------------------------------------------------------
 
 CollectionManager* CollectionManager::m_instance = 0;
 
@@ -773,7 +775,7 @@ void CollectionManager::cleanUp()
 }
 
 CollectionManager::CollectionManager()
-    : d(new CollectionManagerPrivate(this))
+    : d(new Private(this))
 {
     qRegisterMetaType<CollectionLocation>("CollectionLocation");
 
@@ -890,7 +892,9 @@ CollectionLocation CollectionManager::addNetworkLocation(const QUrl& fileUrl, co
 }
 
 CollectionManager::LocationCheckResult CollectionManager::checkLocation(const QUrl& fileUrl,
-        QList<CollectionLocation> assumeDeleted, QString* message, QString* iconName)
+                                                                        QList<CollectionLocation> assumeDeleted,
+                                                                        QString* message,
+                                                                        QString* iconName)
 {
     if (!fileUrl.isLocalFile())
     {

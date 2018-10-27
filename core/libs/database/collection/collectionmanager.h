@@ -40,7 +40,6 @@ namespace Digikam
 
 class CollectionLocation;
 class AlbumRootChangeset;
-class CollectionManagerPrivate;
 
 class DIGIKAM_DATABASE_EXPORT CollectionManager : public QObject
 {
@@ -274,15 +273,23 @@ private:
     CollectionManager();
     ~CollectionManager();
 
-    static CollectionManager* m_instance;
     void updateLocations();
 
     void clear_locked();
 
     Q_PRIVATE_SLOT(d, void slotTriggerUpdateVolumesList())
 
-    CollectionManagerPrivate* const d;
-    friend class CollectionManagerPrivate;
+public:
+
+    class Private;
+
+private:
+
+    static CollectionManager* m_instance;
+
+    Private* const d;
+
+    friend class Private;
     friend class CoreDbWatch;
     friend class CoreDbAccess;
 
