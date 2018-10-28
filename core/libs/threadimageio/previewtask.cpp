@@ -53,6 +53,8 @@ void PreviewLoadingTask::execute()
         return;
     }
 
+    m_running = true;
+
     // Check if preview is in cache first.
 
     LoadingCache* const cache = LoadingCache::cache();
@@ -421,6 +423,8 @@ void PreviewLoadingTask::execute()
         m_thread->taskHasFinished();
         m_thread->imageLoaded(m_loadingDescription, m_img);
     }
+
+    m_running = false;
 }
 
 bool PreviewLoadingTask::needToScale()
