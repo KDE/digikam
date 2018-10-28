@@ -369,13 +369,23 @@ void PreviewLoadingTask::execute()
 
         // The image from the cache may or may not be rotated and post processed.
         // exifRotate() and postProcess() will detect if work is needed.
+        // We check before to find out if we need to provide a deep copy
 
-        if (accessMode() == LoadSaveThread::AccessModeReadWrite)
+        const bool needExifRotate        = MetaEngineSettings::instance()->settings().exifRotate &&
+                                           !LoadSaveThread::wasExifRotated(m_img);
+        const bool needImageScale        = needToScale();
+        const bool needPostProcess       = needsPostProcessing();
+        const bool needzoomOrgSize       = !m_loadingDescription.previewParameters.previewSettings.zoomOrgSize;
+        const bool needConvertToEightBit = m_loadingDescription.previewParameters.previewSettings.convertToEightBit;
+
+        if (accessMode() == LoadSaveThread::AccessModeReadWrite   &&
+            (needExifRotate  || needImageScale || needPostProcess ||
+             needzoomOrgSize || needConvertToEightBit))
         {
             m_img.detach();
         }
 
-        if (needToScale())
+        if (needImageScale)
         {
             QSize scaledSize = m_img.size();
             scaledSize.scale(m_loadingDescription.previewParameters.size,
@@ -386,22 +396,22 @@ void PreviewLoadingTask::execute()
 
         // Set originalSize attribute to the m_img size, to disable zoom to the original image size
 
-        if (!m_loadingDescription.previewParameters.previewSettings.zoomOrgSize)
+        if (needzoomOrgSize)
         {
             m_img.setAttribute(QLatin1String("originalSize"), m_img.size());
         }
 
-        if (m_loadingDescription.previewParameters.previewSettings.convertToEightBit)
+        if (needConvertToEightBit)
         {
             m_img.convertToEightBit();
         }
 
-        if (MetaEngineSettings::instance()->settings().exifRotate)
+        if (needExifRotate)
         {
             LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
         }
 
-        if (needsPostProcessing())
+        if (needPostProcess)
         {
             postProcess();
         }
