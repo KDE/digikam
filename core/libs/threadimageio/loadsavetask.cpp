@@ -252,10 +252,10 @@ void SharedLoadingTask::execute()
         m_usedProcess = 0;
     }
 
+    // following the golden rule to avoid deadlocks, do this when CacheLock is not held
+
     if (!m_img.isNull() && continueQuery())
     {
-        // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
-
         if (accessMode() == LoadSaveThread::AccessModeReadWrite)
         {
             m_img.detach();

@@ -354,10 +354,10 @@ void PreviewLoadingTask::execute()
         m_usedProcess = 0;
     }
 
+    // following the golden rule to avoid deadlocks, do this when CacheLock is not held
+
     if (!m_img.isNull() && continueQuery())
     {
-        // following the golden rule to avoid deadlocks, do this when CacheLock is not held
-
         // The image from the cache may or may not be rotated and post processed.
         // exifRotate() and postProcess() will detect if work is needed.
         // We check before to find out if we need to provide a deep copy
