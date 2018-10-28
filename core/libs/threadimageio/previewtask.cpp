@@ -321,7 +321,8 @@ void PreviewLoadingTask::execute()
 
             for (int i = 0 ; i < m_listeners.count() ; ++i)
             {
-                LoadingProcessListener* const l = m_listeners[i];
+                LoadingProcessListener* const l  = m_listeners[i];
+                LoadSaveNotifier* const notifier = l->loadSaveNotifier();
 
                 if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
                 {
@@ -333,11 +334,6 @@ void PreviewLoadingTask::execute()
                 {
                     l->setResult(m_loadingDescription, m_img);
                 }
-            }
-
-            for (int i = 0 ; i < m_listeners.count() ; ++i)
-            {
-                LoadSaveNotifier* notifier = m_listeners[i]->loadSaveNotifier();
 
                 if (notifier)
                 {
@@ -424,8 +420,6 @@ void PreviewLoadingTask::execute()
     {
         m_img = DImg();
     }
-
-    // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
 
     if (m_thread)
     {

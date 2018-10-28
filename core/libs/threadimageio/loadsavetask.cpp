@@ -244,14 +244,13 @@ void SharedLoadingTask::execute()
         // dispatch image to all listeners, including this
         for (int i = 0 ; i < m_listeners.count() ; ++i)
         {
-            LoadingProcessListener* l = m_listeners[i];
+            LoadingProcessListener* const l = m_listeners[i];
 
             if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
             {
                 // If a listener requested ReadWrite access, it gets a deep copy.
                 // DImg is explicitly shared.
-                DImg copy = m_img.copy();
-                l->setResult(m_loadingDescription, copy);
+                l->setResult(m_loadingDescription, m_img.copy());
             }
             else
             {
@@ -275,6 +274,7 @@ void SharedLoadingTask::execute()
     }
 
     // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
+
     if (!m_img.isNull())
     {
         postProcess();
