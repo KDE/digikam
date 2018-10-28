@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_FILTERS_HISTORY_MODEL_H
-#define DIGIKAM_IMAGE_FILTERS_HISTORY_MODEL_H
+#ifndef DIGIKAM_ITEM_FILTERS_HISTORY_MODEL_H
+#define DIGIKAM_ITEM_FILTERS_HISTORY_MODEL_H
 
 // Qt includes
 
@@ -76,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_FILTERS_HISTORY_MODEL_H
+#endif // DIGIKAM_ITEM_FILTERS_HISTORY_MODEL_H
