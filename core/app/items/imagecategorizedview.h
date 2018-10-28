@@ -42,7 +42,7 @@ class ItemModel;
 class ItemFilterModel;
 class ImageSortFilterModel;
 class ImageDelegate;
-class ImageDelegateOverlay;
+class ItemDelegateOverlay;
 class ItemThumbnailModel;
 
 class ImageCategorizedView : public ItemViewCategorized
@@ -118,9 +118,9 @@ public:
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     /// Unless you pass a different delegate, the current delegate will be used.
-    void addOverlay(ImageDelegateOverlay* overlay, ImageDelegate* delegate = 0);
+    void addOverlay(ItemDelegateOverlay* overlay, ImageDelegate* delegate = 0);
 
-    void removeOverlay(ImageDelegateOverlay* overlay);
+    void removeOverlay(ItemDelegateOverlay* overlay);
 
     void addSelectionOverlay(ImageDelegate* delegate = 0);
 

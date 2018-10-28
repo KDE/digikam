@@ -33,7 +33,7 @@
 // Local includes
 
 #include "itemviewhoverbutton.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 #include "itemviewimportdelegate.h"
 #include "ratingwidget.h"
 

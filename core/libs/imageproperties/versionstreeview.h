@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 class VersionsDelegate;
-class ImageDelegateOverlay;
+class ItemDelegateOverlay;
 
 class VersionsTreeView : public QTreeView, public DragDropViewImplementation
 {
@@ -51,8 +51,8 @@ public:
 
     void setToolTipEnabled(bool on);
 
-    void addOverlay(ImageDelegateOverlay* overlay);
-    void removeOverlay(ImageDelegateOverlay* overlay);
+    void addOverlay(ItemDelegateOverlay* overlay);
+    void removeOverlay(ItemDelegateOverlay* overlay);
 
     VersionsDelegate* delegate() const;
 

@@ -28,7 +28,7 @@
 
 #include "thumbnailsize.h"
 #include "ditemdelegate.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 
 using namespace Digikam;
 
@@ -39,7 +39,7 @@ class ShowfotoFilterModel;
 class ShowfotoItemModel;
 class ItemViewShowfotoDelegatePrivate;
 
-class ItemViewShowfotoDelegate : public DItemDelegate, public ImageDelegateOverlayContainer
+class ItemViewShowfotoDelegate : public DItemDelegate, public ItemDelegateOverlayContainer
 {
     Q_OBJECT
 

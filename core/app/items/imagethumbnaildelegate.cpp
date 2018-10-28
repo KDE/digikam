@@ -32,7 +32,7 @@
 #include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "imagecategorizedview.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 #include "itemmodel.h"
 #include "itemfiltermodel.h"
 #include "thumbnailloadthread.h"

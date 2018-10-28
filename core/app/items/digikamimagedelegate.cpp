@@ -33,7 +33,7 @@
 #include "applicationsettings.h"
 #include "imagecategorydrawer.h"
 #include "imagecategorizedview.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 #include "itemmodel.h"
 #include "itemfiltermodel.h"
 #include "digikamimagedelegatepriv.h"

@@ -31,7 +31,7 @@
 #include "showfotofiltermodel.h"
 #include "showfotothumbnailmodel.h"
 #include "showfotoiteminfo.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 
 namespace ShowFoto
 {
@@ -98,8 +98,8 @@ public:
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     /// Unless you pass a different delegate, the current delegate will be used.
-    void addOverlay(ImageDelegateOverlay* overlay, ShowfotoDelegate* delegate = 0);
-    void removeOverlay(ImageDelegateOverlay* overlay);
+    void addOverlay(ItemDelegateOverlay* overlay, ShowfotoDelegate* delegate = 0);
+    void removeOverlay(ItemDelegateOverlay* overlay);
 
     //TODO: Implement This
 //    void addSelectionOverlay(ShowfotoDelegate* delegate = 0);

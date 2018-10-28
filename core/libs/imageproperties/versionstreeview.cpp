@@ -123,14 +123,14 @@ VersionsDelegate* VersionsTreeView::delegate() const
     return m_delegate;
 }
 
-void VersionsTreeView::addOverlay(ImageDelegateOverlay* overlay)
+void VersionsTreeView::addOverlay(ItemDelegateOverlay* overlay)
 {
     m_delegate->installOverlay(overlay);
     overlay->setView(this);
     overlay->setActive(true);
 }
 
-void VersionsTreeView::removeOverlay(ImageDelegateOverlay* overlay)
+void VersionsTreeView::removeOverlay(ItemDelegateOverlay* overlay)
 {
     m_delegate->removeOverlay(overlay);
     overlay->setView(0);

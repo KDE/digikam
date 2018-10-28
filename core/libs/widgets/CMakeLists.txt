@@ -78,7 +78,7 @@ set(libitemview_SRCS
     itemview/ditemdelegate.cpp
     itemview/ditemtooltip.cpp
     itemview/dcategorydrawer.cpp
-    itemview/imagedelegateoverlay.cpp
+    itemview/itemdelegateoverlay.cpp
     itemview/itemviewhoverbutton.cpp
     itemview/itemviewimagedelegate.cpp
     itemview/itemviewtooltip.cpp

@@ -39,7 +39,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 #include "thememanager.h"
 #include "itemscanner.h"
 #include "imagepropertiestab.h"
@@ -219,13 +219,13 @@ QAbstractItemDelegate* ItemViewImportDelegate::asDelegate()
 
 void ItemViewImportDelegate::overlayDestroyed(QObject* o)
 {
-    ImageDelegateOverlayContainer::overlayDestroyed(o);
+    ItemDelegateOverlayContainer::overlayDestroyed(o);
 }
 
 void ItemViewImportDelegate::mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index)
 {
-    // 3-way indirection AbstractImportItemDelegate -> ItemViewImportDelegate -> ImageDelegateOverlayContainer
-    ImageDelegateOverlayContainer::mouseMoved(e, visualRect, index);
+    // 3-way indirection AbstractImportItemDelegate -> ItemViewImportDelegate -> ItemDelegateOverlayContainer
+    ItemDelegateOverlayContainer::mouseMoved(e, visualRect, index);
 }
 
 void ItemViewImportDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)

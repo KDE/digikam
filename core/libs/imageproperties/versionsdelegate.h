@@ -31,13 +31,13 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 
 namespace Digikam
 {
 
 class VersionsDelegate : public QStyledItemDelegate,
-                         public ImageDelegateOverlayContainer
+                         public ItemDelegateOverlayContainer
 {
     Q_OBJECT
     Q_PROPERTY(int animationState READ animationState
@@ -64,9 +64,9 @@ public:
 Q_SIGNALS:
 
     void animationStateChanged();
-    void visualChange(); // for ImageDelegateOverlayContainer
+    void visualChange(); // for ItemDelegateOverlayContainer
 
-    // for ImageDelegateOverlayContainer, unimplemented:
+    // for ItemDelegateOverlayContainer, unimplemented:
     void requestNotification(const QModelIndex& index, const QString& message);
     void hideNotification();
 
@@ -74,7 +74,7 @@ protected Q_SLOTS:
 
     virtual void overlayDestroyed(QObject* o)
     {
-        ImageDelegateOverlayContainer::overlayDestroyed(o);
+        ItemDelegateOverlayContainer::overlayDestroyed(o);
     }
 
 protected:

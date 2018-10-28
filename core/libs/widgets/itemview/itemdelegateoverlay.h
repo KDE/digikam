@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_DELEGATE_OVERLAY_H
-#define DIGIKAM_IMAGE_DELEGATE_OVERLAY_H
+#ifndef DIGIKAM_ITEM_DELEGATE_OVERLAY_H
+#define DIGIKAM_ITEM_DELEGATE_OVERLAY_H
 
 // Qt includes
 
@@ -37,14 +37,14 @@ namespace Digikam
 
 class ItemViewHoverButton;
 
-class DIGIKAM_EXPORT ImageDelegateOverlay : public QObject
+class DIGIKAM_EXPORT ItemDelegateOverlay : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageDelegateOverlay(QObject* const parent = 0);
-    ~ImageDelegateOverlay();
+    explicit ItemDelegateOverlay(QObject* const parent = 0);
+    ~ItemDelegateOverlay();
 
     /** Called when the overlay was installed and shall begin working,
      *  and before it is removed and shall stop.
@@ -107,15 +107,15 @@ protected:
 
 #define REQUIRE_DELEGATE(Delegate) \
 public: \
-    void setDelegate(Delegate* delegate) { ImageDelegateOverlay::setDelegate(delegate); } \
-    Delegate* delegate() const { return static_cast<Delegate*>(ImageDelegateOverlay::delegate()); } \
+    void setDelegate(Delegate* delegate) { ItemDelegateOverlay::setDelegate(delegate); } \
+    Delegate* delegate() const { return static_cast<Delegate*>(ItemDelegateOverlay::delegate()); } \
     virtual bool acceptsDelegate(QAbstractItemDelegate*d) const { return dynamic_cast<Delegate*>(d); } \
 private:
 
 
 // -------------------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT AbstractWidgetDelegateOverlay : public ImageDelegateOverlay
+class DIGIKAM_EXPORT AbstractWidgetDelegateOverlay : public ItemDelegateOverlay
 {
     Q_OBJECT
 
@@ -294,7 +294,7 @@ private:
 
 // -------------------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT ImageDelegateOverlayContainer
+class DIGIKAM_EXPORT ItemDelegateOverlayContainer
 {
 public:
 
@@ -304,12 +304,12 @@ public:
      * Does not inherit QObject, the delegate already does.
      */
 
-    virtual ~ImageDelegateOverlayContainer();
+    virtual ~ItemDelegateOverlayContainer();
 
-    QList<ImageDelegateOverlay*> overlays() const;
+    QList<ItemDelegateOverlay*> overlays() const;
 
-    void installOverlay(ImageDelegateOverlay* overlay);
-    void removeOverlay(ImageDelegateOverlay* overlay);
+    void installOverlay(ItemDelegateOverlay* overlay);
+    void removeOverlay(ItemDelegateOverlay* overlay);
     void setAllOverlaysActive(bool active);
     void setViewOnAllOverlays(QAbstractItemView* view);
     void removeAllOverlays();
@@ -332,9 +332,9 @@ protected:
 
 protected:
 
-    QList<ImageDelegateOverlay*> m_overlays;
+    QList<ItemDelegateOverlay*> m_overlays;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_DELEGATE_OVERLAY_H
+#endif // DIGIKAM_ITEM_DELEGATE_OVERLAY_H

@@ -30,7 +30,7 @@
 #include "importimagemodel.h"
 #include "importfiltermodel.h"
 #include "importthumbnailmodel.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 #include "camiteminfo.h"
 #include "digikam_export.h"
 
@@ -96,8 +96,8 @@ public:
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     /// Unless you pass a different delegate, the current delegate will be used.
-    void addOverlay(ImageDelegateOverlay* overlay, ImportDelegate* delegate = 0);
-    void removeOverlay(ImageDelegateOverlay* overlay);
+    void addOverlay(ItemDelegateOverlay* overlay, ImportDelegate* delegate = 0);
+    void removeOverlay(ItemDelegateOverlay* overlay);
 
     void addSelectionOverlay(ImportDelegate* delegate = 0);
 

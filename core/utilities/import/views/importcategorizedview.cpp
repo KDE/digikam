@@ -477,7 +477,7 @@ void ImportCategorizedView::hintAt(const CamItemInfo& info)
     scrollTo(index);
 }
 
-void ImportCategorizedView::addOverlay(ImageDelegateOverlay* overlay, ImportDelegate* delegate)
+void ImportCategorizedView::addOverlay(ItemDelegateOverlay* overlay, ImportDelegate* delegate)
 {
     if (!delegate)
     {
@@ -493,7 +493,7 @@ void ImportCategorizedView::addOverlay(ImageDelegateOverlay* overlay, ImportDele
     }
 }
 
-void ImportCategorizedView::removeOverlay(ImageDelegateOverlay* overlay)
+void ImportCategorizedView::removeOverlay(ItemDelegateOverlay* overlay)
 {
     ImportDelegate* delegate = dynamic_cast<ImportDelegate*>(overlay->delegate());
 

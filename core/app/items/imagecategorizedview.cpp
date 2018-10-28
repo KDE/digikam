@@ -40,7 +40,7 @@
 #include "itemalbumfiltermodel.h"
 #include "imagecategorydrawer.h"
 #include "imagedelegate.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 #include "itemthumbnailmodel.h"
 #include "imageselectionoverlay.h"
 #include "itemviewtooltip.h"
@@ -552,7 +552,7 @@ void ImageCategorizedView::hintAt(const ItemInfo& info)
     scrollTo(index);
 }
 
-void ImageCategorizedView::addOverlay(ImageDelegateOverlay* overlay, ImageDelegate* delegate)
+void ImageCategorizedView::addOverlay(ItemDelegateOverlay* overlay, ImageDelegate* delegate)
 {
     if (!delegate)
     {
@@ -568,7 +568,7 @@ void ImageCategorizedView::addOverlay(ImageDelegateOverlay* overlay, ImageDelega
     }
 }
 
-void ImageCategorizedView::removeOverlay(ImageDelegateOverlay* overlay)
+void ImageCategorizedView::removeOverlay(ItemDelegateOverlay* overlay)
 {
     ImageDelegate* delegate = dynamic_cast<ImageDelegate*>(overlay->delegate());
 

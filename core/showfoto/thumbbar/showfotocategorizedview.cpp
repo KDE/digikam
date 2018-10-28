@@ -458,7 +458,7 @@ void ShowfotoCategorizedView::hintAt(const ShowfotoItemInfo& info)
     scrollTo(index);
 }
 
-void ShowfotoCategorizedView::addOverlay(ImageDelegateOverlay* overlay, ShowfotoDelegate* delegate)
+void ShowfotoCategorizedView::addOverlay(ItemDelegateOverlay* overlay, ShowfotoDelegate* delegate)
 {
     if (!delegate)
     {
@@ -474,7 +474,7 @@ void ShowfotoCategorizedView::addOverlay(ImageDelegateOverlay* overlay, Showfoto
     }
 }
 
-void ShowfotoCategorizedView::removeOverlay(ImageDelegateOverlay* overlay)
+void ShowfotoCategorizedView::removeOverlay(ItemDelegateOverlay* overlay)
 {
     ShowfotoDelegate* const delegate = dynamic_cast<ShowfotoDelegate*>(overlay->delegate());
 

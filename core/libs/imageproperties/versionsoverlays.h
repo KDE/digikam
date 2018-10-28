@@ -31,7 +31,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 #include "itemfiltersettings.h"
 
 namespace Digikam

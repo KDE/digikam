@@ -182,13 +182,13 @@ QAbstractItemDelegate* ItemViewShowfotoDelegate::asDelegate()
 
 void ItemViewShowfotoDelegate::overlayDestroyed(QObject* o)
 {
-    ImageDelegateOverlayContainer::overlayDestroyed(o);
+    ItemDelegateOverlayContainer::overlayDestroyed(o);
 }
 
 void ItemViewShowfotoDelegate::mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index)
 {
-    // 3-way indirection AbstractShowfotoItemDelegate -> ItemViewShowfotoDelegate -> ImageDelegateOverlayContainer
-    ImageDelegateOverlayContainer::mouseMoved(e, visualRect, index);
+    // 3-way indirection AbstractShowfotoItemDelegate -> ItemViewShowfotoDelegate -> ItemDelegateOverlayContainer
+    ItemDelegateOverlayContainer::mouseMoved(e, visualRect, index);
 }
 
 void ItemViewShowfotoDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
