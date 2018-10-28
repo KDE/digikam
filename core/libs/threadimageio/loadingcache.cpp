@@ -109,7 +109,7 @@ void LoadingCache::Private::cleanUpImageFilePathHash()
     QSet<QString> keys = imageCache.keys().toSet();
     QMultiMap<QString, QString>::iterator it;
 
-    for (it = imageFilePathHash.begin(); it != imageFilePathHash.end(); )
+    for (it = imageFilePathHash.begin() ; it != imageFilePathHash.end() ; )
     {
         if (!keys.contains(it.value()))
         {
@@ -129,7 +129,7 @@ void LoadingCache::Private::cleanUpThumbnailFilePathHash()
     keys += thumbnailPixmapCache.keys().toSet();
     QMultiMap<QString, QString>::iterator it;
 
-    for (it = thumbnailFilePathHash.begin(); it != thumbnailFilePathHash.end(); )
+    for (it = thumbnailFilePathHash.begin() ; it != thumbnailFilePathHash.end() ; )
     {
         if (!keys.contains(it.value()))
         {
@@ -220,7 +220,7 @@ bool LoadingCache::isCacheable(const DImg* img) const
     return (uint)d->imageCache.maxCost() >= img->numBytes();
 }
 
-void LoadingCache::addLoadingProcess(LoadingProcess* process)
+void LoadingCache::addLoadingProcess(LoadingProcess* const process)
 {
     d->loadingDict[process->cacheKey()] = process;
 }
@@ -230,15 +230,15 @@ LoadingProcess* LoadingCache::retrieveLoadingProcess(const QString& cacheKey) co
     return d->loadingDict.value(cacheKey);
 }
 
-void LoadingCache::removeLoadingProcess(LoadingProcess* process)
+void LoadingCache::removeLoadingProcess(LoadingProcess* const process)
 {
     d->loadingDict.remove(process->cacheKey());
 }
 
-void LoadingCache::notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description)
+void LoadingCache::notifyNewLoadingProcess(LoadingProcess* const process, const LoadingDescription& description)
 {
-    for (QMap<QString, LoadingProcess*>::const_iterator it = d->loadingDict.constBegin();
-         it != d->loadingDict.constEnd(); ++it)
+    for (QMap<QString, LoadingProcess*>::const_iterator it = d->loadingDict.constBegin() ;
+         it != d->loadingDict.constEnd() ; ++it)
     {
         it.value()->notifyNewLoadingProcess(process, description);
     }
@@ -307,7 +307,7 @@ void LoadingCache::setThumbnailCacheSize(int numberOfQImages, int numberOfQPixma
     d->thumbnailPixmapCache.setMaxCost(numberOfQPixmaps * ThumbnailSize::maxThumbsSize() * ThumbnailSize::maxThumbsSize() * QPixmap::defaultDepth() / 8);
 }
 
-void LoadingCache::setFileWatch(LoadingCacheFileWatch* watch)
+void LoadingCache::setFileWatch(LoadingCacheFileWatch* const watch)
 {
     delete d->watch;
     d->watch          = watch;
@@ -330,7 +330,7 @@ void LoadingCache::notifyFileChanged(const QString& filePath, bool notify)
 {
     QList<QString> keys = d->imageFilePathHash.values(filePath);
 
-    foreach(const QString& cacheKey, keys)
+    foreach (const QString& cacheKey, keys)
     {
         if (d->imageCache.remove(cacheKey) && notify)
         {
@@ -340,7 +340,7 @@ void LoadingCache::notifyFileChanged(const QString& filePath, bool notify)
 
     keys = d->thumbnailFilePathHash.values(filePath);
 
-    foreach(const QString& cacheKey, keys)
+    foreach (const QString& cacheKey, keys)
     {
         bool removedImage  = d->thumbnailImageCache.remove(cacheKey);
         bool removedPixmap = d->thumbnailPixmapCache.remove(cacheKey);
@@ -466,7 +466,7 @@ void ClassicLoadingCacheFileWatch::slotUpdateDirWatch()
     QSet<QString> toBeRemoved = m_watchedFiles;
     QList<QString> filePaths  = m_cache->imageFilePathsInCache();
 
-    foreach(const QString& m_watchPath, filePaths)
+    foreach (const QString& m_watchPath, filePaths)
     {
         if (!m_watchPath.isEmpty())
         {
@@ -479,14 +479,14 @@ void ClassicLoadingCacheFileWatch::slotUpdateDirWatch()
         }
     }
 
-    foreach(const QString& watchedItem, toBeRemoved)
+    foreach (const QString& watchedItem, toBeRemoved)
     {
         //qCDebug(DIGIKAM_GENERAL_LOG) << "removing watch for " << *it;
         m_watch->removePath(watchedItem);
         m_watchedFiles.remove(watchedItem);
     }
 
-    foreach(const QString& watchedItem, toBeAdded)
+    foreach (const QString& watchedItem, toBeAdded)
     {
         //qCDebug(DIGIKAM_GENERAL_LOG) << "adding watch for " << *it;
         m_watch->addPath(watchedItem);

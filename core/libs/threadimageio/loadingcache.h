@@ -62,9 +62,9 @@ public:
     virtual bool completed() = 0;
     virtual QString filePath() = 0;
     virtual QString cacheKey() = 0;
-    virtual void addListener(LoadingProcessListener* listener) = 0;
-    virtual void removeListener(LoadingProcessListener* listener) = 0;
-    virtual void notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description) = 0;
+    virtual void addListener(LoadingProcessListener* const listener) = 0;
+    virtual void removeListener(LoadingProcessListener* const listener) = 0;
+    virtual void notifyNewLoadingProcess(LoadingProcess* const process, const LoadingDescription& description) = 0;
 };
 
 // --------------------------------------------------------------------------------------------------------------
@@ -259,7 +259,7 @@ public:
      * Sets a LoadingCacheFileWatch to watch the files contained in this cache.
      * Ownership of this object is transferred to the cache.
      */
-    void setFileWatch(LoadingCacheFileWatch* watch);
+    void setFileWatch(LoadingCacheFileWatch* const watch);
 
     /**
      * Returns a list of all possible file paths in cache.
