@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-01-01
- * Description : scan pictures interface.
+ * Description : scan item controller.
  *
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -244,6 +244,7 @@ void ScanController::completeCollectionScanCore(bool needTotalFiles, bool defer)
 void ScanController::updateUniqueHash()
 {
     createProgressDialog();
+
     // we only need to count the files in advance
     //if we show a progress percentage in progress dialog
     d->needTotalFiles = true;
@@ -479,7 +480,7 @@ void ScanController::run()
             else if (!d->completeScanDeferredAlbums.isEmpty() && d->finishScanAllowed && !d->scanSuspended)
             {
                 // d->completeScanDeferredAlbums is only accessed from the thread, no need to copy
-                doFinishScan             = true;
+                doFinishScan  = true;
             }
             else if (!d->scanTasks.isEmpty() && !d->scanSuspended)
             {
@@ -498,7 +499,7 @@ void ScanController::run()
         {
             d->continueInitialization = true;
             // pass "this" as InitializationObserver
-            bool success = CoreDbAccess::checkReadyForUse(this);
+            bool success              = CoreDbAccess::checkReadyForUse(this);
 
             // If d->advice has not been adjusted to a value indicating failure, do this here
             if (!success && d->advice == Success)
@@ -761,7 +762,9 @@ void ScanController::setInitializationMessage()
     }
 }
 
-static AlbumCopyMoveHint hintForAlbum(const PAlbum* const album, int dstAlbumRootId, const QString& relativeDstPath,
+static AlbumCopyMoveHint hintForAlbum(const PAlbum* const album,
+                                      int dstAlbumRootId,
+                                      const QString& relativeDstPath,
                                       const QString& albumName)
 {
     QString dstAlbumPath;
@@ -775,11 +778,15 @@ static AlbumCopyMoveHint hintForAlbum(const PAlbum* const album, int dstAlbumRoo
         dstAlbumPath = relativeDstPath + QLatin1Char('/') + albumName;
     }
 
-    return AlbumCopyMoveHint(album->albumRootId(), album->id(),
-                             dstAlbumRootId, dstAlbumPath);
+    return AlbumCopyMoveHint(album->albumRootId(),
+                             album->id(),
+                             dstAlbumRootId,
+                             dstAlbumPath);
 }
 
-static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum* const album, int dstAlbumRootId, QString relativeDstPath,
+static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum* const album,
+                                              int dstAlbumRootId,
+                                              QString relativeDstPath,
                                               const QString& albumName)
 {
     QList<AlbumCopyMoveHint> newHints;
@@ -796,13 +803,18 @@ static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum* const album, int dst
     {
         PAlbum* const a        = (PAlbum*)*it;
         QString childAlbumPath = a->albumPath();
-        newHints << hintForAlbum(a, dstAlbumRootId, relativeDstPath, albumName + childAlbumPath.mid(parentAlbumPath.length()));
+        newHints << hintForAlbum(a,
+                                 dstAlbumRootId,
+                                 relativeDstPath,
+                                 albumName + childAlbumPath.mid(parentAlbumPath.length()));
     }
 
     return newHints;
 }
 
-void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const QString& dstPath, const QString& newAlbumName)
+void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album,
+                                             const QString& dstPath,
+                                             const QString& newAlbumName)
 {
     // get album root and album from dst path
     CollectionLocation location = CollectionManager::instance()->locationForPath(dstPath);
@@ -810,43 +822,60 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const QS
     if (location.isNull())
     {
         qCWarning(DIGIKAM_DATABASE_LOG) << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath
-                   << "does not point to an available location.";
+                                        << "does not point to an available location.";
         return;
     }
 
     QString relativeDstPath           = CollectionManager::instance()->album(location, dstPath);
 
-    QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album, location.id(), relativeDstPath,
-                                                      newAlbumName.isNull() ? album->title() : newAlbumName);
+    QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album,
+                                                      location.id(),
+                                                      relativeDstPath,
+                                                      newAlbumName.isNull() ? album->title()
+                                                                            : newAlbumName);
 
     //QMutexLocker lock(&d->mutex);
     //d->albumHints << newHints;
     d->hints->recordHints(newHints);
 }
 
-void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const PAlbum* const dstAlbum, const QString& newAlbumName)
+void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album,
+                                             const PAlbum* const dstAlbum,
+                                             const QString& newAlbumName)
 {
-    QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album, dstAlbum->albumRootId(), dstAlbum->albumPath(),
-                                                      newAlbumName.isNull() ? album->title() : newAlbumName);
+    QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album,
+                                                      dstAlbum->albumRootId(),
+                                                      dstAlbum->albumPath(),
+                                                      newAlbumName.isNull() ? album->title()
+                                                                            : newAlbumName);
 
     //QMutexLocker lock(&d->mutex);
     //d->albumHints << newHints;
     d->hints->recordHints(newHints);
 }
 
-void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum* const dstAlbum,
+void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids,
+                                             const PAlbum* const dstAlbum,
                                              const QStringList& itemNames)
 {
-    ItemCopyMoveHint hint(ids, dstAlbum->albumRootId(), dstAlbum->id(), itemNames);
+    ItemCopyMoveHint hint(ids,
+                          dstAlbum->albumRootId(),
+                          dstAlbum->id(),
+                          itemNames);
 
     d->garbageCollectHints(true);
     //d->itemHints << hint;
     d->hints->recordHints(QList<ItemCopyMoveHint>() << hint);
 }
 
-void ScanController::hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum* const dstAlbum, const QString& itemName)
+void ScanController::hintAtMoveOrCopyOfItem(qlonglong id,
+                                            const PAlbum* const dstAlbum,
+                                            const QString& itemName)
 {
-    ItemCopyMoveHint hint(QList<qlonglong>() << id, dstAlbum->albumRootId(), dstAlbum->id(), QStringList() << itemName);
+    ItemCopyMoveHint hint(QList<qlonglong>() << id,
+                          dstAlbum->albumRootId(),
+                          dstAlbum->id(),
+                          QStringList() << itemName);
 
     d->garbageCollectHints(true);
     //d->itemHints << hint;
@@ -877,9 +906,12 @@ void ScanController::beginFileMetadataWrite(const ItemInfo& info)
         // throw in a lock to synchronize with all parallel writing
         FileReadLocker locker(info.filePath());
     }
+
     QFileInfo fi(info.filePath());
-    d->hints->recordHint(ItemMetadataAdjustmentHint(info.id(), ItemMetadataAdjustmentHint::AboutToEditMetadata,
-                                                    fi.lastModified(), fi.size()));
+    d->hints->recordHint(ItemMetadataAdjustmentHint(info.id(),
+                                                    ItemMetadataAdjustmentHint::AboutToEditMetadata,
+                                                    fi.lastModified(),
+                                                    fi.size()));
 }
 
 void ScanController::finishFileMetadataWrite(const ItemInfo& info, bool changed)
@@ -888,7 +920,8 @@ void ScanController::finishFileMetadataWrite(const ItemInfo& info, bool changed)
     d->hints->recordHint(ItemMetadataAdjustmentHint(info.id(),
                                                     changed ? ItemMetadataAdjustmentHint::MetadataEditingFinished :
                                                               ItemMetadataAdjustmentHint::MetadataEditingAborted,
-                                                    fi.lastModified(), fi.size()));
+                                                    fi.lastModified(),
+                                                    fi.size()));
 
     scanFileDirectlyNormal(info);
 }

@@ -50,14 +50,14 @@ set(libdatabasecore_SRCS
 )
 
 set(libdatabaseutils_SRCS
-    utils/dbstatdlg.cpp
-    utils/dbsettingswidget.cpp
-    utils/dbmigrationdlg.cpp
-    utils/dbinfoiface.cpp
-    utils/scancontroller.cpp
-    utils/scancontroller_p.cpp
-    utils/syncjob.cpp
-    utils/dio.cpp
+    utils/widgets/dbstatdlg.cpp
+    utils/widgets/dbsettingswidget.cpp
+    utils/widgets/dbmigrationdlg.cpp
+    utils/ifaces/dbinfoiface.cpp
+    utils/ifaces/syncjob.cpp
+    utils/ifaces/dio.cpp
+    utils/scan/scancontroller.cpp
+    utils/scan/scancontroller_p.cpp
 )
 
 set(libdatabase_SRCS
@@ -206,13 +206,18 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/engine>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dbjobs>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item/containers>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item/lister>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item/query>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item/scanner>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tags>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/server>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/thumbsdb>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils/widgets>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils/ifaces>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils/scan>
 )
 
 target_link_libraries(digikamdatabase
