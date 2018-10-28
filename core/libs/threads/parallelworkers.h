@@ -140,17 +140,17 @@ public:
     {
         return WorkerObject::qt_metacall(_c, _id, _a);
     }
-    
+
     const QMetaObject* mocMetaObject() const
     {
         return A::metaObject();
     }
-    
+
     static void qt_static_metacall(QObject* o, QMetaObject::Call _c, int _id, void** _a)
     {
         static_cast<ParallelAdapter*>(o)->replacementStaticQtMetacall(_c, _id, _a);
     }
-    
+
     virtual StaticMetacallFunction staticMetacallPointer()
     {
         return qt_static_metacall;
@@ -160,7 +160,7 @@ public:
     {
         return ParallelWorkers::replacementMetaObject();
     }
-    
+
     virtual int qt_metacall(QMetaObject::Call _c, int _id, void** _a)
     {
         return ParallelWorkers::replacementQtMetacall(_c, _id, _a);
@@ -175,12 +175,12 @@ public:
     {
         ParallelWorkers::schedule();
     }
-    
+
     void deactivate(WorkerObject::DeactivatingMode mode = WorkerObject::FlushSignals)
     {
         ParallelWorkers::deactivate(mode);
     }
-    
+
     void wait()
     {
         ParallelWorkers::wait();
