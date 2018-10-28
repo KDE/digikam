@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2007-10-28
+ * Date        : 2005-10-28
  * Description : scan item controller - private containers.
  *
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers at kde dot nl>
@@ -51,7 +51,6 @@
 
 #include "digikam_debug.h"
 #include "collectionscanner.h"
-#include "collectionscannerhints.h"
 #include "coredbaccess.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"

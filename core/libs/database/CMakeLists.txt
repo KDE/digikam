@@ -58,6 +58,9 @@ set(libdatabaseutils_SRCS
     utils/ifaces/dio.cpp
     utils/scan/scancontroller.cpp
     utils/scan/scancontroller_p.cpp
+    utils/scan/scancontroller_start.cpp
+    utils/scan/scancontroller_progress.cpp
+    utils/scan/scancontroller_stop.cpp
 )
 
 set(libdatabase_SRCS

@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2007-10-28
+ * Date        : 2005-10-28
  * Description : scan item controller.
  *
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers at kde dot nl>
@@ -30,11 +30,13 @@
 
 #include <QThread>
 #include <QString>
+#include <QList>
 
 // Local includes
 
 #include "digikam_export.h"
 #include "collectionscannerobserver.h"
+#include "collectionscannerhints.h"
 #include "iteminfo.h"
 #include "loadingcache.h"
 #include "coredbchangesets.h"
@@ -183,6 +185,16 @@ public:
      */
     void beginFileMetadataWrite(const ItemInfo& info);
 
+    /**
+     * Resume a suspended collection scanning.
+     * All scheduled scanning tasks are queued
+     * and will be done when resumeCollectionScan()
+     * has been called.
+     * Calling these methods is recursive, you must resume
+     * as often as you called suspend.
+     */
+    void resumeCollectionScan();
+
 Q_SIGNALS:
 
     void databaseInitialized(bool success);
@@ -225,8 +237,12 @@ public:
      * dstPath is the new parent directory of the album, so
      * do not include the album name to dstPath.
      */
-    void hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const PAlbum* const dstAlbum, const QString& newAlbumName = QString());
-    void hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const QString& dstPath, const QString& newAlbumName = QString());
+    void hintAtMoveOrCopyOfAlbum(const PAlbum* const album,
+                                 const PAlbum* const dstAlbum,
+                                 const QString& newAlbumName = QString());
+    void hintAtMoveOrCopyOfAlbum(const PAlbum* const album,
+                                 const QString& dstPath,
+                                 const QString& newAlbumName = QString());
 
     /**
      * Hint at the imminent copy, move or rename of items, so that the
@@ -235,8 +251,12 @@ public:
      * and give the names at destination in itemNames (Unless for rename, names wont usually change.
      * Give them nevertheless.)
      */
-    void hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum* const dstAlbum, const QStringList& itemNames);
-    void hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum* const dstAlbum, const QString& itemName);
+    void hintAtMoveOrCopyOfItems(const QList<qlonglong> ids,
+                                 const PAlbum* const dstAlbum,
+                                 const QStringList& itemNames);
+    void hintAtMoveOrCopyOfItem(qlonglong id,
+                                const PAlbum* const dstAlbum,
+                                const QString& itemName);
 
     /**
      * Hint at the fact that an item may have changed, although its modification date may not have changed.
@@ -244,7 +264,7 @@ public:
      */
     void hintAtModificationOfItems(const QList<qlonglong> ids);
     void hintAtModificationOfItem(qlonglong id);
-
+    
 Q_SIGNALS:
 
     void totalFilesToScan(int);
@@ -269,6 +289,15 @@ private:
     virtual void schemaUpdateProgress(const QString& message, int numberOfSteps);
     virtual void error(const QString& errorMessage);
 
+    AlbumCopyMoveHint hintForAlbum(const PAlbum* const album,
+                                   int dstAlbumRootId,
+                                   const QString& relativeDstPath,
+                                   const QString& albumName);
+
+    QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum* const album,
+                                           int dstAlbumRootId,
+                                           QString relativeDstPath,
+                                           const QString& albumName);
     //@}
 
     // -----------------------------------------------------------------------------
@@ -316,7 +345,6 @@ public:
      * as often as you called suspend.
      */
     void suspendCollectionScan();
-    void resumeCollectionScan();
 
     /**
      * Implementation of FileMetadataWrite, see there. Calling these methods is equivalent.

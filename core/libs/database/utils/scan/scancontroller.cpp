@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-01-01
+ * Date        : 2005-10-28
  * Description : scan item controller.
  *
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers at kde dot nl>
@@ -28,12 +28,33 @@
 namespace Digikam
 {
 
+ScanController::FileMetadataWrite::FileMetadataWrite(const ItemInfo& info)
+    : m_info(info),
+      m_changed(false)
+{
+    ScanController::instance()->beginFileMetadataWrite(info);
+}
+
+void ScanController::FileMetadataWrite::changed(bool wasChanged)
+{
+    m_changed = m_changed || wasChanged;
+}
+
+ScanController::FileMetadataWrite::~FileMetadataWrite()
+{
+    ScanController::instance()->finishFileMetadataWrite(m_info, m_changed);
+}
+
+// ----------------------------------------------------------------------------
+
 Q_GLOBAL_STATIC(ScanControllerCreator, creator)
 
 ScanController* ScanController::instance()
 {
     return &creator->object;
 }
+
+// ----------------------------------------------------------------------------
 
 ScanController::ScanController()
     : d(new Private)
@@ -97,24 +118,21 @@ ScanController::~ScanController()
     delete d;
 }
 
-void ScanController::shutDown()
+void ScanController::setInitializationMessage()
 {
-    if (!isRunning())
+    QString message = i18n("Initializing database...");
+
+    if (d->progressDialog)
     {
-        return;
+        d->progressDialog->addedAction(d->restartPixmap(), message);
     }
+}
 
-    d->running                = false;
-    d->continueInitialization = false;
-    d->continueScan           = false;
-    d->continuePartialScan    = false;
-
-    {
-        QMutexLocker lock(&d->mutex);
-        d->condVar.wakeAll();
-    }
-
-    wait();
+// implementing InitializationObserver
+bool ScanController::continueQuery()
+{
+    // not from main thread
+    return d->continueInitialization;
 }
 
 void ScanController::createProgressDialog()
@@ -138,312 +156,6 @@ void ScanController::createProgressDialog()
 
     connect(d->progressDialog, SIGNAL(signalCancelPressed()),
             this, SLOT(slotCancelPressed()));
-}
-
-void ScanController::slotCancelPressed()
-{
-    abortInitialization();
-    cancelCompleteScan();
-}
-
-void ScanController::slotTriggerShowProgressDialog()
-{
-    if (d->progressDialog && !d->showTimer->isActive() && !d->progressDialog->isVisible())
-    {
-        d->showTimer->start(300);
-    }
-}
-
-void ScanController::slotShowProgressDialog()
-{
-    if (d->progressDialog)
-    {
-        //if (!CollectionScanner::databaseInitialScanDone())
-        {
-            d->progressDialog->show();
-        }
-    }
-}
-
-ScanController::Advice ScanController::databaseInitialization()
-{
-    d->advice = Success;
-    createProgressDialog();
-    setInitializationMessage();
-
-    {
-        QMutexLocker lock(&d->mutex);
-        d->needsInitialization = true;
-        d->condVar.wakeAll();
-    }
-
-    // loop is quit by signal
-    d->eventLoop->exec();
-
-    // setup file watch service for LoadingCache - now that we are sure we have a CoreDbWatch
-    if (!d->fileWatchInstalled)
-    {
-        d->fileWatchInstalled     = true; // once per application lifetime only
-        LoadingCache* const cache = LoadingCache::cache();
-        LoadingCache::CacheLock lock(cache);
-        cache->setFileWatch(new ScanControllerLoadingCacheFileWatch);
-    }
-
-    delete d->progressDialog;
-    d->progressDialog = 0;
-
-    return d->advice;
-}
-
-void ScanController::completeCollectionScanDeferFiles()
-{
-    completeCollectionScan(true);
-}
-
-void ScanController::allowToScanDeferredFiles()
-{
-    QMutexLocker lock(&d->mutex);
-    d->finishScanAllowed = true;
-    d->condVar.wakeAll();
-}
-
-void ScanController::completeCollectionScan(bool defer)
-{
-    createProgressDialog();
-
-    // we only need to count the files in advance
-    // if we show a progress percentage in progress dialog
-    completeCollectionScanCore(!CollectionScanner::databaseInitialScanDone(), defer);
-
-    delete d->progressDialog;
-    d->progressDialog = 0;
-}
-
-void ScanController::completeCollectionScanInBackground(bool defer)
-{
-    completeCollectionScanCore(true, defer);
-}
-
-void ScanController::completeCollectionScanCore(bool needTotalFiles, bool defer)
-{
-    d->needTotalFiles = needTotalFiles;
-
-    {
-        QMutexLocker lock(&d->mutex);
-        d->needsCompleteScan = true;
-        d->deferFileScanning = defer;
-        d->condVar.wakeAll();
-    }
-
-    // loop is quit by signal
-    d->eventLoop->exec();
-
-    d->needTotalFiles = false;
-}
-
-void ScanController::updateUniqueHash()
-{
-    createProgressDialog();
-
-    // we only need to count the files in advance
-    //if we show a progress percentage in progress dialog
-    d->needTotalFiles = true;
-
-    {
-        QMutexLocker lock(&d->mutex);
-        d->needsUpdateUniqueHash = true;
-        d->condVar.wakeAll();
-    }
-
-    // loop is quit by signal
-    d->eventLoop->exec();
-
-    delete d->progressDialog;
-    d->progressDialog = 0;
-    d->needTotalFiles = false;
-}
-
-void ScanController::scheduleCollectionScan(const QString& path)
-{
-    QMutexLocker lock(&d->mutex);
-
-    if (!d->scanTasks.contains(path))
-    {
-        d->scanTasks << path;
-    }
-
-    d->condVar.wakeAll();
-}
-
-void ScanController::scheduleCollectionScanRelaxed(const QString& path)
-{
-    if (!d->relaxedTimer->isActive())
-    {
-        d->relaxedTimer->start();
-    }
-
-    QMutexLocker lock(&d->mutex);
-
-    if (!d->scanTasks.contains(path))
-    {
-        d->scanTasks << path;
-    }
-}
-
-void ScanController::scheduleCollectionScanExternal(const QString& path)
-{
-    d->externalTimer->start();
-
-    QMutexLocker lock(&d->mutex);
-
-    if (!d->scanTasks.contains(path))
-    {
-        d->scanTasks << path;
-    }
-}
-
-void ScanController::slotRelaxedScanning()
-{
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Starting scan!";
-    d->externalTimer->stop();
-    d->relaxedTimer->stop();
-
-    QMutexLocker lock(&d->mutex);
-    d->condVar.wakeAll();
-}
-
-ItemInfo ScanController::scannedInfo(const QString& filePath)
-{
-    CollectionScanner scanner;
-    scanner.setHintContainer(d->hints);
-
-    ItemInfo info = ItemInfo::fromLocalFile(filePath);
-
-    if (info.isNull())
-    {
-        qlonglong id = scanner.scanFile(filePath, CollectionScanner::NormalScan);
-        return ItemInfo(id);
-    }
-    else
-    {
-        scanner.scanFile(info, CollectionScanner::NormalScan);
-        return info;
-    }
-}
-
-ScanController::FileMetadataWrite::FileMetadataWrite(const ItemInfo& info)
-    : m_info(info),
-      m_changed(false)
-{
-    ScanController::instance()->beginFileMetadataWrite(info);
-}
-
-void ScanController::FileMetadataWrite::changed(bool wasChanged)
-{
-    m_changed = m_changed || wasChanged;
-}
-
-ScanController::FileMetadataWrite::~FileMetadataWrite()
-{
-    ScanController::instance()->finishFileMetadataWrite(m_info, m_changed);
-}
-
-void ScanController::scanFileDirectly(const QString& filePath)
-{
-    suspendCollectionScan();
-
-    CollectionScanner scanner;
-    scanner.setHintContainer(d->hints);
-    scanner.scanFile(filePath);
-
-    resumeCollectionScan();
-}
-
-void ScanController::scanFileDirectlyNormal(const ItemInfo& info)
-{
-    CollectionScanner scanner;
-    scanner.setHintContainer(d->hints);
-    scanner.scanFile(info, CollectionScanner::NormalScan);
-}
-
-/*
-/// This variant shall be used when a new file is created which is a version
-/// of another image, and all relevant attributes shall be copied.
-void scanFileDirectlyCopyAttributes(const QString& filePath, qlonglong parentVersion);
-
-void ScanController::scanFileDirectlyCopyAttributes(const QString& filePath, qlonglong parentVersion)
-{
-    suspendCollectionScan();
-
-    CollectionScanner scanner;
-    scanner.recordHints(d->itemHints);
-    scanner.recordHints(d->itemChangeHints);
-    qlonglong id = scanner.scanFile(filePath);
-    ItemInfo dest(id), source(parentVersion);
-    scanner.copyFileProperties(source, dest);
-
-    resumeCollectionScan();
-}
-*/
-
-void ScanController::abortInitialization()
-{
-    QMutexLocker lock(&d->mutex);
-    d->needsInitialization    = false;
-    d->continueInitialization = false;
-}
-
-void ScanController::cancelCompleteScan()
-{
-    QMutexLocker lock(&d->mutex);
-    d->needsCompleteScan = false;
-    d->continueScan      = false;
-    emit completeScanCanceled();
-}
-
-void ScanController::cancelAllAndSuspendCollectionScan()
-{
-    QMutexLocker lock(&d->mutex);
-
-    d->needsInitialization    = false;
-    d->continueInitialization = false;
-
-    d->needsCompleteScan      = false;
-    d->continueScan           = false;
-
-    d->scanTasks.clear();
-    d->continuePartialScan    = false;
-
-    d->relaxedTimer->stop();
-
-    // like suspendCollectionScan
-    d->scanSuspended++;
-
-    while (!d->idle)
-    {
-        d->condVar.wait(&d->mutex, 20);
-    }
-}
-
-void ScanController::suspendCollectionScan()
-{
-    QMutexLocker lock(&d->mutex);
-    d->scanSuspended++;
-}
-
-void ScanController::resumeCollectionScan()
-{
-    QMutexLocker lock(&d->mutex);
-
-    if (d->scanSuspended)
-    {
-        d->scanSuspended--;
-    }
-
-    if (!d->scanSuspended)
-    {
-        d->condVar.wakeAll();
-    }
 }
 
 void ScanController::run()
@@ -605,325 +317,52 @@ void ScanController::connectCollectionScanner(CollectionScanner* const scanner)
             this, SLOT(slotStartScanningAlbumRoots()));
 }
 
-void ScanController::slotTotalFilesToScan(int count)
+void ScanController::allowToScanDeferredFiles()
 {
-    if (d->progressDialog)
+    QMutexLocker lock(&d->mutex);
+    d->finishScanAllowed = true;
+    d->condVar.wakeAll();
+}
+
+void ScanController::updateUniqueHash()
+{
+    createProgressDialog();
+
+    // we only need to count the files in advance
+    //if we show a progress percentage in progress dialog
+    d->needTotalFiles = true;
+
     {
-        d->progressDialog->incrementMaximum(count);
+        QMutexLocker lock(&d->mutex);
+        d->needsUpdateUniqueHash = true;
+        d->condVar.wakeAll();
     }
 
-    d->totalFilesToScan = count;
-    emit totalFilesToScan(d->totalFilesToScan);
+    // loop is quit by signal
+    d->eventLoop->exec();
+
+    delete d->progressDialog;
+    d->progressDialog = 0;
+    d->needTotalFiles = false;
 }
 
-void ScanController::slotStartCompleteScan()
+ItemInfo ScanController::scannedInfo(const QString& filePath)
 {
-    d->totalFilesToScan = 0;
-    slotTriggerShowProgressDialog();
+    CollectionScanner scanner;
+    scanner.setHintContainer(d->hints);
 
-    QString message     = i18n("Preparing collection scan...");
+    ItemInfo info = ItemInfo::fromLocalFile(filePath);
 
-    if (d->progressDialog)
+    if (info.isNull())
     {
-        d->progressDialog->addedAction(d->restartPixmap(), message);
-    }
-}
-
-void ScanController::slotStartScanningAlbum(const QString& albumRoot, const QString& album)
-{
-    Q_UNUSED(albumRoot);
-
-    if (d->progressDialog)
-    {
-        d->progressDialog->addedAction(d->albumPixmap(), QLatin1Char(' ') + album);
-    }
-}
-
-void ScanController::slotScannedFiles(int scanned)
-{
-    if (d->progressDialog)
-    {
-        d->progressDialog->advance(scanned);
-    }
-
-    if (d->totalFilesToScan)
-    {
-        emit filesScanned(scanned);
-        emit scanningProgress(double(scanned) / double(d->totalFilesToScan));
-    }
-}
-
-void ScanController::slotStartScanningAlbumRoot(const QString& albumRoot)
-{
-    if (d->progressDialog)
-    {
-        d->progressDialog->addedAction(d->rootPixmap(), albumRoot);
-    }
-}
-
-void ScanController::slotStartScanningForStaleAlbums()
-{
-    QString message = i18n("Scanning for removed albums...");
-
-    if (d->progressDialog)
-    {
-        d->progressDialog->addedAction(d->actionPixmap(), message);
-    }
-}
-
-void ScanController::slotStartScanningAlbumRoots()
-{
-    QString message = i18n("Scanning images in individual albums...");
-
-    if (d->progressDialog)
-    {
-        d->progressDialog->addedAction(d->actionPixmap(), message);
-    }
-}
-
-// implementing InitializationObserver
-void ScanController::moreSchemaUpdateSteps(int numberOfSteps)
-{
-    // not from main thread
-    emit triggerShowProgressDialog();
-    emit incrementProgressDialog(numberOfSteps);
-}
-
-// implementing InitializationObserver
-void ScanController::schemaUpdateProgress(const QString& message, int numberOfSteps)
-{
-    // not from main thread
-    emit progressFromInitialization(message, numberOfSteps);
-}
-
-void ScanController::slotProgressFromInitialization(const QString& message, int numberOfSteps)
-{
-    // main thread
-
-    if (d->progressDialog)
-    {
-        d->progressDialog->addedAction(d->actionPixmap(), message);
-        d->progressDialog->advance(numberOfSteps);
-    }
-}
-
-// implementing InitializationObserver
-void ScanController::finishedSchemaUpdate(UpdateResult result)
-{
-    // not from main thread
-    switch (result)
-    {
-        case InitializationObserver::UpdateSuccess:
-            d->advice = Success;
-            break;
-        case InitializationObserver::UpdateError:
-            d->advice = ContinueWithoutDatabase;
-            break;
-        case InitializationObserver::UpdateErrorMustAbort:
-            d->advice = AbortImmediately;
-            break;
-    }
-}
-
-// implementing InitializationObserver
-void ScanController::error(const QString& errorMessage)
-{
-    // not from main thread
-    emit errorFromInitialization(errorMessage);
-}
-
-// implementing InitializationObserver
-bool ScanController::continueQuery()
-{
-    // not from main thread
-    return d->continueInitialization;
-}
-
-void ScanController::slotErrorFromInitialization(const QString& errorMessage)
-{
-    // main thread
-    QString message = i18n("Error");
-
-    if (d->progressDialog)
-    {
-        d->progressDialog->addedAction(d->errorPixmap(), message);
-    }
-
-    QMessageBox::critical(d->progressDialog, qApp->applicationName(), errorMessage);
-}
-
-void ScanController::setInitializationMessage()
-{
-    QString message = i18n("Initializing database...");
-
-    if (d->progressDialog)
-    {
-        d->progressDialog->addedAction(d->restartPixmap(), message);
-    }
-}
-
-static AlbumCopyMoveHint hintForAlbum(const PAlbum* const album,
-                                      int dstAlbumRootId,
-                                      const QString& relativeDstPath,
-                                      const QString& albumName)
-{
-    QString dstAlbumPath;
-
-    if (relativeDstPath == QLatin1String("/"))
-    {
-        dstAlbumPath = relativeDstPath + albumName;
+        qlonglong id = scanner.scanFile(filePath, CollectionScanner::NormalScan);
+        return ItemInfo(id);
     }
     else
     {
-        dstAlbumPath = relativeDstPath + QLatin1Char('/') + albumName;
+        scanner.scanFile(info, CollectionScanner::NormalScan);
+        return info;
     }
-
-    return AlbumCopyMoveHint(album->albumRootId(),
-                             album->id(),
-                             dstAlbumRootId,
-                             dstAlbumPath);
-}
-
-static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum* const album,
-                                              int dstAlbumRootId,
-                                              QString relativeDstPath,
-                                              const QString& albumName)
-{
-    QList<AlbumCopyMoveHint> newHints;
-
-    newHints << hintForAlbum(album, dstAlbumRootId, relativeDstPath, albumName);
-    QString parentAlbumPath = album->albumPath();
-
-    if (parentAlbumPath == QLatin1String("/"))
-    {
-        parentAlbumPath.clear();    // do not cut away a "/" in mid() below
-    }
-
-    for (AlbumIterator it(const_cast<PAlbum*>(album)); *it; ++it)
-    {
-        PAlbum* const a        = (PAlbum*)*it;
-        QString childAlbumPath = a->albumPath();
-        newHints << hintForAlbum(a,
-                                 dstAlbumRootId,
-                                 relativeDstPath,
-                                 albumName + childAlbumPath.mid(parentAlbumPath.length()));
-    }
-
-    return newHints;
-}
-
-void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album,
-                                             const QString& dstPath,
-                                             const QString& newAlbumName)
-{
-    // get album root and album from dst path
-    CollectionLocation location = CollectionManager::instance()->locationForPath(dstPath);
-
-    if (location.isNull())
-    {
-        qCWarning(DIGIKAM_DATABASE_LOG) << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath
-                                        << "does not point to an available location.";
-        return;
-    }
-
-    QString relativeDstPath           = CollectionManager::instance()->album(location, dstPath);
-
-    QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album,
-                                                      location.id(),
-                                                      relativeDstPath,
-                                                      newAlbumName.isNull() ? album->title()
-                                                                            : newAlbumName);
-
-    //QMutexLocker lock(&d->mutex);
-    //d->albumHints << newHints;
-    d->hints->recordHints(newHints);
-}
-
-void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album,
-                                             const PAlbum* const dstAlbum,
-                                             const QString& newAlbumName)
-{
-    QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album,
-                                                      dstAlbum->albumRootId(),
-                                                      dstAlbum->albumPath(),
-                                                      newAlbumName.isNull() ? album->title()
-                                                                            : newAlbumName);
-
-    //QMutexLocker lock(&d->mutex);
-    //d->albumHints << newHints;
-    d->hints->recordHints(newHints);
-}
-
-void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids,
-                                             const PAlbum* const dstAlbum,
-                                             const QStringList& itemNames)
-{
-    ItemCopyMoveHint hint(ids,
-                          dstAlbum->albumRootId(),
-                          dstAlbum->id(),
-                          itemNames);
-
-    d->garbageCollectHints(true);
-    //d->itemHints << hint;
-    d->hints->recordHints(QList<ItemCopyMoveHint>() << hint);
-}
-
-void ScanController::hintAtMoveOrCopyOfItem(qlonglong id,
-                                            const PAlbum* const dstAlbum,
-                                            const QString& itemName)
-{
-    ItemCopyMoveHint hint(QList<qlonglong>() << id,
-                          dstAlbum->albumRootId(),
-                          dstAlbum->id(),
-                          QStringList() << itemName);
-
-    d->garbageCollectHints(true);
-    //d->itemHints << hint;
-    d->hints->recordHints(QList<ItemCopyMoveHint>() << hint);
-}
-
-void ScanController::hintAtModificationOfItems(const QList<qlonglong> ids)
-{
-    ItemChangeHint hint(ids, ItemChangeHint::ItemModified);
-
-    d->garbageCollectHints(true);
-    //d->itemHints << hint;
-    d->hints->recordHints(QList<ItemChangeHint>() << hint);
-}
-
-void ScanController::hintAtModificationOfItem(qlonglong id)
-{
-    ItemChangeHint hint(QList<qlonglong>() << id, ItemChangeHint::ItemModified);
-
-    d->garbageCollectHints(true);
-    //d->itemHints << hint;
-    d->hints->recordHints(QList<ItemChangeHint>() << hint);
-}
-
-void ScanController::beginFileMetadataWrite(const ItemInfo& info)
-{
-    {
-        // throw in a lock to synchronize with all parallel writing
-        FileReadLocker locker(info.filePath());
-    }
-
-    QFileInfo fi(info.filePath());
-    d->hints->recordHint(ItemMetadataAdjustmentHint(info.id(),
-                                                    ItemMetadataAdjustmentHint::AboutToEditMetadata,
-                                                    fi.lastModified(),
-                                                    fi.size()));
-}
-
-void ScanController::finishFileMetadataWrite(const ItemInfo& info, bool changed)
-{
-    QFileInfo fi(info.filePath());
-    d->hints->recordHint(ItemMetadataAdjustmentHint(info.id(),
-                                                    changed ? ItemMetadataAdjustmentHint::MetadataEditingFinished :
-                                                              ItemMetadataAdjustmentHint::MetadataEditingAborted,
-                                                    fi.lastModified(),
-                                                    fi.size()));
-
-    scanFileDirectlyNormal(info);
 }
 
 } // namespace Digikam
