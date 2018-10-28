@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_FILTERS_HISTORY_TREE_ITEM_H
-#define DIGIKAM_IMAGE_FILTERS_HISTORY_TREE_ITEM_H
+#ifndef DIGIKAM_ITEM_FILTERS_HISTORY_TREE_ITEM_H
+#define DIGIKAM_ITEM_FILTERS_HISTORY_TREE_ITEM_H
 
 // Qt includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_FILTERS_HISTORY_TREE_ITEM_H
+#endif // DIGIKAM_ITEM_FILTERS_HISTORY_TREE_ITEM_H
