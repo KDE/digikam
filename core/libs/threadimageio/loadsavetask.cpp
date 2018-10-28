@@ -115,7 +115,7 @@ void SharedLoadingTask::execute()
         DImg* cachedImg        = 0;
         QStringList lookupKeys = m_loadingDescription.lookupCacheKeys();
 
-        foreach(const QString& key, lookupKeys)
+        foreach (const QString& key, lookupKeys)
         {
             if ((cachedImg = cache->retrieveImage(key)))
             {
@@ -141,13 +141,6 @@ void SharedLoadingTask::execute()
         {
             // image is found in image cache, loading is successful
             m_img = *cachedImg;
-
-            if (accessMode() == LoadSaveThread::AccessModeReadWrite)
-            {
-                m_img = m_img.copy();
-            }
-
-            // continues after else clause...
         }
         else
         {
@@ -205,38 +198,24 @@ void SharedLoadingTask::execute()
         }
     }
 
-    if (!m_img.isNull())
+    if (m_img.isNull())
     {
-        // following the golden rule to avoid deadlocks, do this when CacheLock is not held
-        postProcess();
-        m_thread->taskHasFinished();
-        m_thread->imageLoaded(m_resultLoadingDescription, m_img);
-        return;
-    }
+        // load image
 
-    // load image
-    m_img = DImg(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
+        m_img = DImg(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
 
-    if (m_loadingTaskStatus == LoadingTaskStatusStopping)
-    {
-        return;
-    }
-
-    {
         LoadingCache::CacheLock lock(cache);
 
         // put (valid) image into cache of loaded images
         if (!m_img.isNull())
         {
-            cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img), m_loadingDescription.filePath);
+            cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img.copy()),
+                            m_loadingDescription.filePath);
         }
 
         // remove this from the list of loading processes in cache
         cache->removeLoadingProcess(this);
-    }
 
-    {
-        LoadingCache::CacheLock lock(cache);
         //qCDebug(DIGIKAM_GENERAL_LOG) << "SharedLoadingTask " << this << ": image loaded, " << img.isNull();
         // indicate that loading has finished so that listeners can stop waiting
         m_completed = true;
@@ -244,14 +223,13 @@ void SharedLoadingTask::execute()
         // dispatch image to all listeners, including this
         for (int i = 0 ; i < m_listeners.count() ; ++i)
         {
-            LoadingProcessListener* l = m_listeners[i];
+            LoadingProcessListener* const l = m_listeners[i];
 
             if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
             {
                 // If a listener requested ReadWrite access, it gets a deep copy.
                 // DImg is explicitly shared.
-                DImg copy = m_img.copy();
-                l->setResult(m_loadingDescription, copy);
+                l->setResult(m_loadingDescription, m_img.copy());
             }
             else
             {
@@ -274,10 +252,24 @@ void SharedLoadingTask::execute()
         m_usedProcess = 0;
     }
 
-    // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
-    if (!m_img.isNull())
+    // following the golden rule to avoid deadlocks, do this when CacheLock is not held
+
+    if (!m_img.isNull() && continueQuery())
     {
+        if (accessMode() == LoadSaveThread::AccessModeReadWrite)
+        {
+            m_img.detach();
+        }
+
         postProcess();
+    }
+    else if (continueQuery())
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot load image for" << m_loadingDescription.filePath;
+    }
+    else
+    {
+        m_img = DImg();
     }
 
     m_thread->taskHasFinished();

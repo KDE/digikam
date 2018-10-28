@@ -148,51 +148,43 @@ void ThumbnailLoadingTask::execute()
         }
     }
 
-    if (!m_qimage.isNull())
+    if (m_qimage.isNull())
     {
-        // following the golden rule to avoid deadlocks, do this when CacheLock is not held
-        postProcess();
-        m_thread->taskHasFinished();
-        m_thread->thumbnailLoaded(m_loadingDescription, m_qimage);
-        return;
-    }
+        // Load or create thumbnail
 
-    // Load or create thumbnail
-    setupCreator();
+        setupCreator();
 
-    switch (m_loadingDescription.previewParameters.type)
-    {
-        case LoadingDescription::PreviewParameters::Thumbnail:
-            m_qimage = m_creator->load(m_loadingDescription.thumbnailIdentifier());
-            break;
-        case LoadingDescription::PreviewParameters::DetailThumbnail:
-            m_qimage = m_creator->loadDetail(m_loadingDescription.thumbnailIdentifier(),
-                                             m_loadingDescription.previewParameters.extraParameter.toRect());
-            break;
-        default:
-            break;
-    }
+        switch (m_loadingDescription.previewParameters.type)
+        {
+            case LoadingDescription::PreviewParameters::Thumbnail:
+                m_qimage = m_creator->load(m_loadingDescription.thumbnailIdentifier());
+                break;
+            case LoadingDescription::PreviewParameters::DetailThumbnail:
+                m_qimage = m_creator->loadDetail(m_loadingDescription.thumbnailIdentifier(),
+                                                 m_loadingDescription.previewParameters.extraParameter.toRect());
+                break;
+            default:
+                break;
+        }
 
-    if (m_loadingTaskStatus == LoadingTaskStatusStopping)
-    {
-        return;
-    }
+        // this exit is used when thumbnails are created and digiKam is closed
+        if (m_loadingTaskStatus == LoadingTaskStatusStopping)
+        {
+            return;
+        }
 
-    {
         LoadingCache::CacheLock lock(cache);
 
         // put (valid) image into cache of loaded images
         if (!m_qimage.isNull())
         {
-            cache->putThumbnail(m_loadingDescription.cacheKey(), m_qimage, m_loadingDescription.filePath);
+            cache->putThumbnail(m_loadingDescription.cacheKey(), m_qimage,
+                                m_loadingDescription.filePath);
         }
 
         // remove this from the list of loading processes in cache
         cache->removeLoadingProcess(this);
-    }
 
-    {
-        LoadingCache::CacheLock lock(cache);
         // indicate that loading has finished so that listeners can stop waiting
         m_completed = true;
 
@@ -222,7 +214,8 @@ void ThumbnailLoadingTask::execute()
         m_usedProcess = 0;
     }
 
-    // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
+    // following the golden rule to avoid deadlocks, do this when CacheLock is not held
+
     if (!m_qimage.isNull())
     {
         postProcess();

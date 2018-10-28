@@ -297,76 +297,67 @@ void PreviewLoadingTask::execute()
             }
         }
 
+        LoadingCache::CacheLock lock(cache);
+
+        // Put valid image into cache of loaded images
+
+        if (!m_img.isNull())
         {
-            LoadingCache::CacheLock lock(cache);
-
-            // Put valid image into cache of loaded images
-
-            if (!m_img.isNull())
-            {
-                cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img.copy()), m_loadingDescription.filePath);
-            }
-
-            // remove this from the list of loading processes in cache
-            cache->removeLoadingProcess(this);
+            cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img.copy()),
+                            m_loadingDescription.filePath);
         }
 
-        {
-            LoadingCache::CacheLock lock(cache);
+        // remove this from the list of loading processes in cache
+        cache->removeLoadingProcess(this);
 
-            // indicate that loading has finished so that listeners can stop waiting
-            m_completed = true;
+        // indicate that loading has finished so that listeners can stop waiting
+        m_completed = true;
 
-            // dispatch image to all listeners, including this
+       // dispatch image to all listeners, including this
 
-            for (int i = 0 ; i < m_listeners.count() ; ++i)
+       for (int i = 0 ; i < m_listeners.count() ; ++i)
+       {
+            LoadingProcessListener* const l  = m_listeners[i];
+            LoadSaveNotifier* const notifier = l->loadSaveNotifier();
+
+            if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
             {
-                LoadingProcessListener* const l = m_listeners[i];
-
-                if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
-                {
-                    // If a listener requested ReadWrite access, it gets a deep copy.
-                    // DImg is explicitly shared.
-                    l->setResult(m_loadingDescription, m_img.copy());
-                }
-                else
-                {
-                    l->setResult(m_loadingDescription, m_img);
-                }
+                // If a listener requested ReadWrite access, it gets a deep copy.
+                // DImg is explicitly shared.
+                l->setResult(m_loadingDescription, m_img.copy());
+            }
+            else
+            {
+                l->setResult(m_loadingDescription, m_img);
             }
 
-            for (int i = 0 ; i < m_listeners.count() ; ++i)
+            if (notifier)
             {
-                LoadSaveNotifier* notifier = m_listeners[i]->loadSaveNotifier();
-
-                if (notifier)
-                {
-                    notifier->imageLoaded(m_loadingDescription, m_img);
-                }
+                notifier->imageLoaded(m_loadingDescription, m_img);
             }
-
-            // remove myself from list of listeners
-            removeListener(this);
-
-            // wake all listeners waiting on cache condVar, so that they remove themselves
-            lock.wakeAll();
-
-            // wait until all listeners have removed themselves
-
-            while (m_listeners.count() != 0)
-            {
-                lock.timedWait();
-            }
-
-            // set to 0, as checked in setStatus
-            m_usedProcess = 0;
         }
+
+        // remove myself from list of listeners
+        removeListener(this);
+
+        // wake all listeners waiting on cache condVar, so that they remove themselves
+        lock.wakeAll();
+
+        // wait until all listeners have removed themselves
+
+        while (m_listeners.count() != 0)
+        {
+            lock.timedWait();
+        }
+
+        // set to 0, as checked in setStatus
+        m_usedProcess = 0;
     }
+
+    // following the golden rule to avoid deadlocks, do this when CacheLock is not held
 
     if (!m_img.isNull() && continueQuery())
     {
-        // following the golden rule to avoid deadlocks, do this when CacheLock is not held
-
         // The image from the cache may or may not be rotated and post processed.
         // exifRotate() and postProcess() will detect if work is needed.
         // We check before to find out if we need to provide a deep copy
@@ -418,14 +409,12 @@ void PreviewLoadingTask::execute()
     }
     else if (continueQuery())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot extract preview for " << m_loadingDescription.filePath;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot extract preview for" << m_loadingDescription.filePath;
     }
     else
     {
         m_img = DImg();
     }
-
-    // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
 
     if (m_thread)
     {
