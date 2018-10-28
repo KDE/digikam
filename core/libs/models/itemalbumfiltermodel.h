@@ -44,7 +44,7 @@ public:
     explicit ItemAlbumFilterModel(QObject* const parent = 0);
     ~ItemAlbumFilterModel();
 
-    void             setSourceItemModel(ItemAlbumModel* model);
+    void            setSourceItemModel(ItemAlbumModel* model);
     ItemAlbumModel* sourceModel() const;
 
     // convenience mappers
