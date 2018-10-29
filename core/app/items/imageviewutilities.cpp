@@ -404,7 +404,8 @@ void ImageViewUtilities::createGroupByTimeFromInfoList(const ItemInfoList& image
         }
         else
         {
-            it2 = it + 1;
+            ++it;
+            continue;
         }
 
         // increment to next item not put in the group
