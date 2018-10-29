@@ -48,8 +48,8 @@
 #include "dimg.h"
 #include "dmetadata.h"
 #include "itempropertiestab.h"
-#include "imagepropertiesmetadatatab.h"
-#include "imagepropertiescolorstab.h"
+#include "itempropertiesmetadatatab.h"
+#include "itempropertiescolorstab.h"
 #include "itempropertiesversionstab.h"
 
 #ifdef HAVE_MARBLE
@@ -74,8 +74,8 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
     m_dirtyHistoryTab    = false;
 
     m_propertiesTab      = new ItemPropertiesTab(parent);
-    m_metadataTab        = new ImagePropertiesMetaDataTab(parent);
-    m_colorTab           = new ImagePropertiesColorsTab(parent);
+    m_metadataTab        = new ItemPropertiesMetadataTab(parent);
+    m_colorTab           = new ItemPropertiesColorsTab(parent);
 
     // NOTE: Special case with Showfoto which will only be able to load image, not video.
     if (QApplication::applicationName() != QLatin1String("digikam"))

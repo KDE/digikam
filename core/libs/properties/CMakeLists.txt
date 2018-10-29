@@ -12,8 +12,8 @@ endif (POLICY CMP0063)
 set(libitemproperties_SRCS
     imagepropertiessidebar.cpp
     itempropertiestab.cpp
-    imagepropertiesmetadatatab.cpp
-    imagepropertiescolorstab.cpp
+    itempropertiesmetadatatab.cpp
+    itempropertiescolorstab.cpp
 )
 
 set(libitemversionssidebar_SRCS

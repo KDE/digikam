@@ -44,8 +44,8 @@ namespace Digikam
 class DImg;
 class SidebarSplitter;
 class ItemPropertiesTab;
-class ImagePropertiesMetaDataTab;
-class ImagePropertiesColorsTab;
+class ItemPropertiesMetadataTab;
+class ItemPropertiesColorsTab;
 
 #ifdef HAVE_MARBLE
 class ItemPropertiesGPSTab;
@@ -108,8 +108,8 @@ protected:
     DImg*                       m_image;
 
     ItemPropertiesTab*         m_propertiesTab;
-    ImagePropertiesMetaDataTab* m_metadataTab;
-    ImagePropertiesColorsTab*   m_colorTab;
+    ItemPropertiesMetadataTab* m_metadataTab;
+    ItemPropertiesColorsTab*   m_colorTab;
 
 #ifdef HAVE_MARBLE
     ItemPropertiesGPSTab*      m_gpsTab;

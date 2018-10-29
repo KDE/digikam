@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-11-17
- * Description : a tab to display colors information of images
+ * Description : a tab to display item colors information
  *
  * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_PROPERTIES_COLORS_TAB_H
-#define DIGIKAM_IMAGE_PROPERTIES_COLORS_TAB_H
+#ifndef DIGIKAM_ITEM_PROPERTIES_COLORS_TAB_H
+#define DIGIKAM_ITEM_PROPERTIES_COLORS_TAB_H
 
 // Qt includes
 
@@ -45,14 +45,14 @@ namespace Digikam
 class DImg;
 class LoadingDescription;
 
-class DIGIKAM_EXPORT ImagePropertiesColorsTab : public QTabWidget
+class DIGIKAM_EXPORT ItemPropertiesColorsTab : public QTabWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit ImagePropertiesColorsTab(QWidget* const parent);
-    ~ImagePropertiesColorsTab();
+    explicit ItemPropertiesColorsTab(QWidget* const parent);
+    ~ItemPropertiesColorsTab();
 
     void setData(const QUrl& url=QUrl(),
                  const QRect& selectionArea = QRect(),
@@ -96,4 +96,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_PROPERTIES_COLORS_TAB_H
+#endif // DIGIKAM_ITEM_PROPERTIES_COLORS_TAB_H

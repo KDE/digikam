@@ -40,7 +40,7 @@
 #include "dmetadata.h"
 #include "camiteminfo.h"
 #include "importitempropertiestab.h"
-#include "imagepropertiesmetadatatab.h"
+#include "itempropertiesmetadatatab.h"
 
 #ifdef HAVE_MARBLE
 #   include "itempropertiesgpstab.h"
@@ -77,7 +77,7 @@ public:
     ItemPropertiesGPSTab*      gpsTab;
 #endif // HAVE_MARBLE
 
-    ImagePropertiesMetaDataTab* metadataTab;
+    ItemPropertiesMetadataTab* metadataTab;
     ImportItemPropertiesTab*    cameraItemTab;
 };
 
@@ -89,7 +89,7 @@ ImportItemPropertiesSideBarImport::ImportItemPropertiesSideBarImport(QWidget* co
       d(new Private)
 {
     d->cameraItemTab = new ImportItemPropertiesTab(parent);
-    d->metadataTab   = new ImagePropertiesMetaDataTab(parent);
+    d->metadataTab   = new ItemPropertiesMetadataTab(parent);
 
     appendTab(d->cameraItemTab, QIcon::fromTheme(QLatin1String("configure")),             i18n("Properties"));
     appendTab(d->metadataTab,   QIcon::fromTheme(QLatin1String("format-text-code")),              i18n("Metadata")); // krazy:exclude=iconnames

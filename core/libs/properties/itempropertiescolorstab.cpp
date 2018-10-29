@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-11-17
- * Description : a tab to display colors information of images
+ * Description : a tab to display item colors information
  *
  * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertiescolorstab.h"
+#include "itempropertiescolorstab.h"
 
 // C++ includes
 
@@ -65,7 +65,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImagePropertiesColorsTab::Private
+class Q_DECL_HIDDEN ItemPropertiesColorsTab::Private
 {
 public:
 
@@ -132,7 +132,7 @@ public:
     HistogramWidget*      blueHistogram;
 };
 
-ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
+ItemPropertiesColorsTab::ItemPropertiesColorsTab(QWidget* const parent)
     : QTabWidget(parent),
       d(new Private)
 {
@@ -314,7 +314,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
             this, SLOT(slotMaxValueChanged(int)));
 }
 
-ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
+ItemPropertiesColorsTab::~ItemPropertiesColorsTab()
 {
     // If there is a currently histogram computation when dialog is closed,
     // stop it before the d->image data are deleted automatically!
@@ -331,7 +331,7 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     delete d;
 }
 
-void ImagePropertiesColorsTab::readSettings(const KConfigGroup& group)
+void ItemPropertiesColorsTab::readSettings(const KConfigGroup& group)
 {
     setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",                  (int)Private::HISTOGRAM));
     d->iccProfileWidget->setMode(group.readEntry("ICC Level",                     (int)ICCProfileWidget::CUSTOM));
@@ -340,7 +340,7 @@ void ImagePropertiesColorsTab::readSettings(const KConfigGroup& group)
     d->histogramBox->setScale((HistogramScale)group.readEntry("Histogram Scale",  (int)LogScaleHistogram));
 }
 
-void ImagePropertiesColorsTab::writeSettings(KConfigGroup& group)
+void ItemPropertiesColorsTab::writeSettings(KConfigGroup& group)
 {
     group.writeEntry("ImagePropertiesColors Tab", currentIndex());
     group.writeEntry("Histogram Channel",         (int)d->histogramBox->channel());
@@ -349,7 +349,7 @@ void ImagePropertiesColorsTab::writeSettings(KConfigGroup& group)
     group.writeEntry("Current ICC Item",          d->iccProfileWidget->getCurrentItemKey());
 }
 
-void ImagePropertiesColorsTab::setData(const QUrl& url, const QRect& selectionArea, DImg* const img)
+void ItemPropertiesColorsTab::setData(const QUrl& url, const QRect& selectionArea, DImg* const img)
 {
     // We might be getting duplicate events from AlbumIconView,
     // which will cause all sorts of duplicate work.
@@ -441,7 +441,7 @@ void ImagePropertiesColorsTab::setData(const QUrl& url, const QRect& selectionAr
     }
 }
 
-void ImagePropertiesColorsTab::loadImageFromUrl(const QUrl& url)
+void ItemPropertiesColorsTab::loadImageFromUrl(const QUrl& url)
 {
     // create thread on demand
     if (!d->imageLoaderThread)
@@ -487,7 +487,7 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const QUrl& url)
     d->iccProfileWidget->setDataLoading();
 }
 
-void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescription& loadingDescription,
+void ItemPropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescription& loadingDescription,
                                                             const DImg& img)
 {
     // Discard any leftover messages from previous, possibly aborted loads
@@ -520,7 +520,7 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescrip
     }
 }
 
-void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
+void ItemPropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
                                                                 const LoadingDescription& newLoadingDescription)
 {
     if (oldLoadingDescription == d->currentLoadingDescription &&
@@ -536,7 +536,7 @@ void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDes
     }
 }
 
-void ImagePropertiesColorsTab::setSelection(const QRect& selectionArea)
+void ItemPropertiesColorsTab::setSelection(const QRect& selectionArea)
 {
     if (selectionArea == d->selectionArea)
     {
@@ -567,7 +567,7 @@ void ImagePropertiesColorsTab::setSelection(const QRect& selectionArea)
     }
 }
 
-void ImagePropertiesColorsTab::slotRefreshOptions()
+void ItemPropertiesColorsTab::slotRefreshOptions()
 {
     slotChannelChanged();
     slotScaleChanged();
@@ -578,18 +578,18 @@ void ImagePropertiesColorsTab::slotRefreshOptions()
     }
 }
 
-void ImagePropertiesColorsTab::slotHistogramComputationFailed()
+void ItemPropertiesColorsTab::slotHistogramComputationFailed()
 {
     d->imageSelection.reset();
     d->image.reset();
 }
 
-void ImagePropertiesColorsTab::slotChannelChanged()
+void ItemPropertiesColorsTab::slotChannelChanged()
 {
     updateStatistics();
 }
 
-void ImagePropertiesColorsTab::slotScaleChanged()
+void ItemPropertiesColorsTab::slotScaleChanged()
 {
     HistogramScale scale = d->histogramBox->histogram()->scaleType();
     d->redHistogram->setScaleType(scale);
@@ -598,7 +598,7 @@ void ImagePropertiesColorsTab::slotScaleChanged()
     updateStatistics();
 }
 
-void ImagePropertiesColorsTab::slotRenderingChanged(int rendering)
+void ItemPropertiesColorsTab::slotRenderingChanged(int rendering)
 {
     d->histogramBox->histogram()->setRenderingType((HistogramRenderingType)rendering);
     d->redHistogram->setRenderingType((HistogramRenderingType)rendering);
@@ -607,7 +607,7 @@ void ImagePropertiesColorsTab::slotRenderingChanged(int rendering)
     updateStatistics();
 }
 
-void ImagePropertiesColorsTab::slotMinValueChanged(int min)
+void ItemPropertiesColorsTab::slotMinValueChanged(int min)
 {
     // Called when user changes values of spin box.
     // Communicate the change to histogram widget.
@@ -626,7 +626,7 @@ void ImagePropertiesColorsTab::slotMinValueChanged(int min)
     updateStatistics();
 }
 
-void ImagePropertiesColorsTab::slotMaxValueChanged(int max)
+void ItemPropertiesColorsTab::slotMaxValueChanged(int max)
 {
     if (max == d->minInterv->value()-1)
     {
@@ -641,14 +641,14 @@ void ImagePropertiesColorsTab::slotMaxValueChanged(int max)
     updateStatistics();
 }
 
-void ImagePropertiesColorsTab::slotUpdateIntervalFromRGB(int min, int max)
+void ItemPropertiesColorsTab::slotUpdateIntervalFromRGB(int min, int max)
 {
     d->histogramBox->histogram()->slotMinValueChanged(min);
     d->histogramBox->histogram()->slotMaxValueChanged(max);
     slotUpdateInterval(min, max);
 }
 
-void ImagePropertiesColorsTab::slotUpdateInterval(int min, int max)
+void ItemPropertiesColorsTab::slotUpdateInterval(int min, int max)
 {
     // Called when value is set from within histogram widget.
     // Block signals to prevent slotMinValueChanged and
@@ -673,18 +673,18 @@ void ImagePropertiesColorsTab::slotUpdateInterval(int min, int max)
     updateStatistics();
 }
 
-void ImagePropertiesColorsTab::slotUpdateIntervRange(int range)
+void ItemPropertiesColorsTab::slotUpdateIntervRange(int range)
 {
     d->maxInterv->setMaximum( range );
 }
 
-void ImagePropertiesColorsTab::updateInformation()
+void ItemPropertiesColorsTab::updateInformation()
 {
     d->labelColorDepth->setAdjustedText(d->image.sixteenBit() ? i18n("16 bits") : i18n("8 bits"));
     d->labelAlphaChannel->setAdjustedText(d->image.hasAlpha() ? i18n("Yes")     : i18n("No"));
 }
 
-void ImagePropertiesColorsTab::updateStatistics()
+void ItemPropertiesColorsTab::updateStatistics()
 {
     ImageHistogram* const renderedHistogram = d->histogramBox->histogram()->currentHistogram();
 
@@ -726,7 +726,7 @@ void ImagePropertiesColorsTab::updateStatistics()
                                                                       : i18n("Image Region"));
 }
 
-void ImagePropertiesColorsTab::getICCData()
+void ItemPropertiesColorsTab::getICCData()
 {
     if (DImg::fileFormat(d->currentFilePath) == DImg::RAW)
     {
