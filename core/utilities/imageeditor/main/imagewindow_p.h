@@ -98,7 +98,7 @@
 #include "iteminfo.h"
 #include "itemgps.h"
 #include "itemlistmodel.h"
-#include "imagepropertiessidebardb.h"
+#include "itempropertiessidebardb.h"
 #include "itempropertiesversionstab.h"
 #include "itemscanner.h"
 #include "imagethumbnailbar.h"
@@ -287,7 +287,7 @@ public:
     ImageThumbnailBar*           thumbBar;
     ThumbBarDock*                thumbBarDock;
 
-    ImagePropertiesSideBarDB*    rightSideBar;
+    ItemPropertiesSideBarDB*    rightSideBar;
 
     DatabaseVersionManager       versionManager;
 

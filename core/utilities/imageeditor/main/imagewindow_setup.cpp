@@ -167,7 +167,7 @@ void ImageWindow::setupUserArea()
     m_stackView->setCanvas(m_canvas);
     m_stackView->setViewMode(EditorStackView::CanvasMode);
 
-    d->rightSideBar = new ImagePropertiesSideBarDB(widget, m_splitter, Qt::RightEdge, true);
+    d->rightSideBar = new ItemPropertiesSideBarDB(widget, m_splitter, Qt::RightEdge, true);
     d->rightSideBar->setObjectName(QLatin1String("ImageEditor Right Sidebar"));
     d->rightSideBar->getFiltersHistoryTab()->addOpenImageAction();
 

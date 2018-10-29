@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-11-17
- * Description : image properties side bar using data from
- *               digiKam database.
+ * Description : item properties side bar using data from digiKam database.
  *
  * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -23,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_DB_H
-#define DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_DB_H
+#ifndef DIGIKAM_ITEM_PROPERTIES_SIDEBAR_DB_H
+#define DIGIKAM_ITEM_PROPERTIES_SIDEBAR_DB_H
 
 // Qt includes
 
@@ -36,7 +35,7 @@
 
 #include "dimagehistory.h"
 #include "iteminfolist.h"
-#include "imagepropertiessidebar.h"
+#include "itempropertiessidebar.h"
 #include "digikam_export.h"
 #include "digikam_config.h"
 
@@ -52,17 +51,17 @@ class ImageTagChangeset;
 class ItemPropertiesVersionsTab;
 class GPSItemInfo;
 
-class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
+class ItemPropertiesSideBarDB : public ItemPropertiesSideBar
 {
     Q_OBJECT
 
 public:
 
-    explicit ImagePropertiesSideBarDB(QWidget* const parent,
+    explicit ItemPropertiesSideBarDB(QWidget* const parent,
                                       SidebarSplitter* const splitter,
                                       Qt::Edge side=Qt::LeftEdge,
                                       bool mimimizedDefault=false);
-    ~ImagePropertiesSideBarDB();
+    ~ItemPropertiesSideBarDB();
 
     void populateTags();
     void refreshTagsView();
@@ -139,4 +138,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_DB_H
+#endif // DIGIKAM_ITEM_PROPERTIES_SIDEBAR_DB_H

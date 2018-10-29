@@ -48,7 +48,7 @@
 #include "importimagemodel.h"
 #include "coredbwatch.h"
 #include "coredbfields.h"
-#include "imagepropertiessidebardb.h"
+#include "itempropertiessidebardb.h"
 #include "gpsiteminfosorter.h"
 #include "importui.h"
 
@@ -430,7 +430,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             {
                 GPSItemInfo gpsItemInfo;
 
-                if (ImagePropertiesSideBarDB::GPSItemInfofromItemInfo(imageInfo, &gpsItemInfo))
+                if (ItemPropertiesSideBarDB::GPSItemInfofromItemInfo(imageInfo, &gpsItemInfo))
                 {
                     gpsItemInfoList << gpsItemInfo;
                 }

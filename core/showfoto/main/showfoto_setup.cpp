@@ -117,7 +117,7 @@ void ShowFoto::setupUserArea()
     m_stackView->setCanvas(m_canvas);
     m_stackView->setViewMode(Digikam::EditorStackView::CanvasMode);
 
-    d->rightSideBar = new Digikam::ImagePropertiesSideBar(widget, m_splitter, Qt::RightEdge);
+    d->rightSideBar = new Digikam::ItemPropertiesSideBar(widget, m_splitter, Qt::RightEdge);
     d->rightSideBar->setObjectName(QLatin1String("ShowFoto Sidebar Right"));
 
     hlay->addWidget(m_splitter);

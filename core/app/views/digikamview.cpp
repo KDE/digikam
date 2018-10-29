@@ -63,7 +63,7 @@
 #include "itemalbummodel.h"
 #include "itemdescedittab.h"
 #include "imagepreviewview.h"
-#include "imagepropertiessidebardb.h"
+#include "itempropertiessidebardb.h"
 #include "itempropertiesversionstab.h"
 #include "imagethumbnailbar.h"
 #include "imageviewutilities.h"
@@ -198,7 +198,7 @@ public:
     SearchModificationHelper*     searchModificationHelper;
 
     Sidebar*                      leftSideBar;
-    ImagePropertiesSideBarDB*     rightSideBar;
+    ItemPropertiesSideBarDB*     rightSideBar;
 
     FilterSideBarWidget*          filterWidget;
 
@@ -299,7 +299,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->addPageUpDownActions(this, d->stackedview->mediaPlayerView());
 #endif //HAVE_MEDIAPLAYER
 
-    d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, Qt::RightEdge, true);
+    d->rightSideBar = new ItemPropertiesSideBarDB(this, d->splitter, Qt::RightEdge, true);
     d->rightSideBar->setObjectName(QLatin1String("Digikam Right Sidebar"));
 
     // album folder view

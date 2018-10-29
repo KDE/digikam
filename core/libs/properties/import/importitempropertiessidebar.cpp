@@ -189,9 +189,9 @@ void ImportItemPropertiesSideBarImport::slotChangedTab(QWidget* tab)
 
 void ImportItemPropertiesSideBarImport::doLoadState()
 {
-    /// @todo This code is taken from ImagePropertiesSideBar::doLoadState()
+    /// @todo This code is taken from ItemPropertiesSideBar::doLoadState()
     ///       Ideally ImportItemPropertiesSideBarImport should be a subclass of
-    ///       ImagePropertiesSideBar
+    ///       ItemPropertiesSideBar
     Sidebar::doLoadState();
 
     KConfigGroup group = getConfigGroup();
@@ -210,9 +210,9 @@ void ImportItemPropertiesSideBarImport::doLoadState()
 
 void ImportItemPropertiesSideBarImport::doSaveState()
 {
-    /// @todo This code is taken from ImagePropertiesSideBar::doSaveState()
+    /// @todo This code is taken from ItemPropertiesSideBar::doSaveState()
     ///       Ideally ImportItemPropertiesSideBarImport should be a subclass of
-    ///       ImagePropertiesSideBar
+    ///       ItemPropertiesSideBar
 
     Sidebar::doSaveState();
 

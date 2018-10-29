@@ -44,7 +44,7 @@
 // Local includes
 
 #include "digikam_globals.h"
-#include "imagepropertiessidebardb.h"
+#include "itempropertiessidebardb.h"
 #include "statusprogressbar.h"
 #include "dzoombar.h"
 #include "lighttableview.h"
@@ -219,8 +219,8 @@ public:
 
     StatusProgressBar*        statusProgressBar;
 
-    ImagePropertiesSideBarDB* leftSideBar;
-    ImagePropertiesSideBarDB* rightSideBar;
+    ItemPropertiesSideBarDB* leftSideBar;
+    ItemPropertiesSideBarDB* rightSideBar;
 };
 
 } // namespace Digikam

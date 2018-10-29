@@ -10,7 +10,7 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libitemproperties_SRCS
-    imagepropertiessidebar.cpp
+    itempropertiessidebar.cpp
     itempropertiestab.cpp
     itempropertiesmetadatatab.cpp
     itempropertiescolorstab.cpp
@@ -32,7 +32,7 @@ if(${Marble_FOUND})
 endif()
 
 set(libitempropertiesdigikam_SRCS
-    imagepropertiessidebardb.cpp
+    itempropertiessidebardb.cpp
     import/importitempropertiessidebar.cpp
     import/importitempropertiestab.cpp
     captions/itemdescedittab.cpp
