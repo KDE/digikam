@@ -386,18 +386,25 @@ void ImageViewUtilities::createGroupByTimeFromInfoList(const ItemInfoList& image
     {
         const ItemInfo& leader = *it;
         QList<ItemInfo> group;
-        QDateTime time          = it->dateTime();
+        QDateTime time         = it->dateTime();
 
-        for (it2 = it + 1 ; it2 != groupingList.end() ; ++it2)
+        if (time.isValid())
         {
-            if (qAbs(time.secsTo(it2->dateTime())) < 2)
+            for (it2 = it + 1 ; it2 != groupingList.end() ; ++it2)
             {
-                group << *it2;
+                if (qAbs(time.secsTo(it2->dateTime())) < 2)
+                {
+                    group << *it2;
+                }
+                else
+                {
+                    break;
+                }
             }
-            else
-            {
-                break;
-            }
+        }
+        else
+        {
+            it2 = it + 1;
         }
 
         // increment to next item not put in the group
