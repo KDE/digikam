@@ -9,14 +9,14 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-set(libimageproperties_SRCS
+set(libitemproperties_SRCS
     imagepropertiessidebar.cpp
     imagepropertiestab.cpp
     imagepropertiesmetadatatab.cpp
     imagepropertiescolorstab.cpp
 )
 
-set(libimageversionssidebar_SRCS
+set(libitemversionssidebar_SRCS
     imagepropertiesversionstab.cpp
     versionstreeview.cpp
     versionsoverlays.cpp
@@ -24,14 +24,14 @@ set(libimageversionssidebar_SRCS
 )
 
 if(${Marble_FOUND})
-    set(libimageproperties_SRCS
-        ${libimageproperties_SRCS}
+    set(libitemproperties_SRCS
+        ${libitemproperties_SRCS}
         imagepropertiesgpstab.cpp
         itemgpsmodelhelper.cpp
    )
 endif()
 
-set(libimagepropertiesdigikam_SRCS
+set(libitempropertiesdigikam_SRCS
     imagepropertiessidebarcamgui.cpp
     imagepropertiessidebardb.cpp
     cameraitempropertiestab.cpp
@@ -56,9 +56,9 @@ if(ENABLE_DBUS)
 endif()
 
 # used to build digikamcore
-add_library(imageproperties_src OBJECT ${libimageproperties_SRCS})
+add_library(itemproperties_src OBJECT ${libitemproperties_SRCS})
 
-add_library(imagepropertiesdigikam_src OBJECT
-                                      ${libimageversionssidebar_SRCS}
-                                      ${libimagepropertiesdigikam_SRCS}
+add_library(itempropertiesdigikam_src OBJECT
+                                      ${libitemversionssidebar_SRCS}
+                                      ${libitempropertiesdigikam_SRCS}
 )
