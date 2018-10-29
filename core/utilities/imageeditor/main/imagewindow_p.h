@@ -94,7 +94,7 @@
 #include "itemattributeswatch.h"
 #include "itemfiltermodel.h"
 #include "imagedragdrop.h"
-#include "imagedescedittab.h"
+#include "itemdescedittab.h"
 #include "iteminfo.h"
 #include "itemgps.h"
 #include "itemlistmodel.h"

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_DESC_EDIT_TAB_H
-#define DIGIKAM_IMAGE_DESC_EDIT_TAB_H
+#ifndef DIGIKAM_ITEM_DESC_EDIT_TAB_H
+#define DIGIKAM_ITEM_DESC_EDIT_TAB_H
 
 // Qt includes
 
@@ -49,14 +49,14 @@ namespace Digikam
 class ItemInfo;
 class TaggingAction;
 
-class ImageDescEditTab : public DVBox
+class ItemDescEditTab : public DVBox
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageDescEditTab(QWidget* const parent);
-    ~ImageDescEditTab();
+    explicit ItemDescEditTab(QWidget* const parent);
+    ~ItemDescEditTab();
 
     void assignPickLabel(int pickId);
     void assignColorLabel(int colorId);
@@ -160,4 +160,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_DESC_EDIT_TAB_H
+#endif // DIGIKAM_ITEM_DESC_EDIT_TAB_H

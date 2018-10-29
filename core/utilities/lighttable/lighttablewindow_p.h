@@ -68,7 +68,7 @@
 #include "iccsettings.h"
 #include "imagewindow.h"
 #include "itemgps.h"
-#include "imagedescedittab.h"
+#include "itemdescedittab.h"
 #include "presentationmngr.h"
 #include "slideshowbuilder.h"
 #include "slideshow.h"

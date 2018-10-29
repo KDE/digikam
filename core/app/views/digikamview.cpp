@@ -61,7 +61,7 @@
 #include "filtersidebarwidget.h"
 #include "filterstatusbar.h"
 #include "itemalbummodel.h"
-#include "imagedescedittab.h"
+#include "itemdescedittab.h"
 #include "imagepreviewview.h"
 #include "imagepropertiessidebardb.h"
 #include "imagepropertiesversionstab.h"
@@ -2420,29 +2420,29 @@ ItemInfoList DigikamView::selectedInfoList(const bool currentFirst,
     switch (viewMode())
     {
         case StackedView::TableViewMode:
-            
+
             if (currentFirst)
             {
                 return d->tableView->selectedItemInfosCurrentFirst(grouping);
             }
-            
+
             return d->tableView->selectedItemInfos(grouping);
 
         case StackedView::PreviewImageMode:
         case StackedView::MediaPlayerMode:
         case StackedView::MapWidgetMode:
         case StackedView::IconViewMode:
-            
+
             // all of these modes use the same selection model and data as the IconViewMode
             if (currentFirst)
             {
                 return d->iconView->selectedItemInfosCurrentFirst(grouping);
             }
-            
+
             return d->iconView->selectedItemInfos(grouping);
 
         default:
-            
+
             return ItemInfoList();
     }
 }

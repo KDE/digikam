@@ -47,7 +47,7 @@ class DImg;
 class SidebarSplitter;
 class ItemInfo;
 class ImageChangeset;
-class ImageDescEditTab;
+class ItemDescEditTab;
 class ImageTagChangeset;
 class ImagePropertiesVersionsTab;
 class GPSItemInfo;
@@ -69,7 +69,7 @@ public:
 
     ///This is for image editor to be able to update the filter list in sidebar
     ImagePropertiesVersionsTab* getFiltersHistoryTab() const;
-    ImageDescEditTab*           imageDescEditTab()     const;
+    ItemDescEditTab*           imageDescEditTab()     const;
 
     virtual void itemChanged(const QUrl& url, const QRect& rect = QRect(), DImg* const img = 0);
 

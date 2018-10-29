@@ -48,7 +48,7 @@
 #include "coredbwatch.h"
 #include "dimg.h"
 #include "itemattributeswatch.h"
-#include "imagedescedittab.h"
+#include "itemdescedittab.h"
 #include "iteminfo.h"
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
@@ -88,7 +88,7 @@ public:
 
     ItemInfoList               currentInfos;
     DImageHistory               currentHistory;
-    ImageDescEditTab*           desceditTab;
+    ItemDescEditTab*           desceditTab;
     ImagePropertiesVersionsTab* versionsHistoryTab;
 };
 
@@ -97,7 +97,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
     : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault),
       d(new Private)
 {
-    d->desceditTab        = new ImageDescEditTab(parent);
+    d->desceditTab        = new ItemDescEditTab(parent);
     d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
 
     appendTab(d->desceditTab,        QIcon::fromTheme(QLatin1String("edit-text-frame-update")), i18n("Captions"));
@@ -639,7 +639,7 @@ ImagePropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab() con
     return d->versionsHistoryTab;
 }
 
-ImageDescEditTab* ImagePropertiesSideBarDB::imageDescEditTab() const
+ItemDescEditTab* ImagePropertiesSideBarDB::imageDescEditTab() const
 {
     return d->desceditTab;
 }

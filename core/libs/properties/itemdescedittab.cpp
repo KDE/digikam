@@ -26,7 +26,7 @@
  *
  * ============================================================ */
 
-#include "imagedescedittab.h"
+#include "itemdescedittab.h"
 
 // Qt includes
 
@@ -81,7 +81,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageDescEditTab::Private
+class Q_DECL_HIDDEN ItemDescEditTab::Private
 {
 
 public:
@@ -176,7 +176,7 @@ public:
     QList<int>           metadataChangeIds;
 };
 
-ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
+ItemDescEditTab::ItemDescEditTab(QWidget* const parent)
     : DVBox(parent),
       d(new Private)
 {
@@ -288,7 +288,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->newTagEdit  = new AddTagsLineEdit(tagsArea);
     d->newTagEdit->setSupportingTagModel(d->tagModel);
     d->newTagEdit->setTagTreeView(d->tagCheckView);
-    //, "ImageDescEditTabNewTagEdit",
+    //, "ItemDescEditTabNewTagEdit",
     //d->newTagEdit->setCaseSensitive(false);
     d->newTagEdit->setPlaceholderText(i18n("Enter tag here."));
     d->newTagEdit->setWhatsThis(i18n("Enter the text used to create tags here. "
@@ -298,7 +298,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     DHBox* const tagsSearch = new DHBox(tagsArea);
     tagsSearch->setSpacing(spacing);
 
-    d->tagsSearchBar   = new SearchTextBar(tagsSearch, QLatin1String("ImageDescEditTabTagsSearchBar"));
+    d->tagsSearchBar   = new SearchTextBar(tagsSearch, QLatin1String("ItemDescEditTabTagsSearchBar"));
     d->tagsSearchBar->setModel(d->tagCheckView->filteredModel(),
                                AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagsSearchBar->setFilterModel(d->tagCheckView->albumFilterModel());
@@ -337,7 +337,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     d->templateSelector = new TemplateSelector(infoArea);
     d->templateViewer   = new TemplateViewer(infoArea);
-    d->templateViewer->setObjectName(QLatin1String("ImageDescEditTab Expander"));
+    d->templateViewer->setObjectName(QLatin1String("ItemDescEditTab Expander"));
 
     grid2->addWidget(d->templateSelector, 0, 0, 1, 2);
     grid2->addWidget(d->templateViewer,   1, 0, 1, 2);
@@ -446,32 +446,32 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
             this, SLOT(slotImageCaptionChanged(qlonglong)));
 }
 
-ImageDescEditTab::~ImageDescEditTab()
+ItemDescEditTab::~ItemDescEditTab()
 {
     delete d;
 }
 
-void ImageDescEditTab::readSettings(KConfigGroup& group)
+void ItemDescEditTab::readSettings(KConfigGroup& group)
 {
-    d->tabWidget->setCurrentIndex(group.readEntry(QLatin1String("ImageDescEdit Tab"), (int)Private::DESCRIPTIONS));
-    d->titleEdit->setCurrentLanguageCode(group.readEntry(QLatin1String("ImageDescEditTab TitleLang"), QString()));
-    d->captionsEdit->setCurrentLanguageCode(group.readEntry(QLatin1String("ImageDescEditTab CaptionsLang"), QString()));
+    d->tabWidget->setCurrentIndex(group.readEntry(QLatin1String("ItemDescEdit Tab"), (int)Private::DESCRIPTIONS));
+    d->titleEdit->setCurrentLanguageCode(group.readEntry(QLatin1String("ItemDescEditTab TitleLang"), QString()));
+    d->captionsEdit->setCurrentLanguageCode(group.readEntry(QLatin1String("ItemDescEditTab CaptionsLang"), QString()));
 
     d->templateViewer->readSettings(group);
 
     d->tagCheckView->setConfigGroup(group);
-    d->tagCheckView->setEntryPrefix(QLatin1String("ImageDescEditTab TagCheckView"));
+    d->tagCheckView->setEntryPrefix(QLatin1String("ItemDescEditTab TagCheckView"));
     d->tagCheckView->loadState();
     d->tagsSearchBar->setConfigGroup(group);
-    d->tagsSearchBar->setEntryPrefix(QLatin1String("ImageDescEditTab SearchBar"));
+    d->tagsSearchBar->setEntryPrefix(QLatin1String("ItemDescEditTab SearchBar"));
     d->tagsSearchBar->loadState();
 }
 
-void ImageDescEditTab::writeSettings(KConfigGroup& group)
+void ItemDescEditTab::writeSettings(KConfigGroup& group)
 {
-    group.writeEntry(QLatin1String("ImageDescEdit Tab"),             d->tabWidget->currentIndex());
-    group.writeEntry(QLatin1String("ImageDescEditTab TitleLang"),    d->titleEdit->currentLanguageCode());
-    group.writeEntry(QLatin1String("ImageDescEditTab CaptionsLang"), d->captionsEdit->currentLanguageCode());
+    group.writeEntry(QLatin1String("ItemDescEdit Tab"),             d->tabWidget->currentIndex());
+    group.writeEntry(QLatin1String("ItemDescEditTab TitleLang"),    d->titleEdit->currentLanguageCode());
+    group.writeEntry(QLatin1String("ItemDescEditTab CaptionsLang"), d->captionsEdit->currentLanguageCode());
 
     d->templateViewer->writeSettings(group);
 
@@ -479,7 +479,7 @@ void ImageDescEditTab::writeSettings(KConfigGroup& group)
     d->tagsSearchBar->saveState();
 }
 
-void ImageDescEditTab::setFocusToLastSelectedWidget()
+void ItemDescEditTab::setFocusToLastSelectedWidget()
 {
     if (d->lastSelectedWidget)
     {
@@ -489,44 +489,44 @@ void ImageDescEditTab::setFocusToLastSelectedWidget()
     d->lastSelectedWidget = 0;
 }
 
-void ImageDescEditTab::setFocusToTagsView()
+void ItemDescEditTab::setFocusToTagsView()
 {
     d->lastSelectedWidget = qobject_cast<QWidget*>(d->tagCheckView);
     d->tagCheckView->setFocus();
     d->tabWidget->setCurrentIndex(Private::TAGS);
 }
 
-void ImageDescEditTab::setFocusToNewTagEdit()
+void ItemDescEditTab::setFocusToNewTagEdit()
 {
     //select "Tags" tab and focus the NewTagLineEdit widget
     d->tabWidget->setCurrentIndex(Private::TAGS);
     d->newTagEdit->setFocus();
 }
 
-void ImageDescEditTab::setFocusToTitlesEdit()
+void ItemDescEditTab::setFocusToTitlesEdit()
 {
     d->tabWidget->setCurrentIndex(Private::DESCRIPTIONS);
     d->titleEdit->textEdit()->setFocus();
 }
 
-void ImageDescEditTab::setFocusToCommentsEdit()
+void ItemDescEditTab::setFocusToCommentsEdit()
 {
     d->tabWidget->setCurrentIndex(Private::DESCRIPTIONS);
     d->captionsEdit->textEdit()->setFocus();
 }
 
-void ImageDescEditTab::activateAssignedTagsButton()
+void ItemDescEditTab::activateAssignedTagsButton()
 {
     d->tabWidget->setCurrentIndex(Private::TAGS);
     d->assignedTagsBtn->click();
 }
 
-bool ImageDescEditTab::singleSelection() const
+bool ItemDescEditTab::singleSelection() const
 {
     return (d->currInfos.count() == 1);
 }
 
-void ImageDescEditTab::slotChangingItems()
+void ItemDescEditTab::slotChangingItems()
 {
     if (!d->modified)
     {
@@ -550,7 +550,7 @@ void ImageDescEditTab::slotChangingItems()
     }
 }
 
-void ImageDescEditTab::slotAskToApplyChanges(const QList<ItemInfo>& infos, DisjointMetadata* hub)
+void ItemDescEditTab::slotAskToApplyChanges(const QList<ItemInfo>& infos, DisjointMetadata* hub)
 {
     int changedFields = 0;
 
@@ -704,7 +704,7 @@ void ImageDescEditTab::slotAskToApplyChanges(const QList<ItemInfo>& infos, Disjo
     FileActionMngr::instance()->applyMetadata(infos, hub);
 }
 
-void ImageDescEditTab::reset()
+void ItemDescEditTab::reset()
 {
     d->modified = false;
     d->hub.resetChanged();
@@ -713,7 +713,7 @@ void ImageDescEditTab::reset()
     d->applyToAllVersionsButton->setEnabled(false);
 }
 
-void ImageDescEditTab::slotApplyAllChanges()
+void ItemDescEditTab::slotApplyAllChanges()
 {
     if (!d->modified)
     {
@@ -729,7 +729,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     reset();
 }
 
-void ImageDescEditTab::slotRevertAllChanges()
+void ItemDescEditTab::slotRevertAllChanges()
 {
     if (!d->modified)
     {
@@ -744,7 +744,7 @@ void ImageDescEditTab::slotRevertAllChanges()
     setInfos(d->currInfos);
 }
 
-void ImageDescEditTab::setItem(const ItemInfo& info)
+void ItemDescEditTab::setItem(const ItemInfo& info)
 {
     slotChangingItems();
     ItemInfoList list;
@@ -757,13 +757,13 @@ void ImageDescEditTab::setItem(const ItemInfo& info)
     setInfos(list);
 }
 
-void ImageDescEditTab::setItems(const ItemInfoList& infos)
+void ItemDescEditTab::setItems(const ItemInfoList& infos)
 {
     slotChangingItems();
     setInfos(infos);
 }
 
-void ImageDescEditTab::setInfos(const ItemInfoList& infos)
+void ItemDescEditTab::setInfos(const ItemInfoList& infos)
 {
     if (infos.isEmpty())
     {
@@ -804,7 +804,7 @@ void ImageDescEditTab::setInfos(const ItemInfoList& infos)
     setFocusToLastSelectedWidget();
 }
 
-void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
+void ItemDescEditTab::slotReadFromFileMetadataToDatabase()
 {
     initProgressIndicator();
 
@@ -835,7 +835,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
     setInfos(d->currInfos);
 }
 
-void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
+void ItemDescEditTab::slotWriteToFileMetadataFromDatabase()
 {
     initProgressIndicator();
 
@@ -858,7 +858,7 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
     emit signalProgressFinished();
 }
 
-bool ImageDescEditTab::eventFilter(QObject* o, QEvent* e)
+bool ItemDescEditTab::eventFilter(QObject* o, QEvent* e)
 {
     if ( e->type() == QEvent::KeyPress )
     {
@@ -898,14 +898,14 @@ bool ImageDescEditTab::eventFilter(QObject* o, QEvent* e)
     return DVBox::eventFilter(o, e);
 }
 
-void ImageDescEditTab::populateTags()
+void ItemDescEditTab::populateTags()
 {
     // TODO update, this wont work... crashes
     //KConfigGroup group;
     //d->tagCheckView->loadViewState(group);
 }
 
-void ImageDescEditTab::slotTagStateChanged(Album* album, Qt::CheckState checkState)
+void ItemDescEditTab::slotTagStateChanged(Album* album, Qt::CheckState checkState)
 {
     TAlbum* const tag = dynamic_cast<TAlbum*>(album);
 
@@ -927,14 +927,14 @@ void ImageDescEditTab::slotTagStateChanged(Album* album, Qt::CheckState checkSta
     slotModified();
 }
 
-void ImageDescEditTab::slotCommentChanged()
+void ItemDescEditTab::slotCommentChanged()
 {
     d->hub.setComments(d->captionsEdit->values());
     setMetadataWidgetStatus(d->hub.commentsStatus(), d->captionsEdit);
     slotModified();
 }
 
-void ImageDescEditTab::slotTitleChanged()
+void ItemDescEditTab::slotTitleChanged()
 {
     CaptionsMap titles;
 
@@ -944,14 +944,14 @@ void ImageDescEditTab::slotTitleChanged()
     slotModified();
 }
 
-void ImageDescEditTab::slotDateTimeChanged(const QDateTime& dateTime)
+void ItemDescEditTab::slotDateTimeChanged(const QDateTime& dateTime)
 {
     d->hub.setDateTime(dateTime);
     setMetadataWidgetStatus(d->hub.dateTimeStatus(), d->dateTimeEdit);
     slotModified();
 }
 
-void ImageDescEditTab::slotTemplateSelected()
+void ItemDescEditTab::slotTemplateSelected()
 {
     d->hub.setMetadataTemplate(d->templateSelector->getTemplate());
     d->templateViewer->setTemplate(d->templateSelector->getTemplate());
@@ -959,7 +959,7 @@ void ImageDescEditTab::slotTemplateSelected()
     slotModified();
 }
 
-void ImageDescEditTab::slotPickLabelChanged(int pickId)
+void ItemDescEditTab::slotPickLabelChanged(int pickId)
 {
     d->hub.setPickLabel(pickId);
     // no handling for MetadataDisjoint needed for pick label,
@@ -967,7 +967,7 @@ void ImageDescEditTab::slotPickLabelChanged(int pickId)
     slotModified();
 }
 
-void ImageDescEditTab::slotColorLabelChanged(int colorId)
+void ItemDescEditTab::slotColorLabelChanged(int colorId)
 {
     d->hub.setColorLabel(colorId);
     // no handling for MetadataDisjoint needed for color label,
@@ -975,7 +975,7 @@ void ImageDescEditTab::slotColorLabelChanged(int colorId)
     slotModified();
 }
 
-void ImageDescEditTab::slotRatingChanged(int rating)
+void ItemDescEditTab::slotRatingChanged(int rating)
 {
     d->hub.setRating(rating);
     // no handling for MetadataDisjoint needed for rating,
@@ -983,7 +983,7 @@ void ImageDescEditTab::slotRatingChanged(int rating)
     slotModified();
 }
 
-void ImageDescEditTab::slotModified()
+void ItemDescEditTab::slotModified()
 {
     d->modified = true;
     d->applyBtn->setEnabled(true);
@@ -995,7 +995,7 @@ void ImageDescEditTab::slotModified()
     }
 }
 
-void ImageDescEditTab::slotCreateNewTag()
+void ItemDescEditTab::slotCreateNewTag()
 {
     if (d->newTagEdit->text().isEmpty())
     {
@@ -1012,7 +1012,7 @@ void ImageDescEditTab::slotCreateNewTag()
     }
 }
 
-void ImageDescEditTab::slotTaggingActionActivated(const TaggingAction& action)
+void ItemDescEditTab::slotTaggingActionActivated(const TaggingAction& action)
 {
     TAlbum* assigned = 0;
 
@@ -1039,22 +1039,22 @@ void ImageDescEditTab::slotTaggingActionActivated(const TaggingAction& action)
     }
 }
 
-void ImageDescEditTab::assignPickLabel(int pickId)
+void ItemDescEditTab::assignPickLabel(int pickId)
 {
     d->pickLabelSelector->setPickLabel((PickLabel)pickId);
 }
 
-void ImageDescEditTab::assignColorLabel(int colorId)
+void ItemDescEditTab::assignColorLabel(int colorId)
 {
     d->colorLabelSelector->setColorLabel((ColorLabel)colorId);
 }
 
-void ImageDescEditTab::assignRating(int rating)
+void ItemDescEditTab::assignRating(int rating)
 {
     d->ratingWidget->setRating(rating);
 }
 
-void ImageDescEditTab::setTagState(TAlbum* const tag, DisjointMetadata::Status status)
+void ItemDescEditTab::setTagState(TAlbum* const tag, DisjointMetadata::Status status)
 {
     if (!tag)
     {
@@ -1079,7 +1079,7 @@ void ImageDescEditTab::setTagState(TAlbum* const tag, DisjointMetadata::Status s
     }
 }
 
-void ImageDescEditTab::updateTagsView()
+void ItemDescEditTab::updateTagsView()
 {
     // avoid that the automatic tag toggling handles these calls and
     // modification is indicated to this widget
@@ -1110,7 +1110,7 @@ void ImageDescEditTab::updateTagsView()
     }
 }
 
-void ImageDescEditTab::updateComments()
+void ItemDescEditTab::updateComments()
 {
     d->captionsEdit->blockSignals(true);
     d->captionsEdit->setValues(d->hub.comments());
@@ -1123,7 +1123,7 @@ void ImageDescEditTab::updateComments()
     d->titleEdit->blockSignals(false);
 }
 
-void ImageDescEditTab::updatePickLabel()
+void ItemDescEditTab::updatePickLabel()
 {
     d->pickLabelSelector->blockSignals(true);
 
@@ -1139,7 +1139,7 @@ void ImageDescEditTab::updatePickLabel()
     d->pickLabelSelector->blockSignals(false);
 }
 
-void ImageDescEditTab::updateColorLabel()
+void ItemDescEditTab::updateColorLabel()
 {
     d->colorLabelSelector->blockSignals(true);
 
@@ -1155,7 +1155,7 @@ void ImageDescEditTab::updateColorLabel()
     d->colorLabelSelector->blockSignals(false);
 }
 
-void ImageDescEditTab::updateRating()
+void ItemDescEditTab::updateRating()
 {
     d->ratingWidget->blockSignals(true);
 
@@ -1171,7 +1171,7 @@ void ImageDescEditTab::updateRating()
     d->ratingWidget->blockSignals(false);
 }
 
-void ImageDescEditTab::updateDate()
+void ItemDescEditTab::updateDate()
 {
     d->dateTimeEdit->blockSignals(true);
     d->dateTimeEdit->setDateTime(d->hub.dateTime());
@@ -1179,7 +1179,7 @@ void ImageDescEditTab::updateDate()
     d->dateTimeEdit->blockSignals(false);
 }
 
-void ImageDescEditTab::updateTemplate()
+void ItemDescEditTab::updateTemplate()
 {
     d->templateSelector->blockSignals(true);
     d->templateSelector->setTemplate(d->hub.metadataTemplate());
@@ -1188,7 +1188,7 @@ void ImageDescEditTab::updateTemplate()
     d->templateSelector->blockSignals(false);
 }
 
-void ImageDescEditTab::setMetadataWidgetStatus(int status, QWidget* const widget)
+void ItemDescEditTab::setMetadataWidgetStatus(int status, QWidget* const widget)
 {
     if (status == DisjointMetadata::MetadataDisjoint)
     {
@@ -1203,7 +1203,7 @@ void ImageDescEditTab::setMetadataWidgetStatus(int status, QWidget* const widget
     }
 }
 
-void ImageDescEditTab::slotMoreMenu()
+void ItemDescEditTab::slotMoreMenu()
 {
     d->moreMenu->clear();
 
@@ -1228,7 +1228,7 @@ void ImageDescEditTab::slotMoreMenu()
     }
 }
 
-void ImageDescEditTab::slotOpenTagsManager()
+void ItemDescEditTab::slotOpenTagsManager()
 {
     TagsManager* const tagMngr = TagsManager::instance();
     tagMngr->show();
@@ -1236,7 +1236,7 @@ void ImageDescEditTab::slotOpenTagsManager()
     tagMngr->raise();
 }
 
-void ImageDescEditTab::slotImagesChanged(int albumId)
+void ItemDescEditTab::slotImagesChanged(int albumId)
 {
     if (d->ignoreItemAttributesWatch || d->modified)
     {
@@ -1253,28 +1253,28 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
     setInfos(d->currInfos);
 }
 
-void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
+void ItemDescEditTab::slotImageTagsChanged(qlonglong imageId)
 {
     metadataChange(imageId);
 }
 
-void ImageDescEditTab::slotImageRatingChanged(qlonglong imageId)
+void ItemDescEditTab::slotImageRatingChanged(qlonglong imageId)
 {
     metadataChange(imageId);
 }
 
-void ImageDescEditTab::slotImageCaptionChanged(qlonglong imageId)
+void ItemDescEditTab::slotImageCaptionChanged(qlonglong imageId)
 {
     metadataChange(imageId);
 }
 
-void ImageDescEditTab::slotImageDateChanged(qlonglong imageId)
+void ItemDescEditTab::slotImageDateChanged(qlonglong imageId)
 {
     metadataChange(imageId);
 }
 
 // private common code for above methods
-void ImageDescEditTab::metadataChange(qlonglong imageId)
+void ItemDescEditTab::metadataChange(qlonglong imageId)
 {
     if (d->ignoreItemAttributesWatch || d->modified)
     {
@@ -1286,13 +1286,13 @@ void ImageDescEditTab::metadataChange(qlonglong imageId)
     d->metadataChangeTimer->start();
 }
 
-void ImageDescEditTab::resetMetadataChangeInfo()
+void ItemDescEditTab::resetMetadataChangeInfo()
 {
     d->metadataChangeTimer->stop();
     d->metadataChangeIds.clear();
 }
 
-void ImageDescEditTab::slotReloadForMetadataChange()
+void ItemDescEditTab::slotReloadForMetadataChange()
 {
     // NOTE: What to do if d->modified? Reloading is no option.
     // It may be a little change the user wants to ignore, or a large conflict.
@@ -1323,7 +1323,7 @@ void ImageDescEditTab::slotReloadForMetadataChange()
     }
 }
 
-void ImageDescEditTab::updateRecentTags()
+void ItemDescEditTab::updateRecentTags()
 {
     QMenu* const menu = dynamic_cast<QMenu*>(d->recentTagsBtn->menu());
 
@@ -1379,7 +1379,7 @@ void ImageDescEditTab::updateRecentTags()
     }
 }
 
-void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
+void ItemDescEditTab::slotRecentTagsMenuActivated(int id)
 {
     AlbumManager* const albumMan = AlbumManager::instance();
 
@@ -1394,7 +1394,7 @@ void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
     }
 }
 
-void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
+void ItemDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
 {
     Q_UNUSED(settings);
 
@@ -1407,7 +1407,7 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
     }
 }
 
-void ImageDescEditTab::slotAssignedTagsToggled(bool t)
+void ItemDescEditTab::slotAssignedTagsToggled(bool t)
 {
     d->tagCheckView->checkableAlbumFilterModel()->setFilterChecked(t);
     d->tagCheckView->checkableAlbumFilterModel()->setFilterPartiallyChecked(t);
@@ -1428,7 +1428,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
    }
 }
 
-void ImageDescEditTab::slotApplyChangesToAllVersions()
+void ItemDescEditTab::slotApplyChangesToAllVersions()
 {
     if (!d->modified)
     {
@@ -1471,11 +1471,11 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
     d->applyToAllVersionsButton->setEnabled(false);
 }
 
-void ImageDescEditTab::initProgressIndicator()
+void ItemDescEditTab::initProgressIndicator()
 {
-    if (!ProgressManager::instance()->findItembyId(QLatin1String("ImageDescEditTabProgress")))
+    if (!ProgressManager::instance()->findItembyId(QLatin1String("ItemDescEditTabProgress")))
     {
-        FileActionProgress* const item = new FileActionProgress(QLatin1String("ImageDescEditTabProgress"));
+        FileActionProgress* const item = new FileActionProgress(QLatin1String("ItemDescEditTabProgress"));
 
         connect(this, SIGNAL(signalProgressMessageChanged(QString)),
                 item, SLOT(slotProgressStatus(QString)));
@@ -1488,7 +1488,7 @@ void ImageDescEditTab::initProgressIndicator()
     }
 }
 
-AddTagsLineEdit* ImageDescEditTab::getNewTagEdit() const
+AddTagsLineEdit* ItemDescEditTab::getNewTagEdit() const
 {
     return d->newTagEdit;
 }
