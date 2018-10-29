@@ -123,15 +123,22 @@ yum -y install wget \
 
 #################################################################################################
 
-if [[ ! -f /opt/rh/devtoolset-6/enable ]] ; then
+if [[ ! -f /opt/rh/devtoolset-4/enable ]] ; then
 
     echo -e "---------- Install New Compiler Tools Set\n"
 
     if [[ "$(arch)" = "x86_64" ]] ; then
 
-        # Newer compiler than what comes with offcial CentOS 6 (only 64 bits)
-        yum -y install centos-release-scl-rh
-        yum -y install devtoolset-6-gcc devtoolset-6-gcc-c++
+        # Newer compiler than what comes with official CentOS 6 (only 64 bits)
+        # TODO: This official devetoolset version 6 and later do not compile qtwebkit.
+        #yum -y install centos-release-scl-rh
+        #yum -y install devtoolset-6-gcc devtoolset-6-gcc-c++
+
+        # Newer compiler for CentOS 6 64 bits
+        cd /etc/yum.repos.d
+        wget https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-4.1/repo/epel-6/mlampe-devtoolset-4.1-epel-6.repo
+        yum -y --nogpgcheck install devtoolset-4-gcc devtoolset-4-gcc-c++
+        rm -f /etc/yum.repos.d/mlampe-devtoolset-4.1-epel-6.repo
 
     else
 
@@ -212,7 +219,7 @@ if [ ! -d $DOWNLOAD_DIR ] ; then
 fi
 
 # enable new compiler
-. /opt/rh/devtoolset-6/enable
+. /opt/rh/devtoolset-4/enable
 
 #################################################################################################
 
