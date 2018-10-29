@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-06-23
- * Description : a tab to display image editing history
+ * Description : a tab to display item editing history
  *
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertieshistorytab.h"
+#include "itempropertieshistorytab.h"
 
 // Qt includes
 
@@ -52,7 +52,7 @@ RemoveFilterAction::RemoveFilterAction(const QString& label, const QModelIndex& 
 
 // -------------------------------------------------------------------------------------------------------
 
-class Q_DECL_HIDDEN ImagePropertiesHistoryTab::Private
+class Q_DECL_HIDDEN ItemPropertiesHistoryTab::Private
 {
 public:
 
@@ -72,7 +72,7 @@ public:
     QLabel*                          headerLabel;
 };
 
-ImagePropertiesHistoryTab::ImagePropertiesHistoryTab(QWidget* const parent)
+ItemPropertiesHistoryTab::ItemPropertiesHistoryTab(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
@@ -95,7 +95,7 @@ ImagePropertiesHistoryTab::ImagePropertiesHistoryTab(QWidget* const parent)
             this, SLOT(showCustomContextMenu(QPoint)));
 }
 
-ImagePropertiesHistoryTab::~ImagePropertiesHistoryTab()
+ItemPropertiesHistoryTab::~ItemPropertiesHistoryTab()
 {
     delete d->model;
     delete d->view;
@@ -103,14 +103,14 @@ ImagePropertiesHistoryTab::~ImagePropertiesHistoryTab()
     delete d;
 }
 
-void ImagePropertiesHistoryTab::setCurrentURL(const QUrl& url)
+void ItemPropertiesHistoryTab::setCurrentURL(const QUrl& url)
 {
     d->model->setUrl(url);
     d->view->setModel(d->model);
     d->view->update();
 }
 
-void ImagePropertiesHistoryTab::showCustomContextMenu(const QPoint& position)
+void ItemPropertiesHistoryTab::showCustomContextMenu(const QPoint& position)
 {
     QList<QAction*> actions;
 
@@ -140,12 +140,12 @@ void ImagePropertiesHistoryTab::showCustomContextMenu(const QPoint& position)
     }
 }
 
-void ImagePropertiesHistoryTab::setModelData(const QList<DImageHistory::Entry>& entries)
+void ItemPropertiesHistoryTab::setModelData(const QList<DImageHistory::Entry>& entries)
 {
     d->model->setupModelData(entries);
 }
 
-void ImagePropertiesHistoryTab::disableEntry(bool disable)
+void ItemPropertiesHistoryTab::disableEntry(bool disable)
 {
     d->model->disableEntry(d->model->index(d->model->rowCount(),0), disable);
 }

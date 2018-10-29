@@ -98,7 +98,7 @@
 #include "fileactionmngr.h"
 #include "freespacewidget.h"
 #include "iccsettings.h"
-#include "imagepropertiessidebarcamgui.h"
+#include "importitempropertiessidebar.h"
 #include "importsettings.h"
 #include "importview.h"
 #include "imagedialog.h"
@@ -113,7 +113,7 @@
 #include "thememanager.h"
 #include "thumbnailsize.h"
 #include "importthumbnailmodel.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 
 namespace Digikam
 {
@@ -214,7 +214,7 @@ void ImportUI::setupUserArea()
     d->view->importFilterModel()->setCameraThumbsController(d->camThumbsCtrl);
     d->view->importFilterModel()->setStringTypeNatural(ApplicationSettings::instance()->isStringTypeNatural());
     d->historyView      = new DHistoryView(vbox);
-    d->rightSideBar     = new ImagePropertiesSideBarCamGui(widget, d->splitter, Qt::RightEdge, true);
+    d->rightSideBar     = new ImportItemPropertiesSideBarImport(widget, d->splitter, Qt::RightEdge, true);
     d->rightSideBar->setObjectName(QLatin1String("CameraGui Sidebar Right"));
     d->splitter->setFrameStyle(QFrame::NoFrame);
     d->splitter->setFrameShadow(QFrame::Plain);
@@ -1274,8 +1274,8 @@ void ImportUI::slotUploadItems(const QList<QUrl>& urls)
                                         "to upload pictures.\n\n"
                                         "Space require: %1\n"
                                         "Available free space: %2",
-                                        ImagePropertiesTab::humanReadableBytesCount(totalKbSize * 1024),
-                                        ImagePropertiesTab::humanReadableBytesCount(d->cameraFreeSpace->kBAvail() * 1024)));
+                                        ItemPropertiesTab::humanReadableBytesCount(totalKbSize * 1024),
+                                        ItemPropertiesTab::humanReadableBytesCount(d->cameraFreeSpace->kBAvail() * 1024)));
             return;
         }
     }
@@ -2024,8 +2024,8 @@ bool ImportUI::checkDiskSpace(PAlbum *pAlbum)
                                                 "Estimated space required: %1\n"
                                                 "Available free space: %2\n\n"
                                                 "Try Anyway?",
-                                                ImagePropertiesTab::humanReadableBytesCount(dSize * 1024),
-                                                ImagePropertiesTab::humanReadableBytesCount(kBAvail * 1024)),
+                                                ItemPropertiesTab::humanReadableBytesCount(dSize * 1024),
+                                                ItemPropertiesTab::humanReadableBytesCount(kBAvail * 1024)),
                                           QMessageBox::Yes | QMessageBox::No);
 
         if (result == QMessageBox::No)

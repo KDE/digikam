@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-11-17
- * Description : simple image properties side bar (without support
- *               of digiKam database).
+ * Description : item properties side bar (without support of digiKam database).
  *
  * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -22,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertiessidebar.h"
+#include "itempropertiessidebar.h"
 
 // Qt includes
 
@@ -47,10 +46,10 @@
 #include "digikam_debug.h"
 #include "dimg.h"
 #include "dmetadata.h"
-#include "imagepropertiestab.h"
-#include "imagepropertiesmetadatatab.h"
-#include "imagepropertiescolorstab.h"
-#include "imagepropertiesversionstab.h"
+#include "itempropertiestab.h"
+#include "itempropertiesmetadatatab.h"
+#include "itempropertiescolorstab.h"
+#include "itempropertiesversionstab.h"
 
 #ifdef HAVE_MARBLE
 #   include "itempropertiesgpstab.h"
@@ -59,10 +58,10 @@
 namespace Digikam
 {
 
-ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
-                                               SidebarSplitter* const splitter,
-                                               Qt::Edge side,
-                                               bool mimimizedDefault)
+ItemPropertiesSideBar::ItemPropertiesSideBar(QWidget* const parent,
+                                             SidebarSplitter* const splitter,
+                                             Qt::Edge side,
+                                             bool mimimizedDefault)
     : Sidebar(parent, splitter, side, mimimizedDefault)
 {
     m_image              = 0;
@@ -73,9 +72,9 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
     m_dirtyGpsTab        = false;
     m_dirtyHistoryTab    = false;
 
-    m_propertiesTab      = new ImagePropertiesTab(parent);
-    m_metadataTab        = new ImagePropertiesMetaDataTab(parent);
-    m_colorTab           = new ImagePropertiesColorsTab(parent);
+    m_propertiesTab      = new ItemPropertiesTab(parent);
+    m_metadataTab        = new ItemPropertiesMetadataTab(parent);
+    m_colorTab           = new ItemPropertiesColorsTab(parent);
 
     // NOTE: Special case with Showfoto which will only be able to load image, not video.
     if (QApplication::applicationName() != QLatin1String("digikam"))
@@ -97,11 +96,11 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
             this, SIGNAL(signalSetupMetadataFilters(int)));
 }
 
-ImagePropertiesSideBar::~ImagePropertiesSideBar()
+ItemPropertiesSideBar::~ItemPropertiesSideBar()
 {
 }
 
-void ImagePropertiesSideBar::itemChanged(const QUrl& url, const QRect& rect, DImg* const img)
+void ItemPropertiesSideBar::itemChanged(const QUrl& url, const QRect& rect, DImg* const img)
 {
     if (!url.isValid())
     {
@@ -120,7 +119,7 @@ void ImagePropertiesSideBar::itemChanged(const QUrl& url, const QRect& rect, DIm
     slotChangedTab( getActiveTab() );
 }
 
-void ImagePropertiesSideBar::slotNoCurrentItem()
+void ItemPropertiesSideBar::slotNoCurrentItem()
 {
     m_currentURL = QUrl();
 
@@ -139,7 +138,7 @@ void ImagePropertiesSideBar::slotNoCurrentItem()
     m_dirtyHistoryTab    = false;
 }
 
-void ImagePropertiesSideBar::slotImageSelectionChanged(const QRect& rect)
+void ItemPropertiesSideBar::slotImageSelectionChanged(const QRect& rect)
 {
     m_currentRect = rect;
 
@@ -153,7 +152,7 @@ void ImagePropertiesSideBar::slotImageSelectionChanged(const QRect& rect)
     }
 }
 
-void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
+void ItemPropertiesSideBar::slotChangedTab(QWidget* tab)
 {
     if (!m_currentURL.isValid())
     {
@@ -194,7 +193,7 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
     unsetCursor();
 }
 
-void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
+void ItemPropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
 {
     if (!url.isValid())
     {
@@ -212,11 +211,11 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     str = QLocale().toString(modifiedDate, QLocale::ShortFormat);
     m_propertiesTab->setFileModifiedDate(str);
 
-    str = QString::fromUtf8("%1 (%2)").arg(ImagePropertiesTab::humanReadableBytesCount(fileInfo.size()))
+    str = QString::fromUtf8("%1 (%2)").arg(ItemPropertiesTab::humanReadableBytesCount(fileInfo.size()))
                                       .arg(QLocale().toString(fileInfo.size()));
     m_propertiesTab->setFileSize(str);
     m_propertiesTab->setFileOwner(QString::fromUtf8("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
-    m_propertiesTab->setFilePermissions(ImagePropertiesTab::permissionsString(fileInfo));
+    m_propertiesTab->setFilePermissions(ItemPropertiesTab::permissionsString(fileInfo));
 
     // -- Image Properties --------------------------------------------------
 
@@ -262,8 +261,8 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     PhotoInfoContainer photoInfo = metaData.getPhotographInformation();
 
     m_propertiesTab->setPhotoInfoDisable(photoInfo.isEmpty());
-    ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
-    ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+    ItemPropertiesTab::shortenedMakeInfo(photoInfo.make);
+    ItemPropertiesTab::shortenedModelInfo(photoInfo.model);
     m_propertiesTab->setPhotoMake(photoInfo.make.isEmpty()   ? unavailable : photoInfo.make);
     m_propertiesTab->setPhotoModel(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 
@@ -348,7 +347,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     m_propertiesTab->showOrHideCaptionAndTags();
 }
 
-void ImagePropertiesSideBar::doLoadState()
+void ItemPropertiesSideBar::doLoadState()
 {
     Sidebar::doLoadState();
 
@@ -371,7 +370,7 @@ void ImagePropertiesSideBar::doLoadState()
     m_metadataTab->readSettings(groupMetadataTab);
 }
 
-void ImagePropertiesSideBar::doSaveState()
+void ItemPropertiesSideBar::doSaveState()
 {
     Sidebar::doSaveState();
 
@@ -391,7 +390,7 @@ void ImagePropertiesSideBar::doSaveState()
     m_metadataTab->writeSettings(groupMetadataTab);
 }
 
-void ImagePropertiesSideBar::slotLoadMetadataFilters()
+void ItemPropertiesSideBar::slotLoadMetadataFilters()
 {
     m_metadataTab->loadFilters();
 }

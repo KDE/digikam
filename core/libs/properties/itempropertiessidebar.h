@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-11-17
- * Description : simple image properties side bar (without support
- *               of digiKam database).
+ * Description : item properties side bar (without support of digiKam database).
  *
  * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -22,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_H
-#define DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_H
+#ifndef DIGIKAM_ITEM_PROPERTIES_SIDEBAR_H
+#define DIGIKAM_ITEM_PROPERTIES_SIDEBAR_H
 
 // Qt includes
 
@@ -43,25 +42,25 @@ namespace Digikam
 
 class DImg;
 class SidebarSplitter;
-class ImagePropertiesTab;
-class ImagePropertiesMetaDataTab;
-class ImagePropertiesColorsTab;
+class ItemPropertiesTab;
+class ItemPropertiesMetadataTab;
+class ItemPropertiesColorsTab;
 
 #ifdef HAVE_MARBLE
 class ItemPropertiesGPSTab;
 #endif // HAVE_MARBLE
 
-class DIGIKAM_EXPORT ImagePropertiesSideBar : public Sidebar
+class DIGIKAM_EXPORT ItemPropertiesSideBar : public Sidebar
 {
     Q_OBJECT
 
 public:
 
-    explicit ImagePropertiesSideBar(QWidget* const parent,
+    explicit ItemPropertiesSideBar(QWidget* const parent,
                                     SidebarSplitter* const splitter,
                                     Qt::Edge side=Qt::LeftEdge,
                                     bool mimimizedDefault=false);
-    ~ImagePropertiesSideBar();
+    ~ItemPropertiesSideBar();
 
     virtual void itemChanged(const QUrl& url, const QRect& rect = QRect(), DImg* const img = 0);
 
@@ -107,9 +106,9 @@ protected:
 
     DImg*                       m_image;
 
-    ImagePropertiesTab*         m_propertiesTab;
-    ImagePropertiesMetaDataTab* m_metadataTab;
-    ImagePropertiesColorsTab*   m_colorTab;
+    ItemPropertiesTab*         m_propertiesTab;
+    ItemPropertiesMetadataTab* m_metadataTab;
+    ItemPropertiesColorsTab*   m_colorTab;
 
 #ifdef HAVE_MARBLE
     ItemPropertiesGPSTab*      m_gpsTab;
@@ -118,4 +117,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_H
+#endif // DIGIKAM_ITEM_PROPERTIES_SIDEBAR_H

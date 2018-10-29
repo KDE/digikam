@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-06-23
- * Description : a tab to display image editing history
+ * Description : a tab to display item editing history
  *
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_PROPERTIES_HISTORY_TAB_H
-#define DIGIKAM_IMAGE_PROPERTIES_HISTORY_TAB_H
+#ifndef DIGIKAM_ITEM_PROPERTIES_HISTORY_TAB_H
+#define DIGIKAM_ITEM_PROPERTIES_HISTORY_TAB_H
 
 // Qt includes
 
@@ -75,14 +75,14 @@ private:
 
 // -------------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT ImagePropertiesHistoryTab : public QWidget
+class DIGIKAM_EXPORT ItemPropertiesHistoryTab : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit ImagePropertiesHistoryTab(QWidget* const parent);
-    ~ImagePropertiesHistoryTab();
+    explicit ItemPropertiesHistoryTab(QWidget* const parent);
+    ~ItemPropertiesHistoryTab();
 
     void setCurrentURL(const QUrl& url = QUrl());
 
@@ -100,4 +100,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_PROPERTIES_HISTORY_TAB_H
+#endif // DIGIKAM_ITEM_PROPERTIES_HISTORY_TAB_H

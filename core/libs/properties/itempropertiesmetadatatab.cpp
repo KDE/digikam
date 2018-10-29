@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-11-17
- * Description : a tab to display metadata information of images
+ * Description : a tab to display item metadata information
  *
  * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertiesmetadatatab.h"
+#include "itempropertiesmetadatatab.h"
 
 // Qt includes
 
@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImagePropertiesMetaDataTab::Private
+class Q_DECL_HIDDEN ItemPropertiesMetadataTab::Private
 {
 public:
 
@@ -75,7 +75,7 @@ public:
     XmpWidget*       xmpWidget;
 };
 
-ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* const parent)
+ItemPropertiesMetadataTab::ItemPropertiesMetadataTab(QWidget* const parent)
     : QTabWidget(parent),
       d(new Private)
 {
@@ -120,12 +120,12 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* const parent)
             this, SLOT(slotSetupMetadataFilters()));
 }
 
-ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
+ItemPropertiesMetadataTab::~ItemPropertiesMetadataTab()
 {
     delete d;
 }
 
-void ImagePropertiesMetaDataTab::slotSetupMetadataFilters()
+void ItemPropertiesMetadataTab::slotSetupMetadataFilters()
 {
     if (sender() == d->exifWidget)
         emit signalSetupMetadataFilters(Private::EXIF);
@@ -137,7 +137,7 @@ void ImagePropertiesMetaDataTab::slotSetupMetadataFilters()
         emit signalSetupMetadataFilters(Private::XMP);
 }
 
-void ImagePropertiesMetaDataTab::readSettings(const KConfigGroup& group)
+void ItemPropertiesMetadataTab::readSettings(const KConfigGroup& group)
 {
     setCurrentIndex(group.readEntry("ImagePropertiesMetaData Tab",
                                     (int)Private::EXIF));
@@ -153,7 +153,7 @@ void ImagePropertiesMetaDataTab::readSettings(const KConfigGroup& group)
     loadFilters();
 }
 
-void ImagePropertiesMetaDataTab::loadFilters()
+void ItemPropertiesMetadataTab::loadFilters()
 {
     KConfigGroup grp2 = KSharedConfig::openConfig()->group("Image Properties SideBar");
     d->exifWidget->setTagsFilter(grp2.readEntry("EXIF Tags Filter",                 MetadataPanel::defaultExifFilter()));
@@ -162,7 +162,7 @@ void ImagePropertiesMetaDataTab::loadFilters()
     d->xmpWidget->setTagsFilter(grp2.readEntry("XMP Tags Filter",                   MetadataPanel::defaultXmpFilter()));
 }
 
-void ImagePropertiesMetaDataTab::writeSettings(KConfigGroup& group)
+void ItemPropertiesMetadataTab::writeSettings(KConfigGroup& group)
 {
     group.writeEntry("ImagePropertiesMetaData Tab", currentIndex());
     group.writeEntry("EXIF Level",                  d->exifWidget->getMode());
@@ -175,7 +175,7 @@ void ImagePropertiesMetaDataTab::writeSettings(KConfigGroup& group)
     group.writeEntry("Current XMP Item",            d->xmpWidget->getCurrentItemKey());
 }
 
-void ImagePropertiesMetaDataTab::setCurrentURL(const QUrl& url)
+void ItemPropertiesMetadataTab::setCurrentURL(const QUrl& url)
 {
     if (url.isEmpty())
     {
@@ -196,7 +196,7 @@ void ImagePropertiesMetaDataTab::setCurrentURL(const QUrl& url)
     d->xmpWidget->loadFromData(url.fileName(), metadata);
 }
 
-void ImagePropertiesMetaDataTab::setCurrentData(const DMetadata& metaData, const QString& filename)
+void ItemPropertiesMetadataTab::setCurrentData(const DMetadata& metaData, const QString& filename)
 {
     DMetadata data = metaData;
 

@@ -45,7 +45,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 #include "itemdelegateoverlay.h"
 #include "thememanager.h"
 #include "colorlabelwidget.h"
@@ -449,7 +449,7 @@ void ItemViewImageDelegate::drawAspectRatio(QPainter* p, const QRect& dimsRect, 
 
     if (dims.isValid())
     {
-        ImagePropertiesTab::aspectRatioToString(dims.width(), dims.height(), resolution);
+        ItemPropertiesTab::aspectRatioToString(dims.width(), dims.height(), resolution);
     }
     else
     {
@@ -464,7 +464,7 @@ void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong 
     Q_D(const ItemViewImageDelegate);
 
     p->setFont(d->fontXtra);
-    p->drawText(r, Qt::AlignCenter, ImagePropertiesTab::humanReadableBytesCount(bytes));
+    p->drawText(r, Qt::AlignCenter, ItemPropertiesTab::humanReadableBytesCount(bytes));
 }
 
 void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,

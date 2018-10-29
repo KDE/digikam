@@ -10,34 +10,34 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libitemproperties_SRCS
-    imagepropertiessidebar.cpp
-    imagepropertiestab.cpp
-    imagepropertiesmetadatatab.cpp
-    imagepropertiescolorstab.cpp
+    itempropertiessidebar.cpp
+    itempropertiestab.cpp
+    itempropertiesmetadatatab.cpp
+    itempropertiescolorstab.cpp
 )
 
 set(libitemversionssidebar_SRCS
-    imagepropertiesversionstab.cpp
-    versionstreeview.cpp
-    versionsoverlays.cpp
-    versionsdelegate.cpp
+    history/itempropertiesversionstab.cpp
+    history/versionstreeview.cpp
+    history/versionsoverlays.cpp
+    history/versionsdelegate.cpp
 )
 
 if(${Marble_FOUND})
     set(libitemproperties_SRCS
         ${libitemproperties_SRCS}
-        itempropertiesgpstab.cpp
-        itemgpsmodelhelper.cpp
+        geolocation/itempropertiesgpstab.cpp
+        geolocation/itemgpsmodelhelper.cpp
    )
 endif()
 
 set(libitempropertiesdigikam_SRCS
-    imagepropertiessidebarcamgui.cpp
-    imagepropertiessidebardb.cpp
-    cameraitempropertiestab.cpp
-    itemdescedittab.cpp
-    disjointmetadata.cpp
-    captionedit.cpp
+    itempropertiessidebardb.cpp
+    import/importitempropertiessidebar.cpp
+    import/importitempropertiestab.cpp
+    captions/itemdescedittab.cpp
+    captions/disjointmetadata.cpp
+    captions/captionedit.cpp
 )
 
 include_directories(

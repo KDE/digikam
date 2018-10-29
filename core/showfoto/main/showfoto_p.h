@@ -66,7 +66,7 @@
 #include "showfotoiteminfo.h"
 #include "showfotothumbnailbar.h"
 #include "dsplashscreen.h"
-#include "imagepropertiessidebar.h"
+#include "itempropertiessidebar.h"
 #include "showfotodragdrophandler.h"
 #include "thumbnailloadthread.h"
 #include "drawdecoder.h"
@@ -174,7 +174,7 @@ public:
     ShowfotoThumbnailBar*            thumbBar;
     Digikam::ThumbBarDock*           thumbBarDock;
     ShowfotoNormalDelegate*          normalDelegate;
-    Digikam::ImagePropertiesSideBar* rightSideBar;
+    Digikam::ItemPropertiesSideBar* rightSideBar;
     Digikam::DSplashScreen*          splash;
     ShowfotoSettings*                settings;
 };

@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-11-17
- * Description : a tab to display metadata information of images
+ * Date        : 2006-02-08
+ * Description : A tab to display import item information
  *
- * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,48 +21,35 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_PROPERTIES_METADATA_TAB_H
-#define DIGIKAM_IMAGE_PROPERTIES_METADATA_TAB_H
+#ifndef DIGIKAM_IMPORT_ITEM_PROPERTIES_TAB_H
+#define DIGIKAM_IMPORT_ITEM_PROPERTIES_TAB_H
 
 // Qt includes
 
-#include <QWidget>
-#include <QTabWidget>
+#include <QString>
 #include <QUrl>
 
 // Local includes
 
 #include "digikam_export.h"
 #include "dmetadata.h"
+#include "camiteminfo.h"
+#include "dexpanderbox.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImagePropertiesMetaDataTab : public QTabWidget
+class ImportItemPropertiesTab : public DExpanderBox
 {
     Q_OBJECT
 
 public:
 
-    explicit ImagePropertiesMetaDataTab(QWidget* const parent);
-    ~ImagePropertiesMetaDataTab();
+    explicit ImportItemPropertiesTab(QWidget* const parent);
+    ~ImportItemPropertiesTab();
 
-    void setCurrentURL(const QUrl& url=QUrl());
-    void setCurrentData(const DMetadata& metadata=DMetadata(),
-                        const QString& filename=QString());
-
-    void loadFilters();
-
-    void readSettings(const KConfigGroup& group);
-    void writeSettings(KConfigGroup& group);
-
-Q_SIGNALS:
-
-    void signalSetupMetadataFilters(int);
-
-private Q_SLOTS:
-
-    void slotSetupMetadataFilters();
+    void setCurrentItem(const CamItemInfo& itemInfo=CamItemInfo(),
+                        const DMetadata& meta=DMetadata());
 
 private:
 
@@ -72,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_PROPERTIES_METADATA_TAB_H
+#endif // DIGIKAM_IMPORT_ITEM_PROPERTIES_TAB_H

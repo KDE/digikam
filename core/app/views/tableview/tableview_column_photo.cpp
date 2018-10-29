@@ -36,7 +36,7 @@
 
 #include "digikam_debug.h"
 #include "coredbinfocontainers.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 #include "dmetadata.h"
 #include "iteminfo.h"
 
@@ -152,14 +152,14 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
         {
             QString cameraMaker = s->tableViewModel->itemDatabaseFieldRaw(item,
                 DatabaseFields::Set(DatabaseFields::Make)).toString();
-            ImagePropertiesTab::shortenedMakeInfo(cameraMaker);
+            ItemPropertiesTab::shortenedMakeInfo(cameraMaker);
             return cameraMaker;
         }
         case SubColumnCameraModel:
         {
             QString cameraModel = s->tableViewModel->itemDatabaseFieldRaw(item,
                 DatabaseFields::Set(DatabaseFields::Model)).toString();
-            ImagePropertiesTab::shortenedModelInfo(cameraModel);
+            ItemPropertiesTab::shortenedModelInfo(cameraModel);
             return cameraModel;
         }
         case SubColumnLens:
@@ -314,7 +314,7 @@ TableViewColumn::ColumnCompareResult ColumnPhotoProperties::compare(TableViewMod
         {
             const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA,
                 DatabaseFields::Set(DatabaseFields::Aperture));
-            const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, 
+            const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB,
                 DatabaseFields::Set(DatabaseFields::Aperture));
             const double apertureA  = variantA.toDouble();
             const double apertureB  = variantB.toDouble();
@@ -325,9 +325,9 @@ TableViewColumn::ColumnCompareResult ColumnPhotoProperties::compare(TableViewMod
         case SubColumnFocal:
         {
             /// @todo This just works if both have focal length set, not if focal length 35 has to be used
-            const QVariant variantA   = s->tableViewModel->itemDatabaseFieldRaw(itemA, 
+            const QVariant variantA   = s->tableViewModel->itemDatabaseFieldRaw(itemA,
                 DatabaseFields::Set(DatabaseFields::FocalLength));
-            const QVariant variantB   = s->tableViewModel->itemDatabaseFieldRaw(itemB, 
+            const QVariant variantB   = s->tableViewModel->itemDatabaseFieldRaw(itemB,
                 DatabaseFields::Set(DatabaseFields::FocalLength));
             const double focalLengthA = variantA.toDouble();
             const double focalLengthB = variantB.toDouble();

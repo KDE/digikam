@@ -40,7 +40,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 
 namespace Digikam
 {
@@ -142,7 +142,7 @@ void SlideProperties::paintEvent(QPaintEvent*)
 
         if (!photoInfo.make.isEmpty())
         {
-            ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
+            ItemPropertiesTab::shortenedMakeInfo(photoInfo.make);
             str = photoInfo.make;
         }
 
@@ -153,7 +153,7 @@ void SlideProperties::paintEvent(QPaintEvent*)
                 str += QLatin1String(" / ");
             }
 
-            ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+            ItemPropertiesTab::shortenedModelInfo(photoInfo.model);
             str += photoInfo.model;
         }
 

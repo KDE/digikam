@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-11-17
- * Description : image properties side bar using data from
- *               digiKam database.
+ * Description : item properties side bar using data from digiKam database.
  *
  * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -25,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertiessidebardb.h"
+#include "itempropertiessidebardb.h"
 
 // Qt includes
 
@@ -50,10 +49,10 @@
 #include "itemattributeswatch.h"
 #include "itemdescedittab.h"
 #include "iteminfo.h"
-#include "imagepropertiestab.h"
-#include "imagepropertiesmetadatatab.h"
-#include "imagepropertiescolorstab.h"
-#include "imagepropertiesversionstab.h"
+#include "itempropertiestab.h"
+#include "itempropertiesmetadatatab.h"
+#include "itempropertiescolorstab.h"
+#include "itempropertiesversionstab.h"
 #include "itemposition.h"
 #include "tagscache.h"
 
@@ -65,7 +64,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImagePropertiesSideBarDB::Private
+class Q_DECL_HIDDEN ItemPropertiesSideBarDB::Private
 {
 public:
 
@@ -89,16 +88,16 @@ public:
     ItemInfoList               currentInfos;
     DImageHistory               currentHistory;
     ItemDescEditTab*           desceditTab;
-    ImagePropertiesVersionsTab* versionsHistoryTab;
+    ItemPropertiesVersionsTab* versionsHistoryTab;
 };
 
-ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, SidebarSplitter* const splitter,
+ItemPropertiesSideBarDB::ItemPropertiesSideBarDB(QWidget* const parent, SidebarSplitter* const splitter,
                                                    Qt::Edge side, bool mimimizedDefault)
-    : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault),
+    : ItemPropertiesSideBar(parent, splitter, side, mimimizedDefault),
       d(new Private)
 {
     d->desceditTab        = new ItemDescEditTab(parent);
-    d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
+    d->versionsHistoryTab = new ItemPropertiesVersionsTab(parent);
 
     appendTab(d->desceditTab,        QIcon::fromTheme(QLatin1String("edit-text-frame-update")), i18n("Captions"));
     appendTab(d->versionsHistoryTab, QIcon::fromTheme(QLatin1String("view-catalog")),           i18n("Versions"));
@@ -127,23 +126,23 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
             this, SLOT(slotLoadMetadataFilters()));
 }
 
-ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
+ItemPropertiesSideBarDB::~ItemPropertiesSideBarDB()
 {
     delete d;
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const ItemInfo& info, const QRect& rect,
+void ItemPropertiesSideBarDB::itemChanged(const ItemInfo& info, const QRect& rect,
                                            DImg* const img, const DImageHistory& history)
 {
     itemChanged(info.fileUrl(), info, rect, img, history);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const QUrl& url, const QRect& rect, DImg* const img)
+void ItemPropertiesSideBarDB::itemChanged(const QUrl& url, const QRect& rect, DImg* const img)
 {
     itemChanged(url, ItemInfo(), rect, img, DImageHistory());
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const QUrl& url, const ItemInfo& info,
+void ItemPropertiesSideBarDB::itemChanged(const QUrl& url, const ItemInfo& info,
                                            const QRect& rect, DImg* const img, const DImageHistory& history)
 {
     if (!url.isValid())
@@ -163,7 +162,7 @@ void ImagePropertiesSideBarDB::itemChanged(const QUrl& url, const ItemInfo& info
     itemChanged(list, rect, img, history);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const ItemInfoList& infos)
+void ItemPropertiesSideBarDB::itemChanged(const ItemInfoList& infos)
 {
     if (infos.isEmpty())
     {
@@ -175,7 +174,7 @@ void ImagePropertiesSideBarDB::itemChanged(const ItemInfoList& infos)
     itemChanged(infos, QRect(), 0, DImageHistory());
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const ItemInfoList& infos, const QRect& rect, DImg* const img, const DImageHistory& history)
+void ItemPropertiesSideBarDB::itemChanged(const ItemInfoList& infos, const QRect& rect, DImg* const img, const DImageHistory& history)
 {
     m_currentRect        = rect;
     m_image              = img;
@@ -199,9 +198,9 @@ void ImagePropertiesSideBarDB::itemChanged(const ItemInfoList& infos, const QRec
     slotChangedTab( getActiveTab() );
 }
 
-void ImagePropertiesSideBarDB::slotNoCurrentItem()
+void ItemPropertiesSideBarDB::slotNoCurrentItem()
 {
-    ImagePropertiesSideBar::slotNoCurrentItem();
+    ItemPropertiesSideBar::slotNoCurrentItem();
 
     // All tabs that store the ItemInfo list and access it after selection change
     // must release the image info here. slotChangedTab only handles the active tab!
@@ -210,12 +209,12 @@ void ImagePropertiesSideBarDB::slotNoCurrentItem()
     d->dirtyDesceditTab = false;
 }
 
-void ImagePropertiesSideBarDB::populateTags()
+void ItemPropertiesSideBarDB::populateTags()
 {
     d->desceditTab->populateTags();
 }
 
-void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
+void ItemPropertiesSideBarDB::slotChangedTab(QWidget* tab)
 {
     setCursor(Qt::WaitCursor);
 
@@ -225,7 +224,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 
         if (d->currentInfos.isEmpty())
         {
-            ImagePropertiesSideBar::setImagePropertiesInformation(m_currentURL);
+            ItemPropertiesSideBar::setImagePropertiesInformation(m_currentURL);
         }
         else
         {
@@ -363,7 +362,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     unsetCursor();
 }
 
-void ImagePropertiesSideBarDB::slotFileMetadataChanged(const QUrl& url)
+void ItemPropertiesSideBarDB::slotFileMetadataChanged(const QUrl& url)
 {
     if (url == m_currentURL)
     {
@@ -378,7 +377,7 @@ void ImagePropertiesSideBarDB::slotFileMetadataChanged(const QUrl& url)
     }
 }
 
-void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& changeset)
+void ItemPropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& changeset)
 {
     if (!d->currentInfos.isEmpty())
     {
@@ -429,7 +428,7 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
     }
 }
 
-void ImagePropertiesSideBarDB::slotImageTagChanged(const ImageTagChangeset& changeset)
+void ItemPropertiesSideBarDB::slotImageTagChanged(const ImageTagChangeset& changeset)
 {
     if (!d->currentInfos.isEmpty())
     {
@@ -453,48 +452,48 @@ void ImagePropertiesSideBarDB::slotImageTagChanged(const ImageTagChangeset& chan
     }
 }
 
-void ImagePropertiesSideBarDB::slotAssignRating(int rating)
+void ItemPropertiesSideBarDB::slotAssignRating(int rating)
 {
     d->desceditTab->assignRating(rating);
 }
 
-void ImagePropertiesSideBarDB::slotAssignRatingNoStar()
+void ItemPropertiesSideBarDB::slotAssignRatingNoStar()
 {
     d->desceditTab->assignRating(0);
 }
 
-void ImagePropertiesSideBarDB::slotAssignRatingOneStar()
+void ItemPropertiesSideBarDB::slotAssignRatingOneStar()
 {
     d->desceditTab->assignRating(1);
 }
 
-void ImagePropertiesSideBarDB::slotAssignRatingTwoStar()
+void ItemPropertiesSideBarDB::slotAssignRatingTwoStar()
 {
     d->desceditTab->assignRating(2);
 }
 
-void ImagePropertiesSideBarDB::slotAssignRatingThreeStar()
+void ItemPropertiesSideBarDB::slotAssignRatingThreeStar()
 {
     d->desceditTab->assignRating(3);
 }
 
-void ImagePropertiesSideBarDB::slotAssignRatingFourStar()
+void ItemPropertiesSideBarDB::slotAssignRatingFourStar()
 {
     d->desceditTab->assignRating(4);
 }
 
-void ImagePropertiesSideBarDB::slotAssignRatingFiveStar()
+void ItemPropertiesSideBarDB::slotAssignRatingFiveStar()
 {
     d->desceditTab->assignRating(5);
 }
 
-void ImagePropertiesSideBarDB::refreshTagsView()
+void ItemPropertiesSideBarDB::refreshTagsView()
 {
     // TODO update, do we still need this method?
     //d->desceditTab->refreshTagsView();
 }
 
-void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
+void ItemPropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
 {
     foreach(const ItemInfo& info, d->currentInfos)
     {
@@ -513,13 +512,13 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             str = QLocale().toString(commonInfo.fileModificationDate, QLocale::ShortFormat);
             m_propertiesTab->setFileModifiedDate(str);
 
-            str = QString::fromUtf8("%1 (%2)").arg(ImagePropertiesTab::humanReadableBytesCount(fileInfo.size()))
+            str = QString::fromUtf8("%1 (%2)").arg(ItemPropertiesTab::humanReadableBytesCount(fileInfo.size()))
                                     .arg(QLocale().toString(commonInfo.fileSize));
             m_propertiesTab->setFileSize(str);
 
             //  These infos are not stored in DB
             m_propertiesTab->setFileOwner(QString::fromUtf8("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
-            m_propertiesTab->setFilePermissions(ImagePropertiesTab::permissionsString(fileInfo));
+            m_propertiesTab->setFilePermissions(ItemPropertiesTab::permissionsString(fileInfo));
 
             // -- Image Properties --------------------------------------------------
 
@@ -554,8 +553,8 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             // -- Photograph information ------------------------------------------
 
             m_propertiesTab->setPhotoInfoDisable(photoInfo.allFieldsNull);
-            ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
-            ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+            ItemPropertiesTab::shortenedMakeInfo(photoInfo.make);
+            ItemPropertiesTab::shortenedModelInfo(photoInfo.model);
             m_propertiesTab->setPhotoMake(photoInfo.make.isEmpty()   ? unavailable : photoInfo.make);
             m_propertiesTab->setPhotoModel(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 
@@ -634,19 +633,19 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
     }
 }
 
-ImagePropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab() const
+ItemPropertiesVersionsTab* ItemPropertiesSideBarDB::getFiltersHistoryTab() const
 {
     return d->versionsHistoryTab;
 }
 
-ItemDescEditTab* ImagePropertiesSideBarDB::imageDescEditTab() const
+ItemDescEditTab* ItemPropertiesSideBarDB::imageDescEditTab() const
 {
     return d->desceditTab;
 }
 
-void ImagePropertiesSideBarDB::doLoadState()
+void ItemPropertiesSideBarDB::doLoadState()
 {
-    ImagePropertiesSideBar::doLoadState();
+    ItemPropertiesSideBar::doLoadState();
 
     KConfigGroup group                = getConfigGroup();
     KConfigGroup groupVersionTab      = KConfigGroup(&group, entryName(QLatin1String("Version Properties Tab")));
@@ -656,9 +655,9 @@ void ImagePropertiesSideBarDB::doLoadState()
     d->desceditTab->readSettings(groupCaptionsTagsTab);
 }
 
-void ImagePropertiesSideBarDB::doSaveState()
+void ItemPropertiesSideBarDB::doSaveState()
 {
-    ImagePropertiesSideBar::doSaveState();
+    ItemPropertiesSideBar::doSaveState();
 
     KConfigGroup group           = getConfigGroup();
     KConfigGroup groupVersionTab = KConfigGroup(&group, entryName(QLatin1String("Version Properties Tab")));
@@ -668,7 +667,7 @@ void ImagePropertiesSideBarDB::doSaveState()
     d->desceditTab->writeSettings(groupCaptionsTagsTab);
 }
 
-void ImagePropertiesSideBarDB::slotPopupTagsView()
+void ItemPropertiesSideBarDB::slotPopupTagsView()
 {
     setActiveTab(d->desceditTab);
     d->desceditTab->setFocusToTagsView();
@@ -676,7 +675,7 @@ void ImagePropertiesSideBarDB::slotPopupTagsView()
 
 #ifdef HAVE_MARBLE
 
-bool ImagePropertiesSideBarDB::GPSItemInfofromItemInfo(const ItemInfo& imageInfo, GPSItemInfo* const gpsItemInfo)
+bool ItemPropertiesSideBarDB::GPSItemInfofromItemInfo(const ItemInfo& imageInfo, GPSItemInfo* const gpsItemInfo)
 {
     const ItemPosition pos = imageInfo.imagePosition();
 

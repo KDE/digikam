@@ -73,7 +73,7 @@
 #include "colorlabelfilter.h"
 #include "picklabelfilter.h"
 #include "applicationsettings.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 
 namespace Digikam
 {
@@ -334,7 +334,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
 
         for (int i = 0 ; i < make.count() ; i++)
         {
-            ImagePropertiesTab::shortenedMakeInfo(make[i]);
+            ItemPropertiesTab::shortenedMakeInfo(make[i]);
             make[i] = make[i].trimmed();
         }
 
@@ -360,7 +360,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
 
         for (int i = 0 ; i < model.count() ; i++)
         {
-            ImagePropertiesTab::shortenedModelInfo(model[i]);
+            ItemPropertiesTab::shortenedModelInfo(model[i]);
             model[i] = model[i].trimmed();
         }
 

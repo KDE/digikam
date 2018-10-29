@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-08
- * Description : A tab to display camera item information
+ * Description : A tab to display import item information
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "cameraitempropertiestab.h"
+#include "importitempropertiestab.h"
 
 // Qt includes
 
@@ -40,14 +40,14 @@
 
 // Local includes
 
-#include "imagepropertiestxtlabel.h"
+#include "itempropertiestxtlabel.h"
 #include "dlayoutbox.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN CameraItemPropertiesTab::Private
+class Q_DECL_HIDDEN ImportItemPropertiesTab::Private
 {
 public:
 
@@ -178,7 +178,7 @@ public:
     DTextLabelValue* labelVideoAudioCodec;
 };
 
-CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
+ImportItemPropertiesTab::ImportItemPropertiesTab(QWidget* const parent)
     : DExpanderBox(parent),
       d(new Private)
 {
@@ -350,12 +350,12 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     addStretch();
 }
 
-CameraItemPropertiesTab::~CameraItemPropertiesTab()
+ImportItemPropertiesTab::~ImportItemPropertiesTab()
 {
     delete d;
 }
 
-void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const DMetadata& meta)
+void ImportItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const DMetadata& meta)
 {
     if (itemInfo.isNull())
     {
@@ -444,7 +444,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         d->labelFileDate->setAdjustedText(unknown);
     }
 
-    str = i18n("%1 (%2)", ImagePropertiesTab::humanReadableBytesCount(itemInfo.size), QLocale().toString(itemInfo.size));
+    str = i18n("%1 (%2)", ItemPropertiesTab::humanReadableBytesCount(itemInfo.size), QLocale().toString(itemInfo.size));
     d->labelFileSize->setAdjustedText(str);
 
     // -- Image Properties --------------------------------------------------
@@ -494,7 +494,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
     d->labelImageDimensions->setAdjustedText(str);
 
     if (!dims.isValid()) str = unknown;
-    else ImagePropertiesTab::aspectRatioToString(dims.width(), dims.height(), str);
+    else ItemPropertiesTab::aspectRatioToString(dims.width(), dims.height(), str);
 
     d->labelImageRatio->setAdjustedText(str);
 
@@ -532,8 +532,8 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         widget(1)->show();
     }
 
-    ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
-    ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+    ItemPropertiesTab::shortenedMakeInfo(photoInfo.make);
+    ItemPropertiesTab::shortenedModelInfo(photoInfo.model);
     d->labelPhotoMake->setAdjustedText(photoInfo.make.isEmpty()   ? unavailable : photoInfo.make);
     d->labelPhotoModel->setAdjustedText(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 

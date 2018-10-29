@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-11-05
- * Description : simple text labels to display image
+ * Description : simple text labels to display item
  *               properties meta infos
  *
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_PROPERTIES_TXT_LABEL_H
-#define DIGIKAM_IMAGE_PROPERTIES_TXT_LABEL_H
+#ifndef DIGIKAM_ITEM_PROPERTIES_TXT_LABEL_H
+#define DIGIKAM_ITEM_PROPERTIES_TXT_LABEL_H
 
 // Qt includes
 
@@ -146,4 +146,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_PROPERTIES_TXT_LABEL_H
+#endif // DIGIKAM_ITEM_PROPERTIES_TXT_LABEL_H

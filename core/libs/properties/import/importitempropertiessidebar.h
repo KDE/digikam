@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-08
- * Description : simple image properties side bar used by
- *               camera GUI.
+ * Description : item properties side bar used by import tool.
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
@@ -23,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_CAMGUI_H
-#define DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_CAMGUI_H
+#ifndef DIGIKAM_IMPORT_ITEM_PROPERTIES_SIDEBAR_H
+#define DIGIKAM_IMPORT_ITEM_PROPERTIES_SIDEBAR_H
 
 // Qt includes
 
@@ -43,17 +42,17 @@ class SidebarSplitter;
 class CamItemInfo;
 class DMetadata;
 
-class DIGIKAM_EXPORT ImagePropertiesSideBarCamGui : public Sidebar
+class DIGIKAM_EXPORT ImportItemPropertiesSideBarImport : public Sidebar
 {
     Q_OBJECT
 
 public:
 
-    explicit ImagePropertiesSideBarCamGui(QWidget* const parent,
+    explicit ImportItemPropertiesSideBarImport(QWidget* const parent,
                                           SidebarSplitter* const splitter,
                                           Qt::Edge side=Qt::LeftEdge,
                                           bool mimimizedDefault=false);
-    ~ImagePropertiesSideBarCamGui();
+    ~ImportItemPropertiesSideBarImport();
 
     void applySettings();
 
@@ -96,4 +95,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_CAMGUI_H
+#endif // DIGIKAM_IMPORT_ITEM_PROPERTIES_SIDEBAR_H

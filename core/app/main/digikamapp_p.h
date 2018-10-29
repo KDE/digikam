@@ -68,7 +68,7 @@
 #include "dzoombar.h"
 #include "digikamview.h"
 #include "metadatastatusbar.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 #include "importui.h"
 #include "setup.h"
 #include "actioncategorizedview.h"

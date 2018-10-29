@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-08
- * Description : simple image properties side bar used by
- *               camera GUI.
+ * Description : item properties side bar used by import tool.
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
@@ -23,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertiessidebarcamgui.h"
+#include "importitempropertiessidebar.h"
 
 // Qt includes
 
@@ -40,8 +39,8 @@
 #include "digikam_config.h"
 #include "dmetadata.h"
 #include "camiteminfo.h"
-#include "cameraitempropertiestab.h"
-#include "imagepropertiesmetadatatab.h"
+#include "importitempropertiestab.h"
+#include "itempropertiesmetadatatab.h"
 
 #ifdef HAVE_MARBLE
 #   include "itempropertiesgpstab.h"
@@ -50,7 +49,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImagePropertiesSideBarCamGui::Private
+class Q_DECL_HIDDEN ImportItemPropertiesSideBarImport::Private
 {
 public:
 
@@ -78,19 +77,19 @@ public:
     ItemPropertiesGPSTab*      gpsTab;
 #endif // HAVE_MARBLE
 
-    ImagePropertiesMetaDataTab* metadataTab;
-    CameraItemPropertiesTab*    cameraItemTab;
+    ItemPropertiesMetadataTab* metadataTab;
+    ImportItemPropertiesTab*    cameraItemTab;
 };
 
-ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* const parent,
-                                                           SidebarSplitter* const splitter,
-                                                           Qt::Edge side,
-                                                           bool mimimizedDefault)
+ImportItemPropertiesSideBarImport::ImportItemPropertiesSideBarImport(QWidget* const parent,
+                                                         SidebarSplitter* const splitter,
+                                                         Qt::Edge side,
+                                                         bool mimimizedDefault)
     : Sidebar(parent, splitter, side, mimimizedDefault),
       d(new Private)
 {
-    d->cameraItemTab = new CameraItemPropertiesTab(parent);
-    d->metadataTab   = new ImagePropertiesMetaDataTab(parent);
+    d->cameraItemTab = new ImportItemPropertiesTab(parent);
+    d->metadataTab   = new ItemPropertiesMetadataTab(parent);
 
     appendTab(d->cameraItemTab, QIcon::fromTheme(QLatin1String("configure")),             i18n("Properties"));
     appendTab(d->metadataTab,   QIcon::fromTheme(QLatin1String("format-text-code")),              i18n("Metadata")); // krazy:exclude=iconnames
@@ -106,24 +105,24 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* const parent
             this, SLOT(slotChangedTab(QWidget*)));
 }
 
-ImagePropertiesSideBarCamGui::~ImagePropertiesSideBarCamGui()
+ImportItemPropertiesSideBarImport::~ImportItemPropertiesSideBarImport()
 {
     delete d;
 }
 
-void ImagePropertiesSideBarCamGui::applySettings()
+void ImportItemPropertiesSideBarImport::applySettings()
 {
     /// @todo Still needed?
 
     /// @todo Are load/saveState called by the creator?
 }
 
-QUrl ImagePropertiesSideBarCamGui::url() const
+QUrl ImportItemPropertiesSideBarImport::url() const
 {
     return d->itemInfo.url();
 }
 
-void ImagePropertiesSideBarCamGui::itemChanged(const CamItemInfo& itemInfo, const DMetadata& meta)
+void ImportItemPropertiesSideBarImport::itemChanged(const CamItemInfo& itemInfo, const DMetadata& meta)
 {
     if (itemInfo.isNull())
     {
@@ -139,7 +138,7 @@ void ImagePropertiesSideBarCamGui::itemChanged(const CamItemInfo& itemInfo, cons
     slotChangedTab(getActiveTab());
 }
 
-void ImagePropertiesSideBarCamGui::slotNoCurrentItem()
+void ImportItemPropertiesSideBarImport::slotNoCurrentItem()
 {
     d->itemInfo           = CamItemInfo();
     d->metaData           = DMetadata();
@@ -155,7 +154,7 @@ void ImagePropertiesSideBarCamGui::slotNoCurrentItem()
 #endif // HAVE_MARBLE
 }
 
-void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
+void ImportItemPropertiesSideBarImport::slotChangedTab(QWidget* tab)
 {
     if (d->itemInfo.isNull())
     {
@@ -188,11 +187,11 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     unsetCursor();
 }
 
-void ImagePropertiesSideBarCamGui::doLoadState()
+void ImportItemPropertiesSideBarImport::doLoadState()
 {
-    /// @todo This code is taken from ImagePropertiesSideBar::doLoadState()
-    ///       Ideally ImagePropertiesSideBarCamGui should be a subclass of
-    ///       ImagePropertiesSideBar
+    /// @todo This code is taken from ItemPropertiesSideBar::doLoadState()
+    ///       Ideally ImportItemPropertiesSideBarImport should be a subclass of
+    ///       ItemPropertiesSideBar
     Sidebar::doLoadState();
 
     KConfigGroup group = getConfigGroup();
@@ -209,11 +208,11 @@ void ImagePropertiesSideBarCamGui::doLoadState()
     d->metadataTab->readSettings(groupMetadataTab);
 }
 
-void ImagePropertiesSideBarCamGui::doSaveState()
+void ImportItemPropertiesSideBarImport::doSaveState()
 {
-    /// @todo This code is taken from ImagePropertiesSideBar::doSaveState()
-    ///       Ideally ImagePropertiesSideBarCamGui should be a subclass of
-    ///       ImagePropertiesSideBar
+    /// @todo This code is taken from ItemPropertiesSideBar::doSaveState()
+    ///       Ideally ImportItemPropertiesSideBarImport should be a subclass of
+    ///       ItemPropertiesSideBar
 
     Sidebar::doSaveState();
 
