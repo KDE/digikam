@@ -120,8 +120,6 @@ void LoadingCache::Private::cleanUpImageFilePathHash()
             ++it;
         }
     }
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "imageFilePathHash Size:" << imageFilePathHash.size();
 }
 
 void LoadingCache::Private::cleanUpThumbnailFilePathHash()
