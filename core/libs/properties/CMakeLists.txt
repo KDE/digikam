@@ -27,7 +27,7 @@ if(${Marble_FOUND})
     set(libimageproperties_SRCS
         ${libimageproperties_SRCS}
         imagepropertiesgpstab.cpp
-        imagegpsmodelhelper.cpp
+        itemgpsmodelhelper.cpp
    )
 endif()
 

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-07-15
- * Description : central Map view
+ * Description : Model for central Map view
  *
  * Copyright (C) 2010      by Gabriel Voicu <ping dot gabi at gmail dot com>
  * Copyright (C) 2010-2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_GPS_MODEL_HELPER_H
-#define DIGIKAM_IMAGE_GPS_MODEL_HELPER_H
+#ifndef DIGIKAM_ITEM_GPS_MODEL_HELPER_H
+#define DIGIKAM_ITEM_GPS_MODEL_HELPER_H
 
 // Qt includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_GPS_MODEL_HELPER_H
+#endif // DIGIKAM_ITEM_GPS_MODEL_HELPER_H
