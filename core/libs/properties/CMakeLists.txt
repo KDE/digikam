@@ -17,27 +17,27 @@ set(libitemproperties_SRCS
 )
 
 set(libitemversionssidebar_SRCS
-    imagepropertiesversionstab.cpp
-    versionstreeview.cpp
-    versionsoverlays.cpp
-    versionsdelegate.cpp
+    history/imagepropertiesversionstab.cpp
+    history/versionstreeview.cpp
+    history/versionsoverlays.cpp
+    history/versionsdelegate.cpp
 )
 
 if(${Marble_FOUND})
     set(libitemproperties_SRCS
         ${libitemproperties_SRCS}
-        itempropertiesgpstab.cpp
-        itemgpsmodelhelper.cpp
+        geolocation/itempropertiesgpstab.cpp
+        geolocation/itemgpsmodelhelper.cpp
    )
 endif()
 
 set(libitempropertiesdigikam_SRCS
-    imagepropertiessidebarcamgui.cpp
     imagepropertiessidebardb.cpp
-    cameraitempropertiestab.cpp
-    itemdescedittab.cpp
-    disjointmetadata.cpp
-    captionedit.cpp
+    import/imagepropertiessidebarcamgui.cpp
+    import/cameraitempropertiestab.cpp
+    captions/itemdescedittab.cpp
+    captions/disjointmetadata.cpp
+    captions/captionedit.cpp
 )
 
 include_directories(
