@@ -26,7 +26,7 @@ set(libitemversionssidebar_SRCS
 if(${Marble_FOUND})
     set(libitemproperties_SRCS
         ${libitemproperties_SRCS}
-        imagepropertiesgpstab.cpp
+        itempropertiesgpstab.cpp
         itemgpsmodelhelper.cpp
    )
 endif()

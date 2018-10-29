@@ -44,7 +44,7 @@
 #include "imagepropertiesmetadatatab.h"
 
 #ifdef HAVE_MARBLE
-#   include "imagepropertiesgpstab.h"
+#   include "itempropertiesgpstab.h"
 #endif // HAVE_MARBLE
 
 namespace Digikam
@@ -75,7 +75,7 @@ public:
     CamItemInfo                 itemInfo;
 
 #ifdef HAVE_MARBLE
-    ImagePropertiesGPSTab*      gpsTab;
+    ItemPropertiesGPSTab*      gpsTab;
 #endif // HAVE_MARBLE
 
     ImagePropertiesMetaDataTab* metadataTab;
@@ -96,7 +96,7 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* const parent
     appendTab(d->metadataTab,   QIcon::fromTheme(QLatin1String("format-text-code")),              i18n("Metadata")); // krazy:exclude=iconnames
 
 #ifdef HAVE_MARBLE
-    d->gpsTab        = new ImagePropertiesGPSTab(parent);
+    d->gpsTab        = new ItemPropertiesGPSTab(parent);
     appendTab(d->gpsTab,        QIcon::fromTheme(QLatin1String("globe")), i18n("Geolocation"));
 #endif // HAVE_MARBLE
 

@@ -53,7 +53,7 @@
 #include "imagepropertiesversionstab.h"
 
 #ifdef HAVE_MARBLE
-#   include "imagepropertiesgpstab.h"
+#   include "itempropertiesgpstab.h"
 #endif // HAVE_MARBLE
 
 namespace Digikam
@@ -86,7 +86,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
     appendTab(m_colorTab,      QIcon::fromTheme(QLatin1String("fill-color")),       i18n("Colors"));
 
 #ifdef HAVE_MARBLE
-    m_gpsTab = new ImagePropertiesGPSTab(parent);
+    m_gpsTab = new ItemPropertiesGPSTab(parent);
     appendTab(m_gpsTab,        QIcon::fromTheme(QLatin1String("globe")),            i18n("Map"));
 #endif // HAVE_MARBLE
 

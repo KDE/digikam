@@ -58,7 +58,7 @@
 #include "tagscache.h"
 
 #ifdef HAVE_MARBLE
-#   include "imagepropertiesgpstab.h"
+#   include "itempropertiesgpstab.h"
 #   include "gpsiteminfosorter.h"
 #endif // HAVE_MARBLE
 

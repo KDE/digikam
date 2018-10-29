@@ -27,7 +27,7 @@ Good explanations about GPS (in French) can be found at this url :
 http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 */
 
-#include "imagepropertiesgpstab.h"
+#include "itempropertiesgpstab.h"
 
 // Qt includes
 
@@ -68,7 +68,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImagePropertiesGPSTab::Private
+class Q_DECL_HIDDEN ItemPropertiesGPSTab::Private
 {
 
 public:
@@ -116,7 +116,7 @@ public:
     bool                       boundariesShouldBeAdjusted;
 };
 
-ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
+ItemPropertiesGPSTab::ItemPropertiesGPSTab(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
@@ -207,12 +207,12 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
             this, SLOT(slotGPSDetails()));
 }
 
-ImagePropertiesGPSTab::~ImagePropertiesGPSTab()
+ItemPropertiesGPSTab::~ItemPropertiesGPSTab()
 {
     delete d;
 }
 
-void ImagePropertiesGPSTab::readSettings(const KConfigGroup& group)
+void ItemPropertiesGPSTab::readSettings(const KConfigGroup& group)
 {
     d->gpsItemInfoSorter->setSortOptions(GPSItemInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"),
                                           int(d->gpsItemInfoSorter->getSortOptions()))));
@@ -222,7 +222,7 @@ void ImagePropertiesGPSTab::readSettings(const KConfigGroup& group)
     d->map->readSettingsFromGroup(&groupMapWidget);
 
 }
-void ImagePropertiesGPSTab::writeSettings(KConfigGroup& group)
+void ItemPropertiesGPSTab::writeSettings(KConfigGroup& group)
 {
     group.writeEntry(QLatin1String("Sort Order"),      int(d->gpsItemInfoSorter->getSortOptions()));
     group.writeEntry(QLatin1String("Web GPS Locator"), getWebGPSLocator());
@@ -231,17 +231,17 @@ void ImagePropertiesGPSTab::writeSettings(KConfigGroup& group)
     d->map->saveSettingsToGroup(&groupMapWidget);
 }
 
-int ImagePropertiesGPSTab::getWebGPSLocator() const
+int ItemPropertiesGPSTab::getWebGPSLocator() const
 {
     return d->detailsCombo->currentIndex();
 }
 
-void ImagePropertiesGPSTab::setWebGPSLocator(int locator)
+void ItemPropertiesGPSTab::setWebGPSLocator(int locator)
 {
     d->detailsCombo->setCurrentIndex(locator);
 }
 
-void ImagePropertiesGPSTab::slotGPSDetails()
+void ItemPropertiesGPSTab::slotGPSDetails()
 {
     QString val, url;
 
@@ -317,7 +317,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
 #endif
 }
 
-void ImagePropertiesGPSTab::setCurrentURL(const QUrl& url)
+void ItemPropertiesGPSTab::setCurrentURL(const QUrl& url)
 {
     if (url.isEmpty())
     {
@@ -330,7 +330,7 @@ void ImagePropertiesGPSTab::setCurrentURL(const QUrl& url)
     setMetadata(meta, url);
 }
 
-void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const QUrl& url)
+void ItemPropertiesGPSTab::setMetadata(const DMetadata& meta, const QUrl& url)
 {
     double lat, lng;
     const bool haveCoordinates = meta.getGPSLatitudeNumber(&lat) && meta.getGPSLongitudeNumber(&lng);
@@ -360,7 +360,7 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const QUrl& url)
     }
 }
 
-void ImagePropertiesGPSTab::clearGPSInfo()
+void ItemPropertiesGPSTab::clearGPSInfo()
 {
     d->altitude->setAdjustedText();
     d->latitude->setAdjustedText();
@@ -370,7 +370,7 @@ void ImagePropertiesGPSTab::clearGPSInfo()
     setEnabled(false);
 }
 
-void ImagePropertiesGPSTab::setGPSInfoList(const GPSItemInfo::List& list)
+void ItemPropertiesGPSTab::setGPSInfoList(const GPSItemInfo::List& list)
 {
     // Clear info label
     d->altitude->setAdjustedText();
@@ -428,7 +428,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSItemInfo::List& list)
     }
 }
 
-void ImagePropertiesGPSTab::setActive(const bool state)
+void ItemPropertiesGPSTab::setActive(const bool state)
 {
     d->map->setActive(state);
 

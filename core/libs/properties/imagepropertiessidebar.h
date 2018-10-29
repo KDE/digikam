@@ -48,7 +48,7 @@ class ImagePropertiesMetaDataTab;
 class ImagePropertiesColorsTab;
 
 #ifdef HAVE_MARBLE
-class ImagePropertiesGPSTab;
+class ItemPropertiesGPSTab;
 #endif // HAVE_MARBLE
 
 class DIGIKAM_EXPORT ImagePropertiesSideBar : public Sidebar
@@ -112,7 +112,7 @@ protected:
     ImagePropertiesColorsTab*   m_colorTab;
 
 #ifdef HAVE_MARBLE
-    ImagePropertiesGPSTab*      m_gpsTab;
+    ItemPropertiesGPSTab*      m_gpsTab;
 #endif // HAVE_MARBLE
 };
 

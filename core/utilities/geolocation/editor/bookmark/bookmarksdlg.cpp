@@ -56,7 +56,7 @@
 #include "bookmarksmngr.h"
 #include "bookmarknode.h"
 #include "dxmlguiwindow.h"
-#include "imagepropertiesgpstab.h"
+#include "itempropertiesgpstab.h"
 #include "gpsiteminfo.h"
 
 namespace Digikam
@@ -200,7 +200,7 @@ public:
     TreeProxyModel*        proxyModel;
     SearchTextBar*         search;
     QTreeView*             tree;
-    ImagePropertiesGPSTab* mapView;
+    ItemPropertiesGPSTab* mapView;
 };
 
 BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const mngr)
@@ -226,7 +226,7 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
     d->tree->setAlternatingRowColors(true);
     d->tree->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    d->mapView = new ImagePropertiesGPSTab(this);
+    d->mapView = new ItemPropertiesGPSTab(this);
 
     QPushButton* const removeButton    = new QPushButton(this);
     removeButton->setText(i18n("&Remove"));

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_PROPERTIES_GPS_TAB_H
-#define DIGIKAM_IMAGE_PROPERTIES_GPS_TAB_H
+#ifndef DIGIKAM_ITEM_PROPERTIES_GPS_TAB_H
+#define DIGIKAM_ITEM_PROPERTIES_GPS_TAB_H
 
 // Qt includes
 
@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImagePropertiesGPSTab : public QWidget
+class DIGIKAM_EXPORT ItemPropertiesGPSTab : public QWidget
 {
     Q_OBJECT
 
@@ -56,8 +56,8 @@ public:
 
 public:
 
-    explicit ImagePropertiesGPSTab(QWidget* const parent);
-    ~ImagePropertiesGPSTab();
+    explicit ItemPropertiesGPSTab(QWidget* const parent);
+    ~ItemPropertiesGPSTab();
 
     void clearGPSInfo();
     void setGPSInfoList(const GPSItemInfo::List& list);
@@ -85,4 +85,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_PROPERTIES_GPS_TAB_H
+#endif // DIGIKAM_ITEM_PROPERTIES_GPS_TAB_H
