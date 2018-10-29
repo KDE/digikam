@@ -59,7 +59,7 @@
 #include "sharedloadsavethread.h"
 #include "iccprofilewidget.h"
 #include "cietonguewidget.h"
-#include "imagepropertiestxtlabel.h"
+#include "itempropertiestxtlabel.h"
 #include "digikam_globals.h"
 
 namespace Digikam

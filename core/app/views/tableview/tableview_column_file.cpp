@@ -36,7 +36,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 #include "iteminfo.h"
 
 namespace Digikam
@@ -144,7 +144,7 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
 
             if (formatKey == QLatin1String("human"))
             {
-                return ImagePropertiesTab::humanReadableBytesCount(info.fileSize());
+                return ItemPropertiesTab::humanReadableBytesCount(info.fileSize());
             }
             else
             {

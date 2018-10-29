@@ -35,7 +35,7 @@
 #include "digikam_debug.h"
 #include "iteminfo.h"
 #include "coredbinfocontainers.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 
 namespace Digikam
 {
@@ -210,7 +210,7 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
             const QSize imgSize = info.dimensions();
             QString aspectRatioString;
 
-            if (!ImagePropertiesTab::aspectRatioToString(imgSize.width(), imgSize.height(), aspectRatioString))
+            if (!ItemPropertiesTab::aspectRatioToString(imgSize.width(), imgSize.height(), aspectRatioString))
             {
                 return QString();
             }

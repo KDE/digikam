@@ -50,7 +50,7 @@
 #include "itemattributeswatch.h"
 #include "itemdescedittab.h"
 #include "iteminfo.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
 #include "itempropertiesversionstab.h"
@@ -513,13 +513,13 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             str = QLocale().toString(commonInfo.fileModificationDate, QLocale::ShortFormat);
             m_propertiesTab->setFileModifiedDate(str);
 
-            str = QString::fromUtf8("%1 (%2)").arg(ImagePropertiesTab::humanReadableBytesCount(fileInfo.size()))
+            str = QString::fromUtf8("%1 (%2)").arg(ItemPropertiesTab::humanReadableBytesCount(fileInfo.size()))
                                     .arg(QLocale().toString(commonInfo.fileSize));
             m_propertiesTab->setFileSize(str);
 
             //  These infos are not stored in DB
             m_propertiesTab->setFileOwner(QString::fromUtf8("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
-            m_propertiesTab->setFilePermissions(ImagePropertiesTab::permissionsString(fileInfo));
+            m_propertiesTab->setFilePermissions(ItemPropertiesTab::permissionsString(fileInfo));
 
             // -- Image Properties --------------------------------------------------
 
@@ -554,8 +554,8 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             // -- Photograph information ------------------------------------------
 
             m_propertiesTab->setPhotoInfoDisable(photoInfo.allFieldsNull);
-            ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
-            ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+            ItemPropertiesTab::shortenedMakeInfo(photoInfo.make);
+            ItemPropertiesTab::shortenedModelInfo(photoInfo.model);
             m_propertiesTab->setPhotoMake(photoInfo.make.isEmpty()   ? unavailable : photoInfo.make);
             m_propertiesTab->setPhotoModel(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 

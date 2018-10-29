@@ -42,7 +42,7 @@
 #include "itemdelegateoverlay.h"
 #include "thememanager.h"
 #include "itemscanner.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 #include "camiteminfo.h"
 #include "colorlabelwidget.h"
 #include "ratingwidget.h"
@@ -377,7 +377,7 @@ void ItemViewImportDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong
     Q_D(const ItemViewImportDelegate);
 
     p->setFont(d->fontXtra);
-    p->drawText(r, Qt::AlignCenter, ImagePropertiesTab::humanReadableBytesCount(bytes));
+    p->drawText(r, Qt::AlignCenter, ItemPropertiesTab::humanReadableBytesCount(bytes));
 }
 
 void ItemViewImportDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,

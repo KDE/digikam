@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-04-19
- * Description : A tab to display general image information
+ * Description : A tab to display general item information
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_PROPERTIES_TAB_H
-#define DIGIKAM_IMAGE_PROPERTIES_TAB_H
+#ifndef DIGIKAM_ITEM_PROPERTIES_TAB_H
+#define DIGIKAM_ITEM_PROPERTIES_TAB_H
 
 // Qt includes
 
@@ -39,14 +39,14 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImagePropertiesTab : public DExpanderBox
+class DIGIKAM_EXPORT ItemPropertiesTab : public DExpanderBox
 {
     Q_OBJECT
 
 public:
 
-    explicit ImagePropertiesTab(QWidget* const parent);
-    ~ImagePropertiesTab();
+    explicit ItemPropertiesTab(QWidget* const parent);
+    ~ItemPropertiesTab();
 
     void setCurrentURL(const QUrl& url=QUrl());
 
@@ -130,4 +130,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_PROPERTIES_TAB_H
+#endif // DIGIKAM_ITEM_PROPERTIES_TAB_H

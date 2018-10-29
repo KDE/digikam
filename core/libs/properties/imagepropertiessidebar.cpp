@@ -47,7 +47,7 @@
 #include "digikam_debug.h"
 #include "dimg.h"
 #include "dmetadata.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
 #include "itempropertiesversionstab.h"
@@ -73,7 +73,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
     m_dirtyGpsTab        = false;
     m_dirtyHistoryTab    = false;
 
-    m_propertiesTab      = new ImagePropertiesTab(parent);
+    m_propertiesTab      = new ItemPropertiesTab(parent);
     m_metadataTab        = new ImagePropertiesMetaDataTab(parent);
     m_colorTab           = new ImagePropertiesColorsTab(parent);
 
@@ -212,11 +212,11 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     str = QLocale().toString(modifiedDate, QLocale::ShortFormat);
     m_propertiesTab->setFileModifiedDate(str);
 
-    str = QString::fromUtf8("%1 (%2)").arg(ImagePropertiesTab::humanReadableBytesCount(fileInfo.size()))
+    str = QString::fromUtf8("%1 (%2)").arg(ItemPropertiesTab::humanReadableBytesCount(fileInfo.size()))
                                       .arg(QLocale().toString(fileInfo.size()));
     m_propertiesTab->setFileSize(str);
     m_propertiesTab->setFileOwner(QString::fromUtf8("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
-    m_propertiesTab->setFilePermissions(ImagePropertiesTab::permissionsString(fileInfo));
+    m_propertiesTab->setFilePermissions(ItemPropertiesTab::permissionsString(fileInfo));
 
     // -- Image Properties --------------------------------------------------
 
@@ -262,8 +262,8 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     PhotoInfoContainer photoInfo = metaData.getPhotographInformation();
 
     m_propertiesTab->setPhotoInfoDisable(photoInfo.isEmpty());
-    ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
-    ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+    ItemPropertiesTab::shortenedMakeInfo(photoInfo.make);
+    ItemPropertiesTab::shortenedModelInfo(photoInfo.model);
     m_propertiesTab->setPhotoMake(photoInfo.make.isEmpty()   ? unavailable : photoInfo.make);
     m_propertiesTab->setPhotoModel(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 

@@ -43,7 +43,7 @@ namespace Digikam
 
 class DImg;
 class SidebarSplitter;
-class ImagePropertiesTab;
+class ItemPropertiesTab;
 class ImagePropertiesMetaDataTab;
 class ImagePropertiesColorsTab;
 
@@ -107,7 +107,7 @@ protected:
 
     DImg*                       m_image;
 
-    ImagePropertiesTab*         m_propertiesTab;
+    ItemPropertiesTab*         m_propertiesTab;
     ImagePropertiesMetaDataTab* m_metadataTab;
     ImagePropertiesColorsTab*   m_colorTab;
 

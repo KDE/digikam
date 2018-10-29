@@ -39,7 +39,7 @@
 #include "coredbaccess.h"
 #include "coredbwatch.h"
 #include "digikam_globals.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 #include "tagproperties.h"
 
 namespace Digikam
@@ -1092,7 +1092,7 @@ QStringList TagsCache::shortenedTagPaths(const QList<int>& ids, QList<int>* sort
     }
 
     // The code is needed in libdigikamcore, so it cannot be moved here. TODO: Find a good place
-    QStringList shortenedPaths = ImagePropertiesTab::shortenedTagPaths(paths, &variantIds);
+    QStringList shortenedPaths = ItemPropertiesTab::shortenedTagPaths(paths, &variantIds);
 
     foreach(const QVariant& var, variantIds)
     {
@@ -1105,7 +1105,7 @@ QStringList TagsCache::shortenedTagPaths(const QList<int>& ids, QList<int>* sort
 QStringList TagsCache::shortenedTagPaths(const QList<int>& ids,
                                          LeadingSlashPolicy slashPolicy, HiddenTagsPolicy hiddenTagsPolicy) const
 {
-    return ImagePropertiesTab::shortenedTagPaths(tagPaths(ids, slashPolicy, hiddenTagsPolicy));
+    return ItemPropertiesTab::shortenedTagPaths(tagPaths(ids, slashPolicy, hiddenTagsPolicy));
 }
 
 QList<int> TagsCache::Private::tagsForFragment(bool (QString::*stringFunction)(const QString&, Qt::CaseSensitivity cs) const,

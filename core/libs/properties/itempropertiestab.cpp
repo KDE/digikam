@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-04-19
- * Description : A tab to display general image information
+ * Description : A tab to display general item information
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 
 // Qt includes
 
@@ -47,7 +47,7 @@
 
 // Local includes
 
-#include "imagepropertiestxtlabel.h"
+#include "itempropertiestxtlabel.h"
 #include "picklabelwidget.h"
 #include "colorlabelwidget.h"
 #include "tagscache.h"
@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImagePropertiesTab::Private
+class Q_DECL_HIDDEN ItemPropertiesTab::Private
 {
 public:
 
@@ -159,7 +159,7 @@ public:
     DTextLabelValue* labelVideoAudioCodec;
 };
 
-ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
+ItemPropertiesTab::ItemPropertiesTab(QWidget* const parent)
     : DExpanderBox(parent),
       d(new Private)
 {
@@ -204,7 +204,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay1->setColumnStretch(1, 10);
     glay1->setSpacing(0);
 
-    insertItem(ImagePropertiesTab::Private::FileProperties,
+    insertItem(ItemPropertiesTab::Private::FileProperties,
                w1, QIcon::fromTheme(QLatin1String("dialog-information")),
                i18n("File Properties"), QLatin1String("FileProperties"), true);
 
@@ -240,7 +240,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay2->setColumnStretch(1, 10);
     glay2->setSpacing(0);
 
-    insertItem(ImagePropertiesTab::Private::ImageProperties,
+    insertItem(ItemPropertiesTab::Private::ImageProperties,
                w2, QIcon::fromTheme(QLatin1String("view-preview")),
                i18n("Item Properties"), QLatin1String("ItemProperties"), true);
 
@@ -300,7 +300,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay3->setColumnStretch(1, 10);
     glay3->setSpacing(0);
 
-    insertItem(ImagePropertiesTab::Private::PhotoProperties,
+    insertItem(ItemPropertiesTab::Private::PhotoProperties,
                w3, QIcon::fromTheme(QLatin1String("camera-photo")),
                i18n("Photograph Properties"), QLatin1String("PhotographProperties"), true);
 
@@ -344,7 +344,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay4->setColumnStretch(1, 10);
     glay4->setSpacing(0);
 
-    insertItem(ImagePropertiesTab::Private::VideoProperties,
+    insertItem(ItemPropertiesTab::Private::VideoProperties,
                w4, QIcon::fromTheme(QLatin1String("video-x-generic")),
                i18n("Audio/Video Properties"), QLatin1String("VideoProperties"), true);
 
@@ -381,7 +381,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay5->setColumnStretch(1, 10);
     glay5->setSpacing(0);
 
-    insertItem(ImagePropertiesTab::Private::digiKamProperties,
+    insertItem(ItemPropertiesTab::Private::digiKamProperties,
                w5, QIcon::fromTheme(QLatin1String("edit-text-frame-update")),
                i18n("digiKam Properties"), QLatin1String("DigikamProperties"), true);
 
@@ -390,12 +390,12 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     addStretch();
 }
 
-ImagePropertiesTab::~ImagePropertiesTab()
+ItemPropertiesTab::~ItemPropertiesTab()
 {
     delete d;
 }
 
-void ImagePropertiesTab::setCurrentURL(const QUrl& url)
+void ItemPropertiesTab::setCurrentURL(const QUrl& url)
 {
     if (url.isEmpty())
     {
@@ -448,131 +448,131 @@ void ImagePropertiesTab::setCurrentURL(const QUrl& url)
     d->labelFolder->setAdjustedText(QDir::toNativeSeparators(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile()));
 }
 
-void ImagePropertiesTab::setPhotoInfoDisable(const bool b)
+void ItemPropertiesTab::setPhotoInfoDisable(const bool b)
 {
     if (b)
     {
-        widget(ImagePropertiesTab::Private::PhotoProperties)->hide();
+        widget(ItemPropertiesTab::Private::PhotoProperties)->hide();
     }
     else
     {
-        widget(ImagePropertiesTab::Private::PhotoProperties)->show();
+        widget(ItemPropertiesTab::Private::PhotoProperties)->show();
     }
 }
 
-void ImagePropertiesTab::setVideoInfoDisable(const bool b)
+void ItemPropertiesTab::setVideoInfoDisable(const bool b)
 {
     if (b)
     {
-        widget(ImagePropertiesTab::Private::VideoProperties)->hide();
+        widget(ItemPropertiesTab::Private::VideoProperties)->hide();
     }
     else
     {
-        widget(ImagePropertiesTab::Private::VideoProperties)->show();
+        widget(ItemPropertiesTab::Private::VideoProperties)->show();
     }
 }
 
-void ImagePropertiesTab::setFileModifiedDate(const QString& str)
+void ItemPropertiesTab::setFileModifiedDate(const QString& str)
 {
     d->labelFileModifiedDate->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setFileSize(const QString& str)
+void ItemPropertiesTab::setFileSize(const QString& str)
 {
     d->labelFileSize->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setFileOwner(const QString& str)
+void ItemPropertiesTab::setFileOwner(const QString& str)
 {
     d->labelFileOwner->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setFilePermissions(const QString& str)
+void ItemPropertiesTab::setFilePermissions(const QString& str)
 {
     d->labelFilePermissions->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setImageMime(const QString& str)
+void ItemPropertiesTab::setImageMime(const QString& str)
 {
     d->labelImageMime->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setImageDimensions(const QString& str)
+void ItemPropertiesTab::setImageDimensions(const QString& str)
 {
     d->labelImageDimensions->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setImageRatio(const QString& str)
+void ItemPropertiesTab::setImageRatio(const QString& str)
 {
     d->labelImageRatio->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setImageBitDepth(const QString& str)
+void ItemPropertiesTab::setImageBitDepth(const QString& str)
 {
     d->labelImageBitDepth->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setImageColorMode(const QString& str)
+void ItemPropertiesTab::setImageColorMode(const QString& str)
 {
     d->labelImageColorMode->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setPhotoMake(const QString& str)
+void ItemPropertiesTab::setPhotoMake(const QString& str)
 {
     d->labelPhotoMake->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setPhotoModel(const QString& str)
+void ItemPropertiesTab::setPhotoModel(const QString& str)
 {
     d->labelPhotoModel->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setPhotoDateTime(const QString& str)
+void ItemPropertiesTab::setPhotoDateTime(const QString& str)
 {
     d->labelPhotoDateTime->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setPhotoLens(const QString& str)
+void ItemPropertiesTab::setPhotoLens(const QString& str)
 {
     d->labelPhotoLens->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setPhotoAperture(const QString& str)
+void ItemPropertiesTab::setPhotoAperture(const QString& str)
 {
     d->labelPhotoAperture->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setPhotoFocalLength(const QString& str)
+void ItemPropertiesTab::setPhotoFocalLength(const QString& str)
 {
     d->labelPhotoFocalLength->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setPhotoExposureTime(const QString& str)
+void ItemPropertiesTab::setPhotoExposureTime(const QString& str)
 {
     d->labelPhotoExposureTime->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setPhotoSensitivity(const QString& str)
+void ItemPropertiesTab::setPhotoSensitivity(const QString& str)
 {
     d->labelPhotoSensitivity->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setPhotoExposureMode(const QString& str)
+void ItemPropertiesTab::setPhotoExposureMode(const QString& str)
 {
     d->labelPhotoExposureMode->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setPhotoFlash(const QString& str)
+void ItemPropertiesTab::setPhotoFlash(const QString& str)
 {
     d->labelPhotoFlash->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setPhotoWhiteBalance(const QString& str)
+void ItemPropertiesTab::setPhotoWhiteBalance(const QString& str)
 {
     d->labelPhotoWhiteBalance->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::showOrHideCaptionAndTags()
+void ItemPropertiesTab::showOrHideCaptionAndTags()
 {
     bool hasCaption    = !d->labelCaption->adjustedText().isEmpty();
     bool hasPickLabel  = !d->labelPickLabel->adjustedText().isEmpty();
@@ -591,15 +591,15 @@ void ImagePropertiesTab::showOrHideCaptionAndTags()
     d->tags->setVisible(hasTags);
     d->labelTags->setVisible(hasTags);
 
-    widget(ImagePropertiesTab::Private::digiKamProperties)->setVisible(hasCaption || hasRating || hasTags || hasPickLabel || hasColorLabel);
+    widget(ItemPropertiesTab::Private::digiKamProperties)->setVisible(hasCaption || hasRating || hasTags || hasPickLabel || hasColorLabel);
 }
 
-void ImagePropertiesTab::setCaption(const QString& str)
+void ItemPropertiesTab::setCaption(const QString& str)
 {
     d->labelCaption->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setColorLabel(int colorId)
+void ItemPropertiesTab::setColorLabel(int colorId)
 {
     if (colorId == NoColorLabel)
     {
@@ -611,7 +611,7 @@ void ImagePropertiesTab::setColorLabel(int colorId)
     }
 }
 
-void ImagePropertiesTab::setPickLabel(int pickId)
+void ItemPropertiesTab::setPickLabel(int pickId)
 {
     if (pickId == NoPickLabel)
     {
@@ -623,7 +623,7 @@ void ImagePropertiesTab::setPickLabel(int pickId)
     }
 }
 
-void ImagePropertiesTab::setRating(int rating)
+void ItemPropertiesTab::setRating(int rating)
 {
     QString str;
 
@@ -641,12 +641,12 @@ void ImagePropertiesTab::setRating(int rating)
     d->labelRating->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setVideoAspectRatio(const QString& str)
+void ItemPropertiesTab::setVideoAspectRatio(const QString& str)
 {
     d->labelVideoAspectRatio->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setVideoAudioBitRate(const QString& str)
+void ItemPropertiesTab::setVideoAudioBitRate(const QString& str)
 {
     // use string given as parameter by default because it contains the value for "unavailable" if needed
     QString audioBitRateString = str;
@@ -661,17 +661,17 @@ void ImagePropertiesTab::setVideoAudioBitRate(const QString& str)
     d->labelVideoAudioBitRate->setAdjustedText(audioBitRateString);
 }
 
-void ImagePropertiesTab::setVideoAudioChannelType(const QString& str)
+void ItemPropertiesTab::setVideoAudioChannelType(const QString& str)
 {
     d->labelVideoAudioChannelType->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setVideoAudioCodec(const QString& str)
+void ItemPropertiesTab::setVideoAudioCodec(const QString& str)
 {
     d->labelVideoAudioCodec->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setVideoDuration(const QString& str)
+void ItemPropertiesTab::setVideoDuration(const QString& str)
 {
     // duration is given as a string in milliseconds
     // use string given as parameter by default because it contains the value for "unavailable" if needed
@@ -698,7 +698,7 @@ void ImagePropertiesTab::setVideoDuration(const QString& str)
     d->labelVideoDuration->setAdjustedText(durationString);
 }
 
-void ImagePropertiesTab::setVideoFrameRate(const QString& str)
+void ItemPropertiesTab::setVideoFrameRate(const QString& str)
 {
     // use string given as parameter by default because it contains the value for "unavailable" if needed
     QString frameRateString = str;
@@ -713,12 +713,12 @@ void ImagePropertiesTab::setVideoFrameRate(const QString& str)
     d->labelVideoFrameRate->setAdjustedText(frameRateString);
 }
 
-void ImagePropertiesTab::setVideoVideoCodec(const QString& str)
+void ItemPropertiesTab::setVideoVideoCodec(const QString& str)
 {
     d->labelVideoVideoCodec->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setTags(const QStringList& tagPaths, const QStringList& tagNames)
+void ItemPropertiesTab::setTags(const QStringList& tagPaths, const QStringList& tagNames)
 {
     Q_UNUSED(tagNames);
     d->labelTags->setAdjustedText(shortenedTagPaths(tagPaths).join(QLatin1Char('\n')));
@@ -731,7 +731,7 @@ static bool naturalLessThan(const PathValuePair& a, const PathValuePair& b)
     return (QCollator().compare(a.first, b.first) < 0);
 }
 
-QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, QList<QVariant>* identifiers)
+QStringList ItemPropertiesTab::shortenedTagPaths(const QStringList& tagPaths, QList<QVariant>* identifiers)
 {
     QList<PathValuePair> tagsSorted;
 
@@ -795,7 +795,7 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
     return tagsShortened;
 }
 
-void ImagePropertiesTab::shortenedMakeInfo(QString& make)
+void ItemPropertiesTab::shortenedMakeInfo(QString& make)
 {
     make.remove(QLatin1String(" CORPORATION"),       Qt::CaseInsensitive);        // from Nikon, Pentax, and Olympus
     make.remove(QLatin1String("EASTMAN "),           Qt::CaseInsensitive);        // from Kodak
@@ -808,7 +808,7 @@ void ImagePropertiesTab::shortenedMakeInfo(QString& make)
     make.remove(QLatin1String(" Electric Co.,Ltd"),  Qt::CaseInsensitive);        // from Sanyo
 }
 
-void ImagePropertiesTab::shortenedModelInfo(QString& model)
+void ItemPropertiesTab::shortenedModelInfo(QString& model)
 {
     model.remove(QLatin1String("Canon "),           Qt::CaseInsensitive);
     model.remove(QLatin1String("NIKON "),           Qt::CaseInsensitive);
@@ -842,7 +842,7 @@ void ImagePropertiesTab::shortenedModelInfo(QString& model)
  * Details: http://stackoverflow.com/questions/95727/how-to-convert-floats-to-human-readable-fractions
  *
  */
-double ImagePropertiesTab::doubleToHumanReadableFraction(double val, long* num, long* den, long maxden)
+double ItemPropertiesTab::doubleToHumanReadableFraction(double val, long* num, long* den, long maxden)
 {
     double x = val;
     long   m[2][2];
@@ -888,7 +888,7 @@ double ImagePropertiesTab::doubleToHumanReadableFraction(double val, long* num, 
     return (val - ((double)m[0][0] / (double)m[1][0]));
 }
 
-bool ImagePropertiesTab::aspectRatioToString(int width, int height, QString& arString)
+bool ItemPropertiesTab::aspectRatioToString(int width, int height, QString& arString)
 {
     if ((width == 0) || (height == 0))
     {
@@ -911,7 +911,7 @@ bool ImagePropertiesTab::aspectRatioToString(int width, int height, QString& arS
     return true;
 }
 
-QString ImagePropertiesTab::permissionsString(const QFileInfo& fi)
+QString ItemPropertiesTab::permissionsString(const QFileInfo& fi)
 {
     QString str;
     QFile::Permissions perms = fi.permissions();
@@ -933,7 +933,7 @@ QString ImagePropertiesTab::permissionsString(const QFileInfo& fi)
     return str;
 }
 
-QString ImagePropertiesTab::humanReadableBytesCount(qint64 bytes, bool si)
+QString ItemPropertiesTab::humanReadableBytesCount(qint64 bytes, bool si)
 {
     int unit        = si ? 1000 : 1024;
     QString byteStr = i18nc("unit file size in bytes", "B");

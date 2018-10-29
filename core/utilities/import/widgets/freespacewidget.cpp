@@ -51,7 +51,7 @@
 #include "digikam_debug.h"
 #include "freespacetooltip.h"
 #include "applicationsettings.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 
 namespace Digikam
 {
@@ -345,21 +345,21 @@ void FreeSpaceWidget::updateToolTip()
         if (d->dSizeKb > 0)
         {
             tip += cnt.cellBeg + i18nc("@info Storage", "Capacity:") + cnt.cellMid;
-            tip += ImagePropertiesTab::humanReadableBytesCount(d->kBSize * 1024) + cnt.cellEnd;
+            tip += ItemPropertiesTab::humanReadableBytesCount(d->kBSize * 1024) + cnt.cellEnd;
 
             tip += cnt.cellBeg + i18nc("@info Storage", "Available:") + cnt.cellMid;
-            tip += ImagePropertiesTab::humanReadableBytesCount(d->kBAvail * 1024) + cnt.cellEnd;
+            tip += ItemPropertiesTab::humanReadableBytesCount(d->kBAvail * 1024) + cnt.cellEnd;
 
             tip += cnt.cellBeg + i18nc("@info Storage", "Require:") + cnt.cellMid;
-            tip += ImagePropertiesTab::humanReadableBytesCount(d->dSizeKb * 1024) + cnt.cellEnd;
+            tip += ItemPropertiesTab::humanReadableBytesCount(d->dSizeKb * 1024) + cnt.cellEnd;
         }
         else
         {
             tip += cnt.cellBeg + i18nc("@info Storage", "Capacity:") + cnt.cellMid;
-            tip += ImagePropertiesTab::humanReadableBytesCount(d->kBSize * 1024) + cnt.cellEnd;
+            tip += ItemPropertiesTab::humanReadableBytesCount(d->kBSize * 1024) + cnt.cellEnd;
 
             tip += cnt.cellBeg + i18nc("@info Storage", "Available:") + cnt.cellMid;
-            tip += ImagePropertiesTab::humanReadableBytesCount(d->kBAvail * 1024) + cnt.cellEnd;
+            tip += ItemPropertiesTab::humanReadableBytesCount(d->kBAvail * 1024) + cnt.cellEnd;
         }
 
         tip += cnt.tipFooter;

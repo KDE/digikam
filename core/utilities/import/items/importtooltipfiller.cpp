@@ -37,7 +37,7 @@
 // Local includes
 
 #include "importsettings.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 #include "ditemtooltip.h"
 #include "camiteminfo.h"
 
@@ -81,7 +81,7 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
         {
             tip                   += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
             QString localeFileSize = QLocale().toString(info.size);
-            str                    = i18n("%1 (%2)", ImagePropertiesTab::humanReadableBytesCount(info.size), localeFileSize);
+            str                    = i18n("%1 (%2)", ItemPropertiesTab::humanReadableBytesCount(info.size), localeFileSize);
             tip                   += str + cnt.cellEnd;
         }
 
@@ -128,8 +128,8 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
 
             if (settings->getToolTipsShowPhotoMake())
             {
-                ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
-                ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+                ItemPropertiesTab::shortenedMakeInfo(photoInfo.make);
+                ItemPropertiesTab::shortenedModelInfo(photoInfo.model);
 
                 str = QString::fromUtf8("%1 / %2").arg(photoInfo.make.isEmpty() ? cnt.unavailable : photoInfo.make)
                       .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);
