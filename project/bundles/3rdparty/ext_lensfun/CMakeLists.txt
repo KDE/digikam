@@ -12,7 +12,7 @@ if (MINGW)
 
     ExternalProject_Add(ext_lensfun
 
-        GIT_REPOSITORY https://git.code.sf.net/p/lensfun/code lensfun-code
+        GIT_REPOSITORY https://git.code.sf.net/p/lensfun/code
 
 #        URL file://${EXTERNALS_DOWNLOAD_DIR}/lensfun-0.3.2.tar.gz
 #        URL_MD5 247e59a0812ec451f6cd0d20b3379cb5
@@ -48,7 +48,10 @@ else()
 
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        GIT_REPOSITORY https://git.code.sf.net/p/lensfun/code lensfun-code
+        GIT_REPOSITORY https://git.code.sf.net/p/lensfun/code
+
+#        URL file://${EXTERNALS_DOWNLOAD_DIR}/lensfun-0.3.2.tar.gz
+#        URL_MD5 247e59a0812ec451f6cd0d20b3379cb5
 
 #        URL http://downloads.sourceforge.net/project/lensfun/0.3.95/lensfun-0.3.95.tar.gz
 #        URL_MD5 21107eaf72303706256481fef2dc8013

@@ -123,7 +123,7 @@ yum -y install wget \
 
 #################################################################################################
 
-if [[ ! -f /opt/rh/devtoolset-4/enable ]] ; then
+if [[ ! -f /opt/rh/devtoolset-6/enable ]] ; then
 
     echo -e "---------- Install New Compiler Tools Set\n"
 
