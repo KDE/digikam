@@ -98,7 +98,7 @@
 #include "fileactionmngr.h"
 #include "freespacewidget.h"
 #include "iccsettings.h"
-#include "imagepropertiessidebarcamgui.h"
+#include "importitempropertiessidebar.h"
 #include "importsettings.h"
 #include "importview.h"
 #include "imagedialog.h"
@@ -214,7 +214,7 @@ void ImportUI::setupUserArea()
     d->view->importFilterModel()->setCameraThumbsController(d->camThumbsCtrl);
     d->view->importFilterModel()->setStringTypeNatural(ApplicationSettings::instance()->isStringTypeNatural());
     d->historyView      = new DHistoryView(vbox);
-    d->rightSideBar     = new ImagePropertiesSideBarCamGui(widget, d->splitter, Qt::RightEdge, true);
+    d->rightSideBar     = new ImportItemPropertiesSideBarImport(widget, d->splitter, Qt::RightEdge, true);
     d->rightSideBar->setObjectName(QLatin1String("CameraGui Sidebar Right"));
     d->splitter->setFrameStyle(QFrame::NoFrame);
     d->splitter->setFrameShadow(QFrame::Plain);

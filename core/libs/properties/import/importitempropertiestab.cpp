@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-08
- * Description : A tab to display camera item information
+ * Description : A tab to display import item information
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "cameraitempropertiestab.h"
+#include "importitempropertiestab.h"
 
 // Qt includes
 
@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN CameraItemPropertiesTab::Private
+class Q_DECL_HIDDEN ImportItemPropertiesTab::Private
 {
 public:
 
@@ -178,7 +178,7 @@ public:
     DTextLabelValue* labelVideoAudioCodec;
 };
 
-CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
+ImportItemPropertiesTab::ImportItemPropertiesTab(QWidget* const parent)
     : DExpanderBox(parent),
       d(new Private)
 {
@@ -350,12 +350,12 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     addStretch();
 }
 
-CameraItemPropertiesTab::~CameraItemPropertiesTab()
+ImportItemPropertiesTab::~ImportItemPropertiesTab()
 {
     delete d;
 }
 
-void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const DMetadata& meta)
+void ImportItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const DMetadata& meta)
 {
     if (itemInfo.isNull())
     {

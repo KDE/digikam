@@ -46,7 +46,7 @@
 #include "filtercombo.h"
 #include "dzoombar.h"
 #include "freespacewidget.h"
-#include "imagepropertiessidebarcamgui.h"
+#include "importitempropertiessidebar.h"
 #include "renamecustomizer.h"
 #include "albumcustomizer.h"
 #include "advancedsettings.h"
@@ -226,7 +226,7 @@ public:
     ScriptingSettings*            scriptingSettings;
 
     FilterStatusBar*              filterStatusBar;
-    ImagePropertiesSideBarCamGui* rightSideBar;
+    ImportItemPropertiesSideBarImport* rightSideBar;
 
     DZoomBar*                     zoomBar;
     StatusProgressBar*            statusProgressBar;

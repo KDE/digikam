@@ -33,8 +33,8 @@ endif()
 
 set(libitempropertiesdigikam_SRCS
     imagepropertiessidebardb.cpp
-    import/imagepropertiessidebarcamgui.cpp
-    import/cameraitempropertiestab.cpp
+    import/importitempropertiessidebar.cpp
+    import/importitempropertiestab.cpp
     captions/itemdescedittab.cpp
     captions/disjointmetadata.cpp
     captions/captionedit.cpp
