@@ -99,7 +99,7 @@
 #include "itemgps.h"
 #include "itemlistmodel.h"
 #include "imagepropertiessidebardb.h"
-#include "imagepropertiesversionstab.h"
+#include "itempropertiesversionstab.h"
 #include "itemscanner.h"
 #include "imagethumbnailbar.h"
 #include "iofilesettings.h"

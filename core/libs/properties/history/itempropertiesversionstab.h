@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-07-12
- * Description : tab for displaying image versions
+ * Description : tab for displaying item versions
  *
  * Copyright (C) 2010-2012 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_PROPERTIES_VERSIONS_TAB_H
-#define DIGIKAM_IMAGE_PROPERTIES_VERSIONS_TAB_H
+#ifndef DIGIKAM_ITEM_PROPERTIES_VERSIONS_TAB_H
+#define DIGIKAM_ITEM_PROPERTIES_VERSIONS_TAB_H
 
 // Qt includes
 
@@ -47,14 +47,14 @@ class ItemInfo;
 class ItemModel;
 class VersionsWidget;
 
-class ImagePropertiesVersionsTab : public QTabWidget
+class ItemPropertiesVersionsTab : public QTabWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit ImagePropertiesVersionsTab(QWidget* const parent);
-    ~ImagePropertiesVersionsTab();
+    explicit ItemPropertiesVersionsTab(QWidget* const parent);
+    ~ItemPropertiesVersionsTab();
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
@@ -86,4 +86,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_PROPERTIES_VERSIONS_TAB_H
+#endif // DIGIKAM_ITEM_PROPERTIES_VERSIONS_TAB_H

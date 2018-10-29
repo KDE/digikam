@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-07-12
- * Description : tab for displaying image versions
+ * Description : tab for displaying item versions
  *
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertiesversionstab.h"
+#include "itempropertiesversionstab.h"
 
 // Qt includes
 
@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImagePropertiesVersionsTab::Private
+class Q_DECL_HIDDEN ItemPropertiesVersionsTab::Private
 {
 public:
 
@@ -72,9 +72,9 @@ public:
     static const QString  configActiveTab;
 };
 
-const QString ImagePropertiesVersionsTab::Private::configActiveTab(QLatin1String("Version Properties Tab"));
+const QString ItemPropertiesVersionsTab::Private::configActiveTab(QLatin1String("Version Properties Tab"));
 
-ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* const parent)
+ItemPropertiesVersionsTab::ItemPropertiesVersionsTab(QWidget* const parent)
     : QTabWidget(parent),
       d(new Private)
 {
@@ -88,12 +88,12 @@ ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* const parent)
             this, SIGNAL(imageSelected(ItemInfo)));
 }
 
-ImagePropertiesVersionsTab::~ImagePropertiesVersionsTab()
+ItemPropertiesVersionsTab::~ItemPropertiesVersionsTab()
 {
     delete d;
 }
 
-void ImagePropertiesVersionsTab::readSettings(KConfigGroup& group)
+void ItemPropertiesVersionsTab::readSettings(KConfigGroup& group)
 {
     QString tab = group.readEntry(d->configActiveTab, "versions");
 
@@ -105,30 +105,30 @@ void ImagePropertiesVersionsTab::readSettings(KConfigGroup& group)
     d->versionsWidget->readSettings(group);
 }
 
-void ImagePropertiesVersionsTab::writeSettings(KConfigGroup& group)
+void ItemPropertiesVersionsTab::writeSettings(KConfigGroup& group)
 {
     group.writeEntry(d->configActiveTab, currentWidget() == d->versionsWidget ? "versions" : "filters");
 
     d->versionsWidget->writeSettings(group);
 }
 
-VersionsWidget* ImagePropertiesVersionsTab::versionsWidget() const
+VersionsWidget* ItemPropertiesVersionsTab::versionsWidget() const
 {
     return d->versionsWidget;
 }
 
-FiltersHistoryWidget* ImagePropertiesVersionsTab::filtersHistoryWidget() const
+FiltersHistoryWidget* ItemPropertiesVersionsTab::filtersHistoryWidget() const
 {
     return d->filtersHistoryWidget;
 }
 
-void ImagePropertiesVersionsTab::clear()
+void ItemPropertiesVersionsTab::clear()
 {
     d->filtersHistoryWidget->clearData();
     d->versionsWidget->setCurrentItem(ItemInfo());
 }
 
-void ImagePropertiesVersionsTab::setItem(const ItemInfo& info, const DImageHistory& history)
+void ItemPropertiesVersionsTab::setItem(const ItemInfo& info, const DImageHistory& history)
 {
     clear();
 
@@ -150,12 +150,12 @@ void ImagePropertiesVersionsTab::setItem(const ItemInfo& info, const DImageHisto
     d->filtersHistoryWidget->setHistory(d->history);
 }
 
-void ImagePropertiesVersionsTab::addShowHideOverlay()
+void ItemPropertiesVersionsTab::addShowHideOverlay()
 {
     d->versionsWidget->addShowHideOverlay();
 }
 
-void ImagePropertiesVersionsTab::addOpenImageAction()
+void ItemPropertiesVersionsTab::addOpenImageAction()
 {
     ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(QIcon::fromTheme(QLatin1String("document-open")),
                                                                                i18n("Open"),
@@ -165,7 +165,7 @@ void ImagePropertiesVersionsTab::addOpenImageAction()
             this, SIGNAL(actionTriggered(ItemInfo)));
 }
 
-void ImagePropertiesVersionsTab::addOpenAlbumAction(const ItemModel* referenceModel)
+void ItemPropertiesVersionsTab::addOpenAlbumAction(const ItemModel* referenceModel)
 {
     ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(QIcon::fromTheme(QLatin1String("folder-pictures")),
                                                                                i18n("Go To Albums"),
@@ -176,7 +176,7 @@ void ImagePropertiesVersionsTab::addOpenAlbumAction(const ItemModel* referenceMo
             this, SIGNAL(actionTriggered(ItemInfo)));
 }
 
-void ImagePropertiesVersionsTab::setEnabledHistorySteps(int count)
+void ItemPropertiesVersionsTab::setEnabledHistorySteps(int count)
 {
     d->filtersHistoryWidget->setEnabledEntries(count);
 }

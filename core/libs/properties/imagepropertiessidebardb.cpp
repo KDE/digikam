@@ -53,7 +53,7 @@
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
-#include "imagepropertiesversionstab.h"
+#include "itempropertiesversionstab.h"
 #include "itemposition.h"
 #include "tagscache.h"
 
@@ -89,7 +89,7 @@ public:
     ItemInfoList               currentInfos;
     DImageHistory               currentHistory;
     ItemDescEditTab*           desceditTab;
-    ImagePropertiesVersionsTab* versionsHistoryTab;
+    ItemPropertiesVersionsTab* versionsHistoryTab;
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, SidebarSplitter* const splitter,
@@ -98,7 +98,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
       d(new Private)
 {
     d->desceditTab        = new ItemDescEditTab(parent);
-    d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
+    d->versionsHistoryTab = new ItemPropertiesVersionsTab(parent);
 
     appendTab(d->desceditTab,        QIcon::fromTheme(QLatin1String("edit-text-frame-update")), i18n("Captions"));
     appendTab(d->versionsHistoryTab, QIcon::fromTheme(QLatin1String("view-catalog")),           i18n("Versions"));
@@ -634,7 +634,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
     }
 }
 
-ImagePropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab() const
+ItemPropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab() const
 {
     return d->versionsHistoryTab;
 }

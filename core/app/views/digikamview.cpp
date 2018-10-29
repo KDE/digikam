@@ -64,7 +64,7 @@
 #include "itemdescedittab.h"
 #include "imagepreviewview.h"
 #include "imagepropertiessidebardb.h"
-#include "imagepropertiesversionstab.h"
+#include "itempropertiesversionstab.h"
 #include "imagethumbnailbar.h"
 #include "imageviewutilities.h"
 #include "leftsidebarwidgets.h"

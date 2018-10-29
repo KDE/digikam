@@ -50,7 +50,7 @@
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
-#include "imagepropertiesversionstab.h"
+#include "itempropertiesversionstab.h"
 
 #ifdef HAVE_MARBLE
 #   include "itempropertiesgpstab.h"

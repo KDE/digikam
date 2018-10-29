@@ -49,7 +49,7 @@ class ItemInfo;
 class ImageChangeset;
 class ItemDescEditTab;
 class ImageTagChangeset;
-class ImagePropertiesVersionsTab;
+class ItemPropertiesVersionsTab;
 class GPSItemInfo;
 
 class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
@@ -68,7 +68,7 @@ public:
     void refreshTagsView();
 
     ///This is for image editor to be able to update the filter list in sidebar
-    ImagePropertiesVersionsTab* getFiltersHistoryTab() const;
+    ItemPropertiesVersionsTab* getFiltersHistoryTab() const;
     ItemDescEditTab*           imageDescEditTab()     const;
 
     virtual void itemChanged(const QUrl& url, const QRect& rect = QRect(), DImg* const img = 0);

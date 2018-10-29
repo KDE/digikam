@@ -17,7 +17,7 @@ set(libitemproperties_SRCS
 )
 
 set(libitemversionssidebar_SRCS
-    history/imagepropertiesversionstab.cpp
+    history/itempropertiesversionstab.cpp
     history/versionstreeview.cpp
     history/versionsoverlays.cpp
     history/versionsdelegate.cpp
