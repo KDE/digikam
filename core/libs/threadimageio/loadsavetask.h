@@ -55,14 +55,12 @@ public:
 public:
 
     explicit LoadSaveTask(LoadSaveThread* const thread)
-        : m_thread(thread),
-          m_running(false)
+        : m_thread(thread)
     {
     };
 
     virtual ~LoadSaveTask()
     {
-        Q_ASSERT(!m_running);
     };
 
     virtual void execute() = 0;
@@ -74,7 +72,6 @@ public:
 protected:
 
     LoadSaveThread* m_thread;
-    bool            m_running;
 };
 
 //---------------------------------------------------------------------------------------------------
