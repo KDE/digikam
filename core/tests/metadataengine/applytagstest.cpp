@@ -33,11 +33,8 @@
 
 #include "dmetadata.h"
 #include "wstoolutils.h"
-#include "previewloadthread.h"
 
 QTEST_MAIN(ApplyTagsTest)
-
-using namespace Digikam;
 
 const QString originalImageFolder(QFINDTESTDATA("data/"));
 
@@ -48,7 +45,14 @@ void ApplyTagsTest::initTestCase()
 
 void ApplyTagsTest::testApplyTagsToMetadata()
 {
-    applyTags(originalImageFolder + QLatin1String("2015-07-22_00001.JPG"), QStringList() << QLatin1String("nature")); // See bug #400436
+    // For bug #400436
+
+    MetaEngineSettingsContainer settings;
+    settings.metadataWritingMode = DMetadata::WRITETOIMAGEONLY;
+
+    applyTags(originalImageFolder + QLatin1String("2015-07-22_00001.JPG"),
+              QStringList() << QLatin1String("nature"),
+              settings);
 }
 
 void ApplyTagsTest::cleanupTestCase()
@@ -56,7 +60,9 @@ void ApplyTagsTest::cleanupTestCase()
     MetaEngine::cleanupExiv2();
 }
 
-void ApplyTagsTest::applyTags(const QString& file, const QStringList& tags)
+void ApplyTagsTest::applyTags(const QString& file,
+                              const QStringList& tags,
+                              const MetaEngineSettingsContainer& settings)
 {
     qDebug() << "File to process:" << file;
     bool ret     = false;
@@ -74,20 +80,22 @@ void ApplyTagsTest::applyTags(const QString& file, const QStringList& tags)
     QVERIFY(ret);
 
     DMetadata meta;
+    meta.setSettings(settings);
     ret = meta.load(path);
     QVERIFY(ret);
 
-    meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
     meta.setImageTagsPath(tags);
     ret = meta.applyChanges(true);
     QVERIFY(ret);
 
     DMetadata meta2;
+    meta2.setSettings(settings);
     QStringList newTags;
     ret = meta2.load(path);
     QVERIFY(ret);
 
-    meta2.getImageTagsPath(newTags);
+    ret = meta2.getImageTagsPath(newTags);
+    QVERIFY(ret);
 
     foreach (const QString& tag, tags)
     {

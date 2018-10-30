@@ -29,13 +29,22 @@
 #include <QObject>
 #include <QString>
 
+// Local includes
+
+#include "metaenginesettingscontainer.h"
+#include "dmetadatasettingscontainer.h"
+
+using namespace Digikam;
+
 class ApplyTagsTest : public QObject
 {
     Q_OBJECT
 
 private:
 
-    void applyTags(const QString& file, const QStringList& tags);
+    void applyTags(const QString& file,
+                   const QStringList& tags,
+                   const MetaEngineSettingsContainer& settings);
 
 private Q_SLOTS:
 
