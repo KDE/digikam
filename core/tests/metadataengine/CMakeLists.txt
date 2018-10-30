@@ -16,7 +16,9 @@ include_directories(
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-macro(METADATA_TESTS_BUILD)
+# ----------------------------------------------------------------------------------
+
+macro(METADATAENGINE_TOOLS_BUILD)
 
     set(_filename ${ARGV0})
     string(REPLACE "." ";" _temp ${_filename})
@@ -35,68 +37,44 @@ macro(METADATA_TESTS_BUILD)
 
 ENDMACRO()
 
-# ----------------------------------------------------------------------------------
-
-METADATA_TESTS_BUILD(setiptcpreview.cpp)
-METADATA_TESTS_BUILD(metareaderthread.cpp)
-METADATA_TESTS_BUILD(loadfromba.cpp)
-METADATA_TESTS_BUILD(loadfromfile_info.cpp)
-METADATA_TESTS_BUILD(loadfromfile_exif.cpp)
-METADATA_TESTS_BUILD(loadfromfile_iptc.cpp)
-METADATA_TESTS_BUILD(loadfromfile_xmp.cpp)
-METADATA_TESTS_BUILD(erasetag.cpp)
-METADATA_TESTS_BUILD(printtagslist.cpp)
-METADATA_TESTS_BUILD(usexmpsidecar.cpp)
-METADATA_TESTS_BUILD(readimagewritexmpsidecar.cpp)
-METADATA_TESTS_BUILD(setxmpface.cpp)
+METADATAENGINE_TOOLS_BUILD(setiptcpreview.cpp)
+METADATAENGINE_TOOLS_BUILD(metareaderthread.cpp)
+METADATAENGINE_TOOLS_BUILD(loadfromba.cpp)
+METADATAENGINE_TOOLS_BUILD(loadfromfile_info.cpp)
+METADATAENGINE_TOOLS_BUILD(loadfromfile_exif.cpp)
+METADATAENGINE_TOOLS_BUILD(loadfromfile_iptc.cpp)
+METADATAENGINE_TOOLS_BUILD(loadfromfile_xmp.cpp)
+METADATAENGINE_TOOLS_BUILD(erasetag.cpp)
+METADATAENGINE_TOOLS_BUILD(printtagslist.cpp)
+METADATAENGINE_TOOLS_BUILD(usexmpsidecar.cpp)
+METADATAENGINE_TOOLS_BUILD(readimagewritexmpsidecar.cpp)
+METADATAENGINE_TOOLS_BUILD(setxmpface.cpp)
 
 # ----------------------------------------------------------------------------------
 
+macro(METADATAENGINE_TESTS_BUILD)
 
-set(testTag_SRCS tagsreadwritetest.cpp)
-add_executable(tagsReadWriteTest ${testTag_SRCS})
-add_test(tagsReadWriteTest tagsReadWriteTest)
-ecm_mark_as_test(tagsReadWriteTest)
+    set(_filename ${ARGV0})
+    string(REPLACE "." ";" _temp ${_filename})
+    list(GET _temp 0 _target)
 
-target_link_libraries(tagsReadWriteTest
-                      digikamcore
-                      Qt5::Core
-                      Qt5::Test
-                      KF5::I18n
-)
+    set(${_target}_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/${_target}.cpp)
 
-set(testRating_SRCS ratingreadwritetest.cpp)
-add_executable(ratingReadWriteTest ${testRating_SRCS})
-add_test(ratingReadWriteTest ratingReadWriteTest)
-ecm_mark_as_test(ratingReadWriteTest)
+    add_executable(${_target} ${${_target}_SRCS})
+    add_test(${_target} ${_target})
+    ecm_mark_as_test(${target})
 
-target_link_libraries(ratingReadWriteTest
-                      digikamcore
-                      Qt5::Core
-                      Qt5::Test
-                      KF5::I18n
-)
+    target_link_libraries(${_target}
+                          digikamcore
+                          Qt5::Core
+                          Qt5::Test
+                          KF5::I18n
+    )
 
-set(testComment_SRCS commentreadwritetest.cpp)
-add_executable(commentReadWriteTest ${testComment_SRCS})
-add_test(commentReadWriteTest commentReadWriteTest)
-ecm_mark_as_test(commentReadWriteTest)
+ENDMACRO()
 
-target_link_libraries(commentReadWriteTest
-                      digikamcore
-                      Qt5::Core
-                      Qt5::Test
-                      KF5::I18n
-)
-
-set(testPatchPreview_SRCS patchpreviewtest.cpp)
-add_executable(patchPreviewTest ${testPatchPreview_SRCS})
-add_test(patchPreviewTest patchPreviewTest)
-ecm_mark_as_test(patchPreviewTest)
-
-target_link_libraries(patchPreviewTest
-                      digikamcore
-                      Qt5::Core
-                      Qt5::Test
-                      KF5::I18n
-)
+METADATAENGINE_TESTS_BUILD(tagsreadwritetest.cpp)
+METADATAENGINE_TESTS_BUILD(ratingreadwritetest.cpp)
+METADATAENGINE_TESTS_BUILD(commentreadwritetest.cpp)
+METADATAENGINE_TESTS_BUILD(patchpreviewtest.cpp)
+METADATAENGINE_TESTS_BUILD(applytagstest.cpp)

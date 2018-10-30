@@ -50,7 +50,7 @@ void PatchPreviewTest::initTestCase()
 
 void PatchPreviewTest::testExtractPreviewAndFixMetadata()
 {
-    patchPreview(originalImageFolder + QLatin1String("IMG_2520.CR2"), true, 1024, 100);
+    patchPreview(originalImageFolder + QLatin1String("IMG_2520.CR2"), true, 1024, 100); // See bug #400140
 }
 
 void PatchPreviewTest::cleanupTestCase()
@@ -110,4 +110,6 @@ void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDi
     meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
     ret = meta.applyChanges(true);
     QVERIFY(ret);
+
+    WSToolUtils::removeTemporaryDir("patchpreviewtest");
 }
