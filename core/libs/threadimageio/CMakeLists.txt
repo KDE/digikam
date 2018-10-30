@@ -33,12 +33,12 @@ if(ENABLE_MEDIAPLAYER)
 
     set(libthreadimageio_SRCS
         ${libthreadimageio_SRCS}
-        ffmpegthumbnailer/filmstripfilter.cpp
-        ffmpegthumbnailer/moviedecoder.cpp
-        ffmpegthumbnailer/moviedecoder_p.cpp
-        ffmpegthumbnailer/imagewriter.cpp
-        ffmpegthumbnailer/videothumbnailer.cpp
-        videothumbnailerjob.cpp
+        video/filmstripfilter.cpp
+        video/moviedecoder.cpp
+        video/moviedecoder_p.cpp
+        video/videothumbwriter.cpp
+        video/videothumbnailer.cpp
+        video/videothumbnailerjob.cpp
        )
 endif()
 
