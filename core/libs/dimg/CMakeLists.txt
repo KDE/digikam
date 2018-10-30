@@ -20,9 +20,9 @@ set(libdimg_SRCS
     dimgscale.cpp
     dcolor.cpp
     dcolorcomposer.cpp
-    imagehistory/dimagehistory.cpp
-    imagehistory/filteraction.cpp
-    imagehistory/historyimageid.cpp
+    history/dimagehistory.cpp
+    history/filteraction.cpp
+    history/historyimageid.cpp
 )
 
 set(libdimgfilters_SRCS
