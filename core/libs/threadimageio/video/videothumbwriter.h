@@ -22,52 +22,46 @@
  *
  * ============================================================ */
 
-#include "imagewriter.h"
+#ifndef DIGIKAM_VIDEO_THUMB_WRITER_H
+#define DIGIKAM_VIDEO_THUMB_WRITER_H
+
+// Qt includes
+
+#include <QtGlobal>
+#include <QImage>
+#include <QVector>
 
 namespace Digikam
 {
 
-VideoFrame::VideoFrame()
-    : width(0),
-      height(0),
-      lineSize(0)
+class VideoFrame
 {
-}
+public:
 
-VideoFrame::VideoFrame(int width, int height, int lineSize)
-    : width(width),
-      height(height),
-      lineSize(lineSize)
+    VideoFrame();
+    VideoFrame(int width, int height, int lineSize);
+    ~VideoFrame();
+
+public:
+
+    quint32         width;
+    quint32         height;
+    quint32         lineSize;
+    QVector<quint8> frameData;
+};
+
+// -----------------------------------------------------------------
+
+class VideoThumbWriter
 {
-}
+public:
 
-VideoFrame::~VideoFrame()
-{
-}
+    explicit VideoThumbWriter();
+    ~VideoThumbWriter();
 
-// ------------------------------------------------------
-
-ImageWriter::ImageWriter()
-{
-}
-
-ImageWriter::~ImageWriter()
-{
-}
-
-void ImageWriter::writeFrame(VideoFrame& frame, QImage& image)
-{
-    QImage previewImage(frame.width, frame.height, QImage::Format_RGB888);
-
-    for (quint32 y = 0; y < frame.height; y++)
-    {
-        // Copy each line ..
-        memcpy(previewImage.scanLine(y),
-               &frame.frameData[y * frame.lineSize],
-               frame.width * 3);
-    }
-
-    image = previewImage;
-}
+    void writeFrame(VideoFrame& frame, QImage& image);
+};
 
 } // namespace Digikam
+
+#endif // DIGIKAM_VIDEO_THUMB_WRITER_H

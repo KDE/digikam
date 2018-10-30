@@ -22,52 +22,52 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_MOVIE_DECODER_H
-#define DIGIKAM_MOVIE_DECODER_H
-
-// Qt includes
-
-#include <QString>
-
-// Local includes
-
-#include "imagewriter.h"
+#include "videothumbwriter.h"
 
 namespace Digikam
 {
 
-class MovieDecoder
+VideoFrame::VideoFrame()
+    : width(0),
+      height(0),
+      lineSize(0)
 {
-public:
+}
 
-    explicit MovieDecoder(const QString& filename);
-    ~MovieDecoder();
+VideoFrame::VideoFrame(int width, int height, int lineSize)
+    : width(width),
+      height(height),
+      lineSize(lineSize)
+{
+}
 
-public:
+VideoFrame::~VideoFrame()
+{
+}
 
-    QString getCodec()       const;
-    int     getWidth()       const;
-    int     getHeight()      const;
-    int     getDuration()    const;
-    bool    getInitialized() const;
+// ------------------------------------------------------
 
-    void seek(int timeInSeconds);
-    bool decodeVideoFrame()  const;
-    void getScaledVideoFrame(int scaledSize,
-                             bool maintainAspectRatio,
-                             VideoFrame& videoFrame);
+VideoThumbWriter::VideoThumbWriter()
+{
+}
 
-    void initialize(const QString& filename);
-    void destroy();
+VideoThumbWriter::~VideoThumbWriter()
+{
+}
 
-private:
+void VideoThumbWriter::writeFrame(VideoFrame& frame, QImage& image)
+{
+    QImage previewImage(frame.width, frame.height, QImage::Format_RGB888);
 
-    MovieDecoder(const MovieDecoder&); // Disable
+    for (quint32 y = 0 ; y < frame.height ; ++y)
+    {
+        // Copy each line...
+        memcpy(previewImage.scanLine(y),
+               &frame.frameData[y * frame.lineSize],
+               frame.width * 3);
+    }
 
-    class Private;
-    Private* const d;
-};
+    image = previewImage;
+}
 
 } // namespace Digikam
-
-#endif // DIGIKAM_MOVIE_DECODER_H

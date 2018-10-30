@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "imagewriter.h"
+#include "videothumbwriter.h"
 
 namespace Digikam
 {

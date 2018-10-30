@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 class VideoFrame;
-class ImageWriter;
+class VideoThumbWriter;
 class MovieDecoder;
 class FilmStripFilter;
 
@@ -69,7 +69,7 @@ public:
 
 private:
 
-    void generateThumbnail(const QString& videoFile, ImageWriter& imageWriter, QImage& image);
+    void generateThumbnail(const QString& videoFile, VideoThumbWriter& imageWriter, QImage& image);
     void generateSmartThumbnail(MovieDecoder& movieDecoder, VideoFrame& videoFrame);
 
     void applyFilters(VideoFrame& frameData);

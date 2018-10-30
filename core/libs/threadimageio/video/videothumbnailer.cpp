@@ -38,7 +38,7 @@
 
 #include "moviedecoder.h"
 #include "filmstripfilter.h"
-#include "imagewriter.h"
+#include "videothumbwriter.h"
 #include "digikam_debug.h"
 
 using namespace std;
@@ -164,7 +164,7 @@ int VideoThumbnailer::timeToSeconds(const QString& time) const
 }
 
 void VideoThumbnailer::generateThumbnail(const QString& videoFile,
-                                         ImageWriter& imageWriter,
+                                         VideoThumbWriter& imageWriter,
                                          QImage &image)
 {
     MovieDecoder movieDecoder(videoFile);
@@ -224,7 +224,7 @@ void VideoThumbnailer::generateSmartThumbnail(MovieDecoder& movieDecoder,
 void VideoThumbnailer::generateThumbnail(const QString& videoFile,
                                          QImage &image)
 {
-    ImageWriter* const imageWriter = new  ImageWriter();
+    VideoThumbWriter* const imageWriter = new  VideoThumbWriter();
     generateThumbnail(videoFile, *imageWriter, image);
     delete imageWriter;
 }

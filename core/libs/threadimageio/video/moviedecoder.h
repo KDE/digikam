@@ -22,46 +22,52 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_WRITER_H
-#define DIGIKAM_IMAGE_WRITER_H
+#ifndef DIGIKAM_MOVIE_DECODER_H
+#define DIGIKAM_MOVIE_DECODER_H
 
 // Qt includes
 
-#include <QtGlobal>
-#include <QImage>
-#include <QVector>
+#include <QString>
+
+// Local includes
+
+#include "videothumbwriter.h"
 
 namespace Digikam
 {
 
-class VideoFrame
+class MovieDecoder
 {
 public:
 
-    VideoFrame();
-    VideoFrame(int width, int height, int lineSize);
-    ~VideoFrame();
+    explicit MovieDecoder(const QString& filename);
+    ~MovieDecoder();
 
 public:
 
-    quint32         width;
-    quint32         height;
-    quint32         lineSize;
-    QVector<quint8> frameData;
-};
+    QString getCodec()       const;
+    int     getWidth()       const;
+    int     getHeight()      const;
+    int     getDuration()    const;
+    bool    getInitialized() const;
 
-// -----------------------------------------------------------------
+    void seek(int timeInSeconds);
+    bool decodeVideoFrame()  const;
+    void getScaledVideoFrame(int scaledSize,
+                             bool maintainAspectRatio,
+                             VideoFrame& videoFrame);
 
-class ImageWriter
-{
-public:
+    void initialize(const QString& filename);
+    void destroy();
 
-    explicit ImageWriter();
-    ~ImageWriter();
+private:
 
-    void writeFrame(VideoFrame& frame, QImage& image);
+    MovieDecoder(const MovieDecoder&); // Disable
+
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_WRITER_H
+#endif // DIGIKAM_MOVIE_DECODER_H
