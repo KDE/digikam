@@ -13,14 +13,11 @@ if (MINGW)
     ExternalProject_Add(ext_lensfun
 
         GIT_REPOSITORY https://git.code.sf.net/p/lensfun/code
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/lensfun0.3.95-installdb-mxe.patch
 
 #        URL file://${EXTERNALS_DOWNLOAD_DIR}/lensfun-0.3.2.tar.gz
 #        URL_MD5 247e59a0812ec451f6cd0d20b3379cb5
-
-#        URL http://downloads.sourceforge.net/project/lensfun/0.3.95/lensfun-0.3.95.tar.gz
-#        URL_MD5 21107eaf72303706256481fef2dc8013
-
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/lensfun0.3.2-regex-mxe.patch
+#        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/lensfun0.3.2-regex-mxe.patch
 
         CONFIGURE_COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.mxe <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.mxe ${MXE_BUILDROOT} RelWithDebInfo ${GLOBAL_PROFILE}
