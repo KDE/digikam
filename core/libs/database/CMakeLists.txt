@@ -160,7 +160,7 @@ if(Marble_FOUND)
 endif()
 
 # enable exceptions
-kde_source_files_enable_exceptions(imagehistory/imagehistorygraph.cpp imagehistory/imagehistorygraphmodel.cpp)
+kde_source_files_enable_exceptions(history/itemhistorygraph.cpp history/itemhistorygraphmodel.cpp)
 
 set(libhaar_SRCS
     haar/haar.cpp
