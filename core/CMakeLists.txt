@@ -26,7 +26,7 @@ set(DIGIKAM_PATCH_VERSION "0")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-set(DIGIKAM_SUFFIX_VERSION "-beta2")
+set(DIGIKAM_SUFFIX_VERSION "-beta3")
 
 # ==============================================================================
 # Set env. variables accordingly.

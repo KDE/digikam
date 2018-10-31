@@ -1,4 +1,4 @@
-digiKam 6.0.0-beta1 - Release date: 2018-08-19
+digiKam 6.0.0-beta3 - Release date: 2018-11-25
 
 *****************************************************************************************************
 NEW FEATURES:
@@ -624,4 +624,3 @@ BUGFIXES:
 558 ==> 400217 - Incorrect Video date/time information: shifted by 2 hours.
 559 ==> 396961 - Empty space on interface on thumbnail view.
 560 ==> 
-
