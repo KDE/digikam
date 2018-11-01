@@ -39,8 +39,8 @@ namespace Digikam
 
 class VideoFrame;
 class VideoThumbWriter;
-class MovieDecoder;
-class FilmStripFilter;
+class VideoDecoder;
+class VideoStripFilter;
 
 class DIGIKAM_EXPORT VideoThumbnailer
 {
@@ -63,14 +63,14 @@ public:
     void setWorkAroundIssues(bool workAround);
     void setMaintainAspectRatio(bool enabled);
     void setSmartFrameSelection(bool enabled);
-    void addFilter(FilmStripFilter* const filter);
-    void removeFilter(FilmStripFilter* const filter);
+    void addFilter(VideoStripFilter* const filter);
+    void removeFilter(VideoStripFilter* const filter);
     void clearFilters();
 
 private:
 
     void generateThumbnail(const QString& videoFile, VideoThumbWriter& imageWriter, QImage& image);
-    void generateSmartThumbnail(MovieDecoder& movieDecoder, VideoFrame& videoFrame);
+    void generateSmartThumbnail(VideoDecoder& movieDecoder, VideoFrame& videoFrame);
 
     void applyFilters(VideoFrame& frameData);
     int  timeToSeconds(const QString& time) const;

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "filmstripfilter.h"
+#include "videostripfilter.h"
 
 // Qt includes
 
@@ -35,13 +35,13 @@
 namespace Digikam
 {
 
-static const quint8 filmStrip4[4 * 4 * 3] =
+static const quint8 videoStrip4[4 * 4 * 3] =
 {
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0kkk\207\207\207777\0\0\0\237\237\237\303\303"
     "\303RRR\0\0\0\0\0\0\0\0\0\0\0"
 };
 
-static const quint8 filmStrip8[8 * 8 * 3] =
+static const quint8 videoStrip8[8 * 8 * 3] =
 {
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\40\40\40""777::::::444\1\1\1\0\0\0\2"
@@ -51,7 +51,7 @@ static const quint8 filmStrip8[8 * 8 * 3] =
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
 };
 
-static const quint8 filmStrip16[16 * 16 * 3] =
+static const quint8 videoStrip16[16 * 16 * 3] =
 {
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
@@ -80,7 +80,7 @@ static const quint8 filmStrip16[16 * 16 * 3] =
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
 };
 
-static const quint8 filmStrip32[32 * 32 * 3] =
+static const quint8 videoStrip32[32 * 32 * 3] =
 {
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
@@ -184,7 +184,7 @@ static const quint8 filmStrip32[32 * 32 * 3] =
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
 };
 
-static const quint8 filmStrip64[64 * 64 * 3] =
+static const quint8 videoStrip64[64 * 64 * 3] =
 {
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
@@ -595,7 +595,7 @@ static const quint32 SMALLEST_FILM_STRIP_WIDTH = 4;
 static const int FILMHOLE_WIDTH                = 12;
 static const int FILMHOLE_HEIGHT               = 10;
 
-static const quint8* determineFilmStrip(quint32 videoWidth, quint32& filmStripWidth, quint32& filmStripHeight)
+static const quint8* determineFilmStrip(quint32 videoWidth, quint32& videoStripWidth, quint32& videoStripHeight)
 {
     if (videoWidth <= SMALLEST_FILM_STRIP_WIDTH * 2)
     {
@@ -604,46 +604,46 @@ static const quint8* determineFilmStrip(quint32 videoWidth, quint32& filmStripWi
 
     if (videoWidth <= 96)
     {
-        filmStripWidth = filmStripHeight = 4;
-        return filmStrip4;
+        videoStripWidth = videoStripHeight = 4;
+        return videoStrip4;
     }
 
     if (videoWidth <= 192)
     {
-        filmStripWidth = filmStripHeight = 8;
-        return filmStrip8;
+        videoStripWidth = videoStripHeight = 8;
+        return videoStrip8;
     }
 
     if (videoWidth <= 384)
     {
-        filmStripWidth = filmStripHeight = 16;
-        return filmStrip16;
+        videoStripWidth = videoStripHeight = 16;
+        return videoStrip16;
     }
 
     if (videoWidth <= 768)
     {
-        filmStripWidth = filmStripHeight = 32;
-        return filmStrip32;
+        videoStripWidth = videoStripHeight = 32;
+        return videoStrip32;
     }
 
-    filmStripWidth = filmStripHeight = 64;
+    videoStripWidth = videoStripHeight = 64;
 
-    return filmStrip64;
+    return videoStrip64;
 }
 
-FilmStripFilter::FilmStripFilter()
+VideoStripFilter::VideoStripFilter()
 {
 }
 
-FilmStripFilter::~FilmStripFilter()
+VideoStripFilter::~VideoStripFilter()
 {
 }
 
-void FilmStripFilter::process(VideoFrame& videoFrame)
+void VideoStripFilter::process(VideoFrame& videoFrame)
 {
-    quint32 filmStripWidth       = 0;
-    quint32 filmStripHeight      = 0;
-    const quint8* const filmHole = determineFilmStrip(videoFrame.width, filmStripWidth, filmStripHeight);
+    quint32 videoStripWidth       = 0;
+    quint32 videoStripHeight      = 0;
+    const quint8* const filmHole = determineFilmStrip(videoFrame.width, videoStripWidth, videoStripHeight);
 
     if (!filmHole)
     {
@@ -656,7 +656,7 @@ void FilmStripFilter::process(VideoFrame& videoFrame)
 
     for (quint32 i = 0 ; i < videoFrame.height ; i++)
     {
-        for (quint32 j = 0 ; j < filmStripWidth * 3 ; j+=3)
+        for (quint32 j = 0 ; j < videoStripWidth * 3 ; j+=3)
         {
             int currentFilmHoleIndex                          = filmHoleIndex + j;
 
@@ -670,7 +670,7 @@ void FilmStripFilter::process(VideoFrame& videoFrame)
         }
 
         frameIndex   += videoFrame.lineSize;
-        filmHoleIndex = (i % filmStripHeight) * filmStripWidth * 3;
+        filmHoleIndex = (i % videoStripHeight) * videoStripWidth * 3;
     }
 }
 

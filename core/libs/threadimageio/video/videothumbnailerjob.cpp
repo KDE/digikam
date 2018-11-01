@@ -32,7 +32,7 @@
 // Local includes
 
 #include "videothumbnailer.h"
-#include "filmstripfilter.h"
+#include "videostripfilter.h"
 #include "thumbnailsize.h"
 #include "digikam_debug.h"
 
@@ -142,12 +142,12 @@ void VideoThumbnailerJob::run()
             qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for" << file;
 
             VideoThumbnailer thumbnailer;
-            FilmStripFilter  filmStrip;
+            VideoStripFilter  videoStrip;
             QImage           img;
 
             if (d->createStrip)
             {
-                thumbnailer.addFilter(&filmStrip);
+                thumbnailer.addFilter(&videoStrip);
             }
 
             thumbnailer.setThumbnailSize(d->thumbSize);

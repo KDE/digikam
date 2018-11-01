@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#include "moviedecoder.h"
-#include "moviedecoder_p.h"
+#include "videodecoder.h"
+#include "videodecoder_p.h"
 
 // Local includes
 
@@ -32,19 +32,19 @@
 namespace Digikam
 {
 
-MovieDecoder::MovieDecoder(const QString& filename)
+VideoDecoder::VideoDecoder(const QString& filename)
     : d(new Private)
 {
     initialize(filename);
 }
 
-MovieDecoder::~MovieDecoder()
+VideoDecoder::~VideoDecoder()
 {
     destroy();
     delete d;
 }
 
-void MovieDecoder::initialize(const QString& filename)
+void VideoDecoder::initialize(const QString& filename)
 {
     d->lastWidth  = -1;
     d->lastHeight = -1;
@@ -81,12 +81,12 @@ void MovieDecoder::initialize(const QString& filename)
     }
 }
 
-bool MovieDecoder::getInitialized() const
+bool VideoDecoder::getInitialized() const
 {
     return d->initialized;
 }
 
-void MovieDecoder::destroy()
+void VideoDecoder::destroy()
 {
     d->deleteFilterGraph();
 
@@ -122,7 +122,7 @@ void MovieDecoder::destroy()
     }
 }
 
-QString MovieDecoder::getCodec() const 
+QString VideoDecoder::getCodec() const 
 {
     QString codecName;
 
@@ -134,7 +134,7 @@ QString MovieDecoder::getCodec() const
     return codecName;
 }
 
-int MovieDecoder::getWidth() const
+int VideoDecoder::getWidth() const
 {
     if (d->pVideoCodecContext)
     {
@@ -144,7 +144,7 @@ int MovieDecoder::getWidth() const
     return -1;
 }
 
-int MovieDecoder::getHeight() const
+int VideoDecoder::getHeight() const
 {
     if (d->pVideoCodecContext)
     {
@@ -154,7 +154,7 @@ int MovieDecoder::getHeight() const
     return -1;
 }
 
-int MovieDecoder::getDuration() const
+int VideoDecoder::getDuration() const
 {
     if (d->pFormatContext)
     {
@@ -164,7 +164,7 @@ int MovieDecoder::getDuration() const
     return 0;
 }
 
-void MovieDecoder::seek(int timeInSeconds)
+void VideoDecoder::seek(int timeInSeconds)
 {
     if (!d->allowSeek)
     {
@@ -216,7 +216,7 @@ void MovieDecoder::seek(int timeInSeconds)
     }
 }
 
-bool MovieDecoder::decodeVideoFrame() const
+bool VideoDecoder::decodeVideoFrame() const
 {
     bool frameFinished = false;
 
@@ -233,7 +233,7 @@ bool MovieDecoder::decodeVideoFrame() const
     return frameFinished;
 }
 
-void MovieDecoder::getScaledVideoFrame(int scaledSize,
+void VideoDecoder::getScaledVideoFrame(int scaledSize,
                                        bool maintainAspectRatio,
                                        VideoFrame& videoFrame)
 {

@@ -25,7 +25,7 @@
 #ifndef DIGIKAM_MOVIE_DECODER_PRIVATE_H
 #define DIGIKAM_MOVIE_DECODER_PRIVATE_H
 
-#include "moviedecoder.h"
+#include "videodecoder.h"
 
 // FFMpeg includes
 
@@ -43,7 +43,7 @@ extern "C"
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN MovieDecoder::Private
+class Q_DECL_HIDDEN VideoDecoder::Private
 {
 public:
 

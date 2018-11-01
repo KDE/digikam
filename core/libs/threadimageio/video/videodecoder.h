@@ -22,24 +22,52 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FILM_STRIP_FILTER_H
-#define DIGIKAM_FILM_STRIP_FILTER_H
+#ifndef DIGIKAM_MOVIE_DECODER_H
+#define DIGIKAM_MOVIE_DECODER_H
+
+// Qt includes
+
+#include <QString>
+
+// Local includes
+
+#include "videothumbwriter.h"
 
 namespace Digikam
 {
 
-class VideoFrame;
-
-class FilmStripFilter
+class VideoDecoder
 {
 public:
 
-    explicit FilmStripFilter();
-    ~FilmStripFilter();
+    explicit VideoDecoder(const QString& filename);
+    ~VideoDecoder();
 
-    void process(VideoFrame& videoFrame);
+public:
+
+    QString getCodec()       const;
+    int     getWidth()       const;
+    int     getHeight()      const;
+    int     getDuration()    const;
+    bool    getInitialized() const;
+
+    void seek(int timeInSeconds);
+    bool decodeVideoFrame()  const;
+    void getScaledVideoFrame(int scaledSize,
+                             bool maintainAspectRatio,
+                             VideoFrame& videoFrame);
+
+    void initialize(const QString& filename);
+    void destroy();
+
+private:
+
+    VideoDecoder(const VideoDecoder&); // Disable
+
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_FILM_STRIP_FILTER_H
+#endif // DIGIKAM_MOVIE_DECODER_H

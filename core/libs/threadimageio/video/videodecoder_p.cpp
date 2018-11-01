@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "moviedecoder_p.h"
+#include "videodecoder_p.h"
 
 // Local includes
 
@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-MovieDecoder::Private::Private()
+VideoDecoder::Private::Private()
 {
     videoStream           = -1;
     pFormatContext        = 0;
@@ -53,11 +53,11 @@ MovieDecoder::Private::Private()
     lastPixfmt            = AV_PIX_FMT_NONE;
 }
 
-MovieDecoder::Private::~Private()
+VideoDecoder::Private::~Private()
 {
 }
 
-void MovieDecoder::Private::createAVFrame(AVFrame** const avFrame,
+void VideoDecoder::Private::createAVFrame(AVFrame** const avFrame,
                                           quint8** const frameBuffer,
                                           int width,
                                           int height,
@@ -70,7 +70,7 @@ void MovieDecoder::Private::createAVFrame(AVFrame** const avFrame,
     av_image_fill_arrays((*avFrame)->data, (*avFrame)->linesize, *frameBuffer, format, width, height, 1);
 }
 
-void MovieDecoder::Private::initializeVideo()
+void VideoDecoder::Private::initializeVideo()
 {
     for (unsigned int i = 0 ; i < pFormatContext->nb_streams ; i++)
     {
@@ -108,7 +108,7 @@ void MovieDecoder::Private::initializeVideo()
     }
 }
 
-bool MovieDecoder::Private::decodeVideoPacket() const
+bool VideoDecoder::Private::decodeVideoPacket() const
 {
     if (pPacket->stream_index != videoStream)
     {
@@ -140,7 +140,7 @@ bool MovieDecoder::Private::decodeVideoPacket() const
     return (frameFinished > 0);
 }
 
-int MovieDecoder::Private::decodeVideoNew(AVCodecContext* const avContext,
+int VideoDecoder::Private::decodeVideoNew(AVCodecContext* const avContext,
                                           AVFrame* const avFrame,
                                           int* gotFrame,
                                           AVPacket* const avPacket) const
@@ -176,7 +176,7 @@ int MovieDecoder::Private::decodeVideoNew(AVCodecContext* const avContext,
     return 0;
 }
 
-bool MovieDecoder::Private::getVideoPacket()
+bool VideoDecoder::Private::getVideoPacket()
 {
     bool framesAvailable = true;
     bool frameDecoded    = false;
@@ -210,7 +210,7 @@ bool MovieDecoder::Private::getVideoPacket()
     return frameDecoded;
 }
 
-void MovieDecoder::Private::deleteFilterGraph()
+void VideoDecoder::Private::deleteFilterGraph()
 {
     if (filterGraph)
     {
@@ -220,7 +220,7 @@ void MovieDecoder::Private::deleteFilterGraph()
     }
 }
 
-bool MovieDecoder::Private::initFilterGraph(enum AVPixelFormat pixfmt,
+bool VideoDecoder::Private::initFilterGraph(enum AVPixelFormat pixfmt,
                                             int width, int height)
 {
     AVFilterInOut* inputs  = 0;
@@ -274,7 +274,7 @@ bool MovieDecoder::Private::initFilterGraph(enum AVPixelFormat pixfmt,
     return true;
 }
 
-bool MovieDecoder::Private::processFilterGraph(AVFrame* const dst,
+bool VideoDecoder::Private::processFilterGraph(AVFrame* const dst,
                                                const AVFrame* const src,
                                                enum AVPixelFormat pixfmt,
                                                int width, int height)
@@ -317,7 +317,7 @@ bool MovieDecoder::Private::processFilterGraph(AVFrame* const dst,
     return true;
 }
 
-void MovieDecoder::Private::convertAndScaleFrame(AVPixelFormat format,
+void VideoDecoder::Private::convertAndScaleFrame(AVPixelFormat format,
                                                  int scaledSize,
                                                  bool maintainAspectRatio,
                                                  int& scaledWidth,
@@ -391,7 +391,7 @@ void MovieDecoder::Private::convertAndScaleFrame(AVPixelFormat format,
     pFrameBuffer = convertedFrameBuffer;
 }
 
-void MovieDecoder::Private::calculateDimensions(int squareSize,
+void VideoDecoder::Private::calculateDimensions(int squareSize,
                                                 bool maintainAspectRatio,
                                                 int& destWidth,
                                                 int& destHeight)

@@ -36,8 +36,8 @@
 
 // Local includes
 
-#include "moviedecoder.h"
-#include "filmstripfilter.h"
+#include "videodecoder.h"
+#include "videostripfilter.h"
 #include "videothumbwriter.h"
 #include "digikam_debug.h"
 
@@ -100,7 +100,7 @@ public:
     bool                      maintainAspectRatio;
     bool                      smartFrameSelection;
     QString                   seekTime;
-    QVector<FilmStripFilter*> filters;
+    QVector<VideoStripFilter*> filters;
 
     const int                 SMART_FRAME_ATTEMPTS;
 };
@@ -167,7 +167,7 @@ void VideoThumbnailer::generateThumbnail(const QString& videoFile,
                                          VideoThumbWriter& imageWriter,
                                          QImage &image)
 {
-    MovieDecoder movieDecoder(videoFile);
+    VideoDecoder movieDecoder(videoFile);
 
     if (movieDecoder.getInitialized())
     {
@@ -201,7 +201,7 @@ void VideoThumbnailer::generateThumbnail(const QString& videoFile,
     }
 }
 
-void VideoThumbnailer::generateSmartThumbnail(MovieDecoder& movieDecoder,
+void VideoThumbnailer::generateSmartThumbnail(VideoDecoder& movieDecoder,
                                               VideoFrame& videoFrame)
 {
     vector<VideoFrame> videoFrames(d->SMART_FRAME_ATTEMPTS);
@@ -229,14 +229,14 @@ void VideoThumbnailer::generateThumbnail(const QString& videoFile,
     delete imageWriter;
 }
 
-void VideoThumbnailer::addFilter(FilmStripFilter* const filter)
+void VideoThumbnailer::addFilter(VideoStripFilter* const filter)
 {
     d->filters.append(filter);
 }
 
-void VideoThumbnailer::removeFilter(FilmStripFilter* const filter)
+void VideoThumbnailer::removeFilter(VideoStripFilter* const filter)
 {
-    for (QVector<FilmStripFilter*>::iterator it = d->filters.begin();
+    for (QVector<VideoStripFilter*>::iterator it = d->filters.begin();
          it != d->filters.end();
          ++it)
     {
@@ -255,7 +255,7 @@ void VideoThumbnailer::clearFilters()
 
 void VideoThumbnailer::applyFilters(VideoFrame& videoFrame)
 {
-    for (QVector<FilmStripFilter*>::iterator it = d->filters.begin();
+    for (QVector<VideoStripFilter*>::iterator it = d->filters.begin();
          it != d->filters.end();
          ++it)
     {
