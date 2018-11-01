@@ -624,4 +624,5 @@ BUGFIXES:
 558 ==> 400217 - Incorrect Video date/time information: shifted by 2 hours.
 559 ==> 396961 - Empty space on interface on thumbnail view.
 560 ==> 400436 - Crash when saving jpeg files with metadata.
-561 ==> 
+561 ==> 400492 - Rotation does not work.
+562 ==> 

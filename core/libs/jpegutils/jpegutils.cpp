@@ -504,9 +504,6 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
 
 void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotation &matrix)
 {
-    // Reset the Exif orientation tag of the temp image to normal
-    m_metadata.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-
     QMatrix qmatrix = matrix.toMatrix();
     QRect r(QPoint(0, 0), m_originalSize);
     QSize newSize   = qmatrix.mapRect(r).size();
@@ -531,6 +528,9 @@ void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotati
         m_metadata.setImagePreview(imagePreview.transformed(qmatrix));
     }
 
+    // Reset the Exif orientation tag of the temp image to normal
+    m_metadata.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+
     // We update all new metadata now...
     m_metadata.save(fileName, true);
 
@@ -540,7 +540,8 @@ void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotati
 
     if (QT_STAT(QFile::encodeName(m_file).constData(), &st) == 0)
     {
-        // See bug #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
+        // See bug #329608: Restore file modification time from original file
+        // only if updateFileTimeStamp for Setup/Metadata is turned off.
 
         if (!MetaEngineSettings::instance()->settings().updateFileTimeStamp)
         {

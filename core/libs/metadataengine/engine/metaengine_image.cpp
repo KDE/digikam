@@ -394,9 +394,7 @@ bool MetaEngine::setImageOrientation(ImageOrientation orientation) const
 
         if (it != d->exifMetadata().end() && it->count())
         {
-            MetaEngineRotation operation((MetaEngine::ImageOrientation)it->toLong());
-            operation *= orientation;
-            (*it) = static_cast<uint16_t>(operation.exifOrientation());
+            (*it) = static_cast<uint16_t>(orientation);
         }
 
         return true;
