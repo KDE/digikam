@@ -39,6 +39,9 @@ using namespace Digikam;
 
 void CommentReadWriteTest::initTestCase()
 {
+    MetaEngine::initializeExiv2();
+    qDebug() << "Using Exiv2 Version:" << MetaEngine::Exiv2Version();
+
     MetaEngine::AltLangMap authorsMap,  authorsMap2;
     MetaEngine::AltLangMap datesMap,    datesMap2;
     MetaEngine::AltLangMap commentsMap, commentsMap2;
@@ -55,6 +58,11 @@ void CommentReadWriteTest::initTestCase()
     commonAuthor2 = QLatin1String("Munteanu");
 
     commentSet2.setData(commentsMap2, authorsMap2, commonAuthor2, datesMap2);
+}
+
+void CommentReadWriteTest::cleanupTestCase()
+{
+    MetaEngine::cleanupExiv2();
 }
 
 void CommentReadWriteTest::testSimpleReadAfterWrite()

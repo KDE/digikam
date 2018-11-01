@@ -39,6 +39,9 @@ QTEST_GUILESS_MAIN(TagsReadWriteTest)
 
 void TagsReadWriteTest::initTestCase()
 {
+    MetaEngine::initializeExiv2();
+    qDebug() << "Using Exiv2 Version:" << MetaEngine::Exiv2Version();
+
     this->tagSet1  << QLatin1String("/root/child1/child2")
                    << QLatin1String("/root/extra/child2/triple")
                    << QLatin1String("/root/extra/ch223/triple");
@@ -50,6 +53,11 @@ void TagsReadWriteTest::initTestCase()
     this->tagSet3  << QLatin1String("/rowet/child1/crehild2")
                    << QLatin1String("/rsdfsoot/extsdera/chihgld2/triple")
                    << QLatin1String("/roosdst/extfamnbra/ch2hg23/triple");
+}
+
+void TagsReadWriteTest::cleanupTestCase()
+{
+    MetaEngine::cleanupExiv2();
 }
 
 void TagsReadWriteTest::testSimpleReadAfterWrite()

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-10-25
- * Description : Extract preview and patch with DMetadata.
+ * Description : An unit-test to extract preview and patch with DMetadata.
  *               This stage is used by Export tools.
  *
  * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>

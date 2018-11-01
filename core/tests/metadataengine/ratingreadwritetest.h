@@ -36,6 +36,7 @@ class RatingReadWriteTest : public QObject
 private Q_SLOTS:
 
     void initTestCase();
+    void cleanupTestCase();
 
     /**
      * @brief testSimpleReadAfterWrite - default read and write

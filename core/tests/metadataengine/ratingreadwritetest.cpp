@@ -40,6 +40,13 @@ QTEST_GUILESS_MAIN(RatingReadWriteTest)
 
 void RatingReadWriteTest::initTestCase()
 {
+    MetaEngine::initializeExiv2();
+    qDebug() << "Using Exiv2 Version:" << MetaEngine::Exiv2Version();
+}
+
+void RatingReadWriteTest::cleanupTestCase()
+{
+    MetaEngine::cleanupExiv2();
 }
 
 void RatingReadWriteTest::testSimpleReadAfterWrite()
