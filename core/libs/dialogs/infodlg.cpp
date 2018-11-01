@@ -99,10 +99,11 @@ InfoDlg::InfoDlg(QWidget* const parent)
     QLabel* const header    = new QLabel(d->page);
     header->setWordWrap(true);
     header->setText(i18n("<font size=\"5\">%1</font><br/><b>Version %2</b>"
-                         "<p>%3</p>",
+                         "<p>%3</p><p><i>%4</i></p>",
                          QApplication::applicationName(),
                          QApplication::applicationVersion(),
-                         DAboutData::digiKamSlogan()));
+                         DAboutData::digiKamSlogan(),
+                         DAboutData::digiKamFamilly()));
 
     // --------------------------------------------------------
 
