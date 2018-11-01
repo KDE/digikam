@@ -49,14 +49,13 @@ void UseXmpSidecarTest::testUseXmpSidecar()
     MetaEngineSettingsContainer settings;
 
     settings.metadataWritingMode = DMetadata::WRITETOSIDECARONLY;
+    useXmpSidecar(originalImageFolder + QLatin1String("_27A1417.CR2"), settings);
 
-    useXmpSidecar(originalImageFolder + QLatin1String("_27A1417.CR2"),
-                  settings);
+    settings.metadataWritingMode = DMetadata::WRITETOSIDECARONLY;
+    useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 
     settings.metadataWritingMode = DMetadata::WRITETOSIDECARANDIMAGE;
-
-    useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"),
-                  settings);
+    useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 }
 
 void UseXmpSidecarTest::cleanupTestCase()
@@ -81,6 +80,7 @@ void UseXmpSidecarTest::useXmpSidecar(const QString& file,
     ret = !path.isNull();
     QVERIFY(ret);
 
+    QFile::remove(path);
     QFile target(file);
     ret = target.copy(path);
     QVERIFY(ret);
@@ -90,6 +90,7 @@ void UseXmpSidecarTest::useXmpSidecar(const QString& file,
     ret = !pathXmp.isNull();
     QVERIFY(ret);
 
+    QFile::remove(pathXmp);
     QFile xmpTarget(file + QLatin1String(".xmp"));
     ret = xmpTarget.copy(pathXmp);
 

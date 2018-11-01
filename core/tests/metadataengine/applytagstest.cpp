@@ -91,6 +91,7 @@ void ApplyTagsTest::applyTags(const QString& file,
     ret = !path.isNull();
     QVERIFY(ret);
 
+    QFile::remove(path);
     QFile target(file);
     ret = target.copy(path);
     QVERIFY(ret);
