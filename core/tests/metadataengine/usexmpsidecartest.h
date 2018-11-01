@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2010-06-27
- * Description : a command line tool to test XMP sidecar functionality
+ * Date        : 2018-10-30
+ * Description : An unit-test to read/write metadata from XMP sidecar with DMetadata.
  *
- * Copyright (C) 2010 by Jakob Malm <jakob dot malm at gmail dot com>
+ * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,36 +21,35 @@
  *
  * ============================================================ */
 
+#ifndef DIGIKAM_USE_XMP_SIDECAR_TEST_H
+#define DIGIKAM_USE_XMP_SIDECAR_TEST_H
+
 // Qt includes
 
+#include <QObject>
 #include <QString>
-#include <QFile>
-#include <QDebug>
 
 // Local includes
 
-#include "dmetadata.h"
+#include "metaenginesettingscontainer.h"
+#include "dmetadatasettingscontainer.h"
 
 using namespace Digikam;
 
-int main (int argc, char **argv)
+class UseXmpSidecarTest : public QObject
 {
-    if(argc != 2)
-    {
-        qDebug() << "usexmpsidecar - read from and write to XMP sidecar";
-        qDebug() << "Usage: <image>";
-        return -1;
-    }
+    Q_OBJECT
 
-    QString filePath(QString::fromLatin1(argv[1]));
+private:
 
-    DMetadata meta;
-    meta.setUseXMPSidecar4Reading(true);
-    meta.load(filePath);
-    // print some metadata
-    // add some metadata
-    // write changed metadata
-    // perhaps check to see if image file or XMP sidecar file was changed
+    void useXmpSidecar(const QString& file,
+                       const MetaEngineSettingsContainer& settings);
 
-    return 0;
-}
+private Q_SLOTS:
+
+    void initTestCase();
+    void testUseXmpSidecar();
+    void cleanupTestCase();
+};
+
+#endif // DIGIKAM_USE_XMP_SIDECAR_TEST_H
