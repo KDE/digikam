@@ -108,6 +108,11 @@ void UseXmpSidecarTest::useXmpSidecar(const QString& file,
     meta.setImageRating(3);
     meta.setImagePickLabel(2);
     meta.setImageColorLabel(1);
+
+    QStringList tags = QStringList() << QString::fromUtf8("City/Paris/Eiffel Tower")
+                                     << QString::fromUtf8("Animals/Dog/Illka")
+                                     << QString::fromUtf8("People/Family/Agnès");
+    meta.setImageTagsPath(tags);
     ret = meta.applyChanges(true);
     QVERIFY(ret);
 
@@ -124,6 +129,22 @@ void UseXmpSidecarTest::useXmpSidecar(const QString& file,
 
     val = meta2.getImageColorLabel();
     QCOMPARE(val, 1);
+
+    QStringList newTags;
+    ret = meta2.getImageTagsPath(newTags);
+    QVERIFY(ret);
+
+    int count = tags.count();
+
+    foreach (const QString& tag, newTags)
+    {
+        if (tags.contains(tag))
+        {
+            --count;
+        }
+    }
+
+    QCOMPARE(count, 0);
 
     WSToolUtils::removeTemporaryDir("usexmpsidecartest");
 }
