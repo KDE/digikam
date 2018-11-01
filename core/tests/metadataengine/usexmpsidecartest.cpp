@@ -47,20 +47,24 @@ void UseXmpSidecarTest::initTestCase()
 void UseXmpSidecarTest::testUseXmpSidecar()
 {
     MetaEngineSettingsContainer settings;
-    settings.useXMPSidecar4Reading = true;
 
+    settings.useXMPSidecar4Reading = true;
     settings.metadataWritingMode = DMetadata::WRITETOSIDECARONLY;
     useXmpSidecar(originalImageFolder + QLatin1String("_27A1417.CR2"), settings);
 
+    settings.useXMPSidecar4Reading = true;
     settings.metadataWritingMode = DMetadata::WRITETOSIDECARONLY4READONLYFILES;
     useXmpSidecar(originalImageFolder + QLatin1String("_27A1417.CR2"), settings);
 
+    settings.useXMPSidecar4Reading = false;
     settings.metadataWritingMode = DMetadata::WRITETOIMAGEONLY;
     useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 
+    settings.useXMPSidecar4Reading = true;
     settings.metadataWritingMode = DMetadata::WRITETOSIDECARONLY;
     useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 
+    settings.useXMPSidecar4Reading = true;
     settings.metadataWritingMode = DMetadata::WRITETOSIDECARANDIMAGE;
     useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 }
