@@ -51,6 +51,12 @@ void UseXmpSidecarTest::testUseXmpSidecar()
     settings.metadataWritingMode = DMetadata::WRITETOSIDECARONLY;
     useXmpSidecar(originalImageFolder + QLatin1String("_27A1417.CR2"), settings);
 
+    settings.metadataWritingMode = DMetadata::WRITETOSIDECARONLY4READONLYFILES;
+    useXmpSidecar(originalImageFolder + QLatin1String("_27A1417.CR2"), settings);
+
+    settings.metadataWritingMode = DMetadata::WRITETOIMAGEONLY;
+    useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
+
     settings.metadataWritingMode = DMetadata::WRITETOSIDECARONLY;
     useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 
