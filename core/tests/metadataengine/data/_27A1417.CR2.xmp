@@ -1,0 +1,356 @@
+<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="XMP Core 4.4.0-Exiv2">
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about=""
+    xmlns:dmf="http://www.bibblelabs.com/DigitalMasterFile/1.0/"
+    xmlns:dmfversion="http://www.bibblelabs.com/DigitalMasterFileVersion/1.0/"
+    xmlns:bset="http://www.bibblelabs.com/BibbleSettings/5.0/"
+    xmlns:blay="http://www.bibblelabs.com/BibbleLayers/5.0/"
+    xmlns:bopt="http://www.bibblelabs.com/BibbleOpt/5.0/"
+    xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+    xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
+    xmlns:darktable="http://darktable.sf.net/"
+    xmlns:lr="http://ns.adobe.com/lightroom/1.0/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+   dmf:versionCount="1"
+   xmp:Rating="1"
+   xmpMM:DerivedFrom="_27A1417.CR2"
+   darktable:xmp_version="1"
+   darktable:raw_params="0"
+   darktable:auto_presets_applied="1">
+   <dmf:versions>
+    <rdf:Seq>
+     <rdf:li>
+      <rdf:Description
+       dmfversion:software="bibble"
+       dmfversion:softwareVersion="2008.1"
+       dmfversion:versionName="_27A1417.CR2">
+      <dmfversion:settings>
+       <rdf:Description
+        bset:settingsVersion="66"
+        bset:respectsTransform="True"
+        bset:curLayer="0">
+       <bset:layers>
+        <rdf:Seq>
+         <rdf:li>
+          <rdf:Description
+           blay:layerId="0"
+           blay:layerPos="0"
+           blay:name=""
+           blay:enabled="True">
+          <blay:options
+           bopt:optionchanged="false"
+           bopt:hasSettings="false"
+           bopt:metaDirty="true"
+           bopt:version="8.2"
+           bopt:colormode="1"
+           bopt:workingspace="2"
+           bopt:whiteauto="false"
+           bopt:whitetype="8"
+           bopt:lwhitetype="8"
+           bopt:lmr="1"
+           bopt:lmb="1"
+           bopt:whitered="65384"
+           bopt:whitegreen="65384"
+           bopt:whiteblue="65384"
+           bopt:whiteowbr="0"
+           bopt:whiteowbb="0"
+           bopt:autolevel="false"
+           bopt:shadowval="0.2"
+           bopt:highlightval="0.2"
+           bopt:exposureval="0"
+           bopt:highlightrecval="0"
+           bopt:highlightRange="35"
+           bopt:highlightrecthresh="0"
+           bopt:blackPoint="0"
+           bopt:fillamount="0"
+           bopt:fillrange="0.25"
+           bopt:autorotate="0"
+           bopt:rotateangle="0"
+           bopt:sharpensense="6"
+           bopt:sharpenrad="0"
+           bopt:newsharpen="100"
+           bopt:sharpenon="true"
+           bopt:bnn_enabled="false"
+           bopt:bnn_auto="false"
+           bopt:bnn_profile=""
+           bopt:bnn_currentprofile=""
+           bopt:bnn_turbo="true"
+           bopt:bnn_coarse="false"
+           bopt:bnn_lstrength="10"
+           bopt:bnn_lsmooth="10"
+           bopt:bnn_lcontrast="10"
+           bopt:bnn_cstrength="10"
+           bopt:bnn_csmooth="10"
+           bopt:bnn_ccontrast="10"
+           bopt:bnn_usmamount="0"
+           bopt:bnn_usmradius="1.2"
+           bopt:pcenabled="false"
+           bopt:pctintmeta="2"
+           bopt:red="0"
+           bopt:green="0"
+           bopt:blue="0"
+           bopt:sat="0"
+           bopt:cont="0"
+           bopt:hue="0"
+           bopt:vibe="0"
+           bopt:useHSL="false"
+           bopt:useHSV="true"
+           bopt:invertRegions="false"
+           bopt:layerOpacity="1"
+           bopt:selective_color=""
+           bopt:curveson="false"
+           bopt:curves_m_cn="4,1,2,2,2,2"
+           bopt:curves_m_cy="4,20,0,65535,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65535,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65535,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65535,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"
+           bopt:curves_m_cx="4,20,0,65535,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65535,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65535,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65535,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"
+           bopt:curves_m_imid="4,1,1,1,1,1"
+           bopt:curves_m_olo="4,1,0,0,0,0"
+           bopt:curves_m_ilo="4,1,0,0,0,0"
+           bopt:curves_m_ihi="4,1,65535,65535,65535,65535"
+           bopt:curves_m_ohi="4,1,65535,65535,65535,65535"
+           bopt:kelvin="6082"
+           bopt:tint="39"
+           bopt:okelvin="6082"
+           bopt:otint="39"
+           bopt:lkelvin="6082"
+           bopt:ltint="39"
+           bopt:ckelvin="6082"
+           bopt:ctint="39"
+           bopt:cropon="false"
+           bopt:croplocked="true"
+           bopt:cropstyle="0"
+           bopt:cropleft="-1"
+           bopt:croptop="-1"
+           bopt:cropheight="2"
+           bopt:cropwidth="3"
+           bopt:cropdpi="-1"
+           bopt:cropstickydpi="-1"
+           bopt:cropstickyx="-1"
+           bopt:cropstickyy="-1"
+           bopt:cropmenuitem=""
+           bopt:croppercent="1"
+           bopt:Date="2014-08-15 20:26:59.000"
+           bopt:DigitizedDateTime="2014-08-15 20:26:59.000"
+           bopt:title=""
+           bopt:Priority=""
+           bopt:Category=""
+           bopt:SupplementalCategory=""
+           bopt:creator=""
+           bopt:AuthorsPosition=""
+           bopt:rights="x-default|umv@umbertovalentinotti.it"
+           bopt:Credit=""
+           bopt:description=""
+           bopt:CaptionWriter=""
+           bopt:City=""
+           bopt:State=""
+           bopt:Country=""
+           bopt:CountryCode=""
+           bopt:Headline=""
+           bopt:Instructions=""
+           bopt:TransmissionReference=""
+           bopt:Source=""
+           bopt:subject=""
+           bopt:IntellectualGenre=""
+           bopt:CiAdrCity=""
+           bopt:CiAdrCtry=""
+           bopt:CiAdrExtadr=""
+           bopt:CiAdrPcode=""
+           bopt:CiAdrRegion=""
+           bopt:CiEmailWork=""
+           bopt:CiTelWork=""
+           bopt:CiUrlWork=""
+           bopt:UsageTerms=""
+           bopt:Location=""
+           bopt:SubjectCode=""
+           bopt:Scene=""
+           bopt:tag="0"
+           bopt:keywordlist="varie;santagiuliana,persego"
+           bopt:rating="3"
+           bopt:label="0"
+           bopt:warpon="false"
+           bopt:warpa="0.002615"
+           bopt:warpb="-0.01123"
+           bopt:warpc="0"
+           bopt:warpresize="true"
+           bopt:warpfocal="50"
+           bopt:warpcaon="false"
+           bopt:warpcarc="0"
+           bopt:warpcaby="0"
+           bopt:vignetteon="false"
+           bopt:vignetterad="50"
+           bopt:vignetteamt="0.5"
+           bopt:profilemake="Canon SLR"
+           bopt:profilemodel="EOS 5D Mark III"
+           bopt:profilelens="Canon EF 50mm f/1.4 USM"
+           bopt:lens="Canon EF 50mm f/1.4 USM"
+           bopt:GPSVersionID="2.3.0.0"
+           bopt:GPSLatitude=""
+           bopt:GPSLongitude=""
+           bopt:GPSAltitudeRef="0"
+           bopt:GPSAltitude=""
+           bopt:GPSTimeStamp=""
+           bopt:GPSSatellites=""
+           bopt:GPSStatus="A"
+           bopt:GPSMeasureMode=""
+           bopt:GPSDateStamp=""
+           bopt:GPSMapDatum=""
+           bopt:GPSAreaInformation=""
+           bopt:GPSProcessingMethod=""
+           bopt:bMirrorOn="false"
+           bopt:bInvertOn="false"
+           bopt:rn_enabled="true"
+           bopt:rn_smooth_enabled="true"
+           bopt:rn_threshold="0"
+           bopt:rn_limit="50"
+           bopt:enableInputProfile="false"
+           bopt:inputProfile=""
+           bopt:blplug.bbwenabled="false"
+           bopt:blplug.bbwspotA="false"
+           bopt:blplug.bbwspotB="false"
+           bopt:blplug.bbwhueA="0"
+           bopt:blplug.bbwfuzzyA="25"
+           bopt:blplug.bbwcolorA="0"
+           bopt:blplug.bbwhueB="200"
+           bopt:blplug.bbwcolorB="200"
+           bopt:blplug.bbwfuzzyB="25"
+           bopt:blplug.bbwmode="0"
+           bopt:Equalizer_kb.kbs_enabled="false"
+           bopt:Equalizer_kb.kbs_bw="false"
+           bopt:Equalizer_kb.kbs_redlum="0"
+           bopt:Equalizer_kb.kbs_yellowlum="0"
+           bopt:Equalizer_kb.kbs_orangelum="0"
+           bopt:Equalizer_kb.kbs_greenlum="0"
+           bopt:Equalizer_kb.kbs_cyanlum="0"
+           bopt:Equalizer_kb.kbs_bluelum="0"
+           bopt:Equalizer_kb.kbs_magentalum="0"
+           bopt:Equalizer_kb.kbs_redhue="0"
+           bopt:Equalizer_kb.kbs_yellowhue="0"
+           bopt:Equalizer_kb.kbs_orangehue="0"
+           bopt:Equalizer_kb.kbs_greenhue="0"
+           bopt:Equalizer_kb.kbs_cyanhue="0"
+           bopt:Equalizer_kb.kbs_bluehue="0"
+           bopt:Equalizer_kb.kbs_magentahue="0"
+           bopt:Equalizer_kb.kbs_redsat="0"
+           bopt:Equalizer_kb.kbs_yellowsat="0"
+           bopt:Equalizer_kb.kbs_orangesat="0"
+           bopt:Equalizer_kb.kbs_greensat="0"
+           bopt:Equalizer_kb.kbs_cyansat="0"
+           bopt:Equalizer_kb.kbs_bluesat="0"
+           bopt:Equalizer_kb.kbs_magentasat="0"
+           bopt:Equalizer_kb.kbs_redvib="0"
+           bopt:Equalizer_kb.kbs_yellowvib="0"
+           bopt:Equalizer_kb.kbs_orangevib="0"
+           bopt:Equalizer_kb.kbs_greenvib="0"
+           bopt:Equalizer_kb.kbs_cyanvib="0"
+           bopt:Equalizer_kb.kbs_bluevib="0"
+           bopt:Equalizer_kb.kbs_magentavib="0"
+           bopt:Nostalgia.Nostalgia_enabled="false"
+           bopt:Nostalgia.Nostalgia_filter="BW: Red 23A"
+           bopt:Nostalgia.Nostalgia_film="BN: Agfa Agfapan 25 Refinal 6min"
+           bopt:Nostalgia.Nostalgia_paper="BN: Agfa MultiContrast Premium Filter 0"
+           bopt:Nostalgia.Nostalgia_filmid="16018434"
+           bopt:Nostalgia.Nostalgia_paperid="62745048"
+           bopt:Nostalgia.Nostalgia_dr="9"
+           bopt:Nostalgia.Nostalgia_exposure="0"
+           bopt:Nostalgia.Nostalgia_darkroom="0"
+           bopt:Nostalgia.Nostalgia_dmax="5"
+           bopt:Nostalgia.Nostalgia_fred="0"
+           bopt:Nostalgia.Nostalgia_fgreen="0"
+           bopt:Nostalgia.Nostalgia_fblue="0"
+           bopt:Nostalgia.Nostalgia_flatitude="0"
+           bopt:Nostalgia.Nostalgia_platitude="0"
+           bopt:Nostalgia.Nostalgia_rgb="true"
+           bopt:Nostalgia.Nostalgia_print="true"
+           bopt:Nostalgia.Nostalgia_indicator="false"/>
+          </rdf:Description>
+         </rdf:li>
+        </rdf:Seq>
+       </bset:layers>
+       </rdf:Description>
+      </dmfversion:settings>
+      </rdf:Description>
+     </rdf:li>
+    </rdf:Seq>
+   </dmf:versions>
+   <darktable:colorlabels>
+    <rdf:Seq/>
+   </darktable:colorlabels>
+   <darktable:history_modversion>
+    <rdf:Seq>
+     <rdf:li>1</rdf:li>
+     <rdf:li>2</rdf:li>
+    </rdf:Seq>
+   </darktable:history_modversion>
+   <darktable:history_enabled>
+    <rdf:Seq>
+     <rdf:li>1</rdf:li>
+     <rdf:li>1</rdf:li>
+    </rdf:Seq>
+   </darktable:history_enabled>
+   <darktable:history_operation>
+    <rdf:Seq>
+     <rdf:li>sharpen</rdf:li>
+     <rdf:li>basecurve</rdf:li>
+    </rdf:Seq>
+   </darktable:history_operation>
+   <darktable:history_params>
+    <rdf:Seq>
+     <rdf:li>000000400000003f0000003f</rdf:li>
+     <rdf:li>0000000000000000363ae73c2e1df33c12bef73d0bd56d3ec95aeb3e78613f3ff8de5b3ff1bd773f0000803f0000803f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000060000000000000000000000020000000000000000000000</rdf:li>
+    </rdf:Seq>
+   </darktable:history_params>
+   <darktable:blendop_params>
+    <rdf:Seq>
+     <rdf:li>000000000000c84200000000000000000000000000000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f</rdf:li>
+     <rdf:li>000000000000c84200000000000000000000000000000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f00000000000000000000803f0000803f</rdf:li>
+    </rdf:Seq>
+   </darktable:blendop_params>
+   <darktable:blendop_version>
+    <rdf:Seq>
+     <rdf:li>4</rdf:li>
+     <rdf:li>4</rdf:li>
+    </rdf:Seq>
+   </darktable:blendop_version>
+   <darktable:multi_priority>
+    <rdf:Seq>
+     <rdf:li>0</rdf:li>
+     <rdf:li>0</rdf:li>
+    </rdf:Seq>
+   </darktable:multi_priority>
+   <darktable:multi_name>
+    <rdf:Seq>
+     <rdf:li> </rdf:li>
+     <rdf:li> </rdf:li>
+    </rdf:Seq>
+   </darktable:multi_name>
+   <lr:hierarchicalSubject>
+    <rdf:Seq/>
+   </lr:hierarchicalSubject>
+   <dc:subject>
+    <rdf:Seq/>
+   </dc:subject>
+  </rdf:Description>
+ </rdf:RDF>
+</x:xmpmeta>
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                           
+<?xpacket end="w"?>
