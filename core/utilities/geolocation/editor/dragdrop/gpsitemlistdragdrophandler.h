@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-22
- * Description : Drag and drop handler for the image list
+ * Description : Drag and drop handler for the item list
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Michael G. Hansen <mike at mghansen dot de>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_GPS_IMAGE_LIST_DRAG_DROP_HANDLER_H
-#define DIGIKAM_GPS_IMAGE_LIST_DRAG_DROP_HANDLER_H
+#ifndef DIGIKAM_GPS_ITEM_LIST_DRAG_DROP_HANDLER_H
+#define DIGIKAM_GPS_ITEM_LIST_DRAG_DROP_HANDLER_H
 
 // Qt includes
 
@@ -36,32 +36,32 @@
 namespace Digikam
 {
 
-class ImageListDragDropHandler : public QObject
+class ItemListDragDropHandler : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageListDragDropHandler(QObject* const parent = 0);
-    virtual ~ImageListDragDropHandler();
+    explicit ItemListDragDropHandler(QObject* const parent = 0);
+    virtual ~ItemListDragDropHandler();
 
     virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices) = 0;
 };
 
 // -------------------------------------------------------------------------------------------------
 
-class GPSImageListDragDropHandler : public ImageListDragDropHandler
+class GPSItemListDragDropHandler : public ItemListDragDropHandler
 {
     Q_OBJECT
 
 public:
 
-    explicit GPSImageListDragDropHandler(QObject* const parent = 0);
-    ~GPSImageListDragDropHandler();
+    explicit GPSItemListDragDropHandler(QObject* const parent = 0);
+    ~GPSItemListDragDropHandler();
 
     virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices);
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_GPS_IMAGE_LIST_DRAG_DROP_HANDLER_H
+#endif // DIGIKAM_GPS_ITEM_LIST_DRAG_DROP_HANDLER_H

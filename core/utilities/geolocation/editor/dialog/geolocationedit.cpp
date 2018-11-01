@@ -71,7 +71,7 @@
 #include "gpsimagemodel.h"
 #include "mapdragdrophandler.h"
 #include "gpsimagelist.h"
-#include "gpsimagelistdragdrophandler.h"
+#include "gpsitemlistdragdrophandler.h"
 #include "gpsimagelistcontextmenu.h"
 #include "gpscorrelatorwidget.h"
 #include "digikam_debug.h"
@@ -82,7 +82,7 @@
 #include "statusprogressbar.h"
 #include "searchwidget.h"
 #include "backend-rg.h"
-#include "gpsimagedetails.h"
+#include "gpsitemdetails.h"
 #include "gpsgeoifacemodelhelper.h"
 #include "dxmlguiwindow.h"
 #include "gpsbookmarkowner.h"
@@ -232,7 +232,7 @@ public:
     QString                                  progressCancelSlot;
 
     // UI: tab widgets
-    GPSImageDetails*                         detailsWidget;
+    GPSItemDetails*                         detailsWidget;
     GPSCorrelatorWidget*                     correlatorWidget;
     RGWidget*                                rgWidget;
     SearchWidget*                            searchWidget;
@@ -383,7 +383,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
 
     d->treeView      = new GPSImageList(this);
     d->treeView->setModelAndSelectionModel(d->imageModel, d->selectionModel);
-    d->treeView->setDragDropHandler(new GPSImageListDragDropHandler(this));
+    d->treeView->setDragDropHandler(new GPSItemListDragDropHandler(this));
     d->treeView->setDragEnabled(true);
     // TODO: save and restore the state of the header
     // TODO: add a context menu to the header to select which columns should be visible
@@ -415,7 +415,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
 
     d->tabBar->installEventFilter(this);
 
-    d->detailsWidget    = new GPSImageDetails(d->stackedWidget, d->imageModel);
+    d->detailsWidget    = new GPSItemDetails(d->stackedWidget, d->imageModel);
     d->stackedWidget->addWidget(d->detailsWidget);
 
     d->correlatorWidget = new GPSCorrelatorWidget(d->stackedWidget, d->imageModel, d->trackManager);

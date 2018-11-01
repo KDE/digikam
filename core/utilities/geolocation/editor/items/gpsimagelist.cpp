@@ -40,7 +40,7 @@
 
 #include "digikam_debug.h"
 #include "gpsimageitemdelegate.h"
-#include "gpsimagelistdragdrophandler.h"
+#include "gpsitemlistdragdrophandler.h"
 
 namespace Digikam
 {
@@ -66,7 +66,7 @@ public:
     QItemSelectionModel*      selectionModel;
     GPSImageItemDelegate*     itemDelegate;
     GPSImageSortProxyModel*   imageSortProxyModel;
-    ImageListDragDropHandler* dragDropHandler;
+    ItemListDragDropHandler* dragDropHandler;
 };
 
 GPSImageList::GPSImageList(QWidget* const parent)
@@ -136,7 +136,7 @@ void GPSImageList::setModelAndSelectionModel(GPSItemModel* const model, QItemSel
         setSelectionModel(d->imageSortProxyModel->mappedSelectionModel());
 }
 
-void GPSImageList::setDragDropHandler(ImageListDragDropHandler* const dragDropHandler)
+void GPSImageList::setDragDropHandler(ItemListDragDropHandler* const dragDropHandler)
 {
     d->dragDropHandler = dragDropHandler;
 }

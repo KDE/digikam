@@ -29,7 +29,7 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                             searches/searchwidget.cpp
 
                             dragdrop/mapdragdrophandler.cpp
-                            dragdrop/gpsimagelistdragdrophandler.cpp
+                            dragdrop/gpsitemlistdragdrophandler.cpp
 
                             items/gpsimagemodel.cpp
                             items/gpsimagesortproxymodel.cpp
@@ -39,7 +39,7 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                             items/gpsimagelistcontextmenu.cpp
 
                             dialog/gpscommon.cpp
-                            dialog/gpsimagedetails.cpp
+                            dialog/gpsitemdetails.cpp
                             dialog/gpsundocommand.cpp
                             dialog/geolocationedit.cpp
                             dialog/gpsgeoifacemodelhelper.cpp

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-22
- * Description : Drag and drop handler for the image list
+ * Description : Drag and drop handler for the item list
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Michael G. Hansen <mike at mghansen dot de>
@@ -22,32 +22,32 @@
  *
  * ============================================================ */
 
-#include "gpsimagelistdragdrophandler.h"
+#include "gpsitemlistdragdrophandler.h"
 
 namespace Digikam
 {
 
-ImageListDragDropHandler::ImageListDragDropHandler(QObject* const parent)
+ItemListDragDropHandler::ItemListDragDropHandler(QObject* const parent)
     : QObject(parent)
 {
 }
 
-ImageListDragDropHandler::~ImageListDragDropHandler()
+ItemListDragDropHandler::~ItemListDragDropHandler()
 {
 }
 
 // ------------------------------------------------------------------------------------------------
 
-GPSImageListDragDropHandler::GPSImageListDragDropHandler(QObject* const parent)
-    : ImageListDragDropHandler(parent)
+GPSItemListDragDropHandler::GPSItemListDragDropHandler(QObject* const parent)
+    : ItemListDragDropHandler(parent)
 {
 }
 
-GPSImageListDragDropHandler::~GPSImageListDragDropHandler()
+GPSItemListDragDropHandler::~GPSItemListDragDropHandler()
 {
 }
 
-QMimeData* GPSImageListDragDropHandler::createMimeData(const QList<QPersistentModelIndex>& modelIndices)
+QMimeData* GPSItemListDragDropHandler::createMimeData(const QList<QPersistentModelIndex>& modelIndices)
 {
     MapDragData* const mimeData = new MapDragData();
     mimeData->draggedIndices    = modelIndices;

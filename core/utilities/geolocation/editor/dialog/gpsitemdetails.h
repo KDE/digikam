@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-08-06
- * Description : A widget to show details about images
+ * Description : A widget to show details about item
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Michael G. Hansen <mike at mghansen dot de>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_GPS_IMAGE_DETAILS_H
-#define DIGIKAM_GPS_IMAGE_DETAILS_H
+#ifndef DIGIKAM_GPS_ITEM_DETAILS_H
+#define DIGIKAM_GPS_ITEM_DETAILS_H
 
 // Qt includes
 
@@ -42,15 +42,15 @@ class GPSItemModel;
 class GPSUndoCommand;
 class GPSDataContainer;
 
-class GPSImageDetails : public QWidget
+class GPSItemDetails : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit GPSImageDetails(QWidget* const parent,
+    explicit GPSItemDetails(QWidget* const parent,
                              GPSItemModel* const imageModel);
-    ~GPSImageDetails();
+    ~GPSItemDetails();
 
     void setUIEnabledExternal(const bool state);
     void saveSettingsToGroup(KConfigGroup* const group);
@@ -83,4 +83,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_GPS_IMAGE_DETAILS_H
+#endif // DIGIKAM_GPS_ITEM_DETAILS_H

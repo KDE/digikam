@@ -40,7 +40,7 @@ class KConfigGroup;
 namespace Digikam
 {
 
-class ImageListDragDropHandler;
+class ItemListDragDropHandler;
 
 class GPSImageList : public QTreeView
 {
@@ -54,7 +54,7 @@ public:
     void setModelAndSelectionModel(GPSItemModel* const model, QItemSelectionModel* const selectionModel);
     GPSItemModel* getModel() const;
     QItemSelectionModel* getSelectionModel() const;
-    void setDragDropHandler(ImageListDragDropHandler* const dragDropHandler);
+    void setDragDropHandler(ItemListDragDropHandler* const dragDropHandler);
     void setThumbnailSize(const int size);
     GPSImageSortProxyModel* getSortProxyModel() const;
 

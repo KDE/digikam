@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "gpsimagedetails.h"
+#include "gpsitemdetails.h"
 
 // C++ includes
 
@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN GPSImageDetails::Private
+class Q_DECL_HIDDEN GPSItemDetails::Private
 {
 public:
 
@@ -110,7 +110,7 @@ public:
     bool                         haveDelayedState;
 };
 
-GPSImageDetails::GPSImageDetails(QWidget* const parent, GPSItemModel* const imageModel)
+GPSItemDetails::GPSItemDetails(QWidget* const parent, GPSItemModel* const imageModel)
     : QWidget(parent),
       d(new Private())
 {
@@ -208,26 +208,26 @@ GPSImageDetails::GPSImageDetails(QWidget* const parent, GPSItemModel* const imag
     updateUIState();
 }
 
-GPSImageDetails::~GPSImageDetails()
+GPSItemDetails::~GPSItemDetails()
 {
     delete d;
 }
 
-void GPSImageDetails::setUIEnabledExternal(const bool state)
+void GPSItemDetails::setUIEnabledExternal(const bool state)
 {
     d->externalEnabledState = state;
     updateUIState();
 }
 
-void GPSImageDetails::saveSettingsToGroup(KConfigGroup* const /*group*/)
+void GPSItemDetails::saveSettingsToGroup(KConfigGroup* const /*group*/)
 {
 }
 
-void GPSImageDetails::readSettingsFromGroup(const KConfigGroup* const /*group*/)
+void GPSItemDetails::readSettingsFromGroup(const KConfigGroup* const /*group*/)
 {
 }
 
-void GPSImageDetails::updateUIState()
+void GPSItemDetails::updateUIState()
 {
     const bool externalEnabled = d->externalEnabledState && d->imageIndex.isValid();
     const bool haveCoordinates = d->cbCoordinates->isChecked();
@@ -262,7 +262,7 @@ void GPSImageDetails::updateUIState()
     d->pbApply->setEnabled(externalEnabled);
 }
 
-void GPSImageDetails::displayGPSDataContainer(const GPSDataContainer* const gpsData)
+void GPSItemDetails::displayGPSDataContainer(const GPSDataContainer* const gpsData)
 {
     d->cbAltitude->setChecked(false);
     d->cbSpeed->setChecked(false);
@@ -334,7 +334,7 @@ void GPSImageDetails::displayGPSDataContainer(const GPSDataContainer* const gpsD
     updateUIState();
 }
 
-void GPSImageDetails::slotSetCurrentImage(const QModelIndex& index)
+void GPSItemDetails::slotSetCurrentImage(const QModelIndex& index)
 {
     // TODO: slotSetActive may call this function with d->imageIndex as a parameter
     // since we get the index as a reference, we overwrite index when changing d->imageIndex
@@ -367,7 +367,7 @@ void GPSImageDetails::slotSetCurrentImage(const QModelIndex& index)
     displayGPSDataContainer(&gpsData);
 }
 
-void GPSImageDetails::slotModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void GPSItemDetails::slotModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     if (!d->imageIndex.isValid())
         return;
@@ -395,7 +395,7 @@ void GPSImageDetails::slotModelDataChanged(const QModelIndex& topLeft, const QMo
     }
 }
 
-void GPSImageDetails::slotApply()
+void GPSItemDetails::slotApply()
 {
     GPSDataContainer newData;
 
@@ -448,7 +448,7 @@ void GPSImageDetails::slotApply()
     emit(signalUndoCommand(undoCommand));
 }
 
-void GPSImageDetails::slotSetActive(const bool state)
+void GPSItemDetails::slotSetActive(const bool state)
 {
     d->activeState = state;
 
