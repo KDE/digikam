@@ -10,11 +10,11 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libthreadimageio_SRCS
-    dfileoperations.cpp
-    filereadwritelock.cpp
+    engine/dfileoperations.cpp
+    engine/filereadwritelock.cpp
+    engine/managedloadsavethread.cpp
+    engine/sharedloadsavethread.cpp
     loadsavethread.cpp
-    managedloadsavethread.cpp
-    sharedloadsavethread.cpp
     loadingdescription.cpp
     loadingcache.cpp
     loadingcacheinterface.cpp
