@@ -618,7 +618,7 @@ void YFWindow::updateNextPhoto()
                     {
                         d->meta.setImageDimensions(image.size());
                         d->meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-                        d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+                        d->meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
                         d->meta.save(photo.localUrl(), true);
                         prepared = true;
                     }

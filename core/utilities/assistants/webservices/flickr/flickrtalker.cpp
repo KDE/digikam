@@ -562,7 +562,7 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
                 //       This function call remove all Dublin Core Tags.
                 meta.removeXmpTags(QStringList() << QLatin1String("dc"));
 
-                meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+                meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
                 meta.save(path, true);
             }
             else

@@ -567,9 +567,9 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->writeXMPSidecarBox->setEnabled(MetaEngine::supportXmp());
 
     d->writingModeCombo   = new QComboBox;
-    d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only item only"), MetaEngine::WRITETOSIDECARONLY4READONLYFILES);
-    d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                    MetaEngine::WRITETOSIDECARONLY);
-    d->writingModeCombo->addItem(i18n("Write to item and XMP Sidecar"),                MetaEngine::WRITETOSIDECARANDIMAGE);
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only item only"), MetaEngine::WRITE_TO_SIDECAR_ONLY_FOR_READ_ONLY_FILES);
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                    MetaEngine::WRITE_TO_SIDECAR_ONLY);
+    d->writingModeCombo->addItem(i18n("Write to item and XMP Sidecar"),                MetaEngine::WRITE_TO_SIDECAR_AND_IMAGE);
     d->writingModeCombo->setToolTip(i18nc("@info:tooltip", "Specify the exact mode of XMP sidecar writing"));
     d->writingModeCombo->setEnabled(false);
 
@@ -713,7 +713,7 @@ void SetupMetadata::applySettings()
     }
     else
     {
-        set.metadataWritingMode = MetaEngine::WRITETOIMAGEONLY;
+        set.metadataWritingMode = MetaEngine::WRITE_TO_IMAGE_ONLY;
     }
 
     set.updateFileTimeStamp   = d->updateFileTimeStampBox->isChecked();
@@ -791,7 +791,7 @@ void SetupMetadata::readSettings()
     d->rescanImageIfModifiedBox->setChecked(set.rescanImageIfModified);
     d->clearMetadataIfRescanBox->setChecked(set.clearMetadataIfRescan);
 
-    if (set.metadataWritingMode == MetaEngine::WRITETOIMAGEONLY)
+    if (set.metadataWritingMode == MetaEngine::WRITE_TO_IMAGE_ONLY)
     {
         d->writeXMPSidecarBox->setChecked(false);
     }

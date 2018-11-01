@@ -108,7 +108,7 @@ void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDi
     meta.setXmp(xmp);
     meta.setImageDimensions(image.size());
     meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-    meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+    meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
     ret = meta.applyChanges(true);
     QVERIFY(ret);
 

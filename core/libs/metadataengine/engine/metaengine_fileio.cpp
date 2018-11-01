@@ -225,17 +225,17 @@ bool MetaEngine::save(const QString& imageFilePath, bool setVersion) const
 
     switch(d->metadataWritingMode)
     {
-        case WRITETOSIDECARONLY:
+        case WRITE_TO_SIDECAR_ONLY:
             writeToSidecar = true;
             break;
-        case WRITETOIMAGEONLY:
+        case WRITE_TO_IMAGE_ONLY:
             writeToFile    = true;
             break;
-        case WRITETOSIDECARANDIMAGE:
+        case WRITE_TO_SIDECAR_AND_IMAGE:
             writeToFile    = true;
             writeToSidecar = true;
             break;
-        case WRITETOSIDECARONLY4READONLYFILES:
+        case WRITE_TO_SIDECAR_ONLY_FOR_READ_ONLY_FILES:
             writeToFile = true;
             writeToSidecarIfFileNotPossible = true;
             break;

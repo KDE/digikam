@@ -64,16 +64,16 @@ public:
     enum MetadataWritingMode
     {
         /// Write metadata to image file only.
-        WRITETOIMAGEONLY                 = 0,
+        WRITE_TO_IMAGE_ONLY                       = 0,
 
         /// Write metadata to sidecar file only.
-        WRITETOSIDECARONLY               = 1,
+        WRITE_TO_SIDECAR_ONLY                     = 1,
 
         /// Write metadata to image and sidecar files.
-        WRITETOSIDECARANDIMAGE           = 2,
+        WRITE_TO_SIDECAR_AND_IMAGE                = 2,
 
         /// Write metadata to sidecar file only for read only images such as RAW files for example.
-        WRITETOSIDECARONLY4READONLYFILES = 3
+        WRITE_TO_SIDECAR_ONLY_FOR_READ_ONLY_FILES = 3
     };
 
     /**

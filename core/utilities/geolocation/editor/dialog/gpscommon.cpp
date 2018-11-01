@@ -103,7 +103,7 @@ void coordinatesToClipboard(const GeoCoordinates& coordinates,
 
 bool checkSidecarSettings()
 {
-    if ( (MetaEngineSettings::instance()->settings().metadataWritingMode != DMetadata::WRITETOIMAGEONLY) &&
+    if ( (MetaEngineSettings::instance()->settings().metadataWritingMode != DMetadata::WRITE_TO_IMAGE_ONLY) &&
          (!MetaEngineSettings::instance()->settings().useXMPSidecar4Reading) )
     {
         const int result = DMessageBox::showContinueCancel(QMessageBox::Warning,

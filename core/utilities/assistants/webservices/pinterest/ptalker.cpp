@@ -374,7 +374,7 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
     {
         d->meta.setImageDimensions(image.size());
         d->meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-        d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+        d->meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
         d->meta.save(path, true);
     }
 

@@ -144,7 +144,7 @@ DMetadata* GPSImageItem::getMetadataForFile() const
     {
         // It is possible that no sidecar file has yet been created.
         // If writing to sidecar file is activated, we ignore the loading error of the metadata.
-        if (MetaEngineSettings::instance()->settings().metadataWritingMode == DMetadata::WRITETOIMAGEONLY)
+        if (MetaEngineSettings::instance()->settings().metadataWritingMode == DMetadata::WRITE_TO_IMAGE_ONLY)
         {
             return 0;
         }

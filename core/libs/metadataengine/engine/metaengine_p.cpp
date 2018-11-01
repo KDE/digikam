@@ -67,7 +67,7 @@ MetaEngine::Private::Private()
     writeRawFiles         = false;
     updateFileTimeStamp   = false;
     useXMPSidecar4Reading = false;
-    metadataWritingMode   = WRITETOIMAGEONLY;
+    metadataWritingMode   = WRITE_TO_IMAGE_ONLY;
     loadedFromSidecar     = false;
     Exiv2::LogMsg::setHandler(MetaEngine::Private::printExiv2MessageHandler);
 }

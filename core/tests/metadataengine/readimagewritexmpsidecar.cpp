@@ -50,7 +50,7 @@ int main (int argc, char **argv)
     meta.load(filePath);
 
     // Write metadata to XMP sidecar
-    meta.setMetadataWritingMode(DMetadata::WRITETOSIDECARONLY);
+    meta.setMetadataWritingMode(DMetadata::WRITE_TO_SIDECAR_ONLY);
     meta.save(filePath);
 
     return 0;

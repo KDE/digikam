@@ -277,7 +277,7 @@ bool PiwigoTalker::addPhoto(int   albumId,
             {
                 meta.setImageDimensions(image.size());
                 meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-                meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+                meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
                 meta.save(d->path, true);
             }
             else

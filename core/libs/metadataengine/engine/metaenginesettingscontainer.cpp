@@ -55,7 +55,7 @@ MetaEngineSettingsContainer::MetaEngineSettingsContainer()
       clearMetadataIfRescan(false),
       useXMPSidecar4Reading(false),
       useLazySync(false),
-      metadataWritingMode(MetaEngine::WRITETOIMAGEONLY),
+      metadataWritingMode(MetaEngine::WRITE_TO_IMAGE_ONLY),
       rotationBehavior(RotatingFlags | RotateByLosslessRotation),
       sidecarExtensions(QStringList())
 {
@@ -79,7 +79,7 @@ void MetaEngineSettingsContainer::readFromConfig(KConfigGroup& group)
     writeRawFiles         = group.readEntry("Write Metadata To RAW Files", false);
     useXMPSidecar4Reading = group.readEntry("Use XMP Sidecar For Reading", false);
     metadataWritingMode   = (MetaEngine::MetadataWritingMode)
-                            group.readEntry("Metadata Writing Mode",       (int)MetaEngine::WRITETOIMAGEONLY);
+                            group.readEntry("Metadata Writing Mode",       (int)MetaEngine::WRITE_TO_IMAGE_ONLY);
     updateFileTimeStamp   = group.readEntry("Update File Timestamp",       true);
     rescanImageIfModified = group.readEntry("Rescan File If Modified",     false);
     clearMetadataIfRescan = group.readEntry("Clear Metadata If Rescan",    false);

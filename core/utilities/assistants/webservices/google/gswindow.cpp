@@ -1011,7 +1011,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
                     d->meta.setGPSInfo(0.0, item.gpsLat.toDouble(), item.gpsLon.toDouble());
                 }
 
-                d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+                d->meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
                 d->meta.save(tmpUrl.toLocalFile());
             }
 

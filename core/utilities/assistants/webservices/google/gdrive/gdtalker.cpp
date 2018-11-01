@@ -263,7 +263,7 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
         {
             meta.setImageDimensions(image.size());
             meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+            meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
             meta.save(path, true);
         }
     }

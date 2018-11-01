@@ -300,7 +300,7 @@ bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     {
         d->meta.setImageDimensions(image.size());
         d->meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-        d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+        d->meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
         d->meta.save(path, true);
     }
 

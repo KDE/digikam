@@ -255,7 +255,7 @@ bool MediaWikiWindow::prepareImageForUpload(const QString& imgPath)
     // to write metadata to image file rather than sidecar file, to be effective with remote web service.
 
     DMetadata meta;
-    meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+    meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
 
     if (d->widget->removeMeta())
     {

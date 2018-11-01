@@ -105,7 +105,7 @@ void TimeAdjustTask::run()
     }
 
     bool writeToSidecar  = (MetaEngineSettings::instance()->settings()
-                            .metadataWritingMode != DMetadata::WRITETOIMAGEONLY);
+                            .metadataWritingMode != DMetadata::WRITE_TO_IMAGE_ONLY);
 
     bool metadataChanged = d->settings.updEXIFModDate || d->settings.updEXIFOriDate ||
                            d->settings.updEXIFDigDate || d->settings.updEXIFThmDate ||

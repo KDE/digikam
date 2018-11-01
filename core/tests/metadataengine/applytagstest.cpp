@@ -50,7 +50,7 @@ void ApplyTagsTest::testApplyTagsToMetadata()
 
     // For bug #400436
 
-    settings.metadataWritingMode = DMetadata::WRITETOIMAGEONLY;
+    settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
 
     applyTags(originalImageFolder + QLatin1String("2015-07-22_00001.JPG"),
               QStringList() << QLatin1String("nature"),
@@ -60,7 +60,7 @@ void ApplyTagsTest::testApplyTagsToMetadata()
 
     // For bug #397189
 
-    settings.metadataWritingMode = DMetadata::WRITETOIMAGEONLY;
+    settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
 
     applyTags(originalImageFolder + QLatin1String("20160821035715.jpg"),
               QStringList() << QLatin1String("test"),

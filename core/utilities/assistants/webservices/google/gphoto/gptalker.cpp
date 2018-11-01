@@ -346,7 +346,7 @@ bool GPTalker::addPhoto(const QString& photoPath,
         {
             meta.setImageDimensions(image.size());
             meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+            meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
             meta.save(path, true);
         }
     }
@@ -431,7 +431,7 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info, /*const QStr
         {
             meta.setImageDimensions(image.size());
             meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+            meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
             meta.save(path, true);
         }
     }

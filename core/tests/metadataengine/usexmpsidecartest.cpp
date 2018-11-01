@@ -49,23 +49,23 @@ void UseXmpSidecarTest::testUseXmpSidecar()
     MetaEngineSettingsContainer settings;
 
     settings.useXMPSidecar4Reading = true;
-    settings.metadataWritingMode = DMetadata::WRITETOSIDECARONLY;
+    settings.metadataWritingMode = DMetadata::WRITE_TO_SIDECAR_ONLY;
     useXmpSidecar(originalImageFolder + QLatin1String("_27A1417.CR2"), settings);
 
     settings.useXMPSidecar4Reading = true;
-    settings.metadataWritingMode = DMetadata::WRITETOSIDECARONLY4READONLYFILES;
+    settings.metadataWritingMode = DMetadata::WRITE_TO_SIDECAR_ONLY_FOR_READ_ONLY_FILES;
     useXmpSidecar(originalImageFolder + QLatin1String("_27A1417.CR2"), settings);
 
     settings.useXMPSidecar4Reading = false;
-    settings.metadataWritingMode = DMetadata::WRITETOIMAGEONLY;
+    settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
     useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 
     settings.useXMPSidecar4Reading = true;
-    settings.metadataWritingMode = DMetadata::WRITETOSIDECARONLY;
+    settings.metadataWritingMode = DMetadata::WRITE_TO_SIDECAR_ONLY;
     useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 
     settings.useXMPSidecar4Reading = true;
-    settings.metadataWritingMode = DMetadata::WRITETOSIDECARANDIMAGE;
+    settings.metadataWritingMode = DMetadata::WRITE_TO_SIDECAR_AND_IMAGE;
     useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 }
 
