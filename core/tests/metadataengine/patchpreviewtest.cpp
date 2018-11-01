@@ -46,6 +46,7 @@ const QString originalImageFolder(QFINDTESTDATA("data/"));
 void PatchPreviewTest::initTestCase()
 {
     MetaEngine::initializeExiv2();
+    qDebug() << "Using Exiv2 Version:" << MetaEngine::Exiv2Version();
 }
 
 void PatchPreviewTest::testExtractPreviewAndFixMetadata()

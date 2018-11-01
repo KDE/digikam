@@ -44,7 +44,9 @@ private:
 
     void applyTags(const QString& file,
                    const QStringList& tags,
-                   const MetaEngineSettingsContainer& settings);
+                   const MetaEngineSettingsContainer& settings,
+                   bool  expectedRead,
+                   bool  expectedWrite);
 
 private Q_SLOTS:
 

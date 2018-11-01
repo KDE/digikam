@@ -41,6 +41,7 @@ const QString originalImageFolder(QFINDTESTDATA("data/"));
 void ApplyTagsTest::initTestCase()
 {
     MetaEngine::initializeExiv2();
+    qDebug() << "Using Exiv2 Version:" << MetaEngine::Exiv2Version();
 }
 
 void ApplyTagsTest::testApplyTagsToMetadata()
@@ -53,7 +54,9 @@ void ApplyTagsTest::testApplyTagsToMetadata()
 
     applyTags(originalImageFolder + QLatin1String("2015-07-22_00001.JPG"),
               QStringList() << QLatin1String("nature"),
-              settings);
+              settings,
+              true,
+              true);
 
     // For bug #397189
 
@@ -61,7 +64,9 @@ void ApplyTagsTest::testApplyTagsToMetadata()
 
     applyTags(originalImageFolder + QLatin1String("20160821035715.jpg"),
               QStringList() << QLatin1String("test"),
-              settings);
+              settings,
+              true,       // NOTE: image is corrupted => no expected crash
+              false);
 }
 
 void ApplyTagsTest::cleanupTestCase()
@@ -71,7 +76,9 @@ void ApplyTagsTest::cleanupTestCase()
 
 void ApplyTagsTest::applyTags(const QString& file,
                               const QStringList& tags,
-                              const MetaEngineSettingsContainer& settings)
+                              const MetaEngineSettingsContainer& settings,
+                              bool  expectedRead,
+                              bool  expectedWrite)
 {
     qDebug() << "File to process:" << file;
     bool ret     = false;
@@ -91,25 +98,28 @@ void ApplyTagsTest::applyTags(const QString& file,
     DMetadata meta;
     meta.setSettings(settings);
     ret = meta.load(path);
-    QVERIFY(ret);
+    QCOMPARE(ret, expectedRead);
 
     meta.setImageTagsPath(tags);
     ret = meta.applyChanges(true);
-    QVERIFY(ret);
+    QCOMPARE(ret, expectedWrite);
 
-    DMetadata meta2;
-    meta2.setSettings(settings);
-    QStringList newTags;
-    ret = meta2.load(path);
-    QVERIFY(ret);
-
-    ret = meta2.getImageTagsPath(newTags);
-    QVERIFY(ret);
-
-    foreach (const QString& tag, tags)
+    if (expectedWrite)
     {
-        ret = newTags.contains(tag);
+        DMetadata meta2;
+        meta2.setSettings(settings);
+        QStringList newTags;
+        ret = meta2.load(path);
         QVERIFY(ret);
+
+        ret = meta2.getImageTagsPath(newTags);
+        QVERIFY(ret);
+
+        foreach (const QString& tag, tags)
+        {
+            ret = newTags.contains(tag);
+            QVERIFY(ret);
+        }
     }
 
     WSToolUtils::removeTemporaryDir("applytagstest");
