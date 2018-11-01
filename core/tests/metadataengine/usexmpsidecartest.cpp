@@ -47,6 +47,7 @@ void UseXmpSidecarTest::initTestCase()
 void UseXmpSidecarTest::testUseXmpSidecar()
 {
     MetaEngineSettingsContainer settings;
+    settings.useXMPSidecar4Reading = true;
 
     settings.metadataWritingMode = DMetadata::WRITETOSIDECARONLY;
     useXmpSidecar(originalImageFolder + QLatin1String("_27A1417.CR2"), settings);
