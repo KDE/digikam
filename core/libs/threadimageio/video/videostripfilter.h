@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FILM_STRIP_FILTER_H
-#define DIGIKAM_FILM_STRIP_FILTER_H
+#ifndef DIGIKAM_VIDEO_STRIP_FILTER_H
+#define DIGIKAM_VIDEO_STRIP_FILTER_H
 
 namespace Digikam
 {
@@ -42,4 +42,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_FILM_STRIP_FILTER_H
+#endif // DIGIKAM_VIDEO_STRIP_FILTER_H
