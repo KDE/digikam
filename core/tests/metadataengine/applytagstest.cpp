@@ -36,12 +36,31 @@
 
 QTEST_MAIN(ApplyTagsTest)
 
-const QString originalImageFolder(QFINDTESTDATA("data/"));
+QDir          s_tempDir;
+QString       s_tempPath;
+const QString s_originalImageFolder(QFINDTESTDATA("data/"));
 
 void ApplyTagsTest::initTestCase()
 {
     MetaEngine::initializeExiv2();
     qDebug() << "Using Exiv2 Version:" << MetaEngine::Exiv2Version();
+    s_tempPath = QString::fromLatin1(QTest::currentAppName());
+    s_tempPath.replace(QLatin1String("./"), QString());
+}
+
+void ApplyTagsTest::init()
+{
+    s_tempDir = WSToolUtils::makeTemporaryDir(s_tempPath.toLatin1().data());
+}
+
+void ApplyTagsTest::cleanup()
+{
+    WSToolUtils::removeTemporaryDir(s_tempPath.toLatin1().data());
+}
+
+void ApplyTagsTest::cleanupTestCase()
+{
+    MetaEngine::cleanupExiv2();
 }
 
 void ApplyTagsTest::testApplyTagsToMetadata()
@@ -52,7 +71,7 @@ void ApplyTagsTest::testApplyTagsToMetadata()
 
     settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
 
-    applyTags(originalImageFolder + QLatin1String("2015-07-22_00001.JPG"),
+    applyTags(s_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"),
               QStringList() << QLatin1String("nature"),
               settings,
               true,
@@ -67,17 +86,12 @@ void ApplyTagsTest::testApplyTagsToMetadata()
     {
         settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
 
-        applyTags(originalImageFolder + QLatin1String("20160821035715.jpg"),
+        applyTags(s_originalImageFolder + QLatin1String("20160821035715.jpg"),
                   QStringList() << QLatin1String("test"),
                   settings,
                   true,       // NOTE: image is corrupted => no expected crash
                   false);
     }
-}
-
-void ApplyTagsTest::cleanupTestCase()
-{
-    MetaEngine::cleanupExiv2();
 }
 
 void ApplyTagsTest::applyTags(const QString& file,
@@ -88,9 +102,7 @@ void ApplyTagsTest::applyTags(const QString& file,
 {
     qDebug() << "File to process:" << file;
     bool ret     = false;
-
-    QString path = WSToolUtils::makeTemporaryDir("applytagstest").filePath(QFileInfo(file)
-                                                 .baseName().trimmed() + QLatin1String(".jpg"));
+    QString path = s_tempDir.filePath(QFileInfo(file).fileName().trimmed());
 
     qDebug() << "Temporary target file:" << path;
 
@@ -128,6 +140,4 @@ void ApplyTagsTest::applyTags(const QString& file,
             QVERIFY(ret);
         }
     }
-
-    WSToolUtils::removeTemporaryDir("applytagstest");
 }

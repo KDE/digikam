@@ -51,8 +51,11 @@ private:
 private Q_SLOTS:
 
     void initTestCase();
-    void testApplyTagsToMetadata();
+    void init();
+    void cleanup();
     void cleanupTestCase();
+
+    void testApplyTagsToMetadata();
 };
 
 #endif // DIGIKAM_APPLY_TAGS_TEST_H
