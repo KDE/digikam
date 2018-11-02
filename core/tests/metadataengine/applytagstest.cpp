@@ -59,14 +59,20 @@ void ApplyTagsTest::testApplyTagsToMetadata()
               true);
 
     // For bug #397189
+    // The bug is known for Exiv2-0.26, only test the newer versions
 
-    settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
+    bool ok = true;
 
-    applyTags(originalImageFolder + QLatin1String("20160821035715.jpg"),
-              QStringList() << QLatin1String("test"),
-              settings,
-              true,       // NOTE: image is corrupted => no expected crash
-              false);
+    if (MetaEngine::Exiv2Version().section(QLatin1Char('.'), 0, 1).toDouble(&ok) > 0.26 && ok)
+    {
+        settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
+
+        applyTags(originalImageFolder + QLatin1String("20160821035715.jpg"),
+                  QStringList() << QLatin1String("test"),
+                  settings,
+                  true,       // NOTE: image is corrupted => no expected crash
+                  false);
+    }
 }
 
 void ApplyTagsTest::cleanupTestCase()
