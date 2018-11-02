@@ -37,7 +37,6 @@ macro(METADATAENGINE_TOOLS_BUILD)
 
 ENDMACRO()
 
-METADATAENGINE_TOOLS_BUILD(setiptcpreview.cpp)
 METADATAENGINE_TOOLS_BUILD(metareaderthread.cpp)
 METADATAENGINE_TOOLS_BUILD(loadfromfile_info.cpp)
 METADATAENGINE_TOOLS_BUILD(loadfromfile_exif.cpp)
@@ -78,3 +77,4 @@ METADATAENGINE_TESTS_BUILD(patchpreviewtest.cpp)
 METADATAENGINE_TESTS_BUILD(applytagstest.cpp)
 METADATAENGINE_TESTS_BUILD(loadfrombatest.cpp)
 METADATAENGINE_TESTS_BUILD(usexmpsidecartest.cpp)
+METADATAENGINE_TESTS_BUILD(setiptcpreviewtest.cpp)

@@ -28,6 +28,7 @@
 #include <QDebug>
 #include <QTest>
 #include <QFile>
+#include <QImage>
 
 // Local includes
 
@@ -38,27 +39,26 @@ using namespace Digikam;
 
 QTEST_MAIN(SetIptcPreviewTest)
 
-const QString originalImageFolder(QFINDTESTDATA("data/"));
+QDir          s_tempDir;
+QString       s_tempPath;
+const QString s_originalImageFolder(QFINDTESTDATA("data/"));
 
 void SetIptcPreviewTest::initTestCase()
 {
     MetaEngine::initializeExiv2();
     qDebug() << "Using Exiv2 Version:" << MetaEngine::Exiv2Version();
+    s_tempPath = QString::fromLatin1(QTest::currentAppName());
+    s_tempPath.replace(QLatin1String("./"), QString());
 }
 
-void SetIptcPreviewTest::testSetIptcPreview()
+void SetIptcPreviewTest::init()
 {
-    MetaEngineSettingsContainer settings;
+    s_tempDir = WSToolUtils::makeTemporaryDir(s_tempPath.toLatin1().data());
+}
 
-    // For bug #400436
-
-    settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
-
-    applyTags(originalImageFolder + QLatin1String("2015-07-22_00001.JPG"),
-              QStringList() << QLatin1String("nature"),
-              settings,
-              true,
-              true);
+void SetIptcPreviewTest::cleanup()
+{
+    WSToolUtils::removeTemporaryDir(s_tempPath.toLatin1().data());
 }
 
 void SetIptcPreviewTest::cleanupTestCase()
@@ -66,13 +66,17 @@ void SetIptcPreviewTest::cleanupTestCase()
     MetaEngine::cleanupExiv2();
 }
 
+void SetIptcPreviewTest::testSetIptcPreview()
+{
+    setIptcPreview(s_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"));
+}
+
 void SetIptcPreviewTest::setIptcPreview(const QString& file)
 {
     qDebug() << "File to process:" << file;
     bool ret     = false;
 
-    QString path = WSToolUtils::makeTemporaryDir("setiptcpreview")
-                   .filePath(QFileInfo(file).fileName().trimmed());
+    QString path = s_tempDir.filePath(QFileInfo(file).fileName().trimmed());
 
     qDebug() << "Temporary target file:" << path;
 
@@ -87,7 +91,7 @@ void SetIptcPreviewTest::setIptcPreview(const QString& file)
     QImage  preview;
     QImage  image(path);
     QVERIFY(!image.isNull());
-    
+
     QSize previewSize = image.size();
     previewSize.scale(1280, 1024, Qt::KeepAspectRatio);
 
@@ -98,11 +102,11 @@ void SetIptcPreviewTest::setIptcPreview(const QString& file)
         preview = image.scaled(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio).copy();
 
     QVERIFY(!preview.isNull());
-    
+
     DMetadata meta;
     ret = meta.load(path);
     QVERIFY(ret);
-    
+
     meta.setImagePreview(preview);
     ret = meta.applyChanges();
     QVERIFY(ret);
@@ -111,13 +115,11 @@ void SetIptcPreviewTest::setIptcPreview(const QString& file)
     DMetadata meta2;
     ret = meta2.load(path);
     QVERIFY(ret);
-    
+
     ret = meta2.getImagePreview(preview2);
     QVERIFY(ret);
 
     QVERIFY(!preview2.isNull());
 
     QCOMPARE(preview.size(), preview2.size());
-
-    WSToolUtils::removeTemporaryDir("setiptcpreview");
 }

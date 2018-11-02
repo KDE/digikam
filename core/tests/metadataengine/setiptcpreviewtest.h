@@ -40,8 +40,11 @@ private:
 private Q_SLOTS:
 
     void initTestCase();
-    void testSetIptcPreview();
+    void init();
+    void cleanup();
     void cleanupTestCase();
+
+    void testSetIptcPreview();
 };
 
 #endif // DIGIKAM_SET_IPTC_PREVIEW_TEST_H
