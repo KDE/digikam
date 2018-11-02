@@ -528,15 +528,11 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->zoomPlusAction     = buildStdAction(StdZoomInAction, this, SLOT(slotIncreaseZoom()), this);
-    QKeySequence keysPlus(d->zoomPlusAction->shortcut()[0], Qt::Key_Plus);
+    d->zoomPlusAction  = buildStdAction(StdZoomInAction, this, SLOT(slotIncreaseZoom()), this);
     ac->addAction(QLatin1String("editorwindow_zoomplus"), d->zoomPlusAction);
-    ac->setDefaultShortcut(d->zoomPlusAction, keysPlus);
 
-    d->zoomMinusAction  = buildStdAction(StdZoomOutAction, this, SLOT(slotDecreaseZoom()), this);
-    QKeySequence keysMinus(d->zoomMinusAction->shortcut()[0], Qt::Key_Minus);
+    d->zoomMinusAction = buildStdAction(StdZoomOutAction, this, SLOT(slotDecreaseZoom()), this);
     ac->addAction(QLatin1String("editorwindow_zoomminus"), d->zoomMinusAction);
-    ac->setDefaultShortcut(d->zoomMinusAction, keysMinus);
 
     d->zoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18n("Zoom to 100%"), this);
     connect(d->zoomTo100percents, SIGNAL(triggered()), this, SLOT(slotZoomTo100Percents()));

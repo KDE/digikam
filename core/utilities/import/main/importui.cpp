@@ -557,15 +557,11 @@ void ImportUI::setupActions()
 
     d->increaseThumbsAction = buildStdAction(StdZoomInAction, d->view, SLOT(slotZoomIn()), this);
     d->increaseThumbsAction->setEnabled(false);
-    QKeySequence keysPlus(d->increaseThumbsAction->shortcut()[0], Qt::Key_Plus);
     ac->addAction(QLatin1String("importui_zoomplus"), d->increaseThumbsAction);
-    ac->setDefaultShortcut(d->increaseThumbsAction, keysPlus);
 
     d->decreaseThumbsAction = buildStdAction(StdZoomOutAction, d->view, SLOT(slotZoomOut()), this);
     d->decreaseThumbsAction->setEnabled(false);
-    QKeySequence keysMinus(d->decreaseThumbsAction->shortcut()[0], Qt::Key_Minus);
     ac->addAction(QLatin1String("importui_zoomminus"), d->decreaseThumbsAction);
-    ac->setDefaultShortcut(d->decreaseThumbsAction, keysMinus);
 
     d->zoomFitToWindowAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-fit-best")), i18nc("@action:inmenu", "Fit to &Window"), this);
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), d->view, SLOT(slotFitToWindow()));
