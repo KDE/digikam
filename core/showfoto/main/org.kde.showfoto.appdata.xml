@@ -87,6 +87,7 @@
   <url type="help">http://docs.kde.org/development/en/extragear-graphics/showfoto/</url>
   <screenshots>
     <screenshot type="default">
+      <caption>Editing photo in Showfoto</caption>
       <image>https://cdn.kde.org/screenshots/digikam/showfoto.png</image>
     </screenshot>
   </screenshots>

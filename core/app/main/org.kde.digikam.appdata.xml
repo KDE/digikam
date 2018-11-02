@@ -349,6 +349,7 @@
   <url type="help">http://docs.kde.org/development/en/extragear-graphics/digikam/index.html</url>
   <screenshots>
     <screenshot type="default">
+      <caption>Photo management in digiKam</caption>
       <image>http://kde.org/images/screenshots/digikam.png</image>
     </screenshot>
   </screenshots>
