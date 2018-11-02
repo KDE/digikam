@@ -69,7 +69,7 @@ const QString DAboutData::digiKamSlogan()
 
 const QString DAboutData::digiKamFamilly()
 {
-    return i18n("A KDE Familly Project");
+    return i18n("A KDE Family Project");
 }
 
 const QString DAboutData::copyright()
