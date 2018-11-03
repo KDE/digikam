@@ -127,9 +127,16 @@ TrashView::TrashView(QWidget* const parent)
     d->deleteAction    = new QAction(i18n("Delete Permanently"), this);
     d->deleteAllAction = new QAction(i18n("Delete All Permanently"), this);
 
-    QMenu* const menu = new QMenu(this);
+    d->undoButton->setIcon(QIcon::fromTheme(QLatin1String("edit-undo")));
+    d->restoreButton->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
+    d->deleteAction->setIcon(QIcon::fromTheme(QLatin1String("edit-delete")));
+    d->deleteAllAction->setIcon(QIcon::fromTheme(QLatin1String("edit-delete")));
+
+    QMenu* const menu  = new QMenu(this);
     menu->addAction(d->deleteAllAction);
 
+    d->deleteButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    d->deleteButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->deleteButton->setPopupMode(QToolButton::MenuButtonPopup);
     d->deleteButton->setDefaultAction(d->deleteAction);
     d->deleteButton->setMenu(menu);
