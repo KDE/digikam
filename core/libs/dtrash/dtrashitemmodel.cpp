@@ -339,6 +339,18 @@ DTrashItemInfoList DTrashItemModel::itemsForIndexes(const QList<QModelIndex>& in
     return items;
 }
 
+QModelIndex DTrashItemModel::indexForItem(const DTrashItemInfo& itemInfo)
+{
+    int index = d->data.indexOf(itemInfo);
+
+    if (index != -1)
+    {
+        return createIndex(index, 0);
+    }
+
+    return QModelIndex();
+}
+
 DTrashItemInfoList DTrashItemModel::allItems()
 {
     return d->data;

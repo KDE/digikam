@@ -28,10 +28,13 @@
 #include <QHBoxLayout>
 #include <QTableView>
 #include <QPushButton>
+#include <QToolButton>
 #include <QHeaderView>
 #include <QListView>
 #include <QMessageBox>
 #include <QPainter>
+#include <QAction>
+#include <QMenu>
 
 // KDE includes
 
@@ -60,9 +63,12 @@ public:
           mainLayout(0),
           btnsLayout(0),
           tableView(0),
+          undoButton(0),
           restoreButton(0),
           deleteButton(0),
-          deleteAllButton(0),
+          deleteAction(0),
+          deleteAllAction(0),
+          startDateTime(QDateTime::currentDateTime()),
           thumbSize(ThumbnailSize::Large)
     {
     }
@@ -74,10 +80,15 @@ public:
     QVBoxLayout*               mainLayout;
     QHBoxLayout*               btnsLayout;
     QTableView*                tableView;
+    QPushButton*               undoButton;
     QPushButton*               restoreButton;
-    QPushButton*               deleteButton;
-    QPushButton*               deleteAllButton;
+    QToolButton*               deleteButton;
+    QAction*                   deleteAction;
+    QAction*                   deleteAllAction;
+
     QModelIndex                lastSelectedIndex;
+    QDateTime                  startDateTime;
+
     DTrashItemInfo             lastSelectedItem;
     QModelIndexList            selectedIndexesToRemove;
     ThumbnailSize              thumbSize;
@@ -109,20 +120,30 @@ TrashView::TrashView(QWidget* const parent)
     d->tableView->sortByColumn(2, Qt::DescendingOrder);
 
     // Action Buttons
-    d->restoreButton   = new QPushButton(i18n("Restore"));
-    d->deleteButton    = new QPushButton(i18n("Delete Permanently"));
-    d->deleteAllButton = new QPushButton(i18n("Delete All Permanently"));
+    d->undoButton      = new QPushButton(i18n("Undo"), this);
+    d->restoreButton   = new QPushButton(i18n("Restore"), this);
+    d->deleteButton    = new QToolButton(this);
 
+    d->deleteAction    = new QAction(i18n("Delete Permanently"), this);
+    d->deleteAllAction = new QAction(i18n("Delete All Permanently"), this);
+
+    QMenu* const menu = new QMenu(this);
+    menu->addAction(d->deleteAllAction);
+
+    d->deleteButton->setPopupMode(QToolButton::MenuButtonPopup);
+    d->deleteButton->setDefaultAction(d->deleteAction);
+    d->deleteButton->setMenu(menu);
+
+    d->undoButton->setEnabled(false);
     d->restoreButton->setEnabled(false);
     d->deleteButton->setEnabled(false);
-    d->deleteAllButton->setEnabled(false);
 
     // Adding widgets to layouts
     d->mainLayout->addWidget(d->tableView);
 
+    d->btnsLayout->addWidget(d->undoButton);
     d->btnsLayout->addWidget(d->restoreButton);
     d->btnsLayout->addWidget(d->deleteButton);
-    d->btnsLayout->addWidget(d->deleteAllButton);
 
     d->mainLayout->addLayout(d->btnsLayout);
 
@@ -130,13 +151,16 @@ TrashView::TrashView(QWidget* const parent)
     connect(d->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(slotSelectionChanged()));
 
+    connect(d->undoButton, SIGNAL(released()),
+            this, SLOT(slotUndoLastDeletedItems()));
+
     connect(d->restoreButton, SIGNAL(released()),
             this, SLOT(slotRestoreSelectedItems()));
 
-    connect(d->deleteButton, SIGNAL(released()),
+    connect(d->deleteAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteSelectedItems()));
 
-    connect(d->deleteAllButton, SIGNAL(released()),
+    connect(d->deleteAllAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteAllItems()));
 
     connect(d->model, SIGNAL(dataChange()),
@@ -165,14 +189,46 @@ void TrashView::slotSelectionChanged()
 {
     if (d->tableView->selectionModel()->hasSelection())
     {
-        d->deleteButton->setEnabled(true);
         d->restoreButton->setEnabled(true);
     }
     else
     {
-        d->deleteButton->setEnabled(false);
         d->restoreButton->setEnabled(false);
     }
+}
+
+void TrashView::slotUndoLastDeletedItems()
+{
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Undo last deleted items from collection trash";
+
+    DTrashItemInfoList items;
+    d->selectedIndexesToRemove.clear();
+
+    foreach (const DTrashItemInfo& item, d->model->allItems())
+    {
+        if (item.deletionTimestamp > d->startDateTime)
+        {
+            QModelIndex index = d->model->indexForItem(item);
+
+            if (index.isValid())
+            {
+                items << item;
+                d->selectedIndexesToRemove << index;
+            }
+        }
+    }
+
+    if (items.isEmpty())
+    {
+        return;
+    }
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Items to Restore:\n " << items;
+
+    IOJobsThread* const thread = IOJobsManager::instance()->startRestoringDTrashItems(items);
+
+    connect(thread, SIGNAL(finished()),
+            this, SLOT(slotRestoreFinished()));
 }
 
 void TrashView::slotRestoreSelectedItems()
@@ -199,7 +255,7 @@ void TrashView::slotRestoreFinished()
 
     DTrashItemInfoList items = d->model->itemsForIndexes(d->selectedIndexesToRemove);
 
-    foreach(const DTrashItemInfo& item, items)
+    foreach (const DTrashItemInfo& item, items)
     {
         QUrl url     = QUrl::fromLocalFile(item.collectionPath);
         QString path = url.adjusted(QUrl::RemoveFilename).toLocalFile();
@@ -211,6 +267,13 @@ void TrashView::slotRestoreFinished()
 
 void TrashView::slotDeleteSelectedItems()
 {
+    d->selectedIndexesToRemove = d->tableView->selectionModel()->selectedRows();
+
+    if (d->selectedIndexesToRemove.isEmpty())
+    {
+        return;
+    }
+
     QString title = i18n("Confirm Deletion");
     QString msg   = i18n("Are you sure you want to delete those items permanently?");
     int result    = QMessageBox::warning(this, title, msg, QMessageBox::Yes | QMessageBox::No);
@@ -222,8 +285,7 @@ void TrashView::slotDeleteSelectedItems()
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Deleting selected items from collection trash";
 
-    d->selectedIndexesToRemove = d->tableView->selectionModel()->selectedRows();
-    DTrashItemInfoList items   = d->model->itemsForIndexes(d->selectedIndexesToRemove);
+    DTrashItemInfoList items = d->model->itemsForIndexes(d->selectedIndexesToRemove);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Items count: " << items.count();
 
@@ -279,11 +341,21 @@ void TrashView::slotDataChanged()
 
     if (d->model->isEmpty())
     {
-        d->deleteAllButton->setEnabled(false);
+        d->undoButton->setEnabled(false);
+        d->deleteButton->setEnabled(false);
         return;
     }
 
-    d->deleteAllButton->setEnabled(true);
+    d->deleteButton->setEnabled(true);
+
+    foreach (const DTrashItemInfo& item, d->model->allItems())
+    {
+        if (item.deletionTimestamp > d->startDateTime)
+        {
+            d->undoButton->setEnabled(true);
+            break;
+        }
+    }
 }
 
 void TrashView::slotChangeLastSelectedItem(const QModelIndex& curr, const QModelIndex&)

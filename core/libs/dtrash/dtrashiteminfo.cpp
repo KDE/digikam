@@ -45,6 +45,11 @@ bool DTrashItemInfo::isNull() const
            imageId == -1;
 }
 
+bool DTrashItemInfo::operator==(const DTrashItemInfo& itemInfo) const
+{
+    return (trashPath == itemInfo.trashPath);
+}
+
 QDebug operator<<(QDebug dbg, const DTrashItemInfo& info)
 {
     dbg.nospace() << "DTrashItemInfo:";

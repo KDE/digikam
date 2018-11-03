@@ -625,4 +625,5 @@ BUGFIXES:
 559 ==> 396961 - Empty space on interface on thumbnail view.
 560 ==> 400436 - Crash when saving jpeg files with metadata.
 561 ==> 400492 - Rotation does not work.
-562 ==> 
+562 ==> 246727 - Add undo functionality to move to trash action.
+563 ==> 
