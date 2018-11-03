@@ -54,7 +54,11 @@ macro(METADATAENGINE_TESTS_BUILD)
     string(REPLACE "." ";" _temp ${_filename})
     list(GET _temp 0 _target)
 
-    set(${_target}_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/${_target}.cpp)
+    QT5_WRAP_CPP(MOC_files ${CMAKE_CURRENT_SOURCE_DIR}/abstractunittest.h)
+
+    set(${_target}_SRCS
+        ${MOC_files}
+        ${CMAKE_CURRENT_SOURCE_DIR}/${_target}.cpp)
 
     add_executable(${_target} ${${_target}_SRCS})
     add_test(${_target} ${_target})

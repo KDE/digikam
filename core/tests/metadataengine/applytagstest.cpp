@@ -25,43 +25,9 @@
 
 // Qt includes
 
-#include <QDebug>
-#include <QTest>
 #include <QFile>
 
-// Local includes
-
-#include "dmetadata.h"
-#include "wstoolutils.h"
-
 QTEST_MAIN(ApplyTagsTest)
-
-QDir          s_tempDir;
-QString       s_tempPath;
-const QString s_originalImageFolder(QFINDTESTDATA("data/"));
-
-void ApplyTagsTest::initTestCase()
-{
-    MetaEngine::initializeExiv2();
-    qDebug() << "Using Exiv2 Version:" << MetaEngine::Exiv2Version();
-    s_tempPath = QString::fromLatin1(QTest::currentAppName());
-    s_tempPath.replace(QLatin1String("./"), QString());
-}
-
-void ApplyTagsTest::init()
-{
-    s_tempDir = WSToolUtils::makeTemporaryDir(s_tempPath.toLatin1().data());
-}
-
-void ApplyTagsTest::cleanup()
-{
-    WSToolUtils::removeTemporaryDir(s_tempPath.toLatin1().data());
-}
-
-void ApplyTagsTest::cleanupTestCase()
-{
-    MetaEngine::cleanupExiv2();
-}
 
 void ApplyTagsTest::testApplyTagsToMetadata()
 {
@@ -71,7 +37,7 @@ void ApplyTagsTest::testApplyTagsToMetadata()
 
     settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
 
-    applyTags(s_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"),
+    applyTags(m_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"),
               QStringList() << QLatin1String("nature"),
               settings,
               true,
@@ -86,7 +52,7 @@ void ApplyTagsTest::testApplyTagsToMetadata()
     {
         settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
 
-        applyTags(s_originalImageFolder + QLatin1String("20160821035715.jpg"),
+        applyTags(m_originalImageFolder + QLatin1String("20160821035715.jpg"),
                   QStringList() << QLatin1String("test"),
                   settings,
                   true,       // NOTE: image is corrupted => no expected crash
@@ -102,7 +68,7 @@ void ApplyTagsTest::applyTags(const QString& file,
 {
     qDebug() << "File to process:" << file;
     bool ret     = false;
-    QString path = s_tempDir.filePath(QFileInfo(file).fileName().trimmed());
+    QString path = m_tempDir.filePath(QFileInfo(file).fileName().trimmed());
 
     qDebug() << "Temporary target file:" << path;
 
