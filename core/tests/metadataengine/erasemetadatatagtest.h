@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-11
- * Description : a command line tool to tag from photo
+ * Description : an unit-test tool to erase metadata tag from photo with DMetadata
  *
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,42 +21,39 @@
  *
  * ============================================================ */
 
+#ifndef DIGIKAM_ERASE_METADATA_TAG_TEST_H
+#define DIGIKAM_ERASE_METADATA_TAG_TEST_H
+
 // Qt includes
 
+#include <QObject>
 #include <QString>
-#include <QFile>
-#include <QDebug>
 
 // Local includes
 
-#include "dmetadata.h"
+#include "metaenginesettingscontainer.h"
+#include "dmetadatasettingscontainer.h"
 
 using namespace Digikam;
 
-int main (int argc, char **argv)
+class EraseMetadataTagTest : public QObject
 {
-    if(argc != 2)
-    {
-        qDebug() << "erasetag - erase tag from image";
-        qDebug() << "Usage: <image>";
-        return -1;
-    }
+    Q_OBJECT
 
-    QString filePath = QString::fromLocal8Bit(argv[1]);
+private:
 
-    DMetadata meta;
-    meta.load(filePath);
-    meta.setWriteRawFiles(true);
-    bool b = meta.removeExifTag("Exif.OlympusIp.BlackLevel");
-    qDebug() << "Exif.OlympusIp.BlackLevel found = " << b;
+    void eraseMetadataTag(const QString& file,
+                          const QString& metadataTag,
+                          const MetaEngineSettingsContainer& settings);
 
-    QByteArray ba = meta.getExifTagData("Exif.OlympusIp.BlackLevel");
-    qDebug() << "Exif.OlympusIp.BlackLevel removed = " << ba.isEmpty();
+private Q_SLOTS:
 
-    if (b)
-    {
-        meta.applyChanges();
-    }
+    void initTestCase();
+    void init();
+    void cleanup();
+    void cleanupTestCase();
 
-    return 0;
-}
+    void testEraseMetadataTag();
+};
+
+#endif // DIGIKAM_ERASE_METADATA_TAG_TEST_H
