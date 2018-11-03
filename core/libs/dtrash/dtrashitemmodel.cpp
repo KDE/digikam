@@ -244,14 +244,14 @@ void DTrashItemModel::removeItems(const QModelIndexList& indexes)
 {
     QList<QPersistentModelIndex> persistentIndexes;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         persistentIndexes << index;
     }
 
     layoutAboutToBeChanged();
 
-    foreach(const QPersistentModelIndex& index, persistentIndexes)
+    foreach (const QPersistentModelIndex& index, persistentIndexes)
     {
         if (!index.isValid())
             continue;
@@ -328,7 +328,7 @@ DTrashItemInfoList DTrashItemModel::itemsForIndexes(const QList<QModelIndex>& in
 {
     DTrashItemInfoList items;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         if (!index.isValid())
             continue;
@@ -339,7 +339,7 @@ DTrashItemInfoList DTrashItemModel::itemsForIndexes(const QList<QModelIndex>& in
     return items;
 }
 
-QModelIndex DTrashItemModel::indexForItem(const DTrashItemInfo& itemInfo)
+QModelIndex DTrashItemModel::indexForItem(const DTrashItemInfo& itemInfo) const
 {
     int index = d->data.indexOf(itemInfo);
 

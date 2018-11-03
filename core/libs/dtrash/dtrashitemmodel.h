@@ -77,7 +77,7 @@ public:
     /**
      * @brief returns the index for the DTrashItemInfo in model
      */
-    QModelIndex indexForItem(const DTrashItemInfo& itemInfo);
+    QModelIndex indexForItem(const DTrashItemInfo& itemInfo) const;
 
     /**
      * @brief returns a list of all items in model
