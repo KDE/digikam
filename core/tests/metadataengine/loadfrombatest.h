@@ -31,12 +31,13 @@
 
 // Local includes
 
+#include "abstractunittest.h"
 #include "metaenginesettingscontainer.h"
 #include "dmetadatasettingscontainer.h"
 
 using namespace Digikam;
 
-class LoadFromBATest : public QObject
+class LoadFromBATest : public AbstractUnitTest
 {
     Q_OBJECT
 
@@ -46,9 +47,7 @@ private:
 
 private Q_SLOTS:
 
-    void initTestCase();
     void testLoadFromByteArray();
-    void cleanupTestCase();
 };
 
 #endif // DIGIKAM_LOAD_FROM_BA_TEST_H

@@ -25,45 +25,23 @@
 
 // Qt includes
 
-#include <QDebug>
-#include <QTest>
 #include <QFile>
 #include <QDataStream>
 #include <QImage>
 #include <QByteArray>
 
-// Local includes
-
-#include "dmetadata.h"
-#include "wstoolutils.h"
-
 QTEST_MAIN(LoadFromBATest)
-
-const QString originalImageFolder(QFINDTESTDATA("data/"));
-
-void LoadFromBATest::initTestCase()
-{
-    MetaEngine::initializeExiv2();
-    qDebug() << "Using Exiv2 Version:" << MetaEngine::Exiv2Version();
-}
-
-void LoadFromBATest::cleanupTestCase()
-{
-    MetaEngine::cleanupExiv2();
-}
 
 void LoadFromBATest::testLoadFromByteArray()
 {
-    loadFromByteArray(originalImageFolder + QLatin1String("nikon-e2100.jpg"));
+    loadFromByteArray(m_originalImageFolder + QLatin1String("nikon-e2100.jpg"));
 }
 
 void LoadFromBATest::loadFromByteArray(const QString& file)
 {
     qDebug() << "File to process:" << file;
     bool ret     = false;
-
-    QString path = WSToolUtils::makeTemporaryDir("loadfrombatest").filePath(QFileInfo(file)
-                                                 .baseName().trimmed() + QLatin1String(".jpg"));
+    QString path = m_tempDir.filePath(QFileInfo(file).fileName().trimmed());
 
     qDebug() << "Temporary target file:" << path;
 
@@ -94,6 +72,4 @@ void LoadFromBATest::loadFromByteArray(const QString& file)
     DMetadata meta;
     ret = meta.loadFromData(data);
     QVERIFY(ret);
-
-    WSToolUtils::removeTemporaryDir("loadfrombatest");
 }
