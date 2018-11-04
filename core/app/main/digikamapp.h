@@ -107,6 +107,7 @@ private:
     void showSideBars(bool visible);
     bool thumbbarVisibility() const;
     void customizedFullScreenMode(bool set);
+    void customizedTrashView(bool set);
     void toggleShowBar();
 
 private Q_SLOTS:

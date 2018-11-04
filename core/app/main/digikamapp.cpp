@@ -845,8 +845,9 @@ bool DigikamApp::thumbbarVisibility() const
 
 void DigikamApp::slotSwitchedToPreview()
 {
-    d->imagePreviewAction->setChecked(true);
     d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
+    d->imagePreviewAction->setChecked(true);
+    customizedTrashView(true);
     toggleShowBar();
 }
 
@@ -854,6 +855,7 @@ void DigikamApp::slotSwitchedToIconView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     d->imageIconViewAction->setChecked(true);
+    customizedTrashView(true);
     toggleShowBar();
 }
 
@@ -864,6 +866,7 @@ void DigikamApp::slotSwitchedToMapView()
 #ifdef HAVE_MARBLE
     d->imageMapViewAction->setChecked(true);
 #endif // HAVE_MARBLE
+    customizedTrashView(true);
     toggleShowBar();
 }
 
@@ -871,6 +874,7 @@ void DigikamApp::slotSwitchedToTableView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     d->imageTableViewAction->setChecked(true);
+    customizedTrashView(true);
     toggleShowBar();
 }
 
@@ -878,6 +882,7 @@ void DigikamApp::slotSwitchedToTrashView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     // TODO: disable all other views
+    customizedTrashView(false);
     toggleShowBar();
 }
 
@@ -890,6 +895,35 @@ void DigikamApp::customizedFullScreenMode(bool set)
         : toggleShowBar();
 
     d->view->toggleFullScreen(set);
+}
+
+void DigikamApp::customizedTrashView(bool set)
+{
+    d->slideShowSelectionAction->setEnabled(set);
+    d->imageTableViewAction->setEnabled(set);
+    d->imageIconViewAction->setEnabled(set);
+    d->imageMapViewAction->setEnabled(set);
+    d->imagePreviewAction->setEnabled(set);
+    d->slideShowAction->setEnabled(set);
+    d->bqmAction->setEnabled(set);
+    d->ltAction->setEnabled(set);
+    d->ieAction->setEnabled(set);
+
+    d->imageSeparationSortOrderAction->setEnabled(set);
+    d->imageSeparationAction->setEnabled(set);
+    d->imageSortOrderAction->setEnabled(set);
+    d->albumSortAction->setEnabled(set);
+    d->imageSortAction->setEnabled(set);
+
+    d->recurseAlbumsAction->setEnabled(set);
+    d->recurseTagsAction->setEnabled(set);
+
+    d->selectInvertAction->setEnabled(set);
+    d->selectNoneAction->setEnabled(set);
+    d->pasteItemsAction->setEnabled(set);
+    d->copyItemsAction->setEnabled(set);
+    d->selectAllAction->setEnabled(set);
+    d->cutItemsAction->setEnabled(set);
 }
 
 void DigikamApp::toggleShowBar()
