@@ -42,7 +42,6 @@ METADATAENGINE_TOOLS_BUILD(loadfromfile_info.cpp)
 METADATAENGINE_TOOLS_BUILD(loadfromfile_exif.cpp)
 METADATAENGINE_TOOLS_BUILD(loadfromfile_iptc.cpp)
 METADATAENGINE_TOOLS_BUILD(loadfromfile_xmp.cpp)
-METADATAENGINE_TOOLS_BUILD(printtagslist.cpp)
 METADATAENGINE_TOOLS_BUILD(readimagewritexmpsidecar.cpp)
 METADATAENGINE_TOOLS_BUILD(setxmpface.cpp)
 
@@ -55,7 +54,7 @@ macro(METADATAENGINE_TESTS_BUILD)
     list(GET _temp 0 _target)
 
     QT5_WRAP_CPP(MOC_files ${CMAKE_CURRENT_SOURCE_DIR}/abstractunittest.h)
-    
+
     set(${_target}_SRCS
         ${MOC_files}
         ${CMAKE_CURRENT_SOURCE_DIR}/${_target}.cpp)
@@ -82,3 +81,4 @@ METADATAENGINE_TESTS_BUILD(loadfrombatest.cpp)
 METADATAENGINE_TESTS_BUILD(usexmpsidecartest.cpp)
 METADATAENGINE_TESTS_BUILD(setiptcpreviewtest.cpp)
 METADATAENGINE_TESTS_BUILD(erasemetadatatagtest.cpp)
+METADATAENGINE_TESTS_BUILD(printtagslisttest.cpp)

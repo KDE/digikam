@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-07-12
- * Description : a command line tool to print all tags list supported by Exiv2
+ * Description : An unit-test to print all available metadata tags provided by Exiv2.
  *
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,23 +21,20 @@
  *
  * ============================================================ */
 
-// Qt includes
+#include "printtagslisttest.h"
 
-#include <QStringList>
-#include <QDebug>
+QTEST_MAIN(PrintTagsListTest)
 
-// Local includes
-
-#include "dmetadata.h"
-
-using namespace Digikam;
-
-int main (int /*argc*/, char** /*argv*/)
+void PrintTagsListTest::testPrintAllAvailableStdExifTags()
 {
     DMetadata meta;
 
     qDebug() << "-- Standard Exif Tags -------------------------------------------------------------";
+
     DMetadata::TagsMap exiftags = meta.getStdExifTagsList();
+    QVERIFY(!exiftags.isEmpty());
+
+    qDebug() << "Found" << exiftags.size() << "tags:";
 
     for (DMetadata::TagsMap::const_iterator it = exiftags.constBegin(); it != exiftags.constEnd(); ++it )
     {
@@ -48,9 +45,19 @@ int main (int /*argc*/, char** /*argv*/)
         QString     desc   = values[2];
         qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
     }
+}
 
+void PrintTagsListTest::testPrintAllAvailableMakernotesTags()
+{
+    DMetadata meta;
+    
     qDebug() << "-- Makernote Tags -----------------------------------------------------------------";
+    
     DMetadata::TagsMap mntags = meta.getMakernoteTagsList();
+
+    QVERIFY(!mntags.isEmpty());
+
+    qDebug() << "Found" << mntags.size() << "tags:";
 
     for (DMetadata::TagsMap::const_iterator it = mntags.constBegin(); it != mntags.constEnd(); ++it )
     {
@@ -61,10 +68,20 @@ int main (int /*argc*/, char** /*argv*/)
         QString     desc   = values[2];
         qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
     }
+}
 
+void PrintTagsListTest::testPrintAllAvailableIptcTags()
+{
+    DMetadata meta;
+    
     qDebug() << "-- Standard Iptc Tags -----------------------------------------------------------------";
+
     DMetadata::TagsMap iptctags = meta.getIptcTagsList();
 
+    QVERIFY(!iptctags.isEmpty());
+
+    qDebug() << "Found" << iptctags.size() << "tags:";
+    
     for (DMetadata::TagsMap::const_iterator it = iptctags.constBegin(); it != iptctags.constEnd(); ++it )
     {
         QString     key    = it.key();
@@ -74,19 +91,34 @@ int main (int /*argc*/, char** /*argv*/)
         QString     desc   = values[2];
         qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
     }
+}
 
+void PrintTagsListTest::testPrintAllAvailableXmpTags()
+{
+    DMetadata meta;
+    
     qDebug() << "-- Standard Xmp Tags -----------------------------------------------------------------";
+
     DMetadata::TagsMap xmptags = meta.getXmpTagsList();
 
-    for (DMetadata::TagsMap::const_iterator it = xmptags.constBegin(); it != xmptags.constEnd(); ++it )
+    if (meta.supportXmp())
     {
-        QString     key    = it.key();
-        QStringList values = it.value();
-        QString     name   = values[0];
-        QString     title  = values[1];
-        QString     desc   = values[2];
-        qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
-    }
+        QVERIFY(!xmptags.isEmpty());
 
-    return 0;
+        qDebug() << "Found" << xmptags.size() << "tags:";
+
+        for (DMetadata::TagsMap::const_iterator it = xmptags.constBegin(); it != xmptags.constEnd(); ++it )
+        {
+            QString     key    = it.key();
+            QStringList values = it.value();
+            QString     name   = values[0];
+            QString     title  = values[1];
+            QString     desc   = values[2];
+            qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
+        }
+    }
+    else
+    {
+        QWARN("Exiv2 has no XMP support...");
+    }
 }
