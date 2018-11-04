@@ -42,7 +42,6 @@ METADATAENGINE_TOOLS_BUILD(loadfromfile_info.cpp)
 METADATAENGINE_TOOLS_BUILD(loadfromfile_exif.cpp)
 METADATAENGINE_TOOLS_BUILD(loadfromfile_iptc.cpp)
 METADATAENGINE_TOOLS_BUILD(loadfromfile_xmp.cpp)
-METADATAENGINE_TOOLS_BUILD(readimagewritexmpsidecar.cpp)
 METADATAENGINE_TOOLS_BUILD(setxmpface.cpp)
 
 # ----------------------------------------------------------------------------------
@@ -82,3 +81,4 @@ METADATAENGINE_TESTS_BUILD(usexmpsidecartest.cpp)
 METADATAENGINE_TESTS_BUILD(setiptcpreviewtest.cpp)
 METADATAENGINE_TESTS_BUILD(erasemetadatatagtest.cpp)
 METADATAENGINE_TESTS_BUILD(printtagslisttest.cpp)
+METADATAENGINE_TESTS_BUILD(createxmpsidecartest.cpp)
