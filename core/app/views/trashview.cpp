@@ -205,6 +205,7 @@ void TrashView::slotSelectionChanged()
 void TrashView::slotUndoLastDeletedItems()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Undo last deleted items from collection trash";
+
     DTrashItemInfoList items;
     d->selectedIndexesToRemove.clear();
     QDateTime lastDateTime = QDateTime::fromMSecsSinceEpoch(0);
@@ -300,6 +301,8 @@ void TrashView::slotRestoreFinished()
 
 void TrashView::slotDeleteSelectedItems()
 {
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Deleting selected items from collection trash";
+
     d->selectedIndexesToRemove = d->tableView->selectionModel()->selectedRows();
 
     if (d->selectedIndexesToRemove.isEmpty())
@@ -317,8 +320,6 @@ void TrashView::slotDeleteSelectedItems()
     {
         return;
     }
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Deleting selected items from collection trash";
 
     DTrashItemInfoList items = d->model->itemsForIndexes(d->selectedIndexesToRemove);
 
