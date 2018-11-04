@@ -904,6 +904,7 @@ void DigikamApp::customizedTrashView(bool set)
     d->imageIconViewAction->setEnabled(set);
     d->imageMapViewAction->setEnabled(set);
     d->imagePreviewAction->setEnabled(set);
+    m_presentationAction->setEnabled(set);
     d->slideShowAction->setEnabled(set);
     d->bqmAction->setEnabled(set);
     d->ltAction->setEnabled(set);
@@ -912,11 +913,20 @@ void DigikamApp::customizedTrashView(bool set)
     d->imageSeparationSortOrderAction->setEnabled(set);
     d->imageSeparationAction->setEnabled(set);
     d->imageSortOrderAction->setEnabled(set);
-    d->albumSortAction->setEnabled(set);
     d->imageSortAction->setEnabled(set);
+    d->albumSortAction->setEnabled(set);
 
+    d->zoomFitToWindowAction->setEnabled(set);
     d->recurseAlbumsAction->setEnabled(set);
     d->recurseTagsAction->setEnabled(set);
+
+    d->writeAlbumMetadataAction->setEnabled(set);
+    d->readAlbumMetadataAction->setEnabled(set);
+    d->openInFileManagerAction->setEnabled(set);
+    d->propsEditAction->setEnabled(set);
+    d->deleteAction->setEnabled(set);
+    d->renameAction->setEnabled(set);
+    d->newAction->setEnabled(set);
 
     d->selectInvertAction->setEnabled(set);
     d->selectNoneAction->setEnabled(set);
@@ -924,6 +934,7 @@ void DigikamApp::customizedTrashView(bool set)
     d->copyItemsAction->setEnabled(set);
     d->selectAllAction->setEnabled(set);
     d->cutItemsAction->setEnabled(set);
+    d->refreshAction->setEnabled(set);
 }
 
 void DigikamApp::toggleShowBar()
