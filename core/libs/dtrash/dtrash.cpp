@@ -28,7 +28,6 @@
 #include <QDir>
 #include <QFile>
 #include <QUuid>
-#include <QFileInfo>
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonValue>

@@ -28,7 +28,6 @@
 
 #include <QObject>
 #include <QFileInfo>
-#include <QDateTime>
 
 // Local includes
 

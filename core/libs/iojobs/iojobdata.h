@@ -103,7 +103,7 @@ public:
     QUrl             getNextUrl()                         const;
 
     QString          getProgressId()                      const;
-    QDateTime        startTime()                          const;
+    QDateTime        jobTime()                            const;
 
     ItemInfo         findItemInfo(const QUrl& url)        const;
 

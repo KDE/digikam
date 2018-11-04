@@ -219,7 +219,7 @@ void DeleteJob::run()
         {
             if (fileInfo.isDir())
             {
-                if (!DTrash::deleteDirRecursivley(deleteUrl.toLocalFile(), m_data->startTime()))
+                if (!DTrash::deleteDirRecursivley(deleteUrl.toLocalFile(), m_data->jobTime()))
                 {
                     emit signalError(i18n("Could not move folder %1 to collection trash",
                                           QDir::toNativeSeparators(fileInfo.path())));
@@ -229,7 +229,7 @@ void DeleteJob::run()
             }
             else
             {
-                if (!DTrash::deleteImage(deleteUrl.toLocalFile(), m_data->startTime()))
+                if (!DTrash::deleteImage(deleteUrl.toLocalFile(), m_data->jobTime()))
                 {
                     emit signalError(i18n("Could not move image %1 to collection trash",
                                           QDir::toNativeSeparators(fileInfo.filePath())));

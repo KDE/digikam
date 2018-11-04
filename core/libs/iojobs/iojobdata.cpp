@@ -45,7 +45,7 @@ public:
         overwrite(false),
         srcAlbum(0),
         destAlbum(0),
-        startTime(QDateTime::currentDateTime())
+        jobTime(QDateTime::currentDateTime())
     {
     }
 
@@ -57,13 +57,13 @@ public:
     PAlbum*          destAlbum;
 
     QMap<QUrl, QUrl> changeDestMap;
-    QList<ItemInfo> imageInfoList;
+    QList<ItemInfo>  imageInfoList;
     QList<QUrl>      sourceUrlList;
 
     QUrl             destUrl;
 
     QString          progressId;
-    QDateTime        startTime;
+    QDateTime        jobTime;
 
     QMutex           mutex;
 };
@@ -226,9 +226,9 @@ QString IOJobData::getProgressId() const
     return d->progressId;
 }
 
-QDateTime IOJobData::startTime() const
+QDateTime IOJobData::jobTime() const
 {
-    return d->startTime;
+    return d->jobTime;
 }
 
 ItemInfo IOJobData::findItemInfo(const QUrl& url) const
