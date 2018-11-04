@@ -1249,11 +1249,10 @@ void DigikamView::slotAlbumSelected(const QList<Album*>& albums)
 
         if (palbum)
         {
-            QUrl url = palbum->fileUrl();
-            url = url.adjusted(QUrl::StripTrailingSlash);
+            QUrl url = palbum->fileUrl().adjusted(QUrl::StripTrailingSlash);
             d->trashView->model()->loadItemsForCollection(url.toLocalFile());
-            d->filterWidget->setEnabled(false);
             d->stackedview->setViewMode(StackedView::TrashViewMode);
+            d->filterWidget->setEnabled(false);
         }
     }
     else
@@ -1269,6 +1268,7 @@ void DigikamView::slotAlbumSelected(const QList<Album*>& albums)
             default:
                 break;
         }
+
         d->filterWidget->setEnabled(true);
     }
 }
