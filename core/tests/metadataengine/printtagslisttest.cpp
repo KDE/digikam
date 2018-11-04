@@ -23,7 +23,42 @@
 
 #include "printtagslisttest.h"
 
+// Qt includes
+
+#include <QTextStream>
+
 QTEST_MAIN(PrintTagsListTest)
+
+void PrintTagsListTest::parseTagsList(const DMetadata::TagsMap& tags)
+{
+    QString output;
+    QTextStream stream(&output);
+    stream << endl;
+    
+    qDebug() << "Found" << tags.size() << "tags:" << endl;
+
+    for (DMetadata::TagsMap::const_iterator it = tags.constBegin() ; it != tags.constEnd() ; ++it )
+    {
+        QString     key    = it.key();
+        QStringList values = it.value();
+        QString     name   = values[0];
+        QString     title  = values[1];
+        QString     desc   = values[2];
+        
+        // None of these strings can be null, event if strings are translated.
+        QVERIFY(!key.isNull());
+        QVERIFY(!name.isNull());
+        QVERIFY(!title.isNull());
+        QVERIFY(!desc.isNull());
+        
+        stream << key << endl
+               << "    " << name  << endl
+               << "    " << title << endl
+               << "    " << desc  << endl;
+    }
+
+    qDebug().noquote() << output;
+}
 
 void PrintTagsListTest::testPrintAllAvailableStdExifTags()
 {
@@ -34,17 +69,7 @@ void PrintTagsListTest::testPrintAllAvailableStdExifTags()
     DMetadata::TagsMap exiftags = meta.getStdExifTagsList();
     QVERIFY(!exiftags.isEmpty());
 
-    qDebug() << "Found" << exiftags.size() << "tags:";
-
-    for (DMetadata::TagsMap::const_iterator it = exiftags.constBegin(); it != exiftags.constEnd(); ++it )
-    {
-        QString     key    = it.key();
-        QStringList values = it.value();
-        QString     name   = values[0];
-        QString     title  = values[1];
-        QString     desc   = values[2];
-        qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
-    }
+    parseTagsList(exiftags);
 }
 
 void PrintTagsListTest::testPrintAllAvailableMakernotesTags()
@@ -57,17 +82,7 @@ void PrintTagsListTest::testPrintAllAvailableMakernotesTags()
 
     QVERIFY(!mntags.isEmpty());
 
-    qDebug() << "Found" << mntags.size() << "tags:";
-
-    for (DMetadata::TagsMap::const_iterator it = mntags.constBegin(); it != mntags.constEnd(); ++it )
-    {
-        QString     key    = it.key();
-        QStringList values = it.value();
-        QString     name   = values[0];
-        QString     title  = values[1];
-        QString     desc   = values[2];
-        qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
-    }
+    parseTagsList(mntags);
 }
 
 void PrintTagsListTest::testPrintAllAvailableIptcTags()
@@ -80,17 +95,7 @@ void PrintTagsListTest::testPrintAllAvailableIptcTags()
 
     QVERIFY(!iptctags.isEmpty());
 
-    qDebug() << "Found" << iptctags.size() << "tags:";
-    
-    for (DMetadata::TagsMap::const_iterator it = iptctags.constBegin(); it != iptctags.constEnd(); ++it )
-    {
-        QString     key    = it.key();
-        QStringList values = it.value();
-        QString     name   = values[0];
-        QString     title  = values[1];
-        QString     desc   = values[2];
-        qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
-    }
+    parseTagsList(iptctags);
 }
 
 void PrintTagsListTest::testPrintAllAvailableXmpTags()
@@ -105,17 +110,7 @@ void PrintTagsListTest::testPrintAllAvailableXmpTags()
     {
         QVERIFY(!xmptags.isEmpty());
 
-        qDebug() << "Found" << xmptags.size() << "tags:";
-
-        for (DMetadata::TagsMap::const_iterator it = xmptags.constBegin(); it != xmptags.constEnd(); ++it )
-        {
-            QString     key    = it.key();
-            QStringList values = it.value();
-            QString     name   = values[0];
-            QString     title  = values[1];
-            QString     desc   = values[2];
-            qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
-        }
+        parseTagsList(xmptags);
     }
     else
     {
