@@ -25,50 +25,16 @@
 
 // Qt includes
 
-#include <QDebug>
-#include <QTest>
 #include <QFile>
 
-// Local includes
-
-#include "dmetadata.h"
-#include "wstoolutils.h"
-
 QTEST_MAIN(EraseMetadataTagTest)
-
-QDir          s_tempDir;
-QString       s_tempPath;
-const QString s_originalImageFolder(QFINDTESTDATA("data/"));
-
-void EraseMetadataTagTest::initTestCase()
-{
-    MetaEngine::initializeExiv2();
-    qDebug() << "Using Exiv2 Version:" << MetaEngine::Exiv2Version();
-    s_tempPath = QString::fromLatin1(QTest::currentAppName());
-    s_tempPath.replace(QLatin1String("./"), QString());
-}
-
-void EraseMetadataTagTest::init()
-{
-    s_tempDir = WSToolUtils::makeTemporaryDir(s_tempPath.toLatin1().data());
-}
-
-void EraseMetadataTagTest::cleanup()
-{
-    WSToolUtils::removeTemporaryDir(s_tempPath.toLatin1().data());
-}
-
-void EraseMetadataTagTest::cleanupTestCase()
-{
-    MetaEngine::cleanupExiv2();
-}
 
 void EraseMetadataTagTest::testEraseMetadataTag()
 {
     MetaEngineSettingsContainer settings;
 
     settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
-    eraseMetadataTag(s_originalImageFolder + QLatin1String("2008-05_DSC_0294.JPG"),
+    eraseMetadataTag(m_originalImageFolder + QLatin1String("2008-05_DSC_0294.JPG"),
                      QLatin1String("Exif.Nikon3.RetouchHistory"),
                      settings);
 }
@@ -79,7 +45,7 @@ void EraseMetadataTagTest::eraseMetadataTag(const QString& file,
 {
     qDebug() << "File to process:" << file;
     bool ret     = false;
-    QString path = s_tempDir.filePath(QFileInfo(file).fileName().trimmed());
+    QString path = m_tempDir.filePath(QFileInfo(file).fileName().trimmed());
 
     qDebug() << "Temporary target file:" << path;
 

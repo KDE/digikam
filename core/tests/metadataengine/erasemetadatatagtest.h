@@ -31,12 +31,13 @@
 
 // Local includes
 
+#include "abstractunittest.h"
 #include "metaenginesettingscontainer.h"
 #include "dmetadatasettingscontainer.h"
 
 using namespace Digikam;
 
-class EraseMetadataTagTest : public QObject
+class EraseMetadataTagTest : public AbstractUnitTest
 {
     Q_OBJECT
 
@@ -47,11 +48,6 @@ private:
                           const MetaEngineSettingsContainer& settings);
 
 private Q_SLOTS:
-
-    void initTestCase();
-    void init();
-    void cleanup();
-    void cleanupTestCase();
 
     void testEraseMetadataTag();
 };

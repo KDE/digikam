@@ -43,12 +43,13 @@ using namespace Digikam;
 
 class AbstractUnitTest : public QObject
 {
-    Q_OBJECT
-
+    // NOTE: no need Q_OBJECT macro here. Symbols will built with inherited classes
+    //       This prevent to build n extra static library and speedup compilation.
+    
 public:
 
     AbstractUnitTest()
-        : m_originalImageFolder(QFINDTESTDATA("data/"))
+        : m_originalImageFolder(QFINDTESTDATA("data/")) // Original files come with source code.
     {
     }
 
@@ -63,16 +64,19 @@ protected Q_SLOTS:
         m_tempPath.replace(QLatin1String("./"), QString());
     }
 
+    // Re-implemented from QTest framework
     virtual void init()
     {
         m_tempDir = WSToolUtils::makeTemporaryDir(m_tempPath.toLatin1().data());
     }
 
+    // Re-implemented from QTest framework
     virtual void cleanup()
     {
         WSToolUtils::removeTemporaryDir(m_tempPath.toLatin1().data());
     }
 
+    // Re-implemented from QTest framework
     virtual void cleanupTestCase()
     {
         MetaEngine::cleanupExiv2();
@@ -80,9 +84,10 @@ protected Q_SLOTS:
 
 protected:
 
-    QString       m_tempPath;
-    QDir          m_tempDir;
-    const QString m_originalImageFolder;
+    QString       m_tempPath;               // The temporary path to store file to process un unit test.
+    QDir          m_tempDir;                // Same that previous as QDir object.
+    const QString m_originalImageFolder;    // The path to original files to process by unit test,
+                                            // and copied to the temporary directory. Original fules are not touch.
 };
 
 #endif // DIGIKAM_ABSTRACT_UNIT_TEST_H
