@@ -135,7 +135,7 @@ TrashView::TrashView(QWidget* const parent)
 
     d->deleteButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     d->deleteButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    d->deleteButton->setPopupMode(QToolButton::MenuButtonPopup);
+    d->deleteButton->setPopupMode(QToolButton::DelayedPopup);
     d->deleteButton->setDefaultAction(d->deleteAction);
     d->deleteButton->setMenu(menu);
 
