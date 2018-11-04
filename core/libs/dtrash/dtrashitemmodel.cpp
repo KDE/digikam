@@ -156,7 +156,17 @@ QVariant DTrashItemModel::data(const QModelIndex& index, int role) const
         case 1:
             return item.collectionRelativePath;
         case 2:
-            return item.deletionTimestamp.toString();
+        {
+            QString dateTimeFormat = QLocale().dateTimeFormat();
+
+            if (!dateTimeFormat.contains(QLatin1String("yyyy")))
+            {
+                dateTimeFormat.replace(QLatin1String("yy"),
+                                       QLatin1String("yyyy"));
+            }
+
+            return item.deletionTimestamp.toString(dateTimeFormat);
+        }
         default:
             return QVariant();
     };
