@@ -242,7 +242,9 @@ void TrashView::slotUndoLastDeletedItems()
     int result    = QMessageBox::warning(this, title, msg, QMessageBox::Yes | QMessageBox::No);
 
     if (result == QMessageBox::No)
+    {
         return;
+    }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Items to Restore:\n " << items;
 
@@ -258,6 +260,16 @@ void TrashView::slotRestoreSelectedItems()
 
     d->selectedIndexesToRemove = d->tableView->selectionModel()->selectedRows();
     DTrashItemInfoList items   = d->model->itemsForIndexes(d->selectedIndexesToRemove);
+
+    QString title = i18n("Confirm Restore");
+    QString msg   = i18np("Are you sure you want to restore %1 item?",
+                          "Are you sure you want to restore %1 items?", items.count());
+    int result    = QMessageBox::warning(this, title, msg, QMessageBox::Yes | QMessageBox::No);
+
+    if (result == QMessageBox::No)
+    {
+        return;
+    }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Items to Restore:\n " << items;
 
@@ -296,7 +308,9 @@ void TrashView::slotDeleteSelectedItems()
     }
 
     QString title = i18n("Confirm Deletion");
-    QString msg   = i18n("Are you sure you want to delete those items permanently?");
+    QString msg   = i18np("Are you sure you want to delete %1 item permanently?",
+                          "Are you sure you want to delete %1 items permanently?",
+                          d->selectedIndexesToRemove.count());
     int result    = QMessageBox::warning(this, title, msg, QMessageBox::Yes | QMessageBox::No);
 
     if (result == QMessageBox::No)
@@ -346,7 +360,9 @@ void TrashView::slotDeleteAllItems()
     int result    = QMessageBox::warning(this, title, msg, QMessageBox::Yes | QMessageBox::No);
 
     if (result == QMessageBox::No)
+    {
         return;
+    }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Removing all item from trash permanently";
 
