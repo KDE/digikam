@@ -247,7 +247,7 @@ void DIO::rename(const QUrl& src, const QString& newName, bool overwrite)
 
 void DIO::del(const QList<ItemInfo>& infos, bool useTrash)
 {
-    instance()->processJob(new IOJobData(useTrash ? IOJobData::Trash 
+    instance()->processJob(new IOJobData(useTrash ? IOJobData::Trash
                                                   : IOJobData::Delete, infos));
 }
 
@@ -267,7 +267,7 @@ void DIO::del(PAlbum* const album, bool useTrash)
     AlbumManager::instance()->removeWatchedPAlbums(album);
 #endif
 
-    instance()->createJob(new IOJobData(useTrash ? IOJobData::Trash 
+    instance()->createJob(new IOJobData(useTrash ? IOJobData::Trash
                                                  : IOJobData::Delete, album));
 }
 

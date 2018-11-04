@@ -44,7 +44,8 @@ public:
       : operation(Unknown),
         overwrite(false),
         srcAlbum(0),
-        destAlbum(0)
+        destAlbum(0),
+        startTime(QDateTime::currentDateTime())
     {
     }
 
@@ -62,6 +63,7 @@ public:
     QUrl             destUrl;
 
     QString          progressId;
+    QDateTime        startTime;
 
     QMutex           mutex;
 };
@@ -222,6 +224,11 @@ QUrl IOJobData::getNextUrl() const
 QString IOJobData::getProgressId() const
 {
     return d->progressId;
+}
+
+QDateTime IOJobData::startTime() const
+{
+    return d->startTime;
 }
 
 ItemInfo IOJobData::findItemInfo(const QUrl& url) const

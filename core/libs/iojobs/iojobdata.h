@@ -28,6 +28,7 @@
 
 #include <QUrl>
 #include <QList>
+#include <QDateTime>
 
 // Local includes
 
@@ -102,11 +103,12 @@ public:
     QUrl             getNextUrl()                         const;
 
     QString          getProgressId()                      const;
+    QDateTime        startTime()                          const;
 
-    ItemInfo        findItemInfo(const QUrl& url)       const;
+    ItemInfo         findItemInfo(const QUrl& url)        const;
 
     QList<QUrl>      sourceUrls()                         const;
-    QList<ItemInfo> imageInfos()                         const;
+    QList<ItemInfo>  imageInfos()                         const;
 
 private:
 

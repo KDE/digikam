@@ -68,7 +68,6 @@ public:
           deleteButton(0),
           deleteAction(0),
           deleteAllAction(0),
-          startDateTime(QDateTime::currentDateTime()),
           thumbSize(ThumbnailSize::Large)
     {
     }
@@ -87,7 +86,6 @@ public:
     QAction*                   deleteAllAction;
 
     QModelIndex                lastSelectedIndex;
-    QDateTime                  startDateTime;
 
     DTrashItemInfo             lastSelectedItem;
     QModelIndexList            selectedIndexesToRemove;
@@ -207,13 +205,22 @@ void TrashView::slotSelectionChanged()
 void TrashView::slotUndoLastDeletedItems()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Undo last deleted items from collection trash";
-
     DTrashItemInfoList items;
+    d->undoButton->setEnabled(false);
     d->selectedIndexesToRemove.clear();
+    QDateTime lastDateTime = QDateTime::fromMSecsSinceEpoch(0);
 
     foreach (const DTrashItemInfo& item, d->model->allItems())
     {
-        if (item.deletionTimestamp > d->startDateTime)
+        if (item.deletionTimestamp > lastDateTime)
+        {
+            lastDateTime = item.deletionTimestamp;
+        }
+    }
+
+    foreach (const DTrashItemInfo& item, d->model->allItems())
+    {
+        if (item.deletionTimestamp == lastDateTime)
         {
             QModelIndex index = d->model->indexForItem(item);
 
@@ -227,6 +234,7 @@ void TrashView::slotUndoLastDeletedItems()
 
     if (items.isEmpty())
     {
+        d->undoButton->setEnabled(true);
         return;
     }
 
@@ -353,16 +361,8 @@ void TrashView::slotDataChanged()
         return;
     }
 
+    d->undoButton->setEnabled(true);
     d->deleteButton->setEnabled(true);
-
-    foreach (const DTrashItemInfo& item, d->model->allItems())
-    {
-        if (item.deletionTimestamp > d->startDateTime)
-        {
-            d->undoButton->setEnabled(true);
-            break;
-        }
-    }
 }
 
 void TrashView::slotChangeLastSelectedItem(const QModelIndex& curr, const QModelIndex&)
