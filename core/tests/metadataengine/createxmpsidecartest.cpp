@@ -38,8 +38,6 @@ void CreateXmpSidecarTest::testCreateXmpSidecar()
     createXmpSidecar(m_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"), settings);
 
     createXmpSidecar(m_originalImageFolder + QLatin1String("IMG_2520.CR2"),         settings);
-
-    createXmpSidecar(m_originalImageFolder + QLatin1String("20160821035715.jpg"),   settings);
 }
 
 void CreateXmpSidecarTest::createXmpSidecar(const QString& file,
@@ -62,7 +60,7 @@ void CreateXmpSidecarTest::createXmpSidecar(const QString& file,
     QVERIFY(ret);
 
     // Check if no xmp sidecar relevant is present.
-    
+
     qDebug() << "Temporary XMP target file to create:" << pathXmp;
 
     ret = !pathXmp.isNull();
