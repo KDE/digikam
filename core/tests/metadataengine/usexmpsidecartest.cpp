@@ -25,24 +25,9 @@
 
 // Qt includes
 
-#include <QDebug>
-#include <QTest>
 #include <QFile>
 
-// Local includes
-
-#include "dmetadata.h"
-#include "wstoolutils.h"
-
 QTEST_MAIN(UseXmpSidecarTest)
-
-const QString originalImageFolder(QFINDTESTDATA("data/"));
-
-void UseXmpSidecarTest::initTestCase()
-{
-    MetaEngine::initializeExiv2();
-    qDebug() << "Using Exiv2 Version:" << MetaEngine::Exiv2Version();
-}
 
 void UseXmpSidecarTest::testUseXmpSidecar()
 {
@@ -50,45 +35,36 @@ void UseXmpSidecarTest::testUseXmpSidecar()
 
     settings.useXMPSidecar4Reading = true;
     settings.metadataWritingMode = DMetadata::WRITE_TO_SIDECAR_ONLY;
-    useXmpSidecar(originalImageFolder + QLatin1String("_27A1417.CR2"), settings);
+    useXmpSidecar(m_originalImageFolder + QLatin1String("_27A1417.CR2"), settings);
 
     settings.useXMPSidecar4Reading = true;
     settings.metadataWritingMode = DMetadata::WRITE_TO_SIDECAR_ONLY_FOR_READ_ONLY_FILES;
-    useXmpSidecar(originalImageFolder + QLatin1String("_27A1417.CR2"), settings);
+    useXmpSidecar(m_originalImageFolder + QLatin1String("_27A1417.CR2"), settings);
 
     settings.useXMPSidecar4Reading = false;
     settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
-    useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
+    useXmpSidecar(m_originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 
     settings.useXMPSidecar4Reading = true;
     settings.metadataWritingMode = DMetadata::WRITE_TO_SIDECAR_ONLY;
-    useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
+    useXmpSidecar(m_originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 
     settings.useXMPSidecar4Reading = true;
     settings.metadataWritingMode = DMetadata::WRITE_TO_SIDECAR_AND_IMAGE;
-    useXmpSidecar(originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
-}
-
-void UseXmpSidecarTest::cleanupTestCase()
-{
-    MetaEngine::cleanupExiv2();
+    useXmpSidecar(m_originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 }
 
 void UseXmpSidecarTest::useXmpSidecar(const QString& file,
                                       const MetaEngineSettingsContainer& settings)
 {
     qDebug() << "File to process:          " << file;
-    bool ret        = false;
 
-    QString path    = WSToolUtils::makeTemporaryDir("usexmpsidecartest")
-                      .filePath(QFileInfo(file).fileName().trimmed());
-
+    QString path    = m_tempDir.filePath(QFileInfo(file).fileName().trimmed());
     QString pathXmp = path + QLatin1String(".xmp");
-
 
     qDebug() << "Temporary target file:    " << path;
 
-    ret = !path.isNull();
+    bool ret = !path.isNull();
     QVERIFY(ret);
 
     QFile::remove(path);
@@ -104,6 +80,7 @@ void UseXmpSidecarTest::useXmpSidecar(const QString& file,
     QFile::remove(pathXmp);
     QFile xmpTarget(file + QLatin1String(".xmp"));
     ret = xmpTarget.copy(pathXmp);
+    QVERIFY(ret);
 
     DMetadata meta;
     meta.setSettings(settings);
@@ -150,6 +127,4 @@ void UseXmpSidecarTest::useXmpSidecar(const QString& file,
     }
 
     QCOMPARE(count, 0);
-
-    WSToolUtils::removeTemporaryDir("usexmpsidecartest");
 }

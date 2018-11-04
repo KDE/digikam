@@ -24,12 +24,11 @@
 #ifndef DIGIKAM_SET_IPTC_PREVIEW_TEST_H
 #define DIGIKAM_SET_IPTC_PREVIEW_TEST_H
 
-// Qt includes
+// Local includes
 
-#include <QObject>
-#include <QString>
+#include "abstractunittest.h"
 
-class SetIptcPreviewTest : public QObject
+class SetIptcPreviewTest : public AbstractUnitTest
 {
     Q_OBJECT
 
@@ -38,11 +37,6 @@ private:
     void setIptcPreview(const QString& file);
 
 private Q_SLOTS:
-
-    void initTestCase();
-    void init();
-    void cleanup();
-    void cleanupTestCase();
 
     void testSetIptcPreview();
 };

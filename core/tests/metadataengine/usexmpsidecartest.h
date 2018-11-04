@@ -24,19 +24,13 @@
 #ifndef DIGIKAM_USE_XMP_SIDECAR_TEST_H
 #define DIGIKAM_USE_XMP_SIDECAR_TEST_H
 
-// Qt includes
-
-#include <QObject>
-#include <QString>
-
 // Local includes
 
+#include "abstractunittest.h"
 #include "metaenginesettingscontainer.h"
 #include "dmetadatasettingscontainer.h"
 
-using namespace Digikam;
-
-class UseXmpSidecarTest : public QObject
+class UseXmpSidecarTest : public AbstractUnitTest
 {
     Q_OBJECT
 
@@ -47,9 +41,7 @@ private:
 
 private Q_SLOTS:
 
-    void initTestCase();
     void testUseXmpSidecar();
-    void cleanupTestCase();
 };
 
 #endif // DIGIKAM_USE_XMP_SIDECAR_TEST_H

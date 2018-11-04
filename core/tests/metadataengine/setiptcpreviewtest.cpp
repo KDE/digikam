@@ -25,62 +25,25 @@
 
 // Qt includes
 
-#include <QDebug>
-#include <QTest>
 #include <QFile>
 #include <QImage>
 
-// Local includes
-
-#include "dmetadata.h"
-#include "wstoolutils.h"
-
-using namespace Digikam;
-
 QTEST_MAIN(SetIptcPreviewTest)
-
-QDir          s_tempDir;
-QString       s_tempPath;
-const QString s_originalImageFolder(QFINDTESTDATA("data/"));
-
-void SetIptcPreviewTest::initTestCase()
-{
-    MetaEngine::initializeExiv2();
-    qDebug() << "Using Exiv2 Version:" << MetaEngine::Exiv2Version();
-    s_tempPath = QString::fromLatin1(QTest::currentAppName());
-    s_tempPath.replace(QLatin1String("./"), QString());
-}
-
-void SetIptcPreviewTest::init()
-{
-    s_tempDir = WSToolUtils::makeTemporaryDir(s_tempPath.toLatin1().data());
-}
-
-void SetIptcPreviewTest::cleanup()
-{
-    WSToolUtils::removeTemporaryDir(s_tempPath.toLatin1().data());
-}
-
-void SetIptcPreviewTest::cleanupTestCase()
-{
-    MetaEngine::cleanupExiv2();
-}
 
 void SetIptcPreviewTest::testSetIptcPreview()
 {
-    setIptcPreview(s_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"));
+    setIptcPreview(m_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"));
 }
 
 void SetIptcPreviewTest::setIptcPreview(const QString& file)
 {
     qDebug() << "File to process:" << file;
-    bool ret     = false;
 
-    QString path = s_tempDir.filePath(QFileInfo(file).fileName().trimmed());
+    QString path = m_tempDir.filePath(QFileInfo(file).fileName().trimmed());
 
     qDebug() << "Temporary target file:" << path;
 
-    ret = !path.isNull();
+    bool ret = !path.isNull();
     QVERIFY(ret);
 
     QFile::remove(path);

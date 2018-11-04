@@ -43,14 +43,13 @@ void PatchPreviewTest::testExtractPreviewAndFixMetadata()
 void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDim, int imageQuality)
 {
     qDebug() << "File to process:" << file;
-    bool ret     = false;
     
     QString path = m_tempDir.filePath(QFileInfo(file).fileName().trimmed()) + 
                    QLatin1String(".jpg");
 
     qDebug() << "Temporary target file:" << path;
 
-    ret = !path.isNull();
+    bool ret = !path.isNull();
     QVERIFY(ret);
     
     // Load preview from original image.

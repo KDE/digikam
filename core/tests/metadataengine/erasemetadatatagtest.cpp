@@ -44,12 +44,11 @@ void EraseMetadataTagTest::eraseMetadataTag(const QString& file,
                                             const MetaEngineSettingsContainer& settings)
 {
     qDebug() << "File to process:" << file;
-    bool ret     = false;
     QString path = m_tempDir.filePath(QFileInfo(file).fileName().trimmed());
 
     qDebug() << "Temporary target file:" << path;
 
-    ret = !path.isNull();
+    bool ret = !path.isNull();
     QVERIFY(ret);
 
     QFile::remove(path);
