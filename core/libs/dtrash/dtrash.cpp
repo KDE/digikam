@@ -69,8 +69,6 @@ bool DTrash::deleteImage(const QString& imagePath, const QDateTime& deleteTime)
     }
 
     QFileInfo imageFileInfo(imagePath);
-    QFile imageFile(imagePath);
-
     QString fileName = imageFileInfo.fileName();
     // Get the album path, i.e. collection + album. For this,
     // get the n leftmost characters where n is the complete path without the size of the filename
@@ -95,7 +93,7 @@ bool DTrash::deleteImage(const QString& imagePath, const QDateTime& deleteTime)
                                  baseNameForMovingIntoTrash + QLatin1Char('.') +
                                  imageFileInfo.completeSuffix();
 
-    if (!imageFile.rename(destinationInTrash))
+    if (!QFile::rename(imagePath, destinationInTrash))
     {
         return false;
     }
@@ -117,7 +115,10 @@ bool DTrash::deleteDirRecursivley(const QString& dirToDelete, const QDateTime& d
 
     foreach (const QFileInfo& fileInfo, srcDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
-        deleteDirRecursivley(fileInfo.filePath(), deleteTime);
+        if (!deleteDirRecursivley(fileInfo.filePath(), deleteTime))
+        {
+            return false;
+        }
     }
 
     return srcDir.removeRecursively();
