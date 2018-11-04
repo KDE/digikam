@@ -206,7 +206,6 @@ void TrashView::slotUndoLastDeletedItems()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Undo last deleted items from collection trash";
     DTrashItemInfoList items;
-    d->undoButton->setEnabled(false);
     d->selectedIndexesToRemove.clear();
     QDateTime lastDateTime = QDateTime::fromMSecsSinceEpoch(0);
 
@@ -234,9 +233,16 @@ void TrashView::slotUndoLastDeletedItems()
 
     if (items.isEmpty())
     {
-        d->undoButton->setEnabled(true);
         return;
     }
+
+    QString title = i18n("Confirm Undo");
+    QString msg   = i18np("Are you sure you want to restore %1 item?",
+                          "Are you sure you want to restore %1 items?", items.count());
+    int result    = QMessageBox::warning(this, title, msg, QMessageBox::Yes | QMessageBox::No);
+
+    if (result == QMessageBox::No)
+        return;
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Items to Restore:\n " << items;
 
