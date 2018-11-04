@@ -626,4 +626,5 @@ BUGFIXES:
 560 ==> 400436 - Crash when saving jpeg files with metadata.
 561 ==> 400492 - Rotation does not work.
 562 ==> 246727 - Add undo functionality to move to trash action.
-563 ==> 
+563 ==> 400637 - IPFS icons have non-square size, causing them to get blurred.
+564 ==> 
