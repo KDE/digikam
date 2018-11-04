@@ -26,43 +26,35 @@
 
 // Qt includes
 
-#include <QDebug>
-#include <QTest>
 #include <QImage>
 #include <QByteArray>
 
 // Local includes
 
-#include "dmetadata.h"
-#include "wstoolutils.h"
 #include "previewloadthread.h"
 
 QTEST_MAIN(PatchPreviewTest)
 
-using namespace Digikam;
-
-const QString originalImageFolder(QFINDTESTDATA("data/"));
-
-void PatchPreviewTest::initTestCase()
-{
-    MetaEngine::initializeExiv2();
-    qDebug() << "Using Exiv2 Version:" << MetaEngine::Exiv2Version();
-}
-
 void PatchPreviewTest::testExtractPreviewAndFixMetadata()
 {
-    patchPreview(originalImageFolder + QLatin1String("IMG_2520.CR2"), true, 1024, 100); // See bug #400140
-}
-
-void PatchPreviewTest::cleanupTestCase()
-{
-    MetaEngine::cleanupExiv2();
+    patchPreview(m_originalImageFolder + QLatin1String("IMG_2520.CR2"), true, 1024, 100); // See bug #400140
 }
 
 void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDim, int imageQuality)
 {
     qDebug() << "File to process:" << file;
     bool ret     = false;
+    
+    QString path = m_tempDir.filePath(QFileInfo(file).fileName().trimmed()) + 
+                   QLatin1String(".jpg");
+
+    qDebug() << "Temporary target file:" << path;
+
+    ret = !path.isNull();
+    QVERIFY(ret);
+    
+    // Load preview from original image.
+    
     QImage image = PreviewLoadThread::loadHighQualitySynchronously(file).copyQImage();
 
     if (image.isNull())
@@ -73,14 +65,6 @@ void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDi
     ret = image.isNull();
     QVERIFY(!ret);
 
-    QString path = WSToolUtils::makeTemporaryDir("patchpreviewtest").filePath(QFileInfo(file)
-                                                 .baseName().trimmed() + QLatin1String(".jpg"));
-
-    qDebug() << "Temporary target file:" << path;
-
-    ret = !path.isNull();
-    QVERIFY(ret);
-
     int imgQualityToApply = 100;
 
     if (rescale)
@@ -90,10 +74,13 @@ void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDi
 
         imgQualityToApply = imageQuality;
     }
+    
+    // Save preview in temporary directory.
 
     ret = image.save(path, "JPEG", imgQualityToApply);
     QVERIFY(ret);
 
+    // Load metadata from original image.
     DMetadata meta;
     ret = meta.load(file);
     QVERIFY(ret);
@@ -102,7 +89,11 @@ void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDi
     QByteArray iptc = meta.getIptc();
     QByteArray xmp  = meta.getXmp();
 
+    // Backport metadata to preview file.
+
     meta.load(path);
+    QVERIFY(ret);
+
     meta.setExif(exif);
     meta.setIptc(iptc);
     meta.setXmp(xmp);
@@ -111,6 +102,4 @@ void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDi
     meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
     ret = meta.applyChanges(true);
     QVERIFY(ret);
-
-    WSToolUtils::removeTemporaryDir("patchpreviewtest");
 }

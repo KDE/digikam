@@ -24,11 +24,6 @@
 #ifndef DIGIKAM_LOAD_FROM_BA_TEST_H
 #define DIGIKAM_LOAD_FROM_BA_TEST_H
 
-// Qt includes
-
-#include <QObject>
-#include <QString>
-
 // Local includes
 
 #include "abstractunittest.h"

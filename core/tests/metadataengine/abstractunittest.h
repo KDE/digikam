@@ -43,8 +43,7 @@ using namespace Digikam;
 
 class AbstractUnitTest : public QObject
 {
-    // NOTE: no need Q_OBJECT macro here. Symbols will built with inherited classes
-    //       This prevent to build n extra static library and speedup compilation.
+    Q_OBJECT
     
 public:
 

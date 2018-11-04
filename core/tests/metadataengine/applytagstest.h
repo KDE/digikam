@@ -24,11 +24,6 @@
 #ifndef DIGIKAM_APPLY_TAGS_TEST_H
 #define DIGIKAM_APPLY_TAGS_TEST_H
 
-// Qt includes
-
-#include <QObject>
-#include <QString>
-
 // Local includes
 
 #include "abstractunittest.h"

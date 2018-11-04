@@ -25,12 +25,11 @@
 #ifndef DIGIKAM_PATCH_PREVIEW_TEST_H
 #define DIGIKAM_PATCH_PREVIEW_TEST_H
 
-// Qt includes
+// Local includes
 
-#include <QObject>
-#include <QString>
+#include "abstractunittest.h"
 
-class PatchPreviewTest : public QObject
+class PatchPreviewTest : public AbstractUnitTest
 {
     Q_OBJECT
 
@@ -40,9 +39,7 @@ private:
 
 private Q_SLOTS:
 
-    void initTestCase();
     void testExtractPreviewAndFixMetadata();
-    void cleanupTestCase();
 };
 
 #endif // DIGIKAM_PATCH_PREVIEW_TEST_H
