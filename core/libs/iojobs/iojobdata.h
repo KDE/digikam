@@ -108,7 +108,7 @@ public:
     ItemInfo         findItemInfo(const QUrl& url)        const;
 
     QList<QUrl>      sourceUrls()                         const;
-    QList<ItemInfo>  imageInfos()                         const;
+    QList<ItemInfo>  itemInfos()                          const;
 
 private:
 

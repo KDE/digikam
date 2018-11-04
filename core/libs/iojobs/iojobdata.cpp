@@ -57,7 +57,7 @@ public:
     PAlbum*          destAlbum;
 
     QMap<QUrl, QUrl> changeDestMap;
-    QList<ItemInfo>  imageInfoList;
+    QList<ItemInfo>  itemInfosList;
     QList<QUrl>      sourceUrlList;
 
     QUrl             destUrl;
@@ -151,11 +151,11 @@ IOJobData::~IOJobData()
 
 void IOJobData::setItemInfos(const QList<ItemInfo>& infos)
 {
-    d->imageInfoList = infos;
+    d->itemInfosList = infos;
 
     d->sourceUrlList.clear();
 
-    foreach(const ItemInfo& info, d->imageInfoList)
+    foreach (const ItemInfo& info, d->itemInfosList)
     {
         d->sourceUrlList << info.fileUrl();
     }
@@ -233,7 +233,7 @@ QDateTime IOJobData::jobTime() const
 
 ItemInfo IOJobData::findItemInfo(const QUrl& url) const
 {
-    foreach(const ItemInfo& info, d->imageInfoList)
+    foreach (const ItemInfo& info, d->itemInfosList)
     {
         if (info.fileUrl() == url)
         {
@@ -249,9 +249,9 @@ QList<QUrl> IOJobData::sourceUrls() const
     return d->sourceUrlList;
 }
 
-QList<ItemInfo> IOJobData::imageInfos() const
+QList<ItemInfo> IOJobData::itemInfos() const
 {
-    return d->imageInfoList;
+    return d->itemInfosList;
 }
 
 } // namespace Digikam

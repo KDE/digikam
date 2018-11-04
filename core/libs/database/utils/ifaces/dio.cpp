@@ -280,13 +280,13 @@ void DIO::processJob(IOJobData* const data)
     if (operation == IOJobData::CopyImage || operation == IOJobData::MoveImage)
     {
         // this is a fast db operation, do here
-        GroupedImagesFinder finder(data->imageInfos());
+        GroupedImagesFinder finder(data->itemInfos());
         data->setItemInfos(finder.infos);
 
         QStringList      filenames;
         QList<qlonglong> ids;
 
-        foreach (const ItemInfo& info, data->imageInfos())
+        foreach (const ItemInfo& info, data->itemInfos())
         {
             filenames << info.name();
             ids << info.id();
@@ -310,9 +310,9 @@ void DIO::processJob(IOJobData* const data)
 
     if (operation == IOJobData::Rename)
     {
-        if (!data->imageInfos().isEmpty())
+        if (!data->itemInfos().isEmpty())
         {
-            ItemInfo info      = data->imageInfos().first();
+            ItemInfo info      = data->itemInfos().first();
             PAlbum* const album = AlbumManager::instance()->findPAlbum(info.albumId());
 
             if (album)
