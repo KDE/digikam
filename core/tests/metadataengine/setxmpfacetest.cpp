@@ -102,6 +102,8 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     ret = meta2.applyChanges();
     QVERIFY(ret);
 
+    // -------
+
     DMetadata meta3;
     ret = meta3.load(filePath);
     QVERIFY(ret);

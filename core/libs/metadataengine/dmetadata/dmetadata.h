@@ -112,11 +112,17 @@ public: // Faces helpers
     bool getImageFacesMap(QMultiMap<QString, QVariant>& facesPath) const;
 
     /**
-     * Set Images Face Map tags in Picassa/Metadatagroup format
-     * @param write    - if true all faces will be written, else update mode:
-     *                   search if at least a face tag exist and write if true
+     * Set Images Face Map tags in Picassa/Metadatagroup format.
+     *
+     * @param write : if true all faces will be written, else update mode:
+     *                search if at least a face tag exist and write if true.
      */
     bool setImageFacesMap(QMultiMap<QString, QVariant>& facesPath, bool write) const;
+
+    /**
+     * Remove Images Face Map tags from Picassa/Metadatagroup format.
+     */
+    void removeImageFaceMap();
 
 public: // Tags helpers
 

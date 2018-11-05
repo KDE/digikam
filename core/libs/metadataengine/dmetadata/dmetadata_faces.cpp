@@ -48,12 +48,14 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
     // > There are no specialized values for structures, qualifiers and nested
     // > types. However, these can be added by using an XmpTextValue and a path as
     // > the key.
+
     // I think that means I have to iterate over the WLPG face tags in the clunky
     // way below (guess numbers and look them up as strings). (Leif)
+
     const QString personPathTemplate = QLatin1String("Xmp.MP.RegionInfo/MPRI:Regions[%1]/MPReg:PersonDisplayName");
     const QString rectPathTemplate   = QLatin1String("Xmp.MP.RegionInfo/MPRI:Regions[%1]/MPReg:Rectangle");
 
-    for (int i = 1; ; ++i)
+    for (int i = 1 ; ; ++i)
     {
         QString person = getXmpTagString(personPathTemplate.arg(i).toLatin1().constData(), false);
 
@@ -83,7 +85,7 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
         faces.insertMulti(person, rect);
     }
 
-    /** Read face tags only if libkexiv can write them, otherwise
+    /** Read face tags only if Exiv2 can write them, otherwise
      *  garbage tags will be generated on image transformation
      */
 
@@ -95,7 +97,7 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
     const QString mwg_rect_w_PathTemplate = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:w");
     const QString mwg_rect_h_PathTemplate = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:h");
 
-    for (int i = 1; ; ++i)
+    for (int i = 1 ; ; ++i)
     {
         QString person = getXmpTagString(mwg_personPathTemplate.arg(i).toLatin1().constData(), false);
 
@@ -237,6 +239,61 @@ bool DMetadata::setImageFacesMap(QMultiMap<QString, QVariant>& facesPath, bool w
     }
 
     return ok;
+}
+
+void DMetadata::removeImageFaceMap()
+{
+    QString qxmpTagName    = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
+    QString regionTagKey   = qxmpTagName + QLatin1String("[%1]");
+    QString nameTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Name");
+    QString typeTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Type");
+    QString areaTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area");
+    QString areaxTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:x");
+    QString areayTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:y");
+    QString areawTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:w");
+    QString areahTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:h");
+    QString areanormTagKey = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:unit");
+
+    QString winQxmpTagName = QLatin1String("Xmp.MP.RegionInfo/MPRI:Regions");
+    QString winRectTagKey  = winQxmpTagName + QLatin1String("[%1]/MPReg:Rectangle");
+    QString winNameTagKey  = winQxmpTagName + QLatin1String("[%1]/MPReg:PersonDisplayName");
+
+    // Remove mwg-rs tags
+
+    removeXmpTag(qxmpTagName.toLatin1().constData());
+
+    bool dirty = true;
+    int i      = 1;
+
+    while (dirty)
+    {
+        dirty  = false;
+        dirty |= removeXmpTag(regionTagKey.arg(i).toLatin1().constData());
+        dirty |= removeXmpTag(nameTagKey.arg(i).toLatin1().constData());
+        dirty |= removeXmpTag(typeTagKey.arg(i).toLatin1().constData());
+        dirty |= removeXmpTag(areaTagKey.arg(i).toLatin1().constData());
+        dirty |= removeXmpTag(areaxTagKey.arg(i).toLatin1().constData());
+        dirty |= removeXmpTag(areayTagKey.arg(i).toLatin1().constData());
+        dirty |= removeXmpTag(areawTagKey.arg(i).toLatin1().constData());
+        dirty |= removeXmpTag(areahTagKey.arg(i).toLatin1().constData());
+        dirty |= removeXmpTag(areanormTagKey.arg(i).toLatin1().constData());
+        ++i;
+    }
+
+    // Remove MP tags
+
+    removeXmpTag(winQxmpTagName.toLatin1().constData());
+
+    dirty = true;
+    i     = 1;
+
+    while (dirty)
+    {
+        dirty  = false;
+        dirty |= removeXmpTag(winRectTagKey.arg(i).toLatin1().constData());
+        dirty |= removeXmpTag(winNameTagKey.arg(i).toLatin1().constData());
+        ++i;
+    }
 }
 
 } // namespace Digikam
