@@ -108,11 +108,11 @@ public:
      */
     enum XmpTagType
     {
-        NormalTag               = 0,
-        ArrayBagTag             = 1,
-        StructureTag            = 2,
-        ArrayLangTag            = 3,
-        ArraySeqTag             = 4
+        NormalTag    = 0,
+        ArrayBagTag  = 1,
+        StructureTag = 2,
+        ArrayLangTag = 3,
+        ArraySeqTag  = 4
     };
 
     /**
@@ -199,7 +199,7 @@ public:
      */
     static QString Exiv2Version();
 
- 
+
     //@}
 
     //-----------------------------------------------------------------
