@@ -342,7 +342,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
         }
     }
 
-    dirty |= metadata.setImageFacesMap(d->faceTagsList,saveFaces);
+    dirty |= metadata.setImageFacesMap(d->faceTagsList, saveFaces);
 
     dirty |= writeTags(metadata,saveTags);
 

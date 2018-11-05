@@ -36,7 +36,7 @@ void SetXmpFaceTest::testSetXmpFace()
 {
     setXmpFace(m_originalImageFolder + QLatin1String("nikon-e2100.jpg"));
 }
-    
+
 void SetXmpFaceTest::setXmpFace(const QString& file)
 {
     qDebug() << "File to process:          " << file;
