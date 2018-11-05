@@ -25,11 +25,6 @@
 #ifndef DIGIKAM_SET_XMP_FACE_TEST_H
 #define DIGIKAM_SET_XMP_FACE_TEST_H
 
-// Qt includes
-
-#include <QMap>
-#include <QRectF>
-
 // Local includes
 
 #include "abstractunittest.h"
@@ -45,8 +40,6 @@ class SetXmpFaceTest : public AbstractUnitTest
 private:
 
     void setXmpFace(const QString& file);
-    bool setFaceTags(DMetadata& meta, const char* xmpTagName, const QMap<QString, QRectF>& faces);
-    bool removeFaceTags(DMetadata& meta, const char* xmpTagName);
 
 private Q_SLOTS:
 

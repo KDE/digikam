@@ -27,12 +27,14 @@
 // Qt includes
 
 #include <QFile>
+#include <QMultiMap>
+#include <QRectF>
 
 QTEST_MAIN(SetXmpFaceTest)
 
 void SetXmpFaceTest::testSetXmpFace()
 {
-    setXmpFace(m_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"));
+    setXmpFace(m_originalImageFolder + QLatin1String("nikon-e2100.jpg"));
 }
     
 void SetXmpFaceTest::setXmpFace(const QString& file)
@@ -53,178 +55,59 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     QVERIFY(ret);
 
     DMetadata meta;
-    meta.setWriteRawFiles(true);
     ret = meta.load(filePath);
     QVERIFY(ret);
 
-    bool g       = meta.supportXmp();
-    qDebug() << "Exiv2 XMP support" << g;
-    
     // Add random rectangles with facetags
 
-    QString name = QLatin1String("Bob Marley");
-    float x      = 0.5;
-    float y      = 0.5;
-    float w      = 60;
-    float h      = 60;
+    QMultiMap<QString, QVariant> faces;
 
-    QRectF rect(x, y, w, h);
-    QMap<QString, QRectF> faces;
+    QString name  = QLatin1String("Bob Marley");
+    QRectF rect(10, 10, 60, 60);
+    faces.insert(name, QVariant(rect));
 
-    faces[name]       = rect;
+    QString name2 = QLatin1String("Alice");
+    QRectF rect2(20, 20, 30, 30);
+    faces.insert(name2, QVariant(rect2));
 
-    QString name2     = QLatin1String("Hello Kitty!");
-    QRectF rect2(0.4, 0.4, 30,30);
-
-    faces[name2]      = rect2;
-
-    const QString bag = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
-
-    ret = setFaceTags(meta, bag.toLatin1().constData(), faces);
+    ret = meta.setImageFacesMap(faces, true);
     QVERIFY(ret);
 
     ret = meta.applyChanges();
     QVERIFY(ret);
 
-    // Check back face tags assigned.
-
-    QString recoverName = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList[1]/mwg-rs:Name");
+    // Check if face tags are well assigned.
 
     DMetadata meta2;
-    meta2.setWriteRawFiles(true);
     ret = meta2.load(filePath);
     QVERIFY(ret);
 
-    QString nameR = meta2.getXmpTagString(recoverName.toLatin1().constData(), false);
-    QVERIFY(!nameR.isEmpty());
+    QMultiMap<QString, QVariant> faces2;
+    ret = meta2.getImageFacesMap(faces2);
+    QVERIFY(ret);
 
-    qDebug() << "Saved name is:" << nameR;
+    QVERIFY(!faces2.isEmpty());
+    QVERIFY(faces2.contains(name));
+    QVERIFY(faces2.contains(name2));
+    QVERIFY(faces2.value(name)  == rect);
+    QVERIFY(faces2.value(name2) == rect2);
 
-    // Now clear factags and check if well removed.
+    // Now clear face tags and check if well removed.
+
+    QMultiMap<QString, QVariant> faces3;
+
+    ret = meta2.setImageFacesMap(faces3, true);
+    QVERIFY(ret);
+
+    ret = meta2.applyChanges();
+    QVERIFY(ret);
 
     DMetadata meta3;
-    meta3.setWriteRawFiles(true);
     ret = meta3.load(filePath);
     QVERIFY(ret);
-    
-    ret = removeFaceTags(meta3, bag.toLatin1().constData());
+
+    QMultiMap<QString, QVariant> faces4;
+    ret = meta3.getImageFacesMap(faces4);
     QVERIFY(ret);
-
-    ret = meta3.applyChanges();
-    QVERIFY(ret);
-
-    DMetadata meta4;
-    meta4.setWriteRawFiles(true);
-    ret = meta4.load(filePath);
-    QVERIFY(ret);
-
-    QString nameR2 = meta4.getXmpTagString(recoverName.toLatin1().constData(), false);
-    QVERIFY(nameR2.isEmpty());
-}
-
-bool SetXmpFaceTest::setFaceTags(DMetadata& meta, const char* xmpTagName, const QMap<QString,QRectF>& faces)
-{
-    if (!meta.setXmpTagString(xmpTagName, QString(), DMetadata::XmpTagType(1)))
-        return false;
-
-    QString qxmpTagName(QString::fromLatin1(xmpTagName));
-    QString nameTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Name");
-    QString typeTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Type");
-    QString areaTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area");
-    QString areaxTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:x");
-    QString areayTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:y");
-    QString areawTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:w");
-    QString areahTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:h");
-    QString areanormTagKey = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:unit");
-
-    QMap<QString, QRectF>::const_iterator it = faces.constBegin();
-    int i                                    = 1;
-
-    while (it != faces.constEnd())
-    {
-        qreal x, y, w, h;
-        it.value().getRect(&x, &y, &w, &h);
-
-        /** Set tag name **/
-        if (!meta.setXmpTagString(nameTagKey.arg(i).toLatin1().constData(), it.key(),
-                                  DMetadata::XmpTagType(0)))
-            return false;
-
-        /** Set tag type as Face **/
-        if (!meta.setXmpTagString(typeTagKey.arg(i).toLatin1().constData(), QLatin1String("Face"),
-                                  DMetadata::XmpTagType(0)))
-            return false;
-
-        /** Set tag Area, with xmp type struct **/
-        if (!meta.setXmpTagString(areaTagKey.arg(i).toLatin1().constData(), QString(),
-                                  DMetadata::XmpTagType(2)))
-            return false;
-
-        /** Set stArea:x inside Area structure **/
-        if (!meta.setXmpTagString(areaxTagKey.arg(i).toLatin1().constData(), QString::number(x),
-                                  DMetadata::XmpTagType(0)))
-            return false;
-
-        /** Set stArea:y inside Area structure **/
-        if (!meta.setXmpTagString(areayTagKey.arg(i).toLatin1().constData(), QString::number(y),
-                                  DMetadata::XmpTagType(0)))
-            return false;
-
-        /** Set stArea:w inside Area structure **/
-        if (!meta.setXmpTagString(areawTagKey.arg(i).toLatin1().constData(), QString::number(w),
-                                  DMetadata::XmpTagType(0)))
-            return false;
-
-        /** Set stArea:h inside Area structure **/
-        if (!meta.setXmpTagString(areahTagKey.arg(i).toLatin1().constData(),QString::number(h),
-                                  DMetadata::XmpTagType(0)))
-            return false;
-
-        /** Set stArea:unit inside Area structure  as normalized **/
-        if (!meta.setXmpTagString(areanormTagKey.arg(i).toLatin1().constData(), QLatin1String("normalized"),
-                                  DMetadata::XmpTagType(0)))
-            return false;
-
-        ++it;
-        ++i;
-    }
-
-    return true;
-}
-
-bool SetXmpFaceTest::removeFaceTags(DMetadata& meta, const char* xmpTagName)
-{
-    QString qxmpTagName(QString::fromLatin1(xmpTagName));
-    QString regionTagKey   = qxmpTagName + QLatin1String("[%1]");
-    QString nameTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Name");
-    QString typeTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Type");
-    QString areaTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area");
-    QString areaxTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:x");
-    QString areayTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:y");
-    QString areawTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:w");
-    QString areahTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:h");
-    QString areanormTagKey = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:unit");
-
-    if (!meta.removeXmpTag(xmpTagName))
-        return false;
-
-    bool dirty = true;
-    int i      = 1;
-
-    while (dirty)
-    {
-        dirty  = false;
-        dirty |=meta.removeXmpTag(regionTagKey.arg(i).toLatin1().constData());
-        dirty |=meta.removeXmpTag(nameTagKey.arg(i).toLatin1().constData());
-        dirty |=meta.removeXmpTag(typeTagKey.arg(i).toLatin1().constData());
-        dirty |=meta.removeXmpTag(areaTagKey.arg(i).toLatin1().constData());
-        dirty |=meta.removeXmpTag(areaxTagKey.arg(i).toLatin1().constData());
-        dirty |=meta.removeXmpTag(areayTagKey.arg(i).toLatin1().constData());
-        dirty |=meta.removeXmpTag(areawTagKey.arg(i).toLatin1().constData());
-        dirty |=meta.removeXmpTag(areahTagKey.arg(i).toLatin1().constData());
-        dirty |=meta.removeXmpTag(areanormTagKey.arg(i).toLatin1().constData());
-        ++i;
-    }
-
-    return true;
+    QVERIFY(faces4.isEmpty());
 }
