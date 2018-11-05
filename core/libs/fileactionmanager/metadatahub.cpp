@@ -692,6 +692,7 @@ QMultiMap<QString, QVariant> Digikam::MetadataHub::loadIntegerFaceTags(const Ite
             faceTagsList.insertMulti(faceName, QVariant(temprect));
         }
     }
+
     return faceTagsList;
 }
 
