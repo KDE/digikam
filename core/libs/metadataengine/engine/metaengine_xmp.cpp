@@ -411,7 +411,8 @@ bool MetaEngine::setXmpTagString(const char* xmpTagName, const QString& value) c
 
     return false;
 }
-bool MetaEngine::setXmpTagString(const char* xmpTagName, const QString& value,
+bool MetaEngine::setXmpTagString(const char* xmpTagName,
+                                 const QString& value,
                                  MetaEngine::XmpTagType type) const
 {
 #ifdef _XMP_SUPPORT_
@@ -424,7 +425,7 @@ bool MetaEngine::setXmpTagString(const char* xmpTagName, const QString& value,
         if (type == MetaEngine::NormalTag) // normal type
         {
             xmpTxtVal.read(txt);
-            d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName),&xmpTxtVal);
+            d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName), &xmpTxtVal);
             return true;
         }
 
@@ -432,13 +433,15 @@ bool MetaEngine::setXmpTagString(const char* xmpTagName, const QString& value,
         {
             xmpTxtVal.setXmpArrayType(Exiv2::XmpValue::xaBag);
             xmpTxtVal.read("");
-            d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName),&xmpTxtVal);
+            d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName), &xmpTxtVal);
+            return true;
         }
 
         if (type == MetaEngine::StructureTag) // xmp type = struct
         {
             xmpTxtVal.setXmpStruct();
-            d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName),&xmpTxtVal);
+            d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName), &xmpTxtVal);
+            return true;
         }
     }
     catch( Exiv2::Error& e )
