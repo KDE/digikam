@@ -351,9 +351,12 @@
     <screenshot type="default">
       <caption>Photo management in digiKam</caption>
       <caption xml:lang="ca">Gestió de les fotografies al digiKam</caption>
+      <caption xml:lang="ca-valencia">Gestió de les fotografies al digiKam</caption>
       <caption xml:lang="es">Gestión de fotos en digiKam</caption>
+      <caption xml:lang="gl">Xestión de fotos en digiKam</caption>
       <caption xml:lang="nl">Fotobeheer in digiKam</caption>
       <caption xml:lang="pt">Gestão de Fotografias no digiKam</caption>
+      <caption xml:lang="sv">Fotohantering i Digikam</caption>
       <caption xml:lang="uk">Керування фотографіями у digiKam</caption>
       <caption xml:lang="x-test">xxPhoto management in digiKamxx</caption>
       <image>http://kde.org/images/screenshots/digikam.png</image>
