@@ -101,7 +101,7 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     QVERIFY(ret);
 
     meta3.removeImageFacesMap();
-    ret = meta2.applyChanges();
+    ret = meta3.applyChanges();
     QVERIFY(ret);
 
     qDebug() << "Check if face tags are well removed from file...";
