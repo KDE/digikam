@@ -66,7 +66,7 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     QRectF rect(10, 10, 60, 60);
     faces.insert(name, QVariant(rect));
 
-    QString name2 = QLatin1String("Alice");
+    QString name2 = QLatin1String("Alice in wonderland");
     QRectF rect2(20, 20, 30, 30);
     faces.insert(name2, QVariant(rect2));
 
