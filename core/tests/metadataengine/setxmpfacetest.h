@@ -42,11 +42,11 @@ private:
     void setXmpFace(const QString& file);
 
 private Q_SLOTS:
-
+/*
     virtual void cleanup()
     {
     }
-
+*/
     void testSetXmpFace();
 };
 
