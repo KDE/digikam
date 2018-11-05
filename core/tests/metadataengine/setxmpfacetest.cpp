@@ -100,9 +100,7 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     ret = meta3.load(filePath);
     QVERIFY(ret);
 
-    //meta3.removeImageFacesMap();
-    QMultiMap<QString, QVariant> faces3;
-    meta3.setImageFacesMap(faces3, true);
+    meta3.removeImageFacesMap();
     ret = meta3.applyChanges();
     QVERIFY(ret);
 
