@@ -91,20 +91,26 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     QVERIFY(faces2.contains(name2));
     QVERIFY(faces2.value(name)  == rect);
     QVERIFY(faces2.value(name2) == rect2);
-
-    qDebug() << "Clear face tags from file...";
-
-    meta2.removeImageFacesMap();
     ret = meta2.applyChanges();
     QVERIFY(ret);
 
-    qDebug() << "Check if face tags are well removed from file...";
+    qDebug() << "Clear face tags from file...";
 
     DMetadata meta3;
     ret = meta3.load(filePath);
     QVERIFY(ret);
 
+    meta3.removeImageFacesMap();
+    ret = meta2.applyChanges();
+    QVERIFY(ret);
+
+    qDebug() << "Check if face tags are well removed from file...";
+
+    DMetadata meta4;
+    ret = meta4.load(filePath);
+    QVERIFY(ret);
+
     QMultiMap<QString, QVariant> faces4;
-    ret = meta3.getImageFacesMap(faces4);
-    QVERIFY(!ret);   // Empty map returned ?
+    ret = meta4.getImageFacesMap(faces4);
+    QVERIFY(!ret);   // Empty map must be returned
 }

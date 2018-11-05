@@ -43,6 +43,10 @@ private:
 
 private Q_SLOTS:
 
+    virtual void cleanup()
+    {
+    }
+
     void testSetXmpFace();
 };
 

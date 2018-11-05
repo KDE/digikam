@@ -243,6 +243,7 @@ bool DMetadata::setImageFacesMap(QMultiMap<QString, QVariant>& facesPath, bool w
 
 void DMetadata::removeImageFacesMap()
 {
+    QString qxmpStructName = QLatin1String("Xmp.mwg-rs.Regions");
     QString qxmpTagName    = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
     QString regionTagKey   = qxmpTagName + QLatin1String("[%1]");
     QString nameTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Name");
@@ -254,12 +255,14 @@ void DMetadata::removeImageFacesMap()
     QString areahTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:h");
     QString areanormTagKey = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:unit");
 
-    QString winQxmpTagName = QLatin1String("Xmp.MP.RegionInfo/MPRI:Regions");
-    QString winRectTagKey  = winQxmpTagName + QLatin1String("[%1]/MPReg:Rectangle");
-    QString winNameTagKey  = winQxmpTagName + QLatin1String("[%1]/MPReg:PersonDisplayName");
+    QString winQxmpStructName = QLatin1String("Xmp.MP.RegionInfo");
+    QString winQxmpTagName    = QLatin1String("Xmp.MP.RegionInfo/MPRI:Regions");
+    QString winRectTagKey     = winQxmpTagName + QLatin1String("[%1]/MPReg:Rectangle");
+    QString winNameTagKey     = winQxmpTagName + QLatin1String("[%1]/MPReg:PersonDisplayName");
 
     // Remove mwg-rs tags
 
+    removeXmpTag(qxmpStructName.toLatin1().constData());
     removeXmpTag(qxmpTagName.toLatin1().constData());
 
     bool dirty = true;
@@ -282,6 +285,7 @@ void DMetadata::removeImageFacesMap()
 
     // Remove MP tags
 
+    removeXmpTag(winQxmpStructName.toLatin1().constData());
     removeXmpTag(winQxmpTagName.toLatin1().constData());
 
     dirty = true;
@@ -294,6 +298,8 @@ void DMetadata::removeImageFacesMap()
         dirty |= removeXmpTag(winNameTagKey.arg(i).toLatin1().constData());
         ++i;
     }
+
+    return true;
 }
 
 } // namespace Digikam
