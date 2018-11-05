@@ -63,11 +63,11 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     QMultiMap<QString, QVariant> faces;
 
     QString name  = QLatin1String("Bob Marley");
-    QRectF rect(10, 10, 60, 60);
+    QRectF rect(10, 100, 60, 80);
     faces.insert(name, QVariant(rect));
 
     QString name2 = QLatin1String("Alice in wonderland");
-    QRectF rect2(20, 20, 30, 30);
+    QRectF rect2(20, 40, 90, 70);
     faces.insert(name2, QVariant(rect2));
 
     ret = meta.setImageFacesMap(faces, true);
