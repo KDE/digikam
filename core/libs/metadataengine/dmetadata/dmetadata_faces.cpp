@@ -241,7 +241,7 @@ bool DMetadata::setImageFacesMap(QMultiMap<QString, QVariant>& facesPath, bool w
     return ok;
 }
 
-void DMetadata::removeImageFaceMap()
+void DMetadata::removeImageFacesMap()
 {
     QString qxmpTagName    = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
     QString regionTagKey   = qxmpTagName + QLatin1String("[%1]");

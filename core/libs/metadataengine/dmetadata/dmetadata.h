@@ -122,7 +122,7 @@ public: // Faces helpers
     /**
      * Remove Images Face Map tags from Picassa/Metadatagroup format.
      */
-    void removeImageFaceMap();
+    void removeImageFacesMap();
 
 public: // Tags helpers
 

@@ -94,11 +94,7 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
 
     // Now clear face tags and check if well removed.
 
-    QMultiMap<QString, QVariant> faces3;
-
-    ret = meta2.setImageFacesMap(faces3, true);
-    QVERIFY(ret);
-
+    meta2.removeImageFacesMap();
     ret = meta2.applyChanges();
     QVERIFY(ret);
 
@@ -110,6 +106,5 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
 
     QMultiMap<QString, QVariant> faces4;
     ret = meta3.getImageFacesMap(faces4);
-    QVERIFY(ret);
-    QVERIFY(faces4.isEmpty());
+    QVERIFY(!ret);   // Empty map returned ?
 }
