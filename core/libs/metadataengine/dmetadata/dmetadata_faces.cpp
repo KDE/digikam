@@ -298,8 +298,6 @@ void DMetadata::removeImageFacesMap()
         dirty |= removeXmpTag(winNameTagKey.arg(i).toLatin1().constData());
         ++i;
     }
-
-    return true;
 }
 
 } // namespace Digikam
