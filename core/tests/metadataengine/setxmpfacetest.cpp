@@ -58,7 +58,7 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     ret = meta.load(filePath);
     QVERIFY(ret);
 
-    // Add random rectangles with facetags
+    qDebug() << "Add region with face tags in file...";
 
     QMultiMap<QString, QVariant> faces;
 
@@ -76,7 +76,7 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     ret = meta.applyChanges();
     QVERIFY(ret);
 
-    // Check if face tags are well assigned.
+    qDebug() << "Check if face tags are well assigned in file...";
 
     DMetadata meta2;
     ret = meta2.load(filePath);
@@ -92,13 +92,13 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     QVERIFY(faces2.value(name)  == rect);
     QVERIFY(faces2.value(name2) == rect2);
 
-    // Now clear face tags and check if well removed.
+    qDebug() << "Clear face tags from file...";
 
     meta2.removeImageFacesMap();
     ret = meta2.applyChanges();
     QVERIFY(ret);
 
-    // -------
+    qDebug() << "Check if face tags are well removed from file...";
 
     DMetadata meta3;
     ret = meta3.load(filePath);
