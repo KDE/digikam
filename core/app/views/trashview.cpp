@@ -28,7 +28,6 @@
 #include <QHBoxLayout>
 #include <QTableView>
 #include <QPushButton>
-#include <QToolButton>
 #include <QHeaderView>
 #include <QListView>
 #include <QMessageBox>
@@ -81,7 +80,7 @@ public:
     QTableView*                tableView;
     QPushButton*               undoButton;
     QPushButton*               restoreButton;
-    QToolButton*               deleteButton;
+    QPushButton*               deleteButton;
     QAction*                   deleteAction;
     QAction*                   deleteAllAction;
 
@@ -120,23 +119,21 @@ TrashView::TrashView(QWidget* const parent)
     // Action Buttons
     d->undoButton      = new QPushButton(i18n("Undo"), this);
     d->restoreButton   = new QPushButton(i18n("Restore"), this);
-    d->deleteButton    = new QToolButton(this);
+    d->deleteButton    = new QPushButton(i18n("Delete..."), this);
 
-    d->deleteAction    = new QAction(i18n("Delete Permanently"), this);
-    d->deleteAllAction = new QAction(i18n("Delete All Permanently"), this);
+    d->deleteAction    = new QAction(i18n("Selected Items Permanently"), this);
+    d->deleteAllAction = new QAction(i18n("All Items Permanently"), this);
 
     d->undoButton->setIcon(QIcon::fromTheme(QLatin1String("edit-undo")));
     d->restoreButton->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
+    d->deleteButton->setIcon(QIcon::fromTheme(QLatin1String("edit-delete")));
     d->deleteAction->setIcon(QIcon::fromTheme(QLatin1String("edit-delete")));
     d->deleteAllAction->setIcon(QIcon::fromTheme(QLatin1String("edit-delete")));
 
     QMenu* const menu  = new QMenu(this);
+    menu->addAction(d->deleteAction);
     menu->addAction(d->deleteAllAction);
 
-    d->deleteButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    d->deleteButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    d->deleteButton->setPopupMode(QToolButton::DelayedPopup);
-    d->deleteButton->setDefaultAction(d->deleteAction);
     d->deleteButton->setMenu(menu);
 
     d->undoButton->setEnabled(false);
