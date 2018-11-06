@@ -38,17 +38,63 @@ void PrintItemInfoTest::testPrintItemInfo()
     printMetadata(m_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"), true,  false, false);
 }
 
-void PrintItemInfoTest::printItemInfo(const QString& filePath, bool exif, bool iptc, bool xmp)
+void PrintItemInfoTest::printItemInfo(const QString& filePath,
+                                      bool com, bool ttl,            // Comments and titles
+                                      bool cnt, bool loc, bool isb,  // Iptc
+                                      bool pho, bool vid,            // Media
+                                      bool key, bool xsb, bool cat   // Xmp
+                                     )
 {
     DMetadata meta;
 
     bool ret = meta.load(filePath);
     QVERIFY(ret);
 
-    loadExif(meta, exif);
-    loadIptc(meta, iptc);
-    loadXmp(meta, xmp);
+    printComments(meta, com);
+    printTitles(meta, iptc);
+    printIptcContact(meta, xmp);
+    printIptcLocation(meta,
+    printIptcSubjects(meta,
+
+    printPhotoInfo(meta,
+    printVideoInfo(meta,
+
+    printXmpKeywords(meta,
+    printXmpSubjects(meta,
+    printXmpSubCategories(meta,
 }
+
+void PrintItemInfoTest::printComments(const DMetadata& meta, bool expected)
+{
+    qDebug() << QString::fromUtf8("-- Comments from %1 --").arg(meta.getFilePath());
+
+    CaptionsMap map = meta.getItemComments();
+    QCOMPARE(!map.isEmpty(), expected);
+
+    qDebug() << map;
+}
+
+void PrintItemInfoTest::printTitles(const DMetadata& meta, bool expected)
+{
+    qDebug() << QString::fromUtf8("-- Titles from %1 --").arg(meta.getFilePath());
+
+    CaptionsMap map = meta.getImageTitles();
+    QCOMPARE(!map.isEmpty(), expected);
+
+    qDebug() << map;
+}
+
+void PrintItemInfoTest::printIptcContact(const DMetadata& meta, bool expected)
+void PrintItemInfoTest::printIptcLocation(const DMetadata& meta, bool expected)
+void PrintItemInfoTest::printIptcSubjects(const DMetadata& meta, bool expected)
+
+void PrintItemInfoTest::printPhotoInfo(const DMetadata& meta, bool expected)
+void PrintItemInfoTest::printVideoInfo(const DMetadata& meta, bool expected)
+
+void PrintItemInfoTest::printXmpKeywords(const DMetadata& meta, bool expected)
+void PrintItemInfoTest::printXmpSubjects(const DMetadata& meta, bool expected)
+void PrintItemInfoTest::printXmpSubCategories(const DMetadata& meta, bool expected)
+
 
 void PrintItemInfoTest::loadExif(const DMetadata& meta, bool expected)
 {
