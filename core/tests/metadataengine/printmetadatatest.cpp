@@ -70,7 +70,7 @@ void PrintMetadataTest::testPrintMetadata()
     printMetadata(m_originalImageFolder + QLatin1String("nikon-e2100.jpg"),      true,  true,  true);
     printMetadata(m_originalImageFolder + QLatin1String("_27A1417.CR2"),         true,  false, true);
     printMetadata(m_originalImageFolder + QLatin1String("20160821035715.jpg"),   true,  false, true);
-    printMetadata(m_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"), true,  false, false);
+    printMetadata(m_originalImageFolder + QLatin1String("2008-05_DSC_0294.JPG"), true,  true,  true);
 }
 
 void PrintMetadataTest::printMetadata(const QString& filePath, bool exif, bool iptc, bool xmp)
