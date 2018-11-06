@@ -34,7 +34,7 @@ void PrintTagsListTest::parseTagsList(const DMetadata::TagsMap& tags)
     QString output;
     QTextStream stream(&output);
     stream << endl;
-    
+
     qDebug() << "Found" << tags.size() << "tags:" << endl;
 
     for (DMetadata::TagsMap::const_iterator it = tags.constBegin() ; it != tags.constEnd() ; ++it )
@@ -44,13 +44,13 @@ void PrintTagsListTest::parseTagsList(const DMetadata::TagsMap& tags)
         QString     name   = values[0];
         QString     title  = values[1];
         QString     desc   = values[2];
-        
+
         // None of these strings can be null, event if strings are translated.
         QVERIFY(!key.isNull());
         QVERIFY(!name.isNull());
         QVERIFY(!title.isNull());
         QVERIFY(!desc.isNull());
-        
+
         stream << key << endl
                << "    " << name  << endl
                << "    " << title << endl
@@ -75,9 +75,9 @@ void PrintTagsListTest::testPrintAllAvailableStdExifTags()
 void PrintTagsListTest::testPrintAllAvailableMakernotesTags()
 {
     DMetadata meta;
-    
+
     qDebug() << "-- Makernote Tags -----------------------------------------------------------------";
-    
+
     DMetadata::TagsMap mntags = meta.getMakernoteTagsList();
 
     QVERIFY(!mntags.isEmpty());
@@ -88,7 +88,7 @@ void PrintTagsListTest::testPrintAllAvailableMakernotesTags()
 void PrintTagsListTest::testPrintAllAvailableIptcTags()
 {
     DMetadata meta;
-    
+
     qDebug() << "-- Standard Iptc Tags -----------------------------------------------------------------";
 
     DMetadata::TagsMap iptctags = meta.getIptcTagsList();
@@ -101,7 +101,7 @@ void PrintTagsListTest::testPrintAllAvailableIptcTags()
 void PrintTagsListTest::testPrintAllAvailableXmpTags()
 {
     DMetadata meta;
-    
+
     qDebug() << "-- Standard Xmp Tags -----------------------------------------------------------------";
 
     DMetadata::TagsMap xmptags = meta.getXmpTagsList();
