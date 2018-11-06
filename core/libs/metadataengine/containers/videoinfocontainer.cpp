@@ -108,19 +108,19 @@ QDataStream& operator>>(QDataStream& ds, VideoInfoContainer& info)
 
 QDebug operator<<(QDebug dbg, const VideoInfoContainer& t)
 {
-    dbg.nospace() << "PhotoInfoContainer::aspectRatio: "
+    dbg.nospace() << "VideoInfoContainer::aspectRatio: "
                   << t.aspectRatio << ", ";
-    dbg.nospace() << "PhotoInfoContainer::duration: "
+    dbg.nospace() << "VideoInfoContainer::duration: "
                   << t.duration << ", ";
-    dbg.nospace() << "PhotoInfoContainer::frameRate: "
+    dbg.nospace() << "VideoInfoContainer::frameRate: "
                   << t.frameRate << ", ";
-    dbg.nospace() << "PhotoInfoContainer::videoCodec: "
+    dbg.nospace() << "VideoInfoContainer::videoCodec: "
                   << t.videoCodec << ", ";
-    dbg.nospace() << "PhotoInfoContainer::audioBitRate: "
+    dbg.nospace() << "VideoInfoContainer::audioBitRate: "
                   << t.audioBitRate << ", ";
-    dbg.nospace() << "PhotoInfoContainer::audioChannelType: "
+    dbg.nospace() << "VideoInfoContainer::audioChannelType: "
                   << t.audioChannelType << ", ";
-    dbg.nospace() << "PhotoInfoContainer::audioCodec: "
+    dbg.nospace() << "VideoInfoContainer::audioCodec: "
                   << t.audioCodec << ", ";
     return dbg.space();
 }
