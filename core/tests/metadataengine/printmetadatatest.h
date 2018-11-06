@@ -36,11 +36,14 @@ class PrintMetadataTest : public AbstractUnitTest
     Q_OBJECT
 
 private:
-    
+
     void printMetadataMap(const DMetadata::MetaDataMap& map);
-    void loadExif(const QString& file, bool expected);
-    void loadIptc(const QString& file, bool expected);
-    void loadXmp(const QString& file, bool expected);
+    void printMetadata(const QString& filePath, bool exif, bool iptc, bool xmp);
+
+    /// NOTE: 'expected' paramareters want mean that we expect a metadata tags map non empty
+    void loadExif(const DMetadata& meta, bool expected);
+    void loadIptc(const DMetadata& meta, bool expected);
+    void loadXmp(const DMetadata& meta, bool expected);
 
 private Q_SLOTS:
 

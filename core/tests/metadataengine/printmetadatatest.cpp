@@ -29,88 +29,92 @@
 
 QTEST_MAIN(PrintMetadataTest)
 
-void PrintMetadataTest::parseTagsList(const DMetadata::TagsMap& tags)
+void PrintMetadataTest::printMetadataMap(const DMetadata::MetaDataMap& map)
 {
     QString output;
     QTextStream stream(&output);
     stream << endl;
 
-    qDebug() << "Found" << tags.size() << "tags:" << endl;
+    qDebug() << "Found" << map.size() << "tags:" << endl;
 
-    for (DMetadata::TagsMap::const_iterator it = tags.constBegin() ; it != tags.constEnd() ; ++it )
+    for (DMetadata::MetaDataMap::const_iterator it = map.constBegin() ;
+         it != map.constEnd() ; ++it)
     {
-        QString     key    = it.key();
-        QStringList values = it.value();
-        QString     name   = values[0];
-        QString     title  = values[1];
-        QString     desc   = values[2];
+        QString key   = it.key();
+        QString value = it.value();
 
         // None of these strings can be null, event if strings are translated.
         QVERIFY(!key.isNull());
-        QVERIFY(!name.isNull());
-        QVERIFY(!title.isNull());
-        QVERIFY(!desc.isNull());
+        QVERIFY(!value.isNull());
 
-        stream << key << endl
-               << "    " << name  << endl
-               << "    " << title << endl
-               << "    " << desc  << endl;
+        QString tagName = key.simplified();
+        tagName.append(QString().fill(QLatin1Char(' '), 48 - tagName.length()));
+
+        QString tagVal  = value.simplified();
+
+        if (tagVal.length() > 48)
+        {
+            tagVal.truncate(48);
+            tagVal.append(QString::fromLatin1("... (%1 bytes)").arg(value.length()));
+        }
+
+        stream << tagName << " : " << tagVal << endl;
     }
 
     qDebug().noquote() << output;
 }
 
-void PrintMetadataTest::testPrintAllAvailableStdExifTags()
+void PrintMetadataTest::testPrintMetadata()
 {
-    DMetadata meta;
-
-    qDebug() << "-- Standard Exif Tags -------------------------------------------------------------";
-
-    DMetadata::TagsMap exiftags = meta.getStdExifTagsList();
-    QVERIFY(!exiftags.isEmpty());
-
-    parseTagsList(exiftags);
+    //                                                Expected tags tou found in Exif,  Iptc,  Xmp
+    printMetadata(m_originalImageFolder + QLatin1String("nikon-e2100.jpg"),      true,  true,  true);
+    printMetadata(m_originalImageFolder + QLatin1String("_27A1417.CR2"),         true,  false, true);
+    printMetadata(m_originalImageFolder + QLatin1String("20160821035715.jpg"),   true,  false, true);
+    printMetadata(m_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"), true,  false, false);
 }
 
-void PrintMetadataTest::testPrintAllAvailableMakernotesTags()
+void PrintMetadataTest::printMetadata(const QString& filePath, bool exif, bool iptc, bool xmp)
 {
     DMetadata meta;
 
-    qDebug() << "-- Makernote Tags -----------------------------------------------------------------";
+    bool ret = meta.load(filePath);
+    QVERIFY(ret);
 
-    DMetadata::TagsMap mntags = meta.getMakernoteTagsList();
-
-    QVERIFY(!mntags.isEmpty());
-
-    parseTagsList(mntags);
+    loadExif(meta, exif);
+    loadIptc(meta, iptc);
+    loadXmp(meta, xmp);
 }
 
-void PrintMetadataTest::testPrintAllAvailableIptcTags()
+void PrintMetadataTest::loadExif(const DMetadata& meta, bool expected)
 {
-    DMetadata meta;
+    qDebug() << QString::fromUtf8("-- Exif metadata from %1 --").arg(meta.getFilePath());
 
-    qDebug() << "-- Standard Iptc Tags -----------------------------------------------------------------";
+    DMetadata::MetaDataMap map = meta.getExifTagsDataList();
+    QCOMPARE(!map.isEmpty(), expected);
 
-    DMetadata::TagsMap iptctags = meta.getIptcTagsList();
-
-    QVERIFY(!iptctags.isEmpty());
-
-    parseTagsList(iptctags);
+    printMetadataMap(map);
 }
 
-void PrintMetadataTest::testPrintAllAvailableXmpTags()
+void PrintMetadataTest::loadIptc(const DMetadata& meta, bool expected)
 {
-    DMetadata meta;
+    qDebug() << QString::fromUtf8("-- Iptc metadata from %1 --").arg(meta.getFilePath());
 
-    qDebug() << "-- Standard Xmp Tags -----------------------------------------------------------------";
+    DMetadata::MetaDataMap map = meta.getIptcTagsDataList();
+    QCOMPARE(!map.isEmpty(), expected);
 
-    DMetadata::TagsMap xmptags = meta.getXmpTagsList();
+    printMetadataMap(map);
+}
+
+void PrintMetadataTest::loadXmp(const DMetadata& meta, bool expected)
+{
+    qDebug() << QString::fromUtf8("-- Xmp metadata from %1 --").arg(meta.getFilePath());
 
     if (meta.supportXmp())
     {
-        QVERIFY(!xmptags.isEmpty());
+        DMetadata::MetaDataMap map = meta.getXmpTagsDataList();
+        QCOMPARE(!map.isEmpty(), expected);
 
-        parseTagsList(xmptags);
+        printMetadataMap(map);
     }
     else
     {
