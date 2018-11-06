@@ -18,29 +18,6 @@ include_directories(
 
 # ----------------------------------------------------------------------------------
 
-macro(METADATAENGINE_TOOLS_BUILD)
-
-    set(_filename ${ARGV0})
-    string(REPLACE "." ";" _temp ${_filename})
-    list(GET _temp 0 _target)
-
-    set(${_target}_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/${_target}.cpp)
-
-    add_executable(${_target} ${${_target}_SRCS})
-    ecm_mark_nongui_executable(${target})
-
-    target_link_libraries(${_target}
-                          digikamcore
-                          Qt5::Core
-                          KF5::I18n
-    )
-
-ENDMACRO()
-
-METADATAENGINE_TOOLS_BUILD(metareaderthread.cpp)
-
-# ----------------------------------------------------------------------------------
-
 macro(METADATAENGINE_TESTS_BUILD)
 
     set(_filename ${ARGV0})
@@ -80,3 +57,4 @@ METADATAENGINE_TESTS_BUILD(createxmpsidecartest.cpp)
 METADATAENGINE_TESTS_BUILD(setxmpfacetest.cpp)
 METADATAENGINE_TESTS_BUILD(printmetadatatest.cpp)
 METADATAENGINE_TESTS_BUILD(printiteminfotest.cpp)
+METADATAENGINE_TESTS_BUILD(metareaderthreadtest.cpp)

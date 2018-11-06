@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2016-08-14
- * Description : CLI tool to test to load metadata from images through multi-core threads.
+ * Description : An unit test to load metadata from images through multi-core threads.
  *
  * Copyright (C) 2016-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_META_READER_THREAD_H
-#define DIGIKAM_META_READER_THREAD_H
+#ifndef DIGIKAM_META_READER_THREAD_TEST_H
+#define DIGIKAM_META_READER_THREAD_TEST_H
 
 // Qt includes
 
@@ -31,6 +31,9 @@
 
 // Local includes
 
+#include "abstractunittest.h"
+#include "metaenginesettingscontainer.h"
+#include "dmetadatasettingscontainer.h"
 #include "actionthreadbase.h"
 
 using namespace Digikam;
@@ -55,4 +58,15 @@ Q_SIGNALS:
     void done();
 };
 
-#endif // DIGIKAM_META_READER_THREAD_H
+// -------------------------------------------------------------------------
+
+class MetaReaderThreadTest : public AbstractUnitTest
+{
+    Q_OBJECT
+
+private Q_SLOTS:
+
+    void testMetaReaderThread();
+};
+
+#endif // DIGIKAM_META_READER_THREAD_TEST_H

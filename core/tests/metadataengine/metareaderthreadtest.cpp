@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2016-08-14
- * Description : CLI tool to test to load metadata from images through multi-core threads.
+ * Description : An unit test to load metadata from images through multi-core threads.
  *
  * Copyright (C) 2016-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "metareaderthread.h"
+#include "metareaderthreadtest.h"
 
 // Qt includes
 
@@ -29,10 +29,12 @@
 #include <QDebug>
 #include <QApplication>
 #include <QElapsedTimer>
+#include <QSignalSpy>
 
 // Local includes
 
 #include "metaengine.h"
+#include "digikam_globals.h"
 
 class Q_DECL_HIDDEN Mytask : public ActionJob
 {
@@ -113,46 +115,23 @@ void MetaReaderThread::slotJobFinished()
 
 // ----------------------------------------------------------------------------------------------------
 
-int main(int argc, char* argv[])
+QTEST_MAIN(MetaReaderThreadTest)
+
+void MetaReaderThreadTest::testMetaReaderThread()
 {
-    QApplication app(argc, argv);
-
-    if (argc < 3)
-    {
-        qDebug() << "metareaderthread - test to load/save metadata from images through multi-core threads";
-        qDebug() << "Usage  : <direction: READ | WRITE> <images path> <image file filter> ... <image file filter>";
-        qDebug() << "Example: READ /mnt/photos *.jpg *.png *.tif *.nef *.dng";
-        qDebug() << "Warning: Write direction will touch file matadata contents!";
-        return -1;
-    }
-
-    QString direction = QString::fromLocal8Bit(argv[1]);
-
-    if (direction != QLatin1String("READ") && direction == QLatin1String("WRITE"))
-    {
-        qDebug() << "Wrong direction type: " << direction;
-        return -1;
-    }
-
-    QString path = QString::fromLocal8Bit(argv[2]);
+    QString path = m_originalImageFolder;
     qDebug() << "Images path : " << path;
-    QStringList filters;
 
-    for (int i = 3 ; i < argc ; i++)
-    {
-        filters << QString::fromLocal8Bit(argv[i]);
-    }
+    QString filter;
+    supportedImageMimeTypes(QIODevice::ReadOnly, filter);
+    QStringList mimeTypes = filter.split(QLatin1Char(' ')); 
 
-    if (filters.isEmpty())
-    {
-        qDebug() << "Image filters list is empty!";
-        return -1;
-    }
+    qDebug() << "Images filters : " << mimeTypes;
 
-    qDebug() << "Images filters : " << filters;
+    QString direction = QLatin1String("READ");
 
     QList<QUrl> list;
-    QDirIterator it(path, filters,
+    QDirIterator it(path, mimeTypes,
                     QDir::Files,
                     QDirIterator::Subdirectories);
 
@@ -164,28 +143,24 @@ int main(int argc, char* argv[])
 
     if (list.isEmpty())
     {
-        qDebug() << "Files list to process is empty!";
-        return -1;
+        QFAIL("Files list to process is empty!");
+    }
+    else
+    {
+        qDebug() << list.count() << "files to process...";
     }
 
-    MetaEngine::initializeExiv2();
-
-    MetaReaderThread* const thread = new MetaReaderThread(&app);
+    MetaReaderThread* const thread = new MetaReaderThread(this);
     thread->readMetadata(list, direction);
 
     QElapsedTimer timer;
     timer.start();
 
+    QSignalSpy spy(thread, SIGNAL(done()));
     thread->start();
 
-    QObject::connect(thread, SIGNAL(done()),
-                     &app, SLOT(quit()));
+    QVERIFY(spy.wait(30000));
 
-    app.exec();
-
-    qDebug() << "Reading metadata from " << list.size() << " files took " << timer.elapsed()/1000.0 << " seconds";
-
-    MetaEngine::cleanupExiv2();
-
-    return 0;
+    qDebug() << "Reading metadata from " << list.size()
+             << " files took " << timer.elapsed()/1000.0 << " seconds";
 }
