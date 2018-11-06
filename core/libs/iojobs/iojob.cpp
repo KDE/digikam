@@ -289,8 +289,6 @@ void RenameFileJob::run()
 
         QUrl destUrl = m_data->destUrl(renameUrl);
 
-        qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url:" << destUrl;
-
         if (QFileInfo::exists(destUrl.toLocalFile()))
         {
             if (m_data->overwrite())
@@ -308,13 +306,11 @@ void RenameFileJob::run()
             }
         }
 
-        QFile file(renameUrl.toLocalFile());
-
         qCDebug(DIGIKAM_IOJOB_LOG) << "Trying to rename"
                                    << renameUrl.toLocalFile() << "to"
                                    << destUrl.toLocalFile();
 
-        if (!file.rename(destUrl.toLocalFile()))
+        if (!DFileOperations::renameFile(renameUrl.toLocalFile(), destUrl.toLocalFile()))
         {
             qCDebug(DIGIKAM_IOJOB_LOG) << "File could not be renamed!";
             emit signalError(i18n("Image %1 could not be renamed",
@@ -382,7 +378,7 @@ void RestoreDTrashItemsJob::run()
             fi.dir().mkpath(fi.dir().path());
         }
 
-        if (!QFile::rename(item.trashPath, newName.toLocalFile()))
+        if (!DFileOperations::renameFile(item.trashPath, newName.toLocalFile()))
         {
             qCDebug(DIGIKAM_IOJOB_LOG) << "Trash file could not be renamed!";
         }
