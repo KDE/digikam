@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-11
- * Description : An unit-test to print metadata tags from file using DMetadata.
+ * Description : An unit-test to print item info from file using DMetadata.
  *
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,59 +21,24 @@
  *
  * ============================================================ */
 
-#include "printmetadatatest.h"
+#include "printiteminfotest.h"
 
 // Qt includes
 
 #include <QTextStream>
 
-QTEST_MAIN(PrintMetadataTest)
+QTEST_MAIN(PrintItemInfoTest)
 
-void PrintMetadataTest::printMetadataMap(const DMetadata::MetaDataMap& map)
+void PrintItemInfoTest::testPrintItemInfo()
 {
-    QString output;
-    QTextStream stream(&output);
-    stream << endl;
-
-    qDebug() << "Found" << map.size() << "tags:" << endl;
-
-    for (DMetadata::MetaDataMap::const_iterator it = map.constBegin() ;
-         it != map.constEnd() ; ++it)
-    {
-        QString key   = it.key();
-        QString value = it.value();
-
-        // None of these strings can be null, event if strings are translated.
-        QVERIFY(!key.isNull());
-        QVERIFY(!value.isNull());
-
-        QString tagName = key.simplified();
-        tagName.append(QString().fill(QLatin1Char(' '), 48 - tagName.length()));
-
-        QString tagVal  = value.simplified();
-
-        if (tagVal.length() > 48)
-        {
-            tagVal.truncate(48);
-            tagVal.append(QString::fromLatin1("... (%1 bytes)").arg(value.length()));
-        }
-
-        stream << tagName << " : " << tagVal << endl;
-    }
-
-    qDebug().noquote() << output;
-}
-
-void PrintMetadataTest::testPrintMetadata()
-{
-    //                                                 Expected tags to found in Exif,  Iptc,  Xmp
+    //                                                Expected tags to  found in Exif,  Iptc,  Xmp
     printMetadata(m_originalImageFolder + QLatin1String("nikon-e2100.jpg"),      true,  true,  true);
     printMetadata(m_originalImageFolder + QLatin1String("_27A1417.CR2"),         true,  false, true);
     printMetadata(m_originalImageFolder + QLatin1String("20160821035715.jpg"),   true,  false, true);
     printMetadata(m_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"), true,  false, false);
 }
 
-void PrintMetadataTest::printMetadata(const QString& filePath, bool exif, bool iptc, bool xmp)
+void PrintItemInfoTest::printItemInfo(const QString& filePath, bool exif, bool iptc, bool xmp)
 {
     DMetadata meta;
 
@@ -85,7 +50,7 @@ void PrintMetadataTest::printMetadata(const QString& filePath, bool exif, bool i
     loadXmp(meta, xmp);
 }
 
-void PrintMetadataTest::loadExif(const DMetadata& meta, bool expected)
+void PrintItemInfoTest::loadExif(const DMetadata& meta, bool expected)
 {
     qDebug() << QString::fromUtf8("-- Exif metadata from %1 --").arg(meta.getFilePath());
 
@@ -95,7 +60,7 @@ void PrintMetadataTest::loadExif(const DMetadata& meta, bool expected)
     printMetadataMap(map);
 }
 
-void PrintMetadataTest::loadIptc(const DMetadata& meta, bool expected)
+void PrintItemInfoTest::loadIptc(const DMetadata& meta, bool expected)
 {
     qDebug() << QString::fromUtf8("-- Iptc metadata from %1 --").arg(meta.getFilePath());
 
@@ -105,7 +70,7 @@ void PrintMetadataTest::loadIptc(const DMetadata& meta, bool expected)
     printMetadataMap(map);
 }
 
-void PrintMetadataTest::loadXmp(const DMetadata& meta, bool expected)
+void PrintItemInfoTest::loadXmp(const DMetadata& meta, bool expected)
 {
     qDebug() << QString::fromUtf8("-- Xmp metadata from %1 --").arg(meta.getFilePath());
 
