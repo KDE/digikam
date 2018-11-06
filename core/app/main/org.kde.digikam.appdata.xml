@@ -47,6 +47,7 @@
   <summary xml:lang="pl">Zarządzanie zdjęciami</summary>
   <summary xml:lang="pt">Programa de Gestão de Fotografias</summary>
   <summary xml:lang="pt-BR">Programa de gerenciamento de fotos</summary>
+  <summary xml:lang="ru">Программа для управления фотографиями</summary>
   <summary xml:lang="sl">Program za upravljanje fotografij</summary>
   <summary xml:lang="sv">Fotohanteringsprogram</summary>
   <summary xml:lang="tr">Resim Düzenleme Programı</summary>
@@ -76,6 +77,7 @@
     <p xml:lang="pl">digiKam jest zaawansowanym programem do zarządzania cyfrowymi zdjęciami, który czyni importowanie i zarządzanie cyfrowymi zdjęciami "drobnostką". Zdjęcia są urządzone w albumy, które można przechowywać chronologicznie, według układu katalogów lub według własnych zbiorów.</p>
     <p xml:lang="pt">O digiKam é uma aplicação de gestão de fotografias digitais, o que torna a importação e a organização de fotografias digitais extremamente simples. As fotos são organizadas em álbuns, os quais podem ser ordenados de forma cronológica, por disposição das pastas ou com colecções personalizadas.</p>
     <p xml:lang="pt-BR">DigiKam é um aplicativo para gerenciamento de fotos digitais avançado, que torna muito fácil a importação e organização das suas fotos digitais. As fotos são organizadas em álbuns e ordenadas de forma cronológica, por layout de pastas ou por coleções personalizadas.</p>
+    <p xml:lang="ru">digiKam — приложение для управления фотографиями с расширенным набором возможностей. Фотографии сохраняются в альбомах, что позволяет упорядочивать их в хронологическом порядке, по иерархии папок, а также в  коллекции, определённые пользователем.</p>
     <p xml:lang="sk">digiKam je pokročilá aplikácia na správu digitálnych fotografií, ktorá zjednodušuje import a správu digitálnych fotografií. Fotografie sú organizované v albumoch, ktoré sa dajú triediť chronologicky, podľa rozloženia priečinkov alebo podľa vlastných zbierok.</p>
     <p xml:lang="sl">digiKam je napreden program za upravljanje digitalnih fotografij, ki močno poenostavi uvažanje in organiziranje digitalnih fotografij. Fotografije so organizirane v albumih, ki jih lahko razvrstite po času, razporedu map ali zbirkah po meri.</p>
     <p xml:lang="sv">Digikam är ett avancerat program för hantering av digitala foton, som gör det enkelt att importera och organisera digitala foton. Fotona organiseras i album som kan sorteras kronologiskt, enligt katalogutläggning eller enligt egna samlingar.</p>
@@ -131,6 +133,7 @@
       <li xml:lang="pl">Grupowanie zdjęć w albumy i podalbumów (z obsługą znaczników i komentarzy)</li>
       <li xml:lang="pt">Organização das fotografias por álbuns e sub-álbuns (com o suporte para marcas e comentários)</li>
       <li xml:lang="pt-BR">Organização de fotos em álbuns e subálbuns (com suporte a etiquetas e comentários)</li>
+      <li xml:lang="ru">Упорядочивание фотографий с использованием иерархических альбомов, меток и комментариев;</li>
       <li xml:lang="sk">Organizácia fotiek v albumoch a podalbumoch (so značkami a komentármi)</li>
       <li xml:lang="sl">Organizacija fotografij v albumih in pod-albumih (s podporo oznakam in opombam)</li>
       <li xml:lang="sv">Organisation av foton i album och delalbum (med stöd för etiketter och kommentarer)</li>
@@ -155,7 +158,7 @@
       <li xml:lang="pl">Obsługa Exif, Iptc, Xmp, notatek twórcy</li>
       <li xml:lang="pt">Suporte para o EXIF, IPTC, XMP e notas do fabricante</li>
       <li xml:lang="pt-BR">Suporte a EXIF, IPTC, XMP e Notas do Fabricante</li>
-      <li xml:lang="ru">Поддержка метаданных EXIF, IPTC, XMP и MakerNote</li>
+      <li xml:lang="ru">Поддержка метаданных EXIF, IPTC, XMP и MakerNote;</li>
       <li xml:lang="sk">Podpora pre Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="sl">Podpora Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="sv">Stöd för EXIF, IPTC, XMP, tillverkaranteckningar</li>
@@ -178,6 +181,7 @@
       <li xml:lang="pl">Przechowalnia dla albumów i ich metadanych z zaawansowanymi narzędziami wyszukiwania jest napędzana SQLite lub Mysql</li>
       <li xml:lang="pt">Armazenamento baseado em SQLite ou MySQL para o conteúdo dos álbuns e os seus meta-dados com ferramentas de pesquisa avançadas</li>
       <li xml:lang="pt-BR">Armazenamento baseado em SQLite ou MySQL para o conteúdo dos álbuns e seus metadados com ferramentas de pesquisa avançadas</li>
+      <li xml:lang="ru">Использование баз данных SQLite и MySQL для хранения метаданных и информации о содержимом альбомов позволяет выполнять расширенный поиск и отбор требуемых изображений;</li>
       <li xml:lang="sl">Shramba SQLite ali Mysql za albume in metapodatke ter napredna iskalna orodja</li>
       <li xml:lang="sv">Lagring driven av SQLite eller MySQL för album och deras metadata med avancerade sökverktyg</li>
       <li xml:lang="tr">Albüm içeriği ve meta verileri için gelişmiş arama araçlarıyla, SQLite veya Mysql destekli depolama</li>
@@ -203,6 +207,7 @@
       <li xml:lang="pl">Obsługa filtrowania i sortowania albumów</li>
       <li xml:lang="pt">Suporte para filtrar e ordenar os álbuns</li>
       <li xml:lang="pt-BR">Suporte a filtragem e ordenação de álbuns</li>
+      <li xml:lang="ru">Отбор и сортировка альбомов;</li>
       <li xml:lang="sk">Podpora pre filtrovanie a triedenie albumov</li>
       <li xml:lang="sl">Podpora filtriranju in razvrščanju albumov</li>
       <li xml:lang="sv">Stöd för filtrering och sortering av album</li>
@@ -229,6 +234,7 @@
       <li xml:lang="pl">Importowanie z więcej niż 1100 aparatów cyfrowych</li>
       <li xml:lang="pt">Importar a partir de mais de 1100 máquinas digitais</li>
       <li xml:lang="pt-BR">Importação de mais de 1.100 câmeras digitais</li>
+      <li xml:lang="ru">Поддержка импорта более чем с 1100 моделей цифровых камер</li>
       <li xml:lang="sk">Import z viac ako 1100 digitálnych fotoaparátov</li>
       <li xml:lang="sl">Uvažanje iz več kot 1100 digitalnih fotoaparatov</li>
       <li xml:lang="sv">Import från mer än 1100 digitalkameror</li>
@@ -252,6 +258,7 @@
       <li xml:lang="pl">Obsługa dla więcej niż 900 postaci zdjęć RAW</li>
       <li xml:lang="pt">Suporte para mais de 900 formatos de imagens RAW</li>
       <li xml:lang="pt-BR">Suporte a mais de 900 formatos de imagem RAW</li>
+      <li xml:lang="ru">Поддержка более 900 форматов цифровых негативов (RAW);</li>
       <li xml:lang="sl">Podpora več kot 900 vrstam surovih slik (RAW)</li>
       <li xml:lang="sv">Stöd för 900 obehandlade bildformat</li>
       <li xml:lang="tr">900'den fazla RAW biçimli resim desteği</li>
@@ -274,6 +281,7 @@
       <li xml:lang="pl">Podświetlarka do porównywania zdjęć jedno obok drugiego</li>
       <li xml:lang="pt">Mesa de Luz para comparar as fotografias lado-a-lado</li>
       <li xml:lang="pt-BR">Mesa de Luz para comparação de fotos lado a lado</li>
+      <li xml:lang="ru">Световой стол для сравнения изображений;</li>
       <li xml:lang="sl">Osvetlitvena miza za primerjavo fotografij</li>
       <li xml:lang="sv">Ljusbord för att jämföra foton sida vid sida</li>
       <li xml:lang="tr">Fotoğrafı yan yana karşılaştırmak için Tabloyu Işıklandır</li>
@@ -356,6 +364,7 @@
       <caption xml:lang="gl">Xestión de fotos en digiKam</caption>
       <caption xml:lang="nl">Fotobeheer in digiKam</caption>
       <caption xml:lang="pt">Gestão de Fotografias no digiKam</caption>
+      <caption xml:lang="ru">Управление фотографиями  в digiKam</caption>
       <caption xml:lang="sv">Fotohantering i Digikam</caption>
       <caption xml:lang="uk">Керування фотографіями у digiKam</caption>
       <caption xml:lang="x-test">xxPhoto management in digiKamxx</caption>
