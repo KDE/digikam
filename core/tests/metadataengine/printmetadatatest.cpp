@@ -69,8 +69,16 @@ void PrintMetadataTest::testPrintMetadata()
     //                                                 Expected tags to found in Exif,  Iptc,  Xmp
     printMetadata(m_originalImageFolder + QLatin1String("nikon-e2100.jpg"),      true,  true,  true);
     printMetadata(m_originalImageFolder + QLatin1String("_27A1417.CR2"),         true,  false, true);
-    printMetadata(m_originalImageFolder + QLatin1String("20160821035715.jpg"),   true,  false, true);
     printMetadata(m_originalImageFolder + QLatin1String("2008-05_DSC_0294.JPG"), true,  true,  true);
+
+    // The file cannot be loaded with Exiv2-0.26, only test the newer versions
+
+    bool ok = true;
+
+    if ((MetaEngine::Exiv2Version().section(QLatin1Char('.'), 0, 1).toDouble(&ok) > 0.26) && ok)
+    {
+        printMetadata(m_originalImageFolder + QLatin1String("20160821035715.jpg"),   true,  false, true);
+    }
 }
 
 void PrintMetadataTest::printMetadata(const QString& filePath, bool exif, bool iptc, bool xmp)

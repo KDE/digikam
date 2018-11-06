@@ -48,7 +48,7 @@ void ApplyTagsTest::testApplyTagsToMetadata()
 
     bool ok = true;
 
-    if (MetaEngine::Exiv2Version().section(QLatin1Char('.'), 0, 1).toDouble(&ok) > 0.26 && ok)
+    if ((MetaEngine::Exiv2Version().section(QLatin1Char('.'), 0, 1).toDouble(&ok) > 0.26) && ok)
     {
         settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
 

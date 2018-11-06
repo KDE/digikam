@@ -46,16 +46,22 @@ void PrintItemInfoTest::testPrintItemInfo()
                                                                                  true,        true,
                                                                                  false,       false,        false);
 
-    printItemInfo(m_originalImageFolder + QLatin1String("20160821035715.jpg"),   false,       false,
-                                                                                 false,       false,        false,
-                                                                                 false,       true,
-                                                                                 false,       false,        false);
-
     printItemInfo(m_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"), false,       false,
                                                                                  false,       false,        false,
                                                                                  true,        false,
                                                                                  false,       false,        false);
 
+    // The file cannot be loaded with Exiv2-0.26, only test the newer versions
+
+    bool ok = true;
+
+    if ((MetaEngine::Exiv2Version().section(QLatin1Char('.'), 0, 1).toDouble(&ok) > 0.26) && ok)
+    {
+        printItemInfo(m_originalImageFolder + QLatin1String("20160821035715.jpg"),   false,       false,
+                                                                                     false,       false,        false,
+                                                                                     false,       true,
+                                                                                     false,       false,        false);
+    }
 }
 
 void PrintItemInfoTest::printItemInfo(const QString& filePath,
