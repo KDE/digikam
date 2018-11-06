@@ -130,7 +130,7 @@ bool MetaEngine::load(const QString& filePath)
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QLatin1String("Cannot load metadata from file "), e);
+        d->printExiv2ExceptionError(QString::fromUtf8("Cannot load metadata from file %1").arg(getFilePath()), e);
     }
     catch(...)
     {
@@ -161,7 +161,7 @@ bool MetaEngine::load(const QString& filePath)
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QLatin1String("Cannot load XMP sidecar"), e);
+        d->printExiv2ExceptionError(QString::fromUtf8("Cannot load XMP sidecar from file %1").arg(getFilePath()), e);
     }
     catch(...)
     {
@@ -200,7 +200,7 @@ bool MetaEngine::save(const QString& imageFilePath, bool setVersion) const
     if (givenFileInfo.isSymLink())
     {
         qCDebug(DIGIKAM_METAENGINE_LOG) << "filePath" << imageFilePath << "is a symlink."
-                               << "Using target" << givenFileInfo.canonicalFilePath();
+                                        << "Using target" << givenFileInfo.canonicalFilePath();
 
         regularFilePath = givenFileInfo.canonicalFilePath();// Walk all the symlinks
     }
