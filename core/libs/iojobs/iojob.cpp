@@ -378,7 +378,7 @@ void RestoreDTrashItemsJob::run()
             fi.dir().mkpath(fi.dir().path());
         }
 
-        if (!DFileOperations::renameFile(item.trashPath, newName.toLocalFile()))
+        if (!QFile::rename(item.trashPath, newName.toLocalFile()))
         {
             qCDebug(DIGIKAM_IOJOB_LOG) << "Trash file could not be renamed!";
         }
