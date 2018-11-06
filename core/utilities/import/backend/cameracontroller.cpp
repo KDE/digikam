@@ -882,7 +882,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
             QFile::remove(scdest);
         }
 
-        if (!QFile::rename(sctemp, scdest))
+        if (!DFileOperations::renameFile(sctemp, scdest))
         {
             sendLogMsg(xi18n("Failed to save sidecar file for <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
         }
@@ -894,7 +894,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         QFile::remove(dest);
     }
 
-    if (!QFile::rename(temp, dest))
+    if (!DFileOperations::renameFile(temp, dest))
     {
         qCDebug(DIGIKAM_IMPORTUI_LOG) << "Renaming " << temp << " to " << dest << " failed";
         // rename failed. delete the temp file

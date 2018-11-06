@@ -630,4 +630,5 @@ BUGFIXES:
 564 ==> 400434 - Trash content disappears after selecting 'Map' or 'Table' view.
 565 ==> 394660 - Crashes when refreshing.
 566 ==> 400712 - File modification timestamp is updated when images are moved to collection on removable media.
-567 ==> 
+567 ==> 394214 - Import .mp4 files does not preserve file mtime as date stamp.
+568 ==> 
