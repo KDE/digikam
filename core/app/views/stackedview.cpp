@@ -446,7 +446,7 @@ void StackedView::syncSelection(ImageCategorizedView* from, ImageCategorizedView
     QItemSelection selection              = from->selectionModel()->selection();
     QItemSelection newSelection;
 
-    foreach(const QItemSelectionRange& range, selection)
+    foreach (const QItemSelectionRange& range, selection)
     {
         QModelIndex topLeft     = toModel->indexForItemInfo(fromModel->imageInfo(range.topLeft()));
         QModelIndex bottomRight = toModel->indexForItemInfo(fromModel->imageInfo(range.bottomRight()));

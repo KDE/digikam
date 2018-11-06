@@ -881,7 +881,6 @@ void DigikamApp::slotSwitchedToTableView()
 void DigikamApp::slotSwitchedToTrashView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    // TODO: disable all other views
     customizedTrashView(false);
     toggleShowBar();
 }
