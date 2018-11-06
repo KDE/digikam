@@ -82,7 +82,7 @@ void PrintMetadataTest::printMetadata(const QString& filePath, bool exif, bool i
 
     loadExif(meta, exif);
     loadIptc(meta, iptc);
-    loadXmp(meta, xmp);
+    loadXmp(meta,  xmp);
 }
 
 void PrintMetadataTest::loadExif(const DMetadata& meta, bool expected)

@@ -26,16 +26,36 @@
 // Qt includes
 
 #include <QTextStream>
+#include <QStringList>
 
 QTEST_MAIN(PrintItemInfoTest)
 
 void PrintItemInfoTest::testPrintItemInfo()
 {
-    //                                                Expected tags to  found in Exif,  Iptc,  Xmp
-    printMetadata(m_originalImageFolder + QLatin1String("nikon-e2100.jpg"),      true,  true,  true);
-    printMetadata(m_originalImageFolder + QLatin1String("_27A1417.CR2"),         true,  false, true);
-    printMetadata(m_originalImageFolder + QLatin1String("20160821035715.jpg"),   true,  false, true);
-    printMetadata(m_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"), true,  false, false);
+    //                                                 Expected tags to found in Comments,    Titles,
+    //                                                                           IptcContact, IptcLocation, IptcSubjects,
+    //                                                                           PhotoInfo,   VideoInfo,
+    //                                                                           XmpKeywords, XmpSubjects,  XmpSubCategories
+    printItemInfo(m_originalImageFolder + QLatin1String("nikon-e2100.jpg"),      false,       false,
+                                                                                 false,       false,        false,
+                                                                                 true,        true,
+                                                                                 true,        false,        false);
+
+    printItemInfo(m_originalImageFolder + QLatin1String("_27A1417.CR2"),         false,       false,
+                                                                                 false,       false,        false,
+                                                                                 true,        true,
+                                                                                 false,       false,        false);
+
+    printItemInfo(m_originalImageFolder + QLatin1String("20160821035715.jpg"),   false,       false,
+                                                                                 false,       false,        false,
+                                                                                 false,       true,
+                                                                                 false,       false,        false);
+
+    printItemInfo(m_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"), false,       false,
+                                                                                 false,       false,        false,
+                                                                                 true,        false,
+                                                                                 false,       false,        false);
+
 }
 
 void PrintItemInfoTest::printItemInfo(const QString& filePath,
@@ -50,23 +70,28 @@ void PrintItemInfoTest::printItemInfo(const QString& filePath,
     bool ret = meta.load(filePath);
     QVERIFY(ret);
 
-    printComments(meta, com);
-    printTitles(meta, iptc);
-    printIptcContact(meta, xmp);
-    printIptcLocation(meta,
-    printIptcSubjects(meta,
+    // Comments and titles
+    printComments(meta,         com);
+    printTitles(meta,           ttl);
 
-    printPhotoInfo(meta,
-    printVideoInfo(meta,
+    // Iptc
+    printIptcContact(meta,      cnt);
+    printIptcLocation(meta,     loc);
+    printIptcSubjects(meta,     isb),
 
-    printXmpKeywords(meta,
-    printXmpSubjects(meta,
-    printXmpSubCategories(meta,
+    // Media
+    printPhotoInfo(meta,        pho);
+    printVideoInfo(meta,        vid);
+
+    // Xmp
+    printXmpKeywords(meta,      key);
+    printXmpSubjects(meta,      xsb);
+    printXmpSubCategories(meta, cat);
 }
 
 void PrintItemInfoTest::printComments(const DMetadata& meta, bool expected)
 {
-    qDebug() << QString::fromUtf8("-- Comments from %1 --").arg(meta.getFilePath());
+    qDebug() << QString::fromUtf8("-- Comments from %1 --------------------------").arg(meta.getFilePath());
 
     CaptionsMap map = meta.getItemComments();
     QCOMPARE(!map.isEmpty(), expected);
@@ -85,47 +110,99 @@ void PrintItemInfoTest::printTitles(const DMetadata& meta, bool expected)
 }
 
 void PrintItemInfoTest::printIptcContact(const DMetadata& meta, bool expected)
+{
+    qDebug() << QString::fromUtf8("-- IptcContact from %1 --").arg(meta.getFilePath());
+
+    IptcCoreContactInfo map = meta.getCreatorContactInfo();
+    QCOMPARE(!map.isEmpty(), expected);
+
+    qDebug() << map;
+}
+
 void PrintItemInfoTest::printIptcLocation(const DMetadata& meta, bool expected)
+{
+    qDebug() << QString::fromUtf8("-- IptcLocation from %1 --").arg(meta.getFilePath());
+
+    IptcCoreLocationInfo map = meta.getIptcCoreLocation();
+    QCOMPARE(!map.isEmpty(), expected);
+
+    qDebug() << map;
+}
+
 void PrintItemInfoTest::printIptcSubjects(const DMetadata& meta, bool expected)
+{
+    qDebug() << QString::fromUtf8("-- IptcSubjects from %1 --").arg(meta.getFilePath());
+
+    QStringList map = meta.getIptcCoreSubjects();
+    QCOMPARE(!map.isEmpty(), expected);
+
+    qDebug() << map;
+}
 
 void PrintItemInfoTest::printPhotoInfo(const DMetadata& meta, bool expected)
+{
+    qDebug() << QString::fromUtf8("-- PhotoInfo from %1 --").arg(meta.getFilePath());
+
+    PhotoInfoContainer map = meta.getPhotographInformation();
+    QCOMPARE(!map.isEmpty(), expected);
+
+    qDebug() << map;
+}
+
 void PrintItemInfoTest::printVideoInfo(const DMetadata& meta, bool expected)
+{
+    qDebug() << QString::fromUtf8("-- VideoInfo from %1 --").arg(meta.getFilePath());
+
+    VideoInfoContainer map = meta.getVideoInformation();
+    QCOMPARE(!map.isEmpty(), expected);
+
+    qDebug() << map;
+}
 
 void PrintItemInfoTest::printXmpKeywords(const DMetadata& meta, bool expected)
-void PrintItemInfoTest::printXmpSubjects(const DMetadata& meta, bool expected)
-void PrintItemInfoTest::printXmpSubCategories(const DMetadata& meta, bool expected)
-
-
-void PrintItemInfoTest::loadExif(const DMetadata& meta, bool expected)
 {
-    qDebug() << QString::fromUtf8("-- Exif metadata from %1 --").arg(meta.getFilePath());
-
-    DMetadata::MetaDataMap map = meta.getExifTagsDataList();
-    QCOMPARE(!map.isEmpty(), expected);
-
-    printMetadataMap(map);
-}
-
-void PrintItemInfoTest::loadIptc(const DMetadata& meta, bool expected)
-{
-    qDebug() << QString::fromUtf8("-- Iptc metadata from %1 --").arg(meta.getFilePath());
-
-    DMetadata::MetaDataMap map = meta.getIptcTagsDataList();
-    QCOMPARE(!map.isEmpty(), expected);
-
-    printMetadataMap(map);
-}
-
-void PrintItemInfoTest::loadXmp(const DMetadata& meta, bool expected)
-{
-    qDebug() << QString::fromUtf8("-- Xmp metadata from %1 --").arg(meta.getFilePath());
+    qDebug() << QString::fromUtf8("-- XmpKeywords from %1 --").arg(meta.getFilePath());
 
     if (meta.supportXmp())
     {
-        DMetadata::MetaDataMap map = meta.getXmpTagsDataList();
+        QStringList map = meta.getXmpKeywords();
         QCOMPARE(!map.isEmpty(), expected);
 
-        printMetadataMap(map);
+        qDebug() << map;
+    }
+    else
+    {
+        QWARN("Exiv2 has no XMP support...");
+    }
+}
+
+void PrintItemInfoTest::printXmpSubjects(const DMetadata& meta, bool expected)
+{
+    qDebug() << QString::fromUtf8("-- XmpSubjects from %1 --").arg(meta.getFilePath());
+
+    if (meta.supportXmp())
+    {
+        QStringList map = meta.getXmpSubjects();
+        QCOMPARE(!map.isEmpty(), expected);
+
+        qDebug() << map;
+    }
+    else
+    {
+        QWARN("Exiv2 has no XMP support...");
+    }
+}
+
+void PrintItemInfoTest::printXmpSubCategories(const DMetadata& meta, bool expected)
+{
+    qDebug() << QString::fromUtf8("-- XmpSubCategories from %1 --").arg(meta.getFilePath());
+
+    if (meta.supportXmp())
+    {
+        QStringList map = meta.getXmpSubCategories();
+        QCOMPARE(!map.isEmpty(), expected);
+
+        qDebug() << map;
     }
     else
     {
