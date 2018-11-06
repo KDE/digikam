@@ -629,5 +629,5 @@ BUGFIXES:
 563 ==> 400637 - IPFS icons have non-square size, causing them to get blurred.
 564 ==> 400434 - Trash content disappears after selecting 'Map' or 'Table' view.
 565 ==> 394660 - Crashes when refreshing.
-566 ==> 
-
+566 ==> 400712 - File modification timestamp is updated when images are moved to collection on removable media.
+567 ==> 

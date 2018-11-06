@@ -130,9 +130,7 @@ void CopyOrMoveJob::run()
             }
             else
             {
-                QFile srcFile(srcInfo.filePath());
-
-                if (!srcFile.rename(destenation))
+                if (!DFileOperations::renameFile(srcInfo.filePath(), destenation))
                 {
                     emit signalError(i18n("Could not move file %1 to album %2",
                                           srcInfo.filePath(),
@@ -164,7 +162,7 @@ void CopyOrMoveJob::run()
             }
             else
             {
-                if (!QFile::copy(srcInfo.filePath(), destenation))
+                if (!DFileOperations::copyFile(srcInfo.filePath(), destenation))
                 {
                     emit signalError(i18n("Could not copy file %1 to album %2",
                                           QDir::toNativeSeparators(srcInfo.path()),
@@ -172,7 +170,6 @@ void CopyOrMoveJob::run()
 
                     continue;
                 }
-
             }
         }
 

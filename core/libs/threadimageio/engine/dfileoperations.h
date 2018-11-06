@@ -86,6 +86,16 @@ public:
      */
     static bool copyFiles(const QStringList& srcPaths,
                           const QString& dstPath);
+
+    /** Rename or move file and keep the source file modification time.
+     */
+    static bool renameFile(const QString& srcFile,
+                           const QString& dstFile);
+
+    /** Copy file and keep the source file modification time.
+     */
+    static bool copyFile(const QString& srcFile,
+                         const QString& dstFile);
 };
 
 } // namespace Digikam

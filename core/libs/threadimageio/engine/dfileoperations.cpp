@@ -102,7 +102,8 @@ bool DFileOperations::localFileRename(const QString& source,
 
     if (QT_STAT(QFile::encodeName(source).constData(), &st) == 0)
     {
-        // See bug #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
+        // See bug #329608: Restore file modification time from original file
+        // only if updateFileTimeStamp for Setup/Metadata is turned off.
 
         if (!ignoreSettings && !MetaEngineSettings::instance()->settings().updateFileTimeStamp)
         {
@@ -269,13 +270,13 @@ bool DFileOperations::runFiles(const QString& appCmd,
     QProcess* const process = new QProcess();
     QProcessEnvironment env = adjustedEnvironmentForAppImage();
 
-    foreach(const QUrl& url, urlList)
+    foreach (const QUrl& url, urlList)
     {
         dirs  << url.adjusted(QUrl::RemoveFilename).toLocalFile();
         files << url.toLocalFile();
     }
 
-    foreach(const QString& cmdString, cmdList)
+    foreach (const QString& cmdString, cmdList)
     {
         QString cmd = cmdString;
 
@@ -366,7 +367,7 @@ KService::List DFileOperations::servicesForOpenWith(const QList<QUrl>& urls)
     QStringList    mimeTypes;
     KService::List offers;
 
-    foreach(const QUrl& item, urls)
+    foreach (const QUrl& item, urls)
     {
         const QString mimeType = QMimeDatabase().mimeTypeForFile(item.toLocalFile(), QMimeDatabase::MatchExtension).name();
 
@@ -383,7 +384,7 @@ KService::List DFileOperations::servicesForOpenWith(const QList<QUrl>& urls)
         const QString constraintTemplate = QLatin1String("'%1' in ServiceTypes");
         QStringList constraints;
 
-        foreach(const QString& mimeType, mimeTypes)
+        foreach (const QString& mimeType, mimeTypes)
         {
             constraints << constraintTemplate.arg(mimeType);
         }
@@ -431,7 +432,7 @@ bool DFileOperations::copyFolderRecursively(const QString& srcPath,
         if (cancel && *cancel)
             return false;
 
-        if (!QFile::copy(fileInfo.filePath(), copyPath))
+        if (!copyFile(fileInfo.filePath(), copyPath))
             return false;
     }
 
@@ -452,11 +453,59 @@ bool DFileOperations::copyFiles(const QStringList& srcPaths,
         QFileInfo fileInfo(path);
         QString copyPath = dstPath + QLatin1Char('/') + fileInfo.fileName();
 
-        if (!QFile::copy(fileInfo.filePath(), copyPath))
+        if (!copyFile(fileInfo.filePath(), copyPath))
             return false;
     }
 
     return true;
+}
+
+bool DFileOperations::renameFile(const QString& srcFile,
+                                 const QString& dstFile)
+{
+    QT_STATBUF st;
+    int stat = QT_STAT(QFile::encodeName(srcFile).constData(), &st);
+
+    bool ret = QFile::rename(srcFile, dstFile);
+
+    if (ret && stat == 0)
+    {
+        struct utimbuf ut;
+        ut.modtime = st.st_mtime;
+        ut.actime  = st.st_atime;
+
+        if (::utime(QFile::encodeName(dstFile).constData(), &ut) != 0)
+        {
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore modification time for file "
+                                           << dstFile;
+        }
+    }
+
+    return ret;
+}
+
+bool DFileOperations::copyFile(const QString& srcFile,
+                               const QString& dstFile)
+{
+    QT_STATBUF st;
+    int stat = QT_STAT(QFile::encodeName(srcFile).constData(), &st);
+
+    bool ret = QFile::copy(srcFile, dstFile);
+
+    if (ret && stat == 0)
+    {
+        struct utimbuf ut;
+        ut.modtime = st.st_mtime;
+        ut.actime  = st.st_atime;
+
+        if (::utime(QFile::encodeName(dstFile).constData(), &ut) != 0)
+        {
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore modification time for file "
+                                           << dstFile;
+        }
+    }
+
+    return ret;
 }
 
 } // namespace Digikam
