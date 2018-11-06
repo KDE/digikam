@@ -36,9 +36,9 @@ CaptionValues::~CaptionValues()
 
 bool CaptionValues::operator==(const CaptionValues& val) const
 {
-    bool b1  = author  == val.author;
-    bool b2  = caption == val.caption;
-    bool b3  = date    == val.date;
+    bool b1  = (author  == val.author);
+    bool b2  = (caption == val.caption);
+    bool b3  = (date    == val.date);
 
     return (b1 && b2 && b3);
 }
@@ -78,7 +78,7 @@ MetaEngine::AltLangMap CaptionsMap::toAltLangMap() const
 {
     MetaEngine::AltLangMap map;
 
-    for (CaptionsMap::const_iterator it = constBegin(); it != constEnd(); ++it)
+    for (CaptionsMap::const_iterator it = constBegin() ; it != constEnd() ; ++it)
     {
         map.insert(it.key(), (*it).caption);
     }
@@ -90,7 +90,7 @@ void CaptionsMap::fromAltLangMap(const MetaEngine::AltLangMap& map)
 {
     clear();
 
-    for (MetaEngine::AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
+    for (MetaEngine::AltLangMap::const_iterator it = map.constBegin() ; it != map.constEnd() ; ++it)
     {
         CaptionValues val;
         val.caption = it.value();
@@ -102,7 +102,7 @@ MetaEngine::AltLangMap CaptionsMap::authorsList() const
 {
     MetaEngine::AltLangMap map;
 
-    for (CaptionsMap::const_iterator it = constBegin(); it != constEnd(); ++it)
+    for (CaptionsMap::const_iterator it = constBegin() ; it != constEnd() ; ++it)
     {
         map.insert(it.key(), (*it).author);
     }
@@ -112,7 +112,7 @@ MetaEngine::AltLangMap CaptionsMap::authorsList() const
 
 void CaptionsMap::setAuthorsList(const MetaEngine::AltLangMap& map, const QString& commonAuthor)
 {
-    for (CaptionsMap::iterator it = begin(); it != end(); ++it)
+    for (CaptionsMap::iterator it = begin() ; it != end() ; ++it)
     {
         MetaEngine::AltLangMap::const_iterator authorIt = map.find(it.key());
 
@@ -131,7 +131,7 @@ MetaEngine::AltLangMap CaptionsMap::datesList() const
 {
     MetaEngine::AltLangMap map;
 
-    for (CaptionsMap::const_iterator it = constBegin(); it != constEnd(); ++it)
+    for (CaptionsMap::const_iterator it = constBegin() ; it != constEnd() ; ++it)
     {
         map.insert(it.key(), (*it).date.toString(Qt::ISODate));
     }
@@ -141,7 +141,7 @@ MetaEngine::AltLangMap CaptionsMap::datesList() const
 
 void CaptionsMap::setDatesList(const MetaEngine::AltLangMap& map)
 {
-    for (MetaEngine::AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
+    for (MetaEngine::AltLangMap::const_iterator it = map.constBegin() ; it != map.constEnd() ; ++it)
     {
         CaptionsMap::iterator val = find(it.key());
 
