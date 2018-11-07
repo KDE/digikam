@@ -30,11 +30,16 @@
 #include <QApplication>
 #include <QSignalSpy>
 #include <QElapsedTimer>
+#include <QMutexLocker>
+#include <QScopedPointer>
 
 // Local includes
 
 #include "dmetadata.h"
 #include "digikam_globals.h"
+
+// Exiv2 API are not re-entrant. So it's a critical section to protect.
+QMutex s_mutex;
 
 class Q_DECL_HIDDEN Mytask : public ActionJob
 {
@@ -54,40 +59,46 @@ protected:
 
     void run()
     {
-        qDebug() << "Processing file: " << url.fileName();
+        qDebug() << "Processing file: " << url;
 
-        DMetadata meta;
-        meta.setSettings(settings);
-
-        if (!meta.load(url.toLocalFile()))
         {
-            // TODO handle this case with stats
-        }
-        else
-        {
-            // NOTE : only process data here without to generate debug statements
+            QMutexLocker lock(&s_mutex);
 
-            if (direction == MetaReaderThread::READ_FROM_FILE)
+            QScopedPointer<DMetadata> meta(new DMetadata);
+            meta->setSettings(settings);
+
+            if (!meta->load(url.toLocalFile()))
             {
-                // Get most important info used to populate the database
-                meta.getImageDimensions();
-                meta.getImageTitles();
-                meta.getCreatorContactInfo();
-                meta.getIptcCoreLocation();
-                meta.getIptcCoreSubjects();
-                meta.getPhotographInformation();
-                meta.getVideoInformation();
-                meta.getXmpKeywords();
-                meta.getXmpSubjects();
-                meta.getXmpSubCategories();
+                // TODO handle this case with stats
             }
-            else // WRITE_TO_FILE
+            else
             {
-                // Just patch file with this info which will touch Exif, Iptc, and Xmp metadata
-                meta.setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
-                meta.applyChanges();
+                // NOTE : only process data here without to generate debug statements
+
+                if (direction == MetaReaderThread::READ_FROM_FILE)
+                {
+                    // Get most important info used to populate the database
+                    meta->getImageDimensions();
+                    meta->getImageTitles();
+                    meta->getCreatorContactInfo();
+                    meta->getIptcCoreLocation();
+                    meta->getIptcCoreSubjects();
+                    meta->getPhotographInformation();
+                    meta->getVideoInformation();
+                    meta->getXmpKeywords();
+                    meta->getXmpSubjects();
+                    meta->getXmpSubCategories();
+                }
+                else // WRITE_TO_FILE
+                {
+                    // Just patch file with this info which will touch Exif, Iptc, and Xmp metadata
+                    meta->setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
+                    meta->applyChanges();
+                }
             }
         }
+
+        qDebug() << "Processed file: " << url;
 
         emit signalDone();
     }
@@ -124,8 +135,6 @@ void MetaReaderThread::readMetadata(const QList<QUrl>& list,
         job->direction    = direction;
         job->settings     = settings;
         collection.insert(job, 0);
-
-        qDebug() << "Appending file to process " << url;
     }
 
     appendJobs(collection);
@@ -156,7 +165,7 @@ void MetaReaderThreadTest::testMetaReaderThread()
     settings.metadataWritingMode   = DMetadata::WRITE_TO_SIDECAR_ONLY;
 
     QString path = m_originalImageFolder;
-    //QString path = QLatin1String("/mnt/data/photos");
+//    QString path = QLatin1String("/mnt/data/photos/");
 
     runMetaReader(path, mimeTypes, MetaReaderThread::READ_FROM_FILE, settings);
 }
@@ -181,7 +190,8 @@ void MetaReaderThreadTest::runMetaReader(const QString& path,
 
     if (list.isEmpty())
     {
-        QWARN("Files list to process is empty!");
+        qDebug() << "Files list to process is empty!";
+        return;
     }
 
     MetaReaderThread* const thread = new MetaReaderThread(this);
@@ -190,14 +200,12 @@ void MetaReaderThreadTest::runMetaReader(const QString& path,
     QElapsedTimer timer;
     timer.start();
 
-    QBENCHMARK_ONCE
-    {
-        thread->start();
+    thread->start();
 
-        QVERIFY(spy.wait(30000));
+    QVERIFY(spy.wait(3000000));
 
-        delete thread;
-    }
+    thread->cancel();
+    delete thread;
 
     qDebug() << endl << "MetaReader have been completed:" << endl
              << "    Processing duration:" << timer.elapsed() / 1000.0 << " seconds" << endl
@@ -207,4 +215,3 @@ void MetaReaderThreadTest::runMetaReader(const QString& path,
              << "    Type-mimes         :" << mimeTypes << endl
              << "    Engine settings    :" << settings << endl;
 }
-
