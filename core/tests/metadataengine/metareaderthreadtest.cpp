@@ -28,7 +28,6 @@
 #include <QDirIterator>
 #include <QDebug>
 #include <QApplication>
-#include <QElapsedTimer>
 #include <QSignalSpy>
 
 // Local includes
@@ -63,7 +62,7 @@ protected:
         {
             if (direction == MetaReaderThread::READ_FROM_FILE)
             {
-                 qDebug() << url.fileName() << " :: Dim: " << meta.getImageDimensions() 
+                 qDebug() << url.fileName() << " :: Dim: " << meta.getImageDimensions()
                                             << " :: Dat: " << meta.getImageDateTime()
                                             << " :: Com: " << meta.getCommentsDecoded()
                                             << " :: Ori: " << meta.getImageOrientation()
@@ -162,17 +161,16 @@ void MetaReaderThreadTest::readStage()
 
     MetaReaderThread* const thread = new MetaReaderThread(this);
     thread->readMetadata(list, direction);
-
-    QElapsedTimer timer;
-    timer.start();
-
     QSignalSpy spy(thread, SIGNAL(done()));
-    thread->start();
 
-    QVERIFY(spy.wait(30000));
+    QBENCHMARK_ONCE
+    {
+        thread->start();
 
-    qDebug() << "Reading metadata from " << list.size()
-             << " files took " << timer.elapsed()/1000.0 << " seconds";
+        QVERIFY(spy.wait(30000));
+    }
+
+    qDebug() << "Reading metadata was performed over" << list.size() << "files";
 }
 
 void MetaReaderThreadTest::writeStage()
