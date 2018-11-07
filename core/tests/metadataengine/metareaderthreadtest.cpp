@@ -204,7 +204,7 @@ void MetaReaderThreadTest::runMetaReader(const QString& path,
              << "    Root path          :" << path << endl
              << "    Number of files    :" << list.size() << endl
              << "    Direction          :" << MetaReaderThread::directionToString(direction) << endl
-             << "    Type-mimes         :" << mimeTypes << endl;
-//             << "    Metadata settings  :" << settings << endl;
+             << "    Type-mimes         :" << mimeTypes << endl
+             << "    Engine settings    :" << settings << endl;
 }
 
