@@ -6,7 +6,8 @@
  * Date        : 2015-08-12
  * Description : DMetadata Settings Container.
  *
- * Copyright (C) 2015 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ * Copyright (C) 2015      by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ * Copyright (C) 2015-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -126,26 +127,6 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
     {
         defaultValues();
     }
-/*
-    if (group.hasGroup("readTagNamespaces")     &&
-        group.hasGroup("readRatingNamespaces")  &&
-        group.hasGroup("readCommentNamespaces") &&
-        group.hasGroup("writeTagNamespaces")    &&
-        group.hasGroup("writeRatingNamespaces") &&
-        group.hasGroup("writeCommentNamespaces"))
-    {
-        readOneGroup(group, QLatin1String("readTagNamespaces"),      readTagNamespaces);
-        readOneGroup(group, QLatin1String("readRatingNamespaces"),   readRatingNamespaces);
-        readOneGroup(group, QLatin1String("readCommentNamespaces"),  readCommentNamespaces);
-        readOneGroup(group, QLatin1String("writeTagNamespaces"),     writeTagNamespaces);
-        readOneGroup(group, QLatin1String("writeRatingNamespaces"),  writeRatingNamespaces);
-        readOneGroup(group, QLatin1String("writeCommentNamespaces"), writeCommentNamespaces);
-    }
-    else
-    {
-        defaultValues();
-    }
-*/
 }
 
 void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
@@ -155,20 +136,12 @@ void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
         writeOneGroup(group, QLatin1String("read")  + str + QLatin1String("Namespaces"), getReadMapping(str));
         writeOneGroup(group, QLatin1String("write") + str + QLatin1String("Namespaces"), getWriteMapping(str));
     }
-/*
-    writeOneGroup(group, QLatin1String("readTagNamespaces"),      readTagNamespaces);
-    writeOneGroup(group, QLatin1String("readRatingNamespaces"),   readRatingNamespaces);
-    writeOneGroup(group, QLatin1String("readCommentNamespaces"),  readCommentNamespaces);
-    writeOneGroup(group, QLatin1String("writeTagNamespaces"),     writeTagNamespaces);
-    writeOneGroup(group, QLatin1String("writeRatingNamespaces"),  writeRatingNamespaces);
-    writeOneGroup(group, QLatin1String("writeCommentNamespaces"), writeCommentNamespaces);
-*/
+
     group.sync();
 }
 
 void DMetadataSettingsContainer::defaultValues()
 {
-    qCDebug(DIGIKAM_METAENGINE_LOG) << "Loading default values ++++++++++++++++";
     d->unifyReadWrite = true;
     d->writeMappings.clear();
     d->readMappings.clear();
@@ -465,5 +438,27 @@ void DMetadataSettingsContainer::writeOneGroup(KConfigGroup& group, const QStrin
         tmp.writeEntry("isDefault",       e.isDefault);
     }
 }
+/*
+QDebug operator<<(QDebug dbg, const DMetadataSettingsContainer& inf)
+{
+    dbg.nospace() << "[DMetadataSettingsContainer] readMappings(";
 
+    foreach (const QString& str, inf.mappingKeys())
+    {
+        dbg.nospace() << inf.getReadMapping(str) << "), ";
+    }
+
+    dbg.nospace() << "writeMappings(";
+
+    foreach (const QString& str, inf.mappingKeys())
+    {
+        dbg.nospace() << inf.getWriteMapping(str) << "), ";
+    }
+
+    dbg.nospace() << "unifyReadWrite("
+                  << inf.unifyReadWrite() << ")";
+
+    return dbg.space();
+}
+*/
 } // namespace Digikam
