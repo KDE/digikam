@@ -163,7 +163,8 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         return false;
     }
 
-    jp2_image = jas_image_decode(jp2_stream, -1, 0);
+    int fmt   = jas_image_strtofmt(QByteArray("jp2").data());
+    jp2_image = jas_image_decode(jp2_stream, fmt, 0);
 
     if (jp2_image == 0)
     {
@@ -827,12 +828,12 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     //                      the uncompressed size
     // use sprintf for locale-aware string
     char rateBuffer[16];
-    sprintf(rateBuffer, "rate=%.2g\n", (quality / 100.0));
+    sprintf(rateBuffer, "rate=%.2g", (quality / 100.0));
 
     qCDebug(DIGIKAM_DIMG_LOG_JP2K) << "JPEG2000 quality: " << quality;
     qCDebug(DIGIKAM_DIMG_LOG_JP2K) << "JPEG2000 "          << rateBuffer;
 
-    int fmt = jas_image_strtofmt(QString::fromLatin1("jp2").toLatin1().data());
+    int fmt = jas_image_strtofmt(QByteArray("jp2").data());
     int ret = jas_image_encode(jp2_image, jp2_stream, fmt, rateBuffer);
 
     if (ret != 0)
