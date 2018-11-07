@@ -29,10 +29,11 @@
 #include <QDebug>
 #include <QApplication>
 #include <QSignalSpy>
+#include <QElapsedTimer>
 
 // Local includes
 
-#include "metaengine.h"
+#include "dmetadata.h"
 #include "digikam_globals.h"
 
 class Q_DECL_HIDDEN Mytask : public ActionJob
@@ -47,32 +48,44 @@ public:
 
     QUrl                        url;
     MetaReaderThread::Direction direction;
+    MetaEngineSettingsContainer settings;
 
 protected:
 
     void run()
     {
-        MetaEngine meta;
+        qDebug() << "Processing file: " << url.fileName();
+
+        DMetadata meta;
+        meta.setSettings(settings);
 
         if (!meta.load(url.toLocalFile()))
         {
-            qDebug() << url.fileName() << " : cannot load metadata!";
+            // TODO handle this case with stats
         }
         else
         {
+            // NOTE : only process data here without to generate debug statements
+
             if (direction == MetaReaderThread::READ_FROM_FILE)
             {
-                 qDebug() << url.fileName() << " :: Dim: " << meta.getImageDimensions()
-                                            << " :: Dat: " << meta.getImageDateTime()
-                                            << " :: Com: " << meta.getCommentsDecoded()
-                                            << " :: Ori: " << meta.getImageOrientation()
-                                            << " :: Col: " << meta.getImageColorWorkSpace();
+                // Get most important info used to populate the database
+                meta.getImageDimensions();
+                meta.getImageTitles();
+                meta.getCreatorContactInfo();
+                meta.getIptcCoreLocation();
+                meta.getIptcCoreSubjects();
+                meta.getPhotographInformation();
+                meta.getVideoInformation();
+                meta.getXmpKeywords();
+                meta.getXmpSubjects();
+                meta.getXmpSubCategories();
             }
             else // WRITE_TO_FILE
             {
-                 qDebug() << "Patch file: " << url.fileName();
-                 meta.setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
-                 meta.applyChanges();
+                // Just patch file with this info which will touch Exif, Iptc, and Xmp metadata
+                meta.setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
+                meta.applyChanges();
             }
         }
 
@@ -92,7 +105,15 @@ MetaReaderThread::~MetaReaderThread()
 {
 }
 
-void MetaReaderThread::readMetadata(const QList<QUrl>& list, Direction direction)
+QString MetaReaderThread::directionToString(Direction direction)
+{
+    return (direction == MetaReaderThread::READ_FROM_FILE) ? QLatin1String("Read from files")
+                                                           : QLatin1String("Write to files");
+}
+
+void MetaReaderThread::readMetadata(const QList<QUrl>& list,
+                                    Direction direction,
+                                    const MetaEngineSettingsContainer& settings)
 {
     ActionJobCollection collection;
 
@@ -101,6 +122,7 @@ void MetaReaderThread::readMetadata(const QList<QUrl>& list, Direction direction
         Mytask* const job = new Mytask();
         job->url          = url;
         job->direction    = direction;
+        job->settings     = settings;
         collection.insert(job, 0);
 
         qDebug() << "Appending file to process " << url;
@@ -113,6 +135,8 @@ void MetaReaderThread::slotJobFinished()
 {
     ActionThreadBase::slotJobFinished();
 
+    qDebug() << "Pending items to process:" << pendingCount();
+
     if (isEmpty())
         emit done();
 }
@@ -123,21 +147,26 @@ QTEST_MAIN(MetaReaderThreadTest)
 
 void MetaReaderThreadTest::testMetaReaderThread()
 {
-    readStage();
-}
-
-void MetaReaderThreadTest::readStage()
-{
-    QString path = m_originalImageFolder;
-    qDebug() << "Images path : " << path;
-
     QString filter;
     supportedImageMimeTypes(QIODevice::ReadOnly, filter);
-    QStringList mimeTypes = filter.split(QLatin1Char(' '));
+    QStringList mimeTypes          = filter.split(QLatin1Char(' '));
 
-    qDebug() << "Images filters : " << mimeTypes;
+    MetaEngineSettingsContainer settings;
+    settings.useXMPSidecar4Reading = false;
+    settings.metadataWritingMode   = DMetadata::WRITE_TO_SIDECAR_ONLY;
 
-    MetaReaderThread::Direction direction = MetaReaderThread::READ_FROM_FILE;
+    QString path = m_originalImageFolder;
+    //QString path = QLatin1String("/mnt/data/photos");
+
+    runMetaReader(path, mimeTypes, MetaReaderThread::READ_FROM_FILE, settings);
+}
+
+void MetaReaderThreadTest::runMetaReader(const QString& path,
+                                         const QStringList& mimeTypes,
+                                         MetaReaderThread::Direction direction,
+                                         const MetaEngineSettingsContainer& settings)
+{
+    qDebug() << "-- Start to process" << path << "------------------------------";
 
     QList<QUrl> list;
     QDirIterator it(path, mimeTypes,
@@ -152,29 +181,30 @@ void MetaReaderThreadTest::readStage()
 
     if (list.isEmpty())
     {
-        QFAIL("Files list to process is empty!");
-    }
-    else
-    {
-        qDebug() << list.count() << "files to process...";
+        QWARN("Files list to process is empty!");
     }
 
     MetaReaderThread* const thread = new MetaReaderThread(this);
-    thread->readMetadata(list, direction);
+    thread->readMetadata(list, direction, settings);
     QSignalSpy spy(thread, SIGNAL(done()));
+    QElapsedTimer timer;
+    timer.start();
 
     QBENCHMARK_ONCE
     {
         thread->start();
 
         QVERIFY(spy.wait(30000));
+
+        delete thread;
     }
 
-    qDebug() << "Reading metadata was performed over" << list.size() << "files";
-}
-
-void MetaReaderThreadTest::writeStage()
-{
-    // TODO
+    qDebug() << "MetaReader have been performed:"
+             << "    Processing duration:" << timer.elapsed() / 1000.0 << " seconds" << endl
+             << "    Root path          :" << path << endl
+             << "    Number of files    :" << list.size() << endl
+             << "    Direction          :" << MetaReaderThread::directionToString(direction) << endl
+             << "    Type-mimes         :" << mimeTypes << endl;
+//             << "    Metadata settings  :" << settings << endl;
 }
 

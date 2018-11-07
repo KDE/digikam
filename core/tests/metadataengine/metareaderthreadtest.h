@@ -55,7 +55,11 @@ public:
     explicit MetaReaderThread(QObject* const parent);
     ~MetaReaderThread();
 
-    void readMetadata(const QList<QUrl>& list, Direction direction);
+    void readMetadata(const QList<QUrl>& list,
+                      Direction direction,
+                      const MetaEngineSettingsContainer& settings);
+
+    static QString directionToString(Direction direction);
 
 protected Q_SLOTS:
 
@@ -74,8 +78,10 @@ class MetaReaderThreadTest : public AbstractUnitTest
 
 private:
 
-    void readStage();
-    void writeStage();
+    void runMetaReader(const QString& path,
+                       const QStringList& mimeTypes,
+                       MetaReaderThread::Direction direction,
+                       const MetaEngineSettingsContainer& settings);
 
 private Q_SLOTS:
 
