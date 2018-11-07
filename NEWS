@@ -632,4 +632,5 @@ BUGFIXES:
 566 ==> 400712 - File modification timestamp is updated when images are moved to collection on removable media.
 567 ==> 394214 - Import .mp4 files does not preserve file mtime as date stamp.
 568 ==> 400762 - Trash - "Delete All Permanently" button not visible.
-569 ==> 
+569 ==> 400792 - Failure to export to JPEG 2000.
+570 ==> 
