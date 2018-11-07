@@ -199,7 +199,7 @@ void MetaReaderThreadTest::runMetaReader(const QString& path,
         delete thread;
     }
 
-    qDebug() << "MetaReader have been performed:" << endl
+    qDebug() << endl << "MetaReader have been completed:" << endl
              << "    Processing duration:" << timer.elapsed() / 1000.0 << " seconds" << endl
              << "    Root path          :" << path << endl
              << "    Number of files    :" << list.size() << endl
