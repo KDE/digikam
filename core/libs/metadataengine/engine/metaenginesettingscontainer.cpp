@@ -141,4 +141,48 @@ void MetaEngineSettingsContainer::writeToConfig(KConfigGroup& group) const
     group.writeEntry("Custom Sidecar Extensions",   sidecarExtensions);
 }
 
+QDebug operator<<(QDebug dbg, const MetaEngineSettingsContainer& inf)
+{
+    dbg.nospace() << "[MetaEngineSettingsContainer] exifRotate("
+                  << inf.exifRotate << "), ";
+    dbg.nospace() << "exifSetOrientation("
+                  << inf.exifSetOrientation << "), ";
+    dbg.nospace() << "saveComments("
+                  << inf.saveComments << "), ";
+    dbg.nospace() << "saveDateTime("
+                  << inf.saveDateTime << "), ";
+    dbg.nospace() << "savePickLabel("
+                  << inf.saveColorLabel << "), ";
+    dbg.nospace() << "saveColorLabel("
+                  << inf.savePickLabel << "), ";
+    dbg.nospace() << "saveRating("
+                  << inf.saveRating << "), ";
+    dbg.nospace() << "saveTemplate("
+                  << inf.saveTemplate << "), ";
+    dbg.nospace() << "saveTags("
+                  << inf.saveTags << "), ";
+    dbg.nospace() << "saveFaceTags("
+                  << inf.saveFaceTags << "), ";
+    dbg.nospace() << "writeRawFiles("
+                  << inf.writeRawFiles << "), ";
+    dbg.nospace() << "updateFileTimeStamp("
+                  << inf.updateFileTimeStamp << "), ";
+    dbg.nospace() << "rescanImageIfModified("
+                  << inf.rescanImageIfModified << "), ";
+    dbg.nospace() << "clearMetadataIfRescan("
+                  << inf.clearMetadataIfRescan << "), ";
+    dbg.nospace() << "useXMPSidecar4Reading("
+                  << inf.useXMPSidecar4Reading << "), ";
+    dbg.nospace() << "useLazySync("
+                  << inf.useLazySync << "), ";
+    dbg.nospace() << "metadataWritingMode("
+                  << inf.metadataWritingMode << "), ";
+    dbg.nospace() << "rotationBehavior("
+                  << inf.rotationBehavior << "), ";
+    dbg.nospace() << "sidecarExtensions("
+                  << inf.sidecarExtensions << ")";
+
+    return dbg.space();
+}
+
 } // namespace Digikam

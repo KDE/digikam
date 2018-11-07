@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QFlags>
+#include <QDebug>
 
 // Local includes
 
@@ -109,6 +110,9 @@ public:
 
     QStringList                     sidecarExtensions;
 };
+
+//! qDebug() stream operator. Writes property @a inf to the debug output in a nicely formatted way.
+DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const MetaEngineSettingsContainer& inf);
 
 } // namespace Digikam
 
