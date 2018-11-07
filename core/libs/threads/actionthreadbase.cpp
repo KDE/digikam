@@ -184,6 +184,11 @@ bool ActionThreadBase::isEmpty() const
     return d->pending.isEmpty();
 }
 
+int ActionThreadBase::pendingCount() const
+{
+    return d->pending.count();
+}
+
 void ActionThreadBase::appendJobs(const ActionJobCollection& jobs)
 {
     QMutexLocker lock(&d->mutex);
