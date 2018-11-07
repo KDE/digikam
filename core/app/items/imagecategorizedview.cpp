@@ -719,6 +719,8 @@ void ImageCategorizedView::paintEvent(QPaintEvent* e)
         d->delegate->prepareThumbnails(thumbModel, indexesToThumbnail);
     }
 
+    qCWarning(DIGIKAM_GENERAL_LOG) << "ImageCategorizedView::paintEvent()" << QTime::currentTime();
+
     ItemViewCategorized::paintEvent(e);
 }
 
