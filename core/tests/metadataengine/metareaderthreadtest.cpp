@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2016-08-14
- * Description : An unit test to load metadata from images through multi-core threads.
+ * Description : An unit test to read or write metadata through multi-core threads.
  *
  * Copyright (C) 2016-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -41,12 +41,13 @@ class Q_DECL_HIDDEN Mytask : public ActionJob
 public:
 
     Mytask()
-        : ActionJob()
+        : ActionJob(),
+          direction(MetaReaderThread::READ_FROM_FILE)
     {
     }
 
-    QUrl    url;
-    QString direction;
+    QUrl                        url;
+    MetaReaderThread::Direction direction;
 
 protected:
 
@@ -60,7 +61,7 @@ protected:
         }
         else
         {
-            if (direction == QLatin1String("READ"))
+            if (direction == MetaReaderThread::READ_FROM_FILE)
             {
                  qDebug() << url.fileName() << " :: Dim: " << meta.getImageDimensions() 
                                             << " :: Dat: " << meta.getImageDateTime()
@@ -68,12 +69,12 @@ protected:
                                             << " :: Ori: " << meta.getImageOrientation()
                                             << " :: Col: " << meta.getImageColorWorkSpace();
             }
-            else
+            else // WRITE_TO_FILE
             {
                  qDebug() << "Patch file: " << url.fileName();
                  meta.setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
                  meta.applyChanges();
-            } 
+            }
         }
 
         emit signalDone();
@@ -88,7 +89,11 @@ MetaReaderThread::MetaReaderThread(QObject* const parent)
     setObjectName(QLatin1String("MetaReaderThread"));
 }
 
-void MetaReaderThread::readMetadata(const QList<QUrl>& list, const QString& direction)
+MetaReaderThread::~MetaReaderThread()
+{
+}
+
+void MetaReaderThread::readMetadata(const QList<QUrl>& list, Direction direction)
 {
     ActionJobCollection collection;
 
@@ -119,16 +124,21 @@ QTEST_MAIN(MetaReaderThreadTest)
 
 void MetaReaderThreadTest::testMetaReaderThread()
 {
+    readStage();
+}
+
+void MetaReaderThreadTest::readStage()
+{
     QString path = m_originalImageFolder;
     qDebug() << "Images path : " << path;
 
     QString filter;
     supportedImageMimeTypes(QIODevice::ReadOnly, filter);
-    QStringList mimeTypes = filter.split(QLatin1Char(' ')); 
+    QStringList mimeTypes = filter.split(QLatin1Char(' '));
 
     qDebug() << "Images filters : " << mimeTypes;
 
-    QString direction = QLatin1String("READ");
+    MetaReaderThread::Direction direction = MetaReaderThread::READ_FROM_FILE;
 
     QList<QUrl> list;
     QDirIterator it(path, mimeTypes,
@@ -164,3 +174,9 @@ void MetaReaderThreadTest::testMetaReaderThread()
     qDebug() << "Reading metadata from " << list.size()
              << " files took " << timer.elapsed()/1000.0 << " seconds";
 }
+
+void MetaReaderThreadTest::writeStage()
+{
+    // TODO
+}
+

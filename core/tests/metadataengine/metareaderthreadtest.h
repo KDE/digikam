@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2016-08-14
- * Description : An unit test to load metadata from images through multi-core threads.
+ * Description : An unit test to read or write metadata through multi-core threads.
  *
  * Copyright (C) 2016-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -44,10 +44,18 @@ class MetaReaderThread : public ActionThreadBase
 
 public:
 
-    explicit MetaReaderThread(QObject* const parent);
-    ~MetaReaderThread() {};
+    enum Direction
+    {
+        READ_FROM_FILE = 0,
+        WRITE_TO_FILE
+    };
 
-    void readMetadata(const QList<QUrl>& list, const QString& direction);
+public:
+
+    explicit MetaReaderThread(QObject* const parent);
+    ~MetaReaderThread();
+
+    void readMetadata(const QList<QUrl>& list, Direction direction);
 
 protected Q_SLOTS:
 
@@ -63,6 +71,11 @@ Q_SIGNALS:
 class MetaReaderThreadTest : public AbstractUnitTest
 {
     Q_OBJECT
+
+private:
+
+    void readStage();
+    void writeStage();
 
 private Q_SLOTS:
 
