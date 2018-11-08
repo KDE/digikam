@@ -32,7 +32,6 @@ set(libdmetadata_SRCS
     engine/metaengine_rotation.cpp
     engine/metaenginesettings.cpp
     engine/metaenginesettingscontainer.cpp
-    engine/geodetictools.cpp
     dmetadata/dmetadata.cpp
     dmetadata/dmetadata_video.cpp
     dmetadata/dmetadata_fileio.cpp
@@ -49,6 +48,7 @@ set(libdmetadata_SRCS
     dmetadata/dmetadata_xmp.cpp
     dmetadata/dmetadatasettings.cpp
     dmetadata/dmetadatasettingscontainer.cpp
+    dmetadata/geodetictools.cpp
     containers/metadatainfo.cpp
     containers/photoinfocontainer.cpp
     containers/videoinfocontainer.cpp
