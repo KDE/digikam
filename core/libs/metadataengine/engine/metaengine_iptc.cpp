@@ -34,6 +34,8 @@ namespace Digikam
 
 bool MetaEngine::canWriteIptc(const QString& filePath)
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
@@ -63,6 +65,8 @@ bool MetaEngine::hasIptc() const
 
 bool MetaEngine::clearIptc() const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         d->iptcMetadata().clear();
@@ -82,6 +86,8 @@ bool MetaEngine::clearIptc() const
 
 QByteArray MetaEngine::getIptc(bool addIrbHeader) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         if (!d->iptcMetadata().empty())
@@ -122,6 +128,8 @@ QByteArray MetaEngine::getIptc(bool addIrbHeader) const
 
 bool MetaEngine::setIptc(const QByteArray& data) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         if (!data.isEmpty())
@@ -151,6 +159,8 @@ MetaEngine::MetaDataMap MetaEngine::getIptcTagsDataList(const QStringList& iptcK
 {
     if (d->iptcMetadata().empty())
        return MetaDataMap();
+
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {
@@ -257,6 +267,8 @@ MetaEngine::MetaDataMap MetaEngine::getIptcTagsDataList(const QStringList& iptcK
 
 QString MetaEngine::getIptcTagTitle(const char* iptcTagName)
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         std::string iptckey(iptcTagName);
@@ -277,6 +289,8 @@ QString MetaEngine::getIptcTagTitle(const char* iptcTagName)
 
 QString MetaEngine::getIptcTagDescription(const char* iptcTagName)
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         std::string iptckey(iptcTagName);
@@ -297,6 +311,8 @@ QString MetaEngine::getIptcTagDescription(const char* iptcTagName)
 
 bool MetaEngine::removeIptcTag(const char* iptcTagName) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::IptcData::iterator it = d->iptcMetadata().begin();
@@ -337,6 +353,8 @@ bool MetaEngine::setIptcTagData(const char* iptcTagName, const QByteArray& data)
     if (data.isEmpty())
         return false;
 
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::DataValue val((Exiv2::byte *)data.data(), data.size());
@@ -357,6 +375,8 @@ bool MetaEngine::setIptcTagData(const char* iptcTagName, const QByteArray& data)
 
 QByteArray MetaEngine::getIptcTagData(const char* iptcTagName) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::IptcKey  iptcKey(iptcTagName);
@@ -387,6 +407,8 @@ QByteArray MetaEngine::getIptcTagData(const char* iptcTagName) const
 
 QString MetaEngine::getIptcTagString(const char* iptcTagName, bool escapeCR) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::IptcKey  iptcKey(iptcTagName);
@@ -420,6 +442,8 @@ QString MetaEngine::getIptcTagString(const char* iptcTagName, bool escapeCR) con
 
 bool MetaEngine::setIptcTagString(const char* iptcTagName, const QString& value) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         d->iptcMetadata()[iptcTagName] = std::string(value.toUtf8().constData());
@@ -442,6 +466,8 @@ bool MetaEngine::setIptcTagString(const char* iptcTagName, const QString& value)
 
 QStringList MetaEngine::getIptcTagsStringList(const char* iptcTagName, bool escapeCR) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         if (!d->iptcMetadata().empty())
@@ -481,15 +507,18 @@ QStringList MetaEngine::getIptcTagsStringList(const char* iptcTagName, bool esca
 }
 
 bool MetaEngine::setIptcTagsStringList(const char* iptcTagName, int maxSize,
-                                       const QStringList& oldValues, const QStringList& newValues) const
+                                       const QStringList& oldValues,
+                                       const QStringList& newValues) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         QStringList oldvals = oldValues;
         QStringList newvals = newValues;
 
         qCDebug(DIGIKAM_METAENGINE_LOG) << d->filePath.toLatin1().constData() << " : " << iptcTagName
-                 << " => " << newvals.join(QString::fromLatin1(",")).toLatin1().constData();
+                                        << " => " << newvals.join(QString::fromLatin1(",")).toLatin1().constData();
 
         // Remove all old values.
         Exiv2::IptcData iptcData(d->iptcMetadata());
@@ -545,6 +574,8 @@ bool MetaEngine::setIptcTagsStringList(const char* iptcTagName, int maxSize,
 
 QStringList MetaEngine::getIptcKeywords() const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         if (!d->iptcMetadata().empty())
@@ -563,7 +594,7 @@ QStringList MetaEngine::getIptcKeywords() const
                 }
             }
 
-            qCDebug(DIGIKAM_METAENGINE_LOG) << d->filePath << " ==> Read Iptc Keywords: " << keywords;
+            //qCDebug(DIGIKAM_METAENGINE_LOG) << d->filePath << " ==> Read Iptc Keywords: " << keywords;
 
             return keywords;
         }
@@ -582,6 +613,8 @@ QStringList MetaEngine::getIptcKeywords() const
 
 bool MetaEngine::setIptcKeywords(const QStringList& oldKeywords, const QStringList& newKeywords) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         QStringList oldkeys = oldKeywords;
@@ -642,6 +675,8 @@ bool MetaEngine::setIptcKeywords(const QStringList& oldKeywords, const QStringLi
 
 QStringList MetaEngine::getIptcSubjects() const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         if (!d->iptcMetadata().empty())
@@ -677,6 +712,8 @@ QStringList MetaEngine::getIptcSubjects() const
 
 bool MetaEngine::setIptcSubjects(const QStringList& oldSubjects, const QStringList& newSubjects) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         QStringList oldDef = oldSubjects;
@@ -732,6 +769,8 @@ bool MetaEngine::setIptcSubjects(const QStringList& oldSubjects, const QStringLi
 
 QStringList MetaEngine::getIptcSubCategories() const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         if (!d->iptcMetadata().empty())
@@ -767,6 +806,8 @@ QStringList MetaEngine::getIptcSubCategories() const
 
 bool MetaEngine::setIptcSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         QStringList oldkeys = oldSubCategories;
@@ -823,6 +864,8 @@ bool MetaEngine::setIptcSubCategories(const QStringList& oldSubCategories, const
 
 MetaEngine::TagsMap MetaEngine::getIptcTagsList() const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         QList<const Exiv2::DataSet*> tags;

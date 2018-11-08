@@ -60,6 +60,8 @@ bool MetaEngine::getGPSInfo(double& altitude, double& latitude, double& longitud
 
 bool MetaEngine::getGPSLatitudeNumber(double* const latitude) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         *latitude = 0.0;
@@ -140,6 +142,8 @@ bool MetaEngine::getGPSLatitudeNumber(double* const latitude) const
 
 bool MetaEngine::getGPSLongitudeNumber(double* const longitude) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         *longitude = 0.0;
@@ -224,6 +228,8 @@ bool MetaEngine::getGPSLongitudeNumber(double* const longitude) const
 
 bool MetaEngine::getGPSAltitude(double* const altitude) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         double num, den;
@@ -319,6 +325,8 @@ QString MetaEngine::getGPSLongitudeString() const
 
 bool MetaEngine::initializeGPSInfo()
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         // TODO: what happens if these already exist?
@@ -359,6 +367,8 @@ bool MetaEngine::setGPSInfo(const double altitude, const double latitude, const 
 
 bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude, const double longitude)
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         // In first, we need to clean up all existing GPS info.
@@ -496,6 +506,8 @@ bool MetaEngine::setGPSInfo(const double altitude, const QString& latitude, cons
 
 bool MetaEngine::removeGPSInfo()
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         QStringList gpsTagsKeys;

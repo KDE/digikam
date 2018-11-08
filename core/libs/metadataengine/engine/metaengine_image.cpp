@@ -40,6 +40,8 @@ namespace Digikam
 
 bool MetaEngine::setImageProgramId(const QString& program, const QString& version) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         QString software(program);
@@ -101,6 +103,8 @@ bool MetaEngine::setImageProgramId(const QString& program, const QString& versio
 
 QSize MetaEngine::getImageDimensions() const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         long width  = -1;
@@ -203,6 +207,8 @@ QSize MetaEngine::getImageDimensions() const
 
 bool MetaEngine::setImageDimensions(const QSize& size) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         // Set Exif values.
@@ -240,6 +246,8 @@ bool MetaEngine::setImageDimensions(const QSize& size) const
 
 MetaEngine::ImageOrientation MetaEngine::getImageOrientation() const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::ExifData exifData(d->exifMetadata());
@@ -260,7 +268,7 @@ MetaEngine::ImageOrientation MetaEngine::getImageOrientation() const
 
             if (ok)
             {
-                qCDebug(DIGIKAM_METAENGINE_LOG) << "Orientation => Xmp.tiff.Orientation =>" << (int)orientation;
+                //qCDebug(DIGIKAM_METAENGINE_LOG) << "Orientation => Xmp.tiff.Orientation =>" << (int)orientation;
                 return (ImageOrientation)orientation;
             }
         }
@@ -278,7 +286,7 @@ MetaEngine::ImageOrientation MetaEngine::getImageOrientation() const
         if (it != exifData.end() && it->count())
         {
             orientation = it->toLong();
-            qCDebug(DIGIKAM_METAENGINE_LOG) << "Orientation => Exif.MinoltaCs7D.Rotation =>" << (int)orientation;
+            //qCDebug(DIGIKAM_METAENGINE_LOG) << "Orientation => Exif.MinoltaCs7D.Rotation =>" << (int)orientation;
 
             switch(orientation)
             {
@@ -299,7 +307,7 @@ MetaEngine::ImageOrientation MetaEngine::getImageOrientation() const
         if (it != exifData.end() && it->count())
         {
             orientation = it->toLong();
-            qCDebug(DIGIKAM_METAENGINE_LOG) << "Orientation => Exif.MinoltaCs5D.Rotation =>" << (int)orientation;
+            //qCDebug(DIGIKAM_METAENGINE_LOG) << "Orientation => Exif.MinoltaCs5D.Rotation =>" << (int)orientation;
 
             switch(orientation)
             {
@@ -322,7 +330,7 @@ MetaEngine::ImageOrientation MetaEngine::getImageOrientation() const
         if (it != exifData.end() && it->count())
         {
             orientation = it->toLong();
-            qCDebug(DIGIKAM_METAENGINE_LOG) << "Orientation => Exif.Image.Orientation =>" << (int)orientation;
+            //qCDebug(DIGIKAM_METAENGINE_LOG) << "Orientation => Exif.Image.Orientation =>" << (int)orientation;
             return (ImageOrientation)orientation;
         }
 
@@ -341,6 +349,8 @@ MetaEngine::ImageOrientation MetaEngine::getImageOrientation() const
 
 bool MetaEngine::setImageOrientation(ImageOrientation orientation) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
@@ -493,6 +503,8 @@ MetaEngine::ImageColorWorkSpace MetaEngine::getImageColorWorkSpace() const
 
 bool MetaEngine::setImageColorWorkSpace(ImageColorWorkSpace workspace) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         // Set Exif value.
@@ -523,6 +535,8 @@ bool MetaEngine::setImageColorWorkSpace(ImageColorWorkSpace workspace) const
 
 QDateTime MetaEngine::getImageDateTime() const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         // In first, trying to get Date & time from Exif tags.
@@ -543,7 +557,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid())
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Exif.Photo.DateTimeOriginal =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Exif.Photo.DateTimeOriginal =>" << dateTime;
                     }
                 }
             }
@@ -558,7 +572,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Exif.Photo.DateTimeDigitized =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Exif.Photo.DateTimeDigitized =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -574,7 +588,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Exif.Image.DateTime =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Exif.Image.DateTime =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -599,7 +613,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.exif.DateTimeOriginal =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.exif.DateTimeOriginal =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -615,7 +629,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.exif.DateTimeDigitized =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.exif.DateTimeDigitized =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -631,7 +645,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.photoshop.DateCreated =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.photoshop.DateCreated =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -647,7 +661,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.xmp.CreateDate =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.xmp.CreateDate =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -663,7 +677,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.tiff.DateTime =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.tiff.DateTime =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -679,7 +693,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.xmp.ModifyDate =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.xmp.ModifyDate =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -695,7 +709,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.xmp.MetadataDate =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.xmp.MetadataDate =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -714,7 +728,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.video.DateTimeOriginal =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.video.DateTimeOriginal =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -730,7 +744,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.video.DateUTC =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.video.DateUTC =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -746,7 +760,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.video.ModificationDate =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.video.ModificationDate =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -762,7 +776,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.video.DateTimeDigitized =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.video.DateTimeDigitized =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -798,7 +812,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Iptc.Application2.DateCreated =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Iptc.Application2.DateCreated =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -825,7 +839,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 2)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Iptc.Application2.DigitizationDate =>" << dateTime;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Iptc.Application2.DigitizationDate =>" << dateTime;
                         return dateTime;
                     }
                 }
@@ -856,7 +870,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
             if (dateTime.isValid())
             {
-                qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => create date =>" << dateTime;
+                //qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => create date =>" << dateTime;
                 return dateTime;
             }
         }
@@ -877,6 +891,8 @@ bool MetaEngine::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDig
 {
     if (!dateTime.isValid())
         return false;
+
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {
@@ -953,6 +969,8 @@ bool MetaEngine::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDig
 
 QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         // In first, trying to get Date & time from Exif tags.
@@ -1104,6 +1122,8 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
 
 bool MetaEngine::getImagePreview(QImage& preview) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         // In first we trying to get from Iptc preview tag.
@@ -1133,6 +1153,8 @@ bool MetaEngine::setImagePreview(const QImage& preview) const
         removeIptcTag("Iptc.Application2.PreviewVersion");
         return true;
     }
+
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {

@@ -220,7 +220,7 @@ bool DMetadata::setIptcTag(const QString& text, int maxLength,
 {
     QString truncatedText = text;
     truncatedText.truncate(maxLength);
-    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
+    //qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
 
     return setIptcTagString(tagKey, truncatedText);    // returns false if failed
 }

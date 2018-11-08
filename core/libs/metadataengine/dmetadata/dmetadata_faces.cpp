@@ -259,8 +259,6 @@ void DMetadata::removeImageFacesMap()
                     QString(),
                     MetaEngine::StructureTag);
 
-    //removeXmpTag(qxmpStructName.toLatin1().constData());
-
     // Remove MP tags
 
     setXmpTagString(winQxmpTagName.toLatin1().constData(),
@@ -270,8 +268,6 @@ void DMetadata::removeImageFacesMap()
     setXmpTagString(winQxmpStructName.toLatin1().constData(),
                     QString(),
                     MetaEngine::StructureTag);
-
-   //removeXmpTag(winQxmpStructName.toLatin1().constData());
 }
 
 } // namespace Digikam

@@ -207,7 +207,7 @@ bool DMetadata::setImagePickLabel(int pickId) const
         return false;
     }
 
-    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Pick Label: " << pickId;
+    //qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Pick Label: " << pickId;
 
     if (supportXmp())
     {
@@ -228,7 +228,7 @@ bool DMetadata::setImageColorLabel(int colorId) const
         return false;
     }
 
-    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Color Label: " << colorId;
+    //qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Color Label: " << colorId;
 
     if (supportXmp())
     {
@@ -290,7 +290,7 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer& set
         return false;
     }
 
-    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Rating:" << rating;
+    //qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Rating:" << rating;
 
     QList<NamespaceEntry> toWrite = settings.getReadMapping(QString::fromUtf8(DM_RATING_CONTAINER));
 

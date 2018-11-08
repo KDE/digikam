@@ -35,6 +35,8 @@ namespace Digikam
 bool MetaEngine::canWriteXmp(const QString& filePath)
 {
 #ifdef _XMP_SUPPORT_
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
@@ -80,6 +82,7 @@ bool MetaEngine::hasXmp() const
 bool MetaEngine::clearXmp() const
 {
 #ifdef _XMP_SUPPORT_
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {
@@ -103,6 +106,7 @@ bool MetaEngine::clearXmp() const
 QByteArray MetaEngine::getXmp() const
 {
 #ifdef _XMP_SUPPORT_
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {
@@ -134,6 +138,7 @@ QByteArray MetaEngine::getXmp() const
 bool MetaEngine::setXmp(const QByteArray& data) const
 {
 #ifdef _XMP_SUPPORT_
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {
@@ -175,6 +180,8 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
 
     if (d->xmpMetadata().empty())
        return MetaDataMap();
+
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {
@@ -289,6 +296,7 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
 QString MetaEngine::getXmpTagTitle(const char* xmpTagName)
 {
 #ifdef _XMP_SUPPORT_
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {

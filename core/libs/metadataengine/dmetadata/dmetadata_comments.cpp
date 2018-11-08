@@ -155,7 +155,7 @@ bool DMetadata::setItemComments(const CaptionsMap& comments, const DMetadataSett
           return false;
 */
 
-    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Comment: " << comments;
+    //qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Comment: " << comments;
 
     // In first, set captions properties to digiKam XMP namespace
 
@@ -333,7 +333,7 @@ CaptionsMap DMetadata::getImageTitles() const
 
 bool DMetadata::setImageTitles(const CaptionsMap& titles) const
 {
-    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Title: " << titles;
+    //qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Title: " << titles;
 
     QString defaultTitle = titles[QLatin1String("x-default")].caption;
 

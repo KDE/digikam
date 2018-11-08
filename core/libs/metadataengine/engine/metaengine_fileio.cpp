@@ -94,6 +94,8 @@ bool MetaEngine::load(const QString& filePath)
     d->filePath      = filePath;
     bool hasLoaded   = false;
 
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::Image::AutoPtr image;

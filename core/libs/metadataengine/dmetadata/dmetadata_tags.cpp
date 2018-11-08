@@ -122,7 +122,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath,
                     if (ntp != tagsPath)
                     {
                         tagsPath = ntp;
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "Tags Path imported from Imach: " << tagsPath;
+                        //qCDebug(DIGIKAM_METAENGINE_LOG) << "Tags Path imported from Imach: " << tagsPath;
                     }
 
                     return true;
@@ -270,7 +270,7 @@ bool DMetadata::getACDSeeTagsPath(QStringList &tagsPath) const
         QStringList xmlTags = xmlACDSee.split(QLatin1String("<Category Assigned"));
         int category        = 0;
 
-        foreach(const QString& tags, xmlTags)
+        foreach (const QString& tags, xmlTags)
         {
             if (!tags.isEmpty())
             {
@@ -297,7 +297,7 @@ bool DMetadata::getACDSeeTagsPath(QStringList &tagsPath) const
 
         if (!tagsPath.isEmpty())
         {
-            qCDebug(DIGIKAM_METAENGINE_LOG) << "Tags Path imported from ACDSee: " << tagsPath;
+            //qCDebug(DIGIKAM_METAENGINE_LOG) << "Tags Path imported from ACDSee: " << tagsPath;
             return true;
         }
     }
@@ -356,7 +356,9 @@ bool DMetadata::setACDSeeTagsPath(const QStringList &tagsPath) const
     }
 
     QString xmlACDSee = QLatin1String("<Categories>") + xmlTags.join(QLatin1String("")) + QLatin1String("</Categories>");
-    qCDebug(DIGIKAM_METAENGINE_LOG) << "xmlACDSee" << xmlACDSee;
+
+    //qCDebug(DIGIKAM_METAENGINE_LOG) << "xmlACDSee" << xmlACDSee;
+
     removeXmpTag("Xmp.acdsee.categories");
 
     if (!xmlTags.isEmpty())

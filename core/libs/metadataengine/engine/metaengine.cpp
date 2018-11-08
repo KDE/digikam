@@ -166,6 +166,7 @@ MetaEngineData MetaEngine::data() const
 {
     MetaEngineData data;
     data.d = d->data;
+
     return data;
 }
 
@@ -187,6 +188,8 @@ bool MetaEngine::loadFromData(const QByteArray& imgData)
 {
     if (imgData.isEmpty())
         return false;
+
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {

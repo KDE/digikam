@@ -49,19 +49,32 @@ public:
 
     void load(Exiv2::Image::AutoPtr image_)
     {
-        image                              = image_;
+        QMutexLocker lock(&s_metaEngineMutex);
 
-        image->readMetadata();
-
-        manager                            = new Exiv2::PreviewManager(*image);
-        Exiv2::PreviewPropertiesList props = manager->getPreviewProperties();
-
-        // reverse order of list, which is smallest-first
-        Exiv2::PreviewPropertiesList::reverse_iterator it;
-
-        for (it = props.rbegin() ; it != props.rend() ; ++it)
+        try
         {
-            properties << *it;
+            image                              = image_;
+
+            image->readMetadata();
+
+            manager                            = new Exiv2::PreviewManager(*image);
+            Exiv2::PreviewPropertiesList props = manager->getPreviewProperties();
+
+            // reverse order of list, which is smallest-first
+            Exiv2::PreviewPropertiesList::reverse_iterator it;
+
+            for (it = props.rbegin() ; it != props.rend() ; ++it)
+            {
+                properties << *it;
+            }
+        }
+        catch( Exiv2::Error& e )
+        {
+            MetaEngine::Private::printExiv2ExceptionError(QLatin1String("Cannot load preview data using Exiv2 "), e);
+        }
+        catch(...)
+        {
+            qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
         }
     }
 
@@ -75,6 +88,8 @@ public:
 MetaEnginePreviews::MetaEnginePreviews(const QString& filePath)
     : d(new Private)
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath).constData()));
@@ -93,6 +108,8 @@ MetaEnginePreviews::MetaEnginePreviews(const QString& filePath)
 MetaEnginePreviews::MetaEnginePreviews(const QByteArray& imgData)
     : d(new Private)
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((Exiv2::byte*)imgData.data(), imgData.size());
@@ -180,6 +197,8 @@ QByteArray MetaEnginePreviews::data(int index)
 
     qCDebug(DIGIKAM_METAENGINE_LOG) << "index: "         << index;
     qCDebug(DIGIKAM_METAENGINE_LOG) << "d->properties: " << count();
+
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {

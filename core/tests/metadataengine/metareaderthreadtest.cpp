@@ -30,7 +30,6 @@
 #include <QApplication>
 #include <QSignalSpy>
 #include <QElapsedTimer>
-#include <QMutexLocker>
 #include <QScopedPointer>
 #include <QSettings>
 
@@ -38,9 +37,6 @@
 
 #include "dmetadata.h"
 #include "digikam_globals.h"
-
-// Exiv2 API are not re-entrant. So it's a critical section to protect.
-QMutex s_mutex;
 
 class Q_DECL_HIDDEN Mytask : public ActionJob
 {
@@ -63,8 +59,6 @@ protected:
         qDebug() << "Processing file: " << url;
 
         {
-            QMutexLocker lock(&s_mutex);
-
             QScopedPointer<DMetadata> meta(new DMetadata);
             meta->setSettings(settings);
 
@@ -191,7 +185,7 @@ void MetaReaderThreadTest::testMetaReaderThread()
         path = m_originalImageFolder;
     }
 
-    MetaReaderThread::Direction direction = useConf ? 
+    MetaReaderThread::Direction direction = useConf ?
                                             (MetaReaderThread::Direction)conf.value(QLatin1String("Direction"), (int)MetaReaderThread::NOT_DEFINED).toInt()
                                             : MetaReaderThread::NOT_DEFINED;
 
@@ -245,6 +239,6 @@ void MetaReaderThreadTest::runMetaReader(const QString& path,
              <<         "    Root path          :" << path                                           << endl
              <<         "    Number of files    :" << list.size()                                    << endl
              <<         "    Direction          :" << MetaReaderThread::directionToString(direction) << endl
-             <<         "    Type-mimes         :" << mimeTypes                                      << endl
+             <<         "    Type-mimes         :" << mimeTypes.join(QLatin1Char(' '))               << endl
              <<         "    Engine settings    :" << settings                                       << endl;
 }

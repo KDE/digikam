@@ -61,9 +61,15 @@ extern "C"
 namespace Digikam
 {
 
+/** This mutex is used to protect all Exiv2 API calls when MetaEngine is used with multi-threads.
+ */
+QMutex s_metaEngineMutex(QMutex::Recursive);
+
 MetaEngine::Private::Private()
     : data(new MetaEngineData::Private)
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     writeRawFiles         = false;
     updateFileTimeStamp   = false;
     useXMPSidecar4Reading = false;
@@ -78,6 +84,8 @@ MetaEngine::Private::~Private()
 
 void MetaEngine::Private::copyPrivateData(const Private* const other)
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     data                  = other->data;
     filePath              = other->filePath;
     writeRawFiles         = other->writeRawFiles;
@@ -94,6 +102,8 @@ bool MetaEngine::Private::saveToXMPSidecar(const QFileInfo& finfo) const
     {
         return false;
     }
+
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {
@@ -177,6 +187,8 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
     bool ret = false;
 */
 
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::Image::AutoPtr image;
@@ -197,6 +209,8 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
 
 bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoPtr image) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::AccessMode mode;
@@ -382,6 +396,8 @@ void MetaEngine::Private::printExiv2MessageHandler(int lvl, const char* msg)
 
 QString MetaEngine::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         std::string comment;
@@ -618,6 +634,8 @@ int MetaEngine::Private::getXMPTagsListFromPrefix(const QString& pf, MetaEngine:
     int i = 0;
 
 #ifdef _XMP_SUPPORT_
+
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {

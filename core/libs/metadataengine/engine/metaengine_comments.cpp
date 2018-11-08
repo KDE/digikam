@@ -34,6 +34,8 @@ namespace Digikam
 
 bool MetaEngine::canWriteComment(const QString& filePath)
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)

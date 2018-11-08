@@ -55,7 +55,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     MetaEngine::AltLangMap rightUsage = t.rightUsageTerms();
     QString instructions              = t.instructions();
 
-    qCDebug(DIGIKAM_METAENGINE_LOG) << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
+    //qCDebug(DIGIKAM_METAENGINE_LOG) << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
 
     // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
 
@@ -168,7 +168,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     QStringList list = t.IptcSubjects();
     QStringList newList;
 
-    foreach(QString str, list) // krazy:exclude=foreach
+    foreach (QString str, list) // krazy:exclude=foreach
     {
         if (str.startsWith(QLatin1String("XMP")))
         {

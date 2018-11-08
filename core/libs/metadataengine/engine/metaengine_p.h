@@ -46,6 +46,7 @@
 #include <QLatin1String>
 #include <QFileInfo>
 #include <QSharedData>
+#include <QMutexLocker>
 
 // Exiv2 includes -------------------------------------------------------
 
@@ -96,6 +97,8 @@
 
 namespace Digikam
 {
+
+extern QMutex s_metaEngineMutex;
 
 class Q_DECL_HIDDEN MetaEngineData::Private : public QSharedData
 {

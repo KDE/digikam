@@ -45,6 +45,8 @@ namespace Digikam
 
 bool MetaEngine::canWriteExif(const QString& filePath)
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
@@ -75,6 +77,8 @@ bool MetaEngine::hasExif() const
 
 bool MetaEngine::clearExif() const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         d->exifMetadata().clear();
@@ -94,6 +98,8 @@ bool MetaEngine::clearExif() const
 
 QByteArray MetaEngine::getExifEncoded(bool addExifHeader) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         if (!d->exifMetadata().empty())
@@ -136,6 +142,8 @@ QByteArray MetaEngine::getExifEncoded(bool addExifHeader) const
 
 bool MetaEngine::setExif(const QByteArray& data) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         if (!data.isEmpty())
@@ -159,9 +167,10 @@ bool MetaEngine::setExif(const QByteArray& data) const
     return false;
 }
 
-
 QString MetaEngine::getExifComment(bool readDescription) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         if (!d->exifMetadata().empty())
@@ -232,6 +241,8 @@ static bool is7BitAscii(const QByteArray& s)
 
 bool MetaEngine::setExifComment(const QString& comment, bool writeDescription) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         if (writeDescription)
@@ -284,6 +295,8 @@ bool MetaEngine::setExifComment(const QString& comment, bool writeDescription) c
 
 QString MetaEngine::getExifTagTitle(const char* exifTagName)
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         std::string exifkey(exifTagName);
@@ -305,6 +318,8 @@ QString MetaEngine::getExifTagTitle(const char* exifTagName)
 
 QString MetaEngine::getExifTagDescription(const char* exifTagName)
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         std::string exifkey(exifTagName);
@@ -326,6 +341,8 @@ QString MetaEngine::getExifTagDescription(const char* exifTagName)
 
 bool MetaEngine::removeExifTag(const char* exifTagName) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
@@ -351,6 +368,8 @@ bool MetaEngine::removeExifTag(const char* exifTagName) const
 
 bool MetaEngine::getExifTagRational(const char* exifTagName, long int& num, long int& den, int component) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
@@ -380,6 +399,8 @@ bool MetaEngine::getExifTagRational(const char* exifTagName, long int& num, long
 
 bool MetaEngine::setExifTagLong(const char* exifTagName, long val) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         d->exifMetadata()[exifTagName] = static_cast<int32_t>(val);     // krazy:exclude=typedefs
@@ -399,6 +420,8 @@ bool MetaEngine::setExifTagLong(const char* exifTagName, long val) const
 
 bool MetaEngine::setExifTagRational(const char* exifTagName, long int num, long int den) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         d->exifMetadata()[exifTagName] = Exiv2::Rational(num, den);
@@ -420,6 +443,8 @@ bool MetaEngine::setExifTagData(const char* exifTagName, const QByteArray& data)
 {
     if (data.isEmpty())
         return false;
+
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {
@@ -519,6 +544,8 @@ bool MetaEngine::setExifTagVariant(const char* exifTagName, const QVariant& val,
 
 QString MetaEngine::createExifUserStringFromValue(const char* exifTagName, const QVariant& val, bool escapeCR)
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::ExifKey key(exifTagName);
@@ -617,6 +644,8 @@ bool MetaEngine::getExifTagLong(const char* exifTagName, long& val) const
 
 bool MetaEngine::getExifTagLong(const char* exifTagName, long& val, int component) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
@@ -645,6 +674,8 @@ bool MetaEngine::getExifTagLong(const char* exifTagName, long& val, int componen
 
 QByteArray MetaEngine::getExifTagData(const char* exifTagName) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
@@ -676,6 +707,8 @@ QByteArray MetaEngine::getExifTagData(const char* exifTagName) const
 
 QVariant MetaEngine::getExifTagVariant(const char* exifTagName, bool rationalAsListOfInts, bool stringEscapeCR, int component) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
@@ -770,6 +803,8 @@ QVariant MetaEngine::getExifTagVariant(const char* exifTagName, bool rationalAsL
 
 QString MetaEngine::getExifTagString(const char* exifTagName, bool escapeCR) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
@@ -814,6 +849,8 @@ QString MetaEngine::getExifTagString(const char* exifTagName, bool escapeCR) con
 
 bool MetaEngine::setExifTagString(const char* exifTagName, const QString& value) const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         d->exifMetadata()[exifTagName] = std::string(value.toLatin1().constData());
@@ -839,6 +876,8 @@ QImage MetaEngine::getExifThumbnail(bool fixOrientation) const
     if (d->exifMetadata().empty())
        return thumbnail;
 
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         Exiv2::ExifThumbC thumb(d->exifMetadata());
@@ -862,7 +901,7 @@ QImage MetaEngine::getExifThumbnail(bool fixOrientation) const
                 if (it != exifData.end() && it->count())
                 {
                     long orientation = it->toLong();
-                    qCDebug(DIGIKAM_METAENGINE_LOG) << "Exif Thumbnail Orientation: " << (int)orientation;
+                    //qCDebug(DIGIKAM_METAENGINE_LOG) << "Exif Thumbnail Orientation: " << (int)orientation;
                     rotateExifQImage(thumbnail, (ImageOrientation)orientation);
                 }
 
@@ -902,6 +941,8 @@ bool MetaEngine::setExifThumbnail(const QImage& thumbImage) const
         return removeExifThumbnail();
     }
 
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         QByteArray data;
@@ -929,6 +970,8 @@ bool MetaEngine::setExifThumbnail(const QImage& thumbImage) const
 bool MetaEngine::setTiffThumbnail(const QImage& thumbImage) const
 {
     removeExifThumbnail();
+
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {
@@ -994,6 +1037,8 @@ bool MetaEngine::setTiffThumbnail(const QImage& thumbImage) const
 
 bool MetaEngine::removeExifThumbnail() const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         // Remove all IFD0 subimages.
@@ -1018,6 +1063,8 @@ MetaEngine::MetaDataMap MetaEngine::getExifTagsDataList(const QStringList& exifK
 {
     if (d->exifMetadata().empty())
        return MetaDataMap();
+
+    QMutexLocker lock(&s_metaEngineMutex);
 
     try
     {
@@ -1095,6 +1142,8 @@ MetaEngine::MetaDataMap MetaEngine::getExifTagsDataList(const QStringList& exifK
 
 MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         QList<const Exiv2::TagInfo*> tags;
@@ -1156,6 +1205,8 @@ MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const
 
 MetaEngine::TagsMap MetaEngine::getMakernoteTagsList() const
 {
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         QList<const Exiv2::TagInfo*> tags;
