@@ -28,6 +28,7 @@
 
 #include <QList>
 #include <QUrl>
+#include <QMap>
 
 // Local includes
 
@@ -37,6 +38,7 @@
 #include "actionthreadbase.h"
 
 using namespace Digikam;
+
 
 class MetaReaderThread : public ActionThreadBase
 {
@@ -60,15 +62,47 @@ public:
                       Direction direction,
                       const MetaEngineSettingsContainer& settings);
 
+    QString stats(const QStringList& mimeTypes);
+
     static QString directionToString(Direction direction);
 
 protected Q_SLOTS:
 
     void slotJobFinished();
+    void slotStats(const QString& mt, bool p);
 
 Q_SIGNALS:
 
     void done();
+
+private:
+
+    QMap<QString, bool> m_stats;     // Map of type-mime, and file processed.
+};
+
+// -------------------------------------------------------------------------
+
+class Mytask : public ActionJob
+{
+    Q_OBJECT
+
+public:
+
+    Mytask();
+
+public:
+
+    QUrl                        url;
+    MetaReaderThread::Direction direction;
+    MetaEngineSettingsContainer settings;
+
+protected:
+
+    void run();
+
+Q_SIGNALS:
+
+    void signalStats(const QString&, bool);
 };
 
 // -------------------------------------------------------------------------

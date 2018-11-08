@@ -38,66 +38,56 @@
 #include "dmetadata.h"
 #include "digikam_globals.h"
 
-class Q_DECL_HIDDEN Mytask : public ActionJob
+Mytask::Mytask()
+    : ActionJob(),
+      direction(MetaReaderThread::READ_FROM_FILE)
 {
-public:
+}
 
-    Mytask()
-        : ActionJob(),
-          direction(MetaReaderThread::READ_FROM_FILE)
+void Mytask::run()
+{
+    qDebug() << "Processing:" << url;
+
     {
-    }
+        QScopedPointer<DMetadata> meta(new DMetadata);
+        meta->setSettings(settings);
+        bool processed = false;
 
-    QUrl                        url;
-    MetaReaderThread::Direction direction;
-    MetaEngineSettingsContainer settings;
-
-protected:
-
-    void run()
-    {
-        qDebug() << "Processing file: " << url;
-
+        if (meta->load(url.toLocalFile()))
         {
-            QScopedPointer<DMetadata> meta(new DMetadata);
-            meta->setSettings(settings);
+            // NOTE : only process data here without to generate debug statements
 
-            if (!meta->load(url.toLocalFile()))
+            if (direction == MetaReaderThread::READ_FROM_FILE)
             {
-                // TODO handle this case with stats
+                // Get most important info used to populate the database
+                meta->getImageDimensions();
+                meta->getImageTitles();
+                meta->getCreatorContactInfo();
+                meta->getIptcCoreLocation();
+                meta->getIptcCoreSubjects();
+                meta->getPhotographInformation();
+                meta->getVideoInformation();
+                meta->getXmpKeywords();
+                meta->getXmpSubjects();
+                meta->getXmpSubCategories();
             }
-            else
+            else // WRITE_TO_FILE
             {
-                // NOTE : only process data here without to generate debug statements
+                // Just patch file with this info which will touch Exif, Iptc, and Xmp metadata
+                meta->setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
+                meta->applyChanges();
+            }
 
-                if (direction == MetaReaderThread::READ_FROM_FILE)
-                {
-                    // Get most important info used to populate the database
-                    meta->getImageDimensions();
-                    meta->getImageTitles();
-                    meta->getCreatorContactInfo();
-                    meta->getIptcCoreLocation();
-                    meta->getIptcCoreSubjects();
-                    meta->getPhotographInformation();
-                    meta->getVideoInformation();
-                    meta->getXmpKeywords();
-                    meta->getXmpSubjects();
-                    meta->getXmpSubCategories();
-                }
-                else // WRITE_TO_FILE
-                {
-                    // Just patch file with this info which will touch Exif, Iptc, and Xmp metadata
-                    meta->setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
-                    meta->applyChanges();
-                }
-            }
+            processed = true;
         }
 
-        qDebug() << "Processed file: " << url;
-
-        emit signalDone();
+        emit signalStats(QFileInfo(url.path()).suffix(), processed);
     }
-};
+
+    qDebug() << "Processed:" << url;
+
+    emit signalDone();
+}
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -130,9 +120,17 @@ void MetaReaderThread::readMetadata(const QList<QUrl>& list,
         job->direction    = direction;
         job->settings     = settings;
         collection.insert(job, 0);
+
+        connect(job, SIGNAL(signalStats(QString,bool)),
+                this, SLOT(slotStats(QString,bool)));
     }
 
     appendJobs(collection);
+}
+
+void MetaReaderThread::slotStats(const QString& mt, bool p)
+{
+    m_stats.insertMulti(mt, p);
 }
 
 void MetaReaderThread::slotJobFinished()
@@ -143,6 +141,22 @@ void MetaReaderThread::slotJobFinished()
 
     if (isEmpty())
         emit done();
+}
+
+QString MetaReaderThread::stats(const QStringList& mimeTypes)
+{
+    QString out;
+
+    foreach (QString mt, mimeTypes)
+    {
+        mt.remove(QLatin1String("*."));
+        int count  = m_stats.count(mt);
+
+        if (count != 0)
+            out.append(QString::fromLatin1("%1(%2) ").arg(mt).arg(count));
+    }
+
+    return out;
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -231,14 +245,15 @@ void MetaReaderThreadTest::runMetaReader(const QString& path,
 
     QVERIFY(spy.wait(3*1000*1000));  // Time-out in milliseconds
 
-    thread->cancel();
-    delete thread;
-
     qDebug() << endl << "MetaReader have been completed:"                                            << endl
              <<         "    Processing duration:" << timer.elapsed() / 1000.0 << " seconds"         << endl
              <<         "    Root path          :" << path                                           << endl
              <<         "    Number of files    :" << list.size()                                    << endl
              <<         "    Direction          :" << MetaReaderThread::directionToString(direction) << endl
              <<         "    Type-mimes         :" << mimeTypes.join(QLatin1Char(' '))               << endl
-             <<         "    Engine settings    :" << settings                                       << endl;
+             <<         "    Engine settings    :" << settings                                       << endl
+             <<         "    Statistics         :" << thread->stats(mimeTypes)                       << endl;
+
+    thread->cancel();
+    delete thread;
 }
