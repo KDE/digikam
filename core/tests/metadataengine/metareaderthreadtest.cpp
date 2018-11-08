@@ -170,7 +170,13 @@ void MetaReaderThreadTest::testMetaReaderThread()
 
     QSettings conf(QLatin1String("MetaReaderThreadTest"));
     qDebug() << "Read configuration from" << conf.fileName();
-    qDebug() << conf.allKeys();
+
+    if (!QFileInfo(conf.fileName()).exists())
+    {
+        qDebug() << "Configuration file do not exists.";
+        qDebug() << "You can customize this unit-test to copy the template file from";
+        qDebug() << m_originalImageFolder << "to your home directory...";
+    }
 
     bool useConf    = conf.value(QLatin1String("Enable"), 0).toInt();
 
@@ -178,6 +184,8 @@ void MetaReaderThreadTest::testMetaReaderThread()
     {
         qDebug() << "We will use configuration file with this unit-test...";
     }
+
+    int threadsToUse = useConf ? conf.value(QLatin1String("ThreadsToUse"), 0).toInt() : 0;
 
     QString filters = useConf ? conf.value(QLatin1String("Filters"), QString()).toString() : QString();
 
@@ -208,13 +216,14 @@ void MetaReaderThreadTest::testMetaReaderThread()
         direction = MetaReaderThread::READ_FROM_FILE;
     }
 
-    runMetaReader(path, mimeTypes, direction, settings);
+    runMetaReader(path, mimeTypes, direction, settings, threadsToUse);
 }
 
 void MetaReaderThreadTest::runMetaReader(const QString& path,
                                          const QStringList& mimeTypes,
                                          MetaReaderThread::Direction direction,
-                                         const MetaEngineSettingsContainer& settings)
+                                         const MetaEngineSettingsContainer& settings,
+                                         int threadsToUse)
 {
     qDebug() << "-- Start to process" << path << "------------------------------";
 
@@ -237,6 +246,10 @@ void MetaReaderThreadTest::runMetaReader(const QString& path,
 
     MetaReaderThread* const thread = new MetaReaderThread(this);
     thread->readMetadata(list, direction, settings);
+
+    if (threadsToUse > 0)
+        thread->setMaximumNumberOfThreads(threadsToUse);
+
     QSignalSpy spy(thread, SIGNAL(done()));
     QElapsedTimer timer;
     timer.start();

@@ -116,7 +116,8 @@ private:
     void runMetaReader(const QString& path,
                        const QStringList& mimeTypes,
                        MetaReaderThread::Direction direction,
-                       const MetaEngineSettingsContainer& settings);
+                       const MetaEngineSettingsContainer& settings,
+                       int threadsToUse);
 
 private Q_SLOTS:
 
