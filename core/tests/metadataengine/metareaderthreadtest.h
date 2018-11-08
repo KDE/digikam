@@ -46,8 +46,9 @@ public:
 
     enum Direction
     {
+        NOT_DEFINED    = -1,
         READ_FROM_FILE = 0,
-        WRITE_TO_FILE
+        WRITE_TO_FILE  = 1
     };
 
 public:

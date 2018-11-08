@@ -32,6 +32,7 @@
 #include <QElapsedTimer>
 #include <QMutexLocker>
 #include <QScopedPointer>
+#include <QSettings>
 
 // Local includes
 
@@ -156,18 +157,42 @@ QTEST_MAIN(MetaReaderThreadTest)
 
 void MetaReaderThreadTest::testMetaReaderThread()
 {
-    QString filter;
-    supportedImageMimeTypes(QIODevice::ReadOnly, filter);
-    QStringList mimeTypes          = filter.split(QLatin1Char(' '));
+    // Read configuration from ./data/MetaReaderThreadTest.ini
+
+    QSettings conf(m_originalImageFolder + QLatin1String("MetaReaderThreadTest"));
+
+    bool useConf = conf.value(QLatin1String("Enable"), false).toBool();
+
+    QString filters = useConf ? conf.value(QLatin1String("Filters"), QString()).toString() : QString();
+
+    if (filters.isEmpty())
+    {
+        supportedImageMimeTypes(QIODevice::ReadOnly, filters);
+    }
+
+    QStringList mimeTypes          = filters.split(QLatin1Char(' '));
 
     MetaEngineSettingsContainer settings;
     settings.useXMPSidecar4Reading = false;
     settings.metadataWritingMode   = DMetadata::WRITE_TO_SIDECAR_ONLY;
 
-    QString path = m_originalImageFolder;
-//    QString path = QLatin1String("/mnt/data/photos/");
+    QString path = useConf ? conf.value(QLatin1String("Path"), QString()).toString() : QString();
 
-    runMetaReader(path, mimeTypes, MetaReaderThread::READ_FROM_FILE, settings);
+    if (path.isEmpty())
+    {
+        path = m_originalImageFolder;
+    }
+
+    MetaReaderThread::Direction direction = useConf ? 
+                                            (MetaReaderThread::Direction)conf.value(QLatin1String("Direction"), (int)MetaReaderThread::NOT_DEFINED).toInt()
+                                            : MetaReaderThread::NOT_DEFINED;
+
+    if (direction == MetaReaderThread::NOT_DEFINED)
+    {
+        direction = MetaReaderThread::READ_FROM_FILE;
+    }
+
+    runMetaReader(path, mimeTypes, direction, settings);
 }
 
 void MetaReaderThreadTest::runMetaReader(const QString& path,
@@ -202,16 +227,16 @@ void MetaReaderThreadTest::runMetaReader(const QString& path,
 
     thread->start();
 
-    QVERIFY(spy.wait(3000000));
+    QVERIFY(spy.wait(3*1000*1000));  // Time-out in milliseconds
 
     thread->cancel();
     delete thread;
 
-    qDebug() << endl << "MetaReader have been completed:" << endl
-             << "    Processing duration:" << timer.elapsed() / 1000.0 << " seconds" << endl
-             << "    Root path          :" << path << endl
-             << "    Number of files    :" << list.size() << endl
-             << "    Direction          :" << MetaReaderThread::directionToString(direction) << endl
-             << "    Type-mimes         :" << mimeTypes << endl
-             << "    Engine settings    :" << settings << endl;
+    qDebug() << endl << "MetaReader have been completed:"                                            << endl
+             <<         "    Processing duration:" << timer.elapsed() / 1000.0 << " seconds"         << endl
+             <<         "    Root path          :" << path                                           << endl
+             <<         "    Number of files    :" << list.size()                                    << endl
+             <<         "    Direction          :" << MetaReaderThread::directionToString(direction) << endl
+             <<         "    Type-mimes         :" << mimeTypes                                      << endl
+             <<         "    Engine settings    :" << settings                                       << endl;
 }
