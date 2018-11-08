@@ -157,11 +157,17 @@ QTEST_MAIN(MetaReaderThreadTest)
 
 void MetaReaderThreadTest::testMetaReaderThread()
 {
-    // Read configuration from ./data/MetaReaderThreadTest.ini
+    // Read configuration from ~/.config/MetaReaderThreadTest.conf
+    // Template file can be found at core/tests/metadataengine/data/
 
-    QSettings conf(m_originalImageFolder + QLatin1String("MetaReaderThreadTest"));
+    QSettings conf(QLatin1String("MetaReaderThreadTest"));
+    qDebug() << "Read configuration from" << conf.fileName();
+    qDebug() << conf.allKeys();
 
-    bool useConf = conf.value(QLatin1String("Enable"), false).toBool();
+    qDebug() << conf.contains(QLatin1String("Enable"));
+    bool useConf    = conf.value(QLatin1String("Enable"), 0).toInt();
+
+    qDebug() << "We will use configuration file with this unit-test...";
 
     QString filters = useConf ? conf.value(QLatin1String("Filters"), QString()).toString() : QString();
 
