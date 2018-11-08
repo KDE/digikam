@@ -152,6 +152,9 @@ public:
     SpecialOptions secondNameOpts;
 };
 
+//! qDebug() stream operator. Writes property @a inf to the debug output in a nicely formatted way.
+DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const NamespaceEntry& inf);
+
 /**
  * The class DMetadataSettingsContainer is designed to dynamically add namespaces.
  */
@@ -199,10 +202,10 @@ private:
     class Private;
     Private* d;
 };
-/*
+
 //! qDebug() stream operator. Writes property @a inf to the debug output in a nicely formatted way.
 DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const DMetadataSettingsContainer& inf);
-*/
+
 } // namespace Digikam
 
 #endif // DIGIKAM_DMETADATA_SETTINGS_CONTAINER_H

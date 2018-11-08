@@ -41,6 +41,36 @@ bool dmcompare(NamespaceEntry& e1, NamespaceEntry e2)
     return  e1.index < e2.index;
 }
 
+QDebug operator<<(QDebug dbg, const NamespaceEntry& inf)
+{
+    dbg.nospace() << "[NamespaceEntry] nsType("
+                  << inf.nsType << "), ";
+    dbg.nospace() << "subspace("
+                  << inf.subspace << "), ";
+    dbg.nospace() << "isDefault("
+                  << inf.isDefault << "), ";
+    dbg.nospace() << "isDisabled("
+                  << inf.isDisabled << "), ";
+    dbg.nospace() << "index("
+                  << inf.index << "), ";
+    dbg.nospace() << "namespaceName("
+                  << inf.namespaceName << "), ";
+    dbg.nospace() << "alternativeName("
+                  << inf.alternativeName << "), ";
+    dbg.nospace() << "tagPaths("
+                  << inf.tagPaths << "), ";
+    dbg.nospace() << "separator("
+                  << inf.separator << "), ";
+    dbg.nospace() << "convertRatio("
+                  << inf.convertRatio << "), ";
+    dbg.nospace() << "specialOpts("
+                  << inf.specialOpts << "), ";
+    dbg.nospace() << "secondNameOpts("
+                  << inf.secondNameOpts << ")";
+
+    return dbg.space();
+}
+    
 // -------------------------------------------------------------------------------------------------
 
 class Q_DECL_HIDDEN DMetadataSettingsContainer::Private
@@ -438,7 +468,7 @@ void DMetadataSettingsContainer::writeOneGroup(KConfigGroup& group, const QStrin
         tmp.writeEntry("isDefault",       e.isDefault);
     }
 }
-/*
+
 QDebug operator<<(QDebug dbg, const DMetadataSettingsContainer& inf)
 {
     dbg.nospace() << "[DMetadataSettingsContainer] readMappings(";
@@ -460,5 +490,5 @@ QDebug operator<<(QDebug dbg, const DMetadataSettingsContainer& inf)
 
     return dbg.space();
 }
-*/
+
 } // namespace Digikam

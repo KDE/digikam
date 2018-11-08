@@ -41,13 +41,14 @@ bool MetaEngine::canWriteXmp(const QString& filePath)
                                       (QFile::encodeName(filePath).constData()));
 
         Exiv2::AccessMode mode = image->checkMode(Exiv2::mdXmp);
+
         return (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite);
     }
     catch( Exiv2::Error& e )
     {
         std::string s(e.what());
         qCCritical(DIGIKAM_METAENGINE_LOG) << "Cannot check Xmp access mode using Exiv2 (Error #"
-                    << e.code() << ": " << s.c_str() << ")";
+                                           << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {
@@ -111,6 +112,7 @@ QByteArray MetaEngine::getXmp() const
             std::string xmpPacket;
             Exiv2::XmpParser::encode(xmpPacket, d->xmpMetadata());
             QByteArray data(xmpPacket.data(), xmpPacket.size());
+
             return data;
         }
     }
@@ -182,7 +184,7 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
         QString     ifDItemName;
         MetaDataMap metaDataMap;
 
-        for (Exiv2::XmpData::const_iterator md = xmpData.begin(); md != xmpData.end(); ++md)
+        for (Exiv2::XmpData::const_iterator md = xmpData.begin() ; md != xmpData.end() ; ++md)
         {
             QString key = QLatin1String(md->key().c_str());
 
@@ -292,6 +294,7 @@ QString MetaEngine::getXmpTagTitle(const char* xmpTagName)
     {
         std::string xmpkey(xmpTagName);
         Exiv2::XmpKey xk(xmpkey);
+
         return QString::fromLocal8Bit( Exiv2::XmpProperties::propertyTitle(xk) );
     }
     catch (Exiv2::Error& e)
@@ -319,6 +322,7 @@ QString MetaEngine::getXmpTagDescription(const char* xmpTagName)
     {
         std::string xmpkey(xmpTagName);
         Exiv2::XmpKey xk(xmpkey);
+
         return QString::fromLocal8Bit( Exiv2::XmpProperties::propertyDesc(xk) );
     }
     catch (Exiv2::Error& e)
@@ -387,7 +391,7 @@ bool MetaEngine::setXmpTagString(const char* xmpTagName, const QString& value) c
 
     try
     {
-        const std::string &txt(value.toUtf8().constData());
+        const std::string& txt(value.toUtf8().constData());
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
         xmpTxtVal->read(txt);
         d->xmpMetadata()[xmpTagName].setValue(xmpTxtVal.get());
@@ -462,6 +466,7 @@ bool MetaEngine::setXmpTagString(const char* xmpTagName,
 
     return false;
 }
+
 MetaEngine::AltLangMap MetaEngine::getXmpTagStringListLangAlt(const char* xmpTagName, bool escapeCR) const
 {
 #ifdef _XMP_SUPPORT_
@@ -470,15 +475,15 @@ MetaEngine::AltLangMap MetaEngine::getXmpTagStringListLangAlt(const char* xmpTag
     {
         Exiv2::XmpData xmpData = d->xmpMetadata();
 
-        for (Exiv2::XmpData::const_iterator it = xmpData.begin(); it != xmpData.end(); ++it)
+        for (Exiv2::XmpData::const_iterator it = xmpData.begin() ; it != xmpData.end() ; ++it)
         {
             if (it->key() == xmpTagName && it->typeId() == Exiv2::langAlt)
             {
                 AltLangMap map;
                 const Exiv2::LangAltValue &value = static_cast<const Exiv2::LangAltValue &>(it->value());
 
-                for (Exiv2::LangAltValue::ValueType::const_iterator it2 = value.value_.begin();
-                     it2 != value.value_.end(); ++it2)
+                for (Exiv2::LangAltValue::ValueType::const_iterator it2 = value.value_.begin() ;
+                     it2 != value.value_.end() ; ++it2)
                 {
                     QString lang = QString::fromUtf8(it2->first.c_str());
                     QString text = QString::fromUtf8(it2->second.c_str());
@@ -526,10 +531,10 @@ bool MetaEngine::setXmpTagStringListLangAlt(const char* xmpTagName, const MetaEn
         {
             Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
 
-            for (AltLangMap::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+            for (AltLangMap::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
             {
-                QString lang = it.key();
-                QString text = it.value();
+                QString lang       = it.key();
+                QString text       = it.value();
                 QString txtLangAlt = QString::fromLatin1("lang=%1 %2").arg(lang).arg(text);
                 const std::string &txt(txtLangAlt.toUtf8().constData());
                 xmpTxtVal->read(txt);
@@ -568,17 +573,17 @@ QString MetaEngine::getXmpTagStringLangAlt(const char* xmpTagName, const QString
         Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
 
-        for (Exiv2::XmpData::const_iterator it = xmpData.begin(); it != xmpData.end(); ++it)
+        for (Exiv2::XmpData::const_iterator it = xmpData.begin() ; it != xmpData.end() ; ++it)
         {
             if (it->key() == xmpTagName && it->typeId() == Exiv2::langAlt)
             {
-                for (int i = 0; i < it->count(); i++)
+                for (int i = 0 ; i < it->count() ; ++i)
                 {
                     std::ostringstream os;
                     os << it->toString(i);
                     QString lang;
                     QString tagValue = QString::fromUtf8(os.str().c_str());
-                    tagValue = detectLanguageAlt(tagValue, lang);
+                    tagValue         = detectLanguageAlt(tagValue, lang);
 
                     if (langAlt == lang)
                     {
@@ -612,7 +617,8 @@ QString MetaEngine::getXmpTagStringLangAlt(const char* xmpTagName, const QString
     return QString();
 }
 
-bool MetaEngine::setXmpTagStringLangAlt(const char* xmpTagName, const QString& value,
+bool MetaEngine::setXmpTagStringLangAlt(const char* xmpTagName,
+                                        const QString& value,
                                         const QString& langAlt) const
 {
 #ifdef _XMP_SUPPORT_
@@ -624,9 +630,9 @@ bool MetaEngine::setXmpTagStringLangAlt(const char* xmpTagName, const QString& v
         if (!langAlt.isEmpty())
             language = langAlt;
 
-        QString txtLangAlt = QString::fromLatin1("lang=%1 %2").arg(language).arg(value);
+        QString txtLangAlt              = QString::fromLatin1("lang=%1 %2").arg(language).arg(value);
 
-        const std::string &txt(txtLangAlt.toUtf8().constData());
+        const std::string& txt(txtLangAlt.toUtf8().constData());
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
 
         // Search if an Xmp tag already exist.
@@ -635,7 +641,7 @@ bool MetaEngine::setXmpTagStringLangAlt(const char* xmpTagName, const QString& v
 
         if (!map.isEmpty())
         {
-            for (AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
+            for (AltLangMap::const_iterator it = map.constBegin() ; it != map.constEnd() ; ++it)
             {
                 if (it.key() != langAlt)
                 {
@@ -687,7 +693,7 @@ QStringList MetaEngine::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR
             {
                 QStringList seq;
 
-                for (int i = 0; i < it->count(); i++)
+                for (int i = 0 ; i < it->count() ; ++i)
                 {
                     std::ostringstream os;
                     os << it->toString(i);
@@ -736,10 +742,10 @@ bool MetaEngine::setXmpTagStringSeq(const char* xmpTagName, const QStringList& s
         }
         else
         {
-            const QStringList list = seq;
+            const QStringList list          = seq;
             Exiv2::Value::AutoPtr xmpTxtSeq = Exiv2::Value::create(Exiv2::xmpSeq);
 
-            for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
+            for (QStringList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
             {
                 const std::string &txt((*it).toUtf8().constData());
                 xmpTxtSeq->read(txt);
@@ -784,7 +790,7 @@ QStringList MetaEngine::getXmpTagStringBag(const char* xmpTagName, bool escapeCR
             {
                 QStringList bag;
 
-                for (int i = 0; i < it->count(); i++)
+                for (int i = 0 ; i < it->count() ; ++i)
                 {
                     std::ostringstream os;
                     os << it->toString(i);
@@ -832,10 +838,10 @@ bool MetaEngine::setXmpTagStringBag(const char* xmpTagName, const QStringList& b
         }
         else
         {
-            QStringList list = bag;
+            QStringList list                = bag;
             Exiv2::Value::AutoPtr xmpTxtBag = Exiv2::Value::create(Exiv2::xmpBag);
 
-            for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
+            for (QStringList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
             {
                 const std::string &txt((*it).toUtf8().constData());
                 xmpTxtBag->read(txt);
@@ -870,7 +876,7 @@ bool MetaEngine::addToXmpTagStringBag(const char* xmpTagName, const QStringList&
     QStringList newEntries = entriesToAdd;
 
     // Create a list of keywords including old one which already exists.
-    for (QStringList::const_iterator it = oldEntries.constBegin(); it != oldEntries.constEnd(); ++it )
+    for (QStringList::const_iterator it = oldEntries.constBegin() ; it != oldEntries.constEnd() ; ++it)
     {
         if (!newEntries.contains(*it))
             newEntries.append(*it);
@@ -888,7 +894,7 @@ bool MetaEngine::removeFromXmpTagStringBag(const char* xmpTagName, const QString
     QStringList newEntries;
 
     // Create a list of current keywords except those that shall be removed
-    for (QStringList::const_iterator it = currentEntries.constBegin(); it != currentEntries.constEnd(); ++it )
+    for (QStringList::const_iterator it = currentEntries.constBegin() ; it != currentEntries.constEnd() ; ++it)
     {
         if (!entriesToRemove.contains(*it))
             newEntries.append(*it);
@@ -975,7 +981,7 @@ QVariant MetaEngine::getXmpTagVariant(const char* xmpTagName, bool rationalAsLis
                 {
                     QStringList list;
 
-                    for (int i=0; i < it->count(); i++)
+                    for (int i = 0 ; i < it->count() ; ++i)
                     {
                         list << QString::fromUtf8(it->toString(i).c_str());
                     }
@@ -990,7 +996,7 @@ QVariant MetaEngine::getXmpTagVariant(const char* xmpTagName, bool rationalAsLis
                     // access the ValueType std::map< std::string, std::string>
                     Exiv2::LangAltValue::ValueType::const_iterator i;
 
-                    for (i = value.value_.begin(); i != value.value_.end(); ++i)
+                    for (i = value.value_.begin() ; i != value.value_.end() ; ++i)
                     {
                         map[QString::fromUtf8(i->first.c_str())] = QString::fromUtf8(i->second.c_str());
                     }
