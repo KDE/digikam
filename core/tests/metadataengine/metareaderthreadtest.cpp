@@ -164,10 +164,12 @@ void MetaReaderThreadTest::testMetaReaderThread()
     qDebug() << "Read configuration from" << conf.fileName();
     qDebug() << conf.allKeys();
 
-    qDebug() << conf.contains(QLatin1String("Enable"));
     bool useConf    = conf.value(QLatin1String("Enable"), 0).toInt();
 
-    qDebug() << "We will use configuration file with this unit-test...";
+    if (useConf)
+    {
+        qDebug() << "We will use configuration file with this unit-test...";
+    }
 
     QString filters = useConf ? conf.value(QLatin1String("Filters"), QString()).toString() : QString();
 
