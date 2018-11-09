@@ -303,7 +303,7 @@ void MetaReaderThreadTest::runMetaReader(const QString& path,
 
     QVERIFY(spy.wait(3*1000*1000));  // Time-out in milliseconds
 
-    qDebug() << endl << "MetaReader have been completed:"                                            << endl
+    qDebug() << endl << "Scan have been completed:"                                                  << endl
              <<         "    Processing duration:" << timer.elapsed() / 1000.0 << " seconds"         << endl
              <<         "    Root path          :" << path                                           << endl
              <<         "    Number of files    :" << list.size()                                    << endl
