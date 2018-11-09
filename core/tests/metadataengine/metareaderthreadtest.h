@@ -39,6 +39,8 @@
 
 using namespace Digikam;
 
+// -------------------------------------------------------------------------
+// Multi-threads manager for separated job
 
 class MetaReaderThread : public ActionThreadBase
 {
@@ -48,9 +50,10 @@ public:
 
     enum Direction
     {
-        NOT_DEFINED    = -1,
-        READ_FROM_FILE = 0,
-        WRITE_TO_FILE  = 1
+        NOT_DEFINED            = -1,
+        READ_INFO_FROM_FILE    = 0,   /// Read lead metadata info from file used to populate the core-database.
+        READ_PREVIEW_FROM_FILE = 1,   /// Read preview from file to populate thumbs-database.
+        WRITE_INFO_TO_SIDECAR  = 2    /// Write metadata info to sidecar.
     };
 
 public:
@@ -69,7 +72,7 @@ public:
 protected Q_SLOTS:
 
     void slotJobFinished();
-    void slotStats(const QString& mt, bool p);
+    void slotStats(const QUrl& url, bool p);
 
 Q_SIGNALS:
 
@@ -77,10 +80,11 @@ Q_SIGNALS:
 
 private:
 
-    QMap<QString, bool> m_stats;     // Map of type-mime, and file processed.
+    QMap<QUrl, bool> m_stats;     // Map of type-mime, and file processed.
 };
 
 // -------------------------------------------------------------------------
+// Separated job multi-threaded to run operations over file metadata
 
 class Mytask : public ActionJob
 {
@@ -102,10 +106,11 @@ protected:
 
 Q_SIGNALS:
 
-    void signalStats(const QString&, bool);
+    void signalStats(const QUrl&, bool);
 };
 
 // -------------------------------------------------------------------------
+// Unit-test class
 
 class MetaReaderThreadTest : public AbstractUnitTest
 {

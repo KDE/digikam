@@ -40,13 +40,13 @@
 
 Mytask::Mytask()
     : ActionJob(),
-      direction(MetaReaderThread::READ_FROM_FILE)
+      direction(MetaReaderThread::READ_INFO_FROM_FILE)
 {
 }
 
 void Mytask::run()
 {
-    qDebug() << "Processing:" << url;
+    qDebug() << "Processing:" << url.path();
 
     {
         QScopedPointer<DMetadata> meta(new DMetadata);
@@ -55,36 +55,48 @@ void Mytask::run()
 
         if (meta->load(url.toLocalFile()))
         {
-            // NOTE : only process data here without to generate debug statements
+            // NOTE: only process data here without to generate extra debug statements,
+            //       for performance purpose.
 
-            if (direction == MetaReaderThread::READ_FROM_FILE)
+            switch (direction)
             {
-                // Get most important info used to populate the database
-                meta->getImageDimensions();
-                meta->getImageTitles();
-                meta->getCreatorContactInfo();
-                meta->getIptcCoreLocation();
-                meta->getIptcCoreSubjects();
-                meta->getPhotographInformation();
-                meta->getVideoInformation();
-                meta->getXmpKeywords();
-                meta->getXmpSubjects();
-                meta->getXmpSubCategories();
-            }
-            else // WRITE_TO_FILE
-            {
-                // Just patch file with this info which will touch Exif, Iptc, and Xmp metadata
-                meta->setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
-                meta->applyChanges();
+                case (MetaReaderThread::READ_INFO_FROM_FILE):
+                {
+                    // Get most important info used to populate the core-database
+                    meta->getImageDimensions();
+                    meta->getImageTitles();
+                    meta->getCreatorContactInfo();
+                    meta->getIptcCoreLocation();
+                    meta->getIptcCoreSubjects();
+                    meta->getPhotographInformation();
+                    meta->getVideoInformation();
+                    meta->getXmpKeywords();
+                    meta->getXmpSubjects();
+                    meta->getXmpSubCategories();
+                    break;
+                }
+                case (MetaReaderThread::READ_PREVIEW_FROM_FILE):
+                {
+                    // TODO
+                    break;
+                }
+                default: // WRITE_INFO_TO_SIDECAR
+                {
+                    // Just create sidecar files with these info which will touch Exif, Iptc, and Xmp metadata
+                    // Original files are not modified.
+                    meta->setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
+                    meta->applyChanges();
+                    break;
+                }
             }
 
             processed = true;
         }
 
-        emit signalStats(QFileInfo(url.path()).suffix(), processed);
+        emit signalStats(url, processed);
     }
 
-    qDebug() << "Processed:" << url;
+    qDebug() << "Processed:" << url.path();
 
     emit signalDone();
 }
@@ -103,8 +115,22 @@ MetaReaderThread::~MetaReaderThread()
 
 QString MetaReaderThread::directionToString(Direction direction)
 {
-    return (direction == MetaReaderThread::READ_FROM_FILE) ? QLatin1String("Read from files")
-                                                           : QLatin1String("Write to files");
+    QString ret;
+
+    switch (direction)
+    {
+        case (MetaReaderThread::READ_INFO_FROM_FILE):
+             ret = QLatin1String("Read info from file");
+             break;
+        case (MetaReaderThread::READ_PREVIEW_FROM_FILE):
+             ret = QLatin1String("Read preview from file");
+             break;
+        default: // WRITE_INFO_TO_SIDECAR
+             ret = QLatin1String("Write info to side-car");
+             break;
+     }
+
+     return ret;
 }
 
 void MetaReaderThread::readMetadata(const QList<QUrl>& list,
@@ -121,16 +147,16 @@ void MetaReaderThread::readMetadata(const QList<QUrl>& list,
         job->settings     = settings;
         collection.insert(job, 0);
 
-        connect(job, SIGNAL(signalStats(QString,bool)),
-                this, SLOT(slotStats(QString,bool)));
+        connect(job, SIGNAL(signalStats(QUrl,bool)),
+                this, SLOT(slotStats(QUrl,bool)));
     }
 
     appendJobs(collection);
 }
 
-void MetaReaderThread::slotStats(const QString& mt, bool p)
+void MetaReaderThread::slotStats(const QUrl& url, bool p)
 {
-    m_stats.insertMulti(mt, p);
+    m_stats.insertMulti(url, p);
 }
 
 void MetaReaderThread::slotJobFinished()
@@ -146,14 +172,32 @@ void MetaReaderThread::slotJobFinished()
 QString MetaReaderThread::stats(const QStringList& mimeTypes)
 {
     QString out;
+    QStringList list;
+    int count = 0;
+
+    foreach (const QUrl& url, m_stats.keys())
+    {
+        list << QFileInfo(url.path()).suffix();
+    }
 
     foreach (QString mt, mimeTypes)
     {
         mt.remove(QLatin1String("*."));
-        int count  = m_stats.count(mt);
+        count  = list.count(mt);
+        count += list.count(mt.toUpper());
 
         if (count != 0)
+        {
             out.append(QString::fromLatin1("%1(%2) ").arg(mt).arg(count));
+        }
+    }
+
+qDebug() << m_stats;
+    count = m_stats.values().count(false);
+
+    if (count != 0)
+    {
+        out.append(QString::fromLatin1("Failed(%1 - %2%) ").arg(count).arg(count*100.0/m_stats.count()));
     }
 
     return out;
@@ -207,13 +251,14 @@ void MetaReaderThreadTest::testMetaReaderThread()
         path = m_originalImageFolder;
     }
 
-    MetaReaderThread::Direction direction = useConf ?
-                                            (MetaReaderThread::Direction)conf.value(QLatin1String("Direction"), (int)MetaReaderThread::NOT_DEFINED).toInt()
+    MetaReaderThread::Direction direction = useConf
+                                            ? (MetaReaderThread::Direction)conf.value(QLatin1String("Direction"),
+                                                                                      (int)MetaReaderThread::NOT_DEFINED).toInt()
                                             : MetaReaderThread::NOT_DEFINED;
 
     if (direction == MetaReaderThread::NOT_DEFINED)
     {
-        direction = MetaReaderThread::READ_FROM_FILE;
+        direction = MetaReaderThread::READ_INFO_FROM_FILE;
     }
 
     runMetaReader(path, mimeTypes, direction, settings, threadsToUse);
