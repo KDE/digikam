@@ -63,7 +63,8 @@ public:
 
     void readMetadata(const QList<QUrl>& list,
                       Direction direction,
-                      const MetaEngineSettingsContainer& settings);
+                      const MetaEngineSettingsContainer& settings,
+                      const QString& temp);
 
     QString stats(const QStringList& mimeTypes);
 
@@ -99,6 +100,7 @@ public:
     QUrl                        url;
     MetaReaderThread::Direction direction;
     MetaEngineSettingsContainer settings;
+    QString                     tempDir;
 
 protected:
 

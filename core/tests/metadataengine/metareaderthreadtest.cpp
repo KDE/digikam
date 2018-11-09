@@ -64,14 +64,17 @@ void Mytask::run()
             {
                 case (MetaReaderThread::READ_INFO_FROM_FILE):
                 {
+
                     // Get most important info used to populate the core-database
                     meta->getImageDimensions();
+                    meta->getItemComments();
                     meta->getImageTitles();
                     meta->getCreatorContactInfo();
                     meta->getIptcCoreLocation();
                     meta->getIptcCoreSubjects();
                     meta->getPhotographInformation();
-                    meta->getVideoInformation();
+                    QStringList tmp;
+                    meta->getImageTagsPath(tmp);
                     meta->getXmpKeywords();
                     meta->getXmpSubjects();
                     meta->getXmpSubCategories();
@@ -81,9 +84,17 @@ void Mytask::run()
                 default: // WRITE_INFO_TO_SIDECAR
                 {
                     // Just create sidecar files with these info which will touch Exif, Iptc, and Xmp metadata
-                    // Original files are not modified.
-                    processed &= meta->setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
-                    processed &= meta->applyChanges();
+                    meta->setImageDimensions(QSize(256, 256));
+                    meta->setImageDateTime(QDateTime::currentDateTime());
+                    meta->setComments(QString::fromLatin1("MetaReaderThread").toLatin1());
+                    meta->setImageRating(1);
+                    meta->setImagePickLabel(2);
+                    meta->setImageColorLabel(3);
+                    meta->setImageTagsPath(QStringList() << QLatin1String("digiKam/Unit Tests/Metadata Engine/MetaReaderThread"));
+
+                    // This stage will write a sidecar in temporary directory without to touch original file.
+                    meta->save(tempDir + QString::fromUtf8("/%1").arg(url.path().remove(QLatin1Char('/'))));
+                    processed = true;
                     break;
                 }
             }
@@ -136,7 +147,8 @@ QString MetaReaderThread::directionToString(Direction direction)
 
 void MetaReaderThread::readMetadata(const QList<QUrl>& list,
                                     Direction direction,
-                                    const MetaEngineSettingsContainer& settings)
+                                    const MetaEngineSettingsContainer& settings,
+                                    const QString& temp)
 {
     ActionJobCollection collection;
 
@@ -146,6 +158,7 @@ void MetaReaderThread::readMetadata(const QList<QUrl>& list,
         job->url          = url;
         job->direction    = direction;
         job->settings     = settings;
+        job->tempDir      = temp;
         collection.insert(job, 0);
 
         connect(job, SIGNAL(signalStats(QUrl,bool)),
@@ -194,11 +207,7 @@ QString MetaReaderThread::stats(const QStringList& mimeTypes)
     }
 
     count = m_stats.values().count(false);
-
-    if (count != 0)
-    {
-        out.append(QString::fromLatin1("Failed(%1 - %2%) ").arg(count).arg(count*100.0/m_stats.count()));
-    }
+    out.append(QString::fromLatin1("Failed(%1 - %2%) ").arg(count).arg(count*100.0/m_stats.count()));
 
     return out;
 }
@@ -274,6 +283,7 @@ void MetaReaderThreadTest::testMetaReaderThread()
 
     runMetaReader(path, mimeTypes, MetaReaderThread::READ_INFO_FROM_FILE,    settings, threadsToUse);
     runMetaReader(path, mimeTypes, MetaReaderThread::READ_PREVIEW_FROM_FILE, settings, threadsToUse);
+    runMetaReader(path, mimeTypes, MetaReaderThread::WRITE_INFO_TO_SIDECAR,  settings, threadsToUse);
 }
 
 void MetaReaderThreadTest::runMetaReader(const QString& path,
@@ -302,10 +312,12 @@ void MetaReaderThreadTest::runMetaReader(const QString& path,
     }
 
     MetaReaderThread* const thread = new MetaReaderThread(this);
-    thread->readMetadata(list, direction, settings);
 
     if (threadsToUse > 0)
         thread->setMaximumNumberOfThreads(threadsToUse);
+
+    thread->readMetadata(list, direction, settings, m_tempDir.absolutePath());
+
 
     QSignalSpy spy(thread, SIGNAL(done()));
     QElapsedTimer timer;
