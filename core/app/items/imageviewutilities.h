@@ -74,11 +74,11 @@ public Q_SLOTS:
     void openInfosWithDefaultApplication(const QList<ItemInfo>& allInfosToOpen);
 
     void rename(const QUrl& imageUrl, const QString& newName, bool overwrite = false);
-    void setAsAlbumThumbnail(Album* album, const ItemInfo& imageInfo);
+    void setAsAlbumThumbnail(Album* album, const ItemInfo& itemInfo);
 
-    void createGroupByTimeFromInfoList(const ItemInfoList& imageInfoList);
-    void createGroupByFilenameFromInfoList(const ItemInfoList& imageInfoList);
-    void createGroupByTimelapseFromInfoList(const ItemInfoList& imageInfoList);
+    void createGroupByTimeFromInfoList(const ItemInfoList& itemInfoList);
+    void createGroupByFilenameFromInfoList(const ItemInfoList& itemInfoList);
+    void createGroupByTimelapseFromInfoList(const ItemInfoList& itemInfoList);
 
 Q_SIGNALS:
 

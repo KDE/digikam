@@ -69,7 +69,7 @@ ImageViewUtilities::ImageViewUtilities(QWidget* const parentWidget)
 }
 
 void ImageViewUtilities::setAsAlbumThumbnail(Album* album,
-                                             const ItemInfo& imageInfo)
+                                             const ItemInfo& itemInfo)
 {
     if (!album)
     {
@@ -81,14 +81,14 @@ void ImageViewUtilities::setAsAlbumThumbnail(Album* album,
         PAlbum* const palbum = static_cast<PAlbum*>(album);
 
         QString err;
-        AlbumManager::instance()->updatePAlbumIcon(palbum, imageInfo.id(), err);
+        AlbumManager::instance()->updatePAlbumIcon(palbum, itemInfo.id(), err);
     }
     else if (album->type() == Album::TAG)
     {
         TAlbum* const talbum = static_cast<TAlbum*>(album);
 
         QString err;
-        AlbumManager::instance()->updateTAlbumIcon(talbum, QString(), imageInfo.id(), err);
+        AlbumManager::instance()->updateTAlbumIcon(talbum, QString(), itemInfo.id(), err);
     }
 }
 
@@ -375,9 +375,9 @@ bool lowerThanBySizeForItemInfo(const ItemInfo& a, const ItemInfo& b)
 
 } // namespace
 
-void ImageViewUtilities::createGroupByTimeFromInfoList(const ItemInfoList& imageInfoList)
+void ImageViewUtilities::createGroupByTimeFromInfoList(const ItemInfoList& itemInfoList)
 {
-    QList<ItemInfo> groupingList = imageInfoList;
+    QList<ItemInfo> groupingList = itemInfoList;
     // sort by time
     std::stable_sort(groupingList.begin(), groupingList.end(), lessThanByTimeForItemInfo);
 
@@ -419,9 +419,9 @@ void ImageViewUtilities::createGroupByTimeFromInfoList(const ItemInfoList& image
     }
 }
 
-void ImageViewUtilities::createGroupByFilenameFromInfoList(const ItemInfoList& imageInfoList)
+void ImageViewUtilities::createGroupByFilenameFromInfoList(const ItemInfoList& itemInfoList)
 {
-    QList<ItemInfo> groupingList = imageInfoList;
+    QList<ItemInfo> groupingList = itemInfoList;
     // sort by Name
     std::stable_sort(groupingList.begin(), groupingList.end(), lowerThanByNameForItemInfo);
 
@@ -532,7 +532,7 @@ struct NumberInFilenameMatch
     bool containsValue;
 };
 
-bool imageMatchesTimelapseGroup(const ItemInfoList& group, const ItemInfo& imageInfo)
+bool imageMatchesTimelapseGroup(const ItemInfoList& group, const ItemInfo& itemInfo)
 {
     if (group.size() < 2)
     {
@@ -546,31 +546,31 @@ bool imageMatchesTimelapseGroup(const ItemInfoList& group, const ItemInfo& image
     auto const predictedNextTimestamp = group.last().dateTime()
                                                     .addSecs(timeBetweenPhotos);
 
-    return (qAbs(imageInfo.dateTime().secsTo(predictedNextTimestamp)) <= 1);
+    return (qAbs(itemInfo.dateTime().secsTo(predictedNextTimestamp)) <= 1);
 }
 
 } // namespace
 
-void ImageViewUtilities::createGroupByTimelapseFromInfoList(const ItemInfoList& imageInfoList)
+void ImageViewUtilities::createGroupByTimelapseFromInfoList(const ItemInfoList& itemInfoList)
 {
-    if (imageInfoList.size() < 3)
+    if (itemInfoList.size() < 3)
     {
         return;
     }
 
-    ItemInfoList groupingList = imageInfoList;
+    ItemInfoList groupingList = itemInfoList;
 
     std::stable_sort(groupingList.begin(), groupingList.end(), lowerThanByNameForItemInfo);
 
     NumberInFilenameMatch previousNumberMatch;
     ItemInfoList group;
 
-    for (const auto& imageInfo : groupingList)
+    for (const auto& itemInfo : groupingList)
     {
-        NumberInFilenameMatch numberMatch(imageInfo.name());
+        NumberInFilenameMatch numberMatch(itemInfo.name());
 
         // if this is an end of currently processed group
-        if (!previousNumberMatch.directlyPreceeds(numberMatch) || !imageMatchesTimelapseGroup(group, imageInfo))
+        if (!previousNumberMatch.directlyPreceeds(numberMatch) || !imageMatchesTimelapseGroup(group, itemInfo))
         {
             if (group.size() > 2)
             {
@@ -580,7 +580,7 @@ void ImageViewUtilities::createGroupByTimelapseFromInfoList(const ItemInfoList& 
             group.clear();
         }
 
-        group.append(imageInfo);
+        group.append(itemInfo);
         previousNumberMatch = std::move(numberMatch);
     }
 
