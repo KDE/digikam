@@ -209,59 +209,71 @@ QTEST_MAIN(MetaReaderThreadTest)
 
 void MetaReaderThreadTest::testMetaReaderThread()
 {
+    MetaEngineSettingsContainer settings;
+    settings.useXMPSidecar4Reading        = false;
+    settings.metadataWritingMode          = DMetadata::WRITE_TO_SIDECAR_ONLY;
+
+    QString filters;
+    supportedImageMimeTypes(QIODevice::ReadOnly, filters);              // By defaults, all mime-types supported by digiKam.
+    int threadsToUse                      = 0;                          // By default all cpu cores.
+    QString path                          = m_originalImageFolder;      // By default the unit-tests data dir.
+
     // Read configuration from ~/.config/MetaReaderThreadTest.conf
     // Template file can be found at core/tests/metadataengine/data/
 
     QSettings conf(QLatin1String("MetaReaderThreadTest"));
-    qDebug() << "Read configuration from" << conf.fileName();
+    qDebug() << "Check custom configuration file" << conf.fileName();
 
     if (!QFileInfo(conf.fileName()).exists())
     {
         qDebug() << "Configuration file do not exists.";
         qDebug() << "You can customize this unit-test to copy the template file from";
-        qDebug() << m_originalImageFolder << "to your home directory...";
+        qDebug() << m_originalImageFolder << "in your home directory...";
     }
-
-    bool useConf    = conf.value(QLatin1String("Enable"), 0).toInt();
-
-    if (useConf)
+    else
     {
-        qDebug() << "We will use configuration file with this unit-test...";
+        bool useConf = conf.value(QLatin1String("Enable"), 0).toInt();
+
+        // If configuration file is used, only one unit-test will be processed accordingly with the settings.
+
+        if (useConf)
+        {
+            qDebug() << "We will use custom configuration file with this unit-test...";
+
+            threadsToUse        = conf.value(QLatin1String("ThreadsToUse"), 0).toInt();
+            QString confFilters = conf.value(QLatin1String("Filters"), QString()).toString();
+
+            if (!confFilters.isEmpty())
+            {
+                filters = confFilters;
+            }
+
+            QString confPath = conf.value(QLatin1String("Path"), QString()).toString();
+
+            if (!confPath.isEmpty())
+            {
+                path = confPath;
+            }
+
+            MetaReaderThread::Direction direction = (MetaReaderThread::Direction)conf.value(QLatin1String("Direction"),
+                                                    (int)MetaReaderThread::NOT_DEFINED).toInt();
+
+            if (direction == MetaReaderThread::NOT_DEFINED)
+            {
+                direction = MetaReaderThread::READ_INFO_FROM_FILE;
+            }
+
+            runMetaReader(path, filters.split(QLatin1Char(' ')), direction, settings, threadsToUse);
+            return;
+        }
     }
 
-    int threadsToUse = useConf ? conf.value(QLatin1String("ThreadsToUse"), 0).toInt() : 0;
+    // Standard unit-tests
 
-    QString filters = useConf ? conf.value(QLatin1String("Filters"), QString()).toString() : QString();
+    QStringList mimeTypes = filters.split(QLatin1Char(' '));
 
-    if (filters.isEmpty())
-    {
-        supportedImageMimeTypes(QIODevice::ReadOnly, filters);
-    }
-
-    QStringList mimeTypes          = filters.split(QLatin1Char(' '));
-
-    MetaEngineSettingsContainer settings;
-    settings.useXMPSidecar4Reading = false;
-    settings.metadataWritingMode   = DMetadata::WRITE_TO_SIDECAR_ONLY;
-
-    QString path = useConf ? conf.value(QLatin1String("Path"), QString()).toString() : QString();
-
-    if (path.isEmpty())
-    {
-        path = m_originalImageFolder;
-    }
-
-    MetaReaderThread::Direction direction = useConf
-                                            ? (MetaReaderThread::Direction)conf.value(QLatin1String("Direction"),
-                                                                                      (int)MetaReaderThread::NOT_DEFINED).toInt()
-                                            : MetaReaderThread::NOT_DEFINED;
-
-    if (direction == MetaReaderThread::NOT_DEFINED)
-    {
-        direction = MetaReaderThread::READ_INFO_FROM_FILE;
-    }
-
-    runMetaReader(path, mimeTypes, direction, settings, threadsToUse);
+    runMetaReader(path, mimeTypes, MetaReaderThread::READ_INFO_FROM_FILE,    settings, threadsToUse);
+    runMetaReader(path, mimeTypes, MetaReaderThread::READ_PREVIEW_FROM_FILE, settings, threadsToUse);
 }
 
 void MetaReaderThreadTest::runMetaReader(const QString& path,
