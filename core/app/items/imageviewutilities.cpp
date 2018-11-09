@@ -466,26 +466,42 @@ namespace
 
 struct NumberInFilenameMatch
 {
-    NumberInFilenameMatch() : value(0), containsValue(false)
+    NumberInFilenameMatch()
+        : value(0),
+          containsValue(false)
     {
     }
 
-    NumberInFilenameMatch(const QString& filename) : NumberInFilenameMatch()
+    NumberInFilenameMatch(const QString& filename)
+        : NumberInFilenameMatch()
     {
         if (filename.isEmpty())
         {
             return;
         }
 
-        auto firstDigit = std::find_if(filename.begin(), filename.end(), [](const QChar c){ return c.isDigit(); });
+        auto firstDigit = std::find_if(filename.begin(), filename.end(),
+                                            [](const QChar& c)
+                                            {
+                                                return c.isDigit();
+                                            });
+
         prefix = filename.leftRef(std::distance(filename.begin(), firstDigit));
+
         if (firstDigit == filename.end())
         {
             return;
         }
 
-        auto lastDigit = std::find_if(firstDigit, filename.end(), [](const QChar c){ return !c.isDigit(); });
-        value = filename.midRef(prefix.size(), std::distance(firstDigit, lastDigit)).toULongLong(&containsValue);
+        auto lastDigit = std::find_if(firstDigit, filename.end(),
+                                            [](const QChar& c)
+                                            {
+                                                return !c.isDigit();
+                                            });
+
+        value  = filename.midRef(prefix.size(),
+                                 std::distance(firstDigit,
+                                               lastDigit)).toULongLong(&containsValue);
 
         suffix = filename.midRef(std::distance(lastDigit, filename.end()));
     }
@@ -496,19 +512,23 @@ struct NumberInFilenameMatch
         {
             return false;
         }
+
         if (prefix != other.prefix)
         {
             return false;
         }
+
         if (suffix != other.suffix)
         {
             return false;
         }
+
         return value+1 == other.value;
     }
 
-    QStringRef prefix, suffix;
-    unsigned long long value;
+    qulonglong value;
+    QStringRef prefix;
+    QStringRef suffix;
     bool containsValue;
 };
 
@@ -519,10 +539,14 @@ bool imageMatchesTimelapseGroup(const ItemInfoList& group, const ItemInfo& image
         return true;
     }
 
-    auto const timeBetweenPhotos = qAbs(group.front().dateTime().secsTo(group.back().dateTime())) / (group.size()-1);
-    auto const predictedNextTimestamp = group.back().dateTime().addSecs(timeBetweenPhotos);
+    auto const timeBetweenPhotos      = qAbs(group.first().dateTime()
+                                                          .secsTo(group.last()
+                                                          .dateTime())) / (group.size()-1);
 
-    return qAbs(imageInfo.dateTime().secsTo(predictedNextTimestamp)) <= 1;
+    auto const predictedNextTimestamp = group.last().dateTime()
+                                                    .addSecs(timeBetweenPhotos);
+
+    return (qAbs(imageInfo.dateTime().secsTo(predictedNextTimestamp)) <= 1);
 }
 
 } // namespace
@@ -552,6 +576,7 @@ void ImageViewUtilities::createGroupByTimelapseFromInfoList(const ItemInfoList& 
             {
                 FileActionMngr::instance()->addToGroup(group.takeFirst(), group);
             }
+
             group.clear();
         }
 
