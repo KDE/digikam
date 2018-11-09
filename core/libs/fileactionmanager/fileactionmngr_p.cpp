@@ -61,15 +61,12 @@ FileActionMngr::Private::Private(FileActionMngr* const qq)
 
     connectDatabaseToFileWorker();
 
-    //connect(fileWorker, SIGNAL(imageTransformFinished()),
-    //        this, SIGNAL(signalTransformFinished()));
-
     connect(this, SIGNAL(signalTransform(FileActionItemInfoList,int)),
             fileWorker, SLOT(transform(FileActionItemInfoList,int)),
             Qt::DirectConnection);
 
-    connect(fileWorker, SIGNAL(imageDataChanged(QString,bool,bool)),
-            this, SLOT(slotImageDataChanged(QString,bool,bool)));
+    fileWorker->connect(SIGNAL(imageDataChanged(QString,bool,bool)),
+                        this, SLOT(slotImageDataChanged(QString,bool,bool)));
 
     connect(&dbProgress, SIGNAL(lastItemCompleted()),
             this, SLOT(slotLastProgressItemCompleted()));
