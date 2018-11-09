@@ -36,6 +36,7 @@
 // Local includes
 
 #include "dmetadata.h"
+#include "metaengine_previews.h"
 #include "digikam_globals.h"
 
 Mytask::Mytask()
@@ -47,11 +48,12 @@ Mytask::Mytask()
 void Mytask::run()
 {
     qDebug() << "Processing:" << url.path();
+    bool processed = false;
 
+    if (direction != MetaReaderThread::READ_PREVIEW_FROM_FILE)
     {
         QScopedPointer<DMetadata> meta(new DMetadata);
         meta->setSettings(settings);
-        bool processed = false;
 
         if (meta->load(url.toLocalFile()))
         {
@@ -73,28 +75,27 @@ void Mytask::run()
                     meta->getXmpKeywords();
                     meta->getXmpSubjects();
                     meta->getXmpSubCategories();
-                    break;
-                }
-                case (MetaReaderThread::READ_PREVIEW_FROM_FILE):
-                {
-                    // TODO
+                    processed = true;
                     break;
                 }
                 default: // WRITE_INFO_TO_SIDECAR
                 {
                     // Just create sidecar files with these info which will touch Exif, Iptc, and Xmp metadata
                     // Original files are not modified.
-                    meta->setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
-                    meta->applyChanges();
+                    processed &= meta->setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
+                    processed &= meta->applyChanges();
                     break;
                 }
             }
-
-            processed = true;
         }
-
-        emit signalStats(url, processed);
     }
+    else
+    {
+        MetaEnginePreviews previews(url.path());
+        processed = !previews.isEmpty();
+    }
+
+    emit signalStats(url, processed);
 
     qDebug() << "Processed:" << url.path();
 
@@ -192,7 +193,6 @@ QString MetaReaderThread::stats(const QStringList& mimeTypes)
         }
     }
 
-qDebug() << m_stats;
     count = m_stats.values().count(false);
 
     if (count != 0)
@@ -307,6 +307,7 @@ void MetaReaderThreadTest::runMetaReader(const QString& path,
              <<         "    Processing duration:" << timer.elapsed() / 1000.0 << " seconds"         << endl
              <<         "    Root path          :" << path                                           << endl
              <<         "    Number of files    :" << list.size()                                    << endl
+             <<         "    Number of threads  :" << thread->maximumNumberOfThreads()               << endl
              <<         "    Direction          :" << MetaReaderThread::directionToString(direction) << endl
              <<         "    Type-mimes         :" << mimeTypes.join(QLatin1Char(' '))               << endl
              <<         "    Engine settings    :" << settings                                       << endl
