@@ -29,6 +29,7 @@
 #include <QList>
 #include <QUrl>
 #include <QMap>
+#include <QElapsedTimer>
 
 // Local includes
 
@@ -69,6 +70,10 @@ public:
     QString stats(const QStringList& mimeTypes);
 
     static QString directionToString(Direction direction);
+
+public:
+
+    QElapsedTimer m_timer;
 
 protected Q_SLOTS:
 

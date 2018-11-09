@@ -29,7 +29,6 @@
 #include <QDebug>
 #include <QApplication>
 #include <QSignalSpy>
-#include <QElapsedTimer>
 #include <QScopedPointer>
 #include <QSettings>
 
@@ -166,6 +165,7 @@ void MetaReaderThread::readMetadata(const QList<QUrl>& list,
     }
 
     appendJobs(collection);
+    m_timer.start();
 }
 
 void MetaReaderThread::slotStats(const QUrl& url, bool p)
@@ -178,6 +178,7 @@ void MetaReaderThread::slotJobFinished()
     ActionThreadBase::slotJobFinished();
 
     qDebug() << "Pending items to process:" << pendingCount();
+    qDebug() << "Elaspsed time in seconds:" << m_timer.elapsed() / 1000.0;
 
     if (isEmpty())
         emit done();
@@ -273,6 +274,7 @@ void MetaReaderThreadTest::testMetaReaderThread()
             }
 
             runMetaReader(path, filters.split(QLatin1Char(' ')), direction, settings, threadsToUse);
+
             return;
         }
     }
@@ -318,24 +320,21 @@ void MetaReaderThreadTest::runMetaReader(const QString& path,
 
     thread->readMetadata(list, direction, settings, m_tempDir.absolutePath());
 
-
     QSignalSpy spy(thread, SIGNAL(done()));
-    QElapsedTimer timer;
-    timer.start();
 
     thread->start();
 
-    QVERIFY(spy.wait(3*1000*1000));  // Time-out in milliseconds
+    while (!spy.wait(1000));  // Time-out in milliseconds
 
-    qDebug() << endl << "Scan have been completed:"                                                  << endl
-             <<         "    Processing duration:" << timer.elapsed() / 1000.0 << " seconds"         << endl
-             <<         "    Root path          :" << path                                           << endl
-             <<         "    Number of files    :" << list.size()                                    << endl
-             <<         "    Number of threads  :" << thread->maximumNumberOfThreads()               << endl
-             <<         "    Direction          :" << MetaReaderThread::directionToString(direction) << endl
-             <<         "    Type-mimes         :" << mimeTypes.join(QLatin1Char(' '))               << endl
-             <<         "    Engine settings    :" << settings                                       << endl
-             <<         "    Statistics         :" << thread->stats(mimeTypes)                       << endl;
+    qDebug() << endl << "Scan have been completed:"                                                    << endl
+             <<         "    Processing duration:" << thread->m_timer.elapsed() / 1000.0 << " seconds" << endl
+             <<         "    Root path          :" << path                                             << endl
+             <<         "    Number of files    :" << list.size()                                      << endl
+             <<         "    Number of threads  :" << thread->maximumNumberOfThreads()                 << endl
+             <<         "    Direction          :" << MetaReaderThread::directionToString(direction)   << endl
+             <<         "    Type-mimes         :" << mimeTypes.join(QLatin1Char(' '))                 << endl
+             <<         "    Engine settings    :" << settings                                         << endl
+             <<         "    Statistics         :" << thread->stats(mimeTypes)                         << endl;
 
     thread->cancel();
     delete thread;
