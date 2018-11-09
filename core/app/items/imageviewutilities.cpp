@@ -29,6 +29,7 @@
 // Qt includes
 
 #include <QFileInfo>
+#include <QStringRef>
 #include <QUrl>
 
 // KDE includes
@@ -457,6 +458,110 @@ void ImageViewUtilities::createGroupByFilenameFromInfoList(const ItemInfoList& i
             const ItemInfo& leader = group.takeFirst();
             FileActionMngr::instance()->addToGroup(leader, group);
         }
+    }
+}
+
+namespace
+{
+
+struct NumberInFilenameMatch
+{
+    NumberInFilenameMatch() : value(0), containsValue(false)
+    {
+    }
+
+    NumberInFilenameMatch(const QString& filename) : NumberInFilenameMatch()
+    {
+        if (filename.isEmpty())
+        {
+            return;
+        }
+
+        auto firstDigit = std::find_if(filename.begin(), filename.end(), [](const QChar c){ return c.isDigit(); });
+        prefix = filename.leftRef(std::distance(filename.begin(), firstDigit));
+        if (firstDigit == filename.end())
+        {
+            return;
+        }
+
+        auto lastDigit = std::find_if(firstDigit, filename.end(), [](const QChar c){ return !c.isDigit(); });
+        value = filename.midRef(prefix.size(), std::distance(firstDigit, lastDigit)).toULongLong(&containsValue);
+
+        suffix = filename.midRef(std::distance(lastDigit, filename.end()));
+    }
+
+    bool directlyPreceeds(NumberInFilenameMatch const& other) const
+    {
+        if (!containsValue || !other.containsValue)
+        {
+            return false;
+        }
+        if (prefix != other.prefix)
+        {
+            return false;
+        }
+        if (suffix != other.suffix)
+        {
+            return false;
+        }
+        return value+1 == other.value;
+    }
+
+    QStringRef prefix, suffix;
+    unsigned long long value;
+    bool containsValue;
+};
+
+bool imageMatchesTimelapseGroup(const ItemInfoList& group, const ItemInfo& imageInfo)
+{
+    if (group.size() < 2)
+    {
+        return true;
+    }
+
+    auto const timeBetweenPhotos = qAbs(group.front().dateTime().secsTo(group.back().dateTime())) / (group.size()-1);
+    auto const predictedNextTimestamp = group.back().dateTime().addSecs(timeBetweenPhotos);
+
+    return qAbs(imageInfo.dateTime().secsTo(predictedNextTimestamp)) <= 1;
+}
+
+} // namespace
+
+void ImageViewUtilities::createGroupByTimelapseFromInfoList(const ItemInfoList& imageInfoList)
+{
+    if (imageInfoList.size() < 3)
+    {
+        return;
+    }
+
+    ItemInfoList groupingList = imageInfoList;
+
+    std::stable_sort(groupingList.begin(), groupingList.end(), lowerThanByNameForItemInfo);
+
+    NumberInFilenameMatch previousNumberMatch;
+    ItemInfoList group;
+
+    for (const auto& imageInfo : groupingList)
+    {
+        NumberInFilenameMatch numberMatch(imageInfo.name());
+
+        // if this is an end of currently processed group
+        if (!previousNumberMatch.directlyPreceeds(numberMatch) || !imageMatchesTimelapseGroup(group, imageInfo))
+        {
+            if (group.size() > 2)
+            {
+                FileActionMngr::instance()->addToGroup(group.takeFirst(), group);
+            }
+            group.clear();
+        }
+
+        group.append(imageInfo);
+        previousNumberMatch = std::move(numberMatch);
+    }
+
+    if (group.size() > 2)
+    {
+        FileActionMngr::instance()->addToGroup(group.takeFirst(), group);
     }
 }
 

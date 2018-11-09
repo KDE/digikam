@@ -19,6 +19,7 @@ General      : Use DrMinGW has crash handler under Windows.
 General      : Port all export/import tool to OAuth2 authentification.
 General      : New tool to adjust quickly time and date information from items.
                Tool will be available in AlbumView, ImageEditor, LightTable, and Showfoto.
+General      : New function to group images by timelapse / burst
 General      : New tool to export to Pinterest social network.
 General      : New tool to export to OneDrive webservice.
 General      : New tool to export to Box webservice.
@@ -633,4 +634,5 @@ BUGFIXES:
 567 ==> 394214 - Import .mp4 files does not preserve file mtime as date stamp.
 568 ==> 400762 - Trash - "Delete All Permanently" button not visible.
 569 ==> 400792 - Failure to export to JPEG 2000.
-570 ==> 
+570 ==> 400777 - Group images by timelapse / burst [patch].
+571 ==> 

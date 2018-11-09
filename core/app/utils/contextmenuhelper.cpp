@@ -983,6 +983,10 @@ QList<QAction*> ContextMenuHelper::groupMenuActions(const imageIds &ids)
         connect(closeActionType, SIGNAL(triggered()), this, SIGNAL(signalCreateGroupByFilename()));
         actions << closeActionType;
 
+        QAction* const closeActionTimelapse = new QAction(i18nc("@action:inmenu", "Group Selected By Timelapse / Burst"), this);
+        connect(closeActionTimelapse, SIGNAL(triggered()), this, SIGNAL(signalCreateGroupByTimelapse()));
+        actions << closeActionTimelapse;
+
         QAction* const separator = new QAction(this);
         separator->setSeparator(true);
         actions << separator;

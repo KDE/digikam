@@ -78,6 +78,7 @@ public Q_SLOTS:
 
     void createGroupByTimeFromInfoList(const ItemInfoList& imageInfoList);
     void createGroupByFilenameFromInfoList(const ItemInfoList& imageInfoList);
+    void createGroupByTimelapseFromInfoList(const ItemInfoList& imageInfoList);
 
 Q_SIGNALS:
 

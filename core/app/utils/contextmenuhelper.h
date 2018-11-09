@@ -103,6 +103,7 @@ Q_SIGNALS:
     void signalCreateGroup();
     void signalCreateGroupByTime();
     void signalCreateGroupByFilename();
+    void signalCreateGroupByTimelapse();
     void signalUngroup();
     void signalRemoveFromGroup();
 

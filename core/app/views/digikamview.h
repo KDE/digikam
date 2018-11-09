@@ -266,6 +266,7 @@ public Q_SLOTS:
     void slotCreateGroupFromSelection();
     void slotCreateGroupByTimeFromSelection();
     void slotCreateGroupByFilenameFromSelection();
+    void slotCreateGroupByTimelapseFromSelection();
     void slotRemoveSelectedFromGroup();
     void slotUngroupSelected();
 

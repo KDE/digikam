@@ -2703,6 +2703,9 @@ void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const Item
     connect(&cmHelper, SIGNAL(signalCreateGroupByFilename()),
             this, SLOT(slotCreateGroupByFilenameFromSelection()));
 
+    connect(&cmHelper, SIGNAL(signalCreateGroupByTimelapse()),
+            this, SLOT(slotCreateGroupByTimelapseFromSelection()));
+
     connect(&cmHelper, SIGNAL(signalRemoveFromGroup()),
             this, SLOT(slotRemoveSelectedFromGroup()));
 
@@ -2746,6 +2749,9 @@ void DigikamView::slotShowGroupContextMenu(QContextMenuEvent* event,
     connect(&cmhelper, SIGNAL(signalCreateGroupByFilename()),
             this, SLOT(slotCreateGroupByFilenameFromSelection()));
 
+    connect(&cmhelper, SIGNAL(signalCreateGroupByTimelapse()),
+            this, SLOT(slotCreateGroupByTimelapseFromSelection()));
+
     connect(&cmhelper, SIGNAL(signalUngroup()),
             this, SLOT(slotUngroupSelected()));
 
@@ -2773,6 +2779,11 @@ void DigikamView::slotCreateGroupByTimeFromSelection()
 void DigikamView::slotCreateGroupByFilenameFromSelection()
 {
     d->utilities->createGroupByFilenameFromInfoList(selectedInfoList(false, true));
+}
+
+void DigikamView::slotCreateGroupByTimelapseFromSelection()
+{
+    d->utilities->createGroupByTimelapseFromInfoList(selectedInfoList(false, true));
 }
 
 void DigikamView::slotRemoveSelectedFromGroup()
