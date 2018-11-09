@@ -60,7 +60,7 @@ void FileActionMngrDatabaseWorker::changeTags(FileActionItemInfoList infos,
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(const ItemInfo& info, infos)
+        foreach (const ItemInfo& info, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
@@ -119,7 +119,7 @@ void FileActionMngrDatabaseWorker::assignPickLabel(FileActionItemInfoList infos,
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(const ItemInfo& info, infos)
+        foreach (const ItemInfo& info, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
@@ -164,7 +164,7 @@ void FileActionMngrDatabaseWorker::assignColorLabel(FileActionItemInfoList infos
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(const ItemInfo& info, infos)
+        foreach (const ItemInfo& info, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
@@ -210,7 +210,7 @@ void FileActionMngrDatabaseWorker::assignRating(FileActionItemInfoList infos, in
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(const ItemInfo& info, infos)
+        foreach (const ItemInfo& info, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
@@ -252,7 +252,7 @@ void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ItemInfo& pi
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(const ItemInfo& constInfo, infos)
+        foreach (const ItemInfo& constInfo, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
@@ -288,7 +288,7 @@ void FileActionMngrDatabaseWorker::setExifOrientation(FileActionItemInfoList inf
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(ItemInfo info, infos)
+        foreach (ItemInfo info, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
@@ -316,7 +316,7 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionItemInfoList infos, D
         CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
-        foreach(const ItemInfo& info, infos)
+        foreach (const ItemInfo& info, infos)
         {
             if (state() == WorkerObject::Deactivating)
             {
@@ -350,7 +350,7 @@ void FileActionMngrDatabaseWorker::copyAttributes(FileActionItemInfoList infos, 
 {
     if (infos.size() == 1)
     {
-        foreach(const QString& path, derivedPaths)
+        foreach (const QString& path, derivedPaths)
         {
             if (state() == WorkerObject::Deactivating)
             {
