@@ -242,14 +242,14 @@ void DItemToolTip::reposition()
     if (rect.center().x() + width() > desk.right())
     {
         // to the left
-        if (pos.x() - width() < 0)
+        if (pos.x() - width() < desk.left())
         {
             pos.setX(0);
             d->corner = 4;
         }
         else
         {
-            pos.setX( pos.x() - width() );
+            pos.setX(pos.x() - width());
             d->corner = 1;
         }
     }
@@ -258,15 +258,32 @@ void DItemToolTip::reposition()
     if (rect.bottom() + height() > desk.bottom())
     {
         // above
-        pos.setY( rect.top() - height() - 5);
+        int top = rect.top() - height() - 5;
+
+        if (top < desk.top())
+        {
+            top = desk.top();
+
+            // recalculate x
+            if (d->corner == 0)
+            {
+                pos.setX(rect.right() + 5);
+            }
+            else if (d->corner == 1)
+            {
+                pos.setX(rect.left() - width() - 5);
+            }
+        }
+
+        pos.setY(top);
         d->corner += 2;
     }
     else
     {
-        pos.setY( rect.bottom() + 5 );
+        pos.setY(rect.bottom() + 5);
     }
 
-    move( pos );
+    move(pos);
 }
 
 void DItemToolTip::renderArrows()
@@ -340,7 +357,7 @@ void DItemToolTip::renderArrows()
 
 bool DItemToolTip::event(QEvent* e)
 {
-    switch ( e->type() )
+    switch (e->type())
     {
         case QEvent::Leave:
         case QEvent::MouseButtonPress:
@@ -395,16 +412,16 @@ void DItemToolTip::paintEvent(QPaintEvent* e)
     switch (d->corner)
     {
         case 0:
-            p.drawPixmap( 3, 3, pix );
+            p.drawPixmap(3, 3, pix);
             break;
         case 1:
-            p.drawPixmap( width() - pix.width() - 3, 3, pix );
+            p.drawPixmap(width() - pix.width() - 3, 3, pix);
             break;
         case 2:
-            p.drawPixmap( 3, height() - pix.height() - 3, pix );
+            p.drawPixmap(3, height() - pix.height() - 3, pix);
             break;
         case 3:
-            p.drawPixmap( width() - pix.width() - 3, height() - pix.height() - 3, pix );
+            p.drawPixmap(width() - pix.width() - 3, height() - pix.height() - 3, pix);
             break;
     }
 }
