@@ -205,7 +205,7 @@ bool MetaEngine::loadFromData(const QByteArray& imgData)
 
         // Image comments ---------------------------------
 
-        d->imageComments() = image->comment();
+        d->itemComments() = image->comment();
 
         // Exif metadata ----------------------------------
 

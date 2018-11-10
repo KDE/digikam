@@ -49,11 +49,6 @@ class DIGIKAM_EXPORT MetaEngineSettingsContainer
 {
 public:
 
-    explicit MetaEngineSettingsContainer();
-    ~MetaEngineSettingsContainer()
-    {
-    };
-
     /**
      * Describes the allowed and desired operation when rotating a picture.
      * The modes are in escalating order and describe if an operation is allowed.
@@ -76,6 +71,11 @@ public:
         RotatingPixels           = RotateByLosslessRotation | RotateByLossyRotation
     };
     Q_DECLARE_FLAGS(RotationBehaviorFlags, RotationBehaviorFlag)
+
+public:
+
+    explicit MetaEngineSettingsContainer();
+    ~MetaEngineSettingsContainer();
 
 public:
 

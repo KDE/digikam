@@ -111,7 +111,7 @@ bool MetaEngine::load(const QString& filePath)
 
         // Image comments ---------------------------------
 
-        d->imageComments() = image->comment();
+        d->itemComments() = image->comment();
 
         // Exif metadata ----------------------------------
 

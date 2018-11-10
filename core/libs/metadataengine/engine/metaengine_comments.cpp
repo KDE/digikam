@@ -61,7 +61,7 @@ bool MetaEngine::canWriteComment(const QString& filePath)
 
 bool MetaEngine::hasComments() const
 {
-    return !d->imageComments().empty();
+    return !d->itemComments().empty();
 }
 
 bool MetaEngine::clearComments() const
@@ -71,17 +71,17 @@ bool MetaEngine::clearComments() const
 
 QByteArray MetaEngine::getComments() const
 {
-    return QByteArray(d->imageComments().data(), d->imageComments().size());
+    return QByteArray(d->itemComments().data(), d->itemComments().size());
 }
 
 QString MetaEngine::getCommentsDecoded() const
 {
-    return d->detectEncodingAndDecode(d->imageComments());
+    return d->detectEncodingAndDecode(d->itemComments());
 }
 
 bool MetaEngine::setComments(const QByteArray& data) const
 {
-    d->imageComments() = std::string(data.data(), data.size());
+    d->itemComments() = std::string(data.data(), data.size());
 
     return true;
 }

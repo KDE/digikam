@@ -61,6 +61,10 @@ MetaEngineSettingsContainer::MetaEngineSettingsContainer()
 {
 }
 
+MetaEngineSettingsContainer::~MetaEngineSettingsContainer();
+{
+}
+
 void MetaEngineSettingsContainer::readFromConfig(KConfigGroup& group)
 {
     exifRotate            = group.readEntry("EXIF Rotate",                 true);

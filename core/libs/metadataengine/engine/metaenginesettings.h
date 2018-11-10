@@ -65,7 +65,8 @@ public:
 Q_SIGNALS:
 
     void settingsChanged();
-    void settingsChanged(const MetaEngineSettingsContainer& current, const MetaEngineSettingsContainer& previous);
+    void settingsChanged(const MetaEngineSettingsContainer& current,
+                         const MetaEngineSettingsContainer& previous);
 
 private:
 

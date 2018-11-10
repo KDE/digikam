@@ -150,7 +150,7 @@ public:
 
     const Exiv2::ExifData& exifMetadata()  const { return data.constData()->exifMetadata;  }
     const Exiv2::IptcData& iptcMetadata()  const { return data.constData()->iptcMetadata;  }
-    const std::string&     imageComments() const { return data.constData()->imageComments; }
+    const std::string&     itemComments()  const { return data.constData()->imageComments; }
 
 #ifdef _XMP_SUPPORT_
     const Exiv2::XmpData&  xmpMetadata()   const { return data.constData()->xmpMetadata;   }
@@ -158,7 +158,7 @@ public:
 
     Exiv2::ExifData&       exifMetadata()        { return data.data()->exifMetadata;       }
     Exiv2::IptcData&       iptcMetadata()        { return data.data()->iptcMetadata;       }
-    std::string&           imageComments()       { return data.data()->imageComments;      }
+    std::string&           itemComments()        { return data.data()->imageComments;      }
 
 #ifdef _XMP_SUPPORT_
     Exiv2::XmpData&        xmpMetadata()         { return data.data()->xmpMetadata;        }
@@ -215,9 +215,9 @@ public:
     }
 
     /**
-      * Merge two (Exif,IPTC,Xmp) Data packages, where the result is stored in dest
-      * and fields from src take precedence over existing data from dest.
-      */
+     * Merge two (Exif,IPTC,Xmp) Data packages, where the result is stored in dest
+     * and fields from src take precedence over existing data from dest.
+     */
     void mergeAll(const Data& src, Data& dest)
     {
         for (typename Data::const_iterator it = src.begin() ; it != src.end() ; ++it)
@@ -302,16 +302,19 @@ public:
     }
 };
 
-class Q_DECL_HIDDEN ExifMergeHelper : public MergeHelper<Exiv2::ExifData, Exiv2::ExifKey, QLatin1String>
+class Q_DECL_HIDDEN ExifMergeHelper
+    : public MergeHelper<Exiv2::ExifData, Exiv2::ExifKey, QLatin1String>
 {
 };
 
-class Q_DECL_HIDDEN IptcMergeHelper : public MergeHelper<Exiv2::IptcData, Exiv2::IptcKey, QLatin1String>
+class Q_DECL_HIDDEN IptcMergeHelper
+    : public MergeHelper<Exiv2::IptcData, Exiv2::IptcKey, QLatin1String>
 {
 };
 
 #ifdef _XMP_SUPPORT_
-class Q_DECL_HIDDEN XmpMergeHelper : public MergeHelper<Exiv2::XmpData, Exiv2::XmpKey, QLatin1String>
+class Q_DECL_HIDDEN XmpMergeHelper
+    : public MergeHelper<Exiv2::XmpData, Exiv2::XmpKey, QLatin1String>
 {
 };
 #endif

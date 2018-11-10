@@ -229,7 +229,7 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
 
         if ((mode == Exiv2::amWrite) || (mode == Exiv2::amReadWrite))
         {
-            image->setComment(imageComments());
+            image->setComment(itemComments());
             wroteComment = true;
         }
 
