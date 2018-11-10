@@ -378,7 +378,7 @@ void ItemScanner::scanTags()
 
     // Check Pick Label tag.
 
-    int pickId = d->metadata.getImagePickLabel();
+    int pickId = d->metadata.getItemPickLabel();
 
     if (pickId != -1)
     {
@@ -400,7 +400,7 @@ void ItemScanner::scanTags()
 
     // Check Color Label tag.
 
-    int colorId = d->metadata.getImageColorLabel();
+    int colorId = d->metadata.getItemColorLabel();
 
     if (colorId != -1)
     {
@@ -456,7 +456,7 @@ void ItemScanner::scanFaces()
 
     QMultiMap<QString,QVariant> metadataFacesMap;
 
-    if (!d->metadata.getImageFacesMap(metadataFacesMap))
+    if (!d->metadata.getItemFacesMap(metadataFacesMap))
     {
         return;
     }

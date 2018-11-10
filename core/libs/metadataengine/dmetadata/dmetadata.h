@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-23
- * Description : image metadata interface
+ * Description : item metadata interface
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -109,7 +109,7 @@ public: // Faces helpers
      * Get Images Face Map based on tags stored in Picassa/Metadatagroup
      * format.
      */
-    bool getImageFacesMap(QMultiMap<QString, QVariant>& facesPath) const;
+    bool getItemFacesMap(QMultiMap<QString, QVariant>& facesPath) const;
 
     /**
      * Set Images Face Map tags in Picassa/Metadatagroup format.
@@ -117,19 +117,19 @@ public: // Faces helpers
      * @param write : if true all faces will be written, else update mode:
      *                search if at least a face tag exist and write if true.
      */
-    bool setImageFacesMap(QMultiMap<QString, QVariant>& facesPath, bool write) const;
+    bool setItemFacesMap(QMultiMap<QString, QVariant>& facesPath, bool write) const;
 
     /**
      * Remove Images Face Map tags from Picassa/Metadatagroup format.
      */
-    void removeImageFacesMap();
+    void removeItemFacesMap();
 
 public: // Tags helpers
 
-    bool getImageTagsPath(QStringList& tagsPath,
-                          const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
-    bool setImageTagsPath(const QStringList& tagsPath,
-                          const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
+    bool getItemTagsPath(QStringList& tagsPath,
+                         const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
+    bool setItemTagsPath(const QStringList& tagsPath,
+                         const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
 
     bool getACDSeeTagsPath(QStringList& tagsPath) const;
 
@@ -139,24 +139,24 @@ public: // Comments helpers
 
     CaptionsMap getItemComments(const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
     bool setItemComments(const CaptionsMap& comments,
-                          const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
+                         const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
 
-    CaptionsMap getImageTitles() const;
-    bool setImageTitles(const CaptionsMap& title) const;
+    CaptionsMap getItemTitles() const;
+    bool setItemTitles(const CaptionsMap& title) const;
 
     static MetaEngine::AltLangMap toAltLangMap(const QVariant& var);
 
 public: // Labels helpers
 
-    int  getImageRating(const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
-    bool setImageRating(int rating,
-                        const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
+    int  getItemRating(const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
+    bool setItemRating(int rating,
+                       const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
 
-    int  getImagePickLabel() const;
-    bool setImagePickLabel(int pickId) const;
+    int  getItemPickLabel() const;
+    bool setItemPickLabel(int pickId) const;
 
-    int  getImageColorLabel() const;
-    bool setImageColorLabel(int colorId) const;
+    int  getItemColorLabel() const;
+    bool setItemColorLabel(int colorId) const;
 
 public: // Template helpers
 

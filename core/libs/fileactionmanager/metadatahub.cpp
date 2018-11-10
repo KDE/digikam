@@ -289,7 +289,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
     if (saveTitle)
     {
         // Store titles in image as Iptc Object name and Xmp.
-        dirty |= metadata.setImageTitles(d->titles);
+        dirty |= metadata.setItemTitles(d->titles);
     }
 
     if (saveComment)
@@ -307,19 +307,19 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
     if (savePickLabel)
     {
         // Store Image Pick Label as XMP tag.
-        dirty |= metadata.setImagePickLabel(d->pickLabel);
+        dirty |= metadata.setItemPickLabel(d->pickLabel);
     }
 
     if (saveColorLabel)
     {
         // Store Image Color Label as XMP tag.
-        dirty |= metadata.setImageColorLabel(d->colorLabel);
+        dirty |= metadata.setItemColorLabel(d->colorLabel);
     }
 
     if (saveRating)
     {
         // Store Image rating as Iptc tag.
-        dirty |= metadata.setImageRating(d->rating);
+        dirty |= metadata.setItemRating(d->rating);
     }
 
     if (saveTemplate)
@@ -342,7 +342,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
         }
     }
 
-    dirty |= metadata.setImageFacesMap(d->faceTagsList, saveFaces);
+    dirty |= metadata.setItemFacesMap(d->faceTagsList, saveFaces);
 
     dirty |= writeTags(metadata,saveTags);
 
@@ -436,11 +436,11 @@ bool MetadataHub::writeTags(const QString& filePath, WriteComponent writeMode,
 
     if (saveFaces)
     {
-        metadata.setImageFacesMap(d->faceTagsList, true);
+        metadata.setItemFacesMap(d->faceTagsList, true);
     }
     else
     {
-        metadata.setImageFacesMap(d->faceTagsList, false);
+        metadata.setItemFacesMap(d->faceTagsList, false);
     }
 
     writeToBaloo(filePath);
@@ -512,13 +512,13 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
             qCDebug(DIGIKAM_GENERAL_LOG) << "-------------------------- New Keywords" << newKeywords;
             // NOTE: See bug #175321 : we remove all old keyword from IPTC and XMP before to
             // synchronize metadata, else contents is not coherent.
-            dirty |= metadata.setImageTagsPath(tagsPathList);
+            dirty |= metadata.setItemTagsPath(tagsPathList);
         }
         else
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Delete all keywords";
             // Delete all IPTC and XMP keywords
-            dirty |= metadata.setImageTagsPath(QStringList());
+            dirty |= metadata.setItemTagsPath(QStringList());
         }
     }
 
@@ -723,7 +723,7 @@ void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags,
 //    int         colorLabel;
 //    int         rating;
 
-//    titles = metadata.getImageTitles();
+//    titles = metadata.getItemTitles();
 
 //    // Try to get comments from image :
 //    // In first, from Xmp comments tag,
@@ -746,13 +746,13 @@ void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags,
 //    }
 
 //    // Try to get image pick label from Xmp tag
-//    pickLabel = metadata.getImagePickLabel();
+//    pickLabel = metadata.getItemPickLabel();
 
 //    // Try to get image color label from Xmp tag
-//    colorLabel = metadata.getImageColorLabel();
+//    colorLabel = metadata.getItemColorLabel();
 
 //    // Try to get image rating from Xmp tag, or Iptc Urgency tag
-//    rating = metadata.getImageRating();
+//    rating = metadata.getItemRating();
 
 //    Template tref = metadata.getMetadataTemplate();
 //    Template t    = TemplateManager::defaultManager()->findByContents(tref);
@@ -765,7 +765,7 @@ void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags,
 
 //    QStringList tagPaths;
 
-//    if (metadata.getImageTagsPath(tagPaths))
+//    if (metadata.getItemTagsPath(tagPaths))
 //    {
 //        QList<int> tagIds = TagsCache::instance()->tagsForPaths(tagPaths);
 //        loadTags(tagIds);

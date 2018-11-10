@@ -67,13 +67,13 @@ void Mytask::run()
                     // Get most important info used to populate the core-database
                     meta->getItemDimensions();
                     meta->getItemComments();
-                    meta->getImageTitles();
+                    meta->getItemTitles();
                     meta->getCreatorContactInfo();
                     meta->getIptcCoreLocation();
                     meta->getIptcCoreSubjects();
                     meta->getPhotographInformation();
                     QStringList tmp;
-                    meta->getImageTagsPath(tmp);
+                    meta->getItemTagsPath(tmp);
                     meta->getXmpKeywords();
                     meta->getXmpSubjects();
                     meta->getXmpSubCategories();
@@ -86,10 +86,10 @@ void Mytask::run()
                     meta->setItemDimensions(QSize(256, 256));
                     meta->setImageDateTime(QDateTime::currentDateTime());
                     meta->setComments(QString::fromLatin1("MetaReaderThread").toLatin1());
-                    meta->setImageRating(1);
-                    meta->setImagePickLabel(2);
-                    meta->setImageColorLabel(3);
-                    meta->setImageTagsPath(QStringList() << QLatin1String("digiKam/Unit Tests/Metadata Engine/MetaReaderThread"));
+                    meta->setItemRating(1);
+                    meta->setItemPickLabel(2);
+                    meta->setItemColorLabel(3);
+                    meta->setItemTagsPath(QStringList() << QLatin1String("digiKam/Unit Tests/Metadata Engine/MetaReaderThread"));
 
                     // This stage will write a sidecar in temporary directory without to touch original file.
                     meta->save(tempDir + QString::fromUtf8("/%1").arg(url.path().remove(QLatin1Char('/'))));

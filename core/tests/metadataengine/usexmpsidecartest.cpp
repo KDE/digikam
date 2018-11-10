@@ -87,14 +87,14 @@ void UseXmpSidecarTest::useXmpSidecar(const QString& file,
     ret = meta.load(path);
     QVERIFY(ret);
 
-    meta.setImageRating(3);
-    meta.setImagePickLabel(2);
-    meta.setImageColorLabel(1);
+    meta.setItemRating(3);
+    meta.setItemPickLabel(2);
+    meta.setItemColorLabel(1);
 
     QStringList tags = QStringList() << QString::fromUtf8("City/Paris/Eiffel Tower")
                                      << QString::fromUtf8("Animals/Dog/Illka")
                                      << QString::fromUtf8("People/Family/Agnès");
-    meta.setImageTagsPath(tags);
+    meta.setItemTagsPath(tags);
     ret = meta.applyChanges(true);
     QVERIFY(ret);
 
@@ -103,17 +103,17 @@ void UseXmpSidecarTest::useXmpSidecar(const QString& file,
     ret = meta2.load(path);
     QVERIFY(ret);
 
-    int val = meta2.getImageRating();
+    int val = meta2.getItemRating();
     QCOMPARE(val, 3);
 
-    val = meta2.getImagePickLabel();
+    val = meta2.getItemPickLabel();
     QCOMPARE(val, 2);
 
-    val = meta2.getImageColorLabel();
+    val = meta2.getItemColorLabel();
     QCOMPARE(val, 1);
 
     QStringList newTags;
-    ret = meta2.getImageTagsPath(newTags);
+    ret = meta2.getItemTagsPath(newTags);
     QVERIFY(ret);
 
     int count = tags.count();

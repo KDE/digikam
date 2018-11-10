@@ -645,19 +645,19 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
                 if (colorLabel > NoColorLabel)
                 {
-                    metadata.setImageColorLabel(colorLabel);
+                    metadata.setItemColorLabel(colorLabel);
                     applyChanges = true;
                 }
 
                 if (pickLabel > NoPickLabel)
                 {
-                    metadata.setImagePickLabel(pickLabel);
+                    metadata.setItemPickLabel(pickLabel);
                     applyChanges = true;
                 }
 
                 if (rating > RatingMin)
                 {
-                    metadata.setImageRating(rating);
+                    metadata.setItemRating(rating);
                     applyChanges = true;
                 }
 

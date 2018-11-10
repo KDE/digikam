@@ -339,10 +339,10 @@ void ItemPropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
 
     m_propertiesTab->setCaption(caption);
 
-    m_propertiesTab->setRating(metaData.getImageRating());
+    m_propertiesTab->setRating(metaData.getItemRating());
 
     QStringList tagPaths;
-    metaData.getImageTagsPath(tagPaths);
+    metaData.getItemTagsPath(tagPaths);
     m_propertiesTab->setTags(tagPaths);
     m_propertiesTab->showOrHideCaptionAndTags();
 }

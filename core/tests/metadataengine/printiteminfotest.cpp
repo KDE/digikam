@@ -109,7 +109,7 @@ void PrintItemInfoTest::printTitles(const DMetadata& meta, bool expected)
 {
     qDebug() << QString::fromUtf8("-- Titles from %1 --").arg(meta.getFilePath());
 
-    CaptionsMap map = meta.getImageTitles();
+    CaptionsMap map = meta.getItemTitles();
     QCOMPARE(!map.isEmpty(), expected);
 
     qDebug() << map;

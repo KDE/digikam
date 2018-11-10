@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-23
- * Description : image metadata interface - labels helpers.
+ * Description : item metadata interface - labels helpers.
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-int DMetadata::getImagePickLabel() const
+int DMetadata::getItemPickLabel() const
 {
     if (getFilePath().isEmpty())
     {
@@ -65,7 +65,7 @@ int DMetadata::getImagePickLabel() const
     return -1;
 }
 
-int DMetadata::getImageColorLabel() const
+int DMetadata::getItemColorLabel() const
 {
     if (getFilePath().isEmpty())
     {
@@ -123,7 +123,7 @@ int DMetadata::getImageColorLabel() const
     return -1;
 }
 
-int DMetadata::getImageRating(const DMetadataSettingsContainer& settings) const
+int DMetadata::getItemRating(const DMetadataSettingsContainer& settings) const
 {
     if (getFilePath().isEmpty())
     {
@@ -199,7 +199,7 @@ int DMetadata::getImageRating(const DMetadataSettingsContainer& settings) const
     return -1;
 }
 
-bool DMetadata::setImagePickLabel(int pickId) const
+bool DMetadata::setItemPickLabel(int pickId) const
 {
     if (pickId < NoPickLabel || pickId > AcceptedLabel)
     {
@@ -220,7 +220,7 @@ bool DMetadata::setImagePickLabel(int pickId) const
     return true;
 }
 
-bool DMetadata::setImageColorLabel(int colorId) const
+bool DMetadata::setItemColorLabel(int colorId) const
 {
     if (colorId < NoColorLabel || colorId > WhiteLabel)
     {
@@ -279,7 +279,7 @@ bool DMetadata::setImageColorLabel(int colorId) const
     return true;
 }
 
-bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer& settings) const
+bool DMetadata::setItemRating(int rating, const DMetadataSettingsContainer& settings) const
 {
     // NOTE : with digiKam 0.9.x, we have used IPTC Urgency to store Rating.
     // Now this way is obsolete, and we use standard XMP rating tag instead.

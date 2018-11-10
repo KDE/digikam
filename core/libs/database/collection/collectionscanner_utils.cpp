@@ -697,7 +697,7 @@ void CollectionScanner::addItem(Digikam::CoreDbAccess& access, int albumID,
 
     // Try to get image rating from IPTC Urgency tag
     // else use file system time stamp.
-    rating   = metadata.getImageRating();
+    rating   = metadata.getItemRating();
 
     if ( !datetime.isValid() )
     {
@@ -707,7 +707,7 @@ void CollectionScanner::addItem(Digikam::CoreDbAccess& access, int albumID,
 
     // Try to get image tags from IPTC keywords tags.
 
-    metadata.getImageTagsPath(keywords);
+    metadata.getItemTagsPath(keywords);
 
     access.db()->addItem(albumID, fileName, datetime, comment, rating, keywords);
 }

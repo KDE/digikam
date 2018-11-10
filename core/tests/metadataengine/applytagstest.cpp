@@ -84,7 +84,7 @@ void ApplyTagsTest::applyTags(const QString& file,
     ret = meta.load(path);
     QCOMPARE(ret, expectedRead);
 
-    meta.setImageTagsPath(tags);
+    meta.setItemTagsPath(tags);
     ret = meta.applyChanges(true);
     QCOMPARE(ret, expectedWrite);
 
@@ -96,7 +96,7 @@ void ApplyTagsTest::applyTags(const QString& file,
         ret = meta2.load(path);
         QVERIFY(ret);
 
-        ret = meta2.getImageTagsPath(newTags);
+        ret = meta2.getItemTagsPath(newTags);
         QVERIFY(ret);
 
         foreach (const QString& tag, tags)

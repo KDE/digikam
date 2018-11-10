@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-23
- * Description : image metadata interface - comments helpers.
+ * Description : item metadata interface - comments helpers.
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -275,7 +275,7 @@ bool DMetadata::setItemComments(const CaptionsMap& comments, const DMetadataSett
     return true;
 }
 
-CaptionsMap DMetadata::getImageTitles() const
+CaptionsMap DMetadata::getItemTitles() const
 {
     if (getFilePath().isEmpty())
         return CaptionsMap();
@@ -331,7 +331,7 @@ CaptionsMap DMetadata::getImageTitles() const
     return captionsMap;
 }
 
-bool DMetadata::setImageTitles(const CaptionsMap& titles) const
+bool DMetadata::setItemTitles(const CaptionsMap& titles) const
 {
     //qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Title: " << titles;
 

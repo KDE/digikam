@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-23
- * Description : image metadata interface - faces helpers
+ * Description : item metadata interface - faces helpers
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
+bool DMetadata::getItemFacesMap(QMultiMap<QString,QVariant>& faces) const
 {
     faces.clear();
 
@@ -121,7 +121,7 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
     return !faces.isEmpty();
 }
 
-bool DMetadata::setImageFacesMap(QMultiMap<QString, QVariant>& facesPath, bool write) const
+bool DMetadata::setItemFacesMap(QMultiMap<QString, QVariant>& facesPath, bool write) const
 {
     QString qxmpTagName    = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
     QString nameTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Name");
@@ -241,7 +241,7 @@ bool DMetadata::setImageFacesMap(QMultiMap<QString, QVariant>& facesPath, bool w
     return ok;
 }
 
-void DMetadata::removeImageFacesMap()
+void DMetadata::removeItemFacesMap()
 {
     QString qxmpStructName    = QLatin1String("Xmp.mwg-rs.Regions");
     QString qxmpTagName       = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList");

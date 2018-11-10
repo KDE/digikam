@@ -65,8 +65,8 @@ void TagsReadWriteTest::testSimpleReadAfterWrite()
     DMetadata dmeta;
     QStringList tagPaths2;
 
-    dmeta.setImageTagsPath(this->tagSet1);
-    dmeta.getImageTagsPath(tagPaths2);
+    dmeta.setItemTagsPath(this->tagSet1);
+    dmeta.getItemTagsPath(tagPaths2);
 
     QCOMPARE(tagSet1, tagPaths2);
 }
@@ -105,7 +105,7 @@ void TagsReadWriteTest::testWriteToDisabledNamespaces()
              << tagNs2
              << tagNs3;
 
-    dmeta.setImageTagsPath(tagSet1, dmsettings);
+    dmeta.setItemTagsPath(tagSet1, dmsettings);
 
     empty           = dmeta.getXmpTagStringBag("Xmp.MicrosoftPhoto.LastKeywordXMP", false);
 
@@ -155,7 +155,7 @@ void TagsReadWriteTest::testReadFromDisabledNamespaces()
 
     dmeta.setXmpTagStringBag("Xmp.lr.hierarchicalSubject", tagSet2);
 
-    dmeta.getImageTagsPath(actual, dmsettings);
+    dmeta.getItemTagsPath(actual, dmsettings);
 
     QCOMPARE(actual, tagSet2);
 }
@@ -183,7 +183,7 @@ void TagsReadWriteTest::testTagSeparatorWrite()
     dmsettings.getWriteMapping(QString::fromUtf8(DM_TAG_CONTAINER))
              << tagNs3;
 
-    dmeta.setImageTagsPath(tagSet1, dmsettings);
+    dmeta.setItemTagsPath(tagSet1, dmsettings);
 
     readResult = dmeta.getXmpTagStringBag("Xmp.lr.hierarchicalSubject", false);
 
@@ -226,7 +226,7 @@ void TagsReadWriteTest::testTagSeparatorRead()
 
     QCOMPARE(reference, toWrite);
 
-    dmeta.getImageTagsPath(actual, dmsettings);
+    dmeta.getItemTagsPath(actual, dmsettings);
 
     QCOMPARE(actual, tagSet1);
 }
@@ -265,7 +265,7 @@ void TagsReadWriteTest::testTagReadAlternativeNameSpace()
 
     QCOMPARE(reference, toWrite);
 
-    dmeta.getImageTagsPath(actual, dmsettings);
+    dmeta.getItemTagsPath(actual, dmsettings);
 
     QCOMPARE(actual, tagSet1);
 }

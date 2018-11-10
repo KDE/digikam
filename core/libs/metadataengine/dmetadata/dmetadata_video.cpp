@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-02-26
- * Description : image metadata interface - video helpers.
+ * Description : item metadata interface - video helpers.
  *
  * References  :
  *
@@ -937,7 +937,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
         if (b)
         {
-            setImageRating(rating);
+            setItemRating(rating);
         }
     }
 

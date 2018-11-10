@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-23
- * Description : image metadata interface - tags helpers.
+ * Description : item metadata interface - tags helpers.
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-bool DMetadata::getImageTagsPath(QStringList& tagsPath,
+bool DMetadata::getItemTagsPath(QStringList& tagsPath,
                                  const DMetadataSettingsContainer& settings) const
 {
     for (NamespaceEntry entry : settings.getReadMapping(QString::fromUtf8(DM_TAG_CONTAINER)))
@@ -156,7 +156,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath,
     return false;
 }
 
-bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSettingsContainer& settings) const
+bool DMetadata::setItemTagsPath(const QStringList& tagsPath, const DMetadataSettingsContainer& settings) const
 {
     // NOTE : with digiKam 0.9.x, we have used IPTC Keywords for that.
     // Now this way is obsolete, and we use XMP instead.

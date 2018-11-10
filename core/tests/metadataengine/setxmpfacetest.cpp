@@ -70,7 +70,7 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     QRectF rect2(20, 40, 90, 70);
     faces.insert(name2, QVariant(rect2));
 
-    ret = meta.setImageFacesMap(faces, true);
+    ret = meta.setItemFacesMap(faces, true);
     QVERIFY(ret);
 
     ret = meta.applyChanges();
@@ -83,7 +83,7 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     QVERIFY(ret);
 
     QMultiMap<QString, QVariant> faces2;
-    ret = meta2.getImageFacesMap(faces2);
+    ret = meta2.getItemFacesMap(faces2);
     QVERIFY(ret);
 
     QVERIFY(!faces2.isEmpty());
@@ -100,7 +100,7 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     ret = meta3.load(filePath);
     QVERIFY(ret);
 
-    meta3.removeImageFacesMap();
+    meta3.removeItemFacesMap();
     ret = meta3.applyChanges();
     QVERIFY(ret);
 
@@ -111,6 +111,6 @@ void SetXmpFaceTest::setXmpFace(const QString& file)
     QVERIFY(ret);
 
     QMultiMap<QString, QVariant> faces4;
-    ret = meta4.getImageFacesMap(faces4);
+    ret = meta4.getItemFacesMap(faces4);
     QVERIFY(!ret);   // Empty map must be returned
 }

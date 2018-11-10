@@ -350,7 +350,7 @@ void ItemPropertiesGPSTab::setMetadata(const DMetadata& meta, const QUrl& url)
         GPSItemInfo gpsInfo;
         gpsInfo.coordinates = coordinates;
         gpsInfo.dateTime    = meta.getItemDateTime();
-        gpsInfo.rating      = meta.getImageRating();
+        gpsInfo.rating      = meta.getItemRating();
         gpsInfo.url         = url;
         setGPSInfoList(GPSItemInfo::List() << gpsInfo);
     }

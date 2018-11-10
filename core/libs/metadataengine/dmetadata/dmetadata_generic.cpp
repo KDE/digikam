@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-23
- * Description : image metadata interface - generic helpers
+ * Description : item metadata interface - generic helpers
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -141,7 +141,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
 
         case MetadataInfo::Title:
         {
-            QString str = getImageTitles()[QLatin1String("x-default")].caption;
+            QString str = getItemTitles()[QLatin1String("x-default")].caption;
 
             if (str.isEmpty())
             {
@@ -161,21 +161,21 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
         case MetadataInfo::Keywords:
         {
             QStringList list;
-            getImageTagsPath(list);
+            getItemTagsPath(list);
             return toStringListVariant(list);
         }
 
         case MetadataInfo::Faces:
         {
             QMultiMap<QString,QVariant> faceMap;
-            getImageFacesMap(faceMap);
+            getItemFacesMap(faceMap);
             QVariant var(faceMap);
             return var;
         }
 
         case MetadataInfo::Rating:
         {
-            return getImageRating();
+            return getItemRating();
         }
 
         case MetadataInfo::CreationDate:

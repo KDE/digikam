@@ -492,7 +492,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
                 GPSItemInfo gpsItemInfo;
                 gpsItemInfo.coordinates = coordinates;
                 gpsItemInfo.dateTime    = meta.getItemDateTime();
-                gpsItemInfo.rating      = meta.getImageRating();
+                gpsItemInfo.rating      = meta.getItemRating();
                 gpsItemInfo.url         = imageInfo.url();
                 gpsItemInfoList << gpsItemInfo;
             }
