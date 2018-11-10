@@ -579,8 +579,10 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
         // Try video thumbnail anyway;
         if (qimage.isNull())
         {
+
 #ifdef HAVE_MEDIAPLAYER
             qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load video preview with FFmpeg";
+
             VideoThumbnailer thumbnailer;
             VideoStripFilter videoStrip;
 
@@ -591,6 +593,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             qDebug(DIGIKAM_GENERAL_LOG) << "Cannot load video preview for " << path;
             qDebug(DIGIKAM_GENERAL_LOG) << "Video support is not available";
 #endif
+
         }
     }
 
