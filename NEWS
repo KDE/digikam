@@ -635,4 +635,5 @@ BUGFIXES:
 568 ==> 400762 - Trash - "Delete All Permanently" button not visible.
 569 ==> 400792 - Failure to export to JPEG 2000.
 570 ==> 400777 - Group images by timelapse / burst [patch].
-571 ==> 
+571 ==> 400902 - NAS Mysql cannot connect with instructions given by Dmitry Popov.
+572 ==> 
