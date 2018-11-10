@@ -62,8 +62,11 @@
 #include "thumbsdb.h"
 #include "thumbsdbbackend.h"
 #include "thumbnailsize.h"
-#include "videothumbnailer.h"
-#include "videostripfilter.h"
+
+#ifdef HAVE_MEDIAPLAYER
+#   include "videothumbnailer.h"
+#   include "videostripfilter.h"
+#endif
 
 namespace Digikam
 {
