@@ -364,7 +364,7 @@ void ImageWindow::slotChanged()
     }
 
     DImg* const img           = m_canvas->interface()->getImg();
-    DImageHistory history     = m_canvas->interface()->getImageHistory();
+    DImageHistory history     = m_canvas->interface()->getItemHistory();
     DImageHistory redoHistory = m_canvas->interface()->getImageHistoryOfFullRedo();
 
     d->rightSideBar->itemChanged(d->currentItemInfo, m_canvas->getSelectedArea(), img, redoHistory);
@@ -1169,10 +1169,10 @@ void ImageWindow::slotOpenOriginal()
     }
 
     // this time, with mustBeAvailable = true
-    DImageHistory availableResolved = ItemScanner::resolvedImageHistory(m_canvas->interface()->getImageHistory(), true);
+    DImageHistory availableResolved = ItemScanner::resolvedImageHistory(m_canvas->interface()->getItemHistory(), true);
 
     QList<HistoryImageId> originals = availableResolved.referredImagesOfType(HistoryImageId::Original);
-    HistoryImageId originalId       = m_canvas->interface()->getImageHistory().originalReferredImage();
+    HistoryImageId originalId       = m_canvas->interface()->getItemHistory().originalReferredImage();
 
     if (originals.isEmpty())
     {

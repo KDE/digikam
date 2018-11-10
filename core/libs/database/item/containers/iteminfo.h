@@ -305,7 +305,7 @@ public:
      *
      */
     DImageHistory imageHistory() const;
-    void setImageHistory(const DImageHistory& history);
+    void setItemHistory(const DImageHistory& history);
     bool hasImageHistory()       const;
 
     /**

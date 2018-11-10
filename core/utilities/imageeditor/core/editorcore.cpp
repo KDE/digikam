@@ -432,21 +432,21 @@ QString EditorCore::ensureHasCurrentUuid() const
      * 4) When the image is saved, DImg::updateMetadata will create a new UUID for the saved
      *    image, which is then of course written to the newly saved file.
      */
-    if (!d->image.getImageHistory().currentReferredImage().hasUuid())
+    if (!d->image.getItemHistory().currentReferredImage().hasUuid())
     {
         // if there is no uuid in the image, we create one.
         QString uuid = QString::fromUtf8(d->image.createImageUniqueId());
         d->image.addCurrentUniqueImageId(uuid);
     }
 
-    return d->image.getImageHistory().currentReferredImage().uuid();
+    return d->image.getItemHistory().currentReferredImage().uuid();
 }
 
 void EditorCore::provideCurrentUuid(const QString& uuid)
 {
     // If the (original) image did not yet have a UUID, one is provided by higher level
     // Higher level decides how this UUID is stored; we don't touch the original here.
-    if (!d->image.getImageHistory().currentReferredImage().hasUuid())
+    if (!d->image.getItemHistory().currentReferredImage().hasUuid())
     {
         d->image.addCurrentUniqueImageId(uuid);
     }
@@ -509,7 +509,7 @@ void EditorCore::readMetadataFromFile(const QString& file)
     // If we are editing, and someone else at the same time, there's nothing we can do.
     if (!d->undoMan->hasChanges())
     {
-        d->image.setImageHistory(DImageHistory::fromXml(meta.getImageHistory()));
+        d->image.setItemHistory(DImageHistory::fromXml(meta.getItemHistory()));
     }
 }
 
@@ -648,9 +648,9 @@ DImg* EditorCore::getImg() const
     }
 }
 
-DImageHistory EditorCore::getImageHistory() const
+DImageHistory EditorCore::getItemHistory() const
 {
-    return d->image.getImageHistory();
+    return d->image.getItemHistory();
 }
 
 DImageHistory EditorCore::getInitialImageHistory() const

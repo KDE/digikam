@@ -68,7 +68,7 @@ ItemFiltersHistoryModel::ItemFiltersHistoryModel(QObject* const parent, const QU
         d->lastUrl  = url;
 
         DMetadata metadata(url.toLocalFile());
-        QString xml     = metadata.getImageHistory();
+        QString xml     = metadata.getItemHistory();
         DImageHistory h = DImageHistory::fromXml(xml);
         setupModelData(h.entries(), d->rootItem);
     }
@@ -96,7 +96,7 @@ void ItemFiltersHistoryModel::setUrl(const QUrl& url)
         d->lastUrl  = url;
         //qCDebug(DIGIKAM_WIDGETS_LOG) << "Updating model data with url" << rootData.first();
         DMetadata metadata(url.toLocalFile());
-        setupModelData(DImageHistory::fromXml(metadata.getImageHistory()).entries(), d->rootItem);
+        setupModelData(DImageHistory::fromXml(metadata.getItemHistory()).entries(), d->rootItem);
     }
 /*
     else

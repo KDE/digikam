@@ -342,9 +342,9 @@ public:
     void       setEmbeddedText(const QString& key, const QString& text);
     QString    embeddedText(const QString& key) const;
 
-    const DImageHistory& getImageHistory() const;
-    DImageHistory&       getImageHistory();
-    void                 setImageHistory(const DImageHistory& history);
+    const DImageHistory& getItemHistory() const;
+    DImageHistory&       getItemHistory();
+    void                 setItemHistory(const DImageHistory& history);
     bool                 hasImageHistory() const;
     DImageHistory        getOriginalImageHistory() const;
     void                 addFilterAction(const FilterAction& action);

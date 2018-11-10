@@ -96,12 +96,12 @@ public: // File I/O helpers
 
 public: // History helpers
 
-    QString getImageHistory() const;
-    bool    setImageHistory(QString& imageHistoryXml) const;
-    bool    hasImageHistoryTag() const;
+    QString getItemHistory() const;
+    bool    setItemHistory(QString& imageHistoryXml) const;
+    bool    hasItemHistoryTag() const;
 
-    QString getImageUniqueId() const;
-    bool    setImageUniqueId(const QString& uuid) const;
+    QString getItemUniqueId() const;
+    bool    setItemUniqueId(const QString& uuid) const;
 
 public: // Faces helpers
 

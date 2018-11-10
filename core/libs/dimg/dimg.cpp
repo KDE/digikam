@@ -3116,12 +3116,12 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
         }
 
         QString imageHistoryXml = forSaving.toXml();
-        meta.setImageHistory(imageHistoryXml);
+        meta.setItemHistory(imageHistoryXml);
     }
 
     if (flags & CreateNewImageHistoryUUID)
     {
-        meta.setImageUniqueId(QString::fromUtf8(createImageUniqueId()));
+        meta.setItemUniqueId(QString::fromUtf8(createImageUniqueId()));
     }
 
     // Store new Exif/IPTC/XMP data into image.
@@ -3165,17 +3165,17 @@ void DImg::addFilterAction(const Digikam::FilterAction& action)
     m_priv->imageHistory << action;
 }
 
-const DImageHistory& DImg::getImageHistory() const
+const DImageHistory& DImg::getItemHistory() const
 {
     return m_priv->imageHistory;
 }
 
-DImageHistory& DImg::getImageHistory()
+DImageHistory& DImg::getItemHistory()
 {
     return m_priv->imageHistory;
 }
 
-void DImg::setImageHistory(const DImageHistory& history)
+void DImg::setItemHistory(const DImageHistory& history)
 {
     m_priv->imageHistory = history;
 }

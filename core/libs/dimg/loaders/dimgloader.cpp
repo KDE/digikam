@@ -220,12 +220,12 @@ bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
 
     if (m_loadFlags & LoadImageHistory)
     {
-        DImageHistory history = DImageHistory::fromXml(metaDataFromFile.getImageHistory());
+        DImageHistory history = DImageHistory::fromXml(metaDataFromFile.getItemHistory());
         HistoryImageId id     = createHistoryImageId(filePath, *m_image, metaDataFromFile);
         id.m_type             = HistoryImageId::Current;
         history << id;
 
-        m_image->setImageHistory(history);
+        m_image->setItemHistory(history);
         imageSetAttribute(QLatin1String("originalImageHistory"), QVariant::fromValue(history));
     }
 
@@ -261,7 +261,7 @@ HistoryImageId DImgLoader::createHistoryImageId(const QString& filePath, const D
         return HistoryImageId();
     }
 
-    HistoryImageId id(metadata.getImageUniqueId());
+    HistoryImageId id(metadata.getItemUniqueId());
 
     QDateTime dt = metadata.getItemDateTime();
 

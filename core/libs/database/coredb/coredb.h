@@ -1030,7 +1030,7 @@ public:
     /**
      * Retrieves the history entry for the given image.
      */
-    ImageHistoryEntry getImageHistory(qlonglong imageId);
+    ImageHistoryEntry getItemHistory(qlonglong imageId);
 
     /**
      * Retrieves the image UUID
@@ -1045,7 +1045,7 @@ public:
     /**
      * Changes (adds or updates) the image history
      */
-    void setImageHistory(qlonglong imageId, const QString& history);
+    void setItemHistory(qlonglong imageId, const QString& history);
     void setImageUuid(qlonglong imageId, const QString& uuid);
 
     /**

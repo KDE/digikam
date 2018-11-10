@@ -1978,7 +1978,7 @@ void EditorWindow::resetOrigin()
 
 void EditorWindow::resetOriginSwitchFile()
 {
-    DImageHistory resolved = resolvedImageHistory(m_canvas->interface()->getImageHistory());
+    DImageHistory resolved = resolvedImageHistory(m_canvas->interface()->getItemHistory());
     m_canvas->interface()->switchToLastSaved(resolved);
 }
 
@@ -2547,7 +2547,7 @@ bool EditorWindow::startingSaveNewVersionInFormat(const QUrl& url, const QString
 VersionFileOperation EditorWindow::saveVersionFileOperation(const QUrl& url, bool fork)
 {
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
-    DImageHistory history = m_canvas->interface()->getImageHistory();
+    DImageHistory history = m_canvas->interface()->getItemHistory();
 
     VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).toLocalFile(),
                                 url.fileName(), m_canvas->currentImageFileFormat());
@@ -2559,7 +2559,7 @@ VersionFileOperation EditorWindow::saveVersionFileOperation(const QUrl& url, boo
 VersionFileOperation EditorWindow::saveAsVersionFileOperation(const QUrl& url, const QUrl& saveUrl, const QString& format)
 {
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
-    DImageHistory history         = m_canvas->interface()->getImageHistory();
+    DImageHistory history         = m_canvas->interface()->getItemHistory();
 
     VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).toLocalFile(),
                                 url.fileName(), m_canvas->currentImageFileFormat());
@@ -2573,7 +2573,7 @@ VersionFileOperation EditorWindow::saveAsVersionFileOperation(const QUrl& url, c
 VersionFileOperation EditorWindow::saveInFormatVersionFileOperation(const QUrl& url, const QString& format)
 {
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
-    DImageHistory history         = m_canvas->interface()->getImageHistory();
+    DImageHistory history         = m_canvas->interface()->getItemHistory();
 
     VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).toLocalFile(),
                                 url.fileName(), m_canvas->currentImageFileFormat());

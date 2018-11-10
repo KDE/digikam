@@ -2251,7 +2251,7 @@ bool CoreDB::hasImageHistory(qlonglong imageId)
     return !values.isEmpty();
 }
 
-ImageHistoryEntry CoreDB::getImageHistory(qlonglong imageId)
+ImageHistoryEntry CoreDB::getItemHistory(qlonglong imageId)
 {
     QList<QVariant> values;
 
@@ -2322,7 +2322,7 @@ QString CoreDB::getImageUuid(qlonglong imageId)
     return uuid;
 }
 
-void CoreDB::setImageHistory(qlonglong imageId, const QString& history)
+void CoreDB::setItemHistory(qlonglong imageId, const QString& history)
 {
     d->db->execUpsertDBAction(QLatin1String("changeImageHistory"),
                               imageId, QStringList() << QLatin1String("history"), QVariantList() << history);

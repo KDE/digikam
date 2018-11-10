@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-bool DMetadata::setImageHistory(QString& imageHistoryXml) const
+bool DMetadata::setItemHistory(QString& imageHistoryXml) const
 {
     if (supportXmp())
     {
@@ -56,7 +56,7 @@ bool DMetadata::setImageHistory(QString& imageHistoryXml) const
     return false;
 }
 
-QString DMetadata::getImageHistory() const
+QString DMetadata::getItemHistory() const
 {
     if (hasXmp())
     {
@@ -68,7 +68,7 @@ QString DMetadata::getImageHistory() const
     return QString();
 }
 
-bool DMetadata::hasImageHistoryTag() const
+bool DMetadata::hasItemHistoryTag() const
 {
     if (hasXmp())
     {
@@ -85,7 +85,7 @@ bool DMetadata::hasImageHistoryTag() const
     return false;
 }
 
-QString DMetadata::getImageUniqueId() const
+QString DMetadata::getItemUniqueId() const
 {
     QString exifUid;
 
@@ -138,7 +138,7 @@ QString DMetadata::getImageUniqueId() const
     return QString();
 }
 
-bool DMetadata::setImageUniqueId(const QString& uuid) const
+bool DMetadata::setItemUniqueId(const QString& uuid) const
 {
     if (supportXmp())
     {

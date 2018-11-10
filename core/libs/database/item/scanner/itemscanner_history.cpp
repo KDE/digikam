@@ -31,15 +31,15 @@ void ItemScanner::scanImageHistory()
 {
     /** Stage 1 of history scanning */
 
-    d->commit.historyXml = d->metadata.getImageHistory();
-    d->commit.uuid       = d->metadata.getImageUniqueId();
+    d->commit.historyXml = d->metadata.getItemHistory();
+    d->commit.uuid       = d->metadata.getItemUniqueId();
 }
 
 void ItemScanner::commitImageHistory()
 {
     if (!d->commit.historyXml.isEmpty())
     {
-        CoreDbAccess().db()->setImageHistory(d->scanInfo.id, d->commit.historyXml);
+        CoreDbAccess().db()->setItemHistory(d->scanInfo.id, d->commit.historyXml);
         // Delay history resolution by setting this tag:
         // Resolution depends on the presence of other images, possibly only when the scanning process has finished
         CoreDbAccess().db()->addItemTag(d->scanInfo.id, TagsCache::instance()->
@@ -57,7 +57,7 @@ void ItemScanner::scanImageHistoryIfModified()
 {
     // If a file has a modified history, it must have a new UUID
     QString previousUuid = CoreDbAccess().db()->getImageUuid(d->scanInfo.id);
-    QString currentUuid  = d->metadata.getImageUniqueId();
+    QString currentUuid  = d->metadata.getItemUniqueId();
 
     if (!currentUuid.isEmpty() && previousUuid != currentUuid)
     {
@@ -67,7 +67,7 @@ void ItemScanner::scanImageHistoryIfModified()
 
 bool ItemScanner::resolveImageHistory(qlonglong id, QList<qlonglong>* needTaggingIds)
 {
-    ImageHistoryEntry history = CoreDbAccess().db()->getImageHistory(id);
+    ImageHistoryEntry history = CoreDbAccess().db()->getItemHistory(id);
     return resolveImageHistory(id, history.history, needTaggingIds);
 }
 

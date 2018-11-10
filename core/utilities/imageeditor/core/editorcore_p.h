@@ -206,7 +206,7 @@ void EditorCore::Private::saveNext()
     if (file.historyStep != -1)
     {
         // intermediate. Need to get data from undo manager
-        int currentStep = EditorCore::defaultInstance()->getImageHistory().size() - 1;
+        int currentStep = EditorCore::defaultInstance()->getItemHistory().size() - 1;
         //qCDebug(DIGIKAM_GENERAL_LOG) << "Requesting from undo manager data" << currentStep - file.historyStep << "steps back";
         undoMan->putImageDataAndHistory(&file.image, currentStep - file.historyStep);
     }
@@ -327,14 +327,14 @@ void EditorCore::Private::saveAs(const QString& filePath, IOFileSettings* const 
         op.tasks & VersionFileOperation::SaveAndDelete)
     {
         // The current file will stored away at a different name. Adjust history.
-        image.getImageHistory().moveCurrentReferredImage(op.intermediateForLoadedFile.path,
+        image.getItemHistory().moveCurrentReferredImage(op.intermediateForLoadedFile.path,
                                                          op.intermediateForLoadedFile.fileName);
     }
 
     if (op.tasks & VersionFileOperation::Replace)
     {
         // The current file will be replaced. Remove hint at file path (file path will be a different image)
-        image.getImageHistory().purgePathFromReferredImages(op.saveFile.path, op.saveFile.fileName);
+        image.getItemHistory().purgePathFromReferredImages(op.saveFile.path, op.saveFile.fileName);
     }
 
     QMap<int, VersionFileInfo>::const_iterator it;

@@ -1294,18 +1294,18 @@ DImageHistory ItemInfo::imageHistory() const
         return DImageHistory();
     }
 
-    ImageHistoryEntry entry = CoreDbAccess().db()->getImageHistory(m_data->id);
+    ImageHistoryEntry entry = CoreDbAccess().db()->getItemHistory(m_data->id);
     return DImageHistory::fromXml(entry.history);
 }
 
-void ItemInfo::setImageHistory(const DImageHistory& history)
+void ItemInfo::setItemHistory(const DImageHistory& history)
 {
     if (!m_data)
     {
         return;
     }
 
-    CoreDbAccess().db()->setImageHistory(m_data->id, history.toXml());
+    CoreDbAccess().db()->setItemHistory(m_data->id, history.toXml());
 }
 
 bool ItemInfo::hasImageHistory() const
