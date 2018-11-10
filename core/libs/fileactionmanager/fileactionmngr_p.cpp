@@ -233,7 +233,7 @@ void PrivateProgressItemCreator::slotProgressItemCompleted()
     }
 }
 
-void PrivateProgressItemCreator::slotProgressItemCanceled(ProgressItem* const item)
+void PrivateProgressItemCreator::slotProgressItemCanceled(ProgressItem* item)
 {
     FileActionMngr::instance()->shutDown();
     item->setComplete();
