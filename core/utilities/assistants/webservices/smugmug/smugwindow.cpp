@@ -843,9 +843,9 @@ bool SmugWindow::prepareImageForUpload(const QString& imgPath) const
 
     if (meta.load(imgPath))
     {
-        meta.setImageDimensions(image.size());
-        meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-        meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
+        meta.setItemDimensions(image.size());
+        meta.setItemOrientation(MetaEngine::ORIENTATION_NORMAL);
+        meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
         meta.save(d->tmpPath, true);
     }
 

@@ -242,7 +242,7 @@ bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QIma
     // Try to get preview from Exif data (good quality). Can work with Raw files
 
     DMetadata metadata(path);
-    metadata.getImagePreview(thumbnail);
+    metadata.getItemPreview(thumbnail);
 
     if (!thumbnail.isNull())
     {

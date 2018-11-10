@@ -367,7 +367,7 @@ void TimeAdjustDialog::readMetadataTimestamps()
         switch (prm.metadataSource)
         {
             case TimeAdjustContainer::EXIFIPTCXMP:
-                curImageDateTime = meta.getImageDateTime();
+                curImageDateTime = meta.getItemDateTime();
                 break;
             case TimeAdjustContainer::EXIFCREATED:
                 curImageDateTime = QDateTime::fromString(meta.getExifTagString("Exif.Image.DateTime"),

@@ -33,7 +33,7 @@ void EraseMetadataTagTest::testEraseMetadataTag()
 {
     MetaEngineSettingsContainer settings;
 
-    settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
+    settings.metadataWritingMode = DMetadata::WRITE_TO_FILE_ONLY;
     eraseMetadataTag(m_originalImageFolder + QLatin1String("2008-05_DSC_0294.JPG"),
                      QLatin1String("Exif.Nikon3.RetouchHistory"),
                      settings);

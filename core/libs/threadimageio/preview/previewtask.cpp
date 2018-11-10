@@ -537,7 +537,7 @@ bool PreviewLoadingTask::loadImagePreview(int sizeLimit)
 
     QImage previewImage;
 
-    if (metadata.getImagePreview(previewImage))
+    if (metadata.getItemPreview(previewImage))
     {
         if (sizeLimit == -1 || qMax(previewImage.width(), previewImage.height()) > sizeLimit)
         {

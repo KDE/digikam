@@ -42,7 +42,7 @@ void UseXmpSidecarTest::testUseXmpSidecar()
     useXmpSidecar(m_originalImageFolder + QLatin1String("_27A1417.CR2"), settings);
 
     settings.useXMPSidecar4Reading = false;
-    settings.metadataWritingMode = DMetadata::WRITE_TO_IMAGE_ONLY;
+    settings.metadataWritingMode = DMetadata::WRITE_TO_FILE_ONLY;
     useXmpSidecar(m_originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 
     settings.useXMPSidecar4Reading = true;
@@ -50,7 +50,7 @@ void UseXmpSidecarTest::testUseXmpSidecar()
     useXmpSidecar(m_originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 
     settings.useXMPSidecar4Reading = true;
-    settings.metadataWritingMode = DMetadata::WRITE_TO_SIDECAR_AND_IMAGE;
+    settings.metadataWritingMode = DMetadata::WRITE_TO_SIDECAR_AND_FILE;
     useXmpSidecar(m_originalImageFolder + QLatin1String("_27A1434.JPG"), settings);
 }
 

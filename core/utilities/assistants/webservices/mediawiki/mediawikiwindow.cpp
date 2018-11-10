@@ -255,7 +255,7 @@ bool MediaWikiWindow::prepareImageForUpload(const QString& imgPath)
     // to write metadata to image file rather than sidecar file, to be effective with remote web service.
 
     DMetadata meta;
-    meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
+    meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
 
     if (d->widget->removeMeta())
     {
@@ -270,7 +270,7 @@ bool MediaWikiWindow::prepareImageForUpload(const QString& imgPath)
         {
             if (d->widget->resize())
             {
-                meta.setImageDimensions(image.size());
+                meta.setItemDimensions(image.size());
             }
 
             if (d->widget->removeGeo())
@@ -278,7 +278,7 @@ bool MediaWikiWindow::prepareImageForUpload(const QString& imgPath)
                 meta.removeGPSInfo();
             }
 
-            meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
+            meta.setItemOrientation(MetaEngine::ORIENTATION_NORMAL);
             meta.save(d->tmpPath, true);
         }
     }

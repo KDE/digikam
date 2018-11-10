@@ -129,7 +129,7 @@ void ImgurImagesList::slotSuccess(const ImgurTalkerResult& result)
                              result.image.url);
         meta.setXmpTagString("Xmp.digiKam.ImgurDeleteHash",
                              ImgurTalker::urlForDeletehash(result.image.deletehash).toString());
-        meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
+        meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
         bool saved = meta.applyChanges();
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Metadata"

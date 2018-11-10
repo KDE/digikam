@@ -283,7 +283,7 @@ int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& me
         dbOrientation = infoProvider()->orientationHint(filePath);
     }
 
-    int exifOrientation = metadata.getImageOrientation();
+    int exifOrientation = metadata.getItemOrientation();
 
     // Raw files are already rotated properly by Raw engine. Only perform auto-rotation with JPEG/PNG/TIFF file.
     // We don't have a feedback from Raw engine about auto-rotated RAW file during decoding.

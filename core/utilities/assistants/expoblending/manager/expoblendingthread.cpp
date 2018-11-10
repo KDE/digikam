@@ -368,7 +368,7 @@ void ExpoBlendingThread::run()
                     if (result)
                     {
                         if (d->meta.load(t->urls[0].toLocalFile()))
-                            d->meta.rotateExifQImage(image, d->meta.getImageOrientation());
+                            d->meta.rotateExifQImage(image, d->meta.getItemOrientation());
                     }
 
                     ExpoBlendingActionData ad2;
@@ -403,11 +403,11 @@ void ExpoBlendingThread::run()
                     {
                         if (d->meta.load(t->urls[0].toLocalFile()))
                         {
-                            MetaEngine::ImageOrientation orientation = d->meta.getImageOrientation();
+                            MetaEngine::ImageOrientation orientation = d->meta.getItemOrientation();
 
                             if (d->meta.load(destUrl.toLocalFile()))
                             {
-                                d->meta.setImageOrientation(orientation);
+                                d->meta.setItemOrientation(orientation);
                                 d->meta.applyChanges(true);
                             }
                         }
@@ -460,7 +460,7 @@ void ExpoBlendingThread::run()
                             QImage img;
 
                             if (img.load(destUrl.toLocalFile()))
-                                d->meta.setImagePreview(img.scaled(1280, 1024, Qt::KeepAspectRatio));
+                                d->meta.setItemPreview(img.scaled(1280, 1024, Qt::KeepAspectRatio));
                         }
 
                         d->meta.save(destUrl.toLocalFile(), true);
@@ -699,11 +699,11 @@ bool ExpoBlendingThread::computePreview(const QUrl& inUrl, QUrl& outUrl)
         {
             if (d->meta.load(inUrl.toLocalFile()))
             {
-                MetaEngine::ImageOrientation orientation = d->meta.getImageOrientation();
+                MetaEngine::ImageOrientation orientation = d->meta.getItemOrientation();
 
                 if (d->meta.load(outUrl.toLocalFile()))
                 {
-                    d->meta.setImageOrientation(orientation);
+                    d->meta.setItemOrientation(orientation);
                     d->meta.applyChanges(true);
                 }
             }
@@ -731,11 +731,11 @@ bool ExpoBlendingThread::convertRaw(const QUrl& inUrl, QUrl& outUrl)
     {
         if (d->meta.load(inUrl.toLocalFile()))
         {
-            d->meta.setImageDimensions(img.size());
+            d->meta.setItemDimensions(img.size());
             d->meta.setExifTagString("Exif.Image.DocumentName", inUrl.fileName());
             d->meta.setXmpTagString("Xmp.tiff.Make",  d->meta.getExifTagString("Exif.Image.Make"));
             d->meta.setXmpTagString("Xmp.tiff.Model", d->meta.getExifTagString("Exif.Image.Model"));
-            d->meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
+            d->meta.setItemOrientation(MetaEngine::ORIENTATION_NORMAL);
 
             QFileInfo fi(inUrl.toLocalFile());
             outUrl = QUrl::fromLocalFile(d->preprocessingTmpDir->path()                                    +

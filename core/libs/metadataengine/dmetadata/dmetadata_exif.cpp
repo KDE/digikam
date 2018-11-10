@@ -91,7 +91,7 @@ IccProfile DMetadata::getIccProfile() const
     }
 
     // Else check the Exif color-space tag and use default profiles that we ship
-    switch (getImageColorWorkSpace())
+    switch (getItemColorWorkSpace())
     {
         case DMetadata::WORKSPACE_SRGB:
         {

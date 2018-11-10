@@ -737,7 +737,7 @@ void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags,
 //    // In second, from Xmp date & time tags, or
 //    // In third, from Iptc date & time tags.
 //    // else use file system time stamp.
-//    datetime = metadata.getImageDateTime();
+//    datetime = metadata.getItemDateTime();
 
 //    if ( !datetime.isValid() )
 //    {

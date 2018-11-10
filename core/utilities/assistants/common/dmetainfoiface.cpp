@@ -94,13 +94,13 @@ DMetaInfoIface::DInfoMap DMetaInfoIface::itemInfo(const QUrl& url) const
         map.insert(QLatin1String("name"),        info.fileName());
         map.insert(QLatin1String("title"),       meta.getImageTitles()[def].caption);
         map.insert(QLatin1String("comment"),     meta.getItemComments()[def].caption);
-        map.insert(QLatin1String("orientation"), (int)meta.getImageOrientation());
-        map.insert(QLatin1String("datetime"),    meta.getImageDateTime());
+        map.insert(QLatin1String("orientation"), (int)meta.getItemOrientation());
+        map.insert(QLatin1String("datetime"),    meta.getItemDateTime());
         map.insert(QLatin1String("rating"),      meta.getImageRating());
         map.insert(QLatin1String("colorlabel"),  meta.getImageColorLabel());
         map.insert(QLatin1String("picklabel"),   meta.getImagePickLabel());
         map.insert(QLatin1String("filesize"),    (qlonglong)info.size());
-        map.insert(QLatin1String("dimensions"),  meta.getImageDimensions());
+        map.insert(QLatin1String("dimensions"),  meta.getItemDimensions());
 
         // Get digiKam Tags Path list of picture from database.
         // Ex.: "City/Paris/Monuments/Notre Dame"

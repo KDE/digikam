@@ -273,9 +273,9 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
             element.m_exifImageResolutionUnit = meta.getXmpTagString("Xmp.tiff.ResolutionUnit");
         }
 
-        if (meta.getImageDateTime().isValid())
+        if (meta.getItemDateTime().isValid())
         {
-            element.m_exifImageDateTime = QLocale().toString(meta.getImageDateTime(), QLocale::ShortFormat);
+            element.m_exifImageDateTime = QLocale().toString(meta.getItemDateTime(), QLocale::ShortFormat);
         }
 
         element.m_exifImageYCbCrPositioning = meta.getExifTagString("Exif.Image.YCbCrPositioning");

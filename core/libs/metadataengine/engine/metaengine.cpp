@@ -299,7 +299,7 @@ bool MetaEngine::setProgramId() const
 {
     QString version(digiKamVersion());
     QLatin1String software("digiKam");
-    return setImageProgramId(software, version);
+    return setItemProgramId(software, version);
 }
 
 } // namespace Digikam

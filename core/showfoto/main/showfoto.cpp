@@ -275,9 +275,9 @@ void ShowFoto::openUrls(const QList<QUrl> &urls)
         iteminfo.folder    = fi.path();
         iteminfo.dtime     = fi.created();
         meta.load(fi.filePath());
-        iteminfo.ctime     = meta.getImageDateTime();
-        iteminfo.width     = meta.getImageDimensions().width();
-        iteminfo.height    = meta.getImageDimensions().height();
+        iteminfo.ctime     = meta.getItemDateTime();
+        iteminfo.width     = meta.getItemDimensions().width();
+        iteminfo.height    = meta.getItemDimensions().height();
         iteminfo.photoInfo = meta.getPhotographInformation();
 
         if (!d->infoList.contains(iteminfo))
@@ -340,9 +340,9 @@ void ShowFoto::openFolder(const QUrl& url)
         iteminfo.url       = QUrl::fromLocalFile((*fi).filePath());
         iteminfo.dtime     = (*fi).created();
         meta.load((*fi).filePath());
-        iteminfo.ctime     = meta.getImageDateTime();
-        iteminfo.width     = meta.getImageDimensions().width();
-        iteminfo.height    = meta.getImageDimensions().height();
+        iteminfo.ctime     = meta.getItemDateTime();
+        iteminfo.width     = meta.getItemDimensions().width();
+        iteminfo.height    = meta.getItemDimensions().height();
         iteminfo.photoInfo = meta.getPhotographInformation();
 
         if (!d->infoList.contains(iteminfo))

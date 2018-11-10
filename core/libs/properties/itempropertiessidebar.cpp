@@ -228,7 +228,7 @@ void ItemPropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     {
         m_propertiesTab->setImageMime(i18n("RAW Image"));
         bitDepth    = QLatin1String("48");
-        dims        = metaData.getImageDimensions();
+        dims        = metaData.getItemDimensions();
         colorMode   = i18n("Uncalibrated");
     }
     else
@@ -247,7 +247,7 @@ void ItemPropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
     str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
             dims.width(), dims.height(), mpixels);
-    m_propertiesTab->setImageDimensions(str);
+    m_propertiesTab->setItemDimensions(str);
 
     if (!dims.isValid()) str = i18n("Unknown");
     else m_propertiesTab->aspectRatioToString(dims.width(), dims.height(), str);

@@ -70,7 +70,7 @@ void SetIptcPreviewTest::setIptcPreview(const QString& file)
     ret = meta.load(path);
     QVERIFY(ret);
 
-    meta.setImagePreview(preview);
+    meta.setItemPreview(preview);
     ret = meta.applyChanges();
     QVERIFY(ret);
 
@@ -79,7 +79,7 @@ void SetIptcPreviewTest::setIptcPreview(const QString& file)
     ret = meta2.load(path);
     QVERIFY(ret);
 
-    ret = meta2.getImagePreview(preview2);
+    ret = meta2.getItemPreview(preview2);
     QVERIFY(ret);
 
     QVERIFY(!preview2.isNull());

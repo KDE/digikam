@@ -23,7 +23,7 @@ set(libdmetadata_SRCS
     engine/metaengine_data.cpp
     engine/metaengine_exif.cpp
     engine/metaengine_fileio.cpp
-    engine/metaengine_image.cpp
+    engine/metaengine_item.cpp
     engine/metaengine_comments.cpp
     engine/metaengine_iptc.cpp
     engine/metaengine_gps.cpp

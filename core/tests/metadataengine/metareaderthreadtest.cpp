@@ -65,7 +65,7 @@ void Mytask::run()
                 {
 
                     // Get most important info used to populate the core-database
-                    meta->getImageDimensions();
+                    meta->getItemDimensions();
                     meta->getItemComments();
                     meta->getImageTitles();
                     meta->getCreatorContactInfo();
@@ -83,7 +83,7 @@ void Mytask::run()
                 default: // WRITE_INFO_TO_SIDECAR
                 {
                     // Just create sidecar files with these info which will touch Exif, Iptc, and Xmp metadata
-                    meta->setImageDimensions(QSize(256, 256));
+                    meta->setItemDimensions(QSize(256, 256));
                     meta->setImageDateTime(QDateTime::currentDateTime());
                     meta->setComments(QString::fromLatin1("MetaReaderThread").toLatin1());
                     meta->setImageRating(1);

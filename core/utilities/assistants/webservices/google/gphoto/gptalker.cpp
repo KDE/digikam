@@ -344,9 +344,9 @@ bool GPTalker::addPhoto(const QString& photoPath,
 
         if (meta.load(photoPath))
         {
-            meta.setImageDimensions(image.size());
-            meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
+            meta.setItemDimensions(image.size());
+            meta.setItemOrientation(MetaEngine::ORIENTATION_NORMAL);
+            meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
             meta.save(path, true);
         }
     }
@@ -429,9 +429,9 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info, /*const QStr
 
         if (meta.load(photoPath))
         {
-            meta.setImageDimensions(image.size());
-            meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
+            meta.setItemDimensions(image.size());
+            meta.setItemOrientation(MetaEngine::ORIENTATION_NORMAL);
+            meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
             meta.save(path, true);
         }
     }

@@ -96,9 +96,9 @@ void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDi
     meta.setExif(exif);
     meta.setIptc(iptc);
     meta.setXmp(xmp);
-    meta.setImageDimensions(image.size());
-    meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-    meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
+    meta.setItemDimensions(image.size());
+    meta.setItemOrientation(MetaEngine::ORIENTATION_NORMAL);
+    meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
     ret = meta.applyChanges(true);
     QVERIFY(ret);
 }

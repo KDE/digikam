@@ -225,7 +225,7 @@ bool TimeAdjust::toolOperations()
             switch (prm.metadataSource)
             {
                 case TimeAdjustContainer::EXIFIPTCXMP:
-                    orgDateTime = meta.getImageDateTime();
+                    orgDateTime = meta.getItemDateTime();
                     break;
                 case TimeAdjustContainer::EXIFCREATED:
                     orgDateTime = QDateTime::fromString(meta.getExifTagString("Exif.Image.DateTime"),

@@ -647,7 +647,7 @@ QImage ThumbnailCreator::loadImagePreview(const DMetadata& metadata) const
 {
     QImage image;
 
-    if (metadata.getImagePreview(image))
+    if (metadata.getItemPreview(image))
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Use Exif/IPTC preview extraction. Size of image: "
                  << image.width() << "x" << image.height();

@@ -235,8 +235,8 @@ void SaveImgThread::run()
     meta.setXmpTagString("Xmp.tiff.Make",            d->make);
     meta.setExifTagString("Exif.Image.Model",        d->model);
     meta.setXmpTagString("Xmp.tiff.Model",           d->model);
-    meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-    meta.setImageColorWorkSpace(DMetadata::WORKSPACE_SRGB);
+    meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
+    meta.setItemColorWorkSpace(DMetadata::WORKSPACE_SRGB);
 
     emit signalProgress(d->newUrl, 90);
 

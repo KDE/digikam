@@ -475,7 +475,7 @@ void ImportItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         // delayed loading to list faster from UMSCamera
         if (itemInfo.mime == QLatin1String("image/x-raw"))
         {
-            dims = meta.getImageDimensions();
+            dims = meta.getItemDimensions();
         }
         else
         {

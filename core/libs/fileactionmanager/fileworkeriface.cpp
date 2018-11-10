@@ -57,7 +57,7 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionItemInfoList in
         QString path                  = info.filePath();
         DMetadata metadata(path);
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
-        metadata.setImageOrientation(o);
+        metadata.setItemOrientation(o);
 
         if (!metadata.applyChanges())
         {
@@ -281,7 +281,7 @@ void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int actio
             if (!isRaw)
             {
                 DMetadata metadata(path);
-                metadata.setImageOrientation(finalOrientation);
+                metadata.setItemOrientation(finalOrientation);
                 metadata.applyChanges();
             }
         }

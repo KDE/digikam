@@ -59,7 +59,7 @@ public:
     void setFileOwner(const QString& str);
     void setFilePermissions(const QString& str);
 
-    void setImageDimensions(const QString& str);
+    void setItemDimensions(const QString& str);
     void setImageRatio(const QString& str);
     void setImageMime(const QString& str);
     void setImageBitDepth(const QString& str);

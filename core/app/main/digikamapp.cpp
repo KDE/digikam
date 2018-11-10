@@ -757,7 +757,7 @@ void DigikamApp::slotResetExifOrientationActions()
 void DigikamApp::slotSetCheckedExifOrientationAction(const ItemInfo& info)
 {
     //DMetadata meta(info.fileUrl().toLocalFile());
-    //int orientation = (meta.isEmpty()) ? 0 : meta.getImageOrientation();
+    //int orientation = (meta.isEmpty()) ? 0 : meta.getItemOrientation();
     int orientation = info.orientation();
 
     switch (orientation)

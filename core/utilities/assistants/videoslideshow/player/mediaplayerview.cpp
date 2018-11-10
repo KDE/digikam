@@ -413,7 +413,7 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
         int orientation = 0;
         DMetadata meta(url.toLocalFile());
 
-        switch (meta.getImageOrientation())
+        switch (meta.getItemOrientation())
         {
             case MetaEngine::ORIENTATION_ROT_90:
                 orientation = 90;

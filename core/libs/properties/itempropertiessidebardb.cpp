@@ -534,7 +534,7 @@ void ItemPropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
                             commonInfo.width, commonInfo.height, mpixels);
             }
 
-            m_propertiesTab->setImageDimensions(str);
+            m_propertiesTab->setItemDimensions(str);
 
             if (commonInfo.width == 0 || commonInfo.height == 0)
             {

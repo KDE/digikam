@@ -230,10 +230,10 @@ bool MetaEngine::save(const QString& imageFilePath, bool setVersion) const
         case WRITE_TO_SIDECAR_ONLY:
             writeToSidecar = true;
             break;
-        case WRITE_TO_IMAGE_ONLY:
+        case WRITE_TO_FILE_ONLY:
             writeToFile    = true;
             break;
-        case WRITE_TO_SIDECAR_AND_IMAGE:
+        case WRITE_TO_SIDECAR_AND_FILE:
             writeToFile    = true;
             writeToSidecar = true;
             break;

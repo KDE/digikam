@@ -180,7 +180,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
 
         case MetadataInfo::CreationDate:
         {
-            return getImageDateTime();
+            return getItemDateTime();
         }
 
         case MetadataInfo::DigitizationDate:
@@ -190,7 +190,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
 
         case MetadataInfo::Orientation:
         {
-            return (int)getImageOrientation();
+            return (int)getItemOrientation();
         }
 
         case MetadataInfo::Make:

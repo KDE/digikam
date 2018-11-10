@@ -559,7 +559,7 @@ void ImageWindow::saveIsComplete()
 
     // reset the orientation flag in the database
     DMetadata meta(m_canvas->currentImage().getMetadata());
-    d->currentItemInfo.setOrientation(meta.getImageOrientation());
+    d->currentItemInfo.setOrientation(meta.getItemOrientation());
 
     // Pop-up a message to bring user when save is done.
     DNotificationWrapper(QLatin1String("editorsavefilecompleted"), i18n("Image saved successfully"),
@@ -615,7 +615,7 @@ void ImageWindow::saveAsIsComplete()
     {
         // reset the orientation flag in the database
         DMetadata meta(m_canvas->currentImage().getMetadata());
-        d->currentItemInfo.setOrientation(meta.getImageOrientation());
+        d->currentItemInfo.setOrientation(meta.getItemOrientation());
     }
 
     QStringList derivedFilePaths;

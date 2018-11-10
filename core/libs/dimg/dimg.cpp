@@ -3068,7 +3068,7 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
            )
         {
             // Non JPEG file, we update IPTC preview
-            meta.setImagePreview(preview);
+            meta.setItemPreview(preview);
         }
 
         if (destMimeType.toUpper() == QLatin1String("TIFF") || destMimeType.toUpper() == QLatin1String("TIF"))
@@ -3087,7 +3087,7 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
     }
 
     // Update Exif Image dimensions.
-    meta.setImageDimensions(size());
+    meta.setItemDimensions(size());
 
     // Update Exif Document Name tag with the original file name.
     if (!originalFileName.isEmpty())
@@ -3098,7 +3098,7 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
     // Update Exif Orientation tag if necessary.
     if (flags & ResetExifOrientationTag)
     {
-        meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+        meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
     }
 
     if (!m_priv->imageHistory.isEmpty())

@@ -133,11 +133,11 @@ bool DMetadata::loadUsingRawEngine(const QString& filePath)
 
         if (identify.imageSize.isValid())
         {
-            setImageDimensions(identify.imageSize);
+            setItemDimensions(identify.imageSize);
         }
 
         // A RAW image is always uncalibrated. */
-        setImageColorWorkSpace(WORKSPACE_UNCALIBRATED);
+        setItemColorWorkSpace(WORKSPACE_UNCALIBRATED);
 
         return true;
     }

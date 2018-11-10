@@ -122,7 +122,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         // This is bad when scanning. See bugs 215458 and 195583.
         // FIXME: Use Exiv2 to extract this info
         DMetadata metadata(filePath);
-        QSize size = metadata.getImageDimensions();
+        QSize size = metadata.getItemDimensions();
 
         if (size.isValid())
         {

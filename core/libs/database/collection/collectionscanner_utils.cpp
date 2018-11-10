@@ -693,7 +693,7 @@ void CollectionScanner::addItem(Digikam::CoreDbAccess& access, int albumID,
     // In first, from EXIF date & time tags, or
     // In second, from IPTC date & time tags.
 
-    datetime = metadata.getImageDateTime();
+    datetime = metadata.getItemDateTime();
 
     // Try to get image rating from IPTC Urgency tag
     // else use file system time stamp.
@@ -733,7 +733,7 @@ void CollectionScanner::updateItemDate(Digikam::CoreDbAccess& access, int albumI
     // In first, from EXIF date & time tags, or
     // In second, from IPTC date & time tags.
 
-    datetime = metadata.getImageDateTime();
+    datetime = metadata.getItemDateTime();
 
     if ( !datetime.isValid() )
     {

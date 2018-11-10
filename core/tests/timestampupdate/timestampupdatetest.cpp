@@ -110,7 +110,7 @@ void TimeStampUpdateTest::cleanupTestCase()
 void TimeStampUpdateTest::cleanup()
 {
     DMetadata meta;
-    meta.setMetadataWritingMode(MetaEngine::WRITE_TO_IMAGE_ONLY);
+    meta.setMetadataWritingMode(MetaEngine::WRITE_TO_FILE_ONLY);
     meta.setUpdateFileTimeStamp(true);
     meta.load(originalImageFile);
     meta.removeExifTag("Exif.Image.Model");
@@ -150,7 +150,7 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
 
     // Verify that Exif.Image.Model in image file is empty
     DMetadata meta;
-    meta.setMetadataWritingMode(MetaEngine::WRITE_TO_IMAGE_ONLY);
+    meta.setMetadataWritingMode(MetaEngine::WRITE_TO_FILE_ONLY);
     meta.setUpdateFileTimeStamp(true);
     meta.load(originalImageFile);
     QString model = meta.getExifTagString("Exif.Image.Model");
@@ -196,7 +196,7 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2False()
 
     // Verify that Exif.Image.Model in image file is empty
     DMetadata meta;
-    meta.setMetadataWritingMode(MetaEngine::WRITE_TO_IMAGE_ONLY);
+    meta.setMetadataWritingMode(MetaEngine::WRITE_TO_FILE_ONLY);
     meta.setUpdateFileTimeStamp(true);
     meta.load(originalImageFile);
     QString model = meta.getExifTagString("Exif.Image.Model");

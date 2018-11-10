@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-bool MetaEngine::setImageProgramId(const QString& program, const QString& version) const
+bool MetaEngine::setItemProgramId(const QString& program, const QString& version) const
 {
     QMutexLocker lock(&s_metaEngineMutex);
 
@@ -101,7 +101,7 @@ bool MetaEngine::setImageProgramId(const QString& program, const QString& versio
     return false;
 }
 
-QSize MetaEngine::getImageDimensions() const
+QSize MetaEngine::getItemDimensions() const
 {
     QMutexLocker lock(&s_metaEngineMutex);
 
@@ -205,7 +205,7 @@ QSize MetaEngine::getImageDimensions() const
     return QSize();
 }
 
-bool MetaEngine::setImageDimensions(const QSize& size) const
+bool MetaEngine::setItemDimensions(const QSize& size) const
 {
     QMutexLocker lock(&s_metaEngineMutex);
 
@@ -244,7 +244,7 @@ bool MetaEngine::setImageDimensions(const QSize& size) const
     return false;
 }
 
-MetaEngine::ImageOrientation MetaEngine::getImageOrientation() const
+MetaEngine::ImageOrientation MetaEngine::getItemOrientation() const
 {
     QMutexLocker lock(&s_metaEngineMutex);
 
@@ -347,7 +347,7 @@ MetaEngine::ImageOrientation MetaEngine::getImageOrientation() const
     return ORIENTATION_UNSPECIFIED;
 }
 
-bool MetaEngine::setImageOrientation(ImageOrientation orientation) const
+bool MetaEngine::setItemOrientation(ImageOrientation orientation) const
 {
     QMutexLocker lock(&s_metaEngineMutex);
 
@@ -421,7 +421,7 @@ bool MetaEngine::setImageOrientation(ImageOrientation orientation) const
     return false;
 }
 
-MetaEngine::ImageColorWorkSpace MetaEngine::getImageColorWorkSpace() const
+MetaEngine::ImageColorWorkSpace MetaEngine::getItemColorWorkSpace() const
 {
     // Check Exif values.
 
@@ -501,7 +501,7 @@ MetaEngine::ImageColorWorkSpace MetaEngine::getImageColorWorkSpace() const
     return WORKSPACE_UNSPECIFIED;
 }
 
-bool MetaEngine::setImageColorWorkSpace(ImageColorWorkSpace workspace) const
+bool MetaEngine::setItemColorWorkSpace(ImageColorWorkSpace workspace) const
 {
     QMutexLocker lock(&s_metaEngineMutex);
 
@@ -533,7 +533,7 @@ bool MetaEngine::setImageColorWorkSpace(ImageColorWorkSpace workspace) const
     return false;
 }
 
-QDateTime MetaEngine::getImageDateTime() const
+QDateTime MetaEngine::getItemDateTime() const
 {
     QMutexLocker lock(&s_metaEngineMutex);
 
@@ -1115,12 +1115,12 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
     }
 
     if (fallbackToCreationTime)
-        return getImageDateTime();
+        return getItemDateTime();
     else
         return QDateTime();
 }
 
-bool MetaEngine::getImagePreview(QImage& preview) const
+bool MetaEngine::getItemPreview(QImage& preview) const
 {
     QMutexLocker lock(&s_metaEngineMutex);
 
@@ -1144,7 +1144,7 @@ bool MetaEngine::getImagePreview(QImage& preview) const
     return false;
 }
 
-bool MetaEngine::setImagePreview(const QImage& preview) const
+bool MetaEngine::setItemPreview(const QImage& preview) const
 {
     if (preview.isNull())
     {

@@ -549,8 +549,8 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
 
             if (meta.load(photoPath))
             {
-                meta.setImageDimensions(image.size());
-                meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
+                meta.setItemDimensions(image.size());
+                meta.setItemOrientation(MetaEngine::ORIENTATION_NORMAL);
 
                 // NOTE: see bug #153207: Flickr use IPTC keywords to create Tags in web interface
                 //       As IPTC do not support UTF-8, we need to remove it.
@@ -562,7 +562,7 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
                 //       This function call remove all Dublin Core Tags.
                 meta.removeXmpTags(QStringList() << QLatin1String("dc"));
 
-                meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_IMAGE_ONLY);
+                meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
                 meta.save(path, true);
             }
             else

@@ -263,7 +263,7 @@ HistoryImageId DImgLoader::createHistoryImageId(const QString& filePath, const D
 
     HistoryImageId id(metadata.getImageUniqueId());
 
-    QDateTime dt = metadata.getImageDateTime();
+    QDateTime dt = metadata.getItemDateTime();
 
     if (dt.isNull())
     {

@@ -337,7 +337,7 @@ JpegRotator::JpegRotator(const QString& file)
       m_destFile(file)
 {
     m_metadata.load(file);
-    m_orientation  = m_metadata.getImageOrientation();
+    m_orientation  = m_metadata.getItemOrientation();
     QFileInfo info(file);
     m_documentName = info.fileName();
 }
@@ -511,7 +511,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotati
     // Get the new image dimension of the temp image. Using a dummy QImage object here
     // has a sense because the Exif dimension information can be missing from original image.
     // Get new dimensions with QImage will always work...
-    m_metadata.setImageDimensions(newSize);
+    m_metadata.setItemDimensions(newSize);
 
     // Update the image thumbnail.
     QImage exifThumb = m_metadata.getExifThumbnail(true);
@@ -523,13 +523,13 @@ void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotati
 
     QImage imagePreview;
 
-    if (m_metadata.getImagePreview(imagePreview))
+    if (m_metadata.getItemPreview(imagePreview))
     {
-        m_metadata.setImagePreview(imagePreview.transformed(qmatrix));
+        m_metadata.setItemPreview(imagePreview.transformed(qmatrix));
     }
 
     // Reset the Exif orientation tag of the temp image to normal
-    m_metadata.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+    m_metadata.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
 
     // We update all new metadata now...
     m_metadata.save(fileName, true);
@@ -729,7 +729,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         if (format.toUpper() != QLatin1String("JPG") && format.toUpper() != QLatin1String("JPEG") &&
             format.toUpper() != QLatin1String("JPE"))
         {
-            meta.setImagePreview(preview);
+            meta.setItemPreview(preview);
         }
 
         // Update Exif thumbnail.

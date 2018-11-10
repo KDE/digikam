@@ -497,7 +497,7 @@ void ItemPropertiesTab::setImageMime(const QString& str)
     d->labelImageMime->setAdjustedText(str);
 }
 
-void ItemPropertiesTab::setImageDimensions(const QString& str)
+void ItemPropertiesTab::setItemDimensions(const QString& str)
 {
     d->labelImageDimensions->setAdjustedText(str);
 }

@@ -276,7 +276,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     // Try to get preview from Exif data (good quality). Can work with Raw files
 
     DMetadata metadata(path);
-    metadata.getImagePreview(thumbnail);
+    metadata.getItemPreview(thumbnail);
 
     if (!thumbnail.isNull())
     {
@@ -548,8 +548,8 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
         // Try to load image metadata.
         meta.load(fi.filePath());
-        dt    = meta.getImageDateTime();
-        dims  = meta.getImageDimensions();
+        dt    = meta.getItemDateTime();
+        dims  = meta.getItemDimensions();
         pInfo = meta.getPhotographInformation();
 
         if (dt.isNull()) // fall back to file system info

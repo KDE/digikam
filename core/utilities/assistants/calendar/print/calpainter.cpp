@@ -88,7 +88,7 @@ void CalPainter::setImage(const QUrl& imagePath)
 {
     d->imagePath   = imagePath;
     MetaEngine meta(d->imagePath.toLocalFile());
-    d->orientation = (int)meta.getImageOrientation();
+    d->orientation = (int)meta.getItemOrientation();
 }
 
 void CalPainter::paint(int month)

@@ -643,7 +643,7 @@ int DNGWriter::convert()
 
             // Time from original shot
             dng_date_time_info dti;
-            dti.SetDateTime(d->dngDateTime(meta.getImageDateTime()));
+            dti.SetDateTime(d->dngDateTime(meta.getItemDateTime()));
             exif->fDateTimeOriginal = dti;
 
             dti.SetDateTime(d->dngDateTime(meta.getDigitizationDateTime(true)));
@@ -1280,7 +1280,7 @@ int DNGWriter::convert()
 
         if (d->updateFileDate)
         {
-            QDateTime date = meta.getImageDateTime();
+            QDateTime date = meta.getItemDateTime();
 
             qCDebug(DIGIKAM_GENERAL_LOG) << "DNGWriter: Setting modification date from meta data: " << date.toString();
 

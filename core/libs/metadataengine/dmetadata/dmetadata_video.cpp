@@ -499,7 +499,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                 QString::fromLatin1("w:%1, h:%2, unit:pixels").arg(codec->width).arg(codec->height));
 
             // Backport size in Exif and Iptc
-            setImageDimensions(QSize(codec->width, codec->height));
+            setItemDimensions(QSize(codec->width, codec->height));
 
             if (!aspectRatio.isEmpty())
             {
@@ -580,7 +580,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
                     setXmpTagString("Xmp.video.Orientation", QString::number(ori));
                     // Backport orientation in Exif
-                    setImageOrientation(ori);
+                    setItemOrientation(ori);
                 }
             }
 

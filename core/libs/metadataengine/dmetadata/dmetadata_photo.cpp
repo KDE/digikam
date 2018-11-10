@@ -49,7 +49,7 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
 
     if (hasExif() || hasXmp())
     {
-        photoInfo.dateTime = getImageDateTime();
+        photoInfo.dateTime = getItemDateTime();
 
         // -----------------------------------------------------------------------------------
 
