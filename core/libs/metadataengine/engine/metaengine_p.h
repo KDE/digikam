@@ -202,13 +202,15 @@ public:
 
 template <class Data, class Key, class KeyString, class KeyStringList = QList<KeyString> >
 
-class Q_DECL_HIDDEN MergeHelper
+class Q_DECL_HIDDEN MetaEngineMergeHelper
 {
 public:
 
     KeyStringList keys;
 
-    MergeHelper& operator<<(const KeyString& key)
+public:
+
+    MetaEngineMergeHelper& operator<<(const KeyString& key)
     {
         keys << key;
         return *this;
@@ -302,19 +304,19 @@ public:
     }
 };
 
-class Q_DECL_HIDDEN ExifMergeHelper
-    : public MergeHelper<Exiv2::ExifData, Exiv2::ExifKey, QLatin1String>
+class Q_DECL_HIDDEN ExifMetaEngineMergeHelper
+    : public MetaEngineMergeHelper<Exiv2::ExifData, Exiv2::ExifKey, QLatin1String>
 {
 };
 
-class Q_DECL_HIDDEN IptcMergeHelper
-    : public MergeHelper<Exiv2::IptcData, Exiv2::IptcKey, QLatin1String>
+class Q_DECL_HIDDEN IptcMetaEngineMergeHelper
+    : public MetaEngineMergeHelper<Exiv2::IptcData, Exiv2::IptcKey, QLatin1String>
 {
 };
 
 #ifdef _XMP_SUPPORT_
-class Q_DECL_HIDDEN XmpMergeHelper
-    : public MergeHelper<Exiv2::XmpData, Exiv2::XmpKey, QLatin1String>
+class Q_DECL_HIDDEN XmpMetaEngineMergeHelper
+    : public MetaEngineMergeHelper<Exiv2::XmpData, Exiv2::XmpKey, QLatin1String>
 {
 };
 #endif

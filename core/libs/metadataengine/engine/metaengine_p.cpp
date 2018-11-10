@@ -695,7 +695,7 @@ void MetaEngine::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
     // (to understand, remember that the xmpsidecar's Exif data is actually XMP data mapped back to Exif)
 
     // Description, Copyright and Creator is dominated by the sidecar: Remove file Exif fields, if field not in XMP.
-    ExifMergeHelper exifDominatedHelper;
+    ExifMetaEngineMergeHelper exifDominatedHelper;
     exifDominatedHelper << QLatin1String("Exif.Image.ImageDescription")
                         << QLatin1String("Exif.Photo.UserComment")
                         << QLatin1String("Exif.Image.Copyright")
@@ -703,7 +703,7 @@ void MetaEngine::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
     exifDominatedHelper.exclusiveMerge(xmpsidecar->exifData(), exifMetadata());
     // Date/Time and "the few more" from the XMP spec are handled as writeback
     // Note that Date/Time mapping is slightly contradictory in latest specs.
-    ExifMergeHelper exifWritebackHelper;
+    ExifMetaEngineMergeHelper exifWritebackHelper;
     exifWritebackHelper << QLatin1String("Exif.Image.DateTime")
                         << QLatin1String("Exif.Image.DateTime")
                         << QLatin1String("Exif.Photo.DateTimeOriginal")
@@ -718,7 +718,7 @@ void MetaEngine::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
 
     // IPTC
     // These fields cover almost all relevant IPTC data and are defined in the XMP specification for reconciliation.
-    IptcMergeHelper iptcDominatedHelper;
+    IptcMetaEngineMergeHelper iptcDominatedHelper;
     iptcDominatedHelper << QLatin1String("Iptc.Application2.ObjectName")
                         << QLatin1String("Iptc.Application2.Urgency")
                         << QLatin1String("Iptc.Application2.Category")
@@ -741,7 +741,7 @@ void MetaEngine::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
                         << QLatin1String("Iptc.Application2.Writer");
     iptcDominatedHelper.exclusiveMerge(xmpsidecar->iptcData(), iptcMetadata());
 
-    IptcMergeHelper iptcWritebackHelper;
+    IptcMetaEngineMergeHelper iptcWritebackHelper;
     iptcWritebackHelper << QLatin1String("Iptc.Application2.DateCreated")
                         << QLatin1String("Iptc.Application2.TimeCreated")
                         << QLatin1String("Iptc.Application2.DigitizationDate")
