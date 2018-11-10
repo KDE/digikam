@@ -149,6 +149,7 @@ public:
         nextAction(0),
         playAction(0),
         toolBar(0),
+        iface(0),
         videoWidget(0),
         player(0),
         slider(0),
@@ -164,6 +165,8 @@ public:
     QAction*             playAction;
 
     QToolBar*            toolBar;
+
+    DInfoInterface*      iface;
 
     WidgetRenderer*      videoWidget;
     AVPlayer*            player;
@@ -281,6 +284,11 @@ MediaPlayerView::~MediaPlayerView()
 {
     d->player->stop();
     delete d;
+}
+
+void MediaPlayerView::setInfoInterface(DInfoInterface* const iface)
+{
+    d->iface = iface;
 }
 
 void MediaPlayerView::reload()
@@ -411,9 +419,19 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
     if (MetaEngineSettings::instance()->settings().exifRotate)
     {
         int orientation = 0;
-        DMetadata meta(url.toLocalFile());
 
-        switch (meta.getItemOrientation())
+        if (d->iface)
+        {
+            DItemInfo info(d->iface->itemInfo(url));
+            orientation = info.orientation();
+        }
+        else
+        {
+            DMetadata meta(url.toLocalFile());
+            orientation = meta.getItemOrientation();
+        }
+
+        switch (orientation)
         {
             case MetaEngine::ORIENTATION_ROT_90:
                 orientation = 90;

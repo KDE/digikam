@@ -637,4 +637,5 @@ BUGFIXES:
 570 ==> 400777 - Group images by timelapse / burst [patch].
 571 ==> 400902 - NAS Mysql cannot connect with instructions given by Dmitry Popov.
 572 ==> 400918 - Tags are erroneously copied to untagged images in a selection when new tag added.
-573 ==> 
+573 ==> 375197 - It is possible to rotate video thumbnails (but the video isn't rotated).
+574 ==> 
