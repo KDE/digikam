@@ -127,7 +127,8 @@ void ImageRotateOverlay::slotClicked()
 bool ImageRotateOverlay::checkIndex(const QModelIndex& index) const
 {
     ItemInfo info = ItemModel::retrieveItemInfo(index);
-    return (info.category() == DatabaseItem::Image);
+    return (info.category() == DatabaseItem::Image ||
+            info.category() == DatabaseItem::Video);
 }
 
 void ImageRotateOverlay::widgetEnterEvent()
