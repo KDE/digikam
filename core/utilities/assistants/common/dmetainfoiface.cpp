@@ -31,7 +31,8 @@
 // Local includes
 
 #include "dmetadata.h"
-#include "infocontainer.h"
+#include "photoinfocontainer.h"
+#include "videoinfocontainer.h"
 #include "template.h"
 #include "dfileselector.h"
 
@@ -91,20 +92,20 @@ DMetaInfoIface::DInfoMap DMetaInfoIface::itemInfo(const QUrl& url) const
         QFileInfo info(url.toLocalFile());
 
         map.insert(QLatin1String("name"),        info.fileName());
-        map.insert(QLatin1String("title"),       meta.getImageTitles()[def].caption);
-        map.insert(QLatin1String("comment"),     meta.getImageComments()[def].caption);
-        map.insert(QLatin1String("orientation"), (int)meta.getImageOrientation());
-        map.insert(QLatin1String("datetime"),    meta.getImageDateTime());
-        map.insert(QLatin1String("rating"),      meta.getImageRating());
-        map.insert(QLatin1String("colorlabel"),  meta.getImageColorLabel());
-        map.insert(QLatin1String("picklabel"),   meta.getImagePickLabel());
+        map.insert(QLatin1String("title"),       meta.getItemTitles()[def].caption);
+        map.insert(QLatin1String("comment"),     meta.getItemComments()[def].caption);
+        map.insert(QLatin1String("orientation"), (int)meta.getItemOrientation());
+        map.insert(QLatin1String("datetime"),    meta.getItemDateTime());
+        map.insert(QLatin1String("rating"),      meta.getItemRating());
+        map.insert(QLatin1String("colorlabel"),  meta.getItemColorLabel());
+        map.insert(QLatin1String("picklabel"),   meta.getItemPickLabel());
         map.insert(QLatin1String("filesize"),    (qlonglong)info.size());
-        map.insert(QLatin1String("dimensions"),  meta.getImageDimensions());
+        map.insert(QLatin1String("dimensions"),  meta.getItemDimensions());
 
         // Get digiKam Tags Path list of picture from database.
         // Ex.: "City/Paris/Monuments/Notre Dame"
         QStringList tagsPath;
-        meta.getImageTagsPath(tagsPath);
+        meta.getItemTagsPath(tagsPath);
         map.insert(QLatin1String("tagspath"),    tagsPath);
 
         // Get digiKam Tags name (keywords) list of picture from database.

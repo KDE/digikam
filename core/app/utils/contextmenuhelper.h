@@ -51,8 +51,8 @@ class AbstractCheckableAlbumModel;
 class Album;
 class AlbumIconItem;
 class AlbumModificationHelper;
-class ImageInfo;
-class ImageFilterModel;
+class ItemInfo;
+class ItemFilterModel;
 class PAlbum;
 class TagModificationHelper;
 class TAlbum;
@@ -88,9 +88,9 @@ public:
 
 Q_SIGNALS:
 
-    void signalSetThumbnail(const ImageInfo&);
-    void signalGotoAlbum(const ImageInfo&);
-    void signalGotoDate(const ImageInfo&);
+    void signalSetThumbnail(const ItemInfo&);
+    void signalGotoAlbum(const ItemInfo&);
+    void signalGotoDate(const ItemInfo&);
     void signalGotoTag(int);
     void signalAssignTag(int);
     void signalRemoveTag(int);
@@ -103,6 +103,7 @@ Q_SIGNALS:
     void signalCreateGroup();
     void signalCreateGroupByTime();
     void signalCreateGroupByFilename();
+    void signalCreateGroupByTimelapse();
     void signalUngroup();
     void signalRemoveFromGroup();
 
@@ -342,7 +343,7 @@ public:
      * This menu will provide actions open, close, add to, remove from, or split a group.
      *
      * addGroupActions will add the actions as a flat list, not in a submenu.
-     * Note: Call setImageFilterModel before to have Open/Close group actions.
+     * Note: Call setItemFilterModel before to have Open/Close group actions.
      */
     void addGroupMenu(const imageIds& ids, const QList<QAction*>& extraMenuItems = QList<QAction*>());
     void addGroupActions(const imageIds& ids);
@@ -351,7 +352,7 @@ public:
      * Set a filter model.
      * Some of the group actions will operate directly on the model.
      */
-    void setImageFilterModel(ImageFilterModel* model);
+    void setItemFilterModel(ItemFilterModel* model);
 
     /**
      * Add a Select and Deselect menu to check and uncheck albums.

@@ -56,8 +56,8 @@ class Album;
 class DigikamView;
 class FaceScanSettings;
 class FilterStatusBar;
-class ImageInfo;
-class ImageInfoList;
+class ItemInfo;
+class ItemInfoList;
 class CameraType;
 
 class DIGIKAM_EXPORT DigikamApp : public DXmlGuiWindow
@@ -107,12 +107,13 @@ private:
     void showSideBars(bool visible);
     bool thumbbarVisibility() const;
     void customizedFullScreenMode(bool set);
+    void customizedTrashView(bool set);
     void toggleShowBar();
 
 private Q_SLOTS:
 
     void slotAlbumSelected(Album*);
-    void slotImageSelected(const ImageInfoList&, const ImageInfoList&);
+    void slotImageSelected(const ItemInfoList&, const ItemInfoList&);
     void slotSelectionChanged(int selectionCount);
     void slotExit();
     void slotDBStat();
@@ -126,7 +127,7 @@ private Q_SLOTS:
 
     void slotColorManagementOptionsChanged();
     void slotToggleColorManagedView();
-    void slotSetCheckedExifOrientationAction(const ImageInfo& info);
+    void slotSetCheckedExifOrientationAction(const ItemInfo& info);
     void slotResetExifOrientationActions();
     void slotTransformAction();
 

@@ -24,6 +24,10 @@
 
 #include "track_correlator_thread.h"
 
+// Qt includes
+
+#include <QTimeZone>
+
 // Local includes
 
 #include "track_correlator.h"
@@ -69,7 +73,8 @@ void TrackCorrelatorThread::run()
         }
 
         // GPS device are sync in time by satelite using GMT time.
-        QDateTime itemDateTime = it->dateTime.addSecs(options.secondsOffset*(-1));
+        QDateTime itemDateTime = it->dateTime.addSecs(options.secondsOffset);
+        itemDateTime.setTimeZone(QTimeZone(options.timeZoneOffset));
 
         // find the last point before our item:
         QDateTime       lastSmallerTime;

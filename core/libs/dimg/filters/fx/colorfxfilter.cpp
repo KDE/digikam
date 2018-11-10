@@ -530,7 +530,7 @@ static __inline__ int clamp(int from, int maxVal)
 }
 
 template<typename T>
-static void ImageFilterFx(const quint16* lutrgb, int lutTableSize,
+static void ItemFilterFx(const quint16* lutrgb, int lutTableSize,
                           T* rgb, uint start, uint end, int maxVal, int intensity)
 {
     int lutdim_r  = lutTableSize;
@@ -604,13 +604,13 @@ void ColorFXFilter::applyLut3D()
     {
         if (!m_orgImage.sixteenBit())
         {
-            ImageFilterFx(m_lutTable, m_lutTableSize, m_orgImage.bits(),
+            ItemFilterFx(m_lutTable, m_lutTableSize, m_orgImage.bits(),
                           i, min(i + stepI, maxI),
                           255, m_settings.intensity);
         }
         else
         {
-            ImageFilterFx(m_lutTable, m_lutTableSize, reinterpret_cast<unsigned short*>(m_orgImage.bits()),
+            ItemFilterFx(m_lutTable, m_lutTableSize, reinterpret_cast<unsigned short*>(m_orgImage.bits()),
                           i, min(i + stepI, maxI),
                           65535, m_settings.intensity);
         }

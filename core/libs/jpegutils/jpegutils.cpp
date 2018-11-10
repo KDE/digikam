@@ -86,7 +86,7 @@ extern "C"
 
 #include "digikam_debug.h"
 #include "dimg.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "filereadwritelock.h"
 
 #ifdef Q_OS_WIN
@@ -240,8 +240,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 
     // We only take RGB with 1 or 3 components, or CMYK with 4 components
     if (!(
-            (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1)) ||
-            (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
+           (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1)) ||
+           (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
         ))
     {
         jpeg_destroy_decompress(&cinfo);
@@ -281,28 +281,28 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     if (cinfo.output_components == 3)
     {
         // Expand 24->32 bpp.
-        for (uint j=0; j<cinfo.output_height; ++j)
+        for (uint j = 0 ; j < cinfo.output_height ; ++j)
         {
             uchar* in       = img.scanLine(j) + cinfo.output_width * 3;
             QRgb* const out = reinterpret_cast<QRgb*>(img.scanLine(j));
 
-            for (uint i = cinfo.output_width; --i; )
+            for (uint i = cinfo.output_width ; --i ; )
             {
-                in     -= 3;
+                in    -= 3;
                 out[i] = qRgb(in[0], in[1], in[2]);
             }
         }
     }
     else if (cinfo.out_color_space == JCS_CMYK)
     {
-        for (uint j = 0; j < cinfo.output_height; ++j)
+        for (uint j = 0 ; j < cinfo.output_height ; ++j)
         {
             uchar* in       = img.scanLine(j) + cinfo.output_width * 4;
             QRgb* const out = reinterpret_cast<QRgb*>(img.scanLine(j));
 
-            for (uint i = cinfo.output_width; --i; )
+            for (uint i = cinfo.output_width ; --i ; )
             {
-                in     -= 4;
+                in    -= 4;
                 int k  = in[3];
                 out[i] = qRgb(k * in[0] / 255, k * in[1] / 255, k * in[2] / 255);
             }
@@ -337,7 +337,7 @@ JpegRotator::JpegRotator(const QString& file)
       m_destFile(file)
 {
     m_metadata.load(file);
-    m_orientation  = m_metadata.getImageOrientation();
+    m_orientation  = m_metadata.getItemOrientation();
     QFileInfo info(file);
     m_documentName = info.fileName();
 }
@@ -408,7 +408,7 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
     QString     dir  = fi.absolutePath();
     QStringList removeLater;
 
-    for (int i = 0 ; i < actions.size() ; i++)
+    for (int i = 0 ; i < actions.size() ; ++i)
     {
         SafeTemporaryFile* const temp = new SafeTemporaryFile(dir + QLatin1String("/JpegRotator-XXXXXX.digikamtempfile.jpg"));
         temp->setAutoRemove(false);
@@ -450,7 +450,7 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
             qCDebug(DIGIKAM_GENERAL_LOG) << "Lossy transform done for " << src;
         }
 
-        if (i+1 != actions.size())
+        if (i + 1 != actions.size())
         {
             // another round
             src = tempFile;
@@ -504,9 +504,6 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
 
 void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotation &matrix)
 {
-    // Reset the Exif orientation tag of the temp image to normal
-    m_metadata.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-
     QMatrix qmatrix = matrix.toMatrix();
     QRect r(QPoint(0, 0), m_originalSize);
     QSize newSize   = qmatrix.mapRect(r).size();
@@ -514,7 +511,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotati
     // Get the new image dimension of the temp image. Using a dummy QImage object here
     // has a sense because the Exif dimension information can be missing from original image.
     // Get new dimensions with QImage will always work...
-    m_metadata.setImageDimensions(newSize);
+    m_metadata.setItemDimensions(newSize);
 
     // Update the image thumbnail.
     QImage exifThumb = m_metadata.getExifThumbnail(true);
@@ -526,10 +523,13 @@ void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotati
 
     QImage imagePreview;
 
-    if (m_metadata.getImagePreview(imagePreview))
+    if (m_metadata.getItemPreview(imagePreview))
     {
-        m_metadata.setImagePreview(imagePreview.transformed(qmatrix));
+        m_metadata.setItemPreview(imagePreview.transformed(qmatrix));
     }
+
+    // Reset the Exif orientation tag of the temp image to normal
+    m_metadata.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
 
     // We update all new metadata now...
     m_metadata.save(fileName, true);
@@ -540,9 +540,10 @@ void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotati
 
     if (QT_STAT(QFile::encodeName(m_file).constData(), &st) == 0)
     {
-        // See bug #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
+        // See bug #329608: Restore file modification time from original file
+        // only if updateFileTimeStamp for Setup/Metadata is turned off.
 
-        if (!MetadataSettings::instance()->settings().updateFileTimeStamp)
+        if (!MetaEngineSettings::instance()->settings().updateFileTimeStamp)
         {
             struct utimbuf ut;
             ut.modtime = st.st_mtime;
@@ -728,7 +729,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         if (format.toUpper() != QLatin1String("JPG") && format.toUpper() != QLatin1String("JPEG") &&
             format.toUpper() != QLatin1String("JPE"))
         {
-            meta.setImagePreview(preview);
+            meta.setItemPreview(preview);
         }
 
         // Update Exif thumbnail.
@@ -743,24 +744,24 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
 
         // And now save the image to a new file format.
 
-        if ( format.toUpper() == QLatin1String("PNG") )
+        if (format.toUpper() == QLatin1String("PNG"))
         {
             image.setAttribute(QLatin1String("quality"), 9);
         }
 
-        if ( format.toUpper() == QLatin1String("TIFF") || format.toUpper() == QLatin1String("TIF") )
+        if (format.toUpper() == QLatin1String("TIFF") || format.toUpper() == QLatin1String("TIF"))
         {
             image.setAttribute(QLatin1String("compress"), true);
         }
 
-        if ( format.toUpper() == QLatin1String("JP2") || format.toUpper() == QLatin1String("JPX") ||
-             format.toUpper() == QLatin1String("JPC") || format.toUpper() == QLatin1String("PGX") ||
-             format.toUpper() == QLatin1String("J2K") )
+        if (format.toUpper() == QLatin1String("JP2") || format.toUpper() == QLatin1String("JPX") ||
+            format.toUpper() == QLatin1String("JPC") || format.toUpper() == QLatin1String("PGX") ||
+            format.toUpper() == QLatin1String("J2K"))
         {
             image.setAttribute(QLatin1String("quality"), 100);    // LossLess
         }
 
-        if ( format.toUpper() == QLatin1String("PGF") )
+        if (format.toUpper() == QLatin1String("PGF"))
         {
             image.setAttribute(QLatin1String("quality"), 0);    // LossLess
         }
@@ -795,12 +796,12 @@ bool copyFile(const QString& src, const QString& dst)
     QFile sFile(src);
     QFile dFile(dst);
 
-    if ( !sFile.open(QIODevice::ReadOnly) )
+    if (!sFile.open(QIODevice::ReadOnly))
     {
         return false;
     }
 
-    if ( !dFile.open(QIODevice::WriteOnly) )
+    if (!dFile.open(QIODevice::WriteOnly))
     {
         sFile.close();
         return false;
@@ -871,11 +872,11 @@ int getJpegQuality(const QString& file)
     long i, j;
     long sum = 0;
 
-    for (i = 0; i < NUM_QUANT_TBLS; ++i)
+    for (i = 0 ; i < NUM_QUANT_TBLS ; ++i)
     {
         if (jpeg_info.quant_tbl_ptrs[i] != NULL)
         {
-            for (j = 0; j < DCTSIZE2; ++j)
+            for (j = 0 ; j < DCTSIZE2 ; ++j)
             {
                 sum += jpeg_info.quant_tbl_ptrs[i]->quantval[j];
             }
@@ -920,7 +921,7 @@ int getJpegQuality(const QString& file)
                        jpeg_info.quant_tbl_ptrs[1]->quantval[0]+
                        jpeg_info.quant_tbl_ptrs[1]->quantval[DCTSIZE2 - 1]);
 
-        for (i = 0; i < 100; ++i)
+        for (i = 0 ; i < 100 ; ++i)
         {
             if ((value < hash[i]) && (sum < sums[i]))
             {
@@ -970,7 +971,7 @@ int getJpegQuality(const QString& file)
         value = (long)(jpeg_info.quant_tbl_ptrs[0]->quantval[2]+
                        jpeg_info.quant_tbl_ptrs[0]->quantval[53]);
 
-        for (i = 0; i < 100; ++i)
+        for (i = 0 ; i < 100 ; ++i)
         {
             if ((value < hash[i]) && (sum < sums[i]))
             {

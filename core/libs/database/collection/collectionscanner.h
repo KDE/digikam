@@ -38,37 +38,12 @@
 #include "digikam_export.h"
 #include "coredbaccess.h"
 #include "coredbalbuminfo.h"
+#include "collectionscannerhints.h"
 
 class QFileInfo;
 
 namespace Digikam
 {
-
-class AlbumCopyMoveHint;
-class CollectionLocation;
-class CollectionScannerObserver;
-class ImageInfo;
-class ItemCopyMoveHint;
-class ItemChangeHint;
-class ItemMetadataAdjustmentHint;
-
-class CollectionScannerHintContainer
-{
-public:
-
-    /// Note: All methods of this class must be thread-safe.
-
-    virtual ~CollectionScannerHintContainer() {};
-
-    virtual void recordHints(const QList<AlbumCopyMoveHint>& hints) = 0;
-    virtual void recordHints(const QList<ItemCopyMoveHint>& hints) = 0;
-    virtual void recordHints(const QList<ItemChangeHint>& hints) = 0;
-    virtual void recordHint(const ItemMetadataAdjustmentHint& hints) = 0;
-
-    virtual void clear() = 0;
-};
-
-// ------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT CollectionScanner : public QObject
 {
@@ -78,19 +53,27 @@ public:
 
     enum FileScanMode
     {
-        /** The file will be scanned like it is done for any usual scan.
-         *  If it was not modified, no further action is taken.
-         *  If the file is not known yet, it will be fully scanned, or,
-         *  if an identical file is found, this data will be copied. */
+        /**
+         * The file will be scanned like it is done for any usual scan.
+         * If it was not modified, no further action is taken.
+         * If the file is not known yet, it will be fully scanned, or,
+         * if an identical file is found, this data will be copied.
+         */
         NormalScan,
-        /** The file will scanned like a modified file. Only a selected portion
-         *  of the metadata will be updated into the database.
-         *  If the file is not known yet, it will be fully scanned, or,
-         *  if an identical file is found, this data will be copied.  */
+
+        /**
+         * The file will scanned like a modified file. Only a selected portion
+         * of the metadata will be updated into the database.
+         * If the file is not known yet, it will be fully scanned, or,
+         * if an identical file is found, this data will be copied.
+         */
         ModifiedScan,
-        /** The file will be scanned like a completely new file.
-         *  The complete metadata is re-read into the database.
-         *  No search for identical files will be done. */
+
+        /**
+         * The file will be scanned like a completely new file.
+         * The complete metadata is re-read into the database.
+         * No search for identical files will be done.
+         */
         Rescan
     };
 
@@ -98,57 +81,6 @@ public:
 
     explicit CollectionScanner();
     virtual ~CollectionScanner();
-
-    /**
-     * Carries out a full scan on all available parts of the collection.
-     * Only a full scan can finally remove deleted files from the database,
-     * only a full scan will mark the database as scanned.
-     * The database will be locked while running (Note: this is not done for partialScans).
-     */
-    void completeScan();
-
-    /**
-     * If you enable deferred file scanning for a completeScan(), new files
-     * will not be scanned. The relevant albums are available from
-     * deferredAlbumPaths() when completeScan() has finished.
-     * You need to call finishCompleteScan() afterwards with the list
-     * to get the same complete scan than undeferred completeScan().
-     */
-    void finishCompleteScan(const QStringList& albumPaths);
-
-    void setDeferredFileScanning(bool defer);
-    QStringList deferredAlbumPaths() const;
-
-    /**
-     * Carries out a partial scan on the specified path of the collection.
-     * The includes scanning for new files + albums and updating modified file data.
-     * Files no longer found in the specified path however are not completely
-     * removed, but only marked as removed. They will be removed only after a complete scan.
-     */
-    void partialScan(const QString& filePath);
-
-    /**
-     * Same procedure as above, but albumRoot and album is provided.
-     */
-    void partialScan(const QString& albumRoot, const QString& album);
-
-    /**
-     * The given file will be scanned according to the given mode.
-     * Returns the image id of the file.
-     */
-    qlonglong scanFile(const QString& filePath, FileScanMode mode = ModifiedScan);
-
-    /**
-     * Same procedure as above, but albumRoot and album is provided.
-     * If you already have this info it need not be retrieved.
-     * Returns the image id of the file, or -1 on failure.
-     */
-    qlonglong scanFile(const QString& albumRoot, const QString& album, const QString& fileName, FileScanMode mode = ModifiedScan);
-
-    /**
-     * The given file represented by the ImageInfo will be scanned according to mode
-     */
-    void scanFile(const ImageInfo& info, FileScanMode mode = ModifiedScan);
 
     /**
      * Hints give the scanner additional info about things that happened in the past
@@ -175,23 +107,38 @@ public:
     void setNeedFileCount(bool on);
 
     /**
-     * Utility method:
-     * Prepare the given albums to be removed,
-     * typically by setting the albums as orphan
-     * and removing all entries from the albums
-     */
-    void safelyRemoveAlbums(const QList<int>& albumIds);
-
-    /**
      * Set an observer to be able to cancel a running scan
      */
     void setObserver(CollectionScannerObserver* const observer);
 
-    /**
-     * When a file is derived from another file, typically through editing,
-     * copy all relevant attributes from source file to the new file.
+    void setDeferredFileScanning(bool defer);
+    QStringList deferredAlbumPaths() const;
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Scan operations
      */
-    static void copyFileProperties(const ImageInfo& source, const ImageInfo& dest);
+
+    //@{
+
+public:
+
+    /**
+     * Carries out a full scan on all available parts of the collection.
+     * Only a full scan can finally remove deleted files from the database,
+     * only a full scan will mark the database as scanned.
+     * The database will be locked while running (Note: this is not done for partialScans).
+     */
+    void completeScan();
+
+    /**
+     * If you enable deferred file scanning for a completeScan(), new files
+     * will not be scanned. The relevant albums are available from
+     * deferredAlbumPaths() when completeScan() has finished.
+     * You need to call finishCompleteScan() afterwards with the list
+     * to get the same complete scan than undeferred completeScan().
+     */
+    void finishCompleteScan(const QStringList& albumPaths);
 
     /**
      * Returns if the initial scan of the database has been done.
@@ -199,6 +146,101 @@ public:
      * (or update requiring a rescan)
      */
     static bool databaseInitialScanDone();
+
+    /**
+     * Carries out a partial scan on the specified path of the collection.
+     * The includes scanning for new files + albums and updating modified file data.
+     * Files no longer found in the specified path however are not completely
+     * removed, but only marked as removed. They will be removed only after a complete scan.
+     */
+    void partialScan(const QString& filePath);
+
+    /**
+     * Same procedure as above, but albumRoot and album is provided.
+     */
+    void partialScan(const QString& albumRoot, const QString& album);
+
+    /**
+     * The given file will be scanned according to the given mode.
+     * Returns the image id of the file.
+     */
+    qlonglong scanFile(const QString& filePath, FileScanMode mode = ModifiedScan);
+
+    /**
+     * Same procedure as above, but albumRoot and album is provided.
+     * If you already have this info it need not be retrieved.
+     * Returns the image id of the file, or -1 on failure.
+     */
+    qlonglong scanFile(const QString& albumRoot,
+                       const QString& album,
+                       const QString& fileName,
+                       FileScanMode mode = ModifiedScan);
+
+    /**
+     * The given file represented by the ItemInfo will be scanned according to mode
+     */
+    void scanFile(const ItemInfo& info, FileScanMode mode = ModifiedScan);
+
+protected:
+
+    void scanForStaleAlbums(const QList<CollectionLocation>& locations);
+    void scanForStaleAlbums(const QList<int>& locationIdsToScan);
+    void scanAlbumRoot(const CollectionLocation& location);
+    void scanAlbum(const CollectionLocation& location, const QString& album);
+    void scanExistingFile(const QFileInfo& fi, qlonglong id);
+    void scanFileNormal(const QFileInfo& info, const ItemScanInfo& scanInfo);
+    void scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
+    void scanFileUpdateHashReuseThumbnail(const QFileInfo& fi, const ItemScanInfo& scanInfo, bool fileWasEdited);
+    void rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
+    void completeScanCleanupPart();
+    void completeHistoryScanning();
+    void finishHistoryScanning();
+    void historyScanningStage2(const QList<qlonglong>& ids);
+    void historyScanningStage3(const QList<qlonglong>& ids);
+
+    qlonglong scanFile(const QFileInfo& fi, int albumId, qlonglong id, FileScanMode mode);
+    qlonglong scanNewFile(const QFileInfo& info, int albumId);
+    qlonglong scanNewFileFullScan(const QFileInfo& info, int albumId);
+
+    //@}
+
+    // -----------------------------------------------------------------------------
+
+    /** @name Scan utilities
+     */
+
+    //@{
+
+public:
+
+    /**
+     * Prepare the given albums to be removed,
+     * typically by setting the albums as orphan
+     * and removing all entries from the albums
+     */
+    void safelyRemoveAlbums(const QList<int>& albumIds);
+
+    /**
+     * When a file is derived from another file, typically through editing,
+     * copy all relevant attributes from source file to the new file.
+     */
+    static void copyFileProperties(const ItemInfo& source, const ItemInfo& dest);
+
+protected:
+
+    void markDatabaseAsScanned();
+    void mainEntryPoint(bool complete);
+    int  checkAlbum(const CollectionLocation& location, const QString& album);
+    void itemsWereRemoved(const QList<qlonglong> &removedIds);
+    void updateRemovedItemsTime();
+    void incrementDeleteRemovedCompleteScanCount();
+    void resetDeleteRemovedSettings();
+    bool checkDeleteRemoved();
+    void loadNameFilters();
+    int  countItemsInFolder(const QString& directory);
+    DatabaseItem::Category category(const QFileInfo& info);
+
+    //@}
 
 Q_SIGNALS:
 
@@ -237,39 +279,6 @@ Q_SIGNALS:
      * Emitted when the observer told to cancel the scan
      */
     void cancelled();
-
-protected:
-
-    void completeScanCleanupPart();
-    void mainEntryPoint(bool complete);
-    void scanForStaleAlbums(const QList<CollectionLocation>& locations);
-    void scanForStaleAlbums(const QList<int>& locationIdsToScan);
-    void scanAlbumRoot(const CollectionLocation& location);
-    void scanAlbum(const CollectionLocation& location, const QString& album);
-    int  checkAlbum(const CollectionLocation& location, const QString& album);
-    void scanExistingFile(const QFileInfo& fi, qlonglong id);
-    void scanFileNormal(const QFileInfo& info, const ItemScanInfo& scanInfo);
-    void scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
-    void scanFileUpdateHashReuseThumbnail(const QFileInfo& fi, const ItemScanInfo& scanInfo, bool fileWasEdited);
-    void rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
-    void itemsWereRemoved(const QList<qlonglong> &removedIds);
-    void completeHistoryScanning();
-    void finishHistoryScanning();
-    void historyScanningStage2(const QList<qlonglong>& ids);
-    void historyScanningStage3(const QList<qlonglong>& ids);
-
-    void markDatabaseAsScanned();
-    void updateRemovedItemsTime();
-    void incrementDeleteRemovedCompleteScanCount();
-    void resetDeleteRemovedSettings();
-    bool checkDeleteRemoved();
-    void loadNameFilters();
-    int  countItemsInFolder(const QString& directory);
-    DatabaseItem::Category category(const QFileInfo& info);
-
-    qlonglong scanFile(const QFileInfo& fi, int albumId, qlonglong id, FileScanMode mode);
-    qlonglong scanNewFile(const QFileInfo& info, int albumId);
-    qlonglong scanNewFileFullScan(const QFileInfo& info, int albumId);
 
 private:
 

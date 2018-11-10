@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-02-18
- * Description : Sync QItemSelectionModel of ImageFilterModel and TableViewModel
+ * Description : Sync QItemSelectionModel of ItemFilterModel and TableViewModel
  *
  * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -29,7 +29,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "tableview_model.h"
 #include "tableview_shared.h"
 
@@ -91,12 +91,12 @@ TableViewSelectionModelSyncer::~TableViewSelectionModelSyncer()
 
 QModelIndex TableViewSelectionModelSyncer::toSource(const QModelIndex& tableViewIndex) const
 {
-    return s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
+    return s->tableViewModel->toItemFilterModelIndex(tableViewIndex);
 }
 
 QModelIndex TableViewSelectionModelSyncer::toTarget(const QModelIndex& sourceIndex) const
 {
-    return s->tableViewModel->fromImageFilterModelIndex(sourceIndex);
+    return s->tableViewModel->fromItemFilterModelIndex(sourceIndex);
 }
 
 int TableViewSelectionModelSyncer::targetModelColumnCount() const
@@ -171,7 +171,7 @@ QItemSelection TableViewSelectionModelSyncer::itemSelectionToSource(const QItemS
         for (int row = firstRow; row<=lastRow; ++row)
         {
             const QModelIndex tableViewIndex = s->tableViewModel->index(row, 0, range.parent());
-            const QModelIndex sourceIndex    = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
+            const QModelIndex sourceIndex    = s->tableViewModel->toItemFilterModelIndex(tableViewIndex);
 
             if (sourceIndex.isValid())
             {
@@ -196,7 +196,7 @@ QItemSelection TableViewSelectionModelSyncer::itemSelectionToTarget(const QItemS
         for (int row = firstRow; row<=lastRow; ++row)
         {
             const QModelIndex sourceIndex               = s->imageFilterModel->index(row, 0, range.parent());
-            const QModelIndex tableViewIndexTopLeft     = s->tableViewModel->fromImageFilterModelIndex(sourceIndex);
+            const QModelIndex tableViewIndexTopLeft     = s->tableViewModel->fromItemFilterModelIndex(sourceIndex);
             const QModelIndex tableViewIndexBottomRight = s->tableViewModel->index(
                     tableViewIndexTopLeft.row(),
                     targetColumnCount-1,

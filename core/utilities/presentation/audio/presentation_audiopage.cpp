@@ -509,6 +509,8 @@ void PresentationAudioPage::slotSoundFilesButtonLoad()
                 }
             }
 
+            file.close();
+
             if (!playlistFiles.isEmpty())
             {
                 m_SoundFilesListBox->clear();

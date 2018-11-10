@@ -58,13 +58,14 @@
 #include "searchfolderview.h"
 #include "searchtabheader.h"
 #include "searchtextbar.h"
+#include "searchtreeview.h"
 #include "coredbsearchxml.h"
 #include "tagfolderview.h"
 #include "timelinewidget.h"
 #include "facescandialog.h"
 #include "facesdetector.h"
 #include "tagsmanager.h"
-#include "albumlabelstreeview.h"
+#include "labelstreeview.h"
 #include "coredb.h"
 #include "dexpanderbox.h"
 
@@ -436,7 +437,7 @@ public:
     {
     }
 
-    AlbumLabelsTreeView* labelsTree;
+    LabelsTreeView* labelsTree;
 };
 
 LabelsSideBarWidget::LabelsSideBarWidget(QWidget* const parent)
@@ -448,7 +449,7 @@ LabelsSideBarWidget::LabelsSideBarWidget(QWidget* const parent)
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
-    d->labelsTree = new AlbumLabelsTreeView(this);
+    d->labelsTree = new LabelsTreeView(this);
     d->labelsTree->setConfigGroup(getConfigGroup());
 
     layout->addWidget(d->labelsTree);
@@ -459,7 +460,7 @@ LabelsSideBarWidget::~LabelsSideBarWidget()
     delete d;
 }
 
-AlbumLabelsTreeView *LabelsSideBarWidget::labelsTree()
+LabelsTreeView *LabelsSideBarWidget::labelsTree()
 {
     return d->labelsTree;
 }
@@ -501,7 +502,7 @@ const QString LabelsSideBarWidget::getCaption()
     return i18n("Labels");
 }
 
-QHash<AlbumLabelsTreeView::Labels, QList<int> > LabelsSideBarWidget::selectedLabels()
+QHash<LabelsTreeView::Labels, QList<int> > LabelsSideBarWidget::selectedLabels()
 {
     return d->labelsTree->selectedLabels();
 }
@@ -522,7 +523,7 @@ public:
 
 DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent,
                                                          DateAlbumModel* const model,
-                                                         ImageAlbumFilterModel* const imageFilterModel)
+                                                         ItemAlbumFilterModel* const imageFilterModel)
     : SidebarWidget(parent),
       d(new Private)
 {
@@ -533,7 +534,7 @@ DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent,
 
     d->dateFolderView         = new DateFolderView(this, model);
     d->dateFolderView->setConfigGroup(getConfigGroup());
-    d->dateFolderView->setImageModel(imageFilterModel);
+    d->dateFolderView->setItemModel(imageFilterModel);
 
     layout->addWidget(d->dateFolderView);
 }
@@ -1274,14 +1275,14 @@ void FuzzySearchSideBarWidget::newDuplicatesSearch(const QList<TAlbum*>& albums)
     d->fuzzySearchView->newDuplicatesSearch(albums);
 }
 
-void FuzzySearchSideBarWidget::newSimilarSearch(const ImageInfo& imageInfo)
+void FuzzySearchSideBarWidget::newSimilarSearch(const ItemInfo& imageInfo)
 {
     if (imageInfo.isNull())
     {
         return;
     }
 
-    d->fuzzySearchView->setImageInfo(imageInfo);
+    d->fuzzySearchView->setItemInfo(imageInfo);
 }
 
 // -----------------------------------------------------------------------------
@@ -1303,7 +1304,7 @@ public:
 GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent,
                                                SearchModel* const searchModel,
                                                SearchModificationHelper* const searchModificationHelper,
-                                               ImageFilterModel* const imageFilterModel,
+                                               ItemFilterModel* const imageFilterModel,
                                                QItemSelectionModel* const itemSelectionModel)
     : SidebarWidget(parent),
       d(new Private)

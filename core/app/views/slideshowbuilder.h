@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "progressmanager.h"
 #include "slideshowsettings.h"
 
@@ -42,7 +42,7 @@ public:
 
     /** Contructor to work on image list
      */
-    explicit SlideShowBuilder(const ImageInfoList& infoList);
+    explicit SlideShowBuilder(const ItemInfoList& infoList);
 
     /** Contructor to work on recursive mode from album
      */
@@ -57,7 +57,7 @@ public:
       * @brief setOverrideStartFromCurrent
       * @param startFromCurrent
       */
-    void setOverrideStartFrom(const ImageInfo& info);
+    void setOverrideStartFrom(const ItemInfo& info);
     void setAutoPlayEnabled(bool enable);
 
     void run();
@@ -70,7 +70,7 @@ private Q_SLOTS:
 
     void slotRun();
     void slotCancel();
-    void slotParseImageInfoList(const ImageInfoList& list);
+    void slotParseItemInfoList(const ItemInfoList& list);
 
 private:
 

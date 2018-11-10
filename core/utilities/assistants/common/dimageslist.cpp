@@ -1030,11 +1030,14 @@ void DImagesList::slotLoadItems()
             // if EndElement is Images return
             grp.writeEntry("Last Images List Path", loadLevelsFile.adjusted(QUrl::RemoveFilename).toLocalFile());
             config.sync();
+            file.close();
             return;
         }
 
         xmlReader.readNext();
     }
+
+    file.close();
 }
 
 void DImagesList::slotSaveItems()
@@ -1099,6 +1102,7 @@ void DImagesList::slotSaveItems()
 
     grp.writeEntry("Last Images List Path", saveLevelsFile.adjusted(QUrl::RemoveFilename).toLocalFile());
     config.sync();
+    file.close();
 }
 
 void DImagesList::removeItemByUrl(const QUrl& url)

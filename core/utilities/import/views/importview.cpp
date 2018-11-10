@@ -253,13 +253,13 @@ void ImportView::setupConnections()
 /*
 void ImportView::connectIconViewFilter(FilterStatusBar* filterbar)
 {
-    ImageAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
+    ItemAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
 
     connect(model, SIGNAL(filterMatches(bool)),
             filterbar, SLOT(slotFilterMatches(bool)));
 
-    connect(model, SIGNAL(filterSettingsChanged(ImageFilterSettings)),
-            filterbar, SLOT(slotFilterSettingsChanged(ImageFilterSettings)));
+    connect(model, SIGNAL(filterSettingsChanged(ItemFilterSettings)),
+            filterbar, SLOT(slotFilterSettingsChanged(ItemFilterSettings)));
 
     connect(filterbar, SIGNAL(signalResetFilters()),
             d->filterWidget, SLOT(slotResetFilters()));
@@ -329,7 +329,7 @@ CamItemInfo& ImportView::camItemInfoRef(const QString& folder, const QString& fi
 
 bool ImportView::hasImage(const CamItemInfo& info) const
 {
-    return d->iconView->importImageModel()->hasImage(info);
+    return d->iconView->importItemModel()->hasImage(info);
 }
 
 QList<QUrl> ImportView::allUrls() const

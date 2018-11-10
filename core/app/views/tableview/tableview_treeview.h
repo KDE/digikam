@@ -32,8 +32,8 @@
 
 #include "digikam_export.h"
 #include "dragdropimplementations.h"
-#include "imagealbummodel.h"
-#include "imagefiltermodel.h"
+#include "itemalbummodel.h"
+#include "itemfiltermodel.h"
 #include "statesavingobject.h"
 #include "tableview_columnfactory.h"
 #include "tableview_shared.h"
@@ -72,7 +72,7 @@ protected:
     virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
     virtual void wheelEvent(QWheelEvent* event);
 
-    virtual bool hasHiddenGroupedImages(const ImageInfo& info) const;
+    virtual bool hasHiddenGroupedImages(const ItemInfo& info) const;
 
 private:
 

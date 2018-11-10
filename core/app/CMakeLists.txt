@@ -35,7 +35,7 @@ set(DIGIKAMCORE_OBJECTS
             # widgets
             $<TARGET_OBJECTS:digikamwidgetscore_src>
             $<TARGET_OBJECTS:digikamdialogscore_src>
-            $<TARGET_OBJECTS:imageproperties_src>
+            $<TARGET_OBJECTS:itemproperties_src>
             $<TARGET_OBJECTS:digikamgenericmodels_src>
             $<TARGET_OBJECTS:notificationmanager_src>
 
@@ -405,7 +405,7 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:digikamgui_src>
             $<TARGET_OBJECTS:digikamdeletedialog_src>
             $<TARGET_OBJECTS:digikamtemplate_src>
-            $<TARGET_OBJECTS:imagepropertiesdigikam_src>
+            $<TARGET_OBJECTS:itempropertiesdigikam_src>
             $<TARGET_OBJECTS:setup_src>
             $<TARGET_OBJECTS:lighttable_src>
             $<TARGET_OBJECTS:maintenance_src>
@@ -508,13 +508,13 @@ if(WIN32)
 endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
-    target_link_libraries(digikamgui PRIVATE ${KVM_LIBRARY})
+    target_link_libraries(digikamcore PRIVATE ${KVM_LIBRARY})
 endif()
 
 if(Gphoto2_FOUND)
     # See bug #258931: libgphoto2 library must be the last arg for linker.
-    # See bug #268267 : digiKam need to be linked to libusb to prevent crash 
-    # at gphoto2 init if opencv is linked with libdc1394. Libusb linking rules are 
+    # See bug #268267 : digiKam need to be linked to libusb to prevent crash
+    # at gphoto2 init if opencv is linked with libdc1394. Libusb linking rules are
     # add to gphoto2 linking rules by Gphoto2 cmake detection script.
 
     target_link_libraries(digikamgui PUBLIC ${GPHOTO2_LIBRARIES})

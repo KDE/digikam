@@ -28,7 +28,7 @@
 // Local includes
 
 #include "album.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "recognitiondatabase.h"
 
 namespace Digikam
@@ -77,7 +77,7 @@ public:
     AlbumList                               albums;
 
     // image infos to scan
-    ImageInfoList                           infos;
+    ItemInfoList                           infos;
 
     ScanTask                                task;
 

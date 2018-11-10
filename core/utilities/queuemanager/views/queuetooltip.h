@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "ditemtooltip.h"
 
 namespace Digikam

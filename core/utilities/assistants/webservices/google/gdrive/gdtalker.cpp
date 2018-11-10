@@ -261,9 +261,9 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
         if (meta.load(imgPath))
         {
-            meta.setImageDimensions(image.size());
-            meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+            meta.setItemDimensions(image.size());
+            meta.setItemOrientation(MetaEngine::ORIENTATION_NORMAL);
+            meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
             meta.save(path, true);
         }
     }

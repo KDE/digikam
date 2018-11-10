@@ -42,16 +42,16 @@ namespace ShowFoto
 
 typedef QPair<int, int> IntPair;
 
-class ShowfotoImageModel : public QAbstractListModel, public DragDropModelImplementation
+class ShowfotoItemModel : public QAbstractListModel, public DragDropModelImplementation
 {
     Q_OBJECT
 
 public:
-    enum ShowfotoImageModelRoles
+    enum ShowfotoItemModelRoles
     {
-        /// An ShowfotoImageModel* pointer to this model
-        ShowfotoImageModelPointerRole = Qt::UserRole,
-        ShowfotoImageModelInternalId  = Qt::UserRole + 1,
+        /// An ShowfotoItemModel* pointer to this model
+        ShowfotoItemModelPointerRole = Qt::UserRole,
+        ShowfotoItemModelInternalId  = Qt::UserRole + 1,
 
         /// Returns a thumbnail pixmap. May be implemented by subclasses.
         /// Returns either a valid pixmap or a null QVariant.
@@ -67,8 +67,8 @@ public:
 
 public:
 
-     explicit ShowfotoImageModel(QObject* const parent);
-    ~ShowfotoImageModel();
+     explicit ShowfotoItemModel(QObject* const parent);
+    ~ShowfotoItemModel();
 
     /** If a cache is kept, lookup by file path is fast,
      *  without a cache it is O(n). Default is false.
@@ -157,7 +157,7 @@ public:
 
     /**
      * Retrieve the ShowfotoItemInfo object from the data() function of the given index
-     * The index may be from a QSortFilterProxyModel as long as an ShowfotoImageModel is at the end.
+     * The index may be from a QSortFilterProxyModel as long as an ShowfotoItemModel is at the end.
      */
     static ShowfotoItemInfo retrieveShowfotoItemInfo(const QModelIndex& index);
     static qlonglong        retrieveShowfotoItemId(const QModelIndex& index);
@@ -272,7 +272,7 @@ private:
 
 public:
 
-    // NOTE: Declared public because it's used in ImageModelIncrementalUpdater class
+    // NOTE: Declared public because it's used in ItemModelIncrementalUpdater class
     class Private;
 
 private:
@@ -281,6 +281,6 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(ShowFoto::ShowfotoImageModel*)
+Q_DECLARE_METATYPE(ShowFoto::ShowfotoItemModel*)
 
 #endif // SHOW_FOTO_IMAGE_MODEL_H

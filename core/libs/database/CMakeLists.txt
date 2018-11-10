@@ -2,7 +2,7 @@
 # Copyright (c) 2010-2018 by Gilles Caulier, <caulier dot gilles at gmail dot com>
 # Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 # Copyright (c) 2015      by Mohamed_Anwer, <m_dot_anwer at gmx dot com>
-# Copyright (C)      2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
+# Copyright (C) 2018      by Mario Frank,   <mario dot frank at uni minus potsdam dot de>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -15,15 +15,15 @@ endif (POLICY CMP0063)
 string(REPLACE "-fno-operator-names" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 set(libdatabasemodels_SRCS
-    models/imagemodel.cpp
-    models/imagefiltermodel.cpp
-    models/imagefiltermodelpriv.cpp
-    models/imagefiltermodelthreads.cpp
-    models/imagefiltersettings.cpp
-    models/imagelistmodel.cpp
-    models/imagesortsettings.cpp
-    models/imagethumbnailmodel.cpp
-    models/imageversionsmodel.cpp
+    models/itemfiltermodel.cpp
+    models/itemfiltermodel_p.cpp
+    models/itemfiltermodelthreads.cpp
+    models/itemfiltersettings.cpp
+    models/itemversionsmodel.cpp
+    models/itemthumbnailmodel.cpp
+    models/itemsortsettings.cpp
+    models/itemlistmodel.cpp
+    models/itemmodel.cpp
 )
 
 set(libdatabasecore_SRCS
@@ -50,18 +50,28 @@ set(libdatabasecore_SRCS
 )
 
 set(libdatabaseutils_SRCS
-    utils/dbstatdlg.cpp
-    utils/dbsettingswidget.cpp
-    utils/dbmigrationdlg.cpp
-    utils/dbinfoiface.cpp
-    utils/dio.cpp
-    utils/scancontroller.cpp
-    utils/syncjob.cpp
+    utils/widgets/dbstatdlg.cpp
+    utils/widgets/dbsettingswidget.cpp
+    utils/widgets/dbmigrationdlg.cpp
+    utils/ifaces/dbinfoiface.cpp
+    utils/ifaces/syncjob.cpp
+    utils/ifaces/dio.cpp
+    utils/scan/scancontroller.cpp
+    utils/scan/scancontroller_p.cpp
+    utils/scan/scancontroller_start.cpp
+    utils/scan/scancontroller_progress.cpp
+    utils/scan/scancontroller_stop.cpp
 )
 
 set(libdatabase_SRCS
     collection/collectionscanner.cpp
+    collection/collectionscanner_p.cpp
+    collection/collectionscanner_scan.cpp
+    collection/collectionscanner_utils.cpp
     collection/collectionmanager.cpp
+    collection/collectionmanager_p.cpp
+    collection/collectionmanager_location.cpp
+    collection/collectionmanager_album.cpp
     collection/collectionlocation.cpp
     collection/collectionscannerhints.cpp
 
@@ -94,22 +104,40 @@ set(libdatabase_SRCS
     dbjobs/dbjobsmanager.cpp
     dbjobs/duplicatesprogressobserver.cpp
 
-    item/imagecomments.cpp
-    item/imageextendedproperties.cpp
-    item/imageinfo.cpp
-    item/imageinfolist.cpp
-    item/imageinfocache.cpp
-    item/imagelister.cpp
-    item/imagelisterreceiver.cpp
-    item/imageposition.cpp
-    item/imagecopyright.cpp
-    item/imagequerybuilder.cpp
-    item/imagescanner.cpp
-    item/imagetagpair.cpp
-    item/imageattributeswatch.cpp
+    item/containers/iteminfo.cpp
+    item/containers/iteminfolist.cpp
+    item/containers/iteminfocache.cpp
+    item/containers/itemcomments.cpp
+    item/containers/itemcopyright.cpp
+    item/containers/itemposition.cpp
+    item/containers/itemtagpair.cpp
+    item/containers/itemextendedproperties.cpp
 
-    imagehistory/imagehistorygraph.cpp
-    imagehistory/imagehistorygraphmodel.cpp
+    item/lister/itemlister.cpp
+    item/lister/itemlister_palbum.cpp
+    item/lister/itemlister_talbum.cpp
+    item/lister/itemlister_salbum.cpp
+    item/lister/itemlister_falbum.cpp
+    item/lister/itemlisterrecord.cpp
+    item/lister/itemlisterreceiver.cpp
+    item/lister/itemattributeswatch.cpp
+
+    item/query/itemquerybuilder.cpp
+    item/query/itemquerybuilder_p.cpp
+    item/query/itemqueryposthooks.cpp
+    item/query/fieldquerybuilder.cpp
+
+    item/scanner/itemscanner.cpp
+    item/scanner/itemscanner_p.cpp
+    item/scanner/itemscanner_database.cpp
+    item/scanner/itemscanner_file.cpp
+    item/scanner/itemscanner_photo.cpp
+    item/scanner/itemscanner_video.cpp
+    item/scanner/itemscanner_history.cpp
+    item/scanner/itemscanner_baloo.cpp
+
+    history/itemhistorygraph.cpp
+    history/itemhistorygraphmodel.cpp
 
     similaritydb/similaritydb.cpp
     similaritydb/similaritydbschemaupdater.cpp
@@ -127,12 +155,12 @@ endif()
 if(Marble_FOUND)
     set(libdatabase_SRCS
         ${libdatabase_SRCS}
-        item/imagegps.cpp
+        item/containers/itemgps.cpp
        )
 endif()
 
 # enable exceptions
-kde_source_files_enable_exceptions(imagehistory/imagehistorygraph.cpp imagehistory/imagehistorygraphmodel.cpp)
+kde_source_files_enable_exceptions(history/itemhistorygraph.cpp history/itemhistorygraphmodel.cpp)
 
 set(libhaar_SRCS
     haar/haar.cpp
@@ -181,13 +209,18 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/engine>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dbjobs>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item/containers>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item/lister>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item/query>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item/scanner>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tags>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/server>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/thumbsdb>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils/widgets>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils/ifaces>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils/scan>
 )
 
 target_link_libraries(digikamdatabase

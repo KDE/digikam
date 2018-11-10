@@ -77,19 +77,19 @@ void showDigikamComponentsInfo()
 #ifdef HAVE_GPHOTO2
     list.insert(i18n("LibGphoto2"), QLatin1String(gp_library_version(GP_VERSION_SHORT)[0]));
 #else
-    list.insert(i18n("LibGphoto2 support"), i18n("no"));
+    list.insert(i18n("LibGphoto2 support"), i18n("No"));
 #endif /* HAVE_GPHOTO2 */
 
 #ifdef HAVE_KFILEMETADATA
     list.insert(i18n("Baloo support"), i18n("Yes"));
 #else
-    list.insert(i18n("Baloo support"), i18n("no"));
+    list.insert(i18n("Baloo support"), i18n("No"));
 #endif /* HAVE_KFILEMETADATA */
 
 #ifdef HAVE_AKONADICONTACT
     list.insert(i18n("AkonadiContact support"), i18n("Yes"));
 #else
-    list.insert(i18n("AkonadiContact support"), i18n("no"));
+    list.insert(i18n("AkonadiContact support"), i18n("No"));
 #endif /* HAVE_AKONADICONTACT */
 
 #ifdef HAVE_MEDIAPLAYER
@@ -99,31 +99,31 @@ void showDigikamComponentsInfo()
     list.insert(i18n("LibAVCodec"),           QString::fromLatin1("%1.%2.%3").arg(LIBAVCODEC_VERSION_MAJOR).arg(LIBAVCODEC_VERSION_MINOR).arg(LIBAVCODEC_VERSION_MICRO));
     list.insert(i18n("LibAVUtil"),            QString::fromLatin1("%1.%2.%3").arg(LIBAVUTIL_VERSION_MAJOR).arg(LIBAVUTIL_VERSION_MINOR).arg(LIBAVUTIL_VERSION_MICRO));
 #else
-    list.insert(i18n("Media player support"), i18n("no"));
+    list.insert(i18n("Media player support"), i18n("No"));
 #endif /* HAVE_MEDIAPLAYER */
 
 #ifdef HAVE_DBUS
     list.insert(i18n("DBus support"), i18n("Yes"));
 #else
-    list.insert(i18n("DBus support"), i18n("no"));
+    list.insert(i18n("DBus support"), i18n("No"));
 #endif /* HAVE_DBUS */
 
 #ifdef HAVE_PANORAMA
-    list.insert(i18n("Panorama support"), i18n("yes"));
+    list.insert(i18n("Panorama support"), i18n("Yes"));
 #else
-    list.insert(i18n("Panorama support"), i18n("no"));
+    list.insert(i18n("Panorama support"), i18n("No"));
 #endif /* HAVE_PANORAMA */
 
 #ifdef HAVE_HTMLGALLERY
-    list.insert(i18n("HTML Gallery support"), i18n("yes"));
+    list.insert(i18n("HTML Gallery support"), i18n("Yes"));
 #else
-    list.insert(i18n("HTML Gallery support"), i18n("no"));
+    list.insert(i18n("HTML Gallery support"), i18n("No"));
 #endif /* HAVE_HTMLGALLERY */
 
 #ifdef HAVE_KCALENDAR
-    list.insert(i18n("Calendar support"), i18n("yes"));
+    list.insert(i18n("Calendar support"), i18n("Yes"));
 #else
-    list.insert(i18n("Calendar support"), i18n("no"));
+    list.insert(i18n("Calendar support"), i18n("No"));
 #endif /* HAVE_KCALENDAR */
 
     list.insert(i18n("LibOpenCV"),    QLatin1String(CV_VERSION));

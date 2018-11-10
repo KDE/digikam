@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "rawfiles.h"
+#include "drawfiles.h"
 #include "processordlg.h"
 #include "dfiledialog.h"
 

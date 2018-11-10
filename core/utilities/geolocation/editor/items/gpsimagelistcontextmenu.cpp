@@ -170,7 +170,7 @@ bool GPSImageListContextMenu::eventFilter(QObject* watched, QEvent* event)
     if ((event->type() == QEvent::ContextMenu) && d->enabled)
     {
         // enable or disable the actions:
-        GPSImageModel* const imageModel           = d->imagesList->getModel();
+        GPSItemModel* const imageModel           = d->imagesList->getModel();
         QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
         const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
         const int nSelected                       = selectedIndices.size();
@@ -270,7 +270,7 @@ bool GPSImageListContextMenu::getCurrentItemPositionAndUrl(GPSDataContainer* con
                                                            QUrl* const itemUrl)
 {
     // NOTE: currentIndex does not seem to work any more since we use KLinkItemSelectionModel
-    GPSImageModel* const imageModel           = d->imagesList->getModel();
+    GPSItemModel* const imageModel           = d->imagesList->getModel();
     QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
     const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
 
@@ -511,7 +511,7 @@ void GPSImageListContextMenu::pasteActionTriggered(bool swap)
 void GPSImageListContextMenu::setGPSDataForSelectedItems(const GPSDataContainer& gpsData,
                                                          const QString& undoDescription)
 {
-    GPSImageModel* const imageModel           = d->imagesList->getModel();
+    GPSItemModel* const imageModel           = d->imagesList->getModel();
     QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
     const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
     const int nSelected                       = selectedIndices.size();
@@ -555,7 +555,7 @@ bool GPSImageListContextMenu::getCurrentPosition(GPSDataContainer* position, voi
 void GPSImageListContextMenu::removeInformationFromSelectedImages(const GPSDataContainer::HasFlags flagsToClear, const QString& undoDescription)
 {
     // enable or disable the actions:
-    GPSImageModel* const imageModel           = d->imagesList->getModel();
+    GPSItemModel* const imageModel           = d->imagesList->getModel();
     QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
     const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
     const int nSelected                       = selectedIndices.size();
@@ -673,7 +673,7 @@ void GPSImageListContextMenu::slotRemoveSpeed()
 
 void GPSImageListContextMenu::slotLookupMissingAltitudes()
 {
-    GPSImageModel* const imageModel           = d->imagesList->getModel();
+    GPSItemModel* const imageModel           = d->imagesList->getModel();
     QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
     const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
 //  const int nSelected                       = selectedIndices.size();
@@ -731,7 +731,7 @@ void GPSImageListContextMenu::slotLookupMissingAltitudes()
 
 void GPSImageListContextMenu::slotAltitudeLookupReady(const QList<int>& readyRequests)
 {
-    GPSImageModel* const imageModel = d->imagesList->getModel();
+    GPSItemModel* const imageModel = d->imagesList->getModel();
 
     foreach(const int requestIndex, readyRequests)
     {

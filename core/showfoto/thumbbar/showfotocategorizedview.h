@@ -31,7 +31,7 @@
 #include "showfotofiltermodel.h"
 #include "showfotothumbnailmodel.h"
 #include "showfotoiteminfo.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 
 namespace ShowFoto
 {
@@ -49,9 +49,9 @@ public:
     explicit ShowfotoCategorizedView(QWidget* const parent = 0);
     ~ShowfotoCategorizedView();
 
-    void setModels(ShowfotoImageModel* model, ShowfotoSortFilterModel* filterModel);
+    void setModels(ShowfotoItemModel* model, ShowfotoSortFilterModel* filterModel);
 
-    ShowfotoImageModel*         showfotoImageModel()                    const;
+    ShowfotoItemModel*         showfotoItemModel()                    const;
     ShowfotoSortFilterModel*    showfotoSortFilterModel()               const;
 
     QItemSelectionModel*        getSelectionModel()                     const;
@@ -59,7 +59,7 @@ public:
     /// Returns any ShowfotoFilterModel in chain. May not be sourceModel()
     ShowfotoFilterModel*        showfotoFilterModel()                   const;
 
-    /// Returns 0 if the ShowfotoImageModel is not an ShowfotoThumbnailModel
+    /// Returns 0 if the ShowfotoItemModel is not an ShowfotoThumbnailModel
     ShowfotoThumbnailModel*     showfotoThumbnailModel()                const;
 
     ShowfotoDelegate*           delegate()                              const;
@@ -98,8 +98,8 @@ public:
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     /// Unless you pass a different delegate, the current delegate will be used.
-    void addOverlay(ImageDelegateOverlay* overlay, ShowfotoDelegate* delegate = 0);
-    void removeOverlay(ImageDelegateOverlay* overlay);
+    void addOverlay(ItemDelegateOverlay* overlay, ShowfotoDelegate* delegate = 0);
+    void removeOverlay(ItemDelegateOverlay* overlay);
 
     //TODO: Implement This
 //    void addSelectionOverlay(ShowfotoDelegate* delegate = 0);

@@ -279,12 +279,12 @@ void KmlExport::generateImagesthumb(const QUrl& imageURL, QDomElement& kmlAlbum)
           * - a panorama created from several pictures, the right time is the DateTimeOriginal (average of DateTimeOriginal actually)
           *          The (standard)DateTime is the creation date of the panorama.
           * it's seems the time to take into account is the DateTimeOriginal.
-          * but the MetadataProcessor::getImageDateTime() return the (standard)DateTime first
+          * but the MetadataProcessor::getItemDateTime() return the (standard)DateTime first
           * MetadataProcessor seems to take Original dateTime first so it should be alright now.
           */
         QDateTime datetime;
 
-        m_meta.getImageDateTime();
+        m_meta.getItemDateTime();
 
         if (datetime.isValid())
         {

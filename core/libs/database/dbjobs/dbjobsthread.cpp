@@ -89,8 +89,8 @@ void AlbumsDBJobsThread::albumsListing(const AlbumsDBJobInfo& info)
     }
     else
     {
-        connect(j, SIGNAL(data(QList<ImageListerRecord>)),
-                this, SIGNAL(data(QList<ImageListerRecord>)));
+        connect(j, SIGNAL(data(QList<ItemListerRecord>)),
+                this, SIGNAL(data(QList<ItemListerRecord>)));
     }
 
     ActionJobCollection collection;
@@ -128,8 +128,8 @@ void TagsDBJobsThread::tagsListing(const TagsDBJobInfo& info)
     }
     else
     {
-        connect(j, SIGNAL(data(QList<ImageListerRecord>)),
-                this, SIGNAL(data(QList<ImageListerRecord>)));
+        connect(j, SIGNAL(data(QList<ItemListerRecord>)),
+                this, SIGNAL(data(QList<ItemListerRecord>)));
     }
 
     ActionJobCollection collection;
@@ -162,8 +162,8 @@ void DatesDBJobsThread::datesListing(const DatesDBJobInfo& info)
     }
     else
     {
-        connect(j, SIGNAL(data(QList<ImageListerRecord>)),
-                this, SIGNAL(data(QList<ImageListerRecord>)));
+        connect(j, SIGNAL(data(QList<ItemListerRecord>)),
+                this, SIGNAL(data(QList<ItemListerRecord>)));
     }
 
     ActionJobCollection collection;
@@ -196,8 +196,8 @@ void GPSDBJobsThread::GPSListing(const GPSDBJobInfo& info)
     }
     else
     {
-        connect(j, SIGNAL(data(QList<ImageListerRecord>)),
-                this, SIGNAL(data(QList<ImageListerRecord>)));
+        connect(j, SIGNAL(data(QList<ItemListerRecord>)),
+                this, SIGNAL(data(QList<ItemListerRecord>)));
     }
 
     ActionJobCollection collection;
@@ -233,8 +233,8 @@ void SearchesDBJobsThread::searchesListing(const SearchesDBJobInfo& info)
     }
     else
     {
-        connect(j, SIGNAL(data(QList<ImageListerRecord>)),
-                this, SIGNAL(data(QList<ImageListerRecord>)));
+        connect(j, SIGNAL(data(QList<ItemListerRecord>)),
+                this, SIGNAL(data(QList<ItemListerRecord>)));
     }
 
     ActionJobCollection collection;

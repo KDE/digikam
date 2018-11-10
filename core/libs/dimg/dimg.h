@@ -224,7 +224,7 @@ public:
         If loadMetadata is true, the metadata will be available with getComments, getExif, getIptc, getXmp .
         If loadICCData is true, the ICC profile will be available with getICCProfile.
      */
-    bool        loadImageInfo(const QString& filePath, bool loadMetadata = true,
+    bool        loadItemInfo(const QString& filePath, bool loadMetadata = true,
                               bool loadICCData = true, bool loadUniqueHash = true,
                               bool loadImageHistory = true);
 
@@ -342,9 +342,9 @@ public:
     void       setEmbeddedText(const QString& key, const QString& text);
     QString    embeddedText(const QString& key) const;
 
-    const DImageHistory& getImageHistory() const;
-    DImageHistory&       getImageHistory();
-    void                 setImageHistory(const DImageHistory& history);
+    const DImageHistory& getItemHistory() const;
+    DImageHistory&       getItemHistory();
+    void                 setItemHistory(const DImageHistory& history);
     bool                 hasImageHistory() const;
     DImageHistory        getOriginalImageHistory() const;
     void                 addFilterAction(const FilterAction& action);
@@ -608,7 +608,7 @@ public:
 
         If you already have a DImg object of the file, use the member method.
         The object does not need to have the full image data loaded, but it shall at least
-        have been loaded with loadImageInfo with loadMetadata = true, or have the metadata
+        have been loaded with loadItemInfo with loadMetadata = true, or have the metadata
         set later with setComments, setExif, setIptc, setXmp.
         If the object does not have the metadata loaded, a non-null, but invalid hash will
         be returned! In this case, use the static method.

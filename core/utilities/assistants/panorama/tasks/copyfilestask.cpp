@@ -130,7 +130,7 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     QByteArray xmp  = m_meta.getXmp();
     QString make    = m_meta.getExifTagString("Exif.Image.Make");
     QString model   = m_meta.getExifTagString("Exif.Image.Model");
-    QDateTime dt    = m_meta.getImageDateTime();
+    QDateTime dt    = m_meta.getItemDateTime();
 
     m_meta.load(panoUrl.toLocalFile());
     m_meta.setIptc(iptc);

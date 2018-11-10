@@ -50,7 +50,6 @@ extern "C"
 #include <QFileInfo>
 #include <QImage>
 #include <QImageReader>
-#include <QMap>
 #include <QPaintEngine>
 #include <QPainter>
 #include <QPixmap>
@@ -342,9 +341,9 @@ void DImg::setImageData(bool null, uint width, uint height, bool sixteenBit, boo
 //---------------------------------------------------------------------------------------------------
 // load and save
 
-bool DImg::loadImageInfo(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadImageHistory)
+bool DImg::loadItemInfo(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadImageHistory)
 {
-    DImgLoader::LoadFlags loadFlags = DImgLoader::LoadImageInfo;
+    DImgLoader::LoadFlags loadFlags = DImgLoader::LoadItemInfo;
 
     if (loadMetadata)
     {
@@ -377,7 +376,7 @@ bool DImg::load(const QString& filePath, DImgLoaderObserver* const observer, con
 bool DImg::load(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadImageHistory,
                 DImgLoaderObserver* const observer, const DRawDecoding& rawDecodingSettings)
 {
-    DImgLoader::LoadFlags loadFlags = DImgLoader::LoadImageInfo | DImgLoader::LoadImageData;
+    DImgLoader::LoadFlags loadFlags = DImgLoader::LoadItemInfo | DImgLoader::LoadImageData;
 
     if (loadMetadata)
     {
@@ -803,7 +802,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     fclose(f);
 
-    RawInfo dcrawIdentify;
+    DRawInfo dcrawIdentify;
     uchar jpegID[2]    = { 0xFF, 0xD8 };
     uchar tiffBigID[2] = { 0x4D, 0x4D };
     uchar tiffLilID[2] = { 0x49, 0x49 };
@@ -1106,7 +1105,7 @@ QVariant DImg::fileOriginData() const
 {
     QVariantMap map;
 
-    foreach(const QString& key, m_priv->fileOriginAttributes())
+    foreach (const QString& key, m_priv->fileOriginAttributes())
     {
         QVariant attr = attribute(key);
 
@@ -1164,7 +1163,7 @@ void DImg::setFileOriginData(const QVariant& data)
 {
     QVariantMap map = data.toMap();
 
-    foreach(const QString& key, m_priv->fileOriginAttributes())
+    foreach (const QString& key, m_priv->fileOriginAttributes())
     {
         removeAttribute(key);
         QVariant attr = map.value(key);
@@ -3069,7 +3068,7 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
            )
         {
             // Non JPEG file, we update IPTC preview
-            meta.setImagePreview(preview);
+            meta.setItemPreview(preview);
         }
 
         if (destMimeType.toUpper() == QLatin1String("TIFF") || destMimeType.toUpper() == QLatin1String("TIF"))
@@ -3088,7 +3087,7 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
     }
 
     // Update Exif Image dimensions.
-    meta.setImageDimensions(size());
+    meta.setItemDimensions(size());
 
     // Update Exif Document Name tag with the original file name.
     if (!originalFileName.isEmpty())
@@ -3099,7 +3098,7 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
     // Update Exif Orientation tag if necessary.
     if (flags & ResetExifOrientationTag)
     {
-        meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+        meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
     }
 
     if (!m_priv->imageHistory.isEmpty())
@@ -3117,12 +3116,12 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
         }
 
         QString imageHistoryXml = forSaving.toXml();
-        meta.setImageHistory(imageHistoryXml);
+        meta.setItemHistory(imageHistoryXml);
     }
 
     if (flags & CreateNewImageHistoryUUID)
     {
-        meta.setImageUniqueId(QString::fromUtf8(createImageUniqueId()));
+        meta.setItemUniqueId(QString::fromUtf8(createImageUniqueId()));
     }
 
     // Store new Exif/IPTC/XMP data into image.
@@ -3166,17 +3165,17 @@ void DImg::addFilterAction(const Digikam::FilterAction& action)
     m_priv->imageHistory << action;
 }
 
-const DImageHistory& DImg::getImageHistory() const
+const DImageHistory& DImg::getItemHistory() const
 {
     return m_priv->imageHistory;
 }
 
-DImageHistory& DImg::getImageHistory()
+DImageHistory& DImg::getItemHistory()
 {
     return m_priv->imageHistory;
 }
 
-void DImg::setImageHistory(const DImageHistory& history)
+void DImg::setItemHistory(const DImageHistory& history)
 {
     m_priv->imageHistory = history;
 }

@@ -856,7 +856,7 @@ void ImageGuideWidget::updateSpotPosition(int x, int y)
     updatePreview();
 }
 
-QPoint ImageGuideWidget::translateImagePosition(const QPoint& point, bool src) const
+QPoint ImageGuideWidget::translateItemPosition(const QPoint& point, bool src) const
 {
     int x = (int)(point.x() * (float)d->preview.width()  /
                               (float) d->iface->originalSize().width());

@@ -63,12 +63,12 @@ public:
         selectionModel = 0;
     }
 
-    GPSImageModel*         model;
+    GPSItemModel*         model;
     QItemSelectionModel*   selectionModel;
     QList<GeoModelHelper*> ungroupedModelHelpers;
 };
 
-GPSGeoIfaceModelHelper::GPSGeoIfaceModelHelper(GPSImageModel* const model,
+GPSGeoIfaceModelHelper::GPSGeoIfaceModelHelper(GPSItemModel* const model,
                                                QItemSelectionModel* const selectionModel,
                                                QObject* const parent)
     : GeoModelHelper(parent),

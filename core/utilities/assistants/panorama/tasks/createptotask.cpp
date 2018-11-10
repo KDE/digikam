@@ -73,6 +73,8 @@ void CreatePtoTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
         return;
     }
 
+    pto.close();
+
     // 1. Project parameters
     PTOType panoBase(huginVersion);
 

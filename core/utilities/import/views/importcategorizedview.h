@@ -30,7 +30,7 @@
 #include "importimagemodel.h"
 #include "importfiltermodel.h"
 #include "importthumbnailmodel.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 #include "camiteminfo.h"
 #include "digikam_export.h"
 
@@ -49,9 +49,9 @@ public:
     explicit ImportCategorizedView(QWidget* const parent = 0);
     ~ImportCategorizedView();
 
-    void setModels(ImportImageModel* model, ImportSortFilterModel* filterModel);
+    void setModels(ImportItemModel* model, ImportSortFilterModel* filterModel);
 
-    ImportImageModel*      importImageModel()                 const;
+    ImportItemModel*      importItemModel()                 const;
     ImportSortFilterModel* importSortFilterModel()            const;
 
     QItemSelectionModel*   getSelectionModel()                const;
@@ -59,7 +59,7 @@ public:
     /// Returns any ImportFilterModel in chain. May not be sourceModel()
     ImportFilterModel*     importFilterModel()                const;
 
-    /// Returns 0 if the ImportImageModel is not an ImportThumbnailModel
+    /// Returns 0 if the ImportItemModel is not an ImportThumbnailModel
     ImportThumbnailModel*  importThumbnailModel()             const;
 
     ImportDelegate*        delegate()                         const;
@@ -96,8 +96,8 @@ public:
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     /// Unless you pass a different delegate, the current delegate will be used.
-    void addOverlay(ImageDelegateOverlay* overlay, ImportDelegate* delegate = 0);
-    void removeOverlay(ImageDelegateOverlay* overlay);
+    void addOverlay(ItemDelegateOverlay* overlay, ImportDelegate* delegate = 0);
+    void removeOverlay(ItemDelegateOverlay* overlay);
 
     void addSelectionOverlay(ImportDelegate* delegate = 0);
 

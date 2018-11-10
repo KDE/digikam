@@ -39,9 +39,9 @@
 #include "coredbchangesets.h"
 #include "coredbfields.h"
 #include "coredbwatch.h"
-#include "imagefiltermodel.h"
-#include "imagefiltersettings.h"
-#include "imageinfo.h"
+#include "itemfiltermodel.h"
+#include "itemfiltersettings.h"
+#include "iteminfo.h"
 #include "tableview_columnfactory.h"
 #include "tableview_selection_model_syncer.h"
 
@@ -119,19 +119,19 @@ public:
         sortOrder(Qt::AscendingOrder),
         sortRequired(false),
         groupingMode(GroupingShowSubItems),
-        cachedImageInfos(),
+        cachedItemInfos(),
         outdated(true)
     {
     }
 
     QList<TableViewColumn*>     columnObjects;
     TableViewModel::Item*       rootItem;
-    ImageFilterSettings         imageFilterSettings;
+    ItemFilterSettings         imageFilterSettings;
     int                         sortColumn;
     Qt::SortOrder               sortOrder;
     bool                        sortRequired;
     GroupingMode                groupingMode;
-    QHash<qlonglong, ImageInfo> cachedImageInfos;
+    QHash<qlonglong, ItemInfo> cachedItemInfos;
     bool                        outdated;
 };
 
@@ -173,10 +173,10 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
     connect(s->imageModel, SIGNAL(layoutChanged()),
             this, SLOT(slotSourceLayoutChanged()));
 
-    connect(s->imageFilterModel, SIGNAL(filterSettingsChanged(ImageFilterSettings)),
-            this, SLOT(slotFilterSettingsChanged(ImageFilterSettings)));
+    connect(s->imageFilterModel, SIGNAL(filterSettingsChanged(ItemFilterSettings)),
+            this, SLOT(slotFilterSettingsChanged(ItemFilterSettings)));
 
-    // We do not connect to ImageFilterModel::dataChanged, because we monitor changes directly from the database.
+    // We do not connect to ItemFilterModel::dataChanged, because we monitor changes directly from the database.
 
     connect(CoreDbAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotDatabaseImageChanged(ImageChangeset)), Qt::QueuedConnection);
@@ -187,9 +187,9 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
 
     // We only have to trigger population of the model if data is in the source model,
     // otherwise the source model will tell us about any new data.
-    const int itemsInImageModel = s->imageModel->rowCount();
+    const int itemsInItemModel = s->imageModel->rowCount();
 
-    if (itemsInImageModel > 0)
+    if (itemsInItemModel > 0)
     {
         // populate the model once later, not now
         QTimer::singleShot(0, this, SLOT(slotPopulateModelWithNotifications()));
@@ -211,7 +211,7 @@ int TableViewModel::columnCount(const QModelIndex& i) const
     return d->columnObjects.count();
 }
 
-QModelIndex TableViewModel::toImageFilterModelIndex(const QModelIndex& i) const
+QModelIndex TableViewModel::toItemFilterModelIndex(const QModelIndex& i) const
 {
     Item* const item = itemFromIndex(i);
 
@@ -223,7 +223,7 @@ QModelIndex TableViewModel::toImageFilterModelIndex(const QModelIndex& i) const
     return s->imageFilterModel->indexForImageId(item->imageId);
 }
 
-QModelIndex TableViewModel::toImageModelIndex(const QModelIndex& i) const
+QModelIndex TableViewModel::toItemModelIndex(const QModelIndex& i) const
 {
     Item* const item = itemFromIndex(i);
 
@@ -514,7 +514,7 @@ void TableViewModel::slotSourceRowsAboutToBeRemoved(const QModelIndex& parent, i
     {
         const QModelIndex imageModelIndex = s->imageModel->index(i, 0, parent);
         const qlonglong imageId           = s->imageModel->imageId(imageModelIndex);
-        d->cachedImageInfos.remove(imageId);
+        d->cachedItemInfos.remove(imageId);
 
         const QModelIndex tableViewIndex  = indexFromImageId(imageId, 0);
 
@@ -540,7 +540,7 @@ void TableViewModel::slotSourceRowsAboutToBeRemoved(const QModelIndex& parent, i
             Item* const itemToRemove = itemsToRemoveFromCache.takeFirst();
             itemsToRemoveFromCache << itemToRemove->children;
 
-            d->cachedImageInfos.remove(itemToRemove->imageId);
+            d->cachedItemInfos.remove(itemToRemove->imageId);
 
             // child items will be deleted when item is deleted
         }
@@ -596,7 +596,7 @@ void TableViewModel::slotSourceLayoutAboutToBeChanged()
 
     /// @todo Emitting layoutAboutToBeChanged and layoutChanged is tricky,
     ///       because we do not know what will change.
-    ///       It looks like ImageFilterModel emits layoutAboutToBeChanged and layoutChanged
+    ///       It looks like ItemFilterModel emits layoutAboutToBeChanged and layoutChanged
     ///       even when the resulting dataset will be empty, and ModelTest does not like that.
     ///       For now, the easiest workaround is resetting the model
 //     emit(layoutAboutToBeChanged());
@@ -649,7 +649,7 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
 
         if (!item)
         {
-            // Item is not in this model. If it is in the ImageModel,
+            // Item is not in this model. If it is in the ItemModel,
             // it has been filtered out and we have to re-check the filtering.
             const QModelIndex& imageModelIndex = s->imageModel->indexForImageId(id);
 
@@ -658,7 +658,7 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
                 continue;
             }
 
-            const ImageInfo imageInfo          = s->imageModel->imageInfo(imageModelIndex);
+            const ItemInfo imageInfo          = s->imageModel->imageInfo(imageModelIndex);
 
             if (d->imageFilterSettings.matches(imageInfo))
             {
@@ -670,11 +670,11 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
         }
 
         // remove cached info and re-insert it
-        if (d->cachedImageInfos.contains(item->imageId))
+        if (d->cachedItemInfos.contains(item->imageId))
         {
-            const ImageInfo itemInfo(item->imageId);
-            d->cachedImageInfos.remove(item->imageId);
-            d->cachedImageInfos.insert(item->imageId, itemInfo);
+            const ItemInfo itemInfo(item->imageId);
+            d->cachedItemInfos.remove(item->imageId);
+            d->cachedItemInfos.insert(item->imageId, itemInfo);
         }
 
         // Re-check filtering for this item.
@@ -685,9 +685,9 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
             continue;
         }
 
-        const ImageInfo myImageInfo = imageInfo(changedIndexTopLeft);
+        const ItemInfo myItemInfo = imageInfo(changedIndexTopLeft);
 
-        if (!d->imageFilterSettings.matches(myImageInfo))
+        if (!d->imageFilterSettings.matches(myItemInfo))
         {
             // Filter does not match, remove the item.
             beginRemoveRows(changedIndexTopLeft.parent(), changedIndexTopLeft.row(), changedIndexTopLeft.row());
@@ -763,7 +763,7 @@ void TableViewModel::slotClearModel(const bool sendNotifications)
     }
 
     d->rootItem = new Item();
-    d->cachedImageInfos.clear();
+    d->cachedItemInfos.clear();
 
     if (sendNotifications)
     {
@@ -790,7 +790,7 @@ void TableViewModel::slotPopulateModel(const bool sendNotifications)
     }
 
     d->rootItem     = new Item();
-    d->cachedImageInfos.clear();
+    d->cachedItemInfos.clear();
     d->outdated     = false;
     d->sortRequired = false;
 
@@ -824,7 +824,7 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
 {
     ASSERT_MODEL(imageModelIndex, s->imageModel);
 
-    const ImageInfo imageInfo = s->imageModel->imageInfo(imageModelIndex);
+    const ItemInfo imageInfo = s->imageModel->imageInfo(imageModelIndex);
     const bool passedFilter   = d->imageFilterSettings.matches(imageInfo);
 
     if (!passedFilter)
@@ -881,7 +881,7 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
     if ((d->groupingMode == GroupingShowSubItems) && imageInfo.hasGroupedImages())
     {
         // the item was a group leader, add its subitems
-        const QList<ImageInfo> groupedImages = imageInfo.groupedImages();
+        const QList<ItemInfo> groupedImages = imageInfo.groupedImages();
 
         if (sendNotifications)
         {
@@ -889,9 +889,9 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
             beginInsertRows(groupLeaderIndex, 0, groupedImages.count()-1);
         }
 
-        foreach (const ImageInfo& groupedInfo, groupedImages)
+        foreach (const ItemInfo& groupedInfo, groupedImages)
         {
-            d->cachedImageInfos.insert(groupedInfo.id(), groupedInfo);
+            d->cachedItemInfos.insert(groupedInfo.id(), groupedInfo);
 
             /// @todo Grouped items are currently not filtered. Should they?
             Item* const groupedItem = new Item();
@@ -936,7 +936,7 @@ TableViewModel::Item* TableViewModel::itemFromIndex(const QModelIndex& i) const
     return item;
 }
 
-QModelIndex TableViewModel::fromImageFilterModelIndex(const QModelIndex& imageFilterModelIndex)
+QModelIndex TableViewModel::fromItemFilterModelIndex(const QModelIndex& imageFilterModelIndex)
 {
     ASSERT_MODEL(imageFilterModelIndex, s->imageFilterModel);
 
@@ -950,7 +950,7 @@ QModelIndex TableViewModel::fromImageFilterModelIndex(const QModelIndex& imageFi
     return indexFromImageId(imageId, 0);
 }
 
-QModelIndex TableViewModel::fromImageModelIndex(const QModelIndex& imageModelIndex)
+QModelIndex TableViewModel::fromItemModelIndex(const QModelIndex& imageModelIndex)
 {
     ASSERT_MODEL(imageModelIndex, s->imageModel);
 
@@ -964,26 +964,26 @@ QModelIndex TableViewModel::fromImageModelIndex(const QModelIndex& imageModelInd
     return indexFromImageId(imageId, 0);
 }
 
-ImageInfo TableViewModel::infoFromItem(TableViewModel::Item* const item) const
+ItemInfo TableViewModel::infoFromItem(TableViewModel::Item* const item) const
 {
-    /// @todo Is there a way to do it without first looking up the index in the ImageModel?
+    /// @todo Is there a way to do it without first looking up the index in the ItemModel?
     const QModelIndex imageModelIndex = s->imageModel->indexForImageId(item->imageId);
 
     if (!imageModelIndex.isValid())
     {
-        const ImageInfo fromCache = d->cachedImageInfos.value(item->imageId);
+        const ItemInfo fromCache = d->cachedItemInfos.value(item->imageId);
 
         return fromCache;
     }
 
-    const ImageInfo info = s->imageModel->imageInfo(imageModelIndex);
+    const ItemInfo info = s->imageModel->imageInfo(imageModelIndex);
 
     return info;
 }
 
-ImageInfoList TableViewModel::infosFromItems(QList<TableViewModel::Item*> const items) const
+ItemInfoList TableViewModel::infosFromItems(QList<TableViewModel::Item*> const items) const
 {
-    ImageInfoList infos;
+    ItemInfoList infos;
 
     foreach (TableViewModel::Item* const item, items)
     {
@@ -995,9 +995,9 @@ ImageInfoList TableViewModel::infosFromItems(QList<TableViewModel::Item*> const 
 
 TableViewModel::DatabaseFieldsHashRaw TableViewModel::itemDatabaseFieldsRaw(TableViewModel::Item* const item, const DatabaseFields::Set requestedSet)
 {
-    const ImageInfo itemImageInfo = infoFromItem(item);
+    const ItemInfo itemItemInfo = infoFromItem(item);
 
-    return itemImageInfo.getDatabaseFieldsRaw(requestedSet);
+    return itemItemInfo.getDatabaseFieldsRaw(requestedSet);
 }
 
 QVariant TableViewModel::itemDatabaseFieldRaw(TableViewModel::Item* const item, const DatabaseFields::Set requestedField)
@@ -1067,9 +1067,9 @@ QList<qlonglong> TableViewModel::imageIds(const QModelIndexList& indexList) cons
     return idList;
 }
 
-QList<ImageInfo> TableViewModel::imageInfos(const QModelIndexList& indexList) const
+QList<ItemInfo> TableViewModel::imageInfos(const QModelIndexList& indexList) const
 {
-    QList<ImageInfo> infoList;
+    QList<ItemInfo> infoList;
 
     foreach (const QModelIndex& index, indexList)
     {
@@ -1093,7 +1093,7 @@ QList<ImageInfo> TableViewModel::imageInfos(const QModelIndexList& indexList) co
     return infoList;
 }
 
-ImageInfo TableViewModel::imageInfo(const QModelIndex& index) const
+ItemInfo TableViewModel::imageInfo(const QModelIndex& index) const
 {
     ASSERT_MODEL(index, this);
 
@@ -1101,13 +1101,13 @@ ImageInfo TableViewModel::imageInfo(const QModelIndex& index) const
 
     if (!item)
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
     return infoFromItem(item);
 }
 
-void TableViewModel::slotFilterSettingsChanged(const ImageFilterSettings& settings)
+void TableViewModel::slotFilterSettingsChanged(const ItemFilterSettings& settings)
 {
     d->imageFilterSettings = settings;
 
@@ -1218,7 +1218,7 @@ bool TableViewModel::lessThan(TableViewModel::Item* const itemA, TableViewModel:
 
 QMimeData* TableViewModel::mimeData(const QModelIndexList& indexes) const
 {
-    // we pack the mime data via ImageModel's drag-drop handler
+    // we pack the mime data via ItemModel's drag-drop handler
     AbstractItemDragDropHandler* const ddHandler = s->imageModel->dragDropHandler();
 
     QModelIndexList imageModelIndexList;
@@ -1230,7 +1230,7 @@ QMimeData* TableViewModel::mimeData(const QModelIndexList& indexes) const
             continue;
         }
 
-        const QModelIndex imageModelIndex = toImageModelIndex(i);
+        const QModelIndex imageModelIndex = toItemModelIndex(i);
 
         if (imageModelIndex.isValid())
         {
@@ -1343,7 +1343,7 @@ qlonglong TableViewModel::imageId(const QModelIndex& anIndex) const
     return anItem->imageId;
 }
 
-QList<ImageInfo> TableViewModel::allImageInfo() const
+QList<ItemInfo> TableViewModel::allItemInfo() const
 {
     return infosFromItems(d->rootItem->children);
 }

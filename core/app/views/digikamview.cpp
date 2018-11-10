@@ -43,7 +43,7 @@
 // Local includes
 
 #include "albumhistory.h"
-#include "albumlabelstreeview.h"
+#include "labelstreeview.h"
 #include "albumpointer.h"
 #include "coredbsearchxml.h"
 #include "digikam_config.h"
@@ -60,17 +60,17 @@
 #include "fileactionprogress.h"
 #include "filtersidebarwidget.h"
 #include "filterstatusbar.h"
-#include "imagealbummodel.h"
-#include "imagedescedittab.h"
+#include "itemalbummodel.h"
+#include "itemdescedittab.h"
 #include "imagepreviewview.h"
-#include "imagepropertiessidebardb.h"
-#include "imagepropertiesversionstab.h"
+#include "itempropertiessidebardb.h"
+#include "itempropertiesversionstab.h"
 #include "imagethumbnailbar.h"
 #include "imageviewutilities.h"
 #include "leftsidebarwidgets.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "metadatasynchronizer.h"
 #include "newitemsfinder.h"
 #include "presentationmngr.h"
@@ -198,7 +198,7 @@ public:
     SearchModificationHelper*     searchModificationHelper;
 
     Sidebar*                      leftSideBar;
-    ImagePropertiesSideBarDB*     rightSideBar;
+    ItemPropertiesSideBarDB*     rightSideBar;
 
     FilterSideBarWidget*          filterWidget;
 
@@ -299,7 +299,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->addPageUpDownActions(this, d->stackedview->mediaPlayerView());
 #endif //HAVE_MEDIAPLAYER
 
-    d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, Qt::RightEdge, true);
+    d->rightSideBar = new ItemPropertiesSideBarDB(this, d->splitter, Qt::RightEdge, true);
     d->rightSideBar->setObjectName(QLatin1String("Digikam Right Sidebar"));
 
     // album folder view
@@ -428,7 +428,7 @@ void DigikamView::applySettings()
         sidebarWidget->applySettings();
     }
 
-    d->iconView->imageFilterModel()->setVersionImageFilterSettings(VersionImageFilterSettings(ApplicationSettings::instance()->getVersionManagerSettings()));
+    d->iconView->imageFilterModel()->setVersionItemFilterSettings(VersionItemFilterSettings(ApplicationSettings::instance()->getVersionManagerSettings()));
 
     refreshView();
 }
@@ -494,11 +494,11 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(selectionChanged()),
             this, SLOT(slotImageSelected()));
 
-    connect(d->iconView, SIGNAL(previewRequested(ImageInfo)),
-            this, SLOT(slotTogglePreviewMode(ImageInfo)));
+    connect(d->iconView, SIGNAL(previewRequested(ItemInfo)),
+            this, SLOT(slotTogglePreviewMode(ItemInfo)));
 
-    connect(d->iconView, SIGNAL(fullscreenRequested(ImageInfo)),
-            this, SLOT(slotSlideShowManualFrom(ImageInfo)));
+    connect(d->iconView, SIGNAL(fullscreenRequested(ItemInfo)),
+            this, SLOT(slotSlideShowManualFrom(ItemInfo)));
 
     connect(d->iconView, SIGNAL(zoomOutStep()),
             this, SLOT(slotZoomOut()));
@@ -509,16 +509,16 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(signalShowContextMenu(QContextMenuEvent*,QList<QAction*>)),
             this, SLOT(slotShowContextMenu(QContextMenuEvent*,QList<QAction*>)));
 
-    connect(d->iconView, SIGNAL(signalShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,QList<QAction*>,ImageFilterModel*)),
-            this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,QList<QAction*>,ImageFilterModel*)));
+    connect(d->iconView, SIGNAL(signalShowContextMenuOnInfo(QContextMenuEvent*,ItemInfo,QList<QAction*>,ItemFilterModel*)),
+            this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ItemInfo,QList<QAction*>,ItemFilterModel*)));
 
-    connect(d->iconView, SIGNAL(signalShowGroupContextMenu(QContextMenuEvent*,QList<ImageInfo>,ImageFilterModel*)),
-            this, SLOT(slotShowGroupContextMenu(QContextMenuEvent*,QList<ImageInfo>,ImageFilterModel*)));
+    connect(d->iconView, SIGNAL(signalShowGroupContextMenu(QContextMenuEvent*,QList<ItemInfo>,ItemFilterModel*)),
+            this, SLOT(slotShowGroupContextMenu(QContextMenuEvent*,QList<ItemInfo>,ItemFilterModel*)));
 
     // -- TableView Connections -----------------------------------
 
-    connect(d->tableView, SIGNAL(signalPreviewRequested(ImageInfo)),
-            this, SLOT(slotTogglePreviewMode(ImageInfo)));
+    connect(d->tableView, SIGNAL(signalPreviewRequested(ItemInfo)),
+            this, SLOT(slotTogglePreviewMode(ItemInfo)));
 
     connect(d->tableView, SIGNAL(signalZoomOutStep()),
             this, SLOT(slotZoomOut()));
@@ -529,8 +529,8 @@ void DigikamView::setupConnections()
     connect(d->tableView, SIGNAL(signalShowContextMenu(QContextMenuEvent*,QList<QAction*>)),
             this, SLOT(slotShowContextMenu(QContextMenuEvent*,QList<QAction*>)));
 
-    connect(d->tableView, SIGNAL(signalShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,QList<QAction*>,ImageFilterModel*)),
-            this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,QList<QAction*>,ImageFilterModel*)));
+    connect(d->tableView, SIGNAL(signalShowContextMenuOnInfo(QContextMenuEvent*,ItemInfo,QList<QAction*>,ItemFilterModel*)),
+            this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ItemInfo,QList<QAction*>,ItemFilterModel*)));
 
     // TableView::signalItemsChanged is emitted when something changes in the model that
     // DigikamView should care about, not only the selection.
@@ -569,14 +569,14 @@ void DigikamView::setupConnections()
 
     // -- Filter Bars Connections ---------------------------------
 
-    ImageAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
+    ItemAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
 
     connect(d->filterWidget,
-            SIGNAL(signalTagFilterChanged(QList<int>,QList<int>,ImageFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)),
-            d->iconView->imageFilterModel(), SLOT(setTagFilter(QList<int>,QList<int>,ImageFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)));
+            SIGNAL(signalTagFilterChanged(QList<int>,QList<int>,ItemFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)),
+            d->iconView->imageFilterModel(), SLOT(setTagFilter(QList<int>,QList<int>,ItemFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)));
 
-    connect(d->filterWidget, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition,bool)),
-            model, SLOT(setRatingFilter(int,ImageFilterSettings::RatingCondition,bool)));
+    connect(d->filterWidget, SIGNAL(signalRatingFilterChanged(int,ItemFilterSettings::RatingCondition,bool)),
+            model, SLOT(setRatingFilter(int,ItemFilterSettings::RatingCondition,bool)));
 
     connect(d->filterWidget, SIGNAL(signalSearchTextFilterChanged(SearchTextFilterSettings)),
             model, SLOT(setTextFilter(SearchTextFilterSettings)));
@@ -587,8 +587,8 @@ void DigikamView::setupConnections()
     connect(d->filterWidget, SIGNAL(signalMimeTypeFilterChanged(int)),
             model, SLOT(setMimeTypeFilter(int)));
 
-    connect(d->filterWidget, SIGNAL(signalGeolocationFilterChanged(ImageFilterSettings::GeolocationCondition)),
-            model, SLOT(setGeolocationFilter(ImageFilterSettings::GeolocationCondition)));
+    connect(d->filterWidget, SIGNAL(signalGeolocationFilterChanged(ItemFilterSettings::GeolocationCondition)),
+            model, SLOT(setGeolocationFilter(ItemFilterSettings::GeolocationCondition)));
 
     // -- Preview image widget Connections ------------------------
 
@@ -616,11 +616,11 @@ void DigikamView::setupConnections()
     connect(d->stackedview, SIGNAL(signalAddToExistingQueue(int)),
             this, SLOT(slotImageAddToExistingQueue(int)));
 
-    connect(d->stackedview, SIGNAL(signalGotoAlbumAndItem(ImageInfo)),
-            this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
+    connect(d->stackedview, SIGNAL(signalGotoAlbumAndItem(ItemInfo)),
+            this, SLOT(slotGotoAlbumAndItem(ItemInfo)));
 
-    connect(d->stackedview, SIGNAL(signalGotoDateAndItem(ImageInfo)),
-            this, SLOT(slotGotoDateAndItem(ImageInfo)));
+    connect(d->stackedview, SIGNAL(signalGotoDateAndItem(ItemInfo)),
+            this, SLOT(slotGotoDateAndItem(ItemInfo)));
 
     connect(d->stackedview, SIGNAL(signalGotoTagAndItem(int)),
             this, SLOT(slotGotoTagAndItem(int)));
@@ -651,20 +651,20 @@ void DigikamView::setupConnections()
     connect(this, SIGNAL(signalAlbumSelected(Album*)),
             d->albumHistory, SLOT(slotAlbumSelected()));
 
-    connect(this, SIGNAL(signalImageSelected(ImageInfoList,ImageInfoList)),
-            d->albumHistory, SLOT(slotImageSelected(ImageInfoList)));
+    connect(this, SIGNAL(signalImageSelected(ItemInfoList,ItemInfoList)),
+            d->albumHistory, SLOT(slotImageSelected(ItemInfoList)));
 
-    connect(d->iconView, SIGNAL(currentChanged(ImageInfo)),
-            d->albumHistory, SLOT(slotCurrentChange(ImageInfo)));
+    connect(d->iconView, SIGNAL(currentChanged(ItemInfo)),
+            d->albumHistory, SLOT(slotCurrentChange(ItemInfo)));
 
-    connect(d->iconView->imageModel(), SIGNAL(imageInfosAdded(QList<ImageInfo>)),
+    connect(d->iconView->imageModel(), SIGNAL(imageInfosAdded(QList<ItemInfo>)),
             d->albumHistory, SLOT(slotAlbumCurrentChanged()));
 
     connect(d->albumHistory, SIGNAL(signalSetCurrent(qlonglong)),
             this, SLOT(slotSetCurrentWhenAvailable(qlonglong)));
 
-    connect(d->albumHistory, SIGNAL(signalSetSelectedInfos(QList<ImageInfo>)),
-            d->iconView, SLOT(setSelectedImageInfos(QList<ImageInfo>)));
+    connect(d->albumHistory, SIGNAL(signalSetSelectedInfos(QList<ItemInfo>)),
+            d->iconView, SLOT(setSelectedItemInfos(QList<ItemInfo>)));
 
     connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
             d->albumHistory, SLOT(slotAlbumDeleted(Album*)));
@@ -674,22 +674,22 @@ void DigikamView::setupConnections()
 
     // -- Image versions ----------------
 
-    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(imageSelected(ImageInfo)),
-            d->iconView, SLOT(hintAt(ImageInfo)));
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(imageSelected(ItemInfo)),
+            d->iconView, SLOT(hintAt(ItemInfo)));
 
-    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(ImageInfo)),
-            this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(ItemInfo)),
+            this, SLOT(slotGotoAlbumAndItem(ItemInfo)));
 }
 
 void DigikamView::connectIconViewFilter(FilterStatusBar* const filterbar)
 {
-    ImageAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
+    ItemAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
 
     connect(model, SIGNAL(filterMatches(bool)),
             filterbar, SLOT(slotFilterMatches(bool)));
 
-    connect(model, SIGNAL(filterSettingsChanged(ImageFilterSettings)),
-            filterbar, SLOT(slotFilterSettingsChanged(ImageFilterSettings)));
+    connect(model, SIGNAL(filterSettingsChanged(ItemFilterSettings)),
+            filterbar, SLOT(slotFilterSettingsChanged(ItemFilterSettings)));
 
     connect(filterbar, SIGNAL(signalResetFilters()),
             d->filterWidget, SLOT(slotResetFilters()));
@@ -1113,7 +1113,7 @@ void DigikamView::getForwardHistory(QStringList& titles)
     }
 }
 
-void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
+void DigikamView::slotGotoAlbumAndItem(const ItemInfo& imageInfo)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "going to " << imageInfo;
 
@@ -1133,7 +1133,7 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
     d->albumManager->setCurrentAlbums(QList<Album*>() << album);
 }
 
-void DigikamView::slotGotoDateAndItem(const ImageInfo& imageInfo)
+void DigikamView::slotGotoDateAndItem(const ItemInfo& imageInfo)
 {
     QDate date = imageInfo.dateTime().date();
 
@@ -1212,7 +1212,7 @@ void DigikamView::slotAlbumSelected(const QList<Album*>& albums)
         d->mapView->openAlbum(0);
 #endif // HAVE_MARBLE
 
-        slotTogglePreviewMode(ImageInfo());
+        slotTogglePreviewMode(ItemInfo());
         return;
     }
 
@@ -1249,11 +1249,10 @@ void DigikamView::slotAlbumSelected(const QList<Album*>& albums)
 
         if (palbum)
         {
-            QUrl url = palbum->fileUrl();
-            url = url.adjusted(QUrl::StripTrailingSlash);
+            QUrl url = palbum->fileUrl().adjusted(QUrl::StripTrailingSlash);
             d->trashView->model()->loadItemsForCollection(url.toLocalFile());
-            d->filterWidget->setEnabled(false);
             d->stackedview->setViewMode(StackedView::TrashViewMode);
+            d->filterWidget->setEnabled(false);
         }
     }
     else
@@ -1264,11 +1263,12 @@ void DigikamView::slotAlbumSelected(const QList<Album*>& albums)
             case StackedView::MediaPlayerMode:
             case StackedView::WelcomePageMode:
             case StackedView::TrashViewMode:
-                slotTogglePreviewMode(ImageInfo());
+                slotTogglePreviewMode(ItemInfo());
                 break;
             default:
                 break;
         }
+
         d->filterWidget->setEnabled(true);
     }
 }
@@ -1372,9 +1372,9 @@ void DigikamView::slotDispatchImageSelected()
 
     if (d->needDispatchSelection)
     {
-        // the list of ImageInfos of currently selected items, currentItem first
-        const ImageInfoList list      = selectedInfoList(true, true);
-        const ImageInfoList allImages = allInfo(true);
+        // the list of ItemInfos of currently selected items, currentItem first
+        const ItemInfoList list      = selectedInfoList(true, true);
+        const ItemInfoList allImages = allInfo(true);
 
         if (list.isEmpty())
         {
@@ -1386,8 +1386,8 @@ void DigikamView::slotDispatchImageSelected()
         {
             d->rightSideBar->itemChanged(list);
 
-            ImageInfo previousInfo;
-            ImageInfo nextInfo;
+            ItemInfo previousInfo;
+            ItemInfo nextInfo;
 
             if (viewMode() == StackedView::TableViewMode)
             {
@@ -1606,14 +1606,14 @@ void DigikamView::slotAlbumReadMetadata()
 
 void DigikamView::slotImageWriteMetadata()
 {
-    const ImageInfoList selected     = selectedInfoList(ApplicationSettings::Metadata);
+    const ItemInfoList selected     = selectedInfoList(ApplicationSettings::Metadata);
     MetadataSynchronizer* const tool = new MetadataSynchronizer(selected, MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->start();
 }
 
 void DigikamView::slotImageReadMetadata()
 {
-    const ImageInfoList selected     = selectedInfoList(ApplicationSettings::Metadata);
+    const ItemInfoList selected     = selectedInfoList(ApplicationSettings::Metadata);
     MetadataSynchronizer* const tool = new MetadataSynchronizer(selected, MetadataSynchronizer::ReadFromFileToDatabase);
     tool->start();
 }
@@ -1632,7 +1632,7 @@ void DigikamView::slotEscapePreview()
 
     // pass a null image info, because we want to fall back to the old
     // view mode
-    slotTogglePreviewMode(ImageInfo());
+    slotTogglePreviewMode(ItemInfo());
 }
 
 void DigikamView::slotMapWidgetView()
@@ -1667,7 +1667,7 @@ void DigikamView::slotImagePreview()
 /**
  * @brief This method toggles between AlbumView/MapWidgetView and ImagePreview modes, depending on the context.
  */
-void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
+void DigikamView::slotTogglePreviewMode(const ItemInfo& info)
 {
     if ((viewMode() == StackedView::IconViewMode   ||
          viewMode() == StackedView::TableViewMode  ||
@@ -1683,7 +1683,7 @@ void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
             }
             else
             {
-                d->stackedview->setPreviewItem(info, ImageInfo(), ImageInfo());
+                d->stackedview->setPreviewItem(info, ItemInfo(), ItemInfo());
             }
         }
         else
@@ -1739,7 +1739,7 @@ void DigikamView::slotViewModeChanged()
 
 void DigikamView::slotImageFindSimilar()
 {
-    const ImageInfo current = currentInfo();
+    const ItemInfo current = currentInfo();
 
     if (!current.isNull())
     {
@@ -1776,8 +1776,8 @@ void DigikamView::slotRefreshImagePreview()
 
 void DigikamView::slotEditor()
 {
-    const ImageInfoList imageInfoList = selectedInfoList(ApplicationSettings::Tools);
-    ImageInfo singleInfo              = currentInfo();
+    const ItemInfoList imageInfoList = selectedInfoList(ApplicationSettings::Tools);
+    ItemInfo singleInfo              = currentInfo();
 
     if (singleInfo.isNull() && !imageInfoList.isEmpty())
     {
@@ -1796,24 +1796,24 @@ void DigikamView::slotFileWithDefaultApplication()
 void DigikamView::slotLightTable()
 {
     bool grouping = selectedNeedGroupResolving(ApplicationSettings::LightTable);
-    const ImageInfoList selectedList = selectedInfoList(false, grouping);
+    const ItemInfoList selectedList = selectedInfoList(false, grouping);
 
     if (selectedList.isEmpty())
     {
         grouping = allNeedGroupResolving(ApplicationSettings::LightTable);
     }
 
-    const ImageInfoList allInfoList  = allInfo(grouping);
-    const ImageInfo currentImageInfo = currentInfo();
+    const ItemInfoList allInfoList  = allInfo(grouping);
+    const ItemInfo currentItemInfo = currentInfo();
 
-    d->utilities->insertToLightTableAuto(allInfoList, selectedList, currentImageInfo);
+    d->utilities->insertToLightTableAuto(allInfoList, selectedList, currentItemInfo);
 }
 
 void DigikamView::slotQueueMgr()
 {
     bool grouping = selectedNeedGroupResolving(ApplicationSettings::BQM);
-    ImageInfoList imageInfoList = selectedInfoList(false, grouping);
-    ImageInfo     singleInfo    = currentInfo();
+    ItemInfoList imageInfoList = selectedInfoList(false, grouping);
+    ItemInfo     singleInfo    = currentInfo();
 
     if (singleInfo.isNull() && !imageInfoList.isEmpty())
     {
@@ -1823,7 +1823,7 @@ void DigikamView::slotQueueMgr()
     if (singleInfo.isNull())
     {
         grouping = allNeedGroupResolving(ApplicationSettings::BQM);
-        const ImageInfoList allItems = allInfo(grouping);
+        const ItemInfoList allItems = allInfo(grouping);
 
         if (!allItems.isEmpty())
         {
@@ -1842,28 +1842,28 @@ void DigikamView::slotImageEdit()
 
 void DigikamView::slotImageLightTable()
 {
-    const ImageInfoList selectedList = selectedInfoList(ApplicationSettings::LightTable);
-    const ImageInfo currentImageInfo = currentInfo();
+    const ItemInfoList selectedList = selectedInfoList(ApplicationSettings::LightTable);
+    const ItemInfo currentItemInfo = currentInfo();
 
     // replace images in light table
-    d->utilities->insertToLightTable(selectedList, currentImageInfo, false);
+    d->utilities->insertToLightTable(selectedList, currentItemInfo, false);
 }
 
 void DigikamView::slotImageAddToLightTable()
 {
-    const ImageInfoList selectedList = selectedInfoList(ApplicationSettings::LightTable);
-    const ImageInfo currentImageInfo = currentInfo();
+    const ItemInfoList selectedList = selectedInfoList(ApplicationSettings::LightTable);
+    const ItemInfo currentItemInfo = currentInfo();
 
     // add to images in light table
-    d->utilities->insertToLightTable(selectedList, currentImageInfo, true);
+    d->utilities->insertToLightTable(selectedList, currentItemInfo, true);
 }
 
 void DigikamView::slotImageAddToCurrentQueue()
 {
-    const ImageInfoList selectedList = selectedInfoList(ApplicationSettings::BQM);
-    const ImageInfo currentImageInfo = currentInfo();
+    const ItemInfoList selectedList = selectedInfoList(ApplicationSettings::BQM);
+    const ItemInfo currentItemInfo = currentInfo();
 
-    d->utilities->insertToQueueManager(selectedList, currentImageInfo, false);
+    d->utilities->insertToQueueManager(selectedList, currentItemInfo, false);
 }
 
 void DigikamView::slotImageAddToNewQueue()
@@ -1871,20 +1871,20 @@ void DigikamView::slotImageAddToNewQueue()
     const bool newQueue = QueueMgrWindow::queueManagerWindowCreated() &&
                     !QueueMgrWindow::queueManagerWindow()->queuesMap().isEmpty();
 
-    const ImageInfoList selectedList = selectedInfoList(ApplicationSettings::BQM);
-    const ImageInfo currentImageInfo = currentInfo();
+    const ItemInfoList selectedList = selectedInfoList(ApplicationSettings::BQM);
+    const ItemInfo currentItemInfo = currentInfo();
 
-    d->utilities->insertToQueueManager(selectedList, currentImageInfo, newQueue);
+    d->utilities->insertToQueueManager(selectedList, currentItemInfo, newQueue);
 }
 
 void DigikamView::slotImageAddToExistingQueue(int queueid)
 {
-    const ImageInfoList selectedList = selectedInfoList(ApplicationSettings::BQM);
-    const ImageInfo currentImageInfo = currentInfo();
+    const ItemInfoList selectedList = selectedInfoList(ApplicationSettings::BQM);
+    const ItemInfo currentItemInfo = currentInfo();
 
     if (!selectedList.isEmpty())
     {
-        d->utilities->insertSilentToQueueManager(selectedList, currentImageInfo, queueid);
+        d->utilities->insertSilentToQueueManager(selectedList, currentItemInfo, queueid);
     }
 }
 
@@ -2002,7 +2002,7 @@ void DigikamView::slotSortImages(int sortRole)
     }
 
     settings->setImageSortOrder(sortRole);
-    d->iconView->imageFilterModel()->setSortRole((ImageSortSettings::SortRole) sortRole);
+    d->iconView->imageFilterModel()->setSortRole((ItemSortSettings::SortRole) sortRole);
     settings->emitSetupChanged();
 }
 
@@ -2016,7 +2016,7 @@ void DigikamView::slotSortImagesOrder(int order)
     }
 
     settings->setImageSorting(order);
-    d->iconView->imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder) order);
+    d->iconView->imageFilterModel()->setSortOrder((ItemSortSettings::SortOrder) order);
     settings->emitSetupChanged();
 }
 
@@ -2030,7 +2030,7 @@ void DigikamView::slotSeparateImages(int categoryMode)
     }
 
     settings->setImageSeparationMode(categoryMode);
-    d->iconView->imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode) categoryMode);
+    d->iconView->imageFilterModel()->setCategorizationMode((ItemSortSettings::CategorizationMode) categoryMode);
 }
 
 void DigikamView::slotImageSeparationSortOrder(int order)
@@ -2043,7 +2043,7 @@ void DigikamView::slotImageSeparationSortOrder(int order)
     }
 
     settings->setImageSeparationSortOrder(order);
-    d->iconView->imageFilterModel()->setCategorizationSortOrder((ImageSortSettings::SortOrder) order);
+    d->iconView->imageFilterModel()->setCategorizationSortOrder((ItemSortSettings::SortOrder) order);
 }
 
 void DigikamView::slotMoveSelectionToAlbum()
@@ -2080,10 +2080,10 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 
 void DigikamView::toggleTag(int tagID)
 {
-    ImageInfoList tagToRemove, tagToAssign;
-    const ImageInfoList selectedList = selectedInfoList(ApplicationSettings::Metadata);
+    ItemInfoList tagToRemove, tagToAssign;
+    const ItemInfoList selectedList = selectedInfoList(ApplicationSettings::Metadata);
 
-    foreach (const ImageInfo& info, selectedList)
+    foreach (const ItemInfo& info, selectedList)
     {
         if (info.tagIds().contains(tagID))
             tagToRemove.append(info);
@@ -2156,7 +2156,7 @@ void DigikamView::slotSlideShowManualFromCurrent()
     slotSlideShowManualFrom(currentInfo());
 }
 
-void DigikamView::slotSlideShowManualFrom(const ImageInfo& info)
+void DigikamView::slotSlideShowManualFrom(const ItemInfo& info)
 {
    SlideShowBuilder* const builder
            = new SlideShowBuilder(allInfo(ApplicationSettings::Slideshow));
@@ -2173,7 +2173,7 @@ void DigikamView::presentation()
 {
     QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
 
-    foreach (const ImageInfo& info, selectedInfoList(ApplicationSettings::Slideshow))
+    foreach (const ItemInfo& info, selectedInfoList(ApplicationSettings::Slideshow))
     {
         mngr->addFile(info.fileUrl(), info.comment());
         qApp->processEvents();
@@ -2182,7 +2182,7 @@ void DigikamView::presentation()
     mngr->showConfigDialog();
 }
 
-void DigikamView::slideShow(const ImageInfoList& infoList)
+void DigikamView::slideShow(const ItemInfoList& infoList)
 {
     SlideShowBuilder* const builder = new SlideShowBuilder(infoList);
 
@@ -2306,7 +2306,7 @@ void DigikamView::slotRightSideBarActivateAssignedTags()
 void DigikamView::slotRatingChanged(const QUrl& url, int rating)
 {
     rating = qMin(RatingMax, qMax(RatingMin, rating));
-    ImageInfo info = ImageInfo::fromUrl(url);
+    ItemInfo info = ItemInfo::fromUrl(url);
 
     if (!info.isNull())
     {
@@ -2316,7 +2316,7 @@ void DigikamView::slotRatingChanged(const QUrl& url, int rating)
 
 void DigikamView::slotColorLabelChanged(const QUrl& url, int color)
 {
-    ImageInfo info = ImageInfo::fromUrl(url);
+    ItemInfo info = ItemInfo::fromUrl(url);
 
     if (!info.isNull())
     {
@@ -2326,7 +2326,7 @@ void DigikamView::slotColorLabelChanged(const QUrl& url, int color)
 
 void DigikamView::slotPickLabelChanged(const QUrl& url, int pick)
 {
-    ImageInfo info = ImageInfo::fromUrl(url);
+    ItemInfo info = ItemInfo::fromUrl(url);
 
     if (!info.isNull())
     {
@@ -2336,7 +2336,7 @@ void DigikamView::slotPickLabelChanged(const QUrl& url, int pick)
 
 void DigikamView::slotToggleTag(const QUrl& url, int tagID)
 {
-    ImageInfo info = ImageInfo::fromUrl(url);
+    ItemInfo info = ItemInfo::fromUrl(url);
 
     if (!info.isNull())
     {
@@ -2373,7 +2373,7 @@ void DigikamView::imageTransform(MetaEngineRotation::TransformationAction transf
                 selectedInfoList(ApplicationSettings::Metadata), transform);
 }
 
-ImageInfo DigikamView::currentInfo() const
+ItemInfo DigikamView::currentInfo() const
 {
     switch (viewMode())
     {
@@ -2382,7 +2382,7 @@ ImageInfo DigikamView::currentInfo() const
 
 #ifdef HAVE_MARBLE
         case StackedView::MapWidgetMode:
-            return d->mapView->currentImageInfo();
+            return d->mapView->currentItemInfo();
 #endif // HAVE_MARBLE
 
         case StackedView::MediaPlayerMode:
@@ -2392,7 +2392,7 @@ ImageInfo DigikamView::currentInfo() const
             return d->iconView->currentInfo();
 
         default:
-            return ImageInfo();
+            return ItemInfo();
     }
 }
 
@@ -2414,65 +2414,65 @@ Album* DigikamView::currentAlbum() const
     }
 }
 
-ImageInfoList DigikamView::selectedInfoList(const bool currentFirst,
+ItemInfoList DigikamView::selectedInfoList(const bool currentFirst,
                                             const bool grouping) const
 {
     switch (viewMode())
     {
         case StackedView::TableViewMode:
-            
+
             if (currentFirst)
             {
-                return d->tableView->selectedImageInfosCurrentFirst(grouping);
+                return d->tableView->selectedItemInfosCurrentFirst(grouping);
             }
-            
-            return d->tableView->selectedImageInfos(grouping);
+
+            return d->tableView->selectedItemInfos(grouping);
 
         case StackedView::PreviewImageMode:
         case StackedView::MediaPlayerMode:
         case StackedView::MapWidgetMode:
         case StackedView::IconViewMode:
-            
+
             // all of these modes use the same selection model and data as the IconViewMode
             if (currentFirst)
             {
-                return d->iconView->selectedImageInfosCurrentFirst(grouping);
+                return d->iconView->selectedItemInfosCurrentFirst(grouping);
             }
-            
-            return d->iconView->selectedImageInfos(grouping);
+
+            return d->iconView->selectedItemInfos(grouping);
 
         default:
-            
-            return ImageInfoList();
+
+            return ItemInfoList();
     }
 }
 
-ImageInfoList DigikamView::selectedInfoList(const ApplicationSettings::OperationType type,
+ItemInfoList DigikamView::selectedInfoList(const ApplicationSettings::OperationType type,
                                             const bool currentFirst) const
 {
     return selectedInfoList(currentFirst, selectedNeedGroupResolving(type));
 }
 
-ImageInfoList DigikamView::allInfo(const bool grouping) const
+ItemInfoList DigikamView::allInfo(const bool grouping) const
 {
     switch (viewMode())
     {
         case StackedView::TableViewMode:
-            return d->tableView->allImageInfos(grouping);
+            return d->tableView->allItemInfos(grouping);
 
         case StackedView::MapWidgetMode:
         case StackedView::PreviewImageMode:
         case StackedView::MediaPlayerMode:
         case StackedView::IconViewMode:
             // all of these modes use the same selection model and data as the IconViewMode
-            return d->iconView->allImageInfos(grouping);
+            return d->iconView->allItemInfos(grouping);
 
         default:
-            return ImageInfoList();
+            return ItemInfoList();
     }
 }
 
-ImageInfoList DigikamView::allInfo(const ApplicationSettings::OperationType type) const
+ItemInfoList DigikamView::allInfo(const ApplicationSettings::OperationType type) const
 {
     return allInfo(allNeedGroupResolving(type));
 }
@@ -2513,7 +2513,7 @@ bool DigikamView::selectedNeedGroupResolving(const ApplicationSettings::Operatio
 
 QUrl DigikamView::currentUrl() const
 {
-    const ImageInfo cInfo = currentInfo();
+    const ItemInfo cInfo = currentInfo();
 
     return cInfo.fileUrl();
 }
@@ -2596,16 +2596,16 @@ void DigikamView::slotShowContextMenu(QContextMenuEvent* event,
     cmHelper.exec(event->globalPos());
 }
 
-void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info,
+void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info,
                                             const QList<QAction*>& extraGroupingActions,
-                                            ImageFilterModel* imageFilterModel)
+                                            ItemFilterModel* imageFilterModel)
 {
     QList<qlonglong> selectedImageIds = selectedInfoList(true, true).toImageIdList();
 
     // --------------------------------------------------------
     QMenu menu(this);
     ContextMenuHelper cmHelper(&menu);
-    cmHelper.setImageFilterModel(imageFilterModel);
+    cmHelper.setItemFilterModel(imageFilterModel);
 
     cmHelper.addAction(QLatin1String("full_screen"));
     cmHelper.addAction(QLatin1String("options_show_menubar"));
@@ -2679,17 +2679,17 @@ void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const Imag
     connect(&cmHelper, SIGNAL(signalGotoTag(int)),
             d->albumHistory, SLOT(slotClearSelectTAlbum(int)));
 
-    connect(&cmHelper, SIGNAL(signalGotoAlbum(ImageInfo)),
-            this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
+    connect(&cmHelper, SIGNAL(signalGotoAlbum(ItemInfo)),
+            this, SLOT(slotGotoAlbumAndItem(ItemInfo)));
 
-    connect(&cmHelper, SIGNAL(signalGotoAlbum(ImageInfo)),
-            d->albumHistory, SLOT(slotClearSelectPAlbum(ImageInfo)));
+    connect(&cmHelper, SIGNAL(signalGotoAlbum(ItemInfo)),
+            d->albumHistory, SLOT(slotClearSelectPAlbum(ItemInfo)));
 
-    connect(&cmHelper, SIGNAL(signalGotoDate(ImageInfo)),
-            this, SLOT(slotGotoDateAndItem(ImageInfo)));
+    connect(&cmHelper, SIGNAL(signalGotoDate(ItemInfo)),
+            this, SLOT(slotGotoDateAndItem(ItemInfo)));
 
-    connect(&cmHelper, SIGNAL(signalSetThumbnail(ImageInfo)),
-            this, SLOT(slotSetAsAlbumThumbnail(ImageInfo)));
+    connect(&cmHelper, SIGNAL(signalSetThumbnail(ItemInfo)),
+            this, SLOT(slotSetAsAlbumThumbnail(ItemInfo)));
 
     connect(&cmHelper, SIGNAL(signalAddToExistingQueue(int)),
             this, SLOT(slotImageAddToExistingQueue(int)));
@@ -2702,6 +2702,9 @@ void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const Imag
 
     connect(&cmHelper, SIGNAL(signalCreateGroupByFilename()),
             this, SLOT(slotCreateGroupByFilenameFromSelection()));
+
+    connect(&cmHelper, SIGNAL(signalCreateGroupByTimelapse()),
+            this, SLOT(slotCreateGroupByTimelapseFromSelection()));
 
     connect(&cmHelper, SIGNAL(signalRemoveFromGroup()),
             this, SLOT(slotRemoveSelectedFromGroup()));
@@ -2720,19 +2723,19 @@ void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const Imag
 }
 
 void DigikamView::slotShowGroupContextMenu(QContextMenuEvent* event,
-                                           const QList<ImageInfo>& selectedInfos,
-                                           ImageFilterModel* imageFilterModel)
+                                           const QList<ItemInfo>& selectedInfos,
+                                           ItemFilterModel* imageFilterModel)
 {
     QList<qlonglong> selectedImageIDs;
 
-    foreach (const ImageInfo& info, selectedInfos)
+    foreach (const ItemInfo& info, selectedInfos)
     {
         selectedImageIDs << info.id();
     }
 
     QMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
-    cmhelper.setImageFilterModel(imageFilterModel);
+    cmhelper.setItemFilterModel(imageFilterModel);
     cmhelper.addGroupActions(selectedImageIDs);
 
     // special action handling --------------------------------
@@ -2746,6 +2749,9 @@ void DigikamView::slotShowGroupContextMenu(QContextMenuEvent* event,
     connect(&cmhelper, SIGNAL(signalCreateGroupByFilename()),
             this, SLOT(slotCreateGroupByFilenameFromSelection()));
 
+    connect(&cmhelper, SIGNAL(signalCreateGroupByTimelapse()),
+            this, SLOT(slotCreateGroupByTimelapseFromSelection()));
+
     connect(&cmhelper, SIGNAL(signalUngroup()),
             this, SLOT(slotUngroupSelected()));
 
@@ -2755,7 +2761,7 @@ void DigikamView::slotShowGroupContextMenu(QContextMenuEvent* event,
     cmhelper.exec(event->globalPos());
 }
 
-void DigikamView::slotSetAsAlbumThumbnail(const ImageInfo& info)
+void DigikamView::slotSetAsAlbumThumbnail(const ItemInfo& info)
 {
     d->utilities->setAsAlbumThumbnail(currentAlbum(), info);
 }
@@ -2773,6 +2779,11 @@ void DigikamView::slotCreateGroupByTimeFromSelection()
 void DigikamView::slotCreateGroupByFilenameFromSelection()
 {
     d->utilities->createGroupByFilenameFromInfoList(selectedInfoList(false, true));
+}
+
+void DigikamView::slotCreateGroupByTimelapseFromSelection()
+{
+    d->utilities->createGroupByTimelapseFromInfoList(selectedInfoList(false, true));
 }
 
 void DigikamView::slotRemoveSelectedFromGroup()

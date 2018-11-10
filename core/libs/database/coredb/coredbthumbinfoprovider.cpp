@@ -34,7 +34,7 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "coredbaccess.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "thumbnailcreator.h"
 
 namespace Digikam
@@ -43,15 +43,15 @@ namespace Digikam
 ThumbnailInfo ThumbsDbInfoProvider::thumbnailInfo(const ThumbnailIdentifier& identifier)
 {
     // If code here proves to be a bottleneck we can add custom queries to albumdb to retrieve info all-in-one
-    ImageInfo imageinfo;
+    ItemInfo imageinfo;
 
     if (identifier.id)
     {
-        imageinfo = ImageInfo(identifier.id);
+        imageinfo = ItemInfo(identifier.id);
     }
     else
     {
-        imageinfo = ImageInfo::fromLocalFile(identifier.filePath);
+        imageinfo = ItemInfo::fromLocalFile(identifier.filePath);
     }
 
     if (imageinfo.isNull())
@@ -64,7 +64,7 @@ ThumbnailInfo ThumbsDbInfoProvider::thumbnailInfo(const ThumbnailIdentifier& ide
 
 int DatabaseLoadSaveFileInfoProvider::orientationHint(const QString& path)
 {
-    ImageInfo info = ImageInfo::fromLocalFile(path);
+    ItemInfo info = ItemInfo::fromLocalFile(path);
     return info.orientation();
 }
 

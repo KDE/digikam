@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class ImageTagPair;
+class ItemTagPair;
 
 class DIGIKAM_DATABASE_EXPORT FaceTagsEditor
 {
@@ -146,12 +146,12 @@ public:
     // --- Utilities ---
 
     QList<FaceTagsIface> databaseFaces(qlonglong imageId, FaceTagsIface::TypeFlags flags)     const;
-    QList<ImageTagPair>  faceImageTagPairs(qlonglong imageid, FaceTagsIface::TypeFlags flags) const;
+    QList<ItemTagPair>  faceItemTagPairs(qlonglong imageid, FaceTagsIface::TypeFlags flags) const;
 
 protected:
 
-    void addFaceAndTag(ImageTagPair& pair, const FaceTagsIface& face, const QStringList& properties, bool addTag);
-    void removeFaceAndTag(ImageTagPair& pair, const FaceTagsIface& face, bool touchTags);
+    void addFaceAndTag(ItemTagPair& pair, const FaceTagsIface& face, const QStringList& properties, bool addTag);
+    void removeFaceAndTag(ItemTagPair& pair, const FaceTagsIface& face, bool touchTags);
 
     virtual void addNormalTag(qlonglong imageid, int tagId);
     virtual void removeNormalTag(qlonglong imageid, int tagId);

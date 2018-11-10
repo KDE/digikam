@@ -43,9 +43,9 @@ class ShowfotoDragDropHandler : public AbstractItemDragDropHandler
 
 public:
 
-    explicit ShowfotoDragDropHandler(ShowfotoImageModel* const model);
+    explicit ShowfotoDragDropHandler(ShowfotoItemModel* const model);
 
-    ShowfotoImageModel*    model() const;
+    ShowfotoItemModel*    model() const;
 
     virtual bool           dropEvent(QAbstractItemView* view, const QDropEvent* e, const QModelIndex& droppedOn);
     virtual Qt::DropAction accepts(const QDropEvent* e, const QModelIndex& dropIndex);

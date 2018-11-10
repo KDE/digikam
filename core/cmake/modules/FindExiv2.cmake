@@ -5,7 +5,8 @@
 #
 # Once done this will define
 #
-#  Exiv2_FOUND       - system has libexiv2
+#  EXIV2_FOUND       - system has libexiv2
+#  EXIV2_VERSION     - the version of libexiv2
 #  EXIV2_INCLUDE_DIR - the libexiv2 include directory
 #  EXIV2_LIBRARIES   - Link these to use libexiv2
 #  EXIV2_DEFINITIONS - Compiler switches required for using libexiv2
@@ -53,7 +54,7 @@ find_path(EXIV2_INCLUDE_DIR NAMES exiv2/exif.hpp
           ${PC_EXIV2_INCLUDE_DIRS}
         )
 
-find_library(EXIV2_LIBRARY NAMES exiv2 libexiv2
+find_library(EXIV2_LIBRARY NAMES exiv2 libexiv2 exiv2lib
              HINTS
              ${PC_EXIV2_LIBDIR}
              ${PC_EXIV2_LIBRARY_DIRS}
@@ -105,5 +106,11 @@ set(EXIV2_LIBRARIES "${EXIV2_LIBRARY}")
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Exiv2 REQUIRED_VARS EXIV2_LIBRARY EXIV2_INCLUDE_DIR
                                         VERSION_VAR   EXIV2_VERSION)
+
+MESSAGE(STATUS "EXIV2_FOUND       = ${EXIV2_FOUND}")
+MESSAGE(STATUS "EXIV2_VERSION     = ${EXIV2_VERSION}")
+MESSAGE(STATUS "EXIV2_INCLUDE_DIR = ${EXIV2_INCLUDE_DIR}")
+MESSAGE(STATUS "EXIV2_LIBRARY     = ${EXIV2_LIBRARY}")
+MESSAGE(STATUS "EXIV2_DEFINITIONS = ${EXIV2_DEFINITIONS}")
 
 mark_as_advanced(EXIV2_INCLUDE_DIR EXIV2_LIBRARY)

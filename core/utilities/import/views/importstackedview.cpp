@@ -92,7 +92,7 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     d->importPreviewView = new ImportPreviewView(this);
     d->thumbBarDock      = new ThumbBarDock();
     d->thumbBar          = new ImportThumbnailBar(d->thumbBarDock);
-    d->thumbBar->setModelsFiltered(d->importIconView->importImageModel(),
+    d->thumbBar->setModelsFiltered(d->importIconView->importItemModel(),
                                    d->importIconView->importFilterModel());
     d->thumbBar->installOverlays();
     d->thumbBarDock->setWidget(d->thumbBar);

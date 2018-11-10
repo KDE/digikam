@@ -509,7 +509,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 sendLogMsg(xi18n("Failed to list files in <filename>%1</filename>", folder), DHistoryView::ErrorEntry);
             }
 
-            // TODO would it be okay to pass this to the ImportImageModel and let it filter it for us?
+            // TODO would it be okay to pass this to the ImportItemModel and let it filter it for us?
             for (CamItemInfoList::iterator it = itemsList.begin() ; it != itemsList.end() ; )
             {
                 CamItemInfo &info = (*it);
@@ -645,19 +645,19 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
                 if (colorLabel > NoColorLabel)
                 {
-                    metadata.setImageColorLabel(colorLabel);
+                    metadata.setItemColorLabel(colorLabel);
                     applyChanges = true;
                 }
 
                 if (pickLabel > NoPickLabel)
                 {
-                    metadata.setImagePickLabel(pickLabel);
+                    metadata.setItemPickLabel(pickLabel);
                     applyChanges = true;
                 }
 
                 if (rating > RatingMin)
                 {
-                    metadata.setImageRating(rating);
+                    metadata.setItemRating(rating);
                     applyChanges = true;
                 }
 
@@ -882,7 +882,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
             QFile::remove(scdest);
         }
 
-        if (!QFile::rename(sctemp, scdest))
+        if (!DFileOperations::renameFile(sctemp, scdest))
         {
             sendLogMsg(xi18n("Failed to save sidecar file for <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
         }
@@ -894,7 +894,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         QFile::remove(dest);
     }
 
-    if (!QFile::rename(temp, dest))
+    if (!DFileOperations::renameFile(temp, dest))
     {
         qCDebug(DIGIKAM_IMPORTUI_LOG) << "Renaming " << temp << " to " << dest << " failed";
         // rename failed. delete the temp file

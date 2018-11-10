@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "captionvalues.h"
 #include "dmetadata.h"
 #include "dimg.h"
@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 class ApplicationSettings;
-class ImageInfo;
+class ItemInfo;
 class Template;
 
 class MetadataHub
@@ -122,12 +122,12 @@ public:
     // --------------------------------------------------
 
     /**
-        Add metadata information contained in the ImageInfo object.
+        Add metadata information contained in the ItemInfo object.
         This method (or in combination with the other load methods)
         can be called multiple times on the same MetadataHub object.
         In this case, the metadata will be combined.
     */
-    void load(const ImageInfo& info);
+    void load(const ItemInfo& info);
 
 //    /**
 //        Add metadata information from the DMetadata object
@@ -139,7 +139,7 @@ public:
 //        (Uses DMetadata, QFileInfo)
 //        @returns True if the metadata could be loaded
 //    */
-//    bool load(const QString& filePath, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+//    bool load(const QString& filePath, const MetaEngineSettingsContainer& settings = MetaEngineSettings::instance()->settings());
 
     // --------------------------------------------------
 
@@ -151,21 +151,21 @@ public:
      * @param settings
      * @return true           - if everything is successful
      */
-    bool writeToMetadata(const ImageInfo& info, WriteComponent writeMode = WRITE_ALL,
-               bool ignoreLazySync = false, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+    bool writeToMetadata(const ItemInfo& info, WriteComponent writeMode = WRITE_ALL,
+               bool ignoreLazySync = false, const MetaEngineSettingsContainer& settings = MetaEngineSettings::instance()->settings());
 
 
     /**
         Constructs a DMetadata object for given filePath,
         calls the above method, writes the changes out to the file,
-        and notifies the ImageAttributesWatch.
+        and notifies the ItemAttributesWatch.
         WARNING: Do not use this method when multiple image infos are loaded
                  It will result in disjoint tags not being written
                  Use writeToMetadata(Image info ...) instead
         @return Returns if the file has been touched
     */
     bool write(const QString& filePath, WriteComponent writeMode = WRITE_ALL,
-               bool ignoreLazySync = false, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+               bool ignoreLazySync = false, const MetaEngineSettingsContainer& settings = MetaEngineSettings::instance()->settings());
 
     /**
         Constructs a DMetadata object from the metadata stored in the given DImg object,
@@ -173,7 +173,7 @@ public:
         @return Returns if the DImg object has been touched
     */
     bool write(DImg& image, WriteComponent writeMode = WRITE_ALL,
-               bool ignoreLazySync = false, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+               bool ignoreLazySync = false, const MetaEngineSettingsContainer& settings = MetaEngineSettings::instance()->settings());
 
     /**
         Will write only Tags to image. Used by TagsManager to write tags to image
@@ -181,7 +181,7 @@ public:
         @return if tags were successfully written.
     */
     bool writeTags(const QString& filePath, WriteComponent writeMode = WRITE_ALL,
-                   const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+                   const MetaEngineSettingsContainer& settings = MetaEngineSettings::instance()->settings());
 
     /**
      * @brief writeTags - used to deduplicate code from writeTags and usual write, all write to tags
@@ -204,25 +204,25 @@ public:
         apply any changes.
     */
     bool willWriteMetadata(Digikam::MetadataHub::WriteComponent writeMode = WRITE_ALL,
-                           const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings()) const;
+                           const MetaEngineSettingsContainer& settings = MetaEngineSettings::instance()->settings()) const;
 
     /**
      * @brief writeToBaloo - write tags, comments and rating to KDE Nepomuk replacement: Baloo
      * @param filePath     - path to file to add comments, tags and rating
      * @param settings     - metadata settings to be set
      */
-    void writeToBaloo(const QString& filePath, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+    void writeToBaloo(const QString& filePath, const MetaEngineSettingsContainer& settings = MetaEngineSettings::instance()->settings());
 
 
     // --------------------------------------------------
 
     /**
         Dedicated method to set face rectangles from database
-        When called from outside the metadatahub and  ImageInfo is cached,
+        When called from outside the metadatahub and  ItemInfo is cached,
         method dimension() can return wrong values, QSize must be specified
         manually
      */
-    void loadFaceTags(const ImageInfo& info, const QSize& size);
+    void loadFaceTags(const ItemInfo& info, const QSize& size);
 
     /**
         Get face tag names and face tag regions.
@@ -233,7 +233,7 @@ public:
         load the integer face tags.
         This is used in face tag transformation
      */
-    QMultiMap<QString, QVariant> loadIntegerFaceTags(const ImageInfo& info);
+    QMultiMap<QString, QVariant> loadIntegerFaceTags(const ItemInfo& info);
     /**
         Set new face tags
      */
@@ -244,7 +244,7 @@ protected:
     /**
         Applies the set of metadata contained in this MetadataHub
         to the given DMetadata object.
-        The MetadataSettingsContainer determine whether data is actually
+        The MetaEngineSettingsContainer determine whether data is actually
         set or not.
         The following metadata fields may be set (depending on settings):
         - Comment
@@ -261,7 +261,7 @@ protected:
         @return Returns true if the metadata object has been touched
     */
     bool write(DMetadata& metadata, WriteComponent writeMode = WRITE_ALL,
-               const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+               const MetaEngineSettingsContainer& settings = MetaEngineSettings::instance()->settings());
 
     void load(const QDateTime& dateTime,
               const CaptionsMap& titles, const CaptionsMap& comment,

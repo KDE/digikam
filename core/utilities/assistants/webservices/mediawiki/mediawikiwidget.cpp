@@ -206,7 +206,7 @@ MediaWikiWidget::MediaWikiWidget(DInfoInterface* const iface, QWidget* const par
     d->fileBox->setWhatsThis(i18n("This is the login form to your account on the chosen wiki."));
     QGridLayout* const fileBoxLayout = new QGridLayout(d->fileBox);
 
-    loadImageInfoFirstLoad();
+    loadItemInfoFirstLoad();
 
     d->titleEdit    = new QLineEdit(d->defaultMessage, d->fileBox);
     d->dateEdit     = new QLineEdit(d->defaultMessage, d->fileBox);
@@ -741,7 +741,7 @@ void MediaWikiWidget::slotAddWikiClicked()
     slotNewWikiClicked();
 }
 
-void MediaWikiWidget::loadImageInfoFirstLoad()
+void MediaWikiWidget::loadItemInfoFirstLoad()
 {
     QList<QUrl> urls = d->imgList->imageUrls(false);
 
@@ -749,11 +749,11 @@ void MediaWikiWidget::loadImageInfoFirstLoad()
 
     for (int j = 0 ; j < urls.size() ; ++j)
     {
-        loadImageInfo(urls.at(j));
+        loadItemInfo(urls.at(j));
     }
 }
 
-void MediaWikiWidget::loadImageInfo(const QUrl& url)
+void MediaWikiWidget::loadItemInfo(const QUrl& url)
 {
     DItemInfo info(d->iface->itemInfo(url));
     QStringList keywar        = info.keywords();
@@ -814,7 +814,7 @@ void MediaWikiWidget::slotLoadImagesDesc(QTreeWidgetItem* item)
 
     if (!d->imagesDescInfo.contains(l_item->url().toLocalFile()))
     {
-        loadImageInfo(l_item->url());
+        loadItemInfo(l_item->url());
     }
 
     imageMetaData = d->imagesDescInfo[l_item->url().toLocalFile()];

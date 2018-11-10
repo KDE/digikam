@@ -38,7 +38,7 @@
 // local includes
 
 #include "gpsimagemodel.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 
 namespace Digikam
 {
@@ -144,7 +144,7 @@ DMetadata* GPSImageItem::getMetadataForFile() const
     {
         // It is possible that no sidecar file has yet been created.
         // If writing to sidecar file is activated, we ignore the loading error of the metadata.
-        if (MetadataSettings::instance()->settings().metadataWritingMode == DMetadata::WRITETOIMAGEONLY)
+        if (MetaEngineSettings::instance()->settings().metadataWritingMode == DMetadata::WRITE_TO_FILE_ONLY)
         {
             return 0;
         }
@@ -191,7 +191,7 @@ bool GPSImageItem::loadImageData()
 
     if (meta && !m_dateTime.isValid())
     {
-        m_dateTime = meta->getImageDateTime();
+        m_dateTime = meta->getItemDateTime();
     }
 
     if (!m_dateTime.isValid())
@@ -507,7 +507,7 @@ void GPSImageItem::setCoordinates(const GeoCoordinates& newCoordinates)
     emitDataChanged();
 }
 
-void GPSImageItem::setModel(GPSImageModel* const model)
+void GPSImageItem::setModel(GPSItemModel* const model)
 {
     m_model = model;
 }
@@ -520,7 +520,7 @@ void GPSImageItem::emitDataChanged()
     }
 }
 
-void GPSImageItem::setHeaderData(GPSImageModel* const model)
+void GPSImageItem::setHeaderData(GPSItemModel* const model)
 {
     model->setColumnCount(ColumnGPSImageItemCount);
     model->setHeaderData(ColumnThumbnail,   Qt::Horizontal, i18n("Thumbnail"),      Qt::DisplayRole);

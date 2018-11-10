@@ -169,9 +169,9 @@ QPixmap ShowfotoDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int 
     // work around constness
     QAbstractItemModel* const model = const_cast<QAbstractItemModel*>(index.model());
     // set requested thumbnail size
-    model->setData(index, thumbnailSize, ShowfotoImageModel::ThumbnailRole);
+    model->setData(index, thumbnailSize, ShowfotoItemModel::ThumbnailRole);
     // get data from model
-    QVariant thumbData              = index.data(ShowfotoImageModel::ThumbnailRole);
+    QVariant thumbData              = index.data(ShowfotoItemModel::ThumbnailRole);
 
     return thumbData.value<QPixmap>();
 }
@@ -185,7 +185,7 @@ QPixmap ShowfotoDelegate::thumbnailPixmap(const QModelIndex& index) const
 void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     Q_D(const ShowfotoDelegate);
-    ShowfotoItemInfo info     = ShowfotoImageModel::retrieveShowfotoItemInfo(index);
+    ShowfotoItemInfo info     = ShowfotoItemModel::retrieveShowfotoItemInfo(index);
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("ImageViewer Settings");
 

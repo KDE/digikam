@@ -30,8 +30,8 @@
 // Local includes
 
 #include "imagecategorizedview.h"
-#include "imageinfo.h"
-#include "imagemodel.h"
+#include "iteminfo.h"
+#include "itemmodel.h"
 #include "itemviewhoverbutton.h"
 
 namespace Digikam
@@ -126,7 +126,7 @@ void ImageRotateOverlay::slotClicked()
 
 bool ImageRotateOverlay::checkIndex(const QModelIndex& index) const
 {
-    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    ItemInfo info = ItemModel::retrieveItemInfo(index);
     return (info.category() == DatabaseItem::Image);
 }
 

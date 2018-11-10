@@ -75,7 +75,7 @@ public:
 
     // Exif Metadata
     QString                      m_exifImageMake;
-    QString                      m_exifImageModel;
+    QString                      m_exifItemModel;
     QString                      m_exifImageOrientation;
     QString                      m_exifImageXResolution;
     QString                      m_exifImageYResolution;

@@ -104,7 +104,7 @@ double DRawDecoder::Private::progressValue() const
     return m_progress;
 }
 
-void DRawDecoder::Private::fillIndentifyInfo(LibRaw* const raw, RawInfo& identify)
+void DRawDecoder::Private::fillIndentifyInfo(LibRaw* const raw, DRawInfo& identify)
 {
     identify.dateTime.setTime_t(raw->imgdata.other.timestamp);
     identify.make             = QString::fromUtf8(raw->imgdata.idata.make);
@@ -134,7 +134,7 @@ void DRawDecoder::Private::fillIndentifyInfo(LibRaw* const raw, RawInfo& identif
     }
 
     identify.whitePoint       = raw->imgdata.color.maximum;
-    identify.orientation      = (RawInfo::ImageOrientation)raw->imgdata.sizes.flip;
+    identify.orientation      = (DRawInfo::ImageOrientation)raw->imgdata.sizes.flip;
 
     memcpy(&identify.cameraColorMatrix1, &raw->imgdata.color.cmatrix, sizeof(raw->imgdata.color.cmatrix));
     memcpy(&identify.cameraColorMatrix2, &raw->imgdata.color.rgb_cam, sizeof(raw->imgdata.color.rgb_cam));
@@ -270,7 +270,7 @@ bool DRawDecoder::Private::loadFromLibraw(const QString& filePath, QByteArray& i
             double T;
             double RGB[3];
             double xD, yD, X, Y, Z;
-            RawInfo identify;
+            DRawInfo identify;
             T = m_parent->m_decoderSettings.customWhiteBalance;
 
             /* Here starts the code picked and adapted from ufraw (0.12.1)

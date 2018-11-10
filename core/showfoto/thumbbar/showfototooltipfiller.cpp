@@ -36,7 +36,7 @@
 // Local includes
 
 #include "ditemtooltip.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 #include "showfotoiteminfo.h"
 #include "showfotosettings.h"
 
@@ -83,7 +83,7 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
         {
             tip                   += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
             QString localeFileSize = QLocale().toString(info.size);
-            str                    = i18n("%1 (%2)", ImagePropertiesTab::humanReadableBytesCount(info.size), localeFileSize);
+            str                    = i18n("%1 (%2)", ItemPropertiesTab::humanReadableBytesCount(info.size), localeFileSize);
             tip                   += str + cnt.cellEnd;
         }
 
@@ -129,8 +129,8 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
 
             if (settings->getShowPhotoMake())
             {
-                ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
-                ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+                ItemPropertiesTab::shortenedMakeInfo(photoInfo.make);
+                ItemPropertiesTab::shortenedModelInfo(photoInfo.model);
 
                 str = QString::fromUtf8("%1 / %2").arg(photoInfo.make.isEmpty() ? cnt.unavailable : photoInfo.make)
                                                   .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);

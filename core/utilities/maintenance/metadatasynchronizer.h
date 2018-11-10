@@ -31,7 +31,7 @@
 // Local includes
 
 #include "album.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "maintenancetool.h"
 
 namespace Digikam
@@ -59,7 +59,7 @@ public:
 
     /** Constructor which sync all pictures metadata from an Images list
      */
-    explicit MetadataSynchronizer(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
+    explicit MetadataSynchronizer(const ItemInfoList& list, SyncDirection = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
 
     void setTagsOnly(bool value);
 
@@ -71,7 +71,7 @@ private Q_SLOTS:
 
     void slotStart();
     void slotParseAlbums();
-    void slotAlbumParsed(const ImageInfoList&);
+    void slotAlbumParsed(const ItemInfoList&);
     void slotAdvance();
     void slotOneAlbumIsComplete();
     void slotCancel();

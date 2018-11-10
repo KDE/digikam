@@ -43,7 +43,7 @@
 #include "albummanager.h"
 #include "applicationsettings.h"
 #include "coredbaccess.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "thumbsdbaccess.h"
 #include "thumbsdb.h"
 #include "maintenancethread.h"
@@ -168,7 +168,7 @@ void ThumbsGenerator::slotStart()
 
     while (it != d->allPicturesPath.end())
     {
-        ImageInfo info = ImageInfo::fromLocalFile(*it);
+        ItemInfo info = ItemInfo::fromLocalFile(*it);
 
         if (info.category() != DatabaseItem::Image &&
             info.category() != DatabaseItem::Video &&

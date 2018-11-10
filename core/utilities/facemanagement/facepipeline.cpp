@@ -39,7 +39,7 @@
 
 #include "digikam_debug.h"
 #include "loadingdescription.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "tagscache.h"
 #include "threadmanager.h"
 #include "facebenchmarkers.h"
@@ -392,13 +392,13 @@ void FacePipeline::cancel()
     d->stop();
 }
 
-bool FacePipeline::process(const ImageInfo& info)
+bool FacePipeline::process(const ItemInfo& info)
 {
     QString filePath = info.filePath();
 
     if (filePath.isNull())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "ImageInfo has no valid file path. Skipping.";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "ItemInfo has no valid file path. Skipping.";
         return false;
     }
 
@@ -414,7 +414,7 @@ bool FacePipeline::process(const ImageInfo& info)
     return true;
 }
 
-bool FacePipeline::process(const ImageInfo& info,
+bool FacePipeline::process(const ItemInfo& info,
                            const DImg& image)
 {
     FacePipelineExtendedPackage::Ptr package = d->filterOrBuildPackage(info);
@@ -431,7 +431,7 @@ bool FacePipeline::process(const ImageInfo& info,
 }
 
 /*
-bool FacePipeline::add(const ImageInfo& info,
+bool FacePipeline::add(const ItemInfo& info,
                        const QRect& rect,
                        const DImg& image)
 {
@@ -443,13 +443,13 @@ bool FacePipeline::add(const ImageInfo& info,
 }
 */
 
-void FacePipeline::train(const ImageInfo& info,
+void FacePipeline::train(const ItemInfo& info,
                          const QList<FaceTagsIface>& databaseFaces)
 {
     train(info, databaseFaces, DImg());
 }
 
-void FacePipeline::train(const ImageInfo& info,
+void FacePipeline::train(const ItemInfo& info,
                          const QList<FaceTagsIface>& databaseFaces,
                          const DImg& image)
 {
@@ -460,7 +460,7 @@ void FacePipeline::train(const ImageInfo& info,
     d->send(package);
 }
 
-FaceTagsIface FacePipeline::confirm(const ImageInfo& info,
+FaceTagsIface FacePipeline::confirm(const ItemInfo& info,
                                     const FaceTagsIface& databaseFace,
                                     int assignedTagId,
                                     const TagRegion& assignedRegion)
@@ -468,7 +468,7 @@ FaceTagsIface FacePipeline::confirm(const ImageInfo& info,
     return confirm(info, databaseFace, DImg(), assignedTagId, assignedRegion);
 }
 
-FaceTagsIface FacePipeline::confirm(const ImageInfo& info,
+FaceTagsIface FacePipeline::confirm(const ItemInfo& info,
                                     const FaceTagsIface& databaseFace,
                                     const DImg& image,
                                     int assignedTagId,
@@ -485,7 +485,7 @@ FaceTagsIface FacePipeline::confirm(const ImageInfo& info,
     return FaceTagsEditor::confirmedEntry(face, assignedTagId, assignedRegion);
 }
 
-FaceTagsIface FacePipeline::addManually(const ImageInfo& info,
+FaceTagsIface FacePipeline::addManually(const ItemInfo& info,
                                         const DImg& image,
                                         const TagRegion& assignedRegion)
 {
@@ -501,7 +501,7 @@ FaceTagsIface FacePipeline::addManually(const ImageInfo& info,
     return FaceTagsEditor::unconfirmedEntry(info.id(), face.assignedTagId, face.assignedRegion);
 }
 
-FaceTagsIface FacePipeline::editRegion(const ImageInfo& info,
+FaceTagsIface FacePipeline::editRegion(const ItemInfo& info,
                                        const DImg& image,
                                        const FaceTagsIface& databaseFace,
                                        const TagRegion& newRegion)
@@ -520,7 +520,7 @@ FaceTagsIface FacePipeline::editRegion(const ImageInfo& info,
     return face;
 }
 
-void FacePipeline::remove(const ImageInfo& info,
+void FacePipeline::remove(const ItemInfo& info,
                           const FaceTagsIface& databaseFace)
 {
     FacePipelineExtendedPackage::Ptr package = d->buildPackage(info,
@@ -530,7 +530,7 @@ void FacePipeline::remove(const ImageInfo& info,
     d->send(package);
 }
 
-void FacePipeline::process(const QList<ImageInfo>& infos)
+void FacePipeline::process(const QList<ItemInfo>& infos)
 {
     d->processBatch(infos);
 }

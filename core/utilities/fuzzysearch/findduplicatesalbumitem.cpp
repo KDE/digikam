@@ -55,7 +55,7 @@ public:
     SAlbum*   album;
     int       itemCount;
 
-    ImageInfo refImgInfo;
+    ItemInfo refImgInfo;
 };
 
 FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlbum* const album)
@@ -67,7 +67,7 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlb
     if (d->album)
     {
         qlonglong refImage = d->album->title().toLongLong();
-        d->refImgInfo      = ImageInfo(refImage);
+        d->refImgInfo      = ItemInfo(refImage);
         setText(Column::REFERENCE_IMAGE, d->refImgInfo.name());
 
         calculateInfos();
@@ -108,7 +108,7 @@ void FindDuplicatesAlbumItem::calculateInfos(const QList<qlonglong>& deletedImag
 
         foreach (int imageId, list)
         {
-            ImageInfo info(imageId);
+            ItemInfo info(imageId);
 
             // If image is not deleted in this moment and was also not
             // removed before.

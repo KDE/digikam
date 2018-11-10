@@ -36,7 +36,7 @@ namespace Digikam
 
 typedef QPair<CamItemInfo, QPixmap> CachedItem;
 
-class DIGIKAM_EXPORT ImportThumbnailModel : public ImportImageModel
+class DIGIKAM_EXPORT ImportThumbnailModel : public ImportItemModel
 {
     Q_OBJECT
 

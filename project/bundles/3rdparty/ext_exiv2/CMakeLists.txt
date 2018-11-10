@@ -49,9 +49,10 @@ if(MINGW)
         #URL http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
         #URL_MD5 5399e3b570d7f9205f0e76d47582da4c
 
-        # To use current implementation from Git
+        # To use current implementation from Git with tag 0.27 rc1
 
         GIT_REPOSITORY https://github.com/Exiv2/exiv2.git
+        GIT_TAG v0.27-RC1
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/exiv2-0.27-mxe.patch
 

@@ -302,6 +302,7 @@ bool DMediaServerMngr::load()
         if (!doc.setContent(&file))
         {
             qCDebug(DIGIKAM_MEDIASRV_LOG) << "Cannot load MediaServer list XML file";
+            file.close();
             return false;
         }
 
@@ -350,6 +351,7 @@ bool DMediaServerMngr::load()
 
         setCollectionMap(map);
 
+        file.close();
         return true;
     }
     else

@@ -82,7 +82,7 @@ void DImgFilterActionTest::testActions()
     {
         DImg ref(imageDir().filePath(fileName));
         QVERIFY(!ref.isNull());
-        DImageHistory history = ref.getImageHistory();
+        DImageHistory history = ref.getItemHistory();
 
         FilterActionFilter filter;
         filter.setFilterActions(history.allActions());

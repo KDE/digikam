@@ -32,8 +32,8 @@
 
 #include "digikam_debug.h"
 #include "applicationsettings.h"
-#include "imagealbumfiltermodel.h"
-#include "imagealbummodel.h"
+#include "itemalbumfiltermodel.h"
+#include "itemalbummodel.h"
 #include "imagedragdrop.h"
 #include "imageratingoverlay.h"
 #include "imagecoordinatesoverlay.h"
@@ -54,7 +54,7 @@ public:
     }
 
     Qt::ScrollBarPolicy           scrollPolicy;
-    NoDuplicatesImageFilterModel* duplicatesFilter;
+    NoDuplicatesItemFilterModel* duplicatesFilter;
 };
 
 ImageThumbnailBar::ImageThumbnailBar(QWidget* const parent)
@@ -86,11 +86,11 @@ ImageThumbnailBar::~ImageThumbnailBar()
     delete d;
 }
 
-void ImageThumbnailBar::setModelsFiltered(ImageModel* model, ImageSortFilterModel* filterModel)
+void ImageThumbnailBar::setModelsFiltered(ItemModel* model, ImageSortFilterModel* filterModel)
 {
     if (!d->duplicatesFilter)
     {
-        d->duplicatesFilter = new NoDuplicatesImageFilterModel(this);
+        d->duplicatesFilter = new NoDuplicatesItemFilterModel(this);
     }
 
     d->duplicatesFilter->setSourceFilterModel(filterModel);

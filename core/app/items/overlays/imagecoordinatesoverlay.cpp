@@ -30,7 +30,7 @@
 // Local includes
 
 #include "imagedelegate.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "imagecategorizedview.h"
 
 namespace Digikam
@@ -94,7 +94,7 @@ void ImageCoordinatesOverlay::updatePosition()
 
 bool ImageCoordinatesOverlay::checkIndex(const QModelIndex& index) const
 {
-    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    ItemInfo info = ItemModel::retrieveItemInfo(index);
     QRect rect     = static_cast<ImageDelegate*>(delegate())->coordinatesIndicatorRect();
 
     if (!rect.isNull() && info.hasCoordinates())

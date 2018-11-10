@@ -177,8 +177,8 @@ int DNGWriter::convert()
 
         QFileInfo          outputInfo(dngFilePath);
         QByteArray         rawData;
-        RawInfo identify;
-        RawInfo identifyMake;
+        DRawInfo identify;
+        DRawInfo identifyMake;
 
         // -----------------------------------------------------------------------------------------
 
@@ -521,19 +521,19 @@ int DNGWriter::convert()
 
         switch (identify.orientation)
         {
-            case RawInfo::ORIENTATION_180:
+            case DRawInfo::ORIENTATION_180:
                 orientation = dng_orientation::Rotate180();
                 break;
 
-            case RawInfo::ORIENTATION_Mirror90CCW:
+            case DRawInfo::ORIENTATION_Mirror90CCW:
                 orientation = dng_orientation::Mirror90CCW();
                 break;
 
-            case RawInfo::ORIENTATION_90CCW:
+            case DRawInfo::ORIENTATION_90CCW:
                 orientation = dng_orientation::Rotate90CCW();
                 break;
 
-            case RawInfo::ORIENTATION_90CW:
+            case DRawInfo::ORIENTATION_90CW:
                 orientation = dng_orientation::Rotate90CW();
                 break;
 
@@ -643,7 +643,7 @@ int DNGWriter::convert()
 
             // Time from original shot
             dng_date_time_info dti;
-            dti.SetDateTime(d->dngDateTime(meta.getImageDateTime()));
+            dti.SetDateTime(d->dngDateTime(meta.getItemDateTime()));
             exif->fDateTimeOriginal = dti;
 
             dti.SetDateTime(d->dngDateTime(meta.getDigitizationDateTime(true)));
@@ -1114,6 +1114,7 @@ int DNGWriter::convert()
             tempDataStream.Put(compressedData.data(), compressedData.size());
 
             compressedFile.remove();
+            originalFile.close();
 
             tempDataStream.Put_uint32(0);
             tempDataStream.Put_uint32(0);
@@ -1279,7 +1280,7 @@ int DNGWriter::convert()
 
         if (d->updateFileDate)
         {
-            QDateTime date = meta.getImageDateTime();
+            QDateTime date = meta.getItemDateTime();
 
             qCDebug(DIGIKAM_GENERAL_LOG) << "DNGWriter: Setting modification date from meta data: " << date.toString();
 

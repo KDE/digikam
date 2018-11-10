@@ -31,8 +31,8 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "imagealbummodel.h"
-#include "imagefiltermodel.h"
+#include "itemalbummodel.h"
+#include "itemfiltermodel.h"
 #include "statesavingobject.h"
 #include "tableview_columnfactory.h"
 #include "tableview_shared.h"

@@ -45,7 +45,7 @@ class KConfigGroup;
 namespace Digikam
 {
 
-class GPSImageModel;
+class GPSItemModel;
 class GPSUndoCommand;
 
 class RGWidget : public QWidget
@@ -54,7 +54,7 @@ class RGWidget : public QWidget
 
 public:
 
-    explicit RGWidget(GPSImageModel* const imageModel,
+    explicit RGWidget(GPSItemModel* const imageModel,
                       QItemSelectionModel* const selectionModel,
                       QAbstractItemModel* externTagModel,
                       QWidget* const parent = 0);

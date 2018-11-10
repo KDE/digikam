@@ -30,10 +30,10 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "fileactionmngr_p.h"
-#include "imageattributeswatch.h"
-#include "imageinfotasksplitter.h"
+#include "itemattributeswatch.h"
+#include "iteminfotasksplitter.h"
 #include "scancontroller.h"
 #include "digikam_globals.h"
 #include "jpegutils.h"
@@ -43,11 +43,11 @@
 namespace Digikam
 {
 
-void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList infos, int orientation)
+void FileActionMngrFileWorker::writeOrientationToFiles(FileActionItemInfoList infos, int orientation)
 {
     QStringList failedItems;
 
-    foreach(const ImageInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         if (state() == WorkerObject::Deactivating)
         {
@@ -57,7 +57,7 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList i
         QString path                  = info.filePath();
         DMetadata metadata(path);
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
-        metadata.setImageOrientation(o);
+        metadata.setItemOrientation(o);
 
         if (!metadata.applyChanges())
         {
@@ -67,7 +67,7 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList i
         {
             emit imageDataChanged(path, true, true);
             QUrl url = QUrl::fromLocalFile(path);
-            ImageAttributesWatch::instance()->fileMetadataChanged(url);
+            ItemAttributesWatch::instance()->fileMetadataChanged(url);
         }
 
         infos.writtenToOne();
@@ -81,13 +81,13 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList i
     infos.finishedWriting();
 }
 
-void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList infos)
+void FileActionMngrFileWorker::writeMetadataToFiles(FileActionItemInfoList infos)
 {
     d->startingToWrite(infos);
 
     ScanController::instance()->suspendCollectionScan();
 
-    foreach(const ImageInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         MetadataHub hub;
 
@@ -99,7 +99,7 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
         hub.load(info);
         QString filePath = info.filePath();
 
-        if (MetadataSettings::instance()->settings().useLazySync)
+        if (MetaEngineSettings::instance()->settings().useLazySync)
         {
             hub.write(filePath, MetadataHub::WRITE_ALL);
         }
@@ -118,13 +118,13 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
     infos.finishedWriting();
 }
 
-void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, int flags)
+void FileActionMngrFileWorker::writeMetadata(FileActionItemInfoList infos, int flags)
 {
     d->startingToWrite(infos);
 
     ScanController::instance()->suspendCollectionScan();
 
-    foreach(const ImageInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         MetadataHub hub;
 
@@ -135,7 +135,7 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, int 
 
         hub.load(info);
         // apply to file metadata
-        if (MetadataSettings::instance()->settings().useLazySync)
+        if (MetaEngineSettings::instance()->settings().useLazySync)
         {
             hub.writeToMetadata(info, (MetadataHub::WriteComponents)flags);
         }
@@ -154,14 +154,14 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, int 
     infos.finishedWriting();
 }
 
-void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int action)
+void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int action)
 {
     d->startingToWrite(infos);
 
     QStringList failedItems;
     ScanController::instance()->suspendCollectionScan();
 
-    foreach(const ImageInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         if (state() == WorkerObject::Deactivating)
         {
@@ -175,20 +175,20 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
         bool rotateAsJpeg                               = false;
         bool rotateLossy                                = false;
 
-        MetadataSettingsContainer::RotationBehaviorFlags behavior;
-        behavior              = MetadataSettings::instance()->settings().rotationBehavior;
-        bool rotateByMetadata = (behavior & MetadataSettingsContainer::RotateByMetadataFlag);
+        MetaEngineSettingsContainer::RotationBehaviorFlags behavior;
+        behavior              = MetaEngineSettings::instance()->settings().rotationBehavior;
+        bool rotateByMetadata = (behavior & MetaEngineSettingsContainer::RotateByMetadataFlag);
 
         // Check if rotation by content, as desired, is feasible
         // We'll later check again if it was successful
-        if (behavior & MetadataSettingsContainer::RotatingPixels)
+        if (behavior & MetaEngineSettingsContainer::RotatingPixels)
         {
             if (format == QLatin1String("JPG") && JPEGUtils::isJpegImage(path))
             {
                 rotateAsJpeg = true;
             }
 
-            if (behavior & MetadataSettingsContainer::RotateByLossyRotation)
+            if (behavior & MetaEngineSettingsContainer::RotateByLossyRotation)
             {
                 DImg::FORMAT format = DImg::fileFormat(path);
 
@@ -281,18 +281,18 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
             if (!isRaw)
             {
                 DMetadata metadata(path);
-                metadata.setImageOrientation(finalOrientation);
+                metadata.setItemOrientation(finalOrientation);
                 metadata.applyChanges();
             }
         }
 
         // DB rotation
-        ImageInfo(info).setOrientation(finalOrientation);
+        ItemInfo(info).setOrientation(finalOrientation);
 
         if (!failedItems.contains(info.name()))
         {
             emit imageDataChanged(path, true, true);
-            ImageAttributesWatch::instance()->fileMetadataChanged(info.fileUrl());
+            ItemAttributesWatch::instance()->fileMetadataChanged(info.fileUrl());
         }
 
         infos.writtenToOne();
@@ -308,7 +308,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
     ScanController::instance()->resumeCollectionScan();
 }
 
-void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int action)
+void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int action)
 {
     /**
      *  Get all faces from database and rotate them
@@ -322,7 +322,7 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
 
     QMultiMap<QString, QRect> ajustedFaces;
 
-    foreach(const FaceTagsIface& dface, facesList)
+    foreach (const FaceTagsIface& dface, facesList)
     {
         QString name  = FaceTags::faceNameForTag(dface.tagId());
         QRect oldrect = dface.region().toRect();

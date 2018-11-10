@@ -10,30 +10,27 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libtags_SRCS
-    addtagscombobox.cpp
-    tagscompleter.cpp
-    addtagslineedit.cpp
-    tagcheckview.cpp
-    tagfolderview.cpp
-    taggingaction.cpp
-    tagslineeditoverlay.cpp
-    tagspopupmenu.cpp
-    tageditdlg.cpp
-    tagmodificationhelper.cpp
-    tagsactionmngr.cpp
-    taggingactionfactory.cpp
+    widgets/addtagscombobox.cpp
+    widgets/addtagslineedit.cpp
+    widgets/tagcheckview.cpp
+    widgets/tagfolderview.cpp
+    widgets/tagslineeditoverlay.cpp
+    widgets/tagspopupmenu.cpp
+    widgets/tageditdlg.cpp
 
-    tagsmanager/tagsmanager.cpp
-    tagsmanager/tagpropwidget.cpp
-    tagsmanager/taglist.cpp
-    tagsmanager/tagmngrtreeview.cpp
-    tagsmanager/models/tagmngrlistview.cpp
-    tagsmanager/models/tagmngrlistmodel.cpp
-    tagsmanager/models/tagmngrlistitem.cpp
-)
+    engine/tagscompleter.cpp
+    engine/tagmodificationhelper.cpp
+    engine/tagsactionmngr.cpp
+    engine/taggingaction.cpp
+    engine/taggingactionfactory.cpp
 
-include_directories(tagsmanager/
-                    tagsmanager/models/
+    manager/tagsmanager.cpp
+    manager/tagpropwidget.cpp
+    manager/taglist.cpp
+    manager/tagmngrtreeview.cpp
+    manager/models/tagmngrlistview.cpp
+    manager/models/tagmngrlistmodel.cpp
+    manager/models/tagmngrlistitem.cpp
 )
 
 include_directories(

@@ -53,10 +53,10 @@ public:
 
 public:
 
-    void        link();
-    void        unlink();
-    void        doOAuth();
-    bool        authenticated() const;
+    void link();
+    void unlink();
+    void doOAuth();
+    bool authenticated() const;
 
 Q_SIGNALS:
 

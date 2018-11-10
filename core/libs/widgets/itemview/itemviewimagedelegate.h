@@ -28,7 +28,7 @@
 // Local includes
 
 #include "ditemdelegate.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 #include "thumbnailsize.h"
 #include "digikam_export.h"
 
@@ -37,7 +37,7 @@ namespace Digikam
 
 class ItemViewImageDelegatePrivate;
 
-class DIGIKAM_EXPORT ItemViewImageDelegate : public DItemDelegate, public ImageDelegateOverlayContainer
+class DIGIKAM_EXPORT ItemViewImageDelegate : public DItemDelegate, public ItemDelegateOverlayContainer
 {
     Q_OBJECT
 

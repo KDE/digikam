@@ -10,8 +10,8 @@ SET(EXTPREFIX_qt "${EXTPREFIX}")
 
 ExternalProject_Add(ext_qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://download.qt.io/official_releases/qt/5.9/5.9.6/single/qt-everywhere-opensource-src-5.9.6.tar.xz
-    URL_MD5 a427428c65f35909ef6ae865b8ee0da6
+    URL https://download.qt.io/official_releases/qt/5.9/5.9.7/single/qt-everywhere-opensource-src-5.9.7.tar.xz
+    URL_MD5 70e617aeb1f9bbf84a12b8cf09b01ece
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt-appimage-support.patch
 

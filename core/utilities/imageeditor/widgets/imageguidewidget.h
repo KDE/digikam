@@ -129,7 +129,7 @@ protected:
     void   updateMaskCursor();
     void   setSpotPosition(const QPoint& point);
     void   updateSpotPosition(int x, int y);
-    QPoint translateImagePosition(const QPoint& point, bool src) const;
+    QPoint translateItemPosition(const QPoint& point, bool src) const;
 
 private:
 

@@ -35,7 +35,7 @@
 #include "digikam_debug.h"
 #include "coredbinfocontainers.h"
 #include "dmetadata.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace Digikam
 {

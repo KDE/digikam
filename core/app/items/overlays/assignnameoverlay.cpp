@@ -43,7 +43,7 @@
 #include "facepipeline.h"
 #include "facetags.h"
 #include "imagedelegate.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "imagecategorizedview.h"
 #include "taggingaction.h"
 #include "tagscache.h"
@@ -147,25 +147,25 @@ void AssignNameOverlay::setActive(bool active)
 
     if (active)
     {
-        connect(assignNameWidget(), SIGNAL(assigned(TaggingAction,ImageInfo,QVariant)),
-                this, SLOT(slotAssigned(TaggingAction,ImageInfo,QVariant)));
+        connect(assignNameWidget(), SIGNAL(assigned(TaggingAction,ItemInfo,QVariant)),
+                this, SLOT(slotAssigned(TaggingAction,ItemInfo,QVariant)));
 
-        connect(assignNameWidget(), SIGNAL(rejected(ImageInfo,QVariant)),
-                this, SLOT(slotRejected(ImageInfo,QVariant)));
+        connect(assignNameWidget(), SIGNAL(rejected(ItemInfo,QVariant)),
+                this, SLOT(slotRejected(ItemInfo,QVariant)));
 
-        connect(assignNameWidget(), SIGNAL(selected(TaggingAction,ImageInfo,QVariant)),
+        connect(assignNameWidget(), SIGNAL(selected(TaggingAction,ItemInfo,QVariant)),
                 this, SLOT(enterPersistentMode()));
 
-        connect(assignNameWidget(), SIGNAL(assigned(TaggingAction,ImageInfo,QVariant)),
+        connect(assignNameWidget(), SIGNAL(assigned(TaggingAction,ItemInfo,QVariant)),
                 this, SLOT(leavePersistentMode()));
 
-        connect(assignNameWidget(), SIGNAL(rejected(ImageInfo,QVariant)),
+        connect(assignNameWidget(), SIGNAL(rejected(ItemInfo,QVariant)),
                 this, SLOT(leavePersistentMode()));
 
-        connect(assignNameWidget(), SIGNAL(assigned(TaggingAction,ImageInfo,QVariant)),
+        connect(assignNameWidget(), SIGNAL(assigned(TaggingAction,ItemInfo,QVariant)),
                 this, SLOT(storeFocus()));
 
-        connect(assignNameWidget(), SIGNAL(rejected(ImageInfo,QVariant)),
+        connect(assignNameWidget(), SIGNAL(rejected(ItemInfo,QVariant)),
                 this, SLOT(storeFocus()));
 
 /*
@@ -233,9 +233,9 @@ void AssignNameOverlay::updateFace()
         return;
     }
 
-    QVariant extraData = index().data(ImageModel::ExtraDataRole);
+    QVariant extraData = index().data(ItemModel::ExtraDataRole);
     assignNameWidget()->setCurrentFace(FaceTagsIface::fromVariant(extraData));
-    assignNameWidget()->setUserData(ImageModel::retrieveImageInfo(index()), extraData);
+    assignNameWidget()->setUserData(ItemModel::retrieveItemInfo(index()), extraData);
 }
 
 /*
@@ -248,7 +248,7 @@ void AssignNameOverlay::slotDataChanged(const QModelIndex& / *topLeft* /, const 
 
 bool AssignNameOverlay::checkIndex(const QModelIndex& index) const
 {
-    QVariant extraData = index.data(ImageModel::ExtraDataRole);
+    QVariant extraData = index.data(ItemModel::ExtraDataRole);
 
     if (extraData.isNull())
     {
@@ -289,7 +289,7 @@ void AssignNameOverlay::viewportLeaveEvent(QObject* o, QEvent* e)
     PersistentWidgetDelegateOverlay::viewportLeaveEvent(o, e);
 }
 
-void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier)
+void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ItemInfo& info, const QVariant& faceIdentifier)
 {
     Q_UNUSED(info);
     FaceTagsIface face = FaceTagsIface::fromVariant(faceIdentifier);
@@ -320,7 +320,7 @@ void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ImageInf
     hide();
 }
 
-void AssignNameOverlay::slotRejected(const ImageInfo& info, const QVariant& faceIdentifier)
+void AssignNameOverlay::slotRejected(const ItemInfo& info, const QVariant& faceIdentifier)
 {
     Q_UNUSED(info);
     Q_UNUSED(faceIdentifier);

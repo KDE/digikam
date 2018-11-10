@@ -62,6 +62,7 @@
 #include "gpsimageitem.h"
 #include "gpsundocommand.h"
 #include "track_listmodel.h"
+#include "timezonecombobox.h"
 #include "dexpanderbox.h"
 #include "dfiledialog.h"
 
@@ -75,6 +76,7 @@ public:
     explicit Private()
       : gpxLoadFilesButton(0),
         gpxFileList(0),
+        timeZoneCB(0),
         offsetSign(0),
         offsetTime(0),
         interpolateButton(0),
@@ -102,6 +104,8 @@ public:
     QPushButton*            gpxLoadFilesButton;
     QTreeView*              gpxFileList;
 
+    TimeZoneComboBox*       timeZoneCB;
+
     QComboBox*              offsetSign;
     QTimeEdit*              offsetTime;
 
@@ -120,7 +124,7 @@ public:
     TrackListModel*         trackListModel;
     bool                    uiEnabledInternal;
     bool                    uiEnabledExternal;
-    GPSImageModel*          imageModel;
+    GPSItemModel*          imageModel;
 
     int                     correlationTotalCount;
     int                     correlationCorrelatedCount;
@@ -129,7 +133,7 @@ public:
 };
 
 GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent,
-                                         GPSImageModel* const imageModel,
+                                         GPSItemModel* const imageModel,
                                          TrackManager* const trackManager)
     : QWidget(parent),
       d(new Private())
@@ -170,6 +174,16 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent,
     QWidget* const offsetWidget     = new QWidget(this);
     QGridLayout* const offsetLayout = new QGridLayout(offsetWidget);
 
+    QLabel* const timeZoneLabel     = new QLabel(i18n("Camera time zone:"), offsetWidget);
+
+    d->timeZoneCB                   = new TimeZoneComboBox(offsetWidget);
+    d->timeZoneCB->setWhatsThis(i18n("<p>Sets the time zone the camera was set to "
+                                     "during photo shooting, so that the time stamps "
+                                     "of the images can be converted to GMT to match "
+                                     "the GPS time reference.</p>"
+                                     "<p>Note: positive offsets count eastwards from "
+                                     "zero longitude (GMT), they are 'ahead of time'.</p>"));
+
     QLabel* const offsetLabel       = new QLabel(i18n("Offset of pictures (hh:mm:ss):"),
                                                       offsetWidget);
     offsetLabel->setWhatsThis(i18n("Sets the offset between picture times "
@@ -185,9 +199,11 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent,
     d->offsetTime = new QTimeEdit(offsetWidget);
     d->offsetTime->setDisplayFormat(QLatin1String("HH:mm:ss"));
 
-    offsetLayout->addWidget(offsetLabel,   0, 0, 1, 1);
-    offsetLayout->addWidget(d->offsetSign, 0, 1, 1, 1);
-    offsetLayout->addWidget(d->offsetTime, 0, 2, 1, 1);
+    offsetLayout->addWidget(timeZoneLabel, 0, 0, 1, 1);
+    offsetLayout->addWidget(d->timeZoneCB, 0, 2, 1, 1);
+    offsetLayout->addWidget(offsetLabel,   1, 0, 1, 1);
+    offsetLayout->addWidget(d->offsetSign, 1, 1, 1, 1);
+    offsetLayout->addWidget(d->offsetTime, 1, 2, 1, 1);
     offsetLayout->setColumnStretch(0, 10);
     offsetLayout->setContentsMargins(contentsMargins());
 
@@ -359,7 +375,8 @@ void GPSCorrelatorWidget::slotCorrelate()
         userOffset = (-1) * userOffset;
     }
 
-    options.secondsOffset += userOffset;
+    options.secondsOffset  = userOffset;
+    options.timeZoneOffset = d->timeZoneCB->timeZoneOffset();
 
     options.interpolate          = d->interpolateButton->isChecked();
     options.interpolationDstTime = d->interpolateLimitInput->time().msecsSinceStartOfDay() / 1000;
@@ -500,6 +517,7 @@ void GPSCorrelatorWidget::saveSettingsToGroup(KConfigGroup* const group)
     group->writeEntry("Interpolate",                  d->interpolateButton->isChecked());
     group->writeEntry("Max Inter Dist Time",          d->interpolateLimitInput->time().toString());
     group->writeEntry("Max Gap Time",                 d->directMatchLimitInput->time().toString());
+    group->writeEntry("Time Zone",                    d->timeZoneCB->currentIndex());
     group->writeEntry("Offset Sign",                  d->offsetSign->currentIndex());
     group->writeEntry("Offset Time",                  d->offsetTime->time().toString());
     group->writeEntry("GPX File Open Last Directory", d->gpxFileOpenLastDirectory);
@@ -511,6 +529,7 @@ void GPSCorrelatorWidget::readSettingsFromGroup(const KConfigGroup* const group)
     d->interpolateButton->setChecked(group->readEntry("Interpolate", true));
     d->interpolateLimitInput->setTime(QTime::fromString(group->readEntry("Max Inter Dist Time", "00:15:00")));
     d->directMatchLimitInput->setTime(QTime::fromString(group->readEntry("Max Gap Time", "00:00:30")));
+    d->timeZoneCB->setCurrentIndex(group->readEntry("Time Zone", 13));  // +00:00
     d->offsetSign->setCurrentIndex(group->readEntry("Offset Sign", 0));
     d->offsetTime->setTime(QTime::fromString(group->readEntry("Offset Time", "00:00:00")));
     d->gpxFileOpenLastDirectory = group->readEntry("GPX File Open Last Directory",

@@ -45,8 +45,8 @@
 #include "dimgfiltermanager.h"
 #include "ditemtooltip.h"
 #include "filteraction.h"
-#include "imageinfo.h"
-#include "imagepropertiestab.h"
+#include "iteminfo.h"
+#include "itempropertiestab.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
 #include "albumthumbnailloader.h"
@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
+QString ToolTipFiller::imageInfoTipContents(const ItemInfo& info)
 {
     QString              str;
     ApplicationSettings* const settings = ApplicationSettings::instance();
@@ -96,7 +96,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         {
             tip                   += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
             QString localeFileSize = QLocale().toString(commonInfo.fileSize);
-            str                    = i18n("%1 (%2)", ImagePropertiesTab::humanReadableBytesCount(commonInfo.fileSize), localeFileSize);
+            str                    = i18n("%1 (%2)", ItemPropertiesTab::humanReadableBytesCount(commonInfo.fileSize), localeFileSize);
             tip                   += str + cnt.cellEnd;
         }
 
@@ -127,7 +127,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
        if (settings->getToolTipsShowImageAR())
         {
-            if (!ImagePropertiesTab::aspectRatioToString(commonInfo.width, commonInfo.height, str))
+            if (!ItemPropertiesTab::aspectRatioToString(commonInfo.width, commonInfo.height, str))
             {
                 str = i18nc("unknown / invalid image aspect ratio",
                             "Unknown");
@@ -156,8 +156,8 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
             if (settings->getToolTipsShowPhotoMake())
             {
-                ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
-                ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+                ItemPropertiesTab::shortenedMakeInfo(photoInfo.make);
+                ItemPropertiesTab::shortenedModelInfo(photoInfo.model);
 
                 str = QString::fromUtf8("%1 / %2").arg(photoInfo.make.isEmpty() ? cnt.unavailable : photoInfo.make)
                       .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);

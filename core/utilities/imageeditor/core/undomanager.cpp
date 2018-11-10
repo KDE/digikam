@@ -550,7 +550,7 @@ bool UndoManager::hasChanges() const
     }
     else
     {
-        DImageHistory currentHistory = d->core->getImageHistory();
+        DImageHistory currentHistory = d->core->getItemHistory();
         DImageHistory initialHistory = d->core->getInitialImageHistory();
 
         if (currentHistory == initialHistory)
@@ -576,7 +576,7 @@ DImageHistory UndoManager::getImageHistoryOfFullRedo() const
         return d->redoActions.first()->getMetadata().history;
     }
 
-    return d->core->getImageHistory();
+    return d->core->getItemHistory();
 }
 
 } // namespace Digikam

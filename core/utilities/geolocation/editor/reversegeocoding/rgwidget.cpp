@@ -137,7 +137,7 @@ public:
     bool                 hideOptions;
     bool                 UIEnabled;
     QLabel*              label;
-    GPSImageModel*       imageModel;
+    GPSItemModel*       imageModel;
     QItemSelectionModel* selectionModel;
     QPushButton*         buttonRGSelected;
 
@@ -192,7 +192,7 @@ public:
  * @param selectionModel image selection model
  * @param parent The parent object
  */
-RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const selectionModel,
+RGWidget::RGWidget(GPSItemModel* const imageModel, QItemSelectionModel* const selectionModel,
                    QAbstractItemModel* externTagModel, QWidget* const parent)
     : QWidget(parent),
       d(new Private())

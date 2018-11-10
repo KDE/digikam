@@ -35,6 +35,7 @@
 // Local includes.
 
 #include "gitversion.h"
+#include "daboutdata.h"
 
 namespace Digikam
 {
@@ -51,22 +52,22 @@ static inline const QString digiKamVersion()
 static inline QString additionalInformation()
 {
     QString gitVer       = QLatin1String(GITVERSION);
-    QString ret          = i18n("IRC:\n"
-                                "irc.freenode.net - #digikam\n\n"
-                                "Feedback:\n"
-                                "digikam-user@kde.org\n\n"
-                                "Build date: %1 (target: %2)",
+    QString ret          = i18n("%1\n\n"
+                                "IRC: irc.freenode.net - #digikam\n"
+                                "Feedback: digikam-user@kde.org\n\n"
+                                "Build date: %2 (target: %3)",
+                                DAboutData::digiKamFamilly(),
                                 QLatin1String(__DATE__),
                                 QLatin1String("@CMAKE_BUILD_TYPE@"));
 
     if (!gitVer.isEmpty() && !gitVer.startsWith(QLatin1String("unknow")) && !gitVer.startsWith(QLatin1String("export")))
     {
-        ret = i18n("IRC:\n"
-                   "irc.freenode.net - #digikam\n\n"
-                   "Feedback:\n"
-                   "digikam-user@kde.org\n\n"
-                   "Build date: %1 (target: %2)\n"
-                   "Rev.: %3",
+        ret = i18n("%1\n\n"
+                   "IRC: irc.freenode.net - #digikam\n"
+                   "Feedback: digikam-user@kde.org\n\n"
+                   "Build date: %2 (target: %3)\n"
+                   "Rev.: %4",
+                   DAboutData::digiKamFamilly(),
                    QLatin1String(__DATE__),
                    QLatin1String("@CMAKE_BUILD_TYPE@"),
                    QString::fromLatin1("<a href='http://commits.kde.org/digikam/%1'>%2</a>").arg(gitVer).arg(gitVer));
@@ -77,4 +78,4 @@ static inline QString additionalInformation()
 
 }  // namespace Digikam
 
-#endif /* DIGIKAM_VERSION_H */
+#endif // DIGIKAM_VERSION_H

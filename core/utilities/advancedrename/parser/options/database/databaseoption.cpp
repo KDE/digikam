@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "imagecomments.h"
+#include "itemcomments.h"
 #include "dbkeyselector.h"
 #include "digikam_debug.h"
 #include "commonkeys.h"

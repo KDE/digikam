@@ -84,7 +84,7 @@ public:
     qreal longitude;
 };
 
-class GPSImageModel;
+class GPSItemModel;
 
 class DIGIKAM_EXPORT GPSImageItem
 {
@@ -125,7 +125,7 @@ public:
 
     /// @name Functions used by the model
     //@{
-    static void setHeaderData(GPSImageModel* const model);
+    static void setHeaderData(GPSItemModel* const model);
     bool lessThan(const GPSImageItem* const otherItem, const int column) const;
     //@}
 
@@ -169,16 +169,16 @@ public:
 
 protected:
 
-    // these are only to be called by the GPSImageModel
+    // these are only to be called by the GPSItemModel
     QVariant data(const int column, const int role) const;
-    void setModel(GPSImageModel* const model);
+    void setModel(GPSItemModel* const model);
     void emitDataChanged();
     DMetadata* getMetadataForFile() const;
     SaveProperties saveProperties() const;
 
 protected:
 
-    GPSImageModel*         m_model;
+    GPSItemModel*         m_model;
 
     QUrl                   m_url;
     QDateTime              m_dateTime;
@@ -192,7 +192,7 @@ protected:
     QList<QList<TagData> > m_savedTagList;
     bool                   m_writeXmpTags;
 
-    friend class GPSImageModel;
+    friend class GPSItemModel;
 };
 
 } // namespace Digikam

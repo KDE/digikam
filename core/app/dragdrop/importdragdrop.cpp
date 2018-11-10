@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-ImportDragDropHandler::ImportDragDropHandler(ImportImageModel* const model)
+ImportDragDropHandler::ImportDragDropHandler(ImportItemModel* const model)
     : AbstractItemDragDropHandler(model)
 {
 }
@@ -238,9 +238,9 @@ QMimeData* ImportDragDropHandler::createMimeData(const QList<QModelIndex>& index
     return (new DCameraItemListDrag(lst));
 }
 
-ImportImageModel* ImportDragDropHandler::model() const
+ImportItemModel* ImportDragDropHandler::model() const
 {
-    return static_cast<ImportImageModel*>(m_model);
+    return static_cast<ImportItemModel*>(m_model);
 }
 
 } // namespace Digikam

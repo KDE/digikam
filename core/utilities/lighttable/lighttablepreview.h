@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "imagepreviewview.h"
 
 namespace Digikam
@@ -53,7 +53,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalDroppedItems(const ImageInfoList&);
+    void signalDroppedItems(const ItemInfoList&);
 
 private:
 

@@ -39,10 +39,10 @@ namespace Digikam
 {
 
 class ImageChangeset;
-class ImageFilterModel;
-class ImageFilterSettings;
-class ImageInfo;
-class ImageInfoList;
+class ItemFilterModel;
+class ItemFilterSettings;
+class ItemInfo;
+class ItemInfoList;
 class TableViewColumn;
 class TableViewColumnConfiguration;
 class TableViewColumnDescription;
@@ -95,10 +95,10 @@ public:
     void                    removeColumnAt(const int columnIndex);
     TableViewColumn*        getColumnObject(const int columnIndex);
     QList<TableViewColumn*> getColumnObjects();
-    QModelIndex             fromImageFilterModelIndex(const QModelIndex& imageFilterModelIndex);
-    QModelIndex             fromImageModelIndex(const QModelIndex& imageModelIndex);
-    QModelIndex             toImageFilterModelIndex(const QModelIndex& i) const;
-    QModelIndex             toImageModelIndex(const QModelIndex& i) const;
+    QModelIndex             fromItemFilterModelIndex(const QModelIndex& imageFilterModelIndex);
+    QModelIndex             fromItemModelIndex(const QModelIndex& imageModelIndex);
+    QModelIndex             toItemFilterModelIndex(const QModelIndex& i) const;
+    QModelIndex             toItemModelIndex(const QModelIndex& i) const;
     void                    loadColumnProfile(const TableViewColumnProfile& columnProfile);
     TableViewColumnProfile  getColumnProfile() const;
 
@@ -112,17 +112,17 @@ public:
     QModelIndex   indexFromImageId(const qlonglong imageId, const int columnIndex) const;
     Item*         itemFromImageId(const qlonglong imageId) const;
     Item*         itemFromIndex(const QModelIndex& i) const;
-    ImageInfo     infoFromItem(Item* const item) const;
-    ImageInfoList infosFromItems(QList<Item*> const items) const;
+    ItemInfo     infoFromItem(Item* const item) const;
+    ItemInfoList infosFromItems(QList<Item*> const items) const;
 
     QVariant              itemDatabaseFieldRaw(Item* const item, const DatabaseFields::Set requestedField);
     DatabaseFieldsHashRaw itemDatabaseFieldsRaw(Item* const item, const DatabaseFields::Set requestedSet);
 
     qlonglong        imageId(const QModelIndex& anIndex) const;
     QList<qlonglong> imageIds(const QModelIndexList& indexList) const;
-    QList<ImageInfo> imageInfos(const QModelIndexList& indexList) const;
-    ImageInfo        imageInfo(const QModelIndex& index) const;
-    QList<ImageInfo> allImageInfo() const;
+    QList<ItemInfo> imageInfos(const QModelIndexList& indexList) const;
+    ItemInfo        imageInfo(const QModelIndex& index) const;
+    QList<ItemInfo> allItemInfo() const;
 
     QList<Item*> sortItems(const QList<Item*> itemList);
     class LessThan;
@@ -177,7 +177,7 @@ private Q_SLOTS:
 
     void slotDatabaseImageChanged(const ImageChangeset& imageChangeset);
 
-    void slotFilterSettingsChanged(const ImageFilterSettings& settings);
+    void slotFilterSettingsChanged(const ItemFilterSettings& settings);
     void slotResortModel();
     void slotClearModel(const bool sendNotifications);
 

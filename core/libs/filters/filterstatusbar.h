@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "imagefiltersettings.h"
+#include "itemfiltersettings.h"
 
 namespace Digikam
 {
@@ -47,7 +47,7 @@ public:
 public Q_SLOTS:
 
     void slotFilterMatches(bool);
-    void slotFilterSettingsChanged(const ImageFilterSettings& settings);
+    void slotFilterSettingsChanged(const ItemFilterSettings& settings);
 
 Q_SIGNALS:
 

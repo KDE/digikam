@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 class QResizeEvent;
 class QPaintEvent;
@@ -39,7 +39,7 @@ class QMouseEvent;
 
 namespace Digikam
 {
-class ImageFilterModel;
+class ItemFilterModel;
 
 class MonthWidget : public QWidget
 {
@@ -50,7 +50,7 @@ public:
     explicit MonthWidget(QWidget* const parent);
     ~MonthWidget();
 
-    void setImageModel(ImageFilterModel* const model);
+    void setItemModel(ItemFilterModel* const model);
 
     void setYearMonth(int year, int month);
     QSize sizeHint() const;

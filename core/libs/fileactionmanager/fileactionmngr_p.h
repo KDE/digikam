@@ -68,7 +68,7 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotProgressItemCompleted();
-    void slotProgressItemCanceled(ProgressItem*);
+    void slotProgressItemCanceled(ProgressItem* item);
 };
 
 // -----------------------------------------------------------------------------------------------------------
@@ -87,69 +87,67 @@ Q_SIGNALS:
     void signalTasksFinished();
 
     // Inter-thread signals: connected to database worker slots
-    void signalAddTags(const FileActionImageInfoList& infos, const QList<int>& tagIDs);
-    void signalRemoveTags(const FileActionImageInfoList& infos, const QList<int>& tagIDs);
-    void signalAssignPickLabel(const FileActionImageInfoList& infos, int pickId);
-    void signalAssignColorLabel(const FileActionImageInfoList& infos, int colorId);
-    void signalAssignRating(const FileActionImageInfoList& infos, int rating);
-    void signalSetExifOrientation(const FileActionImageInfoList& infos, int orientation);
-    void signalApplyMetadata(const FileActionImageInfoList& infos, DisjointMetadata* hub);
-    void signalEditGroup(int groupAction, const ImageInfo& pick, const FileActionImageInfoList& infos);
-    void signalTransform(const FileActionImageInfoList& infos, int orientation);
-    void signalCopyAttributes(const FileActionImageInfoList& infos, const QStringList& derivedPaths);
-
-    void signalTransformFinished();
+    void signalAddTags(const FileActionItemInfoList& infos, const QList<int>& tagIDs);
+    void signalRemoveTags(const FileActionItemInfoList& infos, const QList<int>& tagIDs);
+    void signalAssignPickLabel(const FileActionItemInfoList& infos, int pickId);
+    void signalAssignColorLabel(const FileActionItemInfoList& infos, int colorId);
+    void signalAssignRating(const FileActionItemInfoList& infos, int rating);
+    void signalSetExifOrientation(const FileActionItemInfoList& infos, int orientation);
+    void signalApplyMetadata(const FileActionItemInfoList& infos, DisjointMetadata* hub);
+    void signalEditGroup(int groupAction, const ItemInfo& pick, const FileActionItemInfoList& infos);
+    void signalTransform(const FileActionItemInfoList& infos, int orientation);
+    void signalCopyAttributes(const FileActionItemInfoList& infos, const QStringList& derivedPaths);
 
 public:
 
     // -- Signal-emitter glue code --
 
-    void assignTags(const FileActionImageInfoList& infos, const QList<int>& tagIDs)
+    void assignTags(const FileActionItemInfoList& infos, const QList<int>& tagIDs)
     {
         emit signalAddTags(infos, tagIDs);
     }
 
-    void removeTags(const FileActionImageInfoList& infos, const QList<int>& tagIDs)
+    void removeTags(const FileActionItemInfoList& infos, const QList<int>& tagIDs)
     {
         emit signalRemoveTags(infos, tagIDs);
     }
 
-    void assignPickLabel(const FileActionImageInfoList& infos, int pickId)
+    void assignPickLabel(const FileActionItemInfoList& infos, int pickId)
     {
         emit signalAssignPickLabel(infos, pickId);
     }
 
-    void assignColorLabel(const FileActionImageInfoList& infos, int colorId)
+    void assignColorLabel(const FileActionItemInfoList& infos, int colorId)
     {
         emit signalAssignColorLabel(infos, colorId);
     }
 
-    void assignRating(const FileActionImageInfoList& infos, int rating)
+    void assignRating(const FileActionItemInfoList& infos, int rating)
     {
         emit signalAssignRating(infos, rating);
     }
 
-    void editGroup(int groupAction, const ImageInfo& pick, const FileActionImageInfoList& infos)
+    void editGroup(int groupAction, const ItemInfo& pick, const FileActionItemInfoList& infos)
     {
         emit signalEditGroup(groupAction, pick, infos);
     }
 
-    void setExifOrientation(const FileActionImageInfoList& infos, int orientation)
+    void setExifOrientation(const FileActionItemInfoList& infos, int orientation)
     {
         emit signalSetExifOrientation(infos, orientation);
     }
 
-    void applyMetadata(const FileActionImageInfoList& infos, DisjointMetadata* hub)
+    void applyMetadata(const FileActionItemInfoList& infos, DisjointMetadata* hub)
     {
         emit signalApplyMetadata(infos, hub);
     }
 
-    void transform(const FileActionImageInfoList& infos, int orientation)
+    void transform(const FileActionItemInfoList& infos, int orientation)
     {
         emit signalTransform(infos, orientation);
     }
 
-    void copyAttributes(const FileActionImageInfoList& infos, const QStringList& derivedPaths)
+    void copyAttributes(const FileActionItemInfoList& infos, const QStringList& derivedPaths)
     {
         emit signalCopyAttributes(infos, derivedPaths);
     }
@@ -164,7 +162,7 @@ public:
     bool shallSendForWriting(qlonglong id);
 
     /// file worker calls this when receiving a task
-    void startingToWrite(const QList<ImageInfo>& infos);
+    void startingToWrite(const QList<ItemInfo>& infos);
 
     void connectToDatabaseWorker();
     void connectDatabaseToFileWorker();

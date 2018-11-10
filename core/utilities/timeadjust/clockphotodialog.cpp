@@ -182,7 +182,7 @@ bool ClockPhotoDialog::setImage(const QUrl& imageFile)
 
     if (meta.load(imageFile.toLocalFile()))
     {
-        d->photoDateTime = meta.getImageDateTime();
+        d->photoDateTime = meta.getItemDateTime();
 
         if (d->photoDateTime.isValid())
         {

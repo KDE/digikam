@@ -34,14 +34,14 @@ namespace Digikam
 GeolocationFilter::GeolocationFilter(QWidget* const parent)
     : QComboBox(parent)
 {
-    addItem( i18n("No geo filtering"),           QVariant::fromValue(ImageFilterSettings::GeolocationNoFilter) );
-    addItem( i18n("Images with coordinates"),    QVariant::fromValue(ImageFilterSettings::GeolocationHasCoordinates) );
-    addItem( i18n("Images without coordinates"), QVariant::fromValue(ImageFilterSettings::GeolocationNoCoordinates) );
+    addItem( i18n("No geo filtering"),           QVariant::fromValue(ItemFilterSettings::GeolocationNoFilter) );
+    addItem( i18n("Images with coordinates"),    QVariant::fromValue(ItemFilterSettings::GeolocationHasCoordinates) );
+    addItem( i18n("Images without coordinates"), QVariant::fromValue(ItemFilterSettings::GeolocationNoCoordinates) );
 
     setToolTip(i18n("Filter by geolocation"));
     setWhatsThis(i18n("Select how geolocation should affect the images which are shown."));
 
-    setGeolocationFilter(ImageFilterSettings::GeolocationNoFilter);
+    setGeolocationFilter(ItemFilterSettings::GeolocationNoFilter);
 
     connect(this, SIGNAL(activated(int)),
             this, SLOT(slotFilterChanged()));
@@ -51,14 +51,14 @@ GeolocationFilter::~GeolocationFilter()
 {
 }
 
-void GeolocationFilter::setGeolocationFilter(const ImageFilterSettings::GeolocationCondition& condition)
+void GeolocationFilter::setGeolocationFilter(const ItemFilterSettings::GeolocationCondition& condition)
 {
     // findData does not seem to work...
-//     const int newIndex = findData(QVariant::fromValue<ImageFilterSettings::GeolocationCondition>(condition));
+//     const int newIndex = findData(QVariant::fromValue<ItemFilterSettings::GeolocationCondition>(condition));
 
     for (int i=0; i<count(); ++i)
     {
-        const ImageFilterSettings::GeolocationCondition currentdata = itemData(i).value<ImageFilterSettings::GeolocationCondition>();
+        const ItemFilterSettings::GeolocationCondition currentdata = itemData(i).value<ItemFilterSettings::GeolocationCondition>();
         if (currentdata == condition)
         {
             setCurrentIndex(i);
@@ -68,9 +68,9 @@ void GeolocationFilter::setGeolocationFilter(const ImageFilterSettings::Geolocat
     }
 }
 
-ImageFilterSettings::GeolocationCondition GeolocationFilter::geolocationFilter() const
+ItemFilterSettings::GeolocationCondition GeolocationFilter::geolocationFilter() const
 {
-    return itemData(currentIndex()).value<ImageFilterSettings::GeolocationCondition>();
+    return itemData(currentIndex()).value<ItemFilterSettings::GeolocationCondition>();
 }
 
 void GeolocationFilter::slotFilterChanged()

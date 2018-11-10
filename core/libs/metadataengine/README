@@ -1,0 +1,9 @@
+The file Metadata manipulation Qt wrapper:
+
+- containers : all metadata classes to group information by categories.
+- engine     : the low level metadata extraction class based on Exiv2 API and managing :
+                   * C++ exception from this library.
+                   * All API call protected by a common mutex to fix non re-entrancy from Exiv2.
+                   * All Exiv2 API are only used in this area to not expose all digiKam core classes of API changes.
+- dmetadata  : the high level metadata class, based on metadata engine, but not based on Exiv2 API.
+               This class must be used everywhere in digiKam.

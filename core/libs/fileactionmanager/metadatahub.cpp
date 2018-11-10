@@ -36,12 +36,12 @@
 #include "digikam_debug.h"
 #include "coredbaccess.h"
 #include "coredbwatch.h"
-#include "imageinfo.h"
-#include "imagecomments.h"
+#include "iteminfo.h"
+#include "itemcomments.h"
 #include "template.h"
 #include "templatemanager.h"
 #include "applicationsettings.h"
-#include "imageattributeswatch.h"
+#include "itemattributeswatch.h"
 #include "tagscache.h"
 #include "facetagseditor.h"
 #include "metadatahubmngr.h"
@@ -141,17 +141,17 @@ void MetadataHub::reset()
 
 // --------------------------------------------------
 
-void MetadataHub::load(const ImageInfo& info)
+void MetadataHub::load(const ItemInfo& info)
 {
     d->count++;
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "---------------------------------Load from ImageInfo ----------------";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "---------------------------------Load from ItemInfo ----------------";
 
     CaptionsMap commentMap;
     CaptionsMap titleMap;
 
     {
         CoreDbAccess access;
-        ImageComments comments = info.imageComments(access);
+        ItemComments comments = info.imageComments(access);
         commentMap             = comments.toCaptionsMap();
         titleMap               = comments.toCaptionsMap(DatabaseComment::Title);
     }
@@ -235,7 +235,7 @@ template <class T> void MetadataHub::Private::loadSingleValue(const T& data, T& 
 // ------------------------------------------------------------------------------------------------------------
 
 /** safe **/
-bool MetadataHub::writeToMetadata(const ImageInfo& info, WriteComponent writeMode, bool ignoreLazySync, const MetadataSettingsContainer &settings)
+bool MetadataHub::writeToMetadata(const ItemInfo& info, WriteComponent writeMode, bool ignoreLazySync, const MetaEngineSettingsContainer &settings)
 {
     applyChangeNotifications();
 
@@ -259,14 +259,14 @@ bool MetadataHub::writeToMetadata(const ImageInfo& info, WriteComponent writeMod
     if (write(metadata, writeMode, settings))
     {
         bool success = metadata.applyChanges();
-        ImageAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(info.filePath()));
+        ItemAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(info.filePath()));
         return success;
     }
 
     return false;
 }
 
-bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const MetadataSettingsContainer& settings)
+bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const MetaEngineSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -289,13 +289,13 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
     if (saveTitle)
     {
         // Store titles in image as Iptc Object name and Xmp.
-        dirty |= metadata.setImageTitles(d->titles);
+        dirty |= metadata.setItemTitles(d->titles);
     }
 
     if (saveComment)
     {
         // Store comments in image as JFIF comments, Exif comments, Iptc Caption, and Xmp.
-        dirty |= metadata.setImageComments(d->comments);
+        dirty |= metadata.setItemComments(d->comments);
     }
 
     if (saveDateTime)
@@ -307,19 +307,19 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
     if (savePickLabel)
     {
         // Store Image Pick Label as XMP tag.
-        dirty |= metadata.setImagePickLabel(d->pickLabel);
+        dirty |= metadata.setItemPickLabel(d->pickLabel);
     }
 
     if (saveColorLabel)
     {
         // Store Image Color Label as XMP tag.
-        dirty |= metadata.setImageColorLabel(d->colorLabel);
+        dirty |= metadata.setItemColorLabel(d->colorLabel);
     }
 
     if (saveRating)
     {
         // Store Image rating as Iptc tag.
-        dirty |= metadata.setImageRating(d->rating);
+        dirty |= metadata.setItemRating(d->rating);
     }
 
     if (saveTemplate)
@@ -342,14 +342,14 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
         }
     }
 
-    dirty |= metadata.setImageFacesMap(d->faceTagsList,saveFaces);
+    dirty |= metadata.setItemFacesMap(d->faceTagsList, saveFaces);
 
     dirty |= writeTags(metadata,saveTags);
 
     return dirty;
 }
 
-bool MetadataHub::write(const QString& filePath, WriteComponent writeMode, bool ignoreLazySync, const MetadataSettingsContainer& settings)
+bool MetadataHub::write(const QString& filePath, WriteComponent writeMode, bool ignoreLazySync, const MetaEngineSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -362,7 +362,7 @@ bool MetadataHub::write(const QString& filePath, WriteComponent writeMode, bool 
 
     if (!ignoreLazySync && settings.useLazySync)
     {
-        ImageInfo info = ImageInfo::fromLocalFile(filePath);
+        ItemInfo info = ItemInfo::fromLocalFile(filePath);
         MetadataHubMngr::instance()->addPending(info);
         return true;
     }
@@ -374,14 +374,14 @@ bool MetadataHub::write(const QString& filePath, WriteComponent writeMode, bool 
     if (write(metadata, writeMode, settings))
     {
         bool success = metadata.applyChanges();
-        ImageAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(filePath));
+        ItemAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(filePath));
         return success;
     }
 
     return false;
 }
 
-bool MetadataHub::write(DImg& image, WriteComponent writeMode, bool ignoreLazySync, const MetadataSettingsContainer& settings)
+bool MetadataHub::write(DImg& image, WriteComponent writeMode, bool ignoreLazySync, const MetaEngineSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -404,7 +404,7 @@ bool MetadataHub::write(DImg& image, WriteComponent writeMode, bool ignoreLazySy
 
     if (!ignoreLazySync && settings.useLazySync && !filePath.isEmpty())
     {
-        ImageInfo info = ImageInfo::fromLocalFile(filePath);
+        ItemInfo info = ItemInfo::fromLocalFile(filePath);
         MetadataHubMngr::instance()->addPending(info);
         return true;
     }
@@ -418,7 +418,7 @@ bool MetadataHub::write(DImg& image, WriteComponent writeMode, bool ignoreLazySy
 }
 
 bool MetadataHub::writeTags(const QString& filePath, WriteComponent writeMode,
-                            const MetadataSettingsContainer& settings)
+                            const MetaEngineSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -436,11 +436,11 @@ bool MetadataHub::writeTags(const QString& filePath, WriteComponent writeMode,
 
     if (saveFaces)
     {
-        metadata.setImageFacesMap(d->faceTagsList, true);
+        metadata.setItemFacesMap(d->faceTagsList, true);
     }
     else
     {
-        metadata.setImageFacesMap(d->faceTagsList, false);
+        metadata.setItemFacesMap(d->faceTagsList, false);
     }
 
     writeToBaloo(filePath);
@@ -448,7 +448,7 @@ bool MetadataHub::writeTags(const QString& filePath, WriteComponent writeMode,
     if (writeTags(metadata, saveTags))
     {
         bool success = metadata.applyChanges();
-        ImageAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(filePath));
+        ItemAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(filePath));
         return success;
     }
     else
@@ -483,7 +483,7 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
             }
 
             // WARNING: Do not use write(QFilePath ...) when multiple image info are loaded
-            // otherwise disjoint tags will not be used, use writeToMetadata(ImageInfo...)
+            // otherwise disjoint tags will not be used, use writeToMetadata(ItemInfo...)
             if (d->tags.value(tagId) == MetadataAvailable)
             {
                 // This works for single and multiple selection.
@@ -512,13 +512,13 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
             qCDebug(DIGIKAM_GENERAL_LOG) << "-------------------------- New Keywords" << newKeywords;
             // NOTE: See bug #175321 : we remove all old keyword from IPTC and XMP before to
             // synchronize metadata, else contents is not coherent.
-            dirty |= metadata.setImageTagsPath(tagsPathList);
+            dirty |= metadata.setItemTagsPath(tagsPathList);
         }
         else
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Delete all keywords";
             // Delete all IPTC and XMP keywords
-            dirty |= metadata.setImageTagsPath(QStringList());
+            dirty |= metadata.setItemTagsPath(QStringList());
         }
     }
 
@@ -551,7 +551,7 @@ QStringList MetadataHub::cleanupTags(const QStringList& toClean)
     return deduplicator.toList();
 }
 
-bool MetadataHub::willWriteMetadata(WriteComponent writeMode, const MetadataSettingsContainer& settings) const
+bool MetadataHub::willWriteMetadata(WriteComponent writeMode, const MetaEngineSettingsContainer& settings) const
 {
     // This is the same logic as in write(DMetadata) but without actually writing.
     // Adapt if the method above changes
@@ -579,7 +579,7 @@ bool MetadataHub::willWriteMetadata(WriteComponent writeMode, const MetadataSett
            );
 }
 
-void MetadataHub::writeToBaloo(const QString& filePath, const MetadataSettingsContainer& settings)
+void MetadataHub::writeToBaloo(const QString& filePath, const MetaEngineSettingsContainer& settings)
 {
 #ifdef HAVE_KFILEMETADATA
 
@@ -641,7 +641,7 @@ void MetadataHub::applyChangeNotifications()
 {
 }
 
-void Digikam::MetadataHub::loadFaceTags(const ImageInfo& info, const QSize& size)
+void Digikam::MetadataHub::loadFaceTags(const ItemInfo& info, const QSize& size)
 {
     FaceTagsEditor editor;
     //qCDebug(DIGIKAM_GENERAL_LOG) << "Image Dimensions ----------------" << info.dimensions();
@@ -671,7 +671,7 @@ QMultiMap<QString, QVariant> Digikam::MetadataHub::getFaceTags()
     return d->faceTagsList;
 }
 
-QMultiMap<QString, QVariant> Digikam::MetadataHub::loadIntegerFaceTags(const ImageInfo& info)
+QMultiMap<QString, QVariant> Digikam::MetadataHub::loadIntegerFaceTags(const ItemInfo& info)
 {
     FaceTagsEditor editor;
     QMultiMap<QString, QVariant> faceTagsList;
@@ -692,6 +692,7 @@ QMultiMap<QString, QVariant> Digikam::MetadataHub::loadIntegerFaceTags(const Ima
             faceTagsList.insertMulti(faceName, QVariant(temprect));
         }
     }
+
     return faceTagsList;
 }
 
@@ -722,21 +723,21 @@ void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags,
 //    int         colorLabel;
 //    int         rating;
 
-//    titles = metadata.getImageTitles();
+//    titles = metadata.getItemTitles();
 
 //    // Try to get comments from image :
 //    // In first, from Xmp comments tag,
 //    // In second, from standard JPEG JFIF comments section,
 //    // In third, from Exif comments tag,
 //    // In four, from Iptc comments tag.
-//    comments = metadata.getImageComments();
+//    comments = metadata.getItemComments();
 
 //    // Try to get date and time from image :
 //    // In first, from Exif date & time tags,
 //    // In second, from Xmp date & time tags, or
 //    // In third, from Iptc date & time tags.
 //    // else use file system time stamp.
-//    datetime = metadata.getImageDateTime();
+//    datetime = metadata.getItemDateTime();
 
 //    if ( !datetime.isValid() )
 //    {
@@ -745,13 +746,13 @@ void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags,
 //    }
 
 //    // Try to get image pick label from Xmp tag
-//    pickLabel = metadata.getImagePickLabel();
+//    pickLabel = metadata.getItemPickLabel();
 
 //    // Try to get image color label from Xmp tag
-//    colorLabel = metadata.getImageColorLabel();
+//    colorLabel = metadata.getItemColorLabel();
 
 //    // Try to get image rating from Xmp tag, or Iptc Urgency tag
-//    rating = metadata.getImageRating();
+//    rating = metadata.getItemRating();
 
 //    Template tref = metadata.getMetadataTemplate();
 //    Template t    = TemplateManager::defaultManager()->findByContents(tref);
@@ -764,14 +765,14 @@ void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags,
 
 //    QStringList tagPaths;
 
-//    if (metadata.getImageTagsPath(tagPaths))
+//    if (metadata.getItemTagsPath(tagPaths))
 //    {
 //        QList<int> tagIds = TagsCache::instance()->tagsForPaths(tagPaths);
 //        loadTags(tagIds);
 //    }
 //}
 
-//bool MetadataHub::load(const QString& filePath, const MetadataSettingsContainer& settings)
+//bool MetadataHub::load(const QString& filePath, const MetaEngineSettingsContainer& settings)
 //{
 
 //    DMetadata metadata;

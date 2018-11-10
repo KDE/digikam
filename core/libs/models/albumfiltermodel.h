@@ -84,7 +84,7 @@ public:
      * Note: If a chained filter model is set, it will not be reset, but
      * the source album model will be made source of the chained filter model.
      */
-    void                setSourceAlbumModel(AbstractAlbumModel* source);
+    void                setSourceAlbumModel(AbstractAlbumModel* const source);
     AbstractAlbumModel* sourceAlbumModel() const;
 
     /**
@@ -92,7 +92,7 @@ public:
      * Note: If a direct source album model is set as current source, it will be set as
      * sourceAlbumModel of the new source filter model.
      */
-    void              setSourceFilterModel(AlbumFilterModel* source);
+    void              setSourceFilterModel(AlbumFilterModel* const source);
     AlbumFilterModel* sourceFilterModel() const;
 
     QModelIndex       mapToSourceAlbumModel(const QModelIndex& index) const;
@@ -189,7 +189,7 @@ Q_SIGNALS:
      * @param searched <code>true</code> if filtering by text was enabled before
      *                 applying the new settings
      * @param willSearch <code>true</code> if the new settings can result in
-     *                   any filtering by text, else <code> false.
+     *                   any filtering by text, else <code>false</code>.
      */
     void searchTextSettingsAboutToChange(bool searched, bool willSearch);
 
@@ -241,7 +241,7 @@ protected:
      * @see setSourceAlbumModel
      * @param model source model
      */
-    virtual void setSourceModel(QAbstractItemModel* model);
+    virtual void setSourceModel(QAbstractItemModel* const model);
 
     virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
     virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
@@ -283,10 +283,10 @@ public:
 
     explicit CheckableAlbumFilterModel(QObject* const parent = 0);
 
-    void                         setSourceAlbumModel(AbstractCheckableAlbumModel* source);
+    void                         setSourceAlbumModel(AbstractCheckableAlbumModel* const source);
     AbstractCheckableAlbumModel* sourceAlbumModel() const;
 
-    void setSourceFilterModel(CheckableAlbumFilterModel* source);
+    void setSourceFilterModel(CheckableAlbumFilterModel* const source);
 
     void setFilterChecked(bool filter);
     void setFilterPartiallyChecked(bool filter);
@@ -314,7 +314,7 @@ public:
 
     explicit SearchFilterModel(QObject* const parent = 0);
 
-    void         setSourceSearchModel(SearchModel* source);
+    void         setSourceSearchModel(SearchModel* const source);
     SearchModel* sourceSearchModel() const;
 
     /** Set the DatabaseSearch::Type. */
@@ -334,7 +334,7 @@ public:
 protected:
 
     // make protected
-    void setSourceAlbumModel(AbstractAlbumModel* source);
+    void setSourceAlbumModel(AbstractAlbumModel* const source);
 
     void setTypeFilter(int type);
 
@@ -359,7 +359,7 @@ public:
 
     explicit TagPropertiesFilterModel(QObject* const parent = 0);
 
-    void      setSourceAlbumModel(TagModel* source);
+    void      setSourceAlbumModel(TagModel* const source);
     TagModel* sourceTagModel() const;
 
     void listOnlyTagsWithProperty(const QString& property);
@@ -393,7 +393,7 @@ public:
 
     explicit TagsManagerFilterModel(QObject* const data = 0);
 
-    void setQuickListTags(QList<int> tags);
+    void setQuickListTags(const QList<int>& tags);
 
 protected:
 

@@ -38,7 +38,7 @@
 #include "metaengine_rotation.h"
 #include "digikam_config.h"
 #include "searchtextbar.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "digikammodelcollection.h"
 #include "sidebarwidget.h"
 #include "stackedview.h"
@@ -55,7 +55,7 @@ class BatchSyncMetadata;
 class FilterStatusBar;
 class SlideShowSettings;
 class DCategorizedView;
-class ImageFilterModel;
+class ItemFilterModel;
 
 class DigikamView : public DHBox
 {
@@ -93,7 +93,7 @@ public:
 
     QUrl      currentUrl()     const;
     bool      hasCurrentItem() const;
-    ImageInfo currentInfo()    const;
+    ItemInfo currentInfo()    const;
     Album*    currentAlbum()   const;
 
     /**
@@ -105,9 +105,9 @@ public:
      */
     QList<QUrl>   selectedUrls(bool grouping = false)                         const;
     QList<QUrl>   selectedUrls(const ApplicationSettings::OperationType type) const;
-    ImageInfoList selectedInfoList(const bool currentFirst = false,
+    ItemInfoList selectedInfoList(const bool currentFirst = false,
                                    const bool grouping = false)               const;
-    ImageInfoList selectedInfoList(const ApplicationSettings::OperationType type,
+    ItemInfoList selectedInfoList(const ApplicationSettings::OperationType type,
                                    const bool currentFirst = false)           const;
     /**
      * Get all items in the current view.
@@ -115,8 +115,8 @@ public:
      * as described above.
      */
     QList<QUrl>   allUrls(bool grouping = false)                         const;
-    ImageInfoList allInfo(const bool grouping = false)                   const;
-    ImageInfoList allInfo(const ApplicationSettings::OperationType type) const;
+    ItemInfoList allInfo(const bool grouping = false)                   const;
+    ItemInfoList allInfo(const ApplicationSettings::OperationType type) const;
 
     /**
      * Query whether the operation to be performed on currently selected or all
@@ -140,7 +140,7 @@ public:
 Q_SIGNALS:
 
     void signalAlbumSelected(Album*);
-    void signalImageSelected(const ImageInfoList& selectedImage, const ImageInfoList& allImages);
+    void signalImageSelected(const ItemInfoList& selectedImage, const ItemInfoList& allImages);
     void signalNoCurrentItem();
     void signalSelectionChanged(int numberOfSelectedItems);
     void signalThumbSizeChanged(int);
@@ -151,7 +151,7 @@ Q_SIGNALS:
     void signalSwitchedToTableView();
     void signalSwitchedToTrashView();
 
-    void signalGotoAlbumAndItem(const ImageInfo&);
+    void signalGotoAlbumAndItem(const ItemInfo&);
     void signalGotoDateAndItem(AlbumIconItem*);
     void signalGotoTagAndItem(int tagID);
     void signalChangedTab(QWidget*);
@@ -170,7 +170,7 @@ public Q_SLOTS:
     void slotSlideShowSelection();
     void slotSlideShowRecursive();
     void slotSlideShowManualFromCurrent();
-    void slotSlideShowManualFrom(const ImageInfo& info);
+    void slotSlideShowManualFrom(const ItemInfo& info);
 
     // Album action slots
     void slotRefresh();
@@ -186,14 +186,14 @@ public Q_SLOTS:
     void slotAlbumReadMetadata();
     void slotAlbumSelected(const QList<Album*>& albums);
 
-    void slotGotoAlbumAndItem(const ImageInfo& imageInfo);
-    void slotGotoDateAndItem(const ImageInfo& imageInfo);
+    void slotGotoAlbumAndItem(const ItemInfo& imageInfo);
+    void slotGotoDateAndItem(const ItemInfo& imageInfo);
     void slotGotoTagAndItem(int tagID);
 
     void slotSelectAlbum(const QUrl& url);
     void slotSetCurrentWhenAvailable(const qlonglong id);
 
-    void slotSetAsAlbumThumbnail(const ImageInfo& info);
+    void slotSetAsAlbumThumbnail(const ItemInfo& info);
 
     // Tag action slots
     void slotNewTag();
@@ -266,6 +266,7 @@ public Q_SLOTS:
     void slotCreateGroupFromSelection();
     void slotCreateGroupByTimeFromSelection();
     void slotCreateGroupByFilenameFromSelection();
+    void slotCreateGroupByTimelapseFromSelection();
     void slotRemoveSelectedFromGroup();
     void slotUngroupSelected();
 
@@ -276,7 +277,7 @@ private:
     void loadViewState();
     void saveViewState();
     void changeAlbumFromHistory(const QList<Album*>& album, QWidget* const widget);
-    void slideShow(const ImageInfoList& infoList);
+    void slideShow(const ItemInfoList& infoList);
 
 private Q_SLOTS:
 
@@ -285,7 +286,7 @@ private Q_SLOTS:
     void slotAlbumsCleared();
 
     void slotImageSelected();
-    void slotTogglePreviewMode(const ImageInfo& info);
+    void slotTogglePreviewMode(const ItemInfo& info);
     void slotDispatchImageSelected();
 
     void slotLeftSidebarChangedTab(QWidget* w);
@@ -324,13 +325,13 @@ private Q_SLOTS:
     void slotShowContextMenu(QContextMenuEvent* event,
                              const QList<QAction*>& extraGroupingActions = QList<QAction*>());
 
-    void slotShowContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info,
+    void slotShowContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info,
                                    const QList<QAction*>& extraGroupingActions = QList<QAction*>(),
-                                   ImageFilterModel* imageFilterModel = 0);
+                                   ItemFilterModel* imageFilterModel = 0);
 
     void slotShowGroupContextMenu(QContextMenuEvent* event,
-                                  const QList<ImageInfo>& selectedInfos,
-                                  ImageFilterModel* imageFilterModel = 0);
+                                  const QList<ItemInfo>& selectedInfos,
+                                  ItemFilterModel* imageFilterModel = 0);
 
 private:
 

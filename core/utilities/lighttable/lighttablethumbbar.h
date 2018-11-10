@@ -27,8 +27,8 @@
 // Local includes
 
 #include "imagethumbnailbar.h"
-#include "imageinfo.h"
-#include "imagelistmodel.h"
+#include "iteminfo.h"
+#include "itemlistmodel.h"
 
 namespace Digikam
 {
@@ -44,27 +44,27 @@ public:
 
     void clear();
 
-    void setItems(const ImageInfoList& list);
-    void setOnLeftPanel(const ImageInfo& info);
-    void setOnRightPanel(const ImageInfo& info);
+    void setItems(const ItemInfoList& list);
+    void setOnLeftPanel(const ItemInfo& info);
+    void setOnRightPanel(const ItemInfo& info);
     void setNavigateByPair(bool b);
 
-    void removeItemByInfo(const ImageInfo& info);
+    void removeItemByInfo(const ItemInfo& info);
     void toggleTag(int tagID);
 
-    bool isOnLeftPanel(const ImageInfo& info)             const;
-    bool isOnRightPanel(const ImageInfo& info)            const;
+    bool isOnLeftPanel(const ItemInfo& info)             const;
+    bool isOnRightPanel(const ItemInfo& info)            const;
     int  countItems()                                     const;
-    QModelIndex findItemByInfo(const ImageInfo& info)     const;
-    ImageInfo   findItemByIndex(const QModelIndex& index) const;
+    QModelIndex findItemByInfo(const ItemInfo& info)     const;
+    ItemInfo   findItemByIndex(const QModelIndex& index) const;
 
 Q_SIGNALS:
 
-    void signalSetItemOnLeftPanel(const ImageInfo&);
-    void signalSetItemOnRightPanel(const ImageInfo&);
-    void signalEditItem(const ImageInfo&);
-    void signalRemoveItem(const ImageInfo&);
-    void signalDroppedItems(const QList<ImageInfo>&);
+    void signalSetItemOnLeftPanel(const ItemInfo&);
+    void signalSetItemOnRightPanel(const ItemInfo&);
+    void signalEditItem(const ItemInfo&);
+    void signalRemoveItem(const ItemInfo&);
+    void signalDroppedItems(const QList<ItemInfo>&);
     void signalClearAll();
     void signalContentChanged();
 
@@ -82,11 +82,11 @@ public Q_SLOTS:
 private:
 
     void paintEvent(QPaintEvent*);
-    void showContextMenuOnInfo(QContextMenuEvent* e, const ImageInfo& info);
-    void assignPickLabel(const ImageInfo& info, int pickId);
-    void assignColorLabel(const ImageInfo& info, int colorId);
-    void assignRating(const ImageInfo& info, int rating);
-    void toggleTag(const ImageInfo& info, int tagID);
+    void showContextMenuOnInfo(QContextMenuEvent* e, const ItemInfo& info);
+    void assignPickLabel(const ItemInfo& info, int pickId);
+    void assignColorLabel(const ItemInfo& info, int colorId);
+    void assignRating(const ItemInfo& info, int rating);
+    void toggleTag(const ItemInfo& info, int tagID);
 
 private Q_SLOTS:
 

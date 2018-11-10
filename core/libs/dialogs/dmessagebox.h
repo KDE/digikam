@@ -50,8 +50,6 @@ public:
      * @return true if the corresponding message box should be shown.
      * @param dontShowAgainName the name that identify the message box. If
      * empty, this method return false.
-     * @param result is set to the result that was chosen the last
-     * time the message box was shown.
      */
     static bool readMsgBoxShouldBeShown(const QString& dontShowAgainName);
 

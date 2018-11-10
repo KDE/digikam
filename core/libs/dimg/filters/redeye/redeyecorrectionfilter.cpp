@@ -117,6 +117,7 @@ void RedEyeCorrectionFilter::filterImage()
             dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
             dataStream >> *temp;
             d->sp                              = temp;
+            model.close();
         }
         else
         {

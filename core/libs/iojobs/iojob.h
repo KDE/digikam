@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class ImageInfo;
+class ItemInfo;
 
 class DIGIKAM_EXPORT IOJob : public ActionJob
 {

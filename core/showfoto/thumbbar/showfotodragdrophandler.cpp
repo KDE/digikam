@@ -43,7 +43,7 @@
 namespace ShowFoto
 {
 
-ShowfotoDragDropHandler::ShowfotoDragDropHandler(ShowfotoImageModel* const model)
+ShowfotoDragDropHandler::ShowfotoDragDropHandler(ShowfotoItemModel* const model)
     : AbstractItemDragDropHandler(model)
 {
 }
@@ -115,9 +115,9 @@ QMimeData* ShowfotoDragDropHandler::createMimeData(const QList<QModelIndex>& ind
     return mimeData;
 }
 
-ShowfotoImageModel* ShowfotoDragDropHandler::model() const
+ShowfotoItemModel* ShowfotoDragDropHandler::model() const
 {
-    return static_cast<ShowfotoImageModel*>(m_model);
+    return static_cast<ShowfotoItemModel*>(m_model);
 }
 
 } // namespace Showfoto

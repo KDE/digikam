@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="606" name="lighttablewindow" translationDomain="digikam" >
+<gui version="607" name="lighttablewindow" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -78,6 +78,7 @@
         <Action name="export_googlephoto" />
         <Action name="export_imageshack" />
         <Action name="export_imgur" />
+        <Action name="export_ipfs" />
         <Action name="export_onedrive" />
         <Action name="export_pinterest" />
         <Action name="export_box" />

@@ -3528,7 +3528,7 @@ void dng_xmp::SyncOrientation (dng_negative &negative,
 
 /******************************************************************************/
 
-void dng_xmp::ClearImageInfo ()
+void dng_xmp::ClearItemInfo ()
 	{
 
 	Remove (XMP_NS_TIFF, "ImageWidth" );

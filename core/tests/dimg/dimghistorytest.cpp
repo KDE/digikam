@@ -80,7 +80,7 @@ void DImgHistoryTest::testDImg()
 
     m_loop.exec();   // krazy:exclude=crashy
 
-    DImageHistory history = m_im->getImg()->getImageHistory();
+    DImageHistory history = m_im->getImg()->getItemHistory();
     QCOMPARE(history.size(), 3);
     QCOMPARE(history.entries().first().referredImages.size(), 1);
     QCOMPARE(history.entries().first().referredImages.first().m_type, HistoryImageId::Current);
@@ -90,7 +90,7 @@ void DImgHistoryTest::testDImg()
 
     m_loop.exec();   // krazy:exclude=crashy
 
-    history = m_im->getImg()->getImageHistory();
+    history = m_im->getImg()->getItemHistory();
     QCOMPARE(history.size(), 3);
     QCOMPARE(history.entries().first().referredImages.size(), 1);
     QCOMPARE(history.entries().first().referredImages.first().m_type, HistoryImageId::Current);
@@ -113,7 +113,7 @@ void DImgHistoryTest::slotImageLoaded(const QString&, bool success)
 
     applyFilters1();
 
-    DImageHistory h = m_im->getImg()->getImageHistory();
+    DImageHistory h = m_im->getImg()->getItemHistory();
     h.adjustReferredImages();
 
     for (int i = 0 ; i < 3 ; ++i)
@@ -136,7 +136,7 @@ void DImgHistoryTest::slotImageSaved(const QString& fileName, bool success)
     m_im->setLastSaved(fileName);
 
     DImg img(fileName);
-    DImageHistory history = img.getImageHistory();
+    DImageHistory history = img.getItemHistory();
     qDebug() << history.toXml();
 
     QCOMPARE(history.size(), 3);

@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "imagefiltersettings.h"
+#include "itemfiltersettings.h"
 
 namespace Digikam
 {
@@ -45,12 +45,12 @@ public:
     explicit GeolocationFilter(QWidget* const parent);
     ~GeolocationFilter();
 
-    void setGeolocationFilter(const ImageFilterSettings::GeolocationCondition& condition);
-    ImageFilterSettings::GeolocationCondition geolocationFilter() const;
+    void setGeolocationFilter(const ItemFilterSettings::GeolocationCondition& condition);
+    ItemFilterSettings::GeolocationCondition geolocationFilter() const;
 
 Q_SIGNALS:
 
-    void signalFilterChanged(const ImageFilterSettings::GeolocationCondition& condition);
+    void signalFilterChanged(const ItemFilterSettings::GeolocationCondition& condition);
 
 private Q_SLOTS:
 

@@ -69,7 +69,7 @@ public:
     QToolButton*      resetBtn;
     QToolButton*      settingsBtn;
 
-    ImageFilterSettings settings;
+    ItemFilterSettings settings;
 };
 
 FilterStatusBar::FilterStatusBar(QWidget* const parent)
@@ -217,7 +217,7 @@ void FilterStatusBar::slotFilterMatches(bool match)
     update();
 }
 
-void FilterStatusBar::slotFilterSettingsChanged(const ImageFilterSettings& settings)
+void FilterStatusBar::slotFilterSettingsChanged(const ItemFilterSettings& settings)
 {
     d->settings = settings;
 }

@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 #include "itemviewimagedelegate.h"
 
 namespace Digikam
@@ -40,7 +40,7 @@ namespace Digikam
 
 class AssignNameWidget;
 class FaceTagsIface;
-class ImageInfo;
+class ItemInfo;
 class TaggingAction;
 
 class AssignNameOverlay : public PersistentWidgetDelegateOverlay
@@ -62,8 +62,8 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void slotAssigned(const TaggingAction& action, const ImageInfo&, const QVariant& faceIdentifier);
-    void slotRejected(const ImageInfo&, const QVariant& faceIdentifier);
+    void slotAssigned(const TaggingAction& action, const ItemInfo&, const QVariant& faceIdentifier);
+    void slotRejected(const ItemInfo&, const QVariant& faceIdentifier);
 
 protected:
 

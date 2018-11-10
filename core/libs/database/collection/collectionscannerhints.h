@@ -33,8 +33,8 @@
 #include <QStringList>
 
 #ifdef HAVE_DBUS
-#include <QDBusArgument>
-#include "dbenginedbusutils.h"
+#   include <QDBusArgument>
+#   include "dbenginedbusutils.h"
 #endif
 
 // Local includes
@@ -43,6 +43,32 @@
 
 namespace Digikam
 {
+
+class AlbumCopyMoveHint;
+class CollectionLocation;
+class CollectionScannerObserver;
+class ItemInfo;
+class ItemCopyMoveHint;
+class ItemChangeHint;
+class ItemMetadataAdjustmentHint;
+
+class CollectionScannerHintContainer
+{
+public:
+
+    /// Note: All methods of this class must be thread-safe.
+
+    virtual ~CollectionScannerHintContainer() {};
+
+    virtual void recordHints(const QList<AlbumCopyMoveHint>& hints) = 0;
+    virtual void recordHints(const QList<ItemCopyMoveHint>& hints) = 0;
+    virtual void recordHints(const QList<ItemChangeHint>& hints) = 0;
+    virtual void recordHint(const ItemMetadataAdjustmentHint& hints) = 0;
+
+    virtual void clear() = 0;
+};
+
+// ------------------------------------------------------------------------------
 
 namespace CollectionScannerHints
 {

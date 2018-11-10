@@ -43,7 +43,7 @@ namespace Digikam
 
 class Album;
 class FuzzySearchFolderView;
-class ImageInfo;
+class ItemInfo;
 class LoadingDescription;
 class SAlbum;
 class PAlbum;
@@ -67,7 +67,7 @@ public:
     void setCurrentAlbum(SAlbum* const album);
 
     void setActive(bool val);
-    void setImageInfo(const ImageInfo& info);
+    void setItemInfo(const ItemInfo& info);
 
     void newDuplicatesSearch(PAlbum* const album);
     void newDuplicatesSearch(const QList<PAlbum*>& albums);
@@ -113,7 +113,7 @@ private Q_SLOTS:
 private:
 
     void setCurrentImage(qlonglong imageid);
-    void setCurrentImage(const ImageInfo& info);
+    void setCurrentImage(const ItemInfo& info);
 
     void createNewFuzzySearchAlbumFromSketch(const QString& name, bool force = false);
     void createNewFuzzySearchAlbumFromImage(const QString& name, bool force = false);

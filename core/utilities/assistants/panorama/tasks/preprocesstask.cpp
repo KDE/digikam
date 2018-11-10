@@ -78,8 +78,9 @@ public:
     {
     }
 
-    bool continueQuery(const DImg* const)
+    bool continueQuery(DImg* const img)
     {
+        Q_UNUSED(img);
         return (!parent->isAbortedFlag);
     }
 
@@ -156,11 +157,11 @@ bool PreProcessTask::computePreview(const QUrl& inUrl)
         if (saved)
         {
             d->meta.load(inUrl.toLocalFile());
-            MetaEngine::ImageOrientation orientation = d->meta.getImageOrientation();
+            MetaEngine::ImageOrientation orientation = d->meta.getItemOrientation();
 
             d->meta.load(outUrl.toLocalFile());
-            d->meta.setImageOrientation(orientation);
-            d->meta.setImageDimensions(QSize(preview.width(), preview.height()));
+            d->meta.setItemOrientation(orientation);
+            d->meta.setItemDimensions(QSize(preview.width(), preview.height()));
             d->meta.applyChanges(true);
         }
 
@@ -221,11 +222,11 @@ bool PreProcessTask::convertRaw()
         d->meta.setExif(exif);
         d->meta.setIptc(iptc);
         d->meta.setXmp(xmp);
-        d->meta.setImageDimensions(QSize(img.width(), img.height()));
+        d->meta.setItemDimensions(QSize(img.width(), img.height()));
         d->meta.setExifTagString("Exif.Image.DocumentName", inUrl.fileName());
         d->meta.setXmpTagString("Xmp.tiff.Make",  make);
         d->meta.setXmpTagString("Xmp.tiff.Model", model);
-        d->meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+        d->meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
         d->meta.applyChanges(true);
     }
     else

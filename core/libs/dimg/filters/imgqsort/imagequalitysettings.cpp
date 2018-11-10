@@ -60,7 +60,7 @@ public:
         detectBlur(0),
         detectNoise(0),
         detectCompression(0),
-        detectOverexposure(0),
+        detectExposure(0),
         setRejected(0),
         setPending(0),
         setAccepted(0),
@@ -80,7 +80,7 @@ public:
     QCheckBox*    detectBlur;
     QCheckBox*    detectNoise;
     QCheckBox*    detectCompression;
-    QCheckBox*    detectOverexposure;
+    QCheckBox*    detectExposure;
     QCheckBox*    setRejected;
     QCheckBox*    setPending;
     QCheckBox*    setAccepted;
@@ -112,17 +112,17 @@ ImageQualitySettings::ImageQualitySettings(QWidget* const parent)
 
     // ------------------------------------------------------------------------------
 
-    d->detectBlur  = new QCheckBox(i18n("Detect Blur"), d->optionsView);
+    d->detectBlur        = new QCheckBox(i18n("Detect Blur"), d->optionsView);
     d->detectBlur->setWhatsThis(i18n("Detect the amount of blur in the images passed to it"));
 
-    d->detectNoise = new QCheckBox(i18n("Detect Noise"), d->optionsView);
+    d->detectNoise       = new QCheckBox(i18n("Detect Noise"), d->optionsView);
     d->detectNoise->setWhatsThis(i18n("Detect the amount of noise in the images passed to it"));
 
-    d->detectCompression  = new QCheckBox(i18n("Detect Compression"), d->optionsView);
+    d->detectCompression = new QCheckBox(i18n("Detect Compression"), d->optionsView);
     d->detectCompression->setWhatsThis(i18n("Detect the amount of compression in the images passed to it"));
 
-    d->detectOverexposure = new QCheckBox(i18n("Detect Overexposure"), d->optionsView);
-    d->detectOverexposure->setWhatsThis(i18n("Detect if the images are overexposed"));
+    d->detectExposure    = new QCheckBox(i18n("Detect Under and Over Exposure"), d->optionsView);
+    d->detectExposure->setWhatsThis(i18n("Detect if the images are under-exposed or over-exposed"));
 
     // ------------------------------------------------------------------------------
 
@@ -168,14 +168,14 @@ ImageQualitySettings::ImageQualitySettings(QWidget* const parent)
     QWidget* const settings = new QWidget(d->optionsView);
     QGridLayout* const glay = new QGridLayout(settings);
 
-    QLabel* const lbl1 = new QLabel(i18n("Speed:"), settings);
+    QLabel* const lbl1      = new QLabel(i18n("Speed:"), settings);
     lbl1->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->setSpeed        = new DIntNumInput(settings);
+    d->setSpeed             = new DIntNumInput(settings);
     d->setSpeed->setDefaultValue(5);
     d->setSpeed->setRange(1, 3, 1);
     d->setSpeed->setWhatsThis(i18n("Tradeoff between speed and accuracy of sorting algorithm"));
 
-    QLabel* const lbl2 = new QLabel(i18n("Rejected threshold:"), settings);
+    QLabel* const lbl2      = new QLabel(i18n("Rejected threshold:"), settings);
     lbl2->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->setRejectedThreshold = new DIntNumInput(settings);
     d->setRejectedThreshold->setDefaultValue(5);
@@ -189,28 +189,28 @@ ImageQualitySettings::ImageQualitySettings(QWidget* const parent)
     d->setPendingThreshold->setRange(1, 100, 1);
     d->setPendingThreshold->setWhatsThis(i18n("Threshold below which all pictures are assigned Pending Label"));
 
-    QLabel* const lbl4 = new QLabel(i18n("Accepted threshold:"), settings);
+    QLabel* const lbl4      = new QLabel(i18n("Accepted threshold:"), settings);
     lbl4->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->setAcceptedThreshold = new DIntNumInput(settings);
     d->setAcceptedThreshold->setDefaultValue(5);
     d->setAcceptedThreshold->setRange(1, 100, 1);
     d->setAcceptedThreshold->setWhatsThis(i18n("Threshold above which all pictures are assigned Accepted Label"));
 
-    QLabel* const lbl5 = new QLabel(i18n("Blur Weight:"), settings);
+    QLabel* const lbl5      = new QLabel(i18n("Blur Weight:"), settings);
     lbl5->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->setBlurWeight        = new DIntNumInput(settings);
     d->setBlurWeight->setDefaultValue(5);
     d->setBlurWeight->setRange(1, 100, 1);
     d->setBlurWeight->setWhatsThis(i18n("Weight to assign to Blur Algorithm"));
 
-    QLabel* const lbl6 = new QLabel(i18n("Noise Weight:"), settings);
+    QLabel* const lbl6      = new QLabel(i18n("Noise Weight:"), settings);
     lbl6->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->setNoiseWeight       = new DIntNumInput(settings);
     d->setNoiseWeight->setDefaultValue(5);
     d->setNoiseWeight->setRange(1, 100, 1);
     d->setNoiseWeight->setWhatsThis(i18n("Weight to assign to Noise Algorithm"));
 
-    QLabel* const lbl7 = new QLabel(i18n("Compression Weight:"), settings);
+    QLabel* const lbl7      = new QLabel(i18n("Compression Weight:"), settings);
     lbl7->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->setCompressionWeight = new DIntNumInput(settings);
     d->setCompressionWeight->setDefaultValue(5);
@@ -253,7 +253,7 @@ void ImageQualitySettings::applySettings()
     imq.detectBlur        = d->detectBlur->isChecked();
     imq.detectNoise       = d->detectNoise->isChecked();
     imq.detectCompression = d->detectCompression->isChecked();
-    imq.detectOverexposure= d->detectOverexposure->isChecked();
+    imq.detectExposure    = d->detectExposure->isChecked();
     imq.lowQRejected      = d->setRejected->isChecked();
     imq.mediumQPending    = d->setPending->isChecked();
     imq.highQAccepted     = d->setAccepted->isChecked();
@@ -277,7 +277,7 @@ void ImageQualitySettings::readSettings()
     d->detectBlur->setChecked(imq.detectBlur);
     d->detectNoise->setChecked(imq.detectNoise);
     d->detectCompression->setChecked(imq.detectCompression);
-    d->detectOverexposure->setChecked(imq.detectOverexposure);
+    d->detectExposure->setChecked(imq.detectExposure);
     d->setRejected->setChecked(imq.lowQRejected);
     d->setPending->setChecked(imq.mediumQPending);
     d->setAccepted->setChecked(imq.highQAccepted);

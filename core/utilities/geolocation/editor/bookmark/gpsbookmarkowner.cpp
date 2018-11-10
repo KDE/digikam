@@ -63,7 +63,7 @@ public:
     QString                  lastTitle;
 };
 
-GPSBookmarkOwner::GPSBookmarkOwner(GPSImageModel* const gpsImageModel, QWidget* const parent)
+GPSBookmarkOwner::GPSBookmarkOwner(GPSItemModel* const gpsItemModel, QWidget* const parent)
     : d(new Private())
 {
     d->parent = parent;
@@ -76,7 +76,7 @@ GPSBookmarkOwner::GPSBookmarkOwner(GPSImageModel* const gpsImageModel, QWidget* 
     d->bookmarkManager->load();
     d->bookmarkMenu                 = new BookmarksMenu(d->bookmarkManager, d->parent);
     d->bookmarkModelHelper          = new GPSBookmarkModelHelper(d->bookmarkManager,
-                                                                 gpsImageModel, this);
+                                                                 gpsItemModel, this);
 
     createBookmarksMenu();
 }

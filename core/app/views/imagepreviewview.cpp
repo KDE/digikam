@@ -53,16 +53,16 @@
 #include "digikamapp.h"
 #include "dimg.h"
 #include "dimgpreviewitem.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "fileactionmngr.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "regionframeitem.h"
 #include "tagspopupmenu.h"
 #include "thememanager.h"
 #include "previewlayout.h"
 #include "previewsettings.h"
 #include "tagscache.h"
-#include "imagetagpair.h"
+#include "itemtagpair.h"
 #include "albummanager.h"
 #include "facegroup.h"
 
@@ -250,13 +250,13 @@ void ImagePreviewView::imageLoadingFailed()
     emit signalPreviewLoaded(false);
     d->rotLeftAction->setEnabled(false);
     d->rotRightAction->setEnabled(false);
-    d->faceGroup->setInfo(ImageInfo());
+    d->faceGroup->setInfo(ItemInfo());
 }
 
-void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
+void ImagePreviewView::setItemInfo(const ItemInfo& info, const ItemInfo& previous, const ItemInfo& next)
 {
     d->faceGroup->aboutToSetInfo(info);
-    d->item->setImageInfo(info);
+    d->item->setItemInfo(info);
 
     d->prevAction->setEnabled(!previous.isNull());
     d->nextAction->setEnabled(!next.isNull());
@@ -276,7 +276,7 @@ void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& prev
     d->item->setPreloadPaths(previewPaths);
 }
 
-ImageInfo ImagePreviewView::getImageInfo() const
+ItemInfo ImagePreviewView::getItemInfo() const
 {
     return d->item->imageInfo();
 }
@@ -309,7 +309,7 @@ void ImagePreviewView::showEvent(QShowEvent* e)
 
 void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event)
 {
-    ImageInfo info = d->item->imageInfo();
+    ItemInfo info = d->item->imageInfo();
 
     if (info.isNull())
     {
@@ -406,11 +406,11 @@ void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event
     connect(&cmHelper, SIGNAL(signalGotoTag(int)),
             this, SIGNAL(signalGotoTagAndItem(int)));
 
-    connect(&cmHelper, SIGNAL(signalGotoAlbum(ImageInfo)),
-            this, SIGNAL(signalGotoAlbumAndItem(ImageInfo)));
+    connect(&cmHelper, SIGNAL(signalGotoAlbum(ItemInfo)),
+            this, SIGNAL(signalGotoAlbumAndItem(ItemInfo)));
 
-    connect(&cmHelper, SIGNAL(signalGotoDate(ImageInfo)),
-            this, SIGNAL(signalGotoDateAndItem(ImageInfo)));
+    connect(&cmHelper, SIGNAL(signalGotoDate(ItemInfo)),
+            this, SIGNAL(signalGotoDateAndItem(ItemInfo)));
 
     cmHelper.exec(event->screenPos());
 }
@@ -472,9 +472,9 @@ void ImagePreviewView::slotRotateLeft()
     /**
      * aboutToSetInfo will delete all face tags from FaceGroup storage
      */
-    d->faceGroup->aboutToSetInfo(ImageInfo());
+    d->faceGroup->aboutToSetInfo(ItemInfo());
 
-    FileActionMngr::instance()->transform(QList<ImageInfo>() << d->item->imageInfo(), MetaEngineRotation::Rotate270);
+    FileActionMngr::instance()->transform(QList<ItemInfo>() << d->item->imageInfo(), MetaEngineRotation::Rotate270);
 }
 
 void ImagePreviewView::slotRotateRight()
@@ -492,9 +492,9 @@ void ImagePreviewView::slotRotateRight()
     /**
      * aboutToSetInfo will delete all face tags from FaceGroup storage
      */
-    d->faceGroup->aboutToSetInfo(ImageInfo());
+    d->faceGroup->aboutToSetInfo(ItemInfo());
 
-    FileActionMngr::instance()->transform(QList<ImageInfo>() << d->item->imageInfo(), MetaEngineRotation::Rotate90);
+    FileActionMngr::instance()->transform(QList<ItemInfo>() << d->item->imageInfo(), MetaEngineRotation::Rotate90);
 }
 
 void ImagePreviewView::slotDeleteItem()
@@ -504,8 +504,8 @@ void ImagePreviewView::slotDeleteItem()
 
 void Digikam::ImagePreviewView::slotUpdateFaces()
 {
-    //d->faceGroup->aboutToSetInfo(ImageInfo());
-    d->faceGroup->aboutToSetInfoAfterRotate(ImageInfo());
+    //d->faceGroup->aboutToSetInfo(ItemInfo());
+    d->faceGroup->aboutToSetInfoAfterRotate(ItemInfo());
     d->item->setAcceptHoverEvents(true);
 
     /**

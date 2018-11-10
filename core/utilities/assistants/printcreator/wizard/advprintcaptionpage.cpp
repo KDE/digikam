@@ -344,12 +344,12 @@ QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo)
     {
         QFileInfo fi(photo->m_url.toLocalFile());
         DMetadata meta(photo->m_url.toLocalFile());
-        imageSize = meta.getImageDimensions();
+        imageSize = meta.getItemDimensions();
 
         format.replace(QString::fromUtf8("%c"),
-            meta.getImageComments()[QLatin1String("x-default")].caption);
+            meta.getItemComments()[QLatin1String("x-default")].caption);
         format.replace(QString::fromUtf8("%d"),
-            QLocale().toString(meta.getImageDateTime(), QLocale::ShortFormat));
+            QLocale().toString(meta.getItemDateTime(), QLocale::ShortFormat));
         format.replace(QString::fromUtf8("%f"), fi.fileName());
 
         PhotoInfoContainer photoInfo = meta.getPhotographInformation();

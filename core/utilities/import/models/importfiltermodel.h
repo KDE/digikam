@@ -48,13 +48,13 @@ public:
     explicit ImportSortFilterModel(QObject* const parent = 0);
     ~ImportSortFilterModel();
 
-    void setSourceImportModel(ImportImageModel* const sourceModel);
-    ImportImageModel* sourceImportModel() const;
+    void setSourceImportModel(ImportItemModel* const sourceModel);
+    ImportItemModel* sourceImportModel() const;
 
     void setSourceFilterModel(ImportSortFilterModel* const sourceModel);
     ImportSortFilterModel* sourceFilterModel() const;
 
-    /// Convenience methods mapped to ImportImageModel.
+    /// Convenience methods mapped to ImportItemModel.
     /// Mentioned indexes returned come from the source import image model.
     QModelIndex mapToSourceImportModel(const QModelIndex& proxyIndex)                       const;
     QModelIndex mapFromSourceImportModel(const QModelIndex& importModelIndex)               const;
@@ -73,7 +73,7 @@ public:
     QModelIndex indexForCamItemId(qlonglong id)              const;
 
     /** Returns a list of all camera infos, sorted according to this model.
-     *  If you do not need a sorted list, use ImportImageModel's camItemInfo() method.
+     *  If you do not need a sorted list, use ImportItemModel's camItemInfo() method.
      */
     QList<CamItemInfo> camItemInfosSorted() const;
 
@@ -85,7 +85,7 @@ protected:
     virtual void setSourceModel(QAbstractItemModel* sourceModel);
 
     /// Reimplement if needed. Called only when model shall be set as (direct) sourceModel.
-    virtual void setDirectSourceImportModel(ImportImageModel* const sourceModel);
+    virtual void setDirectSourceImportModel(ImportItemModel* const sourceModel);
 
 protected:
 
@@ -103,20 +103,20 @@ public:
     enum ImportFilterModelRoles
     {
         /// Returns the current categorization mode.
-        CategorizationModeRole       = ImportImageModel::FilterModelRoles + 1,
+        CategorizationModeRole       = ImportItemModel::FilterModelRoles + 1,
 
         /// Returns the current sort order.
-        SortOrderRole                = ImportImageModel::FilterModelRoles + 2,
+        SortOrderRole                = ImportItemModel::FilterModelRoles + 2,
 
         /// Returns the format of the index which is used for category.
-        CategoryFormatRole           = ImportImageModel::FilterModelRoles + 3,
+        CategoryFormatRole           = ImportItemModel::FilterModelRoles + 3,
 
         /// Returns the date of the index which is used for category.
-        CategoryDateRole             = ImportImageModel::FilterModelRoles + 4,
+        CategoryDateRole             = ImportItemModel::FilterModelRoles + 4,
 
         /// Returns true if the given camera item is a group leader, and the group is opened.
-        //TODO: GroupIsOpenRole            = ImportImageModel::FilterModelRoles + 5
-        ImportFilterModelPointerRole = ImportImageModel::FilterModelRoles + 50
+        //TODO: GroupIsOpenRole            = ImportItemModel::FilterModelRoles + 5
+        ImportFilterModelPointerRole = ImportItemModel::FilterModelRoles + 50
     };
 
 public:
@@ -154,14 +154,14 @@ public Q_SLOTS:
 
     /** Changes the current image filter settings and refilters. */
     //TODO: Implement filtering in import tool.
-    //virtual void setImageFilterSettings(const ImageFilterSettings& settings);
+    //virtual void setItemFilterSettings(const ItemFilterSettings& settings);
 
     /** Changes the current image sort settings and resorts. */
-    //TODO: virtual void setImageSortSettings(const ImageSortSettings& settings);
+    //TODO: virtual void setItemSortSettings(const ItemSortSettings& settings);
 
 Q_SIGNALS:
 
-    /** These signals need to be explicitly enabled with setSendImageInfoSignals().
+    /** These signals need to be explicitly enabled with setSendItemInfoSignals().
      */
     void camItemInfosAdded(const QList<CamItemInfo>& infos);
     void camItemInfosAboutToBeRemoved(const QList<CamItemInfo>& infos);
@@ -183,7 +183,7 @@ protected:
 
 protected:
 
-    virtual void setDirectSourceImportModel(ImportImageModel* const sourceModel);
+    virtual void setDirectSourceImportModel(ImportItemModel* const sourceModel);
 
     virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 

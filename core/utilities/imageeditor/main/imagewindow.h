@@ -34,7 +34,7 @@
 // Local includes
 
 #include "editorwindow.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 class QDragMoveEvent;
 class QDropEvent;
@@ -63,9 +63,9 @@ public:
 
 public Q_SLOTS:
 
-    void loadImageInfos(const ImageInfoList& imageInfoList,
-                        const ImageInfo& imageInfoCurrent, const QString& caption);
-    void openImage(const ImageInfo& info);
+    void loadItemInfos(const ItemInfoList& imageInfoList,
+                        const ItemInfo& imageInfoCurrent, const QString& caption);
+    void openImage(const ItemInfo& info);
 
     void slotAssignPickLabel(int pickId);
     void slotAssignColorLabel(int colorId);
@@ -99,7 +99,7 @@ private:
     DImageHistory resolvedImageHistory(const DImageHistory& history);
 
     void prepareImageToSave();
-    void saveFaceTagsToImage(const ImageInfo& info);
+    void saveFaceTagsToImage(const ItemInfo& info);
 
     void saveIsComplete();
     void saveAsIsComplete();
@@ -108,10 +108,10 @@ private:
     void deleteCurrentItem(bool ask, bool permanently);
     void removeCurrent();
 
-    void assignPickLabel(const ImageInfo& info, int pickId);
-    void assignColorLabel(const ImageInfo& info, int colorId);
-    void assignRating(const ImageInfo& info, int rating);
-    void toggleTag(const ImageInfo& info, int tagID);
+    void assignPickLabel(const ItemInfo& info, int pickId);
+    void assignColorLabel(const ItemInfo& info, int colorId);
+    void assignRating(const ItemInfo& info, int rating);
+    void toggleTag(const ItemInfo& info, int tagID);
 
     ThumbBarDock* thumbBar()     const;
     Sidebar*      rightSideBar() const;
@@ -122,7 +122,7 @@ Q_SIGNALS: // private signals
 
 private Q_SLOTS:
 
-    void slotLoadImageInfosStage2();
+    void slotLoadItemInfosStage2();
     void slotThumbBarModelReady();
 
     void slotForward();
@@ -133,7 +133,7 @@ private Q_SLOTS:
 
     void slotToMainWindow();
 
-    void slotThumbBarImageSelected(const ImageInfo&);
+    void slotThumbBarImageSelected(const ItemInfo&);
     void slotLoadCurrent();
     void slotDeleteCurrentItem();
     void slotDeleteCurrentItemPermanently();
@@ -158,7 +158,7 @@ private Q_SLOTS:
     void slotFileMetadataChanged(const QUrl&);
     //void slotCollectionImageChange(const CollectionImageChangeset&);
     //void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
-    void slotDroppedOnThumbbar(const QList<ImageInfo>& infos);
+    void slotDroppedOnThumbbar(const QList<ItemInfo>& infos);
 
     void slotComponentsInfo();
     void slotDBStat();

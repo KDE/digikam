@@ -43,7 +43,7 @@ extern "C"
 #include "dinfointerface.h"
 #include "timeadjustlist.h"
 #include "timeadjustthread.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 
 namespace Digikam
 {
@@ -104,8 +104,8 @@ void TimeAdjustTask::run()
         return;
     }
 
-    bool writeToSidecar  = (MetadataSettings::instance()->settings()
-                            .metadataWritingMode != DMetadata::WRITETOIMAGEONLY);
+    bool writeToSidecar  = (MetaEngineSettings::instance()->settings()
+                            .metadataWritingMode != DMetadata::WRITE_TO_FILE_ONLY);
 
     bool metadataChanged = d->settings.updEXIFModDate || d->settings.updEXIFOriDate ||
                            d->settings.updEXIFDigDate || d->settings.updEXIFThmDate ||

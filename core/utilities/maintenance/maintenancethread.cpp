@@ -73,11 +73,11 @@ void MaintenanceThread::setUseMultiCore(const bool b)
     }
 }
 
-void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir, bool tagsOnly)
+void MaintenanceThread::syncMetadata(const ItemInfoList& items, MetadataSynchronizer::SyncDirection dir, bool tagsOnly)
 {
     ActionJobCollection collection;
 
-    data->setImageInfos(items);
+    data->setItemInfos(items);
 
     for (int i = 1 ; i <= maximumNumberOfThreads() ; ++i)
     {

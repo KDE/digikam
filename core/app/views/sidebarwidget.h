@@ -36,7 +36,7 @@
 // Local includes
 
 #include "album.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "statesavingobject.h"
 
 namespace Digikam
@@ -68,7 +68,7 @@ public:
     /**
      * This method is called if the visible sidebar widget is changed.
      *
-     * @param if true, this widget is the new active widget, if false another
+     * @param active if true, this widget is the new active widget, if false another
      *        widget is active
      */
     virtual void setActive(bool active) = 0;

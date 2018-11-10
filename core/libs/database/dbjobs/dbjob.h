@@ -28,7 +28,7 @@
 
 #include "dbjobinfo.h"
 #include "dbjobsthread.h"
-#include "imagelisterrecord.h"
+#include "itemlisterrecord.h"
 #include "duplicatesprogressobserver.h"
 #include "actionthreadbase.h"
 #include "digikam_export.h"
@@ -49,7 +49,7 @@ protected:
 
 Q_SIGNALS:
 
-    void data(const QList<ImageListerRecord>& records);
+    void data(const QList<ItemListerRecord>& records);
     void error(const QString& err);
 };
 

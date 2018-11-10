@@ -63,7 +63,7 @@ extern "C"
 #include "digikam_config.h"
 #include "dimg.h"
 #include "dmetadata.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 
 namespace Digikam
 {
@@ -246,13 +246,13 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
             // Fall back to file system info
             if (info.ctime.isNull())
             {
-                info.ctime = ImageScanner::creationDateFromFilesystem(fi);
+                info.ctime = ItemScanner::creationDateFromFilesystem(fi);
             }
         }
         else
         {
             // Only use file system date
-            info.ctime = ImageScanner::creationDateFromFilesystem(fi);
+            info.ctime = ItemScanner::creationDateFromFilesystem(fi);
         }
     }
 
@@ -276,7 +276,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     // Try to get preview from Exif data (good quality). Can work with Raw files
 
     DMetadata metadata(path);
-    metadata.getImagePreview(thumbnail);
+    metadata.getItemPreview(thumbnail);
 
     if (!thumbnail.isNull())
     {
@@ -548,13 +548,13 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
         // Try to load image metadata.
         meta.load(fi.filePath());
-        dt    = meta.getImageDateTime();
-        dims  = meta.getImageDimensions();
+        dt    = meta.getItemDateTime();
+        dims  = meta.getItemDimensions();
         pInfo = meta.getPhotographInformation();
 
         if (dt.isNull()) // fall back to file system info
         {
-            dt = ImageScanner::creationDateFromFilesystem(fi);
+            dt = ItemScanner::creationDateFromFilesystem(fi);
         }
 
         info.name             = fi.fileName();

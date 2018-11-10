@@ -53,7 +53,7 @@ int main(int argc, char** argv)
     QString            fullFilePath(input.baseName() + QString::fromLatin1(".full.png"));
     QFileInfo          fullOutput(fullFilePath);
     QImage             image;
-    RawInfo identify;
+    DRawInfo identify;
 
     // -----------------------------------------------------------
 

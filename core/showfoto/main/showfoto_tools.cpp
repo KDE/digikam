@@ -34,7 +34,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
         return;
     }
 
-    settings.exifRotate = Digikam::MetadataSettings::instance()->settings().exifRotate;
+    settings.exifRotate = Digikam::MetaEngineSettings::instance()->settings().exifRotate;
     settings.fileList   = d->thumbBar->urls();
     int   i             = 0;
     float cnt           = settings.fileList.count();
@@ -49,7 +49,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
     {
         Digikam::SlidePictureInfo pictInfo;
         meta.load((*it).toLocalFile());
-        pictInfo.comment   = meta.getImageComments()[QLatin1String("x-default")].caption;
+        pictInfo.comment   = meta.getItemComments()[QLatin1String("x-default")].caption;
         pictInfo.photoInfo = meta.getPhotographInformation();
         settings.pictInfoMap.insert(*it, pictInfo);
 
@@ -89,7 +89,7 @@ void ShowFoto::slotPresentation()
          !m_cancelSlideShow && (it != urlList.constEnd()) ; ++it)
     {
         meta.load((*it).toLocalFile());
-        mngr->addFile(*it, meta.getImageComments()[QLatin1String("x-default")].caption);
+        mngr->addFile(*it, meta.getItemComments()[QLatin1String("x-default")].caption);
 
         m_nameLabel->setProgressValue((int)((i++/cnt)*100.0f));
         qApp->processEvents();

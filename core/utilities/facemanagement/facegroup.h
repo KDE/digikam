@@ -39,7 +39,7 @@ namespace Digikam
 {
 
 class Album;
-class ImageInfo;
+class ItemInfo;
 class GraphicsDImgView;
 class RegionFrameItem;
 class TaggingAction;
@@ -59,7 +59,7 @@ public:
     ~FaceGroup();
 
     bool isVisible() const;
-    ImageInfo info() const;
+    ItemInfo info() const;
     bool hasVisibleItems() const;
 
     QList<RegionFrameItem*> items() const;
@@ -99,15 +99,15 @@ public Q_SLOTS:
     void setVisible(bool visible);
     void setVisibleItem(RegionFrameItem* item);
 
-    /** Sets the current ImageInfo */
-    void setInfo(const ImageInfo& info);
+    /** Sets the current ItemInfo */
+    void setInfo(const ItemInfo& info);
 
     /** Prepares to load a new info.
      *  Closes the face group for editing.
      *  Pass a null info if about to close. */
-    void aboutToSetInfo(const ImageInfo& info);
+    void aboutToSetInfo(const ItemInfo& info);
 
-    void aboutToSetInfoAfterRotate(const ImageInfo& info);
+    void aboutToSetInfoAfterRotate(const ItemInfo& info);
 
     /** Enters a special state where by click + drag a new face can be created */
     void addFace();
@@ -127,9 +127,9 @@ protected Q_SLOTS:
     void startAutoSuggest();
     void slotAlbumsUpdated(int type);
     void slotAlbumRenamed(Album* album);
-    void slotAssigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier);
-    void slotRejected(const ImageInfo& info, const QVariant& faceIdentifier);
-    void slotLabelClicked(const ImageInfo& info, const QVariant& faceIdentifier);
+    void slotAssigned(const TaggingAction& action, const ItemInfo& info, const QVariant& faceIdentifier);
+    void slotRejected(const ItemInfo& info, const QVariant& faceIdentifier);
+    void slotLabelClicked(const ItemInfo& info, const QVariant& faceIdentifier);
     void slotAddItemStarted(const QPointF& pos);
     void slotAddItemMoving(const QRectF& rect);
     void slotAddItemFinished(const QRectF& rect);

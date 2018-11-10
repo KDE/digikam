@@ -38,12 +38,12 @@
 
 #include "album.h"
 #include "albummanager.h"
-#include "imagealbummodel.h"
+#include "itemalbummodel.h"
 #include "imagecategorizedview.h"
 #include "imagedelegate.h"
-#include "imagefiltermodel.h"
-#include "imagemodel.h"
-#include "imagescanner.h"
+#include "itemfiltermodel.h"
+#include "itemmodel.h"
+#include "itemscanner.h"
 #include "searchfolderview.h"
 
 namespace Digikam
@@ -125,7 +125,7 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
 
     p->translate(option.rect.topLeft());
 
-    ImageSortSettings::CategorizationMode mode = (ImageSortSettings::CategorizationMode)index.data(ImageFilterModel::CategorizationModeRole).toInt();
+    ItemSortSettings::CategorizationMode mode = (ItemSortSettings::CategorizationMode)index.data(ItemFilterModel::CategorizationModeRole).toInt();
 
     p->drawPixmap(0, 0, d->pixmap);
 
@@ -149,18 +149,18 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
 
     switch (mode)
     {
-        case ImageSortSettings::NoCategories:
+        case ItemSortSettings::NoCategories:
             break;
-        case ImageSortSettings::OneCategory:
+        case ItemSortSettings::OneCategory:
             viewHeaderText(index, &header, &subLine);
             break;
-        case ImageSortSettings::CategoryByAlbum:
+        case ItemSortSettings::CategoryByAlbum:
             textForAlbum(index, &header, &subLine);
             break;
-        case ImageSortSettings::CategoryByFormat:
+        case ItemSortSettings::CategoryByFormat:
             textForFormat(index, &header, &subLine);
             break;
-        case ImageSortSettings::CategoryByMonth:
+        case ItemSortSettings::CategoryByMonth:
             textForMonth(index, &header, &subLine);
             break;
     }
@@ -186,7 +186,7 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
 
 void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* header, QString* subLine) const
 {
-    ImageModel* const sourceModel = index.data(ImageModel::ImageModelPointerRole).value<ImageModel*>();
+    ItemModel* const sourceModel = index.data(ItemModel::ItemModelPointerRole).value<ItemModel*>();
 
     if (!sourceModel)
     {
@@ -197,7 +197,7 @@ void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* head
 
     // Add here further model subclasses in use with ImageCategoryDrawer.
     // Note you need a Q_OBJECT in the class's header for this to work.
-    ImageAlbumModel* const albumModel = qobject_cast<ImageAlbumModel*>(sourceModel);
+    ItemAlbumModel* const albumModel = qobject_cast<ItemAlbumModel*>(sourceModel);
 
     if (albumModel)
     {
@@ -239,7 +239,7 @@ void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* head
 
 void ImageCategoryDrawer::textForAlbum(const QModelIndex& index, QString* header, QString* subLine) const
 {
-    int albumId         = index.data(ImageFilterModel::CategoryAlbumIdRole).toInt();
+    int albumId         = index.data(ItemFilterModel::CategoryAlbumIdRole).toInt();
     PAlbum* const album = AlbumManager::instance()->findPAlbum(albumId);
     int count           = d->view->categoryRange(index).height();
     textForPAlbum(album, false, count, header, subLine);
@@ -247,8 +247,8 @@ void ImageCategoryDrawer::textForAlbum(const QModelIndex& index, QString* header
 
 void ImageCategoryDrawer::textForFormat(const QModelIndex& index, QString* header, QString* subLine) const
 {
-    QString format = index.data(ImageFilterModel::CategoryFormatRole).toString();
-    format         = ImageScanner::formatToString(format);
+    QString format = index.data(ItemFilterModel::CategoryFormatRole).toString();
+    format         = ItemScanner::formatToString(format);
     *header        = format;
     int count      = d->view->categoryRange(index).height();
     *subLine       = i18np("1 Item", "%1 Items", count);
@@ -256,7 +256,7 @@ void ImageCategoryDrawer::textForFormat(const QModelIndex& index, QString* heade
 
 void ImageCategoryDrawer::textForMonth(const QModelIndex& index, QString* header, QString* subLine) const
 {
-    QDate date = index.data(ImageFilterModel::CategoryDateRole).toDate();
+    QDate date = index.data(ItemFilterModel::CategoryDateRole).toDate();
     *header    = date.toString(QLatin1String("MMM yyyy"));
     int count  = d->view->categoryRange(index).height();
     *subLine   = i18np("1 Item", "%1 Items", count);

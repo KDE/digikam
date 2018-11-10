@@ -46,12 +46,12 @@ public:
         linkItemSelectionModel = 0;
     }
 
-    GPSImageModel*             imageModel;
+    GPSItemModel*             imageModel;
     QItemSelectionModel*       sourceSelectionModel;
     GPSLinkItemSelectionModel* linkItemSelectionModel;
 };
 
-GPSImageSortProxyModel::GPSImageSortProxyModel(GPSImageModel* const imageModel,
+GPSImageSortProxyModel::GPSImageSortProxyModel(GPSItemModel* const imageModel,
                                                QItemSelectionModel* const sourceSelectionModel)
     : QSortFilterProxyModel(imageModel),
       d(new Private())

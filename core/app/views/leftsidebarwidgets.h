@@ -35,11 +35,11 @@
 #include "digikam_config.h"
 #include "albummodel.h"
 #include "albummodificationhelper.h"
-#include "imagealbumfiltermodel.h"
+#include "itemalbumfiltermodel.h"
 #include "searchmodificationhelper.h"
 #include "sidebarwidget.h"
-#include "imagefiltermodel.h"
-#include "albumlabelstreeview.h"
+#include "itemfiltermodel.h"
+#include "labelstreeview.h"
 
 #ifdef HAVE_MARBLE
 #   include "gpssearchview.h"
@@ -158,7 +158,7 @@ public:
     explicit LabelsSideBarWidget(QWidget* const parent);
     virtual ~LabelsSideBarWidget();
 
-    AlbumLabelsTreeView* labelsTree();
+    LabelsTreeView* labelsTree();
 
     void    setActive(bool active);
     void    applySettings();
@@ -168,7 +168,7 @@ public:
     const QIcon   getIcon();
     const QString getCaption();
 
-    QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels();
+    QHash<LabelsTreeView::Labels, QList<int> > selectedLabels();
 
 private:
 
@@ -191,7 +191,7 @@ public:
 
     explicit DateFolderViewSideBarWidget(QWidget* const parent,
                                          DateAlbumModel* const model,
-                                         ImageAlbumFilterModel* const imageFilterModel);
+                                         ItemAlbumFilterModel* const imageFilterModel);
     virtual ~DateFolderViewSideBarWidget();
 
     void    setActive(bool active);
@@ -323,7 +323,7 @@ public:
     void newDuplicatesSearch(PAlbum* album);
     void newDuplicatesSearch(const QList<PAlbum*>& albums);
     void newDuplicatesSearch(const QList<TAlbum*>& albums);
-    void newSimilarSearch(const ImageInfo& imageInfo);
+    void newSimilarSearch(const ItemInfo& imageInfo);
 
 Q_SIGNALS:
 
@@ -353,7 +353,7 @@ public:
     explicit GPSSearchSideBarWidget(QWidget* const parent,
                                     SearchModel* const searchModel,
                                     SearchModificationHelper* const searchModificationHelper,
-                                    ImageFilterModel* const imageFilterModel,
+                                    ItemFilterModel* const imageFilterModel,
                                     QItemSelectionModel* const itemSelectionModel);
     virtual ~GPSSearchSideBarWidget();
 

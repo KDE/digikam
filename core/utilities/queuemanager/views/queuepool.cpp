@@ -39,7 +39,7 @@
 #include "dmessagebox.h"
 #include "applicationsettings.h"
 #include "iccsettings.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "ddragobjects.h"
 #include "queuelist.h"
 #include "workflowmanager.h"
@@ -233,11 +233,11 @@ QueuePoolItemsList QueuePool::queueItemsList(int index) const
 
     if (queue)
     {
-        ImageInfoList list = queue->pendingItemsList();
+        ItemInfoList list = queue->pendingItemsList();
 
-        for (ImageInfoList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+        for (ItemInfoList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
         {
-            ImageInfo info = *it;
+            ItemInfo info = *it;
             ItemInfoSet set(index, info);
             qpool.append(set);
         }
@@ -354,7 +354,7 @@ void QueuePool::slotRemoveItemsDone()
     }
 }
 
-void QueuePool::slotAddItems(const ImageInfoList& list, int queueId)
+void QueuePool::slotAddItems(const ItemInfoList& list, int queueId)
 {
     QueueListView* const queue = findQueueByIndex(queueId);
 
@@ -540,7 +540,7 @@ void QueuePool::applySettings()
 
             // Reset Exif Orientation settings.
             QueueSettings prm = queue->settings();
-            prm.exifSetOrientation = MetadataSettings::instance()->settings().exifRotate;
+            prm.exifSetOrientation = MetaEngineSettings::instance()->settings().exifRotate;
 
             // Apply Color Management rules to RAW images decoding settings
 

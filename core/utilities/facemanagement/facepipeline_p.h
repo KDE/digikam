@@ -96,18 +96,18 @@ public:
 
     explicit Private(FacePipeline* const q);
 
-    void processBatch(const QList<ImageInfo>& infos);
+    void processBatch(const QList<ItemInfo>& infos);
     void sendFromFilter(const QList<FacePipelineExtendedPackage::Ptr>& packages);
-    void skipFromFilter(const QList<ImageInfo>& infosForSkipping);
+    void skipFromFilter(const QList<ItemInfo>& infosForSkipping);
     void send(FacePipelineExtendedPackage::Ptr package);
     bool senderFlowControl(FacePipelineExtendedPackage::Ptr package);
     void receiverFlowControl();
-    FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info);
-    FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info,
+    FacePipelineExtendedPackage::Ptr buildPackage(const ItemInfo& info);
+    FacePipelineExtendedPackage::Ptr buildPackage(const ItemInfo& info,
                                                   const FacePipelineFaceTagsIface&, const DImg& image);
-    FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info,
+    FacePipelineExtendedPackage::Ptr buildPackage(const ItemInfo& info,
                                                   const FacePipelineFaceTagsIfaceList& faces, const DImg& image);
-    FacePipelineExtendedPackage::Ptr filterOrBuildPackage(const ImageInfo& info);
+    FacePipelineExtendedPackage::Ptr filterOrBuildPackage(const ItemInfo& info);
 
     bool hasFinished();
     void checkFinished();

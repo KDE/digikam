@@ -40,7 +40,7 @@ class KConfigGroup;
 namespace Digikam
 {
 
-class GPSImageModel;
+class GPSItemModel;
 class GPSUndoCommand;
 
 class GPSCorrelatorWidget : public QWidget
@@ -49,7 +49,7 @@ class GPSCorrelatorWidget : public QWidget
 
 public:
 
-    explicit GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* const imageModel, TrackManager* const trackManager);
+    explicit GPSCorrelatorWidget(QWidget* const parent, GPSItemModel* const imageModel, TrackManager* const trackManager);
     virtual ~GPSCorrelatorWidget();
 
     void setUIEnabledExternal(const bool state);

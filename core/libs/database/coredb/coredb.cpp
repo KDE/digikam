@@ -1610,11 +1610,11 @@ QVariantList CoreDB::getImagesFields(qlonglong imageID, DatabaseFields::Images f
     return values;
 }
 
-QVariantList CoreDB::getImageInformation(qlonglong imageID, DatabaseFields::ImageInformation fields)
+QVariantList CoreDB::getItemInformation(qlonglong imageID, DatabaseFields::ItemInformation fields)
 {
     QVariantList values;
 
-    if (fields != DatabaseFields::ImageInformationNone)
+    if (fields != DatabaseFields::ItemInformationNone)
     {
         QString query(QString::fromUtf8("SELECT "));
         QStringList fieldNames = imageInformationFieldList(fields);
@@ -1700,11 +1700,11 @@ QVariantList CoreDB::getVideoMetadata(qlonglong imageID, DatabaseFields::VideoMe
     return values;
 }
 
-QVariantList CoreDB::getImagePosition(qlonglong imageID, DatabaseFields::ImagePositions fields)
+QVariantList CoreDB::getItemPosition(qlonglong imageID, DatabaseFields::ItemPositions fields)
 {
     QVariantList values;
 
-    if (fields != DatabaseFields::ImagePositionsNone)
+    if (fields != DatabaseFields::ItemPositionsNone)
     {
         QString query(QString::fromUtf8("SELECT "));
         QStringList fieldNames =  imagePositionsFieldList(fields);
@@ -1746,11 +1746,11 @@ QVariantList CoreDB::getImagePosition(qlonglong imageID, DatabaseFields::ImagePo
     return values;
 }
 
-QVariantList CoreDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseFields::ImagePositions fields)
+QVariantList CoreDB::getItemPositions(QList<qlonglong> imageIDs, DatabaseFields::ItemPositions fields)
 {
     QVariantList values;
 
-    if (fields != DatabaseFields::ImagePositionsNone)
+    if (fields != DatabaseFields::ItemPositionsNone)
     {
         QString sql(QString::fromUtf8("SELECT "));
         QStringList fieldNames =  imagePositionsFieldList(fields);
@@ -1799,10 +1799,10 @@ QVariantList CoreDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseFields
     return values;
 }
 
-void CoreDB::addImageInformation(qlonglong imageID, const QVariantList& infos,
-                                 DatabaseFields::ImageInformation fields)
+void CoreDB::addItemInformation(qlonglong imageID, const QVariantList& infos,
+                                 DatabaseFields::ItemInformation fields)
 {
-    if (fields == DatabaseFields::ImageInformationNone)
+    if (fields == DatabaseFields::ItemInformationNone)
     {
         return;
     }
@@ -1826,17 +1826,17 @@ void CoreDB::addImageInformation(qlonglong imageID, const QVariantList& infos,
     d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(fields)));
 }
 
-void CoreDB::changeImageInformation(qlonglong imageId, const QVariantList& infos,
-                                    DatabaseFields::ImageInformation fields)
+void CoreDB::changeItemInformation(qlonglong imageId, const QVariantList& infos,
+                                    DatabaseFields::ItemInformation fields)
 {
-    if (fields == DatabaseFields::ImageInformationNone)
+    if (fields == DatabaseFields::ItemInformationNone)
     {
         return;
     }
 
     QStringList fieldNames = imageInformationFieldList(fields);
 
-    d->db->execUpsertDBAction(QLatin1String("changeImageInformation"),
+    d->db->execUpsertDBAction(QLatin1String("changeItemInformation"),
                               imageId, fieldNames, infos);
     d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::Set(fields)));
 }
@@ -1937,9 +1937,9 @@ void CoreDB::changeVideoMetadata(qlonglong imageId, const QVariantList& infos,
     d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::Set(fields)));
 }
 
-void CoreDB::addImagePosition(qlonglong imageID, const QVariantList& infos, DatabaseFields::ImagePositions fields)
+void CoreDB::addItemPosition(qlonglong imageID, const QVariantList& infos, DatabaseFields::ItemPositions fields)
 {
-    if (fields == DatabaseFields::ImagePositionsNone)
+    if (fields == DatabaseFields::ItemPositionsNone)
     {
         return;
     }
@@ -1961,10 +1961,10 @@ void CoreDB::addImagePosition(qlonglong imageID, const QVariantList& infos, Data
     d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(fields)));
 }
 
-void CoreDB::changeImagePosition(qlonglong imageId, const QVariantList& infos,
-                                  DatabaseFields::ImagePositions fields)
+void CoreDB::changeItemPosition(qlonglong imageId, const QVariantList& infos,
+                                  DatabaseFields::ItemPositions fields)
 {
-    if (fields == DatabaseFields::ImagePositionsNone)
+    if (fields == DatabaseFields::ItemPositionsNone)
     {
         return;
     }
@@ -1984,15 +1984,15 @@ void CoreDB::changeImagePosition(qlonglong imageId, const QVariantList& infos,
     d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::Set(fields)));
 }
 
-void CoreDB::removeImagePosition(qlonglong imageid)
+void CoreDB::removeItemPosition(qlonglong imageid)
 {
     d->db->execSql(QString(QString::fromUtf8("DELETE FROM ImagePositions WHERE imageid=?;")),
                    imageid);
 
-    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::Set(DatabaseFields::ImagePositionsAll)));
+    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::Set(DatabaseFields::ItemPositionsAll)));
 }
 
-void CoreDB::removeImagePositionAltitude(qlonglong imageid)
+void CoreDB::removeItemPositionAltitude(qlonglong imageid)
 {
     d->db->execSql(QString(QString::fromUtf8("UPDATE ImagePositions SET altitude=NULL WHERE imageid=?;")),
                    imageid);
@@ -2000,7 +2000,7 @@ void CoreDB::removeImagePositionAltitude(qlonglong imageid)
     d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::Set(DatabaseFields::Altitude)));
 }
 
-QList<CommentInfo> CoreDB::getImageComments(qlonglong imageID)
+QList<CommentInfo> CoreDB::getItemComments(qlonglong imageID)
 {
     QList<CommentInfo> list;
 
@@ -2045,13 +2045,13 @@ int CoreDB::setImageComment(qlonglong imageID, const QString& comment, DatabaseC
                            " VALUES (?,?,?,?,?,?);"),
                    boundValues, 0, &id);
 
-    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(DatabaseFields::ImageCommentsAll)));
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(DatabaseFields::ItemCommentsAll)));
     return id.toInt();
 }
 
-void CoreDB::changeImageComment(int commentId, qlonglong imageID, const QVariantList& infos, DatabaseFields::ImageComments fields)
+void CoreDB::changeImageComment(int commentId, qlonglong imageID, const QVariantList& infos, DatabaseFields::ItemComments fields)
 {
-    if (fields == DatabaseFields::ImageCommentsNone)
+    if (fields == DatabaseFields::ItemCommentsNone)
     {
         return;
     }
@@ -2076,7 +2076,7 @@ void CoreDB::removeImageComment(int commentid, qlonglong imageid)
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageComments WHERE id=?;"),
                    commentid);
 
-    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::Set(DatabaseFields::ImageCommentsAll)));
+    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::Set(DatabaseFields::ItemCommentsAll)));
 }
 
 QString CoreDB::getImageProperty(qlonglong imageID, const QString& property)
@@ -2117,7 +2117,7 @@ void CoreDB::removeImagePropertyByName(const QString& property)
                    property);
 }
 
-QList<CopyrightInfo> CoreDB::getImageCopyright(qlonglong imageID, const QString& property)
+QList<CopyrightInfo> CoreDB::getItemCopyright(qlonglong imageID, const QString& property)
 {
     QList<CopyrightInfo> list;
     QList<QVariant>      values;
@@ -2153,7 +2153,7 @@ QList<CopyrightInfo> CoreDB::getImageCopyright(qlonglong imageID, const QString&
     return list;
 }
 
-void CoreDB::setImageCopyrightProperty(qlonglong imageID, const QString& property,
+void CoreDB::setItemCopyrightProperty(qlonglong imageID, const QString& property,
                                        const QString& value, const QString& extraValue,
                                        CopyrightPropertyUnique uniqueness)
 {
@@ -2176,7 +2176,7 @@ void CoreDB::setImageCopyrightProperty(qlonglong imageID, const QString& propert
                    imageID, property, value, extraValue);
 }
 
-void CoreDB::removeImageCopyrightProperties(qlonglong imageID, const QString& property,
+void CoreDB::removeItemCopyrightProperties(qlonglong imageID, const QString& property,
                                             const QString& extraValue, const QString& value)
 {
     int removeBy = 0;
@@ -2251,7 +2251,7 @@ bool CoreDB::hasImageHistory(qlonglong imageId)
     return !values.isEmpty();
 }
 
-ImageHistoryEntry CoreDB::getImageHistory(qlonglong imageId)
+ImageHistoryEntry CoreDB::getItemHistory(qlonglong imageId)
 {
     QList<QVariant> values;
 
@@ -2322,7 +2322,7 @@ QString CoreDB::getImageUuid(qlonglong imageId)
     return uuid;
 }
 
-void CoreDB::setImageHistory(qlonglong imageId, const QString& history)
+void CoreDB::setItemHistory(qlonglong imageId, const QString& history)
 {
     d->db->execUpsertDBAction(QLatin1String("changeImageHistory"),
                               imageId, QStringList() << QLatin1String("history"), QVariantList() << history);
@@ -2823,7 +2823,7 @@ QStringList CoreDB::imagesFieldList(DatabaseFields::Images fields)
     return list;
 }
 
-QStringList CoreDB::imageInformationFieldList(DatabaseFields::ImageInformation fields)
+QStringList CoreDB::imageInformationFieldList(DatabaseFields::ItemInformation fields)
 {
     // adds no spaces at beginning or end
     QStringList list;
@@ -3007,7 +3007,7 @@ QStringList CoreDB::imageMetadataFieldList(DatabaseFields::ImageMetadata fields)
     return list;
 }
 
-QStringList CoreDB::imagePositionsFieldList(DatabaseFields::ImagePositions fields)
+QStringList CoreDB::imagePositionsFieldList(DatabaseFields::ItemPositions fields)
 {
     // adds no spaces at beginning or end
     QStringList list;
@@ -3065,7 +3065,7 @@ QStringList CoreDB::imagePositionsFieldList(DatabaseFields::ImagePositions field
     return list;
 }
 
-QStringList CoreDB::imageCommentsFieldList(DatabaseFields::ImageComments fields)
+QStringList CoreDB::imageCommentsFieldList(DatabaseFields::ItemComments fields)
 {
     // adds no spaces at beginning or end
     QStringList list;
@@ -4746,7 +4746,7 @@ void CoreDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
                                      " width, height, format, colorDepth, colorModel "
                                      "FROM ImageInformation WHERE imageid=?;"),
                    dstId, srcId);
-    fields |= DatabaseFields::ImageInformationAll;
+    fields |= DatabaseFields::ItemInformationAll;
 
     d->db->execSql(QString::fromUtf8("REPLACE INTO ImageMetadata "
                                      "(imageid, make, model, lens, aperture, focalLength, focalLength35, "
@@ -4775,14 +4775,14 @@ void CoreDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
                                      " altitude, orientation, tilt, roll, accuracy, description "
                                      "FROM ImagePositions WHERE imageid=?;"),
                    dstId, srcId);
-    fields |= DatabaseFields::ImagePositionsAll;
+    fields |= DatabaseFields::ItemPositionsAll;
 
     d->db->execSql(QString::fromUtf8("REPLACE INTO ImageComments "
                                      "(imageid, type, language, author, date, comment) "
                                      "SELECT ?, type, language, author, date, comment "
                                      "FROM ImageComments WHERE imageid=?;"),
                    dstId, srcId);
-    fields |= DatabaseFields::ImageCommentsAll;
+    fields |= DatabaseFields::ItemCommentsAll;
 
     d->db->execSql(QString::fromUtf8("REPLACE INTO ImageCopyright "
                                      "(imageid, property, value, extraValue) "
@@ -4903,14 +4903,14 @@ void CoreDB::clearMetadataFromImage(qlonglong imageID)
 
     d->db->execSql(QString::fromUtf8("DELETE FROM ImagePositions WHERE imageid=?;"),
                    imageID);
-    fields |= DatabaseFields::ImagePositionsAll;
+    fields |= DatabaseFields::ItemPositionsAll;
 
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright WHERE imageid=?;"),
                    imageID);
 
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageComments WHERE imageid=?;"),
                    imageID);
-    fields |= DatabaseFields::ImageCommentsAll;
+    fields |= DatabaseFields::ItemCommentsAll;
 
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageMetadata WHERE imageid=?;"),
                    imageID);

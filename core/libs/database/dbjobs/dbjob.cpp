@@ -28,7 +28,7 @@
 #include "coredbaccess.h"
 #include "dbengineparameters.h"
 #include "coredb.h"
-#include "imagelister.h"
+#include "itemlister.h"
 #include "digikam_export.h"
 #include "digikam_debug.h"
 #include "dbjobsthread.h"
@@ -67,13 +67,13 @@ void AlbumsJob::run()
     }
     else
     {
-        ImageLister lister;
+        ItemLister lister;
         lister.setRecursive(m_jobInfo.isRecursive());
         lister.setListOnlyAvailable(m_jobInfo.isListAvailableImagesOnly());
 
         // Send data every 200 images to be more responsive
-        ImageListerJobGrowingPartsSendingReceiver receiver(this, 200, 2000, 100);
-        lister.listAlbum(&receiver, m_jobInfo.albumRootId(), m_jobInfo.album());
+        ItemListerJobGrowingPartsSendingReceiver receiver(this, 200, 2000, 100);
+        lister.listPAlbum(&receiver, m_jobInfo.albumRootId(), m_jobInfo.album());
         receiver.sendData();
     }
 
@@ -101,11 +101,11 @@ void DatesJob::run()
     }
     else
     {
-        ImageLister lister;
+        ItemLister lister;
         lister.setListOnlyAvailable(true);
 
         // Send data every 200 images to be more responsive
-        ImageListerJobPartsSendingReceiver receiver(this, 200);
+        ItemListerJobPartsSendingReceiver receiver(this, 200);
         lister.listDateRange(&receiver, m_jobInfo.startDate(), m_jobInfo.endDate());
 
         // Send rest
@@ -143,12 +143,12 @@ void GPSJob::run()
     }
     else
     {
-        ImageLister lister;
+        ItemLister lister;
         lister.setAllowExtraValues(true);
         lister.setListOnlyAvailable(m_jobInfo.isListAvailableImagesOnly());
 
         // Send data every 200 images to be more responsive
-        ImageListerJobPartsSendingReceiver receiver(this, 200);
+        ItemListerJobPartsSendingReceiver receiver(this, 200);
         lister.listAreaRange(&receiver,
                              m_jobInfo.lat1(),
                              m_jobInfo.lat2(),
@@ -198,12 +198,12 @@ void TagsJob::run()
     }
     else
     {
-        ImageLister lister;
+        ItemLister lister;
         lister.setRecursive(m_jobInfo.isRecursive());
         lister.setListOnlyAvailable(m_jobInfo.isListAvailableImagesOnly());
 
         // Send data every 200 images to be more responsive
-        ImageListerJobPartsSendingReceiver receiver(this, 200);
+        ItemListerJobPartsSendingReceiver receiver(this, 200);
 
         if (!m_jobInfo.specialTag().isNull())
         {
@@ -249,11 +249,11 @@ void SearchesJob::run()
             infos << CoreDbAccess().db()->getSearchInfo(id);
         }
 
-        ImageLister lister;
+        ItemLister lister;
         lister.setListOnlyAvailable(m_jobInfo.isListAvailableImagesOnly());
 
         // Send data every 200 images to be more responsive
-        ImageListerJobPartsSendingReceiver receiver(this, 200);
+        ItemListerJobPartsSendingReceiver receiver(this, 200);
 
         foreach (const SearchInfo& info, infos)
         {

@@ -36,7 +36,7 @@
 // Local includes
 
 #include "dlayoutbox.h"
-#include "imagepropertiestxtlabel.h"
+#include "itempropertiestxtlabel.h"
 #include "template.h"
 #include "templatemanager.h"
 #include "countryselector.h"

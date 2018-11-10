@@ -46,10 +46,10 @@ void ImageWindow::slotTimeAdjust()
 
 void ImageWindow::slotEditMetadata()
 {
-    if (d->currentImageInfo.isNull())
+    if (d->currentItemInfo.isNull())
         return;
 
-    QUrl url = d->currentImageInfo.fileUrl();
+    QUrl url = d->currentItemInfo.fileUrl();
 
     QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(this, QList<QUrl>() << url);
     dialog->exec();
@@ -65,7 +65,7 @@ void ImageWindow::slotEditMetadata()
 void ImageWindow::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    ImageInfoList infos = d->thumbBar->allImageInfos();
+    ItemInfoList infos = d->thumbBar->allItemInfos();
 
     if (infos.isEmpty())
     {
@@ -80,7 +80,7 @@ void ImageWindow::slotEditGeolocation()
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel,
                                                            new DBInfoIface(this, d->thumbBar->allUrls()),
                                                            this);
-    dialog->setItems(ImageGPS::infosToItems(infos));
+    dialog->setItems(ItemGPS::infosToItems(infos));
     dialog->exec();
 
     delete dialog;
@@ -103,7 +103,7 @@ void ImageWindow::slotPresentation()
 {
     QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
 
-    foreach (const ImageInfo& info, d->imageInfoModel->imageInfos())
+    foreach (const ItemInfo& info, d->imageInfoModel->imageInfos())
     {
         mngr->addFile(info.fileUrl(), info.comment());
         qApp->processEvents();
@@ -115,7 +115,7 @@ void ImageWindow::slotPresentation()
 void ImageWindow::slideShow(SlideShowSettings& settings)
 {
     m_cancelSlideShow   = false;
-    settings.exifRotate = MetadataSettings::instance()->settings().exifRotate;
+    settings.exifRotate = MetaEngineSettings::instance()->settings().exifRotate;
 
     if (!d->imageInfoModel->isEmpty())
     {
@@ -127,7 +127,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
         float cnt = (float)d->imageInfoModel->rowCount();
         int     i = 0;
 
-        foreach (const ImageInfo& info, d->imageInfoModel->imageInfos())
+        foreach (const ItemInfo& info, d->imageInfoModel->imageInfos())
         {
             SlidePictureInfo pictInfo;
             pictInfo.comment    = info.comment();
@@ -160,7 +160,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
         {
             SlidePictureInfo pictInfo;
             meta.load((*it).toLocalFile());
-            pictInfo.comment   = meta.getImageComments()[QString("x-default")].caption;
+            pictInfo.comment   = meta.getItemComments()[QString("x-default")].caption;
             pictInfo.photoInfo = meta.getPhotographInformation();
             settings.pictInfoMap.insert(*it, pictInfo);
 

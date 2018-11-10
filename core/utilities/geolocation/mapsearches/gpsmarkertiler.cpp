@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "gpsimageinfosorter.h"
+#include "gpsiteminfosorter.h"
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
 #include "digikam_debug.h"
@@ -99,7 +99,7 @@ public:
 
         int                      level;
         GPSDBJobsThread*         jobThread;
-        QList<GPSImageInfo> dataFromDatabase;
+        QList<GPSItemInfo> dataFromDatabase;
     };
 
     explicit Private()
@@ -124,9 +124,9 @@ public:
     QList<QRectF>                          rectList;
     QList<int>                             rectLevel;
     bool                                   activeState;
-    QHash<qlonglong, GPSImageInfo>         imagesHash;
-    ImageFilterModel*                      imageFilterModel;
-    ImageAlbumModel*                       imageAlbumModel;
+    QHash<qlonglong, GPSItemInfo>         imagesHash;
+    ItemFilterModel*                      imageFilterModel;
+    ItemAlbumModel*                       imageAlbumModel;
     QItemSelectionModel*                   selectionModel;
     GeoCoordinates::Pair          currentRegionSelection;
     GeoGroupState                    mapGlobalGroupState;
@@ -136,7 +136,7 @@ public:
  * @brief Constructor
  * @param parent Parent object
  */
-GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* const imageFilterModel, QItemSelectionModel* const selectionModel)
+GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ItemFilterModel* const imageFilterModel, QItemSelectionModel* const selectionModel)
     : AbstractMarkerTiler(parent),
       d(new Private())
 {
@@ -144,7 +144,7 @@ GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* const im
 
     d->thumbnailLoadThread = new ThumbnailLoadThread(this);
     d->imageFilterModel    = imageFilterModel;
-    d->imageAlbumModel     = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
+    d->imageAlbumModel     = qobject_cast<ItemAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel      = selectionModel;
 
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
@@ -153,8 +153,8 @@ GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* const im
     connect(CoreDbAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotImageChange(ImageChangeset)), Qt::QueuedConnection);
 
-    connect(d->imageAlbumModel, SIGNAL(imageInfosAdded(QList<ImageInfo>)),
-            this, SLOT(slotNewModelData(QList<ImageInfo>)));
+    connect(d->imageAlbumModel, SIGNAL(imageInfosAdded(QList<ItemInfo>)),
+            this, SLOT(slotNewModelData(QList<ItemInfo>)));
 
     connect(d->selectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(slotSelectionChanged(QItemSelection,QItemSelection)));
@@ -272,8 +272,8 @@ void GPSMarkerTiler::prepareTiles(const GeoCoordinates& upperLeft, const GeoCoor
     connect(currentJob, SIGNAL(finished()),
             this, SLOT(slotMapImagesJobResult()));
 
-    connect(currentJob, SIGNAL(data(QList<ImageListerRecord>)),
-            this, SLOT(slotMapImagesJobData(QList<ImageListerRecord>)));
+    connect(currentJob, SIGNAL(data(QList<ItemListerRecord>)),
+            this, SLOT(slotMapImagesJobData(QList<ItemListerRecord>)));
 }
 
 /**
@@ -302,8 +302,8 @@ AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const TileIndex& tileIndex, c
             for (int i = 0 ; i < tile->imagesId.count() ; ++i)
             {
                 const int currentImageId                  = tile->imagesId.at(i);
-                const GPSImageInfo currentImageInfo       = d->imagesHash[currentImageId];
-                const TileIndex markerTileIndex = TileIndex::fromCoordinates(currentImageInfo.coordinates, level);
+                const GPSItemInfo currentItemInfo       = d->imagesHash[currentImageId];
+                const TileIndex markerTileIndex = TileIndex::fromCoordinates(currentItemInfo.coordinates, level);
                 const int newTileIndex                    = markerTileIndex.lastIndex();
 
                 MyTile* const newTile = static_cast<MyTile*>(tile->getChild(newTileIndex));
@@ -383,15 +383,15 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const TileIndex& tileIndex,
         return QVariant();
     }
 
-    GPSImageInfo bestMarkerInfo               = d->imagesHash.value(tile->imagesId.first());
+    GPSItemInfo bestMarkerInfo               = d->imagesHash.value(tile->imagesId.first());
     GeoGroupState bestMarkerGroupState = getImageState(bestMarkerInfo.id);
 
     for (int i = 1 ; i < tile->imagesId.count() ; ++i)
     {
-        const GPSImageInfo currentMarkerInfo               = d->imagesHash.value(tile->imagesId.at(i));
+        const GPSItemInfo currentMarkerInfo               = d->imagesHash.value(tile->imagesId.at(i));
         const GeoGroupState currentMarkerGroupState = getImageState(currentMarkerInfo.id);
 
-        if (GPSImageInfoSorter::fitsBetter(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, getGlobalGroupState(), GPSImageInfoSorter::SortOptions(sortKey)))
+        if (GPSItemInfoSorter::fitsBetter(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, getGlobalGroupState(), GPSItemInfoSorter::SortOptions(sortKey)))
         {
             bestMarkerInfo       = currentMarkerInfo;
             bestMarkerGroupState = currentMarkerGroupState;
@@ -417,7 +417,7 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
     }
 
     const QPair<TileIndex, int> firstIndex = indices.first().value<QPair<TileIndex, int> >();
-    GPSImageInfo bestMarkerInfo                      = d->imagesHash.value(firstIndex.second);
+    GPSItemInfo bestMarkerInfo                      = d->imagesHash.value(firstIndex.second);
     GeoGroupState bestMarkerGroupState        = getImageState(firstIndex.second);
     TileIndex bestMarkerTileIndex          = firstIndex.first;
 
@@ -425,10 +425,10 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
     {
         const QPair<TileIndex, int> currentIndex = indices.at(i).value<QPair<TileIndex, int> >();
 
-        GPSImageInfo currentMarkerInfo                     = d->imagesHash.value(currentIndex.second);
+        GPSItemInfo currentMarkerInfo                     = d->imagesHash.value(currentIndex.second);
         GeoGroupState currentMarkerGroupState       = getImageState(currentIndex.second);
 
-        if (GPSImageInfoSorter::fitsBetter(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, getGlobalGroupState(), GPSImageInfoSorter::SortOptions(sortKey)))
+        if (GPSItemInfoSorter::fitsBetter(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, getGlobalGroupState(), GPSItemInfoSorter::SortOptions(sortKey)))
         {
             bestMarkerInfo       = currentMarkerInfo;
             bestMarkerGroupState = currentMarkerGroupState;
@@ -452,7 +452,7 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
     QPair<TileIndex, int> indexForPixmap = index.value<QPair<TileIndex, int> >();
 
     QPixmap thumbnail;
-    ImageInfo info(indexForPixmap.second);
+    ItemInfo info(indexForPixmap.second);
     d->thumbnailMap.insert(info.id(), index);
 
     if (d->thumbnailLoadThread->find(info.thumbnailIdentifier(), thumbnail, qMax(size.width() + 2, size.height() + 2)))
@@ -512,7 +512,7 @@ GeoGroupState GPSMarkerTiler::getTileGroupState(const TileIndex& tileIndex)
 /**
  * @brief The marker data is returned from the database in batches. This function takes and unites the batches.
  */
-void GPSMarkerTiler::slotMapImagesJobData(const QList<ImageListerRecord>& records)
+void GPSMarkerTiler::slotMapImagesJobData(const QList<ItemListerRecord>& records)
 {
     if (records.isEmpty())
     {
@@ -536,7 +536,7 @@ void GPSMarkerTiler::slotMapImagesJobData(const QList<ImageListerRecord>& record
         return;
     }
 
-    foreach (const ImageListerRecord &record, records)
+    foreach (const ItemListerRecord &record, records)
     {
         if (record.extraValues.count() < 2)
         {
@@ -544,7 +544,7 @@ void GPSMarkerTiler::slotMapImagesJobData(const QList<ImageListerRecord>& record
             continue;
         }
 
-        GPSImageInfo entry;
+        GPSItemInfo entry;
 
         entry.id           = record.imageID;
         entry.rating       = record.rating;
@@ -590,7 +590,7 @@ void GPSMarkerTiler::slotMapImagesJobResult()
     }
 
     // get the results from the job:
-    const QList<GPSImageInfo> returnedImageInfo = d->jobs.at(foundIndex).dataFromDatabase;
+    const QList<GPSItemInfo> returnedItemInfo = d->jobs.at(foundIndex).dataFromDatabase;
     /// @todo Currently, we ignore the wanted level and just add the images
     //     const int wantedLevel = d->jobs.at(foundIndex).level;
 
@@ -599,24 +599,24 @@ void GPSMarkerTiler::slotMapImagesJobResult()
     d->jobs[foundIndex].jobThread = 0;
     d->jobs.removeAt(foundIndex);
 
-    if (returnedImageInfo.isEmpty())
+    if (returnedItemInfo.isEmpty())
     {
         return;
     }
 
-    for (int i = 0 ; i < returnedImageInfo.count() ; ++i)
+    for (int i = 0 ; i < returnedItemInfo.count() ; ++i)
     {
-        const GPSImageInfo currentImageInfo = returnedImageInfo.at(i);
+        const GPSItemInfo currentItemInfo = returnedItemInfo.at(i);
 
-        if (!currentImageInfo.coordinates.hasCoordinates())
+        if (!currentItemInfo.coordinates.hasCoordinates())
         {
             continue;
         }
 
-        d->imagesHash.insert(currentImageInfo.id, currentImageInfo);
+        d->imagesHash.insert(currentItemInfo.id, currentItemInfo);
 
-        const TileIndex markerTileIndex = TileIndex::fromCoordinates(currentImageInfo.coordinates, TileIndex::MaxLevel);
-        addMarkerToTileAndChildren(currentImageInfo.id, markerTileIndex, static_cast<MyTile*>(rootTile()), 0);
+        const TileIndex markerTileIndex = TileIndex::fromCoordinates(currentItemInfo.coordinates, TileIndex::MaxLevel);
+        addMarkerToTileAndChildren(currentItemInfo.id, markerTileIndex, static_cast<MyTile*>(rootTile()), 0);
     }
 
     emit(signalTilesOrSelectionChanged());
@@ -658,7 +658,7 @@ void GPSMarkerTiler::tileDelete(AbstractMarkerTiler::Tile* const tile)
 void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 {
     const DatabaseFields::Set changes = changeset.changes();
-    //    const DatabaseFields::ImagePositions imagePositionChanges = changes;
+    //    const DatabaseFields::ItemPositions imagePositionChanges = changes;
 
     if (!((changes & DatabaseFields::LatitudeNumber)  ||
           (changes & DatabaseFields::LongitudeNumber) ||
@@ -669,13 +669,13 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 
     foreach (const qlonglong& id, changeset.ids())
     {
-        const ImageInfo newImageInfo(id);
+        const ItemInfo newItemInfo(id);
 
-        if (!newImageInfo.hasCoordinates())
+        if (!newItemInfo.hasCoordinates())
         {
             // the image has no coordinates any more
             // remove it from the tiles and the image list
-            const GPSImageInfo oldInfo                    = d->imagesHash.value(id);
+            const GPSItemInfo oldInfo                    = d->imagesHash.value(id);
             const GeoCoordinates oldCoordinates = oldInfo.coordinates;
             const TileIndex oldTileIndex        = TileIndex::fromCoordinates(oldCoordinates, TileIndex::MaxLevel);
 
@@ -686,11 +686,11 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             continue;
         }
 
-        GeoCoordinates newCoordinates(newImageInfo.latitudeNumber(), newImageInfo.longitudeNumber());
+        GeoCoordinates newCoordinates(newItemInfo.latitudeNumber(), newItemInfo.longitudeNumber());
 
-        if (newImageInfo.hasAltitude())
+        if (newItemInfo.hasAltitude())
         {
-            newCoordinates.setAlt(newImageInfo.altitudeNumber());
+            newCoordinates.setAlt(newItemInfo.altitudeNumber());
         }
 
         if (d->imagesHash.contains(id))
@@ -698,11 +698,11 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             // the image id is known, therefore the image has already been sorted into tiles.
             // We assume that the coordinates of the image have changed.
 
-            const GPSImageInfo oldInfo                    = d->imagesHash.value(id);
+            const GPSItemInfo oldInfo                    = d->imagesHash.value(id);
             const GeoCoordinates oldCoordinates = oldInfo.coordinates;
-            const GPSImageInfo currentImageInfo           = GPSImageInfo::fromIdCoordinatesRatingDateTime(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
+            const GPSItemInfo currentItemInfo           = GPSItemInfo::fromIdCoordinatesRatingDateTime(id, newCoordinates, newItemInfo.rating(), newItemInfo.dateTime());
 
-            d->imagesHash.insert(id, currentImageInfo);
+            d->imagesHash.insert(id, currentItemInfo);
 
             const TileIndex oldTileIndex        = TileIndex::fromCoordinates(oldCoordinates, TileIndex::MaxLevel);
             const TileIndex newTileIndex        = TileIndex::fromCoordinates(newCoordinates, TileIndex::MaxLevel);
@@ -762,10 +762,10 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
         else
         {
             // the image is new, add it to the existing tiles
-            const GPSImageInfo currentImageInfo = GPSImageInfo::fromIdCoordinatesRatingDateTime(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
-            d->imagesHash.insert(id, currentImageInfo);
+            const GPSItemInfo currentItemInfo = GPSItemInfo::fromIdCoordinatesRatingDateTime(id, newCoordinates, newItemInfo.rating(), newItemInfo.dateTime());
+            d->imagesHash.insert(id, currentItemInfo);
 
-            const TileIndex newMarkerTileIndex = TileIndex::fromCoordinates(currentImageInfo.coordinates, TileIndex::MaxLevel);
+            const TileIndex newMarkerTileIndex = TileIndex::fromCoordinates(currentItemInfo.coordinates, TileIndex::MaxLevel);
 
             addMarkerToTileAndChildren(id, newMarkerTileIndex, static_cast<MyTile*>(rootTile()), 0);
         }
@@ -777,7 +777,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 /**
  * @brief Receives notifications from the album model about new items
  */
-void GPSMarkerTiler::slotNewModelData(const QList<ImageInfo>& infoList)
+void GPSMarkerTiler::slotNewModelData(const QList<ItemInfo>& infoList)
 {
     // We do not actually store the data from the model, we just want
     // to know that something was changed.

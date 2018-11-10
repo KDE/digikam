@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "tableview.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
@@ -109,7 +109,7 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
         painter->fillRect(option.rect, option.palette.highlight());
     }
 
-    const ImageInfo info = s->tableViewModel->infoFromItem(item);
+    const ItemInfo info = s->tableViewModel->infoFromItem(item);
 
     if (!info.isNull())
     {
@@ -172,7 +172,7 @@ void ColumnThumbnail::slotThumbnailLoaded(const LoadingDescription& loadingDescr
         return;
     }
 
-    /// @todo Find a way to do this without the ImageFilterModel
+    /// @todo Find a way to do this without the ItemFilterModel
     const QModelIndex imageModelIndex = s->imageModel->indexForPath(loadingDescription.filePath);
 
     if (!imageModelIndex.isValid())

@@ -59,7 +59,7 @@
 #include "digikam_debug.h"
 #include "metaengine.h"
 #include "metadatapanel.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "setuputils.h"
 
 namespace Digikam
@@ -567,9 +567,9 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->writeXMPSidecarBox->setEnabled(MetaEngine::supportXmp());
 
     d->writingModeCombo   = new QComboBox;
-    d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only item only"), MetaEngine::WRITETOSIDECARONLY4READONLYFILES);
-    d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                    MetaEngine::WRITETOSIDECARONLY);
-    d->writingModeCombo->addItem(i18n("Write to item and XMP Sidecar"),                MetaEngine::WRITETOSIDECARANDIMAGE);
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only item only"), MetaEngine::WRITE_TO_SIDECAR_ONLY_FOR_READ_ONLY_FILES);
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                    MetaEngine::WRITE_TO_SIDECAR_ONLY);
+    d->writingModeCombo->addItem(i18n("Write to item and XMP Sidecar"),                MetaEngine::WRITE_TO_SIDECAR_AND_FILE);
     d->writingModeCombo->setToolTip(i18nc("@info:tooltip", "Specify the exact mode of XMP sidecar writing"));
     d->writingModeCombo->setEnabled(false);
 
@@ -664,29 +664,29 @@ void SetupMetadata::setActiveSubTab(int tab)
 
 void SetupMetadata::applySettings()
 {
-    MetadataSettings* const mSettings = MetadataSettings::instance();
+    MetaEngineSettings* const mSettings = MetaEngineSettings::instance();
 
     if (!mSettings)
     {
         return;
     }
 
-    MetadataSettingsContainer set;
+    MetaEngineSettingsContainer set;
 
-    set.rotationBehavior = MetadataSettingsContainer::RotateByInternalFlag;
+    set.rotationBehavior = MetaEngineSettingsContainer::RotateByInternalFlag;
 
     if (d->allowRotateByMetadata->isChecked())
     {
-        set.rotationBehavior |= MetadataSettingsContainer::RotateByMetadataFlag;
+        set.rotationBehavior |= MetaEngineSettingsContainer::RotateByMetadataFlag;
     }
 
     if (d->rotateByContents->isChecked())
     {
-        set.rotationBehavior |= MetadataSettingsContainer::RotateByLosslessRotation;
+        set.rotationBehavior |= MetaEngineSettingsContainer::RotateByLosslessRotation;
 
         if (d->allowLossyRotate->isChecked())
         {
-            set.rotationBehavior |= MetadataSettingsContainer::RotateByLossyRotation;
+            set.rotationBehavior |= MetaEngineSettingsContainer::RotateByLossyRotation;
         }
     }
 
@@ -713,7 +713,7 @@ void SetupMetadata::applySettings()
     }
     else
     {
-        set.metadataWritingMode = MetaEngine::WRITETOIMAGEONLY;
+        set.metadataWritingMode = MetaEngine::WRITE_TO_FILE_ONLY;
     }
 
     set.updateFileTimeStamp   = d->updateFileTimeStampBox->isChecked();
@@ -750,16 +750,16 @@ void SetupMetadata::applySettings()
 
 void SetupMetadata::readSettings()
 {
-    MetadataSettings* const mSettings = MetadataSettings::instance();
+    MetaEngineSettings* const mSettings = MetaEngineSettings::instance();
 
     if (!mSettings)
     {
         return;
     }
 
-    MetadataSettingsContainer set = mSettings->settings();
+    MetaEngineSettingsContainer set = mSettings->settings();
 
-    if (set.rotationBehavior & MetadataSettingsContainer::RotatingPixels)
+    if (set.rotationBehavior & MetaEngineSettingsContainer::RotatingPixels)
     {
         d->rotateByContents->setChecked(true);
     }
@@ -768,8 +768,8 @@ void SetupMetadata::readSettings()
         d->rotateByFlag->setChecked(true);
     }
 
-    d->allowRotateByMetadata->setChecked(set.rotationBehavior & MetadataSettingsContainer::RotateByMetadataFlag);
-    d->allowLossyRotate->setChecked(set.rotationBehavior & MetadataSettingsContainer::RotateByLossyRotation);
+    d->allowRotateByMetadata->setChecked(set.rotationBehavior & MetaEngineSettingsContainer::RotateByMetadataFlag);
+    d->allowLossyRotate->setChecked(set.rotationBehavior & MetaEngineSettingsContainer::RotateByLossyRotation);
 
     d->exifAutoRotateOriginal = set.exifRotate;
     d->exifRotateBox->setChecked(d->exifAutoRotateOriginal);
@@ -791,7 +791,7 @@ void SetupMetadata::readSettings()
     d->rescanImageIfModifiedBox->setChecked(set.rescanImageIfModified);
     d->clearMetadataIfRescanBox->setChecked(set.clearMetadataIfRescan);
 
-    if (set.metadataWritingMode == MetaEngine::WRITETOIMAGEONLY)
+    if (set.metadataWritingMode == MetaEngine::WRITE_TO_FILE_ONLY)
     {
         d->writeXMPSidecarBox->setChecked(false);
     }

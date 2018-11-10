@@ -40,7 +40,7 @@ ShowfotoSortFilterModel::~ShowfotoSortFilterModel()
 {
 }
 
-void ShowfotoSortFilterModel::setSourceShowfotoModel(ShowfotoImageModel* const sourceModel)
+void ShowfotoSortFilterModel::setSourceShowfotoModel(ShowfotoItemModel* const sourceModel)
 {
     if (m_chainedModel)
     {
@@ -52,21 +52,21 @@ void ShowfotoSortFilterModel::setSourceShowfotoModel(ShowfotoImageModel* const s
     }
 }
 
-ShowfotoImageModel* ShowfotoSortFilterModel::sourceShowfotoModel() const
+ShowfotoItemModel* ShowfotoSortFilterModel::sourceShowfotoModel() const
 {
     if (m_chainedModel)
     {
         return m_chainedModel->sourceShowfotoModel();
     }
 
-    return static_cast<ShowfotoImageModel*>(sourceModel());
+    return static_cast<ShowfotoItemModel*>(sourceModel());
 }
 
 void ShowfotoSortFilterModel::setSourceFilterModel(ShowfotoSortFilterModel* const sourceModel)
 {
     if (sourceModel)
     {
-        ShowfotoImageModel* const model = sourceShowfotoModel();
+        ShowfotoItemModel* const model = sourceShowfotoModel();
 
         if (model)
         {
@@ -197,7 +197,7 @@ void ShowfotoSortFilterModel::setSourceModel(QAbstractItemModel* sourceModel)
     DCategorizedSortFilterProxyModel::setSourceModel(sourceModel);
 }
 
-void ShowfotoSortFilterModel::setDirectSourceShowfotoModel(ShowfotoImageModel* const sourceModel)
+void ShowfotoSortFilterModel::setDirectSourceShowfotoModel(ShowfotoItemModel* const sourceModel)
 {
     setSourceModel(sourceModel);
 }
@@ -212,7 +212,7 @@ public:
     ShowfotoFilterModelPrivate()
     {
         q                  = 0;
-        showfotoImageModel = 0;
+        showfotoItemModel = 0;
     }
 
     void init(ShowfotoFilterModel* const _q);
@@ -225,7 +225,7 @@ Q_SIGNALS:
 public:
 
     ShowfotoFilterModel*     q;
-    ShowfotoImageModel*      showfotoImageModel;
+    ShowfotoItemModel*      showfotoItemModel;
     ShowfotoItemSortSettings sorter;
 };
 
@@ -259,7 +259,7 @@ QVariant ShowfotoFilterModel::data(const QModelIndex& index, int role) const
     switch (role)
     {
         case DCategorizedSortFilterProxyModel::CategoryDisplayRole:
-            return categoryIdentifier(d->showfotoImageModel->showfotoItemInfoRef(mapToSource(index)));
+            return categoryIdentifier(d->showfotoItemModel->showfotoItemInfoRef(mapToSource(index)));
 
         case CategorizationModeRole:
             return d->sorter.categorizationMode;
@@ -268,7 +268,7 @@ QVariant ShowfotoFilterModel::data(const QModelIndex& index, int role) const
             return d->sorter.sortRole;
 
         case CategoryFormatRole:
-            return d->showfotoImageModel->showfotoItemInfoRef(mapToSource(index)).mime;
+            return d->showfotoItemModel->showfotoItemInfoRef(mapToSource(index)).mime;
 
         case ShowfotoFilterModelPointerRole:
             return QVariant::fromValue(const_cast<ShowfotoFilterModel*>(this));
@@ -355,31 +355,31 @@ void ShowfotoFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/
     emit showfotoItemInfosAboutToBeRemoved(infos);
 }
 
-void ShowfotoFilterModel::setDirectSourceShowfotoModel(ShowfotoImageModel* const sourceModel)
+void ShowfotoFilterModel::setDirectSourceShowfotoModel(ShowfotoItemModel* const sourceModel)
 {
     Q_D(ShowfotoFilterModel);
 
-    if (d->showfotoImageModel)
+    if (d->showfotoItemModel)
     {
-        //disconnect(d->ShowfotoImageModel, SIGNAL(modelReset()),
+        //disconnect(d->ShowfotoItemModel, SIGNAL(modelReset()),
                            //this, SLOT(slotModelReset()));
         //TODO: slotModelReset(); will be added when implementing filtering options
     }
 
-    d->showfotoImageModel = sourceModel;
+    d->showfotoItemModel = sourceModel;
 
-    if (d->showfotoImageModel)
+    if (d->showfotoItemModel)
     {
         //connect(d, SIGNAL(reAddShowfotoItemInfos(QList<ShowfotoItemInfo>)),
-                //d->showfotoImageModel, SLOT(reAddShowfotoItemInfos(QList<ShowfotoItemInfo>)));
+                //d->showfotoItemModel, SLOT(reAddShowfotoItemInfos(QList<ShowfotoItemInfo>)));
 
         //connect(d, SIGNAL(reAddingFinished()),
-                //d->showfotoImageModel, SLOT(reAddingFinished()));
+                //d->showfotoItemModel, SLOT(reAddingFinished()));
 
-        //TODO: connect(d->showfotoImageModel, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
+        //TODO: connect(d->showfotoItemModel, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
     }
 
-    setSourceModel(d->showfotoImageModel);
+    setSourceModel(d->showfotoItemModel);
 }
 
 int ShowfotoFilterModel::compareCategories(const QModelIndex& left, const QModelIndex& right) const
@@ -396,7 +396,7 @@ int ShowfotoFilterModel::compareCategories(const QModelIndex& left, const QModel
         return -1;
     }
 
-    return compareInfosCategories(d->showfotoImageModel->showfotoItemInfoRef(left), d->showfotoImageModel->showfotoItemInfoRef(right));
+    return compareInfosCategories(d->showfotoItemModel->showfotoItemInfoRef(left), d->showfotoItemModel->showfotoItemInfoRef(right));
 }
 
 bool ShowfotoFilterModel::subSortLessThan(const QModelIndex& left, const QModelIndex& right) const
@@ -413,12 +413,12 @@ bool ShowfotoFilterModel::subSortLessThan(const QModelIndex& left, const QModelI
         return false;
     }
 
-    const ShowfotoItemInfo& leftInfo  = d->showfotoImageModel->showfotoItemInfoRef(left);
-    const ShowfotoItemInfo& rightInfo = d->showfotoImageModel->showfotoItemInfoRef(right);
+    const ShowfotoItemInfo& leftInfo  = d->showfotoItemModel->showfotoItemInfoRef(left);
+    const ShowfotoItemInfo& rightInfo = d->showfotoItemModel->showfotoItemInfoRef(right);
 
     if (leftInfo == rightInfo)
     {
-        return d->sorter.lessThan(left.data(ShowfotoImageModel::ExtraDataRole), right.data(ShowfotoImageModel::ExtraDataRole));
+        return d->sorter.lessThan(left.data(ShowfotoItemModel::ExtraDataRole), right.data(ShowfotoItemModel::ExtraDataRole));
     }
 
     return infosLessThan(leftInfo, rightInfo);
@@ -464,7 +464,7 @@ bool NoDuplicatesShowfotoFilterModel::filterAcceptsRow(int source_row, const QMo
 {
     QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
 
-    if (index.data(ShowfotoImageModel::ExtraDataDuplicateCount).toInt() <= 1)
+    if (index.data(ShowfotoItemModel::ExtraDataDuplicateCount).toInt() <= 1)
     {
         return true;
     }

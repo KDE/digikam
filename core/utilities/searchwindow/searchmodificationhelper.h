@@ -37,7 +37,7 @@ namespace Digikam
 {
 
 class SketchWidget;
-class ImageInfo;
+class ItemInfo;
 
 /**
  * Range of a contiguous dates selection <start date, end date>.
@@ -100,7 +100,7 @@ public:
      * @return the newly created album
      */
     SAlbum* createFuzzySearchFromImage(const QString& name,
-                                       const ImageInfo& image,
+                                       const ItemInfo& image,
                                        float threshold,
                                        float maxThreshold,
                                        QList<int>& targetAlbums,
@@ -170,7 +170,7 @@ public Q_SLOTS:
      *                            user for a new name
      */
     void slotCreateFuzzySearchFromImage(const QString& name,
-                                        const ImageInfo& image,
+                                        const ItemInfo& image,
                                         float threshold,
                                         float maxThreshold,
                                         QList<int>& targetAlbums,

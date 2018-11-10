@@ -32,7 +32,7 @@
 #include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "facetagsiface.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "tagregion.h"
 #include "digikamimagedelegatepriv.h"
 #include "faceutils.h"
@@ -49,7 +49,7 @@ DigikamImageFaceDelegate::~DigikamImageFaceDelegate()
 {
 }
 
-void DigikamImageFaceDelegate::prepareThumbnails(ImageThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
+void DigikamImageFaceDelegate::prepareThumbnails(ItemThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
 {
     //TODO
     DigikamImageDelegate::prepareThumbnails(thumbModel, indexes);
@@ -67,7 +67,7 @@ QPixmap DigikamImageFaceDelegate::thumbnailPixmap(const QModelIndex& index) cons
     // set requested thumbnail detail
     if (rect.isValid())
     {
-        const_cast<QAbstractItemModel*>(index.model())->setData(index, rect, ImageModel::ThumbnailRole);
+        const_cast<QAbstractItemModel*>(index.model())->setData(index, rect, ItemModel::ThumbnailRole);
     }
 
     // parent implementation already resets the thumb size and rect set on model
@@ -95,7 +95,7 @@ QRect DigikamImageFaceDelegate::largerFaceRect(const QModelIndex& index) const
 
 FaceTagsIface DigikamImageFaceDelegate::face(const QModelIndex& index) const
 {
-    QVariant extraData = index.data(ImageModel::ExtraDataRole);
+    QVariant extraData = index.data(ItemModel::ExtraDataRole);
 
     if (extraData.isNull())
     {

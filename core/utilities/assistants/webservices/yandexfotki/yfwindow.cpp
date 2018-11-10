@@ -483,7 +483,7 @@ void YFWindow::slotListPhotosDoneForUpload(const QList <YFPhoto>& photosList)
 
     foreach(const QUrl& url, d->imgList->imageUrls(true))
     {
-        DItemInfo info(d->iface->itemInfo(url.toLocalFile()));
+        DItemInfo info(d->iface->itemInfo(url));
 
         // check if photo alredy uploaded
 
@@ -616,9 +616,9 @@ void YFWindow::updateNextPhoto()
                 {
                     if (d->meta.load(photo.originalUrl()))
                     {
-                        d->meta.setImageDimensions(image.size());
-                        d->meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-                        d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+                        d->meta.setItemDimensions(image.size());
+                        d->meta.setItemOrientation(MetaEngine::ORIENTATION_NORMAL);
+                        d->meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
                         d->meta.save(photo.localUrl(), true);
                         prepared = true;
                     }

@@ -36,7 +36,7 @@ class AddTagsComboBox;
 class AddTagsLineEdit;
 class CheckableAlbumFilterModel;
 class FaceTagsIface;
-class ImageInfo;
+class ItemInfo;
 class TAlbum;
 class TaggingAction;
 class TagModel;
@@ -107,7 +107,7 @@ public:
     void setVisualStyle(VisualStyle style);
     VisualStyle visualStyle()   const;
 
-    ImageInfo info()            const;
+    ItemInfo info()            const;
     QVariant  faceIdentifier()  const;
 
     /// The combo box or line edit in use, if any
@@ -117,7 +117,7 @@ public:
 public Q_SLOTS:
 
     /** The identifying information emitted with the signals */
-    void setUserData(const ImageInfo& info, const QVariant& faceIdentifier = QVariant());
+    void setUserData(const ItemInfo& info, const QVariant& faceIdentifier = QVariant());
 
     /** Sets the suggested (UnconfirmedEditMode) or assigned (ConfirmedMode) tag to be displayed. */
     void setCurrentTag(int tagId);
@@ -134,25 +134,25 @@ Q_SIGNALS:
      * This can be an existing tag, or a new tag, as described by TaggingAction.
      * For convenience, info() and faceIdentifier() are provided.
      */
-    void assigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier);
+    void assigned(const TaggingAction& action, const ItemInfo& info, const QVariant& faceIdentifier);
 
     /**
      * The face has been reject and shall be removed.
      * For convenience, info() and faceIdentifier() are provided.
      */
-    void rejected(const ImageInfo& info, const QVariant& faceIdentifier);
+    void rejected(const ItemInfo& info, const QVariant& faceIdentifier);
 
     /**
      * In ConfirmedMode, this signal is emitted when the user clicked on the label
      */
-    void labelClicked(const ImageInfo& info, const QVariant& faceIdentifier);
+    void labelClicked(const ItemInfo& info, const QVariant& faceIdentifier);
 
     /**
      * An action has been selected. This purely signals user interaction,
      * no fixed decision - mouse hover may be enough to emit this signal.
      * The action may be invalid (user switched back to empty selection).
      */
-    void selected(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier);
+    void selected(const TaggingAction& action, const ItemInfo& info, const QVariant& faceIdentifier);
 
 protected:
 

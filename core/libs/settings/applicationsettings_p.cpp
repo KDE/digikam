@@ -36,8 +36,8 @@
 
 // Local includes
 
-#include "imagefiltersettings.h"
-#include "imagesortsettings.h"
+#include "itemfiltersettings.h"
+#include "itemsortsettings.h"
 #include "thumbnailsize.h"
 
 namespace Digikam
@@ -278,10 +278,10 @@ void ApplicationSettings::Private::init()
     albumCategoryNames.sort();
 
     albumSortRole                        = ApplicationSettings::ByFolder;
-    imageSortOrder                       = ImageSortSettings::SortByFileName;
-    imageSorting                         = ImageSortSettings::AscendingOrder;
-    imageSeparationMode                  = ImageSortSettings::CategoryByAlbum;
-    imageSeparationSortOrder             = ImageSortSettings::AscendingOrder;
+    imageSortOrder                       = ItemSortSettings::SortByFileName;
+    imageSorting                         = ItemSortSettings::AscendingOrder;
+    imageSeparationMode                  = ItemSortSettings::CategoryByAlbum;
+    imageSeparationSortOrder             = ItemSortSettings::AscendingOrder;
 
     itemLeftClickAction                  = ApplicationSettings::ShowPreview;
 
@@ -290,7 +290,7 @@ void ApplicationSettings::Private::init()
     treeviewFont                         = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     sidebarTitleStyle                    = DMultiTabBar::AllIconsText;
 
-    ratingFilterCond                     = ImageFilterSettings::GreaterEqualCondition;
+    ratingFilterCond                     = ItemFilterSettings::GreaterEqualCondition;
 
     showSplash                           = true;
     useTrash                             = true;

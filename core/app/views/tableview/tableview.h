@@ -34,7 +34,7 @@
 #include "dcategorizedsortfilterproxymodel.h"
 #include "digikam_export.h"
 #include "imageviewutilities.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "statesavingobject.h"
 
 class QMenu;
@@ -47,7 +47,7 @@ namespace Digikam
 {
 
 class Album;
-class ImageFilterModel;
+class ItemFilterModel;
 class ThumbnailSize;
 class TableViewShared;
 
@@ -65,20 +65,20 @@ public:
 
     void setThumbnailSize(const ThumbnailSize& size);
     ThumbnailSize getThumbnailSize()                                     const;
-    ImageInfo currentInfo()                                              const;
+    ItemInfo currentInfo()                                              const;
     Album* currentAlbum()                                                const;
     int numberOfSelectedItems()                                          const;
-    ImageInfo nextInfo()                                                 const;
-    ImageInfo previousInfo()                                             const;
-    ImageInfo deepRowImageInfo(const int rowNumber, const bool relative) const;
+    ItemInfo nextInfo()                                                 const;
+    ItemInfo previousInfo()                                             const;
+    ItemInfo deepRowItemInfo(const int rowNumber, const bool relative) const;
 
     void selectAll();
     void clearSelection();
     void invertSelection();
 
-    ImageInfoList allImageInfos(bool grouping = false)                        const;
-    ImageInfoList selectedImageInfos(bool grouping = false)             const;
-    ImageInfoList selectedImageInfosCurrentFirst(bool grouping = false) const;
+    ItemInfoList allItemInfos(bool grouping = false)                        const;
+    ItemInfoList selectedItemInfos(bool grouping = false)             const;
+    ItemInfoList selectedItemInfosCurrentFirst(bool grouping = false) const;
     bool          allNeedGroupResolving(const ApplicationSettings::OperationType type) const;
     bool          selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const;
 
@@ -108,7 +108,7 @@ protected Q_SLOTS:
 
 Q_SIGNALS:
 
-    void signalPreviewRequested(const ImageInfo& info);
+    void signalPreviewRequested(const ItemInfo& info);
     void signalZoomInStep();
     void signalZoomOutStep();
     void signalPopupTagsView();
@@ -116,9 +116,9 @@ Q_SIGNALS:
     void signalInsertSelectedToExistingQueue(int queue);
     void signalShowContextMenu(QContextMenuEvent* event,
                                const QList<QAction*>& actions);
-    void signalShowContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info,
+    void signalShowContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info,
                                      const QList<QAction*>& actions,
-                                     ImageFilterModel* filterModel = 0);
+                                     ItemFilterModel* filterModel = 0);
 
 private:
 

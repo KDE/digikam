@@ -54,8 +54,8 @@
 namespace Digikam
 {
 
-class ImageAlbumModel;
-class ImageFilterModel;
+class ItemAlbumModel;
+class ItemFilterModel;
 
 class Q_DECL_HIDDEN TableView::Private
 {
@@ -84,8 +84,8 @@ TableView::TableView(QItemSelectionModel* const selectionModel,
     s->isActive                      = false;
     s->tableView                     = this;
     s->thumbnailLoadThread           = new ThumbnailLoadThread(this);
-    s->imageFilterModel              = dynamic_cast<ImageFilterModel*>(imageFilterModel);
-    s->imageModel                    = dynamic_cast<ImageModel*>(imageFilterModel->sourceModel());
+    s->imageFilterModel              = dynamic_cast<ItemFilterModel*>(imageFilterModel);
+    s->imageModel                    = dynamic_cast<ItemModel*>(imageFilterModel->sourceModel());
     s->imageFilterSelectionModel     = selectionModel;
     s->columnFactory                 = new TableViewColumnFactory(s.data(), this);
 
@@ -169,7 +169,7 @@ void TableView::doSaveState()
 
 void TableView::slotItemActivated(const QModelIndex& tableViewIndex)
 {
-    const ImageInfo info = s->tableViewModel->imageInfo(tableViewIndex);
+    const ItemInfo info = s->tableViewModel->imageInfo(tableViewIndex);
 
     if (info.isNull())
     {
@@ -184,12 +184,12 @@ void TableView::slotItemActivated(const QModelIndex& tableViewIndex)
         }
         else
         {
-            d->imageViewUtilities->openInfos(info, allImageInfos(), currentAlbum());
+            d->imageViewUtilities->openInfos(info, allItemInfos(), currentAlbum());
         }
     }
     else
     {
-        d->imageViewUtilities->openInfosWithDefaultApplication(QList<ImageInfo>() << info);
+        d->imageViewUtilities->openInfosWithDefaultApplication(QList<ItemInfo>() << info);
     }
 }
 
@@ -239,7 +239,7 @@ ThumbnailSize TableView::getThumbnailSize() const
 
 Album* TableView::currentAlbum() const
 {
-    ImageAlbumModel* const albumModel = qobject_cast<ImageAlbumModel*>(s->imageModel);
+    ItemAlbumModel* const albumModel = qobject_cast<ItemAlbumModel*>(s->imageModel);
 
     if (!albumModel)
     {
@@ -260,34 +260,34 @@ void TableView::slotPaste()
     dragDropViewImplementation->paste();
 }
 
-ImageInfo TableView::currentInfo() const
+ItemInfo TableView::currentInfo() const
 {
     return s->tableViewModel->imageInfo(s->tableViewSelectionModel->currentIndex());
 }
 
-ImageInfoList TableView::allImageInfos(bool grouping) const
+ItemInfoList TableView::allItemInfos(bool grouping) const
 {
     if (grouping)
     {
-        return s->treeView->resolveGrouping(ImageInfoList(s->tableViewModel->allImageInfo()));
+        return s->treeView->resolveGrouping(ItemInfoList(s->tableViewModel->allItemInfo()));
     }
 
-    return ImageInfoList(s->tableViewModel->allImageInfo());
+    return ItemInfoList(s->tableViewModel->allItemInfo());
 }
 
 bool TableView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
 {
-    return s->treeView->needGroupResolving(type, allImageInfos());
+    return s->treeView->needGroupResolving(type, allItemInfos());
 }
 
 bool TableView::selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const
 {
-    return s->treeView->needGroupResolving(type, selectedImageInfos());
+    return s->treeView->needGroupResolving(type, selectedItemInfos());
 }
 
 void TableView::slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMode)
 {
-    const ImageInfoList infoList = selectedImageInfos(true);
+    const ItemInfoList infoList = selectedItemInfos(true);
 
     /// @todo Update parameter naming for deleteImages
     if (d->imageViewUtilities->deleteImages(infoList, deleteMode))
@@ -298,7 +298,7 @@ void TableView::slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMo
 
 void TableView::slotDeleteSelectedWithoutConfirmation(const ImageViewUtilities::DeleteMode deleteMode)
 {
-    const ImageInfoList infoList = selectedImageInfos(true);
+    const ItemInfoList infoList = selectedItemInfos(true);
 
     d->imageViewUtilities->deleteImagesDirectly(infoList, deleteMode);
     slotAwayFromSelection();
@@ -382,7 +382,7 @@ void TableView::slotGoToRow(const int rowNumber, const bool relativeMove)
     }
 }
 
-ImageInfo TableView::deepRowImageInfo(const int rowNumber, const bool relative) const
+ItemInfo TableView::deepRowItemInfo(const int rowNumber, const bool relative) const
 {
     int targetRowNumber = rowNumber;
 
@@ -392,7 +392,7 @@ ImageInfo TableView::deepRowImageInfo(const int rowNumber, const bool relative) 
 
         if (!currentTableViewIndex.isValid())
         {
-            return ImageInfo();
+            return ItemInfo();
         }
 
         const int currentDeepRowNumber = s->tableViewModel->indexToDeepRowNumber(currentTableViewIndex);
@@ -403,7 +403,7 @@ ImageInfo TableView::deepRowImageInfo(const int rowNumber, const bool relative) 
     return s->tableViewModel->imageInfo(targetIndex);
 }
 
-ImageInfo TableView::nextInfo() const
+ItemInfo TableView::nextInfo() const
 {
     const QModelIndex cIndex       = s->tableViewSelectionModel->currentIndex();
     const int currentDeepRowNumber = s->tableViewModel->indexToDeepRowNumber(cIndex);
@@ -411,14 +411,14 @@ ImageInfo TableView::nextInfo() const
 
     if (nextDeepRowNumber>=s->tableViewModel->deepRowCount())
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
     const QModelIndex nextDeepRowIndex = s->tableViewModel->deepRowIndex(nextDeepRowNumber);
     return s->tableViewModel->imageInfo(nextDeepRowIndex);
 }
 
-ImageInfo TableView::previousInfo() const
+ItemInfo TableView::previousInfo() const
 {
     const QModelIndex cIndex        = s->tableViewSelectionModel->currentIndex();
     const int currentDeepRowNumber  = s->tableViewModel->indexToDeepRowNumber(cIndex);
@@ -426,7 +426,7 @@ ImageInfo TableView::previousInfo() const
 
     if (previousDeepRowNumber < 0)
     {
-        return ImageInfo();
+        return ItemInfo();
     }
 
     const QModelIndex previousDeepRowIndex = s->tableViewModel->deepRowIndex(previousDeepRowNumber);
@@ -565,9 +565,9 @@ void TableView::slotSetActive(const bool isActive)
     }
 }
 
-ImageInfoList TableView::selectedImageInfos(bool grouping) const
+ItemInfoList TableView::selectedItemInfos(bool grouping) const
 {
-    ImageInfoList infos = ImageInfoList(s->tableViewModel->imageInfos(s->tableViewSelectionModel->selectedRows()));
+    ItemInfoList infos = ItemInfoList(s->tableViewModel->imageInfos(s->tableViewSelectionModel->selectedRows()));
 
     if (grouping)
     {
@@ -577,7 +577,7 @@ ImageInfoList TableView::selectedImageInfos(bool grouping) const
     return infos;
 }
 
-ImageInfoList TableView::selectedImageInfosCurrentFirst(bool grouping) const
+ItemInfoList TableView::selectedItemInfosCurrentFirst(bool grouping) const
 {
     QModelIndexList indexes   = s->tableViewSelectionModel->selectedRows();
     const QModelIndex current = s->tableViewModel->toCol0(s->tableViewSelectionModel->currentIndex());
@@ -595,15 +595,15 @@ ImageInfoList TableView::selectedImageInfosCurrentFirst(bool grouping) const
 
     if (grouping)
     {
-        return s->treeView->resolveGrouping(ImageInfoList(s->tableViewModel->imageInfos(indexes)));
+        return s->treeView->resolveGrouping(ItemInfoList(s->tableViewModel->imageInfos(indexes)));
     }
 
-    return ImageInfoList(s->tableViewModel->imageInfos(indexes));
+    return ItemInfoList(s->tableViewModel->imageInfos(indexes));
 }
 
 void TableView::rename()
 {
-    ImageInfoList infos = selectedImageInfos();
+    ItemInfoList infos = selectedItemInfos();
 
     if (s->treeView->needGroupResolving(ApplicationSettings::Rename, infos))
     {

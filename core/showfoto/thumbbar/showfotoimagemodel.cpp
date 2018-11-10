@@ -35,7 +35,7 @@
 namespace ShowFoto
 {
 
-class Q_DECL_HIDDEN ShowfotoImageModel::Private
+class Q_DECL_HIDDEN ShowfotoItemModel::Private
 {
 public:
 
@@ -73,23 +73,23 @@ public:
 
 // ----------------------------------------------------------------------------------------------------
 
-ShowfotoImageModel::ShowfotoImageModel(QObject* const parent)
+ShowfotoItemModel::ShowfotoItemModel(QObject* const parent)
     : QAbstractListModel(parent),
       d(new Private)
 {
 }
 
-ShowfotoImageModel::~ShowfotoImageModel()
+ShowfotoItemModel::~ShowfotoItemModel()
 {
     delete d;
 }
 
-bool ShowfotoImageModel::isEmpty() const
+bool ShowfotoItemModel::isEmpty() const
 {
     return d->infos.isEmpty();
 }
 
-ShowfotoItemInfo ShowfotoImageModel::showfotoItemInfo(const QModelIndex& index) const
+ShowfotoItemInfo ShowfotoItemModel::showfotoItemInfo(const QModelIndex& index) const
 {
     if (!d->isValid(index))
     {
@@ -99,12 +99,12 @@ ShowfotoItemInfo ShowfotoImageModel::showfotoItemInfo(const QModelIndex& index) 
     return d->infos.at(index.row());
 }
 
-ShowfotoItemInfo& ShowfotoImageModel::showfotoItemInfoRef(const QModelIndex& index) const
+ShowfotoItemInfo& ShowfotoItemModel::showfotoItemInfoRef(const QModelIndex& index) const
 {
     return d->infos[index.row()];
 }
 
-QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos(const QList<QModelIndex>& indexes) const
+QList<ShowfotoItemInfo> ShowfotoItemModel::showfotoItemInfos(const QList<QModelIndex>& indexes) const
 {
     QList<ShowfotoItemInfo> infos;
 
@@ -116,7 +116,7 @@ QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos(const QList<QModel
     return infos;
 }
 
-ShowfotoItemInfo ShowfotoImageModel::showfotoItemInfo(int row) const
+ShowfotoItemInfo ShowfotoItemModel::showfotoItemInfo(int row) const
 {
     if (row >= d->infos.size())
     {
@@ -126,22 +126,22 @@ ShowfotoItemInfo ShowfotoImageModel::showfotoItemInfo(int row) const
     return d->infos.at(row);
 }
 
-ShowfotoItemInfo& ShowfotoImageModel::showfotoItemInfoRef(int row) const
+ShowfotoItemInfo& ShowfotoItemModel::showfotoItemInfoRef(int row) const
 {
     return d->infos[row];
 }
 
-QModelIndex ShowfotoImageModel::indexForShowfotoItemInfo(const ShowfotoItemInfo& info) const
+QModelIndex ShowfotoItemModel::indexForShowfotoItemInfo(const ShowfotoItemInfo& info) const
 {
     return indexForUrl(info.url);
 }
 
-QList<QModelIndex> ShowfotoImageModel::indexesForShowfotoItemInfo(const ShowfotoItemInfo& info) const
+QList<QModelIndex> ShowfotoItemModel::indexesForShowfotoItemInfo(const ShowfotoItemInfo& info) const
 {
     return indexesForUrl(info.url);
 }
 
-QModelIndex ShowfotoImageModel::indexForShowfotoItemId(qlonglong id) const
+QModelIndex ShowfotoItemModel::indexForShowfotoItemId(qlonglong id) const
 {
     int index = d->idHash.value(id, 0);
 
@@ -154,15 +154,15 @@ QModelIndex ShowfotoImageModel::indexForShowfotoItemId(qlonglong id) const
 }
 
 // static method
-ShowfotoItemInfo ShowfotoImageModel::retrieveShowfotoItemInfo(const QModelIndex& index)
+ShowfotoItemInfo ShowfotoItemModel::retrieveShowfotoItemInfo(const QModelIndex& index)
 {
     if (!index.isValid())
     {
         return ShowfotoItemInfo();
     }
 
-    ShowfotoImageModel* const model = index.data(ShowfotoImageModelPointerRole).value<ShowfotoImageModel*>();
-    int row                         = index.data(ShowfotoImageModelInternalId).toInt();
+    ShowfotoItemModel* const model = index.data(ShowfotoItemModelPointerRole).value<ShowfotoItemModel*>();
+    int row                         = index.data(ShowfotoItemModelInternalId).toInt();
 
     if (!model)
     {
@@ -172,7 +172,7 @@ ShowfotoItemInfo ShowfotoImageModel::retrieveShowfotoItemInfo(const QModelIndex&
     return model->showfotoItemInfo(row);
 }
 
-QModelIndex ShowfotoImageModel::indexForUrl(const QUrl& fileUrl) const
+QModelIndex ShowfotoItemModel::indexForUrl(const QUrl& fileUrl) const
 {
         const int size = d->infos.size();
 
@@ -187,7 +187,7 @@ QModelIndex ShowfotoImageModel::indexForUrl(const QUrl& fileUrl) const
     return QModelIndex();
 }
 
-QList<QModelIndex> ShowfotoImageModel::indexesForUrl(const QUrl& fileUrl) const
+QList<QModelIndex> ShowfotoItemModel::indexesForUrl(const QUrl& fileUrl) const
 {
         QList<QModelIndex> indexes;
         const int          size = d->infos.size();
@@ -203,7 +203,7 @@ QList<QModelIndex> ShowfotoImageModel::indexesForUrl(const QUrl& fileUrl) const
         return indexes;
 }
 
-ShowfotoItemInfo ShowfotoImageModel::showfotoItemInfo(const QUrl& fileUrl) const
+ShowfotoItemInfo ShowfotoItemModel::showfotoItemInfo(const QUrl& fileUrl) const
 {
         foreach (const ShowfotoItemInfo& info, d->infos)
         {
@@ -216,7 +216,7 @@ ShowfotoItemInfo ShowfotoImageModel::showfotoItemInfo(const QUrl& fileUrl) const
     return ShowfotoItemInfo();
 }
 
-QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos(const QUrl& fileUrl) const
+QList<ShowfotoItemInfo> ShowfotoItemModel::showfotoItemInfos(const QUrl& fileUrl) const
 {
     QList<ShowfotoItemInfo> infos;
 
@@ -232,12 +232,12 @@ QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos(const QUrl& fileUr
     return infos;
 }
 
-void ShowfotoImageModel::addShowfotoItemInfo(const ShowfotoItemInfo& info)
+void ShowfotoItemModel::addShowfotoItemInfo(const ShowfotoItemInfo& info)
 {
     addShowfotoItemInfos(QList<ShowfotoItemInfo>() << info);
 }
 
-void ShowfotoImageModel::addShowfotoItemInfos(const QList<ShowfotoItemInfo>& infos)
+void ShowfotoItemModel::addShowfotoItemInfos(const QList<ShowfotoItemInfo>& infos)
 {
     if (infos.isEmpty())
     {
@@ -248,12 +248,12 @@ void ShowfotoImageModel::addShowfotoItemInfos(const QList<ShowfotoItemInfo>& inf
 
 }
 
-void ShowfotoImageModel::addShowfotoItemInfoSynchronously(const ShowfotoItemInfo& info)
+void ShowfotoItemModel::addShowfotoItemInfoSynchronously(const ShowfotoItemInfo& info)
 {
     addShowfotoItemInfosSynchronously(QList<ShowfotoItemInfo>() << info);
 }
 
-void ShowfotoImageModel::addShowfotoItemInfosSynchronously(const QList<ShowfotoItemInfo>& infos)
+void ShowfotoItemModel::addShowfotoItemInfosSynchronously(const QList<ShowfotoItemInfo>& infos)
 {
     if (infos.isEmpty())
     {
@@ -264,7 +264,7 @@ void ShowfotoImageModel::addShowfotoItemInfosSynchronously(const QList<ShowfotoI
     emit processAdded(infos);
 }
 
-void ShowfotoImageModel::clearShowfotoItemInfos()
+void ShowfotoItemModel::clearShowfotoItemInfos()
 {
     beginResetModel();
 
@@ -278,23 +278,23 @@ void ShowfotoImageModel::clearShowfotoItemInfos()
     endResetModel();
 }
 
-void ShowfotoImageModel::setShowfotoItemInfos(const QList<ShowfotoItemInfo>& infos)
+void ShowfotoItemModel::setShowfotoItemInfos(const QList<ShowfotoItemInfo>& infos)
 {
     clearShowfotoItemInfos();
     addShowfotoItemInfos(infos);
 }
 
-QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos() const
+QList<ShowfotoItemInfo> ShowfotoItemModel::showfotoItemInfos() const
 {
     return d->infos;
 }
 
-bool ShowfotoImageModel::hasImage(const ShowfotoItemInfo& info) const
+bool ShowfotoItemModel::hasImage(const ShowfotoItemInfo& info) const
 {
     return d->fileUrlHash.contains(info.url.toDisplayString());
 }
 
-void ShowfotoImageModel::emitDataChangedForAll()
+void ShowfotoItemModel::emitDataChangedForAll()
 {
     if (d->infos.isEmpty())
     {
@@ -306,7 +306,7 @@ void ShowfotoImageModel::emitDataChangedForAll()
     emit dataChanged(first, last);
 }
 
-void ShowfotoImageModel::emitDataChangedForSelections(const QItemSelection& selection)
+void ShowfotoItemModel::emitDataChangedForSelections(const QItemSelection& selection)
 {
     if (!selection.isEmpty())
     {
@@ -317,7 +317,7 @@ void ShowfotoImageModel::emitDataChangedForSelections(const QItemSelection& sele
     }
 }
 
-void ShowfotoImageModel::appendInfos(const QList<ShowfotoItemInfo>& infos)
+void ShowfotoItemModel::appendInfos(const QList<ShowfotoItemInfo>& infos)
 {
     if (infos.isEmpty())
     {
@@ -327,18 +327,18 @@ void ShowfotoImageModel::appendInfos(const QList<ShowfotoItemInfo>& infos)
     publiciseInfos(infos);
 }
 
-void ShowfotoImageModel::reAddShowfotoItemInfos(ShowfotoItemInfoList& infos)
+void ShowfotoItemModel::reAddShowfotoItemInfos(ShowfotoItemInfoList& infos)
 {
     publiciseInfos(infos);
 }
 
-void ShowfotoImageModel::reAddingFinished()
+void ShowfotoItemModel::reAddingFinished()
 {
     d->reAdding = false;
     //cleanSituationChecks();
 }
 
-void ShowfotoImageModel::slotFileDeleted(const QString& folder, const QString& file, bool status)
+void ShowfotoItemModel::slotFileDeleted(const QString& folder, const QString& file, bool status)
 {
     Q_UNUSED(status)
 
@@ -346,12 +346,12 @@ void ShowfotoImageModel::slotFileDeleted(const QString& folder, const QString& f
     //removeShowfotoItemInfo(info);
 }
 
-void ShowfotoImageModel::slotFileUploaded(const ShowfotoItemInfo& info)
+void ShowfotoItemModel::slotFileUploaded(const ShowfotoItemInfo& info)
 {
     addShowfotoItemInfo(info);
 }
 
-void ShowfotoImageModel::publiciseInfos(const QList<ShowfotoItemInfo>& infos)
+void ShowfotoItemModel::publiciseInfos(const QList<ShowfotoItemInfo>& infos)
 {
     if (infos.isEmpty())
     {
@@ -413,12 +413,12 @@ static bool pairsContain(const List& list, T value)
     return false;
 }
 
-void ShowfotoImageModel::removeIndex(const QModelIndex& index)
+void ShowfotoItemModel::removeIndex(const QModelIndex& index)
 {
     removeIndexs(QList<QModelIndex>() << index);
 }
 
-void ShowfotoImageModel::removeIndexs(const QList<QModelIndex>& indexes)
+void ShowfotoItemModel::removeIndexs(const QList<QModelIndex>& indexes)
 {
     QList<int> indexesList;
 
@@ -438,12 +438,12 @@ void ShowfotoImageModel::removeIndexs(const QList<QModelIndex>& indexes)
     removeRowPairs(toContiguousPairs(indexesList));
 }
 
-void ShowfotoImageModel::setSendRemovalSignals(bool send)
+void ShowfotoItemModel::setSendRemovalSignals(bool send)
 {
     d->sendRemovalSignals = send;
 }
 
-void ShowfotoImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
+void ShowfotoItemModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
 {
     if (toRemove.isEmpty())
     {
@@ -531,7 +531,7 @@ void ShowfotoImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
     }
 }
 
-QList<QPair<int, int> > ShowfotoImageModel::toContiguousPairs(const QList<int>& unsorted)
+QList<QPair<int, int> > ShowfotoItemModel::toContiguousPairs(const QList<int>& unsorted)
 {
     // Take the given indices and return them as contiguous pairs [begin, end]
 
@@ -569,7 +569,7 @@ QList<QPair<int, int> > ShowfotoImageModel::toContiguousPairs(const QList<int>& 
 
 // ------------ QAbstractItemModel implementation -------------
 
-int ShowfotoImageModel::rowCount(const QModelIndex& parent) const
+int ShowfotoItemModel::rowCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
     {
@@ -579,7 +579,7 @@ int ShowfotoImageModel::rowCount(const QModelIndex& parent) const
     return d->infos.size();
 }
 
-Qt::ItemFlags ShowfotoImageModel::flags(const QModelIndex& index) const
+Qt::ItemFlags ShowfotoItemModel::flags(const QModelIndex& index) const
 {
     if (!d->isValid(index))
     {
@@ -593,7 +593,7 @@ Qt::ItemFlags ShowfotoImageModel::flags(const QModelIndex& index) const
     return f;
 }
 
-QModelIndex ShowfotoImageModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex ShowfotoItemModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (column != 0 || row < 0 || parent.isValid() || row >= d->infos.size())
     {
@@ -603,7 +603,7 @@ QModelIndex ShowfotoImageModel::index(int row, int column, const QModelIndex& pa
     return createIndex(row, 0);
 }
 
-QVariant ShowfotoImageModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant ShowfotoItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     Q_UNUSED(section)
     Q_UNUSED(orientation)
@@ -612,7 +612,7 @@ QVariant ShowfotoImageModel::headerData(int section, Qt::Orientation orientation
     return QVariant();
 }
 
-QVariant ShowfotoImageModel::data(const QModelIndex& index, int role) const
+QVariant ShowfotoItemModel::data(const QModelIndex& index, int role) const
 {
     if (!d->isValid(index))
     {
@@ -626,11 +626,11 @@ QVariant ShowfotoImageModel::data(const QModelIndex& index, int role) const
             return d->infos.at(index.row()).name;
             break;
 
-        case ShowfotoImageModelPointerRole:
-            return QVariant::fromValue(const_cast<ShowfotoImageModel*>(this));
+        case ShowfotoItemModelPointerRole:
+            return QVariant::fromValue(const_cast<ShowfotoItemModel*>(this));
             break;
 
-        case ShowfotoImageModelInternalId:
+        case ShowfotoItemModelInternalId:
             return index.row();
             break;
     }

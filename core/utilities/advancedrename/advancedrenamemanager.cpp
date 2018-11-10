@@ -42,7 +42,7 @@
 #include "parser.h"
 #include "defaultrenameparser.h"
 #include "importrenameparser.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace Digikam
 {

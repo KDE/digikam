@@ -51,14 +51,14 @@ public:
 UndoMetadataContainer UndoMetadataContainer::fromImage(const DImg& img)
 {
     UndoMetadataContainer container;
-    container.history = img.getImageHistory();
+    container.history = img.getItemHistory();
     container.profile = img.getIccProfile();
     return container;
 }
 
 void UndoMetadataContainer::toImage(DImg& img) const
 {
-    img.setImageHistory(history);
+    img.setItemHistory(history);
     img.setIccProfile(profile);
 }
 

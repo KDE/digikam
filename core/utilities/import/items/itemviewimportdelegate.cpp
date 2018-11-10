@@ -39,10 +39,10 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 #include "thememanager.h"
-#include "imagescanner.h"
-#include "imagepropertiestab.h"
+#include "itemscanner.h"
+#include "itempropertiestab.h"
 #include "camiteminfo.h"
 #include "colorlabelwidget.h"
 #include "ratingwidget.h"
@@ -219,13 +219,13 @@ QAbstractItemDelegate* ItemViewImportDelegate::asDelegate()
 
 void ItemViewImportDelegate::overlayDestroyed(QObject* o)
 {
-    ImageDelegateOverlayContainer::overlayDestroyed(o);
+    ItemDelegateOverlayContainer::overlayDestroyed(o);
 }
 
 void ItemViewImportDelegate::mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index)
 {
-    // 3-way indirection AbstractImportItemDelegate -> ItemViewImportDelegate -> ImageDelegateOverlayContainer
-    ImageDelegateOverlayContainer::mouseMoved(e, visualRect, index);
+    // 3-way indirection AbstractImportItemDelegate -> ItemViewImportDelegate -> ItemDelegateOverlayContainer
+    ItemDelegateOverlayContainer::mouseMoved(e, visualRect, index);
 }
 
 void ItemViewImportDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
@@ -324,7 +324,7 @@ void ItemViewImportDelegate::drawImageFormat(QPainter* p, const QRect& r, const 
     if (!mime.isEmpty() && !r.isNull())
     {
         QString type = mime.split(QLatin1Char('/')).at(1);
-        type         = ImageScanner::formatToString(type);
+        type         = ItemScanner::formatToString(type);
 
         p->save();
 
@@ -377,7 +377,7 @@ void ItemViewImportDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong
     Q_D(const ItemViewImportDelegate);
 
     p->setFont(d->fontXtra);
-    p->drawText(r, Qt::AlignCenter, ImagePropertiesTab::humanReadableBytesCount(bytes));
+    p->drawText(r, Qt::AlignCenter, ItemPropertiesTab::humanReadableBytesCount(bytes));
 }
 
 void ItemViewImportDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,

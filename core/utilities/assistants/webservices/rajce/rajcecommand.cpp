@@ -94,9 +94,9 @@ PreparedImage s_prepareImageForUpload(const QString& saveDir,
 
     if (meta.load(imagePath))
     {
-        meta.setImageDimensions(image.size());
-        meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-        meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+        meta.setItemDimensions(image.size());
+        meta.setItemOrientation(MetaEngine::ORIENTATION_NORMAL);
+        meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
         meta.save(ret.scaledImagePath, true);
     }
 

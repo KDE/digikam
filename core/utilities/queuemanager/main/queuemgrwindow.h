@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "setup.h"
 #include "dhistoryview.h"
 #include "dxmlguiwindow.h"
@@ -60,9 +60,9 @@ public:
     static bool            queueManagerWindowCreated();
 
     void addNewQueue();
-    void loadImageInfos(const ImageInfoList& list, int queueId);
-    void loadImageInfosToCurrentQueue(const ImageInfoList& list);
-    void loadImageInfosToNewQueue(const ImageInfoList& list);
+    void loadItemInfos(const ItemInfoList& list, int queueId);
+    void loadItemInfosToCurrentQueue(const ItemInfoList& list);
+    void loadItemInfosToNewQueue(const ItemInfoList& list);
     void refreshView();
     void applySettings();
 

@@ -44,7 +44,7 @@ public:
     explicit DigikamImageFaceDelegate(ImageCategorizedView* const parent);
     ~DigikamImageFaceDelegate();
 
-    virtual void prepareThumbnails(ImageThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
+    virtual void prepareThumbnails(ItemThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
     QRect faceRect(const QModelIndex& index) const;
     QRect largerFaceRect(const QModelIndex& index) const;
 

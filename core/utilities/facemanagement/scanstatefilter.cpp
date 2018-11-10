@@ -38,7 +38,7 @@
 
 #include "digikam_debug.h"
 #include "loadingdescription.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "tagscache.h"
 #include "threadmanager.h"
 #include "facebenchmarkers.h"
@@ -57,7 +57,7 @@ ScanStateFilter::ScanStateFilter(FacePipeline::FilterMode mode, FacePipeline::Pr
             this, SLOT(dispatch()));
 }
 
-FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
+FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ItemInfo& info)
 {
     FaceUtils utils;
 
@@ -120,7 +120,7 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
     return FacePipelineExtendedPackage::Ptr();
 }
 
-void ScanStateFilter::process(const QList<ImageInfo>& infos)
+void ScanStateFilter::process(const QList<ItemInfo>& infos)
 {
     QMutexLocker lock(threadMutex());
     toFilter << infos;
@@ -128,7 +128,7 @@ void ScanStateFilter::process(const QList<ImageInfo>& infos)
     start(lock);
 }
 
-void ScanStateFilter::process(const ImageInfo& info)
+void ScanStateFilter::process(const ItemInfo& info)
 {
     QMutexLocker lock(threadMutex());
     toFilter << info;
@@ -140,7 +140,7 @@ void ScanStateFilter::run()
     while (runningFlag())
     {
         // get todo list
-        QList<ImageInfo> todo;
+        QList<ItemInfo> todo;
         {
             QMutexLocker lock(threadMutex());
 
@@ -159,9 +159,9 @@ void ScanStateFilter::run()
         if (!todo.isEmpty())
         {
             QList<FacePipelineExtendedPackage::Ptr> send;
-            QList<ImageInfo> skip;
+            QList<ItemInfo> skip;
 
-            foreach (const ImageInfo& info, todo)
+            foreach (const ItemInfo& info, todo)
             {
                 FacePipelineExtendedPackage::Ptr package = filter(info);
 
@@ -192,7 +192,7 @@ void ScanStateFilter::dispatch()
 {
     QList<FacePipelineExtendedPackage::Ptr> send;
 
-    QList<ImageInfo> skip;
+    QList<ItemInfo> skip;
     {
         QMutexLocker lock(threadMutex());
         send = toSend;

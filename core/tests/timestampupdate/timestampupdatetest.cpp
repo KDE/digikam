@@ -35,8 +35,8 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "collectionscanner.h"
-#include "imageinfo.h"
-#include "metadatasettings.h"
+#include "iteminfo.h"
+#include "metaenginesettings.h"
 
 const QString originalImageFolder(QFINDTESTDATA("data/"));
 const QString originalImageFile(QFINDTESTDATA("data/1.jpg"));
@@ -89,7 +89,7 @@ void TimeStampUpdateTest::initTestCase()
 
     foreach(const QString& file, readOnlyImages)
     {
-        ids << ImageInfo::fromLocalFile(file).id();
+        ids << ItemInfo::fromLocalFile(file).id();
     }
 
     QVERIFY(!ids.contains(-1));
@@ -110,7 +110,7 @@ void TimeStampUpdateTest::cleanupTestCase()
 void TimeStampUpdateTest::cleanup()
 {
     DMetadata meta;
-    meta.setMetadataWritingMode(MetaEngine::WRITETOIMAGEONLY);
+    meta.setMetadataWritingMode(MetaEngine::WRITE_TO_FILE_ONLY);
     meta.setUpdateFileTimeStamp(true);
     meta.load(originalImageFile);
     meta.removeExifTag("Exif.Image.Model");
@@ -135,10 +135,10 @@ void TimeStampUpdateTest::cleanup()
 void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
 {
     // Setup metadata settings
-    MetadataSettingsContainer set;
+    MetaEngineSettingsContainer set;
     set.updateFileTimeStamp   = true; // Default value
     set.rescanImageIfModified = true;
-    MetadataSettings::instance()->setSettings(set);
+    MetaEngineSettings::instance()->setSettings(set);
 
     // Load the test image and verify that it's there
     QFileInfo originalFileInfo(originalImageFile);
@@ -150,7 +150,7 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
 
     // Verify that Exif.Image.Model in image file is empty
     DMetadata meta;
-    meta.setMetadataWritingMode(MetaEngine::WRITETOIMAGEONLY);
+    meta.setMetadataWritingMode(MetaEngine::WRITE_TO_FILE_ONLY);
     meta.setUpdateFileTimeStamp(true);
     meta.load(originalImageFile);
     QString model = meta.getExifTagString("Exif.Image.Model");
@@ -181,10 +181,10 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
 void TimeStampUpdateTest::testRescanImageIfModifiedSet2False()
 {
     // Setup metadata settings
-    MetadataSettingsContainer set;
+    MetaEngineSettingsContainer set;
     set.updateFileTimeStamp   = true;  // Default value
     set.rescanImageIfModified = false; // Default value
-    MetadataSettings::instance()->setSettings(set);
+    MetaEngineSettings::instance()->setSettings(set);
 
     // Load the test image and verify that it's there
     QFileInfo originalFileInfo(originalImageFile);
@@ -196,7 +196,7 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2False()
 
     // Verify that Exif.Image.Model in image file is empty
     DMetadata meta;
-    meta.setMetadataWritingMode(MetaEngine::WRITETOIMAGEONLY);
+    meta.setMetadataWritingMode(MetaEngine::WRITE_TO_FILE_ONLY);
     meta.setUpdateFileTimeStamp(true);
     meta.load(originalImageFile);
     QString model = meta.getExifTagString("Exif.Image.Model");

@@ -271,7 +271,7 @@ void DigikamApp::fillSolidMenus()
             if (volume->size())
             {
                 label += i18nc("device label etc... (<formatted byte size>)",
-                               " (%1)", ImagePropertiesTab::humanReadableBytesCount(volume->size()));
+                               " (%1)", ItemPropertiesTab::humanReadableBytesCount(volume->size()));
             }
         }
 

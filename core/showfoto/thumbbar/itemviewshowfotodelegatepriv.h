@@ -34,7 +34,7 @@
 
 #include "digikam_debug.h"
 #include "thumbnailsize.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 
 using namespace Digikam;
 

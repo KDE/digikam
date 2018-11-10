@@ -90,7 +90,7 @@ public:
 
     DImg                          image;
 
-    ImageInfo                     imageinfo;
+    ItemInfo                     imageinfo;
 
     DRawDecoderSettings           rawDecodingSettings;
 
@@ -120,8 +120,9 @@ public:
     {
     }
 
-    bool continueQuery(const DImg* const)
+    bool continueQuery(DImg* const img)
     {
+        Q_UNUSED(img);
         return (!d->cancel);
     }
 
@@ -247,12 +248,12 @@ DImg BatchTool::imageData() const
     return d->image;
 }
 
-void BatchTool::setImageInfo(const ImageInfo& info)
+void BatchTool::setItemInfo(const ItemInfo& info)
 {
     d->imageinfo = info;
 }
 
-ImageInfo BatchTool::imageInfo() const
+ItemInfo BatchTool::imageInfo() const
 {
     return d->imageinfo;
 }
@@ -388,7 +389,7 @@ bool BatchTool::loadToDImg() const
         QImage img;
         bool   ret = DRawDecoder::loadRawPreview(img, inputUrl().toLocalFile());
         DMetadata meta(inputUrl().toLocalFile());
-        meta.setImageDimensions(QSize(img.width(), img.height()));
+        meta.setItemDimensions(QSize(img.width(), img.height()));
         d->image   = DImg(img);
         d->image.setMetadata(meta.data());
         return ret;

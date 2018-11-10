@@ -39,7 +39,7 @@
 // Local includes
 
 #include "statesavingobject.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 
 namespace Digikam
 {
@@ -58,7 +58,7 @@ public:
     explicit GPSSearchView(QWidget* const parent,
                   SearchModel* const searchModel,
                   SearchModificationHelper* const searchModificationHelper,
-                  ImageFilterModel* const imageFilterModel,
+                  ItemFilterModel* const imageFilterModel,
                   QItemSelectionModel* const itemSelectionModel);
     ~GPSSearchView();
 

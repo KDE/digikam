@@ -105,7 +105,7 @@ QString QueueToolTip::tipContents()
         return QString();
     }
 
-    ImageInfo info = d->item->info();
+    ItemInfo info = d->item->info();
 
     return ToolTipFiller::imageInfoTipContents(info);
 }

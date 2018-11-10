@@ -62,7 +62,7 @@ public:
 
     QStandardItemModel* model;
     BookmarksManager*   bookmarkManager;
-    GPSImageModel*      imageModel;
+    GPSItemModel*      imageModel;
     QPixmap             pixmap;
     QUrl                bookmarkIconUrl;
     bool                visible;
@@ -105,7 +105,7 @@ void GPSBookmarkModelHelper::Private::addBookmarkGroupToModel(BookmarkNode* cons
 }
 
 GPSBookmarkModelHelper::GPSBookmarkModelHelper(BookmarksManager* const bookmarkManager,
-                                               GPSImageModel* const imageModel,
+                                               GPSItemModel* const imageModel,
                                                QObject* const parent)
     : GeoModelHelper(parent),
       d(new Private())

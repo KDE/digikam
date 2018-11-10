@@ -44,14 +44,14 @@
 #include "galleryelement.h"
 #include "metaengine_rotation.h"
 #include "drawdecoder.h"
-#include "rawinfo.h"
+#include "drawinfo.h"
 
 namespace Digikam
 {
 
 /**
- * Generate a thumbnail from @fullImage of @size x @size pixels
- * If square == true, crop the result to a square
+ * Generate a thumbnail from @p fullImage of @p size x @p size pixels
+ * If @p square == true, crop the result to a square
  */
 static QImage generateThumbnail(const QImage& fullImage, int size, bool square)
 {
@@ -124,10 +124,12 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
         if (imageFormat.isEmpty())
         {
             emitWarning(i18n("Format of image '%1' is unknown", QDir::toNativeSeparators(path)));
+            imageFile.close();
             return;
         }
 
         imageData = imageFile.readAll();
+        imageFile.close();
 
         if (!originalImage.loadFromData(imageData))
         {
@@ -236,11 +238,11 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
             element.m_exifImageMake = meta.getXmpTagString("Xmp.tiff.Make");
         }
 
-        element.m_exifImageModel = meta.getExifTagString("Exif.Image.Model");
+        element.m_exifItemModel = meta.getExifTagString("Exif.Image.Model");
 
-        if (element.m_exifImageModel.isEmpty())
+        if (element.m_exifItemModel.isEmpty())
         {
-            element.m_exifImageModel = meta.getXmpTagString("Xmp.tiff.Model");
+            element.m_exifItemModel = meta.getXmpTagString("Xmp.tiff.Model");
         }
 
         element.m_exifImageOrientation = meta.getExifTagString("Exif.Image.Orientation");
@@ -271,9 +273,9 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
             element.m_exifImageResolutionUnit = meta.getXmpTagString("Xmp.tiff.ResolutionUnit");
         }
 
-        if (meta.getImageDateTime().isValid())
+        if (meta.getItemDateTime().isValid())
         {
-            element.m_exifImageDateTime = QLocale().toString(meta.getImageDateTime(), QLocale::ShortFormat);
+            element.m_exifImageDateTime = QLocale().toString(meta.getItemDateTime(), QLocale::ShortFormat);
         }
 
         element.m_exifImageYCbCrPositioning = meta.getExifTagString("Exif.Image.YCbCrPositioning");
@@ -354,7 +356,7 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
     {
         // Try to use Raw decoder to identify image.
 
-        RawInfo     info;
+        DRawInfo     info;
         DRawDecoder rawdecoder;
         rawdecoder.rawFileIdentify(info, path);
 
@@ -364,7 +366,7 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
                 element.m_exifImageMake = info.make;
 
             if (!info.model.isEmpty())
-                element.m_exifImageModel = info.model;
+                element.m_exifItemModel = info.model;
 
             if (info.dateTime.isValid())
                 element.m_exifImageDateTime = QLocale().toString(info.dateTime, QLocale::ShortFormat);
@@ -386,8 +388,8 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
     if (element.m_exifImageMake.isEmpty())
         element.m_exifImageMake = unavailable;
 
-    if (element.m_exifImageModel.isEmpty())
-        element.m_exifImageModel = unavailable;
+    if (element.m_exifItemModel.isEmpty())
+        element.m_exifItemModel = unavailable;
 
     if (element.m_exifImageOrientation.isEmpty())
         element.m_exifImageOrientation = unavailable;
@@ -451,9 +453,11 @@ bool GalleryElementFunctor::writeDataToFile(const QByteArray& data, const QStrin
     if (destFile.write(data) != data.size())
     {
         emitWarning(i18n("Could not save image to file '%1'", QDir::toNativeSeparators(destPath)));
+        destFile.close();
         return false;
     }
 
+    destFile.close();
     return true;
 }
 

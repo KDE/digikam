@@ -205,12 +205,18 @@ bool GeoDataParser::loadGPXFile(const QUrl& url)
     QDomDocument gpxDoc(QLatin1String("gpx"));
 
     if (!gpxDoc.setContent(&gpxfile))
+    {
+        gpxfile.close();
         return false;
+    }
 
     QDomElement gpxDocElem = gpxDoc.documentElement();
 
     if (gpxDocElem.tagName() != QLatin1String("gpx"))
+    {
+        gpxfile.close();
         return false;
+    }
 
     for (QDomNode nTrk = gpxDocElem.firstChild(); !nTrk.isNull(); nTrk = nTrk.nextSibling())
     {
@@ -289,6 +295,7 @@ bool GeoDataParser::loadGPXFile(const QUrl& url)
     //qCDebug(DIGIKAM_GENERAL_LOG) << "GPX File " << url.fileName()
     //                         << " parsed with " << numPoints()
     //                         << " points extracted" ;
+    gpxfile.close();
     return true;
 }
 

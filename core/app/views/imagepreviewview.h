@@ -29,7 +29,7 @@
 // Local includes
 
 #include "graphicsdimgview.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 class QPixmap;
 class QDragMoveEvent;
@@ -59,11 +59,11 @@ public:
     explicit ImagePreviewView(QWidget* const parent, Mode mode=IconViewPreview, Album* const currAlbum = 0);
     ~ImagePreviewView();
 
-    void setImageInfo(const ImageInfo& info     = ImageInfo(),
-                      const ImageInfo& previous = ImageInfo(),
-                      const ImageInfo& next     = ImageInfo());
+    void setItemInfo(const ItemInfo& info     = ItemInfo(),
+                      const ItemInfo& previous = ItemInfo(),
+                      const ItemInfo& next     = ItemInfo());
 
-    ImageInfo getImageInfo() const;
+    ItemInfo getItemInfo() const;
 
     void reload();
     void setImagePath(const QString& path=QString());
@@ -79,8 +79,8 @@ Q_SIGNALS:
     void signalSlideShowCurrent();
     void signalAddToExistingQueue(int);
 
-    void signalGotoAlbumAndItem(const ImageInfo&);
-    void signalGotoDateAndItem(const ImageInfo&);
+    void signalGotoAlbumAndItem(const ItemInfo&);
+    void signalGotoDateAndItem(const ItemInfo&);
     void signalGotoTagAndItem(int);
     void signalPopupTagsView();
 

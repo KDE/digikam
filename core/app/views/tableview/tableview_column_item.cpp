@@ -33,9 +33,9 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "coredbinfocontainers.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 
 namespace Digikam
 {
@@ -162,7 +162,7 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
         }
     }
 
-    const ImageInfo info = s->tableViewModel->infoFromItem(item);
+    const ItemInfo info = s->tableViewModel->infoFromItem(item);
 
     switch (subColumn)
     {
@@ -210,7 +210,7 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
             const QSize imgSize = info.dimensions();
             QString aspectRatioString;
 
-            if (!ImagePropertiesTab::aspectRatioToString(imgSize.width(), imgSize.height(), aspectRatioString))
+            if (!ItemPropertiesTab::aspectRatioToString(imgSize.width(), imgSize.height(), aspectRatioString))
             {
                 return QString();
             }
@@ -272,8 +272,8 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
 TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(TableViewModel::Item* const itemA,
                                                                    TableViewModel::Item* const itemB) const
 {
-    const ImageInfo infoA = s->tableViewModel->infoFromItem(itemA);
-    const ImageInfo infoB = s->tableViewModel->infoFromItem(itemB);
+    const ItemInfo infoA = s->tableViewModel->infoFromItem(itemA);
+    const ItemInfo infoB = s->tableViewModel->infoFromItem(itemB);
 
     switch (subColumn)
     {

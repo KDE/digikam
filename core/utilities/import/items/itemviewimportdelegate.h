@@ -30,7 +30,7 @@
 #include "itemviewimportdelegatepriv.h"
 #include "thumbnailsize.h"
 #include "ditemdelegate.h"
-#include "imagedelegateoverlay.h"
+#include "itemdelegateoverlay.h"
 
 namespace Digikam
 {
@@ -38,11 +38,11 @@ namespace Digikam
 class ImportCategoryDrawer;
 class ImportCategorizedView;
 class ImportFilterModel;
-class ImportImageModel;
+class ImportItemModel;
 class ItemViewImportDelegatePrivate;
 
 // Some reuse of the existing model-view classes.
-class ItemViewImportDelegate : public DItemDelegate, public ImageDelegateOverlayContainer
+class ItemViewImportDelegate : public DItemDelegate, public ItemDelegateOverlayContainer
 {
     Q_OBJECT
 

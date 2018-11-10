@@ -58,7 +58,7 @@ protected:
 
     virtual QString tipContents()
     {
-        ShowfotoItemInfo info = ShowfotoImageModel::retrieveShowfotoItemInfo(currentIndex());
+        ShowfotoItemInfo info = ShowfotoItemModel::retrieveShowfotoItemInfo(currentIndex());
         return ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(info);
     }
 };
@@ -78,7 +78,7 @@ public:
     {
     }
 
-    ShowfotoImageModel*      model;
+    ShowfotoItemModel*      model;
     ShowfotoSortFilterModel* filterModel;
 
     ShowfotoDelegate*        delegate;
@@ -114,7 +114,7 @@ ShowfotoCategorizedView::~ShowfotoCategorizedView()
     delete d;
 }
 
-void ShowfotoCategorizedView::setModels(ShowfotoImageModel* model, ShowfotoSortFilterModel* filterModel)
+void ShowfotoCategorizedView::setModels(ShowfotoItemModel* model, ShowfotoSortFilterModel* filterModel)
 {
     if (d->delegate)
     {
@@ -149,7 +149,7 @@ void ShowfotoCategorizedView::setModels(ShowfotoImageModel* model, ShowfotoSortF
     }
 }
 
-ShowfotoImageModel* ShowfotoCategorizedView::showfotoImageModel() const
+ShowfotoItemModel* ShowfotoCategorizedView::showfotoItemModel() const
 {
     return d->model;
 }
@@ -458,7 +458,7 @@ void ShowfotoCategorizedView::hintAt(const ShowfotoItemInfo& info)
     scrollTo(index);
 }
 
-void ShowfotoCategorizedView::addOverlay(ImageDelegateOverlay* overlay, ShowfotoDelegate* delegate)
+void ShowfotoCategorizedView::addOverlay(ItemDelegateOverlay* overlay, ShowfotoDelegate* delegate)
 {
     if (!delegate)
     {
@@ -474,7 +474,7 @@ void ShowfotoCategorizedView::addOverlay(ImageDelegateOverlay* overlay, Showfoto
     }
 }
 
-void ShowfotoCategorizedView::removeOverlay(ImageDelegateOverlay* overlay)
+void ShowfotoCategorizedView::removeOverlay(ItemDelegateOverlay* overlay)
 {
     ShowfotoDelegate* const delegate = dynamic_cast<ShowfotoDelegate*>(overlay->delegate());
 

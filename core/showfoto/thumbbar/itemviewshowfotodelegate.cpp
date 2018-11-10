@@ -35,8 +35,8 @@
 // Local includes
 
 #include "thememanager.h"
-#include "imagescanner.h"
-#include "imagepropertiestab.h"
+#include "itemscanner.h"
+#include "itempropertiestab.h"
 #include "showfotoiteminfo.h"
 #include "colorlabelwidget.h"
 #include "itemviewshowfotodelegatepriv.h"
@@ -182,13 +182,13 @@ QAbstractItemDelegate* ItemViewShowfotoDelegate::asDelegate()
 
 void ItemViewShowfotoDelegate::overlayDestroyed(QObject* o)
 {
-    ImageDelegateOverlayContainer::overlayDestroyed(o);
+    ItemDelegateOverlayContainer::overlayDestroyed(o);
 }
 
 void ItemViewShowfotoDelegate::mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index)
 {
-    // 3-way indirection AbstractShowfotoItemDelegate -> ItemViewShowfotoDelegate -> ImageDelegateOverlayContainer
-    ImageDelegateOverlayContainer::mouseMoved(e, visualRect, index);
+    // 3-way indirection AbstractShowfotoItemDelegate -> ItemViewShowfotoDelegate -> ItemDelegateOverlayContainer
+    ItemDelegateOverlayContainer::mouseMoved(e, visualRect, index);
 }
 
 void ItemViewShowfotoDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
@@ -335,7 +335,7 @@ void ItemViewShowfotoDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglo
 {
     Q_D(const ItemViewShowfotoDelegate);
     p->setFont(d->fontXtra);
-    p->drawText(r, Qt::AlignCenter, ImagePropertiesTab::humanReadableBytesCount(bytes));
+    p->drawText(r, Qt::AlignCenter, ItemPropertiesTab::humanReadableBytesCount(bytes));
 }
 
 void ItemViewShowfotoDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewItem& option,

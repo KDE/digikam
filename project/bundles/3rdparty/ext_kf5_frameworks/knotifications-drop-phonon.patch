@@ -1,21 +1,23 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 0104c73..de44e9a 100644
+index aa2926f..0e03212 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -59,11 +59,11 @@ find_package(KF5Config ${KF5_DEP_VERSION} REQUIRED)
- find_package(KF5Codecs ${KF5_DEP_VERSION} REQUIRED)
- find_package(KF5CoreAddons ${KF5_DEP_VERSION} REQUIRED)
- 
--find_package(Phonon4Qt5 4.6.60 REQUIRED NO_MODULE)
--set_package_properties(Phonon4Qt5 PROPERTIES
--   DESCRIPTION "Qt-based audio library"
--   TYPE REQUIRED
--   PURPOSE "Required to build audio notification support")
-+#find_package(Phonon4Qt5 4.6.60 REQUIRED NO_MODULE)
-+#set_package_properties(Phonon4Qt5 PROPERTIES
-+#   DESCRIPTION "Qt-based audio library"
-+#   TYPE REQUIRED
-+#   PURPOSE "Required to build audio notification support")
- if (Phonon4Qt5_FOUND)
-   add_definitions(-DHAVE_PHONON4QT5)
- endif()
+@@ -73,12 +73,12 @@ set_package_properties(Canberra PROPERTIES DESCRIPTION "Library for generating e
+ if (CANBERRA_FOUND)
+     add_definitions(-DHAVE_CANBERRA)
+ else()
+-    find_package(Phonon4Qt5 4.6.60 NO_MODULE)
+-    set_package_properties(Phonon4Qt5 PROPERTIES
+-        DESCRIPTION "Qt-based audio library"
+-        # This is REQUIRED since you cannot tell CMake "either one of those two optional ones are required"
+-        TYPE REQUIRED
+-        PURPOSE "Needed to build audio notification support when Canberra isn't available")
++#    find_package(Phonon4Qt5 4.6.60 NO_MODULE)
++#    set_package_properties(Phonon4Qt5 PROPERTIES
++#        DESCRIPTION "Qt-based audio library"
++#        # This is REQUIRED since you cannot tell CMake "either one of those two optional ones are required"
++#        TYPE REQUIRED
++#        PURPOSE "Needed to build audio notification support when Canberra isn't available")
+     if (Phonon4Qt5_FOUND)
+         add_definitions(-DHAVE_PHONON4QT5)
+     endif()

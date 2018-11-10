@@ -10,8 +10,8 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libalbummodels_SRCS
-    imagealbummodel.cpp
-    imagealbumfiltermodel.cpp
+    itemalbummodel.cpp
+    itemalbumfiltermodel.cpp
     abstractalbummodel.cpp
     albummodel.cpp
     albumfiltermodel.cpp

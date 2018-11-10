@@ -53,7 +53,7 @@ struct CalParams
 {
 public:
 
-    enum ImagePosition
+    enum ItemPosition
     {
         Top = 0,
         Left,
@@ -70,7 +70,7 @@ public:
     int                   height;
     bool                  drawLines;
     float                 ratio;
-    ImagePosition         imgPos;
+    ItemPosition         imgPos;
     QFont                 baseFont;
     int                   year;
 };

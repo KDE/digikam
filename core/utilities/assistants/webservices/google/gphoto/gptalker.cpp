@@ -113,6 +113,7 @@ public:
 
     State                  state;
 
+    QString                descriptionToUpload;
     QString                albumIdToUpload;
     QString                previousImageId;
     QStringList            uploadTokenList;
@@ -122,10 +123,14 @@ public:
 
 GPTalker::GPTalker(QWidget* const parent)
     : GSTalkerBase(parent,
-                   (QStringList() << QLatin1String("https://www.googleapis.com/auth/plus.login")                            // to get user login (temporary until gphoto supports it officially)
-                                  << QLatin1String("https://www.googleapis.com/auth/photoslibrary")                         // to add and download photo in the library
-                                  << QLatin1String("https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata") // to download photo created by digiKam on GPhoto
-                                  << QLatin1String(" https://www.googleapis.com/auth/photoslibrary.sharing")),              // for shared albums
+                   QStringList() // to get user login (temporary until gphoto supports it officially)
+                                 << QLatin1String("https://www.googleapis.com/auth/plus.login")
+                                 // to add and download photo in the library
+                                 << QLatin1String("https://www.googleapis.com/auth/photoslibrary")
+                                 // to download photo created by digiKam on GPhoto
+                                 << QLatin1String("https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata")
+                                 // for shared albums
+                                 << QLatin1String("https://www.googleapis.com/auth/photoslibrary.sharing"),
                    QLatin1String("GooglePhotos")),
       d(new Private)
 {
@@ -285,7 +290,7 @@ void GPTalker::createAlbum(const GSFolder& album)
  * Upload token then will be sent with url in GPTlaker::uploadPhoto to create real photos on user account
  */
 bool GPTalker::addPhoto(const QString& photoPath,
-                        GSPhoto& /*info*/,
+                        GSPhoto& info,
                         const QString& albumId,
                         bool rescale,
                         int maxDim,
@@ -299,10 +304,10 @@ bool GPTalker::addPhoto(const QString& photoPath,
 
     QUrl url(d->apiUrl.arg("uploads"));
 
-    // Save album ID to upload
-    d->albumIdToUpload = albumId;
+    // Save album ID and description to upload
+    d->descriptionToUpload = info.description;
+    d->albumIdToUpload     = albumId;
 
-//     GPMPForm form;
     QString path = photoPath;
 
     QMimeDatabase mimeDB;
@@ -339,9 +344,9 @@ bool GPTalker::addPhoto(const QString& photoPath,
 
         if (meta.load(photoPath))
         {
-            meta.setImageDimensions(image.size());
-            meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+            meta.setItemDimensions(image.size());
+            meta.setItemOrientation(MetaEngine::ORIENTATION_NORMAL);
+            meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
             meta.save(path, true);
         }
     }
@@ -357,12 +362,13 @@ bool GPTalker::addPhoto(const QString& photoPath,
     QByteArray data = imageFile.readAll();
     imageFile.close();
 
-    QString imageName = QUrl::fromLocalFile(path).fileName().toLatin1();
+    QString imageName = QUrl::fromLocalFile(path).fileName();
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/octet-stream"));
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
     netRequest.setRawHeader("X-Goog-Upload-File-Name", imageName.toLatin1());
+    netRequest.setRawHeader("X-Goog-Upload-Protocol", "raw");
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << imageName;
 
@@ -374,8 +380,8 @@ bool GPTalker::addPhoto(const QString& photoPath,
     return true;
 }
 
-bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QString& albumId*/,
-                                  bool rescale, int maxDim, int imageQuality)
+bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info, /*const QString& albumId,*/
+                           bool rescale, int maxDim, int imageQuality)
 {
     if (m_reply)
     {
@@ -423,11 +429,10 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
 
         if (meta.load(photoPath))
         {
-            meta.setImageDimensions(image.size());
-            meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
-            meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-            meta.save(path);
+            meta.setItemDimensions(image.size());
+            meta.setItemOrientation(MetaEngine::ORIENTATION_NORMAL);
+            meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
+            meta.save(path, true);
         }
     }
 
@@ -707,7 +712,9 @@ void GPTalker::slotUploadPhoto()
     while (!d->uploadTokenList.isEmpty() && nbItemsUpload < NB_MAX_ITEM_UPLOAD)
     {
         const QString& uploadToken = d->uploadTokenList.takeFirst();
-        data += "{\"description\": \"\",";
+        data += "{\"description\": \"";
+        data += d->descriptionToUpload.toUtf8();
+        data += "\",";
         data += "\"simpleMediaItem\": {";
         data += "\"uploadToken\": \"";
         data += uploadToken;
@@ -785,6 +792,7 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
         album.id            = obj[QLatin1String("id")].toString();
         album.title         = obj[QLatin1String("title")].toString();
         album.url           = obj[QLatin1String("productUrl")].toString();
+        album.isWriteable   = obj[QLatin1String("isWriteable")].toBool();
 
         albumList.append(album);
     }

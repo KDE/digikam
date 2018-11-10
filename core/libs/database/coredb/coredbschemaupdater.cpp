@@ -47,7 +47,7 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "collectionscanner.h"
-#include "imagequerybuilder.h"
+#include "itemquerybuilder.h"
 #include "collectionscannerobserver.h"
 #include "digikam_config.h"
 
@@ -459,7 +459,7 @@ bool CoreDbSchemaUpdater::makeUpdates()
     return true;
 }
 
-void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter, QStringList& defaultVideoFilter,
+void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultItemFilter, QStringList& defaultVideoFilter,
                                                 QStringList& defaultAudioFilter)
 {
     //NOTE for updating:
@@ -467,7 +467,7 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
 
     // https://en.wikipedia.org/wiki/Image_file_formats
 
-    defaultImageFilter << QLatin1String("jpg") << QLatin1String("jpeg") << QLatin1String("jpe")                                                 // JPEG
+    defaultItemFilter << QLatin1String("jpg") << QLatin1String("jpeg") << QLatin1String("jpe")                                                 // JPEG
                        << QLatin1String("jp2") << QLatin1String("j2k")  << QLatin1String("jpx") << QLatin1String("jpc") << QLatin1String("pgx") // JPEG-2000
                        << QLatin1String("tif") << QLatin1String("tiff")                                                                         // TIFF
                        << QLatin1String("png")                                                                                                  // PNG
@@ -477,13 +477,13 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
 
     // Raster graphics editor containers: https://en.wikipedia.org/wiki/Raster_graphics_editor
 
-    defaultImageFilter << QLatin1String("xcf")
+    defaultItemFilter << QLatin1String("xcf")
                        << QLatin1String("psd") << QLatin1String("psb")
                        << QLatin1String("kra") << QLatin1String("ora");
 
     // Raw images: https://en.wikipedia.org/wiki/Raw_image_format
 
-    defaultImageFilter << DRawDecoder::rawFilesList();
+    defaultItemFilter << DRawDecoder::rawFilesList();
 
     // Video files: https://en.wikipedia.org/wiki/Video_file_format
 
@@ -514,11 +514,11 @@ void CoreDbSchemaUpdater::defaultIgnoreDirectoryFilterSettings(QStringList& defa
 
 bool CoreDbSchemaUpdater::createFilterSettings()
 {
-    QStringList defaultImageFilter, defaultVideoFilter, defaultAudioFilter, defaultIgnoreDirectoryFilter;
-    defaultFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
+    QStringList defaultItemFilter, defaultVideoFilter, defaultAudioFilter, defaultIgnoreDirectoryFilter;
+    defaultFilterSettings(defaultItemFilter, defaultVideoFilter, defaultAudioFilter);
     defaultIgnoreDirectoryFilterSettings(defaultIgnoreDirectoryFilter);
 
-    d->albumDB->setFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
+    d->albumDB->setFilterSettings(defaultItemFilter, defaultVideoFilter, defaultAudioFilter);
     d->albumDB->setIgnoreDirectoryFilterSettings(defaultIgnoreDirectoryFilter);
     d->albumDB->setSetting(QLatin1String("FilterSettingsVersion"),      QString::number(filterSettingsVersion()));
     d->albumDB->setSetting(QLatin1String("DcrawFilterSettingsVersion"), QString::number(DRawDecoder::rawFilesVersion()));
@@ -1022,7 +1022,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
     {
         QUrl url((*it).query);
 
-        ImageQueryBuilder builder;
+        ItemQueryBuilder builder;
         QString query = builder.convertFromUrlToXml(url);
         QString name  = (*it).name;
 
@@ -1060,23 +1060,23 @@ bool CoreDbSchemaUpdater::updateV4toV7()
 
     // --- Set user settings from config ---
 
-    QStringList defaultImageFilter, defaultVideoFilter, defaultAudioFilter;
-    defaultFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
+    QStringList defaultItemFilter, defaultVideoFilter, defaultAudioFilter;
+    defaultFilterSettings(defaultItemFilter, defaultVideoFilter, defaultAudioFilter);
 
-    QSet<QString> configImageFilter, configVideoFilter, configAudioFilter;
+    QSet<QString> configItemFilter, configVideoFilter, configAudioFilter;
 
-    configImageFilter   = cleanUserFilterString(group.readEntry(QLatin1String("File Filter"),       QString())).toSet();
-    configImageFilter  += cleanUserFilterString(group.readEntry(QLatin1String("Raw File Filter"),   QString())).toSet();
+    configItemFilter   = cleanUserFilterString(group.readEntry(QLatin1String("File Filter"),       QString())).toSet();
+    configItemFilter  += cleanUserFilterString(group.readEntry(QLatin1String("Raw File Filter"),   QString())).toSet();
     configVideoFilter   = cleanUserFilterString(group.readEntry(QLatin1String("Movie File Filter"), QString())).toSet();
     configAudioFilter   = cleanUserFilterString(group.readEntry(QLatin1String("Audio File Filter"), QString())).toSet();
 
     // remove those that are included in the default filter
-    configImageFilter.subtract(defaultImageFilter.toSet());
+    configItemFilter.subtract(defaultItemFilter.toSet());
     configVideoFilter.subtract(defaultVideoFilter.toSet());
     configAudioFilter.subtract(defaultAudioFilter.toSet());
 
-    d->albumDB->setUserFilterSettings(configImageFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
-    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: set initial filter settings with user settings" << configImageFilter;
+    d->albumDB->setUserFilterSettings(configItemFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: set initial filter settings with user settings" << configItemFilter;
 
     if (d->observer)
     {
@@ -1133,7 +1133,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Imported creation dates"));
     }
 
-    // Port ImagesV3.comment to ImageComments
+    // Port ImagesV3.comment to ItemComments
 
     // An author of NULL will inhibt the UNIQUE restriction to take effect (but #189080). Work around.
     d->backend->execSql(QString::fromUtf8(
@@ -1163,7 +1163,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Imported comments"));
     }
 
-    // Port rating storage in ImageProperties to ImageInformation
+    // Port rating storage in ImageProperties to ItemInformation
     if (!d->backend->execSql(QString::fromUtf8(
                                 "UPDATE ImageInformation SET "
                                 " rating=(SELECT value FROM ImageProperties "
@@ -1257,7 +1257,7 @@ void CoreDbSchemaUpdater::preAlpha010Update1()
     {
         QUrl url((*it).query);
 
-        ImageQueryBuilder builder;
+        ItemQueryBuilder builder;
         QString query = builder.convertFromUrlToXml(url);
 
         if (QUrlQuery(url).queryItemValue(QLatin1String("type")) == QLatin1String("datesearch"))
@@ -1288,7 +1288,7 @@ void CoreDbSchemaUpdater::preAlpha010Update2()
         return;
     }
 
-    if (!d->backend->execSql(QString::fromUtf8("ALTER TABLE ImagePositions RENAME TO ImagePositionsTemp;")))
+    if (!d->backend->execSql(QString::fromUtf8("ALTER TABLE ImagePositions RENAME TO ItemPositionsTemp;")))
     {
         return;
     }
@@ -1299,7 +1299,7 @@ void CoreDbSchemaUpdater::preAlpha010Update2()
     }
 
     d->backend->execSql(
-        QString::fromUtf8("CREATE TABLE ImagePositions\n"
+        QString::fromUtf8("CREATE TABLE ItemPositions\n"
                           " (imageid INTEGER PRIMARY KEY,\n"
                           "  latitude TEXT,\n"
                           "  latitudeNumber REAL,\n"
@@ -1317,7 +1317,7 @@ void CoreDbSchemaUpdater::preAlpha010Update2()
                                           "  altitude, orientation, tilt, roll, accuracy, description) "
                                           "SELECT imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
                                           "  altitude, orientation, tilt, roll, 0, description "
-                                          " FROM ImagePositionsTemp;"));
+                                          " FROM ItemPositionsTemp;"));
 
     d->backend->execSql(
         QString::fromUtf8("CREATE TABLE ImageMetadata\n"
@@ -1348,7 +1348,7 @@ void CoreDbSchemaUpdater::preAlpha010Update2()
                                            "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory "
                                            "FROM ImageMetadataTemp;"));
 
-    d->backend->execSql(QString::fromUtf8("DROP TABLE ImagePositionsTemp;"));
+    d->backend->execSql(QString::fromUtf8("DROP TABLE ItemPositionsTemp;"));
     d->backend->execSql(QString::fromUtf8("DROP TABLE ImageMetadataTemp;"));
 
     d->albumDB->setSetting(QLatin1String("preAlpha010Update2"), QLatin1String("true"));
@@ -1363,8 +1363,8 @@ void CoreDbSchemaUpdater::preAlpha010Update3()
         return;
     }
 
-    d->backend->execSql(QString::fromUtf8("DROP TABLE ImageCopyright;"));
-    d->backend->execSql(QString::fromUtf8("CREATE TABLE ImageCopyright\n"
+    d->backend->execSql(QString::fromUtf8("DROP TABLE ItemCopyright;"));
+    d->backend->execSql(QString::fromUtf8("CREATE TABLE ItemCopyright\n"
                                           " (imageid INTEGER,\n"
                                           "  property TEXT,\n"
                                           "  value TEXT,\n"
@@ -1392,15 +1392,15 @@ void CoreDbSchemaUpdater::beta010Update1()
                                           "    WHERE imageid=OLD.id;\n"
                                           "  DELETE From ImageHaarMatrix\n "
                                           "    WHERE imageid=OLD.id;\n"
-                                          "  DELETE From ImageInformation\n "
+                                          "  DELETE From ItemInformation\n "
                                           "    WHERE imageid=OLD.id;\n"
                                           "  DELETE From ImageMetadata\n "
                                           "    WHERE imageid=OLD.id;\n"
-                                          "  DELETE From ImagePositions\n "
+                                          "  DELETE From ItemPositions\n "
                                           "    WHERE imageid=OLD.id;\n"
-                                          "  DELETE From ImageComments\n "
+                                          "  DELETE From ItemComments\n "
                                           "    WHERE imageid=OLD.id;\n"
-                                          "  DELETE From ImageCopyright\n "
+                                          "  DELETE From ItemCopyright\n "
                                           "    WHERE imageid=OLD.id;\n"
                                           "  DELETE From ImageProperties\n "
                                           "    WHERE imageid=OLD.id;\n"

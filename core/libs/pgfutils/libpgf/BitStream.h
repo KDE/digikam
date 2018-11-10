@@ -22,7 +22,7 @@
  */
 
 //////////////////////////////////////////////////////////////////////
-/// @file Bitstream.h
+/// @file BitStream.h
 /// @brief PGF bit-stream operations
 /// @author C. Stamm
 

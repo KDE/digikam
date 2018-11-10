@@ -44,10 +44,10 @@
 #include "albummanager.h"
 #include "imagecategorydrawer.h"
 #include "imagecategorizedview.h"
-#include "imagedelegateoverlay.h"
-#include "imagemodel.h"
-#include "imagefiltermodel.h"
-#include "imagethumbnailmodel.h"
+#include "itemdelegateoverlay.h"
+#include "itemmodel.h"
+#include "itemfiltermodel.h"
+#include "itemthumbnailmodel.h"
 #include "thumbnailloadthread.h"
 #include "applicationsettings.h"
 
@@ -205,7 +205,7 @@ QRect ImageDelegate::coordinatesIndicatorRect() const
     return d->coordinatesRect;
 }
 
-void ImageDelegate::prepareThumbnails(ImageThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
+void ImageDelegate::prepareThumbnails(ItemThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
 {
     thumbModel->prepareThumbnails(indexes, thumbnailSize());
 }
@@ -215,11 +215,11 @@ QPixmap ImageDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thu
     // work around constness
     QAbstractItemModel* const model = const_cast<QAbstractItemModel*>(index.model());
     // set requested thumbnail size
-    model->setData(index, thumbnailSize, ImageModel::ThumbnailRole);
+    model->setData(index, thumbnailSize, ItemModel::ThumbnailRole);
     // get data from model
-    QVariant thumbData              = index.data(ImageModel::ThumbnailRole);
+    QVariant thumbData              = index.data(ItemModel::ThumbnailRole);
     // reset to default thumbnail size
-    model->setData(index, QVariant(), ImageModel::ThumbnailRole);
+    model->setData(index, QVariant(), ItemModel::ThumbnailRole);
 
     return thumbData.value<QPixmap>();
 }
@@ -233,7 +233,7 @@ QPixmap ImageDelegate::thumbnailPixmap(const QModelIndex& index) const
 void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     Q_D(const ImageDelegate);
-    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    ItemInfo info = ItemModel::retrieveItemInfo(index);
 
     if (info.isNull())
     {
@@ -260,7 +260,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     }
 
     bool groupedAndClosed  = (info.hasGroupedImages() &&
-                              !index.data(ImageFilterModel::GroupIsOpenRole).toBool() &&
+                              !index.data(ItemFilterModel::GroupIsOpenRole).toBool() &&
                               ApplicationSettings::instance()->getDrawFramesToGrouped());
 
     QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect,
@@ -335,7 +335,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     if (!d->groupRect.isNull())
     {
         drawGroupIndicator(p, d->groupRect, info.numberOfGroupedImages(),
-                           index.data(ImageFilterModel::GroupIsOpenRole).toBool());
+                           index.data(ItemFilterModel::GroupIsOpenRole).toBool());
     }
 
     if (!d->tagRect.isNull())
@@ -351,8 +351,8 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         drawPickLabelIcon(p, d->pickLabelRect, info.pickLabel());
     }
 
-    bool left  = index.data(ImageModel::LTLeftPanelRole).toBool();
-    bool right = index.data(ImageModel::LTRightPanelRole).toBool();
+    bool left  = index.data(ItemModel::LTLeftPanelRole).toBool();
+    bool right = index.data(ItemModel::LTRightPanelRole).toBool();
     drawPanelSideIcon(p, left, right);
 
     if (d->drawImageFormat)

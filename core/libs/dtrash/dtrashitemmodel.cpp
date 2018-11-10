@@ -156,7 +156,17 @@ QVariant DTrashItemModel::data(const QModelIndex& index, int role) const
         case 1:
             return item.collectionRelativePath;
         case 2:
-            return item.deletionTimestamp.toString();
+        {
+            QString dateTimeFormat = QLocale().dateTimeFormat();
+
+            if (!dateTimeFormat.contains(QLatin1String("yyyy")))
+            {
+                dateTimeFormat.replace(QLatin1String("yy"),
+                                       QLatin1String("yyyy"));
+            }
+
+            return item.deletionTimestamp.toString(dateTimeFormat);
+        }
         default:
             return QVariant();
     };
@@ -244,14 +254,14 @@ void DTrashItemModel::removeItems(const QModelIndexList& indexes)
 {
     QList<QPersistentModelIndex> persistentIndexes;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         persistentIndexes << index;
     }
 
     layoutAboutToBeChanged();
 
-    foreach(const QPersistentModelIndex& index, persistentIndexes)
+    foreach (const QPersistentModelIndex& index, persistentIndexes)
     {
         if (!index.isValid())
             continue;
@@ -328,7 +338,7 @@ DTrashItemInfoList DTrashItemModel::itemsForIndexes(const QList<QModelIndex>& in
 {
     DTrashItemInfoList items;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         if (!index.isValid())
             continue;
@@ -337,6 +347,18 @@ DTrashItemInfoList DTrashItemModel::itemsForIndexes(const QList<QModelIndex>& in
     }
 
     return items;
+}
+
+QModelIndex DTrashItemModel::indexForItem(const DTrashItemInfo& itemInfo) const
+{
+    int index = d->data.indexOf(itemInfo);
+
+    if (index != -1)
+    {
+        return createIndex(index, 0);
+    }
+
+    return QModelIndex();
 }
 
 DTrashItemInfoList DTrashItemModel::allItems()

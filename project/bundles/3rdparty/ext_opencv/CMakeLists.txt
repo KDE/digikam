@@ -59,8 +59,8 @@ if(MINGW)
 
     ExternalProject_Add(ext_opencv
 
-        URL https://github.com/opencv/opencv/archive/3.4.1.tar.gz
-        URL_MD5 a0b7a47899e67b3490ea31edc4f6e8e6
+        URL https://github.com/opencv/opencv/archive/3.4.3.tar.gz
+        URL_MD5 712896f5815938c014c199dde142d508
 
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
                    -DCMAKE_TOOLCHAIN_FILE=${MXE_TOOLCHAIN}
@@ -86,8 +86,8 @@ elseif(APPLE)
     ExternalProject_Add(ext_opencv
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        URL https://github.com/opencv/opencv/archive/3.4.1.tar.gz
-        URL_MD5 a0b7a47899e67b3490ea31edc4f6e8e6
+        URL https://github.com/opencv/opencv/archive/3.4.3.tar.gz
+        URL_MD5 712896f5815938c014c199dde142d508
 
         CONFIGURE_COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.macports <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.macports ${EXTPREFIX_opencv} RelWithDebInfo x86_64 "${BASH_OPTIONS}"
@@ -107,8 +107,8 @@ else() #Linux
     ExternalProject_Add(ext_opencv
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        URL https://github.com/opencv/opencv/archive/3.4.1.tar.gz
-        URL_MD5 a0b7a47899e67b3490ea31edc4f6e8e6
+        URL https://github.com/opencv/opencv/archive/3.4.3.tar.gz
+        URL_MD5 712896f5815938c014c199dde142d508
 
         INSTALL_DIR ${EXTPREFIX_opencv}
 

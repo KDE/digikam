@@ -192,8 +192,8 @@ bool DbEngineConfigSettingsLoader::readConfig(const QString& filepath, int xmlVe
 
     if (!doc.setContent(&file))
     {
-        file.close();
         errorMessage = i18n("The XML in the configuration file <b>%1</b> is invalid and cannot be read.", filepath);
+        file.close();
         return false;
     }
 

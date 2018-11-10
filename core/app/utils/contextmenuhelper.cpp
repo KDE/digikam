@@ -58,8 +58,8 @@
 #include "coredbaccess.h"
 #include "digikamapp.h"
 #include "dfileoperations.h"
-#include "imageinfo.h"
-#include "imagefiltermodel.h"
+#include "iteminfo.h"
+#include "itemfiltermodel.h"
 #include "lighttablewindow.h"
 #include "queuemgrwindow.h"
 #include "picklabelwidget.h"
@@ -105,7 +105,7 @@ public:
     QMap<int, QAction*>          queueActions;
     QMap<QString, KService::Ptr> servicesMap;
 
-    ImageFilterModel*            imageFilterModel;
+    ItemFilterModel*            imageFilterModel;
     AbstractCheckableAlbumModel* albumModel;
 
     QMenu*                       parent;
@@ -252,7 +252,7 @@ void ContextMenuHelper::addStandardActionThumbnail(const imageIds& ids, Album* a
 
 void ContextMenuHelper::addOpenAndNavigateActions(const imageIds &ids) {
     addAction(QLatin1String("image_edit"));
-    addServicesMenu(ImageInfoList(ids).toImageUrlList());
+    addServicesMenu(ItemInfoList(ids).toImageUrlList());
     addAction(QLatin1String("move_selection_to_album"));
     addGotoMenu(ids);
 }
@@ -652,11 +652,11 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
     setSelectedIds(ids);
 
     // the currently selected image is always the first item
-    ImageInfo item;
+    ItemInfo item;
 
     if (!d->selectedIds.isEmpty())
     {
-        item = ImageInfo(d->selectedIds.first());
+        item = ItemInfo(d->selectedIds.first());
     }
 
     if (item.isNull())
@@ -898,7 +898,7 @@ void ContextMenuHelper::addGroupActions(const imageIds &ids)
     }
 }
 
-void ContextMenuHelper::setImageFilterModel(ImageFilterModel* model)
+void ContextMenuHelper::setItemFilterModel(ItemFilterModel* model)
 {
     d->imageFilterModel = model;
 }
@@ -930,7 +930,7 @@ QList<QAction*> ContextMenuHelper::groupMenuActions(const imageIds &ids)
         return actions;
     }
 
-    ImageInfo info(ids.first());
+    ItemInfo info(ids.first());
 
     if (ids.size() == 1)
     {
@@ -983,6 +983,10 @@ QList<QAction*> ContextMenuHelper::groupMenuActions(const imageIds &ids)
         connect(closeActionType, SIGNAL(triggered()), this, SIGNAL(signalCreateGroupByFilename()));
         actions << closeActionType;
 
+        QAction* const closeActionTimelapse = new QAction(i18nc("@action:inmenu", "Group Selected By Timelapse / Burst"), this);
+        connect(closeActionTimelapse, SIGNAL(triggered()), this, SIGNAL(signalCreateGroupByTimelapse()));
+        actions << closeActionTimelapse;
+
         QAction* const separator = new QAction(this);
         separator->setSeparator(true);
         actions << separator;
@@ -1021,11 +1025,11 @@ void ContextMenuHelper::setGroupsOpen(bool open)
         return;
     }
 
-    GroupImageFilterSettings settings = d->imageFilterModel->groupImageFilterSettings();
+    GroupItemFilterSettings settings = d->imageFilterModel->groupItemFilterSettings();
 
     foreach (const qlonglong& id, d->selectedIds)
     {
-        ImageInfo info(id);
+        ItemInfo info(id);
 
         if (info.hasGroupedImages())
         {
@@ -1033,7 +1037,7 @@ void ContextMenuHelper::setGroupsOpen(bool open)
         }
     }
 
-    d->imageFilterModel->setGroupImageFilterSettings(settings);
+    d->imageFilterModel->setGroupItemFilterSettings(settings);
 }
 
 void ContextMenuHelper::slotOpenGroups()
@@ -1110,7 +1114,7 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
     {
         if (d->selectedIds.count() == 1)
         {
-            ImageInfo selectedItem(d->selectedIds.first());
+            ItemInfo selectedItem(d->selectedIds.first());
 
             if (choice == d->gotoAlbumAction)
             {

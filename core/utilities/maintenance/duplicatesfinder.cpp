@@ -38,7 +38,7 @@
 
 #include "digikam_debug.h"
 #include "albummanager.h"
-#include "imagelister.h"
+#include "itemlister.h"
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
 #include "dbjobsthread.h"

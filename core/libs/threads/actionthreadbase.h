@@ -130,6 +130,10 @@ protected:
      */
     bool isEmpty() const;
 
+    /** Return the number of pending jobs to process.
+     */
+    int pendingCount() const;
+
 protected Q_SLOTS:
 
     void slotJobFinished();

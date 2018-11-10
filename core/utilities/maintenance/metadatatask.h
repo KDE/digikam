@@ -31,7 +31,7 @@
 // Local includes
 
 #include "actionthreadbase.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "metadatasynchronizer.h"
 
 namespace Digikam

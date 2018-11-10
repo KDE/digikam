@@ -1,4 +1,4 @@
-digiKam 6.0.0-beta1 - Release date: 2018-08-19
+digiKam 6.0.0-beta3 - Release date: 2018-11-25
 
 *****************************************************************************************************
 NEW FEATURES:
@@ -19,9 +19,11 @@ General      : Use DrMinGW has crash handler under Windows.
 General      : Port all export/import tool to OAuth2 authentification.
 General      : New tool to adjust quickly time and date information from items.
                Tool will be available in AlbumView, ImageEditor, LightTable, and Showfoto.
+General      : New function to group images by timelapse / burst
 General      : New tool to export to Pinterest social network.
 General      : New tool to export to OneDrive webservice.
 General      : New tool to export to Box webservice.
+General      : New tool to export to Ipfs webservice.
 General      : All bundles use last Lenfun 0.3.95 to process automatic lens correction.
 General      : Add QWebEngine support.
 General      : Fix all Krazy static analyzer reports.
@@ -597,21 +599,40 @@ BUGFIXES:
 532 ==> 398810 - "Dates" panel is not refreshed after a photo with a new year is added.
 533 ==> 398986 - Deleting a tag while using it as filter removes all images from the current view.
 534 ==> 370093 - Opening a picture (double-click) in Showfoto (default viewer) does not show the other pictures in the folder (similar to Bug 221245).
-535 ==> 398479 - DigiKam crashing at startup Thread 2 Crashed:: Digikam::ScanController.
-536 ==> 397808 - Digikam Mac Package crashes after resume when screen configuration changes.
+535 ==> 398479 - digiKam crashing at startup Thread 2 Crashed:: Digikam::ScanController.
+536 ==> 397808 - digiKam Mac Package crashes after resume when screen configuration changes.
 537 ==> 399071 - "Adjust Time Date" tool shows all times as "00:00:00".
 538 ==> 399134 - Progress bar or status when importing from camera/card reader.
 539 ==> 399153 - Selecting a picture with a tag and another without that tag, the checkbox is black instead of gray. 
 540 ==> 384759 - Can't adjust timestamp of RAW files.
 541 ==> 399221 - Cannot scroll in videos by clicking on the progress bar (only by moving the progress slider).
 542 ==> 399315 - Horizontal scroll bar aligned to the right by default.
-543 ==> 397962 - Digikam 6.0 does not start after install.
+543 ==> 397962 - digiKam 6.0 does not start after install.
 544 ==> 399336 - Google maps – "For development purposes only" printed on the map.
 545 ==> 399338 - Count of items in Tree Views does not match total number of items.
 546 ==> 399292 - Video file datetime not shown correctly after editing.
-547 ==> 370553 - Adjust date - not possible to update "digikam timestamp".
+547 ==> 370553 - Adjust date - not possible to update "digiKam timestamp".
 548 ==> 329091 - MySQL : needs to set "max-allowed-packet" server settings from 4.096 to 16.777.216 to prevent Maintenance tool crash.
-549 ==> 399406 - Digikam Crash on advance rename.
+549 ==> 399406 - digiKam Crash on advance rename.
 550 ==> 397386 - Add a separate checkbox to "Show Rating".
 551 ==> 335870 - Nexus 4 in PTP mode gets error: The specified camera ("/org/kde/solid/udev/...") is not supported.
-552 ==> 
+552 ==> 399917 - Fails to build with QT5.7.1
+553 ==> 399762 - digiKam Geolocation Correlator ignores time offset.
+554 ==> 400148 - Files exported in google photos does not have their filename as name, but their date.
+555 ==> 373678 - Videos exported in google photos are not available (still processing state).
+556 ==> 400139 - Titles are not exported anymore on google photos.
+557 ==> 400216 - Components Information window: no standardized uppercase/lowercase.
+558 ==> 400217 - Incorrect Video date/time information: shifted by 2 hours.
+559 ==> 396961 - Empty space on interface on thumbnail view.
+560 ==> 400436 - Crash when saving jpeg files with metadata.
+561 ==> 400492 - Rotation does not work.
+562 ==> 246727 - Add undo functionality to move to trash action.
+563 ==> 400637 - IPFS icons have non-square size, causing them to get blurred.
+564 ==> 400434 - Trash content disappears after selecting 'Map' or 'Table' view.
+565 ==> 394660 - Crashes when refreshing.
+566 ==> 400712 - File modification timestamp is updated when images are moved to collection on removable media.
+567 ==> 394214 - Import .mp4 files does not preserve file mtime as date stamp.
+568 ==> 400762 - Trash - "Delete All Permanently" button not visible.
+569 ==> 400792 - Failure to export to JPEG 2000.
+570 ==> 400777 - Group images by timelapse / burst [patch].
+571 ==> 

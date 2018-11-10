@@ -35,9 +35,9 @@
 #include "digikam_export.h"
 #include "dcategorizedsortfilterproxymodel.h"
 #include "statesavingobject.h"
-#include "imagealbummodel.h"
+#include "itemalbummodel.h"
 #include "thumbnailloadthread.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 #include "camiteminfo.h"
 
 namespace Digikam
@@ -70,7 +70,7 @@ public:
     void setActive(const bool state);
     bool getActiveState() const;
 
-    ImageInfo   currentImageInfo()   const;
+    ItemInfo   currentItemInfo()   const;
     CamItemInfo currentCamItemInfo() const;
 
 protected:

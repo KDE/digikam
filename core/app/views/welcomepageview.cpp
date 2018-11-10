@@ -184,6 +184,7 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName) const
 
     result.resize(len + 2);
     readLen = file.read(result.data(), len);
+    file.close();
 
     if (result[len-1] != '\n')
     {

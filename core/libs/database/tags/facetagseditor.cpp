@@ -30,8 +30,8 @@
 #include "coredbconstants.h"
 #include "coredboperationgroup.h"
 #include "facetags.h"
-#include "imageinfo.h"
-#include "imagetagpair.h"
+#include "iteminfo.h"
+#include "itemtagpair.h"
 #include "tagproperties.h"
 #include "tagscache.h"
 #include "tagregion.h"
@@ -54,7 +54,7 @@ FaceTagsEditor::~FaceTagsEditor()
 
 int FaceTagsEditor::faceCountForPersonInImage(qlonglong imageid, int tagId ) const
 {
-    ImageTagPair pair(imageid, tagId);
+    ItemTagPair pair(imageid, tagId);
     return pair.values(ImageTagPropertyName::tagRegion()).size();
 }
 
@@ -83,7 +83,7 @@ QList<FaceTagsIface> FaceTagsEditor::databaseFaces(qlonglong imageid, FaceTagsIf
     QList<FaceTagsIface> faces;
     QStringList         attributes = FaceTagsIface::attributesForFlags(flags);
 
-    foreach(const ImageTagPair& pair, faceImageTagPairs(imageid, flags))
+    foreach(const ItemTagPair& pair, faceItemTagPairs(imageid, flags))
     {
         foreach(const QString& attribute, attributes)
         {
@@ -105,12 +105,12 @@ QList<FaceTagsIface> FaceTagsEditor::databaseFaces(qlonglong imageid, FaceTagsIf
     return faces;
 }
 
-QList<ImageTagPair> FaceTagsEditor::faceImageTagPairs(qlonglong imageid, FaceTagsIface::TypeFlags flags) const
+QList<ItemTagPair> FaceTagsEditor::faceItemTagPairs(qlonglong imageid, FaceTagsIface::TypeFlags flags) const
 {
-    QList<ImageTagPair> pairs;
+    QList<ItemTagPair> pairs;
     QStringList         attributes = FaceTagsIface::attributesForFlags(flags);
 
-    foreach(const ImageTagPair& pair, ImageTagPair::availablePairs(imageid))
+    foreach(const ItemTagPair& pair, ItemTagPair::availablePairs(imageid))
     {
         //qCDebug(DIGIKAM_DATABASE_LOG) << pair.tagId() << pair.properties();
         if (!FaceTags::isPerson(pair.tagId()))
@@ -138,9 +138,9 @@ QList<ImageTagPair> FaceTagsEditor::faceImageTagPairs(qlonglong imageid, FaceTag
 QList< QRect > FaceTagsEditor::getTagRects(qlonglong imageid) const
 {
     QList<QRect>        rectList;
-    QList<ImageTagPair> pairs = ImageTagPair::availablePairs(imageid);
+    QList<ItemTagPair> pairs = ItemTagPair::availablePairs(imageid);
 
-    foreach(const ImageTagPair& pair, pairs)
+    foreach(const ItemTagPair& pair, pairs)
     {
         QStringList regions = pair.values(ImageTagPropertyName::tagRegion());
 
@@ -162,9 +162,9 @@ int FaceTagsEditor::numberOfFaces(qlonglong imageid) const
 {
     // Use case for this? Depending on a use case, we can think of an optimization
     int                 count = 0;
-    QList<ImageTagPair> pairs = ImageTagPair::availablePairs(imageid);
+    QList<ItemTagPair> pairs = ItemTagPair::availablePairs(imageid);
 
-    foreach(const ImageTagPair& pair, pairs)
+    foreach(const ItemTagPair& pair, pairs)
     {
         QStringList regions = pair.values(ImageTagPropertyName::tagRegion());
         count += regions.size();
@@ -195,7 +195,7 @@ FaceTagsIface FaceTagsEditor::confirmedEntry(const FaceTagsIface& face, int tagI
 
 FaceTagsIface FaceTagsEditor::addManually(const FaceTagsIface& face)
 {
-    ImageTagPair pair(face.imageId(), face.tagId());
+    ItemTagPair pair(face.imageId(), face.tagId());
     addFaceAndTag(pair, face, FaceTagsIface::attributesForFlags(face.type()), false);
     return face;
 }
@@ -219,14 +219,14 @@ FaceTagsIface FaceTagsEditor::changeSuggestedName(const FaceTagsIface& previousE
 
     QStringList attributesList = FaceTagsIface::attributesForFlags(FaceTagsIface::UnconfirmedName);
 
-    ImageTagPair pair(newEntry.imageId(), newEntry.tagId());
+    ItemTagPair pair(newEntry.imageId(), newEntry.tagId());
     // UnconfirmedName and UnknownName have the same attribute
     addFaceAndTag(pair, newEntry, attributesList, false);
 
     // Add the image to the face to the unconfirmed tag, if it is not the unknown or unconfirmed tag.
     if (!FaceTags::isTheUnknownPerson(unconfirmedNameTagId) && !FaceTags::isTheUnconfirmedPerson(unconfirmedNameTagId))
     {
-        ImageTagPair unconfirmedAssociation(newEntry.imageId(),FaceTags::unconfirmedPersonTagId());
+        ItemTagPair unconfirmedAssociation(newEntry.imageId(),FaceTags::unconfirmedPersonTagId());
         unconfirmedAssociation.addProperty(ImageTagPropertyName::autodetectedPerson(), newEntry.getAutodetectedPersonString());
     }
 
@@ -243,7 +243,7 @@ FaceTagsIface FaceTagsEditor::confirmName(const FaceTagsIface& face, int tagId, 
         return face;
     }
 
-    ImageTagPair pair(newEntry.imageId(), newEntry.tagId());
+    ItemTagPair pair(newEntry.imageId(), newEntry.tagId());
 
     // Remove entry from autodetection
     if (newEntry.tagId() == face.tagId())
@@ -252,7 +252,7 @@ FaceTagsIface FaceTagsEditor::confirmName(const FaceTagsIface& face, int tagId, 
     }
     else
     {
-        ImageTagPair pairOldEntry(face.imageId(), face.tagId());
+        ItemTagPair pairOldEntry(face.imageId(), face.tagId());
         removeFaceAndTag(pairOldEntry, face, true);
     }
 
@@ -274,7 +274,7 @@ FaceTagsIface FaceTagsEditor::add(qlonglong imageId, int tagId, const TagRegion&
 
 void FaceTagsEditor::add(const FaceTagsIface& face, bool trainFace)
 {
-    ImageTagPair pair(face.imageId(), face.tagId());
+    ItemTagPair pair(face.imageId(), face.tagId());
     FaceTagsIface::TypeFlags flags = FaceTagsIface::ConfirmedName;
 
     if (trainFace)
@@ -285,7 +285,7 @@ void FaceTagsEditor::add(const FaceTagsIface& face, bool trainFace)
     addFaceAndTag(pair, face, FaceTagsIface::attributesForFlags(flags), true);
 }
 
-void FaceTagsEditor::addFaceAndTag(ImageTagPair& pair, const FaceTagsIface& face,
+void FaceTagsEditor::addFaceAndTag(ItemTagPair& pair, const FaceTagsIface& face,
                     const QStringList& properties, bool addTag)
 {
     FaceTags::ensureIsPerson(face.tagId());
@@ -309,7 +309,7 @@ void FaceTagsEditor::removeAllFaces(qlonglong imageid)
     QList<int>  tagsToRemove;
     QStringList attributes = FaceTagsIface::attributesForFlags(FaceTagsIface::AllTypes);
 
-    foreach(ImageTagPair pair, faceImageTagPairs(imageid, FaceTagsIface::AllTypes))
+    foreach(ItemTagPair pair, faceItemTagPairs(imageid, FaceTagsIface::AllTypes))
     {
         foreach(const QString& attribute, attributes)
         {
@@ -329,11 +329,11 @@ void FaceTagsEditor::removeFace(qlonglong imageid, const QRect& rect)
 {
     QList<int>          tagsToRemove;
     QStringList         attributes    = FaceTagsIface::attributesForFlags(FaceTagsIface::AllTypes);
-    QList<ImageTagPair> pairs         = faceImageTagPairs(imageid, FaceTagsIface::AllTypes);
+    QList<ItemTagPair> pairs         = faceItemTagPairs(imageid, FaceTagsIface::AllTypes);
 
     for (int i=0; i<pairs.size(); ++i)
     {
-        ImageTagPair& pair = pairs[i];
+        ItemTagPair& pair = pairs[i];
 
         foreach(const QString& attribute, attributes)
         {
@@ -362,7 +362,7 @@ void FaceTagsEditor::removeFace(const FaceTagsIface& face)
         return;
     }
 
-    ImageTagPair pair(face.imageId(), face.tagId());
+    ItemTagPair pair(face.imageId(), face.tagId());
     removeFaceAndTag(pair, face, true);
 }
 
@@ -375,12 +375,12 @@ void FaceTagsEditor::removeFaces(const QList<FaceTagsIface>& faces)
             continue;
         }
 
-        ImageTagPair pair(face.imageId(), face.tagId());
+        ItemTagPair pair(face.imageId(), face.tagId());
         removeFaceAndTag(pair, face, true);
     }
 }
 
-void FaceTagsEditor::removeFaceAndTag(ImageTagPair& pair, const FaceTagsIface& face, bool touchTags)
+void FaceTagsEditor::removeFaceAndTag(ItemTagPair& pair, const FaceTagsIface& face, bool touchTags)
 {
     QString regionString = TagRegion(face.region().toRect()).toXml();
     pair.removeProperty(FaceTagsIface::attributeForType(face.type()), regionString);
@@ -391,7 +391,7 @@ void FaceTagsEditor::removeFaceAndTag(ImageTagPair& pair, const FaceTagsIface& f
     }
 
     // Remove the unconfirmed property for the image id and the unconfirmed tag with the original tag id and the confirmed region
-    ImageTagPair unconfirmedAssociation(face.imageId(),FaceTags::unconfirmedPersonTagId());
+    ItemTagPair unconfirmedAssociation(face.imageId(),FaceTags::unconfirmedPersonTagId());
     unconfirmedAssociation.removeProperty(ImageTagPropertyName::autodetectedPerson(),face.getAutodetectedPersonString());
 
     // Tag assigned and no other entry left?
@@ -410,7 +410,7 @@ FaceTagsIface FaceTagsEditor::changeRegion(const FaceTagsIface& face, const TagR
         return face;
     }
 
-    ImageTagPair pair(face.imageId(), face.tagId());
+    ItemTagPair pair(face.imageId(), face.tagId());
     removeFaceAndTag(pair, face, false);
 
     FaceTagsIface newFace = face;
@@ -425,19 +425,19 @@ FaceTagsIface FaceTagsEditor::changeRegion(const FaceTagsIface& face, const TagR
 
 void FaceTagsEditor::addNormalTag(qlonglong imageId, int tagId)
 {
-    ImageInfo(imageId).setTag(tagId);
+    ItemInfo(imageId).setTag(tagId);
 }
 
 void FaceTagsEditor::removeNormalTag(qlonglong imageId, int tagId)
 {
-    ImageInfo(imageId).removeTag(tagId);
+    ItemInfo(imageId).removeTag(tagId);
 }
 
 void FaceTagsEditor::removeNormalTags(qlonglong imageId, QList<int> tagIds)
 {
     CoreDbOperationGroup group;
     group.setMaximumTime(200);
-    ImageInfo info(imageId);
+    ItemInfo info(imageId);
 
     foreach(int tagId, tagIds)
     {

@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class ImageDelegateOverlay;
+class ItemDelegateOverlay;
 class ItemViewImportDelegate;
 
 class Q_DECL_HIDDEN ItemViewImportDelegatePrivate

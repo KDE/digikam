@@ -33,6 +33,7 @@ set(libcombotools_SRCS
     combo/comboboxutilities.cpp
     combo/dcombobox.cpp
     combo/squeezedcombobox.cpp
+    combo/timezonecombobox.cpp
 )
 
 set(libcolorstools_SRCS
@@ -77,7 +78,7 @@ set(libitemview_SRCS
     itemview/ditemdelegate.cpp
     itemview/ditemtooltip.cpp
     itemview/dcategorydrawer.cpp
-    itemview/imagedelegateoverlay.cpp
+    itemview/itemdelegateoverlay.cpp
     itemview/itemviewhoverbutton.cpp
     itemview/itemviewimagedelegate.cpp
     itemview/itemviewtooltip.cpp
@@ -163,11 +164,11 @@ add_library(digikamwidgetscore_src OBJECT
 #############################################################"
 
 set(libimagehistory_SRCS
-    imagehistory/filtershistorywidget.cpp
-    imagehistory/imagefiltershistoryitemdelegate.cpp
-    imagehistory/imagefiltershistorymodel.cpp
-    imagehistory/imagefiltershistorytreeitem.cpp
-    imagehistory/versionswidget.cpp
+    history/filtershistorywidget.cpp
+    history/itemfiltershistoryitemdelegate.cpp
+    history/itemfiltershistorymodel.cpp
+    history/itemfiltershistorytreeitem.cpp
+    history/versionswidget.cpp
 )
 
 add_library(imagehistorywidgets_src OBJECT ${libimagehistory_SRCS})

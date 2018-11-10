@@ -131,11 +131,11 @@ void LightTableWindow::showEvent(QShowEvent*)
 }
 
 // Deal with items dropped onto the thumbbar (e.g. from the Album view)
-void LightTableWindow::slotThumbbarDroppedItems(const QList<ImageInfo>& list)
+void LightTableWindow::slotThumbbarDroppedItems(const QList<ItemInfo>& list)
 {
-    // Setting the third parameter of loadImageInfos to true
+    // Setting the third parameter of loadItemInfos to true
     // means that the images are added to the presently available images.
-    loadImageInfos(ImageInfoList(list), ImageInfo(), true);
+    loadItemInfos(ItemInfoList(list), ItemInfo(), true);
 }
 
 // We get here either
@@ -144,10 +144,10 @@ void LightTableWindow::slotThumbbarDroppedItems(const QList<ImageInfo>& list)
 //     b) digikamview.cpp: void DigikamView::slotImageLightTable()
 //          calls d->iconView->insertToLightTable(list, info);
 //     c) albumiconview.cpp: AlbumIconView::insertToLightTable
-//          calls ltview->loadImageInfos(list, current);
+//          calls ltview->loadItemInfos(list, current);
 // - via drag&drop, i.e. calls issued by the ...Dropped... routines
-void LightTableWindow::loadImageInfos(const ImageInfoList& list,
-                                      const ImageInfo& givenImageInfoCurrent,
+void LightTableWindow::loadItemInfos(const ItemInfoList& list,
+                                      const ItemInfo& givenItemInfoCurrent,
                                       bool  addTo)
 {
     // Clear all items before adding new images to the light table.
@@ -158,8 +158,8 @@ void LightTableWindow::loadImageInfos(const ImageInfoList& list,
         slotClearItemsList();
     }
 
-    ImageInfoList l            = list;
-    ImageInfo imageInfoCurrent = givenImageInfoCurrent;
+    ItemInfoList l            = list;
+    ItemInfo imageInfoCurrent = givenItemInfoCurrent;
 
     if (imageInfoCurrent.isNull() && !l.isEmpty())
     {
@@ -198,21 +198,21 @@ void LightTableWindow::slotFileChanged(const QString& path)
     QUrl url = QUrl::fromLocalFile(path);
     // NOTE: Thumbbar handle change through ImageCategorizedView
 
-    if (!d->previewView->leftImageInfo().isNull())
+    if (!d->previewView->leftItemInfo().isNull())
     {
-        if (d->previewView->leftImageInfo().fileUrl() == url)
+        if (d->previewView->leftItemInfo().fileUrl() == url)
         {
             d->previewView->leftReload();
-            d->leftSideBar->itemChanged(d->previewView->leftImageInfo());
+            d->leftSideBar->itemChanged(d->previewView->leftItemInfo());
         }
     }
 
-    if (!d->previewView->rightImageInfo().isNull())
+    if (!d->previewView->rightItemInfo().isNull())
     {
-        if (d->previewView->rightImageInfo().fileUrl() == url)
+        if (d->previewView->rightItemInfo().fileUrl() == url)
         {
             d->previewView->rightReload();
-            d->rightSideBar->itemChanged(d->previewView->rightImageInfo());
+            d->rightSideBar->itemChanged(d->previewView->rightItemInfo());
         }
     }
 }
@@ -224,7 +224,7 @@ void LightTableWindow::slotLeftPanelLeftButtonClicked()
         return;
     }
 
-    d->thumbView->setCurrentInfo(d->previewView->leftImageInfo());
+    d->thumbView->setCurrentInfo(d->previewView->leftItemInfo());
 }
 
 void LightTableWindow::slotRightPanelLeftButtonClicked()
@@ -235,7 +235,7 @@ void LightTableWindow::slotRightPanelLeftButtonClicked()
         return;
     }
 
-    d->thumbView->setCurrentInfo(d->previewView->rightImageInfo());
+    d->thumbView->setCurrentInfo(d->previewView->rightItemInfo());
 }
 
 void LightTableWindow::slotLeftPreviewLoaded(bool b)
@@ -245,11 +245,11 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
 
     if (b)
     {
-        d->leftFileName->setAdjustedText(d->previewView->leftImageInfo().name());
+        d->leftFileName->setAdjustedText(d->previewView->leftItemInfo().name());
         d->previewView->checkForSelection(d->thumbView->currentInfo());
-        d->thumbView->setOnLeftPanel(d->previewView->leftImageInfo());
+        d->thumbView->setOnLeftPanel(d->previewView->leftItemInfo());
 
-        QModelIndex index = d->thumbView->findItemByInfo(d->previewView->leftImageInfo());
+        QModelIndex index = d->thumbView->findItemByInfo(d->previewView->leftItemInfo());
 
         if (d->navigateByPairAction->isChecked() && index.isValid())
         {
@@ -263,7 +263,7 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
             else
             {
                 QModelIndex first = d->thumbView->firstIndex();
-                slotSetItemOnRightPanel(first.isValid() ? d->thumbView->findItemByIndex(first) : ImageInfo());
+                slotSetItemOnRightPanel(first.isValid() ? d->thumbView->findItemByIndex(first) : ItemInfo());
             }
         }
     }
@@ -276,11 +276,11 @@ void LightTableWindow::slotRightPreviewLoaded(bool b)
 
     if (b)
     {
-        d->rightFileName->setAdjustedText(d->previewView->rightImageInfo().name());
+        d->rightFileName->setAdjustedText(d->previewView->rightItemInfo().name());
         d->previewView->checkForSelection(d->thumbView->currentInfo());
-        d->thumbView->setOnRightPanel(d->previewView->rightImageInfo());
+        d->thumbView->setOnRightPanel(d->previewView->rightItemInfo());
 
-        QModelIndex index = d->thumbView->findItemByInfo(d->previewView->rightImageInfo());
+        QModelIndex index = d->thumbView->findItemByInfo(d->previewView->rightItemInfo());
 
         if (index.isValid())
         {
@@ -289,7 +289,7 @@ void LightTableWindow::slotRightPreviewLoaded(bool b)
     }
 }
 
-void LightTableWindow::slotItemSelected(const ImageInfo& info)
+void LightTableWindow::slotItemSelected(const ItemInfo& info)
 {
     bool hasInfo = !info.isNull();
 
@@ -344,14 +344,14 @@ void LightTableWindow::slotItemSelected(const ImageInfo& info)
 }
 
 // Deal with one (or more) items dropped onto the left panel
-void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
+void LightTableWindow::slotLeftDroppedItems(const ItemInfoList& list)
 {
-    ImageInfo info = list.first();
+    ItemInfo info = list.first();
     // add the image to the existing images
-    loadImageInfos(list, info, true);
+    loadItemInfos(list, info, true);
 
     // We will check if first item from list is already stored in thumbbar
-    // Note that the thumbbar stores all ImageInfo reference
+    // Note that the thumbbar stores all ItemInfo reference
     // in memory for preview object.
     QModelIndex index = d->thumbView->findItemByInfo(info);
 
@@ -362,14 +362,14 @@ void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
 }
 
 // Deal with one (or more) items dropped onto the right panel
-void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
+void LightTableWindow::slotRightDroppedItems(const ItemInfoList& list)
 {
-    ImageInfo info = list.first();
+    ItemInfo info = list.first();
     // add the image to the existing images
-    loadImageInfos(list, info, true);
+    loadItemInfos(list, info, true);
 
     // We will check if first item from list is already stored in thumbbar
-    // Note that the thumbbar stores all ImageInfo reference
+    // Note that the thumbbar stores all ItemInfo reference
     // in memory for preview object.
     QModelIndex index = d->thumbView->findItemByInfo(info);
 
@@ -382,16 +382,16 @@ void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
 }
 
 // Set the images for the left and right panel.
-void LightTableWindow::setLeftRightItems(const ImageInfoList& list, bool addTo)
+void LightTableWindow::setLeftRightItems(const ItemInfoList& list, bool addTo)
 {
-    ImageInfoList l = list;
+    ItemInfoList l = list;
 
     if (l.count() == 0)
     {
         return;
     }
 
-    ImageInfo info    = l.first();
+    ItemInfo info    = l.first();
     QModelIndex index = d->thumbView->findItemByInfo(info);
 
     if (l.count() == 1 && !addTo)
@@ -417,7 +417,7 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList& list, bool addTo)
 
         if (next.isValid() && !addTo)
         {
-            ImageInfo nextInf = d->thumbView->findItemByIndex(next);
+            ItemInfo nextInf = d->thumbView->findItemByIndex(next);
             d->thumbView->setOnRightPanel(nextInf);
             slotSetItemOnRightPanel(nextInf);
 
@@ -452,9 +452,9 @@ void LightTableWindow::slotSetItemRight()
     }
 }
 
-void LightTableWindow::slotSetItemOnLeftPanel(const ImageInfo& info)
+void LightTableWindow::slotSetItemOnLeftPanel(const ItemInfo& info)
 {
-    d->previewView->setLeftImageInfo(info);
+    d->previewView->setLeftItemInfo(info);
 
     if (!info.isNull())
     {
@@ -466,9 +466,9 @@ void LightTableWindow::slotSetItemOnLeftPanel(const ImageInfo& info)
     }
 }
 
-void LightTableWindow::slotSetItemOnRightPanel(const ImageInfo& info)
+void LightTableWindow::slotSetItemOnRightPanel(const ItemInfo& info)
 {
-    d->previewView->setRightImageInfo(info);
+    d->previewView->setRightItemInfo(info);
 
     if (!info.isNull())
     {
@@ -482,15 +482,15 @@ void LightTableWindow::slotSetItemOnRightPanel(const ImageInfo& info)
 
 void LightTableWindow::slotClearItemsList()
 {
-    if (!d->previewView->leftImageInfo().isNull())
+    if (!d->previewView->leftItemInfo().isNull())
     {
-        d->previewView->setLeftImageInfo();
+        d->previewView->setLeftItemInfo();
         d->leftSideBar->slotNoCurrentItem();
     }
 
-    if (!d->previewView->rightImageInfo().isNull())
+    if (!d->previewView->rightItemInfo().isNull())
     {
-        d->previewView->setRightImageInfo();
+        d->previewView->setRightItemInfo();
         d->rightSideBar->slotNoCurrentItem();
     }
 
@@ -502,7 +502,7 @@ void LightTableWindow::slotDeleteItem()
     deleteItem(false);
 }
 
-void LightTableWindow::slotDeleteItem(const ImageInfo& info)
+void LightTableWindow::slotDeleteItem(const ItemInfo& info)
 {
     deleteItem(info, false);
 }
@@ -512,7 +512,7 @@ void LightTableWindow::slotDeleteFinalItem()
     deleteItem(true);
 }
 
-void LightTableWindow::slotDeleteFinalItem(const ImageInfo& info)
+void LightTableWindow::slotDeleteFinalItem(const ItemInfo& info)
 {
     deleteItem(info, true);
 }
@@ -525,7 +525,7 @@ void LightTableWindow::deleteItem(bool permanently)
     }
 }
 
-void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
+void LightTableWindow::deleteItem(const ItemInfo& info, bool permanently)
 {
     QUrl u               = info.fileUrl();
     PAlbum* const palbum = AlbumManager::instance()->findPAlbum(u.adjusted(QUrl::RemoveFilename));
@@ -564,23 +564,23 @@ void LightTableWindow::slotRemoveItem()
     }
 }
 
-void LightTableWindow::slotRemoveItem(const ImageInfo& info)
+void LightTableWindow::slotRemoveItem(const ItemInfo& info)
 {
 /*
-    if (!d->previewView->leftImageInfo().isNull())
+    if (!d->previewView->leftItemInfo().isNull())
     {
-        if (d->previewView->leftImageInfo() == info)
+        if (d->previewView->leftItemInfo() == info)
         {
-            d->previewView->setLeftImageInfo();
+            d->previewView->setLeftItemInfo();
             d->leftSideBar->slotNoCurrentItem();
         }
     }
 
-    if (!d->previewView->rightImageInfo().isNull())
+    if (!d->previewView->rightItemInfo().isNull())
     {
-        if (d->previewView->rightImageInfo() == info)
+        if (d->previewView->rightItemInfo() == info)
         {
-            d->previewView->setRightImageInfo();
+            d->previewView->setRightItemInfo();
             d->rightSideBar->slotNoCurrentItem();
         }
     }
@@ -595,16 +595,16 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
     // and the subscript _L and _ R  mark the currently
     // active item on the left and right panel
 
-    ImageInfo new_linfo;
-    ImageInfo new_rinfo;
+    ItemInfo new_linfo;
+    ItemInfo new_rinfo;
     bool leftPanelActive = false;
-    ImageInfo curr_linfo = d->previewView->leftImageInfo();
-    ImageInfo curr_rinfo = d->previewView->rightImageInfo();
+    ItemInfo curr_linfo = d->previewView->leftItemInfo();
+    ItemInfo curr_rinfo = d->previewView->rightItemInfo();
     qint64 infoId        = info.id();
 
     // First determine the next images to the current left and right image:
-    ImageInfo next_linfo;
-    ImageInfo next_rinfo;
+    ItemInfo next_linfo;
+    ItemInfo next_rinfo;
 
     if (!curr_linfo.isNull())
     {
@@ -641,12 +641,12 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
     // Make sure that next_linfo and next_rinfo are still available:
     if (!d->thumbView->findItemByInfo(next_linfo).isValid())
     {
-        next_linfo = ImageInfo();
+        next_linfo = ItemInfo();
     }
 
     if (!d->thumbView->findItemByInfo(next_rinfo).isValid())
     {
-        next_rinfo = ImageInfo();
+        next_rinfo = ItemInfo();
     }
 
     // removal of the left panel item?
@@ -704,7 +704,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
     if (new_linfo.isNull() && !new_rinfo.isNull())
     {
         new_linfo       = new_rinfo;
-        new_rinfo       = ImageInfo();
+        new_rinfo       = ItemInfo();
         leftPanelActive = true;
     }
 
@@ -722,12 +722,12 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
     // in the navigate by pairs mode.
     if (!d->thumbView->findItemByInfo(new_linfo).isValid())
     {
-        new_linfo = ImageInfo();
+        new_linfo = ItemInfo();
     }
 
     if (!d->thumbView->findItemByInfo(new_rinfo).isValid())
     {
-        new_rinfo = ImageInfo();
+        new_rinfo = ItemInfo();
     }
 
     // no right item defined?
@@ -766,7 +766,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
         if (new_linfo.id() == new_rinfo.id())
         {
             // Only keep the left one
-            new_rinfo = ImageInfo();
+            new_rinfo = ItemInfo();
         }
     }
 
@@ -775,7 +775,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
     if (new_linfo.isNull() && !new_rinfo.isNull())
     {
         new_linfo       = new_rinfo;
-        new_rinfo       = ImageInfo();
+        new_rinfo       = ItemInfo();
         leftPanelActive = true;
     }
 
@@ -793,7 +793,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
     }
     else
     {
-        d->previewView->setLeftImageInfo();
+        d->previewView->setLeftItemInfo();
         d->leftSideBar->slotNoCurrentItem();
     }
 
@@ -811,7 +811,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
     }
     else
     {
-        d->previewView->setRightImageInfo();
+        d->previewView->setRightItemInfo();
         d->rightSideBar->slotNoCurrentItem();
     }
 }

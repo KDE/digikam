@@ -189,7 +189,7 @@ public:
      * This menu will provide actions open, close, add to, remove from, or split a group.
      *
      * addGroupActions will add the actions as a flat list, not in a submenu.
-     * Note: Call setImageFilterModel before to have Open/Close group actions.
+     * Note: Call setItemFilterModel before to have Open/Close group actions.
      */
     void addGroupMenu(itemIds& ids);
     void addGroupActions(itemIds& ids);

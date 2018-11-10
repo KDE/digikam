@@ -24,6 +24,10 @@
 #ifndef DIGIKAM_DIMG_LOADER_OBSERVER_H
 #define DIGIKAM_DIMG_LOADER_OBSERVER_H
 
+// Qt includes
+
+#include <QtGlobal>
+
 // Local includes
 
 #include "digikam_export.h"
@@ -44,14 +48,17 @@ public:
 
     /** Posts progress information about image IO
      */
-    virtual void progressInfo(const DImg* const, float /*progress*/)
+    virtual void progressInfo(DImg* const img, float progress)
     {
+        Q_UNUSED(img);
+        Q_UNUSED(progress);
     };
 
     /** Queries whether the image IO operation shall be continued
      */
-    virtual bool continueQuery(const DImg* const)
+    virtual bool continueQuery(DImg* const img)
     {
+        Q_UNUSED(img);
         return true;
     };
 

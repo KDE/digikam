@@ -37,7 +37,7 @@
 // Local includes
 
 #include "albummanager.h"
-#include "imageinfojob.h"
+#include "iteminfojob.h"
 #include "maintenancethread.h"
 
 namespace Digikam
@@ -58,9 +58,9 @@ public:
     AlbumList                           palbumList;
     AlbumList::Iterator                 albumsIt;
 
-    ImageInfoJob*                       imageInfoJob;
+    ItemInfoJob*                       imageInfoJob;
 
-    ImageInfoList                       imageInfoList;
+    ItemInfoList                       imageInfoList;
 
     MaintenanceThread*                  thread;
 
@@ -80,7 +80,7 @@ MetadataSynchronizer::MetadataSynchronizer(const AlbumList& list, SyncDirection 
     init(direction);
 }
 
-MetadataSynchronizer::MetadataSynchronizer(const ImageInfoList& list, SyncDirection direction, ProgressItem* const parent)
+MetadataSynchronizer::MetadataSynchronizer(const ItemInfoList& list, SyncDirection direction, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("MetadataSynchronizer"), parent),
       d(new Private)
 {
@@ -115,10 +115,10 @@ void MetadataSynchronizer::setUseMultiCoreCPU(bool b)
 void MetadataSynchronizer::slotStart()
 {
     MaintenanceTool::slotStart();
-    d->imageInfoJob = new ImageInfoJob;
+    d->imageInfoJob = new ItemInfoJob;
 
-    connect(d->imageInfoJob, SIGNAL(signalItemsInfo(ImageInfoList)),
-            this, SLOT(slotAlbumParsed(ImageInfoList)));
+    connect(d->imageInfoJob, SIGNAL(signalItemsInfo(ItemInfoList)),
+            this, SLOT(slotAlbumParsed(ItemInfoList)));
 
     connect(d->imageInfoJob, SIGNAL(signalCompleted()),
             this, SLOT(slotOneAlbumIsComplete()));
@@ -170,7 +170,7 @@ void MetadataSynchronizer::processOneAlbum()
     d->imageInfoJob->allItemsFromAlbum(*d->albumsIt);
 }
 
-void MetadataSynchronizer::slotAlbumParsed(const ImageInfoList& list)
+void MetadataSynchronizer::slotAlbumParsed(const ItemInfoList& list)
 {
     d->imageInfoList << list;
 }

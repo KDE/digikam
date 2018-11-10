@@ -41,24 +41,24 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "imageposition.h"
+#include "itemposition.h"
 #include "coredbchangesets.h"
-#include "imagelister.h"
+#include "itemlister.h"
 #include "coredbaccess.h"
 #include "coredb.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "thumbnailloadthread.h"
 #include "thumbsdbaccess.h"
 #include "thumbsdb.h"
 #include "coredbwatch.h"
 #include "coredbfields.h"
-#include "imagealbummodel.h"
-#include "imagefiltermodel.h"
+#include "itemalbummodel.h"
+#include "itemfiltermodel.h"
 
 namespace Digikam
 {
 
-class GPSImageInfo;
+class GPSItemInfo;
 
 class GPSMarkerTiler : public AbstractMarkerTiler
 {
@@ -69,7 +69,7 @@ public:
     class MyTile;
 
     explicit GPSMarkerTiler(QObject* const parent,
-                            ImageFilterModel* const imageFilterModel,
+                            ItemFilterModel* const imageFilterModel,
                             QItemSelectionModel* const selectionModel);
     virtual ~GPSMarkerTiler();
 
@@ -102,13 +102,13 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void slotNewModelData(const QList<ImageInfo>& infoList);
+    void slotNewModelData(const QList<ItemInfo>& infoList);
 
 private Q_SLOTS:
 
     /// @todo Do we monitor all signals of the source models?
     void slotMapImagesJobResult();
-    void slotMapImagesJobData(const QList<ImageListerRecord>& records);
+    void slotMapImagesJobData(const QList<ItemListerRecord>& records);
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
     void slotImageChange(const ImageChangeset& changeset);
     void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);

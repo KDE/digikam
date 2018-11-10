@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "digikam_export.h"
 
 class QEvent;

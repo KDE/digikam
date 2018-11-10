@@ -49,7 +49,7 @@ namespace Digikam
 {
 
 KmlWidget::KmlWidget(GeolocationEdit* const dlg,
-                     GPSImageModel* const imageModel,
+                     GPSItemModel* const imageModel,
                      DInfoInterface* const iface)
     : QWidget(dlg),
       m_model(imageModel),

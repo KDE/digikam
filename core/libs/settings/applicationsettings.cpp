@@ -37,8 +37,8 @@
 // Local includes
 
 #include "digikam_config.h"
-#include "imagefiltersettings.h"
-#include "imagesortsettings.h"
+#include "itemfiltersettings.h"
+#include "itemsortsettings.h"
 #include "mimefilter.h"
 #include "thumbnailsize.h"
 #include "thememanager.h"
@@ -124,10 +124,10 @@ void ApplicationSettings::readSettings()
     d->albumSortRole                     = ApplicationSettings::AlbumSortRole(group.readEntry(d->configAlbumSortRoleEntry,
                                                                                                        (int)ApplicationSettings::ByFolder));
 
-    d->imageSortOrder                    = group.readEntry(d->configImageSortOrderEntry,               (int)ImageSortSettings::SortByFileName);
-    d->imageSorting                      = group.readEntry(d->configImageSortingEntry,                 (int)ImageSortSettings::AscendingOrder);
-    d->imageSeparationMode               = group.readEntry(d->configImageSeparationModeEntry,          (int)ImageSortSettings::CategoryByAlbum);
-    d->imageSeparationSortOrder          = group.readEntry(d->configImageSeparationSortOrderEntry,     (int)ImageSortSettings::AscendingOrder);
+    d->imageSortOrder                    = group.readEntry(d->configImageSortOrderEntry,               (int)ItemSortSettings::SortByFileName);
+    d->imageSorting                      = group.readEntry(d->configImageSortingEntry,                 (int)ItemSortSettings::AscendingOrder);
+    d->imageSeparationMode               = group.readEntry(d->configImageSeparationModeEntry,          (int)ItemSortSettings::CategoryByAlbum);
+    d->imageSeparationSortOrder          = group.readEntry(d->configImageSeparationSortOrderEntry,     (int)ItemSortSettings::AscendingOrder);
 
     d->itemLeftClickAction               = ApplicationSettings::ItemLeftClickAction(group.readEntry(d->configItemLeftClickActionEntry,
                                                                                                        (int)ApplicationSettings::ShowPreview));
@@ -141,7 +141,7 @@ void ApplicationSettings::readSettings()
                                                                                                        (int)DMultiTabBar::AllIconsText);
 
     d->ratingFilterCond                  = group.readEntry(d->configRatingFilterConditionEntry,
-                                                                                                       (int)ImageFilterSettings::GreaterEqualCondition);
+                                                                                                       (int)ItemFilterSettings::GreaterEqualCondition);
 
     d->recursiveAlbums                   = group.readEntry(d->configRecursiveAlbumsEntry,              false);
     d->recursiveTags                     = group.readEntry(d->configRecursiveTagsEntry,                true);

@@ -35,7 +35,7 @@
 
 #include "digikam_config.h"
 #include "digikam_export.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "thumbbardock.h"
 
 namespace Digikam
@@ -107,9 +107,9 @@ public:
     bool isInMultipleFileMode() const;
     bool isInAbstractMode()     const;
 
-    void setPreviewItem(const ImageInfo& info = ImageInfo(),
-                        const ImageInfo& previous = ImageInfo(),
-                        const ImageInfo& next = ImageInfo());
+    void setPreviewItem(const ItemInfo& info = ItemInfo(),
+                        const ItemInfo& previous = ItemInfo(),
+                        const ItemInfo& next = ItemInfo());
     StackedViewMode viewMode() const;
     void setViewMode(const StackedViewMode mode);
     void previewLoaded();
@@ -139,8 +139,8 @@ Q_SIGNALS:
     void signalPopupTagsView();
     void signalAddToExistingQueue(int);
 
-    void signalGotoAlbumAndItem(const ImageInfo&);
-    void signalGotoDateAndItem(const ImageInfo&);
+    void signalGotoAlbumAndItem(const ItemInfo&);
+    void signalGotoDateAndItem(const ItemInfo&);
     void signalGotoTagAndItem(int);
 
 public Q_SLOTS:

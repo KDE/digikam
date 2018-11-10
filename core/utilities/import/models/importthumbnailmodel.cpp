@@ -56,7 +56,7 @@ public:
 };
 
 ImportThumbnailModel::ImportThumbnailModel(QObject* const parent)
-    : ImportImageModel(parent),
+    : ImportItemModel(parent),
       d(new Private)
 {
     setKeepsFileUrlCache(true);
@@ -74,7 +74,7 @@ void ImportThumbnailModel::setCameraThumbsController(CameraThumbsCtrl* const thu
     connect(d->thumbsCtrl, SIGNAL(signalThumbInfoReady(CamItemInfo)),
             this, SLOT(slotThumbInfoReady(CamItemInfo)));
 
-    ImportImageModel::setCameraThumbsController(d->thumbsCtrl);
+    ImportItemModel::setCameraThumbsController(d->thumbsCtrl);
 }
 
 ThumbnailSize ImportThumbnailModel::thumbnailSize() const
@@ -111,7 +111,7 @@ QVariant ImportThumbnailModel::data(const QModelIndex& index, int role) const
         return QVariant(d->thumbsCtrl->cameraController()->mimeTypeThumbnail(path).pixmap(d->thumbSize.size()));
     }
 
-    return ImportImageModel::data(index, role);
+    return ImportItemModel::data(index, role);
 }
 
 bool ImportThumbnailModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -142,7 +142,7 @@ bool ImportThumbnailModel::setData(const QModelIndex& index, const QVariant& val
         }
     }
 
-    return ImportImageModel::setData(index, value, role);
+    return ImportItemModel::setData(index, value, role);
 }
 
 void ImportThumbnailModel::slotThumbInfoReady(const CamItemInfo& info)

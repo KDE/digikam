@@ -175,14 +175,14 @@ void DigikamApp::slotEditMetadata()
     foreach (const QUrl& url, urls)
     {
         scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
-        ImageAttributesWatch::instance()->fileMetadataChanged(url);
+        ItemAttributesWatch::instance()->fileMetadataChanged(url);
     }
 }
 
 void DigikamApp::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    ImageInfoList infos = d->view->selectedInfoList(ApplicationSettings::Metadata);
+    ItemInfoList infos = d->view->selectedInfoList(ApplicationSettings::Metadata);
 
     if (infos.isEmpty())
         return;
@@ -195,7 +195,7 @@ void DigikamApp::slotEditGeolocation()
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel,
                                                            new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools),
                                                            this);
-    dialog->setItems(ImageGPS::infosToItems(infos));
+    dialog->setItems(ItemGPS::infosToItems(infos));
     dialog->exec();
 
     delete dialog;

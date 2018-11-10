@@ -36,7 +36,7 @@
 #include "album.h"
 #include "coredb.h"
 #include "applicationsettings.h"
-#include "albumtreeview.h"
+#include "datetreeview.h"
 #include "monthwidget.h"
 
 namespace Digikam
@@ -58,7 +58,7 @@ public:
 
     QString            selected;
 
-    DateAlbumTreeView* dateTreeView;
+    DateTreeView*      dateTreeView;
     MonthWidget*       monthview;
 };
 
@@ -69,7 +69,7 @@ DateFolderView::DateFolderView(QWidget* const parent, DateAlbumModel* const date
 {
     setObjectName(QLatin1String("DateFolderView"));
 
-    d->dateTreeView = new DateAlbumTreeView(this);
+    d->dateTreeView = new DateTreeView(this);
     d->dateTreeView->setAlbumModel(dateAlbumModel);
     d->dateTreeView->setAlbumManagerCurrentAlbum(true);
     d->monthview    = new MonthWidget(this);
@@ -91,9 +91,9 @@ DateFolderView::~DateFolderView()
     saveState();
 }
 
-void DateFolderView::setImageModel(ImageFilterModel* const model)
+void DateFolderView::setItemModel(ItemFilterModel* const model)
 {
-    d->monthview->setImageModel(model);
+    d->monthview->setItemModel(model);
 }
 
 void DateFolderView::setActive(const bool val)

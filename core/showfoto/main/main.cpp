@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
                          i18n("Showfoto"),          // display name
                          digiKamVersion());         // NOTE: showFoto version = digiKam version
 
-    aboutData.setShortDescription(DAboutData::digiKamSlogan());;
+    aboutData.setShortDescription(QString::fromUtf8("%1 - %2").arg(DAboutData::digiKamSlogan()).arg(DAboutData::digiKamFamilly()));
     aboutData.setLicense(KAboutLicense::GPL);
     aboutData.setCopyrightStatement(DAboutData::copyright());
     aboutData.setOtherText(additionalInformation());

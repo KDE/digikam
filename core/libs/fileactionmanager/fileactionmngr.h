@@ -27,7 +27,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "metaengine_rotation.h"
 #include "digikam_export.h"
 
@@ -65,44 +65,44 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void assignTag(const ImageInfo& info, int tagID);
-    void assignTag(const QList<ImageInfo>& infos, int tagID);
-    void assignTags(const ImageInfo& info, const QList<int>& tagIDs);
-    void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void assignTag(const ItemInfo& info, int tagID);
+    void assignTag(const QList<ItemInfo>& infos, int tagID);
+    void assignTags(const ItemInfo& info, const QList<int>& tagIDs);
+    void assignTags(const QList<ItemInfo>& infos, const QList<int>& tagIDs);
     void assignTags(const QList<qlonglong>& imageIds, const QList<int>& tagIDs);
 
-    void removeTag(const ImageInfo& info, int tagID);
-    void removeTag(const QList<ImageInfo>& infos, int tagID);
-    void removeTags(const ImageInfo& info, const QList<int>& tagIDs);
-    void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void removeTag(const ItemInfo& info, int tagID);
+    void removeTag(const QList<ItemInfo>& infos, int tagID);
+    void removeTags(const ItemInfo& info, const QList<int>& tagIDs);
+    void removeTags(const QList<ItemInfo>& infos, const QList<int>& tagIDs);
 
-    void assignPickLabel(const ImageInfo& infos, int pickId);
-    void assignPickLabel(const QList<ImageInfo>& infos, int pickId);
+    void assignPickLabel(const ItemInfo& infos, int pickId);
+    void assignPickLabel(const QList<ItemInfo>& infos, int pickId);
 
-    void assignColorLabel(const ImageInfo& infos, int colorId);
-    void assignColorLabel(const QList<ImageInfo>& infos, int colorId);
+    void assignColorLabel(const ItemInfo& infos, int colorId);
+    void assignColorLabel(const QList<ItemInfo>& infos, int colorId);
 
-    void assignRating(const ImageInfo& infos, int rating);
-    void assignRating(const QList<ImageInfo>& infos, int rating);
+    void assignRating(const ItemInfo& infos, int rating);
+    void assignRating(const QList<ItemInfo>& infos, int rating);
 
-    void addToGroup(const ImageInfo& pick, const QList<ImageInfo>& infos);
-    void removeFromGroup(const ImageInfo& info);
-    void removeFromGroup(const QList<ImageInfo>& infos);
-    void ungroup(const ImageInfo& info);
-    void ungroup(const QList<ImageInfo>& infos);
+    void addToGroup(const ItemInfo& pick, const QList<ItemInfo>& infos);
+    void removeFromGroup(const ItemInfo& info);
+    void removeFromGroup(const QList<ItemInfo>& infos);
+    void ungroup(const ItemInfo& info);
+    void ungroup(const QList<ItemInfo>& infos);
 
-    void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
-//    void applyMetadata(const QList<ImageInfo>& infos, const MetadataHub& hub);
-    void applyMetadata(const QList<ImageInfo>& infos, const DisjointMetadata& hub);
+    void setExifOrientation(const QList<ItemInfo>& infos, int orientation);
+//    void applyMetadata(const QList<ItemInfo>& infos, const MetadataHub& hub);
+    void applyMetadata(const QList<ItemInfo>& infos, const DisjointMetadata& hub);
     // ownership of the hub is passed, hub must be created without QObject parent
-    void applyMetadata(const QList<ImageInfo>& infos, DisjointMetadata* hub);
+    void applyMetadata(const QList<ItemInfo>& infos, DisjointMetadata* hub);
 
     /** Flip or rotate. Note: The NoTransformation action is interpreted as Exif auto-rotate
      */
-    void transform(const QList<ImageInfo>& infos, MetaEngineRotation::TransformationAction action);
+    void transform(const QList<ItemInfo>& infos, MetaEngineRotation::TransformationAction action);
 
-    void copyAttributes(const ImageInfo& source, const QStringList& derivedPaths);
-    void copyAttributes(const ImageInfo& source, const QString& derivedPath);
+    void copyAttributes(const ItemInfo& source, const QStringList& derivedPaths);
+    void copyAttributes(const ItemInfo& source, const QString& derivedPath);
 
 public:
 

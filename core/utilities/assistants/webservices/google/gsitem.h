@@ -67,7 +67,6 @@ public:
     QString     gpsLon;
     QString     gpsLat;
 
-    QString     access;
     bool        canComment;
     QStringList tags;
 
@@ -89,9 +88,10 @@ public:
 
     GSFolder()
     {
-        id         = QLatin1String("-1");
-        title      = QLatin1String("<auto-create>");
-        canComment = true;
+        id          = QLatin1String("-1");
+        title       = QLatin1String("<auto-create>");
+        canComment  = true;
+        isWriteable = true;
     }
 
 public:
@@ -101,8 +101,8 @@ public:
     QString     timestamp;
     QString     description;
     QString     location;
-    QString     access;
     bool        canComment;
+    bool        isWriteable;
     QStringList tags;
     QString     url;
 };

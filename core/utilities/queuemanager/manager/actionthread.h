@@ -72,7 +72,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotUpdateImageInfo(const Digikam::ActionData& ad);
+    void slotUpdateItemInfo(const Digikam::ActionData& ad);
     void slotThreadFinished();
 
 private:

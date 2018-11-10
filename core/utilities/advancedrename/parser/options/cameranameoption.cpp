@@ -52,7 +52,7 @@ QString CameraNameOption::parseOperation(ParseSettings& settings)
 {
     QString result;
 
-    ImageInfo info = ImageInfo::fromUrl(settings.fileUrl);
+    ItemInfo info = ItemInfo::fromUrl(settings.fileUrl);
 
     if (!info.isNull())
     {
@@ -60,7 +60,7 @@ QString CameraNameOption::parseOperation(ParseSettings& settings)
     }
     else
     {
-        // If ImageInfo is not available, read the information from the EXIF data
+        // If ItemInfo is not available, read the information from the EXIF data
         QString make;
         QString model;
 

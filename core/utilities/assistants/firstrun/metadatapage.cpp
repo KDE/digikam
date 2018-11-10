@@ -39,7 +39,7 @@
 // Local includes
 
 #include "dlayoutbox.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 
 namespace Digikam
 {
@@ -110,7 +110,7 @@ MetadataPage::~MetadataPage()
 
 void MetadataPage::saveSettings()
 {
-    MetadataSettingsContainer settings;
+    MetaEngineSettingsContainer settings;
     settings.saveTags       = d->storeInFiles->isChecked();
     settings.saveComments   = d->storeInFiles->isChecked();
     settings.saveDateTime   = d->storeInFiles->isChecked();
@@ -118,7 +118,7 @@ void MetadataPage::saveSettings()
     settings.savePickLabel  = d->storeInFiles->isChecked();
     settings.saveColorLabel = d->storeInFiles->isChecked();
     settings.saveTemplate   = d->storeInFiles->isChecked();
-    MetadataSettings::instance()->setSettings(settings);
+    MetaEngineSettings::instance()->setSettings(settings);
 }
 
 } // namespace Digikam

@@ -250,7 +250,7 @@ public:
 
     /** Adds a new field with the given name (entity) and relation, "Rating less than ...".
      *  Ensure that you closed the previous field with finishField().
-     *  For a reference of valid field names, look into ImageQueryBuilder.
+     *  For a reference of valid field names, look into ItemQueryBuilder.
      *  The general rule is that names are like the database fields, but all lower-case.
      */
     void writeField(const QString& name, SearchXml::Relation relation);

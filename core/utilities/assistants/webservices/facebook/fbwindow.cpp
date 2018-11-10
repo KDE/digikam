@@ -613,9 +613,9 @@ bool FbWindow::prepareImageForUpload(const QString& imgPath, QString& caption)
     if (meta.load(imgPath))
     {
         caption = getImageCaption(imgPath);
-        meta.setImageDimensions(image.size());
-        meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-        meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+        meta.setItemDimensions(image.size());
+        meta.setItemOrientation(MetaEngine::ORIENTATION_NORMAL);
+        meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
         meta.save(d->tmpPath, true);
     }
     else

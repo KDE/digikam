@@ -28,6 +28,7 @@
 
 #include <QUrl>
 #include <QList>
+#include <QDateTime>
 
 // Local includes
 
@@ -37,7 +38,7 @@ namespace Digikam
 {
 
 class PAlbum;
-class ImageInfo;
+class ItemInfo;
 
 class DIGIKAM_EXPORT IOJobData
 {
@@ -61,7 +62,7 @@ public:
 public:
 
     explicit IOJobData(int operation,
-                       const QList<ImageInfo>& infos,
+                       const QList<ItemInfo>& infos,
                        PAlbum* const dest = 0);
 
     explicit IOJobData(int operation,
@@ -77,13 +78,13 @@ public:
                        const QUrl& dest);
 
     explicit IOJobData(int operation,
-                       const ImageInfo& info,
+                       const ItemInfo& info,
                        const QString& newName,
                        bool overwrite = false);
 
     ~IOJobData();
 
-    void             setImageInfos(const QList<ImageInfo>& infos);
+    void             setItemInfos(const QList<ItemInfo>& infos);
     void             setSourceUrls(const QList<QUrl>& urls);
 
     void             setDestUrl(const QUrl& srcUrl,
@@ -102,11 +103,12 @@ public:
     QUrl             getNextUrl()                         const;
 
     QString          getProgressId()                      const;
+    QDateTime        jobTime()                            const;
 
-    ImageInfo        findImageInfo(const QUrl& url)       const;
+    ItemInfo         findItemInfo(const QUrl& url)        const;
 
     QList<QUrl>      sourceUrls()                         const;
-    QList<ImageInfo> imageInfos()                         const;
+    QList<ItemInfo>  itemInfos()                          const;
 
 private:
 

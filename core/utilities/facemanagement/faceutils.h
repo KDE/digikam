@@ -33,7 +33,7 @@
 
 #include "identity.h"
 #include "recognitiondatabase.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "facetagseditor.h"
 #include "digikam_export.h"
 
@@ -79,14 +79,14 @@ public:
     /**
      * Tells if the image has been scanned for faces or not
      */
-    bool                hasBeenScanned(const ImageInfo& info) const;
+    bool                hasBeenScanned(const ItemInfo& info) const;
     bool                hasBeenScanned(qlonglong imageid) const;
 
     /**
      * Marks the image as scanned for faces.
      */
     void                markAsScanned(qlonglong imageid, bool hasBeenScanned = true) const;
-    void                markAsScanned(const ImageInfo& info, bool hasBeenScanned = true) const;
+    void                markAsScanned(const ItemInfo& info, bool hasBeenScanned = true) const;
 
     // --- Utilities ---
 

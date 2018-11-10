@@ -46,7 +46,7 @@
 
 #include "metaengine.h"
 #include "metadatapanel.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "dactivelabel.h"
 
 namespace ShowFoto
@@ -172,14 +172,14 @@ SetupMetadata::~SetupMetadata()
 
 void SetupMetadata::applySettings()
 {
-    Digikam::MetadataSettings* const mSettings = Digikam::MetadataSettings::instance();
+    Digikam::MetaEngineSettings* const mSettings = Digikam::MetaEngineSettings::instance();
 
     if (!mSettings)
     {
         return;
     }
 
-    Digikam::MetadataSettingsContainer set;
+    Digikam::MetaEngineSettingsContainer set;
 
     set.exifRotate         = d->exifRotateBox->isChecked();
     set.exifSetOrientation = d->exifSetOrientationBox->isChecked();
@@ -190,14 +190,14 @@ void SetupMetadata::applySettings()
 
 void SetupMetadata::readSettings()
 {
-    Digikam::MetadataSettings* const mSettings = Digikam::MetadataSettings::instance();
+    Digikam::MetaEngineSettings* const mSettings = Digikam::MetaEngineSettings::instance();
 
     if (!mSettings)
     {
         return;
     }
 
-    Digikam::MetadataSettingsContainer set     = mSettings->settings();
+    Digikam::MetaEngineSettingsContainer set     = mSettings->settings();
 
     d->exifRotateBox->setChecked(set.exifRotate);
     d->exifSetOrientationBox->setChecked(set.exifSetOrientation);

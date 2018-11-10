@@ -163,7 +163,7 @@ public:
     int                   availableRedoSteps()        const;
     IccProfile            getEmbeddedICC()            const;
     MetaEngineData            getMetadata()               const;
-    DImageHistory         getImageHistory()           const;
+    DImageHistory         getItemHistory()           const;
     DImageHistory         getInitialImageHistory()    const;
     DImageHistory         getImageHistoryOfFullRedo() const;
     DImageHistory         getResolvedInitialHistory() const;

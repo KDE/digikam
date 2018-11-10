@@ -77,7 +77,7 @@ dng_date_time DNGWriter::Private::dngDateTime(const QDateTime& qDT) const
     return dngDT;
 }
 
-bool DNGWriter::Private::fujiRotate(QByteArray& rawData, RawInfo& identify) const
+bool DNGWriter::Private::fujiRotate(QByteArray& rawData, DRawInfo& identify) const
 {
     QByteArray tmpData(rawData);
     int height             = identify.outputSize.height();
@@ -93,7 +93,7 @@ bool DNGWriter::Private::fujiRotate(QByteArray& rawData, RawInfo& identify) cons
         }
     }
 
-    identify.orientation = RawInfo::ORIENTATION_Mirror90CCW;
+    identify.orientation = DRawInfo::ORIENTATION_Mirror90CCW;
     identify.outputSize  = QSize(height, width);
 
     // TODO: rotate margins

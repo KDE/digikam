@@ -44,7 +44,7 @@
 #include "similaritydbbackend.h"
 #include "similaritydbaccess.h"
 #include "digikam_export.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 
 namespace Digikam
 {
@@ -112,7 +112,7 @@ public:
      * @param algorithm The algorithm.
      * @return The ids of the items whose fingerprints are dirty or missing.
      */
-    QList<qlonglong> getDirtyOrMissingFingerprints(QList<ImageInfo> imageInfos,
+    QList<qlonglong> getDirtyOrMissingFingerprints(QList<ItemInfo> imageInfos,
                                                    FuzzyAlgorithm algorithm = FuzzyAlgorithm::Haar);
 
     /**
@@ -123,7 +123,7 @@ public:
      * @param algorithm The algorithm.
      * @return The URLs of the items whose fingerprints are dirty or missing.
      */
-    QStringList      getDirtyOrMissingFingerprintURLs(QList<ImageInfo> imageInfos,
+    QStringList      getDirtyOrMissingFingerprintURLs(QList<ItemInfo> imageInfos,
                                                       FuzzyAlgorithm algorithm = FuzzyAlgorithm::Haar);
 
     /**

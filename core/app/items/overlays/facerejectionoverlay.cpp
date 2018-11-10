@@ -32,9 +32,9 @@
 
 #include "imagecategorizedview.h"
 #include "itemviewhoverbutton.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "digikamimagefacedelegate.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 
 namespace Digikam
 {
@@ -110,7 +110,7 @@ void FaceRejectionOverlay::slotClicked()
 
 bool FaceRejectionOverlay::checkIndex(const QModelIndex& index) const
 {
-    return !index.data(ImageModel::ExtraDataRole).isNull();
+    return !index.data(ItemModel::ExtraDataRole).isNull();
 }
 
 void FaceRejectionOverlay::widgetEnterEvent()

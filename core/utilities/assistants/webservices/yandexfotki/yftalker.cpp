@@ -376,6 +376,7 @@ void YFTalker::updatePhotoFile(YFPhoto& photo)
     d->reply = d->netMngr->post(netRequest, imageFile.readAll());
 
     d->buffer.resize(0);
+    imageFile.close();
 }
 
 void YFTalker::updatePhotoInfo(YFPhoto& photo)

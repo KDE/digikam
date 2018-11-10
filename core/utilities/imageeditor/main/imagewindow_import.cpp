@@ -39,7 +39,7 @@ void ImageWindow::slotImportFromScanner()
 
 void ImageWindow::slotImportedImagefromScanner(const QUrl& url)
 {
-    ImageInfo info = ScanController::instance()->scannedInfo(url.toLocalFile());
+    ItemInfo info = ScanController::instance()->scannedInfo(url.toLocalFile());
     openImage(info);
 }
 

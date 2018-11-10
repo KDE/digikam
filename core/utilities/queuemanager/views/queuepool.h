@@ -112,7 +112,7 @@ public Q_SLOTS:
     void slotClearList();
     void slotRemoveSelectedItems();
     void slotRemoveItemsDone();
-    void slotAddItems(const ImageInfoList&, int queueId);
+    void slotAddItems(const ItemInfoList&, int queueId);
     void slotAssignedToolsChanged(const AssignedBatchTools&);
     void slotSettingsChanged(const QueueSettings&);
     void slotQueueSelected(int);

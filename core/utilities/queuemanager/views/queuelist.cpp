@@ -88,10 +88,10 @@ public:
 
     QueueListView* view;
 
-    ImageInfo      info;
+    ItemInfo      info;
 };
 
-QueueListViewItem::QueueListViewItem(QueueListView* const view, const ImageInfo& info)
+QueueListViewItem::QueueListViewItem(QueueListView* const view, const ItemInfo& info)
     : QTreeWidgetItem(view),
       d(new Private)
 {
@@ -110,13 +110,13 @@ bool QueueListViewItem::hasValidThumbnail() const
     return d->hasThumb;
 }
 
-void QueueListViewItem::setInfo(const ImageInfo& info)
+void QueueListViewItem::setInfo(const ItemInfo& info)
 {
     d->info = info;
     setText(1, d->info.name());
 }
 
-ImageInfo QueueListViewItem::info() const
+ItemInfo QueueListViewItem::info() const
 {
     return d->info;
 }
@@ -439,12 +439,12 @@ void QueueListView::dragMoveEvent(QDragMoveEvent* e)
     {
         if (DItemDrag::decode(e->mimeData(), urls, albumIDs, imageIDs))
         {
-            ImageInfoList imageInfoList;
+            ItemInfoList imageInfoList;
 
             for (QList<qlonglong>::const_iterator it = imageIDs.constBegin();
                  it != imageIDs.constEnd(); ++it)
             {
-                ImageInfo info(*it);
+                ItemInfo info(*it);
 
                 if (!findItemByInfo(info))
                 {
@@ -479,12 +479,12 @@ void QueueListView::dropEvent(QDropEvent* e)
 
     if (DItemDrag::decode(e->mimeData(), urls, albumIDs, imageIDs))
     {
-        ImageInfoList imageInfoList;
+        ItemInfoList imageInfoList;
 
         for (QList<qlonglong>::const_iterator it = imageIDs.constBegin();
              it != imageIDs.constEnd(); ++it)
         {
-            ImageInfo info(*it);
+            ItemInfo info(*it);
 
             if (!findItemByInfo(info))
             {
@@ -501,7 +501,7 @@ void QueueListView::dropEvent(QDropEvent* e)
 
             if (vitem && vitem != this)
             {
-                foreach (const ImageInfo& info, imageInfoList)
+                foreach (const ItemInfo& info, imageInfoList)
                 {
                     vitem->removeItemByInfo(info);
                 }
@@ -511,12 +511,12 @@ void QueueListView::dropEvent(QDropEvent* e)
     else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
     {
         QList<qlonglong> itemIDs = CoreDbAccess().db()->getItemIDsInAlbum(albumID);
-        ImageInfoList imageInfoList;
+        ItemInfoList imageInfoList;
 
         for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
              it != itemIDs.constEnd(); ++it)
         {
-            ImageInfo info(*it);
+            ItemInfo info(*it);
 
             if (!findItemByInfo(info))
             {
@@ -540,12 +540,12 @@ void QueueListView::dropEvent(QDropEvent* e)
         }
 
         QList<qlonglong> itemIDs = CoreDbAccess().db()->getItemIDsInTag(tagIDs.first(), true);
-        ImageInfoList imageInfoList;
+        ItemInfoList imageInfoList;
 
         for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
              it != itemIDs.constEnd(); ++it)
         {
-            ImageInfo info(*it);
+            ItemInfo info(*it);
 
             if (!findItemByInfo(info))
             {
@@ -676,16 +676,16 @@ void QueueListView::leaveEvent(QEvent* e)
     QTreeWidget::leaveEvent(e);
 }
 
-void QueueListView::slotAddItems(const ImageInfoList& list)
+void QueueListView::slotAddItems(const ItemInfoList& list)
 {
     if (list.count() == 0)
     {
         return;
     }
 
-    for (ImageInfoList::ConstIterator it = list.begin(); it != list.end(); ++it)
+    for (ItemInfoList::ConstIterator it = list.begin(); it != list.end(); ++it)
     {
-        ImageInfo info = *it;
+        ItemInfo info = *it;
 
         // Check if the new item already exist in the list.
 
@@ -723,7 +723,7 @@ void QueueListView::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const 
 
     if (item && !item->hasValidThumbnail())
     {
-        ImageInfo info = item->info();
+        ItemInfo info = item->info();
         d->thumbLoadThread->find(ThumbnailIdentifier(info.fileUrl().toLocalFile()));
     }
 
@@ -830,7 +830,7 @@ void QueueListView::removeItems(int removeType)
     emit signalQueueContentsChanged();
 }
 
-void QueueListView::removeItemByInfo(const ImageInfo& info)
+void QueueListView::removeItemByInfo(const ItemInfo& info)
 {
     removeItemById(info.id());
 }
@@ -865,7 +865,7 @@ void QueueListView::removeItemById(qlonglong id)
     emit signalQueueContentsChanged();
 }
 
-bool QueueListView::findItemByInfo(const ImageInfo& info)
+bool QueueListView::findItemByInfo(const ItemInfo& info)
 {
     return (findItemById(info.id()) ? true : false);
 }
@@ -945,9 +945,9 @@ void QueueListView::cancelItems()
     }
 }
 
-ImageInfoList QueueListView::pendingItemsList()
+ItemInfoList QueueListView::pendingItemsList()
 {
-    ImageInfoList list;
+    ItemInfoList list;
     QTreeWidgetItemIterator it(this);
 
     while (*it)
@@ -1058,7 +1058,7 @@ void QueueListView::updateDestFileNames()
             if (item)
             {
                 // Update base name using queue renaming rules.
-                ImageInfo info = item->info();
+                ItemInfo info = item->info();
                 QFileInfo fi(info.filePath());
 
                 ParseSettings ps;
@@ -1085,7 +1085,7 @@ void QueueListView::updateDestFileNames()
         if (item)
         {
             // Update base name using queue renaming rules.
-            ImageInfo info    = item->info();
+            ItemInfo info    = item->info();
             QFileInfo fi(info.filePath());
 
             // Update suffix using assigned batch tool rules.

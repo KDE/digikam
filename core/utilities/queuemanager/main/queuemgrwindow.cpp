@@ -590,7 +590,7 @@ int QueueMgrWindow::currentQueueId() const
     return (d->queuePool->currentIndex());
 }
 
-void QueueMgrWindow::loadImageInfos(const ImageInfoList& list, int queueId)
+void QueueMgrWindow::loadItemInfos(const ItemInfoList& list, int queueId)
 {
     QueueListView* const queue = d->queuePool->findQueueByIndex(queueId);
 
@@ -600,7 +600,7 @@ void QueueMgrWindow::loadImageInfos(const ImageInfoList& list, int queueId)
     }
 }
 
-void QueueMgrWindow::loadImageInfosToCurrentQueue(const ImageInfoList& list)
+void QueueMgrWindow::loadItemInfosToCurrentQueue(const ItemInfoList& list)
 {
     if (!d->queuePool->currentQueue())
     {
@@ -610,7 +610,7 @@ void QueueMgrWindow::loadImageInfosToCurrentQueue(const ImageInfoList& list)
     d->queuePool->currentQueue()->slotAddItems(list);
 }
 
-void QueueMgrWindow::loadImageInfosToNewQueue(const ImageInfoList& list)
+void QueueMgrWindow::loadItemInfosToNewQueue(const ItemInfoList& list)
 {
     QueueListView* const queue = d->queuePool->currentQueue();
 

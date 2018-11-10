@@ -111,19 +111,19 @@ void FileActionProgressItemContainer::finishedWriting()
 //    checkFinish(secondItem);
 }
 
-FileActionImageInfoList FileActionImageInfoList::create(const QList<ImageInfo>& infos)
+FileActionItemInfoList FileActionItemInfoList::create(const QList<ItemInfo>& infos)
 {
-    FileActionImageInfoList list;
-    list           = FileActionImageInfoList(infos);
+    FileActionItemInfoList list;
+    list           = FileActionItemInfoList(infos);
     list.container = new FileActionProgressItemContainer;
     return list;
 }
 
-FileActionImageInfoList FileActionImageInfoList::continueTask(const QList<ImageInfo>& infos,
+FileActionItemInfoList FileActionItemInfoList::continueTask(const QList<ItemInfo>& infos,
                                                               FileActionProgressItemContainer* const container)
 {
-    FileActionImageInfoList list;
-    list           = FileActionImageInfoList(infos);
+    FileActionItemInfoList list;
+    list           = FileActionItemInfoList(infos);
     list.container = container;
     return list;
 }

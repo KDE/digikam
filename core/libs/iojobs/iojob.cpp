@@ -37,7 +37,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "dtrash.h"
 #include "coredb.h"
 #include "coredbaccess.h"
@@ -130,9 +130,7 @@ void CopyOrMoveJob::run()
             }
             else
             {
-                QFile srcFile(srcInfo.filePath());
-
-                if (!srcFile.rename(destenation))
+                if (!DFileOperations::renameFile(srcInfo.filePath(), destenation))
                 {
                     emit signalError(i18n("Could not move file %1 to album %2",
                                           srcInfo.filePath(),
@@ -164,7 +162,7 @@ void CopyOrMoveJob::run()
             }
             else
             {
-                if (!QFile::copy(srcInfo.filePath(), destenation))
+                if (!DFileOperations::copyFile(srcInfo.filePath(), destenation))
                 {
                     emit signalError(i18n("Could not copy file %1 to album %2",
                                           QDir::toNativeSeparators(srcInfo.path()),
@@ -172,7 +170,6 @@ void CopyOrMoveJob::run()
 
                     continue;
                 }
-
             }
         }
 
@@ -219,7 +216,7 @@ void DeleteJob::run()
         {
             if (fileInfo.isDir())
             {
-                if (!DTrash::deleteDirRecursivley(deleteUrl.toLocalFile()))
+                if (!DTrash::deleteDirRecursivley(deleteUrl.toLocalFile(), m_data->jobTime()))
                 {
                     emit signalError(i18n("Could not move folder %1 to collection trash",
                                           QDir::toNativeSeparators(fileInfo.path())));
@@ -229,7 +226,7 @@ void DeleteJob::run()
             }
             else
             {
-                if (!DTrash::deleteImage(deleteUrl.toLocalFile()))
+                if (!DTrash::deleteImage(deleteUrl.toLocalFile(), m_data->jobTime()))
                 {
                     emit signalError(i18n("Could not move image %1 to collection trash",
                                           QDir::toNativeSeparators(fileInfo.filePath())));
@@ -292,8 +289,6 @@ void RenameFileJob::run()
 
         QUrl destUrl = m_data->destUrl(renameUrl);
 
-        qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url:" << destUrl;
-
         if (QFileInfo::exists(destUrl.toLocalFile()))
         {
             if (m_data->overwrite())
@@ -311,13 +306,11 @@ void RenameFileJob::run()
             }
         }
 
-        QFile file(renameUrl.toLocalFile());
-
         qCDebug(DIGIKAM_IOJOB_LOG) << "Trying to rename"
                                    << renameUrl.toLocalFile() << "to"
                                    << destUrl.toLocalFile();
 
-        if (!file.rename(destUrl.toLocalFile()))
+        if (!DFileOperations::renameFile(renameUrl.toLocalFile(), destUrl.toLocalFile()))
         {
             qCDebug(DIGIKAM_IOJOB_LOG) << "File could not be renamed!";
             emit signalError(i18n("Image %1 could not be renamed",
@@ -417,7 +410,7 @@ void DeleteDTrashItemsJob::run()
         QFile::remove(item.jsonFilePath);
 
         imagesToRemove   << item.imageId;
-        albumsFromImages << ImageInfo(item.imageId).albumId();
+        albumsFromImages << ItemInfo(item.imageId).albumId();
 
         access.db()->removeAllImageRelationsFrom(item.imageId, DatabaseRelation::Grouped);
     }

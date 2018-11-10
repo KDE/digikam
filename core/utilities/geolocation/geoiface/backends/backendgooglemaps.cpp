@@ -1047,6 +1047,7 @@ void BackendGoogleMaps::setClusterPixmap(const int clusterId, const QPoint& cent
     QBuffer buffer(&bytes);
     buffer.open(QIODevice::WriteOnly);
     clusterPixmap.save(&buffer, "PNG");
+    buffer.close();
 
     // http://www.faqs.org/rfcs/rfc2397.html
     const QString imageData = QString::fromLatin1("data:image/png;base64,%1").arg(QString::fromLatin1(bytes.toBase64()));
@@ -1067,6 +1068,7 @@ void BackendGoogleMaps::setMarkerPixmap(const int modelId, const int markerId,
     QBuffer buffer(&bytes);
     buffer.open(QIODevice::WriteOnly);
     markerPixmap.save(&buffer, "PNG");
+    buffer.close();
 
     // http://www.faqs.org/rfcs/rfc2397.html
     const QString imageData = QString::fromLatin1("data:image/png;base64,%1").arg(QString::fromLatin1(bytes.toBase64()));

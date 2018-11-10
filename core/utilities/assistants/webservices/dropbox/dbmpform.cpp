@@ -54,6 +54,7 @@ bool DBMPForm::addFile(const QString& imgPath)
     }
 
     m_buffer = file.readAll();
+    file.close();
 
     return true;
 }

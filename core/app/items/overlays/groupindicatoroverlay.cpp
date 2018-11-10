@@ -33,9 +33,9 @@
 
 #include "digikam_debug.h"
 #include "imagedelegate.h"
-#include "imagemodel.h"
+#include "itemmodel.h"
 #include "imagecategorizedview.h"
-#include "imagefiltermodel.h"
+#include "itemfiltermodel.h"
 
 namespace Digikam
 {
@@ -116,7 +116,7 @@ void GroupIndicatorOverlay::updatePosition()
 
 bool GroupIndicatorOverlay::checkIndex(const QModelIndex& index) const
 {
-    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    ItemInfo info = ItemModel::retrieveItemInfo(index);
     QRect rect     = static_cast<ImageDelegate*>(delegate())->groupIndicatorRect();
 
     if (!rect.isNull() && info.hasGroupedImages())
@@ -126,7 +126,7 @@ bool GroupIndicatorOverlay::checkIndex(const QModelIndex& index) const
                              "%1 grouped items.\n",
                              info.numberOfGroupedImages());
 
-        if (index.data(ImageFilterModel::GroupIsOpenRole).toBool())
+        if (index.data(ItemFilterModel::GroupIsOpenRole).toBool())
         {
             tip += i18n("Group is open.");
         }

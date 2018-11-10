@@ -37,7 +37,7 @@ ImageQualityContainer::ImageQualityContainer()
     detectBlur         = true;
     detectNoise        = true;
     detectCompression  = true;
-    detectOverexposure = true;
+    detectExposure     = true;
     lowQRejected       = true;
     mediumQPending     = true;
     highQAccepted      = true;
@@ -56,7 +56,7 @@ ImageQualityContainer::ImageQualityContainer(const ImageQualityContainer& other)
     detectBlur         = other.detectBlur;
     detectNoise        = other.detectNoise;
     detectCompression  = other.detectCompression;
-    detectOverexposure = other.detectOverexposure;
+    detectExposure     = other.detectExposure;
     lowQRejected       = other.lowQRejected;
     mediumQPending     = other.mediumQPending;
     highQAccepted      = other.highQAccepted;
@@ -75,7 +75,7 @@ ImageQualityContainer& ImageQualityContainer::operator=(const ImageQualityContai
     detectBlur         = other.detectBlur;
     detectNoise        = other.detectNoise;
     detectCompression  = other.detectCompression;
-    detectOverexposure = other.detectOverexposure;
+    detectExposure     = other.detectExposure;
     lowQRejected       = other.lowQRejected;
     mediumQPending     = other.mediumQPending;
     highQAccepted      = other.highQAccepted;
@@ -103,7 +103,7 @@ void ImageQualityContainer::readFromConfig()
     detectBlur                = group.readEntry("Detect Blur",        true);
     detectNoise               = group.readEntry("Detect Noise",       true);
     detectCompression         = group.readEntry("Detect Compression", true);
-    detectOverexposure        = group.readEntry("Detect Overexposure", true);
+    detectExposure            = group.readEntry("Detect Exposure",    true);
     lowQRejected              = group.readEntry("LowQ Rejected",      true);
     mediumQPending            = group.readEntry("MediumQ Pending",    true);
     highQAccepted             = group.readEntry("HighQ Accepted",     true);
@@ -125,7 +125,7 @@ void ImageQualityContainer::writeToConfig()
     group.writeEntry("Detect Blur",         detectBlur);
     group.writeEntry("Detect Noise",        detectNoise);
     group.writeEntry("Detect Compression",  detectCompression);
-    group.writeEntry("Detect Overexposure", detectOverexposure);
+    group.writeEntry("Detect Exposure",     detectExposure);
     group.writeEntry("LowQ Rejected",       lowQRejected);
     group.writeEntry("MediumQ Pending",     mediumQPending);
     group.writeEntry("HighQ Accepted",      highQAccepted);
@@ -145,7 +145,7 @@ QDebug operator<<(QDebug dbg, const ImageQualityContainer& s)
     dbg.nospace() << "DetectBlur         :" << s.detectBlur         << endl;
     dbg.nospace() << "DetectNoise        :" << s.detectNoise        << endl;
     dbg.nospace() << "DetectCompression  :" << s.detectCompression  << endl;
-    dbg.nospace() << "DetectOverexposure :" << s.detectOverexposure << endl;
+    dbg.nospace() << "DetectExposure     :" << s.detectExposure     << endl;
     dbg.nospace() << "LowQRejected       :" << s.lowQRejected       << endl;
     dbg.nospace() << "MediumQPending     :" << s.mediumQPending     << endl;
     dbg.nospace() << "HighQAccepted      :" << s.highQAccepted      << endl;

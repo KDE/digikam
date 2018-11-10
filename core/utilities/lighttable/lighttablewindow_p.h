@@ -44,7 +44,7 @@
 // Local includes
 
 #include "digikam_globals.h"
-#include "imagepropertiessidebardb.h"
+#include "itempropertiessidebardb.h"
 #include "statusprogressbar.h"
 #include "dzoombar.h"
 #include "lighttableview.h"
@@ -59,7 +59,7 @@
 #include "dio.h"
 #include "dmetadata.h"
 #include "dfileoperations.h"
-#include "metadatasettings.h"
+#include "metaenginesettings.h"
 #include "metadataedit.h"
 #include "applicationsettings.h"
 #include "albummanager.h"
@@ -67,8 +67,8 @@
 #include "deletedialog.h"
 #include "iccsettings.h"
 #include "imagewindow.h"
-#include "imagegps.h"
-#include "imagedescedittab.h"
+#include "itemgps.h"
+#include "itemdescedittab.h"
 #include "presentationmngr.h"
 #include "slideshowbuilder.h"
 #include "slideshow.h"
@@ -219,8 +219,8 @@ public:
 
     StatusProgressBar*        statusProgressBar;
 
-    ImagePropertiesSideBarDB* leftSideBar;
-    ImagePropertiesSideBarDB* rightSideBar;
+    ItemPropertiesSideBarDB* leftSideBar;
+    ItemPropertiesSideBarDB* rightSideBar;
 };
 
 } // namespace Digikam

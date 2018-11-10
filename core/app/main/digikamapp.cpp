@@ -82,7 +82,7 @@ DigikamApp::DigikamApp()
     AlbumManager::instance();
     LoadingCacheInterface::initialize();
     IccSettings::instance()->loadAllProfilesProperties();
-    MetadataSettings::instance();
+    MetaEngineSettings::instance();
     DMetadataSettings::instance();
     ProgressManager::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
@@ -175,7 +175,7 @@ DigikamApp::~DigikamApp()
 {
     ProgressManager::instance()->slotAbortAll();
 
-    ImageAttributesWatch::shutDown();
+    ItemAttributesWatch::shutDown();
 
     // Close and delete image editor instance.
 
@@ -245,7 +245,7 @@ DigikamApp::~DigikamApp()
 
     ScanController::instance()->shutDown();
     AlbumManager::instance()->cleanUp();
-    ImageAttributesWatch::cleanUp();
+    ItemAttributesWatch::cleanUp();
     ThumbnailLoadThread::cleanUp();
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
@@ -509,11 +509,11 @@ void DigikamApp::slotAlbumSelected(Album* album)
     }
 }
 
-void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageInfoList& listAll)
+void DigikamApp::slotImageSelected(const ItemInfoList& selection, const ItemInfoList& listAll)
 {
     int numImagesWithGrouped              = listAll.count();
     int numImagesWithoutGrouped           = d->view->allUrls(false).count();
-    ImageInfoList selectionWithoutGrouped = d->view->selectedInfoList(true, false);
+    ItemInfoList selectionWithoutGrouped = d->view->selectedInfoList(true, false);
 
     QString statusBarSelectionText;
     QString statusBarSelectionToolTip;
@@ -754,10 +754,10 @@ void DigikamApp::slotResetExifOrientationActions()
     d->imageSetExifOrientation8Action->setChecked(false);
 }
 
-void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
+void DigikamApp::slotSetCheckedExifOrientationAction(const ItemInfo& info)
 {
     //DMetadata meta(info.fileUrl().toLocalFile());
-    //int orientation = (meta.isEmpty()) ? 0 : meta.getImageOrientation();
+    //int orientation = (meta.isEmpty()) ? 0 : meta.getItemOrientation();
     int orientation = info.orientation();
 
     switch (orientation)
@@ -845,8 +845,9 @@ bool DigikamApp::thumbbarVisibility() const
 
 void DigikamApp::slotSwitchedToPreview()
 {
-    d->imagePreviewAction->setChecked(true);
     d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
+    d->imagePreviewAction->setChecked(true);
+    customizedTrashView(true);
     toggleShowBar();
 }
 
@@ -854,6 +855,7 @@ void DigikamApp::slotSwitchedToIconView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     d->imageIconViewAction->setChecked(true);
+    customizedTrashView(true);
     toggleShowBar();
 }
 
@@ -864,6 +866,7 @@ void DigikamApp::slotSwitchedToMapView()
 #ifdef HAVE_MARBLE
     d->imageMapViewAction->setChecked(true);
 #endif // HAVE_MARBLE
+    customizedTrashView(true);
     toggleShowBar();
 }
 
@@ -871,13 +874,14 @@ void DigikamApp::slotSwitchedToTableView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     d->imageTableViewAction->setChecked(true);
+    customizedTrashView(true);
     toggleShowBar();
 }
 
 void DigikamApp::slotSwitchedToTrashView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    // TODO: disable all other views
+    customizedTrashView(false);
     toggleShowBar();
 }
 
@@ -890,6 +894,46 @@ void DigikamApp::customizedFullScreenMode(bool set)
         : toggleShowBar();
 
     d->view->toggleFullScreen(set);
+}
+
+void DigikamApp::customizedTrashView(bool set)
+{
+    d->slideShowSelectionAction->setEnabled(set);
+    d->imageTableViewAction->setEnabled(set);
+    d->imageIconViewAction->setEnabled(set);
+    d->imageMapViewAction->setEnabled(set);
+    d->imagePreviewAction->setEnabled(set);
+    m_presentationAction->setEnabled(set);
+    d->slideShowAction->setEnabled(set);
+    d->bqmAction->setEnabled(set);
+    d->ltAction->setEnabled(set);
+    d->ieAction->setEnabled(set);
+
+    d->imageSeparationSortOrderAction->setEnabled(set);
+    d->imageSeparationAction->setEnabled(set);
+    d->imageSortOrderAction->setEnabled(set);
+    d->imageSortAction->setEnabled(set);
+    d->albumSortAction->setEnabled(set);
+
+    d->zoomFitToWindowAction->setEnabled(set);
+    d->recurseAlbumsAction->setEnabled(set);
+    d->recurseTagsAction->setEnabled(set);
+
+    d->writeAlbumMetadataAction->setEnabled(set);
+    d->readAlbumMetadataAction->setEnabled(set);
+    d->openInFileManagerAction->setEnabled(set);
+    d->propsEditAction->setEnabled(set);
+    d->deleteAction->setEnabled(set);
+    d->renameAction->setEnabled(set);
+    d->newAction->setEnabled(set);
+
+    d->selectInvertAction->setEnabled(set);
+    d->selectNoneAction->setEnabled(set);
+    d->pasteItemsAction->setEnabled(set);
+    d->copyItemsAction->setEnabled(set);
+    d->selectAllAction->setEnabled(set);
+    d->cutItemsAction->setEnabled(set);
+    d->refreshAction->setEnabled(set);
 }
 
 void DigikamApp::toggleShowBar()

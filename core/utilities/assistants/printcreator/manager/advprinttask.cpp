@@ -501,7 +501,7 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
             else
             {
                 DMetadata meta(photo->m_url.toLocalFile());
-                exifOrientation = meta.getImageOrientation();
+                exifOrientation = meta.getItemOrientation();
             }
 
             // ROT_90_HFLIP .. ROT_270

@@ -103,8 +103,8 @@ void ImageWindow::setupConnections()
     connect(d->rightSideBar, SIGNAL(signalPrevItem()),
             this, SLOT(slotBackward()));
 
-    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(ImageInfo)),
-            this, SLOT(openImage(ImageInfo)));
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(ItemInfo)),
+            this, SLOT(openImage(ItemInfo)));
 
     connect(this, SIGNAL(signalSelectionChanged(QRect)),
             d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
@@ -112,7 +112,7 @@ void ImageWindow::setupConnections()
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
-    ImageAttributesWatch* watch = ImageAttributesWatch::instance();
+    ItemAttributesWatch* watch = ItemAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalFileMetadataChanged(QUrl)),
             this, SLOT(slotFileMetadataChanged(QUrl)));
@@ -126,11 +126,11 @@ void ImageWindow::setupConnections()
             this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
 */
 
-    connect(d->thumbBar, SIGNAL(currentChanged(ImageInfo)),
-            this, SLOT(slotThumbBarImageSelected(ImageInfo)));
+    connect(d->thumbBar, SIGNAL(currentChanged(ItemInfo)),
+            this, SLOT(slotThumbBarImageSelected(ItemInfo)));
 
-    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(QList<ImageInfo>)),
-            this, SLOT(slotDroppedOnThumbbar(QList<ImageInfo>)));
+    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(QList<ItemInfo>)),
+            this, SLOT(slotDroppedOnThumbbar(QList<ItemInfo>)));
 
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
@@ -167,7 +167,7 @@ void ImageWindow::setupUserArea()
     m_stackView->setCanvas(m_canvas);
     m_stackView->setViewMode(EditorStackView::CanvasMode);
 
-    d->rightSideBar = new ImagePropertiesSideBarDB(widget, m_splitter, Qt::RightEdge, true);
+    d->rightSideBar = new ItemPropertiesSideBarDB(widget, m_splitter, Qt::RightEdge, true);
     d->rightSideBar->setObjectName(QLatin1String("ImageEditor Right Sidebar"));
     d->rightSideBar->getFiltersHistoryTab()->addOpenImageAction();
 
@@ -192,18 +192,18 @@ void ImageWindow::setupUserArea()
         group.deleteEntry(d->configHorizontalThumbbarEntry);
     }
 
-    d->imageInfoModel   = new ImageListModel(this);
+    d->imageInfoModel   = new ItemListModel(this);
 
-    d->imageFilterModel = new ImageFilterModel(this);
-    d->imageFilterModel->setSourceImageModel(d->imageInfoModel);
+    d->imageFilterModel = new ItemFilterModel(this);
+    d->imageFilterModel->setSourceItemModel(d->imageInfoModel);
 
     d->imageInfoModel->setWatchFlags(d->imageFilterModel->suggestedWatchFlags());
     d->imageInfoModel->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
 
-    d->imageFilterModel->setCategorizationMode(ImageSortSettings::NoCategories);
+    d->imageFilterModel->setCategorizationMode(ItemSortSettings::NoCategories);
     d->imageFilterModel->setStringTypeNatural(ApplicationSettings::instance()->isStringTypeNatural());
-    d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)ApplicationSettings::instance()->getImageSortOrder());
-    d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)ApplicationSettings::instance()->getImageSorting());
+    d->imageFilterModel->setSortRole((ItemSortSettings::SortRole)ApplicationSettings::instance()->getImageSortOrder());
+    d->imageFilterModel->setSortOrder((ItemSortSettings::SortOrder)ApplicationSettings::instance()->getImageSorting());
     d->imageFilterModel->setAllGroupsOpen(true); // disable filtering out by group, see bug #283847
     d->imageFilterModel->sort(0); // an initial sorting is necessary
 
@@ -246,7 +246,7 @@ void ImageWindow::slotContextMenu()
         // Bulk assignment/removal of tags --------------------------
 
         QList<qlonglong> idList;
-        idList << d->currentImageInfo.id();
+        idList << d->currentItemInfo.id();
 
         assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::RECENTLYASSIGNED, this);
         removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE, this);

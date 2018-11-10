@@ -39,7 +39,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "haariface.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "coredbsearchxml.h"
 #include "sketchwidget.h"
 
@@ -328,7 +328,7 @@ void SearchModificationHelper::slotCreateFuzzySearchFromDropped(const QString& p
 }
 
 SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& proposedName,
-                                                             const ImageInfo& image,
+                                                             const ItemInfo& image,
                                                              float threshold,
                                                              float maxThreshold,
                                                              QList<int>& targetAlbums,
@@ -378,7 +378,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
 }
 
 void SearchModificationHelper::slotCreateFuzzySearchFromImage(const QString& proposedName,
-                                                              const ImageInfo& image,
+                                                              const ItemInfo& image,
                                                               float threshold,
                                                               float maxThreshold,
                                                               QList<int>& targetAlbums,

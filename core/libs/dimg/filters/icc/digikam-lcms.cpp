@@ -262,13 +262,13 @@ QString dkCmsTakeProductName(cmsHPROFILE hProfile)
 
     if (cmsIsTag(hProfile, cmsSigDeviceMfgDescTag))
     {
-        mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigDeviceMfgDescTag) );
+        mlu = static_cast<cmsMLU*>(cmsReadTag(hProfile, cmsSigDeviceMfgDescTag));
         cmsMLUgetASCII(mlu, "en", "US", Manufacturer, 1024);
     }
 
     if (cmsIsTag(hProfile, cmsSigDeviceModelDescTag))
     {
-        mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigDeviceModelDescTag) );
+        mlu = static_cast<cmsMLU*>(cmsReadTag(hProfile, cmsSigDeviceModelDescTag));
         cmsMLUgetASCII(mlu, "en", "US", Model, 1024);
     }
 
@@ -277,7 +277,7 @@ QString dkCmsTakeProductName(cmsHPROFILE hProfile)
 
         if (cmsIsTag(hProfile, cmsSigProfileDescriptionTag))
         {
-            mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigProfileDescriptionTag) );
+            mlu = static_cast<cmsMLU*>(cmsReadTag(hProfile, cmsSigProfileDescriptionTag));
             cmsMLUgetASCII(mlu, "en", "US", Name, 1024);
             return QLatin1String(Name);
         }
@@ -305,7 +305,7 @@ QString dkCmsTakeProductDesc(cmsHPROFILE hProfile)
 
     if (cmsIsTag(hProfile, cmsSigProfileDescriptionTag))
     {
-        cmsMLU* const mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigProfileDescriptionTag) );
+        cmsMLU* const mlu = static_cast<cmsMLU*>(cmsReadTag(hProfile, cmsSigProfileDescriptionTag));
         cmsMLUgetASCII(mlu, "en", "US", Name, 1024);
     }
     else
@@ -331,7 +331,7 @@ QString dkCmsTakeProductInfo(cmsHPROFILE hProfile)
     {
         char Desc[1024];
 
-        mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigProfileDescriptionTag) );
+        mlu = static_cast<cmsMLU*>(cmsReadTag(hProfile, cmsSigProfileDescriptionTag));
         cmsMLUgetASCII(mlu, "en", "US", Desc, 1024);
         strcat(Info, Desc);
     }
@@ -340,7 +340,7 @@ QString dkCmsTakeProductInfo(cmsHPROFILE hProfile)
     {
         char Copyright[1024];
 
-        mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigCopyrightTag) );
+        mlu = static_cast<cmsMLU*>(cmsReadTag(hProfile, cmsSigCopyrightTag));
         cmsMLUgetASCII(mlu, "en", "US", Copyright, 1024);
         strcat(Info, " - ");
         strcat(Info, Copyright);
@@ -352,7 +352,7 @@ QString dkCmsTakeProductInfo(cmsHPROFILE hProfile)
     {
         char MonCal[1024];
 
-        mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, K007) );
+        mlu = static_cast<cmsMLU*>(cmsReadTag(hProfile, K007));
         cmsMLUgetASCII(mlu, "en", "US", MonCal, 1024);
         strcat(Info, " - ");
         strcat(Info, MonCal);
@@ -389,7 +389,7 @@ QString dkCmsTakeManufacturer(cmsHPROFILE hProfile)
 
 LCMSBOOL dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile)
 {
-    LPcmsCIEXYZ tag = static_cast<LPcmsCIEXYZ>( cmsReadTag(hProfile, cmsSigMediaWhitePointTag) );
+    LPcmsCIEXYZ tag = static_cast<LPcmsCIEXYZ>(cmsReadTag(hProfile, cmsSigMediaWhitePointTag));
 
     if (tag == NULL)
         return FALSE;
@@ -401,7 +401,7 @@ LCMSBOOL dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile)
 QString dkCmsTakeModel(cmsHPROFILE hProfile)
 {
     char buffer[1024];
-    const cmsMLU* const mlu = (const cmsMLU* const)cmsReadTag(hProfile, cmsSigDeviceModelDescTag);
+    const cmsMLU* const mlu = (cmsMLU*)cmsReadTag(hProfile, cmsSigDeviceModelDescTag);
     buffer[0]               = '\0';
 
     if (mlu == NULL)
@@ -414,7 +414,7 @@ QString dkCmsTakeModel(cmsHPROFILE hProfile)
 QString dkCmsTakeCopyright(cmsHPROFILE hProfile)
 {
     char buffer[1024];
-    const cmsMLU* const mlu = (const cmsMLU* const)cmsReadTag(hProfile, cmsSigCopyrightTag);
+    const cmsMLU* const mlu = (cmsMLU*)cmsReadTag(hProfile, cmsSigCopyrightTag);
     buffer[0]               = '\0';
 
     if (mlu == NULL)
@@ -426,19 +426,19 @@ QString dkCmsTakeCopyright(cmsHPROFILE hProfile)
 
 DWORD dkCmsTakeHeaderFlags(cmsHPROFILE hProfile)
 {
-    return static_cast<DWORD>( cmsGetHeaderFlags(hProfile) );
+    return static_cast<DWORD>(cmsGetHeaderFlags(hProfile));
 }
 
 const BYTE* dkCmsTakeProfileID(cmsHPROFILE hProfile)
 {
     cmsUInt8Number* const ProfileID = new cmsUInt8Number[16];
     cmsGetHeaderProfileID(hProfile, ProfileID);
-    return static_cast<BYTE*>( ProfileID );
+    return static_cast<BYTE*>(ProfileID);
 }
 
 int dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
 {
-    return static_cast<int>( cmsGetHeaderRenderingIntent(hProfile) );
+    return static_cast<int>(cmsGetHeaderRenderingIntent(hProfile));
 }
 
 // White Point & Primary chromas handling
@@ -453,7 +453,7 @@ LCMSBOOL dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt)
 
     _l1LPMAT3tol2cmsMAT3(r, &result);
 
-    bool ret = cmsAdaptMatrixFromD50(&result, static_cast<const cmsCIExyY*>( DestWhitePt ));
+    bool ret = cmsAdaptMatrixFromD50(&result, static_cast<const cmsCIExyY*>(DestWhitePt));
 
     _l2cmsMAT3tol1LPMAT3(&result, r);
 
@@ -520,7 +520,7 @@ LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
     MAT3 result;
 
     // See README @ Monday, July 27, 2009 @ Less is more
-    // return static_cast<LCMSBOOL>( GetProfileRGBPrimaries(hProfile, r, INTENT_RELATIVE_COLORIMETRIC) );
+    // return static_cast<LCMSBOOL>(GetProfileRGBPrimaries(hProfile, r, INTENT_RELATIVE_COLORIMETRIC));
 
     LCMSBOOL ret = GetProfileRGBPrimaries(hProfile, &result, INTENT_RELATIVE_COLORIMETRIC);
 
@@ -534,17 +534,17 @@ LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
 
 cmsHPROFILE dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize)
 {
-    return cmsOpenProfileFromMem(MemPtr, static_cast<cmsUInt32Number>( dwSize ));
+    return cmsOpenProfileFromMem(MemPtr, static_cast<cmsUInt32Number>(dwSize));
 }
 
 icProfileClassSignature dkCmsGetDeviceClass(cmsHPROFILE hProfile)
 {
-    return static_cast<icProfileClassSignature>( cmsGetDeviceClass(hProfile) );
+    return static_cast<icProfileClassSignature>(cmsGetDeviceClass(hProfile));
 }
 
 LCMSBOOL dkCmsCloseProfile(cmsHPROFILE hProfile)
 {
-    return static_cast<LCMSBOOL>( cmsCloseProfile(hProfile) );
+    return static_cast<LCMSBOOL>(cmsCloseProfile(hProfile));
 }
 
 cmsHTRANSFORM dkCmsCreateProofingTransform(cmsHPROFILE Input,
@@ -598,7 +598,7 @@ void dkCmsDeleteTransform(cmsHTRANSFORM hTransform)
 
 double dkCmsDeltaE(LPcmsCIELab Lab1, LPcmsCIELab Lab2)
 {
-    return static_cast<double>( cmsDeltaE(static_cast<cmsCIELab*>( Lab1 ), static_cast<cmsCIELab*>( Lab2 )) );
+    return static_cast<double>(cmsDeltaE(static_cast<cmsCIELab*>(Lab1), static_cast<cmsCIELab*>(Lab2)));
 }
 
 void dkCmsDoTransform(cmsHTRANSFORM Transform,
@@ -619,17 +619,17 @@ void dkCmsFloat2XYZEncoded(WORD XYZ[3], const cmsCIEXYZ* const fXYZ)
 
 icColorSpaceSignature dkCmsGetColorSpace(cmsHPROFILE hProfile)
 {
-    return static_cast<icColorSpaceSignature>( cmsGetColorSpace(hProfile) );
+    return static_cast<icColorSpaceSignature>(cmsGetColorSpace(hProfile));
 }
 
 icColorSpaceSignature dkCmsGetPCS(cmsHPROFILE hProfile)
 {
-    return static_cast<icColorSpaceSignature>( cmsGetPCS(hProfile) );
+    return static_cast<icColorSpaceSignature>(cmsGetPCS(hProfile));
 }
 
 LCMSBOOL dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig)
 {
-    return static_cast<LCMSBOOL>( cmsIsTag(hProfile, static_cast<cmsTagSignature>( sig )) );
+    return static_cast<LCMSBOOL>(cmsIsTag(hProfile, static_cast<cmsTagSignature>(sig)));
 }
 
 cmsHPROFILE dkCmsOpenProfileFromFile(const char* const ICCProfile, const char* const sAccess)

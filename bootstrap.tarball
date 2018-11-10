@@ -7,12 +7,13 @@
 
 # Configuration to tune before to build tarball.
 
-TARBALL_VERSION="6.0.0-beta1"
+TARBALL_VERSION="6.0.0-beta2"
 
 # Location to host target files.
 TARBALL_DIR="$PWD/../digikam-$TARBALL_VERSION"
 TARBALL_FILE="$PWD/../digikam-$TARBALL_VERSION.tar.xz"
 TARBALL_CHECKSUMS="$PWD/../digikam-$TARBALL_VERSION.sum"
+TARBALL_SHA256SUMS="$PWD/../sha256_release.sum"
 
 # sub-dir to build translations
 TARBALL_BUILD="build.tarball"
@@ -81,11 +82,29 @@ sha1sum "$TARBALL_FILE"   | { read first rest ; echo $first ; }                 
 echo -n "SHA256 sum : "                                                         >> $TARBALL_CHECKSUMS
 sha256sum "$TARBALL_FILE" | { read first rest ; echo $first ; }                 >> $TARBALL_CHECKSUMS
 
+# Checksums to post on Phabricator at release time.
+sha256sum "$TARBALL_FILE" > $TARBALL_SHA256SUMS
+
 cat $TARBALL_CHECKSUMS
 
 # Compute GPG signature.
 
 if [[ $TARBALL_SIGN = 1 ]] ; then
+
     cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -stabv "$TARBALL_FILE"
     mv -f $TARBALL_FILE.asc $TARBALL_FILE.sig
+
+    echo    "File       : $TARBALL_FILE.sig"                                        >> $TARBALL_CHECKSUMS
+    echo -n "Size       : "                                                         >> $TARBALL_CHECKSUMS
+    du -h "$TARBALL_FILE.sig"     | { read first rest ; echo $first ; }             >> $TARBALL_CHECKSUMS
+    echo -n "MD5 sum    : "                                                         >> $TARBALL_CHECKSUMS
+    md5sum "$TARBALL_FILE.sig"    | { read first rest ; echo $first ; }             >> $TARBALL_CHECKSUMS
+    echo -n "SHA1 sum   : "                                                         >> $TARBALL_CHECKSUMS
+    sha1sum "$TARBALL_FILE.sig"   | { read first rest ; echo $first ; }             >> $TARBALL_CHECKSUMS
+    echo -n "SHA256 sum : "                                                         >> $TARBALL_CHECKSUMS
+    sha256sum "$TARBALL_FILE.sig" | { read first rest ; echo $first ; }             >> $TARBALL_CHECKSUMS
+
+    # Checksums to post on Phabricator at release time.
+    sha256sum "$TARBALL_FILE.sig" >> $TARBALL_SHA256SUMS
+
 fi

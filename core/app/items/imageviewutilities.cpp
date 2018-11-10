@@ -29,6 +29,7 @@
 // Qt includes
 
 #include <QFileInfo>
+#include <QStringRef>
 #include <QUrl>
 
 // KDE includes
@@ -44,7 +45,7 @@
 #include "applicationsettings.h"
 #include "deletedialog.h"
 #include "dio.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
 #include "loadingcacheinterface.h"
@@ -68,7 +69,7 @@ ImageViewUtilities::ImageViewUtilities(QWidget* const parentWidget)
 }
 
 void ImageViewUtilities::setAsAlbumThumbnail(Album* album,
-                                             const ImageInfo& imageInfo)
+                                             const ItemInfo& itemInfo)
 {
     if (!album)
     {
@@ -80,14 +81,14 @@ void ImageViewUtilities::setAsAlbumThumbnail(Album* album,
         PAlbum* const palbum = static_cast<PAlbum*>(album);
 
         QString err;
-        AlbumManager::instance()->updatePAlbumIcon(palbum, imageInfo.id(), err);
+        AlbumManager::instance()->updatePAlbumIcon(palbum, itemInfo.id(), err);
     }
     else if (album->type() == Album::TAG)
     {
         TAlbum* const talbum = static_cast<TAlbum*>(album);
 
         QString err;
-        AlbumManager::instance()->updateTAlbumIcon(talbum, QString(), imageInfo.id(), err);
+        AlbumManager::instance()->updateTAlbumIcon(talbum, QString(), itemInfo.id(), err);
     }
 }
 
@@ -103,7 +104,7 @@ void ImageViewUtilities::rename(const QUrl& imageUrl,
     DIO::rename(imageUrl, newName, overwrite);
 }
 
-bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos,
+bool ImageViewUtilities::deleteImages(const QList<ItemInfo>& infos,
                                       const DeleteMode deleteMode)
 {
     if (infos.isEmpty())
@@ -111,13 +112,13 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos,
         return false;
     }
 
-    QList<ImageInfo> deleteInfos = infos;
+    QList<ItemInfo> deleteInfos = infos;
 
     QList<QUrl> urlList;
     QList<qlonglong> imageIds;
 
     // Buffer the urls for deletion and imageids for notification of the AlbumManager
-    foreach (const ImageInfo& info, deleteInfos)
+    foreach (const ItemInfo& info, deleteInfos)
     {
         urlList  << info.fileUrl();
         imageIds << info.id();
@@ -147,7 +148,7 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos,
     return true;
 }
 
-void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos,
+void ImageViewUtilities::deleteImagesDirectly(const QList<ItemInfo>& infos,
                                               const DeleteMode deleteMode)
 {
     // This method deletes the selected items directly, without confirmation.
@@ -160,7 +161,7 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos,
 
     QList<qlonglong> imageIds;
 
-    foreach (const ImageInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         imageIds << info.id();
     }
@@ -184,7 +185,7 @@ void ImageViewUtilities::notifyFileContentChanged(const QList<QUrl>& urls)
     }
 }
 
-void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos,
+void ImageViewUtilities::createNewAlbumForInfos(const QList<ItemInfo>& infos,
                                                 Album* currentAlbum)
 {
     if (infos.isEmpty())
@@ -210,16 +211,16 @@ void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos,
     DIO::move(infos, (PAlbum*)album);
 }
 
-void ImageViewUtilities::insertToLightTableAuto(const QList<ImageInfo>& all,
-                                                const QList<ImageInfo>& selected,
-                                                const ImageInfo& current)
+void ImageViewUtilities::insertToLightTableAuto(const QList<ItemInfo>& all,
+                                                const QList<ItemInfo>& selected,
+                                                const ItemInfo& current)
 {
-    ImageInfoList list   = ImageInfoList(selected);
-    ImageInfo singleInfo = current;
+    ItemInfoList list   = ItemInfoList(selected);
+    ItemInfo singleInfo = current;
 
     if (list.isEmpty() || (list.size() == 1 && LightTableWindow::lightTableWindow()->isEmpty()))
     {
-        list = ImageInfoList(all);
+        list = ItemInfoList(all);
     }
 
     if (singleInfo.isNull() && !list.isEmpty())
@@ -230,16 +231,16 @@ void ImageViewUtilities::insertToLightTableAuto(const QList<ImageInfo>& all,
     insertToLightTable(list, current, list.size() <= 1);
 }
 
-void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list,
-                                            const ImageInfo& current,
+void ImageViewUtilities::insertToLightTable(const QList<ItemInfo>& list,
+                                            const ItemInfo& current,
                                             bool addTo)
 {
     LightTableWindow* const ltview = LightTableWindow::lightTableWindow();
 
     // If addTo is false, the light table will be emptied before adding
     // the images.
-    ltview->loadImageInfos(ImageInfoList(list), current, addTo);
-    ltview->setLeftRightItems(ImageInfoList(list), addTo);
+    ltview->loadItemInfos(ItemInfoList(list), current, addTo);
+    ltview->setLeftRightItems(ItemInfoList(list), addTo);
 
     if (ltview->isHidden())
     {
@@ -254,7 +255,7 @@ void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list,
     KWindowSystem::activateWindow(ltview->winId());
 }
 
-void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, const ImageInfo& current, bool newQueue)
+void ImageViewUtilities::insertToQueueManager(const QList<ItemInfo>& list, const ItemInfo& current, bool newQueue)
 {
     Q_UNUSED(current);
 
@@ -274,24 +275,24 @@ void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, cons
 
     if (newQueue)
     {
-        bqmview->loadImageInfosToNewQueue(ImageInfoList(list));
+        bqmview->loadItemInfosToNewQueue(ItemInfoList(list));
     }
     else
     {
-        bqmview->loadImageInfosToCurrentQueue(ImageInfoList(list));
+        bqmview->loadItemInfosToCurrentQueue(ItemInfoList(list));
     }
 }
 
-void ImageViewUtilities::insertSilentToQueueManager(const QList<ImageInfo>& list,
-                                                    const ImageInfo& /*current*/,
+void ImageViewUtilities::insertSilentToQueueManager(const QList<ItemInfo>& list,
+                                                    const ItemInfo& /*current*/,
                                                     int queueid)
 {
     QueueMgrWindow* const bqmview = QueueMgrWindow::queueManagerWindow();
-    bqmview->loadImageInfos(ImageInfoList(list), queueid);
+    bqmview->loadItemInfos(ItemInfoList(list), queueid);
 }
 
-void ImageViewUtilities::openInfos(const ImageInfo& info,
-                                   const QList<ImageInfo>& allInfosToOpen,
+void ImageViewUtilities::openInfos(const ItemInfo& info,
+                                   const QList<ItemInfo>& allInfosToOpen,
                                    Album* currentAlbum)
 {
     if (info.isNull())
@@ -307,7 +308,7 @@ void ImageViewUtilities::openInfos(const ImageInfo& info,
     if ( !imagefilter.contains(fi.suffix().toLower()) )
     {
         // Openonly the first one from the list.
-        openInfosWithDefaultApplication(QList<ImageInfo>() << info);
+        openInfosWithDefaultApplication(QList<ItemInfo>() << info);
         return;
     }
 
@@ -320,7 +321,7 @@ void ImageViewUtilities::openInfos(const ImageInfo& info,
     connect(imview, SIGNAL(signalURLChanged(QUrl)),
             this, SIGNAL(editorCurrentUrlChanged(QUrl)));
 
-    imview->loadImageInfos(ImageInfoList(allInfosToOpen), info,
+    imview->loadItemInfos(ItemInfoList(allInfosToOpen), info,
                            currentAlbum ? i18n("Album \"%1\"", currentAlbum->title())
                                         : QString());
 
@@ -337,7 +338,7 @@ void ImageViewUtilities::openInfos(const ImageInfo& info,
     KWindowSystem::activateWindow(imview->winId());
 }
 
-void ImageViewUtilities::openInfosWithDefaultApplication(const QList<ImageInfo>& infos)
+void ImageViewUtilities::openInfosWithDefaultApplication(const QList<ItemInfo>& infos)
 {
     if (infos.isEmpty())
     {
@@ -346,7 +347,7 @@ void ImageViewUtilities::openInfosWithDefaultApplication(const QList<ImageInfo>&
 
     QList<QUrl> urls;
 
-    foreach (const ImageInfo& inf, infos)
+    foreach (const ItemInfo& inf, infos)
     {
         urls << inf.fileUrl();
     }
@@ -357,47 +358,55 @@ void ImageViewUtilities::openInfosWithDefaultApplication(const QList<ImageInfo>&
 namespace
 {
 
-bool lessThanByTimeForImageInfo(const ImageInfo& a, const ImageInfo& b)
+bool lessThanByTimeForItemInfo(const ItemInfo& a, const ItemInfo& b)
 {
     return a.dateTime() < b.dateTime();
 }
 
-bool lowerThanByNameForImageInfo(const ImageInfo& a, const ImageInfo& b)
+bool lowerThanByNameForItemInfo(const ItemInfo& a, const ItemInfo& b)
 {
     return a.name() < b.name();
 }
 
-bool lowerThanBySizeForImageInfo(const ImageInfo& a, const ImageInfo& b)
+bool lowerThanBySizeForItemInfo(const ItemInfo& a, const ItemInfo& b)
 {
     return a.fileSize() < b.fileSize();
 }
 
 } // namespace
 
-void ImageViewUtilities::createGroupByTimeFromInfoList(const ImageInfoList& imageInfoList)
+void ImageViewUtilities::createGroupByTimeFromInfoList(const ItemInfoList& itemInfoList)
 {
-    QList<ImageInfo> groupingList = imageInfoList;
+    QList<ItemInfo> groupingList = itemInfoList;
     // sort by time
-    std::stable_sort(groupingList.begin(), groupingList.end(), lessThanByTimeForImageInfo);
+    std::stable_sort(groupingList.begin(), groupingList.end(), lessThanByTimeForItemInfo);
 
-    QList<ImageInfo>::iterator it, it2;
+    QList<ItemInfo>::iterator it, it2;
 
     for (it = groupingList.begin() ; it != groupingList.end() ; )
     {
-        const ImageInfo& leader = *it;
-        QList<ImageInfo> group;
-        QDateTime time          = it->dateTime();
+        const ItemInfo& leader = *it;
+        QList<ItemInfo> group;
+        QDateTime time         = it->dateTime();
 
-        for (it2 = it + 1 ; it2 != groupingList.end() ; ++it2)
+        if (time.isValid())
         {
-            if (qAbs(time.secsTo(it2->dateTime())) < 2)
+            for (it2 = it + 1 ; it2 != groupingList.end() ; ++it2)
             {
-                group << *it2;
+                if (qAbs(time.secsTo(it2->dateTime())) < 2)
+                {
+                    group << *it2;
+                }
+                else
+                {
+                    break;
+                }
             }
-            else
-            {
-                break;
-            }
+        }
+        else
+        {
+            ++it;
+            continue;
         }
 
         // increment to next item not put in the group
@@ -410,17 +419,17 @@ void ImageViewUtilities::createGroupByTimeFromInfoList(const ImageInfoList& imag
     }
 }
 
-void ImageViewUtilities::createGroupByFilenameFromInfoList(const ImageInfoList& imageInfoList)
+void ImageViewUtilities::createGroupByFilenameFromInfoList(const ItemInfoList& itemInfoList)
 {
-    QList<ImageInfo> groupingList = imageInfoList;
+    QList<ItemInfo> groupingList = itemInfoList;
     // sort by Name
-    std::stable_sort(groupingList.begin(), groupingList.end(), lowerThanByNameForImageInfo);
+    std::stable_sort(groupingList.begin(), groupingList.end(), lowerThanByNameForItemInfo);
 
-    QList<ImageInfo>::iterator it, it2;
+    QList<ItemInfo>::iterator it, it2;
 
     for (it = groupingList.begin() ; it != groupingList.end() ; )
     {
-        QList<ImageInfo> group;
+        QList<ItemInfo> group;
         QString fname = it->name().left(it->name().lastIndexOf(QLatin1Char('.')));
         // don't know the leader yet so put first element also in group
         group << *it;
@@ -445,10 +454,139 @@ void ImageViewUtilities::createGroupByFilenameFromInfoList(const ImageInfoList& 
         if (group.count() > 1)
         {
             // sort by filesize and take smallest as leader
-            std::stable_sort(group.begin(), group.end(), lowerThanBySizeForImageInfo);
-            const ImageInfo& leader = group.takeFirst();
+            std::stable_sort(group.begin(), group.end(), lowerThanBySizeForItemInfo);
+            const ItemInfo& leader = group.takeFirst();
             FileActionMngr::instance()->addToGroup(leader, group);
         }
+    }
+}
+
+namespace
+{
+
+struct NumberInFilenameMatch
+{
+    NumberInFilenameMatch()
+        : value(0),
+          containsValue(false)
+    {
+    }
+
+    NumberInFilenameMatch(const QString& filename)
+        : NumberInFilenameMatch()
+    {
+        if (filename.isEmpty())
+        {
+            return;
+        }
+
+        auto firstDigit = std::find_if(filename.begin(), filename.end(),
+                                            [](const QChar& c)
+                                            {
+                                                return c.isDigit();
+                                            });
+
+        prefix = filename.leftRef(std::distance(filename.begin(), firstDigit));
+
+        if (firstDigit == filename.end())
+        {
+            return;
+        }
+
+        auto lastDigit = std::find_if(firstDigit, filename.end(),
+                                            [](const QChar& c)
+                                            {
+                                                return !c.isDigit();
+                                            });
+
+        value  = filename.midRef(prefix.size(),
+                                 std::distance(firstDigit,
+                                               lastDigit)).toULongLong(&containsValue);
+
+        suffix = filename.midRef(std::distance(lastDigit, filename.end()));
+    }
+
+    bool directlyPreceeds(NumberInFilenameMatch const& other) const
+    {
+        if (!containsValue || !other.containsValue)
+        {
+            return false;
+        }
+
+        if (prefix != other.prefix)
+        {
+            return false;
+        }
+
+        if (suffix != other.suffix)
+        {
+            return false;
+        }
+
+        return value+1 == other.value;
+    }
+
+    qulonglong value;
+    QStringRef prefix;
+    QStringRef suffix;
+    bool containsValue;
+};
+
+bool imageMatchesTimelapseGroup(const ItemInfoList& group, const ItemInfo& itemInfo)
+{
+    if (group.size() < 2)
+    {
+        return true;
+    }
+
+    auto const timeBetweenPhotos      = qAbs(group.first().dateTime()
+                                                          .secsTo(group.last()
+                                                          .dateTime())) / (group.size()-1);
+
+    auto const predictedNextTimestamp = group.last().dateTime()
+                                                    .addSecs(timeBetweenPhotos);
+
+    return (qAbs(itemInfo.dateTime().secsTo(predictedNextTimestamp)) <= 1);
+}
+
+} // namespace
+
+void ImageViewUtilities::createGroupByTimelapseFromInfoList(const ItemInfoList& itemInfoList)
+{
+    if (itemInfoList.size() < 3)
+    {
+        return;
+    }
+
+    ItemInfoList groupingList = itemInfoList;
+
+    std::stable_sort(groupingList.begin(), groupingList.end(), lowerThanByNameForItemInfo);
+
+    NumberInFilenameMatch previousNumberMatch;
+    ItemInfoList group;
+
+    for (const auto& itemInfo : groupingList)
+    {
+        NumberInFilenameMatch numberMatch(itemInfo.name());
+
+        // if this is an end of currently processed group
+        if (!previousNumberMatch.directlyPreceeds(numberMatch) || !imageMatchesTimelapseGroup(group, itemInfo))
+        {
+            if (group.size() > 2)
+            {
+                FileActionMngr::instance()->addToGroup(group.takeFirst(), group);
+            }
+
+            group.clear();
+        }
+
+        group.append(itemInfo);
+        previousNumberMatch = std::move(numberMatch);
+    }
+
+    if (group.size() > 2)
+    {
+        FileActionMngr::instance()->addToGroup(group.takeFirst(), group);
     }
 }
 

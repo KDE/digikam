@@ -479,18 +479,18 @@ void ImportPreviewView::slotSetupChanged()
 void ImportPreviewView::slotRotateLeft()
 {
 /*
-    ImageInfo info(d->item->camItemInfo().url().toLocalFile());
+    ItemInfo info(d->item->camItemInfo().url().toLocalFile());
 
-    FileActionMngr::instance()->transform(QList<ImageInfo>() << info, MetaEngineRotation::Rotate270);
+    FileActionMngr::instance()->transform(QList<ItemInfo>() << info, MetaEngineRotation::Rotate270);
 */
 }
 
 void ImportPreviewView::slotRotateRight()
 {
 /*
-    ImageInfo info(d->item->camItemInfo().url().toLocalFile());
+    ItemInfo info(d->item->camItemInfo().url().toLocalFile());
 
-    FileActionMngr::instance()->transform(QList<ImageInfo>() << info, MetaEngineRotation::Rotate90);
+    FileActionMngr::instance()->transform(QList<ItemInfo>() << info, MetaEngineRotation::Rotate90);
 */
 }
 

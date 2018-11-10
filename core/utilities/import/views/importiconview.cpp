@@ -69,7 +69,7 @@ ImportIconView::ImportIconView(QWidget* const parent)
 
     setThumbnailSize(ThumbnailSize(settings->getDefaultIconSize()));
 
-    importImageModel()->setDragDropHandler(new ImportDragDropHandler(importImageModel()));
+    importItemModel()->setDragDropHandler(new ImportDragDropHandler(importItemModel()));
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(false);
@@ -106,10 +106,10 @@ ImportIconView::ImportIconView(QWidget* const parent)
     //TODO: connect(groupOverlay, SIGNAL(showButtonContextMenu(QModelIndex,QContextMenuEvent*)),
             //this, SLOT(showGroupContextMenu(QModelIndex,QContextMenuEvent*)));
 
-    //TODO: connect(importImageModel()->dragDropHandler(), SIGNAL(assignTags(QList<CamItemInfo>,QList<int>)),
+    //TODO: connect(importItemModel()->dragDropHandler(), SIGNAL(assignTags(QList<CamItemInfo>,QList<int>)),
             //FileActionMngr::instance(), SLOT(assignTags(QList<CamItemInfo>,QList<int>)));
 
-    //TODO: connect(importImageModel()->dragDropHandler(), SIGNAL(addToGroup(CamItemInfo,QList<CamItemInfo>)),
+    //TODO: connect(importItemModel()->dragDropHandler(), SIGNAL(addToGroup(CamItemInfo,QList<CamItemInfo>)),
             //FileActionMngr::instance(), SLOT(addToGroup(CamItemInfo,QList<CamItemInfo>)));
 
     connect(settings, SIGNAL(setupChanged()),
@@ -161,7 +161,7 @@ CamItemInfo& ImportIconView::camItemInfoRef(const QString& folder, const QString
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
     QModelIndex mappedIndex         = importFilterModel()->mapToSource(indexForCamItemInfo);
 
-    return importImageModel()->camItemInfoRef(mappedIndex);
+    return importItemModel()->camItemInfoRef(mappedIndex);
 }
 
 void ImportIconView::slotSetupChanged()
@@ -265,11 +265,11 @@ void ImportIconView::removeSelectedFromGroup()
 void ImportIconView::slotRotateLeft(const QList<QModelIndex>& /*indexes*/)
 {
 /*
-    QList<ImageInfo> imageInfos;
+    QList<ItemInfo> imageInfos;
 
     foreach(const QModelIndex& index, indexes)
     {
-        ImageInfo imageInfo(importFilterModel()->camItemInfo(index).url());
+        ItemInfo imageInfo(importFilterModel()->camItemInfo(index).url());
         imageInfos << imageInfo;
     }
 
@@ -280,11 +280,11 @@ void ImportIconView::slotRotateLeft(const QList<QModelIndex>& /*indexes*/)
 void ImportIconView::slotRotateRight(const QList<QModelIndex>& /*indexes*/)
 {
 /*
-    QList<ImageInfo> imageInfos;
+    QList<ItemInfo> imageInfos;
 
     foreach(const QModelIndex& index, indexes)
     {
-        ImageInfo imageInfo(importFilterModel()->camItemInfo(index).url());
+        ItemInfo imageInfo(importFilterModel()->camItemInfo(index).url());
         imageInfos << imageInfo;
     }
 
@@ -416,7 +416,7 @@ void ImportIconView::assignTagToSelected(int tagID)
 
     foreach(const CamItemInfo& info, infos)
     {
-        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).tagIds.append(tagID);
+        importItemModel()->camItemInfoRef(importItemModel()->indexForCamItemInfo(info)).tagIds.append(tagID);
     }
 }
 
@@ -426,13 +426,13 @@ void ImportIconView::removeTagFromSelected(int tagID)
 
     foreach(const CamItemInfo& info, infos)
     {
-        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).tagIds.removeAll(tagID);
+        importItemModel()->camItemInfoRef(importItemModel()->indexForCamItemInfo(info)).tagIds.removeAll(tagID);
     }
 }
 
 void ImportIconView::assignPickLabel(const QModelIndex& index, int pickId)
 {
-    importImageModel()->camItemInfoRef(index).pickLabel = pickId;
+    importItemModel()->camItemInfoRef(index).pickLabel = pickId;
 }
 
 void ImportIconView::assignPickLabelToSelected(int pickId)
@@ -441,13 +441,13 @@ void ImportIconView::assignPickLabelToSelected(int pickId)
 
     foreach(const CamItemInfo& info, infos)
     {
-        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).pickLabel = pickId;
+        importItemModel()->camItemInfoRef(importItemModel()->indexForCamItemInfo(info)).pickLabel = pickId;
     }
 }
 
 void ImportIconView::assignColorLabel(const QModelIndex& index, int colorId)
 {
-    importImageModel()->camItemInfoRef(index).colorLabel = colorId;
+    importItemModel()->camItemInfoRef(index).colorLabel = colorId;
 }
 
 void ImportIconView::assignColorLabelToSelected(int colorId)
@@ -456,7 +456,7 @@ void ImportIconView::assignColorLabelToSelected(int colorId)
 
     foreach(const CamItemInfo& info, infos)
     {
-        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).colorLabel = colorId;
+        importItemModel()->camItemInfoRef(importItemModel()->indexForCamItemInfo(info)).colorLabel = colorId;
     }
 }
 
@@ -466,7 +466,7 @@ void ImportIconView::assignRating(const QList<QModelIndex>& indexes, int rating)
     {
         if (index.isValid())
         {
-            importImageModel()->camItemInfoRef(index).rating = rating;
+            importItemModel()->camItemInfoRef(index).rating = rating;
         }
     }
 }
@@ -477,7 +477,7 @@ void ImportIconView::assignRatingToSelected(int rating)
 
     foreach(const CamItemInfo& info, infos)
     {
-        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).rating = rating;
+        importItemModel()->camItemInfoRef(importItemModel()->indexForCamItemInfo(info)).rating = rating;
     }
 }
 

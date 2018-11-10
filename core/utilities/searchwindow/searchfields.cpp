@@ -63,8 +63,9 @@
 #include "choicesearchutilities.h"
 #include "dimg.h"
 #include "dmetadata.h"
-#include "imagescanner.h"
+#include "itemscanner.h"
 #include "ddateedit.h"
+#include "tagtreeview.h"
 #include "ratingsearchutilities.h"
 #include "searchfieldgroup.h"
 #include "searchwindow.h"
@@ -72,7 +73,7 @@
 #include "colorlabelfilter.h"
 #include "picklabelfilter.h"
 #include "applicationsettings.h"
-#include "imagepropertiestab.h"
+#include "itempropertiestab.h"
 
 namespace Digikam
 {
@@ -333,7 +334,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
 
         for (int i = 0 ; i < make.count() ; i++)
         {
-            ImagePropertiesTab::shortenedMakeInfo(make[i]);
+            ItemPropertiesTab::shortenedMakeInfo(make[i]);
             make[i] = make[i].trimmed();
         }
 
@@ -359,7 +360,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
 
         for (int i = 0 ; i < model.count() ; i++)
         {
-            ImagePropertiesTab::shortenedModelInfo(model[i]);
+            ItemPropertiesTab::shortenedModelInfo(model[i]);
             model[i] = model[i].trimmed();
         }
 
@@ -2427,10 +2428,10 @@ void SearchFieldAlbum::setupValueWidgets(QGridLayout* layout, int row, int colum
     }
     else if (m_type == TypeTag)
     {
-        m_wrapperBox = new DHBox(0);
+        m_wrapperBox  = new DHBox(0);
         m_tagComboBox = new TagTreeViewSelectComboBox(m_wrapperBox);
 
-        m_operation = new SqueezedComboBox(m_wrapperBox);
+        m_operation   = new SqueezedComboBox(m_wrapperBox);
         m_operation->addSqueezedItem(i18nc("@label:listbox", "In All"),    Operation::All);
         m_operation->addSqueezedItem(i18nc("@label:listbox", "In One of"), Operation::OneOf);
 
@@ -2439,7 +2440,7 @@ void SearchFieldAlbum::setupValueWidgets(QGridLayout* layout, int row, int colum
         m_tagComboBox->setNoSelectionText(i18n("Any Tag"));
         m_tagComboBox->addCheckUncheckContextMenuActions();
 
-        m_model = m_tagComboBox->model();
+        m_model       = m_tagComboBox->model();
         layout->addWidget(m_wrapperBox, row, column, 1, 3);
     }
 
@@ -3043,7 +3044,7 @@ void SearchFieldLabels::write(SearchXmlWriter& writer)
     }
 
     // NOTE: As Color Labels are internal tags, we trig database on "tagid"
-    //       with "labels" in ImageQueryBuilder::buildField().
+    //       with "labels" in ItemQueryBuilder::buildField().
     writer.writeField(m_name, SearchXml::InTree);
 
     if (albumIds.size() > 1)

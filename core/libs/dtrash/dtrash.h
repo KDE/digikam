@@ -53,17 +53,17 @@ public:
 
     /**
      * @brief Deletes image to the trash of a particular collection
-     * @param imageToDelete: path to image
+     * @param imagePath: path to image
      * @return true if the image was deleted
      */
-    static bool deleteImage(const QString& imageToDelete);
+    static bool deleteImage(const QString& imagePath, const QDateTime& deleteTime);
 
     /**
      * @brief Deletes a whole folder from the collection
      * @param dirToDelete: path to folder
      * @return true if folder was deleted
      */
-    static bool deleteDirRecursivley(const QString& dirToDelete);
+    static bool deleteDirRecursivley(const QString& dirToDelete, const QDateTime& deleteTime);
 
     /**
      * @brief Extracts the data from json file and gives it to DTrashItemInfo
@@ -85,19 +85,23 @@ private:
     /**
      * @brief Creates a json file containing the image path and deletion timestamp
      *        and return the baseName for this json file
-     * @param collectionPath: Path of collection that the image belongs to
+     * @param imageId: the image id for the file
      * @param imagePath: path of image to create json file for
-     * @param imageId: The image id for the file.
+     * @param deleteTime: delete time from the image
+     * @param collectionPath: path of collection that the image belongs to
      *
      * @example createJsonRecordForFile("home/user/Pics", "/home/user/Pics/cats/cute/katy.jpg")
      *          returns => "katy"
      */
-    static QString createJsonRecordForFile(const QString& collectionPath, const QString& imagePath, qlonglong imageId);
+    static QString createJsonRecordForFile(qlonglong imageId,
+                                           const QString& imagePath,
+                                           const QDateTime& deleteTime,
+                                           const QString& collectionPath);
 
     /**
      * @brief Checks for duplicates of files names inside the trash and if there is
      *        a duplication it does a simple versioning recursively
-     * @param collectionPath: Path of collection that the image belongs to
+     * @param collectionPath: path of collection that the image belongs to
      * @param baseName: the baseName of the image
      * @param version: a digit to append to the image baseName
      *
@@ -107,7 +111,8 @@ private:
      *          returns => "home/user/Pics/.trash/info/katy{version}.dtrashInfo"
      *          where {version} is a integer number that is available in trash
      */
-    static QString getAvialableJsonFilePathInTrash(const QString& collectionPath, const QString& baseName, int version = 0);
+    static QString getAvialableJsonFilePathInTrash(const QString& collectionPath,
+                                                   const QString& baseName, int version = 0);
 
 private:
 

@@ -35,7 +35,7 @@ enum DetectionType
     DetectBlur = 0,
     DetectNoise,
     DetectCompression,
-    DetectOverExposure
+    DetectExposure
 };
 
 QMultiMap<int, QString> ImgQSortTest_ParseTestImages(DetectionType type, const QFileInfoList& list);

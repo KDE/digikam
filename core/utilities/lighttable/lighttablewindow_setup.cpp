@@ -167,15 +167,11 @@ void LightTableWindow::setupActions()
 
     d->leftZoomPlusAction  = buildStdAction(StdZoomInAction, d->previewView, SLOT(slotIncreaseLeftZoom()), this);
     d->leftZoomPlusAction->setEnabled(false);
-    QKeySequence leftKeysPlus(d->leftZoomPlusAction->shortcut()[0], Qt::Key_Plus);
     ac->addAction(QLatin1String("lighttable_zoomplus_left"), d->leftZoomPlusAction);
-    ac->setDefaultShortcut(d->leftZoomPlusAction, leftKeysPlus);
 
     d->leftZoomMinusAction  = buildStdAction(StdZoomOutAction, d->previewView, SLOT(slotDecreaseLeftZoom()), this);
     d->leftZoomMinusAction->setEnabled(false);
-    QKeySequence leftKeysMinus(d->leftZoomMinusAction->shortcut()[0], Qt::Key_Minus);
     ac->addAction(QLatin1String("lighttable_zoomminus_left"), d->leftZoomMinusAction);
-    ac->setDefaultShortcut(d->leftZoomMinusAction, leftKeysMinus);
 
     d->leftZoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18n("Zoom to 100%"), this);
     connect(d->leftZoomTo100percents, SIGNAL(triggered()), d->previewView, SLOT(slotLeftZoomTo100()));
@@ -191,15 +187,13 @@ void LightTableWindow::setupActions()
 
     d->rightZoomPlusAction  = buildStdAction(StdZoomInAction, d->previewView, SLOT(slotIncreaseRightZoom()), this);
     d->rightZoomPlusAction->setEnabled(false);
-    QKeySequence rightKeysPlus(d->rightZoomPlusAction->shortcut()[0], Qt::SHIFT + Qt::CTRL + Qt::Key_Plus, Qt::SHIFT + Qt::Key_Plus);
     ac->addAction(QLatin1String("lighttable_zoomplus_right"), d->rightZoomPlusAction);
-    ac->setDefaultShortcut(d->rightZoomPlusAction, rightKeysPlus);
+    ac->setDefaultShortcut(d->rightZoomPlusAction, Qt::SHIFT + d->rightZoomPlusAction->shortcut()[0]);
 
     d->rightZoomMinusAction  = buildStdAction(StdZoomOutAction, d->previewView, SLOT(slotDecreaseRightZoom()), this);
     d->rightZoomMinusAction->setEnabled(false);
-    QKeySequence rightKeysMinus(d->rightZoomMinusAction->shortcut()[0], Qt::SHIFT + Qt::CTRL + Qt::Key_Minus, Qt::SHIFT + Qt::Key_Minus);
     ac->addAction(QLatin1String("lighttable_zoomminus_right"), d->rightZoomMinusAction);
-    ac->setDefaultShortcut(d->rightZoomMinusAction, rightKeysMinus);
+    ac->setDefaultShortcut(d->rightZoomMinusAction, Qt::SHIFT + d->rightZoomMinusAction->shortcut()[0]);
 
     d->rightZoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18n("Zoom to 100%"), this);
     connect(d->rightZoomTo100percents, SIGNAL(triggered()), d->previewView, SLOT(slotRightZoomTo100()));
@@ -331,26 +325,26 @@ void LightTableWindow::setupConnections()
 
     // Thumbs bar connections ---------------------------------------
 
-    connect(d->thumbView, SIGNAL(signalSetItemOnLeftPanel(ImageInfo)),
-            this, SLOT(slotSetItemOnLeftPanel(ImageInfo)));
+    connect(d->thumbView, SIGNAL(signalSetItemOnLeftPanel(ItemInfo)),
+            this, SLOT(slotSetItemOnLeftPanel(ItemInfo)));
 
-    connect(d->thumbView, SIGNAL(signalSetItemOnRightPanel(ImageInfo)),
-            this, SLOT(slotSetItemOnRightPanel(ImageInfo)));
+    connect(d->thumbView, SIGNAL(signalSetItemOnRightPanel(ItemInfo)),
+            this, SLOT(slotSetItemOnRightPanel(ItemInfo)));
 
-    connect(d->thumbView, SIGNAL(signalRemoveItem(ImageInfo)),
-            this, SLOT(slotRemoveItem(ImageInfo)));
+    connect(d->thumbView, SIGNAL(signalRemoveItem(ItemInfo)),
+            this, SLOT(slotRemoveItem(ItemInfo)));
 
-    connect(d->thumbView, SIGNAL(signalEditItem(ImageInfo)),
-            this, SLOT(slotEditItem(ImageInfo)));
+    connect(d->thumbView, SIGNAL(signalEditItem(ItemInfo)),
+            this, SLOT(slotEditItem(ItemInfo)));
 
     connect(d->thumbView, SIGNAL(signalClearAll()),
             this, SLOT(slotClearItemsList()));
 
-    connect(d->thumbView, SIGNAL(signalDroppedItems(QList<ImageInfo>)),
-            this, SLOT(slotThumbbarDroppedItems(QList<ImageInfo>)));
+    connect(d->thumbView, SIGNAL(signalDroppedItems(QList<ItemInfo>)),
+            this, SLOT(slotThumbbarDroppedItems(QList<ItemInfo>)));
 
-    connect(d->thumbView, SIGNAL(currentChanged(ImageInfo)),
-            this, SLOT(slotItemSelected(ImageInfo)));
+    connect(d->thumbView, SIGNAL(currentChanged(ItemInfo)),
+            this, SLOT(slotItemSelected(ItemInfo)));
 
     connect(d->thumbView, SIGNAL(signalContentChanged()),
             this, SLOT(slotRefreshStatusBar()));
@@ -383,11 +377,11 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalRightZoomFactorChanged(double)),
             this, SLOT(slotRightZoomFactorChanged(double)));
 
-    connect(d->previewView, SIGNAL(signalEditItem(ImageInfo)),
-            this, SLOT(slotEditItem(ImageInfo)));
+    connect(d->previewView, SIGNAL(signalEditItem(ItemInfo)),
+            this, SLOT(slotEditItem(ItemInfo)));
 
-    connect(d->previewView, SIGNAL(signalDeleteItem(ImageInfo)),
-            this, SLOT(slotDeleteItem(ImageInfo)));
+    connect(d->previewView, SIGNAL(signalDeleteItem(ItemInfo)),
+            this, SLOT(slotDeleteItem(ItemInfo)));
 
     connect(d->previewView, SIGNAL(signalLeftSlideShowCurrent()),
             this, SLOT(slotLeftSlideShowManualFromCurrent()));
@@ -395,11 +389,11 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalRightSlideShowCurrent()),
             this, SLOT(slotRightSlideShowManualFromCurrent()));
 
-    connect(d->previewView, SIGNAL(signalLeftDroppedItems(ImageInfoList)),
-            this, SLOT(slotLeftDroppedItems(ImageInfoList)));
+    connect(d->previewView, SIGNAL(signalLeftDroppedItems(ItemInfoList)),
+            this, SLOT(slotLeftDroppedItems(ItemInfoList)));
 
-    connect(d->previewView, SIGNAL(signalRightDroppedItems(ImageInfoList)),
-            this, SLOT(slotRightDroppedItems(ImageInfoList)));
+    connect(d->previewView, SIGNAL(signalRightDroppedItems(ItemInfoList)),
+            this, SLOT(slotRightDroppedItems(ItemInfoList)));
 
     connect(d->previewView, SIGNAL(signalToggleOnSyncPreview(bool)),
             this, SLOT(slotToggleOnSyncPreview(bool)));
@@ -434,7 +428,7 @@ void LightTableWindow::setupUserArea()
     QHBoxLayout* const hlay = new QHBoxLayout(mainW);
 
     // The left sidebar
-    d->leftSideBar          = new ImagePropertiesSideBarDB(mainW, d->hSplitter, Qt::LeftEdge, true);
+    d->leftSideBar          = new ItemPropertiesSideBarDB(mainW, d->hSplitter, Qt::LeftEdge, true);
 
     // The central preview is wrapped in a KMainWindow so that the thumbnail
     // bar can float around it.
@@ -444,7 +438,7 @@ void LightTableWindow::setupUserArea()
     viewContainer->setCentralWidget(d->previewView);
 
     // The right sidebar.
-    d->rightSideBar = new ImagePropertiesSideBarDB(mainW, d->hSplitter, Qt::RightEdge, true);
+    d->rightSideBar = new ItemPropertiesSideBarDB(mainW, d->hSplitter, Qt::RightEdge, true);
 
     hlay->addWidget(d->leftSideBar);
     hlay->addWidget(d->hSplitter);

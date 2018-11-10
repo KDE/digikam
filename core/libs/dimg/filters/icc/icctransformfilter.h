@@ -76,7 +76,7 @@ public:
 
 protected:
 
-    virtual void progressInfo(const DImg* const, float progress);
+    virtual void progressInfo(DImg* const img, float progress);
     virtual void filterImage();
 
 private:

@@ -454,7 +454,7 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
 
     for (QList<QUrl>::ConstIterator it = urlList.constBegin() ; it != urlList.constEnd() ; ++it)
     {
-        DItemInfo info(d->iface->itemInfo((*it).toLocalFile()));
+        DItemInfo info(d->iface->itemInfo((*it)));
         GSPhoto temp;
         temp.title = info.name();
 
@@ -489,7 +489,7 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
         temp.gpsLon.setNum(info.longitude());
 
         temp.tags = info.tagsPath();
-        d->transferQueue.append( Pair( (*it), temp) );
+        d->transferQueue.append(Pair((*it), temp));
     }
 
     if (d->transferQueue.isEmpty())
@@ -504,15 +504,14 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
     d->widget->progressBar()->setValue(0);
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("Google Photo Export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(QIcon(
-        (QLatin1String("googlephoto"))).pixmap(22, 22));
+    d->widget->progressBar()->progressThumbnailChanged(QIcon((QLatin1String("googlephoto"))).pixmap(22, 22));
 
     d->renamingOpt = 0;
 
     uploadNextPhoto();
 }
 
-void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <GSFolder>& list)
+void GSWindow::slotListAlbumsDone(int code, const QString& errMsg, const QList <GSFolder>& list)
 {
     switch (d->service)
     {
@@ -529,9 +528,8 @@ void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <G
 
             for (int i = 0 ; i < list.size() ; ++i)
             {
-                d->widget->getAlbumsCoB()->addItem(
-                    QIcon::fromTheme(QLatin1String("system-users")),
-                    list.value(i).title, list.value(i).id);
+                d->widget->getAlbumsCoB()->addItem(QIcon::fromTheme(QLatin1String("system-users")),
+                                                   list.value(i).title, list.value(i).id);
 
                 if (d->currentAlbumId == list.value(i).id)
                 {
@@ -558,12 +556,14 @@ void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <G
             {
                 QString albumIcon;
 
-                if (list.at(i).access == QLatin1String("public"))
-                    albumIcon = QLatin1String("folder-image");
-                else if (list.at(i).access == QLatin1String("protected"))
-                    albumIcon = QLatin1String("folder-locked");
-                else
+                if (list.at(i).isWriteable)
+                {
                     albumIcon = QLatin1String("folder");
+                }
+                else
+                {
+                    albumIcon = QLatin1String("folder-locked");
+                }
 
                 d->widget->getAlbumsCoB()->addItem(QIcon::fromTheme(albumIcon), list.at(i).title, list.at(i).id);
 
@@ -705,7 +705,7 @@ void GSWindow::slotStartTransfer()
 
     for (int i = 0 ; i < (d->widget->imagesList()->imageUrls().size()) ; ++i)
     {
-        DItemInfo info(d->iface->itemInfo(d->widget->imagesList()->imageUrls().value(i).toLocalFile()));
+        DItemInfo info(d->iface->itemInfo(d->widget->imagesList()->imageUrls().value(i)));
         GSPhoto temp;
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in start transfer info " <<info.title() << info.comment();
 
@@ -1011,7 +1011,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
                     d->meta.setGPSInfo(0.0, item.gpsLat.toDouble(), item.gpsLon.toDouble());
                 }
 
-                d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+                d->meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
                 d->meta.save(tmpUrl.toLocalFile());
             }
 
@@ -1099,7 +1099,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
 /* TODO
     else
     {
-        KPImageInfo info(newUrl);
+        KPItemInfo info(newUrl);
         info.setName(item.title);
         info.setDescription(item.description);
         info.setTagsPath(item.tags);
@@ -1224,7 +1224,7 @@ void GSWindow::slotNewAlbumRequest()
                 GSFolder newFolder;
                 d->albumDlg->getAlbumProperties(newFolder);
                 d->currentAlbumId = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
-                d->talker->createFolder(newFolder.title,d->currentAlbumId);
+                d->talker->createFolder(newFolder.title, d->currentAlbumId);
             }
             break;
 

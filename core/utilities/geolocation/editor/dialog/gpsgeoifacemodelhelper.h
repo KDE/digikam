@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class GPSImageModel;
+class GPSItemModel;
 class GPSUndoCommand;
 class MapWidget;
 
@@ -48,7 +48,7 @@ class GPSGeoIfaceModelHelper : public GeoModelHelper
 
 public:
 
-    explicit GPSGeoIfaceModelHelper(GPSImageModel* const model,
+    explicit GPSGeoIfaceModelHelper(GPSItemModel* const model,
                                     QItemSelectionModel* const selectionModel,
                                     QObject* const parent = 0);
     virtual ~GPSGeoIfaceModelHelper();

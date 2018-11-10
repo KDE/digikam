@@ -43,7 +43,7 @@
 #include "albumtreeview.h"
 #include "facetagsiface.h"
 #include "dimg.h"
-#include "imageinfo.h"
+#include "iteminfo.h"
 #include "thememanager.h"
 #include "applicationsettings.h"
 
@@ -110,7 +110,7 @@ private:
 
 public:
 
-    ImageInfo                  info;
+    ItemInfo                  info;
     QVariant                   faceIdentifier;
     AlbumPointer<TAlbum>       currentTag;
 
@@ -681,13 +681,13 @@ AssignNameWidget::VisualStyle AssignNameWidget::visualStyle() const
     return d->visualStyle;
 }
 
-void AssignNameWidget::setUserData(const ImageInfo& info, const QVariant& faceIdentifier)
+void AssignNameWidget::setUserData(const ItemInfo& info, const QVariant& faceIdentifier)
 {
     d->info           = info;
     d->faceIdentifier = faceIdentifier;
 }
 
-ImageInfo AssignNameWidget::info() const
+ItemInfo AssignNameWidget::info() const
 {
     return d->info;
 }

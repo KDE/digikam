@@ -38,6 +38,7 @@
 #include "gswindow.h"
 #include "imageshackwindow.h"
 #include "imgurwindow.h"
+#include "ipfswindow.h"
 #include "mediawikiwindow.h"
 #include "odwindow.h"
 #include "pwindow.h"
@@ -81,6 +82,7 @@ public:
     QPointer<GSWindow>         gpImportWindow;
     QPointer<ImageShackWindow> imageShackWindow;
     QPointer<ImgurWindow>      imgurWindow;
+    QPointer<IpfsWindow>       ipfsWindow;
     QPointer<MediaWikiWindow>  mediaWikiWindow;
     QPointer<ODWindow>         odWindow;
     QPointer<PWindow>          pWindow;
@@ -131,6 +133,7 @@ void WSStarter::cleanUp()
         delete instance()->d->gpImportWindow;
         delete instance()->d->imageShackWindow;
         delete instance()->d->imgurWindow;
+        delete instance()->d->ipfsWindow;
         delete instance()->d->mediaWikiWindow;
         delete instance()->d->odWindow;
         delete instance()->d->pWindow;
@@ -290,6 +293,19 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             delete d->imgurWindow;
             d->imgurWindow = new ImgurWindow(iface, parent);
             d->imgurWindow->show();
+        }
+    }
+    else if (tool == ExportIpfs)
+    {
+        if (checkWebService(static_cast<QWidget*>(d->ipfsWindow)))
+        {
+            return;
+        }
+        else
+        {
+            delete d->ipfsWindow;
+            d->ipfsWindow = new IpfsWindow(iface, parent);
+            d->ipfsWindow->show();
         }
     }
     else if (tool == ExportMediawiki)

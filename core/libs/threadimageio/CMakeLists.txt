@@ -10,35 +10,35 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libthreadimageio_SRCS
-    dfileoperations.cpp
-    filereadwritelock.cpp
-    loadsavethread.cpp
-    managedloadsavethread.cpp
-    sharedloadsavethread.cpp
-    loadingdescription.cpp
-    loadingcache.cpp
-    loadingcacheinterface.cpp
-    loadsavetask.cpp
-    previewloadthread.cpp
-    previewtask.cpp
-    previewsettings.cpp
-    thumbnailbasic.cpp
-    thumbnailcreator.cpp
-    thumbnailloadthread.cpp
-    thumbnailtask.cpp
-    thumbnailsize.cpp
+    engine/dfileoperations.cpp
+    engine/filereadwritelock.cpp
+    engine/managedloadsavethread.cpp
+    engine/sharedloadsavethread.cpp
+    preview/previewloadthread.cpp
+    preview/previewtask.cpp
+    preview/previewsettings.cpp
+    thumb/thumbnailbasic.cpp
+    thumb/thumbnailcreator.cpp
+    thumb/thumbnailloadthread.cpp
+    thumb/thumbnailtask.cpp
+    thumb/thumbnailsize.cpp
+    fileio/loadsavethread.cpp
+    fileio/loadingdescription.cpp
+    fileio/loadingcache.cpp
+    fileio/loadingcacheinterface.cpp
+    fileio/loadsavetask.cpp
 )
 
 if(ENABLE_MEDIAPLAYER)
 
     set(libthreadimageio_SRCS
         ${libthreadimageio_SRCS}
-        ffmpegthumbnailer/filmstripfilter.cpp
-        ffmpegthumbnailer/moviedecoder.cpp
-        ffmpegthumbnailer/moviedecoder_p.cpp
-        ffmpegthumbnailer/imagewriter.cpp
-        ffmpegthumbnailer/videothumbnailer.cpp
-        videothumbnailerjob.cpp
+        video/videostripfilter.cpp
+        video/videodecoder.cpp
+        video/videodecoder_p.cpp
+        video/videothumbwriter.cpp
+        video/videothumbnailer.cpp
+        video/videothumbnailerjob.cpp
        )
 endif()
 

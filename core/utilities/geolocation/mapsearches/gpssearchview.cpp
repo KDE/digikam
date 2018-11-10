@@ -46,11 +46,12 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "searchtreeview.h"
 #include "editablesearchtreeview.h"
-#include "imageinfojob.h"
+#include "iteminfojob.h"
 #include "coredbsearchxml.h"
 #include "gpsmarkertiler.h"
-#include "gpsimageinfosorter.h"
+#include "gpsiteminfosorter.h"
 
 namespace Digikam
 {
@@ -80,17 +81,17 @@ public:
     static const QString        configSplitterStateEntry;
     QToolButton*                saveBtn;
     QLineEdit*                  nameEdit;
-    ImageInfoJob                imageInfoJob;
+    ItemInfoJob                imageInfoJob;
     SearchTextBar*              searchGPSBar;
     EditableSearchTreeView*     searchTreeView;
     QSplitter*                  splitter;
     MapWidget*                  mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;
-    ImageAlbumModel*            imageAlbumModel;
-    ImageFilterModel*           imageFilterModel;
+    ItemAlbumModel*            imageAlbumModel;
+    ItemFilterModel*           imageFilterModel;
     QItemSelectionModel*        selectionModel;
     SearchModel*                searchModel;
-    GPSImageInfoSorter*         sortOrderOptionsHelper;
+    GPSItemInfoSorter*         sortOrderOptionsHelper;
     QString                     nonGeonlocatedItemsXml;
 };
 
@@ -106,7 +107,7 @@ const QString GPSSearchView::Private::configSplitterStateEntry(QLatin1String("Sp
 GPSSearchView::GPSSearchView(QWidget* const parent,
                              SearchModel* const searchModel,
                              SearchModificationHelper* const searchModificationHelper,
-                             ImageFilterModel* const imageFilterModel,
+                             ItemFilterModel* const imageFilterModel,
                              QItemSelectionModel* const itemSelectionModel)
     : QWidget(parent),
       StateSavingObject(this),
@@ -117,7 +118,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     /// @todo Really?
     setAcceptDrops(true);
 
-    d->imageAlbumModel        = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
+    d->imageAlbumModel        = qobject_cast<ItemAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel         = itemSelectionModel;
     d->imageFilterModel       = imageFilterModel;
     d->searchModel            = searchModel;
@@ -140,7 +141,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
-    d->sortOrderOptionsHelper = new GPSImageInfoSorter(this);
+    d->sortOrderOptionsHelper = new GPSItemInfoSorter(this);
     d->sortOrderOptionsHelper->addToMapWidget(d->mapSearchWidget);
 
     vlay2->addWidget(d->mapSearchWidget);
@@ -319,7 +320,7 @@ void GPSSearchView::doLoadState()
         }
     }
 
-    d->sortOrderOptionsHelper->setSortOptions(GPSImageInfoSorter::SortOptions(group.readEntry(entryName(QLatin1String("Sort Order")), int(d->sortOrderOptionsHelper->getSortOptions()))));
+    d->sortOrderOptionsHelper->setSortOptions(GPSItemInfoSorter::SortOptions(group.readEntry(entryName(QLatin1String("Sort Order")), int(d->sortOrderOptionsHelper->getSortOptions()))));
 
     const KConfigGroup groupMapWidget = KConfigGroup(&group, entryName(QLatin1String("GPSSearch Map Widget")));
 
@@ -661,7 +662,7 @@ void GPSSearchView::slotClearImages()
 {
     if (d->mapSearchWidget->getActiveState())
     {
-        d->imageAlbumModel->clearImageInfos();
+        d->imageAlbumModel->clearItemInfos();
     }
 }
 
