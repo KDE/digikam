@@ -98,8 +98,6 @@ Q_SIGNALS:
     void signalTransform(const FileActionItemInfoList& infos, int orientation);
     void signalCopyAttributes(const FileActionItemInfoList& infos, const QStringList& derivedPaths);
 
-    void signalTransformFinished();
-
 public:
 
     // -- Signal-emitter glue code --

@@ -47,7 +47,7 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionItemInfoList in
 {
     QStringList failedItems;
 
-    foreach(const ItemInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         if (state() == WorkerObject::Deactivating)
         {
@@ -87,7 +87,7 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionItemInfoList infos
 
     ScanController::instance()->suspendCollectionScan();
 
-    foreach(const ItemInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         MetadataHub hub;
 
@@ -124,7 +124,7 @@ void FileActionMngrFileWorker::writeMetadata(FileActionItemInfoList infos, int f
 
     ScanController::instance()->suspendCollectionScan();
 
-    foreach(const ItemInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         MetadataHub hub;
 
@@ -161,7 +161,7 @@ void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int actio
     QStringList failedItems;
     ScanController::instance()->suspendCollectionScan();
 
-    foreach(const ItemInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         if (state() == WorkerObject::Deactivating)
         {
@@ -322,7 +322,7 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int act
 
     QMultiMap<QString, QRect> ajustedFaces;
 
-    foreach(const FaceTagsIface& dface, facesList)
+    foreach (const FaceTagsIface& dface, facesList)
     {
         QString name  = FaceTags::faceNameForTag(dface.tagId());
         QRect oldrect = dface.region().toRect();
