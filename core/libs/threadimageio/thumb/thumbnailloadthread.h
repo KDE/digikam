@@ -247,7 +247,6 @@ private:
 
     bool find(const ThumbnailIdentifier& identifier, int size, QPixmap* retPixmap, bool emitSignal, const QRect& detailRect);
     void load(const LoadingDescription& description, bool pregenerate);
-    void loadVideoThumbnail(const LoadingDescription& description);
     bool checkSize(int size);
     QPixmap surrogatePixmap(const LoadingDescription& loadingDescription);
 
@@ -261,9 +260,6 @@ private Q_SLOTS:
 
     void slotThumbnailsAvailable();
     void slotThumbnailLoaded(const LoadingDescription&, const QImage&);
-    void slotVideoThumbnailDone(const QString&, const QImage&);
-    void slotVideoThumbnailFailed(const QString&);
-    void slotVideoThumbnailFinished();
 
 private:
 

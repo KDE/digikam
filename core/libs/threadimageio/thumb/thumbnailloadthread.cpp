@@ -43,7 +43,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "digikam_config.h"
 #include "dbengineparameters.h"
 #include "iccmanager.h"
 #include "iccprofile.h"
@@ -53,10 +52,6 @@
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"
 #include "thumbnailcreator.h"
-
-#ifdef HAVE_MEDIAPLAYER
-#   include "videothumbnailerjob.h"
-#endif
 
 namespace Digikam
 {
@@ -121,10 +116,6 @@ public:
         sendSurrogate      = true;
         notifiedForResults = false;
         creator            = 0;
-
-#ifdef HAVE_MEDIAPLAYER
-        videoThumbs        = 0;
-#endif
     }
 
     bool                               wantPixmap;
@@ -138,12 +129,6 @@ public:
 
     QHash<QString, ThumbnailResult>    collectedResults;
     QMutex                             resultsMutex;
-
-    QHash<QString, LoadingDescription> videoJobHash;
-
-#ifdef HAVE_MEDIAPLAYER
-    VideoThumbnailerJob*               videoThumbs;
-#endif
 
     QList<LoadingDescription>          lastDescriptions;
 
@@ -181,31 +166,11 @@ ThumbnailLoadThread::ThumbnailLoadThread(QObject* const parent)
 
     connect(this, SIGNAL(thumbnailsAvailable()),
             this, SLOT(slotThumbnailsAvailable()));
-
-#ifdef HAVE_MEDIAPLAYER
-
-    d->videoThumbs               = new VideoThumbnailerJob(this);
-    d->videoThumbs->setCreateStrip(true);
-
-    connect(d->videoThumbs, SIGNAL(signalThumbnailDone(QString,QImage)),
-            this, SLOT(slotVideoThumbnailDone(QString,QImage)));
-
-    connect(d->videoThumbs, SIGNAL(signalThumbnailFailed(QString)),
-            this, SLOT(slotVideoThumbnailFailed(QString)));
-
-    connect(d->videoThumbs, SIGNAL(signalThumbnailJobFinished()),
-            this, SLOT(slotVideoThumbnailFinished()));
-
-#endif
 }
 
 ThumbnailLoadThread::~ThumbnailLoadThread()
 {
     shutDown();
-
-#ifdef HAVE_MEDIAPLAYER
-    delete d->videoThumbs;
-#endif
 
     delete d->creator;
     delete d;
@@ -773,7 +738,6 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
 
     if (thumb.isNull())
     {
-        loadVideoThumbnail(description);
         pix = surrogatePixmap(description);
     }
     else
@@ -805,64 +769,6 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
     }
 
     emit signalThumbnailLoaded(description, pix);
-}
-
-// --- Video thumbnails ---
-
-void ThumbnailLoadThread::loadVideoThumbnail(const LoadingDescription& description)
-{
-#ifdef HAVE_MEDIAPLAYER
-    d->videoJobHash.insert(description.filePath, description);
-    d->videoThumbs->setThumbnailSize(d->creator->storedSize());
-    d->videoThumbs->setExifRotate(MetaEngineSettings::instance()->settings().exifRotate);
-    d->videoThumbs->addItems(QStringList() << description.filePath);
-#else
-    qDebug(DIGIKAM_GENERAL_LOG) << "Cannot get video thumb for " << description.filePath;
-    qDebug(DIGIKAM_GENERAL_LOG) << "Video support is not available";
-#endif
-}
-
-void ThumbnailLoadThread::slotVideoThumbnailDone(const QString& item, const QImage& img)
-{
-    if (!d->videoJobHash.contains(item))
-    {
-        return;
-    }
-
-    LoadingDescription description = d->videoJobHash.value(item);
-    QPixmap pix;
-
-    if (img.isNull())
-    {
-        // third and last attempt - load a mimetype specific icon
-        pix = surrogatePixmap(description);
-    }
-    else
-    {
-        d->creator->store(description.filePath, img);
-        pix = QPixmap::fromImage(img.scaled(description.previewParameters.size, description.previewParameters.size,
-                                 Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    }
-
-    // put into cache
-    {
-        LoadingCache* const cache = LoadingCache::cache();
-        LoadingCache::CacheLock lock(cache);
-        cache->putThumbnail(description.cacheKey(), pix, description.filePath);
-    }
-
-    d->videoJobHash.remove(description.filePath);
-
-    emit signalThumbnailLoaded(description, pix);
-}
-
-void ThumbnailLoadThread::slotVideoThumbnailFailed(const QString& item)
-{
-    slotVideoThumbnailDone(item, QImage());
-}
-
-void ThumbnailLoadThread::slotVideoThumbnailFinished()
-{
 }
 
 QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& description)

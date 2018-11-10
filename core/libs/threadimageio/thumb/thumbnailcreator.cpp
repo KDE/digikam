@@ -43,6 +43,7 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "metaengine_previews.h"
 #include "metaengine_rotation.h"
 #include "drawdecoder.h"
@@ -61,6 +62,8 @@
 #include "thumbsdb.h"
 #include "thumbsdbbackend.h"
 #include "thumbnailsize.h"
+#include "videothumbnailer.h"
+#include "videostripfilter.h"
 
 namespace Digikam
 {
@@ -568,6 +571,23 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
         {
             // use jpegutils
             PGFUtils::loadPGFScaled(qimage, path, d->storageSize());
+        }
+
+        // Try video thumbnail anyway;
+        if (qimage.isNull())
+        {
+#ifdef HAVE_MEDIAPLAYER
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load video preview with FFmpeg";
+            VideoThumbnailer thumbnailer;
+            VideoStripFilter videoStrip;
+
+            thumbnailer.addFilter(&videoStrip);
+            thumbnailer.setThumbnailSize(d->storageSize());
+            thumbnailer.generateThumbnail(path, qimage);
+#else
+            qDebug(DIGIKAM_GENERAL_LOG) << "Cannot load video preview for " << path;
+            qDebug(DIGIKAM_GENERAL_LOG) << "Video support is not available";
+#endif
         }
     }
 
