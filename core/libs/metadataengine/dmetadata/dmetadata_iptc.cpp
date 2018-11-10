@@ -215,12 +215,14 @@ QStringList DMetadata::getIptcCoreSubjects() const
     return getIptcSubjects();
 }
 
-bool DMetadata::setIptcTag(const QString& text, int maxLength,
-                           const char* const debugLabel, const char* const tagKey)  const
+bool DMetadata::setIptcTag(const QString& text,
+                           int maxLength,
+                           const char* const debugLabel,
+                           const char* const tagKey)  const
 {
     QString truncatedText = text;
     truncatedText.truncate(maxLength);
-    //qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
 
     return setIptcTagString(tagKey, truncatedText);    // returns false if failed
 }
