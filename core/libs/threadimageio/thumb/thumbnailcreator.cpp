@@ -35,6 +35,7 @@
 #include <QIODevice>
 #include <QUrl>
 #include <QUrlQuery>
+#include <QMimeDatabase>
 #include <QTemporaryFile>
 
 // KDE includes
@@ -487,93 +488,98 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     }
     else
     {
-        if (qimage.isNull())
+        QMimeDatabase mimeDB;
+
+        if (!mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("video/")))
         {
-            // Try to extract Exif/IPTC preview first.
-            qimage = loadImagePreview(metadata);
-        }
-
-        // To speed-up thumb extraction, we now try to load the images by the file extension.
-        QString ext = fileInfo.suffix().toUpper();
-
-        if (qimage.isNull() && !ext.isEmpty())
-        {
-            if (ext == QLatin1String("JPEG") || ext == QLatin1String("JPG") || ext == QLatin1String("JPE"))
+            if (qimage.isNull())
             {
-                if (colorManage)
-                {
-                    qimage = loadWithDImg(path, &profile);
-                }
-                else
-                    // use jpegutils
-                {
-                    JPEGUtils::loadJPEGScaled(qimage, path, d->storageSize());
-                }
-
-                failedAtJPEGScaled = qimage.isNull();
+                // Try to extract Exif/IPTC preview first.
+                qimage = loadImagePreview(metadata);
             }
-            else if (ext == QLatin1String("PNG")  ||
-                     ext == QLatin1String("TIFF") ||
-                     ext == QLatin1String("TIF"))
+
+            // To speed-up thumb extraction, we now try to load the images by the file extension.
+            QString ext = fileInfo.suffix().toUpper();
+
+            if (qimage.isNull() && !ext.isEmpty())
             {
-                qimage       = loadWithDImg(path, &profile);
-                failedAtDImg = qimage.isNull();
+                if (ext == QLatin1String("JPEG") || ext == QLatin1String("JPG") || ext == QLatin1String("JPE"))
+                {
+                    if (colorManage)
+                    {
+                        qimage = loadWithDImg(path, &profile);
+                    }
+                    else
+                        // use jpegutils
+                    {
+                        JPEGUtils::loadJPEGScaled(qimage, path, d->storageSize());
+                    }
+
+                    failedAtJPEGScaled = qimage.isNull();
+                }
+                else if (ext == QLatin1String("PNG")  ||
+                         ext == QLatin1String("TIFF") ||
+                         ext == QLatin1String("TIF"))
+                {
+                    qimage       = loadWithDImg(path, &profile);
+                    failedAtDImg = qimage.isNull();
+                }
+                else if (ext == QLatin1String("PGF"))
+                {
+                    // use pgf library to extract reduced version
+                    PGFUtils::loadPGFScaled(qimage, path, d->storageSize());
+                    failedAtPGFScaled = qimage.isNull();
+                }
             }
-            else if (ext == QLatin1String("PGF"))
+
+            // Trying to load with libraw: RAW files.
+            if (qimage.isNull())
             {
-                // use pgf library to extract reduced version
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load Embedded preview with libraw";
+
+                if (DRawDecoder::loadEmbeddedPreview(qimage, path))
+                {
+                    fromEmbeddedPreview = true;
+                    profile             = metadata.getIccProfile();
+                }
+            }
+
+            if (qimage.isNull())
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load half preview with libraw";
+
+                //TODO: Use DImg based loader instead?
+                DRawDecoder::loadHalfPreview(qimage, path);
+            }
+
+            // Special case with DNG file. See bug #338081
+            if (qimage.isNull())
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load Embedded preview with Exiv2";
+
+                MetaEnginePreviews preview(path);
+                qimage = preview.image();
+            }
+
+            // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
+            if (qimage.isNull() && !failedAtDImg)
+            {
+                qimage = loadWithDImg(path, &profile);
+            }
+
+            // Try JPEG anyway
+            if (qimage.isNull() && !failedAtJPEGScaled)
+            {
+                // use jpegutils
+                JPEGUtils::loadJPEGScaled(qimage, path, d->storageSize());
+            }
+
+            // Try PGF anyway
+            if (qimage.isNull() && !failedAtPGFScaled)
+            {
+                // use jpegutils
                 PGFUtils::loadPGFScaled(qimage, path, d->storageSize());
-                failedAtPGFScaled = qimage.isNull();
             }
-        }
-
-        // Trying to load with libraw: RAW files.
-        if (qimage.isNull())
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load Embedded preview with libraw";
-
-            if (DRawDecoder::loadEmbeddedPreview(qimage, path))
-            {
-                fromEmbeddedPreview = true;
-                profile             = metadata.getIccProfile();
-            }
-        }
-
-        if (qimage.isNull())
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load half preview with libraw";
-
-            //TODO: Use DImg based loader instead?
-            DRawDecoder::loadHalfPreview(qimage, path);
-        }
-
-        // Special case with DNG file. See bug #338081
-        if (qimage.isNull())
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load Embedded preview with Exiv2";
-
-            MetaEnginePreviews preview(path);
-            qimage = preview.image();
-        }
-
-        // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
-        if (qimage.isNull() && !failedAtDImg)
-        {
-            qimage = loadWithDImg(path, &profile);
-        }
-
-        // Try JPEG anyway
-        if (qimage.isNull() && !failedAtJPEGScaled)
-        {
-            // use jpegutils
-            JPEGUtils::loadJPEGScaled(qimage, path, d->storageSize());
-        }
-
-        // Try PGF anyway
-        if (qimage.isNull() && !failedAtPGFScaled)
-        {
-            // use jpegutils
-            PGFUtils::loadPGFScaled(qimage, path, d->storageSize());
         }
 
         // Try video thumbnail anyway;

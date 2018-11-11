@@ -176,7 +176,8 @@ void SlideVideo::setCurrentUrl(const QUrl& url)
 
     if (MetaEngineSettings::instance()->settings().exifRotate)
     {
-        int orientation = 0;
+        int orientation      = 0;
+        int videoOrientation = 0;
 
         if (d->iface)
         {
@@ -192,20 +193,20 @@ void SlideVideo::setCurrentUrl(const QUrl& url)
         switch (orientation)
         {
             case MetaEngine::ORIENTATION_ROT_90:
-                orientation = 90;
+                videoOrientation = 90;
                 break;
             case MetaEngine::ORIENTATION_ROT_180:
-                orientation = 180;
+                videoOrientation = 180;
                 break;
             case MetaEngine::ORIENTATION_ROT_270:
-                orientation = 270;
+                videoOrientation = 270;
                 break;
             default:
                 break;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Found video orientation:" << orientation;
-        d->videoWidget->setOrientation(orientation);
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Found video orientation:" << videoOrientation;
+        d->videoWidget->setOrientation(videoOrientation);
     }
 
     d->player->setFile(url.toLocalFile());
