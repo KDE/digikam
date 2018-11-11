@@ -32,6 +32,7 @@
 #include <QFileInfo>
 #include <QLocale>
 #include <QUuid>
+#include <QMimeDatabase>
 
 // Local includes
 
@@ -48,19 +49,30 @@ namespace Digikam
 
 bool DMetadata::load(const QString& filePath)
 {
-    // In first, we trying to get metadata using Exiv2,
-    // else we will use other engine to extract minimal information.
-
     FileReadLocker lock(filePath);
 
-    if (!MetaEngine::load(filePath))
+    QMimeDatabase mimeDB;
+
+    if (!mimeDB.mimeTypeForFile(filePath).name().startsWith(QLatin1String("video/")) &&
+        !mimeDB.mimeTypeForFile(filePath).name().startsWith(QLatin1String("audio/"))
+       )
     {
-        if (!loadUsingRawEngine(filePath))
+        // Non video or audio file, process with Exiv2 backend or libraw if faild with RAW files
+        // Never process video file Exiv2, the backend is very unstable.
+        if (!MetaEngine::load(filePath))
         {
-            if (!loadUsingFFmpeg(filePath))
+            if (!loadUsingRawEngine(filePath))
             {
                 return false;
             }
+        }
+    }
+    else
+    {
+        // No image file, process with ffmpeg backend.
+        if (!loadUsingFFmpeg(filePath))
+        {
+            return false;
         }
     }
 
