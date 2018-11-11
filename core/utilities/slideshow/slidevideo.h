@@ -34,6 +34,10 @@
 
 #include <QtAV/AVError.h> // krazy:exclude=includes
 
+// Local includes
+
+#include "dinfointerface.h"
+
 namespace Digikam
 {
 
@@ -46,8 +50,9 @@ public:
     explicit SlideVideo(QWidget* const parent);
     virtual ~SlideVideo();
 
-    void showIndicator(bool);
+    void setInfoInterface(DInfoInterface* const iface);
     void setCurrentUrl(const QUrl& url);
+    void showIndicator(bool);
     void pause(bool);
     void stop();
 

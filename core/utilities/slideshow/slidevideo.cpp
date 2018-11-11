@@ -79,7 +79,8 @@ class Q_DECL_HIDDEN SlideVideo::Private
 public:
 
     explicit Private()
-      : videoWidget(0),
+      : iface(0),
+        videoWidget(0),
         player(0),
         slider(0),
         tlabel(0),
@@ -87,10 +88,14 @@ public:
     {
     }
 
+    DInfoInterface*      iface;
+
     WidgetRenderer*      videoWidget;
     AVPlayer*            player;
+
     QSlider*             slider;
     QLabel*              tlabel;
+
     DHBox*               indicator;
 };
 
@@ -160,9 +165,9 @@ SlideVideo::~SlideVideo()
     delete d;
 }
 
-void SlideVideo::showIndicator(bool b)
+void SlideVideo::setInfoInterface(DInfoInterface* const iface)
 {
-    d->indicator->setVisible(b);
+    d->iface = iface;
 }
 
 void SlideVideo::setCurrentUrl(const QUrl& url)
@@ -172,9 +177,19 @@ void SlideVideo::setCurrentUrl(const QUrl& url)
     if (MetaEngineSettings::instance()->settings().exifRotate)
     {
         int orientation = 0;
-        DMetadata meta(url.toLocalFile());
 
-        switch (meta.getItemOrientation())
+        if (d->iface)
+        {
+            DItemInfo info(d->iface->itemInfo(url));
+            orientation = info.orientation();
+        }
+        else
+        {
+            DMetadata meta(url.toLocalFile());
+            orientation = meta.getItemOrientation();
+        }
+
+        switch (orientation)
         {
             case MetaEngine::ORIENTATION_ROT_90:
                 orientation = 90;
@@ -197,6 +212,11 @@ void SlideVideo::setCurrentUrl(const QUrl& url)
     d->player->play();
 
     showIndicator(false);
+}
+
+void SlideVideo::showIndicator(bool b)
+{
+    d->indicator->setVisible(b);
 }
 
 void SlideVideo::slotPlayerStateChanged(QtAV::MediaStatus newState)
