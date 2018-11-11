@@ -518,8 +518,8 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
                     failedAtJPEGScaled = qimage.isNull();
                 }
                 else if (ext == QLatin1String("PNG")  ||
-                        ext == QLatin1String("TIFF") ||
-                        ext == QLatin1String("TIF"))
+                         ext == QLatin1String("TIFF") ||
+                         ext == QLatin1String("TIF"))
                 {
                     qimage       = loadWithDImg(path, &profile);
                     failedAtDImg = qimage.isNull();
