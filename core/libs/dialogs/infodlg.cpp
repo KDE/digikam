@@ -103,7 +103,7 @@ InfoDlg::InfoDlg(QWidget* const parent)
                          QApplication::applicationName(),
                          QApplication::applicationVersion(),
                          DAboutData::digiKamSlogan(),
-                         DAboutData::digiKamFamilly()));
+                         DAboutData::digiKamFamily()));
 
     // --------------------------------------------------------
 

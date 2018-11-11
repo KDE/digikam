@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
                          i18n("digiKam"),          // display name
                          digiKamVersion());
 
-    aboutData.setShortDescription(QString::fromUtf8("%1 - %2").arg(DAboutData::digiKamSlogan()).arg(DAboutData::digiKamFamilly()));
+    aboutData.setShortDescription(QString::fromUtf8("%1 - %2").arg(DAboutData::digiKamSlogan()).arg(DAboutData::digiKamFamily()));
     aboutData.setLicense(KAboutLicense::GPL);
     aboutData.setCopyrightStatement(DAboutData::copyright());
     aboutData.setOtherText(additionalInformation());

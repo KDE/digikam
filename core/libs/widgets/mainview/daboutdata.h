@@ -49,7 +49,7 @@ public:
 
     static const QString digiKamSloganFormated();
     static const QString digiKamSlogan();
-    static const QString digiKamFamilly();
+    static const QString digiKamFamily();
     static const QString copyright();
     static const QUrl    webProjectUrl();
     static void          authorsRegistration(KAboutData& aboutData);
