@@ -2404,7 +2404,7 @@ void ImportUI::autoRotateItems()
     foreach (const QString& downloadPath, d->autoRotateItemsList)
     {
         qlonglong id = scanner.scanFile(downloadPath,
-                                        CollectionScanner::ModifiedScan);
+                                        CollectionScanner::NormalScan);
         list << ItemInfo(id);
     }
 
