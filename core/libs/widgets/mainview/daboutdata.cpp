@@ -55,7 +55,7 @@ const QString DAboutData::digiKamSloganFormated()
                  "Please translate using short words else the slogan can be truncated.",
                  "<qt><font color=\"white\">"
                  "<b>Professional</b> Photo <b>Management</b> with the Power of <b>Open Source</b>"
-                 "<br/><br/>"
+                 "</font><font color=\"gray\"><br/>"
                  "<i>%1</i>"
                  "</font></qt>",
                  digiKamFamily()
