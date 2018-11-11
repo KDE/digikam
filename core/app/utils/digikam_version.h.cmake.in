@@ -56,7 +56,6 @@ static inline QString additionalInformation()
                                 "IRC: irc.freenode.net - #digikam\n"
                                 "Feedback: digikam-user@kde.org\n\n"
                                 "Build date: %2 (target: %3)",
-                                DAboutData::digiKamFamilly(),
                                 QLatin1String(__DATE__),
                                 QLatin1String("@CMAKE_BUILD_TYPE@"));
 
@@ -67,7 +66,6 @@ static inline QString additionalInformation()
                    "Feedback: digikam-user@kde.org\n\n"
                    "Build date: %2 (target: %3)\n"
                    "Rev.: %4",
-                   DAboutData::digiKamFamilly(),
                    QLatin1String(__DATE__),
                    QLatin1String("@CMAKE_BUILD_TYPE@"),
                    QString::fromLatin1("<a href='http://commits.kde.org/digikam/%1'>%2</a>").arg(gitVer).arg(gitVer));

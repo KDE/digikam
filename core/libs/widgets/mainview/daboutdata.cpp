@@ -58,7 +58,7 @@ const QString DAboutData::digiKamSloganFormated()
                  "<br/><br/>"
                  "<i>%1</i>"
                  "</font></qt>",
-                 digiKamFamilly()
+                 digiKamFamily()
                  );
 }
 
@@ -67,7 +67,7 @@ const QString DAboutData::digiKamSlogan()
     return i18n("Professional Photo Management with the Power of Open Source");
 }
 
-const QString DAboutData::digiKamFamilly()
+const QString DAboutData::digiKamFamily()
 {
     return i18n("A KDE Family Project");
 }
