@@ -25,17 +25,37 @@
 
 #include "metaengine_data_p.h"
 
+// Local includes
+
+#include "digikam_debug.h"
+
 namespace Digikam
 {
 
 void MetaEngineData::Private::clear()
 {
-    imageComments.clear();
-    exifMetadata.clear();
-    iptcMetadata.clear();
+    QMutexLocker lock(&s_metaEngineMutex);
+
+    try
+    {
+        imageComments.clear();
+        exifMetadata.clear();
+        iptcMetadata.clear();
 #ifdef _XMP_SUPPORT_
-    xmpMetadata.clear();
+        xmpMetadata.clear();
 #endif
+    }
+    catch( Exiv2::Error& e )
+    {
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Cannot clear data container using Exiv2"
+                                           << " (Error #" << e.code() << ": "
+                                           << std::string(e.what()).c_str();
+    }
+    catch(...)
+    {
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
+    }
+
 }
 
 } // namespace Digikam
