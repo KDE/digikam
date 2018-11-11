@@ -104,25 +104,6 @@ namespace Digikam
 
 extern QMutex s_metaEngineMutex;
 
-class Q_DECL_HIDDEN MetaEngineData::Private : public QSharedData
-{
-public:
-
-    void clear();
-
-public:
-
-    std::string     imageComments;
-
-    Exiv2::ExifData exifMetadata;
-
-    Exiv2::IptcData iptcMetadata;
-
-#ifdef _XMP_SUPPORT_
-    Exiv2::XmpData  xmpMetadata;
-#endif
-};
-
 // --------------------------------------------------------------------------
 
 class Q_DECL_HIDDEN MetaEngine::Private
@@ -152,20 +133,18 @@ public:
 
     int getXMPTagsListFromPrefix(const QString& pf, MetaEngine::TagsMap& tagsMap) const;
 
-    const Exiv2::ExifData& exifMetadata()  const { return data.constData()->exifMetadata;  }
-    const Exiv2::IptcData& iptcMetadata()  const { return data.constData()->iptcMetadata;  }
-    const std::string&     itemComments()  const { return data.constData()->imageComments; }
+    const Exiv2::ExifData& exifMetadata() const;
+    const Exiv2::IptcData& iptcMetadata() const;
+    const std::string&     itemComments() const;
+
+    Exiv2::ExifData&       exifMetadata();
+    Exiv2::IptcData&       iptcMetadata();
+    std::string&           itemComments();
 
 #ifdef _XMP_SUPPORT_
-    const Exiv2::XmpData&  xmpMetadata()   const { return data.constData()->xmpMetadata;   }
-#endif
 
-    Exiv2::ExifData&       exifMetadata()        { return data.data()->exifMetadata;       }
-    Exiv2::IptcData&       iptcMetadata()        { return data.data()->iptcMetadata;       }
-    std::string&           itemComments()        { return data.data()->imageComments;      }
-
-#ifdef _XMP_SUPPORT_
-    Exiv2::XmpData&        xmpMetadata()         { return data.data()->xmpMetadata;        }
+    const Exiv2::XmpData&  xmpMetadata()  const;
+    Exiv2::XmpData&        xmpMetadata();
 
     void loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar);
 #endif

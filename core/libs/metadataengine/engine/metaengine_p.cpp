@@ -46,6 +46,7 @@ extern "C"
 // Local includes
 
 #include "digikam_debug.h"
+#include "metaengine_data_p.h"
 
 // Pragma directives to reduce warnings from Exiv2.
 #if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
@@ -65,18 +66,6 @@ namespace Digikam
  */
 QMutex s_metaEngineMutex(QMutex::Recursive);
 
-void MetaEngineData::Private::clear()
-{
-    imageComments.clear();
-    exifMetadata.clear();
-    iptcMetadata.clear();
-#ifdef _XMP_SUPPORT_
-    xmpMetadata.clear();
-#endif
-}
-
-// ----------------------------------------------------------------------------------
-
 MetaEngine::Private::Private()
     : data(new MetaEngineData::Private)
 {
@@ -93,6 +82,48 @@ MetaEngine::Private::Private()
 MetaEngine::Private::~Private()
 {
 }
+
+const Exiv2::ExifData& MetaEngine::Private::exifMetadata() const
+{
+    return data.constData()->exifMetadata;
+}
+
+const Exiv2::IptcData& MetaEngine::Private::iptcMetadata() const
+{
+    return data.constData()->iptcMetadata;
+}
+
+const std::string& MetaEngine::Private::itemComments() const
+{
+    return data.constData()->imageComments;
+}
+
+Exiv2::ExifData& MetaEngine::Private::exifMetadata()
+{
+    return data.data()->exifMetadata;
+}
+
+Exiv2::IptcData& MetaEngine::Private::iptcMetadata()
+{
+    return data.data()->iptcMetadata;
+}
+
+std::string& MetaEngine::Private::itemComments()
+{
+    return data.data()->imageComments;
+}
+
+#ifdef _XMP_SUPPORT_
+const Exiv2::XmpData& MetaEngine::Private::xmpMetadata() const
+{
+    return data.constData()->xmpMetadata;
+}
+
+Exiv2::XmpData& MetaEngine::Private::xmpMetadata()
+{
+    return data.data()->xmpMetadata;
+}
+#endif
 
 void MetaEngine::Private::copyPrivateData(const Private* const other)
 {
