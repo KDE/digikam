@@ -38,7 +38,6 @@ if(ENABLE_MEDIAPLAYER)
         video/videodecoder_p.cpp
         video/videothumbwriter.cpp
         video/videothumbnailer.cpp
-        video/videothumbnailerjob.cpp
        )
 endif()
 
