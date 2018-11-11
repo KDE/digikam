@@ -25,12 +25,16 @@
 #ifndef DIGIKAM_VIDEO_STRIP_FILTER_H
 #define DIGIKAM_VIDEO_STRIP_FILTER_H
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class VideoFrame;
 
-class VideoStripFilter
+class DIGIKAM_EXPORT VideoStripFilter
 {
 public:
 

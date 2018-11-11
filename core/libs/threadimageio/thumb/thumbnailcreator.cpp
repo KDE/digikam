@@ -590,7 +590,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             thumbnailer.setThumbnailSize(d->storageSize());
             thumbnailer.generateThumbnail(path, qimage);
 #else
-            qDebug(DIGIKAM_GENERAL_LOG) << "Cannot load video preview for " << path;
+            qDebug(DIGIKAM_GENERAL_LOG) << "Cannot load video preview for" << path;
             qDebug(DIGIKAM_GENERAL_LOG) << "Video support is not available";
 #endif
 
