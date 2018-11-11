@@ -170,6 +170,7 @@ public:
 
     WidgetRenderer*      videoWidget;
     AVPlayer*            player;
+
     QSlider*             slider;
     QLabel*              tlabel;
     QUrl                 currentItem;

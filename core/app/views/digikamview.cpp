@@ -46,6 +46,7 @@
 #include "labelstreeview.h"
 #include "albumpointer.h"
 #include "coredbsearchxml.h"
+#include "dbinfoiface.h"
 #include "digikam_config.h"
 #include "digikam_debug.h"
 #include "digikam_globals.h"
@@ -2195,6 +2196,7 @@ void DigikamView::slideShow(const ItemInfoList& infoList)
 void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings)
 {
     QPointer<Digikam::SlideShow> slide = new SlideShow(settings);
+    slide->setInfoInterface(new DBInfoIface(this, QList<QUrl>()));
     TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
 
     if (settings.imageUrl.isValid())

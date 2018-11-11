@@ -254,6 +254,13 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
     }
 }
 
+void SlideShow::setInfoInterface(DInfoInterface* const iface)
+{
+#ifdef HAVE_MEDIAPLAYER
+    d->videoView->setInfoInterface(iface);
+#endif
+}
+
 void SlideShow::setCurrentItem(const QUrl& url)
 {
     int index = d->settings.indexOf(url);

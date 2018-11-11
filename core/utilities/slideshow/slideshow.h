@@ -35,6 +35,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dinfointerface.h"
 #include "loadingdescription.h"
 #include "slideshowsettings.h"
 
@@ -62,6 +63,7 @@ public:
     explicit SlideShow(const SlideShowSettings& settings);
     virtual ~SlideShow();
 
+    void setInfoInterface(DInfoInterface* const iface);
     void setCurrentItem(const QUrl& url);
     QUrl currentItem() const;
 
