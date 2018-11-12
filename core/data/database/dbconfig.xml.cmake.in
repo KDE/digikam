@@ -1872,6 +1872,7 @@
             <dbaction name="Migrate_Cleanup_Prepare" mode="transaction">
                 <statement mode="plain">SET FOREIGN_KEY_CHECKS=0;</statement>
                 <statement mode="plain">ALTER TABLE Albums DROP FOREIGN KEY Albums_Images;</statement>
+                <statement mode="plain">ALTER TABLE Albums DROP FOREIGN KEY Images_Albums;</statement>
                 <statement mode="plain">SET FOREIGN_KEY_CHECKS=1;</statement>
             </dbaction>
 
