@@ -34,9 +34,10 @@ namespace Digikam
 AlbumTreeView::AlbumTreeView(QWidget* const parent, Flags flags)
     : AbstractCheckableAlbumTreeView(parent, flags)
 {
-    setRootIsDecorated(false);
     setDragEnabled(true);
     setAcceptDrops(true);
+    setAutoScroll(false);
+    setRootIsDecorated(false);
     setDropIndicatorShown(false);
     setAutoExpandDelay(AUTOEXPANDDELAY);
 
