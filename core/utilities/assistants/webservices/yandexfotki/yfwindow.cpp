@@ -55,7 +55,7 @@
 // Local includes
 
 #include "digikam_version.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "yftalker.h"
 #include "yfnewalbumdlg.h"
 #include "digikam_debug.h"
@@ -122,7 +122,7 @@ public:
     QSpinBox*                   imageQualitySpin;
     QButtonGroup*               policyGroup;
 
-    DImagesList*                imgList;
+    DItemsList*                imgList;
     DProgressWdg*               progressBar;
     DInfoInterface*             iface;
 

@@ -33,7 +33,7 @@
 
 #include "wstooldialog.h"
 #include "digikam_export.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "dinfointerface.h"
 
 namespace Digikam
@@ -50,7 +50,7 @@ public:
 
 public:
 
-    DImagesList* getImagesList() const;
+    DItemsList* getImagesList() const;
 
 Q_SIGNALS:
 

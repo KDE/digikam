@@ -70,7 +70,7 @@ public:
 };
 
 FlickrList::FlickrList(QWidget* const parent, bool is_23)
-    : DImagesList(parent),
+    : DItemsList(parent),
       d(new Private)
 {
     d->is23 = is_23;
@@ -450,7 +450,7 @@ public:
     QLineEdit*              tagLineEdit;
 };
 
-FlickrListViewItem::FlickrListViewItem(DImagesListView* const view,
+FlickrListViewItem::FlickrListViewItem(DItemsListView* const view,
                                        const QUrl& url,
                                        bool is23 = false,
                                        bool accessPublic  = true,
@@ -458,7 +458,7 @@ FlickrListViewItem::FlickrListViewItem(DImagesListView* const view,
                                        bool accessFriends = true,
                                        FlickrList::SafetyLevel safetyLevel = FlickrList::SAFE,
                                        FlickrList::ContentType contentType = FlickrList::PHOTO)
-    : DImagesListViewItem(view, url),
+    : DItemsListViewItem(view, url),
       d(new Private)
 {
     d->is23 = is23;
@@ -474,22 +474,22 @@ FlickrListViewItem::FlickrListViewItem(DImagesListView* const view,
     setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     // Set the text and checkbox for the public column.
-    setCheckState(static_cast<DImagesListView::ColumnType>(FlickrList::PUBLIC), accessPublic ? Qt::Checked : Qt::Unchecked);
+    setCheckState(static_cast<DItemsListView::ColumnType>(FlickrList::PUBLIC), accessPublic ? Qt::Checked : Qt::Unchecked);
 
     // Set the tooltips to guide the user to the mass settings options.
-    setToolTip(static_cast<DImagesListView::ColumnType>(FlickrList::PUBLIC),
+    setToolTip(static_cast<DItemsListView::ColumnType>(FlickrList::PUBLIC),
                i18n("Check if photo should be publicly visible or use Upload "
                     "Options tab to specify this for all images"));
-    setToolTip(static_cast<DImagesListView::ColumnType>(FlickrList::FAMILY),
+    setToolTip(static_cast<DItemsListView::ColumnType>(FlickrList::FAMILY),
                i18n("Check if photo should be visible to family or use Upload "
                     "Options tab to specify this for all images"));
-    setToolTip(static_cast<DImagesListView::ColumnType>(FlickrList::FRIENDS),
+    setToolTip(static_cast<DItemsListView::ColumnType>(FlickrList::FRIENDS),
                i18n("Check if photo should be visible to friends or use "
                     "Upload Options tab to specify this for all images"));
-    setToolTip(static_cast<DImagesListView::ColumnType>(FlickrList::SAFETYLEVEL),
+    setToolTip(static_cast<DItemsListView::ColumnType>(FlickrList::SAFETYLEVEL),
                i18n("Indicate the safety level for the photo or use Upload "
                     "Options tab to specify this for all images"));
-    setToolTip(static_cast<DImagesListView::ColumnType>(FlickrList::CONTENTTYPE),
+    setToolTip(static_cast<DItemsListView::ColumnType>(FlickrList::CONTENTTYPE),
                i18n("Indicate what kind of image this is or use Upload "
                     "Options tab to specify this for all images"));
 
@@ -501,13 +501,13 @@ FlickrListViewItem::FlickrListViewItem(DImagesListView* const view,
     setContentType(contentType);
 
     // Extra per image tags handling.
-    setToolTip(static_cast<DImagesListView::ColumnType>(
+    setToolTip(static_cast<DItemsListView::ColumnType>(
                    FlickrList::TAGS),
                i18n("Add extra tags per image or use Upload Options tab to "
                     "add tags for all images"));
     //d->tagLineEdit = new QLineEdit(view);
     //d->tagLineEdit->setToolTip(i18n("Enter extra tags, separated by commas."));
-    //view->setItemWidget(this, static_cast<DImagesListView::ColumnType>(
+    //view->setItemWidget(this, static_cast<DItemsListView::ColumnType>(
     //                    FlickrList::TAGS), d->tagLineEdit);
     updateItemWidgets();
 }
@@ -521,7 +521,7 @@ void FlickrListViewItem::updateItemWidgets()
 {
     d->tagLineEdit = new QLineEdit(view());
     d->tagLineEdit->setToolTip(i18n("Enter extra tags, separated by commas."));
-    view()->setItemWidget(this, static_cast<DImagesListView::ColumnType>(
+    view()->setItemWidget(this, static_cast<DItemsListView::ColumnType>(
                           FlickrList::TAGS), d->tagLineEdit);
 }
 
@@ -538,16 +538,16 @@ void FlickrListViewItem::toggled()
     {
         if (data(FlickrList::FAMILY, Qt::CheckStateRole) != QVariant())
         {
-            setFamily(checkState(static_cast<DImagesListView::ColumnType>(FlickrList::FAMILY)));
+            setFamily(checkState(static_cast<DItemsListView::ColumnType>(FlickrList::FAMILY)));
         }
 
         if (data(FlickrList::FRIENDS, Qt::CheckStateRole) != QVariant())
         {
-            setFriends(checkState(static_cast<DImagesListView::ColumnType>(FlickrList::FRIENDS)));
+            setFriends(checkState(static_cast<DItemsListView::ColumnType>(FlickrList::FRIENDS)));
         }
     }
 
-    setPublic(checkState(static_cast<DImagesListView::ColumnType>(FlickrList::PUBLIC)));
+    setPublic(checkState(static_cast<DItemsListView::ColumnType>(FlickrList::PUBLIC)));
 }
 
 void FlickrListViewItem::setPublic(bool status)
@@ -567,14 +567,14 @@ void FlickrListViewItem::setPublic(bool status)
             // CheckStateRole. This might seem like a hack, but it's described in
             // the Qt FAQ at
             // http://www.qtsoftware.com/developer/faqs/faq.2007-04-23.8353273326.
-            setData(static_cast<DImagesListView::ColumnType>(FlickrList::FAMILY),  Qt::CheckStateRole, QVariant());
-            setData(static_cast<DImagesListView::ColumnType>(FlickrList::FRIENDS), Qt::CheckStateRole, QVariant());
+            setData(static_cast<DItemsListView::ColumnType>(FlickrList::FAMILY),  Qt::CheckStateRole, QVariant());
+            setData(static_cast<DItemsListView::ColumnType>(FlickrList::FRIENDS), Qt::CheckStateRole, QVariant());
         }
         else
         {
             // Show the checkboxes.
-            setCheckState(static_cast<DImagesListView::ColumnType>(FlickrList::FAMILY),  d->isFamily  ? Qt::Checked : Qt::Unchecked);
-            setCheckState(static_cast<DImagesListView::ColumnType>(FlickrList::FRIENDS), d->isFriends ? Qt::Checked : Qt::Unchecked);
+            setCheckState(static_cast<DItemsListView::ColumnType>(FlickrList::FAMILY),  d->isFamily  ? Qt::Checked : Qt::Unchecked);
+            setCheckState(static_cast<DItemsListView::ColumnType>(FlickrList::FRIENDS), d->isFriends ? Qt::Checked : Qt::Unchecked);
         }
     }
 

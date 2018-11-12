@@ -41,7 +41,7 @@
 
 #include "digikam_debug.h"
 #include "dfiledialog.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "wstoolutils.h"
 #include "dlayoutbox.h"
 
@@ -65,7 +65,7 @@ public:
     DFileDialog*        targetDialog;
     QPushButton*        targetSearchButton;
     QUrl                targetUrl;
-    DImagesList*        imageList;
+    DItemsList*        imageList;
 };
 
 FTExportWidget::FTExportWidget(DInfoInterface* const iface, QWidget* const parent)
@@ -92,7 +92,7 @@ FTExportWidget::FTExportWidget(DInfoInterface* const iface, QWidget* const paren
     d->targetSearchButton->setIcon(QIcon::fromTheme(QLatin1String("folder-remote")));
 
     // setup image list
-    d->imageList = new DImagesList(this);
+    d->imageList = new DItemsList(this);
     d->imageList->setIface(iface);
     d->imageList->loadImagesFromCurrentSelection();
     d->imageList->setAllowRAW(true);
@@ -191,7 +191,7 @@ void FTExportWidget::updateTargetLabel()
     }
 }
 
-DImagesList* FTExportWidget::imagesList() const
+DItemsList* FTExportWidget::imagesList() const
 {
     return d->imageList;
 }

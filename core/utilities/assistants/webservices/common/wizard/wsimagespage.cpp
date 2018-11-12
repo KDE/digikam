@@ -43,7 +43,7 @@
 
 #include "digikam_debug.h"
 #include "dlayoutbox.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "wswizard.h"
 #include "wsnewalbumdialog.h"
 
@@ -72,7 +72,7 @@ public:
         }
     }
 
-    DImagesList*      imageList;
+    DItemsList*      imageList;
 
     QTreeWidget*      albumView;
     QString           currentAlbumId;
@@ -98,8 +98,8 @@ WSImagesPage::WSImagesPage(QWizard* const dialog, const QString& title)
     QLabel* const descImage = new QLabel(vboxImage);
     descImage->setText(i18n("<h3>This view lists all items to export.</h3>"));
 
-    d->imageList            = new DImagesList(vboxImage);
-    d->imageList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
+    d->imageList            = new DItemsList(vboxImage);
+    d->imageList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
 
     connect(d->imageList, SIGNAL(signalImageListChanged()),
             this, SIGNAL(completeChanged()));

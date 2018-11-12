@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "dimageslist.h"
+#include "ditemslist.h"
 
 namespace Digikam
 {
@@ -48,7 +48,7 @@ class ComboBoxDelegate : public QAbstractItemDelegate
 
 public:
 
-    explicit ComboBoxDelegate(DImagesList* const, const QMap<int, QString>&);
+    explicit ComboBoxDelegate(DItemsList* const, const QMap<int, QString>&);
     ~ComboBoxDelegate();
 
     /* Whenever an element needs to be edited, this method should be called.

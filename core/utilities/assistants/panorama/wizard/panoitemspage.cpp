@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "panomanager.h"
 #include "dlayoutbox.h"
 
@@ -55,7 +55,7 @@ public:
     {
     }
 
-    DImagesList* list;
+    DItemsList* list;
 
     PanoManager* mngr;
 };
@@ -79,7 +79,7 @@ PanoItemsPage::PanoItemsPage(PanoManager* const mngr, QWizard* const dlg)
                          "the panorama.</p>"
                          "</qt>"));
 
-    d->list = new DImagesList(vbox);
+    d->list = new DItemsList(vbox);
     d->list->setObjectName(QLatin1String("Panorama ImagesList"));
     d->list->slotAddImages(d->mngr->itemsList());
 

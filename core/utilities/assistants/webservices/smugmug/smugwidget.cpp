@@ -44,7 +44,7 @@
 
 // Local includes
 
-#include "dimageslist.h"
+#include "ditemslist.h"
 
 namespace Digikam
 {
@@ -60,8 +60,8 @@ SmugWidget::SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool 
 
     // -------------------------------------------------------------------
 
-    m_imgList = new DImagesList(this);
-    m_imgList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
+    m_imgList = new DItemsList(this);
+    m_imgList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     m_imgList->setAllowRAW(true);
     m_imgList->setIface(m_iface);
     m_imgList->loadImagesFromCurrentSelection();
@@ -264,7 +264,7 @@ SmugWidget::~SmugWidget()
 {
 }
 
-DImagesList* SmugWidget::imagesList() const
+DItemsList* SmugWidget::imagesList() const
 {
     return m_imgList;
 }

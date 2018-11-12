@@ -51,7 +51,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "imageshacksession.h"
 
 namespace Digikam
@@ -77,7 +77,7 @@ public:
         progressBar        = 0;
     }
 
-    DImagesList*       imgList;
+    DItemsList*       imgList;
     DInfoInterface*    iface;
     ImageShackSession* session;
 

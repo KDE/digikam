@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-05-21
- * Description : widget to display an imagelist
+ * Description : widget to display a list of items
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "dimageslist.h"
+#include "ditemslist.h"
 
 // Qt includes
 
@@ -68,7 +68,7 @@ namespace Digikam
 
 const int DEFAULTSIZE = 48;
 
-class Q_DECL_HIDDEN DImagesListViewItem::Private
+class Q_DECL_HIDDEN DItemsListViewItem::Private
 {
 public:
 
@@ -87,11 +87,11 @@ public:
     QStringList       tags;           // List of keywords from host.
     QUrl              url;            // Image url provided by host.
     QPixmap           thumb;          // Image thumbnail.
-    DImagesListView*  view;
+    DItemsListView*  view;
     State             state;
 };
 
-DImagesListViewItem::DImagesListViewItem(DImagesListView* const view, const QUrl& url)
+DItemsListViewItem::DItemsListViewItem(DItemsListView* const view, const QUrl& url)
     : QTreeWidgetItem(view),
       d(new Private)
 {
@@ -108,17 +108,17 @@ DImagesListViewItem::DImagesListViewItem(DImagesListView* const view, const QUrl
 */
 }
 
-DImagesListViewItem::~DImagesListViewItem()
+DItemsListViewItem::~DItemsListViewItem()
 {
     delete d;
 }
 
-bool DImagesListViewItem::hasValidThumbnail() const
+bool DItemsListViewItem::hasValidThumbnail() const
 {
     return d->hasThumb;
 }
 
-void DImagesListViewItem::updateInformation()
+void DItemsListViewItem::updateInformation()
 {
     if (d->view->iface())
     {
@@ -130,48 +130,48 @@ void DImagesListViewItem::updateInformation()
     }
 }
 
-void DImagesListViewItem::setUrl(const QUrl& url)
+void DItemsListViewItem::setUrl(const QUrl& url)
 {
     d->url = url;
-    setText(DImagesListView::Filename, d->url.fileName());
+    setText(DItemsListView::Filename, d->url.fileName());
 }
 
-QUrl DImagesListViewItem::url() const
+QUrl DItemsListViewItem::url() const
 {
     return d->url;
 }
 
-void DImagesListViewItem::setComments(const QString& comments)
+void DItemsListViewItem::setComments(const QString& comments)
 {
     d->comments = comments;
 }
 
-QString DImagesListViewItem::comments() const
+QString DItemsListViewItem::comments() const
 {
     return d->comments;
 }
 
-void DImagesListViewItem::setTags(const QStringList& tags)
+void DItemsListViewItem::setTags(const QStringList& tags)
 {
     d->tags = tags;
 }
 
-QStringList DImagesListViewItem::tags() const
+QStringList DItemsListViewItem::tags() const
 {
     return d->tags;
 }
 
-void DImagesListViewItem::setRating(int rating)
+void DItemsListViewItem::setRating(int rating)
 {
     d->rating = rating;
 }
 
-int DImagesListViewItem::rating() const
+int DItemsListViewItem::rating() const
 {
     return d->rating;
 }
 
-void DImagesListViewItem::setPixmap(const QPixmap& pix)
+void DItemsListViewItem::setPixmap(const QPixmap& pix)
 {
     QIcon icon = QIcon(pix);
     //  We make sure the preview icon stays the same regardless of the role
@@ -181,10 +181,10 @@ void DImagesListViewItem::setPixmap(const QPixmap& pix)
     icon.addPixmap(pix, QIcon::Active,   QIcon::Off);
     icon.addPixmap(pix, QIcon::Normal,   QIcon::On);
     icon.addPixmap(pix, QIcon::Normal,   QIcon::Off);
-    setIcon(DImagesListView::Thumbnail, icon);
+    setIcon(DItemsListView::Thumbnail, icon);
 }
 
-void DImagesListViewItem::setThumb(const QPixmap& pix, bool hasThumb)
+void DItemsListViewItem::setThumb(const QPixmap& pix, bool hasThumb)
 {
 /*
     qCDebug(DIGIKAM_GENERAL_LOG) << "Received new thumbnail for url " << d->url
@@ -208,7 +208,7 @@ void DImagesListViewItem::setThumb(const QPixmap& pix, bool hasThumb)
     d->hasThumb  = hasThumb;
 }
 
-void DImagesListViewItem::setProgressAnimation(const QPixmap& pix)
+void DItemsListViewItem::setProgressAnimation(const QPixmap& pix)
 {
     QPixmap overlay = d->thumb;
     QPixmap mask(overlay.size());
@@ -219,49 +219,49 @@ void DImagesListViewItem::setProgressAnimation(const QPixmap& pix)
     setPixmap(overlay);
 }
 
-void DImagesListViewItem::setProcessedIcon(const QIcon& icon)
+void DItemsListViewItem::setProcessedIcon(const QIcon& icon)
 {
-    setIcon(DImagesListView::Filename, icon);
+    setIcon(DItemsListView::Filename, icon);
     // reset thumbnail back to no animation pix
     setPixmap(d->thumb);
 }
 
-void DImagesListViewItem::setState(State state)
+void DItemsListViewItem::setState(State state)
 {
     d->state = state;
 }
 
-DImagesListViewItem::State DImagesListViewItem::state() const
+DItemsListViewItem::State DItemsListViewItem::state() const
 {
     return d->state;
 }
 
-DImagesListView* DImagesListViewItem::view() const
+DItemsListView* DItemsListViewItem::view() const
 {
     return d->view;
 }
 
 // ---------------------------------------------------------------------------
 
-DImagesListView::DImagesListView(DImagesList* const parent)
+DItemsListView::DItemsListView(DItemsList* const parent)
     : QTreeWidget(parent)
 {
     setup(DEFAULTSIZE);
 }
 
-DImagesListView::DImagesListView(int iconSize, DImagesList* const parent)
+DItemsListView::DItemsListView(int iconSize, DItemsList* const parent)
     : QTreeWidget(parent)
 {
     setup(iconSize);
 }
 
-DImagesListView::~DImagesListView()
+DItemsListView::~DItemsListView()
 {
 }
 
-DInfoInterface* DImagesListView::iface() const
+DInfoInterface* DItemsListView::iface() const
 {
-    DImagesList* const p = dynamic_cast<DImagesList*>(parent());
+    DItemsList* const p = dynamic_cast<DItemsList*>(parent());
 
     if (p)
     {
@@ -271,7 +271,7 @@ DInfoInterface* DImagesListView::iface() const
     return 0;
 }
 
-void DImagesListView::setup(int iconSize)
+void DItemsListView::setup(int iconSize)
 {
     m_iconSize = iconSize;
     setIconSize(QSize(m_iconSize, m_iconSize));
@@ -308,11 +308,11 @@ void DImagesListView::setup(int iconSize)
     header()->setSectionResizeMode(User5, QHeaderView::Interactive);
     header()->setSectionResizeMode(User6, QHeaderView::Stretch);
 
-    connect(this, &DImagesListView::itemClicked,
-            this, &DImagesListView::slotItemClicked);
+    connect(this, &DItemsListView::itemClicked,
+            this, &DItemsListView::slotItemClicked);
 }
 
-void DImagesListView::enableDragAndDrop(const bool enable)
+void DItemsListView::enableDragAndDrop(const bool enable)
 {
     setDragEnabled(enable);
     viewport()->setAcceptDrops(enable);
@@ -321,13 +321,13 @@ void DImagesListView::enableDragAndDrop(const bool enable)
     setDropIndicatorShown(enable);
 }
 
-void DImagesListView::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
+void DItemsListView::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
-    DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>(itemFromIndex(index));
+    DItemsListViewItem* const item = dynamic_cast<DItemsListViewItem*>(itemFromIndex(index));
 
     if (item && !item->hasValidThumbnail())
     {
-        DImagesList* const view = dynamic_cast<DImagesList*>(parent());
+        DItemsList* const view = dynamic_cast<DItemsList*>(parent());
 
         if (view)
         {
@@ -338,7 +338,7 @@ void DImagesListView::drawRow(QPainter* p, const QStyleOptionViewItem& opt, cons
     QTreeWidget::drawRow(p, opt, index);
 }
 
-void DImagesListView::slotItemClicked(QTreeWidgetItem* item, int column)
+void DItemsListView::slotItemClicked(QTreeWidgetItem* item, int column)
 {
     Q_UNUSED(column)
 
@@ -350,12 +350,12 @@ void DImagesListView::slotItemClicked(QTreeWidgetItem* item, int column)
     emit signalItemClicked(item);
 }
 
-void DImagesListView::setColumnLabel(ColumnType column, const QString& label)
+void DItemsListView::setColumnLabel(ColumnType column, const QString& label)
 {
     headerItem()->setText(column, label);
 }
 
-void DImagesListView::setColumnEnabled(ColumnType column, bool enable)
+void DItemsListView::setColumnEnabled(ColumnType column, bool enable)
 {
     if (enable)
     {
@@ -367,19 +367,19 @@ void DImagesListView::setColumnEnabled(ColumnType column, bool enable)
     }
 }
 
-void DImagesListView::setColumn(ColumnType column, const QString& label, bool enable)
+void DItemsListView::setColumn(ColumnType column, const QString& label, bool enable)
 {
     setColumnLabel(column, label);
     setColumnEnabled(column, enable);
 }
 
-DImagesListViewItem* DImagesListView::findItem(const QUrl& url)
+DItemsListViewItem* DItemsListView::findItem(const QUrl& url)
 {
     QTreeWidgetItemIterator it(this);
 
     while (*it)
     {
-        DImagesListViewItem* const lvItem = dynamic_cast<DImagesListViewItem*>(*it);
+        DItemsListViewItem* const lvItem = dynamic_cast<DItemsListViewItem*>(*it);
 
         if (lvItem && lvItem->url() == url)
         {
@@ -392,18 +392,18 @@ DImagesListViewItem* DImagesListView::findItem(const QUrl& url)
     return 0;
 }
 
-QModelIndex DImagesListView::indexFromItem(DImagesListViewItem* item, int column) const
+QModelIndex DItemsListView::indexFromItem(DItemsListViewItem* item, int column) const
 {
   return QTreeWidget::indexFromItem(item, column);
 }
 
-void DImagesListView::contextMenuEvent(QContextMenuEvent* e)
+void DItemsListView::contextMenuEvent(QContextMenuEvent* e)
 {
     QTreeWidget::contextMenuEvent(e);
     emit signalContextMenuRequested();
 }
 
-void DImagesListView::dragEnterEvent(QDragEnterEvent* e)
+void DItemsListView::dragEnterEvent(QDragEnterEvent* e)
 {
     QTreeWidget::dragEnterEvent(e);
 
@@ -413,7 +413,7 @@ void DImagesListView::dragEnterEvent(QDragEnterEvent* e)
     }
 }
 
-void DImagesListView::dragMoveEvent(QDragMoveEvent* e)
+void DItemsListView::dragMoveEvent(QDragMoveEvent* e)
 {
     QTreeWidget::dragMoveEvent(e);
 
@@ -423,7 +423,7 @@ void DImagesListView::dragMoveEvent(QDragMoveEvent* e)
     }
 }
 
-void DImagesListView::dropEvent(QDropEvent* e)
+void DItemsListView::dropEvent(QDropEvent* e)
 {
     QTreeWidget::dropEvent(e);
     QList<QUrl> list = e->mimeData()->urls();
@@ -463,7 +463,7 @@ CtrlButton::~CtrlButton()
 
 // ---------------------------------------------------------------------------
 
-class Q_DECL_HIDDEN DImagesList::Private
+class Q_DECL_HIDDEN DItemsList::Private
 {
 public:
 
@@ -506,13 +506,13 @@ public:
     int                        progressCount;
     QTimer*                    progressTimer;
 
-    DImagesListView*           listView;
+    DItemsListView*           listView;
     ThumbnailLoadThread*       thumbLoadThread;
 
     DInfoInterface*            iface;
 };
 
-DImagesList::DImagesList(QWidget* const parent, int iconSize)
+DItemsList::DItemsList(QWidget* const parent, int iconSize)
     : QWidget(parent),
       d(new Private)
 {
@@ -523,7 +523,7 @@ DImagesList::DImagesList(QWidget* const parent, int iconSize)
 
     // --------------------------------------------------------
 
-    d->listView = new DImagesListView(d->iconSize, this);
+    d->listView = new DItemsListView(d->iconSize, this);
     d->listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     // --------------------------------------------------------
@@ -554,52 +554,52 @@ DImagesList::DImagesList(QWidget* const parent, int iconSize)
 
     // --------------------------------------------------------
 
-    connect(d->listView, &DImagesListView::signalAddedDropedItems,
-            this, &DImagesList::slotAddImages);
+    connect(d->listView, &DItemsListView::signalAddedDropedItems,
+            this, &DItemsList::slotAddImages);
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnail(LoadingDescription,QPixmap)));
 
-    connect(d->listView, &DImagesListView::signalItemClicked,
-            this, &DImagesList::signalItemClicked);
+    connect(d->listView, &DItemsListView::signalItemClicked,
+            this, &DItemsList::signalItemClicked);
 
-    connect(d->listView, &DImagesListView::signalContextMenuRequested,
-            this, &DImagesList::signalContextMenuRequested);
+    connect(d->listView, &DItemsListView::signalContextMenuRequested,
+            this, &DItemsList::signalContextMenuRequested);
 
     // queue this connection because itemSelectionChanged is emitted
     // while items are deleted, and accessing selectedItems at that
     // time causes a crash ...
-    connect(d->listView, &DImagesListView::itemSelectionChanged,
-            this, &DImagesList::slotImageListChanged, Qt::QueuedConnection);
+    connect(d->listView, &DItemsListView::itemSelectionChanged,
+            this, &DItemsList::slotImageListChanged, Qt::QueuedConnection);
 
-    connect(this, &DImagesList::signalImageListChanged,
-            this, &DImagesList::slotImageListChanged);
+    connect(this, &DItemsList::signalImageListChanged,
+            this, &DItemsList::slotImageListChanged);
 
     // --------------------------------------------------------
 
     connect(d->addButton, &CtrlButton::clicked,
-            this, &DImagesList::slotAddItems);
+            this, &DItemsList::slotAddItems);
 
     connect(d->removeButton, &CtrlButton::clicked,
-            this, &DImagesList::slotRemoveItems);
+            this, &DItemsList::slotRemoveItems);
 
     connect(d->moveUpButton, &CtrlButton::clicked,
-            this, &DImagesList::slotMoveUpItems);
+            this, &DItemsList::slotMoveUpItems);
 
     connect(d->moveDownButton, &CtrlButton::clicked,
-            this, &DImagesList::slotMoveDownItems);
+            this, &DItemsList::slotMoveDownItems);
 
     connect(d->clearButton, &CtrlButton::clicked,
-            this, &DImagesList::slotClearItems);
+            this, &DItemsList::slotClearItems);
 
     connect(d->loadButton, &CtrlButton::clicked,
-            this, &DImagesList::slotLoadItems);
+            this, &DItemsList::slotLoadItems);
 
     connect(d->saveButton, &CtrlButton::clicked,
-            this, &DImagesList::slotSaveItems);
+            this, &DItemsList::slotSaveItems);
 
     connect(d->progressTimer, &QTimer::timeout,
-            this, &DImagesList::slotProgressTimerDone);
+            this, &DItemsList::slotProgressTimerDone);
 
     // --------------------------------------------------------
 
@@ -607,23 +607,23 @@ DImagesList::DImagesList(QWidget* const parent, int iconSize)
 }
 
 
-DImagesList::~DImagesList()
+DItemsList::~DItemsList()
 {
     delete d;
 }
 
-void DImagesList::enableControlButtons(bool enable)
+void DItemsList::enableControlButtons(bool enable)
 {
     d->controlButtonsEnabled = enable;
     slotImageListChanged();
 }
 
-void DImagesList::enableDragAndDrop(const bool enable)
+void DItemsList::enableDragAndDrop(const bool enable)
 {
     d->listView->enableDragAndDrop(enable);
 }
 
-void DImagesList::setControlButtonsPlacement(ControlButtonPlacement placement)
+void DItemsList::setControlButtonsPlacement(ControlButtonPlacement placement)
 {
     delete layout();
 
@@ -700,7 +700,7 @@ void DImagesList::setControlButtonsPlacement(ControlButtonPlacement placement)
     setLayout(mainLayout);
 }
 
-void DImagesList::setControlButtons(ControlButtons buttonMask)
+void DItemsList::setControlButtons(ControlButtons buttonMask)
 {
     d->addButton->setVisible(buttonMask & Add);
     d->removeButton->setVisible(buttonMask & Remove);
@@ -711,27 +711,27 @@ void DImagesList::setControlButtons(ControlButtons buttonMask)
     d->saveButton->setVisible(buttonMask & Save);
 }
 
-void DImagesList::setIface(DInfoInterface* const iface)
+void DItemsList::setIface(DInfoInterface* const iface)
 {
     d->iface = iface;
 }
 
-DInfoInterface* DImagesList::iface() const
+DInfoInterface* DItemsList::iface() const
 {
     return d->iface;
 }
 
-void DImagesList::setAllowDuplicate(bool allow)
+void DItemsList::setAllowDuplicate(bool allow)
 {
   d->allowDuplicate = allow;
 }
 
-void DImagesList::setAllowRAW(bool allow)
+void DItemsList::setAllowRAW(bool allow)
 {
     d->allowRAW = allow;
 }
 
-void DImagesList::setIconSize(int size)
+void DItemsList::setIconSize(int size)
 {
     if (size < 16)
     {
@@ -747,12 +747,12 @@ void DImagesList::setIconSize(int size)
     }
 }
 
-int DImagesList::iconSize() const
+int DItemsList::iconSize() const
 {
     return d->iconSize;
 }
 
-void DImagesList::loadImagesFromCurrentSelection()
+void DItemsList::loadImagesFromCurrentSelection()
 {
     bool selection = checkSelection();
 
@@ -776,7 +776,7 @@ void DImagesList::loadImagesFromCurrentSelection()
     }
 }
 
-void DImagesList::loadImagesFromCurrentAlbum()
+void DItemsList::loadImagesFromCurrentAlbum()
 {
     if (!d->iface)
     {
@@ -791,7 +791,7 @@ void DImagesList::loadImagesFromCurrentAlbum()
     }
 }
 
-bool DImagesList::checkSelection()
+bool DItemsList::checkSelection()
 {
     if (!d->iface)
     {
@@ -803,7 +803,7 @@ bool DImagesList::checkSelection()
     return (!images.isEmpty());
 }
 
-void DImagesList::slotAddImages(const QList<QUrl>& list)
+void DItemsList::slotAddImages(const QList<QUrl>& list)
 {
     if (list.count() == 0)
     {
@@ -824,7 +824,7 @@ void DImagesList::slotAddImages(const QList<QUrl>& list)
 
         while (*iter)
         {
-            DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>(*iter);
+            DItemsListViewItem* const item = dynamic_cast<DItemsListViewItem*>(*iter);
 
             if (item && item->url() == imageUrl)
             {
@@ -843,7 +843,7 @@ void DImagesList::slotAddImages(const QList<QUrl>& list)
                 continue;
             }
 
-            new DImagesListViewItem(listView(), imageUrl);
+            new DItemsListViewItem(listView(), imageUrl);
             urls.append(imageUrl);
         }
     }
@@ -853,7 +853,7 @@ void DImagesList::slotAddImages(const QList<QUrl>& list)
     emit signalFoundRAWImages(raw);
 }
 
-void DImagesList::slotAddItems()
+void DItemsList::slotAddItems()
 {
     KConfig config;
     KConfigGroup grp = config.group(objectName());
@@ -871,7 +871,7 @@ void DImagesList::slotAddItems()
     }
 }
 
-void DImagesList::slotRemoveItems()
+void DItemsList::slotRemoveItems()
 {
     QList<QTreeWidgetItem*> selectedItemsList = d->listView->selectedItems();
     QList<int> itemsIndex;
@@ -879,7 +879,7 @@ void DImagesList::slotRemoveItems()
     for (QList<QTreeWidgetItem*>::const_iterator it = selectedItemsList.constBegin();
          it != selectedItemsList.constEnd(); ++it)
     {
-        DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>(*it);
+        DItemsListViewItem* const item = dynamic_cast<DItemsListViewItem*>(*it);
 
         if (item)
         {
@@ -899,7 +899,7 @@ void DImagesList::slotRemoveItems()
     emit signalImageListChanged();
 }
 
-void DImagesList::slotMoveUpItems()
+void DItemsList::slotMoveUpItems()
 {
     // move above item down, then we don't have to fix the focus
     QModelIndex curIndex = listView()->currentIndex();
@@ -919,7 +919,7 @@ void DImagesList::slotMoveUpItems()
     QTreeWidgetItem* const temp = listView()->takeTopLevelItem(aboveIndex.row());
     listView()->insertTopLevelItem(curIndex.row(), temp);
     // this is a quick fix. We loose the extra tags in flickr upload, but at list we don't get a crash
-    DImagesListViewItem* const uw = dynamic_cast<DImagesListViewItem*>(temp);
+    DItemsListViewItem* const uw = dynamic_cast<DItemsListViewItem*>(temp);
 
     if (uw)
         uw->updateItemWidgets();
@@ -928,7 +928,7 @@ void DImagesList::slotMoveUpItems()
     emit signalMoveUpItem();
 }
 
-void DImagesList::slotMoveDownItems()
+void DItemsList::slotMoveDownItems()
 {
     // move below item up, then we don't have to fix the focus
     QModelIndex curIndex = listView()->currentIndex();
@@ -949,7 +949,7 @@ void DImagesList::slotMoveDownItems()
     listView()->insertTopLevelItem(curIndex.row(), temp);
 
     // This is a quick fix. We can loose extra tags in uploader, but at least we don't get a crash
-    DImagesListViewItem* const uw = dynamic_cast<DImagesListViewItem*>(temp);
+    DItemsListViewItem* const uw = dynamic_cast<DItemsListViewItem*>(temp);
 
     if (uw)
         uw->updateItemWidgets();
@@ -958,14 +958,14 @@ void DImagesList::slotMoveDownItems()
     emit signalMoveDownItem();
 }
 
-void DImagesList::slotClearItems()
+void DItemsList::slotClearItems()
 {
     listView()->selectAll();
     slotRemoveItems();
     listView()->clear();
 }
 
-void DImagesList::slotLoadItems()
+void DItemsList::slotLoadItems()
 {
     KConfig config;
     KConfigGroup grp = config.group(objectName());
@@ -1040,7 +1040,7 @@ void DImagesList::slotLoadItems()
     file.close();
 }
 
-void DImagesList::slotSaveItems()
+void DItemsList::slotSaveItems()
 {
     KConfig config;
     KConfigGroup grp = config.group(objectName());
@@ -1078,7 +1078,7 @@ void DImagesList::slotSaveItems()
 
     while (*it)
     {
-        DImagesListViewItem* const lvItem = dynamic_cast<DImagesListViewItem*>(*it);
+        DItemsListViewItem* const lvItem = dynamic_cast<DItemsListViewItem*>(*it);
 
         if (lvItem)
         {
@@ -1105,7 +1105,7 @@ void DImagesList::slotSaveItems()
     file.close();
 }
 
-void DImagesList::removeItemByUrl(const QUrl& url)
+void DItemsList::removeItemByUrl(const QUrl& url)
 {
     bool found;
     QList<int> itemsIndex;
@@ -1117,7 +1117,7 @@ void DImagesList::removeItemByUrl(const QUrl& url)
 
         while (*it)
         {
-            DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>(*it);
+            DItemsListViewItem* const item = dynamic_cast<DItemsListViewItem*>(*it);
 
             if (item && item->url() == url)
             {
@@ -1142,18 +1142,18 @@ void DImagesList::removeItemByUrl(const QUrl& url)
     emit signalImageListChanged();
 }
 
-QList<QUrl> DImagesList::imageUrls(bool onlyUnprocessed) const
+QList<QUrl> DItemsList::imageUrls(bool onlyUnprocessed) const
 {
     QList<QUrl> list;
     QTreeWidgetItemIterator it(d->listView);
 
     while (*it)
     {
-        DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>(*it);
+        DItemsListViewItem* const item = dynamic_cast<DItemsListViewItem*>(*it);
 
         if (item)
         {
-            if ((onlyUnprocessed == false) || (item->state() != DImagesListViewItem::Success))
+            if ((onlyUnprocessed == false) || (item->state() != DItemsListViewItem::Success))
             {
                 list.append(item->url());
             }
@@ -1165,13 +1165,13 @@ QList<QUrl> DImagesList::imageUrls(bool onlyUnprocessed) const
     return list;
 }
 
-void DImagesList::slotProgressTimerDone()
+void DItemsList::slotProgressTimerDone()
 {
     if (!d->processItems.isEmpty())
     {
         foreach(const QUrl& url, d->processItems)
         {
-            DImagesListViewItem* const item = listView()->findItem(url);
+            DItemsListViewItem* const item = listView()->findItem(url);
 
             if (item)
                 item->setProgressAnimation(d->progressPix.frameAt(d->progressCount));
@@ -1188,9 +1188,9 @@ void DImagesList::slotProgressTimerDone()
     }
 }
 
-void DImagesList::processing(const QUrl& url)
+void DItemsList::processing(const QUrl& url)
 {
-    DImagesListViewItem* const item = listView()->findItem(url);
+    DItemsListViewItem* const item = listView()->findItem(url);
 
     if (item)
     {
@@ -1201,24 +1201,24 @@ void DImagesList::processing(const QUrl& url)
     }
 }
 
-void DImagesList::processed(const QUrl& url, bool success)
+void DItemsList::processed(const QUrl& url, bool success)
 {
-    DImagesListViewItem* const item = listView()->findItem(url);
+    DItemsListViewItem* const item = listView()->findItem(url);
 
     if (item)
     {
         d->processItems.removeAll(url);
         item->setProcessedIcon(QIcon::fromTheme(success ? QLatin1String("dialog-ok-apply")
                                                         : QLatin1String("dialog-cancel")).pixmap(16, 16));
-        item->setState(success ? DImagesListViewItem::Success
-                               : DImagesListViewItem::Failed);
+        item->setState(success ? DItemsListViewItem::Success
+                               : DItemsListViewItem::Failed);
 
         if (d->processItems.isEmpty())
             d->progressTimer->stop();
     }
 }
 
-void DImagesList::cancelProcess()
+void DItemsList::cancelProcess()
 {
     foreach(const QUrl& url, d->processItems)
     {
@@ -1226,13 +1226,13 @@ void DImagesList::cancelProcess()
     }
 }
 
-void DImagesList::clearProcessedStatus()
+void DItemsList::clearProcessedStatus()
 {
     QTreeWidgetItemIterator it(d->listView);
 
     while (*it)
     {
-        DImagesListViewItem* const lvItem = dynamic_cast<DImagesListViewItem*>(*it);
+        DItemsListViewItem* const lvItem = dynamic_cast<DItemsListViewItem*>(*it);
 
         if (lvItem)
         {
@@ -1243,12 +1243,12 @@ void DImagesList::clearProcessedStatus()
     }
 }
 
-DImagesListView* DImagesList::listView() const
+DItemsListView* DItemsList::listView() const
 {
     return d->listView;
 }
 
-void DImagesList::slotImageListChanged()
+void DItemsList::slotImageListChanged()
 {
     const QList<QTreeWidgetItem*> selectedItemsList = d->listView->selectedItems();
     const bool haveImages                           = !(imageUrls().isEmpty())         && d->controlButtonsEnabled;
@@ -1269,18 +1269,18 @@ void DImagesList::slotImageListChanged()
     d->saveButton->setEnabled(d->controlButtonsEnabled);
 }
 
-void DImagesList::updateThumbnail(const QUrl& url)
+void DItemsList::updateThumbnail(const QUrl& url)
 {
     d->thumbLoadThread->find(ThumbnailIdentifier(url.toLocalFile()));
 }
 
-void DImagesList::slotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
+void DItemsList::slotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
     QTreeWidgetItemIterator it(d->listView);
 
     while (*it)
     {
-        DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>(*it);
+        DItemsListViewItem* const item = dynamic_cast<DItemsListViewItem*>(*it);
 
         if (item && item->url() == QUrl::fromLocalFile(desc.filePath))
         {
@@ -1299,7 +1299,7 @@ void DImagesList::slotThumbnail(const LoadingDescription& desc, const QPixmap& p
     }
 }
 
-DImagesListViewItem* DImagesListView::getCurrentItem() const
+DItemsListViewItem* DItemsListView::getCurrentItem() const
 {
     QTreeWidgetItem* const currentTreeItem = currentItem();
 
@@ -1308,12 +1308,12 @@ DImagesListViewItem* DImagesListView::getCurrentItem() const
         return 0;
     }
 
-    return dynamic_cast<DImagesListViewItem*>(currentTreeItem);
+    return dynamic_cast<DItemsListViewItem*>(currentTreeItem);
 }
 
-QUrl DImagesList::getCurrentUrl() const
+QUrl DItemsList::getCurrentUrl() const
 {
-    DImagesListViewItem* const currentItem = d->listView->getCurrentItem();
+    DItemsListViewItem* const currentItem = d->listView->getCurrentItem();
 
     if (!currentItem)
     {

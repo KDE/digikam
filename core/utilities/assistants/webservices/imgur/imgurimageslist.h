@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "imgurtalker.h"
 
 namespace Digikam
@@ -38,7 +38,7 @@ namespace Digikam
 
 class ImgurImageListViewItem;
 
-class ImgurImagesList : public DImagesList
+class ImgurImagesList : public DItemsList
 {
     Q_OBJECT
 
@@ -47,10 +47,10 @@ public:
     // The different columns in a list.
     enum FieldType
     {
-        Title           = DImagesListView::User1,
-        Description     = DImagesListView::User2,
-        URL             = DImagesListView::User3,
-        DeleteURL       = DImagesListView::User4
+        Title           = DItemsListView::User1,
+        Description     = DItemsListView::User2,
+        URL             = DItemsListView::User3,
+        DeleteURL       = DItemsListView::User4
     };
 
 public:
@@ -69,11 +69,11 @@ public Q_SLOTS:
 
 // -------------------------------------------------------------------------
 
-class ImgurImageListViewItem : public DImagesListViewItem
+class ImgurImageListViewItem : public DItemsListViewItem
 {
 public:
 
-    explicit ImgurImageListViewItem(DImagesListView* const view, const QUrl& url);
+    explicit ImgurImageListViewItem(DItemsListView* const view, const QUrl& url);
     ~ImgurImageListViewItem() override {}
 
     void setTitle(const QString& str);

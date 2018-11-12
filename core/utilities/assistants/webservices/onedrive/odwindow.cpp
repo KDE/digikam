@@ -40,7 +40,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "digikam_version.h"
 #include "odtalker.h"
 #include "oditem.h"

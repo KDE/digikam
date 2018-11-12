@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-10-17
- * Description : test for implementation of dimagelist api
+ * Description : test for implementation of ditemslist api
  *
  * Copyright (C) 2011-2012 by A Janardhan Reddy <annapareddyjanardhanreddy at gmail dot com>
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dimageslisttest.h"
+#include "ditemslisttest.h"
 
 // Qt includes
 
@@ -40,7 +40,7 @@
 
 // Local includes
 
-#include "dimageslist.h"
+#include "ditemslist.h"
 
 using namespace Digikam;
 
@@ -177,7 +177,7 @@ void ActionThread::slotJobStarted()
 
 // ----------------------------------------------------------
 
-class Q_DECL_HIDDEN DImagesListTest::Private
+class Q_DECL_HIDDEN DItemsListTest::Private
 {
 public:
 
@@ -197,12 +197,12 @@ public:
     QProgressBar*     progressBar;
     QPushButton*      applyBtn;
 
-    DImagesList*      listView;
+    DItemsList*      listView;
 
     ActionThread*     thread;
 };
 
-DImagesListTest::DImagesListTest(QObject* const /*parent*/)
+DItemsListTest::DItemsListTest(QObject* const /*parent*/)
     : QDialog(),
       d(new Private)
 {
@@ -222,8 +222,8 @@ DImagesListTest::DImagesListTest(QObject* const /*parent*/)
 
     QGridLayout* const mainLayout = new QGridLayout(d->page);
 
-    d->listView                   = new DImagesList(d->page);
-    d->listView->setControlButtonsPlacement(DImagesList::ControlButtonsRight);
+    d->listView                   = new DItemsList(d->page);
+    d->listView->setControlButtonsPlacement(DItemsList::ControlButtonsRight);
 
     d->progressBar                = new QProgressBar(d->page);
     d->progressBar->setMaximumHeight(fontMetrics().height()+2);
@@ -238,27 +238,27 @@ DImagesListTest::DImagesListTest(QObject* const /*parent*/)
     d->applyBtn->setText(i18n("Rotate Items"));
 
     connect(d->applyBtn, &QPushButton::clicked,
-            this, &DImagesListTest::slotStart);
+            this, &DItemsListTest::slotStart);
 
     connect(d->buttons->button(QDialogButtonBox::Close), &QPushButton::clicked,
-            this, &DImagesListTest::close);
+            this, &DItemsListTest::close);
 
     connect(d->thread, &ActionThread::starting,
-            this, &DImagesListTest::slotStarting);
+            this, &DItemsListTest::slotStarting);
 
     connect(d->thread, &ActionThread::finished,
-            this, &DImagesListTest::slotFinished);
+            this, &DItemsListTest::slotFinished);
 
     connect(d->thread, &ActionThread::failed,
-            this, &DImagesListTest::slotFailed);
+            this, &DItemsListTest::slotFailed);
 }
 
-DImagesListTest::~DImagesListTest()
+DItemsListTest::~DItemsListTest()
 {
     delete d;
 }
 
-void DImagesListTest::slotStart()
+void DItemsListTest::slotStart()
 {
     QList<QUrl> selectedImages = d->listView->imageUrls();
 
@@ -276,19 +276,19 @@ void DImagesListTest::slotStart()
     d->thread->start();
 }
 
-void DImagesListTest::slotStarting(const QUrl& url)
+void DItemsListTest::slotStarting(const QUrl& url)
 {
     d->listView->processing(url);
 }
 
-void DImagesListTest::slotFinished(const QUrl& url)
+void DItemsListTest::slotFinished(const QUrl& url)
 {
     d->listView->processed(url, true);
     d->progressBar->setValue(d->progressBar->value()+1);
     d->listView->updateThumbnail(url);
 }
 
-void DImagesListTest::slotFailed(const QUrl& url, const QString&)
+void DItemsListTest::slotFailed(const QUrl& url, const QString&)
 {
     d->listView->processed(url, false);
     d->progressBar->setValue(d->progressBar->value()+1);
@@ -297,7 +297,7 @@ void DImagesListTest::slotFailed(const QUrl& url, const QString&)
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    DImagesListTest* const view = new DImagesListTest(&app);
+    DItemsListTest* const view = new DItemsListTest(&app);
     view->show();
     app.exec();
     return 0;

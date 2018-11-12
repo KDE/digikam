@@ -43,7 +43,7 @@
 
 #include "digikam_debug.h"
 #include "digikam_version.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "ftexportwidget.h"
 
 namespace Digikam

@@ -50,7 +50,7 @@
 #include "rajcetalker.h"
 #include "rajcenewalbumdlg.h"
 #include "rajcesession.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "wslogindialog.h"
 #include "dinfointerface.h"
 #include "dprogresswdg.h"
@@ -95,7 +95,7 @@ public:
     QPushButton*             changeUserBtn;
 
     DInfoInterface*          iface;
-    DImagesList*             imgList;
+    DItemsList*             imgList;
     DProgressWdg*            progressBar;
 
     RajceTalker*             talker;

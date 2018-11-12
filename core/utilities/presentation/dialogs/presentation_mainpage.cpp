@@ -49,7 +49,7 @@
 #include "presentation_advpage.h"
 #include "presentation_captionpage.h"
 #include "thumbnailloadthread.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "dmetadata.h"
 #include "presentationwidget.h"
 
@@ -74,7 +74,7 @@ public:
 
     PresentationContainer* sharedData;
     QTime                  totalTime;
-    DImagesList*           imagesFilesListBox;
+    DItemsList*           imagesFilesListBox;
 };
 
 PresentationMainPage::PresentationMainPage(QWidget* const parent, PresentationContainer* const sharedData)
@@ -88,7 +88,7 @@ PresentationMainPage::PresentationMainPage(QWidget* const parent, PresentationCo
     // --------------------------------------------------------
 
     QVBoxLayout* const listBoxContainerLayout = new QVBoxLayout;
-    d->imagesFilesListBox                     = new DImagesList(m_ImagesFilesListBoxContainer, 32);
+    d->imagesFilesListBox                     = new DItemsList(m_ImagesFilesListBoxContainer, 32);
     d->imagesFilesListBox->setObjectName(QLatin1String("Presentation ImagesList"));
     d->imagesFilesListBox->listView()->header()->hide();
     d->imagesFilesListBox->enableControlButtons(true);
@@ -320,7 +320,7 @@ bool PresentationMainPage::updateUrlList()
 
     while (*it)
     {
-        DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>(*it);
+        DItemsListViewItem* const item = dynamic_cast<DItemsListViewItem*>(*it);
 
         if (!item)
             continue;
@@ -354,7 +354,7 @@ void PresentationMainPage::slotImagesFilesSelected(QTreeWidgetItem* item)
         return;
     }
 
-    DImagesListViewItem* const pitem = dynamic_cast<DImagesListViewItem*>(item);
+    DItemsListViewItem* const pitem = dynamic_cast<DItemsListViewItem*>(item);
 
     if (!pitem)
         return;

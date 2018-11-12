@@ -85,7 +85,7 @@ public:
     {
     }
 
-    DImagesList*                   imgList;
+    DItemsList*                   imgList;
     QWidget*                       uploadWidget;
     QString                        toolName;
 
@@ -137,7 +137,7 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
     setObjectName(d->toolName + QLatin1String(" Widget"));
 
     d->mainLayout         = new QHBoxLayout(this);
-    d->imgList            = new DImagesList(this);
+    d->imgList            = new DItemsList(this);
     d->settingsScrollArea = new QScrollArea(this);
     d->settingsBox        = new QWidget(d->settingsScrollArea);
     d->settingsBoxLayout  = new QVBoxLayout(d->settingsBox);
@@ -169,7 +169,7 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    d->imgList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
+    d->imgList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     d->imgList->setAllowRAW(true);
     d->imgList->listView()->setWhatsThis(i18n("This is the list of images to upload to your %1 account.", d->toolName));
     d->imgList->setIface(d->iface);
@@ -318,7 +318,7 @@ QString WSSettingsWidget::getDestinationPath() const
     return url.toLocalFile();
 }
 
-DImagesList* WSSettingsWidget::imagesList() const
+DItemsList* WSSettingsWidget::imagesList() const
 {
     return d->imgList;
 }

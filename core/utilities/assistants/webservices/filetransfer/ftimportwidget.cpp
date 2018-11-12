@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "dfiledialog.h"
 
 namespace Digikam
@@ -53,7 +53,7 @@ public:
         importSearchBtn = 0;
     }
 
-    DImagesList* imageList;
+    DItemsList* imageList;
     QWidget*     uploadWidget;
     DFileDialog* importDlg;
     QPushButton* importSearchBtn;
@@ -67,11 +67,11 @@ FTImportWidget::FTImportWidget(QWidget* const parent, DInfoInterface* const ifac
     d->importSearchBtn->setIcon(QIcon::fromTheme(QLatin1String("folder-remote")));
 
     // setup image list
-    d->imageList = new DImagesList(this);
+    d->imageList = new DItemsList(this);
     d->imageList->setAllowRAW(true);
     d->imageList->setIface(iface);
-    d->imageList->listView()->setColumnEnabled(DImagesListView::Thumbnail, false);
-    d->imageList->setControlButtons(DImagesList::Remove | DImagesList::MoveUp | DImagesList::MoveDown | DImagesList::Clear);
+    d->imageList->listView()->setColumnEnabled(DItemsListView::Thumbnail, false);
+    d->imageList->setControlButtons(DItemsList::Remove | DItemsList::MoveUp | DItemsList::MoveDown | DItemsList::Clear);
     d->imageList->listView()->setWhatsThis(i18n("This is the list of images to import "
                                                 "into the current album."));
 
@@ -113,7 +113,7 @@ void FTImportWidget::slotShowImportDialogClicked(bool checked)
     delete d->importDlg;
 }
 
-DImagesList* FTImportWidget::imagesList() const
+DItemsList* FTImportWidget::imagesList() const
 {
     return d->imageList;
 }

@@ -47,7 +47,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "wstoolutils.h"
 #include "digikam_version.h"
 #include "dprogresswdg.h"

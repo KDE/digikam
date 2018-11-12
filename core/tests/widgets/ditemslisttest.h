@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-10-17
- * Description : test for implementation of dimagelist api
+ * Description : test for implementation of ditemslist api
  *
  * Copyright (C) 2011-2012 by A Janardhan Reddy <annapareddyjanardhanreddy at gmail dot com>
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DIMAGES_LIST_TEST_H
-#define DIGIKAM_DIMAGES_LIST_TEST_H
+#ifndef DIGIKAM_DITEMS_LIST_TEST_H
+#define DIGIKAM_DITEMS_LIST_TEST_H
 
 // Qt includes
 
@@ -62,14 +62,14 @@ private Q_SLOTS:
 
 // -----------------------------------------------------
 
-class DImagesListTest : public QDialog
+class DItemsListTest : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit DImagesListTest(QObject* const parent);
-    ~DImagesListTest();
+    explicit DItemsListTest(QObject* const parent);
+    ~DItemsListTest();
 
 private Q_SLOTS:
 
@@ -84,4 +84,4 @@ private:
     Private* const d;
 };
 
-#endif // DIGIKAM_DIMAGES_LIST_TEST_H
+#endif // DIGIKAM_DITEMS_LIST_TEST_H

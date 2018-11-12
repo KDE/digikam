@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class DImagesList;
+class DItemsList;
 
 class AdvPrintCropPage : public DWizardPage
 {

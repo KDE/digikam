@@ -56,7 +56,7 @@
 #include "digikam_debug.h"
 #include "dmetadata.h"
 #include "wstoolutils.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "previewloadthread.h"
 #include "mediawikiwidget.h"
 #include "mediawikitalker.h"

@@ -49,7 +49,7 @@
 // Local includes
 
 #include "wstoolutils.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "digikam_version.h"
 #include "dprogresswdg.h"
 #include "gdtalker.h"

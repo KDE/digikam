@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-05-21
- * Description : widget to display an imagelist
+ * Description : widget to display a list of items
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DIMAGES_LIST_H
-#define DIGIKAM_DIMAGES_LIST_H
+#ifndef DIGIKAM_DITEMS_LIST_H
+#define DIGIKAM_DITEMS_LIST_H
 
 // Qt includes
 
@@ -45,10 +45,10 @@
 namespace Digikam
 {
 
-class DImagesList;
-class DImagesListView;
+class DItemsList;
+class DItemsListView;
 
-class DIGIKAM_EXPORT DImagesListViewItem : public QTreeWidgetItem
+class DIGIKAM_EXPORT DItemsListViewItem : public QTreeWidgetItem
 {
 
 public:
@@ -62,8 +62,8 @@ public:
 
 public:
 
-    explicit DImagesListViewItem(DImagesListView* const view, const QUrl& url);
-    ~DImagesListViewItem();
+    explicit DItemsListViewItem(DItemsListView* const view, const QUrl& url);
+    ~DItemsListViewItem();
 
     bool hasValidThumbnail() const;
 
@@ -94,7 +94,7 @@ public:
 
 protected:
 
-    DImagesListView* view() const;
+    DItemsListView* view() const;
 
 private:
 
@@ -108,7 +108,7 @@ private:
 
 // -------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT DImagesListView : public QTreeWidget
+class DIGIKAM_EXPORT DItemsListView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -128,17 +128,17 @@ public:
 
 public:
 
-    explicit DImagesListView(DImagesList* const parent = 0);
-    explicit DImagesListView(int iconSize, DImagesList* const parent = 0);
-    ~DImagesListView();
+    explicit DItemsListView(DItemsList* const parent = 0);
+    explicit DItemsListView(int iconSize, DItemsList* const parent = 0);
+    ~DItemsListView();
 
     void setColumnLabel(ColumnType column, const QString& label);
     void setColumnEnabled(ColumnType column, bool enable);
     void setColumn(ColumnType column, const QString& label, bool enable);
 
-    DImagesListViewItem* findItem(const QUrl& url);
-    QModelIndex indexFromItem(DImagesListViewItem* item, int column = 0) const;
-    DImagesListViewItem* getCurrentItem() const;
+    DItemsListViewItem* findItem(const QUrl& url);
+    QModelIndex indexFromItem(DItemsListViewItem* item, int column = 0) const;
+    DItemsListViewItem* getCurrentItem() const;
 
     DInfoInterface* iface() const;
 
@@ -186,7 +186,7 @@ public:
 
 // -------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT DImagesList : public QWidget
+class DIGIKAM_EXPORT DItemsList : public QWidget
 {
     Q_OBJECT
 
@@ -215,8 +215,8 @@ public:
 
 public:
 
-    explicit DImagesList(QWidget* const parent, int iconSize = -1);
-    virtual ~DImagesList();
+    explicit DItemsList(QWidget* const parent, int iconSize = -1);
+    virtual ~DItemsList();
 
     void                setAllowRAW(bool allow);
     void                setAllowDuplicate(bool allow);
@@ -233,7 +233,7 @@ public:
 
     int                 iconSize()  const;
 
-    DImagesListView*    listView()  const;
+    DItemsListView*    listView()  const;
 
     void                processing(const QUrl& url);
     void                processed(const QUrl& url, bool success);
@@ -293,7 +293,7 @@ private:
 
 private:
 
-    DImagesList(); // Disable default constructor.
+    DItemsList(); // Disable default constructor.
 
     class Private;
     Private* const d;
@@ -301,6 +301,6 @@ private:
 
 } // namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DImagesList::ControlButtons)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DItemsList::ControlButtons)
 
-#endif // DIGIKAM_DIMAGES_LIST_H
+#endif // DIGIKAM_DITEMS_LIST_H

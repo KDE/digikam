@@ -97,7 +97,7 @@ public:
     // album selection
     VKAlbumChooser*   albumsBox;
 
-    DImagesList*      imgList;
+    DItemsList*      imgList;
     QWidget*          uploadWidget;
     DInfoInterface*   iface;
     DProgressWdg*     progressBar;
@@ -130,8 +130,8 @@ VKWindow::VKWindow(DInfoInterface* const iface,
     d->import                     = import;
     d->mainWidget                 = new QWidget(this);
     QHBoxLayout* const mainLayout = new QHBoxLayout(d->mainWidget);
-    d->imgList                    = new DImagesList(this);
-    d->imgList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
+    d->imgList                    = new DItemsList(this);
+    d->imgList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     d->imgList->setAllowRAW(false); // TODO: implement conversion
     d->imgList->setIface(d->iface);
     d->imgList->loadImagesFromCurrentSelection();

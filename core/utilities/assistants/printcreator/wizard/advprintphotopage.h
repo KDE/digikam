@@ -35,14 +35,14 @@
 // Local includes
 
 #include "dwizardpage.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "advprintphoto.h"
 #include "ui_advprintphotopage.h"
 
 namespace Digikam
 {
 
-class DImagesList;
+class DItemsList;
 class TemplateIcon;
 
 class AdvPrintPhotoPage : public DWizardPage
@@ -55,7 +55,7 @@ public:
     ~AdvPrintPhotoPage();
 
     QPrinter*             printer()           const;
-    DImagesList*          imagesList()        const;
+    DItemsList*          imagesList()        const;
     Ui_AdvPrintPhotoPage* ui()                const;
     bool                  isComplete()        const;
     int                   getPageCount()      const;

@@ -47,29 +47,29 @@ namespace Digikam
 {
 
 ImgurImagesList::ImgurImagesList(QWidget* const parent)
-    : DImagesList(parent)
+    : DItemsList(parent)
 {
-    setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
+    setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     setAllowDuplicate(false);
     setAllowRAW(false);
 
     auto* const list = listView();
 
-    list->setColumnLabel(DImagesListView::Thumbnail, i18n("Thumbnail"));
+    list->setColumnLabel(DItemsListView::Thumbnail, i18n("Thumbnail"));
 
-    list->setColumnLabel(static_cast<DImagesListView::ColumnType>(ImgurImagesList::Title),
+    list->setColumnLabel(static_cast<DItemsListView::ColumnType>(ImgurImagesList::Title),
                          i18n("Submission title"));
 
-    list->setColumnLabel(static_cast<DImagesListView::ColumnType>(ImgurImagesList::Description),
+    list->setColumnLabel(static_cast<DItemsListView::ColumnType>(ImgurImagesList::Description),
                          i18n("Submission description"));
 
-    list->setColumn(static_cast<DImagesListView::ColumnType>(ImgurImagesList::URL),
+    list->setColumn(static_cast<DItemsListView::ColumnType>(ImgurImagesList::URL),
                     i18n("Imgur URL"), true);
 
-    list->setColumn(static_cast<DImagesListView::ColumnType>(ImgurImagesList::DeleteURL),
+    list->setColumn(static_cast<DItemsListView::ColumnType>(ImgurImagesList::DeleteURL),
                     i18n("Imgur Delete URL"), true);
 
-    connect(list, &DImagesListView::itemDoubleClicked,
+    connect(list, &DItemsListView::itemDoubleClicked,
             this, &ImgurImagesList::slotDoubleClick);
 }
 
@@ -90,7 +90,7 @@ QList<const ImgurImageListViewItem*> ImgurImagesList::getPendingItems()
 
 void ImgurImagesList::slotAddImages(const QList<QUrl>& list)
 {
-    /* Replaces the DImagesList::slotAddImages method, so that
+    /* Replaces the DItemsList::slotAddImages method, so that
      * ImgurImageListViewItems can be added instead of ImagesListViewItems */
 
     DMetadata meta;
@@ -161,8 +161,8 @@ void ImgurImagesList::slotDoubleClick(QTreeWidgetItem* element, int i)
 
 // ------------------------------------------------------------------------------------------------
 
-ImgurImageListViewItem::ImgurImageListViewItem(DImagesListView* const view, const QUrl& url)
-    : DImagesListViewItem(view, url)
+ImgurImageListViewItem::ImgurImageListViewItem(DItemsListView* const view, const QUrl& url)
+    : DItemsListViewItem(view, url)
 {
     const QColor blue(50, 50, 255);
 

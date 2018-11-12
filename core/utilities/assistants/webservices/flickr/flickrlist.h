@@ -32,12 +32,12 @@
 
 // Local includes
 
-#include "dimageslist.h"
+#include "ditemslist.h"
 
 namespace Digikam
 {
 
-class FlickrList : public DImagesList
+class FlickrList : public DItemsList
 {
     Q_OBJECT
 
@@ -47,12 +47,12 @@ public:
      */
     enum FieldType
     {
-        SAFETYLEVEL = DImagesListView::User1,
-        CONTENTTYPE = DImagesListView::User2,
-        TAGS        = DImagesListView::User3,
-        PUBLIC      = DImagesListView::User4,
-        FAMILY      = DImagesListView::User5,
-        FRIENDS     = DImagesListView::User6
+        SAFETYLEVEL = DItemsListView::User1,
+        CONTENTTYPE = DItemsListView::User2,
+        TAGS        = DItemsListView::User3,
+        PUBLIC      = DItemsListView::User4,
+        FAMILY      = DItemsListView::User5,
+        FRIENDS     = DItemsListView::User6
     };
 
     /** The different possible safety levels recognized by Flickr.
@@ -120,12 +120,12 @@ private:
 
 // -------------------------------------------------------------------------
 
-class FlickrListViewItem : public DImagesListViewItem
+class FlickrListViewItem : public DItemsListViewItem
 {
 
 public:
 
-    explicit FlickrListViewItem(DImagesListView* const view,
+    explicit FlickrListViewItem(DItemsListView* const view,
                                 const QUrl& url,
                                 bool, bool, bool, bool,
                                 FlickrList::SafetyLevel,

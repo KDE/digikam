@@ -39,7 +39,7 @@ namespace Digikam
 {
 
 class AdvPrintPhoto;
-class DImagesList;
+class DItemsList;
 
 class AdvPrintCaptionPage : public DWizardPage
 {
@@ -50,7 +50,7 @@ public:
     explicit AdvPrintCaptionPage(QWizard* const wizard, const QString& title);
     ~AdvPrintCaptionPage();
 
-    DImagesList* imagesList() const;
+    DItemsList* imagesList() const;
 
     void blockCaptionButtons(bool block=true);
 
