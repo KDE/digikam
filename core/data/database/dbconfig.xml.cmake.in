@@ -1180,14 +1180,14 @@
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS VideoMetadata
                     (imageid BIGINT PRIMARY KEY,
-                    aspectRatio TEXT,
-                    audioBitRate TEXT,
-                    audioChannelType TEXT,
-                    audioCompressor TEXT,
-                    duration TEXT,
-                    frameRate TEXT,
+                    aspectRatio TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    audioBitRate TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    audioChannelType TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    audioCompressor TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    duration TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    frameRate TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     exposureProgram INTEGER,
-                    videoCodec TEXT,
+                    videoCodec TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     CONSTRAINT VideoMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
                     ENGINE InnoDB;
                 </statement>
