@@ -137,8 +137,7 @@
 |│   │   ├── tags                                             | Classes to play with tags                                               |
 |│   │   │   └── tagsmanager                                  | Tags manager view                                                       |
 |│   │   ├── template                                         | Metadata template support                                               |
-|│   │   ├── threadimageio                                    | Classes to process thumbs and preview extraction                        |
-|│   │   │   └── ffmpegthumbnailer                            | Video files thumbnailer                                                 |
+|│   │   ├── threadimageio                                    | Classes to process thumbs and preview extraction including video support|
 |│   │   ├── threads                                          | Classes to manage and chain threads using multi-core                    |
 |│   │   ├── transitionmngr                                   | Frames transitions manager                                              |
 |│   │   ├── versionmanager                                   | Classes to manage versionning operations                                |
@@ -174,6 +173,7 @@
 |│       │   ├── sendbymail                                   | Tool to export items by e-mail                                          |
 |│       │   ├── videoslideshow                               | Tool to create video slideshow from items                               |
 |│       │   └── webservices                                  | All tools to import and export items to remote web-services             |
+|│       │       ├── box                                      | Tool to export items with Box                                           |
 |│       │       ├── common                                   | Common classes used by web-services tools                               |
 |│       │       ├── dropbox                                  | Tool to export items with Dropbox                                       |
 |│       │       ├── facebook                                 | Tool to export items with Facebook                                      |
@@ -182,10 +182,14 @@
 |│       │       ├── google                                   | Tool to export items with Google                                        |
 |│       │       ├── imageshack                               | Tool to export items with ImageShack                                    |
 |│       │       ├── imgur                                    | Tool to export items with ImgUr                                         |
+|│       │       ├── ipfs                                     | Tool to export items with Ipfs                                          |
 |│       │       ├── mediawiki                                | Tool to export items with Mediawiki                                     |
+|│       │       ├── onedrive                                 | Tool to export items with OneDrive                                      |
+|│       │       ├── pinterest                                | Tool to export items with Pinterest                                     |
 |│       │       ├── piwigo                                   | Tool to export items with Piwigo                                        |
 |│       │       ├── rajce                                    | Tool to export items with Rajce                                         |
 |│       │       ├── smugmug                                  | Tool to export items with Smugmug                                       |
+|│       │       ├── twitter                                  | Tool to export items with Twitter                                       |
 |│       │       ├── vkontakte                                | Tool to export items with Vkontakte                                     |
 |│       │       └── yandexfotki                              | Tool to export items with Yandexfotki                                   |
 |│       ├── extrasupport                                     | Extra desktop features support as Baloo search engine                   |
