@@ -140,6 +140,7 @@
       <li xml:lang="tr">Resimler albüm ya da alt albümlerde düzenleme (etiket ve yorum desteğiyle)</li>
       <li xml:lang="uk">упорядковування фотографій за альбомами і підальбомами з підтримкою міток та коментарів;</li>
       <li xml:lang="x-test">xxOrganization of photos in albums and sub-albums (with tags and comments support)xx</li>
+      <li xml:lang="zh-CN">在相册和子相册中组织照片 (支持标签和注释)</li>
       <li>Support for Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="bs">Podrška za Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="ca">Implementació per a notes EXIF, IPTC, XMP i del fabricant</li>
@@ -287,6 +288,7 @@
       <li xml:lang="tr">Fotoğrafı yan yana karşılaştırmak için Tabloyu Işıklandır</li>
       <li xml:lang="uk">стіл із підсвічуванням для порівняння фотографій;</li>
       <li xml:lang="x-test">xxLight Table to compare photo side by sidexx</li>
+      <li xml:lang="zh-CN">用于并排比较照片的灯桌</li>
       <li>Extended features using extra tools</li>
       <li xml:lang="ca">Funcionalitats ampliades usant eines extres</li>
       <li xml:lang="ca-valencia">Funcionalitats ampliades usant eines extres</li>
@@ -368,6 +370,7 @@
       <caption xml:lang="sv">Fotohantering i Digikam</caption>
       <caption xml:lang="uk">Керування фотографіями у digiKam</caption>
       <caption xml:lang="x-test">xxPhoto management in digiKamxx</caption>
+      <caption xml:lang="zh-CN">digiKam 的照片管理</caption>
       <image>http://kde.org/images/screenshots/digikam.png</image>
     </screenshot>
   </screenshots>
