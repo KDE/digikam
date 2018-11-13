@@ -22,6 +22,7 @@ Name[sv]=Elegant
 Name[tr]=Zarif
 Name[uk]=Елегантний
 Name[x-test]=xxElegantxx
+Name[zh_CN]=优雅
 Comment=Based on the "Simple" theme. Uses Lytebox by Markus F. Hay to display the images in a slideshow.
 Comment[ca]=Basat en el tema «Senzill». Usa el Lytebox del Markus F. Hay per a mostrar les imatges en un passi de dispositives.
 Comment[ca@valencia]=Basat en el tema «Senzill». Usa el Lytebox del Markus F. Hay per a mostrar les imatges en un passe de dispositives.
@@ -43,6 +44,7 @@ Comment[sv]=Baserat på temat "Enkelt". Använder LyteBox av Markus F. Hay för 
 Comment[tr]="Basit" tema tabanlıdır. Slayt gösterisinde resimleri göstermek için Markus F. Hay tarafından yapılan Lytebox kullanır.
 Comment[uk]=Заснована на темі «Проста». Використовує Lytebox, автором якого є Markus F. Hay для показу слайдів із зображень.
 Comment[x-test]=xxBased on the "Simple" theme. Uses Lytebox by Markus F. Hay to display the images in a slideshow.xx
+Comment[zh_CN]=基于“简洁”主题。使用 Markus F. Hay 创作的 Lytebox 显示图片幻灯片。
 
 [X-HTMLGallery Author]
 Name=Wojciech Jarosz
@@ -95,6 +97,7 @@ Name[sv]=Elegant
 Name[tr]=Zarif
 Name[uk]=Елегантний
 Name[x-test]=xxElegantxx
+Name[zh_CN]=优雅
 Url=preview.png
 
 [X-HTMLGallery Parameter author]

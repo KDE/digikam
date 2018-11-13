@@ -134,6 +134,7 @@ Name[sv]=Tangentbords- och svepnavigering
 Name[tr]=Klavye & kaydırma gezintisi
 Name[uk]=Навігація за допомогою клавіатури і дотику
 Name[x-test]=xxKeyboard & swipe navigationxx
+Name[zh_CN]=键盘和滑动手势导航
 Type=list
 Default=1
 Value-0=1
