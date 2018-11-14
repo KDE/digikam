@@ -129,7 +129,7 @@ void ImageWindow::setupConnections()
     connect(d->thumbBar, SIGNAL(currentChanged(ItemInfo)),
             this, SLOT(slotThumbBarImageSelected(ItemInfo)));
 
-    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(QList<ItemInfo>)),
+    connect(d->dragDropHandler, SIGNAL(itemInfosDropped(QList<ItemInfo>)),
             this, SLOT(slotDroppedOnThumbbar(QList<ItemInfo>)));
 
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
@@ -207,7 +207,7 @@ void ImageWindow::setupUserArea()
     d->imageFilterModel->setAllGroupsOpen(true); // disable filtering out by group, see bug #283847
     d->imageFilterModel->sort(0); // an initial sorting is necessary
 
-    d->dragDropHandler  = new ImageDragDropHandler(d->imageInfoModel);
+    d->dragDropHandler  = new ItemDragDropHandler(d->imageInfoModel);
     d->dragDropHandler->setReadOnlyDrop(true);
     d->imageInfoModel->setDragDropHandler(d->dragDropHandler);
 

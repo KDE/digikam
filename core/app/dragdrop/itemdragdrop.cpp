@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-16
- * Description : Qt Model for Albums - drag and drop handling
+ * Description : Qt Model for Items - drag and drop handling
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "imagedragdrop.h"
+#include "itemdragdrop.h"
 
 // Qt includes
 
@@ -67,19 +67,19 @@ enum DropAction
 
 static QAction* addGroupAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image",
+    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this item",
                                                                                 "Group here"));
 }
 
 static QAction* addSortAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("insert-image")), i18nc("@action:inmenu Insert dragged images before this image",
+    return menu->addAction( QIcon::fromTheme(QLatin1String("insert-image")), i18nc("@action:inmenu Insert dragged images before this item",
                                                                                    "Insert Items here"));
 }
 
 static QAction* addGroupAndMoveAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image and move them to its album",
+    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this item and move them to its album",
                                                                                 "Group here and move to album"));
 }
 
@@ -192,9 +192,8 @@ static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool a
 
 static DropAction groupAction(const QDropEvent* const, QWidget* const view)
 {
-    ImageCategorizedView* const imgView
-                  = dynamic_cast<ImageCategorizedView*>(view);
-    int sortOrder = ApplicationSettings::instance()->getImageSortOrder();
+    ImageCategorizedView* const imgView = dynamic_cast<ImageCategorizedView*>(view);
+    int sortOrder                       = ApplicationSettings::instance()->getImageSortOrder();
 
     QMenu popMenu(view);
     QAction* sortAction        = 0;
@@ -226,28 +225,28 @@ static DropAction groupAction(const QDropEvent* const, QWidget* const view)
 
 // -------------------------------------------------------------------------------------
 
-ImageDragDropHandler::ImageDragDropHandler(ItemModel* const model)
+ItemDragDropHandler::ItemDragDropHandler(ItemModel* const model)
     : AbstractItemDragDropHandler(model),
       m_readOnly(false)
 {
 }
 
-ItemModel* ImageDragDropHandler::model() const
+ItemModel* ItemDragDropHandler::model() const
 {
     return static_cast<ItemModel*>(m_model);
 }
 
-ItemAlbumModel* ImageDragDropHandler::albumModel() const
+ItemAlbumModel* ItemDragDropHandler::albumModel() const
 {
     return qobject_cast<ItemAlbumModel*>(model());
 }
 
-void ImageDragDropHandler::setReadOnlyDrop(bool readOnly)
+void ItemDragDropHandler::setReadOnlyDrop(bool readOnly)
 {
     m_readOnly = readOnly;
 }
 
-bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)
+bool ItemDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)
 {
     Album* album = 0;
 
@@ -343,7 +342,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         if (m_readOnly)
         {
-            emit imageInfosDropped(ItemInfoList(imageIDs));
+            emit itemInfosDropped(ItemInfoList(imageIDs));
             return true;
         }
         else if (palbum)
@@ -356,7 +355,8 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                 return false;
             }
 
-            for (QList<qlonglong>::const_iterator it = imageIDs.constBegin() ; it != imageIDs.constEnd() ; ++it)
+            for (QList<qlonglong>::const_iterator it = imageIDs.constBegin() ;
+                 it != imageIDs.constEnd() ; ++it)
             {
                 ItemInfo info(*it);
 
@@ -628,7 +628,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
     return false;
 }
 
-Qt::DropAction ImageDragDropHandler::accepts(const QDropEvent* e, const QModelIndex& /*dropIndex*/)
+Qt::DropAction ItemDragDropHandler::accepts(const QDropEvent* e, const QModelIndex& /*dropIndex*/)
 {
     if (albumModel() && albumModel()->currentAlbums().isEmpty())
     {
@@ -659,7 +659,7 @@ Qt::DropAction ImageDragDropHandler::accepts(const QDropEvent* e, const QModelIn
     return Qt::IgnoreAction;
 }
 
-QStringList ImageDragDropHandler::mimeTypes() const
+QStringList ItemDragDropHandler::mimeTypes() const
 {
     QStringList mimeTypes;
 
@@ -672,7 +672,7 @@ QStringList ImageDragDropHandler::mimeTypes() const
     return mimeTypes;
 }
 
-QMimeData* ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexes)
+QMimeData* ItemDragDropHandler::createMimeData(const QList<QModelIndex>& indexes)
 {
     QList<ItemInfo> infos = model()->imageInfos(indexes);
 
