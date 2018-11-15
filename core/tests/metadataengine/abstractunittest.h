@@ -34,8 +34,6 @@
 
 // Local includes
 
-// Local includes
-
 #include "dmetadata.h"
 #include "wstoolutils.h"
 
@@ -44,7 +42,7 @@ using namespace Digikam;
 class AbstractUnitTest : public QObject
 {
     Q_OBJECT
-    
+
 public:
 
     AbstractUnitTest()
