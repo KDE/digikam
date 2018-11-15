@@ -82,9 +82,9 @@ public:
 
     explicit Private()
     {
-        clientId     = QLatin1String("83de95b7-0f35-4abf-bac1-7729ced74c01");
-        clientSecret = QLatin1String("tgjV796:)yezuRWMZSZ45+!");
-        scope        = QLatin1String("User.Read Files.ReadWrite");
+        clientId     = QLatin1String("4c20a541-2ca8-4b98-8847-a375e4d33f34");
+        clientSecret = QLatin1String("wtdcaXADCZ0|tcDA7633|@*");
+        scope        = QLatin1String("Files.ReadWrite User.Read");
 
         authUrl      = QLatin1String("https://login.live.com/oauth20_authorize.srf");
         tokenUrl     = QLatin1String("https://login.live.com/oauth20_token.srf");
@@ -133,6 +133,7 @@ ODTalker::ODTalker(QWidget* const parent)
     d->parent  = parent;
     d->netMngr = new QNetworkAccessManager(this);
     d->view    = new WebWidget(d->parent);
+    d->view->resize(800, 600);
 
     connect(this, SIGNAL(oneDriveLinkingFailed()),
             this, SLOT(slotLinkingFailed()));
@@ -317,7 +318,8 @@ void ODTalker::getUserName()
  */
 void ODTalker::listFolders()
 {
-    QUrl url(QLatin1String("https://graph.microsoft.com/v1.0/me//drive/root/children?select=name,folder,path,parentReference"));;
+    QUrl url(QLatin1String("https://graph.microsoft.com/v1.0/me/drive/root/"
+                           "children?select=name,folder,path,parentReference"));
 
     QNetworkRequest netRequest(url);
     netRequest.setRawHeader("Authorization", QString::fromLatin1("bearer %1").arg(d->accessToken).toUtf8());
