@@ -211,6 +211,7 @@ ReplaceDialog::ReplaceDialog(QWidget* const parent,
     d->progressTimer->start(300);
 
     // get source thumbnail
+
     if (d->src.isValid())
     {
         connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
@@ -218,6 +219,8 @@ ReplaceDialog::ReplaceDialog(QWidget* const parent,
 
         d->thumbLoadThread->find(ThumbnailIdentifier(d->src.toLocalFile()));
     }
+
+    // get dest thumbnail
 
     if (d->dest.isValid())
     {
