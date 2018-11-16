@@ -100,31 +100,33 @@ public:
 
 public:
 
-    QString                clientId;
-    QString                clientSecret;
-    QString                authUrl;
-    QString                tokenUrl;
-    QString                scope;
-    QString                redirectUrl;
-    QString                accessToken;
+    QString                         clientId;
+    QString                         clientSecret;
+    QString                         authUrl;
+    QString                         tokenUrl;
+    QString                         scope;
+    QString                         redirectUrl;
+    QString                         accessToken;
 
-    QWidget*               parent;
+    QWidget*                        parent;
 
-    QNetworkAccessManager* netMngr;
+    QNetworkAccessManager*          netMngr;
 
-    QNetworkReply*         reply;
+    QNetworkReply*                  reply;
 
-    State                  state;
+    State                           state;
 
-    QByteArray             buffer;
+    QByteArray                      buffer;
 
-    DMetadata              meta;
+    DMetadata                       meta;
 
-    QMap<QString, QString> urlParametersMap;
+    QMap<QString, QString>          urlParametersMap;
+    QList<QPair<QString, QString> > folderList;
+    QList<QString>                  nextFolder;
 
-    WebWidget*             view;
+    WebWidget*                      view;
 
-    QString                tokenKey;
+    QString                         tokenKey;
 };
 
 ODTalker::ODTalker(QWidget* const parent)
@@ -316,10 +318,22 @@ void ODTalker::getUserName()
 
 /** Get list of folders by parsing json sent by onedrive
  */
-void ODTalker::listFolders()
+void ODTalker::listFolders(const QString& folder)
 {
-    QUrl url(QLatin1String("https://graph.microsoft.com/v1.0/me/drive/root/"
-                           "children?select=name,folder,path,parentReference"));
+    QString nextFolder;
+
+    if (folder.isEmpty())
+    {
+        d->folderList.clear();
+        d->nextFolder.clear();
+    }
+    else
+    {
+        nextFolder = QLatin1Char(':') + folder + QLatin1Char(':');
+    }
+
+    QUrl url(QString::fromLatin1("https://graph.microsoft.com/v1.0/me/drive/root%1/"
+                                 "children?select=name,folder,path,parentReference").arg(nextFolder));
 
     QNetworkRequest netRequest(url);
     netRequest.setRawHeader("Authorization", QString::fromLatin1("bearer %1").arg(d->accessToken).toUtf8());
@@ -480,28 +494,49 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
     //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Json: " << doc;
     QJsonArray jsonArray   = jsonObject[QLatin1String("value")].toArray();
 
-    QList<QPair<QString, QString> > list;
-    list.append(qMakePair(QLatin1String(""), QLatin1String("root")));
+    if (d->folderList.isEmpty())
+    {
+        d->folderList.append(qMakePair(QLatin1String(""), QLatin1String("root")));
+    }
 
     foreach (const QJsonValue& value, jsonArray)
     {
         QString path;
+        QString folderPath;
         QString folderName;
         QJsonObject folder;
+        QJsonObject parent;
 
         QJsonObject obj = value.toObject();
         folder          = obj[QLatin1String("folder")].toObject();
+        parent          = obj[QLatin1String("parentReference")].toObject();
 
         if (!folder.isEmpty())
         {
-            folderName    = obj[QLatin1String("name")].toString();
-            path          = QLatin1Char('/') + folderName;
-            list.append(qMakePair(path, folderName));
+            folderPath  = parent[QLatin1String("path")].toString();
+            folderName  = obj[QLatin1String("name")].toString();
+
+            path        = folderPath.section(QLatin1String("root:"), -1, 1) +
+                                             QLatin1Char('/') + folderName;
+
+            d->folderList.append(qMakePair(path, folderName));
+
+            if (folder[QLatin1String("childCount")].toInt() > 0)
+            {
+                d->nextFolder << path;
+            }
         }
     }
 
-    emit signalBusy(false);
-    emit signalListAlbumsDone(list);
+    if (!d->nextFolder.isEmpty())
+    {
+        listFolders(d->nextFolder.takeLast());
+    }
+    else
+    {
+        emit signalBusy(false);
+        emit signalListAlbumsDone(d->folderList);
+    }
 }
 
 void ODTalker::parseResponseCreateFolder(const QByteArray& data)
