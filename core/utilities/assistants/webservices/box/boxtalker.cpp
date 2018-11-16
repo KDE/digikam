@@ -71,8 +71,8 @@ public:
 
     explicit Private()
     {
-        clientId     = QLatin1String("w2gevz5rargld3aun22fwmssnmswptrn");
-        clientSecret = QLatin1String("iIL49xl04DJH7on8NYLrcYTQEgNKVmbs");
+        clientId     = QLatin1String("yvd43v8av9zgg9phig80m2dc3r7mks4t");
+        clientSecret = QLatin1String("KJkuMjvzOKDMyp3oxweQBEYixg678Fh5");
 
         authUrl      = QLatin1String("https://account.box.com/api/oauth2/authorize");
         tokenUrl     = QLatin1String("https://api.box.com/oauth2/token");
