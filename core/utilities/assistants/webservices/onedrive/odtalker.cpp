@@ -43,7 +43,6 @@
 
 // KDE includes
 
-#include <kconfig.h>
 #include <kwindowconfig.h>
 
 // Local includes
@@ -95,6 +94,7 @@ public:
         parent       = 0;
         netMngr      = 0;
         reply        = 0;
+        settings     = 0;
         view         = 0;
     }
 
@@ -111,8 +111,9 @@ public:
     QWidget*                        parent;
 
     QNetworkAccessManager*          netMngr;
-
     QNetworkReply*                  reply;
+
+    QSettings*                      settings;
 
     State                           state;
 
@@ -130,10 +131,12 @@ public:
 ODTalker::ODTalker(QWidget* const parent)
     : d(new Private)
 {
-    d->parent  = parent;
-    d->netMngr = new QNetworkAccessManager(this);
-    d->view    = new WebWidget(d->parent);
+    d->parent   = parent;
+    d->netMngr  = new QNetworkAccessManager(this);
+    d->view     = new WebWidget(d->parent);
     d->view->resize(800, 600);
+
+    d->settings = WSToolUtils::getOauthSettings(this);
 
     connect(this, SIGNAL(oneDriveLinkingFailed()),
             this, SLOT(slotLinkingFailed()));
@@ -183,9 +186,11 @@ void ODTalker::link()
 void ODTalker::unLink()
 {
     d->accessToken = QString();
-    KConfig config;
-    KConfigGroup grp = config.group("Onedrive User Settings");
-    grp.deleteGroup();
+
+    d->settings->beginGroup(QLatin1String("Onedrive"));
+    d->settings->remove(QString());
+    d->settings->endGroup();
+
 #ifdef HAVE_QWEBENGINE
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
 #else
@@ -555,26 +560,24 @@ void ODTalker::parseResponseCreateFolder(const QByteArray& data)
 
 void ODTalker::writeSettings()
 {
-    KConfig config;
-    KConfigGroup grp = config.group("Onedrive User Settings");
-
-    grp.writeEntry("access_token", d->accessToken);
-    config.sync();
+    d->settings->beginGroup(QLatin1String("Onedrive"));
+    d->settings->setValue(QLatin1String("access_tokenkey"), d->accessToken);
+    d->settings->endGroup();
 }
 
 void ODTalker::readSettings()
 {
-    KConfig config;
-    KConfigGroup grp = config.group("Onedrive User Settings");
+    d->settings->beginGroup(QLatin1String("Onedrive"));
+    d->accessToken = d->settings->value(QLatin1String("access_tokenkey")).toString();
+    d->settings->endGroup();
 
-    if (!grp.readEntry("access_token", false))
+    if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Linking...";
         link();
     }
     else
     {
-        d->accessToken = grp.readEntry("access_token", QString());
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Already Linked";
         emit oneDriveLinkingSucceeded();
     }
