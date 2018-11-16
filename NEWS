@@ -642,4 +642,5 @@ BUGFIXES:
 575 ==> 400917 - Rotation of picture in Preview mode: thumbnail not rotated.
 576 ==> 400960 - Do not reset horizontal scroll bar slider position when selecting album.
 577 ==> 400766 - Export to Onedrive: not possible to export into subfolder.
-578 ==> 
+578 ==> 398207 - box.com video upload fails despite successful authentication.
+579 ==> 
