@@ -233,7 +233,11 @@ QMap<QString, QString> ODTalker::ParseUrlParameters(const QString& url)
     for (int i = 0 ; i < paramlist.count() ; ++i)
     {
         QStringList paramarg = paramlist.at(i).split(QLatin1Char('='));
-        urlParameters.insert(paramarg.at(0), paramarg.at(1));
+
+        if (paramarg.count() == 2)
+        {
+            urlParameters.insert(paramarg.at(0), paramarg.at(1));
+        }
     }
 
     return urlParameters;
