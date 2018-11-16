@@ -328,17 +328,13 @@ bool GPTalker::addPhoto(const QString& photoPath,
 
         path = WSToolUtils::makeTemporaryDir("google").filePath(QFileInfo(photoPath)
                                              .baseName().trimmed() + QLatin1String(".jpg"));
-        int imgQualityToApply = 100;
 
-        if (rescale)
+        if (rescale && (image.width() > maxDim || image.height() > maxDim))
         {
-            if (image.width() > maxDim || image.height() > maxDim)
-                image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-            imgQualityToApply = imageQuality;
+            image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
-        image.save(path, "JPEG", imgQualityToApply);
+        image.save(path, "JPEG", imageQuality);
 
         DMetadata meta;
 
@@ -413,17 +409,13 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info, /*const QStr
 
         path = WSToolUtils::makeTemporaryDir("google").filePath(QFileInfo(photoPath)
                                              .baseName().trimmed() + QLatin1String(".jpg"));
-        int imgQualityToApply = 100;
 
-        if (rescale)
+        if (rescale && (image.width() > maxDim || image.height() > maxDim))
         {
-            if (image.width() > maxDim || image.height() > maxDim)
-                image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
-
-            imgQualityToApply = imageQuality;
+            image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
         }
 
-        image.save(path, "JPEG", imgQualityToApply);
+        image.save(path, "JPEG", imageQuality);
 
         DMetadata meta;
 

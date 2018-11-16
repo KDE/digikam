@@ -245,17 +245,13 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
         path = WSToolUtils::makeTemporaryDir("google").filePath(QFileInfo(imgPath)
                                              .baseName().trimmed() + QLatin1String(".jpg"));
-        int imgQualityToApply = 100;
 
-        if (rescale)
+        if (rescale && (image.width() > maxDim || image.height() > maxDim))
         {
-            if (image.width() > maxDim || image.height() > maxDim)
-                image = image.scaled(maxDim,maxDim,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-
-            imgQualityToApply = imageQuality;
+            image = image.scaled(maxDim,maxDim,Qt::KeepAspectRatio,Qt::SmoothTransformation);
         }
 
-        image.save(path, "JPEG", imgQualityToApply);
+        image.save(path, "JPEG", imageQuality);
 
         DMetadata meta;
 

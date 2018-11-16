@@ -534,10 +534,9 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
             path = WSToolUtils::makeTemporaryDir(d->serviceName.toLatin1().constData()).filePath(QFileInfo(photoPath)
                                                                           .baseName().trimmed() + QLatin1String(".jpg"));
 
-            if (rescale)
+            if (rescale && (image.width() > maxDim || image.height() > maxDim))
             {
-                if (image.width() > maxDim || image.height() > maxDim)
-                    image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+                image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             }
 
             image.save(path, "JPEG", imageQuality);
