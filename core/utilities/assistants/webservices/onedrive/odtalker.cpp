@@ -89,6 +89,9 @@ public:
         tokenUrl     = QLatin1String("https://login.live.com/oauth20_token.srf");
         redirectUrl  = QLatin1String("https://login.live.com/oauth20_desktop.srf");
 
+        serviceName = QLatin1String("Onedrive");
+        serviceKey  = QLatin1String("access_tokenkey");
+
         state        = OD_USERNAME;
 
         parent       = 0;
@@ -107,6 +110,8 @@ public:
     QString                         scope;
     QString                         redirectUrl;
     QString                         accessToken;
+    QString                         serviceName;
+    QString                         serviceKey;
 
     QWidget*                        parent;
 
@@ -187,7 +192,7 @@ void ODTalker::unLink()
 {
     d->accessToken = QString();
 
-    d->settings->beginGroup(QLatin1String("Onedrive"));
+    d->settings->beginGroup(d->serviceName);
     d->settings->remove(QString());
     d->settings->endGroup();
 
@@ -564,15 +569,15 @@ void ODTalker::parseResponseCreateFolder(const QByteArray& data)
 
 void ODTalker::writeSettings()
 {
-    d->settings->beginGroup(QLatin1String("Onedrive"));
-    d->settings->setValue(QLatin1String("access_tokenkey"), d->accessToken);
+    d->settings->beginGroup(d->serviceName);
+    d->settings->setValue(d->serviceKey, d->accessToken);
     d->settings->endGroup();
 }
 
 void ODTalker::readSettings()
 {
-    d->settings->beginGroup(QLatin1String("Onedrive"));
-    d->accessToken = d->settings->value(QLatin1String("access_tokenkey")).toString();
+    d->settings->beginGroup(d->serviceName);
+    d->accessToken = d->settings->value(d->serviceKey).toString();
     d->settings->endGroup();
 
     if (d->accessToken.isEmpty())
