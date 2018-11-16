@@ -79,7 +79,6 @@ public:
     DInfoInterface*        iface;
     QLabel*                lbSrc;
     QLabel*                lbDest;
-    QByteArray             buffer;
     QNetworkAccessManager* netMngr;
     QPixmap                mimePix;
     DWorkingPixmap         progressPix;
@@ -220,9 +219,6 @@ ReplaceDialog::ReplaceDialog(QWidget* const parent,
         d->thumbLoadThread->find(ThumbnailIdentifier(d->src.toLocalFile()));
     }
 
-    // get dest thumbnail
-    d->buffer.resize(0);
-
     if (d->dest.isValid())
     {
         d->netMngr = new QNetworkAccessManager(this);
@@ -250,12 +246,12 @@ void ReplaceDialog::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    d->buffer.append(reply->readAll());
+    QByteArray buffer = reply->readAll();
 
-    if (!d->buffer.isEmpty())
+    if (!buffer.isEmpty())
     {
         QPixmap pxm;
-        pxm.loadFromData(d->buffer);
+        pxm.loadFromData(buffer);
         d->lbDest->setPixmap(pxm.scaled(200, 200, Qt::KeepAspectRatio, Qt::FastTransformation));
     }
 

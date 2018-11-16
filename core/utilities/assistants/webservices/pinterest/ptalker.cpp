@@ -119,8 +119,6 @@ public:
 
     State                  state;
 
-    QByteArray             buffer;
-
     DMetadata              meta;
 
     QMap<QString, QString> urlParametersMap;
@@ -235,7 +233,6 @@ void PTalker::getToken(const QString& code)
     d->reply = d->netMngr->post(netRequest, QByteArray());
 
     d->state = Private::P_ACCESSTOKEN;
-    d->buffer.resize(0);
 }
 
 QMap<QString, QString> PTalker::ParseUrlParameters(const QString& url)
@@ -307,7 +304,6 @@ void PTalker::createBoard(QString& boardName)
     d->reply = d->netMngr->post(netRequest, postData);
 
     d->state = Private::P_CREATEBOARD;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -320,7 +316,6 @@ void PTalker::getUserName()
 
     d->reply = d->netMngr->get(netRequest);
     d->state = Private::P_USERNAME;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -337,7 +332,6 @@ void PTalker::listBoards(const QString& /*path*/)
     d->reply = d->netMngr->get(netRequest);
 
     d->state = Private::P_LISTBOARDS;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -431,8 +425,6 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
     multiPart->setParent(d->reply);
 
     d->state = Private::P_ADDPIN;
-    d->buffer.resize(0);
-
     return true;
 }
 
@@ -459,30 +451,30 @@ void PTalker::slotFinished(QNetworkReply* reply)
         }
     }
 
-    d->buffer.append(reply->readAll());
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "BUFFER" << QString(d->buffer);
+    QByteArray buffer = reply->readAll();
+    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "BUFFER" << QString(buffer);
 
     switch (d->state)
     {
         case Private::P_LISTBOARDS:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In P_LISTBOARDS";
-            parseResponseListBoards(d->buffer);
+            parseResponseListBoards(buffer);
             break;
         case Private::P_CREATEBOARD:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In P_CREATEBOARD";
-            parseResponseCreateBoard(d->buffer);
+            parseResponseCreateBoard(buffer);
             break;
         case Private::P_ADDPIN:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In P_ADDPIN";
-            parseResponseAddPin(d->buffer);
+            parseResponseAddPin(buffer);
             break;
         case Private::P_USERNAME:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In P_USERNAME";
-            parseResponseUserName(d->buffer);
+            parseResponseUserName(buffer);
             break;
         case Private::P_ACCESSTOKEN:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In P_ACCESSTOKEN";
-            parseResponseAccessToken(d->buffer);
+            parseResponseAccessToken(buffer);
             break;
         default:
             break;

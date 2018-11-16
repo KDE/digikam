@@ -81,7 +81,6 @@ protected:
     QString        m_accessToken;
 
     QString        m_bearerAccessToken;
-    QByteArray     m_buffer;
 
     QNetworkReply* m_reply;
     QString        m_serviceName;

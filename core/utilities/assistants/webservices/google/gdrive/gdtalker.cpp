@@ -144,8 +144,6 @@ void GDTalker::getUserName()
 
     m_reply  = d->netMngr->get(netRequest);
     d->state = Private::GD_USERNAME;
-    m_buffer.resize(0);
-
     emit signalBusy(true);
 }
 
@@ -167,8 +165,6 @@ void GDTalker::listFolders()
 
     m_reply  = d->netMngr->get(netRequest);
     d->state = Private::GD_LISTFOLDERS;
-    m_buffer.resize(0);
-
     emit signalBusy(true);
 }
 
@@ -205,8 +201,6 @@ void GDTalker::createFolder(const QString& title, const QString& id)
 
     m_reply  = d->netMngr->post(netRequest, data);
     d->state = Private::GD_CREATEFOLDER;
-    m_buffer.resize(0);
-
     emit signalBusy(true);
 }
 
@@ -288,8 +282,6 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In add photo";
     d->state = Private::GD_ADDPHOTO;
-    m_buffer.resize(0);
-
     return true;
 }
 
@@ -312,7 +304,7 @@ void GDTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    m_buffer.append(reply->readAll());
+    QByteArray buffer =  reply->readAll();
 
     switch (d->state)
     {
@@ -320,19 +312,19 @@ void GDTalker::slotFinished(QNetworkReply* reply)
             break;
         case (Private::GD_LISTFOLDERS):
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GD_LISTFOLDERS";
-            parseResponseListFolders(m_buffer);
+            parseResponseListFolders(buffer);
             break;
         case (Private::GD_CREATEFOLDER):
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GD_CREATEFOLDER";
-            parseResponseCreateFolder(m_buffer);
+            parseResponseCreateFolder(buffer);
             break;
         case (Private::GD_ADDPHOTO):
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GD_ADDPHOTO"; // << m_buffer;
-            parseResponseAddPhoto(m_buffer);
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GD_ADDPHOTO"; // << buffer;
+            parseResponseAddPhoto(buffer);
             break;
         case (Private::GD_USERNAME):
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GD_USERNAME"; // << m_buffer;
-            parseResponseUserName(m_buffer);
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GD_USERNAME"; // << buffer;
+            parseResponseUserName(buffer);
             break;
         default:
             break;

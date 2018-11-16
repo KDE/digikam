@@ -116,8 +116,6 @@ public:
 
     QWidget*               parent;
 
-    QByteArray             buffer;
-
     QString                userAgent;
 
     QString                apiURL;
@@ -386,7 +384,6 @@ void SmugTalker::getLoginedUser()
     d->reply = d->requestor->get(netRequest, reqParams);
 
     d->state = Private::SMUG_LOGIN;
-    d->buffer.resize(0);
 }
 
 void SmugTalker::logout()
@@ -425,7 +422,6 @@ void SmugTalker::listAlbums(const QString& /*nickName*/)
     d->reply = d->requestor->get(netRequest, reqParams);
 
     d->state = Private::SMUG_LISTALBUMS;
-    d->buffer.resize(0);
 }
 
 void SmugTalker::listPhotos(const qint64 /*albumID*/,
@@ -454,7 +450,6 @@ void SmugTalker::listPhotos(const qint64 /*albumID*/,
     d->reply = d->requestor->get(netRequest, reqParams);
 
     d->state = Private::SMUG_LISTPHOTOS;
-    d->buffer.resize(0);
 }
 
 void SmugTalker::listAlbumTmpl()
@@ -480,7 +475,6 @@ void SmugTalker::listAlbumTmpl()
     d->reply = d->requestor->get(netRequest, reqParams);
 
     d->state = Private::SMUG_LISTALBUMTEMPLATES;
-    d->buffer.resize(0);
 }
 
 /**
@@ -509,7 +503,6 @@ void SmugTalker::listCategories()
     d->reply = d->netMngr->get(netRequest);
 
     d->state = Private::SMUG_LISTCATEGORIES;
-    d->buffer.resize(0);
 }
 
 void SmugTalker::listSubCategories(qint64 categoryID)
@@ -536,7 +529,6 @@ void SmugTalker::listSubCategories(qint64 categoryID)
     d->reply = d->netMngr->get(netRequest);
 
     d->state = Private::SMUG_LISTSUBCATEGORIES;
-    d->buffer.resize(0);
 }
 */
 
@@ -575,13 +567,12 @@ void SmugTalker::createAlbum(const SmugAlbum& album)
     d->reply = d->requestor->post(netRequest, reqParams, data);
 
     d->state = Private::SMUG_CREATEALBUM;
-    d->buffer.resize(0);
 }
 
 bool SmugTalker::addPhoto(const  QString& imgPath,
-                        qint64 /*albumID*/,
-                        const  QString& albumKey,
-                        const  QString& caption)
+                          qint64 /*albumID*/,
+                          const  QString& albumKey,
+                          const  QString& caption)
 {
     if (d->reply)
     {
@@ -632,7 +623,6 @@ bool SmugTalker::addPhoto(const  QString& imgPath,
     d->reply = d->requestor->post(netRequest, reqParams, form.formData());
 
     d->state = Private::SMUG_ADDPHOTO;
-    d->buffer.resize(0);
     return true;
 }
 
@@ -660,7 +650,6 @@ void SmugTalker::getPhoto(const QString& imgPath)
     d->reply = d->netMngr->get(netRequest);
 
     d->state = Private::SMUG_GETPHOTO;
-    d->buffer.resize(0);
 }
 
 QString SmugTalker::errorToText(int errCode, const QString& errMsg) const
@@ -732,40 +721,40 @@ void SmugTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    d->buffer.append(reply->readAll());
+    QByteArray buffer = reply->readAll();
 
     switch(d->state)
     {
         case (Private::SMUG_LOGIN):
-            parseResponseLogin(d->buffer);
+            parseResponseLogin(buffer);
             break;
         case (Private::SMUG_LISTALBUMS):
-            parseResponseListAlbums(d->buffer);
+            parseResponseListAlbums(buffer);
             break;
         case (Private::SMUG_LISTPHOTOS):
-            parseResponseListPhotos(d->buffer);
+            parseResponseListPhotos(buffer);
             break;
         case (Private::SMUG_LISTALBUMTEMPLATES):
-            parseResponseListAlbumTmpl(d->buffer);
+            parseResponseListAlbumTmpl(buffer);
             break;
         /*
             case (Private::SMUG_LISTCATEGORIES):
-                parseResponseListCategories(d->buffer);
+                parseResponseListCategories(buffer);
                 break;
             case (Private::SMUG_LISTSUBCATEGORIES):
-                parseResponseListSubCategories(d->buffer);
+                parseResponseListSubCategories(buffer);
                 break;
         */
         case (Private::SMUG_CREATEALBUM):
-            parseResponseCreateAlbum(d->buffer);
+            parseResponseCreateAlbum(buffer);
             break;
         case (Private::SMUG_ADDPHOTO):
-            parseResponseAddPhoto(d->buffer);
+            parseResponseAddPhoto(buffer);
             break;
         case (Private::SMUG_GETPHOTO):
             // all we get is data of the image
             emit signalBusy(false);
-            emit signalGetPhotoDone(0, QString(), d->buffer);
+            emit signalGetPhotoDone(0, QString(), buffer);
             break;
         default: // Private::SMUG_LOGIN
             break;

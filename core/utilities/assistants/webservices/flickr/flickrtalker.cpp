@@ -75,7 +75,6 @@ public:
     }
 
     QWidget*               parent;
-    QByteArray             buffer;
 
     QString                serviceName;
     QString                apiUrl;
@@ -298,7 +297,6 @@ void FlickrTalker::maxAllowedFileSize()
     m_authProgressDlg->setLabelText(i18n("Getting the maximum allowed file size."));
     m_authProgressDlg->setMaximum(4);
     m_authProgressDlg->setValue(1);
-    d->buffer.resize(0);
 
     emit signalBusy(true);
 }
@@ -329,8 +327,6 @@ void FlickrTalker::listPhotoSets()
     d->reply = d->requestor->post(netRequest, reqParams, postData);
 
     d->state = FE_LISTPHOTOSETS;
-    d->buffer.resize(0);
-
     emit signalBusy(true);
 }
 
@@ -364,8 +360,6 @@ void FlickrTalker::getPhotoProperty(const QString& method, const QStringList& ar
     d->reply = d->requestor->post(netRequest, reqParams, postData);
 
     d->state = FE_GETPHOTOPROPERTY;
-    d->buffer.resize(0);
-
     emit signalBusy(true);
 }
 
@@ -404,8 +398,6 @@ void FlickrTalker::createPhotoSet(const QString& /*albumName*/, const QString& a
     d->reply = d->requestor->post(netRequest, reqParams, postData);
 
     d->state = FE_CREATEPHOTOSET;
-    d->buffer.resize(0);
-
     emit signalBusy(true);
 }
 
@@ -448,8 +440,6 @@ void FlickrTalker::addPhotoToPhotoSet(const QString& photoId,
         d->reply = d->requestor->post(netRequest, reqParams, postData);
 
         d->state = FE_ADDPHOTOTOPHOTOSET;
-        d->buffer.resize(0);
-
         emit signalBusy(true);
     }
 }
@@ -597,8 +587,6 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
     d->reply = d->requestor->post(netRequest, reqParams, form.formData());
 
     d->state = FE_ADDPHOTO;
-    d->buffer.resize(0);
-
     return true;
 }
 
@@ -629,8 +617,6 @@ void FlickrTalker::setGeoLocation(const QString& photoId, const QString& lat, co
     d->reply = d->requestor->post(netRequest, reqParams, postData);
 
     d->state = FE_SETGEO;
-    d->buffer.resize(0);
-
     emit signalBusy(true);
 }
 
@@ -766,44 +752,44 @@ void FlickrTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    d->buffer.append(reply->readAll());
+    QByteArray buffer = reply->readAll();
 
     switch (d->state)
     {
         case (FE_LOGIN):
-            //parseResponseLogin(d->buffer);
+            //parseResponseLogin(buffer);
             break;
 
         case (FE_LISTPHOTOSETS):
-            parseResponseListPhotoSets(d->buffer);
+            parseResponseListPhotoSets(buffer);
             break;
 
         case (FE_LISTPHOTOS):
-            parseResponseListPhotos(d->buffer);
+            parseResponseListPhotos(buffer);
             break;
 
         case (FE_GETPHOTOPROPERTY):
-            parseResponsePhotoProperty(d->buffer);
+            parseResponsePhotoProperty(buffer);
             break;
 
         case (FE_ADDPHOTO):
-            parseResponseAddPhoto(d->buffer);
+            parseResponseAddPhoto(buffer);
             break;
 
         case (FE_ADDPHOTOTOPHOTOSET):
-            parseResponseAddPhotoToPhotoSet(d->buffer);
+            parseResponseAddPhotoToPhotoSet(buffer);
             break;
 
         case (FE_CREATEPHOTOSET):
-            parseResponseCreatePhotoSet(d->buffer);
+            parseResponseCreatePhotoSet(buffer);
             break;
 
         case (FE_GETMAXSIZE):
-            parseResponseMaxSize(d->buffer);
+            parseResponseMaxSize(buffer);
             break;
 
         case (FE_SETGEO):
-            parseResponseSetGeoLocation(d->buffer);
+            parseResponseSetGeoLocation(buffer);
             break;
 
         default:  // FR_LOGOUT
