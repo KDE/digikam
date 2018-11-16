@@ -228,7 +228,7 @@ QMap<QString, QString> ODTalker::ParseUrlParameters(const QString& url)
     for (int i = 0 ; i < paramlist.count() ; ++i)
     {
         QStringList paramarg = paramlist.at(i).split('=');
-        urlParameters.insert(paramarg.at(0),paramarg.at(1));
+        urlParameters.insert(paramarg.at(0), paramarg.at(1));
     }
 
     return urlParameters;
@@ -384,7 +384,7 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
         return false;
     }
 
-    QString uploadPath = uploadFolder + QUrl(QUrl::fromLocalFile(imgPath)).fileName();
+    QString uploadPath = uploadFolder + QUrl::fromLocalFile(imgPath).fileName();
     QUrl url(QString::fromLatin1("https://graph.microsoft.com/v1.0/me/drive/root:/%1:/content").arg(uploadPath));
 
     QNetworkRequest netRequest(url);
@@ -510,7 +510,7 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
             folderPath  = parent[QLatin1String("path")].toString();
             folderName  = obj[QLatin1String("name")].toString();
 
-            path        = folderPath.section(QLatin1String("root:"), -1, 1) +
+            path        = folderPath.section(QLatin1String("root:"), -1, -1) +
                                              QLatin1Char('/') + folderName;
 
             d->folderList.append(qMakePair(path, folderName));
