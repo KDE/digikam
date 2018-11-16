@@ -116,8 +116,6 @@ public:
 
     State                           state;
 
-    QByteArray                      buffer;
-
     DMetadata                       meta;
 
     QMap<QString, QString>          urlParametersMap;
@@ -298,7 +296,6 @@ void ODTalker::createFolder(QString& path)
     d->reply = d->netMngr->post(netRequest, postData);
 
     d->state = Private::OD_CREATEFOLDER;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -312,7 +309,6 @@ void ODTalker::getUserName()
 
     d->reply = d->netMngr->get(netRequest);
     d->state = Private::OD_USERNAME;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -342,7 +338,6 @@ void ODTalker::listFolders(const QString& folder)
     d->reply = d->netMngr->get(netRequest);
 
     d->state = Private::OD_LISTFOLDERS;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -399,7 +394,6 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     d->reply = d->netMngr->put(netRequest, form.formData());
 
     d->state = Private::OD_ADDPHOTO;
-    d->buffer.resize(0);
 
     return true;
 }
@@ -426,25 +420,25 @@ void ODTalker::slotFinished(QNetworkReply* reply)
         }
     }
 
-    d->buffer.append(reply->readAll());
+    QByteArray buffer = reply->readAll();
 
     switch (d->state)
     {
         case Private::OD_LISTFOLDERS:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In OD_LISTFOLDERS";
-            parseResponseListFolders(d->buffer);
+            parseResponseListFolders(buffer);
             break;
         case Private::OD_CREATEFOLDER:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In OD_CREATEFOLDER";
-            parseResponseCreateFolder(d->buffer);
+            parseResponseCreateFolder(buffer);
             break;
         case Private::OD_ADDPHOTO:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In OD_ADDPHOTO";
-            parseResponseAddPhoto(d->buffer);
+            parseResponseAddPhoto(buffer);
             break;
         case Private::OD_USERNAME:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In OD_USERNAME";
-            parseResponseUserName(d->buffer);
+            parseResponseUserName(buffer);
             break;
         default:
             break;
