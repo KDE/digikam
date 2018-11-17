@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagefsoverlay.h"
+#include "itemfullscreenoverlay.h"
 
 // KDE includes
 
@@ -38,40 +38,40 @@
 namespace Digikam
 {
 
-ImageFsOverlayButton::ImageFsOverlayButton(QAbstractItemView* const parentView)
+ItemFullScreenOverlayButton::ItemFullScreenOverlayButton(QAbstractItemView* const parentView)
     : ItemViewHoverButton(parentView)
 {
     setup();
 }
 
-QSize ImageFsOverlayButton::sizeHint() const
+QSize ItemFullScreenOverlayButton::sizeHint() const
 {
     return QSize(32, 32);
 }
 
-QIcon ImageFsOverlayButton::icon()
+QIcon ItemFullScreenOverlayButton::icon()
 {
     return QIcon::fromTheme(QLatin1String("media-playback-start"));
 }
 
-void ImageFsOverlayButton::updateToolTip()
+void ItemFullScreenOverlayButton::updateToolTip()
 {
     setToolTip(i18nc("@info:tooltip", "Show Fullscreen"));
 }
 
 // --------------------------------------------------------------------
 
-ImageFsOverlay::ImageFsOverlay(QObject* const parent)
+ItemFullScreenOverlay::ItemFullScreenOverlay(QObject* const parent)
     : HoverButtonDelegateOverlay(parent)
 {
 }
 
-ImageFsOverlay* ImageFsOverlay::instance(QObject* const parent)
+ItemFullScreenOverlay* ItemFullScreenOverlay::instance(QObject* const parent)
 {
-    return new ImageFsOverlay(parent);
+    return new ItemFullScreenOverlay(parent);
 }
 
-void ImageFsOverlay::setActive(bool active)
+void ItemFullScreenOverlay::setActive(bool active)
 {
     HoverButtonDelegateOverlay::setActive(active);
 
@@ -84,12 +84,12 @@ void ImageFsOverlay::setActive(bool active)
     // if !active, button() is deleted
 }
 
-ItemViewHoverButton* ImageFsOverlay::createButton()
+ItemViewHoverButton* ItemFullScreenOverlay::createButton()
 {
-    return new ImageFsOverlayButton(view());
+    return new ItemFullScreenOverlayButton(view());
 }
 
-void ImageFsOverlay::updateButton(const QModelIndex& index)
+void ItemFullScreenOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
     const int size   = qBound(16, rect.width() / 8 - 2, 48);
@@ -100,7 +100,7 @@ void ImageFsOverlay::updateButton(const QModelIndex& index)
     button()->move(QPoint(x, y));
 }
 
-void ImageFsOverlay::slotClicked()
+void ItemFullScreenOverlay::slotClicked()
 {
     QModelIndex index = button()->index();
 
@@ -108,7 +108,7 @@ void ImageFsOverlay::slotClicked()
         emit signalFullscreen(affectedIndexes(index));
 }
 
-bool ImageFsOverlay::checkIndex(const QModelIndex& index) const
+bool ItemFullScreenOverlay::checkIndex(const QModelIndex& index) const
 {
     ItemInfo info = ItemModel::retrieveItemInfo(index);
 
@@ -116,12 +116,12 @@ bool ImageFsOverlay::checkIndex(const QModelIndex& index) const
             info.category() == DatabaseItem::Video);
 }
 
-void ImageFsOverlay::widgetEnterEvent()
+void ItemFullScreenOverlay::widgetEnterEvent()
 {
     widgetEnterNotifyMultiple(button()->index());
 }
 
-void ImageFsOverlay::widgetLeaveEvent()
+void ItemFullScreenOverlay::widgetLeaveEvent()
 {
     widgetLeaveNotifyMultiple();
 }

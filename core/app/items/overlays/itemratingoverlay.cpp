@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "imageratingoverlay.h"
+#include "itemratingoverlay.h"
 
 // Local includes
 
@@ -35,17 +35,17 @@
 namespace Digikam
 {
 
-ImageRatingOverlay::ImageRatingOverlay(QObject* const parent)
+ItemRatingOverlay::ItemRatingOverlay(QObject* const parent)
     : AbstractWidgetDelegateOverlay(parent)
 {
 }
 
-RatingWidget* ImageRatingOverlay::ratingWidget() const
+RatingWidget* ItemRatingOverlay::ratingWidget() const
 {
     return static_cast<RatingWidget*>(m_widget);
 }
 
-QWidget* ImageRatingOverlay::createWidget()
+QWidget* ItemRatingOverlay::createWidget()
 {
     RatingWidget* const w = new RatingWidget(parentWidget());
     w->setFading(true);
@@ -53,7 +53,7 @@ QWidget* ImageRatingOverlay::createWidget()
     return w;
 }
 
-void ImageRatingOverlay::setActive(bool active)
+void ItemRatingOverlay::setActive(bool active)
 {
     AbstractWidgetDelegateOverlay::setActive(active);
 
@@ -79,7 +79,7 @@ void ImageRatingOverlay::setActive(bool active)
     }
 }
 
-void ImageRatingOverlay::visualChange()
+void ItemRatingOverlay::visualChange()
 {
     if (m_widget &&
         m_widget->isVisible())
@@ -88,23 +88,23 @@ void ImageRatingOverlay::visualChange()
     }
 }
 
-void ImageRatingOverlay::widgetEnterEvent()
+void ItemRatingOverlay::widgetEnterEvent()
 {
     widgetEnterNotifyMultiple(m_index);
 }
 
-void ImageRatingOverlay::widgetLeaveEvent()
+void ItemRatingOverlay::widgetLeaveEvent()
 {
     widgetLeaveNotifyMultiple();
 }
 
-void ImageRatingOverlay::hide()
+void ItemRatingOverlay::hide()
 {
     delegate()->setRatingEdited(QModelIndex());
     AbstractWidgetDelegateOverlay::hide();
 }
 
-void ImageRatingOverlay::updatePosition()
+void ItemRatingOverlay::updatePosition()
 {
     if (!m_index.isValid() || !m_widget)
     {
@@ -126,7 +126,7 @@ void ImageRatingOverlay::updatePosition()
     m_widget->move(rect.topLeft());
 }
 
-void ImageRatingOverlay::updateRating()
+void ItemRatingOverlay::updateRating()
 {
     if (!m_index.isValid() || !m_widget)
     {
@@ -137,7 +137,7 @@ void ImageRatingOverlay::updateRating()
     ratingWidget()->setRating(info.rating());
 }
 
-void ImageRatingOverlay::slotRatingChanged(int rating)
+void ItemRatingOverlay::slotRatingChanged(int rating)
 {
     if (m_widget              &&
         m_widget->isVisible() &&
@@ -147,7 +147,7 @@ void ImageRatingOverlay::slotRatingChanged(int rating)
     }
 }
 
-void ImageRatingOverlay::slotEntered(const QModelIndex& index)
+void ItemRatingOverlay::slotEntered(const QModelIndex& index)
 {
     AbstractWidgetDelegateOverlay::slotEntered(index);
 
@@ -169,7 +169,7 @@ void ImageRatingOverlay::slotEntered(const QModelIndex& index)
     view()->update(m_index);
 }
 
-void ImageRatingOverlay::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void ItemRatingOverlay::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     if (m_widget              &&
         m_widget->isVisible() &&

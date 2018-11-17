@@ -35,8 +35,8 @@
 #include "itemalbumfiltermodel.h"
 #include "itemalbummodel.h"
 #include "itemdragdrop.h"
-#include "imageratingoverlay.h"
-#include "imagecoordinatesoverlay.h"
+#include "itemratingoverlay.h"
+#include "itemcoordinatesoverlay.h"
 #include "imagethumbnaildelegate.h"
 #include "fileactionmngr.h"
 
@@ -99,13 +99,13 @@ void ImageThumbnailBar::setModelsFiltered(ItemModel* model, ImageSortFilterModel
 
 void ImageThumbnailBar::installOverlays()
 {
-    ImageRatingOverlay* const ratingOverlay = new ImageRatingOverlay(this);
+    ItemRatingOverlay* const ratingOverlay = new ItemRatingOverlay(this);
     addOverlay(ratingOverlay);
 
     connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
             this, SLOT(assignRating(QList<QModelIndex>,int)));
 
-    addOverlay(new ImageCoordinatesOverlay(this));
+    addOverlay(new ItemCoordinatesOverlay(this));
 }
 
 void ImageThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)

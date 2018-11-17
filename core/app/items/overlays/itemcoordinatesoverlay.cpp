@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagecoordinatesoverlay.h"
+#include "itemcoordinatesoverlay.h"
 
 // KDE includes
 
@@ -47,29 +47,29 @@ void CoordinatesOverlayWidget::paintEvent(QPaintEvent*)
 
 // -----------------------------------------------------------------------------------------
 
-ImageCoordinatesOverlay::ImageCoordinatesOverlay(QObject* const parent)
+ItemCoordinatesOverlay::ItemCoordinatesOverlay(QObject* const parent)
     : AbstractWidgetDelegateOverlay(parent)
 {
 }
 
-CoordinatesOverlayWidget* ImageCoordinatesOverlay::buttonWidget() const
+CoordinatesOverlayWidget* ItemCoordinatesOverlay::buttonWidget() const
 {
     return static_cast<CoordinatesOverlayWidget*>(m_widget);
 }
 
-QWidget* ImageCoordinatesOverlay::createWidget()
+QWidget* ItemCoordinatesOverlay::createWidget()
 {
     QAbstractButton* const button = new CoordinatesOverlayWidget(parentWidget());
     //button->setCursor(Qt::PointingHandCursor);
     return button;
 }
 
-void ImageCoordinatesOverlay::setActive(bool active)
+void ItemCoordinatesOverlay::setActive(bool active)
 {
     AbstractWidgetDelegateOverlay::setActive(active);
 }
 
-void ImageCoordinatesOverlay::visualChange()
+void ItemCoordinatesOverlay::visualChange()
 {
     if (m_widget && m_widget->isVisible())
     {
@@ -77,7 +77,7 @@ void ImageCoordinatesOverlay::visualChange()
     }
 }
 
-void ImageCoordinatesOverlay::updatePosition()
+void ItemCoordinatesOverlay::updatePosition()
 {
     if (!m_index.isValid())
     {
@@ -92,7 +92,7 @@ void ImageCoordinatesOverlay::updatePosition()
     m_widget->move(rect.topLeft());
 }
 
-bool ImageCoordinatesOverlay::checkIndex(const QModelIndex& index) const
+bool ItemCoordinatesOverlay::checkIndex(const QModelIndex& index) const
 {
     ItemInfo info = ItemModel::retrieveItemInfo(index);
     QRect rect     = static_cast<ImageDelegate*>(delegate())->coordinatesIndicatorRect();
@@ -108,7 +108,7 @@ bool ImageCoordinatesOverlay::checkIndex(const QModelIndex& index) const
     return false;
 }
 
-void ImageCoordinatesOverlay::slotEntered(const QModelIndex& index)
+void ItemCoordinatesOverlay::slotEntered(const QModelIndex& index)
 {
     AbstractWidgetDelegateOverlay::slotEntered(index);
     m_index = index;

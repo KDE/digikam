@@ -59,9 +59,9 @@
 #include "itemalbumfiltermodel.h"
 #include "itemalbummodel.h"
 #include "itemdragdrop.h"
-#include "imageratingoverlay.h"
-#include "imagefsoverlay.h"
-#include "imagecoordinatesoverlay.h"
+#include "itemratingoverlay.h"
+#include "itemfullscreenoverlay.h"
+#include "itemcoordinatesoverlay.h"
 #include "tagslineeditoverlay.h"
 #include "imageviewutilities.h"
 #include "imagewindow.h"
@@ -120,13 +120,13 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     addSelectionOverlay(d->faceDelegate);
 
     // rotation overlays
-    d->rotateLeftOverlay  = ImageRotateOverlay::left(this);
-    d->rotateRightOverlay = ImageRotateOverlay::right(this);
-    d->fullscreenOverlay  = ImageFsOverlay::instance(this);
+    d->rotateLeftOverlay  = ItemRotateOverlay::left(this);
+    d->rotateRightOverlay = ItemRotateOverlay::right(this);
+    d->fullscreenOverlay  = ItemFullScreenOverlay::instance(this);
     d->updateOverlays();
 
     // rating overlay
-    ImageRatingOverlay* const ratingOverlay = new ImageRatingOverlay(this);
+    ItemRatingOverlay* const ratingOverlay = new ItemRatingOverlay(this);
     addOverlay(ratingOverlay);
 
     // face overlays
@@ -137,7 +137,7 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     GroupIndicatorOverlay* const groupOverlay = new GroupIndicatorOverlay(this);
     addOverlay(groupOverlay);
 
-    addOverlay(new ImageCoordinatesOverlay(this));
+    addOverlay(new ItemCoordinatesOverlay(this));
 
     connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
             this, SLOT(assignRating(QList<QModelIndex>,int)));

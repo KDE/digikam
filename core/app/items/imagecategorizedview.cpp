@@ -42,7 +42,7 @@
 #include "imagedelegate.h"
 #include "itemdelegateoverlay.h"
 #include "itemthumbnailmodel.h"
-#include "imageselectionoverlay.h"
+#include "itemselectionoverlay.h"
 #include "itemviewtooltip.h"
 #include "loadingcacheinterface.h"
 #include "thumbnailloadthread.h"
@@ -599,7 +599,7 @@ void ImageCategorizedView::slotDelayedEnter()
 
 void ImageCategorizedView::addSelectionOverlay(ImageDelegate* delegate)
 {
-    addOverlay(new ImageSelectionOverlay(this), delegate);
+    addOverlay(new ItemSelectionOverlay(this), delegate);
 }
 
 void ImageCategorizedView::scrollToStoredItem()

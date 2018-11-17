@@ -35,8 +35,8 @@
 #include "digikam_config.h"
 #include "digikamimageview.h"
 #include "digikamimagedelegate.h"
-#include "imagerotationoverlay.h"
-#include "imagefsoverlay.h"
+#include "itemrotationoverlay.h"
+#include "itemfullscreenoverlay.h"
 #include "applicationsettings.h"
 #include "facepipeline.h"
 
@@ -71,9 +71,9 @@ public:
     bool                      overlaysActive;
     bool                      fullscreenActive;
 
-    ImageRotateOverlay*       rotateLeftOverlay;
-    ImageRotateOverlay*       rotateRightOverlay;
-    ImageFsOverlay*           fullscreenOverlay;
+    ItemRotateOverlay*       rotateLeftOverlay;
+    ItemRotateOverlay*       rotateRightOverlay;
+    ItemFullScreenOverlay*           fullscreenOverlay;
 
     bool                      faceMode;
 

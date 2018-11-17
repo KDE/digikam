@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagerotationoverlay.h"
+#include "itemrotationoverlay.h"
 
 // KDE includes
 
@@ -37,21 +37,21 @@
 namespace Digikam
 {
 
-ImageRotateOverlayButton::ImageRotateOverlayButton(ImageRotateOverlayDirection dir, QAbstractItemView* const parentView)
+ItemRotateOverlayButton::ItemRotateOverlayButton(ItemRotateOverlayDirection dir, QAbstractItemView* const parentView)
     : ItemViewHoverButton(parentView),
       m_direction(dir)
 {
     setup();
 }
 
-QSize ImageRotateOverlayButton::sizeHint() const
+QSize ItemRotateOverlayButton::sizeHint() const
 {
     return QSize(32, 32);
 }
 
-QIcon ImageRotateOverlayButton::icon()
+QIcon ItemRotateOverlayButton::icon()
 {
-    if (m_direction == ImageRotateOverlayLeft)
+    if (m_direction == ItemRotateOverlayLeft)
     {
         return QIcon::fromTheme(QLatin1String("object-rotate-left"));
     }
@@ -61,9 +61,9 @@ QIcon ImageRotateOverlayButton::icon()
     }
 }
 
-void ImageRotateOverlayButton::updateToolTip()
+void ItemRotateOverlayButton::updateToolTip()
 {
-    if (m_direction == ImageRotateOverlayLeft)
+    if (m_direction == ItemRotateOverlayLeft)
     {
         setToolTip(i18nc("@info:tooltip", "Rotate Left"));
     }
@@ -75,13 +75,13 @@ void ImageRotateOverlayButton::updateToolTip()
 
 // --------------------------------------------------------------------
 
-ImageRotateOverlay::ImageRotateOverlay(ImageRotateOverlayDirection dir, QObject* const parent)
+ItemRotateOverlay::ItemRotateOverlay(ItemRotateOverlayDirection dir, QObject* const parent)
     : HoverButtonDelegateOverlay(parent),
       m_direction(dir)
 {
 }
 
-void ImageRotateOverlay::setActive(bool active)
+void ItemRotateOverlay::setActive(bool active)
 {
     HoverButtonDelegateOverlay::setActive(active);
 
@@ -94,12 +94,12 @@ void ImageRotateOverlay::setActive(bool active)
     // if !active, button() is deleted
 }
 
-ItemViewHoverButton* ImageRotateOverlay::createButton()
+ItemViewHoverButton* ItemRotateOverlay::createButton()
 {
-    return new ImageRotateOverlayButton(m_direction, view());
+    return new ItemRotateOverlayButton(m_direction, view());
 }
 
-void ImageRotateOverlay::updateButton(const QModelIndex& index)
+void ItemRotateOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
     const int size   = qBound(16, rect.width() / 8 - 2, 48);
@@ -110,7 +110,7 @@ void ImageRotateOverlay::updateButton(const QModelIndex& index)
     button()->move(QPoint(x, y));
 }
 
-void ImageRotateOverlay::slotClicked()
+void ItemRotateOverlay::slotClicked()
 {
     QModelIndex index = button()->index();
 
@@ -124,19 +124,19 @@ void ImageRotateOverlay::slotClicked()
     }
 }
 
-bool ImageRotateOverlay::checkIndex(const QModelIndex& index) const
+bool ItemRotateOverlay::checkIndex(const QModelIndex& index) const
 {
     ItemInfo info = ItemModel::retrieveItemInfo(index);
     return (info.category() == DatabaseItem::Image ||
             info.category() == DatabaseItem::Video);
 }
 
-void ImageRotateOverlay::widgetEnterEvent()
+void ItemRotateOverlay::widgetEnterEvent()
 {
     widgetEnterNotifyMultiple(button()->index());
 }
 
-void ImageRotateOverlay::widgetLeaveEvent()
+void ItemRotateOverlay::widgetLeaveEvent()
 {
     widgetLeaveNotifyMultiple();
 }

@@ -340,11 +340,11 @@ set(libdigikamgui_SRCS
     items/overlays/assignnameoverlay.cpp
     items/overlays/facerejectionoverlay.cpp
     items/overlays/groupindicatoroverlay.cpp
-    items/overlays/imagefsoverlay.cpp
-    items/overlays/imageratingoverlay.cpp
-    items/overlays/imagerotationoverlay.cpp
-    items/overlays/imagecoordinatesoverlay.cpp
-    items/overlays/imageselectionoverlay.cpp
+    items/overlays/itemfullscreenoverlay.cpp
+    items/overlays/itemratingoverlay.cpp
+    items/overlays/itemrotationoverlay.cpp
+    items/overlays/itemcoordinatesoverlay.cpp
+    items/overlays/itemselectionoverlay.cpp
 
     utils/contextmenuhelper.cpp
     utils/digikam_debug.cpp
