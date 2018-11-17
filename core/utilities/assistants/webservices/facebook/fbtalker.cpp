@@ -84,12 +84,12 @@ public:
         apiURL(QLatin1String("https://graph.facebook.com/%1/%2")),
         authUrl(QLatin1String("https://www.facebook.com/dialog/oauth")),
         tokenUrl(QLatin1String("https://graph.facebook.com/oauth/access_token")),
+        scope(QLatin1String("user_photos,publish_pages,manage_pages")), //publish_to_groups,user_friends not necessary?
         apikey(QLatin1String("400589753481372")),
         clientSecret(QLatin1String("5b0b5cd096e110cd4f4c72f517e2c544")),
         loginInProgress(false),
         albumDlg(dynamic_cast<FbNewAlbumDlg*>(albumDlg)),
-        o2(0),
-        scope(QLatin1String("user_photos,publish_pages,manage_pages")) //publish_to_groups,user_friends not necessary?
+        o2(0)
     {
     }
 
@@ -99,6 +99,7 @@ public:
     QString                apiURL;
     QString                authUrl;
     QString                tokenUrl;
+    QString                scope;
     QString                apikey;
     QString                clientSecret;
 
@@ -109,7 +110,6 @@ public:
 
     //Ported to O2 here
     O2*                    o2;
-    QString                scope;
 };
 
 // -----------------------------------------------------------------------------
@@ -118,11 +118,11 @@ FbTalker::FbTalker(QWidget* const parent, WSNewAlbumDialog* albumDlg)
     : WSTalker(parent),
       d(new Private(albumDlg))
 {
-    d->parent  = parent;
+    d->parent = parent;
 
     //TODO: Ported to O2 here
 
-    d->o2      = new O2(this);
+    d->o2     = new O2(this);
 
     d->o2->setClientId(d->apikey);
     d->o2->setClientSecret(d->clientSecret);
@@ -154,6 +154,11 @@ FbTalker::FbTalker(QWidget* const parent, WSNewAlbumDialog* albumDlg)
 
 FbTalker::~FbTalker()
 {
+    if (m_reply)
+    {
+        m_reply->abort();
+    }
+
     delete d;
 }
 
@@ -234,6 +239,7 @@ void FbTalker::getLoggedInUser()
     m_state = WSTalker::GETUSER;
     m_buffer.resize(0);
 }
+
 // ----------------------------------------------------------------------------------------------
 
 /** Compute MD5 signature using url queries keys and values:
@@ -241,30 +247,28 @@ void FbTalker::getLoggedInUser()
  *  This method was used for the legacy authentication scheme and has been obsoleted with OAuth2 authentication.
  */
 /*
- Q S*tring FbTalker::getApiSig(const QMap<QString, QString>& args)
- {
- QString concat;
- // NOTE: QMap iterator will sort alphabetically
- 
- for (QMap<QString, QString>::const_iterator it = args.constBegin();
- it != args.constEnd();
- ++it)
- {
- concat.append(it.key());
- concat.append("=");
- concat.append(it.value());
-}
+QString FbTalker::getApiSig(const QMap<QString, QString>& args)
+{
+    QString concat;
+    // NOTE: QMap iterator will sort alphabetically
 
-if (args["session_key"].isEmpty())
-    concat.append(d->clientSecret);
-else
-    concat.append(d->sessionSecret);
+    for (QMap<QString, QString>::const_iterator it = args.constBegin() ;
+         it != args.constEnd() ; ++it)
+    {
+        concat.append(it.key());
+        concat.append("=");
+        concat.append(it.value());
+    }
 
-KMD5 md5(concat.toUtf8());
-return md5.hexDigest().data();
+    if (args["session_key"].isEmpty())
+        concat.append(d->clientSecret);
+    else
+        concat.append(d->sessionSecret);
+
+    KMD5 md5(concat.toUtf8());
+    return md5.hexDigest().data();
 }
 */
-
 
 void FbTalker::logout()
 {
@@ -289,9 +293,9 @@ void FbTalker::logout()
     emit signalBusy(false);
 }
 
-
 //TODO: Ported to O2
 //----------------------------------------------------------------------------------------------------
+
 void FbTalker::listAlbums(long long userID)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Requesting albums for user " << userID;
@@ -310,7 +314,7 @@ void FbTalker::listAlbums(long long userID)
      * If userID is specified, load albums of that user,
      * else load albums of current user
      */
-    if(!userID)
+    if (!userID)
     {
         url = QUrl(d->apiURL.arg(d->user.id)
                             .arg("albums"));
@@ -381,7 +385,7 @@ void FbTalker::createAlbum(const FbAlbum& album)
     }
 
     QUrl url(QUrl(d->apiURL.arg(d->user.id)
-                            .arg("albums")));
+                           .arg("albums")));
 //     url.setQuery(params);
 
     QNetworkRequest netRequest(url);
@@ -406,7 +410,7 @@ void FbTalker::createNewAlbum()
 void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QString& caption)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Adding photo " << imgPath << " to album with id "
-                                    << albumID << " using caption '" << caption << "'";
+                                     << albumID << " using caption '" << caption << "'";
 
     if (m_reply)
     {
@@ -424,9 +428,8 @@ void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
 
     FbMPForm form;
 
-    for (QMap<QString, QString>::const_iterator it = args.constBegin();
-        it != args.constEnd();
-        ++it)
+    for (QMap<QString, QString>::const_iterator it = args.constBegin() ;
+        it != args.constEnd() ; ++it)
     {
         form.addPair(it.key(), it.value());
     }
@@ -461,6 +464,7 @@ void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
     m_state = WSTalker::ADDPHOTO;
     m_buffer.resize(0);
 }
+
 //----------------------------------------------------------------------------------------------------
 
 QString FbTalker::errorToText(int errCode, const QString &errMsg)
@@ -560,7 +564,7 @@ void FbTalker::slotFinished(QNetworkReply* reply)
 }
 */
 
-void FbTalker::authenticationDone(int errCode, const QString &errMsg)
+void FbTalker::authenticationDone(int errCode, const QString& errMsg)
 {
     if (errCode != 0)
     {
@@ -581,9 +585,8 @@ int FbTalker::parseErrorResponse(const QDomElement& e, QString& errMsg)
 {
     int errCode = -1;
 
-    for (QDomNode node = e.firstChild();
-         !node.isNull();
-         node = node.nextSibling())
+    for (QDomNode node = e.firstChild() ;
+         !node.isNull() ; node = node.nextSibling())
     {
         if (!node.isElement())
             continue;
@@ -725,7 +728,7 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
     {
         QJsonArray jsonArray = jsonObject[QLatin1String("data")].toArray();
 
-        foreach (const QJsonValue & value, jsonArray)
+        foreach (const QJsonValue& value, jsonArray)
         {
             QJsonObject obj   = value.toObject();
             WSAlbum album; //FbAlbum album;

@@ -123,7 +123,7 @@ FbWindow::FbWindow(DInfoInterface* const iface,
       d(new Private(this, iface))
 {
     d->tmpPath.clear();
-    d->tmpDir      = WSToolUtils::makeTemporaryDir("facebook").absolutePath() + QLatin1Char('/');
+    d->tmpDir = WSToolUtils::makeTemporaryDir("facebook").absolutePath() + QLatin1Char('/');
 
     setMainWidget(d->widget);
     setModal(false);
@@ -186,6 +186,7 @@ FbWindow::FbWindow(DInfoInterface* const iface,
             this, SLOT(slotStopAndCloseProgressBar()));
 
     // ------------------------------------------------------------------------
+
     readSettings();
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
@@ -383,7 +384,7 @@ void FbWindow::slotListAlbumsDone(int errCode,
 {
     QString albumDebug = QLatin1String("");
 
-    foreach(const FbAlbum &album, albumsList)
+    foreach (const FbAlbum& album, albumsList)
     {
         albumDebug.append(QString::fromLatin1("%1: %2\n").arg(album.id).arg(album.title));
     }
@@ -431,10 +432,9 @@ void FbWindow::slotListAlbumsDone(int errCode,
                 break;
         }
 
-        d->albumsCoB->addItem(
-            QIcon::fromTheme(albumIcon),
-            albumsList.at(i).title,
-            albumsList.at(i).id);
+        d->albumsCoB->addItem(QIcon::fromTheme(albumIcon),
+                              albumsList.at(i).title,
+                              albumsList.at(i).id);
 
         if (d->currentAlbumID == albumsList.at(i).id)
         {
@@ -477,13 +477,14 @@ void FbWindow::slotUserLogout()
     d->talker->logout();
 
     QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
-                                                    i18n("Warning"),
-                                                    i18n("You will be logged out of your account. If you have logged out of facebook,"
-                                                    "click \"Continue\" to authenticate for another account."),
-                                                    QMessageBox::Yes | QMessageBox::No);
+                i18n("Warning"),
+                i18n("You will be logged out of your account. If you have "
+                     "logged out of facebook, click \"Continue\" to "
+                     "authenticate for another account."),
+                QMessageBox::Yes | QMessageBox::No);
 
-    (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
-    (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
+    warn->button(QMessageBox::Yes)->setText(i18n("Continue"));
+    warn->button(QMessageBox::No)->setText(i18n("Cancel"));
 
     if (warn->exec() == QMessageBox::Yes)
     {
@@ -561,8 +562,7 @@ void FbWindow::setProfileAID(long long userID)
 {
     // store AID of Profile Photos album
     // http://wiki.developers.facebook.com/index.php/Profile_archive_album
-    d->profileAID = QString::number((userID << 32)
-                                   + (-3 & 0xFFFFFFFF));
+    d->profileAID = QString::number((userID << 32) + (-3 & 0xFFFFFFFF));
 }
 
 QString FbWindow::getImageCaption(const QString& fileName)
@@ -595,8 +595,8 @@ bool FbWindow::prepareImageForUpload(const QString& imgPath, QString& caption)
     // rescale image if requested
     int maxDim = d->dimensionSpB->value();
 
-    if (d->resizeChB->isChecked()
-        && (image.width() > maxDim || image.height() > maxDim))
+    if (d->resizeChB->isChecked() &&
+        (image.width() > maxDim || image.height() > maxDim))
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing to " << maxDim;
         image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio,
