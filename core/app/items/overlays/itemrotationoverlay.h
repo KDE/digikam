@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_ROTATION_OVERLAY_H
-#define DIGIKAM_IMAGE_ROTATION_OVERLAY_H
+#ifndef DIGIKAM_ITEM_ROTATION_OVERLAY_H
+#define DIGIKAM_ITEM_ROTATION_OVERLAY_H
 
 // Qt includes
 
@@ -36,17 +36,17 @@
 namespace Digikam
 {
 
-enum ImageRotateOverlayDirection
+enum ItemRotateOverlayDirection
 {
-    ImageRotateOverlayLeft,
-    ImageRotateOverlayRight
+    ItemRotateOverlayLeft,
+    ItemRotateOverlayRight
 };
 
-class ImageRotateOverlayButton : public ItemViewHoverButton
+class ItemRotateOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    ImageRotateOverlayButton(ImageRotateOverlayDirection dir, QAbstractItemView* const parentView);
+    ItemRotateOverlayButton(ItemRotateOverlayDirection dir, QAbstractItemView* const parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -56,26 +56,26 @@ protected:
 
 protected:
 
-    ImageRotateOverlayDirection const m_direction;
+    ItemRotateOverlayDirection const m_direction;
 };
 
 // --------------------------------------------------------------------
 
-class ImageRotateOverlay : public HoverButtonDelegateOverlay
+class ItemRotateOverlay : public HoverButtonDelegateOverlay
 {
     Q_OBJECT
 
 public:
 
-    ImageRotateOverlay(ImageRotateOverlayDirection dir, QObject* const parent);
+    ItemRotateOverlay(ItemRotateOverlayDirection dir, QObject* const parent);
     virtual void setActive(bool active);
 
-    ImageRotateOverlayDirection direction() const { return m_direction; }
-    bool isLeft() const  { return m_direction  == ImageRotateOverlayLeft; }
-    bool isRight() const { return m_direction == ImageRotateOverlayRight; }
+    ItemRotateOverlayDirection direction() const { return m_direction; }
+    bool isLeft() const  { return m_direction  == ItemRotateOverlayLeft; }
+    bool isRight() const { return m_direction == ItemRotateOverlayRight; }
 
-    static ImageRotateOverlay* left(QObject* parent)  { return new ImageRotateOverlay(ImageRotateOverlayLeft, parent);  }
-    static ImageRotateOverlay* right(QObject* parent) { return new ImageRotateOverlay(ImageRotateOverlayRight, parent); }
+    static ItemRotateOverlay* left(QObject* parent)  { return new ItemRotateOverlay(ItemRotateOverlayLeft, parent);  }
+    static ItemRotateOverlay* right(QObject* parent) { return new ItemRotateOverlay(ItemRotateOverlayRight, parent); }
 
 Q_SIGNALS:
 
@@ -95,9 +95,9 @@ private Q_SLOTS:
 
 private:
 
-    ImageRotateOverlayDirection const m_direction;
+    ItemRotateOverlayDirection const m_direction;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_ROTATION_OVERLAY_H
+#endif // DIGIKAM_ITEM_ROTATION_OVERLAY_H

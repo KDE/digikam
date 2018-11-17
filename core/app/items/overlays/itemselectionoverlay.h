@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_SELECTION_OVERLAY_H
-#define DIGIKAM_IMAGE_SELECTION_OVERLAY_H
+#ifndef DIGIKAM_ITEM_SELECTION_OVERLAY_H
+#define DIGIKAM_ITEM_SELECTION_OVERLAY_H
 
 // Qt includes
 
@@ -36,11 +36,11 @@
 namespace Digikam
 {
 
-class ImageSelectionOverlayButton : public ItemViewHoverButton
+class ItemSelectionOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    explicit ImageSelectionOverlayButton(QAbstractItemView* parentView);
+    explicit ItemSelectionOverlayButton(QAbstractItemView* parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -51,13 +51,13 @@ protected:
 
 // --------------------------------------------------------------------
 
-class ImageSelectionOverlay : public HoverButtonDelegateOverlay
+class ItemSelectionOverlay : public HoverButtonDelegateOverlay
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageSelectionOverlay(QObject* parent);
+    explicit ItemSelectionOverlay(QObject* parent);
     virtual void setActive(bool active);
 
 protected:
@@ -73,4 +73,4 @@ protected Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_SELECTION_OVERLAY_H
+#endif // DIGIKAM_ITEM_SELECTION_OVERLAY_H

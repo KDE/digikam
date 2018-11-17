@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imageselectionoverlay.h"
+#include "itemselectionoverlay.h"
 
 // KDE includes
 
@@ -36,24 +36,24 @@
 namespace Digikam
 {
 
-ImageSelectionOverlayButton::ImageSelectionOverlayButton(QAbstractItemView* parentView)
+ItemSelectionOverlayButton::ItemSelectionOverlayButton(QAbstractItemView* parentView)
     : ItemViewHoverButton(parentView)
 {
     setup();
 }
 
-QSize ImageSelectionOverlayButton::sizeHint() const
+QSize ItemSelectionOverlayButton::sizeHint() const
 {
     return QSize(32, 32);
 }
 
-QIcon ImageSelectionOverlayButton::icon()
+QIcon ItemSelectionOverlayButton::icon()
 {
     return QIcon::fromTheme(isChecked() ? QLatin1String("vcs-removed")
                                         : QLatin1String("vcs-added"));
 }
 
-void ImageSelectionOverlayButton::updateToolTip()
+void ItemSelectionOverlayButton::updateToolTip()
 {
     setToolTip(isChecked() ? i18nc("@info:tooltip", "Deselect Item") :
                i18nc("@info:tooltip", "Select Item"));
@@ -61,12 +61,12 @@ void ImageSelectionOverlayButton::updateToolTip()
 
 // --------------------------------------------------------------------
 
-ImageSelectionOverlay::ImageSelectionOverlay(QObject* parent)
+ItemSelectionOverlay::ItemSelectionOverlay(QObject* parent)
     : HoverButtonDelegateOverlay(parent)
 {
 }
 
-void ImageSelectionOverlay::setActive(bool active)
+void ItemSelectionOverlay::setActive(bool active)
 {
     HoverButtonDelegateOverlay::setActive(active);
 
@@ -90,12 +90,12 @@ void ImageSelectionOverlay::setActive(bool active)
     }
 }
 
-ItemViewHoverButton* ImageSelectionOverlay::createButton()
+ItemViewHoverButton* ItemSelectionOverlay::createButton()
 {
-    return new ImageSelectionOverlayButton(view());
+    return new ItemSelectionOverlayButton(view());
 }
 
-void ImageSelectionOverlay::updateButton(const QModelIndex& index)
+void ItemSelectionOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
     const int size   = qBound(16, rect.width() / 8 - 2, 48);
@@ -109,7 +109,7 @@ void ImageSelectionOverlay::updateButton(const QModelIndex& index)
     button()->setChecked(selModel->isSelected(index));
 }
 
-void ImageSelectionOverlay::slotClicked(bool checked)
+void ItemSelectionOverlay::slotClicked(bool checked)
 {
     QModelIndex index = button()->index();
 
@@ -130,7 +130,7 @@ void ImageSelectionOverlay::slotClicked(bool checked)
     }
 }
 
-void ImageSelectionOverlay::slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+void ItemSelectionOverlay::slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
     QModelIndex index = button()->index();
 

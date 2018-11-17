@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_FS_OVERLAY_H
-#define DIGIKAM_IMAGE_FS_OVERLAY_H
+#ifndef DIGIKAM_ITEM_FULL_SCREEN_OVERLAY_H
+#define DIGIKAM_ITEM_FULL_SCREEN_OVERLAY_H
 
 // Qt includes
 
@@ -38,11 +38,11 @@
 namespace Digikam
 {
 
-class ImageFsOverlayButton : public ItemViewHoverButton
+class ItemFullScreenOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    explicit ImageFsOverlayButton(QAbstractItemView* const parentView);
+    explicit ItemFullScreenOverlayButton(QAbstractItemView* const parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -53,16 +53,16 @@ protected:
 
 // --------------------------------------------------------------------
 
-class ImageFsOverlay : public HoverButtonDelegateOverlay
+class ItemFullScreenOverlay : public HoverButtonDelegateOverlay
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageFsOverlay(QObject* const parent);
+    explicit ItemFullScreenOverlay(QObject* const parent);
     virtual void setActive(bool active);
 
-    static ImageFsOverlay* instance(QObject* const parent);
+    static ItemFullScreenOverlay* instance(QObject* const parent);
 
 Q_SIGNALS:
 
@@ -83,4 +83,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_FS_OVERLAY_H
+#endif // DIGIKAM_ITEM_FULL_SCREEN_OVERLAY_H

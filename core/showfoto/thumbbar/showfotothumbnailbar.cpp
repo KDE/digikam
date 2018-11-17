@@ -37,7 +37,7 @@
 #include "itemviewtooltip.h"
 #include "showfototooltipfiller.h"
 #include "showfotocategorizedview.h"
-#include "imageselectionoverlay.h"
+#include "itemselectionoverlay.h"
 #include "showfotokineticscroller.h"
 #include "showfotocoordinatesoverlay.h"
 

@@ -3,11 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-04-30
- * Description : rating icon view item at mouse hover
+ * Date        : 2014-05-28
+ * Description : overlay for GPS location indicator
  *
- * Copyright (C) 2009      by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,57 +21,57 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_RATING_OVERLAY_H
-#define DIGIKAM_IMAGE_RATING_OVERLAY_H
+#ifndef DIGIKAM_ITEM_COORDINATES_OVERLAY_H
+#define DIGIKAM_ITEM_COORDINATES_OVERLAY_H
 
 // Qt includes
 
+#include <QAbstractButton>
 #include <QAbstractItemView>
 
 // Local includes
 
+#include "itemviewhoverbutton.h"
 #include "itemdelegateoverlay.h"
 #include "itemviewimagedelegate.h"
 
 namespace Digikam
 {
 
-class RatingWidget;
+class CoordinatesOverlayWidget : public QAbstractButton
+{
+    Q_OBJECT
 
-class ImageRatingOverlay : public AbstractWidgetDelegateOverlay
+public:
+
+    explicit CoordinatesOverlayWidget(QWidget* const parent = 0);
+
+protected:
+
+    virtual void paintEvent(QPaintEvent*);
+};
+
+// ----------------------------------------------------------------------
+
+class ItemCoordinatesOverlay : public AbstractWidgetDelegateOverlay
 {
     Q_OBJECT
     REQUIRE_DELEGATE(ItemViewImageDelegate)
 
 public:
 
-    explicit ImageRatingOverlay(QObject* const parent);
-
-    RatingWidget* ratingWidget() const;
-
-Q_SIGNALS:
-
-    void ratingEdited(const QList<QModelIndex>& indexes, int rating);
-
-protected Q_SLOTS:
-
-    void slotRatingChanged(int);
-    void slotDataChanged(const QModelIndex&, const QModelIndex&);
+    explicit ItemCoordinatesOverlay(QObject* const parent);
+    CoordinatesOverlayWidget* buttonWidget() const;
 
 protected:
 
     void updatePosition();
-    void updateRating();
-
-protected:
 
     virtual QWidget* createWidget();
-    virtual void setActive(bool);
+    virtual void setActive(bool active);
     virtual void visualChange();
-    virtual void hide();
+    virtual bool checkIndex(const QModelIndex& index) const;
     virtual void slotEntered(const QModelIndex& index);
-    virtual void widgetEnterEvent();
-    virtual void widgetLeaveEvent();
 
 protected:
 
@@ -81,4 +80,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_RATING_OVERLAY_H
+#endif // DIGIKAM_ITEM_COORDINATES_OVERLAY_H
