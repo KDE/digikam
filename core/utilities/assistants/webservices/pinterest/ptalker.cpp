@@ -137,9 +137,12 @@ public:
 PTalker::PTalker(QWidget* const parent)
     : d(new Private)
 {
-    d->parent  = parent;
-    d->netMngr = new QNetworkAccessManager(this);
-    d->view    = new WebWidget(d->parent);
+    d->parent   = parent;
+    d->netMngr  = new QNetworkAccessManager(this);
+    d->view     = new WebWidget(d->parent);
+    d->view->resize(800, 600);
+
+    d->settings = WSToolUtils::getOauthSettings(this);
 
 #ifndef HAVE_QWEBENGINE
     d->view->settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
@@ -180,8 +183,8 @@ void PTalker::link()
     url.setQuery(query);
 
     d->view->setWindowFlags(Qt::Dialog);
-    d->view->show();
     d->view->load(url);
+    d->view->show();
 
     connect(d->view, SIGNAL(urlChanged(QUrl)),
             this, SLOT(slotCatchUrl(QUrl)));
