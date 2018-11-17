@@ -335,7 +335,7 @@ set(libdigikamgui_SRCS
     items/imagedelegate.cpp
     items/imagethumbnailbar.cpp
     items/imagethumbnaildelegate.cpp
-    items/imageviewutilities.cpp
+    items/itemviewutilities.cpp
     items/digikamimagefacedelegate.cpp
     items/overlays/assignnameoverlay.cpp
     items/overlays/facerejectionoverlay.cpp

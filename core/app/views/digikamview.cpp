@@ -67,7 +67,7 @@
 #include "itempropertiessidebardb.h"
 #include "itempropertiesversionstab.h"
 #include "imagethumbnailbar.h"
-#include "imageviewutilities.h"
+#include "itemviewutilities.h"
 #include "leftsidebarwidgets.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
@@ -188,7 +188,7 @@ public:
     DigikamImageView*             iconView;
     TableView*                    tableView;
     TrashView*                    trashView;
-    ImageViewUtilities*           utilities;
+    ItemViewUtilities*           utilities;
     AlbumManager*                 albumManager;
     AlbumHistory*                 albumHistory;
     StackedView*                  stackedview;
@@ -1907,11 +1907,11 @@ void DigikamView::slotImageDelete()
     switch (viewMode())
     {
         case StackedView::TableViewMode:
-            d->tableView->slotDeleteSelected(ImageViewUtilities::DeleteUseTrash);
+            d->tableView->slotDeleteSelected(ItemViewUtilities::DeleteUseTrash);
             break;
 
         default:
-            d->iconView->deleteSelected(ImageViewUtilities::DeleteUseTrash);
+            d->iconView->deleteSelected(ItemViewUtilities::DeleteUseTrash);
     }
 }
 
@@ -1920,11 +1920,11 @@ void DigikamView::slotImageDeletePermanently()
     switch (viewMode())
     {
         case StackedView::TableViewMode:
-            d->tableView->slotDeleteSelected(ImageViewUtilities::DeletePermanently);
+            d->tableView->slotDeleteSelected(ItemViewUtilities::DeletePermanently);
             break;
 
         default:
-            d->iconView->deleteSelected(ImageViewUtilities::DeletePermanently);
+            d->iconView->deleteSelected(ItemViewUtilities::DeletePermanently);
     }
 }
 
@@ -1933,11 +1933,11 @@ void DigikamView::slotImageDeletePermanentlyDirectly()
     switch (viewMode())
     {
         case StackedView::TableViewMode:
-            d->tableView->slotDeleteSelectedWithoutConfirmation(ImageViewUtilities::DeletePermanently);
+            d->tableView->slotDeleteSelectedWithoutConfirmation(ItemViewUtilities::DeletePermanently);
             break;
 
         default:
-            d->iconView->deleteSelectedDirectly(ImageViewUtilities::DeletePermanently);
+            d->iconView->deleteSelectedDirectly(ItemViewUtilities::DeletePermanently);
     }
 }
 
@@ -1946,11 +1946,11 @@ void DigikamView::slotImageTrashDirectly()
     switch (viewMode())
     {
         case StackedView::TableViewMode:
-            d->tableView->slotDeleteSelectedWithoutConfirmation(ImageViewUtilities::DeleteUseTrash);
+            d->tableView->slotDeleteSelectedWithoutConfirmation(ItemViewUtilities::DeleteUseTrash);
             break;
 
         default:
-            d->iconView->deleteSelectedDirectly(ImageViewUtilities::DeleteUseTrash);
+            d->iconView->deleteSelectedDirectly(ItemViewUtilities::DeleteUseTrash);
     }
 }
 

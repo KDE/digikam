@@ -61,7 +61,7 @@ public:
 
 public:
 
-    ImageViewUtilities*       utilities;
+    ItemViewUtilities*       utilities;
 
     FacePipeline              editPipeline;
 

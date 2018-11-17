@@ -33,7 +33,7 @@
 #include "applicationsettings.h"
 #include "dcategorizedsortfilterproxymodel.h"
 #include "digikam_export.h"
-#include "imageviewutilities.h"
+#include "itemviewutilities.h"
 #include "iteminfo.h"
 #include "statesavingobject.h"
 
@@ -95,8 +95,8 @@ public Q_SLOTS:
     void slotGoToRow(const int rowNumber, const bool relativeMove);
     void slotSetCurrentWhenAvailable(const qlonglong id);
     void slotAwayFromSelection();
-    void slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
-    void slotDeleteSelectedWithoutConfirmation(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
+    void slotDeleteSelected(const ItemViewUtilities::DeleteMode deleteMode = ItemViewUtilities::DeleteUseTrash);
+    void slotDeleteSelectedWithoutConfirmation(const ItemViewUtilities::DeleteMode deleteMode = ItemViewUtilities::DeleteUseTrash);
     void slotSetActive(const bool isActive);
     void slotPaste();
     void rename();

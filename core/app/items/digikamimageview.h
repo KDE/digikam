@@ -29,13 +29,13 @@
 
 #include "applicationsettings.h"
 #include "imagecategorizedview.h"
-#include "imageviewutilities.h"
+#include "itemviewutilities.h"
 #include "groupingviewimplementation.h"
 
 namespace Digikam
 {
 
-class ImageViewUtilities;
+class ItemViewUtilities;
 class ItemInfoList;
 
 class DigikamImageView : public ImageCategorizedView, public GroupingViewImplementation
@@ -47,7 +47,7 @@ public:
     explicit DigikamImageView(QWidget* const parent = 0);
     ~DigikamImageView();
 
-    ImageViewUtilities* utilities() const;
+    ItemViewUtilities* utilities() const;
 
     int  fitToWidthIcons();
 
@@ -63,8 +63,8 @@ public Q_SLOTS:
 
     void openFile(const ItemInfo& info);
 
-    void deleteSelected(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
-    void deleteSelectedDirectly(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
+    void deleteSelected(const ItemViewUtilities::DeleteMode deleteMode = ItemViewUtilities::DeleteUseTrash);
+    void deleteSelectedDirectly(const ItemViewUtilities::DeleteMode deleteMode = ItemViewUtilities::DeleteUseTrash);
 
     void rename();
 

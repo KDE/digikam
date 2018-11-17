@@ -44,7 +44,7 @@
 #include "digikam_debug.h"
 #include "fileactionmngr.h"
 #include "album.h"
-#include "imageviewutilities.h"
+#include "itemviewutilities.h"
 #include "tableview_columnfactory.h"
 #include "tableview_model.h"
 #include "tableview_selection_model_syncer.h"
@@ -70,7 +70,7 @@ public:
 
     QList<TableViewColumnProfile> columnProfiles;
     ThumbnailSize                 thumbnailSize;
-    ImageViewUtilities*           imageViewUtilities;
+    ItemViewUtilities*           imageViewUtilities;
 };
 
 TableView::TableView(QItemSelectionModel* const selectionModel,
@@ -96,7 +96,7 @@ TableView::TableView(QItemSelectionModel* const selectionModel,
     s->treeView                      = new TableViewTreeView(s.data(), this);
     s->treeView->installEventFilter(this);
 
-    d->imageViewUtilities            = new ImageViewUtilities(this);
+    d->imageViewUtilities            = new ItemViewUtilities(this);
 
     connect(s->treeView, SIGNAL(activated(QModelIndex)),
             this, SLOT(slotItemActivated(QModelIndex)));
@@ -285,7 +285,7 @@ bool TableView::selectedNeedGroupResolving(const ApplicationSettings::OperationT
     return s->treeView->needGroupResolving(type, selectedItemInfos());
 }
 
-void TableView::slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMode)
+void TableView::slotDeleteSelected(const ItemViewUtilities::DeleteMode deleteMode)
 {
     const ItemInfoList infoList = selectedItemInfos(true);
 
@@ -296,7 +296,7 @@ void TableView::slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMo
     }
 }
 
-void TableView::slotDeleteSelectedWithoutConfirmation(const ImageViewUtilities::DeleteMode deleteMode)
+void TableView::slotDeleteSelectedWithoutConfirmation(const ItemViewUtilities::DeleteMode deleteMode)
 {
     const ItemInfoList infoList = selectedItemInfos(true);
 

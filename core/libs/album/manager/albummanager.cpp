@@ -256,7 +256,7 @@ void AlbumManager::prepareItemCounts()
 
 void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Got image deletion notification from ImageViewUtilities for " << imageIds.size() << " images.";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Got image deletion notification from ItemViewUtilities for " << imageIds.size() << " images.";
 
     QSet<SAlbum*> sAlbumsToUpdate;
     QSet<qlonglong> deletedImages = imageIds.toSet();

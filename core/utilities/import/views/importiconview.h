@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-class ImageViewUtilities;
+class ItemViewUtilities;
 
 class ImportIconView : public ImportCategorizedView
 {
@@ -43,7 +43,7 @@ public:
     explicit ImportIconView(QWidget* const parent = 0);
     ~ImportIconView();
 
-    ImageViewUtilities* utilities() const;
+    ItemViewUtilities* utilities() const;
 
     int fitToWidthIcons();
 

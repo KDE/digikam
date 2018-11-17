@@ -63,7 +63,7 @@
 #include "itemfullscreenoverlay.h"
 #include "itemcoordinatesoverlay.h"
 #include "tagslineeditoverlay.h"
-#include "imageviewutilities.h"
+#include "itemviewutilities.h"
 #include "imagewindow.h"
 #include "fileactionmngr.h"
 #include "fileactionprogress.h"
@@ -148,7 +148,7 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     connect(groupOverlay, SIGNAL(showButtonContextMenu(QModelIndex,QContextMenuEvent*)),
             this, SLOT(showGroupContextMenu(QModelIndex,QContextMenuEvent*)));
 
-    d->utilities = new ImageViewUtilities(this);
+    d->utilities = new ItemViewUtilities(this);
 
     connect(imageModel()->dragDropHandler(), SIGNAL(assignTags(QList<ItemInfo>,QList<int>)),
             FileActionMngr::instance(), SLOT(assignTags(QList<ItemInfo>,QList<int>)));
@@ -173,7 +173,7 @@ DigikamImageView::~DigikamImageView()
     delete d;
 }
 
-ImageViewUtilities* DigikamImageView::utilities() const
+ItemViewUtilities* DigikamImageView::utilities() const
 {
     return d->utilities;
 }
@@ -463,7 +463,7 @@ void DigikamImageView::openFile(const ItemInfo& info)
     d->utilities->openInfos(info, allItemInfos(), currentAlbum());
 }
 
-void DigikamImageView::deleteSelected(const ImageViewUtilities::DeleteMode deleteMode)
+void DigikamImageView::deleteSelected(const ItemViewUtilities::DeleteMode deleteMode)
 {
     ItemInfoList imageInfoList = selectedItemInfos(true);
 
@@ -473,7 +473,7 @@ void DigikamImageView::deleteSelected(const ImageViewUtilities::DeleteMode delet
     }
 }
 
-void DigikamImageView::deleteSelectedDirectly(const ImageViewUtilities::DeleteMode deleteMode)
+void DigikamImageView::deleteSelectedDirectly(const ItemViewUtilities::DeleteMode deleteMode)
 {
     ItemInfoList imageInfoList = selectedItemInfos(true);
 

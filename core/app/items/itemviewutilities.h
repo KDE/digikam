@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-04
- * Description : Various operations on images
+ * Description : Various operation on items
  *
  * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ITEMS_IMAGE_VIEW_UTILITIES_H
-#define DIGIKAM_ITEMS_IMAGE_VIEW_UTILITIES_H
+#ifndef DIGIKAM_ITEM_VIEW_UTILITIES_H
+#define DIGIKAM_ITEM_VIEW_UTILITIES_H
 
 // Qt includes
 
@@ -40,7 +40,7 @@ namespace Digikam
 {
 class Album;
 
-class DIGIKAM_EXPORT ImageViewUtilities : public QObject
+class DIGIKAM_EXPORT ItemViewUtilities : public QObject
 {
     Q_OBJECT
 
@@ -54,7 +54,7 @@ public:
 
 public:
 
-    explicit ImageViewUtilities(QWidget* const parentWidget);
+    explicit ItemViewUtilities(QWidget* const parentWidget);
 
 public Q_SLOTS:
 
@@ -92,6 +92,6 @@ protected:
 
 } // namespace Digikam
 
-Q_DECLARE_METATYPE(Digikam::ImageViewUtilities::DeleteMode)
+Q_DECLARE_METATYPE(Digikam::ItemViewUtilities::DeleteMode)
 
-#endif // DIGIKAM_ITEMS_IMAGE_VIEW_UTILITIES_H
+#endif // DIGIKAM_ITEM_VIEW_UTILITIES_H

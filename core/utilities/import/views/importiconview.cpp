@@ -41,7 +41,7 @@
 #include "importdelegate.h"
 #include "advancedrenamedialog.h"
 #include "advancedrenameprocessdialog.h"
-#include "imageviewutilities.h"
+#include "itemviewutilities.h"
 #include "importcontextmenu.h"
 #include "importdragdrop.h"
 
@@ -123,7 +123,7 @@ ImportIconView::~ImportIconView()
     delete d;
 }
 
-ImageViewUtilities* ImportIconView::utilities() const
+ItemViewUtilities* ImportIconView::utilities() const
 {
     return d->utilities;
 }

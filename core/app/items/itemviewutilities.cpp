@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-04
- * Description : Various operations on images
+ * Description : Various operation on items
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "imageviewutilities.h"
+#include "itemviewutilities.h"
 
 // Qt includes
 
@@ -59,7 +59,7 @@
 namespace Digikam
 {
 
-ImageViewUtilities::ImageViewUtilities(QWidget* const parentWidget)
+ItemViewUtilities::ItemViewUtilities(QWidget* const parentWidget)
     : QObject(parentWidget)
 {
     m_widget = parentWidget;
@@ -68,7 +68,7 @@ ImageViewUtilities::ImageViewUtilities(QWidget* const parentWidget)
             AlbumManager::instance(), SLOT(slotImagesDeleted(QList<qlonglong>)));
 }
 
-void ImageViewUtilities::setAsAlbumThumbnail(Album* album,
+void ItemViewUtilities::setAsAlbumThumbnail(Album* album,
                                              const ItemInfo& itemInfo)
 {
     if (!album)
@@ -92,7 +92,7 @@ void ImageViewUtilities::setAsAlbumThumbnail(Album* album,
     }
 }
 
-void ImageViewUtilities::rename(const QUrl& imageUrl,
+void ItemViewUtilities::rename(const QUrl& imageUrl,
                                 const QString& newName,
                                 bool overwrite)
 {
@@ -104,7 +104,7 @@ void ImageViewUtilities::rename(const QUrl& imageUrl,
     DIO::rename(imageUrl, newName, overwrite);
 }
 
-bool ImageViewUtilities::deleteImages(const QList<ItemInfo>& infos,
+bool ItemViewUtilities::deleteImages(const QList<ItemInfo>& infos,
                                       const DeleteMode deleteMode)
 {
     if (infos.isEmpty())
@@ -128,7 +128,7 @@ bool ImageViewUtilities::deleteImages(const QList<ItemInfo>& infos,
 
     DeleteDialogMode::DeleteMode deleteDialogMode = DeleteDialogMode::NoChoiceTrash;
 
-    if (deleteMode == ImageViewUtilities::DeletePermanently)
+    if (deleteMode == ItemViewUtilities::DeletePermanently)
     {
         deleteDialogMode = DeleteDialogMode::NoChoiceDeletePermanently;
     }
@@ -148,7 +148,7 @@ bool ImageViewUtilities::deleteImages(const QList<ItemInfo>& infos,
     return true;
 }
 
-void ImageViewUtilities::deleteImagesDirectly(const QList<ItemInfo>& infos,
+void ItemViewUtilities::deleteImagesDirectly(const QList<ItemInfo>& infos,
                                               const DeleteMode deleteMode)
 {
     // This method deletes the selected items directly, without confirmation.
@@ -166,7 +166,7 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ItemInfo>& infos,
         imageIds << info.id();
     }
 
-    const bool useTrash = (deleteMode == ImageViewUtilities::DeleteUseTrash);
+    const bool useTrash = (deleteMode == ItemViewUtilities::DeleteUseTrash);
 
     DIO::del(infos, useTrash);
 
@@ -174,7 +174,7 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ItemInfo>& infos,
     emit signalImagesDeleted(imageIds);
 }
 
-void ImageViewUtilities::notifyFileContentChanged(const QList<QUrl>& urls)
+void ItemViewUtilities::notifyFileContentChanged(const QList<QUrl>& urls)
 {
     foreach (const QUrl& url, urls)
     {
@@ -185,7 +185,7 @@ void ImageViewUtilities::notifyFileContentChanged(const QList<QUrl>& urls)
     }
 }
 
-void ImageViewUtilities::createNewAlbumForInfos(const QList<ItemInfo>& infos,
+void ItemViewUtilities::createNewAlbumForInfos(const QList<ItemInfo>& infos,
                                                 Album* currentAlbum)
 {
     if (infos.isEmpty())
@@ -211,7 +211,7 @@ void ImageViewUtilities::createNewAlbumForInfos(const QList<ItemInfo>& infos,
     DIO::move(infos, (PAlbum*)album);
 }
 
-void ImageViewUtilities::insertToLightTableAuto(const QList<ItemInfo>& all,
+void ItemViewUtilities::insertToLightTableAuto(const QList<ItemInfo>& all,
                                                 const QList<ItemInfo>& selected,
                                                 const ItemInfo& current)
 {
@@ -231,7 +231,7 @@ void ImageViewUtilities::insertToLightTableAuto(const QList<ItemInfo>& all,
     insertToLightTable(list, current, list.size() <= 1);
 }
 
-void ImageViewUtilities::insertToLightTable(const QList<ItemInfo>& list,
+void ItemViewUtilities::insertToLightTable(const QList<ItemInfo>& list,
                                             const ItemInfo& current,
                                             bool addTo)
 {
@@ -255,7 +255,7 @@ void ImageViewUtilities::insertToLightTable(const QList<ItemInfo>& list,
     KWindowSystem::activateWindow(ltview->winId());
 }
 
-void ImageViewUtilities::insertToQueueManager(const QList<ItemInfo>& list, const ItemInfo& current, bool newQueue)
+void ItemViewUtilities::insertToQueueManager(const QList<ItemInfo>& list, const ItemInfo& current, bool newQueue)
 {
     Q_UNUSED(current);
 
@@ -283,7 +283,7 @@ void ImageViewUtilities::insertToQueueManager(const QList<ItemInfo>& list, const
     }
 }
 
-void ImageViewUtilities::insertSilentToQueueManager(const QList<ItemInfo>& list,
+void ItemViewUtilities::insertSilentToQueueManager(const QList<ItemInfo>& list,
                                                     const ItemInfo& /*current*/,
                                                     int queueid)
 {
@@ -291,7 +291,7 @@ void ImageViewUtilities::insertSilentToQueueManager(const QList<ItemInfo>& list,
     bqmview->loadItemInfos(ItemInfoList(list), queueid);
 }
 
-void ImageViewUtilities::openInfos(const ItemInfo& info,
+void ItemViewUtilities::openInfos(const ItemInfo& info,
                                    const QList<ItemInfo>& allInfosToOpen,
                                    Album* currentAlbum)
 {
@@ -338,7 +338,7 @@ void ImageViewUtilities::openInfos(const ItemInfo& info,
     KWindowSystem::activateWindow(imview->winId());
 }
 
-void ImageViewUtilities::openInfosWithDefaultApplication(const QList<ItemInfo>& infos)
+void ItemViewUtilities::openInfosWithDefaultApplication(const QList<ItemInfo>& infos)
 {
     if (infos.isEmpty())
     {
@@ -375,7 +375,7 @@ bool lowerThanBySizeForItemInfo(const ItemInfo& a, const ItemInfo& b)
 
 } // namespace
 
-void ImageViewUtilities::createGroupByTimeFromInfoList(const ItemInfoList& itemInfoList)
+void ItemViewUtilities::createGroupByTimeFromInfoList(const ItemInfoList& itemInfoList)
 {
     QList<ItemInfo> groupingList = itemInfoList;
     // sort by time
@@ -419,7 +419,7 @@ void ImageViewUtilities::createGroupByTimeFromInfoList(const ItemInfoList& itemI
     }
 }
 
-void ImageViewUtilities::createGroupByFilenameFromInfoList(const ItemInfoList& itemInfoList)
+void ItemViewUtilities::createGroupByFilenameFromInfoList(const ItemInfoList& itemInfoList)
 {
     QList<ItemInfo> groupingList = itemInfoList;
     // sort by Name
@@ -551,7 +551,7 @@ bool imageMatchesTimelapseGroup(const ItemInfoList& group, const ItemInfo& itemI
 
 } // namespace
 
-void ImageViewUtilities::createGroupByTimelapseFromInfoList(const ItemInfoList& itemInfoList)
+void ItemViewUtilities::createGroupByTimelapseFromInfoList(const ItemInfoList& itemInfoList)
 {
     if (itemInfoList.size() < 3)
     {
