@@ -154,6 +154,12 @@ PTalker::PTalker(QWidget* const parent)
 
     connect(this, SIGNAL(pinterestLinkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
+
+    connect(d->view, SIGNAL(urlChanged(QUrl)),
+            this, SLOT(slotCatchUrl(QUrl)));
+
+    connect(d->view, SIGNAL(closeView(bool)),
+            this, SIGNAL(signalBusy(bool)));
 }
 
 PTalker::~PTalker()
@@ -183,11 +189,6 @@ void PTalker::link()
     d->view->setWindowFlags(Qt::Dialog);
     d->view->load(url);
     d->view->show();
-
-    connect(d->view, SIGNAL(urlChanged(QUrl)),
-            this, SLOT(slotCatchUrl(QUrl)));
-    connect(d->view, SIGNAL(closeView(bool)),
-            this, SIGNAL(signalBusy(bool)));
 }
 
 void PTalker::unLink()

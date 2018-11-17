@@ -152,6 +152,9 @@ ODTalker::ODTalker(QWidget* const parent)
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
 
+    connect(d->view, SIGNAL(urlChanged(QUrl)),
+            this, SLOT(slotCatchUrl(QUrl)));
+
     connect(d->view, SIGNAL(closeView(bool)),
             this, SIGNAL(signalBusy(bool)));
 }
@@ -183,9 +186,6 @@ void ODTalker::link()
     d->view->setWindowFlags(Qt::Dialog);
     d->view->load(url);
     d->view->show();
-
-    connect(d->view, SIGNAL(urlChanged(QUrl)),
-            this, SLOT(slotCatchUrl(QUrl)));
 }
 
 void ODTalker::unLink()
