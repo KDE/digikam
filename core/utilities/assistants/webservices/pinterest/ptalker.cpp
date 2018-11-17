@@ -249,18 +249,22 @@ QMap<QString, QString> PTalker::ParseUrlParameters(const QString& url)
 {
     QMap<QString, QString> urlParameters;
 
-    if (url.indexOf('?') == -1)
+    if (url.indexOf(QLatin1Char('?')) == -1)
     {
         return urlParameters;
     }
 
-    QString tmp           = url.right(url.length()-url.indexOf('?') - 1);
-    QStringList paramlist = tmp.split('&');
+    QString tmp           = url.right(url.length()-url.indexOf(QLatin1Char('?')) - 1);
+    QStringList paramlist = tmp.split(QLatin1Char('&'));
 
     for (int i = 0 ; i < paramlist.count() ; ++i)
     {
-        QStringList paramarg = paramlist.at(i).split('=');
-        urlParameters.insert(paramarg.at(0), paramarg.at(1));
+        QStringList paramarg = paramlist.at(i).split(QLatin1Char('='));
+
+        if (paramarg.count() == 2)
+        {
+            urlParameters.insert(paramarg.at(0), paramarg.at(1));
+        }
     }
 
     return urlParameters;
