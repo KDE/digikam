@@ -237,7 +237,6 @@ void FbTalker::getLoggedInUser()
     m_reply = m_netMngr->get(netRequest);
 
     m_state = WSTalker::GETUSER;
-    m_buffer.resize(0);
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -338,7 +337,6 @@ void FbTalker::listAlbums(long long userID)
     m_reply = m_netMngr->get(netRequest);
 
     m_state = WSTalker::LISTALBUMS;
-    m_buffer.resize(0);
 }
 
 void FbTalker::createAlbum(const FbAlbum& album)
@@ -397,7 +395,6 @@ void FbTalker::createAlbum(const FbAlbum& album)
     m_reply = m_netMngr->post(netRequest, params.query().toUtf8());
 
     m_state = WSTalker::CREATEALBUM;
-    m_buffer.resize(0);
 }
 
 void FbTalker::createNewAlbum()
@@ -462,7 +459,6 @@ void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
     m_reply = m_netMngr->post(netRequest, form.formData());
 
     m_state = WSTalker::ADDPHOTO;
-    m_buffer.resize(0);
 }
 
 //----------------------------------------------------------------------------------------------------
