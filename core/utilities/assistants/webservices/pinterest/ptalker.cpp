@@ -54,7 +54,6 @@
 #include "wstoolutils.h"
 #include "pwindow.h"
 #include "pitem.h"
-#include "pmpform.h"
 #include "previewloadthread.h"
 
 #ifdef HAVE_QWEBENGINE
@@ -359,7 +358,6 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
 
     emit signalBusy(true);
 
-    PMPForm form;
     QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
 
     if (image.isNull())
@@ -387,12 +385,6 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
     }
 
     QString boardParam = d->userName + QLatin1Char('/') + uploadBoard;
-
-    if (!form.addFile(path))
-    {
-        emit signalBusy(false);
-        return false;
-    }
 
     QUrl url(QString::fromLatin1("https://api.pinterest.com/v1/pins/?access_token=%1").arg(d->accessToken));
 
