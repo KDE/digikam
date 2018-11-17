@@ -162,7 +162,6 @@ set(libwsonedrive_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odnewalbumdlg.cpp
 # Pinterest tool --------------------------------------------------------------
 
 set(libwspinterest_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/pinterest/pnewalbumdlg.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/pinterest/pmpform.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/pinterest/ptalker.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/pinterest/pwidget.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/pinterest/pwindow.cpp

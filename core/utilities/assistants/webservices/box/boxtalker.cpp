@@ -71,8 +71,8 @@ public:
 
     explicit Private()
     {
-        clientId     = QLatin1String("w2gevz5rargld3aun22fwmssnmswptrn");
-        clientSecret = QLatin1String("iIL49xl04DJH7on8NYLrcYTQEgNKVmbs");
+        clientId     = QLatin1String("yvd43v8av9zgg9phig80m2dc3r7mks4t");
+        clientSecret = QLatin1String("KJkuMjvzOKDMyp3oxweQBEYixg678Fh5");
 
         authUrl      = QLatin1String("https://account.box.com/api/oauth2/authorize");
         tokenUrl     = QLatin1String("https://api.box.com/oauth2/token");
@@ -103,7 +103,6 @@ public:
 
     State                           state;
 
-    QByteArray                      buffer;
     DMetadata                       meta;
     QMap<QString, QString>          urlParametersMap;
     QList<QPair<QString, QString> > foldersList;
@@ -239,7 +238,6 @@ void BOXTalker::createFolder(QString& path)
 
     d->reply = d->netMngr->post(netRequest, postData);
     d->state = Private::BOX_CREATEFOLDER;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -253,7 +251,6 @@ void BOXTalker::getUserName()
 
     d->reply = d->netMngr->get(netRequest);
     d->state = Private::BOX_USERNAME;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -268,7 +265,6 @@ void BOXTalker::listFolders(const QString& /*path*/)
     d->reply = d->netMngr->get(netRequest);
 
     d->state = Private::BOX_LISTFOLDERS;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -359,8 +355,6 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     multiPart->setParent(d->reply);
 
     d->state        = Private::BOX_ADDPHOTO;
-    d->buffer.resize(0);
-
     return true;
 }
 
@@ -385,28 +379,28 @@ void BOXTalker::slotFinished(QNetworkReply* reply)
         }
     }
 
-    d->buffer.append(reply->readAll());
+    QByteArray buffer = reply->readAll();
 
     switch (d->state)
     {
         case Private::BOX_LISTFOLDERS:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In BOX_LISTFOLDERS";
-            parseResponseListFolders(d->buffer);
+            parseResponseListFolders(buffer);
             break;
 
         case Private::BOX_CREATEFOLDER:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In BOX_CREATEFOLDER";
-            parseResponseCreateFolder(d->buffer);
+            parseResponseCreateFolder(buffer);
             break;
 
         case Private::BOX_ADDPHOTO:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In BOX_ADDPHOTO";
-            parseResponseAddPhoto(d->buffer);
+            parseResponseAddPhoto(buffer);
             break;
 
         case Private::BOX_USERNAME:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In BOX_USERNAME";
-            parseResponseUserName(d->buffer);
+            parseResponseUserName(buffer);
             break;
 
         default:

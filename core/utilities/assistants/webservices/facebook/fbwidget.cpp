@@ -40,7 +40,7 @@
 
 // Local includes
 
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "dprogresswdg.h"
 
 namespace Digikam

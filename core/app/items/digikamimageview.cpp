@@ -58,7 +58,7 @@
 #include "groupindicatoroverlay.h"
 #include "itemalbumfiltermodel.h"
 #include "itemalbummodel.h"
-#include "imagedragdrop.h"
+#include "itemdragdrop.h"
 #include "imageratingoverlay.h"
 #include "imagefsoverlay.h"
 #include "imagecoordinatesoverlay.h"
@@ -103,7 +103,7 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     setThumbnailSize(ThumbnailSize(settings->getDefaultIconSize()));
     imageAlbumModel()->setPreloadThumbnails(true);
 
-    imageModel()->setDragDropHandler(new ImageDragDropHandler(imageModel()));
+    imageModel()->setDragDropHandler(new ItemDragDropHandler(imageModel()));
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(false);

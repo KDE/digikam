@@ -34,7 +34,7 @@
 #include "applicationsettings.h"
 #include "itemalbumfiltermodel.h"
 #include "itemalbummodel.h"
-#include "imagedragdrop.h"
+#include "itemdragdrop.h"
 #include "imageratingoverlay.h"
 #include "imagecoordinatesoverlay.h"
 #include "imagethumbnaildelegate.h"

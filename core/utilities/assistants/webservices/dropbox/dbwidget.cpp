@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "dimageslist.h"
+#include "ditemslist.h"
 
 namespace Digikam
 {

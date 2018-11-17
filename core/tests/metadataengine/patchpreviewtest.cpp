@@ -43,7 +43,7 @@ void PatchPreviewTest::testExtractPreviewAndFixMetadata()
 void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDim, int imageQuality)
 {
     qDebug() << "File to process:" << file;
-    
+
     QString path = m_tempDir.filePath(QFileInfo(file).fileName().trimmed()) + 
                    QLatin1String(".jpg");
 
@@ -51,9 +51,9 @@ void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDi
 
     bool ret = !path.isNull();
     QVERIFY(ret);
-    
+
     // Load preview from original image.
-    
+
     QImage image = PreviewLoadThread::loadHighQualitySynchronously(file).copyQImage();
 
     if (image.isNull())
@@ -64,19 +64,14 @@ void PatchPreviewTest::patchPreview(const QString& file, bool rescale, int maxDi
     ret = image.isNull();
     QVERIFY(!ret);
 
-    int imgQualityToApply = 100;
-
-    if (rescale)
+    if (rescale && (image.width() > maxDim || image.height() > maxDim))
     {
-        if (image.width() > maxDim || image.height() > maxDim)
-            image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-        imgQualityToApply = imageQuality;
+        image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
-    
+
     // Save preview in temporary directory.
 
-    ret = image.save(path, "JPEG", imgQualityToApply);
+    ret = image.save(path, "JPEG", imageQuality);
     QVERIFY(ret);
 
     // Load metadata from original image.

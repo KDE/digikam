@@ -104,8 +104,6 @@ public:
 
     State                  state;
 
-    QByteArray             buffer;
-
     DMetadata              meta;
 
     O2*                    o2;
@@ -228,7 +226,6 @@ void DBTalker::createFolder(const QString& path)
     d->reply = d->netMngr->post(netRequest, postData);
 
     d->state = Private::DB_CREATEFOLDER;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -244,7 +241,6 @@ void DBTalker::getUserName()
     d->reply = d->netMngr->post(netRequest, QByteArray());
 
     d->state = Private::DB_USERNAME;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -263,7 +259,6 @@ void DBTalker::listFolders(const QString& path)
     d->reply = d->netMngr->post(netRequest, postData);
 
     d->state = Private::DB_LISTFOLDERS;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -323,8 +318,6 @@ bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     d->reply = d->netMngr->post(netRequest, form.formData());
 
     d->state = Private::DB_ADDPHOTO;
-    d->buffer.resize(0);
-
     return true;
 }
 
@@ -361,25 +354,25 @@ void DBTalker::slotFinished(QNetworkReply* reply)
         }
     }
 
-    d->buffer.append(reply->readAll());
+    QByteArray buffer = reply->readAll();
 
     switch (d->state)
     {
         case Private::DB_LISTFOLDERS:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In DB_LISTFOLDERS";
-            parseResponseListFolders(d->buffer);
+            parseResponseListFolders(buffer);
             break;
         case Private::DB_CREATEFOLDER:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In DB_CREATEFOLDER";
-            parseResponseCreateFolder(d->buffer);
+            parseResponseCreateFolder(buffer);
             break;
         case Private::DB_ADDPHOTO:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In DB_ADDPHOTO";
-            parseResponseAddPhoto(d->buffer);
+            parseResponseAddPhoto(buffer);
             break;
         case Private::DB_USERNAME:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In DB_USERNAME";
-            parseResponseUserName(d->buffer);
+            parseResponseUserName(buffer);
             break;
         default:
             break;

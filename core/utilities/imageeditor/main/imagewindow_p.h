@@ -93,7 +93,7 @@
 #include "iccsettingscontainer.h"
 #include "itemattributeswatch.h"
 #include "itemfiltermodel.h"
-#include "imagedragdrop.h"
+#include "itemdragdrop.h"
 #include "itemdescedittab.h"
 #include "iteminfo.h"
 #include "itemgps.h"
@@ -282,7 +282,7 @@ public:
     ItemInfo                    currentItemInfo;
     ItemListModel*              imageInfoModel;
     ItemFilterModel*            imageFilterModel;
-    ImageDragDropHandler*        dragDropHandler;
+    ItemDragDropHandler*        dragDropHandler;
 
     ImageThumbnailBar*           thumbBar;
     ThumbBarDock*                thumbBarDock;

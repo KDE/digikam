@@ -1180,14 +1180,14 @@
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS VideoMetadata
                     (imageid BIGINT PRIMARY KEY,
-                    aspectRatio TEXT,
-                    audioBitRate TEXT,
-                    audioChannelType TEXT,
-                    audioCompressor TEXT,
-                    duration TEXT,
-                    frameRate TEXT,
+                    aspectRatio TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    audioBitRate TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    audioChannelType TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    audioCompressor TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    duration TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    frameRate TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     exposureProgram INTEGER,
-                    videoCodec TEXT,
+                    videoCodec TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     CONSTRAINT VideoMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
                     ENGINE InnoDB;
                 </statement>
@@ -1869,9 +1869,12 @@
             <!-- Mysql Migration Statements -->
 
             <!-- NOTE: Migrate_Cleanup_DB now it's done by the program except for cleanup prepare -->
-            <dbaction name="Migrate_Cleanup_Prepare"><statement mode="transaction">
-                ALTER TABLE Albums DROP FOREIGN KEY Albums_Images;
-            </statement></dbaction>
+            <dbaction name="Migrate_Cleanup_Prepare" mode="transaction">
+                <statement mode="plain">SET FOREIGN_KEY_CHECKS=0;</statement>
+                <statement mode="plain">ALTER TABLE Albums DROP FOREIGN KEY Albums_Images;</statement>
+                <statement mode="plain">ALTER TABLE Albums DROP FOREIGN KEY Images_Albums;</statement>
+                <statement mode="plain">SET FOREIGN_KEY_CHECKS=1;</statement>
+            </dbaction>
 
             <dbaction name="Migrate_Read_AlbumRoots"><statement mode="query">
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;

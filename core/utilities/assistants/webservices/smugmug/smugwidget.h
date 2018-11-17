@@ -32,7 +32,7 @@
 
 #include "dinfointerface.h"
 #include "dprogresswdg.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 
 class QLabel;
 class QSpinBox;
@@ -72,7 +72,7 @@ public:
     QString getAlbumPassword()   const;
     QString getDestinationPath() const;
 
-    DImagesList* imagesList()    const;
+    DItemsList* imagesList()    const;
     DProgressWdg* progressBar()  const;
 
 Q_SIGNALS:
@@ -116,7 +116,7 @@ private:
 
     DInfoInterface* m_iface;
     DProgressWdg*   m_progressBar;
-    DImagesList*    m_imgList;
+    DItemsList*    m_imgList;
     QWidget*        m_uploadWidget;
 
     friend class SmugWindow;

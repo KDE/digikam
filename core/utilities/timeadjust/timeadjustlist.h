@@ -33,13 +33,13 @@
 
 // Local includes
 
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "timeadjustsettings.h"
 
 namespace Digikam
 {
 
-class TimeAdjustList : public DImagesList
+class TimeAdjustList : public DItemsList
 {
     Q_OBJECT
 
@@ -48,9 +48,9 @@ public:
     /* The different columns in a list. */
     enum FieldType
     {
-        TIMESTAMP_USED     = DImagesListView::User1,
-        TIMESTAMP_UPDATED  = DImagesListView::User2,
-        STATUS             = DImagesListView::User3
+        TIMESTAMP_USED     = DItemsListView::User1,
+        TIMESTAMP_UPDATED  = DItemsListView::User2,
+        STATUS             = DItemsListView::User3
     };
 
     enum ProcessingStatus

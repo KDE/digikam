@@ -14,7 +14,7 @@ set(libassistants_SRCS dwizardpage.cpp
                        dwizardpage.cpp
                        dpreviewmanager.cpp
                        dpreviewimage.cpp
-                       dimageslist.cpp
+                       ditemslist.cpp
                        dinfointerface.cpp
                        dmetainfoiface.cpp
 )

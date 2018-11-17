@@ -583,35 +583,40 @@ void DatabaseSettingsWidget::handleInternalServer(int index)
 
 void DatabaseSettingsWidget::slotUpdateSqlInit()
 {
-    QString sql = QString::fromLatin1("CREATE USER \'%1\'@\'%\' IDENTIFIED BY \'<b>password</b>\';<br>")
-                                      .arg(d->userName->text());
+    QString sql = QString::fromLatin1("CREATE USER \'%1\'@\'%2\' IDENTIFIED BY \'<b>password</b>\';<br>")
+                                      .arg(d->userName->text())
+                                      .arg(d->hostName->text());
 
-    sql += QString::fromLatin1("GRANT ALL ON *.* TO \'%1\'@\'%\' IDENTIFIED BY \'<b>password</b>\';<br>")
-                               .arg(d->userName->text());
+    sql += QString::fromLatin1("GRANT ALL ON *.* TO \'%1\'@\'%2\' IDENTIFIED BY \'<b>password</b>\';<br>")
+                               .arg(d->userName->text())
+                               .arg(d->hostName->text());
 
     sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
-                               "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%\';<br>")
+                               "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%4\';<br>")
                                .arg(d->dbNameCore->text())
                                .arg(d->dbNameCore->text())
-                               .arg(d->userName->text());
+                               .arg(d->userName->text())
+                               .arg(d->hostName->text());
 
     if (d->dbNameThumbs->text() != d->dbNameCore->text())
     {
         sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
-                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%\';<br>")
+                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%4\';<br>")
                                    .arg(d->dbNameThumbs->text())
                                    .arg(d->dbNameThumbs->text())
-                                   .arg(d->userName->text());
+                                   .arg(d->userName->text())
+                                   .arg(d->hostName->text());
     }
 
     if ((d->dbNameFace->text() != d->dbNameCore->text()) &&
         (d->dbNameFace->text() != d->dbNameThumbs->text()))
     {
         sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
-                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%\';<br>")
+                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%4\';<br>")
                                    .arg(d->dbNameFace->text())
                                    .arg(d->dbNameFace->text())
-                                   .arg(d->userName->text());
+                                   .arg(d->userName->text())
+                                   .arg(d->hostName->text());
     }
 
     if ((d->dbNameSimilarity->text() != d->dbNameCore->text()) &&
@@ -619,10 +624,11 @@ void DatabaseSettingsWidget::slotUpdateSqlInit()
         (d->dbNameSimilarity->text() != d->dbNameFace->text()))
     {
         sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
-                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%\';<br>")
+                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%4\';<br>")
                                    .arg(d->dbNameSimilarity->text())
                                    .arg(d->dbNameSimilarity->text())
-                                   .arg(d->userName->text());
+                                   .arg(d->userName->text())
+                                   .arg(d->hostName->text());
     }
 
     sql += QLatin1String("FLUSH PRIVILEGES;<br>");

@@ -32,7 +32,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "dinfointerface.h"
 #include "dprogresswdg.h"
 
@@ -67,7 +67,7 @@ public:
     void              addWidgetToSettingsBox(QWidget* const widget);
 
     QString           getDestinationPath()   const;
-    DImagesList*      imagesList()           const;
+    DItemsList*      imagesList()           const;
     DProgressWdg*     progressBar()          const;
 
     QWidget*          getSettingsBox()       const;

@@ -27,7 +27,8 @@
 
 // Local includes
 
-#include "videothumbnailerjob.h"
+#include "videothumbnailer.h"
+#include "videostripfilter.h"
 
 using namespace Digikam;
 
@@ -41,47 +42,28 @@ int main(int argc, char** argv)
     }
 
     QApplication app(argc, argv);
-    QStringList files;
 
     for (int i = 1 ; i < argc ; i++)
-        files.append(QString::fromLocal8Bit(argv[i]));
+    {
+        QString path = QString::fromLocal8Bit(argv[i]);
+        VideoThumbnailer thumbnailer;
+        VideoStripFilter videoStrip;
+        QImage image;
 
-    VideoThumbnailerJob* const vthumbs = new VideoThumbnailerJob(&app);
-    vthumbs->setThumbnailSize(256);
-    vthumbs->setCreateStrip(true);
+        thumbnailer.addFilter(&videoStrip);
+        thumbnailer.setThumbnailSize(256);
+        thumbnailer.generateThumbnail(path, image);
 
-    // NOTE: connection to signal/C++11 lambda methods to catch events from thumbnail job.
-    // This permit to write test tool without to implement a QObject receiver for thumbnailer events.
+        if (!image.isNull())
+        {
+            qDebug() << "Extracted thumbnail from" << path << image.size();
+            image.save(QString::fromUtf8("./%1.png").arg(path), "PNG");
+        }
+        else
+        {
+           qDebug() << "Cannot extract thumbnail from" << path;
+        }
+    }
 
-    // Write thumbnail image to png when file can be processed
-    QObject::connect(vthumbs, &VideoThumbnailerJob::signalThumbnailDone,
-                     [vthumbs, &app](const QString& str, const QImage& img)
-                        {
-                            img.save(QString::fromUtf8("./%1.png").arg(str), "PNG");
-                            app.quit();
-                        }
-                    );
-
-    // PRint a message is a file cannot be processed
-    QObject::connect(vthumbs, &VideoThumbnailerJob::signalThumbnailFailed,
-                     [vthumbs, &app](const QString& str)
-                        {
-                            qDebug() << "Cannot extract thumbnail from" << str;
-                        }
-                    );
-
-    // Quit when all is done.
-    QObject::connect(vthumbs, &VideoThumbnailerJob::signalThumbnailJobFinished,
-                     [vthumbs, &app]()
-                        {
-                            app.quit();
-                        }
-                    );
-
-    qDebug() << "Video files to process : " << files;
-
-    vthumbs->addItems(files);
-    int ret = app.exec();
-
-    return ret;
+    return 0;
 }

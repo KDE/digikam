@@ -32,7 +32,7 @@
 
 #include "htmlwizard.h"
 #include "galleryinfo.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 
 namespace Digikam
 {
@@ -61,7 +61,7 @@ public:
 
     bool             albumSupport;
     QWidget*         albumSelector;
-    DImagesList*     imageList;
+    DItemsList*     imageList;
     QStackedWidget*  stack;
     HTMLWizard*      wizard;
     GalleryInfo*     info;
@@ -88,8 +88,8 @@ HTMLSelectionPage::HTMLSelectionPage(QWizard* const dialog, const QString& title
 
     d->stack->insertWidget(GalleryInfo::ALBUMS, d->albumSelector);
 
-    d->imageList          = new DImagesList(this);
-    d->imageList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
+    d->imageList          = new DItemsList(this);
+    d->imageList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     d->stack->insertWidget(GalleryInfo::IMAGES, d->imageList);
 
     setPageWidget(d->stack);

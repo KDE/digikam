@@ -55,7 +55,7 @@ public:
     bool authenticated();
     void cancel();
     bool addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality);
-    void listFolders();
+    void listFolders(const QString& folder = QString());
     void createFolder(QString& path);
     void setAccessToken(const QString& token);
     QMap<QString, QString> ParseUrlParameters(const QString& url);

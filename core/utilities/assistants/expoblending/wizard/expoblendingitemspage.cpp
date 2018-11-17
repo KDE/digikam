@@ -37,7 +37,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "expoblendingmanager.h"
 #include "expoblendingthread.h"
 #include "dlayoutbox.h"
@@ -55,7 +55,7 @@ public:
     {
     }
 
-    DImagesList*         list;
+    DItemsList*         list;
     ExpoBlendingManager* mngr;
 };
 
@@ -75,9 +75,9 @@ ItemsPage::ItemsPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
                          "<li>All images must have the same dimensions.</li></ul>"
                          "</qt>"));
 
-    d->list = new DImagesList(vbox);
+    d->list = new DItemsList(vbox);
     d->list->setObjectName(QLatin1String("ExpoBlending ImagesList"));
-    d->list->listView()->setColumn(DImagesListView::User1, i18nc("@title:column", "Exposure (EV)"), true);
+    d->list->listView()->setColumn(DItemsListView::User1, i18nc("@title:column", "Exposure (EV)"), true);
     d->list->slotAddImages(d->mngr->itemsList());
 
     setPageWidget(vbox);
@@ -130,11 +130,11 @@ QList<QUrl> ItemsPage::itemUrls() const
 
 void ItemsPage::setIdentity(const QUrl& url, const QString& identity)
 {
-    DImagesListViewItem* item = d->list->listView()->findItem(url);
+    DItemsListViewItem* item = d->list->listView()->findItem(url);
 
     if (item)
     {
-        item->setText(DImagesListView::User1, identity);
+        item->setText(DItemsListView::User1, identity);
     }
 }
 

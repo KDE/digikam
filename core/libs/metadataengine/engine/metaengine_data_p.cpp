@@ -5,7 +5,7 @@
  *
  * Date        : 2006-09-15
  * Description : Exiv2 library interface.
- *               Shared data container.
+ *               Internal private data container.
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -23,34 +23,39 @@
  *
  * ============================================================ */
 
+#include "metaengine_data_p.h"
+
 // Local includes
 
-#include "metaengine_data.h"
-#include "metaengine_data_p.h"
-#include "metaengine.h"
-#include "metaengine_p.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
 
-MetaEngineData::MetaEngineData()
-    : d(0)
+void MetaEngineData::Private::clear()
 {
-}
+    QMutexLocker lock(&s_metaEngineMutex);
 
-MetaEngineData::MetaEngineData(const MetaEngineData& other)
-{
-    d = other.d;
-}
+    try
+    {
+        imageComments.clear();
+        exifMetadata.clear();
+        iptcMetadata.clear();
+#ifdef _XMP_SUPPORT_
+        xmpMetadata.clear();
+#endif
+    }
+    catch( Exiv2::Error& e )
+    {
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Cannot clear data container using Exiv2"
+                                           << " (Error #" << e.code() << ": "
+                                           << std::string(e.what()).c_str();
+    }
+    catch(...)
+    {
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
+    }
 
-MetaEngineData::~MetaEngineData()
-{
-}
-
-MetaEngineData& MetaEngineData::operator=(const MetaEngineData& other)
-{
-    d = other.d;
-    return *this;
 }
 
 } // namespace Digikam

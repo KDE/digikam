@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-16
- * Description : Qt Model for Albums - drag and drop handling
+ * Description : Qt Model for Items - drag and drop handling
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_DRAG_DROP_H
-#define DIGIKAM_IMAGE_DRAG_DROP_H
+#ifndef DIGIKAM_ITEM_DRAG_DROP_H
+#define DIGIKAM_ITEM_DRAG_DROP_H
 
 // Qt includes
 
@@ -37,13 +37,13 @@
 namespace Digikam
 {
 
-class ImageDragDropHandler : public AbstractItemDragDropHandler
+class ItemDragDropHandler : public AbstractItemDragDropHandler
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageDragDropHandler(ItemModel* const model);
+    explicit ItemDragDropHandler(ItemModel* const model);
 
     ItemModel*      model()      const;
     ItemAlbumModel* albumModel() const;
@@ -62,7 +62,7 @@ public:
 
 Q_SIGNALS:
 
-    void imageInfosDropped(const QList<ItemInfo>& infos);
+    void itemInfosDropped(const QList<ItemInfo>& infos);
     void urlsDropped(const QList<QUrl>& urls);
     void assignTags(const QList<ItemInfo>& list, const QList<int>& tagIDs);
     void addToGroup(const ItemInfo& pick, const QList<ItemInfo>& infos);
@@ -75,4 +75,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_DRAG_DROP_H
+#endif // DIGIKAM_ITEM_DRAG_DROP_H

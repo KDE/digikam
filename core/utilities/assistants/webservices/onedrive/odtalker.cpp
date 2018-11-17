@@ -43,7 +43,6 @@
 
 // KDE includes
 
-#include <kconfig.h>
 #include <kwindowconfig.h>
 
 // Local includes
@@ -82,57 +81,67 @@ public:
 
     explicit Private()
     {
-        clientId     = QLatin1String("83de95b7-0f35-4abf-bac1-7729ced74c01");
-        clientSecret = QLatin1String("tgjV796:)yezuRWMZSZ45+!");
-        scope        = QLatin1String("User.Read Files.ReadWrite");
+        clientId     = QLatin1String("4c20a541-2ca8-4b98-8847-a375e4d33f34");
+        clientSecret = QLatin1String("wtdcaXADCZ0|tcDA7633|@*");
+        scope        = QLatin1String("Files.ReadWrite User.Read");
 
         authUrl      = QLatin1String("https://login.live.com/oauth20_authorize.srf");
         tokenUrl     = QLatin1String("https://login.live.com/oauth20_token.srf");
         redirectUrl  = QLatin1String("https://login.live.com/oauth20_desktop.srf");
+
+        serviceName = QLatin1String("Onedrive");
+        serviceKey  = QLatin1String("access_token");
 
         state        = OD_USERNAME;
 
         parent       = 0;
         netMngr      = 0;
         reply        = 0;
+        settings     = 0;
         view         = 0;
     }
 
 public:
 
-    QString                clientId;
-    QString                clientSecret;
-    QString                authUrl;
-    QString                tokenUrl;
-    QString                scope;
-    QString                redirectUrl;
-    QString                accessToken;
+    QString                         clientId;
+    QString                         clientSecret;
+    QString                         authUrl;
+    QString                         tokenUrl;
+    QString                         scope;
+    QString                         redirectUrl;
+    QString                         accessToken;
+    QString                         serviceName;
+    QString                         serviceKey;
 
-    QWidget*               parent;
+    QWidget*                        parent;
 
-    QNetworkAccessManager* netMngr;
+    QNetworkAccessManager*          netMngr;
+    QNetworkReply*                  reply;
 
-    QNetworkReply*         reply;
+    QSettings*                      settings;
 
-    State                  state;
+    State                           state;
 
-    QByteArray             buffer;
+    DMetadata                       meta;
 
-    DMetadata              meta;
+    QMap<QString, QString>          urlParametersMap;
+    QList<QPair<QString, QString> > folderList;
+    QList<QString>                  nextFolder;
 
-    QMap<QString, QString> urlParametersMap;
+    WebWidget*                      view;
 
-    WebWidget*             view;
-
-    QString                tokenKey;
+    QString                         tokenKey;
 };
 
 ODTalker::ODTalker(QWidget* const parent)
     : d(new Private)
 {
-    d->parent  = parent;
-    d->netMngr = new QNetworkAccessManager(this);
-    d->view    = new WebWidget(d->parent);
+    d->parent   = parent;
+    d->netMngr  = new QNetworkAccessManager(this);
+    d->view     = new WebWidget(d->parent);
+    d->view->resize(800, 600);
+
+    d->settings = WSToolUtils::getOauthSettings(this);
 
     connect(this, SIGNAL(oneDriveLinkingFailed()),
             this, SLOT(slotLinkingFailed()));
@@ -182,9 +191,11 @@ void ODTalker::link()
 void ODTalker::unLink()
 {
     d->accessToken = QString();
-    KConfig config;
-    KConfigGroup grp = config.group("Onedrive User Settings");
-    grp.deleteGroup();
+
+    d->settings->beginGroup(d->serviceName);
+    d->settings->remove(QString());
+    d->settings->endGroup();
+
 #ifdef HAVE_QWEBENGINE
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
 #else
@@ -215,19 +226,23 @@ QMap<QString, QString> ODTalker::ParseUrlParameters(const QString& url)
 {
     QMap<QString, QString> urlParameters;
 
-    if (url.indexOf('?') == -1)
+    if (url.indexOf(QLatin1Char('?')) == -1)
     {
         return urlParameters;
     }
 
-    QString tmp           = url.right(url.length() - url.indexOf('?') - 1);
-    tmp                   = tmp.right(tmp.length() - tmp.indexOf('#') - 1);
-    QStringList paramlist = tmp.split('&');
+    QString tmp           = url.right(url.length() - url.indexOf(QLatin1Char('?')) - 1);
+    tmp                   = tmp.right(tmp.length() - tmp.indexOf(QLatin1Char('#')) - 1);
+    QStringList paramlist = tmp.split(QLatin1Char('&'));
 
     for (int i = 0 ; i < paramlist.count() ; ++i)
     {
-        QStringList paramarg = paramlist.at(i).split('=');
-        urlParameters.insert(paramarg.at(0),paramarg.at(1));
+        QStringList paramarg = paramlist.at(i).split(QLatin1Char('='));
+
+        if (paramarg.count() == 2)
+        {
+            urlParameters.insert(paramarg.at(0), paramarg.at(1));
+        }
     }
 
     return urlParameters;
@@ -295,7 +310,6 @@ void ODTalker::createFolder(QString& path)
     d->reply = d->netMngr->post(netRequest, postData);
 
     d->state = Private::OD_CREATEFOLDER;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -309,15 +323,27 @@ void ODTalker::getUserName()
 
     d->reply = d->netMngr->get(netRequest);
     d->state = Private::OD_USERNAME;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
 /** Get list of folders by parsing json sent by onedrive
  */
-void ODTalker::listFolders()
+void ODTalker::listFolders(const QString& folder)
 {
-    QUrl url(QLatin1String("https://graph.microsoft.com/v1.0/me//drive/root/children?select=name,folder,path,parentReference"));;
+    QString nextFolder;
+
+    if (folder.isEmpty())
+    {
+        d->folderList.clear();
+        d->nextFolder.clear();
+    }
+    else
+    {
+        nextFolder = QLatin1Char(':') + folder + QLatin1Char(':');
+    }
+
+    QUrl url(QString::fromLatin1("https://graph.microsoft.com/v1.0/me/drive/root%1/"
+                                 "children?select=name,folder,path,parentReference").arg(nextFolder));
 
     QNetworkRequest netRequest(url);
     netRequest.setRawHeader("Authorization", QString::fromLatin1("bearer %1").arg(d->accessToken).toUtf8());
@@ -326,7 +352,6 @@ void ODTalker::listFolders()
     d->reply = d->netMngr->get(netRequest);
 
     d->state = Private::OD_LISTFOLDERS;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -373,7 +398,7 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
         return false;
     }
 
-    QString uploadPath = uploadFolder + QUrl(QUrl::fromLocalFile(imgPath)).fileName();
+    QString uploadPath = uploadFolder + QUrl::fromLocalFile(imgPath).fileName();
     QUrl url(QString::fromLatin1("https://graph.microsoft.com/v1.0/me/drive/root:/%1:/content").arg(uploadPath));
 
     QNetworkRequest netRequest(url);
@@ -383,7 +408,6 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     d->reply = d->netMngr->put(netRequest, form.formData());
 
     d->state = Private::OD_ADDPHOTO;
-    d->buffer.resize(0);
 
     return true;
 }
@@ -410,25 +434,25 @@ void ODTalker::slotFinished(QNetworkReply* reply)
         }
     }
 
-    d->buffer.append(reply->readAll());
+    QByteArray buffer = reply->readAll();
 
     switch (d->state)
     {
         case Private::OD_LISTFOLDERS:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In OD_LISTFOLDERS";
-            parseResponseListFolders(d->buffer);
+            parseResponseListFolders(buffer);
             break;
         case Private::OD_CREATEFOLDER:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In OD_CREATEFOLDER";
-            parseResponseCreateFolder(d->buffer);
+            parseResponseCreateFolder(buffer);
             break;
         case Private::OD_ADDPHOTO:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In OD_ADDPHOTO";
-            parseResponseAddPhoto(d->buffer);
+            parseResponseAddPhoto(buffer);
             break;
         case Private::OD_USERNAME:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In OD_USERNAME";
-            parseResponseUserName(d->buffer);
+            parseResponseUserName(buffer);
             break;
         default:
             break;
@@ -478,28 +502,49 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
     //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Json: " << doc;
     QJsonArray jsonArray   = jsonObject[QLatin1String("value")].toArray();
 
-    QList<QPair<QString, QString> > list;
-    list.append(qMakePair(QLatin1String(""), QLatin1String("root")));
+    if (d->folderList.isEmpty())
+    {
+        d->folderList.append(qMakePair(QLatin1String(""), QLatin1String("root")));
+    }
 
     foreach (const QJsonValue& value, jsonArray)
     {
         QString path;
+        QString folderPath;
         QString folderName;
         QJsonObject folder;
+        QJsonObject parent;
 
         QJsonObject obj = value.toObject();
         folder          = obj[QLatin1String("folder")].toObject();
+        parent          = obj[QLatin1String("parentReference")].toObject();
 
         if (!folder.isEmpty())
         {
-            folderName    = obj[QLatin1String("name")].toString();
-            path          = QLatin1Char('/') + folderName;
-            list.append(qMakePair(path, folderName));
+            folderPath  = parent[QLatin1String("path")].toString();
+            folderName  = obj[QLatin1String("name")].toString();
+
+            path        = folderPath.section(QLatin1String("root:"), -1, -1) +
+                                             QLatin1Char('/') + folderName;
+
+            d->folderList.append(qMakePair(path, folderName));
+
+            if (folder[QLatin1String("childCount")].toInt() > 0)
+            {
+                d->nextFolder << path;
+            }
         }
     }
 
-    emit signalBusy(false);
-    emit signalListAlbumsDone(list);
+    if (!d->nextFolder.isEmpty())
+    {
+        listFolders(d->nextFolder.takeLast());
+    }
+    else
+    {
+        emit signalBusy(false);
+        emit signalListAlbumsDone(d->folderList);
+    }
 }
 
 void ODTalker::parseResponseCreateFolder(const QByteArray& data)
@@ -524,26 +569,24 @@ void ODTalker::parseResponseCreateFolder(const QByteArray& data)
 
 void ODTalker::writeSettings()
 {
-    KConfig config;
-    KConfigGroup grp = config.group("Onedrive User Settings");
-
-    grp.writeEntry("access_token", d->accessToken);
-    config.sync();
+    d->settings->beginGroup(d->serviceName);
+    d->settings->setValue(d->serviceKey, d->accessToken);
+    d->settings->endGroup();
 }
 
 void ODTalker::readSettings()
 {
-    KConfig config;
-    KConfigGroup grp = config.group("Onedrive User Settings");
+    d->settings->beginGroup(d->serviceName);
+    d->accessToken = d->settings->value(d->serviceKey).toString();
+    d->settings->endGroup();
 
-    if (!grp.readEntry("access_token", false))
+    if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Linking...";
         link();
     }
     else
     {
-        d->accessToken = grp.readEntry("access_token", QString());
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Already Linked";
         emit oneDriveLinkingSucceeded();
     }

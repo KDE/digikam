@@ -40,7 +40,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "digikam_version.h"
 #include "dbtalker.h"
 #include "dbitem.h"
@@ -181,13 +181,11 @@ void DBWindow::readSettings()
     {
         d->widget->getResizeCheckBox()->setChecked(true);
         d->widget->getDimensionSpB()->setEnabled(true);
-        d->widget->getImgQualitySpB()->setEnabled(true);
     }
     else
     {
         d->widget->getResizeCheckBox()->setChecked(false);
         d->widget->getDimensionSpB()->setEnabled(false);
-        d->widget->getImgQualitySpB()->setEnabled(false);
     }
 
     d->widget->getDimensionSpB()->setValue(grp.readEntry("Maximum Width",  1600));

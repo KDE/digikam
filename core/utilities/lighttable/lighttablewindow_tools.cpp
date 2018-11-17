@@ -177,6 +177,7 @@ void LightTableWindow::slotSlideShowManualFrom(const ItemInfo& info)
 void LightTableWindow::slotSlideShowBuilderComplete(const SlideShowSettings& settings)
 {
     QPointer<Digikam::SlideShow> slide = new SlideShow(settings);
+    slide->setInfoInterface(new DBInfoIface(this, QList<QUrl>()));
     TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
 
     d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode, QString());

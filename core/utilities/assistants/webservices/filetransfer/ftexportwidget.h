@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class DImagesList;
+class DItemsList;
 
 class FTExportWidget: public QWidget
 {
@@ -61,7 +61,7 @@ public:
     /**
      * Returns a pointer to the imagelist that is displayed.
      */
-    DImagesList* imagesList() const;
+    DItemsList* imagesList() const;
 
     /**
      * Returns the currently selected target url. Maybe invalid.

@@ -37,14 +37,14 @@ namespace Digikam
 {
 
 TimeAdjustList::TimeAdjustList(QWidget* const parent)
-    : DImagesList(parent)
+    : DItemsList(parent)
 {
-    setControlButtonsPlacement(DImagesList::NoControlButtons);
-    listView()->setColumn(static_cast<Digikam::DImagesListView::ColumnType>(TIMESTAMP_USED),
+    setControlButtonsPlacement(DItemsList::NoControlButtons);
+    listView()->setColumn(static_cast<Digikam::DItemsListView::ColumnType>(TIMESTAMP_USED),
                           i18n("Timestamp Used"), true);
-    listView()->setColumn(static_cast<Digikam::DImagesListView::ColumnType>(TIMESTAMP_UPDATED),
+    listView()->setColumn(static_cast<Digikam::DItemsListView::ColumnType>(TIMESTAMP_UPDATED),
                           i18n("Timestamp Updated"), true);
-    listView()->setColumn(static_cast<Digikam::DImagesListView::ColumnType>(STATUS),
+    listView()->setColumn(static_cast<Digikam::DItemsListView::ColumnType>(STATUS),
                           i18n("Status"), true);
 
     listView()->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
@@ -68,7 +68,7 @@ void TimeAdjustList::setItemDates(const QMap<QUrl, QDateTime>& map, FieldType ty
 
     foreach (const QUrl& url, map.keys())
     {
-        DImagesListViewItem* const item = listView()->findItem(url);
+        DItemsListViewItem* const item = listView()->findItem(url);
 
         if (item)
         {
@@ -90,7 +90,7 @@ void TimeAdjustList::setStatus(const QMap<QUrl, int>& status)
 {
     foreach (const QUrl& url, status.keys())
     {
-        DImagesListViewItem* const item = listView()->findItem(url);
+        DItemsListViewItem* const item = listView()->findItem(url);
 
         if (item)
         {

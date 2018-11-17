@@ -31,7 +31,7 @@
 // Local includes
 
 #include "advprintsettings.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "dinfointerface.h"
 #include "dwizarddlg.h"
 #include "digikam_export.h"

@@ -47,6 +47,7 @@ Comment[sv]=Ett tema med avrundade hörn och stöd för sidor med stora gallerie
 Comment[tr]=Büyük galerilerde sayfa desteği ve yuvarlanmış kenarları olan bir tema
 Comment[uk]=Тема із заокругленими кутами і підтримкою сторінки у великих галереях
 Comment[x-test]=xxA theme with rounded corners and page support on big galeriesxx
+Comment[zh_CN]=带有圆角的主题，支持大相册分页功能
 
 [X-HTMLGallery Author]
 Name=Franz Dietrich
@@ -303,6 +304,7 @@ Name[sv]=Navigeringens bakgrund
 Name[tr]= Gezintinin arkaplanı
 Name[uk]= Тло панелі навігації
 Name[x-test]=xx Background of the navigationxx
+Name[zh_CN]= 导航的背景
 Type=color
 Default=#a7dccf
 

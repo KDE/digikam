@@ -45,7 +45,7 @@
 // Local includes
 
 #include "dinfointerface.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "dmediaservermngr.h"
 #include "dxmlguiwindow.h"
 #include "workingwidget.h"
@@ -87,7 +87,7 @@ public:
     QCheckBox*          startOnStartup;
     bool                albumSupport;
     QWidget*            albumSelector;
-    DImagesList*        listView;
+    DItemsList*        listView;
     DInfoInterface*     iface;
     QWidget*            page;
     QDialogButtonBox*   buttons;
@@ -130,8 +130,8 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     }
     else
     {
-        d->listView = new DImagesList(d->page);
-        d->listView->setControlButtonsPlacement(DImagesList::ControlButtonsRight);
+        d->listView = new DItemsList(d->page);
+        d->listView->setControlButtonsPlacement(DItemsList::ControlButtonsRight);
         d->listView->setIface(d->iface);
 
         // Add all items currently loaded in application.

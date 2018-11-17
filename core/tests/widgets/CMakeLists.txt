@@ -32,13 +32,13 @@ target_link_libraries(searchtextbartest
 
 ##################################################################
 
-set(dimagelisttest_SRCS
-    dimageslisttest.cpp
+set(ditemslisttest_SRCS
+    ditemslisttest.cpp
 )
 
-add_executable(dimagelisttest ${dimagelisttest_SRCS})
+add_executable(ditemslisttest ${ditemslisttest_SRCS})
 
-target_link_libraries(dimagelisttest
+target_link_libraries(ditemslisttest
                       digikamcore
 
                       Qt5::Test

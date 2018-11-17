@@ -41,7 +41,7 @@
 
 #include "dinfointerface.h"
 #include "dprogresswdg.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 
 namespace Digikam
 {
@@ -70,7 +70,7 @@ public:
                       const QString& url = QString());
     void invertAccountLoginBox();
 
-    DImagesList*  imagesList()  const;
+    DItemsList*  imagesList()  const;
     DProgressWdg* progressBar() const;
 
     int  dimension()            const;

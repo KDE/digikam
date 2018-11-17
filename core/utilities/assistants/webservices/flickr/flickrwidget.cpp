@@ -54,10 +54,10 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
     d->imglst->loadImagesFromCurrentSelection();
 
     d->imglst->listView()->setWhatsThis(i18n("This is the list of images to upload to your Flickr account."));
-    d->imglst->listView()->setColumn(static_cast<DImagesListView::ColumnType>(FlickrList::PUBLIC), i18nc("photo permissions", "Public"), true);
+    d->imglst->listView()->setColumn(static_cast<DItemsListView::ColumnType>(FlickrList::PUBLIC), i18nc("photo permissions", "Public"), true);
 
     // Handle extra tags per image.
-    d->imglst->listView()->setColumn(static_cast<DImagesListView::ColumnType>(FlickrList::TAGS),
+    d->imglst->listView()->setColumn(static_cast<DItemsListView::ColumnType>(FlickrList::TAGS),
                                     i18n("Extra tags"), true);
 
     if (serviceName != QLatin1String("23"))
@@ -74,18 +74,18 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
             permColWidth = tmpWidth;
         }
 
-        d->imglst->listView()->setColumn(static_cast<DImagesListView::ColumnType>(FlickrList::FAMILY),
+        d->imglst->listView()->setColumn(static_cast<DItemsListView::ColumnType>(FlickrList::FAMILY),
                                         i18nc("photo permissions", "Family"), true);
-        d->imglst->listView()->setColumn(static_cast<DImagesListView::ColumnType>(FlickrList::FRIENDS),
+        d->imglst->listView()->setColumn(static_cast<DItemsListView::ColumnType>(FlickrList::FRIENDS),
                                         i18nc("photo permissions", "Friends"), true);
         hdr->setSectionResizeMode(FlickrList::FAMILY,  QHeaderView::Interactive);
         hdr->setSectionResizeMode(FlickrList::FRIENDS, QHeaderView::Interactive);
         hdr->resizeSection(FlickrList::FAMILY,  permColWidth);
         hdr->resizeSection(FlickrList::FRIENDS, permColWidth);
 
-        d->imglst->listView()->setColumn(static_cast<DImagesListView::ColumnType>(FlickrList::SAFETYLEVEL),
+        d->imglst->listView()->setColumn(static_cast<DItemsListView::ColumnType>(FlickrList::SAFETYLEVEL),
                                         i18n("Safety level"), true);
-        d->imglst->listView()->setColumn(static_cast<DImagesListView::ColumnType>(FlickrList::CONTENTTYPE),
+        d->imglst->listView()->setColumn(static_cast<DItemsListView::ColumnType>(FlickrList::CONTENTTYPE),
                                         i18n("Content type"), true);
         QMap<int, QString> safetyLevelItems;
         QMap<int, QString> contentTypeItems;
@@ -97,8 +97,8 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
         contentTypeItems[FlickrList::OTHER]      = i18nc("photo content type", "Other");
         ComboBoxDelegate* const safetyLevelDelegate = new ComboBoxDelegate(d->imglst, safetyLevelItems);
         ComboBoxDelegate* const contentTypeDelegate = new ComboBoxDelegate(d->imglst, contentTypeItems);
-        d->imglst->listView()->setItemDelegateForColumn(static_cast<DImagesListView::ColumnType>(FlickrList::SAFETYLEVEL), safetyLevelDelegate);
-        d->imglst->listView()->setItemDelegateForColumn(static_cast<DImagesListView::ColumnType>(FlickrList::CONTENTTYPE), contentTypeDelegate);
+        d->imglst->listView()->setItemDelegateForColumn(static_cast<DItemsListView::ColumnType>(FlickrList::SAFETYLEVEL), safetyLevelDelegate);
+        d->imglst->listView()->setItemDelegateForColumn(static_cast<DItemsListView::ColumnType>(FlickrList::CONTENTTYPE), contentTypeDelegate);
     }
 
     hdr->setSectionResizeMode(FlickrList::PUBLIC, QHeaderView::Interactive);
@@ -213,7 +213,7 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
     getUploadBox()->hide();
     getSizeBox()->hide();
 
-    // Removing DImagesList inherited from WSSettingsWidget and replacing it with more specific FlickrList
+    // Removing DItemsList inherited from WSSettingsWidget and replacing it with more specific FlickrList
     replaceImageList(d->imglst);
 
     updateLabels();
@@ -267,8 +267,8 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
     {
         d->extendedPublicationBox->hide();
         d->extendedPublicationButton->hide();
-        d->imglst->listView()->setColumnEnabled(static_cast<DImagesListView::ColumnType>(FlickrList::SAFETYLEVEL), false);
-        d->imglst->listView()->setColumnEnabled(static_cast<DImagesListView::ColumnType>(FlickrList::CONTENTTYPE), false);
+        d->imglst->listView()->setColumnEnabled(static_cast<DItemsListView::ColumnType>(FlickrList::SAFETYLEVEL), false);
+        d->imglst->listView()->setColumnEnabled(static_cast<DItemsListView::ColumnType>(FlickrList::CONTENTTYPE), false);
     }
 }
 

@@ -146,7 +146,7 @@ public:
 
     DProgressWdg*                            progressBar;
     DInfoInterface*                          iface;
-    DImagesList*                             imgList;
+    DItemsList*                             imgList;
 
     QStringList                              WikisHistory;
     QStringList                              UrlsHistory;
@@ -173,8 +173,8 @@ MediaWikiWidget::MediaWikiWidget(DInfoInterface* const iface, QWidget* const par
     d->headerLbl->setOpenExternalLinks(true);
     d->headerLbl->setFocusPolicy(Qt::NoFocus);
 
-    d->imgList   = new DImagesList(this);
-    d->imgList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
+    d->imgList   = new DItemsList(this);
+    d->imgList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     d->imgList->setAllowRAW(true);
     d->imgList->setIface(d->iface);
     d->imgList->loadImagesFromCurrentSelection();
@@ -638,7 +638,7 @@ void MediaWikiWidget::saveSettings(KConfigGroup& group)
     group.writeEntry("RemoveGeo",     d->removeGeoChB->isChecked());
 }
 
-DImagesList* MediaWikiWidget::imagesList() const
+DItemsList* MediaWikiWidget::imagesList() const
 {
     return d->imgList;
 }
@@ -805,7 +805,7 @@ void MediaWikiWidget::clearEditFields()
 void MediaWikiWidget::slotLoadImagesDesc(QTreeWidgetItem* item)
 {
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
-    DImagesListViewItem* const l_item     = dynamic_cast<DImagesListViewItem*>(item);
+    DItemsListViewItem* const l_item     = dynamic_cast<DItemsListViewItem*>(item);
 
     if (!l_item)
         return;
@@ -868,7 +868,7 @@ void MediaWikiWidget::slotRestoreExtension()
     // Build the list of items to rename
     for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
-        DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
+        DItemsListViewItem* const l_item = dynamic_cast<DItemsListViewItem*>(selectedItems.at(i));
 
         if (l_item)
             urls.append(l_item->url());
@@ -912,7 +912,7 @@ void MediaWikiWidget::slotApplyTitle()
     // Build the list of items to rename
     for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
-        DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
+        DItemsListViewItem* const l_item = dynamic_cast<DItemsListViewItem*>(selectedItems.at(i));
 
         if (l_item)
             urls.append(l_item->url());
@@ -951,7 +951,7 @@ void MediaWikiWidget::slotApplyDate()
 
     for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
-        DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
+        DItemsListViewItem* const l_item = dynamic_cast<DItemsListViewItem*>(selectedItems.at(i));
 
         if (l_item)
             urls.append(l_item->url());
@@ -973,7 +973,7 @@ void MediaWikiWidget::slotApplyCategories()
 
     for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
-        DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
+        DItemsListViewItem* const l_item = dynamic_cast<DItemsListViewItem*>(selectedItems.at(i));
 
         if (l_item)
             urls.append(l_item->url());
@@ -995,7 +995,7 @@ void MediaWikiWidget::slotApplyDescription()
 
     for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
-        DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
+        DItemsListViewItem* const l_item = dynamic_cast<DItemsListViewItem*>(selectedItems.at(i));
 
         if (l_item)
             urls.append(l_item->url());
@@ -1018,7 +1018,7 @@ void MediaWikiWidget::slotApplyLatitude()
 
     for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
-        DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
+        DItemsListViewItem* const l_item = dynamic_cast<DItemsListViewItem*>(selectedItems.at(i));
 
         if (l_item)
             urls.append(l_item->url());
@@ -1040,7 +1040,7 @@ void MediaWikiWidget::slotApplyLongitude()
 
     for (int i = 0 ; i < selectedItems.size() ; ++i)
     {
-        DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(selectedItems.at(i));
+        DItemsListViewItem* const l_item = dynamic_cast<DItemsListViewItem*>(selectedItems.at(i));
 
         if (l_item)
             urls.append(l_item->url());

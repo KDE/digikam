@@ -165,14 +165,14 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
 
     d->photoUi->mPrintList->setIface(d->iface);
     d->photoUi->mPrintList->setAllowDuplicate(true);
-    d->photoUi->mPrintList->setControlButtons(DImagesList::Add      |
-                                    DImagesList::Remove   |
-                                    DImagesList::MoveUp   |
-                                    DImagesList::MoveDown |
-                                    DImagesList::Clear    |
-                                    DImagesList::Save     |
-                                    DImagesList::Load);
-    d->photoUi->mPrintList->setControlButtonsPlacement(DImagesList::ControlButtonsAbove);
+    d->photoUi->mPrintList->setControlButtons(DItemsList::Add      |
+                                    DItemsList::Remove   |
+                                    DItemsList::MoveUp   |
+                                    DItemsList::MoveDown |
+                                    DItemsList::Clear    |
+                                    DItemsList::Save     |
+                                    DItemsList::Load);
+    d->photoUi->mPrintList->setControlButtonsPlacement(DItemsList::ControlButtonsAbove);
     d->photoUi->mPrintList->enableDragAndDrop(false);
 
     d->photoUi->BmpFirstPagePreview->setAlignment(Qt::AlignHCenter);
@@ -302,7 +302,7 @@ QPrinter* AdvPrintPhotoPage::printer() const
     return d->printer;
 }
 
-DImagesList* AdvPrintPhotoPage::imagesList() const
+DItemsList* AdvPrintPhotoPage::imagesList() const
 {
     return d->photoUi->mPrintList;
 }
@@ -490,7 +490,7 @@ void AdvPrintPhotoPage::slotIncreaseCopies()
     if (d->settings->photos.size())
     {
         QList<QUrl> list;
-        DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>(d->photoUi->mPrintList->listView()->currentItem());
+        DItemsListViewItem* const item = dynamic_cast<DItemsListViewItem*>(d->photoUi->mPrintList->listView()->currentItem());
 
         if (!item)
             return;
@@ -505,7 +505,7 @@ void AdvPrintPhotoPage::slotDecreaseCopies()
 {
     if (d->settings->photos.size())
     {
-        DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>
+        DItemsListViewItem* const item = dynamic_cast<DItemsListViewItem*>
             (d->photoUi->mPrintList->listView()->currentItem());
 
         if (!item)

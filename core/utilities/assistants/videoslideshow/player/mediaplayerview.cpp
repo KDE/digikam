@@ -149,6 +149,7 @@ public:
         nextAction(0),
         playAction(0),
         toolBar(0),
+        iface(0),
         videoWidget(0),
         player(0),
         slider(0),
@@ -165,8 +166,11 @@ public:
 
     QToolBar*            toolBar;
 
+    DInfoInterface*      iface;
+
     WidgetRenderer*      videoWidget;
     AVPlayer*            player;
+
     QSlider*             slider;
     QLabel*              tlabel;
     QUrl                 currentItem;
@@ -281,6 +285,11 @@ MediaPlayerView::~MediaPlayerView()
 {
     d->player->stop();
     delete d;
+}
+
+void MediaPlayerView::setInfoInterface(DInfoInterface* const iface)
+{
+    d->iface = iface;
 }
 
 void MediaPlayerView::reload()
@@ -410,26 +419,37 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
 
     if (MetaEngineSettings::instance()->settings().exifRotate)
     {
-        int orientation = 0;
-        DMetadata meta(url.toLocalFile());
+        int orientation      = 0;
+        int videoOrientation = 0;
 
-        switch (meta.getItemOrientation())
+        if (d->iface)
+        {
+            DItemInfo info(d->iface->itemInfo(url));
+            orientation = info.orientation();
+        }
+        else
+        {
+            DMetadata meta(url.toLocalFile());
+            orientation = meta.getItemOrientation();
+        }
+
+        switch (orientation)
         {
             case MetaEngine::ORIENTATION_ROT_90:
-                orientation = 90;
+                videoOrientation = 90;
                 break;
             case MetaEngine::ORIENTATION_ROT_180:
-                orientation = 180;
+                videoOrientation = 180;
                 break;
             case MetaEngine::ORIENTATION_ROT_270:
-                orientation = 270;
+                videoOrientation = 270;
                 break;
             default:
                 break;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Found video orientation:" << orientation;
-        d->videoWidget->setOrientation(orientation);
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Found video orientation:" << videoOrientation;
+        d->videoWidget->setOrientation(videoOrientation);
     }
 
     d->player->setFile(d->currentItem.toLocalFile());

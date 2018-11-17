@@ -46,6 +46,7 @@ extern "C"
 // Local includes
 
 #include "digikam_debug.h"
+#include "metaengine_data_p.h"
 
 // Pragma directives to reduce warnings from Exiv2.
 #if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
@@ -82,6 +83,48 @@ MetaEngine::Private::~Private()
 {
 }
 
+const Exiv2::ExifData& MetaEngine::Private::exifMetadata() const
+{
+    return data.constData()->exifMetadata;
+}
+
+const Exiv2::IptcData& MetaEngine::Private::iptcMetadata() const
+{
+    return data.constData()->iptcMetadata;
+}
+
+const std::string& MetaEngine::Private::itemComments() const
+{
+    return data.constData()->imageComments;
+}
+
+Exiv2::ExifData& MetaEngine::Private::exifMetadata()
+{
+    return data.data()->exifMetadata;
+}
+
+Exiv2::IptcData& MetaEngine::Private::iptcMetadata()
+{
+    return data.data()->iptcMetadata;
+}
+
+std::string& MetaEngine::Private::itemComments()
+{
+    return data.data()->imageComments;
+}
+
+#ifdef _XMP_SUPPORT_
+const Exiv2::XmpData& MetaEngine::Private::xmpMetadata() const
+{
+    return data.constData()->xmpMetadata;
+}
+
+Exiv2::XmpData& MetaEngine::Private::xmpMetadata()
+{
+    return data.data()->xmpMetadata;
+}
+#endif
+
 void MetaEngine::Private::copyPrivateData(const Private* const other)
 {
     QMutexLocker lock(&s_metaEngineMutex);
@@ -108,7 +151,9 @@ bool MetaEngine::Private::saveToXMPSidecar(const QFileInfo& finfo) const
     try
     {
         Exiv2::Image::AutoPtr image;
-        image = Exiv2::ImageFactory::create(Exiv2::ImageType::xmp, (const char*)(QFile::encodeName(filePath).constData()));
+        image = Exiv2::ImageFactory::create(Exiv2::ImageType::xmp,
+                                            (const char*)(QFile::encodeName(filePath).constData()));
+
         return saveOperations(finfo, image);
     }
     catch( Exiv2::Error& e )
@@ -127,7 +172,8 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
 {
     if (!finfo.isWritable())
     {
-        qCDebug(DIGIKAM_METAENGINE_LOG) << "File" << finfo.fileName() << "is read only. Metadata not written.";
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "File" << finfo.fileName()
+                                        << "is read only. Metadata not written.";
         return false;
     }
 
@@ -193,6 +239,7 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
     {
         Exiv2::Image::AutoPtr image;
         image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(finfo.filePath()).constData()));
+
         return saveOperations(finfo, image);
     }
     catch( Exiv2::Error& e )
@@ -265,7 +312,7 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
                 untouchedTags << QLatin1String("Exif.Image.PlanarConfiguration");
                 untouchedTags << QLatin1String("Exif.Image.ResolutionUnit");
 
-                for (Exiv2::ExifData::const_iterator it = orgExif.begin(); it != orgExif.end(); ++it)
+                for (Exiv2::ExifData::const_iterator it = orgExif.begin() ; it != orgExif.end() ; ++it)
                 {
                     if (untouchedTags.contains(QLatin1String(it->key().c_str())))
                     {
@@ -275,7 +322,7 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
 
                 Exiv2::ExifData readedExif = exifMetadata();
 
-                for (Exiv2::ExifData::const_iterator it = readedExif.begin(); it != readedExif.end(); ++it)
+                for (Exiv2::ExifData::const_iterator it = readedExif.begin() ; it != readedExif.end() ; ++it)
                 {
                     if (!untouchedTags.contains(QLatin1String(it->key().c_str())))
                     {
@@ -370,16 +417,6 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
     }
 
     return false;
-}
-
-void MetaEngineData::Private::clear()
-{
-    imageComments.clear();
-    exifMetadata.clear();
-    iptcMetadata.clear();
-#ifdef _XMP_SUPPORT_
-    xmpMetadata.clear();
-#endif
 }
 
 void MetaEngine::Private::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
@@ -642,7 +679,7 @@ int MetaEngine::Private::getXMPTagsListFromPrefix(const QString& pf, MetaEngine:
         QList<const Exiv2::XmpPropertyInfo*> tags;
         tags << Exiv2::XmpProperties::propertyList(pf.toLatin1().data());
 
-        for (QList<const Exiv2::XmpPropertyInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
+        for (QList<const Exiv2::XmpPropertyInfo*>::iterator it = tags.begin() ; it != tags.end() ; ++it)
         {
             while ( (*it) && !QString::fromLatin1((*it)->name_).isNull() )
             {

@@ -55,10 +55,10 @@ const QString DAboutData::digiKamSloganFormated()
                  "Please translate using short words else the slogan can be truncated.",
                  "<qt><font color=\"white\">"
                  "<b>Professional</b> Photo <b>Management</b> with the Power of <b>Open Source</b>"
-                 "<br/><br/>"
+                 "</font><font color=\"gray\"><br/>"
                  "<i>%1</i>"
                  "</font></qt>",
-                 digiKamFamilly()
+                 digiKamFamily()
                  );
 }
 
@@ -67,7 +67,7 @@ const QString DAboutData::digiKamSlogan()
     return i18n("Professional Photo Management with the Power of Open Source");
 }
 
-const QString DAboutData::digiKamFamilly()
+const QString DAboutData::digiKamFamily()
 {
     return i18n("A KDE Family Project");
 }

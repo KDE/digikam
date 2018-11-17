@@ -193,7 +193,6 @@ void GPTalker::listAlbums()
     m_reply = d->netMngr->get(netRequest);
 
     d->state = Private::GP_LISTALBUMS;
-    m_buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -223,8 +222,6 @@ void GPTalker::getLoggedInUser()
     m_reply = d->netMngr->get(netRequest);
 
     d->state = Private::GP_GETUSER;
-    m_buffer.resize(0);
-
     emit signalBusy(true);
 }
 
@@ -252,7 +249,6 @@ void GPTalker::listPhotos(const QString& albumId, const QString& /*imgmax*/)
     m_reply = d->netMngr->post(netRequest, data);
 
     d->state = Private::GP_LISTPHOTOS;
-    m_buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -281,7 +277,6 @@ void GPTalker::createAlbum(const GSFolder& album)
     m_reply = d->netMngr->post(netRequest, data);
 
     d->state = Private::GP_CREATEALBUM;
-    m_buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -328,17 +323,13 @@ bool GPTalker::addPhoto(const QString& photoPath,
 
         path = WSToolUtils::makeTemporaryDir("google").filePath(QFileInfo(photoPath)
                                              .baseName().trimmed() + QLatin1String(".jpg"));
-        int imgQualityToApply = 100;
 
-        if (rescale)
+        if (rescale && (image.width() > maxDim || image.height() > maxDim))
         {
-            if (image.width() > maxDim || image.height() > maxDim)
-                image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-            imgQualityToApply = imageQuality;
+            image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
-        image.save(path, "JPEG", imgQualityToApply);
+        image.save(path, "JPEG", imageQuality);
 
         DMetadata meta;
 
@@ -375,7 +366,6 @@ bool GPTalker::addPhoto(const QString& photoPath,
     m_reply = d->netMngr->post(netRequest, data);
 
     d->state = Private::GP_ADDPHOTO;
-    m_buffer.resize(0);
     emit signalBusy(true);
     return true;
 }
@@ -413,17 +403,13 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info, /*const QStr
 
         path = WSToolUtils::makeTemporaryDir("google").filePath(QFileInfo(photoPath)
                                              .baseName().trimmed() + QLatin1String(".jpg"));
-        int imgQualityToApply = 100;
 
-        if (rescale)
+        if (rescale && (image.width() > maxDim || image.height() > maxDim))
         {
-            if (image.width() > maxDim || image.height() > maxDim)
-                image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
-
-            imgQualityToApply = imageQuality;
+            image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
         }
 
-        image.save(path, "JPEG", imgQualityToApply);
+        image.save(path, "JPEG", imageQuality);
 
         DMetadata meta;
 
@@ -509,8 +495,6 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info, /*const QStr
     m_reply = d->netMngr->put(netRequest, form.formData());
 
     d->state = Private::GP_UPDATEPHOTO;
-    m_buffer.resize(0);
-
     return true;
 }
 
@@ -530,7 +514,6 @@ void GPTalker::getPhoto(const QString& imgPath)
     m_reply = d->netMngr->get(QNetworkRequest(url));
 
     d->state = Private::GP_GETPHOTO;
-    m_buffer.resize(0);
 }
 
 void GPTalker::cancel()
@@ -639,38 +622,38 @@ void GPTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    m_buffer.append(reply->readAll());
+    QByteArray buffer = reply->readAll();
 
     switch (d->state)
     {
         case (Private::GP_LOGOUT):
             break;
         case (Private::GP_GETUSER):
-            parseResponseGetLoggedInUser(m_buffer);
+            parseResponseGetLoggedInUser(buffer);
             break;
         case (Private::GP_CREATEALBUM):
-            parseResponseCreateAlbum(m_buffer);
+            parseResponseCreateAlbum(buffer);
             break;
         case (Private::GP_LISTALBUMS):
-            parseResponseListAlbums(m_buffer);
+            parseResponseListAlbums(buffer);
             break;
         case (Private::GP_LISTPHOTOS):
-            parseResponseListPhotos(m_buffer);
+            parseResponseListPhotos(buffer);
             break;
         case (Private::GP_ADDPHOTO):
-            parseResponseAddPhoto(m_buffer);
+            parseResponseAddPhoto(buffer);
             break;
         case (Private::GP_UPDATEPHOTO):
             emit signalAddPhotoDone(1, QLatin1String(""));
             break;
         case (Private::GP_UPLOADPHOTO):
-            parseResponseUploadPhoto(m_buffer);
+            parseResponseUploadPhoto(buffer);
             break;
         case (Private::GP_GETPHOTO):
 
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(m_buffer);
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(buffer);
             // all we get is data of the image
-            emit signalGetPhotoDone(1, QString(), m_buffer);
+            emit signalGetPhotoDone(1, QString(), buffer);
             break;
     }
 
@@ -751,7 +734,6 @@ void GPTalker::slotUploadPhoto()
     m_reply = d->netMngr->post(netRequest, data);
 
     d->state = Private::GP_UPLOADPHOTO;
-    m_buffer.resize(0);
     emit signalBusy(true);
 }
 

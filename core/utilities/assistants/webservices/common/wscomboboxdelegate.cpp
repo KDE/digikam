@@ -46,7 +46,7 @@ public:
         rowEdited = -1;
     }
 
-    DImagesList*       parent;
+    DItemsList*       parent;
     QMap<int, QString> items;
 
     /* The row in the view that is currently being edited. Should be -1 to
@@ -57,7 +57,7 @@ public:
     QSize              size;
 };
 
-ComboBoxDelegate::ComboBoxDelegate(DImagesList* const parent, const QMap<int, QString>& items)
+ComboBoxDelegate::ComboBoxDelegate(DItemsList* const parent, const QMap<int, QString>& items)
     : QAbstractItemDelegate(parent),
       d(new Private)
 {

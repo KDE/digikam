@@ -35,7 +35,7 @@
 // Local includes
 
 #include "mailwizard.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "dlayoutbox.h"
 
 namespace Digikam
@@ -58,7 +58,7 @@ public:
         }
     }
 
-    DImagesList*     imageList;
+    DItemsList*     imageList;
     MailWizard*      wizard;
     DInfoInterface*  iface;
 };
@@ -71,8 +71,8 @@ MailImagesPage::MailImagesPage(QWizard* const dialog, const QString& title)
     QLabel* const desc = new QLabel(vbox);
     desc->setText(i18n("<p>This view list all items to export by mail.</p>"));
 
-    d->imageList       = new DImagesList(vbox);
-    d->imageList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
+    d->imageList       = new DItemsList(vbox);
+    d->imageList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
 
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));

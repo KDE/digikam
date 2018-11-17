@@ -42,26 +42,26 @@ namespace Digikam
 {
 
 IpfsImagesList::IpfsImagesList(QWidget* const parent)
-    : DImagesList(parent)
+    : DItemsList(parent)
 {
-    setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
+    setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     setAllowDuplicate(false);
     setAllowRAW(false);
 
     auto* list = listView();
 
-    list->setColumnLabel(DImagesListView::Thumbnail, i18n("Thumbnail"));
+    list->setColumnLabel(DItemsListView::Thumbnail, i18n("Thumbnail"));
 
-    list->setColumnLabel(static_cast<DImagesListView::ColumnType>(IpfsImagesList::Title),
+    list->setColumnLabel(static_cast<DItemsListView::ColumnType>(IpfsImagesList::Title),
                          i18n("Submission title"));
 
-    list->setColumnLabel(static_cast<DImagesListView::ColumnType>(IpfsImagesList::Description),
+    list->setColumnLabel(static_cast<DItemsListView::ColumnType>(IpfsImagesList::Description),
                          i18n("Submission description"));
 
-    list->setColumn(static_cast<DImagesListView::ColumnType>(IpfsImagesList::Url),
+    list->setColumn(static_cast<DItemsListView::ColumnType>(IpfsImagesList::Url),
                     i18n("Ipfs Url"), true);
 
-    connect(list, &DImagesListView::itemDoubleClicked,
+    connect(list, &DItemsListView::itemDoubleClicked,
             this, &IpfsImagesList::slotDoubleClick);
 }
 
@@ -142,8 +142,8 @@ void IpfsImagesList::slotDoubleClick(QTreeWidgetItem* element, int i)
 
 // ------------------------------------------------------------------------------------------------
 
-IpfsImagesListViewItem::IpfsImagesListViewItem(DImagesListView* const view, const QUrl& url)
-    : DImagesListViewItem(view, url)
+IpfsImagesListViewItem::IpfsImagesListViewItem(DItemsListView* const view, const QUrl& url)
+    : DItemsListViewItem(view, url)
 {
     const QColor blue(50, 50, 255);
 

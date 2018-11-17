@@ -33,7 +33,7 @@
 #include "digikam_export.h"
 #include "dprogresswdg.h"
 #include "dinfointerface.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 
 class KJob;
 

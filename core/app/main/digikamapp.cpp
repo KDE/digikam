@@ -901,7 +901,9 @@ void DigikamApp::customizedTrashView(bool set)
     d->slideShowSelectionAction->setEnabled(set);
     d->imageTableViewAction->setEnabled(set);
     d->imageIconViewAction->setEnabled(set);
+#ifdef HAVE_MARBLE
     d->imageMapViewAction->setEnabled(set);
+#endif
     d->imagePreviewAction->setEnabled(set);
     m_presentationAction->setEnabled(set);
     d->slideShowAction->setEnabled(set);

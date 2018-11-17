@@ -133,7 +133,7 @@ QString DKCamera::mimeType(const QString& fileext) const
     QString ext = fileext;
     QString mime;
 
-    // Massage known variations of known mimetypes into KDE specific ones
+    // Massage known variations of known mimetypes
     if (ext == QLatin1String("jpg") || ext == QLatin1String("jpe"))
     {
         ext = QLatin1String("jpeg");
@@ -168,7 +168,7 @@ void DKCamera::fillItemInfoFromMetadata(CamItemInfo& info, const DMetadata& meta
     QSize dims     = meta.getItemDimensions();
     info.ctime     = meta.getItemDateTime();
 
-    //NOTE: see bug #246401 to sort based on milliseconds for items  taken quickly.
+    // NOTE: see bug #246401 to sort based on milliseconds for items taken quickly.
     if (!info.ctime.isNull())
     {
         info.ctime.setTime(info.ctime.time().addMSecs(meta.getMSecsInfo()));

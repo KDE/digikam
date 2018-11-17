@@ -464,7 +464,7 @@ void ImageViewUtilities::createGroupByFilenameFromInfoList(const ItemInfoList& i
 namespace
 {
 
-struct NumberInFilenameMatch
+struct Q_DECL_HIDDEN NumberInFilenameMatch
 {
     NumberInFilenameMatch()
         : value(0),
@@ -472,7 +472,7 @@ struct NumberInFilenameMatch
     {
     }
 
-    NumberInFilenameMatch(const QString& filename)
+    explicit NumberInFilenameMatch(const QString& filename)
         : NumberInFilenameMatch()
     {
         if (filename.isEmpty())
@@ -523,13 +523,13 @@ struct NumberInFilenameMatch
             return false;
         }
 
-        return value+1 == other.value;
+        return (value+1 == other.value);
     }
 
     qulonglong value;
     QStringRef prefix;
     QStringRef suffix;
-    bool containsValue;
+    bool       containsValue;
 };
 
 bool imageMatchesTimelapseGroup(const ItemInfoList& group, const ItemInfo& itemInfo)

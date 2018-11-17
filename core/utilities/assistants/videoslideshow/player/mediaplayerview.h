@@ -38,6 +38,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
@@ -54,6 +55,8 @@ public:
     void setCurrentItem(const QUrl& url   = QUrl(),
                         bool  hasPrevious = false,
                         bool  hasNext     = false);
+
+    void setInfoInterface(DInfoInterface* const iface);
     void escapePreview();
     void reload();
 

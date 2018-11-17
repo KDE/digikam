@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class DImagesList;
+class DItemsList;
 
 /**
  * Helper widget for the import tool.
@@ -73,7 +73,7 @@ public:
      *
      * @return pointer to the image list
      */
-    DImagesList* imagesList() const;
+    DItemsList* imagesList() const;
 
     /**
      * Returns the upload widget for specifying the target location.

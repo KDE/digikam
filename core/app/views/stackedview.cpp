@@ -42,6 +42,7 @@
 #include "applicationsettings.h"
 #include "digikamimageview.h"
 #include "digikamview.h"
+#include "dbinfoiface.h"
 #include "itemalbummodel.h"
 #include "itemalbumfiltermodel.h"
 #include "imagepreviewview.h"
@@ -147,6 +148,7 @@ StackedView::StackedView(QWidget* const parent)
 
 #ifdef HAVE_MEDIAPLAYER
     d->mediaPlayerView  = new MediaPlayerView(this);
+    d->mediaPlayerView->setInfoInterface(new DBInfoIface(this, QList<QUrl>()));
 #endif //HAVE_MEDIAPLAYER
 
     insertWidget(IconViewMode,     d->imageIconView);

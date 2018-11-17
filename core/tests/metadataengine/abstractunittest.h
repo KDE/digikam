@@ -34,8 +34,6 @@
 
 // Local includes
 
-// Local includes
-
 #include "dmetadata.h"
 #include "wstoolutils.h"
 
@@ -44,7 +42,7 @@ using namespace Digikam;
 class AbstractUnitTest : public QObject
 {
     Q_OBJECT
-    
+
 public:
 
     AbstractUnitTest()
@@ -86,7 +84,7 @@ protected:
     QString       m_tempPath;               // The temporary path to store file to process un unit test.
     QDir          m_tempDir;                // Same that previous as QDir object.
     const QString m_originalImageFolder;    // The path to original files to process by unit test,
-                                            // and copied to the temporary directory. Original fules are not touch.
+                                            // and copied to the temporary directory. Original files still in read only.
 };
 
 #endif // DIGIKAM_ABSTRACT_UNIT_TEST_H

@@ -35,7 +35,7 @@
 // Local includes
 
 #include "vidslidewizard.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "dlayoutbox.h"
 
 namespace Digikam
@@ -58,7 +58,7 @@ public:
         }
     }
 
-    DImagesList*     imageList;
+    DItemsList*     imageList;
     VidSlideWizard*  wizard;
     DInfoInterface*  iface;
 };
@@ -75,8 +75,8 @@ VidSlideImagesPage::VidSlideImagesPage(QWizard* const dialog, const QString& tit
                        "<p>The first one is on top of the list, the last one</p>"
                        "<p>on the bottom. You can adjust the order of each item.</p>"));
 
-    d->imageList       = new DImagesList(vbox);
-    d->imageList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
+    d->imageList       = new DItemsList(vbox);
+    d->imageList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
 
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));

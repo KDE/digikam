@@ -45,7 +45,7 @@
 #include "applicationsettings.h"
 #include "contextmenuhelper.h"
 #include "itemfiltermodel.h"
-#include "imagedragdrop.h"
+#include "itemdragdrop.h"
 #include "fileactionmngr.h"
 #include "thumbnailloadthread.h"
 
@@ -172,7 +172,7 @@ public:
 
     LightTableItemListModel* imageInfoModel;
     ItemFilterModel*         imageFilterModel;
-    ImageDragDropHandler*     dragDropHandler;
+    ItemDragDropHandler*     dragDropHandler;
 };
 
 LightTableThumbBar::LightTableThumbBar(QWidget* const parent)
@@ -196,14 +196,14 @@ LightTableThumbBar::LightTableThumbBar(QWidget* const parent)
     d->imageFilterModel->setAllGroupsOpen(true); // disable filtering out by group, see bug #308948
     d->imageFilterModel->sort(0); // an initial sorting is necessary
 
-    d->dragDropHandler  = new ImageDragDropHandler(d->imageInfoModel);
+    d->dragDropHandler  = new ItemDragDropHandler(d->imageInfoModel);
     d->dragDropHandler->setReadOnlyDrop(true);
     d->imageInfoModel->setDragDropHandler(d->dragDropHandler);
 
     setModels(d->imageInfoModel, d->imageFilterModel);
     setSelectionMode(QAbstractItemView::SingleSelection);
 
-    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(QList<ItemInfo>)),
+    connect(d->dragDropHandler, SIGNAL(itemInfosDropped(QList<ItemInfo>)),
             this, SIGNAL(signalDroppedItems(QList<ItemInfo>)));
 
     connect(d->imageInfoModel, SIGNAL(imageInfosAdded(QList<ItemInfo>)),

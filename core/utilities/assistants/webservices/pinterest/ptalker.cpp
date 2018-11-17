@@ -44,7 +44,6 @@
 
 // KDE includes
 
-#include <kconfig.h>
 #include <kwindowconfig.h>
 
 // Local includes
@@ -55,7 +54,6 @@
 #include "wstoolutils.h"
 #include "pwindow.h"
 #include "pitem.h"
-#include "pmpform.h"
 #include "previewloadthread.h"
 
 #ifdef HAVE_QWEBENGINE
@@ -93,11 +91,15 @@ public:
 
         scope        = QLatin1String("read_public,write_public");
 
+        serviceName  = QLatin1String("Pinterest");
+        serviceKey   = QLatin1String("access_token");
+
         state        = P_USERNAME;
 
         parent       = 0;
         netMngr      = 0;
         reply        = 0;
+        settings     = 0;
         view         = 0;
     }
 
@@ -110,16 +112,17 @@ public:
     QString                redirectUrl;
     QString                accessToken;
     QString                scope;
+    QString                serviceName;
+    QString                serviceKey;
 
     QWidget*               parent;
 
     QNetworkAccessManager* netMngr;
-
     QNetworkReply*         reply;
 
-    State                  state;
+    QSettings*             settings;
 
-    QByteArray             buffer;
+    State                  state;
 
     DMetadata              meta;
 
@@ -133,9 +136,12 @@ public:
 PTalker::PTalker(QWidget* const parent)
     : d(new Private)
 {
-    d->parent  = parent;
-    d->netMngr = new QNetworkAccessManager(this);
-    d->view    = new WebWidget(d->parent);
+    d->parent   = parent;
+    d->netMngr  = new QNetworkAccessManager(this);
+    d->view     = new WebWidget(d->parent);
+    d->view->resize(800, 600);
+
+    d->settings = WSToolUtils::getOauthSettings(this);
 
 #ifndef HAVE_QWEBENGINE
     d->view->settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
@@ -176,8 +182,8 @@ void PTalker::link()
     url.setQuery(query);
 
     d->view->setWindowFlags(Qt::Dialog);
-    d->view->show();
     d->view->load(url);
+    d->view->show();
 
     connect(d->view, SIGNAL(urlChanged(QUrl)),
             this, SLOT(slotCatchUrl(QUrl)));
@@ -188,10 +194,11 @@ void PTalker::link()
 void PTalker::unLink()
 {
     d->accessToken = QString();
-    KConfig config;
-    KConfigGroup grp   = config.group("Pinterest User Settings");
-    grp.deleteGroup();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "group deleted";
+
+    d->settings->beginGroup(d->serviceName);
+    d->settings->remove(QString());
+    d->settings->endGroup();
+
 #ifdef HAVE_QWEBENGINE
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
 #else
@@ -235,25 +242,28 @@ void PTalker::getToken(const QString& code)
     d->reply = d->netMngr->post(netRequest, QByteArray());
 
     d->state = Private::P_ACCESSTOKEN;
-    d->buffer.resize(0);
 }
 
 QMap<QString, QString> PTalker::ParseUrlParameters(const QString& url)
 {
     QMap<QString, QString> urlParameters;
 
-    if (url.indexOf('?') == -1)
+    if (url.indexOf(QLatin1Char('?')) == -1)
     {
         return urlParameters;
     }
 
-    QString tmp           = url.right(url.length()-url.indexOf('?') - 1);
-    QStringList paramlist = tmp.split('&');
+    QString tmp           = url.right(url.length()-url.indexOf(QLatin1Char('?')) - 1);
+    QStringList paramlist = tmp.split(QLatin1Char('&'));
 
     for (int i = 0 ; i < paramlist.count() ; ++i)
     {
-        QStringList paramarg = paramlist.at(i).split('=');
-        urlParameters.insert(paramarg.at(0), paramarg.at(1));
+        QStringList paramarg = paramlist.at(i).split(QLatin1Char('='));
+
+        if (paramarg.count() == 2)
+        {
+            urlParameters.insert(paramarg.at(0), paramarg.at(1));
+        }
     }
 
     return urlParameters;
@@ -307,7 +317,6 @@ void PTalker::createBoard(QString& boardName)
     d->reply = d->netMngr->post(netRequest, postData);
 
     d->state = Private::P_CREATEBOARD;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -320,7 +329,6 @@ void PTalker::getUserName()
 
     d->reply = d->netMngr->get(netRequest);
     d->state = Private::P_USERNAME;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -337,7 +345,6 @@ void PTalker::listBoards(const QString& /*path*/)
     d->reply = d->netMngr->get(netRequest);
 
     d->state = Private::P_LISTBOARDS;
-    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -351,7 +358,6 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
 
     emit signalBusy(true);
 
-    PMPForm form;
     QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
 
     if (image.isNull())
@@ -379,12 +385,6 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
     }
 
     QString boardParam = d->userName + QLatin1Char('/') + uploadBoard;
-
-    if (!form.addFile(path))
-    {
-        emit signalBusy(false);
-        return false;
-    }
 
     QUrl url(QString::fromLatin1("https://api.pinterest.com/v1/pins/?access_token=%1").arg(d->accessToken));
 
@@ -431,8 +431,6 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
     multiPart->setParent(d->reply);
 
     d->state = Private::P_ADDPIN;
-    d->buffer.resize(0);
-
     return true;
 }
 
@@ -459,30 +457,30 @@ void PTalker::slotFinished(QNetworkReply* reply)
         }
     }
 
-    d->buffer.append(reply->readAll());
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "BUFFER" << QString(d->buffer);
+    QByteArray buffer = reply->readAll();
+    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "BUFFER" << QString(buffer);
 
     switch (d->state)
     {
         case Private::P_LISTBOARDS:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In P_LISTBOARDS";
-            parseResponseListBoards(d->buffer);
+            parseResponseListBoards(buffer);
             break;
         case Private::P_CREATEBOARD:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In P_CREATEBOARD";
-            parseResponseCreateBoard(d->buffer);
+            parseResponseCreateBoard(buffer);
             break;
         case Private::P_ADDPIN:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In P_ADDPIN";
-            parseResponseAddPin(d->buffer);
+            parseResponseAddPin(buffer);
             break;
         case Private::P_USERNAME:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In P_USERNAME";
-            parseResponseUserName(d->buffer);
+            parseResponseUserName(buffer);
             break;
         case Private::P_ACCESSTOKEN:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In P_ACCESSTOKEN";
-            parseResponseAccessToken(d->buffer);
+            parseResponseAccessToken(buffer);
             break;
         default:
             break;
@@ -595,30 +593,26 @@ void PTalker::parseResponseCreateBoard(const QByteArray& data)
 
 void PTalker::writeSettings()
 {
-    KConfig config;
-    KConfigGroup grp = config.group("Pinterest User Settings");
-
-    grp.writeEntry("access_token", d->accessToken);
-    config.sync();
+    d->settings->beginGroup(d->serviceName);
+    d->settings->setValue(d->serviceKey, d->accessToken);
+    d->settings->endGroup();
 }
 
 void PTalker::readSettings()
 {
-    KConfig config;
-    KConfigGroup grp = config.group("Pinterest User Settings");
+    d->settings->beginGroup(d->serviceName);
+    d->accessToken = d->settings->value(d->serviceKey).toString();
+    d->settings->endGroup();
 
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In read settings";
-    if (!grp.readEntry("access_token", false))
+    if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Linking...";
         link();
     }
     else
     {
-        d->accessToken = grp.readEntry("access_token",QString());
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Already Linked";
         emit pinterestLinkingSucceeded();
-
     }
 }
 

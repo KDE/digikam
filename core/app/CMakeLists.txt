@@ -321,7 +321,7 @@ set(libdigikamgui_SRCS
     dragdrop/importdragdrop.cpp
     dragdrop/albumdragdrop.cpp
     dragdrop/ddragobjects.cpp
-    dragdrop/imagedragdrop.cpp
+    dragdrop/itemdragdrop.cpp
     dragdrop/tagdragdrop.cpp
 
     filters/filtersidebarwidget.cpp

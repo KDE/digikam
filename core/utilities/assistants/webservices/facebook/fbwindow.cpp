@@ -47,7 +47,7 @@
 
 #include "digikam_debug.h"
 #include "dmetadata.h"
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "digikam_version.h"
 #include "dprogresswdg.h"
 #include "wstoolutils.h"
@@ -85,7 +85,7 @@ public:
     }
 
     FbWidget*       widget;
-    DImagesList*    imgList;
+    DItemsList*    imgList;
     QPushButton*    changeUserBtn;
     QComboBox*      albumsCoB;
     QPushButton*    newAlbumBtn;

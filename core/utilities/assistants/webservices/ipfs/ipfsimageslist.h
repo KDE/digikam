@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "dimageslist.h"
+#include "ditemslist.h"
 #include "ipfstalker.h"
 
 namespace Digikam
@@ -38,7 +38,7 @@ namespace Digikam
 
 class IpfsImagesListViewItem;
 
-class IpfsImagesList : public DImagesList
+class IpfsImagesList : public DItemsList
 {
     Q_OBJECT
 
@@ -48,9 +48,9 @@ public:
      */
     enum FieldType
     {
-        Title       = DImagesListView::User1,
-        Description = DImagesListView::User2,
-        Url         = DImagesListView::User3,
+        Title       = DItemsListView::User1,
+        Description = DItemsListView::User2,
+        Url         = DItemsListView::User3,
     };
 
     explicit IpfsImagesList(QWidget* const parent = 0);
@@ -67,11 +67,11 @@ public Q_SLOTS:
 
 // -------------------------------------------------------------------------
 
-class IpfsImagesListViewItem : public DImagesListViewItem
+class IpfsImagesListViewItem : public DItemsListViewItem
 {
 public:
 
-    explicit IpfsImagesListViewItem(DImagesListView* const view, const QUrl& url);
+    explicit IpfsImagesListViewItem(DItemsListView* const view, const QUrl& url);
     ~IpfsImagesListViewItem() Q_DECL_OVERRIDE {}
 
     void setTitle(const QString& str);

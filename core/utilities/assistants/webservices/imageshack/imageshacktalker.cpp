@@ -87,8 +87,6 @@ public:
 
     ImageShackSession*     session;
 
-    QByteArray             buffer;
-
     QString                userAgent;
     QUrl                   photoApiUrl;
     QUrl                   videoApiUrl;
@@ -185,22 +183,22 @@ void ImageShackTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    d->buffer.append(reply->readAll());
+    QByteArray buffer = reply->readAll();
 
     switch (d->state)
     {
         case Private::IMGHCK_AUTHENTICATING:
-            parseAccessToken(d->buffer);
+            parseAccessToken(buffer);
             break;
         case Private::IMGHCK_ADDPHOTOGALLERY:
-            parseAddPhotoToGalleryDone(d->buffer);
+            parseAddPhotoToGalleryDone(buffer);
             break;
         case Private::IMGHCK_ADDVIDEO:
         case Private::IMGHCK_ADDPHOTO:
-            parseUploadPhotoDone(d->buffer);
+            parseUploadPhotoDone(buffer);
             break;
         case Private::IMGHCK_GETGALLERIES:
-            parseGetGalleries(d->buffer);
+            parseGetGalleries(buffer);
             break;
         default:
             break;
@@ -232,7 +230,6 @@ void ImageShackTalker::authenticate()
     d->reply = d->netMngr->post(netRequest, QByteArray());
 
     d->state = Private::IMGHCK_AUTHENTICATING;
-    d->buffer.resize(0);
 }
 
 void ImageShackTalker::getGalleries()
@@ -256,7 +253,6 @@ void ImageShackTalker::getGalleries()
     d->reply = d->netMngr->get(QNetworkRequest(gUrl));
 
     d->state = Private::IMGHCK_GETGALLERIES;
-    d->buffer.resize(0);
 }
 
 void ImageShackTalker::checkRegistrationCodeDone(int errCode, const QString& errMsg)
@@ -415,8 +411,6 @@ void ImageShackTalker::uploadItem(const QString& path, const QMap<QString, QStri
 
     d->reply = d->netMngr->post(netRequest, form.formData());
 
-    d->buffer.resize(0);
-
     //uploadItemToGallery(path, QLatin1String(""), opts);
 }
 
@@ -470,8 +464,6 @@ void ImageShackTalker::uploadItemToGallery(const QString& path, const QString& /
     netRequest.setHeader(QNetworkRequest::UserAgentHeader, d->userAgent);
 
     d->reply = d->netMngr->post(netRequest, form.formData());
-
-    d->buffer.resize(0);
 }
 
 int ImageShackTalker::parseErrorResponse(QDomElement elem, QString& errMsg) const

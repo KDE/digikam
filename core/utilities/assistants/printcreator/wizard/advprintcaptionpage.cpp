@@ -124,8 +124,8 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
 
     d->captionUi->mPrintList->setIface(d->iface);
     d->captionUi->mPrintList->setAllowDuplicate(true);
-    d->captionUi->mPrintList->setControlButtonsPlacement(DImagesList::NoControlButtons);
-    d->captionUi->mPrintList->listView()->setColumn(DImagesListView::User1,
+    d->captionUi->mPrintList->setControlButtonsPlacement(DItemsList::NoControlButtons);
+    d->captionUi->mPrintList->listView()->setColumn(DItemsListView::User1,
                                         i18nc("@title:column", "Caption"),
                                         true);
 
@@ -140,7 +140,7 @@ AdvPrintCaptionPage::~AdvPrintCaptionPage()
     delete d;
 }
 
-DImagesList* AdvPrintCaptionPage::imagesList() const
+DItemsList* AdvPrintCaptionPage::imagesList() const
 {
     return d->captionUi->mPrintList;
 }
@@ -260,7 +260,7 @@ void AdvPrintCaptionPage::slotUpdateCaptions()
 
             if (pPhoto && pPhoto->m_pAdvPrintCaptionInfo)
             {
-                DImagesListViewItem* const lvItem = d->captionUi->mPrintList->listView()->findItem(pPhoto->m_url);
+                DItemsListViewItem* const lvItem = d->captionUi->mPrintList->listView()->findItem(pPhoto->m_url);
 
                 if (lvItem)
                 {
@@ -272,7 +272,7 @@ void AdvPrintCaptionPage::slotUpdateCaptions()
 
                     qCDebug(DIGIKAM_GENERAL_LOG) << cap;
 
-                    lvItem->setText(DImagesListView::User1, cap);
+                    lvItem->setText(DItemsListView::User1, cap);
                 }
             }
         }
