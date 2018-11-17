@@ -101,7 +101,7 @@
 #include "itempropertiessidebardb.h"
 #include "itempropertiesversionstab.h"
 #include "itemscanner.h"
-#include "imagethumbnailbar.h"
+#include "itemthumbnailbar.h"
 #include "iofilesettings.h"
 #include "dnotificationwrapper.h"
 #include "loadingcacheinterface.h"
@@ -284,7 +284,7 @@ public:
     ItemFilterModel*            imageFilterModel;
     ItemDragDropHandler*        dragDropHandler;
 
-    ImageThumbnailBar*           thumbBar;
+    ItemThumbnailBar*           thumbBar;
     ThumbBarDock*                thumbBarDock;
 
     ItemPropertiesSideBarDB*    rightSideBar;

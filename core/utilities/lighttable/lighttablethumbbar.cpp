@@ -176,7 +176,7 @@ public:
 };
 
 LightTableThumbBar::LightTableThumbBar(QWidget* const parent)
-    : ImageThumbnailBar(parent),
+    : ItemThumbnailBar(parent),
       d(new Private)
 {
     d->imageInfoModel   = new LightTableItemListModel(this);
@@ -469,7 +469,7 @@ void LightTableThumbBar::paintEvent(QPaintEvent* e)
         return;
     }
 
-    ImageThumbnailBar::paintEvent(e);
+    ItemThumbnailBar::paintEvent(e);
 }
 
 void LightTableThumbBar::slotSetupChanged()

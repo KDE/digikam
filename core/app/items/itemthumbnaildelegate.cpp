@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-02-06
- * Description : thumbnail bar for images - the delegate
+ * Description : thumbnail bar for items - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "imagethumbnaildelegate.h"
+#include "itemthumbnaildelegate.h"
 #include "imagedelegatepriv.h"
 
 // Local includes
@@ -36,64 +36,64 @@
 #include "itemmodel.h"
 #include "itemfiltermodel.h"
 #include "thumbnailloadthread.h"
-#include "imagethumbnaildelegatepriv.h"
+#include "itemthumbnaildelegatepriv.h"
 
 namespace Digikam
 {
 
-void ImageThumbnailDelegatePrivate::init(ImageThumbnailDelegate* const q)
+void ItemThumbnailDelegatePrivate::init(ItemThumbnailDelegate* const q)
 {
     QObject::connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
                      q, SLOT(slotSetupChanged()));
 }
 
-ImageThumbnailDelegate::ImageThumbnailDelegate(ImageCategorizedView* parent)
-    : ImageDelegate(*new ImageThumbnailDelegatePrivate, parent)
+ItemThumbnailDelegate::ItemThumbnailDelegate(ImageCategorizedView* parent)
+    : ImageDelegate(*new ItemThumbnailDelegatePrivate, parent)
 {
-    Q_D(ImageThumbnailDelegate);
+    Q_D(ItemThumbnailDelegate);
     d->init(this);
 }
 
-ImageThumbnailDelegate::~ImageThumbnailDelegate()
+ItemThumbnailDelegate::~ItemThumbnailDelegate()
 {
 }
 
-void ImageThumbnailDelegate::setFlow(QListView::Flow flow)
+void ItemThumbnailDelegate::setFlow(QListView::Flow flow)
 {
-    Q_D(ImageThumbnailDelegate);
+    Q_D(ItemThumbnailDelegate);
     d->flow = flow;
 }
 
-void ImageThumbnailDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
+void ItemThumbnailDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
-    Q_D(ImageThumbnailDelegate);
+    Q_D(ItemThumbnailDelegate);
     // store before calling parent class
     d->viewSize = option.rect;
     ImageDelegate::setDefaultViewOptions(option);
 }
 
-int ImageThumbnailDelegate::maximumSize() const
+int ItemThumbnailDelegate::maximumSize() const
 {
-    Q_D(const ImageThumbnailDelegate);
+    Q_D(const ItemThumbnailDelegate);
     return ThumbnailLoadThread::maximumThumbnailPixmapSize(true) + 2*d->radius + 2*d->margin;
 }
 
-int ImageThumbnailDelegate::minimumSize() const
+int ItemThumbnailDelegate::minimumSize() const
 {
-    Q_D(const ImageThumbnailDelegate);
+    Q_D(const ItemThumbnailDelegate);
     return ThumbnailSize::Small + 2*d->radius + 2*d->margin;
 }
 
-bool ImageThumbnailDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect,
+bool ItemThumbnailDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect,
         const QModelIndex& index, QRect* activationRect) const
 {
     // reuse implementation from grandparent
     return ItemViewImageDelegate::acceptsActivation(pos, visualRect, index, activationRect);
 }
 
-void ImageThumbnailDelegate::updateContentWidth()
+void ItemThumbnailDelegate::updateContentWidth()
 {
-    Q_D(ImageThumbnailDelegate);
+    Q_D(ItemThumbnailDelegate);
     int maxSize;
 
     if (d->flow == QListView::LeftToRight)
@@ -110,9 +110,9 @@ void ImageThumbnailDelegate::updateContentWidth()
     ImageDelegate::updateContentWidth();
 }
 
-void ImageThumbnailDelegate::updateRects()
+void ItemThumbnailDelegate::updateRects()
 {
-    Q_D(ImageThumbnailDelegate);
+    Q_D(ItemThumbnailDelegate);
 
     d->rect               = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
     d->pixmapRect         = QRect(d->margin, d->margin, d->contentWidth, d->contentWidth);

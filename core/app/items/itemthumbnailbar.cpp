@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-02-06
- * Description : Thumbnail bar for images
+ * Description : Thumbnail bar for items
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagethumbnailbar.h"
+#include "itemthumbnailbar.h"
 
 // Qt includes
 
@@ -37,13 +37,13 @@
 #include "itemdragdrop.h"
 #include "itemratingoverlay.h"
 #include "itemcoordinatesoverlay.h"
-#include "imagethumbnaildelegate.h"
+#include "itemthumbnaildelegate.h"
 #include "fileactionmngr.h"
 
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageThumbnailBar::Private
+class Q_DECL_HIDDEN ItemThumbnailBar::Private
 {
 public:
 
@@ -57,11 +57,11 @@ public:
     NoDuplicatesItemFilterModel* duplicatesFilter;
 };
 
-ImageThumbnailBar::ImageThumbnailBar(QWidget* const parent)
+ItemThumbnailBar::ItemThumbnailBar(QWidget* const parent)
     : ImageCategorizedView(parent),
       d(new Private())
 {
-    setItemDelegate(new ImageThumbnailDelegate(this));
+    setItemDelegate(new ItemThumbnailDelegate(this));
     setSpacing(3);
     setUsePointingHandCursor(false);
     setScrollStepGranularity(5);
@@ -81,12 +81,12 @@ ImageThumbnailBar::ImageThumbnailBar(QWidget* const parent)
     setFlow(LeftToRight);
 }
 
-ImageThumbnailBar::~ImageThumbnailBar()
+ItemThumbnailBar::~ItemThumbnailBar()
 {
     delete d;
 }
 
-void ImageThumbnailBar::setModelsFiltered(ItemModel* model, ImageSortFilterModel* filterModel)
+void ItemThumbnailBar::setModelsFiltered(ItemModel* model, ImageSortFilterModel* filterModel)
 {
     if (!d->duplicatesFilter)
     {
@@ -97,7 +97,7 @@ void ImageThumbnailBar::setModelsFiltered(ItemModel* model, ImageSortFilterModel
     ImageCategorizedView::setModels(model, d->duplicatesFilter);
 }
 
-void ImageThumbnailBar::installOverlays()
+void ItemThumbnailBar::installOverlays()
 {
     ItemRatingOverlay* const ratingOverlay = new ItemRatingOverlay(this);
     addOverlay(ratingOverlay);
@@ -108,7 +108,7 @@ void ImageThumbnailBar::installOverlays()
     addOverlay(new ItemCoordinatesOverlay(this));
 }
 
-void ImageThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
+void ItemThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
 {
     if (area == Qt::LeftDockWidgetArea || area == Qt::RightDockWidgetArea)
     {
@@ -122,12 +122,12 @@ void ImageThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
     scrollTo(currentIndex());
 }
 
-void ImageThumbnailBar::setScrollBarPolicy(Qt::ScrollBarPolicy policy)
+void ItemThumbnailBar::setScrollBarPolicy(Qt::ScrollBarPolicy policy)
 {
     if (policy == Qt::ScrollBarAsNeeded)
     {
         // Delegate resizing will cause endless relayouting, see bug #228807
-        qCDebug(DIGIKAM_GENERAL_LOG) << "The Qt::ScrollBarAsNeeded policy is not supported by ImageThumbnailBar";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "The Qt::ScrollBarAsNeeded policy is not supported by ItemThumbnailBar";
     }
 
     d->scrollPolicy = policy;
@@ -144,13 +144,13 @@ void ImageThumbnailBar::setScrollBarPolicy(Qt::ScrollBarPolicy policy)
     }
 }
 
-void ImageThumbnailBar::setFlow(QListView::Flow flow)
+void ItemThumbnailBar::setFlow(QListView::Flow flow)
 {
     setWrapping(false);
 
     ImageCategorizedView::setFlow(flow);
 
-    ImageThumbnailDelegate* const del = static_cast<ImageThumbnailDelegate*>(delegate());
+    ItemThumbnailDelegate* const del = static_cast<ItemThumbnailDelegate*>(delegate());
     del->setFlow(flow);
 
     // Reset the minimum and maximum sizes.
@@ -174,7 +174,7 @@ void ImageThumbnailBar::setFlow(QListView::Flow flow)
     setScrollBarPolicy(d->scrollPolicy);
 }
 
-void ImageThumbnailBar::slotSetupChanged()
+void ItemThumbnailBar::slotSetupChanged()
 {
     setScrollCurrentToCenter(ApplicationSettings::instance()->getScrollItemToCenter());
     setToolTipEnabled(ApplicationSettings::instance()->showToolTipsIsValid());
@@ -183,12 +183,12 @@ void ImageThumbnailBar::slotSetupChanged()
     ImageCategorizedView::slotSetupChanged();
 }
 
-void ImageThumbnailBar::assignRating(const QList<QModelIndex>& indexes, int rating)
+void ItemThumbnailBar::assignRating(const QList<QModelIndex>& indexes, int rating)
 {
     FileActionMngr::instance()->assignRating(imageSortFilterModel()->imageInfos(indexes), rating);
 }
 
-bool ImageThumbnailBar::event(QEvent* e)
+bool ItemThumbnailBar::event(QEvent* e)
 {
     // reset widget max/min sizes
     if (e->type() == QEvent::StyleChange || e->type() == QEvent::Show)
@@ -199,22 +199,22 @@ bool ImageThumbnailBar::event(QEvent* e)
     return ImageCategorizedView::event(e);
 }
 
-QModelIndex ImageThumbnailBar::nextIndex(const QModelIndex& index) const
+QModelIndex ItemThumbnailBar::nextIndex(const QModelIndex& index) const
 {
     return imageFilterModel()->index(index.row() + 1, 0);
 }
 
-QModelIndex ImageThumbnailBar::previousIndex(const QModelIndex& index) const
+QModelIndex ItemThumbnailBar::previousIndex(const QModelIndex& index) const
 {
     return imageFilterModel()->index(index.row() - 1, 0);
 }
 
-QModelIndex ImageThumbnailBar::firstIndex() const
+QModelIndex ItemThumbnailBar::firstIndex() const
 {
     return imageFilterModel()->index(0, 0);
 }
 
-QModelIndex ImageThumbnailBar::lastIndex() const
+QModelIndex ItemThumbnailBar::lastIndex() const
 {
     return imageFilterModel()->index(imageFilterModel()->rowCount() - 1, 0);
 }

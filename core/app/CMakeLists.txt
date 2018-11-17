@@ -326,17 +326,16 @@ set(libdigikamgui_SRCS
     filters/filtersidebarwidget.cpp
     filters/tagfilterview.cpp
 
-    items/tooltipfiller.cpp
     items/digikamimageview.cpp
     items/digikamimageview_p.cpp
     items/digikamimagedelegate.cpp
+    items/digikamimagefacedelegate.cpp
     items/imagecategorizedview.cpp
     items/imagecategorydrawer.cpp
     items/imagedelegate.cpp
-    items/imagethumbnailbar.cpp
-    items/imagethumbnaildelegate.cpp
+    items/itemthumbnailbar.cpp
+    items/itemthumbnaildelegate.cpp
     items/itemviewutilities.cpp
-    items/digikamimagefacedelegate.cpp
     items/overlays/assignnameoverlay.cpp
     items/overlays/facerejectionoverlay.cpp
     items/overlays/groupindicatoroverlay.cpp
@@ -345,6 +344,7 @@ set(libdigikamgui_SRCS
     items/overlays/itemrotationoverlay.cpp
     items/overlays/itemcoordinatesoverlay.cpp
     items/overlays/itemselectionoverlay.cpp
+    items/tooltipfiller.cpp
 
     utils/contextmenuhelper.cpp
     utils/digikam_debug.cpp

@@ -46,7 +46,7 @@
 #include "itemalbummodel.h"
 #include "itemalbumfiltermodel.h"
 #include "imagepreviewview.h"
-#include "imagethumbnailbar.h"
+#include "itemthumbnailbar.h"
 #include "loadingcacheinterface.h"
 #include "previewlayout.h"
 #include "welcomepageview.h"
@@ -100,7 +100,7 @@ public:
     QSplitter*         splitter;
 
     DigikamImageView*  imageIconView;
-    ImageThumbnailBar* thumbBar;
+    ItemThumbnailBar* thumbBar;
     ImagePreviewView*  imagePreviewView;
     ThumbBarDock*      thumbBarDock;
     WelcomePageView*   welcomePageView;
@@ -123,7 +123,7 @@ StackedView::StackedView(QWidget* const parent)
     d->imageIconView    = new DigikamImageView(this);
     d->imagePreviewView = new ImagePreviewView(this);
     d->thumbBarDock     = new ThumbBarDock();
-    d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
+    d->thumbBar         = new ItemThumbnailBar(d->thumbBarDock);
     d->thumbBar->setModelsFiltered(d->imageIconView->imageModel(),
                                    d->imageIconView->imageFilterModel());
     d->thumbBar->installOverlays();
@@ -255,7 +255,7 @@ ThumbBarDock* StackedView::thumbBarDock() const
     return d->thumbBarDock;
 }
 
-ImageThumbnailBar* StackedView::thumbBar() const
+ItemThumbnailBar* StackedView::thumbBar() const
 {
     return d->thumbBar;
 }

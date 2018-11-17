@@ -66,7 +66,7 @@
 #include "imagepreviewview.h"
 #include "itempropertiessidebardb.h"
 #include "itempropertiesversionstab.h"
-#include "imagethumbnailbar.h"
+#include "itemthumbnailbar.h"
 #include "itemviewutilities.h"
 #include "leftsidebarwidgets.h"
 #include "loadingcacheinterface.h"

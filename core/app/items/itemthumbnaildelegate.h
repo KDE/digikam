@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-02-06
- * Description : thumbnail bar for images - the delegate
+ * Description : thumbnail bar for items - the delegate
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ITEMS_IMAGE_THUMBNAIL_DELEGATE_H
-#define DIGIKAM_ITEMS_IMAGE_THUMBNAIL_DELEGATE_H
+#ifndef DIGIKAM_ITEMS_THUMBNAIL_DELEGATE_H
+#define DIGIKAM_ITEMS_THUMBNAIL_DELEGATE_H
 
 // Qt includes
 
@@ -37,16 +37,16 @@ namespace Digikam
 {
 
 class ImageCategoryDrawer;
-class ImageThumbnailDelegatePrivate;
+class ItemThumbnailDelegatePrivate;
 
-class ImageThumbnailDelegate : public ImageDelegate
+class ItemThumbnailDelegate : public ImageDelegate
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageThumbnailDelegate(ImageCategorizedView* const parent);
-    ~ImageThumbnailDelegate();
+    explicit ItemThumbnailDelegate(ImageCategorizedView* const parent);
+    ~ItemThumbnailDelegate();
 
     void setFlow(QListView::Flow flow);
 
@@ -66,9 +66,9 @@ protected:
 
 private:
 
-    Q_DECLARE_PRIVATE(ImageThumbnailDelegate)
+    Q_DECLARE_PRIVATE(ItemThumbnailDelegate)
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ITEMS_IMAGE_THUMBNAIL_DELEGATE_H
+#endif // DIGIKAM_ITEMS_THUMBNAIL_DELEGATE_H

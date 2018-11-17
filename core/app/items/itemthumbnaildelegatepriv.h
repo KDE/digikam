@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : thumbnail bar for images - the delegate
+ * Description : thumbnail bar for items - the delegate
  *
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ITEMS_IMAGE_THUMBNAIL_DELEGATE_PRIV_H
-#define DIGIKAM_ITEMS_IMAGE_THUMBNAIL_DELEGATE_PRIV_H
+#ifndef DIGIKAM_ITEM_THUMBNAIL_DELEGATE_PRIV_H
+#define DIGIKAM_ITEM_THUMBNAIL_DELEGATE_PRIV_H
 
 // Qt includes
 
@@ -37,11 +37,11 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageThumbnailDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
+class Q_DECL_HIDDEN ItemThumbnailDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
 {
 public:
 
-    explicit ImageThumbnailDelegatePrivate()
+    explicit ItemThumbnailDelegatePrivate()
     {
         flow                = QListView::LeftToRight;
 
@@ -58,9 +58,9 @@ public:
 
 public:
 
-    void init(ImageThumbnailDelegate* const q);
+    void init(ItemThumbnailDelegate* const q);
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ITEMS_IMAGE_THUMBNAIL_DELEGATE_PRIV_H
+#endif // DIGIKAM_ITEMS_THUMBNAIL_DELEGATE_PRIV_H

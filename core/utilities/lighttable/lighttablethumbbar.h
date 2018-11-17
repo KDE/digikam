@@ -26,14 +26,14 @@
 
 // Local includes
 
-#include "imagethumbnailbar.h"
+#include "itemthumbnailbar.h"
 #include "iteminfo.h"
 #include "itemlistmodel.h"
 
 namespace Digikam
 {
 
-class LightTableThumbBar : public ImageThumbnailBar
+class LightTableThumbBar : public ItemThumbnailBar
 {
     Q_OBJECT
 

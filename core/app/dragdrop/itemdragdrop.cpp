@@ -43,7 +43,7 @@
 #include "albummanager.h"
 #include "importui.h"
 #include "importiconview.h"
-#include "imagethumbnailbar.h"
+#include "itemthumbnailbar.h"
 #include "ddragobjects.h"
 #include "dio.h"
 #include "imagecategorizedview.h"
@@ -328,7 +328,7 @@ bool ItemDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDrop
 
         if (droppedOn.isValid())
         {
-            ImageThumbnailBar* const thumbBar = qobject_cast<ImageThumbnailBar*>(abstractview);
+            ItemThumbnailBar* const thumbBar = qobject_cast<ItemThumbnailBar*>(abstractview);
 
             if (thumbBar)
             {

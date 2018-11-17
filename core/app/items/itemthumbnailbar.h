@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-02-06
- * Description : Thumbnail bar for images
+ * Description : Thumbnail bar for items
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ITEMS_IMAGE_THUMBNAIL_BAR_H
-#define DIGIKAM_ITEMS_IMAGE_THUMBNAIL_BAR_H
+#ifndef DIGIKAM_ITEM_THUMBNAIL_BAR_H
+#define DIGIKAM_ITEM_THUMBNAIL_BAR_H
 
 // Local includes
 
@@ -32,14 +32,14 @@
 namespace Digikam
 {
 
-class ImageThumbnailBar : public ImageCategorizedView
+class ItemThumbnailBar : public ImageCategorizedView
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageThumbnailBar(QWidget* const parent = 0);
-    ~ImageThumbnailBar();
+    explicit ItemThumbnailBar(QWidget* const parent = 0);
+    ~ItemThumbnailBar();
 
     /// Sets the policy always for the one scroll bar which is relevant, depending on orientation
     void setScrollBarPolicy(Qt::ScrollBarPolicy policy);
@@ -76,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ITEMS_IMAGE_THUMBNAIL_BAR_H
+#endif // DIGIKAM_ITEM_THUMBNAIL_BAR_H

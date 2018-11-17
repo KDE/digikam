@@ -44,7 +44,7 @@ namespace Digikam
 class DigikamImageView;
 class ImageCategorizedView;
 class ImagePreviewView;
-class ImageThumbnailBar;
+class ItemThumbnailBar;
 class TableView;
 class TrashView;
 
@@ -84,7 +84,7 @@ public:
     void setDockArea(QMainWindow*);
 
     ThumbBarDock*      thumbBarDock()     const;
-    ImageThumbnailBar* thumbBar()         const;
+    ItemThumbnailBar* thumbBar()         const;
     DigikamImageView*  imageIconView()    const;
     ImagePreviewView*  imagePreviewView() const;
     TableView*         tableView()        const;
