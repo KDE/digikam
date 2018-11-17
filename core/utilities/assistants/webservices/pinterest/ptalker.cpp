@@ -44,7 +44,6 @@
 
 // KDE includes
 
-#include <kconfig.h>
 #include <kwindowconfig.h>
 
 // Local includes
@@ -93,11 +92,15 @@ public:
 
         scope        = QLatin1String("read_public,write_public");
 
+        serviceName  = QLatin1String("Pinterest");
+        serviceKey   = QLatin1String("access_token");
+
         state        = P_USERNAME;
 
         parent       = 0;
         netMngr      = 0;
         reply        = 0;
+        settings     = 0;
         view         = 0;
     }
 
@@ -110,12 +113,15 @@ public:
     QString                redirectUrl;
     QString                accessToken;
     QString                scope;
+    QString                serviceName;
+    QString                serviceKey;
 
     QWidget*               parent;
 
     QNetworkAccessManager* netMngr;
-
     QNetworkReply*         reply;
+
+    QSettings*             settings;
 
     State                  state;
 
@@ -186,10 +192,11 @@ void PTalker::link()
 void PTalker::unLink()
 {
     d->accessToken = QString();
-    KConfig config;
-    KConfigGroup grp   = config.group("Pinterest User Settings");
-    grp.deleteGroup();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "group deleted";
+
+    d->settings->beginGroup(d->serviceName);
+    d->settings->remove(QString());
+    d->settings->endGroup();
+
 #ifdef HAVE_QWEBENGINE
     d->view->page()->profile()->cookieStore()->deleteAllCookies();
 #else
@@ -587,30 +594,26 @@ void PTalker::parseResponseCreateBoard(const QByteArray& data)
 
 void PTalker::writeSettings()
 {
-    KConfig config;
-    KConfigGroup grp = config.group("Pinterest User Settings");
-
-    grp.writeEntry("access_token", d->accessToken);
-    config.sync();
+    d->settings->beginGroup(d->serviceName);
+    d->settings->setValue(d->serviceKey, d->accessToken);
+    d->settings->endGroup();
 }
 
 void PTalker::readSettings()
 {
-    KConfig config;
-    KConfigGroup grp = config.group("Pinterest User Settings");
+    d->settings->beginGroup(d->serviceName);
+    d->accessToken = d->settings->value(d->serviceKey).toString();
+    d->settings->endGroup();
 
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In read settings";
-    if (!grp.readEntry("access_token", false))
+    if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Linking...";
         link();
     }
     else
     {
-        d->accessToken = grp.readEntry("access_token",QString());
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Already Linked";
         emit pinterestLinkingSucceeded();
-
     }
 }
 

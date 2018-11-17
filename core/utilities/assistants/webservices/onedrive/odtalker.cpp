@@ -90,7 +90,7 @@ public:
         redirectUrl  = QLatin1String("https://login.live.com/oauth20_desktop.srf");
 
         serviceName = QLatin1String("Onedrive");
-        serviceKey  = QLatin1String("access_tokenkey");
+        serviceKey  = QLatin1String("access_token");
 
         state        = OD_USERNAME;
 
