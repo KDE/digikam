@@ -38,10 +38,11 @@
 |│   │   ├── date                                             | All date relevant views                                                 |
 |│   │   ├── dragdrop                                         | Drag and drop helper classes                                            |
 |│   │   ├── filters                                          | Tags filter widgets                                                     |
-|│   │   ├── items                                            | Icon-view item widgets                                                  |
-|│   │   │   ├── overlays                                     | Icon-view item overlays                                                 |
-|│   │   │   ├── thumbbar                                     | Icon-view item thumbbar widget                                          |
-|│   │   │   └── utils                                        | Icon-view item utility classes                                          |
+|│   │   ├── items                                            | Item management classes                                                 |
+|│   │   │   ├── overlays                                     | Item overlays                                                           |
+|│   │   │   ├── thumbbar                                     | Item thumbbar widget                                                    |
+|│   │   │   ├── utils                                        | Item utility classes                                                    |
+|│   │   │   └── views                                        | Item view classes                                                       |
 |│   │   ├── main                                             | Main digiKam application                                                |
 |│   │   ├── utils                                            | Generic utility classes                                                 |
 |│   │   └── views                                            | Views classes                                                           |

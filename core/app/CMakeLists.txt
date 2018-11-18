@@ -328,11 +328,10 @@ set(libdigikamgui_SRCS
 
     items/digikamimagedelegate.cpp
     items/imagedelegate.cpp
-    items/digikamitemview.cpp
-    items/digikamitemview_p.cpp
-    items/itemcategorizedview.cpp
-    items/itemcategorydrawer.cpp
     items/itemfacedelegate.cpp
+    items/views/digikamitemview.cpp
+    items/views/digikamitemview_p.cpp
+    items/views/itemcategorizedview.cpp
     items/thumbbar/itemthumbnailbar.cpp
     items/thumbbar/itemthumbnaildelegate.cpp
     items/overlays/assignnameoverlay.cpp
@@ -347,6 +346,7 @@ set(libdigikamgui_SRCS
     items/utils/tooltipfiller.cpp
     items/utils/contextmenuhelper.cpp
     items/utils/groupingviewimplementation.cpp
+    items/utils/itemcategorydrawer.cpp
 
     utils/digikam_debug.cpp
     utils/componentsinfo.cpp
