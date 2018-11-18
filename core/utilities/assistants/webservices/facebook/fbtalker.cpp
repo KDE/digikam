@@ -86,6 +86,7 @@ public:
     enum State
     {
         FB_GETLOGGEDINUSER = 0,
+        FB_LOGOUTUSER,
         FB_LISTALBUMS,
         FB_CREATEALBUM,
         FB_ADDPHOTO
@@ -205,6 +206,7 @@ void FbTalker::link()
 void FbTalker::unlink()
 {
     d->accessToken = QString();
+    d->user        = FbUser();
 
     d->settings->beginGroup(d->serviceName);
     d->settings->remove(QString());
@@ -255,12 +257,14 @@ void FbTalker::slotLinkingSucceeded()
 void FbTalker::slotCatchUrl(const QUrl& url)
 {
     d->urlParametersMap = parseUrlParameters(url.toString());
-    d->accessToken      = d->urlParametersMap.value("access_token");
+    QString accessToken = d->urlParametersMap.value("access_token");
+
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function:" << url ;
 
-    if (!d->accessToken.isEmpty())
+    if (!accessToken.isEmpty())
     {
         qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access Token Received";
+        d->accessToken = accessToken;
         emit linkingSucceeded();
     }
     else
@@ -344,22 +348,21 @@ void FbTalker::logout()
         d->reply = 0;
     }
 
-    QMap<QString, QString> args;
-    args[QLatin1String("next")]         = QLatin1String("https://www.digikam.org");
-    args[QLatin1String("access_token")] = d->accessToken.toUtf8();
+    emit signalBusy(true);
 
     QUrl url(QLatin1String("https://www.facebook.com/logout.php"));
     QUrlQuery q;
-    q.addQueryItem(QLatin1String("next"), QLatin1String("https://www.digikam.org"));
     q.addQueryItem(QLatin1String("access_token"), d->accessToken.toUtf8());
     url.setQuery(q);
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Logout URL: " << url;
 
-    d->view->setWindowFlags(Qt::Dialog);
-    d->view->load(url);
-    d->view->show();
+    QNetworkRequest netRequest(url);
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                         QLatin1String("application/x-www-form-urlencoded"));
 
-    emit signalBusy(false);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url = " << netRequest.url();
+    d->reply = d->netMngr->get(netRequest);
+
+    d->state = Private::FB_LOGOUTUSER;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -600,6 +603,9 @@ void FbTalker::slotFinished(QNetworkReply* reply)
         case (Private::FB_GETLOGGEDINUSER):
             parseResponseGetLoggedInUser(buffer);
             break;
+        case (Private::FB_LOGOUTUSER):
+            parseResponseLogoutUser(buffer);
+            break;
         case (Private::FB_LISTALBUMS):
             parseResponseListAlbums(buffer);
             break;
@@ -665,6 +671,12 @@ void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
     d->user.profileURL = jsonObject[QLatin1String("link")].toString();
 
     emit signalLoginDone(0, QString());
+}
+
+void FbTalker::parseResponseLogoutUser(const QByteArray& /*data*/)
+{
+    unlink();
+    emit signalLoginDone(-1, QString());
 }
 
 void FbTalker::parseResponseAddPhoto(const QByteArray& data)
