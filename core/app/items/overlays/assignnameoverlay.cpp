@@ -44,7 +44,7 @@
 #include "facetags.h"
 #include "imagedelegate.h"
 #include "itemmodel.h"
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 #include "taggingaction.h"
 #include "tagscache.h"
 #include "searchutilities.h"

@@ -29,7 +29,7 @@
 
 #include "imagedelegate.h"
 #include "itemmodel.h"
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 #include "ratingwidget.h"
 
 namespace Digikam

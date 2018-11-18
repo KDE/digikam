@@ -46,7 +46,7 @@
 #include "itemthumbnailbar.h"
 #include "ddragobjects.h"
 #include "dio.h"
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 #include "iteminfo.h"
 #include "iteminfolist.h"
 #include "tableview_treeview.h"
@@ -192,7 +192,7 @@ static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool a
 
 static DropAction groupAction(const QDropEvent* const, QWidget* const view)
 {
-    ImageCategorizedView* const imgView = dynamic_cast<ImageCategorizedView*>(view);
+    ItemCategorizedView* const imgView = dynamic_cast<ItemCategorizedView*>(view);
     int sortOrder                       = ApplicationSettings::instance()->getImageSortOrder();
 
     QMenu popMenu(view);
@@ -250,9 +250,9 @@ bool ItemDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDrop
 {
     Album* album = 0;
 
-    // Note that the drop event does not have to be in an ImageCategorizedView.
+    // Note that the drop event does not have to be in an ItemCategorizedView.
     // It can also be a TableViewTreeView.
-    ImageCategorizedView* const view = qobject_cast<ImageCategorizedView*>(abstractview);
+    ItemCategorizedView* const view = qobject_cast<ItemCategorizedView*>(abstractview);
 
     if (view)
     {

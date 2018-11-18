@@ -89,7 +89,7 @@ public:
     QCache<int, QRect>    actualPixmapRectCache;
     ItemCategoryDrawer*  categoryDrawer;
 
-    ImageCategorizedView* currentView;
+    ItemCategorizedView* currentView;
     QAbstractItemModel*   currentModel;
 
 public:

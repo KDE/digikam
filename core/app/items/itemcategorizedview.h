@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-22
- * Description : Qt item view for images
+ * Description : Qt model-view for items
  *
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ITEMS_IMAGE_CATEGORIZED_VIEW_H
-#define DIGIKAM_ITEMS_IMAGE_CATEGORIZED_VIEW_H
+#ifndef DIGIKAM_ITEM_CATEGORIZED_VIEW_H
+#define DIGIKAM_ITEM_CATEGORIZED_VIEW_H
 
 // Local includes
 
@@ -45,14 +45,14 @@ class ImageDelegate;
 class ItemDelegateOverlay;
 class ItemThumbnailModel;
 
-class ImageCategorizedView : public ItemViewCategorized
+class ItemCategorizedView : public ItemViewCategorized
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageCategorizedView(QWidget* const parent = 0);
-    ~ImageCategorizedView();
+    explicit ItemCategorizedView(QWidget* const parent = 0);
+    ~ItemCategorizedView();
 
     void setModels(ItemModel* model, ImageSortFilterModel* filterModel);
 
@@ -225,4 +225,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ITEMS_IMAGE_CATEGORIZED_VIEW_H
+#endif // DIGIKAM_ITEM_CATEGORIZED_VIEW_H

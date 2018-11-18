@@ -31,7 +31,7 @@
 
 #include "digikam_debug.h"
 #include "applicationsettings.h"
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 #include "itemdelegateoverlay.h"
 #include "itemmodel.h"
 #include "itemfiltermodel.h"
@@ -47,7 +47,7 @@ void ItemThumbnailDelegatePrivate::init(ItemThumbnailDelegate* const q)
                      q, SLOT(slotSetupChanged()));
 }
 
-ItemThumbnailDelegate::ItemThumbnailDelegate(ImageCategorizedView* parent)
+ItemThumbnailDelegate::ItemThumbnailDelegate(ItemCategorizedView* parent)
     : ImageDelegate(*new ItemThumbnailDelegatePrivate, parent)
 {
     Q_D(ItemThumbnailDelegate);

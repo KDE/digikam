@@ -31,7 +31,7 @@
 
 #include "imagedelegate.h"
 #include "itemmodel.h"
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 
 namespace Digikam
 {

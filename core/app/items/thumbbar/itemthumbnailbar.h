@@ -27,12 +27,12 @@
 
 // Local includes
 
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 
 namespace Digikam
 {
 
-class ItemThumbnailBar : public ImageCategorizedView
+class ItemThumbnailBar : public ItemCategorizedView
 {
     Q_OBJECT
 

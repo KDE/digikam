@@ -28,7 +28,7 @@
 // Local includes
 
 #include "applicationsettings.h"
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 #include "itemviewutilities.h"
 #include "groupingviewimplementation.h"
 
@@ -38,7 +38,7 @@ namespace Digikam
 class ItemViewUtilities;
 class ItemInfoList;
 
-class DigikamImageView : public ImageCategorizedView, public GroupingViewImplementation
+class DigikamImageView : public ItemCategorizedView, public GroupingViewImplementation
 {
     Q_OBJECT
 

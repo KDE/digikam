@@ -43,7 +43,7 @@
 #include "digikam_debug.h"
 #include "albummanager.h"
 #include "itemcategorydrawer.h"
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 #include "itemdelegateoverlay.h"
 #include "itemmodel.h"
 #include "itemfiltermodel.h"
@@ -91,7 +91,7 @@ ImageDelegate::~ImageDelegate()
     Q_UNUSED(d); // To please compiler about warnings.
 }
 
-void ImageDelegate::setView(ImageCategorizedView* view)
+void ImageDelegate::setView(ItemCategorizedView* view)
 {
     Q_D(ImageDelegate);
     setViewOnAllOverlays(view);

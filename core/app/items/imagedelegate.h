@@ -34,7 +34,7 @@ namespace Digikam
 {
 
 class ItemCategoryDrawer;
-class ImageCategorizedView;
+class ItemCategorizedView;
 class ItemDelegateOverlay;
 class ItemFilterModel;
 class ItemModel;
@@ -49,7 +49,7 @@ public:
     explicit ImageDelegate(QObject* const parent = 0);
     ~ImageDelegate();
 
-    void setView(ImageCategorizedView* view);
+    void setView(ItemCategorizedView* view);
 
     ItemCategoryDrawer* categoryDrawer() const;
 

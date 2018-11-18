@@ -34,7 +34,7 @@
 #include "digikam_debug.h"
 #include "imagedelegate.h"
 #include "itemmodel.h"
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 #include "itemfiltermodel.h"
 
 namespace Digikam

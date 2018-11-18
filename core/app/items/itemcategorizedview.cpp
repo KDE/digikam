@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-22
- * Description : Qt item view for images
+ * Description : Qt model-view for items
  *
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 
 // Qt includes
 
@@ -52,18 +52,18 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageItemViewToolTip : public ItemViewToolTip
+class Q_DECL_HIDDEN ItemCategorizedViewToolTip : public ItemViewToolTip
 {
 public:
 
-    explicit ImageItemViewToolTip(ImageCategorizedView* const view)
+    explicit ItemCategorizedViewToolTip(ItemCategorizedView* const view)
         : ItemViewToolTip(view)
     {
     }
 
-    ImageCategorizedView* view() const
+    ItemCategorizedView* view() const
     {
-        return static_cast<ImageCategorizedView*>(ItemViewToolTip::view());
+        return static_cast<ItemCategorizedView*>(ItemViewToolTip::view());
     }
 
 protected:
@@ -77,7 +77,7 @@ protected:
 
 // -------------------------------------------------------------------------------
 
-class Q_DECL_HIDDEN ImageCategorizedView::Private
+class Q_DECL_HIDDEN ItemCategorizedView::Private
 {
 public:
 
@@ -109,11 +109,11 @@ public:
 
 // -------------------------------------------------------------------------------
 
-ImageCategorizedView::ImageCategorizedView(QWidget* const parent)
+ItemCategorizedView::ItemCategorizedView(QWidget* const parent)
     : ItemViewCategorized(parent),
       d(new Private)
 {
-    setToolTip(new ImageItemViewToolTip(this));
+    setToolTip(new ItemCategorizedViewToolTip(this));
 
     LoadingCacheInterface::connectToSignalFileChanged(this,
             SLOT(slotFileChanged(QString)));
@@ -129,13 +129,13 @@ ImageCategorizedView::ImageCategorizedView(QWidget* const parent)
             this, SLOT(slotDelayedEnter()));
 }
 
-ImageCategorizedView::~ImageCategorizedView()
+ItemCategorizedView::~ItemCategorizedView()
 {
     d->delegate->removeAllOverlays();
     delete d;
 }
 
-void ImageCategorizedView::installDefaultModels()
+void ItemCategorizedView::installDefaultModels()
 {
     ItemAlbumModel* model             = new ItemAlbumModel(this);
     ItemAlbumFilterModel* filterModel = new ItemAlbumFilterModel(this);
@@ -152,7 +152,7 @@ void ImageCategorizedView::installDefaultModels()
     setModels(model, filterModel);
 }
 
-void ImageCategorizedView::setModels(ItemModel* model, ImageSortFilterModel* filterModel)
+void ItemCategorizedView::setModels(ItemModel* model, ImageSortFilterModel* filterModel)
 {
     if (d->delegate)
     {
@@ -197,47 +197,47 @@ void ImageCategorizedView::setModels(ItemModel* model, ImageSortFilterModel* fil
     }
 }
 
-ItemModel* ImageCategorizedView::imageModel() const
+ItemModel* ItemCategorizedView::imageModel() const
 {
     return d->model;
 }
 
-ImageSortFilterModel* ImageCategorizedView::imageSortFilterModel() const
+ImageSortFilterModel* ItemCategorizedView::imageSortFilterModel() const
 {
     return d->filterModel;
 }
 
-ItemFilterModel* ImageCategorizedView::imageFilterModel() const
+ItemFilterModel* ItemCategorizedView::imageFilterModel() const
 {
     return d->filterModel->imageFilterModel();
 }
 
-ItemThumbnailModel* ImageCategorizedView::imageThumbnailModel() const
+ItemThumbnailModel* ItemCategorizedView::imageThumbnailModel() const
 {
     return qobject_cast<ItemThumbnailModel*>(d->model);
 }
 
-ItemAlbumModel* ImageCategorizedView::imageAlbumModel() const
+ItemAlbumModel* ItemCategorizedView::imageAlbumModel() const
 {
     return qobject_cast<ItemAlbumModel*>(d->model);
 }
 
-ItemAlbumFilterModel* ImageCategorizedView::imageAlbumFilterModel() const
+ItemAlbumFilterModel* ItemCategorizedView::imageAlbumFilterModel() const
 {
     return qobject_cast<ItemAlbumFilterModel*>(d->filterModel->imageFilterModel());
 }
 
-QSortFilterProxyModel* ImageCategorizedView::filterModel() const
+QSortFilterProxyModel* ItemCategorizedView::filterModel() const
 {
     return d->filterModel;
 }
 
-ImageDelegate* ImageCategorizedView::delegate() const
+ImageDelegate* ItemCategorizedView::delegate() const
 {
     return d->delegate;
 }
 
-void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
+void ItemCategorizedView::setItemDelegate(ImageDelegate* delegate)
 {
     ThumbnailSize oldSize      = thumbnailSize();
     ImageDelegate* oldDelegate = d->delegate;
@@ -276,7 +276,7 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
             this, SLOT(hideIndexNotification()));
 }
 
-Album* ImageCategorizedView::currentAlbum() const
+Album* ItemCategorizedView::currentAlbum() const
 {
     ItemAlbumModel* albumModel = imageAlbumModel();
     /** TODO: Change to QList return type **/
@@ -288,42 +288,42 @@ Album* ImageCategorizedView::currentAlbum() const
     return 0;
 }
 
-ItemInfo ImageCategorizedView::currentInfo() const
+ItemInfo ItemCategorizedView::currentInfo() const
 {
     return imageInfo(currentIndex());
 }
 
-QUrl ImageCategorizedView::currentUrl() const
+QUrl ItemCategorizedView::currentUrl() const
 {
     return currentInfo().fileUrl();
 }
 
-ItemInfo ImageCategorizedView::imageInfo(const QModelIndex& index) const
+ItemInfo ItemCategorizedView::imageInfo(const QModelIndex& index) const
 {
     return d->filterModel->imageInfo(index);
 }
 
-ItemInfoList ImageCategorizedView::imageInfos(const QList<QModelIndex>& indexes) const
+ItemInfoList ItemCategorizedView::imageInfos(const QList<QModelIndex>& indexes) const
 {
     return ItemInfoList(d->filterModel->imageInfos(indexes));
 }
 
-ItemInfoList ImageCategorizedView::allItemInfos() const
+ItemInfoList ItemCategorizedView::allItemInfos() const
 {
     return ItemInfoList(d->filterModel->imageInfosSorted());
 }
 
-QList<QUrl> ImageCategorizedView::allUrls() const
+QList<QUrl> ItemCategorizedView::allUrls() const
 {
     return allItemInfos().toImageUrlList();
 }
 
-ItemInfoList ImageCategorizedView::selectedItemInfos() const
+ItemInfoList ItemCategorizedView::selectedItemInfos() const
 {
     return imageInfos(selectedIndexes());
 }
 
-ItemInfoList ImageCategorizedView::selectedItemInfosCurrentFirst() const
+ItemInfoList ItemCategorizedView::selectedItemInfosCurrentFirst() const
 {
     QModelIndexList indexes   = selectedIndexes();
     const QModelIndex current = currentIndex();
@@ -342,17 +342,17 @@ ItemInfoList ImageCategorizedView::selectedItemInfosCurrentFirst() const
     return imageInfos(indexes);
 }
 
-void ImageCategorizedView::toIndex(const QUrl& url)
+void ItemCategorizedView::toIndex(const QUrl& url)
 {
     ItemViewCategorized::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
 }
 
-QModelIndex ImageCategorizedView::indexForInfo(const ItemInfo& info) const
+QModelIndex ItemCategorizedView::indexForInfo(const ItemInfo& info) const
 {
     return d->filterModel->indexForItemInfo(info);
 }
 
-ItemInfo ImageCategorizedView::nextInOrder(const ItemInfo& startingPoint, int nth)
+ItemInfo ItemCategorizedView::nextInOrder(const ItemInfo& startingPoint, int nth)
 {
     QModelIndex index = d->filterModel->indexForItemInfo(startingPoint);
 
@@ -364,7 +364,7 @@ ItemInfo ImageCategorizedView::nextInOrder(const ItemInfo& startingPoint, int nt
     return imageInfo(d->filterModel->index(index.row() + nth, 0, QModelIndex()));
 }
 
-QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const QItemSelectionRange& removed) const
+QModelIndex ItemCategorizedView::nextIndexHint(const QModelIndex& anchor, const QItemSelectionRange& removed) const
 {
     QModelIndex hint = ItemViewCategorized::nextIndexHint(anchor, removed);
     ItemInfo info   = imageInfo(anchor);
@@ -403,7 +403,7 @@ QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const
     return hint;
 }
 
-void ImageCategorizedView::openAlbum(const QList<Album*>& albums)
+void ItemCategorizedView::openAlbum(const QList<Album*>& albums)
 {
     ItemAlbumModel* const albumModel = imageAlbumModel();
 
@@ -413,7 +413,7 @@ void ImageCategorizedView::openAlbum(const QList<Album*>& albums)
     }
 }
 
-ThumbnailSize ImageCategorizedView::thumbnailSize() const
+ThumbnailSize ItemCategorizedView::thumbnailSize() const
 {
 /*
     ItemThumbnailModel* const thumbModel = imageThumbnailModel();
@@ -428,12 +428,12 @@ ThumbnailSize ImageCategorizedView::thumbnailSize() const
     return ThumbnailSize();
 }
 
-void ImageCategorizedView::setThumbnailSize(int size)
+void ItemCategorizedView::setThumbnailSize(int size)
 {
     setThumbnailSize(ThumbnailSize(size));
 }
 
-void ImageCategorizedView::setThumbnailSize(const ThumbnailSize& s)
+void ItemCategorizedView::setThumbnailSize(const ThumbnailSize& s)
 {
     // we abuse this pair of method calls to restore scroll position
     layoutAboutToBeChanged();
@@ -441,12 +441,12 @@ void ImageCategorizedView::setThumbnailSize(const ThumbnailSize& s)
     layoutWasChanged();
 }
 
-void ImageCategorizedView::setCurrentWhenAvailable(qlonglong imageId)
+void ItemCategorizedView::setCurrentWhenAvailable(qlonglong imageId)
 {
     d->scrollToItemId = imageId;
 }
 
-void ImageCategorizedView::setCurrentUrlWhenAvailable(const QUrl& url)
+void ItemCategorizedView::setCurrentUrlWhenAvailable(const QUrl& url)
 {
     if (url.isEmpty())
     {
@@ -469,7 +469,7 @@ void ImageCategorizedView::setCurrentUrlWhenAvailable(const QUrl& url)
     d->unknownCurrentUrl.clear();
 }
 
-void ImageCategorizedView::setCurrentUrl(const QUrl& url)
+void ItemCategorizedView::setCurrentUrl(const QUrl& url)
 {
     if (url.isEmpty())
     {
@@ -490,14 +490,14 @@ void ImageCategorizedView::setCurrentUrl(const QUrl& url)
     setCurrentIndex(index);
 }
 
-void ImageCategorizedView::setCurrentInfo(const ItemInfo& info)
+void ItemCategorizedView::setCurrentInfo(const ItemInfo& info)
 {
     QModelIndex index = d->filterModel->indexForItemInfo(info);
     clearSelection();
     setCurrentIndex(index);
 }
 
-void ImageCategorizedView::setSelectedUrls(const QList<QUrl>& urlList)
+void ItemCategorizedView::setSelectedUrls(const QList<QUrl>& urlList)
 {
     QItemSelection mySelection;
 
@@ -521,7 +521,7 @@ void ImageCategorizedView::setSelectedUrls(const QList<QUrl>& urlList)
     selectionModel()->select(mySelection, QItemSelectionModel::Select);
 }
 
-void ImageCategorizedView::setSelectedItemInfos(const QList<ItemInfo>& infos)
+void ItemCategorizedView::setSelectedItemInfos(const QList<ItemInfo>& infos)
 {
     QItemSelection mySelection;
 
@@ -534,7 +534,7 @@ void ImageCategorizedView::setSelectedItemInfos(const QList<ItemInfo>& infos)
     selectionModel()->select(mySelection, QItemSelectionModel::ClearAndSelect);
 }
 
-void ImageCategorizedView::hintAt(const ItemInfo& info)
+void ItemCategorizedView::hintAt(const ItemInfo& info)
 {
     if (info.isNull())
     {
@@ -552,7 +552,7 @@ void ImageCategorizedView::hintAt(const ItemInfo& info)
     scrollTo(index);
 }
 
-void ImageCategorizedView::addOverlay(ItemDelegateOverlay* overlay, ImageDelegate* delegate)
+void ItemCategorizedView::addOverlay(ItemDelegateOverlay* overlay, ImageDelegate* delegate)
 {
     if (!delegate)
     {
@@ -568,7 +568,7 @@ void ImageCategorizedView::addOverlay(ItemDelegateOverlay* overlay, ImageDelegat
     }
 }
 
-void ImageCategorizedView::removeOverlay(ItemDelegateOverlay* overlay)
+void ItemCategorizedView::removeOverlay(ItemDelegateOverlay* overlay)
 {
     ImageDelegate* delegate = dynamic_cast<ImageDelegate*>(overlay->delegate());
 
@@ -580,13 +580,13 @@ void ImageCategorizedView::removeOverlay(ItemDelegateOverlay* overlay)
     overlay->setView(0);
 }
 
-void ImageCategorizedView::updateGeometries()
+void ItemCategorizedView::updateGeometries()
 {
     ItemViewCategorized::updateGeometries();
     d->delayedEnterTimer->start();
 }
 
-void ImageCategorizedView::slotDelayedEnter()
+void ItemCategorizedView::slotDelayedEnter()
 {
     // re-emit entered() for index under mouse (after layout).
     QModelIndex mouseIndex = indexAt(mapFromGlobal(QCursor::pos()));
@@ -597,12 +597,12 @@ void ImageCategorizedView::slotDelayedEnter()
     }
 }
 
-void ImageCategorizedView::addSelectionOverlay(ImageDelegate* delegate)
+void ItemCategorizedView::addSelectionOverlay(ImageDelegate* delegate)
 {
     addOverlay(new ItemSelectionOverlay(this), delegate);
 }
 
-void ImageCategorizedView::scrollToStoredItem()
+void ItemCategorizedView::scrollToStoredItem()
 {
     if (d->scrollToItemId)
     {
@@ -616,7 +616,7 @@ void ImageCategorizedView::scrollToStoredItem()
     }
 }
 
-void ImageCategorizedView::slotItemInfosAdded()
+void ItemCategorizedView::slotItemInfosAdded()
 {
     if (d->scrollToItemId)
     {
@@ -628,13 +628,13 @@ void ImageCategorizedView::slotItemInfosAdded()
     }
 }
 
-void ImageCategorizedView::slotCurrentUrlTimer()
+void ItemCategorizedView::slotCurrentUrlTimer()
 {
     setCurrentUrl(d->unknownCurrentUrl);
     d->unknownCurrentUrl.clear();
 }
 
-void ImageCategorizedView::slotFileChanged(const QString& filePath)
+void ItemCategorizedView::slotFileChanged(const QString& filePath)
 {
     QModelIndex index = d->filterModel->indexForPath(filePath);
 
@@ -644,7 +644,7 @@ void ImageCategorizedView::slotFileChanged(const QString& filePath)
     }
 }
 
-void ImageCategorizedView::indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
+void ItemCategorizedView::indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
 {
     ItemInfo info = imageInfo(index);
 
@@ -655,14 +655,14 @@ void ImageCategorizedView::indexActivated(const QModelIndex& index, Qt::Keyboard
     }
 }
 
-void ImageCategorizedView::currentChanged(const QModelIndex& index, const QModelIndex& previous)
+void ItemCategorizedView::currentChanged(const QModelIndex& index, const QModelIndex& previous)
 {
     ItemViewCategorized::currentChanged(index, previous);
 
     emit currentChanged(imageInfo(index));
 }
 
-void ImageCategorizedView::selectionChanged(const QItemSelection& selectedItems, const QItemSelection& deselectedItems)
+void ItemCategorizedView::selectionChanged(const QItemSelection& selectedItems, const QItemSelection& deselectedItems)
 {
     ItemViewCategorized::selectionChanged(selectedItems, deselectedItems);
 
@@ -677,7 +677,7 @@ void ImageCategorizedView::selectionChanged(const QItemSelection& selectedItems,
     }
 }
 
-Album* ImageCategorizedView::albumAt(const QPoint& pos) const
+Album* ItemCategorizedView::albumAt(const QPoint& pos) const
 {
     if (imageFilterModel()->imageSortSettings().categorizationMode == ItemSortSettings::CategoryByAlbum)
     {
@@ -693,22 +693,22 @@ Album* ImageCategorizedView::albumAt(const QPoint& pos) const
     return currentAlbum();
 }
 
-void ImageCategorizedView::activated(const ItemInfo&, Qt::KeyboardModifiers)
+void ItemCategorizedView::activated(const ItemInfo&, Qt::KeyboardModifiers)
 {
     // implemented in subclass
 }
 
-void ImageCategorizedView::showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index)
+void ItemCategorizedView::showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index)
 {
     showContextMenuOnInfo(event, imageInfo(index));
 }
 
-void ImageCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const ItemInfo&)
+void ItemCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const ItemInfo&)
 {
     // implemented in subclass
 }
 
-void ImageCategorizedView::paintEvent(QPaintEvent* e)
+void ItemCategorizedView::paintEvent(QPaintEvent* e)
 {
     // We want the thumbnails to be loaded in order.
     ItemThumbnailModel* const thumbModel = imageThumbnailModel();
@@ -722,17 +722,17 @@ void ImageCategorizedView::paintEvent(QPaintEvent* e)
     ItemViewCategorized::paintEvent(e);
 }
 
-QItemSelectionModel* ImageCategorizedView::getSelectionModel() const
+QItemSelectionModel* ItemCategorizedView::getSelectionModel() const
 {
     return selectionModel();
 }
 
-AbstractItemDragDropHandler* ImageCategorizedView::dragDropHandler() const
+AbstractItemDragDropHandler* ItemCategorizedView::dragDropHandler() const
 {
     return d->model->dragDropHandler();
 }
 
-void ImageCategorizedView::slotIccSettingsChanged(const ICCSettingsContainer&, const ICCSettingsContainer&)
+void ItemCategorizedView::slotIccSettingsChanged(const ICCSettingsContainer&, const ICCSettingsContainer&)
 {
     viewport()->update();
 }

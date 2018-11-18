@@ -48,7 +48,7 @@ public:
 
     virtual ~DigikamImageDelegatePrivate();
 
-    void init(DigikamImageDelegate* const q, ImageCategorizedView* const parent);
+    void init(DigikamImageDelegate* const q, ItemCategorizedView* const parent);
 };
 
 // -----------------------------------------------------------------------------------------

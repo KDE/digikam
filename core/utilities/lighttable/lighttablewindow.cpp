@@ -196,7 +196,7 @@ void LightTableWindow::slotRefreshStatusBar()
 void LightTableWindow::slotFileChanged(const QString& path)
 {
     QUrl url = QUrl::fromLocalFile(path);
-    // NOTE: Thumbbar handle change through ImageCategorizedView
+    // NOTE: Thumbbar handle change through ItemCategorizedView
 
     if (!d->previewView->leftItemInfo().isNull())
     {

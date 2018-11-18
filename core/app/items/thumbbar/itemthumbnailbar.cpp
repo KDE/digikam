@@ -58,7 +58,7 @@ public:
 };
 
 ItemThumbnailBar::ItemThumbnailBar(QWidget* const parent)
-    : ImageCategorizedView(parent),
+    : ItemCategorizedView(parent),
       d(new Private())
 {
     setItemDelegate(new ItemThumbnailDelegate(this));
@@ -94,7 +94,7 @@ void ItemThumbnailBar::setModelsFiltered(ItemModel* model, ImageSortFilterModel*
     }
 
     d->duplicatesFilter->setSourceFilterModel(filterModel);
-    ImageCategorizedView::setModels(model, d->duplicatesFilter);
+    ItemCategorizedView::setModels(model, d->duplicatesFilter);
 }
 
 void ItemThumbnailBar::installOverlays()
@@ -148,7 +148,7 @@ void ItemThumbnailBar::setFlow(QListView::Flow flow)
 {
     setWrapping(false);
 
-    ImageCategorizedView::setFlow(flow);
+    ItemCategorizedView::setFlow(flow);
 
     ItemThumbnailDelegate* const del = static_cast<ItemThumbnailDelegate*>(delegate());
     del->setFlow(flow);
@@ -180,7 +180,7 @@ void ItemThumbnailBar::slotSetupChanged()
     setToolTipEnabled(ApplicationSettings::instance()->showToolTipsIsValid());
     setFont(ApplicationSettings::instance()->getIconViewFont());
 
-    ImageCategorizedView::slotSetupChanged();
+    ItemCategorizedView::slotSetupChanged();
 }
 
 void ItemThumbnailBar::assignRating(const QList<QModelIndex>& indexes, int rating)
@@ -196,7 +196,7 @@ bool ItemThumbnailBar::event(QEvent* e)
         setFlow(flow());
     }
 
-    return ImageCategorizedView::event(e);
+    return ItemCategorizedView::event(e);
 }
 
 QModelIndex ItemThumbnailBar::nextIndex(const QModelIndex& index) const

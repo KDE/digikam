@@ -39,7 +39,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "itemalbummodel.h"
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 #include "imagedelegate.h"
 #include "itemfiltermodel.h"
 #include "itemmodel.h"
@@ -63,10 +63,10 @@ public:
     QRect                 rect;
     QPixmap               pixmap;
     int                   lowerSpacing;
-    ImageCategorizedView* view;
+    ItemCategorizedView* view;
 };
 
-ItemCategoryDrawer::ItemCategoryDrawer(ImageCategorizedView* const parent)
+ItemCategoryDrawer::ItemCategoryDrawer(ItemCategorizedView* const parent)
     : DCategoryDrawer(0),
       d(new Private)
 {

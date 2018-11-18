@@ -438,7 +438,7 @@ void StackedView::setViewMode(const StackedViewMode mode)
     emit signalViewModeChanged();
 }
 
-void StackedView::syncSelection(ImageCategorizedView* from, ImageCategorizedView* to)
+void StackedView::syncSelection(ItemCategorizedView* from, ItemCategorizedView* to)
 {
     ImageSortFilterModel* const fromModel = from->imageSortFilterModel();
     ImageSortFilterModel* const toModel   = to->imageSortFilterModel();

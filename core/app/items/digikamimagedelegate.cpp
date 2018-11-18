@@ -32,7 +32,7 @@
 #include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "itemcategorydrawer.h"
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 #include "itemdelegateoverlay.h"
 #include "itemmodel.h"
 #include "itemfiltermodel.h"
@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-void DigikamImageDelegatePrivate::init(DigikamImageDelegate* const q, ImageCategorizedView* const parent)
+void DigikamImageDelegatePrivate::init(DigikamImageDelegate* const q, ItemCategorizedView* const parent)
 {
     categoryDrawer = new ItemCategoryDrawer(parent);
 
@@ -56,14 +56,14 @@ DigikamImageDelegatePrivate::~DigikamImageDelegatePrivate()
 
 // ------------------------------------------------------------------------------------------------
 
-DigikamImageDelegate::DigikamImageDelegate(ImageCategorizedView* parent)
+DigikamImageDelegate::DigikamImageDelegate(ItemCategorizedView* parent)
     : ImageDelegate(*new DigikamImageDelegatePrivate, parent)
 {
     Q_D(DigikamImageDelegate);
     d->init(this, parent);
 }
 
-DigikamImageDelegate::DigikamImageDelegate(DigikamImageDelegatePrivate& dd, ImageCategorizedView* parent)
+DigikamImageDelegate::DigikamImageDelegate(DigikamImageDelegatePrivate& dd, ItemCategorizedView* parent)
     : ImageDelegate(dd, parent)
 {
     Q_D(DigikamImageDelegate);

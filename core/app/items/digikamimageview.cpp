@@ -77,7 +77,7 @@ namespace Digikam
 {
 
 DigikamImageView::DigikamImageView(QWidget* const parent)
-    : ImageCategorizedView(parent),
+    : ItemCategorizedView(parent),
       d(new Private(this))
 {
     installDefaultModels();
@@ -181,37 +181,37 @@ ItemViewUtilities* DigikamImageView::utilities() const
 void DigikamImageView::setThumbnailSize(const ThumbnailSize& size)
 {
     imageThumbnailModel()->setPreloadThumbnailSize(size);
-    ImageCategorizedView::setThumbnailSize(size);
+    ItemCategorizedView::setThumbnailSize(size);
 }
 
 ItemInfoList DigikamImageView::allItemInfos(bool grouping) const
 {
     if (grouping)
     {
-        return resolveGrouping(ImageCategorizedView::allItemInfos());
+        return resolveGrouping(ItemCategorizedView::allItemInfos());
     }
 
-    return ImageCategorizedView::allItemInfos();
+    return ItemCategorizedView::allItemInfos();
 }
 
 ItemInfoList DigikamImageView::selectedItemInfos(bool grouping) const
 {
     if (grouping)
     {
-        return resolveGrouping(ImageCategorizedView::selectedItemInfos());
+        return resolveGrouping(ItemCategorizedView::selectedItemInfos());
     }
 
-    return ImageCategorizedView::selectedItemInfos();
+    return ItemCategorizedView::selectedItemInfos();
 }
 
 ItemInfoList DigikamImageView::selectedItemInfosCurrentFirst(bool grouping) const
 {
     if (grouping)
     {
-        return resolveGrouping(ImageCategorizedView::selectedItemInfosCurrentFirst());
+        return resolveGrouping(ItemCategorizedView::selectedItemInfosCurrentFirst());
     }
 
-    return ImageCategorizedView::selectedItemInfosCurrentFirst();
+    return ItemCategorizedView::selectedItemInfosCurrentFirst();
 }
 
 void DigikamImageView::dragDropSort(const ItemInfo& pick, const QList<ItemInfo>& infos)
@@ -288,7 +288,7 @@ void DigikamImageView::slotSetupChanged()
 
     d->updateOverlays();
 
-    ImageCategorizedView::slotSetupChanged();
+    ItemCategorizedView::slotSetupChanged();
 }
 
 bool DigikamImageView::hasHiddenGroupedImages(const ItemInfo& info) const
@@ -299,7 +299,7 @@ bool DigikamImageView::hasHiddenGroupedImages(const ItemInfo& info) const
 ItemInfoList DigikamImageView::imageInfos(const QList<QModelIndex>& indexes,
                                            ApplicationSettings::OperationType type) const
 {
-    ItemInfoList infos = ImageCategorizedView::imageInfos(indexes);
+    ItemInfoList infos = ItemCategorizedView::imageInfos(indexes);
 
     if (needGroupResolving(type, infos))
     {

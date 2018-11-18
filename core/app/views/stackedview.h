@@ -42,7 +42,7 @@ namespace Digikam
 {
 
 class DigikamImageView;
-class ImageCategorizedView;
+class ItemCategorizedView;
 class ImagePreviewView;
 class ItemThumbnailBar;
 class TableView;
@@ -157,7 +157,7 @@ private Q_SLOTS:
 private:
 
     void readSettings();
-    void syncSelection(ImageCategorizedView* from, ImageCategorizedView* to);
+    void syncSelection(ItemCategorizedView* from, ItemCategorizedView* to);
 
 private:
 
