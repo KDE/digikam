@@ -130,7 +130,7 @@ FbWindow::FbWindow(DInfoInterface* const iface,
 
     d->changeUserBtn->setStyleSheet(QLatin1String("QPushButton {background-color: "
                                                   "#3b5998; color: #ffffff;}"));
-    d->changeUserBtn->setIcon(QIcon::fromTheme(QLatin1String("facebook")));
+    d->changeUserBtn->setIcon(QIcon::fromTheme(QLatin1String("facebook-white")));
     d->changeUserBtn->setText(i18n("Continue with Facebook"));
 
     // ------------------------------------------------------------------------
