@@ -104,6 +104,7 @@ public:
         clientSecret       = QLatin1String("5b0b5cd096e110cd4f4c72f517e2c544");
 
         serviceName        = QLatin1String("Facebook");
+        serviceDate        = QLatin1String("token_date");
         serviceKey         = QLatin1String("access_token");
 
         dialog             = 0;
@@ -124,6 +125,7 @@ public:
     QString                clientSecret;
     QString                accessToken;
     QString                serviceName;
+    QString                serviceDate;
     QString                serviceKey;
 
     QDialog*               dialog;
@@ -573,12 +575,7 @@ void FbTalker::slotFinished(QNetworkReply* reply)
 
     if (reply->error() != QNetworkReply::NoError)
     {
-        if (d->state == Private::FB_GETLOGGEDINUSER)
-        {
-            unlink();
-            link();
-        }
-        else if (d->state == Private::FB_ADDPHOTO)
+        if (d->state == Private::FB_ADDPHOTO)
         {
             emit signalBusy(false);
             emit signalAddPhotoDone(reply->error(), reply->errorString());
@@ -823,19 +820,28 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
 void FbTalker::writeSettings()
 {
     d->settings->beginGroup(d->serviceName);
-    d->settings->setValue(d->serviceKey, d->accessToken);
+    d->settings->setValue(d->serviceDate, QDateTime::currentDateTime());
+    d->settings->setValue(d->serviceKey,  d->accessToken);
     d->settings->endGroup();
 }
 
 void FbTalker::readSettings()
 {
     d->settings->beginGroup(d->serviceName);
-    d->accessToken = d->settings->value(d->serviceKey).toString();
+    QDateTime dateTime = d->settings->value(d->serviceDate).toDateTime();
+    d->accessToken     = d->settings->value(d->serviceKey).toString();
     d->settings->endGroup();
 
     if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Linking...";
+        link();
+    }
+    else if (dateTime.secsTo(QDateTime::currentDateTime()) > 3600)
+    {
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token has expired";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Linking...";
+        d->accessToken = QString();
         link();
     }
     else

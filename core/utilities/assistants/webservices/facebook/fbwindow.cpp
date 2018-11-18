@@ -188,8 +188,6 @@ FbWindow::FbWindow(DInfoInterface* const iface,
     // ------------------------------------------------------------------------
 
     readSettings();
-
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
     buttonStateChange(d->talker->linked());
 
     authenticate();
@@ -255,20 +253,6 @@ void FbWindow::readSettings()
     KConfig config;
     KConfigGroup grp  = config.group("Facebook Settings");
 
-    /* 
-     * Access token and session expire now handled in fbtalker.cpp by O2
-     */
-//     d->accessToken    = grp.readEntry("Access Token");
-//     d->sessionExpires = grp.readEntry("Session Expires", 0);
-// 
-//     if (d->accessToken.isEmpty())
-//     {
-//         d->sessionKey     = grp.readEntry("Session Key");
-//         d->sessionSecret  = grp.readEntry("Session Secret");
-//     }
-
-    d->currentAlbumID = grp.readEntry("Current Album", QString());
-
     if (grp.readEntry("Resize", false))
     {
         d->resizeChB->setChecked(true);
@@ -280,7 +264,8 @@ void FbWindow::readSettings()
         d->dimensionSpB->setEnabled(false);
     }
 
-    d->dimensionSpB->setValue(grp.readEntry("Maximum Width", 604));
+    d->currentAlbumID = grp.readEntry("Current Album", QString());
+    d->dimensionSpB->setValue(grp.readEntry("Maximum Width", 1600));
     d->imageQualitySpB->setValue(grp.readEntry("Image Quality", 85));
 
     winId();
@@ -294,31 +279,10 @@ void FbWindow::writeSettings()
     KConfig config;
     KConfigGroup grp = config.group("Facebook Settings");
 
-    /* 
-     * Access token and session expire now handled in fbtalker.cpp by O2
-     */
-//     grp.writeEntry("Access Token",    d->accessToken);
-
-    /* If we have both access token and session key, then we have just converted one into the other. */
-//     if (! d->accessToken.isEmpty())
-//     {
-//         if (! d->sessionKey.isEmpty())
-//         {
-//             grp.deleteEntry("Session Key");
-//         }
-// 
-//         if (! d->sessionSecret.isEmpty())
-//         {
-//             grp.deleteEntry("Session Secret");
-//         }
-//     }
-// 
-//     grp.writeEntry("Session Expires", d->sessionExpires);
-
-    grp.writeEntry("Current Album",   d->currentAlbumID);
-    grp.writeEntry("Resize",          d->resizeChB->isChecked());
-    grp.writeEntry("Maximum Width",   d->dimensionSpB->value());
-    grp.writeEntry("Image Quality",   d->imageQualitySpB->value());
+    grp.writeEntry("Current Album", d->currentAlbumID);
+    grp.writeEntry("Resize",        d->resizeChB->isChecked());
+    grp.writeEntry("Maximum Width", d->dimensionSpB->value());
+    grp.writeEntry("Image Quality", d->imageQualitySpB->value());
 
     KConfigGroup dialogGroup = config.group("Facebook Export Dialog");
     KWindowConfig::saveWindowSize(windowHandle(), dialogGroup);
@@ -388,7 +352,7 @@ void FbWindow::slotListAlbumsDone(int errCode,
     }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received albums (errCode = " << errCode << ", errMsg = "
-             << errMsg << "): " << albumDebug;
+                                     << errMsg << "): " << albumDebug;
 
     if (errCode != 0)
     {
@@ -416,10 +380,6 @@ void FbWindow::slotListAlbumsDone(int errCode,
             case FB_FRIENDS_OF_FRIENDS:
                 albumIcon = QLatin1String("system-users");
                 break;
-
-//             case FB_NETWORKS:
-//                 albumIcon = QLatin1String("network-workgroup");
-//                 break;
 
             case FB_EVERYONE:
                 albumIcon = QLatin1String("folder-html");
