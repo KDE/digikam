@@ -38,7 +38,6 @@
 // Local includes
 
 #include "fbitem.h"
-#include "wsnewalbumdialog.h"
 
 class QDomElement;
 
@@ -51,7 +50,7 @@ class FbTalker : public QObject
 
 public:
 
-    explicit FbTalker(QWidget* const parent, WSNewAlbumDialog* albumDlg=0);
+    explicit FbTalker(QWidget* const parent);
     ~FbTalker();
 
     void    link();
@@ -65,7 +64,6 @@ public:
 
     void    listAlbums(long long userID = 0);
 
-    void    createNewAlbum();
     void    createAlbum(const FbAlbum& album);
 
     void    addPhoto(const QString& imgPath, const QString& albumID,
@@ -103,7 +101,6 @@ private Q_SLOTS:
     void    slotLinkingFailed();
     void    slotLinkingSucceeded();
     void    slotCatchUrl(const QUrl& url);
-    void    slotOpenBrowser(const QUrl& url);
     void    slotFinished(QNetworkReply* reply);
 
 private:

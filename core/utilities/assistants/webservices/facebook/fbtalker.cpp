@@ -55,7 +55,6 @@
 #include "digikam_config.h"
 #include "digikam_version.h"
 #include "fbmpform.h"
-#include "fbnewalbumdlg.h"
 #include "wstoolutils.h"
 
 #ifdef HAVE_QWEBENGINE
@@ -93,27 +92,26 @@ public:
 
 public:
 
-    explicit Private(WSNewAlbumDialog* albumDlg)
+    explicit Private()
     {
-        apiURL              = QLatin1String("https://graph.facebook.com/%1/%2");
-        authUrl             = QLatin1String("https://www.facebook.com/dialog/oauth");
-        tokenUrl            = QLatin1String("https://graph.facebook.com/oauth/access_token");
-        redirectUrl         = QLatin1String("https://www.facebook.com/connect/login_success.html");
-        scope               = QLatin1String("user_photos,publish_pages,manage_pages"); //publish_to_groups,user_friends not necessary?
-        apikey              = QLatin1String("400589753481372");
-        clientSecret        = QLatin1String("5b0b5cd096e110cd4f4c72f517e2c544");
+        apiURL             = QLatin1String("https://graph.facebook.com/%1/%2");
+        authUrl            = QLatin1String("https://www.facebook.com/dialog/oauth");
+        tokenUrl           = QLatin1String("https://graph.facebook.com/oauth/access_token");
+        redirectUrl        = QLatin1String("https://www.facebook.com/connect/login_success.html");
+        scope              = QLatin1String("user_photos,publish_pages,manage_pages"); //publish_to_groups,user_friends not necessary?
+        apikey             = QLatin1String("400589753481372");
+        clientSecret       = QLatin1String("5b0b5cd096e110cd4f4c72f517e2c544");
 
-        serviceName         = QLatin1String("Facebook");
-        serviceKey          = QLatin1String("access_token");
+        serviceName        = QLatin1String("Facebook");
+        serviceKey         = QLatin1String("access_token");
 
-        albumDlg            = dynamic_cast<FbNewAlbumDlg*>(albumDlg);
-        dialog              = 0;
-        parent              = 0;
-        settings            = 0;
-        netMngr             = 0;
-        reply               = 0;
-        view                = 0;
-        state               = FB_GETLOGGEDINUSER;
+        dialog             = 0;
+        parent             = 0;
+        settings           = 0;
+        netMngr            = 0;
+        reply              = 0;
+        view               = 0;
+        state              = FB_GETLOGGEDINUSER;
     }
 
     QString                apiURL;
@@ -126,8 +124,6 @@ public:
     QString                accessToken;
     QString                serviceName;
     QString                serviceKey;
-
-    FbNewAlbumDlg*         albumDlg; // Pointer to FbNewAlbumDlg* const so that no modification can impact this pointer
 
     QDialog*               dialog;
     QWidget*               parent;
@@ -148,8 +144,8 @@ public:
 
 // -----------------------------------------------------------------------------
 
-FbTalker::FbTalker(QWidget* const parent, WSNewAlbumDialog* albumDlg)
-    : d(new Private(albumDlg))
+FbTalker::FbTalker(QWidget* const parent)
+    : d(new Private())
 {
     d->parent   = parent;
     d->netMngr  = new QNetworkAccessManager(this);
@@ -247,17 +243,10 @@ void FbTalker::slotLinkingSucceeded()
     }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Facebook ok";
-    writeSettings();
     d->view->close();
-    getLoggedInUser();
-}
+    writeSettings();
 
-void FbTalker::slotOpenBrowser(const QUrl& url)
-{
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Open Browser..." << url;
-    d->view->setWindowFlags(Qt::Dialog);
-    d->view->load(url);
-    d->view->show();
+    getLoggedInUser();
 }
 
 void FbTalker::slotCatchUrl(const QUrl& url)
@@ -269,11 +258,11 @@ void FbTalker::slotCatchUrl(const QUrl& url)
     if (!d->accessToken.isEmpty())
     {
         qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access Token Received";
-        emit slotLinkingSucceeded();
+        emit linkingSucceeded();
     }
     else
     {
-        emit slotLinkingFailed();
+        emit linkingFailed();
     }
 }
 
@@ -326,10 +315,9 @@ void FbTalker::getLoggedInUser()
     emit signalBusy(true);
     emit signalLoginProgress(3);
 
-    QUrl url(d->apiURL.arg("me")
-                      .arg(""));
+    QUrl url(d->apiURL.arg("me").arg(""));
+
     QUrlQuery q;
-//     q.addQueryItem(QLatin1String("fields"), QLatin1String("id, name, link"));
     q.addQueryItem(QLatin1String("access_token"), d->accessToken.toUtf8());
     url.setQuery(q);
 
@@ -363,7 +351,10 @@ void FbTalker::logout()
     q.addQueryItem(QLatin1String("access_token"), d->accessToken.toUtf8());
     url.setQuery(q);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Logout URL: " << url;
-    //QDesktopServices::openUrl(url);
+
+    d->view->setWindowFlags(Qt::Dialog);
+    d->view->load(url);
+    d->view->show();
 
     emit signalBusy(false);
 }
@@ -459,7 +450,7 @@ void FbTalker::createAlbum(const FbAlbum& album)
 
     QUrl url(QUrl(d->apiURL.arg(d->user.id)
                            .arg("albums")));
-//     url.setQuery(params);
+    url.setQuery(params);
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, 
@@ -470,13 +461,6 @@ void FbTalker::createAlbum(const FbAlbum& album)
     d->reply = d->netMngr->post(netRequest, params.query().toUtf8());
 
     d->state = Private::FB_CREATEALBUM;
-}
-
-void FbTalker::createNewAlbum()
-{
-    FbAlbum album;
-    d->albumDlg->getAlbumProperties(album);
-    createAlbum(album);
 }
 
 void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QString& caption)
