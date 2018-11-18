@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-10-03
- * Description : Private Qt item view for images
+ * Description : Private Qt model-view for items
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_VIEW_PRIVATE_H
-#define DIGIKAM_IMAGE_VIEW_PRIVATE_H
+#ifndef DIGIKAM_ITEM_VIEW_PRIVATE_H
+#define DIGIKAM_ITEM_VIEW_PRIVATE_H
 
 // Qt includes
 
@@ -33,7 +33,7 @@
 // Local includes
 
 #include "digikam_config.h"
-#include "digikamimageview.h"
+#include "digikamitemview.h"
 #include "digikamimagedelegate.h"
 #include "itemrotationoverlay.h"
 #include "itemfullscreenoverlay.h"
@@ -46,14 +46,14 @@ namespace Digikam
 class DigikamImageDelegate;
 class ItemFaceDelegate;
 
-class Q_DECL_HIDDEN DigikamImageView::Private : public QObject
+class Q_DECL_HIDDEN DigikamItemView::Private : public QObject
 {
     Q_OBJECT
-    Q_DECLARE_PUBLIC(DigikamImageView)
+    Q_DECLARE_PUBLIC(DigikamItemView)
 
 public:
 
-    explicit Private(DigikamImageView* const qq);
+    explicit Private(DigikamItemView* const qq);
     ~Private();
 
     void updateOverlays();
@@ -63,23 +63,23 @@ public:
 
     ItemViewUtilities*       utilities;
 
-    FacePipeline              editPipeline;
+    FacePipeline             editPipeline;
 
-    DigikamImageDelegate*     normalDelegate;
-    ItemFaceDelegate* faceDelegate;
+    DigikamImageDelegate*    normalDelegate;
+    ItemFaceDelegate*        faceDelegate;
 
-    bool                      overlaysActive;
-    bool                      fullscreenActive;
+    bool                     overlaysActive;
+    bool                     fullscreenActive;
 
     ItemRotateOverlay*       rotateLeftOverlay;
     ItemRotateOverlay*       rotateRightOverlay;
-    ItemFullScreenOverlay*           fullscreenOverlay;
+    ItemFullScreenOverlay*   fullscreenOverlay;
 
-    bool                      faceMode;
+    bool                     faceMode;
 
 private:
 
-    DigikamImageView*         q_ptr;
+    DigikamItemView*         q_ptr;
 
 private:
 
@@ -88,4 +88,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_VIEW_PRIVATE_H
+#endif // DIGIKAM_ITEM_VIEW_PRIVATE_H

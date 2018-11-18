@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-24
- * Description : Qt item view for images
+ * Description : Qt model-view for items
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_VIEW_H
-#define DIGIKAM_IMAGE_VIEW_H
+#ifndef DIGIKAM_ITEM_VIEW_H
+#define DIGIKAM_ITEM_VIEW_H
 
 // Local includes
 
@@ -38,14 +38,14 @@ namespace Digikam
 class ItemViewUtilities;
 class ItemInfoList;
 
-class DigikamImageView : public ItemCategorizedView, public GroupingViewImplementation
+class DigikamItemView : public ItemCategorizedView, public GroupingViewImplementation
 {
     Q_OBJECT
 
 public:
 
-    explicit DigikamImageView(QWidget* const parent = 0);
-    ~DigikamImageView();
+    explicit DigikamItemView(QWidget* const parent = 0);
+    ~DigikamItemView();
 
     ItemViewUtilities* utilities() const;
 
@@ -126,4 +126,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_VIEW_H
+#endif // DIGIKAM_ITEM_VIEW_H

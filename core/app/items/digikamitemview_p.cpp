@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-10-03
- * Description : Private Qt item view for images
+ * Description : Private Qt model-view for items
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "digikamimageview_p.h"
+#include "digikamitemview_p.h"
 
 // Local includes
 
@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-DigikamImageView::Private::Private(DigikamImageView* const qq)
+DigikamItemView::Private::Private(DigikamItemView* const qq)
     : overlaysActive(false),
       fullscreenActive(false),
       q_ptr(qq)
@@ -46,13 +46,13 @@ DigikamImageView::Private::Private(DigikamImageView* const qq)
     faceMode           = false;
 }
 
-DigikamImageView::Private::~Private()
+DigikamItemView::Private::~Private()
 {
 }
 
-void DigikamImageView::Private::updateOverlays()
+void DigikamItemView::Private::updateOverlays()
 {
-    Q_Q(DigikamImageView);
+    Q_Q(DigikamItemView);
 
     ApplicationSettings* const settings = ApplicationSettings::instance();
 

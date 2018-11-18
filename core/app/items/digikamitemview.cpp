@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-24
- * Description : Qt item view for images
+ * Description : Qt model-view for items
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -26,8 +26,8 @@
  *
  * ============================================================ */
 
-#include "digikamimageview.h"
-#include "digikamimageview_p.h"
+#include "digikamitemview.h"
+#include "digikamitemview_p.h"
 
 // Qt includes
 
@@ -76,7 +76,7 @@
 namespace Digikam
 {
 
-DigikamImageView::DigikamImageView(QWidget* const parent)
+DigikamItemView::DigikamItemView(QWidget* const parent)
     : ItemCategorizedView(parent),
       d(new Private(this))
 {
@@ -168,23 +168,23 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     slotSetupChanged();
 }
 
-DigikamImageView::~DigikamImageView()
+DigikamItemView::~DigikamItemView()
 {
     delete d;
 }
 
-ItemViewUtilities* DigikamImageView::utilities() const
+ItemViewUtilities* DigikamItemView::utilities() const
 {
     return d->utilities;
 }
 
-void DigikamImageView::setThumbnailSize(const ThumbnailSize& size)
+void DigikamItemView::setThumbnailSize(const ThumbnailSize& size)
 {
     imageThumbnailModel()->setPreloadThumbnailSize(size);
     ItemCategorizedView::setThumbnailSize(size);
 }
 
-ItemInfoList DigikamImageView::allItemInfos(bool grouping) const
+ItemInfoList DigikamItemView::allItemInfos(bool grouping) const
 {
     if (grouping)
     {
@@ -194,7 +194,7 @@ ItemInfoList DigikamImageView::allItemInfos(bool grouping) const
     return ItemCategorizedView::allItemInfos();
 }
 
-ItemInfoList DigikamImageView::selectedItemInfos(bool grouping) const
+ItemInfoList DigikamItemView::selectedItemInfos(bool grouping) const
 {
     if (grouping)
     {
@@ -204,7 +204,7 @@ ItemInfoList DigikamImageView::selectedItemInfos(bool grouping) const
     return ItemCategorizedView::selectedItemInfos();
 }
 
-ItemInfoList DigikamImageView::selectedItemInfosCurrentFirst(bool grouping) const
+ItemInfoList DigikamItemView::selectedItemInfosCurrentFirst(bool grouping) const
 {
     if (grouping)
     {
@@ -214,7 +214,7 @@ ItemInfoList DigikamImageView::selectedItemInfosCurrentFirst(bool grouping) cons
     return ItemCategorizedView::selectedItemInfosCurrentFirst();
 }
 
-void DigikamImageView::dragDropSort(const ItemInfo& pick, const QList<ItemInfo>& infos)
+void DigikamItemView::dragDropSort(const ItemInfo& pick, const QList<ItemInfo>& infos)
 {
     if (pick.isNull() || infos.isEmpty())
     {
@@ -265,22 +265,22 @@ void DigikamImageView::dragDropSort(const ItemInfo& pick, const QList<ItemInfo>&
     imageFilterModel()->invalidate();
  }
 
-bool DigikamImageView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
+bool DigikamItemView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
 {
     return needGroupResolving(type, allItemInfos());
 }
 
-bool DigikamImageView::selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const
+bool DigikamItemView::selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const
 {
     return needGroupResolving(type, selectedItemInfos());
 }
 
-int DigikamImageView::fitToWidthIcons()
+int DigikamItemView::fitToWidthIcons()
 {
     return delegate()->calculatethumbSizeToFit(viewport()->size().width());
 }
 
-void DigikamImageView::slotSetupChanged()
+void DigikamItemView::slotSetupChanged()
 {
     imageFilterModel()->setStringTypeNatural(ApplicationSettings::instance()->isStringTypeNatural());
     setToolTipEnabled(ApplicationSettings::instance()->showToolTipsIsValid());
@@ -291,12 +291,12 @@ void DigikamImageView::slotSetupChanged()
     ItemCategorizedView::slotSetupChanged();
 }
 
-bool DigikamImageView::hasHiddenGroupedImages(const ItemInfo& info) const
+bool DigikamItemView::hasHiddenGroupedImages(const ItemInfo& info) const
 {
     return info.hasGroupedImages() && !imageFilterModel()->isGroupOpen(info.id());
 }
 
-ItemInfoList DigikamImageView::imageInfos(const QList<QModelIndex>& indexes,
+ItemInfoList DigikamItemView::imageInfos(const QList<QModelIndex>& indexes,
                                            ApplicationSettings::OperationType type) const
 {
     ItemInfoList infos = ItemCategorizedView::imageInfos(indexes);
@@ -309,7 +309,7 @@ ItemInfoList DigikamImageView::imageInfos(const QList<QModelIndex>& indexes,
     return infos;
 }
 
-void DigikamImageView::setFaceMode(bool on)
+void DigikamItemView::setFaceMode(bool on)
 {
     d->faceMode = on;
 
@@ -329,7 +329,7 @@ void DigikamImageView::setFaceMode(bool on)
     }
 }
 
-void DigikamImageView::addRejectionOverlay(ImageDelegate* delegate)
+void DigikamItemView::addRejectionOverlay(ImageDelegate* delegate)
 {
     FaceRejectionOverlay* const rejectionOverlay = new FaceRejectionOverlay(this);
 
@@ -340,7 +340,7 @@ void DigikamImageView::addRejectionOverlay(ImageDelegate* delegate)
 }
 
 /*
-void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
+void DigikamItemView::addTagEditOverlay(ImageDelegate* delegate)
 {
     TagsLineEditOverlay* tagOverlay = new TagsLineEditOverlay(this);
 
@@ -351,7 +351,7 @@ void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
 }
 */
 
-void DigikamImageView::addAssignNameOverlay(ImageDelegate* delegate)
+void DigikamItemView::addAssignNameOverlay(ImageDelegate* delegate)
 {
     AssignNameOverlay* const nameOverlay = new AssignNameOverlay(this);
     addOverlay(nameOverlay, delegate);
@@ -363,7 +363,7 @@ void DigikamImageView::addAssignNameOverlay(ImageDelegate* delegate)
             this, SLOT(removeFaces(QList<QModelIndex>)));
 }
 
-void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId)
+void DigikamItemView::confirmFaces(const QList<QModelIndex>& indexes, int tagId)
 {
     QList<ItemInfo>    infos;
     QList<FaceTagsIface> faces;
@@ -397,7 +397,7 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
     }
 }
 
-void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
+void DigikamItemView::removeFaces(const QList<QModelIndex>& indexes)
 {
     QList<ItemInfo> infos;
     QList<FaceTagsIface> faces;
@@ -418,7 +418,7 @@ void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
     }
 }
 
-void DigikamImageView::activated(const ItemInfo& info, Qt::KeyboardModifiers modifiers)
+void DigikamItemView::activated(const ItemInfo& info, Qt::KeyboardModifiers modifiers)
 {
     if (info.isNull())
     {
@@ -442,28 +442,28 @@ void DigikamImageView::activated(const ItemInfo& info, Qt::KeyboardModifiers mod
     }
 }
 
-void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info)
+void DigikamItemView::showContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info)
 {
     emit signalShowContextMenuOnInfo(event, info, QList<QAction*>(), imageFilterModel());
 }
 
-void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMenuEvent* event)
+void DigikamItemView::showGroupContextMenu(const QModelIndex& index, QContextMenuEvent* event)
 {
     Q_UNUSED(index);
     emit signalShowGroupContextMenu(event, selectedItemInfosCurrentFirst(), imageFilterModel());
 }
 
-void DigikamImageView::showContextMenu(QContextMenuEvent* event)
+void DigikamItemView::showContextMenu(QContextMenuEvent* event)
 {
     emit signalShowContextMenu(event);
 }
 
-void DigikamImageView::openFile(const ItemInfo& info)
+void DigikamItemView::openFile(const ItemInfo& info)
 {
     d->utilities->openInfos(info, allItemInfos(), currentAlbum());
 }
 
-void DigikamImageView::deleteSelected(const ItemViewUtilities::DeleteMode deleteMode)
+void DigikamItemView::deleteSelected(const ItemViewUtilities::DeleteMode deleteMode)
 {
     ItemInfoList imageInfoList = selectedItemInfos(true);
 
@@ -473,7 +473,7 @@ void DigikamImageView::deleteSelected(const ItemViewUtilities::DeleteMode delete
     }
 }
 
-void DigikamImageView::deleteSelectedDirectly(const ItemViewUtilities::DeleteMode deleteMode)
+void DigikamItemView::deleteSelectedDirectly(const ItemViewUtilities::DeleteMode deleteMode)
 {
     ItemInfoList imageInfoList = selectedItemInfos(true);
 
@@ -481,13 +481,13 @@ void DigikamImageView::deleteSelectedDirectly(const ItemViewUtilities::DeleteMod
     awayFromSelection();
 }
 
-void DigikamImageView::assignRating(const QList<QModelIndex>& indexes, int rating)
+void DigikamItemView::assignRating(const QList<QModelIndex>& indexes, int rating)
 {
     ItemInfoList infos = imageInfos(indexes, ApplicationSettings::Metadata);
     FileActionMngr::instance()->assignRating(infos, rating);
 }
 
-void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
+void DigikamItemView::groupIndicatorClicked(const QModelIndex& index)
 {
     ItemInfo info = imageFilterModel()->imageInfo(index);
 
@@ -501,7 +501,7 @@ void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
     imageAlbumModel()->ensureHasGroupedImages(info);
 }
 
-void DigikamImageView::rename()
+void DigikamItemView::rename()
 {
     ItemInfoList infos = selectedItemInfos();
 
@@ -553,19 +553,19 @@ void DigikamImageView::rename()
     while (!urls.isEmpty() && !newNamesList.isEmpty());
 }
 
-void DigikamImageView::slotRotateLeft(const QList<QModelIndex>& indexes)
+void DigikamItemView::slotRotateLeft(const QList<QModelIndex>& indexes)
 {
     ItemInfoList infos = imageInfos(indexes, ApplicationSettings::Metadata);
     FileActionMngr::instance()->transform(infos, MetaEngineRotation::Rotate270);
 }
 
-void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
+void DigikamItemView::slotRotateRight(const QList<QModelIndex>& indexes)
 {
     ItemInfoList infos = imageInfos(indexes, ApplicationSettings::Metadata);
     FileActionMngr::instance()->transform(infos, MetaEngineRotation::Rotate90);
 }
 
-void DigikamImageView::slotFullscreen(const QList<QModelIndex>& indexes)
+void DigikamItemView::slotFullscreen(const QList<QModelIndex>& indexes)
 {
    QList<ItemInfo> infos = imageInfos(indexes, ApplicationSettings::Slideshow);
 
@@ -580,7 +580,7 @@ void DigikamImageView::slotFullscreen(const QList<QModelIndex>& indexes)
    emit fullscreenRequested(info);
 }
 
-void DigikamImageView::slotInitProgressIndicator()
+void DigikamItemView::slotInitProgressIndicator()
 {
     if (!ProgressManager::instance()->findItembyId(QLatin1String("FaceActionProgress")))
     {

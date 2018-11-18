@@ -40,7 +40,7 @@
 #include "digikam_config.h"
 #include "digikam_debug.h"
 #include "applicationsettings.h"
-#include "digikamimageview.h"
+#include "digikamitemview.h"
 #include "digikamview.h"
 #include "dbinfoiface.h"
 #include "itemalbummodel.h"
@@ -99,7 +99,7 @@ public:
     QMainWindow*       dockArea;
     QSplitter*         splitter;
 
-    DigikamImageView*  imageIconView;
+    DigikamItemView*  imageIconView;
     ItemThumbnailBar* thumbBar;
     ImagePreviewView*  imagePreviewView;
     ThumbBarDock*      thumbBarDock;
@@ -120,7 +120,7 @@ StackedView::StackedView(QWidget* const parent)
     : QStackedWidget(parent),
       d(new Private)
 {
-    d->imageIconView    = new DigikamImageView(this);
+    d->imageIconView    = new DigikamItemView(this);
     d->imagePreviewView = new ImagePreviewView(this);
     d->thumbBarDock     = new ThumbBarDock();
     d->thumbBar         = new ItemThumbnailBar(d->thumbBarDock);
@@ -270,7 +270,7 @@ void StackedView::slotEscapePreview()
 #endif //HAVE_MEDIAPLAYER
 }
 
-DigikamImageView* StackedView::imageIconView() const
+DigikamItemView* StackedView::imageIconView() const
 {
     return d->imageIconView;
 }

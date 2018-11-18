@@ -51,7 +51,7 @@
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 #include "digikamapp.h"
-#include "digikamimageview.h"
+#include "digikamitemview.h"
 #include "dmessagebox.h"
 #include "dzoombar.h"
 #include "dtrashitemmodel.h"
@@ -185,7 +185,7 @@ public:
 
     PeopleSideBarWidget*          peopleSideBar;
     DigikamApp*                   parent;
-    DigikamImageView*             iconView;
+    DigikamItemView*             iconView;
     TableView*                    tableView;
     TrashView*                    trashView;
     ItemViewUtilities*           utilities;
