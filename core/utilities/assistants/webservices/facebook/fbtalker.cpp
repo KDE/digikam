@@ -47,6 +47,7 @@
 #include <QUrlQuery>
 #include <QSettings>
 #include <QMessageBox>
+#include <QNetworkCookieJar>
 #include <QNetworkAccessManager>
 
 // Local includes
