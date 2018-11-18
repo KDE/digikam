@@ -39,7 +39,9 @@
 |│   │   ├── dragdrop                                         | Drag and drop helper classes                                            |
 |│   │   ├── filters                                          | Tags filter widgets                                                     |
 |│   │   ├── items                                            | Icon-view item widgets                                                  |
-|│   │   │   └── overlays                                     | Icon-view item overlays                                                 |
+|│   │   │   ├── overlays                                     | Icon-view item overlays                                                 |
+|│   │   │   ├── thumbbar                                     | Icon-view item thumbbar widget                                          |
+|│   │   │   └── utils                                        | Icon-view item utility classes                                          |
 |│   │   ├── main                                             | Main digiKam application                                                |
 |│   │   ├── utils                                            | Generic utility classes                                                 |
 |│   │   └── views                                            | Views classes                                                           |
