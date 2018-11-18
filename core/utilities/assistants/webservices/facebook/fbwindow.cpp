@@ -128,8 +128,10 @@ FbWindow::FbWindow(DInfoInterface* const iface,
 
     d->widget->setMinimumSize(700, 500);
 
-    d->changeUserBtn->setText(i18n("Continue with Facebook"));
+    d->changeUserBtn->setStyleSheet(QLatin1String("QPushButton {background-color: "
+                                                  "#3b5998; color: #ffffff;}"));
     d->changeUserBtn->setIcon(QIcon::fromTheme(QLatin1String("facebook")));
+    d->changeUserBtn->setText(i18n("Continue with Facebook"));
 
     // ------------------------------------------------------------------------
 
@@ -282,9 +284,9 @@ void FbWindow::writeSettings()
 
 void FbWindow::authenticate()
 {
-    setRejectButtonMode(QDialogButtonBox::Cancel);
     d->progressBar->show();
     d->progressBar->setFormat(QLatin1String(""));
+    setRejectButtonMode(QDialogButtonBox::Cancel);
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method ";
     d->talker->readSettings();
@@ -329,13 +331,12 @@ void FbWindow::slotLoginDone(int errCode, const QString& errMsg)
     d->widget->updateLabels(user.name, user.profileURL);
     d->albumsCoB->clear();
 
-    d->albumsCoB->addItem(i18n("<auto create>"), QString());
-
     if (errCode == 0 && d->talker->linked())
     {
+        d->albumsCoB->addItem(i18n("<auto create>"), QString());
         d->talker->listAlbums();    // get albums to fill combo box
     }
-    else
+    else if (errCode > 0)
     {
         QMessageBox::critical(this, QString(), i18n("Facebook Call Failed: %1\n", errMsg));
     }
@@ -425,25 +426,19 @@ void FbWindow::slotBusy(bool val)
     }
 }
 
-void FbWindow::slotUserLogout()
+void FbWindow::slotUserChangeRequest()
 {
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot Change User Request";
+
     if (d->talker->linked())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot User Logout";
-        // Logout and wait until it's done
         d->talker->logout();
-        d->talker->unlink();
     }
     else
     {
         authenticate();
     }
-}
-
-void FbWindow::slotUserChangeRequest()
-{
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot Change User Request";
-    slotUserLogout();
 }
 
 void FbWindow::slotReloadAlbumsRequest(long long userID)
