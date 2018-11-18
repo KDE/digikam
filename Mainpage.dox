@@ -39,6 +39,7 @@
 |│   │   ├── dragdrop                                         | Drag and drop helper classes                                            |
 |│   │   ├── filters                                          | Tags filter widgets                                                     |
 |│   │   ├── items                                            | Item management classes                                                 |
+|│   │   │   ├── delegate                                     | Item view delegate                                                      |
 |│   │   │   ├── overlays                                     | Item overlays                                                           |
 |│   │   │   ├── thumbbar                                     | Item thumbbar widget                                                    |
 |│   │   │   ├── utils                                        | Item utility classes                                                    |
