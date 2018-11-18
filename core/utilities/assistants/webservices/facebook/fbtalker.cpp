@@ -573,7 +573,12 @@ void FbTalker::slotFinished(QNetworkReply* reply)
 
     if (reply->error() != QNetworkReply::NoError)
     {
-        if (d->state == Private::FB_ADDPHOTO)
+        if (d->state == Private::FB_GETLOGGEDINUSER)
+        {
+            unlink();
+            link();
+        }
+        else if (d->state == Private::FB_ADDPHOTO)
         {
             emit signalBusy(false);
             emit signalAddPhotoDone(reply->error(), reply->errorString());

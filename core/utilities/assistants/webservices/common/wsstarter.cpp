@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QPointer>
+#include <QMessageBox>
 
 // Local includes
 
@@ -208,6 +209,11 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
         else
         {
+            // This message is not translated, will be removed after the review process.
+            QMessageBox::warning(parent, QLatin1String("Facebook"),
+                                 QLatin1String("This Facebook export tool is under "
+                                               "review process and only works for "
+                                               "registered test users."));
             delete d->fbWindow;
             d->fbWindow = new FbWindow(iface, parent);
             d->fbWindow->show();
