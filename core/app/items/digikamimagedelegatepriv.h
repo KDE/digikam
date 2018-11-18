@@ -53,11 +53,11 @@ public:
 
 // -----------------------------------------------------------------------------------------
 
-class Q_DECL_HIDDEN DigikamImageFaceDelegatePrivate : public DigikamImageDelegatePrivate
+class Q_DECL_HIDDEN ItemFaceDelegatePrivate : public DigikamImageDelegatePrivate
 {
 public:
 
-    explicit DigikamImageFaceDelegatePrivate()
+    explicit ItemFaceDelegatePrivate()
     {
     }
 };

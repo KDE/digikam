@@ -47,7 +47,7 @@
 #include "loadingcacheinterface.h"
 #include "thumbnailloadthread.h"
 #include "tooltipfiller.h"
-#include "digikamimagefacedelegate.h"
+#include "itemfacedelegate.h"
 
 namespace Digikam
 {

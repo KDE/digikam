@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : Qt item view for images - the delegate
+ * Description : Qt model-view for face item - the delegate
  *
  * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_FACE_DELEGATE_H
-#define DIGIKAM_IMAGE_FACE_DELEGATE_H
+#ifndef DIGIKAM_ITEM_FACE_DELEGATE_H
+#define DIGIKAM_ITEM_FACE_DELEGATE_H
 
 // Local includes
 
@@ -33,16 +33,16 @@ namespace Digikam
 
 class ImageCategoryDrawer;
 class FaceTagsIface;
-class DigikamImageFaceDelegatePrivate;
+class ItemFaceDelegatePrivate;
 
-class DigikamImageFaceDelegate : public DigikamImageDelegate
+class ItemFaceDelegate : public DigikamImageDelegate
 {
     Q_OBJECT
 
 public:
 
-    explicit DigikamImageFaceDelegate(ImageCategorizedView* const parent);
-    ~DigikamImageFaceDelegate();
+    explicit ItemFaceDelegate(ImageCategorizedView* const parent);
+    ~ItemFaceDelegate();
 
     virtual void prepareThumbnails(ItemThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
     QRect faceRect(const QModelIndex& index) const;
@@ -58,9 +58,9 @@ protected:
 
 private:
 
-    Q_DECLARE_PRIVATE(DigikamImageFaceDelegate)
+    Q_DECLARE_PRIVATE(ItemFaceDelegate)
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_FACE_DELEGATE_H
+#endif // DIGIKAM_ITEM_FACE_DELEGATE_H

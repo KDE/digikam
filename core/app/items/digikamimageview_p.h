@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 class DigikamImageDelegate;
-class DigikamImageFaceDelegate;
+class ItemFaceDelegate;
 
 class Q_DECL_HIDDEN DigikamImageView::Private : public QObject
 {
@@ -66,7 +66,7 @@ public:
     FacePipeline              editPipeline;
 
     DigikamImageDelegate*     normalDelegate;
-    DigikamImageFaceDelegate* faceDelegate;
+    ItemFaceDelegate* faceDelegate;
 
     bool                      overlaysActive;
     bool                      fullscreenActive;

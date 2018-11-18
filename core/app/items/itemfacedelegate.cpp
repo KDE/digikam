@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : Qt item view for images - the delegate
+ * Description : Qt model-view for face item - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "digikamimagefacedelegate.h"
+#include "itemfacedelegate.h"
 #include "imagedelegatepriv.h"
 
 // Local includes
@@ -40,22 +40,22 @@
 namespace Digikam
 {
 
-DigikamImageFaceDelegate::DigikamImageFaceDelegate(ImageCategorizedView* const parent)
-    : DigikamImageDelegate(*new DigikamImageFaceDelegatePrivate, parent)
+ItemFaceDelegate::ItemFaceDelegate(ImageCategorizedView* const parent)
+    : DigikamImageDelegate(*new ItemFaceDelegatePrivate, parent)
 {
 }
 
-DigikamImageFaceDelegate::~DigikamImageFaceDelegate()
+ItemFaceDelegate::~ItemFaceDelegate()
 {
 }
 
-void DigikamImageFaceDelegate::prepareThumbnails(ItemThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
+void ItemFaceDelegate::prepareThumbnails(ItemThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
 {
     //TODO
     DigikamImageDelegate::prepareThumbnails(thumbModel, indexes);
 }
 
-QPixmap DigikamImageFaceDelegate::thumbnailPixmap(const QModelIndex& index) const
+QPixmap ItemFaceDelegate::thumbnailPixmap(const QModelIndex& index) const
 {
     QRect rect = largerFaceRect(index);
 
@@ -74,12 +74,12 @@ QPixmap DigikamImageFaceDelegate::thumbnailPixmap(const QModelIndex& index) cons
     return DigikamImageDelegate::thumbnailPixmap(index);
 }
 
-QRect DigikamImageFaceDelegate::faceRect(const QModelIndex& index) const
+QRect ItemFaceDelegate::faceRect(const QModelIndex& index) const
 {
     return face(index).region().toRect();
 }
 
-QRect DigikamImageFaceDelegate::largerFaceRect(const QModelIndex& index) const
+QRect ItemFaceDelegate::largerFaceRect(const QModelIndex& index) const
 {
     QRect rect = faceRect(index);
 
@@ -93,7 +93,7 @@ QRect DigikamImageFaceDelegate::largerFaceRect(const QModelIndex& index) const
     return rect.adjusted(-margin, -margin, margin, margin);
 }
 
-FaceTagsIface DigikamImageFaceDelegate::face(const QModelIndex& index) const
+FaceTagsIface ItemFaceDelegate::face(const QModelIndex& index) const
 {
     QVariant extraData = index.data(ItemModel::ExtraDataRole);
 
@@ -106,14 +106,14 @@ FaceTagsIface DigikamImageFaceDelegate::face(const QModelIndex& index) const
     return face;
 }
 
-void DigikamImageFaceDelegate::updateRects()
+void ItemFaceDelegate::updateRects()
 {
-    Q_D(DigikamImageFaceDelegate);
+    Q_D(ItemFaceDelegate);
     DigikamImageDelegate::updateRects();
     d->groupRect = QRect();
 }
 
-void DigikamImageFaceDelegate::clearModelDataCaches()
+void ItemFaceDelegate::clearModelDataCaches()
 {
     DigikamImageDelegate::clearModelDataCaches();
 }

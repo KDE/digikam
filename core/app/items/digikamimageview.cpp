@@ -53,7 +53,7 @@
 #include "ddragobjects.h"
 #include "digikamapp.h"
 #include "digikamimagedelegate.h"
-#include "digikamimagefacedelegate.h"
+#include "itemfacedelegate.h"
 #include "dio.h"
 #include "groupindicatoroverlay.h"
 #include "itemalbumfiltermodel.h"
@@ -90,7 +90,7 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
             this, SLOT(slotInitProgressIndicator()));
 
     d->normalDelegate = new DigikamImageDelegate(this);
-    d->faceDelegate   = new DigikamImageFaceDelegate(this);
+    d->faceDelegate   = new ItemFaceDelegate(this);
 
     setItemDelegate(d->normalDelegate);
     setSpacing(10);
