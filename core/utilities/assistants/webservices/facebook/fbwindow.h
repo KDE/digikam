@@ -84,7 +84,7 @@ private:
     void    readSettings();
     void    writeSettings();
 
-    void    authenticate();
+    void    authenticate(bool forceLogin);
 
     void    buttonStateChange(bool state);
 

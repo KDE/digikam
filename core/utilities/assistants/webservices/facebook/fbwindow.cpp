@@ -188,7 +188,7 @@ FbWindow::FbWindow(DInfoInterface* const iface,
     readSettings();
     buttonStateChange(false);
 
-    authenticate();
+    authenticate(false);
 }
 
 FbWindow::~FbWindow()
@@ -282,14 +282,22 @@ void FbWindow::writeSettings()
     config.sync();
 }
 
-void FbWindow::authenticate()
+void FbWindow::authenticate(bool forceLogin)
 {
     d->progressBar->show();
     d->progressBar->setFormat(QLatin1String(""));
     setRejectButtonMode(QDialogButtonBox::Cancel);
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method ";
-    d->talker->readSettings();
+
+    if (forceLogin)
+    {
+        d->talker->link();
+    }
+    else
+    {
+        d->talker->readSettings();
+    }
 }
 
 void FbWindow::slotLoginProgress(int step, int maxStep, const QString& label)
@@ -437,7 +445,7 @@ void FbWindow::slotUserChangeRequest()
     }
     else
     {
-        authenticate();
+        authenticate(true);
     }
 }
 

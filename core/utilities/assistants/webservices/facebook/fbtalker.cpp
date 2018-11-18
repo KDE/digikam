@@ -153,8 +153,6 @@ FbTalker::FbTalker(QWidget* const parent)
 {
     d->parent   = parent;
     d->netMngr  = new QNetworkAccessManager(this);
-    d->view     = new WebWidget(d->parent);
-    d->view->resize(800, 600);
 
     d->settings = WSToolUtils::getOauthSettings(this);
 
@@ -166,12 +164,6 @@ FbTalker::FbTalker(QWidget* const parent)
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
-
-    connect(d->view, SIGNAL(urlChanged(QUrl)),
-            this, SLOT(slotCatchUrl(QUrl)));
-
-    connect(d->view, SIGNAL(closeView(bool)),
-            this, SIGNAL(signalBusy(bool)));
 }
 
 FbTalker::~FbTalker()
@@ -189,6 +181,7 @@ FbTalker::~FbTalker()
 void FbTalker::link()
 {
     emit signalBusy(true);
+    emit signalLoginProgress(1, 3);
 
     QUrl url(d->authUrl);
     QUrlQuery query(url);
@@ -198,7 +191,18 @@ void FbTalker::link()
     query.addQueryItem(QLatin1String("response_type"), "token");
     url.setQuery(query);
 
+    delete d->view;
+
+    d->view = new WebWidget(d->parent);
     d->view->setWindowFlags(Qt::Dialog);
+    d->view->resize(800, 600);
+
+    connect(d->view, SIGNAL(urlChanged(QUrl)),
+            this, SLOT(slotCatchUrl(QUrl)));
+
+    connect(d->view, SIGNAL(closeView(bool)),
+            this, SIGNAL(signalBusy(bool)));
+
     d->view->load(url);
     d->view->show();
 }
@@ -213,9 +217,15 @@ void FbTalker::unlink()
     d->settings->endGroup();
 
 #ifdef HAVE_QWEBENGINE
-    d->view->page()->profile()->cookieStore()->deleteAllCookies();
+    if (d->view)
+    {
+        d->view->page()->profile()->cookieStore()->deleteAllCookies();
+    }
 #else
-    d->view->page()->networkAccessManager()->setCookieJar(new QNetworkCookieJar());
+    if (d->view)
+    {
+        d->view->page()->networkAccessManager()->setCookieJar(new QNetworkCookieJar());
+    }
 #endif
 
     emit linkingSucceeded();
@@ -248,8 +258,13 @@ void FbTalker::slotLinkingSucceeded()
     }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Facebook ok";
-    d->view->close();
+
     writeSettings();
+
+    if (d->view)
+    {
+        d->view->close();
+    }
 
     getLoggedInUser();
 }
@@ -320,7 +335,7 @@ void FbTalker::getLoggedInUser()
     }
 
     emit signalBusy(true);
-    emit signalLoginProgress(3);
+    emit signalLoginProgress(2, 3);
 
     QUrl url(d->apiURL.arg("me").arg(""));
 
@@ -378,6 +393,7 @@ void FbTalker::listAlbums(long long userID)
     }
 
     emit signalBusy(true);
+    emit signalLoginProgress(1, 3);
 
     QUrl url;
 
@@ -404,7 +420,7 @@ void FbTalker::listAlbums(long long userID)
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader,
-                            QLatin1String("application/x-www-form-urlencoded"));
+                         QLatin1String("application/x-www-form-urlencoded"));
 
     d->reply = d->netMngr->get(netRequest);
 
@@ -651,7 +667,7 @@ void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Logged in data " << doc;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Logged in data" << doc;
 
     if (err.error != QJsonParseError::NoError)
     {
@@ -673,8 +689,13 @@ void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
     emit signalLoginDone(0, QString());
 }
 
-void FbTalker::parseResponseLogoutUser(const QByteArray& /*data*/)
+void FbTalker::parseResponseLogoutUser(const QByteArray& data)
 {
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Logged in data" << doc;
+
     unlink();
     emit signalLoginDone(-1, QString());
 }
@@ -716,7 +737,7 @@ void FbTalker::parseResponseAddPhoto(const QByteArray& data)
 
 void FbTalker::parseResponseCreateAlbum(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) <<"Parse Create album data is"<<data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) <<"Parse Create album data is" << data;
     int errCode       = -1;
     QString errMsg;
     QString newAlbumID;
@@ -846,15 +867,14 @@ void FbTalker::readSettings()
 
     if (d->accessToken.isEmpty())
     {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Linking...";
-        link();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token is empty";
+        emit signalLoginDone(-1, QString());
     }
     else if (dateTime.secsTo(QDateTime::currentDateTime()) > 3600)
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token has expired";
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Linking...";
         d->accessToken = QString();
-        link();
+        emit signalLoginDone(-1, QString());
     }
     else
     {
