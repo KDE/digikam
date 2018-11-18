@@ -326,7 +326,7 @@ void FbWindow::slotLoginDone(int errCode, const QString& errMsg)
 
     if (d->talker->linked())
     {
-        d->changeUserBtn->setText(i18n("Logout from Facebook"));
+        d->changeUserBtn->setText(i18n("Log Out of Facebook"));
     }
     else
     {
