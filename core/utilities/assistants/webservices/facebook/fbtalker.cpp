@@ -141,8 +141,6 @@ public:
 
     State                  state;
 
-    QMap<QString, QString> urlParametersMap;
-
     FbUser                 user;
 };
 
@@ -191,17 +189,18 @@ void FbTalker::link()
     query.addQueryItem(QLatin1String("response_type"), "token");
     url.setQuery(query);
 
-    delete d->view;
+    if (!d->view)
+    {
+        d->view = new WebWidget(d->parent);
+        d->view->setWindowFlags(Qt::Dialog);
+        d->view->resize(800, 600);
 
-    d->view = new WebWidget(d->parent);
-    d->view->setWindowFlags(Qt::Dialog);
-    d->view->resize(800, 600);
+        connect(d->view, SIGNAL(urlChanged(QUrl)),
+                this, SLOT(slotCatchUrl(QUrl)));
 
-    connect(d->view, SIGNAL(urlChanged(QUrl)),
-            this, SLOT(slotCatchUrl(QUrl)));
-
-    connect(d->view, SIGNAL(closeView(bool)),
-            this, SIGNAL(signalBusy(bool)));
+        connect(d->view, SIGNAL(closeView(bool)),
+                this, SIGNAL(signalBusy(bool)));
+    }
 
     d->view->load(url);
     d->view->show();
@@ -271,10 +270,9 @@ void FbTalker::slotLinkingSucceeded()
 
 void FbTalker::slotCatchUrl(const QUrl& url)
 {
-    d->urlParametersMap = parseUrlParameters(url.toString());
-    QString accessToken = d->urlParametersMap.value("access_token");
-
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function:" << url ;
+
+    QString accessToken = parseUrlParameters(url.toString()).value("access_token");
 
     if (!accessToken.isEmpty())
     {
@@ -298,7 +296,6 @@ QMap<QString, QString> FbTalker::parseUrlParameters(const QString& url)
     }
 
     QString tmp           = url.right(url.length() - url.indexOf(QLatin1Char('#')) - 1);
-    tmp                   = tmp.right(tmp.length() - tmp.indexOf(QLatin1Char('#')) - 1);
     QStringList paramlist = tmp.split(QLatin1Char('&'));
 
     for (int i = 0 ; i < paramlist.count() ; ++i)
@@ -326,7 +323,7 @@ bool FbTalker::linked()
 
 void FbTalker::getLoggedInUser()
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getLoggedInUser called ";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getLoggedInUser called";
 
     if (d->reply)
     {
@@ -347,7 +344,6 @@ void FbTalker::getLoggedInUser()
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                          QLatin1String("application/x-www-form-urlencoded"));
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url = " << netRequest.url();
     d->reply = d->netMngr->get(netRequest);
 
     d->state = Private::FB_GETLOGGEDINUSER;
@@ -357,6 +353,8 @@ void FbTalker::getLoggedInUser()
 
 void FbTalker::logout()
 {
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "logout called";
+
     if (d->reply)
     {
         d->reply->abort();
@@ -367,6 +365,7 @@ void FbTalker::logout()
 
     QUrl url(QLatin1String("https://www.facebook.com/logout.php"));
     QUrlQuery q;
+    q.addQueryItem(QLatin1String("next"), "https://www.digikam.org");
     q.addQueryItem(QLatin1String("access_token"), d->accessToken.toUtf8());
     url.setQuery(q);
 
@@ -374,7 +373,6 @@ void FbTalker::logout()
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                          QLatin1String("application/x-www-form-urlencoded"));
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url = " << netRequest.url();
     d->reply = d->netMngr->get(netRequest);
 
     d->state = Private::FB_LOGOUTUSER;
