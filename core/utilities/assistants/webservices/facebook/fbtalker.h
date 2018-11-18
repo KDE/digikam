@@ -34,26 +34,18 @@
 #include <QUrl>
 #include <QNetworkReply>
 #include <QMap>
-#include <QSettings>
 
 // Local includes
 
 #include "fbitem.h"
 #include "wsnewalbumdialog.h"
-#include "wstalker.h"
-#include "wsitem.h"
-
-// O2 include
-
-#include "o2.h"
-#include "o0globals.h"
 
 class QDomElement;
 
 namespace Digikam
 {
 
-class FbTalker : public WSTalker
+class FbTalker : public QObject
 {
     Q_OBJECT
 
@@ -64,13 +56,11 @@ public:
 
     void    link();
     void    unlink();
-    bool    linked() const;
-
-    void    resetTalker(const QString& expire, const QString& accessToken, const QString& refreshToken);
+    bool    linked();
+    void    cancel();
 
     FbUser  getUser() const;
 
-    void    authenticate();
     void    logout();
 
     void    listAlbums(long long userID = 0);
@@ -81,15 +71,22 @@ public:
     void    addPhoto(const QString& imgPath, const QString& albumID,
                      const QString& caption);
 
+    void    readSettings();
+    void    writeSettings();
+
 Q_SIGNALS:
 
+    void    signalBusy(bool val);
+    void    signalListAlbumsDone(int errCode, const QString& errMsg, const QList <FbAlbum>& albumsList);
+    void    signalCreateAlbumDone(int errCode, const QString& errMsg, const QString& newAlbumId);
+    void    signalAddPhotoDone(int errCode, const QString& errMsg);
     void    signalLoginProgress(int step, int maxStep = 0, const QString& label = QString());
     void    signalLoginDone(int errCode, const QString& errMsg);
+    void    linkingSucceeded();
+    void    linkingFailed();
 
 private:
 
-    //QString getApiSig(const QMap<QString, QString>& args);
-    void    authenticationDone(int errCode, const QString& errMsg);
     void    getLoggedInUser();
 
     QString errorToText(int errCode, const QString& errMsg);
@@ -99,9 +96,15 @@ private:
     void    parseResponseCreateAlbum(const QByteArray& data);
     void    parseResponseListAlbums(const QByteArray& data);
 
+    QMap<QString, QString> parseUrlParameters(const QString& url);
+
 private Q_SLOTS:
 
-    void    slotResponseTokenReceived(const QMap<QString, QString>& rep);
+    void    slotLinkingFailed();
+    void    slotLinkingSucceeded();
+    void    slotCatchUrl(const QUrl& url);
+    void    slotOpenBrowser(const QUrl& url);
+    void    slotFinished(QNetworkReply* reply);
 
 private:
 

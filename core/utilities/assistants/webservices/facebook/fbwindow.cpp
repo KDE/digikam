@@ -273,13 +273,11 @@ void FbWindow::readSettings()
     {
         d->resizeChB->setChecked(true);
         d->dimensionSpB->setEnabled(true);
-        d->imageQualitySpB->setEnabled(true);
     }
     else
     {
         d->resizeChB->setChecked(false);
         d->dimensionSpB->setEnabled(false);
-        d->imageQualitySpB->setEnabled(false);
     }
 
     d->dimensionSpB->setValue(grp.readEntry("Maximum Width", 604));
@@ -335,7 +333,7 @@ void FbWindow::authenticate()
     d->progressBar->setFormat(QLatin1String(""));
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method ";
-    d->talker->reauthenticate();
+    d->talker->readSettings();
 }
 
 void FbWindow::slotLoginProgress(int step, int maxStep, const QString& label)
@@ -488,7 +486,7 @@ void FbWindow::slotUserLogout()
 
     if (warn->exec() == QMessageBox::Yes)
     {
-        d->talker->reauthenticate();
+        //d->talker->reauthenticate();
     }
 
     delete warn;
