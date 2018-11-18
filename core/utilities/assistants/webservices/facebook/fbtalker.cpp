@@ -345,12 +345,12 @@ void FbTalker::logout()
     }
 
     QMap<QString, QString> args;
-    args[QLatin1String("next")]         = QLatin1String("http://www.digikam.org");
+    args[QLatin1String("next")]         = QLatin1String("https://www.digikam.org");
     args[QLatin1String("access_token")] = d->accessToken.toUtf8();
 
     QUrl url(QLatin1String("https://www.facebook.com/logout.php"));
     QUrlQuery q;
-    q.addQueryItem(QLatin1String("next"), QLatin1String("http://www.digikam.org"));
+    q.addQueryItem(QLatin1String("next"), QLatin1String("https://www.digikam.org"));
     q.addQueryItem(QLatin1String("access_token"), d->accessToken.toUtf8());
     url.setQuery(q);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Logout URL: " << url;

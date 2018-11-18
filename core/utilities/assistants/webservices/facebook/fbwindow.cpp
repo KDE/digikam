@@ -79,13 +79,12 @@ public:
         imageQualitySpB = widget->getImgQualitySpB();
         imagesCount     = 0;
         imagesTotal     = 0;
-        sessionExpires  = 0;
         talker          = 0;
         albumDlg        = 0;
     }
 
     FbWidget*       widget;
-    DItemsList*    imgList;
+    DItemsList*     imgList;
     QPushButton*    changeUserBtn;
     QComboBox*      albumsCoB;
     QPushButton*    newAlbumBtn;
@@ -102,12 +101,6 @@ public:
 
     QString         profileAID;
     QString         currentAlbumID;
-
-    // the next two entries are only used to upgrade to the new authentication scheme
-    QString         sessionKey;             // old world session key
-    QString         sessionSecret;          // old world session secret
-    unsigned int    sessionExpires;
-    QString         accessToken;            // OAuth access token
 
     QList<QUrl>     transferQueue;
 
@@ -134,6 +127,9 @@ FbWindow::FbWindow(DInfoInterface* const iface,
     startButton()->setToolTip(i18n("Start upload to Facebook web service"));
 
     d->widget->setMinimumSize(700, 500);
+
+    d->changeUserBtn->setText(i18n("Continue with Facebook"));
+    d->changeUserBtn->setIcon(QIcon::fromTheme(QLatin1String("facebook")));
 
     // ------------------------------------------------------------------------
 
@@ -188,7 +184,7 @@ FbWindow::FbWindow(DInfoInterface* const iface,
     // ------------------------------------------------------------------------
 
     readSettings();
-    buttonStateChange(d->talker->linked());
+    buttonStateChange(false);
 
     authenticate();
 }
@@ -229,12 +225,6 @@ void FbWindow::slotCancelClicked()
     d->imgList->cancelProcess();
     d->progressBar->hide();
     d->progressBar->progressCompleted();
-}
-
-void FbWindow::reactivate()
-{
-    d->imgList->loadImagesFromCurrentSelection();
-    show();
 }
 
 void FbWindow::closeEvent(QCloseEvent* e)
@@ -323,8 +313,19 @@ void FbWindow::slotLoginDone(int errCode, const QString& errMsg)
     d->progressBar->hide();
 
     buttonStateChange(d->talker->linked());
+
+    if (d->talker->linked())
+    {
+        d->changeUserBtn->setText(i18n("Logout from Facebook"));
+    }
+    else
+    {
+        d->changeUserBtn->setText(i18n("Continue with Facebook"));
+    }
+
     FbUser user = d->talker->getUser();
     setProfileAID(user.id.toLongLong());
+
     d->widget->updateLabels(user.name, user.profileURL);
     d->albumsCoB->clear();
 
@@ -424,32 +425,19 @@ void FbWindow::slotBusy(bool val)
     }
 }
 
-/* Maybe we don't really want to logout but just change user
- * The logout should be an explicit button rather than change account
- */
 void FbWindow::slotUserLogout()
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot User Logout";
-
-    // Logout and wait until it's done
-    d->talker->logout();
-
-    QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
-                i18n("Warning"),
-                i18n("You will be logged out of your account. If you have "
-                     "logged out of facebook, click \"Continue\" to "
-                     "authenticate for another account."),
-                QMessageBox::Yes | QMessageBox::No);
-
-    warn->button(QMessageBox::Yes)->setText(i18n("Continue"));
-    warn->button(QMessageBox::No)->setText(i18n("Cancel"));
-
-    if (warn->exec() == QMessageBox::Yes)
+    if (d->talker->linked())
     {
-        //d->talker->reauthenticate();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot User Logout";
+        // Logout and wait until it's done
+        d->talker->logout();
+        d->talker->unlink();
     }
-
-    delete warn;
+    else
+    {
+        authenticate();
+    }
 }
 
 void FbWindow::slotUserChangeRequest()
@@ -511,7 +499,7 @@ void FbWindow::slotStartTransfer()
     d->progressBar->setValue(0);
     d->progressBar->show();
     d->progressBar->progressScheduled(i18n("Facebook export"), true, true);
-    d->progressBar->progressThumbnailChanged(QIcon(QLatin1String("facebook")).pixmap(22, 22));
+    d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QLatin1String("facebook")).pixmap(22, 22));
 
     uploadNextPhoto();
 }

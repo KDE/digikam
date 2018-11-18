@@ -52,12 +52,6 @@ public:
     explicit FbWindow(DInfoInterface* const iface, QWidget* const parent);
     ~FbWindow();
 
-    /**
-     * Use this method to (re-)activate the dialog after it has been created
-     * to display it. This also loads the currently selected images.
-     */
-    void reactivate();
-
 private Q_SLOTS:
 
     void slotBusy(bool val);
@@ -95,7 +89,7 @@ private:
 
     void    buttonStateChange(bool state);
 
-    void    closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
+    void    closeEvent(QCloseEvent*);
 
 private:
 
