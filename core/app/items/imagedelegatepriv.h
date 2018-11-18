@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class ImageCategoryDrawer;
+class ItemCategoryDrawer;
 
 class Q_DECL_HIDDEN ImageDelegate::ImageDelegatePrivate : public ItemViewImageDelegatePrivate
 {
@@ -87,7 +87,7 @@ public:
     bool                  ratingOverThumbnail;
 
     QCache<int, QRect>    actualPixmapRectCache;
-    ImageCategoryDrawer*  categoryDrawer;
+    ItemCategoryDrawer*  categoryDrawer;
 
     ImageCategorizedView* currentView;
     QAbstractItemModel*   currentModel;

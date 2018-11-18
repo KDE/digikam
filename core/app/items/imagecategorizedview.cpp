@@ -38,7 +38,7 @@
 #include "iccsettings.h"
 #include "itemalbummodel.h"
 #include "itemalbumfiltermodel.h"
-#include "imagecategorydrawer.h"
+#include "itemcategorydrawer.h"
 #include "imagedelegate.h"
 #include "itemdelegateoverlay.h"
 #include "itemthumbnailmodel.h"

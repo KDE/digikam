@@ -31,7 +31,7 @@
 
 #include "digikam_debug.h"
 #include "applicationsettings.h"
-#include "imagecategorydrawer.h"
+#include "itemcategorydrawer.h"
 #include "imagecategorizedview.h"
 #include "itemdelegateoverlay.h"
 #include "itemmodel.h"
@@ -43,7 +43,7 @@ namespace Digikam
 
 void DigikamImageDelegatePrivate::init(DigikamImageDelegate* const q, ImageCategorizedView* const parent)
 {
-    categoryDrawer = new ImageCategoryDrawer(parent);
+    categoryDrawer = new ItemCategoryDrawer(parent);
 
     QObject::connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
                      q, SLOT(slotSetupChanged()));

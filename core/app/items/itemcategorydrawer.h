@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-20
- * Description : Qt item view for images - category drawer
+ * Description : Qt model-view for items - category drawer
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ITEMS_IMAGE_CATEGORY_DRAWER_H
-#define DIGIKAM_ITEMS_IMAGE_CATEGORY_DRAWER_H
+#ifndef DIGIKAM_ITEM_CATEGORY_DRAWER_H
+#define DIGIKAM_ITEM_CATEGORY_DRAWER_H
 
 // Local includes
 
@@ -40,12 +40,12 @@ class TAlbum;
 class SAlbum;
 class DAlbum;
 
-class ImageCategoryDrawer : public DCategoryDrawer
+class ItemCategoryDrawer : public DCategoryDrawer
 {
 public:
 
-    explicit ImageCategoryDrawer(ImageCategorizedView* const parent);
-    ~ImageCategoryDrawer();
+    explicit ItemCategoryDrawer(ImageCategorizedView* const parent);
+    ~ItemCategoryDrawer();
 
     virtual int categoryHeight(const QModelIndex& index, const QStyleOption& option) const;
     virtual void drawCategory(const QModelIndex& index, int sortRole, const QStyleOption& option, QPainter* painter) const;
@@ -75,4 +75,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ITEMS_IMAGE_CATEGORY_DRAWER_H
+#endif // DIGIKAM_ITEM_CATEGORY_DRAWER_H

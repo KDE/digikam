@@ -330,8 +330,8 @@ set(libdigikamgui_SRCS
     items/digikamimageview_p.cpp
     items/digikamimagedelegate.cpp
     items/imagecategorizedview.cpp
-    items/imagecategorydrawer.cpp
     items/imagedelegate.cpp
+    items/itemcategorydrawer.cpp
     items/itemfacedelegate.cpp
     items/thumbbar/itemthumbnailbar.cpp
     items/thumbbar/itemthumbnaildelegate.cpp

@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-class ImageCategoryDrawer;
+class ItemCategoryDrawer;
 class FaceTagsIface;
 class ItemFaceDelegatePrivate;
 

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-20
- * Description : Qt item view for images - category drawer
+ * Description : Qt model-view for items - category drawer
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011      by Andi Clemens <andi dot clemens at gmail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagecategorydrawer.h"
+#include "itemcategorydrawer.h"
 
 // Qt includes
 
@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImageCategoryDrawer::Private
+class Q_DECL_HIDDEN ItemCategoryDrawer::Private
 {
 public:
 
@@ -66,34 +66,34 @@ public:
     ImageCategorizedView* view;
 };
 
-ImageCategoryDrawer::ImageCategoryDrawer(ImageCategorizedView* const parent)
+ItemCategoryDrawer::ItemCategoryDrawer(ImageCategorizedView* const parent)
     : DCategoryDrawer(0),
       d(new Private)
 {
     d->view = parent;
 }
 
-ImageCategoryDrawer::~ImageCategoryDrawer()
+ItemCategoryDrawer::~ItemCategoryDrawer()
 {
     delete d;
 }
 
-int ImageCategoryDrawer::categoryHeight(const QModelIndex& /*index*/, const QStyleOption& /*option*/) const
+int ItemCategoryDrawer::categoryHeight(const QModelIndex& /*index*/, const QStyleOption& /*option*/) const
 {
     return d->rect.height() + d->lowerSpacing;
 }
 
-int ImageCategoryDrawer::maximumHeight() const
+int ItemCategoryDrawer::maximumHeight() const
 {
     return d->rect.height() + d->lowerSpacing;
 }
 
-void ImageCategoryDrawer::setLowerSpacing(int spacing)
+void ItemCategoryDrawer::setLowerSpacing(int spacing)
 {
     d->lowerSpacing = spacing;
 }
 
-void ImageCategoryDrawer::setDefaultViewOptions(const QStyleOptionViewItem& option)
+void ItemCategoryDrawer::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
     d->font = option.font;
 
@@ -103,7 +103,7 @@ void ImageCategoryDrawer::setDefaultViewOptions(const QStyleOptionViewItem& opti
     }
 }
 
-void ImageCategoryDrawer::invalidatePaintingCache()
+void ItemCategoryDrawer::invalidatePaintingCache()
 {
     if (d->rect.isNull())
     {
@@ -113,12 +113,12 @@ void ImageCategoryDrawer::invalidatePaintingCache()
     updateRectsAndPixmaps(d->rect.width());
 }
 
-void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*/,
+void ItemCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*/,
                                        const QStyleOption& option, QPainter* p) const
 {
     if (option.rect.width() != d->rect.width())
     {
-        const_cast<ImageCategoryDrawer*>(this)->updateRectsAndPixmaps(option.rect.width());
+        const_cast<ItemCategoryDrawer*>(this)->updateRectsAndPixmaps(option.rect.width());
     }
 
     p->save();
@@ -184,7 +184,7 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
     p->restore();
 }
 
-void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* header, QString* subLine) const
+void ItemCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* header, QString* subLine) const
 {
     ItemModel* const sourceModel = index.data(ItemModel::ItemModelPointerRole).value<ItemModel*>();
 
@@ -195,7 +195,7 @@ void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* head
 
     int count = d->view->categoryRange(index).height();
 
-    // Add here further model subclasses in use with ImageCategoryDrawer.
+    // Add here further model subclasses in use with ItemCategoryDrawer.
     // Note you need a Q_OBJECT in the class's header for this to work.
     ItemAlbumModel* const albumModel = qobject_cast<ItemAlbumModel*>(sourceModel);
 
@@ -237,7 +237,7 @@ void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* head
     }
 }
 
-void ImageCategoryDrawer::textForAlbum(const QModelIndex& index, QString* header, QString* subLine) const
+void ItemCategoryDrawer::textForAlbum(const QModelIndex& index, QString* header, QString* subLine) const
 {
     int albumId         = index.data(ItemFilterModel::CategoryAlbumIdRole).toInt();
     PAlbum* const album = AlbumManager::instance()->findPAlbum(albumId);
@@ -245,7 +245,7 @@ void ImageCategoryDrawer::textForAlbum(const QModelIndex& index, QString* header
     textForPAlbum(album, false, count, header, subLine);
 }
 
-void ImageCategoryDrawer::textForFormat(const QModelIndex& index, QString* header, QString* subLine) const
+void ItemCategoryDrawer::textForFormat(const QModelIndex& index, QString* header, QString* subLine) const
 {
     QString format = index.data(ItemFilterModel::CategoryFormatRole).toString();
     format         = ItemScanner::formatToString(format);
@@ -254,7 +254,7 @@ void ImageCategoryDrawer::textForFormat(const QModelIndex& index, QString* heade
     *subLine       = i18np("1 Item", "%1 Items", count);
 }
 
-void ImageCategoryDrawer::textForMonth(const QModelIndex& index, QString* header, QString* subLine) const
+void ItemCategoryDrawer::textForMonth(const QModelIndex& index, QString* header, QString* subLine) const
 {
     QDate date = index.data(ItemFilterModel::CategoryDateRole).toDate();
     *header    = date.toString(QLatin1String("MMM yyyy"));
@@ -262,7 +262,7 @@ void ImageCategoryDrawer::textForMonth(const QModelIndex& index, QString* header
     *subLine   = i18np("1 Item", "%1 Items", count);
 }
 
-void ImageCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count, QString* header, QString* subLine) const
+void ItemCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count, QString* header, QString* subLine) const
 {
     Q_UNUSED(recursive);
 
@@ -297,7 +297,7 @@ void ImageCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count
     *header = album->prettyUrl();
 }
 
-void ImageCategoryDrawer::textForTAlbum(TAlbum* talbum, bool recursive, int count, QString* header,
+void ItemCategoryDrawer::textForTAlbum(TAlbum* talbum, bool recursive, int count, QString* header,
                                         QString* subLine) const
 {
     *header = talbum->title();
@@ -325,7 +325,7 @@ void ImageCategoryDrawer::textForTAlbum(TAlbum* talbum, bool recursive, int coun
     }
 }
 
-void ImageCategoryDrawer::textForSAlbum(SAlbum* salbum, int count, QString* header, QString* subLine) const
+void ItemCategoryDrawer::textForSAlbum(SAlbum* salbum, int count, QString* header, QString* subLine) const
 {
     QString title = salbum->displayTitle();
 
@@ -345,7 +345,7 @@ void ImageCategoryDrawer::textForSAlbum(SAlbum* salbum, int count, QString* head
     }
 }
 
-void ImageCategoryDrawer::textForDAlbum(DAlbum* album, int count, QString* header, QString* subLine) const
+void ItemCategoryDrawer::textForDAlbum(DAlbum* album, int count, QString* header, QString* subLine) const
 {
     if (album->range() == DAlbum::Month)
     {
@@ -361,7 +361,7 @@ void ImageCategoryDrawer::textForDAlbum(DAlbum* album, int count, QString* heade
     *subLine = i18np("1 Item", "%1 Items", count);
 }
 
-void ImageCategoryDrawer::updateRectsAndPixmaps(int width)
+void ItemCategoryDrawer::updateRectsAndPixmaps(int width)
 {
     d->rect = QRect(0, 0, 0, 0);
 

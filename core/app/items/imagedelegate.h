@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class ImageCategoryDrawer;
+class ItemCategoryDrawer;
 class ImageCategorizedView;
 class ItemDelegateOverlay;
 class ItemFilterModel;
@@ -51,7 +51,7 @@ public:
 
     void setView(ImageCategorizedView* view);
 
-    ImageCategoryDrawer* categoryDrawer() const;
+    ItemCategoryDrawer* categoryDrawer() const;
 
     QRect commentsRect()                             const;
     QRect tagsRect()                                 const;

@@ -42,7 +42,7 @@
 
 #include "digikam_debug.h"
 #include "albummanager.h"
-#include "imagecategorydrawer.h"
+#include "itemcategorydrawer.h"
 #include "imagecategorizedview.h"
 #include "itemdelegateoverlay.h"
 #include "itemmodel.h"
@@ -163,7 +163,7 @@ void ImageDelegate::setSpacing(int spacing)
     ItemViewImageDelegate::setSpacing(spacing);
 }
 
-ImageCategoryDrawer* ImageDelegate::categoryDrawer() const
+ItemCategoryDrawer* ImageDelegate::categoryDrawer() const
 {
     Q_D(const ImageDelegate);
     return d->categoryDrawer;

@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class ImageCategoryDrawer;
+class ItemCategoryDrawer;
 class ItemThumbnailDelegatePrivate;
 
 class ItemThumbnailDelegate : public ImageDelegate
