@@ -39,7 +39,7 @@
 #include "digikam_config.h"
 #include "searchtextbar.h"
 #include "iteminfo.h"
-#include "digikammodelcollection.h"
+#include "dmodelfactory.h"
 #include "sidebarwidget.h"
 #include "stackedview.h"
 #include "dlayoutbox.h"

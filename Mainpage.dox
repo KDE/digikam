@@ -47,7 +47,8 @@
 |│   │   ├── main                                             | Main digiKam application                                                |
 |│   │   ├── utils                                            | Generic utility classes                                                 |
 |│   │   └── views                                            | Views classes                                                           |
-|│   │       └── tableview                                    | Table-view classes                                                      |
+|│   │       ├── tableview                                    | Table-view classes                                                    |
+|│   │       └── utils                                        | View utility classes                                                      |
 |│   ├── cmake                                                | Extra Cmake scripts will be hosted here                                 |
 |│   │   ├── modules                                          | Cmake scripts to find extra dependencies                                |
 |│   │   └── templates                                        | Cmake template files used at configuration time                         |

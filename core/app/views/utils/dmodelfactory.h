@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-12-05
- * Description : collection of basic models used for views in digikam
+ * Description : factory of basic models used for views in digikam
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010      by Andi Clemens <andi dot clemens at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_MODEL_COLLECTION_H
-#define DIGIKAM_MODEL_COLLECTION_H
+#ifndef DIGIKAM_DMODEL_FACTORY_H
+#define DIGIKAM_DMODEL_FACTORY_H
 
 // Qt includes
 
@@ -54,12 +54,12 @@ public:
     DigikamModelCollection();
     virtual ~DigikamModelCollection();
 
-    AlbumModel*         getAlbumModel()         const;
-    TagModel*           getTagModel()           const;
-    TagModel*           getTagFilterModel()     const;
-    TagModel*           getTagFacesModel()      const;
-    SearchModel*        getSearchModel()        const;
-    DateAlbumModel*     getDateAlbumModel()     const;
+    AlbumModel*        getAlbumModel()        const;
+    TagModel*          getTagModel()          const;
+    TagModel*          getTagFilterModel()    const;
+    TagModel*          getTagFacesModel()     const;
+    SearchModel*       getSearchModel()       const;
+    DateAlbumModel*    getDateAlbumModel()    const;
     ItemVersionsModel* getItemVersionsModel() const;
 
 private Q_SLOTS:
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_MODEL_COLLECTION_H
+#endif // DIGIKAM_DMODEL_FACTORY_H

@@ -375,8 +375,8 @@ set(libdigikamgui_SRCS
     views/trashview.cpp
     views/stackedview.cpp
     views/sidebarwidget.cpp
-    views/digikammodelcollection.cpp
-    views/slideshowbuilder.cpp
+    views/utils/dmodelfactory.cpp
+    views/utils/slideshowbuilder.cpp
 
     ${digikamadaptor_SRCS}
 )
