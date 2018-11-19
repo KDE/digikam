@@ -76,8 +76,8 @@ bool GPSImageSortProxyModel::lessThan(const QModelIndex& left, const QModelIndex
     }
 
     const int column                    = left.column();
-    const GPSImageItem* const itemLeft  = d->imageModel->itemFromIndex(left);
-    const GPSImageItem* const itemRight = d->imageModel->itemFromIndex(right);
+    const GPSItemContainer* const itemLeft  = d->imageModel->itemFromIndex(left);
+    const GPSItemContainer* const itemRight = d->imageModel->itemFromIndex(right);
 
 //  qCDebug(DIGIKAM_GENERAL_LOG) << itemLeft << itemRight << column << rowCount() << d->imageModel->rowCount();
     return itemLeft->lessThan(itemRight, column);

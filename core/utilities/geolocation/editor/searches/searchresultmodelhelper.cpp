@@ -145,7 +145,7 @@ void SearchResultModelHelper::snapItemsTo(const QModelIndex& targetIndex,
     for (int i = 0 ; i < snappedIndices.count() ; ++i)
     {
         const QPersistentModelIndex itemIndex = snappedIndices.at(i);
-        GPSImageItem* const item              = d->imageModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const item              = d->imageModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(item);

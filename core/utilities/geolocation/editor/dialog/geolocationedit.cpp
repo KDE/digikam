@@ -107,7 +107,7 @@ public:
 
     QPair<QUrl, QString> operator()(const QPersistentModelIndex& itemIndex)
     {
-        GPSImageItem* const item = imageModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const item = imageModel->itemFromIndex(itemIndex);
 
         if (!item)
             return QPair<QUrl, QString>(QUrl(), QString());
@@ -134,7 +134,7 @@ public:
 
     QPair<QUrl, QString> operator()(const QPersistentModelIndex& itemIndex)
     {
-        GPSImageItem* const item = imageModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const item = imageModel->itemFromIndex(itemIndex);
 
         if (!item)
             return QPair<QUrl, QString>(QUrl(), QString());
@@ -294,7 +294,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
                                         d->selectionModel,
                                         d->stackedWidget);
 
-    GPSImageItem::setHeaderData(d->imageModel);
+    GPSItemContainer::setHeaderData(d->imageModel);
     d->mapModelHelper      = new GPSGeoIfaceModelHelper(d->imageModel, d->selectionModel, this);
     d->mapModelHelper->addUngroupedModelHelper(d->bookmarkOwner->bookmarkModelHelper());
 
@@ -585,19 +585,19 @@ void GeolocationEdit::setCurrentTab(int index)
 
 void GeolocationEdit::setImages(const QList<QUrl>& images)
 {
-    QList<GPSImageItem*> items;
+    QList<GPSItemContainer*> items;
 
     foreach(const QUrl& u, images)
     {
-        items << new GPSImageItem(u);
+        items << new GPSItemContainer(u);
     }
 
     setItems(items);
 }
 
-void GeolocationEdit::setItems(const QList<GPSImageItem*>& items)
+void GeolocationEdit::setItems(const QList<GPSItemContainer*>& items)
 {
-    foreach(GPSImageItem* const newItem, items)
+    foreach(GPSItemContainer* const newItem, items)
     {
         newItem->loadImageData();
         d->imageModel->addItem(newItem);
@@ -784,7 +784,7 @@ void GeolocationEdit::closeEvent(QCloseEvent *e)
     for (int i = 0; i < d->imageModel->rowCount(); ++i)
     {
         const QModelIndex itemIndex = d->imageModel->index(i, 0);
-        GPSImageItem* const item    = d->imageModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const item    = d->imageModel->itemFromIndex(itemIndex);
 
         if (item->isDirty() || item->isTagListDirty())
         {
@@ -836,7 +836,7 @@ void GeolocationEdit::slotImageActivated(const QModelIndex& index)
     if (!index.isValid())
         return;
 
-    GPSImageItem* const item = d->imageModel->itemFromIndex(index);
+    GPSItemContainer* const item = d->imageModel->itemFromIndex(index);
 
     if (!item)
         return;
@@ -888,7 +888,7 @@ void GeolocationEdit::saveChanges(const bool closeAfterwards)
     for (int i = 0 ; i < d->imageModel->rowCount() ; ++i)
     {
         const QModelIndex itemIndex = d->imageModel->index(i, 0);
-        GPSImageItem* const item    = d->imageModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const item    = d->imageModel->itemFromIndex(itemIndex);
 
         if (item->isDirty() || item->isTagListDirty())
         {

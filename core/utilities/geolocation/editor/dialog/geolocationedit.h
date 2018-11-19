@@ -39,7 +39,7 @@
 #include "geoifacetypes.h"
 #include "geomodelhelper.h"
 #include "trackmanager.h"
-#include "gpsimageitem.h"
+#include "gpsitemcontainer.h"
 #include "digikam_export.h"
 
 class QAbstractItemModel;
@@ -66,9 +66,9 @@ public:
      */
     void setImages(const QList<QUrl>& images);
 
-    /* Populate items in dialog list based dedicated GPSImageItem instances filled with DB info
+    /* Populate items in dialog list based dedicated GPSItemContainer instances filled with DB info
      */
-    void setItems(const QList<GPSImageItem*>& items);
+    void setItems(const QList<GPSItemContainer*>& items);
 
 protected:
 

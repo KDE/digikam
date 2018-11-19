@@ -42,7 +42,7 @@ public:
     {
     }
 
-    QList<GPSImageItem*>            items;
+    QList<GPSItemContainer*>            items;
     int                             columnCount;
     QMap<QPair<int, int>, QVariant> headerData;
     ThumbnailLoadThread*            thumbnailLoadThread;
@@ -118,7 +118,7 @@ QModelIndex GPSItemModel::parent(const QModelIndex& /*index*/) const
     return QModelIndex();
 }
 
-void GPSItemModel::addItem(GPSImageItem* const newItem)
+void GPSItemModel::addItem(GPSItemContainer* const newItem)
 {
     beginInsertRows(QModelIndex(), d->items.count(), d->items.count());
     newItem->setModel(this);
@@ -135,7 +135,7 @@ void GPSItemModel::setColumnCount(const int nColumns)
     emit(layoutChanged());
 }
 
-void GPSItemModel::itemChanged(GPSImageItem* const changedItem)
+void GPSItemModel::itemChanged(GPSItemContainer* const changedItem)
 {
     const int itemIndex = d->items.indexOf(changedItem);
 
@@ -148,7 +148,7 @@ void GPSItemModel::itemChanged(GPSImageItem* const changedItem)
     emit(dataChanged(itemModelIndexStart, itemModelIndexEnd));
 }
 
-GPSImageItem* GPSItemModel::itemFromIndex(const QModelIndex& index) const
+GPSItemContainer* GPSItemModel::itemFromIndex(const QModelIndex& index) const
 {
     if (index.isValid())
     {
@@ -222,7 +222,7 @@ Qt::ItemFlags GPSItemModel::flags(const QModelIndex& index) const
     return QAbstractItemModel::flags(index) | Qt::ItemIsDragEnabled;
 }
 
-GPSImageItem* GPSItemModel::itemFromUrl(const QUrl& url) const
+GPSItemContainer* GPSItemModel::itemFromUrl(const QUrl& url) const
 {
     for (int i = 0 ; i < d->items.count() ; ++i)
     {
@@ -254,7 +254,7 @@ QPixmap GPSItemModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex, 
     // TODO: should we cache the pixmap on our own here or does the interface usually cache it for us?
     // TODO: do we need to make sure we do not request the same pixmap twice in a row?
     // construct the key under which we stored the pixmap in the cache:
-    GPSImageItem* const imageItem = itemFromIndex(itemIndex);
+    GPSItemContainer* const imageItem = itemFromIndex(itemIndex);
 
     if (!imageItem)
         return QPixmap();

@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "gpsimageitem.h"
+#include "gpsitemcontainer.h"
 #include "thumbnailloadthread.h"
 
 namespace Digikam
@@ -48,10 +48,10 @@ public:
     ~GPSItemModel();
 
     // own functions:
-    void addItem(GPSImageItem* const newItem);
+    void addItem(GPSItemContainer* const newItem);
     void setColumnCount(const int nColumns);
-    GPSImageItem* itemFromIndex(const QModelIndex& index) const;
-    GPSImageItem* itemFromUrl(const QUrl& url) const;
+    GPSItemContainer* itemFromIndex(const QModelIndex& index) const;
+    GPSItemContainer* itemFromUrl(const QUrl& url) const;
     QModelIndex indexFromUrl(const QUrl& url) const;
 
     QPixmap getPixmapForIndex(const QPersistentModelIndex& itemIndex, const int size);
@@ -70,7 +70,7 @@ public:
 
 protected:
 
-    void itemChanged(GPSImageItem* const changedItem);
+    void itemChanged(GPSItemContainer* const changedItem);
 
 Q_SIGNALS:
 
@@ -85,7 +85,7 @@ private:
     class Private;
     Private* const d;
 
-    friend class GPSImageItem;
+    friend class GPSItemContainer;
 };
 
 } // namespace Digikam

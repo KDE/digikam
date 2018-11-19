@@ -64,7 +64,7 @@ public:
     bool                      dragEnabled;
     GPSItemModel*            model;
     QItemSelectionModel*      selectionModel;
-    GPSImageItemDelegate*     itemDelegate;
+    GPSItemContainerDelegate*     itemDelegate;
     GPSImageSortProxyModel*   imageSortProxyModel;
     ItemListDragDropHandler* dragDropHandler;
 };
@@ -78,7 +78,7 @@ GPSImageList::GPSImageList(QWidget* const parent)
     setRootIsDecorated(false);
     setAlternatingRowColors(true);
 
-    d->itemDelegate = new GPSImageItemDelegate(this, this);
+    d->itemDelegate = new GPSItemContainerDelegate(this, this);
     setItemDelegate(d->itemDelegate);
     setThumbnailSize(60);
     slotUpdateActionsEnabled();
@@ -149,7 +149,7 @@ GPSItemModel* GPSImageList::getModel() const
 void GPSImageList::setThumbnailSize(const int size)
 {
     d->itemDelegate->setThumbnailSize(size);
-    setColumnWidth(GPSImageItem::ColumnThumbnail, size);
+    setColumnWidth(GPSItemContainer::ColumnThumbnail, size);
 }
 
 void GPSImageList::slotIncreaseThumbnailSize()
@@ -214,9 +214,9 @@ void GPSImageList::readSettingsFromGroup(const KConfigGroup* const group)
     else
     {
         // by default, hide the advanced columns:
-        header()->setSectionHidden(GPSImageItem::ColumnDOP,         true);
-        header()->setSectionHidden(GPSImageItem::ColumnFixType,     true);
-        header()->setSectionHidden(GPSImageItem::ColumnNSatellites, true);
+        header()->setSectionHidden(GPSItemContainer::ColumnDOP,         true);
+        header()->setSectionHidden(GPSItemContainer::ColumnFixType,     true);
+        header()->setSectionHidden(GPSItemContainer::ColumnNSatellites, true);
     }
 }
 

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-21
- * Description : An item to hold information about an image.
+ * Description : A container to hold GPS information about an item.
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010-2014 by Michael G. Hansen <mike at mghansen dot de>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_GPS_IMAGE_ITEM_H
-#define DIGIKAM_GPS_IMAGE_ITEM_H
+#ifndef DIGIKAM_GPS_ITEM_CONTAINER_H
+#define DIGIKAM_GPS_ITEM_CONTAINER_H
 
 // Qt includes
 
@@ -86,7 +86,7 @@ public:
 
 class GPSItemModel;
 
-class DIGIKAM_EXPORT GPSImageItem
+class DIGIKAM_EXPORT GPSItemContainer
 {
 public:
 
@@ -106,12 +106,12 @@ public:
     static const int ColumnNSatellites       = 11;
     static const int ColumnSpeed             = 12;
 
-    static const int ColumnGPSImageItemCount = 13;
+    static const int ColumnGPSItemContainerCount = 13;
 
 public:
 
-    explicit GPSImageItem(const QUrl& url);
-    virtual ~GPSImageItem();
+    explicit GPSItemContainer(const QUrl& url);
+    virtual ~GPSItemContainer();
 
     /// @name Loading and saving
     //@{
@@ -126,7 +126,7 @@ public:
     /// @name Functions used by the model
     //@{
     static void setHeaderData(GPSItemModel* const model);
-    bool lessThan(const GPSImageItem* const otherItem, const int column) const;
+    bool lessThan(const GPSItemContainer* const otherItem, const int column) const;
     //@}
 
     /// @name GPS related functions
@@ -178,7 +178,7 @@ protected:
 
 protected:
 
-    GPSItemModel*         m_model;
+    GPSItemModel*          m_model;
 
     QUrl                   m_url;
     QDateTime              m_dateTime;
@@ -197,4 +197,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_GPS_IMAGE_ITEM_H
+#endif // DIGIKAM_GPS_ITEM_CONTAINER_H

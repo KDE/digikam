@@ -44,7 +44,7 @@
 
 #include "gpscommon.h"
 #include "gpsimagemodel.h"
-#include "gpsimageitem.h"
+#include "gpsitemcontainer.h"
 #include "gpsundocommand.h"
 #include "mapdragdrophandler.h"
 #include "backend-rg.h"
@@ -97,7 +97,7 @@ QItemSelectionModel* GPSGeoIfaceModelHelper::selectionModel() const
 bool GPSGeoIfaceModelHelper::itemCoordinates(const QModelIndex& index,
                                              GeoCoordinates* const coordinates) const
 {
-    GPSImageItem* const item = d->model->itemFromIndex(index);
+    GPSItemContainer* const item = d->model->itemFromIndex(index);
 
     if (!item)
         return false;
@@ -132,7 +132,7 @@ QPersistentModelIndex GPSGeoIfaceModelHelper::bestRepresentativeIndexFromList(co
     for (int i = 0 ; i < list.count() ; ++i)
     {
         const QPersistentModelIndex currentIndex = list.at(i);
-        const GPSImageItem* const currentItem   = static_cast<GPSImageItem*>(d->model->itemFromIndex(currentIndex));
+        const GPSItemContainer* const currentItem   = static_cast<GPSItemContainer*>(d->model->itemFromIndex(currentIndex));
         const QDateTime currentTime              = currentItem->dateTime();
         bool takeThisIndex                       = bestTime.isNull();
 
@@ -196,7 +196,7 @@ void GPSGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& 
     for (int i = 0; i < movedMarkers.count(); ++i)
     {
         const QPersistentModelIndex itemIndex = movedMarkers.at(i);
-        GPSImageItem* const item              = static_cast<GPSImageItem*>(d->model->itemFromIndex(itemIndex));
+        GPSItemContainer* const item              = static_cast<GPSItemContainer*>(d->model->itemFromIndex(itemIndex));
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(item);

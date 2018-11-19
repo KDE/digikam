@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "gpsimageitem.h"
+#include "gpsitemcontainer.h"
 
 namespace Digikam
 {
@@ -49,8 +49,8 @@ public:
         {
         }
 
-        void readOldDataFromItem(const GPSImageItem* const imageItem);
-        void readNewDataFromItem(const GPSImageItem* const imageItem);
+        void readOldDataFromItem(const GPSItemContainer* const imageItem);
+        void readNewDataFromItem(const GPSItemContainer* const imageItem);
 
         QPersistentModelIndex modelIndex;
         GPSDataContainer dataBefore;

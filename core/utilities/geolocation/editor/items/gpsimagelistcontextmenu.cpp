@@ -46,7 +46,7 @@
 #include "digikam_config.h"
 #include "gpsundocommand.h"
 #include "gpscommon.h"
-#include "gpsimageitem.h"
+#include "gpsitemcontainer.h"
 #include "lookupfactory.h"
 #include "gpsbookmarkowner.h"
 #include "digikam_debug.h"
@@ -185,7 +185,7 @@ bool GPSImageListContextMenu::eventFilter(QObject* watched, QEvent* event)
 
         for (int i = 0 ; i < nSelected ; ++i)
         {
-            GPSImageItem* const gpsItem = imageModel->itemFromIndex(selectedIndices.at(i));
+            GPSItemContainer* const gpsItem = imageModel->itemFromIndex(selectedIndices.at(i));
 
             if (gpsItem)
             {
@@ -286,7 +286,7 @@ bool GPSImageListContextMenu::getCurrentItemPositionAndUrl(GPSDataContainer* con
         return false;
     }
 
-    GPSImageItem* const gpsItem = imageModel->itemFromIndex(currentIndex);
+    GPSItemContainer* const gpsItem = imageModel->itemFromIndex(currentIndex);
 
     if (gpsItem)
     {
@@ -520,7 +520,7 @@ void GPSImageListContextMenu::setGPSDataForSelectedItems(const GPSDataContainer&
     for (int i = 0 ; i < nSelected ; ++i)
     {
         const QModelIndex itemIndex = selectedIndices.at(i);
-        GPSImageItem* const gpsItem = imageModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const gpsItem = imageModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(gpsItem);
@@ -564,7 +564,7 @@ void GPSImageListContextMenu::removeInformationFromSelectedImages(const GPSDataC
     for (int i = 0 ; i < nSelected ; ++i)
     {
         const QModelIndex itemIndex = selectedIndices.at(i);
-        GPSImageItem* const gpsItem = imageModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const gpsItem = imageModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(gpsItem);
@@ -683,7 +683,7 @@ void GPSImageListContextMenu::slotLookupMissingAltitudes()
 
     foreach(const QModelIndex& currentIndex, selectedIndices)
     {
-        GPSImageItem* const gpsItem = imageModel->itemFromIndex(currentIndex);
+        GPSItemContainer* const gpsItem = imageModel->itemFromIndex(currentIndex);
 
         if (!gpsItem)
         {
@@ -743,7 +743,7 @@ void GPSImageListContextMenu::slotAltitudeLookupReady(const QList<int>& readyReq
             continue;
         }
 
-        GPSImageItem* const gpsItem = imageModel->itemFromIndex(markerIndex);
+        GPSItemContainer* const gpsItem = imageModel->itemFromIndex(markerIndex);
 
         if (!gpsItem)
         {

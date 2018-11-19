@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-21
- * Description : An item to hold information about an image.
+ * Description : A container to hold GPS information about an item.
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010-2014 by Michael G. Hansen <mike at mghansen dot de>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "gpsimageitem.h"
+#include "gpsitemcontainer.h"
 
 // Qt includes
 
@@ -118,7 +118,7 @@ bool setExifXmpTagDataVariant(DMetadata* const meta, const char* const exifTagNa
     return success;
 }
 
-GPSImageItem::GPSImageItem(const QUrl& url)
+GPSItemContainer::GPSItemContainer(const QUrl& url)
     : m_model(0),
       m_url(url),
       m_dateTime(),
@@ -132,11 +132,11 @@ GPSImageItem::GPSImageItem(const QUrl& url)
 {
 }
 
-GPSImageItem::~GPSImageItem()
+GPSItemContainer::~GPSItemContainer()
 {
 }
 
-DMetadata* GPSImageItem::getMetadataForFile() const
+DMetadata* GPSItemContainer::getMetadataForFile() const
 {
     QScopedPointer<DMetadata> meta(new DMetadata);
 
@@ -185,7 +185,7 @@ int getWarningLevelFromGPSDataContainer(const GPSDataContainer& data)
     return -1;
 }
 
-bool GPSImageItem::loadImageData()
+bool GPSItemContainer::loadImageData()
 {
     QScopedPointer<DMetadata> meta(getMetadataForFile());
 
@@ -350,7 +350,7 @@ bool GPSImageItem::loadImageData()
     return true;
 }
 
-QVariant GPSImageItem::data(const int column, const int role) const
+QVariant GPSItemContainer::data(const int column, const int role) const
 {
     if ((column == ColumnFilename) && (role == Qt::DisplayRole))
     {
@@ -500,19 +500,19 @@ QVariant GPSImageItem::data(const int column, const int role) const
     return QVariant();
 }
 
-void GPSImageItem::setCoordinates(const GeoCoordinates& newCoordinates)
+void GPSItemContainer::setCoordinates(const GeoCoordinates& newCoordinates)
 {
     m_gpsData.setCoordinates(newCoordinates);
     m_dirty = true;
     emitDataChanged();
 }
 
-void GPSImageItem::setModel(GPSItemModel* const model)
+void GPSItemContainer::setModel(GPSItemModel* const model)
 {
     m_model = model;
 }
 
-void GPSImageItem::emitDataChanged()
+void GPSItemContainer::emitDataChanged()
 {
     if (m_model)
     {
@@ -520,9 +520,9 @@ void GPSImageItem::emitDataChanged()
     }
 }
 
-void GPSImageItem::setHeaderData(GPSItemModel* const model)
+void GPSItemContainer::setHeaderData(GPSItemModel* const model)
 {
-    model->setColumnCount(ColumnGPSImageItemCount);
+    model->setColumnCount(ColumnGPSItemContainerCount);
     model->setHeaderData(ColumnThumbnail,   Qt::Horizontal, i18n("Thumbnail"),      Qt::DisplayRole);
     model->setHeaderData(ColumnFilename,    Qt::Horizontal, i18n("Filename"),       Qt::DisplayRole);
     model->setHeaderData(ColumnDateTime,    Qt::Horizontal, i18n("Date and time"),  Qt::DisplayRole);
@@ -538,7 +538,7 @@ void GPSImageItem::setHeaderData(GPSItemModel* const model)
     model->setHeaderData(ColumnTags,        Qt::Horizontal, i18n("Tags"),           Qt::DisplayRole);
 }
 
-bool GPSImageItem::lessThan(const GPSImageItem* const otherItem, const int column) const
+bool GPSItemContainer::lessThan(const GPSItemContainer* const otherItem, const int column) const
 {
     switch (column)
     {
@@ -682,7 +682,7 @@ bool GPSImageItem::lessThan(const GPSImageItem* const otherItem, const int colum
     }
 }
 
-SaveProperties GPSImageItem::saveProperties() const
+SaveProperties GPSItemContainer::saveProperties() const
 {
     SaveProperties p;
 
@@ -712,7 +712,7 @@ SaveProperties GPSImageItem::saveProperties() const
     return p;
 }
 
-QString GPSImageItem::saveChanges()
+QString GPSItemContainer::saveChanges()
 {
     SaveProperties p = saveProperties();
 
@@ -869,14 +869,14 @@ QString GPSImageItem::saveChanges()
 /**
  * @brief Restore the gps data to @p container. Sets m_dirty to false if container equals savedState.
  */
-void GPSImageItem::restoreGPSData(const GPSDataContainer& container)
+void GPSItemContainer::restoreGPSData(const GPSDataContainer& container)
 {
     m_dirty   = !(container == m_savedState);
     m_gpsData = container;
     emitDataChanged();
 }
 
-void GPSImageItem::restoreRGTagList(const QList<QList<TagData> >& tagList)
+void GPSItemContainer::restoreRGTagList(const QList<QList<TagData> >& tagList)
 {
     //TODO: override == operator
 
@@ -917,51 +917,51 @@ void GPSImageItem::restoreRGTagList(const QList<QList<TagData> >& tagList)
     emitDataChanged();
 }
 
-bool GPSImageItem::isDirty() const
+bool GPSItemContainer::isDirty() const
 {
     return m_dirty;
 }
 
-QUrl GPSImageItem::url() const
+QUrl GPSItemContainer::url() const
 {
     return m_url;
 }
 
-QDateTime GPSImageItem::dateTime() const
+QDateTime GPSItemContainer::dateTime() const
 {
     return m_dateTime;
 }
 
-GeoCoordinates GPSImageItem::coordinates() const
+GeoCoordinates GPSItemContainer::coordinates() const
 {
     return m_gpsData.getCoordinates();
 }
 
-GPSDataContainer GPSImageItem::gpsData() const
+GPSDataContainer GPSItemContainer::gpsData() const
 {
     return m_gpsData;
 }
 
-void GPSImageItem::setGPSData(const GPSDataContainer& container)
+void GPSItemContainer::setGPSData(const GPSDataContainer& container)
 {
     m_gpsData = container;
     m_dirty   = true;
     emitDataChanged();
 }
 
-void GPSImageItem::setTagList(const QList<QList<TagData> >& externalTagList)
+void GPSItemContainer::setTagList(const QList<QList<TagData> >& externalTagList)
 {
     m_tagList      = externalTagList;
     m_tagListDirty = true;
     emitDataChanged();
 }
 
-bool GPSImageItem::isTagListDirty() const
+bool GPSItemContainer::isTagListDirty() const
 {
     return m_tagListDirty;
 }
 
-QList<QList<TagData> > GPSImageItem::getTagList() const
+QList<QList<TagData> > GPSItemContainer::getTagList() const
 {
     return m_tagList;
 }

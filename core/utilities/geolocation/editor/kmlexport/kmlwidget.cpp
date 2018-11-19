@@ -295,7 +295,7 @@ void KmlWidget::slotKMLGenerate()
 
     for (int i = 0; i < m_model->rowCount(); ++i)
     {
-        GPSImageItem* const item = m_model->itemFromIndex(m_model->index(i, 0));
+        GPSItemContainer* const item = m_model->itemFromIndex(m_model->index(i, 0));
 
         if (item)
         {

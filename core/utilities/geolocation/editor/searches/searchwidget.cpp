@@ -446,7 +446,7 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
     for (int i = 0 ; i < selectedImageIndices.count() ; ++i)
     {
         const QPersistentModelIndex itemIndex = selectedImageIndices.at(i);
-        GPSImageItem* const item              = d->gpsItemModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const item              = d->gpsItemModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(item);

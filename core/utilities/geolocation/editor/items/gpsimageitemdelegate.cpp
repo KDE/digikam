@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN GPSImageItemDelegate::Private
+class Q_DECL_HIDDEN GPSItemContainerDelegate::Private
 {
 public:
 
@@ -51,21 +51,21 @@ public:
     int           thumbnailSize;
 };
 
-GPSImageItemDelegate::GPSImageItemDelegate(GPSImageList* const imageList, QObject* const parent)
+GPSItemContainerDelegate::GPSItemContainerDelegate(GPSImageList* const imageList, QObject* const parent)
     : QItemDelegate(parent),
       d(new Private())
 {
     d->imageList = imageList;
 }
 
-GPSImageItemDelegate::~GPSImageItemDelegate()
+GPSItemContainerDelegate::~GPSItemContainerDelegate()
 {
     delete d;
 }
 
-void GPSImageItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
+void GPSItemContainerDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
 {
-    if (sortMappedindex.column() != GPSImageItem::ColumnThumbnail)
+    if (sortMappedindex.column() != GPSItemContainer::ColumnThumbnail)
     {
         QItemDelegate::paint(painter, option, sortMappedindex);
         return;
@@ -97,9 +97,9 @@ void GPSImageItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& 
     painter->drawPixmap(QRect(startPoint, pixmapSize), itemPixmap, QRect(QPoint(0, 0), pixmapSize));
 }
 
-QSize GPSImageItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
+QSize GPSItemContainerDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
 {
-    if (sortMappedindex.column() == GPSImageItem::ColumnThumbnail)
+    if (sortMappedindex.column() == GPSItemContainer::ColumnThumbnail)
     {
         return QSize(d->thumbnailSize, d->thumbnailSize);
     }
@@ -109,7 +109,7 @@ QSize GPSImageItemDelegate::sizeHint(const QStyleOptionViewItem& option, const Q
     return QSize(realSizeHint.width(), d->thumbnailSize);
 }
 
-void GPSImageItemDelegate::setThumbnailSize(const int size)
+void GPSItemContainerDelegate::setThumbnailSize(const int size)
 {
     d->thumbnailSize                 = size;
     GPSItemModel* const imageModel = d->imageList->getModel();
@@ -125,7 +125,7 @@ void GPSImageItemDelegate::setThumbnailSize(const int size)
     }
 }
 
-int GPSImageItemDelegate::getThumbnailSize() const
+int GPSItemContainerDelegate::getThumbnailSize() const
 {
     return d->thumbnailSize;
 }

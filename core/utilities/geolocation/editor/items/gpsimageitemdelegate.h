@@ -36,14 +36,14 @@
 namespace Digikam
 {
 
-class GPSImageItemDelegate : public QItemDelegate
+class GPSItemContainerDelegate : public QItemDelegate
 {
     Q_OBJECT
 
 public:
 
-    explicit GPSImageItemDelegate(GPSImageList* const imageList, QObject* const parent = 0);
-    virtual ~GPSImageItemDelegate();
+    explicit GPSItemContainerDelegate(GPSImageList* const imageList, QObject* const parent = 0);
+    virtual ~GPSItemContainerDelegate();
 
     void setThumbnailSize(const int size);
     int  getThumbnailSize() const;

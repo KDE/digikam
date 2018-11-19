@@ -33,7 +33,7 @@ namespace Digikam
 {
 
 ItemGPS::ItemGPS(const ItemInfo& info)
-    : GPSImageItem(info.fileUrl()),
+    : GPSItemContainer(info.fileUrl()),
       m_info(info)
 {
 }
@@ -66,9 +66,9 @@ bool ItemGPS::loadImageData()
         return true;
     }
 
-    // If item do not have any GPS data in databse, we will try to load it from file using standard implementation from GPSImageItem.
+    // If item do not have any GPS data in databse, we will try to load it from file using standard implementation from GPSItemContainer.
 
-    return GPSImageItem::loadImageData();
+    return GPSItemContainer::loadImageData();
 }
 
 QString ItemGPS::saveChanges()
@@ -131,12 +131,12 @@ QString ItemGPS::saveChanges()
 
     // Save info to file.
 
-    return GPSImageItem::saveChanges();
+    return GPSItemContainer::saveChanges();
 }
 
-QList<GPSImageItem*> ItemGPS::infosToItems(const ItemInfoList& infos)
+QList<GPSItemContainer*> ItemGPS::infosToItems(const ItemInfoList& infos)
 {
-    QList<GPSImageItem*> items;
+    QList<GPSItemContainer*> items;
 
     foreach(const ItemInfo& inf, infos)
     {

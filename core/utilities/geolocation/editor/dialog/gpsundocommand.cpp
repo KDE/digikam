@@ -51,7 +51,7 @@ void GPSUndoCommand::changeItemData(const bool redoIt)
     for (int i=0; i<undoList.count(); ++i)
     {
         const UndoInfo& info      = undoList.at(i);
-        GPSImageItem* const item = imageModel->itemFromIndex(info.modelIndex);
+        GPSItemContainer* const item = imageModel->itemFromIndex(info.modelIndex);
 
         // TODO: correctly handle the dirty flags
         // TODO: find a way to regenerate tag tree
@@ -77,13 +77,13 @@ void GPSUndoCommand::addUndoInfo(const UndoInfo& info)
     undoList << info;
 }
 
-void GPSUndoCommand::UndoInfo::readOldDataFromItem(const GPSImageItem* const imageItem)
+void GPSUndoCommand::UndoInfo::readOldDataFromItem(const GPSItemContainer* const imageItem)
 {
     this->dataBefore = imageItem->gpsData();
     this->oldTagList = imageItem->getTagList();
 }
 
-void GPSUndoCommand::UndoInfo::readNewDataFromItem(const GPSImageItem* const imageItem)
+void GPSUndoCommand::UndoInfo::readNewDataFromItem(const GPSItemContainer* const imageItem)
 {
     this->dataAfter  = imageItem->gpsData();
     this->newTagList = imageItem->getTagList();

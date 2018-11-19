@@ -353,7 +353,7 @@ void GPSItemDetails::slotSetCurrentImage(const QModelIndex& index)
 
     if (index.isValid())
     {
-        GPSImageItem* const item = d->imageModel->itemFromIndex(index);
+        GPSItemContainer* const item = d->imageModel->itemFromIndex(index);
         qCDebug(DIGIKAM_GENERAL_LOG)<<item;
 
         if (item)
@@ -382,7 +382,7 @@ void GPSItemDetails::slotModelDataChanged(const QModelIndex& topLeft, const QMod
         }
 
         GPSDataContainer gpsData;
-        GPSImageItem* const item = d->imageModel->itemFromIndex(d->imageIndex);
+        GPSItemContainer* const item = d->imageModel->itemFromIndex(d->imageIndex);
 
         if (item)
         {
@@ -436,7 +436,7 @@ void GPSItemDetails::slotApply()
         }
     }
 
-    GPSImageItem* const gpsItem      = d->imageModel->itemFromIndex(d->imageIndex);
+    GPSItemContainer* const gpsItem      = d->imageModel->itemFromIndex(d->imageIndex);
     GPSUndoCommand* const undoCommand = new GPSUndoCommand();
 
     GPSUndoCommand::UndoInfo undoInfo(d->imageIndex);

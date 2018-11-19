@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-06-28
- * Description : Test loading and saving of data in GPSImageItem.
+ * Description : Test loading and saving of data in GPSItemContainer.
  *
  * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -33,18 +33,18 @@
 
 #include "dmetadata.h"
 #include "gpsdatacontainer.h"
-#include "gpsimageitem.h"
+#include "gpsitemcontainer.h"
 
 
 using namespace Digikam;
 
-void TestGPSImageItem::initTestCase()
+void TestGPSItemContainer::initTestCase()
 {
     // initialize exiv2 before doing any multitasking
     DMetadata::initializeExiv2();
 }
 
-void TestGPSImageItem::cleanupTestCase()
+void TestGPSItemContainer::cleanupTestCase()
 {
     // clean up the exiv2 memory:
     DMetadata::cleanupExiv2();
@@ -58,9 +58,9 @@ QString GetTestDataDirectory()
     return QString(QFINDTESTDATA("data/"));
 }
 
-GPSImageItem* ItemFromFile(const QUrl& url)
+GPSItemContainer* ItemFromFile(const QUrl& url)
 {
-    QScopedPointer<GPSImageItem> imageItem(new GPSImageItem(url));
+    QScopedPointer<GPSItemContainer> imageItem(new GPSItemContainer(url));
 
     if (imageItem->loadImageData())
     {
@@ -73,23 +73,23 @@ GPSImageItem* ItemFromFile(const QUrl& url)
 /**
  * @brief Dummy test that does nothing
  */
-void TestGPSImageItem::testNoOp()
+void TestGPSItemContainer::testNoOp()
 {
 }
 
-void TestGPSImageItem::testBasicLoading()
+void TestGPSItemContainer::testBasicLoading()
 {
     {
         // test failure on not-existing file
         QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("not-existing"));
-        QScopedPointer<GPSImageItem> imageItem(ItemFromFile(testDataDir));
+        QScopedPointer<GPSItemContainer> imageItem(ItemFromFile(testDataDir));
         QVERIFY(!imageItem);
     }
 
     {
         // load a file without GPS info
         QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("exiftest-nogps.png"));
-        QScopedPointer<GPSImageItem> imageItem(ItemFromFile(testDataDir));
+        QScopedPointer<GPSItemContainer> imageItem(ItemFromFile(testDataDir));
         QVERIFY(imageItem);
 
         const GPSDataContainer container = imageItem->gpsData();
@@ -103,7 +103,7 @@ void TestGPSImageItem::testBasicLoading()
     {
         // load a file with geo:5,15,25
         QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("exiftest-5_15_25.jpg"));
-        QScopedPointer<GPSImageItem> imageItem(ItemFromFile(testDataDir));
+        QScopedPointer<GPSItemContainer> imageItem(ItemFromFile(testDataDir));
         QVERIFY(imageItem);
 
         const GPSDataContainer container = imageItem->gpsData();
@@ -118,4 +118,4 @@ void TestGPSImageItem::testBasicLoading()
     }
 }
 
-QTEST_GUILESS_MAIN(TestGPSImageItem)
+QTEST_GUILESS_MAIN(TestGPSItemContainer)

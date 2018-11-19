@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "gpsimageitem.h"
+#include "gpsitemcontainer.h"
 
 class QItemSelectionModel;
 class QAbstractItemModel;

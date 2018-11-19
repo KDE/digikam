@@ -33,12 +33,12 @@
 
 #include "digikam_export.h"
 #include "iteminfo.h"
-#include "gpsimageitem.h"
+#include "gpsitemcontainer.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT ItemGPS : public GPSImageItem
+class DIGIKAM_DATABASE_EXPORT ItemGPS : public GPSItemContainer
 {
 
 public:
@@ -49,7 +49,7 @@ public:
     QString saveChanges();
     bool loadImageData();
 
-    static QList<GPSImageItem*> infosToItems(const ItemInfoList& infos);
+    static QList<GPSItemContainer*> infosToItems(const ItemInfoList& infos);
 
 private:
 

@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "gpsimageitem.h"
+#include "gpsitemcontainer.h"
 #include "treebranch.h"
 #include "digikam_export.h"
 
