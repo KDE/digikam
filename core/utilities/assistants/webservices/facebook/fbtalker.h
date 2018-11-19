@@ -90,10 +90,10 @@ private:
     QString errorToText(int errCode, const QString& errMsg);
     int     parseErrorResponse(const QDomElement& e, QString& errMsg);
     void    parseResponseGetLoggedInUser(const QByteArray& data);
-    void    parseResponseLogoutUser(const QByteArray& data);
     void    parseResponseAddPhoto(const QByteArray& data);
     void    parseResponseCreateAlbum(const QByteArray& data);
     void    parseResponseListAlbums(const QByteArray& data);
+    void    parseResponseLogoutUser();
 
 private Q_SLOTS:
 

@@ -236,12 +236,12 @@ void FbTalker::slotLinkingSucceeded()
 {
     if (d->accessToken.isEmpty())
     {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Facebook ok";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Facebook";
         emit signalBusy(false);
         return;
     }
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Facebook ok";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Facebook";
 
     writeSettings();
 
@@ -255,7 +255,7 @@ void FbTalker::slotLinkingSucceeded()
 
 void FbTalker::slotCatchUrl(const QUrl& url)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function:" << url ;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview:" << url ;
 
     QString   str = url.toString();
     QUrlQuery query(str.section(QLatin1Char('#'), -1, -1));
@@ -362,7 +362,7 @@ void FbTalker::logout()
 
 void FbTalker::listAlbums(long long userID)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Requesting albums for user " << userID;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Requesting albums for user" << userID;
 
     if (d->reply)
     {
@@ -456,7 +456,7 @@ void FbTalker::createAlbum(const FbAlbum& album)
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, 
                          QLatin1String("application/x-www-form-urlencoded"));
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url to create new album " << netRequest.url() << params.query(); 
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url to create new album" << netRequest.url() << params.query(); 
 
     d->reply = d->netMngr->post(netRequest, params.query().toUtf8());
 
@@ -465,8 +465,8 @@ void FbTalker::createAlbum(const FbAlbum& album)
 
 void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QString& caption)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Adding photo " << imgPath << " to album with id "
-                                     << albumID << " using caption '" << caption << "'";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Adding photo" << imgPath << "to album with id"
+                                     << albumID << "using caption '" << caption << "'";
 
     if (d->reply)
     {
@@ -525,7 +525,7 @@ void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
 QString FbTalker::errorToText(int errCode, const QString &errMsg)
 {
     QString transError;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "errorToText: " << errCode << ": " << errMsg;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "errorToText:" << errCode << ":" << errMsg;
 
     switch (errCode)
     {
@@ -584,8 +584,6 @@ void FbTalker::slotFinished(QNetworkReply* reply)
                                   i18n("Error"), reply->errorString());
         }
 
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << reply->error() << " text :"<< QString(reply->readAll());
-
         reply->deleteLater();
         return;
     }
@@ -598,7 +596,7 @@ void FbTalker::slotFinished(QNetworkReply* reply)
             parseResponseGetLoggedInUser(buffer);
             break;
         case (Private::FB_LOGOUTUSER):
-            parseResponseLogoutUser(buffer);
+            parseResponseLogoutUser();
             break;
         case (Private::FB_LISTALBUMS):
             parseResponseListAlbums(buffer);
@@ -667,20 +665,9 @@ void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
     emit signalLoginDone(0, QString());
 }
 
-void FbTalker::parseResponseLogoutUser(const QByteArray& data)
-{
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
-
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Logged in data" << doc;
-
-    unlink();
-    emit signalLoginDone(-1, QString());
-}
-
 void FbTalker::parseResponseAddPhoto(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) <<"Parse Add Photo data is "<<data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) <<"Parse Add Photo data is" << data;
     int errCode       = -1;
     QString errMsg;
     QJsonParseError err;
@@ -696,7 +683,8 @@ void FbTalker::parseResponseAddPhoto(const QByteArray& data)
 
     if (jsonObject.contains(QLatin1String("id")))
     {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Id of photo exported is" << jsonObject[QLatin1String("id")].toString();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Id of photo exported is"
+                                         << jsonObject[QLatin1String("id")].toString();
         errCode = 0;
     }
 
@@ -707,7 +695,7 @@ void FbTalker::parseResponseAddPhoto(const QByteArray& data)
         errMsg          = obj[QLatin1String("message")].toString();
     }
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "add photo : " << doc;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "add photo:" << doc;
 
     emit signalBusy(false);
     emit signalAddPhotoDone(errCode, errorToText(errCode, errMsg));
@@ -744,7 +732,7 @@ void FbTalker::parseResponseCreateAlbum(const QByteArray& data)
         errMsg          = obj[QLatin1String("message")].toString();
     }
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "error create photo : " << doc;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "error create photo:" << doc;
 
     emit signalBusy(false);
     emit signalCreateAlbumDone(errCode, errorToText(errCode, errMsg), newAlbumID);
@@ -859,6 +847,12 @@ void FbTalker::readSettings()
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Already Linked";
         emit linkingSucceeded();
     }
+}
+
+void FbTalker::parseResponseLogoutUser()
+{
+    unlink();
+    emit signalLoginDone(-1, QString());
 }
 
 } // namespace Digikam
