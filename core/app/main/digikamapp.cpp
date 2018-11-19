@@ -272,7 +272,7 @@ DigikamApp* DigikamApp::instance()
     return m_instance;
 }
 
-DigikamView* DigikamApp::view() const
+ItemIconView* DigikamApp::view() const
 {
     return d->view;
 }

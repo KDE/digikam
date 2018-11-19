@@ -46,7 +46,7 @@ void DigikamApp::setupView()
         d->splashScreen->setMessage(i18n("Initializing Main View..."));
     }
 
-    d->view = new DigikamView(this, d->modelCollection);
+    d->view = new ItemIconView(this, d->modelCollection);
     setCentralWidget(d->view);
     d->view->applySettings();
 }

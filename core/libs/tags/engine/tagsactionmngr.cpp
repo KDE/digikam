@@ -49,7 +49,7 @@
 #include "coredbinfocontainers.h"
 #include "digikamapp.h"
 #include "dxmlguiwindow.h"
-#include "digikamview.h"
+#include "itemiconview.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
 #include "picklabelwidget.h"

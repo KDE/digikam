@@ -180,7 +180,7 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
      d->tagMngrView = new TagMngrTreeView(this, d->tagModel);
      d->tagMngrView->setConfigGroup(getConfigGroup());
 
-     d->searchBar  = new SearchTextBar(this, QLatin1String("DigikamViewTagSearchBar"));
+     d->searchBar  = new SearchTextBar(this, QLatin1String("ItemIconViewTagSearchBar"));
      d->searchBar->setHighlightOnResult(true);
      d->searchBar->setModel(d->tagMngrView->filteredModel(),
                             AbstractAlbumModel::AlbumIdRole,

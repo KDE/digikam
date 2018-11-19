@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2002-16-10
- * Description : implementation of album view interface.
+ * Description : implementation of item icon view interface.
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -27,7 +27,7 @@
  *
  * ============================================================ */
 
-#include "digikamview.h"
+#include "itemiconview.h"
 
 // Qt includes
 
@@ -103,7 +103,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN DigikamView::Private
+class Q_DECL_HIDDEN ItemIconView::Private
 {
 public:
 
@@ -152,7 +152,7 @@ public:
     }
 
     QString userPresentableAlbumTitle(const QString& album) const;
-    void    addPageUpDownActions(DigikamView* const q, QWidget* const w);
+    void    addPageUpDownActions(ItemIconView* const q, QWidget* const w);
 
 public:
 
@@ -211,7 +211,7 @@ public:
     AlbumLabelsSearchHandler*     labelsSearchHandler;
 };
 
-QString DigikamView::Private::userPresentableAlbumTitle(const QString& title) const
+QString ItemIconView::Private::userPresentableAlbumTitle(const QString& title) const
 {
     if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch))
     {
@@ -238,7 +238,7 @@ QString DigikamView::Private::userPresentableAlbumTitle(const QString& title) co
     return title;
 }
 
-void DigikamView::Private::addPageUpDownActions(DigikamView* const q, QWidget* const w)
+void ItemIconView::Private::addPageUpDownActions(ItemIconView* const q, QWidget* const w)
 {
     defineShortcut(w, Qt::Key_PageDown, q, SLOT(slotNextItem()));
     defineShortcut(w, Qt::Key_Down,     q, SLOT(slotNextItem()));
@@ -251,7 +251,7 @@ void DigikamView::Private::addPageUpDownActions(DigikamView* const q, QWidget* c
 
 // -------------------------------------------------------------------------------------------
 
-DigikamView::DigikamView(QWidget* const parent, DModelFactory* const modelCollection)
+ItemIconView::ItemIconView(QWidget* const parent, DModelFactory* const modelCollection)
     : DHBox(parent),
       d(new Private)
 {
@@ -413,7 +413,7 @@ DigikamView::DigikamView(QWidget* const parent, DModelFactory* const modelCollec
             this, SLOT(slotSetupMetadataFilters(int)));
 }
 
-DigikamView::~DigikamView()
+ItemIconView::~ItemIconView()
 {
     saveViewState();
 
@@ -422,7 +422,7 @@ DigikamView::~DigikamView()
     delete d;
 }
 
-void DigikamView::applySettings()
+void ItemIconView::applySettings()
 {
     foreach (SidebarWidget* const sidebarWidget, d->leftSideBarWidgets)
     {
@@ -434,12 +434,12 @@ void DigikamView::applySettings()
     refreshView();
 }
 
-void DigikamView::refreshView()
+void ItemIconView::refreshView()
 {
     d->rightSideBar->refreshTagsView();
 }
 
-void DigikamView::setupConnections()
+void ItemIconView::setupConnections()
 {
     // -- DigikamApp connections ----------------------------------
 
@@ -534,7 +534,7 @@ void DigikamView::setupConnections()
             this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ItemInfo,QList<QAction*>,ItemFilterModel*)));
 
     // TableView::signalItemsChanged is emitted when something changes in the model that
-    // DigikamView should care about, not only the selection.
+    // ItemIconView should care about, not only the selection.
     connect(d->tableView, SIGNAL(signalItemsChanged()),
             this, SLOT(slotImageSelected()));
 
@@ -682,7 +682,7 @@ void DigikamView::setupConnections()
             this, SLOT(slotGotoAlbumAndItem(ItemInfo)));
 }
 
-void DigikamView::connectIconViewFilter(FilterStatusBar* const filterbar)
+void ItemIconView::connectIconViewFilter(FilterStatusBar* const filterbar)
 {
     ItemAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
 
@@ -699,13 +699,13 @@ void DigikamView::connectIconViewFilter(FilterStatusBar* const filterbar)
             this, SLOT(slotPopupFiltersView()));
 }
 
-void DigikamView::slotPopupFiltersView()
+void ItemIconView::slotPopupFiltersView()
 {
     d->rightSideBar->setActiveTab(d->filterWidget);
     d->filterWidget->setFocusToTextFilter();
 }
 
-void DigikamView::loadViewState()
+void ItemIconView::loadViewState()
 {
     foreach (SidebarWidget* const widget, d->leftSideBarWidgets)
     {
@@ -735,7 +735,7 @@ void DigikamView::loadViewState()
     d->rightSideBar->loadState();
 }
 
-void DigikamView::saveViewState()
+void ItemIconView::saveViewState()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("MainWindow"));
@@ -782,73 +782,73 @@ void DigikamView::saveViewState()
     d->rightSideBar->saveState();
 }
 
-QList<SidebarWidget*> DigikamView::leftSidebarWidgets() const
+QList<SidebarWidget*> ItemIconView::leftSidebarWidgets() const
 {
     return d->leftSideBarWidgets;
 }
 
-QList<QUrl> DigikamView::allUrls(bool grouping) const
+QList<QUrl> ItemIconView::allUrls(bool grouping) const
 {
     /// @todo This functions seems not to be used anywhere right now
 
     return allInfo(grouping).toImageUrlList();
 }
 
-QList<QUrl> DigikamView::selectedUrls(bool grouping) const
+QList<QUrl> ItemIconView::selectedUrls(bool grouping) const
 {
     return selectedInfoList(false, grouping).toImageUrlList();
 }
 
-QList<QUrl> DigikamView::selectedUrls(const ApplicationSettings::OperationType type) const
+QList<QUrl> ItemIconView::selectedUrls(const ApplicationSettings::OperationType type) const
 {
     return selectedInfoList(type).toImageUrlList();
 }
 
-void DigikamView::showSideBars()
+void ItemIconView::showSideBars()
 {
     d->leftSideBar->restore();
     d->rightSideBar->restore();
 }
 
-void DigikamView::hideSideBars()
+void ItemIconView::hideSideBars()
 {
     d->leftSideBar->backup();
     d->rightSideBar->backup();
 }
 
-void DigikamView::toggleLeftSidebar()
+void ItemIconView::toggleLeftSidebar()
 {
     d->leftSideBar->isExpanded() ? d->leftSideBar->shrink()
                                  : d->leftSideBar->expand();
 }
 
-void DigikamView::toggleRightSidebar()
+void ItemIconView::toggleRightSidebar()
 {
     d->rightSideBar->isExpanded() ? d->rightSideBar->shrink()
                                   : d->rightSideBar->expand();
 }
 
-void DigikamView::previousLeftSideBarTab()
+void ItemIconView::previousLeftSideBarTab()
 {
     d->leftSideBar->activePreviousTab();
 }
 
-void DigikamView::nextLeftSideBarTab()
+void ItemIconView::nextLeftSideBarTab()
 {
     d->leftSideBar->activeNextTab();
 }
 
-void DigikamView::previousRightSideBarTab()
+void ItemIconView::previousRightSideBarTab()
 {
     d->rightSideBar->activePreviousTab();
 }
 
-void DigikamView::nextRightSideBarTab()
+void ItemIconView::nextRightSideBarTab()
 {
     d->rightSideBar->activeNextTab();
 }
 
-void DigikamView::slotFirstItem()
+void ItemIconView::slotFirstItem()
 {
     switch (viewMode())
     {
@@ -862,7 +862,7 @@ void DigikamView::slotFirstItem()
     }
 }
 
-void DigikamView::slotPrevItem()
+void ItemIconView::slotPrevItem()
 {
     switch (viewMode())
     {
@@ -876,7 +876,7 @@ void DigikamView::slotPrevItem()
     }
 }
 
-void DigikamView::slotNextItem()
+void ItemIconView::slotNextItem()
 {
     switch (viewMode())
     {
@@ -890,7 +890,7 @@ void DigikamView::slotNextItem()
     }
 }
 
-void DigikamView::slotLastItem()
+void ItemIconView::slotLastItem()
 {
     switch (viewMode())
     {
@@ -904,14 +904,14 @@ void DigikamView::slotLastItem()
     }
 }
 
-void DigikamView::slotSelectItemByUrl(const QUrl& url)
+void ItemIconView::slotSelectItemByUrl(const QUrl& url)
 {
     /// @todo This functions seems not to be used anywhere right now
     /// @todo Adapt to TableView
     d->iconView->toIndex(url);
 }
 
-void DigikamView::slotAllAlbumsLoaded()
+void ItemIconView::slotAllAlbumsLoaded()
 {
     disconnect(d->albumManager, SIGNAL(signalAllAlbumsLoaded()),
                this, SLOT(slotAllAlbumsLoaded()));
@@ -927,7 +927,7 @@ void DigikamView::slotAllAlbumsLoaded()
     d->albumManager->setCurrentAlbums(QList<Album*>() << album);
 }
 
-void DigikamView::slotSortAlbums(int role)
+void ItemIconView::slotSortAlbums(int role)
 {
     ApplicationSettings* const settings = ApplicationSettings::instance();
 
@@ -954,23 +954,23 @@ void DigikamView::slotSortAlbums(int role)
     }
 }
 
-void DigikamView::slotNewAlbum()
+void ItemIconView::slotNewAlbum()
 {
     // TODO use the selection model of the view instead
     d->albumModificationHelper->slotAlbumNew(d->albumFolderSideBar->currentAlbum());
 }
 
-void DigikamView::slotDeleteAlbum()
+void ItemIconView::slotDeleteAlbum()
 {
     d->albumModificationHelper->slotAlbumDelete(d->albumFolderSideBar->currentAlbum());
 }
 
-void DigikamView::slotRenameAlbum()
+void ItemIconView::slotRenameAlbum()
 {
     d->albumModificationHelper->slotAlbumRename(d->albumFolderSideBar->currentAlbum());
 }
 
-void DigikamView::slotNewTag()
+void ItemIconView::slotNewTag()
 {
     QList<TAlbum*> talbums = AlbumManager::instance()->currentTAlbums();
 
@@ -978,7 +978,7 @@ void DigikamView::slotNewTag()
         d->tagModificationHelper->slotTagNew(talbums.first());
 }
 
-void DigikamView::slotDeleteTag()
+void ItemIconView::slotDeleteTag()
 {
     QList<TAlbum*> talbums = AlbumManager::instance()->currentTAlbums();
 
@@ -986,7 +986,7 @@ void DigikamView::slotDeleteTag()
         d->tagModificationHelper->slotTagDelete(talbums.first());
 }
 
-void DigikamView::slotEditTag()
+void ItemIconView::slotEditTag()
 {
     QList<TAlbum*> talbums = AlbumManager::instance()->currentTAlbums();
 
@@ -994,7 +994,7 @@ void DigikamView::slotEditTag()
         d->tagModificationHelper->slotTagEdit(talbums.first());
 }
 
-void DigikamView::slotOpenTagsManager()
+void ItemIconView::slotOpenTagsManager()
 {
     TagsManager* const tagMngr = TagsManager::instance();
     tagMngr->show();
@@ -1002,48 +1002,48 @@ void DigikamView::slotOpenTagsManager()
     tagMngr->raise();
 }
 
-void DigikamView::slotAssignTag()
+void ItemIconView::slotAssignTag()
 {
     d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
     d->rightSideBar->imageDescEditTab()->setFocusToNewTagEdit();
 }
 
-void DigikamView::slotNewKeywordSearch()
+void ItemIconView::slotNewKeywordSearch()
 {
     slotLeftSideBarActivate(d->searchSideBar);
     d->searchSideBar->newKeywordSearch();
 }
 
-void DigikamView::slotNewAdvancedSearch()
+void ItemIconView::slotNewAdvancedSearch()
 {
     slotLeftSideBarActivate(d->searchSideBar);
     d->searchSideBar->newAdvancedSearch();
 }
 
-void DigikamView::slotNewDuplicatesSearch(PAlbum* album)
+void ItemIconView::slotNewDuplicatesSearch(PAlbum* album)
 {
     slotLeftSideBarActivate(d->fuzzySearchSideBar);
     d->fuzzySearchSideBar->newDuplicatesSearch(album);
 }
 
-void DigikamView::slotNewDuplicatesSearch(const QList<PAlbum*>& albums)
+void ItemIconView::slotNewDuplicatesSearch(const QList<PAlbum*>& albums)
 {
     slotLeftSideBarActivate(d->fuzzySearchSideBar);
     d->fuzzySearchSideBar->newDuplicatesSearch(albums);
 }
 
-void DigikamView::slotNewDuplicatesSearch(const QList<TAlbum*>& albums)
+void ItemIconView::slotNewDuplicatesSearch(const QList<TAlbum*>& albums)
 {
     slotLeftSideBarActivate(d->fuzzySearchSideBar);
     d->fuzzySearchSideBar->newDuplicatesSearch(albums);
 }
 
-void DigikamView::slotAlbumsCleared()
+void ItemIconView::slotAlbumsCleared()
 {
     emit signalAlbumSelected(0);
 }
 
-void DigikamView::slotAlbumHistoryBack(int steps)
+void ItemIconView::slotAlbumHistoryBack(int steps)
 {
     QList<Album*> albums;
     QWidget* widget = 0;
@@ -1053,7 +1053,7 @@ void DigikamView::slotAlbumHistoryBack(int steps)
     changeAlbumFromHistory(albums, widget);
 }
 
-void DigikamView::slotAlbumHistoryForward(int steps)
+void ItemIconView::slotAlbumHistoryForward(int steps)
 {
     QList<Album*> albums;
     QWidget* widget = 0;
@@ -1064,7 +1064,7 @@ void DigikamView::slotAlbumHistoryForward(int steps)
 }
 
 // TODO update, use SideBarWidget instead of QWidget
-void DigikamView::changeAlbumFromHistory(const QList<Album*>& album, QWidget* const widget)
+void ItemIconView::changeAlbumFromHistory(const QList<Album*>& album, QWidget* const widget)
 {
     if (!(album.isEmpty()) && widget)
     {
@@ -1087,14 +1087,14 @@ void DigikamView::changeAlbumFromHistory(const QList<Album*>& album, QWidget* co
     }
 }
 
-void DigikamView::clearHistory()
+void ItemIconView::clearHistory()
 {
     d->albumHistory->clearHistory();
     d->parent->enableAlbumBackwardHistory(false);
     d->parent->enableAlbumForwardHistory(false);
 }
 
-void DigikamView::getBackwardHistory(QStringList& titles)
+void ItemIconView::getBackwardHistory(QStringList& titles)
 {
     d->albumHistory->getBackwardHistory(titles);
 
@@ -1104,7 +1104,7 @@ void DigikamView::getBackwardHistory(QStringList& titles)
     }
 }
 
-void DigikamView::getForwardHistory(QStringList& titles)
+void ItemIconView::getForwardHistory(QStringList& titles)
 {
     d->albumHistory->getForwardHistory(titles);
 
@@ -1114,7 +1114,7 @@ void DigikamView::getForwardHistory(QStringList& titles)
     }
 }
 
-void DigikamView::slotGotoAlbumAndItem(const ItemInfo& imageInfo)
+void ItemIconView::slotGotoAlbumAndItem(const ItemInfo& imageInfo)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "going to " << imageInfo;
 
@@ -1134,7 +1134,7 @@ void DigikamView::slotGotoAlbumAndItem(const ItemInfo& imageInfo)
     d->albumManager->setCurrentAlbums(QList<Album*>() << album);
 }
 
-void DigikamView::slotGotoDateAndItem(const ItemInfo& imageInfo)
+void ItemIconView::slotGotoDateAndItem(const ItemInfo& imageInfo)
 {
     QDate date = imageInfo.dateTime().date();
 
@@ -1153,7 +1153,7 @@ void DigikamView::slotGotoDateAndItem(const ItemInfo& imageInfo)
     d->dateViewSideBar->gotoDate(date);
 }
 
-void DigikamView::slotGotoTagAndItem(int tagID)
+void ItemIconView::slotGotoTagAndItem(int tagID)
 {
     // FIXME: Arnd: don't know yet how to get the iconItem passed through ...
     //  then we would know how to use the following ...
@@ -1186,7 +1186,7 @@ void DigikamView::slotGotoTagAndItem(int tagID)
     // d->iconView->setAlbumItemToFind(url);
 }
 
-void DigikamView::slotSelectAlbum(const QUrl& url)
+void ItemIconView::slotSelectAlbum(const QUrl& url)
 {
     PAlbum* const album = d->albumManager->findPAlbum(url);
 
@@ -1200,7 +1200,7 @@ void DigikamView::slotSelectAlbum(const QUrl& url)
     d->albumFolderSideBar->setCurrentAlbum(album);
 }
 
-void DigikamView::slotAlbumSelected(const QList<Album*>& albums)
+void ItemIconView::slotAlbumSelected(const QList<Album*>& albums)
 {
     emit signalNoCurrentItem();
     emit signalAlbumSelected(0);
@@ -1274,7 +1274,7 @@ void DigikamView::slotAlbumSelected(const QList<Album*>& albums)
     }
 }
 
-void DigikamView::slotAlbumOpenInFileManager()
+void ItemIconView::slotAlbumOpenInFileManager()
 {
     Album* const album = d->albumManager->currentAlbums().first();
 
@@ -1297,7 +1297,7 @@ void DigikamView::slotAlbumOpenInFileManager()
     }
 }
 
-void DigikamView::slotRefresh()
+void ItemIconView::slotRefresh()
 {
     switch (viewMode())
     {
@@ -1334,7 +1334,7 @@ void DigikamView::slotRefresh()
     }
 }
 
-void DigikamView::slotAlbumRefreshComplete()
+void ItemIconView::slotAlbumRefreshComplete()
 {
     // force reload. Should normally not be necessary, but we may have bugs
     qlonglong currentId = currentInfo().id();
@@ -1346,7 +1346,7 @@ void DigikamView::slotAlbumRefreshComplete()
     }
 }
 
-void DigikamView::slotImageSelected()
+void ItemIconView::slotImageSelected()
 {
     // delay to slotDispatchImageSelected
     d->needDispatchSelection = true;
@@ -1363,7 +1363,7 @@ void DigikamView::slotImageSelected()
     }
 }
 
-void DigikamView::slotDispatchImageSelected()
+void ItemIconView::slotDispatchImageSelected()
 {
     if (viewMode() == StackedView::TrashViewMode)
     {
@@ -1415,28 +1415,28 @@ void DigikamView::slotDispatchImageSelected()
     }
 }
 
-double DigikamView::zoomMin() const
+double ItemIconView::zoomMin() const
 {
     return d->stackedview->zoomMin();
 }
 
-double DigikamView::zoomMax() const
+double ItemIconView::zoomMax() const
 {
     return d->stackedview->zoomMax();
 }
 
-void DigikamView::setZoomFactor(double zoom)
+void ItemIconView::setZoomFactor(double zoom)
 {
     d->stackedview->setZoomFactorSnapped(zoom);
 }
 
-void DigikamView::slotZoomFactorChanged(double zoom)
+void ItemIconView::slotZoomFactorChanged(double zoom)
 {
     toggleZoomActions();
     emit signalZoomChanged(zoom);
 }
 
-void DigikamView::setThumbSize(int size)
+void ItemIconView::setThumbSize(int size)
 {
     if (viewMode() == StackedView::PreviewImageMode)
     {
@@ -1466,7 +1466,7 @@ void DigikamView::setThumbSize(int size)
     }
 }
 
-void DigikamView::slotThumbSizeEffect()
+void ItemIconView::slotThumbSizeEffect()
 {
     d->iconView->setThumbnailSize(ThumbnailSize(d->thumbSize));
     d->tableView->setThumbnailSize(ThumbnailSize(d->thumbSize));
@@ -1476,7 +1476,7 @@ void DigikamView::slotThumbSizeEffect()
     ApplicationSettings::instance()->setDefaultIconSize(d->thumbSize);
 }
 
-void DigikamView::toggleZoomActions()
+void ItemIconView::toggleZoomActions()
 {
     if (viewMode() == StackedView::PreviewImageMode)
     {
@@ -1516,7 +1516,7 @@ void DigikamView::toggleZoomActions()
     }
 }
 
-void DigikamView::slotZoomIn()
+void ItemIconView::slotZoomIn()
 {
     if (viewMode() == StackedView::IconViewMode ||
         viewMode() == StackedView::TableViewMode)
@@ -1531,7 +1531,7 @@ void DigikamView::slotZoomIn()
     }
 }
 
-void DigikamView::slotZoomOut()
+void ItemIconView::slotZoomOut()
 {
     if (viewMode() == StackedView::IconViewMode ||
         viewMode() == StackedView::TableViewMode)
@@ -1546,7 +1546,7 @@ void DigikamView::slotZoomOut()
     }
 }
 
-void DigikamView::slotZoomTo100Percents()
+void ItemIconView::slotZoomTo100Percents()
 {
     if (viewMode() == StackedView::PreviewImageMode)
     {
@@ -1554,7 +1554,7 @@ void DigikamView::slotZoomTo100Percents()
     }
 }
 
-void DigikamView::slotFitToWindow()
+void ItemIconView::slotFitToWindow()
 {
     if (viewMode() == StackedView::TableViewMode)
     {
@@ -1574,12 +1574,12 @@ void DigikamView::slotFitToWindow()
     }
 }
 
-void DigikamView::slotAlbumPropsEdit()
+void ItemIconView::slotAlbumPropsEdit()
 {
     d->albumModificationHelper->slotAlbumEdit(d->albumManager->currentPAlbum());
 }
 
-void DigikamView::slotAlbumWriteMetadata()
+void ItemIconView::slotAlbumWriteMetadata()
 {
     Album* const album = d->albumManager->currentAlbums().first();
 
@@ -1592,7 +1592,7 @@ void DigikamView::slotAlbumWriteMetadata()
     tool->start();
 }
 
-void DigikamView::slotAlbumReadMetadata()
+void ItemIconView::slotAlbumReadMetadata()
 {
     Album* const album = d->albumManager->currentAlbums().first();
 
@@ -1605,14 +1605,14 @@ void DigikamView::slotAlbumReadMetadata()
     tool->start();
 }
 
-void DigikamView::slotImageWriteMetadata()
+void ItemIconView::slotImageWriteMetadata()
 {
     const ItemInfoList selected     = selectedInfoList(ApplicationSettings::Metadata);
     MetadataSynchronizer* const tool = new MetadataSynchronizer(selected, MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->start();
 }
 
-void DigikamView::slotImageReadMetadata()
+void ItemIconView::slotImageReadMetadata()
 {
     const ItemInfoList selected     = selectedInfoList(ApplicationSettings::Metadata);
     MetadataSynchronizer* const tool = new MetadataSynchronizer(selected, MetadataSynchronizer::ReadFromFileToDatabase);
@@ -1621,7 +1621,7 @@ void DigikamView::slotImageReadMetadata()
 
 // ----------------------------------------------------------------
 
-void DigikamView::slotEscapePreview()
+void ItemIconView::slotEscapePreview()
 {
     if (viewMode() == StackedView::IconViewMode  ||
         viewMode() == StackedView::MapWidgetMode ||
@@ -1636,17 +1636,17 @@ void DigikamView::slotEscapePreview()
     slotTogglePreviewMode(ItemInfo());
 }
 
-void DigikamView::slotMapWidgetView()
+void ItemIconView::slotMapWidgetView()
 {
     d->stackedview->setViewMode(StackedView::MapWidgetMode);
 }
 
-void DigikamView::slotTableView()
+void ItemIconView::slotTableView()
 {
     d->stackedview->setViewMode(StackedView::TableViewMode);
 }
 
-void DigikamView::slotIconView()
+void ItemIconView::slotIconView()
 {
     if (viewMode() == StackedView::PreviewImageMode)
     {
@@ -1660,7 +1660,7 @@ void DigikamView::slotIconView()
     slotImageSelected();
 }
 
-void DigikamView::slotImagePreview()
+void ItemIconView::slotImagePreview()
 {
     slotTogglePreviewMode(currentInfo());
 }
@@ -1668,7 +1668,7 @@ void DigikamView::slotImagePreview()
 /**
  * @brief This method toggles between AlbumView/MapWidgetView and ImagePreview modes, depending on the context.
  */
-void DigikamView::slotTogglePreviewMode(const ItemInfo& info)
+void ItemIconView::slotTogglePreviewMode(const ItemInfo& info)
 {
     if ((viewMode() == StackedView::IconViewMode   ||
          viewMode() == StackedView::TableViewMode  ||
@@ -1704,7 +1704,7 @@ void DigikamView::slotTogglePreviewMode(const ItemInfo& info)
     slotImageSelected();
 }
 
-void DigikamView::slotViewModeChanged()
+void ItemIconView::slotViewModeChanged()
 {
     toggleZoomActions();
 
@@ -1738,7 +1738,7 @@ void DigikamView::slotViewModeChanged()
     }
 }
 
-void DigikamView::slotImageFindSimilar()
+void ItemIconView::slotImageFindSimilar()
 {
     const ItemInfo current = currentInfo();
 
@@ -1749,7 +1749,7 @@ void DigikamView::slotImageFindSimilar()
     }
 }
 
-void DigikamView::slotImageScanForFaces()
+void ItemIconView::slotImageScanForFaces()
 {
     FaceScanSettings settings;
 
@@ -1767,7 +1767,7 @@ void DigikamView::slotImageScanForFaces()
     tool->start();
 }
 
-void DigikamView::slotRefreshImagePreview()
+void ItemIconView::slotRefreshImagePreview()
 {
     if (viewMode() == StackedView::PreviewImageMode)
     {
@@ -1775,7 +1775,7 @@ void DigikamView::slotRefreshImagePreview()
     }
 }
 
-void DigikamView::slotEditor()
+void ItemIconView::slotEditor()
 {
     const ItemInfoList imageInfoList = selectedInfoList(ApplicationSettings::Tools);
     ItemInfo singleInfo              = currentInfo();
@@ -1789,12 +1789,12 @@ void DigikamView::slotEditor()
     d->utilities->openInfos(singleInfo, imageInfoList, current);
 }
 
-void DigikamView::slotFileWithDefaultApplication()
+void ItemIconView::slotFileWithDefaultApplication()
 {
     d->utilities->openInfosWithDefaultApplication(selectedInfoList(ApplicationSettings::Tools));
 }
 
-void DigikamView::slotLightTable()
+void ItemIconView::slotLightTable()
 {
     bool grouping = selectedNeedGroupResolving(ApplicationSettings::LightTable);
     const ItemInfoList selectedList = selectedInfoList(false, grouping);
@@ -1810,7 +1810,7 @@ void DigikamView::slotLightTable()
     d->utilities->insertToLightTableAuto(allInfoList, selectedList, currentItemInfo);
 }
 
-void DigikamView::slotQueueMgr()
+void ItemIconView::slotQueueMgr()
 {
     bool grouping = selectedNeedGroupResolving(ApplicationSettings::BQM);
     ItemInfoList imageInfoList = selectedInfoList(false, grouping);
@@ -1835,13 +1835,13 @@ void DigikamView::slotQueueMgr()
     d->utilities->insertToQueueManager(imageInfoList, singleInfo, true);
 }
 
-void DigikamView::slotImageEdit()
+void ItemIconView::slotImageEdit()
 {
     // Where is the difference to slotEditor?
     slotEditor();
 }
 
-void DigikamView::slotImageLightTable()
+void ItemIconView::slotImageLightTable()
 {
     const ItemInfoList selectedList = selectedInfoList(ApplicationSettings::LightTable);
     const ItemInfo currentItemInfo = currentInfo();
@@ -1850,7 +1850,7 @@ void DigikamView::slotImageLightTable()
     d->utilities->insertToLightTable(selectedList, currentItemInfo, false);
 }
 
-void DigikamView::slotImageAddToLightTable()
+void ItemIconView::slotImageAddToLightTable()
 {
     const ItemInfoList selectedList = selectedInfoList(ApplicationSettings::LightTable);
     const ItemInfo currentItemInfo = currentInfo();
@@ -1859,7 +1859,7 @@ void DigikamView::slotImageAddToLightTable()
     d->utilities->insertToLightTable(selectedList, currentItemInfo, true);
 }
 
-void DigikamView::slotImageAddToCurrentQueue()
+void ItemIconView::slotImageAddToCurrentQueue()
 {
     const ItemInfoList selectedList = selectedInfoList(ApplicationSettings::BQM);
     const ItemInfo currentItemInfo = currentInfo();
@@ -1867,7 +1867,7 @@ void DigikamView::slotImageAddToCurrentQueue()
     d->utilities->insertToQueueManager(selectedList, currentItemInfo, false);
 }
 
-void DigikamView::slotImageAddToNewQueue()
+void ItemIconView::slotImageAddToNewQueue()
 {
     const bool newQueue = QueueMgrWindow::queueManagerWindowCreated() &&
                     !QueueMgrWindow::queueManagerWindow()->queuesMap().isEmpty();
@@ -1878,7 +1878,7 @@ void DigikamView::slotImageAddToNewQueue()
     d->utilities->insertToQueueManager(selectedList, currentItemInfo, newQueue);
 }
 
-void DigikamView::slotImageAddToExistingQueue(int queueid)
+void ItemIconView::slotImageAddToExistingQueue(int queueid)
 {
     const ItemInfoList selectedList = selectedInfoList(ApplicationSettings::BQM);
     const ItemInfo currentItemInfo = currentInfo();
@@ -1889,7 +1889,7 @@ void DigikamView::slotImageAddToExistingQueue(int queueid)
     }
 }
 
-void DigikamView::slotImageRename()
+void ItemIconView::slotImageRename()
 {
     switch (viewMode())
     {
@@ -1902,7 +1902,7 @@ void DigikamView::slotImageRename()
     }
 }
 
-void DigikamView::slotImageDelete()
+void ItemIconView::slotImageDelete()
 {
     switch (viewMode())
     {
@@ -1915,7 +1915,7 @@ void DigikamView::slotImageDelete()
     }
 }
 
-void DigikamView::slotImageDeletePermanently()
+void ItemIconView::slotImageDeletePermanently()
 {
     switch (viewMode())
     {
@@ -1928,7 +1928,7 @@ void DigikamView::slotImageDeletePermanently()
     }
 }
 
-void DigikamView::slotImageDeletePermanentlyDirectly()
+void ItemIconView::slotImageDeletePermanentlyDirectly()
 {
     switch (viewMode())
     {
@@ -1941,7 +1941,7 @@ void DigikamView::slotImageDeletePermanentlyDirectly()
     }
 }
 
-void DigikamView::slotImageTrashDirectly()
+void ItemIconView::slotImageTrashDirectly()
 {
     switch (viewMode())
     {
@@ -1954,7 +1954,7 @@ void DigikamView::slotImageTrashDirectly()
     }
 }
 
-void DigikamView::slotSelectAll()
+void ItemIconView::slotSelectAll()
 {
     switch (viewMode())
     {
@@ -1967,7 +1967,7 @@ void DigikamView::slotSelectAll()
     }
 }
 
-void DigikamView::slotSelectNone()
+void ItemIconView::slotSelectNone()
 {
     switch (viewMode())
     {
@@ -1980,7 +1980,7 @@ void DigikamView::slotSelectNone()
     }
 }
 
-void DigikamView::slotSelectInvert()
+void ItemIconView::slotSelectInvert()
 {
     switch (viewMode())
     {
@@ -1993,7 +1993,7 @@ void DigikamView::slotSelectInvert()
     }
 }
 
-void DigikamView::slotSortImages(int sortRole)
+void ItemIconView::slotSortImages(int sortRole)
 {
     ApplicationSettings* const settings = ApplicationSettings::instance();
 
@@ -2007,7 +2007,7 @@ void DigikamView::slotSortImages(int sortRole)
     settings->emitSetupChanged();
 }
 
-void DigikamView::slotSortImagesOrder(int order)
+void ItemIconView::slotSortImagesOrder(int order)
 {
     ApplicationSettings* const settings = ApplicationSettings::instance();
 
@@ -2021,7 +2021,7 @@ void DigikamView::slotSortImagesOrder(int order)
     settings->emitSetupChanged();
 }
 
-void DigikamView::slotSeparateImages(int categoryMode)
+void ItemIconView::slotSeparateImages(int categoryMode)
 {
     ApplicationSettings* const settings = ApplicationSettings::instance();
 
@@ -2034,7 +2034,7 @@ void DigikamView::slotSeparateImages(int categoryMode)
     d->iconView->imageFilterModel()->setCategorizationMode((ItemSortSettings::CategorizationMode) categoryMode);
 }
 
-void DigikamView::slotImageSeparationSortOrder(int order)
+void ItemIconView::slotImageSeparationSortOrder(int order)
 {
     ApplicationSettings* const settings = ApplicationSettings::instance();
 
@@ -2047,13 +2047,13 @@ void DigikamView::slotImageSeparationSortOrder(int order)
     d->iconView->imageFilterModel()->setCategorizationSortOrder((ItemSortSettings::SortOrder) order);
 }
 
-void DigikamView::slotMoveSelectionToAlbum()
+void ItemIconView::slotMoveSelectionToAlbum()
 {
     d->utilities->createNewAlbumForInfos(selectedInfoList(false, true),
                                          currentAlbum());
 }
 
-void DigikamView::slotImagePaste()
+void ItemIconView::slotImagePaste()
 {
     switch (viewMode())
     {
@@ -2067,7 +2067,7 @@ void DigikamView::slotImagePaste()
 }
 
 
-void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
+void ItemIconView::slotLeftSidebarChangedTab(QWidget* w)
 {
     // TODO update, temporary cast
     SidebarWidget* const widget = dynamic_cast<SidebarWidget*>(w);
@@ -2079,7 +2079,7 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
     }
 }
 
-void DigikamView::toggleTag(int tagID)
+void ItemIconView::toggleTag(int tagID)
 {
     ItemInfoList tagToRemove, tagToAssign;
     const ItemInfoList selectedList = selectedInfoList(ApplicationSettings::Metadata);
@@ -2096,42 +2096,42 @@ void DigikamView::toggleTag(int tagID)
     FileActionMngr::instance()->removeTag(tagToRemove, tagID);
 }
 
-void DigikamView::slotAssignPickLabel(int pickId)
+void ItemIconView::slotAssignPickLabel(int pickId)
 {
     FileActionMngr::instance()->assignPickLabel(selectedInfoList(ApplicationSettings::Metadata), pickId);
 }
 
-void DigikamView::slotAssignColorLabel(int colorId)
+void ItemIconView::slotAssignColorLabel(int colorId)
 {
     FileActionMngr::instance()->assignColorLabel(selectedInfoList(ApplicationSettings::Metadata), colorId);
 }
 
-void DigikamView::slotAssignRating(int rating)
+void ItemIconView::slotAssignRating(int rating)
 {
     FileActionMngr::instance()->assignRating(selectedInfoList(ApplicationSettings::Metadata), rating);
 }
 
-void DigikamView::slotAssignTag(int tagID)
+void ItemIconView::slotAssignTag(int tagID)
 {
     FileActionMngr::instance()->assignTags(selectedInfoList(ApplicationSettings::Metadata), QList<int>() << tagID);
 }
 
-void DigikamView::slotRemoveTag(int tagID)
+void ItemIconView::slotRemoveTag(int tagID)
 {
     FileActionMngr::instance()->removeTags(selectedInfoList(ApplicationSettings::Metadata), QList<int>() << tagID);
 }
 
-void DigikamView::slotSlideShowAll()
+void ItemIconView::slotSlideShowAll()
 {
     slideShow(allInfo(ApplicationSettings::Slideshow));
 }
 
-void DigikamView::slotSlideShowSelection()
+void ItemIconView::slotSlideShowSelection()
 {
     slideShow(selectedInfoList(ApplicationSettings::Slideshow));
 }
 
-void DigikamView::slotSlideShowRecursive()
+void ItemIconView::slotSlideShowRecursive()
 {
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
     Album* album            = 0;
@@ -2152,12 +2152,12 @@ void DigikamView::slotSlideShowRecursive()
     }
 }
 
-void DigikamView::slotSlideShowManualFromCurrent()
+void ItemIconView::slotSlideShowManualFromCurrent()
 {
     slotSlideShowManualFrom(currentInfo());
 }
 
-void DigikamView::slotSlideShowManualFrom(const ItemInfo& info)
+void ItemIconView::slotSlideShowManualFrom(const ItemInfo& info)
 {
    SlideShowBuilder* const builder
            = new SlideShowBuilder(allInfo(ApplicationSettings::Slideshow));
@@ -2170,7 +2170,7 @@ void DigikamView::slotSlideShowManualFrom(const ItemInfo& info)
    builder->run();
 }
 
-void DigikamView::presentation()
+void ItemIconView::presentation()
 {
     QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
 
@@ -2183,7 +2183,7 @@ void DigikamView::presentation()
     mngr->showConfigDialog();
 }
 
-void DigikamView::slideShow(const ItemInfoList& infoList)
+void ItemIconView::slideShow(const ItemInfoList& infoList)
 {
     SlideShowBuilder* const builder = new SlideShowBuilder(infoList);
 
@@ -2193,7 +2193,7 @@ void DigikamView::slideShow(const ItemInfoList& infoList)
     builder->run();
 }
 
-void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings)
+void ItemIconView::slotSlideShowBuilderComplete(const SlideShowSettings& settings)
 {
     QPointer<Digikam::SlideShow> slide = new SlideShow(settings);
     slide->setInfoInterface(new DBInfoIface(this, QList<QUrl>()));
@@ -2226,7 +2226,7 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
     slide->show();
 }
 
-void DigikamView::toggleShowBar(bool b)
+void ItemIconView::toggleShowBar(bool b)
 {
     d->stackedview->thumbBarDock()->showThumbBar(b);
 
@@ -2234,17 +2234,17 @@ void DigikamView::toggleShowBar(bool b)
     d->stackedview->setViewMode(viewMode());
 }
 
-void DigikamView::setRecurseAlbums(bool recursive)
+void ItemIconView::setRecurseAlbums(bool recursive)
 {
     d->iconView->imageAlbumModel()->setRecurseAlbums(recursive);
 }
 
-void DigikamView::setRecurseTags(bool recursive)
+void ItemIconView::setRecurseTags(bool recursive)
 {
     d->iconView->imageAlbumModel()->setRecurseTags(recursive);
 }
 
-void DigikamView::slotSidebarTabTitleStyleChanged()
+void ItemIconView::slotSidebarTabTitleStyleChanged()
 {
     d->leftSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
     d->rightSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
@@ -2253,7 +2253,7 @@ void DigikamView::slotSidebarTabTitleStyleChanged()
     //     d->rightSideBar->applySettings();
 }
 
-void DigikamView::slotImageChangeFailed(const QString& message, const QStringList& fileNames)
+void ItemIconView::slotImageChangeFailed(const QString& message, const QStringList& fileNames)
 {
     if (fileNames.isEmpty())
     {
@@ -2267,45 +2267,45 @@ void DigikamView::slotImageChangeFailed(const QString& message, const QStringLis
                                      fileNames);
 }
 
-void DigikamView::slotLeftSideBarActivateAlbums()
+void ItemIconView::slotLeftSideBarActivateAlbums()
 {
     d->leftSideBar->setActiveTab(d->albumFolderSideBar);
 }
 
-void DigikamView::slotLeftSideBarActivateTags()
+void ItemIconView::slotLeftSideBarActivateTags()
 {
     d->leftSideBar->setActiveTab(d->tagViewSideBar);
 }
 
-void DigikamView::slotLeftSideBarActivate(SidebarWidget* widget)
+void ItemIconView::slotLeftSideBarActivate(SidebarWidget* widget)
 {
     d->leftSideBar->setActiveTab(widget);
 }
 
-void DigikamView::slotLeftSideBarActivate(QWidget* widget)
+void ItemIconView::slotLeftSideBarActivate(QWidget* widget)
 {
     slotLeftSideBarActivate(static_cast<SidebarWidget*>(widget));
 }
 
-void DigikamView::slotRightSideBarActivateTitles()
+void ItemIconView::slotRightSideBarActivateTitles()
 {
     d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
     d->rightSideBar->imageDescEditTab()->setFocusToTitlesEdit();
 }
 
-void DigikamView::slotRightSideBarActivateComments()
+void ItemIconView::slotRightSideBarActivateComments()
 {
     d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
     d->rightSideBar->imageDescEditTab()->setFocusToCommentsEdit();
 }
 
-void DigikamView::slotRightSideBarActivateAssignedTags()
+void ItemIconView::slotRightSideBarActivateAssignedTags()
 {
     d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
     d->rightSideBar->imageDescEditTab()->activateAssignedTagsButton();
 }
 
-void DigikamView::slotRatingChanged(const QUrl& url, int rating)
+void ItemIconView::slotRatingChanged(const QUrl& url, int rating)
 {
     rating = qMin(RatingMax, qMax(RatingMin, rating));
     ItemInfo info = ItemInfo::fromUrl(url);
@@ -2316,7 +2316,7 @@ void DigikamView::slotRatingChanged(const QUrl& url, int rating)
     }
 }
 
-void DigikamView::slotColorLabelChanged(const QUrl& url, int color)
+void ItemIconView::slotColorLabelChanged(const QUrl& url, int color)
 {
     ItemInfo info = ItemInfo::fromUrl(url);
 
@@ -2326,7 +2326,7 @@ void DigikamView::slotColorLabelChanged(const QUrl& url, int color)
     }
 }
 
-void DigikamView::slotPickLabelChanged(const QUrl& url, int pick)
+void ItemIconView::slotPickLabelChanged(const QUrl& url, int pick)
 {
     ItemInfo info = ItemInfo::fromUrl(url);
 
@@ -2336,7 +2336,7 @@ void DigikamView::slotPickLabelChanged(const QUrl& url, int pick)
     }
 }
 
-void DigikamView::slotToggleTag(const QUrl& url, int tagID)
+void ItemIconView::slotToggleTag(const QUrl& url, int tagID)
 {
     ItemInfo info = ItemInfo::fromUrl(url);
 
@@ -2349,12 +2349,12 @@ void DigikamView::slotToggleTag(const QUrl& url, int tagID)
     }
 }
 
-bool DigikamView::hasCurrentItem() const
+bool ItemIconView::hasCurrentItem() const
 {
     return !currentInfo().isNull();
 }
 
-void DigikamView::slotFocusAndNextImage()
+void ItemIconView::slotFocusAndNextImage()
 {
     //slot is called on pressing "return" a second time after assigning a tag
     d->stackedview->currentWidget()->setFocus();
@@ -2363,19 +2363,19 @@ void DigikamView::slotFocusAndNextImage()
     slotNextItem();
 }
 
-void DigikamView::slotImageExifOrientation(int orientation)
+void ItemIconView::slotImageExifOrientation(int orientation)
 {
     FileActionMngr::instance()->setExifOrientation(
                 selectedInfoList(ApplicationSettings::Metadata), orientation);
 }
 
-void DigikamView::imageTransform(MetaEngineRotation::TransformationAction transform)
+void ItemIconView::imageTransform(MetaEngineRotation::TransformationAction transform)
 {
     FileActionMngr::instance()->transform(
                 selectedInfoList(ApplicationSettings::Metadata), transform);
 }
 
-ItemInfo DigikamView::currentInfo() const
+ItemInfo ItemIconView::currentInfo() const
 {
     switch (viewMode())
     {
@@ -2398,7 +2398,7 @@ ItemInfo DigikamView::currentInfo() const
     }
 }
 
-Album* DigikamView::currentAlbum() const
+Album* ItemIconView::currentAlbum() const
 {
     switch (viewMode())
     {
@@ -2416,7 +2416,7 @@ Album* DigikamView::currentAlbum() const
     }
 }
 
-ItemInfoList DigikamView::selectedInfoList(const bool currentFirst,
+ItemInfoList ItemIconView::selectedInfoList(const bool currentFirst,
                                             const bool grouping) const
 {
     switch (viewMode())
@@ -2449,13 +2449,13 @@ ItemInfoList DigikamView::selectedInfoList(const bool currentFirst,
     }
 }
 
-ItemInfoList DigikamView::selectedInfoList(const ApplicationSettings::OperationType type,
+ItemInfoList ItemIconView::selectedInfoList(const ApplicationSettings::OperationType type,
                                             const bool currentFirst) const
 {
     return selectedInfoList(currentFirst, selectedNeedGroupResolving(type));
 }
 
-ItemInfoList DigikamView::allInfo(const bool grouping) const
+ItemInfoList ItemIconView::allInfo(const bool grouping) const
 {
     switch (viewMode())
     {
@@ -2474,12 +2474,12 @@ ItemInfoList DigikamView::allInfo(const bool grouping) const
     }
 }
 
-ItemInfoList DigikamView::allInfo(const ApplicationSettings::OperationType type) const
+ItemInfoList ItemIconView::allInfo(const ApplicationSettings::OperationType type) const
 {
     return allInfo(allNeedGroupResolving(type));
 }
 
-bool DigikamView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
+bool ItemIconView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
 {
     switch (viewMode())
     {
@@ -2496,7 +2496,7 @@ bool DigikamView::allNeedGroupResolving(const ApplicationSettings::OperationType
     }
 }
 
-bool DigikamView::selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const
+bool ItemIconView::selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const
 {
     switch (viewMode())
     {
@@ -2513,14 +2513,14 @@ bool DigikamView::selectedNeedGroupResolving(const ApplicationSettings::Operatio
     }
 }
 
-QUrl DigikamView::currentUrl() const
+QUrl ItemIconView::currentUrl() const
 {
     const ItemInfo cInfo = currentInfo();
 
     return cInfo.fileUrl();
 }
 
-void DigikamView::slotSetCurrentWhenAvailable(const qlonglong id)
+void ItemIconView::slotSetCurrentWhenAvailable(const qlonglong id)
 {
     switch (viewMode())
     {
@@ -2533,7 +2533,7 @@ void DigikamView::slotSetCurrentWhenAvailable(const qlonglong id)
     }
 }
 
-void DigikamView::slotAwayFromSelection()
+void ItemIconView::slotAwayFromSelection()
 {
     switch (viewMode())
     {
@@ -2546,29 +2546,29 @@ void DigikamView::slotAwayFromSelection()
     }
 }
 
-StackedView::StackedViewMode DigikamView::viewMode() const
+StackedView::StackedViewMode ItemIconView::viewMode() const
 {
     return d->stackedview->viewMode();
 }
 
-void DigikamView::slotSetupMetadataFilters(int tab)
+void ItemIconView::slotSetupMetadataFilters(int tab)
 {
     Setup::execMetadataFilters(this, tab);
 }
 
-void DigikamView::toggleFullScreen(bool set)
+void ItemIconView::toggleFullScreen(bool set)
 {
     d->stackedview->imagePreviewView()->toggleFullScreen(set);
 }
 
-void DigikamView::setToolsIconView(DCategorizedView* const view)
+void ItemIconView::setToolsIconView(DCategorizedView* const view)
 {
     d->rightSideBar->appendTab(view,
                                QIcon::fromTheme(QLatin1String("document-edit")),
                                i18n("Tools"));
 }
 
-void DigikamView::slotShowContextMenu(QContextMenuEvent* event,
+void ItemIconView::slotShowContextMenu(QContextMenuEvent* event,
                                       const QList<QAction*>& extraGroupingActions)
 {
     Album* const album = currentAlbum();
@@ -2598,7 +2598,7 @@ void DigikamView::slotShowContextMenu(QContextMenuEvent* event,
     cmHelper.exec(event->globalPos());
 }
 
-void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info,
+void ItemIconView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info,
                                             const QList<QAction*>& extraGroupingActions,
                                             ItemFilterModel* imageFilterModel)
 {
@@ -2724,7 +2724,7 @@ void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const Item
     }
 }
 
-void DigikamView::slotShowGroupContextMenu(QContextMenuEvent* event,
+void ItemIconView::slotShowGroupContextMenu(QContextMenuEvent* event,
                                            const QList<ItemInfo>& selectedInfos,
                                            ItemFilterModel* imageFilterModel)
 {
@@ -2763,37 +2763,37 @@ void DigikamView::slotShowGroupContextMenu(QContextMenuEvent* event,
     cmhelper.exec(event->globalPos());
 }
 
-void DigikamView::slotSetAsAlbumThumbnail(const ItemInfo& info)
+void ItemIconView::slotSetAsAlbumThumbnail(const ItemInfo& info)
 {
     d->utilities->setAsAlbumThumbnail(currentAlbum(), info);
 }
 
-void DigikamView::slotCreateGroupFromSelection()
+void ItemIconView::slotCreateGroupFromSelection()
 {
     FileActionMngr::instance()->addToGroup(currentInfo(), selectedInfoList(false, true));
 }
 
-void DigikamView::slotCreateGroupByTimeFromSelection()
+void ItemIconView::slotCreateGroupByTimeFromSelection()
 {
     d->utilities->createGroupByTimeFromInfoList(selectedInfoList(false, true));
 }
 
-void DigikamView::slotCreateGroupByFilenameFromSelection()
+void ItemIconView::slotCreateGroupByFilenameFromSelection()
 {
     d->utilities->createGroupByFilenameFromInfoList(selectedInfoList(false, true));
 }
 
-void DigikamView::slotCreateGroupByTimelapseFromSelection()
+void ItemIconView::slotCreateGroupByTimelapseFromSelection()
 {
     d->utilities->createGroupByTimelapseFromInfoList(selectedInfoList(false, true));
 }
 
-void DigikamView::slotRemoveSelectedFromGroup()
+void ItemIconView::slotRemoveSelectedFromGroup()
 {
     FileActionMngr::instance()->removeFromGroup(selectedInfoList(false, true));
 }
 
-void DigikamView::slotUngroupSelected()
+void ItemIconView::slotUngroupSelected()
 {
     FileActionMngr::instance()->ungroup(selectedInfoList(false, true));
 }

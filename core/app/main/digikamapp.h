@@ -53,7 +53,7 @@ namespace Digikam
 {
 
 class Album;
-class DigikamView;
+class ItemIconView;
 class FaceScanSettings;
 class FilterStatusBar;
 class ItemInfo;
@@ -77,7 +77,7 @@ public:
     void enableAlbumBackwardHistory(bool enable);
     void enableAlbumForwardHistory(bool enable);
 
-    DigikamView* view()    const;
+    ItemIconView* view()    const;
     QMenu* slideShowMenu() const;
 
     static DigikamApp* instance();

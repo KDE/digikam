@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2002-16-10
- * Description : implementation of album view interface.
+ * Description : implementation of item icon view interface.
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_VIEW_H
-#define DIGIKAM_VIEW_H
+#ifndef ITEM_ICON_VIEW_H
+#define ITEM_ICON_VIEW_H
 
 // Qt includes
 
@@ -57,15 +57,15 @@ class SlideShowSettings;
 class DCategorizedView;
 class ItemFilterModel;
 
-class DigikamView : public DHBox
+class ItemIconView : public DHBox
 {
     Q_OBJECT
 
 public:
 
-    explicit DigikamView(QWidget* const parent,
-                         DModelFactory* const modelCollection);
-    ~DigikamView();
+    explicit ItemIconView(QWidget* const parent,
+                          DModelFactory* const modelCollection);
+    ~ItemIconView();
 
     void applySettings();
     void refreshView();
@@ -341,4 +341,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_VIEW_H
+#endif // ITEM_ICON_VIEW_H

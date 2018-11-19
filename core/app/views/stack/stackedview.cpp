@@ -41,7 +41,7 @@
 #include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "digikamitemview.h"
-#include "digikamview.h"
+#include "itemiconview.h"
 #include "dbinfoiface.h"
 #include "itemalbummodel.h"
 #include "itemalbumfiltermodel.h"

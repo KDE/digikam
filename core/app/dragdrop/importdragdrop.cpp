@@ -43,7 +43,7 @@
 #include "camiteminfo.h"
 #include "albummanager.h"
 #include "digikamapp.h"
-#include "digikamview.h"
+#include "itemiconview.h"
 
 namespace Digikam
 {

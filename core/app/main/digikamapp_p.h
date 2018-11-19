@@ -66,7 +66,7 @@
 #include "cameranamehelper.h"
 #include "dsplashscreen.h"
 #include "dzoombar.h"
-#include "digikamview.h"
+#include "itemiconview.h"
 #include "metadatastatusbar.h"
 #include "itempropertiestab.h"
 #include "importui.h"
@@ -428,7 +428,7 @@ public:
     MetadataStatusBar*                  metadataStatusBar;
     FilterStatusBar*                    filterStatusBar;
     DSplashScreen*                      splashScreen;
-    DigikamView*                        view;
+    ItemIconView*                        view;
     CameraList*                         cameraList;
     TagsActionMngr*                     tagsActionManager;
     DZoomBar*                           zoomBar;

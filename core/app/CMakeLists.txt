@@ -368,7 +368,7 @@ set(libdigikamgui_SRCS
     views/tableview/tableview_selection_model_syncer.cpp
 
     views/stack/welcomepageview.cpp
-    views/stack/digikamview.cpp
+    views/stack/itemiconview.cpp
     views/stack/trashview.cpp
     views/stack/stackedview.cpp
     views/preview/itempreviewcanvas.cpp

@@ -46,7 +46,7 @@
 #include "collectionmanager.h"
 #include "deletedialog.h"
 #include "dio.h"
-#include "digikamview.h"
+#include "itemiconview.h"
 #include "digikamapp.h"
 #include "coredb.h"
 #include "coredbaccess.h"

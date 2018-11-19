@@ -35,7 +35,7 @@
 #include "coredbnamefilter.h"
 #include "digikamapp.h"
 #include "digikam_debug.h"
-#include "digikamview.h"
+#include "itemiconview.h"
 #include "itemcopyright.h"
 #include "iteminfo.h"
 #include "photoinfocontainer.h"
