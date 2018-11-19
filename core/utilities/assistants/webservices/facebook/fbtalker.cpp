@@ -156,9 +156,6 @@ FbTalker::FbTalker(QWidget* const parent)
 
     d->settings = WSToolUtils::getOauthSettings(this);
 
-    connect(this, SIGNAL(linkingFailed()),
-            this, SLOT(slotLinkingFailed()));
-
     connect(this, SIGNAL(linkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
 
@@ -243,12 +240,6 @@ void FbTalker::cancel()
     emit signalBusy(false);
 }
 
-void FbTalker::slotLinkingFailed()
-{
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Facebook fail";
-    emit signalBusy(false);
-}
-
 void FbTalker::slotLinkingSucceeded()
 {
     if (d->accessToken.isEmpty())
@@ -283,12 +274,13 @@ void FbTalker::slotCatchUrl(const QUrl& url)
         int seconds    = query.queryItemValue(QLatin1String("expires_in")).toInt();
         d->expiryTime  = QDateTime::currentDateTime().addSecs(seconds);
 
-        qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access Token Received";
+        qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token received";
         emit linkingSucceeded();
     }
     else
     {
-        emit linkingFailed();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "No access token in URL";
+        emit signalBusy(false);
     }
 }
 

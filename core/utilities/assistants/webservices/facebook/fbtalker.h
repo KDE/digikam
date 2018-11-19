@@ -81,7 +81,6 @@ Q_SIGNALS:
     void    signalLoginProgress(int step, int maxStep = 0, const QString& label = QString());
     void    signalLoginDone(int errCode, const QString& errMsg);
     void    linkingSucceeded();
-    void    linkingFailed();
 
 private:
 
@@ -97,7 +96,6 @@ private:
 
 private Q_SLOTS:
 
-    void    slotLinkingFailed();
     void    slotLinkingSucceeded();
     void    slotCatchUrl(const QUrl& url);
     void    slotFinished(QNetworkReply* reply);
