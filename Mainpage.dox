@@ -48,7 +48,7 @@
 |│   │   ├── utils                                            | Generic utility classes                                                 |
 |│   │   └── views                                            | Views classes                                                           |
 |│   │       ├── preview                                      | Item preview classes                                                    |
-|│   │       ├── sidebar                                      | Left and right sidebar contents                                         |
+|│   │       ├── sidebar                                      | Left sidebar contents                                                   |
 |│   │       ├── stack                                        | Stacked-view show in central place of main digiKam window               |
 |│   │       ├── tableview                                    | Table-view classes                                                      |
 |│   │       └── utils                                        | View utility classes                                                    |
