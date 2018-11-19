@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-21-12
- * Description : a embedded view to show the image preview widget.
+ * Description : a embedded view to show item preview widget.
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_PREVIEW_VIEW_H
-#define DIGIKAM_IMAGE_PREVIEW_VIEW_H
+#ifndef DIGIKAM_ITEM_PREVIEW_VIEW_H
+#define DIGIKAM_ITEM_PREVIEW_VIEW_H
 
 // Local includes
 
@@ -42,7 +42,7 @@ namespace Digikam
 class Album;
 class LoadingDescription;
 
-class ImagePreviewView : public GraphicsDImgView
+class ItemPreviewView : public GraphicsDImgView
 {
     Q_OBJECT
 
@@ -56,8 +56,8 @@ public:
 
 public:
 
-    explicit ImagePreviewView(QWidget* const parent, Mode mode=IconViewPreview, Album* const currAlbum = 0);
-    ~ImagePreviewView();
+    explicit ItemPreviewView(QWidget* const parent, Mode mode=IconViewPreview, Album* const currAlbum = 0);
+    ~ItemPreviewView();
 
     void setItemInfo(const ItemInfo& info     = ItemInfo(),
                       const ItemInfo& previous = ItemInfo(),
@@ -129,4 +129,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_PREVIEW_VIEW_H
+#endif // DIGIKAM_ITEM_PREVIEW_VIEW_H

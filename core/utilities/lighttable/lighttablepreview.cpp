@@ -48,7 +48,7 @@ namespace Digikam
 {
 
 LightTablePreview::LightTablePreview(QWidget* const parent)
-    : ImagePreviewView(parent, ImagePreviewView::LightTablePreview)
+    : ItemPreviewView(parent, ItemPreviewView::LightTablePreview)
 {
     setDragAndDropEnabled(true);
     showDragAndDropMessage();

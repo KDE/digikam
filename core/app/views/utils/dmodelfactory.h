@@ -40,19 +40,19 @@ namespace Digikam
 {
 
 /**
- * This class is simply a collection of all models that build the core of the
+ * This class is simply a factory of all models that build the core of the
  * digikam application.
  *
  * @author jwienke
  */
-class DigikamModelCollection: public QObject
+class DModelFactory: public QObject
 {
     Q_OBJECT
 
 public:
 
-    DigikamModelCollection();
-    virtual ~DigikamModelCollection();
+    DModelFactory();
+    virtual ~DModelFactory();
 
     AlbumModel*        getAlbumModel()        const;
     TagModel*          getTagModel()          const;

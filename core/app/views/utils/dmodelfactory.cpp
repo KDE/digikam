@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN DigikamModelCollection::Private
+class Q_DECL_HIDDEN DModelFactory::Private
 {
 
 public:
@@ -60,7 +60,7 @@ public:
     ItemVersionsModel* imageVersionModel;
 };
 
-DigikamModelCollection::DigikamModelCollection() :
+DModelFactory::DModelFactory() :
     d(new Private)
 {
     d->albumModel        = new AlbumModel(AlbumModel::IncludeRootAlbum);
@@ -81,7 +81,7 @@ DigikamModelCollection::DigikamModelCollection() :
             this, SLOT(slotApplicationSettingsChanged()));
 }
 
-DigikamModelCollection::~DigikamModelCollection()
+DModelFactory::~DModelFactory()
 {
     delete d->tagModel;
     delete d->tagFilterModel;
@@ -92,42 +92,42 @@ DigikamModelCollection::~DigikamModelCollection()
     delete d;
 }
 
-AlbumModel* DigikamModelCollection::getAlbumModel() const
+AlbumModel* DModelFactory::getAlbumModel() const
 {
     return d->albumModel;
 }
 
-TagModel* DigikamModelCollection::getTagModel() const
+TagModel* DModelFactory::getTagModel() const
 {
     return d->tagModel;
 }
 
-TagModel* DigikamModelCollection::getTagFilterModel() const
+TagModel* DModelFactory::getTagFilterModel() const
 {
     return d->tagFilterModel;
 }
 
-TagModel* DigikamModelCollection::getTagFacesModel() const
+TagModel* DModelFactory::getTagFacesModel() const
 {
     return d->tagFacesModel;
 }
 
-SearchModel* DigikamModelCollection::getSearchModel() const
+SearchModel* DModelFactory::getSearchModel() const
 {
     return d->searchModel;
 }
 
-DateAlbumModel* DigikamModelCollection::getDateAlbumModel() const
+DateAlbumModel* DModelFactory::getDateAlbumModel() const
 {
     return d->dateAlbumModel;
 }
 
-ItemVersionsModel* DigikamModelCollection::getItemVersionsModel() const
+ItemVersionsModel* DModelFactory::getItemVersionsModel() const
 {
     return d->imageVersionModel;
 }
 
-void DigikamModelCollection::slotApplicationSettingsChanged()
+void DModelFactory::slotApplicationSettingsChanged()
 {
     d->dateAlbumModel->setPixmaps(QIcon::fromTheme(QLatin1String("view-calendar-list")).pixmap(ApplicationSettings::instance()->getTreeViewIconSize()),
                                   QIcon::fromTheme(QLatin1String("view-calendar")).pixmap(ApplicationSettings::instance()->getTreeViewIconSize()));

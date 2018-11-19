@@ -63,7 +63,7 @@
 #include "filterstatusbar.h"
 #include "itemalbummodel.h"
 #include "itemdescedittab.h"
-#include "imagepreviewview.h"
+#include "itempreviewview.h"
 #include "itempropertiessidebardb.h"
 #include "itempropertiesversionstab.h"
 #include "itemthumbnailbar.h"
@@ -207,7 +207,7 @@ public:
 
     QList<SidebarWidget*>         leftSideBarWidgets;
 
-    DigikamModelCollection*       modelCollection;
+    DModelFactory*       modelCollection;
     AlbumLabelsSearchHandler*     labelsSearchHandler;
 };
 
@@ -251,7 +251,7 @@ void DigikamView::Private::addPageUpDownActions(DigikamView* const q, QWidget* c
 
 // -------------------------------------------------------------------------------------------
 
-DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const modelCollection)
+DigikamView::DigikamView(QWidget* const parent, DModelFactory* const modelCollection)
     : DHBox(parent),
       d(new Private)
 {

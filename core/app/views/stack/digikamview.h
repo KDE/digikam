@@ -64,7 +64,7 @@ class DigikamView : public DHBox
 public:
 
     explicit DigikamView(QWidget* const parent,
-                         DigikamModelCollection* const modelCollection);
+                         DModelFactory* const modelCollection);
     ~DigikamView();
 
     void applySettings();
@@ -93,7 +93,7 @@ public:
 
     QUrl      currentUrl()     const;
     bool      hasCurrentItem() const;
-    ItemInfo currentInfo()    const;
+    ItemInfo  currentInfo()    const;
     Album*    currentAlbum()   const;
 
     /**
@@ -114,7 +114,7 @@ public:
      * Whether only the first or all grouped items are returned is determined
      * as described above.
      */
-    QList<QUrl>   allUrls(bool grouping = false)                         const;
+    QList<QUrl>  allUrls(bool grouping = false)                         const;
     ItemInfoList allInfo(const bool grouping = false)                   const;
     ItemInfoList allInfo(const ApplicationSettings::OperationType type) const;
 

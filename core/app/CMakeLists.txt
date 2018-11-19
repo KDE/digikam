@@ -367,14 +367,14 @@ set(libdigikamgui_SRCS
     views/tableview/tableview_columnfactory.cpp
     views/tableview/tableview_selection_model_syncer.cpp
 
-    views/imagepreviewviewitem.cpp
-    views/imagepreviewview.cpp
-    views/welcomepageview.cpp
-    views/leftsidebarwidgets.cpp
-    views/digikamview.cpp
-    views/trashview.cpp
-    views/stackedview.cpp
-    views/sidebarwidget.cpp
+    views/stack/welcomepageview.cpp
+    views/stack/digikamview.cpp
+    views/stack/trashview.cpp
+    views/stack/stackedview.cpp
+    views/preview/itempreviewcanvas.cpp
+    views/preview/itempreviewview.cpp
+    views/sidebar/leftsidebarwidgets.cpp
+    views/sidebar/sidebarwidget.cpp
     views/utils/dmodelfactory.cpp
     views/utils/slideshowbuilder.cpp
 
@@ -384,7 +384,7 @@ set(libdigikamgui_SRCS
 if(${Marble_FOUND})
     set(libdigikamgui_SRCS
         ${libdigikamgui_SRCS}
-        views/mapwidgetview.cpp
+        views/stack/mapwidgetview.cpp
        )
 endif()
 

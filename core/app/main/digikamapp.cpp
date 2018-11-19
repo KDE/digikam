@@ -112,7 +112,7 @@ DigikamApp::DigikamApp()
     connect(d->cameraList, SIGNAL(signalCameraRemoved(QAction*)),
             this, SLOT(slotCameraRemoved(QAction*)));
 
-    d->modelCollection = new DigikamModelCollection;
+    d->modelCollection = new DModelFactory;
 
     // This manager must be created after collection setup and before accelerators setup.
     d->tagsActionManager = new TagsActionMngr(this);

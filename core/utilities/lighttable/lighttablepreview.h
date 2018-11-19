@@ -34,12 +34,12 @@
 // Local includes
 
 #include "iteminfo.h"
-#include "imagepreviewview.h"
+#include "itempreviewview.h"
 
 namespace Digikam
 {
 
-class LightTablePreview : public ImagePreviewView
+class LightTablePreview : public ItemPreviewView
 {
     Q_OBJECT
 

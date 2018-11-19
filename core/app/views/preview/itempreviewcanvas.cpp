@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "imagepreviewviewitem.h"
+#include "itempreviewcanvas.h"
 
 // Qt includes
 
@@ -31,13 +31,13 @@
 
 // Local includes
 
-#include "imagepreviewview.h"
+#include "itempreviewview.h"
 #include "facegroup.h"
 
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImagePreviewViewItem::Private
+class Q_DECL_HIDDEN ItemPreviewCanvas::Private
 {
 public:
 
@@ -50,44 +50,44 @@ public:
     ItemInfo         info;
 };
 
-ImagePreviewViewItem::ImagePreviewViewItem()
+ItemPreviewCanvas::ItemPreviewCanvas()
     : d(new Private)
 {
     setAcceptHoverEvents(true);
 }
 
-ImagePreviewViewItem::~ImagePreviewViewItem()
+ItemPreviewCanvas::~ItemPreviewCanvas()
 {
     delete d;
 }
 
-void ImagePreviewViewItem::setFaceGroup(FaceGroup* const group)
+void ItemPreviewCanvas::setFaceGroup(FaceGroup* const group)
 {
     d->group = group;
 }
 
-void ImagePreviewViewItem::setItemInfo(const ItemInfo& info)
+void ItemPreviewCanvas::setItemInfo(const ItemInfo& info)
 {
     d->info = info;
     setPath(info.filePath());
 }
 
-ItemInfo ImagePreviewViewItem::imageInfo() const
+ItemInfo ItemPreviewCanvas::imageInfo() const
 {
     return d->info;
 }
 
-void ImagePreviewViewItem::hoverEnterEvent(QGraphicsSceneHoverEvent* e)
+void ItemPreviewCanvas::hoverEnterEvent(QGraphicsSceneHoverEvent* e)
 {
     d->group->itemHoverEnterEvent(e);
 }
 
-void ImagePreviewViewItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* e)
+void ItemPreviewCanvas::hoverLeaveEvent(QGraphicsSceneHoverEvent* e)
 {
     d->group->itemHoverLeaveEvent(e);
 }
 
-void ImagePreviewViewItem::hoverMoveEvent(QGraphicsSceneHoverEvent* e)
+void ItemPreviewCanvas::hoverMoveEvent(QGraphicsSceneHoverEvent* e)
 {
     d->group->itemHoverMoveEvent(e);
 }

@@ -43,7 +43,7 @@ namespace Digikam
 
 class DigikamItemView;
 class ItemCategorizedView;
-class ImagePreviewView;
+class ItemPreviewView;
 class ItemThumbnailBar;
 class TableView;
 class TrashView;
@@ -86,7 +86,7 @@ public:
     ThumbBarDock*      thumbBarDock()     const;
     ItemThumbnailBar* thumbBar()         const;
     DigikamItemView*  imageIconView()    const;
-    ImagePreviewView*  imagePreviewView() const;
+    ItemPreviewView*  imagePreviewView() const;
     TableView*         tableView()        const;
     TrashView*         trashView()        const;
 

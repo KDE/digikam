@@ -45,7 +45,7 @@
 #include "dbinfoiface.h"
 #include "itemalbummodel.h"
 #include "itemalbumfiltermodel.h"
-#include "imagepreviewview.h"
+#include "itempreviewview.h"
 #include "itemthumbnailbar.h"
 #include "loadingcacheinterface.h"
 #include "previewlayout.h"
@@ -101,7 +101,7 @@ public:
 
     DigikamItemView*  imageIconView;
     ItemThumbnailBar* thumbBar;
-    ImagePreviewView*  imagePreviewView;
+    ItemPreviewView*  imagePreviewView;
     ThumbBarDock*      thumbBarDock;
     WelcomePageView*   welcomePageView;
     TableView*         tableView;
@@ -121,7 +121,7 @@ StackedView::StackedView(QWidget* const parent)
       d(new Private)
 {
     d->imageIconView    = new DigikamItemView(this);
-    d->imagePreviewView = new ImagePreviewView(this);
+    d->imagePreviewView = new ItemPreviewView(this);
     d->thumbBarDock     = new ThumbBarDock();
     d->thumbBar         = new ItemThumbnailBar(d->thumbBarDock);
     d->thumbBar->setModelsFiltered(d->imageIconView->imageModel(),
@@ -275,7 +275,7 @@ DigikamItemView* StackedView::imageIconView() const
     return d->imageIconView;
 }
 
-ImagePreviewView* StackedView::imagePreviewView() const
+ItemPreviewView* StackedView::imagePreviewView() const
 {
     return d->imagePreviewView;
 }

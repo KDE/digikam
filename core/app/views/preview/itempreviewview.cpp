@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-21-12
- * Description : a embedded view to show the image preview widget.
+ * Description : a embedded view to show item preview widget.
  *
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "imagepreviewview.h"
+#include "itempreviewview.h"
 
 // Qt includes
 
@@ -46,7 +46,7 @@
 
 #include "digikam_debug.h"
 #include "digikam_config.h"
-#include "imagepreviewviewitem.h"
+#include "itempreviewcanvas.h"
 #include "applicationsettings.h"
 #include "contextmenuhelper.h"
 #include "ddragobjects.h"
@@ -69,7 +69,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ImagePreviewView::Private
+class Q_DECL_HIDDEN ItemPreviewView::Private
 {
 public:
 
@@ -85,7 +85,7 @@ public:
         nextAction          = 0;
         rotLeftAction       = 0;
         rotRightAction      = 0;
-        mode                = ImagePreviewView::IconViewPreview;
+        mode                = ItemPreviewView::IconViewPreview;
         faceGroup           = 0;
         peopleToggleAction  = 0;
         addPersonAction     = 0;
@@ -99,9 +99,9 @@ public:
     bool                   isValid;
     bool                   rotationLock;
 
-    ImagePreviewView::Mode mode;
+    ItemPreviewView::Mode mode;
 
-    ImagePreviewViewItem*  item;
+    ItemPreviewCanvas*  item;
 
     QAction*               prevAction;
     QAction*               nextAction;
@@ -120,12 +120,12 @@ public:
     Album*                 currAlbum;
 };
 
-ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode, Album* const currAlbum)
+ItemPreviewView::ItemPreviewView(QWidget* const parent, Mode mode, Album* const currAlbum)
     : GraphicsDImgView(parent),
       d(new Private())
 {
     d->mode      = mode;
-    d->item      = new ImagePreviewViewItem();
+    d->item      = new ItemPreviewCanvas();
     d->currAlbum = currAlbum;
     setItem(d->item);
 
@@ -226,18 +226,18 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode, Album* cons
     slotSetupChanged();
 }
 
-ImagePreviewView::~ImagePreviewView()
+ItemPreviewView::~ItemPreviewView()
 {
     delete d->item;
     delete d;
 }
 
-void ImagePreviewView::reload()
+void ItemPreviewView::reload()
 {
     previewItem()->reload();
 }
 
-void ImagePreviewView::imageLoaded()
+void ItemPreviewView::imageLoaded()
 {
     emit signalPreviewLoaded(true);
     d->rotLeftAction->setEnabled(true);
@@ -245,7 +245,7 @@ void ImagePreviewView::imageLoaded()
     d->faceGroup->setInfo(d->item->imageInfo());
 }
 
-void ImagePreviewView::imageLoadingFailed()
+void ItemPreviewView::imageLoadingFailed()
 {
     emit signalPreviewLoaded(false);
     d->rotLeftAction->setEnabled(false);
@@ -253,7 +253,7 @@ void ImagePreviewView::imageLoadingFailed()
     d->faceGroup->setInfo(ItemInfo());
 }
 
-void ImagePreviewView::setItemInfo(const ItemInfo& info, const ItemInfo& previous, const ItemInfo& next)
+void ItemPreviewView::setItemInfo(const ItemInfo& info, const ItemInfo& previous, const ItemInfo& next)
 {
     d->faceGroup->aboutToSetInfo(info);
     d->item->setItemInfo(info);
@@ -276,12 +276,12 @@ void ImagePreviewView::setItemInfo(const ItemInfo& info, const ItemInfo& previou
     d->item->setPreloadPaths(previewPaths);
 }
 
-ItemInfo ImagePreviewView::getItemInfo() const
+ItemInfo ItemPreviewView::getItemInfo() const
 {
     return d->item->imageInfo();
 }
 
-bool ImagePreviewView::acceptsMouseClick(QMouseEvent* e)
+bool ItemPreviewView::acceptsMouseClick(QMouseEvent* e)
 {
     if (!GraphicsDImgView::acceptsMouseClick(e))
     {
@@ -291,23 +291,23 @@ bool ImagePreviewView::acceptsMouseClick(QMouseEvent* e)
     return d->faceGroup->acceptsMouseClick(mapToScene(e->pos()));
 }
 
-void ImagePreviewView::enterEvent(QEvent* e)
+void ItemPreviewView::enterEvent(QEvent* e)
 {
     d->faceGroup->enterEvent(e);
 }
 
-void ImagePreviewView::leaveEvent(QEvent* e)
+void ItemPreviewView::leaveEvent(QEvent* e)
 {
     d->faceGroup->leaveEvent(e);
 }
 
-void ImagePreviewView::showEvent(QShowEvent* e)
+void ItemPreviewView::showEvent(QShowEvent* e)
 {
     GraphicsDImgView::showEvent(e);
     d->faceGroup->setVisible(d->peopleToggleAction->isChecked());
 }
 
-void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event)
+void ItemPreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event)
 {
     ItemInfo info = d->item->imageInfo();
 
@@ -415,39 +415,39 @@ void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event
     cmHelper.exec(event->screenPos());
 }
 
-void ImagePreviewView::slotAssignTag(int tagID)
+void ItemPreviewView::slotAssignTag(int tagID)
 {
     FileActionMngr::instance()->assignTag(d->item->imageInfo(), tagID);
 }
 
-void ImagePreviewView::slotRemoveTag(int tagID)
+void ItemPreviewView::slotRemoveTag(int tagID)
 {
     FileActionMngr::instance()->removeTag(d->item->imageInfo(), tagID);
 }
 
-void ImagePreviewView::slotAssignPickLabel(int pickId)
+void ItemPreviewView::slotAssignPickLabel(int pickId)
 {
     FileActionMngr::instance()->assignPickLabel(d->item->imageInfo(), pickId);
 }
 
-void ImagePreviewView::slotAssignColorLabel(int colorId)
+void ItemPreviewView::slotAssignColorLabel(int colorId)
 {
     FileActionMngr::instance()->assignColorLabel(d->item->imageInfo(), colorId);
 }
 
-void ImagePreviewView::slotAssignRating(int rating)
+void ItemPreviewView::slotAssignRating(int rating)
 {
     FileActionMngr::instance()->assignRating(d->item->imageInfo(), rating);
 }
 
-void ImagePreviewView::slotThemeChanged()
+void ItemPreviewView::slotThemeChanged()
 {
     QPalette plt(palette());
     plt.setColor(backgroundRole(), qApp->palette().color(QPalette::Base));
     setPalette(plt);
 }
 
-void ImagePreviewView::slotSetupChanged()
+void ItemPreviewView::slotSetupChanged()
 {
     previewItem()->setPreviewSettings(ApplicationSettings::instance()->getPreviewSettings());
 
@@ -457,7 +457,7 @@ void ImagePreviewView::slotSetupChanged()
     // pass auto-suggest?
 }
 
-void ImagePreviewView::slotRotateLeft()
+void ItemPreviewView::slotRotateLeft()
 {
     if (d->rotationLock)
         return;
@@ -465,7 +465,7 @@ void ImagePreviewView::slotRotateLeft()
     d->rotationLock = true;
 
     /**
-     * Setting lock won't allow mouse hover events in ImagePreviewViewItem class
+     * Setting lock won't allow mouse hover events in ItemPreviewCanvas class
      */
     d->item->setAcceptHoverEvents(false);
 
@@ -477,7 +477,7 @@ void ImagePreviewView::slotRotateLeft()
     FileActionMngr::instance()->transform(QList<ItemInfo>() << d->item->imageInfo(), MetaEngineRotation::Rotate270);
 }
 
-void ImagePreviewView::slotRotateRight()
+void ItemPreviewView::slotRotateRight()
 {
     if (d->rotationLock)
         return;
@@ -485,7 +485,7 @@ void ImagePreviewView::slotRotateRight()
     d->rotationLock = true;
 
     /**
-     * Setting lock won't allow mouse hover events in ImagePreviewViewItem class
+     * Setting lock won't allow mouse hover events in ItemPreviewCanvas class
      */
     d->item->setAcceptHoverEvents(false);
 
@@ -497,12 +497,12 @@ void ImagePreviewView::slotRotateRight()
     FileActionMngr::instance()->transform(QList<ItemInfo>() << d->item->imageInfo(), MetaEngineRotation::Rotate90);
 }
 
-void ImagePreviewView::slotDeleteItem()
+void ItemPreviewView::slotDeleteItem()
 {
     emit signalDeleteItem();
 }
 
-void Digikam::ImagePreviewView::slotUpdateFaces()
+void Digikam::ItemPreviewView::slotUpdateFaces()
 {
     //d->faceGroup->aboutToSetInfo(ItemInfo());
     d->faceGroup->aboutToSetInfoAfterRotate(ItemInfo());
@@ -514,7 +514,7 @@ void Digikam::ImagePreviewView::slotUpdateFaces()
     d->rotationLock = false;
 }
 
-void ImagePreviewView::dragMoveEvent(QDragMoveEvent* e)
+void ItemPreviewView::dragMoveEvent(QDragMoveEvent* e)
 {
     if (DTagListDrag::canDecode(e->mimeData()))
     {
@@ -525,7 +525,7 @@ void ImagePreviewView::dragMoveEvent(QDragMoveEvent* e)
     e->ignore();
 }
 
-void ImagePreviewView::dragEnterEvent(QDragEnterEvent* e)
+void ItemPreviewView::dragEnterEvent(QDragEnterEvent* e)
 {
     if (DTagListDrag::canDecode(e->mimeData()))
     {
@@ -536,7 +536,7 @@ void ImagePreviewView::dragEnterEvent(QDragEnterEvent* e)
     e->ignore();
 }
 
-void ImagePreviewView::dropEvent(QDropEvent* e)
+void ItemPreviewView::dropEvent(QDropEvent* e)
 {
     if (DTagListDrag::canDecode(e->mimeData()))
     {
@@ -564,7 +564,7 @@ void ImagePreviewView::dropEvent(QDropEvent* e)
     return;
 }
 
-void ImagePreviewView::mousePressEvent(QMouseEvent* e)
+void ItemPreviewView::mousePressEvent(QMouseEvent* e)
 {
     if (e->button() == Qt::LeftButton && QApplication::keyboardModifiers() == Qt::ControlModifier)
     {
