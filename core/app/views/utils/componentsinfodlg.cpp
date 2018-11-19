@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "componentsinfo.h"
+#include "componentsinfodlg.h"
 
 // Qt includes
 

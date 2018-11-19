@@ -62,7 +62,7 @@
 #include "assignedlist.h"
 #include "toolsettingsview.h"
 #include "toolsview.h"
-#include "componentsinfo.h"
+#include "componentsinfodlg.h"
 #include "digikamapp.h"
 #include "thememanager.h"
 #include "dimg.h"

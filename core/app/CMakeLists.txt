@@ -349,7 +349,6 @@ set(libdigikamgui_SRCS
     items/utils/itemcategorydrawer.cpp
 
     utils/digikam_debug.cpp
-    utils/componentsinfo.cpp
 
     views/tableview/tableview.cpp
     views/tableview/tableview_treeview.cpp
@@ -377,6 +376,7 @@ set(libdigikamgui_SRCS
     views/sidebar/sidebarwidget.cpp
     views/utils/dmodelfactory.cpp
     views/utils/slideshowbuilder.cpp
+    views/utils/componentsinfodlg.cpp
 
     ${digikamadaptor_SRCS}
 )

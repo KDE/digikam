@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_COMPONENTS_INFO_H
-#define DIGIKAM_COMPONENTS_INFO_H
+#ifndef DIGIKAM_COMPONENTS_INFO_DLG_H
+#define DIGIKAM_COMPONENTS_INFO_DLG_H
 
 // Local includes
 
@@ -37,4 +37,4 @@ DIGIKAM_EXPORT void showDigikamDatabaseStat();
 
 } // namespace Digikam
 
-#endif // DIGIKAM_COMPONENTS_INFO_H
+#endif // DIGIKAM_COMPONENTS_INFO_DLG_H

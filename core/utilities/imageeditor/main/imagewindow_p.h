@@ -73,7 +73,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "collectionscanner.h"
-#include "componentsinfo.h"
+#include "componentsinfodlg.h"
 #include "coredbaccess.h"
 #include "coredbwatch.h"
 #include "coredbchangesets.h"

@@ -91,7 +91,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "collectionscanner.h"
-#include "componentsinfo.h"
+#include "componentsinfodlg.h"
 #include "dlogoaction.h"
 #include "coredbdownloadhistory.h"
 #include "dzoombar.h"
