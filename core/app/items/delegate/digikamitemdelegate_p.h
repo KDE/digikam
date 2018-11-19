@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : Qt item view for images - the delegate
+ * Description : Qt model-view for items - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_DELEGATE_PRIVATE_H
-#define DIGIKAM_IMAGE_DELEGATE_PRIVATE_H
+#ifndef DIGIKAM_DIGIKAMITEM_DELEGATE_P_H
+#define DIGIKAM_DIGIKAMITEM_DELEGATE_P_H
 
 // Qt includes
 
@@ -33,27 +33,27 @@
 
 // Local includes
 
-#include "imagedelegatepriv.h"
+#include "itemdelegate_p.h"
 
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN DigikamImageDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
+class Q_DECL_HIDDEN DigikamItemDelegatePrivate : public ItemDelegate::ItemDelegatePrivate
 {
 public:
 
-    explicit DigikamImageDelegatePrivate()
+    explicit DigikamItemDelegatePrivate()
     {
     }
 
-    virtual ~DigikamImageDelegatePrivate();
+    virtual ~DigikamItemDelegatePrivate();
 
-    void init(DigikamImageDelegate* const q, ItemCategorizedView* const parent);
+    void init(DigikamItemDelegate* const q, ItemCategorizedView* const parent);
 };
 
 // -----------------------------------------------------------------------------------------
 
-class Q_DECL_HIDDEN ItemFaceDelegatePrivate : public DigikamImageDelegatePrivate
+class Q_DECL_HIDDEN ItemFaceDelegatePrivate : public DigikamItemDelegatePrivate
 {
 public:
 
@@ -64,4 +64,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_DELEGATE_PRIVATE_H
+#endif // DIGIKAM_DIGIKAMITEM_DELEGATE_P_H

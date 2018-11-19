@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : Qt item view for images - the delegate
+ * Description : Qt model-view for items - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#include "imagedelegate.h"
-#include "imagedelegatepriv.h"
+#include "itemdelegate.h"
+#include "itemdelegate_p.h"
 
 // C++ includes
 
@@ -54,9 +54,9 @@
 namespace Digikam
 {
 
-void ImageDelegate::ImageDelegatePrivate::clearRects()
+void ItemDelegate::ItemDelegatePrivate::clearRects()
 {
-    ItemViewImageDelegatePrivate::clearRects();
+    ItemViewItemDelegatePrivate::clearRects();
     dateRect             = QRect(0, 0, 0, 0);
     modDateRect          = QRect(0, 0, 0, 0);
     pixmapRect           = QRect(0, 0, 0, 0);
@@ -73,27 +73,27 @@ void ImageDelegate::ImageDelegatePrivate::clearRects()
     groupRect            = QRect(0, 0, 0, 0);
 }
 
-ImageDelegate::ImageDelegate(QObject* const parent)
-    : ItemViewImageDelegate(*new ImageDelegatePrivate, parent)
+ItemDelegate::ItemDelegate(QObject* const parent)
+    : ItemViewItemDelegate(*new ItemDelegatePrivate, parent)
 {
 }
 
-ImageDelegate::ImageDelegate(ImageDelegate::ImageDelegatePrivate& dd, QObject* parent)
-    : ItemViewImageDelegate(dd, parent)
+ItemDelegate::ItemDelegate(ItemDelegate::ItemDelegatePrivate& dd, QObject* parent)
+    : ItemViewItemDelegate(dd, parent)
 {
 }
 
-ImageDelegate::~ImageDelegate()
+ItemDelegate::~ItemDelegate()
 {
-    Q_D(ImageDelegate);
+    Q_D(ItemDelegate);
     // crashes for a lot of people, see bug 230515. Cause unknown.
     //delete d->categoryDrawer;
     Q_UNUSED(d); // To please compiler about warnings.
 }
 
-void ImageDelegate::setView(ItemCategorizedView* view)
+void ItemDelegate::setView(ItemCategorizedView* view)
 {
-    Q_D(ImageDelegate);
+    Q_D(ItemDelegate);
     setViewOnAllOverlays(view);
 
     if (d->currentView)
@@ -113,9 +113,9 @@ void ImageDelegate::setView(ItemCategorizedView* view)
     }
 }
 
-void ImageDelegate::setModel(QAbstractItemModel* model)
+void ItemDelegate::setModel(QAbstractItemModel* model)
 {
-    Q_D(ImageDelegate);
+    Q_D(ItemDelegate);
 
     // 1) We only need the model to invalidate model-index based caches on change
     // 2) We do not need to care for overlays. The view calls setActive() on them on model change
@@ -151,66 +151,66 @@ void ImageDelegate::setModel(QAbstractItemModel* model)
     }
 }
 
-void ImageDelegate::setSpacing(int spacing)
+void ItemDelegate::setSpacing(int spacing)
 {
-    Q_D(ImageDelegate);
+    Q_D(ItemDelegate);
 
     if (d->categoryDrawer)
     {
         d->categoryDrawer->setLowerSpacing(spacing);
     }
 
-    ItemViewImageDelegate::setSpacing(spacing);
+    ItemViewItemDelegate::setSpacing(spacing);
 }
 
-ItemCategoryDrawer* ImageDelegate::categoryDrawer() const
+ItemCategoryDrawer* ItemDelegate::categoryDrawer() const
 {
-    Q_D(const ImageDelegate);
+    Q_D(const ItemDelegate);
     return d->categoryDrawer;
 }
 
-QRect ImageDelegate::commentsRect() const
+QRect ItemDelegate::commentsRect() const
 {
-    Q_D(const ImageDelegate);
+    Q_D(const ItemDelegate);
     return d->commentsRect;
 }
 
-QRect ImageDelegate::tagsRect() const
+QRect ItemDelegate::tagsRect() const
 {
-    Q_D(const ImageDelegate);
+    Q_D(const ItemDelegate);
     return d->tagRect;
 }
 
-QRect ImageDelegate::pixmapRect() const
+QRect ItemDelegate::pixmapRect() const
 {
-    Q_D(const ImageDelegate);
+    Q_D(const ItemDelegate);
     return d->pixmapRect;
 }
 
-QRect ImageDelegate::imageInformationRect() const
+QRect ItemDelegate::imageInformationRect() const
 {
-    Q_D(const ImageDelegate);
+    Q_D(const ItemDelegate);
     return d->imageInformationRect;
 }
 
-QRect ImageDelegate::groupIndicatorRect() const
+QRect ItemDelegate::groupIndicatorRect() const
 {
-    Q_D(const ImageDelegate);
+    Q_D(const ItemDelegate);
     return d->groupRect;
 }
 
-QRect ImageDelegate::coordinatesIndicatorRect() const
+QRect ItemDelegate::coordinatesIndicatorRect() const
 {
-    Q_D(const ImageDelegate);
+    Q_D(const ItemDelegate);
     return d->coordinatesRect;
 }
 
-void ImageDelegate::prepareThumbnails(ItemThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
+void ItemDelegate::prepareThumbnails(ItemThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
 {
     thumbModel->prepareThumbnails(indexes, thumbnailSize());
 }
 
-QPixmap ImageDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize)
+QPixmap ItemDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize)
 {
     // work around constness
     QAbstractItemModel* const model = const_cast<QAbstractItemModel*>(index.model());
@@ -224,15 +224,15 @@ QPixmap ImageDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thu
     return thumbData.value<QPixmap>();
 }
 
-QPixmap ImageDelegate::thumbnailPixmap(const QModelIndex& index) const
+QPixmap ItemDelegate::thumbnailPixmap(const QModelIndex& index) const
 {
-    Q_D(const ImageDelegate);
+    Q_D(const ItemDelegate);
     return retrieveThumbnailPixmap(index, d->thumbSize.size());
 }
 
-void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void ItemDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    Q_D(const ImageDelegate);
+    Q_D(const ItemDelegate);
     ItemInfo info = ItemModel::retrieveItemInfo(index);
 
     if (info.isNull())
@@ -269,7 +269,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
 
     if (!actualPixmapRect.isNull())
     {
-        const_cast<ImageDelegate*>(this)->updateActualPixmapRect(index, actualPixmapRect);
+        const_cast<ItemDelegate*>(this)->updateActualPixmapRect(index, actualPixmapRect);
     }
 
     if (!d->ratingRect.isNull())
@@ -390,7 +390,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     drawOverlays(p, option, index);
 }
 
-QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const
+QPixmap ItemDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const
 {
     QPixmap icon;
 
@@ -402,19 +402,19 @@ QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const Q
     return makeDragPixmap(option, indexes, icon);
 }
 
-bool ImageDelegate::acceptsToolTip(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
+bool ItemDelegate::acceptsToolTip(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
                                    QRect* toolTipRect) const
 {
     return onActualPixmapRect(pos, visualRect, index, toolTipRect);
 }
 
-bool ImageDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
+bool ItemDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
                                       QRect* activationRect) const
 {
     return onActualPixmapRect(pos, visualRect, index, activationRect);
 }
 
-bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
+bool ItemDelegate::onActualPixmapRect(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
                                        QRect* returnRect) const
 {
     QRect actualRect = actualPixmapRect(index);
@@ -434,39 +434,39 @@ bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QRect& visualRec
     return actualRect.contains(pos);
 }
 
-void ImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
+void ItemDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
-    Q_D(ImageDelegate);
+    Q_D(ItemDelegate);
 
     if (d->categoryDrawer)
     {
         d->categoryDrawer->setDefaultViewOptions(option);
     }
 
-    ItemViewImageDelegate::setDefaultViewOptions(option);
+    ItemViewItemDelegate::setDefaultViewOptions(option);
 }
 
-void ImageDelegate::invalidatePaintingCache()
+void ItemDelegate::invalidatePaintingCache()
 {
-    Q_D(ImageDelegate);
+    Q_D(ItemDelegate);
 
     if (d->categoryDrawer)
     {
         d->categoryDrawer->invalidatePaintingCache();
     }
 
-    ItemViewImageDelegate::invalidatePaintingCache();
+    ItemViewItemDelegate::invalidatePaintingCache();
 }
 
-void ImageDelegate::updateContentWidth()
+void ItemDelegate::updateContentWidth()
 {
-    Q_D(ImageDelegate);
+    Q_D(ItemDelegate);
     d->contentWidth = d->thumbSize.size() + 2*d->radius;
 }
 
-void ImageDelegate::updateSizeRectsAndPixmaps()
+void ItemDelegate::updateSizeRectsAndPixmaps()
 {
-    Q_D(ImageDelegate);
+    Q_D(ItemDelegate);
 
     // ---- Reset rects and prepare fonts ----
 
@@ -498,34 +498,34 @@ void ImageDelegate::updateSizeRectsAndPixmaps()
     clearCaches();
 }
 
-void ImageDelegate::clearCaches()
+void ItemDelegate::clearCaches()
 {
-    Q_D(ImageDelegate);
-    ItemViewImageDelegate::clearCaches();
+    Q_D(ItemDelegate);
+    ItemViewItemDelegate::clearCaches();
     d->actualPixmapRectCache.clear();
 }
 
-void ImageDelegate::clearModelDataCaches()
+void ItemDelegate::clearModelDataCaches()
 {
-    Q_D(ImageDelegate);
+    Q_D(ItemDelegate);
     d->actualPixmapRectCache.clear();
 }
 
-void ImageDelegate::modelChanged()
+void ItemDelegate::modelChanged()
 {
-    Q_D(ImageDelegate);
+    Q_D(ItemDelegate);
     clearModelDataCaches();
     setModel(d->currentView ? d->currentView->model() : 0);
 }
 
-void ImageDelegate::modelContentsChanged()
+void ItemDelegate::modelContentsChanged()
 {
     clearModelDataCaches();
 }
 
-QRect ImageDelegate::actualPixmapRect(const QModelIndex& index) const
+QRect ItemDelegate::actualPixmapRect(const QModelIndex& index) const
 {
-    Q_D(const ImageDelegate);
+    Q_D(const ItemDelegate);
     // We do not recompute if not found. Assumption is cache is always properly updated.
     QRect* rect = d->actualPixmapRectCache.object(index.row());
 
@@ -539,9 +539,9 @@ QRect ImageDelegate::actualPixmapRect(const QModelIndex& index) const
     }
 }
 
-void ImageDelegate::updateActualPixmapRect(const QModelIndex& index, const QRect& rect)
+void ItemDelegate::updateActualPixmapRect(const QModelIndex& index, const QRect& rect)
 {
-    Q_D(ImageDelegate);
+    Q_D(ItemDelegate);
     QRect* const old = d->actualPixmapRectCache.object(index.row());
 
     if (!old || *old != rect)
@@ -550,9 +550,9 @@ void ImageDelegate::updateActualPixmapRect(const QModelIndex& index, const QRect
     }
 }
 
-int ImageDelegate::calculatethumbSizeToFit(int ws)
+int ItemDelegate::calculatethumbSizeToFit(int ws)
 {
-    Q_D(ImageDelegate);
+    Q_D(ItemDelegate);
 
     int ts     = thumbnailSize().size();
     int gs     = gridSize().width();

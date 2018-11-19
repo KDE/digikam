@@ -41,7 +41,7 @@ class ItemAlbumFilterModel;
 class ItemModel;
 class ItemFilterModel;
 class ImageSortFilterModel;
-class ImageDelegate;
+class ItemDelegate;
 class ItemDelegateOverlay;
 class ItemThumbnailModel;
 
@@ -71,7 +71,7 @@ public:
     ItemAlbumModel*       imageAlbumModel()       const;
     ItemAlbumFilterModel* imageAlbumFilterModel() const;
 
-    ImageDelegate*         delegate()              const;
+    ItemDelegate*         delegate()              const;
 
     Album*                 currentAlbum()          const;
     ItemInfo              currentInfo()           const;
@@ -118,11 +118,11 @@ public:
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     /// Unless you pass a different delegate, the current delegate will be used.
-    void addOverlay(ItemDelegateOverlay* overlay, ImageDelegate* delegate = 0);
+    void addOverlay(ItemDelegateOverlay* overlay, ItemDelegate* delegate = 0);
 
     void removeOverlay(ItemDelegateOverlay* overlay);
 
-    void addSelectionOverlay(ImageDelegate* delegate = 0);
+    void addSelectionOverlay(ItemDelegate* delegate = 0);
 
 public Q_SLOTS:
 
@@ -192,7 +192,7 @@ protected:
     AbstractItemDragDropHandler* dragDropHandler() const;
     QModelIndex                  nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const;
 
-    void setItemDelegate(ImageDelegate* delegate);
+    void setItemDelegate(ItemDelegate* delegate);
     void indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers);
     void currentChanged(const QModelIndex& index, const QModelIndex& previous);
     void paintEvent(QPaintEvent* e);

@@ -46,7 +46,7 @@ class TaggingAction;
 class AssignNameOverlay : public PersistentWidgetDelegateOverlay
 {
     Q_OBJECT
-    REQUIRE_DELEGATE(ItemViewImageDelegate)
+    REQUIRE_DELEGATE(ItemViewItemDelegate)
 
 public:
 

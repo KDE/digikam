@@ -29,7 +29,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imagedelegate.h"
+#include "itemdelegate.h"
 #include "itemmodel.h"
 #include "addtagslineedit.h"
 #include "tagscache.h"

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : Qt item view for images - the delegate
+ * Description : Qt model-view for items - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ITEMS_IMAGE_DELEGATE_PRIV_H
-#define DIGIKAM_ITEMS_IMAGE_DELEGATE_PRIV_H
+#ifndef DIGIKAM_ITEM_DELEGATE_P_H
+#define DIGIKAM_ITEM_DELEGATE_P_H
 
 // Qt includes
 
@@ -41,11 +41,11 @@ namespace Digikam
 
 class ItemCategoryDrawer;
 
-class Q_DECL_HIDDEN ImageDelegate::ImageDelegatePrivate : public ItemViewImageDelegatePrivate
+class Q_DECL_HIDDEN ItemDelegate::ItemDelegatePrivate : public ItemViewItemDelegatePrivate
 {
 public:
 
-    ImageDelegatePrivate()
+    ItemDelegatePrivate()
     {
         contentWidth        = 0;
         drawFocusFrame      = true;
@@ -99,5 +99,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ITEMS_IMAGE_DELEGATE_PRIV_H
-
+#endif // DIGIKAM_ITEM_DELEGATE_P_H

@@ -32,7 +32,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imagedelegate.h"
+#include "itemdelegate.h"
 #include "itemmodel.h"
 #include "itemcategorizedview.h"
 #include "itemfiltermodel.h"
@@ -106,7 +106,7 @@ void GroupIndicatorOverlay::updatePosition()
         return;
     }
 
-    QRect rect       = static_cast<ImageDelegate*>(delegate())->groupIndicatorRect();
+    QRect rect       = static_cast<ItemDelegate*>(delegate())->groupIndicatorRect();
     QRect visualRect = m_view->visualRect(m_index);
     rect.translate(visualRect.topLeft());
 
@@ -117,7 +117,7 @@ void GroupIndicatorOverlay::updatePosition()
 bool GroupIndicatorOverlay::checkIndex(const QModelIndex& index) const
 {
     ItemInfo info = ItemModel::retrieveItemInfo(index);
-    QRect rect     = static_cast<ImageDelegate*>(delegate())->groupIndicatorRect();
+    QRect rect     = static_cast<ItemDelegate*>(delegate())->groupIndicatorRect();
 
     if (!rect.isNull() && info.hasGroupedImages())
     {

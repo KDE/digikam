@@ -42,18 +42,18 @@
 namespace Digikam
 {
 
-class ItemViewImageDelegate;
+class ItemViewItemDelegate;
 
-class DIGIKAM_EXPORT ItemViewImageDelegatePrivate
+class DIGIKAM_EXPORT ItemViewItemDelegatePrivate
 {
 public:
 
-    explicit ItemViewImageDelegatePrivate();
-    virtual ~ItemViewImageDelegatePrivate()
+    explicit ItemViewItemDelegatePrivate();
+    virtual ~ItemViewItemDelegatePrivate()
     {
     }
 
-    void init(ItemViewImageDelegate* const _q);
+    void init(ItemViewItemDelegate* const _q);
 
     void makeStarPolygon();
 
@@ -84,7 +84,7 @@ public:
 
     QPersistentModelIndex     editingRating;
 
-    ItemViewImageDelegate*    q;
+    ItemViewItemDelegate*    q;
 
     QRect                     oneRowRegRect;
     QRect                     oneRowComRect;

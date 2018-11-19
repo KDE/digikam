@@ -40,7 +40,7 @@
 #include "albummanager.h"
 #include "itemalbummodel.h"
 #include "itemcategorizedview.h"
-#include "imagedelegate.h"
+#include "itemdelegate.h"
 #include "itemfiltermodel.h"
 #include "itemmodel.h"
 #include "itemscanner.h"

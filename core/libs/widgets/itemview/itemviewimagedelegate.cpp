@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-ItemViewImageDelegatePrivate::ItemViewImageDelegatePrivate()
+ItemViewItemDelegatePrivate::ItemViewItemDelegatePrivate()
 {
     q         = 0;
     spacing   = 0;
@@ -69,7 +69,7 @@ ItemViewImageDelegatePrivate::ItemViewImageDelegatePrivate()
     ratingPixmaps = QVector<QPixmap>(10);
 }
 
-void ItemViewImageDelegatePrivate::init(ItemViewImageDelegate* const _q)
+void ItemViewItemDelegatePrivate::init(ItemViewItemDelegate* const _q)
 {
     q = _q;
 
@@ -77,52 +77,52 @@ void ItemViewImageDelegatePrivate::init(ItemViewImageDelegate* const _q)
                q, SLOT(slotThemeChanged()));
 }
 
-void ItemViewImageDelegatePrivate::clearRects()
+void ItemViewItemDelegatePrivate::clearRects()
 {
     gridSize   = QSize(0, 0);
     rect       = QRect(0, 0, 0, 0);
     ratingRect = QRect(0, 0, 0, 0);
 }
 
-void ItemViewImageDelegatePrivate::makeStarPolygon()
+void ItemViewItemDelegatePrivate::makeStarPolygon()
 {
     // Pre-computed star polygon for a 15x15 pixmap.
     starPolygon     = RatingWidget::starPolygon();
     starPolygonSize = QSize(15, 15);
 }
 
-ItemViewImageDelegate::ItemViewImageDelegate(QObject* const parent)
+ItemViewItemDelegate::ItemViewItemDelegate(QObject* const parent)
     : DItemDelegate(parent),
-      d_ptr(new ItemViewImageDelegatePrivate)
+      d_ptr(new ItemViewItemDelegatePrivate)
 {
     d_ptr->init(this);
 }
 
-ItemViewImageDelegate::ItemViewImageDelegate(ItemViewImageDelegatePrivate& dd, QObject* const parent)
+ItemViewItemDelegate::ItemViewItemDelegate(ItemViewItemDelegatePrivate& dd, QObject* const parent)
     : DItemDelegate(parent),
       d_ptr(&dd)
 {
     d_ptr->init(this);
 }
 
-ItemViewImageDelegate::~ItemViewImageDelegate()
+ItemViewItemDelegate::~ItemViewItemDelegate()
 {
-    Q_D(ItemViewImageDelegate);
+    Q_D(ItemViewItemDelegate);
 
     removeAllOverlays();
     delete d;
 }
 
-ThumbnailSize ItemViewImageDelegate::thumbnailSize() const
+ThumbnailSize ItemViewItemDelegate::thumbnailSize() const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     return d->thumbSize;
 }
 
-void ItemViewImageDelegate::setThumbnailSize(const ThumbnailSize& thumbSize)
+void ItemViewItemDelegate::setThumbnailSize(const ThumbnailSize& thumbSize)
 {
-    Q_D(ItemViewImageDelegate);
+    Q_D(ItemViewItemDelegate);
 
     if (d->thumbSize != thumbSize)
     {
@@ -131,9 +131,9 @@ void ItemViewImageDelegate::setThumbnailSize(const ThumbnailSize& thumbSize)
     }
 }
 
-void ItemViewImageDelegate::setSpacing(int spacing)
+void ItemViewItemDelegate::setSpacing(int spacing)
 {
-    Q_D(ItemViewImageDelegate);
+    Q_D(ItemViewItemDelegate);
 
     if (d->spacing == spacing)
     {
@@ -144,59 +144,59 @@ void ItemViewImageDelegate::setSpacing(int spacing)
     invalidatePaintingCache();
 }
 
-int ItemViewImageDelegate::spacing() const
+int ItemViewItemDelegate::spacing() const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     return d->spacing;
 }
 
-QRect ItemViewImageDelegate::rect() const
+QRect ItemViewItemDelegate::rect() const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     return d->rect;
 }
 
-QRect ItemViewImageDelegate::pixmapRect() const
+QRect ItemViewItemDelegate::pixmapRect() const
 {
     return QRect();
 }
 
-QRect ItemViewImageDelegate::imageInformationRect() const
+QRect ItemViewItemDelegate::imageInformationRect() const
 {
     return QRect();
 }
 
-QRect ItemViewImageDelegate::ratingRect() const
+QRect ItemViewItemDelegate::ratingRect() const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     return d->ratingRect;
 }
 
-void ItemViewImageDelegate::setRatingEdited(const QModelIndex& index)
+void ItemViewItemDelegate::setRatingEdited(const QModelIndex& index)
 {
-    Q_D(ItemViewImageDelegate);
+    Q_D(ItemViewItemDelegate);
 
     d->editingRating = index;
 }
 
-QSize ItemViewImageDelegate::sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
+QSize ItemViewItemDelegate::sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     return d->rect.size();
 }
 
-QSize ItemViewImageDelegate::gridSize() const
+QSize ItemViewItemDelegate::gridSize() const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     return d->gridSize;
 }
 
-bool ItemViewImageDelegate::acceptsToolTip(const QPoint&, const QRect& visualRect, const QModelIndex&, QRect* retRect) const
+bool ItemViewItemDelegate::acceptsToolTip(const QPoint&, const QRect& visualRect, const QModelIndex&, QRect* retRect) const
 {
     if (retRect)
     {
@@ -206,7 +206,7 @@ bool ItemViewImageDelegate::acceptsToolTip(const QPoint&, const QRect& visualRec
     return true;
 }
 
-bool ItemViewImageDelegate::acceptsActivation(const QPoint& , const QRect& visualRect, const QModelIndex&, QRect* retRect) const
+bool ItemViewItemDelegate::acceptsActivation(const QPoint& , const QRect& visualRect, const QModelIndex&, QRect* retRect) const
 {
     if (retRect)
     {
@@ -216,43 +216,43 @@ bool ItemViewImageDelegate::acceptsActivation(const QPoint& , const QRect& visua
     return true;
 }
 
-QAbstractItemDelegate* ItemViewImageDelegate::asDelegate()
+QAbstractItemDelegate* ItemViewItemDelegate::asDelegate()
 {
     return this;
 }
 
-void ItemViewImageDelegate::overlayDestroyed(QObject* o)
+void ItemViewItemDelegate::overlayDestroyed(QObject* o)
 {
     ItemDelegateOverlayContainer::overlayDestroyed(o);
 }
 
-void ItemViewImageDelegate::mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index)
+void ItemViewItemDelegate::mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index)
 {
-    // 3-way indirection DItemDelegate -> ItemViewImageDelegate -> ItemDelegateOverlayContainer
+    // 3-way indirection DItemDelegate -> ItemViewItemDelegate -> ItemDelegateOverlayContainer
     ItemDelegateOverlayContainer::mouseMoved(e, visualRect, index);
 }
 
-void ItemViewImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
+void ItemViewItemDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
-    Q_D(ItemViewImageDelegate);
+    Q_D(ItemViewItemDelegate);
 
     d->font = option.font;
     invalidatePaintingCache();
 }
 
-void ItemViewImageDelegate::slotThemeChanged()
+void ItemViewItemDelegate::slotThemeChanged()
 {
     invalidatePaintingCache();
 }
 
-void ItemViewImageDelegate::slotSetupChanged()
+void ItemViewItemDelegate::slotSetupChanged()
 {
     invalidatePaintingCache();
 }
 
-void ItemViewImageDelegate::invalidatePaintingCache()
+void ItemViewItemDelegate::invalidatePaintingCache()
 {
-    Q_D(ItemViewImageDelegate);
+    Q_D(ItemViewItemDelegate);
 
     QSize oldGridSize = d->gridSize;
     updateSizeRectsAndPixmaps();
@@ -266,10 +266,10 @@ void ItemViewImageDelegate::invalidatePaintingCache()
     emit visualChange();
 }
 
-QRect ItemViewImageDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background,
+QRect ItemViewItemDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background,
                                            const QPixmap& thumbnail, bool isGrouped) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     p->drawPixmap(0, 0, background);
 
@@ -328,10 +328,10 @@ QRect ItemViewImageDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, 
     return actualPixmapRect;
 }
 
-void ItemViewImageDelegate::drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect,
+void ItemViewItemDelegate::drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect,
                                        int rating, bool isSelected) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     if (d->editingRating != index)
     {
@@ -339,9 +339,9 @@ void ItemViewImageDelegate::drawRating(QPainter* p, const QModelIndex& index, co
     }
 }
 
-void ItemViewImageDelegate::drawSpecialInfo(QPainter* p,const QRect& r, const QString& text) const
+void ItemViewItemDelegate::drawSpecialInfo(QPainter* p,const QRect& r, const QString& text) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     if (!text.isEmpty() && !r.isNull())
     {
@@ -372,9 +372,9 @@ void ItemViewImageDelegate::drawSpecialInfo(QPainter* p,const QRect& r, const QS
     }
 }
 
-void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QString& name) const
+void ItemViewItemDelegate::drawName(QPainter* p,const QRect& nameRect, const QString& name) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     p->setFont(d->fontReg);
     // NOTE: in case of file name are long, use squeezedTextCached to adjust string elide mode.
@@ -382,25 +382,25 @@ void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QS
     p->drawText(nameRect, Qt::AlignCenter, squeezedTextCached(p, nameRect.width(), name));
 }
 
-void ItemViewImageDelegate::drawTitle(QPainter* p, const QRect& titleRect, const QString& title) const
+void ItemViewItemDelegate::drawTitle(QPainter* p, const QRect& titleRect, const QString& title) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     p->setFont(d->fontReg);
     p->drawText(titleRect, Qt::AlignCenter, squeezedTextCached(p, titleRect.width(), title));
 }
 
-void ItemViewImageDelegate::drawComments(QPainter* p, const QRect& commentsRect, const QString& comments) const
+void ItemViewItemDelegate::drawComments(QPainter* p, const QRect& commentsRect, const QString& comments) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     p->setFont(d->fontCom);
     p->drawText(commentsRect, Qt::AlignCenter, squeezedTextCached(p, commentsRect.width(), comments));
 }
 
-void ItemViewImageDelegate::drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
+void ItemViewItemDelegate::drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
@@ -408,9 +408,9 @@ void ItemViewImageDelegate::drawCreationDate(QPainter* p, const QRect& dateRect,
     p->drawText(dateRect, Qt::AlignCenter, str); //squeezedTextCached(p, dateRect.width(), str));
 }
 
-void ItemViewImageDelegate::drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
+void ItemViewItemDelegate::drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
@@ -418,9 +418,9 @@ void ItemViewImageDelegate::drawModificationDate(QPainter* p, const QRect& dateR
     p->drawText(dateRect, Qt::AlignCenter, str); //squeezedTextCached(p, dateRect.width(), str));
 }
 
-void ItemViewImageDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const
+void ItemViewItemDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     if (dims.isValid())
     {
@@ -440,9 +440,9 @@ void ItemViewImageDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, co
     }
 }
 
-void ItemViewImageDelegate::drawAspectRatio(QPainter* p, const QRect& dimsRect, const QSize& dims) const
+void ItemViewItemDelegate::drawAspectRatio(QPainter* p, const QRect& dimsRect, const QSize& dims) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     p->setFont(d->fontXtra);
     QString resolution;
@@ -459,18 +459,18 @@ void ItemViewImageDelegate::drawAspectRatio(QPainter* p, const QRect& dimsRect, 
     p->drawText(dimsRect, Qt::AlignCenter, resolution); //squeezedTextCached(p, dimsRect.width(), resolution));
 }
 
-void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const
+void ItemViewItemDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     p->setFont(d->fontXtra);
     p->drawText(r, Qt::AlignCenter, ItemPropertiesTab::humanReadableBytesCount(bytes));
 }
 
-void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,
+void ItemViewItemDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,
                                      bool isSelected) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     p->setFont(d->fontCom);
     p->setPen(isSelected ? qApp->palette().color(QPalette::HighlightedText)
@@ -479,10 +479,10 @@ void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString&
     p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), tagsString));
 }
 
-void ItemViewImageDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewItem& option,
+void ItemViewItemDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewItem& option,
                                           bool isSelected) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     if (option.state & QStyle::State_HasFocus) //?? is current item
     {
@@ -493,9 +493,9 @@ void ItemViewImageDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewIte
     }
 }
 
-void ItemViewImageDelegate::drawImageFormat(QPainter* p, const QRect& r, const QString& f, bool drawTop) const
+void ItemViewItemDelegate::drawImageFormat(QPainter* p, const QRect& r, const QString& f, bool drawTop) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     if (!f.isEmpty() && !r.isNull())
     {
@@ -528,7 +528,7 @@ void ItemViewImageDelegate::drawImageFormat(QPainter* p, const QRect& r, const Q
     }
 }
 
-void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int pickId) const
+void ItemViewItemDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int pickId) const
 {
     // Draw Pick Label icon
     if (pickId != NoPickLabel)
@@ -552,9 +552,9 @@ void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int p
     }
 }
 
-void ItemViewImageDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right) const
+void ItemViewItemDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     const int iconSize = qBound(16, d->rect.width() / 8 - 2, 48);
 
@@ -573,7 +573,7 @@ void ItemViewImageDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right
     }
 }
 
-void ItemViewImageDelegate::drawGeolocationIndicator(QPainter* p, const QRect& r) const
+void ItemViewItemDelegate::drawGeolocationIndicator(QPainter* p, const QRect& r) const
 {
     if (!r.isNull())
     {
@@ -585,7 +585,7 @@ void ItemViewImageDelegate::drawGeolocationIndicator(QPainter* p, const QRect& r
     }
 }
 
-void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
+void ItemViewItemDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
                                                int numberOfGroupedImages, bool open) const
 {
     if (numberOfGroupedImages)
@@ -611,10 +611,10 @@ void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
     }
 }
 
-void ItemViewImageDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option,
+void ItemViewItemDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option,
                                                bool isSelected, int colorId) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
     Q_UNUSED(option);
     Q_UNUSED(isSelected);
 
@@ -626,9 +626,9 @@ void ItemViewImageDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionVi
     }
 }
 
-void ItemViewImageDelegate::drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const
+void ItemViewItemDelegate::drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     if (option.state & QStyle::State_MouseOver)
     {
@@ -637,9 +637,9 @@ void ItemViewImageDelegate::drawMouseOverRect(QPainter* p, const QStyleOptionVie
     }
 }
 
-void ItemViewImageDelegate::prepareFonts()
+void ItemViewItemDelegate::prepareFonts()
 {
-    Q_D(ItemViewImageDelegate);
+    Q_D(ItemViewItemDelegate);
 
     d->fontReg  = d->font;
     d->fontCom  = d->font;
@@ -661,9 +661,9 @@ void ItemViewImageDelegate::prepareFonts()
     }
 }
 
-void ItemViewImageDelegate::prepareMetrics(int maxWidth)
+void ItemViewItemDelegate::prepareMetrics(int maxWidth)
 {
-    Q_D(ItemViewImageDelegate);
+    Q_D(ItemViewItemDelegate);
 
     QFontMetrics fm(d->fontReg);
     d->oneRowRegRect = fm.boundingRect(0, 0, maxWidth, 0xFFFFFFFF,
@@ -679,9 +679,9 @@ void ItemViewImageDelegate::prepareMetrics(int maxWidth)
                                         QLatin1String("XXXXXXXXX"));
 }
 
-void ItemViewImageDelegate::prepareBackground()
+void ItemViewItemDelegate::prepareBackground()
 {
-    Q_D(ItemViewImageDelegate);
+    Q_D(ItemViewItemDelegate);
 
     if (!d->rect.isValid())
     {
@@ -704,11 +704,11 @@ void ItemViewImageDelegate::prepareBackground()
     }
 }
 
-void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
+void ItemViewItemDelegate::prepareRatingPixmaps(bool composeOverBackground)
 {
     // Please call this method after prepareBackground() and when d->ratingPixmap is set
 
-    Q_D(ItemViewImageDelegate);
+    Q_D(ItemViewItemDelegate);
 
     if (!d->ratingRect.isValid())
     {
@@ -772,9 +772,9 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
     }
 }
 
-QPixmap ItemViewImageDelegate::ratingPixmap(int rating, bool selected) const
+QPixmap ItemViewItemDelegate::ratingPixmap(int rating, bool selected) const
 {
-    Q_D(const ItemViewImageDelegate);
+    Q_D(const ItemViewItemDelegate);
 
     if (rating < 1 || rating > 5)
     {

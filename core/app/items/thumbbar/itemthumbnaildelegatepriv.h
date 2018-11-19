@@ -32,12 +32,12 @@
 
 // Local includes
 
-#include "imagedelegatepriv.h"
+#include "itemdelegate_p.h"
 
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN ItemThumbnailDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
+class Q_DECL_HIDDEN ItemThumbnailDelegatePrivate : public ItemDelegate::ItemDelegatePrivate
 {
 public:
 

@@ -25,7 +25,7 @@
  * ============================================================ */
 
 #include "itemthumbnaildelegate.h"
-#include "imagedelegatepriv.h"
+#include "itemdelegate_p.h"
 
 // Local includes
 
@@ -48,7 +48,7 @@ void ItemThumbnailDelegatePrivate::init(ItemThumbnailDelegate* const q)
 }
 
 ItemThumbnailDelegate::ItemThumbnailDelegate(ItemCategorizedView* parent)
-    : ImageDelegate(*new ItemThumbnailDelegatePrivate, parent)
+    : ItemDelegate(*new ItemThumbnailDelegatePrivate, parent)
 {
     Q_D(ItemThumbnailDelegate);
     d->init(this);
@@ -69,7 +69,7 @@ void ItemThumbnailDelegate::setDefaultViewOptions(const QStyleOptionViewItem& op
     Q_D(ItemThumbnailDelegate);
     // store before calling parent class
     d->viewSize = option.rect;
-    ImageDelegate::setDefaultViewOptions(option);
+    ItemDelegate::setDefaultViewOptions(option);
 }
 
 int ItemThumbnailDelegate::maximumSize() const
@@ -88,7 +88,7 @@ bool ItemThumbnailDelegate::acceptsActivation(const QPoint& pos, const QRect& vi
         const QModelIndex& index, QRect* activationRect) const
 {
     // reuse implementation from grandparent
-    return ItemViewImageDelegate::acceptsActivation(pos, visualRect, index, activationRect);
+    return ItemViewItemDelegate::acceptsActivation(pos, visualRect, index, activationRect);
 }
 
 void ItemThumbnailDelegate::updateContentWidth()
@@ -107,7 +107,7 @@ void ItemThumbnailDelegate::updateContentWidth()
 
     d->thumbSize = ThumbnailSize(ThumbnailLoadThread::thumbnailToPixmapSize(true, maxSize - 2*d->radius - 2*d->margin));
 
-    ImageDelegate::updateContentWidth();
+    ItemDelegate::updateContentWidth();
 }
 
 void ItemThumbnailDelegate::updateRects()

@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "digikamimagedelegate.h"
+#include "digikamitemdelegate.h"
 
 namespace Digikam
 {
@@ -35,7 +35,7 @@ class ItemCategoryDrawer;
 class FaceTagsIface;
 class ItemFaceDelegatePrivate;
 
-class ItemFaceDelegate : public DigikamImageDelegate
+class ItemFaceDelegate : public DigikamItemDelegate
 {
     Q_OBJECT
 

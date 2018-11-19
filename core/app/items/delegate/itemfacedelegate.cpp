@@ -25,7 +25,7 @@
  * ============================================================ */
 
 #include "itemfacedelegate.h"
-#include "imagedelegatepriv.h"
+#include "itemdelegate_p.h"
 
 // Local includes
 
@@ -34,14 +34,14 @@
 #include "facetagsiface.h"
 #include "itemmodel.h"
 #include "tagregion.h"
-#include "digikamimagedelegatepriv.h"
+#include "digikamitemdelegate_p.h"
 #include "faceutils.h"
 
 namespace Digikam
 {
 
 ItemFaceDelegate::ItemFaceDelegate(ItemCategorizedView* const parent)
-    : DigikamImageDelegate(*new ItemFaceDelegatePrivate, parent)
+    : DigikamItemDelegate(*new ItemFaceDelegatePrivate, parent)
 {
 }
 
@@ -52,7 +52,7 @@ ItemFaceDelegate::~ItemFaceDelegate()
 void ItemFaceDelegate::prepareThumbnails(ItemThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
 {
     //TODO
-    DigikamImageDelegate::prepareThumbnails(thumbModel, indexes);
+    DigikamItemDelegate::prepareThumbnails(thumbModel, indexes);
 }
 
 QPixmap ItemFaceDelegate::thumbnailPixmap(const QModelIndex& index) const
@@ -61,7 +61,7 @@ QPixmap ItemFaceDelegate::thumbnailPixmap(const QModelIndex& index) const
 
     if (rect.isNull())
     {
-        return DigikamImageDelegate::thumbnailPixmap(index);
+        return DigikamItemDelegate::thumbnailPixmap(index);
     }
 
     // set requested thumbnail detail
@@ -71,7 +71,7 @@ QPixmap ItemFaceDelegate::thumbnailPixmap(const QModelIndex& index) const
     }
 
     // parent implementation already resets the thumb size and rect set on model
-    return DigikamImageDelegate::thumbnailPixmap(index);
+    return DigikamItemDelegate::thumbnailPixmap(index);
 }
 
 QRect ItemFaceDelegate::faceRect(const QModelIndex& index) const
@@ -109,13 +109,13 @@ FaceTagsIface ItemFaceDelegate::face(const QModelIndex& index) const
 void ItemFaceDelegate::updateRects()
 {
     Q_D(ItemFaceDelegate);
-    DigikamImageDelegate::updateRects();
+    DigikamItemDelegate::updateRects();
     d->groupRect = QRect();
 }
 
 void ItemFaceDelegate::clearModelDataCaches()
 {
-    DigikamImageDelegate::clearModelDataCaches();
+    DigikamItemDelegate::clearModelDataCaches();
 }
 
 } // namespace Digikam

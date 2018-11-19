@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : Qt item view for images - the delegate
+ * Description : Qt model-view for items - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#include "digikamimagedelegate.h"
-#include "imagedelegatepriv.h"
+#include "digikamitemdelegate.h"
+#include "itemdelegate_p.h"
 
 // Local includes
 
@@ -36,12 +36,12 @@
 #include "itemdelegateoverlay.h"
 #include "itemmodel.h"
 #include "itemfiltermodel.h"
-#include "digikamimagedelegatepriv.h"
+#include "digikamitemdelegate_p.h"
 
 namespace Digikam
 {
 
-void DigikamImageDelegatePrivate::init(DigikamImageDelegate* const q, ItemCategorizedView* const parent)
+void DigikamItemDelegatePrivate::init(DigikamItemDelegate* const q, ItemCategorizedView* const parent)
 {
     categoryDrawer = new ItemCategoryDrawer(parent);
 
@@ -49,34 +49,34 @@ void DigikamImageDelegatePrivate::init(DigikamImageDelegate* const q, ItemCatego
                      q, SLOT(slotSetupChanged()));
 }
 
-DigikamImageDelegatePrivate::~DigikamImageDelegatePrivate()
+DigikamItemDelegatePrivate::~DigikamItemDelegatePrivate()
 {
     delete categoryDrawer;
 }
 
 // ------------------------------------------------------------------------------------------------
 
-DigikamImageDelegate::DigikamImageDelegate(ItemCategorizedView* parent)
-    : ImageDelegate(*new DigikamImageDelegatePrivate, parent)
+DigikamItemDelegate::DigikamItemDelegate(ItemCategorizedView* parent)
+    : ItemDelegate(*new DigikamItemDelegatePrivate, parent)
 {
-    Q_D(DigikamImageDelegate);
+    Q_D(DigikamItemDelegate);
     d->init(this, parent);
 }
 
-DigikamImageDelegate::DigikamImageDelegate(DigikamImageDelegatePrivate& dd, ItemCategorizedView* parent)
-    : ImageDelegate(dd, parent)
+DigikamItemDelegate::DigikamItemDelegate(DigikamItemDelegatePrivate& dd, ItemCategorizedView* parent)
+    : ItemDelegate(dd, parent)
 {
-    Q_D(DigikamImageDelegate);
+    Q_D(DigikamItemDelegate);
     d->init(this, parent);
 }
 
-DigikamImageDelegate::~DigikamImageDelegate()
+DigikamItemDelegate::~DigikamItemDelegate()
 {
 }
 
-void DigikamImageDelegate::updateRects()
+void DigikamItemDelegate::updateRects()
 {
-    Q_D(DigikamImageDelegate);
+    Q_D(DigikamItemDelegate);
 
     int y                                          = d->margin;
     d->pixmapRect                                  = QRect(d->margin, y, d->contentWidth, d->contentWidth);

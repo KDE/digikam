@@ -27,7 +27,7 @@
 
 // Local includes
 
-#include "imagedelegate.h"
+#include "itemdelegate.h"
 #include "itemmodel.h"
 #include "itemcategorizedview.h"
 #include "ratingwidget.h"

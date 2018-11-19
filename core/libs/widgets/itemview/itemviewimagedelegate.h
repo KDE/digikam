@@ -35,16 +35,16 @@
 namespace Digikam
 {
 
-class ItemViewImageDelegatePrivate;
+class ItemViewItemDelegatePrivate;
 
-class DIGIKAM_EXPORT ItemViewImageDelegate : public DItemDelegate, public ItemDelegateOverlayContainer
+class DIGIKAM_EXPORT ItemViewItemDelegate : public DItemDelegate, public ItemDelegateOverlayContainer
 {
     Q_OBJECT
 
 public:
 
-    explicit ItemViewImageDelegate(QObject* const parent = 0);
-    ~ItemViewImageDelegate();
+    explicit ItemViewItemDelegate(QObject* const parent = 0);
+    ~ItemViewItemDelegate();
 
     ThumbnailSize thumbnailSize() const;
     int spacing()                 const;
@@ -137,12 +137,12 @@ protected:
 
 protected:
 
-    ItemViewImageDelegatePrivate* const d_ptr;
-    ItemViewImageDelegate(ItemViewImageDelegatePrivate& dd, QObject* const parent);
+    ItemViewItemDelegatePrivate* const d_ptr;
+    ItemViewItemDelegate(ItemViewItemDelegatePrivate& dd, QObject* const parent);
 
 private:
 
-    Q_DECLARE_PRIVATE(ItemViewImageDelegate)
+    Q_DECLARE_PRIVATE(ItemViewItemDelegate)
 };
 
 } // namespace Digikam

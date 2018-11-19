@@ -42,7 +42,7 @@
 #include "facetagsiface.h"
 #include "facepipeline.h"
 #include "facetags.h"
-#include "imagedelegate.h"
+#include "itemdelegate.h"
 #include "itemmodel.h"
 #include "itemcategorizedview.h"
 #include "taggingaction.h"

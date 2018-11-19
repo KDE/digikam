@@ -39,7 +39,7 @@
 #include "itemalbummodel.h"
 #include "itemalbumfiltermodel.h"
 #include "itemcategorydrawer.h"
-#include "imagedelegate.h"
+#include "itemdelegate.h"
 #include "itemdelegateoverlay.h"
 #include "itemthumbnailmodel.h"
 #include "itemselectionoverlay.h"
@@ -95,7 +95,7 @@ public:
     ItemModel*           model;
     ImageSortFilterModel* filterModel;
 
-    ImageDelegate*        delegate;
+    ItemDelegate*        delegate;
     bool                  showToolTip;
 
     qlonglong             scrollToItemId;
@@ -232,15 +232,15 @@ QSortFilterProxyModel* ItemCategorizedView::filterModel() const
     return d->filterModel;
 }
 
-ImageDelegate* ItemCategorizedView::delegate() const
+ItemDelegate* ItemCategorizedView::delegate() const
 {
     return d->delegate;
 }
 
-void ItemCategorizedView::setItemDelegate(ImageDelegate* delegate)
+void ItemCategorizedView::setItemDelegate(ItemDelegate* delegate)
 {
     ThumbnailSize oldSize      = thumbnailSize();
-    ImageDelegate* oldDelegate = d->delegate;
+    ItemDelegate* oldDelegate = d->delegate;
 
     if (oldDelegate)
     {
@@ -552,7 +552,7 @@ void ItemCategorizedView::hintAt(const ItemInfo& info)
     scrollTo(index);
 }
 
-void ItemCategorizedView::addOverlay(ItemDelegateOverlay* overlay, ImageDelegate* delegate)
+void ItemCategorizedView::addOverlay(ItemDelegateOverlay* overlay, ItemDelegate* delegate)
 {
     if (!delegate)
     {
@@ -570,7 +570,7 @@ void ItemCategorizedView::addOverlay(ItemDelegateOverlay* overlay, ImageDelegate
 
 void ItemCategorizedView::removeOverlay(ItemDelegateOverlay* overlay)
 {
-    ImageDelegate* delegate = dynamic_cast<ImageDelegate*>(overlay->delegate());
+    ItemDelegate* delegate = dynamic_cast<ItemDelegate*>(overlay->delegate());
 
     if (delegate)
     {
@@ -597,7 +597,7 @@ void ItemCategorizedView::slotDelayedEnter()
     }
 }
 
-void ItemCategorizedView::addSelectionOverlay(ImageDelegate* delegate)
+void ItemCategorizedView::addSelectionOverlay(ItemDelegate* delegate)
 {
     addOverlay(new ItemSelectionOverlay(this), delegate);
 }

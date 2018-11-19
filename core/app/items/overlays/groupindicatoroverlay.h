@@ -61,7 +61,7 @@ Q_SIGNALS:
 class GroupIndicatorOverlay : public AbstractWidgetDelegateOverlay
 {
     Q_OBJECT
-    REQUIRE_DELEGATE(ItemViewImageDelegate)
+    REQUIRE_DELEGATE(ItemViewItemDelegate)
 
 public:
 

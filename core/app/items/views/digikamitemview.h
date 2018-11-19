@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ITEM_VIEW_H
-#define DIGIKAM_ITEM_VIEW_H
+#ifndef DIGIKAM_DIGIKAMITEM_VIEW_H
+#define DIGIKAM_DIGIKAMITEM_VIEW_H
 
 // Local includes
 
@@ -98,8 +98,8 @@ protected Q_SLOTS:
 
 protected:
 
-    void addRejectionOverlay(ImageDelegate* delegate = 0);
-    void addAssignNameOverlay(ImageDelegate* delegate = 0);
+    void addRejectionOverlay(ItemDelegate* delegate = 0);
+    void addAssignNameOverlay(ItemDelegate* delegate = 0);
 
     virtual void activated(const ItemInfo& info, Qt::KeyboardModifiers modifiers);
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info);
@@ -126,4 +126,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ITEM_VIEW_H
+#endif // DIGIKAM_DIGIKAMITEM_VIEW_H

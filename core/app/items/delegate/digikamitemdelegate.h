@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : Qt item view for images - the delegate
+ * Description : Qt model-view for items - the delegate
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,39 +21,39 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_DELEGATE_H
-#define DIGIKAM_IMAGE_DELEGATE_H
+#ifndef DIGIKAM_DIGIKAMITEM_DELEGATE_H
+#define DIGIKAM_DIGIKAMITEM_DELEGATE_H
 
 // Local includes
 
-#include "imagedelegate.h"
+#include "itemdelegate.h"
 
 namespace Digikam
 {
 
 class ItemCategoryDrawer;
-class DigikamImageDelegatePrivate;
+class DigikamItemDelegatePrivate;
 
-class DigikamImageDelegate : public ImageDelegate
+class DigikamItemDelegate : public ItemDelegate
 {
     Q_OBJECT
 
 public:
 
-    explicit DigikamImageDelegate(ItemCategorizedView* parent);
-    ~DigikamImageDelegate();
+    explicit DigikamItemDelegate(ItemCategorizedView* parent);
+    ~DigikamItemDelegate();
 
 protected:
 
     virtual void updateRects();
 
-    DigikamImageDelegate(DigikamImageDelegatePrivate& dd, ItemCategorizedView* parent);
+    DigikamItemDelegate(DigikamItemDelegatePrivate& dd, ItemCategorizedView* parent);
 
 private:
 
-    Q_DECLARE_PRIVATE(DigikamImageDelegate)
+    Q_DECLARE_PRIVATE(DigikamItemDelegate)
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_DELEGATE_H
+#endif // DIGIKAM_DIGIKAMITEM_DELEGATE_H

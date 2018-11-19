@@ -326,8 +326,8 @@ set(libdigikamgui_SRCS
     filters/filtersidebarwidget.cpp
     filters/tagfilterview.cpp
 
-    items/delegate/digikamimagedelegate.cpp
-    items/delegate/imagedelegate.cpp
+    items/delegate/digikamitemdelegate.cpp
+    items/delegate/itemdelegate.cpp
     items/delegate/itemfacedelegate.cpp
     items/views/digikamitemview.cpp
     items/views/digikamitemview_p.cpp

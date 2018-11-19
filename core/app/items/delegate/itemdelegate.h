@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : Qt item view for images - the delegate
+ * Description : Qt model-view for items - the delegate
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ITEMS_IMAGE_DELEGATE_H
-#define DIGIKAM_ITEMS_IMAGE_DELEGATE_H
+#ifndef DIGIKAM_ITEM_DELEGATE_H
+#define DIGIKAM_ITEM_DELEGATE_H
 
 // Local includes
 
@@ -40,14 +40,14 @@ class ItemFilterModel;
 class ItemModel;
 class ItemThumbnailModel;
 
-class ImageDelegate : public ItemViewImageDelegate
+class ItemDelegate : public ItemViewItemDelegate
 {
     Q_OBJECT
 
 public:
 
-    explicit ImageDelegate(QObject* const parent = 0);
-    ~ImageDelegate();
+    explicit ItemDelegate(QObject* const parent = 0);
+    ~ItemDelegate();
 
     void setView(ItemCategorizedView* view);
 
@@ -87,8 +87,8 @@ public:
 
 public:
 
-    // Declared as public because of use in DigikamImageDelegate class.
-    class ImageDelegatePrivate;
+    // Declared as public because of use in DigikamItemDelegate class.
+    class ItemDelegatePrivate;
 
 protected:
 
@@ -120,7 +120,7 @@ protected:
 
     void setModel(QAbstractItemModel* model);
 
-    ImageDelegate(ImageDelegate::ImageDelegatePrivate& dd, QObject* parent);
+    ItemDelegate(ItemDelegate::ItemDelegatePrivate& dd, QObject* parent);
 
 protected Q_SLOTS:
 
@@ -129,9 +129,9 @@ protected Q_SLOTS:
 
 private:
 
-    Q_DECLARE_PRIVATE(ImageDelegate)
+    Q_DECLARE_PRIVATE(ItemDelegate)
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ITEMS_IMAGE_DELEGATE_H
+#endif // DIGIKAM_ITEM_DELEGATE_H

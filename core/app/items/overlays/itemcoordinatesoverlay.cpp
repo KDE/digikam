@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "imagedelegate.h"
+#include "itemdelegate.h"
 #include "itemmodel.h"
 #include "itemcategorizedview.h"
 
@@ -84,7 +84,7 @@ void ItemCoordinatesOverlay::updatePosition()
         return;
     }
 
-    QRect rect       = static_cast<ImageDelegate*>(delegate())->coordinatesIndicatorRect();
+    QRect rect       = static_cast<ItemDelegate*>(delegate())->coordinatesIndicatorRect();
     QRect visualRect = m_view->visualRect(m_index);
     rect.translate(visualRect.topLeft());
 
@@ -95,7 +95,7 @@ void ItemCoordinatesOverlay::updatePosition()
 bool ItemCoordinatesOverlay::checkIndex(const QModelIndex& index) const
 {
     ItemInfo info = ItemModel::retrieveItemInfo(index);
-    QRect rect     = static_cast<ImageDelegate*>(delegate())->coordinatesIndicatorRect();
+    QRect rect     = static_cast<ItemDelegate*>(delegate())->coordinatesIndicatorRect();
 
     if (!rect.isNull() && info.hasCoordinates())
     {

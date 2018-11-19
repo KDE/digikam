@@ -52,7 +52,7 @@
 #include "coredbaccess.h"
 #include "ddragobjects.h"
 #include "digikamapp.h"
-#include "digikamimagedelegate.h"
+#include "digikamitemdelegate.h"
 #include "itemfacedelegate.h"
 #include "dio.h"
 #include "groupindicatoroverlay.h"
@@ -89,7 +89,7 @@ DigikamItemView::DigikamItemView(QWidget* const parent)
     connect(&d->editPipeline, SIGNAL(scheduled()),
             this, SLOT(slotInitProgressIndicator()));
 
-    d->normalDelegate = new DigikamImageDelegate(this);
+    d->normalDelegate = new DigikamItemDelegate(this);
     d->faceDelegate   = new ItemFaceDelegate(this);
 
     setItemDelegate(d->normalDelegate);
@@ -329,7 +329,7 @@ void DigikamItemView::setFaceMode(bool on)
     }
 }
 
-void DigikamItemView::addRejectionOverlay(ImageDelegate* delegate)
+void DigikamItemView::addRejectionOverlay(ItemDelegate* delegate)
 {
     FaceRejectionOverlay* const rejectionOverlay = new FaceRejectionOverlay(this);
 
@@ -340,7 +340,7 @@ void DigikamItemView::addRejectionOverlay(ImageDelegate* delegate)
 }
 
 /*
-void DigikamItemView::addTagEditOverlay(ImageDelegate* delegate)
+void DigikamItemView::addTagEditOverlay(ItemDelegate* delegate)
 {
     TagsLineEditOverlay* tagOverlay = new TagsLineEditOverlay(this);
 
@@ -351,7 +351,7 @@ void DigikamItemView::addTagEditOverlay(ImageDelegate* delegate)
 }
 */
 
-void DigikamItemView::addAssignNameOverlay(ImageDelegate* delegate)
+void DigikamItemView::addAssignNameOverlay(ItemDelegate* delegate)
 {
     AssignNameOverlay* const nameOverlay = new AssignNameOverlay(this);
     addOverlay(nameOverlay, delegate);

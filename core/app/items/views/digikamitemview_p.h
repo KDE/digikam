@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ITEM_VIEW_PRIVATE_H
-#define DIGIKAM_ITEM_VIEW_PRIVATE_H
+#ifndef DIGIKAM_DIGIKAMITEM_VIEW_P_H
+#define DIGIKAM_DIGIKAMITEM_VIEW_P_H
 
 // Qt includes
 
@@ -34,7 +34,7 @@
 
 #include "digikam_config.h"
 #include "digikamitemview.h"
-#include "digikamimagedelegate.h"
+#include "digikamitemdelegate.h"
 #include "itemrotationoverlay.h"
 #include "itemfullscreenoverlay.h"
 #include "applicationsettings.h"
@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class DigikamImageDelegate;
+class DigikamItemDelegate;
 class ItemFaceDelegate;
 
 class Q_DECL_HIDDEN DigikamItemView::Private : public QObject
@@ -65,7 +65,7 @@ public:
 
     FacePipeline             editPipeline;
 
-    DigikamImageDelegate*    normalDelegate;
+    DigikamItemDelegate*     normalDelegate;
     ItemFaceDelegate*        faceDelegate;
 
     bool                     overlaysActive;
@@ -88,4 +88,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ITEM_VIEW_PRIVATE_H
+#endif // DIGIKAM_DIGIKAMITEM_VIEW_P_H

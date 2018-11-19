@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "imagedelegate.h"
+#include "itemdelegate.h"
 
 namespace Digikam
 {
@@ -39,7 +39,7 @@ namespace Digikam
 class ItemCategoryDrawer;
 class ItemThumbnailDelegatePrivate;
 
-class ItemThumbnailDelegate : public ImageDelegate
+class ItemThumbnailDelegate : public ItemDelegate
 {
     Q_OBJECT
 
