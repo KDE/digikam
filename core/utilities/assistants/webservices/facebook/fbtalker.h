@@ -85,6 +85,7 @@ Q_SIGNALS:
 private:
 
     void    getLoggedInUser();
+    void    clearCookies();
 
     QString errorToText(int errCode, const QString& errMsg);
     int     parseErrorResponse(const QDomElement& e, QString& errMsg);

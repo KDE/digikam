@@ -170,6 +170,8 @@ FbTalker::~FbTalker()
         d->reply->abort();
     }
 
+    clearCookies();
+
     delete d;
 }
 
@@ -214,17 +216,7 @@ void FbTalker::unlink()
     d->settings->remove(QString());
     d->settings->endGroup();
 
-#ifdef HAVE_QWEBENGINE
-    if (d->view)
-    {
-        d->view->page()->profile()->cookieStore()->deleteAllCookies();
-    }
-#else
-    if (d->view)
-    {
-        d->view->page()->networkAccessManager()->setCookieJar(new QNetworkCookieJar());
-    }
-#endif
+    clearCookies();
 
     emit linkingSucceeded();
 }
@@ -294,6 +286,21 @@ bool FbTalker::linked()
     return (!d->accessToken.isEmpty());
 }
 
+void FbTalker::clearCookies()
+{
+#ifdef HAVE_QWEBENGINE
+    if (d->view)
+    {
+        d->view->page()->profile()->cookieStore()->deleteAllCookies();
+    }
+#else
+    if (d->view)
+    {
+        d->view->page()->networkAccessManager()->setCookieJar(new QNetworkCookieJar());
+    }
+#endif
+}
+
 void FbTalker::getLoggedInUser()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getLoggedInUser called";
@@ -338,7 +345,7 @@ void FbTalker::logout()
 
     QUrl url(QLatin1String("https://www.facebook.com/logout.php"));
     QUrlQuery q;
-    q.addQueryItem(QLatin1String("next"), "https://www.digikam.org");
+    q.addQueryItem(QLatin1String("next"), d->redirectUrl.toUtf8());
     q.addQueryItem(QLatin1String("access_token"), d->accessToken.toUtf8());
     url.setQuery(q);
 
