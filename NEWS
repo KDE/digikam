@@ -15,6 +15,7 @@ Database     : New video metadata parser based on ffmpeg to populate database.
 Search       : Add video support to find files based on properties registered on database.
 
 General      : Add new Exiv2 0.27 support.
+General      : Add new Lensfun 0.4 support.
 General      : Use DrMinGW has crash handler under Windows.
 General      : Port all export/import tool to OAuth2 authentification.
 General      : New tool to adjust quickly time and date information from items.
@@ -643,4 +644,6 @@ BUGFIXES:
 576 ==> 400960 - Do not reset horizontal scroll bar slider position when selecting album.
 577 ==> 400766 - Export to Onedrive: not possible to export into subfolder.
 578 ==> 398207 - box.com video upload fails despite successful authentication.
-579 ==> 
+579 ==> 401160 - Build against lensfun-devel.
+580 ==> 
+
