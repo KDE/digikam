@@ -44,7 +44,7 @@
 #include "threadmanager.h"
 #include "facebenchmarkers.h"
 #include "faceworkers.h"
-#include "faceimageretriever.h"
+#include "faceitemretriever.h"
 #include "parallelpipes.h"
 #include "scanstatefilter.h"
 
@@ -220,9 +220,9 @@ void FacePipeline::plugRetrainingDatabaseFilter()
     d->databaseFilter->tasks = FacePipelineFaceTagsIface::ForTraining;
 }
 
-void FacePipeline::plugPreviewLoader()
+void FacePipeline::plugFacePreviewLoader()
 {
-    d->previewThread = new PreviewLoader(d);
+    d->previewThread = new FacePreviewLoader(d);
 }
 
 void FacePipeline::plugFaceDetector()

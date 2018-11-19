@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "faceimageretriever.h"
+#include "faceitemretriever.h"
 
 // Qt includes
 
@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-PreviewLoader::PreviewLoader(FacePipeline::Private* const d)
+FacePreviewLoader::FacePreviewLoader(FacePipeline::Private* const d)
     : d(d)
 {
     // upper limit for memory cost
@@ -60,13 +60,13 @@ PreviewLoader::PreviewLoader(FacePipeline::Private* const d)
             this, SLOT(slotImageLoaded(LoadingDescription,DImg)));
 }
 
-void PreviewLoader::cancel()
+void FacePreviewLoader::cancel()
 {
     stopAllTasks();
     scheduledPackages.clear();
 }
 
-void PreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
+void FacePreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
 {
     if (!package->image.isNull())
     {
@@ -82,7 +82,7 @@ void PreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
     checkRestart();
 }
 
-void PreviewLoader::slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img)
+void FacePreviewLoader::slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img)
 {
     FacePipelineExtendedPackage::Ptr package = scheduledPackages.take(loadingDescription);
 
@@ -114,14 +114,14 @@ void PreviewLoader::slotImageLoaded(const LoadingDescription& loadingDescription
     emit processed(package);
 }
 
-bool PreviewLoader::sentOutLimitReached()
+bool FacePreviewLoader::sentOutLimitReached()
 {
     int packagesInTheFollowingPipeline = d->packagesOnTheRoad - scheduledPackages.size();
 
     return (packagesInTheFollowingPipeline > maximumSentOutPackages);
 }
 
-void PreviewLoader::checkRestart()
+void FacePreviewLoader::checkRestart()
 {
     if (!sentOutLimitReached() && !scheduledPackages.isEmpty())
     {
@@ -131,22 +131,22 @@ void PreviewLoader::checkRestart()
 
 // ----------------------------------------------------------------------------------------
 
-FaceImageRetriever::FaceImageRetriever(FacePipeline::Private* const d)
+FaceItemRetriever::FaceItemRetriever(FacePipeline::Private* const d)
     : catcher(new ThumbnailImageCatcher(d->createThumbnailLoadThread(), d))
 {
 }
 
-ThumbnailImageCatcher* FaceImageRetriever::thumbnailCatcher() const
+ThumbnailImageCatcher* FaceItemRetriever::thumbnailCatcher() const
 {
     return catcher;
 }
 
-void FaceImageRetriever::cancel()
+void FaceItemRetriever::cancel()
 {
     catcher->cancel();
 }
 
-QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<QRectF>& rects) const
+QList<QImage> FaceItemRetriever::getDetails(const DImg& src, const QList<QRectF>& rects) const
 {
     QList<QImage> images;
 
@@ -158,7 +158,7 @@ QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<QRectF
     return images;
 }
 
-QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<FaceTagsIface>& faces) const
+QList<QImage> FaceItemRetriever::getDetails(const DImg& src, const QList<FaceTagsIface>& faces) const
 {
     QList<QImage> images;
 
@@ -171,7 +171,7 @@ QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<FaceTa
     return images;
 }
 
-QList<QImage> FaceImageRetriever::getThumbnails(const QString& filePath, const QList<FaceTagsIface>& faces) const
+QList<QImage> FaceItemRetriever::getThumbnails(const QString& filePath, const QList<FaceTagsIface>& faces) const
 {
     Q_UNUSED(filePath)
     thumbnailCatcher()->setActive(true);

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FACE_IMAGE_RETRIEVER_H
-#define DIGIKAM_FACE_IMAGE_RETRIEVER_H
+#ifndef DIGIKAM_FACE_ITEM_RETRIEVER_H
+#define DIGIKAM_FACE_ITEM_RETRIEVER_H
 
 // Qt includes
 
@@ -44,13 +44,13 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN PreviewLoader : public PreviewLoadThread
+class Q_DECL_HIDDEN FacePreviewLoader : public PreviewLoadThread
 {
     Q_OBJECT
 
 public:
 
-    explicit PreviewLoader(FacePipeline::Private* const d);
+    explicit FacePreviewLoader(FacePipeline::Private* const d);
 
     void cancel();
     bool sentOutLimitReached();
@@ -74,11 +74,11 @@ protected:
 
 // ----------------------------------------------------------------------------------------
 
-class Q_DECL_HIDDEN FaceImageRetriever
+class Q_DECL_HIDDEN FaceItemRetriever
 {
 public:
 
-    explicit FaceImageRetriever(FacePipeline::Private* const d);
+    explicit FaceItemRetriever(FacePipeline::Private* const d);
     void cancel();
 
     ThumbnailImageCatcher* thumbnailCatcher()                                               const;
@@ -92,9 +92,9 @@ protected:
 
 private:
 
-    FaceImageRetriever(const FaceImageRetriever&); // Disable
+    FaceItemRetriever(const FaceItemRetriever&); // Disable
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_FACE_IMAGE_RETRIEVER_H
+#endif // DIGIKAM_FACE_ITEM_RETRIEVER_H

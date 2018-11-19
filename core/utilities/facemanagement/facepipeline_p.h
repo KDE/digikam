@@ -51,8 +51,8 @@ class DetectionWorker;
 class RecognitionWorker;
 class Trainer;
 class DatabaseWriter;
-class PreviewLoader;
-class FaceImageRetriever;
+class FacePreviewLoader;
+class FaceItemRetriever;
 class ParallelPipes;
 class ScanStateFilter;
 
@@ -121,7 +121,7 @@ public:
 public:
 
     ScanStateFilter*                        databaseFilter;
-    PreviewLoader*                          previewThread;
+    FacePreviewLoader*                          previewThread;
     DetectionWorker*                        detectionWorker;
     ParallelPipes*                          parallelDetectors;
     RecognitionWorker*                      recognitionWorker;

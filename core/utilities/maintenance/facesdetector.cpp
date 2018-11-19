@@ -125,7 +125,7 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
     {
         d->benchmark = true;
         d->pipeline.plugDatabaseFilter(FacePipeline::ScanAll);
-        d->pipeline.plugPreviewLoader();
+        d->pipeline.plugFacePreviewLoader();
 
         if (settings.useFullCpu)
         {
@@ -170,7 +170,7 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
         }
 
         d->pipeline.plugDatabaseFilter(filterMode);
-        d->pipeline.plugPreviewLoader();
+        d->pipeline.plugFacePreviewLoader();
 
         if (settings.useFullCpu)
         {

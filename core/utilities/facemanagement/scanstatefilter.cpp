@@ -43,7 +43,7 @@
 #include "threadmanager.h"
 #include "facebenchmarkers.h"
 #include "faceworkers.h"
-#include "faceimageretriever.h"
+#include "faceitemretriever.h"
 #include "parallelpipes.h"
 
 namespace Digikam
