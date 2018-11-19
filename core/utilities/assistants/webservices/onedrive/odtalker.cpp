@@ -128,7 +128,6 @@ public:
 
     DMetadata                       meta;
 
-    QMap<QString, QString>          urlParametersMap;
     QList<QPair<QString, QString> > folderList;
     QList<QString>                  nextFolder;
 
