@@ -105,7 +105,7 @@ public:
         clientSecret       = QLatin1String("5b0b5cd096e110cd4f4c72f517e2c544");
 
         serviceName        = QLatin1String("Facebook");
-        serviceDate        = QLatin1String("token_date");
+        serviceTime        = QLatin1String("token_time");
         serviceKey         = QLatin1String("access_token");
 
         dialog             = 0;
@@ -126,8 +126,10 @@ public:
     QString                clientSecret;
     QString                accessToken;
     QString                serviceName;
-    QString                serviceDate;
+    QString                serviceTime;
     QString                serviceKey;
+
+    QDateTime              expiryTime;
 
     QDialog*               dialog;
     QWidget*               parent;
@@ -184,9 +186,9 @@ void FbTalker::link()
     QUrl url(d->authUrl);
     QUrlQuery query(url);
     query.addQueryItem(QLatin1String("client_id"), d->apikey);
-    query.addQueryItem(QLatin1String("scope"), d->scope);
-    query.addQueryItem(QLatin1String("redirect_uri"), d->redirectUrl);
     query.addQueryItem(QLatin1String("response_type"), "token");
+    query.addQueryItem(QLatin1String("redirect_uri"), d->redirectUrl);
+    query.addQueryItem(QLatin1String("scope"), d->scope);
     url.setQuery(query);
 
     if (!d->view)
@@ -272,43 +274,22 @@ void FbTalker::slotCatchUrl(const QUrl& url)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function:" << url ;
 
-    QString accessToken = parseUrlParameters(url.toString()).value("access_token");
+    QString   str = url.toString();
+    QUrlQuery query(str.section(QLatin1Char('#'), -1, -1));
 
-    if (!accessToken.isEmpty())
+    if (query.hasQueryItem(QLatin1String("access_token")))
     {
+        d->accessToken = query.queryItemValue(QLatin1String("access_token"));
+        int seconds    = query.queryItemValue(QLatin1String("expires_in")).toInt();
+        d->expiryTime  = QDateTime::currentDateTime().addSecs(seconds);
+
         qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access Token Received";
-        d->accessToken = accessToken;
         emit linkingSucceeded();
     }
     else
     {
         emit linkingFailed();
     }
-}
-
-QMap<QString, QString> FbTalker::parseUrlParameters(const QString& url)
-{
-    QMap<QString, QString> urlParameters;
-
-    if (url.indexOf(QLatin1Char('#')) == -1)
-    {
-        return urlParameters;
-    }
-
-    QString tmp           = url.right(url.length() - url.indexOf(QLatin1Char('#')) - 1);
-    QStringList paramlist = tmp.split(QLatin1Char('&'));
-
-    for (int i = 0 ; i < paramlist.count() ; ++i)
-    {
-        QStringList paramarg = paramlist.at(i).split(QLatin1Char('='));
-
-        if (paramarg.count() == 2)
-        {
-            urlParameters.insert(paramarg.at(0), paramarg.at(1));
-        }
-    }
-
-    return urlParameters;
 }
 
 FbUser FbTalker::getUser() const
@@ -851,7 +832,7 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
 void FbTalker::writeSettings()
 {
     d->settings->beginGroup(d->serviceName);
-    d->settings->setValue(d->serviceDate, QDateTime::currentDateTime());
+    d->settings->setValue(d->serviceTime, d->expiryTime);
     d->settings->setValue(d->serviceKey,  d->accessToken);
     d->settings->endGroup();
 }
@@ -859,8 +840,8 @@ void FbTalker::writeSettings()
 void FbTalker::readSettings()
 {
     d->settings->beginGroup(d->serviceName);
-    QDateTime dateTime = d->settings->value(d->serviceDate).toDateTime();
-    d->accessToken     = d->settings->value(d->serviceKey).toString();
+    d->expiryTime  = d->settings->value(d->serviceTime).toDateTime();
+    d->accessToken = d->settings->value(d->serviceKey).toString();
     d->settings->endGroup();
 
     if (d->accessToken.isEmpty())
@@ -868,7 +849,7 @@ void FbTalker::readSettings()
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token is empty";
         emit signalLoginDone(-1, QString());
     }
-    else if (dateTime.secsTo(QDateTime::currentDateTime()) > 3600)
+    else if (QDateTime::currentDateTime() > d->expiryTime)
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token has expired";
         d->accessToken = QString();

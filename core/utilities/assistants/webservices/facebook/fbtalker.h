@@ -95,8 +95,6 @@ private:
     void    parseResponseCreateAlbum(const QByteArray& data);
     void    parseResponseListAlbums(const QByteArray& data);
 
-    QMap<QString, QString> parseUrlParameters(const QString& url);
-
 private Q_SLOTS:
 
     void    slotLinkingFailed();
