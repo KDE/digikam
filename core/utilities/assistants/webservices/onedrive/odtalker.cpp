@@ -90,6 +90,7 @@ public:
         redirectUrl  = QLatin1String("https://login.live.com/oauth20_desktop.srf");
 
         serviceName = QLatin1String("Onedrive");
+        serviceTime = QLatin1String("token_time");
         serviceKey  = QLatin1String("access_token");
 
         state        = OD_USERNAME;
@@ -111,7 +112,10 @@ public:
     QString                         redirectUrl;
     QString                         accessToken;
     QString                         serviceName;
+    QString                         serviceTime;
     QString                         serviceKey;
+
+    QDateTime                       expiryTime;
 
     QWidget*                        parent;
 
@@ -207,45 +211,24 @@ void ODTalker::unLink()
 
 void ODTalker::slotCatchUrl(const QUrl& url)
 {
-    d->urlParametersMap = ParseUrlParameters(url.toString());
-    d->accessToken      = d->urlParametersMap.value("access_token");
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function: " << url ;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview:" << url;
 
-    if (!d->accessToken.isEmpty())
+    QString   str = url.toString();
+    QUrlQuery query(str.section(QLatin1Char('#'), -1, -1));
+
+    if (query.hasQueryItem(QLatin1String("access_token")))
     {
-        qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access Token Received";
+        d->accessToken = query.queryItemValue(QLatin1String("access_token"));
+        int seconds    = query.queryItemValue(QLatin1String("expires_in")).toInt();
+        d->expiryTime  = QDateTime::currentDateTime().addSecs(seconds);
+
+        qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token received";
         emit oneDriveLinkingSucceeded();
     }
     else
     {
         emit oneDriveLinkingFailed();
     }
-}
-
-QMap<QString, QString> ODTalker::ParseUrlParameters(const QString& url)
-{
-    QMap<QString, QString> urlParameters;
-
-    if (url.indexOf(QLatin1Char('?')) == -1)
-    {
-        return urlParameters;
-    }
-
-    QString tmp           = url.right(url.length() - url.indexOf(QLatin1Char('?')) - 1);
-    tmp                   = tmp.right(tmp.length() - tmp.indexOf(QLatin1Char('#')) - 1);
-    QStringList paramlist = tmp.split(QLatin1Char('&'));
-
-    for (int i = 0 ; i < paramlist.count() ; ++i)
-    {
-        QStringList paramarg = paramlist.at(i).split(QLatin1Char('='));
-
-        if (paramarg.count() == 2)
-        {
-            urlParameters.insert(paramarg.at(0), paramarg.at(1));
-        }
-    }
-
-    return urlParameters;
 }
 
 void ODTalker::slotLinkingFailed()
@@ -258,12 +241,12 @@ void ODTalker::slotLinkingSucceeded()
 {
     if (d->accessToken.isEmpty())
     {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Onedrive ok";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Onedrive";
         emit signalBusy(false);
         return;
     }
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Onedrive ok";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Onedrive";
     writeSettings();
     d->view->close();
     emit signalLinkingSucceeded();
@@ -570,19 +553,27 @@ void ODTalker::parseResponseCreateFolder(const QByteArray& data)
 void ODTalker::writeSettings()
 {
     d->settings->beginGroup(d->serviceName);
-    d->settings->setValue(d->serviceKey, d->accessToken);
+    d->settings->setValue(d->serviceTime, d->expiryTime);
+    d->settings->setValue(d->serviceKey,  d->accessToken);
     d->settings->endGroup();
 }
 
 void ODTalker::readSettings()
 {
     d->settings->beginGroup(d->serviceName);
+    d->expiryTime  = d->settings->value(d->serviceTime).toDateTime();
     d->accessToken = d->settings->value(d->serviceKey).toString();
     d->settings->endGroup();
 
     if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Linking...";
+        link();
+    }
+    else if (QDateTime::currentDateTime() > d->expiryTime)
+    {
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token has expired";
+        d->accessToken = QString();
         link();
     }
     else

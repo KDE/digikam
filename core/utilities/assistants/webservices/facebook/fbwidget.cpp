@@ -71,7 +71,7 @@ void FbWidget::updateLabels(const QString& name, const QString& url)
 
     getHeaderLbl()->setText(QString::fromLatin1(
         "<b><h2><a href='%1'>"
-        "<font color=\"#3B5998\">facebook</font>"
+        "<font color=\"#3B5998\">Facebook</font>"
         "</a></h2></b>").arg(web));
     if (name.isEmpty())
     {
