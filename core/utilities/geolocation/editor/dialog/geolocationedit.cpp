@@ -68,7 +68,7 @@
 #include "itemmarkertiler.h"
 #include "trackmanager.h"
 #include "gpscommon.h"
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 #include "mapdragdrophandler.h"
 #include "gpsimagelist.h"
 #include "gpsitemlistdragdrophandler.h"

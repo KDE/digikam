@@ -37,7 +37,7 @@
 
 // local includes
 
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 #include "metaenginesettings.h"
 
 namespace Digikam

@@ -43,7 +43,7 @@
 // Local includes
 
 #include "gpscommon.h"
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 #include "gpsitemcontainer.h"
 #include "gpsundocommand.h"
 #include "mapdragdrophandler.h"

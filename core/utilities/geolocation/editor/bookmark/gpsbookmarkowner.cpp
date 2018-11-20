@@ -33,7 +33,7 @@
 
 #include "gpsbookmarkmodelhelper.h"
 #include "gpsundocommand.h"
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 #include "bookmarknode.h"
 #include "bookmarksmenu.h"
 #include "bookmarksdlg.h"

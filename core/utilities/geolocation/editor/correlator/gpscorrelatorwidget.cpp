@@ -58,7 +58,7 @@
 #include "dlayoutbox.h"
 #include "digikam_debug.h"
 #include "dmessagebox.h"
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 #include "gpsitemcontainer.h"
 #include "gpsundocommand.h"
 #include "track_listmodel.h"

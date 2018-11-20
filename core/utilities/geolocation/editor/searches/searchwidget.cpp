@@ -57,7 +57,7 @@
 #include "searchresultmodelhelper.h"
 #include "gpscommon.h"
 #include "gpsundocommand.h"
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 #include "gpsbookmarkowner.h"
 
 #ifdef GPSSYNC_MODELTEST

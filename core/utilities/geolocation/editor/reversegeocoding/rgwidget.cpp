@@ -56,7 +56,7 @@
 #include "dlayoutbox.h"
 #include "gpsundocommand.h"
 #include "geolocationedit.h"
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 #include "gpsitemcontainer.h"
 #include "backend-geonames-rg.h"
 #include "backend-osm-rg.h"

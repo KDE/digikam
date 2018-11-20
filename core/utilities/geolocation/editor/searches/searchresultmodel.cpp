@@ -36,7 +36,7 @@
 #include "searchbackend.h"
 #include "gpscommon.h"
 #include "gpsundocommand.h"
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 
 namespace Digikam
 {

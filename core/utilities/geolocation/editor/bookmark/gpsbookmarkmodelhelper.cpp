@@ -39,7 +39,7 @@
 #include "bookmarknode.h"
 #include "gpsbookmarkowner.h"
 #include "gpsundocommand.h"
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 
 namespace Digikam
 {

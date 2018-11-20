@@ -36,7 +36,7 @@
 #include "dinfointerface.h"
 #include "digikam_export.h"
 #include "geolocationedit.h"
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 
 class QButtonGroup;
 class QCheckBox;

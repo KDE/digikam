@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 #include "gpsimagesortproxymodel.h"
 
 class QWheelEvent;

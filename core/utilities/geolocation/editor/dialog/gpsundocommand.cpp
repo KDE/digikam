@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 
 namespace Digikam
 {
