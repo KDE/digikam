@@ -47,11 +47,11 @@ public:
     {
     }
 
-    GPSImageList* imageList;
+    GPSItemList* imageList;
     int           thumbnailSize;
 };
 
-GPSItemDelegate::GPSItemDelegate(GPSImageList* const imageList, QObject* const parent)
+GPSItemDelegate::GPSItemDelegate(GPSItemList* const imageList, QObject* const parent)
     : QItemDelegate(parent),
       d(new Private())
 {

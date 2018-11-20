@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "gpsimagelist.h"
+#include "gpsitemlist.h"
 
 namespace Digikam
 {
@@ -42,7 +42,7 @@ class GPSItemDelegate : public QItemDelegate
 
 public:
 
-    explicit GPSItemDelegate(GPSImageList* const imageList, QObject* const parent = 0);
+    explicit GPSItemDelegate(GPSItemList* const imageList, QObject* const parent = 0);
     virtual ~GPSItemDelegate();
 
     void setThumbnailSize(const int size);

@@ -34,7 +34,7 @@
 #include "digikam_config.h"
 #include "lookupaltitude.h"
 #include "gpsdatacontainer.h"
-#include "gpsimagelist.h"
+#include "gpsitemlist.h"
 
 class QUrl;
 
@@ -50,7 +50,7 @@ class GPSItemListContextMenu : public QObject
 
 public:
 
-    explicit GPSItemListContextMenu(GPSImageList* const imagesList,
+    explicit GPSItemListContextMenu(GPSItemList* const imagesList,
                                      GPSBookmarkOwner* const bookmarkOwner = 0);
     ~GPSItemListContextMenu();
 

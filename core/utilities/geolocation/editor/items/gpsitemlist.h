@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-22
- * Description : A view to display a list of images.
+ * Description : A view to display a list of items with GPS info.
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Michael G. Hansen <mike at mghansen dot de>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_GPS_IMAGE_LIST_H
-#define DIGIKAM_GPS_IMAGE_LIST_H
+#ifndef DIGIKAM_GPS_ITEM_LIST_H
+#define DIGIKAM_GPS_ITEM_LIST_H
 
 // Qt includes
 
@@ -42,14 +42,14 @@ namespace Digikam
 
 class ItemListDragDropHandler;
 
-class GPSImageList : public QTreeView
+class GPSItemList : public QTreeView
 {
     Q_OBJECT
 
 public:
 
-    explicit GPSImageList(QWidget* const parent = 0);
-    ~GPSImageList();
+    explicit GPSItemList(QWidget* const parent = 0);
+    ~GPSItemList();
 
     void setModelAndSelectionModel(GPSItemModel* const model, QItemSelectionModel* const selectionModel);
     GPSItemModel* getModel() const;
@@ -93,4 +93,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_GPS_IMAGE_LIST_H
+#endif // DIGIKAM_GPS_ITEM_LIST_H

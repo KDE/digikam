@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-22
- * Description : A view to display a list of images.
+ * Description : A view to display a list of items with GPS info.
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Michael G. Hansen <mike at mghansen dot de>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "gpsimagelist.h"
+#include "gpsitemlist.h"
 
 // Qt includes
 
@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN GPSImageList::Private
+class Q_DECL_HIDDEN GPSItemList::Private
 {
 public:
 
@@ -69,7 +69,7 @@ public:
     ItemListDragDropHandler* dragDropHandler;
 };
 
-GPSImageList::GPSImageList(QWidget* const parent)
+GPSItemList::GPSItemList(QWidget* const parent)
     : QTreeView(parent),
       d(new Private())
 {
@@ -86,12 +86,12 @@ GPSImageList::GPSImageList(QWidget* const parent)
     header()->installEventFilter(this);
 }
 
-GPSImageList::~GPSImageList()
+GPSItemList::~GPSItemList()
 {
     delete d;
 }
 
-void GPSImageList::startDrag(Qt::DropActions supportedActions)
+void GPSItemList::startDrag(Qt::DropActions supportedActions)
 {
     if (!d->dragDropHandler)
     {
@@ -119,7 +119,7 @@ void GPSImageList::startDrag(Qt::DropActions supportedActions)
     drag->exec(Qt::CopyAction);
 }
 
-void GPSImageList::setModelAndSelectionModel(GPSItemModel* const model, QItemSelectionModel* const selectionModel)
+void GPSItemList::setModelAndSelectionModel(GPSItemModel* const model, QItemSelectionModel* const selectionModel)
 {
     d->model               = model;
     d->selectionModel      = selectionModel;
@@ -136,23 +136,23 @@ void GPSImageList::setModelAndSelectionModel(GPSItemModel* const model, QItemSel
         setSelectionModel(d->imageSortProxyModel->mappedSelectionModel());
 }
 
-void GPSImageList::setDragDropHandler(ItemListDragDropHandler* const dragDropHandler)
+void GPSItemList::setDragDropHandler(ItemListDragDropHandler* const dragDropHandler)
 {
     d->dragDropHandler = dragDropHandler;
 }
 
-GPSItemModel* GPSImageList::getModel() const
+GPSItemModel* GPSItemList::getModel() const
 {
     return d->model;
 }
 
-void GPSImageList::setThumbnailSize(const int size)
+void GPSItemList::setThumbnailSize(const int size)
 {
     d->itemDelegate->setThumbnailSize(size);
     setColumnWidth(GPSItemContainer::ColumnThumbnail, size);
 }
 
-void GPSImageList::slotIncreaseThumbnailSize()
+void GPSItemList::slotIncreaseThumbnailSize()
 {
     // TODO: pick reasonable limits and make sure we stay on multiples of 5
     const int currentThumbnailSize = d->itemDelegate->getThumbnailSize();
@@ -161,7 +161,7 @@ void GPSImageList::slotIncreaseThumbnailSize()
         setThumbnailSize(currentThumbnailSize + 5);
 }
 
-void GPSImageList::slotDecreaseThumbnailSize()
+void GPSItemList::slotDecreaseThumbnailSize()
 {
     const int currentThumbnailSize = d->itemDelegate->getThumbnailSize();
 
@@ -169,7 +169,7 @@ void GPSImageList::slotDecreaseThumbnailSize()
         setThumbnailSize(currentThumbnailSize - 5);
 }
 
-void GPSImageList::wheelEvent(QWheelEvent* we)
+void GPSItemList::wheelEvent(QWheelEvent* we)
 {
     if ((we->modifiers() & Qt::ControlModifier) == 0)
     {
@@ -189,19 +189,19 @@ void GPSImageList::wheelEvent(QWheelEvent* we)
     }
 }
 
-void GPSImageList::slotThumbnailFromModel(const QPersistentModelIndex& index, const QPixmap& /*pixmap*/)
+void GPSItemList::slotThumbnailFromModel(const QPersistentModelIndex& index, const QPixmap& /*pixmap*/)
 {
     // TODO: verify that the size corresponds to the size of our thumbnails!
     update(d->imageSortProxyModel->mapFromSource(index));
 }
 
-void GPSImageList::saveSettingsToGroup(KConfigGroup* const group)
+void GPSItemList::saveSettingsToGroup(KConfigGroup* const group)
 {
     group->writeEntry("Image List Thumbnail Size", d->itemDelegate->getThumbnailSize());
     group->writeEntry("Header State",              header()->saveState());
 }
 
-void GPSImageList::readSettingsFromGroup(const KConfigGroup* const group)
+void GPSItemList::readSettingsFromGroup(const KConfigGroup* const group)
 {
     setThumbnailSize(group->readEntry("Image List Thumbnail Size", 60));
 
@@ -220,35 +220,35 @@ void GPSImageList::readSettingsFromGroup(const KConfigGroup* const group)
     }
 }
 
-QItemSelectionModel* GPSImageList::getSelectionModel() const
+QItemSelectionModel* GPSItemList::getSelectionModel() const
 {
     return d->selectionModel;
 }
 
-void GPSImageList::slotInternalTreeViewImageActivated(const QModelIndex& index)
+void GPSItemList::slotInternalTreeViewImageActivated(const QModelIndex& index)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << index << d->imageSortProxyModel->mapToSource(index);
     emit(signalImageActivated(d->imageSortProxyModel->mapToSource(index)));
 }
 
-GPSItemSortProxyModel* GPSImageList::getSortProxyModel() const
+GPSItemSortProxyModel* GPSItemList::getSortProxyModel() const
 {
     return d->imageSortProxyModel;
 }
 
-void GPSImageList::setEditEnabled(const bool state)
+void GPSItemList::setEditEnabled(const bool state)
 {
     d->editEnabled = state;
     slotUpdateActionsEnabled();
 }
 
-void GPSImageList::setDragEnabled(const bool state)
+void GPSItemList::setDragEnabled(const bool state)
 {
     d->dragEnabled = state;
     slotUpdateActionsEnabled();
 }
 
-void GPSImageList::slotUpdateActionsEnabled()
+void GPSItemList::slotUpdateActionsEnabled()
 {
     QTreeView::setDragEnabled(d->dragEnabled && d->editEnabled);
 
@@ -258,7 +258,7 @@ void GPSImageList::slotUpdateActionsEnabled()
     }
 }
 
-bool GPSImageList::eventFilter(QObject* watched, QEvent* event)
+bool GPSItemList::eventFilter(QObject* watched, QEvent* event)
 {
     QHeaderView* const headerView = header();
 
@@ -290,7 +290,7 @@ bool GPSImageList::eventFilter(QObject* watched, QEvent* event)
     return true;
 }
 
-void GPSImageList::slotColumnVisibilityActionTriggered(QAction* action)
+void GPSItemList::slotColumnVisibilityActionTriggered(QAction* action)
 {
     const int columnNumber     = action->data().toInt();
     const bool columnIsVisible = action->isChecked();

@@ -70,7 +70,7 @@
 #include "gpscommon.h"
 #include "gpsitemmodel.h"
 #include "mapdragdrophandler.h"
-#include "gpsimagelist.h"
+#include "gpsitemlist.h"
 #include "gpsitemlistdragdrophandler.h"
 #include "gpsitemlistcontextmenu.h"
 #include "gpscorrelatorwidget.h"
@@ -218,7 +218,7 @@ public:
     QDialogButtonBox*                        buttonBox;
     QSplitter*                               VSplitter;
     QSplitter*                               HSplitter;
-    GPSImageList*                            treeView;
+    GPSItemList*                            treeView;
     QStackedWidget*                          stackedWidget;
     QTabBar*                                 tabBar;
     int                                      splitterSize;
@@ -381,7 +381,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
     d->mapSplitter->addWidget(mapVBox);
     d->VSplitter->addWidget(d->mapSplitter);
 
-    d->treeView      = new GPSImageList(this);
+    d->treeView      = new GPSItemList(this);
     d->treeView->setModelAndSelectionModel(d->imageModel, d->selectionModel);
     d->treeView->setDragDropHandler(new GPSItemListDragDropHandler(this));
     d->treeView->setDragEnabled(true);

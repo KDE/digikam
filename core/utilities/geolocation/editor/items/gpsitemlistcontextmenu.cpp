@@ -92,7 +92,7 @@ public:
     QAction*                 actionRemoveSpeed;
     QAction*                 actionLookupMissingAltitudes;
 
-    GPSImageList*            imagesList;
+    GPSItemList*            imagesList;
 
     // Altitude lookup
     QPointer<LookupAltitude> altitudeLookup;
@@ -101,7 +101,7 @@ public:
     int                      altitudeReceivedCount;
 };
 
-GPSItemListContextMenu::GPSItemListContextMenu(GPSImageList* const imagesList,
+GPSItemListContextMenu::GPSItemListContextMenu(GPSItemList* const imagesList,
                                                  GPSBookmarkOwner* const bookmarkOwner)
     : QObject(imagesList),
       d(new Private)

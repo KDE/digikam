@@ -35,7 +35,7 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                             items/gpsitemdelegate.cpp
                             items/gpsitemmodel.cpp
                             items/gpsitemsortproxymodel.cpp
-                            items/gpsimagelist.cpp
+                            items/gpsitemlist.cpp
                             items/gpsitemlistcontextmenu.cpp
 
                             dialog/gpscommon.cpp
