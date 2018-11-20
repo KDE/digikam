@@ -32,9 +32,9 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                             dragdrop/gpsitemlistdragdrophandler.cpp
 
                             items/gpsitemcontainer.cpp
+                            items/gpsitemdelegate.cpp
                             items/gpsimagesortproxymodel.cpp
                             items/gpsimagemodel.cpp
-                            items/gpsimageitemdelegate.cpp
                             items/gpsimagelist.cpp
                             items/gpsimagelistcontextmenu.cpp
 

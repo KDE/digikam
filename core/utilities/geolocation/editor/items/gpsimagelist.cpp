@@ -39,7 +39,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "gpsimageitemdelegate.h"
+#include "gpsitemdelegate.h"
 #include "gpsitemlistdragdrophandler.h"
 
 namespace Digikam
@@ -64,7 +64,7 @@ public:
     bool                      dragEnabled;
     GPSItemModel*            model;
     QItemSelectionModel*      selectionModel;
-    GPSItemContainerDelegate*     itemDelegate;
+    GPSItemDelegate*     itemDelegate;
     GPSImageSortProxyModel*   imageSortProxyModel;
     ItemListDragDropHandler* dragDropHandler;
 };
@@ -78,7 +78,7 @@ GPSImageList::GPSImageList(QWidget* const parent)
     setRootIsDecorated(false);
     setAlternatingRowColors(true);
 
-    d->itemDelegate = new GPSItemContainerDelegate(this, this);
+    d->itemDelegate = new GPSItemDelegate(this, this);
     setItemDelegate(d->itemDelegate);
     setThumbnailSize(60);
     slotUpdateActionsEnabled();

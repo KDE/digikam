@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-22
- * Description : A model for the view to display a list of images.
+ * Description : A model for the view to display a list of items.
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Michael G. Hansen <mike at mghansen dot de>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_GPS_IMAGE_ITEM_DELEGATE_H
-#define DIGIKAM_GPS_IMAGE_ITEM_DELEGATE_H
+#ifndef DIGIKAM_GPS_ITEM_DELEGATE_H
+#define DIGIKAM_GPS_ITEM_DELEGATE_H
 
 // Qt includes
 
@@ -36,14 +36,14 @@
 namespace Digikam
 {
 
-class GPSItemContainerDelegate : public QItemDelegate
+class GPSItemDelegate : public QItemDelegate
 {
     Q_OBJECT
 
 public:
 
-    explicit GPSItemContainerDelegate(GPSImageList* const imageList, QObject* const parent = 0);
-    virtual ~GPSItemContainerDelegate();
+    explicit GPSItemDelegate(GPSImageList* const imageList, QObject* const parent = 0);
+    virtual ~GPSItemDelegate();
 
     void setThumbnailSize(const int size);
     int  getThumbnailSize() const;
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_GPS_IMAGE_ITEM_DELEGATE_H
+#endif // DIGIKAM_GPS_ITEM_DELEGATE_H

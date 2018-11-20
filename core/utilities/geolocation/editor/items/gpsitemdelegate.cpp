@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-22
- * Description : A model for the view to display a list of images.
+ * Description : A model for the view to display a list of items.
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Michael G. Hansen <mike at mghansen dot de>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "gpsimageitemdelegate.h"
+#include "gpsitemdelegate.h"
 
 // Qt includes
 
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN GPSItemContainerDelegate::Private
+class Q_DECL_HIDDEN GPSItemDelegate::Private
 {
 public:
 
@@ -51,19 +51,19 @@ public:
     int           thumbnailSize;
 };
 
-GPSItemContainerDelegate::GPSItemContainerDelegate(GPSImageList* const imageList, QObject* const parent)
+GPSItemDelegate::GPSItemDelegate(GPSImageList* const imageList, QObject* const parent)
     : QItemDelegate(parent),
       d(new Private())
 {
     d->imageList = imageList;
 }
 
-GPSItemContainerDelegate::~GPSItemContainerDelegate()
+GPSItemDelegate::~GPSItemDelegate()
 {
     delete d;
 }
 
-void GPSItemContainerDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
+void GPSItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
 {
     if (sortMappedindex.column() != GPSItemContainer::ColumnThumbnail)
     {
@@ -97,7 +97,7 @@ void GPSItemContainerDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     painter->drawPixmap(QRect(startPoint, pixmapSize), itemPixmap, QRect(QPoint(0, 0), pixmapSize));
 }
 
-QSize GPSItemContainerDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
+QSize GPSItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
 {
     if (sortMappedindex.column() == GPSItemContainer::ColumnThumbnail)
     {
@@ -109,9 +109,9 @@ QSize GPSItemContainerDelegate::sizeHint(const QStyleOptionViewItem& option, con
     return QSize(realSizeHint.width(), d->thumbnailSize);
 }
 
-void GPSItemContainerDelegate::setThumbnailSize(const int size)
+void GPSItemDelegate::setThumbnailSize(const int size)
 {
-    d->thumbnailSize                 = size;
+    d->thumbnailSize               = size;
     GPSItemModel* const imageModel = d->imageList->getModel();
 
     if (!imageModel)
@@ -125,7 +125,7 @@ void GPSItemContainerDelegate::setThumbnailSize(const int size)
     }
 }
 
-int GPSItemContainerDelegate::getThumbnailSize() const
+int GPSItemDelegate::getThumbnailSize() const
 {
     return d->thumbnailSize;
 }
