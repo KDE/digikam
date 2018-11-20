@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_GPS_IMAGE_LIST_CONTEXT_MENU_H
-#define DIGIKAM_GPS_IMAGE_LIST_CONTEXT_MENU_H
+#ifndef DIGIKAM_GPS_ITEM_LIST_CONTEXT_MENU_H
+#define DIGIKAM_GPS_ITEM_LIST_CONTEXT_MENU_H
 
 // Qt includes:
 
@@ -44,15 +44,15 @@ namespace Digikam
 class GPSUndoCommand;
 class GPSBookmarkOwner;
 
-class GPSImageListContextMenu : public QObject
+class GPSItemListContextMenu : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit GPSImageListContextMenu(GPSImageList* const imagesList,
+    explicit GPSItemListContextMenu(GPSImageList* const imagesList,
                                      GPSBookmarkOwner* const bookmarkOwner = 0);
-    ~GPSImageListContextMenu();
+    ~GPSItemListContextMenu();
 
     void setEnabled(const bool state);
 
@@ -97,4 +97,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_GPS_IMAGE_LIST_CONTEXT_MENU_H
+#endif // DIGIKAM_GPS_ITEM_LIST_CONTEXT_MENU_H

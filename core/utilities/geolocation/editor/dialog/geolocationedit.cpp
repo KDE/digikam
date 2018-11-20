@@ -72,7 +72,7 @@
 #include "mapdragdrophandler.h"
 #include "gpsimagelist.h"
 #include "gpsitemlistdragdrophandler.h"
-#include "gpsimagelistcontextmenu.h"
+#include "gpsitemlistcontextmenu.h"
 #include "gpscorrelatorwidget.h"
 #include "digikam_debug.h"
 #include "dmessagebox.h"
@@ -204,7 +204,7 @@ public:
     GPSItemModel*                           imageModel;
     QItemSelectionModel*                     selectionModel;
     bool                                     uiEnabled;
-    GPSImageListContextMenu*                 listViewContextMenu;
+    GPSItemListContextMenu*                 listViewContextMenu;
     TrackManager*                            trackManager;
 
     // Loading and saving
@@ -392,7 +392,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
     d->treeView->setSortingEnabled(true);
     d->VSplitter->addWidget(d->treeView);
 
-    d->listViewContextMenu  = new GPSImageListContextMenu(d->treeView, d->bookmarkOwner);
+    d->listViewContextMenu  = new GPSItemListContextMenu(d->treeView, d->bookmarkOwner);
     d->HSplitter->addWidget(d->stackedWidget);
     d->HSplitter->setCollapsible(1, true);
     d->splitterSize         = 0;
