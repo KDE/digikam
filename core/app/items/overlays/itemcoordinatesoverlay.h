@@ -33,7 +33,7 @@
 
 #include "itemviewhoverbutton.h"
 #include "itemdelegateoverlay.h"
-#include "itemviewimagedelegate.h"
+#include "itemviewdelegate.h"
 
 namespace Digikam
 {
@@ -56,7 +56,7 @@ protected:
 class ItemCoordinatesOverlay : public AbstractWidgetDelegateOverlay
 {
     Q_OBJECT
-    REQUIRE_DELEGATE(ItemViewItemDelegate)
+    REQUIRE_DELEGATE(ItemViewDelegate)
 
 public:
 

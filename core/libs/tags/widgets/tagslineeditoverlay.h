@@ -31,7 +31,7 @@
 // Local includes
 
 #include "itemdelegateoverlay.h"
-#include "itemviewimagedelegate.h"
+#include "itemviewdelegate.h"
 
 namespace Digikam
 {
@@ -41,7 +41,7 @@ class AddTagsLineEdit;
 class TagsLineEditOverlay : public AbstractWidgetDelegateOverlay
 {
     Q_OBJECT
-    REQUIRE_DELEGATE(ItemViewItemDelegate)
+    REQUIRE_DELEGATE(ItemViewDelegate)
 
 public:
 

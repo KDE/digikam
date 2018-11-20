@@ -36,7 +36,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "itemviewimagedelegate.h"
+#include "itemviewdelegate.h"
 #include "itemviewhoverbutton.h"
 
 namespace Digikam

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : Qt item view for images - the delegate
+ * Description : Qt item view for items - the delegate
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ITEM_VIEW_IMAGE_DELEGATE_H
-#define DIGIKAM_ITEM_VIEW_IMAGE_DELEGATE_H
+#ifndef DIGIKAM_ITEM_VIEW_DELEGATE_H
+#define DIGIKAM_ITEM_VIEW_DELEGATE_H
 
 // Local includes
 
@@ -35,16 +35,16 @@
 namespace Digikam
 {
 
-class ItemViewItemDelegatePrivate;
+class ItemViewDelegatePrivate;
 
-class DIGIKAM_EXPORT ItemViewItemDelegate : public DItemDelegate, public ItemDelegateOverlayContainer
+class DIGIKAM_EXPORT ItemViewDelegate : public DItemDelegate, public ItemDelegateOverlayContainer
 {
     Q_OBJECT
 
 public:
 
-    explicit ItemViewItemDelegate(QObject* const parent = 0);
-    ~ItemViewItemDelegate();
+    explicit ItemViewDelegate(QObject* const parent = 0);
+    ~ItemViewDelegate();
 
     ThumbnailSize thumbnailSize() const;
     int spacing()                 const;
@@ -137,14 +137,14 @@ protected:
 
 protected:
 
-    ItemViewItemDelegatePrivate* const d_ptr;
-    ItemViewItemDelegate(ItemViewItemDelegatePrivate& dd, QObject* const parent);
+    ItemViewDelegatePrivate* const d_ptr;
+    ItemViewDelegate(ItemViewDelegatePrivate& dd, QObject* const parent);
 
 private:
 
-    Q_DECLARE_PRIVATE(ItemViewItemDelegate)
+    Q_DECLARE_PRIVATE(ItemViewDelegate)
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ITEM_VIEW_IMAGE_DELEGATE_H
+#endif // DIGIKAM_ITEM_VIEW_DELEGATE_H

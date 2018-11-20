@@ -27,7 +27,7 @@
 
 // Local includes
 
-#include "itemviewimagedelegate.h"
+#include "itemviewdelegate.h"
 #include "thumbnailsize.h"
 
 namespace Digikam
@@ -40,7 +40,7 @@ class ItemFilterModel;
 class ItemModel;
 class ItemThumbnailModel;
 
-class ItemDelegate : public ItemViewItemDelegate
+class ItemDelegate : public ItemViewDelegate
 {
     Q_OBJECT
 

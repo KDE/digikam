@@ -56,7 +56,7 @@ namespace Digikam
 
 void ItemDelegate::ItemDelegatePrivate::clearRects()
 {
-    ItemViewItemDelegatePrivate::clearRects();
+    ItemViewDelegatePrivate::clearRects();
     dateRect             = QRect(0, 0, 0, 0);
     modDateRect          = QRect(0, 0, 0, 0);
     pixmapRect           = QRect(0, 0, 0, 0);
@@ -74,12 +74,12 @@ void ItemDelegate::ItemDelegatePrivate::clearRects()
 }
 
 ItemDelegate::ItemDelegate(QObject* const parent)
-    : ItemViewItemDelegate(*new ItemDelegatePrivate, parent)
+    : ItemViewDelegate(*new ItemDelegatePrivate, parent)
 {
 }
 
 ItemDelegate::ItemDelegate(ItemDelegate::ItemDelegatePrivate& dd, QObject* parent)
-    : ItemViewItemDelegate(dd, parent)
+    : ItemViewDelegate(dd, parent)
 {
 }
 
@@ -160,7 +160,7 @@ void ItemDelegate::setSpacing(int spacing)
         d->categoryDrawer->setLowerSpacing(spacing);
     }
 
-    ItemViewItemDelegate::setSpacing(spacing);
+    ItemViewDelegate::setSpacing(spacing);
 }
 
 ItemCategoryDrawer* ItemDelegate::categoryDrawer() const
@@ -443,7 +443,7 @@ void ItemDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
         d->categoryDrawer->setDefaultViewOptions(option);
     }
 
-    ItemViewItemDelegate::setDefaultViewOptions(option);
+    ItemViewDelegate::setDefaultViewOptions(option);
 }
 
 void ItemDelegate::invalidatePaintingCache()
@@ -455,7 +455,7 @@ void ItemDelegate::invalidatePaintingCache()
         d->categoryDrawer->invalidatePaintingCache();
     }
 
-    ItemViewItemDelegate::invalidatePaintingCache();
+    ItemViewDelegate::invalidatePaintingCache();
 }
 
 void ItemDelegate::updateContentWidth()
@@ -501,7 +501,7 @@ void ItemDelegate::updateSizeRectsAndPixmaps()
 void ItemDelegate::clearCaches()
 {
     Q_D(ItemDelegate);
-    ItemViewItemDelegate::clearCaches();
+    ItemViewDelegate::clearCaches();
     d->actualPixmapRectCache.clear();
 }
 

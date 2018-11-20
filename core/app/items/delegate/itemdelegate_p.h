@@ -34,14 +34,14 @@
 
 // Local includes
 
-#include "itemviewimagedelegatepriv.h"
+#include "itemviewdelegate_p.h"
 
 namespace Digikam
 {
 
 class ItemCategoryDrawer;
 
-class Q_DECL_HIDDEN ItemDelegate::ItemDelegatePrivate : public ItemViewItemDelegatePrivate
+class Q_DECL_HIDDEN ItemDelegate::ItemDelegatePrivate : public ItemViewDelegatePrivate
 {
 public:
 

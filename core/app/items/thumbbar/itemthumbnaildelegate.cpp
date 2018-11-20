@@ -88,7 +88,7 @@ bool ItemThumbnailDelegate::acceptsActivation(const QPoint& pos, const QRect& vi
         const QModelIndex& index, QRect* activationRect) const
 {
     // reuse implementation from grandparent
-    return ItemViewItemDelegate::acceptsActivation(pos, visualRect, index, activationRect);
+    return ItemViewDelegate::acceptsActivation(pos, visualRect, index, activationRect);
 }
 
 void ItemThumbnailDelegate::updateContentWidth()

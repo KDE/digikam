@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : Qt item view for images - the delegate
+ * Description : Qt item view for items - the delegate (private container)
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ITEM_VIEW_IMAGE_DELEGATE_PRIV_H
-#define DIGIKAM_ITEM_VIEW_IMAGE_DELEGATE_PRIV_H
+#ifndef DIGIKAM_ITEM_VIEW_DELEGATE_P_H
+#define DIGIKAM_ITEM_VIEW_DELEGATE_P_H
 
 // Qt includes
 
@@ -42,18 +42,18 @@
 namespace Digikam
 {
 
-class ItemViewItemDelegate;
+class ItemViewDelegate;
 
-class DIGIKAM_EXPORT ItemViewItemDelegatePrivate
+class DIGIKAM_EXPORT ItemViewDelegatePrivate
 {
 public:
 
-    explicit ItemViewItemDelegatePrivate();
-    virtual ~ItemViewItemDelegatePrivate()
+    explicit ItemViewDelegatePrivate();
+    virtual ~ItemViewDelegatePrivate()
     {
     }
 
-    void init(ItemViewItemDelegate* const _q);
+    void init(ItemViewDelegate* const _q);
 
     void makeStarPolygon();
 
@@ -84,7 +84,7 @@ public:
 
     QPersistentModelIndex     editingRating;
 
-    ItemViewItemDelegate*    q;
+    ItemViewDelegate*    q;
 
     QRect                     oneRowRegRect;
     QRect                     oneRowComRect;
@@ -97,4 +97,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ITEM_VIEW_IMAGE_DELEGATE_PRIV_H
+#endif // DIGIKAM_ITEM_VIEW_DELEGATE_P_H

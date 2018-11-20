@@ -33,7 +33,7 @@
 // Local includes
 
 #include "itemdelegateoverlay.h"
-#include "itemviewimagedelegate.h"
+#include "itemviewdelegate.h"
 
 namespace Digikam
 {
@@ -61,7 +61,7 @@ Q_SIGNALS:
 class GroupIndicatorOverlay : public AbstractWidgetDelegateOverlay
 {
     Q_OBJECT
-    REQUIRE_DELEGATE(ItemViewItemDelegate)
+    REQUIRE_DELEGATE(ItemViewDelegate)
 
 public:
 
