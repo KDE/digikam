@@ -36,7 +36,7 @@
 #include "itemmodel.h"
 #include "itemfiltermodel.h"
 #include "thumbnailloadthread.h"
-#include "itemthumbnaildelegatepriv.h"
+#include "itemthumbnaildelegate_p.h"
 
 namespace Digikam
 {
