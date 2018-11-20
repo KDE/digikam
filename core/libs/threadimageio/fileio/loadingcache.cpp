@@ -60,16 +60,16 @@ public:
 
 public:
 
-    QCache<QString, DImg>           imageCache;
-    QCache<QString, QImage>         thumbnailImageCache;
-    QCache<QString, QPixmap>        thumbnailPixmapCache;
-    QMultiMap<QString, QString>     imageFilePathHash;
-    QMultiMap<QString, QString>     thumbnailFilePathHash;
-    QMap<QString, LoadingProcess*>  loadingDict;
-    QMutex                          mutex;
-    QWaitCondition                  condVar;
-    LoadingCacheFileWatch*          watch;
-    LoadingCache*                   q;
+    QCache<QString, QSharedPointer<DImg> >    imageCache;
+    QCache<QString, QSharedPointer<QImage> >  thumbnailImageCache;
+    QCache<QString, QSharedPointer<QPixmap> > thumbnailPixmapCache;
+    QMultiMap<QString, QString>               imageFilePathHash;
+    QMultiMap<QString, QString>               thumbnailFilePathHash;
+    QMap<QString, LoadingProcess*>            loadingDict;
+    QMutex                                    mutex;
+    QWaitCondition                            condVar;
+    LoadingCacheFileWatch*                    watch;
+    LoadingCache*                             q;
 };
 
 LoadingCacheFileWatch* LoadingCache::Private::fileWatch() const
@@ -184,15 +184,14 @@ LoadingCache::~LoadingCache()
 
 DImg* LoadingCache::retrieveImage(const QString& cacheKey) const
 {
-    DImg* const img = d->imageCache.take(cacheKey);
+    QSharedPointer<DImg>* const img = d->imageCache[cacheKey];
 
     if (img)
     {
-        int cost = img->numBytes();
-        d->imageCache.insert(cacheKey, img, cost);
+        return img->data();
     }
 
-    return img;
+    return 0;
 }
 
 bool LoadingCache::putImage(const QString& cacheKey, DImg* img, const QString& filePath) const
@@ -201,7 +200,7 @@ bool LoadingCache::putImage(const QString& cacheKey, DImg* img, const QString& f
 
     int cost = img->numBytes();
 
-    successfulyInserted = d->imageCache.insert(cacheKey, img, cost);
+    successfulyInserted = d->imageCache.insert(cacheKey, new QSharedPointer<DImg>(img), cost);
 
     if (successfulyInserted && !filePath.isEmpty())
     {
@@ -262,12 +261,26 @@ void LoadingCache::setCacheSize(int megabytes)
 
 const QImage* LoadingCache::retrieveThumbnail(const QString& cacheKey) const
 {
-    return d->thumbnailImageCache[cacheKey];
+    QSharedPointer<QImage>* const img = d->thumbnailImageCache[cacheKey];
+
+    if (img)
+    {
+        return img->data();
+    }
+
+    return 0;
 }
 
 const QPixmap* LoadingCache::retrieveThumbnailPixmap(const QString& cacheKey) const
 {
-    return d->thumbnailPixmapCache[cacheKey];
+    QSharedPointer<QPixmap>* const pix = d->thumbnailPixmapCache[cacheKey];
+
+    if (pix)
+    {
+        return pix->data();
+    }
+
+    return 0;
 }
 
 bool LoadingCache::hasThumbnailPixmap(const QString& cacheKey) const
@@ -279,7 +292,7 @@ void LoadingCache::putThumbnail(const QString& cacheKey, const QImage& thumb, co
 {
     int cost = thumb.byteCount();
 
-    if (d->thumbnailImageCache.insert(cacheKey, new QImage(thumb), cost))
+    if (d->thumbnailImageCache.insert(cacheKey, new QSharedPointer<QImage>(new QImage(thumb)), cost))
     {
         d->mapThumbnailFilePath(filePath, cacheKey);
         d->fileWatch()->addedThumbnail(filePath);
@@ -290,7 +303,7 @@ void LoadingCache::putThumbnail(const QString& cacheKey, const QPixmap& thumb, c
 {
     int cost = thumb.width() * thumb.height() * thumb.depth() / 8;
 
-    if (d->thumbnailPixmapCache.insert(cacheKey, new QPixmap(thumb), cost))
+    if (d->thumbnailPixmapCache.insert(cacheKey, new QSharedPointer<QPixmap>(new QPixmap(thumb)), cost))
     {
         d->mapThumbnailFilePath(filePath, cacheKey);
         d->fileWatch()->addedThumbnail(filePath);
