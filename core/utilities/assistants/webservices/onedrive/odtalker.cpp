@@ -221,6 +221,8 @@ void ODTalker::slotCatchUrl(const QUrl& url)
         int seconds    = query.queryItemValue(QLatin1String("expires_in")).toInt();
         d->expiryTime  = QDateTime::currentDateTime().addSecs(seconds);
 
+        writeSettings();
+
         qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token received";
         emit oneDriveLinkingSucceeded();
     }
@@ -246,7 +248,7 @@ void ODTalker::slotLinkingSucceeded()
     }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Onedrive";
-    writeSettings();
+
     d->view->close();
     emit signalLinkingSucceeded();
 }

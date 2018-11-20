@@ -243,8 +243,6 @@ void FbTalker::slotLinkingSucceeded()
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Facebook";
 
-    writeSettings();
-
     if (d->view)
     {
         d->view->close();
@@ -265,6 +263,8 @@ void FbTalker::slotCatchUrl(const QUrl& url)
         d->accessToken = query.queryItemValue(QLatin1String("access_token"));
         int seconds    = query.queryItemValue(QLatin1String("expires_in")).toInt();
         d->expiryTime  = QDateTime::currentDateTime().addSecs(seconds);
+
+        writeSettings();
 
         qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token received";
         emit linkingSucceeded();
