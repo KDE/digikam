@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-04-30
- * Description : Graphics View item for DImg
+ * Description : Graphics View item for DImg - Private containers
  *
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DIMG_ITEMS_PRIV_H
-#define DIGIKAM_DIMG_ITEMS_PRIV_H
+#ifndef DIGIKAM_DIMG_ITEMS_P_H
+#define DIGIKAM_DIMG_ITEMS_P_H
 
 // Qt includes
 
@@ -115,4 +115,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_DIMG_ITEMS_PRIV_H
+#endif // DIGIKAM_DIMG_ITEMS_P_H

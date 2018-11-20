@@ -22,7 +22,7 @@
  * ============================================================ */
 
 #include "dimgpreviewitem.h"
-#include "dimgitemspriv.h"
+#include "dimgitems_p.h"
 
 // Qt includes
 

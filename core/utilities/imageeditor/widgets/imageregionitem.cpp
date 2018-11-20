@@ -36,7 +36,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dimgitemspriv.h"
+#include "dimgitems_p.h"
 #include "editorcore.h"
 #include "exposurecontainer.h"
 #include "iccmanager.h"

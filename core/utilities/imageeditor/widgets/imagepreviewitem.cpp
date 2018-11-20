@@ -39,7 +39,7 @@
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "editorcore.h"
-#include "dimgitemspriv.h"
+#include "dimgitems_p.h"
 
 namespace Digikam
 {
