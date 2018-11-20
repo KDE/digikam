@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-07-08
- * Description : Qt item view for images - the delegate
+ * Description : Qt item view to import items - the delegate (private container)
  *
  * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
  * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMPORT_DELEGATE_PRIV_H
-#define DIGIKAM_IMPORT_DELEGATE_PRIV_H
+#ifndef DIGIKAM_IMPORT_DELEGATE_P_H
+#define DIGIKAM_IMPORT_DELEGATE_P_H
 
 // Qt includes
 
@@ -33,7 +33,7 @@
 // Local includes
 
 #include "importcategorizedview.h"
-#include "itemviewimportdelegatepriv.h"
+#include "itemviewimportdelegate_p.h"
 
 namespace Digikam
 {
@@ -133,4 +133,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMPORT_DELEGATE_PRIV_H
+#endif // DIGIKAM_IMPORT_DELEGATE_P_H

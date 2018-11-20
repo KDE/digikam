@@ -27,7 +27,6 @@
 
 // Local includes
 
-#include "itemviewimportdelegatepriv.h"
 #include "thumbnailsize.h"
 #include "ditemdelegate.h"
 #include "itemdelegateoverlay.h"
