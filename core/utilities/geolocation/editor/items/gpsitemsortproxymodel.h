@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-21
- * Description : A model to hold information about images.
+ * Description : A model to hold GPS information about items.
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Michael G. Hansen <mike at mghansen dot de>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_GPS_IMAGE_SORT_PROXY_MODEL_H
-#define DIGIKAM_GPS_IMAGE_SORT_PROXY_MODEL_H
+#ifndef DIGIKAM_GPS_ITEM_SORT_PROXY_MODEL_H
+#define DIGIKAM_GPS_ITEM_SORT_PROXY_MODEL_H
 
 // Qt includes
 
@@ -40,14 +40,14 @@
 namespace Digikam
 {
 
-class GPSImageSortProxyModel : public QSortFilterProxyModel
+class GPSItemSortProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
 public:
 
-    explicit GPSImageSortProxyModel(GPSItemModel* const imageModel, QItemSelectionModel* const sourceSelectionModel);
-    ~GPSImageSortProxyModel();
+    explicit GPSItemSortProxyModel(GPSItemModel* const imageModel, QItemSelectionModel* const sourceSelectionModel);
+    ~GPSItemSortProxyModel();
 
     QItemSelectionModel* mappedSelectionModel() const;
 
@@ -187,4 +187,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_GPS_IMAGE_SORT_PROXY_MODEL_H
+#endif // DIGIKAM_GPS_ITEM_SORT_PROXY_MODEL_H

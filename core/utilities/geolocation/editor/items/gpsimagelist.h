@@ -32,7 +32,7 @@
 // Local includes
 
 #include "gpsitemmodel.h"
-#include "gpsimagesortproxymodel.h"
+#include "gpsitemsortproxymodel.h"
 
 class QWheelEvent;
 class KConfigGroup;
@@ -56,7 +56,7 @@ public:
     QItemSelectionModel* getSelectionModel() const;
     void setDragDropHandler(ItemListDragDropHandler* const dragDropHandler);
     void setThumbnailSize(const int size);
-    GPSImageSortProxyModel* getSortProxyModel() const;
+    GPSItemSortProxyModel* getSortProxyModel() const;
 
     void saveSettingsToGroup(KConfigGroup* const group);
     void readSettingsFromGroup(const KConfigGroup* const group);

@@ -65,7 +65,7 @@ public:
     GPSItemModel*            model;
     QItemSelectionModel*      selectionModel;
     GPSItemDelegate*     itemDelegate;
-    GPSImageSortProxyModel*   imageSortProxyModel;
+    GPSItemSortProxyModel*   imageSortProxyModel;
     ItemListDragDropHandler* dragDropHandler;
 };
 
@@ -123,7 +123,7 @@ void GPSImageList::setModelAndSelectionModel(GPSItemModel* const model, QItemSel
 {
     d->model               = model;
     d->selectionModel      = selectionModel;
-    d->imageSortProxyModel = new GPSImageSortProxyModel(d->model, d->selectionModel);
+    d->imageSortProxyModel = new GPSItemSortProxyModel(d->model, d->selectionModel);
     setModel(d->imageSortProxyModel);
 
     connect(d->model, SIGNAL(signalThumbnailForIndexAvailable(QPersistentModelIndex,QPixmap)),
@@ -231,7 +231,7 @@ void GPSImageList::slotInternalTreeViewImageActivated(const QModelIndex& index)
     emit(signalImageActivated(d->imageSortProxyModel->mapToSource(index)));
 }
 
-GPSImageSortProxyModel* GPSImageList::getSortProxyModel() const
+GPSItemSortProxyModel* GPSImageList::getSortProxyModel() const
 {
     return d->imageSortProxyModel;
 }
