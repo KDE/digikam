@@ -25,18 +25,17 @@
  * ============================================================ */
 
 #include "digikamitemdelegate.h"
-#include "itemdelegate_p.h"
+#include "digikamitemdelegate_p.h"
 
 // Local includes
 
-#include "digikam_debug.h"
-#include "applicationsettings.h"
 #include "itemcategorydrawer.h"
 #include "itemcategorizedview.h"
 #include "itemdelegateoverlay.h"
 #include "itemmodel.h"
 #include "itemfiltermodel.h"
-#include "digikamitemdelegate_p.h"
+#include "applicationsettings.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
