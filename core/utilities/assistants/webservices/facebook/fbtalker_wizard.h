@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FB_TALKER_H
-#define DIGIKAM_FB_TALKER_H
+#ifndef DIGIKAM_FB_TALKER_WIZARD_H
+#define DIGIKAM_FB_TALKER_WIZARD_H
 
 // Qt includes
 
@@ -111,4 +111,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_FB_TALKER_H
+#endif // DIGIKAM_FB_TALKER_WIZARD_H
