@@ -51,12 +51,15 @@ public:
     void setFlow(QListView::Flow flow);
 
     /** Returns the minimum or maximum viewport size in the limiting dimension,
-     *  width or height, depending on current flow. */
+     *  width or height, depending on current flow.
+     */
     int maximumSize() const;
     int minimumSize() const;
 
     virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
-    virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
+    virtual bool acceptsActivation(const QPoint& pos,
+                                   const QRect& visualRect,
+                                   const QModelIndex& index,
                                    QRect* activationRect) const;
 
 protected:

@@ -25,7 +25,7 @@
  * ============================================================ */
 
 #include "itemthumbnaildelegate.h"
-#include "itemdelegate_p.h"
+#include "itemthumbnaildelegate_p.h"
 
 // Local includes
 
@@ -36,7 +36,6 @@
 #include "itemmodel.h"
 #include "itemfiltermodel.h"
 #include "thumbnailloadthread.h"
-#include "itemthumbnaildelegate_p.h"
 
 namespace Digikam
 {
@@ -75,12 +74,14 @@ void ItemThumbnailDelegate::setDefaultViewOptions(const QStyleOptionViewItem& op
 int ItemThumbnailDelegate::maximumSize() const
 {
     Q_D(const ItemThumbnailDelegate);
+
     return ThumbnailLoadThread::maximumThumbnailPixmapSize(true) + 2*d->radius + 2*d->margin;
 }
 
 int ItemThumbnailDelegate::minimumSize() const
 {
     Q_D(const ItemThumbnailDelegate);
+
     return ThumbnailSize::Small + 2*d->radius + 2*d->margin;
 }
 

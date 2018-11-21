@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-08-01
- * Description : Qt item view for images - the delegate Private
+ * Description : Qt model view for Showfoto item - the delegate Private
  *
  * Copyright (C) 2013      by Mohamed_Anwer <m_dot_anwer at gmx dot com>
  * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOW_FOTO_DELEGATE_PRIV_H
-#define SHOW_FOTO_DELEGATE_PRIV_H
+#ifndef SHOW_FOTO_DELEGATE_P_H
+#define SHOW_FOTO_DELEGATE_P_H
 
 // Qt includes
 
@@ -33,7 +33,7 @@
 // Local includes
 
 #include "showfotothumbnailbar.h"
-#include "itemviewshowfotodelegatepriv.h"
+#include "itemviewshowfotodelegate_p.h"
 #include "showfotodelegate.h"
 
 namespace ShowFoto
@@ -118,4 +118,4 @@ public:
 
 } // namespace Showfoto
 
-#endif // SHOW_FOTO_DELEGATE_PRIV_H
+#endif // SHOW_FOTO_DELEGATE_P_H
