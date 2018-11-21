@@ -43,6 +43,7 @@
 #include "threadmanager.h"
 #include "facebenchmarkers.h"
 #include "faceworkers.h"
+#include "facepreviewloader.h"
 #include "faceitemretriever.h"
 #include "parallelpipes.h"
 #include "scanstatefilter.h"

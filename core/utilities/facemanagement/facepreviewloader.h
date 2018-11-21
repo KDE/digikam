@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FACE_ITEM_RETRIEVER_H
-#define DIGIKAM_FACE_ITEM_RETRIEVER_H
+#ifndef DIGIKAM_FACE_PREVIEW_LOADER_H
+#define DIGIKAM_FACE_PREVIEW_LOADER_H
 
 // Qt includes
 
@@ -44,27 +44,34 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN FaceItemRetriever
+class Q_DECL_HIDDEN FacePreviewLoader : public PreviewLoadThread
 {
+    Q_OBJECT
+
 public:
 
-    explicit FaceItemRetriever(FacePipeline::Private* const d);
-    void cancel();
+    explicit FacePreviewLoader(FacePipeline::Private* const d);
 
-    ThumbnailImageCatcher* thumbnailCatcher()                                               const;
-    QList<QImage> getDetails(const DImg& src, const QList<QRectF>& rects)                   const;
-    QList<QImage> getDetails(const DImg& src, const QList<FaceTagsIface>& faces)            const;
-    QList<QImage> getThumbnails(const QString& filePath, const QList<FaceTagsIface>& faces) const;
+    void cancel();
+    bool sentOutLimitReached();
+    void checkRestart();
+
+public Q_SLOTS:
+
+    void process(FacePipelineExtendedPackage::Ptr package);
+    void slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img);
+
+Q_SIGNALS:
+
+    void processed(FacePipelineExtendedPackage::Ptr package);
 
 protected:
 
-    ThumbnailImageCatcher* catcher;
-
-private:
-
-    FaceItemRetriever(const FaceItemRetriever&); // Disable
+    PackageLoadingDescriptionList scheduledPackages;
+    int                           maximumSentOutPackages;
+    FacePipeline::Private* const  d;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_FACE_ITEM_RETRIEVER_H
+#endif // DIGIKAM_FACE_PREVIEW_LOADER_H

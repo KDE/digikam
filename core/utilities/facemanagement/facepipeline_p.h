@@ -121,7 +121,7 @@ public:
 public:
 
     ScanStateFilter*                        databaseFilter;
-    FacePreviewLoader*                          previewThread;
+    FacePreviewLoader*                      previewThread;
     DetectionWorker*                        detectionWorker;
     ParallelPipes*                          parallelDetectors;
     RecognitionWorker*                      recognitionWorker;
