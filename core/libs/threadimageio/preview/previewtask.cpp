@@ -271,7 +271,7 @@ void PreviewLoadingTask::execute()
                         break;
                     }
 
-                    if (continueQuery())
+                    if (continueQuery(&m_img))
                     {
                         // Set a hint to try to load a JPEG or PGF with the fast scale-before-decoding method
                         if (isFast)
@@ -287,7 +287,7 @@ void PreviewLoadingTask::execute()
 
                 case PreviewSettings::HighQualityPreview:
                 {
-                    if (continueQuery())
+                    if (continueQuery(&m_img))
                     {
                         m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
                     }
@@ -356,7 +356,7 @@ void PreviewLoadingTask::execute()
 
     // following the golden rule to avoid deadlocks, do this when CacheLock is not held
 
-    if (!m_img.isNull() && continueQuery())
+    if (!m_img.isNull() && continueQuery(&m_img))
     {
         // The image from the cache may or may not be rotated and post processed.
         // exifRotate() and postProcess() will detect if work is needed.
@@ -407,7 +407,7 @@ void PreviewLoadingTask::execute()
             postProcess();
         }
     }
-    else if (continueQuery())
+    else if (continueQuery(&m_img))
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot extract preview for" << m_loadingDescription.filePath;
     }
@@ -448,7 +448,7 @@ bool PreviewLoadingTask::needToScale()
 
 bool PreviewLoadingTask::loadExiv2Preview(MetaEnginePreviews& previews, int sizeLimit)
 {
-    if (previews.isEmpty() || !continueQuery())
+    if (previews.isEmpty() || !continueQuery(&m_img))
     {
         return false;
     }
@@ -469,7 +469,7 @@ bool PreviewLoadingTask::loadExiv2Preview(MetaEnginePreviews& previews, int size
 
 bool PreviewLoadingTask::loadLibRawPreview(int sizeLimit)
 {
-    if (!continueQuery())
+    if (!continueQuery(&m_img))
     {
         return false;
     }
@@ -490,7 +490,7 @@ bool PreviewLoadingTask::loadLibRawPreview(int sizeLimit)
 
 bool PreviewLoadingTask::loadHalfSizeRaw()
 {
-    if (!continueQuery())
+    if (!continueQuery(&m_img))
     {
         return false;
     }
@@ -501,7 +501,7 @@ bool PreviewLoadingTask::loadHalfSizeRaw()
 
 void PreviewLoadingTask::convertQImageToDImg()
 {
-    if (!continueQuery())
+    if (!continueQuery(&m_img))
     {
         return;
     }

@@ -145,7 +145,7 @@ public:
 
     virtual void execute();
     virtual void progressInfo(DImg* const img, float progress);
-    virtual bool continueQuery(DImg* const img = 0);
+    virtual bool continueQuery(DImg* const img);
     virtual void setStatus(LoadingTaskStatus status);
 
     virtual bool needsPostProcessing() const;

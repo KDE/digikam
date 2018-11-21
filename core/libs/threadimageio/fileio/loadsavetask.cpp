@@ -60,6 +60,8 @@ void LoadingTask::progressInfo(DImg* const img, float progress)
 {
     Q_UNUSED(img);
 
+    qCWarning(DIGIKAM_GENERAL_LOG) << "!!!!!!!!!!!!!!!!!!!!!! Wrong function called !!!!!!!!!!!!!!!!!!!!!!";
+
     if (m_loadingTaskStatus == LoadingTaskStatusLoading)
     {
         if (m_thread && m_thread->querySendNotifyEvent())
@@ -254,7 +256,7 @@ void SharedLoadingTask::execute()
 
     // following the golden rule to avoid deadlocks, do this when CacheLock is not held
 
-    if (!m_img.isNull() && continueQuery())
+    if (!m_img.isNull() && continueQuery(&m_img))
     {
         if (accessMode() == LoadSaveThread::AccessModeReadWrite)
         {
@@ -263,7 +265,7 @@ void SharedLoadingTask::execute()
 
         postProcess();
     }
-    else if (continueQuery())
+    else if (continueQuery(&m_img))
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot load image for" << m_loadingDescription.filePath;
     }
