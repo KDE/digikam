@@ -390,7 +390,7 @@ void EditorWindow::setupStandardActions()
     ac->addAction(QLatin1String("editorwindow_openversion"), m_openVersionAction);
     ac->setDefaultShortcuts(m_openVersionAction, QList<QKeySequence>() << Qt::CTRL + Qt::Key_End);
 
-    m_saveAction = buildStdAction(StdSaveAction, this, SLOT(save()), this);
+    m_saveAction = buildStdAction(StdSaveAction, this, SLOT(saveOrSaveAs()), this);
     ac->addAction(QLatin1String("editorwindow_save"), m_saveAction);
 
     m_saveAsAction = buildStdAction(StdSaveAsAction, this, SLOT(saveAs()), this);
@@ -2044,12 +2044,8 @@ bool EditorWindow::saveOrSaveAs()
     {
         return saveAs();
     }
-    else if (promptForOverWrite())
-    {
-        return save();
-    }
 
-    return false;
+    return save();
 }
 
 void EditorWindow::slotSavingStarted(const QString& /*filename*/)
