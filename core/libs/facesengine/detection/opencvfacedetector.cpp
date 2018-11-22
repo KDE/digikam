@@ -358,7 +358,7 @@ void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const 
      * unless in we want very high sensitivity at low speed
      */
     if (d->sensitivityVsSpecificity > 0.1 || d->speedVsAccuracy < 0.9)
-        d->primaryParams.flags = CV_HAAR_DO_CANNY_PRUNING;
+        d->primaryParams.flags = cv::CASCADE_DO_CANNY_PRUNING;
     else
         d->primaryParams.flags = 0;
 

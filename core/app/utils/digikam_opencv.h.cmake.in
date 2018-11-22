@@ -54,24 +54,36 @@
 #   include <opencv2/legacy/compat.hpp>
 #   include <opencv/cvaux.h>
 #   include <opencv2/imgproc/imgproc.hpp>
-#else
+#elif OPENCV_TEST_VERSION(4,0,0)
 #   include <opencv/cv.h>
 #   include <opencv/cvaux.h>
 #   include <opencv/cxcore.h>
 #   include <opencv2/imgproc.hpp>
+#else
+#   include <opencv2/imgproc.hpp>
+#   include <opencv2/core/core_c.h>
+#   include <opencv2/core/types_c.h>
+#   include <opencv2/imgproc/types_c.h>
 #endif
 
 #if OPENCV_TEST_VERSION(3,0,0)
 #   include <opencv2/core/core.hpp>
 #   include <opencv2/core/internal.hpp>
 #   include <opencv2/contrib/contrib.hpp>
-#else
+#elif OPENCV_TEST_VERSION(4,0,0)
 #   include <opencv2/objdetect.hpp>
 #   include <opencv2/core.hpp>
 #   include <opencv2/core/utility.hpp>
 #   include <opencv2/core/persistence.hpp>
 #   include <opencv2/imgcodecs.hpp>
 #   include <opencv2/imgcodecs/imgcodecs_c.h>
+#else
+#   include <opencv2/objdetect.hpp>
+#   include <opencv2/core.hpp>
+#   include <opencv2/core/utility.hpp>
+#   include <opencv2/core/persistence.hpp>
+#   include <opencv2/imgcodecs.hpp>
+#   include <opencv2/imgcodecs/legacy/constants_c.h>
 #endif
 
 // for old-style code
