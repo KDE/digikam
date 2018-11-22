@@ -645,5 +645,5 @@ BUGFIXES:
 577 ==> 400766 - Export to Onedrive: not possible to export into subfolder.
 578 ==> 398207 - box.com video upload fails despite successful authentication.
 579 ==> 401160 - Build against lensfun-devel.
-580 ==> 
-
+580 ==> 401173 - Wish for file saving: set changed datetime to exif datetime.
+581 ==> 
