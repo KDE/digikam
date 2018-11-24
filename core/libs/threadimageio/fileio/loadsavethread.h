@@ -122,11 +122,11 @@ public:
     /** Append a task to load the given file to the task list */
     void load(const LoadingDescription& description);
     /** Append a task to save the image to the task list */
-    void save(DImg& image, const QString& filePath, const QString& format);
+    void save(const DImg& image, const QString& filePath, const QString& format);
 
     void setNotificationPolicy(NotificationPolicy notificationPolicy);
 
-    static void setInfoProvider(LoadSaveFileInfoProvider* infoProvider);
+    static void setInfoProvider(LoadSaveFileInfoProvider* const infoProvider);
     static LoadSaveFileInfoProvider* infoProvider();
 
     /**
@@ -137,7 +137,7 @@ public:
      * Returns false if a rotation was not needed.
      */
     static bool exifRotate(DImg& image, const QString& filePath);
-    static bool wasExifRotated(DImg& image);
+    static bool wasExifRotated(const DImg& image);
 
     /**
      * Reverses the previous function

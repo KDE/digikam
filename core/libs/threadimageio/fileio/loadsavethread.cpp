@@ -74,7 +74,7 @@ LoadSaveThread::~LoadSaveThread()
     delete d;
 }
 
-void LoadSaveThread::setInfoProvider(LoadSaveFileInfoProvider* infoProvider)
+void LoadSaveThread::setInfoProvider(LoadSaveFileInfoProvider* const infoProvider)
 {
     Private::infoProvider = infoProvider;
 }
@@ -91,7 +91,7 @@ void LoadSaveThread::load(const LoadingDescription& description)
     start(lock);
 }
 
-void LoadSaveThread::save(DImg& image, const QString& filePath, const QString& format)
+void LoadSaveThread::save(const DImg& image, const QString& filePath, const QString& format)
 {
     QMutexLocker lock(threadMutex());
     m_todo << new SavingTask(this, image, filePath, format);
@@ -314,7 +314,7 @@ int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& me
     return exifOrientation;
 }
 
-bool LoadSaveThread::wasExifRotated(DImg& image)
+bool LoadSaveThread::wasExifRotated(const DImg& image)
 {
     // Keep in sync with the variant in thumbnailcreator.cpp
     QVariant attribute(image.attribute(QLatin1String("exifRotated")));

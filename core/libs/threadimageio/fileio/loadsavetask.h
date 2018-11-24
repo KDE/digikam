@@ -194,7 +194,7 @@ public:
 
 public:
 
-    explicit SavingTask(LoadSaveThread* const thread, DImg& img, const QString& filePath, const QString& format)
+    explicit SavingTask(LoadSaveThread* const thread, const DImg& img, const QString& filePath, const QString& format)
         : LoadSaveTask(thread),
           m_filePath(filePath),
           m_format(format),
