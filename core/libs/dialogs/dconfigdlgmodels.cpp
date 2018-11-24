@@ -316,7 +316,7 @@ void PageItem::dump(int indent)
 
 // ---------------------------------------------------------------------------------
 
-DConfigDlgWdgModel::DConfigDlgWdgModel(QObject* parent)
+DConfigDlgWdgModel::DConfigDlgWdgModel(QObject* const parent)
     : DConfigDlgModel(*new DConfigDlgWdgModelPrivate, parent)
 {
 }

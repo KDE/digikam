@@ -99,14 +99,14 @@ void BorderFilter::Private::setup(const DImg& m_orgImage)
     }
 }
 
-BorderFilter::BorderFilter(QObject* parent)
+BorderFilter::BorderFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
       d(new Private)
 {
     initFilter();
 }
 
-BorderFilter::BorderFilter(DImg* image, QObject* parent, const BorderContainer& settings)
+BorderFilter::BorderFilter(DImg* image, QObject* const parent, const BorderContainer& settings)
     : DImgThreadedFilter(image, parent, QLatin1String("Border")),
       d(new Private)
 {

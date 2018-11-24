@@ -220,7 +220,7 @@ public:
      *  Connect to the signals accordingly, e.g. to trigger a repaint.
      */
 
-    explicit ItemVisibilityControllerPropertyObject(QObject* parent = 0);
+    explicit ItemVisibilityControllerPropertyObject(QObject* const parent = 0);
 
     qreal opacity() const;
     void setOpacity(qreal opacity);

@@ -120,7 +120,7 @@ protected:
 
     void setModel(QAbstractItemModel* model);
 
-    ItemDelegate(ItemDelegate::ItemDelegatePrivate& dd, QObject* parent);
+    ItemDelegate(ItemDelegate::ItemDelegatePrivate& dd, QObject* const parent);
 
 protected Q_SLOTS:
 

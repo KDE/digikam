@@ -57,7 +57,7 @@ public:
     bool                         paintTree;
 };
 
-ItemVersionsModel::ItemVersionsModel(QObject* parent)
+ItemVersionsModel::ItemVersionsModel(QObject* const parent)
     : QAbstractListModel(parent),
       d(new Private)
 {

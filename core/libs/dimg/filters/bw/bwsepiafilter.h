@@ -148,8 +148,8 @@ class DIGIKAM_EXPORT BWSepiaFilter : public DImgThreadedFilter
 
 public:
 
-    explicit BWSepiaFilter(QObject* parent = 0);
-    explicit BWSepiaFilter(DImg* orgImage, QObject* parent=0, const BWSepiaContainer& settings=BWSepiaContainer());
+    explicit BWSepiaFilter(QObject* const parent = 0);
+    explicit BWSepiaFilter(DImg* orgImage, QObject* const parent=0, const BWSepiaContainer& settings=BWSepiaContainer());
     virtual ~BWSepiaFilter();
 
     static QString          FilterIdentifier()

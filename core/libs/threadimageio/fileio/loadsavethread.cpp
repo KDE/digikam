@@ -60,7 +60,7 @@ LoadSaveFileInfoProvider* LoadSaveThread::Private::infoProvider = 0;
 
 //---------------------------------------------------------------------------------------------------
 
-LoadSaveThread::LoadSaveThread(QObject* parent)
+LoadSaveThread::LoadSaveThread(QObject* const parent)
     : DynamicThread(parent),
       d(new Private)
 {

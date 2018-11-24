@@ -69,7 +69,7 @@ public:
     void setSeparatorRole(int role);
     int separatorRole() const;
 
-    QAction* makeAction(const QIcon& icon, const QString& text, QObject* parent);
+    QAction* makeAction(const QIcon& icon, const QString& text, QObject* const parent);
 
 Q_SIGNALS:
 

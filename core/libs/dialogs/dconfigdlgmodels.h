@@ -256,7 +256,7 @@ public:
      *
      * @param parent The parent object.
      */
-    explicit DConfigDlgWdgModel(QObject* parent = 0);
+    explicit DConfigDlgWdgModel(QObject* const parent = 0);
 
     /**
      * Destroys the page widget model.

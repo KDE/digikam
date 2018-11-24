@@ -52,7 +52,7 @@ class ModelTest : public QObject
 
 public:
 
-  ModelTest( QAbstractItemModel *model, QObject *parent = 0 );
+  ModelTest( QAbstractItemModel* const model, QObject* const parent = 0 );
 
 private Q_SLOTS:
 

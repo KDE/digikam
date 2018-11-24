@@ -207,12 +207,12 @@ public:
     explicit ImportRotateOverlay(ImportRotateOverlayDirection dir, QObject* const parent);
     virtual void setActive(bool active);
 
-    ImportRotateOverlayDirection direction() const     { return m_direction;                                               }
-    bool isLeft() const                                { return m_direction  == ImportRotateOverlayLeft;                   }
-    bool isRight() const                               { return m_direction == ImportRotateOverlayRight;                   }
+    ImportRotateOverlayDirection direction() const { return m_direction; }
+    bool isLeft() const                            { return m_direction  == ImportRotateOverlayLeft; }
+    bool isRight() const                           { return m_direction == ImportRotateOverlayRight; }
 
-    static ImportRotateOverlay* left(QObject* parent)  { return new ImportRotateOverlay(ImportRotateOverlayLeft, parent);  }
-    static ImportRotateOverlay* right(QObject* parent) { return new ImportRotateOverlay(ImportRotateOverlayRight, parent); }
+    static ImportRotateOverlay* left(QObject* const parent)  { return new ImportRotateOverlay(ImportRotateOverlayLeft, parent);  }
+    static ImportRotateOverlay* right(QObject* const parent) { return new ImportRotateOverlay(ImportRotateOverlayRight, parent); }
 
 Q_SIGNALS:
 

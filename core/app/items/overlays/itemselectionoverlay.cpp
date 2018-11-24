@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-ItemSelectionOverlayButton::ItemSelectionOverlayButton(QAbstractItemView* parentView)
+ItemSelectionOverlayButton::ItemSelectionOverlayButton(QAbstractItemView* const parentView)
     : ItemViewHoverButton(parentView)
 {
     setup();
@@ -61,7 +61,7 @@ void ItemSelectionOverlayButton::updateToolTip()
 
 // --------------------------------------------------------------------
 
-ItemSelectionOverlay::ItemSelectionOverlay(QObject* parent)
+ItemSelectionOverlay::ItemSelectionOverlay(QObject* const parent)
     : HoverButtonDelegateOverlay(parent)
 {
 }

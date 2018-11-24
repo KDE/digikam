@@ -40,7 +40,7 @@ class ItemSelectionOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    explicit ItemSelectionOverlayButton(QAbstractItemView* parentView);
+    explicit ItemSelectionOverlayButton(QAbstractItemView* const parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -57,7 +57,7 @@ class ItemSelectionOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    explicit ItemSelectionOverlay(QObject* parent);
+    explicit ItemSelectionOverlay(QObject* const parent);
     virtual void setActive(bool active);
 
 protected:

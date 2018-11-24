@@ -78,7 +78,7 @@ ItemDelegate::ItemDelegate(QObject* const parent)
 {
 }
 
-ItemDelegate::ItemDelegate(ItemDelegate::ItemDelegatePrivate& dd, QObject* parent)
+ItemDelegate::ItemDelegate(ItemDelegate::ItemDelegatePrivate& dd, QObject* const parent)
     : ItemViewDelegate(dd, parent)
 {
 }

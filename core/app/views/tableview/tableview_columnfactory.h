@@ -300,7 +300,7 @@ class TableViewColumnFactory : public QObject
 
 public:
 
-    explicit TableViewColumnFactory(TableViewShared* const tableViewShared, QObject* parent = 0);
+    explicit TableViewColumnFactory(TableViewShared* const tableViewShared, QObject* const parent = 0);
 
     static QList<TableViewColumnDescription> getColumnDescriptionList();
     TableViewColumn* getColumn(const TableViewColumnConfiguration& columnConfiguration);

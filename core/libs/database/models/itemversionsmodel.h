@@ -42,7 +42,7 @@ class DIGIKAM_DATABASE_EXPORT ItemVersionsModel : public QAbstractListModel
 
 public:
 
-    explicit ItemVersionsModel(QObject* parent = 0);
+    explicit ItemVersionsModel(QObject* const parent = 0);
     ~ItemVersionsModel();
 
     Qt::ItemFlags flags(const QModelIndex& index) const;

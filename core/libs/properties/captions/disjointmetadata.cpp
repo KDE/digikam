@@ -149,7 +149,7 @@ public:
     void makeConnections(DisjointMetadata* q);
 };
 
-void DisjointMetadata::Private::makeConnections(DisjointMetadata *q)
+void DisjointMetadata::Private::makeConnections(DisjointMetadata* q)
 {
     QObject::connect(TagsCache::instance(), SIGNAL(tagDeleted(int)),
                      q, SLOT(slotTagDeleted(int)),
@@ -159,7 +159,7 @@ void DisjointMetadata::Private::makeConnections(DisjointMetadata *q)
                      q, SLOT(slotInvalidate()));
 }
 
-DisjointMetadata::DisjointMetadata(QObject *parent)
+DisjointMetadata::DisjointMetadata(QObject* const parent)
     : QObject(parent),
       d(new Private())
 {

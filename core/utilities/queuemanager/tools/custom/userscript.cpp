@@ -75,7 +75,7 @@ public:
     bool            changeSettings;
 };
 
-UserScript::UserScript(QObject* parent)
+UserScript::UserScript(QObject* const parent)
     : BatchTool(QLatin1String("UserScript"), CustomTool, parent),
       d(new Private)
 {

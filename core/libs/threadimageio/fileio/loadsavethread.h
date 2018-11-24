@@ -81,7 +81,8 @@ public:
 
 // -------------------------------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT LoadSaveThread : public DynamicThread, public LoadSaveNotifier
+class DIGIKAM_EXPORT LoadSaveThread : public DynamicThread,
+                                      public LoadSaveNotifier
 {
     Q_OBJECT
 
@@ -111,7 +112,7 @@ public:
 
 public:
 
-    explicit LoadSaveThread(QObject* parent = 0);
+    explicit LoadSaveThread(QObject* const parent = 0);
     /**
      * Destructor:
      * The thread will execute all pending tasks and wait for this upon destruction

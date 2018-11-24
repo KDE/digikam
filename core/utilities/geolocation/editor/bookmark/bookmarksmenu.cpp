@@ -237,7 +237,7 @@ QAction* ModelMenu::makeAction(const QModelIndex& index)
     return action;
 }
 
-QAction* ModelMenu::makeAction(const QIcon& icon, const QString& text, QObject* parent)
+QAction* ModelMenu::makeAction(const QIcon& icon, const QString& text, QObject* const parent)
 {
     QFontMetrics fm(font());
 

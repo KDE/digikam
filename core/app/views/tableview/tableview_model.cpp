@@ -135,7 +135,7 @@ public:
     bool                        outdated;
 };
 
-TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* parent)
+TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* const parent)
     : QAbstractItemModel(parent),
       s(sharedObject),
       d(new Private())

@@ -38,7 +38,7 @@ class UserScript : public BatchTool
 
 public:
 
-    explicit UserScript(QObject* parent = 0);
+    explicit UserScript(QObject* const parent = 0);
     ~UserScript();
 
     QString outputSuffix() const;

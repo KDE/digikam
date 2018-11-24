@@ -74,8 +74,8 @@ public:
     bool isLeft() const  { return m_direction  == ItemRotateOverlayLeft; }
     bool isRight() const { return m_direction == ItemRotateOverlayRight; }
 
-    static ItemRotateOverlay* left(QObject* parent)  { return new ItemRotateOverlay(ItemRotateOverlayLeft, parent);  }
-    static ItemRotateOverlay* right(QObject* parent) { return new ItemRotateOverlay(ItemRotateOverlayRight, parent); }
+    static ItemRotateOverlay* left(QObject* const parent)  { return new ItemRotateOverlay(ItemRotateOverlayLeft, parent);  }
+    static ItemRotateOverlay* right(QObject* const parent) { return new ItemRotateOverlay(ItemRotateOverlayRight, parent); }
 
 Q_SIGNALS:
 

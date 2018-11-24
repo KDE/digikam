@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-SharedLoadSaveThread::SharedLoadSaveThread(QObject* parent)
+SharedLoadSaveThread::SharedLoadSaveThread(QObject* const parent)
     : ManagedLoadSaveThread(parent)
 {
 }
