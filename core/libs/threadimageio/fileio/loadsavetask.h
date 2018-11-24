@@ -115,13 +115,13 @@ public:
 
     // LoadSaveTask
 
-    virtual void execute();
-    virtual TaskType type();
+    virtual void execute() Q_DECL_OVERRIDE;
+    virtual TaskType type() Q_DECL_OVERRIDE;
 
     // DImgLoaderObserver
 
-    virtual void progressInfo(DImg* const img, float progress);
-    virtual bool continueQuery(DImg* const img);
+    virtual void progressInfo(DImg* const img, float progress) Q_DECL_OVERRIDE;
+    virtual bool continueQuery(DImg* const img) Q_DECL_OVERRIDE;
 
     virtual void setStatus(LoadingTaskStatus status);
 
@@ -143,9 +143,9 @@ public:
                                LoadSaveThread::AccessMode mode = LoadSaveThread::AccessModeReadWrite,
                                LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading);
 
-    virtual void execute();
-    virtual void progressInfo(DImg* const img, float progress);
-    virtual bool continueQuery(DImg* const img);
+    virtual void execute() Q_DECL_OVERRIDE;
+    virtual void progressInfo(DImg* const img, float progress) Q_DECL_OVERRIDE;
+    virtual bool continueQuery(DImg* const img) Q_DECL_OVERRIDE;
     virtual void setStatus(LoadingTaskStatus status);
 
     virtual bool needsPostProcessing() const;
@@ -215,11 +215,11 @@ public:
 
 public:
 
-    virtual void     execute();
-    virtual TaskType type();
+    virtual void     execute() Q_DECL_OVERRIDE;
+    virtual TaskType type() Q_DECL_OVERRIDE;
 
-    virtual void     progressInfo(DImg* const img, float progress);
-    virtual bool     continueQuery(DImg* const img);
+    virtual void     progressInfo(DImg* const img, float progress) Q_DECL_OVERRIDE;
+    virtual bool     continueQuery(DImg* const img) Q_DECL_OVERRIDE;
 
     virtual void     setStatus(SavingTaskStatus status);
 

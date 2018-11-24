@@ -279,8 +279,7 @@ void PreviewLoadingTask::execute()
                             m_img.setAttribute(QLatin1String("scaledLoadingSize"), m_loadingDescription.previewParameters.size);
                         }
 
-                        m_img.load(m_loadingDescription.filePath, dynamic_cast<SharedLoadingTask*>(this),
-                                   m_loadingDescription.rawDecodingSettings);
+                        m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
                     }
 
                     break;
@@ -290,8 +289,7 @@ void PreviewLoadingTask::execute()
                 {
                     if (continueQuery(&m_img))
                     {
-                        m_img.load(m_loadingDescription.filePath, dynamic_cast<SharedLoadingTask*>(this),
-                                   m_loadingDescription.rawDecodingSettings);
+                        m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
                     }
 
                     break;
