@@ -60,8 +60,6 @@ void LoadingTask::progressInfo(DImg* const img, float progress)
 {
     Q_UNUSED(img);
 
-    qCWarning(DIGIKAM_GENERAL_LOG) << "!!!!!!!!!!!!!!!!!!!!!! Wrong function called !!!!!!!!!!!!!!!!!!!!!!";
-
     if (m_loadingTaskStatus == LoadingTaskStatusLoading)
     {
         if (m_thread && m_thread->querySendNotifyEvent())
