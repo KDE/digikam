@@ -151,6 +151,8 @@ void PreviewLoadingTask::execute()
         }
     }
 
+    qCWarning(DIGIKAM_GENERAL_LOG) << "------> Point 1 - PreviewLoadingTask is deleted:" << m_deleted;
+
     if (m_img.isNull())
     {
         // Preview is not in cache, we will load image from file.
@@ -279,6 +281,8 @@ void PreviewLoadingTask::execute()
                             m_img.setAttribute(QLatin1String("scaledLoadingSize"), m_loadingDescription.previewParameters.size);
                         }
 
+                        qCWarning(DIGIKAM_GENERAL_LOG) << "------> Point 2 - PreviewLoadingTask is deleted:" << m_deleted;
+
                         m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
                     }
 
@@ -356,6 +360,8 @@ void PreviewLoadingTask::execute()
 
     // following the golden rule to avoid deadlocks, do this when CacheLock is not held
 
+    qCWarning(DIGIKAM_GENERAL_LOG) << "------> Point 3 - PreviewLoadingTask is deleted:" << m_deleted;
+
     if (!m_img.isNull() && continueQuery(&m_img))
     {
         // The image from the cache may or may not be rotated and post processed.
@@ -396,6 +402,8 @@ void PreviewLoadingTask::execute()
         {
             m_img.convertToEightBit();
         }
+
+        qCWarning(DIGIKAM_GENERAL_LOG) << "------> Point 4 - PreviewLoadingTask is deleted:" << m_deleted;
 
         if (needExifRotate)
         {
