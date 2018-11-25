@@ -222,7 +222,7 @@ void ManagedLoadSaveThread::load(const LoadingDescription& description, LoadingM
             // remove all loading tasks
             for (int i = 0 ; i < m_todo.size() ; ++i)
             {
-                LoadSaveTask* task = m_todo[i];
+                LoadSaveTask* const task = m_todo[i];
 
                 if (task != existingTask && checkLoadingTask(task, LoadingTaskFilterAll))
                 {
@@ -360,7 +360,7 @@ void ManagedLoadSaveThread::loadThumbnail(const LoadingDescription& description)
 void ManagedLoadSaveThread::preloadThumbnail(const LoadingDescription& description)
 {
     QMutexLocker lock(threadMutex());
-    LoadingTask* existingTask = findExistingTask(description);
+    LoadingTask* const existingTask = findExistingTask(description);
 
     // reuse task if it exists
     if (existingTask)
@@ -389,7 +389,7 @@ void ManagedLoadSaveThread::preloadThumbnailGroup(const QList<LoadingDescription
 
     foreach (const LoadingDescription& description, descriptions)
     {
-        LoadingTask* existingTask = findExistingTask(description);
+        LoadingTask* const existingTask = findExistingTask(description);
 
         // reuse task if it exists
         if (existingTask)
@@ -536,7 +536,7 @@ void ManagedLoadSaveThread::stopSaving(const QString& filePath)
     // remove relevant tasks from list
     for (int i = 0 ; i < m_todo.size() ; ++i)
     {
-        LoadSaveTask* task = m_todo[i];
+        LoadSaveTask* const task = m_todo[i];
 
         if (task->type() ==  LoadSaveTask::TaskTypeSaving)
         {
