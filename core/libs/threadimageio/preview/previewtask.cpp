@@ -151,6 +151,10 @@ void PreviewLoadingTask::execute()
         }
     }
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "------------> loadingTaskStatus:" << (m_loadingTaskStatus == LoadingTaskStatusStopping)
+                                                                       << continueQuery(&m_img);
+    Q_ASSERT(!(m_loadingTaskStatus == LoadingTaskStatusStopping));
+
     if (m_img.isNull())
     {
         // Preview is not in cache, we will load image from file.
