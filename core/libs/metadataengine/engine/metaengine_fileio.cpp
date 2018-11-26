@@ -154,10 +154,11 @@ bool MetaEngine::loadFromSidecarAndMerge(const QString& filePath)
         return false;
     }
 
-    d->filePath      = filePath;
-    bool hasLoaded   = false;
+    d->filePath    = filePath;
+    bool hasLoaded = false;
 
 #ifdef _XMP_SUPPORT_
+
     QMutexLocker lock(&s_metaEngineMutex);
 
     try
