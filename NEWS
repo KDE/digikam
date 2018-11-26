@@ -646,4 +646,5 @@ BUGFIXES:
 578 ==> 398207 - box.com video upload fails despite successful authentication.
 579 ==> 401160 - Build against lensfun-devel.
 580 ==> 401173 - Wish for file saving: set changed datetime to exif datetime.
-581 ==> 
+581 ==> 401423 - Video sidecar files nor read or written.
+582 ==> 

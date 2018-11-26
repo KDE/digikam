@@ -51,6 +51,7 @@ bool DMetadata::load(const QString& filePath)
 {
     FileReadLocker lock(filePath);
 
+    bool hasLoaded = false;
     QMimeDatabase mimeDB;
 
     if (!mimeDB.mimeTypeForFile(filePath).name().startsWith(QLatin1String("video/")) &&
@@ -61,22 +62,31 @@ bool DMetadata::load(const QString& filePath)
         // Never process video file Exiv2, the backend is very unstable.
         if (!MetaEngine::load(filePath))
         {
-            if (!loadUsingRawEngine(filePath))
+            if (loadUsingRawEngine(filePath))
             {
-                return false;
+                hasLoaded = true;
             }
+        }
+        else
+        {
+            hasLoaded = true;
         }
     }
     else
     {
         // No image file, process with ffmpeg backend.
-        if (!loadUsingFFmpeg(filePath))
+        if (loadUsingFFmpeg(filePath))
         {
-            return false;
+            hasLoaded = true;
+        }
+
+        if (loadFromSidecarAndMerge(filePath))
+        {
+            hasLoaded = true;
         }
     }
 
-    return true;
+    return hasLoaded;
 }
 
 bool DMetadata::save(const QString& filePath, bool setVersion) const

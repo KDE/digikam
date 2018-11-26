@@ -312,6 +312,11 @@ public:
      */
     virtual bool load(const QString& filePath);
 
+    /** Load metadata from a sidecar file and merge.
+     *  Return true if metadata have been loaded successfully from file.
+     */
+    bool loadFromSidecarAndMerge(const QString& filePath);
+
     /** Save all metadata to a file. This one can be different than original picture to perform
      *  transfert operation Return true if metadata have been saved into file.
      */
