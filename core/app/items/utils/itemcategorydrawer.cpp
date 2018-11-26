@@ -350,7 +350,7 @@ void ItemCategoryDrawer::textForDAlbum(DAlbum* album, int count, QString* header
     if (album->range() == DAlbum::Month)
     {
         *header = i18nc("Month String - Year String", "%1 %2",
-                        QLocale().monthName(album->date().month(), QLocale::LongFormat),
+                        QLocale().standaloneMonthName(album->date().month(), QLocale::LongFormat),
                         album->date().year());
     }
     else

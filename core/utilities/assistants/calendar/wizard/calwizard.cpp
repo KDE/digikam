@@ -196,7 +196,7 @@ void CalWizard::slotPageSelected(int curr)
 
         for (int i = 1; i <= CalSystem().monthsInYear(date); ++i)
         {
-            month = QLocale().monthName(i, QLocale::LongFormat);
+            month = QLocale().standaloneMonthName(i, QLocale::LongFormat);
             image = d->cSettings->image(i);
 
             if (!image.isEmpty())
@@ -345,7 +345,7 @@ void CalWizard::updatePage(int page)
     int month = d->months.keys().at(page);
 
     d->calProgressUI.finishLabel->setText(i18n("Printing calendar page for %1 of %2",
-                                          QLocale().monthName(month, QLocale::LongFormat),
+                                          QLocale().standaloneMonthName(month, QLocale::LongFormat),
                                           QLocale().toString(date, QLatin1String("yyyy"))));
 }
 

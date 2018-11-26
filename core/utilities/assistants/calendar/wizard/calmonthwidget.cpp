@@ -102,7 +102,7 @@ void CalMonthWidget::paintEvent(QPaintEvent* e)
     QPushButton::paintEvent(e);
 
     QPainter painter(this);
-    QString name = QLocale().monthName(d->month, QLocale::ShortFormat);
+    QString name = QLocale().standaloneMonthName(d->month, QLocale::ShortFormat);
     QRect cr     = contentsRect();
     cr.setBottom(70);
     painter.drawPixmap(cr.width()  / 2 - d->thumb.width()  / 2,

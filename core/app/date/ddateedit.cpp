@@ -477,7 +477,7 @@ void DDateEdit::setupKeywords()
 
     for (int i = 1; i <= 7; ++i)
     {
-        dayName = QLocale().dayName(i, QLocale::LongFormat).toLower();
+        dayName = QLocale().standaloneDayName(i, QLocale::LongFormat).toLower();
         d->keywordMap.insert(dayName, i + 100);
     }
 }

@@ -34,8 +34,8 @@ ItemQueryBuilder::ItemQueryBuilder()
 
     for (int i = 1 ; i <= 12 ; ++i)
     {
-        m_shortMonths[i-1] = QLocale().monthName(i, QLocale::ShortFormat).toLower();
-        m_longMonths[i-1]  = QLocale().monthName(i, QLocale::LongFormat).toLower();
+        m_shortMonths[i-1] = QLocale().standaloneMonthName(i, QLocale::ShortFormat).toLower();
+        m_longMonths[i-1]  = QLocale().standaloneMonthName(i, QLocale::LongFormat).toLower();
     }
 
     m_imageTagPropertiesJoined = false;

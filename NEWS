@@ -647,4 +647,5 @@ BUGFIXES:
 579 ==> 401160 - Build against lensfun-devel.
 580 ==> 401173 - Wish for file saving: set changed datetime to exif datetime.
 581 ==> 401423 - Video sidecar files nor read or written.
-582 ==> 
+582 ==> 401438 - Calendar plugin prints improper month names (Czech localization).
+583 ==> 

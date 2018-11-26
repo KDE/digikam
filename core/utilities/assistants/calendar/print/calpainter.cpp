@@ -222,7 +222,7 @@ void CalPainter::paint(int month)
     f.setPixelSize(f.pixelSize() + 5);
     setFont(f);
     drawText(rCalHeader, Qt::AlignLeft | Qt::AlignVCenter, QString::number(params.year));
-    drawText(rCalHeader, Qt::AlignRight | Qt::AlignVCenter, QLocale().monthName(month));
+    drawText(rCalHeader, Qt::AlignRight | Qt::AlignVCenter, QLocale().standaloneMonthName(month));
     restore();
 
     // ---------------------------------------------------------------
@@ -254,7 +254,7 @@ void CalPainter::paint(int month)
         rsmall = r;
         rsmall.setWidth(r.width() - 2);
         rsmall.setHeight(r.height() - 2);
-        drawText(rsmall, Qt::AlignRight | Qt::AlignBottom, QLocale().dayName(dayname, QLocale::ShortFormat));
+        drawText(rsmall, Qt::AlignRight | Qt::AlignBottom, QLocale().standaloneDayName(dayname, QLocale::ShortFormat));
     }
 
     restore();

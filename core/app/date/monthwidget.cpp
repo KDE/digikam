@@ -270,7 +270,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
         rsmall.setWidth(r.width() - 2);
         rsmall.setHeight(r.height() - 2);
         p.drawText(rsmall, Qt::AlignVCenter|Qt::AlignHCenter,
-                   QLocale().dayName(i, QLocale::ShortFormat).remove(2, 1));
+                   QLocale().standaloneDayName(i, QLocale::ShortFormat).remove(2, 1));
         ++index;
     }
 
@@ -280,7 +280,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
     p.setFont(fnBold);
 
     p.drawText(r, Qt::AlignCenter, QString::fromUtf8("%1 %2")
-               .arg(QLocale().monthName(d->month, QLocale::LongFormat))
+               .arg(QLocale().standaloneMonthName(d->month, QLocale::LongFormat))
                .arg(QDate(d->year, d->month, 1).year()));
 
     p.end();

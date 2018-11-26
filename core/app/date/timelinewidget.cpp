@@ -315,7 +315,7 @@ int TimeLineWidget::cursorInfo(QString& infoDate) const
             infoDate      = i18nc("Week #weeknumber - month name - year string\nStart:\tEnd: ",
                                   "Week #%1 - %2 %3\n%4\t%5",
                                   weekNb,
-                                  QLocale().monthName(date.month(), QLocale::LongFormat),
+                                  QLocale().standaloneMonthName(date.month(), QLocale::LongFormat),
                                   QLocale().toString(date, QLatin1String("yyyy")),
                                   i18n("Start: ") + QLocale().toString(date, QLatin1String("dd")),
                                   i18n("End: ")   + QLocale().toString(endDate, QLatin1String("dd")));
@@ -326,7 +326,7 @@ int TimeLineWidget::cursorInfo(QString& infoDate) const
         {
             infoDate = i18nc("month-name year-string",
                              "%1 %2",
-                             QLocale().monthName(date.month(), QLocale::LongFormat),
+                             QLocale().standaloneMonthName(date.month(), QLocale::LongFormat),
                              QLocale().toString(date, QLatin1String("yyyy")));
             break;
         }
@@ -760,7 +760,7 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
                 fnt.setPointSize(fnt.pointSize() - 4);
                 p.setFont(fnt);
                 p.setPen(subDateColor);
-                QString txt = QLocale().dayName(ref.date().day(), QLocale::ShortFormat);
+                QString txt = QLocale().standaloneDayName(ref.date().day(), QLocale::ShortFormat);
                 QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
                 p.drawText(barRect.left() + ((barRect.width() - br.width()) / 2),
                            barRect.bottom() + br.height(), txt);
@@ -828,7 +828,7 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
                 fnt.setPointSize(fnt.pointSize() - 4);
                 p.setFont(fnt);
                 p.setPen(subDateColor);
-                QString txt = QLocale().monthName(ref.date().month(), QLocale::ShortFormat);
+                QString txt = QLocale().standaloneMonthName(ref.date().month(), QLocale::ShortFormat);
                 QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
                 p.drawText(barRect.left() + ((barRect.width() - br.width()) / 2),
                            barRect.bottom() + br.height(), txt);
