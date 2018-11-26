@@ -235,7 +235,7 @@
       <li xml:lang="pl">Importowanie z więcej niż 1100 aparatów cyfrowych</li>
       <li xml:lang="pt">Importar a partir de mais de 1100 máquinas digitais</li>
       <li xml:lang="pt-BR">Importação de mais de 1.100 câmeras digitais</li>
-      <li xml:lang="ru">Поддержка импорта более чем с 1100 моделей цифровых камер</li>
+      <li xml:lang="ru">Поддержка импорта более чем с 1100 моделей цифровых камер;</li>
       <li xml:lang="sk">Import z viac ako 1100 digitálnych fotoaparátov</li>
       <li xml:lang="sl">Uvažanje iz več kot 1100 digitalnih fotoaparatov</li>
       <li xml:lang="sv">Import från mer än 1100 digitalkameror</li>
@@ -304,6 +304,7 @@
       <li xml:lang="pl">Rozszerzone funkcje używające dodatkowych narzędzi</li>
       <li xml:lang="pt">Funcionalidades estendidas com ferramentas extra</li>
       <li xml:lang="pt-BR">Funcionalidades estendidas com ferramentas extras</li>
+      <li xml:lang="ru">Расширенные возможности дополнительных инструментов;</li>
       <li xml:lang="sl">Razširjene zmožnosti preko dodatnih orodij</li>
       <li xml:lang="sv">Utökade funktioner med användning av extra verktyg</li>
       <li xml:lang="tr">Ekstra araçlar kullanan genişletilmiş özellikler</li>
@@ -325,7 +326,7 @@
       <li xml:lang="pl">Udostępnianie zdjęć przy użyciu HTML lub publikowanie ich poprzez usługi sieciowe</li>
       <li xml:lang="pt">Partilhar as suas fotos por HTML ou publicá-las em serviços Web remotos</li>
       <li xml:lang="pt-BR">Compartilhamento de fotos usando HTML ou publicação em serviços remotos</li>
-      <li xml:lang="ru">Публикация фотографий созданием галерей в формате HTML а также на различных интернет-ресурсах</li>
+      <li xml:lang="ru">Публикация фотографий созданием галерей в формате HTML а также на различных интернет-ресурсах;</li>
       <li xml:lang="sl">Delite vaše fotografije s pomočjo HTML-ja ali pa jih objavite na oddaljenih storitvah</li>
       <li xml:lang="sv">Dela foton genom att använda HTML eller publicera dem på webbtjänster</li>
       <li xml:lang="tr">Resimlerinizi HTML kullanarak paylaşın veya onları uzak web servislerinde yayımlayın</li>
@@ -347,6 +348,7 @@
       <li xml:lang="pl">Dołączony edytor obrazów o zaawansowanych narzedziach do szybkiego poprawiania zdjęć</li>
       <li xml:lang="pt">Editor de imagens que inclui ferramentas avançadas para corrigir rapidamente as fotografias</li>
       <li xml:lang="pt-BR">Editor de imagens com funcionalidades avançadas para correção de fotos</li>
+      <li xml:lang="ru">Редактор изображений с расширенными инструментами для быстрого исправления фотографий.</li>
       <li xml:lang="sl">Vgrajen urejevalnik slik z naprednimi orodji za hitre popravke fotografij</li>
       <li xml:lang="sv">Bildeditor med avancerade funktioner ingår för att snabbt förbättra foton</li>
       <li xml:lang="tr">Fotoğrafı hızla düzeltmek için gelişmiş araçlar içeren resim editörü</li>
