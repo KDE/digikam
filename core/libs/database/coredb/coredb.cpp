@@ -4901,6 +4901,8 @@ void CoreDB::clearMetadataFromImage(qlonglong imageID)
     qCDebug(DIGIKAM_DATABASE_LOG) << "Clean up the image information, the "
                                      "file will be scanned again";
 
+    changeItemInformation(imageID, QVariantList() << 0, DatabaseFields::Rating);
+
     d->db->execSql(QString::fromUtf8("DELETE FROM ImagePositions WHERE imageid=?;"),
                    imageID);
     fields |= DatabaseFields::ItemPositionsAll;
