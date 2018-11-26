@@ -33,6 +33,7 @@
 #include <QStyle>
 #include <QHBoxLayout>
 #include <QMessageBox>
+#include <QSignalBlocker>
 
 // KDE includes
 
@@ -45,7 +46,6 @@
 #include "iccsettings.h"
 #include "iccsettingscontainer.h"
 #include "iccmanager.h"
-#include "signalblocker.h"
 #include "ui_printoptionspage.h"
 #include "editorwindow.h"
 
@@ -275,7 +275,7 @@ void PrintOptionsPage::adjustWidthToRatio()
     double width = d->mImageSize.width() * d->kcfg_PrintHeight->value() /
                    d->mImageSize.height();
 
-    SignalBlocker blocker(d->kcfg_PrintWidth);
+    const QSignalBlocker blocker(d->kcfg_PrintWidth);
     d->kcfg_PrintWidth->setValue(width ? width : 1.);
 }
 
@@ -289,7 +289,7 @@ void PrintOptionsPage::adjustHeightToRatio()
     double height = d->mImageSize.height() * d->kcfg_PrintWidth->value() /
                     d->mImageSize.width();
 
-    SignalBlocker blocker(d->kcfg_PrintHeight);
+    const QSignalBlocker blocker(d->kcfg_PrintHeight);
     d->kcfg_PrintHeight->setValue(height ? height : 1.0);
 }
 
