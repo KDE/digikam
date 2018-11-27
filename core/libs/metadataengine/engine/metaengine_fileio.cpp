@@ -139,10 +139,7 @@ bool MetaEngine::load(const QString& filePath)
         qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
-    if (loadFromSidecarAndMerge(filePath))
-    {
-        hasLoaded = true;
-    }
+    hasLoaded |= loadFromSidecarAndMerge(filePath);
 
     return hasLoaded;
 }

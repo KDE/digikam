@@ -60,30 +60,16 @@ bool DMetadata::load(const QString& filePath)
     {
         // Non video or audio file, process with Exiv2 backend or libraw if faild with RAW files
         // Never process video file Exiv2, the backend is very unstable.
-        if (!MetaEngine::load(filePath))
+        if (!(hasLoaded = MetaEngine::load(filePath)))
         {
-            if (loadUsingRawEngine(filePath))
-            {
-                hasLoaded = true;
-            }
-        }
-        else
-        {
-            hasLoaded = true;
+            hasLoaded = loadUsingRawEngine(filePath);
         }
     }
     else
     {
         // No image file, process with ffmpeg backend.
-        if (loadUsingFFmpeg(filePath))
-        {
-            hasLoaded = true;
-        }
-
-        if (loadFromSidecarAndMerge(filePath))
-        {
-            hasLoaded = true;
-        }
+        hasLoaded  = loadUsingFFmpeg(filePath);
+        hasLoaded |= loadFromSidecarAndMerge(filePath);
     }
 
     return hasLoaded;
