@@ -33,6 +33,7 @@
 #include <QSize>
 #include <QRect>
 #include <QVariant>
+#include <QMutexLocker>
 
 // Local includes
 
@@ -50,6 +51,8 @@ class QPixmap;
 
 namespace Digikam
 {
+
+extern QMutex s_dimgQMapMutex;
 
 class ExposureSettingsContainer;
 class DImageHistory;
