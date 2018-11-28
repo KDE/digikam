@@ -47,8 +47,6 @@
 namespace Digikam
 {
 
-QMutex s_dimgLoaderMutex(QMutex::Recursive);
-
 DImgLoader::DImgLoader(DImg* const image)
     : m_image(image)
 {

@@ -33,9 +33,8 @@
 
 #include <QMap>
 #include <QString>
-#include <QVariant>
 #include <QByteArray>
-#include <QMutexLocker>
+#include <QVariant>
 
 // Local includes
 
@@ -45,8 +44,6 @@
 
 namespace Digikam
 {
-
-extern QMutex s_dimgLoaderMutex;
 
 class DImgLoaderObserver;
 class DMetadata;
