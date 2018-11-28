@@ -272,12 +272,13 @@ void ODTalker::cancel()
 void ODTalker::createFolder(QString& path)
 {
     //path also has name of new folder so send path parameter accordingly
-    QString name       = path.section(QLatin1Char('/'), -1);
-    QString folderPath = path.section(QLatin1Char('/'), -2, -2);
+    QString name       = QUrl(path).fileName();
+    QString folderPath = QUrl(path).adjusted(QUrl::RemoveFilename |
+                                             QUrl::StripTrailingSlash).path();
 
     QUrl url;
 
-    if (folderPath.isEmpty())
+    if (folderPath == QLatin1String("/"))
     {
         url = QLatin1String("https://graph.microsoft.com/v1.0/me/drive/root/children");
     }
@@ -382,7 +383,7 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
         return false;
     }
 
-    QString uploadPath = uploadFolder + QUrl::fromLocalFile(imgPath).fileName();
+    QString uploadPath = uploadFolder + QUrl(imgPath).fileName();
     QUrl url(QString::fromLatin1("https://graph.microsoft.com/v1.0/me/drive/root:/%1:/content").arg(uploadPath));
 
     QNetworkRequest netRequest(url);
@@ -494,6 +495,7 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
     foreach (const QJsonValue& value, jsonArray)
     {
         QString path;
+        QString pathName;
         QString folderPath;
         QString folderName;
         QJsonObject folder;
@@ -510,8 +512,10 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
 
             path        = folderPath.section(QLatin1String("root:"), -1, -1) +
                                              QLatin1Char('/') + folderName;
+            pathName    = path;
+            pathName.remove(0, 1);
 
-            d->folderList.append(qMakePair(path, folderName));
+            d->folderList.append(qMakePair(path, pathName));
 
             if (folder[QLatin1String("childCount")].toInt() > 0)
             {
