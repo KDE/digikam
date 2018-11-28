@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "itemviewshowfotodelegate.h"
+#include "itemviewshowfotodelegate_p.h"
 
 // Qt includes
 
@@ -39,7 +40,6 @@
 #include "itempropertiestab.h"
 #include "showfotoiteminfo.h"
 #include "colorlabelwidget.h"
-#include "itemviewshowfotodelegate_p.h"
 
 namespace ShowFoto
 {
