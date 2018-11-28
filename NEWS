@@ -648,5 +648,5 @@ BUGFIXES:
 580 ==> 401173 - Wish for file saving: set changed datetime to exif datetime.
 581 ==> 401423 - Video sidecar files nor read or written.
 582 ==> 401438 - Calendar plugin prints improper month names (Czech localization).
-583 ==> 401516 - Export to (Onedrive, Dropbox ...): list of subfolders not correctly displayed (problems if several subfolders have the same name).
+583 ==> 401515 - Export to OneDrive: created subfolders not correctly managed.
 584 ==> 
