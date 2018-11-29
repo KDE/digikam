@@ -439,10 +439,12 @@ void DBTalker::parseResponseListFolders(const QByteArray& data)
         if (folder == QLatin1String("folder"))
         {
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Path is" << path;
-            QString name = path.section(QLatin1Char('/'), -1);
-            list.append(qMakePair(path, name));
+            QString listName = path.section(QLatin1Char('/'), 1);
+            list.append(qMakePair(path, listName));
         }
     }
+
+    std::sort(list.begin(), list.end());
 
     emit signalBusy(false);
     emit signalListAlbumsDone(list);

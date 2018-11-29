@@ -117,6 +117,8 @@ public:
 
     QDateTime                       expiryTime;
 
+    State                           state;
+
     QWidget*                        parent;
 
     QNetworkAccessManager*          netMngr;
@@ -124,16 +126,10 @@ public:
 
     QSettings*                      settings;
 
-    State                           state;
-
-    DMetadata                       meta;
+    WebWidget*                      view;
 
     QList<QPair<QString, QString> > folderList;
     QList<QString>                  nextFolder;
-
-    WebWidget*                      view;
-
-    QString                         tokenKey;
 };
 
 ODTalker::ODTalker(QWidget* const parent)
@@ -369,12 +365,14 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     image.save(path, "JPEG", imageQuality);
 
-    if (d->meta.load(imgPath))
+    DMetadata meta;
+
+    if (meta.load(imgPath))
     {
-        d->meta.setItemDimensions(image.size());
-        d->meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
-        d->meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
-        d->meta.save(path, true);
+        meta.setItemDimensions(image.size());
+        meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
+        meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
+        meta.save(path, true);
     }
 
     if (!form.addFile(path))
@@ -495,7 +493,7 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
     foreach (const QJsonValue& value, jsonArray)
     {
         QString path;
-        QString pathName;
+        QString listName;
         QString folderPath;
         QString folderName;
         QJsonObject folder;
@@ -512,10 +510,9 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
 
             path        = folderPath.section(QLatin1String("root:"), -1, -1) +
                                              QLatin1Char('/') + folderName;
-            pathName    = path;
-            pathName.remove(0, 1);
+            listName    = path.section(QLatin1Char('/'), 1);
 
-            d->folderList.append(qMakePair(path, pathName));
+            d->folderList.append(qMakePair(path, listName));
 
             if (folder[QLatin1String("childCount")].toInt() > 0)
             {
@@ -530,6 +527,8 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
     }
     else
     {
+        std::sort(d->folderList.begin(), d->folderList.end());
+
         emit signalBusy(false);
         emit signalListAlbumsDone(d->folderList);
     }
