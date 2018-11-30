@@ -269,13 +269,31 @@ void FaceDb::updateLBPHFaceModel(LBPHFaceModel& model)
                                     << data.cols
                                     << compressed;
 
+                    values.clear();
+                    d->db->execSql(QLatin1String("SELECT id FROM OpenCVLBPHistograms "
+                                                 "WHERE recognizerid=? AND identity=? AND `type`=?;"),
+                                   model.databaseId, metadata.identity, data.type, &values);
+
+                    if (values.count() > 20)
+                    {
+                        for (int j = 0 ; j < values.count() - 20 ; ++j)
+                        {
+                            qCDebug(DIGIKAM_FACEDB_LOG) << "Delete compressed histogram " << values.at(j).toInt()
+                                                        << " for identity " << metadata.identity;
+
+                            d->db->execSql(QLatin1String("DELETE FROM OpenCVLBPHistograms "
+                                                         "WHERE id=? AND recognizerid=? AND identity=? AND `type`=?;"),
+                                           values.at(j).toInt(), model.databaseId, metadata.identity, data.type);
+                        }
+                    }
+
                     d->db->execSql(QLatin1String("INSERT INTO OpenCVLBPHistograms (recognizerid, identity, `context`, `type`, `rows`, `cols`, `data`) "
                                                  "VALUES (?,?,?,?,?,?,?);"),
                                    histogramValues, 0, &insertedId);
 
                     model.setWrittenToDatabase(i, insertedId.toInt());
 
-                    qCDebug(DIGIKAM_FACEDB_LOG) << "Commit compressed histogram " << metadata.databaseId << " for identity "
+                    qCDebug(DIGIKAM_FACEDB_LOG) << "Commit compressed histogram " << insertedId.toInt() << " for identity "
                                                 << metadata.identity << " with size " << compressed.size();
                 }
             }
