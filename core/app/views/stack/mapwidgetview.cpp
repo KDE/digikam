@@ -137,6 +137,7 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
     d->gpsItemInfoSorter->addToMapWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget->getControlWidget());
+    vBoxLayout->setContentsMargins(QMargins());
 }
 
 /**

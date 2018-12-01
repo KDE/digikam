@@ -265,6 +265,8 @@ ItemIconView::ItemIconView(QWidget* const parent, DModelFactory* const modelColl
     d->tagModificationHelper    = new TagModificationHelper(this, this);
     d->searchModificationHelper = new SearchModificationHelper(this, this);
 
+    const int spacing           = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->splitter    = new SidebarSplitter;
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
@@ -273,10 +275,12 @@ ItemIconView::ItemIconView(QWidget* const parent, DModelFactory* const modelColl
 
     d->leftSideBar = new Sidebar(this, d->splitter, Qt::LeftEdge);
     d->leftSideBar->setObjectName(QLatin1String("Digikam Left Sidebar"));
+    d->leftSideBar->setContentsMargins(0, 0, spacing, 0);
     d->splitter->setParent(this);
 
     // The dock area where the thumbnail bar is allowed to go.
     d->dockArea    = new QMainWindow(this, Qt::Widget);
+    d->dockArea->setContentsMargins(spacing, 0, 0, 0);
     d->splitter->addWidget(d->dockArea);
     d->stackedview = new StackedView(d->dockArea);
     d->dockArea->setCentralWidget(d->stackedview);

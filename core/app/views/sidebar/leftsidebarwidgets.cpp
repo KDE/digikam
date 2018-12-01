@@ -111,6 +111,7 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* const parent
 
     layout->addWidget(d->albumFolderView);
     layout->addWidget(d->searchTextBar);
+    layout->setContentsMargins(QMargins());
 
     // setup connection
     connect(d->albumFolderView, SIGNAL(signalFindDuplicates(PAlbum*)),
@@ -251,6 +252,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     layout->addWidget(d->tagsBtn);
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
+    layout->setContentsMargins(QMargins());
 
     connect(d->openTagMngr, SIGNAL(clicked()),
             this,SLOT(slotOpenTagManager()));
@@ -453,6 +455,7 @@ LabelsSideBarWidget::LabelsSideBarWidget(QWidget* const parent)
     d->labelsTree->setConfigGroup(getConfigGroup());
 
     layout->addWidget(d->labelsTree);
+    layout->setContentsMargins(QMargins());
 }
 
 LabelsSideBarWidget::~LabelsSideBarWidget()
@@ -537,6 +540,7 @@ DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent,
     d->dateFolderView->setItemModel(imageFilterModel);
 
     layout->addWidget(d->dateFolderView);
+    layout->setContentsMargins(QMargins());
 }
 
 DateFolderViewSideBarWidget::~DateFolderViewSideBarWidget()
@@ -1114,6 +1118,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent,
     layout->addWidget(d->searchTreeView);
     layout->setStretchFactor(d->searchTreeView, 1);
     layout->addWidget(d->searchSearchBar);
+    layout->setContentsMargins(QMargins());
 
     connect(d->searchTreeView, SIGNAL(newSearch()),
             d->searchTabHeader, SLOT(newAdvancedSearch()));
@@ -1211,6 +1216,7 @@ FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* const parent,
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
     layout->addWidget(d->fuzzySearchView);
+    layout->setContentsMargins(QMargins());
 }
 
 FuzzySearchSideBarWidget::~FuzzySearchSideBarWidget()
@@ -1319,6 +1325,7 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent,
     QVBoxLayout* const layout     = new QVBoxLayout(this);
 
     layout->addWidget(scrollArea);
+    layout->setContentsMargins(QMargins());
     scrollArea->setWidget(d->gpsSearchView);
     scrollArea->setWidgetResizable(true);
 
@@ -1430,6 +1437,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent,
     layout->addWidget(d->rescanButton);
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
+    layout->setContentsMargins(QMargins());
 
     setLayout(layout);
 

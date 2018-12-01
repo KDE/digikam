@@ -129,6 +129,7 @@ TableView::TableView(QItemSelectionModel* const selectionModel,
             this, SIGNAL(signalItemsChanged()));
 
     vbox1->addWidget(s->treeView);
+    vbox1->setContentsMargins(QMargins());
 
     setLayout(vbox1);
 }

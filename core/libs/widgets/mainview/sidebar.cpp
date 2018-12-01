@@ -555,12 +555,12 @@ DMultiTabBar::DMultiTabBar(Qt::Edge pos, QWidget* const parent)
     if (pos == Qt::LeftEdge || pos == Qt::RightEdge)
     {
         d->layout = new QVBoxLayout(this);
-        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding/*, true*/);
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     }
     else
     {
         d->layout = new QHBoxLayout(this);
-        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed/*, true*/);
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     }
 
     d->layout->setContentsMargins(QMargins());

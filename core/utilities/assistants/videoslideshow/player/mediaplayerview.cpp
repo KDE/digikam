@@ -183,8 +183,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     setAttribute(Qt::WA_DeleteOnClose);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-    QMargins margins(spacing, 0, spacing, spacing);
+    const int spacing      = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     d->prevAction          = new QAction(QIcon::fromTheme(QLatin1String("go-previous")),          i18nc("go to previous image", "Back"),   this);
     d->nextAction          = new QAction(QIcon::fromTheme(QLatin1String("go-next")),              i18nc("go to next image", "Forward"),    this);
@@ -199,7 +198,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     QVBoxLayout* const vbox1 = new QVBoxLayout(d->errorView);
     vbox1->addWidget(errorMsg, 10);
-    vbox1->setContentsMargins(margins);
+    vbox1->setContentsMargins(QMargins());
     vbox1->setSpacing(spacing);
 
     insertWidget(Private::ErrorView, d->errorView);
@@ -216,6 +215,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->slider->setRange(0, 0);
     d->tlabel         = new QLabel(hbox);
     d->tlabel->setText(QLatin1String("00:00:00 / 00:00:00"));
+    hbox->setContentsMargins(0, spacing, 0, 0);
     hbox->setStretchFactor(d->slider, 10);
 
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
@@ -228,7 +228,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     QVBoxLayout* const vbox2 = new QVBoxLayout(d->playerView);
     vbox2->addWidget(d->videoWidget, 10);
     vbox2->addWidget(hbox,           0);
-    vbox2->setContentsMargins(margins);
+    vbox2->setContentsMargins(0, 0, 0, spacing);
     vbox2->setSpacing(spacing);
 
     insertWidget(Private::PlayerView, d->playerView);

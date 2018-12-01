@@ -87,6 +87,7 @@ WelcomePageView::WelcomePageView(QWidget* const parent)
 #endif
 
     setContextMenuPolicy(Qt::NoContextMenu);
+    setContentsMargins(QMargins());
 
 #ifdef HAVE_QWEBENGINE
     WelcomePageViewPage* const wpage = new WelcomePageViewPage(this);

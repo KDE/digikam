@@ -148,6 +148,7 @@ TrashView::TrashView(QWidget* const parent)
     d->btnsLayout->addWidget(d->deleteButton);
 
     d->mainLayout->addLayout(d->btnsLayout);
+    d->mainLayout->setContentsMargins(QMargins());
 
     // Signals and Slots connections
     connect(d->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
