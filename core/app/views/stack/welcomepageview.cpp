@@ -115,7 +115,7 @@ WelcomePageView::~WelcomePageView()
 
 void WelcomePageView::slotUrlOpen(const QUrl& url)
 {
-    WebBrowserDlg* const browser = new WebBrowserDlg(url, this);
+    WebBrowserDlg* const browser = new WebBrowserDlg(url, qApp->activeWindow());
     browser->show();
 }
 
