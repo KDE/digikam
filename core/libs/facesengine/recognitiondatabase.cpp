@@ -914,7 +914,15 @@ QList<Identity> RecognitionDatabase::recognizeFaces(const QList<QImage>& images)
 
 void RecognitionDatabase::activeFaceRecognizer(RecognizeAlgorithm algorithmType)
 {
-    d->recognizeAlgorithm = algorithmType;
+    if (algorithmType == RecognizeAlgorithm::EigenFace ||
+        algorithmType == RecognizeAlgorithm::FisherFace)
+    {
+        d->recognizeAlgorithm = RecognizeAlgorithm::LBP;
+    }
+    else
+    {
+        d->recognizeAlgorithm = algorithmType;
+    }
 }
 
 QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const images)

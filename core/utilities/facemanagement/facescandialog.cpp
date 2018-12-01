@@ -190,8 +190,8 @@ void FaceScanDialog::doLoadState()
     RecognitionDatabase::RecognizeAlgorithm algo =
             (RecognitionDatabase::RecognizeAlgorithm)group.readEntry(entryName(d->configRecognizeAlgorithm),
                                                                                (int)RecognitionDatabase::RecognizeAlgorithm::LBP);
-
-    d->recognizeBox->setCurrentIndex(d->recognizeBox->findData(algo));
+    int index = d->recognizeBox->findData(algo);
+    d->recognizeBox->setCurrentIndex(index == -1 ? (int)RecognitionDatabase::RecognizeAlgorithm::LBP : index);
 
     // do not load retrainAllButton state from config, dangerous
 
@@ -357,8 +357,8 @@ void FaceScanDialog::setupUi()
 
     d->recognizeBox        = new QComboBox;
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using LBP algorithm"),           RecognitionDatabase::RecognizeAlgorithm::LBP);
-    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using EigenFaces algorithm"),    RecognitionDatabase::RecognizeAlgorithm::EigenFace);
-    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using FisherFaces algorithm"),   RecognitionDatabase::RecognizeAlgorithm::FisherFace);
+    //d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using EigenFaces algorithm"),    RecognitionDatabase::RecognizeAlgorithm::EigenFace);
+    //d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using FisherFaces algorithm"),   RecognitionDatabase::RecognizeAlgorithm::FisherFace);
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using Deep Learning algorithm"), RecognitionDatabase::RecognizeAlgorithm::DNN);
     d->recognizeBox->setCurrentIndex(RecognitionDatabase::RecognizeAlgorithm::LBP);
 
