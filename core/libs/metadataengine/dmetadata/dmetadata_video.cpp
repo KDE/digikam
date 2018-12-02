@@ -277,13 +277,12 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             if (codec->codec_type == AVMEDIA_TYPE_AUDIO)
             {
                 setXmpTagString("Xmp.audio.Codec",
-                    QLatin1String("none"));
+                    QString::fromUtf8(cname));
             }
-
-            if (codec->codec_type == AVMEDIA_TYPE_VIDEO)
+            else if (codec->codec_type == AVMEDIA_TYPE_VIDEO)
             {
                 setXmpTagString("Xmp.video.Codec",
-                    QLatin1String("none"));
+                    QString::fromUtf8(cname));
             }
 
             continue;
