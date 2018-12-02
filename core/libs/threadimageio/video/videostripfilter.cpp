@@ -654,9 +654,9 @@ void VideoStripFilter::process(VideoFrame& videoFrame)
     int filmHoleIndex = 0;
     int offset        = (videoFrame.width * 3) - 3;
 
-    for (quint32 i = 0 ; i < videoFrame.height ; i++)
+    for (quint32 i = 0 ; i < videoFrame.height ; ++i)
     {
-        for (quint32 j = 0 ; j < videoStripWidth * 3 ; j+=3)
+        for (quint32 j = 0 ; j < videoStripWidth * 3 ; j += 3)
         {
             int currentFilmHoleIndex                          = filmHoleIndex + j;
 

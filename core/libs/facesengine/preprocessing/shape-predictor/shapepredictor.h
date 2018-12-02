@@ -129,7 +129,7 @@ QDataStream& operator << (QDataStream& dataStream, const RegressionTree& regtree
 {
     dataStream << (unsigned int)regtree.splits.size();
 
-    for (unsigned int i = 0 ; i < regtree.splits.size() ; i++)
+    for (unsigned int i = 0 ; i < regtree.splits.size() ; ++i)
     {
         dataStream << regtree.splits[i];
     }
@@ -137,9 +137,9 @@ QDataStream& operator << (QDataStream& dataStream, const RegressionTree& regtree
     dataStream << (unsigned int)regtree.leaf_values.size();
     dataStream << (unsigned int)regtree.leaf_values[0].size();
 
-    for (unsigned int i = 0 ; i < regtree.leaf_values.size() ; i++)
+    for (unsigned int i = 0 ; i < regtree.leaf_values.size() ; ++i)
     {
-        for (unsigned int j = 0 ; j < regtree.leaf_values[i].size() ; j++)
+        for (unsigned int j = 0 ; j < regtree.leaf_values[i].size() ; ++j)
         {
             dataStream << regtree.leaf_values[i][j];
         }
@@ -155,7 +155,7 @@ QDataStream& operator >> (QDataStream& dataStream, RegressionTree& regtree)
     dataStream >> size;
     regtree.splits.resize(size);
 
-    for (unsigned int i = 0 ; i < regtree.splits.size() ; i++)
+    for (unsigned int i = 0 ; i < regtree.splits.size() ; ++i)
     {
         dataStream >> regtree.splits[i];
     }
@@ -164,11 +164,11 @@ QDataStream& operator >> (QDataStream& dataStream, RegressionTree& regtree)
     regtree.leaf_values.resize(size);
     dataStream >> size;
 
-    for (unsigned int i = 0 ; i < regtree.leaf_values.size() ; i++)
+    for (unsigned int i = 0 ; i < regtree.leaf_values.size() ; ++i)
     {
         regtree.leaf_values[i].resize(size);
 
-        for (unsigned int j = 0 ; j < regtree.leaf_values[i].size() ; j++)
+        for (unsigned int j = 0 ; j < regtree.leaf_values[i].size() ; ++j)
         {
             dataStream >> regtree.leaf_values[i][j];
         }
@@ -276,7 +276,7 @@ inline PointTransformAffine find_tform_between_shapes(const std::vector<float>& 
 
 /*!
     ensures
-        - returns a transform that maps rect.tl_corner() to (0,0) and rect.br_corner()
+        - returns a transform that maps rect.tl_corner() to (0, 0) and rect.br_corner()
             to (1,1).
 !*/
 inline PointTransformAffine normalizing_tform(const cv::Rect& rect)
@@ -314,7 +314,7 @@ inline PointTransformAffine normalizing_tform(const cv::Rect& rect)
 
 /*!
     ensures
-        - returns a transform that maps (0,0) to rect.tl_corner() and (1,1) to
+        - returns a transform that maps (0, 0) to rect.tl_corner() and (1,1) to
             rect.br_corner().
 !*/
 inline PointTransformAffine unnormalizing_tform(const cv::Rect& rect)
@@ -354,7 +354,7 @@ bool pointcontained(const cv::Rect& rect, const std::vector<float>& point)
     float x = point[0];
     float y = point[1];
 
-    if(x > 0 && x < rect.width   &&
+    if (x > 0 && x < rect.width   &&
         y > 0 && y < rect.height)
     {
         return true;
@@ -393,7 +393,7 @@ void extract_feature_pixel_values(const cv::Mat& img_,
 {
     const std::vector<std::vector<float> > tform = find_tform_between_shapes(reference_shape, current_shape).get_m();
     const PointTransformAffine tform_to_img      = unnormalizing_tform(rect);
-    const cv::Rect area                          = cv::Rect(0,0,img_.size().width, img_.size().height);
+    const cv::Rect area                          = cv::Rect(0, 0, img_.size().width, img_.size().height);
     cv::Mat img(img_);
     feature_pixel_values.resize(reference_pixel_deltas.size());
 
@@ -490,7 +490,7 @@ QDataStream& operator << (QDataStream& dataStream, const ShapePredictor& shape)
 {
     dataStream << (unsigned int)shape.initial_shape.size();
 
-    for (unsigned int i = 0 ; i < shape.initial_shape.size() ; i++)
+    for (unsigned int i = 0 ; i < shape.initial_shape.size() ; ++i)
     {
         dataStream << shape.initial_shape[i];
     }
@@ -498,9 +498,9 @@ QDataStream& operator << (QDataStream& dataStream, const ShapePredictor& shape)
     dataStream<<(unsigned int)shape.forests.size();
     dataStream<<(unsigned int)shape.forests[0].size();
 
-    for (unsigned int i = 0 ; i < shape.forests.size() ; i++)
+    for (unsigned int i = 0 ; i < shape.forests.size() ; ++i)
     {
-        for (unsigned int j = 0 ; j < shape.forests[i].size() ; j++)
+        for (unsigned int j = 0 ; j < shape.forests[i].size() ; ++j)
         {
             dataStream << shape.forests[i][j];
         }
@@ -509,9 +509,9 @@ QDataStream& operator << (QDataStream& dataStream, const ShapePredictor& shape)
     dataStream << (unsigned int)shape.anchor_idx.size();
     dataStream << (unsigned int)shape.anchor_idx[0].size();
 
-    for (unsigned int i = 0 ; i < shape.anchor_idx.size() ; i++)
+    for (unsigned int i = 0 ; i < shape.anchor_idx.size() ; ++i)
     {
-        for (unsigned int j = 0 ; j < shape.anchor_idx[i].size() ; j++)
+        for (unsigned int j = 0 ; j < shape.anchor_idx[i].size() ; ++j)
         {
             dataStream << shape.anchor_idx[i][j];
         }
@@ -521,9 +521,9 @@ QDataStream& operator << (QDataStream& dataStream, const ShapePredictor& shape)
     dataStream << (unsigned int)shape.deltas.size();
     dataStream << (unsigned int)shape.deltas[0].size();
 
-    for (unsigned int i = 0 ; i < shape.deltas.size() ; i++)
+    for (unsigned int i = 0 ; i < shape.deltas.size() ; ++i)
     {
-        for (unsigned int j = 0 ; j < shape.deltas[i].size() ; j++)
+        for (unsigned int j = 0 ; j < shape.deltas[i].size() ; ++j)
         {
             dataStream << shape.deltas[i][j][0];
             dataStream << shape.deltas[i][j][1];
@@ -539,7 +539,7 @@ QDataStream& operator >> (QDataStream& dataStream, ShapePredictor& shape)
     dataStream >> size;
     shape.initial_shape.resize(size);
 
-    for (unsigned int i = 0 ; i < shape.initial_shape.size() ; i++)
+    for (unsigned int i = 0 ; i < shape.initial_shape.size() ; ++i)
     {
         dataStream >> shape.initial_shape[i];
     }
@@ -548,11 +548,11 @@ QDataStream& operator >> (QDataStream& dataStream, ShapePredictor& shape)
     shape.forests.resize(size);
     dataStream >> size;
 
-    for (unsigned int i = 0 ; i < shape.forests.size() ; i++)
+    for (unsigned int i = 0 ; i < shape.forests.size() ; ++i)
     {
         shape.forests[i].resize(size);
 
-        for (unsigned int j = 0 ; j < shape.forests[i].size() ; j++)
+        for (unsigned int j = 0 ; j < shape.forests[i].size() ; ++j)
         {
             dataStream >> shape.forests[i][j];
         }
@@ -562,11 +562,11 @@ QDataStream& operator >> (QDataStream& dataStream, ShapePredictor& shape)
     shape.anchor_idx.resize(size);
     dataStream >> size;
 
-    for (unsigned int i = 0 ; i < shape.anchor_idx.size() ; i++)
+    for (unsigned int i = 0 ; i < shape.anchor_idx.size() ; ++i)
     {
         shape.anchor_idx[i].resize(size);
 
-        for (unsigned int j = 0 ; j < shape.anchor_idx[i].size() ; j++)
+        for (unsigned int j = 0 ; j < shape.anchor_idx[i].size() ; ++j)
         {
             dataStream >> shape.anchor_idx[i][j];
         }
@@ -577,11 +577,11 @@ QDataStream& operator >> (QDataStream& dataStream, ShapePredictor& shape)
     shape.deltas.resize(size);
     dataStream >> size;
 
-    for (unsigned int i = 0 ; i < shape.deltas.size() ; i++)
+    for (unsigned int i = 0 ; i < shape.deltas.size() ; ++i)
     {
         shape.deltas[i].resize(size);
 
-        for (unsigned int j = 0 ; j < shape.deltas[i].size() ; j++)
+        for (unsigned int j = 0 ; j < shape.deltas[i].size() ; ++j)
         {
             shape.deltas[i][j].resize(2);
             dataStream >> shape.deltas[i][j][0];

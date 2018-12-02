@@ -72,7 +72,7 @@ void VideoDecoder::Private::createAVFrame(AVFrame** const avFrame,
 
 bool VideoDecoder::Private::initializeVideo()
 {
-    for (unsigned int i = 0 ; i < pFormatContext->nb_streams ; i++)
+    for (unsigned int i = 0 ; i < pFormatContext->nb_streams ; ++i)
     {
         if (pFormatContext->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO)
         {
