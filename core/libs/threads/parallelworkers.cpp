@@ -111,7 +111,7 @@ void ParallelWorkers::add(WorkerObject* const worker)
 
     QMetaObject* meta = asQObject()->metaObject();
 
-    for (int i=0; i<meta->methodCount(); i++)
+    for (int i=0; i<meta->methodCount(); ++i)
     {
         QMetaMethod method = meta->method(index);
         if (!method->methodType() == QMetaMethod::
@@ -174,7 +174,7 @@ int ParallelWorkers::replacementStaticQtMetacall(QMetaObject::Call _c, int _id, 
         QList<QByteArray> types = method.parameterTypes();
         QVector<QGenericArgument> args(10);
 
-        for (int i = 0; i < types.size(); i++)
+        for (int i = 0 ; i < types.size() ; ++i)
         {
             int typeId = QMetaType::type(types[i].constData());
 

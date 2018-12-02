@@ -334,7 +334,7 @@ void DDatePicker::selectMonthClicked()
     // JPL do we need to do something here for months that fall outside valid range?
     const int monthsInYear = QDate(thisDate.year() + 1, 1, 1).addDays(-1).month();
 
-    for (int m = 1; m <= monthsInYear; m++)
+    for (int m = 1 ; m <= monthsInYear ; ++m)
     {
         popup.addAction(locale().standaloneMonthName(m))->setData(m);
     }

@@ -430,7 +430,7 @@ bool CoreDbSchemaUpdater::makeUpdates()
         }
 
         // Incremental updates, starting from version 5
-        for (int v = d->currentVersion.toInt(); v < schemaVersion(); v++)
+        for (int v = d->currentVersion.toInt() ; v < schemaVersion() ; ++v)
         {
             int targetVersion = v + 1;
 

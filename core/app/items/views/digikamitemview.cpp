@@ -391,7 +391,7 @@ void DigikamItemView::confirmFaces(const QList<QModelIndex>& indexes, int tagId)
 
     imageAlbumModel()->removeIndexes(sourceIndexes);
 
-    for (int i = 0 ; i < infos.size() ; i++)
+    for (int i = 0 ; i < infos.size() ; ++i)
     {
         d->editPipeline.confirm(infos[i], faces[i], tagId);
     }
@@ -412,7 +412,7 @@ void DigikamItemView::removeFaces(const QList<QModelIndex>& indexes)
 
     imageAlbumModel()->removeIndexes(sourceIndexes);
 
-    for (int i = 0 ; i < infos.size() ; i++)
+    for (int i = 0 ; i < infos.size() ; ++i)
     {
         d->editPipeline.remove(infos[i], faces[i]);
     }

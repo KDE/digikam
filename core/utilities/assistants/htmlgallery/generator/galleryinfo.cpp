@@ -90,7 +90,7 @@ QString GalleryInfo::getEnumString(const QString& itemName) const
     QList<KConfigSkeleton::ItemEnum::Choice>::ConstIterator it  = lst.constBegin();
     QList<KConfigSkeleton::ItemEnum::Choice>::ConstIterator end = lst.constEnd();
 
-    for (int pos = 0 ; it != end ; ++it, pos++)
+    for (int pos = 0 ; it != end ; ++it, ++pos)
     {
         if (pos == value)
         {

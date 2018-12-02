@@ -959,7 +959,7 @@ void SetupCamera::slotRemoveFilter()
     QListWidgetItem* const item = d->importListView->currentItem();
     int current                 = d->importListView->currentRow();
 
-    for (int i = 0 ; i < d->filters.count() ; i++)
+    for (int i = 0 ; i < d->filters.count() ; ++i)
     {
         if (d->filters.at(i)->name == item->text())
         {
@@ -975,7 +975,7 @@ void SetupCamera::slotEditFilter()
 {
     QListWidgetItem* const item = d->importListView->currentItem();
 
-    for (int i = 0 ; i < d->filters.count() ; i++)
+    for (int i = 0 ; i < d->filters.count() ; ++i)
     {
         if (d->filters.at(i)->name == item->text())
         {

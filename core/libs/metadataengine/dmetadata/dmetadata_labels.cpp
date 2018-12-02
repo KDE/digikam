@@ -181,7 +181,7 @@ int DMetadata::getItemRating(const DMetadataSettingsContainer& settings) const
             (rating > entry.convertRatio.first()) &&
             (rating < entry.convertRatio.last()))
         {
-            for (int i = 0 ; i < entry.convertRatio.size() ; i++)
+            for (int i = 0 ; i < entry.convertRatio.size() ; ++i)
             {
                 if (rating > entry.convertRatio.at(i))
                 {

@@ -1515,7 +1515,7 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
     }
     else
     {
-        for (int i = 0 ; i < count ; i++)
+        for (int i = 0 ; i < count ; ++i)
         {
             gp_abilities_list_get_abilities(abilList, i, &abil);
             const char* cname = abil.model;
@@ -1553,7 +1553,7 @@ void GPCamera::getSupportedPorts(QStringList& plist)
     }
     else
     {
-        for (int i = 0 ; i < numPorts ; i++)
+        for (int i = 0 ; i < numPorts ; ++i)
         {
             gp_port_info_list_get_info(list, i, &info);
 #ifdef HAVE_GPHOTO25
@@ -1646,7 +1646,7 @@ int GPCamera::autoDetect(QString& model, QString& port)
     camModel_ = 0;
     camPort_  = 0;
 
-    for (int i = 0; i < count; i++)
+    for (int i = 0 ; i < count ; ++i)
     {
         if (gp_list_get_name(camList, i, &camModel_) != GP_OK)
         {
@@ -1709,7 +1709,7 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     int count = gp_list_count(camList);
     int cnt   = 0;
 
-    for (int i = 0 ; i < count ; i++)
+    for (int i = 0 ; i < count ; ++i)
     {
         const char* xmodel = 0;
         gp_list_get_name(camList, i, &xmodel);

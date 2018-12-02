@@ -216,7 +216,7 @@ AbstractMarkerTiler::NonEmptyIterator::NonEmptyIterator(AbstractMarkerTiler* con
     TileIndex startIndex;
     TileIndex endIndex;
 
-    for (int i = 0 ; i <= level ; i++)
+    for (int i = 0 ; i <= level ; ++i)
     {
         startIndex.appendLinearIndex(0);
         endIndex.appendLinearIndex(TileIndex::Tiling * TileIndex::Tiling - 1);
@@ -255,7 +255,7 @@ AbstractMarkerTiler::NonEmptyIterator::NonEmptyIterator(AbstractMarkerTiler* con
     d->level = level;
 
     // store the coordinates of the bounds as indices:
-    for (int i = 0 ; i < normalizedMapBounds.count() ; i++)
+    for (int i = 0 ; i < normalizedMapBounds.count() ; ++i)
     {
         GeoCoordinates::Pair currentBounds = normalizedMapBounds.at(i);
         GEOIFACE_ASSERT(currentBounds.first.lat() < currentBounds.second.lat());

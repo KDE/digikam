@@ -620,7 +620,7 @@ int get_swap_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
             break;
         }
 
-        for (i = 0; i < num; i++)
+        for (i = 0; i < num; ++i)
         {
             struct pst_swapinfo* si = &pstat_swapinfo[i];
 

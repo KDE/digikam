@@ -93,7 +93,7 @@ void DMultiTabBarFrame::setStyle(DMultiTabBar::TextStyle style)
 {
     d->style = style;
 
-    for (int i = 0 ; i < d->tabs.count() ; i++)
+    for (int i = 0 ; i < d->tabs.count() ; ++i)
         d->tabs.at(i)->setStyle(d->style);
 
     updateGeometry();
@@ -137,7 +137,7 @@ int DMultiTabBarFrame::appendTab(const QPixmap& pic, int id, const QString& text
 
 void DMultiTabBarFrame::removeTab(int id)
 {
-    for (int pos = 0 ; pos < d->tabs.count() ; pos++)
+    for (int pos = 0 ; pos < d->tabs.count() ; ++pos)
     {
         if (d->tabs.at(pos)->id() == id)
         {
@@ -152,7 +152,7 @@ void DMultiTabBarFrame::setPosition(Qt::Edge pos)
 {
     d->position = pos;
 
-    for (int i = 0 ; i < d->tabs.count() ; i++)
+    for (int i = 0 ; i < d->tabs.count() ; ++i)
         d->tabs.at(i)->setPosition(d->position);
 
     updateGeometry();
@@ -647,7 +647,7 @@ DMultiTabBarTab* DMultiTabBar::tab(int id) const
 
 void DMultiTabBar::removeButton(int id)
 {
-    for (int pos = 0 ; pos < d->buttons.count() ; pos++)
+    for (int pos = 0 ; pos < d->buttons.count() ; ++pos)
     {
         if (d->buttons.at(pos)->id() == id)
         {

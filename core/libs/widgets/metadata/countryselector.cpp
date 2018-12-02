@@ -339,7 +339,7 @@ void CountrySelector::setCountry(const QString& countryCode)
 
     int id = count()-1;
 
-    for (int i = 0 ; i < d->countryCodeMap.count() ; i++)
+    for (int i = 0 ; i < d->countryCodeMap.count() ; ++i)
     {
         if (itemText(i).left(3) == countryCode)
         {

@@ -114,7 +114,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
             int size               = Categories.size();
             QStringList categorychoices;
 
-            for (int i=0; i<size; i++)
+            for (int i = 0 ; i < size ; ++i)
             {
                 categorychoices << Categories.at(i) << Categories.at(i);
             }
@@ -332,7 +332,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setText(i18n("Camera"), i18n("The make of the camera"));
         QStringList make = CoreDbAccess().db()->getListFromImageMetadata(DatabaseFields::Make);
 
-        for (int i = 0 ; i < make.count() ; i++)
+        for (int i = 0 ; i < make.count() ; ++i)
         {
             ItemPropertiesTab::shortenedMakeInfo(make[i]);
             make[i] = make[i].trimmed();
@@ -358,7 +358,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setText(i18n("Camera"), i18n("The model of the camera"));
         QStringList model = CoreDbAccess().db()->getListFromImageMetadata(DatabaseFields::Model);
 
-        for (int i = 0 ; i < model.count() ; i++)
+        for (int i = 0 ; i < model.count() ; ++i)
         {
             ItemPropertiesTab::shortenedModelInfo(model[i]);
             model[i] = model[i].trimmed();

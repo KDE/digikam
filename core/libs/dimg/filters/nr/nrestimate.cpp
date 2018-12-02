@@ -189,7 +189,7 @@ void NREstimate::startAnalyse()
 /*
     qCDebug(DIGIKAM_DIMG_LOG) << "Lets see what the rowPosition array looks like : ";
 
-    for (uint i = 0 ; runningFlag() && (i < d->clusterCount) ; i++)
+    for (uint i = 0 ; runningFlag() && (i < d->clusterCount) ; ++i)
     {
         qCDebug(DIGIKAM_DIMG_LOG) << "Cluster : "<< i << " the count is :" << rowPosition[i];
     }

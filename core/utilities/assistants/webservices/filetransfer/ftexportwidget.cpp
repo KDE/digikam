@@ -135,7 +135,7 @@ QList<QUrl> FTExportWidget::history() const
 {
     QList<QUrl> urls;
 
-    for (int i = 0 ; i <= d->targetLabel->comboBox()->count() ; i++)
+    for (int i = 0 ; i <= d->targetLabel->comboBox()->count() ; ++i)
         urls << QUrl(d->targetLabel->comboBox()->itemText(i));
 
     return urls;

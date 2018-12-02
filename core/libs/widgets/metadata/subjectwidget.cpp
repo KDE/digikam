@@ -436,7 +436,7 @@ void SubjectWidget::slotAddSubject()
 
     bool found = false;
 
-    for (int i = 0 ; i < d->subjectsBox->count(); i++)
+    for (int i = 0 ; i < d->subjectsBox->count() ; ++i)
     {
         QListWidgetItem* const item = d->subjectsBox->item(i);
 
@@ -618,7 +618,7 @@ QStringList SubjectWidget::subjectsList() const
 {
     QStringList newSubjects;
 
-    for (int i = 0 ; i < d->subjectsBox->count(); i++)
+    for (int i = 0 ; i < d->subjectsBox->count() ; ++i)
     {
         QListWidgetItem* item = d->subjectsBox->item(i);
         newSubjects.append(item->text());

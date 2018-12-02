@@ -188,7 +188,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     QStringList styleList     = QStyleFactory::keys();
 
-    for (int i = 0 ; i < styleList.count() ; i++)
+    for (int i = 0 ; i < styleList.count() ; ++i)
     {
         d->applicationStyle->addItem(styleList.at(i));
     }

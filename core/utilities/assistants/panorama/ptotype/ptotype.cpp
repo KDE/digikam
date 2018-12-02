@@ -169,7 +169,7 @@ bool PTOType::createFile(const QString& filepath)
 
     // Third, the images
     // Note: the order is very important here
-    for (int id = 0; id < images.size(); id++)
+    for (int id = 0 ; id < images.size() ; ++id)
     {
         const Image &image = images[id];
 
@@ -239,7 +239,7 @@ bool PTOType::createFile(const QString& filepath)
     }
 
     // Fourth, the variable to optimize
-    for (int id = 0; id < images.size(); id++)
+    for (int id = 0 ; id < images.size() ; ++id)
     {
         const Image& image = images[id];
 
@@ -334,7 +334,7 @@ bool PTOType::createFile(const QString& filepath)
     out << "v" << endl;
 
     // Fifth, the masks
-    for (int id = 0; id < images.size(); id++)
+    for (int id = 0 ; id < images.size() ; ++id)
     {
         const Image& image = images[id];
 
@@ -347,7 +347,7 @@ bool PTOType::createFile(const QString& filepath)
             out << " t" << (int) mask.type;
             out << " p\"";
 
-            for (int pid = 0; pid < mask.hull.size(); pid++)
+            for (int pid = 0 ; pid < mask.hull.size() ; ++pid)
             {
                 out << (pid == 0 ? "" : " ");
                 out << mask.hull[pid].x() << ' ' << mask.hull[pid].y();

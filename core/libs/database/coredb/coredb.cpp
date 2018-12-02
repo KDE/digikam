@@ -1342,7 +1342,7 @@ QVector<QList<int> > CoreDB::getItemsTagIDs(const QList<qlonglong> imageIds)
     DbEngineSqlQuery query = d->db->prepareQuery(QString::fromUtf8("SELECT tagid FROM ImageTags WHERE imageID=?;"));
     QVariantList values;
 
-    for (int i = 0 ; i < imageIds.size() ; i++)
+    for (int i = 0 ; i < imageIds.size() ; ++i)
     {
         d->db->execSql(query, imageIds[i], &values);
         QList<int>& tagIds = results[i];
@@ -2473,7 +2473,7 @@ QVector<QList<qlonglong> > CoreDB::getRelatedImages(QList<qlonglong> ids,
     QString sql = d->constructRelatedImagesSQL(fromOrTo, type, boolean);
     DbEngineSqlQuery query = d->db->prepareQuery(sql);
 
-    for (int i = 0 ; i < ids.size() ; i++)
+    for (int i = 0 ; i < ids.size() ; ++i)
     {
         result[i] = d->execRelatedImagesQuery(query, ids[i], type);
     }

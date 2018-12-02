@@ -379,7 +379,7 @@ void QueryRevision::doWorkProcessReply()
         {
             setError(KJob::NoError);
 
-            for (int i = 0; i < results.length(); i++)
+            for (int i = 0 ; i < results.length() ; ++i)
             {
                 results[i].setParseTree(results[i].parseTree().replace(QChar(254), QStringLiteral(">")));
                 results[i].setParseTree(results[i].parseTree().replace(QChar(255), QStringLiteral("<")));

@@ -350,7 +350,7 @@ void ItemScanner::scanTags()
     QStringList filteredKeywords;
 
     // Extra empty tags check, empty tag = root tag which is not asignable
-    for (int index = 0 ; index < keywords.size() ; index++)
+    for (int index = 0 ; index < keywords.size() ; ++index)
     {
         QString keyword = keywords.at(index);
 

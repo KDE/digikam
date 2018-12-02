@@ -85,7 +85,7 @@ void ItemLister::listPAlbum(ItemListerReceiver* const receiver,
         // SQLite allows no more than 999 parameters
         const int maxParams = CoreDbAccess().backend()->maximumBoundValues();
 
-        for (int i = 0 ; i < albumIds.size() ; i++)
+        for (int i = 0 ; i < albumIds.size() ; ++i)
         {
             QString q           = query;
             QList<QVariant> ids =  (albumIds.size() <= maxParams) ? albumIds : albumIds.mid(i, maxParams);

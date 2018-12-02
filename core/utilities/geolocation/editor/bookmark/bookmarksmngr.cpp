@@ -526,7 +526,7 @@ bool BookmarksModel::dropMimeData(const QMimeData* data,
         BookmarkNode* const rootNode  = reader.read(&buffer);
         QList<BookmarkNode*> children = rootNode->children();
 
-        for (int i = 0 ; i < children.count() ; i++)
+        for (int i = 0 ; i < children.count() ; ++i)
         {
             BookmarkNode* const bookmarkNode = children.at(i);
             rootNode->remove(bookmarkNode);
@@ -636,7 +636,7 @@ bool TreeProxyModel::filterAcceptsRow(int srow, const QModelIndex& sparent) cons
         return true;
     }
 
-    for (int i = 0 ; i < sourceModel()->rowCount(index) ; i++)
+    for (int i = 0 ; i < sourceModel()->rowCount(index) ; ++i)
     {
         if (filterAcceptsRow(i, index))
         {

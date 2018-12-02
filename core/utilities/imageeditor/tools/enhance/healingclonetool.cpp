@@ -223,9 +223,9 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
 {
     double blurPercent = d->blurPercent->value() / 100;
 
-    for (int i = -1 * radius ; i < radius ; i++)
+    for (int i = -1 * radius ; i < radius ; ++i)
     {
-        for (int j = -1 * radius ; j < radius ; j++)
+        for (int j = -1 * radius ; j < radius ; ++j)
         {
             int rPercent = (i * i) + (j * j);
 

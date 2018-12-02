@@ -203,7 +203,7 @@ void VKAlbumChooser::selectAlbum(int aid)
      */
     d->albumToSelect = aid;
 
-    for (int i = 0 ; i < d->albums.size() ; i ++)
+    for (int i = 0 ; i < d->albums.size() ; ++i)
     {
         if (d->albums.at(i).aid() == aid)
         {

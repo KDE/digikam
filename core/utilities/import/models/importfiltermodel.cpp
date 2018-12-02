@@ -192,7 +192,7 @@ QList<CamItemInfo> ImportSortFilterModel::camItemInfosSorted() const
     QList<CamItemInfo> infos;
     const int          size = rowCount();
 
-    for (int i = 0; i < size; i++)
+    for (int i = 0 ; i < size ; ++i)
     {
         infos << camItemInfo(index(i, 0));
     }
@@ -380,7 +380,7 @@ void ImportFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int star
 {
     QList<CamItemInfo> infos;
 
-    for (int i = start; i < end; i++)
+    for (int i = start ; i < end ; ++i)
     {
         infos << camItemInfo(index(i, 0));
     }
@@ -392,7 +392,7 @@ void ImportFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, 
 {
     QList<CamItemInfo> infos;
 
-    for (int i = start; i < end; i++)
+    for (int i = start ; i < end ; ++i)
     {
         infos << camItemInfo(index(i, 0));
     }

@@ -631,7 +631,7 @@ void ItemPropertiesTab::setRating(int rating)
     {
         str = QLatin1Char(' ');
 
-        for (int i = 0 ; i < rating ; i++)
+        for (int i = 0 ; i < rating ; ++i)
         {
             str += QChar(0x2730);
             str += QLatin1Char(' ');

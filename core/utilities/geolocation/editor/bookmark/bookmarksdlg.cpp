@@ -309,7 +309,7 @@ bool BookmarksDialog::saveExpandedNodes(const QModelIndex& parent)
 {
     bool changed = false;
 
-    for (int i = 0 ; i < d->proxyModel->rowCount(parent) ; i++)
+    for (int i = 0 ; i < d->proxyModel->rowCount(parent) ; ++i)
     {
         QModelIndex child             = d->proxyModel->index(i, 0, parent);
         QModelIndex sourceIndex       = d->proxyModel->mapToSource(child);
@@ -334,7 +334,7 @@ bool BookmarksDialog::saveExpandedNodes(const QModelIndex& parent)
 
 void BookmarksDialog::expandNodes(BookmarkNode* const node)
 {
-    for (int i = 0 ; i < node->children().count() ; i++)
+    for (int i = 0 ; i < node->children().count() ; ++i)
     {
         BookmarkNode* const childNode = node->children()[i];
 

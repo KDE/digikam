@@ -461,7 +461,7 @@ void AdvancedMetadataTab::setModels()
 
     d->metadataTypeSize = keys.size();
 
-    for (int i = 0 ; i < keys.size() * 2; i++)
+    for (int i = 0 ; i < keys.size() * 2 ; ++i)
     {
         d->models.append(new QStandardItemModel(this));
     }
@@ -491,7 +491,7 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel* model,
         return;
     }
 
-    for (int i = 0 ; i < root->rowCount(); i++)
+    for (int i = 0 ; i < root->rowCount() ; ++i)
     {
         NamespaceEntry ns;
         QStandardItem* const current = root->child(i);

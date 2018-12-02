@@ -350,7 +350,7 @@ void LabelsTreeView::initRatingsTree()
     noRate->setIcon(0, QIcon(pix));
     noRate->setSizeHint(0, d->iconSize);
 
-    for (int rate = 1 ; rate <= 5 ; rate++)
+    for (int rate = 1 ; rate <= 5 ; ++rate)
     {
         QTreeWidgetItem* const rateWidget = new QTreeWidgetItem(d->ratings);
 

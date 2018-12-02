@@ -64,7 +64,7 @@ static int minimumListWidth(const QListWidget* list)
 {
     int w = 0;
 
-    for (int i = 0; i < list->count(); i++)
+    for (int i = 0; i < list->count(); ++i)
     {
         int itemWidth = list->visualItemRect(list->item(i)).width();
         // ...and add a space on both sides for not too tight look.

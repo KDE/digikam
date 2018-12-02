@@ -697,7 +697,7 @@ void ImageWindow::prepareImageToSave()
                                              << faceRect.x()     << faceRect.y()
                                              << faceRect.width() << faceRect.height();
 
-                for (int i = 0 ; i < m_transformQue.size() ; i++)
+                for (int i = 0 ; i < m_transformQue.size() ; ++i)
                 {
                     EditorWindow::TransformType type = m_transformQue[i];
 

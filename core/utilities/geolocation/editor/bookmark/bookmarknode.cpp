@@ -90,7 +90,7 @@ bool BookmarkNode::operator==(const BookmarkNode& other) const
         return false;
     }
 
-    for (int i = 0 ; i < d->children.count() ; i++)
+    for (int i = 0 ; i < d->children.count() ; ++i)
     {
         if (!((*(d->children[i])) == (*(other.d->children[i]))))
             return false;
@@ -306,7 +306,7 @@ bool XbelWriter::write(QIODevice* const device, const BookmarkNode* const root)
     {
         BookmarkNode* const rootFolder = root->children().first();
 
-        for (int i = 0  ; i < rootFolder->children().count() ; i++)
+        for (int i = 0  ; i < rootFolder->children().count() ; ++i)
             writeItem(rootFolder->children().at(i));
     }
     else
@@ -328,7 +328,7 @@ void XbelWriter::writeItem(const BookmarkNode* const parent)
             writeAttribute(QLatin1String("folded"), parent->expanded ? QLatin1String("no") : QLatin1String("yes"));
             writeTextElement(QLatin1String("title"), parent->title);
 
-            for (int i = 0 ; i < parent->children().count() ; i++)
+            for (int i = 0 ; i < parent->children().count() ; ++i)
                 writeItem(parent->children().at(i));
 
             writeEndElement();

@@ -512,7 +512,7 @@ void PanoActionThread::appendStitchingJobs(QSharedPointer<Sequence>& js,
 
     (*jobs) << createMKTask;
 
-    for (int i = 0 ; i < preProcessedUrlsMap.size() ; i++)
+    for (int i = 0 ; i < preProcessedUrlsMap.size() ; ++i)
     {
         QObjectDecorator* const t
             = new QObjectDecorator(new CompileMKStepTask(d->preprocessingTmpDir->path(),

@@ -223,7 +223,7 @@ void DBWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
     d->widget->getAlbumsCoB()->clear();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" << list.size();
 
-    for (int i = 0 ; i < list.size() ; i++)
+    for (int i = 0 ; i < list.size() ; ++i)
     {
         d->widget->getAlbumsCoB()->addItem(
         QIcon::fromTheme(QLatin1String("system-users")),

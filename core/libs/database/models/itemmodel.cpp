@@ -726,7 +726,7 @@ void ItemModel::appendInfosChecked(const QList<ItemInfo>& infos, const QList<QVa
         QList<QVariant>  checkedExtraValues;
         const int size = infos.size();
 
-        for (int i = 0 ; i < size ; i++)
+        for (int i = 0 ; i < size ; ++i)
         {
             if (!hasImage(infos[i], extraValues[i]))
             {

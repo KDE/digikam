@@ -64,9 +64,9 @@ public:
         m = std::vector<std::vector<float> >(2, std::vector<float>(2, 0));
         b = std::vector<float >(2, 0);
 
-        for (unsigned int i = 0 ; i < m_.size() ; i++)
+        for (unsigned int i = 0 ; i < m_.size() ; ++i)
         {
-            for (unsigned int j = 0 ; j < m_[0].size() ; j++)
+            for (unsigned int j = 0 ; j < m_[0].size() ; ++j)
             {
                 if (j == 2)
                 {

@@ -1020,7 +1020,7 @@ int TagsCache::colorLabelFromTags(QList<int> tagIds)
 
     foreach(int tagId, tagIds)
     {
-        for (int i = FirstColorLabel ; i <= LastColorLabel ; i++)
+        for (int i = FirstColorLabel ; i <= LastColorLabel ; ++i)
         {
             if (d->colorLabelsTags[i] == tagId)
             {
@@ -1063,7 +1063,7 @@ int TagsCache::pickLabelFromTags(QList<int> tagIds)
 
     foreach(int tagId, tagIds)
     {
-        for (int i = FirstPickLabel ; i <= LastPickLabel ; i++)
+        for (int i = FirstPickLabel ; i <= LastPickLabel ; ++i)
         {
             if (d->pickLabelsTags[i] == tagId)
             {

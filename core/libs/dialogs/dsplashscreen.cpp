@@ -175,7 +175,7 @@ void DSplashScreen::drawContents(QPainter* p)
     // Increments are chosen to get close to background's color
     // (didn't work well with QColor::light function)
 
-    for (int i = 0 ; i < d->progressBarSize ; i++)
+    for (int i = 0 ; i < d->progressBarSize ; ++i)
     {
         position = (d->state + i) % (2 * d->progressBarSize - 1);
 

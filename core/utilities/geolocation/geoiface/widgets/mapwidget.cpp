@@ -2203,7 +2203,7 @@ void MapWidget::adjustBoundariesToGroupedMarkers(const bool useSaneZoomLevel)
     {
         const TileIndex tileIndex = tileIterator.currentIndex();
 
-        for(int corner = 1 ; corner <= 4 ; corner++)
+        for (int corner = 1 ; corner <= 4 ; ++corner)
         {
             const GeoCoordinates currentTileCoordinate =
                 tileIndex.toCoordinates(TileIndex::CornerPosition(corner));

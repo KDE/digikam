@@ -504,7 +504,7 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
         }
         else
         {
-            for (int i = RedChannel; i <= BlueChannel; i++)
+            for (int i = RedChannel ; i <= BlueChannel ; ++i)
                 d->levels->levelsBlackToneAdjustByColors(i, color);
         }
     }
@@ -525,7 +525,7 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
         }
         else
         {
-            for (int i = RedChannel; i <= BlueChannel; i++)
+            for (int i = RedChannel ; i <= BlueChannel ; ++i)
                 d->levels->levelsWhiteToneAdjustByColors(i, color);
         }
     }

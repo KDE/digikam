@@ -85,7 +85,7 @@ void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
 {
     ActionJobCollection collection;
 
-    for (int i = 0 ; i < items.size() ; i++)
+    for (int i = 0 ; i < items.size() ; ++i)
     {
         Task* const t = new Task();
         t->setSettings(d->settings);

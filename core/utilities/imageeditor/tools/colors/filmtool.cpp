@@ -425,7 +425,7 @@ void FilmTool::setLevelsFromFilm()
 {
     LevelsContainer l = d->filmContainer.toLevels();
 
-    for (int i = RedChannel; i <= BlueChannel; i++)
+    for (int i = RedChannel ; i <= BlueChannel ; ++i)
     {
         d->levels->setLevelLowInputValue(i, l.lInput[i]);
         d->levels->setLevelHighInputValue(i, l.hInput[i]);
@@ -503,7 +503,7 @@ void FilmTool::slotAutoWhitePoint()
     bool sixteenBit            = d->originalImage->sixteenBit();
     int high_input[4];
 
-    for (int channel = RedChannel; channel <= BlueChannel; channel++)
+    for (int channel = RedChannel ; channel <= BlueChannel ; ++channel)
     {
         double new_count = 0.0;
         double percentage;

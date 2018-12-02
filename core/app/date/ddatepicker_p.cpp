@@ -55,7 +55,7 @@ QValidator::State DatePickerValidator::validate(QString& text, int&) const
 
     QLocale locale = m_picker->locale();
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0 ; i < 3 ; ++i)
     {
         QDate tmp = locale.toDate(text, formats[i]);
 
