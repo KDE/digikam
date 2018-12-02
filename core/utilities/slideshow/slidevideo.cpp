@@ -209,8 +209,18 @@ void SlideVideo::setCurrentUrl(const QUrl& url)
         d->videoWidget->setOrientation(videoOrientation);
     }
 
-    d->player->setFile(url.toLocalFile());
-    d->player->play();
+    DMetadata meta(url.toLocalFile());
+
+    if (meta.getXmpTagString("Xmp.video.Codec") == QLatin1String("none"))
+    {
+        d->player->setFile(QString());
+        signalVideoLoaded(false);
+    }
+    else
+    {
+        d->player->setFile(url.toLocalFile());
+        d->player->play();
+    }
 
     showIndicator(false);
 }

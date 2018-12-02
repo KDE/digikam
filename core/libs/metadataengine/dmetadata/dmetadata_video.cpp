@@ -273,7 +273,21 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         const char* cname              = avcodec_get_name(codec->codec_id);
 
         if (QLatin1String(cname) == QLatin1String("none"))
+        {
+            if (codec->codec_type == AVMEDIA_TYPE_AUDIO)
+            {
+                setXmpTagString("Xmp.audio.Codec",
+                    QLatin1String("none"));
+            }
+
+            if (codec->codec_type == AVMEDIA_TYPE_VIDEO)
+            {
+                setXmpTagString("Xmp.video.Codec",
+                    QLatin1String("none"));
+            }
+
             continue;
+        }
 
         // -----------------------------------------
         // Audio stream parsing

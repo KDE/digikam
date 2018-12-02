@@ -452,9 +452,20 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
         d->videoWidget->setOrientation(videoOrientation);
     }
 
-    d->player->setFile(d->currentItem.toLocalFile());
-    setPreviewMode(Private::PlayerView);
-    d->player->play();
+    DMetadata meta(url.toLocalFile());
+
+    if (meta.getXmpTagString("Xmp.video.Codec") == QLatin1String("none"))
+    {
+        d->currentItem = QUrl();
+        d->player->setFile(QString());
+        setPreviewMode(Private::ErrorView);
+    }
+    else
+    {
+        d->player->setFile(d->currentItem.toLocalFile());
+        setPreviewMode(Private::PlayerView);
+        d->player->play();
+    }
 }
 
 void MediaPlayerView::slotPositionChanged(qint64 position)
