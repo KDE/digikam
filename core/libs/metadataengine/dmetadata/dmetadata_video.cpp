@@ -258,7 +258,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     bool astream = false;
     bool sstream = false;
 
-    for (uint i = 0 ; i < fmt_ctx->nb_streams ; i++)
+    for (uint i = 0 ; i < fmt_ctx->nb_streams ; ++i)
     {
         const AVStream* const stream   = fmt_ctx->streams[i];
 
@@ -1058,7 +1058,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    for (int i = 1 ; i <= 9 ; i++)
+    for (int i = 1 ; i <= 9 ; ++i)
     {
         s_setXmpTagStringFromEntry(this,
                          QStringList() << QString::fromLatin1("IAS%1").arg(i),                                  // RIFF files.
@@ -1519,7 +1519,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
         QList<int> digits;
 
-        for (int i = 0 ; i < data.length() ; i++)
+        for (int i = 0 ; i < data.length() ; ++i)
         {
             QChar c = data[i];
 
