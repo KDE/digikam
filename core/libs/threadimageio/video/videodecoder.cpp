@@ -72,7 +72,11 @@ void VideoDecoder::initialize(const QString& filename)
         return;
     }
 
-    d->initializeVideo();
+    if (!d->initializeVideo())
+    {
+        return;
+    }
+
     d->pFrame = av_frame_alloc();
 
     if (d->pFrame)

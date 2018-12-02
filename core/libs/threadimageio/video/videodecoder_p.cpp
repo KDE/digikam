@@ -70,7 +70,7 @@ void VideoDecoder::Private::createAVFrame(AVFrame** const avFrame,
     av_image_fill_arrays((*avFrame)->data, (*avFrame)->linesize, *frameBuffer, format, width, height, 1);
 }
 
-void VideoDecoder::Private::initializeVideo()
+bool VideoDecoder::Private::initializeVideo()
 {
     for (unsigned int i = 0 ; i < pFormatContext->nb_streams ; i++)
     {
@@ -85,7 +85,7 @@ void VideoDecoder::Private::initializeVideo()
     if (videoStream == -1)
     {
         qDebug(DIGIKAM_GENERAL_LOG) << "Could not find video stream";
-        return;
+        return false;
     }
 
     pVideoCodecParameters = pFormatContext->streams[videoStream]->codecpar;
@@ -96,7 +96,7 @@ void VideoDecoder::Private::initializeVideo()
         // set to 0, otherwise avcodec_close(d->pVideoCodecContext) crashes
         pVideoCodecContext = 0;
         qDebug(DIGIKAM_GENERAL_LOG) << "Video Codec not found";
-        return;
+        return false;
     }
 
     pVideoCodecContext = avcodec_alloc_context3(pVideoCodec);
@@ -105,7 +105,10 @@ void VideoDecoder::Private::initializeVideo()
     if (avcodec_open2(pVideoCodecContext, pVideoCodec, 0) < 0)
     {
         qDebug(DIGIKAM_GENERAL_LOG) << "Could not open video codec";
+        return false;
     }
+
+    return true;
 }
 
 bool VideoDecoder::Private::decodeVideoPacket() const

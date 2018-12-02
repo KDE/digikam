@@ -73,7 +73,7 @@ public:
 
 public:
 
-    void initializeVideo();
+    bool initializeVideo();
     bool getVideoPacket();
     bool decodeVideoPacket() const;
 

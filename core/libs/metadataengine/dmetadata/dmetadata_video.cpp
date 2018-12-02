@@ -261,7 +261,19 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     for (uint i = 0 ; i < fmt_ctx->nb_streams ; i++)
     {
         const AVStream* const stream   = fmt_ctx->streams[i];
+
+        if (!stream)
+            continue;
+
         AVCodecParameters* const codec = stream->codecpar;
+
+        if (!codec)
+            continue;
+
+        const char* cname              = avcodec_get_name(codec->codec_id);
+
+        if (QLatin1String(cname) == QLatin1String("none"))
+            continue;
 
         // -----------------------------------------
         // Audio stream parsing
@@ -269,8 +281,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
         if (!astream && codec->codec_type == AVMEDIA_TYPE_AUDIO)
         {
-            astream           = true;
-            const char* cname = avcodec_get_name(codec->codec_id);
+            astream = true;
 
             setXmpTagString("Xmp.audio.Codec",
                 QString::fromUtf8(cname));
@@ -374,8 +385,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
         if (!vstream && codec->codec_type == AVMEDIA_TYPE_VIDEO)
         {
-            vstream           = true;
-            const char* cname = avcodec_get_name(codec->codec_id);
+            vstream = true;
 
             setXmpTagString("Xmp.video.Codec",
                  QString::fromUtf8(cname));
@@ -631,8 +641,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
         if (!sstream && codec->codec_type == AVMEDIA_TYPE_SUBTITLE)
         {
-            sstream           = true;
-            const char* cname = avcodec_get_name(codec->codec_id);
+            sstream = true;
 
             setXmpTagString("Xmp.video.SubTCodec",
                 QString::fromUtf8(cname));
