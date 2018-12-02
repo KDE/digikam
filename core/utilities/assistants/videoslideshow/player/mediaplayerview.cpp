@@ -436,6 +436,8 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
         switch (orientation)
         {
             case MetaEngine::ORIENTATION_ROT_90:
+            case MetaEngine::ORIENTATION_ROT_90_HFLIP:
+            case MetaEngine::ORIENTATION_ROT_90_VFLIP:
                 videoOrientation = 90;
                 break;
             case MetaEngine::ORIENTATION_ROT_180:
