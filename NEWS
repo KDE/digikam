@@ -651,4 +651,5 @@ BUGFIXES:
 583 ==> 401515 - Export to OneDrive: created subfolders not correctly managed.
 584 ==> 401516 - Export to (Onedrive, Dropbox ...): list of subfolders not correctly displayed (problems if several subfolders have the same name).
 585 ==> 401645 - Digikam crashes on possibly damaged video-file.
-586 ==> 
+586 ==> 401676 - BQM resize tool : allow to resize by percentage (%).
+587 ==> 
