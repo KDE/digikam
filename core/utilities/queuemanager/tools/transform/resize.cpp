@@ -150,7 +150,7 @@ void Resize::registerSettingsWidget()
     d->presetCBox->insertItem(Private::Huge,   i18np("Huge (1 pixel)",   "Huge (%1 pixels)",   d->presetLengthValue(Private::Huge)));
 
     d->useCustom        = new QCheckBox(i18n("Use Custom Length"), vbox);
-    d->usePercent       = new QCheckBox(i18n("Use Percent instead of Pixels"), vbox);
+    d->usePercent       = new QCheckBox(i18n("Use Percentage"), vbox);
     d->customLength     = new DIntNumInput(vbox);
     d->customLength->setSuffix(i18n(" Pixels"));
     d->customLength->setRange(10, 10000, 1);
