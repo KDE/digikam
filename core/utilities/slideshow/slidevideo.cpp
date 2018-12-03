@@ -221,7 +221,7 @@ void SlideVideo::setCurrentUrl(const QUrl& url)
     else
     {
         d->player->setFile(QString());
-        signalVideoLoaded(false);
+        emit signalVideoLoaded(false);
     }
 
     showIndicator(false);
