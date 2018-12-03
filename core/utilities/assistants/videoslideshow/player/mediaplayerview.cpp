@@ -51,7 +51,6 @@
 #include "digikam_debug.h"
 #include "thememanager.h"
 #include "dlayoutbox.h"
-#include "dmetadata.h"
 
 using namespace QtAV;
 
@@ -417,21 +416,24 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
 
     d->player->stop();
 
+    int orientation     = 0;
+    bool supportedCodec = true;
+
+    if (d->iface)
+    {
+        DItemInfo info(d->iface->itemInfo(url));
+
+        orientation = info.orientation();
+
+        if (info.videoCodec() == QLatin1String("none"))
+        {
+            supportedCodec = false;
+        }
+    }
+
     if (MetaEngineSettings::instance()->settings().exifRotate)
     {
-        int orientation      = 0;
         int videoOrientation = 0;
-
-        if (d->iface)
-        {
-            DItemInfo info(d->iface->itemInfo(url));
-            orientation = info.orientation();
-        }
-        else
-        {
-            DMetadata meta(url.toLocalFile());
-            orientation = meta.getItemOrientation();
-        }
 
         switch (orientation)
         {
@@ -454,19 +456,17 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
         d->videoWidget->setOrientation(videoOrientation);
     }
 
-    DMetadata meta(url.toLocalFile());
-
-    if (meta.getXmpTagString("Xmp.video.Codec") == QLatin1String("none"))
-    {
-        d->currentItem = QUrl();
-        d->player->setFile(QString());
-        setPreviewMode(Private::ErrorView);
-    }
-    else
+    if (supportedCodec)
     {
         d->player->setFile(d->currentItem.toLocalFile());
         setPreviewMode(Private::PlayerView);
         d->player->play();
+    }
+    else
+    {
+        d->currentItem = QUrl();
+        d->player->setFile(QString());
+        setPreviewMode(Private::ErrorView);
     }
 }
 

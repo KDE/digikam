@@ -128,6 +128,7 @@ public:
     QString            sensitivity()  const;
     QString            aperture()     const;
     QString            focalLength()  const;
+    QString            videoCodec()   const;
 
     bool hasGeolocationInfo() const;
 

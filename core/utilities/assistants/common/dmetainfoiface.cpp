@@ -139,6 +139,10 @@ DMetaInfoIface::DInfoMap DMetaInfoIface::itemInfo(const QUrl& url) const
         map.insert(QLatin1String("sensitivity"),  photoInfo.sensitivity);
         map.insert(QLatin1String("aperture"),     photoInfo.aperture);
         map.insert(QLatin1String("focallength"),  photoInfo.focalLength);
+
+        // TODO: add more video metadata as needed
+        VideoInfoContainer videoInfo = meta.getVideoInformation();
+        map.insert(QLatin1String("videocodec"), videoInfo.videoCodec);
     }
 
     return map;

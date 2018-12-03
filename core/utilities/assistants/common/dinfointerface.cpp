@@ -270,6 +270,12 @@ QString DItemInfo::focalLength() const
     return !val.isNull() ? val.toString() : QString();
 }
 
+QString DItemInfo::videoCodec() const
+{
+    QVariant val = parseInfoMap(QLatin1String("videocodec"));
+    return !val.isNull() ? val.toString() : QString();
+}
+
 bool DItemInfo::hasGeolocationInfo() const
 {
     // NOTE: GPS position without altitude is a valid geolocation.

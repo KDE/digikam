@@ -414,6 +414,10 @@ DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
         map.insert(QLatin1String("aperture"),     photoInfo.aperture);
         map.insert(QLatin1String("focallength"),  photoInfo.focalLength);
 
+        // TODO: add more video metadata as needed
+        VideoInfoContainer videoInfo = info.videoInfoContainer();
+        map.insert(QLatin1String("videocodec"), videoInfo.videoCodec);
+
         qCDebug(DIGIKAM_GENERAL_LOG) << "Database Info populated for" << url;
     }
     else
