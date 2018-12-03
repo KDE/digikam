@@ -31,6 +31,7 @@
   <name xml:lang="uk">digiKam</name>
   <name xml:lang="x-test">xxdigiKamxx</name>
   <name xml:lang="zh-CN">digiKam</name>
+  <name xml:lang="zh-TW">digiKam</name>
   <summary>Photo Management Program</summary>
   <summary xml:lang="ca">Programa per a la gestió de les fotografies</summary>
   <summary xml:lang="ca-valencia">Programa per a la gestió de les fotografies</summary>
@@ -54,6 +55,7 @@
   <summary xml:lang="uk">Програма для керування фотографіями</summary>
   <summary xml:lang="x-test">xxPhoto Management Programxx</summary>
   <summary xml:lang="zh-CN">照片管理程序</summary>
+  <summary xml:lang="zh-TW">圖片管理程式</summary>
   <description>
     <p>
       digiKam is an advanced digital photo management application, which makes importing and organizing digital photos
@@ -113,6 +115,7 @@
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
     <p xml:lang="zh-CN">功能：</p>
+    <p xml:lang="zh-TW">功能：</p>
     <ul>
       <li>Organization of photos in albums and sub-albums (with tags and comments support)</li>
       <li xml:lang="ar">تنظيم الصّور في ألبومات وألبومات فرعيّة (بدعم الوسوم والتّعليقات)</li>
@@ -167,6 +170,7 @@
       <li xml:lang="uk">підтримка Exif, Iptc, Xmp, Makernotes;</li>
       <li xml:lang="x-test">xxSupport for Exif, Iptc, Xmp, Makernotesxx</li>
       <li xml:lang="zh-CN">支持 Exif、Iptc、Xmp、Makernotes</li>
+      <li xml:lang="zh-TW">支援 EXIF、IPTC、XMP 和 Makernotes</li>
       <li>SQLite or Mysql powered storage for the album contents and its metadata with advanced search tools</li>
       <li xml:lang="ca">Emmagatzematge basat en SQLite o Mysql per als continguts dels àlbums i les seves metadades amb eines de cerca avançades</li>
       <li xml:lang="ca-valencia">Emmagatzematge basat en SQLite o Mysql per als continguts dels àlbums i les seues metadades amb eines de cerca avançades</li>
@@ -216,6 +220,7 @@
       <li xml:lang="uk">підтримка фільтрування та упорядковування альбомів;</li>
       <li xml:lang="x-test">xxSupport for filtering and sorting albumsxx</li>
       <li xml:lang="zh-CN">支持筛选和排序相册</li>
+      <li xml:lang="zh-TW">支援篩選和排序相簿</li>
       <li>Import from more than 1100 digital camera devices</li>
       <li xml:lang="ar">الاستيراد من أكثر من 1100 كمرة رقميّة</li>
       <li xml:lang="bs">Uvoz iz više od 1100 digitalnih kamera uređaja</li>
@@ -243,6 +248,7 @@
       <li xml:lang="uk">можливість імпортування даних з понад 1100 цифрових фотоапаратів;</li>
       <li xml:lang="x-test">xxImport from more than 1100 digital camera devicesxx</li>
       <li xml:lang="zh-CN">从1100多种数码相机设备中导入</li>
+      <li xml:lang="zh-TW">能從超過 1100 個數位相機裝置匯入</li>
       <li>Support for more than 900 RAW format pictures</li>
       <li xml:lang="ca">Admet més de 900 formats d'imatge RAW</li>
       <li xml:lang="ca-valencia">Admet més de 900 formats d'imatge RAW</li>
@@ -266,6 +272,7 @@
       <li xml:lang="uk">підтримка понад 900 форматів цифрових негативів (RAW);</li>
       <li xml:lang="x-test">xxSupport for more than 900 RAW format picturesxx</li>
       <li xml:lang="zh-CN">支持超过900种 RAW 格式的图片</li>
+      <li xml:lang="zh-TW">支援超過 900 個 RAW 格式圖片</li>
       <li>Light Table to compare photo side by side</li>
       <li xml:lang="ca">Taula de llum per a comparar les fotografies costat a costat</li>
       <li xml:lang="ca-valencia">Taula de llum per a comparar les fotografies costat a costat</li>
@@ -311,6 +318,7 @@
       <li xml:lang="uk">розширення можливостей за допомогою додаткових інструментів;</li>
       <li xml:lang="x-test">xxExtended features using extra toolsxx</li>
       <li xml:lang="zh-CN">使用额外工具的扩展功能</li>
+      <li xml:lang="zh-TW">使用延伸工具得到延伸功能</li>
       <li>Share your photos using HTML or publishing them to remote web services</li>
       <li xml:lang="ca">Compartiu les vostres fotografies usant HTML o publicant-les a serveis web remots</li>
       <li xml:lang="ca-valencia">Compartiu les vostres fotografies usant HTML o publicant-les a serveis web remots</li>
@@ -333,6 +341,7 @@
       <li xml:lang="uk">можливість оприлюднення фотографій на віддалених службах у інтернеті;</li>
       <li xml:lang="x-test">xxShare your photos using HTML or publishing them to remote web servicesxx</li>
       <li xml:lang="zh-CN">使用 HTML 共享您的照片或将其发布到远程 WEB 服务</li>
+      <li xml:lang="zh-TW">使用 HTML 分享圖片或將圖片發布到遠端網路服務</li>
       <li>Image editor included with advanced tools to fix photo quickly</li>
       <li xml:lang="ca">Inclou un editor d'imatges amb eines avançades per esmenar ràpidament les fotografies</li>
       <li xml:lang="ca-valencia">Inclou un editor d'imatges amb eines avançades per esmenar ràpidament les fotografies</li>
@@ -355,6 +364,7 @@
       <li xml:lang="uk">редактор зображень із додатковими можливостями для швидкого виправлення фотографій;</li>
       <li xml:lang="x-test">xxImage editor included with advanced tools to fix photo quicklyxx</li>
       <li xml:lang="zh-CN">图像编辑器包含高级工具以快速修复照片</li>
+      <li xml:lang="zh-TW">包含進階工具的圖片編輯器以快速修復圖片</li>
     </ul>
   </description>
   <url type="homepage">http://www.digikam.org/</url>
@@ -366,6 +376,7 @@
       <caption xml:lang="ca">Gestió de les fotografies al digiKam</caption>
       <caption xml:lang="ca-valencia">Gestió de les fotografies al digiKam</caption>
       <caption xml:lang="cs">Správa fotografií v digiKamu</caption>
+      <caption xml:lang="en-GB">Photo management in digiKam</caption>
       <caption xml:lang="es">Gestión de fotos en digiKam</caption>
       <caption xml:lang="gl">Xestión de fotos en digiKam</caption>
       <caption xml:lang="nl">Fotobeheer in digiKam</caption>
@@ -375,6 +386,7 @@
       <caption xml:lang="uk">Керування фотографіями у digiKam</caption>
       <caption xml:lang="x-test">xxPhoto management in digiKamxx</caption>
       <caption xml:lang="zh-CN">digiKam 的照片管理</caption>
+      <caption xml:lang="zh-TW">digiKam 中的圖片管理</caption>
       <image>http://kde.org/images/screenshots/digikam.png</image>
     </screenshot>
   </screenshots>
@@ -405,6 +417,7 @@
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
   <developer_name xml:lang="zh-CN">digiKam 项目</developer_name>
+  <developer_name xml:lang="zh-TW">digiKam 專案</developer_name>
   <project_group>KDE</project_group>
   <provides>
     <binary>digikam</binary>
