@@ -94,7 +94,7 @@ void MetadataHubMngr::slotApplyPending()
     if (d->pendingItemIds.isEmpty())
         return;
 
-   ItemInfoList infos;
+    ItemInfoList infos;
 
     foreach (const qlonglong& id, d->pendingItemIds)
     {
