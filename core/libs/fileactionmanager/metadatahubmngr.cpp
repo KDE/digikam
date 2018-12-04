@@ -125,12 +125,6 @@ void MetadataHubMngr::requestShutDown()
     if (d->pendingItemIds.isEmpty())
         return;
 
-    QPointer<QProgressDialog> dialog = new QProgressDialog;
-    dialog->setMinimum(0);
-    dialog->setMaximum(0);
-    dialog->setMinimumDuration(100);
-    dialog->setLabelText(i18nc("@label", "Apply pending changes to metadata"));
-
     ItemInfoList infos;
 
     foreach (const qlonglong& id, d->pendingItemIds)
@@ -149,6 +143,12 @@ void MetadataHubMngr::requestShutDown()
 
     if (infos.isEmpty())
         return;
+
+    QPointer<QProgressDialog> dialog = new QProgressDialog;
+    dialog->setMinimum(0);
+    dialog->setMaximum(0);
+    dialog->setMinimumDuration(100);
+    dialog->setLabelText(i18nc("@label", "Apply pending changes to metadata"));
 
     MetadataSynchronizer* const tool = new MetadataSynchronizer(infos,
                                            MetadataSynchronizer::WriteFromDatabaseToFile);
