@@ -50,8 +50,8 @@ public:
     {
     }
 
-    ItemInfoList pendingItems;
-    QMutex        mutex;
+    QList<qlonglong> pendingItemIds;
+    QMutex           mutex;
 };
 
 MetadataHubMngr::MetadataHubMngr()
@@ -81,23 +81,37 @@ void MetadataHubMngr::addPending(const ItemInfo& info)
 {
     QMutexLocker locker(&d->mutex);
 
-    if (!d->pendingItems.contains(info))
-        d->pendingItems.append(info);
+    if (!d->pendingItemIds.contains(info.id()))
+        d->pendingItemIds.append(info.id());
 
-    emit signalPendingMetadata(d->pendingItems.size());
+    emit signalPendingMetadata(d->pendingItemIds.size());
 }
 
 void MetadataHubMngr::slotApplyPending()
 {
     QMutexLocker lock(&d->mutex);
 
-    if (d->pendingItems.isEmpty())
+    if (d->pendingItemIds.isEmpty())
         return;
 
-    ItemInfoList infos(d->pendingItems);
-    d->pendingItems.clear();
+   ItemInfoList infos;
+
+    foreach (const qlonglong& id, d->pendingItemIds)
+    {
+        ItemInfo info(id);
+
+        if (!info.isNull() && !info.isRemoved())
+        {
+            infos.append(info);
+        }
+    }
+
+    d->pendingItemIds.clear();
 
     emit signalPendingMetadata(0);
+
+    if (infos.isEmpty())
+        return;
 
     MetadataSynchronizer* const tool = new MetadataSynchronizer(infos,
                                            MetadataSynchronizer::WriteFromDatabaseToFile);
@@ -108,7 +122,7 @@ void MetadataHubMngr::requestShutDown()
 {
     QMutexLocker lock(&d->mutex);
 
-    if (d->pendingItems.isEmpty())
+    if (d->pendingItemIds.isEmpty())
         return;
 
     QPointer<QProgressDialog> dialog = new QProgressDialog;
@@ -117,10 +131,24 @@ void MetadataHubMngr::requestShutDown()
     dialog->setMinimumDuration(100);
     dialog->setLabelText(i18nc("@label", "Apply pending changes to metadata"));
 
-    ItemInfoList infos(d->pendingItems);
-    d->pendingItems.clear();
+    ItemInfoList infos;
+
+    foreach (const qlonglong& id, d->pendingItemIds)
+    {
+        ItemInfo info(id);
+
+        if (!info.isNull() && !info.isRemoved())
+        {
+            infos.append(info);
+        }
+    }
+
+    d->pendingItemIds.clear();
 
     emit signalPendingMetadata(0);
+
+    if (infos.isEmpty())
+        return;
 
     MetadataSynchronizer* const tool = new MetadataSynchronizer(infos,
                                            MetadataSynchronizer::WriteFromDatabaseToFile);
