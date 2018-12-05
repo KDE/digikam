@@ -71,8 +71,7 @@ protected:
 
     bool eventFilter(QObject* obj, QEvent* event)
     {
-        if ((qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick)  && event->type() == QEvent::MouseButtonRelease)   ||
-            (!qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick) && event->type() == QEvent::MouseButtonDblClick))
+        if (event->type() == QEvent::MouseButtonRelease)
         {
             QMouseEvent* const mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
