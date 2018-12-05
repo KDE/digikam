@@ -418,27 +418,35 @@ void DigikamItemView::removeFaces(const QList<QModelIndex>& indexes)
     }
 }
 
-void DigikamItemView::activated(const ItemInfo& info, Qt::KeyboardModifiers modifiers)
+void DigikamItemView::activated(const ItemInfo& info, QMouseEvent* const event)
 {
     if (info.isNull())
     {
         return;
     }
 
-    if (modifiers != Qt::MetaModifier)
+    if (event)
     {
-        if (ApplicationSettings::instance()->getItemLeftClickAction() == ApplicationSettings::ShowPreview)
+        const bool acceptedClick = ((!qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick) &&
+                                     event->type() == QEvent::MouseButtonDblClick)                            ||
+                                    ( qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick) &&
+                                     event->type() == QEvent::MouseButtonRelease));
+
+        if (event->modifiers() != Qt::MetaModifier)
         {
-            emit previewRequested(info);
+            if (ApplicationSettings::instance()->getItemLeftClickAction() == ApplicationSettings::ShowPreview)
+            {
+                emit previewRequested(info);
+            }
+            else if (acceptedClick)
+            {
+                openFile(info);
+            }
         }
-        else
+        else if (acceptedClick)
         {
-            openFile(info);
+            d->utilities->openInfosWithDefaultApplication(QList<ItemInfo>() << info);
         }
-    }
-    else
-    {
-        d->utilities->openInfosWithDefaultApplication(QList<ItemInfo>() << info);
     }
 }
 

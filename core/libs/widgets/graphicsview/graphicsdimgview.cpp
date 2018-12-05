@@ -193,20 +193,15 @@ void GraphicsDImgView::drawText(QPainter* p, const QRectF& rect, const QString& 
 void GraphicsDImgView::mouseDoubleClickEvent(QMouseEvent* e)
 {
     QGraphicsView::mouseDoubleClickEvent(e);
-/*
+
     if (!acceptsMouseClick(e))
     {
         return;
     }
-*/
+
     if (e->button() == Qt::LeftButton)
     {
         emit leftButtonDoubleClicked();
-
-        if (!qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick))
-        {
-            emit activated();
-        }
     }
 }
 
@@ -231,7 +226,7 @@ void GraphicsDImgView::mousePressEvent(QMouseEvent* e)
     {
         d->mousePressPos = e->pos();
 
-        if (!qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick) || e->button() == Qt::MidButton)
+        if (e->button() == Qt::MidButton)
         {
             startPanning(e->pos());
         }
@@ -276,10 +271,7 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
     {
         if (!d->movingInProgress && e->button() == Qt::LeftButton)
         {
-            if (qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick))
-            {
-                emit activated();
-            }
+            emit activated();
         }
         else
         {

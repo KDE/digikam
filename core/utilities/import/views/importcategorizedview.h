@@ -156,14 +156,14 @@ protected:
     QModelIndex                  nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const;
 
     void setItemDelegate(ImportDelegate* delegate);
-    void indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers);
+    void indexActivated(const QModelIndex& index, QMouseEvent* const event);
     void currentChanged(const QModelIndex& index, const QModelIndex& previous);
     void paintEvent(QPaintEvent* e);
     void selectionChanged(const QItemSelection&, const QItemSelection&);
     void updateGeometries();
 
     /// Reimplement these in a subclass
-    virtual void activated(const CamItemInfo& info, Qt::KeyboardModifiers modifiers);
+    virtual void activated(const CamItemInfo& info, QMouseEvent* const event);
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const CamItemInfo& info);
     virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
 

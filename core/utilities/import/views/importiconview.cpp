@@ -292,7 +292,7 @@ void ImportIconView::slotRotateRight(const QList<QModelIndex>& /*indexes*/)
 */
 }
 
-void ImportIconView::activated(const CamItemInfo& info, Qt::KeyboardModifiers)
+void ImportIconView::activated(const CamItemInfo& info, QMouseEvent*)
 {
     if (info.isNull())
     {

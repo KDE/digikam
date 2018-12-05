@@ -559,13 +559,13 @@ void ImportCategorizedView::slotFileChanged(const QString& filePath)
     }
 }
 
-void ImportCategorizedView::indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
+void ImportCategorizedView::indexActivated(const QModelIndex& index, QMouseEvent* const event)
 {
     CamItemInfo info = d->filterModel->camItemInfo(index);
 
     if (!info.isNull())
     {
-        activated(info, modifiers);
+        activated(info, event);
         emit camItemInfoActivated(info);
     }
 }
@@ -592,7 +592,7 @@ void ImportCategorizedView::selectionChanged(const QItemSelection& selectedItems
     }
 }
 
-void ImportCategorizedView::activated(const CamItemInfo&, Qt::KeyboardModifiers)
+void ImportCategorizedView::activated(const CamItemInfo&, QMouseEvent*)
 {
     // implemented in subclass
 }

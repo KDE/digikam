@@ -94,7 +94,6 @@ Q_SIGNALS:
     void toPreviousImage();
     void contentsMoved(bool panningFinished);
     void resized();
-    //void contentTakeFocus();
 
     void viewportRectChanged(const QRectF& viewportRect);
 
