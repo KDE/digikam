@@ -653,4 +653,5 @@ BUGFIXES:
 585 ==> 401645 - Digikam crashes on possibly damaged video-file.
 586 ==> 401676 - BQM resize tool : allow to resize by percentage (%).
 587 ==> 401709 - Double clicking a name in a face-frame closes image preview.
-588 ==> 
+588 ==> 401811 - DB migration (SQLite -> MySQL) fails if images are in trash.
+589 ==> 
