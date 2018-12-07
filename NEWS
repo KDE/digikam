@@ -54,6 +54,8 @@ General      : Update internal Libraw to last 0.19.0.
                * YUNEEC: CGO3, CGO3P
                * Xiaoyi: YIAC3 (YI 4k)
 
+Collection   : Add tool button to update an existing collection to the new drive or path.
+
 Tags         : Add possibility to merge tags by drag & drop.
 
 IconView     : Add capability to re-organize the contents manually.
