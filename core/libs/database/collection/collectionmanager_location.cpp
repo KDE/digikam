@@ -28,7 +28,7 @@ namespace Digikam
 
 CollectionLocation CollectionManager::addLocation(const QUrl& fileUrl, const QString& label)
 {
-    qCDebug(DIGIKAM_DATABASE_LOG) << "addLocation " << fileUrl;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "addLocation" << fileUrl;
     QString path = fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile();
 
     if (!locationForPath(path).isNull())
@@ -66,7 +66,7 @@ CollectionLocation CollectionManager::addLocation(const QUrl& fileUrl, const QSt
             qCDebug(DIGIKAM_DATABASE_LOG) << "Solid did not return any storage volumes on your system.";
             qCDebug(DIGIKAM_DATABASE_LOG) << "This indicates a missing implementation or a problem with your installation";
             qCDebug(DIGIKAM_DATABASE_LOG) << "On Linux, check that Solid and HAL are working correctly."
-                                            "Problems with RAID partitions have been reported, if you have RAID this error may be normal.";
+                                             "Problems with RAID partitions have been reported, if you have RAID this error may be normal.";
             qCDebug(DIGIKAM_DATABASE_LOG) << "On Windows, Solid may not be fully implemented, if you are running Windows this error may be normal.";
         }
 
@@ -85,7 +85,7 @@ CollectionLocation CollectionManager::addLocation(const QUrl& fileUrl, const QSt
 
 CollectionLocation CollectionManager::addNetworkLocation(const QUrl& fileUrl, const QString& label)
 {
-    qCDebug(DIGIKAM_DATABASE_LOG) << "addLocation " << fileUrl;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "addLocation" << fileUrl;
     QString path = fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile();
 
     if (!locationForPath(path).isNull())
@@ -95,6 +95,92 @@ CollectionLocation CollectionManager::addNetworkLocation(const QUrl& fileUrl, co
 
     ChangingDB changing(d);
     CoreDbAccess().db()->addAlbumRoot(AlbumRoot::Network, d->networkShareIdentifier(path), QLatin1String("/"), label);
+
+    // Do not emit the locationAdded signal here, it is done in updateLocations()
+    updateLocations();
+
+    return locationForPath(path);
+}
+
+CollectionLocation CollectionManager::updateLocation(const CollectionLocation& location, const QUrl& fileUrl, const QString& label)
+{
+    qCDebug(DIGIKAM_DATABASE_LOG) << "updateLocation" << fileUrl;
+    QString path = fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile();
+
+    if (location.isNull())
+    {
+        return CollectionLocation();
+    }
+
+    AlbumRootLocation* const albumLoc = d->locations.value(location.id());
+
+    if (!albumLoc)
+    {
+        return CollectionLocation();
+    }
+
+    QList<SolidVolumeInfo> volumes = d->listVolumes();
+    SolidVolumeInfo volume         = d->findVolumeForUrl(fileUrl, volumes);
+
+    if (!volume.isNull())
+    {
+        CoreDbAccess access;
+        // volume.path has a trailing slash. We want to split in front of this.
+        QString specificPath = path.mid(volume.path.length() - 1);
+        AlbumRoot::Type type;
+
+        if (volume.isRemovable)
+        {
+            type = AlbumRoot::VolumeRemovable;
+        }
+        else
+        {
+            type = AlbumRoot::VolumeHardWired;
+        }
+
+        ChangingDB changing(d);
+        access.db()->setAlbumRootLabel(location.id(), label);
+        access.db()->changeAlbumRootType(location.id(), type);
+        access.db()->setAlbumRootPath(location.id(), specificPath);
+        access.db()->migrateAlbumRoot(location.id(), d->volumeIdentifier(volume));
+
+        albumLoc->setLabel(label);
+        albumLoc->specificPath = specificPath;
+        albumLoc->setType((CollectionLocation::Type)type);
+        albumLoc->identifier   = d->volumeIdentifier(volume);
+
+        emit locationPropertiesChanged(*albumLoc);
+    }
+    else
+    {
+        // Empty volumes indicates that Solid is not working correctly.
+        if (volumes.isEmpty())
+        {
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Solid did not return any storage volumes on your system.";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "This indicates a missing implementation or a problem with your installation";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "On Linux, check that Solid and HAL are working correctly."
+                                             "Problems with RAID partitions have been reported, if you have RAID this error may be normal.";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "On Windows, Solid may not be fully implemented, if you are running Windows this error may be normal.";
+        }
+
+        // fall back
+        qCWarning(DIGIKAM_DATABASE_LOG) << "Unable to identify a path with Solid. Adding the location with path only.";
+        CoreDbAccess access;
+
+        ChangingDB changing(d);
+        AlbumRoot::Type type = AlbumRoot::VolumeHardWired;
+        access.db()->setAlbumRootLabel(location.id(), label);
+        access.db()->changeAlbumRootType(location.id(), type);
+        access.db()->setAlbumRootPath(location.id(), QLatin1String("/"));
+        access.db()->migrateAlbumRoot(location.id(), d->volumeIdentifier(path));
+
+        albumLoc->setLabel(label);
+        albumLoc->specificPath = (QLatin1String("/"));
+        albumLoc->setType((CollectionLocation::Type)type);
+        albumLoc->identifier   = d->volumeIdentifier(path);
+
+        emit locationPropertiesChanged(*albumLoc);
+    }
 
     // Do not emit the locationAdded signal here, it is done in updateLocations()
     updateLocations();

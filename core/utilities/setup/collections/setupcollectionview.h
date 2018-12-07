@@ -64,10 +64,15 @@ public:
         CategoryButtonDisplayRole  = Qt::UserRole + 1,
         CategoryButtonMapId        = Qt::UserRole + 2,
         /// Returns true if the model index is the index of a button
-        IsButtonRole               = Qt::UserRole + 3,
+        IsUpdateRole               = Qt::UserRole + 3,
         /// The pixmap of the button
-        ButtonDecorationRole       = Qt::UserRole + 4,
-        ButtonMapId                = Qt::UserRole + 5
+        UpdateDecorationRole       = Qt::UserRole + 4,
+        UpdateMapId                = Qt::UserRole + 5,
+        /// Returns true if the model index is the index of a button
+        IsDeleteRole               = Qt::UserRole + 6,
+        /// The pixmap of the button
+        DeleteDecorationRole       = Qt::UserRole + 7,
+        DeleteMapId                = Qt::UserRole + 8
     };
 
     enum Columns
@@ -75,7 +80,8 @@ public:
         ColumnStatus       = 0,
         ColumnName         = 1,
         ColumnPath         = 2,
-        ColumnDeleteButton = 3,
+        ColumnUpdateButton = 3,
+        ColumnDeleteButton = 4,
         NumberOfColumns
     };
 
@@ -138,11 +144,13 @@ public Q_SLOTS:
      *  mappedId is retrieved with the ButtonMapId role
      *  for the model index of the button
      */
+    void slotUpdatePressed(int mappedId);
     void slotButtonPressed(int mappedId);
 
 protected Q_SLOTS:
 
     void addCollection(int category);
+    void updateCollection(int internalId);
     void deleteCollection(int internalId);
 
 protected:
@@ -168,6 +176,7 @@ protected:
         QString            label;
         QString            path;
         int                parentId;
+        bool               updated;
         bool               deleted;
     };
 
@@ -228,6 +237,7 @@ public:
 Q_SIGNALS:
 
     void categoryButtonPressed(int mappedId);
+    void updatePressed(int mappedId);
     void buttonPressed(int mappedId);
 
 protected:
@@ -235,10 +245,12 @@ protected:
     QStyledItemDelegate* m_styledDelegate;
 
     QPushButton*         m_samplePushButton;
-    QToolButton*         m_sampleToolButton;
+    QToolButton*         m_sampleUpdateButton;
+    QToolButton*         m_sampleDeleteButton;
     int                  m_categoryMaxStyledWidth;
 
     QSignalMapper*       m_categoryButtonMapper;
+    QSignalMapper*       m_updateMapper;
     QSignalMapper*       m_buttonMapper;
 };
 

@@ -654,4 +654,5 @@ BUGFIXES:
 586 ==> 401676 - BQM resize tool : allow to resize by percentage (%).
 587 ==> 401709 - Double clicking a name in a face-frame closes image preview.
 588 ==> 401811 - DB migration (SQLite -> MySQL) fails if images are in trash.
-589 ==> 
+589 ==> 401767 - digikam unable to find existing path.
+590 ==> 

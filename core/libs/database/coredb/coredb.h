@@ -162,6 +162,13 @@ public:
     void setAlbumRootLabel(int rootId, const QString& newLabel);
 
     /**
+     * Changes the specificPath of the specified album root
+     * @param rootId the id of the album root
+     * @param newPath new path for the album root
+     */
+    void setAlbumRootPath(int rootId, const QString& newPath);
+
+    /**
      * Sets the type of the specified album root to a new value.
      */
     void changeAlbumRootType(int rootId, AlbumRoot::Type newType);
