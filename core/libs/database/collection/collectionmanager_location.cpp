@@ -127,27 +127,37 @@ CollectionLocation CollectionManager::updateLocation(const CollectionLocation& l
         CoreDbAccess access;
         // volume.path has a trailing slash. We want to split in front of this.
         QString specificPath = path.mid(volume.path.length() - 1);
+        QString identifier   = d->volumeIdentifier(volume);
         AlbumRoot::Type type;
 
-        if (volume.isRemovable)
+        if (location.type() == CollectionLocation::TypeNetwork)
         {
-            type = AlbumRoot::VolumeRemovable;
+            type         = AlbumRoot::Network;
+            specificPath = QLatin1String("/");
+            identifier   = d->networkShareIdentifier(path);
         }
         else
         {
-            type = AlbumRoot::VolumeHardWired;
+            if (volume.isRemovable)
+            {
+                type = AlbumRoot::VolumeRemovable;
+            }
+            else
+            {
+                type = AlbumRoot::VolumeHardWired;
+            }
         }
 
         ChangingDB changing(d);
         access.db()->setAlbumRootLabel(location.id(), label);
         access.db()->changeAlbumRootType(location.id(), type);
+        access.db()->migrateAlbumRoot(location.id(), identifier);
         access.db()->setAlbumRootPath(location.id(), specificPath);
-        access.db()->migrateAlbumRoot(location.id(), d->volumeIdentifier(volume));
 
         albumLoc->setLabel(label);
+        albumLoc->identifier   = identifier;
         albumLoc->specificPath = specificPath;
         albumLoc->setType((CollectionLocation::Type)type);
-        albumLoc->identifier   = d->volumeIdentifier(volume);
 
         emit locationPropertiesChanged(*albumLoc);
     }
