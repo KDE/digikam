@@ -562,156 +562,14 @@ void SetupCollectionModel::addCollection(int category)
         return;
     }
 
-    QString picturesPath;
+    QString path;
+    QString label;
 
-    if (m_collections.count() > 0)
-    {
-        const Item& item = m_collections[0];
-        picturesPath     = item.path;
-    }
-    else
-    {
-        picturesPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
-    }
-
-    QUrl curl = DFileDialog::getExistingDirectoryUrl(m_dialogParentWidget,
-                                                     i18n("Choose the folder containing your collection"),
-                                                     QUrl::fromLocalFile(picturesPath));
-
-    if (curl.isEmpty())
-    {
-        return;
-    }
-
-    // Check path: First check with manager
-    QString messageFromManager, deviceIcon;
-    QList<CollectionLocation> assumeDeleted;
-
-    foreach (const Item& item, m_collections)
-    {
-        if (item.deleted && !item.location.isNull())
-        {
-            assumeDeleted << item.location;
-        }
-    }
-
-    CollectionManager::LocationCheckResult result;
-
-    if (category == CategoryRemote)
-        result = CollectionManager::instance()->checkNetworkLocation(curl, assumeDeleted,
-                                                                     &messageFromManager, &deviceIcon);
-    else
-        result = CollectionManager::instance()->checkLocation(curl, assumeDeleted,
-                                                              &messageFromManager, &deviceIcon);
-
-    QString path = QDir::fromNativeSeparators(curl.toDisplayString(QUrl::PreferLocalFile ));
-
-    // If there are other added collections then CollectionManager does not know about them. Check here.
-    foreach (const Item& item, m_collections)
-    {
-        if (!item.deleted && item.location.isNull())
-        {
-            if (!item.path.isEmpty() && path.startsWith(item.path))
-            {
-                if (path == item.path || path.startsWith(item.path + QLatin1Char('/')))
-                {
-                    messageFromManager = i18n("You have previously added a collection "
-                                              "that contains the path \"%1\".", QDir::toNativeSeparators(path));
-                    result = CollectionManager::LocationNotAllowed;
-                    break;
-                }
-            }
-        }
-    }
-
-    // If check failed, display sorry message
-    QString iconName;
-
-    switch (result)
-    {
-        case CollectionManager::LocationAllRight:
-            iconName = QLatin1String("dialog-ok-apply");
-            break;
-
-        case CollectionManager::LocationHasProblems:
-            iconName = QLatin1String("dialog-information");
-            break;
-
-        case CollectionManager::LocationNotAllowed:
-        case CollectionManager::LocationInvalidCheck:
-            QMessageBox::warning(m_dialogParentWidget, i18n("Problem Adding Collection"), messageFromManager);
-            // fail
-            return;
-    }
-
-    // Create a dialog that displays volume information and allows to change the name of the collection
-    QDialog* const dialog = new QDialog(m_dialogParentWidget);
-    dialog->setWindowTitle(i18n("Adding Collection"));
-
-    QWidget* const mainWidget = new QWidget(dialog);
-    QLabel* const nameLabel   = new QLabel;
-    nameLabel->setText(i18n("Your new collection will be created with this name:"));
-    nameLabel->setWordWrap(true);
-
-    // lineedit for collection name
-    QLineEdit* const nameEdit = new QLineEdit;
-    nameEdit->setClearButtonEnabled(true);
-    nameLabel->setBuddy(nameEdit);
-
-    // label for the icon showing the type of storage (hard disk, CD, USB drive)
-    QLabel* const deviceIconLabel = new QLabel;
-    deviceIconLabel->setPixmap(QIcon::fromTheme(deviceIcon).pixmap(64));
-
-    QGroupBox* const infoBox = new QGroupBox;
-    //infoBox->setTitle(i18n("More Information"));
-
-    // label either signalling everything is all right, or raising awareness to some problems
-    // (like handling of CD identified by a label)
-    QLabel* const iconLabel = new QLabel;
-    iconLabel->setPixmap(QIcon::fromTheme(iconName).pixmap(48));
-    QLabel* const infoLabel = new QLabel;
-    infoLabel->setText(messageFromManager);
-    infoLabel->setWordWrap(true);
-
-    QHBoxLayout* const hbox1 = new QHBoxLayout;
-    hbox1->addWidget(iconLabel);
-    hbox1->addWidget(infoLabel);
-    infoBox->setLayout(hbox1);
-
-    QGridLayout* const grid1 = new QGridLayout;
-    grid1->addWidget(deviceIconLabel, 0, 0, 3, 1);
-    grid1->addWidget(nameLabel,       0, 1);
-    grid1->addWidget(nameEdit,        1, 1);
-    grid1->addWidget(infoBox,         2, 1);
-    mainWidget->setLayout(grid1);
-
-    QVBoxLayout* const vbx          = new QVBoxLayout(dialog);
-    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, dialog);
-    vbx->addWidget(mainWidget);
-    vbx->addWidget(buttons);
-    dialog->setLayout(vbx);
-
-    connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
-            dialog, SLOT(accept()));
-
-    connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
-            dialog, SLOT(reject()));
-
-    // default to directory name as collection name
-    QDir dir(path);
-    nameEdit->setText(dir.dirName());
-
-    if (dialog->exec() == QDialog::Accepted)
+    if (askForNewCollectionPath(category, &path, &label))
     {
         // Add new item to model. Adding to CollectionManager is done in apply()!
         QModelIndex parent = indexForCategory((Category)category);
         int row            = rowCount(parent);
-        QString label      = nameEdit->text();
-
-        if (label.isEmpty())
-        {
-            label.clear();
-        }
 
         beginInsertRows(parent, row, row);
         m_collections << Item(path, label, (Category)category);
@@ -754,136 +612,12 @@ void SetupCollectionModel::updateCollection(int internalId)
 
     Item& item = m_collections[index.internalId()];
 
-    QUrl curl = DFileDialog::getExistingDirectoryUrl(m_dialogParentWidget,
-                                                     i18n("Choose the folder containing your collection"),
-                                                     QUrl::fromLocalFile(item.path));
+    QString path;
+    QString label;
 
-    if (curl.isEmpty())
+    if (askForNewCollectionPath(item.parentId, &path, &label))
     {
-        return;
-    }
-
-    // Check path: First check with manager
-    QString messageFromManager, deviceIcon;
-    QList<CollectionLocation> assumeDeleted;
-
-    foreach (const Item& item, m_collections)
-    {
-        if (item.deleted && !item.location.isNull())
-        {
-            assumeDeleted << item.location;
-        }
-    }
-
-    CollectionManager::LocationCheckResult result;
-
-    if (item.parentId == CategoryRemote)
-        result = CollectionManager::instance()->checkNetworkLocation(curl, assumeDeleted,
-                                                                     &messageFromManager, &deviceIcon);
-    else
-        result = CollectionManager::instance()->checkLocation(curl, assumeDeleted,
-                                                              &messageFromManager, &deviceIcon);
-
-    QString path = QDir::fromNativeSeparators(curl.toDisplayString(QUrl::PreferLocalFile ));
-
-    // If there are other added collections then CollectionManager does not know about them. Check here.
-    foreach (const Item& item, m_collections)
-    {
-        if (!item.deleted && item.location.isNull())
-        {
-            if (!item.path.isEmpty() && path.startsWith(item.path))
-            {
-                if (path == item.path || path.startsWith(item.path + QLatin1Char('/')))
-                {
-                    messageFromManager = i18n("You have previously added a collection "
-                                              "that contains the path \"%1\".", QDir::toNativeSeparators(path));
-                    result = CollectionManager::LocationNotAllowed;
-                    break;
-                }
-            }
-        }
-    }
-
-    // If check failed, display sorry message
-    QString iconName;
-
-    switch (result)
-    {
-        case CollectionManager::LocationAllRight:
-            iconName = QLatin1String("dialog-ok-apply");
-            break;
-
-        case CollectionManager::LocationHasProblems:
-            iconName = QLatin1String("dialog-information");
-            break;
-
-        case CollectionManager::LocationNotAllowed:
-        case CollectionManager::LocationInvalidCheck:
-            QMessageBox::warning(m_dialogParentWidget, i18n("Problem Update Collection"), messageFromManager);
-            // fail
-            return;
-    }
-
-    // Create a dialog that displays volume information and allows to change the name of the collection
-    QDialog* const dialog = new QDialog(m_dialogParentWidget);
-    dialog->setWindowTitle(i18n("Update Collection"));
-
-    QWidget* const mainWidget = new QWidget(dialog);
-    QLabel* const nameLabel   = new QLabel;
-    nameLabel->setText(i18n("Your collection will be updated with this name:"));
-    nameLabel->setWordWrap(true);
-
-    // lineedit for collection name
-    QLineEdit* const nameEdit = new QLineEdit;
-    nameEdit->setClearButtonEnabled(true);
-    nameLabel->setBuddy(nameEdit);
-
-    // label for the icon showing the type of storage (hard disk, CD, USB drive)
-    QLabel* const deviceIconLabel = new QLabel;
-    deviceIconLabel->setPixmap(QIcon::fromTheme(deviceIcon).pixmap(64));
-
-    QGroupBox* const infoBox = new QGroupBox;
-    //infoBox->setTitle(i18n("More Information"));
-
-    // label either signalling everything is all right, or raising awareness to some problems
-    // (like handling of CD identified by a label)
-    QLabel* const iconLabel = new QLabel;
-    iconLabel->setPixmap(QIcon::fromTheme(iconName).pixmap(48));
-    QLabel* const infoLabel = new QLabel;
-    infoLabel->setText(messageFromManager);
-    infoLabel->setWordWrap(true);
-
-    QHBoxLayout* const hbox1 = new QHBoxLayout;
-    hbox1->addWidget(iconLabel);
-    hbox1->addWidget(infoLabel);
-    infoBox->setLayout(hbox1);
-
-    QGridLayout* const grid1 = new QGridLayout;
-    grid1->addWidget(deviceIconLabel, 0, 0, 3, 1);
-    grid1->addWidget(nameLabel,       0, 1);
-    grid1->addWidget(nameEdit,        1, 1);
-    grid1->addWidget(infoBox,         2, 1);
-    mainWidget->setLayout(grid1);
-
-    QVBoxLayout* const vbx          = new QVBoxLayout(dialog);
-    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, dialog);
-    vbx->addWidget(mainWidget);
-    vbx->addWidget(buttons);
-    dialog->setLayout(vbx);
-
-    connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
-            dialog, SLOT(accept()));
-
-    connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
-            dialog, SLOT(reject()));
-
-    // default to directory name as collection name
-    QDir dir(path);
-    nameEdit->setText(dir.dirName());
-
-    if (dialog->exec() == QDialog::Accepted)
-    {
-        item.label   = nameEdit->text();
+        item.label   = label;
         item.path    = path;
         item.updated = true;
 
@@ -1340,6 +1074,149 @@ SetupCollectionModel::Category SetupCollectionModel::typeToCategory(CollectionLo
         case CollectionLocation::TypeNetwork:
             return CategoryRemote;
     }
+}
+
+bool SetupCollectionModel::askForNewCollectionPath(int category, QString* const newPath, QString* const newLabel)
+{
+    QString picPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
+    QUrl curl       = DFileDialog::getExistingDirectoryUrl(m_dialogParentWidget,
+                                                          i18n("Choose the folder containing your collection"),
+                                                          QUrl::fromLocalFile(picPath));
+
+    if (curl.isEmpty())
+    {
+        return false;
+    }
+
+    // Check path: First check with manager
+    QString messageFromManager, deviceIcon;
+    QList<CollectionLocation> assumeDeleted;
+
+    foreach (const Item& item, m_collections)
+    {
+        if (item.deleted && !item.location.isNull())
+        {
+            assumeDeleted << item.location;
+        }
+    }
+
+    CollectionManager::LocationCheckResult result;
+
+    if (category == CategoryRemote)
+        result = CollectionManager::instance()->checkNetworkLocation(curl, assumeDeleted,
+                                                                     &messageFromManager, &deviceIcon);
+    else
+        result = CollectionManager::instance()->checkLocation(curl, assumeDeleted,
+                                                              &messageFromManager, &deviceIcon);
+
+    QString path = QDir::fromNativeSeparators(curl.toDisplayString(QUrl::PreferLocalFile ));
+
+    // If there are other added collections then CollectionManager does not know about them. Check here.
+    foreach (const Item& item, m_collections)
+    {
+        if (!item.deleted && item.location.isNull())
+        {
+            if (!item.path.isEmpty() && path.startsWith(item.path))
+            {
+                if (path == item.path || path.startsWith(item.path + QLatin1Char('/')))
+                {
+                    messageFromManager = i18n("You have previously added a collection "
+                                              "that contains the path \"%1\".", QDir::toNativeSeparators(path));
+                    result = CollectionManager::LocationNotAllowed;
+                    break;
+                }
+            }
+        }
+    }
+
+    // If check failed, display sorry message
+    QString iconName;
+
+    switch (result)
+    {
+        case CollectionManager::LocationAllRight:
+            iconName = QLatin1String("dialog-ok-apply");
+            break;
+
+        case CollectionManager::LocationHasProblems:
+            iconName = QLatin1String("dialog-information");
+            break;
+
+        case CollectionManager::LocationNotAllowed:
+        case CollectionManager::LocationInvalidCheck:
+            QMessageBox::warning(m_dialogParentWidget, i18n("Problem Adding Collection"), messageFromManager);
+            // fail
+            return false;
+    }
+
+    // Create a dialog that displays volume information and allows to change the name of the collection
+    QDialog* const dialog = new QDialog(m_dialogParentWidget);
+    dialog->setWindowTitle(i18n("Adding Collection"));
+
+    QWidget* const mainWidget = new QWidget(dialog);
+    QLabel* const nameLabel   = new QLabel;
+    nameLabel->setText(i18n("Your new collection will be created with this name:"));
+    nameLabel->setWordWrap(true);
+
+    // lineedit for collection name
+    QLineEdit* const nameEdit = new QLineEdit;
+    nameEdit->setClearButtonEnabled(true);
+    nameLabel->setBuddy(nameEdit);
+
+    // label for the icon showing the type of storage (hard disk, CD, USB drive)
+    QLabel* const deviceIconLabel = new QLabel;
+    deviceIconLabel->setPixmap(QIcon::fromTheme(deviceIcon).pixmap(64));
+
+    QGroupBox* const infoBox = new QGroupBox;
+    //infoBox->setTitle(i18n("More Information"));
+
+    // label either signalling everything is all right, or raising awareness to some problems
+    // (like handling of CD identified by a label)
+    QLabel* const iconLabel = new QLabel;
+    iconLabel->setPixmap(QIcon::fromTheme(iconName).pixmap(48));
+    QLabel* const infoLabel = new QLabel;
+    infoLabel->setText(messageFromManager);
+    infoLabel->setWordWrap(true);
+
+    QHBoxLayout* const hbox1 = new QHBoxLayout;
+    hbox1->addWidget(iconLabel);
+    hbox1->addWidget(infoLabel);
+    infoBox->setLayout(hbox1);
+
+    QGridLayout* const grid1 = new QGridLayout;
+    grid1->addWidget(deviceIconLabel, 0, 0, 3, 1);
+    grid1->addWidget(nameLabel,       0, 1);
+    grid1->addWidget(nameEdit,        1, 1);
+    grid1->addWidget(infoBox,         2, 1);
+    mainWidget->setLayout(grid1);
+
+    QVBoxLayout* const vbx          = new QVBoxLayout(dialog);
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, dialog);
+    vbx->addWidget(mainWidget);
+    vbx->addWidget(buttons);
+    dialog->setLayout(vbx);
+
+    connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            dialog, SLOT(accept()));
+
+    connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            dialog, SLOT(reject()));
+
+    // default to directory name as collection name
+    QDir dir(path);
+    nameEdit->setText(dir.dirName());
+
+    if (dialog->exec() == QDialog::Accepted)
+    {
+        if (newPath && newLabel)
+        {
+            *newLabel = nameEdit->text();
+            *newPath  = path;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 int SetupCollectionModel::categoryButtonMapId(const QModelIndex& index) const
