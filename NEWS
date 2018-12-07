@@ -655,4 +655,5 @@ BUGFIXES:
 587 ==> 401709 - Double clicking a name in a face-frame closes image preview.
 588 ==> 401811 - DB migration (SQLite -> MySQL) fails if images are in trash.
 589 ==> 401767 - digikam unable to find existing path.
-590 ==> 
+590 ==> 215486 - Collection not found in location on disk with UUID (LVM volume).
+591 ==> 
