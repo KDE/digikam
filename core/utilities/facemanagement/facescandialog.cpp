@@ -130,6 +130,7 @@ FaceScanDialog::FaceScanDialog(QWidget* const parent)
                    Qt::WindowMinMaxButtonsHint);
 
     setWindowTitle(i18nc("@title:window", "Scanning faces"));
+    setModal(true);
 
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
