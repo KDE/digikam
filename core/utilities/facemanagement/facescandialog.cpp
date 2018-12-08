@@ -124,6 +124,11 @@ FaceScanDialog::FaceScanDialog(QWidget* const parent)
       StateSavingObject(this),
       d(new Private)
 {
+    setWindowFlags((windowFlags() & ~Qt::Dialog) |
+                   Qt::Window                    |
+                   Qt::WindowCloseButtonHint     |
+                   Qt::WindowMinMaxButtonsHint);
+
     setWindowTitle(i18nc("@title:window", "Scanning faces"));
 
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
