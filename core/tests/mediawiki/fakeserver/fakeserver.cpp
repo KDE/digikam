@@ -76,7 +76,7 @@ void FakeServer::dataAvailable()
         {
             FakeServer::Request request;
             request.type  = token[0];
-            request.agent = token[4];
+            request.agent = token[6];
             request.value = token[1];
 
             // It might happen that the same request cames through more than once, so you need to check that you are
