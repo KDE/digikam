@@ -659,4 +659,5 @@ BUGFIXES:
 589 ==> 401767 - digikam unable to find existing path.
 590 ==> 215486 - Collection not found in location on disk with UUID (LVM volume).
 591 ==> 401834 - The "Scanning Faces" dialog box is too large and can't be resized in french language.
-592 ==> 
+592 ==> 401664 - Trash shows list view only no thumbnails.
+593 ==> 
