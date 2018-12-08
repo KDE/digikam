@@ -72,12 +72,16 @@ void FakeServer::dataAvailable()
     {
         QStringList token = QString::fromUtf8(m_clientSocket->readAll()).split(QRegExp(QStringLiteral("[ \r\n][ \r\n]*")));
 
-        if (!token.empty())
+        if (token.size() > 2)
         {
             FakeServer::Request request;
             request.type  = token[0];
-            request.agent = token[6];
             request.value = token[1];
+
+            int index     = token.indexOf(QLatin1String("User-Agent:"));
+
+            if (index > 0 && index + 1 < token.size())
+                request.agent = token[index + 1];
 
             // It might happen that the same request cames through more than once, so you need to check that you are
             // counting each different request only once.
