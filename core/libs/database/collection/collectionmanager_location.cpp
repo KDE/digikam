@@ -174,7 +174,7 @@ CollectionLocation CollectionManager::updateLocation(const CollectionLocation& l
         }
 
         // fall back
-        qCWarning(DIGIKAM_DATABASE_LOG) << "Unable to identify a path with Solid. Adding the location with path only.";
+        qCWarning(DIGIKAM_DATABASE_LOG) << "Unable to identify a path with Solid. Update the location with path only.";
         CoreDbAccess access;
 
         ChangingDB changing(d);
