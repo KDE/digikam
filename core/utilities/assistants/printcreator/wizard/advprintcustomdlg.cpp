@@ -104,7 +104,7 @@ void AdvPrintCustomLayoutDlg::saveSettings()
     }
 
     group.writeEntry(QLatin1String("Custom-choice"),     choice);
-    group.writeEntry(QLatin1String("Custom-gridSize"),   QSize(m_gridRows->value(),   m_gridColumns->value()));
+    group.writeEntry(QLatin1String("Custom-gridSize"),   QSize(m_gridRows->value(),    m_gridColumns->value()));
     group.writeEntry(QLatin1String("Custom-photoSize"),  QSizeF(m_photoWidth->value(), m_photoHeight->value()));
     group.writeEntry(QLatin1String("Custom-photoUnits"), m_photoUnits->currentIndex());
     group.writeEntry(QLatin1String("Custom-autorotate"), m_autorotate->isChecked());
