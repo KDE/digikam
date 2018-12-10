@@ -910,8 +910,8 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
         }
         else if (custDlg->m_fitAsManyCheck->isChecked())
         {
-            int width  = custDlg->m_photoWidth->value();
-            int height = custDlg->m_photoHeight->value();
+            double width  = custDlg->m_photoWidth->value();
+            double height = custDlg->m_photoHeight->value();
 
             //photo size must be less than page size
             static const float round_value = 0.01F;
@@ -920,7 +920,7 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
                  width  > (size.width()  + round_value)))
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "photo size "
-                                             << QSize(width, height)
+                                             << QSizeF(width, height)
                                              << "> page size "
                                              << size;
                 delete s;
@@ -936,7 +936,7 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
                 s->m_dpi         = 0;
                 int nColumns     = int(size.width()  / width);
                 int nRows        = int(size.height() / height);
-                int spareWidth   = int(size.width()) % width;
+                int spareWidth   = int(size.width()) % int(width);
 
                 // check if there's no room left to separate photos
                 if (nColumns > 1 &&  spareWidth == 0)
@@ -945,13 +945,13 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
                     spareWidth = width;
                 }
 
-                int spareHeight = int(size.height()) % height;
+                int spareHeight = int(size.height()) % int(height);
 
                 // check if there's no room left to separate photos
                 if (nRows > 1 && spareHeight == 0)
                 {
                     nRows      -= 1;
-                    spareHeight = height;
+                    spareHeight = int(height);
                 }
 
                 if (nRows > 0 && nColumns > 0)

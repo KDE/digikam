@@ -116,7 +116,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QSpinBox" name="m_photoHeight">
+          <widget class="QDoubleSpinBox" name="m_photoHeight">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -132,11 +132,14 @@
              <height>28</height>
             </size>
            </property>
-           <property name="minimum">
+           <property name="decimals">
             <number>1</number>
            </property>
+           <property name="minimum">
+            <double>1.000000000000000</double>
+           </property>
            <property name="maximum">
-            <number>999</number>
+            <double>999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -154,7 +157,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="m_photoWidth">
+          <widget class="QDoubleSpinBox" name="m_photoWidth">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -170,11 +173,14 @@
              <height>28</height>
             </size>
            </property>
-           <property name="minimum">
+           <property name="decimals">
             <number>1</number>
            </property>
+           <property name="minimum">
+            <double>1.000000000000000</double>
+           </property>
            <property name="maximum">
-            <number>999</number>
+            <double>999.000000000000000</double>
            </property>
           </widget>
          </item>
