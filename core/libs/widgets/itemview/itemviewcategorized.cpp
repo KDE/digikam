@@ -135,17 +135,14 @@ ItemViewCategorized::ItemViewCategorized(QWidget* const parent)
     viewport()->setAcceptDrops(true);
     setMouseTracking(true);
 
+    connect(this, SIGNAL(activated(QModelIndex)),
+            this, SLOT(slotActivated(QModelIndex)));
+
     connect(this, SIGNAL(clicked(QModelIndex)),
             this, SLOT(slotClicked(QModelIndex)));
 
     connect(this, SIGNAL(entered(QModelIndex)),
             this, SLOT(slotEntered(QModelIndex)));
-
-    connect(this, SIGNAL(clicked(QModelIndex)),
-            this, SLOT(slotActivated(QModelIndex)));
-
-    connect(this, SIGNAL(doubleClicked(QModelIndex)),
-            this, SLOT(slotActivated(QModelIndex)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -376,16 +373,23 @@ void ItemViewCategorized::updateDelegateSizes()
 
 void ItemViewCategorized::slotActivated(const QModelIndex& index)
 {
+    Qt::KeyboardModifiers modifiers = Qt::NoModifier;
+
     if (d->currentMouseEvent)
     {
         // Ignore activation if Ctrl or Shift is pressed (for selection)
-        const Qt::KeyboardModifiers modifiers = d->currentMouseEvent->modifiers();
-        const Qt::MouseButton button          = d->currentMouseEvent->button();
-        const bool shiftKeyPressed            = modifiers & Qt::ShiftModifier;
-        const bool controlKeyPressed          = modifiers & Qt::ControlModifier;
-        const bool rightButtonPressed         = button    & Qt::RightButton;
+        modifiers                    = d->currentMouseEvent->modifiers();
+        const bool shiftKeyPressed   = modifiers & Qt::ShiftModifier;
+        const bool controlKeyPressed = modifiers & Qt::ControlModifier;
 
-        if (shiftKeyPressed || controlKeyPressed || rightButtonPressed)
+        if (shiftKeyPressed || controlKeyPressed)
+        {
+            return;
+        }
+
+        const bool rightClick = d->currentMouseEvent->button() & Qt::RightButton;
+
+        if (rightClick)
         {
             return;
         }
@@ -399,7 +403,8 @@ void ItemViewCategorized::slotActivated(const QModelIndex& index)
         }
     }
 
-    indexActivated(index, d->currentMouseEvent);
+    d->currentMouseEvent = 0;
+    indexActivated(index, modifiers);
 }
 
 void ItemViewCategorized::slotClicked(const QModelIndex& index)
@@ -730,7 +735,7 @@ void ItemViewCategorized::showContextMenu(QContextMenuEvent*)
     // implemented in subclass
 }
 
-void ItemViewCategorized::indexActivated(const QModelIndex&, QMouseEvent*)
+void ItemViewCategorized::indexActivated(const QModelIndex&, Qt::KeyboardModifiers)
 {
 }
 
@@ -791,9 +796,6 @@ void ItemViewCategorized::mousePressEvent(QMouseEvent* event)
 {
     userInteraction();
 
-    // store event for entered(), clicked(), activated() signal handlers
-    d->currentMouseEvent            = event;
-
     const QModelIndex index         = indexAt(event->pos());
 
     // Clear selection on click on empty area. Standard behavior, but not done by QAbstractItemView for some reason.
@@ -807,6 +809,16 @@ void ItemViewCategorized::mousePressEvent(QMouseEvent* event)
     if (!index.isValid() && !rightButtonPressed && !shiftKeyPressed && !controlKeyPressed)
     {
         clearSelection();
+    }
+
+    // store event for entered(), clicked(), activated() signal handlers
+    if (!rightButtonPressed)
+    {
+        d->currentMouseEvent = event;
+    }
+    else
+    {
+        d->currentMouseEvent = 0;
     }
 
     DCategorizedView::mousePressEvent(event);

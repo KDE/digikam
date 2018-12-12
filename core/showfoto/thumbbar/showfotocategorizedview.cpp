@@ -513,13 +513,13 @@ void ShowfotoCategorizedView::slotFileChanged(const QString& filePath)
     }
 }
 
-void ShowfotoCategorizedView::indexActivated(const QModelIndex& index, QMouseEvent* const event)
+void ShowfotoCategorizedView::indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
 {
     ShowfotoItemInfo info = d->filterModel->showfotoItemInfo(index);
 
     if (!info.isNull())
     {
-        activated(info, event);
+        activated(info, modifiers);
         emit showfotoItemInfoActivated(info);
     }
 }
@@ -546,7 +546,7 @@ void ShowfotoCategorizedView::selectionChanged(const QItemSelection& selectedIte
     }
 }
 
-void ShowfotoCategorizedView::activated(const ShowfotoItemInfo&, QMouseEvent*)
+void ShowfotoCategorizedView::activated(const ShowfotoItemInfo&, Qt::KeyboardModifiers)
 {
     // implemented in subclass
 }

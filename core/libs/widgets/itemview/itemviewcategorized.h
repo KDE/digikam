@@ -164,7 +164,7 @@ protected:
     /// Reimplement these in a subclass
     virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
     virtual void showContextMenu(QContextMenuEvent* event);
-    virtual void indexActivated(const QModelIndex& index, QMouseEvent* const event);
+    virtual void indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers);
 
     /** Provides default behavior, can reimplement in a subclass.
      *  Returns true if a tooltip was shown.

@@ -644,13 +644,13 @@ void ItemCategorizedView::slotFileChanged(const QString& filePath)
     }
 }
 
-void ItemCategorizedView::indexActivated(const QModelIndex& index, QMouseEvent* const event)
+void ItemCategorizedView::indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
 {
     ItemInfo info = imageInfo(index);
 
     if (!info.isNull())
     {
-        activated(info, event);
+        activated(info, modifiers);
         emit imageActivated(info);
     }
 }
@@ -693,7 +693,7 @@ Album* ItemCategorizedView::albumAt(const QPoint& pos) const
     return currentAlbum();
 }
 
-void ItemCategorizedView::activated(const ItemInfo&, QMouseEvent*)
+void ItemCategorizedView::activated(const ItemInfo&, Qt::KeyboardModifiers)
 {
     // implemented in subclass
 }
