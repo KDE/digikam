@@ -193,12 +193,12 @@ void GraphicsDImgView::drawText(QPainter* p, const QRectF& rect, const QString& 
 void GraphicsDImgView::mouseDoubleClickEvent(QMouseEvent* e)
 {
     QGraphicsView::mouseDoubleClickEvent(e);
-/*
+
     if (!acceptsMouseClick(e))
     {
         return;
     }
-*/
+
     if (e->button() == Qt::LeftButton)
     {
         emit leftButtonDoubleClicked();
