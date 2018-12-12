@@ -379,17 +379,12 @@ void ItemViewCategorized::slotActivated(const QModelIndex& index)
     {
         // Ignore activation if Ctrl or Shift is pressed (for selection)
         modifiers                    = d->currentMouseEvent->modifiers();
+        Qt::MouseButton button       = d->currentMouseEvent->button();
         const bool shiftKeyPressed   = modifiers & Qt::ShiftModifier;
         const bool controlKeyPressed = modifiers & Qt::ControlModifier;
+        const bool rightClickPressed = button & Qt::RightButton;
 
-        if (shiftKeyPressed || controlKeyPressed)
-        {
-            return;
-        }
-
-        const bool rightClick = d->currentMouseEvent->button() & Qt::RightButton;
-
-        if (rightClick)
+        if (shiftKeyPressed || controlKeyPressed || rightClickPressed)
         {
             return;
         }
