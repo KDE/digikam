@@ -150,6 +150,7 @@ AdvPrintWizard::~AdvPrintWizard()
     KConfigGroup group = config.group("PrintCreator");
     d->settings->writeSettings(group);
 
+    delete d->settings;
     delete d->tempPath;
     delete d;
 }
