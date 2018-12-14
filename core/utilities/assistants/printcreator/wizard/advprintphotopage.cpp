@@ -31,6 +31,7 @@
 #include <QPrinter>
 #include <QPrinterInfo>
 #include <QWidget>
+#include <QMessageBox>
 #include <QApplication>
 #include <QStyle>
 #include <QMenu>
@@ -1020,16 +1021,19 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
         s = d->settings->photosizes.at(curr);
     }
 
-    if (!s)
-    {
-        // change position to top
-        d->photoUi->ListPhotoSizes->blockSignals(true);
-        d->photoUi->ListPhotoSizes->setCurrentRow(0, QItemSelectionModel::Select);
-        d->photoUi->ListPhotoSizes->blockSignals(false);
-    }
-
     // reset preview page number
     d->settings->currentPreviewPage = 0;
+
+    if (!s)
+    {
+        QMessageBox::warning(this, i18n("Custom layout"),
+                             i18n("The selected custom photo size can "
+                                  "not be applied to the paper size."));
+
+        // change position to top
+        d->photoUi->ListPhotoSizes->setCurrentRow(0);
+    }
+
     d->wizard->previewPhotos();
 }
 
