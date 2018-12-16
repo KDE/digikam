@@ -592,8 +592,6 @@ void FuzzySearchView::setupConnections()
 
 FuzzySearchView::~FuzzySearchView()
 {
-    delete d->timerSketch;
-    delete d->timerImage;
     delete d;
 }
 
@@ -803,7 +801,7 @@ void FuzzySearchView::slotAlbumSelected(Album* album)
 
 void FuzzySearchView::slotApplicationSettingsChanged()
 {
-    d->similarityRange->setRange(d->settings->getMinimumSimilarityBound(),100);
+    d->similarityRange->setRange(d->settings->getMinimumSimilarityBound(), 100);
 }
 
 // Sketch Searches methods -----------------------------------------------------------------------
