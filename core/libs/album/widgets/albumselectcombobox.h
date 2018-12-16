@@ -73,7 +73,7 @@ public:
     /** Sets the text that is used to describe the state when no album is selected.
         This may be something like "Any album" or "No tag selected".
         Depends on the default line edit implementation of TreeViewLineEditComboBox.
-    */
+     */
     void setNoSelectionText(const QString& text);
 
     /** Returns the source model. Retrieve selection information from here.
@@ -88,10 +88,9 @@ public Q_SLOTS:
 
     virtual void hidePopup();
 
-protected Q_SLOTS:
-
     /** Updates the text describing the selection ("3 Albums selected").
-        Can be overridden to customize the default text. */
+        Can be overridden to customize the default text.
+     */
     virtual void updateText();
 
 protected:

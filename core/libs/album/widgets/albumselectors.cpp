@@ -415,6 +415,7 @@ void AlbumSelectors::loadState()
         d->albumClearButton->animateVisible(!d->albumSelectCB->model()->checkedAlbums().isEmpty());
 
         slotWholeAlbums(wholeAlbumsChecked());
+        d->albumSelectCB->updateText();
     }
 
     if (d->tagWidget)
@@ -424,6 +425,7 @@ void AlbumSelectors::loadState()
         d->tagClearButton->animateVisible(!d->tagSelectCB->model()->checkedAlbums().isEmpty());
 
         slotWholeTags(wholeTagsChecked());
+        d->tagSelectCB->updateText();
     }
 
     if (d->selectionMode == All)
