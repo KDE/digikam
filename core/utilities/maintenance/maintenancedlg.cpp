@@ -425,9 +425,11 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.duplicates                          = d->expanderBox->isChecked(Private::Duplicates);
     prm.minSimilarity                       = d->similarityRange->minValue();
     prm.maxSimilarity                       = d->similarityRange->maxValue();
-    prm.duplicatesRestriction               = (HaarIface::DuplicatesSearchRestrictions)d->searchResultRestriction->itemData(d->searchResultRestriction->currentIndex()).toInt();
+    prm.duplicatesRestriction               = (HaarIface::DuplicatesSearchRestrictions)
+                                                d->searchResultRestriction->itemData(d->searchResultRestriction->currentIndex()).toInt();
     prm.faceManagement                      = d->expanderBox->isChecked(Private::FaceManagement);
-    prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->itemData(d->faceScannedHandling->currentIndex()).toInt();
+    prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)
+                                                d->faceScannedHandling->itemData(d->faceScannedHandling->currentIndex()).toInt();
     prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
     prm.qualitySort                         = d->expanderBox->isChecked(Private::ImageQualitySorter);
     prm.qualityScanMode                     = d->qualityScanMode->itemData(d->qualityScanMode->currentIndex()).toInt();

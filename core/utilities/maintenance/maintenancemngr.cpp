@@ -195,9 +195,10 @@ void MaintenanceMngr::stage1()
 
             foreach(Album* const a, d->settings.albums)
             {
-                PAlbum* const pa = dynamic_cast<PAlbum*>(a);
-                if (pa)
-                    paths << pa->folderPath();
+                PAlbum* const palbum = dynamic_cast<PAlbum*>(a);
+
+                if (palbum)
+                    paths << palbum->folderPath();
             }
 
             d->newItemsFinder = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, paths);
