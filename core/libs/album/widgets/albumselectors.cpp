@@ -151,7 +151,7 @@ AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, 
         }
     }
 
-    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setContentsMargins(QMargins());
 }
 
 AlbumSelectors::~AlbumSelectors()

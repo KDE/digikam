@@ -225,7 +225,8 @@ QSortFilterProxyModel* AlbumSelectComboBox::filterModel() const
 void AlbumSelectComboBox::hidePopup()
 {
     // just make this a slot
-    return TreeViewLineEditComboBox::hidePopup();
+    TreeViewLineEditComboBox::hidePopup();
+    updateText();
 }
 
 void AlbumSelectComboBox::updateText()
@@ -365,7 +366,7 @@ AlbumTreeView* AlbumTreeViewSelectComboBox::view() const
 
 void AlbumTreeViewSelectComboBox::setDefaultModel()
 {
-    setModel(0,0);
+    setModel(0, 0);
 }
 
 void AlbumTreeViewSelectComboBox::setModel(AlbumModel* model, CheckableAlbumFilterModel* filterModel)
@@ -408,7 +409,7 @@ TagTreeView* TagTreeViewSelectComboBox::view() const
 
 void TagTreeViewSelectComboBox::setDefaultModel()
 {
-    setModel(0,0);
+    setModel(0, 0);
 }
 
 void TagTreeViewSelectComboBox::setModel(TagModel* model,
