@@ -160,7 +160,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->restrictResultsLabel->setBuddy(d->searchResultRestriction);
 
     d->searchResultRestriction = new SqueezedComboBox();
-    d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "None"),                                 HaarIface::DuplicatesSearchRestrictions::None);
+    d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "None"),                        HaarIface::DuplicatesSearchRestrictions::None);
     d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "Restrict to reference album"), HaarIface::DuplicatesSearchRestrictions::SameAlbum);
     d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "Exclude reference album"),     HaarIface::DuplicatesSearchRestrictions::DifferentAlbum);
     d->searchResultRestriction->setToolTip(i18n("Use this option to restrict the duplicate search "

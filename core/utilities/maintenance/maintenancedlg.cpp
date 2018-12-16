@@ -228,8 +228,8 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->cleanThumbsDb           = new QCheckBox(i18n("Also clean up the thumbnail database."), d->vbox3);
     d->cleanFacesDb            = new QCheckBox(i18n("Also clean up the faces database."), d->vbox3);
     d->shrinkDatabases         = new QCheckBox(i18n("Also shrink all databases if possible."), d->vbox3);
-    d->shrinkDatabases->setToolTip(i18n("This option leads to the vacuuming (shrinking) of the databases."
-                                        " Vacuuming is supported both for SQLite and MySQL."));
+    d->shrinkDatabases->setToolTip(i18n("This option leads to the vacuuming (shrinking) of the databases. "
+                                        "Vacuuming is supported both for SQLite and MySQL."));
     d->expanderBox->insertItem(Private::DbCleanup, d->vbox3,
                                QIcon::fromTheme(QLatin1String("run-build")),
                                i18n("Perform database cleaning"), QLatin1String("DbCleanup"), false);
@@ -426,10 +426,10 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.minSimilarity                       = d->similarityRange->minValue();
     prm.maxSimilarity                       = d->similarityRange->maxValue();
     prm.duplicatesRestriction               = (HaarIface::DuplicatesSearchRestrictions)
-                                                d->searchResultRestriction->itemData(d->searchResultRestriction->currentIndex()).toInt();
+                                                  d->searchResultRestriction->itemData(d->searchResultRestriction->currentIndex()).toInt();
     prm.faceManagement                      = d->expanderBox->isChecked(Private::FaceManagement);
     prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)
-                                                d->faceScannedHandling->itemData(d->faceScannedHandling->currentIndex()).toInt();
+                                                  d->faceScannedHandling->itemData(d->faceScannedHandling->currentIndex()).toInt();
     prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
     prm.qualitySort                         = d->expanderBox->isChecked(Private::ImageQualitySorter);
     prm.qualityScanMode                     = d->qualityScanMode->itemData(d->qualityScanMode->currentIndex()).toInt();
@@ -450,8 +450,8 @@ void MaintenanceDlg::readSettings()
 
     MaintenanceSettings prm;
 
-    d->useMutiCoreCPU->setChecked(group.readEntry(d->configUseMutiCoreCPU,                               prm.useMutiCoreCPU));
-    d->expanderBox->setChecked(Private::NewItems,           group.readEntry(d->configNewItems,           prm.newItems));
+    d->useMutiCoreCPU->setChecked(group.readEntry(d->configUseMutiCoreCPU,                                  prm.useMutiCoreCPU));
+    d->expanderBox->setChecked(Private::NewItems,           group.readEntry(d->configNewItems,              prm.newItems));
 
     d->expanderBox->setChecked(Private::DbCleanup,          group.readEntry(d->configCleanupDatabase,       prm.databaseCleanup));
     d->cleanThumbsDb->setChecked(group.readEntry(d->configCleanupThumbDatabase,                             prm.cleanThumbDb));
