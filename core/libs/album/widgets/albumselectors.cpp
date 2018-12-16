@@ -166,7 +166,7 @@ void AlbumSelectors::initAlbumWidget()
     d->albumSelectCB = new AlbumTreeViewSelectComboBox(d->albumWidget);
     d->albumSelectCB->setToolTip(i18nc("@info:tooltip", "Select all albums that should be processed."));
     d->albumSelectCB->setDefaultModel();
-    d->albumSelectCB->setNoSelectionText(i18nc("@info:status", "Any albums"));
+    d->albumSelectCB->setNoSelectionText(i18n("No Album Selected"));
     d->albumSelectCB->addCheckUncheckContextMenuActions();
 
     d->albumClearButton = new ModelClearButton(d->albumSelectCB->view()->albumModel());
@@ -199,7 +199,7 @@ void AlbumSelectors::initTagWidget()
     d->tagSelectCB = new TagTreeViewSelectComboBox(d->tagWidget);
     d->tagSelectCB->setToolTip(i18nc("@info:tooltip", "Select all tags that should be processed."));
     d->tagSelectCB->setDefaultModel();
-    d->tagSelectCB->setNoSelectionText(i18nc("@info:status", "Any tags"));
+    d->tagSelectCB->setNoSelectionText(i18n("No Tag Selected"));
     d->tagSelectCB->addCheckUncheckContextMenuActions();
 
     d->tagClearButton = new ModelClearButton(d->tagSelectCB->view()->albumModel());
