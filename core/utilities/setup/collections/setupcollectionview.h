@@ -145,7 +145,7 @@ public Q_SLOTS:
      *  for the model index of the button
      */
     void slotUpdatePressed(int mappedId);
-    void slotButtonPressed(int mappedId);
+    void slotDeletePressed(int mappedId);
 
 protected Q_SLOTS:
 
@@ -239,7 +239,7 @@ Q_SIGNALS:
 
     void categoryButtonPressed(int mappedId);
     void updatePressed(int mappedId);
-    void buttonPressed(int mappedId);
+    void deletePressed(int mappedId);
 
 protected:
 
@@ -252,7 +252,7 @@ protected:
 
     QSignalMapper*       m_categoryButtonMapper;
     QSignalMapper*       m_updateMapper;
-    QSignalMapper*       m_buttonMapper;
+    QSignalMapper*       m_deleteMapper;
 };
 
 } // namespace Digikam

@@ -90,7 +90,7 @@ SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView* const view, 
     // Implement mapping of signals. Every button gets a mapping ID from the model
     m_categoryButtonMapper = new QSignalMapper(this);
     m_updateMapper         = new QSignalMapper(this);
-    m_buttonMapper         = new QSignalMapper(this);
+    m_deleteMapper         = new QSignalMapper(this);
 
     connect(m_categoryButtonMapper, SIGNAL(mapped(int)),
             this, SIGNAL(categoryButtonPressed(int)));
@@ -98,8 +98,8 @@ SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView* const view, 
     connect(m_updateMapper, SIGNAL(mapped(int)),
             this, SIGNAL(updatePressed(int)));
 
-    connect(m_buttonMapper, SIGNAL(mapped(int)),
-            this, SIGNAL(buttonPressed(int)));
+    connect(m_deleteMapper, SIGNAL(mapped(int)),
+            this, SIGNAL(deletePressed(int)));
 }
 
 SetupCollectionDelegate::~SetupCollectionDelegate()
@@ -130,7 +130,7 @@ QList<QWidget*> SetupCollectionDelegate::createItemWidgets(const QModelIndex& /*
     list << deleteButton;
 
     connect(deleteButton, SIGNAL(clicked()),
-            m_buttonMapper, SLOT(map()));
+            m_deleteMapper, SLOT(map()));
 
     return list;
 }
@@ -233,7 +233,7 @@ void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
 
         deleteButton->setEnabled(itemView()->isEnabled());
 
-        m_buttonMapper->setMapping(deleteButton, index.data(SetupCollectionModel::DeleteMapId).toInt());
+        m_deleteMapper->setMapping(deleteButton, index.data(SetupCollectionModel::DeleteMapId).toInt());
     }
     else
     {
@@ -305,8 +305,8 @@ void SetupCollectionTreeView::setModel(SetupCollectionModel* collectionModel)
     connect(static_cast<SetupCollectionDelegate*>(itemDelegate()), SIGNAL(updatePressed(int)),
             collectionModel, SLOT(slotUpdatePressed(int)));
 
-    connect(static_cast<SetupCollectionDelegate*>(itemDelegate()), SIGNAL(buttonPressed(int)),
-            collectionModel, SLOT(slotButtonPressed(int)));
+    connect(static_cast<SetupCollectionDelegate*>(itemDelegate()), SIGNAL(deletePressed(int)),
+            collectionModel, SLOT(slotDeletePressed(int)));
 
     // give model a widget to use as parent for message boxes
     collectionModel->setParentWidgetForDialogs(this);
@@ -550,7 +550,7 @@ void SetupCollectionModel::slotUpdatePressed(int mappedId)
     updateCollection(mappedId);
 }
 
-void SetupCollectionModel::slotButtonPressed(int mappedId)
+void SetupCollectionModel::slotDeletePressed(int mappedId)
 {
     deleteCollection(mappedId);
 }
