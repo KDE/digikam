@@ -462,9 +462,9 @@ void NamespaceEditDlg::populateFields(NamespaceEntry& entry)
         d->isPath->setChecked(false);
     }
 
-    d->specialOptsCombo->setCurrentIndex((int)entry.specialOpts);
     d->alternativeName->setText(entry.alternativeName);
-    d->altSpecialOptsCombo->setCurrentIndex((int)entry.secondNameOpts);
+    d->specialOptsCombo->setCurrentIndex(d->specialOptsCombo->findData(entry.specialOpts));
+    d->altSpecialOptsCombo->setCurrentIndex(d->altSpecialOptsCombo->findData(entry.secondNameOpts));
 
     if (entry.convertRatio.size() == 6)
     {
