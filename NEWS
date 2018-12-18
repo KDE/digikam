@@ -660,4 +660,5 @@ BUGFIXES:
 590 ==> 215486 - Collection not found in location on disk with UUID (LVM volume).
 591 ==> 401834 - The "Scanning Faces" dialog box is too large and can't be resized in french language.
 592 ==> 401664 - Trash shows list view only no thumbnails.
-593 ==> 
+593 ==> 402029 - Find New Items process takes significantly longer to finish on 6.0.0.
+594 ==> 

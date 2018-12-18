@@ -578,8 +578,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
         emit startScanningAlbum(location.albumRootPath(), album);
     }
 
-    int albumID                   = checkAlbum(location, album);
-    QList<ItemScanInfo> scanInfos = CoreDbAccess().db()->getItemScanInfos(albumID);
+    int albumID                          = checkAlbum(location, album);
+    QList<ItemScanInfo> scanInfos        = CoreDbAccess().db()->getItemScanInfos(albumID);
+    MetaEngineSettingsContainer settings = MetaEngineSettings::instance()->settings();
 
     // create a hash filename -> index in list
     QHash<QString, int> fileNameIndexHash;
@@ -591,16 +592,14 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
         itemIdSet << scanInfos.at(i).id;
     }
 
-    const QFileInfoList list = dir.entryInfoList(QDir::Files   |
-                                                 QDir::AllDirs |
-                                                 QDir::NoDotAndDotDot,
-                                                 QDir::Name | QDir::DirsLast);
-
-    QFileInfoList::const_iterator fi;
+    const QStringList list = dir.entryList(QDir::Files   |
+                                           QDir::AllDirs |
+                                           QDir::NoDotAndDotDot,
+                                           QDir::Name | QDir::DirsLast);
 
     int counter = -1;
 
-    for (fi = list.constBegin() ; fi != list.constEnd() ; ++fi)
+    foreach (const QString& entry, list)
     {
         if (!d->checkObserver())
         {
@@ -615,10 +614,12 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             counter = 0;
         }
 
-        if (fi->isFile())
+        QFileInfo info(dir.path() + QLatin1Char('/') + entry);
+
+        if (info.isFile())
         {
             // filter with name filter
-            QString suffix = fi->suffix().toLower();
+            QString suffix = info.suffix().toLower();
 
             if (!d->nameFilters.contains(suffix))
             {
@@ -626,33 +627,50 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             }
 
             // ignore new files in subdirectories of ignored directories
-            foreach (const QString& dir, d->ignoreDirectory)
+            foreach (const QString& ignore, d->ignoreDirectory)
             {
-                if (fi->dir().path().contains(dir))
+                if (info.path().contains(ignore))
                 {
                     continue;
                 }
             }
 
-            int index = fileNameIndexHash.value(fi->fileName(), -1);
+            int index = fileNameIndexHash.value(info.fileName(), -1);
 
             if (index != -1)
             {
                 // mark item as "seen"
                 itemIdSet.remove(scanInfos.at(index).id);
 
-                scanFileNormal(*fi, scanInfos.at(index));
+                bool hasSidecar = false;
+
+                if (settings.useXMPSidecar4Reading)
+                {
+                    QString fileForLR = info.fileName();
+                    fileForLR.chop(info.suffix().size());
+
+                    if (list.contains(fileForLR + QLatin1String("xmp")))
+                    {
+                        hasSidecar = true;
+                    }
+                    else  if (list.contains(info.fileName() + QLatin1String(".xmp")))
+                    {
+                        hasSidecar = true;
+                    }
+                }
+
+                scanFileNormal(info, scanInfos.at(index), hasSidecar);
             }
             // ignore temp files we created ourselves
-            else if (fi->completeSuffix().contains(QLatin1String("digikamtempfile.")))
+            else if (info.completeSuffix().contains(QLatin1String("digikamtempfile.")))
             {
                 continue;
             }
             else
             {
-                //qCDebug(DIGIKAM_DATABASE_LOG) << "Adding item " << fi->fileName();
+                //qCDebug(DIGIKAM_DATABASE_LOG) << "Adding item " << info.fileName();
 
-                scanNewFile(*fi, albumID);
+                scanNewFile(info, albumID);
 
                 // emit signals for scanned files with much higher granularity
                 if (d->wantSignals && counter && (counter % 2 == 0))
@@ -662,18 +680,18 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                 }
             }
         }
-        else if (fi->isDir())
+        else if (info.isDir())
         {
 
 #ifdef Q_OS_WIN
             //Hide album that starts with a dot, as under Linux.
-            if (fi->fileName().startsWith(QLatin1Char('.')))
+            if (info.fileName().startsWith(QLatin1Char('.')))
             {
                 continue;
             }
 #endif
 
-            if (d->ignoreDirectory.contains(fi->fileName()))
+            if (d->ignoreDirectory.contains(info.fileName()))
             {
                 continue;
             }
@@ -682,11 +700,11 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
 
             if (album == QLatin1String("/"))
             {
-                subalbum = QLatin1Char('/') + fi->fileName();
+                subalbum = QLatin1Char('/') + info.fileName();
             }
             else
             {
-                subalbum = album + QLatin1Char('/') + fi->fileName();
+                subalbum = album + QLatin1Char('/') + info.fileName();
             }
 
             scanAlbum(location, subalbum);
@@ -716,7 +734,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     }
 }
 
-void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& scanInfo)
+void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& scanInfo, bool checkSidecar)
 {
     bool hasAnyHint = d->hints && d->hints->hasAnyNormalHint(scanInfo.id);
 
@@ -779,14 +797,17 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
     MetaEngineSettingsContainer settings = MetaEngineSettings::instance()->settings();
     QDateTime modificationDate           = fi.lastModified();
 
-    if (settings.useXMPSidecar4Reading && DMetadata::hasSidecar(fi.filePath()))
+    if (settings.useXMPSidecar4Reading && checkSidecar)
     {
-        QString filePath      = DMetadata::sidecarPath(fi.filePath());
-        QDateTime sidecarDate = QFileInfo(filePath).lastModified();
-
-        if (sidecarDate > modificationDate)
+        if (DMetadata::hasSidecar(fi.filePath()))
         {
-            modificationDate = sidecarDate;
+            QString filePath      = DMetadata::sidecarPath(fi.filePath());
+            QDateTime sidecarDate = QFileInfo(filePath).lastModified();
+
+            if (sidecarDate > modificationDate)
+            {
+                modificationDate = sidecarDate;
+            }
         }
     }
 
