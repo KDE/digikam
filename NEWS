@@ -662,4 +662,5 @@ BUGFIXES:
 592 ==> 401664 - Trash shows list view only no thumbnails.
 593 ==> 402029 - Find New Items process takes significantly longer to finish on 6.0.0.
 594 ==> 402286 - Metadata settings don't display the combo value options.
-595 ==> 
+595 ==> 402288 - The default Xmp.lr.hierarchicalSubject setting does not read darktable tags.
+596 ==> 
