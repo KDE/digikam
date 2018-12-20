@@ -664,4 +664,5 @@ BUGFIXES:
 594 ==> 402286 - Metadata settings don't display the combo value options.
 595 ==> 402288 - The default Xmp.lr.hierarchicalSubject setting does not read darktable tags.
 596 ==> 402300 - Template string in Help > About.
-597 ==> 
+597 ==> 402283 - Duplicate entries drive to unpredictable performance.
+598 ==> 
