@@ -665,4 +665,5 @@ BUGFIXES:
 595 ==> 402288 - The default Xmp.lr.hierarchicalSubject setting does not read darktable tags.
 596 ==> 402300 - Template string in Help > About.
 597 ==> 402283 - Duplicate entries drive to unpredictable performance.
-598 ==> 
+598 ==> 402380 - Database schema upgrade to V10 is incomplete.
+599 ==> 
