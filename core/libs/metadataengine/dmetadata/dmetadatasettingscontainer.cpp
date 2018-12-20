@@ -126,18 +126,20 @@ void DMetadataSettingsContainer::setUnifyReadWrite(bool b)
 
 void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 {
-    bool valid = true;
+    bool valid                   = true;
+    const QString readNameSpace  = QLatin1String("read%1Namespaces");
+    const QString writeNameSpace = QLatin1String("write%1Namespaces");
 
     foreach (const QString& str, mappingKeys())
     {
-        if (!group.hasGroup(QLatin1String("read") + str + QLatin1String("Namespaces")))
+        if (!group.hasGroup(readNameSpace.arg(str)))
         {
             valid = false;
             qCDebug(DIGIKAM_GENERAL_LOG) << "Does not contain " << str << " Namespace";
             break;
         }
 
-        if (!group.hasGroup(QLatin1String("write") + str + QLatin1String("Namespaces")))
+        if (!group.hasGroup(writeNameSpace.arg(str)))
         {
             valid = false;
             qCDebug(DIGIKAM_GENERAL_LOG) << "Does not contain " << str << " Namespace";
@@ -149,8 +151,8 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
     {
         foreach (const QString& str, mappingKeys())
         {
-            readOneGroup(group, QLatin1String("read")  + str + QLatin1String("Namespaces"), getReadMapping(str));
-            readOneGroup(group, QLatin1String("write") + str + QLatin1String("Namespaces"), getWriteMapping(str));
+            readOneGroup(group, readNameSpace.arg(str), getReadMapping(str));
+            readOneGroup(group, writeNameSpace.arg(str), getWriteMapping(str));
         }
     }
     else
@@ -161,10 +163,17 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 
 void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 {
+   const QString readNameSpace  = QLatin1String("read%1Namespaces");
+   const QString writeNameSpace = QLatin1String("write%1Namespaces");
+
     foreach (const QString& str, mappingKeys())
     {
-        writeOneGroup(group, QLatin1String("read")  + str + QLatin1String("Namespaces"), getReadMapping(str));
-        writeOneGroup(group, QLatin1String("write") + str + QLatin1String("Namespaces"), getWriteMapping(str));
+        // Remove all old group elements.
+        group.group(readNameSpace.arg(str)).deleteGroup();
+        group.group(writeNameSpace.arg(str)).deleteGroup();
+
+        writeOneGroup(group, readNameSpace.arg(str), getReadMapping(str));
+        writeOneGroup(group, writeNameSpace.arg(str), getWriteMapping(str));
     }
 
     group.sync();
