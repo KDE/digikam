@@ -150,7 +150,7 @@ int main(int ac, char *av[])
     }
 
     // we should call dcraw_process before thumbnail extraction because for
-    // some cameras (i.e. Kodak ones) white balance for thumbnail should be set
+    // some cameras (i.e. Kodak ones) white balance for thumbnal should be set
     // from main image settings
 
     ret = RawProcessor.dcraw_process();

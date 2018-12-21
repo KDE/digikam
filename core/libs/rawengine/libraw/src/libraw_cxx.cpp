@@ -91,8 +91,10 @@ extern "C"
       return "Unsupported thumbnail format";
     case LIBRAW_INPUT_CLOSED:
       return "No input stream, or input stream closed";
+    case LIBRAW_MEMPOOL_OVERFLOW:
+      return "Libraw internal mempool overflowed";
     case LIBRAW_UNSUFFICIENT_MEMORY:
-      return "Insufficient memory";
+      return "Unsufficient memory";
     case LIBRAW_DATA_ERROR:
       return "Corrupted data or unexpected EOF";
     case LIBRAW_IO_ERROR:
@@ -133,6 +135,9 @@ const float LibRaw_constants::d65_white[3] = {0.95047f, 1.0f, 1.08883f};
     /* fprintf(stderr,"Exception %d caught\n",e);*/                                                                    \
     switch (e)                                                                                                         \
     {                                                                                                                  \
+    case LIBRAW_EXCEPTION_MEMPOOL:                                                                                       \
+      recycle();                                                                                                       \
+      return LIBRAW_MEMPOOL_OVERFLOW;                                                                               \
     case LIBRAW_EXCEPTION_ALLOC:                                                                                       \
       recycle();                                                                                                       \
       return LIBRAW_UNSUFFICIENT_MEMORY;                                                                               \
@@ -795,6 +800,7 @@ int LibRaw::get_decoder_info(libraw_decoder_info_t *d_info)
   {
     // UNTESTED
     d_info->decoder_name = "sinar_4shot_load_raw()";
+	d_info->decoder_flags = LIBRAW_DECODER_SINAR4SHOT;
   }
   else if (load_raw == &LibRaw::imacon_full_load_raw)
   {
@@ -2834,7 +2840,30 @@ int LibRaw::unpack(void)
         // x3f foveon decoder and DNG float
         // Do nothing! Decoder will allocate data internally
       }
-      if (decoder_info.decoder_flags & LIBRAW_DECODER_3CHANNEL)
+	  if (decoder_info.decoder_flags & LIBRAW_DECODER_SINAR4SHOT)
+	  {
+		  if(imgdata.params.shot_select) // single image extract
+		  {
+			  if (INT64(rwidth) * INT64(rheight + 8) * sizeof(imgdata.rawdata.raw_image[0]) >
+				  INT64(LIBRAW_MAX_ALLOC_MB) * INT64(1024 * 1024))
+				  throw LIBRAW_EXCEPTION_TOOBIG;
+			  imgdata.rawdata.raw_alloc = malloc(rwidth * (rheight + 8) * sizeof(imgdata.rawdata.raw_image[0]));
+			  imgdata.rawdata.raw_image = (ushort *)imgdata.rawdata.raw_alloc;
+			  if (!S.raw_pitch)
+				  S.raw_pitch = S.raw_width * 2; // Bayer case, not set before
+		  }
+		  else // Full image extract
+		  {
+			  if (INT64(rwidth) * INT64(rheight + 8) * sizeof(imgdata.rawdata.raw_image[0]) * 4 >
+				  INT64(LIBRAW_MAX_ALLOC_MB) * INT64(1024 * 1024))
+				  throw LIBRAW_EXCEPTION_TOOBIG;
+			  S.raw_pitch = S.raw_width * 8;
+			  imgdata.rawdata.raw_alloc = 0;
+			  imgdata.image = (ushort(*)[4])calloc(
+				  unsigned(MAX(S.width, S.raw_width)) * unsigned(MAX(S.height, S.raw_height)+8), sizeof(*imgdata.image));
+		  }
+	  }
+	  else if (decoder_info.decoder_flags & LIBRAW_DECODER_3CHANNEL)
       {
         if (INT64(rwidth) * INT64(rheight + 8) * sizeof(imgdata.rawdata.raw_image[0]) * 3 >
             LIBRAW_MAX_ALLOC_MB * INT64(1024 * 1024))
@@ -2899,7 +2928,13 @@ int LibRaw::unpack(void)
       {
         // x3f foveon decoder only: do nothing
       }
-      else if (!(imgdata.idata.filters || P1.colors == 1)) // legacy decoder, ownalloc handled above
+	  else if (decoder_info.decoder_flags & LIBRAW_DECODER_SINAR4SHOT && imgdata.params.shot_select == 0)
+	  {
+		  imgdata.rawdata.raw_alloc = imgdata.image;
+		  imgdata.rawdata.color4_image = (ushort(*)[4])imgdata.rawdata.raw_alloc;
+		  imgdata.image = 0;
+	  }
+	  else if (!(imgdata.idata.filters || P1.colors == 1)) // legacy decoder, ownalloc handled above
       {
         // successfully decoded legacy image, attach image to raw_alloc
         imgdata.rawdata.raw_alloc = imgdata.image;
@@ -6310,6 +6345,12 @@ void LibRaw::parse_x3f()
     libraw_internal_data.internal_data.toffset = DE->input.offset;
     write_thumb = &LibRaw::x3f_thumb_loader;
   }
+  DE = x3f_get_camf(x3f);
+  if (DE && DE->input.size > 28)
+  {
+	  libraw_internal_data.unpacker_data.meta_offset = DE->input.offset + 8;
+	  libraw_internal_data.unpacker_data.meta_length = DE->input.size - 28;
+  } 
 }
 
 INT64 LibRaw::x3f_thumb_size()
@@ -6597,7 +6638,18 @@ void LibRaw::x3f_load_raw()
       throw LIBRAW_EXCEPTION_ALLOC;
 
     imgdata.rawdata.color3_image = (ushort(*)[3])imgdata.rawdata.raw_alloc;
-    if (HUF)
+	// swap R/B channels for known old cameras
+	if(!strcasecmp(P1.make,"Polaroid") && !strcasecmp(P1.model,"x530"))
+	{
+		ushort(*src)[3] = (ushort(*)[3])data;
+		for(int p = 0; p < S.raw_height * S.raw_width; p++)
+		{
+			imgdata.rawdata.color3_image[p][0] = src[p][2];
+			imgdata.rawdata.color3_image[p][1] = src[p][1];
+			imgdata.rawdata.color3_image[p][2] = src[p][0];
+		}
+	}
+    else if (HUF)
       memmove(imgdata.rawdata.raw_alloc, data, datasize);
     else if (TRU && (!Q || !Q->quattro_layout))
       memmove(imgdata.rawdata.raw_alloc, data, datasize);

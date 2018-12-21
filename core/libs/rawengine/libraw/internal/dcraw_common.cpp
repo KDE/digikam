@@ -2661,7 +2661,9 @@ void CLASS packed_load_raw()
         fseek(ifp, ftell(ifp) >> 3 << 2, SEEK_SET);
       }
     }
+#ifdef LIBRAW_LIBRARY_BUILD
     if(feof(ifp)) throw LIBRAW_EXCEPTION_IO_EOF;
+#endif
     for (col = 0; col < raw_width; col++)
     {
       for (vbits -= tiff_bps; vbits < 0; vbits += bite)
@@ -2904,6 +2906,7 @@ unsigned CLASS pana_data(int nb, unsigned *bytes)
     fread(buf, 1, load_flags, ifp);
   }
 
+#ifdef LIBRAW_LIBRARY_BUILD /* not part of std. dcraw */
   if (pana_encoding == 5)
   {
     for (byte = 0; byte < 16; byte++)
@@ -2913,6 +2916,7 @@ unsigned CLASS pana_data(int nb, unsigned *bytes)
     }
   }
   else
+#endif
   {
     vpos = (vpos - nb) & 0x1ffff;
     byte = vpos >> 3 ^ 0x3ff0;
@@ -2930,18 +2934,18 @@ void CLASS panasonic_load_raw()
   int row, col, i, j, sh = 0, pred[2], nonz[2];
   unsigned bytes[16];
   ushort *raw_block_data;
-  int enc_blck_size = pana_bpp == 12 ? 10 : 9;
 
   pana_data(0, 0);
+
+#ifdef LIBRAW_LIBRARY_BUILD
+  int enc_blck_size = pana_bpp == 12 ? 10 : 9;
   if (pana_encoding == 5)
   {
     for (row = 0; row < raw_height; row++)
     {
       raw_block_data = raw_image + row * raw_width;
 
-#ifdef LIBRAW_LIBRARY_BUILD
       checkCancel();
-#endif
       for (col = 0; col < raw_width; col += enc_blck_size)
       {
         pana_data(0, bytes);
@@ -2977,6 +2981,7 @@ void CLASS panasonic_load_raw()
     }
   }
   else
+#endif
   {
     for (row = 0; row < raw_height; row++)
     {
@@ -4943,7 +4948,7 @@ void CLASS hat_transform(float *temp, float *base, int st, int size, int sc)
     temp[i] = 2 * base[st * i] + base[st * (i - sc)] + base[st * (2 * size - 2 - (i + sc))];
 }
 
-#if !defined(LIBRAW_USE_OPENMP)
+#if !defined(LIBRAW_USE_OPENMP) || !defined(LIBRAW_LIBRARY_BUILD)
 void CLASS wavelet_denoise()
 {
   float *fimg = 0, *temp, thold, mul[2], avg, diff;
@@ -5042,7 +5047,7 @@ void CLASS wavelet_denoise()
   }
   free(fimg);
 }
-#else /* LIBRAW_USE_OPENMP */
+#else /* LIBRAW_USE_OPENMP and LIBRAW_LIBRARY_BUILD */
 void CLASS wavelet_denoise()
 {
   float *fimg = 0, *temp, thold, mul[2], avg, diff;
@@ -5066,33 +5071,26 @@ void CLASS wavelet_denoise()
   temp = fimg + size * 3;
   if ((nc = colors) == 3 && filters)
     nc++;
-#ifdef LIBRAW_LIBRARY_BUILD
 #pragma omp parallel default(shared) private(i, col, row, thold, lev, lpass, hpass, temp, c) firstprivate(scale, size)
-#endif
   {
+#pragma omp critical  /* LibRaw's malloc is not local thread-safe */
     temp = (float *)malloc((iheight + iwidth) * sizeof *fimg);
     FORC(nc)
     { /* denoise R,G1,B,G3 individually */
-#ifdef LIBRAW_LIBRARY_BUILD
 #pragma omp for
-#endif
       for (i = 0; i < size; i++)
         fimg[i] = 256 * sqrt((double)(image[i][c] << scale));
       for (hpass = lev = 0; lev < 5; lev++)
       {
         lpass = size * ((lev & 1) + 1);
-#ifdef LIBRAW_LIBRARY_BUILD
 #pragma omp for
-#endif
         for (row = 0; row < iheight; row++)
         {
           hat_transform(temp, fimg + hpass + row * iwidth, 1, iwidth, 1 << lev);
           for (col = 0; col < iwidth; col++)
             fimg[lpass + row * iwidth + col] = temp[col] * 0.25;
         }
-#ifdef LIBRAW_LIBRARY_BUILD
 #pragma omp for
-#endif
         for (col = 0; col < iwidth; col++)
         {
           hat_transform(temp, fimg + lpass + col, iwidth, iheight, 1 << lev);
@@ -5100,9 +5098,7 @@ void CLASS wavelet_denoise()
             fimg[lpass + row * iwidth + col] = temp[row] * 0.25;
         }
         thold = threshold * noise[lev];
-#ifdef LIBRAW_LIBRARY_BUILD
 #pragma omp for
-#endif
         for (i = 0; i < size; i++)
         {
           fimg[hpass + i] -= fimg[lpass + i];
@@ -5117,17 +5113,16 @@ void CLASS wavelet_denoise()
         }
         hpass = lpass;
       }
-#ifdef LIBRAW_LIBRARY_BUILD
 #pragma omp for
-#endif
       for (i = 0; i < size; i++)
         image[i][c] = CLIP(SQR(fimg[i] + fimg[lpass + i]) / 0x10000);
     }
+#pragma omp critical
     free(temp);
   } /* end omp parallel */
-  /* the following loops are hard to parallelize, no idea yes,
+  /* the following loops are hard to parallize, no idea yes,
    * problem is wlast which is carrying dependency
-   * second part should be easier, but did not yet get it right.
+   * second part should be easyer, but did not yet get it right.
    */
   if (filters && colors == 3)
   { /* pull G1 and G3 closer together */
@@ -6134,7 +6129,7 @@ void CLASS xtrans_interpolate(int passes)
                   homo[d][row][col]++;
         }
 
-      /* Average the most homogeneous pixels for the final result:	*/
+      /* Average the most homogenous pixels for the final result:	*/
       if (height - top < TS + 4)
         mrow = height - top + 2;
       if (width - left < TS + 4)
@@ -6390,26 +6385,24 @@ void CLASS ahd_interpolate()
   cielab(0, 0);
   border_interpolate(5);
 
-#ifdef LIBRAW_LIBRARY_BUILD
 #ifdef LIBRAW_USE_OPENMP
 #pragma omp parallel private(buffer, rgb, lab, homo, top, left, i, j, k) shared(xyz_cam, terminate_flag)
 #endif
-#endif
   {
+#ifdef LIBRAW_USE_OPENMP
+#pragma omp critical
+#endif
     buffer = (char *)malloc(26 * TS * TS); /* 1664 kB */
     merror(buffer, "ahd_interpolate()");
     rgb = (ushort(*)[TS][TS][3])buffer;
     lab = (short(*)[TS][TS][3])(buffer + 12 * TS * TS);
     homo = (char(*)[TS][2])(buffer + 24 * TS * TS);
 
-#ifdef LIBRAW_LIBRARY_BUILD
 #ifdef LIBRAW_USE_OPENMP
 #pragma omp for schedule(dynamic)
 #endif
-#endif
     for (top = 2; top < height - 5; top += TS - 6)
     {
-#ifdef LIBRAW_LIBRARY_BUILD
 #ifdef LIBRAW_USE_OPENMP
       if (0 == omp_get_thread_num())
 #endif
@@ -6420,7 +6413,6 @@ void CLASS ahd_interpolate()
           if (rr)
             terminate_flag = 1;
         }
-#endif
       for (left = 2; !terminate_flag && (left < width - 5); left += TS - 6)
       {
         ahd_interpolate_green_h_and_v(top, left, rgb);
@@ -6429,15 +6421,16 @@ void CLASS ahd_interpolate()
         ahd_interpolate_combine_homogeneous_pixels(top, left, rgb, homo);
       }
     }
+#ifdef LIBRAW_USE_OPENMP
+#pragma omp critical
+#endif
     free(buffer);
   }
-#ifdef LIBRAW_LIBRARY_BUILD
   if (terminate_flag)
     throw LIBRAW_EXCEPTION_CANCELLED_BY_CALLBACK;
-#endif
 }
 
-#else
+#else /* LIBRAW_LIBRARY_BUILD */
 void CLASS ahd_interpolate()
 {
   int i, j, top, left, row, col, tr, tc, c, d, val, hm[2];
@@ -6527,7 +6520,7 @@ void CLASS ahd_interpolate()
                 homo[d][tr][tc]++;
         }
       }
-      /*  Combine the most homogeneous pixels for the final result:	*/
+      /*  Combine the most homogenous pixels for the final result:	*/
       for (row = top + 3; row < top + TS - 3 && row < height - 5; row++)
       {
         tr = row - top;
@@ -14368,11 +14361,14 @@ void CLASS apply_tiff()
       is_raw = 0;
     }
   if (!dng_version)
-    if (((tiff_samples == 3 && tiff_ifd[raw].bytes && tiff_bps != 14 && (tiff_compress & -16) != 32768) ||
+    if (((tiff_samples == 3 && tiff_ifd[raw].bytes && tiff_bps != 14 &&
+      !(tiff_bps == 16 && !strncmp(make, "Leaf", 4)) && // Allow Leaf/16bit/3color files
+    (tiff_compress & -16) != 32768) ||
          (tiff_bps == 8 && strncmp(make, "Phase", 5) && strncmp(make, "Leaf", 4) && !strcasestr(make, "Kodak") &&
           !strstr(model2, "DEBUG RAW"))) &&
         strncmp(software, "Nikon Scan", 10))
       is_raw = 0;
+
   for (i = 0; i < tiff_nifds; i++)
     if (i != raw &&
         (tiff_ifd[i].samples == max_samp || (tiff_ifd[i].comp == 7 && tiff_ifd[i].samples == 1)) /* Allow 1-bps JPEGs */
@@ -14413,8 +14409,13 @@ void CLASS apply_tiff()
 
 void CLASS parse_minolta(int base)
 {
-  int save, tag, len, offset, high = 0, wide = 0, i, c;
+  int tag, len, offset, high = 0, wide = 0, i, c;
   short sorder = order;
+#ifdef LIBRAW_LIBRARY_BUILD
+  INT64 save;
+#else
+  int save;
+#endif
 
   fseek(ifp, base, SEEK_SET);
   if (fgetc(ifp) || fgetc(ifp) - 'M' || fgetc(ifp) - 'R')
@@ -14422,8 +14423,9 @@ void CLASS parse_minolta(int base)
   order = fgetc(ifp) * 0x101;
   offset = base + get4() + 8;
 #ifdef LIBRAW_LIBRARY_BUILD
-  if(offset>ifp->size()-8) // At least 8 bytes for tag/len
-    offset = ifp->size()-8;
+  INT64 fsize = ifp->size();
+  if(offset>fsize-8) // At least 8 bytes for tag/len
+    offset = fsize-8;
 #endif
 
   while ((save = ftell(ifp)) < offset)
@@ -14433,6 +14435,10 @@ void CLASS parse_minolta(int base)
     len = get4();
     if(len < 0)
       return; // just ignore wrong len?? or raise bad file exception?
+#ifdef LIBRAW_LIBRARY_BUILD
+    if((INT64)len + save + 8ULL > fsize)
+      return; // just ignore out of file metadata, stop parse
+#endif
     switch (tag)
     {
     case 0x505244: /* PRD */
@@ -14648,19 +14654,35 @@ void CLASS parse_ciff(int offset, int length, int depth)
 {
   int tboff, nrecs, c, type, len, save, wbi = -1;
   ushort key[] = {0x410, 0x45f3};
+#ifdef LIBRAW_LIBRARY_BUILD
+  INT64 fsize = ifp->size();
+#endif
 
   fseek(ifp, offset + length - 4, SEEK_SET);
   tboff = get4() + offset;
   fseek(ifp, tboff, SEEK_SET);
   nrecs = get2();
+  if (nrecs<1) return;
   if ((nrecs | depth) > 127)
     return;
+#ifdef LIBRAW_LIBRARY_BUILD
+  if(nrecs*10 + offset > fsize) return;
+#endif
+
   while (nrecs--)
   {
     type = get2();
     len = get4();
     save = ftell(ifp) + 4;
-    fseek(ifp, offset + get4(), SEEK_SET);
+    INT64 see = offset + get4();
+#ifdef LIBRAW_LIBRARY_BUILD
+	if(see >= fsize  ) // At least one byte
+	{
+		fseek(ifp, save, SEEK_SET);
+		continue;
+	}
+#endif
+    fseek(ifp, see, SEEK_SET);
     if ((((type >> 8) + 8) | 8) == 0x38)
     {
       parse_ciff(ftell(ifp), len, depth + 1); /* Parse a sub-table */
@@ -14851,7 +14873,7 @@ void CLASS parse_rollei()
   memset(&t, 0, sizeof t);
   do
   {
-    fgets(line, 128, ifp);
+    if(!fgets(line, 128, ifp)) break;
     if ((val = strchr(line, '=')))
       *val++ = 0;
     else
@@ -14889,6 +14911,7 @@ void CLASS parse_sinar_ia()
   order = 0x4949;
   fseek(ifp, 4, SEEK_SET);
   entries = get4();
+  if(entries < 1 || entries > 8192) return;
   fseek(ifp, get4(), SEEK_SET);
   while (entries--)
   {
@@ -14930,8 +14953,11 @@ void CLASS parse_phase_one(int base)
   order = get4() & 0xffff;
   if (get4() >> 8 != 0x526177)
     return; /* "Raw" */
-  fseek(ifp, get4() + base, SEEK_SET);
+  unsigned offset = get4();
+  if(offset == 0xbad0bad) return;
+  fseek(ifp, offset + base, SEEK_SET);
   entries = get4();
+  if(entries > 8192) return; // too much??
   get4();
   while (entries--)
   {
@@ -17918,9 +17944,11 @@ void CLASS identify()
     case 10:
       load_raw = &CLASS nokia_load_raw;
       break;
+#ifdef LIBRAW_LIBRARY_BUILD
     case 0:
       throw LIBRAW_EXCEPTION_IO_CORRUPT;
       break;
+#endif
     }
     raw_height = height + (top_margin = i / (width * tiff_bps / 8) - height);
     mask[0][3] = 1;
@@ -19684,8 +19712,10 @@ dng_skip:
 		  cmul_ok = false;
    }
    if(!cmul_ok)
-	  cam_mul[0] = cam_mul[3] = 0;
-
+   {
+     if(cam_mul[0]>0) cam_mul[0] = 0;   
+     cam_mul[3] = 0;
+   }
   }
   if ((use_camera_matrix & ((use_camera_wb || dng_version) | 0x2)) && cmatrix[0][0] > 0.125)
   {
@@ -19732,6 +19762,7 @@ dng_skip:
     if (maximum < 0x10000 && curve[maximum] > 0 && load_raw == &CLASS sony_arw2_load_raw)
       maximum = curve[maximum];
   }
+  if(maximum > 0xffff) maximum = 0xffff;
   if (!load_raw || height < 22 || width < 22 ||
 #ifdef LIBRAW_LIBRARY_BUILD
       (tiff_bps > 16 && load_raw != &LibRaw::deflate_dng_load_raw)
