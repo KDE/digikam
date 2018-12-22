@@ -85,7 +85,7 @@ IOJobsThread* IOJobsManager::startIOJobs(IOJobData* const data)
     return thread;
 }
 
-IOJobsThread *IOJobsManager::startDTrashItemsListingForCollection(const QString& collectionPath)
+IOJobsThread* IOJobsManager::startDTrashItemsListingForCollection(const QString& collectionPath)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
     thread->listDTrashItems(collectionPath);

@@ -42,13 +42,13 @@ void ItemScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataCon
     // DMetadata does all translation work
     QStringList strings = DMetadata::valuesToString(fields, allVideoMetadataFields());
     // associate with hard-coded variables
-    container->aspectRatio                  = strings.at(0);
-    container->audioBitRate                 = strings.at(1);
-    container->audioChannelType             = strings.at(2);
-    container->audioCodec                   = strings.at(3);
-    container->duration                     = strings.at(4);
-    container->frameRate                    = strings.at(5);
-    container->videoCodec                   = strings.at(6);
+    container->aspectRatio      = strings.at(0);
+    container->audioBitRate     = strings.at(1);
+    container->audioChannelType = strings.at(2);
+    container->audioCodec       = strings.at(3);
+    container->duration         = strings.at(4);
+    container->frameRate        = strings.at(5);
+    container->videoCodec       = strings.at(6);
 }
 
 QString ItemScanner::detectVideoFormat() const

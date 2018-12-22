@@ -200,7 +200,7 @@ void ItemScanner::scanItemPosition()
     if (hasValidField(metadataInfos))
     {
         d->commit.commitItemPosition = true;
-        d->commit.imagePositionInfos  = metadataInfos;
+        d->commit.imagePositionInfos = metadataInfos;
     }
 }
 
@@ -225,8 +225,8 @@ void ItemScanner::scanItemComments()
         return;
     }
 
-    d->commit.commitItemComments  = true;
-    d->commit.captions             = captions;
+    d->commit.commitItemComments = true;
+    d->commit.captions           = captions;
 
     // Headline
     if (!metadataInfos.at(0).isNull())
@@ -275,7 +275,7 @@ void ItemScanner::scanItemCopyright()
     }
 
     d->commit.commitItemCopyright = true;
-    d->commit.copyrightTemplate    = t;
+    d->commit.copyrightTemplate   = t;
 }
 
 void ItemScanner::commitItemCopyright()
@@ -454,14 +454,14 @@ void ItemScanner::scanFaces()
         return;
     }
 
-    QMultiMap<QString,QVariant> metadataFacesMap;
+    QMultiMap<QString, QVariant> metadataFacesMap;
 
     if (!d->metadata.getItemFacesMap(metadataFacesMap))
     {
         return;
     }
 
-    d->commit.commitFaces = true;
+    d->commit.commitFaces      = true;
     d->commit.metadataFacesMap = metadataFacesMap;
 }
 
