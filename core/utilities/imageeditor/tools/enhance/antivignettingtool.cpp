@@ -7,7 +7,7 @@
  * Description : a digiKam image tool to reduce
  *               vignetting on an image.
  *
- * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
  * This program is free software; you can redistribute it
