@@ -7,7 +7,7 @@
  * Description : a tool to export images to Flickr web service
  *
  * Copyright (C) 2005-2008 by Vardhman Jain <vardhman at gmail dot com>
- * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Luka Renko <lure at kubuntu dot org>
  *
  * This program is free software; you can redistribute it

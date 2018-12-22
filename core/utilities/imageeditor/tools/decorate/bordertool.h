@@ -7,7 +7,7 @@
  * Description : a digiKam image tool to add a border
  *               around an image.
  *
- * Copyright 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
