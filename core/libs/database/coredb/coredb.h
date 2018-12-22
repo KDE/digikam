@@ -598,22 +598,20 @@ public:
     QList<qlonglong> getImageIds(DatabaseItem::Status status, DatabaseItem::Category category);
 
     /**
-     * Get the imageId fitting to the information given for the item
+     * Find the imageId fitting to the information given for the item
      * @param albumID the albumID of the item (-1 means NULL)
      * @param name the name of the item
      * @param status the status of the item
      * @param category the category of the item
-     * @param modificationDate the modification date
      * @param fileSize the file size
      * @param uniqueHash the unique hash
      * @return the ImageId for the item, or -1 if no matching or more than one infos were found.
      */
-    qlonglong getImageId(int albumID, const QString& name,
-                      DatabaseItem::Status status,
-                      DatabaseItem::Category category,
-                      const QDateTime& modificationDate,
-                      qlonglong fileSize,
-                      const QString& uniqueHash);
+    qlonglong findImageId(int albumID, const QString& name,
+                          DatabaseItem::Status status,
+                          DatabaseItem::Category category,
+                          qlonglong fileSize,
+                          const QString& uniqueHash);
 
     enum ItemSortOrder
     {

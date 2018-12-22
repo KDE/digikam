@@ -172,7 +172,7 @@ protected:
     void commitCopyImageAttributes();
 
     void prepareAddImage(int albumId);
-    void commitAddImage();
+    bool commitAddImage();
 
     //@}
 

@@ -1250,28 +1250,26 @@ QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status, DatabaseItem::
     return imageIds;
 }
 
-qlonglong CoreDB::getImageId(int albumID, const QString& name,
-                             DatabaseItem::Status status,
-                             DatabaseItem::Category category,
-                             const QDateTime& modificationDate,
-                             qlonglong fileSize,
-                             const QString& uniqueHash)
+qlonglong CoreDB::findImageId(int albumID, const QString& name,
+                              DatabaseItem::Status status,
+                              DatabaseItem::Category category,
+                              qlonglong fileSize,
+                              const QString& uniqueHash)
 {
     QList<QVariant> values;
     QVariantList boundValues;
 
     // Add the standard bindings
     boundValues << name << (int)status << (int)category
-                << modificationDate << fileSize << uniqueHash;
+                << fileSize << uniqueHash;
 
     // If the album id is -1, no album is assigned. Get all images with NULL album
     if (albumID == -1)
     {
         d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
                                          "WHERE name=? AND status=? "
-                                         "AND category=? AND modificationDate=? "
-                                         "AND fileSize=? AND uniqueHash=? "
-                                         "AND album IS NULL;"),
+                                         "AND category=? AND fileSize=? "
+                                         "AND uniqueHash=? AND album IS NULL;"),
                        boundValues, &values);
     }
     else
@@ -1280,19 +1278,20 @@ qlonglong CoreDB::getImageId(int albumID, const QString& name,
 
         d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
                                          "WHERE name=? AND status=? "
-                                         "AND category=? AND modificationDate=? "
-                                         "AND fileSize=? AND uniqueHash=? "
-                                         "AND album=?;"),
+                                         "AND category=? AND fileSize=? "
+                                         "AND uniqueHash=? AND album=?;"),
                        boundValues, &values);
     }
 
-    if (values.isEmpty() || ( values.size() > 1 ))
+    if (values.isEmpty())
     {
         return -1;
     }
     else
     {
-        return values.first().toLongLong();
+        // If there are several identical image ids,
+        // probably use the last most recent one.
+        return values.last().toLongLong();
     }
 }
 
