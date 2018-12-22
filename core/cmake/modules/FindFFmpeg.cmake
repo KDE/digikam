@@ -29,7 +29,7 @@
 # Copyright (c) 2006,      Matthias Kretz, <kretz at kde dot org>
 # Copyright (c) 2008,      Alexander Neundorf, <neundorf at kde dot org>
 # Copyright (c) 2011,      Michael Jansen, <kde at michael-jansen dot biz>
-# Copyright (c) 2016-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2016-2019, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
