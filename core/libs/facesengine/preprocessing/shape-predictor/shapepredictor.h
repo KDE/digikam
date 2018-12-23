@@ -351,8 +351,8 @@ inline PointTransformAffine unnormalizing_tform(const cv::Rect& rect)
 
 bool pointContained(const cv::Rect& rect, const std::vector<float>& point)
 {
-    float x = std::round(point[0]);
-    float y = std::round(point[1]);
+    int x = std::round(point[0]);
+    int y = std::round(point[1]);
 
     if (x > 0 && x < rect.width   &&
         y > 0 && y < rect.height)
