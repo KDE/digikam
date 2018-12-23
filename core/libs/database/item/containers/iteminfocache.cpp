@@ -361,6 +361,10 @@ void ItemInfoCache::slotImageChanged(const ImageChangeset& changeset)
                 (*it)->databaseFieldsHashRaw.removeAllFields(changedImageMetadata);
             }
         }
+        else
+        {
+            m_needUpdateGrouped = true;
+        }
     }
 }
 
