@@ -668,4 +668,5 @@ BUGFIXES:
 598 ==> 402380 - Database schema upgrade to V10 is incomplete.
 599 ==> 402379 - Moving location of RAW file causes loss of metadata.
 600 ==> 366211 - When changing database, cannot open thumbnails into edit window.
-601 ==> 
+601 ==> 402496 - digikam crashed after a while during face recognition.
+602 ==> 

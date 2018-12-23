@@ -349,10 +349,10 @@ inline PointTransformAffine unnormalizing_tform(const cv::Rect& rect)
     return find_affine_transform(from_points, to_points);
 }
 
-bool pointcontained(const cv::Rect& rect, const std::vector<float>& point)
+bool pointContained(const cv::Rect& rect, const std::vector<float>& point)
 {
-    float x = point[0];
-    float y = point[1];
+    float x = std::round(point[0]);
+    float y = std::round(point[1]);
 
     if (x > 0 && x < rect.width   &&
         y > 0 && y < rect.height)
@@ -403,7 +403,7 @@ void extract_feature_pixel_values(const cv::Mat& img_,
         // then map it from the normalized shape space into pixel space.
         std::vector<float> p = tform_to_img(tform*reference_pixel_deltas[i] + location(current_shape, reference_pixel_anchor_idx[i]));
 
-        if (pointcontained(area,p))
+        if (pointContained(area, p))
         {
             feature_pixel_values[i] = img.at<unsigned char>(std::round(p[1]), std::round(p[0]));
         }
