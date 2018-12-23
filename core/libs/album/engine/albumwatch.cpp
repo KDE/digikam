@@ -40,6 +40,7 @@
 #include "collectionmanager.h"
 #include "dbengineparameters.h"
 #include "scancontroller.h"
+#include "dio.h"
 
 namespace Digikam
 {
@@ -264,6 +265,11 @@ void AlbumWatch::slotAlbumAboutToBeDeleted(Album* a)
 
 void AlbumWatch::rescanDirectory(const QString& dir)
 {
+    if (DIO::itemsUnderProcessing())
+    {
+        return;
+    }
+
     qCDebug(DIGIKAM_GENERAL_LOG) << "Detected change, triggering rescan of" << dir;
 
     ScanController::instance()->scheduleCollectionScanExternal(dir);
