@@ -258,6 +258,14 @@ AssignedListViewItem* AssignedListView::insertTool(AssignedListViewItem* const p
         item = new AssignedListViewItem(this);
     }
 
+    BatchTool* const tool = BatchToolsFactory::instance()->findTool(set.name, set.group);
+
+    // NOTE: Only now create the settings widget when needed.
+    if (tool && !tool->settingsWidget())
+    {
+        tool->registerSettingsWidget();
+    }
+
     item->setToolSet(set);
     refreshIndex();
 
@@ -500,16 +508,26 @@ void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListVi
     while (it.hasPrevious())
     {
         it.previous();
-        BatchTool::BatchToolGroup group  = (BatchTool::BatchToolGroup)(it.key());
-        QString name                     = it.value();
-        BatchTool* const tool            = BatchToolsFactory::instance()->findTool(name, group);
-        BatchToolSet set;
-        set.name                         = tool->objectName();
-        set.group                        = tool->toolGroup();
-        set.version                      = tool->toolVersion();
-        set.settings                     = tool->defaultSettings();
-        AssignedListViewItem* const item = insertTool(preceding, set);
-        setCurrentItem(item);
+        BatchTool::BatchToolGroup group = (BatchTool::BatchToolGroup)(it.key());
+        QString name                    = it.value();
+        BatchTool* const tool           = BatchToolsFactory::instance()->findTool(name, group);
+
+        if (tool)
+        {
+            // NOTE: Only now create the settings widget when needed.
+            if (!tool->settingsWidget())
+            {
+                tool->registerSettingsWidget();
+            }
+
+            BatchToolSet set;
+            set.name                         = tool->objectName();
+            set.group                        = tool->toolGroup();
+            set.version                      = tool->toolVersion();
+            set.settings                     = tool->defaultSettings();
+            AssignedListViewItem* const item = insertTool(preceding, set);
+            setCurrentItem(item);
+        }
     }
 }
 

@@ -159,6 +159,11 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
 
 ToolSettingsView::~ToolSettingsView()
 {
+    if (d->tool)
+    {
+        d->tool->clearSettingsWidget();
+    }
+
     delete d;
 }
 

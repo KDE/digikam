@@ -192,13 +192,12 @@ void BatchToolsFactory::registerTool(BatchTool* const tool)
         return;
     }
 
-    tool->registerSettingsWidget();
     d->toolsList.append(tool);
 }
 
 BatchTool* BatchToolsFactory::findTool(const QString& name, BatchTool::BatchToolGroup group) const
 {
-    foreach(BatchTool* const tool, d->toolsList)
+    foreach (BatchTool* const tool, d->toolsList)
     {
         if (tool->objectName() == name && tool->toolGroup() == group)
         {

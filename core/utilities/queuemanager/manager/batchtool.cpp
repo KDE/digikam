@@ -143,10 +143,9 @@ BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* const p
 
 BatchTool::~BatchTool()
 {
-    // NOTE: See bug #341566: no need to delete settings widget here.
-    // Owner is passed to ToolSettingsView, which will delete instance,
-    // even if Valgrind report a memory leak.
+    // NOTE: See bug #341566: need to delete settings widget here.
 
+    delete m_settingsWidget;
     delete d->observer;
     delete d;
 }
@@ -537,6 +536,11 @@ void BatchTool::applyFilter(DImgBuiltinFilter* const filter)
 QWidget* BatchTool::settingsWidget() const
 {
     return m_settingsWidget;
+}
+
+void BatchTool::clearSettingsWidget()
+{
+    m_settingsWidget = 0;
 }
 
 void BatchTool::registerSettingsWidget()
