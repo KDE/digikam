@@ -100,7 +100,10 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent, bool useGenericImg)
 
     if (useGenericImg)
     {
-        thumbImage = DImg(QIcon::fromTheme(QLatin1String("view-preview")).pixmap(128).toImage());
+        QString backGround = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                    QLatin1String("digikam/about/images/body-background.jpg"));
+
+        thumbImage         = DImg(backGround).smoothScale(128, 128);
     }
     else
     {
