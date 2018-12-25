@@ -79,7 +79,7 @@ public:
         {
             return;
         }
-        for (QVariantMap::const_iterator it = m_parameters.constBegin(); it != m_parameters.constEnd(); ++it)
+        for (QVariantMap::const_iterator it = m_parameters.constBegin() ; it != m_parameters.constEnd() ; ++it)
         {
             if (it.key() == QLatin1String("accuracy"))
             {
@@ -175,7 +175,6 @@ QList<QRectF> FaceDetector::detectFaces(const QImage& image, const QSize& origin
     return result;
 }
 
-
 QList<QRectF> FaceDetector::detectFaces(const Digikam::DImg& image, const QSize& originalSize)
 {
     QList<QRectF> result;
@@ -215,7 +214,6 @@ QList<QRectF> FaceDetector::detectFaces(const Digikam::DImg& image, const QSize&
     return result;
 }
 
-
 void FaceDetector::setParameter(const QString& parameter, const QVariant& value)
 {
     d->m_parameters.insert(parameter, value);
@@ -224,7 +222,7 @@ void FaceDetector::setParameter(const QString& parameter, const QVariant& value)
 
 void FaceDetector::setParameters(const QVariantMap& parameters)
 {
-    for (QVariantMap::const_iterator it = parameters.begin(); it != parameters.end(); ++it)
+    for (QVariantMap::const_iterator it = parameters.begin() ; it != parameters.end() ; ++it)
     {
         d->m_parameters.insert(it.key(), it.value());
     }
