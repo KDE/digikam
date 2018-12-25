@@ -276,10 +276,9 @@ public:
      */
     QWidget* settingsWidget() const;
 
-    /** Clear dedicated settings widget registered with registerSettingsWidget()
-     *  to prevent double delete from ToolSettingsView().
+    /** Delete dedicated settings widget registered with registerSettingsWidget().
      */
-    void clearSettingsWidget();
+    void deleteSettingsWidget();
 
     /** Setup dedicated settings widget. Default implementation assign no settings view (a message label is just displayed).
      *  You need to call default implementation in your child class to init default signals and slots connections,

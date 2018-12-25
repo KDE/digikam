@@ -143,9 +143,9 @@ BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* const p
 
 BatchTool::~BatchTool()
 {
-    // NOTE: See bug #341566: need to delete settings widget here.
+    // NOTE: See bug #341566: no need to delete settings widget here.
+    // We delete the settings widget now in the ToolSettingsView.
 
-    delete m_settingsWidget;
     delete d->observer;
     delete d;
 }
@@ -538,8 +538,9 @@ QWidget* BatchTool::settingsWidget() const
     return m_settingsWidget;
 }
 
-void BatchTool::clearSettingsWidget()
+void BatchTool::deleteSettingsWidget()
 {
+    delete m_settingsWidget;
     m_settingsWidget = 0;
 }
 
