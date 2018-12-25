@@ -103,7 +103,7 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent, bool useGenericImg)
         QString backGround = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                                     QLatin1String("digikam/about/images/body-background.jpg"));
 
-        thumbImage         = DImg(backGround).smoothScale(128, 128);
+        thumbImage         = DImg(backGround).smoothScale(128, 128, Qt::KeepAspectRatio);
     }
     else
     {

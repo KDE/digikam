@@ -142,7 +142,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
         QString backGround = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                                     QLatin1String("digikam/about/images/body-background.jpg"));
 
-        d->thumbImage      = DImg(backGround).smoothScale(128, 128);
+        d->thumbImage      = DImg(backGround).smoothScale(128, 128, Qt::KeepAspectRatio);
     }
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
