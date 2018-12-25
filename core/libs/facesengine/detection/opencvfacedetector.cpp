@@ -55,7 +55,7 @@ public:
         searchIncrement = 0;
         grouping        = 0;
         flags           = 0;
-        minSize         = cv::Size(0,0);
+        minSize         = cv::Size(0, 0);
     }
 
 public:
@@ -199,7 +199,7 @@ public:
         }
 
         if (lessThanWindowSize(minSize))
-            return cv::Size(0,0);
+            return cv::Size(0, 0);
 
         return minSize;
     }
@@ -402,7 +402,7 @@ void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const 
              << " min size " << d->primaryParams.minSize.width << endl
              << " primary cascades: ";
 
-    for (unsigned int i=0; i<d->cascadeProperties.size(); i++)
+    for (unsigned int i = 0 ; i < d->cascadeProperties.size() ; ++i)
         if (d->cascadeProperties[i].primaryCascade)
             qCDebug(DIGIKAM_FACESENGINE_LOG) << d->cascadeSet->getCascade(i).name << " ";
 
@@ -458,7 +458,7 @@ QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
 
     QList<QRect> results;
 
-    for (std::vector<cv::Rect>::const_iterator it = faces.begin(); it != faces.end(); ++it)
+    for (std::vector<cv::Rect>::const_iterator it = faces.begin() ; it != faces.end() ; ++it)
     {
         results << toQRect(*it);
     }
@@ -472,7 +472,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
     // check if we need to verify
     bool hasVerifyingCascade = false;
 
-    for (int i=0; i<d->cascades.size(); ++i)
+    for (int i = 0 ; i < d->cascades.size() ; ++i)
     {
         if (d->cascades[i].verifyingCascade)
         {
@@ -506,7 +506,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
     int frontalFaceVotes   = 0;
     int facialFeatureVotes = 0;
 
-    for (int i=0; i<d->cascades.size(); ++i)
+    for (int i = 0 ; i < d->cascades.size() ; ++i)
     {
         qCDebug(DIGIKAM_FACESENGINE_LOG) << "Verifying face " << face << " using cascade " << i;
 
@@ -537,7 +537,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
 
                 foundFaces = cascadeResult(feature, cascade.cascade, d->verifyingParams);
 
-                for (vector<Face>::iterator it = foundFaces.begin(); it != foundFaces.end(); ++it)
+                for (vector<Face>::iterator it = foundFaces.begin() ; it != foundFaces.end() ; ++it)
                 {
                     qCDebug(DIGIKAM_FACESENGINE_LOG) << "Feature face " << it->getX1() << " " << it->getY1() << " " << it->getWidth() << "x" << it->getHeight();
 
@@ -641,11 +641,11 @@ QList<QRect> OpenCVFaceDetector::mergeFaces(const cv::Mat& inputImage, const QLi
 
     QList<QRect>::iterator first, second;
 
-    for (first = results.begin(); first != results.end(); )
+    for (first = results.begin() ; first != results.end() ; )
     {
         int duplicates = 0;
 
-        for (second = first + 1; second != results.end(); )  // Compare with the faces to the right
+        for (second = first + 1 ; second != results.end() ; )  // Compare with the faces to the right
         {
             ctr++;
 
@@ -698,7 +698,7 @@ cv::Mat OpenCVFaceDetector::prepareForDetection(const QImage& inputImage) const
         // Looking for scale factor z where A = w*z * h*z => z = sqrt(A/(w*h))
         qreal z          = qSqrt(qreal(maxAcceptableInputArea) / image.width() / image.height());
         QSize scaledSize = image.size() * z;
-        image            = image.scaled(scaledSize);
+        image            = image.scaled(scaledSize, Qt::KeepAspectRatio);
     }
 
     //TODO: move to common utils, opentldrecognition
@@ -732,7 +732,7 @@ cv::Mat OpenCVFaceDetector::prepareForDetection(const Digikam::DImg& inputImage)
     }
 
     Digikam::DImg image(inputImage);
-    int inputArea                    = image.size().width() * image.height();
+    int inputArea                    = image.width() * image.height();
     const int maxAcceptableInputArea = 1024*768;
 
     if (inputArea > maxAcceptableInputArea)
@@ -741,7 +741,7 @@ cv::Mat OpenCVFaceDetector::prepareForDetection(const Digikam::DImg& inputImage)
         // Looking for scale factor z where A = w*z * h*z => z = sqrt(A/(w*h))
         qreal z          = qSqrt(qreal(maxAcceptableInputArea) / image.width() / image.height());
         QSize scaledSize = image.size() * z;
-        image            = image.smoothScale(scaledSize);
+        image            = image.smoothScale(scaledSize, Qt::KeepAspectRatio);
     }
 
     //TODO: move to common utils, opentldrecognition
@@ -762,11 +762,11 @@ cv::Mat OpenCVFaceDetector::prepareForDetection(const Digikam::DImg& inputImage)
             cvtColor(cvImageWrapper, cvImage, CV_RGB2GRAY);
             break;
     }
-    if(type == CV_16UC4 || type == CV_16UC3)
-    {
-        cvImage.convertTo(cvImage,CV_8UC1,1/255.0);
-    }
 
+    if (type == CV_16UC4 || type == CV_16UC3)
+    {
+        cvImage.convertTo(cvImage, CV_8UC1, 1/255.0);
+    }
 
     equalizeHist(cvImage, cvImage);
     return cvImage;
@@ -787,7 +787,7 @@ QList<QRect> OpenCVFaceDetector::detectFaces(const cv::Mat& inputImage, const cv
     QList<QList<QRect> > primaryResults;
     QList<QRect> results;
 
-    for (int i=0; i<d->cascades.size(); ++i)
+    for (int i = 0 ; i < d->cascades.size() ; ++i)
     {
         if (d->cascades[i].primaryCascade)
         {
@@ -799,7 +799,7 @@ QList<QRect> OpenCVFaceDetector::detectFaces(const cv::Mat& inputImage, const cv
     results = mergeFaces(inputImage, primaryResults);
 
     // Verify faces using other cascades
-    for (QList<QRect>::iterator it = results.begin(); it != results.end(); )
+    for (QList<QRect>::iterator it = results.begin() ; it != results.end() ; )
     {
         if (!verifyFace(inputImage, *it))
             it = results.erase(it);
