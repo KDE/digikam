@@ -23,24 +23,10 @@
 
 #include "facebenchmarkers.h"
 
-// Qt includes
-
-#include <QMetaObject>
-#include <QMutexLocker>
-
-// KDE includes
-
-#include <klocalizedstring.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
-
 // Local includes
 
 #include "digikam_debug.h"
-#include "loadingdescription.h"
-#include "metaenginesettings.h"
 #include "tagscache.h"
-#include "threadmanager.h"
 
 namespace Digikam
 {

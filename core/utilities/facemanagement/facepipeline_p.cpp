@@ -23,28 +23,14 @@
 
 #include "facepipeline_p.h"
 
-// Qt includes
-
-#include <QMetaObject>
-#include <QMutexLocker>
-
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
 
 // Local includes
 
 #include "digikam_debug.h"
-#include "loadingdescription.h"
-#include "metaenginesettings.h"
-#include "tagscache.h"
-#include "threadmanager.h"
-#include "facebenchmarkers.h"
-#include "faceworkers.h"
 #include "facepreviewloader.h"
-#include "faceitemretriever.h"
 #include "parallelpipes.h"
 #include "scanstatefilter.h"
 

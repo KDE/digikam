@@ -24,22 +24,9 @@
 #ifndef DIGIKAM_PARALLEL_PIPES_H
 #define DIGIKAM_PARALLEL_PIPES_H
 
-// Qt includes
-
-#include <QExplicitlySharedDataPointer>
-#include <QMetaMethod>
-#include <QMutex>
-#include <QSharedData>
-#include <QWaitCondition>
-
 // Local includes
 
 #include "facepipeline_p.h"
-#include "facedetector.h"
-#include "faceutils.h"
-#include "previewloadthread.h"
-#include "thumbnailloadthread.h"
-#include "workerobject.h"
 
 namespace Digikam
 {
