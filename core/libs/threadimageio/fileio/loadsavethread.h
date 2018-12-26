@@ -204,7 +204,7 @@ public:
     virtual void imageSaved(const QString& filePath, bool success);
     virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img);
 
-    virtual bool querySendNotifyEvent();
+    virtual bool querySendNotifyEvent() const;
     virtual void taskHasFinished();
 
 protected:

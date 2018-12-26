@@ -192,17 +192,17 @@ public:
      *  Add a loading process to the list. Only one loading process
      *  for the same cache key is registered at a time.
      */
-    void addLoadingProcess(LoadingProcess* process);
+    void addLoadingProcess(LoadingProcess* const process);
 
     /**
      *  Remove loading process for given cache key
      */
-    void removeLoadingProcess(LoadingProcess* process);
+    void removeLoadingProcess(LoadingProcess* const process);
 
     /**
      *  Notify all currently registered loading processes
      */
-    void notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description);
+    void notifyNewLoadingProcess(LoadingProcess* const process, const LoadingDescription& description);
 
     /**
      *  Sets the cache size in megabytes.
@@ -302,7 +302,7 @@ private:
 
 private:
 
-    static LoadingCache*    m_instance;
+    static LoadingCache* m_instance;
 
     class Private;
     Private* const d;

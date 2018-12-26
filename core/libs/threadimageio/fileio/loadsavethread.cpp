@@ -219,7 +219,7 @@ void LoadSaveThread::setNotificationPolicy(NotificationPolicy notificationPolicy
     d->blockNotification = false;
 }
 
-bool LoadSaveThread::querySendNotifyEvent()
+bool LoadSaveThread::querySendNotifyEvent() const
 {
     // This function is called from the thread to ask for permission to send a notify event.
     switch (m_notificationPolicy)
