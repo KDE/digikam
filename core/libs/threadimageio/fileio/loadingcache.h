@@ -46,9 +46,9 @@ class LoadingProcessListener
 public:
 
     virtual ~LoadingProcessListener() {};
-    virtual bool querySendNotifyEvent() = 0;
+    virtual bool querySendNotifyEvent() const = 0;
     virtual void setResult(const LoadingDescription& loadingDescription, const DImg& img) = 0;
-    virtual LoadSaveNotifier* loadSaveNotifier() = 0;
+    virtual LoadSaveNotifier* loadSaveNotifier() const = 0;
     virtual LoadSaveThread::AccessMode accessMode() = 0;
 };
 
@@ -60,8 +60,8 @@ public:
 
     virtual ~LoadingProcess() {};
     virtual bool completed() = 0;
-    virtual QString filePath() = 0;
-    virtual QString cacheKey() = 0;
+    virtual QString filePath() const = 0;
+    virtual QString cacheKey() const = 0;
     virtual void addListener(LoadingProcessListener* const listener) = 0;
     virtual void removeListener(LoadingProcessListener* const listener) = 0;
     virtual void notifyNewLoadingProcess(LoadingProcess* const process, const LoadingDescription& description) = 0;

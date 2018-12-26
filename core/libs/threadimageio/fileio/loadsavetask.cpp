@@ -395,27 +395,27 @@ bool SharedLoadingTask::completed()
     return m_completed;
 }
 
-QString SharedLoadingTask::filePath()
+QString SharedLoadingTask::filePath() const
 {
     return m_loadingDescription.filePath;
 }
 
-QString SharedLoadingTask::cacheKey()
+QString SharedLoadingTask::cacheKey() const
 {
     return m_loadingDescription.cacheKey();
 }
 
-void SharedLoadingTask::addListener(LoadingProcessListener* listener)
+void SharedLoadingTask::addListener(LoadingProcessListener* const listener)
 {
     m_listeners << listener;
 }
 
-void SharedLoadingTask::removeListener(LoadingProcessListener* listener)
+void SharedLoadingTask::removeListener(LoadingProcessListener* const listener)
 {
     m_listeners.removeAll(listener);
 }
 
-void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description)
+void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess* const process, const LoadingDescription& description)
 {
     // Ok, we are notified that another task has been started in another thread.
     // We are of course only interested if the task loads the same file,
@@ -435,12 +435,12 @@ void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess* process, const L
     }
 }
 
-bool SharedLoadingTask::querySendNotifyEvent()
+bool SharedLoadingTask::querySendNotifyEvent() const
 {
     return m_thread && m_thread->querySendNotifyEvent();
 }
 
-LoadSaveNotifier* SharedLoadingTask::loadSaveNotifier()
+LoadSaveNotifier* SharedLoadingTask::loadSaveNotifier() const
 {
     return m_thread;
 }

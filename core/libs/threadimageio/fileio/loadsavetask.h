@@ -154,17 +154,17 @@ public:
     // LoadingProcess
 
     virtual bool completed();
-    virtual QString filePath();
-    virtual QString cacheKey();
-    virtual void addListener(LoadingProcessListener* listener);
-    virtual void removeListener(LoadingProcessListener* listener);
-    virtual void notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description);
+    virtual QString filePath() const;
+    virtual QString cacheKey() const;
+    virtual void addListener(LoadingProcessListener* const listener);
+    virtual void removeListener(LoadingProcessListener* const listener);
+    virtual void notifyNewLoadingProcess(LoadingProcess* const process, const LoadingDescription& description);
 
     // LoadingProcessListener
 
-    virtual bool querySendNotifyEvent();
+    virtual bool querySendNotifyEvent() const;
     virtual void setResult(const LoadingDescription& loadingDescription, const DImg& img);
-    virtual LoadSaveNotifier* loadSaveNotifier();
+    virtual LoadSaveNotifier* loadSaveNotifier() const;
     virtual LoadSaveThread::AccessMode accessMode();
 
     DImg img() { return m_img; }
