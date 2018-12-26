@@ -303,7 +303,7 @@ void PreviewLoadingTask::execute()
 
         if (!m_img.isNull())
         {
-            cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img.copy()),
+            cache->putImage(m_loadingDescription.cacheKey(), m_img,
                             m_loadingDescription.filePath);
         }
 

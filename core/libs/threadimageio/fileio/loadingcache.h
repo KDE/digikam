@@ -160,7 +160,7 @@ public:
     DImg* retrieveImage(const QString& cacheKey) const;
 
     /// Returns whether the given DImg fits in the cache.
-    bool isCacheable(const DImg* img) const;
+    bool isCacheable(const DImg& img) const;
 
     /** Put image into for given string into the cache.
      *  Returns true if image has been put in the cache, false otherwise.
@@ -169,7 +169,7 @@ public:
      *  The third parameter specifies a file path that will be watched.
      *  If this file changes, the object will be removed from the cache.
      */
-    bool putImage(const QString& cacheKey, DImg* img, const QString& filePath) const;
+    bool putImage(const QString& cacheKey, const DImg& img, const QString& filePath) const;
 
     /**
      *  Remove entries for the given cacheKey from the cache

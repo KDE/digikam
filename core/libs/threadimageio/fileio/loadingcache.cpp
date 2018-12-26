@@ -187,13 +187,10 @@ DImg* LoadingCache::retrieveImage(const QString& cacheKey) const
     return d->imageCache[cacheKey];
 }
 
-bool LoadingCache::putImage(const QString& cacheKey, DImg* img, const QString& filePath) const
+bool LoadingCache::putImage(const QString& cacheKey, const DImg& img, const QString& filePath) const
 {
-    bool successfulyInserted;
-
-    int cost = img->numBytes();
-
-    successfulyInserted = d->imageCache.insert(cacheKey, img, cost);
+    int cost                 = img.numBytes();
+    bool successfulyInserted = d->imageCache.insert(cacheKey, new DImg(img.copy()), cost);
 
     if (successfulyInserted && !filePath.isEmpty())
     {
@@ -214,10 +211,10 @@ void LoadingCache::removeImages()
     d->imageCache.clear();
 }
 
-bool LoadingCache::isCacheable(const DImg* img) const
+bool LoadingCache::isCacheable(const DImg& img) const
 {
     // return whether image fits in cache
-    return (uint)d->imageCache.maxCost() >= img->numBytes();
+    return (uint)d->imageCache.maxCost() >= img.numBytes();
 }
 
 void LoadingCache::addLoadingProcess(LoadingProcess* const process)

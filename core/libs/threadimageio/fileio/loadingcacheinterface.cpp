@@ -76,11 +76,9 @@ void LoadingCacheInterface::putImage(const QString& filePath, const DImg& img)
     LoadingCache* cache = LoadingCache::cache();
     LoadingCache::CacheLock lock(cache);
 
-    if (cache->isCacheable(&img))
+    if (cache->isCacheable(img))
     {
-        DImg* copy = new DImg(img);
-        copy->detach();
-        cache->putImage(filePath, copy, filePath);
+        cache->putImage(filePath, img, filePath);
     }
 }
 
