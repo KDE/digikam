@@ -115,15 +115,15 @@ public:
 
         if (file.isEmpty())
         {
-            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Failed to locate cascade " << fileName << " in " << dirs;
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Failed to locate cascade" << fileName << "in" << dirs;
             return;
         }
 
-        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Loading cascade " << file;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Loading cascade" << file;
 
         if (!load(file.toStdString()))
         {
-            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Failed to load cascade " << file;
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Failed to load cascade" << file;
             return;
         }
     }
@@ -442,11 +442,11 @@ QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
     // There can be more than one face in an image. So create a growable sequence of faces.
     // Detect the objects and store them in the sequence
 
-    qCDebug(DIGIKAM_FACESENGINE_LOG) << "detectMultiScale: image size " << inputImage.cols << " " << inputImage.rows
-                                     << " searchIncrement " << params.searchIncrement
-                                     << " grouping " << params.grouping
-                                     << " flags " << params.flags
-                                     << " min size " << params.minSize.width << " " << params.minSize.height << endl;
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "detectMultiScale: image size (" << inputImage.cols << "," << inputImage.rows
+                                     << ") searchIncrement" << params.searchIncrement
+                                     << "grouping" << params.grouping
+                                     << "flags" << params.flags
+                                     << "min size (" << params.minSize.width << "," << params.minSize.height << ")";
 
     std::vector<cv::Rect> faces;
     cascade.detectMultiScale(inputImage, faces,
@@ -463,7 +463,7 @@ QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
         results << toQRect(*it);
     }
 
-    qCDebug(DIGIKAM_FACESENGINE_LOG) << "detectMultiScale gave " << results;
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "detectMultiScale gave" << results;
     return results;
 }
 
@@ -508,7 +508,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
 
     for (int i = 0 ; i < d->cascades.size() ; ++i)
     {
-        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Verifying face " << face << " using cascade " << i;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Verifying face" << face << "using cascade" << i;
 
         if (d->cascades[i].verifyingCascade)
         {
@@ -520,7 +520,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
 
                 cv::Rect roi      = d->cascades[i].faceROI(faceRect);
                 cv::Mat  feature  = inputImage(roi);
-                qCDebug(DIGIKAM_FACESENGINE_LOG) << "feature " << d->cascades[i].roi << toQRect(faceRect) << toQRect(roi);
+                qCDebug(DIGIKAM_FACESENGINE_LOG) << "feature" << d->cascades[i].roi << toQRect(faceRect) << toQRect(roi);
                 foundFaces        = cascadeResult(feature, d->cascades[i], d->verifyingParams);
 
                 if (!foundFaces.isEmpty())
@@ -671,7 +671,7 @@ QList<QRect> OpenCVFaceDetector::mergeFaces(const cv::Mat& inputImage, const QLi
         }
     }
 
-    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Faces parsed: " << ctr << " number of final faces: " << results.size();
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Faces parsed:" << ctr << "number of final faces:" << results.size();
 
     return results;
 }
