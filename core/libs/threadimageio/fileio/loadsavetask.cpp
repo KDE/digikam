@@ -164,7 +164,9 @@ void SharedLoadingTask::execute()
                 m_usedProcess->addListener(this);
 
                 // break loop when either the loading has completed, or this task is being stopped
-                while (m_loadingTaskStatus != LoadingTaskStatusStopping && m_usedProcess && !m_usedProcess->completed())
+                while (m_loadingTaskStatus != LoadingTaskStatusStopping &&
+                       m_usedProcess                                    &&
+                       !m_usedProcess->completed())
                 {
                     lock.timedWait();
                 }
@@ -179,7 +181,6 @@ void SharedLoadingTask::execute()
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
                 m_usedProcess = 0;
-                //qCDebug(DIGIKAM_GENERAL_LOG) << "SharedLoadingTask " << this << ": waited";
                 // m_img is now set to the result
             }
             else
