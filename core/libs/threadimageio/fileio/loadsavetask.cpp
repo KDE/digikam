@@ -391,7 +391,7 @@ void SharedLoadingTask::setStatus(LoadingTaskStatus status)
     }
 }
 
-bool SharedLoadingTask::completed()
+bool SharedLoadingTask::completed() const volatile
 {
     return m_completed;
 }
