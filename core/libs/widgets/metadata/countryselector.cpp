@@ -6,7 +6,7 @@
  * Date        : 2009-07-07
  * Description : country selector combo-box.
  *
- * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -339,7 +339,7 @@ void CountrySelector::setCountry(const QString& countryCode)
 
     int id = count()-1;
 
-    for (int i = 0 ; i < d->countryCodeMap.count() ; i++)
+    for (int i = 0 ; i < d->countryCodeMap.count() ; ++i)
     {
         if (itemText(i).left(3) == countryCode)
         {

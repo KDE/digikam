@@ -24,23 +24,10 @@
 #ifndef DIGIKAM_FACE_WORKERS_H
 #define DIGIKAM_FACE_WORKERS_H
 
-// Qt includes
-
-#include <QExplicitlySharedDataPointer>
-#include <QMetaMethod>
-#include <QMutex>
-#include <QSharedData>
-#include <QWaitCondition>
-
 // Local includes
 
 #include "facepipeline_p.h"
-#include "facedetector.h"
-#include "faceutils.h"
-#include "previewloadthread.h"
-#include "thumbnailloadthread.h"
-#include "workerobject.h"
-#include "faceimageretriever.h"
+#include "faceitemretriever.h"
 
 namespace Digikam
 {
@@ -108,7 +95,7 @@ Q_SIGNALS:
 
 protected:
 
-    FaceImageRetriever           imageRetriever;
+    FaceItemRetriever           imageRetriever;
     RecognitionDatabase          database;
     FacePipeline::Private* const d;
 };
@@ -167,7 +154,7 @@ Q_SIGNALS:
 protected:
 
     RecognitionDatabase          database;
-    FaceImageRetriever           imageRetriever;
+    FaceItemRetriever           imageRetriever;
     FacePipeline::Private* const d;
 };
 

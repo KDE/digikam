@@ -8,7 +8,7 @@
  *               This class do not depend of digiKam database library
  *               to permit to re-use tools on Showfoto.
  *
- * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -267,6 +267,12 @@ QString DItemInfo::aperture() const
 QString DItemInfo::focalLength() const
 {
     QVariant val = parseInfoMap(QLatin1String("focallength"));
+    return !val.isNull() ? val.toString() : QString();
+}
+
+QString DItemInfo::videoCodec() const
+{
+    QVariant val = parseInfoMap(QLatin1String("videocodec"));
     return !val.isNull() ? val.toString() : QString();
 }
 

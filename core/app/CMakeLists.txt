@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2018 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2019 by Gilles Caulier, <caulier dot gilles at gmail dot com>
 # Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
@@ -327,30 +327,29 @@ set(libdigikamgui_SRCS
     filters/filtersidebarwidget.cpp
     filters/tagfilterview.cpp
 
-    items/tooltipfiller.cpp
-    items/digikamimageview.cpp
-    items/digikamimageview_p.cpp
-    items/digikamimagedelegate.cpp
-    items/imagecategorizedview.cpp
-    items/imagecategorydrawer.cpp
-    items/imagedelegate.cpp
-    items/imagethumbnailbar.cpp
-    items/imagethumbnaildelegate.cpp
-    items/imageviewutilities.cpp
-    items/digikamimagefacedelegate.cpp
+    items/delegate/digikamitemdelegate.cpp
+    items/delegate/itemdelegate.cpp
+    items/delegate/itemfacedelegate.cpp
+    items/views/digikamitemview.cpp
+    items/views/digikamitemview_p.cpp
+    items/views/itemcategorizedview.cpp
+    items/thumbbar/itemthumbnailbar.cpp
+    items/thumbbar/itemthumbnaildelegate.cpp
     items/overlays/assignnameoverlay.cpp
     items/overlays/facerejectionoverlay.cpp
     items/overlays/groupindicatoroverlay.cpp
-    items/overlays/imagefsoverlay.cpp
-    items/overlays/imageratingoverlay.cpp
-    items/overlays/imagerotationoverlay.cpp
-    items/overlays/imagecoordinatesoverlay.cpp
-    items/overlays/imageselectionoverlay.cpp
+    items/overlays/itemfullscreenoverlay.cpp
+    items/overlays/itemratingoverlay.cpp
+    items/overlays/itemrotationoverlay.cpp
+    items/overlays/itemcoordinatesoverlay.cpp
+    items/overlays/itemselectionoverlay.cpp
+    items/utils/itemviewutilities.cpp
+    items/utils/tooltipfiller.cpp
+    items/utils/contextmenuhelper.cpp
+    items/utils/groupingviewimplementation.cpp
+    items/utils/itemcategorydrawer.cpp
 
-    utils/contextmenuhelper.cpp
     utils/digikam_debug.cpp
-    utils/componentsinfo.cpp
-    utils/groupingviewimplementation.cpp
 
     views/tableview/tableview.cpp
     views/tableview/tableview_treeview.cpp
@@ -368,16 +367,17 @@ set(libdigikamgui_SRCS
     views/tableview/tableview_columnfactory.cpp
     views/tableview/tableview_selection_model_syncer.cpp
 
-    views/imagepreviewviewitem.cpp
-    views/imagepreviewview.cpp
-    views/welcomepageview.cpp
-    views/leftsidebarwidgets.cpp
-    views/digikamview.cpp
-    views/trashview.cpp
-    views/stackedview.cpp
-    views/sidebarwidget.cpp
-    views/digikammodelcollection.cpp
-    views/slideshowbuilder.cpp
+    views/stack/welcomepageview.cpp
+    views/stack/itemiconview.cpp
+    views/stack/trashview.cpp
+    views/stack/stackedview.cpp
+    views/preview/itempreviewcanvas.cpp
+    views/preview/itempreviewview.cpp
+    views/sidebar/leftsidebarwidgets.cpp
+    views/sidebar/sidebarwidget.cpp
+    views/utils/dmodelfactory.cpp
+    views/utils/slideshowbuilder.cpp
+    views/utils/componentsinfodlg.cpp
 
     ${digikamadaptor_SRCS}
 )
@@ -385,7 +385,7 @@ set(libdigikamgui_SRCS
 if(${Marble_FOUND})
     set(libdigikamgui_SRCS
         ${libdigikamgui_SRCS}
-        views/mapwidgetview.cpp
+        views/stack/mapwidgetview.cpp
        )
 endif()
 

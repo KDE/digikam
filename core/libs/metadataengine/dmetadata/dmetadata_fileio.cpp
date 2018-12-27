@@ -6,7 +6,7 @@
  * Date        : 2006-02-23
  * Description : item metadata interface - file I/O helpers.
  *
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011      by Leif Huhn <leif at dkstat dot com>
  *
@@ -51,6 +51,7 @@ bool DMetadata::load(const QString& filePath)
 {
     FileReadLocker lock(filePath);
 
+    bool hasLoaded = false;
     QMimeDatabase mimeDB;
 
     if (!mimeDB.mimeTypeForFile(filePath).name().startsWith(QLatin1String("video/")) &&
@@ -59,24 +60,19 @@ bool DMetadata::load(const QString& filePath)
     {
         // Non video or audio file, process with Exiv2 backend or libraw if faild with RAW files
         // Never process video file Exiv2, the backend is very unstable.
-        if (!MetaEngine::load(filePath))
+        if (!(hasLoaded = MetaEngine::load(filePath)))
         {
-            if (!loadUsingRawEngine(filePath))
-            {
-                return false;
-            }
+            hasLoaded = loadUsingRawEngine(filePath);
         }
     }
     else
     {
         // No image file, process with ffmpeg backend.
-        if (!loadUsingFFmpeg(filePath))
-        {
-            return false;
-        }
+        hasLoaded  = loadUsingFFmpeg(filePath);
+        hasLoaded |= loadFromSidecarAndMerge(filePath);
     }
 
-    return true;
+    return hasLoaded;
 }
 
 bool DMetadata::save(const QString& filePath, bool setVersion) const

@@ -6,7 +6,7 @@
  * Date        : 1997-04-21
  * Description : A date selection widget.
  *
- * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 1997      by Tim D. Gilman <tdgilman at best dot org>
  * Copyright (C) 1998-2001 by Mirko Boehm <mirko at kde dot org>
  * Copyright (C) 2007      by John Layt <john at layt dot net>
@@ -334,7 +334,7 @@ void DDatePicker::selectMonthClicked()
     // JPL do we need to do something here for months that fall outside valid range?
     const int monthsInYear = QDate(thisDate.year() + 1, 1, 1).addDays(-1).month();
 
-    for (int m = 1; m <= monthsInYear; m++)
+    for (int m = 1 ; m <= monthsInYear ; ++m)
     {
         popup.addAction(locale().standaloneMonthName(m))->setData(m);
     }

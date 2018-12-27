@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2011-2015 by Alexander Potashev <aspotashev at gmail dot com>
  * Copyright (C) 2005-2008 by Vardhman Jain <vardhman at gmail dot com>
- * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Luka Renko <lure at kubuntu dot org>
  * Copyright (C) 2010      by Roman Tsisyk <roman at tsisyk dot com>
  *

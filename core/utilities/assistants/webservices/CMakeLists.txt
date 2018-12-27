@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2018 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2019 by Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -105,15 +105,15 @@ set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/common/wscomboboxdelegate.cp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wslogindialog.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wsstarter.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wssettings.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wsauthentication.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wstalker.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsalbumspage.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsfinalpage.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsimagespage.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsintropage.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wssettingspage.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsauthenticationpage.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wswizard.cpp
+                        #${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wsauthentication.cpp
+                        #${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wstalker.cpp
+                        #${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsalbumspage.cpp
+                        #${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsfinalpage.cpp
+                        #${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsimagespage.cpp
+                        #${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsintropage.cpp
+                        #${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wssettingspage.cpp
+                        #${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsauthenticationpage.cpp
+                        #${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wswizard.cpp
 )
 
 # Flickr tool ----------------------------------------------------------------

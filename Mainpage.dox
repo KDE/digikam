@@ -38,12 +38,20 @@
 |│   │   ├── date                                             | All date relevant views                                                 |
 |│   │   ├── dragdrop                                         | Drag and drop helper classes                                            |
 |│   │   ├── filters                                          | Tags filter widgets                                                     |
-|│   │   ├── items                                            | Icon-view item widgets                                                  |
-|│   │   │   └── overlays                                     | Icon-view item overlays                                                 |
+|│   │   ├── items                                            | Item management classes                                                 |
+|│   │   │   ├── delegate                                     | Item view delegate                                                      |
+|│   │   │   ├── overlays                                     | Item overlays                                                           |
+|│   │   │   ├── thumbbar                                     | Item thumbbar widget                                                    |
+|│   │   │   ├── utils                                        | Item utility classes                                                    |
+|│   │   │   └── views                                        | Item view classes                                                       |
 |│   │   ├── main                                             | Main digiKam application                                                |
 |│   │   ├── utils                                            | Generic utility classes                                                 |
 |│   │   └── views                                            | Views classes                                                           |
-|│   │       └── tableview                                    | Table-view classes                                                      |
+|│   │       ├── preview                                      | Item preview classes                                                    |
+|│   │       ├── sidebar                                      | Left sidebar contents                                                   |
+|│   │       ├── stack                                        | Stacked-view show in central place of main digiKam window               |
+|│   │       ├── tableview                                    | Table-view classes                                                      |
+|│   │       └── utils                                        | View utility classes                                                    |
 |│   ├── cmake                                                | Extra Cmake scripts will be hosted here                                 |
 |│   │   ├── modules                                          | Cmake scripts to find extra dependencies                                |
 |│   │   └── templates                                        | Cmake template files used at configuration time                         |

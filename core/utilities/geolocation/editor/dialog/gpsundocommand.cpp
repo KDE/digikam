@@ -6,7 +6,7 @@
  * Date        : 2010-04-25
  * Description : A class to hold undo/redo commands.
  *
- * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 
 namespace Digikam
 {
@@ -51,7 +51,7 @@ void GPSUndoCommand::changeItemData(const bool redoIt)
     for (int i=0; i<undoList.count(); ++i)
     {
         const UndoInfo& info      = undoList.at(i);
-        GPSImageItem* const item = imageModel->itemFromIndex(info.modelIndex);
+        GPSItemContainer* const item = imageModel->itemFromIndex(info.modelIndex);
 
         // TODO: correctly handle the dirty flags
         // TODO: find a way to regenerate tag tree
@@ -77,13 +77,13 @@ void GPSUndoCommand::addUndoInfo(const UndoInfo& info)
     undoList << info;
 }
 
-void GPSUndoCommand::UndoInfo::readOldDataFromItem(const GPSImageItem* const imageItem)
+void GPSUndoCommand::UndoInfo::readOldDataFromItem(const GPSItemContainer* const imageItem)
 {
     this->dataBefore = imageItem->gpsData();
     this->oldTagList = imageItem->getTagList();
 }
 
-void GPSUndoCommand::UndoInfo::readNewDataFromItem(const GPSImageItem* const imageItem)
+void GPSUndoCommand::UndoInfo::readNewDataFromItem(const GPSItemContainer* const imageItem)
 {
     this->dataAfter  = imageItem->gpsData();
     this->newTagList = imageItem->getTagList();

@@ -12,7 +12,7 @@
  *               http://community.kde.org/Digikam/SoK2012/AutoNR
  *
  * Copyright (C) 2012-2013 by Sayantan Datta <sayantan dot knz at gmail dot com>
- * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -189,7 +189,7 @@ void NREstimate::startAnalyse()
 /*
     qCDebug(DIGIKAM_DIMG_LOG) << "Lets see what the rowPosition array looks like : ";
 
-    for (uint i = 0 ; runningFlag() && (i < d->clusterCount) ; i++)
+    for (uint i = 0 ; runningFlag() && (i < d->clusterCount) ; ++i)
     {
         qCDebug(DIGIKAM_DIMG_LOG) << "Cluster : "<< i << " the count is :" << rowPosition[i];
     }

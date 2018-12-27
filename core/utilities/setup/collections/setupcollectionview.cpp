@@ -7,7 +7,7 @@
  * Description : collections setup tab model/view
  *
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2012 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -80,20 +80,26 @@ SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView* const view, 
             this, SIGNAL(sizeHintChanged(QModelIndex)));
 
     // For size hint. To get a valid size hint, the widgets seem to need a parent widget
-    m_samplePushButton = new QPushButton(view);
+    m_samplePushButton   = new QPushButton(view);
     m_samplePushButton->hide();
-    m_sampleToolButton = new QToolButton(view);
-    m_sampleToolButton->hide();
+    m_sampleUpdateButton = new QToolButton(view);
+    m_sampleUpdateButton->hide();
+    m_sampleDeleteButton = new QToolButton(view);
+    m_sampleDeleteButton->hide();
 
     // Implement mapping of signals. Every button gets a mapping ID from the model
     m_categoryButtonMapper = new QSignalMapper(this);
-    m_buttonMapper         = new QSignalMapper(this);
+    m_updateMapper         = new QSignalMapper(this);
+    m_deleteMapper         = new QSignalMapper(this);
 
     connect(m_categoryButtonMapper, SIGNAL(mapped(int)),
             this, SIGNAL(categoryButtonPressed(int)));
 
-    connect(m_buttonMapper, SIGNAL(mapped(int)),
-            this, SIGNAL(buttonPressed(int)));
+    connect(m_updateMapper, SIGNAL(mapped(int)),
+            this, SIGNAL(updatePressed(int)));
+
+    connect(m_deleteMapper, SIGNAL(mapped(int)),
+            this, SIGNAL(deletePressed(int)));
 }
 
 SetupCollectionDelegate::~SetupCollectionDelegate()
@@ -102,7 +108,7 @@ SetupCollectionDelegate::~SetupCollectionDelegate()
 
 QList<QWidget*> SetupCollectionDelegate::createItemWidgets(const QModelIndex& /*index*/) const
 {
-    // We only need a push button for certain indexes and a tool button for others,
+    // We only need a push button for certain indexes and two tool button for others,
     // but we have no index here, but need to provide the widgets for each index
 
     QList<QWidget*> list;
@@ -112,12 +118,19 @@ QList<QWidget*> SetupCollectionDelegate::createItemWidgets(const QModelIndex& /*
     connect(pushButton, SIGNAL(clicked()),
             m_categoryButtonMapper, SLOT(map()));
 
-    QToolButton* const toolButton = new QToolButton();
-    toolButton->setAutoRaise(true);
-    list << toolButton;
+    QToolButton* const updateButton = new QToolButton();
+    updateButton->setAutoRaise(true);
+    list << updateButton;
 
-    connect(toolButton, SIGNAL(clicked()),
-            m_buttonMapper, SLOT(map()));
+    connect(updateButton, SIGNAL(clicked()),
+            m_updateMapper, SLOT(map()));
+
+    QToolButton* const deleteButton = new QToolButton();
+    deleteButton->setAutoRaise(true);
+    list << deleteButton;
+
+    connect(deleteButton, SIGNAL(clicked()),
+            m_deleteMapper, SLOT(map()));
 
     return list;
 }
@@ -133,7 +146,7 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
         // get the largest size hint for the icon/text of all category entries
         int maxStyledWidth = 0;
 
-        foreach(const QModelIndex& catIndex, static_cast<const SetupCollectionModel*>(index.model())->categoryIndexes())
+        foreach (const QModelIndex& catIndex, static_cast<const SetupCollectionModel*>(index.model())->categoryIndexes())
         {
             maxStyledWidth = qMax(maxStyledWidth, m_styledDelegate->sizeHint(option, catIndex).width());
         }
@@ -148,12 +161,23 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
         hint.setWidth(m_categoryMaxStyledWidth + widgetHint.width());
         hint.setHeight(qMax(hint.height(), widgetHint.height()));
     }
-    else if (index.data(SetupCollectionModel::IsButtonRole).toBool())
+    else if (index.data(SetupCollectionModel::IsUpdateRole).toBool())
     {
         // set real pixmap on sample button to compute correct size hint
-        QIcon pix      = index.data(SetupCollectionModel::ButtonDecorationRole).value<QIcon>();
-        m_sampleToolButton->setIcon(index.data(SetupCollectionModel::ButtonDecorationRole).value<QIcon>());
-        QSize widgetHint = m_sampleToolButton->sizeHint();
+        QIcon pix      = index.data(SetupCollectionModel::UpdateDecorationRole).value<QIcon>();
+        m_sampleUpdateButton->setIcon(index.data(SetupCollectionModel::UpdateDecorationRole).value<QIcon>());
+        QSize widgetHint = m_sampleUpdateButton->sizeHint();
+
+        // combine hints
+        hint.setWidth(hint.width() + widgetHint.width());
+        hint.setHeight(qMax(hint.height(), widgetHint.height()));
+    }
+    else if (index.data(SetupCollectionModel::IsDeleteRole).toBool())
+    {
+        // set real pixmap on sample button to compute correct size hint
+        QIcon pix      = index.data(SetupCollectionModel::DeleteDecorationRole).value<QIcon>();
+        m_sampleDeleteButton->setIcon(index.data(SetupCollectionModel::DeleteDecorationRole).value<QIcon>());
+        QSize widgetHint = m_sampleDeleteButton->sizeHint();
 
         // combine hints
         hint.setWidth(hint.width() + widgetHint.width());
@@ -166,8 +190,9 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
 void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
                                                 const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const
 {
-    QPushButton* const pushButton = static_cast<QPushButton*>(widgets.at(0));
-    QToolButton* const toolButton = static_cast<QToolButton*>(widgets.at(1));
+    QPushButton* const pushButton  = static_cast<QPushButton*>(widgets.at(0));
+    QToolButton* const updateButton = static_cast<QToolButton*>(widgets.at(1));
+    QToolButton* const deleteButton = static_cast<QToolButton*>(widgets.at(2));
 
     if (index.data(SetupCollectionModel::IsCategoryRole).toBool())
     {
@@ -178,29 +203,43 @@ void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
         // move to position in line. We have cached the icon/text size hint from sizeHint()
         pushButton->move(m_categoryMaxStyledWidth, (option.rect.height() - pushButton->height()) / 2);
         pushButton->show();
-        toolButton->hide();
+        updateButton->hide();
+        deleteButton->hide();
 
         pushButton->setEnabled(itemView()->isEnabled());
 
         // get the mapping id from model. The signal mapper will associate the id with the signal from this button.
         m_categoryButtonMapper->setMapping(pushButton, index.data(SetupCollectionModel::CategoryButtonMapId).toInt());
     }
-    else if (index.data(SetupCollectionModel::IsButtonRole).toBool())
+    else if (index.data(SetupCollectionModel::IsUpdateRole).toBool())
     {
-        toolButton->setIcon(index.data(SetupCollectionModel::ButtonDecorationRole).value<QIcon>());
-        toolButton->resize(toolButton->sizeHint());
-        toolButton->move(0, (option.rect.height() - toolButton->height()) / 2);
-        toolButton->show();
+        updateButton->setIcon(index.data(SetupCollectionModel::UpdateDecorationRole).value<QIcon>());
+        updateButton->resize(updateButton->sizeHint());
+        updateButton->move(0, (option.rect.height() - updateButton->height()) / 2);
+        updateButton->show();
         pushButton->hide();
 
-        toolButton->setEnabled(itemView()->isEnabled());
+        updateButton->setEnabled(itemView()->isEnabled());
 
-        m_buttonMapper->setMapping(toolButton, index.data(SetupCollectionModel::ButtonMapId).toInt());
+        m_updateMapper->setMapping(updateButton, index.data(SetupCollectionModel::UpdateMapId).toInt());
+    }
+    else if (index.data(SetupCollectionModel::IsDeleteRole).toBool())
+    {
+        deleteButton->setIcon(index.data(SetupCollectionModel::DeleteDecorationRole).value<QIcon>());
+        deleteButton->resize(deleteButton->sizeHint());
+        deleteButton->move(0, (option.rect.height() - deleteButton->height()) / 2);
+        deleteButton->show();
+        pushButton->hide();
+
+        deleteButton->setEnabled(itemView()->isEnabled());
+
+        m_deleteMapper->setMapping(deleteButton, index.data(SetupCollectionModel::DeleteMapId).toInt());
     }
     else
     {
         pushButton->hide();
-        toolButton->hide();
+        updateButton->hide();
+        deleteButton->hide();
     }
 }
 
@@ -263,8 +302,11 @@ void SetupCollectionTreeView::setModel(SetupCollectionModel* collectionModel)
     connect(static_cast<SetupCollectionDelegate*>(itemDelegate()), SIGNAL(categoryButtonPressed(int)),
             collectionModel, SLOT(slotCategoryButtonPressed(int)));
 
-    connect(static_cast<SetupCollectionDelegate*>(itemDelegate()), SIGNAL(buttonPressed(int)),
-            collectionModel, SLOT(slotButtonPressed(int)));
+    connect(static_cast<SetupCollectionDelegate*>(itemDelegate()), SIGNAL(updatePressed(int)),
+            collectionModel, SLOT(slotUpdatePressed(int)));
+
+    connect(static_cast<SetupCollectionDelegate*>(itemDelegate()), SIGNAL(deletePressed(int)),
+            collectionModel, SLOT(slotDeletePressed(int)));
 
     // give model a widget to use as parent for message boxes
     collectionModel->setParentWidgetForDialogs(this);
@@ -275,7 +317,7 @@ void SetupCollectionTreeView::setModel(SetupCollectionModel* collectionModel)
 void SetupCollectionTreeView::modelLoadedCollections()
 {
     // make category entries span the whole line
-    for (int i = 0; i < model()->rowCount(QModelIndex()); ++i)
+    for (int i = 0 ; i < model()->rowCount(QModelIndex()) ; ++i)
     {
         setFirstColumnSpanned(i, QModelIndex(), true);
     }
@@ -289,6 +331,8 @@ void SetupCollectionTreeView::modelLoadedCollections()
 
     // Resize last column, so that delete button is always rightbound
     header()->setStretchLastSection(false); // defaults to true
+    header()->setSectionResizeMode(SetupCollectionModel::ColumnUpdateButton, QHeaderView::Fixed);
+    resizeColumnToContents(SetupCollectionModel::ColumnUpdateButton);
     header()->setSectionResizeMode(SetupCollectionModel::ColumnDeleteButton, QHeaderView::Fixed);
     resizeColumnToContents(SetupCollectionModel::ColumnDeleteButton);
 
@@ -307,12 +351,14 @@ void SetupCollectionTreeView::modelLoadedCollections()
 
 SetupCollectionModel::Item::Item()
     : parentId(INTERNALID),
+      updated(false),
       deleted(false)
 {
 }
 
 SetupCollectionModel::Item::Item(const CollectionLocation& location)
     : location(location),
+      updated(false),
       deleted(false)
 {
     parentId = SetupCollectionModel::typeToCategory(location.type());
@@ -322,6 +368,7 @@ SetupCollectionModel::Item::Item(const QString& path, const QString& label, Setu
     : label(label),
       path(path),
       parentId(category),
+      updated(false),
       deleted(false)
 {
 }
@@ -368,9 +415,9 @@ void SetupCollectionModel::loadCollections()
 
 void SetupCollectionModel::apply()
 {
-    QList<int> newItems, deletedItems, renamedItems;
+    QList<int> newItems, deletedItems, updatedItems, renamedItems;
 
-    for (int i = 0; i < m_collections.count(); ++i)
+    for (int i = 0 ; i < m_collections.count() ; ++i)
     {
         const Item& item = m_collections.at(i);
 
@@ -386,8 +433,12 @@ void SetupCollectionModel::apply()
         }
         else if (!item.deleted && !item.location.isNull())
         {
-            // if item has a valid location, is not deleted, and has changed its label
-            if (!item.label.isNull() && item.label != item.location.label())
+            // if item has a valid location, is updated or has changed its label
+            if (item.updated)
+            {
+                updatedItems << i;
+            }
+            else if (!item.label.isNull() && item.label != item.location.label())
             {
                 renamedItems << i;
             }
@@ -431,6 +482,26 @@ void SetupCollectionModel::apply()
         }
     }
 
+    // Update collections
+    foreach (int i, updatedItems)
+    {
+        Item& item = m_collections[i];
+        CollectionLocation location;
+
+        location = CollectionManager::instance()->updateLocation(item.location, QUrl::fromLocalFile(item.path), item.label);
+
+        if (location.isNull())
+        {
+            failedItems << item;
+        }
+        else
+        {
+            item.location = location;
+            item.path.clear();
+            item.label.clear();
+        }
+    }
+
     // Rename collections
     foreach (int i, renamedItems)
     {
@@ -457,7 +528,7 @@ void SetupCollectionModel::apply()
     }
 
     // Trigger collection scan
-    if (!newItems.isEmpty() || !deletedItems.isEmpty())
+    if (!newItems.isEmpty() || !updatedItems.isEmpty() || !deletedItems.isEmpty())
     {
         NewItemsFinder* const tool = new NewItemsFinder();
         tool->start();
@@ -474,7 +545,12 @@ void SetupCollectionModel::slotCategoryButtonPressed(int mappedId)
     addCollection(mappedId);
 }
 
-void SetupCollectionModel::slotButtonPressed(int mappedId)
+void SetupCollectionModel::slotUpdatePressed(int mappedId)
+{
+    updateCollection(mappedId);
+}
+
+void SetupCollectionModel::slotDeletePressed(int mappedId)
 {
     deleteCollection(mappedId);
 }
@@ -486,156 +562,14 @@ void SetupCollectionModel::addCollection(int category)
         return;
     }
 
-    QString picturesPath;
+    QString path;
+    QString label;
 
-    if (m_collections.count() > 0)
-    {
-        const Item& item = m_collections[0];
-        picturesPath     = item.path;
-    }
-    else
-    {
-        picturesPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
-    }
-
-    QUrl curl = DFileDialog::getExistingDirectoryUrl(m_dialogParentWidget,
-                                                     i18n("Choose the folder containing your collection"),
-                                                     QUrl::fromLocalFile(picturesPath));
-
-    if (curl.isEmpty())
-    {
-        return;
-    }
-
-    // Check path: First check with manager
-    QString messageFromManager, deviceIcon;
-    QList<CollectionLocation> assumeDeleted;
-
-    foreach(const Item& item, m_collections)
-    {
-        if (item.deleted && !item.location.isNull())
-        {
-            assumeDeleted << item.location;
-        }
-    }
-
-    CollectionManager::LocationCheckResult result;
-
-    if (category == CategoryRemote)
-        result = CollectionManager::instance()->checkNetworkLocation(curl, assumeDeleted,
-                                                                     &messageFromManager, &deviceIcon);
-    else
-        result = CollectionManager::instance()->checkLocation(curl, assumeDeleted,
-                                                              &messageFromManager, &deviceIcon);
-
-    QString path = QDir::fromNativeSeparators(curl.toDisplayString(QUrl::PreferLocalFile ));
-
-    // If there are other added collections then CollectionManager does not know about them. Check here.
-    foreach (const Item& item, m_collections)
-    {
-        if (!item.deleted && item.location.isNull())
-        {
-            if (!item.path.isEmpty() && path.startsWith(item.path))
-            {
-                if (path == item.path || path.startsWith(item.path + QLatin1Char('/')))
-                {
-                    messageFromManager = i18n("You have previously added a collection "
-                                              "that contains the path \"%1\".", QDir::toNativeSeparators(path));
-                    result = CollectionManager::LocationNotAllowed;
-                    break;
-                }
-            }
-        }
-    }
-
-    // If check failed, display sorry message
-    QString iconName;
-
-    switch (result)
-    {
-        case CollectionManager::LocationAllRight:
-            iconName = QLatin1String("dialog-ok-apply");
-            break;
-
-        case CollectionManager::LocationHasProblems:
-            iconName = QLatin1String("dialog-information");
-            break;
-
-        case CollectionManager::LocationNotAllowed:
-        case CollectionManager::LocationInvalidCheck:
-            QMessageBox::warning(m_dialogParentWidget, i18n("Problem Adding Collection"), messageFromManager);
-            // fail
-            return;
-    }
-
-    // Create a dialog that displays volume information and allows to change the name of the collection
-    QDialog* const dialog = new QDialog(m_dialogParentWidget);
-    dialog->setWindowTitle(i18n("Adding Collection"));
-
-    QWidget* const mainWidget = new QWidget(dialog);
-    QLabel* const nameLabel   = new QLabel;
-    nameLabel->setText(i18n("Your new collection will be created with this name:"));
-    nameLabel->setWordWrap(true);
-
-    // lineedit for collection name
-    QLineEdit* const nameEdit = new QLineEdit;
-    nameEdit->setClearButtonEnabled(true);
-    nameLabel->setBuddy(nameEdit);
-
-    // label for the icon showing the type of storage (hard disk, CD, USB drive)
-    QLabel* const deviceIconLabel = new QLabel;
-    deviceIconLabel->setPixmap(QIcon::fromTheme(deviceIcon).pixmap(64));
-
-    QGroupBox* const infoBox = new QGroupBox;
-    //infoBox->setTitle(i18n("More Information"));
-
-    // label either signalling everything is all right, or raising awareness to some problems
-    // (like handling of CD identified by a label)
-    QLabel* const iconLabel = new QLabel;
-    iconLabel->setPixmap(QIcon::fromTheme(iconName).pixmap(48));
-    QLabel* const infoLabel = new QLabel;
-    infoLabel->setText(messageFromManager);
-    infoLabel->setWordWrap(true);
-
-    QHBoxLayout* const hbox1 = new QHBoxLayout;
-    hbox1->addWidget(iconLabel);
-    hbox1->addWidget(infoLabel);
-    infoBox->setLayout(hbox1);
-
-    QGridLayout* const grid1 = new QGridLayout;
-    grid1->addWidget(deviceIconLabel, 0, 0, 3, 1);
-    grid1->addWidget(nameLabel,       0, 1);
-    grid1->addWidget(nameEdit,        1, 1);
-    grid1->addWidget(infoBox,         2, 1);
-    mainWidget->setLayout(grid1);
-
-    QVBoxLayout* const vbx          = new QVBoxLayout(dialog);
-    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, dialog);
-    vbx->addWidget(mainWidget);
-    vbx->addWidget(buttons);
-    dialog->setLayout(vbx);
-
-    connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
-            dialog, SLOT(accept()));
-
-    connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
-            dialog, SLOT(reject()));
-
-    // default to directory name as collection name
-    QDir dir(path);
-    nameEdit->setText(dir.dirName());
-
-    if (dialog->exec() == QDialog::Accepted)
+    if (askForNewCollectionPath(category, &path, &label))
     {
         // Add new item to model. Adding to CollectionManager is done in apply()!
         QModelIndex parent = indexForCategory((Category)category);
         int row            = rowCount(parent);
-        QString label      = nameEdit->text();
-
-        if (label.isEmpty())
-        {
-            label.clear();
-        }
 
         beginInsertRows(parent, row, row);
         m_collections << Item(path, label, (Category)category);
@@ -666,6 +600,31 @@ void SetupCollectionModel::emitDataChangedForChildren(const QModelIndex& parent)
     }
 }
 */
+
+void SetupCollectionModel::updateCollection(int internalId)
+{
+    QModelIndex index = indexForId(internalId, (int)ColumnStatus);
+
+    if (!index.isValid() || internalId >= m_collections.count())
+    {
+        return;
+    }
+
+    Item& item = m_collections[index.internalId()];
+
+    QString path;
+    QString label;
+
+    if (askForNewCollectionPath(item.parentId, &path, &label))
+    {
+        item.label   = label;
+        item.path    = path;
+        item.updated = true;
+
+        // only workaround for bug 182753
+        emit layoutChanged();
+    }
+}
 
 void SetupCollectionModel::deleteCollection(int internalId)
 {
@@ -802,6 +761,11 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
 
                 if (role == Qt::DecorationRole)
                 {
+                    if (item.updated)
+                    {
+                        return QIcon::fromTheme(QLatin1String("view-refresh"));
+                    }
+
                     if (item.deleted)
                     {
                         return QIcon::fromTheme(QLatin1String("edit-delete"));
@@ -834,6 +798,8 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                                     return QIcon::fromTheme(QLatin1String("network-wired-activated")).pixmap(16, QIcon::Disabled);
                             }
 
+                            break;
+
                         case CollectionLocation::LocationNull:
                         case CollectionLocation::LocationDeleted:
                             return QIcon::fromTheme(QLatin1String("edit-delete"));
@@ -859,6 +825,25 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
 
                 break;
 
+            case ColumnUpdateButton:
+
+                switch (role)
+                {
+                    case Qt::ToolTipRole:
+                        return i18n("Update collection");
+
+                    case IsUpdateRole:
+                        return true;
+
+                    case UpdateDecorationRole:
+                        return QIcon::fromTheme(QLatin1String("view-refresh"));
+
+                    case UpdateMapId:
+                        return buttonMapId(index);
+                }
+
+                break;
+
             case ColumnDeleteButton:
 
                 switch (role)
@@ -866,13 +851,13 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                     case Qt::ToolTipRole:
                         return i18n("Remove collection");
 
-                    case IsButtonRole:
+                    case IsDeleteRole:
                         return true;
 
-                    case ButtonDecorationRole:
+                    case DeleteDecorationRole:
                         return QIcon::fromTheme(QLatin1String("edit-delete"));
 
-                    case ButtonMapId:
+                    case DeleteMapId:
                         return buttonMapId(index);
                 }
 
@@ -897,6 +882,9 @@ QVariant SetupCollectionModel::headerData(int section, Qt::Orientation orientati
 
             case ColumnStatus:
                 return i18n("Status");
+
+            case ColumnUpdateButton:
+                break;
 
             case ColumnDeleteButton:
                 break;
@@ -940,7 +928,7 @@ int SetupCollectionModel::rowCount(const QModelIndex& parent) const
 
 int SetupCollectionModel::columnCount(const QModelIndex& /*parent*/) const
 {
-    return 4;
+    return 5;
 }
 
 Qt::ItemFlags SetupCollectionModel::flags(const QModelIndex& index) const
@@ -989,7 +977,7 @@ QModelIndex SetupCollectionModel::index(int row, int column, const QModelIndex& 
             return createIndex(row, 0, INTERNALID);
         }
     }
-    else if (row >= 0 && column < 4)
+    else if (row >= 0 && column < 5)
     {
         // m_collections is a flat list with all entries, of all categories and also deleted entries.
         // The model indices contain as internal id the index to this list.
@@ -1086,6 +1074,149 @@ SetupCollectionModel::Category SetupCollectionModel::typeToCategory(CollectionLo
         case CollectionLocation::TypeNetwork:
             return CategoryRemote;
     }
+}
+
+bool SetupCollectionModel::askForNewCollectionPath(int category, QString* const newPath, QString* const newLabel)
+{
+    QString picPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
+    QUrl curl       = DFileDialog::getExistingDirectoryUrl(m_dialogParentWidget,
+                                                          i18n("Choose the folder containing your collection"),
+                                                          QUrl::fromLocalFile(picPath));
+
+    if (curl.isEmpty())
+    {
+        return false;
+    }
+
+    // Check path: First check with manager
+    QString messageFromManager, deviceIcon;
+    QList<CollectionLocation> assumeDeleted;
+
+    foreach (const Item& item, m_collections)
+    {
+        if (item.deleted && !item.location.isNull())
+        {
+            assumeDeleted << item.location;
+        }
+    }
+
+    CollectionManager::LocationCheckResult result;
+
+    if (category == CategoryRemote)
+        result = CollectionManager::instance()->checkNetworkLocation(curl, assumeDeleted,
+                                                                     &messageFromManager, &deviceIcon);
+    else
+        result = CollectionManager::instance()->checkLocation(curl, assumeDeleted,
+                                                              &messageFromManager, &deviceIcon);
+
+    QString path = QDir::fromNativeSeparators(curl.toDisplayString(QUrl::PreferLocalFile ));
+
+    // If there are other added collections then CollectionManager does not know about them. Check here.
+    foreach (const Item& item, m_collections)
+    {
+        if (!item.deleted && item.location.isNull())
+        {
+            if (!item.path.isEmpty() && path.startsWith(item.path))
+            {
+                if (path == item.path || path.startsWith(item.path + QLatin1Char('/')))
+                {
+                    messageFromManager = i18n("You have previously added a collection "
+                                              "that contains the path \"%1\".", QDir::toNativeSeparators(path));
+                    result = CollectionManager::LocationNotAllowed;
+                    break;
+                }
+            }
+        }
+    }
+
+    // If check failed, display sorry message
+    QString iconName;
+
+    switch (result)
+    {
+        case CollectionManager::LocationAllRight:
+            iconName = QLatin1String("dialog-ok-apply");
+            break;
+
+        case CollectionManager::LocationHasProblems:
+            iconName = QLatin1String("dialog-information");
+            break;
+
+        case CollectionManager::LocationNotAllowed:
+        case CollectionManager::LocationInvalidCheck:
+            QMessageBox::warning(m_dialogParentWidget, i18n("Problem Adding Collection"), messageFromManager);
+            // fail
+            return false;
+    }
+
+    // Create a dialog that displays volume information and allows to change the name of the collection
+    QDialog* const dialog = new QDialog(m_dialogParentWidget);
+    dialog->setWindowTitle(i18n("Adding Collection"));
+
+    QWidget* const mainWidget = new QWidget(dialog);
+    QLabel* const nameLabel   = new QLabel;
+    nameLabel->setText(i18n("Your new collection will be created with this name:"));
+    nameLabel->setWordWrap(true);
+
+    // lineedit for collection name
+    QLineEdit* const nameEdit = new QLineEdit;
+    nameEdit->setClearButtonEnabled(true);
+    nameLabel->setBuddy(nameEdit);
+
+    // label for the icon showing the type of storage (hard disk, CD, USB drive)
+    QLabel* const deviceIconLabel = new QLabel;
+    deviceIconLabel->setPixmap(QIcon::fromTheme(deviceIcon).pixmap(64));
+
+    QGroupBox* const infoBox = new QGroupBox;
+    //infoBox->setTitle(i18n("More Information"));
+
+    // label either signalling everything is all right, or raising awareness to some problems
+    // (like handling of CD identified by a label)
+    QLabel* const iconLabel = new QLabel;
+    iconLabel->setPixmap(QIcon::fromTheme(iconName).pixmap(48));
+    QLabel* const infoLabel = new QLabel;
+    infoLabel->setText(messageFromManager);
+    infoLabel->setWordWrap(true);
+
+    QHBoxLayout* const hbox1 = new QHBoxLayout;
+    hbox1->addWidget(iconLabel);
+    hbox1->addWidget(infoLabel);
+    infoBox->setLayout(hbox1);
+
+    QGridLayout* const grid1 = new QGridLayout;
+    grid1->addWidget(deviceIconLabel, 0, 0, 3, 1);
+    grid1->addWidget(nameLabel,       0, 1);
+    grid1->addWidget(nameEdit,        1, 1);
+    grid1->addWidget(infoBox,         2, 1);
+    mainWidget->setLayout(grid1);
+
+    QVBoxLayout* const vbx          = new QVBoxLayout(dialog);
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, dialog);
+    vbx->addWidget(mainWidget);
+    vbx->addWidget(buttons);
+    dialog->setLayout(vbx);
+
+    connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            dialog, SLOT(accept()));
+
+    connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            dialog, SLOT(reject()));
+
+    // default to directory name as collection name
+    QDir dir(path);
+    nameEdit->setText(dir.dirName());
+
+    if (dialog->exec() == QDialog::Accepted)
+    {
+        if (newPath && newLabel)
+        {
+            *newLabel = nameEdit->text();
+            *newPath  = path;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 int SetupCollectionModel::categoryButtonMapId(const QModelIndex& index) const

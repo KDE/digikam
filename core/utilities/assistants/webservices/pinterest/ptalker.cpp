@@ -112,6 +112,7 @@ public:
     QString                redirectUrl;
     QString                accessToken;
     QString                scope;
+    QString                userName;
     QString                serviceName;
     QString                serviceKey;
 
@@ -129,8 +130,6 @@ public:
     QMap<QString, QString> urlParametersMap;
 
     WebWidget*             view;
-
-    QString                userName;
 };
 
 PTalker::PTalker(QWidget* const parent)
@@ -155,6 +154,12 @@ PTalker::PTalker(QWidget* const parent)
 
     connect(this, SIGNAL(pinterestLinkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
+
+    connect(d->view, SIGNAL(urlChanged(QUrl)),
+            this, SLOT(slotCatchUrl(QUrl)));
+
+    connect(d->view, SIGNAL(closeView(bool)),
+            this, SIGNAL(signalBusy(bool)));
 }
 
 PTalker::~PTalker()
@@ -184,11 +189,6 @@ void PTalker::link()
     d->view->setWindowFlags(Qt::Dialog);
     d->view->load(url);
     d->view->show();
-
-    connect(d->view, SIGNAL(urlChanged(QUrl)),
-            this, SLOT(slotCatchUrl(QUrl)));
-    connect(d->view, SIGNAL(closeView(bool)),
-            this, SIGNAL(signalBusy(bool)));
 }
 
 void PTalker::unLink()
@@ -388,7 +388,7 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
 
     QUrl url(QString::fromLatin1("https://api.pinterest.com/v1/pins/?access_token=%1").arg(d->accessToken));
 
-    QHttpMultiPart* const multiPart = new QHttpMultiPart (QHttpMultiPart::FormDataType);
+    QHttpMultiPart* const multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
     ///Board Section
     QHttpPart board;
     QString boardHeader = QString("form-data; name=\"board\"") ;
@@ -529,11 +529,10 @@ void PTalker::parseResponseUserName(const QByteArray& data)
 {
     QJsonDocument doc      = QJsonDocument::fromJson(data);
     QJsonObject jsonObject = doc.object()[QLatin1String("data")].toObject();
-    QString name           = jsonObject[QLatin1String("username")].toString();
+    d->userName            = jsonObject[QLatin1String("username")].toString();
 
     emit signalBusy(false);
-    d->userName = name;
-    emit signalSetUserName(name);
+    emit signalSetUserName(d->userName);
 }
 
 void PTalker::parseResponseListBoards(const QByteArray& data)

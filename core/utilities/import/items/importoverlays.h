@@ -7,7 +7,7 @@
  * Description : Overlays for the import interface
  *
  * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
- * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -207,12 +207,12 @@ public:
     explicit ImportRotateOverlay(ImportRotateOverlayDirection dir, QObject* const parent);
     virtual void setActive(bool active);
 
-    ImportRotateOverlayDirection direction() const     { return m_direction;                                               }
-    bool isLeft() const                                { return m_direction  == ImportRotateOverlayLeft;                   }
-    bool isRight() const                               { return m_direction == ImportRotateOverlayRight;                   }
+    ImportRotateOverlayDirection direction() const { return m_direction; }
+    bool isLeft() const                            { return m_direction  == ImportRotateOverlayLeft; }
+    bool isRight() const                           { return m_direction == ImportRotateOverlayRight; }
 
-    static ImportRotateOverlay* left(QObject* parent)  { return new ImportRotateOverlay(ImportRotateOverlayLeft, parent);  }
-    static ImportRotateOverlay* right(QObject* parent) { return new ImportRotateOverlay(ImportRotateOverlayRight, parent); }
+    static ImportRotateOverlay* left(QObject* const parent)  { return new ImportRotateOverlay(ImportRotateOverlayLeft, parent);  }
+    static ImportRotateOverlay* right(QObject* const parent) { return new ImportRotateOverlay(ImportRotateOverlayRight, parent); }
 
 Q_SIGNALS:
 

@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : setup Misc tab.
  *
- * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2008 by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C)      2014 by Mohamed_Anwer <m_dot_anwer at gmx dot com>
  *
@@ -188,7 +188,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     QStringList styleList     = QStyleFactory::keys();
 
-    for (int i = 0 ; i < styleList.count() ; i++)
+    for (int i = 0 ; i < styleList.count() ; ++i)
     {
         d->applicationStyle->addItem(styleList.at(i));
     }

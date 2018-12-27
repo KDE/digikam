@@ -7,7 +7,7 @@
  * Description : Exiv2 library interface.
  *               File I/O methods
  *
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -139,7 +139,25 @@ bool MetaEngine::load(const QString& filePath)
         qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
+    hasLoaded |= loadFromSidecarAndMerge(filePath);
+
+    return hasLoaded;
+}
+
+bool MetaEngine::loadFromSidecarAndMerge(const QString& filePath)
+{
+    if (filePath.isEmpty())
+    {
+        return false;
+    }
+
+    d->filePath    = filePath;
+    bool hasLoaded = false;
+
 #ifdef _XMP_SUPPORT_
+
+    QMutexLocker lock(&s_metaEngineMutex);
+
     try
     {
         if (d->useXMPSidecar4Reading)

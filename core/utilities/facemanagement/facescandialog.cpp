@@ -7,7 +7,7 @@
  * Description : Dialog to choose options for face scanning
  *
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -124,7 +124,13 @@ FaceScanDialog::FaceScanDialog(QWidget* const parent)
       StateSavingObject(this),
       d(new Private)
 {
+    setWindowFlags((windowFlags() & ~Qt::Dialog) |
+                   Qt::Window                    |
+                   Qt::WindowCloseButtonHint     |
+                   Qt::WindowMinMaxButtonsHint);
+
     setWindowTitle(i18nc("@title:window", "Scanning faces"));
+    setModal(true);
 
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
@@ -190,8 +196,8 @@ void FaceScanDialog::doLoadState()
     RecognitionDatabase::RecognizeAlgorithm algo =
             (RecognitionDatabase::RecognizeAlgorithm)group.readEntry(entryName(d->configRecognizeAlgorithm),
                                                                                (int)RecognitionDatabase::RecognizeAlgorithm::LBP);
-
-    d->recognizeBox->setCurrentIndex(d->recognizeBox->findData(algo));
+    int index = d->recognizeBox->findData(algo);
+    d->recognizeBox->setCurrentIndex(index == -1 ? (int)RecognitionDatabase::RecognizeAlgorithm::LBP : index);
 
     // do not load retrainAllButton state from config, dangerous
 
@@ -357,8 +363,8 @@ void FaceScanDialog::setupUi()
 
     d->recognizeBox        = new QComboBox;
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using LBP algorithm"),           RecognitionDatabase::RecognizeAlgorithm::LBP);
-    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using EigenFaces algorithm"),    RecognitionDatabase::RecognizeAlgorithm::EigenFace);
-    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using FisherFaces algorithm"),   RecognitionDatabase::RecognizeAlgorithm::FisherFace);
+    //d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using EigenFaces algorithm"),    RecognitionDatabase::RecognizeAlgorithm::EigenFace);
+    //d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using FisherFaces algorithm"),   RecognitionDatabase::RecognizeAlgorithm::FisherFace);
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using Deep Learning algorithm"), RecognitionDatabase::RecognizeAlgorithm::DNN);
     d->recognizeBox->setCurrentIndex(RecognitionDatabase::RecognizeAlgorithm::LBP);
 

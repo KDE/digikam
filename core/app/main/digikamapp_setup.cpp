@@ -6,7 +6,7 @@
  * Date        : 2002-16-10
  * Description : main digiKam interface implementation - Internal setup
  *
- * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,7 @@ void DigikamApp::setupView()
         d->splashScreen->setMessage(i18n("Initializing Main View..."));
     }
 
-    d->view = new DigikamView(this, d->modelCollection);
+    d->view = new ItemIconView(this, d->modelCollection);
     setCentralWidget(d->view);
     d->view->applySettings();
 }

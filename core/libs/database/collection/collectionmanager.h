@@ -123,6 +123,7 @@ public:
      */
     CollectionLocation addLocation(const QUrl& fileUrl, const QString& label = QString());
     CollectionLocation addNetworkLocation(const QUrl& fileUrl, const QString& label = QString());
+    CollectionLocation updateLocation(const CollectionLocation& location, const QUrl& fileUrl, const QString& label = QString());
 
     /**
      * Analyzes the given file path. Creates an info message

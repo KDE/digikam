@@ -7,7 +7,7 @@
  * Description : image file IO threaded interface.
  *
  * Copyright (C) 2005-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -115,13 +115,13 @@ public:
 
     // LoadSaveTask
 
-    virtual void execute();
-    virtual TaskType type();
+    virtual void execute()  Q_DECL_OVERRIDE;
+    virtual TaskType type() Q_DECL_OVERRIDE;
 
     // DImgLoaderObserver
 
-    virtual void progressInfo(DImg* const img, float progress);
-    virtual bool continueQuery(DImg* const img);
+    virtual void progressInfo(DImg* const img, float progress) Q_DECL_OVERRIDE;
+    virtual bool continueQuery(DImg* const img)                Q_DECL_OVERRIDE;
 
     virtual void setStatus(LoadingTaskStatus status);
 
@@ -143,9 +143,9 @@ public:
                                LoadSaveThread::AccessMode mode = LoadSaveThread::AccessModeReadWrite,
                                LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading);
 
-    virtual void execute();
-    virtual void progressInfo(DImg* const img, float progress);
-    virtual bool continueQuery(DImg* const img = 0);
+    virtual void execute()                                     Q_DECL_OVERRIDE;
+    virtual void progressInfo(DImg* const img, float progress) Q_DECL_OVERRIDE;
+    virtual bool continueQuery(DImg* const img)                Q_DECL_OVERRIDE;
     virtual void setStatus(LoadingTaskStatus status);
 
     virtual bool needsPostProcessing() const;
@@ -153,25 +153,25 @@ public:
 
     // LoadingProcess
 
-    virtual bool completed();
-    virtual QString filePath();
-    virtual QString cacheKey();
-    virtual void addListener(LoadingProcessListener* listener);
-    virtual void removeListener(LoadingProcessListener* listener);
-    virtual void notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description);
+    virtual bool completed() const volatile;
+    virtual QString filePath() const;
+    virtual QString cacheKey() const;
+    virtual void addListener(LoadingProcessListener* const listener);
+    virtual void removeListener(LoadingProcessListener* const listener);
+    virtual void notifyNewLoadingProcess(LoadingProcess* const process, const LoadingDescription& description);
 
     // LoadingProcessListener
 
-    virtual bool querySendNotifyEvent();
+    virtual bool querySendNotifyEvent() const;
     virtual void setResult(const LoadingDescription& loadingDescription, const DImg& img);
-    virtual LoadSaveNotifier* loadSaveNotifier();
+    virtual LoadSaveNotifier* loadSaveNotifier() const;
     virtual LoadSaveThread::AccessMode accessMode();
 
     DImg img() { return m_img; }
 
 protected:
 
-    bool                           m_completed;
+    volatile bool                  m_completed;
     LoadSaveThread::AccessMode     m_accessMode;
     LoadingProcess*                m_usedProcess;
     QList<LoadingProcessListener*> m_listeners;
@@ -194,7 +194,7 @@ public:
 
 public:
 
-    explicit SavingTask(LoadSaveThread* const thread, DImg& img, const QString& filePath, const QString& format)
+    explicit SavingTask(LoadSaveThread* const thread, const DImg& img, const QString& filePath, const QString& format)
         : LoadSaveTask(thread),
           m_filePath(filePath),
           m_format(format),
@@ -215,11 +215,11 @@ public:
 
 public:
 
-    virtual void     execute();
-    virtual TaskType type();
+    virtual void     execute()                                     Q_DECL_OVERRIDE;
+    virtual TaskType type()                                        Q_DECL_OVERRIDE;
 
-    virtual void     progressInfo(DImg* const img, float progress);
-    virtual bool     continueQuery(DImg* const img);
+    virtual void     progressInfo(DImg* const img, float progress) Q_DECL_OVERRIDE;
+    virtual bool     continueQuery(DImg* const img)                Q_DECL_OVERRIDE;
 
     virtual void     setStatus(SavingTaskStatus status);
 

@@ -6,7 +6,7 @@
  * Date        : 2008-12-23
  * Description : a widget to change font properties.
  *
- * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      1996 by Bernd Johannes Wuebben  <wuebben at kde dot org>
  * Copyright (c)      1999 by Preston Brown <pbrown at kde dot org>
  * Copyright (c)      1999 by Mario Weilguni <mweilguni at kde dot org>
@@ -64,7 +64,7 @@ static int minimumListWidth(const QListWidget* list)
 {
     int w = 0;
 
-    for (int i = 0; i < list->count(); i++)
+    for (int i = 0; i < list->count(); ++i)
     {
         int itemWidth = list->visualItemRect(list->item(i)).width();
         // ...and add a space on both sides for not too tight look.

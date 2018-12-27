@@ -7,7 +7,7 @@
  * Description : Find Duplicates View.
  *
  * Copyright (C) 2016-2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
- * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -160,7 +160,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->restrictResultsLabel->setBuddy(d->searchResultRestriction);
 
     d->searchResultRestriction = new SqueezedComboBox();
-    d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "None"),                                 HaarIface::DuplicatesSearchRestrictions::None);
+    d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "None"),                        HaarIface::DuplicatesSearchRestrictions::None);
     d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "Restrict to reference album"), HaarIface::DuplicatesSearchRestrictions::SameAlbum);
     d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "Exclude reference album"),     HaarIface::DuplicatesSearchRestrictions::DifferentAlbum);
     d->searchResultRestriction->setToolTip(i18n("Use this option to restrict the duplicate search "

@@ -7,7 +7,7 @@
  * Description : Albums manager interface.
  *
  * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2015      by Mohamed_Anwer <m_dot_anwer at gmx dot com>
  *
@@ -256,7 +256,7 @@ void AlbumManager::prepareItemCounts()
 
 void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Got image deletion notification from ImageViewUtilities for " << imageIds.size() << " images.";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Got image deletion notification from ItemViewUtilities for " << imageIds.size() << " images.";
 
     QSet<SAlbum*> sAlbumsToUpdate;
     QSet<qlonglong> deletedImages = imageIds.toSet();

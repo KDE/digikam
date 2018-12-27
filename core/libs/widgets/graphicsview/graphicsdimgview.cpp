@@ -7,7 +7,7 @@
  * Description : Graphics View for DImg preview
  *
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -193,12 +193,12 @@ void GraphicsDImgView::drawText(QPainter* p, const QRectF& rect, const QString& 
 void GraphicsDImgView::mouseDoubleClickEvent(QMouseEvent* e)
 {
     QGraphicsView::mouseDoubleClickEvent(e);
-/*
+
     if (!acceptsMouseClick(e))
     {
         return;
     }
-*/
+
     if (e->button() == Qt::LeftButton)
     {
         emit leftButtonDoubleClicked();

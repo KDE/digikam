@@ -215,7 +215,6 @@ protected:
     QNetworkReply*          m_reply;
 
     State                   m_state;
-    QByteArray              m_buffer;
 
     QSettings*              m_settings;
     O0SettingsStore*        m_store;

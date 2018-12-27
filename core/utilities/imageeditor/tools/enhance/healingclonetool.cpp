@@ -6,7 +6,7 @@
  * Date        : 2017-06-15
  * Description : a tool to replace part of the image using another
  *
- * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2017      by Shaza Ismail Kaoud <shaza dot ismail dot k at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -223,9 +223,9 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
 {
     double blurPercent = d->blurPercent->value() / 100;
 
-    for (int i = -1 * radius ; i < radius ; i++)
+    for (int i = -1 * radius ; i < radius ; ++i)
     {
-        for (int j = -1 * radius ; j < radius ; j++)
+        for (int j = -1 * radius ; j < radius ; ++j)
         {
             int rPercent = (i * i) + (j * j);
 

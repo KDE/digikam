@@ -51,7 +51,11 @@ class DIGIKAM_EXPORT DIO : public QObject
 
 public:
 
+    static DIO* instance();
+
     static void cleanUp();
+
+    static bool itemsUnderProcessing();
 
     /**
      * All DIO methods will take care for sidecar files, if they exist
@@ -88,8 +92,6 @@ public:
     /// Rename item to new name
     static void rename(const QUrl& src, const QString& newName, bool overwrite = false);
 
-    static DIO* instance();
-
 Q_SIGNALS:
 
     void signalRenameFinished();
@@ -119,6 +121,8 @@ private Q_SLOTS:
     void slotCancel(ProgressItem* item);
 
 private:
+
+    int          m_processingCount;
 
     friend class DIOCreator;
 };

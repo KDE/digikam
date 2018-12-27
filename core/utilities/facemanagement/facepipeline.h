@@ -203,7 +203,7 @@ public:
     void plugDatabaseFilter(FilterMode mode);
     void plugRerecognizingDatabaseFilter();
     void plugRetrainingDatabaseFilter();
-    void plugPreviewLoader();
+    void plugFacePreviewLoader();
     void plugFaceDetector();
     void plugParallelFaceDetectors();
     void plugFaceRecognizer();

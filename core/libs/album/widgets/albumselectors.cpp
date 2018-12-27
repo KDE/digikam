@@ -7,7 +7,7 @@
  * Description : A widget to select Physical or virtual albums with combo-box
  *
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -151,7 +151,7 @@ AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, 
         }
     }
 
-    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setContentsMargins(QMargins());
 }
 
 AlbumSelectors::~AlbumSelectors()
@@ -166,7 +166,7 @@ void AlbumSelectors::initAlbumWidget()
     d->albumSelectCB = new AlbumTreeViewSelectComboBox(d->albumWidget);
     d->albumSelectCB->setToolTip(i18nc("@info:tooltip", "Select all albums that should be processed."));
     d->albumSelectCB->setDefaultModel();
-    d->albumSelectCB->setNoSelectionText(i18nc("@info:status", "Any albums"));
+    d->albumSelectCB->setNoSelectionText(i18n("No Album Selected"));
     d->albumSelectCB->addCheckUncheckContextMenuActions();
 
     d->albumClearButton = new ModelClearButton(d->albumSelectCB->view()->albumModel());
@@ -199,7 +199,7 @@ void AlbumSelectors::initTagWidget()
     d->tagSelectCB = new TagTreeViewSelectComboBox(d->tagWidget);
     d->tagSelectCB->setToolTip(i18nc("@info:tooltip", "Select all tags that should be processed."));
     d->tagSelectCB->setDefaultModel();
-    d->tagSelectCB->setNoSelectionText(i18nc("@info:status", "Any tags"));
+    d->tagSelectCB->setNoSelectionText(i18n("No Tag Selected"));
     d->tagSelectCB->addCheckUncheckContextMenuActions();
 
     d->tagClearButton = new ModelClearButton(d->tagSelectCB->view()->albumModel());
@@ -415,6 +415,7 @@ void AlbumSelectors::loadState()
         d->albumClearButton->animateVisible(!d->albumSelectCB->model()->checkedAlbums().isEmpty());
 
         slotWholeAlbums(wholeAlbumsChecked());
+        d->albumSelectCB->updateText();
     }
 
     if (d->tagWidget)
@@ -424,6 +425,7 @@ void AlbumSelectors::loadState()
         d->tagClearButton->animateVisible(!d->tagSelectCB->model()->checkedAlbums().isEmpty());
 
         slotWholeTags(wholeTagsChecked());
+        d->tagSelectCB->updateText();
     }
 
     if (d->selectionMode == All)

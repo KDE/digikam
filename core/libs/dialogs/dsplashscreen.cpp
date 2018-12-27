@@ -7,7 +7,7 @@
  * Description : a widget to display splash with progress bar
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -175,7 +175,7 @@ void DSplashScreen::drawContents(QPainter* p)
     // Increments are chosen to get close to background's color
     // (didn't work well with QColor::light function)
 
-    for (int i = 0 ; i < d->progressBarSize ; i++)
+    for (int i = 0 ; i < d->progressBarSize ; ++i)
     {
         position = (d->state + i) % (2 * d->progressBarSize - 1);
 

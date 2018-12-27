@@ -32,7 +32,7 @@
 #include "digikam_debug.h"
 #include "camitemsortsettings.h"
 #include "iccsettings.h"
-#include "imageselectionoverlay.h"
+#include "itemselectionoverlay.h"
 #include "importdelegate.h"
 #include "importtooltipfiller.h"
 #include "importsettings.h"
@@ -524,7 +524,7 @@ void ImportCategorizedView::slotDelayedEnter()
 
 void ImportCategorizedView::addSelectionOverlay(ImportDelegate* delegate)
 {
-    addOverlay(new ImageSelectionOverlay(this), delegate);
+    addOverlay(new ItemSelectionOverlay(this), delegate);
 }
 
 void ImportCategorizedView::scrollToStoredItem()

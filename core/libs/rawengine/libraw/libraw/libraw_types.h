@@ -103,7 +103,7 @@ typedef unsigned long long UINT64;
 #       ifdef LIBRAW_BUILDLIB
 #           define DllDef __declspec(dllexport)
 #       else
-#           define DllDef __declspec(dllimport)
+#          define DllDef __declspec(dllimport)
 #       endif
 #   endif
 #else
@@ -595,7 +595,7 @@ typedef unsigned long long UINT64;
     int use_dngsdk;
     /* Disable Auto-scale */
     int no_auto_scale;
-    /* Disable interpolation */
+    /* Disable intepolation */
     int no_interpolation;
     /*  int x3f_flags; */
     /* Sony ARW2 digging mode */

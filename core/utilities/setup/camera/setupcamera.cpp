@@ -7,7 +7,7 @@
  * Description : camera setup tab.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -959,7 +959,7 @@ void SetupCamera::slotRemoveFilter()
     QListWidgetItem* const item = d->importListView->currentItem();
     int current                 = d->importListView->currentRow();
 
-    for (int i = 0 ; i < d->filters.count() ; i++)
+    for (int i = 0 ; i < d->filters.count() ; ++i)
     {
         if (d->filters.at(i)->name == item->text())
         {
@@ -975,7 +975,7 @@ void SetupCamera::slotEditFilter()
 {
     QListWidgetItem* const item = d->importListView->currentItem();
 
-    for (int i = 0 ; i < d->filters.count() ; i++)
+    for (int i = 0 ; i < d->filters.count() ; ++i)
     {
         if (d->filters.at(i)->name == item->text())
         {

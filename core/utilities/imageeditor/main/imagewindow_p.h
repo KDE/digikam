@@ -7,7 +7,7 @@
  * Description : digiKam image editor GUI
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,7 +73,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "collectionscanner.h"
-#include "componentsinfo.h"
+#include "componentsinfodlg.h"
 #include "coredbaccess.h"
 #include "coredbwatch.h"
 #include "coredbchangesets.h"
@@ -101,7 +101,7 @@
 #include "itempropertiessidebardb.h"
 #include "itempropertiesversionstab.h"
 #include "itemscanner.h"
-#include "imagethumbnailbar.h"
+#include "itemthumbnailbar.h"
 #include "iofilesettings.h"
 #include "dnotificationwrapper.h"
 #include "loadingcacheinterface.h"
@@ -284,7 +284,7 @@ public:
     ItemFilterModel*            imageFilterModel;
     ItemDragDropHandler*        dragDropHandler;
 
-    ImageThumbnailBar*           thumbBar;
+    ItemThumbnailBar*           thumbBar;
     ThumbBarDock*                thumbBarDock;
 
     ItemPropertiesSideBarDB*    rightSideBar;

@@ -11,7 +11,7 @@
  * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
  * Copyright (C) 2011      by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2012      by Angelo Naselli <anaselli at linux dot it>
- * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -196,7 +196,7 @@ void CalWizard::slotPageSelected(int curr)
 
         for (int i = 1; i <= CalSystem().monthsInYear(date); ++i)
         {
-            month = QLocale().monthName(i, QLocale::LongFormat);
+            month = QLocale().standaloneMonthName(i, QLocale::LongFormat);
             image = d->cSettings->image(i);
 
             if (!image.isEmpty())
@@ -345,7 +345,7 @@ void CalWizard::updatePage(int page)
     int month = d->months.keys().at(page);
 
     d->calProgressUI.finishLabel->setText(i18n("Printing calendar page for %1 of %2",
-                                          QLocale().monthName(month, QLocale::LongFormat),
+                                          QLocale().standaloneMonthName(month, QLocale::LongFormat),
                                           QLocale().toString(date, QLatin1String("yyyy"))));
 }
 

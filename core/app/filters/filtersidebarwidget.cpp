@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C)      2014 by Mohamed_Anwer <m_dot_anwer at gmx dot com>
  *
@@ -145,8 +145,8 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     QWidget* const box3   = new QWidget(d->expbox);
     d->tagFilterModel     = tagFilterModel;
     d->tagFilterView      = new TagFilterView(box3, tagFilterModel);
-    d->tagFilterView->setObjectName(QLatin1String("DigikamViewTagFilterView"));
-    d->tagFilterSearchBar = new SearchTextBar(box3, QLatin1String("DigikamViewTagFilterSearchBar"));
+    d->tagFilterView->setObjectName(QLatin1String("ItemIconViewTagFilterView"));
+    d->tagFilterSearchBar = new SearchTextBar(box3, QLatin1String("ItemIconViewTagFilterSearchBar"));
     d->tagFilterSearchBar->setModel(d->tagFilterView->filteredModel(),
                                     AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());

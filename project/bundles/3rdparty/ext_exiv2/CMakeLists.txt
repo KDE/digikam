@@ -1,6 +1,6 @@
 # Script to build Exiv2 for digiKam bundle.
 #
-# Copyright (c) 2015-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015-2019, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -28,6 +28,7 @@ set(Exiv2_Conf -DBUILD_SHARED_LIBS=ON
                -DEXIV2_TEAM_EXTRA_WARNINGS=OFF
                -DEXIV2_TEAM_WARNINGS_AS_ERRORS=OFF
                -DEXIV2_TEAM_USE_SANITIZERS=OFF
+               -DEXIV2_TEAM_PACKAGING=OFF
 )
 
 if(MINGW)
@@ -46,13 +47,13 @@ if(MINGW)
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
         # To use official release tarball
-        #URL http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
-        #URL_MD5 5399e3b570d7f9205f0e76d47582da4c
+        URL https://github.com/Exiv2/exiv2/archive/0.27.tar.gz
+        URL_MD5 8f7e0a0b51f183f95820de4474364f76
 
         # To use current implementation from Git with tag 0.27 rc1
 
-        GIT_REPOSITORY https://github.com/Exiv2/exiv2.git
-        GIT_TAG v0.27-RC1
+        #GIT_REPOSITORY https://github.com/Exiv2/exiv2.git
+        #GIT_TAG v0.27-RC1
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/exiv2-0.27-mxe.patch
 
@@ -77,12 +78,12 @@ elseif(APPLE)
 
         # To use official release tarball
 
-        #URL http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
-        #URL_MD5 5399e3b570d7f9205f0e76d47582da4c
+        URL https://github.com/Exiv2/exiv2/archive/0.27.tar.gz
+        URL_MD5 8f7e0a0b51f183f95820de4474364f76
 
         # To use current implementation from Git
 
-        GIT_REPOSITORY https://github.com/Exiv2/exiv2.git
+        #GIT_REPOSITORY https://github.com/Exiv2/exiv2.git
 
         CONFIGURE_COMMAND cp -f ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.macports <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.macports ${PREFIX_ext_exiv2} RelWithDebInfo x86_64 ${BASH_OPTIONS}
@@ -104,12 +105,12 @@ else() # Linux
 
         # To use official release tarball
 
-        #URL http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
-        #URL_MD5 5399e3b570d7f9205f0e76d47582da4c
+        URL https://github.com/Exiv2/exiv2/archive/0.27.tar.gz
+        URL_MD5 8f7e0a0b51f183f95820de4474364f76
 
         # To use current implementation from Git
 
-        GIT_REPOSITORY https://github.com/Exiv2/exiv2.git
+        #GIT_REPOSITORY https://github.com/Exiv2/exiv2.git
 
         CONFIGURE_COMMAND cd <SOURCE_DIR> &&
                    $(CMAKE_COMMAND) . -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_exiv2}

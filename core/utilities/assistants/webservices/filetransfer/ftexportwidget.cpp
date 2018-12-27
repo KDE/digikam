@@ -8,7 +8,7 @@
  *               location
  *
  * Copyright (C) 2006-2009 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -135,7 +135,7 @@ QList<QUrl> FTExportWidget::history() const
 {
     QList<QUrl> urls;
 
-    for (int i = 0 ; i <= d->targetLabel->comboBox()->count() ; i++)
+    for (int i = 0 ; i <= d->targetLabel->comboBox()->count() ; ++i)
         urls << QUrl(d->targetLabel->comboBox()->itemText(i));
 
     return urls;

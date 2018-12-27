@@ -6,7 +6,7 @@
  * Date        : 2006-20-12
  * Description : a view to embed QtAv media player.
  *
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,7 +51,6 @@
 #include "digikam_debug.h"
 #include "thememanager.h"
 #include "dlayoutbox.h"
-#include "dmetadata.h"
 
 using namespace QtAV;
 
@@ -183,8 +182,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     setAttribute(Qt::WA_DeleteOnClose);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-    QMargins margins(spacing, 0, spacing, spacing);
+    const int spacing      = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     d->prevAction          = new QAction(QIcon::fromTheme(QLatin1String("go-previous")),          i18nc("go to previous image", "Back"),   this);
     d->nextAction          = new QAction(QIcon::fromTheme(QLatin1String("go-next")),              i18nc("go to next image", "Forward"),    this);
@@ -199,7 +197,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     QVBoxLayout* const vbox1 = new QVBoxLayout(d->errorView);
     vbox1->addWidget(errorMsg, 10);
-    vbox1->setContentsMargins(margins);
+    vbox1->setContentsMargins(QMargins());
     vbox1->setSpacing(spacing);
 
     insertWidget(Private::ErrorView, d->errorView);
@@ -216,6 +214,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->slider->setRange(0, 0);
     d->tlabel         = new QLabel(hbox);
     d->tlabel->setText(QLatin1String("00:00:00 / 00:00:00"));
+    hbox->setContentsMargins(0, spacing, 0, 0);
     hbox->setStretchFactor(d->slider, 10);
 
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
@@ -228,7 +227,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     QVBoxLayout* const vbox2 = new QVBoxLayout(d->playerView);
     vbox2->addWidget(d->videoWidget, 10);
     vbox2->addWidget(hbox,           0);
-    vbox2->setContentsMargins(margins);
+    vbox2->setContentsMargins(0, 0, 0, spacing);
     vbox2->setSpacing(spacing);
 
     insertWidget(Private::PlayerView, d->playerView);
@@ -417,25 +416,30 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
 
     d->player->stop();
 
+    int orientation     = 0;
+    bool supportedCodec = true;
+
+    if (d->iface)
+    {
+        DItemInfo info(d->iface->itemInfo(url));
+
+        orientation = info.orientation();
+
+        if (info.videoCodec() == QLatin1String("none"))
+        {
+            supportedCodec = false;
+        }
+    }
+
     if (MetaEngineSettings::instance()->settings().exifRotate)
     {
-        int orientation      = 0;
         int videoOrientation = 0;
-
-        if (d->iface)
-        {
-            DItemInfo info(d->iface->itemInfo(url));
-            orientation = info.orientation();
-        }
-        else
-        {
-            DMetadata meta(url.toLocalFile());
-            orientation = meta.getItemOrientation();
-        }
 
         switch (orientation)
         {
             case MetaEngine::ORIENTATION_ROT_90:
+            case MetaEngine::ORIENTATION_ROT_90_HFLIP:
+            case MetaEngine::ORIENTATION_ROT_90_VFLIP:
                 videoOrientation = 90;
                 break;
             case MetaEngine::ORIENTATION_ROT_180:
@@ -452,9 +456,18 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
         d->videoWidget->setOrientation(videoOrientation);
     }
 
-    d->player->setFile(d->currentItem.toLocalFile());
-    setPreviewMode(Private::PlayerView);
-    d->player->play();
+    if (supportedCodec)
+    {
+        d->player->setFile(d->currentItem.toLocalFile());
+        setPreviewMode(Private::PlayerView);
+        d->player->play();
+    }
+    else
+    {
+        d->currentItem = QUrl();
+        d->player->setFile(QString());
+        setPreviewMode(Private::ErrorView);
+    }
 }
 
 void MediaPlayerView::slotPositionChanged(qint64 position)

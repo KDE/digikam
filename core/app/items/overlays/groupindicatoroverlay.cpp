@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2008      by Peter Penz <peter dot penz at gmx dot at>
- * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,9 +32,9 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imagedelegate.h"
+#include "itemdelegate.h"
 #include "itemmodel.h"
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 #include "itemfiltermodel.h"
 
 namespace Digikam
@@ -106,7 +106,7 @@ void GroupIndicatorOverlay::updatePosition()
         return;
     }
 
-    QRect rect       = static_cast<ImageDelegate*>(delegate())->groupIndicatorRect();
+    QRect rect       = static_cast<ItemDelegate*>(delegate())->groupIndicatorRect();
     QRect visualRect = m_view->visualRect(m_index);
     rect.translate(visualRect.topLeft());
 
@@ -117,7 +117,7 @@ void GroupIndicatorOverlay::updatePosition()
 bool GroupIndicatorOverlay::checkIndex(const QModelIndex& index) const
 {
     ItemInfo info = ItemModel::retrieveItemInfo(index);
-    QRect rect     = static_cast<ImageDelegate*>(delegate())->groupIndicatorRect();
+    QRect rect     = static_cast<ItemDelegate*>(delegate())->groupIndicatorRect();
 
     if (!rect.isNull() && info.hasGroupedImages())
     {

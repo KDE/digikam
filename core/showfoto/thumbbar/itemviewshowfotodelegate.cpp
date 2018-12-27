@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-08-01
- * Description : Qt item view for images - the delegate
+ * Description : Qt model view for Showfoto item - the delegate
  *
  * Copyright (C) 2013 by Mohamed_Anwer <m_dot_anwer at gmx dot com>
  *
@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "itemviewshowfotodelegate.h"
+#include "itemviewshowfotodelegate_p.h"
 
 // Qt includes
 
@@ -39,7 +40,6 @@
 #include "itempropertiestab.h"
 #include "showfotoiteminfo.h"
 #include "colorlabelwidget.h"
-#include "itemviewshowfotodelegatepriv.h"
 
 namespace ShowFoto
 {

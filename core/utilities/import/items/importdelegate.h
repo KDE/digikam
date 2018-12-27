@@ -4,10 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2012-07-08
- * Description : Qt item view for images - the delegate
+ * Description : Qt item view to import items - the delegate
  *
  * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
- * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

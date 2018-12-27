@@ -6,7 +6,7 @@
  * Date        : 2007-31-01
  * Description : main digiKam interface implementation
  *
- * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2014      by Mohamed_Anwer <m_dot_anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
@@ -66,7 +66,7 @@
 #include "cameranamehelper.h"
 #include "dsplashscreen.h"
 #include "dzoombar.h"
-#include "digikamview.h"
+#include "itemiconview.h"
 #include "metadatastatusbar.h"
 #include "itempropertiestab.h"
 #include "importui.h"
@@ -84,7 +84,7 @@
 #include "categorizeditemmodel.h"
 #include "collectionscanner.h"
 #include "collectionmanager.h"
-#include "componentsinfo.h"
+#include "componentsinfodlg.h"
 #include "coredbthumbinfoprovider.h"
 #include "dio.h"
 #include "dlogoaction.h"
@@ -428,13 +428,13 @@ public:
     MetadataStatusBar*                  metadataStatusBar;
     FilterStatusBar*                    filterStatusBar;
     DSplashScreen*                      splashScreen;
-    DigikamView*                        view;
+    ItemIconView*                        view;
     CameraList*                         cameraList;
     TagsActionMngr*                     tagsActionManager;
     DZoomBar*                           zoomBar;
     DAdjustableLabel*                   statusLabel;
 
-    DigikamModelCollection*             modelCollection;
+    DModelFactory*             modelCollection;
 };
 
 } // namespace Digikam

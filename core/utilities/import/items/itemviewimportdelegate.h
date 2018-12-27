@@ -7,7 +7,7 @@
  * Description : Item delegate for import interface items.
  *
  * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
- * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,7 +27,6 @@
 
 // Local includes
 
-#include "itemviewimportdelegatepriv.h"
 #include "thumbnailsize.h"
 #include "ditemdelegate.h"
 #include "itemdelegateoverlay.h"

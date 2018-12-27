@@ -95,16 +95,17 @@ public:
     QString                         tokenUrl;
     QString                         redirectUrl;
 
-    QWidget*                        parent;
-    QNetworkAccessManager*          netMngr;
-    QNetworkReply*                  reply;
-    QSettings*                      settings;
-    O2*                             o2;
-
     State                           state;
 
-    DMetadata                       meta;
-    QMap<QString, QString>          urlParametersMap;
+    QWidget*                        parent;
+
+    QNetworkAccessManager*          netMngr;
+    QNetworkReply*                  reply;
+
+    QSettings*                      settings;
+
+    O2*                             o2;
+
     QList<QPair<QString, QString> > foldersList;
 };
 
@@ -302,12 +303,14 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
 
         image.save(path, "JPEG", imageQuality);
 
-        if (d->meta.load(imgPath))
+        DMetadata meta;
+
+        if (meta.load(imgPath))
         {
-            d->meta.setItemDimensions(image.size());
-            d->meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
-            d->meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
-            d->meta.save(path, true);
+            meta.setItemDimensions(image.size());
+            meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
+            meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
+            meta.save(path, true);
         }
     }
 
@@ -455,7 +458,6 @@ void BOXTalker::parseResponseListFolders(const QByteArray& data)
 
     foreach (const QJsonValue& value, jsonArray)
     {
-        QString path;
         QString folderName;
         QString type;
         QString id;

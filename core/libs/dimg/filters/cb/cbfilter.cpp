@@ -6,7 +6,7 @@
  * Date        : 2006-01-18
  * Description : color balance filter
  *
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -343,11 +343,28 @@ void CBFilter::adjustRGB(double r, double g, double b, double a, bool sixteenBit
         return ;
     }
 
-    int* r_table     = new int[65536];
-    int* g_table     = new int[65536];
-    int* b_table     = new int[65536];
-    int* a_table     = new int[65536];
-    int* dummy_table = new int[65536];
+    int* r_table     = 0;
+    int* g_table     = 0;
+    int* b_table     = 0;
+    int* a_table     = 0;
+    int* dummy_table = 0;
+
+    if (sixteenBit)
+    {
+        r_table     = new int[65536];
+        g_table     = new int[65536];
+        b_table     = new int[65536];
+        a_table     = new int[65536];
+        dummy_table = new int[65536];
+    }
+    else
+    {
+        r_table     = new int[256];
+        g_table     = new int[256];
+        b_table     = new int[256];
+        a_table     = new int[256];
+        dummy_table = new int[256];
+    }
 
     if (r == g && r == b && r == a)
     {

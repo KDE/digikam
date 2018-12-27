@@ -11,7 +11,7 @@
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2014-2015 by Mohamed_Anwer <m_dot_anwer at gmx dot com>
- * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -112,7 +112,7 @@ DigikamApp::DigikamApp()
     connect(d->cameraList, SIGNAL(signalCameraRemoved(QAction*)),
             this, SLOT(slotCameraRemoved(QAction*)));
 
-    d->modelCollection = new DigikamModelCollection;
+    d->modelCollection = new DModelFactory;
 
     // This manager must be created after collection setup and before accelerators setup.
     d->tagsActionManager = new TagsActionMngr(this);
@@ -272,7 +272,7 @@ DigikamApp* DigikamApp::instance()
     return m_instance;
 }
 
-DigikamView* DigikamApp::view() const
+ItemIconView* DigikamApp::view() const
 {
     return d->view;
 }

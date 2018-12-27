@@ -60,9 +60,9 @@ std::vector<std::vector<float> > pinv(const std::vector<std::vector<float> >& ma
     cv::Mat B(mat[0].size(), mat.size()   , CV_32FC1);
     cv::Mat A(mat.size()   , mat[0].size(), CV_32FC1);
 
-    for (unsigned int i = 0 ; i < mat.size() ; i++)
+    for (unsigned int i = 0 ; i < mat.size() ; ++i)
     {
-        for (unsigned int j =0 ; j < mat[0].size() ; j++)
+        for (unsigned int j =0 ; j < mat[0].size() ; ++j)
         {
             A.at<float>(i, j) = mat[i][j];
         }
@@ -70,9 +70,9 @@ std::vector<std::vector<float> > pinv(const std::vector<std::vector<float> >& ma
 
     cv::invert(A, B, cv::DECOMP_SVD);
 
-    for (int i = 0 ; i < B.rows ; i++)
+    for (int i = 0 ; i < B.rows ; ++i)
     {
-        for (int j = 0 ; j < B.cols ; j++)
+        for (int j = 0 ; j < B.cols ; ++j)
         {
             result[i][j] = B.at<float>(i, j);
         }
@@ -83,9 +83,9 @@ std::vector<std::vector<float> > pinv(const std::vector<std::vector<float> >& ma
 
 void stdmattocvmat(const std::vector<std::vector<float> >& src, cv::Mat& dst)
 {
-    for (unsigned int i = 0 ; i < src.size() ; i++)
+    for (unsigned int i = 0 ; i < src.size() ; ++i)
     {
-        for (unsigned int j = 0 ; j < src[0].size() ; j++)
+        for (unsigned int j = 0 ; j < src[0].size() ; ++j)
         {
             dst.at<float>(i, j) = src[i][j];
         }
@@ -94,9 +94,9 @@ void stdmattocvmat(const std::vector<std::vector<float> >& src, cv::Mat& dst)
 
 void cvmattostdmat(const cv::Mat& dst, std::vector<std::vector<float> >& src)
 {
-    for (unsigned int i = 0 ; i < src.size() ; i++)
+    for (unsigned int i = 0 ; i < src.size() ; ++i)
     {
-        for (unsigned int j = 0 ; j < src[0].size() ; j++)
+        for (unsigned int j = 0 ; j < src[0].size() ; ++j)
         {
             src[i][j] = dst.at<float>(i, j);
         }
@@ -147,9 +147,9 @@ inline T pythag(const T& a, const T& b)
 void transpose(std::vector<std::vector<float> >& src,
                std::vector<std::vector<float> >& dst)
 {
-    for(unsigned int i = 0;i<src.size();i++)
+    for (unsigned int i = 0 ; i < src.size() ; ++i)
     {
-        for(unsigned int j=0;j<src[0].size();j++)
+        for (unsigned int j = 0 ; j < src[0].size() ; ++j)
         {
             dst[i][j] = src[j][i];
         }
@@ -161,9 +161,9 @@ float trace(const std::vector<std::vector<float> >& src)
 {
     float result = 0;
 
-    for (unsigned int i = 0 ; i < src.size() ; i++)
+    for (unsigned int i = 0 ; i < src.size() ; ++i)
     {
-        for (unsigned int j = 0 ; j < src[0].size() ; j++)
+        for (unsigned int j = 0 ; j < src[0].size() ; ++j)
         {
             if (i == j)
             {
@@ -538,14 +538,14 @@ void svd(const std::vector<std::vector<float> >& m,
     w.resize(2);
     v.resize(2);
 
-    for(unsigned int i = 0 ; i < 2 ; i++)
+    for (unsigned int i = 0 ; i < 2 ; ++i)
     {
 
         u[i].resize(2);
         w[i].resize(2);
         v[i].resize(2);
 
-        for(unsigned int j = 0 ; j < 2 ; j++)
+        for (unsigned int j = 0 ; j < 2 ; ++j)
         {
             u[i][j] = m[i][j];
         }
@@ -556,9 +556,9 @@ void svd(const std::vector<std::vector<float> >& m,
     svd3(u,W,v,rv1);
 
     // get w from W
-    for(unsigned int i = 0 ; i < 2 ; i++)
+    for (unsigned int i = 0 ; i < 2 ; ++i)
     {
-        for(unsigned int j = 0 ; j < 2 ; j++)
+        for (unsigned int j = 0 ; j < 2 ; ++j)
         {
             if (i == j)
                 w[i][j] = W[i];

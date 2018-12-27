@@ -7,7 +7,7 @@
  *
  * Copyright (C)      2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C)      2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
- * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -914,7 +914,15 @@ QList<Identity> RecognitionDatabase::recognizeFaces(const QList<QImage>& images)
 
 void RecognitionDatabase::activeFaceRecognizer(RecognizeAlgorithm algorithmType)
 {
-    d->recognizeAlgorithm = algorithmType;
+    if (algorithmType == RecognizeAlgorithm::EigenFace ||
+        algorithmType == RecognizeAlgorithm::FisherFace)
+    {
+        d->recognizeAlgorithm = RecognizeAlgorithm::LBP;
+    }
+    else
+    {
+        d->recognizeAlgorithm = algorithmType;
+    }
 }
 
 QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const images)

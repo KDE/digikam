@@ -7,7 +7,7 @@
  * Description : database settings widget
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -257,8 +257,8 @@ void DatabaseSettingsWidget::setupMainArea()
 #endif
 
 #ifdef Q_OS_WIN
-    d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files/MariaDB 10.1/bin"));
-    d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files (x86/MariaDB 10.1/bin"));
+    d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files/MariaDB 10.3/bin"));
+    d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files (x86/MariaDB 10.3/bin"));
 #endif
 
     d->dbBinariesWidget->allBinariesFound();

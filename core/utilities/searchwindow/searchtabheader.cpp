@@ -227,6 +227,7 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     QVBoxLayout* const mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(QMargins());
     setLayout(mainLayout);
 
     // upper part
@@ -257,9 +258,9 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
 
     d->advancedEditLabel      = new QPushButton(i18n("Advanced Search..."), this);
 
-    grid1->addWidget(searchLabel,          0, 0);
-    grid1->addWidget(d->keywordEdit,       0, 1);
-    grid1->addWidget(d->advancedEditLabel, 1, 1);
+    grid1->addWidget(searchLabel,          0, 0, 1, 1);
+    grid1->addWidget(d->keywordEdit,       0, 1, 1, 1);
+    grid1->addWidget(d->advancedEditLabel, 1, 0, 1, 2);
     grid1->setContentsMargins(spacing, spacing, spacing, spacing);
     grid1->setSpacing(spacing);
 

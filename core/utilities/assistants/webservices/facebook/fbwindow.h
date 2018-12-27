@@ -7,7 +7,7 @@
  * Description : a tool to export items to Facebook web service
  *
  * Copyright (C) 2005-2008 by Vardhman Jain <vardhman at gmail dot com>
- * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2009 by Luka Renko <lure at kubuntu dot org>
  *
  * This program is free software; you can redistribute it
@@ -52,12 +52,6 @@ public:
     explicit FbWindow(DInfoInterface* const iface, QWidget* const parent);
     ~FbWindow();
 
-    /**
-     * Use this method to (re-)activate the dialog after it has been created
-     * to display it. This also loads the currently selected images.
-     */
-    void reactivate();
-
 private Q_SLOTS:
 
     void slotBusy(bool val);
@@ -69,7 +63,6 @@ private Q_SLOTS:
     void slotListAlbumsDone(int errCode, const QString& errMsg,
                             const QList<FbAlbum>& albumsList);
 
-    void slotUserLogout();
     void slotUserChangeRequest();
     void slotReloadAlbumsRequest(long long userID);
     void slotNewAlbumRequest();
@@ -91,11 +84,11 @@ private:
     void    readSettings();
     void    writeSettings();
 
-    void    authenticate();
+    void    authenticate(bool forceLogin);
 
     void    buttonStateChange(bool state);
 
-    void    closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
+    void    closeEvent(QCloseEvent*);
 
 private:
 

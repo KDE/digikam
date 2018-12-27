@@ -6,7 +6,7 @@
  * Date        : 2006-05-16
  * Description : A tool to edit geolocation
  *
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010-2014 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2010      by Gabriel Voicu <ping dot gabi at gmail dot com>
  * Copyright (C) 2014      by Justus Schwartz <justus at gmx dot li>
@@ -39,7 +39,7 @@
 #include "geoifacetypes.h"
 #include "geomodelhelper.h"
 #include "trackmanager.h"
-#include "gpsimageitem.h"
+#include "gpsitemcontainer.h"
 #include "digikam_export.h"
 
 class QAbstractItemModel;
@@ -66,9 +66,9 @@ public:
      */
     void setImages(const QList<QUrl>& images);
 
-    /* Populate items in dialog list based dedicated GPSImageItem instances filled with DB info
+    /* Populate items in dialog list based dedicated GPSItemContainer instances filled with DB info
      */
-    void setItems(const QList<GPSImageItem*>& items);
+    void setItems(const QList<GPSItemContainer*>& items);
 
 protected:
 

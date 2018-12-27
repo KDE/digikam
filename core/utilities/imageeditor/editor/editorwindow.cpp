@@ -6,7 +6,7 @@
  * Date        : 2006-01-20
  * Description : core image editor GUI implementation
  *
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2015      by Mohamed_Anwer <m_dot_anwer at gmx dot com>
  *
@@ -390,7 +390,7 @@ void EditorWindow::setupStandardActions()
     ac->addAction(QLatin1String("editorwindow_openversion"), m_openVersionAction);
     ac->setDefaultShortcuts(m_openVersionAction, QList<QKeySequence>() << Qt::CTRL + Qt::Key_End);
 
-    m_saveAction = buildStdAction(StdSaveAction, this, SLOT(save()), this);
+    m_saveAction = buildStdAction(StdSaveAction, this, SLOT(saveOrSaveAs()), this);
     ac->addAction(QLatin1String("editorwindow_save"), m_saveAction);
 
     m_saveAsAction = buildStdAction(StdSaveAsAction, this, SLOT(saveAs()), this);
@@ -2044,12 +2044,8 @@ bool EditorWindow::saveOrSaveAs()
     {
         return saveAs();
     }
-    else if (promptForOverWrite())
-    {
-        return save();
-    }
 
-    return false;
+    return save();
 }
 
 void EditorWindow::slotSavingStarted(const QString& /*filename*/)

@@ -7,7 +7,7 @@
  * Description : Directory watch interface
  *
  * Copyright (C) 2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2015-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2015-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +40,7 @@
 #include "collectionmanager.h"
 #include "dbengineparameters.h"
 #include "scancontroller.h"
+#include "dio.h"
 
 namespace Digikam
 {
@@ -264,6 +265,11 @@ void AlbumWatch::slotAlbumAboutToBeDeleted(Album* a)
 
 void AlbumWatch::rescanDirectory(const QString& dir)
 {
+    if (DIO::itemsUnderProcessing())
+    {
+        return;
+    }
+
     qCDebug(DIGIKAM_GENERAL_LOG) << "Detected change, triggering rescan of" << dir;
 
     ScanController::instance()->scheduleCollectionScanExternal(dir);

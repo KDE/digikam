@@ -7,7 +7,7 @@
  * Description : Scanning a single item - video metadata helper.
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,13 +42,13 @@ void ItemScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataCon
     // DMetadata does all translation work
     QStringList strings = DMetadata::valuesToString(fields, allVideoMetadataFields());
     // associate with hard-coded variables
-    container->aspectRatio                  = strings.at(0);
-    container->audioBitRate                 = strings.at(1);
-    container->audioChannelType             = strings.at(2);
-    container->audioCodec                   = strings.at(3);
-    container->duration                     = strings.at(4);
-    container->frameRate                    = strings.at(5);
-    container->videoCodec                   = strings.at(6);
+    container->aspectRatio      = strings.at(0);
+    container->audioBitRate     = strings.at(1);
+    container->audioChannelType = strings.at(2);
+    container->audioCodec       = strings.at(3);
+    container->duration         = strings.at(4);
+    container->frameRate        = strings.at(5);
+    container->videoCodec       = strings.at(6);
 }
 
 QString ItemScanner::detectVideoFormat() const

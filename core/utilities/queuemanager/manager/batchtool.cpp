@@ -6,7 +6,7 @@
  * Date        : 2008-11-24
  * Description : Batch Tool Container.
  *
- * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -144,8 +144,7 @@ BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* const p
 BatchTool::~BatchTool()
 {
     // NOTE: See bug #341566: no need to delete settings widget here.
-    // Owner is passed to ToolSettingsView, which will delete instance,
-    // even if Valgrind report a memory leak.
+    // We delete the settings widget now in the ToolSettingsView.
 
     delete d->observer;
     delete d;
@@ -537,6 +536,12 @@ void BatchTool::applyFilter(DImgBuiltinFilter* const filter)
 QWidget* BatchTool::settingsWidget() const
 {
     return m_settingsWidget;
+}
+
+void BatchTool::deleteSettingsWidget()
+{
+    delete m_settingsWidget;
+    m_settingsWidget = 0;
 }
 
 void BatchTool::registerSettingsWidget()

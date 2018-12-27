@@ -7,7 +7,7 @@
  * Description : a tool to export items to Facebook web service
  *
  * Copyright (C) 2005-2008 by Vardhman Jain <vardhman at gmail dot com>
- * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2009 by Luka Renko <lure at kubuntu dot org>
  * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
@@ -79,13 +79,12 @@ public:
         imageQualitySpB = widget->getImgQualitySpB();
         imagesCount     = 0;
         imagesTotal     = 0;
-        sessionExpires  = 0;
         talker          = 0;
         albumDlg        = 0;
     }
 
     FbWidget*       widget;
-    DItemsList*    imgList;
+    DItemsList*     imgList;
     QPushButton*    changeUserBtn;
     QComboBox*      albumsCoB;
     QPushButton*    newAlbumBtn;
@@ -103,12 +102,6 @@ public:
     QString         profileAID;
     QString         currentAlbumID;
 
-    // the next two entries are only used to upgrade to the new authentication scheme
-    QString         sessionKey;             // old world session key
-    QString         sessionSecret;          // old world session secret
-    unsigned int    sessionExpires;
-    QString         accessToken;            // OAuth access token
-
     QList<QUrl>     transferQueue;
 
     FbTalker*       talker;
@@ -123,7 +116,7 @@ FbWindow::FbWindow(DInfoInterface* const iface,
       d(new Private(this, iface))
 {
     d->tmpPath.clear();
-    d->tmpDir      = WSToolUtils::makeTemporaryDir("facebook").absolutePath() + QLatin1Char('/');
+    d->tmpDir = WSToolUtils::makeTemporaryDir("facebook").absolutePath() + QLatin1Char('/');
 
     setMainWidget(d->widget);
     setModal(false);
@@ -134,6 +127,11 @@ FbWindow::FbWindow(DInfoInterface* const iface,
     startButton()->setToolTip(i18n("Start upload to Facebook web service"));
 
     d->widget->setMinimumSize(700, 500);
+
+    d->changeUserBtn->setStyleSheet(QLatin1String("QPushButton {background-color: "
+                                                  "#3b5998; color: #ffffff;}"));
+    d->changeUserBtn->setIcon(QIcon::fromTheme(QLatin1String("facebook-white")));
+    d->changeUserBtn->setText(i18n("Continue with Facebook"));
 
     // ------------------------------------------------------------------------
 
@@ -186,12 +184,11 @@ FbWindow::FbWindow(DInfoInterface* const iface,
             this, SLOT(slotStopAndCloseProgressBar()));
 
     // ------------------------------------------------------------------------
+
     readSettings();
+    buttonStateChange(false);
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
-    buttonStateChange(d->talker->linked());
-
-    authenticate();
+    authenticate(false);
 }
 
 FbWindow::~FbWindow()
@@ -232,12 +229,6 @@ void FbWindow::slotCancelClicked()
     d->progressBar->progressCompleted();
 }
 
-void FbWindow::reactivate()
-{
-    d->imgList->loadImagesFromCurrentSelection();
-    show();
-}
-
 void FbWindow::closeEvent(QCloseEvent* e)
 {
     if (!e)
@@ -254,34 +245,19 @@ void FbWindow::readSettings()
     KConfig config;
     KConfigGroup grp  = config.group("Facebook Settings");
 
-    /* 
-     * Access token and session expire now handled in fbtalker.cpp by O2
-     */
-//     d->accessToken    = grp.readEntry("Access Token");
-//     d->sessionExpires = grp.readEntry("Session Expires", 0);
-// 
-//     if (d->accessToken.isEmpty())
-//     {
-//         d->sessionKey     = grp.readEntry("Session Key");
-//         d->sessionSecret  = grp.readEntry("Session Secret");
-//     }
-
-    d->currentAlbumID = grp.readEntry("Current Album", QString());
-
     if (grp.readEntry("Resize", false))
     {
         d->resizeChB->setChecked(true);
         d->dimensionSpB->setEnabled(true);
-        d->imageQualitySpB->setEnabled(true);
     }
     else
     {
         d->resizeChB->setChecked(false);
         d->dimensionSpB->setEnabled(false);
-        d->imageQualitySpB->setEnabled(false);
     }
 
-    d->dimensionSpB->setValue(grp.readEntry("Maximum Width", 604));
+    d->currentAlbumID = grp.readEntry("Current Album", QString());
+    d->dimensionSpB->setValue(grp.readEntry("Maximum Width", 1600));
     d->imageQualitySpB->setValue(grp.readEntry("Image Quality", 85));
 
     winId();
@@ -295,31 +271,10 @@ void FbWindow::writeSettings()
     KConfig config;
     KConfigGroup grp = config.group("Facebook Settings");
 
-    /* 
-     * Access token and session expire now handled in fbtalker.cpp by O2
-     */
-//     grp.writeEntry("Access Token",    d->accessToken);
-
-    /* If we have both access token and session key, then we have just converted one into the other. */
-//     if (! d->accessToken.isEmpty())
-//     {
-//         if (! d->sessionKey.isEmpty())
-//         {
-//             grp.deleteEntry("Session Key");
-//         }
-// 
-//         if (! d->sessionSecret.isEmpty())
-//         {
-//             grp.deleteEntry("Session Secret");
-//         }
-//     }
-// 
-//     grp.writeEntry("Session Expires", d->sessionExpires);
-
-    grp.writeEntry("Current Album",   d->currentAlbumID);
-    grp.writeEntry("Resize",          d->resizeChB->isChecked());
-    grp.writeEntry("Maximum Width",   d->dimensionSpB->value());
-    grp.writeEntry("Image Quality",   d->imageQualitySpB->value());
+    grp.writeEntry("Current Album", d->currentAlbumID);
+    grp.writeEntry("Resize",        d->resizeChB->isChecked());
+    grp.writeEntry("Maximum Width", d->dimensionSpB->value());
+    grp.writeEntry("Image Quality", d->imageQualitySpB->value());
 
     KConfigGroup dialogGroup = config.group("Facebook Export Dialog");
     KWindowConfig::saveWindowSize(windowHandle(), dialogGroup);
@@ -327,14 +282,22 @@ void FbWindow::writeSettings()
     config.sync();
 }
 
-void FbWindow::authenticate()
+void FbWindow::authenticate(bool forceLogin)
 {
-    setRejectButtonMode(QDialogButtonBox::Cancel);
     d->progressBar->show();
     d->progressBar->setFormat(QLatin1String(""));
+    setRejectButtonMode(QDialogButtonBox::Cancel);
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method ";
-    d->talker->reauthenticate();
+
+    if (forceLogin)
+    {
+        d->talker->link();
+    }
+    else
+    {
+        d->talker->readSettings();
+    }
 }
 
 void FbWindow::slotLoginProgress(int step, int maxStep, const QString& label)
@@ -360,18 +323,28 @@ void FbWindow::slotLoginDone(int errCode, const QString& errMsg)
     d->progressBar->hide();
 
     buttonStateChange(d->talker->linked());
+
+    if (d->talker->linked())
+    {
+        d->changeUserBtn->setText(i18n("Log Out of Facebook"));
+    }
+    else
+    {
+        d->changeUserBtn->setText(i18n("Continue with Facebook"));
+    }
+
     FbUser user = d->talker->getUser();
     setProfileAID(user.id.toLongLong());
+
     d->widget->updateLabels(user.name, user.profileURL);
     d->albumsCoB->clear();
 
-    d->albumsCoB->addItem(i18n("<auto create>"), QString());
-
     if (errCode == 0 && d->talker->linked())
     {
+        d->albumsCoB->addItem(i18n("<auto create>"), QString());
         d->talker->listAlbums();    // get albums to fill combo box
     }
-    else
+    else if (errCode > 0)
     {
         QMessageBox::critical(this, QString(), i18n("Facebook Call Failed: %1\n", errMsg));
     }
@@ -383,13 +356,13 @@ void FbWindow::slotListAlbumsDone(int errCode,
 {
     QString albumDebug = QLatin1String("");
 
-    foreach(const FbAlbum &album, albumsList)
+    foreach (const FbAlbum& album, albumsList)
     {
         albumDebug.append(QString::fromLatin1("%1: %2\n").arg(album.id).arg(album.title));
     }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received albums (errCode = " << errCode << ", errMsg = "
-             << errMsg << "): " << albumDebug;
+                                     << errMsg << "): " << albumDebug;
 
     if (errCode != 0)
     {
@@ -418,10 +391,6 @@ void FbWindow::slotListAlbumsDone(int errCode,
                 albumIcon = QLatin1String("system-users");
                 break;
 
-//             case FB_NETWORKS:
-//                 albumIcon = QLatin1String("network-workgroup");
-//                 break;
-
             case FB_EVERYONE:
                 albumIcon = QLatin1String("folder-html");
                 break;
@@ -431,10 +400,9 @@ void FbWindow::slotListAlbumsDone(int errCode,
                 break;
         }
 
-        d->albumsCoB->addItem(
-            QIcon::fromTheme(albumIcon),
-            albumsList.at(i).title,
-            albumsList.at(i).id);
+        d->albumsCoB->addItem(QIcon::fromTheme(albumIcon),
+                              albumsList.at(i).title,
+                              albumsList.at(i).id);
 
         if (d->currentAlbumID == albumsList.at(i).id)
         {
@@ -466,37 +434,19 @@ void FbWindow::slotBusy(bool val)
     }
 }
 
-/* Maybe we don't really want to logout but just change user
- * The logout should be an explicit button rather than change account
- */
-void FbWindow::slotUserLogout()
-{
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot User Logout";
-
-    // Logout and wait until it's done
-    d->talker->logout();
-
-    QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
-                                                    i18n("Warning"),
-                                                    i18n("You will be logged out of your account. If you have logged out of facebook,"
-                                                    "click \"Continue\" to authenticate for another account."),
-                                                    QMessageBox::Yes | QMessageBox::No);
-
-    (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
-    (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
-
-    if (warn->exec() == QMessageBox::Yes)
-    {
-        d->talker->reauthenticate();
-    }
-
-    delete warn;
-}
-
 void FbWindow::slotUserChangeRequest()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot Change User Request";
-    slotUserLogout();
+
+    if (d->talker->linked())
+    {
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot User Logout";
+        d->talker->logout();
+    }
+    else
+    {
+        authenticate(true);
+    }
 }
 
 void FbWindow::slotReloadAlbumsRequest(long long userID)
@@ -552,7 +502,7 @@ void FbWindow::slotStartTransfer()
     d->progressBar->setValue(0);
     d->progressBar->show();
     d->progressBar->progressScheduled(i18n("Facebook export"), true, true);
-    d->progressBar->progressThumbnailChanged(QIcon(QLatin1String("facebook")).pixmap(22, 22));
+    d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QLatin1String("facebook")).pixmap(22, 22));
 
     uploadNextPhoto();
 }
@@ -561,8 +511,7 @@ void FbWindow::setProfileAID(long long userID)
 {
     // store AID of Profile Photos album
     // http://wiki.developers.facebook.com/index.php/Profile_archive_album
-    d->profileAID = QString::number((userID << 32)
-                                   + (-3 & 0xFFFFFFFF));
+    d->profileAID = QString::number((userID << 32) + (-3 & 0xFFFFFFFF));
 }
 
 QString FbWindow::getImageCaption(const QString& fileName)
@@ -595,8 +544,8 @@ bool FbWindow::prepareImageForUpload(const QString& imgPath, QString& caption)
     // rescale image if requested
     int maxDim = d->dimensionSpB->value();
 
-    if (d->resizeChB->isChecked()
-        && (image.width() > maxDim || image.height() > maxDim))
+    if (d->resizeChB->isChecked() &&
+        (image.width() > maxDim || image.height() > maxDim))
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing to " << maxDim;
         image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio,

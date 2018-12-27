@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : border threaded image filter.
  *
- * Copyright 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
@@ -128,8 +128,8 @@ public:
 
     /** Constructor using settings to preserve aspect ratio of image.
      */
-    explicit BorderFilter(QObject* parent = 0);
-    explicit BorderFilter(DImg* orgImage, QObject* parent=0, const BorderContainer& settings = BorderContainer());
+    explicit BorderFilter(QObject* const parent = 0);
+    explicit BorderFilter(DImg* orgImage, QObject* const parent=0, const BorderContainer& settings = BorderContainer());
     virtual ~BorderFilter();
 
     static QString          FilterIdentifier()

@@ -46,9 +46,9 @@ class LoadingProcessListener
 public:
 
     virtual ~LoadingProcessListener() {};
-    virtual bool querySendNotifyEvent() = 0;
+    virtual bool querySendNotifyEvent() const = 0;
     virtual void setResult(const LoadingDescription& loadingDescription, const DImg& img) = 0;
-    virtual LoadSaveNotifier* loadSaveNotifier() = 0;
+    virtual LoadSaveNotifier* loadSaveNotifier() const = 0;
     virtual LoadSaveThread::AccessMode accessMode() = 0;
 };
 
@@ -59,9 +59,9 @@ class LoadingProcess
 public:
 
     virtual ~LoadingProcess() {};
-    virtual bool completed() = 0;
-    virtual QString filePath() = 0;
-    virtual QString cacheKey() = 0;
+    virtual bool completed() const volatile = 0;
+    virtual QString filePath() const = 0;
+    virtual QString cacheKey() const = 0;
     virtual void addListener(LoadingProcessListener* const listener) = 0;
     virtual void removeListener(LoadingProcessListener* const listener) = 0;
     virtual void notifyNewLoadingProcess(LoadingProcess* const process, const LoadingDescription& description) = 0;
@@ -160,7 +160,7 @@ public:
     DImg* retrieveImage(const QString& cacheKey) const;
 
     /// Returns whether the given DImg fits in the cache.
-    bool isCacheable(const DImg* img) const;
+    bool isCacheable(const DImg& img) const;
 
     /** Put image into for given string into the cache.
      *  Returns true if image has been put in the cache, false otherwise.
@@ -169,7 +169,7 @@ public:
      *  The third parameter specifies a file path that will be watched.
      *  If this file changes, the object will be removed from the cache.
      */
-    bool putImage(const QString& cacheKey, DImg* img, const QString& filePath) const;
+    bool putImage(const QString& cacheKey, const DImg& img, const QString& filePath) const;
 
     /**
      *  Remove entries for the given cacheKey from the cache
@@ -192,17 +192,17 @@ public:
      *  Add a loading process to the list. Only one loading process
      *  for the same cache key is registered at a time.
      */
-    void addLoadingProcess(LoadingProcess* process);
+    void addLoadingProcess(LoadingProcess* const process);
 
     /**
      *  Remove loading process for given cache key
      */
-    void removeLoadingProcess(LoadingProcess* process);
+    void removeLoadingProcess(LoadingProcess* const process);
 
     /**
      *  Notify all currently registered loading processes
      */
-    void notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description);
+    void notifyNewLoadingProcess(LoadingProcess* const process, const LoadingDescription& description);
 
     /**
      *  Sets the cache size in megabytes.
@@ -302,7 +302,7 @@ private:
 
 private:
 
-    static LoadingCache*    m_instance;
+    static LoadingCache* m_instance;
 
     class Private;
     Private* const d;

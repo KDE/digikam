@@ -7,7 +7,7 @@
  * Description : image region widget item for image editor.
  *
  * Copyright (C) 2013-2014 by Yiou Wang <geow812 at gmail dot com>
- * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dimgitemspriv.h"
+#include "dimgitems_p.h"
 #include "editorcore.h"
 #include "exposurecontainer.h"
 #include "iccmanager.h"

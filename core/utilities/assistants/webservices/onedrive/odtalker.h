@@ -58,7 +58,6 @@ public:
     void listFolders(const QString& folder = QString());
     void createFolder(QString& path);
     void setAccessToken(const QString& token);
-    QMap<QString, QString> ParseUrlParameters(const QString& url);
     void readSettings();
     void writeSettings();
 

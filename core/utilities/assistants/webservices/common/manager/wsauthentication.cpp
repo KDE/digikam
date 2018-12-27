@@ -136,8 +136,8 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
             //d->talker = new ImgurTalker(d->wizard);
             break;
         case WSSettings::WebService::FACEBOOK:
-            d->albumDlg = new FbNewAlbumDlg(d->wizard, d->serviceName);
-            d->talker   = new FbTalker(d->wizard, d->albumDlg);
+            //d->albumDlg = new FbNewAlbumDlg(d->wizard, d->serviceName);
+            //d->talker   = new FbTalker(d->wizard, d->albumDlg);
             break;
         case WSSettings::WebService::SMUGMUG:
             //d->talker = new SmugTalker(d->iface, d->wizard);

@@ -6,7 +6,7 @@
  * Date        : 1997-04-21
  * Description : Date selection table.
  *
- * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 1997      by Tim D. Gilman <tdgilman at best dot org>
  * Copyright (C) 1998-2001 by Mirko Boehm <mirko at kde dot org>
  * Copyright (C) 2007      by John Layt <john at layt dot net>
@@ -267,7 +267,7 @@ void DDateTable::paintCell(QPainter* painter, int row, int col)
 
         //Set the text to the short day name and bold it
         cellFont.setBold(true);
-        cellText = locale().dayName(cellWeekDay, QLocale::ShortFormat);
+        cellText = locale().standaloneDayName(cellWeekDay, QLocale::ShortFormat);
 
     }
     else
@@ -490,7 +490,7 @@ void DDateTable::setFontSize(int size)
 
     for (int weekday = 1; weekday <= 7; ++weekday)
     {
-        rect = metrics.boundingRect(locale().dayName(weekday, QLocale::ShortFormat));
+        rect = metrics.boundingRect(locale().standaloneDayName(weekday, QLocale::ShortFormat));
         d->maxCell.setWidth(qMax(d->maxCell.width(), rect.width()));
         d->maxCell.setHeight(qMax(d->maxCell.height(), rect.height()));
     }

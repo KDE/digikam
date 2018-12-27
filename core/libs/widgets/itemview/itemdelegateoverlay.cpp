@@ -36,7 +36,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "itemviewimagedelegate.h"
+#include "itemviewdelegate.h"
 #include "itemviewhoverbutton.h"
 
 namespace Digikam
@@ -175,7 +175,7 @@ int ItemDelegateOverlay::numberOfAffectedIndexes(const QModelIndex& index) const
 
 // --------------------------------------------------------------------------------------------
 
-AbstractWidgetDelegateOverlay::AbstractWidgetDelegateOverlay(QObject* parent)
+AbstractWidgetDelegateOverlay::AbstractWidgetDelegateOverlay(QObject* const parent)
     : ItemDelegateOverlay(parent),
       m_widget(0),
       m_mouseButtonPressedOnWidget(false)

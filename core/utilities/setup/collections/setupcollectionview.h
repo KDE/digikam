@@ -7,7 +7,7 @@
  * Description : collections setup tab model/view
  *
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,10 +64,15 @@ public:
         CategoryButtonDisplayRole  = Qt::UserRole + 1,
         CategoryButtonMapId        = Qt::UserRole + 2,
         /// Returns true if the model index is the index of a button
-        IsButtonRole               = Qt::UserRole + 3,
+        IsUpdateRole               = Qt::UserRole + 3,
         /// The pixmap of the button
-        ButtonDecorationRole       = Qt::UserRole + 4,
-        ButtonMapId                = Qt::UserRole + 5
+        UpdateDecorationRole       = Qt::UserRole + 4,
+        UpdateMapId                = Qt::UserRole + 5,
+        /// Returns true if the model index is the index of a button
+        IsDeleteRole               = Qt::UserRole + 6,
+        /// The pixmap of the button
+        DeleteDecorationRole       = Qt::UserRole + 7,
+        DeleteMapId                = Qt::UserRole + 8
     };
 
     enum Columns
@@ -75,7 +80,8 @@ public:
         ColumnStatus       = 0,
         ColumnName         = 1,
         ColumnPath         = 2,
-        ColumnDeleteButton = 3,
+        ColumnUpdateButton = 3,
+        ColumnDeleteButton = 4,
         NumberOfColumns
     };
 
@@ -138,17 +144,20 @@ public Q_SLOTS:
      *  mappedId is retrieved with the ButtonMapId role
      *  for the model index of the button
      */
-    void slotButtonPressed(int mappedId);
+    void slotUpdatePressed(int mappedId);
+    void slotDeletePressed(int mappedId);
 
 protected Q_SLOTS:
 
     void addCollection(int category);
+    void updateCollection(int internalId);
     void deleteCollection(int internalId);
 
 protected:
 
     QModelIndex indexForId(int id, int column) const;
 
+    bool askForNewCollectionPath(int category, QString* const newPath, QString* const newLabel);
     int categoryButtonMapId(const QModelIndex& index) const;
     int buttonMapId(const QModelIndex& index) const;
 
@@ -168,6 +177,7 @@ protected:
         QString            label;
         QString            path;
         int                parentId;
+        bool               updated;
         bool               deleted;
     };
 
@@ -228,18 +238,21 @@ public:
 Q_SIGNALS:
 
     void categoryButtonPressed(int mappedId);
-    void buttonPressed(int mappedId);
+    void updatePressed(int mappedId);
+    void deletePressed(int mappedId);
 
 protected:
 
     QStyledItemDelegate* m_styledDelegate;
 
     QPushButton*         m_samplePushButton;
-    QToolButton*         m_sampleToolButton;
+    QToolButton*         m_sampleUpdateButton;
+    QToolButton*         m_sampleDeleteButton;
     int                  m_categoryMaxStyledWidth;
 
     QSignalMapper*       m_categoryButtonMapper;
-    QSignalMapper*       m_buttonMapper;
+    QSignalMapper*       m_updateMapper;
+    QSignalMapper*       m_deleteMapper;
 };
 
 } // namespace Digikam

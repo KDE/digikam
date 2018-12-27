@@ -6,7 +6,7 @@
  * Date        : 2006-05-16
  * Description : A tool to edit geolocation
  *
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010-2014 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2010      by Gabriel Voicu <ping dot gabi at gmail dot com>
  * Copyright (C) 2014      by Justus Schwartz <justus at gmx dot li>
@@ -68,11 +68,11 @@
 #include "itemmarkertiler.h"
 #include "trackmanager.h"
 #include "gpscommon.h"
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 #include "mapdragdrophandler.h"
-#include "gpsimagelist.h"
+#include "gpsitemlist.h"
 #include "gpsitemlistdragdrophandler.h"
-#include "gpsimagelistcontextmenu.h"
+#include "gpsitemlistcontextmenu.h"
 #include "gpscorrelatorwidget.h"
 #include "digikam_debug.h"
 #include "dmessagebox.h"
@@ -107,7 +107,7 @@ public:
 
     QPair<QUrl, QString> operator()(const QPersistentModelIndex& itemIndex)
     {
-        GPSImageItem* const item = imageModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const item = imageModel->itemFromIndex(itemIndex);
 
         if (!item)
             return QPair<QUrl, QString>(QUrl(), QString());
@@ -134,7 +134,7 @@ public:
 
     QPair<QUrl, QString> operator()(const QPersistentModelIndex& itemIndex)
     {
-        GPSImageItem* const item = imageModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const item = imageModel->itemFromIndex(itemIndex);
 
         if (!item)
             return QPair<QUrl, QString>(QUrl(), QString());
@@ -204,7 +204,7 @@ public:
     GPSItemModel*                           imageModel;
     QItemSelectionModel*                     selectionModel;
     bool                                     uiEnabled;
-    GPSImageListContextMenu*                 listViewContextMenu;
+    GPSItemListContextMenu*                 listViewContextMenu;
     TrackManager*                            trackManager;
 
     // Loading and saving
@@ -218,7 +218,7 @@ public:
     QDialogButtonBox*                        buttonBox;
     QSplitter*                               VSplitter;
     QSplitter*                               HSplitter;
-    GPSImageList*                            treeView;
+    GPSItemList*                            treeView;
     QStackedWidget*                          stackedWidget;
     QTabBar*                                 tabBar;
     int                                      splitterSize;
@@ -294,7 +294,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
                                         d->selectionModel,
                                         d->stackedWidget);
 
-    GPSImageItem::setHeaderData(d->imageModel);
+    GPSItemContainer::setHeaderData(d->imageModel);
     d->mapModelHelper      = new GPSGeoIfaceModelHelper(d->imageModel, d->selectionModel, this);
     d->mapModelHelper->addUngroupedModelHelper(d->bookmarkOwner->bookmarkModelHelper());
 
@@ -381,7 +381,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
     d->mapSplitter->addWidget(mapVBox);
     d->VSplitter->addWidget(d->mapSplitter);
 
-    d->treeView      = new GPSImageList(this);
+    d->treeView      = new GPSItemList(this);
     d->treeView->setModelAndSelectionModel(d->imageModel, d->selectionModel);
     d->treeView->setDragDropHandler(new GPSItemListDragDropHandler(this));
     d->treeView->setDragEnabled(true);
@@ -392,7 +392,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
     d->treeView->setSortingEnabled(true);
     d->VSplitter->addWidget(d->treeView);
 
-    d->listViewContextMenu  = new GPSImageListContextMenu(d->treeView, d->bookmarkOwner);
+    d->listViewContextMenu  = new GPSItemListContextMenu(d->treeView, d->bookmarkOwner);
     d->HSplitter->addWidget(d->stackedWidget);
     d->HSplitter->setCollapsible(1, true);
     d->splitterSize         = 0;
@@ -585,19 +585,19 @@ void GeolocationEdit::setCurrentTab(int index)
 
 void GeolocationEdit::setImages(const QList<QUrl>& images)
 {
-    QList<GPSImageItem*> items;
+    QList<GPSItemContainer*> items;
 
     foreach(const QUrl& u, images)
     {
-        items << new GPSImageItem(u);
+        items << new GPSItemContainer(u);
     }
 
     setItems(items);
 }
 
-void GeolocationEdit::setItems(const QList<GPSImageItem*>& items)
+void GeolocationEdit::setItems(const QList<GPSItemContainer*>& items)
 {
-    foreach(GPSImageItem* const newItem, items)
+    foreach(GPSItemContainer* const newItem, items)
     {
         newItem->loadImageData();
         d->imageModel->addItem(newItem);
@@ -784,7 +784,7 @@ void GeolocationEdit::closeEvent(QCloseEvent *e)
     for (int i = 0; i < d->imageModel->rowCount(); ++i)
     {
         const QModelIndex itemIndex = d->imageModel->index(i, 0);
-        GPSImageItem* const item    = d->imageModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const item    = d->imageModel->itemFromIndex(itemIndex);
 
         if (item->isDirty() || item->isTagListDirty())
         {
@@ -836,7 +836,7 @@ void GeolocationEdit::slotImageActivated(const QModelIndex& index)
     if (!index.isValid())
         return;
 
-    GPSImageItem* const item = d->imageModel->itemFromIndex(index);
+    GPSItemContainer* const item = d->imageModel->itemFromIndex(index);
 
     if (!item)
         return;
@@ -888,7 +888,7 @@ void GeolocationEdit::saveChanges(const bool closeAfterwards)
     for (int i = 0 ; i < d->imageModel->rowCount() ; ++i)
     {
         const QModelIndex itemIndex = d->imageModel->index(i, 0);
-        GPSImageItem* const item    = d->imageModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const item    = d->imageModel->itemFromIndex(itemIndex);
 
         if (item->isDirty() || item->isTagListDirty())
         {

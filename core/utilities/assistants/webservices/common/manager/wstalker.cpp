@@ -55,7 +55,6 @@ WSTalker::WSTalker(QWidget* const parent)
       m_netMngr(new QNetworkAccessManager(this)),
       m_reply(0),
       m_state(WSTalker::DEFAULT),
-      m_buffer(0),
       m_settings(0),
       m_store(0),
       m_userName(QString("")),
@@ -390,22 +389,22 @@ void WSTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    m_buffer.append(reply->readAll());
+    QByteArray buffer = reply->readAll();
 
     switch (m_state)
     {
         case WSTalker::GETUSER :
-            parseResponseGetLoggedInUser(m_buffer);
+            parseResponseGetLoggedInUser(buffer);
             authenticationDone(0, QLatin1String(""));
             break;
         case WSTalker::LISTALBUMS :
-            parseResponseListAlbums(m_buffer);
+            parseResponseListAlbums(buffer);
             break;
         case WSTalker::CREATEALBUM :
-            parseResponseCreateAlbum(m_buffer);
+            parseResponseCreateAlbum(buffer);
             break;
         case WSTalker::ADDPHOTO :
-            parseResponseAddPhoto(m_buffer);
+            parseResponseAddPhoto(buffer);
             break;
         case WSTalker::DEFAULT :
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotFinished at state = default";

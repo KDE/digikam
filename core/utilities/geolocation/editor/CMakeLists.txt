@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2017, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2019, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -31,12 +31,12 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                             dragdrop/mapdragdrophandler.cpp
                             dragdrop/gpsitemlistdragdrophandler.cpp
 
-                            items/gpsimagemodel.cpp
-                            items/gpsimagesortproxymodel.cpp
-                            items/gpsimageitem.cpp
-                            items/gpsimageitemdelegate.cpp
-                            items/gpsimagelist.cpp
-                            items/gpsimagelistcontextmenu.cpp
+                            items/gpsitemcontainer.cpp
+                            items/gpsitemdelegate.cpp
+                            items/gpsitemmodel.cpp
+                            items/gpsitemsortproxymodel.cpp
+                            items/gpsitemlist.cpp
+                            items/gpsitemlistcontextmenu.cpp
 
                             dialog/gpscommon.cpp
                             dialog/gpsitemdetails.cpp

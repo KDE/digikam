@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,8 +34,8 @@ ItemQueryBuilder::ItemQueryBuilder()
 
     for (int i = 1 ; i <= 12 ; ++i)
     {
-        m_shortMonths[i-1] = QLocale().monthName(i, QLocale::ShortFormat).toLower();
-        m_longMonths[i-1]  = QLocale().monthName(i, QLocale::LongFormat).toLower();
+        m_shortMonths[i-1] = QLocale().standaloneMonthName(i, QLocale::ShortFormat).toLower();
+        m_longMonths[i-1]  = QLocale().standaloneMonthName(i, QLocale::LongFormat).toLower();
     }
 
     m_imageTagPropertiesJoined = false;

@@ -23,7 +23,7 @@
  * MKV files  : Matroska container tags.
  * QT files   : Quicktime container tags (Apple).
  *
- * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -258,10 +258,35 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     bool astream = false;
     bool sstream = false;
 
-    for (uint i = 0 ; i < fmt_ctx->nb_streams ; i++)
+    for (uint i = 0 ; i < fmt_ctx->nb_streams ; ++i)
     {
         const AVStream* const stream   = fmt_ctx->streams[i];
+
+        if (!stream)
+            continue;
+
         AVCodecParameters* const codec = stream->codecpar;
+
+        if (!codec)
+            continue;
+
+        const char* cname              = avcodec_get_name(codec->codec_id);
+
+        if (QLatin1String(cname) == QLatin1String("none"))
+        {
+            if (codec->codec_type == AVMEDIA_TYPE_AUDIO)
+            {
+                setXmpTagString("Xmp.audio.Codec",
+                    QString::fromUtf8(cname));
+            }
+            else if (codec->codec_type == AVMEDIA_TYPE_VIDEO)
+            {
+                setXmpTagString("Xmp.video.Codec",
+                    QString::fromUtf8(cname));
+            }
+
+            continue;
+        }
 
         // -----------------------------------------
         // Audio stream parsing
@@ -269,8 +294,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
         if (!astream && codec->codec_type == AVMEDIA_TYPE_AUDIO)
         {
-            astream           = true;
-            const char* cname = avcodec_get_name(codec->codec_id);
+            astream = true;
 
             setXmpTagString("Xmp.audio.Codec",
                 QString::fromUtf8(cname));
@@ -374,8 +398,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
         if (!vstream && codec->codec_type == AVMEDIA_TYPE_VIDEO)
         {
-            vstream           = true;
-            const char* cname = avcodec_get_name(codec->codec_id);
+            vstream = true;
 
             setXmpTagString("Xmp.video.Codec",
                  QString::fromUtf8(cname));
@@ -631,8 +654,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
         if (!sstream && codec->codec_type == AVMEDIA_TYPE_SUBTITLE)
         {
-            sstream           = true;
-            const char* cname = avcodec_get_name(codec->codec_id);
+            sstream = true;
 
             setXmpTagString("Xmp.video.SubTCodec",
                 QString::fromUtf8(cname));
@@ -1036,7 +1058,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    for (int i = 1 ; i <= 9 ; i++)
+    for (int i = 1 ; i <= 9 ; ++i)
     {
         s_setXmpTagStringFromEntry(this,
                          QStringList() << QString::fromLatin1("IAS%1").arg(i),                                  // RIFF files.
@@ -1497,7 +1519,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
         QList<int> digits;
 
-        for (int i = 0 ; i < data.length() ; i++)
+        for (int i = 0 ; i < data.length() ; ++i)
         {
             QChar c = data[i];
 

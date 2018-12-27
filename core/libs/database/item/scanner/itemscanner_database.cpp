@@ -7,7 +7,7 @@
  * Description : Scanning a single item - database helper.
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,8 @@ void ItemScanner::commit()
         case ItemScannerCommit::NoOp:
             return;
         case ItemScannerCommit::AddItem:
-            commitAddImage();
+            if (!commitAddImage())
+                return;
             break;
         case ItemScannerCommit::UpdateItem:
             commitUpdateImage();
@@ -185,13 +186,13 @@ void ItemScanner::prepareAddImage(int albumId)
     d->commit.operation = ItemScannerCommit::AddItem;
 }
 
-void ItemScanner::commitAddImage()
+bool ItemScanner::commitAddImage()
 {
-    // get the image id of a deleted image info if existent and mark it as valid.
+    // find the image id of a deleted image info if existent and mark it as valid.
     // otherwise, create a new item.
-    qlonglong imageId = CoreDbAccess().db()->getImageId(-1, d->scanInfo.itemName, DatabaseItem::Status::Trashed,
-                                                         d->scanInfo.category, d->scanInfo.modificationDate,
-                                                         d->scanInfo.fileSize, d->scanInfo.uniqueHash);
+    qlonglong imageId = CoreDbAccess().db()->findImageId(-1, d->scanInfo.itemName, DatabaseItem::Status::Trashed,
+                                                         d->scanInfo.category, d->scanInfo.fileSize, d->scanInfo.uniqueHash);
+
     if (imageId != -1)
     {
         qCDebug(DIGIKAM_DATABASE_LOG) << "Detected identical image info with id" << imageId
@@ -201,6 +202,8 @@ void ItemScanner::commitAddImage()
         d->scanInfo.id = imageId;
         CoreDbAccess().db()->setItemAlbum(imageId, d->scanInfo.albumID);
         CoreDbAccess().db()->setItemStatus(imageId, DatabaseItem::Status::Visible);
+
+        return false;
     }
     else
     {
@@ -209,6 +212,8 @@ void ItemScanner::commitAddImage()
                                                       d->scanInfo.modificationDate, d->scanInfo.fileSize,
                                                       d->scanInfo.uniqueHash);
     }
+
+    return true;
 }
 
 } // namespace Digikam

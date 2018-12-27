@@ -48,7 +48,6 @@
 #include "metaenginesettings.h"
 #include "digikam_debug.h"
 #include "dlayoutbox.h"
-#include "dmetadata.h"
 
 using namespace QtAV;
 
@@ -174,25 +173,30 @@ void SlideVideo::setCurrentUrl(const QUrl& url)
 {
     d->player->stop();
 
+    int orientation     = 0;
+    bool supportedCodec = true;
+
+    if (d->iface)
+    {
+        DItemInfo info(d->iface->itemInfo(url));
+
+        orientation = info.orientation();
+
+        if (info.videoCodec() == QLatin1String("none"))
+        {
+            supportedCodec = false;
+        }
+    }
+
     if (MetaEngineSettings::instance()->settings().exifRotate)
     {
-        int orientation      = 0;
         int videoOrientation = 0;
-
-        if (d->iface)
-        {
-            DItemInfo info(d->iface->itemInfo(url));
-            orientation = info.orientation();
-        }
-        else
-        {
-            DMetadata meta(url.toLocalFile());
-            orientation = meta.getItemOrientation();
-        }
 
         switch (orientation)
         {
             case MetaEngine::ORIENTATION_ROT_90:
+            case MetaEngine::ORIENTATION_ROT_90_HFLIP:
+            case MetaEngine::ORIENTATION_ROT_90_VFLIP:
                 videoOrientation = 90;
                 break;
             case MetaEngine::ORIENTATION_ROT_180:
@@ -209,8 +213,16 @@ void SlideVideo::setCurrentUrl(const QUrl& url)
         d->videoWidget->setOrientation(videoOrientation);
     }
 
-    d->player->setFile(url.toLocalFile());
-    d->player->play();
+    if (supportedCodec)
+    {
+        d->player->setFile(url.toLocalFile());
+        d->player->play();
+    }
+    else
+    {
+        d->player->setFile(QString());
+        emit signalVideoLoaded(false);
+    }
 
     showIndicator(false);
 }

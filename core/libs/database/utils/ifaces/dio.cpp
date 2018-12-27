@@ -139,6 +139,7 @@ DIO* DIO::instance()
 
 DIO::DIO()
 {
+    m_processingCount = 0;
 }
 
 DIO::~DIO()
@@ -147,6 +148,11 @@ DIO::~DIO()
 
 void DIO::cleanUp()
 {
+}
+
+bool DIO::itemsUnderProcessing()
+{
+    return instance()->m_processingCount;
 }
 
 // Album -> Album -----------------------------------------------------
@@ -377,6 +383,8 @@ void DIO::createJob(IOJobData* const data)
         connect(item, SIGNAL(progressItemCanceled(ProgressItem*)),
                 this, SLOT(slotCancel(ProgressItem*)));
     }
+
+    ++m_processingCount;
 }
 
 void DIO::slotResult()
@@ -396,6 +404,11 @@ void DIO::slotResult()
         QString errors = jobThread->errorsList().join(QLatin1Char('\n'));
         DNotificationWrapper(QString(), errors, DigikamApp::instance(),
                              DigikamApp::instance()->windowTitle());
+    }
+
+    if (m_processingCount)
+    {
+        --m_processingCount;
     }
 
     slotCancel(getProgressItem(data));
@@ -502,17 +515,11 @@ void DIO::slotOneProccessed(const QUrl& url)
 
     // Scan folders for changes
 
-    QString scanPath;
-
-    if (operation == IOJobData::CopyImage || operation == IOJobData::CopyAlbum ||
-        operation == IOJobData::CopyFiles || operation == IOJobData::MoveImage ||
-        operation == IOJobData::MoveAlbum || operation == IOJobData::MoveFiles)
-    {
-        scanPath = data->destUrl().toLocalFile();
-    }
-    else if (operation == IOJobData::Delete || operation == IOJobData::Trash)
+    if (operation == IOJobData::Delete || operation == IOJobData::Trash ||
+        operation == IOJobData::MoveAlbum)
     {
         PAlbum* const album = data->srcAlbum();
+        QString scanPath;
 
         if (album)
         {
@@ -523,14 +530,20 @@ void DIO::slotOneProccessed(const QUrl& url)
                 scanPath = parent->fileUrl().toLocalFile();
             }
         }
-        else
+
+        if (scanPath.isEmpty())
         {
             scanPath = url.adjusted(QUrl::RemoveFilename).toLocalFile();
         }
+
+        ScanController::instance()->scheduleCollectionScanRelaxed(scanPath);
     }
 
-    if (!scanPath.isEmpty())
+    if (operation == IOJobData::CopyImage || operation == IOJobData::CopyAlbum ||
+        operation == IOJobData::CopyFiles || operation == IOJobData::MoveImage ||
+        operation == IOJobData::MoveAlbum || operation == IOJobData::MoveFiles)
     {
+        QString scanPath = data->destUrl().toLocalFile();
         ScanController::instance()->scheduleCollectionScanRelaxed(scanPath);
     }
 

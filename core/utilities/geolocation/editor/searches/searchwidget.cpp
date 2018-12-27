@@ -6,7 +6,7 @@
  * Date        : 2010-06-01
  * Description : A widget to search for places.
  *
- * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010-2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -57,7 +57,7 @@
 #include "searchresultmodelhelper.h"
 #include "gpscommon.h"
 #include "gpsundocommand.h"
-#include "gpsimagemodel.h"
+#include "gpsitemmodel.h"
 #include "gpsbookmarkowner.h"
 
 #ifdef GPSSYNC_MODELTEST
@@ -446,7 +446,7 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
     for (int i = 0 ; i < selectedImageIndices.count() ; ++i)
     {
         const QPersistentModelIndex itemIndex = selectedImageIndices.at(i);
-        GPSImageItem* const item              = d->gpsItemModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const item              = d->gpsItemModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(item);

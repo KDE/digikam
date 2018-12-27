@@ -7,7 +7,7 @@
  * Description : a widget to perform month selection.
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -270,7 +270,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
         rsmall.setWidth(r.width() - 2);
         rsmall.setHeight(r.height() - 2);
         p.drawText(rsmall, Qt::AlignVCenter|Qt::AlignHCenter,
-                   QLocale().dayName(i, QLocale::ShortFormat).remove(2, 1));
+                   QLocale().standaloneDayName(i, QLocale::ShortFormat).remove(2, 1));
         ++index;
     }
 
@@ -280,7 +280,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
     p.setFont(fnBold);
 
     p.drawText(r, Qt::AlignCenter, QString::fromUtf8("%1 %2")
-               .arg(QLocale().monthName(d->month, QLocale::LongFormat))
+               .arg(QLocale().standaloneMonthName(d->month, QLocale::LongFormat))
                .arg(QDate(d->year, d->month, 1).year()));
 
     p.end();

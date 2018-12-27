@@ -53,7 +53,10 @@ Q_DECLARE_METATYPE ( QModelIndex )
 /*!
     Connect to all of the models signals.  Whenever anything happens recheck everything.
 */
-ModelTest::ModelTest ( QAbstractItemModel *_model, QObject *parent ) : QObject ( parent ), model ( _model ), fetchingMore ( false )
+ModelTest::ModelTest ( QAbstractItemModel* const _model, QObject* const parent )
+    : QObject ( parent ),
+      model ( _model ),
+      fetchingMore ( false )
 {
     Q_ASSERT ( model );
 

@@ -6,7 +6,7 @@
  * Date        : 2004-11-22
  * Description : digiKam image editor - Internal setup
  *
- * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -216,7 +216,7 @@ void ImageWindow::setupUserArea()
     d->thumbBarDock->setObjectName(QLatin1String("editor_thumbbar"));
     d->thumbBarDock->setWindowTitle(i18n("Image Editor Thumbnail Dock"));
 
-    d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
+    d->thumbBar         = new ItemThumbnailBar(d->thumbBarDock);
     d->thumbBar->setModels(d->imageInfoModel, d->imageFilterModel);
 
     d->thumbBarDock->setWidget(d->thumbBar);

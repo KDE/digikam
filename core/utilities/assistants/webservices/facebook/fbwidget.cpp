@@ -7,7 +7,7 @@
  * Description : a tool to export items to Facebook web service
  *
  * Copyright (C) 2008-2009 by Luka Renko <lure at kubuntu dot org>
- * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,14 +64,14 @@ FbWidget::~FbWidget()
 
 void FbWidget::updateLabels(const QString& name, const QString& url)
 {
-    QString web(QLatin1String("http://www.facebook.com"));
+    QString web(QLatin1String("https://www.facebook.com"));
 
     if (!url.isEmpty())
         web = url;
 
     getHeaderLbl()->setText(QString::fromLatin1(
         "<b><h2><a href='%1'>"
-        "<font color=\"#3B5998\">facebook</font>"
+        "<font color=\"#3B5998\">Facebook</font>"
         "</a></h2></b>").arg(web));
     if (name.isEmpty())
     {

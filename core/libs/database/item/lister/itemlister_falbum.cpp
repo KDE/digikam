@@ -7,7 +7,7 @@
  * Description : Listing information from database - FAlbum helpers.
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2015      by Mohamed_Anwer  <m_dot_anwer at gmx dot com>
  * Copyright (C) 2018      by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  *

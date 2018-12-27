@@ -6,7 +6,7 @@
  * Date        : 2004-08-02
  * Description : colors scheme manager
  *
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Matthew Woehlke <mw_triad at users dot sourceforge dot net>
  *
  * This program is free software; you can redistribute it
@@ -826,7 +826,7 @@ void SchemeManagerPrivate::init(const KSharedConfigPtr& config,
     {
         StateEffects effects(state, config);
 
-        for (int i = 0; i < 8; i++)
+        for (int i = 0 ; i < 8 ; ++i)
         {
             _brushes.fg[i] = effects.brush(_brushes.fg[i], _brushes.bg[0]);
         }
@@ -1108,7 +1108,7 @@ QPalette SchemeManager::createApplicationPalette(const KSharedConfigPtr& config)
     // TT thinks tooltips shouldn't use active, so we use our active colors for all states
     SchemeManager schemeTooltip(QPalette::Active, SchemeManager::Tooltip, config);
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0 ; i < 3 ; ++i)
     {
         QPalette::ColorGroup state = states[i];
         SchemeManager schemeView(state,      SchemeManager::View,      config);

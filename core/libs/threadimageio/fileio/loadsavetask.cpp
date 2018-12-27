@@ -7,7 +7,7 @@
  * Description : image file IO threaded interface.
  *
  * Copyright (C) 2005-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -164,7 +164,9 @@ void SharedLoadingTask::execute()
                 m_usedProcess->addListener(this);
 
                 // break loop when either the loading has completed, or this task is being stopped
-                while (m_loadingTaskStatus != LoadingTaskStatusStopping && m_usedProcess && !m_usedProcess->completed())
+                while (m_loadingTaskStatus != LoadingTaskStatusStopping &&
+                       m_usedProcess                                    &&
+                       !m_usedProcess->completed())
                 {
                     lock.timedWait();
                 }
@@ -179,7 +181,6 @@ void SharedLoadingTask::execute()
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
                 m_usedProcess = 0;
-                //qCDebug(DIGIKAM_GENERAL_LOG) << "SharedLoadingTask " << this << ": waited";
                 // m_img is now set to the result
             }
             else
@@ -209,7 +210,7 @@ void SharedLoadingTask::execute()
         // put (valid) image into cache of loaded images
         if (!m_img.isNull())
         {
-            cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img.copy()),
+            cache->putImage(m_loadingDescription.cacheKey(), m_img,
                             m_loadingDescription.filePath);
         }
 
@@ -254,7 +255,7 @@ void SharedLoadingTask::execute()
 
     // following the golden rule to avoid deadlocks, do this when CacheLock is not held
 
-    if (!m_img.isNull() && continueQuery())
+    if (!m_img.isNull() && continueQuery(&m_img))
     {
         if (accessMode() == LoadSaveThread::AccessModeReadWrite)
         {
@@ -263,7 +264,7 @@ void SharedLoadingTask::execute()
 
         postProcess();
     }
-    else if (continueQuery())
+    else if (continueQuery(&m_img))
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot load image for" << m_loadingDescription.filePath;
     }
@@ -390,32 +391,32 @@ void SharedLoadingTask::setStatus(LoadingTaskStatus status)
     }
 }
 
-bool SharedLoadingTask::completed()
+bool SharedLoadingTask::completed() const volatile
 {
     return m_completed;
 }
 
-QString SharedLoadingTask::filePath()
+QString SharedLoadingTask::filePath() const
 {
     return m_loadingDescription.filePath;
 }
 
-QString SharedLoadingTask::cacheKey()
+QString SharedLoadingTask::cacheKey() const
 {
     return m_loadingDescription.cacheKey();
 }
 
-void SharedLoadingTask::addListener(LoadingProcessListener* listener)
+void SharedLoadingTask::addListener(LoadingProcessListener* const listener)
 {
     m_listeners << listener;
 }
 
-void SharedLoadingTask::removeListener(LoadingProcessListener* listener)
+void SharedLoadingTask::removeListener(LoadingProcessListener* const listener)
 {
     m_listeners.removeAll(listener);
 }
 
-void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description)
+void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess* const process, const LoadingDescription& description)
 {
     // Ok, we are notified that another task has been started in another thread.
     // We are of course only interested if the task loads the same file,
@@ -435,12 +436,12 @@ void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess* process, const L
     }
 }
 
-bool SharedLoadingTask::querySendNotifyEvent()
+bool SharedLoadingTask::querySendNotifyEvent() const
 {
     return m_thread && m_thread->querySendNotifyEvent();
 }
 
-LoadSaveNotifier* SharedLoadingTask::loadSaveNotifier()
+LoadSaveNotifier* SharedLoadingTask::loadSaveNotifier() const
 {
     return m_thread;
 }

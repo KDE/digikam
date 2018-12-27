@@ -7,7 +7,7 @@
  * Description : DMetadata Settings Container.
  *
  * Copyright (C) 2015      by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
- * Copyright (C) 2015-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2015-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -126,18 +126,20 @@ void DMetadataSettingsContainer::setUnifyReadWrite(bool b)
 
 void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 {
-    bool valid = true;
+    bool valid                   = true;
+    const QString readNameSpace  = QLatin1String("read%1Namespaces");
+    const QString writeNameSpace = QLatin1String("write%1Namespaces");
 
     foreach (const QString& str, mappingKeys())
     {
-        if (!group.hasGroup(QLatin1String("read") + str + QLatin1String("Namespaces")))
+        if (!group.hasGroup(readNameSpace.arg(str)))
         {
             valid = false;
             qCDebug(DIGIKAM_GENERAL_LOG) << "Does not contain " << str << " Namespace";
             break;
         }
 
-        if (!group.hasGroup(QLatin1String("write") + str + QLatin1String("Namespaces")))
+        if (!group.hasGroup(writeNameSpace.arg(str)))
         {
             valid = false;
             qCDebug(DIGIKAM_GENERAL_LOG) << "Does not contain " << str << " Namespace";
@@ -149,8 +151,8 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
     {
         foreach (const QString& str, mappingKeys())
         {
-            readOneGroup(group, QLatin1String("read")  + str + QLatin1String("Namespaces"), getReadMapping(str));
-            readOneGroup(group, QLatin1String("write") + str + QLatin1String("Namespaces"), getWriteMapping(str));
+            readOneGroup(group, readNameSpace.arg(str), getReadMapping(str));
+            readOneGroup(group, writeNameSpace.arg(str), getWriteMapping(str));
         }
     }
     else
@@ -161,10 +163,17 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 
 void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 {
+   const QString readNameSpace  = QLatin1String("read%1Namespaces");
+   const QString writeNameSpace = QLatin1String("write%1Namespaces");
+
     foreach (const QString& str, mappingKeys())
     {
-        writeOneGroup(group, QLatin1String("read")  + str + QLatin1String("Namespaces"), getReadMapping(str));
-        writeOneGroup(group, QLatin1String("write") + str + QLatin1String("Namespaces"), getWriteMapping(str));
+        // Remove all old group elements.
+        group.group(readNameSpace.arg(str)).deleteGroup();
+        group.group(writeNameSpace.arg(str)).deleteGroup();
+
+        writeOneGroup(group, readNameSpace.arg(str), getReadMapping(str));
+        writeOneGroup(group, writeNameSpace.arg(str), getWriteMapping(str));
     }
 
     group.sync();
@@ -421,21 +430,29 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup& group, const QString
 
     for (QString element : myItems.groupList())
     {
-        KConfigGroup gr     = myItems.group(element);
+        KConfigGroup gr      = myItems.group(element);
         NamespaceEntry ns;
 
-        ns.namespaceName    = element;
-        ns.tagPaths         = (NamespaceEntry::TagType)gr.readEntry("tagPaths").toInt();
-        ns.separator        = gr.readEntry("separator");
-        ns.nsType           = (NamespaceEntry::NamespaceType)gr.readEntry("nsType").toInt();
-        ns.index            = gr.readEntry("index").toInt();
-        ns.subspace         = (NamespaceEntry::NsSubspace)gr.readEntry("subspace").toInt();
-        ns.alternativeName  = gr.readEntry("alternativeName");
-        ns.specialOpts      = (NamespaceEntry::SpecialOptions)gr.readEntry("specialOpts").toInt();
-        ns.secondNameOpts   = (NamespaceEntry::SpecialOptions)gr.readEntry("secondNameOpts").toInt();
-        ns.isDefault        = gr.readEntry(QLatin1String("isDefault"), QVariant(true)).toBool();
-        ns.isDisabled       = gr.readEntry(QLatin1String("isDisabled"), QVariant(false)).toBool();
-        QString conversion  = gr.readEntry("convertRatio");
+        if (element.startsWith(QLatin1Char('#')))
+        {
+            ns.namespaceName = gr.readEntry("namespaceName");
+        }
+        else
+        {
+            ns.namespaceName = element;
+        }
+
+        ns.tagPaths          = (NamespaceEntry::TagType)gr.readEntry("tagPaths").toInt();
+        ns.separator         = gr.readEntry("separator");
+        ns.nsType            = (NamespaceEntry::NamespaceType)gr.readEntry("nsType").toInt();
+        ns.index             = gr.readEntry("index").toInt();
+        ns.subspace          = (NamespaceEntry::NsSubspace)gr.readEntry("subspace").toInt();
+        ns.alternativeName   = gr.readEntry("alternativeName");
+        ns.specialOpts       = (NamespaceEntry::SpecialOptions)gr.readEntry("specialOpts").toInt();
+        ns.secondNameOpts    = (NamespaceEntry::SpecialOptions)gr.readEntry("secondNameOpts").toInt();
+        ns.isDefault         = gr.readEntry(QLatin1String("isDefault"), QVariant(true)).toBool();
+        ns.isDisabled        = gr.readEntry(QLatin1String("isDisabled"), QVariant(false)).toBool();
+        QString conversion   = gr.readEntry("convertRatio");
 
         for (QString str : conversion.split(QLatin1String(",")))
         {
@@ -451,10 +468,15 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup& group, const QString
 void DMetadataSettingsContainer::writeOneGroup(KConfigGroup& group, const QString& name, QList<NamespaceEntry>& container) const
 {
     KConfigGroup namespacesGroup = group.group(name);
+    int index                    = 0;
 
     for (NamespaceEntry e : container)
     {
-        KConfigGroup tmp = namespacesGroup.group(e.namespaceName);
+        QString groupNumber = QString::fromLatin1("#%1")
+                              .arg(++index, 4, 10, QLatin1Char('0'));
+
+        KConfigGroup tmp = namespacesGroup.group(groupNumber);
+        tmp.writeEntry("namespaceName",   e.namespaceName);
         tmp.writeEntry("alternativeName", e.alternativeName);
         tmp.writeEntry("subspace",        (int)e.subspace);
         tmp.writeEntry("tagPaths",        (int)e.tagPaths);

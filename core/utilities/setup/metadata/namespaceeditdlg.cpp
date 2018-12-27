@@ -429,16 +429,16 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
 
     d->gridLayout->addWidget(d->alternativeNameLabel,       8, 0, 1, 2);
     d->gridLayout->addWidget(d->alternativeName,            8, 2, 1, 4);
-    d->gridLayout->addWidget(d->altspecialOptsLabel,        9, 0, 1, 3);
-    d->gridLayout->addWidget(d->altSpecialOptsCombo,        9, 3, 1, 3);
+    d->gridLayout->addWidget(d->altspecialOptsLabel,        9, 0, 1, 2);
+    d->gridLayout->addWidget(d->altSpecialOptsCombo,        9, 2, 1, 4);
 
     d->gridLayout->addWidget(d->separatorLabel,             10, 0, 1, 2);
     d->gridLayout->addWidget(d->nameSpaceSeparator,         10, 2, 1, 4);
     d->gridLayout->addWidget(d->isTagLabel,                 11, 0, 1, 2);
     d->gridLayout->addWidget(d->isPath,                     11, 2, 1, 3);
 
-    d->gridLayout->addWidget(d->ratingMappings,             14, 0, 2, 6);
-    d->gridLayout->addWidget(d->tipLabel2,                  15, 0, 1, 6);
+    d->gridLayout->addWidget(d->ratingMappings,             12, 0, 2, 6);
+    d->gridLayout->addWidget(d->tipLabel2,                  14, 0, 1, 6);
 
     d->gridLayout->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
     d->gridLayout->setSpacing(spacing);
@@ -462,9 +462,9 @@ void NamespaceEditDlg::populateFields(NamespaceEntry& entry)
         d->isPath->setChecked(false);
     }
 
-    d->specialOptsCombo->setCurrentIndex((int)entry.specialOpts);
     d->alternativeName->setText(entry.alternativeName);
-    d->altSpecialOptsCombo->setCurrentIndex((int)entry.secondNameOpts);
+    d->specialOptsCombo->setCurrentIndex(d->specialOptsCombo->findData(entry.specialOpts));
+    d->altSpecialOptsCombo->setCurrentIndex(d->altSpecialOptsCombo->findData(entry.secondNameOpts));
 
     if (entry.convertRatio.size() == 6)
     {

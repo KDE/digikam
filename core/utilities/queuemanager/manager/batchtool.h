@@ -6,7 +6,7 @@
  * Date        : 2008-11-24
  * Description : Batch Tool Container.
  *
- * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -275,6 +275,10 @@ public:
     /** Return dedicated settings widget registered with registerSettingsWidget().
      */
     QWidget* settingsWidget() const;
+
+    /** Delete dedicated settings widget registered with registerSettingsWidget().
+     */
+    void deleteSettingsWidget();
 
     /** Setup dedicated settings widget. Default implementation assign no settings view (a message label is just displayed).
      *  You need to call default implementation in your child class to init default signals and slots connections,

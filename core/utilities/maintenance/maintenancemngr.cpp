@@ -6,7 +6,7 @@
  * Date        : 2012-01-31
  * Description : maintenance manager
  *
- * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -195,9 +195,10 @@ void MaintenanceMngr::stage1()
 
             foreach(Album* const a, d->settings.albums)
             {
-                PAlbum* const pa = dynamic_cast<PAlbum*>(a);
-                if (pa)
-                    paths << pa->folderPath();
+                PAlbum* const palbum = dynamic_cast<PAlbum*>(a);
+
+                if (palbum)
+                    paths << palbum->folderPath();
             }
 
             d->newItemsFinder = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, paths);

@@ -7,7 +7,7 @@
  * Description : Qt Model for Items - drag and drop handling
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
@@ -43,10 +43,10 @@
 #include "albummanager.h"
 #include "importui.h"
 #include "importiconview.h"
-#include "imagethumbnailbar.h"
+#include "itemthumbnailbar.h"
 #include "ddragobjects.h"
 #include "dio.h"
-#include "imagecategorizedview.h"
+#include "itemcategorizedview.h"
 #include "iteminfo.h"
 #include "iteminfolist.h"
 #include "tableview_treeview.h"
@@ -192,7 +192,7 @@ static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool a
 
 static DropAction groupAction(const QDropEvent* const, QWidget* const view)
 {
-    ImageCategorizedView* const imgView = dynamic_cast<ImageCategorizedView*>(view);
+    ItemCategorizedView* const imgView = dynamic_cast<ItemCategorizedView*>(view);
     int sortOrder                       = ApplicationSettings::instance()->getImageSortOrder();
 
     QMenu popMenu(view);
@@ -250,9 +250,9 @@ bool ItemDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDrop
 {
     Album* album = 0;
 
-    // Note that the drop event does not have to be in an ImageCategorizedView.
+    // Note that the drop event does not have to be in an ItemCategorizedView.
     // It can also be a TableViewTreeView.
-    ImageCategorizedView* const view = qobject_cast<ImageCategorizedView*>(abstractview);
+    ItemCategorizedView* const view = qobject_cast<ItemCategorizedView*>(abstractview);
 
     if (view)
     {
@@ -328,7 +328,7 @@ bool ItemDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDrop
 
         if (droppedOn.isValid())
         {
-            ImageThumbnailBar* const thumbBar = qobject_cast<ImageThumbnailBar*>(abstractview);
+            ItemThumbnailBar* const thumbBar = qobject_cast<ItemThumbnailBar*>(abstractview);
 
             if (thumbBar)
             {

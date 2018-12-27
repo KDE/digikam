@@ -7,7 +7,7 @@
  * Description : Scanning a single item - file metadata helper.
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,7 +26,7 @@
 
 namespace Digikam
 {
-    
+
 void ItemScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container)
 {
     QVariantList imagesFields;
@@ -41,15 +41,15 @@ void ItemScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* c
                                                     DatabaseFields::FileSize);
 
         imageInformationFields = access.db()->getItemInformation(imageid,
-                                                                  DatabaseFields::Rating           |
-                                                                  DatabaseFields::CreationDate     |
-                                                                  DatabaseFields::DigitizationDate |
-                                                                  DatabaseFields::Orientation      |
-                                                                  DatabaseFields::Width            |
-                                                                  DatabaseFields::Height           |
-                                                                  DatabaseFields::Format           |
-                                                                  DatabaseFields::ColorDepth       |
-                                                                  DatabaseFields::ColorModel);
+                                                                 DatabaseFields::Rating           |
+                                                                 DatabaseFields::CreationDate     |
+                                                                 DatabaseFields::DigitizationDate |
+                                                                 DatabaseFields::Orientation      |
+                                                                 DatabaseFields::Width            |
+                                                                 DatabaseFields::Height           |
+                                                                 DatabaseFields::Format           |
+                                                                 DatabaseFields::ColorDepth       |
+                                                                 DatabaseFields::ColorModel);
     }
 
     if (!imagesFields.isEmpty())
@@ -158,14 +158,14 @@ void ItemScanner::commitItemInformation()
     if (d->scanMode == NewScan)
     {
         CoreDbAccess().db()->addItemInformation(d->scanInfo.id,
-                                                 d->commit.imageInformationInfos,
-                                                 d->commit.imageInformationFields);
+                                                d->commit.imageInformationInfos,
+                                                d->commit.imageInformationFields);
     }
     else // d->scanMode == Rescan or d->scanMode == ModifiedScan
     {
         CoreDbAccess().db()->changeItemInformation(d->scanInfo.id,
-                                                    d->commit.imageInformationInfos,
-                                                    d->commit.imageInformationFields);
+                                                   d->commit.imageInformationInfos,
+                                                   d->commit.imageInformationFields);
     }
 }
 

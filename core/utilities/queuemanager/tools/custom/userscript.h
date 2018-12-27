@@ -6,7 +6,7 @@
  * Date        : 2014-05-24
  * Description : user script batch tool.
  *
- * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2014      by Hubert Law <hhclaw dot eb at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -38,7 +38,7 @@ class UserScript : public BatchTool
 
 public:
 
-    explicit UserScript(QObject* parent = 0);
+    explicit UserScript(QObject* const parent = 0);
     ~UserScript();
 
     QString outputSuffix() const;

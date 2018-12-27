@@ -851,7 +851,7 @@ void FaceGroup::applyItemGeometryChanges()
 }
 
 /*
-void ImagePreviewView::trainFaces()
+void ItemPreviewView::trainFaces()
 {
     QList<Face> trainList;
 
@@ -870,7 +870,7 @@ void ImagePreviewView::trainFaces()
     }
 }
 
-void ImagePreviewView::suggestFaces()
+void ItemPreviewView::suggestFaces()
 {
     // Assign tentative names to the face list
     QList<Face> recogList;

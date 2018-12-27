@@ -106,11 +106,11 @@ cv::Mat TanTriggsPreprocessor::preprocessRaw(const cv::Mat& inputImage)
 
     // Squash into the tanh:
     {
-        for(int r = 0; r < I.rows; r++)
+        for (int r = 0 ; r < I.rows ; ++r)
         {
-            for(int c = 0; c < I.cols; c++)
+            for (int c = 0 ; c < I.cols ; ++c)
             {
-                I.at<float>(r,c) = tanh(I.at<float>(r,c) / tau);
+                I.at<float>(r, c) = tanh(I.at<float>(r, c) / tau);
             }
         }
 

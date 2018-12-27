@@ -38,7 +38,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imagedelegate.h"
+#include "itemdelegate.h"
 #include "itemhistorygraphmodel.h"
 #include "itemversionsmodel.h"
 #include "thumbnailloadthread.h"
@@ -247,7 +247,7 @@ void VersionsDelegate::initStyleOption(QStyleOptionViewItem* option, const QMode
         }
         else
         {
-            QPixmap pix = ImageDelegate::retrieveThumbnailPixmap(index, d->thumbnailSize);
+            QPixmap pix = ItemDelegate::retrieveThumbnailPixmap(index, d->thumbnailSize);
 
             if (pix.isNull())
             {

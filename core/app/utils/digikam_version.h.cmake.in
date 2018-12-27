@@ -52,20 +52,18 @@ static inline const QString digiKamVersion()
 static inline QString additionalInformation()
 {
     QString gitVer       = QLatin1String(GITVERSION);
-    QString ret          = i18n("%1\n\n"
-                                "IRC: irc.freenode.net - #digikam\n"
+    QString ret          = i18n("IRC: irc.freenode.net - #digikam\n"
                                 "Feedback: digikam-user@kde.org\n\n"
-                                "Build date: %2 (target: %3)",
+                                "Build date: %1 (target: %2)",
                                 QLatin1String(__DATE__),
                                 QLatin1String("@CMAKE_BUILD_TYPE@"));
 
     if (!gitVer.isEmpty() && !gitVer.startsWith(QLatin1String("unknow")) && !gitVer.startsWith(QLatin1String("export")))
     {
-        ret = i18n("%1\n\n"
-                   "IRC: irc.freenode.net - #digikam\n"
+        ret = i18n("IRC: irc.freenode.net - #digikam\n"
                    "Feedback: digikam-user@kde.org\n\n"
-                   "Build date: %2 (target: %3)\n"
-                   "Rev.: %4",
+                   "Build date: %1 (target: %2)\n"
+                   "Rev.: %3",
                    QLatin1String(__DATE__),
                    QLatin1String("@CMAKE_BUILD_TYPE@"),
                    QString::fromLatin1("<a href='http://commits.kde.org/digikam/%1'>%2</a>").arg(gitVer).arg(gitVer));

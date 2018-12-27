@@ -7,7 +7,7 @@
  * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
- * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
@@ -512,7 +512,7 @@ void PanoActionThread::appendStitchingJobs(QSharedPointer<Sequence>& js,
 
     (*jobs) << createMKTask;
 
-    for (int i = 0 ; i < preProcessedUrlsMap.size() ; i++)
+    for (int i = 0 ; i < preProcessedUrlsMap.size() ; ++i)
     {
         QObjectDecorator* const t
             = new QObjectDecorator(new CompileMKStepTask(d->preprocessingTmpDir->path(),

@@ -90,6 +90,7 @@ public:
         redirectUrl  = QLatin1String("https://login.live.com/oauth20_desktop.srf");
 
         serviceName = QLatin1String("Onedrive");
+        serviceTime = QLatin1String("token_time");
         serviceKey  = QLatin1String("access_token");
 
         state        = OD_USERNAME;
@@ -111,7 +112,12 @@ public:
     QString                         redirectUrl;
     QString                         accessToken;
     QString                         serviceName;
+    QString                         serviceTime;
     QString                         serviceKey;
+
+    QDateTime                       expiryTime;
+
+    State                           state;
 
     QWidget*                        parent;
 
@@ -120,17 +126,10 @@ public:
 
     QSettings*                      settings;
 
-    State                           state;
-
-    DMetadata                       meta;
-
-    QMap<QString, QString>          urlParametersMap;
-    QList<QPair<QString, QString> > folderList;
-    QList<QString>                  nextFolder;
-
     WebWidget*                      view;
 
-    QString                         tokenKey;
+    QList<QPair<QString, QString> > folderList;
+    QList<QString>                  nextFolder;
 };
 
 ODTalker::ODTalker(QWidget* const parent)
@@ -151,6 +150,9 @@ ODTalker::ODTalker(QWidget* const parent)
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
+
+    connect(d->view, SIGNAL(urlChanged(QUrl)),
+            this, SLOT(slotCatchUrl(QUrl)));
 
     connect(d->view, SIGNAL(closeView(bool)),
             this, SIGNAL(signalBusy(bool)));
@@ -183,9 +185,6 @@ void ODTalker::link()
     d->view->setWindowFlags(Qt::Dialog);
     d->view->load(url);
     d->view->show();
-
-    connect(d->view, SIGNAL(urlChanged(QUrl)),
-            this, SLOT(slotCatchUrl(QUrl)));
 }
 
 void ODTalker::unLink()
@@ -207,45 +206,26 @@ void ODTalker::unLink()
 
 void ODTalker::slotCatchUrl(const QUrl& url)
 {
-    d->urlParametersMap = ParseUrlParameters(url.toString());
-    d->accessToken      = d->urlParametersMap.value("access_token");
-    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function: " << url ;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview:" << url;
 
-    if (!d->accessToken.isEmpty())
+    QString   str = url.toString();
+    QUrlQuery query(str.section(QLatin1Char('#'), -1, -1));
+
+    if (query.hasQueryItem(QLatin1String("access_token")))
     {
-        qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access Token Received";
+        d->accessToken = query.queryItemValue(QLatin1String("access_token"));
+        int seconds    = query.queryItemValue(QLatin1String("expires_in")).toInt();
+        d->expiryTime  = QDateTime::currentDateTime().addSecs(seconds);
+
+        writeSettings();
+
+        qDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token received";
         emit oneDriveLinkingSucceeded();
     }
     else
     {
         emit oneDriveLinkingFailed();
     }
-}
-
-QMap<QString, QString> ODTalker::ParseUrlParameters(const QString& url)
-{
-    QMap<QString, QString> urlParameters;
-
-    if (url.indexOf(QLatin1Char('?')) == -1)
-    {
-        return urlParameters;
-    }
-
-    QString tmp           = url.right(url.length() - url.indexOf(QLatin1Char('?')) - 1);
-    tmp                   = tmp.right(tmp.length() - tmp.indexOf(QLatin1Char('#')) - 1);
-    QStringList paramlist = tmp.split(QLatin1Char('&'));
-
-    for (int i = 0 ; i < paramlist.count() ; ++i)
-    {
-        QStringList paramarg = paramlist.at(i).split(QLatin1Char('='));
-
-        if (paramarg.count() == 2)
-        {
-            urlParameters.insert(paramarg.at(0), paramarg.at(1));
-        }
-    }
-
-    return urlParameters;
 }
 
 void ODTalker::slotLinkingFailed()
@@ -258,13 +238,13 @@ void ODTalker::slotLinkingSucceeded()
 {
     if (d->accessToken.isEmpty())
     {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Onedrive ok";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Onedrive";
         emit signalBusy(false);
         return;
     }
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Onedrive ok";
-    writeSettings();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Onedrive";
+
     d->view->close();
     emit signalLinkingSucceeded();
 }
@@ -288,12 +268,13 @@ void ODTalker::cancel()
 void ODTalker::createFolder(QString& path)
 {
     //path also has name of new folder so send path parameter accordingly
-    QString name       = path.section(QLatin1Char('/'), -1);
-    QString folderPath = path.section(QLatin1Char('/'), -2, -2);
+    QString name       = QUrl(path).fileName();
+    QString folderPath = QUrl(path).adjusted(QUrl::RemoveFilename |
+                                             QUrl::StripTrailingSlash).path();
 
     QUrl url;
 
-    if (folderPath.isEmpty())
+    if (folderPath == QLatin1String("/"))
     {
         url = QLatin1String("https://graph.microsoft.com/v1.0/me/drive/root/children");
     }
@@ -384,12 +365,14 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     image.save(path, "JPEG", imageQuality);
 
-    if (d->meta.load(imgPath))
+    DMetadata meta;
+
+    if (meta.load(imgPath))
     {
-        d->meta.setItemDimensions(image.size());
-        d->meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
-        d->meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
-        d->meta.save(path, true);
+        meta.setItemDimensions(image.size());
+        meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
+        meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
+        meta.save(path, true);
     }
 
     if (!form.addFile(path))
@@ -398,7 +381,7 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
         return false;
     }
 
-    QString uploadPath = uploadFolder + QUrl::fromLocalFile(imgPath).fileName();
+    QString uploadPath = uploadFolder + QUrl(imgPath).fileName();
     QUrl url(QString::fromLatin1("https://graph.microsoft.com/v1.0/me/drive/root:/%1:/content").arg(uploadPath));
 
     QNetworkRequest netRequest(url);
@@ -510,6 +493,7 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
     foreach (const QJsonValue& value, jsonArray)
     {
         QString path;
+        QString listName;
         QString folderPath;
         QString folderName;
         QJsonObject folder;
@@ -526,8 +510,9 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
 
             path        = folderPath.section(QLatin1String("root:"), -1, -1) +
                                              QLatin1Char('/') + folderName;
+            listName    = path.section(QLatin1Char('/'), 1);
 
-            d->folderList.append(qMakePair(path, folderName));
+            d->folderList.append(qMakePair(path, listName));
 
             if (folder[QLatin1String("childCount")].toInt() > 0)
             {
@@ -542,6 +527,8 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
     }
     else
     {
+        std::sort(d->folderList.begin(), d->folderList.end());
+
         emit signalBusy(false);
         emit signalListAlbumsDone(d->folderList);
     }
@@ -570,19 +557,27 @@ void ODTalker::parseResponseCreateFolder(const QByteArray& data)
 void ODTalker::writeSettings()
 {
     d->settings->beginGroup(d->serviceName);
-    d->settings->setValue(d->serviceKey, d->accessToken);
+    d->settings->setValue(d->serviceTime, d->expiryTime);
+    d->settings->setValue(d->serviceKey,  d->accessToken);
     d->settings->endGroup();
 }
 
 void ODTalker::readSettings()
 {
     d->settings->beginGroup(d->serviceName);
+    d->expiryTime  = d->settings->value(d->serviceTime).toDateTime();
     d->accessToken = d->settings->value(d->serviceKey).toString();
     d->settings->endGroup();
 
     if (d->accessToken.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Linking...";
+        link();
+    }
+    else if (QDateTime::currentDateTime() > d->expiryTime)
+    {
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Access token has expired";
+        d->accessToken = QString();
         link();
     }
     else

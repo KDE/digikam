@@ -7,7 +7,7 @@
  * Description : image file IO threaded interface.
  *
  * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,7 +60,7 @@ LoadSaveFileInfoProvider* LoadSaveThread::Private::infoProvider = 0;
 
 //---------------------------------------------------------------------------------------------------
 
-LoadSaveThread::LoadSaveThread(QObject* parent)
+LoadSaveThread::LoadSaveThread(QObject* const parent)
     : DynamicThread(parent),
       d(new Private)
 {
@@ -74,7 +74,7 @@ LoadSaveThread::~LoadSaveThread()
     delete d;
 }
 
-void LoadSaveThread::setInfoProvider(LoadSaveFileInfoProvider* infoProvider)
+void LoadSaveThread::setInfoProvider(LoadSaveFileInfoProvider* const infoProvider)
 {
     Private::infoProvider = infoProvider;
 }
@@ -91,7 +91,7 @@ void LoadSaveThread::load(const LoadingDescription& description)
     start(lock);
 }
 
-void LoadSaveThread::save(DImg& image, const QString& filePath, const QString& format)
+void LoadSaveThread::save(const DImg& image, const QString& filePath, const QString& format)
 {
     QMutexLocker lock(threadMutex());
     m_todo << new SavingTask(this, image, filePath, format);
@@ -219,7 +219,7 @@ void LoadSaveThread::setNotificationPolicy(NotificationPolicy notificationPolicy
     d->blockNotification = false;
 }
 
-bool LoadSaveThread::querySendNotifyEvent()
+bool LoadSaveThread::querySendNotifyEvent() const
 {
     // This function is called from the thread to ask for permission to send a notify event.
     switch (m_notificationPolicy)
@@ -314,7 +314,7 @@ int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& me
     return exifOrientation;
 }
 
-bool LoadSaveThread::wasExifRotated(DImg& image)
+bool LoadSaveThread::wasExifRotated(const DImg& image)
 {
     // Keep in sync with the variant in thumbnailcreator.cpp
     QVariant attribute(image.attribute(QLatin1String("exifRotated")));

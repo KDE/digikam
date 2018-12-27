@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-06-28
- * Description : Test loading and saving of data in GPSImageItem.
+ * Description : Test loading and saving of data in GPSItemContainer.
  *
  * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -30,7 +30,7 @@
 
 // local includes
 
-class TestGPSImageItem : public QObject
+class TestGPSItemContainer : public QObject
 {
     Q_OBJECT
 

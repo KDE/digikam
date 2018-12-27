@@ -56,8 +56,8 @@
 #include "dlayoutbox.h"
 #include "gpsundocommand.h"
 #include "geolocationedit.h"
-#include "gpsimagemodel.h"
-#include "gpsimageitem.h"
+#include "gpsitemmodel.h"
+#include "gpsitemcontainer.h"
 #include "backend-geonames-rg.h"
 #include "backend-osm-rg.h"
 #include "backend-geonamesUS-rg.h"
@@ -437,7 +437,7 @@ void RGWidget::slotButtonRGSelected()
     for ( int i = 0 ; i < selectedItems.count() ; ++i)
     {
         const QPersistentModelIndex itemIndex = selectedItems.at(i);
-        GPSImageItem* const selectedItem      = d->imageModel->itemFromIndex(itemIndex);
+        GPSItemContainer* const selectedItem      = d->imageModel->itemFromIndex(itemIndex);
         const GPSDataContainer gpsData        = selectedItem->gpsData();
 
          if (!gpsData.hasCoordinates())
@@ -554,7 +554,7 @@ void RGWidget::slotRGReady(QList<RGInfo>& returnedRGList)
             }
 
             QList<QList<TagData> > returnedTags = d->tagModel->addNewData(elements, resultedData);
-            GPSImageItem* const currentItem     = d->imageModel->itemFromIndex(currentImageIndex);
+            GPSItemContainer* const currentItem     = d->imageModel->itemFromIndex(currentImageIndex);
 
             GPSUndoCommand::UndoInfo undoInfo(currentImageIndex);
             undoInfo.readOldDataFromItem(currentItem);
@@ -843,7 +843,7 @@ void RGWidget::slotReaddNewTags()
 {
     for (int row = 0 ; row < d->imageModel->rowCount() ; ++row)
     {
-        GPSImageItem* const currentItem     = d->imageModel->itemFromIndex(d->imageModel->index(row, 0));
+        GPSItemContainer* const currentItem     = d->imageModel->itemFromIndex(d->imageModel->index(row, 0));
         QList<QList<TagData> > tagAddresses = currentItem->getTagList();
 
         if (!tagAddresses.isEmpty())

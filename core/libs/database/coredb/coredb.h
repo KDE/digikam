@@ -7,7 +7,7 @@
  * Description : Core database interface.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -160,6 +160,13 @@ public:
      * @param newLabel new label for the album root
      */
     void setAlbumRootLabel(int rootId, const QString& newLabel);
+
+    /**
+     * Changes the specificPath of the specified album root
+     * @param rootId the id of the album root
+     * @param newPath new path for the album root
+     */
+    void setAlbumRootPath(int rootId, const QString& newPath);
 
     /**
      * Sets the type of the specified album root to a new value.
@@ -591,22 +598,20 @@ public:
     QList<qlonglong> getImageIds(DatabaseItem::Status status, DatabaseItem::Category category);
 
     /**
-     * Get the imageId fitting to the information given for the item
+     * Find the imageId fitting to the information given for the item
      * @param albumID the albumID of the item (-1 means NULL)
      * @param name the name of the item
      * @param status the status of the item
      * @param category the category of the item
-     * @param modificationDate the modification date
      * @param fileSize the file size
      * @param uniqueHash the unique hash
      * @return the ImageId for the item, or -1 if no matching or more than one infos were found.
      */
-    qlonglong getImageId(int albumID, const QString& name,
-                      DatabaseItem::Status status,
-                      DatabaseItem::Category category,
-                      const QDateTime& modificationDate,
-                      qlonglong fileSize,
-                      const QString& uniqueHash);
+    qlonglong findImageId(int albumID, const QString& name,
+                          DatabaseItem::Status status,
+                          DatabaseItem::Category category,
+                          qlonglong fileSize,
+                          const QString& uniqueHash);
 
     enum ItemSortOrder
     {

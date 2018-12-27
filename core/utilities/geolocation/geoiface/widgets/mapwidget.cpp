@@ -6,7 +6,7 @@
  * Date        : 2009-12-01
  * Description : world map widget library
  *
- * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C)      2014 by Justus Schwartz <justus at gmx dot li>
  *
@@ -2203,7 +2203,7 @@ void MapWidget::adjustBoundariesToGroupedMarkers(const bool useSaneZoomLevel)
     {
         const TileIndex tileIndex = tileIterator.currentIndex();
 
-        for(int corner = 1 ; corner <= 4 ; corner++)
+        for (int corner = 1 ; corner <= 4 ; ++corner)
         {
             const GeoCoordinates currentTileCoordinate =
                 tileIndex.toCoordinates(TileIndex::CornerPosition(corner));

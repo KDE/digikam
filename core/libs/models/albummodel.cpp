@@ -316,7 +316,7 @@ QString DateAlbumModel::albumName(Album* album) const
     }
     else
     {
-        return QLocale().monthName(dalbum->date().month(), QLocale::LongFormat);
+        return QLocale().standaloneMonthName(dalbum->date().month(), QLocale::LongFormat);
     }
 }
 

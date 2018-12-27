@@ -7,7 +7,7 @@
  * Description : image file IO threaded interface.
  *
  * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,7 +81,8 @@ public:
 
 // -------------------------------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT LoadSaveThread : public DynamicThread, public LoadSaveNotifier
+class DIGIKAM_EXPORT LoadSaveThread : public DynamicThread,
+                                      public LoadSaveNotifier
 {
     Q_OBJECT
 
@@ -111,7 +112,7 @@ public:
 
 public:
 
-    explicit LoadSaveThread(QObject* parent = 0);
+    explicit LoadSaveThread(QObject* const parent = 0);
     /**
      * Destructor:
      * The thread will execute all pending tasks and wait for this upon destruction
@@ -121,11 +122,11 @@ public:
     /** Append a task to load the given file to the task list */
     void load(const LoadingDescription& description);
     /** Append a task to save the image to the task list */
-    void save(DImg& image, const QString& filePath, const QString& format);
+    void save(const DImg& image, const QString& filePath, const QString& format);
 
     void setNotificationPolicy(NotificationPolicy notificationPolicy);
 
-    static void setInfoProvider(LoadSaveFileInfoProvider* infoProvider);
+    static void setInfoProvider(LoadSaveFileInfoProvider* const infoProvider);
     static LoadSaveFileInfoProvider* infoProvider();
 
     /**
@@ -136,7 +137,7 @@ public:
      * Returns false if a rotation was not needed.
      */
     static bool exifRotate(DImg& image, const QString& filePath);
-    static bool wasExifRotated(DImg& image);
+    static bool wasExifRotated(const DImg& image);
 
     /**
      * Reverses the previous function
@@ -203,7 +204,7 @@ public:
     virtual void imageSaved(const QString& filePath, bool success);
     virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img);
 
-    virtual bool querySendNotifyEvent();
+    virtual bool querySendNotifyEvent() const;
     virtual void taskHasFinished();
 
 protected:

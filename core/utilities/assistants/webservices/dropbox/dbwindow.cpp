@@ -7,7 +7,7 @@
  * Description : a tool to export images to Dropbox web service
  *
  * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
- * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -223,7 +223,7 @@ void DBWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
     d->widget->getAlbumsCoB()->clear();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" << list.size();
 
-    for (int i = 0 ; i < list.size() ; i++)
+    for (int i = 0 ; i < list.size() ; ++i)
     {
         d->widget->getAlbumsCoB()->addItem(
         QIcon::fromTheme(QLatin1String("system-users")),

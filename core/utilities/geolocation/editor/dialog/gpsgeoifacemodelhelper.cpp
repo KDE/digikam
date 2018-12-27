@@ -6,7 +6,7 @@
  * Date        : 2006-05-16
  * Description : A tool to edit geolocation
  *
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010-2014 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2010      by Gabriel Voicu <ping dot gabi at gmail dot com>
  * Copyright (C) 2014      by Justus Schwartz <justus at gmx dot li>
@@ -43,8 +43,8 @@
 // Local includes
 
 #include "gpscommon.h"
-#include "gpsimagemodel.h"
-#include "gpsimageitem.h"
+#include "gpsitemmodel.h"
+#include "gpsitemcontainer.h"
 #include "gpsundocommand.h"
 #include "mapdragdrophandler.h"
 #include "backend-rg.h"
@@ -97,7 +97,7 @@ QItemSelectionModel* GPSGeoIfaceModelHelper::selectionModel() const
 bool GPSGeoIfaceModelHelper::itemCoordinates(const QModelIndex& index,
                                              GeoCoordinates* const coordinates) const
 {
-    GPSImageItem* const item = d->model->itemFromIndex(index);
+    GPSItemContainer* const item = d->model->itemFromIndex(index);
 
     if (!item)
         return false;
@@ -132,7 +132,7 @@ QPersistentModelIndex GPSGeoIfaceModelHelper::bestRepresentativeIndexFromList(co
     for (int i = 0 ; i < list.count() ; ++i)
     {
         const QPersistentModelIndex currentIndex = list.at(i);
-        const GPSImageItem* const currentItem   = static_cast<GPSImageItem*>(d->model->itemFromIndex(currentIndex));
+        const GPSItemContainer* const currentItem   = static_cast<GPSItemContainer*>(d->model->itemFromIndex(currentIndex));
         const QDateTime currentTime              = currentItem->dateTime();
         bool takeThisIndex                       = bestTime.isNull();
 
@@ -196,7 +196,7 @@ void GPSGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& 
     for (int i = 0; i < movedMarkers.count(); ++i)
     {
         const QPersistentModelIndex itemIndex = movedMarkers.at(i);
-        GPSImageItem* const item              = static_cast<GPSImageItem*>(d->model->itemFromIndex(itemIndex));
+        GPSItemContainer* const item              = static_cast<GPSItemContainer*>(d->model->itemFromIndex(itemIndex));
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(item);

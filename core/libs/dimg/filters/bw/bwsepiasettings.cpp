@@ -6,7 +6,7 @@
  * Date        : 2010-02-23
  * Description : black and white settings view.
  *
- * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -139,7 +139,10 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     }
     else
     {
-        d->thumbImage = DImg(QIcon::fromTheme(QLatin1String("view-preview")).pixmap(128).toImage());
+        QString backGround = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                    QLatin1String("digikam/about/images/body-background.jpg"));
+
+        d->thumbImage      = DImg(backGround).smoothScale(128, 128, Qt::KeepAspectRatio);
     }
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);

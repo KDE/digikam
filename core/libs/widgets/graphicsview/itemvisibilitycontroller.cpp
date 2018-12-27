@@ -639,7 +639,7 @@ void ItemVisibilityController::Private::setItemVisible(QObject* const item, bool
 
 // ---------------------------------------------------------------------------------
 
-ItemVisibilityController::ItemVisibilityController(QObject* parent)
+ItemVisibilityController::ItemVisibilityController(QObject* const parent)
     : QObject(parent),
       d(new Private(this))
 {

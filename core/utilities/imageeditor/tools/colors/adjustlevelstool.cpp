@@ -6,7 +6,7 @@
  * Date        : 2004-07-20
  * Description : image histogram adjust levels.
  *
- * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -504,7 +504,7 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
         }
         else
         {
-            for (int i = RedChannel; i <= BlueChannel; i++)
+            for (int i = RedChannel ; i <= BlueChannel ; ++i)
                 d->levels->levelsBlackToneAdjustByColors(i, color);
         }
     }
@@ -525,7 +525,7 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
         }
         else
         {
-            for (int i = RedChannel; i <= BlueChannel; i++)
+            for (int i = RedChannel ; i <= BlueChannel ; ++i)
                 d->levels->levelsWhiteToneAdjustByColors(i, color);
         }
     }

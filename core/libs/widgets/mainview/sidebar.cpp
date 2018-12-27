@@ -7,7 +7,7 @@
  * Description : a widget to manage sidebar in GUI.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern dot ahrens at kdemail dot net>
- * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2001-2003 by Joseph Wenninger <jowenn at kde dot org>
  *
@@ -93,7 +93,7 @@ void DMultiTabBarFrame::setStyle(DMultiTabBar::TextStyle style)
 {
     d->style = style;
 
-    for (int i = 0 ; i < d->tabs.count() ; i++)
+    for (int i = 0 ; i < d->tabs.count() ; ++i)
         d->tabs.at(i)->setStyle(d->style);
 
     updateGeometry();
@@ -137,7 +137,7 @@ int DMultiTabBarFrame::appendTab(const QPixmap& pic, int id, const QString& text
 
 void DMultiTabBarFrame::removeTab(int id)
 {
-    for (int pos = 0 ; pos < d->tabs.count() ; pos++)
+    for (int pos = 0 ; pos < d->tabs.count() ; ++pos)
     {
         if (d->tabs.at(pos)->id() == id)
         {
@@ -152,7 +152,7 @@ void DMultiTabBarFrame::setPosition(Qt::Edge pos)
 {
     d->position = pos;
 
-    for (int i = 0 ; i < d->tabs.count() ; i++)
+    for (int i = 0 ; i < d->tabs.count() ; ++i)
         d->tabs.at(i)->setPosition(d->position);
 
     updateGeometry();
@@ -555,12 +555,12 @@ DMultiTabBar::DMultiTabBar(Qt::Edge pos, QWidget* const parent)
     if (pos == Qt::LeftEdge || pos == Qt::RightEdge)
     {
         d->layout = new QVBoxLayout(this);
-        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding/*, true*/);
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     }
     else
     {
         d->layout = new QHBoxLayout(this);
-        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed/*, true*/);
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     }
 
     d->layout->setContentsMargins(QMargins());
@@ -647,7 +647,7 @@ DMultiTabBarTab* DMultiTabBar::tab(int id) const
 
 void DMultiTabBar::removeButton(int id)
 {
-    for (int pos = 0 ; pos < d->buttons.count() ; pos++)
+    for (int pos = 0 ; pos < d->buttons.count() ; ++pos)
     {
         if (d->buttons.at(pos)->id() == id)
         {

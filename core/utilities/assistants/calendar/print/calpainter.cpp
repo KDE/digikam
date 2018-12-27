@@ -9,7 +9,7 @@
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
  * Copyright (C) 2012      by Angelo Naselli <anaselli at linux dot it>
- * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -222,7 +222,7 @@ void CalPainter::paint(int month)
     f.setPixelSize(f.pixelSize() + 5);
     setFont(f);
     drawText(rCalHeader, Qt::AlignLeft | Qt::AlignVCenter, QString::number(params.year));
-    drawText(rCalHeader, Qt::AlignRight | Qt::AlignVCenter, QLocale().monthName(month));
+    drawText(rCalHeader, Qt::AlignRight | Qt::AlignVCenter, QLocale().standaloneMonthName(month));
     restore();
 
     // ---------------------------------------------------------------
@@ -254,7 +254,7 @@ void CalPainter::paint(int month)
         rsmall = r;
         rsmall.setWidth(r.width() - 2);
         rsmall.setHeight(r.height() - 2);
-        drawText(rsmall, Qt::AlignRight | Qt::AlignBottom, QLocale().dayName(dayname, QLocale::ShortFormat));
+        drawText(rsmall, Qt::AlignRight | Qt::AlignBottom, QLocale().standaloneDayName(dayname, QLocale::ShortFormat));
     }
 
     restore();

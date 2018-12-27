@@ -1,4 +1,4 @@
-digiKam 6.0.0-beta3 - Release date: 2018-11-25
+digiKam 6.0.0-beta3 - Release date: 2018-12-30
 
 *****************************************************************************************************
 NEW FEATURES:
@@ -15,6 +15,7 @@ Database     : New video metadata parser based on ffmpeg to populate database.
 Search       : Add video support to find files based on properties registered on database.
 
 General      : Add new Exiv2 0.27 support.
+General      : Add new Lensfun 0.4 support.
 General      : Use DrMinGW has crash handler under Windows.
 General      : Port all export/import tool to OAuth2 authentification.
 General      : New tool to adjust quickly time and date information from items.
@@ -27,7 +28,7 @@ General      : New tool to export to Ipfs webservice.
 General      : All bundles use last Lenfun 0.3.95 to process automatic lens correction.
 General      : Add QWebEngine support.
 General      : Fix all Krazy static analyzer reports.
-General      : Update internal Libraw to last 0.19.0.
+General      : Update internal Libraw to last 0.19.1.
                New camera supported:
                * Apple: Phone 8, iPhone 8 plus, iPhone X
                * BlackMagic: URSA Mini 4k, URSA Mini 4.6k, URSA Mini Pro 4.6k
@@ -52,6 +53,8 @@ General      : Update internal Libraw to last 0.19.0.
                * Yi: M1
                * YUNEEC: CGO3, CGO3P
                * Xiaoyi: YIAC3 (YI 4k)
+
+Collection   : Add tool button to update an existing collection to the new drive or path.
 
 Tags         : Add possibility to merge tags by drag & drop.
 
@@ -643,4 +646,27 @@ BUGFIXES:
 576 ==> 400960 - Do not reset horizontal scroll bar slider position when selecting album.
 577 ==> 400766 - Export to Onedrive: not possible to export into subfolder.
 578 ==> 398207 - box.com video upload fails despite successful authentication.
-579 ==> 
+579 ==> 401160 - Build against lensfun-devel.
+580 ==> 401173 - Wish for file saving: set changed datetime to exif datetime.
+581 ==> 401423 - Video sidecar files nor read or written.
+582 ==> 401438 - Calendar plugin prints improper month names (Czech localization).
+583 ==> 401515 - Export to OneDrive: created subfolders not correctly managed.
+584 ==> 401516 - Export to (Onedrive, Dropbox ...): list of subfolders not correctly displayed (problems if several subfolders have the same name).
+585 ==> 401645 - Digikam crashes on possibly damaged video-file.
+586 ==> 401676 - BQM resize tool : allow to resize by percentage (%).
+587 ==> 401709 - Double clicking a name in a face-frame closes image preview.
+588 ==> 401811 - DB migration (SQLite -> MySQL) fails if images are in trash.
+589 ==> 401767 - digikam unable to find existing path.
+590 ==> 215486 - Collection not found in location on disk with UUID (LVM volume).
+591 ==> 401834 - The "Scanning Faces" dialog box is too large and can't be resized in french language.
+592 ==> 401664 - Trash shows list view only no thumbnails.
+593 ==> 402029 - Find New Items process takes significantly longer to finish on 6.0.0.
+594 ==> 402286 - Metadata settings don't display the combo value options.
+595 ==> 402288 - The default Xmp.lr.hierarchicalSubject setting does not read darktable tags.
+596 ==> 402300 - Template string in Help > About.
+597 ==> 402283 - Duplicate entries drive to unpredictable performance.
+598 ==> 402380 - Database schema upgrade to V10 is incomplete.
+599 ==> 402379 - Moving location of RAW file causes loss of metadata.
+600 ==> 366211 - When changing database, cannot open thumbnails into edit window.
+601 ==> 402496 - digikam crashed after a while during face recognition.
+602 ==> 

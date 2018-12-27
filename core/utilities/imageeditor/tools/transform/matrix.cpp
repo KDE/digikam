@@ -7,7 +7,7 @@
  * Description : a matrix implementation for image
  *               perspective adjustment.
  *
- * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Based on Matrix3 implementation inspired from gimp 2.0

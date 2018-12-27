@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2018 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2019 by Gilles Caulier, <caulier dot gilles at gmail dot com>
 # Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
@@ -80,7 +80,7 @@ set(libitemview_SRCS
     itemview/dcategorydrawer.cpp
     itemview/itemdelegateoverlay.cpp
     itemview/itemviewhoverbutton.cpp
-    itemview/itemviewimagedelegate.cpp
+    itemview/itemviewdelegate.cpp
     itemview/itemviewtooltip.cpp
     itemview/itemviewcategorized.cpp
     itemview/actioncategorizedview.cpp
