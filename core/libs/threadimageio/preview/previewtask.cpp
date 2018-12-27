@@ -369,9 +369,9 @@ void PreviewLoadingTask::execute()
         const bool needzoomOrgSize       = !m_loadingDescription.previewParameters.previewSettings.zoomOrgSize;
         const bool needConvertToEightBit = m_loadingDescription.previewParameters.previewSettings.convertToEightBit;
 
-        if (accessMode() == LoadSaveThread::AccessModeReadWrite   &&
-            (needExifRotate  || needImageScale || needPostProcess ||
-             needzoomOrgSize || needConvertToEightBit))
+        if (accessMode() == LoadSaveThread::AccessModeReadWrite  ||
+            needExifRotate  || needImageScale || needPostProcess ||
+            needzoomOrgSize || needConvertToEightBit)
         {
             m_img.detach();
         }
