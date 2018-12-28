@@ -314,12 +314,36 @@ int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& me
     return exifOrientation;
 }
 
+bool LoadSaveThread::wasExifRotatedStatic(const DImg& image)
+{
+    // Keep in sync with the variant in thumbnailcreator.cpp
+    QVariant attribute(image.attribute(QLatin1String("exifRotated")));
+
+    return attribute.isValid() && attribute.toBool();
+}
+
 bool LoadSaveThread::wasExifRotated(const DImg& image)
 {
     // Keep in sync with the variant in thumbnailcreator.cpp
     QVariant attribute(image.attribute(QLatin1String("exifRotated")));
 
     return attribute.isValid() && attribute.toBool();
+}
+
+bool LoadSaveThread::exifRotateStatic(DImg& image, const QString& filePath)
+{
+    // Keep in sync with the variant in thumbnailcreator.cpp
+    if (wasExifRotatedStatic(image))
+    {
+        return false;
+    }
+
+    // Rotate thumbnail based on metadata orientation information
+
+    bool rotatedOrFlipped = image.rotateAndFlip(exifOrientation(image, filePath));
+    image.setAttribute(QLatin1String("exifRotated"), true);
+
+    return rotatedOrFlipped;
 }
 
 bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
