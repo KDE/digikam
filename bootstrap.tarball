@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Copyright (c) 2008-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2008-2019, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 # Configuration to tune before to build tarball.
 
-TARBALL_VERSION="6.0.0-beta2"
+TARBALL_VERSION="6.0.0-beta3"
 
 # Location to host target files.
 TARBALL_DIR="$PWD/../digikam-$TARBALL_VERSION"
@@ -19,7 +19,7 @@ TARBALL_SHA256SUMS="$PWD/../sha256_release.sum"
 TARBALL_BUILD="build.tarball"
 
 # PGP signature
-TARBALL_SIGN=1
+TARBALL_SIGN=0
 
 # Prepare temporary directory to compile translations files.
 
