@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2013-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2013-2019, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Run Coverity Scan static analyzer on whole digiKam source code.
 # https://scan.coverity.com/
