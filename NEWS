@@ -28,7 +28,7 @@ General      : New tool to export to Ipfs webservice.
 General      : All bundles use last Lenfun 0.3.95 to process automatic lens correction.
 General      : Add QWebEngine support.
 General      : Fix all Krazy static analyzer reports.
-General      : Update internal Libraw to last 0.19.1.
+General      : Update internal Libraw to last 0.19.2.
                New camera supported:
                * Apple: Phone 8, iPhone 8 plus, iPhone X
                * BlackMagic: URSA Mini 4k, URSA Mini 4.6k, URSA Mini Pro 4.6k
@@ -645,18 +645,18 @@ BUGFIXES:
 575 ==> 400917 - Rotation of picture in Preview mode: thumbnail not rotated.
 576 ==> 400960 - Do not reset horizontal scroll bar slider position when selecting album.
 577 ==> 400766 - Export to Onedrive: not possible to export into subfolder.
-578 ==> 398207 - box.com video upload fails despite successful authentication.
+578 ==> 398207 - Box.com video upload fails despite successful authentication.
 579 ==> 401160 - Build against lensfun-devel.
 580 ==> 401173 - Wish for file saving: set changed datetime to exif datetime.
 581 ==> 401423 - Video sidecar files nor read or written.
 582 ==> 401438 - Calendar plugin prints improper month names (Czech localization).
 583 ==> 401515 - Export to OneDrive: created subfolders not correctly managed.
 584 ==> 401516 - Export to (Onedrive, Dropbox ...): list of subfolders not correctly displayed (problems if several subfolders have the same name).
-585 ==> 401645 - Digikam crashes on possibly damaged video-file.
+585 ==> 401645 - digiKam crashes on possibly damaged video-file.
 586 ==> 401676 - BQM resize tool : allow to resize by percentage (%).
 587 ==> 401709 - Double clicking a name in a face-frame closes image preview.
 588 ==> 401811 - DB migration (SQLite -> MySQL) fails if images are in trash.
-589 ==> 401767 - digikam unable to find existing path.
+589 ==> 401767 - digiKam unable to find existing path.
 590 ==> 215486 - Collection not found in location on disk with UUID (LVM volume).
 591 ==> 401834 - The "Scanning Faces" dialog box is too large and can't be resized in french language.
 592 ==> 401664 - Trash shows list view only no thumbnails.
@@ -668,5 +668,5 @@ BUGFIXES:
 598 ==> 402380 - Database schema upgrade to V10 is incomplete.
 599 ==> 402379 - Moving location of RAW file causes loss of metadata.
 600 ==> 366211 - When changing database, cannot open thumbnails into edit window.
-601 ==> 402496 - digikam crashed after a while during face recognition.
+601 ==> 402496 - digiKam crashed after a while during face recognition.
 602 ==> 
