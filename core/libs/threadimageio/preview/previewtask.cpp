@@ -363,15 +363,15 @@ void PreviewLoadingTask::execute()
         // We check before to find out if we need to provide a deep copy
 
         const bool needExifRotate        = MetaEngineSettings::instance()->settings().exifRotate &&
-                                           !LoadSaveThread::wasExifRotated(m_img);
+                                           !m_thread->wasExifRotated(m_img);
         const bool needImageScale        = needToScale();
         const bool needPostProcess       = needsPostProcessing();
         const bool needzoomOrgSize       = !m_loadingDescription.previewParameters.previewSettings.zoomOrgSize;
         const bool needConvertToEightBit = m_loadingDescription.previewParameters.previewSettings.convertToEightBit;
 
-        if (accessMode() == LoadSaveThread::AccessModeReadWrite   &&
-            (needExifRotate  || needImageScale || needPostProcess ||
-             needzoomOrgSize || needConvertToEightBit))
+        if (accessMode() == LoadSaveThread::AccessModeReadWrite  ||
+            needExifRotate  || needImageScale || needPostProcess ||
+            needzoomOrgSize || needConvertToEightBit)
         {
             m_img.detach();
         }
@@ -399,7 +399,7 @@ void PreviewLoadingTask::execute()
 
         if (needExifRotate)
         {
-            LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
+            m_thread->exifRotate(m_img, m_loadingDescription.filePath);
         }
 
         if (needPostProcess)

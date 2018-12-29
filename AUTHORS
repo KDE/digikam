@@ -20,15 +20,15 @@ Guillaume Castagnino <casta at xwing dot info>                            : Deve
 Teemu Rytilahti <tpr at iki dotfi>                                        : Developer.
 Julien Narboux <Julien at narboux dot fr>                                 : Developer.
 Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>         : Developer.
-Dodon Victor <dodonvictor at gmail dot com>                               : Developer, Webservices tool..
+Dodon Victor <dodonvictor at gmail dot com>                               : Developer, Webservices tool.
 Jens Muller <tschenser at gmx dot de>                                     : Developer.
 Martin Engelmann <murphi dot oss at googlemail dot com>                   : Developer.
 Orgad Shaneh <orgads at gmail dot com>                                    : Developer, Calendar tool.
-Seb Ruiz <ruiz at kde dot org>                                            : Developer, Webservices tool..
+Seb Ruiz <ruiz at kde dot org>                                            : Developer, Webservices tool.
 Ruediger Bente <ruediger dot bente at gmx dot de>                         : Developer.
 Beth Marmorstein <purplegamba at cox dot net>                             : Developer.
 Robert Marmorstein <rmmarm at sdf dot lonestar dot org>                   : Developer.
-Markus Leuthold <kusi at forum dot titlis dot org>                        : Developer, Webservices tool..
+Markus Leuthold <kusi at forum dot titlis dot org>                        : Developer, Webservices tool.
 Frederic Coiffier <fcoiffie at gmail dot com>                             : Developer, Piwigo tool.
 Laurent Montel <montel at kde dot org>                                    : Developer, port to Qt5/KF5.
 Kare Sars <kare dot sars at iki dot fi>                                   : Developer, flat scanners support.
@@ -56,7 +56,7 @@ Holger Foerster <hamsi2k at freenet dot de>                               : Deve
 Luka Renko <lure at kubuntu dot org>                                      : Developer, Kubuntu packages.
 Ananta Palani <anantapalani at gmail dot com>                             : Windows port and packaging.
 Andi Clemens <andi dot clemens at gmail dot com>                          : Advance Rename tool, developer.
-Franscesco Riosa <francesco at pnpitalia dot it>                          : LCMS2 port.
+Franscesco Riosa <francesco at pnpitalia dot it>                          : LCMS2 port, Mysql support.
 Patrick Spendrin <patrick_spendrin at gmx dot de>                         : Developer, Windows port, Marble support.
 Gerhard Kulzer <gerhard at kulzer dot net>                                : Bug reports, patches, and handbook writer.
 Risto Saukonpaa <paristo at gmail dot com>                                : Design, icons, logo, banner, mocup, beta tester.

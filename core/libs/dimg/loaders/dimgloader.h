@@ -78,9 +78,9 @@ public:
     virtual bool sixteenBit()    const = 0;
     virtual bool isReadOnly()    const = 0;
 
-    static QByteArray     uniqueHashV2(const QString& filePath, const DImg* const img = 0);
-    static QByteArray     uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
-    static HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata& metadata);
+    static QByteArray     uniqueHashV2Static(const QString& filePath, const DImg* const img = 0);
+    static QByteArray     uniqueHashStatic(const QString& filePath, const DImg& img, bool loadMetadata);
+    static HistoryImageId createHistoryImageIdStatic(const QString& filePath, const DImg& img, const DMetadata& metadata);
 
     static unsigned char*  new_failureTolerant(size_t unsecureSize);
     static unsigned char*  new_failureTolerant(quint64 w, quint64 h, uint typesPerPixel);
@@ -95,6 +95,12 @@ public:
 
     template <typename Type> static Type* new_failureTolerant(size_t unsecureSize);
     template <typename Type> static Type* new_failureTolerant(quint64 w, quint64 h, uint typesPerPixel);
+
+private:
+
+    QByteArray     uniqueHashV2(const QString& filePath, const DImg* const img = 0);
+    QByteArray     uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
+    HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata& metadata);
 
 protected:
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2013-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2013-2019, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -19,7 +19,7 @@ BUILDING_DIR="`pwd`/temp.build"
 
 #------------
 # IMPORTANT: Target Windows architecture to build installer. Possible values: 32 or 64 bits.
-MXE_ARCHBITS=64
+MXE_ARCHBITS=32
 #------------
 
 if [[ $MXE_ARCHBITS == 32 ]]; then
@@ -71,7 +71,7 @@ DK_EPOCH="-`date "+%Y%m%dT%H%M%S"`"
 DK_DEBUG=1
 
 # Sign bundles with GPG. Passphrase must be hosted in ~/.gnupg/dkorg-gpg-pwd.txt
-DK_SIGN=0
+DK_SIGN=1
 
 # Upload automatically bundle to files.kde.org (pre-release only).
 DK_UPLOAD=1

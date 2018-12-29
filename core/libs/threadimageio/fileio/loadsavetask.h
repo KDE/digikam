@@ -153,7 +153,7 @@ public:
 
     // LoadingProcess
 
-    virtual bool completed() const volatile;
+    virtual bool completed() const;
     virtual QString filePath() const;
     virtual QString cacheKey() const;
     virtual void addListener(LoadingProcessListener* const listener);
@@ -171,7 +171,7 @@ public:
 
 protected:
 
-    volatile bool                  m_completed;
+    bool                           m_completed;
     LoadSaveThread::AccessMode     m_accessMode;
     LoadingProcess*                m_usedProcess;
     QList<LoadingProcessListener*> m_listeners;

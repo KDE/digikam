@@ -252,6 +252,32 @@ static QDateTime creationDateFromFilesystem(const QFileInfo& info)
     return qMin(ctime, mtime);
 }
 
+HistoryImageId DImgLoader::createHistoryImageIdStatic(const QString& filePath, const DImg& image, const DMetadata& metadata)
+{
+    QFileInfo file(filePath);
+
+    if (!file.exists())
+    {
+        return HistoryImageId();
+    }
+
+    HistoryImageId id(metadata.getItemUniqueId());
+
+    QDateTime dt = metadata.getItemDateTime();
+
+    if (dt.isNull())
+    {
+        dt = creationDateFromFilesystem(file);
+    }
+
+    id.setCreationDate(dt);
+    id.setFileName(file.fileName());
+    id.setPath(file.path());
+    id.setUniqueHash(QString::fromUtf8(uniqueHashV2Static(filePath, &image)), file.size());
+
+    return id;
+}
+
 HistoryImageId DImgLoader::createHistoryImageId(const QString& filePath, const DImg& image, const DMetadata& metadata)
 {
     QFileInfo file(filePath);
@@ -320,6 +346,53 @@ void DImgLoader::purgeExifWorkingColorSpace()
     m_image->setMetadata(meta.data());
 }
 
+QByteArray DImgLoader::uniqueHashV2Static(const QString& filePath, const DImg* const img)
+{
+    QFile file(filePath);
+
+    if (!file.open(QIODevice::Unbuffered | QIODevice::ReadOnly))
+    {
+        return QByteArray();
+    }
+
+    QCryptographicHash md5(QCryptographicHash::Md5);
+
+    // Specified size: 100 kB; but limit to file size
+    const qint64 specifiedSize = 100 * 1024; // 100 kB
+    qint64 size                = qMin(file.size(), specifiedSize);
+
+    if (size)
+    {
+        QScopedArrayPointer<char> databuf(new char[size]);
+        int read;
+
+        // Read first 100 kB
+        if ((read = file.read(databuf.data(), size)) > 0)
+        {
+            md5.addData(databuf.data(), read);
+        }
+
+        // Read last 100 kB
+        file.seek(file.size() - size);
+
+        if ((read = file.read(databuf.data(), size)) > 0)
+        {
+            md5.addData(databuf.data(), read);
+        }
+    }
+
+    file.close();
+
+    QByteArray hash = md5.result().toHex();
+
+    if (img && !hash.isNull())
+    {
+        const_cast<DImg*>(img)->setAttribute(QString::fromUtf8("uniqueHashV2"), hash);
+    }
+
+    return hash;
+}
+
 QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* const img)
 {
     QFile file(filePath);
@@ -362,6 +435,57 @@ QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* const i
     if (img && !hash.isNull())
     {
         const_cast<DImg*>(img)->setAttribute(QString::fromUtf8("uniqueHashV2"), hash);
+    }
+
+    return hash;
+}
+
+QByteArray DImgLoader::uniqueHashStatic(const QString& filePath, const DImg& img, bool loadMetadata)
+{
+    QByteArray bv;
+
+    if (loadMetadata)
+    {
+        DMetadata metaDataFromFile(filePath);
+        bv = metaDataFromFile.getExifEncoded();
+    }
+    else
+    {
+        DMetadata metaDataFromImage(img.getMetadata());
+        bv = metaDataFromImage.getExifEncoded();
+    }
+
+    // Create the unique ID
+
+    QCryptographicHash md5(QCryptographicHash::Md5);
+
+    // First, read the Exif data into the hash
+    md5.addData(bv);
+
+    // Second, read in the first 8KB of the file
+    QFile qfile(filePath);
+
+    char databuf[8192];
+    QByteArray hash;
+
+    if (qfile.open(QIODevice::Unbuffered | QIODevice::ReadOnly))
+    {
+        int readlen = 0;
+
+        if ((readlen = qfile.read(databuf, 8192)) > 0)
+        {
+            QByteArray size = 0;
+            md5.addData(databuf, readlen);
+            md5.addData(size.setNum(qfile.size()));
+            hash = md5.result().toHex();
+        }
+
+        qfile.close();
+    }
+
+    if (!hash.isNull())
+    {
+        const_cast<DImg&>(img).setAttribute(QLatin1String("uniqueHash"), hash);
     }
 
     return hash;

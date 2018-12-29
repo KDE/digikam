@@ -190,7 +190,7 @@ DImg* LoadingCache::retrieveImage(const QString& cacheKey) const
 bool LoadingCache::putImage(const QString& cacheKey, const DImg& img, const QString& filePath) const
 {
     int cost                 = img.numBytes();
-    bool successfulyInserted = d->imageCache.insert(cacheKey, new DImg(img.copy()), cost);
+    bool successfulyInserted = d->imageCache.insert(cacheKey, new DImg(img), cost);
 
     if (successfulyInserted && !filePath.isEmpty())
     {
