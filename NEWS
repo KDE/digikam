@@ -28,7 +28,7 @@ General      : New tool to export to Ipfs webservice.
 General      : All bundles use last Lenfun 0.3.95 to process automatic lens correction.
 General      : Add QWebEngine support.
 General      : Fix all Krazy static analyzer reports.
-General      : Update internal Libraw to last 0.19.1.
+General      : Update internal Libraw to last 0.19.2.
                New camera supported:
                * Apple: Phone 8, iPhone 8 plus, iPhone X
                * BlackMagic: URSA Mini 4k, URSA Mini 4.6k, URSA Mini Pro 4.6k
