@@ -136,11 +136,8 @@ public:
      * Returns true if the image has actually been rotated or flipped.
      * Returns false if a rotation was not needed.
      */
-    static bool exifRotateStatic(DImg& image, const QString& filePath);
-    static bool wasExifRotatedStatic(const DImg& image);
-
-    bool exifRotate(DImg& image, const QString& filePath);
-    bool wasExifRotated(const DImg& image);
+    static bool exifRotate(DImg& image, const QString& filePath);
+    static bool wasExifRotated(const DImg& image);
 
     /**
      * Reverses the previous function
