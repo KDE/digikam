@@ -18,6 +18,9 @@ Notice to make release tarballs from GIT
     last major release. Look in bugzilla for closed file summaries.
     Commit to GIT.
 
+    Note: after a stable release, the NEWS file is moved from the root directory to the project sub-directory
+    with the release IDs as file-name suffix. The NEWS file from the root directory is cleaned for the next release.
+
 6/  Tag Git vith the release version in this format: vX.Y.Z-suffix.
     Use these commands:
 
@@ -60,7 +63,7 @@ Notice to make release tarballs from GIT
     Use same worflow than source tarball.
 
 11/ Create a release announcement page on digikam.org web site.
-    Web-site is hosted in a dedicated release repository : https://cgit.kde.org/websites/digikam-org.git/
+    Web-site is hosted in a dedicated release repository: https://cgit.kde.org/websites/digikam-org.git/
     Website repository use a staging branch to review changes before to post contents officialy.
     See this README file for details: https://cgit.kde.org/websites/digikam-org.git/tree/README
     The release announcement can use MarkDown format and are located to "news" directory.
@@ -76,7 +79,7 @@ Notice to make release tarballs from GIT
     Dear all digiKam fans and users,
 
     The digiKam development team is proud to release digiKam
-    Software Collection X.Y.Z-suffix. For more details, see announcement on
+    X.Y.Z-suffix. For more details, see announcement on
     digikam.org:
 
     https://www.digikam.org/news/date-X.Y.Z-suffix_release_announcement/
