@@ -607,7 +607,7 @@ bool WaterMark::toolOperations()
 
     // rotate and/or flip the image depending on the exif information to allow for the expected watermark placement.
     //note that this operation is reversed after proper watermark generation to leave everything as it was.
-    LoadSaveThread::exifRotateStatic(image(), inputUrl().toLocalFile());
+    LoadSaveThread::exifRotate(image(), inputUrl().toLocalFile());
 
     float ratio = (float)image().height()/image().width();
 
