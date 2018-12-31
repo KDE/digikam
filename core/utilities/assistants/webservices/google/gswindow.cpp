@@ -502,7 +502,8 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
     d->widget->progressBar()->setValue(0);
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("Google Photo Export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(QIcon((QLatin1String("dk-googlephoto"))).pixmap(22, 22));
+    d->widget->progressBar()->progressThumbnailChanged(
+        QIcon::fromTheme((QLatin1String("dk-googlephoto"))).pixmap(22, 22));
 
     d->renamingOpt = 0;
 
@@ -734,7 +735,8 @@ void GSWindow::slotStartTransfer()
     d->widget->progressBar()->setValue(0);
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("Google Drive export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("dk-googledrive")).pixmap(22, 22));
+    d->widget->progressBar()->progressThumbnailChanged(
+        QIcon::fromTheme(QLatin1String("dk-googledrive")).pixmap(22, 22));
 
     uploadNextPhoto();
 }

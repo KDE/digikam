@@ -316,7 +316,8 @@ void MediaWikiWindow::slotStartTransfer()
 
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("MediaWiki export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("MediaWiki")).pixmap(22, 22));
+    d->widget->progressBar()->progressThumbnailChanged(
+        QIcon::fromTheme(QLatin1String("dk-mediawiki")).pixmap(22, 22));
     d->uploadTalker->slotBegin();
 }
 
