@@ -305,7 +305,7 @@ void ODWindow::slotStartTransfer()
     d->widget->progressBar()->setValue(0);
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("Onedrive export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("onedrive")).pixmap(22, 22));
+    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("dk-onedrive")).pixmap(22, 22));
 
     uploadNextPhoto();
 }

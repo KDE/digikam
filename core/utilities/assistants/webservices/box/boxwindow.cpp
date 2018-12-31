@@ -305,7 +305,7 @@ void BOXWindow::slotStartTransfer()
     d->widget->progressBar()->setValue(0);
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("Box export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("box")).pixmap(22, 22));
+    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("dk-box")).pixmap(22, 22));
 
     uploadNextPhoto();
 }

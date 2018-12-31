@@ -87,7 +87,7 @@ WSSelectUserDlg::WSSelectUserDlg(QWidget* const parent, const QString& serviceNa
     }
     else
     {
-        setWindowIcon(QIcon::fromTheme(QLatin1String("flickr")));
+        setWindowIcon(QIcon::fromTheme(QLatin1String("dk-flickr")));
     }
 
     d->userName     = QString();

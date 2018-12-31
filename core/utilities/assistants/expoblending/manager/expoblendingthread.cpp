@@ -190,7 +190,7 @@ void ExpoBlendingThread::cleanUpResultFiles()
     // Cleanup all tmp files created by Enfuse process.
     QMutexLocker(&d->enfuseTmpUrlsMutex);
 
-    foreach(const QUrl& url, d->enfuseTmpUrls)
+    foreach (const QUrl& url, d->enfuseTmpUrls)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Removing temp file " << url.toLocalFile();
         QFile(url.toLocalFile()).remove();
@@ -206,7 +206,7 @@ void ExpoBlendingThread::setPreProcessingSettings(bool align)
 
 void ExpoBlendingThread::identifyFiles(const QList<QUrl>& urlList)
 {
-    foreach(const QUrl& url, urlList)
+    foreach (const QUrl& url, urlList)
     {
         Private::Task* const t = new Private::Task;
         t->action              = EXPOBLENDING_IDENTIFY;
@@ -597,7 +597,7 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
         args << QLatin1String("-a");
         args << QLatin1String("aligned");
 
-        foreach(const QUrl& url, d->mixedUrls)
+        foreach (const QUrl& url, d->mixedUrls)
         {
             args << url.toLocalFile();
         }
@@ -638,7 +638,7 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
             i++;
         }
 
-        foreach(const QUrl& inputUrl, d->preProcessedUrlsMap.keys())
+        foreach (const QUrl& inputUrl, d->preProcessedUrlsMap.keys())
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Pre-processed output urls map: "
                                          << inputUrl << "=>"
@@ -665,7 +665,7 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
     }
     else
     {
-        foreach(const QUrl& inputUrl, d->preProcessedUrlsMap.keys())
+        foreach (const QUrl& inputUrl, d->preProcessedUrlsMap.keys())
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Pre-processed output urls map: "
                                          << inputUrl << "=>"

@@ -673,5 +673,6 @@ BUGFIXES:
 603 ==> 401301 - digiKam Close crash.
 604 ==> 401837 - Button Caption transcription error in french.
 605 ==> 398880 - digiKam stays as a background process after closing.
-606 ==> 
-
+606 ==> 398129 - ExpoBlend tool filename dialog shows previous file's name.
+607 ==> 402556 - digikam-data conflict with dropbox installation.
+608 ==> 

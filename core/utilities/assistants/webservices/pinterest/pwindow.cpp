@@ -305,7 +305,7 @@ void PWindow::slotStartTransfer()
     d->widget->progressBar()->setValue(0);
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("Pinterest export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("pinterest")).pixmap(22, 22));
+    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("dk-pinterest")).pixmap(22, 22));
 
     uploadNextPhoto();
 }

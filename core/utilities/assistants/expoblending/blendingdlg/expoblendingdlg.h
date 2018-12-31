@@ -85,6 +85,7 @@ private Q_SLOTS:
     void slotLoadProcessed(const QUrl&);
     void slotExpoBlendingAction(const Digikam::ExpoBlendingActionData&);
     void slotAddItems(const QList<QUrl>& urls);
+    void slotItemClicked(const QUrl& url);
 
     void slotPreviewButtonClicked();
     void slotFileFormatChanged();
