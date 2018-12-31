@@ -6,7 +6,7 @@
  * Date        : 2018-07-30
  * Description : manager to load external plugins at run-time: private container
  *
- * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +35,7 @@ class Q_DECL_HIDDEN DPluginLoader::Private
 {
 public:
 
-    explicit Private(DPluginLoader* const q);
+    explicit Private();
     ~Private();
 
     QString     pluginSystemPath();
@@ -50,7 +50,6 @@ public:
 
     bool            pluginsLoaded;
     QList<DPlugin*> allPlugins;
-    DPluginLoader*  parent;
     QStringList     blacklist;
     QStringList     whitelist;
 };

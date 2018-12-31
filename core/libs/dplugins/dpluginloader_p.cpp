@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : manager to load external plugins at run-time
- *
  * Description : manager to load external plugins at run-time: private container
+ *
+ * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,9 +37,8 @@
 namespace Digikam
 {
 
-DPluginLoader::Private::Private(DPluginLoader* const q)
-    : pluginsLoaded(false),
-      parent(q)
+DPluginLoader::Private::Private()
+    : pluginsLoaded(false)
 {
 }
 
@@ -160,7 +159,7 @@ void DPluginLoader::Private::loadPlugins()
 
         // qCDebug(DIGIKAM_GENERAL_LOG) << fileName << " - " << pluginPath(fileName);
         QString const path          = pluginPath(fileName);
-        QPluginLoader* const loader = new QPluginLoader(path, parent);
+        QPluginLoader* const loader = new QPluginLoader(path, DPluginLoader::instance());
         QObject* const obj          = loader->instance();
 
         if (obj)

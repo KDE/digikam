@@ -6,7 +6,7 @@
  * Date        : 2018-07-30
  * Description : manager to load external plugins at run-time
  *
- * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,8 +53,16 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
 
  public:
 
-    explicit DPluginLoader(QObject* const parent=0);
-    ~DPluginLoader();
+    /**
+     * @brief instance: returns the singleton of plugin loader
+     * @return DPluginLoader global instance
+     */
+    static DPluginLoader* instance();
+
+    /**
+     * Init plugin loader. Call this method to parse and load relevant plugins installed on your system.
+     */
+    void init();
 
     /**
      * @brief Returns all available plugins.
@@ -89,10 +97,16 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
 
 private:
 
+    // Disable constructor and destructor
+    DPluginLoader();
+    ~DPluginLoader();
+
     Q_DISABLE_COPY(DPluginLoader)
 
     class Private;
     Private* const d;
+    
+    friend class DPluginLoaderCreator; 
 };
 
 } // namespace Digikam

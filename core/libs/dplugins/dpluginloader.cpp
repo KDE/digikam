@@ -6,7 +6,7 @@
  * Date        : 2018-07-30
  * Description : manager to load external plugins at run-time
  *
- * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,16 +36,36 @@
 namespace Digikam
 {
 
-DPluginLoader::DPluginLoader(QObject* const parent)
-    : QObject(parent),
-      d(new Private(this))
+class Q_DECL_HIDDEN DPluginLoaderCreator
 {
-    d->loadPlugins();
+public:
+
+    DPluginLoader object;
+};
+
+Q_GLOBAL_STATIC(DPluginLoaderCreator, creator)
+
+// -----------------------------------------------------
+
+DPluginLoader::DPluginLoader()
+    : QObject(),
+      d(new Private)
+{
 }
 
 DPluginLoader::~DPluginLoader()
 {
     delete d;
+}
+
+DPluginLoader* DPluginLoader::instance()
+{
+    return &creator->object;
+}
+
+void DPluginLoader::init()
+{
+    d->loadPlugins();
 }
 
 QList<DPlugin*> DPluginLoader::allPlugins() const

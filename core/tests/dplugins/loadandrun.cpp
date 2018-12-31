@@ -53,12 +53,13 @@ int main(int argc, char* argv[])
 
     parser.process(app);
 
-    DPluginLoader dpl;
+    DPluginLoader* const dpl = DPluginLoader::instance();
+    dpl->init();
     bool found = false;
 
     if (parser.isSet(QString::fromLatin1("list")))
     {
-        foreach (DPlugin* const p, dpl.allPlugins())
+        foreach (DPlugin* const p, dpl->allPlugins())
         {
             qDebug() << "--------------------------------------------";
             qDebug() << "Id     :" << p->id();
@@ -108,7 +109,7 @@ int main(int argc, char* argv[])
 
         MetaEngine::initializeExiv2();
 
-        foreach (DPlugin* const p, dpl.allPlugins())
+        foreach (DPlugin* const p, dpl->allPlugins())
         {
             if (p->id() == name)
             {
