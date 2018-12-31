@@ -69,7 +69,7 @@ public:
 };
 
 ExpoBlendingWizard::ExpoBlendingWizard(ExpoBlendingManager* const mngr, QWidget* const parent)
-    : DWizardDlg(parent, QLatin1String("ExpoBlending Dialog")),
+    : DWizardDlg(parent, QLatin1String("ExpoBlending Wizard")),
       d(new Private)
 {
     setModal(false);
