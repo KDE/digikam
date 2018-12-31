@@ -257,6 +257,9 @@ ExpoBlendingDlg::ExpoBlendingDlg(ExpoBlendingManager* const mngr, QWidget* const
     connect(d->bracketStack, SIGNAL(signalAddItems(QList<QUrl>)),
             this, SLOT(slotAddItems(QList<QUrl>)));
 
+    connect(d->bracketStack, SIGNAL(signalItemClicked(QUrl)),
+            this, SLOT(slotItemClicked(QUrl)));
+
     connect(d->previewWidget, SIGNAL(signalButtonClicked()),
             this, SLOT(slotPreviewButtonClicked()));
 
@@ -333,6 +336,20 @@ void ExpoBlendingDlg::slotAddItems(const QList<QUrl>& urls)
         if (!d->mngr->thread()->isRunning())
             d->mngr->thread()->start();
     }
+}
+
+void ExpoBlendingDlg::slotItemClicked(const QUrl& url)
+{
+    QString fileName = url.fileName();
+
+    if (fileName.isEmpty())
+        return;
+
+    int dot  = fileName.lastIndexOf(QLatin1Char('.'));
+    fileName = fileName.left(dot);
+
+    d->templateFileName->setText(fileName);
+    slotFileFormatChanged();
 }
 
 void ExpoBlendingDlg::slotLoadProcessed(const QUrl& url)

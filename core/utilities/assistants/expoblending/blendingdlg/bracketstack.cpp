@@ -123,6 +123,9 @@ BracketStackList::BracketStackList(QWidget* const parent)
     connect(ThumbnailLoadThread::defaultThread(), SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnail(LoadingDescription,QPixmap)));
 
+    connect(this, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
+            this, SLOT(slotItemClicked(QTreeWidgetItem*,int)));
+
     sortItems(2, Qt::DescendingOrder);
 }
 
@@ -204,7 +207,7 @@ void BracketStackList::addItems(const QList<QUrl>& list)
         }
     }
 
-    foreach(const QUrl& url, urls)
+    foreach (const QUrl& url, urls)
     {
         ThumbnailLoadThread::defaultThread()->find(ThumbnailIdentifier(url.toLocalFile()));
     }
@@ -235,6 +238,16 @@ void BracketStackList::slotThumbnail(const LoadingDescription& desc, const QPixm
         }
 
         ++it;
+    }
+}
+
+void BracketStackList::slotItemClicked(QTreeWidgetItem* item, int column)
+{
+    BracketStackItem* const cItem = dynamic_cast<BracketStackItem*>(item);
+
+    if (cItem && column == 1)
+    {
+        signalItemClicked(cItem->url());
     }
 }
 

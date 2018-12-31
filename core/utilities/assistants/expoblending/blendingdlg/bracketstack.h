@@ -83,10 +83,12 @@ public:
 Q_SIGNALS:
 
     void signalAddItems(const QList<QUrl>&);
+    void signalItemClicked(const QUrl& url);
 
 private Q_SLOTS:
 
     void slotThumbnail(const LoadingDescription&, const QPixmap& pix);
+    void slotItemClicked(QTreeWidgetItem* item, int column);
 };
 
 } // namespace Digikam
