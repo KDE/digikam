@@ -81,6 +81,7 @@
         <Action name="export_ipfs" />
         <Action name="export_onedrive" />
         <Action name="export_pinterest" />
+        <Action name="export_piwigo" />
         <Action name="export_box" />
         <Action name="export_rajce" />
         <Action name="export_smugmug" />
