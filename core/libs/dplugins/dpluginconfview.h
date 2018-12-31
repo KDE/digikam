@@ -94,7 +94,7 @@ private:
     class Private;
     Private* const d;
 };
-    
+
 } // namespace Digikam
 
 #endif // DIGIKAM_DPLUGIN_CONF_VIEW_H

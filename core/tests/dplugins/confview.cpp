@@ -29,8 +29,7 @@
 // Local includes
 
 #include "dpluginloader.h"
-#include "dplugin.h"
-#include "dpluginconfview.h"
+#include "dpluginsetup.h"
 
 using namespace Digikam;
 
@@ -40,7 +39,7 @@ int main(int argc, char* argv[])
 
     DPluginLoader::instance()->init();
 
-    DPluginConfView view;
+    DPluginSetup view;
     view.show();
 
     app.exec();
