@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="606" name="showfoto" translationDomain="digikam" >
+<gui version="607" name="showfoto" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -82,7 +82,7 @@
     <Menu name="Enhance" ><text>Enh&amp;ance</text>
         <Action name="editorwindow_enhance_restoration" />
         <Action name="editorwindow_enhance_blur" />
-	<Action name="editorwindow_enhance_healingclone" />
+        <Action name="editorwindow_enhance_healingclone" />
         <Action name="editorwindow_enhance_sharpen" />
         <Action name="editorwindow_enhance_noisereduction" />
         <Action name="editorwindow_enhance_localcontrast" />
@@ -165,6 +165,7 @@
         <Action name="export_ipfs" />
         <Action name="export_onedrive" />
         <Action name="export_pinterest" />
+        <Action name="export_piwigo" />
         <Action name="export_box" />
         <Action name="export_rajce" />
         <Action name="export_smugmug" />
