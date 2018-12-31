@@ -675,4 +675,6 @@ BUGFIXES:
 605 ==> 398880 - digiKam stays as a background process after closing.
 606 ==> 398129 - ExpoBlend tool filename dialog shows previous file's name.
 607 ==> 402556 - digikam-data conflict with dropbox installation.
-608 ==> 
+608 ==> 402733 - Launch failure on MacOS with Digkam 6 beta3.
+609 ==> 
+
