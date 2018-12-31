@@ -766,7 +766,7 @@ void SmugWindow::slotStartTransfer()
         d->widget->progressBar()->setValue(0);
         d->widget->progressBar()->progressScheduled(i18n("SmugMug Import"), true, true);
         d->widget->progressBar()->progressThumbnailChanged(
-            QIcon(QLatin1String("smugmug")).pixmap(22, 22));
+            QIcon(QLatin1String("dk-smugmug")).pixmap(22, 22));
         setUiInProgressState(true);
 
         // list photos of the album, then start download
@@ -798,7 +798,7 @@ void SmugWindow::slotStartTransfer()
         d->widget->progressBar()->setMaximum(d->imagesTotal);
         d->widget->progressBar()->setValue(0);
         d->widget->progressBar()->progressScheduled(i18n("SmugMug Export"), true, true);
-        d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("smugmug")).pixmap(22, 22));
+        d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("dk-smugmug")).pixmap(22, 22));
         setUiInProgressState(true);
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "d->currentAlbumID" << d->currentAlbumID;

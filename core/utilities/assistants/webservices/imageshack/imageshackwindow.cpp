@@ -253,7 +253,7 @@ void ImageShackWindow::slotStartTransfer()
     d->widget->d->progressBar->setValue(0);
     d->widget->d->progressBar->setVisible(true);
     d->widget->d->progressBar->progressScheduled(i18n("Image Shack Export"), false, true);
-    d->widget->d->progressBar->progressThumbnailChanged(QIcon(QLatin1String("imageshack")).pixmap(22, 22));
+    d->widget->d->progressBar->progressThumbnailChanged(QIcon(QLatin1String("dk-imageshack")).pixmap(22, 22));
 
     uploadNextItem();
 }

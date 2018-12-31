@@ -801,7 +801,7 @@ void FlickrWindow::slotAddPhotoNext()
     {
         setUiInProgressState(true);
         d->widget->progressBar()->progressScheduled(i18n("Flickr Export"), true, true);
-        d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("flickr")).pixmap(22, 22));
+        d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("dk-flickr")).pixmap(22, 22));
     }
 }
 

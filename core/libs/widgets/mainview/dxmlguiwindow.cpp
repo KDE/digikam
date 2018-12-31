@@ -1052,7 +1052,7 @@ void DXmlGuiWindow::setupIconTheme()
 void DXmlGuiWindow::createExportActions()
 {
     m_exportDropboxAction = new QAction(i18n("Export to &Dropbox..."), this);
-    m_exportDropboxAction->setIcon(QIcon::fromTheme(QLatin1String("dropbox")));
+    m_exportDropboxAction->setIcon(QIcon::fromTheme(QLatin1String("dk-dropbox")));
     actionCollection()->addAction(QLatin1String("export_dropbox"), m_exportDropboxAction);
     actionCollection()->setDefaultShortcut(m_exportDropboxAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_D);
 
@@ -1060,7 +1060,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportOnedriveAction = new QAction(i18n("Export to &Onedrive..."), this);
-    m_exportOnedriveAction->setIcon(QIcon::fromTheme(QString::fromLatin1("onedrive")));
+    m_exportOnedriveAction->setIcon(QIcon::fromTheme(QLatin1String("dk-onedrive")));
     actionCollection()->addAction(QLatin1String("export_onedrive"), m_exportOnedriveAction);
     actionCollection()->setDefaultShortcut(m_exportOnedriveAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_O);
 
@@ -1068,7 +1068,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportPinterestAction = new QAction(i18n("Export to &Pinterest..."), this);
-    m_exportPinterestAction->setIcon(QIcon::fromTheme(QString::fromLatin1("pinterest")));
+    m_exportPinterestAction->setIcon(QIcon::fromTheme(QLatin1String("dk-pinterest")));
     actionCollection()->addAction(QLatin1String("export_pinterest"), m_exportPinterestAction);
     actionCollection()->setDefaultShortcut(m_exportPinterestAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_I);
 
@@ -1076,7 +1076,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportBoxAction = new QAction(i18n("Export to &Box..."), this);
-    m_exportBoxAction->setIcon(QIcon::fromTheme(QString::fromLatin1("box")));
+    m_exportBoxAction->setIcon(QIcon::fromTheme(QLatin1String("dk-box")));
     actionCollection()->addAction(QLatin1String("export_box"), m_exportBoxAction);
     actionCollection()->setDefaultShortcut(m_exportBoxAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_B);
 
@@ -1084,7 +1084,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportFacebookAction = new QAction(i18n("Export to &Facebook..."), this);
-    m_exportFacebookAction->setIcon(QIcon::fromTheme(QString::fromLatin1("facebook")));
+    m_exportFacebookAction->setIcon(QIcon::fromTheme(QString::fromLatin1("dk-facebook")));
     actionCollection()->addAction(QLatin1String("export_facebook"), m_exportFacebookAction);
     actionCollection()->setDefaultShortcut(m_exportFacebookAction, Qt::ALT + Qt::SHIFT + Qt::Key_F);
 
@@ -1092,7 +1092,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportFlickrAction = new QAction(i18n("Export to Flick&r..."), this);
-    m_exportFlickrAction->setIcon(QIcon::fromTheme(QLatin1String("flickr")));
+    m_exportFlickrAction->setIcon(QIcon::fromTheme(QLatin1String("dk-flickr")));
     actionCollection()->addAction(QLatin1String("export_flickr"), m_exportFlickrAction);
     actionCollection()->setDefaultShortcut(m_exportFlickrAction, Qt::ALT + Qt::SHIFT + Qt::Key_R);
 
@@ -1100,7 +1100,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportGdriveAction = new QAction(i18n("Export to &Google Drive..."), this);
-    m_exportGdriveAction->setIcon(QIcon::fromTheme(QLatin1String("googledrive")));
+    m_exportGdriveAction->setIcon(QIcon::fromTheme(QLatin1String("dk-googledrive")));
     actionCollection()->addAction(QLatin1String("export_googledrive"), m_exportGdriveAction);
     actionCollection()->setDefaultShortcut(m_exportGdriveAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_G);
 
@@ -1108,7 +1108,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportGphotoAction = new QAction(i18n("Export to &Google Photos..."), this);
-    m_exportGphotoAction->setIcon(QIcon::fromTheme(QLatin1String("googlephoto")));
+    m_exportGphotoAction->setIcon(QIcon::fromTheme(QLatin1String("dk-googlephoto")));
     actionCollection()->addAction(QLatin1String("export_googlephoto"), m_exportGphotoAction);
     actionCollection()->setDefaultShortcut(m_exportGphotoAction, Qt::ALT + Qt::SHIFT + Qt::Key_P);
 
@@ -1116,7 +1116,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportImageshackAction = new QAction(i18n("Export to &Imageshack..."), this);
-    m_exportImageshackAction->setIcon(QIcon::fromTheme(QLatin1String("imageshack")));
+    m_exportImageshackAction->setIcon(QIcon::fromTheme(QLatin1String("dk-imageshack")));
     actionCollection()->addAction(QLatin1String("export_imageshack"), m_exportImageshackAction);
     actionCollection()->setDefaultShortcut(m_exportImageshackAction, Qt::ALT + Qt::SHIFT + Qt::Key_M);
 
@@ -1124,28 +1124,28 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportImgurAction = new QAction(i18n("Export to &Imgur.."), this);
-    m_exportImgurAction->setIcon(QIcon::fromTheme(QLatin1String("imgur")));
+    m_exportImgurAction->setIcon(QIcon::fromTheme(QLatin1String("dk-imgur")));
     actionCollection()->addAction(QLatin1String("export_imgur"), m_exportImgurAction);
 
     connect(m_exportImgurAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
     m_exportIpfsAction = new QAction(i18n("Export to &Ipfs.."), this);
-    m_exportIpfsAction->setIcon(QIcon::fromTheme(QLatin1String("ipfs")));
+    m_exportIpfsAction->setIcon(QIcon::fromTheme(QLatin1String("dk-ipfs")));
     actionCollection()->addAction(QLatin1String("export_ipfs"), m_exportIpfsAction);
 
     connect(m_exportIpfsAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
     m_exportPiwigoAction = new QAction(i18n("Export to &Piwigo..."), this);
-    m_exportPiwigoAction->setIcon(QIcon::fromTheme(QLatin1String("piwigo")));
+    m_exportPiwigoAction->setIcon(QIcon::fromTheme(QLatin1String("dk-piwigo")));
     actionCollection()->addAction(QLatin1String("export_piwigo"), m_exportPiwigoAction);
 
     connect(m_exportPiwigoAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
     m_exportRajceAction = new QAction(i18n("Export to &Rajce.net..."), this);
-    m_exportRajceAction->setIcon(QIcon::fromTheme(QLatin1String("rajce")));
+    m_exportRajceAction->setIcon(QIcon::fromTheme(QLatin1String("dk-rajce")));
     actionCollection()->addAction(QLatin1String("export_rajce"), m_exportRajceAction);
     actionCollection()->setDefaultShortcut(m_exportRajceAction, Qt::ALT + Qt::SHIFT + Qt::Key_J);
 
@@ -1153,7 +1153,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportSmugmugAction = new QAction(i18n("Export to &SmugMug..."), this);
-    m_exportSmugmugAction->setIcon(QIcon::fromTheme(QLatin1String("smugmug")));
+    m_exportSmugmugAction->setIcon(QIcon::fromTheme(QLatin1String("dk-smugmug")));
     actionCollection()->addAction(QLatin1String("export_smugmug"), m_exportSmugmugAction);
     actionCollection()->setDefaultShortcut(m_exportSmugmugAction, Qt::ALT + Qt::SHIFT +  Qt::Key_S);
 
@@ -1169,7 +1169,7 @@ void DXmlGuiWindow::createExportActions()
             this, SLOT(slotExportTool()));
 
     m_exportMediawikiAction = new QAction(i18n("Export to MediaWiki..."), this);
-    m_exportMediawikiAction->setIcon(QIcon::fromTheme(QLatin1String("MediaWiki")));
+    m_exportMediawikiAction->setIcon(QIcon::fromTheme(QLatin1String("dk-mediawiki")));
     actionCollection()->addAction(QLatin1String("export_MediaWiki"), m_exportMediawikiAction);
 
     connect(m_exportMediawikiAction, SIGNAL(triggered(bool)),
@@ -1198,7 +1198,7 @@ void DXmlGuiWindow::createExportActions()
 void DXmlGuiWindow::createImportActions()
 {
     m_importGphotoAction = new QAction(i18n("Import from &Google Photos..."), this);
-    m_importGphotoAction->setIcon(QIcon::fromTheme(QLatin1String("googlephoto")));
+    m_importGphotoAction->setIcon(QIcon::fromTheme(QLatin1String("dk-googlephoto")));
     actionCollection()->addAction(QLatin1String("import_googlephoto"), m_importGphotoAction);
     actionCollection()->setDefaultShortcut(m_importGphotoAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_P);
 
@@ -1206,7 +1206,7 @@ void DXmlGuiWindow::createImportActions()
             this, SLOT(slotImportTool()));
 
     m_importSmugmugAction = new QAction(i18n("Import from &SmugMug..."), this);
-    m_importSmugmugAction->setIcon(QIcon::fromTheme(QLatin1String("smugmug")));
+    m_importSmugmugAction->setIcon(QIcon::fromTheme(QLatin1String("dk-smugmug")));
     actionCollection()->addAction(QLatin1String("import_smugmug"), m_importSmugmugAction);
     actionCollection()->setDefaultShortcut(m_importSmugmugAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_S);
 

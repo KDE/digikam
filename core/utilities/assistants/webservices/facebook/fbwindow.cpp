@@ -130,7 +130,7 @@ FbWindow::FbWindow(DInfoInterface* const iface,
 
     d->changeUserBtn->setStyleSheet(QLatin1String("QPushButton {background-color: "
                                                   "#3b5998; color: #ffffff;}"));
-    d->changeUserBtn->setIcon(QIcon::fromTheme(QLatin1String("facebook-white")));
+    d->changeUserBtn->setIcon(QIcon::fromTheme(QLatin1String("dk-facebook-white")));
     d->changeUserBtn->setText(i18n("Continue with Facebook"));
 
     // ------------------------------------------------------------------------
@@ -502,7 +502,7 @@ void FbWindow::slotStartTransfer()
     d->progressBar->setValue(0);
     d->progressBar->show();
     d->progressBar->progressScheduled(i18n("Facebook export"), true, true);
-    d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QLatin1String("facebook")).pixmap(22, 22));
+    d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QLatin1String("dk-facebook")).pixmap(22, 22));
 
     uploadNextPhoto();
 }

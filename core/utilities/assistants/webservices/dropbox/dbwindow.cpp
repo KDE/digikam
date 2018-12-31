@@ -299,7 +299,7 @@ void DBWindow::slotStartTransfer()
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("Dropbox export"), true, true);
     d->widget->progressBar()->progressThumbnailChanged(
-        QIcon(QLatin1String("dropbox")).pixmap(22, 22));
+        QIcon(QLatin1String("dk-dropbox")).pixmap(22, 22));
 
     uploadNextPhoto();
 }
