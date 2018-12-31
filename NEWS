@@ -671,4 +671,6 @@ BUGFIXES:
 601 ==> 402496 - digiKam crashed after a while during face recognition.
 602 ==> 402726 - Piwigo export is missing.
 603 ==> 401301 - digiKam Close crash.
-604 ==> 
+604 ==> 401837 - Button Caption transcription error in french.
+605 ==> 
+
