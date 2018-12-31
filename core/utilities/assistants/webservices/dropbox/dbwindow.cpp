@@ -218,7 +218,7 @@ void DBWindow::slotSetUserName(const QString& msg)
     d->widget->updateLabels(msg, QLatin1String(""));
 }
 
-void DBWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
+void DBWindow::slotListAlbumsDone(const QList<QPair<QString, QString> >& list)
 {
     d->widget->getAlbumsCoB()->clear();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" << list.size();
@@ -299,7 +299,7 @@ void DBWindow::slotStartTransfer()
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("Dropbox export"), true, true);
     d->widget->progressBar()->progressThumbnailChanged(
-        QIcon(QLatin1String("dk-dropbox")).pixmap(22, 22));
+        QIcon::fromTheme(QLatin1String("dk-dropbox")).pixmap(22, 22));
 
     uploadNextPhoto();
 }

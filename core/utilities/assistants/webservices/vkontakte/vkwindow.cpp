@@ -419,7 +419,8 @@ void VKWindow::slotStartTransfer()
 
     d->progressBar->show();
     d->progressBar->progressScheduled(i18n("Vkontakte Export"), false, true);
-    d->progressBar->progressThumbnailChanged(QIcon(QLatin1String("preferences-web-browser-shortcuts")).pixmap(22, 22));
+    d->progressBar->progressThumbnailChanged(
+        QIcon::fromTheme(QLatin1String("preferences-web-browser-shortcuts")).pixmap(22, 22));
 }
 
 void VKWindow::slotPhotoUploadDone(KJob* kjob)

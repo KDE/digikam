@@ -296,7 +296,8 @@ void BOXWindow::slotStartTransfer()
     }
 
     d->currentAlbumName = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "StartTransfer:" << d->currentAlbumName << "INDEX: " << d->widget->getAlbumsCoB()->currentIndex();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "StartTransfer:" << d->currentAlbumName
+                                     << "INDEX: " << d->widget->getAlbumsCoB()->currentIndex();
     d->imagesTotal = d->transferQueue.count();
     d->imagesCount = 0;
 
@@ -305,7 +306,8 @@ void BOXWindow::slotStartTransfer()
     d->widget->progressBar()->setValue(0);
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("Box export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("dk-box")).pixmap(22, 22));
+    d->widget->progressBar()->progressThumbnailChanged(
+        QIcon::fromTheme(QLatin1String("dk-box")).pixmap(22, 22));
 
     uploadNextPhoto();
 }

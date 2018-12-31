@@ -244,7 +244,7 @@ void TwWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
     for (int i = 0 ; i < list.size() ; ++i)
     {
         d->widget->getAlbumsCoB()->addItem(
-        QIcon::fromTheme(QLatin1String("system-users")),
+            QIcon::fromTheme(QLatin1String("system-users")),
         list.value(i).second, list.value(i).first);
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" << list.value(i).second << " " << list.value(i).first;
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" <<d->currentAlbumName;
@@ -301,7 +301,8 @@ void TwWindow::slotStartTransfer()
     }
 
     d->currentAlbumName = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "StartTransfer:" << d->currentAlbumName << "INDEX: " << d->widget->getAlbumsCoB()->currentIndex();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "StartTransfer:" << d->currentAlbumName
+                                     << "INDEX: " << d->widget->getAlbumsCoB()->currentIndex();
     d->imagesTotal = d->transferQueue.count();
     d->imagesCount = 0;
 
@@ -310,7 +311,8 @@ void TwWindow::slotStartTransfer()
     d->widget->progressBar()->setValue(0);
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("Twitter export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("twitter")).pixmap(22, 22));
+    d->widget->progressBar()->progressThumbnailChanged(
+        QIcon::fromTheme(QLatin1String("twitter")).pixmap(22, 22));
 
     uploadNextPhoto();
 }
