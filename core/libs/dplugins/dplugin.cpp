@@ -99,7 +99,7 @@ QStringList DPlugin::pluginCategories() const
     foreach (DPluginAction* const ac, actions())
     {
         QString cat = ac->actionCategoryToString();
-        
+
         if (!list.contains(cat))
         {
             list << cat;

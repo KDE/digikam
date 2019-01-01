@@ -142,7 +142,7 @@ void DPluginConfView::apply()
     if (DPluginLoader::instance())
     {
         KSharedConfigPtr config = KSharedConfig::openConfig();
-        KConfigGroup group      = config->group(QString::fromLatin1("DPlugin/EnabledPlugin"));
+        KConfigGroup group      = config->group(QString::fromLatin1("EnabledDPlugin"));
 
         foreach (DPluginCheckBox* const item, d->boxes)
         {

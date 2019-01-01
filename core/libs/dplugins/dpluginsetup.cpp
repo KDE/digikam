@@ -50,13 +50,11 @@ class Q_DECL_HIDDEN DPluginSetup::Private
 {
 public:
 
-
     explicit Private()
       : pluginsNumber(0),
         pluginsNumberActivated(0),
         checkAllBtn(0),
         clearBtn(0),
-        grid(0),
         hbox(0),
         pluginFilter(0),
         pluginsList(0)
@@ -68,8 +66,6 @@ public:
 
     QPushButton*     checkAllBtn;
     QPushButton*     clearBtn;
-
-    QGridLayout*     grid;
 
     QWidget*         hbox;
 
@@ -84,7 +80,7 @@ DPluginSetup::DPluginSetup(QWidget* const parent)
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     QWidget* const panel        = new QWidget(viewport());
-    d->grid                     = new QGridLayout(panel);
+    QGridLayout* const grid     = new QGridLayout(panel);
 
     d->pluginFilter             = new SearchTextBar(panel, QLatin1String("PluginsSearchBar"));
     d->pluginsNumber            = new QLabel(panel);
@@ -108,14 +104,14 @@ DPluginSetup::DPluginSetup(QWidget* const parent)
     labels.append(i18n("Author"));
     d->pluginsList->setHeaderLabels(labels);
 
-    d->grid->addWidget(d->pluginFilter,           0, 0, 1, 1);
-    d->grid->addWidget(d->pluginsNumber,          0, 1, 1, 1);
-    d->grid->addWidget(d->pluginsNumberActivated, 0, 2, 1, 1);
-    d->grid->addWidget(d->hbox,                   1, 0, 1, 2);
-    d->grid->addWidget(d->pluginsList,            2, 0, 1, -1);
-    d->grid->setColumnStretch(3, 10);
-    d->grid->setContentsMargins(spacing, spacing, spacing, spacing);
-    d->grid->setSpacing(spacing);
+    grid->addWidget(d->pluginFilter,           0, 0, 1, 1);
+    grid->addWidget(d->pluginsNumber,          0, 1, 1, 1);
+    grid->addWidget(d->pluginsNumberActivated, 0, 2, 1, 1);
+    grid->addWidget(d->hbox,                   1, 0, 1, 2);
+    grid->addWidget(d->pluginsList,            2, 0, 1, -1);
+    grid->setColumnStretch(3, 10);
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // --------------------------------------------------------
 
