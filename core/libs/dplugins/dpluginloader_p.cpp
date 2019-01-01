@@ -46,18 +46,28 @@ DPluginLoader::Private::~Private()
 {
 }
 
-QStringList DPluginLoader::Private::pluginEntriesList(const QString& relativePath, QDir::Filters filters)
+QStringList DPluginLoader::Private::pluginEntriesList() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing plugins from" << pluginLocalPath();
+    QStringList allFiles;
 
-    QStringList allFiles  = QDir(pluginLocalPath() + QLatin1Char('/') + relativePath).entryList(filters);
-    auto const systemPath = pluginSystemPath();
+#ifdef Q_OS_OSX
+    QStringList paths = QStandardPaths::standardLocations(QStandardPaths::DataLocation);
+#else
+    QStringList paths = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+#endif
 
-    if (!systemPath.isEmpty())
+    foreach (QString str, paths)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing plugins from" << systemPath;
+        str.append(QDir::separator() + QLatin1String("digikam") +
+                   QDir::separator() + QLatin1String("plugins") +
+                   QDir::separator());
 
-        allFiles << QDir(systemPath + QLatin1Char('/') + relativePath).entryList(filters);
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing plugins from" << str;
+
+        foreach (const QString& file, QDir(str).entryList(QDir::Files))
+        {
+            allFiles << str + file;
+        }
     }
 
     // remove duplicate entries
@@ -77,32 +87,6 @@ QStringList DPluginLoader::Private::pluginEntriesList(const QString& relativePat
     return allFiles;
 }
 
-QString DPluginLoader::Private::pluginSystemPath()
-{
-    return QCoreApplication::applicationDirPath() +
-           QDir::separator() + QLatin1String("plugins");
-}
-
-QString DPluginLoader::Private::pluginLocalPath()
-{
-    return QStandardPaths::writableLocation(QStandardPaths::DataLocation) +
-           QDir::separator() + QLatin1String("plugins");
-}
-
-QString DPluginLoader::Private::pluginPath(const QString& relativePath)
-{
-    const QString localPath  = pluginLocalPath()  + QDir::separator() + relativePath; // local path
-    const QString systemPath = pluginSystemPath() + QDir::separator() + relativePath; // system path
-    QString fullPath         = systemPath;
-
-    if (QFile::exists(localPath))
-    {
-        fullPath = localPath;
-    }
-
-    return QDir(fullPath).canonicalPath();
-}
-
 /** Append obj to the given plugins list.
  */
 bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* const loader, QList<DPlugin*>& list)
@@ -114,7 +98,7 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* con
         Q_ASSERT(obj->metaObject()->superClass()); // all our plugins have a super class
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Plugin of type" << obj->metaObject()->superClass()->className()
-                                     << "loaded from" << loader->fileName();
+                                     << "loaded from"    << loader->fileName();
 
         plugin->setup();
         list << plugin;
@@ -136,7 +120,7 @@ void DPluginLoader::Private::loadPlugins()
     t.start();
     qCDebug(DIGIKAM_GENERAL_LOG) << "Starting to load external tools.";
 
-    QStringList toolFileNameList = pluginEntriesList(QString(), QDir::Files);
+    QStringList toolFileNameList = pluginEntriesList();
 
     Q_ASSERT(allPlugins.isEmpty());
 
@@ -159,7 +143,7 @@ void DPluginLoader::Private::loadPlugins()
         }
 
         // qCDebug(DIGIKAM_GENERAL_LOG) << fileName << " - " << pluginPath(fileName);
-        QString const path          = pluginPath(fileName);
+        QString const path          = QDir(fileName).canonicalPath();
         QPluginLoader* const loader = new QPluginLoader(path, DPluginLoader::instance());
         QObject* const obj          = loader->instance();
 
@@ -194,24 +178,8 @@ void DPluginLoader::Private::loadPlugins()
 
     if (!foundPlugin)
     {
-#ifdef Q_OS_WIN
-        QString pluginPaths = "Plugin Path: " + pluginPath();
-
-        if (pluginPath().isEmpty())
-            pluginPaths = QString();
-
-        pluginPaths += "System Path: " + pluginSystemPath() + "\nLocal Path: " + pluginLocalPath();
-
-        QMessageBox::warning(0,
-                             i18n("No plugins loaded"),
-                             i18n("No plugins were loaded, please check if the plugins were installed in one "
-                             "of the following paths:\n") + pluginPaths +
-                             i18n("\n\nAlso check if the plugin is compiled against the right version of digiKam. "
-                             "Analyzing the debug messages inside a debugger might give more insight."));
-#else
         qCWarning(DIGIKAM_GENERAL_LOG) << "No plugins loaded. Please check if the plugins were installed in the correct path,"
                                        << "or if any errors occurred while loading plugins.";
-#endif
     }
 
     pluginsLoaded = true;

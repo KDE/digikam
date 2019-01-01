@@ -38,10 +38,27 @@ public:
     explicit Private();
     ~Private();
 
-    QString     pluginSystemPath();
-    QString     pluginLocalPath();
-    QString     pluginPath(const QString& relativePath);
-    QStringList pluginEntriesList(const QString& relativePath, QDir::Filters filters);
+    /** Try to find plugin files from different places:
+     *
+     *  Linux (QStandardPaths::GenericDataLocation):
+     *
+     *           "~/.local/share/digikam/plugins/"
+     *           "/usr/local/share/digikam/plugins/"
+     *           "/usr/share/digikam/plugins/"
+     *
+     *  MacOS (QStandardPaths::DataLocation):
+     *
+     *           "~/Library/Application Support/digikam/plugins/"
+     *           "/Library/Application Support/digikam/plugins/"
+     *           "<APPDIR>/../Resources/digikam/plugins/"
+     *
+     *  Windows (QStandardPaths::GenericDataLocation):
+     *           "~/AppData/Local/digikam/plugins/"
+     *           "C:/ProgramData/digikam/plugins/"
+     *            "<APPDIR>/digikam/plugins/"
+     *            "<APPDIR>/data/digikam/plugins/"
+     */
+    QStringList pluginEntriesList() const;
 
     bool        appendPlugin(QObject* const obj, QPluginLoader* const loader, QList<DPlugin*>& list);
     void        loadPlugins();
