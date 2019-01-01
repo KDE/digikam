@@ -92,7 +92,7 @@ ScanController::ScanController()
     // create timer for external scheduling
     d->externalTimer = new QTimer(this);
     d->externalTimer->setSingleShot(true);
-    d->externalTimer->setInterval(2000);
+    d->externalTimer->setInterval(1500);
 
     connect(d->externalTimer, &QTimer::timeout,
             this, &ScanController::slotRelaxedScanning);
