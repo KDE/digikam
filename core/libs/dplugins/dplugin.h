@@ -85,6 +85,11 @@ public:
      */
     QStringList pluginAuthors() const;
 
+    /**
+     * Return the internal version used to check the binary compatibility at run-time.
+     */
+    QString internalVersion() const;
+
 public:
 
     /**
@@ -108,6 +113,9 @@ public:
      */
     virtual QString id() const = 0;
 
+    /** 
+     * @brief Returns the version string of the plugin.
+     */
     virtual QString version() const = 0;
 
     /**

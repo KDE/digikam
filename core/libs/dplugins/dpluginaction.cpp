@@ -57,17 +57,17 @@ DPluginAction::ActionType DPluginAction::actionType() const
 {
     switch (actionCategory())
     {
-        case GenericExportCat:
-        case GenericImportCat:
-        case GenericToolCat:
-            return GenericType;
+        case GenericExport:
+        case GenericImport:
+        case GenericTool:
+            return Generic;
 
         case EditorColor:
         case EditorEnhance:
         case EditorTransform:
         case EditorDecorate:
         case EditorEffects:
-            return EditorType;
+            return Editor;
 
         case BqmColor:
         case BqmEnhance:
@@ -77,7 +77,7 @@ DPluginAction::ActionType DPluginAction::actionType() const
         case BqmConvert:
         case BqmMetadata:
         case BqmCustom:
-            return BqmType;
+            return Bqm;
     }
 
     return InvalidType;
@@ -102,11 +102,11 @@ QString DPluginAction::actionCategoryToString() const
 {
     switch (actionCategory())
     {
-        case GenericExportCat:
+        case GenericExport:
             return QLatin1String("GenericExport");
-        case GenericImportCat:
+        case GenericImport:
             return QLatin1String("GenericImport");
-        case GenericToolCat:
+        case GenericTool:
             return QLatin1String("GenericTool");
 
         case EditorColor:

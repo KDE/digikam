@@ -33,6 +33,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_version.h"
 
 namespace Digikam
 {
@@ -97,11 +98,14 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* con
     {
         Q_ASSERT(obj->metaObject()->superClass()); // all our plugins have a super class
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Plugin of type" << obj->metaObject()->superClass()->className()
-                                     << "loaded from"    << loader->fileName();
+        if (plugin->internalVersion() == QLatin1String(digikam_version_short))
+        {
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Plugin of type" << obj->metaObject()->superClass()->className()
+                                         << "loaded from"    << loader->fileName();
 
-        plugin->setup();
-        list << plugin;
+            plugin->setup();
+            list << plugin;
+        }
 
         return true;
     }

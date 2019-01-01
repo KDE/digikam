@@ -29,6 +29,7 @@
 
 // Local includes
 
+#include "digikam_version.h"
 #include "digikam_debug.h"
 
 namespace Digikam
@@ -61,6 +62,11 @@ DPlugin::~DPlugin()
 void DPlugin::setInfoIface(DInfoInterface* const iface)
 {
     d->iface = iface;
+}
+
+QString DPlugin::internalVersion() const
+{
+    return QLatin1String(digikam_version_short);
 }
 
 DInfoInterface* DPlugin::infoIface() const

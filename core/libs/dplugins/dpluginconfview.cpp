@@ -57,12 +57,15 @@ public:
         QStringList list = m_tool->pluginCategories();
         setText(1, list.join(QString::fromLatin1(", ")));
 
+        // Version
+        setText(2, m_tool->version());
+
         // Description
-        setText(2, m_tool->description());
+        setText(3, m_tool->description());
 
         // Authors
         list = m_tool->pluginAuthors();
-        setText(3, list.join(QString::fromLatin1(", ")));
+        setText(4, list.join(QString::fromLatin1(", ")));
     };
 
     ~DPluginCheckBox()
@@ -74,7 +77,8 @@ public:
         return (text(0).contains(txt, cs) ||
                 text(1).contains(txt, cs) ||
                 text(2).contains(txt, cs) ||
-                text(3).contains(txt, cs));
+                text(3).contains(txt, cs) ||
+                text(4).contains(txt, cs));
     };
 
 public:
@@ -105,12 +109,13 @@ DPluginConfView::DPluginConfView(QWidget* const parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setAllColumnsShowFocus(true);
     setSortingEnabled(true);
-    setColumnCount(4);
+    setColumnCount(5);
 
     header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
-    header()->setSectionResizeMode(2, QHeaderView::Stretch);
-    header()->setSectionResizeMode(3, QHeaderView::Interactive);
+    header()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(3, QHeaderView::Stretch);
+    header()->setSectionResizeMode(4, QHeaderView::Interactive);
     header()->setSortIndicatorShown(true);
 
     setAutoFillBackground(false);

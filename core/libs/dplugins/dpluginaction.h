@@ -44,18 +44,20 @@ public:
     enum ActionType
     {
         InvalidType = -1,
-        GenericType = 0,         /// Generic action available everywhere (AlbumView, Editor, and LightTable).
-        EditorType,              /// Specific action for Image Editor and Showfoto.
-        BqmType                  /// Specific action for Batch Queue Manager.
+
+        Generic = 0,            /// Generic action available everywhere (AlbumView, Editor, and LightTable).
+        Editor,                 /// Specific action for Image Editor and Showfoto.
+        Bqm                     /// Specific action for Batch Queue Manager.
     };
 
     /// Plugin action categories.
     enum ActionCategory
     {
-        InvalidCat       = -1,
-        GenericExportCat = 0,   /// Generic export action.
-        GenericImportCat,       /// Generic import action.
-        GenericToolCat,         /// Generic processing action.
+        InvalidCat    = -1,
+
+        GenericExport = 0,      /// Generic export action.
+        GenericImport,          /// Generic import action.
+        GenericTool,            /// Generic processing action.
 
         EditorColor,            /// Image Editor color correction action.
         EditorEnhance,          /// Image Editor enhance action.
