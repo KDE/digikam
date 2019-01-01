@@ -105,8 +105,8 @@ private:
 
     class Private;
     Private* const d;
-    
-    friend class DPluginLoaderCreator; 
+
+    friend class DPluginLoaderCreator;
 };
 
 } // namespace Digikam
