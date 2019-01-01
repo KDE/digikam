@@ -31,7 +31,6 @@
 #include <QLabel>
 #include <QFontMetrics>
 #include <QHBoxLayout>
-#include <QBuffer>
 #include <QStandardPaths>
 #include <QStyle>
 
@@ -77,38 +76,31 @@ DPluginSetup::DPluginSetup(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    QWidget* const panel        = new QWidget(viewport());
-    QGridLayout* const grid     = new QGridLayout(panel);
+    QWidget* const panel      = new QWidget(viewport());
+    QGridLayout* const grid   = new QGridLayout(panel);
 
-    d->pluginFilter             = new SearchTextBar(panel, QLatin1String("PluginsSearchBar"));
-    d->pluginsNumber            = new QLabel(panel);
-    d->pluginsNumberActivated   = new QLabel(panel);
-    d->hbox                     = new QWidget(panel);
-    QHBoxLayout* const hboxLay  = new QHBoxLayout(d->hbox);
-    d->checkAllBtn              = new QPushButton(i18n("Check All"), d->hbox);
-    d->clearBtn                 = new QPushButton(i18n("Clear"),     d->hbox);
-    QWidget* const space        = new QWidget(d->hbox);
+    d->pluginFilter           = new SearchTextBar(panel, QLatin1String("PluginsSearchBar"));
+    d->pluginsNumber          = new QLabel(panel);
+    d->pluginsNumberActivated = new QLabel(panel);
+    d->checkAllBtn            = new QPushButton(i18n("Check All"), panel);
+    d->clearBtn               = new QPushButton(i18n("Clear"),     panel);
 
-    hboxLay->addWidget(d->checkAllBtn);
-    hboxLay->addWidget(d->clearBtn);
-    hboxLay->addWidget(space);
-    hboxLay->setStretchFactor(space, 10);
-
-    d->pluginsList              = new DPluginConfView(panel);
+    d->pluginsList            = new DPluginConfView(panel);
     QStringList labels;
     labels.append(i18n("Name"));
     labels.append(i18n("Categories"));
     labels.append(i18n("Description"));
-    labels.append(i18n("Author"));
+    labels.append(i18n("Authors"));
     d->pluginsList->setHeaderLabels(labels);
 
     grid->addWidget(d->pluginFilter,           0, 0, 1, 1);
     grid->addWidget(d->pluginsNumber,          0, 1, 1, 1);
     grid->addWidget(d->pluginsNumberActivated, 0, 2, 1, 1);
-    grid->addWidget(d->hbox,                   1, 0, 1, 2);
-    grid->addWidget(d->pluginsList,            2, 0, 1, -1);
+    grid->addWidget(d->checkAllBtn,            0, 4, 1, 1);
+    grid->addWidget(d->clearBtn,               0, 5, 1, 1);
+    grid->addWidget(d->pluginsList,            1, 0, 1, -1);
     grid->setColumnStretch(3, 10);
     grid->setContentsMargins(spacing, spacing, spacing, spacing);
     grid->setSpacing(spacing);
