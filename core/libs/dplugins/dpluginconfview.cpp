@@ -83,11 +83,11 @@ public:
 
 // ---------------------------------------------------------------------
 
-class DPluginConfView::Private
+class Q_DECL_HIDDEN DPluginConfView::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     };
 

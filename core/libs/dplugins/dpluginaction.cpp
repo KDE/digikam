@@ -27,6 +27,10 @@
 
 #include <QVariant>
 
+// Local includes
+
+#include "digikam_debug.h"
+
 namespace Digikam
 {
 
@@ -99,11 +103,11 @@ QString DPluginAction::actionCategoryToString() const
     switch (actionCategory())
     {
         case GenericExportCat:
-            return QLatin1String("GenericExportCat");
+            return QLatin1String("GenericExport");
         case GenericImportCat:
-            return QLatin1String("GenericImportCat");
+            return QLatin1String("GenericImport");
         case GenericToolCat:
-            return QLatin1String("GenericToolCat");
+            return QLatin1String("GenericTool");
 
         case EditorColor:
             return QLatin1String("EditorColor");
@@ -132,9 +136,12 @@ QString DPluginAction::actionCategoryToString() const
             return QLatin1String("BqmMetadata");
         case BqmCustom:
             return QLatin1String("BqmCustom");
+
+        default:
+            break;
     }
 
-    return QLatin1String("InvalidCat");
+    return QLatin1String("Invalid");
 }
 
 QString DPluginAction::xmlSection() const

@@ -77,7 +77,6 @@ int main(int argc, char* argv[])
 
             qDebug() << "Authors:" << authors;
 
-            p->setup();
             QString actions;
 
             foreach (DPluginAction* const ac, p->actions())
@@ -113,8 +112,7 @@ int main(int argc, char* argv[])
         {
             if (p->id() == name)
             {
-                found = true;
-                p->setup();
+                found                   = true;
                 DPluginAction* const ac = p->findActionByName(action);
 
                 if (ac)

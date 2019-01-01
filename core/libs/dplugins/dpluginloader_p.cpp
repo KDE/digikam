@@ -116,6 +116,7 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* con
         qCDebug(DIGIKAM_GENERAL_LOG) << "Plugin of type" << obj->metaObject()->superClass()->className()
                                      << "loaded from" << loader->fileName();
 
+        plugin->setup();
         list << plugin;
 
         return true;

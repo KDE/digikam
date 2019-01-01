@@ -27,6 +27,10 @@
 
 #include <QIcon>
 
+// Local includes
+
+#include "digikam_debug.h"
+
 namespace Digikam
 {
 

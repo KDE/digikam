@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-#include "dpluginloader.h"
 #include "dpluginloader_p.h"
 
 // Qt includes

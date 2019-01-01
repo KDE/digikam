@@ -74,7 +74,7 @@ public:
      * Return a plugin action instance found by name in plugin action list.
      */
     DPluginAction* findActionByName(const QString& name) const;
-    
+
     /**
      * Return a list of plugin categories as strings.
      */
