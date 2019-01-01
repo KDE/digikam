@@ -165,14 +165,14 @@ int ItemAlbumFilterModel::compareInfosCategories(const ItemInfo& left, const Ite
                 {
 
                     return ItemSortSettings::compareByOrder(leftDate > rightDate ? 1 : -1,
-                                                             d->sorter.currentCategorizationSortOrder);
+                                                            d->sorter.currentCategorizationSortOrder);
                 }
             }
 
             return ItemSortSettings::naturalCompare(leftAlbum->albumPath(), rightAlbum->albumPath(),
-                                                     d->sorter.currentCategorizationSortOrder,
-                                                     d->sorter.categorizationCaseSensitivity,
-                                                     d->sorter.strTypeNatural, true);
+                                                    d->sorter.currentCategorizationSortOrder,
+                                                    d->sorter.categorizationCaseSensitivity,
+                                                    d->sorter.strTypeNatural);
         }
         default:
         {

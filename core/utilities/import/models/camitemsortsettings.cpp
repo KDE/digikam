@@ -217,12 +217,12 @@ int CamItemSortSettings::compare(const CamItemInfo& left, const CamItemInfo& rig
     {
         case SortByFileName:
         {
-            bool versioning = (left.name.contains(QLatin1String("_v"), Qt::CaseInsensitive) ||
-                               right.name.contains(QLatin1String("_v"), Qt::CaseInsensitive));
-            return naturalCompare(left.name, right.name, currentSortOrder, sortCaseSensitivity, strTypeNatural, versioning);
+            return naturalCompare(left.name, right.name,
+                                  currentSortOrder, sortCaseSensitivity, strTypeNatural);
         }
         case SortByFilePath:
-            return naturalCompare(left.url().toLocalFile(), right.url().toLocalFile(), currentSortOrder, sortCaseSensitivity, strTypeNatural);
+            return naturalCompare(left.url().toLocalFile(), right.url().toLocalFile(),
+                                  currentSortOrder, sortCaseSensitivity, strTypeNatural);
         case SortByFileSize:
             return compareByOrder(left.size, right.size, currentSortOrder);
             //FIXME: Change it to creation date instead of modification date.
