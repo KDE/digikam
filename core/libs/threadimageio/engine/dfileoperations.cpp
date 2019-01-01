@@ -490,12 +490,14 @@ bool DFileOperations::copyFile(const QString& srcFile,
     QString tmpFile;
 
     int stat = QT_STAT(QFile::encodeName(srcFile).constData(), &st);
+    int path = dstFile.lastIndexOf(QLatin1Char('/'));
     int dot  = dstFile.lastIndexOf(QLatin1Char('.'));
+    dot      = (path > dot) ? -1 : dot;
     int ext  = dstFile.length() - dot;
     tmpFile  = dstFile.left(dot);
     tmpFile += QLatin1String(".digikamtempfile");
-    tmpFile += dot < 0 ? QLatin1String(".tmp")
-                       : dstFile.right(ext);
+    tmpFile += (dot < 0) ? QLatin1String(".tmp")
+                         : dstFile.right(ext);
 
     bool ret = QFile::copy(srcFile, tmpFile);
 
