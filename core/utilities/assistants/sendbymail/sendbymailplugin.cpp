@@ -65,9 +65,9 @@ QString SendByMailPlugin::resume() const
 
 QString SendByMailPlugin::description() const
 {
-    return i18n("This tool permit to backprocess items (as resize) before to send by email."
-                "Items to process can be selected one by one or by group through a selection of albums"
-                "Different mail client application can be used to process files on the network.");
+    return i18n("<p>This tool permit to back-process items (as resize) before to send by email.</p>"
+                "<p>Items to process can be selected one by one or by group through a selection of albums.</p>"
+                "<p>Different mail client application can be used to process files on the network.</p>");
 }
 
 QList<DPluginAuthor> SendByMailPlugin::authors() const
@@ -95,6 +95,7 @@ void SendByMailPlugin::setup()
 void SendByMailPlugin::slotSendByMail()
 {
     QPointer<MailWizard> wzrd = new MailWizard(0, infoIface());
+    wzrd->setPlugin(this);
     wzrd->exec();
     delete wzrd;
 }

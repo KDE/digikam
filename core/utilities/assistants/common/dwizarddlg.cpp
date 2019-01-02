@@ -26,20 +26,25 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QAbstractButton>
+#include <QPointer>
 
 // KDE includes
 
 #include <kconfig.h>
+#include <klocalizedstring.h>
 
 // Local includes
 
 #include "dxmlguiwindow.h"
+#include "dpluginaboutdlg.h"
 
 namespace Digikam
 {
 
 DWizardDlg::DWizardDlg(QWidget* const parent, const QString& objName)
-    : QWizard(parent)
+    : QWizard(parent),
+      m_tool(0)
 {
     setObjectName(objName);
     restoreDialogSize();
@@ -48,6 +53,28 @@ DWizardDlg::DWizardDlg(QWidget* const parent, const QString& objName)
 DWizardDlg::~DWizardDlg()
 {
     saveDialogSize();
+}
+
+void DWizardDlg::setPlugin(DPlugin* const tool)
+{
+    m_tool = tool;
+    
+    if (m_tool)
+    {
+        setOption(QWizard::HaveCustomButton1);
+        QAbstractButton* const btn = button(QWizard::CustomButton1);
+        btn->setText(i18n("About..."));
+        
+        connect(btn, SIGNAL(clicked()),
+                this, SLOT(slotAboutPlugin()));
+    }
+}
+
+void DWizardDlg::slotAboutPlugin()
+{
+    QPointer<DPluginAboutDlg> dlg = new DPluginAboutDlg(m_tool);
+    dlg->exec();
+    delete dlg;
 }
 
 void DWizardDlg::restoreDialogSize()
