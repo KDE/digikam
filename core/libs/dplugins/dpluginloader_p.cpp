@@ -45,7 +45,8 @@ namespace Digikam
 {
 
 DPluginLoader::Private::Private()
-    : pluginsLoaded(false)
+    : pluginsLoaded(false),
+      iface(0)
 {
 }
 
@@ -104,6 +105,7 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* con
             KConfigGroup group      = config->group(DPluginLoader::instance()->configGroupName());
 
             plugin->setShouldLoaded(group.readEntry(plugin->id(), false));
+            plugin->setInfoIface(iface);
             plugin->setup();
 
             list << plugin;

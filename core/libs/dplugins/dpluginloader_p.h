@@ -49,6 +49,7 @@ public:
 
     bool            pluginsLoaded;
     QList<DPlugin*> allPlugins;
+    DInfoInterface* iface;
     QStringList     blacklist;
     QStringList     whitelist;
 };

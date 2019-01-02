@@ -32,6 +32,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dinfointerface.h"
 #include "dplugin.h"
 
 namespace Digikam
@@ -63,6 +64,12 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
      * Return the config group name used to store the list of plugins to load at startup.
      */
     QString configGroupName() const;
+
+    /**
+     * Manage the info interface instance set by host application.
+     */
+    void setInfoIface(DInfoInterface* const iface);
+    DInfoInterface* infoIface() const;
 
     /**
      * Init plugin loader. Call this method to parse and load relevant plugins installed on your system.

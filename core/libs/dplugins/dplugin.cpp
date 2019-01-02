@@ -61,14 +61,14 @@ DPlugin::~DPlugin()
     delete d;
 }
 
-void DPlugin::setInfoIface(DInfoInterface* const iface)
-{
-    d->iface = iface;
-}
-
 QString DPlugin::internalVersion() const
 {
     return QLatin1String(digikam_version_short);
+}
+
+void DPlugin::setInfoIface(DInfoInterface* const iface)
+{
+    d->iface = iface;
 }
 
 DInfoInterface* DPlugin::infoIface() const

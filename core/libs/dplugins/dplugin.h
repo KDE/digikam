@@ -62,6 +62,9 @@ public:
      */
     ~DPlugin() override;
 
+    /**
+     * Manage the info interface instance set by plugin loader.
+     */
     void setInfoIface(DInfoInterface* const iface);
     DInfoInterface* infoIface() const;
 
