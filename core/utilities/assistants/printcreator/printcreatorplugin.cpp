@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : plugin to create prints.
+ * Description : a plugin to create print compositions.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -60,7 +60,7 @@ QString PrintCreatorPlugin::version() const
 
 QString PrintCreatorPlugin::description() const
 {
-    return i18n("A Tool to Create Prints.");
+    return i18n("A Tool to Create Print compositions.");
 }
 
 QString PrintCreatorPlugin::details() const

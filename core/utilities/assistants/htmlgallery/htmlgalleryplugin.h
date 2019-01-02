@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a plugin to create print compositions.
+ * Description : a plugin to generate HTML image galleries.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_PRINT_CREATOR_PLUGIN_H
-#define DIGIKAM_PRINT_CREATOR_PLUGIN_H
+#ifndef DIGIKAM_HTML_GALLERY_PLUGIN_H
+#define DIGIKAM_HTML_GALLERY_PLUGIN_H
 
 // Local includes
 
@@ -30,15 +30,15 @@
 namespace Digikam
 {
 
-class PrintCreatorPlugin : public DPlugin
+class HtmlGalleryPlugin : public DPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.kde.digikam.PrintCreator")
+    Q_PLUGIN_METADATA(IID "org.kde.digikam.HtmlGallery")
     Q_INTERFACES(Digikam::DPlugin)
 
 public:
 
-    explicit PrintCreatorPlugin(QObject* const parent = 0);
+    explicit HtmlGalleryPlugin(QObject* const parent = 0);
 
     QString name()                 const override;
     QString id()                   const override;
@@ -51,9 +51,9 @@ public:
 
 private Q_SLOTS:
 
-    void slotPrintCreator();
+    void slotHtmlGallery();
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_PRINT_CREATOR_PLUGIN_H
+#endif // DIGIKAM_HTML_GALLERY_PLUGIN_H

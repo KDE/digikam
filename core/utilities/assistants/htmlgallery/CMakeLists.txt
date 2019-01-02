@@ -52,3 +52,8 @@ set(libhtmlgallery_SRCS
 )
 
 add_library(htmlgallery_src OBJECT ${libhtmlgallery_SRCS})
+
+DIGIKAM_ADD_PLUGIN(HtmlGalleryPlugin
+                   ${CMAKE_CURRENT_SOURCE_DIR}/htmlgalleryplugin.cpp
+                   ${libhtmlgallery_SRCS}
+)
