@@ -60,6 +60,11 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
     static DPluginLoader* instance();
 
     /**
+     * Return the config group name used to store the list of plugins to load at startup.
+     */
+    QString configGroupName() const;
+
+    /**
      * Init plugin loader. Call this method to parse and load relevant plugins installed on your system.
      */
     void init();

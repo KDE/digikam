@@ -67,6 +67,11 @@ void DPluginLoader::init()
     d->loadPlugins();
 }
 
+QString DPluginLoader::configGroupName() const
+{
+    return QLatin1String("EnabledDPlugins");
+}
+
 QList<DPlugin*> DPluginLoader::allPlugins() const
 {
     return d->allPlugins;

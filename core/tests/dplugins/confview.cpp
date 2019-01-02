@@ -44,5 +44,7 @@ int main(int argc, char* argv[])
 
     app.exec();
 
+    view.applySettings();
+
     return 0;
 }

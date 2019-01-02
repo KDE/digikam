@@ -40,10 +40,12 @@ class Q_DECL_HIDDEN DPlugin::Private
 public:
 
     explicit Private()
-      : iface(0)
+      : loaded(false),
+        iface(0)
     {
     }
 
+    bool                  loaded;
     DInfoInterface*       iface;
     QList<DPluginAction*> actions;
 };
@@ -141,6 +143,16 @@ QStringList DPlugin::pluginAuthors() const
 QString DPlugin::aboutDataText() const
 {
     return QString();
+}
+
+bool DPlugin::isLoaded() const
+{
+    return d->loaded;
+}
+
+void DPlugin::setLoaded(bool b)
+{
+    d->loaded = b;
 }
 
 } // namespace Digikam

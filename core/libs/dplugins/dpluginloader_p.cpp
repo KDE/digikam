@@ -31,6 +31,11 @@
 #include <QMessageBox>
 #include <QLibraryInfo>
 
+// KDE includes
+
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -94,7 +99,17 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* con
             qCDebug(DIGIKAM_GENERAL_LOG) << "Plugin of type" << obj->metaObject()->superClass()->className()
                                          << "loaded from"    << loader->fileName();
 
-            plugin->setup();
+
+            KSharedConfigPtr config = KSharedConfig::openConfig();
+            KConfigGroup group      = config->group(DPluginLoader::instance()->configGroupName());
+            bool toLoad             = group.readEntry(plugin->id(), false);
+
+            if (toLoad)
+            {
+                plugin->setup();
+                plugin->setLoaded(true);
+            }
+
             list << plugin;
         }
 

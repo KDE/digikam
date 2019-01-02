@@ -90,6 +90,18 @@ public:
      */
     QString internalVersion() const;
 
+    /**
+     * Return the loaded property.
+     * If it's true, the plugin have been loaded at startup by plugin loader after a setup() call.
+     */
+    bool isLoaded() const;
+
+    /**
+     * Accessor to adjust the loaded plugin property.
+     * This property is adjusted by plugin loader at start-up.
+     */
+    void setLoaded(bool b);
+
 public:
 
     /**

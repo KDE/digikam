@@ -51,7 +51,7 @@ public:
         // Name + Icon + Selector
         setText(0, m_tool->name());
         setIcon(0, m_tool->icon());
-        setCheckState(0, Qt::Unchecked);
+        setCheckState(0, m_tool->isLoaded() ? Qt::Checked : Qt::Unchecked);
 
         // Categories
         QStringList list = m_tool->pluginCategories();
@@ -145,10 +145,12 @@ DPluginConfView::~DPluginConfView()
 
 void DPluginConfView::apply()
 {
-    if (DPluginLoader::instance())
+    DPluginLoader* const loader = DPluginLoader::instance();
+
+    if (loader)
     {
         KSharedConfigPtr config = KSharedConfig::openConfig();
-        KConfigGroup group      = config->group(QString::fromLatin1("EnabledDPlugin"));
+        KConfigGroup group      = config->group(loader->configGroupName());
 
         foreach (DPluginCheckBox* const item, d->boxes)
         {
