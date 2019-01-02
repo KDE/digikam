@@ -41,6 +41,7 @@ int main(int argc, char* argv[])
 
     DPluginSetup view;
     view.show();
+    view.resize(1024, 600);
 
     app.exec();
 

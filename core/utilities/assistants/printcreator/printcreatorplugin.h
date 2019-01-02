@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_SEND_BY_MAIL_PLUGIN_H
-#define DIGIKAM_SEND_BY_MAIL_PLUGIN_H
+#ifndef DIGIKAM_PRINT_CREATOR_PLUGIN_H
+#define DIGIKAM_PRINT_CREATOR_PLUGIN_H
 
 // Local includes
 
@@ -30,15 +30,15 @@
 namespace Digikam
 {
 
-class SendByMailPlugin : public DPlugin
+class PrintCreatorPlugin : public DPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.kde.digikam.SendByMail")
+    Q_PLUGIN_METADATA(IID "org.kde.digikam.PrintCreator")
     Q_INTERFACES(Digikam::DPlugin)
 
 public:
 
-    explicit SendByMailPlugin(QObject* const parent = 0);
+    explicit PrintCreatorPlugin(QObject* const parent = 0);
 
     QString name()                 const override;
     QString id()                   const override;
@@ -51,9 +51,9 @@ public:
 
 private Q_SLOTS:
 
-    void slotSendByMail();
+    void slotPrintCreator();
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_SEND_BY_MAIL_PLUGIN_H
+#endif // DIGIKAM_PRINT_CREATOR_PLUGIN_H

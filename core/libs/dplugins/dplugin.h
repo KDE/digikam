@@ -131,9 +131,9 @@ public:
     virtual QString version() const = 0;
 
     /**
-     * @brief Returns a short resume about the plugin.
+     * @brief Returns a short description about the plugin.
      */
-    virtual QString resume() const = 0;
+    virtual QString description() const = 0;
 
     /**
      * @brief Returns an icon for the plugin.
@@ -146,12 +146,9 @@ public:
     virtual QList<DPluginAuthor> authors() const = 0;
 
     /**
-     * @brief Returns long description text about the plugin .
-     *
-     * The default implementation returns the empty string. Please override
-     * this method to give a complete description of the plugin.
+     * @brief Returns a long description about the plugin.
      */
-    virtual QString description() const;
+    virtual QString details() const = 0;
 
 protected:
 

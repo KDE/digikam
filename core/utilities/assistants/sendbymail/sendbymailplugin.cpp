@@ -58,12 +58,12 @@ QString SendByMailPlugin::version() const
     return QLatin1String("1.0");
 }
 
-QString SendByMailPlugin::resume() const
+QString SendByMailPlugin::description() const
 {
     return i18n("A Tool to Send Items by Email.");
 }
 
-QString SendByMailPlugin::description() const
+QString SendByMailPlugin::details() const
 {
     return i18n("<p>This tool permit to back-process items (as resize) before to send by email.</p>"
                 "<p>Items to process can be selected one by one or by group through a selection of albums.</p>"
@@ -75,7 +75,15 @@ QList<DPluginAuthor> SendByMailPlugin::authors() const
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2004-2019"));
+                             QLatin1String("(C) 2004-2019"),
+                             i18n("Author and Maintainer"))
+            << DPluginAuthor(QLatin1String("Michael Hoechstetter"),
+                             QLatin1String("michael dot hoechstetter at gmx dot de"),
+                             QLatin1String("(C) 2006"))
+            << DPluginAuthor(QLatin1String("Tom Albers"),
+                             QLatin1String("tomalbers at kde dot nl"),
+                             QLatin1String("(C) 2007"))
+            ;
 }
 
 void SendByMailPlugin::setup()

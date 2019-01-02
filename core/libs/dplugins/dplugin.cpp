@@ -140,11 +140,6 @@ QStringList DPlugin::pluginAuthors() const
     return list;
 }
 
-QString DPlugin::description() const
-{
-    return QString();
-}
-
 bool DPlugin::shouldLoaded() const
 {
     return d->shouldLoaded;

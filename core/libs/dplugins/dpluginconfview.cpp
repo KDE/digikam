@@ -52,6 +52,7 @@ public:
         setText(0, m_tool->name());
         setIcon(0, m_tool->icon());
         setCheckState(0, m_tool->shouldLoaded() ? Qt::Checked : Qt::Unchecked);
+        setToolTip(0, m_tool->details());
 
         // Categories
         QStringList list = m_tool->pluginCategories();

@@ -66,17 +66,17 @@ DPluginAboutDlg::DPluginAboutDlg(DPlugin* const tool, QWidget* const parent)
                          "<p>%3</p>",
                          tool->name(),
                          tool->version(),
-                         tool->resume()));
+                         tool->description()));
 
     // --------------------------------------------------------
 
-    QTabWidget* const tab = new QTabWidget(page);
+    QTabWidget* const tab       = new QTabWidget(page);
 
     QTextBrowser* const details = new QTextBrowser(tab);
     details->setOpenExternalLinks(false);
     details->setOpenLinks(false);
     details->setFocusPolicy(Qt::NoFocus);
-    details->setText(tool->description());
+    details->setText(tool->details());
 
     tab->addTab(details, i18n("Details"));
 
