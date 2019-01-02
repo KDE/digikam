@@ -77,7 +77,7 @@ QList<DPlugin*> DPluginLoader::allPlugins() const
     return d->allPlugins;
 }
 
-QList<DPluginAction*> DPluginLoader::pluginActions(DPluginAction::ActionCategory cat) const
+QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategory cat) const
 {
     QList<DPluginAction*> list;
 
@@ -95,11 +95,43 @@ QList<DPluginAction*> DPluginLoader::pluginActions(DPluginAction::ActionCategory
      return list;
 }
 
+QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginId) const
+{
+    QList<DPluginAction*> list;
+
+    foreach (DPlugin* const p, allPlugins())
+    {
+        if (p->id() == pluginId)
+        {
+            list << p->actions();
+            break;
+        }
+    }
+
+    return list;
+}
+
+DPluginAction* DPluginLoader::pluginAction(const QString& actionName) const
+{
+    foreach (DPlugin* const p, allPlugins())
+    {
+        foreach (DPluginAction* const ac, p->actions())
+        {
+            if (ac->actionName() == actionName)
+            {
+                return ac;
+            }
+        }
+     }
+
+     return 0;
+}
+
 QString DPluginLoader::pluginXmlSections(DPluginAction::ActionCategory cat) const
 {
     QString xml;
 
-    foreach (DPluginAction* const ac, pluginActions(cat))
+    foreach (DPluginAction* const ac, pluginsActions(cat))
     {
         xml.append(ac->xmlSection());
     }

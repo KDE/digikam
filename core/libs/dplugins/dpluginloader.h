@@ -76,8 +76,21 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
 
     /**
      * @brief Returns a list of plugin actions set for a kind of category.
+     *        If no plugin have found in this category, this returns an empty list.
      */
-    QList<DPluginAction*> pluginActions(DPluginAction::ActionCategory cat) const;
+    QList<DPluginAction*> pluginsActions(DPluginAction::ActionCategory cat) const;
+
+    /**
+     * @brief Returns the plugin actions corresponding to a plugin id string.
+     *        If not found, this returns an empty list.
+     */
+    QList<DPluginAction*> pluginActions(const QString& pluginId) const;
+
+    /**
+     * @brief Returns the plugin action corresponding to a action name.
+     *        If not found, this returns a null pointer.
+     */
+    DPluginAction* pluginAction(const QString& actionName) const;
 
     /**
      * @brief Returns all xml sections as string of plugin actions set for a kind of category.

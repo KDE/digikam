@@ -78,6 +78,9 @@ DPluginAction::ActionType DPluginAction::actionType() const
         case BqmMetadata:
         case BqmCustom:
             return Bqm;
+
+        default:
+            break;
     }
 
     return InvalidType;

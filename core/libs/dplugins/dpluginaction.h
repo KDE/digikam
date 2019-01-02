@@ -81,7 +81,7 @@ public:
     ~DPluginAction();
 
     /**
-     * Manage the internal action name.
+     * Manage the internal unique action name.
      */
     void setActionName(const QString& name);
     QString actionName() const;
