@@ -91,16 +91,16 @@ public:
     QString internalVersion() const;
 
     /**
-     * Return the loaded property.
-     * If it's true, the plugin have been loaded at startup by plugin loader after a setup() call.
+     * Return the should loaded property.
+     * If it's true, the plugin must be loaded in appliction GUI at startup by plugin loader.
      */
-    bool isLoaded() const;
+    bool shouldLoaded() const;
 
     /**
-     * Accessor to adjust the loaded plugin property.
+     * Accessor to adjust the should loaded plugin property.
      * This property is adjusted by plugin loader at start-up.
      */
-    void setLoaded(bool b);
+    void setShouldLoaded(bool b);
 
 public:
 
@@ -125,15 +125,15 @@ public:
      */
     virtual QString id() const = 0;
 
-    /** 
+    /**
      * @brief Returns the version string of the plugin.
      */
     virtual QString version() const = 0;
 
     /**
-     * @brief Returns a user description of the plugin.
+     * @brief Returns a short resume about the plugin.
      */
-    virtual QString description() const = 0;
+    virtual QString resume() const = 0;
 
     /**
      * @brief Returns an icon for the plugin.
@@ -146,12 +146,12 @@ public:
     virtual QList<DPluginAuthor> authors() const = 0;
 
     /**
-     * @brief Returns about text (credits) for external data the plugin uses.
+     * @brief Returns long description text about the plugin .
      *
      * The default implementation returns the empty string. Please override
-     * this method to give credits for all data from 3rd-partys.
+     * this method to give a complete description of the plugin.
      */
-    virtual QString aboutDataText() const;
+    virtual QString description() const;
 
 protected:
 

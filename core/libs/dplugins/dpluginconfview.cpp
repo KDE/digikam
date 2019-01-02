@@ -51,7 +51,7 @@ public:
         // Name + Icon + Selector
         setText(0, m_tool->name());
         setIcon(0, m_tool->icon());
-        setCheckState(0, m_tool->isLoaded() ? Qt::Checked : Qt::Unchecked);
+        setCheckState(0, m_tool->shouldLoaded() ? Qt::Checked : Qt::Unchecked);
 
         // Categories
         QStringList list = m_tool->pluginCategories();

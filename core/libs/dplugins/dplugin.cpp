@@ -40,12 +40,12 @@ class Q_DECL_HIDDEN DPlugin::Private
 public:
 
     explicit Private()
-      : loaded(false),
+      : shouldLoaded(false),
         iface(0)
     {
     }
 
-    bool                  loaded;
+    bool                  shouldLoaded;
     DInfoInterface*       iface;
     QList<DPluginAction*> actions;
 };
@@ -140,19 +140,19 @@ QStringList DPlugin::pluginAuthors() const
     return list;
 }
 
-QString DPlugin::aboutDataText() const
+QString DPlugin::description() const
 {
     return QString();
 }
 
-bool DPlugin::isLoaded() const
+bool DPlugin::shouldLoaded() const
 {
-    return d->loaded;
+    return d->shouldLoaded;
 }
 
-void DPlugin::setLoaded(bool b)
+void DPlugin::setShouldLoaded(bool b)
 {
-    d->loaded = b;
+    d->shouldLoaded = b;
 }
 
 } // namespace Digikam

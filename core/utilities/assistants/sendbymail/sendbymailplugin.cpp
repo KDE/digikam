@@ -58,9 +58,16 @@ QString SendByMailPlugin::version() const
     return QLatin1String("1.0");
 }
 
-QString SendByMailPlugin::description() const
+QString SendByMailPlugin::resume() const
 {
     return i18n("A Tool to Send Items by Email.");
+}
+
+QString SendByMailPlugin::description() const
+{
+    return i18n("This tool permit to backprocess items (as resize) before to send by email."
+                "Items to process can be selected one by one or by group through a selection of albums"
+                "Different mail client application can be used to process files on the network.");
 }
 
 QList<DPluginAuthor> SendByMailPlugin::authors() const

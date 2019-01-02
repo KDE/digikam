@@ -102,13 +102,9 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* con
 
             KSharedConfigPtr config = KSharedConfig::openConfig();
             KConfigGroup group      = config->group(DPluginLoader::instance()->configGroupName());
-            bool toLoad             = group.readEntry(plugin->id(), false);
 
-            if (toLoad)
-            {
-                plugin->setup();
-                plugin->setLoaded(true);
-            }
+            plugin->setShouldLoaded(group.readEntry(plugin->id(), false));
+            plugin->setup();
 
             list << plugin;
         }
