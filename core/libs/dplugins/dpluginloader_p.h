@@ -38,25 +38,7 @@ public:
     explicit Private();
     ~Private();
 
-    /** Try to find plugin files from different places:
-     *
-     *  Linux (QStandardPaths::GenericDataLocation):
-     *
-     *           "~/.local/share/digikam/plugins/"
-     *           "/usr/local/share/digikam/plugins/"
-     *           "/usr/share/digikam/plugins/"
-     *
-     *  MacOS (QStandardPaths::DataLocation):
-     *
-     *           "~/Library/Application Support/digikam/plugins/"
-     *           "/Library/Application Support/digikam/plugins/"
-     *           "<APPDIR>/../Resources/digikam/plugins/"
-     *
-     *  Windows (QStandardPaths::GenericDataLocation):
-     *           "~/AppData/Local/digikam/plugins/"
-     *           "C:/ProgramData/digikam/plugins/"
-     *            "<APPDIR>/digikam/plugins/"
-     *            "<APPDIR>/data/digikam/plugins/"
+    /** Try to find plugin files from Qt5 plugins install dir:
      */
     QStringList pluginEntriesList() const;
 

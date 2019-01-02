@@ -29,6 +29,7 @@
 #include <QTime>
 #include <QStandardPaths>
 #include <QMessageBox>
+#include <QLibraryInfo>
 
 // Local includes
 
@@ -51,24 +52,14 @@ QStringList DPluginLoader::Private::pluginEntriesList() const
 {
     QStringList allFiles;
 
-#ifdef Q_OS_OSX
-    QStringList paths = QStandardPaths::standardLocations(QStandardPaths::DataLocation);
-#else
-    QStringList paths = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
-#endif
+    QString path = QLibraryInfo::location(QLibraryInfo::PluginsPath);
+    path.append(QDir::separator() + QLatin1String("digikam") + QDir::separator());
 
-    foreach (QString str, paths)
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing plugins from" << path;
+
+    foreach (const QString& file, QDir(path).entryList(QDir::Files))
     {
-        str.append(QDir::separator() + QLatin1String("digikam") +
-                   QDir::separator() + QLatin1String("plugins") +
-                   QDir::separator());
-
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing plugins from" << str;
-
-        foreach (const QString& file, QDir(str).entryList(QDir::Files))
-        {
-            allFiles << str + file;
-        }
+        allFiles << path + file;
     }
 
     // remove duplicate entries

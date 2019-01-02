@@ -8,14 +8,6 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-macro(digikam_add_plugin _target_name)
-    set(_src ${ARGN})
-    add_library(${_target_name} MODULE ${_src})
-    target_link_libraries(${_target_name} ${${_target_name}_LIBS} digikamcore)
-
-    install(TARGETS ${_target_name} DESTINATION ${PLUGIN_INSTALL_DIR}/digikam/plugins)
-endmacro()
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/tools
 
@@ -43,7 +35,7 @@ set(libsendbymail_SRCS
 
 add_library(sendbymail_src OBJECT ${libsendbymail_SRCS})
 
-digikam_add_plugin(SendByMailPlugin
+DIGIKAM_ADD_PLUGIN(SendByMailPlugin
                    ${CMAKE_CURRENT_SOURCE_DIR}/sendbymailplugin.cpp
                    ${libsendbymail_SRCS}
 )
