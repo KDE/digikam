@@ -92,7 +92,7 @@ void LightTableWindow::setupActions()
     ac->addAction(QLatin1String("lighttable_clearlist"), d->clearListAction);
     ac->setDefaultShortcut(d->clearListAction, Qt::CTRL + Qt::SHIFT + Qt::Key_K);
 
-    d->fileDeleteAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")), i18nc("Non-pluralized", "Move to Trash"), this);
+    d->fileDeleteAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash-full")), i18nc("Non-pluralized", "Move to Trash"), this);
     d->fileDeleteAction->setEnabled(false);
     connect(d->fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteItem()));
     ac->addAction(QLatin1String("lighttable_filedelete"), d->fileDeleteAction);

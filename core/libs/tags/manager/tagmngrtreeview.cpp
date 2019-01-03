@@ -136,7 +136,7 @@ void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, const QList<TAl
     else
     {
         /** This is a dummy action, delete is disable for root tag **/
-        QAction* deleteTagsAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")),
+        QAction* deleteTagsAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")),
                                                 i18n("Delete Tags"), this);
         cmh.addAction(deleteTagsAction);
         deleteTagsAction->setEnabled(false);

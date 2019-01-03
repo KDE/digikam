@@ -466,7 +466,7 @@ void EditorWindow::setupStandardActions()
     ac->setDefaultShortcut(d->openWithAction, Qt::META + Qt::Key_F4);
     d->openWithAction->setEnabled(false);
 
-    m_fileDeleteAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")), i18nc("Non-pluralized", "Move to Trash"), this);
+    m_fileDeleteAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash-full")), i18nc("Non-pluralized", "Move to Trash"), this);
     connect(m_fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteCurrentItem()));
     ac->addAction(QLatin1String("editorwindow_delete"), m_fileDeleteAction);
     ac->setDefaultShortcut(m_fileDeleteAction, Qt::Key_Delete);
