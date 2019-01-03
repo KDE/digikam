@@ -161,10 +161,8 @@ public:
         {
             return a < b;
         }
-        else
-        {
-            return b < a;
-        }
+
+        return b < a;
     }
 
     /** Returns the usual compare result of -1, 0, or 1 for lessThan, equals and greaterThan.
@@ -177,14 +175,12 @@ public:
             return 0;
         }
 
-        if (a < b)
-        {
-            return -1;
-        }
-        else
+        if (a > b)
         {
             return 1;
         }
+
+        return -1;
     }
 
     /** Takes a typical result from a compare method (0 is equal, -1 is less than, 1 is greater than)
@@ -196,10 +192,8 @@ public:
         {
             return compareResult;
         }
-        else
-        {
-            return - compareResult;
-        }
+
+        return - compareResult;
     }
 
     template <typename T>
@@ -212,13 +206,24 @@ public:
      */
     static inline int naturalCompare(const QString& a, const QString& b, Qt::SortOrder sortOrder,
                                      Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive,
-                                     bool natural = true, bool versioning = false)
+                                     bool natural = true)
     {
         QCollator collator;
         collator.setNumericMode(natural);
-        collator.setIgnorePunctuation(versioning);
+        collator.setIgnorePunctuation(false);
         collator.setCaseSensitivity(caseSensitive);
-        return (compareByOrder(collator.compare(a, b), sortOrder));
+
+        if (a.contains(QLatin1String("_v"), Qt::CaseInsensitive))
+        {
+            collator.setIgnorePunctuation(true);
+        }
+
+        if (sortOrder == Qt::AscendingOrder)
+        {
+            return collator.compare(a, b);
+        }
+
+        return - collator.compare(a, b);
     }
 };
 

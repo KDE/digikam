@@ -487,9 +487,24 @@ bool DFileOperations::copyFile(const QString& srcFile,
                                const QString& dstFile)
 {
     QT_STATBUF st;
-    int stat = QT_STAT(QFile::encodeName(srcFile).constData(), &st);
+    QString tmpFile;
 
-    bool ret = QFile::copy(srcFile, dstFile);
+    int stat = QT_STAT(QFile::encodeName(srcFile).constData(), &st);
+    int path = dstFile.lastIndexOf(QLatin1Char('/'));
+    int dot  = dstFile.lastIndexOf(QLatin1Char('.'));
+    dot      = (path > dot) ? -1 : dot;
+    int ext  = dstFile.length() - dot;
+    tmpFile  = dstFile.left(dot);
+    tmpFile += QLatin1String(".digikamtempfile");
+    tmpFile += (dot < 0) ? QLatin1String(".tmp")
+                         : dstFile.right(ext);
+
+    bool ret = QFile::copy(srcFile, tmpFile);
+
+    if (ret && !(ret = QFile::rename(tmpFile, dstFile)))
+    {
+        QFile::remove(tmpFile);
+    }
 
     if (ret && stat == 0)
     {
