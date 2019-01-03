@@ -58,14 +58,13 @@ DWizardDlg::~DWizardDlg()
 void DWizardDlg::setPlugin(DPlugin* const tool)
 {
     m_tool = tool;
-    
+
     if (m_tool)
     {
-        setOption(QWizard::HaveCustomButton1);
-        QAbstractButton* const btn = button(QWizard::CustomButton1);
-        btn->setText(i18n("About..."));
-        
-        connect(btn, SIGNAL(clicked()),
+        setOption(QWizard::HaveHelpButton);
+        setButtonText(QWizard::HelpButton, i18n("About..."));
+
+        connect(button(QWizard::HelpButton), SIGNAL(clicked()),
                 this, SLOT(slotAboutPlugin()));
     }
 }
