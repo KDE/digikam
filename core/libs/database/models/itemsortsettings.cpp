@@ -409,7 +409,9 @@ DatabaseFields::Set ItemSortSettings::watchFlags() const
     {
         case OneCategory:
         case NoCategories:
+            break;
         case CategoryByAlbum:
+            set |= DatabaseFields::Album;
             break;
         case CategoryByFormat:
             set |= DatabaseFields::Format;
