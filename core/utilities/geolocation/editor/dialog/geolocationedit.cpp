@@ -506,7 +506,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
     d->mapWidget->setActive(true);
 
     // Workaround for a drag & drop problem of images to the map for Qt>=5.9.2
-    show();
+    //show();
 }
 
 GeolocationEdit::~GeolocationEdit()

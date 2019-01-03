@@ -1531,18 +1531,17 @@ void MapWidget::dragEnterEvent(QDragEnterEvent* event)
 
     /// @todo need data about the dragged object: #markers, selected, icon, ...
     event->accept();
-
-//     if (!dragData->haveDragPixmap)
-//         d->currentBackend->updateDragDropMarker(event->pos(), dragData);
 }
 
 void MapWidget::dragMoveEvent(QDragMoveEvent* event)
 {
-    Q_UNUSED(event);
+    if (!d->dragDropHandler)
+    {
+        event->ignore();
+        return;
+    }
 
-    /// @todo update the position of the drag marker if it is to be shown
-//     if (!dragData->haveDragPixmap)
-//         d->currentBackend->updateDragDropMarkerPosition(event->pos());
+    event->accept();
 }
 
 void MapWidget::dropEvent(QDropEvent* event)

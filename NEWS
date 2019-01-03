@@ -678,4 +678,5 @@ BUGFIXES:
 608 ==> 402733 - Launch failure on MacOS with Digkam 6 beta3.
 609 ==> 388705 - Unexpected crash on adding new items to the collection from an external application - 5.7.0 suse packages.
 610 ==> 402800 - Main album view does not update when moving images between albums.
-611 ==> 
+611 ==> 402811 - Drag-n-drop disabled in Geolocation editor.
+612 ==> 
