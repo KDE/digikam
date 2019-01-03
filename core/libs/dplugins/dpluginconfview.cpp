@@ -58,8 +58,8 @@ public:
         QStringList list = m_tool->pluginCategories();
         setText(1, list.join(QString::fromLatin1(", ")));
 
-        // Version
-        setText(2, m_tool->version());
+        // Number of actions
+        setText(2, QString::number(m_tool->actions().count()));
 
         // Description
         setText(3, m_tool->description());

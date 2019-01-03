@@ -25,7 +25,6 @@
 // Qt includes
 
 #include <QPointer>
-#include <QIcon>
 
 // KDE includes
 
@@ -53,9 +52,9 @@ QString PrintCreatorPlugin::id() const
     return QLatin1String("PrintCreator");
 }
 
-QString PrintCreatorPlugin::version() const
+QIcon PrintCreatorPlugin::icon() const
 {
-    return QLatin1String("1.0");
+    return QIcon::fromTheme(QLatin1String("document-print"));
 }
 
 QString PrintCreatorPlugin::description() const

@@ -25,7 +25,7 @@
 
 // Qt includes
 
-#include <QIcon>
+#include <QApplication>
 
 // Local includes
 
@@ -61,7 +61,7 @@ DPlugin::~DPlugin()
     delete d;
 }
 
-QString DPlugin::internalVersion() const
+QString DPlugin::version() const
 {
     return QLatin1String(digikam_version_short);
 }
@@ -78,7 +78,7 @@ DInfoInterface* DPlugin::infoIface() const
 
 QIcon DPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("digikam"));
+    return qApp->windowIcon();
 }
 
 QList<DPluginAction*> DPlugin::actions() const

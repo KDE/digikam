@@ -32,6 +32,7 @@
 #include <QStringList>
 #include <QtPlugin>
 #include <QObject>
+#include <QIcon>
 
 // Local includes
 
@@ -44,7 +45,7 @@ namespace Digikam
 {
 
 /**
- * A digiKam external plugin template class.
+ * A digiKam external plugin abstract class.
  */
 class DIGIKAM_EXPORT DPlugin : public QObject
 {
@@ -90,8 +91,9 @@ public:
 
     /**
      * Return the internal version used to check the binary compatibility at run-time.
+     * This is typically the same version of digiKam core used at compilation time.
      */
-    QString internalVersion() const;
+    QString version() const;
 
     /**
      * Return the should loaded property.
@@ -129,17 +131,13 @@ public:
     virtual QString id() const = 0;
 
     /**
-     * @brief Returns the version string of the plugin.
-     */
-    virtual QString version() const = 0;
-
-    /**
      * @brief Returns a short description about the plugin.
      */
     virtual QString description() const = 0;
 
     /**
      * @brief Returns an icon for the plugin.
+     *        Default implementation return host application icon.
      */
     virtual QIcon icon() const;
 

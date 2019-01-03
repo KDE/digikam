@@ -42,7 +42,7 @@ public:
 
     QString name()                 const override;
     QString id()                   const override;
-    QString version()              const override;
+    QIcon   icon()                 const override;
     QString details()              const override;
     QString description()          const override;
     QList<DPluginAuthor> authors() const override;

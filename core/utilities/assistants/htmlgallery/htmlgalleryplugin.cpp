@@ -25,7 +25,6 @@
 // Qt includes
 
 #include <QPointer>
-#include <QIcon>
 
 // KDE includes
 
@@ -53,9 +52,9 @@ QString HtmlGalleryPlugin::id() const
     return QLatin1String("HtmlGallery");
 }
 
-QString HtmlGalleryPlugin::version() const
+QIcon HtmlGalleryPlugin::icon() const
 {
-    return QLatin1String("1.0");
+    return QIcon::fromTheme(QLatin1String("text-html"));
 }
 
 QString HtmlGalleryPlugin::description() const

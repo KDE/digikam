@@ -95,7 +95,7 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* con
     {
         Q_ASSERT(obj->metaObject()->superClass()); // all our plugins have a super class
 
-        if (plugin->internalVersion() == QLatin1String(digikam_version_short))
+        if (plugin->version() == QLatin1String(digikam_version_short))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Plugin of type" << obj->metaObject()->superClass()->className()
                                          << "loaded from"    << loader->fileName();

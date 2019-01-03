@@ -25,7 +25,6 @@
 // Qt includes
 
 #include <QPointer>
-#include <QIcon>
 
 // KDE includes
 
@@ -53,9 +52,9 @@ QString SendByMailPlugin::id() const
     return QLatin1String("SendByMail");
 }
 
-QString SendByMailPlugin::version() const
+QIcon SendByMailPlugin::icon() const
 {
-    return QLatin1String("1.0");
+    return QIcon::fromTheme(QLatin1String("mail-send"));
 }
 
 QString SendByMailPlugin::description() const
