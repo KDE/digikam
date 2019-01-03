@@ -345,7 +345,8 @@ ItemFilterModel* ItemFilterModel::imageFilterModel() const
 DatabaseFields::Set ItemFilterModel::suggestedWatchFlags() const
 {
     DatabaseFields::Set watchFlags;
-    watchFlags |= DatabaseFields::Name   | DatabaseFields::FileSize     | DatabaseFields::ModificationDate;
+    watchFlags |= DatabaseFields::Album  | DatabaseFields::Name         | DatabaseFields::FileSize    |
+                  DatabaseFields::ModificationDate;
     watchFlags |= DatabaseFields::Rating | DatabaseFields::CreationDate | DatabaseFields::Orientation |
                   DatabaseFields::Width  | DatabaseFields::Height;
     watchFlags |= DatabaseFields::Comment;
@@ -1021,6 +1022,7 @@ void ItemFilterModel::slotImageChange(const ImageChangeset& changeset)
     DatabaseFields::Set set = changeset.changes();
     bool sortAffected       = (set & d->sorter.watchFlags());
     bool filterAffected     = (set & d->filter.watchFlags()) || (set & d->groupFilter.watchFlags());
+    bool categoryAffected   = sortAffected && (d->sorter.categorizationMode == ItemSortSettings::CategoryByAlbum);
 
     if (!sortAffected && !filterAffected)
     {
@@ -1045,7 +1047,7 @@ void ItemFilterModel::slotImageChange(const ImageChangeset& changeset)
         return;
     }
 
-    if (filterAffected)
+    if (categoryAffected || filterAffected)
     {
         d->updateFilterTimer->start();
     }

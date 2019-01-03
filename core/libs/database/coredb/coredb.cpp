@@ -4696,6 +4696,7 @@ void CoreDB::moveItem(int srcAlbumID, const QString& srcName,
     d->db->execSql(QString::fromUtf8("UPDATE Images SET album=?, name=? "
                                      "WHERE id=?;"),
                    dstAlbumID, dstName, imageId);
+    d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::Set(DatabaseFields::Album)));
     d->db->recordChangeset(CollectionImageChangeset(imageId, srcAlbumID, CollectionImageChangeset::Moved));
     d->db->recordChangeset(CollectionImageChangeset(imageId, srcAlbumID, CollectionImageChangeset::Removed));
     d->db->recordChangeset(CollectionImageChangeset(imageId, dstAlbumID, CollectionImageChangeset::Added));
