@@ -211,7 +211,6 @@ private Q_SLOTS:
     void slotExpoBlending();
     void slotPanorama();
     void slotVideoSlideshow();
-    void slotSendByMail();
     void slotHtmlGallery();
     void slotCalendar();
     void slotMediaServer();

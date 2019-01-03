@@ -106,6 +106,9 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* con
             plugin->setShouldLoaded(group.readEntry(plugin->id(), false));
             plugin->setup(parents);
 
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Actions from plugin named" << plugin->name()
+                                         << "registered to" << parents;
+
             list << plugin;
         }
 

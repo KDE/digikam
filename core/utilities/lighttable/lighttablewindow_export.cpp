@@ -68,13 +68,6 @@ void LightTableWindow::slotVideoSlideshow()
 #endif
 }
 
-void LightTableWindow::slotSendByMail()
-{
-    QPointer<MailWizard> w = new MailWizard(this, new DBInfoIface(this, d->thumbView->allUrls()));
-    w->exec();
-    delete w;
-}
-
 void LightTableWindow::slotMediaServer()
 {
     DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);

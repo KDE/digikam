@@ -359,9 +359,6 @@ private Q_SLOTS:
     // Called by Presentation tool.
     virtual void slotPresentation()            {};
 
-    // Called by SendByMail tool.
-    virtual void slotSendByMail()              {};
-
     // Called by PrintCreator tool.
     virtual void slotPrintCreator()            {};
 

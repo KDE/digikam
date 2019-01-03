@@ -68,13 +68,6 @@ void ShowFoto::slotVideoSlideshow()
 #endif
 }
 
-void ShowFoto::slotSendByMail()
-{
-    QPointer<MailWizard> w = new MailWizard(this, new DMetaInfoIface(this, d->thumbBar->urls()));
-    w->exec();
-    delete w;
-}
-
 void ShowFoto::slotMediaServer()
 {
     QPointer<DMediaServerDlg> w = new DMediaServerDlg(this, new DMetaInfoIface(this, d->thumbBar->urls()));

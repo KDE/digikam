@@ -1063,6 +1063,13 @@ void DigikamApp::preloadWindows()
     LightTableWindow::lightTableWindow();
 
     d->tagsActionManager->registerTagsActionCollections();
+
+    // Load plugins
+    DPluginLoader* const dpl = DPluginLoader::instance();
+    dpl->setPluginParents(QList<QObject*>() << this
+                                            << LightTableWindow::lightTableWindow()
+                                            << ImageWindow::imageWindow());
+    dpl->init();
 }
 
 void DigikamApp::initGui()

@@ -69,6 +69,7 @@
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 #include "daboutdata.h"
+#include "dpluginloader.h"
 #include "webbrowserdlg.h"
 #include "wsstarter.h"
 
@@ -542,13 +543,7 @@ void DXmlGuiWindow::createCalendarAction()
 
 void DXmlGuiWindow::createSendByMailAction()
 {
-    m_sendByMailAction = new QAction(QIcon::fromTheme(QLatin1String("mail-send")),
-                                    i18nc("@action", "Send by Mail..."),
-                                    this);
-    actionCollection()->addAction(QLatin1String("sendbymail"), m_sendByMailAction);
-
-    connect(m_sendByMailAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotSendByMail()));
+    m_sendByMailAction = DPluginLoader::instance()->pluginAction(QLatin1String("sendbymail"), this);
 }
 
 void DXmlGuiWindow::createPrintCreatorAction()

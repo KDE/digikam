@@ -138,6 +138,10 @@ DPluginAction* DPluginLoader::pluginAction(const QString& actionName, QObject* c
         }
      }
 
+     qCCritical(DIGIKAM_GENERAL_LOG) << "DPluginAction named" << actionName
+                                     << "not found in" << parent->objectName()
+                                     << "(" << parent << ")";
+
      return 0;
 }
 

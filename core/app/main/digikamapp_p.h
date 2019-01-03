@@ -132,6 +132,7 @@
 #include "dmediaserverdlg.h"
 #include "timeadjustdialog.h"
 #include "wsstarter.h"
+#include "dpluginloader.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"

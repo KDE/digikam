@@ -69,13 +69,6 @@ void ImageWindow::slotExpoBlending()
     ExpoBlendingManager::instance()->run();
 }
 
-void ImageWindow::slotSendByMail()
-{
-    QPointer<MailWizard> w = new MailWizard(this, new DBInfoIface(this, d->thumbBar->allUrls()));
-    w->exec();
-    delete w;
-}
-
 void ImageWindow::slotMediaServer()
 {
     DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);

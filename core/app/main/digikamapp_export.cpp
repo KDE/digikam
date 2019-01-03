@@ -51,13 +51,6 @@ void DigikamApp::slotVideoSlideshow()
 #endif
 }
 
-void DigikamApp::slotSendByMail()
-{
-    QPointer<MailWizard> w = new MailWizard(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
-    w->exec();
-    delete w;
-}
-
 void DigikamApp::slotHtmlGallery()
 {
 #ifdef HAVE_HTMLGALLERY
