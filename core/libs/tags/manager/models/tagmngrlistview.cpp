@@ -145,7 +145,7 @@ void TagMngrListView::contextMenuEvent(QContextMenuEvent* event)
         return;
     }
 
-    QAction* const delAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")),
+    QAction* const delAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")),
                                            i18n("Delete Selected from List"), this);
     cmhelper.addAction(delAction, tagList, SLOT(slotDeleteSelected()), false);
 

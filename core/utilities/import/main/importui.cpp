@@ -421,7 +421,7 @@ void ImportUI::setupActions()
     // --- Delete actions ------------------------------------------------------
 
     d->deleteAction = new QMenu(i18nc("@title:menu", "Delete"), this);
-    d->deleteAction->setIcon(QIcon::fromTheme(QLatin1String("user-trash")));
+    d->deleteAction->setIcon(QIcon::fromTheme(QLatin1String("edit-delete")));
     ac->addAction(QLatin1String("importui_delete"), d->deleteAction->menuAction());
     d->cameraActions->addAction(d->deleteAction->menuAction());
 

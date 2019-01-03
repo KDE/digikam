@@ -380,7 +380,7 @@ void ContextMenuHelper::addActionNewTag(TagModificationHelper* helper, TAlbum* t
 
 void ContextMenuHelper::addActionDeleteTag(TagModificationHelper* helper, TAlbum* tag)
 {
-    QAction* const deleteTagAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")), i18n("Delete Tag"), this);
+    QAction* const deleteTagAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete Tag"), this);
     addAction(deleteTagAction);
     helper->bindTag(deleteTagAction, tag);
 
@@ -390,7 +390,7 @@ void ContextMenuHelper::addActionDeleteTag(TagModificationHelper* helper, TAlbum
 
 void ContextMenuHelper::addActionDeleteTags(Digikam::TagModificationHelper* helper, QList< TAlbum* > tags)
 {
-    QAction* const deleteTagsAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")), i18n("Delete Tags"), this);
+    QAction* const deleteTagsAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete Tags"), this);
     addAction(deleteTagsAction);
     helper->bindMultipleTags(deleteTagsAction, tags);
 
@@ -1098,7 +1098,7 @@ void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
 
 void ContextMenuHelper::addStandardActionItemDelete(QObject* recv, const char* slot, int quantity)
 {
-    QAction* const trashAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")), i18ncp("@action:inmenu Pluralized",
+    QAction* const trashAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash-full")), i18ncp("@action:inmenu Pluralized",
                                              "Move to Trash", "Move %1 Files to Trash", quantity), d->parent);
     connect(trashAction, SIGNAL(triggered()),
             recv, slot);
