@@ -112,7 +112,7 @@ public:
      * @param algorithm The algorithm.
      * @return The ids of the items whose fingerprints are dirty or missing.
      */
-    QList<qlonglong> getDirtyOrMissingFingerprints(QList<ItemInfo> imageInfos,
+    QList<qlonglong> getDirtyOrMissingFingerprints(const QList<ItemInfo>& imageInfos,
                                                    FuzzyAlgorithm algorithm = FuzzyAlgorithm::Haar);
 
     /**
@@ -123,7 +123,7 @@ public:
      * @param algorithm The algorithm.
      * @return The URLs of the items whose fingerprints are dirty or missing.
      */
-    QStringList      getDirtyOrMissingFingerprintURLs(QList<ItemInfo> imageInfos,
+    QStringList      getDirtyOrMissingFingerprintURLs(const QList<ItemInfo>& imageInfos,
                                                       FuzzyAlgorithm algorithm = FuzzyAlgorithm::Haar);
 
     /**

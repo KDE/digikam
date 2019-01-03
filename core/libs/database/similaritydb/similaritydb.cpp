@@ -183,7 +183,7 @@ bool SimilarityDb::hasFingerprints(FuzzyAlgorithm algorithm) const
     }
 }
 
-QList<qlonglong> SimilarityDb::getDirtyOrMissingFingerprints(QList<ItemInfo> imageInfos,
+QList<qlonglong> SimilarityDb::getDirtyOrMissingFingerprints(const QList<ItemInfo>& imageInfos,
                                                              FuzzyAlgorithm algorithm)
 {
     QList<qlonglong> itemIDs;
@@ -220,7 +220,7 @@ QList<qlonglong> SimilarityDb::getDirtyOrMissingFingerprints(QList<ItemInfo> ima
     return itemIDs;
 }
 
-QStringList SimilarityDb::getDirtyOrMissingFingerprintURLs(QList<ItemInfo> imageInfos,
+QStringList SimilarityDb::getDirtyOrMissingFingerprintURLs(const QList<ItemInfo>& imageInfos,
                                                            FuzzyAlgorithm algorithm)
 {
     QStringList urls;

@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QString>
 #include <QTimer>
 #include <QDir>
@@ -122,6 +123,8 @@ void ThumbsGenerator::slotStart()
 {
     MaintenanceTool::slotStart();
 
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     if (d->albumList.isEmpty())
     {
         d->albumList = AlbumManager::instance()->allPAlbums();
@@ -181,6 +184,8 @@ void ThumbsGenerator::slotStart()
             ++it;
         }
     }
+
+    QApplication::restoreOverrideCursor();
 
     if (d->allPicturesPath.isEmpty())
     {
