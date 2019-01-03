@@ -41,6 +41,8 @@
 #include "digikam_export.h"
 #include "digikam_config.h"
 #include "dlogoaction.h"
+#include "dinfointerface.h"
+#include "dpluginaction.h"
 
 #ifdef HAVE_KSANE
 #   include "ksaneaction.h"
@@ -206,6 +208,12 @@ public:
     /** Return true if managed window is currently in Full Screen Mode.
      */
     bool fullScreenIsActive() const;
+
+public:
+
+    virtual DInfoInterface* infoIface(DPluginAction* const ac) = 0;
+
+public:
 
     static void openHandbook();
     static void restoreWindowSize(QWindow* const win, const KConfigGroup& group);

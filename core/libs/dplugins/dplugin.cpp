@@ -31,6 +31,7 @@
 
 #include "digikam_version.h"
 #include "digikam_debug.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -40,13 +41,11 @@ class Q_DECL_HIDDEN DPlugin::Private
 public:
 
     explicit Private()
-      : shouldLoaded(false),
-        iface(0)
+      : shouldLoaded(false)
     {
     }
 
     bool                  shouldLoaded;
-    DInfoInterface*       iface;
     QList<DPluginAction*> actions;
 };
 
@@ -66,14 +65,21 @@ QString DPlugin::version() const
     return QLatin1String(digikam_version_short);
 }
 
-void DPlugin::setInfoIface(DInfoInterface* const iface)
+DInfoInterface* DPlugin::infoIface(QObject* const ac) const
 {
-    d->iface = iface;
-}
+    DPluginAction* const pac = dynamic_cast<DPluginAction*>(ac);
 
-DInfoInterface* DPlugin::infoIface() const
-{
-    return d->iface;
+    if (pac)
+    {
+        DXmlGuiWindow* const gui = dynamic_cast<DXmlGuiWindow*>(pac->parent());
+
+        if (gui)
+        {
+            return gui->infoIface(pac);
+        }
+    }
+
+    return 0;
 }
 
 int DPlugin::count() const
@@ -138,6 +144,7 @@ DPluginAction* DPlugin::findActionByName(const QString& name, QObject* const par
 
 void DPlugin::addAction(DPluginAction* const ac)
 {
+    ac->setProperty("DPluginId", id());
     d->actions.append(ac);
 }
 

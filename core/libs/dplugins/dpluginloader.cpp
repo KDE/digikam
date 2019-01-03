@@ -62,16 +62,6 @@ DPluginLoader* DPluginLoader::instance()
     return &creator->object;
 }
 
-void DPluginLoader::setInfoIface(DInfoInterface* const iface)
-{
-    d->iface = iface;
-}
-
-DInfoInterface* DPluginLoader::infoIface() const
-{
-    return d->iface;
-}
-
 void DPluginLoader::setPluginParents(const QList<QObject*>& parents)
 {
     d->parents = parents;

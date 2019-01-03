@@ -979,4 +979,27 @@ void DigikamApp::slotColorManagementOptionsChanged()
     d->viewCMViewAction->blockSignals(false);
 }
 
+DInfoInterface* DigikamApp::infoIface(DPluginAction* const ac)
+{
+    ApplicationSettings::OperationType aset = ApplicationSettings::Unspecified;
+
+    switch (ac->actionCategory())
+    {
+        case DPluginAction::GenericExport:
+        case DPluginAction::GenericImport:
+            aset = ApplicationSettings::ImportExport;
+            break;
+        case DPluginAction::GenericMetadata:
+            aset = ApplicationSettings::Metadata;
+            break;
+        case DPluginAction::GenericTool:
+            aset = ApplicationSettings::Tools;
+            break;
+        default:
+            break;
+    }
+
+    return (new DBInfoIface(this, QList<QUrl>(), aset));
+}
+
 } // namespace Digikam

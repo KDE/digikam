@@ -59,6 +59,10 @@ public:
     bool queryClose();
     void toggleTag(int tagID);
 
+public:
+
+    DInfoInterface* infoIface(DPluginAction* const ac);
+
     virtual VersionManager* versionManager() const;
 
 public Q_SLOTS:

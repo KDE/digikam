@@ -60,6 +60,7 @@ DPluginAction::ActionType DPluginAction::actionType() const
         case GenericExport:
         case GenericImport:
         case GenericTool:
+        case GenericMetadata:
             return Generic;
 
         case EditorColor:
@@ -111,6 +112,8 @@ QString DPluginAction::actionCategoryToString() const
             return QLatin1String("GenericImport");
         case GenericTool:
             return QLatin1String("GenericTool");
+        case GenericMetadata:
+            return QLatin1String("GenericMetadata");
 
         case EditorColor:
             return QLatin1String("EditorColor");
@@ -157,6 +160,11 @@ QString DPluginAction::toString() const
     return QString::fromUtf8("%1: \"%2\" - %3").arg(actionName())
                                                .arg(text())
                                                .arg(actionCategoryToString());
+}
+
+QString DPluginAction::pluginId() const
+{
+    return property("DPluginId").toString();
 }
 
 } // namespace Digikam

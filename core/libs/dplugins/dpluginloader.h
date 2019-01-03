@@ -66,12 +66,6 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
     QString configGroupName() const;
 
     /**
-     * Manage the info interface instance set by host application.
-     */
-    void setInfoIface(DInfoInterface* const iface);
-    DInfoInterface* infoIface() const;
-
-    /**
      * Manage the parent instances to use with plugin at init.
      */
     void setPluginParents(const QList<QObject*>& parents);

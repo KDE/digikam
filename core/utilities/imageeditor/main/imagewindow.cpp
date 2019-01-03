@@ -1299,4 +1299,27 @@ void ImageWindow::slotRightSideBarActivateAssignedTags()
     d->rightSideBar->imageDescEditTab()->activateAssignedTagsButton();
 }
 
+DInfoInterface* ImageWindow::infoIface(DPluginAction* const ac)
+{
+    ApplicationSettings::OperationType aset = ApplicationSettings::Unspecified;
+
+    switch (ac->actionCategory())
+    {
+        case DPluginAction::GenericExport:
+        case DPluginAction::GenericImport:
+            aset = ApplicationSettings::ImportExport;
+            break;
+        case DPluginAction::GenericMetadata:
+            aset = ApplicationSettings::Metadata;
+            break;
+        case DPluginAction::GenericTool:
+            aset = ApplicationSettings::Tools;
+            break;
+        default:
+            break;
+    }
+
+    return (new DBInfoIface(this, d->thumbBar->allUrls(), aset));
+}
+
 } // namespace Digikam

@@ -855,6 +855,11 @@ void ShowFoto::slotOpenWith(QAction* action)
     openWith(d->thumbBar->currentUrl(), action);
 }
 
+DInfoInterface* ShowFoto::infoIface(DPluginAction* const)
+{
+    return (new DMetaInfoIface(this, d->thumbBar->urls()));
+}
+
 } // namespace ShowFoto
 
 #include "moc_showfoto.cpp"

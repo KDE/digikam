@@ -82,6 +82,10 @@ public:
 
     static DigikamApp* instance();
 
+public:
+
+    DInfoInterface* infoIface(DPluginAction* const ac);
+
 Q_SIGNALS:
 
     void signalEscapePressed();

@@ -58,6 +58,7 @@ public:
         GenericExport = 0,      /// Generic export action.
         GenericImport,          /// Generic import action.
         GenericTool,            /// Generic processing action.
+        GenericMetadata,        /// Generic Metadata adjustement action.
 
         EditorColor,            /// Image Editor color correction action.
         EditorEnhance,          /// Image Editor enhance action.
@@ -97,6 +98,11 @@ public:
      * Return the action type depending of category.
      */
     ActionType actionType() const;
+
+    /**
+     * Return the plugin id string hosting this action.
+     */
+    QString pluginId() const;
 
     /**
      * Return the XML section to merge in KXMLGUIClient host XML definition.

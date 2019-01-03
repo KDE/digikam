@@ -88,6 +88,10 @@ public:
 
     CameraThumbsCtrl* getCameraThumbsCtrl() const;
 
+public:
+
+    DInfoInterface* infoIface(DPluginAction* const) { return 0; };
+
 Q_SIGNALS:
 
     void signalLastDestination(const QUrl&);

@@ -58,6 +58,10 @@ public:
 
     void toggleTag(int tagID);
 
+public:
+
+    DInfoInterface* infoIface(DPluginAction* const ac);
+
 Q_SIGNALS:
 
     void signalWindowHasMoved();

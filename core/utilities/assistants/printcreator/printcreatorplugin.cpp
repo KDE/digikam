@@ -109,7 +109,7 @@ void PrintCreatorPlugin::setup(const QList<QObject*>& parents)
 
 void PrintCreatorPlugin::slotPrintCreator()
 {
-    QPointer<AdvPrintWizard> wzrd = new AdvPrintWizard(0, infoIface());
+    QPointer<AdvPrintWizard> wzrd = new AdvPrintWizard(0, infoIface(sender()));
     wzrd->setPlugin(this);
     wzrd->exec();
     delete wzrd;

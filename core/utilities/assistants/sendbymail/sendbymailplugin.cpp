@@ -104,7 +104,7 @@ void SendByMailPlugin::setup(const QList<QObject*>& parents)
 
 void SendByMailPlugin::slotSendByMail()
 {
-    QPointer<MailWizard> wzrd = new MailWizard(0, infoIface());
+    QPointer<MailWizard> wzrd = new MailWizard(0, infoIface(sender()));
     wzrd->setPlugin(this);
     wzrd->exec();
     delete wzrd;

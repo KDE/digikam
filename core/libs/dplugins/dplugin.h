@@ -64,12 +64,6 @@ public:
     ~DPlugin() override;
 
     /**
-     * Manage the info interface instance set by plugin loader.
-     */
-    void setInfoIface(DInfoInterface* const iface);
-    DInfoInterface* infoIface() const;
-
-    /**
      * Return all plugin actions registered in setup() method with addAction() for a given parent.
      */
     QList<DPluginAction*> actions(QObject* const parent) const;
@@ -159,6 +153,11 @@ public:
 protected:
 
     void addAction(DPluginAction* const ac);
+
+    /**
+     * Return the info interface instance for the given action.
+     */
+    DInfoInterface* infoIface(QObject* const ac) const;
 
 private:
 

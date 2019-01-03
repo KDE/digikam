@@ -49,6 +49,10 @@ public:
     explicit ShowFoto(const QList<QUrl>& urlList);
     ~ShowFoto();
 
+public:
+
+    DInfoInterface* infoIface(DPluginAction* const ac);
+
     virtual void show();
 
 private:

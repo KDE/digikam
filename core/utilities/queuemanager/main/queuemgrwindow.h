@@ -75,6 +75,10 @@ public:
 
     bool queryClose();
 
+public:
+
+    DInfoInterface* infoIface(DPluginAction* const) { return 0; };
+
 Q_SIGNALS:
 
     void signalWindowHasMoved();
