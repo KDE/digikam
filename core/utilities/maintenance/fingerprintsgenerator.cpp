@@ -27,6 +27,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QString>
 #include <QIcon>
 
@@ -105,6 +106,8 @@ void FingerPrintsGenerator::slotStart()
 {
     MaintenanceTool::slotStart();
 
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     if (d->albumList.isEmpty())
     {
         d->albumList = AlbumManager::instance()->allPAlbums();
@@ -152,6 +155,8 @@ void FingerPrintsGenerator::slotStart()
             d->allPicturesPath += aPaths;
         }
     }
+
+    QApplication::restoreOverrideCursor();
 
     if (d->allPicturesPath.isEmpty())
     {
