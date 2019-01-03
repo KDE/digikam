@@ -70,22 +70,27 @@ public:
     DInfoInterface* infoIface() const;
 
     /**
-     * Return all plugin actions registered in setup() method with addAction().
+     * Return all plugin actions registered in setup() method with addAction() for a given parent.
      */
-    QList<DPluginAction*> actions() const;
+    QList<DPluginAction*> actions(QObject* const parent) const;
 
     /**
-     * Return a plugin action instance found by name in plugin action list.
+     * Return the count of action registered to all parents.
      */
-    DPluginAction* findActionByName(const QString& name) const;
+    int count() const;
 
     /**
-     * Return a list of plugin categories as strings.
+     * Return a plugin action instance found by name in plugin action list for a given parent.
+     */
+    DPluginAction* findActionByName(const QString& name, QObject* const parent) const;
+
+    /**
+     * Return a list of categories as strings registered in this plugin.
      */
     QStringList pluginCategories() const;
 
     /**
-     * Return a list of plugin authors as strings.
+     * Return a list of authors as strings registered in this plugin.
      */
     QStringList pluginAuthors() const;
 
@@ -110,11 +115,11 @@ public:
 public:
 
     /**
-     * Plugin factory method to create all internal actions.
+     * Plugin factory method to create all internal actions for a given parent windows list.
      * To retrieve all plugin actions, use actions() public methods.
      * To register a new plugin action in this method, use addAction() protected method.
      */
-    virtual void setup() = 0;
+    virtual void setup(const QList<QObject*>& parents) = 0;
 
     /**
      * @brief Returns the user-visible name of the plugin.

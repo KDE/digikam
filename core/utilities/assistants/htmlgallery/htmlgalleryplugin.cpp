@@ -86,19 +86,22 @@ QList<DPluginAuthor> HtmlGalleryPlugin::authors() const
             ;
 }
 
-void HtmlGalleryPlugin::setup()
+void HtmlGalleryPlugin::setup(const QList<QObject*>& parents)
 {
-    DPluginAction* const ac = new DPluginAction(this);
-    ac->setIcon(QIcon::fromTheme(QLatin1String("text-html")));
-    ac->setText(i18nc("@action", "Create Html gallery..."));
-    ac->setActionName(QLatin1String("htmlgallery"));
-    ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_H);
-    ac->setActionCategory(DPluginAction::GenericTool);
+    foreach (QObject* const p, parents)
+    {
+        DPluginAction* const ac = new DPluginAction(p);
+        ac->setIcon(QIcon::fromTheme(QLatin1String("text-html")));
+        ac->setText(i18nc("@action", "Create Html gallery..."));
+        ac->setActionName(QLatin1String("htmlgallery"));
+        ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_H);
+        ac->setActionCategory(DPluginAction::GenericTool);
 
-    connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotHtmlGallery()));
+        connect(ac, SIGNAL(triggered(bool)),
+                this, SLOT(slotHtmlGallery()));
 
-    addAction(ac);
+        addAction(ac);
+    }
 }
 
 void HtmlGalleryPlugin::slotHtmlGallery()

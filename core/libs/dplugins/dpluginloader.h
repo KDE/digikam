@@ -72,6 +72,12 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
     DInfoInterface* infoIface() const;
 
     /**
+     * Manage the parent instances to use with plugin at init.
+     */
+    void setPluginParents(const QList<QObject*>& parents);
+    QList<QObject*> pluginParents() const;
+
+    /**
      * Init plugin loader. Call this method to parse and load relevant plugins installed on your system.
      */
     void init();
@@ -82,27 +88,27 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
     QList<DPlugin*> allPlugins() const;
 
     /**
-     * @brief Returns a list of plugin actions set for a kind of category.
+     * @brief Returns a list of plugin actions set as category for a given parent.
      *        If no plugin have found in this category, this returns an empty list.
      */
-    QList<DPluginAction*> pluginsActions(DPluginAction::ActionCategory cat) const;
+    QList<DPluginAction*> pluginsActions(DPluginAction::ActionCategory cat, QObject* const parent) const;
 
     /**
-     * @brief Returns the plugin actions corresponding to a plugin id string.
+     * @brief Returns the plugin actions corresponding to a plugin id string for a given parent.
      *        If not found, this returns an empty list.
      */
-    QList<DPluginAction*> pluginActions(const QString& pluginId) const;
+    QList<DPluginAction*> pluginActions(const QString& pluginId, QObject* const parent) const;
 
     /**
-     * @brief Returns the plugin action corresponding to a action name.
+     * @brief Returns the plugin action corresponding to a action name for a given parent.
      *        If not found, this returns a null pointer.
      */
-    DPluginAction* pluginAction(const QString& actionName) const;
+    DPluginAction* pluginAction(const QString& actionName, QObject* const parent) const;
 
     /**
-     * @brief Returns all xml sections as string of plugin actions set for a kind of category.
+     * @brief Returns all xml sections as string of plugin actions set with a kind of category for a given parent.
      */
-    QString pluginXmlSections(DPluginAction::ActionCategory cat) const;
+    QString pluginXmlSections(DPluginAction::ActionCategory cat, QObject* const parent) const;
 
     /**
      * @brief appendPluginToBlackList Prevent that a plugin is loaded from the given filename

@@ -59,7 +59,7 @@ public:
         setText(1, list.join(QString::fromLatin1(", ")));
 
         // Number of actions
-        setText(2, QString::number(m_tool->actions().count()));
+        setText(2, QString::number(m_tool->count()));
 
         // Description
         setText(3, m_tool->description());

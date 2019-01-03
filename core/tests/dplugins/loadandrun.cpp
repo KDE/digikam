@@ -54,6 +54,7 @@ int main(int argc, char* argv[])
     parser.process(app);
 
     DPluginLoader* const dpl = DPluginLoader::instance();
+    dpl->setPluginParents(QList<QObject*>() << qApp);
     dpl->init();
     bool found = false;
 
@@ -79,7 +80,7 @@ int main(int argc, char* argv[])
 
             QString actions;
 
-            foreach (DPluginAction* const ac, p->actions())
+            foreach (DPluginAction* const ac, p->actions(qApp))
             {
                 actions.append(ac->toString());
                 actions.append(QLatin1String(" ; "));
@@ -113,7 +114,7 @@ int main(int argc, char* argv[])
             if (p->id() == name)
             {
                 found                   = true;
-                DPluginAction* const ac = p->findActionByName(action);
+                DPluginAction* const ac = p->findActionByName(action, qApp);
 
                 if (ac)
                 {

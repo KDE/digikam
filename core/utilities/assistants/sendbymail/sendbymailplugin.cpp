@@ -85,18 +85,21 @@ QList<DPluginAuthor> SendByMailPlugin::authors() const
             ;
 }
 
-void SendByMailPlugin::setup()
+void SendByMailPlugin::setup(const QList<QObject*>& parents)
 {
-    DPluginAction* const ac = new DPluginAction(this);
-    ac->setIcon(QIcon::fromTheme(QLatin1String("mail-send")));
-    ac->setText(i18nc("@action", "Send by Mail..."));
-    ac->setActionName(QLatin1String("sendbymail"));
-    ac->setActionCategory(DPluginAction::GenericTool);
+    foreach (QObject* const p, parents)
+    {
+        DPluginAction* const ac = new DPluginAction(p);
+        ac->setIcon(QIcon::fromTheme(QLatin1String("mail-send")));
+        ac->setText(i18nc("@action", "Send by Mail..."));
+        ac->setActionName(QLatin1String("sendbymail"));
+        ac->setActionCategory(DPluginAction::GenericTool);
 
-    connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotSendByMail()));
+        connect(ac, SIGNAL(triggered(bool)),
+                this, SLOT(slotSendByMail()));
 
-    addAction(ac);
+        addAction(ac);
+    }
 }
 
 void SendByMailPlugin::slotSendByMail()

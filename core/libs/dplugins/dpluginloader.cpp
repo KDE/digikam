@@ -72,6 +72,16 @@ DInfoInterface* DPluginLoader::infoIface() const
     return d->iface;
 }
 
+void DPluginLoader::setPluginParents(const QList<QObject*>& parents)
+{
+    d->parents = parents;
+}
+
+QList<QObject*> DPluginLoader::pluginParents() const
+{
+    return d->parents;
+}
+
 void DPluginLoader::init()
 {
     d->loadPlugins();
@@ -87,15 +97,15 @@ QList<DPlugin*> DPluginLoader::allPlugins() const
     return d->allPlugins;
 }
 
-QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategory cat) const
+QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategory cat, QObject* const parent) const
 {
     QList<DPluginAction*> list;
 
     foreach (DPlugin* const p, allPlugins())
     {
-        foreach (DPluginAction* const ac, p->actions())
+        foreach (DPluginAction* const ac, p->actions(parent))
         {
-            if (ac->actionCategory() == cat)
+            if (ac && (ac->actionCategory() == cat))
             {
                 list << ac;
             }
@@ -105,7 +115,7 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategor
      return list;
 }
 
-QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginId) const
+QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginId, QObject* const parent) const
 {
     QList<DPluginAction*> list;
 
@@ -113,7 +123,11 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginId) cons
     {
         if (p->id() == pluginId)
         {
-            list << p->actions();
+            foreach (DPluginAction* const ac, p->actions(parent))
+            {
+                list << ac;
+            }
+
             break;
         }
     }
@@ -121,13 +135,13 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginId) cons
     return list;
 }
 
-DPluginAction* DPluginLoader::pluginAction(const QString& actionName) const
+DPluginAction* DPluginLoader::pluginAction(const QString& actionName, QObject* const parent) const
 {
     foreach (DPlugin* const p, allPlugins())
     {
-        foreach (DPluginAction* const ac, p->actions())
+        foreach (DPluginAction* const ac, p->actions(parent))
         {
-            if (ac->actionName() == actionName)
+            if (ac && (ac->actionName() == actionName))
             {
                 return ac;
             }
@@ -137,11 +151,11 @@ DPluginAction* DPluginLoader::pluginAction(const QString& actionName) const
      return 0;
 }
 
-QString DPluginLoader::pluginXmlSections(DPluginAction::ActionCategory cat) const
+QString DPluginLoader::pluginXmlSections(DPluginAction::ActionCategory cat, QObject* const parent) const
 {
     QString xml;
 
-    foreach (DPluginAction* const ac, pluginsActions(cat))
+    foreach (DPluginAction* const ac, pluginsActions(cat, parent))
     {
         xml.append(ac->xmlSection());
     }

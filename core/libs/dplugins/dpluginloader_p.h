@@ -52,6 +52,8 @@ public:
     DInfoInterface* iface;
     QStringList     blacklist;
     QStringList     whitelist;
+
+    QList<QObject*> parents;        // parent windows instance to use with plugin setup.
 };
 
 } // namepace Digikam

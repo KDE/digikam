@@ -90,18 +90,21 @@ QList<DPluginAuthor> PrintCreatorPlugin::authors() const
             ;
 }
 
-void PrintCreatorPlugin::setup()
+void PrintCreatorPlugin::setup(const QList<QObject*>& parents)
 {
-    DPluginAction* const ac = new DPluginAction(this);
-    ac->setIcon(QIcon::fromTheme(QLatin1String("document-print")));
-    ac->setText(i18nc("@action", "Print Creator..."));
-    ac->setActionName(QLatin1String("printcreator"));
-    ac->setActionCategory(DPluginAction::GenericTool);
+    foreach (QObject* const p, parents)
+    {
+        DPluginAction* const ac = new DPluginAction(p);
+        ac->setIcon(QIcon::fromTheme(QLatin1String("document-print")));
+        ac->setText(i18nc("@action", "Print Creator..."));
+        ac->setActionName(QLatin1String("printcreator"));
+        ac->setActionCategory(DPluginAction::GenericTool);
 
-    connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotPrintCreator()));
+        connect(ac, SIGNAL(triggered(bool)),
+                this, SLOT(slotPrintCreator()));
 
-    addAction(ac);
+        addAction(ac);
+    }
 }
 
 void PrintCreatorPlugin::slotPrintCreator()

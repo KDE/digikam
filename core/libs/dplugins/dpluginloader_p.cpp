@@ -106,7 +106,7 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* con
 
             plugin->setShouldLoaded(group.readEntry(plugin->id(), false));
             plugin->setInfoIface(iface);
-            plugin->setup();
+            plugin->setup(parents);
 
             list << plugin;
         }

@@ -76,21 +76,58 @@ DInfoInterface* DPlugin::infoIface() const
     return d->iface;
 }
 
+int DPlugin::count() const
+{
+    int count       = 0;
+    QObject* parent = 0;
+
+    foreach (DPluginAction* const ac, d->actions)
+    {
+        if (ac)
+        {
+            // NOTE: we will return the count of actions registered with the same parents,
+            //       as each parent registered the same list of actions through setup().
+
+            if (!count)
+            {
+                parent = ac->parent(),
+                ++count;
+            }
+            else if (ac->parent() == parent)
+            {
+                ++count;
+            }
+        }
+    }
+
+    return count;
+}
+
 QIcon DPlugin::icon() const
 {
     return qApp->windowIcon();
 }
 
-QList<DPluginAction*> DPlugin::actions() const
+QList<DPluginAction*> DPlugin::actions(QObject* const parent) const
 {
-    return d->actions;
+    QList<DPluginAction*> list;
+
+    foreach (DPluginAction* const ac, d->actions)
+    {
+        if (ac && (ac->parent() == parent))
+        {
+            list << ac;
+        }
+    }
+
+    return list;
 }
 
-DPluginAction* DPlugin::findActionByName(const QString& name) const
+DPluginAction* DPlugin::findActionByName(const QString& name, QObject* const parent) const
 {
-    foreach (DPluginAction* const ac, actions())
+    foreach (DPluginAction* const ac, actions(parent))
     {
-        if (ac->actionName() == name)
+        if (ac && (ac->actionName() == name))
         {
             return ac;
         }
@@ -108,7 +145,7 @@ QStringList DPlugin::pluginCategories() const
 {
     QStringList list;
 
-    foreach (DPluginAction* const ac, actions())
+    foreach (DPluginAction* const ac, d->actions)
     {
         QString cat = ac->actionCategoryToString();
 
