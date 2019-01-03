@@ -29,7 +29,6 @@
 // Qt includes
 
 #include <QCoreApplication>
-#include <QReadWriteLock>
 #include <QDir>
 #include <QThread>
 #include <QCryptographicHash>
@@ -247,7 +246,6 @@ public:
     bool                          changingDB;
     QStringList                   udisToWatch;
     bool                          watchEnabled;
-    QReadWriteLock                lock;
     CollectionManager*            s;
 };
 
