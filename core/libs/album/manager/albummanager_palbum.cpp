@@ -465,17 +465,17 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     d->albumWatch->removeWatchedPAlbums(album);
 
     QString oldAlbumPath = album->albumPath();
-    QUrl oldUrl          = album->fileUrl();
+    QString oldName      = album->title();
     album->setTitle(newName);
     album->m_path        = newName;
-    QUrl newUrl          = album->fileUrl();
     QString newAlbumPath = album->albumPath();
 
     // We use a private shortcut around collection scanner noticing our changes,
     // we rename them directly. Faster.
     ScanController::instance()->suspendCollectionScan();
 
-    bool ret = QDir().rename(oldUrl.toLocalFile(), newUrl.toLocalFile());
+    QDir dir(album->albumRootPath() + album->m_parentPath);
+    bool ret = dir.rename(oldName, newName);
 
     if (!ret)
     {
