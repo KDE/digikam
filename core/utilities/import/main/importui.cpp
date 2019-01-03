@@ -359,6 +359,9 @@ void ImportUI::setupActions()
     d->downloadAction->addAction(d->downloadNewAction);
     d->cameraActions->addAction(d->downloadNewAction);
 
+    connect(d->downloadAction->menuAction(), SIGNAL(triggered()),
+            d->downloadNewAction, SLOT(trigger()));
+
     d->downloadSelectedAction = new QAction(QIcon::fromTheme(QLatin1String("document-save")), i18nc("@action", "Download Selected"), this);
     connect(d->downloadSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadSelected()));
     ac->addAction(QLatin1String("importui_imagedownloadselected"), d->downloadSelectedAction);
