@@ -36,13 +36,6 @@ void ShowFoto::slotPanorama()
 #endif
 }
 
-void ShowFoto::slotExpoBlending()
-{
-    ExpoBlendingManager::instance()->checkBinaries();
-    ExpoBlendingManager::instance()->setItemsList(d->thumbBar->urls());
-    ExpoBlendingManager::instance()->run();
-}
-
 void ShowFoto::slotMediaServer()
 {
     QPointer<DMediaServerDlg> w = new DMediaServerDlg(this, new DMetaInfoIface(this, d->thumbBar->urls()));

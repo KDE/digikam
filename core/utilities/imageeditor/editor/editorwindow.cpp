@@ -818,7 +818,6 @@ void EditorWindow::setupStandardActions()
     createGeolocationEditAction();
     createTimeAdjustAction();
     createPanoramaAction();
-    createExpoBlendingAction();
     createMediaServerAction();
     createExportActions();
     createImportActions();

@@ -36,13 +36,6 @@ void ImageWindow::slotPanorama()
 #endif
 }
 
-void ImageWindow::slotExpoBlending()
-{
-    ExpoBlendingManager::instance()->checkBinaries();
-    ExpoBlendingManager::instance()->setItemsList(d->thumbBar->allUrls());
-    ExpoBlendingManager::instance()->run();
-}
-
 void ImageWindow::slotMediaServer()
 {
     DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);

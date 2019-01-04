@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include "dplugin.h"
 #include "expoblendingactions.h"
 #include "digikam_export.h"
 
@@ -59,6 +60,8 @@ public:
 
     void setItemsList(const QList<QUrl>& urls);
     QList<QUrl>& itemsList() const;
+
+    void setPlugin(DPlugin* const tool);
 
     void setPreProcessedMap(const ExpoBlendingItemUrlsMap& urls);
     ExpoBlendingItemUrlsMap& preProcessedMap() const;

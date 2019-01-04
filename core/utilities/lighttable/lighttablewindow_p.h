@@ -85,8 +85,6 @@
 #include "thumbnailloadthread.h"
 #include "dexpanderbox.h"
 #include "dbinfoiface.h"
-#include "calwizard.h"
-#include "expoblendingmanager.h"
 #include "dmediaserverdlg.h"
 #include "timeadjustdialog.h"
 #include "wsstarter.h"
@@ -97,10 +95,6 @@
 
 #ifdef HAVE_PANORAMA
 #   include "panomanager.h"
-#endif
-
-#ifdef HAVE_MEDIAPLAYER
-#   include "vidslidewizard.h"
 #endif
 
 namespace Digikam

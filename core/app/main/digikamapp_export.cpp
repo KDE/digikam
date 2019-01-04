@@ -26,12 +26,6 @@
 
 namespace Digikam
 {
-void DigikamApp::slotExpoBlending()
-{
-    ExpoBlendingManager::instance()->checkBinaries();
-    ExpoBlendingManager::instance()->setItemsList(view()->selectedUrls(ApplicationSettings::Tools));
-    ExpoBlendingManager::instance()->run();
-}
 
 void DigikamApp::slotPanorama()
 {

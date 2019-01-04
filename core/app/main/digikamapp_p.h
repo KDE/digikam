@@ -123,8 +123,6 @@
 #include "itemsortsettings.h"
 #include "metadatahubmngr.h"
 #include "metadataedit.h"
-#include "expoblendingmanager.h"
-#include "calwizard.h"
 #include "dfiledialog.h"
 #include "dmediaservermngr.h"
 #include "dmediaserverdlg.h"
@@ -142,10 +140,6 @@
 
 #ifdef HAVE_PANORAMA
 #   include "panomanager.h"
-#endif
-
-#ifdef HAVE_MEDIAPLAYER
-#   include "vidslidewizard.h"
 #endif
 
 #ifdef HAVE_KFILEMETADATA

@@ -34,5 +34,7 @@ set(libexpoblending_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/blendingdlg/expoblendingdlg.cpp
 )
 
-
-add_library(expoblending_src OBJECT ${libexpoblending_SRCS})
+DIGIKAM_ADD_PLUGIN(ExpoBlendingPlugin
+                   ${CMAKE_CURRENT_SOURCE_DIR}/expoblendingplugin.cpp
+                   ${libexpoblending_SRCS}
+)

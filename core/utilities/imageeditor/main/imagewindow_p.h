@@ -128,8 +128,6 @@
 #include "undostate.h"
 #include "dexpanderbox.h"
 #include "dbinfoiface.h"
-#include "calwizard.h"
-#include "expoblendingmanager.h"
 #include "dmediaserverdlg.h"
 #include "facetagseditor.h"
 #include "timeadjustdialog.h"
@@ -141,10 +139,6 @@
 
 #ifdef HAVE_PANORAMA
 #   include "panomanager.h"
-#endif
-
-#ifdef HAVE_MEDIAPLAYER
-#   include "vidslidewizard.h"
 #endif
 
 namespace Digikam

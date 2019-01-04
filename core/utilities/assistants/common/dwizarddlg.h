@@ -46,18 +46,18 @@ public:
     ~DWizardDlg();
 
     void setPlugin(DPlugin* const tool);
-    
+
 private:
 
     void restoreDialogSize();
     void saveDialogSize();
-    
+
 private Q_SLOTS:
 
     void slotAboutPlugin();
 
 private:
-    
+
     DPlugin* m_tool;
 };
 

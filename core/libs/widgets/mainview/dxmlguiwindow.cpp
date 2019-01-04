@@ -290,6 +290,9 @@ void DXmlGuiWindow::registerPluginsActions()
     
     m_calendarAction = DPluginLoader::instance()->pluginAction(QLatin1String("calendar"), this);
     actionCollection()->addActions(QList<QAction*>() << m_calendarAction);
+
+    m_expoBlendingAction = DPluginLoader::instance()->pluginAction(QLatin1String("expoblending"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_expoBlendingAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -512,18 +515,6 @@ void DXmlGuiWindow::createPresentationAction()
 
     connect(m_presentationAction, SIGNAL(triggered()),
             this, SLOT(slotPresentation()));
-}
-
-void DXmlGuiWindow::createExpoBlendingAction()
-{
-    m_expoBlendingAction = new QAction(QIcon::fromTheme(QLatin1String("expoblending")),
-                                       i18nc("@action", "Create Stacked Images..."),
-                                       this);
-
-    actionCollection()->addAction(QLatin1String("expoblending"), m_expoBlendingAction);
-
-    connect(m_expoBlendingAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExpoBlending()));
 }
 
 void DXmlGuiWindow::createPanoramaAction()

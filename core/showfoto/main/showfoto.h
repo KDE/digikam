@@ -166,7 +166,6 @@ private:
 
 private Q_SLOTS:
 
-    void slotExpoBlending();
     void slotPanorama();
     void slotMediaServer();
     void slotExportTool();

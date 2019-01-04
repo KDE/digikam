@@ -229,11 +229,6 @@ DigikamApp::~DigikamApp()
     }
 #endif
 
-    if (ExpoBlendingManager::isCreated())
-    {
-        delete ExpoBlendingManager::internalPtr;
-    }
-
 #ifdef HAVE_PANORAMA
     if (PanoManager::isCreated())
     {

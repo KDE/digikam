@@ -43,7 +43,6 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:slideshow_src>
             $<TARGET_OBJECTS:imageeditor_src>
             $<TARGET_OBJECTS:metadataedit_src>
-            $<TARGET_OBJECTS:expoblending_src>
             $<TARGET_OBJECTS:assistants_src>
             $<TARGET_OBJECTS:presentation_src>
             $<TARGET_OBJECTS:digikamlibtransitionmngr_src>

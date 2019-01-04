@@ -40,6 +40,7 @@ public:
 
     explicit Private()
       : thread(0),
+        plugin(0),
         wizard(0),
         dlg(0)
     {
@@ -50,6 +51,8 @@ public:
     ExpoBlendingItemUrlsMap preProcessedUrlsMap;
 
     ExpoBlendingThread*     thread;
+
+    DPlugin*                plugin;
 
     AlignBinary             alignBinary;
     EnfuseBinary            enfuseBinary;
@@ -133,6 +136,11 @@ QList<QUrl>& ExpoBlendingManager::itemsList() const
     return d->inputUrls;
 }
 
+void ExpoBlendingManager::setPlugin(DPlugin* const plugin)
+{
+    d->plugin = plugin;
+}
+
 void ExpoBlendingManager::setPreProcessedMap(const ExpoBlendingItemUrlsMap& urls)
 {
     d->preProcessedUrlsMap = urls;
@@ -179,6 +187,7 @@ void ExpoBlendingManager::startWizard()
         d->dlg = 0;
 
         d->wizard = new ExpoBlendingWizard(this);
+        d->wizard->setPlugin(d->plugin);
 
         connect(d->wizard, SIGNAL(accepted()),
                 this, SLOT(slotStartDialog()));

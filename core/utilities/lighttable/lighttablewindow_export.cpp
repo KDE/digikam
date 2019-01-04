@@ -36,13 +36,6 @@ void LightTableWindow::slotPanorama()
 #endif
 }
 
-void LightTableWindow::slotExpoBlending()
-{
-    ExpoBlendingManager::instance()->checkBinaries();
-    ExpoBlendingManager::instance()->setItemsList(d->thumbView->allUrls());
-    ExpoBlendingManager::instance()->run();
-}
-
 void LightTableWindow::slotMediaServer()
 {
     DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);

@@ -135,10 +135,6 @@ public:
      */
     void createPresentationAction();
 
-    /** Create Exposure Blending tool action.
-     */
-    void createExpoBlendingAction();
-
     /** Create Panorama tool action.
      */
     void createPanoramaAction();
@@ -345,9 +341,6 @@ private Q_SLOTS:
 
     // Called by Panorama tool.
     virtual void slotPanorama()                {};
-
-    // Called by Exposure Blending tool.
-    virtual void slotExpoBlending()            {};
 
     // Called by Media Server tool.
     virtual void slotMediaServer()             {};

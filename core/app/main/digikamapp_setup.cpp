@@ -781,7 +781,6 @@ void DigikamApp::setupActions()
     connect(d->maintenanceAction, SIGNAL(triggered()), this, SLOT(slotMaintenance()));
     ac->addAction(QLatin1String("maintenance"), d->maintenanceAction);
 
-    createExpoBlendingAction();
     createPanoramaAction();
     createMediaServerAction();
 

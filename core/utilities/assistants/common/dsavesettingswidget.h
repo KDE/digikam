@@ -33,12 +33,13 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "filesaveconflictbox.h"
 
 namespace Digikam
 {
 
-class DSaveSettingsWidget : public QWidget
+class DIGIKAM_EXPORT DSaveSettingsWidget : public QWidget
 {
     Q_OBJECT
 

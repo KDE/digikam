@@ -33,10 +33,14 @@
 #include <QImage>
 #include <QUrl>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class DPreviewManager : public QStackedWidget
+class DIGIKAM_EXPORT DPreviewManager : public QStackedWidget
 {
     Q_OBJECT
 

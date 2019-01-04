@@ -33,6 +33,10 @@
 #include <QString>
 #include <QColor>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class QResizeEvent;
 class QWheelEvent;
 class QMouseEvent;
@@ -41,7 +45,7 @@ class QEvent;
 namespace Digikam
 {
 
-class DSelectionItem : public QGraphicsItem
+class DIGIKAM_EXPORT DSelectionItem : public QGraphicsItem
 {
 public:
 
@@ -95,7 +99,7 @@ private:
 
 // -----------------------------------------------------------------------------------------
 
-class DPreviewImage : public QGraphicsView
+class DIGIKAM_EXPORT DPreviewImage : public QGraphicsView
 {
     Q_OBJECT
 
