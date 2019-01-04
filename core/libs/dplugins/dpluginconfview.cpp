@@ -157,6 +157,7 @@ void DPluginConfView::apply()
         {
             bool load = (item->checkState(0) == Qt::Checked);
             group.writeEntry(item->m_tool->id(), load);
+            item->m_tool->setVisibleActions(load);
         }
 
         config->sync();

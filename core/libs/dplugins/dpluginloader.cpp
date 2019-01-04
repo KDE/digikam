@@ -162,6 +162,7 @@ void DPluginLoader::registerPlugins(QObject* const parent)
     foreach (DPlugin* const plugin, d->allPlugins)
     {
         plugin->setup(parent);
+        plugin->setVisibleActions(plugin->shouldLoaded());
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Actions from plugin named" << plugin->name()
                                      << "registered to" << parent;

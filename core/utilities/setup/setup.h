@@ -58,6 +58,7 @@ public:
         SlideshowPage,
         ImageQualityPage,
         CameraPage,
+        PluginsPage,
         MiscellaneousPage,
         SetupPageEnumLast
     };

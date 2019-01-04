@@ -121,6 +121,17 @@ QIcon DPlugin::icon() const
     return qApp->windowIcon();
 }
 
+void DPlugin::setVisibleActions(bool b)
+{
+    foreach (DPluginAction* const ac, d->actions)
+    {
+        if (ac)
+        {
+            ac->setVisible(b);
+        }
+    }
+}
+
 QList<DPluginAction*> DPlugin::actions(QObject* const parent) const
 {
     QList<DPluginAction*> list;

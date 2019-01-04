@@ -64,6 +64,11 @@ public:
     ~DPlugin() override;
 
     /**
+     * Holds whether the plugin actions can be seen in menus and toolbars.*
+     */
+    void setVisibleActions(bool b);
+
+    /**
      * Return all plugin actions registered in setup() method with addAction() for a given parent.
      */
     QList<DPluginAction*> actions(QObject* const parent) const;

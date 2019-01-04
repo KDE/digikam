@@ -53,6 +53,7 @@
 #include "setupdatabase.h"
 #include "importsettings.h"
 #include "dxmlguiwindow.h"
+#include "dpluginsetup.h"
 
 namespace Digikam
 {
@@ -74,7 +75,7 @@ public:
         page_imagequalitysorter(0),
         page_icc(0),
         page_camera(0),
-
+        page_plugins(0),
         page_misc(0),
         databasePage(0),
         collectionsPage(0),
@@ -88,7 +89,7 @@ public:
         imageQualitySorterPage(0),
         iccPage(0),
         cameraPage(0),
-
+        pluginsPage(0),
         miscPage(0)
     {
     }
@@ -105,6 +106,7 @@ public:
     DConfigDlgWdgItem*       page_imagequalitysorter;
     DConfigDlgWdgItem*       page_icc;
     DConfigDlgWdgItem*       page_camera;
+    DConfigDlgWdgItem*       page_plugins;
     DConfigDlgWdgItem*       page_misc;
     SetupDatabase*           databasePage;
     SetupCollections*        collectionsPage;
@@ -118,6 +120,7 @@ public:
     SetupImageQualitySorter* imageQualitySorterPage;
     SetupICC*                iccPage;
     SetupCamera*             cameraPage;
+    DPluginSetup*            pluginsPage;
     SetupMisc*               miscPage;
 
 public:
@@ -214,11 +217,12 @@ Setup::Setup(QWidget* const parent)
     connect(d->cameraPage, SIGNAL(signalUseFileMetadataChanged(bool)),
             d->tooltipPage, SLOT(slotUseFileMetadataChanged(bool)));
 
-    connect(buttonBox(), SIGNAL(helpRequested()),
-            this, SLOT(slotHelp()));
 
-    connect(buttonBox()->button(QDialogButtonBox::Ok), &QPushButton::clicked,
-            this, &Setup::slotOkClicked);
+    d->pluginsPage  = new DPluginSetup();
+    d->page_plugins = addPage(d->pluginsPage, i18n("Plugins"));
+    d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
+                                    "<i>Set which plugins will be accessible from application</i></qt>"));
+    d->page_plugins->setIcon(QIcon(QLatin1String("preferences-plugin")));
 
     d->miscPage  = new SetupMisc();
     d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
@@ -243,6 +247,12 @@ Setup::Setup(QWidget* const parent)
             scrollArea->setFrameShape(QFrame::NoFrame);
         }
     }
+
+    connect(buttonBox(), SIGNAL(helpRequested()),
+            this, SLOT(slotHelp()));
+
+    connect(buttonBox()->button(QDialogButtonBox::Ok), &QPushButton::clicked,
+            this, &Setup::slotOkClicked);
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("Setup Dialog"));
@@ -406,6 +416,7 @@ void Setup::slotOkClicked()
     d->slideshowPage->applySettings();
     d->imageQualitySorterPage->applySettings();
     d->iccPage->applySettings();
+    d->pluginsPage->applySettings();
     d->miscPage->applySettings();
 
     ApplicationSettings::instance()->emitSetupChanged();
@@ -517,6 +528,11 @@ Setup::Page Setup::activePageIndex() const
         return CameraPage;
     }
 
+    if (cur == d->page_plugins)
+    {
+        return PluginsPage;
+    }
+
     if (cur == d->page_misc)
     {
         return MiscellaneousPage;
@@ -564,6 +580,9 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
 
         case Setup::CameraPage:
             return page_camera;
+
+        case Setup::PluginsPage:
+            return page_plugins;
 
         case Setup::MiscellaneousPage:
             return page_misc;
