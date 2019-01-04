@@ -91,10 +91,14 @@ DPluginAboutDlg::DPluginAboutDlg(DPlugin* const tool, QWidget* const parent)
 
     foreach (const DPluginAuthor& auth, tool->authors())
     {
-        alist += auth.name  + QLatin1String("\n    ") +
-                 auth.email + QLatin1String("\n    ") +
-                 auth.years + QLatin1String("\n    ") +
-                 auth.roles + QLatin1String("\n\n");
+        alist += QString::fromUtf8("<b>%1</b><ul>"
+                                   "<li><i>%2</i></li>"
+                                   "<li>%3</li>"
+                                   "<li>%4</li></ul><br/>")
+                 .arg(auth.name)
+                 .arg(auth.email)
+                 .arg(auth.years)
+                 .arg(auth.roles);
     }
 
     authors->setText(alist);

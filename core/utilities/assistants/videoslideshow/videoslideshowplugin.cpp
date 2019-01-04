@@ -91,7 +91,7 @@ void VideoSlideShowPlugin::setup(QObject* const parent)
     ac->setActionCategory(DPluginAction::GenericTool);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotVideoSlideshow()));
+            this, SLOT(slotVideoSlideShow()));
 
     addAction(ac);
 }
