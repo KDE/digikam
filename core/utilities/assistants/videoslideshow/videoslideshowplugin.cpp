@@ -47,9 +47,9 @@ QString VideoSlideShowPlugin::name() const
     return i18n("Video Slideshow");
 }
 
-QString VideoSlideShowPlugin::id() const
+QString VideoSlideShowPlugin::iid() const
 {
-    return QLatin1String("VideoSlideShow");
+    return QLatin1String(DPLUGIN_IID);
 }
 
 QIcon VideoSlideShowPlugin::icon() const
@@ -66,7 +66,7 @@ QString VideoSlideShowPlugin::details() const
 {
     return i18n("<p>This tool permit to back-process image as frame to create video slide-show.</p>"
                 "<p>Items to process can be selected one by one or by group through a selection of albums.</p>"
-                "<p>Different visual effects can be apllied to images to make transitions while to render target video.</p>");
+                "<p>Different visual effects can be applied to images to make transitions while to render target video.</p>");
 }
 
 QList<DPluginAuthor> VideoSlideShowPlugin::authors() const

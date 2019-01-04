@@ -27,13 +27,15 @@
 
 #include "dplugin.h"
 
+#define DPLUGIN_IID "org.kde.digikam.SendByMail"
+
 namespace Digikam
 {
 
 class SendByMailPlugin : public DPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.kde.digikam.SendByMail")
+    Q_PLUGIN_METADATA(IID DPLUGIN_IID)
     Q_INTERFACES(Digikam::DPlugin)
 
 public:
@@ -41,7 +43,7 @@ public:
     explicit SendByMailPlugin(QObject* const parent = 0);
 
     QString name()                 const override;
-    QString id()                   const override;
+    QString iid()                  const override;
     QIcon   icon()                 const override;
     QString details()              const override;
     QString description()          const override;

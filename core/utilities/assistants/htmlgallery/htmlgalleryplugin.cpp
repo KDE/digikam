@@ -47,9 +47,9 @@ QString HtmlGalleryPlugin::name() const
     return i18n("Html Gallery");
 }
 
-QString HtmlGalleryPlugin::id() const
+QString HtmlGalleryPlugin::iid() const
 {
-    return QLatin1String("HtmlGallery");
+    return QLatin1String(DPLUGIN_IID);
 }
 
 QIcon HtmlGalleryPlugin::icon() const

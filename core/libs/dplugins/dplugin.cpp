@@ -162,7 +162,7 @@ DPluginAction* DPlugin::findActionByName(const QString& name, QObject* const par
 
 void DPlugin::addAction(DPluginAction* const ac)
 {
-    ac->setProperty("DPluginId", id());
+    ac->setProperty("DPluginIId", iid());
     d->actions.append(ac);
 }
 

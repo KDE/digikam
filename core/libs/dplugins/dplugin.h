@@ -130,9 +130,10 @@ public:
     virtual QString name() const = 0;
 
     /**
-     * @brief Returns the unique identification string of the plugin.
+     * @brief Returns the unique internal identification string of the plugin.
+     *        Must be formated as "org.kde.digikam._NAME_OF_PLUGIN_".
      */
-    virtual QString id() const = 0;
+    virtual QString iid() const = 0;
 
     /**
      * @brief Returns a short description about the plugin.

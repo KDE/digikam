@@ -97,41 +97,41 @@ QString DPluginAction::actionCategoryToString() const
     switch (actionCategory())
     {
         case GenericExport:
-            return QLatin1String("GenericExport");
+            return QLatin1String("Generic/Export");
         case GenericImport:
-            return QLatin1String("GenericImport");
+            return QLatin1String("Generic/Import");
         case GenericTool:
-            return QLatin1String("GenericTool");
+            return QLatin1String("Generic/Tool");
         case GenericMetadata:
-            return QLatin1String("GenericMetadata");
+            return QLatin1String("Generic/Metadata");
 
         case EditorColor:
-            return QLatin1String("EditorColor");
+            return QLatin1String("Editor/Color");
         case EditorEnhance:
-            return QLatin1String("EditorEnhance");
+            return QLatin1String("Editor/Enhance");
         case EditorTransform:
-            return QLatin1String("EditorTransform");
+            return QLatin1String("Editor/Transform");
         case EditorDecorate:
-            return QLatin1String("EditorDecorate");
+            return QLatin1String("Editor/Decorate");
         case EditorEffects:
-            return QLatin1String("EditorEffects");
+            return QLatin1String("Editor/Effects");
 
         case BqmColor:
-            return QLatin1String("BqmColor");
+            return QLatin1String("Bqm/Color");
         case BqmEnhance:
-            return QLatin1String("BqmEnhance");
+            return QLatin1String("Bqm/Enhance");
         case BqmTransform:
-            return QLatin1String("BqmTransform");
+            return QLatin1String("Bqm/Transform");
         case BqmDecorate:
-            return QLatin1String("BqmDecorate");
+            return QLatin1String("Bqm/Decorate");
         case BqmFilters:
-            return QLatin1String("BqmFilters");
+            return QLatin1String("Bqm/Filters");
         case BqmConvert:
-            return QLatin1String("BqmConvert");
+            return QLatin1String("Bqm/Convert");
         case BqmMetadata:
-            return QLatin1String("BqmMetadata");
+            return QLatin1String("Bqm/Metadata");
         case BqmCustom:
-            return QLatin1String("BqmCustom");
+            return QLatin1String("Bqm/Custom");
 
         default:
             break;

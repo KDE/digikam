@@ -87,10 +87,10 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
     QList<DPluginAction*> pluginsActions(DPluginAction::ActionCategory cat, QObject* const parent) const;
 
     /**
-     * @brief Returns the plugin actions corresponding to a plugin id string for a given parent.
+     * @brief Returns the plugin actions corresponding to a plugin internal ID string for a given parent.
      *        If not found, this returns an empty list.
      */
-    QList<DPluginAction*> pluginActions(const QString& pluginId, QObject* const parent) const;
+    QList<DPluginAction*> pluginActions(const QString& pluginIID, QObject* const parent) const;
 
     /**
      * @brief Returns the plugin action corresponding to a action name for a given parent.

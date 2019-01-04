@@ -47,9 +47,9 @@ QString PrintCreatorPlugin::name() const
     return i18n("Print Creator");
 }
 
-QString PrintCreatorPlugin::id() const
+QString PrintCreatorPlugin::iid() const
 {
-    return QLatin1String("PrintCreator");
+    return QLatin1String(DPLUGIN_IID);
 }
 
 QIcon PrintCreatorPlugin::icon() const

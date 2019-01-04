@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
         foreach (DPlugin* const p, dpl->allPlugins())
         {
             qDebug() << "--------------------------------------------";
-            qDebug() << "Id     :" << p->id();
+            qDebug() << "IID    :" << p->iid();
             qDebug() << "Name   :" << p->name();
             qDebug() << "Version:" << p->version();
             qDebug() << "Desc   :" << p->description();
@@ -121,7 +121,7 @@ int main(int argc, char* argv[])
 
         foreach (DPlugin* const p, dpl->allPlugins())
         {
-            if (p->id() == name)
+            if (p->iid() == name)
             {
                 found                   = true;
                 DPluginAction* const ac = p->findActionByName(action, &iface);

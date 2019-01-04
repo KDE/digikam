@@ -47,9 +47,9 @@ QString SendByMailPlugin::name() const
     return i18n("Send by Email");
 }
 
-QString SendByMailPlugin::id() const
+QString SendByMailPlugin::iid() const
 {
-    return QLatin1String("SendByMail");
+    return QLatin1String(DPLUGIN_IID);
 }
 
 QIcon SendByMailPlugin::icon() const

@@ -95,13 +95,13 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategor
      return list;
 }
 
-QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginId, QObject* const parent) const
+QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QObject* const parent) const
 {
     QList<DPluginAction*> list;
 
     foreach (DPlugin* const p, allPlugins())
     {
-        if (p->id() == pluginId)
+        if (p->iid() == pluginIID)
         {
             foreach (DPluginAction* const ac, p->actions(parent))
             {

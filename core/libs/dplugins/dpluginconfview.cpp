@@ -156,7 +156,7 @@ void DPluginConfView::apply()
         foreach (DPluginCheckBox* const item, d->boxes)
         {
             bool load = (item->checkState(0) == Qt::Checked);
-            group.writeEntry(item->m_tool->id(), load);
+            group.writeEntry(item->m_tool->iid(), load);
             item->m_tool->setVisibleActions(load);
             item->m_tool->setShouldLoaded(load);
         }
