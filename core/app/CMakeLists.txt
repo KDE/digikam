@@ -47,7 +47,6 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:assistants_src>
             $<TARGET_OBJECTS:presentation_src>
             $<TARGET_OBJECTS:digikamlibtransitionmngr_src>
-            $<TARGET_OBJECTS:calendar_src>
             $<TARGET_OBJECTS:mediaserver_src>
             $<TARGET_OBJECTS:webservices_src>
             $<TARGET_OBJECTS:timeadjust_src>

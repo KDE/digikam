@@ -287,6 +287,9 @@ void DXmlGuiWindow::registerPluginsActions()
     m_videoslideshowAction = DPluginLoader::instance()->pluginAction(QLatin1String("videoslideshow"), this);
     actionCollection()->addActions(QList<QAction*>() << m_videoslideshowAction);
 #endif
+    
+    m_calendarAction = DPluginLoader::instance()->pluginAction(QLatin1String("calendar"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_calendarAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -534,17 +537,6 @@ void DXmlGuiWindow::createPanoramaAction()
     connect(m_panoramaAction, SIGNAL(triggered(bool)),
             this, SLOT(slotPanorama()));
 #endif
-}
-
-void DXmlGuiWindow::createCalendarAction()
-{
-    m_calendarAction = new QAction(QIcon::fromTheme(QLatin1String("view-calendar")),
-                                    i18nc("@action", "Create Calendar..."),
-                                    this);
-    actionCollection()->addAction(QLatin1String("calendar"), m_calendarAction);
-
-    connect(m_calendarAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotCalendar()));
 }
 
 void DXmlGuiWindow::createMediaServerAction()

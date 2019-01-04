@@ -38,4 +38,7 @@ ki18n_wrap_ui(libcalendar_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/calprogress.ui
 )
 
-add_library(calendar_src OBJECT ${libcalendar_SRCS})
+DIGIKAM_ADD_PLUGIN(CalendarPlugin
+                   ${CMAKE_CURRENT_SOURCE_DIR}/calendarplugin.cpp
+                   ${libcalendar_SRCS}
+)

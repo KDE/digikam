@@ -35,6 +35,7 @@
 
 #include "dwizarddlg.h"
 #include "dwizardpage.h"
+#include "dinfointerface.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -46,8 +47,10 @@ class DIGIKAM_EXPORT CalWizard : public DWizardDlg
 
 public:
 
-    explicit CalWizard(const QList<QUrl>& urlList, QWidget* const parent=0);
+    explicit CalWizard(QWidget* const parent, DInfoInterface* const iface = 0);
     ~CalWizard();
+
+    DInfoInterface* iface()    const;
 
 private:
 

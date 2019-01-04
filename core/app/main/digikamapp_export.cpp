@@ -42,13 +42,6 @@ void DigikamApp::slotPanorama()
 #endif
 }
 
-void DigikamApp::slotCalendar()
-{
-    QPointer<CalWizard> w = new CalWizard(view()->selectedUrls(ApplicationSettings::Tools), this);
-    w->exec();
-    delete w;
-}
-
 void DigikamApp::slotMediaServer()
 {
     DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);

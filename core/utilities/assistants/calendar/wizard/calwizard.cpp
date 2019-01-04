@@ -63,6 +63,7 @@ public:
 
     explicit Private()
     {
+        iface         = 0;
         introPage     = 0;
         cSettings     = 0;
         wTemplate     = 0;
@@ -81,6 +82,7 @@ public:
         printThread   = 0;
     }
 
+    DInfoInterface*  iface;
     CalIntroPage*    introPage;
     CalSettings*     cSettings;
     CalTemplate*     wTemplate;
@@ -106,17 +108,18 @@ public:
     QMap<int, QUrl>  months;
 };
 
-CalWizard::CalWizard(const QList<QUrl>& urlList, QWidget* const parent)
+CalWizard::CalWizard(QWidget* const parent, DInfoInterface* const iface)
     : DWizardDlg(parent, QLatin1String("Calendar Dialog")),
       d(new Private)
 {
     setWindowTitle(i18n("Create Calendar"));
+    d->iface         = iface;
     d->cSettings     = CalSettings::instance(this);
     d->introPage     = new CalIntroPage(this, i18n("Welcome to Calendar Tool"));
 
     // ---------------------------------------------------------------
 
-    d->wTemplate     = new CalTemplate(urlList, this);
+    d->wTemplate     = new CalTemplate(d->iface->currentSelectedItems(), this);
     d->wTemplatePage = new DWizardPage(this, i18n("Create Template for Calendar"));
     d->wTemplatePage->setPageWidget(d->wTemplate);
     d->wTemplatePage->setLeftBottomPix(QIcon::fromTheme(QLatin1String("resource-calendar-insert")));
@@ -182,6 +185,11 @@ CalWizard::~CalWizard()
     delete d;
 }
 
+DInfoInterface* CalWizard::iface() const
+{
+    return d->iface;
+}
+
 void CalWizard::slotPageSelected(int curr)
 {
     DWizardPage* const current = dynamic_cast<DWizardPage*>(page(curr));
@@ -194,7 +202,7 @@ void CalWizard::slotPageSelected(int curr)
         QStringList printList;
         QDate       date = CalSystem().date(d->cSettings->year(), 1, 1);
 
-        for (int i = 1; i <= CalSystem().monthsInYear(date); ++i)
+        for (int i = 1 ; i <= CalSystem().monthsInYear(date) ; ++i)
         {
             month = QLocale().standaloneMonthName(i, QLocale::LongFormat);
             image = d->cSettings->image(i);

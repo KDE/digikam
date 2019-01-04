@@ -203,7 +203,6 @@ private Q_SLOTS:
 
 private Q_SLOTS:
 
-    void slotCalendar();
     void slotExpoBlending();
     void slotPanorama();
     void slotMediaServer();

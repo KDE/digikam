@@ -27,13 +27,6 @@
 namespace Digikam
 {
 
-void LightTableWindow::slotCalendar()
-{
-    QPointer<CalWizard> w = new CalWizard(d->thumbView->allUrls(), this);
-    w->exec();
-    delete w;
-}
-
 void LightTableWindow::slotPanorama()
 {
 #ifdef HAVE_PANORAMA

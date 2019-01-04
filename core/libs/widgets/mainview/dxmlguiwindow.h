@@ -135,10 +135,6 @@ public:
      */
     void createPresentationAction();
 
-    /** Create Calendar tool action.
-     */
-    void createCalendarAction();
-
     /** Create Exposure Blending tool action.
      */
     void createExpoBlendingAction();
@@ -346,9 +342,6 @@ private Q_SLOTS:
 
     // Called by Presentation tool.
     virtual void slotPresentation()            {};
-
-    // Called by Calendar tool.
-    virtual void slotCalendar()                {};
 
     // Called by Panorama tool.
     virtual void slotPanorama()                {};

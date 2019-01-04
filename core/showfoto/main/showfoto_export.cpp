@@ -27,13 +27,6 @@
 namespace ShowFoto
 {
 
-void ShowFoto::slotCalendar()
-{
-    QPointer<CalWizard> w = new CalWizard(d->thumbBar->urls(), this);
-    w->exec();
-    delete w;
-}
-
 void ShowFoto::slotPanorama()
 {
 #ifdef HAVE_PANORAMA
