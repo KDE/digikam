@@ -41,6 +41,7 @@ class SendByMailPlugin : public DPlugin
 public:
 
     explicit SendByMailPlugin(QObject* const parent = 0);
+    ~SendByMailPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;

@@ -42,6 +42,10 @@ VideoSlideShowPlugin::VideoSlideShowPlugin(QObject* const parent)
 {
 }
 
+VideoSlideShowPlugin::~VideoSlideShowPlugin()
+{
+}
+
 QString VideoSlideShowPlugin::name() const
 {
     return i18n("Video Slideshow");
@@ -59,7 +63,7 @@ QIcon VideoSlideShowPlugin::icon() const
 
 QString VideoSlideShowPlugin::description() const
 {
-    return i18n("A Tool to Create Video Slideshow.");
+    return i18n("A tool to create video slideshow from images");
 }
 
 QString VideoSlideShowPlugin::details() const

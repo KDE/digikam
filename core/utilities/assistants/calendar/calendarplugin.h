@@ -41,6 +41,7 @@ class CalendarPlugin : public DPlugin
 public:
 
     explicit CalendarPlugin(QObject* const parent = 0);
+    ~CalendarPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;

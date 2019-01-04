@@ -42,6 +42,10 @@ SendByMailPlugin::SendByMailPlugin(QObject* const parent)
 {
 }
 
+SendByMailPlugin::~SendByMailPlugin()
+{
+}
+
 QString SendByMailPlugin::name() const
 {
     return i18n("Send by Email");
@@ -59,12 +63,12 @@ QIcon SendByMailPlugin::icon() const
 
 QString SendByMailPlugin::description() const
 {
-    return i18n("A Tool to Send Items by Email.");
+    return i18n("A Tool to send images by E-mail");
 }
 
 QString SendByMailPlugin::details() const
 {
-    return i18n("<p>This tool permit to back-process items (as resize) before to send by email.</p>"
+    return i18n("<p>This tool permit to back-process items (as resize) before to send by e-mail.</p>"
                 "<p>Items to process can be selected one by one or by group through a selection of albums.</p>"
                 "<p>Different mail client application can be used to process files on the network.</p>");
 }

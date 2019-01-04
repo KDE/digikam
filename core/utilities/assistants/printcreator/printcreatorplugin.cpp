@@ -42,6 +42,10 @@ PrintCreatorPlugin::PrintCreatorPlugin(QObject* const parent)
 {
 }
 
+PrintCreatorPlugin::~PrintCreatorPlugin()
+{
+}
+
 QString PrintCreatorPlugin::name() const
 {
     return i18n("Print Creator");
@@ -59,7 +63,7 @@ QIcon PrintCreatorPlugin::icon() const
 
 QString PrintCreatorPlugin::description() const
 {
-    return i18n("A Tool to Create Print compositions.");
+    return i18n("A tool to create print composition from images");
 }
 
 QString PrintCreatorPlugin::details() const

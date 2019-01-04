@@ -41,6 +41,7 @@ class PrintCreatorPlugin : public DPlugin
 public:
 
     explicit PrintCreatorPlugin(QObject* const parent = 0);
+    ~PrintCreatorPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;

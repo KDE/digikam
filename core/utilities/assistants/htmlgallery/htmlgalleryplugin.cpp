@@ -42,6 +42,10 @@ HtmlGalleryPlugin::HtmlGalleryPlugin(QObject* const parent)
 {
 }
 
+HtmlGalleryPlugin::~HtmlGalleryPlugin()
+{
+}
+
 QString HtmlGalleryPlugin::name() const
 {
     return i18n("Html Gallery");
@@ -59,7 +63,7 @@ QIcon HtmlGalleryPlugin::icon() const
 
 QString HtmlGalleryPlugin::description() const
 {
-    return i18n("A Tool to generate HTML image galleries");
+    return i18n("A tool to generate HTML gallery from images");
 }
 
 QString HtmlGalleryPlugin::details() const

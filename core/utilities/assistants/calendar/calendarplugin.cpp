@@ -42,6 +42,10 @@ CalendarPlugin::CalendarPlugin(QObject* const parent)
 {
 }
 
+CalendarPlugin::~CalendarPlugin()
+{
+}
+
 QString CalendarPlugin::name() const
 {
     return i18n("Create Calendar");
@@ -59,7 +63,7 @@ QIcon CalendarPlugin::icon() const
 
 QString CalendarPlugin::description() const
 {
-    return i18n("A Tool to Create Calendar.");
+    return i18n("A tool to create calendar from images");
 }
 
 QString CalendarPlugin::details() const
