@@ -105,17 +105,17 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
 
     /**
      * @brief appendPluginToBlackList Prevent that a plugin is loaded from the given filename
-     * @param filename The name of the file (excluding prefix and file extension) to blacklist. E.g.
-     * to ignore "libflickrexport.so" on Linux and "flickrexport.dll" on Windows, pass "flickrexport"
+     * @param filename The name of the file excluding file extension to blacklist. E.g.
+     * to ignore "HtmlGalleryPlugin.so" on Linux and "HtmlGalleryPlugin.dll" on Windows, pass "HtmlGalleryPlugin"
      */
     void appendPluginToBlackList(const QString& filename);
 
     /**
      * @brief appendPluginToWhiteList Add a plugin to the whitelist of tools. If the whitelist is not
      * empty, only whitelisted tools are loaded. If a tool is both whitelisted and blacklisted,
-     * it will not be loaded
-     * @param filename The name of the file (excluding prefix and file extension) to whitelist. E.g.
-     * to ignore "libflickrexport.so" on Linux and "flickrexport.dll" on Windows, pass "flickrexport"
+     * it will not be loaded.
+     * @param filename The name of the file excluding file extension to whitelist. E.g.
+     * to not ignore "HtmlGalleryPlugin.so" on Linux and "HtmlGalleryPlugin.dll" on Windows, pass "HtmlGalleryPlugin"
      */
     void appendPluginToWhiteList(const QString& filename);
 

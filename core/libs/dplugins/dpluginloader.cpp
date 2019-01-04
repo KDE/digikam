@@ -149,12 +149,12 @@ QString DPluginLoader::pluginXmlSections(DPluginAction::ActionCategory cat, QObj
 
 void DPluginLoader::appendPluginToBlackList(const QString& filename)
 {
-    d->blacklist << QLatin1String(DIGIKAM_SHARED_LIBRARY_PREFIX) + filename;
+    d->blacklist << filename;
 }
 
 void DPluginLoader::appendPluginToWhiteList(const QString& filename)
 {
-    d->whitelist << QLatin1String(DIGIKAM_SHARED_LIBRARY_PREFIX) + filename;
+    d->whitelist << filename;
 }
 
 void DPluginLoader::registerPlugins(QObject* const parent)
