@@ -51,15 +51,6 @@ void DigikamApp::slotVideoSlideshow()
 #endif
 }
 
-void DigikamApp::slotHtmlGallery()
-{
-#ifdef HAVE_HTMLGALLERY
-    QPointer<HTMLWizard> w = new HTMLWizard(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
-    w->exec();
-    delete w;
-#endif
-}
-
 void DigikamApp::slotCalendar()
 {
     QPointer<CalWizard> w = new CalWizard(view()->selectedUrls(ApplicationSettings::Tools), this);

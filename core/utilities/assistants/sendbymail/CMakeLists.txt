@@ -33,8 +33,6 @@ set(libsendbymail_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/mailfinalpage.cpp
 )
 
-add_library(sendbymail_src OBJECT ${libsendbymail_SRCS})
-
 DIGIKAM_ADD_PLUGIN(SendByMailPlugin
                    ${CMAKE_CURRENT_SOURCE_DIR}/sendbymailplugin.cpp
                    ${libsendbymail_SRCS}

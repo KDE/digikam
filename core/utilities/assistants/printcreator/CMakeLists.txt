@@ -47,8 +47,6 @@ ki18n_wrap_ui(libprintcreator_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/advprintcustomlayout.ui
 )
 
-add_library(printcreator_src OBJECT ${libprintcreator_SRCS})
-
 DIGIKAM_ADD_PLUGIN(PrintCreatorPlugin
                    ${CMAKE_CURRENT_SOURCE_DIR}/printcreatorplugin.cpp
                    ${libprintcreator_SRCS}

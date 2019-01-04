@@ -79,6 +79,16 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
 
     Digikam::ThemeManager::instance();
 
+    // Load plugins
+
+    if (d->splash)
+    {
+        d->splash->setMessage(i18n("Load Plugins..."));
+    }
+
+    DPluginLoader* const dpl = DPluginLoader::instance();
+    dpl->init();
+
     // -- Build the GUI -----------------------------------
 
     setupUserArea();

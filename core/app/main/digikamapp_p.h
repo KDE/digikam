@@ -125,8 +125,6 @@
 #include "metadataedit.h"
 #include "expoblendingmanager.h"
 #include "calwizard.h"
-#include "mailwizard.h"
-#include "advprintwizard.h"
 #include "dfiledialog.h"
 #include "dmediaservermngr.h"
 #include "dmediaserverdlg.h"
@@ -136,10 +134,6 @@
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
-#endif
-
-#ifdef HAVE_HTMLGALLERY
-#   include "htmlwizard.h"
 #endif
 
 #ifdef HAVE_DBUS

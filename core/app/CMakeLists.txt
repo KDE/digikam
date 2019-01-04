@@ -48,8 +48,6 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:presentation_src>
             $<TARGET_OBJECTS:digikamlibtransitionmngr_src>
             $<TARGET_OBJECTS:calendar_src>
-            $<TARGET_OBJECTS:sendbymail_src>
-            $<TARGET_OBJECTS:printcreator_src>
             $<TARGET_OBJECTS:mediaserver_src>
             $<TARGET_OBJECTS:webservices_src>
             $<TARGET_OBJECTS:timeadjust_src>
@@ -84,13 +82,6 @@ if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
     set(DIGIKAMCORE_OBJECTS
         ${DIGIKAMCORE_OBJECTS}
         $<TARGET_OBJECTS:panorama_src>
-    )
-endif()
-
-if(LibXml2_FOUND AND LibXslt_FOUND)
-    set(DIGIKAMCORE_OBJECTS
-        ${DIGIKAMCORE_OBJECTS}
-        $<TARGET_OBJECTS:htmlgallery_src>
     )
 endif()
 

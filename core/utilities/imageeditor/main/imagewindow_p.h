@@ -130,8 +130,6 @@
 #include "dbinfoiface.h"
 #include "calwizard.h"
 #include "expoblendingmanager.h"
-#include "mailwizard.h"
-#include "advprintwizard.h"
 #include "dmediaserverdlg.h"
 #include "facetagseditor.h"
 #include "timeadjustdialog.h"
@@ -139,10 +137,6 @@
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
-#endif
-
-#ifdef HAVE_HTMLGALLERY
-#   include "htmlwizard.h"
 #endif
 
 #ifdef HAVE_PANORAMA
