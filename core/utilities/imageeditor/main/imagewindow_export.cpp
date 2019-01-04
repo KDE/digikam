@@ -43,15 +43,6 @@ void ImageWindow::slotPanorama()
 #endif
 }
 
-void ImageWindow::slotVideoSlideshow()
-{
-#ifdef HAVE_MEDIAPLAYER
-    QPointer<VidSlideWizard> w = new VidSlideWizard(this, new DBInfoIface(this, d->thumbBar->allUrls()));
-    w->exec();
-    delete w;
-#endif
-}
-
 void ImageWindow::slotExpoBlending()
 {
     ExpoBlendingManager::instance()->checkBinaries();

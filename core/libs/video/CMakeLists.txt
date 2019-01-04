@@ -16,17 +16,12 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::Service,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-set(libvideoslideshow_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/vidslidewizard.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/vidslideintropage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/vidslidealbumspage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/vidslideimagespage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/vidslidevideopage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/vidslideoutputpage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/vidslidefinalpage.cpp
+set(libvideotools_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/manager/vidslidesettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/manager/vidslidethread.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/manager/vidslidetask.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/player/vidplayerdlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/player/mediaplayerview.cpp
 )
 
-DIGIKAM_ADD_PLUGIN(VideoSlideShow
-                   ${CMAKE_CURRENT_SOURCE_DIR}/videoslideshowplugin.cpp
-                   ${libvideoslideshow_SRCS}
-)
+add_library(videotools_src OBJECT ${libvideotools_SRCS})

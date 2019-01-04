@@ -282,6 +282,11 @@ void DXmlGuiWindow::registerPluginsActions()
     m_htmlGalleryAction = DPluginLoader::instance()->pluginAction(QLatin1String("htmlgallery"), this);
     actionCollection()->addActions(QList<QAction*>() << m_htmlGalleryAction);
 #endif
+
+#ifdef HAVE_MEDIAPLAYER
+    m_videoslideshowAction = DPluginLoader::instance()->pluginAction(QLatin1String("videoslideshow"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_videoslideshowAction);
+#endif
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -528,19 +533,6 @@ void DXmlGuiWindow::createPanoramaAction()
 
     connect(m_panoramaAction, SIGNAL(triggered(bool)),
             this, SLOT(slotPanorama()));
-#endif
-}
-
-void DXmlGuiWindow::createVideoSlideshowAction()
-{
-#ifdef HAVE_MEDIAPLAYER
-    m_videoslideshowAction = new QAction(QIcon::fromTheme(QLatin1String("media-record")),
-                                         i18nc("@action", "Create video slideshow..."),
-                                         this);
-    actionCollection()->addAction(QLatin1String("videoslideshow"), m_videoslideshowAction);
-
-    connect(m_videoslideshowAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotVideoSlideshow()));
 #endif
 }
 

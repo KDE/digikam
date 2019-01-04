@@ -157,7 +157,6 @@ void LightTableWindow::setupActions()
     createPanoramaAction();
     createExpoBlendingAction();
     createCalendarAction();
-    createVideoSlideshowAction();
     createMediaServerAction();
     createExportActions();
     createImportActions();

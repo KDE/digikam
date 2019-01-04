@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : plugin to email items.
+ * Description : plugin to create video slideshow.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "sendbymailplugin.h"
+#include "videoslideshowplugin.h"
 
 // Qt includes
 
@@ -32,76 +32,73 @@
 
 // Local includes
 
-#include "mailwizard.h"
+#include "vidslidewizard.h"
 
 namespace Digikam
 {
 
-SendByMailPlugin::SendByMailPlugin(QObject* const parent)
+VideoSlideShowPlugin::VideoSlideShowPlugin(QObject* const parent)
     : DPlugin(parent)
 {
 }
 
-QString SendByMailPlugin::name() const
+QString VideoSlideShowPlugin::name() const
 {
-    return i18n("Send by Email");
+    return i18n("Video Slideshow");
 }
 
-QString SendByMailPlugin::id() const
+QString VideoSlideShowPlugin::id() const
 {
-    return QLatin1String("SendByMail");
+    return QLatin1String("VideoSlideShow");
 }
 
-QIcon SendByMailPlugin::icon() const
+QIcon VideoSlideShowPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("mail-send"));
+    return QIcon::fromTheme(QLatin1String("media-record"));
 }
 
-QString SendByMailPlugin::description() const
+QString VideoSlideShowPlugin::description() const
 {
-    return i18n("A Tool to Send Items by Email.");
+    return i18n("A Tool to Create Video Slideshow.");
 }
 
-QString SendByMailPlugin::details() const
+QString VideoSlideShowPlugin::details() const
 {
-    return i18n("<p>This tool permit to back-process items (as resize) before to send by email.</p>"
+    return i18n("<p>This tool permit to back-process image as frame to create video slide-show.</p>"
                 "<p>Items to process can be selected one by one or by group through a selection of albums.</p>"
-                "<p>Different mail client application can be used to process files on the network.</p>");
+                "<p>Different visual effects can be pallied to images to make transitions while to render target video.</p>");
 }
 
-QList<DPluginAuthor> SendByMailPlugin::authors() const
+QList<DPluginAuthor> VideoSlideShowPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2004-2019"),
+                             QLatin1String("(C) 2012-2019"),
                              i18n("Author and Maintainer"))
-            << DPluginAuthor(QLatin1String("Michael Hoechstetter"),
-                             QLatin1String("michael dot hoechstetter at gmx dot de"),
-                             QLatin1String("(C) 2006"))
-            << DPluginAuthor(QLatin1String("Tom Albers"),
-                             QLatin1String("tomalbers at kde dot nl"),
-                             QLatin1String("(C) 2007"))
+            << DPluginAuthor(QLatin1String("A Janardhan Reddy"),
+                             QLatin1String("annapareddyjanardhanreddy at gmail dot com"),
+                             QLatin1String("(C) 2012"))
             ;
 }
 
-void SendByMailPlugin::setup(QObject* const parent)
+void VideoSlideShowPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Send by Mail..."));
-    ac->setObjectName(QLatin1String("sendbymail"));
+    ac->setText(i18nc("@action", "Create video slideshow..."));
+    ac->setObjectName(QLatin1String("videoslideshow"));
     ac->setActionCategory(DPluginAction::GenericTool);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotSendByMail()));
+            this, SLOT(slotVideoSlideshow()));
 
     addAction(ac);
 }
 
-void SendByMailPlugin::slotSendByMail()
+void VideoSlideShowPlugin::slotVideoSlideShow()
 {
-    QPointer<MailWizard> wzrd = new MailWizard(0, infoIface(sender()));
+    QPointer<VidSlideWizard> wzrd = new VidSlideWizard(0, infoIface(sender()));
     wzrd->setPlugin(this);
     wzrd->exec();
     delete wzrd;

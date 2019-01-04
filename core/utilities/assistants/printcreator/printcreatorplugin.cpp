@@ -93,7 +93,7 @@ QList<DPluginAuthor> PrintCreatorPlugin::authors() const
 void PrintCreatorPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
-    ac->setIcon(QIcon::fromTheme(QLatin1String("document-print")));
+    ac->setIcon(icon());
     ac->setText(i18nc("@action", "Print Creator..."));
     ac->setObjectName(QLatin1String("printcreator"));
     ac->setActionCategory(DPluginAction::GenericTool);

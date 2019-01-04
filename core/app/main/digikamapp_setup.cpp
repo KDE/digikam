@@ -784,7 +784,6 @@ void DigikamApp::setupActions()
     createExpoBlendingAction();
     createPanoramaAction();
     createCalendarAction();
-    createVideoSlideshowAction();
     createMediaServerAction();
 
     // -----------------------------------------------------------

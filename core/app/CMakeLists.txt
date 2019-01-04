@@ -55,6 +55,13 @@ set(DIGIKAMCORE_OBJECTS
             utils/digikam_debug.cpp
 )
 
+if(ENABLE_MEDIAPLAYER)
+    set(DIGIKAMCORE_OBJECTS
+        ${DIGIKAMCORE_OBJECTS}
+        $<TARGET_OBJECTS:videotools_src>
+    )
+endif()
+
 if(Marble_FOUND)
     set(DIGIKAMCORE_OBJECTS
         ${DIGIKAMCORE_OBJECTS}
@@ -84,14 +91,6 @@ if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
         $<TARGET_OBJECTS:panorama_src>
     )
 endif()
-
-if(ENABLE_MEDIAPLAYER)
-    set(DIGIKAMCORE_OBJECTS
-        ${DIGIKAMCORE_OBJECTS}
-        $<TARGET_OBJECTS:videoslideshow_src>
-    )
-endif()
-
 
 include_directories($<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>

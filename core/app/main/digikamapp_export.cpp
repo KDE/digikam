@@ -42,15 +42,6 @@ void DigikamApp::slotPanorama()
 #endif
 }
 
-void DigikamApp::slotVideoSlideshow()
-{
-#ifdef HAVE_MEDIAPLAYER
-    QPointer<VidSlideWizard> w = new VidSlideWizard(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
-    w->exec();
-    delete w;
-#endif
-}
-
 void DigikamApp::slotCalendar()
 {
     QPointer<CalWizard> w = new CalWizard(view()->selectedUrls(ApplicationSettings::Tools), this);

@@ -147,10 +147,6 @@ public:
      */
     void createPanoramaAction();
 
-    /** Create Video Slideshow tool action.
-     */
-    void createVideoSlideshowAction();
-
     /** Create Media Server action to share through DLNA.
      */
     void createMediaServerAction();
@@ -353,9 +349,6 @@ private Q_SLOTS:
 
     // Called by Calendar tool.
     virtual void slotCalendar()                {};
-
-    // Called by Video Slideshow tool.
-    virtual void slotVideoSlideshow()          {};
 
     // Called by Panorama tool.
     virtual void slotPanorama()                {};

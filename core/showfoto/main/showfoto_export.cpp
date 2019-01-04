@@ -50,15 +50,6 @@ void ShowFoto::slotExpoBlending()
     ExpoBlendingManager::instance()->run();
 }
 
-void ShowFoto::slotVideoSlideshow()
-{
-#ifdef HAVE_MEDIAPLAYER
-    QPointer<VidSlideWizard> w = new VidSlideWizard(this, new DMetaInfoIface(this, d->thumbBar->urls()));
-    w->exec();
-    delete w;
-#endif
-}
-
 void ShowFoto::slotMediaServer()
 {
     QPointer<DMediaServerDlg> w = new DMediaServerDlg(this, new DMetaInfoIface(this, d->thumbBar->urls()));

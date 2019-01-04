@@ -50,15 +50,6 @@ void LightTableWindow::slotExpoBlending()
     ExpoBlendingManager::instance()->run();
 }
 
-void LightTableWindow::slotVideoSlideshow()
-{
-#ifdef HAVE_MEDIAPLAYER
-    QPointer<VidSlideWizard> w = new VidSlideWizard(this, new DBInfoIface(this, d->thumbView->allUrls()));
-    w->exec();
-    delete w;
-#endif
-}
-
 void LightTableWindow::slotMediaServer()
 {
     DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);

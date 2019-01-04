@@ -89,7 +89,7 @@ QList<DPluginAuthor> HtmlGalleryPlugin::authors() const
 void HtmlGalleryPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
-    ac->setIcon(QIcon::fromTheme(QLatin1String("text-html")));
+    ac->setIcon(icon());
     ac->setText(i18nc("@action", "Create Html gallery..."));
     ac->setObjectName(QLatin1String("htmlgallery"));
     ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_H);

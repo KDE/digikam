@@ -820,7 +820,6 @@ void EditorWindow::setupStandardActions()
     createPanoramaAction();
     createExpoBlendingAction();
     createCalendarAction();
-    createVideoSlideshowAction();
     createMediaServerAction();
     createExportActions();
     createImportActions();

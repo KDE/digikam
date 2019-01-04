@@ -83,3 +83,7 @@ add_subdirectory(rawengine)
 add_subdirectory(album)
 add_subdirectory(tags)
 add_subdirectory(transitionmngr)
+
+if(ENABLE_MEDIAPLAYER)
+    add_subdirectory(video)
+endif()
