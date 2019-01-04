@@ -109,11 +109,11 @@ public:
 public:
 
     /**
-     * Plugin factory method to create all internal actions for a given parent windows list.
+     * Plugin factory method to create all internal actions for a given parent.
      * To retrieve all plugin actions, use actions() public methods.
      * To register a new plugin action in this method, use addAction() protected method.
      */
-    virtual void setup(const QList<QObject*>& parents) = 0;
+    virtual void setup(QObject* const parent) = 0;
 
     /**
      * @brief Returns the user-visible name of the plugin.

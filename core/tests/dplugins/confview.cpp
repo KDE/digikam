@@ -38,8 +38,8 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
 
     DPluginLoader* const dpl = DPluginLoader::instance();
-    dpl->setPluginParents(QList<QObject*>() << qApp);
     dpl->init();
+    dpl->registerPlugins(qApp);
 
     DPluginSetup view;
     view.show();

@@ -209,6 +209,10 @@ public:
      */
     bool fullScreenIsActive() const;
 
+    /** Register all plugins action to this instance.
+     */
+    void registerPluginsActions();
+
 public:
 
     virtual DInfoInterface* infoIface(DPluginAction* const ac) = 0;

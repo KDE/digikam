@@ -54,8 +54,9 @@ int main(int argc, char* argv[])
     parser.process(app);
 
     DPluginLoader* const dpl = DPluginLoader::instance();
-    dpl->setPluginParents(QList<QObject*>() << qApp);
     dpl->init();
+    dpl->registerPlugins(qApp);
+
     bool found = false;
 
     if (parser.isSet(QString::fromLatin1("list")))

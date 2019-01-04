@@ -133,7 +133,7 @@ DPluginAction* DPlugin::findActionByName(const QString& name, QObject* const par
 {
     foreach (DPluginAction* const ac, actions(parent))
     {
-        if (ac && (ac->actionName() == name))
+        if (ac && (ac->objectName() == name))
         {
             return ac;
         }

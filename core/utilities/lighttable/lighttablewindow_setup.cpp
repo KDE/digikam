@@ -29,6 +29,8 @@ namespace Digikam
 
 void LightTableWindow::setupActions()
 {
+    registerPluginsActions();
+
     // -- Standard 'File' menu actions ---------------------------------------------
 
     KActionCollection* const ac =   actionCollection();

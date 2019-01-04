@@ -43,16 +43,6 @@ DPluginAction::~DPluginAction()
 {
 }
 
-void DPluginAction::setActionName(const QString& name)
-{
-    setProperty("DPluginActionName", name);
-}
-
-QString DPluginAction::actionName() const
-{
-    return (property("DPluginActionName").toString());
-}
-
 DPluginAction::ActionType DPluginAction::actionType() const
 {
     switch (actionCategory())
@@ -152,12 +142,12 @@ QString DPluginAction::actionCategoryToString() const
 
 QString DPluginAction::xmlSection() const
 {
-    return QString::fromLatin1("<Action name=\"%1\" />\n").arg(actionName());
+    return QString::fromLatin1("<Action name=\"%1\" />\n").arg(objectName());
 }
 
 QString DPluginAction::toString() const
 {
-    return QString::fromUtf8("%1: \"%2\" - %3").arg(actionName())
+    return QString::fromUtf8("%1: \"%2\" - %3").arg(objectName())
                                                .arg(text())
                                                .arg(actionCategoryToString());
 }

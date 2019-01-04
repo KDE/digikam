@@ -47,7 +47,7 @@ public:
     QString description()          const override;
     QList<DPluginAuthor> authors() const override;
 
-    void setup(const QList<QObject*>&);
+    void setup(QObject* const);
 
 private Q_SLOTS:
 

@@ -42,6 +42,8 @@ public:
      */
     QStringList pluginEntriesList() const;
 
+    /** Stage to load plugins in memory
+    */
     bool        appendPlugin(QObject* const obj, QPluginLoader* const loader, QList<DPlugin*>& list);
     void        loadPlugins();
 
@@ -51,8 +53,6 @@ public:
     QList<DPlugin*> allPlugins;
     QStringList     blacklist;
     QStringList     whitelist;
-
-    QList<QObject*> parents;        // parent windows instance to use with plugin setup.
 };
 
 } // namepace Digikam

@@ -267,6 +267,12 @@ void DXmlGuiWindow::setFullScreenOptions(int options)
     d->fsOptions = options;
 }
 
+void DXmlGuiWindow::registerPluginsActions()
+{
+    DPluginLoader* const dpl = DPluginLoader::instance();
+    dpl->registerPlugins(this);
+}
+
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
 {
     d->libsInfoAction = new QAction(QIcon::fromTheme(QLatin1String("help-about")), i18n("Components Information"), this);
@@ -319,9 +325,7 @@ void DXmlGuiWindow::cleanupActions()
     if (ac) actionCollection()->removeAction(ac);
 
 /*
-    QList<QAction*> lst = actionCollection()->actions();
-
-    foreach (QAction* const act, lst)
+    foreach (QAction* const act, actionCollection()->actions())
         qCDebug(DIGIKAM_WIDGETS_LOG) << "action: " << act->objectName();
 */
 }
@@ -501,7 +505,6 @@ void DXmlGuiWindow::createExpoBlendingAction()
 
     connect(m_expoBlendingAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExpoBlending()));
-
 }
 
 void DXmlGuiWindow::createPanoramaAction()
@@ -544,6 +547,7 @@ void DXmlGuiWindow::createCalendarAction()
 void DXmlGuiWindow::createSendByMailAction()
 {
     m_sendByMailAction = DPluginLoader::instance()->pluginAction(QLatin1String("sendbymail"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_sendByMailAction);
 }
 
 void DXmlGuiWindow::createPrintCreatorAction()

@@ -117,6 +117,15 @@ DigikamApp::DigikamApp()
     // This manager must be created after collection setup and before accelerators setup.
     d->tagsActionManager = new TagsActionMngr(this);
 
+    // Load plugins
+    if (d->splashScreen)
+    {
+        d->splashScreen->setMessage(i18n("Load Plugins..."));
+    }
+
+    DPluginLoader* const dpl = DPluginLoader::instance();
+    dpl->init();
+
     // First create everything, then connect.
     // Otherwise some items may send signals and the slots can try
     // to access items which were not created yet.
@@ -141,10 +150,6 @@ DigikamApp::DigikamApp()
     d->validIccPath = SetupICC::iccRepositoryIsValid();
 
     // Read albums from database
-    if (d->splashScreen)
-    {
-        d->splashScreen->setMessage(i18n("Reading database..."));
-    }
 
     AlbumManager::instance()->startScan();
 

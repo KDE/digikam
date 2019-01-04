@@ -62,16 +62,6 @@ DPluginLoader* DPluginLoader::instance()
     return &creator->object;
 }
 
-void DPluginLoader::setPluginParents(const QList<QObject*>& parents)
-{
-    d->parents = parents;
-}
-
-QList<QObject*> DPluginLoader::pluginParents() const
-{
-    return d->parents;
-}
-
 void DPluginLoader::init()
 {
     d->loadPlugins();
@@ -131,7 +121,7 @@ DPluginAction* DPluginLoader::pluginAction(const QString& actionName, QObject* c
     {
         foreach (DPluginAction* const ac, p->actions(parent))
         {
-            if (ac && (ac->actionName() == actionName))
+            if (ac && (ac->objectName() == actionName))
             {
                 return ac;
             }
@@ -165,6 +155,17 @@ void DPluginLoader::appendPluginToBlackList(const QString& filename)
 void DPluginLoader::appendPluginToWhiteList(const QString& filename)
 {
     d->whitelist << QLatin1String(DIGIKAM_SHARED_LIBRARY_PREFIX) + filename;
+}
+
+void DPluginLoader::registerPlugins(QObject* const parent)
+{
+    foreach (DPlugin* const plugin, d->allPlugins)
+    {
+        plugin->setup(parent);
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Actions from plugin named" << plugin->name()
+                                     << "registered to" << parent;
+    }
 }
 
 } // namepace Digikam
