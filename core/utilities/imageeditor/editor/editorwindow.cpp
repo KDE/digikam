@@ -817,13 +817,10 @@ void EditorWindow::setupStandardActions()
     createMetadataEditAction();
     createGeolocationEditAction();
     createTimeAdjustAction();
-    createHtmlGalleryAction();
     createPanoramaAction();
     createExpoBlendingAction();
     createCalendarAction();
     createVideoSlideshowAction();
-    createSendByMailAction();
-    createPrintCreatorAction();
     createMediaServerAction();
     createExportActions();
     createImportActions();

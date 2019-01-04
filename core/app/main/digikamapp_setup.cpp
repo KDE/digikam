@@ -783,11 +783,8 @@ void DigikamApp::setupActions()
 
     createExpoBlendingAction();
     createPanoramaAction();
-    createHtmlGalleryAction();
     createCalendarAction();
     createVideoSlideshowAction();
-    createSendByMailAction();
-    createPrintCreatorAction();
     createMediaServerAction();
 
     // -----------------------------------------------------------

@@ -154,13 +154,10 @@ void LightTableWindow::setupActions()
     createMetadataEditAction();
     createGeolocationEditAction();
     createTimeAdjustAction();
-    createHtmlGalleryAction();
     createPanoramaAction();
     createExpoBlendingAction();
     createCalendarAction();
     createVideoSlideshowAction();
-    createSendByMailAction();
-    createPrintCreatorAction();
     createMediaServerAction();
     createExportActions();
     createImportActions();

@@ -77,6 +77,13 @@ DInfoInterface* DPlugin::infoIface(QObject* const ac) const
         {
             return gui->infoIface(pac);
         }
+
+        DInfoInterface* const iface = dynamic_cast<DInfoInterface*>(pac->parent());
+
+        if (iface)
+        {
+            return iface;
+        }
     }
 
     return 0;

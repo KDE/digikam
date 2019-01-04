@@ -151,18 +151,6 @@ public:
      */
     void createVideoSlideshowAction();
 
-    /** Create HTML Gallery tool action.
-     */
-    void createHtmlGalleryAction();
-
-    /** Create Print Creator tool action.
-     */
-    void createPrintCreatorAction();
-
-    /** Create Send by Mail tool action.
-     */
-    void createSendByMailAction();
-
     /** Create Media Server action to share through DLNA.
      */
     void createMediaServerAction();

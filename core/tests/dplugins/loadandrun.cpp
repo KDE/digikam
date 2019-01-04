@@ -31,8 +31,8 @@
 
 // Local includes
 
-#include "dmetainfoiface.h"
 #include "metaengine.h"
+#include "dmetainfoiface.h"
 #include "dpluginloader.h"
 #include "dplugin.h"
 
@@ -50,12 +50,21 @@ int main(int argc, char* argv[])
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("n"),    QLatin1String("Name of plugin to use"),     QLatin1String("Plugin Name")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("a"),    QLatin1String("Plugin action name to run"), QLatin1String("Action Name")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("w"),    QLatin1String("Wait until plugin non-modal dialog is closed")));
-
+    parser.addPositionalArgument(QLatin1String("files"), QLatin1String("File(s) to open"), QLatin1String("+[file(s)]"));
     parser.process(app);
 
+    QList<QUrl> urlList;
+    const QStringList args = parser.positionalArguments();
+
+    for (auto& arg : args)
+    {
+        urlList.append(QUrl::fromLocalFile(arg));
+    }
+
+    DMetaInfoIface iface(qApp, urlList);
     DPluginLoader* const dpl = DPluginLoader::instance();
     dpl->init();
-    dpl->registerPlugins(qApp);
+    dpl->registerPlugins(&iface);
 
     bool found = false;
 
@@ -81,7 +90,7 @@ int main(int argc, char* argv[])
 
             QString actions;
 
-            foreach (DPluginAction* const ac, p->actions(qApp))
+            foreach (DPluginAction* const ac, p->actions(&iface))
             {
                 actions.append(ac->toString());
                 actions.append(QLatin1String(" ; "));
@@ -115,7 +124,7 @@ int main(int argc, char* argv[])
             if (p->id() == name)
             {
                 found                   = true;
-                DPluginAction* const ac = p->findActionByName(action, qApp);
+                DPluginAction* const ac = p->findActionByName(action, &iface);
 
                 if (ac)
                 {

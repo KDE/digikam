@@ -271,6 +271,17 @@ void DXmlGuiWindow::registerPluginsActions()
 {
     DPluginLoader* const dpl = DPluginLoader::instance();
     dpl->registerPlugins(this);
+
+    m_sendByMailAction = DPluginLoader::instance()->pluginAction(QLatin1String("sendbymail"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_sendByMailAction);
+
+    m_printCreatorAction = DPluginLoader::instance()->pluginAction(QLatin1String("printcreator"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_printCreatorAction);
+
+#ifdef HAVE_HTMLGALLERY
+    m_htmlGalleryAction = DPluginLoader::instance()->pluginAction(QLatin1String("htmlgallery"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_htmlGalleryAction);
+#endif
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -542,26 +553,6 @@ void DXmlGuiWindow::createCalendarAction()
 
     connect(m_calendarAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCalendar()));
-}
-
-void DXmlGuiWindow::createSendByMailAction()
-{
-    m_sendByMailAction = DPluginLoader::instance()->pluginAction(QLatin1String("sendbymail"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_sendByMailAction);
-}
-
-void DXmlGuiWindow::createPrintCreatorAction()
-{
-    m_printCreatorAction = DPluginLoader::instance()->pluginAction(QLatin1String("printcreator"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_printCreatorAction);
-}
-
-void DXmlGuiWindow::createHtmlGalleryAction()
-{
-#ifdef HAVE_HTMLGALLERY
-    m_htmlGalleryAction = DPluginLoader::instance()->pluginAction(QLatin1String("htmlgallery"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_htmlGalleryAction);
-#endif
 }
 
 void DXmlGuiWindow::createMediaServerAction()

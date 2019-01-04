@@ -50,7 +50,7 @@ public:
 
     DInfoMap    itemInfo(const QUrl&)             const;
     bool        supportAlbums()                   const;
-    
+
     QWidget* uploadWidget(QWidget* const parent)  const;
     QUrl     uploadUrl()                          const;
 
