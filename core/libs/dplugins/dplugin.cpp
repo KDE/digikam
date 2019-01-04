@@ -118,7 +118,7 @@ int DPlugin::count() const
 
 QIcon DPlugin::icon() const
 {
-    return qApp->windowIcon();
+    return QIcon::fromTheme(QLatin1String("plugins"));
 }
 
 void DPlugin::setVisibleActions(bool b)

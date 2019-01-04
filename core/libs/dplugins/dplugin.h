@@ -141,7 +141,7 @@ public:
 
     /**
      * @brief Returns an icon for the plugin.
-     *        Default implementation return host application icon.
+     *        Default implementation return the system plugin icon.
      */
     virtual QIcon icon() const;
 

@@ -108,6 +108,7 @@ public:
     DConfigDlgWdgItem*       page_camera;
     DConfigDlgWdgItem*       page_plugins;
     DConfigDlgWdgItem*       page_misc;
+
     SetupDatabase*           databasePage;
     SetupCollections*        collectionsPage;
     SetupAlbumView*          albumViewPage;
@@ -217,12 +218,11 @@ Setup::Setup(QWidget* const parent)
     connect(d->cameraPage, SIGNAL(signalUseFileMetadataChanged(bool)),
             d->tooltipPage, SLOT(slotUseFileMetadataChanged(bool)));
 
-
     d->pluginsPage  = new DPluginSetup();
     d->page_plugins = addPage(d->pluginsPage, i18n("Plugins"));
     d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
                                     "<i>Set which plugins will be accessible from application</i></qt>"));
-    d->page_plugins->setIcon(QIcon(QLatin1String("preferences-plugin")));
+    d->page_plugins->setIcon(QIcon::fromTheme(QLatin1String("preferences-plugin")));
 
     d->miscPage  = new SetupMisc();
     d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
@@ -304,6 +304,7 @@ QSize Setup::sizeHint() const
             page == TemplatePage    ||
             page == LightTablePage  ||
             page == EditorPage      ||
+            page == PluginsPage     ||
             page == MiscellaneousPage)
         {
             DConfigDlgWdgItem* const item = d->pageItem((Page)page);

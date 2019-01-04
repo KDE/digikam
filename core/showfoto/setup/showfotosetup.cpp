@@ -45,6 +45,7 @@
 #include "showfotosetupmetadata.h"
 #include "showfotosetuptooltip.h"
 #include "dxmlguiwindow.h"
+#include "dpluginsetup.h"
 
 namespace ShowFoto
 {
@@ -61,6 +62,7 @@ public:
         page_iofiles(0),
         page_slideshow(0),
         page_icc(0),
+        page_plugins(0),
         page_misc(0),
         metadataPage(0),
         toolTipPage(0),
@@ -69,7 +71,8 @@ public:
         editorIfacePage(0),
         iofilesPage(0),
         slideshowPage(0),
-        iccPage(0)
+        iccPage(0),
+        pluginsPage(0)
     {
     }
 
@@ -80,6 +83,7 @@ public:
     DConfigDlgWdgItem*         page_iofiles;
     DConfigDlgWdgItem*         page_slideshow;
     DConfigDlgWdgItem*         page_icc;
+    DConfigDlgWdgItem*         page_plugins;
     DConfigDlgWdgItem*         page_misc;
 
     SetupMetadata*             metadataPage;
@@ -91,6 +95,7 @@ public:
     Digikam::SetupIOFiles*     iofilesPage;
     Digikam::SetupSlideShow*   slideshowPage;
     Digikam::SetupICC*         iccPage;
+    Digikam::DPluginSetup*     pluginsPage;
 
 public:
 
@@ -148,6 +153,12 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
     d->page_slideshow->setHeader(i18n("<qt>Slide Show Settings<br/>"
                                       "<i>Customize slideshow settings</i></qt>"));
     d->page_slideshow->setIcon(QIcon::fromTheme(QLatin1String("view-presentation")));
+
+    d->pluginsPage  = new DPluginSetup();
+    d->page_plugins = addPage(d->pluginsPage, i18n("Plugins"));
+    d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
+                                    "<i>Set which plugins will be accessible from application</i></qt>"));
+    d->page_plugins->setIcon(QIcon::fromTheme(QLatin1String("preferences-plugin")));
 
     d->miscPage       = new SetupMisc();
     d->page_misc      = addPage(d->miscPage, i18n("Miscellaneous"));
@@ -219,6 +230,7 @@ void Setup::slotOkClicked()
     d->iofilesPage->applySettings();
     d->slideshowPage->applySettings();
     d->iccPage->applySettings();
+    d->pluginsPage->applySettings();
     d->miscPage->applySettings();
     close();
 }
@@ -244,6 +256,9 @@ void Setup::showPage(Setup::Page page)
             break;
         case MetadataPage:
             setCurrentPage(d->page_metadata);
+            break;
+        case PluginsPage:
+            setCurrentPage(d->page_plugins);
             break;
         case MiscellaneousPage:
             setCurrentPage(d->page_misc);
@@ -288,6 +303,11 @@ Setup::Page Setup::activePageIndex()
         return MetadataPage;
     }
 
+    if (cur == d->page_plugins)
+    {
+        return PluginsPage;
+    }
+
     if (cur == d->page_misc)
     {
         return MiscellaneousPage;
@@ -314,6 +334,8 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
             return page_slideshow;
         case Setup::ICCPage:
             return page_icc;
+        case Setup::PluginsPage:
+            return page_plugins;
         case Setup::MiscellaneousPage:
             return page_misc;
         default:

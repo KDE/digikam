@@ -50,6 +50,7 @@ public:
         IOFilesPage,
         SlideshowPage,
         ICCPage,
+        PluginsPage,
         MiscellaneousPage,
 
         SetupPageEnumLast
