@@ -59,8 +59,8 @@ public:
     }
 
     DItemsList*     imageList;
-    MailWizard*      wizard;
-    DInfoInterface*  iface;
+    MailWizard*     wizard;
+    DInfoInterface* iface;
 };
 
 MailImagesPage::MailImagesPage(QWizard* const dialog, const QString& title)

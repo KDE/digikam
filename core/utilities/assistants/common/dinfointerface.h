@@ -88,7 +88,7 @@ public:
     // Album selector view methods (to upload items from an external place).
 
     virtual QWidget* uploadWidget(QWidget* const parent) const;
-    virtual QUrl     uploadUrl()                  const;
+    virtual QUrl     uploadUrl()                         const;
 
     Q_SIGNAL void signalUploadUrlChanged();
 };
