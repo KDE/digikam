@@ -27,15 +27,6 @@
 namespace ShowFoto
 {
 
-void ShowFoto::slotHtmlGallery()
-{
-#ifdef HAVE_HTMLGALLERY
-    QPointer<HTMLWizard> w = new HTMLWizard(this, new DMetaInfoIface(this, d->thumbBar->urls()));
-    w->exec();
-    delete w;
-#endif
-}
-
 void ShowFoto::slotCalendar()
 {
     QPointer<CalWizard> w = new CalWizard(d->thumbBar->urls(), this);

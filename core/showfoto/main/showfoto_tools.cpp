@@ -157,11 +157,4 @@ void ShowFoto::slotEditMetadata()
     slotChanged();
 }
 
-void ShowFoto::slotPrintCreator()
-{
-    QPointer<AdvPrintWizard> w = new AdvPrintWizard(this, new DMetaInfoIface(this, d->thumbBar->urls()));
-    w->exec();
-    delete w;
-}
-
 } // namespace ShowFoto

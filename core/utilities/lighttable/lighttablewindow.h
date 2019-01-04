@@ -190,7 +190,6 @@ private Q_SLOTS:
     void slotTimeAdjust();
     void slotEditMetadata();
     void slotEditGeolocation();
-    void slotPrintCreator();
     void slotPresentation();
 
     void slotSlideShowAll();
@@ -204,7 +203,6 @@ private Q_SLOTS:
 
 private Q_SLOTS:
 
-    void slotHtmlGallery();
     void slotCalendar();
     void slotExpoBlending();
     void slotPanorama();

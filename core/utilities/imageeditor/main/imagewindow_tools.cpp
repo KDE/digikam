@@ -92,13 +92,6 @@ void ImageWindow::slotFilePrint()
     printImage(d->currentUrl());
 }
 
-void ImageWindow::slotPrintCreator()
-{
-    QPointer<AdvPrintWizard> w = new AdvPrintWizard(this, new DBInfoIface(this, d->thumbBar->allUrls()));
-    w->exec();
-    delete w;
-}
-
 void ImageWindow::slotPresentation()
 {
     QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);

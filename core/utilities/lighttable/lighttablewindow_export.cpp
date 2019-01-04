@@ -27,15 +27,6 @@
 namespace Digikam
 {
 
-void LightTableWindow::slotHtmlGallery()
-{
-#ifdef HAVE_HTMLGALLERY
-    QPointer<HTMLWizard> w = new HTMLWizard(this, new DBInfoIface(this, d->thumbView->allUrls()));
-    w->exec();
-    delete w;
-#endif
-}
-
 void LightTableWindow::slotCalendar()
 {
     QPointer<CalWizard> w = new CalWizard(d->thumbView->allUrls(), this);

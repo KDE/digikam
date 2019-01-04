@@ -27,16 +27,6 @@
 namespace Digikam
 {
 
-void ImageWindow::slotHtmlGallery()
-{
-#ifdef HAVE_HTMLGALLERY
-    QPointer<HTMLWizard> w = new HTMLWizard(this, new DBInfoIface(this, d->thumbBar->allUrls()));
-
-    w->exec();
-    delete w;
-#endif
-}
-
 void ImageWindow::slotCalendar()
 {
     QPointer<CalWizard> w = new CalWizard(d->thumbBar->allUrls(), this);

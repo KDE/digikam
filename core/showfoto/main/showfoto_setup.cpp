@@ -29,6 +29,7 @@ namespace ShowFoto
 
 void ShowFoto::setupActions()
 {
+    registerPluginsActions();
     Digikam::ThemeManager::instance()->setThemeMenuAction(new QMenu(i18n("&Themes"), this));
     setupStandardActions();
 

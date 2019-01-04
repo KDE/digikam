@@ -114,13 +114,6 @@ void LightTableWindow::slotEditGeolocation()
 #endif
 }
 
-void LightTableWindow::slotPrintCreator()
-{
-    QPointer<AdvPrintWizard> w = new AdvPrintWizard(this, new DBInfoIface(this, d->thumbView->allUrls()));
-    w->exec();
-    delete w;
-}
-
 void LightTableWindow::slotPresentation()
 {
     QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);

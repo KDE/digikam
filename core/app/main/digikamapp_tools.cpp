@@ -207,11 +207,4 @@ void DigikamApp::slotPresentation()
     d->view->presentation();
 }
 
-void DigikamApp::slotPrintCreator()
-{
-    QPointer<AdvPrintWizard> w = new AdvPrintWizard(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
-    w->exec();
-    delete w;
-}
-
 } // namespace Digikam

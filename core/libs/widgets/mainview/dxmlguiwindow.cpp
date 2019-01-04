@@ -552,27 +552,15 @@ void DXmlGuiWindow::createSendByMailAction()
 
 void DXmlGuiWindow::createPrintCreatorAction()
 {
-    m_printCreatorAction = new QAction(QIcon::fromTheme(QLatin1String("document-print")),
-                                    i18nc("@action", "Print Creator..."),
-                                    this);
-    actionCollection()->addAction(QLatin1String("printcreator"), m_printCreatorAction);
-
-    connect(m_printCreatorAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotPrintCreator()));
+    m_printCreatorAction = DPluginLoader::instance()->pluginAction(QLatin1String("printcreator"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_printCreatorAction);
 }
 
 void DXmlGuiWindow::createHtmlGalleryAction()
 {
 #ifdef HAVE_HTMLGALLERY
-    m_htmlGalleryAction = new QAction(QIcon::fromTheme(QLatin1String("text-html")),
-                                      i18nc("@action", "Create Html gallery..."),
-                                      this);
-
-    actionCollection()->setDefaultShortcut(m_htmlGalleryAction, Qt::ALT + Qt::SHIFT + Qt::Key_H);
-    actionCollection()->addAction(QLatin1String("htmlgallery"), m_htmlGalleryAction);
-
-    connect(m_htmlGalleryAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotHtmlGallery()));
+    m_htmlGalleryAction = DPluginLoader::instance()->pluginAction(QLatin1String("htmlgallery"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_htmlGalleryAction);
 #endif
 }
 

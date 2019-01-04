@@ -363,12 +363,6 @@ private Q_SLOTS:
     // Called by Presentation tool.
     virtual void slotPresentation()            {};
 
-    // Called by PrintCreator tool.
-    virtual void slotPrintCreator()            {};
-
-    // Called by HTML Gallery tool.
-    virtual void slotHTMLGallery()             {};
-
     // Called by Calendar tool.
     virtual void slotCalendar()                {};
 

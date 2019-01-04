@@ -156,7 +156,6 @@ private Q_SLOTS:
     void slotEditMetadata();
     void slotEditGeolocation();
     void slotFilePrint();
-    void slotPrintCreator();
     void slotPresentation();
 
 private:
@@ -167,7 +166,6 @@ private:
 
 private Q_SLOTS:
 
-    void slotHtmlGallery();
     void slotCalendar();
     void slotExpoBlending();
     void slotPanorama();
