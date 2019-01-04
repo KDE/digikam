@@ -680,4 +680,5 @@ BUGFIXES:
 610 ==> 402800 - Main album view does not update when moving images between albums.
 611 ==> 402811 - Drag-n-drop disabled in Geolocation editor.
 612 ==> 402812 - Use RED "recycle bin" icon from Albums context menus in all other 'delete' context menu items too.
-613 ==> 
+613 ==> 402809 - Clicking on "Import" toolbar button in import preview does nothing.
+614 ==> 
