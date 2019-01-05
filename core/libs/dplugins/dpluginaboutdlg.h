@@ -24,6 +24,8 @@
 #ifndef DIGIKAM_DPLUGIN_ABOUT_DLG_H
 #define DIGIKAM_DPLUGIN_ABOUT_DLG_H
 
+// Qt includes
+
 #include <QDialog>
 
 // Local includes
@@ -46,7 +48,6 @@ public:
 private:
 
     Q_DISABLE_COPY(DPluginAboutDlg)
-
 };
 
 } // namespace Digikam

@@ -43,6 +43,11 @@ namespace Digikam
 DPluginAboutDlg::DPluginAboutDlg(DPlugin* const tool, QWidget* const parent)
     : QDialog(parent)
 {
+    setWindowFlags((windowFlags() & ~Qt::Dialog) |
+                   Qt::Window                    |
+                   Qt::WindowCloseButtonHint     |
+                   Qt::WindowMinMaxButtonsHint);
+
     setModal(false);
     setWindowTitle(i18n("About %1 Plugin", tool->name()));
 
