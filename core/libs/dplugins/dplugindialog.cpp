@@ -27,8 +27,8 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QAbstractButton>
 #include <QPointer>
+#include <QPushButton>
 
 // KDE includes
 
@@ -45,17 +45,15 @@ namespace Digikam
 
 DPluginDialog::DPluginDialog(QWidget* const parent, const QString& objName)
     : QDialog(parent),
-      m_tool(0)
+      m_tool(0),
+      m_buttons(0)
 {
     setWindowFlags((windowFlags() & ~Qt::Dialog) |
                    Qt::Window                    |
                    Qt::WindowCloseButtonHint     |
                    Qt::WindowMinMaxButtonsHint);
 
-    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok, this);
-    buttons->button(QDialogButtonBox::Ok)->setDefault(true);
-
-
+    m_buttons = new QDialogButtonBox(this);
 }
 
 DPluginDialog::~DPluginDialog()
@@ -69,10 +67,10 @@ void DPluginDialog::setPlugin(DPlugin* const tool)
 
     if (m_tool)
     {
-        setOption(QWizard::HaveHelpButton);
-        setButtonText(QWizard::HelpButton, i18n("About..."));
+        QPushButton* const help = m_buttons->addButton(QDialogButtonBox::Help);
+        help->setText(i18n("About..."));
 
-        connect(button(QWizard::HelpButton), SIGNAL(clicked()),
+        connect(help, SIGNAL(clicked()),
                 this, SLOT(slotAboutPlugin()));
     }
 }

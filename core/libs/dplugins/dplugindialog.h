@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QDialog>
+#include <QDialogButtonBox>
 
 // Local includes
 
@@ -56,9 +57,13 @@ private Q_SLOTS:
 
     void slotAboutPlugin();
 
+protected:
+
+    QDialogButtonBox* m_buttons;
+    
 private:
 
-    DPlugin* m_tool;
+    DPlugin*          m_tool;
     
     Q_DISABLE_COPY(DPluginDialog)
 };

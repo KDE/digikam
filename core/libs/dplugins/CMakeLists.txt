@@ -14,7 +14,7 @@ set(libdpluginsinterface_SRCS
     dpluginconfview.cpp
     dpluginsetup.cpp
     dpluginaction.cpp
-#    dplugindialog.cpp
+    dplugindialog.cpp
     dpluginaboutdlg.cpp
     dpluginloader.cpp
     dpluginloader_p.cpp
