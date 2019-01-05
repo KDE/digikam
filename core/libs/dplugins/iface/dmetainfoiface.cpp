@@ -64,7 +64,7 @@ DMetaInfoIface::~DMetaInfoIface()
     delete d;
 }
 
-void DMetaInfoIface::slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate)
+void DMetaInfoIface::slotDateTimeForUrl(const QUrl& url, const QDateTime& /*dt*/, bool /*updModDate*/)
 {
     emit signalItemChanged(url);
 }

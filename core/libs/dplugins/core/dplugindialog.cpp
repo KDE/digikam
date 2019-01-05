@@ -45,9 +45,10 @@ namespace Digikam
 
 DPluginDialog::DPluginDialog(QWidget* const parent, const QString& objName)
     : QDialog(parent),
-      m_tool(0),
-      m_buttons(0)
+      m_buttons(0),
+      m_tool(0)
 {
+    setObjectName(objName);
     setWindowFlags((windowFlags() & ~Qt::Dialog) |
                    Qt::Window                    |
                    Qt::WindowCloseButtonHint     |
