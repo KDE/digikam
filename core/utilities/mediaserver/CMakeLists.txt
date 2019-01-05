@@ -19,5 +19,4 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
 DIGIKAM_ADD_PLUGIN(MediaServerPlugin
                    ${CMAKE_CURRENT_SOURCE_DIR}/dmediaserverdlg.cpp
                    ${CMAKE_CURRENT_SOURCE_DIR}/mediaserverplugin.cpp
-                   ${libmediaserver_SRCS}
 )

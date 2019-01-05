@@ -20,7 +20,7 @@ if(KF5CalendarCore_FOUND)
     include_directories($<TARGET_PROPERTY:KF5::CalendarCore,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
-set(libcalendar_SRCS
+set(calendarplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/print/calsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/print/calpainter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/print/calprinter.cpp
@@ -30,15 +30,15 @@ set(libcalendar_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/caltemplate.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/calwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/calwizard.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/calendarplugin.cpp
 )
 
-ki18n_wrap_ui(libcalendar_SRCS
+ki18n_wrap_ui(calendarplugin_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/caltemplate.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/calevents.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/calprogress.ui
 )
 
 DIGIKAM_ADD_PLUGIN(CalendarPlugin
-                   ${CMAKE_CURRENT_SOURCE_DIR}/calendarplugin.cpp
-                   ${libcalendar_SRCS}
+                   ${calendarplugin_SRCS}
 )

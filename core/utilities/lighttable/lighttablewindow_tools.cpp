@@ -54,23 +54,6 @@ void LightTableWindow::slotEditItem(const ItemInfo& info)
     im->setFocus();
 }
 
-void LightTableWindow::slotTimeAdjust()
-{
-    QList<QUrl> urls = d->thumbView->allUrls();
-
-    if (urls.isEmpty())
-        return;
-
-    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DBInfoIface(this, urls));
-
-    connect(dialog, SIGNAL(signalDateTimeForUrl(QUrl,QDateTime,bool)),
-            DIO::instance(), SLOT(slotDateTimeForUrl(QUrl,QDateTime,bool)));
-
-    dialog->exec();
-
-    delete dialog;
-}
-
 void LightTableWindow::slotEditMetadata()
 {
     if (d->thumbView->currentInfo().isNull())

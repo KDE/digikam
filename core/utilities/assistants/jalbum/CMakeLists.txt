@@ -17,16 +17,9 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::ConfigWidgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::Service,INTERFACE_INCLUDE_DIRECTORIES>
-
-                    ${LIBXSLT_INCLUDE_DIR}
-                    ${LIBXML2_INCLUDE_DIR}
 )
 
-add_definitions(${LIBXSLT_DEFINITIONS}
-                ${LIBXML2_DEFINITIONS}
-)
-
-set(libjalbum_SRCS
+set(jalbumplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/jalbumconfig.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/jalbuminfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/jalbumgenerator.cpp
@@ -35,9 +28,9 @@ set(libjalbum_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/jalbumoutputpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/jalbumselectionpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/jalbumwizard.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/jalbumplugin.cpp
 )
 
 DIGIKAM_ADD_PLUGIN(JAlbumPlugin
-                   ${CMAKE_CURRENT_SOURCE_DIR}/jalbumplugin.cpp
-                   ${libjalbum_SRCS}
+                   ${jalbumplugin_SRCS}
 )

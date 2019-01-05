@@ -305,6 +305,9 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_mediaServerAction = DPluginLoader::instance()->pluginAction(QLatin1String("mediaserver"), this);
     actionCollection()->addActions(QList<QAction*>() << m_mediaServerAction);
+
+    m_timeAdjustAction = DPluginLoader::instance()->pluginAction(QLatin1String("timeadjust_edit"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_timeAdjustAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -506,16 +509,6 @@ void DXmlGuiWindow::createMetadataEditAction()
 
     connect(m_metadataEditAction, SIGNAL(triggered(bool)),
             this, SLOT(slotEditMetadata()));
-}
-
-void DXmlGuiWindow::createTimeAdjustAction()
-{
-    m_timeAdjustAction = new QAction(QIcon::fromTheme(QLatin1String("appointment-new")), i18n("Adjust Time && Date..."), this);
-    actionCollection()->addAction(QLatin1String("timeadjust_edit"), m_timeAdjustAction);
-    actionCollection()->setDefaultShortcut(m_timeAdjustAction, Qt::CTRL + Qt::SHIFT + Qt::Key_D);
-
-    connect(m_timeAdjustAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotTimeAdjust()));
 }
 
 void DXmlGuiWindow::createPresentationAction()

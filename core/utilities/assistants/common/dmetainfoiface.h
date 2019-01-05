@@ -42,6 +42,10 @@ public:
     explicit DMetaInfoIface(QObject* const, const QList<QUrl>&);
     ~DMetaInfoIface();
 
+    Q_SLOT void slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate);
+
+    Q_SIGNAL void signalItemChanged(const QUrl& url);
+
 public:
 
     QList<QUrl> currentSelectedItems()            const;

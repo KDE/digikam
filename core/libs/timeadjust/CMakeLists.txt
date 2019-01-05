@@ -17,10 +17,11 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_PLUGIN(TimeAdjustPlugin
-    ${CMAKE_CURRENT_SOURCE_DIR}/timeadjustdialog.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/timeadjustlist.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/timeadjusttask.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/timeadjustthread.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/timeadjustplugin.cpp
+set(libtimeadjust_SRCS
+    clockphotodialog.cpp
+    detbyclockphotobutton.cpp
+    timeadjustcontainer.cpp
+    timeadjustsettings.cpp
 )
+
+add_library(timeadjust_src OBJECT ${libtimeadjust_SRCS})

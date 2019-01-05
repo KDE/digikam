@@ -127,10 +127,6 @@ public:
      */
     void createMetadataEditAction();
 
-    /** Create Time Adjust tool action.
-     */
-    void createTimeAdjustAction();
-
     /** Create Presentation tool action.
      */
     void createPresentationAction();

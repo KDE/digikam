@@ -142,23 +142,6 @@ void DigikamApp::slotDatabaseMigration()
     dlg.exec();
 }
 
-void DigikamApp::slotTimeAdjust()
-{
-    QList<QUrl> urls = view()->selectedUrls(ApplicationSettings::Metadata);
-
-    if (urls.isEmpty())
-        return;
-
-    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DBInfoIface(this, urls, ApplicationSettings::Metadata));
-
-    connect(dialog, SIGNAL(signalDateTimeForUrl(QUrl,QDateTime,bool)),
-            DIO::instance(), SLOT(slotDateTimeForUrl(QUrl,QDateTime,bool)));
-
-    dialog->exec();
-
-    delete dialog;
-}
-
 void DigikamApp::slotEditMetadata()
 {
     QList<QUrl> urls = view()->selectedUrls(ApplicationSettings::Metadata);

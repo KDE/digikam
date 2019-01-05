@@ -867,7 +867,12 @@ void ShowFoto::slotOpenWith(QAction* action)
 
 DInfoInterface* ShowFoto::infoIface(DPluginAction* const)
 {
-    return (new DMetaInfoIface(this, d->thumbBar->urls()));
+    DMetaInfoIface* const iface = new DMetaInfoIface(this, d->thumbBar->urls());
+
+    connect(iface, SIGNAL(signalItemChanged(QUrl)),
+            this, SLOT(slotChanged()));
+    
+    return iface;
 }
 
 } // namespace ShowFoto

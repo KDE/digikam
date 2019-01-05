@@ -816,7 +816,6 @@ void EditorWindow::setupStandardActions()
 
     createMetadataEditAction();
     createGeolocationEditAction();
-    createTimeAdjustAction();
     createExportActions();
     createImportActions();
 

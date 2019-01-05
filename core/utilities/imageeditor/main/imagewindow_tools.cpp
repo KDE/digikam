@@ -27,23 +27,6 @@
 namespace Digikam
 {
 
-void ImageWindow::slotTimeAdjust()
-{
-    QList<QUrl> urls = d->thumbBar->allUrls();
-
-    if (urls.isEmpty())
-        return;
-
-    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DBInfoIface(this, urls));
-
-    connect(dialog, SIGNAL(signalDateTimeForUrl(QUrl,QDateTime,bool)),
-            DIO::instance(), SLOT(slotDateTimeForUrl(QUrl,QDateTime,bool)));
-
-    dialog->exec();
-
-    delete dialog;
-}
-
 void ImageWindow::slotEditMetadata()
 {
     if (d->currentItemInfo.isNull())

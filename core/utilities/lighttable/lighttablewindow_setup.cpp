@@ -153,7 +153,6 @@ void LightTableWindow::setupActions()
 
     createMetadataEditAction();
     createGeolocationEditAction();
-    createTimeAdjustAction();
     createExportActions();
     createImportActions();
 

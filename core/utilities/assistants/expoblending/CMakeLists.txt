@@ -19,7 +19,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::Service,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-set(libexpoblending_SRCS
+set(expoblendingplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/expoblendingmanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/expoblendingthread.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/enfusebinary.cpp
@@ -32,9 +32,9 @@ set(libexpoblending_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/blendingdlg/bracketstack.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/blendingdlg/enfusestack.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/blendingdlg/expoblendingdlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/expoblendingplugin.cpp
 )
 
 DIGIKAM_ADD_PLUGIN(ExpoBlendingPlugin
-                   ${CMAKE_CURRENT_SOURCE_DIR}/expoblendingplugin.cpp
-                   ${libexpoblending_SRCS}
+                   ${expoblendingplugin_SRCS}
 )

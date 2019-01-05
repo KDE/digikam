@@ -125,22 +125,6 @@ void ShowFoto::slotEditGeolocation()
 #endif
 }
 
-void ShowFoto::slotTimeAdjust()
-{
-    QList<QUrl> urls = d->thumbBar->urls();
-
-    if (urls.isEmpty())
-        return;
-
-    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(this, new DMetaInfoIface(this, urls));
-    dialog->exec();
-
-    delete dialog;
-
-    // Update image information everywhere.
-    slotChanged();
-}
-
 void ShowFoto::slotEditMetadata()
 {
     if (d->thumbBar->currentInfo().isNull())

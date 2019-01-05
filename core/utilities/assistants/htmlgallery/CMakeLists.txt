@@ -26,7 +26,7 @@ add_definitions(${LIBXSLT_DEFINITIONS}
                 ${LIBXML2_DEFINITIONS}
 )
 
-set(libhtmlgallery_SRCS
+set(htmlgalleryplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/parameters/abstractthemeparameter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/parameters/intthemeparameter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/parameters/listthemeparameter.cpp
@@ -49,9 +49,9 @@ set(libhtmlgallery_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/gallerytheme.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/galleryinfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/gallerygenerator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/htmlgalleryplugin.cpp
 )
 
 DIGIKAM_ADD_PLUGIN(HtmlGalleryPlugin
-                   ${CMAKE_CURRENT_SOURCE_DIR}/htmlgalleryplugin.cpp
-                   ${libhtmlgallery_SRCS}
+                   ${htmlgalleryplugin_SRCS}
 )

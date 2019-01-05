@@ -19,7 +19,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::Service,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-set(libprintcreator_SRCS
+set(printcreatorplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/templateicon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/atkinspagelayout.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/atkinspagelayoutnode.cpp
@@ -38,9 +38,10 @@ set(libprintcreator_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcustomdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcropframe.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintwizard.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/printcreatorplugin.cpp
 )
 
-ki18n_wrap_ui(libprintcreator_SRCS
+ki18n_wrap_ui(printcreatorplugin_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/advprintphotopage.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/advprintcroppage.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/advprintcaptionpage.ui
@@ -48,6 +49,5 @@ ki18n_wrap_ui(libprintcreator_SRCS
 )
 
 DIGIKAM_ADD_PLUGIN(PrintCreatorPlugin
-                   ${CMAKE_CURRENT_SOURCE_DIR}/printcreatorplugin.cpp
-                   ${libprintcreator_SRCS}
+                   ${printcreatorplugin_SRCS}
 )

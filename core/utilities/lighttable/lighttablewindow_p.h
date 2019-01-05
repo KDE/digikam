@@ -85,8 +85,6 @@
 #include "thumbnailloadthread.h"
 #include "dexpanderbox.h"
 #include "dbinfoiface.h"
-#include "dmediaserverdlg.h"
-#include "timeadjustdialog.h"
 #include "wsstarter.h"
 
 #ifdef HAVE_MARBLE

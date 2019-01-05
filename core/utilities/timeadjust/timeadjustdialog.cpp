@@ -173,6 +173,9 @@ TimeAdjustDialog::TimeAdjustDialog(QWidget* const parent, DInfoInterface* const 
     connect(d->settingsView, SIGNAL(signalSettingsChangedTool()),
             this, SLOT(slotReadTimestamps()));
 
+    connect(this, SIGNAL(signalDateTimeForUrl(QUrl,QDateTime,bool)),
+            d->iface, SLOT(slotDateTimeForUrl(QUrl,QDateTime,bool)));
+
     // -----------------------------------------------------------------------
 
     setBusy(false);

@@ -20,7 +20,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-set(libsendbymail_SRCS
+set(sendbymailplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/imageresizethread.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/imageresizejob.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/mailsettings.cpp
@@ -31,9 +31,9 @@ set(libsendbymail_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/mailimagespage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/mailsettingspage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/mailfinalpage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/sendbymailplugin.cpp
 )
 
 DIGIKAM_ADD_PLUGIN(SendByMailPlugin
-                   ${CMAKE_CURRENT_SOURCE_DIR}/sendbymailplugin.cpp
-                   ${libsendbymail_SRCS}
+                   ${sendbymailplugin_SRCS}
 )

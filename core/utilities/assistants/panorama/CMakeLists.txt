@@ -9,7 +9,17 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-set(libpanorama_SRCS
+include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+
+                    $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::ThreadWeaver,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
+set(panoramaplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/tasks/panotask.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tasks/commandtask.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tasks/createfinalptotask.cpp
@@ -35,19 +45,9 @@ set(libpanorama_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/panopreprocesspage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/panopreviewpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/panowizard.cpp
-)
-
-include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
-
-                    $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::ThreadWeaver,INTERFACE_INCLUDE_DIRECTORIES>
+    ${CMAKE_CURRENT_SOURCE_DIR}/panoramaplugin.cpp
 )
 
 DIGIKAM_ADD_PLUGIN(PanoramaPlugin
-                   ${CMAKE_CURRENT_SOURCE_DIR}/panoramaplugin.cpp
-                   ${libpanorama_SRCS}
+                   ${panoramaplugin_SRCS}
 )
