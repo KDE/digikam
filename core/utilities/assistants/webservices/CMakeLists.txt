@@ -32,12 +32,6 @@ if(KF5KIO_FOUND)
     )
 endif()
 
-if(ENABLE_QWEBENGINE)
-    include_directories($<TARGET_PROPERTY:Qt5::WebEngineWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
-else()
-    include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
-endif()
-
 # OAuth2 library ---------------------------------------------------
 
 # The o2 library does not adhere to the flags we use
