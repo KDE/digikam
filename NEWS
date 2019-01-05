@@ -681,4 +681,6 @@ BUGFIXES:
 611 ==> 402811 - Drag-n-drop disabled in Geolocation editor.
 612 ==> 402812 - Use RED "recycle bin" icon from Albums context menus in all other 'delete' context menu items too.
 613 ==> 402809 - Clicking on "Import" toolbar button in import preview does nothing.
-614 ==> 
+614 ==> 372650 - On OS X, when tagging multiple images metadata is not correctly written to some image files or sidecars.
+615 ==> 
+
