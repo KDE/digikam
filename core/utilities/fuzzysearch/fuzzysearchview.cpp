@@ -28,8 +28,6 @@
 
 // Qt includes
 
-#include <QEvent>
-#include <QDragEnterEvent>
 #include <QFrame>
 #include <QImage>
 #include <QLabel>

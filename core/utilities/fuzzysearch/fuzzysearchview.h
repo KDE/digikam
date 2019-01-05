@@ -28,14 +28,15 @@
 
 // Qt includes
 
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
 #include <QScrollArea>
+#include <QDropEvent>
 
 // Local includes
 
 #include "statesavingobject.h"
 
-class QDragEnterEvent;
-class QDropEvent;
 class QMimeData;
 class QPixmap;
 
