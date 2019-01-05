@@ -38,6 +38,11 @@ void DetByClockPhotoButton::dragEnterEvent(QDragEnterEvent* event)
     event->acceptProposedAction();
 }
 
+void DetByClockPhotoButton::dragMoveEvent(QDragMoveEvent* event)
+{
+    event->acceptProposedAction();
+}
+
 void DetByClockPhotoButton::dropEvent(QDropEvent* event)
 {
     const QMimeData* const mimeData = event->mimeData();
