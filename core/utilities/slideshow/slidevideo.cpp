@@ -243,9 +243,11 @@ void SlideVideo::slotPlayerStateChanged(QtAV::AVPlayer::State state)
         // fix wrong rotation from QtAV git/master
         rotate     = d->player->statistics().video_only.rotate;
 #endif
-        d->videoWidget->setOrientation(-rotate + d->videoOrientation);
+        rotate     = rotate == 0 ? d->videoOrientation
+                                 : (-rotate + d->videoOrientation);
         qCDebug(DIGIKAM_GENERAL_LOG) << "Found video orientation:"
                                      << d->videoOrientation;
+        d->videoWidget->setOrientation(rotate);
     }
 }
 
