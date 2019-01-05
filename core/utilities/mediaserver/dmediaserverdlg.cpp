@@ -87,7 +87,7 @@ public:
     QCheckBox*          startOnStartup;
     bool                albumSupport;
     QWidget*            albumSelector;
-    DItemsList*        listView;
+    DItemsList*         listView;
     DInfoInterface*     iface;
     QWidget*            page;
     QDialogButtonBox*   buttons;
@@ -95,23 +95,23 @@ public:
 
 DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
                                  DInfoInterface* const iface)
-    : QDialog(),
+    : DPluginDialog(0, DMediaServerMngr::instance()->configGroupName()),
       d(new Private)
 {
-    setWindowFlags((windowFlags() & ~Qt::Dialog) |
-                   Qt::Window                    |
-                   Qt::WindowCloseButtonHint     |
-                   Qt::WindowMinMaxButtonsHint);
-
     setWindowTitle(i18nc("@title:window", "Share Files with DLNA Media Server"));
 
     d->iface                 = iface;
-    d->buttons               = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok, this);
-    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+    // NOTE: We overwrite the default albums chooser object name for load save check items state between sessions.
+    // The goal is not mix these settings with other export tools.
+    d->iface->setObjectName(QLatin1String("SetupMediaServerIface"));
+    
+    m_buttons->addButton(QDialogButtonBox::Cancel);
+    m_buttons->addButton(QDialogButtonBox::Ok);
+    m_buttons->button(QDialogButtonBox::Ok)->setDefault(true);
     d->page                  = new QWidget(this);
     QVBoxLayout* const vbx   = new QVBoxLayout(this);
     vbx->addWidget(d->page);
-    vbx->addWidget(d->buttons);
+    vbx->addWidget(m_buttons);
     setLayout(vbx);
     setModal(false);
 
@@ -190,10 +190,10 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     connect(d->srvButton, SIGNAL(clicked()),
             this, SLOT(slotToggleMediaServer()));
 
-    connect(d->buttons->button(QDialogButtonBox::Cancel), &QPushButton::clicked,
+    connect(m_buttons->button(QDialogButtonBox::Cancel), &QPushButton::clicked,
             this, &DMediaServerDlg::reject);
 
-    connect(d->buttons->button(QDialogButtonBox::Ok), &QPushButton::clicked,
+    connect(m_buttons->button(QDialogButtonBox::Ok), &QPushButton::clicked,
             this, &DMediaServerDlg::accept);
 
     // -------------------
@@ -244,10 +244,6 @@ void DMediaServerDlg::readSettings()
 
     d->startOnStartup->setChecked(group.readEntry(d->mngr->configStartServerOnStartupEntry(), false));
 
-    winId();
-    DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
-    resize(windowHandle()->size());
-
     updateServerStatus();
 }
 
@@ -258,7 +254,6 @@ void DMediaServerDlg::saveSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->mngr->configGroupName());
     group.writeEntry(d->mngr->configStartServerOnStartupEntry(), d->startOnStartup->isChecked());
-    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
     config->sync();
 }
 
@@ -295,7 +290,7 @@ bool DMediaServerDlg::setMediaServerContents()
         DInfoInterface::DAlbumIDs albums = d->iface->albumChooserItems();
         MediaServerMap map;
 
-        foreach(int id, albums)
+        foreach (int id, albums)
         {
             DAlbumInfo anf(d->iface->albumInfo(id));
             map.insert(anf.title(), d->iface->albumItems(id));

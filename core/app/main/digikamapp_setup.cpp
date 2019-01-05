@@ -781,8 +781,6 @@ void DigikamApp::setupActions()
     connect(d->maintenanceAction, SIGNAL(triggered()), this, SLOT(slotMaintenance()));
     ac->addAction(QLatin1String("maintenance"), d->maintenanceAction);
 
-    createMediaServerAction();
-
     // -----------------------------------------------------------
 
     QAction* const cameraAction = new QAction(i18n("Add Camera Manually..."), this);

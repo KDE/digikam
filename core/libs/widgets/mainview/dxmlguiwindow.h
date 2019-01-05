@@ -135,10 +135,6 @@ public:
      */
     void createPresentationAction();
 
-    /** Create Media Server action to share through DLNA.
-     */
-    void createMediaServerAction();
-
     /** Create common actions to setup all digiKam main windows.
      */
     void createSettingsActions();
@@ -335,9 +331,6 @@ private Q_SLOTS:
 
     // Called by Presentation tool.
     virtual void slotPresentation()            {};
-
-    // Called by Media Server tool.
-    virtual void slotMediaServer()             {};
 
     // Called by Webservices Export tools.
     virtual void slotExportTool()              {};

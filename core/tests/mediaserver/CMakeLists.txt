@@ -33,23 +33,6 @@ target_link_libraries(dmediaservertest
 )
 
 ########################################################################
-
-set(dmediaserver_dlg_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/dmediaserver_dlg.cpp
-)
-
-add_executable(dmediaserver_dlg ${dmediaserver_dlg_SRCS})
-
-target_link_libraries(dmediaserver_dlg
-                      digikamcore
-
-                      Qt5::Widgets
-                      Qt5::Gui
-                      Qt5::Core
-                      Qt5::Test
-)
-
-########################################################################
 # CLI test tool from Platinum SDK
 
 #set(filemediaserver_SRCS

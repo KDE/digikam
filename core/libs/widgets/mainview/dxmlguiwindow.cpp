@@ -302,6 +302,9 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_jalbumAction = DPluginLoader::instance()->pluginAction(QLatin1String("jalbum"), this);
     actionCollection()->addActions(QList<QAction*>() << m_jalbumAction);
+
+    m_mediaServerAction = DPluginLoader::instance()->pluginAction(QLatin1String("mediaserver"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_mediaServerAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -524,19 +527,6 @@ void DXmlGuiWindow::createPresentationAction()
 
     connect(m_presentationAction, SIGNAL(triggered()),
             this, SLOT(slotPresentation()));
-}
-
-void DXmlGuiWindow::createMediaServerAction()
-{
-    m_mediaServerAction = new QAction(QIcon::fromTheme(QLatin1String("arrow-right-double")),
-                                      i18n("Share with DLNA"),
-                                      this);
-
-
-    actionCollection()->addAction(QLatin1String("mediaserver"), m_mediaServerAction);
-
-    connect(m_mediaServerAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotMediaServer()));
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)

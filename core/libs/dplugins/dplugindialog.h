@@ -45,13 +45,13 @@ public:
 
     explicit DPluginDialog(QWidget* const parent, const QString& objName);
     ~DPluginDialog();
-    
+
     void setPlugin(DPlugin* const tool);
 
 protected:
 
-    virtual void restoreDialogSize();
-    virtual void saveDialogSize();
+    void restoreDialogSize();
+    void saveDialogSize();
 
 private Q_SLOTS:
 
@@ -60,11 +60,11 @@ private Q_SLOTS:
 protected:
 
     QDialogButtonBox* m_buttons;
-    
+
 private:
 
     DPlugin*          m_tool;
-    
+
     Q_DISABLE_COPY(DPluginDialog)
 };
 

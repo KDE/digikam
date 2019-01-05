@@ -49,8 +49,8 @@ public:
 
 protected:
 
-    virtual void restoreDialogSize();
-    virtual void saveDialogSize();
+    void restoreDialogSize();
+    void saveDialogSize();
 
 private Q_SLOTS:
 
@@ -59,7 +59,7 @@ private Q_SLOTS:
 private:
 
     DPlugin* m_tool;
-    
+
     Q_DISABLE_COPY(DWizardDlg)
 };
 

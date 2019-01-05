@@ -203,7 +203,6 @@ private Q_SLOTS:
 
 private Q_SLOTS:
 
-    void slotMediaServer();
     void slotExportTool();
 
 // -- Import tools methods implemented in lighttablewindow_import.cpp -------------------------------------

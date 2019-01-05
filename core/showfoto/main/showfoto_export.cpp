@@ -27,13 +27,6 @@
 namespace ShowFoto
 {
 
-void ShowFoto::slotMediaServer()
-{
-    QPointer<DMediaServerDlg> w = new DMediaServerDlg(this, new DMetaInfoIface(this, d->thumbBar->urls()));
-    w->exec();
-    delete w;
-}
-
 void ShowFoto::slotExportTool()
 {
     QAction* const action = dynamic_cast<QAction*>(sender());

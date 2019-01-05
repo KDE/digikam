@@ -817,7 +817,6 @@ void EditorWindow::setupStandardActions()
     createMetadataEditAction();
     createGeolocationEditAction();
     createTimeAdjustAction();
-    createMediaServerAction();
     createExportActions();
     createImportActions();
 

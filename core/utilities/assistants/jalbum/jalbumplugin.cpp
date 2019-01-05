@@ -63,7 +63,7 @@ QIcon JAlbumPlugin::icon() const
 
 QString JAlbumPlugin::description() const
 {
-    return i18n("A Tool to export images to jAlbum gallery generator");
+    return i18n("A tool to export images to jAlbum gallery generator");
 }
 
 QString JAlbumPlugin::details() const

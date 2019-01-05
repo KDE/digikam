@@ -63,7 +63,7 @@ QIcon SendByMailPlugin::icon() const
 
 QString SendByMailPlugin::description() const
 {
-    return i18n("A Tool to send images by E-mail");
+    return i18n("A tool to send images by E-mail");
 }
 
 QString SendByMailPlugin::details() const

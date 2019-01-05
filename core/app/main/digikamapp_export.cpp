@@ -27,18 +27,6 @@
 namespace Digikam
 {
 
-void DigikamApp::slotMediaServer()
-{
-    DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);
-    // NOTE: We overwrite the default albums chooser object name for load save check items state between sessions.
-    // The goal is not mix these settings with other export tools.
-    iface->setObjectName(QLatin1String("SetupMediaServerIface"));
-
-    QPointer<DMediaServerDlg> w = new DMediaServerDlg(this, iface);
-    w->exec();
-    delete w;
-}
-
 void DigikamApp::slotExportTool()
 {
     QAction* const action = dynamic_cast<QAction*>(sender());

@@ -215,7 +215,6 @@ private:
 
 private Q_SLOTS:
 
-    void slotMediaServer();
     void slotExportTool();
 
 // -- Import tools methods implemented in imagewindow_import.cpp -------------------------------------

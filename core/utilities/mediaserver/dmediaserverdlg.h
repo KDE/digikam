@@ -26,17 +26,17 @@
 // Qt includes
 
 #include <QUrl>
-#include <QDialog>
 
 // Local includes
 
 #include "digikam_export.h"
 #include "dinfointerface.h"
+#include "dplugindialog.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DMediaServerDlg : public QDialog
+class DIGIKAM_EXPORT DMediaServerDlg : public DPluginDialog
 {
     Q_OBJECT
 
