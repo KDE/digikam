@@ -59,6 +59,9 @@ public:
     explicit DInfoInterface(QObject* const parent);
     ~DInfoInterface();
 
+    // Slot to call when date time stamp from items are changed.
+    Q_SLOT virtual void slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate);
+
 public:
 
     // Low level items and albums methods
@@ -72,7 +75,7 @@ public:
 
     virtual DInfoMap    albumInfo(int)                    const;
     virtual DInfoMap    itemInfo(const QUrl&)             const;
-
+    
 public:
 
     // Albums chooser view methods (to use items from albums before to process).

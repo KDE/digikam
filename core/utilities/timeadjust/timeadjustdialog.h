@@ -7,7 +7,7 @@
  * Description : dialog to set time stamp of picture files.
  *
  * Copyright (C) 2012      by Smit Mehta <smit dot meh at gmail dot com>
- * Copyright (C) 2003-2005 by Jesper Pedersen <blackie@kde.org>
+ * Copyright (C) 2003-2005 by Jesper Pedersen <blackie at kde dot org>
  * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (c) 2018      by Maik Qualmann <metzpinguin at gmail dot com>
  *
@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "wstooldialog.h"
+#include "dplugindialog.h"
 #include "digikam_export.h"
 #include "timeadjustsettings.h"
 
@@ -41,7 +41,7 @@ namespace Digikam
 
 class DInfoInterface;
 
-class DIGIKAM_EXPORT TimeAdjustDialog : public WSToolDialog
+class DIGIKAM_EXPORT TimeAdjustDialog : public DPluginDialog
 {
     Q_OBJECT
 

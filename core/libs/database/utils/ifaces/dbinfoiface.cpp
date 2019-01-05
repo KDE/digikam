@@ -45,6 +45,7 @@
 #include "coredbsearchxml.h"
 #include "itemlister.h"
 #include "itemlisterreceiver.h"
+#include "dio.h"
 
 namespace Digikam
 {
@@ -276,6 +277,11 @@ DBInfoIface::DBInfoIface(QObject* const parent, const QList<QUrl>& lst,
 DBInfoIface::~DBInfoIface()
 {
     delete d;
+}
+
+void DBInfoIface::slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate)
+{
+    DIO::instance()->slotDateTimeForUrl(url, dt, updModDate);
 }
 
 QList<QUrl> DBInfoIface::currentAlbumItems() const

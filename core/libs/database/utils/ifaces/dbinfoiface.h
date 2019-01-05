@@ -47,6 +47,8 @@ public:
                          const ApplicationSettings::OperationType type = ApplicationSettings::Unspecified);
     ~DBInfoIface();
 
+    Q_SLOT virtual void slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate);
+        
     QList<QUrl> currentSelectedItems()               const;
     QList<QUrl> currentAlbumItems()                  const;
 

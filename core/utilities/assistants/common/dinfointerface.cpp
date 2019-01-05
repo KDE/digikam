@@ -47,6 +47,10 @@ DInfoInterface::~DInfoInterface()
 {
 }
 
+void DInfoInterface::slotDateTimeForUrl(const QUrl& /*url*/, const QDateTime& /*dt*/, bool /*updModDate*/)
+{
+}
+
 QList<QUrl> DInfoInterface::currentSelectedItems() const
 {
     return QList<QUrl>();

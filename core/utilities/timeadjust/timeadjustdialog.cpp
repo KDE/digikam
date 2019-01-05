@@ -7,7 +7,7 @@
  * Description : dialog to set time stamp of picture files.
  *
  * Copyright (C) 2012      by Smit Mehta <smit dot meh at gmail dot com>
- * Copyright (C) 2003-2005 by Jesper Pedersen <blackie@kde.org>
+ * Copyright (C) 2003-2005 by Jesper Pedersen <blackie at kde dot org>
  * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (c) 2018      by Maik Qualmann <metzpinguin at gmail dot com>
  *
@@ -100,7 +100,7 @@ public:
 };
 
 TimeAdjustDialog::TimeAdjustDialog(QWidget* const parent, DInfoInterface* const iface)
-    : WSToolDialog(parent),
+    : DPluginDialog(parent, QLatin1String("Time Adjust Dialog")),
       d(new Private)
 {
     setWindowTitle(i18n("Adjust Time & Date"));
@@ -109,12 +109,17 @@ TimeAdjustDialog::TimeAdjustDialog(QWidget* const parent, DInfoInterface* const 
 
     d->iface = iface;
 
-    startButton()->setText(i18nc("@action:button", "&Apply"));
-    startButton()->setToolTip(i18nc("@info:tooltip", "Write the corrected date and time for each image"));
-    startButton()->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok-apply")));
+    m_buttons->addButton(QDialogButtonBox::Close);
+    m_buttons->addButton(QDialogButtonBox::Ok);
+    m_buttons->button(QDialogButtonBox::Ok)->setText(i18nc("@action:button", "&Apply"));
+    m_buttons->button(QDialogButtonBox::Ok)->setToolTip(i18nc("@info:tooltip", "Write the corrected date and time for each image"));
+    m_buttons->button(QDialogButtonBox::Ok)->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok-apply")));
 
-    QWidget* const mainWidget     = new QWidget(this);
-    setMainWidget(mainWidget);
+    QWidget* const mainWidget = new QWidget(this);
+    QVBoxLayout* const vbx    = new QVBoxLayout(this);
+    vbx->addWidget(mainWidget);
+    vbx->addWidget(m_buttons);
+    setLayout(vbx);
 
     QGridLayout* const mainLayout = new QGridLayout(mainWidget);
     d->listView                   = new TimeAdjustList(mainWidget);
@@ -153,14 +158,14 @@ TimeAdjustDialog::TimeAdjustDialog(QWidget* const parent, DInfoInterface* const 
 
     // -- Dialog Slots/Signals -----------------------------------------------
 
-    connect(startButton(), &QPushButton::clicked,
-            this, &TimeAdjustDialog::slotApplyClicked);
+    connect(m_buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(slotApplyClicked()));
 
-    connect(this, &WSToolDialog::cancelClicked,
-            this, &TimeAdjustDialog::slotCancelThread);
+    connect(m_buttons->button(QDialogButtonBox::Close), SIGNAL(clicked()),
+            this, SLOT(slotCancelThread()));
 
-    connect(this, &QDialog::finished,
-            this, &TimeAdjustDialog::slotDialogFinished);
+    connect(this, SIGNAL(finished(int)),
+            this, SLOT(slotDialogFinished()));
 
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotReadTimestamps()));
@@ -234,11 +239,6 @@ void TimeAdjustDialog::readSettings()
     prm.fileDateSource = group.readEntry(QLatin1String("File Timestamp Type"),           0);
 
     d->settingsView->setSettings(prm);
-
-    winId();
-    KConfigGroup group2 = config->group(QLatin1String("Time Adjust Dialog"));
-    DXmlGuiWindow::restoreWindowSize(windowHandle(), group2);
-    resize(windowHandle()->size());
 }
 
 void TimeAdjustDialog::saveSettings()
@@ -268,9 +268,6 @@ void TimeAdjustDialog::saveSettings()
     group.writeEntry(QLatin1String("Use Timestamp Type"),            prm.dateSource);
     group.writeEntry(QLatin1String("Meta Timestamp Type"),           prm.metadataSource);
     group.writeEntry(QLatin1String("File Timestamp Type"),           prm.fileDateSource);
-
-    KConfigGroup group2 = config->group(QLatin1String("Time Adjust Dialog"));
-    DXmlGuiWindow::saveWindowSize(windowHandle(), group2);
 }
 
 void TimeAdjustDialog::slotReadTimestamps()
@@ -311,6 +308,7 @@ void TimeAdjustDialog::slotReadTimestamps()
             {
                 d->itemsUsedMap.insert(url, dateTime);
             }
+
             break;
         }
     }
@@ -336,8 +334,6 @@ void TimeAdjustDialog::readApplicationTimestamps()
             d->itemsUsedMap.insert(url, QDateTime());
         }
     }
-
-    // TODO (blackie): handle all items in listview with inexact timestamp through floatingDateItems.
 }
 
 void TimeAdjustDialog::readFileTimestamps()
@@ -428,12 +424,29 @@ void TimeAdjustDialog::slotCancelThread()
     {
         d->thread->cancel();
     }
+
+    if (m_buttons->button(QDialogButtonBox::Ok)->isEnabled())
+    {
+        accept();
+    }
 }
 
 void TimeAdjustDialog::setBusy(bool busy)
 {
-    setRejectButtonMode(busy ? QDialogButtonBox::Cancel : QDialogButtonBox::Close);
-    startButton()->setEnabled(!busy);
+    if (busy)
+    {
+        m_buttons->button(QDialogButtonBox::Close)->setText(i18n("Cancel"));
+        m_buttons->button(QDialogButtonBox::Close)->setIcon(QIcon::fromTheme(QLatin1String("dialog-cancel")));
+        m_buttons->button(QDialogButtonBox::Close)->setToolTip(i18n("Cancel current operation"));
+    }
+    else
+    {
+        m_buttons->button(QDialogButtonBox::Close)->setText(i18n("Close"));
+        m_buttons->button(QDialogButtonBox::Close)->setIcon(QIcon::fromTheme(QLatin1String("window-close")));
+        m_buttons->button(QDialogButtonBox::Close)->setToolTip(i18n("Close window"));
+    }
+
+    m_buttons->button(QDialogButtonBox::Ok)->setEnabled(!busy);
 }
 
 void TimeAdjustDialog::slotProcessStarted(const QUrl& url)
