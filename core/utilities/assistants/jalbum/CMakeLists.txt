@@ -37,4 +37,7 @@ set(libjalbum_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/jalbumwizard.cpp
 )
 
-add_library(jalbum_src OBJECT ${libjalbum_SRCS})
+DIGIKAM_ADD_PLUGIN(JAlbumPlugin
+                   ${CMAKE_CURRENT_SOURCE_DIR}/jalbumplugin.cpp
+                   ${libjalbum_SRCS}
+)

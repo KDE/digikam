@@ -178,6 +178,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_panoramaAction           = 0;
     m_videoslideshowAction     = 0;
     m_htmlGalleryAction        = 0;
+    m_jalbumAction             = 0;
     m_sendByMailAction         = 0;
     m_printCreatorAction       = 0;
     m_calendarAction           = 0;
@@ -287,7 +288,7 @@ void DXmlGuiWindow::registerPluginsActions()
     m_videoslideshowAction = DPluginLoader::instance()->pluginAction(QLatin1String("videoslideshow"), this);
     actionCollection()->addActions(QList<QAction*>() << m_videoslideshowAction);
 #endif
-    
+
     m_calendarAction = DPluginLoader::instance()->pluginAction(QLatin1String("calendar"), this);
     actionCollection()->addActions(QList<QAction*>() << m_calendarAction);
 
@@ -299,6 +300,8 @@ void DXmlGuiWindow::registerPluginsActions()
     actionCollection()->addActions(QList<QAction*>() << m_panoramaAction);
 #endif
 
+    m_jalbumAction = DPluginLoader::instance()->pluginAction(QLatin1String("jalbum"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_jalbumAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)

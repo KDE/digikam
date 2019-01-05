@@ -4,10 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2006-04-04
- * Description : a tool to generate HTML image galleries
+ * Description : a tool to generate jAlbum image galleries
  *
- * Copyright (C) 2006-2010 by Aurelien Gateau <aurelien dot gateau at free dot fr>
- * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2019 by Andrew Goodbody <ajg zero two at elfringham dot co dot uk>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +41,7 @@ namespace Digikam
  * This class stores all the export settings. It is initialized by the
  * Wizard and read by the Generator.
  */
-class JalbumInfo : public JalbumConfig
+class JAlbumInfo : public JAlbumConfig
 {
 public:
 
@@ -54,8 +53,8 @@ public:
 
 public:
 
-    explicit JalbumInfo(DInfoInterface* const iface = 0);
-    ~JalbumInfo();
+    explicit JAlbumInfo(DInfoInterface* const iface = 0);
+    ~JAlbumInfo();
 
 public:
 
@@ -72,7 +71,7 @@ private:
 };
 
 //! qDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.
-QDebug operator<<(QDebug dbg, const JalbumInfo& t);
+QDebug operator<<(QDebug dbg, const JAlbumInfo& t);
 
 } // namespace Digikam
 

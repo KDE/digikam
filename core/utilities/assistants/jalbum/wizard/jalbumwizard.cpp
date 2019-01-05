@@ -4,10 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2006-04-04
- * Description : a tool to generate HTML image galleries
+ * Description : a tool to generate jAlbum image galleries
  *
- * Copyright (C) 2006-2010 by Aurelien Gateau <aurelien dot gateau at free dot fr>
- * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2019 by Andrew Goodbody <ajg zero two at elfringham dot co dot uk>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +51,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN JALBUMWizard::Private
+class Q_DECL_HIDDEN JAlbumWizard::Private
 {
 public:
 
@@ -66,44 +65,44 @@ public:
     {
     }
 
-    JalbumInfo*            info;
+    JAlbumInfo*            info;
     KConfigDialogManager*  configManager;
 
-    JALBUMIntroPage*       introPage;
-    JALBUMSelectionPage*   selectionPage;
-    JALBUMOutputPage*      outputPage;
-    JALBUMFinalPage*       finalPage;
+    JAlbumIntroPage*       introPage;
+    JAlbumSelectionPage*   selectionPage;
+    JAlbumOutputPage*      outputPage;
+    JAlbumFinalPage*       finalPage;
 };
 
-JALBUMWizard::JALBUMWizard(QWidget* const parent, DInfoInterface* const iface)
+JAlbumWizard::JAlbumWizard(QWidget* const parent, DInfoInterface* const iface)
     : DWizardDlg(parent, QLatin1String("jAlbum Album Creation Dialog")),
       d(new Private)
 {
     setOption(QWizard::NoCancelButtonOnLastPage);
     setWindowTitle(i18n("Create jAlbum Album"));
 
-    d->info = new JalbumInfo(iface);
+    d->info = new JAlbumInfo(iface);
     d->info->load();
 
-    d->introPage         = new JALBUMIntroPage(this,         i18n("Welcome to jAlbum Album Tool"));
-    d->selectionPage     = new JALBUMSelectionPage(this,     i18n("Items Selection"));
-    d->outputPage        = new JALBUMOutputPage(this,        i18n("Paths Selection"));
-    d->finalPage         = new JALBUMFinalPage(this,         i18n("Generating jAlbum"));
+    d->introPage         = new JAlbumIntroPage(this,         i18n("Welcome to jAlbum Album Tool"));
+    d->selectionPage     = new JAlbumSelectionPage(this,     i18n("Items Selection"));
+    d->outputPage        = new JAlbumOutputPage(this,        i18n("Paths Selection"));
+    d->finalPage         = new JAlbumFinalPage(this,         i18n("Generating jAlbum"));
     d->configManager     = new KConfigDialogManager(this, d->info);
     d->configManager->updateWidgets();
 }
 
-JALBUMWizard::~JALBUMWizard()
+JAlbumWizard::~JAlbumWizard()
 {
     delete d;
 }
 
-void JALBUMWizard::setItemsList(const QList<QUrl>& urls)
+void JAlbumWizard::setItemsList(const QList<QUrl>& urls)
 {
     d->selectionPage->setItemsList(urls);
 }
 
-bool JALBUMWizard::validateCurrentPage()
+bool JAlbumWizard::validateCurrentPage()
 {
     if (!DWizardDlg::validateCurrentPage())
         return false;
@@ -117,12 +116,12 @@ bool JALBUMWizard::validateCurrentPage()
     return true;
 }
 
-int JALBUMWizard::nextId() const
+int JAlbumWizard::nextId() const
 {
     return DWizardDlg::nextId();
 }
 
-JalbumInfo* JALBUMWizard::jalbumInfo() const
+JAlbumInfo* JAlbumWizard::jalbumInfo() const
 {
     return d->info;
 }

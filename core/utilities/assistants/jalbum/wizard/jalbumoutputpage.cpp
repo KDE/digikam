@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2006-04-04
- * Description : a tool to generate JALBUM image galleries
+ * Description : a tool to generate jAlbum image galleries
  *
- * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2019 by Andrew Goodbody <ajg zero two at elfringham dot co dot uk>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN JALBUMOutputPage::Private
+class Q_DECL_HIDDEN JAlbumOutputPage::Private
 {
 public:
 
@@ -65,7 +65,7 @@ public:
     QLineEdit*     imageSelectionTitle;
 };
 
-JALBUMOutputPage::JALBUMOutputPage(QWizard* const dialog, const QString& title)
+JAlbumOutputPage::JAlbumOutputPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title),
       d(new Private)
 {
@@ -137,26 +137,26 @@ JALBUMOutputPage::JALBUMOutputPage(QWizard* const dialog, const QString& title)
             this, SIGNAL(completeChanged()));
 }
 
-JALBUMOutputPage::~JALBUMOutputPage()
+JAlbumOutputPage::~JAlbumOutputPage()
 {
     delete d;
 }
 
-void JALBUMOutputPage::initializePage()
+void JAlbumOutputPage::initializePage()
 {
-    JALBUMWizard* const wizard = dynamic_cast<JALBUMWizard*>(assistant());
+    JAlbumWizard* const wizard = dynamic_cast<JAlbumWizard*>(assistant());
 
     if (!wizard)
         return;
 
-    JalbumInfo* const info  = wizard->jalbumInfo();
+    JAlbumInfo* const info  = wizard->jalbumInfo();
 
     d->destUrl->setFileDlgPath(info->destUrl().toLocalFile());
     d->jarUrl->setFileDlgPath(info->jarUrl().toLocalFile());
     d->imageSelectionTitle->setText(info->imageSelectionTitle());
 }
 
-bool JALBUMOutputPage::validatePage()
+bool JAlbumOutputPage::validatePage()
 {
     if (d->destUrl->fileDlgPath().isEmpty())
         return false;
@@ -167,12 +167,12 @@ bool JALBUMOutputPage::validatePage()
     if (d->imageSelectionTitle->text().isEmpty())
         return false;
 
-    JALBUMWizard* const wizard = dynamic_cast<JALBUMWizard*>(assistant());
+    JAlbumWizard* const wizard = dynamic_cast<JAlbumWizard*>(assistant());
 
     if (!wizard)
         return false;
 
-    JalbumInfo* const info  = wizard->jalbumInfo();
+    JAlbumInfo* const info  = wizard->jalbumInfo();
 
     info->setDestUrl(QUrl::fromLocalFile(d->destUrl->fileDlgPath()));
     info->setJarUrl(QUrl::fromLocalFile(d->jarUrl->fileDlgPath()));
@@ -181,9 +181,9 @@ bool JALBUMOutputPage::validatePage()
     return true;
 }
 
-bool JALBUMOutputPage::isComplete() const
+bool JAlbumOutputPage::isComplete() const
 {
-    JALBUMWizard* const wizard = dynamic_cast<JALBUMWizard*>(assistant());
+    JAlbumWizard* const wizard = dynamic_cast<JAlbumWizard*>(assistant());
 
     if (!wizard)
         return false;

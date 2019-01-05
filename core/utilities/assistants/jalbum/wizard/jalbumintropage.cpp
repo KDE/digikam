@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2006-04-04
- * Description : a tool to generate JALBUM image galleries
+ * Description : a tool to generate jAlbum image galleries
  *
- * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2019 by Andrew Goodbody <ajg zero two at elfringham dot co dot uk>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN JALBUMIntroPage::Private
+class Q_DECL_HIDDEN JAlbumIntroPage::Private
 {
 public:
 
@@ -54,7 +54,7 @@ public:
         info(0),
         iface(0)
     {
-        wizard = dynamic_cast<JALBUMWizard*>(dialog);
+        wizard = dynamic_cast<JAlbumWizard*>(dialog);
 
         if (wizard)
         {
@@ -65,12 +65,12 @@ public:
 
     QComboBox*       imageGetOption;
     DHBox*           hbox;
-    JALBUMWizard*    wizard;
-    JalbumInfo*      info;
+    JAlbumWizard*    wizard;
+    JAlbumInfo*      info;
     DInfoInterface*  iface;
 };
 
-JALBUMIntroPage::JALBUMIntroPage(QWizard* const dialog, const QString& title)
+JAlbumIntroPage::JAlbumIntroPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title),
       d(new Private(dialog))
 {
@@ -90,26 +90,26 @@ JALBUMIntroPage::JALBUMIntroPage(QWizard* const dialog, const QString& title)
     d->hbox                     = new DHBox(vbox);
     QLabel* const getImageLabel = new QLabel(i18n("&Choose image selection method:"), d->hbox);
     d->imageGetOption           = new QComboBox(d->hbox);
-    d->imageGetOption->insertItem(JalbumInfo::ALBUMS, i18n("Albums"));
-    d->imageGetOption->insertItem(JalbumInfo::IMAGES, i18n("Images"));
+    d->imageGetOption->insertItem(JAlbumInfo::ALBUMS, i18n("Albums"));
+    d->imageGetOption->insertItem(JAlbumInfo::IMAGES, i18n("Images"));
     getImageLabel->setBuddy(d->imageGetOption);
 
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("text-html")));
 }
 
-JALBUMIntroPage::~JALBUMIntroPage()
+JAlbumIntroPage::~JAlbumIntroPage()
 {
     delete d;
 }
 
-void JALBUMIntroPage::initializePage()
+void JAlbumIntroPage::initializePage()
 {
     bool albumSupport = (d->iface && d->iface->supportAlbums());
 
     if (!albumSupport)
     {
-        d->imageGetOption->setCurrentIndex(JalbumInfo::IMAGES);
+        d->imageGetOption->setCurrentIndex(JAlbumInfo::IMAGES);
         d->hbox->setEnabled(false);
     }
     else
@@ -118,9 +118,9 @@ void JALBUMIntroPage::initializePage()
     }
 }
 
-bool JALBUMIntroPage::validatePage()
+bool JAlbumIntroPage::validatePage()
 {
-    d->info->m_getOption = (JalbumInfo::ImageGetOption)d->imageGetOption->currentIndex();
+    d->info->m_getOption = (JAlbumInfo::ImageGetOption)d->imageGetOption->currentIndex();
 
     return true;
 }

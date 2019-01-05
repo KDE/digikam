@@ -837,6 +837,8 @@ void EditorWindow::setupStandardActions()
     m_htmlGalleryAction->setEnabled(false);
 #endif
 
+    m_jalbumAction->setEnabled(false);
+        
 #ifdef HAVE_PANORAMA
     m_panoramaAction->setEnabled(false);
 #endif
@@ -1428,6 +1430,8 @@ void EditorWindow::toggleStandardActions(bool val)
 #ifdef HAVE_PANORAMA
     m_panoramaAction->setEnabled(val);
 #endif
+
+    m_jalbumAction->setEnabled(val);
 
 #ifdef HAVE_MEDIAPLAYER
     m_videoslideshowAction->setEnabled(val);
@@ -3030,6 +3034,8 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(m_htmlGalleryAction,           postCategory);
 #endif
 
+    actionModel->addAction(m_jalbumAction,                postCategory);
+    
 #ifdef HAVE_PANORAMA
     actionModel->addAction(m_panoramaAction,              postCategory);
 #endif

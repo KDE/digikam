@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="608" name="imageeditor" translationDomain="digikam" >
+<gui version="610" name="imageeditor" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -141,6 +141,7 @@
         <Action name="expoblending" />
         <Action name="panorama" />
         <Action name="htmlgallery" />
+        <Action name="jalbum" />
         <Action name="calendar" />
         <Action name="videoslideshow" />
         <Action name="sendbymail" />

@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2006-04-04
- * Description : a tool to generate JALBUM image galleries
+ * Description : a tool to generate jAlbum image galleries
  *
- * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2019 by Andrew Goodbody <ajg zero two at elfringham dot co dot uk>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN JALBUMFinalPage::Private
+class Q_DECL_HIDDEN JAlbumFinalPage::Private
 {
 public:
 
@@ -68,7 +68,7 @@ public:
     bool          complete;
 };
 
-JALBUMFinalPage::JALBUMFinalPage(QWizard* const dialog, const QString& title)
+JAlbumFinalPage::JAlbumFinalPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title),
       d(new Private)
 {
@@ -86,21 +86,21 @@ JALBUMFinalPage::JALBUMFinalPage(QWizard* const dialog, const QString& title)
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("system-run")));
 }
 
-JALBUMFinalPage::~JALBUMFinalPage()
+JAlbumFinalPage::~JAlbumFinalPage()
 {
     delete d;
 }
 
-void JALBUMFinalPage::initializePage()
+void JAlbumFinalPage::initializePage()
 {
     d->complete = false;
     emit completeChanged();
     QTimer::singleShot(0, this, SLOT(slotProcess()));
 }
 
-void JALBUMFinalPage::slotProcess()
+void JAlbumFinalPage::slotProcess()
 {
-    JALBUMWizard* const wizard = dynamic_cast<JALBUMWizard*>(assistant());
+    JAlbumWizard* const wizard = dynamic_cast<JAlbumWizard*>(assistant());
 
     if (!wizard)
     {
@@ -112,16 +112,16 @@ void JALBUMFinalPage::slotProcess()
     d->progressView->clear();
     d->progressBar->reset();
 
-    JalbumInfo* const info  = wizard->jalbumInfo();
+    JAlbumInfo* const info  = wizard->jalbumInfo();
 
-    // Generate JalbumInfo
+    // Generate JAlbumInfo
 
     qCDebug(DIGIKAM_GENERAL_LOG) << info;
 
     d->progressView->addEntry(i18n("Starting to generate jAlbum..."),
                               DHistoryView::ProgressEntry);
 
-    if (info->m_getOption == JalbumInfo::ALBUMS)
+    if (info->m_getOption == JAlbumInfo::ALBUMS)
     {
         if (!info->m_iface)
             return;
@@ -145,7 +145,7 @@ void JALBUMFinalPage::slotProcess()
                               QDir::toNativeSeparators(info->destUrl().toLocalFile())),
                               DHistoryView::ProgressEntry);
 
-    JalbumGenerator generator(info);
+    JAlbumGenerator generator(info);
     generator.setProgressWidgets(d->progressView, d->progressBar);
 
     if (!generator.run())
@@ -168,7 +168,7 @@ void JALBUMFinalPage::slotProcess()
     emit completeChanged();
 }
 
-bool JALBUMFinalPage::isComplete() const
+bool JAlbumFinalPage::isComplete() const
 {
     return d->complete;
 }

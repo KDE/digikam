@@ -65,6 +65,8 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(m_htmlGalleryAction,           postCategory);
 #endif
 
+    actionModel->addAction(m_jalbumAction,                postCategory);
+
 #ifdef HAVE_MARBLE
     actionModel->addAction(m_geolocationEditAction,       postCategory);
 #endif

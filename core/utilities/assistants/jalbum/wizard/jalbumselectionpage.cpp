@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2006-04-04
- * Description : a tool to generate JALBUM image galleries
+ * Description : a tool to generate jAlbum image galleries
  *
- * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2019 by Andrew Goodbody <ajg zero two at elfringham dot co dot uk>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN JALBUMSelectionPage::Private
+class Q_DECL_HIDDEN JAlbumSelectionPage::Private
 {
 public:
 
@@ -50,7 +50,7 @@ public:
         info(0),
         iface(0)
     {
-        wizard = dynamic_cast<JALBUMWizard*>(dialog);
+        wizard = dynamic_cast<JAlbumWizard*>(dialog);
 
         if (wizard)
         {
@@ -63,12 +63,12 @@ public:
     QWidget*        albumSelector;
     DItemsList*     imageList;
     QStackedWidget* stack;
-    JALBUMWizard*   wizard;
-    JalbumInfo*     info;
+    JAlbumWizard*   wizard;
+    JAlbumInfo*     info;
     DInfoInterface* iface;
 };
 
-JALBUMSelectionPage::JALBUMSelectionPage(QWizard* const dialog, const QString& title)
+JAlbumSelectionPage::JAlbumSelectionPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title),
       d(new Private(dialog))
 {
@@ -86,11 +86,11 @@ JALBUMSelectionPage::JALBUMSelectionPage(QWizard* const dialog, const QString& t
         d->albumSelector = new QWidget(this);
     }
 
-    d->stack->insertWidget(JalbumInfo::ALBUMS, d->albumSelector);
+    d->stack->insertWidget(JAlbumInfo::ALBUMS, d->albumSelector);
 
     d->imageList          = new DItemsList(this);
     d->imageList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
-    d->stack->insertWidget(JalbumInfo::IMAGES, d->imageList);
+    d->stack->insertWidget(JAlbumInfo::IMAGES, d->imageList);
 
     setPageWidget(d->stack);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-pictures")));
@@ -105,22 +105,22 @@ JALBUMSelectionPage::JALBUMSelectionPage(QWizard* const dialog, const QString& t
             this, SIGNAL(completeChanged()));
 }
 
-JALBUMSelectionPage::~JALBUMSelectionPage()
+JAlbumSelectionPage::~JAlbumSelectionPage()
 {
     delete d;
 }
 
 
-void JALBUMSelectionPage::setItemsList(const QList<QUrl>& urls)
+void JAlbumSelectionPage::setItemsList(const QList<QUrl>& urls)
 {
     d->imageList->slotAddImages(urls);
 }
 
-void JALBUMSelectionPage::initializePage()
+void JAlbumSelectionPage::initializePage()
 {
     d->imageList->setIface(d->iface);
 
-    if (d->info->m_getOption == JalbumInfo::IMAGES)
+    if (d->info->m_getOption == JAlbumInfo::IMAGES)
     {
         d->imageList->loadImagesFromCurrentSelection();
     }
@@ -128,9 +128,9 @@ void JALBUMSelectionPage::initializePage()
     d->stack->setCurrentIndex(d->info->m_getOption);
 }
 
-bool JALBUMSelectionPage::validatePage()
+bool JAlbumSelectionPage::validatePage()
 {
-    if (d->stack->currentIndex() == JalbumInfo::ALBUMS)
+    if (d->stack->currentIndex() == JAlbumInfo::ALBUMS)
     {
         if (d->albumSupport)
         {
@@ -155,9 +155,9 @@ bool JALBUMSelectionPage::validatePage()
     return true;
 }
 
-bool JALBUMSelectionPage::isComplete() const
+bool JAlbumSelectionPage::isComplete() const
 {
-    if (d->stack->currentIndex() == JalbumInfo::ALBUMS)
+    if (d->stack->currentIndex() == JAlbumInfo::ALBUMS)
     {
         if (!d->albumSupport)
             return false;

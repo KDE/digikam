@@ -4,10 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2006-04-04
- * Description : a tool to generate HTML image galleries
+ * Description : a tool to generate jAlbum image galleries
  *
- * Copyright (C) 2006-2010 by Aurelien Gateau <aurelien dot gateau at free dot fr>
- * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2019 by Andrew Goodbody <ajg zero two at elfringham dot co dot uk>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,21 +32,21 @@ namespace Digikam
 
 class DHistoryView;
 class DProgressWdg;
-class JalbumInfo;
-class JalbumElementFunctor;
+class JAlbumInfo;
+class JAlbumElementFunctor;
 
 /**
  * This class is responsible for generating the HTML and scaling the images
  * according to the settings specified by the user.
  */
-class JalbumGenerator : public QObject
+class JAlbumGenerator : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit JalbumGenerator(JalbumInfo* const);
-    virtual ~JalbumGenerator();
+    explicit JAlbumGenerator(JAlbumInfo* const);
+    virtual ~JAlbumGenerator();
 
     void setProgressWidgets(DHistoryView* const, DProgressWdg* const);
 
@@ -62,8 +61,8 @@ public:
 Q_SIGNALS:
 
     /**
-     * This signal is emitted from JalbumElementFunctor. It uses a
-     * QueuedConnection to switch between the JalbumElementFunctor thread and
+     * This signal is emitted from JAlbumElementFunctor. It uses a
+     * QueuedConnection to switch between the JAlbumElementFunctor thread and
      * the gui thread.
      */
     void logWarningRequested(const QString&);
@@ -79,7 +78,7 @@ private:
     Private* const d;
 
     friend class Private;
-    friend class JalbumElementFunctor;
+    friend class JAlbumElementFunctor;
 };
 
 } // namespace Digikam

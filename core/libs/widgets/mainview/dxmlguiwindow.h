@@ -214,6 +214,7 @@ protected:
     QAction*     m_presentationAction;
     QAction*     m_calendarAction;
     QAction*     m_htmlGalleryAction;
+    QAction*     m_jalbumAction;
     QAction*     m_printCreatorAction;
     QAction*     m_sendByMailAction;
     QAction*     m_expoBlendingAction;

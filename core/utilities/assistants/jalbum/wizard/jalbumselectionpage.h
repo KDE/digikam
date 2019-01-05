@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2006-04-04
- * Description : a tool to generate JALBUM image galleries
+ * Description : a tool to generate jAlbum image galleries
  *
- * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2019 by Andrew Goodbody <ajg zero two at elfringham dot co dot uk>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,12 +36,12 @@
 namespace Digikam
 {
 
-class JALBUMSelectionPage : public DWizardPage
+class JAlbumSelectionPage : public DWizardPage
 {
 public:
 
-    explicit JALBUMSelectionPage(QWizard* const dialog, const QString& title);
-    ~JALBUMSelectionPage();
+    explicit JAlbumSelectionPage(QWizard* const dialog, const QString& title);
+    ~JAlbumSelectionPage();
 
     void initializePage();
     bool validatePage();
