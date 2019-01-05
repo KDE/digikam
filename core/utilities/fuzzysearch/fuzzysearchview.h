@@ -36,6 +36,7 @@
 
 class QDragEnterEvent;
 class QDropEvent;
+class QMimeData;
 class QPixmap;
 
 namespace Digikam
@@ -80,6 +81,7 @@ public:
 protected:
 
     void dragEnterEvent(QDragEnterEvent* e);
+    void dragMoveEvent(QDragMoveEvent* e);
     void dropEvent(QDropEvent* e);
 
 private Q_SLOTS:
@@ -117,6 +119,7 @@ private:
 
     void createNewFuzzySearchAlbumFromSketch(const QString& name, bool force = false);
     void createNewFuzzySearchAlbumFromImage(const QString& name, bool force = false);
+    bool dragEventWrapper(const QMimeData* data) const;
 
     void setColor(QColor c);
 

@@ -930,30 +930,45 @@ void FuzzySearchView::slotCheckNameEditSketchConditions()
 
 void FuzzySearchView::dragEnterEvent(QDragEnterEvent* e)
 {
-    if (DItemDrag::canDecode(e->mimeData()))
+    if (dragEventWrapper(e->mimeData()))
     {
         e->acceptProposedAction();
     }
-    else if (e->mimeData()->hasUrls())
+}
+
+void FuzzySearchView::dragMoveEvent(QDragMoveEvent* e)
+{
+    if (dragEventWrapper(e->mimeData()))
     {
-        QList<QUrl> urls = e->mimeData()->urls();
+        e->acceptProposedAction();
+    }
+}
+
+bool FuzzySearchView::dragEventWrapper(const QMimeData* data) const
+{
+    if (DItemDrag::canDecode(data))
+    {
+        return true;
+    }
+    else if (data->hasUrls())
+    {
+        QList<QUrl> urls = data->urls();
 
         // If there is at least one URL and the URL is a local file.
-        if (!urls.isEmpty())
+        if (!urls.isEmpty() && urls.first().isLocalFile())
         {
-            if (urls.first().isLocalFile())
-            {
-                HaarIface haarIface;
-                QString path       = urls.first().toLocalFile();
-                const QImage image = haarIface.loadQImage(path);
+            HaarIface haarIface;
+            QString path       = urls.first().toLocalFile();
+            const QImage image = haarIface.loadQImage(path);
 
-                if (!image.isNull())
-                {
-                    e->acceptProposedAction();
-                }
+            if (!image.isNull())
+            {
+                return true;
             }
         }
     }
+
+    return false;
 }
 
 void FuzzySearchView::dropEvent(QDropEvent* e)
@@ -985,37 +1000,34 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
         QList<QUrl> urls = e->mimeData()->urls();
 
         // If there is at least one URL and the URL is a local file.
-        if (!urls.isEmpty())
+        if (!urls.isEmpty() && urls.first().isLocalFile())
         {
-            if (urls.first().isLocalFile())
+            HaarIface haarIface;
+            QString path       = urls.first().toLocalFile();
+            const QImage image = haarIface.loadQImage(path);
+
+            if (!image.isNull())
             {
-                HaarIface haarIface;
-                QString path       = urls.first().toLocalFile();
-                const QImage image = haarIface.loadQImage(path);
+                // Set a temporary image id
+                d->imageInfo = ItemInfo(-1);
+                d->imageUrl  = urls.first();
 
-                if (!image.isNull())
-                {
-                    // Set a temporary image id
-                    d->imageInfo = ItemInfo(-1);
-                    d->imageUrl  = urls.first();
+                d->imageWidget->setPixmap(QPixmap::fromImage(image).scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-                    d->imageWidget->setPixmap(QPixmap::fromImage(image).scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
+                QString haarTitle = SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch);
 
-                    AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
-                    QString haarTitle = SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch);
+                QList<int> albums = d->fuzzySearchAlbumSelectors->selectedAlbumIds();
 
-                    QList<int> albums = d->fuzzySearchAlbumSelectors->selectedAlbumIds();
+                d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle, path,
+                                                                                           d->similarityRange->minValue() / 100.0,
+                                                                                           d->similarityRange->maxValue() / 100.0,
+                                                                                           albums, true);
+                d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
+                d->labelFile->setAdjustedText(urls.first().fileName());
+                d->labelFolder->setAdjustedText(urls.first().adjusted(QUrl::RemoveFilename).toLocalFile());
 
-                    d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle, path,
-                                                                                               d->similarityRange->minValue() / 100.0,
-                                                                                               d->similarityRange->maxValue() / 100.0,
-                                                                                               albums, true);
-                    d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
-                    d->labelFile->setAdjustedText(urls.first().fileName());
-                    d->labelFolder->setAdjustedText(urls.first().adjusted(QUrl::RemoveFilename).toLocalFile());
-
-                    e->acceptProposedAction();
-                }
+                e->acceptProposedAction();
             }
         }
     }
