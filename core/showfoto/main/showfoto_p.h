@@ -101,8 +101,6 @@
 #include "dmetainfoiface.h"
 #include "dexpanderbox.h"
 #include "dfiledialog.h"
-#include "calwizard.h"
-#include "expoblendingmanager.h"
 #include "dmediaservermngr.h"
 #include "dmediaserverdlg.h"
 #include "timeadjustdialog.h"
@@ -111,14 +109,6 @@
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
-#endif
-
-#ifdef HAVE_PANORAMA
-#   include "panomanager.h"
-#endif
-
-#ifdef HAVE_MEDIAPLAYER
-#   include "vidslidewizard.h"
 #endif
 
 namespace ShowFoto

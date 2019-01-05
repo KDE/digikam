@@ -229,13 +229,6 @@ DigikamApp::~DigikamApp()
     }
 #endif
 
-#ifdef HAVE_PANORAMA
-    if (PanoManager::isCreated())
-    {
-        delete PanoManager::internalPtr;
-    }
-#endif
-
     delete d->view;
 
     ApplicationSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());

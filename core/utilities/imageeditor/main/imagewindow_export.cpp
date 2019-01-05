@@ -27,15 +27,6 @@
 namespace Digikam
 {
 
-void ImageWindow::slotPanorama()
-{
-#ifdef HAVE_PANORAMA
-    PanoManager::instance()->checkBinaries();
-    PanoManager::instance()->setItemsList(d->thumbBar->allUrls());
-    PanoManager::instance()->run();
-#endif
-}
-
 void ImageWindow::slotMediaServer()
 {
     DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);

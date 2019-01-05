@@ -87,3 +87,7 @@ add_subdirectory(transitionmngr)
 if(ENABLE_MEDIAPLAYER)
     add_subdirectory(video)
 endif()
+
+if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
+    add_subdirectory(panoparser)
+endif()

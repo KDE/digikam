@@ -293,6 +293,12 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_expoBlendingAction = DPluginLoader::instance()->pluginAction(QLatin1String("expoblending"), this);
     actionCollection()->addActions(QList<QAction*>() << m_expoBlendingAction);
+
+#ifdef HAVE_PANORAMA
+    m_panoramaAction = DPluginLoader::instance()->pluginAction(QLatin1String("panorama"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_panoramaAction);
+#endif
+
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -515,19 +521,6 @@ void DXmlGuiWindow::createPresentationAction()
 
     connect(m_presentationAction, SIGNAL(triggered()),
             this, SLOT(slotPresentation()));
-}
-
-void DXmlGuiWindow::createPanoramaAction()
-{
-#ifdef HAVE_PANORAMA
-    m_panoramaAction = new QAction(QIcon::fromTheme(QLatin1String("panorama")),
-                                    i18nc("@action", "Create panorama..."),
-                                    this);
-    actionCollection()->addAction(QLatin1String("panorama"), m_panoramaAction);
-
-    connect(m_panoramaAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotPanorama()));
-#endif
 }
 
 void DXmlGuiWindow::createMediaServerAction()

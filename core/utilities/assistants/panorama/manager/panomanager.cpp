@@ -66,6 +66,7 @@ public:
         panoPtoData(0),
         hugin2015(false),
         thread(0),
+        plugin(0),
         wizard(0),
         group(config.group("Panorama Settings"))
     {
@@ -114,6 +115,8 @@ public:
 
     PanoActionThread*              thread;
 
+    DPlugin*                       plugin;
+    
     AutoOptimiserBinary            autoOptimiserBinary;
     CPCleanBinary                  cpCleanBinary;
     CPFindBinary                   cpFindBinary;
@@ -605,6 +608,11 @@ QList<QUrl>& PanoManager::itemsList() const
     return d->inputUrls;
 }
 
+void PanoManager::setPlugin(DPlugin* const plugin)
+{
+    d->plugin = plugin;
+}
+
 void PanoManager::setPreProcessedMap(const PanoramaItemUrlsMap& urls)
 {
     d->preProcessedUrlsMap = urls;
@@ -638,6 +646,7 @@ void PanoManager::startWizard()
         delete d->wizard;
 
         d->wizard = new PanoWizard(this);
+        d->wizard->setPlugin(d->plugin);
         d->wizard->show();
     }
 }

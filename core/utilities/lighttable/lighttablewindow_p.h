@@ -93,10 +93,6 @@
 #   include "geolocationedit.h"
 #endif
 
-#ifdef HAVE_PANORAMA
-#   include "panomanager.h"
-#endif
-
 namespace Digikam
 {
 

@@ -61,7 +61,7 @@ public:
     void setItemsList(const QList<QUrl>& urls);
     QList<QUrl>& itemsList() const;
 
-    void setPlugin(DPlugin* const tool);
+    void setPlugin(DPlugin* const plugin);
 
     void setPreProcessedMap(const ExpoBlendingItemUrlsMap& urls);
     ExpoBlendingItemUrlsMap& preProcessedMap() const;

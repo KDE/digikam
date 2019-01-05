@@ -27,15 +27,6 @@
 namespace Digikam
 {
 
-void LightTableWindow::slotPanorama()
-{
-#ifdef HAVE_PANORAMA
-    PanoManager::instance()->checkBinaries();
-    PanoManager::instance()->setItemsList(d->thumbView->allUrls());
-    PanoManager::instance()->run();
-#endif
-}
-
 void LightTableWindow::slotMediaServer()
 {
     DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);

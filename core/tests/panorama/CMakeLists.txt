@@ -5,9 +5,6 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-# =======================================================
-# Stand alone version of ExpoBlending tool
-
 if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
@@ -19,7 +16,7 @@ include_directories(
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-macro(ASSISTANTS_BUILD_STANDALONE)
+macro(PANORAMA_BUILD_TEST)
 
     set(_filename ${ARGV0})
     string(REPLACE "." ";" _temp ${_filename})
@@ -38,6 +35,5 @@ macro(ASSISTANTS_BUILD_STANDALONE)
 endmacro()
 
 if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
-    ASSISTANTS_BUILD_STANDALONE(panorama)
-    ASSISTANTS_BUILD_STANDALONE(panoparser_test)
+    PANORAMA_BUILD_TEST(panoparser_test)
 endif()

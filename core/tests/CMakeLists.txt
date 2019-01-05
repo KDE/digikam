@@ -9,7 +9,7 @@ kde_enable_exceptions()
 
 add_subdirectory(albummodel)
 add_subdirectory(advancedrename)
-add_subdirectory(assistants)
+add_subdirectory(panorama)
 add_subdirectory(database)
 add_subdirectory(dialogs)
 add_subdirectory(dimg)

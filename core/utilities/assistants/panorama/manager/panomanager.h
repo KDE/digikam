@@ -33,6 +33,7 @@
 
 #include "panoactions.h"
 #include "ptotype.h"
+#include "dplugin.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -85,6 +86,8 @@ public:
     void setItemsList(const QList<QUrl>& urls);
     QList<QUrl>& itemsList() const;
 
+    void setPlugin(DPlugin* const plugin);
+        
     QUrl&                   basePtoUrl() const;
     QSharedPointer<PTOType> basePtoData();
     void                    resetBasePto();

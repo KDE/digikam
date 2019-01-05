@@ -86,7 +86,7 @@ endif()
 if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
     set(DIGIKAMCORE_OBJECTS
         ${DIGIKAMCORE_OBJECTS}
-        $<TARGET_OBJECTS:panorama_src>
+        $<TARGET_OBJECTS:panoparser_src>
     )
 endif()
 

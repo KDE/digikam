@@ -154,7 +154,6 @@ void LightTableWindow::setupActions()
     createMetadataEditAction();
     createGeolocationEditAction();
     createTimeAdjustAction();
-    createPanoramaAction();
     createMediaServerAction();
     createExportActions();
     createImportActions();

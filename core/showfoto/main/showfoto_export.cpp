@@ -27,15 +27,6 @@
 namespace ShowFoto
 {
 
-void ShowFoto::slotPanorama()
-{
-#ifdef HAVE_PANORAMA
-    PanoManager::instance()->checkBinaries();
-    PanoManager::instance()->setItemsList(d->thumbBar->urls());
-    PanoManager::instance()->run();
-#endif
-}
-
 void ShowFoto::slotMediaServer()
 {
     QPointer<DMediaServerDlg> w = new DMediaServerDlg(this, new DMetaInfoIface(this, d->thumbBar->urls()));

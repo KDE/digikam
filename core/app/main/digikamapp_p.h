@@ -138,10 +138,6 @@
 #   include "digikamadaptor.h"
 #endif
 
-#ifdef HAVE_PANORAMA
-#   include "panomanager.h"
-#endif
-
 #ifdef HAVE_KFILEMETADATA
 #   include "baloowrap.h"
 #endif

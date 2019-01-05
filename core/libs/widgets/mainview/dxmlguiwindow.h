@@ -135,10 +135,6 @@ public:
      */
     void createPresentationAction();
 
-    /** Create Panorama tool action.
-     */
-    void createPanoramaAction();
-
     /** Create Media Server action to share through DLNA.
      */
     void createMediaServerAction();
@@ -338,9 +334,6 @@ private Q_SLOTS:
 
     // Called by Presentation tool.
     virtual void slotPresentation()            {};
-
-    // Called by Panorama tool.
-    virtual void slotPanorama()                {};
 
     // Called by Media Server tool.
     virtual void slotMediaServer()             {};
