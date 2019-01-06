@@ -55,6 +55,9 @@ set(libdpluginsinterface_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wscomboboxintermediate.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wstooldialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wstoolutils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wssettingswidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wsselectuserdlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wslogindialog.cpp
 )
 
 if(ENABLE_QWEBENGINE)

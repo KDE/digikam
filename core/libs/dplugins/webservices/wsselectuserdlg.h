@@ -29,10 +29,14 @@
 #include <QString>
 #include <QDialog>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class WSSelectUserDlg : public QDialog
+class DIGIKAM_EXPORT WSSelectUserDlg : public QDialog
 {
     Q_OBJECT
 
