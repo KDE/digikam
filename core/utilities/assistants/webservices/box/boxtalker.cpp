@@ -351,7 +351,7 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     QUrl url(QString::fromLatin1("https://upload.box.com/api/2.0/files/content?access_token=%1").arg(d->o2->token()));
 
     QNetworkRequest netRequest(url);
-    QString content = QLatin1String("multipart/form-data;boundary=") + multiPart->boundary();
+    QString content = QLatin1String("multipart/form-data;boundary=") + QString::fromUtf8(multiPart->boundary());
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, content);
     d->reply        = d->netMngr->post(netRequest, multiPart);
     // delete the multiPart and file with the reply
@@ -465,7 +465,7 @@ void BOXTalker::parseResponseListFolders(const QByteArray& data)
         QJsonObject obj = value.toObject();
         type            = obj[QLatin1String("type")].toString();
 
-        if (type == "folder")
+        if (type == QLatin1String("folder"))
         {
             folderName = obj[QLatin1String("name")].toString();
             id         = obj[QLatin1String("id")].toString();

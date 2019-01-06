@@ -182,7 +182,7 @@ void GPTalker::listAlbums()
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "list albums";
 
-    QUrl url(d->apiUrl.arg("albums"));
+    QUrl url(d->apiUrl.arg(QLatin1String("albums")));
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url for list albums " << url;
 
@@ -233,7 +233,7 @@ void GPTalker::listPhotos(const QString& albumId, const QString& /*imgmax*/)
         m_reply = 0;
     }
 
-    QUrl url(d->apiUrl.arg("mediaItems:search"));
+    QUrl url(d->apiUrl.arg(QLatin1String("mediaItems:search")));
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -244,7 +244,7 @@ void GPTalker::listPhotos(const QString& albumId, const QString& /*imgmax*/)
     data += "\"albumId\":\"";
     data += albumId.toUtf8();
     data += "\"}";
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "data to list photos : " << QString(data);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "data to list photos : " << data;
 
     m_reply = d->netMngr->post(netRequest, data);
 
@@ -266,9 +266,9 @@ void GPTalker::createAlbum(const GSFolder& album)
     data += "{\"title\":\"";
     data += album.title.toLatin1();
     data += "\"}}";
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(data);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << data;
 
-    QUrl url(d->apiUrl.arg("albums"));
+    QUrl url(d->apiUrl.arg(QLatin1String("albums")));
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -297,7 +297,7 @@ bool GPTalker::addPhoto(const QString& photoPath,
         m_reply = 0;
     }
 
-    QUrl url(d->apiUrl.arg("uploads"));
+    QUrl url(d->apiUrl.arg(QLatin1String("uploads")));
 
     // Save album ID and description to upload
     d->descriptionToUpload = info.description;
@@ -644,14 +644,14 @@ void GPTalker::slotFinished(QNetworkReply* reply)
             parseResponseAddPhoto(buffer);
             break;
         case (Private::GP_UPDATEPHOTO):
-            emit signalAddPhotoDone(1, QLatin1String(""));
+            emit signalAddPhotoDone(1, QString());
             break;
         case (Private::GP_UPLOADPHOTO):
             parseResponseUploadPhoto(buffer);
             break;
         case (Private::GP_GETPHOTO):
 
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(buffer);
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << buffer;
             // all we get is data of the image
             emit signalGetPhotoDone(1, QString(), buffer);
             break;
@@ -673,7 +673,7 @@ void GPTalker::slotUploadPhoto()
         m_reply = 0;
     }
 
-    QUrl url(d->apiUrl.arg("mediaItems:batchCreate"));
+    QUrl url(d->apiUrl.arg(QLatin1String("mediaItems:batchCreate")));
 
     QByteArray data;
     data += '{';
@@ -700,7 +700,7 @@ void GPTalker::slotUploadPhoto()
         data += "\",";
         data += "\"simpleMediaItem\": {";
         data += "\"uploadToken\": \"";
-        data += uploadToken;
+        data += uploadToken.toUtf8();
         data += "\"}}";
 
         if (d->uploadTokenList.length() > 0)
@@ -725,7 +725,7 @@ void GPTalker::slotUploadPhoto()
     }
 
     data += "}\r\n";
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(data);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << data;
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -856,10 +856,10 @@ void GPTalker::parseResponseCreateAlbum(const QByteArray& data)
 void GPTalker::parseResponseAddPhoto(const QByteArray& data)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseAddPhoto";
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "response " << QString(data);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "response " << data;
 
-    d->uploadTokenList << QString(data);
-    emit signalAddPhotoDone(1, QLatin1String(""));
+    d->uploadTokenList << QString::fromUtf8(data);
+    emit signalAddPhotoDone(1, QString());
 }
 
 void GPTalker::parseResponseGetLoggedInUser(const QByteArray& data)
@@ -915,10 +915,10 @@ void GPTalker::parseResponseUploadPhoto(const QByteArray& data)
 
     d->previousImageId = listPhotoId.last();
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "list photo Id " << listPhotoId.join(", ");
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "list photo Id " << listPhotoId.join(QLatin1String(", "));
 
     emit signalBusy(false);
-    emit signalUploadPhotoDone(1, QLatin1String(""), listPhotoId);
+    emit signalUploadPhotoDone(1, QString(), listPhotoId);
 }
 
 } // namespace Digikam

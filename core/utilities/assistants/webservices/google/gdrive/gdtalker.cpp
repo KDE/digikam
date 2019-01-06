@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include <gdtalker.h>
+#include "gdtalker.h"
 
 // Qt includes
 
@@ -136,7 +136,7 @@ void GDTalker::getUserName()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getUserName";
 
-    QUrl url(d->apiUrl.arg("about"));
+    QUrl url(d->apiUrl.arg(QLatin1String("about")));
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -152,7 +152,7 @@ void GDTalker::getUserName()
  */
 void GDTalker::listFolders()
 {
-    QUrl url(d->apiUrl.arg("files"));
+    QUrl url(d->apiUrl.arg(QLatin1String("files")));
 
     QUrlQuery q;
     q.addQueryItem(QLatin1String("q"), QLatin1String("mimeType = 'application/vnd.google-apps.folder'"));
@@ -179,7 +179,7 @@ void GDTalker::createFolder(const QString& title, const QString& id)
         m_reply = 0;
     }
 
-    QUrl url(d->apiUrl.arg("files"));
+    QUrl url(d->apiUrl.arg(QLatin1String("files")));
     QByteArray data;
     data += "{\"title\":\"";
     data += title.toLatin1();
@@ -335,7 +335,7 @@ void GDTalker::slotFinished(QNetworkReply* reply)
 
 void GDTalker::slotUploadPhoto()
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << d->listPhotoId.join(", ");
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << d->listPhotoId.join(QLatin1String(", "));
     emit signalUploadPhotoDone(1, QString(), d->listPhotoId);
 }
 

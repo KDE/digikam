@@ -292,13 +292,13 @@ bool PiwigoTalker::addPhoto(int   albumId,
     // Complete name and comment for summary sending
     QFileInfo fi(mediaPath);
     d->title   = fi.completeBaseName();
-    d->comment = QLatin1String("");
-    d->author  = QLatin1String("");
+    d->comment = QString();
+    d->author  = QString();
     d->date    = fi.created();
 
     // Look in the host database
 
-    DItemInfo info(d->iface->itemInfo(mediaPath));
+    DItemInfo info(d->iface->itemInfo(QUrl::fromLocalFile(mediaPath)));
 
     if (!info.title().isEmpty())
         d->title = info.title();

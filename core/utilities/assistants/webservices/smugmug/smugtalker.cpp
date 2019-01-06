@@ -78,7 +78,7 @@ public:
         SMUG_ADDPHOTO,
         SMUG_GETPHOTO
         /*
-         * S MUG_LISTCATEGORIES,
+         * SMUG_LISTCATEGORIES,
          * SMUG_LISTSUBCATEGORIES,
          */
     };
@@ -157,9 +157,9 @@ SmugTalker::SmugTalker(DInfoInterface* const iface, QWidget* const parent)
     d->o1 = new O1SmugMug(this, d->netMngr);
 
     // Config for authentication flow
-    d->o1->setRequestTokenUrl(d->requestTokenUrl);
-    d->o1->setAuthorizeUrl(d->authUrl);
-    d->o1->setAccessTokenUrl(d->accessTokenUrl);
+    d->o1->setRequestTokenUrl(QUrl(d->requestTokenUrl));
+    d->o1->setAuthorizeUrl(QUrl(d->authUrl));
+    d->o1->setAccessTokenUrl(QUrl(d->accessTokenUrl));
     d->o1->setLocalPort(8000);
 
     // Application credentials
@@ -371,7 +371,7 @@ void SmugTalker::login()
 
 void SmugTalker::getLoginedUser()
 {
-    QUrl url(d->apiURL.arg("/api/v2!authuser"));
+    QUrl url(d->apiURL.arg(QLatin1String("/api/v2!authuser")));
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url = " << url.url();
 
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
@@ -557,7 +557,7 @@ void SmugTalker::createAlbum(const SmugAlbum& album)
     data += "\",\"UrlName\":\"";
     data += createAlbumUrl(album.title).toUtf8();
     data += "\",\"Privacy\":\"Public\"}";
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(data);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << data;
 
     QNetworkRequest netRequest(url);
     netRequest.setRawHeader("Accept", "application/json");
@@ -800,7 +800,7 @@ void SmugTalker::parseResponseLogin(const QByteArray& data)
 
     emit signalLoginProgress(4);
     emit signalBusy(false);
-    emit signalLoginDone(0, QString(""));
+    emit signalLoginDone(0, QString());
 }
 
 /**
@@ -893,10 +893,10 @@ void SmugTalker::parseResponseCreateAlbum(const QByteArray& data)
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
-        emit signalCreateAlbumDone(err.error, err.errorString(),0,0);
+        emit signalCreateAlbumDone(err.error, err.errorString(), 0, QString());
         return;
     }
 
@@ -910,7 +910,7 @@ void SmugTalker::parseResponseCreateAlbum(const QByteArray& data)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "newAlbumKey " << newAlbumKey;
 
     emit signalBusy(false);
-    emit signalCreateAlbumDone(0, errorToText(0, QString("")), 0, newAlbumKey);
+    emit signalCreateAlbumDone(0, errorToText(0, QString()), 0, newAlbumKey);
 }
 
 void SmugTalker::parseResponseListAlbums(const QByteArray& data)
@@ -960,7 +960,7 @@ void SmugTalker::parseResponseListAlbums(const QByteArray& data)
                     << QString::number(album.canShare)
                     << album.passwordHint
                     << QString::number(album.imageCount);
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "album " << albumParams.join(",");
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "album " << albumParams.join(QLatin1String(","));
     }
 
     std::sort(albumList.begin(), albumList.end(), SmugAlbum::lessThan);
@@ -1011,7 +1011,7 @@ void SmugTalker::parseResponseListPhotos(const QByteArray& data)
     }
 
     emit signalBusy(false);
-    emit signalListPhotosDone(0, QString(""), photosList);
+    emit signalListPhotosDone(0, QString(), photosList);
 }
 
 void SmugTalker::parseResponseListAlbumTmpl(const QByteArray& data)
@@ -1056,7 +1056,7 @@ void SmugTalker::parseResponseListAlbumTmpl(const QByteArray& data)
     }
 
     emit signalBusy(false);
-    emit signalListAlbumTmplDone(0, errorToText(0, QString("")), albumTmplList);
+    emit signalListAlbumTmplDone(0, errorToText(0, QString()), albumTmplList);
 }
 
 /**

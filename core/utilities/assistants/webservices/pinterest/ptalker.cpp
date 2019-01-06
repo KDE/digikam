@@ -183,7 +183,7 @@ void PTalker::link()
     query.addQueryItem(QLatin1String("client_id"),     d->clientId);
     query.addQueryItem(QLatin1String("scope"),         d->scope);
     query.addQueryItem(QLatin1String("redirect_uri"),  d->redirectUrl);
-    query.addQueryItem(QLatin1String("response_type"), "code");
+    query.addQueryItem(QLatin1String("response_type"), QLatin1String("code"));
     url.setQuery(query);
 
     d->view->setWindowFlags(Qt::Dialog);
@@ -211,7 +211,7 @@ void PTalker::unLink()
 void PTalker::slotCatchUrl(const QUrl& url)
 {
     d->urlParametersMap = ParseUrlParameters(url.toString());
-    QString code        = d->urlParametersMap.value("code");
+    QString code        = d->urlParametersMap.value(QLatin1String("code"));
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received URL from webview in link function: " << url ;
 
     if (!code.isEmpty())
@@ -228,7 +228,7 @@ void PTalker::getToken(const QString& code)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Code: " << code;
     QUrl url(d->tokenUrl);
     QUrlQuery query(url);
-    query.addQueryItem(QLatin1String("grant_type"),    "authorization_code");
+    query.addQueryItem(QLatin1String("grant_type"),    QLatin1String("authorization_code"));
     query.addQueryItem(QLatin1String("client_id"),     d->clientId);
     query.addQueryItem(QLatin1String("client_secret"), d->clientSecret);
     query.addQueryItem(QLatin1String("code"),          code);
@@ -236,7 +236,7 @@ void PTalker::getToken(const QString& code)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Token Request URL:    " << url.toString();
 
     QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
     netRequest.setRawHeader("Accept", "application/json");
 
     d->reply = d->netMngr->post(netRequest, QByteArray());
@@ -307,7 +307,7 @@ void PTalker::cancel()
 
 void PTalker::createBoard(QString& boardName)
 {
-    QUrl url("https://api.pinterest.com/v1/boards/");
+    QUrl url(QLatin1String("https://api.pinterest.com/v1/boards/"));
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
     netRequest.setRawHeader("Authorization", QString::fromLatin1("Bearer %1").arg(d->accessToken).toUtf8());
@@ -391,7 +391,7 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
     QHttpMultiPart* const multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
     ///Board Section
     QHttpPart board;
-    QString boardHeader = QString("form-data; name=\"board\"") ;
+    QString boardHeader = QLatin1String("form-data; name=\"board\"") ;
     board.setHeader(QNetworkRequest::ContentDispositionHeader, boardHeader);
 
     QByteArray postData = boardParam.toUtf8();
@@ -400,7 +400,7 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
 
     ///Note section
     QHttpPart note;
-    QString noteHeader = QString("form-data; name=\"note\"") ;
+    QString noteHeader = QLatin1String("form-data; name=\"note\"") ;
     note.setHeader(QNetworkRequest::ContentDispositionHeader, noteHeader);
 
     postData = QByteArray();
@@ -422,7 +422,7 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
     imagePart.setBodyDevice(file);
     multiPart->append(imagePart);
 
-    QString content = QLatin1String("multipart/form-data;boundary=") + multiPart->boundary();
+    QString content = QLatin1String("multipart/form-data;boundary=") + QString::fromUtf8(multiPart->boundary());
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, content);
 

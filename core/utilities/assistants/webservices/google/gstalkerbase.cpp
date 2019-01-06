@@ -124,7 +124,7 @@ GSTalkerBase::GSTalkerBase(QWidget* const parent, const QStringList& scope, cons
     d->o2->setRefreshTokenUrl(d->refreshUrl);
     d->o2->setLocalPort(8000);
     d->o2->setGrantFlow(O2::GrantFlow::GrantFlowAuthorizationCode);
-    d->o2->setScope(m_scope.join(" "));
+    d->o2->setScope(m_scope.join(QLatin1String(" ")));
 
     // OAuth configuration saved to between dk sessions
     d->settings                  = WSToolUtils::getOauthSettings(this);
@@ -134,7 +134,7 @@ GSTalkerBase::GSTalkerBase(QWidget* const parent, const QStringList& scope, cons
 
     // Refresh token permission when offline
     QMap<QString, QVariant> extraParams;
-    extraParams.insert("access_type", "offline");
+    extraParams.insert(QLatin1String("access_type"), QLatin1String("offline"));
     d->o2->setExtraRequestParams(extraParams);
 
     connect(d->o2, SIGNAL(linkingSucceeded()),
@@ -148,7 +148,6 @@ GSTalkerBase::GSTalkerBase(QWidget* const parent, const QStringList& scope, cons
 
     connect(d->o2, SIGNAL(openBrowser(QUrl)),
             this, SLOT(slotOpenBrowser(QUrl)));
-
 }
 
 GSTalkerBase::~GSTalkerBase()
@@ -174,7 +173,7 @@ void GSTalkerBase::unlink()
     d->o2->unlink();
 
     d->settings->beginGroup(m_serviceName);
-    d->settings->remove("");
+    d->settings->remove(QString());
     d->settings->endGroup();
 
     m_bearerAccessToken.clear();
@@ -192,7 +191,7 @@ void GSTalkerBase::slotLinkingSucceeded()
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to " << m_serviceName << " ok";
 
-    m_accessToken = d->o2->token();
+    m_accessToken       = d->o2->token();
     m_bearerAccessToken = QLatin1String("Bearer ") + m_accessToken;
 
     emit signalAccessTokenObtained();

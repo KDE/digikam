@@ -28,13 +28,14 @@
 
 #include "wstooldialog.h"
 #include "dinfointerface.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
 class RajceWidget;
 
-class RajceWindow : public WSToolDialog
+class DIGIKAM_EXPORT RajceWindow : public WSToolDialog
 {
     Q_OBJECT
 

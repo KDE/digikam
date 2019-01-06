@@ -50,8 +50,8 @@ WSSettings::WSSettings(QObject* const parent)
     removeMetadata      = false;
     imageCompression    = 75;
     webService          = FLICKR;
-    currentAlbumId      = QLatin1String("");
-    userName            = QLatin1String("");
+    currentAlbumId      = QString();
+    userName            = QString();
     oauthSettings       = WSToolUtils::getOauthSettings(parent);
     oauthSettingsStore  = new O0SettingsStore(oauthSettings, QLatin1String(O2_ENCRYPTION_KEY), this);
     imageSize           = 1024;
@@ -79,9 +79,9 @@ void WSSettings::readSettings(KConfigGroup& group)
     webService        = (WebService)group.readEntry("WebService",
                         (int)FLICKR);
     userName          = group.readEntry("UserName",
-                        QString(""));
+                        QString());
     currentAlbumId    = group.readEntry("Album",
-                        QString(""));
+                        QString());
     imageSize         = group.readEntry("ImageSize",
                         1024);
     imageFormat       = (ImageFormat)group.readEntry("ImageFormat",
@@ -140,7 +140,7 @@ QStringList WSSettings::allUserNames(const QString& serviceName)
     QStringList userNames;
 
     oauthSettings->beginGroup(serviceName);
-    oauthSettings->beginGroup("users");
+    oauthSettings->beginGroup(QLatin1String("users"));
     userNames = oauthSettings->allKeys();
     oauthSettings->endGroup();
     oauthSettings->endGroup();

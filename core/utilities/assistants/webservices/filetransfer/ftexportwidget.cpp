@@ -57,7 +57,6 @@ public:
         targetLabel        = 0;
         targetDialog       = 0;
         targetSearchButton = 0;
-        targetUrl          = 0;
         imageList          = 0;
     }
 
@@ -65,7 +64,7 @@ public:
     DFileDialog*        targetDialog;
     QPushButton*        targetSearchButton;
     QUrl                targetUrl;
-    DItemsList*        imageList;
+    DItemsList*         imageList;
 };
 
 FTExportWidget::FTExportWidget(DInfoInterface* const iface, QWidget* const parent)

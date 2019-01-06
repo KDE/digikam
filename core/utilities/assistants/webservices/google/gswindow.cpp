@@ -1275,7 +1275,7 @@ void GSWindow::slotAuthenticationRefused()
     d->widget->getAlbumsCoB()->clear();
 
     // Clear user name
-    d->widget->updateLabels(QString(""));
+    d->widget->updateLabels(QString());
 
     return;
 }

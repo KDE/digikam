@@ -179,7 +179,7 @@ void ODTalker::link()
     query.addQueryItem(QLatin1String("client_id"), d->clientId);
     query.addQueryItem(QLatin1String("scope"), d->scope);
     query.addQueryItem(QLatin1String("redirect_uri"), d->redirectUrl);
-    query.addQueryItem(QLatin1String("response_type"), "token");
+    query.addQueryItem(QLatin1String("response_type"), QLatin1String("token"));
     url.setQuery(query);
 
     d->view->setWindowFlags(Qt::Dialog);
@@ -276,11 +276,11 @@ void ODTalker::createFolder(QString& path)
 
     if (folderPath == QLatin1String("/"))
     {
-        url = QLatin1String("https://graph.microsoft.com/v1.0/me/drive/root/children");
+        url = QUrl(QLatin1String("https://graph.microsoft.com/v1.0/me/drive/root/children"));
     }
     else
     {
-        url = QString("https://graph.microsoft.com/v1.0/me/drive/root:/%1:/children").arg(folderPath);
+        url = QUrl(QString::fromUtf8("https://graph.microsoft.com/v1.0/me/drive/root:/%1:/children").arg(folderPath));
     }
 
     QNetworkRequest netRequest(url);

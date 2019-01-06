@@ -514,7 +514,7 @@ void SmugWindow::slotListPhotosDone(int errCode, const QString &errMsg,
 
     for (int i = 0; i < photosList.size(); ++i)
     {
-        d->transferQueue.append(photosList.at(i).originalURL);
+        d->transferQueue.append(QUrl(photosList.at(i).originalURL));
     }
 
     if (d->transferQueue.isEmpty())

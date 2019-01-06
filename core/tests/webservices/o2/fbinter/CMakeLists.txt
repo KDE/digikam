@@ -28,14 +28,14 @@ remove_definitions(
 # =======================================================
 # Facebook demo test tool
 
-set(fbinter_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/../../../../utilities/assistants/webservices/common/o2/examples/facebookexternalinterceptordemo/fbdemo.cpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/../../../../utilities/assistants/webservices/common/o2/examples/facebookexternalinterceptordemo/main.cpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/../../../../utilities/assistants/webservices/common/o2/examples/facebookexternalinterceptordemo/webenginepage.cpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/../../../../utilities/assistants/webservices/common/o2/examples/facebookexternalinterceptordemo/webwindow.cpp
+set(fbinter_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/dplugins/webservices/o2/examples/facebookexternalinterceptordemo/fbdemo.cpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/dplugins/webservices/o2/examples/facebookexternalinterceptordemo/main.cpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/dplugins/webservices/o2/examples/facebookexternalinterceptordemo/webenginepage.cpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/dplugins/webservices/o2/examples/facebookexternalinterceptordemo/webwindow.cpp
 )
 
 qt5_wrap_ui(fbinter_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/../../../../utilities/assistants/webservices/common/o2/examples/facebookexternalinterceptordemo/webwindow.ui
+            ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libs/dplugins/webservices/o2/examples/facebookexternalinterceptordemo/webwindow.ui
 )
 
 add_executable(fbinter ${fbinter_SRCS})
