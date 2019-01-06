@@ -28,10 +28,14 @@
 #include <QString>
 #include <QStringList>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class WSAlbum
+class DIGIKAM_EXPORT WSAlbum
 {
 
 public:
@@ -78,7 +82,7 @@ public:
  * It contains only the most important attributes of an album,
  * which is needed for further usage (e.g upload photos, create new album).
  */
-class AlbumSimplified
+class DIGIKAM_EXPORT AlbumSimplified
 {
 
 public:

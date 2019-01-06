@@ -58,6 +58,8 @@ set(libdpluginsinterface_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wssettingswidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wsselectuserdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wslogindialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wsnewalbumdialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wssettings.cpp
 )
 
 if(ENABLE_QWEBENGINE)

@@ -35,8 +35,9 @@
 #include <QMap>
 #include <QSettings>
 
-// Local include
+// Local includes
 
+#include "digikam_export.h"
 #include "o0settingsstore.h"
 
 class KConfigGroup;
@@ -44,7 +45,7 @@ class KConfigGroup;
 namespace Digikam
 {
 
-class WSSettings : public QObject
+class DIGIKAM_EXPORT WSSettings : public QObject
 {
     Q_OBJECT
 
@@ -55,7 +56,6 @@ public:
     {
         EXPORT = 0,
         IMPORT
-
     };
 
     enum WebService

@@ -34,9 +34,7 @@ endif()
 
 # Helper classes ------------------------------------------------------------------
 
-set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/common/wsnewalbumdialog.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wsstarter.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wssettings.cpp
+set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/common/wsstarter.cpp
                         #${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wsauthentication.cpp
                         #${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wstalker.cpp
                         #${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsalbumspage.cpp
