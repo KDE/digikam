@@ -297,6 +297,11 @@ void PreviewLoadingTask::execute()
             }
         }
 
+        if (!m_img.isNull() && MetaEngineSettings::instance()->settings().exifRotate)
+        {
+            LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
+        }
+
         LoadingCache::CacheLock lock(cache);
 
         // Put valid image into cache of loaded images
@@ -313,10 +318,10 @@ void PreviewLoadingTask::execute()
         // indicate that loading has finished so that listeners can stop waiting
         m_completed = true;
 
-       // dispatch image to all listeners, including this
+        // dispatch image to all listeners, including this
 
-       for (int i = 0 ; i < m_listeners.count() ; ++i)
-       {
+        for (int i = 0 ; i < m_listeners.count() ; ++i)
+        {
             LoadingProcessListener* const l  = m_listeners[i];
             LoadSaveNotifier* const notifier = l->loadSaveNotifier();
 
