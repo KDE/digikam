@@ -32,7 +32,8 @@
 
 // QtAV includes
 
-#include <QtAV/AVError.h> // krazy:exclude=includes
+#include <QtAV/AVError.h>    // krazy:exclude=includes
+#include <QtAV/AVPlayer.h>   // krazy:exclude=includes
 
 // Local includes
 
@@ -66,8 +67,9 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotPlayerStateChanged(QtAV::MediaStatus);
-    void slotHandlePlayerError(const QtAV::AVError&);
+    void slotPlayerStateChanged(QtAV::AVPlayer::State state);
+    void slotMediaStatusChanged(QtAV::MediaStatus status);
+    void slotHandlePlayerError(const QtAV::AVError& err);
 
     void slotPositionChanged(qint64 position);
     void slotDurationChanged(qint64 duration);

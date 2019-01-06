@@ -40,6 +40,7 @@
 // QtAV includes
 
 #include <QtAVWidgets/WidgetRenderer.h>   // krazy:exclude=includes
+#include <QtAV/version.h>                 // krazy:exclude=include
 
 // KDE includes
 
@@ -152,7 +153,8 @@ public:
         videoWidget(0),
         player(0),
         slider(0),
-        tlabel(0)
+        tlabel(0),
+        videoOrientation(0)
     {
     }
 
@@ -173,6 +175,8 @@ public:
     QSlider*             slider;
     QLabel*              tlabel;
     QUrl                 currentItem;
+
+    int                  videoOrientation;
 };
 
 MediaPlayerView::MediaPlayerView(QWidget* const parent)
@@ -302,6 +306,15 @@ void MediaPlayerView::slotPlayerStateChanged(QtAV::AVPlayer::State state)
 {
     if (state == QtAV::AVPlayer::PlayingState)
     {
+        int rotate = 0;
+#if QTAV_VERSION > QTAV_VERSION_CHK(1, 12, 0)
+        // fix wrong rotation from QtAV git/master
+        rotate     = d->player->statistics().video_only.rotate;
+#endif
+        d->videoWidget->setOrientation((-rotate) + d->videoOrientation);
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Found video orientation:"
+                                     << d->videoOrientation;
+
         d->playAction->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
     }
     else if (state == QtAV::AVPlayer::PausedState ||
@@ -433,27 +446,23 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
 
     if (MetaEngineSettings::instance()->settings().exifRotate)
     {
-        int videoOrientation = 0;
-
         switch (orientation)
         {
             case MetaEngine::ORIENTATION_ROT_90:
             case MetaEngine::ORIENTATION_ROT_90_HFLIP:
             case MetaEngine::ORIENTATION_ROT_90_VFLIP:
-                videoOrientation = 90;
+                d->videoOrientation = 90;
                 break;
             case MetaEngine::ORIENTATION_ROT_180:
-                videoOrientation = 180;
+                d->videoOrientation = 180;
                 break;
             case MetaEngine::ORIENTATION_ROT_270:
-                videoOrientation = 270;
+                d->videoOrientation = 270;
                 break;
             default:
+                d->videoOrientation = 0;
                 break;
         }
-
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Found video orientation:" << videoOrientation;
-        d->videoWidget->setOrientation(videoOrientation);
     }
 
     if (supportedCodec)

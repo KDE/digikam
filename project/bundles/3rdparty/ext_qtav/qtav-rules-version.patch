@@ -1,0 +1,13 @@
+diff --git a/src/QtAV/version.h b/src/QtAV/version.h
+index 88c05969..a83b7a6f 100644
+--- a/src/QtAV/version.h
++++ b/src/QtAV/version.h
+@@ -24,7 +24,7 @@
+ 
+ #define QTAV_MAJOR 1    //((QTAV_VERSION&0xff0000)>>16)
+ #define QTAV_MINOR 12    //((QTAV_VERSION&0xff00)>>8)
+-#define QTAV_PATCH 0    //(QTAV_VERSION&0xff)
++#define QTAV_PATCH 1    //(QTAV_VERSION&0xff)
+ 
+ 
+ #define QTAV_VERSION_MAJOR(V) ((V & 0xff0000) >> 16)
