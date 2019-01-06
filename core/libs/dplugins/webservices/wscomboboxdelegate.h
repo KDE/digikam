@@ -37,12 +37,13 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "ditemslist.h"
 
 namespace Digikam
 {
 
-class ComboBoxDelegate : public QAbstractItemDelegate
+class DIGIKAM_EXPORT ComboBoxDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
 

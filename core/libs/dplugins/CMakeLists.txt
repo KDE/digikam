@@ -32,65 +32,6 @@ if(KF5KIO_FOUND)
     )
 endif()
 
-# OAuth2 library ---------------------------------------------------
-
-# The o2 library does not adhere to the flags we use
-remove_definitions(
-    -DQT_NO_CAST_FROM_ASCII
-    -DQT_NO_CAST_TO_ASCII
-    -DQT_NO_URL_CAST_FROM_STRING
-    -DQT_NO_CAST_FROM_BYTEARRAY)
-# It also does not export symbols, so export all by default
-unset(CMAKE_CXX_VISIBILITY_PRESET)
-
-if(WIN32)
-    add_definitions(-DO2_DLL_EXPORT)
-endif()
-
-# Copied from o2/src/CMakeLists.txt
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(libwso2_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o2.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o2reply.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o2replyserver.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o2requestor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o2simplecrypt.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o0settingsstore.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o0baseauth.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o0abstractstore.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o0globals.h
-    # Enable when needed
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o1.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o1requestor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o1timedreply.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o1smugmug.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o1twitter.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/oxtwitter.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o1dropbox.h
-    #${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o1flickr.h
-    #${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o2gft.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o2facebook.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o2skydrive.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o2hubic.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/webservices/o2/src/o2uber.cpp
-)
-
-if(ENABLE_QWEBENGINE)
-    set(libwso2_SRCS
-        ${libwso2_SRCS}
-        ${CMAKE_CURRENT_SOURCE_DIR}/webservices/webwidget_qwebengine.cpp
-       )
-else()
-    set(libwso2_SRCS
-        ${libwso2_SRCS}
-        ${CMAKE_CURRENT_SOURCE_DIR}/webservices/webwidget.cpp
-       )
-endif()
-
-# Helper classes ------------------------------------------------------------------
-
-
 set(libdpluginsinterface_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginauthor.cpp
@@ -110,7 +51,25 @@ set(libdpluginsinterface_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/dpreviewmanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/dpreviewimage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/ditemslist.cpp
-    ${libwso2_SRCS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wscomboboxdelegate.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wscomboboxintermediate.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wstooldialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/webservices/wstoolutils.cpp
 )
 
+if(ENABLE_QWEBENGINE)
+    set(libdpluginsinterface_SRCS
+        ${libdpluginsinterface_SRCS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/webservices/webwidget_qwebengine.cpp
+       )
+else()
+    set(libdpluginsinterface_SRCS
+        ${libdpluginsinterface_SRCS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/webservices/webwidget.cpp
+       )
+endif()
+
 add_library(dpluginsinterface_src OBJECT ${libdpluginsinterface_SRCS})
+
+# Parse O2 library code and rules at end, ad compilation rules remove important Qt definitions.
+add_subdirectory(webservices)

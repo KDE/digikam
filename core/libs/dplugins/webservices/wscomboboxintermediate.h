@@ -40,10 +40,14 @@
 
 #include <klocalizedstring.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class WSComboBoxIntermediate : public QComboBox
+class DIGIKAM_EXPORT WSComboBoxIntermediate : public QComboBox
 {
     Q_OBJECT
 

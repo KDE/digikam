@@ -31,9 +31,14 @@
 #include <QWebEngineProfile>
 #include <QWebEngineCookieStore>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
-class WebWidget : public QWebEngineView
+
+class DIGIKAM_EXPORT WebWidget : public QWebEngineView
 {
     Q_OBJECT
 
@@ -43,6 +48,7 @@ public:
   ~WebWidget();
 
 protected:
+
   void closeEvent(QCloseEvent *event) override;
 
 Q_SIGNALS:

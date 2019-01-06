@@ -28,10 +28,14 @@
 
 #include <qwebview.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class WebWidget : public QWebView
+class DIGIKAM_EXPORT WebWidget : public QWebView
 {
     Q_OBJECT
 

@@ -31,6 +31,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:rawengine_srcs>
             $<TARGET_OBJECTS:digikamfacesengine_src>
             $<TARGET_OBJECTS:dpluginsinterface_src>
+            $<TARGET_OBJECTS:libwso2_src>
 
             # widgets
             $<TARGET_OBJECTS:digikamwidgetscore_src>
