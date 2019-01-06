@@ -464,18 +464,12 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
 
     d->albumWatch->removeWatchedPAlbums(album);
 
-    QString oldAlbumPath = album->albumPath();
-    QString oldName      = album->title();
-    album->setTitle(newName);
-    album->m_path        = newName;
-    QString newAlbumPath = album->albumPath();
-
     // We use a private shortcut around collection scanner noticing our changes,
     // we rename them directly. Faster.
     ScanController::instance()->suspendCollectionScan();
 
     QDir dir(album->albumRootPath() + album->m_parentPath);
-    bool ret = dir.rename(oldName, newName);
+    bool ret = dir.rename(album->title(), newName);
 
     if (!ret)
     {
@@ -484,6 +478,11 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         errMsg = i18n("Failed to rename Album");
         return false;
     }
+
+    QString oldAlbumPath = album->albumPath();
+    album->setTitle(newName);
+    album->m_path        = newName;
+    QString newAlbumPath = album->albumPath();
 
     // now rename the album and subalbums in the database
     {
