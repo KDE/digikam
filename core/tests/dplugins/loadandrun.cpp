@@ -28,6 +28,7 @@
 #include <QUrl>
 #include <QIcon>
 #include <QDebug>
+#include <QLibraryInfo>
 
 // Local includes
 
@@ -41,6 +42,10 @@ using namespace Digikam;
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
+
+    qDebug() << QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+    qDebug() << QLibraryInfo::location(QLibraryInfo::LibraryExecutablesPath);
+    qDebug() << QLibraryInfo::location(QLibraryInfo::PluginsPath);
 
     QCommandLineParser parser;
     parser.addHelpOption();

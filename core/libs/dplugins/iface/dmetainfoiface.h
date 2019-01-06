@@ -43,7 +43,8 @@ public:
     ~DMetaInfoIface();
 
     Q_SLOT void slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate);
-
+    Q_SLOT void slotMetadataChangedForUrl(const QUrl& url);
+    
     Q_SIGNAL void signalItemChanged(const QUrl& url);
 
 public:

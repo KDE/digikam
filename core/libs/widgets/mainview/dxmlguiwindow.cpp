@@ -308,6 +308,9 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_timeAdjustAction = DPluginLoader::instance()->pluginAction(QLatin1String("timeadjust_edit"), this);
     actionCollection()->addActions(QList<QAction*>() << m_timeAdjustAction);
+
+    m_metadataEditAction = DPluginLoader::instance()->pluginAction(QLatin1String("metadata_edit"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_metadataEditAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -499,16 +502,6 @@ void DXmlGuiWindow::createGeolocationEditAction()
     connect(m_geolocationEditAction, SIGNAL(triggered(bool)),
             this, SLOT(slotEditGeolocation()));
 #endif
-}
-
-void DXmlGuiWindow::createMetadataEditAction()
-{
-    m_metadataEditAction = new QAction(QIcon::fromTheme(QLatin1String("format-text-code")), i18n("Edit Metadata..."), this);
-    actionCollection()->addAction(QLatin1String("metadata_edit"), m_metadataEditAction);
-    actionCollection()->setDefaultShortcut(m_metadataEditAction, Qt::CTRL + Qt::SHIFT + Qt::Key_M);
-
-    connect(m_metadataEditAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotEditMetadata()));
 }
 
 void DXmlGuiWindow::createPresentationAction()

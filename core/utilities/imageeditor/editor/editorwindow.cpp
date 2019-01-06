@@ -814,7 +814,6 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Tools' menu actions ---------------------------------------------
 
-    createMetadataEditAction();
     createGeolocationEditAction();
     createExportActions();
     createImportActions();

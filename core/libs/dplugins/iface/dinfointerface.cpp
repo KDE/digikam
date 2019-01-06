@@ -51,6 +51,10 @@ void DInfoInterface::slotDateTimeForUrl(const QUrl& /*url*/, const QDateTime& /*
 {
 }
 
+void DInfoInterface::slotMetadataChangedForUrl(const QUrl& /*url*/)
+{
+}
+
 QList<QUrl> DInfoInterface::currentSelectedItems() const
 {
     return QList<QUrl>();

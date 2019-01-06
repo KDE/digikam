@@ -54,25 +54,6 @@ void LightTableWindow::slotEditItem(const ItemInfo& info)
     im->setFocus();
 }
 
-void LightTableWindow::slotEditMetadata()
-{
-    if (d->thumbView->currentInfo().isNull())
-    {
-        return;
-    }
-
-    QUrl url = d->thumbView->currentInfo().fileUrl();
-
-    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(this, QList<QUrl>() << url);
-    dialog->exec();
-
-    delete dialog;
-
-    // Refresh Database with new metadata from file.
-    CollectionScanner scanner;
-    scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
-}
-
 void LightTableWindow::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE

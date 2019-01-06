@@ -69,6 +69,10 @@ public:
 
 public:
 
+    typedef QMap<QString, QString> CountryCodeMap;
+
+public:
+
     DMetadata();
     explicit DMetadata(const QString& filePath);
     explicit DMetadata(const MetaEngineData& data);
@@ -218,6 +222,8 @@ public: // IPTC helpers
     QStringList getIptcCoreSubjects()                              const;
 
     bool removeIptcTags(const QStringList& tagFilters);
+    
+    static CountryCodeMap countryCodeMap();
 
 private:
 

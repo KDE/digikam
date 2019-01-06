@@ -184,7 +184,6 @@ private Q_SLOTS:
     void slotMaintenance();
     void slotMaintenanceDone();
     void slotDatabaseMigration();
-    void slotEditMetadata();
     void slotEditGeolocation();
     void slotPresentation();
 

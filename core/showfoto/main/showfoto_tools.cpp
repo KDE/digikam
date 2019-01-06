@@ -125,20 +125,4 @@ void ShowFoto::slotEditGeolocation()
 #endif
 }
 
-void ShowFoto::slotEditMetadata()
-{
-    if (d->thumbBar->currentInfo().isNull())
-    {
-        return;
-    }
-
-    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(this, QList<QUrl>() << d->thumbBar->currentInfo().url);
-    dialog->exec();
-
-    delete dialog;
-
-    // Update image information everywhere.
-    slotChanged();
-}
-
 } // namespace ShowFoto

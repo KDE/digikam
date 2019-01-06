@@ -37,17 +37,11 @@ class IPTCProperties : public QWidget
 
 public:
 
-    typedef QMap<QString, QString> CountryCodeMap;
-
-public:
-
     explicit IPTCProperties(QWidget* const parent);
     ~IPTCProperties();
 
     void applyMetadata(QByteArray& iptcData);
     void readMetadata(QByteArray& iptcData);
-
-    static CountryCodeMap countryCodeMap();
 
 Q_SIGNALS:
 

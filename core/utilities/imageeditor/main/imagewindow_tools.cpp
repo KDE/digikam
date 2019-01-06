@@ -27,24 +27,6 @@
 namespace Digikam
 {
 
-void ImageWindow::slotEditMetadata()
-{
-    if (d->currentItemInfo.isNull())
-        return;
-
-    QUrl url = d->currentItemInfo.fileUrl();
-
-    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(this, QList<QUrl>() << url);
-    dialog->exec();
-
-    delete dialog;
-
-    // Refresh Database with new metadata from file.
-    CollectionScanner scanner;
-    scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
-}
-
-
 void ImageWindow::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE

@@ -66,7 +66,7 @@
 #include "simpletreemodel.h"
 #include "dmessagebox.h"
 #include "dexpanderbox.h"
-#include "iptcproperties.h"
+#include "dmetadata.h"
 
 #ifdef GPSSYNC_MODELTEST
 #   include <modeltest.h>
@@ -267,9 +267,9 @@ RGWidget::RGWidget(GPSItemModel* const imageModel, QItemSelectionModel* const se
     d->languageLabel = new QLabel(i18n("Select language:"), d->UGridContainer);
     d->languageEdit  = new QComboBox(d->UGridContainer);
 
-    IPTCProperties::CountryCodeMap map = IPTCProperties::countryCodeMap();
+    DMetadata::CountryCodeMap map = DMetadata::countryCodeMap();
 
-    for (IPTCProperties::CountryCodeMap::Iterator it = map.begin() ; it != map.end() ; ++it)
+    for (DMetadata::CountryCodeMap::Iterator it = map.begin() ; it != map.end() ; ++it)
     {
         d->languageEdit->addItem(QString::fromUtf8("%1 - %2").arg(it.key()).arg(it.value()), it.key().toLower());
     }

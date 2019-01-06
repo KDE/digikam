@@ -8,43 +8,6 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-set(libmetadataedit_SRCS exif/exifeditwidget.cpp
-                         exif/exifcaption.cpp
-                         exif/exifdatetime.cpp
-                         exif/exifadjust.cpp
-                         exif/exiflens.cpp
-                         exif/exifdevice.cpp
-                         exif/exiflight.cpp
-
-                         iptc/iptceditwidget.cpp
-                         iptc/iptccontent.cpp
-                         iptc/iptcsubjects.cpp
-                         iptc/iptckeywords.cpp
-                         iptc/iptccategories.cpp
-                         iptc/iptccredits.cpp
-                         iptc/iptcproperties.cpp
-                         iptc/iptcstatus.cpp
-                         iptc/iptcorigin.cpp
-                         iptc/iptcenvelope.cpp
-
-                         xmp/xmpeditwidget.cpp
-                         xmp/xmpcontent.cpp
-                         xmp/xmpkeywords.cpp
-                         xmp/xmpcategories.cpp
-                         xmp/xmpsubjects.cpp
-                         xmp/xmporigin.cpp
-                         xmp/xmpcredits.cpp
-                         xmp/xmpstatus.cpp
-                         xmp/xmpproperties.cpp
-
-                         dialog/metadatacheckbox.cpp
-                         dialog/altlangstringedit.cpp
-                         dialog/multistringsedit.cpp
-                         dialog/multivaluesedit.cpp
-                         dialog/objectattributesedit.cpp
-                         dialog/metadataedit.cpp
-   )
-
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 
@@ -53,11 +16,44 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-add_library(metadataedit_src OBJECT ${libmetadataedit_SRCS})
+set(metadataeditplugin_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/exif/exifeditwidget.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/exif/exifcaption.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/exif/exifdatetime.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/exif/exifadjust.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/exif/exiflens.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/exif/exifdevice.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/exif/exiflight.cpp
 
-add_library(metadataedit STATIC $<TARGET_OBJECTS:metadataedit_src>)
+                            ${CMAKE_CURRENT_SOURCE_DIR}/iptc/iptceditwidget.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/iptc/iptccontent.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/iptc/iptcsubjects.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/iptc/iptckeywords.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/iptc/iptccategories.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/iptc/iptccredits.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/iptc/iptcproperties.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/iptc/iptcstatus.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/iptc/iptcorigin.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/iptc/iptcenvelope.cpp
 
-target_link_libraries(metadataedit
-                      PRIVATE
-                      Qt5::Gui
-)
+                            ${CMAKE_CURRENT_SOURCE_DIR}/xmp/xmpeditwidget.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/xmp/xmpcontent.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/xmp/xmpkeywords.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/xmp/xmpcategories.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/xmp/xmpsubjects.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/xmp/xmporigin.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/xmp/xmpcredits.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/xmp/xmpstatus.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/xmp/xmpproperties.cpp
+
+                            ${CMAKE_CURRENT_SOURCE_DIR}/dialog/metadatacheckbox.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/dialog/altlangstringedit.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/dialog/multistringsedit.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/dialog/multivaluesedit.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/dialog/objectattributesedit.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/dialog/metadataedit.cpp
+
+                            ${CMAKE_CURRENT_SOURCE_DIR}/metadataeditplugin.cpp
+   )
+
+
+DIGIKAM_ADD_PLUGIN(MetadataEditPlugin ${metadataeditplugin_SRCS})

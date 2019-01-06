@@ -39,6 +39,7 @@ namespace Digikam
 {
 
 class DConfigDlgWdgPrivate;
+
 /**
  * @short Page widget with many layouts (faces).
  * @see DConfigDlgView with hierarchical page model.

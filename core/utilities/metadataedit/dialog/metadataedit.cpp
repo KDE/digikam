@@ -54,6 +54,7 @@
 #include "xmpeditwidget.h"
 #include "thumbnailloadthread.h"
 #include "dxmlguiwindow.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
@@ -64,13 +65,13 @@ public:
 
     explicit Private()
     {
-        isReadOnly      = false;
-        tabWidget       = 0;
-        buttons         = 0;
-        tabExif         = 0;
-        tabIptc         = 0;
-        tabXmp          = 0;
-        catcher         = 0;
+        isReadOnly = false;
+        tabWidget  = 0;
+        tabExif    = 0;
+        tabIptc    = 0;
+        tabXmp     = 0;
+        catcher    = 0;
+        iface      = 0;
     }
 
     bool                   isReadOnly;
@@ -82,23 +83,20 @@ public:
 
     QTabWidget*            tabWidget;
 
-    QDialogButtonBox*      buttons;
-
     EXIFEditWidget*        tabExif;
     IPTCEditWidget*        tabIptc;
     XMPEditWidget*         tabXmp;
 
     ThumbnailImageCatcher* catcher;
+    
+    DInfoInterface*        iface;
 };
 
-MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>& urls)
-    : QDialog(parent),
+MetadataEditDialog::MetadataEditDialog(QWidget* const parent, DInfoInterface* const iface)
+    : DPluginDialog(parent, QLatin1String("Metadata Edit Dialog")),
       d(new Private)
 {
-    setWindowFlags((windowFlags() & ~Qt::Dialog) |
-                   Qt::Window                    |
-                   Qt::WindowCloseButtonHint     |
-                   Qt::WindowMinMaxButtonsHint);
+    d->iface = iface;
 
     setWindowTitle(i18n("Metadata Editor"));
     setModal(true);
@@ -108,7 +106,7 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
     thread->setPixmapRequested(false);
     d->catcher                        = new ThumbnailImageCatcher(thread, this);
 
-    d->urls     = urls;
+    d->urls     = d->iface->currentSelectedItems();
     d->currItem = d->urls.begin();
     updatePreview();
 
@@ -118,21 +116,18 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
                                              QDialogButtonBox::No    |   // NextPrevious item
                                              QDialogButtonBox::Yes;      // Previous item
 
-    d->buttons = new QDialogButtonBox(btns, this);
-    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
-    d->buttons->button(QDialogButtonBox::Apply)->setEnabled(false);
+    m_buttons = new QDialogButtonBox(btns, this);
+    m_buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+    m_buttons->button(QDialogButtonBox::Apply)->setEnabled(false);
+    m_buttons->button(QDialogButtonBox::No)->setText(i18nc("@action:button",  "Next"));
+    m_buttons->button(QDialogButtonBox::No)->setIcon(QIcon::fromTheme(QLatin1String("go-next")));
+    m_buttons->button(QDialogButtonBox::Yes)->setText(i18nc("@action:button", "Previous"));
+    m_buttons->button(QDialogButtonBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("go-previous")));
 
-    if (d->urls.count() > 1)
+    if (d->urls.count() <= 1)
     {
-        d->buttons->button(QDialogButtonBox::No)->setText(i18nc("@action:button",  "Next"));
-        d->buttons->button(QDialogButtonBox::No)->setIcon(QIcon::fromTheme(QLatin1String("go-next")));
-        d->buttons->button(QDialogButtonBox::Yes)->setText(i18nc("@action:button", "Previous"));
-        d->buttons->button(QDialogButtonBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("go-previous")));
-    }
-    else
-    {
-        d->buttons->button(QDialogButtonBox::No)->setVisible(false);
-        d->buttons->button(QDialogButtonBox::Yes)->setVisible(false);
+        m_buttons->button(QDialogButtonBox::No)->setDisabled(true);
+        m_buttons->button(QDialogButtonBox::Yes)->setDisabled(true);
     }
 
     d->tabWidget = new QTabWidget(this);
@@ -145,7 +140,7 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(d->tabWidget);
-    vbx->addWidget(d->buttons);
+    vbx->addWidget(m_buttons);
     setLayout(vbx);
 
     //----------------------------------------------------------
@@ -168,21 +163,24 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
     connect(d->tabXmp, SIGNAL(signalSetReadOnly(bool)),
             this, SLOT(slotSetReadOnly(bool)));
 
-    connect(d->buttons->button(QDialogButtonBox::Apply), SIGNAL(clicked()),
+    connect(m_buttons->button(QDialogButtonBox::Apply), SIGNAL(clicked()),
             this, SLOT(slotApply()));
 
-    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+    connect(m_buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
             this, SLOT(slotOk()));
 
-    connect(d->buttons->button(QDialogButtonBox::Close), SIGNAL(clicked()),
+    connect(m_buttons->button(QDialogButtonBox::Close), SIGNAL(clicked()),
             this, SLOT(slotClose()));
 
-    connect(d->buttons->button(QDialogButtonBox::No), SIGNAL(clicked()),
+    connect(m_buttons->button(QDialogButtonBox::No), SIGNAL(clicked()),
             this, SLOT(slotNext()));
 
-    connect(d->buttons->button(QDialogButtonBox::Yes), SIGNAL(clicked()),
+    connect(m_buttons->button(QDialogButtonBox::Yes), SIGNAL(clicked()),
             this, SLOT(slotPrevious()));
 
+    connect(this, SIGNAL(signalMetadataChangedForUrl(QUrl)),
+            d->iface, SLOT(slotMetadataChangedForUrl(QUrl)));
+        
     //----------------------------------------------------------
 
     readSettings();
@@ -254,7 +252,7 @@ void MetadataEditDialog::slotModified()
             break;
     }
 
-    d->buttons->button(QDialogButtonBox::Apply)->setEnabled(modified);
+    m_buttons->button(QDialogButtonBox::Apply)->setEnabled(modified);
 }
 
 void MetadataEditDialog::slotOk()
@@ -275,6 +273,7 @@ void MetadataEditDialog::slotApply()
     d->tabExif->apply();
     d->tabIptc->apply();
     d->tabXmp->apply();
+    emit signalMetadataChangedForUrl(*d->currItem);
     slotItemChanged();
 }
 
@@ -297,10 +296,6 @@ void MetadataEditDialog::readSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("Metadata Edit Dialog"));
     d->tabWidget->setCurrentIndex(group.readEntry(QLatin1String("Tab Index"), 0));
-
-    winId();
-    DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
-    resize(windowHandle()->size());
 }
 
 void MetadataEditDialog::saveSettings()
@@ -308,7 +303,6 @@ void MetadataEditDialog::saveSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("Metadata Edit Dialog"));
     group.writeEntry(QLatin1String("Tab Index"), d->tabWidget->currentIndex());
-    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
 
     d->tabExif->saveSettings();
     d->tabIptc->saveSettings();
@@ -327,9 +321,9 @@ void MetadataEditDialog::slotItemChanged()
         d->urls.indexOf(*(d->currItem))+1,
         d->urls.count()));
 
-    d->buttons->button(QDialogButtonBox::No)->setEnabled(*(d->currItem) != d->urls.last());
-    d->buttons->button(QDialogButtonBox::Yes)->setEnabled(*(d->currItem) != d->urls.first());
-    d->buttons->button(QDialogButtonBox::Apply)->setEnabled(!d->isReadOnly);
+    m_buttons->button(QDialogButtonBox::No)->setEnabled(*(d->currItem) != d->urls.last());
+    m_buttons->button(QDialogButtonBox::Yes)->setEnabled(*(d->currItem) != d->urls.first());
+    m_buttons->button(QDialogButtonBox::Apply)->setEnabled(!d->isReadOnly);
 }
 
 bool MetadataEditDialog::eventFilter(QObject*, QEvent* e)
@@ -343,7 +337,7 @@ bool MetadataEditDialog::eventFilter(QObject*, QEvent* e)
         {
             slotApply();
 
-            if (d->buttons->button(QDialogButtonBox::No)->isEnabled())
+            if (m_buttons->button(QDialogButtonBox::No)->isEnabled())
                 slotNext();
 
             return true;
@@ -353,7 +347,7 @@ bool MetadataEditDialog::eventFilter(QObject*, QEvent* e)
         {
             slotApply();
 
-            if (d->buttons->button(QDialogButtonBox::Yes)->isEnabled())
+            if (m_buttons->button(QDialogButtonBox::Yes)->isEnabled())
                 slotPrevious();
 
             return true;
@@ -368,6 +362,7 @@ bool MetadataEditDialog::eventFilter(QObject*, QEvent* e)
 void MetadataEditDialog::closeEvent(QCloseEvent* e)
 {
     if (!e) return;
+
     saveSettings();
     e->accept();
 }

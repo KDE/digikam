@@ -31,6 +31,8 @@
 
 // Local includes
 
+#include "digikam_export.h"
+
 class QAbstractItemDelegate;
 class QAbstractItemView;
 class QModelIndex;
@@ -53,7 +55,7 @@ class DConfigDlgModel;
  * types are available. @see DConfigDlgWdg
  *
  */
-class DConfigDlgView : public QWidget
+class DIGIKAM_EXPORT DConfigDlgView : public QWidget
 {
     Q_OBJECT
     Q_ENUMS(FaceType)

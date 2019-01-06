@@ -28,10 +28,14 @@
 
 #include <QComboBox>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class TimeZoneComboBox : public QComboBox
+class DIGIKAM_EXPORT TimeZoneComboBox : public QComboBox
 {
     Q_OBJECT
 

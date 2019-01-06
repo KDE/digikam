@@ -142,28 +142,6 @@ void DigikamApp::slotDatabaseMigration()
     dlg.exec();
 }
 
-void DigikamApp::slotEditMetadata()
-{
-    QList<QUrl> urls = view()->selectedUrls(ApplicationSettings::Metadata);
-
-    if (urls.isEmpty())
-        return;
-
-    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(this, urls);
-    dialog->exec();
-
-    delete dialog;
-
-    // Refresh Database with new metadata from files.
-    CollectionScanner scanner;
-
-    foreach (const QUrl& url, urls)
-    {
-        scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
-        ItemAttributesWatch::instance()->fileMetadataChanged(url);
-    }
-}
-
 void DigikamApp::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE

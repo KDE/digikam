@@ -33,8 +33,10 @@
 #include "albumselectwidget.h"
 #include "coredb.h"
 #include "coredbnamefilter.h"
+#include "collectionscanner.h"
 #include "digikamapp.h"
 #include "digikam_debug.h"
+#include "itemattributeswatch.h"
 #include "itemiconview.h"
 #include "itemcopyright.h"
 #include "iteminfo.h"
@@ -282,6 +284,15 @@ DBInfoIface::~DBInfoIface()
 void DBInfoIface::slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate)
 {
     DIO::instance()->slotDateTimeForUrl(url, dt, updModDate);
+}
+
+void DBInfoIface::slotMetadataChangedForUrl(const QUrl& url)
+{
+    // Refresh Database with new metadata from file.
+    CollectionScanner scanner;
+
+    scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
+    ItemAttributesWatch::instance()->fileMetadataChanged(url);
 }
 
 QList<QUrl> DBInfoIface::currentAlbumItems() const

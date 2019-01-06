@@ -123,10 +123,6 @@ public:
      */
     void createGeolocationEditAction();
 
-    /** Create Metadata Edit tool action.
-     */
-    void createMetadataEditAction();
-
     /** Create Presentation tool action.
      */
     void createPresentationAction();
@@ -318,9 +314,6 @@ private Q_SLOTS:
 
     // Called by KSane action.
     virtual void slotImportFromScanner()       {};
-
-    // Called by Metadata Edit tool.
-    virtual void slotEditMetadata()            {};
 
     // Called by Geolocation Edit tool.
     virtual void slotEditGeolocation()         {};

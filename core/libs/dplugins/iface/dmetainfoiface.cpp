@@ -69,6 +69,11 @@ void DMetaInfoIface::slotDateTimeForUrl(const QUrl& url, const QDateTime& /*dt*/
     emit signalItemChanged(url);
 }
 
+void DMetaInfoIface::slotMetadataChangedForUrl(const QUrl& url)
+{
+    emit signalItemChanged(url);
+}
+
 QList<QUrl> DMetaInfoIface::currentAlbumItems() const
 {
     return d->urls;

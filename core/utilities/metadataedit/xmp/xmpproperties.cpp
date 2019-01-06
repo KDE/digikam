@@ -46,7 +46,6 @@
 #include "metadatacheckbox.h"
 #include "multivaluesedit.h"
 #include "objectattributesedit.h"
-#include "iptcproperties.h"
 #include "dmetadata.h"
 #include "dexpanderbox.h"
 
@@ -110,9 +109,9 @@ public:
         typeCodeMap.insert( QLatin1String("Topic"),              i18n("Topic") );
         typeCodeMap.insert( QLatin1String("TopicSet"),           i18n("Topic Set") );
 
-        IPTCProperties::CountryCodeMap map = IPTCProperties::countryCodeMap();
+        DMetadata::CountryCodeMap map = DMetadata::countryCodeMap();
 
-        for ( IPTCProperties::CountryCodeMap::Iterator it = map.begin(); it != map.end(); ++it)
+        for (DMetadata::CountryCodeMap::Iterator it = map.begin() ; it != map.end() ; ++it)
         {
             languageCodeMap.insert(it.key(), it.value());
         }

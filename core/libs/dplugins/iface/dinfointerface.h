@@ -59,8 +59,11 @@ public:
     explicit DInfoInterface(QObject* const parent);
     ~DInfoInterface();
 
-    // Slot to call when date time stamp from items are changed.
+    // Slot to call when date time stamp from item is changed.
     Q_SLOT virtual void slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate);
+
+    // Slot to call when something in metadata from item is changed.
+    Q_SLOT virtual void slotMetadataChangedForUrl(const QUrl& url);
 
 public:
 

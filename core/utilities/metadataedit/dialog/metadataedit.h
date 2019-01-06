@@ -27,28 +27,34 @@
 // Qt includes
 
 #include <QCloseEvent>
-#include <QDialog>
 #include <QUrl>
 
 // Local includes
 
 #include "digikam_export.h"
+#include "dplugindialog.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT MetadataEditDialog : public QDialog
+class DInfoInterface;
+
+class DIGIKAM_EXPORT MetadataEditDialog : public DPluginDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit MetadataEditDialog(QWidget* const parent, const QList<QUrl>& urls);
+    explicit MetadataEditDialog(QWidget* const parent, DInfoInterface* const iface);
     ~MetadataEditDialog();
 
     QList<QUrl>::iterator currentItem() const;
     QString currentItemTitleHeader(const QString& title) const;
 
+Q_SIGNALS:
+
+    void signalMetadataChangedForUrl(const QUrl&);
+    
 public Q_SLOTS:
 
     void slotModified();
