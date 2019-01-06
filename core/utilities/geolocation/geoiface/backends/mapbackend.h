@@ -33,6 +33,7 @@
 // Local includes
 
 #include "geoifacecommon.h"
+#include "digikam_export.h"
 
 class QMenu;
 class QWidget;
@@ -47,7 +48,7 @@ namespace Marble
 namespace Digikam
 {
 
-class MapBackend : public QObject
+class DIGIKAM_EXPORT MapBackend : public QObject
 {
 
 Q_OBJECT

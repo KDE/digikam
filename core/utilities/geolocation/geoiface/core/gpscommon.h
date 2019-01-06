@@ -33,6 +33,7 @@
 // Local includes
 
 #include "geocoordinates.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -44,13 +45,13 @@ enum MapLayout
     MapLayoutVertical   = 2
 };
 
-QString getUserAgentName();
+DIGIKAM_EXPORT QString getUserAgentName();
 
-void coordinatesToClipboard(const GeoCoordinates& coordinates,
+void DIGIKAM_EXPORT coordinatesToClipboard(const GeoCoordinates& coordinates,
                             const QUrl& url,
                             const QString& title);
 
-bool checkSidecarSettings();
+bool DIGIKAM_EXPORT checkSidecarSettings();
 
 } // namespace Digikam
 

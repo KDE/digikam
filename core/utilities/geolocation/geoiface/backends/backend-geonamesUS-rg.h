@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-05-12
- * Description : Backend for reverse geocoding using geonames.org (non-US)
+ * Description : Backend for reverse geocoding using geonames.org (US-only)
  *
  * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BACKEND_GEONAMES_RG_H
-#define DIGIKAM_BACKEND_GEONAMES_RG_H
+#ifndef DIGIKAM_BACKEND_GEONAMESUS_RG_H
+#define DIGIKAM_BACKEND_GEONAMESUS_RG_H
 
 // Qt includes
 
@@ -35,19 +35,20 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "backend-rg.h"
 
 namespace Digikam
 {
 
-class BackendGeonamesRG : public RGBackend
+class DIGIKAM_EXPORT BackendGeonamesUSRG : public RGBackend
 {
     Q_OBJECT
 
 public:
 
-    explicit BackendGeonamesRG(QObject* const parent);
-    virtual ~BackendGeonamesRG();
+    explicit BackendGeonamesUSRG(QObject* const parent);
+    virtual ~BackendGeonamesUSRG();
 
     QMap<QString, QString> makeQMapFromXML(const QString& xmlData);
 
@@ -69,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_BACKEND_GEONAMES_RG_H
+#endif // DIGIKAM_BACKEND_GEONAMESUS_RG_H

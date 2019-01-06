@@ -34,6 +34,7 @@
 // local includes
 
 #include "track_correlator.h"
+#include "digikam_export.h"
 
 class KConfigGroup;
 
@@ -43,7 +44,7 @@ namespace Digikam
 class GPSItemModel;
 class GPSUndoCommand;
 
-class GPSCorrelatorWidget : public QWidget
+class DIGIKAM_EXPORT GPSCorrelatorWidget : public QWidget
 {
     Q_OBJECT
 

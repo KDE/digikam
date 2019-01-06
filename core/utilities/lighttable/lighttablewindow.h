@@ -187,7 +187,6 @@ private Q_SLOTS:
     void slotEditItem();
     void slotEditItem(const ItemInfo&);
 
-    void slotEditGeolocation();
     void slotPresentation();
 
     void slotSlideShowAll();

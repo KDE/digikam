@@ -142,29 +142,6 @@ void DigikamApp::slotDatabaseMigration()
     dlg.exec();
 }
 
-void DigikamApp::slotEditGeolocation()
-{
-#ifdef HAVE_MARBLE
-    ItemInfoList infos = d->view->selectedInfoList(ApplicationSettings::Metadata);
-
-    if (infos.isEmpty())
-        return;
-
-    TagModel* const tagModel                    = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, this);
-    TagPropertiesFilterModel* const filterModel = new TagPropertiesFilterModel(this);
-    filterModel->setSourceAlbumModel(tagModel);
-    filterModel->sort(0);
-
-    QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel,
-                                                           new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools),
-                                                           this);
-    dialog->setItems(ItemGPS::infosToItems(infos));
-    dialog->exec();
-
-    delete dialog;
-#endif
-}
-
 void DigikamApp::slotPresentation()
 {
     d->view->presentation();

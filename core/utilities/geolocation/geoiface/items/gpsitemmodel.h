@@ -34,11 +34,12 @@
 
 #include "gpsitemcontainer.h"
 #include "thumbnailloadthread.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class GPSItemModel : public QAbstractItemModel
+class DIGIKAM_EXPORT GPSItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 

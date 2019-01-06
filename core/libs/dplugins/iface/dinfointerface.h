@@ -37,6 +37,7 @@
 #include <QList>
 #include <QDateTime>
 #include <QDate>
+#include <QAbstractItemModel>
 
 // Local includes
 
@@ -97,6 +98,11 @@ public:
     virtual QUrl     uploadUrl()                         const;
 
     Q_SIGNAL void signalUploadUrlChanged();
+    
+public:
+
+    // Return an instance of tag filter model if host application support this feature, else null pointer.
+    virtual QAbstractItemModel* tagFilterModel();
 };
 
 // -----------------------------------------------------------------

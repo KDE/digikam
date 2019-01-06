@@ -115,6 +115,11 @@ QUrl DInfoInterface::uploadUrl() const
     return QUrl();
 }
 
+QAbstractItemModel* DInfoInterface::tagFilterModel()
+{
+    return 0;
+}
+    
 // -----------------------------------------------------------------
 
 DItemInfo::DItemInfo(const DInfoInterface::DInfoMap& info)

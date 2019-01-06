@@ -33,6 +33,10 @@
 
 #include <marble/LayerInterface.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 /// @cond false
 namespace Marble
 {
@@ -47,7 +51,7 @@ namespace Digikam
 
 class BackendMarble;
 
-class BackendMarbleLayer : public Marble::LayerInterface
+class DIGIKAM_EXPORT BackendMarbleLayer : public Marble::LayerInterface
 {
 public:
 

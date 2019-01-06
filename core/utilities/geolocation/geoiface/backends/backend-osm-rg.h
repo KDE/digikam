@@ -35,11 +35,12 @@
 // Local includes
 
 #include "backend-rg.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class BackendOsmRG : public RGBackend
+class DIGIKAM_EXPORT BackendOsmRG : public RGBackend
 {
     Q_OBJECT
 

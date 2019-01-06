@@ -35,6 +35,7 @@
 #include "lookupaltitude.h"
 #include "gpsdatacontainer.h"
 #include "gpsitemlist.h"
+#include "digikam_export.h"
 
 class QUrl;
 
@@ -44,7 +45,7 @@ namespace Digikam
 class GPSUndoCommand;
 class GPSBookmarkOwner;
 
-class GPSItemListContextMenu : public QObject
+class DIGIKAM_EXPORT GPSItemListContextMenu : public QObject
 {
     Q_OBJECT
 

@@ -311,6 +311,12 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_metadataEditAction = DPluginLoader::instance()->pluginAction(QLatin1String("metadata_edit"), this);
     actionCollection()->addActions(QList<QAction*>() << m_metadataEditAction);
+
+#ifdef HAVE_MARBLE
+    m_geolocationEditAction = DPluginLoader::instance()->pluginAction(QLatin1String("geolocation_edit"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_geolocationEditAction);
+#endif
+
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -490,18 +496,6 @@ void DXmlGuiWindow::slotNewToolbarConfig()
 {
     KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
     applyMainWindowSettings(group);
-}
-
-void DXmlGuiWindow::createGeolocationEditAction()
-{
-#ifdef HAVE_MARBLE
-    m_geolocationEditAction = new QAction(QIcon::fromTheme(QLatin1String("globe")), i18n("Edit Geolocation..."), this);
-    actionCollection()->addAction(QLatin1String("geolocation_edit"), m_geolocationEditAction);
-    actionCollection()->setDefaultShortcut(m_geolocationEditAction, Qt::CTRL + Qt::SHIFT + Qt::Key_G);
-
-    connect(m_geolocationEditAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotEditGeolocation()));
-#endif
 }
 
 void DXmlGuiWindow::createPresentationAction()

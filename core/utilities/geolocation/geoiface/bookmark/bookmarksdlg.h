@@ -35,11 +35,12 @@
 
 #include "searchtextbar.h"
 #include "bookmarksmngr.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class AddBookmarkDialog : public QDialog
+class DIGIKAM_EXPORT AddBookmarkDialog : public QDialog
 {
     Q_OBJECT
 
@@ -63,7 +64,7 @@ private:
 
 // --------------------------------------------------------------------
 
-class BookmarksDialog : public QDialog
+class DIGIKAM_EXPORT BookmarksDialog : public QDialog
 {
     Q_OBJECT
 

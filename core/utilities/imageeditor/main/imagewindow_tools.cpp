@@ -27,31 +27,6 @@
 namespace Digikam
 {
 
-void ImageWindow::slotEditGeolocation()
-{
-#ifdef HAVE_MARBLE
-    ItemInfoList infos = d->thumbBar->allItemInfos();
-
-    if (infos.isEmpty())
-    {
-        return;
-    }
-
-    TagModel* const tagModel                    = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, this);
-    TagPropertiesFilterModel* const filterModel = new TagPropertiesFilterModel(this);
-    filterModel->setSourceAlbumModel(tagModel);
-    filterModel->sort(0);
-
-    QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel,
-                                                           new DBInfoIface(this, d->thumbBar->allUrls()),
-                                                           this);
-    dialog->setItems(ItemGPS::infosToItems(infos));
-    dialog->exec();
-
-    delete dialog;
-#endif
-}
-
 void ImageWindow::slotFilePrint()
 {
     printImage(d->currentUrl());

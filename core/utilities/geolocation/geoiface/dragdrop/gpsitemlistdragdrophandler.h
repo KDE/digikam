@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-22
- * Description : Drag-and-drop handler for geolocation interface integration.
+ * Description : Drag and drop handler for the item list
  *
  * Copyright (C) 2010-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Michael G. Hansen <mike at mghansen dot de>
@@ -22,57 +22,47 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_MAP_DRAG_DROP_HANDLER_H
-#define DIGIKAM_MAP_DRAG_DROP_HANDLER_H
+#ifndef DIGIKAM_GPS_ITEM_LIST_DRAG_DROP_HANDLER_H
+#define DIGIKAM_GPS_ITEM_LIST_DRAG_DROP_HANDLER_H
 
 // Qt includes
 
-#include <QAbstractItemModel>
-#include <QMimeData>
+#include <QTreeView>
 
 // Local includes
 
-#include "geodragdrophandler.h"
+#include "mapdragdrophandler.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class GPSGeoIfaceModelHelper;
-
-class MapDragData : public QMimeData
+class DIGIKAM_EXPORT ItemListDragDropHandler : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit MapDragData()
-      : QMimeData(),
-        draggedIndices()
-    {
-    }
+    explicit ItemListDragDropHandler(QObject* const parent = 0);
+    virtual ~ItemListDragDropHandler();
 
-    QList<QPersistentModelIndex> draggedIndices;
+    virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices) = 0;
 };
 
-class MapDragDropHandler : public GeoDragDropHandler
+// -------------------------------------------------------------------------------------------------
+
+class DIGIKAM_EXPORT GPSItemListDragDropHandler : public ItemListDragDropHandler
 {
     Q_OBJECT
 
 public:
 
-    explicit MapDragDropHandler(QAbstractItemModel* const /*pModel*/,
-                                GPSGeoIfaceModelHelper* const parent);
-    virtual ~MapDragDropHandler();
+    explicit GPSItemListDragDropHandler(QObject* const parent = 0);
+    ~GPSItemListDragDropHandler();
 
-    virtual Qt::DropAction accepts(const QDropEvent* e);
-    virtual bool dropEvent(const QDropEvent* e, const GeoCoordinates& dropCoordinates);
     virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices);
-
-private:
-
-    GPSGeoIfaceModelHelper* const gpsGeoIfaceModelHelper;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_MAP_DRAG_DROP_HANDLER_H
+#endif // DIGIKAM_GPS_ITEM_LIST_DRAG_DROP_HANDLER_H

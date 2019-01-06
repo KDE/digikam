@@ -34,6 +34,7 @@
 #include "geomodelhelper.h"
 #include "gpsdatacontainer.h"
 #include "bookmarksmngr.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -41,7 +42,7 @@ namespace Digikam
 class GPSItemModel;
 class GPSUndoCommand;
 
-class GPSBookmarkModelHelper : public GeoModelHelper
+class DIGIKAM_EXPORT GPSBookmarkModelHelper : public GeoModelHelper
 {
     Q_OBJECT
 

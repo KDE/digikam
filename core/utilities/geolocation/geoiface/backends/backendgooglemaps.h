@@ -30,11 +30,12 @@
 
 #include "mapbackend.h"
 #include "trackmanager.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class BackendGoogleMaps : public MapBackend
+class DIGIKAM_EXPORT BackendGoogleMaps : public MapBackend
 {
     Q_OBJECT
 

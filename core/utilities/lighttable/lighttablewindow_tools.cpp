@@ -54,30 +54,6 @@ void LightTableWindow::slotEditItem(const ItemInfo& info)
     im->setFocus();
 }
 
-void LightTableWindow::slotEditGeolocation()
-{
-#ifdef HAVE_MARBLE
-    ItemInfoList infos = d->thumbView->allItemInfos();
-
-    if (infos.isEmpty())
-    {
-        return;
-    }
-
-    TagModel* const tagModel                    = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, this);
-    TagPropertiesFilterModel* const filterModel = new TagPropertiesFilterModel(this);
-    filterModel->setSourceAlbumModel(tagModel);
-    filterModel->sort(0);
-
-    QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel,
-                                                           new DBInfoIface(this, d->thumbView->allUrls()), this);
-    dialog->setItems(ItemGPS::infosToItems(infos));
-    dialog->exec();
-
-    delete dialog;
-#endif
-}
-
 void LightTableWindow::slotPresentation()
 {
     QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);

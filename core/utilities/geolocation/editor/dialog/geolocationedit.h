@@ -31,11 +31,11 @@
 
 #include <QModelIndex>
 #include <QWidget>
-#include <QDialog>
 #include <QUrl>
 
 // Local includes
 
+#include "dplugindialog.h"
 #include "geoifacetypes.h"
 #include "geomodelhelper.h"
 #include "trackmanager.h"
@@ -51,15 +51,13 @@ class GPSUndoCommand;
 class MapWidget;
 class DInfoInterface;
 
-class DIGIKAM_EXPORT GeolocationEdit : public QDialog
+class DIGIKAM_EXPORT GeolocationEdit : public DPluginDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit GeolocationEdit(QAbstractItemModel* const externTagModel,
-                             DInfoInterface* const iface,
-                             QWidget* const parent);
+    explicit GeolocationEdit(QWidget* const parent, DInfoInterface* const iface);
     ~GeolocationEdit();
 
     /* Populate items in dialog list based on url. To be used in case of non database as with Showfoto.
@@ -69,6 +67,10 @@ public:
     /* Populate items in dialog list based dedicated GPSItemContainer instances filled with DB info
      */
     void setItems(const QList<GPSItemContainer*>& items);
+
+Q_SIGNALS:
+
+    void signalMetadataChangedForUrl(const QUrl&);
 
 protected:
 

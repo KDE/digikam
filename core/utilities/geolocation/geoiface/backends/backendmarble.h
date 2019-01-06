@@ -30,6 +30,7 @@
 
 #include "mapbackend.h"
 #include "trackmanager.h"
+#include "digikam_export.h"
 
 /// @cond false
 namespace Marble
@@ -41,7 +42,7 @@ namespace Marble
 namespace Digikam
 {
 
-class BackendMarble : public MapBackend
+class DIGIKAM_EXPORT BackendMarble : public MapBackend
 {
     Q_OBJECT
 

@@ -29,7 +29,9 @@
 #include "albumselecttabs.h"
 #include "applicationsettings.h"
 #include "album.h"
+#include "albummodel.h"
 #include "albummanager.h"
+#include "albumfiltermodel.h"
 #include "albumselectwidget.h"
 #include "coredb.h"
 #include "coredbnamefilter.h"
@@ -224,7 +226,7 @@ public:
 
         if (!(withGroupedIsSet && withGrouped))
         {
-            foreach(const QUrl& url, urlList)
+            foreach (const QUrl& url, urlList)
             {
                 ItemInfo info = ItemInfo::fromUrl(url);
 
@@ -241,7 +243,7 @@ public:
                         }
                     }
 
-                    foreach(const ItemInfo& i, info.groupedImages())
+                    foreach (const ItemInfo& i, info.groupedImages())
                     {
                         lst.removeOne(i.fileUrl());
                     }
@@ -512,7 +514,7 @@ QList<QUrl> DBInfoIface::albumsItems(const DAlbumIDs& lst) const
 {
     QList<QUrl> imageList;
 
-    foreach(int gid, lst)
+    foreach (int gid, lst)
     {
         imageList << albumItems(gid);
     }
@@ -543,7 +545,7 @@ DBInfoIface::DAlbumIDs DBInfoIface::albumChooserItems() const
     AlbumList lst = d->albumsChooser->selectedAlbums();
     DAlbumIDs ids;
 
-    foreach(Album* const a, lst)
+    foreach (Album* const a, lst)
     {
         if (a)
             ids << a->globalID();
@@ -585,6 +587,16 @@ QUrl DBInfoIface::uploadUrl() const
     }
 
     return url;
+}
+
+QAbstractItemModel* DBInfoIface::tagFilterModel()
+{
+    TagModel* const tagModel                    = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, this);
+    TagPropertiesFilterModel* const filterModel = new TagPropertiesFilterModel(this);
+    filterModel->setSourceAlbumModel(tagModel);
+    filterModel->sort(0);
+    
+    return filterModel;
 }
 
 } // namespace Digikam

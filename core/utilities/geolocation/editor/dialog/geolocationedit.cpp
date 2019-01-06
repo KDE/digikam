@@ -118,7 +118,7 @@ public:
 public:
 
     typedef QPair<QUrl, QString> result_type;
-    GPSItemModel* const         imageModel;
+    GPSItemModel* const          imageModel;
 };
 
 // ---------------------------------------------------------------------------------
@@ -201,10 +201,10 @@ public:
     }
 
     // General things
-    GPSItemModel*                           imageModel;
+    GPSItemModel*                            imageModel;
     QItemSelectionModel*                     selectionModel;
     bool                                     uiEnabled;
-    GPSItemListContextMenu*                 listViewContextMenu;
+    GPSItemListContextMenu*                  listViewContextMenu;
     TrackManager*                            trackManager;
 
     // Loading and saving
@@ -218,7 +218,7 @@ public:
     QDialogButtonBox*                        buttonBox;
     QSplitter*                               VSplitter;
     QSplitter*                               HSplitter;
-    GPSItemList*                            treeView;
+    GPSItemList*                             treeView;
     QStackedWidget*                          stackedWidget;
     QTabBar*                                 tabBar;
     int                                      splitterSize;
@@ -232,7 +232,7 @@ public:
     QString                                  progressCancelSlot;
 
     // UI: tab widgets
-    GPSItemDetails*                         detailsWidget;
+    GPSItemDetails*                          detailsWidget;
     GPSCorrelatorWidget*                     correlatorWidget;
     RGWidget*                                rgWidget;
     SearchWidget*                            searchWidget;
@@ -261,17 +261,10 @@ public:
     DInfoInterface*                          iface;
 };
 
-GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
-                                 DInfoInterface* const iface,
-                                 QWidget* const parent)
-    : QDialog(parent),
+GeolocationEdit::GeolocationEdit(QWidget* const parent, DInfoInterface* const iface)
+    : DPluginDialog(parent, QLatin1String("Geolocation Edit Settings")),
       d(new Private)
 {
-    setWindowFlags((windowFlags() & ~Qt::Dialog) |
-                   Qt::Window                    |
-                   Qt::WindowCloseButtonHint     |
-                   Qt::WindowMinMaxButtonsHint);
-
     setAttribute(Qt::WA_DeleteOnClose, true);
     setWindowTitle(i18n("Geolocation Editor"));
     setMinimumSize(300, 400);
@@ -342,12 +335,14 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
     connect(d->progressCancelButton, SIGNAL(clicked()),
             this, SLOT(slotProgressCancelButtonClicked()));
 
-    d->buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Close, hbox);
+    m_buttons->addButton(QDialogButtonBox::Apply);
+    m_buttons->addButton(QDialogButtonBox::Close);
+    m_buttons->setParent(hbox);
 
-    connect(d->buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked,
+    connect(m_buttons->button(QDialogButtonBox::Apply), &QPushButton::clicked,
             this, &GeolocationEdit::slotApplyClicked);
 
-    connect(d->buttonBox->button(QDialogButtonBox::Close), &QPushButton::clicked,
+    connect(m_buttons->button(QDialogButtonBox::Close), &QPushButton::clicked,
             this, &GeolocationEdit::close);
 
     mainLayout->addWidget(hbox, 0);
@@ -424,7 +419,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
     d->undoView         = new QUndoView(d->undoStack, d->stackedWidget);
     d->stackedWidget->addWidget(d->undoView);
 
-    d->rgWidget         = new RGWidget(d->imageModel, d->selectionModel, externTagModel, d->stackedWidget);
+    d->rgWidget         = new RGWidget(d->imageModel, d->selectionModel, d->iface->tagFilterModel(), d->stackedWidget);
     d->stackedWidget->addWidget(d->rgWidget);
 
     d->stackedWidget->addWidget(d->searchWidget);
@@ -501,12 +496,17 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
     connect(d->cbMapLayout, SIGNAL(activated(int)),
             this, SLOT(slotLayoutChanged(int)));
 
+    connect(this, SIGNAL(signalMetadataChangedForUrl(QUrl)),
+            d->iface, SLOT(slotMetadataChangedForUrl(QUrl)));
+
     readSettings();
 
     d->mapWidget->setActive(true);
 
     // Workaround for a drag & drop problem of images to the map for Qt>=5.9.2
     //show();
+
+    setImages(d->iface->currentSelectedItems());
 }
 
 GeolocationEdit::~GeolocationEdit()
@@ -597,7 +597,7 @@ void GeolocationEdit::setImages(const QList<QUrl>& images)
 
 void GeolocationEdit::setItems(const QList<GPSItemContainer*>& items)
 {
-    foreach(GPSItemContainer* const newItem, items)
+    foreach (GPSItemContainer* const newItem, items)
     {
         newItem->loadImageData();
         d->imageModel->addItem(newItem);
@@ -661,11 +661,6 @@ void GeolocationEdit::readSettings()
     d->rgWidget->readSettingsFromGroup(&groupRGWidget);
 
     const KConfigGroup groupDialog = KConfigGroup(&group, "Dialog");
-
-    winId();
-    windowHandle()->resize(800, 600);
-    DXmlGuiWindow::restoreWindowSize(windowHandle(), groupDialog);
-    resize(windowHandle()->size());
 
     // --------------------------
 
@@ -751,9 +746,6 @@ void GeolocationEdit::saveSettings()
     KConfigGroup groupRGWidget = KConfigGroup(&group, "Reverse Geocoding Widget");
     d->rgWidget->saveSettingsToGroup(&groupRGWidget);
 
-    KConfigGroup groupDialog = KConfigGroup(&group, "Dialog");
-    DXmlGuiWindow::saveWindowSize(windowHandle(), groupDialog);
-
     // --------------------------
 
     group.writeEntry("Current Tab",               d->tabBar->currentIndex());
@@ -781,14 +773,14 @@ void GeolocationEdit::closeEvent(QCloseEvent *e)
     // are there any modified images?
     int dirtyImagesCount = 0;
 
-    for (int i = 0; i < d->imageModel->rowCount(); ++i)
+    for (int i = 0 ; i < d->imageModel->rowCount() ; ++i)
     {
-        const QModelIndex itemIndex = d->imageModel->index(i, 0);
-        GPSItemContainer* const item    = d->imageModel->itemFromIndex(itemIndex);
+        const QModelIndex itemIndex  = d->imageModel->index(i, 0);
+        GPSItemContainer* const item = d->imageModel->itemFromIndex(itemIndex);
 
         if (item->isDirty() || item->isTagListDirty())
         {
-            dirtyImagesCount++;
+            ++dirtyImagesCount;
         }
     }
 
@@ -865,7 +857,7 @@ void GeolocationEdit::slotSetUIEnabled(const bool enabledState,
     d->progressCancelObject = cancelObject;
     d->progressCancelSlot   = cancelSlot;
     d->uiEnabled            = enabledState;
-    d->buttonBox->setEnabled(enabledState);
+    m_buttons->setEnabled(enabledState);
     d->correlatorWidget->setUIEnabledExternal(enabledState);
     d->detailsWidget->setUIEnabledExternal(enabledState);
     d->rgWidget->setUIEnabled(enabledState);
@@ -887,8 +879,8 @@ void GeolocationEdit::saveChanges(const bool closeAfterwards)
 
     for (int i = 0 ; i < d->imageModel->rowCount() ; ++i)
     {
-        const QModelIndex itemIndex = d->imageModel->index(i, 0);
-        GPSItemContainer* const item    = d->imageModel->itemFromIndex(itemIndex);
+        const QModelIndex itemIndex  = d->imageModel->index(i, 0);
+        GPSItemContainer* const item = d->imageModel->itemFromIndex(itemIndex);
 
         if (item->isDirty() || item->isTagListDirty())
         {
@@ -941,6 +933,9 @@ void GeolocationEdit::slotFileChangesSaved(int beginIndex, int endIndex)
         {
             if (!d->fileIOFuture.resultAt(i).second.isEmpty())
                 errorList << d->fileIOFuture.resultAt(i);
+
+            // To rescan item metadata from host.
+            emit signalMetadataChangedForUrl(d->fileIOFuture.resultAt(i).first);
         }
 
         if (!errorList.isEmpty())
@@ -949,7 +944,6 @@ void GeolocationEdit::slotFileChangesSaved(int beginIndex, int endIndex)
 
             for (int i = 0 ; i < errorList.count() ; ++i)
             {
-                // TODO: how to do kurl->qstring?
                 errorStrings << QString::fromLatin1("%1: %2")
                     .arg(errorList.at(i).first.toLocalFile())
                     .arg(errorList.at(i).second);

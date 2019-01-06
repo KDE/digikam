@@ -72,6 +72,8 @@ public:
     QWidget*    uploadWidget(QWidget* const parent)  const;
     QUrl        uploadUrl()                          const;
 
+    QAbstractItemModel* tagFilterModel();
+
 private:
 
     class Private;

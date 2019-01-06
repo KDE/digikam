@@ -34,6 +34,7 @@
 
 #include "gpsdatacontainer.h"
 #include "bookmarksmngr.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -41,7 +42,7 @@ namespace Digikam
 class GPSItemModel;
 class GPSBookmarkModelHelper;
 
-class GPSBookmarkOwner : public QObject
+class DIGIKAM_EXPORT GPSBookmarkOwner : public QObject
 {
     Q_OBJECT
 

@@ -64,7 +64,7 @@ if(Marble_FOUND)
         ${DIGIKAMCORE_OBJECTS}
         $<TARGET_OBJECTS:geoiface_src>
         $<TARGET_OBJECTS:geomapwrapper_src>
-        $<TARGET_OBJECTS:geolocationedit_src>
+#        $<TARGET_OBJECTS:geolocationedit_src>
     )
 endif()
 

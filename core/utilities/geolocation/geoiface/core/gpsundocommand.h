@@ -32,11 +32,12 @@
 // Local includes
 
 #include "gpsitemcontainer.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class GPSUndoCommand : public QUndoCommand
+class DIGIKAM_EXPORT GPSUndoCommand : public QUndoCommand
 {
 public:
 

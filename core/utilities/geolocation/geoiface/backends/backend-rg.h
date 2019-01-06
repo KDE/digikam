@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-05-12
- * Description : Backend for reverse geocoding using geonames.org (US-only)
+ * Description : Abstract backend class for reverse geocoding.
  *
  * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
@@ -22,51 +22,40 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BACKEND_GEONAMESUS_RG_H
-#define DIGIKAM_BACKEND_GEONAMESUS_RG_H
+#ifndef DIGIKAM_BACKEND_RG_H
+#define DIGIKAM_BACKEND_RG_H
 
-// Qt includes
+// local includes
 
-#include <QNetworkReply>
-#include <QString>
-#include <QList>
-#include <QUrl>
-#include <QMap>
-
-// Local includes
-
-#include "backend-rg.h"
+#include "gpsitemcontainer.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class BackendGeonamesUSRG : public RGBackend
+class DIGIKAM_EXPORT RGBackend : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit BackendGeonamesUSRG(QObject* const parent);
-    virtual ~BackendGeonamesUSRG();
+    explicit RGBackend(QObject* const parent);
+    RGBackend();
+    virtual ~RGBackend();
 
-    QMap<QString, QString> makeQMapFromXML(const QString& xmlData);
-
-    virtual void callRGBackend(const QList<RGInfo>& rgList, const QString& language);
+    virtual void callRGBackend(const QList<RGInfo>&, const  QString&) = 0;
     virtual QString getErrorMessage();
     virtual QString backendName();
-    virtual void cancelRequests();
+    virtual void cancelRequests() = 0;
 
-private Q_SLOTS:
+Q_SIGNALS:
 
-    void nextPhoto();
-    void slotFinished(QNetworkReply* reply);
-
-private:
-
-    class Private;
-    Private* const d;
+    /**
+     * @brief Emitted whenever some items are ready
+     */
+    void signalRGReady(QList<RGInfo>&);
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_BACKEND_GEONAMESUS_RG_H
+#endif // DIGIKAM_BACKEND_RG_H

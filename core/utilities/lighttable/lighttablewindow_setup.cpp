@@ -151,7 +151,6 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'Tools' menu actions ------------------------
 
-    createGeolocationEditAction();
     createExportActions();
     createImportActions();
 

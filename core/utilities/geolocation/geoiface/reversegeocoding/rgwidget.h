@@ -37,6 +37,7 @@
 // Local includes
 
 #include "gpsitemcontainer.h"
+#include "digikam_export.h"
 
 class QItemSelectionModel;
 class QAbstractItemModel;
@@ -48,7 +49,7 @@ namespace Digikam
 class GPSItemModel;
 class GPSUndoCommand;
 
-class RGWidget : public QWidget
+class DIGIKAM_EXPORT RGWidget : public QWidget
 {
     Q_OBJECT
 

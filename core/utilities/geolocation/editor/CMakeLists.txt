@@ -8,56 +8,6 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-set(libgeolocationedit_SRCS backends/backend-rg.cpp
-                            backends/backend-geonames-rg.cpp
-                            backends/backend-geonamesUS-rg.cpp
-                            backends/backend-osm-rg.cpp
-
-                            correlator/track_correlator.cpp
-                            correlator/track_correlator_thread.cpp
-                            correlator/track_listmodel.cpp
-                            correlator/gpscorrelatorwidget.cpp
-
-                            reversegeocoding/rginfo.cpp
-                            reversegeocoding/rgtagmodel.cpp
-                            reversegeocoding/rgwidget.cpp
-                            reversegeocoding/simpletreemodel.cpp
-
-                            searches/searchbackend.cpp
-                            searches/searchresultmodel.cpp
-                            searches/searchresultmodelhelper.cpp
-                            searches/searchwidget.cpp
-
-                            dragdrop/mapdragdrophandler.cpp
-                            dragdrop/gpsitemlistdragdrophandler.cpp
-
-                            items/gpsitemcontainer.cpp
-                            items/gpsitemdelegate.cpp
-                            items/gpsitemmodel.cpp
-                            items/gpsitemsortproxymodel.cpp
-                            items/gpsitemlist.cpp
-                            items/gpsitemlistcontextmenu.cpp
-
-                            dialog/gpscommon.cpp
-                            dialog/gpsitemdetails.cpp
-                            dialog/gpsundocommand.cpp
-                            dialog/geolocationedit.cpp
-                            dialog/gpsgeoifacemodelhelper.cpp
-
-                            bookmark/gpsbookmarkowner.cpp
-                            bookmark/gpsbookmarkmodelhelper.cpp
-                            bookmark/bookmarknode.cpp
-                            bookmark/bookmarksmenu.cpp
-                            bookmark/bookmarksmngr.cpp
-                            bookmark/bookmarksdlg.cpp
-
-                            kmlexport/geodataparser.cpp
-                            kmlexport/kmlgpsdataparser.cpp
-                            kmlexport/kmlwidget.cpp
-                            kmlexport/kmlexport.cpp
-
-)
-
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Network,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
@@ -68,16 +18,21 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-if(KF5Bookmarks_FOUND)
-    include_directories($<TARGET_PROPERTY:KF5::Bookmarks,INTERFACE_INCLUDE_DIRECTORIES>)
-endif()
+set(geolocationeditplugin_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/searches/searchbackend.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/searches/searchresultmodel.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/searches/searchresultmodelhelper.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/searches/searchwidget.cpp
 
-add_library(geolocationedit_src OBJECT ${libgeolocationedit_SRCS})
+                               ${CMAKE_CURRENT_SOURCE_DIR}/dialog/gpsitemdetails.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/dialog/geolocationedit.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/dialog/gpsgeoifacemodelhelper.cpp
 
-add_library(geolocationedit STATIC $<TARGET_OBJECTS:geolocationedit_src>)
+                               ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/geodataparser.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/kmlgpsdataparser.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/kmlwidget.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/kmlexport.cpp
 
-target_link_libraries(geolocationedit
-                      PRIVATE
-                      Qt5::Gui
-                      Qt5::Concurrent
-                    )
+                               ${CMAKE_CURRENT_SOURCE_DIR}/geolocationeditplugin.cpp
+)
+
+DIGIKAM_ADD_PLUGIN(GeolocationEditPlugin ${geolocationeditplugin_SRCS})

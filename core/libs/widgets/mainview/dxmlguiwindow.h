@@ -119,10 +119,6 @@ public:
      */
     int actionToWebService(QAction* const action) const;
 
-    /** Create Geolocation Edit tool action.
-     */
-    void createGeolocationEditAction();
-
     /** Create Presentation tool action.
      */
     void createPresentationAction();
@@ -314,9 +310,6 @@ private Q_SLOTS:
 
     // Called by KSane action.
     virtual void slotImportFromScanner()       {};
-
-    // Called by Geolocation Edit tool.
-    virtual void slotEditGeolocation()         {};
 
     // Called by Presentation tool.
     virtual void slotPresentation()            {};

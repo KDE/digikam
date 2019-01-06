@@ -104,25 +104,4 @@ void ShowFoto::slotFilePrint()
     printImage(d->thumbBar->currentUrl());
 }
 
-void ShowFoto::slotEditGeolocation()
-{
-#ifdef HAVE_MARBLE
-    QList<QUrl> infos = d->thumbBar->urls();
-
-    if (infos.isEmpty())
-    {
-        return;
-    }
-
-    QPointer<GeolocationEdit> dialog = new GeolocationEdit(0, new DMetaInfoIface(this, d->thumbBar->urls()), this);
-    dialog->setImages(infos);
-    dialog->exec();
-
-    delete dialog;
-
-    // Update image information everywhere.
-    slotChanged();
-#endif
-}
-
 } // namespace ShowFoto

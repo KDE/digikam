@@ -33,6 +33,7 @@
 
 #include "gpsitemmodel.h"
 #include "gpsitemsortproxymodel.h"
+#include "digikam_export.h"
 
 class QWheelEvent;
 class KConfigGroup;
@@ -42,7 +43,7 @@ namespace Digikam
 
 class ItemListDragDropHandler;
 
-class GPSItemList : public QTreeView
+class DIGIKAM_EXPORT GPSItemList : public QTreeView
 {
     Q_OBJECT
 
