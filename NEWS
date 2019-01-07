@@ -683,5 +683,5 @@ BUGFIXES:
 613 ==> 402809 - Clicking on "Import" toolbar button in import preview does nothing.
 614 ==> 372650 - On OS X, when tagging multiple images metadata is not correctly written to some image files or sidecars.
 615 ==> 389241 - Several errors in migrating from sqlite to external mysql server.
-616 ==> 
-
+616 ==> 402979 - Can't rename album in collection on NTFS usb drive.
+617 ==> 
