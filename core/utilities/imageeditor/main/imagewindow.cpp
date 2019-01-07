@@ -1315,6 +1315,9 @@ DInfoInterface* ImageWindow::infoIface(DPluginAction* const ac)
         case DPluginAction::GenericTool:
             aset = ApplicationSettings::Tools;
             break;
+        case DPluginAction::GenericView:
+            aset = ApplicationSettings::Slideshow;
+            break;
         default:
             break;
     }

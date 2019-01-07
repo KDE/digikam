@@ -43,9 +43,9 @@ public:
     /// Plugin action types to resume where they can be used.
     enum ActionType
     {
-        InvalidType = -1,
+        InvalidType   = -1,
 
-        Generic = 0,            /// Generic action available everywhere (AlbumView, Editor, and LightTable).
+        Generic       = 0,      /// Generic action available everywhere (AlbumView, Editor, and LightTable).
         Editor,                 /// Specific action for Image Editor and Showfoto.
         Bqm                     /// Specific action for Batch Queue Manager.
     };
@@ -59,6 +59,7 @@ public:
         GenericImport,          /// Generic import action.
         GenericTool,            /// Generic processing action.
         GenericMetadata,        /// Generic Metadata adjustement action.
+        GenericView,            /// Generic View action (as Slideshow).
 
         EditorColor,            /// Image Editor color correction action.
         EditorEnhance,          /// Image Editor enhance action.
@@ -85,7 +86,7 @@ public:
      * Manage the internal action category.
      */
     void setActionCategory(ActionCategory cat);
-    ActionCategory actionCategory() const;
+    ActionCategory actionCategory()  const;
     QString actionCategoryToString() const;
 
     /**

@@ -51,6 +51,7 @@ DPluginAction::ActionType DPluginAction::actionType() const
         case GenericImport:
         case GenericTool:
         case GenericMetadata:
+        case GenericView:
             return Generic;
 
         case EditorColor:
@@ -104,6 +105,8 @@ QString DPluginAction::actionCategoryToString() const
             return QLatin1String("Generic/Tool");
         case GenericMetadata:
             return QLatin1String("Generic/Metadata");
+        case GenericView:
+            return QLatin1String("Generic/View");
 
         case EditorColor:
             return QLatin1String("Editor/Color");
