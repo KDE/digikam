@@ -38,11 +38,12 @@
 // Local includes
 
 #include "dinfointerface.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class SlideVideo : public QWidget
+class DIGIKAM_EXPORT SlideVideo : public QWidget
 {
     Q_OBJECT
 

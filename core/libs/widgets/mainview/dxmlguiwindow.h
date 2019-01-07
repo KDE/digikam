@@ -115,10 +115,6 @@ public:
      */
     int actionToWebService(QAction* const action) const;
 
-    /** Create Presentation tool action.
-     */
-    void createPresentationAction();
-
     /** Create common actions to setup all digiKam main windows.
      */
     void createSettingsActions();
@@ -303,9 +299,6 @@ private Q_SLOTS:
     // Slots for common Settings actions
     virtual void slotEditKeys()                { editKeyboardShortcuts(); };
     virtual void slotSetup() = 0;
-
-    // Called by Presentation tool.
-    virtual void slotPresentation()            {};
 
     // Called by Webservices Export tools.
     virtual void slotExportTool()              {};

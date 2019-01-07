@@ -27,14 +27,14 @@
 
 // Local includes
 
-#include <QDialog>
+#include "dplugindialog.h"
 
 namespace Digikam
 {
 
 class PresentationContainer;
 
-class PresentationDlg : public QDialog
+class PresentationDlg : public DPluginDialog
 {
     Q_OBJECT
 

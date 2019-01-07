@@ -43,7 +43,6 @@ set(DIGIKAMCORE_OBJECTS
             # utilities
             $<TARGET_OBJECTS:slideshow_src>
             $<TARGET_OBJECTS:imageeditor_src>
-            $<TARGET_OBJECTS:presentation_src>
             $<TARGET_OBJECTS:digikamlibtransitionmngr_src>
             $<TARGET_OBJECTS:mediaserver_src>
             $<TARGET_OBJECTS:webservices_src>

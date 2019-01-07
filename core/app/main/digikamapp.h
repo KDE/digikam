@@ -184,7 +184,6 @@ private Q_SLOTS:
     void slotMaintenance();
     void slotMaintenanceDone();
     void slotDatabaseMigration();
-    void slotPresentation();
 
 // -- Configure methods implemented in digikamapp_config.cpp ----------------------------------------
 

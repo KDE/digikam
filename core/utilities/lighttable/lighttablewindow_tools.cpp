@@ -54,19 +54,6 @@ void LightTableWindow::slotEditItem(const ItemInfo& info)
     im->setFocus();
 }
 
-void LightTableWindow::slotPresentation()
-{
-    QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
-
-    foreach (const ItemInfo& info, d->thumbView->allItemInfos())
-    {
-        mngr->addFile(info.fileUrl(), info.comment());
-        qApp->processEvents();
-    }
-
-    mngr->showConfigDialog();
-}
-
 void LightTableWindow::slotSlideShowAll()
 {
    SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->allItemInfos());

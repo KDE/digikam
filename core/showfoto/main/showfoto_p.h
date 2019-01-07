@@ -83,8 +83,6 @@
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
 #include "metaenginesettings.h"
-#include "metadataedit.h"
-#include "presentationmngr.h"
 #include "savingcontext.h"
 #include "showfotosetup.h"
 #include "showfotosetupmisc.h"
@@ -104,10 +102,6 @@
 #include "dmediaservermngr.h"
 #include "wsstarter.h"
 #include "dpluginloader.h"
-
-#ifdef HAVE_MARBLE
-#   include "geolocationedit.h"
-#endif
 
 namespace ShowFoto
 {

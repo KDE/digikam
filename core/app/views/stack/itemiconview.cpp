@@ -74,7 +74,6 @@
 #include "metaenginesettings.h"
 #include "metadatasynchronizer.h"
 #include "newitemsfinder.h"
-#include "presentationmngr.h"
 #include "queuemgrwindow.h"
 #include "scancontroller.h"
 #include "setup.h"
@@ -2172,19 +2171,6 @@ void ItemIconView::slotSlideShowManualFrom(const ItemInfo& info)
            this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
 
    builder->run();
-}
-
-void ItemIconView::presentation()
-{
-    QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
-
-    foreach (const ItemInfo& info, selectedInfoList(ApplicationSettings::Slideshow))
-    {
-        mngr->addFile(info.fileUrl(), info.comment());
-        qApp->processEvents();
-    }
-
-    mngr->showConfigDialog();
 }
 
 void ItemIconView::slideShow(const ItemInfoList& infoList)

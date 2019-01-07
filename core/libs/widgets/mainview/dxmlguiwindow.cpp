@@ -321,6 +321,9 @@ void DXmlGuiWindow::registerPluginsActions()
     m_digitalScannerAction = DPluginLoader::instance()->pluginAction(QLatin1String("import_scan"), this);
     actionCollection()->addActions(QList<QAction*>() << m_digitalScannerAction);
 #endif
+
+    m_presentationAction = DPluginLoader::instance()->pluginAction(QLatin1String("presentation"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_presentationAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -500,17 +503,6 @@ void DXmlGuiWindow::slotNewToolbarConfig()
 {
     KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
     applyMainWindowSettings(group);
-}
-
-void DXmlGuiWindow::createPresentationAction()
-{
-    m_presentationAction = new QAction(QIcon::fromTheme(QLatin1String("view-presentation")), i18n("Presentation..."), this);
-
-    actionCollection()->addAction(QLatin1String("presentation"), m_presentationAction);
-    actionCollection()->setDefaultShortcut(m_presentationAction, Qt::ALT + Qt::SHIFT + Qt::Key_F9);
-
-    connect(m_presentationAction, SIGNAL(triggered()),
-            this, SLOT(slotPresentation()));
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)

@@ -65,11 +65,17 @@ PresentationMngr::PresentationMngr(QObject* const parent)
     : QObject(parent)
 {
     m_sharedData = new PresentationContainer();
+    m_plugin     = 0;
 }
 
 PresentationMngr::~PresentationMngr()
 {
     delete m_sharedData;
+}
+
+void PresentationMngr::setPlugin(DPlugin* const plugin)
+{
+    m_plugin = plugin;
 }
 
 void PresentationMngr::addFile(const QUrl& url, const QString& comment)
@@ -85,6 +91,7 @@ void PresentationMngr::showConfigDialog()
     connect(dlg, SIGNAL(buttonStartClicked()),
             this, SLOT(slotSlideShow()));
 
+    dlg->setPlugin(m_plugin);
     dlg->show();
 }
 

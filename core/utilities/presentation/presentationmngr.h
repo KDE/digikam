@@ -35,6 +35,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dplugin.h"
 
 namespace Digikam
 {
@@ -53,12 +54,15 @@ public:
     void addFile(const QUrl& url, const QString& comment);
     void showConfigDialog();
 
+    void setPlugin(DPlugin* const plugin);
+
 private Q_SLOTS:
 
     void slotSlideShow();
 
 private:
 
+    DPlugin*               m_plugin;
     PresentationContainer* m_sharedData;
 };
 

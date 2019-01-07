@@ -142,9 +142,4 @@ void DigikamApp::slotDatabaseMigration()
     dlg.exec();
 }
 
-void DigikamApp::slotPresentation()
-{
-    d->view->presentation();
-}
-
 } // namespace Digikam

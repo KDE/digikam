@@ -32,19 +32,6 @@ void ImageWindow::slotFilePrint()
     printImage(d->currentUrl());
 }
 
-void ImageWindow::slotPresentation()
-{
-    QPointer<Digikam::PresentationMngr> mngr = new PresentationMngr(this);
-
-    foreach (const ItemInfo& info, d->imageInfoModel->imageInfos())
-    {
-        mngr->addFile(info.fileUrl(), info.comment());
-        qApp->processEvents();
-    }
-
-    mngr->showConfigDialog();
-}
-
 void ImageWindow::slideShow(SlideShowSettings& settings)
 {
     m_cancelSlideShow   = false;

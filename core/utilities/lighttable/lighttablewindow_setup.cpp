@@ -147,8 +147,6 @@ void LightTableWindow::setupActions()
     ac->addAction(QLatin1String("lighttable_slideshow"), d->slideShowAction);
     ac->setDefaultShortcut(d->slideShowAction, Qt::Key_F9);
 
-    createPresentationAction();
-
     // -- Standard 'Tools' menu actions ------------------------
 
     createExportActions();

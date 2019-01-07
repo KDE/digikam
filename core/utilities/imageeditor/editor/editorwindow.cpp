@@ -834,7 +834,7 @@ void EditorWindow::setupStandardActions()
 #endif
 
     m_jalbumAction->setEnabled(false);
-        
+
 #ifdef HAVE_PANORAMA
     m_panoramaAction->setEnabled(false);
 #endif
@@ -855,8 +855,6 @@ void EditorWindow::setupStandardActions()
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     ac->addAction(QLatin1String("editorwindow_slideshow"), d->slideShowAction);
     ac->setDefaultShortcut(d->slideShowAction, Qt::Key_F9);
-
-    createPresentationAction();
 
     d->viewUnderExpoAction = new QAction(QIcon::fromTheme(QLatin1String("underexposure")), i18n("Under-Exposure Indicator"), this);
     d->viewUnderExpoAction->setCheckable(true);
@@ -3031,7 +3029,7 @@ void EditorWindow::setupSelectToolsAction()
 #endif
 
     actionModel->addAction(m_jalbumAction,                postCategory);
-    
+
 #ifdef HAVE_PANORAMA
     actionModel->addAction(m_panoramaAction,              postCategory);
 #endif

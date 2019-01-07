@@ -60,7 +60,6 @@
 #include "dmetadata.h"
 #include "dfileoperations.h"
 #include "metaenginesettings.h"
-#include "metadataedit.h"
 #include "applicationsettings.h"
 #include "albummanager.h"
 #include "loadingcacheinterface.h"
@@ -69,7 +68,6 @@
 #include "imagewindow.h"
 #include "itemgps.h"
 #include "itemdescedittab.h"
-#include "presentationmngr.h"
 #include "slideshowbuilder.h"
 #include "slideshow.h"
 #include "setup.h"
@@ -86,10 +84,6 @@
 #include "dexpanderbox.h"
 #include "dbinfoiface.h"
 #include "wsstarter.h"
-
-#ifdef HAVE_MARBLE
-#   include "geolocationedit.h"
-#endif
 
 namespace Digikam
 {

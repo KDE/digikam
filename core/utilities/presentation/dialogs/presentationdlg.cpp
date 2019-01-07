@@ -76,20 +76,19 @@ public:
 };
 
 PresentationDlg::PresentationDlg(QWidget* const parent, PresentationContainer* const sharedData)
-    : QDialog(parent),
+    : DPluginDialog(parent, QLatin1String("Presentation Settings")),
       d(new Private)
 {
-    setObjectName(QLatin1String("Presentation Settings"));
     setWindowTitle(i18n("Presentation"));
 
-    d->sharedData = sharedData;
+    d->sharedData  = sharedData;
 
-    d->buttonBox   = new QDialogButtonBox(QDialogButtonBox::Close, this);
-    d->startButton = new QPushButton(i18nc("@action:button", "&Start"), this);
-    d->startButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
-    d->startButton->setText(i18n("Start Presentation"));
-    d->startButton->setDefault(true);
-    d->buttonBox->addButton(d->startButton, QDialogButtonBox::ActionRole);
+    m_buttons->addButton(QDialogButtonBox::Close);
+    m_buttons->addButton(QDialogButtonBox::Ok);
+    m_buttons->button(QDialogButtonBox::Ok)->setText(i18n("Start"));
+    m_buttons->button(QDialogButtonBox::Ok)->setToolTip(i18nc("@info:tooltip", "Start Presentation"));
+    m_buttons->button(QDialogButtonBox::Ok)->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
+    m_buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
     setModal(true);
 
@@ -121,16 +120,16 @@ PresentationDlg::PresentationDlg(QWidget* const parent, PresentationContainer* c
 
     QVBoxLayout* const mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(d->tab);
-    mainLayout->addWidget(d->buttonBox);
+    mainLayout->addWidget(m_buttons);
     setLayout(mainLayout);
 
     // Slot connections
 
-    connect(d->startButton, &QPushButton::clicked,
-            this, &PresentationDlg::slotStartClicked);
+    connect(m_buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(slotStartClicked()));
 
-    connect(d->buttonBox, &QDialogButtonBox::rejected,
-            this, &PresentationDlg::reject);
+    connect(m_buttons->button(QDialogButtonBox::Close), SIGNAL(clicked()),
+            this, SLOT(reject()));
 
     readSettings();
 }
@@ -143,7 +142,7 @@ PresentationDlg::~PresentationDlg ()
 void PresentationDlg::readSettings()
 {
     KConfig config;
-    KConfigGroup grp = config.group(objectName());
+    KConfigGroup grp = config.group(QLatin1String("Presentation Settings"));
 
     d->sharedData->opengl            = grp.readEntry("OpenGL",                   false);
     d->sharedData->openGlFullScale   = grp.readEntry("OpenGLFullScale",          false);
@@ -198,13 +197,13 @@ void PresentationDlg::readSettings()
 
     if (d->sharedData->soundtrackRememberPlaylist)
     {
-        QString groupName(objectName() + QLatin1String(" Soundtrack "));
+        QString groupName(QLatin1String("Presentation Settings") + QLatin1String(" Soundtrack "));
         KConfigGroup soundGrp = config.group(groupName);
 
         // load and check playlist files, if valid, add to tracklist widget
         QList<QUrl> playlistFiles = soundGrp.readEntry("Tracks", QList<QUrl>());
 
-        foreach(const QUrl& playlistFile, playlistFiles)
+        foreach (const QUrl& playlistFile, playlistFiles)
         {
             QUrl file(playlistFile);
             QFileInfo fi(file.toLocalFile());
@@ -236,7 +235,7 @@ void PresentationDlg::saveSettings()
     d->sharedData->soundtrackPage->saveSettings();
 #endif
 
-    KConfigGroup grp = config.group(objectName());
+    KConfigGroup grp = config.group(QLatin1String("Presentation Settings"));
     grp.writeEntry("OpenGL",                   d->sharedData->opengl);
     grp.writeEntry("OpenGLFullScale",          d->sharedData->openGlFullScale);
     grp.writeEntry("Delay",                    d->sharedData->delay);
@@ -285,7 +284,7 @@ void PresentationDlg::saveSettings()
     // of older track entries
     if (d->sharedData->soundtrackRememberPlaylist && d->sharedData->soundtrackPlayListNeedsUpdate)
     {
-        QString groupName(objectName() + QLatin1String(" Soundtrack "));
+        QString groupName(QLatin1String("Presentation Settings") + QLatin1String(" Soundtrack "));
         KConfigGroup soundGrp = config.group(groupName);
         soundGrp.writeEntry("Tracks", d->sharedData->soundtrackUrls);
     }

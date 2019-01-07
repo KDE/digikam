@@ -724,8 +724,6 @@ void DigikamApp::setupActions()
     ac->setDefaultShortcut(d->slideShowRecursiveAction, Qt::SHIFT+Qt::Key_F9);
     d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
-    createPresentationAction();
-
     // -----------------------------------------------------------
 
     d->viewCMViewAction = new QAction(QIcon::fromTheme(QLatin1String("video-display")), i18n("Color-Managed View"), this);

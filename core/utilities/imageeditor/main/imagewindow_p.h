@@ -107,10 +107,8 @@
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
 #include "metaenginesettings.h"
-#include "metadataedit.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
-#include "presentationmngr.h"
 #include "ratingwidget.h"
 #include "savingcontext.h"
 #include "scancontroller.h"
@@ -130,10 +128,6 @@
 #include "dbinfoiface.h"
 #include "facetagseditor.h"
 #include "wsstarter.h"
-
-#ifdef HAVE_MARBLE
-#   include "geolocationedit.h"
-#endif
 
 namespace Digikam
 {

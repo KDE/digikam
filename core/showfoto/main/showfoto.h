@@ -153,7 +153,6 @@ private Q_SLOTS:
 private Q_SLOTS:
 
     void slotFilePrint();
-    void slotPresentation();
 
 private:
 

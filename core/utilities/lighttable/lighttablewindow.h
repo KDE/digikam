@@ -187,8 +187,6 @@ private Q_SLOTS:
     void slotEditItem();
     void slotEditItem(const ItemInfo&);
 
-    void slotPresentation();
-
     void slotSlideShowAll();
     void slotLeftSlideShowManualFromCurrent();
     void slotRightSlideShowManualFromCurrent();

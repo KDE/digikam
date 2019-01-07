@@ -30,48 +30,54 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-set(libpresentation_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_captionpage.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_advpage.cpp
+set(presentationplugin_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_captionpage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_advpage.cpp
 
-                         ${CMAKE_CURRENT_SOURCE_DIR}/widgets/presentationctrlwidget.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/widgets/presentationwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/presentationctrlwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/presentationwidget.cpp
 
-                         ${CMAKE_CURRENT_SOURCE_DIR}/common/presentationcontainer.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/common/presentationloader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/presentationcontainer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/presentationloader.cpp
 
-                         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentationdlg.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_mainpage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentationdlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_mainpage.cpp
 
-                         ${CMAKE_CURRENT_SOURCE_DIR}/presentationmngr.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/presentationmngr.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/presentationplugin.cpp
 )
 
 if(HAVE_OPENGL)
-    set(libpresentation_SRCS ${libpresentation_SRCS}
-                             ${CMAKE_CURRENT_SOURCE_DIR}/opengl/presentationgl.cpp
-                             ${CMAKE_CURRENT_SOURCE_DIR}/opengl/presentationkb.cpp
-                             ${CMAKE_CURRENT_SOURCE_DIR}/opengl/kbeffect.cpp
-                             ${CMAKE_CURRENT_SOURCE_DIR}/opengl/kbimageloader.cpp
+    set(presentationplugin_SRCS
+        ${presentationplugin_SRCS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/opengl/presentationgl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/opengl/presentationkb.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/opengl/kbeffect.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/opengl/kbimageloader.cpp
        )
 endif()
 
 if(HAVE_MEDIAPLAYER)
-    set(libpresentation_SRCS ${libpresentation_SRCS}
-                             ${CMAKE_CURRENT_SOURCE_DIR}/audio/presentationaudiolist.cpp
-                             ${CMAKE_CURRENT_SOURCE_DIR}/audio/presentation_audiopage.cpp
-                             ${CMAKE_CURRENT_SOURCE_DIR}/audio/presentationaudiowidget.cpp
+    set(presentationplugin_SRCS
+        ${presentationplugin_SRCS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/audio/presentationaudiolist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/audio/presentation_audiopage.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/audio/presentationaudiowidget.cpp
     )
 
-    ki18n_wrap_ui(libpresentation_SRCS
+    ki18n_wrap_ui(presentationplugin_SRCS
                   ${CMAKE_CURRENT_SOURCE_DIR}/audio/presentation_audiopage.ui
                   ${CMAKE_CURRENT_SOURCE_DIR}/audio/presentationaudiowidget.ui
     )
 endif()
 
-ki18n_wrap_ui(libpresentation_SRCS
+ki18n_wrap_ui(presentationplugin_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_mainpage.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_captionpage.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_advpage.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/widgets/presentationctrlwidget.ui
 )
 
-add_library(presentation_src OBJECT ${libpresentation_SRCS})
+DIGIKAM_ADD_PLUGIN(PresentationPlugin
+                   ${presentationplugin_SRCS}
+)
