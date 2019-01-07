@@ -206,7 +206,6 @@ private Q_SLOTS:
 
 private Q_SLOTS:
 
-    void slotImportFromScanner();
     void slotImportedImagefromScanner(const QUrl& url);
     void slotImportTool();
 

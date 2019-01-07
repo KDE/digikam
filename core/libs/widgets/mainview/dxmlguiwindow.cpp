@@ -226,7 +226,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
 #endif
 
 #ifdef HAVE_KSANE
-    m_ksaneAction              = 0;
+    m_digitalScannerAction     = 0;
 #endif
 
     installEventFilter(this);
@@ -317,6 +317,10 @@ void DXmlGuiWindow::registerPluginsActions()
     actionCollection()->addActions(QList<QAction*>() << m_geolocationEditAction);
 #endif
 
+#ifdef HAVE_KSANE
+    m_digitalScannerAction = DPluginLoader::instance()->pluginAction(QLatin1String("import_scan"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_digitalScannerAction);
+#endif
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -1141,14 +1145,6 @@ void DXmlGuiWindow::createImportActions()
     connect(m_importFileTransferAction, SIGNAL(triggered(bool)),
             this, SLOT(slotImportTool()));
 #endif
-
-#ifdef HAVE_KSANE
-    m_ksaneAction = new KSaneAction(this);
-    actionCollection()->addAction(QLatin1String("import_scan"), m_ksaneAction);
-
-    connect(m_ksaneAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotImportFromScanner()));
-#endif
 }
 
 QList<QAction*> DXmlGuiWindow::exportActions() const
@@ -1190,7 +1186,7 @@ QList<QAction*> DXmlGuiWindow::importActions() const
 #endif
 
 #ifdef HAVE_KSANE
-                             << m_ksaneAction
+                             << m_digitalScannerAction
 #endif
                              ;
 }

@@ -871,7 +871,10 @@ DInfoInterface* ShowFoto::infoIface(DPluginAction* const)
 
     connect(iface, SIGNAL(signalItemChanged(QUrl)),
             this, SLOT(slotChanged()));
-    
+
+    connect(iface, SIGNAL(signalImportedImage(QUrl)),
+            this, SLOT(slotImportedImagefromScanner(QUrl)));
+
     return iface;
 }
 

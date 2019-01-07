@@ -44,10 +44,6 @@
 #include "dinfointerface.h"
 #include "dpluginaction.h"
 
-#ifdef HAVE_KSANE
-#   include "ksaneaction.h"
-#endif
-
 class QEvent;
 
 class KToolBar;
@@ -240,7 +236,7 @@ protected:
 #endif
 
 #ifdef HAVE_KSANE
-    KSaneAction* m_ksaneAction;
+    QAction*     m_digitalScannerAction;
 #endif
 
 protected:
@@ -307,9 +303,6 @@ private Q_SLOTS:
     // Slots for common Settings actions
     virtual void slotEditKeys()                { editKeyboardShortcuts(); };
     virtual void slotSetup() = 0;
-
-    // Called by KSane action.
-    virtual void slotImportFromScanner()       {};
 
     // Called by Presentation tool.
     virtual void slotPresentation()            {};

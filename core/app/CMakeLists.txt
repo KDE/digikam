@@ -75,13 +75,6 @@ if(KF5AkonadiContact_FOUND)
     )
 endif()
 
-if(KF5Sane_FOUND)
-    set(DIGIKAMCORE_OBJECTS
-        ${DIGIKAMCORE_OBJECTS}
-        $<TARGET_OBJECTS:ksaneiface_src>
-    )
-endif()
-
 if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
     set(DIGIKAMCORE_OBJECTS
         ${DIGIKAMCORE_OBJECTS}

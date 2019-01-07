@@ -1319,7 +1319,12 @@ DInfoInterface* ImageWindow::infoIface(DPluginAction* const ac)
             break;
     }
 
-    return (new DBInfoIface(this, d->thumbBar->allUrls(), aset));
+    DBInfoIface* const iface = new DBInfoIface(this, d->thumbBar->allUrls(), aset);
+
+    connect(iface, SIGNAL(signalImportedImage(QUrl)),
+            this, SLOT(slotImportedImagefromScanner(QUrl)));
+
+    return iface;
 }
 
 } // namespace Digikam

@@ -1052,7 +1052,12 @@ DInfoInterface* LightTableWindow::infoIface(DPluginAction* const ac)
             break;
     }
 
-    return (new DBInfoIface(this, d->thumbView->allUrls(), aset));
+    DBInfoIface* const iface = new DBInfoIface(this, d->thumbView->allUrls(), aset);
+
+    connect(iface, SIGNAL(signalImportedImage(QUrl)),
+            this, SLOT(slotImportedImagefromScanner(QUrl)));
+
+    return iface;
 }
 
 } // namespace Digikam

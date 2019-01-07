@@ -417,7 +417,7 @@ public:
     DZoomBar*                           zoomBar;
     DAdjustableLabel*                   statusLabel;
 
-    DModelFactory*             modelCollection;
+    DModelFactory*                      modelCollection;
 };
 
 } // namespace Digikam

@@ -26,33 +26,6 @@
 
 namespace ShowFoto
 {
-    
-void ShowFoto::slotImportFromScanner()
-{
-#ifdef HAVE_KSANE
-
-    QString place    = QDir::homePath();
-    QStringList pics = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
-
-    if (!pics.isEmpty())
-        place = pics.first();
-
-    QUrl trg = saveDestinationUrl();
-
-    if (!trg.isEmpty())
-    {
-        QString path = trg.adjusted(QUrl::RemoveFilename).toLocalFile();
-
-        if (!path.isEmpty())
-            place = path;
-    }
-
-    m_ksaneAction->activate(place, configGroupName());
-
-    connect(m_ksaneAction, SIGNAL(signalImportedImage(QUrl)),
-            this, SLOT(slotImportedImagefromScanner(QUrl)));
-#endif
-}
 
 void ShowFoto::slotImportedImagefromScanner(const QUrl& url)
 {

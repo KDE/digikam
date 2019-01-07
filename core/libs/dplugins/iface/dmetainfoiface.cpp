@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QFileInfo>
+#include <QStandardPaths>
 
 // Local includes
 
@@ -186,6 +187,27 @@ QWidget* DMetaInfoIface::uploadWidget(QWidget* const parent) const
 QUrl DMetaInfoIface::uploadUrl() const
 {
     return QUrl::fromLocalFile(d->dirSelector->fileDlgPath());
+}
+
+QUrl DMetaInfoIface::defaultUploadUrl() const
+{
+    QUrl place       = QUrl::fromLocalFile(QDir::homePath());
+    QStringList pics = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
+
+    if (!pics.isEmpty())
+        place = QUrl::fromLocalFile(pics.first());
+
+    QList<QUrl> lst = currentAlbumItems();
+
+    if (!lst.isEmpty())
+    {
+        QUrl trg = lst.first().adjusted(QUrl::RemoveFilename);
+
+        if (!trg.isEmpty())
+            place = trg;
+    }
+
+    return place;
 }
 
 } // namespace Digikam

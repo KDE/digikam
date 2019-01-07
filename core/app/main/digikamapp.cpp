@@ -992,7 +992,12 @@ DInfoInterface* DigikamApp::infoIface(DPluginAction* const ac)
             break;
     }
 
-    return (new DBInfoIface(this, QList<QUrl>(), aset));
+    DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), aset);
+
+    connect(iface, SIGNAL(signalImportedImage(QUrl)),
+            this, SLOT(slotImportedImagefromScanner(QUrl)));
+
+    return iface;
 }
 
 } // namespace Digikam

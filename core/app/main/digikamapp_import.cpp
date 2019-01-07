@@ -27,51 +27,26 @@
 namespace Digikam
 {
 
-QString DigikamApp::scannerTargetPlace()
+void DigikamApp::slotImportedImagefromScanner(const QUrl& url)
 {
-    QString place    = QDir::homePath();
-    QStringList pics = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
-
-    if (!pics.isEmpty())
-        place = pics.first();
-
-    Album* const album = AlbumManager::instance()->currentAlbums().first();
-
-    if (album->type() == Album::PHYSICAL)
-    {
-        PAlbum* const p = dynamic_cast<PAlbum*>(album);
-
-        if (p)
-        {
-            place = p->folderPath();
-        }
-    }
-    else
-    {
-        QStringList cols = CollectionManager::instance()->allAvailableAlbumRootPaths();
-
-        if (!cols.isEmpty())
-            place = cols.first();
-    }
-
-    return place;
+    ScanController::instance()->scannedInfo(url.toLocalFile());
 }
 
 void DigikamApp::updateQuickImportAction()
 {
     d->quickImportMenu->clear();
 
-    foreach(QAction* const action, d->solidCameraActionGroup->actions())
+    foreach (QAction* const action, d->solidCameraActionGroup->actions())
     {
         d->quickImportMenu->addAction(action);
     }
 
-    foreach(QAction* const action, d->solidUsmActionGroup->actions())
+    foreach (QAction* const action, d->solidUsmActionGroup->actions())
     {
         d->quickImportMenu->addAction(action);
     }
 
-    foreach(QAction* const action, d->manualCameraActionGroup->actions())
+    foreach (QAction* const action, d->manualCameraActionGroup->actions())
     {
         d->quickImportMenu->addAction(action);
     }
@@ -87,7 +62,7 @@ void DigikamApp::updateQuickImportAction()
         QAction*  primaryAction = 0;
         QDateTime latest;
 
-        foreach(QAction* const action, d->quickImportMenu->actions())
+        foreach (QAction* const action, d->quickImportMenu->actions())
         {
             QDateTime appearanceTime = d->cameraAppearanceTimes.value(action->data().toString());
 
@@ -195,13 +170,6 @@ void DigikamApp::slotImportAddFolders()
     }
 
     DIO::copy(urls, pAlbum);
-}
-
-void DigikamApp::slotImportFromScanner()
-{
-#ifdef HAVE_KSANE
-    m_ksaneAction->activate(scannerTargetPlace(), configGroupName());
-#endif
 }
 
 void DigikamApp::slotImportTool()

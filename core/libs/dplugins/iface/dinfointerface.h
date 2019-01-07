@@ -79,7 +79,7 @@ public:
 
     virtual DInfoMap    albumInfo(int)                    const;
     virtual DInfoMap    itemInfo(const QUrl&)             const;
-    
+
 public:
 
     // Albums chooser view methods (to use items from albums before to process).
@@ -98,7 +98,12 @@ public:
     virtual QUrl     uploadUrl()                         const;
 
     Q_SIGNAL void signalUploadUrlChanged();
-    
+
+    // Url to upload new items without to use album selector.
+    virtual QUrl     defaultUploadUrl()                  const;
+
+    Q_SIGNAL void signalImportedImage(const QUrl&);
+
 public:
 
     // Return an instance of tag filter model if host application support this feature, else null pointer.

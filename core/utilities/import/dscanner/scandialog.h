@@ -26,7 +26,10 @@
 // Qt includes
 
 #include <QCloseEvent>
-#include <QDialog>
+
+// Local includes
+
+#include "dplugindialog.h"
 
 class QWidget;
 
@@ -40,13 +43,13 @@ using namespace KSaneIface;
 namespace Digikam
 {
 
-class ScanDialog : public QDialog
+class ScanDialog : public DPluginDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit ScanDialog(KSaneWidget* const saneWdg, const QString& config, QWidget* const parent=0);
+    explicit ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent=0);
     ~ScanDialog();
 
     void setTargetDir(const QString& targetDir);
@@ -65,11 +68,6 @@ private Q_SLOTS:
     void slotThreadProgress(const QUrl&, int);
     void slotThreadDone(const QUrl&, bool);
     void slotDialogFinished();
-
-private:
-
-    void readSettings();
-    void saveSettings();
 
 private:
 

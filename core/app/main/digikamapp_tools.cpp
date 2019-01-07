@@ -86,7 +86,7 @@ void DigikamApp::setupSelectToolsAction()
     }
 
 #ifdef HAVE_KSANE
-    actionModel->addAction(m_ksaneAction,                 importCategory);
+    actionModel->addAction(m_digitalScannerAction,                 importCategory);
 #endif
 
     // setup categorized view

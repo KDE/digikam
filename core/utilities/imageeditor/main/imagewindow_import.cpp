@@ -27,16 +27,6 @@
 namespace Digikam
 {
 
-void ImageWindow::slotImportFromScanner()
-{
-#ifdef HAVE_KSANE
-    m_ksaneAction->activate(DigikamApp::instance()->scannerTargetPlace(), configGroupName());
-
-    connect(m_ksaneAction, SIGNAL(signalImportedImage(QUrl)),
-            this, SLOT(slotImportedImagefromScanner(QUrl)));
-#endif
-}
-
 void ImageWindow::slotImportedImagefromScanner(const QUrl& url)
 {
     ItemInfo info = ScanController::instance()->scannedInfo(url.toLocalFile());

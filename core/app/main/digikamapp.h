@@ -208,19 +208,15 @@ private Q_SLOTS:
 
 // -- Import tools methods implemented in digikamapp_import.cpp -------------------------------------
 
-public:
-
-    static QString scannerTargetPlace();
-
 private:
 
     void updateQuickImportAction();
 
 private Q_SLOTS:
 
+    void slotImportedImagefromScanner(const QUrl& url);
     void slotImportAddImages();
     void slotImportAddFolders();
-    void slotImportFromScanner();
     void slotImportTool();
 
 // -- Camera management methods implemented in digikamapp_camera.cpp --------------------------------

@@ -44,7 +44,7 @@ public:
 
     Q_SLOT void slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate);
     Q_SLOT void slotMetadataChangedForUrl(const QUrl& url);
-    
+
     Q_SIGNAL void signalItemChanged(const QUrl& url);
 
 public:
@@ -58,6 +58,8 @@ public:
 
     QWidget* uploadWidget(QWidget* const parent)  const;
     QUrl     uploadUrl()                          const;
+
+    QUrl     defaultUploadUrl()                   const;
 
 private:
 

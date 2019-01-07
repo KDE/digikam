@@ -66,22 +66,19 @@ public:
     }
 
     QString            targetDir;
-    QString            configGroupName;
     StatusProgressBar* progress;
     KSaneWidget*       saneWidget;
 };
 
-ScanDialog::ScanDialog(KSaneWidget* const saneWdg, const QString& config, QWidget* const parent)
-    : QDialog(parent),
+ScanDialog::ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent)
+    : DPluginDialog(parent, QLatin1String("Scan Tool Dialog")),
       d(new Private)
 {
     setWindowTitle(i18n("Scan Image"));
     setModal(false);
 
-    d->saneWidget      = saneWdg;
-    d->configGroupName = config;
-
-    d->progress = new StatusProgressBar(this);
+    d->saneWidget = saneWdg;
+    d->progress   = new StatusProgressBar(this);
     d->progress->setProgressBarMode(StatusProgressBar::ProgressBarMode);
     d->progress->setProgressTotalSteps(100);
     d->progress->setNotify(true);
@@ -91,10 +88,6 @@ ScanDialog::ScanDialog(KSaneWidget* const saneWdg, const QString& config, QWidge
     vbx->addWidget(d->saneWidget, 10);
     vbx->addWidget(d->progress);
     setLayout(vbx);
-
-    // ------------------------------------------------------------------------
-
-    readSettings();
 
     // ------------------------------------------------------------------------
 
@@ -115,24 +108,6 @@ void ScanDialog::setTargetDir(const QString& targetDir)
     d->targetDir = targetDir;
 }
 
-void ScanDialog::readSettings()
-{
-    KConfig config(d->configGroupName);
-    KConfigGroup group = config.group(QLatin1String("Scan Tool Dialog"));
-
-    winId();
-    DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
-    resize(windowHandle()->size());
-}
-
-void ScanDialog::saveSettings()
-{
-    KConfig config(d->configGroupName);
-    KConfigGroup group = config.group(QLatin1String("Scan Tool Dialog"));
-    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
-    config.sync();
-}
-
 void ScanDialog::closeEvent(QCloseEvent* e)
 {
     if (!e)
@@ -147,7 +122,6 @@ void ScanDialog::closeEvent(QCloseEvent* e)
 void ScanDialog::slotDialogFinished()
 {
     d->saneWidget->closeDevice();
-    saveSettings();
 }
 
 void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, int bytes_per_line, int ksaneformat)

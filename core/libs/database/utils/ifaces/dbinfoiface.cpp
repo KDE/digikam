@@ -24,6 +24,10 @@
 
 #include "dbinfoiface.h"
 
+// Qt includes
+
+#include <QDir>
+
 // Local includes
 
 #include "albumselecttabs.h"
@@ -34,6 +38,7 @@
 #include "albumfiltermodel.h"
 #include "albumselectwidget.h"
 #include "coredb.h"
+#include "collectionmanager.h"
 #include "coredbnamefilter.h"
 #include "collectionscanner.h"
 #include "digikamapp.h"
@@ -589,13 +594,45 @@ QUrl DBInfoIface::uploadUrl() const
     return url;
 }
 
+QUrl DBInfoIface::defaultUploadUrl() const
+{
+    QUrl place       = QUrl::fromLocalFile(QDir::homePath());
+    QStringList pics = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
+
+    if (!pics.isEmpty())
+        place = QUrl::fromLocalFile(pics.first());
+
+    Album* const album = AlbumManager::instance()->currentAlbums().first();
+
+    if (album->type() == Album::PHYSICAL)
+    {
+        PAlbum* const p = dynamic_cast<PAlbum*>(album);
+
+        if (p)
+        {
+            place = QUrl::fromLocalFile(p->folderPath());
+        }
+    }
+    else
+    {
+        QStringList cols = CollectionManager::instance()->allAvailableAlbumRootPaths();
+
+        if (!cols.isEmpty())
+        {
+            place = QUrl::fromLocalFile(cols.first());
+        }
+    }
+
+    return place;
+}
+
 QAbstractItemModel* DBInfoIface::tagFilterModel()
 {
     TagModel* const tagModel                    = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, this);
     TagPropertiesFilterModel* const filterModel = new TagPropertiesFilterModel(this);
     filterModel->setSourceAlbumModel(tagModel);
     filterModel->sort(0);
-    
+
     return filterModel;
 }
 

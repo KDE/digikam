@@ -8,8 +8,6 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-set(ksaneiface_SRCS ksaneaction.cpp scandialog.cpp saveimgthread.cpp)
-
 include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
@@ -20,8 +18,8 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-add_library(ksaneiface_src OBJECT ${ksaneiface_SRCS})
-add_library(ksaneiface STATIC $<TARGET_OBJECTS:ksaneiface_src>)
-
-target_link_libraries(ksaneiface PRIVATE KF5::Sane KF5::I18n)
-
+DIGIKAM_ADD_PLUGIN(DigitalScannerPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/dscannerplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/scandialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/saveimgthread.cpp
+)
