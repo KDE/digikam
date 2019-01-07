@@ -22,6 +22,7 @@ set(libvideotools_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/vidslidetask.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/player/vidplayerdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/player/mediaplayerview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/player/slidevideo.cpp
 )
 
 add_library(videotools_src OBJECT ${libvideotools_SRCS})

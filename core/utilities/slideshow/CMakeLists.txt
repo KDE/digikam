@@ -21,10 +21,6 @@ set(libslideshow_SRCS
     slideshowsettings.cpp
 )
 
-if(ENABLE_MEDIAPLAYER)
-    set(libslideshow_SRCS ${libslideshow_SRCS} slidevideo.cpp)
-endif()
-
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 
