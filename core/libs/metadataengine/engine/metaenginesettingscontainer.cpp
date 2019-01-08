@@ -129,7 +129,7 @@ void MetaEngineSettingsContainer::writeToConfig(KConfigGroup& group) const
     group.writeEntry("Save Color Label",            saveColorLabel);
     group.writeEntry("Save Rating",                 saveRating);
 
-    group.writeEntry("Write RAW Files",             writeRawFiles);
+    group.writeEntry("Write Metadata To RAW Files", writeRawFiles);
     group.writeEntry("Use XMP Sidecar For Reading", useXMPSidecar4Reading);
     group.writeEntry("Metadata Writing Mode",       (int)metadataWritingMode);
     group.writeEntry("Update File Timestamp",       updateFileTimeStamp);
