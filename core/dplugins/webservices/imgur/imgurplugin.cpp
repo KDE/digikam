@@ -44,7 +44,7 @@ ImgUrPlugin::ImgUrPlugin(QObject* const parent)
 
 ImgUrPlugin::~ImgUrPlugin()
 {
-    delete m_toolWidget;
+    delete m_toolDlg;
 }
 
 QString ImgUrPlugin::name() const
@@ -105,9 +105,9 @@ void ImgUrPlugin::setup(QObject* const parent)
 
 void ImgUrPlugin::slotImgUr()
 {
-    if (!reactivateToolWidget())
+    if (!reactivateToolDialog())
     {
-        delete m_tooldlg;
+        delete m_toolDlg;
         m_toolDlg = new ImgurWindow(infoIface(sender()), 0);
         m_toolDlg->setPlugin(this);
         m_toolDlg->show();
