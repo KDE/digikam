@@ -84,6 +84,10 @@ blacklist = [
     "dwmapi.dll",
     "uxtheme.dll",
     "bcrypt.dll",
+    "wtsapi32.dll",
+    "d2d1.dll",
+    "d3d11.dll",
+    "dwrite.dll",
 ]
 
 # -----------------------------------------------

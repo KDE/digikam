@@ -91,7 +91,6 @@ public:
     TagPropertiesFilterModel  filteredModel;
 
     AssignNameWidget*         assignNameWidget;
-    QPersistentModelIndex     index;
 };
 
 AssignNameOverlay::AssignNameOverlay(QObject* const parent)
@@ -248,6 +247,11 @@ void AssignNameOverlay::slotDataChanged(const QModelIndex& / *topLeft* /, const 
 
 bool AssignNameOverlay::checkIndex(const QModelIndex& index) const
 {
+    if (!index.isValid())
+    {
+        return false;
+    }
+
     QVariant extraData = index.data(ItemModel::ExtraDataRole);
 
     if (extraData.isNull())

@@ -685,4 +685,5 @@ BUGFIXES:
 615 ==> 389241 - Several errors in migrating from sqlite to external mysql server.
 616 ==> 402979 - Can't rename album in collection on NTFS usb drive.
 617 ==> 389690 - Updated image label and image is broken after metadata is written to file.
-618 ==>
+618 ==> 402944 - crash while looking at face tags.
+619 ==> 
