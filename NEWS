@@ -684,4 +684,5 @@ BUGFIXES:
 614 ==> 372650 - On OS X, when tagging multiple images metadata is not correctly written to some image files or sidecars.
 615 ==> 389241 - Several errors in migrating from sqlite to external mysql server.
 616 ==> 402979 - Can't rename album in collection on NTFS usb drive.
-617 ==> 
+617 ==> 389690 - Updated image label and image is broken after metadata is written to file.
+618 ==>
