@@ -111,7 +111,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
                        QWidget* const /*parent*/,
                        bool import,
                        QString /*nickName*/)
-    : WSToolDialog(0),
+    : WSToolDialog(0, QString::fromLatin1("Smug %1 Dialog").arg(import ? QLatin1String("Import") : QLatin1String("Export"))),
       d(new Private)
 {
     d->tmpPath.clear();

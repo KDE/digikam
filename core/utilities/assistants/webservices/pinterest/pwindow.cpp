@@ -76,7 +76,7 @@ public:
 
 PWindow::PWindow(DInfoInterface* const iface,
                  QWidget* const /*parent*/)
-    : WSToolDialog(0),
+    : WSToolDialog(0, QLatin1String("Pinterest Export Dialog")),
       d(new Private)
 {
     d->widget = new PWidget(this, iface, QLatin1String("Pinterest"));

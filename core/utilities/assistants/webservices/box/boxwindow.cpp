@@ -76,7 +76,7 @@ public:
 
 BOXWindow::BOXWindow(DInfoInterface* const iface,
                      QWidget* const /*parent*/)
-    : WSToolDialog(0),
+    : WSToolDialog(0, QLatin1String("Box Export Dialog")),
       d(new Private)
 {
     d->widget = new BOXWidget(this, iface, QLatin1String("Box"));

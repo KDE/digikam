@@ -74,9 +74,8 @@ public:
     QList<QUrl>    transferQueue;
 };
 
-DBWindow::DBWindow(DInfoInterface* const iface,
-                   QWidget* const /*parent*/)
-    : WSToolDialog(0),
+DBWindow::DBWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
+    : WSToolDialog(0, QLatin1String("Dropbox Export Dialog")),
       d(new Private)
 {
     d->widget      = new DBWidget(this, iface, QLatin1String("Dropbox"));

@@ -92,7 +92,7 @@ public:
 };
 
 MediaWikiWindow::MediaWikiWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0),
+    : WSToolDialog(0, QLatin1String("MediaWiki export dialog")),
       d(new Private)
 {
     d->tmpPath.clear();

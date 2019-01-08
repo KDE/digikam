@@ -6,5 +6,4 @@
 
 add_subdirectory(geoiface)
 add_subdirectory(mapsearches)
-add_subdirectory(editor)
 add_subdirectory(geomapwrapper)

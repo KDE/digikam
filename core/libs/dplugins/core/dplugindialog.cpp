@@ -39,6 +39,7 @@
 
 #include "dxmlguiwindow.h"
 #include "dpluginaboutdlg.h"
+#include "dplugin.h"
 
 namespace Digikam
 {

@@ -147,7 +147,7 @@ public:
 FlickrWindow::FlickrWindow(DInfoInterface* const iface,
                            QWidget* const /*parent*/,
                            const QString& serviceName)
-    : WSToolDialog(0),
+    : WSToolDialog(0, QString::fromLatin1("%1Export Dialog").arg(serviceName)),
       d(new Private)
 {
     d->iface       = iface;

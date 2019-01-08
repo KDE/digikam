@@ -137,15 +137,14 @@ public:
     // XMP id const for images
     static const char*          XMP_SERVICE_ID;
 };
-    
+
 /*
  * This tag added to our images after uploading to Fotki web service
  */
 const char* YFWindow::Private::XMP_SERVICE_ID = "Xmp.digiKam.yandexGPhotoId";
 
-
-YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const parent, bool import)
-    : WSToolDialog(parent),
+YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const /*parent*/, bool import)
+    : WSToolDialog(0, QLatin1String("YandexFotki Dialog")),
       d(new Private)
 {
     d->iface                = iface;

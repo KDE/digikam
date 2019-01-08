@@ -110,9 +110,8 @@ public:
     DInfoInterface* iface;
 };
 
-FbWindow::FbWindow(DInfoInterface* const iface,
-                   QWidget* const /*parent*/)
-    : WSToolDialog(0),
+FbWindow::FbWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
+    : WSToolDialog(0, QLatin1String("Facebook Export Dialog")),
       d(new Private(this, iface))
 {
     d->tmpPath.clear();

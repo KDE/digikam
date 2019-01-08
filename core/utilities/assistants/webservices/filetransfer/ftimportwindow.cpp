@@ -59,7 +59,7 @@ public:
 };
 
 FTImportWindow::FTImportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0),
+    : WSToolDialog(0, QLatin1String("Kio Import Dialog")),
       d(new Private)
 {
     d->iface        = iface;

@@ -37,6 +37,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "dpluginaboutdlg.h"
 
 namespace Digikam
 {
@@ -46,40 +47,33 @@ class Q_DECL_HIDDEN WSToolDialog::Private
 public:
 
     explicit Private()
-        : buttonBox(0),
-          startButton(0),
+        : startButton(0),
           mainWidget(0),
           propagateReject(true)
     {
     }
 
-    QDialogButtonBox* buttonBox;
     QPushButton*      startButton;
     QWidget*          mainWidget;
 
     bool              propagateReject;
 };
 
-WSToolDialog::WSToolDialog(QWidget* const parent)
-    : QDialog(parent),
+WSToolDialog::WSToolDialog(QWidget* const parent, const QString& objName)
+    : DPluginDialog(parent, objName),
       d(new Private)
 {
-    setWindowFlags((windowFlags() & ~Qt::Dialog) |
-                   Qt::Window                    |
-                   Qt::WindowCloseButtonHint     |
-                   Qt::WindowMinMaxButtonsHint);
-
-    d->buttonBox   = new QDialogButtonBox(QDialogButtonBox::Close, this);
+    m_buttons->addButton(QDialogButtonBox::Close);
+    m_buttons->button(QDialogButtonBox::Close)->setDefault(true);
     d->startButton = new QPushButton(i18nc("@action:button", "&Start"), this);
     d->startButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
-    d->buttonBox->addButton(d->startButton, QDialogButtonBox::ActionRole);
-    d->buttonBox->button(QDialogButtonBox::Close)->setDefault(true);
+    m_buttons->addButton(d->startButton, QDialogButtonBox::ActionRole);
 
     QVBoxLayout* const mainLayout = new QVBoxLayout(this);
-    mainLayout->addWidget(d->buttonBox);
+    mainLayout->addWidget(m_buttons);
     setLayout(mainLayout);
 
-    connect(d->buttonBox, &QDialogButtonBox::rejected,
+    connect(m_buttons, &QDialogButtonBox::rejected,
             this, &WSToolDialog::slotCloseClicked);
 }
 
@@ -95,7 +89,7 @@ void WSToolDialog::setMainWidget(QWidget* const widget)
         return;
     }
 
-    layout()->removeWidget(d->buttonBox);
+    layout()->removeWidget(m_buttons);
 
     if (d->mainWidget)
     {
@@ -106,23 +100,23 @@ void WSToolDialog::setMainWidget(QWidget* const widget)
 
     d->mainWidget = widget;
     layout()->addWidget(d->mainWidget);
-    layout()->addWidget(d->buttonBox);
+    layout()->addWidget(m_buttons);
 }
 
 void WSToolDialog::setRejectButtonMode(QDialogButtonBox::StandardButton button)
 {
     if (button == QDialogButtonBox::Close)
     {
-        d->buttonBox->button(QDialogButtonBox::Close)->setText(i18n("Close"));
-        d->buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon::fromTheme(QLatin1String("window-close")));
-        d->buttonBox->button(QDialogButtonBox::Close)->setToolTip(i18n("Close window"));
+        m_buttons->button(QDialogButtonBox::Close)->setText(i18n("Close"));
+        m_buttons->button(QDialogButtonBox::Close)->setIcon(QIcon::fromTheme(QLatin1String("window-close")));
+        m_buttons->button(QDialogButtonBox::Close)->setToolTip(i18n("Close window"));
         d->propagateReject = true;
     }
     else if (button == QDialogButtonBox::Cancel)
     {
-        d->buttonBox->button(QDialogButtonBox::Close)->setText(i18n("Cancel"));
-        d->buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon::fromTheme(QLatin1String("dialog-cancel")));
-        d->buttonBox->button(QDialogButtonBox::Close)->setToolTip(i18n("Cancel current operation"));
+        m_buttons->button(QDialogButtonBox::Close)->setText(i18n("Cancel"));
+        m_buttons->button(QDialogButtonBox::Close)->setIcon(QIcon::fromTheme(QLatin1String("dialog-cancel")));
+        m_buttons->button(QDialogButtonBox::Close)->setToolTip(i18n("Cancel current operation"));
         d->propagateReject = false;
     }
     else
@@ -138,7 +132,7 @@ QPushButton* WSToolDialog::startButton() const
 
 void WSToolDialog::addButton(QAbstractButton* button, QDialogButtonBox::ButtonRole role)
 {
-    d->buttonBox->addButton(button, role);
+    m_buttons->addButton(button, role);
 }
 
 void WSToolDialog::slotCloseClicked()

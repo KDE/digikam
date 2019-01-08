@@ -70,7 +70,7 @@ const QString FTExportWindow::Private::HISTORY_URL_PROPERTY = QLatin1String("his
 const QString FTExportWindow::Private::CONFIG_GROUP         = QLatin1String("KioExport");
 
 FTExportWindow::FTExportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0),
+    : WSToolDialog(0, QLatin1String("Kio Export Dialog")),
       d(new Private)
 {
     d->exportWidget = new FTExportWidget(iface, this);

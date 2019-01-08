@@ -57,13 +57,6 @@ set(libwsflickr_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrlist.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrwindow.cpp
 )
 
-# Imgur tool ----------------------------------------------------------------
-
-set(libwsimgur_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurtalker.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurimageslist.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurwindow.cpp
-)
-
 # Ipfs tool -----------------------------------------------------------------
 
 set(libwsipfs_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/ipfs/ipfstalker.cpp
@@ -247,7 +240,6 @@ endif()
 add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwso2_SRCS}
                                    ${libwsflickr_SRCS}
-                                   ${libwsimgur_SRCS}
                                    ${libwsipfs_SRCS}
                                    ${libwsdropbox_SRCS}
                                    ${libwsonedrive_SRCS}

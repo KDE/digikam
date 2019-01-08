@@ -737,6 +737,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     add_subdirectory(libs)
     add_subdirectory(utilities)
     add_subdirectory(app)
+    add_subdirectory(dplugins)
     add_subdirectory(showfoto)
 
     if(BUILD_TESTING)

@@ -109,7 +109,7 @@ public:
 GSWindow::GSWindow(DInfoInterface* const iface,
                    QWidget* const /*parent*/,
                    const QString& serviceName)
-    : WSToolDialog(0),
+    : WSToolDialog(0, QString::fromLatin1("%1Export Dialog").arg(serviceName)),
       d(new Private)
 {
     d->iface       = iface;
@@ -317,20 +317,7 @@ void GSWindow::readSettings()
         d->widget->m_tagsBGrp->button(grp.readEntry("Tag Paths", 0))->setChecked(true);
     }
 
-    KConfigGroup dialogGroup;
-
-    switch (d->service)
-    {
-        case GoogleService::GDrive:
-            dialogGroup = config.group("Google Drive Export Dialog");
-            break;
-        case GoogleService::GPhotoExport:
-            dialogGroup = config.group("Google Photo Export Dialog");
-            break;
-        case GoogleService::GPhotoImport:
-            dialogGroup = config.group("Google Photo Import Dialog");
-            break;
-    }
+    KConfigGroup dialogGroup = config.group(QString::fromLatin1("%1Export Dialog").arg(d->serviceName));
 
     winId();
     KWindowConfig::restoreWindowSize(windowHandle(), dialogGroup);
@@ -362,21 +349,7 @@ void GSWindow::writeSettings()
         grp.writeEntry("Tag Paths", d->widget->m_tagsBGrp->checkedId());
     }
 
-    KConfigGroup dialogGroup;
-
-    switch (d->service)
-    {
-        case GoogleService::GDrive:
-            dialogGroup = config.group("Google Drive Export Dialog");
-            break;
-        case GoogleService::GPhotoExport:
-            dialogGroup = config.group("Google Photo Export Dialog");
-            break;
-        case GoogleService::GPhotoImport:
-            dialogGroup = config.group("Google Photo Import Dialog");
-            break;
-    }
-
+    KConfigGroup dialogGroup = config.group(QString::fromLatin1("%1Export Dialog").arg(d->serviceName));
     KWindowConfig::saveWindowSize(windowHandle(), dialogGroup);
     config.sync();
 }

@@ -212,4 +212,17 @@ void DPlugin::setShouldLoaded(bool b)
     d->shouldLoaded = b;
 }
 
+bool DPlugin::reactivateToolDialog() const
+{
+    if (m_toolDlg && (m_toolDlg->isMinimized() || !m_toolDlg->isHidden()))
+    {
+        m_toolDlg->showNormal();       // krazy:exclude=qmethods
+        m_toolDlg->activateWindow();
+        m_toolDlg->raise();
+        return true;
+    }
+
+    return false;
+}
+
 } // namespace Digikam

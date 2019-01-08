@@ -98,7 +98,7 @@ public:
 
 ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
                                    QWidget* const /*parent*/)
-    : WSToolDialog(0),
+    : WSToolDialog(0, QLatin1String("ImageShack Dialog")),
       d(new Private)
 {
     d->session = new ImageShackSession();

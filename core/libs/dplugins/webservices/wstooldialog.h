@@ -31,6 +31,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dplugindialog.h"
 
 class QAbstractButton;
 class QPushButton;
@@ -38,13 +39,13 @@ class QPushButton;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT WSToolDialog : public QDialog
+class DIGIKAM_EXPORT WSToolDialog : public DPluginDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit WSToolDialog(QWidget* const parent = 0);
+    explicit WSToolDialog(QWidget* const parent, const QString& objName);
     ~WSToolDialog();
 
     void setMainWidget(QWidget* const widget);

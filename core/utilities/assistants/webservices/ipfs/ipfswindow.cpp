@@ -67,7 +67,7 @@ public:
 };
 
 IpfsWindow::IpfsWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0),
+    : WSToolDialog(0, QLatin1String("IPFS Dialog")),
       d(new Private)
 {
     d->api = new IpfsTalker(this);
@@ -134,7 +134,7 @@ IpfsWindow::IpfsWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
 IpfsWindow::~IpfsWindow()
 {
     saveSettings();
-    delete d;    
+    delete d;
 }
 
 void IpfsWindow::reactivate()

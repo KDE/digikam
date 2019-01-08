@@ -77,7 +77,7 @@ public:
 
 TwWindow::TwWindow(DInfoInterface* const iface,
                    QWidget* const /*parent*/)
-    : WSToolDialog(0),
+    : WSToolDialog(0, QLatin1String("Twitter Export Dialog")),
       d(new Private)
 {
     d->widget      = new TwWidget(this, iface, QLatin1String("Twitter"));

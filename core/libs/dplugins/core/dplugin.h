@@ -33,12 +33,15 @@
 #include <QtPlugin>
 #include <QObject>
 #include <QIcon>
+#include <QPointer>
+#include <QWidget>
 
 // Local includes
 
 #include "dinfointerface.h"
 #include "dpluginauthor.h"
 #include "dpluginaction.h"
+#include "dplugindialog.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -164,6 +167,16 @@ protected:
      * Return the info interface instance for the given action.
      */
     DInfoInterface* infoIface(QObject* const ac) const;
+
+    /**
+     * Check if tool dialog instance already exists.
+     * If true, reactivate the visibility of widget.
+     */
+    bool reactivateToolDialog() const;
+
+protected:
+
+    QPointer<DPluginDialog> m_toolDlg;
 
 private:
 

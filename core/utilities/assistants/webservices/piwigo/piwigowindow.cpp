@@ -221,8 +221,8 @@ PiwigoWindow::Private::Private(PiwigoWindow* const parent,
 // ---------------------------------------------------------------------------
 
 PiwigoWindow::PiwigoWindow(DInfoInterface* const iface,
-                           QWidget* const parent)
-    : WSToolDialog(parent),
+                           QWidget* const /*parent*/)
+    : WSToolDialog(0, QLatin1String("PiwigoSync Dialog")),
       d(new Private(this, iface))
 {
     d->pPiwigo = new PiwigoSession();

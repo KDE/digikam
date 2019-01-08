@@ -111,11 +111,11 @@ public:
 
     QString           appId;
 };
-    
+
 VKWindow::VKWindow(DInfoInterface* const iface,
                    QWidget* const parent,
                    bool import)
-    : WSToolDialog(parent),
+    : WSToolDialog(parent, QLatin1String("VKontakte Dialog")),
       d(new Private)
 {
     d->iface = iface;

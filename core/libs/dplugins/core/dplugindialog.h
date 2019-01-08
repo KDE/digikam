@@ -32,10 +32,11 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "dplugin.h"
 
 namespace Digikam
 {
+
+class DPlugin;
 
 class DIGIKAM_EXPORT DPluginDialog : public QDialog
 {

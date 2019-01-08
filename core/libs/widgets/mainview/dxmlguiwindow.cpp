@@ -324,6 +324,9 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_presentationAction = DPluginLoader::instance()->pluginAction(QLatin1String("presentation"), this);
     actionCollection()->addActions(QList<QAction*>() << m_presentationAction);
+
+    m_exportImgurAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_imgur"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportImgurAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -1038,13 +1041,6 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportImageshackAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
-    m_exportImgurAction = new QAction(i18n("Export to &Imgur.."), this);
-    m_exportImgurAction->setIcon(QIcon::fromTheme(QLatin1String("dk-imgur")));
-    actionCollection()->addAction(QLatin1String("export_imgur"), m_exportImgurAction);
-
-    connect(m_exportImgurAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
     m_exportIpfsAction = new QAction(i18n("Export to &Ipfs.."), this);
     m_exportIpfsAction->setIcon(QIcon::fromTheme(QLatin1String("dk-ipfs")));
     actionCollection()->addAction(QLatin1String("export_ipfs"), m_exportIpfsAction);
@@ -1220,10 +1216,6 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     else if (action == m_exportImageshackAction)
     {
         return WSStarter::ExportImageshack;
-    }
-    else if (action == m_exportImgurAction)
-    {
-        return WSStarter::ExportImgur;
     }
     else if (action == m_exportIpfsAction)
     {
