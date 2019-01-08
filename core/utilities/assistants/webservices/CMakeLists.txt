@@ -57,13 +57,6 @@ set(libwsflickr_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrlist.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrwindow.cpp
 )
 
-# Ipfs tool -----------------------------------------------------------------
-
-set(libwsipfs_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/ipfs/ipfstalker.cpp
-                   ${CMAKE_CURRENT_SOURCE_DIR}/ipfs/ipfsimageslist.cpp
-                   ${CMAKE_CURRENT_SOURCE_DIR}/ipfs/ipfswindow.cpp
-)
-
 # DropBox tool --------------------------------------------------------------
 
 set(libwsdropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbnewalbumdlg.cpp

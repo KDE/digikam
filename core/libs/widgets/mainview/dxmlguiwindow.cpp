@@ -327,6 +327,9 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_exportImgurAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_imgur"), this);
     actionCollection()->addActions(QList<QAction*>() << m_exportImgurAction);
+    
+    m_exportIpfsAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_ipfs"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportIpfsAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -1041,13 +1044,6 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportImageshackAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
-    m_exportIpfsAction = new QAction(i18n("Export to &Ipfs.."), this);
-    m_exportIpfsAction->setIcon(QIcon::fromTheme(QLatin1String("dk-ipfs")));
-    actionCollection()->addAction(QLatin1String("export_ipfs"), m_exportIpfsAction);
-
-    connect(m_exportIpfsAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
     m_exportPiwigoAction = new QAction(i18n("Export to &Piwigo..."), this);
     m_exportPiwigoAction->setIcon(QIcon::fromTheme(QLatin1String("dk-piwigo")));
     actionCollection()->addAction(QLatin1String("export_piwigo"), m_exportPiwigoAction);
@@ -1216,10 +1212,6 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     else if (action == m_exportImageshackAction)
     {
         return WSStarter::ExportImageshack;
-    }
-    else if (action == m_exportIpfsAction)
-    {
-        return WSStarter::ExportIpfs;
     }
     else if (action == m_exportMediawikiAction)
     {

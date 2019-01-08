@@ -38,7 +38,6 @@
 #include "flickrwindow.h"
 #include "gswindow.h"
 #include "imageshackwindow.h"
-#include "ipfswindow.h"
 #include "mediawikiwindow.h"
 #include "odwindow.h"
 #include "pwindow.h"
@@ -81,7 +80,6 @@ public:
     QPointer<GSWindow>         gpWindow;
     QPointer<GSWindow>         gpImportWindow;
     QPointer<ImageShackWindow> imageShackWindow;
-    QPointer<IpfsWindow>       ipfsWindow;
     QPointer<MediaWikiWindow>  mediaWikiWindow;
     QPointer<ODWindow>         odWindow;
     QPointer<PWindow>          pWindow;
@@ -131,7 +129,6 @@ void WSStarter::cleanUp()
         delete instance()->d->gpWindow;
         delete instance()->d->gpImportWindow;
         delete instance()->d->imageShackWindow;
-        delete instance()->d->ipfsWindow;
         delete instance()->d->mediaWikiWindow;
         delete instance()->d->odWindow;
         delete instance()->d->pWindow;

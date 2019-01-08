@@ -5,3 +5,4 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 add_subdirectory(imgur)
+add_subdirectory(ipfs)

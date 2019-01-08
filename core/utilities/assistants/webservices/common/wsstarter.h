@@ -56,7 +56,6 @@ public:
         ExportGphoto,
         ImportGphoto,
         ExportImageshack,
-        ExportIpfs,
         ExportMediawiki,
         ExportOnedrive,
         ExportPinterest,
