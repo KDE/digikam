@@ -71,7 +71,7 @@ QString ImgUrPlugin::details() const
 {
     return i18n("<p>This tool permit to export items to ImgUr web-service.</p>"
                 "<p>You can export items as anonymous or with an user account.</p>"
-                "<p>See ImgUr site for details: https://imgur.com/.</p>");
+                "<p>See ImgUr web site for details: <a href='https://imgur.com/'>https://imgur.com/</a></p>");
 }
 
 QList<DPluginAuthor> ImgUrPlugin::authors() const

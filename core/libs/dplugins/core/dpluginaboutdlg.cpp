@@ -78,7 +78,6 @@ DPluginAboutDlg::DPluginAboutDlg(DPlugin* const tool, QWidget* const parent)
     QTabWidget* const tab       = new QTabWidget(page);
 
     QTextBrowser* const details = new QTextBrowser(tab);
-    details->setOpenLinks(false);
     details->setFocusPolicy(Qt::NoFocus);
     details->setText(tool->details());
 

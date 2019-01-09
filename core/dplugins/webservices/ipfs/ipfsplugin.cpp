@@ -70,7 +70,7 @@ QString IpfsPlugin::description() const
 QString IpfsPlugin::details() const
 {
     return i18n("<p>This tool permit to export items to IPFS web-service.</p>"
-                "<p>See IPFS site for details: https://ipfs.io/.</p>");
+                "<p>See IPFS web site for details: <a href='https://ipfs.io/'>https://ipfs.io/</a></p>");
 }
 
 QList<DPluginAuthor> IpfsPlugin::authors() const
