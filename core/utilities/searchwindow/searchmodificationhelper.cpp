@@ -38,6 +38,8 @@
 #include "digikam_debug.h"
 #include "album.h"
 #include "albummanager.h"
+#include "similaritydbaccess.h"
+#include "similaritydb.h"
 #include "haariface.h"
 #include "iteminfo.h"
 #include "coredbsearchxml.h"
@@ -346,6 +348,20 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
         if (!checkName(name))
         {
             return 0;
+        }
+    }
+
+    // If the image has no fingerprint, generate it.
+    if (SimilarityDbAccess().db()->hasDirtyOrMissingFingerprint(image))
+    {
+        QString path = image.filePath();
+
+        if (!path.isEmpty())
+        {
+            qCDebug(DIGIKAM_GENERAL_LOG) << "(Re-)generating fingerprint for file:" << path;
+
+            HaarIface haarIface;
+            haarIface.indexImage(path);
         }
     }
 

@@ -159,6 +159,26 @@ QSet<qlonglong> SimilarityDb::registeredImageIds() const
 
 // ----------- Methods for fingerprint (ImageHaarMatrix) table access ----------
 
+bool SimilarityDb::hasFingerprint(qlonglong imageId, FuzzyAlgorithm algorithm) const
+{
+    if (algorithm == FuzzyAlgorithm::Haar)
+    {
+        QList<QVariant> values;
+
+        d->db->execSql(QString::fromUtf8("SELECT imageid FROM ImageHaarMatrix "
+                                         "WHERE matrix IS NOT NULL AND imageid=? LIMIT 1;"),
+                       imageId, &values);
+
+        // return true if there is at least one fingerprint
+        return !values.isEmpty();
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
 bool SimilarityDb::hasFingerprints()
 {
     return hasFingerprints(FuzzyAlgorithm::Haar);
@@ -181,6 +201,37 @@ bool SimilarityDb::hasFingerprints(FuzzyAlgorithm algorithm) const
     {
         return false;
     }
+}
+
+bool SimilarityDb::hasDirtyOrMissingFingerprint(const ItemInfo& imageInfo, FuzzyAlgorithm algorithm) const
+{
+    if (algorithm == FuzzyAlgorithm::Haar)
+    {
+        QList<QVariant> values;
+        d->db->execSql(QString::fromUtf8("SELECT modificationDate, uniqueHash FROM ImageHaarMatrix "
+                                         "WHERE imageid=?;"),
+                       imageInfo.id(), &values);
+
+        if (values.isEmpty())
+        {
+            // The image id does not exist -> missing fingerprint
+            return true;
+        }
+        else
+        {
+            // The image id exists -> if uniqueHash or modificationDate differ, we need a new fingerprint.
+            if (values.size() == 2)
+            {
+                if ((values.at(0).toDateTime() != imageInfo.modDateTime()) ||
+                    (values.at(1).toString()   != imageInfo.uniqueHash()))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 QList<qlonglong> SimilarityDb::getDirtyOrMissingFingerprints(const QList<ItemInfo>& imageInfos,
