@@ -26,4 +26,5 @@ DIGIKAM_ADD_PLUGIN(YandexFotkiPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/yfnewalbumdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/yfwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/yfwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/yfplugin.cpp
 )
