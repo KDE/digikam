@@ -108,7 +108,7 @@ void ImgUrPlugin::setup(QObject* const parent)
 
 void ImgUrPlugin::slotImgUr()
 {
-    if (!reactivateToolDialog())
+    if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
         m_toolDlg = new ImgurWindow(infoIface(sender()), 0);

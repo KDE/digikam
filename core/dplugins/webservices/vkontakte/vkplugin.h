@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a plugin to export to Flickr web-service.
+ * Description : a plugin to export to VKontakte web-service.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,19 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FLICKR_PLUGIN_H
-#define DIGIKAM_FLICKR_PLUGIN_H
+#ifndef DIGIKAM_VKONTAKTE_PLUGIN_H
+#define DIGIKAM_VKONTAKTE_PLUGIN_H
 
 // Local includes
 
 #include "dplugin.h"
 
-#define DPLUGIN_IID "org.kde.digikam.Flickr"
+#define DPLUGIN_IID "org.kde.digikam.VKontakte"
 
 namespace Digikam
 {
 
-class FlickrPlugin : public DPlugin
+class VKontaktePlugin : public DPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +40,8 @@ class FlickrPlugin : public DPlugin
 
 public:
 
-    explicit FlickrPlugin(QObject* const parent = 0);
-    ~FlickrPlugin();
+    explicit VKontaktePlugin(QObject* const parent = 0);
+    ~VKontaktePlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -54,7 +54,7 @@ public:
 
 private Q_SLOTS:
 
-    void slotFlickr();
+    void slotVKontakte();
 
 private:
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_FLICKR_PLUGIN_H
+#endif // DIGIKAM_VKONTAKTE_PLUGIN_H

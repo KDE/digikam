@@ -98,7 +98,7 @@ void TwitterPlugin::setup(QObject* const parent)
 
 void TwitterPlugin::slotTwitter()
 {
-    if (!reactivateToolDialog())
+    if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
         m_toolDlg = new TwWindow(infoIface(sender()), 0);

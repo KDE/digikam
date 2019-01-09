@@ -55,6 +55,10 @@ public:
 private Q_SLOTS:
 
     void slotBox();
+
+private:
+
+    QPointer<DPluginDialog> m_toolDlg;
 };
 
 } // namespace Digikam

@@ -17,12 +17,11 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_PLUGIN(FaceBookPlugin
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbmpform.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbnewalbumdlg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbtalker.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/fbtalker_wizard.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbwidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbwindow.cpp
+DIGIKAM_ADD_PLUGIN(SmugMugPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/smugmpform.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/smugnewalbumdlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/smugplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/smugtalker.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/smugwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/smugwindow.cpp
 )

@@ -99,7 +99,7 @@ void PPlugin::setup(QObject* const parent)
 
 void PPlugin::slotPinterest()
 {
-    if (!reactivateToolDialog())
+    if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
         m_toolDlg = new PWindow(infoIface(sender()), 0);

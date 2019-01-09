@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a plugin to export to Flickr web-service.
+ * Description : a plugin to export and import items with SmugMug web-service.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,19 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FLICKR_PLUGIN_H
-#define DIGIKAM_FLICKR_PLUGIN_H
+#ifndef DIGIKAM_SMUG_PLUGIN_H
+#define DIGIKAM_SMUG_PLUGIN_H
 
 // Local includes
 
 #include "dplugin.h"
 
-#define DPLUGIN_IID "org.kde.digikam.Flickr"
+#define DPLUGIN_IID "org.kde.digikam.SmugMug"
 
 namespace Digikam
 {
 
-class FlickrPlugin : public DPlugin
+class SmugPlugin : public DPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +40,8 @@ class FlickrPlugin : public DPlugin
 
 public:
 
-    explicit FlickrPlugin(QObject* const parent = 0);
-    ~FlickrPlugin();
+    explicit SmugPlugin(QObject* const parent = 0);
+    ~SmugPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -54,13 +54,15 @@ public:
 
 private Q_SLOTS:
 
-    void slotFlickr();
+    void slotSmugMugExport();
+    void slotSmugMugImport();
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<DPluginDialog> m_toolDlgExport;
+    QPointer<DPluginDialog> m_toolDlgImport;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_FLICKR_PLUGIN_H
+#endif // DIGIKAM_SMUG_PLUGIN_H

@@ -456,7 +456,7 @@ void FbTalker::createAlbum(const FbAlbum& album)
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                          QLatin1String("application/x-www-form-urlencoded"));
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url to create new album" << netRequest.url() << params.query(); 
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url to create new album" << netRequest.url() << params.query();
 
     d->reply = d->netMngr->post(netRequest, params.query().toUtf8());
 

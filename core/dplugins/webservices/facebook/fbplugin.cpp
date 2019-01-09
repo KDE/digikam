@@ -109,7 +109,7 @@ void FbPlugin::setup(QObject* const parent)
 
 void FbPlugin::slotFaceBook()
 {
-    if (!reactivateToolDialog())
+    if (!reactivateToolDialog(m_toolDlg))
     {
         // This message is not translated, and it will be removed after the review process.
         QMessageBox::warning(0, QLatin1String("Facebook"),

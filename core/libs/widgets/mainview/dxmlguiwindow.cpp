@@ -368,6 +368,13 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_exportFlickrAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_flickr"), this);
     actionCollection()->addActions(QList<QAction*>() << m_exportFlickrAction);
+
+
+    m_importSmugmugAction = DPluginLoader::instance()->pluginAction(QLatin1String("import_smugmug"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_importSmugmugAction);
+
+    m_exportSmugmugAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_smugmug"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportSmugmugAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -1026,14 +1033,6 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportGphotoAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
-    m_exportSmugmugAction = new QAction(i18n("Export to &SmugMug..."), this);
-    m_exportSmugmugAction->setIcon(QIcon::fromTheme(QLatin1String("dk-smugmug")));
-    actionCollection()->addAction(QLatin1String("export_smugmug"), m_exportSmugmugAction);
-    actionCollection()->setDefaultShortcut(m_exportSmugmugAction, Qt::ALT + Qt::SHIFT +  Qt::Key_S);
-
-    connect(m_exportSmugmugAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
 #ifdef HAVE_KIO
     m_exportFileTransferAction = new QAction(i18n("Export to remote storage..."), this);
     m_exportFileTransferAction->setIcon(QIcon::fromTheme(QLatin1String("folder-html")));
@@ -1053,14 +1052,6 @@ void DXmlGuiWindow::createImportActions()
     actionCollection()->setDefaultShortcut(m_importGphotoAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_P);
 
     connect(m_importGphotoAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotImportTool()));
-
-    m_importSmugmugAction = new QAction(i18n("Import from &SmugMug..."), this);
-    m_importSmugmugAction->setIcon(QIcon::fromTheme(QLatin1String("dk-smugmug")));
-    actionCollection()->addAction(QLatin1String("import_smugmug"), m_importSmugmugAction);
-    actionCollection()->setDefaultShortcut(m_importSmugmugAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_S);
-
-    connect(m_importSmugmugAction, SIGNAL(triggered(bool)),
             this, SLOT(slotImportTool()));
 
 #ifdef HAVE_KIO
@@ -1135,10 +1126,6 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     {
         return WSStarter::ExportGphoto;
     }
-    else if (action == m_exportSmugmugAction)
-    {
-        return WSStarter::ExportSmugmug;
-    }
     else if (action == m_importGphotoAction)
     {
         return WSStarter::ImportGphoto;
@@ -1150,11 +1137,6 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
         return WSStarter::ImportFileTransfer;
     }
 #endif
-
-    else if (action == m_importSmugmugAction)
-    {
-        return WSStarter::ImportSmugmug;
-    }
 
     return WSStarter::ExportUnknown;
 }

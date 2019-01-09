@@ -33,8 +33,6 @@
 #include "digikam_debug.h"
 #include "digikam_config.h"
 #include "gswindow.h"
-#include "rajcewindow.h"
-#include "smugwindow.h"
 
 #ifdef HAVE_KIO
 #   include "ftexportwindow.h"
@@ -59,8 +57,6 @@ public:
     QPointer<GSWindow>         gdWindow;
     QPointer<GSWindow>         gpWindow;
     QPointer<GSWindow>         gpImportWindow;
-    QPointer<SmugWindow>       smugWindow;
-    QPointer<SmugWindow>       smugImportWindow;
 };
 
 class Q_DECL_HIDDEN WSStarterCreator
@@ -91,8 +87,6 @@ void WSStarter::cleanUp()
         delete instance()->d->gdWindow;
         delete instance()->d->gpWindow;
         delete instance()->d->gpImportWindow;
-        delete instance()->d->smugWindow;
-        delete instance()->d->smugImportWindow;
     }
 }
 
@@ -162,19 +156,6 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->gpWindow->show();
         }
     }
-    else if (tool == ExportSmugmug)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->smugWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->smugWindow;
-            d->smugWindow = new SmugWindow(iface, parent);
-            d->smugWindow->show();
-        }
-    }
 }
 
 void WSStarter::fromWebService(int tool, DInfoInterface* const iface, QWidget* const parent)
@@ -208,20 +189,6 @@ void WSStarter::fromWebService(int tool, DInfoInterface* const iface, QWidget* c
         }
     }
 #endif
-
-    else if (tool == ImportSmugmug)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->smugImportWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->smugImportWindow;
-            d->smugImportWindow = new SmugWindow(iface, parent, true);
-            d->smugImportWindow->show();
-        }
-    }
 }
 
 bool WSStarter::checkWebService(QWidget* const widget) const

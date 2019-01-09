@@ -99,7 +99,7 @@ void BoxPlugin::setup(QObject* const parent)
 
 void BoxPlugin::slotBox()
 {
-    if (!reactivateToolDialog())
+    if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
         m_toolDlg = new BOXWindow(infoIface(sender()), 0);

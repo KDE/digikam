@@ -99,7 +99,7 @@ void DBPlugin::setup(QObject* const parent)
 
 void DBPlugin::slotDropBox()
 {
-    if (!reactivateToolDialog())
+    if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
         m_toolDlg = new DBWindow(infoIface(sender()), 0);

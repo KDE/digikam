@@ -41,11 +41,12 @@
 #include "dinfointerface.h"
 #include "dpluginauthor.h"
 #include "dpluginaction.h"
-#include "dplugindialog.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
+
+class DPluginDialog;
 
 /**
  * A digiKam external plugin abstract class.
@@ -169,14 +170,10 @@ protected:
     DInfoInterface* infoIface(QObject* const ac) const;
 
     /**
-     * Check if tool dialog instance already exists.
+     * Helper function to check if a tool dialog instance already exists.
      * If true, reactivate the visibility of widget.
      */
-    bool reactivateToolDialog() const;
-
-protected:
-
-    QPointer<DPluginDialog> m_toolDlg;
+    bool reactivateToolDialog(DPluginDialog* const dlg) const;
 
 private:
 

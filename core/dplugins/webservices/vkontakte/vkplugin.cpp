@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a plugin to export to Rajce web-service.
+ * Description : a plugin to export to VKontakte web-service.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "rajceplugin.h"
+#include "vkplugin.h"
 
 // Qt includes
 
@@ -32,77 +32,76 @@
 
 // Local includes
 
-#include "rajcewindow.h"
+#include "vkwindow.h"
 
 namespace Digikam
 {
 
-RajcePlugin::RajcePlugin(QObject* const parent)
+VKontaktePlugin::VKontaktePlugin(QObject* const parent)
     : DPlugin(parent)
 {
 }
 
-RajcePlugin::~RajcePlugin()
+VKontaktePlugin::~VKontaktePlugin()
 {
     delete m_toolDlg;
 }
 
-QString RajcePlugin::name() const
+QString VKontaktePlugin::name() const
 {
-    return i18n("Rajce");
+    return i18n("VKontakte");
 }
 
-QString RajcePlugin::iid() const
+QString VKontaktePlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon RajcePlugin::icon() const
+QIcon VKontaktePlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("dk-rajce"));
+    return QIcon::fromTheme(QLatin1String("preferences-web-browser-shortcuts"));
 }
 
-QString RajcePlugin::description() const
+QString VKontaktePlugin::description() const
 {
-    return i18n("A tool to export to Rajce web-service");
+    return i18n("A tool to export to VKontakte web-service");
 }
 
-QString RajcePlugin::details() const
+QString VKontaktePlugin::details() const
 {
-    return i18n("<p>This tool permit to export items to Rajce web-service.</p>"
-                "<p>See Rajce web site for details: <a href='https://www.rajce.idnes.cz/'>https://www.rajce.idnes.cz/</a></p>");
+    return i18n("<p>This tool permit to export items to VKontakte web-service.</p>"
+                "<p>See VKontakte web site for details: <a href='https://vk.com/'>https://vk.com/</a></p>");
 }
 
-QList<DPluginAuthor> RajcePlugin::authors() const
+QList<DPluginAuthor> VKontaktePlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Lukas Krejci"),
-                             QLatin1String("metlosh at gmail dot com"),
-                             QLatin1String("(C) 2011-2013"))
+            << DPluginAuthor(QLatin1String("Alexander Potashev"),
+                             QLatin1String("aspotashev at gmail dot com"),
+                             QLatin1String("(C) 2011-2015"))
             ;
 }
 
-void RajcePlugin::setup(QObject* const parent)
+void VKontaktePlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Export to &Rajce..."));
-    ac->setObjectName(QLatin1String("export_rajce"));
+    ac->setText(i18nc("@action", "Export to &VKontakte..."));
+    ac->setObjectName(QLatin1String("export_vkontakte"));
     ac->setActionCategory(DPluginAction::GenericExport);
-    ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_J);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotRajce()));
+            this, SLOT(slotVKontakte()));
 
     addAction(ac);
 }
 
-void RajcePlugin::slotRajce()
+void VKontaktePlugin::slotVKontakte()
 {
     if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
-        m_toolDlg = new RajceWindow(infoIface(sender()), 0);
+        m_toolDlg = new VKWindow(infoIface(sender()), 0);
         m_toolDlg->setPlugin(this);
         m_toolDlg->show();
     }

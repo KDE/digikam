@@ -17,12 +17,10 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_PLUGIN(FaceBookPlugin
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbmpform.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbnewalbumdlg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbtalker.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/fbtalker_wizard.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbwidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbwindow.cpp
+DIGIKAM_ADD_PLUGIN(VKontaktePlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/vkalbumchooser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/vkauthwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/vknewalbumdlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/vkplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/vkwindow.cpp
 )

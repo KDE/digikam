@@ -111,7 +111,7 @@ void FlickrPlugin::setup(QObject* const parent)
 
 void FlickrPlugin::slotFlickr()
 {
-    if (!reactivateToolDialog())
+    if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
         m_toolDlg = new FlickrWindow(infoIface(sender()), 0);

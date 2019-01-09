@@ -107,7 +107,7 @@ void MediaWikiPlugin::setup(QObject* const parent)
 
 void MediaWikiPlugin::slotMediaWiki()
 {
-    if (!reactivateToolDialog())
+    if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
         m_toolDlg = new MediaWikiWindow(infoIface(sender()), 0);

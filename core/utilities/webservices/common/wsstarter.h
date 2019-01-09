@@ -50,9 +50,7 @@ public:
         ImportFileTransfer,
         ExportGdrive,
         ExportGphoto,
-        ImportGphoto,
-        ExportSmugmug,
-        ImportSmugmug,
+        ImportGphoto
     };
 
 public:

@@ -46,15 +46,6 @@ set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/common/wsstarter.cpp
                         #${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wswizard.cpp
 )
 
-# SmugMug tool -------------------------------------------------------------
-
-set(libwssmugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugnewalbumdlg.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugmpform.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugtalker.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugwidget.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugwindow.cpp
-)
-
 # Google tool ----------------------------------------------------------------
 
 set(libwsgoogle_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/gdmpform.cpp

@@ -32,6 +32,7 @@
 #include "digikam_version.h"
 #include "digikam_debug.h"
 #include "dxmlguiwindow.h"
+#include "dplugindialog.h"
 
 namespace Digikam
 {
@@ -212,13 +213,13 @@ void DPlugin::setShouldLoaded(bool b)
     d->shouldLoaded = b;
 }
 
-bool DPlugin::reactivateToolDialog() const
+bool DPlugin::reactivateToolDialog(DPluginDialog* const dlg) const
 {
-    if (m_toolDlg && (m_toolDlg->isMinimized() || !m_toolDlg->isHidden()))
+    if (dlg && (dlg->isMinimized() || !dlg->isHidden()))
     {
-        m_toolDlg->showNormal();       // krazy:exclude=qmethods
-        m_toolDlg->activateWindow();
-        m_toolDlg->raise();
+        dlg->showNormal();       // krazy:exclude=qmethods
+        dlg->activateWindow();
+        dlg->raise();
         return true;
     }
 

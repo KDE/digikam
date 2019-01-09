@@ -16,6 +16,7 @@ add_subdirectory(onedrive)
 add_subdirectory(pinterest)
 add_subdirectory(piwigo)
 add_subdirectory(rajce)
+add_subdirectory(smugmug)
 add_subdirectory(yandexfotki)
 
 if(KF5Vkontakte_FOUND)

@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "fbtalker.h"
+#include "fbtalker_wizard.h"
 
 // Qt includes
 
@@ -190,10 +190,10 @@ bool FbTalker::linked() const
 
 void FbTalker::resetTalker(const QString& expire, const QString& accessToken, const QString& refreshToken)
 {
-    m_store->setValue(QString(O2_KEY_EXPIRES).arg(d->apikey), expire);
-    m_store->setValue(QString(O2_KEY_LINKED).arg(d->apikey), "1");
-    m_store->setValue(QString(O2_KEY_REFRESH_TOKEN).arg(d->apikey), refreshToken);
-    m_store->setValue(QString(O2_KEY_TOKEN).arg(d->apikey), accessToken);
+    m_store->setValue(QString::fromUtf8(O2_KEY_EXPIRES).arg(d->apikey), expire);
+    m_store->setValue(QString::fromUtf8(O2_KEY_LINKED).arg(d->apikey), QLatin1String("1"));
+    m_store->setValue(QString::fromUtf8(O2_KEY_REFRESH_TOKEN).arg(d->apikey), refreshToken);
+    m_store->setValue(QString::fromUtf8(O2_KEY_TOKEN).arg(d->apikey), accessToken);
 }
 
 FbUser FbTalker::getUser() const
@@ -222,11 +222,11 @@ void FbTalker::getLoggedInUser()
     emit signalBusy(true);
     emit signalLoginProgress(3);
 
-    QUrl url(d->apiURL.arg("me")
-                      .arg(""));
+    QUrl url(d->apiURL.arg(QLatin1String("me"))
+                      .arg(QString()));
     QUrlQuery q;
 //     q.addQueryItem(QLatin1String("fields"), QLatin1String("id,name,link"));
-    q.addQueryItem(QLatin1String("access_token"), d->o2->token().toUtf8());
+    q.addQueryItem(QLatin1String("access_token"), d->o2->token());
     url.setQuery(q);
 
     QNetworkRequest netRequest(url);
@@ -279,12 +279,12 @@ void FbTalker::logout()
 
     QMap<QString, QString> args;
     args[QLatin1String("next")]         = QLatin1String("http://www.digikam.org");
-    args[QLatin1String("access_token")] = d->o2->token().toUtf8();
+    args[QLatin1String("access_token")] = d->o2->token();
 
     QUrl url(QLatin1String("https://www.facebook.com/logout.php"));
     QUrlQuery q;
     q.addQueryItem(QLatin1String("next"), QLatin1String("http://www.digikam.org"));
-    q.addQueryItem(QLatin1String("access_token"), d->o2->token().toUtf8());
+    q.addQueryItem(QLatin1String("access_token"), d->o2->token());
     url.setQuery(q);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Logout URL: " << url;
     QDesktopServices::openUrl(url);
@@ -316,18 +316,18 @@ void FbTalker::listAlbums(long long userID)
     if (!userID)
     {
         url = QUrl(d->apiURL.arg(d->user.id)
-                            .arg("albums"));
+                            .arg(QLatin1String("albums")));
     }
     else
     {
         url = QUrl(d->apiURL.arg(userID)
-                            .arg("albums"));
+                            .arg(QLatin1String("albums")));
     }
 
     QUrlQuery q;
     q.addQueryItem(QLatin1String("fields"),
                     QLatin1String("id,name,description,privacy,link,location"));
-    q.addQueryItem(QLatin1String("access_token"), d->o2->token().toUtf8());
+    q.addQueryItem(QLatin1String("access_token"), d->o2->token());
     url.setQuery(q);
 
     QNetworkRequest netRequest(url);
@@ -350,47 +350,47 @@ void FbTalker::createAlbum(const FbAlbum& album)
     emit signalBusy(true);
 
     QUrlQuery params;
-    params.addQueryItem("access_token", d->o2->token().toUtf8());
-    params.addQueryItem("name", album.title);
+    params.addQueryItem(QLatin1String("access_token"), d->o2->token());
+    params.addQueryItem(QLatin1String("name"), album.title);
 
     if (!album.location.isEmpty())
-        params.addQueryItem("location", album.location);
+        params.addQueryItem(QLatin1String("location"), album.location);
     /*
      * description is deprecated and now a param of message
      */
     if (!album.description.isEmpty())
-        params.addQueryItem("message", album.description);
+        params.addQueryItem(QLatin1String("message"), album.description);
 
     // TODO (Dirk): Wasn't that a requested feature in Bugzilla?
     switch (album.privacy)
     {
         case FB_ME:
-            params.addQueryItem("privacy","{'value':'SELF'}");
+            params.addQueryItem(QLatin1String("privacy"), QLatin1String("{'value':'SELF'}"));
             break;
         case FB_FRIENDS:
-            params.addQueryItem("privacy","{'value':'ALL_FRIENDS'}");
+            params.addQueryItem(QLatin1String("privacy"), QLatin1String("{'value':'ALL_FRIENDS'}"));
             break;
         case FB_FRIENDS_OF_FRIENDS:
-            params.addQueryItem("privacy","{'value':'FRIENDS_OF_FRIENDS'}");
+            params.addQueryItem(QLatin1String("privacy"), QLatin1String("{'value':'FRIENDS_OF_FRIENDS'}"));
             break;
         case FB_EVERYONE:
-            params.addQueryItem("privacy","{'value':'EVERYONE'}");
+            params.addQueryItem(QLatin1String("privacy"), QLatin1String("{'value':'EVERYONE'}"));
             break;
         case FB_CUSTOM:
             //TODO
-            params.addQueryItem("privacy","{'value':'CUSTOM'}");
+            params.addQueryItem(QLatin1String("privacy"), QLatin1String("{'value':'CUSTOM'}"));
             break;
     }
 
     QUrl url(QUrl(d->apiURL.arg(d->user.id)
-                           .arg("albums")));
+                           .arg(QLatin1String("albums"))));
 //     url.setQuery(params);
 
     QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, 
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                         QLatin1String("application/x-www-form-urlencoded"));
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url to create new album " << netRequest.url() << params.query(); 
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url to create new album " << netRequest.url() << params.query();
 
     m_reply = m_netMngr->post(netRequest, params.query().toUtf8());
 
@@ -418,7 +418,7 @@ void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
     emit signalBusy(true);
 
     QMap<QString, QString> args;
-    args[QLatin1String("access_token")] = d->o2->token().toUtf8();
+    args[QLatin1String("access_token")] = d->o2->token();
 
     if (!caption.isEmpty())
         args[QLatin1String("message")]  = caption;
@@ -453,7 +453,7 @@ void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
         arg_1 = albumID;
     }
 
-    QNetworkRequest netRequest(QUrl(d->apiURL.arg(arg_1.toString()).arg("photos")));
+    QNetworkRequest netRequest(QUrl(d->apiURL.arg(arg_1.toString()).arg(QLatin1String("photos"))));
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
 
     m_reply = m_netMngr->post(netRequest, form.formData());
@@ -504,7 +504,7 @@ QString FbTalker::errorToText(int errCode, const QString &errMsg)
 
 /*
  * (Trung) This has to be adapted in slotFinished in WSTalker
- * 
+ *
 void FbTalker::slotFinished(QNetworkReply* reply)
 {
     if (reply != m_reply)

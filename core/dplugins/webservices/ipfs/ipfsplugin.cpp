@@ -101,7 +101,7 @@ void IpfsPlugin::setup(QObject* const parent)
 
 void IpfsPlugin::slotIpfs()
 {
-    if (!reactivateToolDialog())
+    if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
         m_toolDlg = new IpfsWindow(infoIface(sender()), 0);

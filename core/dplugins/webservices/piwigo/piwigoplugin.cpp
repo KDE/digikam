@@ -110,7 +110,7 @@ void PiwigoPlugin::setup(QObject* const parent)
 
 void PiwigoPlugin::slotPiwigo()
 {
-    if (!reactivateToolDialog())
+    if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
         m_toolDlg = new PiwigoWindow(infoIface(sender()), 0);
