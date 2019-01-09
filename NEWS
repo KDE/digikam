@@ -686,4 +686,5 @@ BUGFIXES:
 616 ==> 402979 - Can't rename album in collection on NTFS usb drive.
 617 ==> 389690 - Updated image label and image is broken after metadata is written to file.
 618 ==> 402944 - crash while looking at face tags.
-619 ==> 
+619 ==> 402659 - Find Similar context menu action shows no result if used on an image without a fingerprint.
+620 ==>

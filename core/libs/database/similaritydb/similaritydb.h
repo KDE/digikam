@@ -92,6 +92,15 @@ public:
     // ----------- Methods for fingerprint (ImageHaarMatrix) table access ----------
 
     /**
+     * This method checks if the given image has a fingerprint for the given algorithm.
+     *
+     * @param imageId The Id of the image to check.
+     * @param algorithm The algorithm.
+     * @return True, if there is a fingerprint.
+     */
+    bool hasFingerprint(qlonglong imageId, FuzzyAlgorithm algorithm) const;
+
+    /**
      * This method checks if there are any fingerprints for any algorithm present.
      * @return True, if fingerprints exist.
      */
@@ -103,6 +112,16 @@ public:
      * @return true, if there are fingerprints and false, otherwise.
      */
     bool hasFingerprints(FuzzyAlgorithm algorithm) const;
+
+    /**
+     * Checks if the given image has a dirty fingerprint or even none for the given algorithm.
+     *
+     * @param imageInfo The image info object representing the item.
+     * @param algorithm The algorithm used for the fingerprint.
+     * @return True, if the image either has no or a dirty fingerprint.
+     */
+    bool hasDirtyOrMissingFingerprint(const ItemInfo& imageInfo,
+                                      FuzzyAlgorithm algorithm = FuzzyAlgorithm::Haar) const;
 
     /**
      * Returns a list of all item ids (images, videos,...) where either no fingerprint for the given
