@@ -57,16 +57,6 @@ set(libwsflickr_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrlist.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrwindow.cpp
 )
 
-# Twitter tool --------------------------------------------------------------
-
-set(libwstwitter_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twitternewalbumdlg.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twittermpform.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twittertalker.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twitterwidget.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/twitter/twitterwindow.cpp
-)
-
-
 # SmugMug tool -------------------------------------------------------------
 
 set(libwssmugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugnewalbumdlg.cpp
@@ -84,19 +74,6 @@ set(libwsfacebook_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbnewalbumdlg.cpp
                        ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbwidget.cpp
                        ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbwindow.cpp
 )
-
-# Rajce tool ----------------------------------------------------------------
-
-set(libwsrajce_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcenewalbumdlg.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcempform.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcecommand.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcetalker.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcesession.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcealbum.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcewidget.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcewindow.cpp
-)
-
 
 # Google tool ----------------------------------------------------------------
 
@@ -168,7 +145,4 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsmediawiki_SRCS}
                                    ${libwsvkontakte_SRCS}
                                    ${libwsfiletransfer_SRCS}
-
-                                   # Not yet finalized
-                                   #${libwstwitter_SRCS}
 )

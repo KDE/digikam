@@ -251,18 +251,18 @@ QMap<QString, QString> TwTalker::ParseUrlParameters(const QString &url)
 {
     QMap<QString, QString> urlParameters;
 
-    if (url.indexOf('?') == -1)
+    if (url.indexOf(QLatin1Char('?')) == -1)
     {
         return urlParameters;
     }
 
-    QString tmp           = url.right(url.length()-url.indexOf('?')-1);
-    tmp                   = tmp.right(tmp.length() - tmp.indexOf('#')-1);
-    QStringList paramlist = tmp.split('&');
+    QString tmp           = url.right(url.length()-url.indexOf(QLatin1Char('?'))-1);
+    tmp                   = tmp.right(tmp.length() - tmp.indexOf(QLatin1Char('#'))-1);
+    QStringList paramlist = tmp.split(QLatin1Char('&'));
 
     for (int i = 0 ; i < paramlist.count() ; ++i)
     {
-        QStringList paramarg = paramlist.at(i).split('=');
+        QStringList paramarg = paramlist.at(i).split(QLatin1Char('='));
         urlParameters.insert(paramarg.at(0),paramarg.at(1));
     }
 
@@ -307,12 +307,14 @@ void TwTalker::slotLinkingSucceeded()
 
         foreach (const QString& key, extraTokens.keys())
         {
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "\t" << key << ":" << (extraTokens.value(key).toString().left(3) + "...");
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "\t"
+                                             << key
+                                             << ":"
+                                             << (extraTokens.value(key).toString().left(3) + QLatin1String("..."));
         }
     }
 
     emit signalLinkingSucceeded();
-
 }
 
 bool TwTalker::authenticated()
@@ -339,7 +341,11 @@ void TwTalker::upload(QByteArray& data){
 }
 */
 
-bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality)
+bool TwTalker::addPhoto(const QString& imgPath,
+                        const QString& uploadFolder,
+                        bool rescale,
+                        int maxDim,
+                        int imageQuality)
 {
     //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Status update message:" << message.toLatin1().constData();
     emit signalBusy(true);
@@ -348,7 +354,7 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     QImage image     = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
     qint64 imageSize = QFileInfo(imgPath).size();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "SIZE of image using qfileinfo:   " << imageSize;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << " " ;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << " ";
 
     if (image.isNull())
     {
@@ -392,7 +398,7 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Form DATA null:";
     }
 
-    QUrl url = QUrl("https://upload.twitter.com/1.1/media/upload.json");
+    QUrl url = QUrl(QLatin1String("https://upload.twitter.com/1.1/media/upload.json"));
 
     O1Requestor* const requestor        = new O1Requestor(d->netMngr, d->o1Twitter, this);
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
@@ -407,14 +413,14 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     QByteArray postData = O1::createQueryParameters(reqParams);
 
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("multipart/form-data"));
     QNetworkReply* const reply2 = requestor->post(request, reqParams, postData);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "reply size:              " << reply2->readBufferSize();  //always returns 0
     QByteArray replyData = reply2->readAll();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Media reply:" << replyData; //always Empty
 
     //uncomment this to try to post a tweet
-    QUrl url2 = QUrl("https://api.twitter.com/1.1/statuses/update.json");
+    QUrl url2 = QUrl(QLatin1String("https://api.twitter.com/1.1/statuses/update.json"));
     reqParams = QList<O0RequestParameter>();
     reqParams << O0RequestParameter(QByteArray("status"), "Hello");
     //reqParams << O0RequestParameter(QByteArray("media_ids"), mediaId.toUtf8());
@@ -422,7 +428,7 @@ bool TwTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     postData = O1::createQueryParameters(reqParams);
 
     request.setUrl(url2);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_XFORM);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String(O2_MIME_TYPE_XFORM));
 
     QNetworkReply* const reply = requestor->post(request, reqParams, postData);
 

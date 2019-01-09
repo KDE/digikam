@@ -10,9 +10,9 @@ class O0_EXPORT O1Twitter: public O1 {
 
 public:
     explicit O1Twitter(QObject *parent = 0): O1(parent) {
-        setRequestTokenUrl(QUrl("https://api.twitter.com/oauth/request_token"));
-        setAuthorizeUrl(QUrl("https://api.twitter.com/oauth/authenticate"));
-        setAccessTokenUrl(QUrl("https://api.twitter.com/oauth/access_token"));
+        setRequestTokenUrl(QUrl(QLatin1String("https://api.twitter.com/oauth/request_token")));
+        setAuthorizeUrl(QUrl(QLatin1String("https://api.twitter.com/oauth/authenticate")));
+        setAccessTokenUrl(QUrl(QLatin1String("https://api.twitter.com/oauth/access_token")));
     }
 };
 

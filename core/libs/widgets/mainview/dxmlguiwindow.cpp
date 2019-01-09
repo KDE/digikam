@@ -351,6 +351,9 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_exportPiwigoAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_piwigo"), this);
     actionCollection()->addActions(QList<QAction*>() << m_exportPiwigoAction);
+
+    m_exportRajceAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_rajce"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportRajceAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -1025,14 +1028,6 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportGphotoAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
-    m_exportRajceAction = new QAction(i18n("Export to &Rajce.net..."), this);
-    m_exportRajceAction->setIcon(QIcon::fromTheme(QLatin1String("dk-rajce")));
-    actionCollection()->addAction(QLatin1String("export_rajce"), m_exportRajceAction);
-    actionCollection()->setDefaultShortcut(m_exportRajceAction, Qt::ALT + Qt::SHIFT + Qt::Key_J);
-
-    connect(m_exportRajceAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
     m_exportSmugmugAction = new QAction(i18n("Export to &SmugMug..."), this);
     m_exportSmugmugAction->setIcon(QIcon::fromTheme(QLatin1String("dk-smugmug")));
     actionCollection()->addAction(QLatin1String("export_smugmug"), m_exportSmugmugAction);
@@ -1167,10 +1162,6 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     else if (action == m_exportGphotoAction)
     {
         return WSStarter::ExportGphoto;
-    }
-    else if (action == m_exportRajceAction)
-    {
-        return WSStarter::ExportRajce;
     }
     else if (action == m_exportSmugmugAction)
     {

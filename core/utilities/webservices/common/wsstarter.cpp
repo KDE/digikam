@@ -222,19 +222,6 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->gpWindow->show();
         }
     }
-    else if (tool == ExportRajce)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->rajceWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->rajceWindow;
-            d->rajceWindow = new RajceWindow(iface, parent);
-            d->rajceWindow->show();
-        }
-    }
     else if (tool == ExportSmugmug)
     {
         if (checkWebService(static_cast<QWidget*>(d->smugWindow)))
