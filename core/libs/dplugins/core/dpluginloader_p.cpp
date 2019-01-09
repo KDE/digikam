@@ -56,9 +56,23 @@ DPluginLoader::Private::~Private()
 QStringList DPluginLoader::Private::pluginEntriesList() const
 {
     QStringList allFiles;
+    QString     path;
 
-    QString path = QLibraryInfo::location(QLibraryInfo::PluginsPath);
-    path.append(QDir::separator() + QLatin1String("digikam") + QDir::separator());
+    // First we try to load in first the local plugin if DK_PLUG_PATH variable is declared.
+    // Else, we will load plusing from the system using the standard Qt plugin path.
+
+    QByteArray dkenv = qgetenv("DK_PLUGIN_PATH");
+
+    if (!dkenv.isEmpty())
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "DK_PLUGIN_PATH env.variable detected. We will use it to load plugin...";
+        path = QString::fromUtf8(dkenv);
+    }
+    else
+    {
+        path = QLibraryInfo::location(QLibraryInfo::PluginsPath);
+        path.append(QDir::separator() + QLatin1String("digikam") + QDir::separator());
+    }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing plugins from" << path;
 
