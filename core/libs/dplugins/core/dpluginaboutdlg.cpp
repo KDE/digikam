@@ -78,7 +78,6 @@ DPluginAboutDlg::DPluginAboutDlg(DPlugin* const tool, QWidget* const parent)
     QTabWidget* const tab       = new QTabWidget(page);
 
     QTextBrowser* const details = new QTextBrowser(tab);
-    details->setOpenExternalLinks(false);
     details->setOpenLinks(false);
     details->setFocusPolicy(Qt::NoFocus);
     details->setText(tool->details());
@@ -88,9 +87,9 @@ DPluginAboutDlg::DPluginAboutDlg(DPlugin* const tool, QWidget* const parent)
     // --------------------------------------------------------
 
     QTextBrowser* const authors = new QTextBrowser(tab);
-    details->setOpenExternalLinks(false);
-    details->setOpenLinks(false);
-    details->setFocusPolicy(Qt::NoFocus);
+    authors->setOpenExternalLinks(false);
+    authors->setOpenLinks(false);
+    authors->setFocusPolicy(Qt::NoFocus);
 
     QString alist;
 
