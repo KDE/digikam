@@ -7,6 +7,7 @@
 add_subdirectory(box)
 add_subdirectory(dropbox)
 add_subdirectory(imgur)
+add_subdirectory(imageshack)
 add_subdirectory(ipfs)
 add_subdirectory(mediawiki)
 add_subdirectory(onedrive)

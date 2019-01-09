@@ -345,6 +345,9 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_exportMediawikiAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_MediaWiki"), this);
     actionCollection()->addActions(QList<QAction*>() << m_exportMediawikiAction);
+
+    m_exportImageshackAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_imageshack"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportImageshackAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -1019,14 +1022,6 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportGphotoAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
-    m_exportImageshackAction = new QAction(i18n("Export to &Imageshack..."), this);
-    m_exportImageshackAction->setIcon(QIcon::fromTheme(QLatin1String("dk-imageshack")));
-    actionCollection()->addAction(QLatin1String("export_imageshack"), m_exportImageshackAction);
-    actionCollection()->setDefaultShortcut(m_exportImageshackAction, Qt::ALT + Qt::SHIFT + Qt::Key_M);
-
-    connect(m_exportImageshackAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
     m_exportPiwigoAction = new QAction(i18n("Export to &Piwigo..."), this);
     m_exportPiwigoAction->setIcon(QIcon::fromTheme(QLatin1String("dk-piwigo")));
     actionCollection()->addAction(QLatin1String("export_piwigo"), m_exportPiwigoAction);
@@ -1176,10 +1171,6 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     else if (action == m_exportGphotoAction)
     {
         return WSStarter::ExportGphoto;
-    }
-    else if (action == m_exportImageshackAction)
-    {
-        return WSStarter::ExportImageshack;
     }
     else if (action == m_exportPiwigoAction)
     {

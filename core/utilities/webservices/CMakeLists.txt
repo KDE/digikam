@@ -76,16 +76,6 @@ set(libwssmugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugnewalbumdlg.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugwindow.cpp
 )
 
-# ImageShack tool -------------------------------------------------------------
-
-set(libwsimageshack_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshacksession.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshacknewalbumdlg.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshackmpform.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshacktalker.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshackwidget.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshackwindow.cpp
-)
-
 # FaceBook tool -------------------------------------------------------------
 
 set(libwsfacebook_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbnewalbumdlg.cpp

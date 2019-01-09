@@ -35,7 +35,6 @@
 #include "fbwindow.h"
 #include "flickrwindow.h"
 #include "gswindow.h"
-#include "imageshackwindow.h"
 #include "piwigowindow.h"
 #include "rajcewindow.h"
 #include "smugwindow.h"
@@ -72,7 +71,6 @@ public:
     QPointer<GSWindow>         gdWindow;
     QPointer<GSWindow>         gpWindow;
     QPointer<GSWindow>         gpImportWindow;
-    QPointer<ImageShackWindow> imageShackWindow;
     QPointer<PiwigoWindow>     piwigoWindow;
     QPointer<RajceWindow>      rajceWindow;
     QPointer<SmugWindow>       smugWindow;
@@ -116,7 +114,6 @@ void WSStarter::cleanUp()
         delete instance()->d->gdWindow;
         delete instance()->d->gpWindow;
         delete instance()->d->gpImportWindow;
-        delete instance()->d->imageShackWindow;
         delete instance()->d->piwigoWindow;
         delete instance()->d->rajceWindow;
         delete instance()->d->smugWindow;
@@ -226,19 +223,6 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             delete d->gpWindow;
             d->gpWindow = new GSWindow(iface, parent, QLatin1String("googlephotoexport"));
             d->gpWindow->show();
-        }
-    }
-    else if (tool == ExportImageshack)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->imageShackWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->imageShackWindow;
-            d->imageShackWindow = new ImageShackWindow(iface, parent);
-            d->imageShackWindow->show();
         }
     }
     else if (tool == ExportPiwigo)
