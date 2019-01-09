@@ -36,9 +36,6 @@
 #include "flickrwindow.h"
 #include "gswindow.h"
 #include "imageshackwindow.h"
-#include "mediawikiwindow.h"
-#include "odwindow.h"
-#include "pwindow.h"
 #include "piwigowindow.h"
 #include "rajcewindow.h"
 #include "smugwindow.h"
@@ -76,9 +73,6 @@ public:
     QPointer<GSWindow>         gpWindow;
     QPointer<GSWindow>         gpImportWindow;
     QPointer<ImageShackWindow> imageShackWindow;
-    QPointer<MediaWikiWindow>  mediaWikiWindow;
-    QPointer<ODWindow>         odWindow;
-    QPointer<PWindow>          pWindow;
     QPointer<PiwigoWindow>     piwigoWindow;
     QPointer<RajceWindow>      rajceWindow;
     QPointer<SmugWindow>       smugWindow;
@@ -123,9 +117,6 @@ void WSStarter::cleanUp()
         delete instance()->d->gpWindow;
         delete instance()->d->gpImportWindow;
         delete instance()->d->imageShackWindow;
-        delete instance()->d->mediaWikiWindow;
-        delete instance()->d->odWindow;
-        delete instance()->d->pWindow;
         delete instance()->d->piwigoWindow;
         delete instance()->d->rajceWindow;
         delete instance()->d->smugWindow;
@@ -248,45 +239,6 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             delete d->imageShackWindow;
             d->imageShackWindow = new ImageShackWindow(iface, parent);
             d->imageShackWindow->show();
-        }
-    }
-    else if (tool == ExportMediawiki)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->mediaWikiWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->mediaWikiWindow;
-            d->mediaWikiWindow = new MediaWikiWindow(iface, parent);
-            d->mediaWikiWindow->show();
-        }
-    }
-    else if (tool == ExportOnedrive)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->odWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->odWindow;
-            d->odWindow = new ODWindow(iface, parent);
-            d->odWindow->show();
-        }
-    }
-    else if (tool == ExportPinterest)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->pWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->pWindow;
-            d->pWindow = new PWindow(iface, parent);
-            d->pWindow->show();
         }
     }
     else if (tool == ExportPiwigo)

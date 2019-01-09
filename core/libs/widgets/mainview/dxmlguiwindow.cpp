@@ -327,7 +327,7 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_exportImgurAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_imgur"), this);
     actionCollection()->addActions(QList<QAction*>() << m_exportImgurAction);
-    
+
     m_exportIpfsAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_ipfs"), this);
     actionCollection()->addActions(QList<QAction*>() << m_exportIpfsAction);
 
@@ -336,6 +336,15 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_exportDropboxAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_dropbox"), this);
     actionCollection()->addActions(QList<QAction*>() << m_exportDropboxAction);
+
+    m_exportOnedriveAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_onedrive"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportOnedriveAction);
+
+    m_exportPinterestAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_pinterest"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportPinterestAction);
+
+    m_exportMediawikiAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_MediaWiki"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportMediawikiAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -978,22 +987,6 @@ void DXmlGuiWindow::setupIconTheme()
 
 void DXmlGuiWindow::createExportActions()
 {
-    m_exportOnedriveAction = new QAction(i18n("Export to &Onedrive..."), this);
-    m_exportOnedriveAction->setIcon(QIcon::fromTheme(QLatin1String("dk-onedrive")));
-    actionCollection()->addAction(QLatin1String("export_onedrive"), m_exportOnedriveAction);
-    actionCollection()->setDefaultShortcut(m_exportOnedriveAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_O);
-
-    connect(m_exportOnedriveAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
-    m_exportPinterestAction = new QAction(i18n("Export to &Pinterest..."), this);
-    m_exportPinterestAction->setIcon(QIcon::fromTheme(QLatin1String("dk-pinterest")));
-    actionCollection()->addAction(QLatin1String("export_pinterest"), m_exportPinterestAction);
-    actionCollection()->setDefaultShortcut(m_exportPinterestAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_I);
-
-    connect(m_exportPinterestAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
     m_exportFacebookAction = new QAction(i18n("Export to &Facebook..."), this);
     m_exportFacebookAction->setIcon(QIcon::fromTheme(QString::fromLatin1("dk-facebook")));
     actionCollection()->addAction(QLatin1String("export_facebook"), m_exportFacebookAction);
@@ -1063,13 +1056,6 @@ void DXmlGuiWindow::createExportActions()
     actionCollection()->setDefaultShortcut(m_exportYandexfotkiAction, Qt::ALT + Qt::SHIFT + Qt::Key_Y);
 
     connect(m_exportYandexfotkiAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
-    m_exportMediawikiAction = new QAction(i18n("Export to MediaWiki..."), this);
-    m_exportMediawikiAction->setIcon(QIcon::fromTheme(QLatin1String("dk-mediawiki")));
-    actionCollection()->addAction(QLatin1String("export_MediaWiki"), m_exportMediawikiAction);
-
-    connect(m_exportMediawikiAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
 #ifdef HAVE_VKONTAKTE
@@ -1194,18 +1180,6 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     else if (action == m_exportImageshackAction)
     {
         return WSStarter::ExportImageshack;
-    }
-    else if (action == m_exportMediawikiAction)
-    {
-        return WSStarter::ExportMediawiki;
-    }
-    else if (action == m_exportOnedriveAction)
-    {
-        return WSStarter::ExportOnedrive;
-    }
-    else if (action == m_exportPinterestAction)
-    {
-        return WSStarter::ExportPinterest;
     }
     else if (action == m_exportPiwigoAction)
     {

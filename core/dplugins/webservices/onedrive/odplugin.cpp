@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a plugin to export to DropBox web-service.
+ * Description : a plugin to export to OneDrive web-service.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "dbplugin.h"
+#include "odplugin.h"
 
 // Qt includes
 
@@ -32,48 +32,48 @@
 
 // Local includes
 
-#include "dbwindow.h"
+#include "odwindow.h"
 
 namespace Digikam
 {
 
-DBPlugin::DBPlugin(QObject* const parent)
+ODPlugin::ODPlugin(QObject* const parent)
     : DPlugin(parent)
 {
 }
 
-DBPlugin::~DBPlugin()
+ODPlugin::~ODPlugin()
 {
     delete m_toolDlg;
 }
 
-QString DBPlugin::name() const
+QString ODPlugin::name() const
 {
-    return i18n("DropBox");
+    return i18n("OneDrive");
 }
 
-QString DBPlugin::iid() const
+QString ODPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon DBPlugin::icon() const
+QIcon ODPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("dk-dropbox"));
+    return QIcon::fromTheme(QLatin1String("dk-onedrive"));
 }
 
-QString DBPlugin::description() const
+QString ODPlugin::description() const
 {
-    return i18n("A tool to export to DropBox web-service");
+    return i18n("A tool to export to OneDrive web-service");
 }
 
-QString DBPlugin::details() const
+QString ODPlugin::details() const
 {
-    return i18n("<p>This tool permit to export items to DropBox web-service.</p>"
-                "<p>See DropBox web site for details: <a href='https://www.dropbox.com/'>https://www.dropbox.com/</a></p>");
+    return i18n("<p>This tool permit to export items to OneDrive web-service.</p>"
+                "<p>See Box web site for details: <a href='https://onedrive.live.com/'>https://onedrive.live.com/</a></p>");
 }
 
-QList<DPluginAuthor> DBPlugin::authors() const
+QList<DPluginAuthor> ODPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Tarek Talaat"),
@@ -82,27 +82,27 @@ QList<DPluginAuthor> DBPlugin::authors() const
             ;
 }
 
-void DBPlugin::setup(QObject* const parent)
+void ODPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Export to &Dropbox..."));
-    ac->setObjectName(QLatin1String("export_dropbox"));
+    ac->setText(i18nc("@action", "Export to &Onedrive..."));
+    ac->setObjectName(QLatin1String("export_onedrive"));
     ac->setActionCategory(DPluginAction::GenericExport);
-    ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_D);
+    ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_O);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotDropBox()));
+            this, SLOT(slotOneDrive()));
 
     addAction(ac);
 }
 
-void DBPlugin::slotDropBox()
+void ODPlugin::slotOneDrive()
 {
     if (!reactivateToolDialog())
     {
         delete m_toolDlg;
-        m_toolDlg = new DBWindow(infoIface(sender()), 0);
+        m_toolDlg = new ODWindow(infoIface(sender()), 0);
         m_toolDlg->setPlugin(this);
         m_toolDlg->show();
     }

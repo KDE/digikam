@@ -44,6 +44,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:slideshow_src>
             $<TARGET_OBJECTS:imageeditor_src>
             $<TARGET_OBJECTS:digikamlibtransitionmngr_src>
+            $<TARGET_OBJECTS:mediawiki_src>
             $<TARGET_OBJECTS:mediaserver_src>
             $<TARGET_OBJECTS:webservices_src>
             $<TARGET_OBJECTS:timeadjust_src>
