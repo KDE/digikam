@@ -49,10 +49,6 @@ public:
     explicit Private()
     {
     }
-#ifdef HAVE_KIO
-    QPointer<FTExportWindow>   ftExportWindow;
-    QPointer<FTImportWindow>   ftImportWindow;
-#endif
 
     QPointer<GSWindow>         gdWindow;
     QPointer<GSWindow>         gpWindow;
@@ -79,11 +75,6 @@ void WSStarter::cleanUp()
 {
     if (creator.exists())
     {
-#ifdef HAVE_KIO
-        delete instance()->d->ftExportWindow;
-        delete instance()->d->ftImportWindow;
-#endif
-
         delete instance()->d->gdWindow;
         delete instance()->d->gpWindow;
         delete instance()->d->gpImportWindow;
@@ -114,23 +105,7 @@ WSStarter::~WSStarter()
 
 void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* const parent)
 {
-#ifdef HAVE_KIO
-    if (tool == ExportFileTransfer)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->ftExportWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->ftExportWindow;
-            d->ftExportWindow = new FTExportWindow(iface, parent);
-            d->ftExportWindow->show();
-        }
-    }
-#endif
-
-    else if (tool == ExportGdrive)
+    if (tool == ExportGdrive)
     {
         if (checkWebService(static_cast<QWidget*>(d->gdWindow)))
         {
@@ -173,22 +148,6 @@ void WSStarter::fromWebService(int tool, DInfoInterface* const iface, QWidget* c
             d->gpImportWindow->show();
         }
     }
-
-#ifdef HAVE_KIO
-    else if (tool == ImportFileTransfer)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->ftImportWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->ftImportWindow;
-            d->ftImportWindow = new FTImportWindow(iface, parent);
-            d->ftImportWindow->show();
-        }
-    }
-#endif
 }
 
 bool WSStarter::checkWebService(QWidget* const widget) const

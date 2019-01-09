@@ -59,18 +59,6 @@ set(libwsgoogle_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/gdmpform.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gswidget.cpp
 )
 
-# FileTransfer tool ---------------------------------------------------------
-
-if(KF5KIO_FOUND)
-
-    set(libwsfiletransfer_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/ftexportwindow.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/ftexportwidget.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/ftimportwindow.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/ftimportwidget.cpp
-    )
-
-endif()
-
 # ------------------------------------------------------------------------------
 
 add_library(webservices_src OBJECT ${libwebservices_SRCS}

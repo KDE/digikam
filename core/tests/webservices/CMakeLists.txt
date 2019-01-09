@@ -41,7 +41,3 @@ endmacro()
 WEBSERVICE_BUILD_STANDALONE(gdrive.cpp)
 WEBSERVICE_BUILD_STANDALONE(gphoto.cpp)
 #WEBSERVICE_BUILD_STANDALONE(webservices.cpp)
-
-if(KF5KIO_FOUND)
-    WEBSERVICE_BUILD_STANDALONE(filetransfer.cpp)
-endif()

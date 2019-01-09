@@ -23,5 +23,9 @@ if(KF5Vkontakte_FOUND)
     add_subdirectory(vkontakte)
 endif()
 
+if(KF5KIO_FOUND)
+    add_subdirectory(filetransfer)
+endif()
+
 # Not yet finalized
 #add_subdirectory(twitter)

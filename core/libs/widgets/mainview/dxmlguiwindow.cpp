@@ -375,6 +375,15 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_exportSmugmugAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_smugmug"), this);
     actionCollection()->addActions(QList<QAction*>() << m_exportSmugmugAction);
+    
+#ifdef HAVE_KIO
+    m_exportFileTransferAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_filetransfer"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportFileTransferAction);
+    
+    m_importFileTransferAction = DPluginLoader::instance()->pluginAction(QLatin1String("import_filetransfer"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_importFileTransferAction);
+#endif
+
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -1032,16 +1041,6 @@ void DXmlGuiWindow::createExportActions()
 
     connect(m_exportGphotoAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
-
-#ifdef HAVE_KIO
-    m_exportFileTransferAction = new QAction(i18n("Export to remote storage..."), this);
-    m_exportFileTransferAction->setIcon(QIcon::fromTheme(QLatin1String("folder-html")));
-    actionCollection()->addAction(QLatin1String("export_filetransfer"), m_exportFileTransferAction);
-    actionCollection()->setDefaultShortcut(m_exportFileTransferAction, Qt::ALT + Qt::SHIFT + Qt::Key_K);
-
-    connect(m_exportFileTransferAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-#endif
 }
 
 void DXmlGuiWindow::createImportActions()
@@ -1053,16 +1052,6 @@ void DXmlGuiWindow::createImportActions()
 
     connect(m_importGphotoAction, SIGNAL(triggered(bool)),
             this, SLOT(slotImportTool()));
-
-#ifdef HAVE_KIO
-    m_importFileTransferAction = new QAction(i18n("Import from remote storage..."), this);
-    m_importFileTransferAction->setIcon(QIcon::fromTheme(QLatin1String("folder-html")));
-    actionCollection()->addAction(QLatin1String("import_filetransfer"), m_importFileTransferAction);
-    actionCollection()->setDefaultShortcut(m_importFileTransferAction, Qt::ALT + Qt::SHIFT + Qt::Key_I);
-
-    connect(m_importFileTransferAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotImportTool()));
-#endif
 }
 
 QList<QAction*> DXmlGuiWindow::exportActions() const
@@ -1111,14 +1100,7 @@ QList<QAction*> DXmlGuiWindow::importActions() const
 
 int DXmlGuiWindow::actionToWebService(QAction* const action) const
 {
-#ifdef HAVE_KIO
-    if (action == m_exportFileTransferAction)
-    {
-        return WSStarter::ExportFileTransfer;
-    }
-#endif
-
-    else if (action == m_exportGdriveAction)
+    if (action == m_exportGdriveAction)
     {
         return WSStarter::ExportGdrive;
     }
@@ -1130,13 +1112,6 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     {
         return WSStarter::ImportGphoto;
     }
-
-#ifdef HAVE_KIO
-    else if (action == m_importFileTransferAction)
-    {
-        return WSStarter::ImportFileTransfer;
-    }
-#endif
 
     return WSStarter::ExportUnknown;
 }
