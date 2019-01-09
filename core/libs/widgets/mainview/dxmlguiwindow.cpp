@@ -1188,7 +1188,7 @@ void DXmlGuiWindow::createExportActions()
     m_exportFileTransferAction = new QAction(i18n("Export to remote storage..."), this);
     m_exportFileTransferAction->setIcon(QIcon::fromTheme(QLatin1String("folder-html")));
     actionCollection()->addAction(QLatin1String("export_filetransfer"), m_exportFileTransferAction);
-    actionCollection()->setDefaultShortcut(m_exportYandexfotkiAction, Qt::ALT + Qt::SHIFT + Qt::Key_K);
+    actionCollection()->setDefaultShortcut(m_exportFileTransferAction, Qt::ALT + Qt::SHIFT + Qt::Key_K);
 
     connect(m_exportFileTransferAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
