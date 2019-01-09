@@ -46,7 +46,6 @@ public:
     enum WSTool
     {
         ExportUnknown = 0,
-        ExportDropbox,
         ExportFacebook,
         ExportFileTransfer,
         ImportFileTransfer,

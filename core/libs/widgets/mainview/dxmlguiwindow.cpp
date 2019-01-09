@@ -333,6 +333,9 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_exportBoxAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_box"), this);
     actionCollection()->addActions(QList<QAction*>() << m_exportBoxAction);
+
+    m_exportDropboxAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_dropbox"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportDropboxAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -975,14 +978,6 @@ void DXmlGuiWindow::setupIconTheme()
 
 void DXmlGuiWindow::createExportActions()
 {
-    m_exportDropboxAction = new QAction(i18n("Export to &Dropbox..."), this);
-    m_exportDropboxAction->setIcon(QIcon::fromTheme(QLatin1String("dk-dropbox")));
-    actionCollection()->addAction(QLatin1String("export_dropbox"), m_exportDropboxAction);
-    actionCollection()->setDefaultShortcut(m_exportDropboxAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_D);
-
-    connect(m_exportDropboxAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
     m_exportOnedriveAction = new QAction(i18n("Export to &Onedrive..."), this);
     m_exportOnedriveAction->setIcon(QIcon::fromTheme(QLatin1String("dk-onedrive")));
     actionCollection()->addAction(QLatin1String("export_onedrive"), m_exportOnedriveAction);
@@ -1172,11 +1167,7 @@ QList<QAction*> DXmlGuiWindow::importActions() const
 
 int DXmlGuiWindow::actionToWebService(QAction* const action) const
 {
-    if (action == m_exportDropboxAction)
-    {
-        return WSStarter::ExportDropbox;
-    }
-    else if (action == m_exportFacebookAction)
+    if (action == m_exportFacebookAction)
     {
         return WSStarter::ExportFacebook;
     }

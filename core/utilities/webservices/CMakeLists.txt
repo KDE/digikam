@@ -57,15 +57,6 @@ set(libwsflickr_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrlist.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrwindow.cpp
 )
 
-# DropBox tool --------------------------------------------------------------
-
-set(libwsdropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbnewalbumdlg.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbmpform.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbtalker.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbwidget.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbwindow.cpp
-)
-
 # OneDrive tool --------------------------------------------------------------
 
 set(libwsonedrive_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odnewalbumdlg.cpp
