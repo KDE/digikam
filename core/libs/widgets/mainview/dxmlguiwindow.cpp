@@ -348,6 +348,9 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_exportImageshackAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_imageshack"), this);
     actionCollection()->addActions(QList<QAction*>() << m_exportImageshackAction);
+
+    m_exportPiwigoAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_piwigo"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportPiwigoAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -1022,13 +1025,6 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportGphotoAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
-    m_exportPiwigoAction = new QAction(i18n("Export to &Piwigo..."), this);
-    m_exportPiwigoAction->setIcon(QIcon::fromTheme(QLatin1String("dk-piwigo")));
-    actionCollection()->addAction(QLatin1String("export_piwigo"), m_exportPiwigoAction);
-
-    connect(m_exportPiwigoAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
     m_exportRajceAction = new QAction(i18n("Export to &Rajce.net..."), this);
     m_exportRajceAction->setIcon(QIcon::fromTheme(QLatin1String("dk-rajce")));
     actionCollection()->addAction(QLatin1String("export_rajce"), m_exportRajceAction);
@@ -1171,10 +1167,6 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     else if (action == m_exportGphotoAction)
     {
         return WSStarter::ExportGphoto;
-    }
-    else if (action == m_exportPiwigoAction)
-    {
-        return WSStarter::ExportPiwigo;
     }
     else if (action == m_exportRajceAction)
     {

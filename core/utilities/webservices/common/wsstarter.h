@@ -53,7 +53,6 @@ public:
         ExportGdrive,
         ExportGphoto,
         ImportGphoto,
-        ExportPiwigo,
         ExportRajce,
         ExportSmugmug,
         ImportSmugmug,

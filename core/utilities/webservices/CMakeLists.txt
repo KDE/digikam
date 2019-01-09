@@ -123,14 +123,6 @@ set(libwsyandexfotki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfauth/yfauth.
                           ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfwidget.cpp
 )
 
-# Piwigo tool -------------------------------------------------------------
-
-set(libwspiwigo_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/piwigo/piwigologindlg.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/piwigo/piwigotalker.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/piwigo/piwigosession.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/piwigo/piwigowindow.cpp
-)
-
 # VKontakte tool ------------------------------------------------------------
 
 if(KF5Vkontakte_FOUND)
