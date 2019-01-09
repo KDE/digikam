@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a plugin to export to ImgUr web-service.
+ * Description : a plugin to export to Flickr web-service.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "imgurplugin.h"
+#include "flickrplugin.h"
 
 // Qt includes
 
@@ -32,86 +32,89 @@
 
 // Local includes
 
-#include "imgurwindow.h"
+#include "flickrwindow.h"
 
 namespace Digikam
 {
 
-ImgUrPlugin::ImgUrPlugin(QObject* const parent)
+FlickrPlugin::FlickrPlugin(QObject* const parent)
     : DPlugin(parent)
 {
 }
 
-ImgUrPlugin::~ImgUrPlugin()
+FlickrPlugin::~FlickrPlugin()
 {
     delete m_toolDlg;
 }
 
-QString ImgUrPlugin::name() const
+QString FlickrPlugin::name() const
 {
-    return i18n("ImgUr");
+    return i18n("Flickr");
 }
 
-QString ImgUrPlugin::iid() const
+QString FlickrPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ImgUrPlugin::icon() const
+QIcon FlickrPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("dk-imgur"));
+    return QIcon::fromTheme(QLatin1String("dk-flickr"));
 }
 
-QString ImgUrPlugin::description() const
+QString FlickrPlugin::description() const
 {
-    return i18n("A tool to export to ImgUr web-service");
+    return i18n("A tool to export to Flickr web-service");
 }
 
-QString ImgUrPlugin::details() const
+QString FlickrPlugin::details() const
 {
-    return i18n("<p>This tool permit to export items to ImgUr web-service.</p>"
-                "<p>You can export items as anonymous or with an user account.</p>"
-                "<p>See ImgUr web site for details: <a href='https://imgur.com/'>https://imgur.com/</a></p>");
+    return i18n("<p>This tool permit to export items to Flickr web-service.</p>"
+                "<p>See Flickr web site for details: <a href='https://box.com/'>https://box.com/</a></p>");
 }
 
-QList<DPluginAuthor> ImgUrPlugin::authors() const
+QList<DPluginAuthor> FlickrPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2012-2019"))
+                             QLatin1String("(C) 2008-2019"))
             << DPluginAuthor(QLatin1String("Maik Qualmann"),
                              QLatin1String("metzpinguin at gmail dot com"),
                              QLatin1String("(C) 2017-2019"))
-            << DPluginAuthor(QLatin1String("Marius Orcsik"),
-                             QLatin1String("marius at habarnam dot ro"),
-                             QLatin1String("(C) 2012-2013"))
-            << DPluginAuthor(QLatin1String("Fabian Vogt"),
-                             QLatin1String("fabian at ritter dash vogt dot de"),
-                             QLatin1String("(C) 2014"))
+            << DPluginAuthor(QLatin1String("Vardhman Jain"),
+                             QLatin1String("vardhman at gmail dot com"),
+                             QLatin1String("(C) 2005-2008"))
+            << DPluginAuthor(QLatin1String("Luka Renko"),
+                             QLatin1String("lure at kubuntu dot org"),
+                             QLatin1String("(C) 2009"))
+            << DPluginAuthor(QLatin1String("Shourya Singh Gupta"),
+                             QLatin1String("shouryasgupta at gmail dot com"),
+                             QLatin1String("(C) 2015"))
             ;
 }
 
-void ImgUrPlugin::setup(QObject* const parent)
+void FlickrPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Export to &Imgur..."));
-    ac->setObjectName(QLatin1String("export_imgur"));
+    ac->setText(i18nc("@action", "Export to &Flickr..."));
+    ac->setObjectName(QLatin1String("export_flickr"));
     ac->setActionCategory(DPluginAction::GenericExport);
+    ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_R);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotImgUr()));
+            this, SLOT(slotFlickr()));
 
     addAction(ac);
 }
 
-void ImgUrPlugin::slotImgUr()
+void FlickrPlugin::slotFlickr()
 {
     if (!reactivateToolDialog())
     {
         delete m_toolDlg;
-        m_toolDlg = new ImgurWindow(infoIface(sender()), 0);
+        m_toolDlg = new FlickrWindow(infoIface(sender()), 0);
         m_toolDlg->setPlugin(this);
         m_toolDlg->show();
     }

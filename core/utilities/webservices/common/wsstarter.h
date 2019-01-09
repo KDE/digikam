@@ -46,16 +46,13 @@ public:
     enum WSTool
     {
         ExportUnknown = 0,
-        ExportFacebook,
         ExportFileTransfer,
         ImportFileTransfer,
-        ExportFlickr,
         ExportGdrive,
         ExportGphoto,
         ImportGphoto,
         ExportSmugmug,
         ImportSmugmug,
-        ExportVkontakte,
     };
 
 public:

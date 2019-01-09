@@ -6,6 +6,8 @@
 
 add_subdirectory(box)
 add_subdirectory(dropbox)
+add_subdirectory(facebook)
+add_subdirectory(flickr)
 add_subdirectory(imgur)
 add_subdirectory(imageshack)
 add_subdirectory(ipfs)
@@ -15,6 +17,10 @@ add_subdirectory(pinterest)
 add_subdirectory(piwigo)
 add_subdirectory(rajce)
 add_subdirectory(yandexfotki)
+
+if(KF5Vkontakte_FOUND)
+    add_subdirectory(vkontakte)
+endif()
 
 # Not yet finalized
 #add_subdirectory(twitter)

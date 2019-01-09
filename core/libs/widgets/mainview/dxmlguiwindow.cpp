@@ -362,6 +362,12 @@ void DXmlGuiWindow::registerPluginsActions()
     m_exportVkontakteAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_vkontakte"), this);
     actionCollection()->addActions(QList<QAction*>() << m_exportVkontakteAction);
 #endif
+
+    m_exportFacebookAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_facebook"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportFacebookAction);
+
+    m_exportFlickrAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_flickr"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportFlickrAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -1004,22 +1010,6 @@ void DXmlGuiWindow::setupIconTheme()
 
 void DXmlGuiWindow::createExportActions()
 {
-    m_exportFacebookAction = new QAction(i18n("Export to &Facebook..."), this);
-    m_exportFacebookAction->setIcon(QIcon::fromTheme(QString::fromLatin1("dk-facebook")));
-    actionCollection()->addAction(QLatin1String("export_facebook"), m_exportFacebookAction);
-    actionCollection()->setDefaultShortcut(m_exportFacebookAction, Qt::ALT + Qt::SHIFT + Qt::Key_F);
-
-    connect(m_exportFacebookAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
-    m_exportFlickrAction = new QAction(i18n("Export to Flick&r..."), this);
-    m_exportFlickrAction->setIcon(QIcon::fromTheme(QLatin1String("dk-flickr")));
-    actionCollection()->addAction(QLatin1String("export_flickr"), m_exportFlickrAction);
-    actionCollection()->setDefaultShortcut(m_exportFlickrAction, Qt::ALT + Qt::SHIFT + Qt::Key_R);
-
-    connect(m_exportFlickrAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
     m_exportGdriveAction = new QAction(i18n("Export to &Google Drive..."), this);
     m_exportGdriveAction->setIcon(QIcon::fromTheme(QLatin1String("dk-googledrive")));
     actionCollection()->addAction(QLatin1String("export_googledrive"), m_exportGdriveAction);
@@ -1130,22 +1120,13 @@ QList<QAction*> DXmlGuiWindow::importActions() const
 
 int DXmlGuiWindow::actionToWebService(QAction* const action) const
 {
-    if (action == m_exportFacebookAction)
-    {
-        return WSStarter::ExportFacebook;
-    }
-
 #ifdef HAVE_KIO
-    else if (action == m_exportFileTransferAction)
+    if (action == m_exportFileTransferAction)
     {
         return WSStarter::ExportFileTransfer;
     }
 #endif
 
-    else if (action == m_exportFlickrAction)
-    {
-        return WSStarter::ExportFlickr;
-    }
     else if (action == m_exportGdriveAction)
     {
         return WSStarter::ExportGdrive;

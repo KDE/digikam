@@ -46,17 +46,6 @@ set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/common/wsstarter.cpp
                         #${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wswizard.cpp
 )
 
-# Flickr tool ----------------------------------------------------------------
-
-set(libwsflickr_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrlist.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrmpform.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrtalker.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrwidget.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrnewalbumdlg.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrtalker.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrwindow.cpp
-)
-
 # SmugMug tool -------------------------------------------------------------
 
 set(libwssmugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugnewalbumdlg.cpp
@@ -64,15 +53,6 @@ set(libwssmugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugnewalbumdlg.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugtalker.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugwidget.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugwindow.cpp
-)
-
-# FaceBook tool -------------------------------------------------------------
-
-set(libwsfacebook_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbnewalbumdlg.cpp
-                       ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbmpform.cpp
-                       ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbtalker.cpp
-                       ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbwidget.cpp
-                       ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbwindow.cpp
 )
 
 # Google tool ----------------------------------------------------------------
@@ -87,19 +67,6 @@ set(libwsgoogle_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/gdmpform.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gswindow.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gswidget.cpp
 )
-
-# VKontakte tool ------------------------------------------------------------
-
-if(KF5Vkontakte_FOUND)
-
-    set(libwsvkontakte_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/vkontakte/vkwindow.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/vkontakte/vknewalbumdlg.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/vkontakte/vkalbumchooser.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/vkontakte/vkauthwidget.cpp
-    )
-
-endif()
-
 
 # FileTransfer tool ---------------------------------------------------------
 
