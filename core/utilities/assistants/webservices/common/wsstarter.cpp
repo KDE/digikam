@@ -282,19 +282,6 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
             d->imageShackWindow->show();
         }
     }
-    else if (tool == ExportIpfs)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->ipfsWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->ipfsWindow;
-            d->ipfsWindow = new IpfsWindow(iface, parent);
-            d->ipfsWindow->show();
-        }
-    }
     else if (tool == ExportMediawiki)
     {
         if (checkWebService(static_cast<QWidget*>(d->mediaWikiWindow)))
