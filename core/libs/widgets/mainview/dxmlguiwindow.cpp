@@ -354,6 +354,14 @@ void DXmlGuiWindow::registerPluginsActions()
 
     m_exportRajceAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_rajce"), this);
     actionCollection()->addActions(QList<QAction*>() << m_exportRajceAction);
+
+    m_exportYandexfotkiAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_yandexfotki"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportYandexfotkiAction);
+
+#ifdef HAVE_VKONTAKTE
+    m_exportVkontakteAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_vkontakte"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportVkontakteAction);
+#endif
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -1036,28 +1044,11 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportSmugmugAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
-    m_exportYandexfotkiAction = new QAction(i18n("Export to &Yandex.Fotki..."), this);
-    m_exportYandexfotkiAction->setIcon(QIcon::fromTheme(QLatin1String("internet-web-browser")));
-    actionCollection()->addAction(QLatin1String("export_yandexfotki"), m_exportYandexfotkiAction);
-    actionCollection()->setDefaultShortcut(m_exportYandexfotkiAction, Qt::ALT + Qt::SHIFT + Qt::Key_Y);
-
-    connect(m_exportYandexfotkiAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
-#ifdef HAVE_VKONTAKTE
-    m_exportVkontakteAction = new QAction(i18n("Export to &VKontakte..."), this);
-    m_exportVkontakteAction->setIcon(QIcon::fromTheme(QLatin1String("preferences-web-browser-shortcuts")));
-    actionCollection()->addAction(QLatin1String("export_vkontakte"), m_exportVkontakteAction);
-
-    connect(m_exportVkontakteAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-#endif
-
 #ifdef HAVE_KIO
     m_exportFileTransferAction = new QAction(i18n("Export to remote storage..."), this);
     m_exportFileTransferAction->setIcon(QIcon::fromTheme(QLatin1String("folder-html")));
     actionCollection()->addAction(QLatin1String("export_filetransfer"), m_exportFileTransferAction);
-    actionCollection()->setDefaultShortcut(m_exportYandexfotkiAction, Qt::ALT + Qt::SHIFT + Qt::Key_K);
+    actionCollection()->setDefaultShortcut(m_exportFileTransferAction, Qt::ALT + Qt::SHIFT + Qt::Key_K);
 
     connect(m_exportFileTransferAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
@@ -1166,18 +1157,6 @@ int DXmlGuiWindow::actionToWebService(QAction* const action) const
     else if (action == m_exportSmugmugAction)
     {
         return WSStarter::ExportSmugmug;
-    }
-
-#ifdef HAVE_VKONTAKTE
-    else if (action == m_exportVkontakteAction)
-    {
-        return WSStarter::ExportVkontakte;
-    }
-#endif
-
-    else if (action == m_exportYandexfotkiAction)
-    {
-        return WSStarter::ExportYandexfotki;
     }
     else if (action == m_importGphotoAction)
     {

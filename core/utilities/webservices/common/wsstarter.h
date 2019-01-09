@@ -56,7 +56,6 @@ public:
         ExportSmugmug,
         ImportSmugmug,
         ExportVkontakte,
-        ExportYandexfotki
     };
 
 public:

@@ -14,6 +14,7 @@ add_subdirectory(onedrive)
 add_subdirectory(pinterest)
 add_subdirectory(piwigo)
 add_subdirectory(rajce)
+add_subdirectory(yandexfotki)
 
 # Not yet finalized
 #add_subdirectory(twitter)

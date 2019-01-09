@@ -37,7 +37,6 @@
 #include "gswindow.h"
 #include "rajcewindow.h"
 #include "smugwindow.h"
-#include "yfwindow.h"
 
 #ifdef HAVE_VKONTAKTE
 #   include "vkwindow.h"
@@ -77,8 +76,6 @@ public:
 #ifdef HAVE_VKONTAKTE
     QPointer<VKWindow>         vkWindow;
 #endif
-
-    QPointer<YFWindow>         yfWindow;
 };
 
 class Q_DECL_HIDDEN WSStarterCreator
@@ -119,8 +116,6 @@ void WSStarter::cleanUp()
 #ifdef HAVE_VKONTAKTE
         delete instance()->d->vkWindow;
 #endif
-
-        delete instance()->d->yfWindow;
     }
 }
 
@@ -251,20 +246,6 @@ void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* con
         }
     }
 #endif
-
-    else if (tool == ExportYandexfotki)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->yfWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->yfWindow;
-            d->yfWindow = new YFWindow(iface, parent);
-            d->yfWindow->show();
-        }
-    }
 }
 
 void WSStarter::fromWebService(int tool, DInfoInterface* const iface, QWidget* const parent)
