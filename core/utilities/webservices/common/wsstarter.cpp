@@ -32,12 +32,6 @@
 
 #include "digikam_debug.h"
 #include "digikam_config.h"
-#include "gswindow.h"
-
-#ifdef HAVE_KIO
-#   include "ftexportwindow.h"
-#   include "ftimportwindow.h"
-#endif
 
 namespace Digikam
 {
@@ -50,9 +44,6 @@ public:
     {
     }
 
-    QPointer<GSWindow>         gdWindow;
-    QPointer<GSWindow>         gpWindow;
-    QPointer<GSWindow>         gpImportWindow;
 };
 
 class Q_DECL_HIDDEN WSStarterCreator
@@ -75,9 +66,6 @@ void WSStarter::cleanUp()
 {
     if (creator.exists())
     {
-        delete instance()->d->gdWindow;
-        delete instance()->d->gpWindow;
-        delete instance()->d->gpImportWindow;
     }
 }
 
@@ -105,49 +93,10 @@ WSStarter::~WSStarter()
 
 void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* const parent)
 {
-    if (tool == ExportGdrive)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->gdWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->gdWindow;
-            d->gdWindow = new GSWindow(iface, parent, QLatin1String("googledriveexport"));
-            d->gdWindow->show();
-        }
-    }
-    else if (tool == ExportGphoto)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->gpWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->gpWindow;
-            d->gpWindow = new GSWindow(iface, parent, QLatin1String("googlephotoexport"));
-            d->gpWindow->show();
-        }
-    }
 }
 
 void WSStarter::fromWebService(int tool, DInfoInterface* const iface, QWidget* const parent)
 {
-    if (tool == ImportGphoto)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->gpImportWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->gpImportWindow;
-            d->gpImportWindow = new GSWindow(iface, parent, QLatin1String("googlephotoimport"));
-            d->gpImportWindow->show();
-        }
-    }
 }
 
 bool WSStarter::checkWebService(QWidget* const widget) const

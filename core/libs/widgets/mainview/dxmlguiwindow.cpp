@@ -384,6 +384,14 @@ void DXmlGuiWindow::registerPluginsActions()
     actionCollection()->addActions(QList<QAction*>() << m_importFileTransferAction);
 #endif
 
+    m_exportGdriveAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_googledrive"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportGdriveAction);
+
+    m_exportGphotoAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_googlephoto"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportGphotoAction);
+    
+    m_importGphotoAction = DPluginLoader::instance()->pluginAction(QLatin1String("import_googlephoto"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_importGphotoAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -1026,32 +1034,10 @@ void DXmlGuiWindow::setupIconTheme()
 
 void DXmlGuiWindow::createExportActions()
 {
-    m_exportGdriveAction = new QAction(i18n("Export to &Google Drive..."), this);
-    m_exportGdriveAction->setIcon(QIcon::fromTheme(QLatin1String("dk-googledrive")));
-    actionCollection()->addAction(QLatin1String("export_googledrive"), m_exportGdriveAction);
-    actionCollection()->setDefaultShortcut(m_exportGdriveAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_G);
-
-    connect(m_exportGdriveAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
-    m_exportGphotoAction = new QAction(i18n("Export to &Google Photos..."), this);
-    m_exportGphotoAction->setIcon(QIcon::fromTheme(QLatin1String("dk-googlephoto")));
-    actionCollection()->addAction(QLatin1String("export_googlephoto"), m_exportGphotoAction);
-    actionCollection()->setDefaultShortcut(m_exportGphotoAction, Qt::ALT + Qt::SHIFT + Qt::Key_P);
-
-    connect(m_exportGphotoAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
 }
 
 void DXmlGuiWindow::createImportActions()
 {
-    m_importGphotoAction = new QAction(i18n("Import from &Google Photos..."), this);
-    m_importGphotoAction->setIcon(QIcon::fromTheme(QLatin1String("dk-googlephoto")));
-    actionCollection()->addAction(QLatin1String("import_googlephoto"), m_importGphotoAction);
-    actionCollection()->setDefaultShortcut(m_importGphotoAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_P);
-
-    connect(m_importGphotoAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotImportTool()));
 }
 
 QList<QAction*> DXmlGuiWindow::exportActions() const
@@ -1100,19 +1086,6 @@ QList<QAction*> DXmlGuiWindow::importActions() const
 
 int DXmlGuiWindow::actionToWebService(QAction* const action) const
 {
-    if (action == m_exportGdriveAction)
-    {
-        return WSStarter::ExportGdrive;
-    }
-    else if (action == m_exportGphotoAction)
-    {
-        return WSStarter::ExportGphoto;
-    }
-    else if (action == m_importGphotoAction)
-    {
-        return WSStarter::ImportGphoto;
-    }
-
     return WSStarter::ExportUnknown;
 }
 

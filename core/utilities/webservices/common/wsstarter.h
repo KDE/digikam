@@ -46,9 +46,6 @@ public:
     enum WSTool
     {
         ExportUnknown = 0,
-        ExportGdrive,
-        ExportGphoto,
-        ImportGphoto
     };
 
 public:
