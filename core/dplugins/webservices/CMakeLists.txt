@@ -6,3 +6,4 @@
 
 add_subdirectory(imgur)
 add_subdirectory(ipfs)
+add_subdirectory(box)

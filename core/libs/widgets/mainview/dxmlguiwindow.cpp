@@ -330,6 +330,9 @@ void DXmlGuiWindow::registerPluginsActions()
     
     m_exportIpfsAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_ipfs"), this);
     actionCollection()->addActions(QList<QAction*>() << m_exportIpfsAction);
+
+    m_exportBoxAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_box"), this);
+    actionCollection()->addActions(QList<QAction*>() << m_exportBoxAction);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -996,14 +999,6 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportPinterestAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 
-    m_exportBoxAction = new QAction(i18n("Export to &Box..."), this);
-    m_exportBoxAction->setIcon(QIcon::fromTheme(QLatin1String("dk-box")));
-    actionCollection()->addAction(QLatin1String("export_box"), m_exportBoxAction);
-    actionCollection()->setDefaultShortcut(m_exportBoxAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_B);
-
-    connect(m_exportBoxAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotExportTool()));
-
     m_exportFacebookAction = new QAction(i18n("Export to &Facebook..."), this);
     m_exportFacebookAction->setIcon(QIcon::fromTheme(QString::fromLatin1("dk-facebook")));
     actionCollection()->addAction(QLatin1String("export_facebook"), m_exportFacebookAction);
@@ -1177,11 +1172,7 @@ QList<QAction*> DXmlGuiWindow::importActions() const
 
 int DXmlGuiWindow::actionToWebService(QAction* const action) const
 {
-    if (action == m_exportBoxAction)
-    {
-        return WSStarter::ExportBox;
-    }
-    else if (action == m_exportDropboxAction)
+    if (action == m_exportDropboxAction)
     {
         return WSStarter::ExportDropbox;
     }

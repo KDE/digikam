@@ -32,7 +32,6 @@
 
 #include "digikam_debug.h"
 #include "digikam_config.h"
-#include "boxwindow.h"
 #include "dbwindow.h"
 #include "fbwindow.h"
 #include "flickrwindow.h"
@@ -66,7 +65,6 @@ public:
     {
     }
 
-    QPointer<BOXWindow>        boxWindow;
     QPointer<DBWindow>         dbWindow;
     QPointer<FbWindow>         fbWindow;
 
@@ -115,7 +113,6 @@ void WSStarter::cleanUp()
 {
     if (creator.exists())
     {
-        delete instance()->d->boxWindow;
         delete instance()->d->dbWindow;
         delete instance()->d->fbWindow;
 
@@ -169,20 +166,7 @@ WSStarter::~WSStarter()
 
 void WSStarter::toWebService(int tool, DInfoInterface* const iface, QWidget* const parent)
 {
-    if (tool == ExportBox)
-    {
-        if (checkWebService(static_cast<QWidget*>(d->boxWindow)))
-        {
-            return;
-        }
-        else
-        {
-            delete d->boxWindow;
-            d->boxWindow = new BOXWindow(iface, parent);
-            d->boxWindow->show();
-        }
-    }
-    else if (tool == ExportDropbox)
+    if (tool == ExportDropbox)
     {
         if (checkWebService(static_cast<QWidget*>(d->dbWindow)))
         {
