@@ -99,7 +99,7 @@ void PiwigoPlugin::setup(QObject* const parent)
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
     ac->setText(i18nc("@action", "Export to &Piwigo..."));
-    ac->setObjectName(QLatin1String("export-piwigo"));
+    ac->setObjectName(QLatin1String("export_piwigo"));
     ac->setActionCategory(DPluginAction::GenericExport);
 
     connect(ac, SIGNAL(triggered(bool)),
