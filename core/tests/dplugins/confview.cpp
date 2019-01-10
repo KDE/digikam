@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 
     DPluginLoader* const dpl = DPluginLoader::instance();
     dpl->init();
-    dpl->registerPlugins(qApp);
+    dpl->registerGenericPlugins(qApp);
 
     DPluginSetup view;
     view.show();

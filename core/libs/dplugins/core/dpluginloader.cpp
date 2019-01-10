@@ -197,15 +197,20 @@ void DPluginLoader::appendPluginToWhiteList(const QString& filename)
     d->whitelist << filename;
 }
 
-void DPluginLoader::registerPlugins(QObject* const parent)
+void DPluginLoader::registerGenericPlugins(QObject* const parent)
 {
     foreach (DPlugin* const plugin, d->allPlugins)
     {
-        plugin->setup(parent);
-        plugin->setVisible(plugin->shouldLoaded());
+        DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(plugin);
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Plugin named" << plugin->name()
-                                     << "registered to" << parent;
+        if (gene)
+        {
+            gene->setup(parent);
+            gene->setVisible(plugin->shouldLoaded());
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Generic plugin named" << gene->name()
+                                         << "registered to" << parent;
+        }
     }
 }
 

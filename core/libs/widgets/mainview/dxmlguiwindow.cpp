@@ -217,7 +217,7 @@ void DXmlGuiWindow::setFullScreenOptions(int options)
 void DXmlGuiWindow::registerPluginsActions()
 {
     DPluginLoader* const dpl = DPluginLoader::instance();
-    dpl->registerPlugins(this);
+    dpl->registerGenericPlugins(this);
 
     QList<DPluginAction*> actions = dpl->pluginsActions(DPluginAction::Generic, this);
 

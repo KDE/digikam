@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
     DMetaInfoIface iface(qApp, urlList);
     DPluginLoader* const dpl = DPluginLoader::instance();
     dpl->init();
-    dpl->registerPlugins(&iface);
+    dpl->registerGenericPlugins(&iface);
 
     bool found = false;
 
