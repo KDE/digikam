@@ -48,6 +48,7 @@ set(libqueuemanager_SRCS
     tools/transform/crop.cpp
     manager/actionthread.cpp
     manager/task.cpp
+    manager/dpluginbqm.cpp
     manager/batchtool.cpp
     manager/batchtoolutils.cpp
     manager/batchtoolsfactory.cpp

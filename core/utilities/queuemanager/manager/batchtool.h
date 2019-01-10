@@ -83,6 +83,10 @@ public:
      */
     BatchToolGroup toolGroup() const;
 
+    /** Return group of tool name as string.
+     */
+    QString toolGroupToString() const;
+
     /** Manage Tool title.
      */
     void setToolTitle(const QString& toolTitle);

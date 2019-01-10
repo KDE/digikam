@@ -86,7 +86,7 @@ public:
      * This property is adjusted by plugin loader at start-up.
      */
     void setShouldLoaded(bool b);
-    
+
 public:
 
     /**
@@ -142,5 +142,7 @@ private:
 };
 
 } // namespace Digikam
+
+Q_DECLARE_TYPEINFO(Digikam::DPluginAuthor, Q_MOVABLE_TYPE);
 
 #endif // DIGIKAM_DPLUGIN_H

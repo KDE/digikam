@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : Generic digiKam plugin definition.
+ * Description : Batch Queue Manager digiKam plugin definition.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DPLUGIN_GENERIC_H
-#define DIGIKAM_DPLUGIN_GENERIC_H
+#ifndef DIGIKAM_DPLUGIN_BQM_H
+#define DIGIKAM_DPLUGIN_BQM_H
 
 // Qt includes
 
@@ -30,15 +30,14 @@
 
 // Local includes
 
-#include "dinfointerface.h"
 #include "dplugin.h"
-#include "dpluginaction.h"
+#include "batchtool.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DPluginGeneric : public DPlugin
+class DIGIKAM_EXPORT DPluginBqm : public DPlugin
 {
     Q_OBJECT
 
@@ -47,12 +46,12 @@ public:
     /**
      * Constructor with optional parent object
      */
-    explicit DPluginGeneric(QObject* const parent = 0);
+    explicit DPluginBqm(QObject* const parent = 0);
 
     /**
      * Destructor
      */
-    ~DPluginGeneric() override;
+    ~DPluginBqm() override;
 
 public:
 
@@ -62,38 +61,28 @@ public:
     void setVisible(bool b);
 
     /**
-     * Return all plugin actions registered in setup() method with addAction() for a given parent.
+     * Return all plugin tools registered in setup() method with addTool() for a given parent.
      */
-    QList<DPluginAction*> actions(QObject* const parent) const;
+    QList<BatchTool*> tools(QObject* const parent) const;
 
     /**
-     * Return the amount of actions registered to all parents.
+     * Return the amount of tools registered.
      */
-    int actionCount() const;
+    int toolCount() const;
 
     /**
-     * Return a plugin action instance found by name in plugin action list for a given parent.
+     * Return a plugin tool instance found by name in plugin tools list for a given parent.
      */
-    DPluginAction* findActionByName(const QString& name, QObject* const parent) const;
+    BatchTool* findToolByName(const QString& name, QObject* const parent) const;
 
     /**
-     * Return a list of categories as strings registered in this plugin.
+     * Return a list of batch tool group as strings registered in this plugin.
      */
-    QStringList actionCategories() const;
+    QStringList batchToolGroup() const;
 
 protected:
 
-    void addAction(DPluginAction* const ac);
-
-    /**
-     * Return the info interface instance for the given action.
-     */
-    DInfoInterface* infoIface(QObject* const ac) const;
-
-    /**
-     * Helper function to reactivate the desktop visibility of tool widget.
-     */
-    bool reactivateToolDialog(QWidget* const dlg) const;
+    void addTool(BatchTool* const t);
 
 private:
 
@@ -103,6 +92,6 @@ private:
 
 } // namespace Digikam
 
-Q_DECLARE_INTERFACE(Digikam::DPluginGeneric, "org.kde.digikam.DPluginGeneric/1.0.0" )
+Q_DECLARE_INTERFACE(Digikam::DPluginBqm, "org.kde.digikam.DPluginBqm/1.0.0" )
 
-#endif // DIGIKAM_DPLUGIN_GENERIC_H
+#endif // DIGIKAM_DPLUGIN_BQM_H

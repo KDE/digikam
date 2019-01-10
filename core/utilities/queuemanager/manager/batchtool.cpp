@@ -90,7 +90,7 @@ public:
 
     DImg                          image;
 
-    ItemInfo                     imageinfo;
+    ItemInfo                      imageinfo;
 
     DRawDecoderSettings           rawDecodingSettings;
 
@@ -165,6 +165,36 @@ BatchTool::BatchToolGroup BatchTool::toolGroup() const
     return d->toolGroup;
 }
 
+QString BatchTool::toolGroupToString() const
+{
+    switch (toolGroup())
+    {
+        case BaseTool:
+            return QLatin1String("Base");
+        case CustomTool:
+            return QLatin1String("Custom");
+        case ColorTool:
+            return QLatin1String("Color");
+        case EnhanceTool:
+            return QLatin1String("Enhance");
+        case TransformTool:
+            return QLatin1String("Transform");
+        case DecorateTool:
+            return QLatin1String("Decorate");
+        case FiltersTool:
+            return QLatin1String("Filter");
+        case ConvertTool:
+            return QLatin1String("Convert");
+        case MetadataTool:
+            return QLatin1String("Metadata");
+            
+        default:
+            break;
+    }
+
+    return QLatin1String("Invalid");
+}
+    
 void BatchTool::setToolTitle(const QString& toolTitle)
 {
     d->toolTitle = toolTitle;
