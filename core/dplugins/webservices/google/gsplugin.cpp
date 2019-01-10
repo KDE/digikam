@@ -96,17 +96,17 @@ QList<DPluginAuthor> GSPlugin::authors() const
 
 void GSPlugin::setup(QObject* const parent)
 {
-    DPluginAction* const ac = new DPluginAction(parent);
-    ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Export to &Google Photos..."));
-    ac->setObjectName(QLatin1String("export_googlephoto"));
-    ac->setActionCategory(DPluginAction::GenericExport);
-    ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_P);
+    DPluginAction* const ac1 = new DPluginAction(parent);
+    ac1->setIcon(icon());
+    ac1->setText(i18nc("@action", "Export to &Google Photos..."));
+    ac1->setObjectName(QLatin1String("export_googlephoto"));
+    ac1->setActionCategory(DPluginAction::GenericExport);
+    ac1->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_P);
 
-    connect(ac, SIGNAL(triggered(bool)),
+    connect(ac1, SIGNAL(triggered(bool)),
             this, SLOT(slotExportGphoto()));
 
-    addAction(ac);
+    addAction(ac1);
 
     DPluginAction* const ac2 = new DPluginAction(parent);
     ac2->setIcon(icon());
@@ -124,7 +124,7 @@ void GSPlugin::setup(QObject* const parent)
     ac3->setIcon(icon());
     ac3->setText(i18nc("@action", "Export to &Google Drive..."));
     ac3->setObjectName(QLatin1String("export_googledrive"));
-    ac3->setActionCategory(DPluginAction::GenericImport);
+    ac3->setActionCategory(DPluginAction::GenericExport);
     ac3->setShortcut(Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_G);
 
     connect(ac3, SIGNAL(triggered(bool)),
