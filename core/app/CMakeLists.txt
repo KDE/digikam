@@ -46,7 +46,6 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:digikamlibtransitionmngr_src>
             $<TARGET_OBJECTS:mediawiki_src>
             $<TARGET_OBJECTS:mediaserver_src>
-            $<TARGET_OBJECTS:webservices_src>
             $<TARGET_OBJECTS:timeadjust_src>
 
             utils/digikam_debug.cpp
@@ -281,7 +280,6 @@ set(libdigikamgui_SRCS
     main/digikamapp_solid.cpp
     main/digikamapp_camera.cpp
     main/digikamapp_import.cpp
-    main/digikamapp_export.cpp
     main/digikamapp_config.cpp
     main/digikamapp_tools.cpp
     main/digikamapp_setup.cpp

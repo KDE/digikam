@@ -207,18 +207,11 @@ private:
 
     void slideShow(SlideShowSettings& settings);
 
-// -- Export tools methods implemented in imagewindow_export.cpp -------------------------------------
-
-private Q_SLOTS:
-
-    void slotExportTool();
-
 // -- Import tools methods implemented in imagewindow_import.cpp -------------------------------------
 
 private Q_SLOTS:
 
     void slotImportedImagefromScanner(const QUrl& url);
-    void slotImportTool();
 
 // -- Internal private container --------------------------------------------------------------------
 

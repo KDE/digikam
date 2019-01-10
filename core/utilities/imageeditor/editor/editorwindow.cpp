@@ -812,11 +812,6 @@ void EditorWindow::setupStandardActions()
 
     HotPixelsTool::registerFilter();
 
-    // -- Standard 'Tools' menu actions ---------------------------------------------
-
-    createExportActions();
-    createImportActions();
-
     m_metadataEditAction->setEnabled(false);
     m_timeAdjustAction->setEnabled(false);
     m_expoBlendingAction->setEnabled(false);

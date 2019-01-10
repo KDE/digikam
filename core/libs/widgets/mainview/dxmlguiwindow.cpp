@@ -71,7 +71,6 @@
 #include "daboutdata.h"
 #include "dpluginloader.h"
 #include "webbrowserdlg.h"
-#include "wsstarter.h"
 
 namespace Digikam
 {
@@ -1032,14 +1031,6 @@ void DXmlGuiWindow::setupIconTheme()
     }
 }
 
-void DXmlGuiWindow::createExportActions()
-{
-}
-
-void DXmlGuiWindow::createImportActions()
-{
-}
-
 QList<QAction*> DXmlGuiWindow::exportActions() const
 {
     return QList<QAction*>() << m_exportDropboxAction
@@ -1082,11 +1073,6 @@ QList<QAction*> DXmlGuiWindow::importActions() const
                              << m_digitalScannerAction
 #endif
                              ;
-}
-
-int DXmlGuiWindow::actionToWebService(QAction* const action) const
-{
-    return WSStarter::ExportUnknown;
 }
 
 } // namespace Digikam

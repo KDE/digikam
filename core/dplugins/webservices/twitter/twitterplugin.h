@@ -32,6 +32,8 @@
 namespace Digikam
 {
 
+class DPluginDialog;
+
 class TwitterPlugin : public DPlugin
 {
     Q_OBJECT

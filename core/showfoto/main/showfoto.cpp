@@ -131,7 +131,6 @@ ShowFoto::~ShowFoto()
     delete m_canvas;
     m_canvas = 0;
 
-    Digikam::WSStarter::cleanUp();
     Digikam::ThumbnailLoadThread::cleanUp();
     Digikam::LoadingCacheInterface::cleanUp();
     Digikam::DMediaServerMngr::instance()->saveAtShutdown();

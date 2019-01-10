@@ -32,6 +32,8 @@
 namespace Digikam
 {
 
+class DPluginDialog;
+
 class VKontaktePlugin : public DPlugin
 {
     Q_OBJECT

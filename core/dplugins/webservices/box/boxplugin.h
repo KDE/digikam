@@ -32,6 +32,8 @@
 namespace Digikam
 {
 
+class DPluginDialog;
+
 class BoxPlugin : public DPlugin
 {
     Q_OBJECT

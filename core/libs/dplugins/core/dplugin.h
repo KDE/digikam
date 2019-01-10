@@ -46,8 +46,6 @@
 namespace Digikam
 {
 
-class DPluginDialog;
-
 /**
  * A digiKam external plugin abstract class.
  */
@@ -170,10 +168,9 @@ protected:
     DInfoInterface* infoIface(QObject* const ac) const;
 
     /**
-     * Helper function to check if a tool dialog instance already exists.
-     * If true, reactivate the visibility of widget.
+     * Helper function to reactivate the desktop visibility of tool widget.
      */
-    bool reactivateToolDialog(DPluginDialog* const dlg) const;
+    bool reactivateToolDialog(QWidget* const dlg) const;
 
 private:
 

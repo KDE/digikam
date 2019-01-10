@@ -32,6 +32,8 @@
 namespace Digikam
 {
 
+class DPluginDialog;
+
 class PiwigoPlugin : public DPlugin
 {
     Q_OBJECT

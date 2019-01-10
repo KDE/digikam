@@ -17,6 +17,12 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
+if(KF5KIO_FOUND)
+    include_directories($<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
+                        $<TARGET_PROPERTY:KF5::KIOFileWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+endif()
+
 DIGIKAM_ADD_PLUGIN(FileTransferPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/ftexportwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ftexportwindow.cpp

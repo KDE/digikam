@@ -32,6 +32,8 @@
 namespace Digikam
 {
 
+class DPluginDialog;
+
 class IpfsPlugin : public DPlugin
 {
     Q_OBJECT

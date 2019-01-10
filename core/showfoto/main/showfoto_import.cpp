@@ -32,15 +32,4 @@ void ShowFoto::slotImportedImagefromScanner(const QUrl& url)
     openUrls(QList<QUrl>() << url);
 }
 
-void ShowFoto::slotImportTool()
-{
-    QAction* const action = dynamic_cast<QAction*>(sender());
-    int tool              = actionToWebService(action);
-
-    if (tool != WSStarter::ExportUnknown)
-    {
-        WSStarter::importFromWebService(tool, new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()), this);
-    }
-}
-
 } // namespace ShowFoto

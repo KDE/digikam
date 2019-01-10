@@ -145,7 +145,7 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     QLabel* const accountLabel  = new QLabel(i18n("&Choose account:"), accountBox);
     d->accountOption            = new QComboBox(accountBox);
 
-    QStringList accounts        = QStringList(QString(""))
+    QStringList accounts        = QStringList(QString())
                                   << d->settings->allUserNames(map.constBegin().value());
 
     foreach(const QString& account, accounts)
@@ -212,7 +212,7 @@ void WSIntroPage::slotWebServiceOptionChanged(const QString& serviceName)
     d->accountOption->clear();
 
     // An empty option is added to accounts, so that user can choose to login with new account
-    QStringList accounts = QStringList(QString(""))
+    QStringList accounts = QStringList(QString())
                            << d->settings->allUserNames(serviceName);
 
     foreach(const QString& account, accounts)

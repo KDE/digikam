@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT WSWizard : public DWizardDlg
 
 public:
 
-    explicit WSWizard(QWidget* const parent, DInfoInterface* const iface = 0);
+    explicit WSWizard(DInfoInterface* const iface, QWidget* const parent);
     ~WSWizard();
 
     bool validateCurrentPage() override;

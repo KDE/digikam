@@ -109,7 +109,7 @@ WSAuthentication::WSAuthentication(QWidget* const parent, DInfoInterface* const 
      */
 
     d->tmpPath.clear();
-    d->tmpDir = WSToolUtils::makeTemporaryDir(d->serviceName.toUtf8()).absolutePath() + QLatin1Char('/');
+    d->tmpDir = WSToolUtils::makeTemporaryDir(d->serviceName.toUtf8().data()).absolutePath() + QLatin1Char('/');
 }
 
 WSAuthentication::~WSAuthentication()

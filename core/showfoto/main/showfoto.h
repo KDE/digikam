@@ -158,18 +158,11 @@ private:
 
     void slideShow(Digikam::SlideShowSettings& settings);
 
-// -- Export tools methods implemented in showfoto_export.cpp -------------------------------------
-
-private Q_SLOTS:
-
-    void slotExportTool();
-
 // -- Import tools methods implemented in showfoto_import.cpp -------------------------------------
 
 private Q_SLOTS:
 
     void slotImportedImagefromScanner(const QUrl& url);
-    void slotImportTool();
 
 // -- Internal private container --------------------------------------------------------------------
 

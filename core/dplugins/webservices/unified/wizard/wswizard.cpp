@@ -84,7 +84,7 @@ public:
     WSAuthentication*           wsAuth;
 };
 
-WSWizard::WSWizard(QWidget* const parent, DInfoInterface* const iface)
+WSWizard::WSWizard(DInfoInterface* const iface, QWidget* const parent)
     : DWizardDlg(parent, QLatin1String("Web Services Dialog")),
       d(new Private)
 {

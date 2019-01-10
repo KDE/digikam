@@ -4,6 +4,12 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+if(ENABLE_QWEBENGINE)
+    include_directories($<TARGET_PROPERTY:Qt5::WebEngineWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
+else()
+    include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
+
 add_subdirectory(box)
 add_subdirectory(dropbox)
 add_subdirectory(facebook)
@@ -30,3 +36,4 @@ endif()
 
 # Not yet finalized
 #add_subdirectory(twitter)
+#add_subdirectory(unified)

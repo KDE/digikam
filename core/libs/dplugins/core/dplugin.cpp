@@ -213,7 +213,7 @@ void DPlugin::setShouldLoaded(bool b)
     d->shouldLoaded = b;
 }
 
-bool DPlugin::reactivateToolDialog(DPluginDialog* const dlg) const
+bool DPlugin::reactivateToolDialog(QWidget* const dlg) const
 {
     if (dlg && (dlg->isMinimized() || !dlg->isHidden()))
     {

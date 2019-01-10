@@ -111,21 +111,9 @@ public:
      */
     QList<QAction*> importActions() const;
 
-    /** Return the Webservice enum from action
-     */
-    int actionToWebService(QAction* const action) const;
-
     /** Create common actions to setup all digiKam main windows.
      */
     void createSettingsActions();
-
-    /** Create common actions from Export menu for all digiKam main windows.
-     */
-    void createExportActions();
-
-    /** Create common actions from Import menu for all digiKam main windows.
-     */
-    void createImportActions();
 
     /** Create common actions from Help menu for all digiKam main windows.
      */
@@ -299,12 +287,6 @@ private Q_SLOTS:
     // Slots for common Settings actions
     virtual void slotEditKeys()                { editKeyboardShortcuts(); };
     virtual void slotSetup() = 0;
-
-    // Called by Webservices Export tools.
-    virtual void slotExportTool()              {};
-
-    // Called by Webservices Import tools.
-    virtual void slotImportTool()              {};
 
 private:
 

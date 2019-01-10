@@ -194,18 +194,11 @@ private Q_SLOTS:
     void slotSlideShowManualFrom(const ItemInfo&);
     void slotSlideShowBuilderComplete(const SlideShowSettings&);
 
-// -- Export tools methods implemented in lighttablewindow_export.cpp -------------------------------------
-
-private Q_SLOTS:
-
-    void slotExportTool();
-
 // -- Import tools methods implemented in lighttablewindow_import.cpp -------------------------------------
 
 private Q_SLOTS:
 
     void slotImportedImagefromScanner(const QUrl& url);
-    void slotImportTool();
 
 // -- Internal private container --------------------------------------------------------------------
 

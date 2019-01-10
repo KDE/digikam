@@ -147,11 +147,6 @@ void LightTableWindow::setupActions()
     ac->addAction(QLatin1String("lighttable_slideshow"), d->slideShowAction);
     ac->setDefaultShortcut(d->slideShowAction, Qt::Key_F9);
 
-    // -- Standard 'Tools' menu actions ------------------------
-
-    createExportActions();
-    createImportActions();
-
     // Left Panel Zoom Actions
 
     d->leftZoomPlusAction  = buildStdAction(StdZoomInAction, d->previewView, SLOT(slotIncreaseLeftZoom()), this);

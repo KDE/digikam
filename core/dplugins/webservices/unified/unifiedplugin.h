@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a plugin to export to FaceBook web-service.
+ * Description : a plugin to export items to web-services (unified version).
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,21 +20,21 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FB_PLUGIN_H
-#define DIGIKAM_FB_PLUGIN_H
+#ifndef DIGIKAM_UNIFIED_PLUGIN_H
+#define DIGIKAM_UNIFIED_PLUGIN_H
 
 // Local includes
 
 #include "dplugin.h"
 
-#define DPLUGIN_IID "org.kde.digikam.FaceBook"
+#define DPLUGIN_IID "org.kde.digikam.Unified"
 
 namespace Digikam
 {
 
-class DPluginDialog;
+class DWizardDlg;
 
-class FbPlugin : public DPlugin
+class UnifiedPlugin : public DPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -42,8 +42,8 @@ class FbPlugin : public DPlugin
 
 public:
 
-    explicit FbPlugin(QObject* const parent = 0);
-    ~FbPlugin();
+    explicit UnifiedPlugin(QObject* const parent = 0);
+    ~UnifiedPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -56,13 +56,13 @@ public:
 
 private Q_SLOTS:
 
-    void slotFaceBook();
+    void slotUnified();
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<DWizardDlg> m_toolDlg;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_FB_PLUGIN_H
+#endif // DIGIKAM_UNIFIED_PLUGIN_H

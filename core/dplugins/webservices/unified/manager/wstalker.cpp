@@ -56,7 +56,7 @@ WSTalker::WSTalker(QWidget* const parent)
       m_state(WSTalker::DEFAULT),
       m_settings(0),
       m_store(0),
-      m_userName(QString("")),
+      m_userName(QString()),
       m_wizard(0)
 {
     m_wizard = dynamic_cast<WSWizard*>(parent);
@@ -120,7 +120,7 @@ QString WSTalker::getUserID(const QString& userName)
     if (!userName.isEmpty())
     {
         m_settings->beginGroup(m_store->groupKey());
-        m_settings->beginGroup("users");
+        m_settings->beginGroup(QLatin1String("users"));
         userID = m_settings->value(userName).toString();
         m_settings->endGroup();
         m_settings->endGroup();
@@ -217,14 +217,14 @@ void WSTalker::saveUserAccount(const QString& userName,
 
     m_settings->beginGroup(m_store->groupKey());
 
-    m_settings->beginGroup("users");
+    m_settings->beginGroup(QLatin1String("users"));
     m_settings->setValue(userName, userID);
     m_settings->endGroup();
 
     m_settings->beginGroup(userID);
-    m_settings->setValue("expiration_time", expire);
-    m_settings->setValue("access_token", accessToken);
-    m_settings->setValue("refresh_token", refreshToken);
+    m_settings->setValue(QLatin1String("expiration_time"), expire);
+    m_settings->setValue(QLatin1String("access_token"),    accessToken);
+    m_settings->setValue(QLatin1String("refresh_token"),   refreshToken);
     m_settings->endGroup();
 
     m_settings->endGroup();
@@ -260,9 +260,9 @@ bool WSTalker::loadUserAccount(const QString& userName)
         return false;
     }
 
-    QString expire        = map["expiration_time"].toString();
-    QString accessToken   = map["access_token"].toString();
-    QString refreshToken  = map["refresh_token"].toString();
+    QString expire        = map[QLatin1String("expiration_time")].toString();
+    QString accessToken   = map[QLatin1String("access_token")].toString();
+    QString refreshToken  = map[QLatin1String("refresh_token")].toString();
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "expired moment : " << expire;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "current time : " << QDateTime::currentMSecsSinceEpoch() / 1000;
@@ -317,10 +317,10 @@ void WSTalker::removeUserAccount(const QString& userName)
     m_settings->beginGroup(m_store->groupKey());
 
     m_settings->beginGroup(userID);
-    m_settings->remove("");
+    m_settings->remove(QString());
     m_settings->endGroup();
 
-    m_settings->beginGroup("users");
+    m_settings->beginGroup(QLatin1String("users"));
     m_settings->remove(userName);
     m_settings->endGroup();
 
@@ -330,7 +330,7 @@ void WSTalker::removeUserAccount(const QString& userName)
 void WSTalker::removeAllAccounts()
 {
     m_settings->beginGroup(m_store->groupKey());
-    m_settings->remove("");
+    m_settings->remove(QString());
     m_settings->endGroup();
 }
 
@@ -382,7 +382,7 @@ void WSTalker::slotFinished(QNetworkReply* reply)
 
     if (reply->error() != QNetworkReply::NoError)
     {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << reply->error() << " text :"<< QString(reply->readAll());
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << reply->error() << " text :"<< QLatin1String(reply->readAll());
         authenticationDone(reply->error(), reply->errorString());
         reply->deleteLater();
         return;

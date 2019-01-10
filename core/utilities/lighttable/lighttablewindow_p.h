@@ -83,7 +83,6 @@
 #include "thumbnailloadthread.h"
 #include "dexpanderbox.h"
 #include "dbinfoiface.h"
-#include "wsstarter.h"
 
 namespace Digikam
 {

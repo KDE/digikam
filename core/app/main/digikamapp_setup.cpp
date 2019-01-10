@@ -630,8 +630,6 @@ void DigikamApp::setupActions()
 
     setupImageTransformActions();
     setupExifOrientationActions();
-    createExportActions();
-    createImportActions();
 
     // -----------------------------------------------------------------
 

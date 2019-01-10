@@ -52,7 +52,6 @@ set(showfoto_SRCS
     main/showfoto_setup.cpp
     main/showfoto_config.cpp
     main/showfoto_import.cpp
-    main/showfoto_export.cpp
 )
 
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/apps/*-apps-showfoto.png")

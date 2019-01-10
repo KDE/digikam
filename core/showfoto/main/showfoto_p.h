@@ -100,7 +100,6 @@
 #include "dexpanderbox.h"
 #include "dfiledialog.h"
 #include "dmediaservermngr.h"
-#include "wsstarter.h"
 #include "dpluginloader.h"
 
 namespace ShowFoto

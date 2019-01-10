@@ -119,10 +119,10 @@ WSImagesPage::WSImagesPage(QWizard* const dialog, const QString& title)
     DHBox* const buttonBox  = new DHBox(vboxAlbum);
 
     // Disable New Album button for now, because creating album on facebook is encountering a strange error
-    d->newAlbumBtn          = new QPushButton(QString("New Album"), buttonBox);
+    d->newAlbumBtn          = new QPushButton(QLatin1String("New Album"), buttonBox);
     //d->newAlbumBtn->setDisabled(true);
 
-    d->reloadAlbumsBtn      = new QPushButton(QString("Reload"), buttonBox);
+    d->reloadAlbumsBtn      = new QPushButton(QLatin1String("Reload"), buttonBox);
 
     connect(d->newAlbumBtn, SIGNAL(clicked()),
             d->wsAuth, SLOT(slotNewAlbumRequest()));

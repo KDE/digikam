@@ -199,12 +199,6 @@ private Q_SLOTS:
     void slotEditKeys();
     void slotThemeChanged();
 
-// -- Export tools methods implemented in digikamapp_export.cpp -------------------------------------
-
-private Q_SLOTS:
-
-    void slotExportTool();
-
 // -- Import tools methods implemented in digikamapp_import.cpp -------------------------------------
 
 private:
@@ -216,7 +210,6 @@ private Q_SLOTS:
     void slotImportedImagefromScanner(const QUrl& url);
     void slotImportAddImages();
     void slotImportAddFolders();
-    void slotImportTool();
 
 // -- Camera management methods implemented in digikamapp_camera.cpp --------------------------------
 
