@@ -55,11 +55,11 @@ public:
         setToolTip(0, m_tool->details());
 
         // Categories
-        QStringList list = m_tool->pluginCategories();
+        QStringList list = m_tool->actionCategories();
         setText(1, list.join(QString::fromLatin1(", ")));
 
         // Number of actions
-        setText(2, QString::number(m_tool->count()));
+        setText(2, QString::number(m_tool->actionCount()));
 
         // Description
         setText(3, m_tool->description());

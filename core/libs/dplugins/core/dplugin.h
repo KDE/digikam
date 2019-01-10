@@ -65,6 +65,8 @@ public:
      */
     ~DPlugin() override;
 
+public:
+
     /**
      * Holds whether the plugin actions can be seen in menus and toolbars.*
      */
@@ -76,9 +78,9 @@ public:
     QList<DPluginAction*> actions(QObject* const parent) const;
 
     /**
-     * Return the count of action registered to all parents.
+     * Return the amount of actions registered to all parents.
      */
-    int count() const;
+    int actionCount() const;
 
     /**
      * Return a plugin action instance found by name in plugin action list for a given parent.
@@ -88,7 +90,9 @@ public:
     /**
      * Return a list of categories as strings registered in this plugin.
      */
-    QStringList pluginCategories() const;
+    QStringList actionCategories() const;
+
+public:
 
     /**
      * Return a list of authors as strings registered in this plugin.
@@ -116,9 +120,11 @@ public:
 public:
 
     /**
-     * Plugin factory method to create all internal actions for a given parent.
-     * To retrieve all plugin actions, use actions() public methods.
-     * To register a new plugin action in this method, use addAction() protected method.
+     * Plugin factory method to create all internal object instances for a given parent.
+     *
+     * To play with plugin actions:
+     * - To register a new plugin action in this method, use addAction() protected method.
+     * - To retrieve all plugin actions, use actions() public methods.
      */
     virtual void setup(QObject* const parent) = 0;
 
