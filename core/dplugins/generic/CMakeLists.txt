@@ -4,4 +4,8 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-add_subdirectory(generic)
+add_subdirectory(metadata)
+add_subdirectory(import)
+add_subdirectory(tools)
+add_subdirectory(view)
+add_subdirectory(webservices)
