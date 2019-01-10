@@ -68,33 +68,6 @@ public:
 public:
 
     /**
-     * Holds whether the plugin actions can be seen in menus and toolbars.*
-     */
-    void setVisibleActions(bool b);
-
-    /**
-     * Return all plugin actions registered in setup() method with addAction() for a given parent.
-     */
-    QList<DPluginAction*> actions(QObject* const parent) const;
-
-    /**
-     * Return the amount of actions registered to all parents.
-     */
-    int actionCount() const;
-
-    /**
-     * Return a plugin action instance found by name in plugin action list for a given parent.
-     */
-    DPluginAction* findActionByName(const QString& name, QObject* const parent) const;
-
-    /**
-     * Return a list of categories as strings registered in this plugin.
-     */
-    QStringList actionCategories() const;
-
-public:
-
-    /**
      * Return a list of authors as strings registered in this plugin.
      */
     QStringList pluginAuthors() const;
@@ -163,6 +136,33 @@ public:
      * @brief Returns a long description about the plugin.
      */
     virtual QString details() const = 0;
+
+public:
+
+    /**
+     * Holds whether the plugin actions can be seen in menus and toolbars.*
+     */
+    void setVisibleActions(bool b);
+
+    /**
+     * Return all plugin actions registered in setup() method with addAction() for a given parent.
+     */
+    QList<DPluginAction*> actions(QObject* const parent) const;
+
+    /**
+     * Return the amount of actions registered to all parents.
+     */
+    int actionCount() const;
+
+    /**
+     * Return a plugin action instance found by name in plugin action list for a given parent.
+     */
+    DPluginAction* findActionByName(const QString& name, QObject* const parent) const;
+
+    /**
+     * Return a list of categories as strings registered in this plugin.
+     */
+    QStringList actionCategories() const;
 
 protected:
 
