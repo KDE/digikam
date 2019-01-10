@@ -35,7 +35,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "dplugin.h"
+#include "dplugingeneric.h"
 
 namespace Digikam
 {

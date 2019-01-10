@@ -33,7 +33,7 @@
 
 #include "panoactions.h"
 #include "ptotype.h"
-#include "dplugin.h"
+#include "dplugingeneric.h"
 #include "digikam_export.h"
 
 namespace Digikam

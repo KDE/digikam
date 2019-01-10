@@ -33,43 +33,47 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
+// Local includes
+
+#include "dplugingeneric.h"
+
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN DPluginCheckBox : public QTreeWidgetItem
+class Q_DECL_HIDDEN DPluginGenericCB : public QTreeWidgetItem
 {
 public:
 
-    explicit DPluginCheckBox(DPlugin* const tool, QTreeWidget* const parent)
+    explicit DPluginGenericCB(DPluginGeneric* const plugin, QTreeWidget* const parent)
         : QTreeWidgetItem(parent),
-          m_tool(tool)
+          m_plugin(plugin)
     {
         setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
         setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
         setDisabled(false);
 
         // Name + Icon + Selector
-        setText(0, m_tool->name());
-        setIcon(0, m_tool->icon());
-        setCheckState(0, m_tool->shouldLoaded() ? Qt::Checked : Qt::Unchecked);
-        setToolTip(0, m_tool->details());
+        setText(0, m_plugin->name());
+        setIcon(0, m_plugin->icon());
+        setCheckState(0, m_plugin->shouldLoaded() ? Qt::Checked : Qt::Unchecked);
+        setToolTip(0, m_plugin->details());
 
         // Categories
-        QStringList list = m_tool->actionCategories();
+        QStringList list = m_plugin->actionCategories();
         setText(1, list.join(QString::fromLatin1(", ")));
 
         // Number of actions
-        setText(2, QString::number(m_tool->actionCount()));
-
+        setText(2, QString::number(m_plugin->actionCount()));
+        
         // Description
-        setText(3, m_tool->description());
+        setText(3, m_plugin->description());
 
         // Authors
-        list = m_tool->pluginAuthors();
+        list = m_plugin->pluginAuthors();
         setText(4, list.join(QString::fromLatin1(", ")));
     };
 
-    ~DPluginCheckBox()
+    ~DPluginGenericCB()
     {
     };
 
@@ -84,7 +88,7 @@ public:
 
 public:
 
-    DPlugin* m_tool;
+    DPluginGeneric* m_plugin;
 };
 
 // ---------------------------------------------------------------------
@@ -97,8 +101,8 @@ public:
     {
     };
 
-    QString                 filter;
-    QList<DPluginCheckBox*> boxes;
+    QString                  filter;
+    QList<DPluginGenericCB*> geneBoxes;
 };
 
 DPluginConfView::DPluginConfView(QWidget* const parent)
@@ -128,9 +132,11 @@ DPluginConfView::DPluginConfView(QWidget* const parent)
     {
         foreach (DPlugin* const tool, loader->allPlugins())
         {
-            if (tool)
+            DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(tool);
+
+            if (gene)
             {
-                d->boxes.append(new DPluginCheckBox(tool, this));
+                d->geneBoxes.append(new DPluginGenericCB(gene, this));
             }
         }
     }
@@ -153,12 +159,12 @@ void DPluginConfView::apply()
         KSharedConfigPtr config = KSharedConfig::openConfig();
         KConfigGroup group      = config->group(loader->configGroupName());
 
-        foreach (DPluginCheckBox* const item, d->boxes)
+        foreach (DPluginGenericCB* const item, d->geneBoxes)
         {
             bool load = (item->checkState(0) == Qt::Checked);
-            group.writeEntry(item->m_tool->iid(), load);
-            item->m_tool->setVisibleActions(load);
-            item->m_tool->setShouldLoaded(load);
+            group.writeEntry(item->m_plugin->iid(), load);
+            item->m_plugin->setVisible(load);
+            item->m_plugin->setShouldLoaded(load);
         }
 
         config->sync();
@@ -167,7 +173,7 @@ void DPluginConfView::apply()
 
 void DPluginConfView::selectAll()
 {
-    foreach (DPluginCheckBox* const item, d->boxes)
+    foreach (DPluginGenericCB* const item, d->geneBoxes)
     {
         item->setCheckState(0, Qt::Checked);
     }
@@ -175,7 +181,7 @@ void DPluginConfView::selectAll()
 
 void DPluginConfView::clearAll()
 {
-    foreach (DPluginCheckBox* const item, d->boxes)
+    foreach (DPluginGenericCB* const item, d->geneBoxes)
     {
         item->setCheckState(0, Qt::Unchecked);
     }
@@ -183,14 +189,14 @@ void DPluginConfView::clearAll()
 
 int DPluginConfView::count() const
 {
-    return d->boxes.count();
+    return d->geneBoxes.count();
 }
 
 int DPluginConfView::actived() const
 {
     int actived = 0;
 
-    foreach (DPluginCheckBox* const item, d->boxes)
+    foreach (DPluginGenericCB* const item, d->geneBoxes)
     {
         if (item->checkState(0) == Qt::Checked)
             ++actived;
@@ -203,7 +209,7 @@ int DPluginConfView::visible() const
 {
     int visible = 0;
 
-    foreach (DPluginCheckBox* const item, d->boxes)
+    foreach (DPluginGenericCB* const item, d->geneBoxes)
     {
         if (!item->isHidden())
             ++visible;
@@ -217,7 +223,7 @@ void DPluginConfView::setFilter(const QString& filter, Qt::CaseSensitivity cs)
     d->filter  = filter;
     bool query = false;
 
-    foreach (DPluginCheckBox* const item, d->boxes)
+    foreach (DPluginGenericCB* const item, d->geneBoxes)
     {
         if (item->contains(filter, cs))
         {

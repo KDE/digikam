@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 PiwigoPlugin::PiwigoPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

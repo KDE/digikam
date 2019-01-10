@@ -34,13 +34,10 @@
 #include <QObject>
 #include <QIcon>
 #include <QPointer>
-#include <QWidget>
 
 // Local includes
 
-#include "dinfointerface.h"
 #include "dpluginauthor.h"
-#include "dpluginaction.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -89,15 +86,16 @@ public:
      * This property is adjusted by plugin loader at start-up.
      */
     void setShouldLoaded(bool b);
-
+    
 public:
 
     /**
+     * Holds whether the plugin can be seen in parent view.
+     */
+    virtual void setVisible(bool b) = 0;
+
+    /**
      * Plugin factory method to create all internal object instances for a given parent.
-     *
-     * To play with plugin actions:
-     * - To register a new plugin action in this method, use addAction() protected method.
-     * - To retrieve all plugin actions, use actions() public methods.
      */
     virtual void setup(QObject* const parent) = 0;
 
@@ -137,47 +135,6 @@ public:
      */
     virtual QString details() const = 0;
 
-public:
-
-    /**
-     * Holds whether the plugin actions can be seen in menus and toolbars.*
-     */
-    void setVisibleActions(bool b);
-
-    /**
-     * Return all plugin actions registered in setup() method with addAction() for a given parent.
-     */
-    QList<DPluginAction*> actions(QObject* const parent) const;
-
-    /**
-     * Return the amount of actions registered to all parents.
-     */
-    int actionCount() const;
-
-    /**
-     * Return a plugin action instance found by name in plugin action list for a given parent.
-     */
-    DPluginAction* findActionByName(const QString& name, QObject* const parent) const;
-
-    /**
-     * Return a list of categories as strings registered in this plugin.
-     */
-    QStringList actionCategories() const;
-
-protected:
-
-    void addAction(DPluginAction* const ac);
-
-    /**
-     * Return the info interface instance for the given action.
-     */
-    DInfoInterface* infoIface(QObject* const ac) const;
-
-    /**
-     * Helper function to reactivate the desktop visibility of tool widget.
-     */
-    bool reactivateToolDialog(QWidget* const dlg) const;
-
 private:
 
     class Private;
@@ -185,9 +142,5 @@ private:
 };
 
 } // namespace Digikam
-
-Q_DECLARE_TYPEINFO(Digikam::DPluginAuthor, Q_MOVABLE_TYPE);
-
-Q_DECLARE_INTERFACE(Digikam::DPlugin, "org.kde.digikam.DPlugin/1.0.0" )
 
 #endif // DIGIKAM_DPLUGIN_H

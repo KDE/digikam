@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 FlickrPlugin::FlickrPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

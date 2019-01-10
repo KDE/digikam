@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 MediaWikiPlugin::MediaWikiPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

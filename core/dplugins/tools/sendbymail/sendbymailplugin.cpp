@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 SendByMailPlugin::SendByMailPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

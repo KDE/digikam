@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 ImageShackPlugin::ImageShackPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

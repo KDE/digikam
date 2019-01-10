@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 ImgUrPlugin::ImgUrPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

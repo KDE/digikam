@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 JAlbumPlugin::JAlbumPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

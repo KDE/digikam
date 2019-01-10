@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 VKontaktePlugin::VKontaktePlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

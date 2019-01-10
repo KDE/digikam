@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 DBPlugin::DBPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

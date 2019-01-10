@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 TimeAdjustPlugin::TimeAdjustPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

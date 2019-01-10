@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 PrintCreatorPlugin::PrintCreatorPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

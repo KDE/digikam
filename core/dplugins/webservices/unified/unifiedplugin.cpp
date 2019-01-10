@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 UnifiedPlugin::UnifiedPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

@@ -25,7 +25,7 @@
 
 // Local includes
 
-#include "dplugin.h"
+#include "dplugingeneric.h"
 
 #define DPLUGIN_IID "org.kde.digikam.ImageShack"
 
@@ -34,11 +34,11 @@ namespace Digikam
 
 class DPluginDialog;
 
-class ImageShackPlugin : public DPlugin
+class ImageShackPlugin : public DPluginGeneric
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
-    Q_INTERFACES(Digikam::DPlugin)
+    Q_INTERFACES(Digikam::DPluginGeneric)
 
 public:
 

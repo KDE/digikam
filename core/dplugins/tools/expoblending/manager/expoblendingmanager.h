@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "dplugin.h"
+#include "dplugingeneric.h"
 #include "expoblendingactions.h"
 #include "digikam_export.h"
 

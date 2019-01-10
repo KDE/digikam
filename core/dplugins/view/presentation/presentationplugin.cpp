@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 PresentationPlugin::PresentationPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

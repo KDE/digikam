@@ -34,6 +34,7 @@
 #include "digikam_export.h"
 #include "dinfointerface.h"
 #include "dplugin.h"
+#include "dpluginaction.h"
 
 namespace Digikam
 {

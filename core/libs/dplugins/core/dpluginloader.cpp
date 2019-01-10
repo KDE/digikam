@@ -31,6 +31,7 @@
 
 #include "digikam_config.h"
 #include "digikam_debug.h"
+#include "dplugingeneric.h"
 
 namespace Digikam
 {
@@ -84,13 +85,18 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionType ty
 
     foreach (DPlugin* const p, allPlugins())
     {
-        foreach (DPluginAction* const ac, p->actions(parent))
+        DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(p);
+
+        if (gene)
         {
-            if (ac && (ac->actionType() == type))
+            foreach (DPluginAction* const ac, gene->actions(parent))
             {
-                list << ac;
+                if (ac && (ac->actionType() == type))
+                {
+                    list << ac;
+                }
             }
-         }
+        }
      }
 
      return list;
@@ -102,13 +108,18 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategor
 
     foreach (DPlugin* const p, allPlugins())
     {
-        foreach (DPluginAction* const ac, p->actions(parent))
+        DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(p);
+
+        if (gene)
         {
-            if (ac && (ac->actionCategory() == cat))
+            foreach (DPluginAction* const ac, gene->actions(parent))
             {
-                list << ac;
+                if (ac && (ac->actionCategory() == cat))
+                {
+                    list << ac;
+                }
             }
-         }
+        }
      }
 
      return list;
@@ -120,14 +131,19 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QOb
 
     foreach (DPlugin* const p, allPlugins())
     {
-        if (p->iid() == pluginIID)
-        {
-            foreach (DPluginAction* const ac, p->actions(parent))
-            {
-                list << ac;
-            }
+        DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(p);
 
-            break;
+        if (gene)
+        {
+            if (p->iid() == pluginIID)
+            {
+                foreach (DPluginAction* const ac, gene->actions(parent))
+                {
+                    list << ac;
+                }
+
+                break;
+            }
         }
     }
 
@@ -138,11 +154,16 @@ DPluginAction* DPluginLoader::pluginAction(const QString& actionName, QObject* c
 {
     foreach (DPlugin* const p, allPlugins())
     {
-        foreach (DPluginAction* const ac, p->actions(parent))
+        DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(p);
+
+        if (gene)
         {
-            if (ac && (ac->objectName() == actionName))
+            foreach (DPluginAction* const ac, gene->actions(parent))
             {
-                return ac;
+                if (ac && (ac->objectName() == actionName))
+                {
+                    return ac;
+                }
             }
         }
      }
@@ -181,9 +202,9 @@ void DPluginLoader::registerPlugins(QObject* const parent)
     foreach (DPlugin* const plugin, d->allPlugins)
     {
         plugin->setup(parent);
-        plugin->setVisibleActions(plugin->shouldLoaded());
+        plugin->setVisible(plugin->shouldLoaded());
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Actions from plugin named" << plugin->name()
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Plugin named" << plugin->name()
                                      << "registered to" << parent;
     }
 }

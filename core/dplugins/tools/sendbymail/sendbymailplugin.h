@@ -25,18 +25,18 @@
 
 // Local includes
 
-#include "dplugin.h"
+#include "dplugingeneric.h"
 
 #define DPLUGIN_IID "org.kde.digikam.SendByMail"
 
 namespace Digikam
 {
 
-class SendByMailPlugin : public DPlugin
+class SendByMailPlugin : public DPluginGeneric
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
-    Q_INTERFACES(Digikam::DPlugin)
+    Q_INTERFACES(Digikam::DPluginGeneric)
 
 public:
 

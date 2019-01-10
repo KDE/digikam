@@ -35,7 +35,7 @@
 #include "metaengine.h"
 #include "dmetainfoiface.h"
 #include "dpluginloader.h"
-#include "dplugin.h"
+#include "dplugingeneric.h"
 
 using namespace Digikam;
 
@@ -95,13 +95,18 @@ int main(int argc, char* argv[])
 
             QString actions;
 
-            foreach (DPluginAction* const ac, p->actions(&iface))
+            DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(p);
+            
+            if (gene)
             {
-                actions.append(ac->toString());
-                actions.append(QLatin1String(" ; "));
-            }
+                foreach (DPluginAction* const ac, gene->actions(&iface))
+                {
+                    actions.append(ac->toString());
+                    actions.append(QLatin1String(" ; "));
+                }
 
-            qDebug() << "Actions:" << actions;
+                qDebug() << "Actions:" << actions;
+            }
         }
 
         return 0;
@@ -128,24 +133,29 @@ int main(int argc, char* argv[])
         {
             if (p->iid() == name)
             {
-                found                   = true;
-                DPluginAction* const ac = p->findActionByName(action, &iface);
-
-                if (ac)
+                DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(p);
+            
+                if (gene)
                 {
-                    ac->trigger();
+                    found                   = true;
+                    DPluginAction* const ac = gene->findActionByName(action, &iface);
 
-                    if (parser.isSet(QString::fromLatin1("w")))
+                    if (ac)
                     {
-                        app.exec();
-                    }
-                }
-                else
-                {
-                    qDebug() << action << "action not found in plugin!";
-                }
+                        ac->trigger();
 
-                break;
+                        if (parser.isSet(QString::fromLatin1("w")))
+                        {
+                            app.exec();
+                        }
+                    }
+                    else
+                    {
+                        qDebug() << action << "action not found in plugin!";
+                    }
+
+                    break;
+                }
             }
         }
 

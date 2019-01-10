@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 MetadataEditPlugin::MetadataEditPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

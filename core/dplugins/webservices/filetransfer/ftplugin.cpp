@@ -39,7 +39,7 @@ namespace Digikam
 {
 
 FTPlugin::FTPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

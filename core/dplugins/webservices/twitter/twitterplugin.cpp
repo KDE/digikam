@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 TwitterPlugin::TwitterPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

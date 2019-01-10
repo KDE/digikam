@@ -46,7 +46,7 @@ namespace Digikam
 {
 
 DigitalScannerPlugin::DigitalScannerPlugin(QObject* const parent)
-    : DPlugin(parent),
+    : DPluginGeneric(parent),
       m_saneWidget(0)
 {
 }

@@ -39,7 +39,7 @@ namespace Digikam
 {
 
 FbPlugin::FbPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 BoxPlugin::BoxPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

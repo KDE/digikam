@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 RajcePlugin::RajcePlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

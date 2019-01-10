@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 ExpoBlendingPlugin::ExpoBlendingPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

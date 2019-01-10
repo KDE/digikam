@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 ODPlugin::ODPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

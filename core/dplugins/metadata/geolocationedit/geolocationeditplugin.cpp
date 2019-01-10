@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 GeolocationEditPlugin::GeolocationEditPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

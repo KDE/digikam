@@ -58,7 +58,7 @@ public:
 };
 
 SlideShowPlugin::SlideShowPlugin(QObject* const parent)
-    : DPlugin(parent),
+    : DPluginGeneric(parent),
       d(new Private)
 {
 }

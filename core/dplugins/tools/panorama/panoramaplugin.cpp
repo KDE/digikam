@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 PanoramaPlugin::PanoramaPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 

@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 IpfsPlugin::IpfsPlugin(QObject* const parent)
-    : DPlugin(parent)
+    : DPluginGeneric(parent)
 {
 }
 
