@@ -66,6 +66,40 @@ QString DPlugin::version() const
     return QLatin1String(digikam_version_short);
 }
 
+QIcon DPlugin::icon() const
+{
+    return QIcon::fromTheme(QLatin1String("plugins"));
+}
+
+QStringList DPlugin::pluginAuthors() const
+{
+    QStringList list;
+
+    foreach (const DPluginAuthor& au, authors())
+    {
+        if (!list.contains(au.name))
+        {
+            list << au.name;
+        }
+    }
+
+    list.sort();
+
+    return list;
+}
+
+bool DPlugin::shouldLoaded() const
+{
+    return d->shouldLoaded;
+}
+
+void DPlugin::setShouldLoaded(bool b)
+{
+    d->shouldLoaded = b;
+}
+
+// ---------------------------------------------------------------
+
 DInfoInterface* DPlugin::infoIface(QObject* const ac) const
 {
     DPluginAction* const pac = dynamic_cast<DPluginAction*>(ac);
@@ -115,11 +149,6 @@ int DPlugin::actionCount() const
     }
 
     return count;
-}
-
-QIcon DPlugin::icon() const
-{
-    return QIcon::fromTheme(QLatin1String("plugins"));
 }
 
 void DPlugin::setVisibleActions(bool b)
@@ -186,32 +215,6 @@ QStringList DPlugin::actionCategories() const
     return list;
 }
 
-QStringList DPlugin::pluginAuthors() const
-{
-    QStringList list;
-
-    foreach (const DPluginAuthor& au, authors())
-    {
-        if (!list.contains(au.name))
-        {
-            list << au.name;
-        }
-    }
-
-    list.sort();
-
-    return list;
-}
-
-bool DPlugin::shouldLoaded() const
-{
-    return d->shouldLoaded;
-}
-
-void DPlugin::setShouldLoaded(bool b)
-{
-    d->shouldLoaded = b;
-}
 
 bool DPlugin::reactivateToolDialog(QWidget* const dlg) const
 {
