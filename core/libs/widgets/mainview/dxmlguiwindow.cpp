@@ -173,60 +173,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
       d(new Private)
 {
-    m_expoBlendingAction       = 0;
-    m_panoramaAction           = 0;
-    m_videoslideshowAction     = 0;
-    m_htmlGalleryAction        = 0;
-    m_jalbumAction             = 0;
-    m_sendByMailAction         = 0;
-    m_printCreatorAction       = 0;
-    m_calendarAction           = 0;
-    m_presentationAction       = 0;
-    m_metadataEditAction       = 0;
-    m_geolocationEditAction    = 0;
-    m_mediaServerAction        = 0;
-    m_timeAdjustAction         = 0;
-    m_animLogo                 = 0;
-
-    // Export tools
-
-    m_exportDropboxAction      = 0;
-    m_exportOnedriveAction     = 0;
-    m_exportPinterestAction    = 0;
-    m_exportBoxAction          = 0;
-    m_exportFacebookAction     = 0;
-    m_exportFlickrAction       = 0;
-    m_exportGdriveAction       = 0;
-    m_exportGphotoAction       = 0;
-    m_exportImageshackAction   = 0;
-    m_exportImgurAction        = 0;
-    m_exportIpfsAction         = 0;
-    m_exportPiwigoAction       = 0;
-    m_exportRajceAction        = 0;
-    m_exportSmugmugAction      = 0;
-    m_exportYandexfotkiAction  = 0;
-    m_exportMediawikiAction    = 0;
-
-#ifdef HAVE_VKONTAKTE
-    m_exportVkontakteAction    = 0;
-#endif
-
-#ifdef HAVE_KIO
-    m_exportFileTransferAction = 0;
-#endif
-
-    // Import tools
-
-    m_importGphotoAction       = 0;
-    m_importSmugmugAction      = 0;
-
-#ifdef HAVE_KIO
-    m_importFileTransferAction = 0;
-#endif
-
-#ifdef HAVE_KSANE
-    m_digitalScannerAction     = 0;
-#endif
+    m_animLogo = 0;
 
     installEventFilter(this);
 }
@@ -272,125 +219,12 @@ void DXmlGuiWindow::registerPluginsActions()
     DPluginLoader* const dpl = DPluginLoader::instance();
     dpl->registerPlugins(this);
 
-    m_sendByMailAction = DPluginLoader::instance()->pluginAction(QLatin1String("sendbymail"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_sendByMailAction);
+    QList<DPluginAction*> actions = dpl->pluginsActions(DPluginAction::Generic, this);
 
-    m_printCreatorAction = DPluginLoader::instance()->pluginAction(QLatin1String("printcreator"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_printCreatorAction);
-
-#ifdef HAVE_HTMLGALLERY
-    m_htmlGalleryAction = DPluginLoader::instance()->pluginAction(QLatin1String("htmlgallery"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_htmlGalleryAction);
-#endif
-
-#ifdef HAVE_MEDIAPLAYER
-    m_videoslideshowAction = DPluginLoader::instance()->pluginAction(QLatin1String("videoslideshow"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_videoslideshowAction);
-#endif
-
-    m_calendarAction = DPluginLoader::instance()->pluginAction(QLatin1String("calendar"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_calendarAction);
-
-    m_expoBlendingAction = DPluginLoader::instance()->pluginAction(QLatin1String("expoblending"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_expoBlendingAction);
-
-#ifdef HAVE_PANORAMA
-    m_panoramaAction = DPluginLoader::instance()->pluginAction(QLatin1String("panorama"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_panoramaAction);
-#endif
-
-    m_jalbumAction = DPluginLoader::instance()->pluginAction(QLatin1String("jalbum"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_jalbumAction);
-
-    m_mediaServerAction = DPluginLoader::instance()->pluginAction(QLatin1String("mediaserver"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_mediaServerAction);
-
-    m_timeAdjustAction = DPluginLoader::instance()->pluginAction(QLatin1String("timeadjust_edit"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_timeAdjustAction);
-
-    m_metadataEditAction = DPluginLoader::instance()->pluginAction(QLatin1String("metadata_edit"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_metadataEditAction);
-
-#ifdef HAVE_MARBLE
-    m_geolocationEditAction = DPluginLoader::instance()->pluginAction(QLatin1String("geolocation_edit"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_geolocationEditAction);
-#endif
-
-#ifdef HAVE_KSANE
-    m_digitalScannerAction = DPluginLoader::instance()->pluginAction(QLatin1String("import_scan"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_digitalScannerAction);
-#endif
-
-    m_presentationAction = DPluginLoader::instance()->pluginAction(QLatin1String("presentation"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_presentationAction);
-
-    m_exportImgurAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_imgur"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportImgurAction);
-
-    m_exportIpfsAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_ipfs"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportIpfsAction);
-
-    m_exportBoxAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_box"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportBoxAction);
-
-    m_exportDropboxAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_dropbox"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportDropboxAction);
-
-    m_exportOnedriveAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_onedrive"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportOnedriveAction);
-
-    m_exportPinterestAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_pinterest"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportPinterestAction);
-
-    m_exportMediawikiAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_MediaWiki"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportMediawikiAction);
-
-    m_exportImageshackAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_imageshack"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportImageshackAction);
-
-    m_exportPiwigoAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_piwigo"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportPiwigoAction);
-
-    m_exportRajceAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_rajce"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportRajceAction);
-
-    m_exportYandexfotkiAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_yandexfotki"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportYandexfotkiAction);
-
-#ifdef HAVE_VKONTAKTE
-    m_exportVkontakteAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_vkontakte"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportVkontakteAction);
-#endif
-
-    m_exportFacebookAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_facebook"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportFacebookAction);
-
-    m_exportFlickrAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_flickr"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportFlickrAction);
-
-
-    m_importSmugmugAction = DPluginLoader::instance()->pluginAction(QLatin1String("import_smugmug"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_importSmugmugAction);
-
-    m_exportSmugmugAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_smugmug"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportSmugmugAction);
-    
-#ifdef HAVE_KIO
-    m_exportFileTransferAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_filetransfer"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportFileTransferAction);
-    
-    m_importFileTransferAction = DPluginLoader::instance()->pluginAction(QLatin1String("import_filetransfer"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_importFileTransferAction);
-#endif
-
-    m_exportGdriveAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_googledrive"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportGdriveAction);
-
-    m_exportGphotoAction = DPluginLoader::instance()->pluginAction(QLatin1String("export_googlephoto"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_exportGphotoAction);
-    
-    m_importGphotoAction = DPluginLoader::instance()->pluginAction(QLatin1String("import_googlephoto"), this);
-    actionCollection()->addActions(QList<QAction*>() << m_importGphotoAction);
+    foreach (DPluginAction* const ac, actions)
+    {
+        actionCollection()->addActions(QList<QAction*>() << ac);
+    }
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
@@ -1029,50 +863,6 @@ void DXmlGuiWindow::setupIconTheme()
 
         cg.sync();
     }
-}
-
-QList<QAction*> DXmlGuiWindow::exportActions() const
-{
-    return QList<QAction*>() << m_exportDropboxAction
-                             << m_exportOnedriveAction
-                             << m_exportPinterestAction
-                             << m_exportBoxAction
-                             << m_exportFacebookAction
-                             << m_exportFlickrAction
-                             << m_exportGdriveAction
-                             << m_exportGphotoAction
-                             << m_exportImageshackAction
-                             << m_exportImgurAction
-                             << m_exportIpfsAction
-                             << m_exportPiwigoAction
-                             << m_exportRajceAction
-                             << m_exportSmugmugAction
-                             << m_exportYandexfotkiAction
-                             << m_exportMediawikiAction
-
-#ifdef HAVE_VKONTAKTE
-                             << m_exportVkontakteAction
-#endif
-
-#ifdef HAVE_KIO
-                             << m_exportFileTransferAction;
-#endif
-                             ;
-}
-
-QList<QAction*> DXmlGuiWindow::importActions() const
-{
-    return QList<QAction*>() << m_importGphotoAction
-                             << m_importSmugmugAction
-
-#ifdef HAVE_KIO
-                             << m_importFileTransferAction
-#endif
-
-#ifdef HAVE_KSANE
-                             << m_digitalScannerAction
-#endif
-                             ;
 }
 
 } // namespace Digikam

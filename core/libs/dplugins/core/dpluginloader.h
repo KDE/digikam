@@ -81,6 +81,12 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
     QList<DPlugin*> allPlugins() const;
 
     /**
+     * @brief Returns a list of plugin actions set as type for a given parent.
+     *        If no plugin have found in this category, this returns an empty list.
+     */
+    QList<DPluginAction*> pluginsActions(DPluginAction::ActionType type, QObject* const parent) const;
+
+    /**
      * @brief Returns a list of plugin actions set as category for a given parent.
      *        If no plugin have found in this category, this returns an empty list.
      */

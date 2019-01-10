@@ -43,6 +43,7 @@
 #include "dlogoaction.h"
 #include "dinfointerface.h"
 #include "dpluginaction.h"
+#include "dpluginloader.h"
 
 class QEvent;
 
@@ -102,14 +103,6 @@ public:
      */
     void setConfigGroupName(const QString& name);
     QString configGroupName() const;
-
-    /** List of Webservices export actions
-     */
-    QList<QAction*> exportActions() const;
-
-    /** List of Webservices export actions
-     */
-    QList<QAction*> importActions() const;
 
     /** Create common actions to setup all digiKam main windows.
      */
@@ -172,56 +165,6 @@ public:
 protected:
 
     DLogoAction* m_animLogo;
-
-    QAction*     m_metadataEditAction;
-    QAction*     m_geolocationEditAction;
-    QAction*     m_presentationAction;
-    QAction*     m_calendarAction;
-    QAction*     m_htmlGalleryAction;
-    QAction*     m_jalbumAction;
-    QAction*     m_printCreatorAction;
-    QAction*     m_sendByMailAction;
-    QAction*     m_expoBlendingAction;
-    QAction*     m_panoramaAction;
-    QAction*     m_videoslideshowAction;
-    QAction*     m_mediaServerAction;
-    QAction*     m_timeAdjustAction;
-
-    QAction*     m_exportDropboxAction;
-    QAction*     m_exportOnedriveAction;
-    QAction*     m_exportPinterestAction;
-    QAction*     m_exportBoxAction;
-    QAction*     m_exportFacebookAction;
-    QAction*     m_exportFlickrAction;
-    QAction*     m_exportGdriveAction;
-    QAction*     m_exportGphotoAction;
-    QAction*     m_exportImageshackAction;
-    QAction*     m_exportImgurAction;
-    QAction*     m_exportIpfsAction;
-    QAction*     m_exportPiwigoAction;
-    QAction*     m_exportRajceAction;
-    QAction*     m_exportSmugmugAction;
-    QAction*     m_exportYandexfotkiAction;
-    QAction*     m_exportMediawikiAction;
-
-#ifdef HAVE_VKONTAKTE
-    QAction*     m_exportVkontakteAction;
-#endif
-
-#ifdef HAVE_KIO
-    QAction*     m_exportFileTransferAction;
-#endif
-
-    QAction*     m_importGphotoAction;
-    QAction*     m_importSmugmugAction;
-
-#ifdef HAVE_KIO
-    QAction*     m_importFileTransferAction;
-#endif
-
-#ifdef HAVE_KSANE
-    QAction*     m_digitalScannerAction;
-#endif
 
 protected:
 

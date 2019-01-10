@@ -580,7 +580,7 @@ void ContextMenuHelper::addCreateTagFromAddressbookMenu()
             this, SIGNAL(signalAddNewTagFromABCMenu(QString)));
 
     // AkonadiIface instance will be deleted with d->parent.
-#endif    
+#endif
 }
 
 void ContextMenuHelper::slotDeselectAllAlbumItems()
@@ -592,11 +592,16 @@ void ContextMenuHelper::slotDeselectAllAlbumItems()
 void ContextMenuHelper::addImportMenu()
 {
     QMenu* const menuImport       = new QMenu(i18n("Import"), d->parent);
-    QList<QAction*> importActions = DigikamApp::instance()->importActions();
+    KXMLGUIClient* const client   = const_cast<KXMLGUIClient*>(d->stdActionCollection->parentGUIClient());
+    QList<DPluginAction*> actions = DPluginLoader::instance()->pluginsActions(DPluginAction::GenericImport,
+                                    dynamic_cast<KXmlGuiWindow*>(client));
 
-    if (!importActions.isEmpty())
+    if (!actions.isEmpty())
     {
-        menuImport->addActions(importActions);
+        foreach (DPluginAction* const ac, actions)
+        {
+            menuImport->addActions(QList<QAction*>() << ac);
+        }
     }
     else
     {
@@ -610,17 +615,22 @@ void ContextMenuHelper::addImportMenu()
 
 void ContextMenuHelper::addExportMenu()
 {
-    QMenu* const menuExport = new QMenu(i18n("Export"), d->parent);
-    QList<QAction*> exportActions = DigikamApp::instance()->exportActions();
+    QMenu* const menuExport       = new QMenu(i18n("Export"), d->parent);
+    KXMLGUIClient* const client   = const_cast<KXMLGUIClient*>(d->stdActionCollection->parentGUIClient());
+    QList<DPluginAction*> actions = DPluginLoader::instance()->pluginsActions(DPluginAction::GenericExport,
+                                    dynamic_cast<KXmlGuiWindow*>(client));
 
 #if 0
     QAction* selectAllAction = 0;
     selectAllAction = d->stdActionCollection->action("selectAll");
 #endif
 
-    if (!exportActions.isEmpty())
+    if (!actions.isEmpty())
     {
-        menuExport->addActions(exportActions);
+        foreach (DPluginAction* const ac, actions)
+        {
+            menuExport->addActions(QList<QAction*>() << ac);
+        }
     }
     else
     {

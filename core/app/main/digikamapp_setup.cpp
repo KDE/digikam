@@ -1072,13 +1072,12 @@ void DigikamApp::initGui()
     d->imageExifOrientationActionMenu->setEnabled(false);
     d->openWithAction->setEnabled(false);
     d->slideShowSelectionAction->setEnabled(false);
-    m_metadataEditAction->setEnabled(false);
-    m_timeAdjustAction->setEnabled(false);
     d->imageAutoExifActionMenu->setEnabled(false);
 
-#ifdef HAVE_MARBLE
-    m_geolocationEditAction->setEnabled(false);
-#endif
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::GenericMetadata, this))
+    {
+        ac->setEnabled(false);
+    }
 
     d->albumSortAction->setCurrentItem((int)ApplicationSettings::instance()->getAlbumSortRole());
     d->imageSortAction->setCurrentItem((int)ApplicationSettings::instance()->getImageSortOrder());

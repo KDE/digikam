@@ -77,6 +77,25 @@ QList<DPlugin*> DPluginLoader::allPlugins() const
     return d->allPlugins;
 }
 
+
+QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionType type, QObject* const parent) const
+{
+    QList<DPluginAction*> list;
+
+    foreach (DPlugin* const p, allPlugins())
+    {
+        foreach (DPluginAction* const ac, p->actions(parent))
+        {
+            if (ac && (ac->actionType() == type))
+            {
+                list << ac;
+            }
+         }
+     }
+
+     return list;
+}
+
 QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategory cat, QObject* const parent) const
 {
     QList<DPluginAction*> list;

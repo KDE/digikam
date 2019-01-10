@@ -44,50 +44,30 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(d->advSearchAction,            mainCategory);
 
     QString postCategory   = i18nc("@title Post Processing Tools", "Post-Processing");
-    actionModel->addAction(m_expoBlendingAction,          postCategory);
-    actionModel->addAction(m_calendarAction,              postCategory);
-    actionModel->addAction(m_metadataEditAction,          postCategory);
-    actionModel->addAction(m_timeAdjustAction,            postCategory);
-    actionModel->addAction(m_presentationAction,          postCategory);
-    actionModel->addAction(m_sendByMailAction,            postCategory);
-    actionModel->addAction(m_printCreatorAction,          postCategory);
-    actionModel->addAction(m_mediaServerAction,           postCategory);
 
-#ifdef HAVE_PANORAMA
-    actionModel->addAction(m_panoramaAction,              postCategory);
-#endif
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::GenericTool, this))
+    {
+        actionModel->addAction(ac, postCategory);
+    }
 
-#ifdef HAVE_MEDIAPLAYER
-    actionModel->addAction(m_videoslideshowAction,        postCategory);
-#endif
-
-#ifdef HAVE_HTMLGALLERY
-    actionModel->addAction(m_htmlGalleryAction,           postCategory);
-#endif
-
-    actionModel->addAction(m_jalbumAction,                postCategory);
-
-#ifdef HAVE_MARBLE
-    actionModel->addAction(m_geolocationEditAction,       postCategory);
-#endif
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::GenericMetadata, this))
+    {
+        actionModel->addAction(ac, postCategory);
+    }
 
     QString exportCategory = i18nc("@title Export Tools",          "Export");
 
-    foreach (QAction* const ac, exportActions())
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::GenericExport, this))
     {
-        actionModel->addAction(ac,                        exportCategory);
+        actionModel->addAction(ac, exportCategory);
     }
 
     QString importCategory = i18nc("@title Import Tools",          "Import");
 
-    foreach (QAction* const ac, importActions())
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::GenericImport, this))
     {
-        actionModel->addAction(ac,                        importCategory);
+        actionModel->addAction(ac, importCategory);
     }
-
-#ifdef HAVE_KSANE
-    actionModel->addAction(m_digitalScannerAction,                 importCategory);
-#endif
 
     // setup categorized view
     DCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();

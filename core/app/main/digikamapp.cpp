@@ -629,14 +629,13 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     d->moveSelectionToAlbumAction->setEnabled(selectionCount > 0);
     d->cutItemsAction->setEnabled(selectionCount > 0);
     d->copyItemsAction->setEnabled(selectionCount > 0);
-    m_metadataEditAction->setEnabled(selectionCount > 0);
-    m_timeAdjustAction->setEnabled(selectionCount > 0);
     d->openWithAction->setEnabled(selectionCount > 0);
     d->imageAutoExifActionMenu->setEnabled(selectionCount > 0);
 
-#ifdef HAVE_MARBLE
-    m_geolocationEditAction->setEnabled(selectionCount > 0);
-#endif
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::GenericMetadata, this))
+    {
+        ac->setEnabled(selectionCount > 0);
+    }
 
     if (selectionCount > 0)
     {
@@ -894,7 +893,6 @@ void DigikamApp::customizedTrashView(bool set)
     d->imageMapViewAction->setEnabled(set);
 #endif
     d->imagePreviewAction->setEnabled(set);
-    m_presentationAction->setEnabled(set);
     d->slideShowAction->setEnabled(set);
     d->bqmAction->setEnabled(set);
     d->ltAction->setEnabled(set);
@@ -925,6 +923,11 @@ void DigikamApp::customizedTrashView(bool set)
     d->selectAllAction->setEnabled(set);
     d->cutItemsAction->setEnabled(set);
     d->refreshAction->setEnabled(set);
+
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::GenericView, this))
+    {
+        ac->setEnabled(set);
+    }
 }
 
 void DigikamApp::toggleShowBar()

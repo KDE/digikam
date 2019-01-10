@@ -812,34 +812,12 @@ void EditorWindow::setupStandardActions()
 
     HotPixelsTool::registerFilter();
 
-    m_metadataEditAction->setEnabled(false);
-    m_timeAdjustAction->setEnabled(false);
-    m_expoBlendingAction->setEnabled(false);
-    m_calendarAction->setEnabled(false);
-    m_sendByMailAction->setEnabled(false);
-    m_printCreatorAction->setEnabled(false);
-    m_mediaServerAction->setEnabled(false);
+    QList<DPluginAction*> actions = DPluginLoader::instance()->pluginsActions(DPluginAction::Generic, this);
 
-#ifdef HAVE_MARBLE
-    m_geolocationEditAction->setEnabled(false);
-#endif
-
-#ifdef HAVE_HTMLGALLERY
-    m_htmlGalleryAction->setEnabled(false);
-#endif
-
-    m_jalbumAction->setEnabled(false);
-
-#ifdef HAVE_PANORAMA
-    m_panoramaAction->setEnabled(false);
-#endif
-
-#ifdef HAVE_MEDIAPLAYER
-    m_videoslideshowAction->setEnabled(false);
-#endif
-
-    foreach (QAction* const ac, exportActions())
+    foreach (DPluginAction* const ac, actions)
+    {
         ac->setEnabled(false);
+    }
 
     // --------------------------------------------------------
 
@@ -1395,39 +1373,17 @@ void EditorWindow::toggleStandardActions(bool val)
     m_saveAsAction->setEnabled(val);
     d->openWithAction->setEnabled(val);
     d->filePrintAction->setEnabled(val);
-    m_metadataEditAction->setEnabled(val);
-    m_timeAdjustAction->setEnabled(val);
     m_exportAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
     d->selectNoneAction->setEnabled(val);
     d->slideShowAction->setEnabled(val);
-    m_presentationAction->setEnabled(val);
-    m_calendarAction->setEnabled(val);
-    m_expoBlendingAction->setEnabled(val);
-    m_sendByMailAction->setEnabled(val);
-    m_printCreatorAction->setEnabled(val);
-    m_mediaServerAction->setEnabled(val);
 
-#ifdef HAVE_MARBLE
-    m_geolocationEditAction->setEnabled(val);
-#endif
+    QList<DPluginAction*> actions = DPluginLoader::instance()->pluginsActions(DPluginAction::Generic, this);
 
-#ifdef HAVE_HTMLGALLERY
-    m_htmlGalleryAction->setEnabled(val);
-#endif
-
-#ifdef HAVE_PANORAMA
-    m_panoramaAction->setEnabled(val);
-#endif
-
-    m_jalbumAction->setEnabled(val);
-
-#ifdef HAVE_MEDIAPLAYER
-    m_videoslideshowAction->setEnabled(val);
-#endif
-
-    foreach (QAction* const ac, exportActions())
+    foreach (DPluginAction* const ac, actions)
+    {
         ac->setEnabled(val);
+    }
 
     // these actions are special: They are turned off if val is false,
     // but if val is true, they may be turned on or off.
@@ -3010,45 +2966,29 @@ void EditorWindow::setupSelectToolsAction()
 #endif
 
     QString postCategory      = i18nc("@title Post Processing Tools", "Post-Processing");
-    actionModel->addAction(m_calendarAction,              postCategory);
-    actionModel->addAction(m_metadataEditAction,          postCategory);
-    actionModel->addAction(m_timeAdjustAction,            postCategory);
-    actionModel->addAction(m_presentationAction,          postCategory);
-    actionModel->addAction(m_expoBlendingAction,          postCategory);
-    actionModel->addAction(m_sendByMailAction,            postCategory);
-    actionModel->addAction(m_printCreatorAction,          postCategory);
-    actionModel->addAction(m_mediaServerAction,           postCategory);
 
-#ifdef HAVE_HTMLGALLERY
-    actionModel->addAction(m_htmlGalleryAction,           postCategory);
-#endif
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::GenericTool, this))
+    {
+        actionModel->addAction(ac, postCategory);
+    }
 
-    actionModel->addAction(m_jalbumAction,                postCategory);
-
-#ifdef HAVE_PANORAMA
-    actionModel->addAction(m_panoramaAction,              postCategory);
-#endif
-
-#ifdef HAVE_MEDIAPLAYER
-    actionModel->addAction(m_videoslideshowAction,        postCategory);
-#endif
-
-#ifdef HAVE_MARBLE
-    actionModel->addAction(m_geolocationEditAction,       postCategory);
-#endif
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::GenericMetadata, this))
+    {
+        actionModel->addAction(ac, postCategory);
+    }
 
     QString exportCategory    = i18nc("@title Export Tools",          "Export");
 
-    foreach(QAction* const ac, exportActions())
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::GenericExport, this))
     {
-        actionModel->addAction(ac,                        exportCategory);
+        actionModel->addAction(ac, exportCategory);
     }
 
     QString importCategory    = i18nc("@title Import Tools",          "Import");
 
-    foreach(QAction* const ac, importActions())
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::GenericImport, this))
     {
-        actionModel->addAction(ac,                        importCategory);
+        actionModel->addAction(ac, importCategory);
     }
 
     // setup categorized view
