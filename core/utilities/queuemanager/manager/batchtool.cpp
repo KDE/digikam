@@ -50,6 +50,7 @@
 #include "jpegsettings.h"
 #include "pngsettings.h"
 #include "dmetadata.h"
+#include "dpluginbqm.h"
 
 namespace Digikam
 {
@@ -69,7 +70,8 @@ public:
         last(false),
         observer(0),
         toolGroup(BaseTool),
-        rawLoadingRule(QueueSettings::DEMOSAICING)
+        rawLoadingRule(QueueSettings::DEMOSAICING),
+        plugin(0)
     {
     }
 
@@ -82,7 +84,7 @@ public:
     QString                       errorMessage;
     QString                       toolTitle;          // User friendly tool title.
     QString                       toolDescription;    // User friendly tool description.
-    QString                       toolIconName;
+    QIcon                         toolIcon;
 
     QUrl                          inputUrl;
     QUrl                          outputUrl;
@@ -103,6 +105,8 @@ public:
     BatchTool::BatchToolGroup     toolGroup;
 
     QueueSettings::RawLoadingRule rawLoadingRule;
+
+    DPluginBqm*                   plugin;
 };
 
 class Q_DECL_HIDDEN BatchToolObserver : public DImgLoaderObserver
@@ -150,6 +154,19 @@ BatchTool::~BatchTool()
     delete d;
 }
 
+void BatchTool::setPlugin(DPluginBqm* const plugin)
+{
+    d->plugin = plugin;
+    setToolTitle(d->plugin->name());
+    setToolDescription(d->plugin->description());
+    setToolIcon(d->plugin->icon());
+}
+
+DPluginBqm* BatchTool::plugin() const
+{
+    return d->plugin;
+}
+
 QString BatchTool::errorDescription() const
 {
     return d->errorMessage;
@@ -187,14 +204,14 @@ QString BatchTool::toolGroupToString() const
             return QLatin1String("Convert");
         case MetadataTool:
             return QLatin1String("Metadata");
-            
+
         default:
             break;
     }
 
     return QLatin1String("Invalid");
 }
-    
+
 void BatchTool::setToolTitle(const QString& toolTitle)
 {
     d->toolTitle = toolTitle;
@@ -217,12 +234,17 @@ QString BatchTool::toolDescription() const
 
 void BatchTool::setToolIconName(const QString& iconName)
 {
-    d->toolIconName = iconName;
+    d->toolIcon = QIcon::fromTheme(iconName);
 }
 
-QString BatchTool::toolIconName() const
+void BatchTool::setToolIcon(const QIcon& icon)
 {
-    return d->toolIconName;
+    d->toolIcon = icon;
+}
+
+QIcon BatchTool::toolIcon() const
+{
+    return d->toolIcon;
 }
 
 void BatchTool::slotResetSettingsToDefault()

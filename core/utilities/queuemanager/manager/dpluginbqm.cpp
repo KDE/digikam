@@ -58,15 +58,9 @@ DPluginBqm::~DPluginBqm()
     delete d;
 }
 
-void DPluginBqm::setVisible(bool b)
+void DPluginBqm::setVisible(bool /*b*/)
 {
-    foreach (BatchTool* const t, d->tools)
-    {
-        if (t)
-        {
-            //t->setVisible(b);
-        }
-    }
+    // Not used
 }
 
 QList<BatchTool*> DPluginBqm::tools(QObject* const parent) const

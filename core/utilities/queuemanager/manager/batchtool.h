@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QObject>
+#include <QIcon>
 
 // Local includes
 
@@ -44,6 +45,7 @@ namespace Digikam
 
 class DImgBuiltinFilter;
 class DImgThreadedFilter;
+class DPluginBqm;
 
 /** A map of batch tool settings (setting key, setting value).
  */
@@ -76,6 +78,9 @@ public:
     explicit BatchTool(const QString& name, BatchToolGroup group, QObject* const parent = 0);
     ~BatchTool();
 
+    void setPlugin(DPluginBqm* const plugin);
+    DPluginBqm* plugin() const;
+
     /** Get description of an error which appear during apply() method.
      */
     QString errorDescription() const;
@@ -101,7 +106,8 @@ public:
     /** Manage Tool icon name.
      */
     void setToolIconName(const QString& iconName);
-    QString toolIconName() const;
+    void setToolIcon(const QIcon& icon);
+    QIcon toolIcon() const;
 
     /** Manage settings values to tool. See BatchToolSettings container for details.
      */

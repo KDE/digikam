@@ -117,7 +117,7 @@ ToolListViewItem::ToolListViewItem(ToolListViewGroup* const parent, BatchTool* c
 
     if (m_tool)
     {
-        setIcon(0, QIcon::fromTheme(m_tool->toolIconName()));
+        setIcon(0, m_tool->toolIcon());
         setText(0, m_tool->toolTitle());
         setText(1, m_tool->toolDescription());
     }

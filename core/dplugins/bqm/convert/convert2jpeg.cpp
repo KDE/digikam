@@ -46,10 +46,6 @@ Convert2JPEG::Convert2JPEG(QObject* const parent)
     : BatchTool(QLatin1String("Convert2JPEG"), ConvertTool, parent)
 {
     m_changeSettings = true;
-
-    setToolTitle(i18n("Convert To JPEG"));
-    setToolDescription(i18n("Convert images to JPEG format."));
-    setToolIconName(QLatin1String("image-jpeg"));
 }
 
 Convert2JPEG::~Convert2JPEG()

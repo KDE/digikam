@@ -59,6 +59,7 @@ private Q_SLOTS:
 
     void slotSettingsChanged(const BatchToolSettings&);
     void slotThemeChanged();
+    void slotAboutPlugin();
 
 private:
 

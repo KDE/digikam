@@ -43,6 +43,8 @@
 #include "dlayoutbox.h"
 #include "thememanager.h"
 #include "batchtoolsfactory.h"
+#include "dpluginbqm.h"
+#include "dpluginaboutdlg.h"
 
 namespace Digikam
 {
@@ -65,6 +67,7 @@ public:
         settingsViewIcon(0),
         settingsViewTitle(0),
         settingsViewReset(0),
+        settingsViewAbout(0),
         settingsView(0),
         tool(0)
     {
@@ -75,6 +78,7 @@ public:
     QLabel*      settingsViewTitle;
 
     QPushButton* settingsViewReset;
+    QPushButton* settingsViewAbout;
 
     QScrollArea* settingsView;
 
@@ -109,6 +113,10 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
     d->settingsViewReset->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->settingsViewReset->setToolTip(i18n("Reset current tool settings to default values."));
 
+    d->settingsViewAbout = new QPushButton();
+    d->settingsViewAbout->setIcon(QIcon::fromTheme(QLatin1String("help-about")));
+    d->settingsViewAbout->setToolTip(i18n("About this tool..."));
+
     QString frameStyle = QString::fromUtf8("QFrame {"
                                  "color: %1;"
                                  "border: 1px solid %2;"
@@ -126,6 +134,7 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
     d->settingsViewIcon->setStyleSheet(noFrameStyle);
     d->settingsViewTitle->setStyleSheet(noFrameStyle);
     d->settingsViewReset->setStyleSheet(noFrameStyle);
+    d->settingsViewAbout->setStyleSheet(noFrameStyle);
     toolDescriptor->setStyleSheet(frameStyle);
 
     d->settingsViewIcon->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
@@ -135,6 +144,7 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
     descrLayout->addWidget(d->settingsViewIcon,  0, 0, 1, 1);
     descrLayout->addWidget(d->settingsViewTitle, 0, 1, 1, 1);
     descrLayout->addWidget(d->settingsViewReset, 0, 2, 1, 1);
+    descrLayout->addWidget(d->settingsViewAbout, 0, 3, 1, 1);
     descrLayout->setColumnStretch(1, 10);
     toolDescriptor->setLayout(descrLayout);
 
@@ -155,6 +165,9 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    connect(d->settingsViewAbout, SIGNAL(clicked()),
+            this, SLOT(slotAboutPlugin()));
 }
 
 ToolSettingsView::~ToolSettingsView()
@@ -165,6 +178,16 @@ ToolSettingsView::~ToolSettingsView()
     }
 
     delete d;
+}
+
+void ToolSettingsView::slotAboutPlugin()
+{
+    if (d->tool && d->tool->plugin())
+    {
+        QPointer<DPluginAboutDlg> dlg = new DPluginAboutDlg(dynamic_cast<DPlugin*>(d->tool->plugin()));
+        dlg->exec();
+        delete dlg;
+    }
 }
 
 void ToolSettingsView::setBusy(bool b)
@@ -244,12 +267,14 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
 
     if (d->tool)
     {
-        d->settingsViewIcon->setPixmap(QIcon::fromTheme(d->tool->toolIconName()).pixmap(22));
+        d->settingsViewIcon->setPixmap(d->tool->toolIcon().pixmap(22));
         d->settingsViewTitle->setText(d->tool->toolTitle());
         d->tool->setSettings(d->set.settings);
 
         // Only set on Reset button if Manager is not busy (settings widget is disabled in this case).
         d->settingsViewReset->setEnabled(d->settingsView->viewport()->isEnabled());
+
+        d->settingsViewAbout->setEnabled(d->tool->plugin());
 
         setToolSettingsWidget(d->tool->settingsWidget());
 

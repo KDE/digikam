@@ -104,7 +104,7 @@ QueueMgrWindow::QueueMgrWindow()
     qRegisterMetaType<BatchToolSet>("BatchToolSet");
 
     m_instance = this;
-    BatchToolsFactory::instance();        // Create first instance here
+    BatchToolsFactory::instance();           // Create first instance here
     WorkflowManager::instance();             // Create first instance here
     d->thread  = new ActionThread(this);
 

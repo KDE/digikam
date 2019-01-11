@@ -77,7 +77,7 @@ void AssignedListViewItem::setToolSet(const BatchToolSet& set)
 
     if (tool)
     {
-        setIcon(1, QIcon::fromTheme(tool->toolIconName()));
+        setIcon(1, tool->toolIcon());
         setText(1, tool->toolTitle());
     }
 }

@@ -86,6 +86,8 @@ QList<DPluginAuthor> ConvertToJpegPlugin::authors() const
 void ConvertToJpegPlugin::setup(QObject* const parent)
 {
     Convert2JPEG* const tool = new Convert2JPEG(parent);
+    tool->setPlugin(this);
+
     addTool(tool);
 }
 
