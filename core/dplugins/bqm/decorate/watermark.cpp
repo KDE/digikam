@@ -153,9 +153,6 @@ WaterMark::WaterMark(QObject* const parent)
     : BatchTool(QLatin1String("WaterMark"), DecorateTool, parent),
       d(new Private)
 {
-    setToolTitle(i18n("Add Watermark"));
-    setToolDescription(i18n("Overlay an image or text as a visible watermark"));
-    setToolIconName(QLatin1String("insert-text"));
 }
 
 WaterMark::~WaterMark()
