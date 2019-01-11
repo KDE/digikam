@@ -46,10 +46,6 @@ FilmGrain::FilmGrain(QObject* const parent)
     : BatchTool(QLatin1String("FilmGrain"), FiltersTool, parent)
 {
     m_settingsView = 0;
-
-    setToolTitle(i18n("Film Grain"));
-    setToolDescription(i18n("Add film grain"));
-    setToolIconName(QLatin1String("filmgrain"));
 }
 
 FilmGrain::~FilmGrain()
