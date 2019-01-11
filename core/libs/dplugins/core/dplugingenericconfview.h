@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-12-31
- * Description : configuration view for external plugin
+ * Description : configuration view for external generic plugin
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DPLUGIN_CONF_VIEW_H
-#define DIGIKAM_DPLUGIN_CONF_VIEW_H
+#ifndef DIGIKAM_DPLUGIN_GENERIC_CONF_VIEW_H
+#define DIGIKAM_DPLUGIN_GENERIC_CONF_VIEW_H
 
 // Qt includes
 
@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DPluginConfView : public QTreeWidget
+class DIGIKAM_EXPORT DPluginGenericConfView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -47,8 +47,8 @@ public:
 
     /** Default constructor.
      */
-    explicit DPluginConfView(QWidget* const parent=0);
-    ~DPluginConfView();
+    explicit DPluginGenericConfView(QWidget* const parent=0);
+    ~DPluginGenericConfView();
 
     /** Apply all changes about plugins selected to be hosted in host application.
      */
@@ -97,4 +97,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_DPLUGIN_CONF_VIEW_H
+#endif // DIGIKAM_DPLUGIN_GENERIC_CONF_VIEW_H

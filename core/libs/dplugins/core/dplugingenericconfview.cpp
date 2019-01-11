@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-12-31
- * Description : configuration view for external plugin
+ * Description : configuration view for external generic plugin
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dpluginconfview.h"
+#include "dplugingenericconfview.h"
 
 // Qt include
 
@@ -93,7 +93,7 @@ public:
 
 // ---------------------------------------------------------------------
 
-class Q_DECL_HIDDEN DPluginConfView::Private
+class Q_DECL_HIDDEN DPluginGenericConfView::Private
 {
 public:
 
@@ -105,7 +105,7 @@ public:
     QList<DPluginGenericCB*> geneBoxes;
 };
 
-DPluginConfView::DPluginConfView(QWidget* const parent)
+DPluginGenericConfView::DPluginGenericConfView(QWidget* const parent)
     : QTreeWidget(parent),
       d(new Private)
 {
@@ -145,12 +145,12 @@ DPluginConfView::DPluginConfView(QWidget* const parent)
     sortItems(0, Qt::AscendingOrder);
 }
 
-DPluginConfView::~DPluginConfView()
+DPluginGenericConfView::~DPluginGenericConfView()
 {
     delete d;
 }
 
-void DPluginConfView::apply()
+void DPluginGenericConfView::apply()
 {
     DPluginLoader* const loader = DPluginLoader::instance();
 
@@ -171,7 +171,7 @@ void DPluginConfView::apply()
     }
 }
 
-void DPluginConfView::selectAll()
+void DPluginGenericConfView::selectAll()
 {
     foreach (DPluginGenericCB* const item, d->geneBoxes)
     {
@@ -179,7 +179,7 @@ void DPluginConfView::selectAll()
     }
 }
 
-void DPluginConfView::clearAll()
+void DPluginGenericConfView::clearAll()
 {
     foreach (DPluginGenericCB* const item, d->geneBoxes)
     {
@@ -187,12 +187,12 @@ void DPluginConfView::clearAll()
     }
 }
 
-int DPluginConfView::count() const
+int DPluginGenericConfView::count() const
 {
     return d->geneBoxes.count();
 }
 
-int DPluginConfView::actived() const
+int DPluginGenericConfView::actived() const
 {
     int actived = 0;
 
@@ -205,7 +205,7 @@ int DPluginConfView::actived() const
     return actived;
 }
 
-int DPluginConfView::visible() const
+int DPluginGenericConfView::visible() const
 {
     int visible = 0;
 
@@ -218,7 +218,7 @@ int DPluginConfView::visible() const
     return visible;
 }
 
-void DPluginConfView::setFilter(const QString& filter, Qt::CaseSensitivity cs)
+void DPluginGenericConfView::setFilter(const QString& filter, Qt::CaseSensitivity cs)
 {
     d->filter  = filter;
     bool query = false;
@@ -239,7 +239,7 @@ void DPluginConfView::setFilter(const QString& filter, Qt::CaseSensitivity cs)
     emit signalSearchResult(query);
 }
 
-QString DPluginConfView::filter() const
+QString DPluginGenericConfView::filter() const
 {
     return d->filter;
 }

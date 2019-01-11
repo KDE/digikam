@@ -40,7 +40,7 @@
 
 // Local includes
 
-#include "dpluginconfview.h"
+#include "dplugingenericconfview.h"
 
 namespace Digikam
 {
@@ -60,16 +60,16 @@ public:
     {
     }
 
-    QLabel*          pluginsNumber;
-    QLabel*          pluginsNumberActivated;
+    QLabel*                 pluginsNumber;
+    QLabel*                 pluginsNumberActivated;
 
-    QPushButton*     checkAllBtn;
-    QPushButton*     clearBtn;
+    QPushButton*            checkAllBtn;
+    QPushButton*            clearBtn;
 
-    QWidget*         hbox;
+    QWidget*                hbox;
 
-    SearchTextBar*   pluginFilter;
-    DPluginConfView* pluginsList;
+    SearchTextBar*          pluginFilter;
+    DPluginGenericConfView* pluginsList;
 };
 
 DPluginGenericSetup::DPluginGenericSetup(QWidget* const parent)
@@ -86,7 +86,7 @@ DPluginGenericSetup::DPluginGenericSetup(QWidget* const parent)
     d->checkAllBtn            = new QPushButton(i18n("Check All"), this);
     d->clearBtn               = new QPushButton(i18n("Clear"),     this);
 
-    d->pluginsList            = new DPluginConfView(this);
+    d->pluginsList            = new DPluginGenericConfView(this);
     QStringList labels;
     labels.append(i18n("Name"));
     labels.append(i18n("Categories"));
