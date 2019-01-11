@@ -18,14 +18,14 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-#DIGIKAM_ADD_BQM_PLUGIN(ConvertToJPEGPlugin
+#DIGIKAM_ADD_BQM_PLUGIN(BQMConvertToJPEGPlugin
 #    ${CMAKE_CURRENT_SOURCE_DIR}/converttojpegplugin.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/convert2jpeg.cpp
 #)
 
 if(LensFun_FOUND)
     include_directories(${LENSFUN_INCLUDE_DIRS})
-#   DIGIKAM_ADD_BQM_PLUGIN(ConvertToJPEGPlugin
+#   DIGIKAM_ADD_BQM_PLUGIN(BQMConvertToJPEGPlugin
 #        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixplugin.cpp
 #        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofix.cpp
 #   )
