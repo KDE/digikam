@@ -48,10 +48,6 @@ Blur::Blur(QObject* const parent)
       m_radiusInput(0)
 {
     m_changeSettings = true;
-
-    setToolTitle(i18n("Blur Image"));
-    setToolDescription(i18n("Blur images"));
-    setToolIconName(QLatin1String("blurimage"));
 }
 
 Blur::~Blur()

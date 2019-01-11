@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to apply color effects
+ * Description : a BQM plugin to sharp images
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,19 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_COLORFX_PLUGIN_H
-#define DIGIKAM_COLORFX_PLUGIN_H
+#ifndef DIGIKAM_SHARPEN_PLUGIN_H
+#define DIGIKAM_SHARPEN_PLUGIN_H
 
 // Local includes
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMColorFX"
+#define DPLUGIN_IID "org.kde.digikam.BQMSharpen"
 
 namespace Digikam
 {
 
-class ColorFXPlugin : public DPluginBqm
+class SharpenPlugin : public DPluginBqm
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +40,8 @@ class ColorFXPlugin : public DPluginBqm
 
 public:
 
-    explicit ColorFXPlugin(QObject* const parent = 0);
-    ~ColorFXPlugin();
+    explicit SharpenPlugin(QObject* const parent = 0);
+    ~SharpenPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -55,4 +55,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_COLORFX_PLUGIN_H
+#endif // DIGIKAM_SHARPEN_PLUGIN_H

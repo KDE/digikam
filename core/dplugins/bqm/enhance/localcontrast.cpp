@@ -45,9 +45,6 @@ LocalContrast::LocalContrast(QObject* const parent)
     : BatchTool(QLatin1String("LocalContrast"), EnhanceTool, parent),
       m_settingsView(0)
 {
-    setToolTitle(i18n("Local Contrast"));
-    setToolDescription(i18n("Emulate tone mapping."));
-    setToolIconName(QLatin1String("contrast"));
 }
 
 LocalContrast::~LocalContrast()

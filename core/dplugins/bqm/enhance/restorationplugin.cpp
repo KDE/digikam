@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to apply color effects
+ * Description : a BQM plugin to restore images
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "colorfxplugin.h"
+#include "restorationplugin.h"
 
 // Qt includes
 
@@ -35,57 +35,57 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "colorfx.h"
+#include "restoration.h"
 
 namespace Digikam
 {
 
-ColorFXPlugin::ColorFXPlugin(QObject* const parent)
+RestorationPlugin::RestorationPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ColorFXPlugin::~ColorFXPlugin()
+RestorationPlugin::~RestorationPlugin()
 {
 }
 
-QString ColorFXPlugin::name() const
+QString RestorationPlugin::name() const
 {
-    return i18n("Color Effects");
+    return i18n("Restoration");
 }
 
-QString ColorFXPlugin::iid() const
+QString RestorationPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ColorFXPlugin::icon() const
+QIcon RestorationPlugin::icon() const
 {
     return QIcon::fromTheme(QLatin1String("colorfx"));
 }
 
-QString ColorFXPlugin::description() const
+QString RestorationPlugin::description() const
 {
-    return i18n("Apply color effects");
+    return i18n("A tool to restore photographs using Greystoration algorithm");
 }
 
-QString ColorFXPlugin::details() const
+QString RestorationPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can apply color effects over images.</p>");
+    return i18n("<p>This batch Queue Manager tool can restore images.</p>");
 }
 
-QList<DPluginAuthor> ColorFXPlugin::authors() const
+QList<DPluginAuthor> RestorationPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Alexander Dymo"),
-                             QLatin1String("adymo at develop dot org"),
-                             QLatin1String("(C) 2012"))
+            << DPluginAuthor(QLatin1String("Gilles Caulier"),
+                             QLatin1String("caulier dot gilles at gmail dot com"),
+                             QLatin1String("(C) 2009-2019"))
             ;
 }
 
-void ColorFXPlugin::setup(QObject* const parent)
+void RestorationPlugin::setup(QObject* const parent)
 {
-    ColorFX* const tool = new ColorFX(parent);
+    Restoration* const tool = new Restoration(parent);
     tool->setPlugin(this);
 
     addTool(tool);

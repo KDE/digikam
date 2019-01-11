@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to apply color effects
+ * Description : a BQM plugin to blur images
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "colorfxplugin.h"
+#include "blurplugin.h"
 
 // Qt includes
 
@@ -35,57 +35,57 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "colorfx.h"
+#include "blur.h"
 
 namespace Digikam
 {
 
-ColorFXPlugin::ColorFXPlugin(QObject* const parent)
+BlurPlugin::BlurPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ColorFXPlugin::~ColorFXPlugin()
+BlurPlugin::~BlurPlugin()
 {
 }
 
-QString ColorFXPlugin::name() const
+QString BlurPlugin::name() const
 {
-    return i18n("Color Effects");
+    return i18n("Blur Image");
 }
 
-QString ColorFXPlugin::iid() const
+QString BlurPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ColorFXPlugin::icon() const
+QIcon BlurPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("colorfx"));
+    return QIcon::fromTheme(QLatin1String("blurimage"));
 }
 
-QString ColorFXPlugin::description() const
+QString BlurPlugin::description() const
 {
-    return i18n("Apply color effects");
+    return i18n("A tool to blur images");
 }
 
-QString ColorFXPlugin::details() const
+QString BlurPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can apply color effects over images.</p>");
+    return i18n("<p>This batch Queue Manager tool can blur images.</p>");
 }
 
-QList<DPluginAuthor> ColorFXPlugin::authors() const
+QList<DPluginAuthor> BlurPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Alexander Dymo"),
-                             QLatin1String("adymo at develop dot org"),
-                             QLatin1String("(C) 2012"))
+            << DPluginAuthor(QLatin1String("Gilles Caulier"),
+                             QLatin1String("caulier dot gilles at gmail dot com"),
+                             QLatin1String("(C) 2009-2019"))
             ;
 }
 
-void ColorFXPlugin::setup(QObject* const parent)
+void BlurPlugin::setup(QObject* const parent)
 {
-    ColorFX* const tool = new ColorFX(parent);
+    Blur* const tool = new Blur(parent);
     tool->setPlugin(this);
 
     addTool(tool);

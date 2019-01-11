@@ -48,9 +48,6 @@ Restoration::Restoration(QObject* const parent)
       m_comboBox(0),
       m_cimgIface(0)
 {
-    setToolTitle(i18n("Restoration"));
-    setToolDescription(i18n("Restore photographs based on Greystoration."));
-    setToolIconName(QLatin1String("restoration"));
 }
 
 Restoration::~Restoration()

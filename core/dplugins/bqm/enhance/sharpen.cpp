@@ -52,9 +52,6 @@ Sharpen::Sharpen(QObject* const parent)
     : BatchTool(QLatin1String("Sharpen"), EnhanceTool, parent)
 {
     m_settingsView = 0;
-    setToolTitle(i18n("Sharpen Image"));
-    setToolDescription(i18n("Sharpen images"));
-    setToolIconName(QLatin1String("sharpenimage"));
 }
 
 Sharpen::~Sharpen()

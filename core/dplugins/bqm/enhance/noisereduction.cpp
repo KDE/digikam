@@ -45,9 +45,6 @@ NoiseReduction::NoiseReduction(QObject* const parent)
     : BatchTool(QLatin1String("NoiseReduction"), EnhanceTool, parent),
       m_settingsView(0)
 {
-    setToolTitle(i18n("Noise Reduction"));
-    setToolDescription(i18n("Remove photograph noise using wavelets."));
-    setToolIconName(QLatin1String("noisereduction"));
 }
 
 NoiseReduction::~NoiseReduction()

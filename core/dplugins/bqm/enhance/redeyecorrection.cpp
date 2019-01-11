@@ -46,9 +46,6 @@ RedEyeCorrection::RedEyeCorrection(QObject* const parent)
       m_redEyeCFilter(0)
 {
     m_settingsView = 0;
-    setToolTitle(i18n("RedEye-Correction"));
-    setToolDescription(i18n("Automatically detect and correct RedEye effect."));
-    setToolIconName(QLatin1String("redeyes"));
 }
 
 RedEyeCorrection::~RedEyeCorrection()

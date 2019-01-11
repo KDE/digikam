@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to apply color effects
+ * Description : a BQM plugin to reduce red eyes
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "colorfxplugin.h"
+#include "redeyecorrectionplugin.h"
 
 // Qt includes
 
@@ -35,57 +35,57 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "colorfx.h"
+#include "redeyecorrection.h"
 
 namespace Digikam
 {
 
-ColorFXPlugin::ColorFXPlugin(QObject* const parent)
+RedEyeCorrectionPlugin::RedEyeCorrectionPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ColorFXPlugin::~ColorFXPlugin()
+RedEyeCorrectionPlugin::~RedEyeCorrectionPlugin()
 {
 }
 
-QString ColorFXPlugin::name() const
+QString RedEyeCorrectionPlugin::name() const
 {
-    return i18n("Color Effects");
+    return i18n("Red Eye Correction");
 }
 
-QString ColorFXPlugin::iid() const
+QString RedEyeCorrectionPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ColorFXPlugin::icon() const
+QIcon RedEyeCorrectionPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("colorfx"));
+    return QIcon::fromTheme(QLatin1String("redeyes"));
 }
 
-QString ColorFXPlugin::description() const
+QString RedEyeCorrectionPlugin::description() const
 {
-    return i18n("Apply color effects");
+    return i18n("A tool to automatically detect and correct red eye effect");
 }
 
-QString ColorFXPlugin::details() const
+QString RedEyeCorrectionPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can apply color effects over images.</p>");
+    return i18n("<p>This batch Queue Manager tool can reduce red eye effect in images.</p>");
 }
 
-QList<DPluginAuthor> ColorFXPlugin::authors() const
+QList<DPluginAuthor> RedEyeCorrectionPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Alexander Dymo"),
-                             QLatin1String("adymo at develop dot org"),
-                             QLatin1String("(C) 2012"))
+            << DPluginAuthor(QLatin1String("Omar Amin"),
+                             QLatin1String("Omar dot moh dot amin at gmail dot com"),
+                             QLatin1String("(C) 2016"))
             ;
 }
 
-void ColorFXPlugin::setup(QObject* const parent)
+void RedEyeCorrectionPlugin::setup(QObject* const parent)
 {
-    ColorFX* const tool = new ColorFX(parent);
+    RedEyeCorrection* const tool = new RedEyeCorrection(parent);
     tool->setPlugin(this);
 
     addTool(tool);
