@@ -50,10 +50,6 @@ AssignTemplate::AssignTemplate(QObject* const parent)
 {
     m_templateSelector = 0;
     m_templateViewer   = 0;
-
-    setToolTitle(i18n("Apply Metadata Template"));
-    setToolDescription(i18n("Apply template metadata"));
-    setToolIconName(QLatin1String("text-xml"));
 }
 
 AssignTemplate::~AssignTemplate()

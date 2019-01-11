@@ -17,7 +17,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_PLUGIN(ImageShackPlugin
+DIGIKAM_ADD_PLUGIN(GENEImageShackPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/imageshackmpform.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/imageshackplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/imageshacktalker.cpp

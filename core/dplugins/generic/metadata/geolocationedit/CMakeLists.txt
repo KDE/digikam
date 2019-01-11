@@ -18,21 +18,16 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-set(geolocationeditplugin_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/searches/searchbackend.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/searches/searchresultmodel.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/searches/searchresultmodelhelper.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/searches/searchwidget.cpp
-
-                               ${CMAKE_CURRENT_SOURCE_DIR}/dialog/gpsitemdetails.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/dialog/geolocationedit.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/dialog/gpsgeoifacemodelhelper.cpp
-
-                               ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/geodataparser.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/kmlgpsdataparser.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/kmlwidget.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/kmlexport.cpp
-
-                               ${CMAKE_CURRENT_SOURCE_DIR}/geolocationeditplugin.cpp
-)
-
-DIGIKAM_ADD_PLUGIN(GeolocationEditPlugin ${geolocationeditplugin_SRCS})
+DIGIKAM_ADD_PLUGIN(GENEGeolocationEditPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/searches/searchbackend.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/searches/searchresultmodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/searches/searchresultmodelhelper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/searches/searchwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialog/gpsitemdetails.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialog/geolocationedit.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialog/gpsgeoifacemodelhelper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/geodataparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/kmlgpsdataparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/kmlwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/kmlexport.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/geolocationeditplugin.cpp)

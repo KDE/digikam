@@ -48,6 +48,6 @@ ki18n_wrap_ui(printcreatorplugin_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/advprintcustomlayout.ui
 )
 
-DIGIKAM_ADD_PLUGIN(PrintCreatorPlugin
+DIGIKAM_ADD_PLUGIN(GENEPrintCreatorPlugin
                    ${printcreatorplugin_SRCS}
 )

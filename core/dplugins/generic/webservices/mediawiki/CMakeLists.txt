@@ -20,7 +20,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_PLUGIN(MediaWikiPlugin
+DIGIKAM_ADD_PLUGIN(GENEMediaWikiPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/mediawikiplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/mediawikitalker.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/mediawikiwidget.cpp

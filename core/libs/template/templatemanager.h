@@ -31,12 +31,16 @@
 #include <QObject>
 #include <QString>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class Template;
 
-class TemplateManager : public QObject
+class DIGIKAM_EXPORT TemplateManager : public QObject
 {
     Q_OBJECT
 

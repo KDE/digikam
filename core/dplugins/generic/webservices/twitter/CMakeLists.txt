@@ -17,7 +17,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_PLUGIN(TwitterPlugin
+DIGIKAM_ADD_PLUGIN(GENETwitterPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/twittermpform.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/twitternewalbumdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/twitterplugin.cpp

@@ -18,8 +18,18 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-#DIGIKAM_ADD_BQM_PLUGIN(ConvertToJPEGPlugin
-#    ${CMAKE_CURRENT_SOURCE_DIR}/converttojpegplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/convert2jpeg.cpp
-#)
+DIGIKAM_ADD_BQM_PLUGIN(BQMAssignTemplatePlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/assigntemplateplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/assigntemplate.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(BQMRemoveMetadataPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/removemetadataplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/removemetadata.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(BQMTimeAdjustPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/timeadjustplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/timeadjust.cpp
+)
 

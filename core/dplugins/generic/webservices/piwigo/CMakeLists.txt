@@ -17,7 +17,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_PLUGIN(PiwigoPlugin
+DIGIKAM_ADD_PLUGIN(GENEPiwigoPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/piwigologindlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/piwigoplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/piwigosession.cpp

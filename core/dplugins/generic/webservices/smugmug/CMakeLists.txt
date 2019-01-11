@@ -17,7 +17,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_PLUGIN(SmugMugPlugin
+DIGIKAM_ADD_PLUGIN(GENESmugMugPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/smugmpform.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/smugnewalbumdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/smugplugin.cpp

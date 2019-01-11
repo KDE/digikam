@@ -18,7 +18,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_BQM_PLUGIN(UserScriptPlugin
+DIGIKAM_ADD_BQM_PLUGIN(BQMUserScriptPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/userscriptplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/userscript.cpp
 )

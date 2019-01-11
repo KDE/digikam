@@ -34,6 +34,6 @@ set(sendbymailplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/sendbymailplugin.cpp
 )
 
-DIGIKAM_ADD_PLUGIN(SendByMailPlugin
+DIGIKAM_ADD_PLUGIN(GENESendByMailPlugin
                    ${sendbymailplugin_SRCS}
 )

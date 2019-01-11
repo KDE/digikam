@@ -17,7 +17,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_PLUGIN(FlickrPlugin
+DIGIKAM_ADD_PLUGIN(GENEFlickrPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/flickrlist.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/flickrmpform.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/flickrnewalbumdlg.cpp

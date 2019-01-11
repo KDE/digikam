@@ -30,6 +30,7 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dexpanderbox.h"
 
 namespace Digikam
@@ -37,7 +38,7 @@ namespace Digikam
 
 class Template;
 
-class TemplateViewer : public DExpanderBox
+class DIGIKAM_EXPORT TemplateViewer : public DExpanderBox
 {
     Q_OBJECT
 

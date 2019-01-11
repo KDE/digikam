@@ -18,34 +18,34 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_BQM_PLUGIN(ConvertToJPEGPlugin
+DIGIKAM_ADD_BQM_PLUGIN(BQMConvertToJPEGPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/converttojpegplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/convert2jpeg.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN(ConvertToDNGPlugin
+DIGIKAM_ADD_BQM_PLUGIN(BQMConvertToDNGPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/converttodngplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/convert2dng.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN(ConvertToTIFFPlugin
+DIGIKAM_ADD_BQM_PLUGIN(BQMConvertToTIFFPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/converttotiffplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/convert2tiff.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN(ConvertToPNGPlugin
+DIGIKAM_ADD_BQM_PLUGIN(BQMConvertToPNGPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/converttopngplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/convert2png.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN(ConvertToPGFPlugin
+DIGIKAM_ADD_BQM_PLUGIN(BQMConvertToPGFPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/converttopgfplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/convert2pgf.cpp
 )
 
 if(Jasper_FOUND)
 
-    DIGIKAM_ADD_BQM_PLUGIN(ConvertToJP2lugin
+    DIGIKAM_ADD_BQM_PLUGIN(BQMConvertToJP2lugin
         ${CMAKE_CURRENT_SOURCE_DIR}/converttojp2plugin.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/convert2jp2.cpp
     )

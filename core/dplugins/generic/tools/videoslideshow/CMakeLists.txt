@@ -27,6 +27,6 @@ set(videoslideshowplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/videoslideshowplugin.cpp
 )
 
-DIGIKAM_ADD_PLUGIN(VideoSlideShow
+DIGIKAM_ADD_PLUGIN(GENEVideoSlideShow
                    ${videoslideshowplugin_SRCS}
 )

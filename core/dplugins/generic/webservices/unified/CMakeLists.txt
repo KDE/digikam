@@ -20,7 +20,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_PLUGIN(UnifiedPlugin
+DIGIKAM_ADD_PLUGIN(GENEUnifiedPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/wsauthentication.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/wstalker.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wsalbumspage.cpp
