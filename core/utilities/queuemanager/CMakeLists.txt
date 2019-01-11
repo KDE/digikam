@@ -48,6 +48,8 @@ set(libqueuemanager_SRCS
     manager/actionthread.cpp
     manager/task.cpp
     manager/dpluginbqm.cpp
+    manager/dpluginbqmsetup.cpp
+    manager/dpluginbqmconfview.cpp
     manager/batchtool.cpp
     manager/batchtoolutils.cpp
     manager/batchtoolsfactory.cpp

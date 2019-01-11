@@ -63,6 +63,11 @@ void DPluginBqm::setVisible(bool /*b*/)
     // Not used
 }
 
+int DPluginBqm::toolCount() const
+{
+    return d->tools.count();
+}
+
 QList<BatchTool*> DPluginBqm::tools(QObject* const parent) const
 {
     QList<BatchTool*> list;

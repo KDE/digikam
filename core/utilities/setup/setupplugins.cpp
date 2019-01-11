@@ -33,6 +33,7 @@
 // Local includes
 
 #include "dplugingenericsetup.h"
+#include "dpluginbqmsetup.h"
 
 namespace Digikam
 {
@@ -50,6 +51,7 @@ public:
     QTabWidget*          tab;
 
     DPluginGenericSetup* setupGeneric;
+    DPluginBqmSetup*     setupBqm;
 };
 
 SetupPlugins::SetupPlugins(QWidget* const parent)
@@ -64,6 +66,11 @@ SetupPlugins::SetupPlugins(QWidget* const parent)
 
     d->setupGeneric = new DPluginGenericSetup(d->tab);
     d->tab->insertTab(Generic, d->setupGeneric, i18nc("@title:tab", "Generic"));
+
+    // --------------------
+
+    d->setupBqm = new DPluginBqmSetup(d->tab);
+    d->tab->insertTab(Bqm, d->setupBqm, i18nc("@title:tab", "Batch Queue Manager"));
 }
 
 SetupPlugins::~SetupPlugins()
