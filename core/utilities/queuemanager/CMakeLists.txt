@@ -47,13 +47,13 @@ set(libqueuemanager_SRCS
     tools/transform/crop.cpp
     manager/actionthread.cpp
     manager/task.cpp
-    manager/dpluginbqm.cpp
-    manager/dpluginbqmsetup.cpp
-    manager/dpluginbqmconfview.cpp
     manager/batchtool.cpp
     manager/batchtoolutils.cpp
     manager/batchtoolsfactory.cpp
     manager/workflowmanager.cpp
+    dplugins/dpluginbqm.cpp
+    dplugins/dpluginbqmsetup.cpp
+    dplugins/dpluginbqmconfview.cpp
     views/workflowdlg.cpp
     views/assignedlist.cpp
     views/queuelist.cpp
