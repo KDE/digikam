@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "colofxplugin.h"
+#include "colorfxplugin.h"
 
 // Qt includes
 

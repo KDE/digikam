@@ -18,16 +18,46 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-#DIGIKAM_ADD_BQM_PLUGIN(BQMConvertToJPEGPlugin
-#    ${CMAKE_CURRENT_SOURCE_DIR}/converttojpegplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/convert2jpeg.cpp
-#)
+DIGIKAM_ADD_BQM_PLUGIN(BQMAntiVignettingPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/antivignettingplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/antivignetting.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(BQMBlurPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/blurplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/blur.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(BQMLocalContrastPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/localcontrastplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/localcontrast.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(BQMNoiseReductionPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/noisereductionplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/noisereduction.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(BQMRedEyeCorrectionPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/redeyecorrectionplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/redeyecorrection.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(BQMRestorationPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/restorationplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/restoration.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(BQMSharpenPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/sharpenplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/sharpen.cpp
+)
 
 if(LensFun_FOUND)
     include_directories(${LENSFUN_INCLUDE_DIRS})
-#   DIGIKAM_ADD_BQM_PLUGIN(BQMConvertToJPEGPlugin
-#        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixplugin.cpp
-#        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofix.cpp
-#   )
+   DIGIKAM_ADD_BQM_PLUGIN(BQMConvertToJPEGPlugin
+        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixplugin.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofix.cpp
+   )
 
 endif()
