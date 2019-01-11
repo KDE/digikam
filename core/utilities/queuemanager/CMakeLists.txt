@@ -10,36 +10,6 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libqueuemanager_SRCS
-    tools/color/autocorrection.cpp
-    tools/color/bcgcorrection.cpp
-    tools/color/bwconvert.cpp
-    tools/color/channelmixer.cpp
-    tools/color/colorbalance.cpp
-    tools/color/convert16to8.cpp
-    tools/color/convert8to16.cpp
-    tools/color/curvesadjust.cpp
-    tools/color/hslcorrection.cpp
-    tools/color/iccconvert.cpp
-    tools/color/invert.cpp
-    tools/color/whitebalance.cpp
-    tools/decorate/border.cpp
-    tools/decorate/watermark.cpp
-    tools/enhance/antivignetting.cpp
-    tools/enhance/blur.cpp
-    tools/enhance/localcontrast.cpp
-    tools/enhance/noisereduction.cpp
-    tools/enhance/restoration.cpp
-    tools/enhance/sharpen.cpp
-    tools/enhance/redeyecorrection.cpp
-    tools/filters/filmgrain.cpp
-    tools/filters/colorfx.cpp
-    tools/metadata/assigntemplate.cpp
-    tools/metadata/removemetadata.cpp
-    tools/metadata/timeadjust.cpp
-    tools/transform/flip.cpp
-    tools/transform/resize.cpp
-    tools/transform/rotate.cpp
-    tools/transform/crop.cpp
     manager/actionthread.cpp
     manager/task.cpp
     manager/batchtool.cpp
