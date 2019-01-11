@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to apply color effects
+ * Description : a BQM plugin to correct vignetting
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "colorfxplugin.h"
+#include "antivignettingplugin.h"
 
 // Qt includes
 
@@ -35,57 +35,57 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "colorfx.h"
+#include "antivignetting.h"
 
 namespace Digikam
 {
 
-ColorFXPlugin::ColorFXPlugin(QObject* const parent)
+AntiVignettingPlugin::AntiVignettingPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ColorFXPlugin::~ColorFXPlugin()
+AntiVignettingPlugin::~AntiVignettingPlugin()
 {
 }
 
-QString ColorFXPlugin::name() const
+QString AntiVignettingPlugin::name() const
 {
-    return i18n("Color Effects");
+    return i18n("Anti-Vignetting");
 }
 
-QString ColorFXPlugin::iid() const
+QString AntiVignettingPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ColorFXPlugin::icon() const
+QIcon AntiVignettingPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("colorfx"));
+    return QIcon::fromTheme(QLatin1String("antivignetting"));
 }
 
-QString ColorFXPlugin::description() const
+QString AntiVignettingPlugin::description() const
 {
-    return i18n("Apply color effects");
+    return i18n("Remove/add vignetting to photograph");
 }
 
-QString ColorFXPlugin::details() const
+QString AntiVignettingPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can apply color effects over images.</p>");
+    return i18n("<p>This batch Queue Manager tool remove or add vignettings to images.</p>");
 }
 
-QList<DPluginAuthor> ColorFXPlugin::authors() const
+QList<DPluginAuthor> AntiVignettingPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Alexander Dymo"),
-                             QLatin1String("adymo at develop dot org"),
-                             QLatin1String("(C) 2012"))
+            << DPluginAuthor(QLatin1String("Gilles Caulier"),
+                             QLatin1String("caulier dot gilles at gmail dot com"),
+                             QLatin1String("(C) 2009-2019"))
             ;
 }
 
-void ColorFXPlugin::setup(QObject* const parent)
+void AntiVignettingPlugin::setup(QObject* const parent)
 {
-    ColorFX* const tool = new ColorFX(parent);
+    AntiVignetting* const tool = new AntiVignetting(parent);
     tool->setPlugin(this);
 
     addTool(tool);

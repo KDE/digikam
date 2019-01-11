@@ -18,10 +18,10 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-# DIGIKAM_ADD_BQM_PLUGIN(BQMAntiVignettingPlugin
-#     ${CMAKE_CURRENT_SOURCE_DIR}/antivignettingplugin.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/antivignetting.cpp
-# )
+DIGIKAM_ADD_BQM_PLUGIN(BQMAntiVignettingPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/antivignettingplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/antivignetting.cpp
+)
 
 # DIGIKAM_ADD_BQM_PLUGIN(BQMBlurPlugin
 #     ${CMAKE_CURRENT_SOURCE_DIR}/blurplugin.cpp
