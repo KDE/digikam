@@ -32,13 +32,6 @@ set(libqueuemanager_SRCS
     main/queuemgrwindow.cpp
 )
 
-if(LensFun_FOUND)
-    set(libqueuemanager_SRCS ${libqueuemanager_SRCS}
-        tools/enhance/lensautofix.cpp
-    )
-    include_directories(${LENSFUN_INCLUDE_DIRS})
-endif()
-
 if(Gphoto2_FOUND)
     include_directories(${GPHOTO2_INCLUDE_DIRS})
 endif()

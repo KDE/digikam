@@ -23,3 +23,11 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
 #    ${CMAKE_CURRENT_SOURCE_DIR}/convert2jpeg.cpp
 #)
 
+if(LensFun_FOUND)
+    include_directories(${LENSFUN_INCLUDE_DIRS})
+#   DIGIKAM_ADD_BQM_PLUGIN(ConvertToJPEGPlugin
+#        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixplugin.cpp
+#        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofix.cpp
+#   )
+
+endif()
