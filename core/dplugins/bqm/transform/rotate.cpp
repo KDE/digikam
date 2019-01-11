@@ -77,9 +77,6 @@ Rotate::Rotate(QObject* const parent)
     : BatchTool(QLatin1String("Rotate"), TransformTool, parent),
       d(new Private)
 {
-    setToolTitle(i18n("Rotate"));
-    setToolDescription(i18n("Rotate images."));
-    setToolIconName(QLatin1String("object-rotate-right"));
 }
 
 Rotate::~Rotate()

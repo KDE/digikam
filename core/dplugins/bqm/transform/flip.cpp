@@ -48,10 +48,6 @@ Flip::Flip(QObject* const parent)
     : BatchTool(QLatin1String("Flip"), TransformTool, parent)
 {
     m_comboBox = 0;
-
-    setToolTitle(i18n("Flip"));
-    setToolDescription(i18n("Flip images horizontally or vertically."));
-    setToolIconName(QLatin1String("object-flip-vertical"));
 }
 
 void Flip::registerSettingsWidget()

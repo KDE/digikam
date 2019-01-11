@@ -18,8 +18,22 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-#DIGIKAM_ADD_BQM_PLUGIN(BQMConvertToJPEGPlugin
-#    ${CMAKE_CURRENT_SOURCE_DIR}/converttojpegplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/convert2jpeg.cpp
-#)
+DIGIKAM_ADD_BQM_PLUGIN(BQMCropPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/cropplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/crop.cpp
+)
 
+DIGIKAM_ADD_BQM_PLUGIN(BQMFlipPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/flipplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/flip.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(BQMResizePlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/resizeplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/resize.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(BQMRotatePlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/rotateplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/rotate.cpp
+)

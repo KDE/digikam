@@ -77,9 +77,6 @@ Crop::Crop(QObject* const parent)
     : BatchTool(QLatin1String("Crop"), TransformTool, parent),
       d(new Private)
 {
-    setToolTitle(i18n("Crop"));
-    setToolDescription(i18n("Crop images to a region."));
-    setToolIconName(QLatin1String("transform-crop"));
 }
 
 Crop::~Crop()

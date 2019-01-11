@@ -127,9 +127,6 @@ Resize::Resize(QObject* const parent)
     : BatchTool(QLatin1String("Resize"), TransformTool, parent),
       d(new Private)
 {
-    setToolTitle(i18n("Resize"));
-    setToolDescription(i18n("Resize images with a customized length."));
-    setToolIconName(QLatin1String("transform-scale"));
 }
 
 Resize::~Resize()
