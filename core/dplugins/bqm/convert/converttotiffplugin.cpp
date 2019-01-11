@@ -71,7 +71,7 @@ QString ConvertToTiffPlugin::description() const
 
 QString ConvertToTiffPlugin::details() const
 {
-    return i18n("<p>This batch Queue manager tool can convert images data to TIFF format.</p>"
+    return i18n("<p>This batch Queue Manager tool can convert images data to TIFF format.</p>"
                 "<p>The Tagged Image File Format is a computer file format for storing raster graphics images, popular among graphic artists, the publishing industry, and photographers.</p>"
                 "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/TIFF'>this page</a>.</p>");
 }

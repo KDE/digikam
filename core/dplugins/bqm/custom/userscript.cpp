@@ -79,9 +79,6 @@ UserScript::UserScript(QObject* const parent)
     : BatchTool(QLatin1String("UserScript"), CustomTool, parent),
       d(new Private)
 {
-    setToolTitle(i18n("User Shell Script"));
-    setToolDescription(i18n("Execute a custom shell script"));
-    setToolIconName(QLatin1String("text-x-script"));
 }
 
 UserScript::~UserScript()

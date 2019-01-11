@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to convert to PGF.
+ * Description : a BQM plugin to run user script.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "converttopgfplugin.h"
+#include "userscriptplugin.h"
 
 // Qt includes
 
@@ -35,59 +35,60 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "convert2pgf.h"
+#include "userscript.h"
 
 namespace Digikam
 {
 
-ConvertToPgfPlugin::ConvertToPgfPlugin(QObject* const parent)
+UserScriptPlugin::UserScriptPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ConvertToPgfPlugin::~ConvertToPgfPlugin()
+UserScriptPlugin::~UserScriptPlugin()
 {
 }
 
-QString ConvertToPgfPlugin::name() const
+QString UserScriptPlugin::name() const
 {
-    return i18n("Convert To PGF");
+    return i18n("User Shell Script");
 }
 
-QString ConvertToPgfPlugin::iid() const
+QString UserScriptPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ConvertToPgfPlugin::icon() const
+QIcon UserScriptPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("image-jpeg"));
+    return QIcon::fromTheme(QLatin1String("text-x-script"));
 }
 
-QString ConvertToPgfPlugin::description() const
+QString UserScriptPlugin::description() const
 {
-    return i18n("Convert images to PGF format");
+    return i18n("Execute a custom shell script");
 }
 
-QString ConvertToPgfPlugin::details() const
+QString UserScriptPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can convert images data to PGF format.</p>"
-                "<p>The Progressive Graphics File is a wavelet-based bitmapped image format that employs lossless and lossy data compression.</p>"
-                "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/Progressive_Graphics_File'>this page</a>.</p>");
+    return i18n("<p>This batch Queue Manager tool can run user shell script as workflow stage.</p>");
 }
 
-QList<DPluginAuthor> ConvertToPgfPlugin::authors() const
+QList<DPluginAuthor> UserScriptPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
                              QLatin1String("(C) 2009-2019"))
+            << DPluginAuthor(QLatin1String("Hubert Law"),
+                             QLatin1String("hhclaw dot eb at gmail dot com"),
+                             QLatin1String("(C) 2014"))
             ;
 }
 
-void ConvertToPgfPlugin::setup(QObject* const parent)
+void UserScriptPlugin::setup(QObject* const parent)
 {
-    Convert2PGF* const tool = new Convert2PGF(parent);
+    UserScript* const tool = new UserScript(parent);
     tool->setPlugin(this);
 
     addTool(tool);

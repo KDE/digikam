@@ -22,7 +22,6 @@ set(libqueuemanager_SRCS
     tools/color/iccconvert.cpp
     tools/color/invert.cpp
     tools/color/whitebalance.cpp
-    tools/custom/userscript.cpp
     tools/decorate/border.cpp
     tools/decorate/watermark.cpp
     tools/enhance/antivignetting.cpp

@@ -60,7 +60,6 @@
 #include "border.h"
 #include "removemetadata.h"
 #include "convert2dng.h"
-#include "userscript.h"
 #include "timeadjust.h"
 
 #ifdef HAVE_LENSFUN
@@ -168,9 +167,6 @@ BatchToolsFactory::BatchToolsFactory()
     // Filters
     registerTool(new FilmGrain(this));
     registerTool(new ColorFX(this));
-
-    // Custom
-    registerTool(new UserScript(this));
 }
 
 BatchToolsFactory::~BatchToolsFactory()

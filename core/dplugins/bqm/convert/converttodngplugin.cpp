@@ -71,7 +71,7 @@ QString ConvertToDngPlugin::description() const
 
 QString ConvertToDngPlugin::details() const
 {
-    return i18n("<p>This batch Queue manager tool can convert RAW images data to DNG format.</p>"
+    return i18n("<p>This batch Queue Manager tool can convert RAW images data to DNG format.</p>"
                 "<p>The Digital Negative is a lossless RAW image format created by Adobe.</p>"
                 "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/Digital_Negative'>this page</a>.</p>");
 }
