@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2018-07-30
- * Description : stand alone test application for plugin configuration view.
+ * Date        : 2007-02-06
+ * Description : Setup view panel for dplugins.
  *
- * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,33 +21,42 @@
  *
  * ============================================================ */
 
-// Qt Includes
+#ifndef DIGIKAM_SETUP_PLUGINS_H
+#define DIGIKAM_SETUP_PLUGINS_H
 
-#include <QApplication>
-#include <QDebug>
+// Qt includes
 
-// Local includes
+#include <QScrollArea>
 
-#include "dpluginloader.h"
-#include "dplugingenericsetup.h"
-
-using namespace Digikam;
-
-int main(int argc, char* argv[])
+namespace Digikam
 {
-    QApplication app(argc, argv);
 
-    DPluginLoader* const dpl = DPluginLoader::instance();
-    dpl->init();
-    dpl->registerGenericPlugins(qApp);
+class SetupPlugins : public QScrollArea
+{
+    Q_OBJECT
 
-    DPluginGenericSetup view;
-    view.show();
-    view.resize(1024, 600);
+public:
 
-    app.exec();
+    enum MiscTab
+    {
+        Generic = 0,
+        Bqm,
+        Editor
+    };
 
-    view.applySettings();
+public:
 
-    return 0;
-}
+    explicit SetupPlugins(QWidget* const parent = 0);
+    ~SetupPlugins();
+
+    void applySettings();
+
+private:
+
+    class Private;
+    Private* const d;
+};
+
+}  // namespace Digikam
+
+#endif // DIGIKAM_SETUP_PLUGINS_H

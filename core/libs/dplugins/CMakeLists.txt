@@ -37,7 +37,7 @@ set(libdpluginsinterface_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugingeneric.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginauthor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginconfview.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginsetup.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugingenericsetup.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginaction.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugindialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginaboutdlg.cpp

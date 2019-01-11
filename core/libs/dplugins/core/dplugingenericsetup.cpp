@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-02-06
- * Description : setup dplugins.
+ * Description : Config panel for generic dplugins.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dpluginsetup.h"
+#include "dplugingenericsetup.h"
 
 // Qt includes
 
@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN DPluginSetup::Private
+class Q_DECL_HIDDEN DPluginGenericSetup::Private
 {
 public:
 
@@ -72,22 +72,21 @@ public:
     DPluginConfView* pluginsList;
 };
 
-DPluginSetup::DPluginSetup(QWidget* const parent)
-    : QScrollArea(parent),
+DPluginGenericSetup::DPluginGenericSetup(QWidget* const parent)
+    : QWidget(parent),
       d(new Private)
 {
     const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    QWidget* const panel      = new QWidget(viewport());
-    QGridLayout* const grid   = new QGridLayout(panel);
+    QGridLayout* const grid   = new QGridLayout(this);
 
-    d->pluginFilter           = new SearchTextBar(panel, QLatin1String("PluginsSearchBar"));
-    d->pluginsNumber          = new QLabel(panel);
-    d->pluginsNumberActivated = new QLabel(panel);
-    d->checkAllBtn            = new QPushButton(i18n("Check All"), panel);
-    d->clearBtn               = new QPushButton(i18n("Clear"),     panel);
+    d->pluginFilter           = new SearchTextBar(this, QLatin1String("PluginsSearchBar"));
+    d->pluginsNumber          = new QLabel(this);
+    d->pluginsNumberActivated = new QLabel(this);
+    d->checkAllBtn            = new QPushButton(i18n("Check All"), this);
+    d->clearBtn               = new QPushButton(i18n("Clear"),     this);
 
-    d->pluginsList            = new DPluginConfView(panel);
+    d->pluginsList            = new DPluginConfView(this);
     QStringList labels;
     labels.append(i18n("Name"));
     labels.append(i18n("Categories"));
@@ -101,18 +100,11 @@ DPluginSetup::DPluginSetup(QWidget* const parent)
     grid->addWidget(d->pluginsNumberActivated, 0, 2, 1, 1);
     grid->addWidget(d->checkAllBtn,            0, 4, 1, 1);
     grid->addWidget(d->clearBtn,               0, 5, 1, 1);
-    grid->addWidget(d->pluginsList,            1, 0, 1, -1);
+    grid->addWidget(d->pluginsList,            1, 0, 1, 6);
     grid->setColumnStretch(3, 10);
+    grid->setRowStretch(1, 10);
     grid->setContentsMargins(spacing, spacing, spacing, spacing);
     grid->setSpacing(spacing);
-
-    // --------------------------------------------------------
-
-    setWidget(panel);
-    setWidgetResizable(true);
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
 
     // --------------------------------------------------------
 
@@ -136,22 +128,22 @@ DPluginSetup::DPluginSetup(QWidget* const parent)
     updateInfo();
 }
 
-DPluginSetup::~DPluginSetup()
+DPluginGenericSetup::~DPluginGenericSetup()
 {
     delete d;
 }
 
-void DPluginSetup::applySettings()
+void DPluginGenericSetup::applySettings()
 {
     d->pluginsList->apply();
 }
 
-void DPluginSetup::slotSearchTextChanged(const SearchTextSettings& settings)
+void DPluginGenericSetup::slotSearchTextChanged(const SearchTextSettings& settings)
 {
     d->pluginsList->setFilter(settings.text, settings.caseSensitive);
 }
 
-void DPluginSetup::updateInfo()
+void DPluginGenericSetup::updateInfo()
 {
     if (d->pluginFilter->text().isEmpty())
     {
@@ -184,30 +176,30 @@ void DPluginSetup::updateInfo()
     }
 }
 
-void DPluginSetup::slotCheckAll()
+void DPluginGenericSetup::slotCheckAll()
 {
     d->pluginsList->selectAll();
     updateInfo();
 }
 
-void DPluginSetup::slotClearList()
+void DPluginGenericSetup::slotClearList()
 {
     d->pluginsList->clearAll();
     updateInfo();
 }
 
-void DPluginSetup::slotItemClicked()
+void DPluginGenericSetup::slotItemClicked()
 {
     updateInfo();
 }
 
-void DPluginSetup::slotSetFilter(const QString& filter, Qt::CaseSensitivity cs)
+void DPluginGenericSetup::slotSetFilter(const QString& filter, Qt::CaseSensitivity cs)
 {
     d->pluginsList->setFilter(filter, cs);
     updateInfo();
 }
 
-void DPluginSetup::slotSearchResult(int found)
+void DPluginGenericSetup::slotSearchResult(int found)
 {
     d->pluginFilter->slotSearchResult(found ? true : false);
 }

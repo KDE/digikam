@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-02-06
- * Description : setup dplugins.
+ * Description : Setup view panel for dplugins.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,44 +21,26 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DPLUGIN_SETUP_H
-#define DIGIKAM_DPLUGIN_SETUP_H
+#ifndef SHOW_FOTO_SETUP_PLUGINS_H
+#define SHOW_FOTO_SETUP_PLUGINS_H
 
 // Qt includes
 
 #include <QScrollArea>
 
-// Local includes
-
-#include "searchtextbar.h"
-#include "digikam_export.h"
-
-namespace Digikam
+namespace ShowFoto
 {
 
-class DIGIKAM_EXPORT DPluginSetup : public QScrollArea
+class SetupPlugins : public QScrollArea
 {
     Q_OBJECT
 
 public:
 
-    explicit DPluginSetup(QWidget* const parent = 0);
-    ~DPluginSetup();
+    explicit SetupPlugins(QWidget* const parent = 0);
+    ~SetupPlugins();
 
     void applySettings();
-
-private Q_SLOTS:
-
-    void slotSearchTextChanged(const SearchTextSettings& settings);
-    void slotSetFilter(const QString& filter, Qt::CaseSensitivity cs);
-    void slotCheckAll();
-    void slotClearList();
-    void slotItemClicked();
-    void slotSearchResult(int found);
-
-private:
-
-    void updateInfo();
 
 private:
 
@@ -66,6 +48,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace ShowFoto
 
-#endif // DIGIKAM_DPLUGIN_SETUP_H
+#endif // SHOW_FOTO_SETUP_PLUGINS_H

@@ -51,9 +51,9 @@
 #include "setupimagequalitysorter.h"
 #include "setuptooltip.h"
 #include "setupdatabase.h"
+#include "setupplugins.h"
 #include "importsettings.h"
 #include "dxmlguiwindow.h"
-#include "dpluginsetup.h"
 
 namespace Digikam
 {
@@ -121,7 +121,7 @@ public:
     SetupImageQualitySorter* imageQualitySorterPage;
     SetupICC*                iccPage;
     SetupCamera*             cameraPage;
-    DPluginSetup*            pluginsPage;
+    SetupPlugins*            pluginsPage;
     SetupMisc*               miscPage;
 
 public:
@@ -218,9 +218,9 @@ Setup::Setup(QWidget* const parent)
     connect(d->cameraPage, SIGNAL(signalUseFileMetadataChanged(bool)),
             d->tooltipPage, SLOT(slotUseFileMetadataChanged(bool)));
 
-    d->pluginsPage  = new DPluginSetup();
+    d->pluginsPage  = new SetupPlugins();
     d->page_plugins = addPage(d->pluginsPage, i18n("Plugins"));
-    d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
+    d->page_plugins->setHeader(i18n("<qt>Plug-in Settings<br/>"
                                     "<i>Set which plugins will be accessible from application</i></qt>"));
     d->page_plugins->setIcon(QIcon::fromTheme(QLatin1String("preferences-plugin")));
 

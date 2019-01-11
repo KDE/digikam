@@ -44,8 +44,8 @@
 #include "showfotosetupmisc.h"
 #include "showfotosetupmetadata.h"
 #include "showfotosetuptooltip.h"
+#include "showfotosetupplugins.h"
 #include "dxmlguiwindow.h"
-#include "dpluginsetup.h"
 
 namespace ShowFoto
 {
@@ -68,34 +68,34 @@ public:
         toolTipPage(0),
         miscPage(0),
         rawPage(0),
+        pluginsPage(0),
         editorIfacePage(0),
         iofilesPage(0),
         slideshowPage(0),
-        iccPage(0),
-        pluginsPage(0)
+        iccPage(0)
     {
     }
 
-    DConfigDlgWdgItem*         page_editorIface;
-    DConfigDlgWdgItem*         page_metadata;
-    DConfigDlgWdgItem*         page_tooltip;
-    DConfigDlgWdgItem*         page_raw;
-    DConfigDlgWdgItem*         page_iofiles;
-    DConfigDlgWdgItem*         page_slideshow;
-    DConfigDlgWdgItem*         page_icc;
-    DConfigDlgWdgItem*         page_plugins;
-    DConfigDlgWdgItem*         page_misc;
+    DConfigDlgWdgItem*            page_editorIface;
+    DConfigDlgWdgItem*            page_metadata;
+    DConfigDlgWdgItem*            page_tooltip;
+    DConfigDlgWdgItem*            page_raw;
+    DConfigDlgWdgItem*            page_iofiles;
+    DConfigDlgWdgItem*            page_slideshow;
+    DConfigDlgWdgItem*            page_icc;
+    DConfigDlgWdgItem*            page_plugins;
+    DConfigDlgWdgItem*            page_misc;
 
-    SetupMetadata*             metadataPage;
-    SetupToolTip*              toolTipPage;
-    SetupMisc*                 miscPage;
-    SetupRaw*                  rawPage;
+    SetupMetadata*                metadataPage;
+    SetupToolTip*                 toolTipPage;
+    SetupMisc*                    miscPage;
+    SetupRaw*                     rawPage;
+    SetupPlugins*                 pluginsPage;
 
-    Digikam::SetupEditorIface* editorIfacePage;
-    Digikam::SetupIOFiles*     iofilesPage;
-    Digikam::SetupSlideShow*   slideshowPage;
-    Digikam::SetupICC*         iccPage;
-    Digikam::DPluginSetup*     pluginsPage;
+    Digikam::SetupEditorIface*    editorIfacePage;
+    Digikam::SetupIOFiles*        iofilesPage;
+    Digikam::SetupSlideShow*      slideshowPage;
+    Digikam::SetupICC*            iccPage;
 
 public:
 
@@ -154,7 +154,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
                                       "<i>Customize slideshow settings</i></qt>"));
     d->page_slideshow->setIcon(QIcon::fromTheme(QLatin1String("view-presentation")));
 
-    d->pluginsPage  = new DPluginSetup();
+    d->pluginsPage  = new SetupPlugins();
     d->page_plugins = addPage(d->pluginsPage, i18n("Plugins"));
     d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
                                     "<i>Set which plugins will be accessible from application</i></qt>"));
