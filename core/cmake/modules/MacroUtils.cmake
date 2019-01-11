@@ -187,7 +187,7 @@ macro(DIGIKAM_ADD_PLUGIN _target_name)
     target_link_libraries(${_target_name} ${${_target_name}_LIBS} digikamcore)
 
     install(TARGETS ${_target_name}
-            DESTINATION ${PLUGIN_INSTALL_DIR}/digikam)
+            DESTINATION ${PLUGIN_INSTALL_DIR}/digikam/generic)
 
 endmacro()
 
@@ -202,6 +202,6 @@ macro(DIGIKAM_ADD_BQM_PLUGIN _target_name)
     target_link_libraries(${_target_name} ${${_target_name}_LIBS} digikamgui)
 
     install(TARGETS ${_target_name}
-            DESTINATION ${PLUGIN_INSTALL_DIR}/digikam)
+            DESTINATION ${PLUGIN_INSTALL_DIR}/digikam/bqm)
 
 endmacro()

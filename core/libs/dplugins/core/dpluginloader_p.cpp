@@ -27,6 +27,7 @@
 
 #include <QStringList>
 #include <QTime>
+#include <QDirIterator>
 #include <QStandardPaths>
 #include <QMessageBox>
 #include <QLibraryInfo>
@@ -55,7 +56,6 @@ DPluginLoader::Private::~Private()
 
 QStringList DPluginLoader::Private::pluginEntriesList() const
 {
-    QStringList allFiles;
     QString     path;
 
     // First we try to load in first the local plugin if DK_PLUG_PATH variable is declared.
@@ -76,9 +76,21 @@ QStringList DPluginLoader::Private::pluginEntriesList() const
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing plugins from" << path;
 
-    foreach (const QString& file, QDir(path).entryList(QDir::Files))
+    QDirIterator it(path, QDirIterator::Subdirectories);
+    QString      dir;
+    QStringList  allFiles;
+
+    while (it.hasNext())
     {
-        allFiles << path + file;
+        QFileInfo inf(it.next());
+
+        if (!inf.baseName().isEmpty()             &&
+            inf.baseName() != QLatin1String(".")  &&
+            inf.baseName() != QLatin1String("..") &&
+            inf.isFile())
+        {
+            allFiles << inf.filePath();
+        }
     }
 
     // remove duplicate entries
