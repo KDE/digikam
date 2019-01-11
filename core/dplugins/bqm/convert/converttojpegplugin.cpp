@@ -72,7 +72,7 @@ QString ConvertToJpegPlugin::description() const
 QString ConvertToJpegPlugin::details() const
 {
     return i18n("<p>This batch Queue manager tool can convert images data to JPEG format.</p>"
-                "<p>Warning: JPEG is a lossy image compression format.</p>");
+                "<p>Warning: JPEG is a lossy image compression format.</p>"
                 "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/JPEG'>this page</a>.</p>");
 }
 
