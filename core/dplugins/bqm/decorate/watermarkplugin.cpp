@@ -66,7 +66,7 @@ QIcon WaterMarkPlugin::icon() const
 
 QString WaterMarkPlugin::description() const
 {
-    return i18n("Overlay an image or text as a visible watermark");
+    return i18n("A tool to overlay an image or text as a visible watermark");
 }
 
 QString WaterMarkPlugin::details() const

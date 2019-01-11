@@ -66,7 +66,7 @@ QIcon UserScriptPlugin::icon() const
 
 QString UserScriptPlugin::description() const
 {
-    return i18n("Execute a custom shell script");
+    return i18n("A tool to execute a custom shell script");
 }
 
 QString UserScriptPlugin::details() const

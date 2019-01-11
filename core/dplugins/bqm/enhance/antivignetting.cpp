@@ -45,9 +45,6 @@ AntiVignetting::AntiVignetting(QObject* const parent)
     : BatchTool(QLatin1String("AntiVignetting"), EnhanceTool, parent),
       m_settingsView(0)
 {
-    setToolTitle(i18n("Anti-Vignetting"));
-    setToolDescription(i18n("Remove/add vignetting to photograph."));
-    setToolIconName(QLatin1String("antivignetting"));
 }
 
 AntiVignetting::~AntiVignetting()

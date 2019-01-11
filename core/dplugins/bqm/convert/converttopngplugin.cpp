@@ -66,7 +66,7 @@ QIcon ConvertToPngPlugin::icon() const
 
 QString ConvertToPngPlugin::description() const
 {
-    return i18n("Convert images to PNG format");
+    return i18n("A tool to convert images to PNG format");
 }
 
 QString ConvertToPngPlugin::details() const

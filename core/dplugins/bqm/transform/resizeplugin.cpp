@@ -66,7 +66,7 @@ QIcon ResizePlugin::icon() const
 
 QString ResizePlugin::description() const
 {
-    return i18n("Resize images with a customized length");
+    return i18n("A tool to resize images with a customized length");
 }
 
 QString ResizePlugin::details() const

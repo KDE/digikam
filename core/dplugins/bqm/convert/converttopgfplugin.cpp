@@ -66,7 +66,7 @@ QIcon ConvertToPgfPlugin::icon() const
 
 QString ConvertToPgfPlugin::description() const
 {
-    return i18n("Convert images to PGF format");
+    return i18n("A tool to convert images to PGF format");
 }
 
 QString ConvertToPgfPlugin::details() const

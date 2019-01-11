@@ -66,7 +66,7 @@ QIcon AntiVignettingPlugin::icon() const
 
 QString AntiVignettingPlugin::description() const
 {
-    return i18n("Remove/add vignetting to photograph");
+    return i18n("A tool to adjust vignetting to photograph");
 }
 
 QString AntiVignettingPlugin::details() const

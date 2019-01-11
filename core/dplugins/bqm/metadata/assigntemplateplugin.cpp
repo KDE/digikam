@@ -66,7 +66,7 @@ QIcon AssignTemplatePlugin::icon() const
 
 QString AssignTemplatePlugin::description() const
 {
-    return i18n("Apply metadata template to images");
+    return i18n("A tool to apply metadata template to images");
 }
 
 QString AssignTemplatePlugin::details() const

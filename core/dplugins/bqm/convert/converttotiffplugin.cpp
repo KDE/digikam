@@ -66,7 +66,7 @@ QIcon ConvertToTiffPlugin::icon() const
 
 QString ConvertToTiffPlugin::description() const
 {
-    return i18n("Convert images to TIFF format");
+    return i18n("A tool to convert images to TIFF format");
 }
 
 QString ConvertToTiffPlugin::details() const

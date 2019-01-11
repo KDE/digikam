@@ -66,7 +66,7 @@ QIcon ConvertToJpegPlugin::icon() const
 
 QString ConvertToJpegPlugin::description() const
 {
-    return i18n("Convert images to JPEG format");
+    return i18n("A tool to convert images to JPEG format");
 }
 
 QString ConvertToJpegPlugin::details() const

@@ -66,7 +66,7 @@ QIcon FlipPlugin::icon() const
 
 QString FlipPlugin::description() const
 {
-    return i18n("Flip images horizontally or vertically");
+    return i18n("A tool to flip images horizontally or vertically");
 }
 
 QString FlipPlugin::details() const

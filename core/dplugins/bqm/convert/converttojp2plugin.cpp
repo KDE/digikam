@@ -66,7 +66,7 @@ QIcon ConvertToJp2Plugin::icon() const
 
 QString ConvertToJp2Plugin::description() const
 {
-    return i18n("Convert images to JPEG-2000 format");
+    return i18n("A tool to convert images to JPEG-2000 format");
 }
 
 QString ConvertToJp2Plugin::details() const

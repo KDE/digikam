@@ -66,7 +66,7 @@ QIcon RotatePlugin::icon() const
 
 QString RotatePlugin::description() const
 {
-    return i18n("Rotate images");
+    return i18n("A tool to rotate images");
 }
 
 QString RotatePlugin::details() const

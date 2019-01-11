@@ -66,7 +66,7 @@ QIcon FilmGrainPlugin::icon() const
 
 QString FilmGrainPlugin::description() const
 {
-    return i18n("Add film grain");
+    return i18n("A tool to add film grain");
 }
 
 QString FilmGrainPlugin::details() const

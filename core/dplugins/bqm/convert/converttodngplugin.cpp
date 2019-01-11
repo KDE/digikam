@@ -66,7 +66,7 @@ QIcon ConvertToDngPlugin::icon() const
 
 QString ConvertToDngPlugin::description() const
 {
-    return i18n("Convert RAW images to DNG container");
+    return i18n("A tool to convert RAW images to DNG container");
 }
 
 QString ConvertToDngPlugin::details() const

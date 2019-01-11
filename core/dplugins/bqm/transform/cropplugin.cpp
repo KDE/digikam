@@ -66,7 +66,7 @@ QIcon CropPlugin::icon() const
 
 QString CropPlugin::description() const
 {
-    return i18n("Crop images to a region");
+    return i18n("A tool to crop images to a region");
 }
 
 QString CropPlugin::details() const

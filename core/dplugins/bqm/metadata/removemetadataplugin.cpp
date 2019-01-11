@@ -66,7 +66,7 @@ QIcon RemoveMetadataPlugin::icon() const
 
 QString RemoveMetadataPlugin::description() const
 {
-    return i18n("Remove Exif, Iptc, or Xmp metadata from images");
+    return i18n("A tool to remove Exif, Iptc, or Xmp metadata from images");
 }
 
 QString RemoveMetadataPlugin::details() const

@@ -66,7 +66,7 @@ QIcon ColorFXPlugin::icon() const
 
 QString ColorFXPlugin::description() const
 {
-    return i18n("Apply color effects");
+    return i18n("A tool to apply color effects");
 }
 
 QString ColorFXPlugin::details() const

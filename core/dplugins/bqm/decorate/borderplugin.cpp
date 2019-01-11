@@ -66,7 +66,7 @@ QIcon BorderPlugin::icon() const
 
 QString BorderPlugin::description() const
 {
-    return i18n("Add a border around images");
+    return i18n("A tool to add a border around images");
 }
 
 QString BorderPlugin::details() const
