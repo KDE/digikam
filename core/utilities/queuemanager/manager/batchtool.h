@@ -30,6 +30,7 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "drawdecodersettings.h"
 #include "dimg.h"
 #include "iteminfo.h"
@@ -48,7 +49,7 @@ class DImgThreadedFilter;
  */
 typedef QMap<QString, QVariant> BatchToolSettings;
 
-class BatchTool : public QObject
+class DIGIKAM_EXPORT BatchTool : public QObject
 {
     Q_OBJECT
 

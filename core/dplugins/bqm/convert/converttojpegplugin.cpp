@@ -35,6 +35,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "convert2jpeg.h"
 
 namespace Digikam
 {
@@ -84,18 +85,8 @@ QList<DPluginAuthor> ConvertToJpegPlugin::authors() const
 
 void ConvertToJpegPlugin::setup(QObject* const parent)
 {
-/*
-    DPluginAction* const ac = new DPluginAction(parent);
-    ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Import from Scanner..."));
-    ac->setObjectName(QLatin1String("import_scan"));
-    ac->setActionCategory(DPluginAction::GenericImport);
-
-    connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotDigitalScanner()));
-
-    addAction(ac);
-*/
+    Convert2JPEG* const tool = new Convert2JPEG(parent);
+    addTool(tool);
 }
 
 } // namespace Digikam

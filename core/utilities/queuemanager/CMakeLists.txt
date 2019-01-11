@@ -22,7 +22,6 @@ set(libqueuemanager_SRCS
     tools/color/iccconvert.cpp
     tools/color/invert.cpp
     tools/color/whitebalance.cpp
-    tools/convert/convert2jpeg.cpp
     tools/convert/convert2pgf.cpp
     tools/convert/convert2png.cpp
     tools/convert/convert2tiff.cpp

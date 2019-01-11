@@ -26,9 +26,12 @@
 // Local includes
 
 #include "digikam_config.h"
+#include "digikam_debug.h"
+#include "dpluginloader.h"
+#include "dpluginbqm.h"
+
 #include "assigntemplate.h"
 #include "autocorrection.h"
-#include "convert2jpeg.h"
 #include "convert2pgf.h"
 #include "convert2png.h"
 #include "convert2tiff.h"
@@ -107,8 +110,28 @@ BatchToolsFactory* BatchToolsFactory::instance()
 BatchToolsFactory::BatchToolsFactory()
     : d(new Private)
 {
+    DPluginLoader* const dpl = DPluginLoader::instance();
+
+    foreach (DPlugin* const p, dpl->allPlugins())
+    {
+        DPluginBqm* const bqm = dynamic_cast<DPluginBqm*>(p);
+
+        if (bqm)
+        {
+            bqm->setup(this);
+            bqm->setVisible(p->shouldLoaded());
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "BQM plugin named" << bqm->name()
+                                         << "registered to" << this;
+
+            foreach (BatchTool* const t, bqm->tools(this))
+            {
+                registerTool(t);
+            }
+        }
+    }
+
     // Convert
-    registerTool(new Convert2JPEG(this));
     registerTool(new Convert2PNG(this));
     registerTool(new Convert2TIFF(this));
 #ifdef HAVE_JASPER
