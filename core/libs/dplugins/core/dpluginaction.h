@@ -46,8 +46,7 @@ public:
         InvalidType   = -1,
 
         Generic       = 0,      /// Generic action available everywhere (AlbumView, Editor, and LightTable).
-        Editor,                 /// Specific action for Image Editor and Showfoto.
-        Bqm                     /// Specific action for Batch Queue Manager.
+        Editor                  /// Specific action for Image Editor and Showfoto.
     };
 
     /// Plugin action categories.
@@ -65,16 +64,7 @@ public:
         EditorEnhance,          /// Image Editor enhance action.
         EditorTransform,        /// Image Editor transform action.
         EditorDecorate,         /// Image Editor decorate action.
-        EditorEffects,          /// Image Editor special effects action.
-
-        BqmColor,               /// Batch Queue Manager color action.
-        BqmEnhance,             /// Batch Queue Manager enhance action.
-        BqmTransform,           /// Batch Queue Manager transform action.
-        BqmDecorate,            /// Batch Queue Manager decorate action.
-        BqmFilters,             /// Batch Queue Manager filters action.
-        BqmConvert,             /// Batch Queue Manager convert action.
-        BqmMetadata,            /// Batch Queue Manager metadata action.
-        BqmCustom               /// Batch Queue Manager custom action.
+        EditorEffects           /// Image Editor special effects action.
     };
 
 public:

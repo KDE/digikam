@@ -187,29 +187,29 @@ QString BatchTool::toolGroupToString() const
     switch (toolGroup())
     {
         case BaseTool:
-            return QLatin1String("Base");
+            return i18n("Base");
         case CustomTool:
-            return QLatin1String("Custom");
+            return i18n("Custom");
         case ColorTool:
-            return QLatin1String("Color");
+            return i18n("Color");
         case EnhanceTool:
-            return QLatin1String("Enhance");
+            return i18n("Enhance");
         case TransformTool:
-            return QLatin1String("Transform");
+            return i18n("Transform");
         case DecorateTool:
-            return QLatin1String("Decorate");
+            return i18n("Decorate");
         case FiltersTool:
-            return QLatin1String("Filter");
+            return i18n("Filter");
         case ConvertTool:
-            return QLatin1String("Convert");
+            return i18n("Convert");
         case MetadataTool:
-            return QLatin1String("Metadata");
+            return i18n("Metadata");
 
         default:
             break;
     }
 
-    return QLatin1String("Invalid");
+    return i18n("Invalid");
 }
 
 void BatchTool::setToolTitle(const QString& toolTitle)

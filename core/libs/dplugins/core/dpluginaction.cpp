@@ -27,6 +27,10 @@
 
 #include <QVariant>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -61,16 +65,6 @@ DPluginAction::ActionType DPluginAction::actionType() const
         case EditorEffects:
             return Editor;
 
-        case BqmColor:
-        case BqmEnhance:
-        case BqmTransform:
-        case BqmDecorate:
-        case BqmFilters:
-        case BqmConvert:
-        case BqmMetadata:
-        case BqmCustom:
-            return Bqm;
-
         default:
             break;
     }
@@ -98,49 +92,32 @@ QString DPluginAction::actionCategoryToString() const
     switch (actionCategory())
     {
         case GenericExport:
-            return QLatin1String("Generic/Export");
+            return i18n("Export");
         case GenericImport:
-            return QLatin1String("Generic/Import");
+            return i18n("Import");
         case GenericTool:
-            return QLatin1String("Generic/Tool");
+            return i18n("Tool");
         case GenericMetadata:
-            return QLatin1String("Generic/Metadata");
+            return i18n("Metadata");
         case GenericView:
-            return QLatin1String("Generic/View");
+            return i18n("View");
 
         case EditorColor:
-            return QLatin1String("Editor/Color");
+            return i18n("Color");
         case EditorEnhance:
-            return QLatin1String("Editor/Enhance");
+            return i18n("Enhance");
         case EditorTransform:
-            return QLatin1String("Editor/Transform");
+            return i18n("Transform");
         case EditorDecorate:
-            return QLatin1String("Editor/Decorate");
+            return i18n("Decorate");
         case EditorEffects:
-            return QLatin1String("Editor/Effects");
-
-        case BqmColor:
-            return QLatin1String("Bqm/Color");
-        case BqmEnhance:
-            return QLatin1String("Bqm/Enhance");
-        case BqmTransform:
-            return QLatin1String("Bqm/Transform");
-        case BqmDecorate:
-            return QLatin1String("Bqm/Decorate");
-        case BqmFilters:
-            return QLatin1String("Bqm/Filters");
-        case BqmConvert:
-            return QLatin1String("Bqm/Convert");
-        case BqmMetadata:
-            return QLatin1String("Bqm/Metadata");
-        case BqmCustom:
-            return QLatin1String("Bqm/Custom");
+            return i18n("Effects");
 
         default:
             break;
     }
 
-    return QLatin1String("Invalid");
+    return i18n("Invalid");
 }
 
 QString DPluginAction::xmlSection() const

@@ -64,7 +64,7 @@ public:
 
         // Number of actions
         setText(2, QString::number(m_plugin->actionCount()));
-        
+
         // Description
         setText(3, m_plugin->description());
 

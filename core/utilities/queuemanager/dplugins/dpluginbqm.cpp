@@ -31,7 +31,6 @@
 
 #include "digikam_version.h"
 #include "digikam_debug.h"
-#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
