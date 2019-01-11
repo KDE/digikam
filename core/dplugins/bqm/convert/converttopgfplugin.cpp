@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to convert to jpeg.
+ * Description : a BQM plugin to convert to PGF.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "converttojpegplugin.h"
+#include "converttopgfplugin.h"
 
 // Qt includes
 
@@ -35,59 +35,59 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "convert2jpeg.h"
+#include "convert2pgf.h"
 
 namespace Digikam
 {
 
-ConvertToJpegPlugin::ConvertToJpegPlugin(QObject* const parent)
+ConvertToPgfPlugin::ConvertToPgfPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ConvertToJpegPlugin::~ConvertToJpegPlugin()
+ConvertToPgfPlugin::~ConvertToPgfPlugin()
 {
 }
 
-QString ConvertToJpegPlugin::name() const
+QString ConvertToPgfPlugin::name() const
 {
-    return i18n("Convert To JPEG");
+    return i18n("Convert To PGF");
 }
 
-QString ConvertToJpegPlugin::iid() const
+QString ConvertToPgfPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ConvertToJpegPlugin::icon() const
+QIcon ConvertToPgfPlugin::icon() const
 {
     return QIcon::fromTheme(QLatin1String("image-jpeg"));
 }
 
-QString ConvertToJpegPlugin::description() const
+QString ConvertToPgfPlugin::description() const
 {
-    return i18n("Convert images to JPEG format");
+    return i18n("Convert images to PGF format");
 }
 
-QString ConvertToJpegPlugin::details() const
+QString ConvertToPgfPlugin::details() const
 {
-    return i18n("<p>This batch Queue manager tool can convert images data to JPEG format.</p>"
-                "<p>The Joint Photographic Experts Group format is a commonly used method of lossy compression for digital images, particularly for those images produced by digital photography.</p>"
-                "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/JPEG'>this page</a>.</p>");
+    return i18n("<p>This batch Queue manager tool can convert images data to PGF format.</p>"
+                "<p>The Progressive Graphics File is a wavelet-based bitmapped image format that employs lossless and lossy data compression.</p>"
+                "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/Progressive_Graphics_File'>this page</a>.</p>");
 }
 
-QList<DPluginAuthor> ConvertToJpegPlugin::authors() const
+QList<DPluginAuthor> ConvertToPgfPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2008-2019"))
+                             QLatin1String("(C) 2009-2019"))
             ;
 }
 
-void ConvertToJpegPlugin::setup(QObject* const parent)
+void ConvertToPgfPlugin::setup(QObject* const parent)
 {
-    Convert2JPEG* const tool = new Convert2JPEG(parent);
+    Convert2PGF* const tool = new Convert2PGF(parent);
     tool->setPlugin(this);
 
     addTool(tool);

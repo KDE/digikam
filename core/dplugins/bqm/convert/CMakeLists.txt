@@ -22,3 +22,32 @@ DIGIKAM_ADD_BQM_PLUGIN(ConvertToJPEGPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/converttojpegplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/convert2jpeg.cpp
 )
+
+DIGIKAM_ADD_BQM_PLUGIN(ConvertToDNGPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/converttodngplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/convert2dng.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(ConvertToTIFFPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/converttotiffplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/convert2tiff.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(ConvertToPNGPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/converttopngplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/convert2png.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(ConvertToPGFPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/converttopgfplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/convert2pgf.cpp
+)
+
+if(Jasper_FOUND)
+
+    DIGIKAM_ADD_BQM_PLUGIN(ConvertToJP2lugin
+        ${CMAKE_CURRENT_SOURCE_DIR}/converttojp2plugin.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/convert2jp2.cpp
+    )
+
+endif()

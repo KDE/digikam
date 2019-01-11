@@ -46,10 +46,6 @@ Convert2TIFF::Convert2TIFF(QObject* const parent)
     : BatchTool(QLatin1String("Convert2TIFF"), ConvertTool, parent)
 {
     m_changeSettings = true;
-
-    setToolTitle(i18n("Convert To TIFF"));
-    setToolDescription(i18n("Convert images to TIFF format."));
-    setToolIconName(QLatin1String("image-tiff"));
 }
 
 Convert2TIFF::~Convert2TIFF()

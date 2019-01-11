@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to convert to jpeg.
+ * Description : a BQM plugin to convert to DNG.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "converttojpegplugin.h"
+#include "converttodngplugin.h"
 
 // Qt includes
 
@@ -35,59 +35,59 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "convert2jpeg.h"
+#include "convert2dng.h"
 
 namespace Digikam
 {
 
-ConvertToJpegPlugin::ConvertToJpegPlugin(QObject* const parent)
+ConvertToDngPlugin::ConvertToDngPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ConvertToJpegPlugin::~ConvertToJpegPlugin()
+ConvertToDngPlugin::~ConvertToDngPlugin()
 {
 }
 
-QString ConvertToJpegPlugin::name() const
+QString ConvertToDngPlugin::name() const
 {
-    return i18n("Convert To JPEG");
+    return i18n("Convert RAW To DNG");
 }
 
-QString ConvertToJpegPlugin::iid() const
+QString ConvertToDngPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ConvertToJpegPlugin::icon() const
+QIcon ConvertToDngPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("image-jpeg"));
+    return QIcon::fromTheme(QLatin1String("image-x-adobe-dng"));
 }
 
-QString ConvertToJpegPlugin::description() const
+QString ConvertToDngPlugin::description() const
 {
-    return i18n("Convert images to JPEG format");
+    return i18n("Convert RAW images to DNG container");
 }
 
-QString ConvertToJpegPlugin::details() const
+QString ConvertToDngPlugin::details() const
 {
-    return i18n("<p>This batch Queue manager tool can convert images data to JPEG format.</p>"
-                "<p>The Joint Photographic Experts Group format is a commonly used method of lossy compression for digital images, particularly for those images produced by digital photography.</p>"
-                "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/JPEG'>this page</a>.</p>");
+    return i18n("<p>This batch Queue manager tool can convert RAW images data to DNG format.</p>"
+                "<p>The Digital Negative is a lossless RAW image format created by Adobe.</p>"
+                "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/Digital_Negative'>this page</a>.</p>");
 }
 
-QList<DPluginAuthor> ConvertToJpegPlugin::authors() const
+QList<DPluginAuthor> ConvertToDngPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2008-2019"))
+                             QLatin1String("(C) 2015-2019"))
             ;
 }
 
-void ConvertToJpegPlugin::setup(QObject* const parent)
+void ConvertToDngPlugin::setup(QObject* const parent)
 {
-    Convert2JPEG* const tool = new Convert2JPEG(parent);
+    Convert2DNG* const tool = new Convert2DNG(parent);
     tool->setPlugin(this);
 
     addTool(tool);

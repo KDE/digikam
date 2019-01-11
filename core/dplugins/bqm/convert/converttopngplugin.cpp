@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to convert to jpeg.
+ * Description : a BQM plugin to convert to PNG.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "converttojpegplugin.h"
+#include "converttopngplugin.h"
 
 // Qt includes
 
@@ -35,48 +35,48 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "convert2jpeg.h"
+#include "convert2png.h"
 
 namespace Digikam
 {
 
-ConvertToJpegPlugin::ConvertToJpegPlugin(QObject* const parent)
+ConvertToPngPlugin::ConvertToPngPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ConvertToJpegPlugin::~ConvertToJpegPlugin()
+ConvertToPngPlugin::~ConvertToPngPlugin()
 {
 }
 
-QString ConvertToJpegPlugin::name() const
+QString ConvertToPngPlugin::name() const
 {
-    return i18n("Convert To JPEG");
+    return i18n("Convert To PNG");
 }
 
-QString ConvertToJpegPlugin::iid() const
+QString ConvertToPngPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ConvertToJpegPlugin::icon() const
+QIcon ConvertToPngPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("image-jpeg"));
+    return QIcon::fromTheme(QLatin1String("image-png"));
 }
 
-QString ConvertToJpegPlugin::description() const
+QString ConvertToPngPlugin::description() const
 {
-    return i18n("Convert images to JPEG format");
+    return i18n("Convert images to PNG format");
 }
 
-QString ConvertToJpegPlugin::details() const
+QString ConvertToPngPlugin::details() const
 {
-    return i18n("<p>This batch Queue manager tool can convert images data to JPEG format.</p>"
-                "<p>The Joint Photographic Experts Group format is a commonly used method of lossy compression for digital images, particularly for those images produced by digital photography.</p>"
-                "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/JPEG'>this page</a>.</p>");
+    return i18n("<p>This batch Queue manager tool can convert images data to PNG format.</p>"
+                "<p>The Portable Network Graphics is a raster-graphics file-format that supports lossless data compression.</p>"
+                "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/Portable_Network_Graphics'>this page</a>.</p>");
 }
 
-QList<DPluginAuthor> ConvertToJpegPlugin::authors() const
+QList<DPluginAuthor> ConvertToPngPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
@@ -85,9 +85,9 @@ QList<DPluginAuthor> ConvertToJpegPlugin::authors() const
             ;
 }
 
-void ConvertToJpegPlugin::setup(QObject* const parent)
+void ConvertToPngPlugin::setup(QObject* const parent)
 {
-    Convert2JPEG* const tool = new Convert2JPEG(parent);
+    Convert2PNG* const tool = new Convert2PNG(parent);
     tool->setPlugin(this);
 
     addTool(tool);

@@ -46,10 +46,6 @@ Convert2PNG::Convert2PNG(QObject* const parent)
     : BatchTool(QLatin1String("Convert2PNG"), ConvertTool, parent)
 {
     m_changeSettings = true;
-
-    setToolTitle(i18n("Convert To PNG"));
-    setToolDescription(i18n("Convert images to PNG format."));
-    setToolIconName(QLatin1String("image-png"));
 }
 
 Convert2PNG::~Convert2PNG()

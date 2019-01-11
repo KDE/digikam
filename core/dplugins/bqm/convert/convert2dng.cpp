@@ -39,10 +39,6 @@ Convert2DNG::Convert2DNG(QObject* const parent)
     : BatchTool(QLatin1String("Convert2DNG"), ConvertTool, parent)
 {
     m_changeSettings = true;
-
-    setToolTitle(i18n("Convert RAW To DNG"));
-    setToolDescription(i18n("Convert RAW images to DNG container."));
-    setToolIconName(QLatin1String("image-x-adobe-dng"));
 }
 
 Convert2DNG::~Convert2DNG()

@@ -22,10 +22,6 @@ set(libqueuemanager_SRCS
     tools/color/iccconvert.cpp
     tools/color/invert.cpp
     tools/color/whitebalance.cpp
-    tools/convert/convert2pgf.cpp
-    tools/convert/convert2png.cpp
-    tools/convert/convert2tiff.cpp
-    tools/convert/convert2dng.cpp
     tools/custom/userscript.cpp
     tools/decorate/border.cpp
     tools/decorate/watermark.cpp
@@ -66,13 +62,6 @@ set(libqueuemanager_SRCS
     views/workflowlist.cpp
     main/queuemgrwindow.cpp
 )
-
-
-if(Jasper_FOUND)
-    set(libqueuemanager_SRCS ${libqueuemanager_SRCS}
-        tools/convert/convert2jp2.cpp
-       )
-endif()
 
 if(LensFun_FOUND)
     set(libqueuemanager_SRCS ${libqueuemanager_SRCS}

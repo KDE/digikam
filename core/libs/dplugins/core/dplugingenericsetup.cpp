@@ -90,7 +90,7 @@ DPluginGenericSetup::DPluginGenericSetup(QWidget* const parent)
     QStringList labels;
     labels.append(i18n("Name"));
     labels.append(i18n("Categories"));
-    labels.append(i18n("Actions"));
+    labels.append(i18n("Tools"));
     labels.append(i18n("Description"));
     labels.append(i18n("Authors"));
     d->pluginsList->setHeaderLabels(labels);

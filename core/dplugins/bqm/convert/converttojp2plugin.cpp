@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to convert to jpeg.
+ * Description : a BQM plugin to convert to JPEG2000.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "converttojpegplugin.h"
+#include "converttojp2plugin.h"
 
 // Qt includes
 
@@ -35,48 +35,48 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "convert2jpeg.h"
+#include "convert2jp2.h"
 
 namespace Digikam
 {
 
-ConvertToJpegPlugin::ConvertToJpegPlugin(QObject* const parent)
+ConvertToJp2Plugin::ConvertToJp2Plugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ConvertToJpegPlugin::~ConvertToJpegPlugin()
+ConvertToJp2Plugin::~ConvertToJp2Plugin()
 {
 }
 
-QString ConvertToJpegPlugin::name() const
+QString ConvertToJp2Plugin::name() const
 {
-    return i18n("Convert To JPEG");
+    return i18n("Convert To JP2");
 }
 
-QString ConvertToJpegPlugin::iid() const
+QString ConvertToJp2Plugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ConvertToJpegPlugin::icon() const
+QIcon ConvertToJp2Plugin::icon() const
 {
     return QIcon::fromTheme(QLatin1String("image-jpeg"));
 }
 
-QString ConvertToJpegPlugin::description() const
+QString ConvertToJp2Plugin::description() const
 {
-    return i18n("Convert images to JPEG format");
+    return i18n("Convert images to JPEG-2000 format");
 }
 
-QString ConvertToJpegPlugin::details() const
+QString ConvertToJp2Plugin::details() const
 {
-    return i18n("<p>This batch Queue manager tool can convert images data to JPEG format.</p>"
-                "<p>The Joint Photographic Experts Group format is a commonly used method of lossy compression for digital images, particularly for those images produced by digital photography.</p>"
-                "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/JPEG'>this page</a>.</p>");
+    return i18n("<p>This batch Queue manager tool can convert images data to JPEG-2000 format.</p>"
+                "<p>This is an image compression standard and coding system. It was created by the Joint Photographic Experts Group committee in 2000 with the intention of superseding their original discrete cosine transform-based JPEG standard (created in 1992) with a newly designed, wavelet-based method.</p>"
+                "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/JPEG_2000'>this page</a>.</p>");
 }
 
-QList<DPluginAuthor> ConvertToJpegPlugin::authors() const
+QList<DPluginAuthor> ConvertToJp2Plugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
@@ -85,9 +85,9 @@ QList<DPluginAuthor> ConvertToJpegPlugin::authors() const
             ;
 }
 
-void ConvertToJpegPlugin::setup(QObject* const parent)
+void ConvertToJp2Plugin::setup(QObject* const parent)
 {
-    Convert2JPEG* const tool = new Convert2JPEG(parent);
+    Convert2JP2* const tool = new Convert2JP2(parent);
     tool->setPlugin(this);
 
     addTool(tool);

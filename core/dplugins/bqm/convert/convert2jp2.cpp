@@ -46,10 +46,6 @@ Convert2JP2::Convert2JP2(QObject* const parent)
     : BatchTool(QLatin1String("Convert2JP2"), ConvertTool, parent)
 {
     m_changeSettings = true;
-
-    setToolTitle(i18n("Convert To JP2"));
-    setToolDescription(i18n("Convert images to JPEG-2000 format."));
-    setToolIconName(QLatin1String("image-jpeg"));
 }
 
 Convert2JP2::~Convert2JP2()

@@ -46,10 +46,6 @@ Convert2PGF::Convert2PGF(QObject* const parent)
     : BatchTool(QLatin1String("Convert2PGF"), ConvertTool, parent)
 {
     m_changeSettings = true;
-
-    setToolTitle(i18n("Convert To PGF"));
-    setToolDescription(i18n("Convert images to PGF format."));
-    setToolIconName(QLatin1String("image-jpeg"));
 }
 
 Convert2PGF::~Convert2PGF()

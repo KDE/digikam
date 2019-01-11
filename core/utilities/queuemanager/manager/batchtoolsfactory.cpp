@@ -32,9 +32,6 @@
 
 #include "assigntemplate.h"
 #include "autocorrection.h"
-#include "convert2pgf.h"
-#include "convert2png.h"
-#include "convert2tiff.h"
 #include "crop.h"
 #include "flip.h"
 #include "resize.h"
@@ -65,10 +62,6 @@
 #include "convert2dng.h"
 #include "userscript.h"
 #include "timeadjust.h"
-
-#ifdef HAVE_JASPER
-#   include "convert2jp2.h"
-#endif // HAVE_JASPER
 
 #ifdef HAVE_LENSFUN
 #   include "lensautofix.h"
@@ -130,15 +123,6 @@ BatchToolsFactory::BatchToolsFactory()
             }
         }
     }
-
-    // Convert
-    registerTool(new Convert2PNG(this));
-    registerTool(new Convert2TIFF(this));
-#ifdef HAVE_JASPER
-    registerTool(new Convert2JP2(this));
-#endif // HAVE_JASPER
-    registerTool(new Convert2PGF(this));
-    registerTool(new Convert2DNG(this));
 
     // Transform
     registerTool(new Rotate(this));
