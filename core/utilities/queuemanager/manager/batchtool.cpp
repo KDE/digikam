@@ -191,7 +191,7 @@ QString BatchTool::toolGroupToString() const
         case CustomTool:
             return i18n("Custom");
         case ColorTool:
-            return i18n("Color");
+            return i18n("Colors");
         case EnhanceTool:
             return i18n("Enhance");
         case TransformTool:
@@ -199,7 +199,7 @@ QString BatchTool::toolGroupToString() const
         case DecorateTool:
             return i18n("Decorate");
         case FiltersTool:
-            return i18n("Filter");
+            return i18n("Filters");
         case ConvertTool:
             return i18n("Convert");
         case MetadataTool:
