@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : plugin to email items.
+ * Description : image editor plugin to fix BCG.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "sendbymailplugin.h"
+#include "bcgtoolplugin.h"
 
 // Qt includes
 
@@ -32,83 +32,82 @@
 
 // Local includes
 
-#include "mailwizard.h"
+#include "editorwindow.h"
+#include "bcgtool.h"
 
 namespace Digikam
 {
 
-SendByMailPlugin::SendByMailPlugin(QObject* const parent)
-    : DPluginGeneric(parent)
+BCGToolPlugin::BCGToolPlugin(QObject* const parent)
+    : DPluginEditor(parent)
 {
 }
 
-SendByMailPlugin::~SendByMailPlugin()
+BCGToolPlugin::~BCGToolPlugin()
 {
 }
 
-QString SendByMailPlugin::name() const
+QString BCGToolPlugin::name() const
 {
-    return i18n("Send by Email");
+    return i18n("BCG Correction");
 }
 
-QString SendByMailPlugin::iid() const
+QString BCGToolPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon SendByMailPlugin::icon() const
+QIcon BCGToolPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("mail-send"));
+    return QIcon::fromTheme(QLatin1String("contrast"));
 }
 
-QString SendByMailPlugin::description() const
+QString BCGToolPlugin::description() const
 {
-    return i18n("A tool to send images by E-mail");
+    return i18n("A tool to fix Brightness/Contrast/Gamma");
 }
 
-QString SendByMailPlugin::details() const
+QString BCGToolPlugin::details() const
 {
-    return i18n("<p>This tool permit to back-process items (as resize) before to send by e-mail.</p>"
-                "<p>Items to process can be selected one by one or by group through a selection of albums.</p>"
-                "<p>Different mail client application can be used to process files on the network.</p>");
+    return i18n("<p>This Image Editor tool can adjust Brightness/Contrast/Gamma from image.</p>");
 }
 
-QList<DPluginAuthor> SendByMailPlugin::authors() const
+QList<DPluginAuthor> BCGToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
+            << DPluginAuthor(QLatin1String("Renchi Raju"),
+                             QLatin1String("renchi dot raju at gmail dot com"),
+                             QLatin1String("(C) 2004"))
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2004-2019"),
-                             i18n("Author and Maintainer"))
-            << DPluginAuthor(QLatin1String("Michael Hoechstetter"),
-                             QLatin1String("michael dot hoechstetter at gmx dot de"),
-                             QLatin1String("(C) 2006"))
-            << DPluginAuthor(QLatin1String("Tom Albers"),
-                             QLatin1String("tomalbers at kde dot nl"),
-                             QLatin1String("(C) 2007"))
+                             QLatin1String("(C) 2005-2019"))
             ;
 }
 
-void SendByMailPlugin::setup(QObject* const parent)
+void BCGToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Send by Mail..."));
-    ac->setObjectName(QLatin1String("sendbymail"));
-    ac->setActionCategory(DPluginAction::GenericTool);
+    ac->setText(i18nc("@action", "Brightness/Contrast/Gamma..."));
+    ac->setObjectName(QLatin1String("editorwindow_color_bcg"));
+    ac->setActionCategory(DPluginAction::EditorColor);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotSendByMail()));
+            this, SLOT(slotBCGTool()));
 
     addAction(ac);
 }
 
-void SendByMailPlugin::slotSendByMail()
+void BCGToolPlugin::slotBCGTool()
 {
-    QPointer<MailWizard> wzrd = new MailWizard(0, infoIface(sender()));
-    wzrd->setPlugin(this);
-    wzrd->exec();
-    delete wzrd;
+    EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
+
+    if (editor)
+    {
+        BCGTool* const tool = new BCGTool(editor);
+        tool->setPlugin(this);
+        editor->loadTool(tool);
+    }
 }
 
 } // namespace Digikam

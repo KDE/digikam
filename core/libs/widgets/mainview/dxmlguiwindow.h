@@ -138,12 +138,14 @@ public:
      */
     bool fullScreenIsActive() const;
 
-    /** Register all plugins action to this instance.
-     */
-    void registerPluginsActions();
-
 public:
 
+    /** Register all plugins action to this instance.
+     */
+    virtual void registerPluginsActions();
+
+    /** Return the interface instance to access to items information.
+     */
     virtual DInfoInterface* infoIface(DPluginAction* const ac) = 0;
 
 public:

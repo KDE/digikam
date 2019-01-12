@@ -35,6 +35,7 @@ endif()
 set(libdpluginsinterface_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugingeneric.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugineditor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginauthor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugingenericconfview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugingenericsetup.cpp

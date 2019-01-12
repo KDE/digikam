@@ -42,7 +42,9 @@ class QIcon;
 
 namespace Digikam
 {
+
 class HistogramBox;
+class EditorTool;
 
 class DIGIKAM_EXPORT EditorToolSettings : public QScrollArea
 {
@@ -77,8 +79,7 @@ public:
     void setButtons(Buttons buttonMask);
     void setTools(Tools toolMask);
     void setHistogramType(HistogramBoxType type);
-    void setToolIcon(const QIcon& pixmap);
-    void setToolName(const QString& name);
+    void setTool(EditorTool* const tool);
 
     int marginHint();
     int spacingHint();
@@ -112,6 +113,10 @@ Q_SIGNALS:
     void signalColorGuideChanged();
     void signalChannelChanged();
     void signalScaleChanged();
+
+private Q_SLOTS:
+    
+    void slotAboutPlugin();
 
 private:
 

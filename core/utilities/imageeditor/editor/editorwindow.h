@@ -94,6 +94,9 @@ public:
 
     const static QString CONFIG_GROUP_NAME;
 
+    void registerPluginsActions();
+    void loadTool(EditorTool* const tool);
+
 public Q_SLOTS:
 
     virtual void slotSetup()    = 0;
@@ -347,7 +350,6 @@ private Q_SLOTS:
     void slotDistortionFX();
     void slotRainDrop();
     void slotFilmGrain();
-    void slotBCG();
     void slotCB();
     void slotHSL();
     void slotAutoCorrection();
@@ -429,8 +431,6 @@ private:
     QString selectValidSavingFormat(const QUrl& targetUrl);
 
     void addAction2ContextMenu(const QString& actionName, bool addDisabled = false);
-
-    void loadTool(EditorTool* const tool);
 
 private:
 

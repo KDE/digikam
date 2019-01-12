@@ -37,6 +37,7 @@
 #include "dcolor.h"
 #include "previewtoolbar.h"
 #include "filteraction.h"
+#include "dplugineditor.h"
 
 namespace Digikam
 {
@@ -53,6 +54,9 @@ public:
 
     explicit EditorTool(QObject* const parent);
     virtual ~EditorTool();
+
+    void setPlugin(DPluginEditor* const plugin);
+    DPluginEditor* plugin() const;
 
     /** Caller by editor tool interface to initialized tool when all is ready, through slotInit().
      */

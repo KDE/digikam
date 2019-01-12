@@ -143,7 +143,6 @@
 #include "imageiface.h"
 #include "iccprofilescombobox.h"
 #include "autocorrectiontool.h"
-#include "bcgtool.h"
 #include "bwsepiatool.h"
 #include "hsltool.h"
 #include "profileconversiontool.h"
@@ -626,10 +625,7 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Colors' menu actions ---------------------------------------------
 
-    d->BCGAction = new QAction(QIcon::fromTheme(QLatin1String("contrast")), i18n("Brightness/Contrast/Gamma..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_color_bcg"), d->BCGAction);
-    connect(d->BCGAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotBCG()));
+    d->BCGAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_bcg"),this);
     d->BCGAction->setEnabled(false);
 
     // NOTE: Photoshop 7 use CTRL+U.
@@ -3422,11 +3418,6 @@ void EditorWindow::slotFilm()
     loadTool(new FilmTool(this));
 }
 
-void EditorWindow::slotBCG()
-{
-    loadTool(new BCGTool(this));
-}
-
 void EditorWindow::slotCB()
 {
     loadTool(new CBTool(this));
@@ -3555,6 +3546,21 @@ void EditorWindow::slotFlipHIntoQue()
 void EditorWindow::slotFlipVIntoQue()
 {
     m_transformQue.append(TransformType::FlipVertical);
+}
+
+void EditorWindow::registerPluginsActions()
+{
+    DXmlGuiWindow::registerPluginsActions();
+
+    DPluginLoader* const dpl = DPluginLoader::instance();
+    dpl->registerEditorPlugins(this);
+
+    QList<DPluginAction*> actions = dpl->pluginsActions(DPluginAction::Editor, this);
+
+    foreach (DPluginAction* const ac, actions)
+    {
+        actionCollection()->addActions(QList<QAction*>() << ac);
+    }
 }
 
 } // namespace Digikam

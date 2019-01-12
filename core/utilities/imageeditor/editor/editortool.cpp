@@ -60,7 +60,8 @@ public:
         view(0),
         timer(0),
         settings(0),
-        category(FilterAction::ReproducibleFilter)
+        category(FilterAction::ReproducibleFilter),
+        plugin(0)
     {
     }
 
@@ -76,6 +77,8 @@ public:
     EditorToolSettings*    settings;
 
     FilterAction::Category category;
+    
+    DPluginEditor*         plugin;
 };
 
 EditorTool::EditorTool(QObject* const parent)
@@ -93,6 +96,19 @@ EditorTool::~EditorTool()
     delete d->settings;
     delete d->view;
     delete d;
+}
+
+void EditorTool::setPlugin(DPluginEditor* const plugin)
+{
+    d->plugin = plugin;
+    setToolName(d->plugin->name());
+    setToolIcon(d->plugin->icon());
+    d->settings->setTool(this);
+}
+
+DPluginEditor* EditorTool::plugin() const
+{
+    return d->plugin;
 }
 
 void EditorTool::init()
@@ -182,8 +198,7 @@ EditorToolSettings* EditorTool::toolSettings() const
 void EditorTool::setToolSettings(EditorToolSettings* const settings)
 {
     d->settings = settings;
-    d->settings->setToolIcon(toolIcon());
-    d->settings->setToolName(toolName());
+    d->settings->setTool(this);
 
     connect(d->settings, SIGNAL(signalOkClicked()),
             this, SLOT(slotOk()));

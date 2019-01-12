@@ -72,6 +72,11 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
     void registerGenericPlugins(QObject* const parent);
 
     /**
+     * Register all Editor plugin actions to parent object.
+     */
+    void registerEditorPlugins(QObject* const parent);
+
+    /**
      * Init plugin loader. Call this method to parse and load relevant plugins installed on your system.
      */
     void init();

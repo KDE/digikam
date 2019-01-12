@@ -97,7 +97,6 @@ set(libeditortools_SRCS
     tools/filters/raindroptool.cpp
     tools/filters/filmgraintool.cpp
     tools/colors/autocorrectiontool.cpp
-    tools/colors/bcgtool.cpp
     tools/colors/bwsepiatool.cpp
     tools/colors/profileconversiontool.cpp
     tools/colors/cbtool.cpp
@@ -130,7 +129,6 @@ set(libeditortools_SRCS
     tools/transform/matrix.cpp
     tools/transform/imageselectionwidget.cpp
     tools/transform/ratiocroptool.cpp
-    dplugins/dplugineditor.cpp
 )
 
 if(Lqr-1_FOUND)

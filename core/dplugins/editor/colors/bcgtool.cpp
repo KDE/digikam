@@ -80,9 +80,7 @@ BCGTool::BCGTool(QObject* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("bcgadjust"));
-    setToolName(i18n("Brightness / Contrast / Gamma"));
     setToolVersion(1);
-    setToolIcon(QIcon::fromTheme(QLatin1String("contrast")));
     setToolHelp(QLatin1String("bcgadjusttool.anchor"));
     setToolCategory(FilterAction::ReproducibleFilter);
     setInitPreview(true);

@@ -32,6 +32,7 @@
 #include "digikam_config.h"
 #include "digikam_debug.h"
 #include "dplugingeneric.h"
+#include "dplugineditor.h"
 
 namespace Digikam
 {
@@ -78,7 +79,6 @@ QList<DPlugin*> DPluginLoader::allPlugins() const
     return d->allPlugins;
 }
 
-
 QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionType type, QObject* const parent) const
 {
     QList<DPluginAction*> list;
@@ -97,9 +97,28 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionType ty
                 }
             }
         }
-     }
+    }
+    
+    if (!list.isEmpty())
+        return list;
 
-     return list;
+    foreach (DPlugin* const p, allPlugins())
+    {
+        DPluginEditor* const edit = dynamic_cast<DPluginEditor*>(p);
+
+        if (edit)
+        {
+            foreach (DPluginAction* const ac, edit->actions(parent))
+            {
+                if (ac && (ac->actionType() == type))
+                {
+                    list << ac;
+                }
+            }
+        }
+    }
+
+    return list;
 }
 
 QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategory cat, QObject* const parent) const
@@ -113,6 +132,25 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategor
         if (gene)
         {
             foreach (DPluginAction* const ac, gene->actions(parent))
+            {
+                if (ac && (ac->actionCategory() == cat))
+                {
+                    list << ac;
+                }
+            }
+        }
+     }
+    
+    if (!list.isEmpty())
+        return list;
+
+    foreach (DPlugin* const p, allPlugins())
+    {
+        DPluginEditor* const edit = dynamic_cast<DPluginEditor*>(p);
+
+        if (edit)
+        {
+            foreach (DPluginAction* const ac, edit->actions(parent))
             {
                 if (ac && (ac->actionCategory() == cat))
                 {
@@ -146,6 +184,27 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QOb
             }
         }
     }
+    
+    if (!list.isEmpty())
+        return list;
+        
+    foreach (DPlugin* const p, allPlugins())
+    {
+        DPluginEditor* const edit = dynamic_cast<DPluginEditor*>(p);
+
+        if (edit)
+        {
+            if (p->iid() == pluginIID)
+            {
+                foreach (DPluginAction* const ac, edit->actions(parent))
+                {
+                    list << ac;
+                }
+
+                break;
+            }
+        }
+    }
 
     return list;
 }
@@ -166,13 +225,26 @@ DPluginAction* DPluginLoader::pluginAction(const QString& actionName, QObject* c
                 }
             }
         }
-     }
 
-     qCCritical(DIGIKAM_GENERAL_LOG) << "DPluginAction named" << actionName
-                                     << "not found in" << parent->objectName()
-                                     << "(" << parent << ")";
+        DPluginEditor* const edit = dynamic_cast<DPluginEditor*>(p);
 
-     return 0;
+        if (edit)
+        {
+            foreach (DPluginAction* const ac, edit->actions(parent))
+            {
+                if (ac && (ac->objectName() == actionName))
+                {
+                    return ac;
+                }
+            }
+        }
+    }
+
+    qCCritical(DIGIKAM_GENERAL_LOG) << "DPluginAction named" << actionName
+                                    << "not found in" << parent->objectName()
+                                    << "(" << parent << ")";
+
+    return 0;
 }
 
 QString DPluginLoader::pluginXmlSections(DPluginAction::ActionCategory cat, QObject* const parent) const
@@ -209,6 +281,23 @@ void DPluginLoader::registerGenericPlugins(QObject* const parent)
             gene->setVisible(plugin->shouldLoaded());
 
             qCDebug(DIGIKAM_GENERAL_LOG) << "Generic plugin named" << gene->name()
+                                         << "registered to" << parent;
+        }
+    }
+}
+
+void DPluginLoader::registerEditorPlugins(QObject* const parent)
+{
+    foreach (DPlugin* const plugin, d->allPlugins)
+    {
+        DPluginEditor* const edit = dynamic_cast<DPluginEditor*>(plugin);
+
+        if (edit)
+        {
+            edit->setup(parent);
+            edit->setVisible(plugin->shouldLoaded());
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Editor plugin named" << edit->name()
                                          << "registered to" << parent;
         }
     }

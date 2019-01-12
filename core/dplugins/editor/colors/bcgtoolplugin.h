@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : plugin to email items.
+ * Description : image editor plugin to fix BCG.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,28 +20,28 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_SEND_BY_MAIL_PLUGIN_H
-#define DIGIKAM_SEND_BY_MAIL_PLUGIN_H
+#ifndef DIGIKAM_BCGTOOL_PLUGIN_H
+#define DIGIKAM_BCGTOOL_PLUGIN_H
 
 // Local includes
 
-#include "dplugingeneric.h"
+#include "dplugineditor.h"
 
-#define DPLUGIN_IID "org.kde.digikam.SendByMail"
+#define DPLUGIN_IID "org.kde.digikam.BCGTool"
 
 namespace Digikam
 {
 
-class SendByMailPlugin : public DPluginGeneric
+class BCGToolPlugin : public DPluginEditor
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
-    Q_INTERFACES(Digikam::DPluginGeneric)
+    Q_INTERFACES(Digikam::DPluginEditor)
 
 public:
 
-    explicit SendByMailPlugin(QObject* const parent = 0);
-    ~SendByMailPlugin();
+    explicit BCGToolPlugin(QObject* const parent = 0);
+    ~BCGToolPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -54,9 +54,9 @@ public:
 
 private Q_SLOTS:
 
-    void slotSendByMail();
+    void slotBCGTool();
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_SEND_BY_MAIL_PLUGIN_H
+#endif // DIGIKAM_BCGTOOL_PLUGIN_H

@@ -53,6 +53,9 @@
 #include "histogrambox.h"
 #include "digikam_globals.h"
 #include "dcolorselector.h"
+#include "dpluginaboutdlg.h"
+#include "dplugineditor.h"
+#include "editortool.h"
 
 namespace Digikam
 {
@@ -70,6 +73,7 @@ public:
         plainPage(0),
         toolName(0),
         toolIcon(0),
+        toolAbout(0),
         guideBox(0),
         okBtn(0),
         cancelBtn(0),
@@ -80,7 +84,8 @@ public:
         guideColorBt(0),
         hGradient(0),
         histogramBox(0),
-        guideSize(0)
+        guideSize(0),
+        tool(0)
     {
     }
 
@@ -94,6 +99,7 @@ public:
 
     QLabel*              toolName;
     QLabel*              toolIcon;
+    QPushButton*         toolAbout;
 
     DHBox*               guideBox;
 
@@ -111,6 +117,8 @@ public:
     HistogramBox*        histogramBox;
 
     DIntNumInput*        guideSize;
+    
+    EditorTool*          tool;
 };
 
 EditorToolSettings::EditorToolSettings(QWidget* const parent)
@@ -138,6 +146,10 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     font.setBold(true);
     d->toolName->setFont(font);
 
+    d->toolAbout         = new QPushButton();
+    d->toolAbout->setIcon(QIcon::fromTheme(QLatin1String("help-about")));
+    d->toolAbout->setToolTip(i18n("About this tool..."));
+
     QString frameStyle = QString::fromLatin1("QFrame {"
                                              "color: %1;"
                                              "border: 1px solid %2;"
@@ -155,10 +167,12 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     toolDescriptor->setStyleSheet(frameStyle);
     d->toolName->setStyleSheet(noFrameStyle);
     d->toolIcon->setStyleSheet(noFrameStyle);
+    d->toolAbout->setStyleSheet(noFrameStyle);
 
     QGridLayout* const descrLayout = new QGridLayout();
-    descrLayout->addWidget(d->toolIcon, 0, 0, 1, 1);
-    descrLayout->addWidget(d->toolName, 0, 1, 1, 1);
+    descrLayout->addWidget(d->toolIcon,  0, 0, 1, 1);
+    descrLayout->addWidget(d->toolName,  0, 1, 1, 1);
+    descrLayout->addWidget(d->toolAbout, 0, 2, 1, 1);
     descrLayout->setColumnStretch(1, 10);
     toolDescriptor->setLayout(descrLayout);
 
@@ -266,6 +280,9 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     connect(d->histogramBox, SIGNAL(signalScaleChanged(HistogramScale)),
             this, SIGNAL(signalScaleChanged()));
+
+    connect(d->toolAbout, SIGNAL(clicked()),
+            this, SLOT(slotAboutPlugin()));
 
     // --------------------------------------------------------
 
@@ -406,14 +423,21 @@ void EditorToolSettings::setHistogramType(HistogramBoxType type)
     d->histogramBox->setHistogramType(type);
 }
 
-void EditorToolSettings::setToolIcon(const QIcon& icon)
+void EditorToolSettings::setTool(EditorTool* const tool)
 {
-    d->toolIcon->setPixmap(icon.pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
+    d->tool = tool;
+    d->toolName->setText(d->tool->toolName());
+    d->toolIcon->setPixmap(d->tool->toolIcon().pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
 }
 
-void EditorToolSettings::setToolName(const QString& name)
+void EditorToolSettings::slotAboutPlugin()
 {
-    d->toolName->setText(name);
+    if (d->tool && d->tool->plugin())
+    {
+        QPointer<DPluginAboutDlg> dlg = new DPluginAboutDlg(dynamic_cast<DPlugin*>(d->tool->plugin()));
+        dlg->exec();
+        delete dlg;
+    }
 }
 
 } // namespace Digikam
