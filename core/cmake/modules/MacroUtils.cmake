@@ -178,7 +178,7 @@ endmacro()
 
 # -------------------------------------------------------------------------
 
-macro(DIGIKAM_ADD_PLUGIN _target_name)
+macro(DIGIKAM_ADD_GENERIC_PLUGIN _target_name)
 
     set(_src ${ARGN})
 
