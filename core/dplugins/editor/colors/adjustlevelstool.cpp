@@ -162,8 +162,6 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("adjustlevels"));
-    setToolName(i18n("Adjust Levels"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("adjustlevels")));
     setInitPreview(true);
 
     ImageIface iface;

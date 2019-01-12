@@ -103,7 +103,6 @@ set(libeditortools_SRCS
     tools/colors/whitebalancetool.cpp
     tools/colors/hsltool.cpp
     tools/colors/channelmixertool.cpp
-    tools/colors/adjustlevelstool.cpp
     tools/colors/filmtool.cpp
     tools/enhance/restorationtool.cpp
     tools/enhance/blurtool.cpp

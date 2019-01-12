@@ -149,7 +149,6 @@
 #include "cbtool.h"
 #include "whitebalancetool.h"
 #include "channelmixertool.h"
-#include "adjustlevelstool.h"
 #include "filmtool.h"
 #include "restorationtool.h"
 #include "blurtool.h"
@@ -631,6 +630,10 @@ void EditorWindow::setupStandardActions()
     d->curvesAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_adjustcurves"), this);
     actionCollection()->addActions(QList<QAction*>() << d->curvesAction);
     d->curvesAction->setEnabled(false);
+
+    d->levelsAction  = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_adjustlevels"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->levelsAction);
+    d->levelsAction->setEnabled(false);
     
     // NOTE: Photoshop 7 use CTRL+U.
     d->HSLAction = new QAction(QIcon::fromTheme(QLatin1String("adjusthsl")), i18n("Hue/Saturation/Lightness..."), this);
@@ -712,13 +715,6 @@ void EditorWindow::setupStandardActions()
     connect(d->channelMixerAction, SIGNAL(triggered(bool)),
             this, SLOT(slotChannelMixer()));
     d->channelMixerAction->setEnabled(false);
-
-    d->levelsAction  = new QAction(QIcon::fromTheme(QLatin1String("adjustlevels")), i18n("Levels Adjust..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_color_adjustlevels"), d->levelsAction);
-    actionCollection()->setDefaultShortcut(d->levelsAction, Qt::CTRL+Qt::Key_L);
-    connect(d->levelsAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotLevelsAdjust()));
-    d->levelsAction->setEnabled(false);
 
     d->filmAction = new QAction(QIcon::fromTheme(QLatin1String("colorneg")), i18n("Color Negative..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_color_film"), d->filmAction);
@@ -3397,11 +3393,6 @@ void EditorWindow::slotWhiteBalance()
 void EditorWindow::slotChannelMixer()
 {
     loadTool(new ChannelMixerTool(this));
-}
-
-void EditorWindow::slotLevelsAdjust()
-{
-    loadTool(new AdjustLevelsTool(this));
 }
 
 void EditorWindow::slotFilm()
