@@ -193,6 +193,21 @@ endmacro()
 
 # -------------------------------------------------------------------------
 
+macro(DIGIKAM_ADD_EDITOR_PLUGIN _target_name)
+
+    set(_src ${ARGN})
+
+    add_library(${_target_name} MODULE ${_src})
+
+    target_link_libraries(${_target_name} ${${_target_name}_LIBS} digikamcore)
+
+    install(TARGETS ${_target_name}
+            DESTINATION ${PLUGIN_INSTALL_DIR}/digikam/editor)
+
+endmacro()
+
+# -------------------------------------------------------------------------
+
 macro(DIGIKAM_ADD_BQM_PLUGIN _target_name)
 
     set(_src ${ARGN})

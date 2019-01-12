@@ -130,6 +130,7 @@ set(libeditortools_SRCS
     tools/transform/matrix.cpp
     tools/transform/imageselectionwidget.cpp
     tools/transform/ratiocroptool.cpp
+    dplugins/dplugineditor.cpp
 )
 
 if(Lqr-1_FOUND)

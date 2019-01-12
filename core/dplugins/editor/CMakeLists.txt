@@ -4,6 +4,11 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-add_subdirectory(generic)
-add_subdirectory(editor)
-add_subdirectory(bqm)
+add_subdirectory(colors)
+#add_subdirectory(convert)
+#add_subdirectory(custom)
+#add_subdirectory(decorate)
+#add_subdirectory(metadata)
+#add_subdirectory(transform)
+#add_subdirectory(filters)
+#add_subdirectory(enhance)
