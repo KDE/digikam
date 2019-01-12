@@ -50,10 +50,6 @@ AutoCorrection::AutoCorrection(QObject* const parent)
     : BatchTool(QLatin1String("AutoCorrection"), ColorTool, parent)
 {
     m_comboBox = 0;
-
-    setToolTitle(i18n("Color Auto-correction"));
-    setToolDescription(i18n("Automatically correct image colors."));
-    setToolIconName(QLatin1String("autocorrection"));
 }
 
 AutoCorrection::~AutoCorrection()

@@ -53,16 +53,16 @@ DIGIKAM_ADD_BQM_PLUGIN(BQMHslCorrectionPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/hslcorrection.cpp
 )
 
-# DIGIKAM_ADD_BQM_PLUGIN(BQMAutoCorrectionPlugin
-#     ${CMAKE_CURRENT_SOURCE_DIR}/autocorrectionplugin.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/autocorrection.cpp
-# )
-# 
-# DIGIKAM_ADD_BQM_PLUGIN(BQMBWconvertPlugin
-#     ${CMAKE_CURRENT_SOURCE_DIR}/bwconvertplugin.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/bwconvert.cpp
-# )
-# 
+DIGIKAM_ADD_BQM_PLUGIN(BQMAutoCorrectionPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/autocorrectionplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/autocorrection.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN(BQMBWconvertPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/bwconvertplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/bwconvert.cpp
+)
+
 # DIGIKAM_ADD_BQM_PLUGIN(BQMColorBalancePlugin
 #     ${CMAKE_CURRENT_SOURCE_DIR}/colorbalanceplugin.cpp
 #     ${CMAKE_CURRENT_SOURCE_DIR}/colorbalance.cpp
