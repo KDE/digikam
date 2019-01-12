@@ -43,11 +43,11 @@ DIGIKAM_ADD_BQM_PLUGIN(BQMBcgCorrectionPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/bcgcorrection.cpp
 )
 
-# DIGIKAM_ADD_BQM_PLUGIN(BQMInvertPlugin
-#     ${CMAKE_CURRENT_SOURCE_DIR}/invertplugin.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/invert.cpp
-# )
-# 
+DIGIKAM_ADD_BQM_PLUGIN(BQMInvertPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/invertplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/invert.cpp
+)
+
 # DIGIKAM_ADD_BQM_PLUGIN(BQMHslCorrectionPlugin
 #     ${CMAKE_CURRENT_SOURCE_DIR}/hslcorrectionplugin.cpp
 #     ${CMAKE_CURRENT_SOURCE_DIR}/hslcorrection.cpp

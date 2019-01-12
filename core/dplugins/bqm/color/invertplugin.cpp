@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to apply color effects
+ * Description : a BQM plugin to invert colors
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "colorfxplugin.h"
+#include "invertplugin.h"
 
 // Qt includes
 
@@ -35,57 +35,57 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "colorfx.h"
+#include "invert.h"
 
 namespace Digikam
 {
 
-ColorFXPlugin::ColorFXPlugin(QObject* const parent)
+InvertPlugin::InvertPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ColorFXPlugin::~ColorFXPlugin()
+InvertPlugin::~InvertPlugin()
 {
 }
 
-QString ColorFXPlugin::name() const
+QString InvertPlugin::name() const
 {
-    return i18n("Color Effects");
+    return i18n("Invert Colors");
 }
 
-QString ColorFXPlugin::iid() const
+QString InvertPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ColorFXPlugin::icon() const
+QIcon InvertPlugin::icon() const
 {
     return QIcon::fromTheme(QLatin1String("colorfx"));
 }
 
-QString ColorFXPlugin::description() const
+QString InvertPlugin::description() const
 {
-    return i18n("Apply color effects");
+    return i18n("A tool to invert image colors");
 }
 
-QString ColorFXPlugin::details() const
+QString InvertPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can apply color effects over images.</p>");
+    return i18n("<p>This batch Queue Manager tool can invert colors from images.</p>");
 }
 
-QList<DPluginAuthor> ColorFXPlugin::authors() const
+QList<DPluginAuthor> InvertPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2009-2019"))
+                             QLatin1String("(C) 2010-2019"))
             ;
 }
 
-void ColorFXPlugin::setup(QObject* const parent)
+void InvertPlugin::setup(QObject* const parent)
 {
-    ColorFX* const tool = new ColorFX(parent);
+    Invert* const tool = new Invert(parent);
     tool->setPlugin(this);
 
     addTool(tool);
