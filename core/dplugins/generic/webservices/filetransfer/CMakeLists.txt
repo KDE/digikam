@@ -23,7 +23,7 @@ if(KF5KIO_FOUND)
     )
 endif()
 
-DIGIKAM_ADD_PLUGIN(GENEFileTransferPlugin
+DIGIKAM_ADD_GENERIC_PLUGIN(GENEFileTransferPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/ftexportwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ftexportwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ftimportwidget.cpp

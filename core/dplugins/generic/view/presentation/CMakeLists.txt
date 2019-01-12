@@ -78,6 +78,6 @@ ki18n_wrap_ui(presentationplugin_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/widgets/presentationctrlwidget.ui
 )
 
-DIGIKAM_ADD_PLUGIN(GENEPresentationPlugin
+DIGIKAM_ADD_GENERIC_PLUGIN(GENEPresentationPlugin
                    ${presentationplugin_SRCS}
 )

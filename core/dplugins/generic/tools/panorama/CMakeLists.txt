@@ -48,6 +48,6 @@ set(panoramaplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/panoramaplugin.cpp
 )
 
-DIGIKAM_ADD_PLUGIN(GENEPanoramaPlugin
+DIGIKAM_ADD_GENERIC_PLUGIN(GENEPanoramaPlugin
                    ${panoramaplugin_SRCS}
 )

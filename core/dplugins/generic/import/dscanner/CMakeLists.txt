@@ -18,7 +18,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_PLUGIN(GENEDigitalScannerPlugin
+DIGIKAM_ADD_GENERIC_PLUGIN(GENEDigitalScannerPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/dscannerplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/scandialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/saveimgthread.cpp

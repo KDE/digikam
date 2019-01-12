@@ -17,7 +17,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_PLUGIN(GENETimeAdjustPlugin
+DIGIKAM_ADD_GENERIC_PLUGIN(GENETimeAdjustPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/timeadjustdialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/timeadjustlist.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/timeadjusttask.cpp

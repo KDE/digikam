@@ -35,6 +35,6 @@ set(expoblendingplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/expoblendingplugin.cpp
 )
 
-DIGIKAM_ADD_PLUGIN(GENEExpoBlendingPlugin
+DIGIKAM_ADD_GENERIC_PLUGIN(GENEExpoBlendingPlugin
                    ${expoblendingplugin_SRCS}
 )
