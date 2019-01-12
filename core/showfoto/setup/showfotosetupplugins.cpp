@@ -23,6 +23,10 @@
 
 #include "showfotosetupplugins.h"
 
+// Qt includes
+
+#include <QTabWidget>
+
 // Local includes
 
 #include "dpluginsetup.h"
@@ -35,21 +39,35 @@ class Q_DECL_HIDDEN SetupPlugins::Private
 public:
 
     explicit Private()
-      : setupView(0)
+      : tab(0),
+        setupGeneric(0),
+        setupEditor(0)
     {
     }
 
-    Digikam::DPluginSetup* setupView;
+    QTabWidget*            tab;
+
+    Digikam::DPluginSetup* setupGeneric;
+    Digikam::DPluginSetup* setupEditor;
 };
 
 SetupPlugins::SetupPlugins(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
-    d->setupView = new Digikam::DPluginSetup(Digikam::DPluginAction::Generic, viewport());
-
-    setWidget(d->setupView);
+    d->tab = new QTabWidget(viewport());
+    setWidget(d->tab);
     setWidgetResizable(true);
+
+    // --------------------
+
+    d->setupGeneric = new Digikam::DPluginSetup(Digikam::DPluginAction::Generic, d->tab);
+    d->tab->insertTab(Generic, d->setupGeneric, i18nc("@title:tab", "Generic"));
+
+    // --------------------
+
+    d->setupEditor = new Digikam::DPluginSetup(Digikam::DPluginAction::Editor, d->tab);
+    d->tab->insertTab(Editor, d->setupEditor, i18nc("@title:tab", "Image Editor"));
 }
 
 SetupPlugins::~SetupPlugins()
@@ -59,7 +77,8 @@ SetupPlugins::~SetupPlugins()
 
 void SetupPlugins::applySettings()
 {
-    d->setupView->applySettings();
+    d->setupGeneric->applySettings();
+    d->setupEditor->applySettings();
 }
 
 }  // namespace ShowFoto

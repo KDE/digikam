@@ -37,6 +37,14 @@ class SetupPlugins : public QScrollArea
 
 public:
 
+    enum PluginTab
+    {
+        Generic = 0,
+        Editor
+    };
+    
+public:
+
     explicit SetupPlugins(QWidget* const parent = 0);
     ~SetupPlugins();
 

@@ -37,7 +37,7 @@ class SetupPlugins : public QScrollArea
 
 public:
 
-    enum MiscTab
+    enum PluginTab
     {
         Generic = 0,
         Editor,
