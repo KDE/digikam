@@ -66,7 +66,7 @@ QIcon TimeAdjustPlugin::icon() const
 
 QString TimeAdjustPlugin::description() const
 {
-    return i18n("A tool to adjust Date Time Stamp of Images");
+    return i18n("A tool to adjust date and time-stamp from images");
 }
 
 QString TimeAdjustPlugin::details() const
