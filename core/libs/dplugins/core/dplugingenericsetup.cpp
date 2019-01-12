@@ -41,6 +41,7 @@
 // Local includes
 
 #include "dplugingenericconfview.h"
+#include "dpluginaboutdlg.h"
 
 namespace Digikam
 {
@@ -114,8 +115,11 @@ DPluginGenericSetup::DPluginGenericSetup(QWidget* const parent)
     connect(d->clearBtn, SIGNAL(clicked()),
             this, SLOT(slotClearList()));
 
-    connect(d->pluginsList, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
-            this, SLOT(slotItemClicked()));
+    connect(d->pluginsList, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
+            this, SLOT(slotAboutPlugin(QTreeWidgetItem*)));
+
+    connect(d->pluginsList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
+            this, SLOT(slotAboutPlugin(QTreeWidgetItem*)));
 
     connect(d->pluginsList, SIGNAL(signalSearchResult(int)),
             this, SLOT(slotSearchResult(int)));
@@ -136,6 +140,15 @@ DPluginGenericSetup::~DPluginGenericSetup()
 void DPluginGenericSetup::applySettings()
 {
     d->pluginsList->apply();
+}
+
+void DPluginGenericSetup::slotAboutPlugin(QTreeWidgetItem* item)
+{
+    if (!item) return;
+
+    QPointer<DPluginAboutDlg> dlg = new DPluginAboutDlg(d->pluginsList->plugin(item));
+    dlg->exec();
+    delete dlg;
 }
 
 void DPluginGenericSetup::slotSearchTextChanged(const SearchTextSettings& settings)

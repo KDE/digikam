@@ -33,6 +33,8 @@
 #include "searchtextbar.h"
 #include "digikam_export.h"
 
+class QTreeWidgetItem;
+
 namespace Digikam
 {
 
@@ -55,6 +57,7 @@ private Q_SLOTS:
     void slotClearList();
     void slotItemClicked();
     void slotSearchResult(int found);
+    void slotAboutPlugin(QTreeWidgetItem*);
 
 private:
 

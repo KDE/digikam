@@ -150,6 +150,21 @@ DPluginGenericConfView::~DPluginGenericConfView()
     delete d;
 }
 
+DPluginGeneric* DPluginGenericConfView::plugin(QTreeWidgetItem* const item) const
+{
+    if (item)
+    {
+        DPluginGenericCB* const cb = dynamic_cast<DPluginGenericCB*>(item);
+
+        if (cb)
+        {
+            return cb->m_plugin;
+        }
+    }
+
+    return 0;
+}
+
 void DPluginGenericConfView::apply()
 {
     DPluginLoader* const loader = DPluginLoader::instance();
