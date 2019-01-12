@@ -23,11 +23,11 @@ DIGIKAM_ADD_BQM_PLUGIN(BQMWhiteBalancePlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/whitebalance.cpp
 )
 
-# DIGIKAM_ADD_BQM_PLUGIN(BQMIccConvertPlugin
-#     ${CMAKE_CURRENT_SOURCE_DIR}/iccconvertplugin.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/iccconvert.cpp
-# )
-# 
+DIGIKAM_ADD_BQM_PLUGIN(BQMIccConvertPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/iccconvertplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/iccconvert.cpp
+)
+
 # DIGIKAM_ADD_BQM_PLUGIN(BQMCurvesAdjustPlugin
 #     ${CMAKE_CURRENT_SOURCE_DIR}/curvesadjustplugin.cpp
 #     ${CMAKE_CURRENT_SOURCE_DIR}/curvesadjust.cpp

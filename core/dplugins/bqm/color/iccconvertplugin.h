@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to apply color effects
+ * Description : a BQM plugin to convert to color space
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,19 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_COLORFX_PLUGIN_H
-#define DIGIKAM_COLORFX_PLUGIN_H
+#ifndef DIGIKAM_ICCCONVERT_PLUGIN_H
+#define DIGIKAM_ICCCONVERT_PLUGIN_H
 
 // Local includes
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMColorFX"
+#define DPLUGIN_IID "org.kde.digikam.BQMIccConvert"
 
 namespace Digikam
 {
 
-class ColorFXPlugin : public DPluginBqm
+class IccConvertPlugin : public DPluginBqm
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +40,8 @@ class ColorFXPlugin : public DPluginBqm
 
 public:
 
-    explicit ColorFXPlugin(QObject* const parent = 0);
-    ~ColorFXPlugin();
+    explicit IccConvertPlugin(QObject* const parent = 0);
+    ~IccConvertPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -55,4 +55,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_COLORFX_PLUGIN_H
+#endif // DIGIKAM_ICCCONVERT_PLUGIN_H

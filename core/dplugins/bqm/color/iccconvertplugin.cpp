@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to apply color effects
+ * Description : a BQM plugin to convert to color space
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "colorfxplugin.h"
+#include "iccconvertplugin.h"
 
 // Qt includes
 
@@ -35,57 +35,57 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "colorfx.h"
+#include "iccconvert.h"
 
 namespace Digikam
 {
 
-ColorFXPlugin::ColorFXPlugin(QObject* const parent)
+IccConvertPlugin::IccConvertPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ColorFXPlugin::~ColorFXPlugin()
+IccConvertPlugin::~IccConvertPlugin()
 {
 }
 
-QString ColorFXPlugin::name() const
+QString IccConvertPlugin::name() const
 {
-    return i18n("Color Effects");
+    return i18n("ICC Convert");
 }
 
-QString ColorFXPlugin::iid() const
+QString IccConvertPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ColorFXPlugin::icon() const
+QIcon IccConvertPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("colorfx"));
+    return QIcon::fromTheme(QLatin1String("preferences-desktop-display-color"));
 }
 
-QString ColorFXPlugin::description() const
+QString IccConvertPlugin::description() const
 {
-    return i18n("Apply color effects");
+    return i18n("A tool to convert image to a color space");
 }
 
-QString ColorFXPlugin::details() const
+QString IccConvertPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can apply color effects over images.</p>");
+    return i18n("<p>This batch Queue Manager tool can convert images to a different color space.</p>");
 }
 
-QList<DPluginAuthor> ColorFXPlugin::authors() const
+QList<DPluginAuthor> IccConvertPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Alexander Dymo"),
-                             QLatin1String("adymo at develop dot org"),
-                             QLatin1String("(C) 2012"))
+            << DPluginAuthor(QLatin1String("Gilles Caulier"),
+                             QLatin1String("caulier dot gilles at gmail dot com"),
+                             QLatin1String("(C) 2010-2019"))
             ;
 }
 
-void ColorFXPlugin::setup(QObject* const parent)
+void IccConvertPlugin::setup(QObject* const parent)
 {
-    ColorFX* const tool = new ColorFX(parent);
+    IccConvert* const tool = new IccConvert(parent);
     tool->setPlugin(this);
 
     addTool(tool);
