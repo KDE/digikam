@@ -71,7 +71,7 @@ QString CropPlugin::description() const
 
 QString CropPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can crop images to a region.</p>");
+    return i18n("<p>This Batch Queue Manager tool can crop images to a region.</p>");
 }
 
 QList<DPluginAuthor> CropPlugin::authors() const

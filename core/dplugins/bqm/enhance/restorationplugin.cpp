@@ -71,7 +71,7 @@ QString RestorationPlugin::description() const
 
 QString RestorationPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can restore images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can restore images.</p>");
 }
 
 QList<DPluginAuthor> RestorationPlugin::authors() const

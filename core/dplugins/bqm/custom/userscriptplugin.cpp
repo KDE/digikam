@@ -71,7 +71,7 @@ QString UserScriptPlugin::description() const
 
 QString UserScriptPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can run user shell script as workflow stage.</p>");
+    return i18n("<p>This Batch Queue Manager tool can run user shell script as workflow stage.</p>");
 }
 
 QList<DPluginAuthor> UserScriptPlugin::authors() const

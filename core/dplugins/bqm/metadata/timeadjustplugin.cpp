@@ -71,7 +71,7 @@ QString TimeAdjustPlugin::description() const
 
 QString TimeAdjustPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can adjust time in images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can adjust time in images.</p>");
 }
 
 QList<DPluginAuthor> TimeAdjustPlugin::authors() const

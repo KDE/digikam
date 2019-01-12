@@ -22,3 +22,8 @@ DIGIKAM_ADD_EDITOR_PLUGIN(BcgTool
     ${CMAKE_CURRENT_SOURCE_DIR}/bcgtoolplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/bcgtool.cpp
 )
+
+DIGIKAM_ADD_EDITOR_PLUGIN(AdjustCurvesTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/adjustcurvestoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/adjustcurvestool.cpp
+)

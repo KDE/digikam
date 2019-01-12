@@ -71,7 +71,7 @@ QString BWConvertPlugin::description() const
 
 QString BWConvertPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can convert images to black and white.</p>");
+    return i18n("<p>This Batch Queue Manager tool can convert images to black and white.</p>");
 }
 
 QList<DPluginAuthor> BWConvertPlugin::authors() const

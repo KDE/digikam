@@ -71,7 +71,7 @@ QString Convert16To8Plugin::description() const
 
 QString Convert16To8Plugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can convert image color depth to 8 bits.</p>");
+    return i18n("<p>This Batch Queue Manager tool can convert image color depth to 8 bits.</p>");
 }
 
 QList<DPluginAuthor> Convert16To8Plugin::authors() const

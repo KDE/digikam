@@ -149,7 +149,6 @@
 #include "cbtool.h"
 #include "whitebalancetool.h"
 #include "channelmixertool.h"
-#include "adjustcurvestool.h"
 #include "adjustlevelstool.h"
 #include "filmtool.h"
 #include "restorationtool.h"
@@ -625,9 +624,14 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Colors' menu actions ---------------------------------------------
 
-    d->BCGAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_bcg"),this);
+    d->BCGAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_bcg"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->BCGAction);
     d->BCGAction->setEnabled(false);
 
+    d->curvesAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_adjustcurves"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->curvesAction);
+    d->curvesAction->setEnabled(false);
+    
     // NOTE: Photoshop 7 use CTRL+U.
     d->HSLAction = new QAction(QIcon::fromTheme(QLatin1String("adjusthsl")), i18n("Hue/Saturation/Lightness..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_color_hsl"), d->HSLAction);
@@ -708,14 +712,6 @@ void EditorWindow::setupStandardActions()
     connect(d->channelMixerAction, SIGNAL(triggered(bool)),
             this, SLOT(slotChannelMixer()));
     d->channelMixerAction->setEnabled(false);
-
-    d->curvesAction = new QAction(QIcon::fromTheme(QLatin1String("adjustcurves")), i18n("Curves Adjust..."), this);
-    // NOTE: Photoshop 7 use CTRL+M (but it's used in KDE to toogle menu bar).
-    actionCollection()->addAction(QLatin1String("editorwindow_color_adjustcurves"), d->curvesAction);
-    actionCollection()->setDefaultShortcut(d->curvesAction, Qt::CTRL+Qt::SHIFT+Qt::Key_C);
-    connect(d->curvesAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotCurvesAdjust()));
-    d->curvesAction->setEnabled(false);
 
     d->levelsAction  = new QAction(QIcon::fromTheme(QLatin1String("adjustlevels")), i18n("Levels Adjust..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_color_adjustlevels"), d->levelsAction);
@@ -3401,11 +3397,6 @@ void EditorWindow::slotWhiteBalance()
 void EditorWindow::slotChannelMixer()
 {
     loadTool(new ChannelMixerTool(this));
-}
-
-void EditorWindow::slotCurvesAdjust()
-{
-    loadTool(new AdjustCurvesTool(this));
 }
 
 void EditorWindow::slotLevelsAdjust()

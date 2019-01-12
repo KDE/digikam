@@ -71,7 +71,7 @@ QString BlurPlugin::description() const
 
 QString BlurPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can blur images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can blur images.</p>");
 }
 
 QList<DPluginAuthor> BlurPlugin::authors() const

@@ -71,7 +71,7 @@ QString AutoCorrectionPlugin::description() const
 
 QString AutoCorrectionPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can adjust colors automatically from images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can adjust colors automatically from images.</p>");
 }
 
 QList<DPluginAuthor> AutoCorrectionPlugin::authors() const

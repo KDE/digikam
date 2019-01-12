@@ -71,7 +71,7 @@ QString ConvertToPgfPlugin::description() const
 
 QString ConvertToPgfPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can convert images data to PGF format.</p>"
+    return i18n("<p>This Batch Queue Manager tool can convert images data to PGF format.</p>"
                 "<p>The Progressive Graphics File is a wavelet-based bitmapped image format that employs lossless and lossy data compression.</p>"
                 "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/Progressive_Graphics_File'>this page</a>.</p>");
 }

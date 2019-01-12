@@ -71,7 +71,7 @@ QString InvertPlugin::description() const
 
 QString InvertPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can invert colors from images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can invert colors from images.</p>");
 }
 
 QList<DPluginAuthor> InvertPlugin::authors() const

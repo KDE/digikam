@@ -71,7 +71,7 @@ QString ColorBalancePlugin::description() const
 
 QString ColorBalancePlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can adjust color balance from images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can adjust color balance from images.</p>");
 }
 
 QList<DPluginAuthor> ColorBalancePlugin::authors() const

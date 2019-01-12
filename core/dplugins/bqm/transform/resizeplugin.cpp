@@ -71,7 +71,7 @@ QString ResizePlugin::description() const
 
 QString ResizePlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can resize images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can resize images.</p>");
 }
 
 QList<DPluginAuthor> ResizePlugin::authors() const

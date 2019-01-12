@@ -71,7 +71,7 @@ QString CurvesAdjustPlugin::description() const
 
 QString CurvesAdjustPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can adjust the color curves from images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can adjust the color curves from images.</p>");
 }
 
 QList<DPluginAuthor> CurvesAdjustPlugin::authors() const

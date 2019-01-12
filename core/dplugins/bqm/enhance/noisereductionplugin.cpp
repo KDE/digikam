@@ -71,7 +71,7 @@ QString NoiseReductionPlugin::description() const
 
 QString NoiseReductionPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can reduce noise in images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can reduce noise in images.</p>");
 }
 
 QList<DPluginAuthor> NoiseReductionPlugin::authors() const

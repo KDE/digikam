@@ -71,7 +71,7 @@ QString ConvertToJpegPlugin::description() const
 
 QString ConvertToJpegPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can convert images data to JPEG format.</p>"
+    return i18n("<p>This Batch Queue Manager tool can convert images data to JPEG format.</p>"
                 "<p>The Joint Photographic Experts Group format is a commonly used method of lossy compression for digital images, particularly for those images produced by digital photography.</p>"
                 "<p>See details about this format from <a href='https://en.wikipedia.org/wiki/JPEG'>this page</a>.</p>");
 }

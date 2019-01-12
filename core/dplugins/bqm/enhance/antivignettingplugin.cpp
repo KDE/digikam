@@ -71,7 +71,7 @@ QString AntiVignettingPlugin::description() const
 
 QString AntiVignettingPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool remove or add vignettings to images.</p>");
+    return i18n("<p>This Batch Queue Manager tool remove or add vignettings to images.</p>");
 }
 
 QList<DPluginAuthor> AntiVignettingPlugin::authors() const
