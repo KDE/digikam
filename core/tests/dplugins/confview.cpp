@@ -29,7 +29,7 @@
 // Local includes
 
 #include "dpluginloader.h"
-#include "dplugingenericsetup.h"
+#include "dpluginsetup.h"
 
 using namespace Digikam;
 
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
     dpl->init();
     dpl->registerGenericPlugins(qApp);
 
-    DPluginGenericSetup view;
+    DPluginSetup view(DPluginAction::Generic);
     view.show();
     view.resize(1024, 600);
 

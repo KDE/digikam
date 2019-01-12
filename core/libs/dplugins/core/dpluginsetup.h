@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DPLUGIN_GENERIC_SETUP_H
-#define DIGIKAM_DPLUGIN_GENERIC_SETUP_H
+#ifndef DIGIKAM_DPLUGIN_SETUP_H
+#define DIGIKAM_DPLUGIN_SETUP_H
 
 // Qt includes
 
@@ -32,20 +32,21 @@
 
 #include "searchtextbar.h"
 #include "digikam_export.h"
+#include "dpluginaction.h"
 
 class QTreeWidgetItem;
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DPluginGenericSetup : public QWidget
+class DIGIKAM_EXPORT DPluginSetup : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit DPluginGenericSetup(QWidget* const parent = 0);
-    ~DPluginGenericSetup();
+    explicit DPluginSetup(DPluginAction::ActionType type, QWidget* const parent = 0);
+    ~DPluginSetup();
 
     void applySettings();
 
@@ -71,4 +72,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // DIGIKAM_DPLUGIN_GENERIC_SETUP_H
+#endif // DIGIKAM_DPLUGIN_SETUP_H

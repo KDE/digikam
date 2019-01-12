@@ -25,7 +25,7 @@
 
 // Local includes
 
-#include "dplugingenericsetup.h"
+#include "dpluginsetup.h"
 
 namespace ShowFoto
 {
@@ -39,14 +39,14 @@ public:
     {
     }
 
-    Digikam::DPluginGenericSetup* setupView;
+    Digikam::DPluginSetup* setupView;
 };
 
 SetupPlugins::SetupPlugins(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
-    d->setupView = new Digikam::DPluginGenericSetup(viewport());
+    d->setupView = new Digikam::DPluginSetup(Digikam::DPluginAction::Generic, viewport());
 
     setWidget(d->setupView);
     setWidgetResizable(true);

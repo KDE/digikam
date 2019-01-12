@@ -40,8 +40,8 @@ public:
     enum MiscTab
     {
         Generic = 0,
-        Bqm,
-        Editor
+        Editor,
+        Bqm
     };
 
 public:

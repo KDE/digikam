@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DPLUGIN_GENERIC_CONF_VIEW_H
-#define DIGIKAM_DPLUGIN_GENERIC_CONF_VIEW_H
+#ifndef DIGIKAM_DPLUGIN_CONF_VIEW_H
+#define DIGIKAM_DPLUGIN_CONF_VIEW_H
 
 // Qt includes
 
@@ -32,14 +32,14 @@
 
 // Local includes
 
-#include "dplugingeneric.h"
 #include "dpluginloader.h"
 #include "digikam_export.h"
+#include "dpluginaction.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DPluginGenericConfView : public QTreeWidget
+class DIGIKAM_EXPORT DPluginConfView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -47,8 +47,8 @@ public:
 
     /** Default constructor.
      */
-    explicit DPluginGenericConfView(QWidget* const parent=0);
-    ~DPluginGenericConfView();
+    explicit DPluginConfView(DPluginAction::ActionType type, QWidget* const parent=0);
+    ~DPluginConfView();
 
     /** Apply all changes about plugins selected to be hosted in host application.
      */
@@ -82,7 +82,7 @@ public:
      */
     QString filter() const;
 
-    DPluginGeneric* plugin(QTreeWidgetItem* const item) const;
+    DPlugin* plugin(QTreeWidgetItem* const item) const;
 
 Q_SIGNALS:
 
@@ -99,4 +99,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_DPLUGIN_GENERIC_CONF_VIEW_H
+#endif // DIGIKAM_DPLUGIN_CONF_VIEW_H

@@ -32,8 +32,9 @@
 
 // Local includes
 
-#include "dplugingenericsetup.h"
+#include "dpluginsetup.h"
 #include "dpluginbqmsetup.h"
+#include "dpluginaction.h"
 
 namespace Digikam
 {
@@ -44,13 +45,16 @@ public:
 
     explicit Private()
       : tab(0),
-        setupGeneric(0)
+        setupGeneric(0),
+        setupEditor(0),
+        setupBqm(0)
     {
     }
 
     QTabWidget*          tab;
 
-    DPluginGenericSetup* setupGeneric;
+    DPluginSetup*        setupGeneric;
+    DPluginSetup*        setupEditor;
     DPluginBqmSetup*     setupBqm;
 };
 
@@ -64,8 +68,13 @@ SetupPlugins::SetupPlugins(QWidget* const parent)
 
     // --------------------
 
-    d->setupGeneric = new DPluginGenericSetup(d->tab);
+    d->setupGeneric = new DPluginSetup(DPluginAction::Generic, d->tab);
     d->tab->insertTab(Generic, d->setupGeneric, i18nc("@title:tab", "Generic"));
+
+    // --------------------
+
+    d->setupEditor = new DPluginSetup(DPluginAction::Editor, d->tab);
+    d->tab->insertTab(Editor, d->setupEditor, i18nc("@title:tab", "Image Editor"));
 
     // --------------------
 
@@ -81,6 +90,7 @@ SetupPlugins::~SetupPlugins()
 void SetupPlugins::applySettings()
 {
     d->setupGeneric->applySettings();
+    d->setupEditor->applySettings();
 }
 
 } // namespace Digikam
