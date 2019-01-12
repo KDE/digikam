@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to apply color effects
+ * Description : a BQM plugin to adjust color curves
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "colorfxplugin.h"
+#include "curvesadjustplugin.h"
 
 // Qt includes
 
@@ -35,57 +35,57 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "colorfx.h"
+#include "curvesadjust.h"
 
 namespace Digikam
 {
 
-ColorFXPlugin::ColorFXPlugin(QObject* const parent)
+CurvesAdjustPlugin::CurvesAdjustPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ColorFXPlugin::~ColorFXPlugin()
+CurvesAdjustPlugin::~CurvesAdjustPlugin()
 {
 }
 
-QString ColorFXPlugin::name() const
+QString CurvesAdjustPlugin::name() const
 {
-    return i18n("Color Effects");
+    return i18n("Curves Adjust");
 }
 
-QString ColorFXPlugin::iid() const
+QString CurvesAdjustPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ColorFXPlugin::icon() const
+QIcon CurvesAdjustPlugin::icon() const
 {
     return QIcon::fromTheme(QLatin1String("colorfx"));
 }
 
-QString ColorFXPlugin::description() const
+QString CurvesAdjustPlugin::description() const
 {
-    return i18n("Apply color effects");
+    return i18n("A tool to adjust color curves");
 }
 
-QString ColorFXPlugin::details() const
+QString CurvesAdjustPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can apply color effects over images.</p>");
+    return i18n("<p>This batch Queue Manager tool can adjust the color curves from images.</p>");
 }
 
-QList<DPluginAuthor> ColorFXPlugin::authors() const
+QList<DPluginAuthor> CurvesAdjustPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Alexander Dymo"),
-                             QLatin1String("adymo at develop dot org"),
-                             QLatin1String("(C) 2012"))
+            << DPluginAuthor(QLatin1String("Gilles Caulier"),
+                             QLatin1String("caulier dot gilles at gmail dot com"),
+                             QLatin1String("(C) 2010-2019"))
             ;
 }
 
-void ColorFXPlugin::setup(QObject* const parent)
+void CurvesAdjustPlugin::setup(QObject* const parent)
 {
-    ColorFX* const tool = new ColorFX(parent);
+    CurvesAdjust* const tool = new CurvesAdjust(parent);
     tool->setPlugin(this);
 
     addTool(tool);
