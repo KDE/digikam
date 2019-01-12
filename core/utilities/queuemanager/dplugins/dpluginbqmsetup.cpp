@@ -41,6 +41,7 @@
 // Local includes
 
 #include "dpluginbqmconfview.h"
+#include "dpluginaboutdlg.h"
 
 namespace Digikam
 {
@@ -101,6 +102,9 @@ DPluginBqmSetup::DPluginBqmSetup(QWidget* const parent)
     connect(d->pluginFilter, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
             this, SLOT(slotSearchTextChanged(SearchTextSettings)));
 
+    connect(d->pluginsList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
+            this, SLOT(slotAboutPlugin(QTreeWidgetItem*)));
+
     // --------------------------------------------------------
 
     updateInfo();
@@ -109,6 +113,15 @@ DPluginBqmSetup::DPluginBqmSetup(QWidget* const parent)
 DPluginBqmSetup::~DPluginBqmSetup()
 {
     delete d;
+}
+
+void DPluginBqmSetup::slotAboutPlugin(QTreeWidgetItem* item)
+{
+    if (!item) return;
+
+    QPointer<DPluginAboutDlg> dlg = new DPluginAboutDlg(d->pluginsList->plugin(item));
+    dlg->exec();
+    delete dlg;
 }
 
 void DPluginBqmSetup::slotSearchTextChanged(const SearchTextSettings& settings)

@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "dplugin.h"
+#include "dpluginbqm.h"
 #include "dpluginloader.h"
 #include "digikam_export.h"
 
@@ -65,6 +65,8 @@ public:
     /** Return the current string used to filter the plugins list.
      */
     QString filter() const;
+
+    DPluginBqm* plugin(QTreeWidgetItem* const item) const;
 
 Q_SIGNALS:
 

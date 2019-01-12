@@ -32,6 +32,8 @@
 
 #include "searchtextbar.h"
 
+class QTreeWidgetItem;
+
 namespace Digikam
 {
 
@@ -49,6 +51,7 @@ private Q_SLOTS:
     void slotSearchTextChanged(const SearchTextSettings& settings);
     void slotSetFilter(const QString& filter, Qt::CaseSensitivity cs);
     void slotSearchResult(int found);
+    void slotAboutPlugin(QTreeWidgetItem*);
 
 private:
 

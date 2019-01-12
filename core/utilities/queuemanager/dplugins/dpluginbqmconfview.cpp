@@ -143,6 +143,21 @@ DPluginBqmConfView::~DPluginBqmConfView()
     delete d;
 }
 
+DPluginBqm* DPluginBqmConfView::plugin(QTreeWidgetItem* const item) const
+{
+    if (item)
+    {
+        DPluginBqmCB* const cb = dynamic_cast<DPluginBqmCB*>(item);
+
+        if (cb)
+        {
+            return cb->m_plugin;
+        }
+    }
+
+    return 0;
+}
+
 int DPluginBqmConfView::count() const
 {
     return d->bqmBoxes.count();
