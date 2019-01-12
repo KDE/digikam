@@ -66,7 +66,7 @@ QIcon Convert8To16Plugin::icon() const
 
 QString Convert8To16Plugin::description() const
 {
-    return i18n("A tool to convert color depth 16 bits");
+    return i18n("A tool to convert color depth to 16 bits");
 }
 
 QString Convert8To16Plugin::details() const

@@ -73,7 +73,7 @@ DIGIKAM_ADD_BQM_PLUGIN(BQMConvert8To16Plugin
     ${CMAKE_CURRENT_SOURCE_DIR}/convert8to16.cpp
 )
 
-# DIGIKAM_ADD_BQM_PLUGIN(BQMConvert16To8Plugin
-#     ${CMAKE_CURRENT_SOURCE_DIR}/convert16to8plugin.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/convert16to8.cpp
-# )
+DIGIKAM_ADD_BQM_PLUGIN(BQMConvert16To8Plugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/convert16to8plugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/convert16to8.cpp
+)

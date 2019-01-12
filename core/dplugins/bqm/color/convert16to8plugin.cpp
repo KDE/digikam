@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to apply color effects
+ * Description : a BQM plugin to convert 16 bits color depth to 8
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "colorfxplugin.h"
+#include "convert16to8plugin.h"
 
 // Qt includes
 
@@ -35,57 +35,57 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "colorfx.h"
+#include "convert16to8.h"
 
 namespace Digikam
 {
 
-ColorFXPlugin::ColorFXPlugin(QObject* const parent)
+Convert16To8Plugin::Convert16To8Plugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ColorFXPlugin::~ColorFXPlugin()
+Convert16To8Plugin::~Convert16To8Plugin()
 {
 }
 
-QString ColorFXPlugin::name() const
+QString Convert16To8Plugin::name() const
 {
-    return i18n("Color Effects");
+    return i18n("Convert to 8 bits");
 }
 
-QString ColorFXPlugin::iid() const
+QString Convert16To8Plugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ColorFXPlugin::icon() const
+QIcon Convert16To8Plugin::icon() const
 {
     return QIcon::fromTheme(QLatin1String("colorfx"));
 }
 
-QString ColorFXPlugin::description() const
+QString Convert16To8Plugin::description() const
 {
-    return i18n("Apply color effects");
+    return i18n("A tool to convert color depth to 8 bits");
 }
 
-QString ColorFXPlugin::details() const
+QString Convert16To8Plugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can apply color effects over images.</p>");
+    return i18n("<p>This batch Queue Manager tool can convert image color depth to 8 bits.</p>");
 }
 
-QList<DPluginAuthor> ColorFXPlugin::authors() const
+QList<DPluginAuthor> Convert16To8Plugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2009-2019"))
+                             QLatin1String("(C) 2010-2019"))
             ;
 }
 
-void ColorFXPlugin::setup(QObject* const parent)
+void Convert16To8Plugin::setup(QObject* const parent)
 {
-    ColorFX* const tool = new ColorFX(parent);
+    Convert16to8* const tool = new Convert16to8(parent);
     tool->setPlugin(this);
 
     addTool(tool);
