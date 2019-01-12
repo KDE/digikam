@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMWhiteBalance"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMWhiteBalance"
 
 namespace Digikam
 {

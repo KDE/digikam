@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMAntiVignetting"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMAntiVignetting"
 
 namespace Digikam
 {

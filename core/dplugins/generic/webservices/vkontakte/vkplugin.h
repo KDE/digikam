@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.VKontakte"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.VKontakte"
 
 namespace Digikam
 {

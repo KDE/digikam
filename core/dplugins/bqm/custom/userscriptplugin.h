@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMUserScript"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMUserScript"
 
 namespace Digikam
 {

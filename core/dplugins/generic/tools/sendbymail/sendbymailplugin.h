@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.SendByMail"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.SendByMail"
 
 namespace Digikam
 {

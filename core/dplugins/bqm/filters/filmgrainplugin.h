@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMFilmGrain"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMFilmGrain"
 
 namespace Digikam
 {

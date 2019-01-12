@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.Unified"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.Unified"
 
 namespace Digikam
 {

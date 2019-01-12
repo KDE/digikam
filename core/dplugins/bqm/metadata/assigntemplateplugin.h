@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMAssignTemplate"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMAssignTemplate"
 
 namespace Digikam
 {

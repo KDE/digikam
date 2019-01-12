@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.HtmlGallery"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.HtmlGallery"
 
 namespace Digikam
 {

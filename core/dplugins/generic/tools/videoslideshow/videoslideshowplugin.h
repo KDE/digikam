@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.VideoSlideShow"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.VideoSlideShow"
 
 namespace Digikam
 {

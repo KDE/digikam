@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMRestoration"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMRestoration"
 
 namespace Digikam
 {

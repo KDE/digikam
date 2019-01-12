@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMNoiseReduction"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMNoiseReduction"
 
 namespace Digikam
 {

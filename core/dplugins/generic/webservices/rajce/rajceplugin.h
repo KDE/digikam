@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.Rajce"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.Rajce"
 
 namespace Digikam
 {

@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.DropBox"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.DropBox"
 
 namespace Digikam
 {

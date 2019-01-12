@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.Box"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.Box"
 
 namespace Digikam
 {

@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.Flickr"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.Flickr"
 
 namespace Digikam
 {

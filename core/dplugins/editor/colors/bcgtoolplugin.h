@@ -27,7 +27,7 @@
 
 #include "dplugineditor.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BCGTool"
+#define DPLUGIN_IID "org.kde.digikam.plugin.editor.BCGTool"
 
 namespace Digikam
 {

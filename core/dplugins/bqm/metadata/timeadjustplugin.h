@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMTimeAdjust"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMTimeAdjust"
 
 namespace Digikam
 {

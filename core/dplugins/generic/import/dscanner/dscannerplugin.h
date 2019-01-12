@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.DigitalScanner"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.DigitalScanner"
 
 namespace KSaneIface
 {

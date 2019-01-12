@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.Calendar"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.Calendar"
 
 namespace Digikam
 {

@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMConverToPng"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMConverToPng"
 
 namespace Digikam
 {

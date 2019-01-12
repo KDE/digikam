@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.Google"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.Google"
 
 namespace Digikam
 {

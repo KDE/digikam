@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.MediaServer"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.MediaServer"
 
 namespace Digikam
 {

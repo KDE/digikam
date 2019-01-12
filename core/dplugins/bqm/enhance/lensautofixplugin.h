@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMLensAutoFix"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMLensAutoFix"
 
 namespace Digikam
 {

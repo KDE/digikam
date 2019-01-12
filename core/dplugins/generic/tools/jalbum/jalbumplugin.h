@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.JAlbum"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.JAlbum"
 
 namespace Digikam
 {

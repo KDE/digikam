@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMConverToJp2"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMConverToJp2"
 
 namespace Digikam
 {

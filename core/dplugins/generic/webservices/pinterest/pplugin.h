@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.Pinterest"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.Pinterest"
 
 namespace Digikam
 {

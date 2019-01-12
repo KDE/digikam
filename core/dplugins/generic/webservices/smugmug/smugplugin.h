@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.SmugMug"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.SmugMug"
 
 namespace Digikam
 {

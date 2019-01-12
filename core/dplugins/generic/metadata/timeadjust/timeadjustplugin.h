@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.TimeAdjust"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.TimeAdjust"
 
 namespace Digikam
 {

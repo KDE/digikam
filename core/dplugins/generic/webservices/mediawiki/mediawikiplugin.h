@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.MediaWiki"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.MediaWiki"
 
 namespace Digikam
 {

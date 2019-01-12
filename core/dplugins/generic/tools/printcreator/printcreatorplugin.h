@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.PrintCreator"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.PrintCreator"
 
 namespace Digikam
 {

@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMBorder"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMBorder"
 
 namespace Digikam
 {

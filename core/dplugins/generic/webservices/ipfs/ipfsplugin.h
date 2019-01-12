@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.IpFs"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.IpFs"
 
 namespace Digikam
 {

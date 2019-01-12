@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMLocalContrast"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMLocalContrast"
 
 namespace Digikam
 {

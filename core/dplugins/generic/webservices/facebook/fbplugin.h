@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.FaceBook"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.FaceBook"
 
 namespace Digikam
 {

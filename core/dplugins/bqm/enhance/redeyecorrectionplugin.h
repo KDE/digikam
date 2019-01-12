@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMRedEyeCorrection"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMRedEyeCorrection"
 
 namespace Digikam
 {

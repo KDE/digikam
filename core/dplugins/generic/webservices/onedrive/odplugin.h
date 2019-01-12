@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.OneDrive"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.OneDrive"
 
 namespace Digikam
 {

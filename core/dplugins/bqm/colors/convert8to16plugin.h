@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMConvert8To16"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMConvert8To16"
 
 namespace Digikam
 {

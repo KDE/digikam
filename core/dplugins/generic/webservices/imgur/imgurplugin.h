@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.ImgUr"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.ImgUr"
 
 namespace Digikam
 {

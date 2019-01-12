@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.BQMCurvesAdjust"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMCurvesAdjust"
 
 namespace Digikam
 {

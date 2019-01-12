@@ -27,7 +27,7 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.Twitter"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.Twitter"
 
 namespace Digikam
 {
