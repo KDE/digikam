@@ -63,11 +63,11 @@ DIGIKAM_ADD_BQM_PLUGIN(BQMBWconvertPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/bwconvert.cpp
 )
 
-# DIGIKAM_ADD_BQM_PLUGIN(BQMColorBalancePlugin
-#     ${CMAKE_CURRENT_SOURCE_DIR}/colorbalanceplugin.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/colorbalance.cpp
-# )
-# 
+DIGIKAM_ADD_BQM_PLUGIN(BQMColorBalancePlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorbalanceplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorbalance.cpp
+)
+ 
 # DIGIKAM_ADD_BQM_PLUGIN(BQMConvert8To16Plugin
 #     ${CMAKE_CURRENT_SOURCE_DIR}/convert8to16plugin.cpp
 #     ${CMAKE_CURRENT_SOURCE_DIR}/convert8to16.cpp
