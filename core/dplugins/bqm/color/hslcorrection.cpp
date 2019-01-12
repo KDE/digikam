@@ -44,9 +44,6 @@ HSLCorrection::HSLCorrection(QObject* const parent)
     : BatchTool(QLatin1String("HSLCorrection"), ColorTool, parent)
 {
     m_settingsView = 0;
-    setToolTitle(i18n("HSL Correction"));
-    setToolDescription(i18n("Fix Hue/Saturation/Lightness."));
-    setToolIconName(QLatin1String("adjusthsl"));
 }
 
 HSLCorrection::~HSLCorrection()
