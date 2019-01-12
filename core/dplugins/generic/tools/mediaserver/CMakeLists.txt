@@ -16,7 +16,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN(GENEMediaServerPlugin
+DIGIKAM_ADD_GENERIC_PLUGIN(MediaServer
                    ${CMAKE_CURRENT_SOURCE_DIR}/dmediaserverdlg.cpp
                    ${CMAKE_CURRENT_SOURCE_DIR}/mediaserverplugin.cpp
 )

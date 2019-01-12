@@ -52,6 +52,6 @@ set(htmlgalleryplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/htmlgalleryplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN(GENEHtmlGalleryPlugin
+DIGIKAM_ADD_GENERIC_PLUGIN(HtmlGallery
                    ${htmlgalleryplugin_SRCS}
 )

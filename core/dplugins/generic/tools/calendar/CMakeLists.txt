@@ -39,6 +39,6 @@ ki18n_wrap_ui(calendarplugin_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/calprogress.ui
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN(GENECalendarPlugin
+DIGIKAM_ADD_GENERIC_PLUGIN(Calendar
                    ${calendarplugin_SRCS}
 )

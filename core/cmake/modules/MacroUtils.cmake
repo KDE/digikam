@@ -182,11 +182,11 @@ macro(DIGIKAM_ADD_GENERIC_PLUGIN _target_name)
 
     set(_src ${ARGN})
 
-    add_library(${_target_name} MODULE ${_src})
+    add_library(Generic_${_target_name}_Plugin MODULE ${_src})
 
-    target_link_libraries(${_target_name} ${${_target_name}_LIBS} digikamcore)
+    target_link_libraries(Generic_${_target_name}_Plugin ${GENE${_target_name}_LIBS} digikamcore)
 
-    install(TARGETS ${_target_name}
+    install(TARGETS Generic_${_target_name}_Plugin
             DESTINATION ${PLUGIN_INSTALL_DIR}/digikam/generic)
 
 endmacro()
@@ -197,11 +197,11 @@ macro(DIGIKAM_ADD_EDITOR_PLUGIN _target_name)
 
     set(_src ${ARGN})
 
-    add_library(${_target_name} MODULE ${_src})
+    add_library(Editor_${_target_name}_Plugin MODULE ${_src})
 
-    target_link_libraries(${_target_name} ${${_target_name}_LIBS} digikamcore)
+    target_link_libraries(Editor_${_target_name}_Plugin ${${_target_name}_LIBS} digikamcore)
 
-    install(TARGETS ${_target_name}
+    install(TARGETS Editor_${_target_name}_Plugin
             DESTINATION ${PLUGIN_INSTALL_DIR}/digikam/editor)
 
 endmacro()
@@ -212,11 +212,11 @@ macro(DIGIKAM_ADD_BQM_PLUGIN _target_name)
 
     set(_src ${ARGN})
 
-    add_library(${_target_name} MODULE ${_src})
+    add_library(Bqm_${_target_name}_Plugin MODULE ${_src})
 
-    target_link_libraries(${_target_name} ${${_target_name}_LIBS} digikamgui)
+    target_link_libraries(Bqm_${_target_name}_Plugin ${${_target_name}_LIBS} digikamgui)
 
-    install(TARGETS ${_target_name}
+    install(TARGETS Bqm_${_target_name}_Plugin
             DESTINATION ${PLUGIN_INSTALL_DIR}/digikam/bqm)
 
 endmacro()

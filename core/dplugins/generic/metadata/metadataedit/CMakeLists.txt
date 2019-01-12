@@ -55,4 +55,4 @@ set(metadataeditplugin_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/exif/exifeditwidget.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/metadataeditplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN(GENEMetadataEditPlugin ${metadataeditplugin_SRCS})
+DIGIKAM_ADD_GENERIC_PLUGIN(MetadataEdit ${metadataeditplugin_SRCS})

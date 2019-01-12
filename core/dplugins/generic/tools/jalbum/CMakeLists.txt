@@ -31,6 +31,6 @@ set(jalbumplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/jalbumplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN(GENEJAlbumPlugin
+DIGIKAM_ADD_GENERIC_PLUGIN(JAlbum
                    ${jalbumplugin_SRCS}
 )
