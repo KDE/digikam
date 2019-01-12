@@ -33,11 +33,11 @@ DIGIKAM_ADD_BQM_PLUGIN(BQMCurvesAdjustPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}/curvesadjust.cpp
 )
 
-# DIGIKAM_ADD_BQM_PLUGIN(BQMChannelMixerPlugin
-#     ${CMAKE_CURRENT_SOURCE_DIR}/channelmixerplugin.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/channelmixer.cpp
-# )
-# 
+DIGIKAM_ADD_BQM_PLUGIN(BQMChannelMixerPlugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/channelmixerplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/channelmixer.cpp
+)
+
 # DIGIKAM_ADD_BQM_PLUGIN(BQMBcgCorrectionPlugin
 #     ${CMAKE_CURRENT_SOURCE_DIR}/bcgcorrectionplugin.cpp
 #     ${CMAKE_CURRENT_SOURCE_DIR}/bcgcorrection.cpp

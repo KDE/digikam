@@ -45,9 +45,6 @@ ChannelMixer::ChannelMixer(QObject* const parent)
     : BatchTool(QLatin1String("ChannelMixer"), ColorTool, parent)
 {
     m_settingsView = 0;
-    setToolTitle(i18n("Channel Mixer"));
-    setToolDescription(i18n("Mix color channel."));
-    setToolIconName(QLatin1String("channelmixer"));
 }
 
 ChannelMixer::~ChannelMixer()
