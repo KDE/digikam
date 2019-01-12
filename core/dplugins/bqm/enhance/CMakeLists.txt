@@ -54,7 +54,7 @@ DIGIKAM_ADD_BQM_PLUGIN(BQMSharpenPlugin
 )
 
 if(LensFun_FOUND)
-   
+
    include_directories(${LENSFUN_INCLUDE_DIRS})
 
    DIGIKAM_ADD_BQM_PLUGIN(BQMLensAutoFixPlugin
