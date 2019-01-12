@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to apply color effects
+ * Description : a BQM plugin to adjust BCG
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "colorfxplugin.h"
+#include "bcgcorrectionplugin.h"
 
 // Qt includes
 
@@ -35,57 +35,57 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "colorfx.h"
+#include "bcgcorrection.h"
 
 namespace Digikam
 {
 
-ColorFXPlugin::ColorFXPlugin(QObject* const parent)
+BCGCorrectionPlugin::BCGCorrectionPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-ColorFXPlugin::~ColorFXPlugin()
+BCGCorrectionPlugin::~BCGCorrectionPlugin()
 {
 }
 
-QString ColorFXPlugin::name() const
+QString BCGCorrectionPlugin::name() const
 {
-    return i18n("Color Effects");
+    return i18n("BCG Correction");
 }
 
-QString ColorFXPlugin::iid() const
+QString BCGCorrectionPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon ColorFXPlugin::icon() const
+QIcon BCGCorrectionPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("colorfx"));
+    return QIcon::fromTheme(QLatin1String("contrast"));
 }
 
-QString ColorFXPlugin::description() const
+QString BCGCorrectionPlugin::description() const
 {
-    return i18n("Apply color effects");
+    return i18n("A tool to fix Brightness/Contrast/Gamma");
 }
 
-QString ColorFXPlugin::details() const
+QString BCGCorrectionPlugin::details() const
 {
-    return i18n("<p>This batch Queue Manager tool can apply color effects over images.</p>");
+    return i18n("<p>This batch Queue Manager tool can adjust Brightness/Contrast/Gamma from images.</p>");
 }
 
-QList<DPluginAuthor> ColorFXPlugin::authors() const
+QList<DPluginAuthor> BCGCorrectionPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Alexander Dymo"),
-                             QLatin1String("adymo at develop dot org"),
-                             QLatin1String("(C) 2012"))
+            << DPluginAuthor(QLatin1String("Gilles Caulier"),
+                             QLatin1String("caulier dot gilles at gmail dot com"),
+                             QLatin1String("(C) 2010-2019"))
             ;
 }
 
-void ColorFXPlugin::setup(QObject* const parent)
+void BCGCorrectionPlugin::setup(QObject* const parent)
 {
-    ColorFX* const tool = new ColorFX(parent);
+    BCGCorrection* const tool = new BCGCorrection(parent);
     tool->setPlugin(this);
 
     addTool(tool);
