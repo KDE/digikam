@@ -112,7 +112,8 @@ QStringList DPluginLoader::Private::pluginEntriesList() const
 
 /** Append obj to the given plugins list.
  */
-bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* const loader, QList<DPlugin*>& list)
+bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* const loader,
+                                          QList<DPlugin*>& plist, QList<QPluginLoader*>& llist)
 {
     DPlugin* const plugin = qobject_cast<DPlugin*>(obj);
 
@@ -131,7 +132,8 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* con
 
             plugin->setShouldLoaded(group.readEntry(plugin->iid(), true));
 
-            list << plugin;
+            plist << plugin;
+            llist << loader;
         }
 
         return true;
@@ -180,7 +182,7 @@ void DPluginLoader::Private::loadPlugins()
 
         if (obj)
         {
-            bool isPlugin = appendPlugin(obj, loader, allPlugins);
+            bool isPlugin = appendPlugin(obj, loader, allPlugins, allLoaders);
 
             if (!isPlugin)
             {

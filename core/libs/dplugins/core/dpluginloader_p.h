@@ -44,15 +44,17 @@ public:
 
     /** Stage to load plugins in memory
     */
-    bool        appendPlugin(QObject* const obj, QPluginLoader* const loader, QList<DPlugin*>& list);
+    bool        appendPlugin(QObject* const obj, QPluginLoader* const loader,
+                             QList<DPlugin*>& plist, QList<QPluginLoader*>& llist);
     void        loadPlugins();
 
 public:
 
-    bool            pluginsLoaded;
-    QList<DPlugin*> allPlugins;
-    QStringList     blacklist;
-    QStringList     whitelist;
+    bool                  pluginsLoaded;
+    QList<DPlugin*>       allPlugins;
+    QList<QPluginLoader*> allLoaders;
+    QStringList           blacklist;
+    QStringList           whitelist;
 };
 
 } // namepace Digikam

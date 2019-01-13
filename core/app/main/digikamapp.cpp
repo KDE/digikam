@@ -233,6 +233,7 @@ DigikamApp::~DigikamApp()
     ApplicationSettings::instance()->saveSettings();
 
     ScanController::instance()->shutDown();
+    DPluginLoader::instance()->cleanUp();
     AlbumManager::instance()->cleanUp();
     ItemAttributesWatch::cleanUp();
     ThumbnailLoadThread::cleanUp();

@@ -81,6 +81,11 @@ class DIGIKAM_EXPORT DPluginLoader : public QObject
      */
     void init();
 
+     /**
+     * Unload all loaded plugins. Call this method before the main instance is closed.
+     */
+    void cleanUp();
+
     /**
      * @brief Returns all available plugins.
      */

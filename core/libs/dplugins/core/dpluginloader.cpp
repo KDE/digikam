@@ -69,6 +69,16 @@ void DPluginLoader::init()
     d->loadPlugins();
 }
 
+void DPluginLoader::cleanUp()
+{
+    foreach (QPluginLoader* const loader, d->allLoaders)
+    {
+        loader->unload();
+    }
+
+    d->allLoaders.clear();
+}
+
 QString DPluginLoader::configGroupName() const
 {
     return QLatin1String("EnabledDPlugins");
