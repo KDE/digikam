@@ -341,7 +341,6 @@ private Q_SLOTS:
     void slotNextRightSideBarTab();
     void slotToolDone();
     void slotInsertText();
-    void slotTexture();
     void slotColorEffects();
     void slotCharcoal();
     void slotEmboss();

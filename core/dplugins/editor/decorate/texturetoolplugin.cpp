@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to add border
+ * Description : image editor plugin to add texture
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "bordertoolplugin.h"
+#include "texturetoolplugin.h"
 
 // Qt includes
 
@@ -33,78 +33,78 @@
 // Local includes
 
 #include "editorwindow.h"
-#include "bordertool.h"
+#include "texturetool.h"
 
 namespace Digikam
 {
 
-BorderToolPlugin::BorderToolPlugin(QObject* const parent)
+TextureToolPlugin::TextureToolPlugin(QObject* const parent)
     : DPluginEditor(parent)
 {
 }
 
-BorderToolPlugin::~BorderToolPlugin()
+TextureToolPlugin::~TextureToolPlugin()
 {
 }
 
-QString BorderToolPlugin::name() const
+QString TextureToolPlugin::name() const
 {
-    return i18n("Add Border");
+    return i18n("Texture");
 }
 
-QString BorderToolPlugin::iid() const
+QString TextureToolPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon BorderToolPlugin::icon() const
+QIcon TextureToolPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("bordertool"));
+    return QIcon::fromTheme(QLatin1String("texture"));
 }
 
-QString BorderToolPlugin::description() const
+QString TextureToolPlugin::description() const
 {
-    return i18n("A tool to add a border around image");
+    return i18n("A tool to apply a texture over an image");
 }
 
-QString BorderToolPlugin::details() const
+QString TextureToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can add decorative border around image.</p>");
+    return i18n("<p>This Image Editor tool can apply a texture over an image.</p>");
 }
 
-QList<DPluginAuthor> BorderToolPlugin::authors() const
+QList<DPluginAuthor> TextureToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Marcel Wiesweg"),
                              QLatin1String("marcel dot wiesweg at gmx dot de"),
-                             QLatin1String("(C) 2006-2012"))
+                             QLatin1String("(C) 2006-2010"))
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
                              QLatin1String("(C) 2005-2019"))
             ;
 }
 
-void BorderToolPlugin::setup(QObject* const parent)
+void TextureToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Add Border..."));
-    ac->setObjectName(QLatin1String("editorwindow_decorate_border"));
+    ac->setText(i18nc("@action", "Apply Texture..."));
+    ac->setObjectName(QLatin1String("editorwindow_decorate_texture"));
     ac->setActionCategory(DPluginAction::EditorDecorate);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotBorder()));
+            this, SLOT(slotTexture()));
 
     addAction(ac);
 }
 
-void BorderToolPlugin::slotBorder()
+void TextureToolPlugin::slotTexture()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
 
     if (editor)
     {
-        BorderTool* const tool = new BorderTool(editor);
+        TextureTool* const tool = new TextureTool(editor);
         tool->setPlugin(this);
         editor->loadTool(tool);
     }

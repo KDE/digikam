@@ -550,12 +550,6 @@ void EditorWindow::setupStandardActions()
             this, SLOT(slotInsertText()));
     d->insertTextAction->setEnabled(false);
 
-    d->textureAction = new QAction(QIcon::fromTheme(QLatin1String("texture")), i18n("Apply Texture..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_decorate_texture"), d->textureAction );
-    connect(d->textureAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotTexture()));
-    d->textureAction->setEnabled(false);
-
     // -- Standard 'Effects' menu actions ---------------------------------------------
 
     d->colorEffectsAction = new QAction(QIcon::fromTheme(QLatin1String("colorfx")), i18n("Color Effects..."), this);
@@ -659,6 +653,10 @@ void EditorWindow::setupStandardActions()
     d->borderAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_decorate_border"), this);
     actionCollection()->addActions(QList<QAction*>() << d->borderAction);
     d->borderAction->setEnabled(false);
+
+    d->textureAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_decorate_texture"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->textureAction);
+    d->textureAction->setEnabled(false);
 
     // **********************************************************
 
@@ -3158,11 +3156,6 @@ void EditorWindow::slotToolDone()
 void EditorWindow::slotInsertText()
 {
     loadTool(new InsertTextTool(this));
-}
-
-void EditorWindow::slotTexture()
-{
-    loadTool(new TextureTool(this));
 }
 
 void EditorWindow::slotColorEffects()

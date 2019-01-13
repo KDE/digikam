@@ -23,3 +23,8 @@ DIGIKAM_ADD_EDITOR_PLUGIN(BorderTool
     ${CMAKE_CURRENT_SOURCE_DIR}/bordertool.cpp
 )
 
+DIGIKAM_ADD_EDITOR_PLUGIN(TextureTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/texturetoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/texturetool.cpp
+)
+
