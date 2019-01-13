@@ -18,8 +18,40 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN(BcgTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/bcgtoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/bcgtool.cpp
+DIGIKAM_ADD_EDITOR_PLUGIN(FreeRotationTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/freerotationtoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/freerotationtool.cpp
 )
 
+DIGIKAM_ADD_EDITOR_PLUGIN(ShearTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/sheartoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/sheartool.cpp
+)
+
+DIGIKAM_ADD_EDITOR_PLUGIN(ResizeTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/resizetoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/resizetool.cpp
+)
+
+DIGIKAM_ADD_EDITOR_PLUGIN(PerspectiveTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/perspectivetoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/perspectivetool.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/perspectivewidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/triangle.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/matrix.cpp
+)
+
+DIGIKAM_ADD_EDITOR_PLUGIN(RatioCropTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/imageselectionwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ratiocroptoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ratiocroptool.cpp
+)
+
+if(Lqr-1_FOUND)
+
+    DIGIKAM_ADD_EDITOR_PLUGIN(ContentAwareResizeTool
+        ${CMAKE_CURRENT_SOURCE_DIR}/contentawareresizetoolplugin.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/contentawareresizetool.cpp
+       )
+
+endif()
