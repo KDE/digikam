@@ -503,9 +503,6 @@ GeolocationEdit::GeolocationEdit(QWidget* const parent, DInfoInterface* const if
 
     d->mapWidget->setActive(true);
 
-    // Workaround for a drag & drop problem of images to the map for Qt>=5.9.2
-    //show();
-
     setImages(d->iface->currentSelectedItems());
 }
 
@@ -516,7 +513,7 @@ GeolocationEdit::~GeolocationEdit()
 
 bool GeolocationEdit::eventFilter(QObject* const o, QEvent* const e)
 {
-    if ( ( o == d->tabBar ) && ( e->type() == QEvent::MouseButtonPress ) )
+    if ((o == d->tabBar) && (e->type() == QEvent::MouseButtonPress))
     {
         QMouseEvent const* m = static_cast<QMouseEvent*>(e);
 
@@ -551,7 +548,8 @@ bool GeolocationEdit::eventFilter(QObject* const o, QEvent* const e)
         d->tabBar->setCurrentIndex(var);
         d->stackedWidget->setCurrentIndex(var);
         d->HSplitter->setSizes(sizes);
-        d->detailsWidget->slotSetActive( (d->stackedWidget->currentWidget()==d->detailsWidget) && (d->splitterSize==0) );
+        d->detailsWidget->slotSetActive((d->stackedWidget->currentWidget() == d->detailsWidget) &&
+                                        (d->splitterSize == 0));
 
         return true;
     }
@@ -563,7 +561,7 @@ void GeolocationEdit::slotCurrentTabChanged(int index)
 {
     d->tabBar->setCurrentIndex(index);
     d->stackedWidget->setCurrentIndex(index);
-    d->detailsWidget->slotSetActive(d->stackedWidget->currentWidget()==d->detailsWidget);
+    d->detailsWidget->slotSetActive(d->stackedWidget->currentWidget() == d->detailsWidget);
 }
 
 void GeolocationEdit::setCurrentTab(int index)
