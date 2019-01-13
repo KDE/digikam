@@ -56,6 +56,7 @@ DPluginDialog::DPluginDialog(QWidget* const parent, const QString& objName)
                    Qt::WindowMinMaxButtonsHint);
 
     m_buttons = new QDialogButtonBox(this);
+    restoreDialogSize();
 }
 
 DPluginDialog::~DPluginDialog()
