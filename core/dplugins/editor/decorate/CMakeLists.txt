@@ -28,3 +28,9 @@ DIGIKAM_ADD_EDITOR_PLUGIN(TextureTool
     ${CMAKE_CURRENT_SOURCE_DIR}/texturetool.cpp
 )
 
+DIGIKAM_ADD_EDITOR_PLUGIN(InserTextTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/inserttexttoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/inserttextwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/inserttexttool.cpp
+)
+

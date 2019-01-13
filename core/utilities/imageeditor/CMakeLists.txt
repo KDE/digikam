@@ -84,8 +84,6 @@ set(libeditorrawimport_SRCS
 )
 
 set(libeditortools_SRCS
-    tools/decorate/inserttextwidget.cpp
-    tools/decorate/inserttexttool.cpp
     tools/filters/colorfxtool.cpp
     tools/filters/charcoaltool.cpp
     tools/filters/embosstool.cpp

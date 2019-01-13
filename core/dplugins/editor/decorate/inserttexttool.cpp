@@ -132,8 +132,6 @@ InsertTextTool::InsertTextTool(QObject* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("inserttext"));
-    setToolName(i18n("Insert Text"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("insert-text")));
 
     // -------------------------------------------------------------
 
