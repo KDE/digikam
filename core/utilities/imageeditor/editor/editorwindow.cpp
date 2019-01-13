@@ -131,7 +131,6 @@
 #include "dexpanderbox.h"
 
 #include "inserttexttool.h"
-#include "texturetool.h"
 #include "colorfxtool.h"
 #include "charcoaltool.h"
 #include "embosstool.h"
@@ -541,21 +540,6 @@ void EditorWindow::setupStandardActions()
     d->zoomFitToSelectAction->setWhatsThis(i18n("This option can be used to zoom the image to the "
                                                 "current selection area."));
 
-    // -- Standard 'Decorate' menu actions ---------------------------------------------
-
-    d->insertTextAction = new QAction(QIcon::fromTheme(QLatin1String("insert-text")), i18n("Insert Text..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_decorate_inserttext"), d->insertTextAction );
-    actionCollection()->setDefaultShortcut(d->insertTextAction, Qt::SHIFT+Qt::CTRL+Qt::Key_T);
-    connect(d->insertTextAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotInsertText()));
-    d->insertTextAction->setEnabled(false);
-
-    d->textureAction = new QAction(QIcon::fromTheme(QLatin1String("texture")), i18n("Apply Texture..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_decorate_texture"), d->textureAction );
-    connect(d->textureAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotTexture()));
-    d->textureAction->setEnabled(false);
-
     // -- Standard 'Effects' menu actions ---------------------------------------------
 
     d->colorEffectsAction = new QAction(QIcon::fromTheme(QLatin1String("colorfx")), i18n("Color Effects..."), this);
@@ -659,6 +643,14 @@ void EditorWindow::setupStandardActions()
     d->borderAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_decorate_border"), this);
     actionCollection()->addActions(QList<QAction*>() << d->borderAction);
     d->borderAction->setEnabled(false);
+
+    d->textureAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_decorate_texture"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->textureAction);
+    d->textureAction->setEnabled(false);
+
+    d->insertTextAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_decorate_inserttext"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->insertTextAction);
+    d->insertTextAction->setEnabled(false);
 
     // **********************************************************
 
@@ -3153,16 +3145,6 @@ void EditorWindow::loadTool(EditorTool* const tool)
 void EditorWindow::slotToolDone()
 {
     EditorToolIface::editorToolIface()->unLoadTool();
-}
-
-void EditorWindow::slotInsertText()
-{
-    loadTool(new InsertTextTool(this));
-}
-
-void EditorWindow::slotTexture()
-{
-    loadTool(new TextureTool(this));
 }
 
 void EditorWindow::slotColorEffects()

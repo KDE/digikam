@@ -105,8 +105,6 @@ TextureTool::TextureTool(QObject* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("texture"));
-    setToolName(i18n("Texture"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("texture")));
 
     // -------------------------------------------------------------
 

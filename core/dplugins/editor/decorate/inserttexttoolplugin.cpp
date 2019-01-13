@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to add border
+ * Description : image editor plugin to insert text
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "bordertoolplugin.h"
+#include "inserttexttoolplugin.h"
 
 // Qt includes
 
@@ -33,46 +33,46 @@
 // Local includes
 
 #include "editorwindow.h"
-#include "bordertool.h"
+#include "inserttexttool.h"
 
 namespace Digikam
 {
 
-BorderToolPlugin::BorderToolPlugin(QObject* const parent)
+InsertTextToolPlugin::InsertTextToolPlugin(QObject* const parent)
     : DPluginEditor(parent)
 {
 }
 
-BorderToolPlugin::~BorderToolPlugin()
+InsertTextToolPlugin::~InsertTextToolPlugin()
 {
 }
 
-QString BorderToolPlugin::name() const
+QString InsertTextToolPlugin::name() const
 {
-    return i18n("Add Border");
+    return i18n("Insert Text");
 }
 
-QString BorderToolPlugin::iid() const
+QString InsertTextToolPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon BorderToolPlugin::icon() const
+QIcon InsertTextToolPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("bordertool"));
+    return QIcon::fromTheme(QLatin1String("insert-text"));
 }
 
-QString BorderToolPlugin::description() const
+QString InsertTextToolPlugin::description() const
 {
-    return i18n("A tool to add a border around image");
+    return i18n("A tool to insert text over an image");
 }
 
-QString BorderToolPlugin::details() const
+QString InsertTextToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can add decorative border around image.</p>");
+    return i18n("<p>This Image Editor tool can inser text over an image.</p>");
 }
 
-QList<DPluginAuthor> BorderToolPlugin::authors() const
+QList<DPluginAuthor> InsertTextToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Marcel Wiesweg"),
@@ -84,27 +84,28 @@ QList<DPluginAuthor> BorderToolPlugin::authors() const
             ;
 }
 
-void BorderToolPlugin::setup(QObject* const parent)
+void InsertTextToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Add Border..."));
-    ac->setObjectName(QLatin1String("editorwindow_decorate_border"));
+    ac->setText(i18nc("@action", "Insert Text..."));
+    ac->setObjectName(QLatin1String("editorwindow_decorate_inserttext"));
+    ac->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_T);
     ac->setActionCategory(DPluginAction::EditorDecorate);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotBorder()));
+            this, SLOT(slotInsertText()));
 
     addAction(ac);
 }
 
-void BorderToolPlugin::slotBorder()
+void InsertTextToolPlugin::slotInsertText()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
 
     if (editor)
     {
-        BorderTool* const tool = new BorderTool(editor);
+        InsertTextTool* const tool = new InsertTextTool(editor);
         tool->setPlugin(this);
         editor->loadTool(tool);
     }
