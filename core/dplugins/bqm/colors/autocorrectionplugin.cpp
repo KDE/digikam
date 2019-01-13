@@ -61,7 +61,7 @@ QString AutoCorrectionPlugin::iid() const
 
 QIcon AutoCorrectionPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("colorfx"));
+    return QIcon::fromTheme(QLatin1String("autocorrection"));
 }
 
 QString AutoCorrectionPlugin::description() const

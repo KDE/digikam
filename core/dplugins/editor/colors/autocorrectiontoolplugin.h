@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to adjust color levels.
+ * Description : image editor plugin to fix colors automatically
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,19 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ADJUSTLEVELSTOOL_PLUGIN_H
-#define DIGIKAM_ADJUSTLEVELSTOOL_PLUGIN_H
+#ifndef DIGIKAM_AUTOCORRECTIONTOOL_PLUGIN_H
+#define DIGIKAM_AUTOCORRECTIONTOOL_PLUGIN_H
 
 // Local includes
 
 #include "dplugineditor.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.editor.AdjustLevelsTool"
+#define DPLUGIN_IID "org.kde.digikam.plugin.editor.AutoCorrectionTool"
 
 namespace Digikam
 {
 
-class AdjustLevelsToolPlugin : public DPluginEditor
+class AutoCorrectionToolPlugin : public DPluginEditor
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +40,8 @@ class AdjustLevelsToolPlugin : public DPluginEditor
 
 public:
 
-    explicit AdjustLevelsToolPlugin(QObject* const parent = 0);
-    ~AdjustLevelsToolPlugin();
+    explicit AutoCorrectionToolPlugin(QObject* const parent = 0);
+    ~AutoCorrectionToolPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -54,9 +54,9 @@ public:
 
 private Q_SLOTS:
 
-    void slotAdjustCurvesTool();
+    void slotAutoCorrection();
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ADJUSTLEVELSTOOL_PLUGIN_H
+#endif // DIGIKAM_AUTOCORRECTIONTOOL_PLUGIN_H

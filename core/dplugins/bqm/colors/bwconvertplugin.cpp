@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to convert to BW
+ * Description : a BQM plugin to convert to Black and White
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -66,7 +66,7 @@ QIcon BWConvertPlugin::icon() const
 
 QString BWConvertPlugin::description() const
 {
-    return i18n("At tool to convert to black and white");
+    return i18n("A tool to convert to black and white");
 }
 
 QString BWConvertPlugin::details() const

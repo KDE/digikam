@@ -96,8 +96,6 @@ set(libeditortools_SRCS
     tools/filters/distortionfxtool.cpp
     tools/filters/raindroptool.cpp
     tools/filters/filmgraintool.cpp
-    tools/colors/autocorrectiontool.cpp
-    tools/colors/bwsepiatool.cpp
     tools/colors/profileconversiontool.cpp
     tools/colors/cbtool.cpp
     tools/colors/whitebalancetool.cpp

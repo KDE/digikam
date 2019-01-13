@@ -33,3 +33,13 @@ DIGIKAM_ADD_EDITOR_PLUGIN(AdjustLevelsTool
     ${CMAKE_CURRENT_SOURCE_DIR}/adjustlevelstool.cpp
 )
 
+DIGIKAM_ADD_EDITOR_PLUGIN(AutoCorrectionTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/autocorrectiontoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/autocorrectiontool.cpp
+)
+
+DIGIKAM_ADD_EDITOR_PLUGIN(BWSepiaTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/bwsepiatoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/bwsepiatool.cpp
+)
+

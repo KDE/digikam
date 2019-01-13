@@ -142,8 +142,6 @@
 #include "invertfilter.h"
 #include "imageiface.h"
 #include "iccprofilescombobox.h"
-#include "autocorrectiontool.h"
-#include "bwsepiatool.h"
 #include "hsltool.h"
 #include "profileconversiontool.h"
 #include "cbtool.h"
@@ -634,6 +632,17 @@ void EditorWindow::setupStandardActions()
     d->levelsAction  = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_adjustlevels"), this);
     actionCollection()->addActions(QList<QAction*>() << d->levelsAction);
     d->levelsAction->setEnabled(false);
+
+    d->autoCorrectionAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_autocorrection"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->autoCorrectionAction);
+    d->autoCorrectionAction->setEnabled(false);
+
+    d->BWAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_blackwhite"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->BWAction);
+    d->BWAction->setEnabled(false);
+
+    
+    // **********************************************************
     
     // NOTE: Photoshop 7 use CTRL+U.
     d->HSLAction = new QAction(QIcon::fromTheme(QLatin1String("adjusthsl")), i18n("Hue/Saturation/Lightness..."), this);
@@ -650,14 +659,6 @@ void EditorWindow::setupStandardActions()
     connect(d->CBAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCB()));
     d->CBAction->setEnabled(false);
-
-    // NOTE: Photoshop 7 use CTRL+SHIFT+B with
-    d->autoCorrectionAction = new QAction(QIcon::fromTheme(QLatin1String("autocorrection")), i18n("Auto-Correction..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_color_autocorrection"), d->autoCorrectionAction);
-    actionCollection()->setDefaultShortcut(d->autoCorrectionAction, Qt::CTRL+Qt::SHIFT+Qt::Key_B);
-    connect(d->autoCorrectionAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotAutoCorrection()));
-    d->autoCorrectionAction->setEnabled(false);
 
     // NOTE: Photoshop 7 use CTRL+I.
     d->invertAction = new QAction(QIcon::fromTheme(QLatin1String("edit-select-invert")), i18n("Invert"), this);
@@ -695,12 +696,6 @@ void EditorWindow::setupStandardActions()
     d->colorSpaceConverter->setEnabled(false);
 
     slotUpdateColorSpaceMenu();
-
-    d->BWAction = new QAction(QIcon::fromTheme(QLatin1String("bwtonal")), i18n("Black && White..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_color_blackwhite"), d->BWAction);
-    connect(d->BWAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotBW()));
-    d->BWAction->setEnabled(false);
 
     d->whitebalanceAction = new QAction(QIcon::fromTheme(QLatin1String("bordertool")), i18n("White Balance..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_color_whitebalance"), d->whitebalanceAction);
@@ -3375,11 +3370,6 @@ void EditorWindow::slotProfileConversionTool()
     loadTool(tool);
 }
 
-void EditorWindow::slotBW()
-{
-    loadTool(new BWSepiaTool(this));
-}
-
 void EditorWindow::slotHSL()
 {
     loadTool(new HSLTool(this));
@@ -3403,11 +3393,6 @@ void EditorWindow::slotFilm()
 void EditorWindow::slotCB()
 {
     loadTool(new CBTool(this));
-}
-
-void EditorWindow::slotAutoCorrection()
-{
-    loadTool(new AutoCorrectionTool(this));
 }
 
 void EditorWindow::slotHotPixels()

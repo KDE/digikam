@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to fix colors automatically
+ * Description : image editor plugin to convert to Black and White
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "autocorrectiontoolplugin.h"
+#include "bwsepiatoolplugin.h"
 
 // Qt includes
 
@@ -33,77 +33,78 @@
 // Local includes
 
 #include "editorwindow.h"
-#include "autocorrectiontool.h"
+#include "bwsepiatool.h"
 
 namespace Digikam
 {
 
-AutoCorrectionToolPlugin::AutoCorrectionToolPlugin(QObject* const parent)
+BWSepiaToolPlugin::BWSepiaToolPlugin(QObject* const parent)
     : DPluginEditor(parent)
 {
 }
 
-AutoCorrectionToolPlugin::~AutoCorrectionToolPlugin()
+BWSepiaToolPlugin::~BWSepiaToolPlugin()
 {
 }
 
-QString AutoCorrectionToolPlugin::name() const
+QString BWSepiaToolPlugin::name() const
 {
-    return i18n("Auto Correction");
+    return i18n("Black and White");
 }
 
-QString AutoCorrectionToolPlugin::iid() const
+QString BWSepiaToolPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon AutoCorrectionToolPlugin::icon() const
+QIcon BWSepiaToolPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("autocorrection"));
+    return QIcon::fromTheme(QLatin1String("bwtonal"));
 }
 
-QString AutoCorrectionToolPlugin::description() const
+QString BWSepiaToolPlugin::description() const
 {
-    return i18n("A tool to fix colors automatically");
+    return i18n("A tool to convert to black and white");
 }
 
-QString AutoCorrectionToolPlugin::details() const
+QString BWSepiaToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can adjust colors automatically from image.</p>");
+    return i18n("<p>This Image Editor tool can can convert image to black and white.</p>");
 }
 
-QList<DPluginAuthor> AutoCorrectionToolPlugin::authors() const
+QList<DPluginAuthor> BWSepiaToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
+            << DPluginAuthor(QLatin1String("Renchi Raju"),
+                             QLatin1String("renchi dot raju at gmail dot com"),
+                             QLatin1String("(C) 2004-2005"))
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2005-2019"))
+                             QLatin1String("(C) 2006-2019"))
             ;
 }
 
-void AutoCorrectionToolPlugin::setup(QObject* const parent)
+void BWSepiaToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Auto-Correction..."));
-    ac->setObjectName(QLatin1String("editorwindow_color_autocorrection"));
-    // NOTE: Photoshop 7 use CTRL+SHIFT+B
-    ac->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B);
+    ac->setText(i18nc("@action", "Black && White..."));
+    ac->setObjectName(QLatin1String("editorwindow_color_blackwhite"));
     ac->setActionCategory(DPluginAction::EditorColor);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotAutoCorrection()));
+            this, SLOT(slotBWSepia()));
 
     addAction(ac);
 }
 
-void AutoCorrectionToolPlugin::slotAutoCorrection()
+void BWSepiaToolPlugin::slotBWSepia()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
 
     if (editor)
     {
-        AutoCorrectionTool* const tool = new AutoCorrectionTool(editor);
+        BWSepiaTool* const tool = new BWSepiaTool(editor);
         tool->setPlugin(this);
         editor->loadTool(tool);
     }

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to fix colors automatically
+ * Description : image editor plugin to convert to Black and White
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,19 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_AUTOCORRECTIONTOOL_PLUGIN_H
-#define DIGIKAM_AUTOCORRECTIONTOOL_PLUGIN_H
+#ifndef DIGIKAM_BWSEPIATOOL_PLUGIN_H
+#define DIGIKAM_BWSEPIATOOL_PLUGIN_H
 
 // Local includes
 
 #include "dplugineditor.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.editor.AutoCorrectionTool"
+#define DPLUGIN_IID "org.kde.digikam.plugin.editor.BWSepiaTool"
 
 namespace Digikam
 {
 
-class AutoCorrectionToolPlugin : public DPluginEditor
+class BWSepiaToolPlugin : public DPluginEditor
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +40,8 @@ class AutoCorrectionToolPlugin : public DPluginEditor
 
 public:
 
-    explicit AutoCorrectionToolPlugin(QObject* const parent = 0);
-    ~AutoCorrectionToolPlugin();
+    explicit BWSepiaToolPlugin(QObject* const parent = 0);
+    ~BWSepiaToolPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -54,9 +54,9 @@ public:
 
 private Q_SLOTS:
 
-    void slotAutoCorrection();
+    void slotBWSepia();
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_AUTOCORRECTIONTOOL_PLUGIN_H
+#endif // DIGIKAM_BWSEPIATOOL_PLUGIN_H

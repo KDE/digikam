@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to adjust color levels.
+ * Description : image editor plugin to fix colors automatically
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "adjustlevelstoolplugin.h"
+#include "autocorrectiontoolplugin.h"
 
 // Qt includes
 
@@ -33,77 +33,77 @@
 // Local includes
 
 #include "editorwindow.h"
-#include "adjustlevelstool.h"
+#include "autocorrectiontool.h"
 
 namespace Digikam
 {
 
-AdjustLevelsToolPlugin::AdjustLevelsToolPlugin(QObject* const parent)
+AutoCorrectionToolPlugin::AutoCorrectionToolPlugin(QObject* const parent)
     : DPluginEditor(parent)
 {
 }
 
-AdjustLevelsToolPlugin::~AdjustLevelsToolPlugin()
+AutoCorrectionToolPlugin::~AutoCorrectionToolPlugin()
 {
 }
 
-QString AdjustLevelsToolPlugin::name() const
+QString AutoCorrectionToolPlugin::name() const
 {
-    return i18n("Adjust Levels");
+    return i18n("Auto Correction");
 }
 
-QString AdjustLevelsToolPlugin::iid() const
+QString AutoCorrectionToolPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon AdjustLevelsToolPlugin::icon() const
+QIcon AutoCorrectionToolPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("adjustlevels"));
+    return QIcon::fromTheme(QLatin1String("autocorrection"));
 }
 
-QString AdjustLevelsToolPlugin::description() const
+QString AutoCorrectionToolPlugin::description() const
 {
-    return i18n("A tool to adjust color levels");
+    return i18n("A tool to fix colors automatically");
 }
 
-QString AdjustLevelsToolPlugin::details() const
+QString AutoCorrectionToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can adjust the color levels from image.</p>");
+    return i18n("<p>This Image Editor tool can adjust colors automatically from image.</p>");
 }
 
-QList<DPluginAuthor> AdjustLevelsToolPlugin::authors() const
+QList<DPluginAuthor> AutoCorrectionToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2004-2019"))
+                             QLatin1String("(C) 2005-2019"))
             ;
 }
 
-void AdjustLevelsToolPlugin::setup(QObject* const parent)
+void AutoCorrectionToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Levels Adjust..."));
-    ac->setObjectName(QLatin1String("editorwindow_color_adjustlevels"));
-    // NOTE: Photoshop 7 use CTRL+M (but it's used in KDE to toogle menu bar).
-    ac->setShortcut(Qt::CTRL+Qt::Key_L);
+    ac->setText(i18nc("@action", "Auto-Correction..."));
+    ac->setObjectName(QLatin1String("editorwindow_color_autocorrection"));
+    // NOTE: Photoshop 7 use CTRL+SHIFT+B
+    ac->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B);
     ac->setActionCategory(DPluginAction::EditorColor);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotAdjustCurvesTool()));
+            this, SLOT(slotAutoCorrection()));
 
     addAction(ac);
 }
 
-void AdjustLevelsToolPlugin::slotAdjustCurvesTool()
+void AutoCorrectionToolPlugin::slotAutoCorrection()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
 
     if (editor)
     {
-        AdjustLevelsTool* const tool = new AdjustLevelsTool(editor);
+        AutoCorrectionTool* const tool = new AutoCorrectionTool(editor);
         tool->setPlugin(this);
         editor->loadTool(tool);
     }

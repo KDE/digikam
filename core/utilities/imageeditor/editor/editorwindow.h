@@ -352,9 +352,7 @@ private Q_SLOTS:
     void slotFilmGrain();
     void slotCB();
     void slotHSL();
-    void slotAutoCorrection();
     void slotInvert();
-    void slotBW();
     void slotWhiteBalance();
     void slotConvertTo8Bits();
     void slotConvertTo16Bits();
