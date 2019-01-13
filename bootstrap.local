@@ -43,14 +43,15 @@ cat << EOF > finish_install.sh
 #!/bin/bash
 KCOCA=$DIGIKAM_INSTALL_PREFIX/var/tmp/kde-$USER/ksycoca5
 XDG=$DIGIKAM_INSTALL_PREFIX/share:\$XDG_DATA_DIRS
-QTPLUG=$DIGIKAM_INSTALL_PREFIX/lib64/plugins:$DIGIKAM_INSTALL_PREFIX/lib/plugins:$QT_PLUGIN_PATH
+QTPLUG=$DIGIKAM_INSTALL_PREFIX/plugins/digikam:$QT_PLUGIN_PATH
+DKPLUG=$DIGIKAM_INSTALL_PREFIX/plugins/digikam
 
 KDESYCOCA="\$KCOCA" XDG_DATA_DIRS="\$XDG" QT_PLUGIN_PATH="\$QTPLUG" kbuildsycoca5
 echo "Use the following command line to start digiKam:"
-echo "  KDESYCOCA="\$KCOCA" XDG_DATA_DIRS=\$XDG QT_PLUGIN_PATH=\$QTPLUG $DIGIKAM_INSTALL_PREFIX/bin/digikam"
+echo "  KDESYCOCA="\$KCOCA" XDG_DATA_DIRS=\$XDG DK_PLUGIN_PATH=\$DKPLUG $DIGIKAM_INSTALL_PREFIX/bin/digikam"
 echo
 echo "or add an alias to your .bashrc file:"
-echo "  alias digikam-dev=\"KDESYCOCA=\$KCOCA XDG_DATA_DIRS=\$XDG QT_PLUGIN_PATH=\$QTPLUG $DIGIKAM_INSTALL_PREFIX/bin/digikam\""
+echo "  alias digikam-dev=\"KDESYCOCA=\$KCOCA XDG_DATA_DIRS=\$XDG DK_PLUGIN_PATH=\$DKPLUG $DIGIKAM_INSTALL_PREFIX/bin/digikam\""
 echo "and start digiKam using \"digikam-dev\""
 EOF
 chmod u+x finish_install.sh
