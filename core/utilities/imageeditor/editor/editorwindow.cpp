@@ -143,7 +143,6 @@
 #include "filmgraintool.h"
 #include "invertfilter.h"
 #include "imageiface.h"
-#include "whitebalancetool.h"
 #include "restorationtool.h"
 #include "blurtool.h"
 #include "healingclonetool.h"
@@ -657,7 +656,12 @@ void EditorWindow::setupStandardActions()
     d->profileMenuAction->setEnabled(false);
 
     d->colorSpaceConverter = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_spaceconverter"), this);
+    // NOTE : action not pluged in action collection as it's included in profileMenuAction menu
     d->colorSpaceConverter->setEnabled(false);
+
+    d->whitebalanceAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_whitebalance"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->whitebalanceAction);
+    d->whitebalanceAction->setEnabled(false);
 
     // **********************************************************
 
@@ -680,13 +684,6 @@ void EditorWindow::setupStandardActions()
     connect(d->convertTo16Bits, SIGNAL(triggered(bool)),
             this, SLOT(slotConvertTo16Bits()));
     d->convertTo16Bits->setEnabled(false);
-
-    d->whitebalanceAction = new QAction(QIcon::fromTheme(QLatin1String("bordertool")), i18n("White Balance..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_color_whitebalance"), d->whitebalanceAction);
-    actionCollection()->setDefaultShortcut(d->whitebalanceAction, Qt::CTRL+Qt::SHIFT+Qt::Key_W);
-    connect(d->whitebalanceAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotWhiteBalance()));
-    d->whitebalanceAction->setEnabled(false);
 
     // -- Standard 'Enhance' menu actions ---------------------------------------------
 
@@ -3272,11 +3269,6 @@ void EditorWindow::slotConvertTo16Bits()
     qApp->setOverrideCursor(Qt::WaitCursor);
     iface.convertOriginalColorDepth(64);
     qApp->restoreOverrideCursor();
-}
-
-void EditorWindow::slotWhiteBalance()
-{
-    loadTool(new WhiteBalanceTool(this));
 }
 
 void EditorWindow::slotHotPixels()

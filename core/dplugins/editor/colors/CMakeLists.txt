@@ -67,3 +67,9 @@ DIGIKAM_ADD_EDITOR_PLUGIN(ProfileConversionTool
     ${CMAKE_CURRENT_SOURCE_DIR}/profileconversiontoolplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/profileconversiontool.cpp
 )
+
+DIGIKAM_ADD_EDITOR_PLUGIN(WhiteBalanceTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/whitebalancetoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/whitebalancetool.cpp
+)
+

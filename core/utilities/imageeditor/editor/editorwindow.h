@@ -352,7 +352,6 @@ private Q_SLOTS:
     void slotRainDrop();
     void slotFilmGrain();
     void slotInvert();
-    void slotWhiteBalance();
     void slotConvertTo8Bits();
     void slotConvertTo16Bits();
     void slotRestoration();
