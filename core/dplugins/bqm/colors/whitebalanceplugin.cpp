@@ -61,7 +61,7 @@ QString WhiteBalancePlugin::iid() const
 
 QIcon WhiteBalancePlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("colorfx"));
+    return QIcon::fromTheme(QLatin1String("whitebalance"));
 }
 
 QString WhiteBalancePlugin::description() const
