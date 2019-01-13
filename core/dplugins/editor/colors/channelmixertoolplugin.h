@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to fix colors balance
+ * Description : image editor plugin to mix color channels
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,19 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CBTOOL_PLUGIN_H
-#define DIGIKAM_CBTOOL_PLUGIN_H
+#ifndef DIGIKAM_CHANNELMIXERTOOL_PLUGIN_H
+#define DIGIKAM_CHANNELMIXERTOOL_PLUGIN_H
 
 // Local includes
 
 #include "dplugineditor.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.editor.CBTool"
+#define DPLUGIN_IID "org.kde.digikam.plugin.editor.ChannelMixerTool"
 
 namespace Digikam
 {
 
-class CBToolPlugin : public DPluginEditor
+class ChannelMixerToolPlugin : public DPluginEditor
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +40,8 @@ class CBToolPlugin : public DPluginEditor
 
 public:
 
-    explicit CBToolPlugin(QObject* const parent = 0);
-    ~CBToolPlugin();
+    explicit ChannelMixerToolPlugin(QObject* const parent = 0);
+    ~ChannelMixerToolPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -54,9 +54,9 @@ public:
 
 private Q_SLOTS:
 
-    void slotColorBalance();
+    void slotChannelMixer();
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_CBTOOL_PLUGIN_H
+#endif // DIGIKAM_CHANNELMIXERTOOL_PLUGIN_H

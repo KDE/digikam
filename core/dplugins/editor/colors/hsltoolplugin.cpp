@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to emulate film color
+ * Description : image editor plugin to adjust HSL
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "filmtoolplugin.h"
+#include "hsltoolplugin.h"
 
 // Qt includes
 
@@ -33,76 +33,77 @@
 // Local includes
 
 #include "editorwindow.h"
-#include "filmtool.h"
+#include "hsltool.h"
 
 namespace Digikam
 {
 
-FilmToolPlugin::FilmToolPlugin(QObject* const parent)
+HSLToolPlugin::HSLToolPlugin(QObject* const parent)
     : DPluginEditor(parent)
 {
 }
 
-FilmToolPlugin::~FilmToolPlugin()
+HSLToolPlugin::~HSLToolPlugin()
 {
 }
 
-QString FilmToolPlugin::name() const
+QString HSLToolPlugin::name() const
 {
-    return i18n("Color Negative Film");
+    return i18n("HSL Correction");
 }
 
-QString FilmToolPlugin::iid() const
+QString HSLToolPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon FilmToolPlugin::icon() const
+QIcon HSLToolPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("colorneg"));
+    return QIcon::fromTheme(QLatin1String("adjusthsl"));
 }
 
-QString FilmToolPlugin::description() const
+QString HSLToolPlugin::description() const
 {
-    return i18n("A tool to emulate color negative film");
+    return i18n("A tool to fix Hue / Saturation / Lightness");
 }
 
-QString FilmToolPlugin::details() const
+QString HSLToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can emulate color negative film from image.</p>");
+    return i18n("<p>This Image Editor tool can adjust Hue / Saturation / Lightness from image.</p>");
 }
 
-QList<DPluginAuthor> FilmToolPlugin::authors() const
+QList<DPluginAuthor> HSLToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Matthias Welwarsky"),
-                             QLatin1String("matthias at welwarsky dot de"),
-                             QLatin1String("(C) 2012"))
+            << DPluginAuthor(QLatin1String("Gilles Caulier"),
+                             QLatin1String("caulier dot gilles at gmail dot com"),
+                             QLatin1String("(C) 2004-2019"))
             ;
 }
-
-void FilmToolPlugin::setup(QObject* const parent)
+    
+void HSLToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Color Negative..."));
-    ac->setObjectName(QLatin1String("editorwindow_color_film"));
-    ac->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I);
+    ac->setText(i18nc("@action", "Hue/Saturation/Lightness..."));
+    ac->setObjectName(QLatin1String("editorwindow_color_hsl"));
+    // NOTE: Photoshop 7 use CTRL+U.
+    ac->setShortcut(Qt::CTRL+Qt::Key_U);
     ac->setActionCategory(DPluginAction::EditorColor);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotFilmTool()));
+            this, SLOT(slotHSL()));
 
     addAction(ac);
 }
 
-void FilmToolPlugin::slotFilmTool()
+void HSLToolPlugin::slotHSL()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
 
     if (editor)
     {
-        FilmTool* const tool = new FilmTool(editor);
+        HSLTool* const tool = new HSLTool(editor);
         tool->setPlugin(this);
         editor->loadTool(tool);
     }

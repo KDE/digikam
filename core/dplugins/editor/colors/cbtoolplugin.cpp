@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to fix colors automatically
+ * Description : image editor plugin to fix colors balance
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "autocorrectiontoolplugin.h"
+#include "cbtoolplugin.h"
 
 // Qt includes
 
@@ -33,77 +33,77 @@
 // Local includes
 
 #include "editorwindow.h"
-#include "autocorrectiontool.h"
+#include "cbtool.h"
 
 namespace Digikam
 {
 
-AutoCorrectionToolPlugin::AutoCorrectionToolPlugin(QObject* const parent)
+CBToolPlugin::CBToolPlugin(QObject* const parent)
     : DPluginEditor(parent)
 {
 }
 
-AutoCorrectionToolPlugin::~AutoCorrectionToolPlugin()
+CBToolPlugin::~CBToolPlugin()
 {
 }
 
-QString AutoCorrectionToolPlugin::name() const
+QString CBToolPlugin::name() const
 {
-    return i18n("Auto Correction");
+    return i18n("Color Balance");
 }
 
-QString AutoCorrectionToolPlugin::iid() const
+QString CBToolPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon AutoCorrectionToolPlugin::icon() const
+QIcon CBToolPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("autocorrection"));
+    return QIcon::fromTheme(QLatin1String("adjustrgb"));
 }
 
-QString AutoCorrectionToolPlugin::description() const
+QString CBToolPlugin::description() const
 {
-    return i18n("A tool to fix colors automatically");
+    return i18n("A tool to adjust color balance");
 }
 
-QString AutoCorrectionToolPlugin::details() const
+QString CBToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can adjust colors automatically from image.</p>");
+    return i18n("<p>This Image Editor tool can adjust color balance from image.</p>");
 }
 
-QList<DPluginAuthor> AutoCorrectionToolPlugin::authors() const
+QList<DPluginAuthor> CBToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2005-2019"))
+                             QLatin1String("(C) 2004-2019"))
             ;
 }
 
-void AutoCorrectionToolPlugin::setup(QObject* const parent)
+void CBToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Auto-Correction..."));
-    ac->setObjectName(QLatin1String("editorwindow_color_autocorrection"));
-    // NOTE: Photoshop 7 use CTRL+SHIFT+B
-    ac->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B);
+    ac->setText(i18nc("@action", "Color Balance..."));
+    ac->setObjectName(QLatin1String("editorwindow_color_rgb"));
+    // NOTE: Photoshop 7 use CTRL+B.
+    ac->setShortcut(Qt::CTRL+Qt::Key_B);
     ac->setActionCategory(DPluginAction::EditorColor);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotAutoCorrection()));
+            this, SLOT(slotColorBalance()));
 
     addAction(ac);
 }
 
-void AutoCorrectionToolPlugin::slotAutoCorrection()
+void CBToolPlugin::slotColorBalance()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
 
     if (editor)
     {
-        AutoCorrectionTool* const tool = new AutoCorrectionTool(editor);
+        CBTool* const tool = new CBTool(editor);
         tool->setPlugin(this);
         editor->loadTool(tool);
     }

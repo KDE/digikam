@@ -78,8 +78,6 @@ CBTool::CBTool(QObject* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("colorbalance"));
-    setToolName(i18n("Color Balance"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("adjustrgb")));
     setInitPreview(true);
 
     d->previewWidget = new ImageRegionWidget;

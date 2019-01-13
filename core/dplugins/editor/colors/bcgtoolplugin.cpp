@@ -64,12 +64,12 @@ QIcon BCGToolPlugin::icon() const
 
 QString BCGToolPlugin::description() const
 {
-    return i18n("A tool to fix Brightness/Contrast/Gamma");
+    return i18n("A tool to fix Brightness / Contrast / Gamma");
 }
 
 QString BCGToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can adjust Brightness/Contrast/Gamma from image.</p>");
+    return i18n("<p>This Image Editor tool can adjust Brightness / Contrast / Gamma from image.</p>");
 }
 
 QList<DPluginAuthor> BCGToolPlugin::authors() const

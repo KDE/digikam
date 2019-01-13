@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to fix colors balance
+ * Description : image editor plugin to mix color channels
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "cbtoolplugin.h"
+#include "channelmixertoolplugin.h"
 
 // Qt includes
 
@@ -33,77 +33,76 @@
 // Local includes
 
 #include "editorwindow.h"
-#include "cbtool.h"
+#include "channelmixertool.h"
 
 namespace Digikam
 {
 
-CBToolPlugin::CBToolPlugin(QObject* const parent)
+ChannelMixerToolPlugin::ChannelMixerToolPlugin(QObject* const parent)
     : DPluginEditor(parent)
 {
 }
 
-CBToolPlugin::~CBToolPlugin()
+ChannelMixerToolPlugin::~ChannelMixerToolPlugin()
 {
 }
 
-QString CBToolPlugin::name() const
+QString ChannelMixerToolPlugin::name() const
 {
-    return i18n("Color Balance");
+    return i18n("Channel Mixer");
 }
 
-QString CBToolPlugin::iid() const
+QString ChannelMixerToolPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon CBToolPlugin::icon() const
+QIcon ChannelMixerToolPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("adjustrgb"));
+    return QIcon::fromTheme(QLatin1String("channelmixer"));
 }
 
-QString CBToolPlugin::description() const
+QString ChannelMixerToolPlugin::description() const
 {
-    return i18n("A tool to adjust color balance");
+    return i18n("A tool to mix color channel");
 }
 
-QString CBToolPlugin::details() const
+QString ChannelMixerToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can adjust color balance from image.</p>");
+    return i18n("<p>This Image Editor tool can mix color channels from image.</p>");
 }
 
-QList<DPluginAuthor> CBToolPlugin::authors() const
+QList<DPluginAuthor> ChannelMixerToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2004-2019"))
+                             QLatin1String("(C) 2005-2019"))
             ;
 }
 
-void CBToolPlugin::setup(QObject* const parent)
+void ChannelMixerToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Color Balance..."));
-    ac->setObjectName(QLatin1String("editorwindow_color_rgb"));
-    // NOTE: Photoshop 7 use CTRL+B.
-    ac->setShortcut(Qt::CTRL+Qt::Key_B);
+    ac->setText(i18nc("@action", "Channel Mixer..."));
+    ac->setObjectName(QLatin1String("editorwindow_color_channelmixer"));
+    ac->setShortcut(Qt::CTRL+Qt::Key_H);
     ac->setActionCategory(DPluginAction::EditorColor);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotColorBalance()));
+            this, SLOT(slotChannelMixer()));
 
     addAction(ac);
 }
 
-void CBToolPlugin::slotColorBalance()
+void ChannelMixerToolPlugin::slotChannelMixer()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
 
     if (editor)
     {
-        CBTool* const tool = new CBTool(editor);
+        ChannelMixerTool* const tool = new ChannelMixerTool(editor);
         tool->setPlugin(this);
         editor->loadTool(tool);
     }

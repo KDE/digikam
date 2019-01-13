@@ -79,8 +79,6 @@ HSLTool::HSLTool(QObject* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("adjusthsl"));
-    setToolName(i18n("Hue / Saturation / Lightness"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("adjusthsl")));
     setToolHelp(QLatin1String("hsladjusttool.anchor"));
     setInitPreview(true);
 

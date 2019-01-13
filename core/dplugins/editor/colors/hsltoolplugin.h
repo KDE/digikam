@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to emulate film color
+ * Description : image editor plugin to adjust HSL
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,19 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FILMTOOL_PLUGIN_H
-#define DIGIKAM_FILMTOOL_PLUGIN_H
+#ifndef DIGIKAM_HSLTOOL_PLUGIN_H
+#define DIGIKAM_HSLTOOL_PLUGIN_H
 
 // Local includes
 
 #include "dplugineditor.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.editor.FilmTool"
+#define DPLUGIN_IID "org.kde.digikam.plugin.editor.HSLTool"
 
 namespace Digikam
 {
 
-class FilmToolPlugin : public DPluginEditor
+class HSLToolPlugin : public DPluginEditor
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +40,8 @@ class FilmToolPlugin : public DPluginEditor
 
 public:
 
-    explicit FilmToolPlugin(QObject* const parent = 0);
-    ~FilmToolPlugin();
+    explicit HSLToolPlugin(QObject* const parent = 0);
+    ~HSLToolPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -54,9 +54,9 @@ public:
 
 private Q_SLOTS:
 
-    void slotFilmTool();
+    void slotHSL();
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_FILMTOOL_PLUGIN_H
+#endif // DIGIKAM_HSLTOOL_PLUGIN_H

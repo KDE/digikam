@@ -127,7 +127,9 @@
 #include "versioningpromptusersavedlg.h"
 #include "undostate.h"
 #include "versionmanager.h"
+#include "dfiledialog.h"
 #include "dexpanderbox.h"
+
 #include "inserttexttool.h"
 #include "bordertool.h"
 #include "texturetool.h"
@@ -141,13 +143,7 @@
 #include "filmgraintool.h"
 #include "invertfilter.h"
 #include "imageiface.h"
-#include "iccprofilescombobox.h"
-#include "hsltool.h"
-#include "profileconversiontool.h"
-#include "cbtool.h"
 #include "whitebalancetool.h"
-#include "channelmixertool.h"
-#include "filmtool.h"
 #include "restorationtool.h"
 #include "blurtool.h"
 #include "healingclonetool.h"
@@ -163,7 +159,6 @@
 #include "sheartool.h"
 #include "resizetool.h"
 #include "ratiocroptool.h"
-#include "dfiledialog.h"
 
 #ifdef HAVE_LIBLQR_1
 #   include "contentawareresizetool.h"
@@ -641,24 +636,30 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->BWAction);
     d->BWAction->setEnabled(false);
 
+    d->CBAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_rgb"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->CBAction);
+    d->CBAction->setEnabled(false);
+
+    d->channelMixerAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_channelmixer"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->channelMixerAction);
+    d->channelMixerAction->setEnabled(false);
+
+    d->filmAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_film"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->filmAction);
+    d->filmAction->setEnabled(false);
     
-    // **********************************************************
-    
-    // NOTE: Photoshop 7 use CTRL+U.
-    d->HSLAction = new QAction(QIcon::fromTheme(QLatin1String("adjusthsl")), i18n("Hue/Saturation/Lightness..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_color_hsl"), d->HSLAction);
-    actionCollection()->setDefaultShortcut(d->HSLAction, Qt::CTRL+Qt::Key_U);
-    connect(d->HSLAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotHSL()));
+    d->HSLAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_hsl"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->HSLAction);
     d->HSLAction->setEnabled(false);
 
-    // NOTE: Photoshop 7 use CTRL+B.
-    d->CBAction = new QAction(QIcon::fromTheme(QLatin1String("adjustrgb")), i18n("Color Balance..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_color_rgb"), d->CBAction);
-    actionCollection()->setDefaultShortcut(d->CBAction, Qt::CTRL+Qt::Key_B);
-    connect(d->CBAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotCB()));
-    d->CBAction->setEnabled(false);
+    d->profileMenuAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_colormanagement"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->profileMenuAction);
+    d->profileMenuAction->setEnabled(false);
+
+    d->colorSpaceConverter = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_spaceconverter"), this);
+    d->colorSpaceConverter->setEnabled(false);
+
+    // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
     d->invertAction = new QAction(QIcon::fromTheme(QLatin1String("edit-select-invert")), i18n("Invert"), this);
@@ -680,43 +681,12 @@ void EditorWindow::setupStandardActions()
             this, SLOT(slotConvertTo16Bits()));
     d->convertTo16Bits->setEnabled(false);
 
-    d->profileMenuAction = new IccProfilesMenuAction(QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")), i18n("Color Spaces"), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_colormanagement"), d->profileMenuAction->menuAction());
-    connect(d->profileMenuAction, SIGNAL(triggered(IccProfile)),
-            this, SLOT(slotConvertToColorSpace(IccProfile)));
-    d->profileMenuAction->setEnabled(false);
-
-    connect(IccSettings::instance(), SIGNAL(settingsChanged()),
-            this, SLOT(slotUpdateColorSpaceMenu()));
-
-    d->colorSpaceConverter = new QAction(QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")),
-                                                          i18n("Color Space Converter..."), this);
-    connect(d->colorSpaceConverter, SIGNAL(triggered()),
-            this, SLOT(slotProfileConversionTool()));
-    d->colorSpaceConverter->setEnabled(false);
-
-    slotUpdateColorSpaceMenu();
-
     d->whitebalanceAction = new QAction(QIcon::fromTheme(QLatin1String("bordertool")), i18n("White Balance..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_color_whitebalance"), d->whitebalanceAction);
     actionCollection()->setDefaultShortcut(d->whitebalanceAction, Qt::CTRL+Qt::SHIFT+Qt::Key_W);
     connect(d->whitebalanceAction, SIGNAL(triggered(bool)),
             this, SLOT(slotWhiteBalance()));
     d->whitebalanceAction->setEnabled(false);
-
-    d->channelMixerAction = new QAction(QIcon::fromTheme(QLatin1String("channelmixer")), i18n("Channel Mixer..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_color_channelmixer"), d->channelMixerAction);
-    actionCollection()->setDefaultShortcut(d->channelMixerAction, Qt::CTRL+Qt::Key_H);
-    connect(d->channelMixerAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotChannelMixer()));
-    d->channelMixerAction->setEnabled(false);
-
-    d->filmAction = new QAction(QIcon::fromTheme(QLatin1String("colorneg")), i18n("Color Negative..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_color_film"), d->filmAction);
-    actionCollection()->setDefaultShortcut(d->filmAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
-    connect(d->filmAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotFilm()));
-    d->filmAction->setEnabled(false);
 
     // -- Standard 'Enhance' menu actions ---------------------------------------------
 
@@ -1337,6 +1307,11 @@ void EditorWindow::toggleActions(bool val)
     toggleStandardActions(val);
 }
 
+bool EditorWindow::actionEnabledState() const
+{
+    return m_actionEnabledState;
+}
+
 void EditorWindow::toggleStandardActions(bool val)
 {
     d->zoomFitToSelectAction->setEnabled(val);
@@ -1408,8 +1383,10 @@ void EditorWindow::toggleStandardActions(bool val)
     d->autoCorrectionAction->setEnabled(val);
     d->BWAction->setEnabled(val);
     d->HSLAction->setEnabled(val);
+
     d->profileMenuAction->setEnabled(val);
     d->colorSpaceConverter->setEnabled(val && IccSettings::instance()->isEnabled());
+
     d->whitebalanceAction->setEnabled(val);
     d->channelMixerAction->setEnabled(val);
     d->curvesAction->setEnabled(val);
@@ -3297,102 +3274,9 @@ void EditorWindow::slotConvertTo16Bits()
     qApp->restoreOverrideCursor();
 }
 
-void EditorWindow::slotConvertToColorSpace(const IccProfile& profile)
-{
-    ImageIface iface;
-
-    if (iface.originalIccProfile().isNull())
-    {
-        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
-                              i18n("This image is not color managed."));
-        return;
-    }
-
-    qApp->setOverrideCursor(Qt::WaitCursor);
-    ProfileConversionTool::fastConversion(profile);
-    qApp->restoreOverrideCursor();
-}
-
-void EditorWindow::slotUpdateColorSpaceMenu()
-{
-    d->profileMenuAction->clear();
-
-    if (!IccSettings::instance()->isEnabled())
-    {
-        QAction* const action = new QAction(i18n("Color Management is disabled..."), this);
-        d->profileMenuAction->addAction(action);
-
-        connect(action, SIGNAL(triggered()),
-                this, SLOT(slotSetupICC()));
-    }
-    else
-    {
-        ICCSettingsContainer settings = IccSettings::instance()->settings();
-
-        QList<IccProfile> standardProfiles, favoriteProfiles;
-        QSet<QString> standardProfilePaths, favoriteProfilePaths;
-        standardProfiles << IccProfile::sRGB()
-                        << IccProfile::adobeRGB()
-                        << IccProfile::wideGamutRGB()
-                        << IccProfile::proPhotoRGB();
-
-        foreach(IccProfile profile, standardProfiles) // krazy:exclude=foreach
-        {
-            d->profileMenuAction->addProfile(profile, profile.description());
-            standardProfilePaths << profile.filePath();
-        }
-
-        d->profileMenuAction->addSeparator();
-
-        favoriteProfilePaths  = QSet<QString>::fromList(ProfileConversionTool::favoriteProfiles());
-        favoriteProfilePaths -= standardProfilePaths;
-
-        foreach(const QString& path, favoriteProfilePaths)
-        {
-            favoriteProfiles << IccProfile(path);
-        }
-
-        d->profileMenuAction->addProfiles(favoriteProfiles);
-    }
-
-    d->profileMenuAction->addSeparator();
-    d->profileMenuAction->addAction(d->colorSpaceConverter);
-    d->colorSpaceConverter->setEnabled(m_actionEnabledState && IccSettings::instance()->isEnabled());
-}
-
-void EditorWindow::slotProfileConversionTool()
-{
-    ProfileConversionTool* const tool = new ProfileConversionTool(this);
-
-    connect(tool, SIGNAL(okClicked()),
-            this, SLOT(slotUpdateColorSpaceMenu()));
-
-    loadTool(tool);
-}
-
-void EditorWindow::slotHSL()
-{
-    loadTool(new HSLTool(this));
-}
-
 void EditorWindow::slotWhiteBalance()
 {
     loadTool(new WhiteBalanceTool(this));
-}
-
-void EditorWindow::slotChannelMixer()
-{
-    loadTool(new ChannelMixerTool(this));
-}
-
-void EditorWindow::slotFilm()
-{
-    loadTool(new FilmTool(this));
-}
-
-void EditorWindow::slotCB()
-{
-    loadTool(new CBTool(this));
 }
 
 void EditorWindow::slotHotPixels()

@@ -51,7 +51,7 @@ IccConvertPlugin::~IccConvertPlugin()
 
 QString IccConvertPlugin::name() const
 {
-    return i18n("ICC Convert");
+    return i18n("Color Profile Conversion");
 }
 
 QString IccConvertPlugin::iid() const
@@ -66,7 +66,7 @@ QIcon IccConvertPlugin::icon() const
 
 QString IccConvertPlugin::description() const
 {
-    return i18n("A tool to convert image to a color space");
+    return i18n("A tool to convert images to a color space");
 }
 
 QString IccConvertPlugin::details() const

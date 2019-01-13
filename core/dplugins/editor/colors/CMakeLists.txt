@@ -43,3 +43,27 @@ DIGIKAM_ADD_EDITOR_PLUGIN(BWSepiaTool
     ${CMAKE_CURRENT_SOURCE_DIR}/bwsepiatool.cpp
 )
 
+DIGIKAM_ADD_EDITOR_PLUGIN(CBTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/cbtoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/cbtool.cpp
+)
+
+DIGIKAM_ADD_EDITOR_PLUGIN(ChannelMixerTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/channelmixertoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/channelmixertool.cpp
+)
+
+DIGIKAM_ADD_EDITOR_PLUGIN(FilmTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/filmtoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/filmtool.cpp
+)
+
+DIGIKAM_ADD_EDITOR_PLUGIN(HSLTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/hsltoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/hsltool.cpp
+)
+
+DIGIKAM_ADD_EDITOR_PLUGIN(ProfileConversionTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/profileconversiontoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/profileconversiontool.cpp
+)

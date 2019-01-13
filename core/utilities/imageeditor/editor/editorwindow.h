@@ -96,7 +96,8 @@ public:
 
     void registerPluginsActions();
     void loadTool(EditorTool* const tool);
-
+    bool actionEnabledState() const;
+    
 public Q_SLOTS:
 
     virtual void slotSetup()    = 0;
@@ -350,17 +351,10 @@ private Q_SLOTS:
     void slotDistortionFX();
     void slotRainDrop();
     void slotFilmGrain();
-    void slotCB();
-    void slotHSL();
     void slotInvert();
     void slotWhiteBalance();
     void slotConvertTo8Bits();
     void slotConvertTo16Bits();
-    void slotConvertToColorSpace(const IccProfile&);
-    void slotProfileConversionTool();
-    void slotChannelMixer();
-    void slotFilm();
-    void slotUpdateColorSpaceMenu();
     void slotRestoration();
     void slotBlur();
     void slotHealingClone();

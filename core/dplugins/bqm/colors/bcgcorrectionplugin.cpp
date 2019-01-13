@@ -66,12 +66,12 @@ QIcon BCGCorrectionPlugin::icon() const
 
 QString BCGCorrectionPlugin::description() const
 {
-    return i18n("A tool to fix Brightness/Contrast/Gamma");
+    return i18n("A tool to fix Brightness / Contrast / Gamma");
 }
 
 QString BCGCorrectionPlugin::details() const
 {
-    return i18n("<p>This Batch Queue Manager tool can adjust Brightness/Contrast/Gamma from images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can adjust Brightness / Contrast / Gamma from images.</p>");
 }
 
 QList<DPluginAuthor> BCGCorrectionPlugin::authors() const

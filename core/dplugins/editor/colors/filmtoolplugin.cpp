@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to fix colors balance
+ * Description : image editor plugin to emulate film color
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "cbtoolplugin.h"
+#include "filmtoolplugin.h"
 
 // Qt includes
 
@@ -33,77 +33,76 @@
 // Local includes
 
 #include "editorwindow.h"
-#include "cbtool.h"
+#include "filmtool.h"
 
 namespace Digikam
 {
 
-CBToolPlugin::CBToolPlugin(QObject* const parent)
+FilmToolPlugin::FilmToolPlugin(QObject* const parent)
     : DPluginEditor(parent)
 {
 }
 
-CBToolPlugin::~CBToolPlugin()
+FilmToolPlugin::~FilmToolPlugin()
 {
 }
 
-QString CBToolPlugin::name() const
+QString FilmToolPlugin::name() const
 {
-    return i18n("Color Balance");
+    return i18n("Color Negative Film");
 }
 
-QString CBToolPlugin::iid() const
+QString FilmToolPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon CBToolPlugin::icon() const
+QIcon FilmToolPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("adjustrgb"));
+    return QIcon::fromTheme(QLatin1String("colorneg"));
 }
 
-QString CBToolPlugin::description() const
+QString FilmToolPlugin::description() const
 {
-    return i18n("A tool to adjust color balance");
+    return i18n("A tool to emulate color negative film");
 }
 
-QString CBToolPlugin::details() const
+QString FilmToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can adjust color balance from image.</p>");
+    return i18n("<p>This Image Editor tool can emulate color negative film from image.</p>");
 }
 
-QList<DPluginAuthor> CBToolPlugin::authors() const
+QList<DPluginAuthor> FilmToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2004-2019"))
+            << DPluginAuthor(QLatin1String("Matthias Welwarsky"),
+                             QLatin1String("matthias at welwarsky dot de"),
+                             QLatin1String("(C) 2012"))
             ;
 }
 
-void CBToolPlugin::setup(QObject* const parent)
+void FilmToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Color Balance..."));
-    ac->setObjectName(QLatin1String("editorwindow_color_rgb"));
-    // NOTE: Photoshop 7 use CTRL+B.
-    ac->setShortcut(Qt::CTRL+Qt::Key_B);
+    ac->setText(i18nc("@action", "Color Negative..."));
+    ac->setObjectName(QLatin1String("editorwindow_color_film"));
+    ac->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I);
     ac->setActionCategory(DPluginAction::EditorColor);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotColorBalance()));
+            this, SLOT(slotFilmTool()));
 
     addAction(ac);
 }
 
-void CBToolPlugin::slotColorBalance()
+void FilmToolPlugin::slotFilmTool()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
 
     if (editor)
     {
-        CBTool* const tool = new CBTool(editor);
+        FilmTool* const tool = new FilmTool(editor);
         tool->setPlugin(this);
         editor->loadTool(tool);
     }

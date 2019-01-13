@@ -66,12 +66,12 @@ QIcon HSLCorrectionPlugin::icon() const
 
 QString HSLCorrectionPlugin::description() const
 {
-    return i18n("A tool to fix Hue/Saturation/Lightness");
+    return i18n("A tool to fix Hue / Saturation / Lightness");
 }
 
 QString HSLCorrectionPlugin::details() const
 {
-    return i18n("<p>This Batch Queue Manager tool can adjust Hue/Saturation/Lightness from images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can adjust Hue / Saturation / Lightness from images.</p>");
 }
 
 QList<DPluginAuthor> HSLCorrectionPlugin::authors() const

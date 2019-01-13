@@ -233,7 +233,7 @@ public:
     QAction*                     curvesAction;
     QAction*                     levelsAction;
     QAction*                     filmAction;
-    IccProfilesMenuAction*       profileMenuAction;
+    QAction*                     profileMenuAction;
     QAction*                     colorSpaceConverter;
     QAction*                     hotpixelsAction;
     QAction*                     lensdistortionAction;
