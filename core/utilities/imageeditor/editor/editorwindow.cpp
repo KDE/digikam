@@ -131,7 +131,6 @@
 #include "dexpanderbox.h"
 
 #include "inserttexttool.h"
-#include "bordertool.h"
 #include "texturetool.h"
 #include "colorfxtool.h"
 #include "charcoaltool.h"
@@ -551,12 +550,6 @@ void EditorWindow::setupStandardActions()
             this, SLOT(slotInsertText()));
     d->insertTextAction->setEnabled(false);
 
-    d->borderAction = new QAction(QIcon::fromTheme(QLatin1String("bordertool")), i18n("Add Border..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_decorate_border"), d->borderAction );
-    connect(d->borderAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotBorder()));
-    d->borderAction->setEnabled(false);
-
     d->textureAction = new QAction(QIcon::fromTheme(QLatin1String("texture")), i18n("Apply Texture..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_decorate_texture"), d->textureAction );
     connect(d->textureAction, SIGNAL(triggered(bool)),
@@ -662,6 +655,10 @@ void EditorWindow::setupStandardActions()
     d->whitebalanceAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_whitebalance"), this);
     actionCollection()->addActions(QList<QAction*>() << d->whitebalanceAction);
     d->whitebalanceAction->setEnabled(false);
+
+    d->borderAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_decorate_border"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->borderAction);
+    d->borderAction->setEnabled(false);
 
     // **********************************************************
 
@@ -3161,11 +3158,6 @@ void EditorWindow::slotToolDone()
 void EditorWindow::slotInsertText()
 {
     loadTool(new InsertTextTool(this));
-}
-
-void EditorWindow::slotBorder()
-{
-    loadTool(new BorderTool(this));
 }
 
 void EditorWindow::slotTexture()

@@ -5,7 +5,7 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 add_subdirectory(colors)
-#add_subdirectory(decorate)
+add_subdirectory(decorate)
 #add_subdirectory(enhance)
 #add_subdirectory(filters)
 #add_subdirectory(transform)
