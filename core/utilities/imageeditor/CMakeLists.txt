@@ -83,7 +83,6 @@ set(libeditorrawimport_SRCS
 )
 
 set(libeditortools_SRCS
-    tools/filters/colorfxtool.cpp
     tools/filters/charcoaltool.cpp
     tools/filters/embosstool.cpp
     tools/filters/oilpainttool.cpp

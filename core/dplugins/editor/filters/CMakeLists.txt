@@ -18,10 +18,10 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-#DIGIKAM_ADD_EDITOR_PLUGIN(ColorFxTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/colorfxtoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/colorfxtool.cpp
-#)
+DIGIKAM_ADD_EDITOR_PLUGIN(ColorFxTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorfxtoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorfxtool.cpp
+)
 
 #DIGIKAM_ADD_EDITOR_PLUGIN(CharcoalTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/charcoaltoolplugin.cpp

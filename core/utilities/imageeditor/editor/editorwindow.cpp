@@ -131,7 +131,6 @@
 #include "dexpanderbox.h"
 #include "imageiface.h"
 
-#include "colorfxtool.h"
 #include "charcoaltool.h"
 #include "embosstool.h"
 #include "oilpainttool.h"
@@ -525,12 +524,6 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Effects' menu actions ---------------------------------------------
 
-    d->colorEffectsAction = new QAction(QIcon::fromTheme(QLatin1String("colorfx")), i18n("Color Effects..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_filter_colorfx"), d->colorEffectsAction);
-    connect(d->colorEffectsAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotColorEffects()));
-    d->colorEffectsAction->setEnabled(false);
-
     d->charcoalAction = new QAction(QIcon::fromTheme(QLatin1String("charcoaltool")), i18n("Charcoal Drawing..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_filter_charcoal"), d->charcoalAction);
     connect(d->charcoalAction, SIGNAL(triggered(bool)),
@@ -680,6 +673,10 @@ void EditorWindow::setupStandardActions()
     d->distortionfxAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_filter_distortionfx"), this);
     actionCollection()->addActions(QList<QAction*>() << d->distortionfxAction);
     d->distortionfxAction->setEnabled(false);
+
+    d->colorEffectsAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_filter_colorfx"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->colorEffectsAction);
+    d->colorEffectsAction->setEnabled(false);
 
     // **********************************************************
 
@@ -3099,11 +3096,6 @@ void EditorWindow::loadTool(EditorTool* const tool)
 void EditorWindow::slotToolDone()
 {
     EditorToolIface::editorToolIface()->unLoadTool();
-}
-
-void EditorWindow::slotColorEffects()
-{
-    loadTool(new ColorFxTool(this));
 }
 
 void EditorWindow::slotCharcoal()
