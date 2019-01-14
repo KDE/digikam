@@ -79,7 +79,8 @@ if(LensFun_FOUND)
 endif()
 
 # Not yet finalized
-#DIGIKAM_ADD_EDITOR_PLUGIN(HealingCloneTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/healingclonetoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/healingclonetool.cpp
-#)
+DIGIKAM_ADD_EDITOR_PLUGIN(HealingCloneTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/healingclone/imagebrushguidewidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/healingclone/healingclonetoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/healingclone/healingclonetool.cpp
+)

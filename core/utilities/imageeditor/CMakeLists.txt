@@ -33,7 +33,6 @@ endif()
 
 set(libeditorwidgets_SRCS
     widgets/imageguidewidget.cpp
-    widgets/imagebrushguidewidget.cpp
     widgets/imagepreviewitem.cpp
     widgets/previewtoolbar.cpp
     widgets/previewlist.cpp
