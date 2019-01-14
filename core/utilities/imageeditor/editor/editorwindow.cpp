@@ -142,7 +142,6 @@
 #include "filmgraintool.h"
 #include "invertfilter.h"
 #include "blurtool.h"
-#include "antivignettingtool.h"
 #include "hotpixelstool.h"
 #include "perspectivetool.h"
 #include "freerotationtool.h"
@@ -679,6 +678,10 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->lensdistortionAction);
     d->lensdistortionAction->setEnabled(false);
 
+    d->antivignettingAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_antivignetting"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->antivignettingAction);
+    d->antivignettingAction->setEnabled(false);
+
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -708,12 +711,6 @@ void EditorWindow::setupStandardActions()
     connect(d->blurAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBlur()));
     d->blurAction->setEnabled(false);
-
-    d->antivignettingAction = new QAction(QIcon::fromTheme(QLatin1String("antivignetting")), i18n("Vignetting Correction..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_enhance_antivignetting"), d->antivignettingAction);
-    connect(d->antivignettingAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotAntiVignetting()));
-    d->antivignettingAction->setEnabled(false);
 
     d->hotpixelsAction  = new QAction(QIcon::fromTheme(QLatin1String("hotpixels")), i18n("Hot Pixels..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_hotpixels"), d->hotpixelsAction);
@@ -3225,11 +3222,6 @@ void EditorWindow::slotHotPixels()
 void EditorWindow::slotBlur()
 {
     loadTool(new BlurTool(this));
-}
-
-void EditorWindow::slotAntiVignetting()
-{
-    loadTool(new AntiVignettingTool(this));
 }
 
 void EditorWindow::slotPerspective()
