@@ -143,7 +143,6 @@
 #include "invertfilter.h"
 #include "blurtool.h"
 #include "healingclonetool.h"
-#include "redeyetool.h"
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
 #include "hotpixelstool.h"
@@ -663,6 +662,10 @@ void EditorWindow::setupStandardActions()
     d->sharpenAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_sharpen"), this);
     actionCollection()->addActions(QList<QAction*>() << d->sharpenAction);
     d->sharpenAction->setEnabled(false);
+
+    d->redeyeAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_redeye"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->redeyeAction);
+    d->redeyeAction->setEnabled(false);
     
     // **********************************************************
 
@@ -701,14 +704,6 @@ void EditorWindow::setupStandardActions()
             this, SLOT(slotHealingClone()));
     d->healCloneAction->setEnabled(false);
 */
-
-    d->redeyeAction = new QAction(QIcon::fromTheme(QLatin1String("redeyes")), i18n("Red Eye..."), this);
-    d->redeyeAction->setWhatsThis(i18n("This filter can be used to correct red eyes in a photo. "
-                                       "Select a region including the eyes to use this option."));
-    actionCollection()->addAction(QLatin1String("editorwindow_enhance_redeye"), d->redeyeAction);
-    connect(d->redeyeAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotRedEye()));
-    d->redeyeAction->setEnabled(false);
 
     d->antivignettingAction = new QAction(QIcon::fromTheme(QLatin1String("antivignetting")), i18n("Vignetting Correction..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_antivignetting"), d->antivignettingAction);
@@ -3252,11 +3247,6 @@ void EditorWindow::slotBlur()
 void EditorWindow::slotHealingClone()
 {
     loadTool(new HealingCloneTool(this));
-}
-
-void EditorWindow::slotRedEye()
-{
-    loadTool(new RedEyeTool(this));
 }
 
 void EditorWindow::slotLensAutoFix()

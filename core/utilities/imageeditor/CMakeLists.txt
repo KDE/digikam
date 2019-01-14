@@ -93,7 +93,6 @@ set(libeditortools_SRCS
     tools/filters/raindroptool.cpp
     tools/filters/filmgraintool.cpp
     tools/enhance/blurtool.cpp
-    tools/enhance/redeyetool.cpp
     tools/enhance/antivignettingtool.cpp
     tools/enhance/lensdistortiontool.cpp
     tools/enhance/healingclonetool.cpp
