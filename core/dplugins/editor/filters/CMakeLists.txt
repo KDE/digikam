@@ -43,10 +43,10 @@ DIGIKAM_ADD_EDITOR_PLUGIN(BlurFxTool
     ${CMAKE_CURRENT_SOURCE_DIR}/blurfxtool.cpp
 )
 
-#DIGIKAM_ADD_EDITOR_PLUGIN(DistortionFxTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/distortionfxtoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/distortionfxtool.cpp
-#)
+DIGIKAM_ADD_EDITOR_PLUGIN(DistortionFxTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/distortionfxtoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/distortionfxtool.cpp
+)
 
 #DIGIKAM_ADD_EDITOR_PLUGIN(RainDropTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/raindroptoolplugin.cpp

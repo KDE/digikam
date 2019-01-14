@@ -135,7 +135,6 @@
 #include "charcoaltool.h"
 #include "embosstool.h"
 #include "oilpainttool.h"
-#include "distortionfxtool.h"
 #include "raindroptool.h"
 #include "filmgraintool.h"
 #include "invertfilter.h"
@@ -550,12 +549,6 @@ void EditorWindow::setupStandardActions()
             this ,SLOT(slotOilPaint()));
     d->oilpaintAction->setEnabled(false);
 
-    d->distortionfxAction = new QAction(QIcon::fromTheme(QLatin1String("draw-spiral")), i18n("Distortion Effects..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_filter_distortionfx"), d->distortionfxAction );
-    connect(d->distortionfxAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotDistortionFX()));
-    d->distortionfxAction->setEnabled(false);
-
     d->raindropAction = new QAction(QIcon::fromTheme(QLatin1String("raindrop")), i18n("Raindrops..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_filter_raindrop"), d->raindropAction);
     connect(d->raindropAction, SIGNAL(triggered(bool)),
@@ -683,6 +676,10 @@ void EditorWindow::setupStandardActions()
     d->blurfxAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_filter_blurfx"), this);
     actionCollection()->addActions(QList<QAction*>() << d->blurfxAction);
     d->blurfxAction->setEnabled(false);
+
+    d->distortionfxAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_filter_distortionfx"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->distortionfxAction);
+    d->distortionfxAction->setEnabled(false);
 
     // **********************************************************
 
@@ -3122,11 +3119,6 @@ void EditorWindow::slotEmboss()
 void EditorWindow::slotOilPaint()
 {
     loadTool(new OilPaintTool(this));
-}
-
-void EditorWindow::slotDistortionFX()
-{
-    loadTool(new DistortionFXTool(this));
 }
 
 void EditorWindow::slotRainDrop()

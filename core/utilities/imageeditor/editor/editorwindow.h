@@ -344,7 +344,6 @@ private Q_SLOTS:
     void slotCharcoal();
     void slotEmboss();
     void slotOilPaint();
-    void slotDistortionFX();
     void slotRainDrop();
     void slotFilmGrain();
     void slotInvert();

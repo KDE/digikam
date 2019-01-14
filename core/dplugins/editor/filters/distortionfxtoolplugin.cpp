@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to reduce lens artifacts
+ * Description : image editor plugin to apply distortion effects.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "lensautofixtoolplugin.h"
+#include "distortionfxtoolplugin.h"
 
 // Qt includes
 
@@ -33,78 +33,78 @@
 // Local includes
 
 #include "editorwindow.h"
-#include "lensautofixtool.h"
+#include "distortionfxtool.h"
 
 namespace Digikam
 {
 
-LensAutoFixToolPlugin::LensAutoFixToolPlugin(QObject* const parent)
+DistortionFXToolPlugin::DistortionFXToolPlugin(QObject* const parent)
     : DPluginEditor(parent)
 {
 }
 
-LensAutoFixToolPlugin::~LensAutoFixToolPlugin()
+DistortionFXToolPlugin::~DistortionFXToolPlugin()
 {
 }
 
-QString LensAutoFixToolPlugin::name() const
+QString DistortionFXToolPlugin::name() const
 {
-    return i18n("Lens Auto-Correction");
+    return i18n("Distortion Effects");
 }
 
-QString LensAutoFixToolPlugin::iid() const
+QString DistortionFXToolPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon LensAutoFixToolPlugin::icon() const
+QIcon DistortionFXToolPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("lensautofix"));
+    return QIcon::fromTheme(QLatin1String("draw-spiral"));
 }
 
-QString LensAutoFixToolPlugin::description() const
+QString DistortionFXToolPlugin::description() const
 {
-    return i18n("A tool to fix automatically lens artifacts");
+    return i18n("A tool to apply distortion effects to an image");
 }
 
-QString LensAutoFixToolPlugin::details() const
+QString DistortionFXToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can fix automatically lens artifacts over an image.</p>");
+    return i18n("<p>This Image Editor tool can apply distortion effects to an image.</p>");
 }
 
-QList<DPluginAuthor> LensAutoFixToolPlugin::authors() const
+QList<DPluginAuthor> DistortionFXToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Adrian Schroeter"),
-                             QLatin1String("adrian at suse dot de"),
-                             QLatin1String("(C) 2008"))
+            << DPluginAuthor(QLatin1String("Marcel Wiesweg"),
+                             QLatin1String("marcel dot wiesweg at gmx dot de"),
+                             QLatin1String("(C) 2006-2012"))
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2008-2019"))
+                             QLatin1String("(C) 2005-2019"))
             ;
 }
     
-void LensAutoFixToolPlugin::setup(QObject* const parent)
+void DistortionFXToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Auto-Correction..."));
-    ac->setObjectName(QLatin1String("editorwindow_enhance_lensautofix"));
-    ac->setActionCategory(DPluginAction::EditorEnhance);
+    ac->setText(i18nc("@action", "Distortion Effects..."));
+    ac->setObjectName(QLatin1String("editorwindow_filter_distortionfx"));
+    ac->setActionCategory(DPluginAction::EditorFilters);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotLensAutoFix()));
+            this, SLOT(slotDistortionFX()));
 
     addAction(ac);
 }
-    
-void LensAutoFixToolPlugin::slotLensAutoFix()
+
+void DistortionFXToolPlugin::slotDistortionFX()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
 
     if (editor)
     {
-        LensAutoFixTool* const tool = new LensAutoFixTool(editor);
+        DistortionFXTool* const tool = new DistortionFXTool(editor);
         tool->setPlugin(this);
         editor->loadTool(tool);
     }
