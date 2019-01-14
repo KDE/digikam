@@ -66,12 +66,12 @@ QIcon RestorationPlugin::icon() const
 
 QString RestorationPlugin::description() const
 {
-    return i18n("A tool to restore photographs using Greystoration algorithm");
+    return i18n("A tool to restore images using Greystoration algorithm");
 }
 
 QString RestorationPlugin::details() const
 {
-    return i18n("<p>This Batch Queue Manager tool can restore images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can restore images using Greystoration algorithm.</p>");
 }
 
 QList<DPluginAuthor> RestorationPlugin::authors() const

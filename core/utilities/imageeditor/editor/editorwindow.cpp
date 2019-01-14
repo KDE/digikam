@@ -129,6 +129,7 @@
 #include "versionmanager.h"
 #include "dfiledialog.h"
 #include "dexpanderbox.h"
+#include "imageiface.h"
 
 #include "inserttexttool.h"
 #include "colorfxtool.h"
@@ -140,8 +141,6 @@
 #include "raindroptool.h"
 #include "filmgraintool.h"
 #include "invertfilter.h"
-#include "imageiface.h"
-#include "restorationtool.h"
 #include "blurtool.h"
 #include "healingclonetool.h"
 #include "sharpentool.h"
@@ -652,6 +651,10 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->insertTextAction);
     d->insertTextAction->setEnabled(false);
 
+    d->restorationAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_restoration"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->restorationAction);
+    d->restorationAction->setEnabled(false);
+    
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -675,12 +678,6 @@ void EditorWindow::setupStandardActions()
     d->convertTo16Bits->setEnabled(false);
 
     // -- Standard 'Enhance' menu actions ---------------------------------------------
-
-    d->restorationAction = new QAction(QIcon::fromTheme(QLatin1String("restoration")), i18n("Restoration..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_enhance_restoration"), d->restorationAction);
-    connect(d->restorationAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotRestoration()));
-    d->restorationAction->setEnabled(false);
 
     d->sharpenAction = new QAction(QIcon::fromTheme(QLatin1String("sharpenimage")), i18n("Sharpen..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_sharpen"), d->sharpenAction);
@@ -3253,11 +3250,6 @@ void EditorWindow::slotHotPixels()
 void EditorWindow::slotLensDistortion()
 {
     loadTool(new LensDistortionTool(this));
-}
-
-void EditorWindow::slotRestoration()
-{
-    loadTool(new RestorationTool(this));
 }
 
 void EditorWindow::slotBlur()

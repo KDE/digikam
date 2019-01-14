@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to insert text
+ * Description : image editor plugin to restore an image
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "inserttexttoolplugin.h"
+#include "restorationtoolplugin.h"
 
 // Qt includes
 
@@ -33,79 +33,75 @@
 // Local includes
 
 #include "editorwindow.h"
-#include "inserttexttool.h"
+#include "restorationtool.h"
 
 namespace Digikam
 {
 
-InsertTextToolPlugin::InsertTextToolPlugin(QObject* const parent)
+RestoreToolPlugin::RestoreToolPlugin(QObject* const parent)
     : DPluginEditor(parent)
 {
 }
 
-InsertTextToolPlugin::~InsertTextToolPlugin()
+RestoreToolPlugin::~RestoreToolPlugin()
 {
 }
 
-QString InsertTextToolPlugin::name() const
+QString RestoreToolPlugin::name() const
 {
-    return i18n("Insert Text");
+    return i18n("Restoration");
 }
 
-QString InsertTextToolPlugin::iid() const
+QString RestoreToolPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon InsertTextToolPlugin::icon() const
+QIcon RestoreToolPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("insert-text"));
+    return QIcon::fromTheme(QLatin1String("restoration"));
 }
 
-QString InsertTextToolPlugin::description() const
+QString RestoreToolPlugin::description() const
 {
-    return i18n("A tool to insert text over an image");
+    return i18n("A tool to restore an image using Greystoration algorithm");
 }
 
-QString InsertTextToolPlugin::details() const
+QString RestoreToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can insert text over an image.</p>");
+    return i18n("<p>This Image Editor tool can restore an image using Greystoration algorithm.</p>");
 }
 
-QList<DPluginAuthor> InsertTextToolPlugin::authors() const
+QList<DPluginAuthor> RestoreToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Marcel Wiesweg"),
-                             QLatin1String("marcel dot wiesweg at gmx dot de"),
-                             QLatin1String("(C) 2006-2012"))
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
                              QLatin1String("(C) 2005-2019"))
             ;
 }
 
-void InsertTextToolPlugin::setup(QObject* const parent)
+void RestoreToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Insert Text..."));
-    ac->setObjectName(QLatin1String("editorwindow_decorate_inserttext"));
-    ac->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_T);
-    ac->setActionCategory(DPluginAction::EditorDecorate);
+    ac->setText(i18nc("@action", "Restoration..."));
+    ac->setObjectName(QLatin1String("editorwindow_enhance_restoration"));
+    ac->setActionCategory(DPluginAction::EditorEnhance);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotInsertText()));
+            this, SLOT(slotRestore()));
 
     addAction(ac);
 }
-
-void InsertTextToolPlugin::slotInsertText()
+    
+void RestoreToolPlugin::slotRestore()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
 
     if (editor)
     {
-        InsertTextTool* const tool = new InsertTextTool(editor);
+        RestorationTool* const tool = new RestorationTool(editor);
         tool->setPlugin(this);
         editor->loadTool(tool);
     }
