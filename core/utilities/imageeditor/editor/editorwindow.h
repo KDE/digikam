@@ -353,7 +353,6 @@ private Q_SLOTS:
     void slotConvertTo16Bits();
     void slotBlur();
     void slotAntiVignetting();
-    void slotLensDistortion();
     void slotHotPixels();
     void slotPerspective();
     void slotFreeRotation();

@@ -102,8 +102,6 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("lensdistortion"));
-    setToolName(i18n("Lens Distortion"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("lensdistortion")));
 
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);

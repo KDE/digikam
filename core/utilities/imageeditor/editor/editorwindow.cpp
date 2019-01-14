@@ -143,7 +143,6 @@
 #include "invertfilter.h"
 #include "blurtool.h"
 #include "antivignettingtool.h"
-#include "lensdistortiontool.h"
 #include "hotpixelstool.h"
 #include "perspectivetool.h"
 #include "freerotationtool.h"
@@ -675,7 +674,11 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->healCloneAction);
     d->healCloneAction->setEnabled(false);
 */
-    
+ 
+    d->lensdistortionAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_lensdistortion"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->lensdistortionAction);
+    d->lensdistortionAction->setEnabled(false);
+
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -711,12 +714,6 @@ void EditorWindow::setupStandardActions()
     connect(d->antivignettingAction, SIGNAL(triggered(bool)),
             this, SLOT(slotAntiVignetting()));
     d->antivignettingAction->setEnabled(false);
-
-    d->lensdistortionAction = new QAction(QIcon::fromTheme(QLatin1String("lensdistortion")), i18n("Distortion..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_enhance_lensdistortion"), d->lensdistortionAction);
-    connect(d->lensdistortionAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotLensDistortion()));
-    d->lensdistortionAction->setEnabled(false);
 
     d->hotpixelsAction  = new QAction(QIcon::fromTheme(QLatin1String("hotpixels")), i18n("Hot Pixels..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_hotpixels"), d->hotpixelsAction);
@@ -3223,11 +3220,6 @@ void EditorWindow::slotConvertTo16Bits()
 void EditorWindow::slotHotPixels()
 {
     loadTool(new HotPixelsTool(this));
-}
-
-void EditorWindow::slotLensDistortion()
-{
-    loadTool(new LensDistortionTool(this));
 }
 
 void EditorWindow::slotBlur()

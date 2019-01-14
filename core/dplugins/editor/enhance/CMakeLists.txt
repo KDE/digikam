@@ -53,10 +53,10 @@ DIGIKAM_ADD_EDITOR_PLUGIN(RedEyeTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/antivignettingtool.cpp
 #)
 
-#DIGIKAM_ADD_EDITOR_PLUGIN(LensDistortionTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/lensdistorsiontoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/lensdistortiontool.cpp
-#)
+DIGIKAM_ADD_EDITOR_PLUGIN(LensDistortionTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/lensdistortiontoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/lensdistortiontool.cpp
+)
 
 #DIGIKAM_ADD_EDITOR_PLUGIN(HotpixelsTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/weights.cpp

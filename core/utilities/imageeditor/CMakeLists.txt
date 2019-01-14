@@ -93,7 +93,6 @@ set(libeditortools_SRCS
     tools/filters/filmgraintool.cpp
     tools/enhance/blurtool.cpp
     tools/enhance/antivignettingtool.cpp
-    tools/enhance/lensdistortiontool.cpp
     tools/enhance/hotpixels/weights.cpp
     tools/enhance/hotpixels/blackframeparser.cpp
     tools/enhance/hotpixels/blackframelistview.cpp
