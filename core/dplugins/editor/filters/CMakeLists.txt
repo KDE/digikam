@@ -33,10 +33,10 @@ DIGIKAM_ADD_EDITOR_PLUGIN(ColorFxTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/embosstool.cpp
 #)
 
-#DIGIKAM_ADD_EDITOR_PLUGIN(OilPaintTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/oilpainttoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/oilpainttool.cpp
-#)
+DIGIKAM_ADD_EDITOR_PLUGIN(OilPaintTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/oilpainttoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/oilpainttool.cpp
+)
 
 DIGIKAM_ADD_EDITOR_PLUGIN(BlurFxTool
     ${CMAKE_CURRENT_SOURCE_DIR}/blurfxtoolplugin.cpp

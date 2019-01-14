@@ -133,7 +133,6 @@
 
 #include "charcoaltool.h"
 #include "embosstool.h"
-#include "oilpainttool.h"
 #include "invertfilter.h"
 #include "perspectivetool.h"
 #include "freerotationtool.h"
@@ -534,12 +533,6 @@ void EditorWindow::setupStandardActions()
             this, SLOT(slotEmboss()));
     d->embossAction->setEnabled(false);
 
-    d->oilpaintAction = new QAction(QIcon::fromTheme(QLatin1String("oilpaint")), i18n("Oil Paint..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_filter_oilpaint"), d->oilpaintAction);
-    connect(d->oilpaintAction, SIGNAL(triggered(bool)),
-            this ,SLOT(slotOilPaint()));
-    d->oilpaintAction->setEnabled(false);
-
     // -- Standard 'Colors' menu actions ---------------------------------------------
 
     d->BCGAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_bcg"), this);
@@ -671,7 +664,11 @@ void EditorWindow::setupStandardActions()
     d->filmgrainAction  = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_filter_filmgrain"), this);
     actionCollection()->addActions(QList<QAction*>() << d->filmgrainAction);
     d->filmgrainAction->setEnabled(false);
-    
+
+    d->oilpaintAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_filter_oilpaint"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->oilpaintAction);
+    d->oilpaintAction->setEnabled(false);
+
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -3100,11 +3097,6 @@ void EditorWindow::slotCharcoal()
 void EditorWindow::slotEmboss()
 {
     loadTool(new EmbossTool(this));
-}
-
-void EditorWindow::slotOilPaint()
-{
-    loadTool(new OilPaintTool(this));
 }
 
 void EditorWindow::slotInvert()

@@ -342,7 +342,6 @@ private Q_SLOTS:
     void slotToolDone();
     void slotCharcoal();
     void slotEmboss();
-    void slotOilPaint();
     void slotInvert();
     void slotConvertTo8Bits();
     void slotConvertTo16Bits();

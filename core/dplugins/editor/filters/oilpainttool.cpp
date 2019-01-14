@@ -83,8 +83,6 @@ OilPaintTool::OilPaintTool(QObject* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("oilpaint"));
-    setToolName(i18n("Oil Paint"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("oilpaint"))); // krazy:exclude=iconnames
 
     // -------------------------------------------------------------
 
