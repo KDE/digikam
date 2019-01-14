@@ -143,7 +143,6 @@
 #include "invertfilter.h"
 #include "blurtool.h"
 #include "healingclonetool.h"
-#include "sharpentool.h"
 #include "redeyetool.h"
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
@@ -661,6 +660,10 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->noiseReductionAction);
     d->noiseReductionAction->setEnabled(false);
 
+    d->sharpenAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_sharpen"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->sharpenAction);
+    d->sharpenAction->setEnabled(false);
+    
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -684,12 +687,6 @@ void EditorWindow::setupStandardActions()
     d->convertTo16Bits->setEnabled(false);
 
     // -- Standard 'Enhance' menu actions ---------------------------------------------
-
-    d->sharpenAction = new QAction(QIcon::fromTheme(QLatin1String("sharpenimage")), i18n("Sharpen..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_enhance_sharpen"), d->sharpenAction);
-    connect(d->sharpenAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotSharpen()));
-    d->sharpenAction->setEnabled(false);
 
     d->blurAction = new QAction(QIcon::fromTheme(QLatin1String("blurimage")), i18n("Blur..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_blur"), d->blurAction);
@@ -3255,11 +3252,6 @@ void EditorWindow::slotBlur()
 void EditorWindow::slotHealingClone()
 {
     loadTool(new HealingCloneTool(this));
-}
-
-void EditorWindow::slotSharpen()
-{
-    loadTool(new SharpenTool(this));
 }
 
 void EditorWindow::slotRedEye()

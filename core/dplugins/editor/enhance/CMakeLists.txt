@@ -33,14 +33,14 @@ DIGIKAM_ADD_EDITOR_PLUGIN(NoiseReductionTool
     ${CMAKE_CURRENT_SOURCE_DIR}/noisereductiontool.cpp
 )
 
+DIGIKAM_ADD_EDITOR_PLUGIN(SharpenTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/sharpentoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/sharpentool.cpp
+)
+
 #DIGIKAM_ADD_EDITOR_PLUGIN(BlurTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/blurtoolplugin.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/blurtool.cpp
-#)
-
-#DIGIKAM_ADD_EDITOR_PLUGIN(SharpenTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/sharpentoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/sharpentool.cpp
 #)
 
 #DIGIKAM_ADD_EDITOR_PLUGIN(RedEyeTool
