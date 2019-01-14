@@ -118,13 +118,6 @@ if(Lqr-1_FOUND)
        )
 endif()
 
-if(LensFun_FOUND)
-    set(libeditortools_SRCS ${libeditortools_SRCS}
-        tools/enhance/lensautofixtool.cpp
-       )
-    include_directories(${LENSFUN_INCLUDE_DIRS})
-endif()
-
 set(libeditoriface_SRCS
     editor/editortool.cpp
     editor/editortooliface.cpp

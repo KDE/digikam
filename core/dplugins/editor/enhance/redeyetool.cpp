@@ -90,8 +90,6 @@ RedEyeTool::RedEyeTool(QObject* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("redeye"));
-    setToolName(i18n("Red Eye"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("redeyes")));
     setToolHelp(QLatin1String("redeyecorrectiontool.anchor"));
 
     d->previewWidget = new ImageRegionWidget;

@@ -156,10 +156,6 @@
 #   include "contentawareresizetool.h"
 #endif
 
-#ifdef HAVE_LENSFUN
-#   include "lensautofixtool.h"
-#endif
-
 namespace Digikam
 {
 
@@ -666,6 +662,14 @@ void EditorWindow::setupStandardActions()
     d->redeyeAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_redeye"), this);
     actionCollection()->addActions(QList<QAction*>() << d->redeyeAction);
     d->redeyeAction->setEnabled(false);
+
+#ifdef HAVE_LENSFUN
+
+    d->lensAutoFixAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_lensautofix"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->lensAutoFixAction);
+    d->lensAutoFixAction->setEnabled(false);
+
+#endif // HAVE_LENSFUN
     
     // **********************************************************
 
@@ -722,16 +726,6 @@ void EditorWindow::setupStandardActions()
     connect(d->hotpixelsAction, SIGNAL(triggered(bool)),
             this, SLOT(slotHotPixels()));
     d->hotpixelsAction->setEnabled(false);
-
-#ifdef HAVE_LENSFUN
-
-    d->lensAutoFixAction = new QAction(QIcon::fromTheme(QLatin1String("lensautofix")), i18n("Auto-Correction..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_enhance_lensautofix"), d->lensAutoFixAction );
-    connect(d->lensAutoFixAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotLensAutoFix()));
-    d->lensAutoFixAction->setEnabled(false);
-
-#endif // HAVE_LENSFUN
 
     HotPixelsTool::registerFilter();
 
@@ -3247,13 +3241,6 @@ void EditorWindow::slotBlur()
 void EditorWindow::slotHealingClone()
 {
     loadTool(new HealingCloneTool(this));
-}
-
-void EditorWindow::slotLensAutoFix()
-{
-#ifdef HAVE_LENSFUN
-    loadTool(new LensAutoFixTool(this));
-#endif
 }
 
 void EditorWindow::slotAntiVignetting()

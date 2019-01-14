@@ -67,16 +67,16 @@ DIGIKAM_ADD_EDITOR_PLUGIN(RedEyeTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/hotpixelstool.cpp
 #)
 
-#if(LensFun_FOUND)
-#
-#    include_directories(${LENSFUN_INCLUDE_DIRS})
-#
-#    DIGIKAM_ADD_EDITOR_PLUGIN(HotpixelsTool
-#        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixtoolplugin.cpp
-#        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixtool.cpp
-#    )
-#
-#endif()
+if(LensFun_FOUND)
+
+    include_directories(${LENSFUN_INCLUDE_DIRS})
+
+    DIGIKAM_ADD_EDITOR_PLUGIN(HotpixelsTool
+        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixtoolplugin.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixtool.cpp
+    )
+
+endif()
 
 # Not yet finalized
 #DIGIKAM_ADD_EDITOR_PLUGIN(HealingCloneTool

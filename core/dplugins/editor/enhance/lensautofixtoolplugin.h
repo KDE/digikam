@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to reduce lens artifacts
+ * Description : image editor plugin to reduce lens artifacts
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,28 +20,28 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_LENSAUTOFIX_PLUGIN_H
-#define DIGIKAM_LENSAUTOFIX_PLUGIN_H
+#ifndef DIGIKAM_LENSAUTOFIXTOOL_PLUGIN_H
+#define DIGIKAM_LENSAUTOFIXTOOL_PLUGIN_H
 
 // Local includes
 
-#include "dpluginbqm.h"
+#include "dplugineditor.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMLensAutoFix"
+#define DPLUGIN_IID "org.kde.digikam.plugin.editor.LensAutoFixTool"
 
 namespace Digikam
 {
 
-class LensAutoFixPlugin : public DPluginBqm
+class LensAutoFixToolPlugin : public DPluginEditor
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
-    Q_INTERFACES(Digikam::DPluginBqm)
+    Q_INTERFACES(Digikam::DPluginEditor)
 
 public:
 
-    explicit LensAutoFixPlugin(QObject* const parent = 0);
-    ~LensAutoFixPlugin();
+    explicit LensAutoFixToolPlugin(QObject* const parent = 0);
+    ~LensAutoFixToolPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -51,8 +51,12 @@ public:
     QList<DPluginAuthor> authors() const override;
 
     void setup(QObject* const);
+
+private Q_SLOTS:
+
+    void slotLensAutoFix();
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAM_LENSAUTOFIX_PLUGIN_H
+#endif // DIGIKAM_LENSAUTOFIXTOOL_PLUGIN_H
