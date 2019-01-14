@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : image editor plugin to blur an image
+ * Description : image editor plugin to fix hot pixels
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "blurtoolplugin.h"
+#include "hotpixelstoolplugin.h"
 
 // Qt includes
 
@@ -33,78 +33,80 @@
 // Local includes
 
 #include "editorwindow.h"
-#include "blurtool.h"
+#include "hotpixelstool.h"
 
 namespace Digikam
 {
 
-BlurToolPlugin::BlurToolPlugin(QObject* const parent)
+HotPixelsToolPlugin::HotPixelsToolPlugin(QObject* const parent)
     : DPluginEditor(parent)
 {
 }
 
-BlurToolPlugin::~BlurToolPlugin()
+HotPixelsToolPlugin::~HotPixelsToolPlugin()
 {
 }
 
-QString BlurToolPlugin::name() const
+QString HotPixelsToolPlugin::name() const
 {
-    return i18n("Blur");
+    return i18n("Hot Pixels");
 }
 
-QString BlurToolPlugin::iid() const
+QString HotPixelsToolPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon BlurToolPlugin::icon() const
+QIcon HotPixelsToolPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("blurimage"));
+    return QIcon::fromTheme(QLatin1String("hotpixels"));
 }
 
-QString BlurToolPlugin::description() const
+QString HotPixelsToolPlugin::description() const
 {
-    return i18n("A tool to blur an image");
+    return i18n("A tool to fix hot pixels");
 }
 
-QString BlurToolPlugin::details() const
+QString HotPixelsToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can blur an image.</p>");
+    return i18n("<p>This Image Editor tool can fix hot pixels from an image.</p>");
 }
 
-QList<DPluginAuthor> BlurToolPlugin::authors() const
+QList<DPluginAuthor> HotPixelsToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Andi Clemens"),
-                             QLatin1String("andi dot clemens at gmail dot com"),
-                             QLatin1String("(C) 2009"))
+            << DPluginAuthor(QLatin1String("Unai Garro"),
+                             QLatin1String("ugarro at users dot sourceforge dot net"),
+                             QLatin1String("(C) 2005-2006"))
             << DPluginAuthor(QLatin1String("Gilles Caulier"),
                              QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2004-2019"))
+                             QLatin1String("(C) 2005-2019"))
             ;
 }
     
-void BlurToolPlugin::setup(QObject* const parent)
+void HotPixelsToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Blur..."));
-    ac->setObjectName(QLatin1String("editorwindow_enhance_blur"));
+    ac->setText(i18nc("@action", "Hot Pixels..."));
+    ac->setObjectName(QLatin1String("editorwindow_enhance_hotpixels"));
     ac->setActionCategory(DPluginAction::EditorEnhance);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotBlur()));
+            this, SLOT(slotHotPixels()));
 
     addAction(ac);
+    
+    HotPixelsTool::registerFilter();
 }
     
-void BlurToolPlugin::slotBlur()
+void HotPixelsToolPlugin::slotHotPixels()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
 
     if (editor)
     {
-        BlurTool* const tool = new BlurTool(editor);
+        HotPixelsTool* const tool = new HotPixelsTool(editor);
         tool->setPlugin(this);
         editor->loadTool(tool);
     }

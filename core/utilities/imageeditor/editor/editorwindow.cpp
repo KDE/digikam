@@ -140,7 +140,6 @@
 #include "raindroptool.h"
 #include "filmgraintool.h"
 #include "invertfilter.h"
-#include "hotpixelstool.h"
 #include "perspectivetool.h"
 #include "freerotationtool.h"
 #include "sheartool.h"
@@ -683,6 +682,11 @@ void EditorWindow::setupStandardActions()
     d->blurAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_blur"), this);
     actionCollection()->addActions(QList<QAction*>() << d->blurAction);
     d->blurAction->setEnabled(false);
+    
+    d->hotpixelsAction  = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_hotpixels"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->hotpixelsAction);
+    d->hotpixelsAction->setEnabled(false);
+
 
     // **********************************************************
 
@@ -706,15 +710,7 @@ void EditorWindow::setupStandardActions()
             this, SLOT(slotConvertTo16Bits()));
     d->convertTo16Bits->setEnabled(false);
 
-    // -- Standard 'Enhance' menu actions ---------------------------------------------
-
-    d->hotpixelsAction  = new QAction(QIcon::fromTheme(QLatin1String("hotpixels")), i18n("Hot Pixels..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_enhance_hotpixels"), d->hotpixelsAction);
-    connect(d->hotpixelsAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotHotPixels()));
-    d->hotpixelsAction->setEnabled(false);
-
-    HotPixelsTool::registerFilter();
+    // --------------------------------------------------------------------------------
 
     QList<DPluginAction*> actions = DPluginLoader::instance()->pluginsActions(DPluginAction::Generic, this);
 
@@ -3208,11 +3204,6 @@ void EditorWindow::slotConvertTo16Bits()
     qApp->setOverrideCursor(Qt::WaitCursor);
     iface.convertOriginalColorDepth(64);
     qApp->restoreOverrideCursor();
-}
-
-void EditorWindow::slotHotPixels()
-{
-    loadTool(new HotPixelsTool(this));
 }
 
 void EditorWindow::slotPerspective()

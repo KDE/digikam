@@ -58,20 +58,20 @@ DIGIKAM_ADD_EDITOR_PLUGIN(LensDistortionTool
     ${CMAKE_CURRENT_SOURCE_DIR}/lensdistortiontool.cpp
 )
 
-#DIGIKAM_ADD_EDITOR_PLUGIN(HotpixelsTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/weights.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/blackframeparser.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/blackframelistview.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/hotpixelfixer.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/hotpixelstoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/hotpixelstool.cpp
-#)
+DIGIKAM_ADD_EDITOR_PLUGIN(HotpixelsTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/weights.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/blackframeparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/blackframelistview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/hotpixelfixer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/hotpixelstoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/hotpixels/hotpixelstool.cpp
+)
 
 if(LensFun_FOUND)
 
     include_directories(${LENSFUN_INCLUDE_DIRS})
 
-    DIGIKAM_ADD_EDITOR_PLUGIN(HotpixelsTool
+    DIGIKAM_ADD_EDITOR_PLUGIN(LensAutoFixTool
         ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixtoolplugin.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixtool.cpp
     )
