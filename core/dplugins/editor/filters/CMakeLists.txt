@@ -28,10 +28,10 @@ DIGIKAM_ADD_EDITOR_PLUGIN(CharcoalTool
     ${CMAKE_CURRENT_SOURCE_DIR}/charcoaltool.cpp
 )
 
-#DIGIKAM_ADD_EDITOR_PLUGIN(EmbossTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/embosstoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/embosstool.cpp
-#)
+DIGIKAM_ADD_EDITOR_PLUGIN(EmbossTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/embosstoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/embosstool.cpp
+)
 
 DIGIKAM_ADD_EDITOR_PLUGIN(OilPaintTool
     ${CMAKE_CURRENT_SOURCE_DIR}/oilpainttoolplugin.cpp

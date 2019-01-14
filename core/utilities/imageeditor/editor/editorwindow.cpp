@@ -131,8 +131,6 @@
 #include "dexpanderbox.h"
 #include "imageiface.h"
 
-#include "charcoaltool.h"
-#include "embosstool.h"
 #include "invertfilter.h"
 #include "perspectivetool.h"
 #include "freerotationtool.h"
@@ -519,15 +517,7 @@ void EditorWindow::setupStandardActions()
     d->zoomFitToSelectAction->setWhatsThis(i18n("This option can be used to zoom the image to the "
                                                 "current selection area."));
 
-    // -- Standard 'Effects' menu actions ---------------------------------------------
-
-    d->embossAction = new QAction(QIcon::fromTheme(QLatin1String("embosstool")), i18n("Emboss..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_filter_emboss"), d->embossAction);
-    connect(d->embossAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotEmboss()));
-    d->embossAction->setEnabled(false);
-
-    // -- Standard 'Colors' menu actions ---------------------------------------------
+    // -------------------------------------------------------------------------------
 
     d->BCGAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_bcg"), this);
     actionCollection()->addActions(QList<QAction*>() << d->BCGAction);
@@ -667,6 +657,10 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->charcoalAction);
     d->charcoalAction->setEnabled(false);
 
+    d->embossAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_filter_emboss"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->embossAction);
+    d->embossAction->setEnabled(false);
+    
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -3085,12 +3079,6 @@ void EditorWindow::loadTool(EditorTool* const tool)
 void EditorWindow::slotToolDone()
 {
     EditorToolIface::editorToolIface()->unLoadTool();
-}
-
-
-void EditorWindow::slotEmboss()
-{
-    loadTool(new EmbossTool(this));
 }
 
 void EditorWindow::slotInvert()

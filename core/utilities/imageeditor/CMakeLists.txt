@@ -83,7 +83,6 @@ set(libeditorrawimport_SRCS
 )
 
 set(libeditortools_SRCS
-    tools/filters/embosstool.cpp
     tools/transform/freerotationtool.cpp
     tools/transform/sheartool.cpp
     tools/transform/resizetool.cpp
