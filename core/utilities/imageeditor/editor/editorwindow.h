@@ -340,7 +340,6 @@ private Q_SLOTS:
     void slotPreviousRightSideBarTab();
     void slotNextRightSideBarTab();
     void slotToolDone();
-    void slotCharcoal();
     void slotEmboss();
     void slotInvert();
     void slotConvertTo8Bits();

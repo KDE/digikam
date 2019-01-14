@@ -23,10 +23,10 @@ DIGIKAM_ADD_EDITOR_PLUGIN(ColorFxTool
     ${CMAKE_CURRENT_SOURCE_DIR}/colorfxtool.cpp
 )
 
-#DIGIKAM_ADD_EDITOR_PLUGIN(CharcoalTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/charcoaltoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/charcoaltool.cpp
-#)
+DIGIKAM_ADD_EDITOR_PLUGIN(CharcoalTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/charcoaltoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/charcoaltool.cpp
+)
 
 #DIGIKAM_ADD_EDITOR_PLUGIN(EmbossTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/embosstoolplugin.cpp

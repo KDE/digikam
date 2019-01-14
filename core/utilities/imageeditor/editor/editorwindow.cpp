@@ -521,12 +521,6 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Effects' menu actions ---------------------------------------------
 
-    d->charcoalAction = new QAction(QIcon::fromTheme(QLatin1String("charcoaltool")), i18n("Charcoal Drawing..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_filter_charcoal"), d->charcoalAction);
-    connect(d->charcoalAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotCharcoal()));
-    d->charcoalAction->setEnabled(false);
-
     d->embossAction = new QAction(QIcon::fromTheme(QLatin1String("embosstool")), i18n("Emboss..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_filter_emboss"), d->embossAction);
     connect(d->embossAction, SIGNAL(triggered(bool)),
@@ -668,6 +662,10 @@ void EditorWindow::setupStandardActions()
     d->oilpaintAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_filter_oilpaint"), this);
     actionCollection()->addActions(QList<QAction*>() << d->oilpaintAction);
     d->oilpaintAction->setEnabled(false);
+
+    d->charcoalAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_filter_charcoal"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->charcoalAction);
+    d->charcoalAction->setEnabled(false);
 
     // **********************************************************
 
@@ -3089,10 +3087,6 @@ void EditorWindow::slotToolDone()
     EditorToolIface::editorToolIface()->unLoadTool();
 }
 
-void EditorWindow::slotCharcoal()
-{
-    loadTool(new CharcoalTool(this));
-}
 
 void EditorWindow::slotEmboss()
 {
