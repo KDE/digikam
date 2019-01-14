@@ -71,7 +71,7 @@ QString LocalContrastPlugin::description() const
 
 QString LocalContrastPlugin::details() const
 {
-    return i18n("<p>This Batch Queue Manager tool can apply color effects over images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can emulate tone mapping over images.</p>");
 }
 
 QList<DPluginAuthor> LocalContrastPlugin::authors() const

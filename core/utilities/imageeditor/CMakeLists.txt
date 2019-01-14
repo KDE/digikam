@@ -95,7 +95,6 @@ set(libeditortools_SRCS
     tools/enhance/blurtool.cpp
     tools/enhance/sharpentool.cpp
     tools/enhance/noisereductiontool.cpp
-    tools/enhance/localcontrasttool.cpp
     tools/enhance/redeyetool.cpp
     tools/enhance/antivignettingtool.cpp
     tools/enhance/lensdistortiontool.cpp

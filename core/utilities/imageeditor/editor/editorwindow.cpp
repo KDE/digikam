@@ -145,7 +145,6 @@
 #include "healingclonetool.h"
 #include "sharpentool.h"
 #include "noisereductiontool.h"
-#include "localcontrasttool.h"
 #include "redeyetool.h"
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
@@ -655,6 +654,10 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->restorationAction);
     d->restorationAction->setEnabled(false);
     
+    d->localContrastAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_localcontrast"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->localContrastAction);
+    d->localContrastAction->setEnabled(false);
+    
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -703,12 +706,6 @@ void EditorWindow::setupStandardActions()
     connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotNoiseReduction()));
     d->noiseReductionAction->setEnabled(false);
-
-    d->localContrastAction = new QAction(QIcon::fromTheme(QLatin1String("contrast")), i18n("Local Contrast..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_enhance_localcontrast"), d->localContrastAction);
-    connect(d->localContrastAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotLocalContrast()));
-    d->localContrastAction->setEnabled(false);
 
     d->redeyeAction = new QAction(QIcon::fromTheme(QLatin1String("redeyes")), i18n("Red Eye..."), this);
     d->redeyeAction->setWhatsThis(i18n("This filter can be used to correct red eyes in a photo. "
@@ -3270,11 +3267,6 @@ void EditorWindow::slotSharpen()
 void EditorWindow::slotNoiseReduction()
 {
     loadTool(new NoiseReductionTool(this));
-}
-
-void EditorWindow::slotLocalContrast()
-{
-    loadTool(new LocalContrastTool(this));
 }
 
 void EditorWindow::slotRedEye()
