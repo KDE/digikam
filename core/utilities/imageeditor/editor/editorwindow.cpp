@@ -131,7 +131,6 @@
 #include "dexpanderbox.h"
 #include "imageiface.h"
 
-#include "inserttexttool.h"
 #include "colorfxtool.h"
 #include "charcoaltool.h"
 #include "embosstool.h"
@@ -141,7 +140,6 @@
 #include "raindroptool.h"
 #include "filmgraintool.h"
 #include "invertfilter.h"
-#include "blurtool.h"
 #include "hotpixelstool.h"
 #include "perspectivetool.h"
 #include "freerotationtool.h"
@@ -682,6 +680,10 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->antivignettingAction);
     d->antivignettingAction->setEnabled(false);
 
+    d->blurAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_blur"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->blurAction);
+    d->blurAction->setEnabled(false);
+
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -705,12 +707,6 @@ void EditorWindow::setupStandardActions()
     d->convertTo16Bits->setEnabled(false);
 
     // -- Standard 'Enhance' menu actions ---------------------------------------------
-
-    d->blurAction = new QAction(QIcon::fromTheme(QLatin1String("blurimage")), i18n("Blur..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_enhance_blur"), d->blurAction);
-    connect(d->blurAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotBlur()));
-    d->blurAction->setEnabled(false);
 
     d->hotpixelsAction  = new QAction(QIcon::fromTheme(QLatin1String("hotpixels")), i18n("Hot Pixels..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_hotpixels"), d->hotpixelsAction);
@@ -3217,11 +3213,6 @@ void EditorWindow::slotConvertTo16Bits()
 void EditorWindow::slotHotPixels()
 {
     loadTool(new HotPixelsTool(this));
-}
-
-void EditorWindow::slotBlur()
-{
-    loadTool(new BlurTool(this));
 }
 
 void EditorWindow::slotPerspective()

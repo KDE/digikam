@@ -91,7 +91,6 @@ set(libeditortools_SRCS
     tools/filters/distortionfxtool.cpp
     tools/filters/raindroptool.cpp
     tools/filters/filmgraintool.cpp
-    tools/enhance/blurtool.cpp
     tools/enhance/hotpixels/weights.cpp
     tools/enhance/hotpixels/blackframeparser.cpp
     tools/enhance/hotpixels/blackframelistview.cpp
