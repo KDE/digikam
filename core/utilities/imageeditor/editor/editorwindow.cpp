@@ -142,7 +142,6 @@
 #include "filmgraintool.h"
 #include "invertfilter.h"
 #include "blurtool.h"
-#include "healingclonetool.h"
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
 #include "hotpixelstool.h"
@@ -670,6 +669,12 @@ void EditorWindow::setupStandardActions()
     d->lensAutoFixAction->setEnabled(false);
 
 #endif // HAVE_LENSFUN
+
+/*
+    d->healCloneAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_healingclone"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->healCloneAction);
+    d->healCloneAction->setEnabled(false);
+*/
     
     // **********************************************************
 
@@ -700,14 +705,6 @@ void EditorWindow::setupStandardActions()
     connect(d->blurAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBlur()));
     d->blurAction->setEnabled(false);
-/*
-    d->healCloneAction = new QAction(QIcon::fromTheme(QLatin1String("edit-clone")), i18n("Healing Clone..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_enhance_healingclone"), d->healCloneAction);
-    d->healCloneAction->setWhatsThis( i18n( "This filter can be used to clone a part in a photo to erase unwanted region.") );
-    connect(d->healCloneAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotHealingClone()));
-    d->healCloneAction->setEnabled(false);
-*/
 
     d->antivignettingAction = new QAction(QIcon::fromTheme(QLatin1String("antivignetting")), i18n("Vignetting Correction..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_antivignetting"), d->antivignettingAction);
@@ -3236,11 +3233,6 @@ void EditorWindow::slotLensDistortion()
 void EditorWindow::slotBlur()
 {
     loadTool(new BlurTool(this));
-}
-
-void EditorWindow::slotHealingClone()
-{
-    loadTool(new HealingCloneTool(this));
 }
 
 void EditorWindow::slotAntiVignetting()

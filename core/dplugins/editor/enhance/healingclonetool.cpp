@@ -86,8 +86,6 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("healing clone"));
-    setToolName(i18n("Healing Clone Tool"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("healimage")));
     setToolHelp(QLatin1String("healingclonetool.anchor"));
 
     d->gboxSettings      = new EditorToolSettings(0);

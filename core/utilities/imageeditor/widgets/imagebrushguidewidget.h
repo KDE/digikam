@@ -28,11 +28,12 @@
 // Local includes
 
 #include "imageguidewidget.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class ImageBrushGuideWidget : public ImageGuideWidget
+class DIGIKAM_EXPORT ImageBrushGuideWidget : public ImageGuideWidget
 {
     Q_OBJECT
 
