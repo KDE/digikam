@@ -28,6 +28,11 @@ DIGIKAM_ADD_EDITOR_PLUGIN(LocalContrastTool
     ${CMAKE_CURRENT_SOURCE_DIR}/localcontrasttool.cpp
 )
 
+DIGIKAM_ADD_EDITOR_PLUGIN(NoiseReductionTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/noisereductiontoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/noisereductiontool.cpp
+)
+
 #DIGIKAM_ADD_EDITOR_PLUGIN(BlurTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/blurtoolplugin.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/blurtool.cpp
@@ -37,12 +42,6 @@ DIGIKAM_ADD_EDITOR_PLUGIN(LocalContrastTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/sharpentoolplugin.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/sharpentool.cpp
 #)
-
-#DIGIKAM_ADD_EDITOR_PLUGIN(NoiseReductionTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/noisereductiontoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/noisereductiontool.cpp
-#)
-
 
 #DIGIKAM_ADD_EDITOR_PLUGIN(RedEyeTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/redeyetoolplugin.cpp

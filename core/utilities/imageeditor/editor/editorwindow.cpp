@@ -144,7 +144,6 @@
 #include "blurtool.h"
 #include "healingclonetool.h"
 #include "sharpentool.h"
-#include "noisereductiontool.h"
 #include "redeyetool.h"
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
@@ -658,6 +657,10 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->localContrastAction);
     d->localContrastAction->setEnabled(false);
     
+    d->noiseReductionAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_noisereduction"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->noiseReductionAction);
+    d->noiseReductionAction->setEnabled(false);
+
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -701,11 +704,6 @@ void EditorWindow::setupStandardActions()
             this, SLOT(slotHealingClone()));
     d->healCloneAction->setEnabled(false);
 */
-    d->noiseReductionAction = new QAction(QIcon::fromTheme(QLatin1String("noisereduction")), i18n("Noise Reduction..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_enhance_noisereduction"), d->noiseReductionAction);
-    connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotNoiseReduction()));
-    d->noiseReductionAction->setEnabled(false);
 
     d->redeyeAction = new QAction(QIcon::fromTheme(QLatin1String("redeyes")), i18n("Red Eye..."), this);
     d->redeyeAction->setWhatsThis(i18n("This filter can be used to correct red eyes in a photo. "
@@ -3262,11 +3260,6 @@ void EditorWindow::slotHealingClone()
 void EditorWindow::slotSharpen()
 {
     loadTool(new SharpenTool(this));
-}
-
-void EditorWindow::slotNoiseReduction()
-{
-    loadTool(new NoiseReductionTool(this));
 }
 
 void EditorWindow::slotRedEye()

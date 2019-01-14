@@ -354,7 +354,6 @@ private Q_SLOTS:
     void slotBlur();
     void slotHealingClone();
     void slotSharpen();
-    void slotNoiseReduction();
     void slotRedEye();
     void slotLensAutoFix();
     void slotAntiVignetting();
