@@ -86,8 +86,6 @@ set(libeditortools_SRCS
     tools/transform/freerotationtool.cpp
     tools/transform/sheartool.cpp
     tools/transform/resizetool.cpp
-    tools/transform/imageselectionwidget.cpp
-    tools/transform/ratiocroptool.cpp
 )
 
 if(Lqr-1_FOUND)

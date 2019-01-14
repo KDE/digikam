@@ -135,7 +135,6 @@
 #include "freerotationtool.h"
 #include "sheartool.h"
 #include "resizetool.h"
-#include "ratiocroptool.h"
 
 #ifdef HAVE_LIBLQR_1
 #   include "contentawareresizetool.h"
@@ -663,6 +662,10 @@ void EditorWindow::setupStandardActions()
     d->perspectiveAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_transform_perspective"), this);
     actionCollection()->addActions(QList<QAction*>() << d->perspectiveAction);
     d->perspectiveAction->setEnabled(false);
+    
+    d->aspectRatioCropAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_transform_ratiocrop"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->aspectRatioCropAction);
+    d->aspectRatioCropAction->setEnabled(false);
 
     // **********************************************************
 
@@ -766,12 +769,6 @@ void EditorWindow::setupStandardActions()
     connect(d->resizeAction, SIGNAL(triggered()),
             this, SLOT(slotResize()));
     d->resizeAction->setEnabled(false);
-
-    d->aspectRatioCropAction = new QAction(QIcon::fromTheme(QLatin1String("transform-crop")), i18n("Aspect Ratio Crop..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_transform_ratiocrop"), d->aspectRatioCropAction);
-    connect(d->aspectRatioCropAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotRatioCrop()));
-    d->aspectRatioCropAction->setEnabled(false);
 
 #ifdef HAVE_LIBLQR_1
 
@@ -3144,11 +3141,6 @@ void EditorWindow::slotShearTool()
 void EditorWindow::slotResize()
 {
     loadTool(new ResizeTool(this));
-}
-
-void EditorWindow::slotRatioCrop()
-{
-    loadTool(new RatioCropTool(this));
 }
 
 void EditorWindow::slotContentAwareResizing()

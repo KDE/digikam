@@ -41,11 +41,11 @@ DIGIKAM_ADD_EDITOR_PLUGIN(PerspectiveTool
     ${CMAKE_CURRENT_SOURCE_DIR}/perspective/matrix.cpp
 )
 
-#DIGIKAM_ADD_EDITOR_PLUGIN(RatioCropTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/imageselectionwidget.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/ratiocroptoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/ratiocroptool.cpp
-#)
+DIGIKAM_ADD_EDITOR_PLUGIN(RatioCropTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/ratiocrop/imageselectionwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ratiocrop/ratiocroptoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ratiocrop/ratiocroptool.cpp
+)
 
 #if(Lqr-1_FOUND)
 #

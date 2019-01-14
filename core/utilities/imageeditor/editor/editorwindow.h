@@ -348,7 +348,6 @@ private Q_SLOTS:
     void slotShearTool();
     void slotContentAwareResizing();
     void slotResize();
-    void slotRatioCrop();
     void slotRotateLeftIntoQue();
     void slotRotateRightIntoQue();
     void slotFlipHIntoQue();
