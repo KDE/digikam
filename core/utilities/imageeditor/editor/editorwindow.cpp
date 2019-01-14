@@ -132,7 +132,6 @@
 #include "imageiface.h"
 
 #include "invertfilter.h"
-#include "perspectivetool.h"
 #include "freerotationtool.h"
 #include "sheartool.h"
 #include "resizetool.h"
@@ -660,7 +659,11 @@ void EditorWindow::setupStandardActions()
     d->embossAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_filter_emboss"), this);
     actionCollection()->addActions(QList<QAction*>() << d->embossAction);
     d->embossAction->setEnabled(false);
-    
+
+    d->perspectiveAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_transform_perspective"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->perspectiveAction);
+    d->perspectiveAction->setEnabled(false);
+
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -751,12 +754,6 @@ void EditorWindow::setupStandardActions()
     d->autoCropAction->setEnabled(false);
     ac->addAction(QLatin1String("editorwindow_transform_autocrop"), d->autoCropAction);
     ac->setDefaultShortcut(d->autoCropAction, Qt::SHIFT + Qt::CTRL + Qt::Key_X);
-
-    d->perspectiveAction = new QAction(QIcon::fromTheme(QLatin1String("perspective")), i18n("Perspective Adjustment..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_transform_perspective"), d->perspectiveAction);
-    connect(d->perspectiveAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotPerspective()));
-    d->perspectiveAction->setEnabled(false);
 
     d->sheartoolAction = new QAction(QIcon::fromTheme(QLatin1String("transform-shear-left")), i18n("Shear..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_transform_sheartool"), d->sheartoolAction);
@@ -3137,11 +3134,6 @@ void EditorWindow::slotConvertTo16Bits()
     qApp->setOverrideCursor(Qt::WaitCursor);
     iface.convertOriginalColorDepth(64);
     qApp->restoreOverrideCursor();
-}
-
-void EditorWindow::slotPerspective()
-{
-    loadTool(new PerspectiveTool(this));
 }
 
 void EditorWindow::slotShearTool()

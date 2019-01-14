@@ -86,10 +86,6 @@ set(libeditortools_SRCS
     tools/transform/freerotationtool.cpp
     tools/transform/sheartool.cpp
     tools/transform/resizetool.cpp
-    tools/transform/perspectivetool.cpp
-    tools/transform/perspectivewidget.cpp
-    tools/transform/triangle.cpp
-    tools/transform/matrix.cpp
     tools/transform/imageselectionwidget.cpp
     tools/transform/ratiocroptool.cpp
 )
