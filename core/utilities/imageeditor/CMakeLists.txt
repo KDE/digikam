@@ -86,7 +86,6 @@ set(libeditortools_SRCS
     tools/filters/charcoaltool.cpp
     tools/filters/embosstool.cpp
     tools/filters/oilpainttool.cpp
-    tools/filters/filmgraintool.cpp
     tools/transform/freerotationtool.cpp
     tools/transform/sheartool.cpp
     tools/transform/resizetool.cpp

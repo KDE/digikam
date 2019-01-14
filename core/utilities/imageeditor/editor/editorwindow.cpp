@@ -134,7 +134,6 @@
 #include "charcoaltool.h"
 #include "embosstool.h"
 #include "oilpainttool.h"
-#include "filmgraintool.h"
 #include "invertfilter.h"
 #include "perspectivetool.h"
 #include "freerotationtool.h"
@@ -541,12 +540,6 @@ void EditorWindow::setupStandardActions()
             this ,SLOT(slotOilPaint()));
     d->oilpaintAction->setEnabled(false);
 
-    d->filmgrainAction  = new QAction(QIcon::fromTheme(QLatin1String("filmgrain")), i18n("Add Film Grain..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_filter_filmgrain"), d->filmgrainAction);
-    connect(d->filmgrainAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotFilmGrain()));
-    d->filmgrainAction->setEnabled(false);
-
     // -- Standard 'Colors' menu actions ---------------------------------------------
 
     d->BCGAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_bcg"), this);
@@ -675,6 +668,10 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->raindropAction);
     d->raindropAction->setEnabled(false);
 
+    d->filmgrainAction  = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_filter_filmgrain"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->filmgrainAction);
+    d->filmgrainAction->setEnabled(false);
+    
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -3108,11 +3105,6 @@ void EditorWindow::slotEmboss()
 void EditorWindow::slotOilPaint()
 {
     loadTool(new OilPaintTool(this));
-}
-
-void EditorWindow::slotFilmGrain()
-{
-    loadTool(new FilmGrainTool(this));
 }
 
 void EditorWindow::slotInvert()
