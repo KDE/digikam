@@ -87,7 +87,6 @@ set(libeditortools_SRCS
     tools/filters/charcoaltool.cpp
     tools/filters/embosstool.cpp
     tools/filters/oilpainttool.cpp
-    tools/filters/blurfxtool.cpp
     tools/filters/distortionfxtool.cpp
     tools/filters/raindroptool.cpp
     tools/filters/filmgraintool.cpp

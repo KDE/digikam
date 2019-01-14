@@ -64,7 +64,7 @@ public:
         EditorEnhance,          /// Image Editor enhance action.
         EditorTransform,        /// Image Editor transform action.
         EditorDecorate,         /// Image Editor decorate action.
-        EditorEffects           /// Image Editor special effects action.
+        EditorFilters           /// Image Editor special effects action.
     };
 
 public:

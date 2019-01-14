@@ -18,42 +18,42 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN(ColorFxTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorfxtoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorfxtool.cpp
-)
+#DIGIKAM_ADD_EDITOR_PLUGIN(ColorFxTool
+#    ${CMAKE_CURRENT_SOURCE_DIR}/colorfxtoolplugin.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/colorfxtool.cpp
+#)
 
-DIGIKAM_ADD_EDITOR_PLUGIN(CharcoalTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/charcoaltoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/charcoaltool.cpp
-)
+#DIGIKAM_ADD_EDITOR_PLUGIN(CharcoalTool
+#    ${CMAKE_CURRENT_SOURCE_DIR}/charcoaltoolplugin.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/charcoaltool.cpp
+#)
 
-DIGIKAM_ADD_EDITOR_PLUGIN(EmbossTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/embosstoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/embosstool.cpp
-)
+#DIGIKAM_ADD_EDITOR_PLUGIN(EmbossTool
+#    ${CMAKE_CURRENT_SOURCE_DIR}/embosstoolplugin.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/embosstool.cpp
+#)
 
-DIGIKAM_ADD_EDITOR_PLUGIN(OilPaintTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/oilpainttoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/oilpainttool.cpp
-)
+#DIGIKAM_ADD_EDITOR_PLUGIN(OilPaintTool
+#    ${CMAKE_CURRENT_SOURCE_DIR}/oilpainttoolplugin.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/oilpainttool.cpp
+#)
 
 DIGIKAM_ADD_EDITOR_PLUGIN(BlurFxTool
     ${CMAKE_CURRENT_SOURCE_DIR}/blurfxtoolplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/blurfxtool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN(DistortionFxTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/distortionfxtoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/distortionfxtool.cpp
-)
+#DIGIKAM_ADD_EDITOR_PLUGIN(DistortionFxTool
+#    ${CMAKE_CURRENT_SOURCE_DIR}/distortionfxtoolplugin.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/distortionfxtool.cpp
+#)
 
-DIGIKAM_ADD_EDITOR_PLUGIN(RainDropTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/raindroptoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/raindroptool.cpp
-)
+#DIGIKAM_ADD_EDITOR_PLUGIN(RainDropTool
+#    ${CMAKE_CURRENT_SOURCE_DIR}/raindroptoolplugin.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/raindroptool.cpp
+#)
 
-DIGIKAM_ADD_EDITOR_PLUGIN(FilmGrainTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/filmgraintoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/filmgraintool.cpp
-)
+#DIGIKAM_ADD_EDITOR_PLUGIN(FilmGrainTool
+#    ${CMAKE_CURRENT_SOURCE_DIR}/filmgraintoolplugin.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/filmgraintool.cpp
+#)

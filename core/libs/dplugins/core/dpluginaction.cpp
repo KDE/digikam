@@ -62,7 +62,7 @@ DPluginAction::ActionType DPluginAction::actionType() const
         case EditorEnhance:
         case EditorTransform:
         case EditorDecorate:
-        case EditorEffects:
+        case EditorFilters:
             return Editor;
 
         default:
@@ -110,7 +110,7 @@ QString DPluginAction::actionCategoryToString() const
             return i18n("Transform");
         case EditorDecorate:
             return i18n("Decorate");
-        case EditorEffects:
+        case EditorFilters:
             return i18n("Effects");
 
         default:
