@@ -134,7 +134,6 @@
 #include "charcoaltool.h"
 #include "embosstool.h"
 #include "oilpainttool.h"
-#include "raindroptool.h"
 #include "filmgraintool.h"
 #include "invertfilter.h"
 #include "perspectivetool.h"
@@ -542,12 +541,6 @@ void EditorWindow::setupStandardActions()
             this ,SLOT(slotOilPaint()));
     d->oilpaintAction->setEnabled(false);
 
-    d->raindropAction = new QAction(QIcon::fromTheme(QLatin1String("raindrop")), i18n("Raindrops..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_filter_raindrop"), d->raindropAction);
-    connect(d->raindropAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotRainDrop()));
-    d->raindropAction->setEnabled(false);
-
     d->filmgrainAction  = new QAction(QIcon::fromTheme(QLatin1String("filmgrain")), i18n("Add Film Grain..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_filter_filmgrain"), d->filmgrainAction);
     connect(d->filmgrainAction, SIGNAL(triggered(bool)),
@@ -677,6 +670,10 @@ void EditorWindow::setupStandardActions()
     d->colorEffectsAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_filter_colorfx"), this);
     actionCollection()->addActions(QList<QAction*>() << d->colorEffectsAction);
     d->colorEffectsAction->setEnabled(false);
+
+    d->raindropAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_filter_raindrop"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->raindropAction);
+    d->raindropAction->setEnabled(false);
 
     // **********************************************************
 
@@ -3111,11 +3108,6 @@ void EditorWindow::slotEmboss()
 void EditorWindow::slotOilPaint()
 {
     loadTool(new OilPaintTool(this));
-}
-
-void EditorWindow::slotRainDrop()
-{
-    loadTool(new RainDropTool(this));
 }
 
 void EditorWindow::slotFilmGrain()

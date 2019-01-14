@@ -87,8 +87,6 @@ RainDropTool::RainDropTool(QObject* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("raindrops"));
-    setToolName(i18n("Raindrops"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("raindrop")));
 
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     d->previewWidget->setWhatsThis(i18n("This is the preview of the Raindrop effect."

@@ -48,10 +48,10 @@ DIGIKAM_ADD_EDITOR_PLUGIN(DistortionFxTool
     ${CMAKE_CURRENT_SOURCE_DIR}/distortionfxtool.cpp
 )
 
-#DIGIKAM_ADD_EDITOR_PLUGIN(RainDropTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/raindroptoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/raindroptool.cpp
-#)
+DIGIKAM_ADD_EDITOR_PLUGIN(RainDropTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/raindroptoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/raindroptool.cpp
+)
 
 #DIGIKAM_ADD_EDITOR_PLUGIN(FilmGrainTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/filmgraintoolplugin.cpp

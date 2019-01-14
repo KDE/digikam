@@ -343,7 +343,6 @@ private Q_SLOTS:
     void slotCharcoal();
     void slotEmboss();
     void slotOilPaint();
-    void slotRainDrop();
     void slotFilmGrain();
     void slotInvert();
     void slotConvertTo8Bits();
