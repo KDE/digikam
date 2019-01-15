@@ -113,7 +113,6 @@
 #include "metaenginesettings.h"
 #include "libsinfodlg.h"
 #include "loadingcacheinterface.h"
-#include "printhelper.h"
 #include "jpegsettings.h"
 #include "pngsettings.h"
 #include "savingcontext.h"
@@ -408,12 +407,6 @@ void EditorWindow::setupStandardActions()
     m_revertAction->setEnabled(false);
     m_discardChangesAction->setEnabled(false);
 
-    d->filePrintAction = new QAction(QIcon::fromTheme(QLatin1String("document-print-frame")), i18n("Print Image..."), this);
-    connect(d->filePrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
-    ac->addAction(QLatin1String("editorwindow_print"), d->filePrintAction);
-    ac->setDefaultShortcut(d->filePrintAction, Qt::CTRL + Qt::Key_P);
-    d->filePrintAction->setEnabled(false);
-
     d->openWithAction = new QAction(QIcon::fromTheme(QLatin1String("preferences-desktop-filetype-association")), i18n("Open With Default Application"), this);
     d->openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
     connect(d->openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
@@ -510,6 +503,10 @@ void EditorWindow::setupStandardActions()
 
     // -------------------------------------------------------------------------------
 
+    d->filePrintAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_print"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->filePrintAction);
+    d->filePrintAction->setEnabled(false);
+    
     d->BCGAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_bcg"), this);
     actionCollection()->addActions(QList<QAction*>() << d->BCGAction);
     d->BCGAction->setEnabled(false);
@@ -913,19 +910,6 @@ void EditorWindow::setupStatusBar()
     hlay->addWidget(d->cmViewIndicator);
 
     statusBar()->addPermanentWidget(buttonsBox);
-}
-
-void EditorWindow::printImage(const QUrl&)
-{
-    DImg* const image = m_canvas->interface()->getImg();
-
-    if (!image || image->isNull())
-    {
-        return;
-    }
-
-    PrintHelper printHelp(this);
-    printHelp.print(*image);
 }
 
 void EditorWindow::slotAboutToShowUndoMenu()

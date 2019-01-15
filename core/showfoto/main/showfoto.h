@@ -150,10 +150,6 @@ private Q_SLOTS:
 
 // -- Extra tool methods implemented in showfoto_tools.cpp ----------------------------------------
 
-private Q_SLOTS:
-
-    void slotFilePrint();
-
 private:
 
     void slideShow(Digikam::SlideShowSettings& settings);

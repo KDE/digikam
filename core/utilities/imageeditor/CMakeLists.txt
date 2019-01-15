@@ -66,16 +66,6 @@ set(libeditorcore_SRCS
     core/iccpostloadingmanager.cpp
 )
 
-set(libeditorprintiface_SRCS
-    printiface/printhelper.cpp
-    printiface/printoptionspage.cpp
-    printiface/printconfig.cpp
-)
-
-ki18n_wrap_ui(libeditorprintiface_SRCS
-              printiface/printoptionspage.ui
-)
-
 set(libeditorrawimport_SRCS
     rawimport/rawimport.cpp
     rawimport/rawpreview.cpp
@@ -95,7 +85,6 @@ set(libeditoriface_SRCS
 add_library(imageeditor_src OBJECT ${libeditorcore_SRCS}
                                    ${libeditordlg_SRCS}
                                    ${libeditoriface_SRCS}
-                                   ${libeditorprintiface_SRCS}
                                    ${libeditorrawimport_SRCS}
                                    ${libeditorwidgets_SRCS}
 )

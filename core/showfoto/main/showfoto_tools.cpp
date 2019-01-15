@@ -72,9 +72,4 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
     }
 }
 
-void ShowFoto::slotFilePrint()
-{
-    printImage(d->thumbBar->currentUrl());
-}
-
 } // namespace ShowFoto

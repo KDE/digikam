@@ -58,6 +58,7 @@ DPluginAction::ActionType DPluginAction::actionType() const
         case GenericView:
             return Generic;
 
+        case EditorFile:
         case EditorColor:
         case EditorEnhance:
         case EditorTransform:
@@ -102,6 +103,8 @@ QString DPluginAction::actionCategoryToString() const
         case GenericView:
             return i18n("View");
 
+        case EditorFile:
+            return i18n("File");
         case EditorColor:
             return i18n("Color");
         case EditorEnhance:

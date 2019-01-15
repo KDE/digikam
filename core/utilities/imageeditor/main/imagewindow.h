@@ -199,10 +199,6 @@ private Q_SLOTS:
 
 // -- Extra tool methods implemented in imagewindow_tools.cpp ----------------------------------------
 
-private Q_SLOTS:
-
-    void slotFilePrint();
-
 private:
 
     void slideShow(SlideShowSettings& settings);

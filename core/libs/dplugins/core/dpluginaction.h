@@ -60,6 +60,7 @@ public:
         GenericMetadata,        /// Generic Metadata adjustement action.
         GenericView,            /// Generic View action (as Slideshow).
 
+        EditorFile,             /// Image Editor file action.
         EditorColor,            /// Image Editor color correction action.
         EditorEnhance,          /// Image Editor enhance action.
         EditorTransform,        /// Image Editor transform action.

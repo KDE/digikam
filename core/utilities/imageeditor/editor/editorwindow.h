@@ -197,8 +197,6 @@ protected:
     void toggleNonDestructiveActions();
     void toggleToolActions(EditorTool* tool = 0);
 
-    void printImage(const QUrl& url);
-
     bool promptForOverWrite();
 
     bool promptUserDelete(const QUrl& url);
@@ -296,7 +294,6 @@ protected Q_SLOTS:
     virtual bool saveCurrentVersion() = 0;
     virtual bool saveNewVersionAs() = 0;
     virtual bool saveNewVersionInFormat(const QString&) = 0;
-    virtual void slotFilePrint() = 0;
     virtual void slotFileWithDefaultApplication() = 0;
     virtual void slotDeleteCurrentItem() = 0;
     virtual void slotBackward() = 0;

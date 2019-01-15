@@ -27,11 +27,6 @@
 namespace Digikam
 {
 
-void ImageWindow::slotFilePrint()
-{
-    printImage(d->currentUrl());
-}
-
 void ImageWindow::slideShow(SlideShowSettings& settings)
 {
     m_cancelSlideShow   = false;
