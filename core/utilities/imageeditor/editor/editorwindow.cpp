@@ -132,7 +132,6 @@
 #include "imageiface.h"
 
 #include "invertfilter.h"
-#include "sheartool.h"
 
 #ifdef HAVE_LIBLQR_1
 #   include "contentawareresizetool.h"
@@ -673,6 +672,10 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->resizeAction);
     d->resizeAction->setEnabled(false);
 
+    d->sheartoolAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_transform_sheartool"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->sheartoolAction);
+    d->sheartoolAction->setEnabled(false);
+
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -763,12 +766,6 @@ void EditorWindow::setupStandardActions()
     d->autoCropAction->setEnabled(false);
     ac->addAction(QLatin1String("editorwindow_transform_autocrop"), d->autoCropAction);
     ac->setDefaultShortcut(d->autoCropAction, Qt::SHIFT + Qt::CTRL + Qt::Key_X);
-
-    d->sheartoolAction = new QAction(QIcon::fromTheme(QLatin1String("transform-shear-left")), i18n("Shear..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_transform_sheartool"), d->sheartoolAction);
-    connect(d->sheartoolAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotShearTool()));
-    d->sheartoolAction->setEnabled(false);
 
 #ifdef HAVE_LIBLQR_1
 
@@ -3105,11 +3102,6 @@ void EditorWindow::slotConvertTo16Bits()
     qApp->setOverrideCursor(Qt::WaitCursor);
     iface.convertOriginalColorDepth(64);
     qApp->restoreOverrideCursor();
-}
-
-void EditorWindow::slotShearTool()
-{
-    loadTool(new ShearTool(this));
 }
 
 void EditorWindow::slotContentAwareResizing()

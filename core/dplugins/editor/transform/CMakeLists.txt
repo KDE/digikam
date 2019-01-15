@@ -23,10 +23,10 @@ DIGIKAM_ADD_EDITOR_PLUGIN(FreeRotationTool
     ${CMAKE_CURRENT_SOURCE_DIR}/freerotationtool.cpp
 )
 
-#DIGIKAM_ADD_EDITOR_PLUGIN(ShearTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/sheartoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/sheartool.cpp
-#)
+DIGIKAM_ADD_EDITOR_PLUGIN(ShearTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/sheartoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/sheartool.cpp
+)
 
 DIGIKAM_ADD_EDITOR_PLUGIN(ResizeTool
     ${CMAKE_CURRENT_SOURCE_DIR}/resizetoolplugin.cpp

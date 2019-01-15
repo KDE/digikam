@@ -82,10 +82,6 @@ set(libeditorrawimport_SRCS
     rawimport/rawsettingsbox.cpp
 )
 
-set(libeditortools_SRCS
-    tools/transform/sheartool.cpp
-)
-
 if(Lqr-1_FOUND)
     set(libeditortools_SRCS ${libeditortools_SRCS}
         tools/transform/contentawareresizetool.cpp
