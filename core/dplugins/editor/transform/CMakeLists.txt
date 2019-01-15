@@ -28,10 +28,10 @@ DIGIKAM_ADD_EDITOR_PLUGIN(FreeRotationTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/sheartool.cpp
 #)
 
-#DIGIKAM_ADD_EDITOR_PLUGIN(ResizeTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/resizetoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/resizetool.cpp
-#)
+DIGIKAM_ADD_EDITOR_PLUGIN(ResizeTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/resizetoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/resizetool.cpp
+)
 
 DIGIKAM_ADD_EDITOR_PLUGIN(PerspectiveTool
     ${CMAKE_CURRENT_SOURCE_DIR}/perspective/perspectivetoolplugin.cpp

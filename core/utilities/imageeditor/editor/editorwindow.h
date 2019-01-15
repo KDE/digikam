@@ -343,7 +343,6 @@ private Q_SLOTS:
     void slotConvertTo16Bits();
     void slotShearTool();
     void slotContentAwareResizing();
-    void slotResize();
     void slotRotateLeftIntoQue();
     void slotRotateRightIntoQue();
     void slotFlipHIntoQue();

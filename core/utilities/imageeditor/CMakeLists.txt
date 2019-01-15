@@ -84,7 +84,6 @@ set(libeditorrawimport_SRCS
 
 set(libeditortools_SRCS
     tools/transform/sheartool.cpp
-    tools/transform/resizetool.cpp
 )
 
 if(Lqr-1_FOUND)

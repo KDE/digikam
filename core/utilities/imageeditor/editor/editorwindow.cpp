@@ -133,7 +133,6 @@
 
 #include "invertfilter.h"
 #include "sheartool.h"
-#include "resizetool.h"
 
 #ifdef HAVE_LIBLQR_1
 #   include "contentawareresizetool.h"
@@ -670,6 +669,10 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->freerotationAction);
     d->freerotationAction->setEnabled(false);
 
+    d->resizeAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_transform_resize"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->resizeAction);
+    d->resizeAction->setEnabled(false);
+
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -766,12 +769,6 @@ void EditorWindow::setupStandardActions()
     connect(d->sheartoolAction, SIGNAL(triggered(bool)),
             this, SLOT(slotShearTool()));
     d->sheartoolAction->setEnabled(false);
-
-    d->resizeAction = new QAction(QIcon::fromTheme(QLatin1String("transform-scale")), i18n("&Resize..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_transform_resize"), d->resizeAction);
-    connect(d->resizeAction, SIGNAL(triggered()),
-            this, SLOT(slotResize()));
-    d->resizeAction->setEnabled(false);
 
 #ifdef HAVE_LIBLQR_1
 
@@ -3113,11 +3110,6 @@ void EditorWindow::slotConvertTo16Bits()
 void EditorWindow::slotShearTool()
 {
     loadTool(new ShearTool(this));
-}
-
-void EditorWindow::slotResize()
-{
-    loadTool(new ResizeTool(this));
 }
 
 void EditorWindow::slotContentAwareResizing()
