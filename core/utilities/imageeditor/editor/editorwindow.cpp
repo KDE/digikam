@@ -133,10 +133,6 @@
 
 #include "invertfilter.h"
 
-#ifdef HAVE_LIBLQR_1
-#   include "contentawareresizetool.h"
-#endif
-
 namespace Digikam
 {
 
@@ -676,6 +672,14 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->sheartoolAction);
     d->sheartoolAction->setEnabled(false);
 
+#ifdef HAVE_LIBLQR_1
+
+    d->contentAwareResizingAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_transform_contentawareresizing"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->contentAwareResizingAction);
+    d->contentAwareResizingAction->setEnabled(false);
+
+#endif // HAVE_LIBLQR_1
+
     // **********************************************************
 
     // NOTE: Photoshop 7 use CTRL+I.
@@ -766,16 +770,6 @@ void EditorWindow::setupStandardActions()
     d->autoCropAction->setEnabled(false);
     ac->addAction(QLatin1String("editorwindow_transform_autocrop"), d->autoCropAction);
     ac->setDefaultShortcut(d->autoCropAction, Qt::SHIFT + Qt::CTRL + Qt::Key_X);
-
-#ifdef HAVE_LIBLQR_1
-
-    d->contentAwareResizingAction = new QAction(QIcon::fromTheme(QLatin1String("transform-scale")), i18n("Liquid Rescale..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_transform_contentawareresizing"), d->contentAwareResizingAction);
-    connect(d->contentAwareResizingAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotContentAwareResizing()));
-    d->contentAwareResizingAction->setEnabled(false);
-
-#endif /* HAVE_LIBLQR_1 */
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
 
@@ -3102,13 +3096,6 @@ void EditorWindow::slotConvertTo16Bits()
     qApp->setOverrideCursor(Qt::WaitCursor);
     iface.convertOriginalColorDepth(64);
     qApp->restoreOverrideCursor();
-}
-
-void EditorWindow::slotContentAwareResizing()
-{
-#ifdef HAVE_LIBLQR_1
-    loadTool(new ContentAwareResizeTool(this));
-#endif
 }
 
 void EditorWindow::slotRotateLeftIntoQue()

@@ -166,8 +166,6 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("liquidrescale"));
-    setToolName(i18n("Liquid Rescale"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("transform-scale")));
 
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     d->previewWidget->installEventFilter(this);

@@ -82,12 +82,6 @@ set(libeditorrawimport_SRCS
     rawimport/rawsettingsbox.cpp
 )
 
-if(Lqr-1_FOUND)
-    set(libeditortools_SRCS ${libeditortools_SRCS}
-        tools/transform/contentawareresizetool.cpp
-       )
-endif()
-
 set(libeditoriface_SRCS
     editor/editortool.cpp
     editor/editortooliface.cpp
@@ -104,7 +98,6 @@ add_library(imageeditor_src OBJECT ${libeditorcore_SRCS}
                                    ${libeditorprintiface_SRCS}
                                    ${libeditorrawimport_SRCS}
                                    ${libeditorwidgets_SRCS}
-                                   ${libeditortools_SRCS}
 )
 
 add_library(imageeditorgui_src OBJECT ${libeditorgui_SRCS})
