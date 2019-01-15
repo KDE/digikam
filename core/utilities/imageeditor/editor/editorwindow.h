@@ -109,9 +109,6 @@ Q_SIGNALS:
     void signalNoCurrentItem();
     void signalPreviewModeChanged(int);
     void signalToolApplied();
-    void signalPoint1Action();
-    void signalPoint2Action();
-    void signalAutoAdjustAction();
 
 protected:
 
@@ -344,7 +341,6 @@ private Q_SLOTS:
     void slotInvert();
     void slotConvertTo8Bits();
     void slotConvertTo16Bits();
-    void slotFreeRotation();
     void slotShearTool();
     void slotContentAwareResizing();
     void slotResize();

@@ -100,8 +100,6 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("freerotation"));
-    setToolName(i18n("Free Rotation"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("transform-rotate")));
 
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     d->previewWidget->setWhatsThis(i18n("This is the free rotation operation preview. "

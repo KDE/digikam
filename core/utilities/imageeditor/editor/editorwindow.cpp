@@ -132,7 +132,6 @@
 #include "imageiface.h"
 
 #include "invertfilter.h"
-#include "freerotationtool.h"
 #include "sheartool.h"
 #include "resizetool.h"
 
@@ -666,6 +665,10 @@ void EditorWindow::setupStandardActions()
     d->aspectRatioCropAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_transform_ratiocrop"), this);
     actionCollection()->addActions(QList<QAction*>() << d->aspectRatioCropAction);
     d->aspectRatioCropAction->setEnabled(false);
+    
+    d->freerotationAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_transform_freerotation"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->freerotationAction);
+    d->freerotationAction->setEnabled(false);
 
     // **********************************************************
 
@@ -779,32 +782,6 @@ void EditorWindow::setupStandardActions()
     d->contentAwareResizingAction->setEnabled(false);
 
 #endif /* HAVE_LIBLQR_1 */
-
-    //-----------------------------------------------------------------------------------
-
-    d->freerotationAction = new QAction(QIcon::fromTheme(QLatin1String("transform-rotate")), i18n("Free Rotation..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_transform_freerotation"), d->freerotationAction );
-    connect(d->freerotationAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotFreeRotation()));
-    d->freerotationAction->setEnabled(false);
-
-    QAction* const point1Action = new QAction(i18n("Set Point 1"), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_transform_freerotation_point1"), point1Action);
-    actionCollection()->setDefaultShortcut(point1Action, Qt::CTRL + Qt::SHIFT + Qt::Key_1);
-    connect(point1Action, SIGNAL(triggered(bool)),
-            this, SIGNAL(signalPoint1Action()));
-
-    QAction* const point2Action = new QAction(i18n("Set Point 2"), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_transform_freerotation_point2"), point2Action);
-    actionCollection()->setDefaultShortcut(point2Action, Qt::CTRL + Qt::SHIFT + Qt::Key_2);
-    connect(point2Action, SIGNAL(triggered(bool)),
-            this, SIGNAL(signalPoint2Action()));
-
-    QAction* const autoAdjustAction = new QAction(i18n("Auto Adjust"), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_transform_freerotation_autoadjust"), autoAdjustAction);
-    actionCollection()->setDefaultShortcut(autoAdjustAction, Qt::CTRL + Qt::SHIFT + Qt::Key_R);
-    connect(autoAdjustAction, SIGNAL(triggered(bool)),
-            this, SIGNAL(signalAutoAdjustAction()));
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
 
@@ -3148,22 +3125,6 @@ void EditorWindow::slotContentAwareResizing()
 #ifdef HAVE_LIBLQR_1
     loadTool(new ContentAwareResizeTool(this));
 #endif
-}
-
-void EditorWindow::slotFreeRotation()
-{
-    FreeRotationTool* const tool = new FreeRotationTool(this);
-
-    connect(this, SIGNAL(signalPoint1Action()),
-            tool, SLOT(slotAutoAdjustP1Clicked()));
-
-    connect(this, SIGNAL(signalPoint2Action()),
-            tool, SLOT(slotAutoAdjustP2Clicked()));
-
-    connect(this, SIGNAL(signalAutoAdjustAction()),
-            tool, SLOT(slotAutoAdjustClicked()));
-
-    loadTool(tool);
 }
 
 void EditorWindow::slotRotateLeftIntoQue()

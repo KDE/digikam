@@ -18,10 +18,10 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-#DIGIKAM_ADD_EDITOR_PLUGIN(FreeRotationTool
-#    ${CMAKE_CURRENT_SOURCE_DIR}/freerotationtoolplugin.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/freerotationtool.cpp
-#)
+DIGIKAM_ADD_EDITOR_PLUGIN(FreeRotationTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/freerotationtoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/freerotationtool.cpp
+)
 
 #DIGIKAM_ADD_EDITOR_PLUGIN(ShearTool
 #    ${CMAKE_CURRENT_SOURCE_DIR}/sheartoolplugin.cpp
