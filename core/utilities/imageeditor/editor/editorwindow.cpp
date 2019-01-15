@@ -376,9 +376,13 @@ void EditorWindow::setupStandardActions()
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "TIFF"),      QLatin1String("TIFF"));
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "PNG"),       QLatin1String("PNG"));
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "PGF"),       QLatin1String("PGF"));
+
 #ifdef HAVE_JASPER
+
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "JPEG 2000"), QLatin1String("JP2"));
+
 #endif // HAVE_JASPER
+
     m_saveNewVersionAction->menu()->addAction(m_saveNewVersionAsAction);
     m_saveNewVersionAction->menu()->addAction(m_saveNewVersionInFormatAction->menuAction());
 
@@ -506,7 +510,7 @@ void EditorWindow::setupStandardActions()
     d->filePrintAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_print"), this);
     actionCollection()->addActions(QList<QAction*>() << d->filePrintAction);
     d->filePrintAction->setEnabled(false);
-    
+
     d->BCGAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_bcg"), this);
     actionCollection()->addActions(QList<QAction*>() << d->BCGAction);
     d->BCGAction->setEnabled(false);
@@ -538,7 +542,7 @@ void EditorWindow::setupStandardActions()
     d->filmAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_film"), this);
     actionCollection()->addActions(QList<QAction*>() << d->filmAction);
     d->filmAction->setEnabled(false);
-    
+
     d->HSLAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_hsl"), this);
     actionCollection()->addActions(QList<QAction*>() << d->HSLAction);
     d->HSLAction->setEnabled(false);
@@ -570,11 +574,11 @@ void EditorWindow::setupStandardActions()
     d->restorationAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_restoration"), this);
     actionCollection()->addActions(QList<QAction*>() << d->restorationAction);
     d->restorationAction->setEnabled(false);
-    
+
     d->localContrastAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_localcontrast"), this);
     actionCollection()->addActions(QList<QAction*>() << d->localContrastAction);
     d->localContrastAction->setEnabled(false);
-    
+
     d->noiseReductionAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_noisereduction"), this);
     actionCollection()->addActions(QList<QAction*>() << d->noiseReductionAction);
     d->noiseReductionAction->setEnabled(false);
@@ -600,7 +604,7 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->healCloneAction);
     d->healCloneAction->setEnabled(false);
 */
- 
+
     d->lensdistortionAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_lensdistortion"), this);
     actionCollection()->addActions(QList<QAction*>() << d->lensdistortionAction);
     d->lensdistortionAction->setEnabled(false);
@@ -612,7 +616,7 @@ void EditorWindow::setupStandardActions()
     d->blurAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_blur"), this);
     actionCollection()->addActions(QList<QAction*>() << d->blurAction);
     d->blurAction->setEnabled(false);
-    
+
     d->hotpixelsAction  = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_hotpixels"), this);
     actionCollection()->addActions(QList<QAction*>() << d->hotpixelsAction);
     d->hotpixelsAction->setEnabled(false);
@@ -652,11 +656,11 @@ void EditorWindow::setupStandardActions()
     d->perspectiveAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_transform_perspective"), this);
     actionCollection()->addActions(QList<QAction*>() << d->perspectiveAction);
     d->perspectiveAction->setEnabled(false);
-    
+
     d->aspectRatioCropAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_transform_ratiocrop"), this);
     actionCollection()->addActions(QList<QAction*>() << d->aspectRatioCropAction);
     d->aspectRatioCropAction->setEnabled(false);
-    
+
     d->freerotationAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_transform_freerotation"), this);
     actionCollection()->addActions(QList<QAction*>() << d->freerotationAction);
     d->freerotationAction->setEnabled(false);
