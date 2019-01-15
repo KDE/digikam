@@ -86,7 +86,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
         d->splash->setMessage(i18n("Load Plugins..."));
     }
 
-    DPluginLoader* const dpl = DPluginLoader::instance();
+    DPluginLoader* const dpl = Digikam::DPluginLoader::instance();
     dpl->init();
 
     // -- Build the GUI -----------------------------------
@@ -133,6 +133,7 @@ ShowFoto::~ShowFoto()
 
     Digikam::ThumbnailLoadThread::cleanUp();
     Digikam::LoadingCacheInterface::cleanUp();
+    Digikam::DPluginLoader::instance()->cleanUp();
     Digikam::DMediaServerMngr::instance()->saveAtShutdown();
 
     delete d->model;
