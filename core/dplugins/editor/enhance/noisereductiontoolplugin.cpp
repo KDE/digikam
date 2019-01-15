@@ -80,7 +80,7 @@ QList<DPluginAuthor> LocalContrastToolPlugin::authors() const
                              QLatin1String("(C) 2004-2019"))
             ;
 }
-    
+
 void LocalContrastToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
@@ -90,11 +90,11 @@ void LocalContrastToolPlugin::setup(QObject* const parent)
     ac->setActionCategory(DPluginAction::EditorEnhance);
 
     connect(ac, SIGNAL(triggered(bool)),
-            this, SLOT(slotLocalContrast()));
+            this, SLOT(slotNoiseReduction()));
 
     addAction(ac);
 }
-    
+
 void LocalContrastToolPlugin::slotNoiseReduction()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
