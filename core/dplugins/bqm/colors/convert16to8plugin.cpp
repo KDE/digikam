@@ -61,7 +61,7 @@ QString Convert16To8Plugin::iid() const
 
 QIcon Convert16To8Plugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("colorfx"));
+    return QIcon::fromTheme(QLatin1String("depth16to8"));
 }
 
 QString Convert16To8Plugin::description() const
