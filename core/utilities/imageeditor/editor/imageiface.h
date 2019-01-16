@@ -83,7 +83,7 @@ public:
     /** Return a pointer to the DImg object representing the preview image.
      *  This function is a backdoor for preview editing.
      */
-    DImg * previewReference();
+    DImg* previewReference();
 
     /** Return a DImg object representing the preview image.
      */
@@ -96,6 +96,10 @@ public:
     /** Return a DImg object representing the current original image selection.
      */
     DImg  selection()                       const;
+
+    /** Crop the original image currently hosted by editor to the region.
+     */
+    void crop(const QRect& region);
 
     /** Get colors from original, (unchanged) preview
      *  or target preview (set by setPreviewImage) image.

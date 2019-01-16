@@ -162,8 +162,8 @@ public:
     int                   availableUndoSteps()        const;
     int                   availableRedoSteps()        const;
     IccProfile            getEmbeddedICC()            const;
-    MetaEngineData            getMetadata()               const;
-    DImageHistory         getItemHistory()           const;
+    MetaEngineData        getMetadata()               const;
+    DImageHistory         getItemHistory()            const;
     DImageHistory         getInitialImageHistory()    const;
     DImageHistory         getImageHistoryOfFullRedo() const;
     DImageHistory         getResolvedInitialHistory() const;

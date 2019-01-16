@@ -691,6 +691,10 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addActions(QList<QAction*>() << d->convertTo8Bits);
     d->convertTo8Bits->setEnabled(false);
 
+    d->autoCropAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_transform_autocrop"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->autoCropAction);
+    d->autoCropAction->setEnabled(false);
+
     // **********************************************************
 
     QList<DPluginAction*> actions = DPluginLoader::instance()->pluginsActions(DPluginAction::Generic, this);
@@ -752,13 +756,6 @@ void EditorWindow::setupStandardActions()
                                      "Select a region of the image to enable this action."));
     ac->addAction(QLatin1String("editorwindow_transform_crop"), d->cropAction);
     ac->setDefaultShortcut(d->cropAction, Qt::CTRL + Qt::Key_X);
-
-    d->autoCropAction = new QAction(QIcon::fromTheme(QLatin1String("transform-crop")), i18nc("@action", "Auto-Crop"), this);
-    d->autoCropAction->setWhatsThis(i18n("This option can be used to crop automatically the image."));
-    connect(d->autoCropAction, SIGNAL(triggered()), m_canvas, SLOT(slotAutoCrop()));
-    d->autoCropAction->setEnabled(false);
-    ac->addAction(QLatin1String("editorwindow_transform_autocrop"), d->autoCropAction);
-    ac->setDefaultShortcut(d->autoCropAction, Qt::SHIFT + Qt::CTRL + Qt::Key_X);
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
 

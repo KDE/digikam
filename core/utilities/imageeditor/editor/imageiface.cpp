@@ -264,6 +264,11 @@ void ImageIface::setPreviewIccProfile(const IccProfile& profile)
     d->targetPreviewImage.setIccProfile(profile);
 }
 
+void ImageIface::crop(const QRect& region)
+{
+    d->core->crop(region);
+}
+
 void ImageIface::setOriginalIccProfile(const IccProfile& profile)
 {
     d->core->putIccProfile(profile);

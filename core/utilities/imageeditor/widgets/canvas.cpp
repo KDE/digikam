@@ -40,7 +40,6 @@
 
 // Local includes
 
-#include "autocrop.h"
 #include "imagehistogram.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
@@ -335,26 +334,6 @@ void Canvas::slotFlipVert()
 {
     d->canvasItem->clearCache();
     d->core->flipVert();
-}
-
-void Canvas::slotAutoCrop()
-{
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-
-    d->canvasItem->clearCache();
-    AutoCrop ac(d->core->getImg());
-    ac.startFilterDirectly();
-    QRect rect = ac.autoInnerCrop();
-    d->core->crop(rect);
-    QApplication::restoreOverrideCursor();
-
-    if (d->rubber && d->rubber->isVisible())
-    {
-        d->rubber->setVisible(false);
-    }
-
-    emit signalSelected(false);
-    addRubber();
 }
 
 void Canvas::slotCrop()
