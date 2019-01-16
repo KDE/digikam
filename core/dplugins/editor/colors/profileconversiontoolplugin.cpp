@@ -105,7 +105,7 @@ void ProfileConversionToolPlugin::setup(QObject* const parent)
     ac->setMenu(m_profileMenuAction);
     ac->setText(i18n("Color Spaces"));
     ac->setObjectName(QLatin1String("editorwindow_colormanagement"));
-    ac->setActionCategory(DPluginAction::EditorColor);
+    ac->setActionCategory(DPluginAction::EditorColors);
 
     addAction(ac);
         
@@ -113,7 +113,7 @@ void ProfileConversionToolPlugin::setup(QObject* const parent)
     ac2->setIcon(icon());
     ac2->setText(i18nc("@action", "Color Space Converter..."));
     ac2->setObjectName(QLatin1String("editorwindow_color_spaceconverter"));
-    ac2->setActionCategory(DPluginAction::EditorColor);
+    ac2->setActionCategory(DPluginAction::EditorColors);
 
     connect(ac2, SIGNAL(triggered(bool)),
             this, SLOT(slotProfileConversionTool()));

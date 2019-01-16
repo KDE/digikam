@@ -90,7 +90,7 @@ void BCGToolPlugin::setup(QObject* const parent)
     ac->setIcon(icon());
     ac->setText(i18nc("@action", "Brightness/Contrast/Gamma..."));
     ac->setObjectName(QLatin1String("editorwindow_color_bcg"));
-    ac->setActionCategory(DPluginAction::EditorColor);
+    ac->setActionCategory(DPluginAction::EditorColors);
 
     connect(ac, SIGNAL(triggered(bool)),
             this, SLOT(slotBCGTool()));

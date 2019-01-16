@@ -59,7 +59,7 @@ DPluginAction::ActionType DPluginAction::actionType() const
             return Generic;
 
         case EditorFile:
-        case EditorColor:
+        case EditorColors:
         case EditorEnhance:
         case EditorTransform:
         case EditorDecorate:
@@ -105,7 +105,7 @@ QString DPluginAction::actionCategoryToString() const
 
         case EditorFile:
             return i18n("File");
-        case EditorColor:
+        case EditorColors:
             return i18n("Color");
         case EditorEnhance:
             return i18n("Enhance");

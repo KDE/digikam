@@ -88,7 +88,7 @@ void ChannelMixerToolPlugin::setup(QObject* const parent)
     ac->setText(i18nc("@action", "Channel Mixer..."));
     ac->setObjectName(QLatin1String("editorwindow_color_channelmixer"));
     ac->setShortcut(Qt::CTRL+Qt::Key_H);
-    ac->setActionCategory(DPluginAction::EditorColor);
+    ac->setActionCategory(DPluginAction::EditorColors);
 
     connect(ac, SIGNAL(triggered(bool)),
             this, SLOT(slotChannelMixer()));

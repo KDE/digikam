@@ -91,7 +91,7 @@ void WhiteBalanceToolPlugin::setup(QObject* const parent)
     ac->setText(i18nc("@action", "White Balance..."));
     ac->setObjectName(QLatin1String("editorwindow_color_whitebalance"));
     ac->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_W);
-    ac->setActionCategory(DPluginAction::EditorColor);
+    ac->setActionCategory(DPluginAction::EditorColors);
 
     connect(ac, SIGNAL(triggered(bool)),
             this, SLOT(slotWhiteBalance()));

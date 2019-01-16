@@ -89,7 +89,7 @@ void CBToolPlugin::setup(QObject* const parent)
     ac->setObjectName(QLatin1String("editorwindow_color_rgb"));
     // NOTE: Photoshop 7 use CTRL+B.
     ac->setShortcut(Qt::CTRL+Qt::Key_B);
-    ac->setActionCategory(DPluginAction::EditorColor);
+    ac->setActionCategory(DPluginAction::EditorColors);
 
     connect(ac, SIGNAL(triggered(bool)),
             this, SLOT(slotColorBalance()));

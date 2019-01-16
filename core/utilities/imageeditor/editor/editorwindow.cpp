@@ -504,7 +504,7 @@ void EditorWindow::setupStandardActions()
                                                 "current selection area."));
 
     // -------------------------------------------------------------------------------
-
+/*
     d->filePrintAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_print"), this);
     actionCollection()->addActions(QList<QAction*>() << d->filePrintAction);
     d->filePrintAction->setEnabled(false);
@@ -597,11 +597,9 @@ void EditorWindow::setupStandardActions()
 
 #endif // HAVE_LENSFUN
 
-/*
-    d->healCloneAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_healingclone"), this);
-    actionCollection()->addActions(QList<QAction*>() << d->healCloneAction);
-    d->healCloneAction->setEnabled(false);
-*/
+    //d->healCloneAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_healingclone"), this);
+    //actionCollection()->addActions(QList<QAction*>() << d->healCloneAction);
+    //d->healCloneAction->setEnabled(false);
 
     d->lensdistortionAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_enhance_lensdistortion"), this);
     actionCollection()->addActions(QList<QAction*>() << d->lensdistortionAction);
@@ -694,7 +692,7 @@ void EditorWindow::setupStandardActions()
     d->autoCropAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_transform_autocrop"), this);
     actionCollection()->addActions(QList<QAction*>() << d->autoCropAction);
     d->autoCropAction->setEnabled(false);
-
+*/
     // **********************************************************
 
     QList<DPluginAction*> actions = DPluginLoader::instance()->pluginsActions(DPluginAction::Generic, this);
@@ -704,6 +702,13 @@ void EditorWindow::setupStandardActions()
         ac->setEnabled(false);
     }
 
+    QList<DPluginAction*> actions2 = DPluginLoader::instance()->pluginsActions(DPluginAction::Editor, this);
+
+    foreach (DPluginAction* const ac, actions2)
+    {
+        ac->setEnabled(false);
+    }
+    
     // --------------------------------------------------------
 
     createFullScreenAction(QLatin1String("editorwindow_fullscreen"));
@@ -1182,7 +1187,6 @@ void EditorWindow::toggleStandardActions(bool val)
     m_fileDeleteAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
     d->openWithAction->setEnabled(val);
-    d->filePrintAction->setEnabled(val);
     m_exportAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
     d->selectNoneAction->setEnabled(val);
@@ -1214,60 +1218,14 @@ void EditorWindow::toggleStandardActions(bool val)
         m_redoAction->setEnabled(false);
     }
 
-    // Tools actions
+    // Editor Tools actions
 
-    d->insertTextAction->setEnabled(val);
-    d->borderAction->setEnabled(val);
-    d->textureAction->setEnabled(val);
-    d->charcoalAction->setEnabled(val);
-    d->colorEffectsAction->setEnabled(val);
-    d->embossAction->setEnabled(val);
-    d->oilpaintAction->setEnabled(val);
-    d->blurfxAction->setEnabled(val);
-    d->distortionfxAction->setEnabled(val);
-    d->raindropAction->setEnabled(val);
-    d->filmgrainAction->setEnabled(val);
-    d->convertTo8Bits->setEnabled(val);
-    d->convertTo16Bits->setEnabled(val);
-    d->invertAction->setEnabled(val);
-    d->BCGAction->setEnabled(val);
-    d->CBAction->setEnabled(val);
-    d->autoCorrectionAction->setEnabled(val);
-    d->BWAction->setEnabled(val);
-    d->HSLAction->setEnabled(val);
+    QList<DPluginAction*> actions2 = DPluginLoader::instance()->pluginsActions(DPluginAction::Editor, this);
 
-    d->profileMenuAction->setEnabled(val);
-    d->colorSpaceConverter->setEnabled(val && IccSettings::instance()->isEnabled());
-
-    d->whitebalanceAction->setEnabled(val);
-    d->channelMixerAction->setEnabled(val);
-    d->curvesAction->setEnabled(val);
-    d->levelsAction->setEnabled(val);
-    d->filmAction->setEnabled(val);
-    d->restorationAction->setEnabled(val);
-    d->blurAction->setEnabled(val);
-    //d->healCloneAction->setEnabled(val);
-    d->sharpenAction->setEnabled(val);
-    d->noiseReductionAction->setEnabled(val);
-    d->localContrastAction->setEnabled(val);
-    d->redeyeAction->setEnabled(val);
-    d->lensdistortionAction->setEnabled(val);
-    d->antivignettingAction->setEnabled(val);
-    d->hotpixelsAction->setEnabled(val);
-    d->resizeAction->setEnabled(val);
-    d->autoCropAction->setEnabled(val);
-    d->perspectiveAction->setEnabled(val);
-    d->freerotationAction->setEnabled(val);
-    d->sheartoolAction->setEnabled(val);
-    d->aspectRatioCropAction->setEnabled(val);
-
-#ifdef HAVE_LENSFUN
-    d->lensAutoFixAction->setEnabled(val);
-#endif
-
-#ifdef HAVE_LIBLQR_1
-    d->contentAwareResizingAction->setEnabled(val);
-#endif
+    foreach (DPluginAction* const ac, actions2)
+    {
+        ac->setEnabled(val);
+    }
 }
 
 void EditorWindow::toggleNonDestructiveActions()
@@ -2714,72 +2672,48 @@ void EditorWindow::setupSelectToolsAction()
     // Builtin actions
 
     QString transformCategory = i18nc("@title Image Transform",       "Transform");
-    actionModel->addAction(d->rotateLeftAction,           transformCategory);
-    actionModel->addAction(d->rotateRightAction,          transformCategory);
-    actionModel->addAction(d->flipHorizAction,            transformCategory);
-    actionModel->addAction(d->flipVertAction,             transformCategory);
-    actionModel->addAction(d->cropAction,                 transformCategory);
-    actionModel->addAction(d->autoCropAction,             transformCategory);
-    actionModel->addAction(d->aspectRatioCropAction,      transformCategory);
-    actionModel->addAction(d->resizeAction,               transformCategory);
-    actionModel->addAction(d->sheartoolAction,            transformCategory);
-    actionModel->addAction(d->freerotationAction,         transformCategory);
-    actionModel->addAction(d->perspectiveAction,          transformCategory);
 
-#ifdef HAVE_LIBLQR_1
-    actionModel->addAction(d->contentAwareResizingAction, transformCategory);
-#endif
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::EditorTransform, this))
+    {
+        actionModel->addAction(ac, transformCategory);
+    }
 
     QString decorateCategory  = i18nc("@title Image Decorate",        "Decorate");
-    actionModel->addAction(d->textureAction,              decorateCategory);
-    actionModel->addAction(d->borderAction,               decorateCategory);
-    actionModel->addAction(d->insertTextAction,           decorateCategory);
+
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::EditorDecorate, this))
+    {
+        actionModel->addAction(ac, decorateCategory);
+    }
 
     QString effectsCategory   = i18nc("@title Image Effect",          "Effects");
-    actionModel->addAction(d->filmgrainAction,            effectsCategory);
-    actionModel->addAction(d->raindropAction,             effectsCategory);
-    actionModel->addAction(d->distortionfxAction,         effectsCategory);
-    actionModel->addAction(d->blurfxAction,               effectsCategory);
-    actionModel->addAction(d->oilpaintAction,             effectsCategory);
-    actionModel->addAction(d->embossAction,               effectsCategory);
-    actionModel->addAction(d->charcoalAction,             effectsCategory);
-    actionModel->addAction(d->colorEffectsAction,         effectsCategory);
+
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::EditorFilters, this))
+    {
+        actionModel->addAction(ac, effectsCategory);
+    }
 
     QString colorsCategory    = i18nc("@title Image Colors",          "Colors");
-    actionModel->addAction(d->convertTo8Bits,             colorsCategory);
-    actionModel->addAction(d->convertTo16Bits,            colorsCategory);
-    actionModel->addAction(d->invertAction,               colorsCategory);
-    actionModel->addAction(d->BCGAction,                  colorsCategory);
-    actionModel->addAction(d->CBAction,                   colorsCategory);
-    actionModel->addAction(d->autoCorrectionAction,       colorsCategory);
-    actionModel->addAction(d->BWAction,                   colorsCategory);
-    actionModel->addAction(d->HSLAction,                  colorsCategory);
-    actionModel->addAction(d->whitebalanceAction,         colorsCategory);
-    actionModel->addAction(d->channelMixerAction,         colorsCategory);
-    actionModel->addAction(d->curvesAction,               colorsCategory);
-    actionModel->addAction(d->levelsAction,               colorsCategory);
-    actionModel->addAction(d->filmAction,                 colorsCategory);
-    actionModel->addAction(d->colorSpaceConverter,        colorsCategory);
+
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::EditorColors, this))
+    {
+        actionModel->addAction(ac, effectsCategory);
+    }
 
     QString enhanceCategory   = i18nc("@title Image Enhance",         "Enhance");
-    actionModel->addAction(d->restorationAction,          enhanceCategory);
-    actionModel->addAction(d->blurAction,                 enhanceCategory);
-    //actionModel->addAction(d->healCloneAction,            enhanceCategory);
-    actionModel->addAction(d->sharpenAction,              enhanceCategory);
-    actionModel->addAction(d->noiseReductionAction,       enhanceCategory);
-    actionModel->addAction(d->localContrastAction,        enhanceCategory);
-    actionModel->addAction(d->redeyeAction,               enhanceCategory);
-    actionModel->addAction(d->lensdistortionAction,       enhanceCategory);
-    actionModel->addAction(d->antivignettingAction,       enhanceCategory);
-    actionModel->addAction(d->hotpixelsAction,            enhanceCategory);
 
-#ifdef HAVE_LENSFUN
-    actionModel->addAction(d->lensAutoFixAction,          enhanceCategory);
-#endif
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::EditorEnhance, this))
+    {
+        actionModel->addAction(ac, effectsCategory);
+    }
 
     QString postCategory      = i18nc("@title Post Processing Tools", "Post-Processing");
 
     foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::GenericTool, this))
+    {
+        actionModel->addAction(ac, postCategory);
+    }
+
+    foreach (DPluginAction* const ac, DPluginLoader::instance()->pluginsActions(DPluginAction::EditorFile, this))
     {
         actionModel->addAction(ac, postCategory);
     }

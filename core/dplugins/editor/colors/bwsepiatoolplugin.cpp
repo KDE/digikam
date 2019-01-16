@@ -90,7 +90,7 @@ void BWSepiaToolPlugin::setup(QObject* const parent)
     ac->setIcon(icon());
     ac->setText(i18nc("@action", "Black && White..."));
     ac->setObjectName(QLatin1String("editorwindow_color_blackwhite"));
-    ac->setActionCategory(DPluginAction::EditorColor);
+    ac->setActionCategory(DPluginAction::EditorColors);
 
     connect(ac, SIGNAL(triggered(bool)),
             this, SLOT(slotBWSepia()));

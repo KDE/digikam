@@ -74,8 +74,6 @@ public:
         infoLabel(0),
         copyAction(0),
         cropAction(0),
-        autoCropAction(0),
-        filePrintAction(0),
         flipHorizAction(0),
         flipVertAction(0),
         rotateLeftAction(0),
@@ -89,50 +87,6 @@ public:
         zoomPlusAction(0),
         zoomTo100percents(0),
         openWithAction(0),
-        textureAction(0),
-        borderAction(0),
-        insertTextAction(0),
-        filmgrainAction(0),
-        raindropAction(0),
-        distortionfxAction(0),
-        blurfxAction(0),
-        oilpaintAction(0),
-        embossAction(0),
-        charcoalAction(0),
-        colorEffectsAction(0),
-        BCGAction(0),
-        HSLAction(0),
-        CBAction(0),
-        autoCorrectionAction(0),
-        invertAction(0),
-        BWAction(0),
-        convertTo8Bits(0),
-        convertTo16Bits(0),
-        whitebalanceAction(0),
-        channelMixerAction(0),
-        curvesAction(0),
-        levelsAction(0),
-        filmAction(0),
-        profileMenuAction(0),
-        colorSpaceConverter(0),
-        hotpixelsAction(0),
-        lensdistortionAction(0),
-        antivignettingAction(0),
-        lensAutoFixAction(0),
-        redeyeAction(0),
-        restorationAction(0),
-        blurAction(0),
-        healCloneAction(0),
-        sharpenAction(0),
-        noiseReductionAction(0),
-        localContrastAction(0),
-        inPaintingAction(0),
-        aspectRatioCropAction(0),
-        resizeAction(0),
-        contentAwareResizingAction(0),
-        sheartoolAction(0),
-        freerotationAction(0),
-        perspectiveAction(0),
         undoSignalMapper(0),
         redoSignalMapper(0),
         formatMenuActionMapper(0),
@@ -192,8 +146,6 @@ public:
 
     QAction*                     copyAction;
     QAction*                     cropAction;
-    QAction*                     autoCropAction;
-    QAction*                     filePrintAction;
     QAction*                     flipHorizAction;
     QAction*                     flipVertAction;
     QAction*                     rotateLeftAction;
@@ -207,52 +159,6 @@ public:
     QAction*                     zoomPlusAction;
     QAction*                     zoomTo100percents;
     QAction*                     openWithAction;
-
-    // Tools Actions
-    QAction*                     textureAction;
-    QAction*                     borderAction;
-    QAction*                     insertTextAction;
-    QAction*                     filmgrainAction;
-    QAction*                     raindropAction;
-    QAction*                     distortionfxAction;
-    QAction*                     blurfxAction;
-    QAction*                     oilpaintAction;
-    QAction*                     embossAction;
-    QAction*                     charcoalAction;
-    QAction*                     colorEffectsAction;
-    QAction*                     BCGAction;
-    QAction*                     HSLAction;
-    QAction*                     CBAction;
-    QAction*                     autoCorrectionAction;
-    QAction*                     invertAction;
-    QAction*                     BWAction;
-    QAction*                     convertTo8Bits;
-    QAction*                     convertTo16Bits;
-    QAction*                     whitebalanceAction;
-    QAction*                     channelMixerAction;
-    QAction*                     curvesAction;
-    QAction*                     levelsAction;
-    QAction*                     filmAction;
-    QAction*                     profileMenuAction;
-    QAction*                     colorSpaceConverter;
-    QAction*                     hotpixelsAction;
-    QAction*                     lensdistortionAction;
-    QAction*                     antivignettingAction;
-    QAction*                     lensAutoFixAction;
-    QAction*                     redeyeAction;
-    QAction*                     restorationAction;
-    QAction*                     blurAction;
-    QAction*                     healCloneAction;
-    QAction*                     sharpenAction;
-    QAction*                     noiseReductionAction;
-    QAction*                     localContrastAction;
-    QAction*                     inPaintingAction;
-    QAction*                     aspectRatioCropAction;
-    QAction*                     resizeAction;
-    QAction*                     contentAwareResizingAction;
-    QAction*                     sheartoolAction;
-    QAction*                     freerotationAction;
-    QAction*                     perspectiveAction;
 
     QSignalMapper*               undoSignalMapper;
     QSignalMapper*               redoSignalMapper;
