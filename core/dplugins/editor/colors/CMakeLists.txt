@@ -77,3 +77,10 @@ DIGIKAM_ADD_EDITOR_PLUGIN(InvertTool
     ${CMAKE_CURRENT_SOURCE_DIR}/inverttoolplugin.cpp
 )
 
+DIGIKAM_ADD_EDITOR_PLUGIN(Convert8To16Tool
+    ${CMAKE_CURRENT_SOURCE_DIR}/convert8to16toolplugin.cpp
+)
+
+DIGIKAM_ADD_EDITOR_PLUGIN(Convert16To8Tool
+    ${CMAKE_CURRENT_SOURCE_DIR}/convert16to8toolplugin.cpp
+)

@@ -682,22 +682,16 @@ void EditorWindow::setupStandardActions()
     d->invertAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_invert"), this);
     actionCollection()->addActions(QList<QAction*>() << d->invertAction);
     d->invertAction->setEnabled(false);
-
-    // **********************************************************
-
-    d->convertTo8Bits = new QAction(QIcon::fromTheme(QLatin1String("depth16to8")), i18n("8 bits"), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_convertto8bits"), d->convertTo8Bits);
-    connect(d->convertTo8Bits, SIGNAL(triggered(bool)),
-            this, SLOT(slotConvertTo8Bits()));
-    d->convertTo8Bits->setEnabled(false);
-
-    d->convertTo16Bits = new QAction(QIcon::fromTheme(QLatin1String("depth8to16")), i18n("16 bits"), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_convertto16bits"), d->convertTo16Bits);
-    connect(d->convertTo16Bits, SIGNAL(triggered(bool)),
-            this, SLOT(slotConvertTo16Bits()));
+    
+    d->convertTo16Bits = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_convertto16bits"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->convertTo16Bits);
     d->convertTo16Bits->setEnabled(false);
 
-    // --------------------------------------------------------------------------------
+    d->convertTo8Bits = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_convertto8bits"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->convertTo8Bits);
+    d->convertTo8Bits->setEnabled(false);
+
+    // **********************************************************
 
     QList<DPluginAction*> actions = DPluginLoader::instance()->pluginsActions(DPluginAction::Generic, this);
 
@@ -3020,52 +3014,6 @@ void EditorWindow::loadTool(EditorTool* const tool)
 void EditorWindow::slotToolDone()
 {
     EditorToolIface::editorToolIface()->unLoadTool();
-}
-
-void EditorWindow::slotConvertTo8Bits()
-{
-    ImageIface iface;
-
-    if (!iface.originalSixteenBit())
-    {
-        QMessageBox::critical(qApp->activeWindow(),
-                              qApp->applicationName(),
-                              i18n("This image is already using a depth of 8 bits / color / pixel."));
-        return;
-    }
-    else
-    {
-        if (DMessageBox::showContinueCancel(QMessageBox::Warning,
-                                            qApp->activeWindow(),
-                                            qApp->applicationName(),
-                                            i18n("Performing this operation will reduce image color quality. "
-                                            "Do you want to continue?"),
-                                            QLatin1String("ToolColor16To8Bits"))
-            == QMessageBox::Cancel)
-        {
-            return;
-        }
-    }
-
-    qApp->setOverrideCursor(Qt::WaitCursor);
-    iface.convertOriginalColorDepth(32);
-    qApp->restoreOverrideCursor();
-}
-
-void EditorWindow::slotConvertTo16Bits()
-{
-    ImageIface iface;
-
-    if (iface.originalSixteenBit())
-    {
-        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
-                              i18n("This image is already using a depth of 16 bits / color / pixel."));
-        return;
-    }
-
-    qApp->setOverrideCursor(Qt::WaitCursor);
-    iface.convertOriginalColorDepth(64);
-    qApp->restoreOverrideCursor();
 }
 
 void EditorWindow::slotRotateLeftIntoQue()
