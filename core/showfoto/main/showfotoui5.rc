@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="610" name="showfoto" translationDomain="digikam" >
+<gui version="611" name="showfoto" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -105,6 +105,7 @@
         <Action name="editorwindow_transform_flipvert" />
         <Separator/>
         <Action name="editorwindow_transform_crop" />
+        <Action name="editorwindow_transform_autocrop" />
         <Action name="editorwindow_transform_resize" />
         <Action name="editorwindow_transform_ratiocrop" />
         <Separator />
