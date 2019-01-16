@@ -130,8 +130,6 @@
 #include "dexpanderbox.h"
 #include "imageiface.h"
 
-#include "invertfilter.h"
-
 namespace Digikam
 {
 
@@ -681,15 +679,11 @@ void EditorWindow::setupStandardActions()
 
 #endif // HAVE_LIBLQR_1
 
-    // **********************************************************
-
-    // NOTE: Photoshop 7 use CTRL+I.
-    d->invertAction = new QAction(QIcon::fromTheme(QLatin1String("edit-select-invert")), i18n("Invert"), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_color_invert"), d->invertAction);
-    actionCollection()->setDefaultShortcut(d->invertAction, Qt::CTRL+Qt::Key_I);
-    connect(d->invertAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotInvert()));
+    d->invertAction = DPluginLoader::instance()->pluginAction(QLatin1String("editorwindow_color_invert"), this);
+    actionCollection()->addActions(QList<QAction*>() << d->invertAction);
     d->invertAction->setEnabled(false);
+
+    // **********************************************************
 
     d->convertTo8Bits = new QAction(QIcon::fromTheme(QLatin1String("depth16to8")), i18n("8 bits"), this);
     actionCollection()->addAction(QLatin1String("editorwindow_convertto8bits"), d->convertTo8Bits);
@@ -3026,18 +3020,6 @@ void EditorWindow::loadTool(EditorTool* const tool)
 void EditorWindow::slotToolDone()
 {
     EditorToolIface::editorToolIface()->unLoadTool();
-}
-
-void EditorWindow::slotInvert()
-{
-    qApp->setOverrideCursor(Qt::WaitCursor);
-
-    ImageIface iface;
-    InvertFilter invert(iface.original(), 0L);
-    invert.startFilterDirectly();
-    iface.setOriginal(i18n("Invert"), invert.filterAction(), invert.getTargetImage());
-
-    qApp->restoreOverrideCursor();
 }
 
 void EditorWindow::slotConvertTo8Bits()

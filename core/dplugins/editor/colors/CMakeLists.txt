@@ -73,3 +73,7 @@ DIGIKAM_ADD_EDITOR_PLUGIN(WhiteBalanceTool
     ${CMAKE_CURRENT_SOURCE_DIR}/whitebalancetool.cpp
 )
 
+DIGIKAM_ADD_EDITOR_PLUGIN(InvertTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/inverttoolplugin.cpp
+)
+

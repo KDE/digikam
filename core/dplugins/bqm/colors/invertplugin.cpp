@@ -61,7 +61,7 @@ QString InvertPlugin::iid() const
 
 QIcon InvertPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("colorfx"));
+    return QIcon::fromTheme(QLatin1String("edit-select-invert"));
 }
 
 QString InvertPlugin::description() const
