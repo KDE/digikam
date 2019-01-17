@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2014-10-17
  * Description : test for implementation of ditemslist api

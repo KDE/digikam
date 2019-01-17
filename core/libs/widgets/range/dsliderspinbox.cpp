@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2014-11-30
  * Description : Save space slider widget

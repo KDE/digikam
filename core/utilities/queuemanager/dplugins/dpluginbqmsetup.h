@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2007-02-06
  * Description : Config panel for BQM dplugins.

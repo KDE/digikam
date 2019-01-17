@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2010-06-27
  * Description : an unit-test to test XMP sidecar creation with DMetadata

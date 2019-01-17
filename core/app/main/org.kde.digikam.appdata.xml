@@ -395,7 +395,7 @@
       <li xml:lang="zh-TW">包含進階工具的圖片編輯器以快速修復圖片</li>
     </ul>
   </description>
-  <url type="homepage">http://www.digikam.org/</url>
+  <url type="homepage">https://www.digikam.org/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=digikam</url>
   <url type="help">http://docs.kde.org/development/en/extragear-graphics/digikam/index.html</url>
   <screenshots>

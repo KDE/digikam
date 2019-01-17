@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digikam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2009-20-12
  * Description : Interface class for objects that can store their state.

@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2018-10-30
  * Description : An unit-test to read metadata and apply tag paths to item with DMetadata.

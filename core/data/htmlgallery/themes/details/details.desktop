@@ -141,4 +141,4 @@ Name[x-test]=xxFooter informationxx
 Name[zh_CN]=页脚信息
 
 Type=string
-Default=My personal gallery <a href="mailto:email@mydomain.tld">email@mydomain.tld</a> - Powered by <a href="http://www.digikam.org">digiKam - HTMLGallery</a>
+Default=My personal gallery <a href="mailto:email@mydomain.tld">email@mydomain.tld</a> - Powered by <a href="https://www.digikam.org">digiKam - HTMLGallery</a>

@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2013-06-16
  * Description : Functions to convert between OpenCV's cv::Mat and Qt's QImage and QPixmap.

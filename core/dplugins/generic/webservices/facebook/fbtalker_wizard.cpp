@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2008-12-26
  * Description : a tool to export items to Facebook web service
@@ -278,12 +278,12 @@ void FbTalker::logout()
     }
 
     QMap<QString, QString> args;
-    args[QLatin1String("next")]         = QLatin1String("http://www.digikam.org");
+    args[QLatin1String("next")]         = QLatin1String("https://www.digikam.org");
     args[QLatin1String("access_token")] = d->o2->token();
 
     QUrl url(QLatin1String("https://www.facebook.com/logout.php"));
     QUrlQuery q;
-    q.addQueryItem(QLatin1String("next"), QLatin1String("http://www.digikam.org"));
+    q.addQueryItem(QLatin1String("next"), QLatin1String("https://www.digikam.org"));
     q.addQueryItem(QLatin1String("access_token"), d->o2->token());
     url.setQuery(q);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Logout URL: " << url;

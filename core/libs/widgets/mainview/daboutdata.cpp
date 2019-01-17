@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2008-07-30
  * Description : digiKam about data.
@@ -79,7 +79,7 @@ const QString DAboutData::copyright()
 
 const QUrl DAboutData::webProjectUrl()
 {
-    return QUrl(QLatin1String("http://www.digikam.org"));
+    return QUrl(QLatin1String("https://www.digikam.org"));
 }
 
 void DAboutData::authorsRegistration(KAboutData& aboutData)

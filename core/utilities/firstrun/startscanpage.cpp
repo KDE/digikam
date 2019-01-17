@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2009-28-04
  * Description : first run assistant dialog
@@ -52,7 +52,7 @@ StartScanPage::StartScanPage(QWizard* const dlg)
                        "To learn more about the digiKam world, we recommend reading the <b>digiKam handbook</b> "
                        "using the <b>Help/Handbook</b> menu entry (you need to install the separate digiKam documentation package.) "
                        "You can also read the manual online from the "
-                       "<a href='http://www.digikam.org/docs'>digikam.org website</a>.</p>"
+                       "<a href='https://www.digikam.org/docs'>digikam.org website</a>.</p>"
                        "<p>Press <b>Finish</b> to close this assistant. digiKam will scan your "
                        "collection to register all albums in the database. Items including in "
                        "albums are collected after startup stage in background.</p>"

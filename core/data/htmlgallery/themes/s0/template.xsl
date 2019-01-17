@@ -4,7 +4,7 @@
  * ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2011-10-12
  * Description : A "Calligraphics" icon based theme

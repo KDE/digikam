@@ -85,7 +85,7 @@
     <p xml:lang="x-test">xxShowfoto is a fast Image Editor with powerful image editing tools. You can use it to view your photographs and improve them. Showfoto is the standalone image editor of the digiKam project.xx</p>
     <p xml:lang="zh-CN">Showfoto 是一款具有强大图像编辑工具的快速图像编辑器。你可以用它来查看你的照片并改进它们。 Showfoto 是 digiKam 项目的独立图像编辑器。</p>
   </description>
-  <url type="homepage">http://www.digikam.org/</url>
+  <url type="homepage">https://www.digikam.org/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=digikam</url>
   <url type="help">http://docs.kde.org/development/en/extragear-graphics/showfoto/</url>
   <screenshots>

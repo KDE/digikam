@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of the digikam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2017-01-01
  * Description : button for choosing time difference photo which accepts drag & drop

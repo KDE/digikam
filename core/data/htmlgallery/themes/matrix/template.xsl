@@ -4,7 +4,7 @@
  * ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2008-04-01
  * Description : A Matrix like theme for the digiKam html gallery tool.

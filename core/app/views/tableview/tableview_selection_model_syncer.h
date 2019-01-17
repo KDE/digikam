@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2013-02-18
  * Description : Sync QItemSelectionModel of ItemFilterModel and TableViewModel

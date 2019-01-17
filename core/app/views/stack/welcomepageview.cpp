@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2006-12-20
  * Description : a widget to display a welcome page
@@ -163,7 +163,7 @@ QStringList WelcomePageView::aboutTabContent() const
              i18n("Currently, you are in the Album view mode of digiKam. Albums are the places where your files are stored, and are identical to the folders on your hard disk."),
              i18n("<li>%1</li><li>%2</li>",
                   i18n("digiKam has many powerful features which are described in the <a href=\"https://docs.kde.org/trunk5/en/extragear-graphics/digikam/index.html\">documentation</a>"),
-                  i18n("The <a href=\"http://www.digikam.org\">digiKam homepage</a> provides information about new versions of digiKam."))
+                  i18n("The <a href=\"https://www.digikam.org\">digiKam homepage</a> provides information about new versions of digiKam."))
             );
     return QStringList() << tabHeader << tabContent;
 }

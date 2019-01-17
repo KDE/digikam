@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2006-09-15
  * Description : Exiv2 library interface
@@ -85,7 +85,7 @@ bool MetaEngine::initializeExiv2()
         return false;
 
     registerXmpNameSpace(QLatin1String("http://ns.adobe.com/lightroom/1.0/"),  QLatin1String("lr"));
-    registerXmpNameSpace(QLatin1String("http://www.digikam.org/ns/kipi/1.0/"), QLatin1String("kipi"));
+    registerXmpNameSpace(QLatin1String("https://www.digikam.org/ns/kipi/1.0/"), QLatin1String("kipi"));
     registerXmpNameSpace(QLatin1String("http://ns.microsoft.com/photo/1.2/"),  QLatin1String("MP"));
     registerXmpNameSpace(QLatin1String("http://ns.acdsee.com/iptc/1.0/"),      QLatin1String("acdsee"));
     registerXmpNameSpace(QLatin1String("http://www.video"),                    QLatin1String("video"));
@@ -101,7 +101,7 @@ bool MetaEngine::cleanupExiv2()
 #ifdef _XMP_SUPPORT_
 
     unregisterXmpNameSpace(QLatin1String("http://ns.adobe.com/lightroom/1.0/"));
-    unregisterXmpNameSpace(QLatin1String("http://www.digikam.org/ns/kipi/1.0/"));
+    unregisterXmpNameSpace(QLatin1String("https://www.digikam.org/ns/kipi/1.0/"));
     unregisterXmpNameSpace(QLatin1String("http://ns.microsoft.com/photo/1.2/"));
     unregisterXmpNameSpace(QLatin1String("http://ns.acdsee.com/iptc/1.0/"));
     unregisterXmpNameSpace(QLatin1String("http://www.video"));

@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2004-12-21
  * Description : USB Mass Storage camera interface
@@ -622,7 +622,7 @@ bool UMSCamera::cameraAbout(QString& about)
                          "mounted locally on your system.<br/><br/>"
                          "It does not use libgphoto2 drivers.<br/><br/>"
                          "To report any problems with this driver, please contact the digiKam team at:<br/><br/>"
-                         "http://www.digikam.org/?q=contact"));
+                         "https://www.digikam.org/?q=contact"));
     return true;
 }
 

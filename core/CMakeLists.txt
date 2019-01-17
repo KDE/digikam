@@ -549,7 +549,7 @@ configure_file(app/utils/digikam_config.h.cmake.in
 
 message(STATUS "")
 message(STATUS "----------------------------------------------------------------------------------")
-message(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <http://www.digikam.org>")
+message(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <https://www.digikam.org>")
 message(STATUS "")
 
 PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support" ENABLE_MYSQLSUPPORT)

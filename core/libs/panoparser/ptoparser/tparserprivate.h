@@ -1,7 +1,7 @@
 /*============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Description : Helper functions for the Hugin API
  *

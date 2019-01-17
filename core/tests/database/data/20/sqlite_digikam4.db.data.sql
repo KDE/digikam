@@ -132,10 +132,10 @@ CREATE TABLE ImageComments
                             comment TEXT,
                             UNIQUE(imageid, type, language, author));
 INSERT INTO "ImageComments" VALUES(1,1,1,'x-default',NULL,NULL,'This file is a part of digiKam project
-http://www.digikam.org
+https://www.digikam.org
 Copyright (C) 2011 by Francesco Riosa <francesco+kde at pnpitalia it>');
 INSERT INTO "ImageComments" VALUES(2,2,1,'x-default',NULL,NULL,'This file is a part of digiKam project
-http://www.digikam.org
+https://www.digikam.org
 Copyright (C) 2011 by Francesco Riosa <francesco+kde at pnpitalia it>');
 CREATE TABLE ImageCopyright
                             (id INTEGER PRIMARY KEY,

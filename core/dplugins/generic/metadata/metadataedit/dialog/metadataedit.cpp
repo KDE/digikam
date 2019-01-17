@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2011-03-14
  * Description : a dialog to edit EXIF,IPTC and XMP metadata

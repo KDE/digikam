@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2006-05-16
  * Description : a tool to export GPS data to KML file.
@@ -422,7 +422,7 @@ void KmlExport::generate()
     QDomElement kmlAlbum            = addKmlElement(kmlRoot, QLatin1String("Document"));
     QDomElement kmlName             = addKmlTextElement(kmlAlbum, QLatin1String("name"), m_KMLFileName);
     QDomElement kmlDescription      = addKmlHtmlElement(kmlAlbum, QLatin1String("description"),
-                                                        QLatin1String("Created with Geolocation Editor from <a href=\"http://www.digikam.org/\">digiKam</a>"));
+                                                        QLatin1String("Created with Geolocation Editor from <a href=\"https://www.digikam.org/\">digiKam</a>"));
 
     if (m_GPXtracks)
     {

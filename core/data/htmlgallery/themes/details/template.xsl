@@ -4,7 +4,7 @@
  * ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2008-06-22
  * Description : A clean look theme for the digiKam html gallery tool.

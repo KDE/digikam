@@ -4,7 +4,7 @@
  * ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2009-11-30
  * Description : A dark theme with floating thumbnail and description
@@ -214,7 +214,7 @@
 	</ul>
 
 	<p class="footer">
-		<a href="http://www.digikam.org/">digiKam</a> HTML Gallery (Floating Cards theme)
+		<a href="https://www.digikam.org/">digiKam</a> HTML Gallery (Floating Cards theme)
 		<a href="http://validator.w3.org/check?uri=referer">Valid XHTML 1.0 Strict!</a>
 		<a href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS!</a>
 	</p>
@@ -275,7 +275,7 @@
 	</ul>
 	
 	<p class="footer">
-		<a href="http://www.digikam.org/">digiKam</a> HTML Gallery (Floating Cards theme)
+		<a href="https://www.digikam.org/">digiKam</a> HTML Gallery (Floating Cards theme)
 		<a href="http://validator.w3.org/check?uri=referer">Valid XHTML 1.0 Strict!</a>
 		<a href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS!</a>
 	</p>

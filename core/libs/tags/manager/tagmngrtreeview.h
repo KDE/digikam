@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 20013-08-05
  * Description : Tag Manager Tree View derived from TagsFolderView to implement

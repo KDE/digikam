@@ -1,7 +1,7 @@
 # ===========================================================
 #
 # This file is a part of digiKam project
-# http://www.digikam.org
+# https://www.digikam.org
 #
 # Date        : 2011-11-02
 # Description : simple BASH script to check EOL of each file from LibRaw

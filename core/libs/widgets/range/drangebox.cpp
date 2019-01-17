@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * https://www.digikam.org
  *
  * Date        : 2017-08-09
  * Description : Generic range boxes, i.e. ranges where a minimum and maximum can be given.
