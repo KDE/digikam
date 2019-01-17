@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="612" name="showfoto" translationDomain="digikam" >
+<gui version="615" name="showfoto" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -96,7 +96,7 @@
 
         <Separator/>
 
-        <!-- _DPLUGINS_GENERIC_TOOLS_ACTIONS_ -->
+        <!-- _DPLUGINS_GENERIC_TOOL_ACTIONS_ -->
 
     </Menu>
 

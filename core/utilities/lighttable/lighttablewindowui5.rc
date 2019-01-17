@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="611" name="lighttablewindow" translationDomain="digikam" >
+<gui version="615" name="lighttablewindow" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -55,7 +55,7 @@
 
         <Separator/>
 
-        <!-- _DPLUGINS_GENERIC_TOOLS_ACTIONS_ -->
+        <!-- _DPLUGINS_GENERIC_TOOL_ACTIONS_ -->
 
     </Menu>
 

@@ -230,11 +230,11 @@ void DXmlGuiWindow::registerPluginsActions()
     }
 
     QString dom = domDocument().toString();
-    dom.replace(QLatin1String("<!-- _DPLUGINS_GENERIC_TOOLS_ACTIONS_ -->"),    dpl->pluginXmlSections(DPluginAction::GenericTool, this));
+    dom.replace(QLatin1String("<!-- _DPLUGINS_GENERIC_TOOL_ACTIONS_ -->"),     dpl->pluginXmlSections(DPluginAction::GenericTool,     this));
     dom.replace(QLatin1String("<!-- _DPLUGINS_GENERIC_METADATA_ACTIONS_ -->"), dpl->pluginXmlSections(DPluginAction::GenericMetadata, this));
-    dom.replace(QLatin1String("<!-- _DPLUGINS_GENERIC_IMPORT_ACTIONS_ -->"),   dpl->pluginXmlSections(DPluginAction::GenericImport, this));
-    dom.replace(QLatin1String("<!-- _DPLUGINS_GENERIC_EXPORT_ACTIONS_ -->"),   dpl->pluginXmlSections(DPluginAction::GenericExport, this));
-    dom.replace(QLatin1String("<!-- _DPLUGINS_GENERIC_VIEW_ACTIONS_ -->"),     dpl->pluginXmlSections(DPluginAction::GenericView, this));
+    dom.replace(QLatin1String("<!-- _DPLUGINS_GENERIC_IMPORT_ACTIONS_ -->"),   dpl->pluginXmlSections(DPluginAction::GenericImport,   this));
+    dom.replace(QLatin1String("<!-- _DPLUGINS_GENERIC_EXPORT_ACTIONS_ -->"),   dpl->pluginXmlSections(DPluginAction::GenericExport,   this));
+    dom.replace(QLatin1String("<!-- _DPLUGINS_GENERIC_VIEW_ACTIONS_ -->"),     dpl->pluginXmlSections(DPluginAction::GenericView,     this));
 
     registerExtraPluginsActions(dom);
 
