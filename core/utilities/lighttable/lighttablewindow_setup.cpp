@@ -29,8 +29,6 @@ namespace Digikam
 
 void LightTableWindow::setupActions()
 {
-    registerPluginsActions();
-
     // -- Standard 'File' menu actions ---------------------------------------------
 
     KActionCollection* const ac =   actionCollection();
@@ -258,6 +256,8 @@ void LightTableWindow::setupActions()
     // ---------------------------------------------------------------------------------
 
     createGUI(xmlFile());
+    registerPluginsActions();
+
     cleanupActions();
 
     showMenuBarAction()->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080

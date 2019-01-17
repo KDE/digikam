@@ -134,7 +134,6 @@ void DigikamApp::setupStatusBar()
 
 void DigikamApp::setupActions()
 {
-    registerPluginsActions();
 
     KActionCollection* const ac = actionCollection();
 
@@ -796,6 +795,8 @@ void DigikamApp::setupActions()
     populateThemes();
 
     createGUI(xmlFile());
+
+    registerPluginsActions();
 
     cleanupActions();
 

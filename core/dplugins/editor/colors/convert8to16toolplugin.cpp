@@ -85,7 +85,7 @@ void Convert8To16ToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "16 bits"));
+    ac->setText(i18nc("@action", "Convert to 16 bits"));
     ac->setObjectName(QLatin1String("editorwindow_convertto16bits"));
     ac->setActionCategory(DPluginAction::EditorColors);
 

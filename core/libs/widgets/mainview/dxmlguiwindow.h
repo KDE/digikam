@@ -34,6 +34,7 @@
 // KDE includes
 
 #include <kxmlguiwindow.h>
+#include <kxmlguifactory.h>
 #include <kconfiggroup.h>
 
 // Local includes
@@ -140,9 +141,11 @@ public:
 
 public:
 
-    /** Register all plugins action to this instance.
+    /** Register all generic plugins action to this instance.
+     *  Call registerExtraPluginsActions() to plug oter kind of plugins in GUI.
      */
-    virtual void registerPluginsActions();
+    void registerPluginsActions();
+    virtual void registerExtraPluginsActions(QString& /*dom*/) {};
 
     /** Return the interface instance to access to items information.
      */

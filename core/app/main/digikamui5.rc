@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="611" name="digikam" translationDomain="digikam" >
+<gui version="612" name="digikam" translationDomain="digikam" >
 
  <MenuBar>
 
@@ -61,9 +61,9 @@
      <Action name="image_write_metadata" />
      <Action name="image_read_metadata" />
    <Separator />
-     <Action name="metadata_edit" />
-     <Action name="geolocation_edit" />
-     <Action name="timeadjust_edit" />
+
+        <!-- _DPLUGINS_GENERIC_METADATA_ACTIONS_ -->
+
    <Separator />
      <Action name="image_rotate" />
      <Action name="image_flip" />
@@ -91,9 +91,11 @@
      <!--<Action name="view_selection" />-->
      <Separator/>
      <Action name="slideshow" />
-     <Action name="presentation" />
      <Action name="full_screen" />
      <Action name="view_refresh" />
+
+     <!-- _DPLUGINS_GENERIC_VIEW_ACTIONS_ -->
+
      <Separator/>
      <Action name="album_zoomin" />
      <Action name="album_zoomout" />
@@ -123,15 +125,9 @@
       <Separator/>
         <Action name="maintenance" />
       <Separator/>
-        <Action name="expoblending" />
-        <Action name="panorama" />
-        <Action name="htmlgallery" />
-        <Action name="jalbum" />
-        <Action name="calendar" />
-        <Action name="videoslideshow" />
-        <Action name="sendbymail" />
-        <Action name="printcreator" />
-        <Action name="mediaserver" />
+
+        <!-- _DPLUGINS_GENERIC_TOOLS_ACTIONS_ -->
+
       <Separator/>
   </Menu>
 
@@ -142,32 +138,16 @@
       <Separator/>
       <Action name="import_addImages" />
       <Action name="import_addFolders" />
-      <Action name="import_scan" />
       <Separator/>
-      <Action name="import_googlephoto" />
-      <Action name="import_smugmug" />
-      <Action name="import_filetransfer" />
+
+      <!-- _DPLUGINS_GENERIC_IMPORT_ACTIONS_ -->
+
   </Menu>
 
   <Menu name="Export"><text>&amp;Export</text>
-      <Action name="export_dropbox" />
-      <Action name="export_facebook" />
-      <Action name="export_flickr" />
-      <Action name="export_googledrive" />
-      <Action name="export_googlephoto" />
-      <Action name="export_imageshack" />
-      <Action name="export_imgur" />
-      <Action name="export_ipfs" />
-      <Action name="export_onedrive" />
-      <Action name="export_pinterest" />
-      <Action name="export_piwigo" />
-      <Action name="export_box" />
-      <Action name="export_rajce" />
-      <Action name="export_smugmug" />
-      <Action name="export_yandexfotki" />
-      <Action name="export_mediawiki" />
-      <Action name="export_vkontakte" />
-      <Action name="export_filetransfer" />
+
+      <!-- _DPLUGINS_GENERIC_EXPORT_ACTIONS_ -->
+
   </Menu>
 
   <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>

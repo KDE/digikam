@@ -2967,10 +2967,8 @@ void EditorWindow::slotFlipVIntoQue()
     m_transformQue.append(TransformType::FlipVertical);
 }
 
-void EditorWindow::registerPluginsActions()
+void EditorWindow::registerExtraPluginsActions(QString& dom)
 {
-    DXmlGuiWindow::registerPluginsActions();
-
     DPluginLoader* const dpl = DPluginLoader::instance();
     dpl->registerEditorPlugins(this);
 
@@ -2980,6 +2978,13 @@ void EditorWindow::registerPluginsActions()
     {
         actionCollection()->addActions(QList<QAction*>() << ac);
     }
+
+    dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_FILES_ACTIONS_ -->"),     dpl->pluginXmlSections(DPluginAction::EditorFile, this));
+    dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_COLORS_ACTIONS_ -->"),    dpl->pluginXmlSections(DPluginAction::EditorColors, this));
+    dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_ENHANCE_ACTIONS_ -->"),   dpl->pluginXmlSections(DPluginAction::EditorEnhance, this));
+    dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_TRANSFORM_ACTIONS_ -->"), dpl->pluginXmlSections(DPluginAction::EditorTransform, this));
+    dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_DECORATE_ACTIONS_ -->"),  dpl->pluginXmlSections(DPluginAction::EditorDecorate, this));
+    dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_FILTERS_ACTIONS_ -->"),   dpl->pluginXmlSections(DPluginAction::EditorFilters, this));
 }
 
 } // namespace Digikam

@@ -94,10 +94,10 @@ public:
 
     const static QString CONFIG_GROUP_NAME;
 
-    void registerPluginsActions();
+    void registerExtraPluginsActions(QString& dom);
     void loadTool(EditorTool* const tool);
     bool actionEnabledState() const;
-    
+
 public Q_SLOTS:
 
     virtual void slotSetup()    = 0;

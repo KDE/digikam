@@ -108,7 +108,7 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionType ty
             }
         }
     }
-    
+
     if (!list.isEmpty())
         return list;
 
@@ -150,7 +150,7 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategor
             }
         }
      }
-    
+
     if (!list.isEmpty())
         return list;
 
@@ -194,10 +194,10 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QOb
             }
         }
     }
-    
+
     if (!list.isEmpty())
         return list;
-        
+
     foreach (DPlugin* const p, allPlugins())
     {
         DPluginEditor* const edit = dynamic_cast<DPluginEditor*>(p);

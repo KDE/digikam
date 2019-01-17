@@ -108,7 +108,7 @@ void ProfileConversionToolPlugin::setup(QObject* const parent)
     ac->setActionCategory(DPluginAction::EditorColors);
 
     addAction(ac);
-        
+
     DPluginAction* const ac2 = new DPluginAction(parent);
     ac2->setIcon(icon());
     ac2->setText(i18nc("@action", "Color Space Converter..."));

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="611" name="showfoto" translationDomain="digikam" >
+<gui version="612" name="showfoto" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -13,7 +13,9 @@
         <Action name="editorwindow_first" />
         <Action name="editorwindow_last" />
         <Separator/>
-        <Action name="editorwindow_print" />
+
+        <!-- _DPLUGINS_EDITOR_FILES_ACTIONS_ -->
+
         <Action name="open_with_default_application" />
         <Separator/>
         <Action name="editorwindow_save" />
@@ -38,7 +40,9 @@
     <Menu name="View" ><text>&amp;View</text>
         <Action name="editorwindow_fullscreen" />
         <Action name="editorwindow_slideshow" />
-        <Action name="presentation" />
+
+        <!-- _DPLUGINS_GENERIC_VIEW_ACTIONS_ -->
+
         <Separator/>
         <Action name="editorwindow_zoomplus" />
         <Action name="editorwindow_zoomminus" />
@@ -57,124 +61,55 @@
     </Menu>
 
     <Menu name="Color"><text>&amp;Color</text>
-        <Action name="editorwindow_color_autocorrection" />
-        <Action name="editorwindow_color_bcg" />
-        <Action name="editorwindow_color_hsl" />
-        <Action name="editorwindow_color_rgb" />
-        <Separator />
-        <Action name="editorwindow_color_adjustlevels" />
-        <Action name="editorwindow_color_adjustcurves" />
-        <Separator />
-        <Action name="editorwindow_color_invert" />
-        <Action name="editorwindow_color_film" />
-        <Action name="editorwindow_color_blackwhite" />
-        <Action name="editorwindow_color_channelmixer" />
-        <Action name="editorwindow_color_whitebalance" />
-        <Separator />
-        <Menu name="Depth"><text>&amp;Depth</text>
-            <Action name="editorwindow_convertto8bits" />
-            <Action name="editorwindow_convertto16bits" />
-        </Menu>
-        <Action name="editorwindow_colormanagement" />
-        <Separator />
+
+        <!-- _DPLUGINS_EDITOR_COLORS_ACTIONS_ -->
+
     </Menu>
 
     <Menu name="Enhance" ><text>Enh&amp;ance</text>
-        <Action name="editorwindow_enhance_restoration" />
-        <Action name="editorwindow_enhance_blur" />
-        <Action name="editorwindow_enhance_healingclone" />
-        <Action name="editorwindow_enhance_sharpen" />
-        <Action name="editorwindow_enhance_noisereduction" />
-        <Action name="editorwindow_enhance_localcontrast" />
-        <Action name="editorwindow_enhance_hotpixels" />
-        <Separator />
-        <Action name="editorwindow_enhance_redeye" />
 
-        <Menu name="Lens" ><text>&amp;Lens</text>
-            <Action name="editorwindow_enhance_lensautofix" />
-            <Action name="editorwindow_enhance_antivignetting" />
-            <Action name="editorwindow_enhance_lensdistortion" />
-        </Menu>
+        <!-- _DPLUGINS_EDITOR_ENHANCE_ACTIONS_ -->
+
     </Menu>
 
     <Menu name="Transform" ><text>Tra&amp;nsform</text>
-        <Action name="editorwindow_transform_rotateleft" />
-        <Action name="editorwindow_transform_rotateright" />
-        <Separator/>
-        <Action name="editorwindow_transform_fliphoriz" />
-        <Action name="editorwindow_transform_flipvert" />
-        <Separator/>
-        <Action name="editorwindow_transform_crop" />
-        <Action name="editorwindow_transform_autocrop" />
-        <Action name="editorwindow_transform_resize" />
-        <Action name="editorwindow_transform_ratiocrop" />
-        <Separator />
-        <Action name="editorwindow_transform_perspective" />
-        <Action name="editorwindow_transform_freerotation" />
-        <Action name="editorwindow_transform_sheartool" />
-        <Action name="editorwindow_transform_contentawareresizing" />
+
+        <!-- _DPLUGINS_EDITOR_TRANSFORM_ACTIONS_ -->
+
     </Menu>
 
     <Menu name="Decorate" ><text>&amp;Decorate</text>
-        <Action name="editorwindow_decorate_inserttext" />
-        <Action name="editorwindow_decorate_border" />
-        <Action name="editorwindow_decorate_texture" />
+
+        <!-- _DPLUGINS_EDITOR_DECORATE_ACTIONS_ -->
+
     </Menu>
 
     <Menu name="Filters" ><text>Effec&amp;ts</text>
-        <Action name="editorwindow_filter_colorfx" />
-        <Action name="editorwindow_filter_charcoal" />
-        <Action name="editorwindow_filter_emboss" />
-        <Action name="editorwindow_filter_oilpaint" />
-        <Action name="editorwindow_filter_blurfx" />
-        <Action name="editorwindow_filter_distortionfx" />
-        <Action name="editorwindow_filter_raindrop" />
-        <Action name="editorwindow_filter_filmgrain" />
+
+        <!-- _DPLUGINS_EDITOR_FILTERS_ACTIONS_ -->
+
     </Menu>
 
     <Menu name="Tools"><text>&amp;Tools</text>
-        <Action name="metadata_edit"/>
-        <Action name="geolocation_edit"/>
-        <Action name="timeadjust_edit"/>
+
+        <!-- _DPLUGINS_GENERIC_METADATA_ACTIONS_ -->
+
         <Separator/>
-        <Action name="expoblending" />
-        <Action name="panorama" />
-        <Action name="htmlgallery" />
-        <Action name="jalbum" />
-        <Action name="calendar" />
-        <Action name="videoslideshow" />
-        <Action name="sendbymail" />
-        <Action name="printcreator" />
-        <Action name="mediaserver" />
+
+        <!-- _DPLUGINS_GENERIC_TOOLS_ACTIONS_ -->
+
     </Menu>
 
     <Menu name="Import"><text>I&amp;mport</text>
-        <Action name="import_scan" />
-        <Separator/>
-        <Action name="import_googlephoto" />
-        <Action name="import_smugmug" />
-        <Action name="import_filetransfer" />
+
+        <!-- _DPLUGINS_GENERIC_IMPORT_ACTIONS_ -->
+
     </Menu>
 
     <Menu name="Export"><text>&amp;Export</text>
-        <Action name="export_dropbox" />
-        <Action name="export_facebook" />
-        <Action name="export_flickr" />
-        <Action name="export_googledrive" />
-        <Action name="export_googlephoto" />
-        <Action name="export_imageshack" />
-        <Action name="export_imgur" />
-        <Action name="export_ipfs" />
-        <Action name="export_onedrive" />
-        <Action name="export_pinterest" />
-        <Action name="export_piwigo" />
-        <Action name="export_box" />
-        <Action name="export_rajce" />
-        <Action name="export_smugmug" />
-        <Action name="export_yandexfotki" />
-        <Action name="export_mediawiki" />
-        <Action name="export_vkontakte" />
-        <Action name="export_filetransfer" />
+
+        <!-- _DPLUGINS_GENERIC_EXPORT_ACTIONS_ -->
+
     </Menu>
 
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>

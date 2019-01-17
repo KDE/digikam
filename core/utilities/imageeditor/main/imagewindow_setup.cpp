@@ -29,8 +29,6 @@ namespace Digikam
 
 void ImageWindow::setupActions()
 {
-    registerPluginsActions();
-
     setupStandardActions();
 
     KActionCollection* const ac = actionCollection();

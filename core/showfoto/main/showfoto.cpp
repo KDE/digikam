@@ -95,6 +95,8 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
     setupActions();
     setupStatusBar();
     createGUI(xmlFile());
+    registerPluginsActions();
+
     cleanupActions();
 
     // Create tool selection view
