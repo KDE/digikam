@@ -169,8 +169,6 @@ PrintHelper::~PrintHelper()
 
 void PrintHelper::print(DImg& doc)
 {
-    //doc.loadFullImage();
-    //doc.waitUntilLoaded();
     QPrinter printer;
 
     QPrintDialog* const dialog          = new QPrintDialog(&printer, d->parent);
