@@ -27,18 +27,6 @@
 namespace Digikam
 {
 
-void DigikamApp::rebuild()
-{
-    QString file = xmlFile();
-
-    if (!file.isEmpty())
-    {
-        setXMLGUIBuildDocument(QDomDocument());
-        loadStandardsXmlFile();
-        setXMLFile(file, true);
-    }
-}
-
 void DigikamApp::setupView()
 {
     if (d->splashScreen)

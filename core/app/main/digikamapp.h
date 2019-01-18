@@ -156,10 +156,6 @@ private Q_SLOTS:
 
 // -- Internal setup methods implemented in digikamapp_setup.cpp ----------------------------------------
 
-public:
-
-    void rebuild();
-
 private:
 
     void setupView();
