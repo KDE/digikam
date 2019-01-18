@@ -1,5 +1,5 @@
 /** \mainpage digiKam API reference page.
-    \author (c) 2001-2018 digiKam team.
+    \author (c) 2001-2019 digiKam team.
     \brief digiKam is an advanced open-source digital photo management application that runs on Linux, Windows, and MacOS.
     \image html logo-digikam.png
 
@@ -488,14 +488,14 @@ There are two configuration sections : the top level and the core.
 
 This section describes how to install digiKam from the git repository, while keeping a system-wide digiKam install.
 
-This procedure is based on the configure script \b boostrap.local
+This procedure is based on the configure script \b bootstrap.local
 
- 1. Set the root directory for your git install in boostrap.local (DIGIKAM_INSTALL_PREFIX variable)
+ 1. Set the root directory for your git install in bootstrap.local (DIGIKAM_INSTALL_PREFIX variable)
  2. If you want a clean build directory, set CLEANROOT to 1
  3. Type the following command in your terminal:
 
 \code
-   $ ./boostrap.local  # or "./bootstrap.local --eclipse" if you intend to use Eclipse
+   $ ./bootstrap.local  # or "./bootstrap.local --eclipse" if you intend to use Eclipse
    $ cd build
    $ make
    $ make install
