@@ -227,6 +227,7 @@ void DXmlGuiWindow::registerPluginsActions()
     foreach (DPluginAction* const ac, actions)
     {
         actionCollection()->addActions(QList<QAction*>() << ac);
+        actionCollection()->setDefaultShortcuts(ac, ac->shortcuts());
     }
 
     QString dom = domDocument().toString();

@@ -2977,6 +2977,7 @@ void EditorWindow::registerExtraPluginsActions(QString& dom)
     foreach (DPluginAction* const ac, actions)
     {
         actionCollection()->addActions(QList<QAction*>() << ac);
+        actionCollection()->setDefaultShortcuts(ac, ac->shortcuts());
     }
 
     dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_FILES_ACTIONS_ -->"),     dpl->pluginXmlSections(DPluginAction::EditorFile,      this));
