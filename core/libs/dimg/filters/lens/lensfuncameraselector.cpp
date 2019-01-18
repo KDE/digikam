@@ -39,7 +39,7 @@
 
 #include "dlayoutbox.h"
 #include "digikam_debug.h"
-#include "dcombobox.h"
+#include "squeezedcombobox.h"
 #include "dnuminput.h"
 #include "dexpanderbox.h"
 
@@ -107,13 +107,13 @@ public:
     const QString       orangeStyle;
     const QString       greenStyle;
 
-    DAdjustableLabel* lensDescription;
-    DAdjustableLabel* makeDescription;
-    DAdjustableLabel* modelDescription;
+    DAdjustableLabel*   lensDescription;
+    DAdjustableLabel*   makeDescription;
+    DAdjustableLabel*   modelDescription;
 
-    DComboBox*          make;
-    DComboBox*          model;
-    DComboBox*          lens;
+    SqueezedComboBox*   make;
+    SqueezedComboBox*   model;
+    SqueezedComboBox*   lens;
 
     DDoubleNumInput*    focal;
     DDoubleNumInput*    aperture;
@@ -145,8 +145,8 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     d->makeDescription->setWhatsThis(i18n("This is the camera maker description string found in image meta-data. "
                                           "This one is used to query and find relevant camera device information from Lensfun database."));
 
-    d->make              = new DComboBox(this);
-    d->make->setDefaultIndex(0);
+    d->make              = new SqueezedComboBox(this);
+    d->make->setCurrentIndex(0);
 
     DHBox* const hbox2   = new DHBox(this);
     d->modelLabel        = new QLabel(i18nc("camera model", "Model:"), hbox2);
@@ -157,8 +157,8 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     d->modelDescription->setWhatsThis(i18n("This is the camera model description string found in image meta-data. "
                                            "This one is used to query and found relevant camera device information from Lensfun database."));
 
-    d->model             = new DComboBox(this);
-    d->model->setDefaultIndex(0);
+    d->model             = new SqueezedComboBox(this);
+    d->model->setCurrentIndex(0);
 
     DHBox* const hbox3   = new DHBox(this);
     d->lensLabel         = new QLabel(i18nc("camera lens",  "Lens:"),  hbox3);
@@ -169,8 +169,8 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
                                           "This one is used to query and found relevant lens information from Lensfun database."));
     hbox3->setStretchFactor(space3, 10);
 
-    d->lens              = new DComboBox(this);
-    d->lens->setDefaultIndex(0);
+    d->lens              = new SqueezedComboBox(this);
+    d->lens->setCurrentIndex(0);
 
     d->metadataUsage->setEnabled(false);
     d->metadataUsage->setCheckState(Qt::Unchecked);
@@ -454,16 +454,16 @@ void LensFunCameraSelector::refreshSettingsView()
 
     if (d->iface->usedCamera())
     {
-        makerIdx = d->make->combo()->findText(d->iface->settings().cameraMake);
+        makerIdx = d->make->findText(d->iface->settings().cameraMake);
         qCDebug(DIGIKAM_DIMG_LOG) << "makerIdx: " << makerIdx << " (" << d->iface->settings().cameraMake << ")";
     }
     else
     {
-        int i = d->make->combo()->findText(d->iface->makeDescription());
+        int i = d->make->findText(d->iface->makeDescription());
 
         if (i == -1)
         {
-            i = d->make->combo()->findText(QLatin1String("Generic"));
+            i = d->make->findText(QLatin1String("Generic"));
         }
 
         if (i >= 0)
@@ -502,7 +502,7 @@ void LensFunCameraSelector::refreshSettingsView()
 
     if (d->iface->usedCamera())
     {
-        modelIdx = d->model->combo()->findText(d->iface->settings().cameraModel);
+        modelIdx = d->model->findText(d->iface->settings().cameraModel);
         qCDebug(DIGIKAM_DIMG_LOG) << "modelIdx: " << modelIdx << " (" << d->iface->settings().cameraModel << ")";
     }
 
@@ -537,7 +537,7 @@ void LensFunCameraSelector::refreshSettingsView()
 
     if (d->iface->usedLens())
     {
-        lensIdx = d->lens->combo()->findText(d->iface->settings().lensModel);
+        lensIdx = d->lens->findText(d->iface->settings().lensModel);
         qCDebug(DIGIKAM_DIMG_LOG) << "lensIdx: " << lensIdx << " (" << d->iface->settings().lensModel << ")";
     }
 
@@ -629,11 +629,11 @@ void LensFunCameraSelector::populateDeviceCombos()
     const lfCamera* const* it = d->iface->lensFunCameras();
 
     // reset box
-    d->model->combo()->clear();
+    d->model->clear();
 
     bool firstRun = false;
 
-    if (d->make->combo()->count() == 0)
+    if (d->make->count() == 0)
     {
         firstRun = true;
     }
@@ -647,26 +647,26 @@ void LensFunCameraSelector::populateDeviceCombos()
             {
                 QString t = QLatin1String((*it)->Maker);
 
-                if (d->make->combo()->findText(t, Qt::MatchExactly) < 0)
+                if (d->make->findText(t, Qt::MatchExactly) < 0)
                 {
-                    d->make->addItem(t);
+                    d->make->addSqueezedItem(t);
                 }
             }
         }
 
         // Fill models for current selected maker
-        if ((*it)->Model && QLatin1String((*it)->Maker) == d->make->combo()->currentText())
+        if ((*it)->Model && QLatin1String((*it)->Maker) == d->make->itemHighlighted())
         {
             LensFunIface::DevicePtr dev = *it;
             QVariant b                  = qVariantFromValue(dev);
-            d->model->combo()->addItem(QLatin1String(dev->Model), b);
+            d->model->addSqueezedItem(QLatin1String(dev->Model), b);
         }
 
         ++it;
     }
 
-    d->make->combo()->model()->sort(0,  Qt::AscendingOrder);
-    d->model->combo()->model()->sort(0, Qt::AscendingOrder);
+    d->make->model()->sort(0,  Qt::AscendingOrder);
+    d->model->model()->sort(0, Qt::AscendingOrder);
 
     d->make->blockSignals(false);
     d->model->blockSignals(false);
@@ -675,10 +675,10 @@ void LensFunCameraSelector::populateDeviceCombos()
 void LensFunCameraSelector::populateLensCombo()
 {
     d->lens->blockSignals(true);
-    d->lens->combo()->clear();
+    d->lens->clear();
     d->lens->blockSignals(false);
 
-    QVariant v = d->model->combo()->itemData(d->model->currentIndex());
+    QVariant v = d->model->itemData(d->model->currentIndex());
 
     if (!v.isValid() || v.isNull())
     {
@@ -708,11 +708,11 @@ void LensFunCameraSelector::populateLensCombo()
     {
         LensFunIface::LensPtr lens = *lenses;
         QVariant b                 = qVariantFromValue(lens);
-        d->lens->combo()->addItem(QLatin1String(lens->Model), b);
+        d->lens->addSqueezedItem(QLatin1String(lens->Model), b);
         ++lenses;
     }
 
-    d->lens->combo()->model()->sort(0, Qt::AscendingOrder);
+    d->lens->model()->sort(0, Qt::AscendingOrder);
     d->lens->blockSignals(false);
 }
 
@@ -734,7 +734,7 @@ void LensFunCameraSelector::slotModelChanged()
 
 void LensFunCameraSelector::slotModelSelected()
 {
-    QVariant v = d->model->combo()->itemData(d->model->currentIndex());
+    QVariant v = d->model->itemData(d->model->currentIndex());
     d->iface->setUsedCamera(d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
                             v.value<LensFunIface::DevicePtr>());
     emit signalLensSettingsChanged();
@@ -742,7 +742,7 @@ void LensFunCameraSelector::slotModelSelected()
 
 void LensFunCameraSelector::slotLensSelected()
 {
-    QVariant v = d->lens->combo()->itemData(d->lens->currentIndex());
+    QVariant v = d->lens->itemData(d->lens->currentIndex());
     d->iface->setUsedLens(d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
                           v.value<LensFunIface::LensPtr>());
 
@@ -751,7 +751,8 @@ void LensFunCameraSelector::slotLensSelected()
     if (d->iface->usedLens() &&
         settings.cropFactor <= 0.0) // this should not happen
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << "No crop factor is set for camera, using lens calibration data: " << d->iface->usedLens()->CropFactor;
+        qCDebug(DIGIKAM_DIMG_LOG) << "No crop factor is set for camera, using lens calibration data: "
+                                  << d->iface->usedLens()->CropFactor;
         settings.cropFactor = d->iface->usedLens()->CropFactor;
     }
 
