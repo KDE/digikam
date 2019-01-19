@@ -2,22 +2,48 @@
 
 # Main AppImage script to wrap XDG_* variable properly for Qt5.
 #
-# Copyright (c) 2015-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015-2019, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-if [[ "$(arch)" = "x86_64" ]] ; then
-    export LD_PRELOAD=$LD_PRELOAD:/usr/lib64/libfreetype.so
-    export LD_PRELOAD=$LD_PRELOAD:/usr/lib64/libudev.so
-else
-    export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libfreetype.so
-    export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libudev.so
-fi
+preload_shared_library ()
+{
+    FILE=$1
+    echo $FILE
 
+    if [[ "$(arch)" = "x86_64" ]] ; then
+        # 64 bits system
+
+        if [ -f "/usr/lib64/$FILE" ] ; then
+            export LD_PRELOAD=$LD_PRELOAD:/usr/lib64/$FILE
+        elif [ -f "/usr/lib/x86_64-linux-gnu/$FILE" ] ; then
+            export LD_PRELOAD=$LD_PRELOAD:/usr/lib/x86_64-linux-gnu/$FILE
+        elif [ -f "/lib/x86_64-linux-gnu/$FILE" ] ; then
+            export LD_PRELOAD=$LD_PRELOAD:/lib/x86_64-linux-gnu/$FILE
+        fi
+
+    else
+        # 32 bits system
+
+        if [ -f "/usr/lib/$FILE" ] ; then
+            export LD_PRELOAD=$LD_PRELOAD:/usr/lib/$FILE
+        elif [ -f "/usr/lib/i386-linux-gnu/$FILE" ] ; then
+            export LD_PRELOAD=$LD_PRELOAD:/usr/lib/i386-linux-gnu/$FILE
+        elif [ -f "/lib/i386-linux-gnu/$FILE" ] ; then
+            export LD_PRELOAD=$LD_PRELOAD:/lib/i386-linux-gnu/$FILE
+        fi
+
+    fi
+}
+
+preload_shared_library libfreetype.so
+preload_shared_library libudev.so
+exit
 echo "-- digiKam AppImage Bundle"
 echo "-- Use 'help' as CLI argument to know all available options for digiKam application"
+echo "-- Preloading shared libs: $LD_PRELOAD"
 
 DIR="`dirname \"$0\"`"
 DIR="`( cd \"$DIR\" && pwd )`"

@@ -36,7 +36,7 @@ AlbumTreeView::AlbumTreeView(QWidget* const parent, Flags flags)
 {
     setDragEnabled(true);
     setAcceptDrops(true);
-    setAutoScroll(false);
+    setAutoScroll(false);   // Workaround for bug 400960
     setRootIsDecorated(false);
     setDropIndicatorShown(false);
     setAutoExpandDelay(AUTOEXPANDDELAY);
@@ -94,6 +94,7 @@ PAlbum* AlbumTreeView::albumForIndex(const QModelIndex& index) const
 void AlbumTreeView::setCurrentAlbums(const QList<Album*>& albums, bool selectInAlbumManager)
 {
     AbstractCheckableAlbumTreeView::setCurrentAlbums(albums, selectInAlbumManager);
+    scrollToSelectedAlbum();   // Workaround for bug 400960
 }
 
 void AlbumTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
