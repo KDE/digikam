@@ -77,12 +77,12 @@ QString SharpenPlugin::details() const
 QList<DPluginAuthor> SharpenPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Matthias Welwarsky"),
-                             QLatin1String("matze at welwarsky dot de"),
-                             QLatin1String("(C) 2009"))
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2009-2019"))
+            << DPluginAuthor(QString::fromUtf8("Matthias Welwarsky"),
+                             QString::fromUtf8("matze at welwarsky dot de"),
+                             QString::fromUtf8("(C) 2009"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2009-2019"))
             ;
 }
 

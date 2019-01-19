@@ -75,12 +75,12 @@ QString HotPixelsToolPlugin::details() const
 QList<DPluginAuthor> HotPixelsToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Unai Garro"),
-                             QLatin1String("ugarro at users dot sourceforge dot net"),
-                             QLatin1String("(C) 2005-2006"))
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2005-2019"))
+            << DPluginAuthor(QString::fromUtf8("Unai Garro"),
+                             QString::fromUtf8("ugarro at users dot sourceforge dot net"),
+                             QString::fromUtf8("(C) 2005-2006"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2005-2019"))
             ;
 }
     

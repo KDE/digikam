@@ -75,15 +75,15 @@ QString ContentAwareResizeToolPlugin::details() const
 QList<DPluginAuthor> ContentAwareResizeToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Julien Pontabry"),
-                             QLatin1String("julien dot pontabry at ulp dot u-strasbg dot fr"),
-                             QLatin1String("(C) 2009-2010"))
-            << DPluginAuthor(QLatin1String("Julien Narboux"),
-                             QLatin1String("julien at narboux dot fr"),
-                             QLatin1String("(C) 2009-2010"))
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2009-2019"))
+            << DPluginAuthor(QString::fromUtf8("Julien Pontabry"),
+                             QString::fromUtf8("julien dot pontabry at ulp dot u-strasbg dot fr"),
+                             QString::fromUtf8("(C) 2009-2010"))
+            << DPluginAuthor(QString::fromUtf8("Julien Narboux"),
+                             QString::fromUtf8("julien at narboux dot fr"),
+                             QString::fromUtf8("(C) 2009-2010"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2009-2019"))
             ;
 }
 

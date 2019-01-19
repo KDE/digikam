@@ -76,16 +76,16 @@ QString SendByMailPlugin::details() const
 QList<DPluginAuthor> SendByMailPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2004-2019"),
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2004-2019"),
                              i18n("Author and Maintainer"))
-            << DPluginAuthor(QLatin1String("Michael Hoechstetter"),
-                             QLatin1String("michael dot hoechstetter at gmx dot de"),
-                             QLatin1String("(C) 2006"))
-            << DPluginAuthor(QLatin1String("Tom Albers"),
-                             QLatin1String("tomalbers at kde dot nl"),
-                             QLatin1String("(C) 2007"))
+            << DPluginAuthor(QString::fromUtf8("Michael Hoechstetter"),
+                             QString::fromUtf8("michael dot hoechstetter at gmx dot de"),
+                             QString::fromUtf8("(C) 2006"))
+            << DPluginAuthor(QString::fromUtf8("Tom Albers"),
+                             QString::fromUtf8("tomalbers at kde dot nl"),
+                             QString::fromUtf8("(C) 2007"))
             ;
 }
 

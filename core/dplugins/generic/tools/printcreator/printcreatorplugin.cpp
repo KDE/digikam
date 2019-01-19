@@ -76,20 +76,20 @@ QString PrintCreatorPlugin::details() const
 QList<DPluginAuthor> PrintCreatorPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2004-2019"),
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2004-2019"),
                              i18n("Developer and Maintainer"))
-            << DPluginAuthor(QLatin1String("Todd Shoemaker"),
-                             QLatin1String("todd at theshoemakers dot net"),
-                             QLatin1String("(C) 2003-2004"),
+            << DPluginAuthor(QString::fromUtf8("Todd Shoemaker"),
+                             QString::fromUtf8("todd at theshoemakers dot net"),
+                             QString::fromUtf8("(C) 2003-2004"),
                              i18n("Author"))
-            << DPluginAuthor(QLatin1String("Angelo Naselli"),
-                             QLatin1String("anaselli at linux dot it"),
-                             QLatin1String("(C) 2007-2013"))
-            << DPluginAuthor(QLatin1String("Andreas Trink"),
-                             QLatin1String("atrink at nociaro dot org"),
-                             QLatin1String("(C) 2010"),
+            << DPluginAuthor(QString::fromUtf8("Angelo Naselli"),
+                             QString::fromUtf8("anaselli at linux dot it"),
+                             QString::fromUtf8("(C) 2007-2013"))
+            << DPluginAuthor(QString::fromUtf8("Andreas Trink"),
+                             QString::fromUtf8("atrink at nociaro dot org"),
+                             QString::fromUtf8("(C) 2010"),
                              i18n("Contributor"))
             ;
 }

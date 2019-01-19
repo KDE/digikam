@@ -79,18 +79,18 @@ QString GSPlugin::details() const
 QList<DPluginAuthor> GSPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2013-2019"))
-            << DPluginAuthor(QLatin1String("Maik Qualmann"),
-                             QLatin1String("metzpinguin at gmail dot com"),
-                             QLatin1String("(C) 2017-2019"))
-            << DPluginAuthor(QLatin1String("Saurabh Patel"),
-                             QLatin1String("saurabhpatel7717 at gmail dot co"),
-                             QLatin1String("(C) 2013"))
-            << DPluginAuthor(QLatin1String("Shourya Singh Gupta"),
-                             QLatin1String("shouryasgupta at gmail dot com"),
-                             QLatin1String("(C) 2015"))
+            << DPluginAuthor(QString::fromUtf8("Saurabh Patel"),
+                             QString::fromUtf8("saurabhpatel7717 at gmail dot co"),
+                             QString::fromUtf8("(C) 2013"))
+            << DPluginAuthor(QString::fromUtf8("Shourya Singh Gupta"),
+                             QString::fromUtf8("shouryasgupta at gmail dot com"),
+                             QString::fromUtf8("(C) 2015"))
+            << DPluginAuthor(QString::fromUtf8("Maik Qualmann"),
+                             QString::fromUtf8("metzpinguin at gmail dot com"),
+                             QString::fromUtf8("(C) 2017-2019"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2013-2019"))
             ;
 }
 

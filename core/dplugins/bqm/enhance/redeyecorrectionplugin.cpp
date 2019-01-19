@@ -77,9 +77,9 @@ QString RedEyeCorrectionPlugin::details() const
 QList<DPluginAuthor> RedEyeCorrectionPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Omar Amin"),
-                             QLatin1String("Omar dot moh dot amin at gmail dot com"),
-                             QLatin1String("(C) 2016"))
+            << DPluginAuthor(QString::fromUtf8("Omar Amin"),
+                             QString::fromUtf8("Omar dot moh dot amin at gmail dot com"),
+                             QString::fromUtf8("(C) 2016"))
             ;
 }
 

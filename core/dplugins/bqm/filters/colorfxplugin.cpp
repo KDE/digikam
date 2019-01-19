@@ -77,9 +77,9 @@ QString ColorFXPlugin::details() const
 QList<DPluginAuthor> ColorFXPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Alexander Dymo"),
-                             QLatin1String("adymo at develop dot org"),
-                             QLatin1String("(C) 2012"))
+            << DPluginAuthor(QString::fromUtf8("Alexander Dymo"),
+                             QString::fromUtf8("adymo at develop dot org"),
+                             QString::fromUtf8("(C) 2012"))
             ;
 }
 

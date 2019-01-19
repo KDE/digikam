@@ -75,9 +75,9 @@ QString HealingCloneToolPlugin::details() const
 QList<DPluginAuthor> HealingCloneToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Shaza Ismail Kaoud shaza dot ismail dot k at gmail dot com"),
-                             QLatin1String("shaza dot ismail dot k at gmail dot com"),
-                             QLatin1String("(C) 2017"))
+            << DPluginAuthor(QString::fromUtf8("Shaza Ismail Kaoud shaza dot ismail dot k at gmail dot com"),
+                             QString::fromUtf8("shaza dot ismail dot k at gmail dot com"),
+                             QString::fromUtf8("(C) 2017"))
             ;
 }
     

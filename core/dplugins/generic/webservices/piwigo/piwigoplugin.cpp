@@ -76,21 +76,21 @@ QString PiwigoPlugin::details() const
 QList<DPluginAuthor> PiwigoPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Renchi Raju"),
-                             QLatin1String("renchi dot raju at gmail dot com"),
-                             QLatin1String("(C) 2003-2005"))
-            << DPluginAuthor(QLatin1String("Colin Guthrie"),
-                             QLatin1String("kde at colin dot guthr dot ie"),
-                             QLatin1String("(C)  2006-2007"))
-            << DPluginAuthor(QLatin1String("Andrea Diamantini"),
-                             QLatin1String("adjam7 at gmail dot com"),
-                             QLatin1String("(C) 2008"))
-            << DPluginAuthor(QLatin1String("Frédéric Coiffier"),
-                             QLatin1String("frederic dot coiffier at free dot com"),
-                             QLatin1String("(C) 2010-2014"))
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2006-2019"))
+            << DPluginAuthor(QString::fromUtf8("Renchi Raju"),
+                             QString::fromUtf8("renchi dot raju at gmail dot com"),
+                             QString::fromUtf8("(C) 2003-2005"))
+            << DPluginAuthor(QString::fromUtf8("Colin Guthrie"),
+                             QString::fromUtf8("kde at colin dot guthr dot ie"),
+                             QString::fromUtf8("(C)  2006-2007"))
+            << DPluginAuthor(QString::fromUtf8("Andrea Diamantini"),
+                             QString::fromUtf8("adjam7 at gmail dot com"),
+                             QString::fromUtf8("(C) 2008"))
+            << DPluginAuthor(QString::fromUtf8("Frédéric Coiffier"),
+                             QString::fromUtf8("frederic dot coiffier at free dot com"),
+                             QString::fromUtf8("(C) 2010-2014"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2006-2019"))
             ;
 }
 

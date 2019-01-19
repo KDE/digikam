@@ -76,9 +76,9 @@ QString RajcePlugin::details() const
 QList<DPluginAuthor> RajcePlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Lukas Krejci"),
-                             QLatin1String("metlosh at gmail dot com"),
-                             QLatin1String("(C) 2011-2013"))
+            << DPluginAuthor(QString::fromUtf8("Lukas Krejci"),
+                             QString::fromUtf8("metlosh at gmail dot com"),
+                             QString::fromUtf8("(C) 2011-2013"))
             ;
 }
 

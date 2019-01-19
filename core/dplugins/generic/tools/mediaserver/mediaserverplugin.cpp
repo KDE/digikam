@@ -76,19 +76,19 @@ QString MediaServerPlugin::details() const
 QList<DPluginAuthor> MediaServerPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2012-2019"),
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2012-2019"),
                              i18n("Developer and Maintainer"))
-            << DPluginAuthor(QLatin1String("Ahmed Fathi"),
-                             QLatin1String("ahmed dot fathi dot abdelmageed at gmail dot com"),
-                             QLatin1String("(C) 2015"))
-            << DPluginAuthor(QLatin1String("Smit Mehta"),
-                             QLatin1String("smit dot meh at gmail dot com"),
-                             QLatin1String("(C) 2012-2013"))
-            << DPluginAuthor(QLatin1String("Marcel Wiesweg"),
-                             QLatin1String("marcel dot wiesweg at gmx dot de"),
-                             QLatin1String("(C) 2012-2013"))
+            << DPluginAuthor(QString::fromUtf8("Ahmed Fathi"),
+                             QString::fromUtf8("ahmed dot fathi dot abdelmageed at gmail dot com"),
+                             QString::fromUtf8("(C) 2015"))
+            << DPluginAuthor(QString::fromUtf8("Smit Mehta"),
+                             QString::fromUtf8("smit dot meh at gmail dot com"),
+                             QString::fromUtf8("(C) 2012-2013"))
+            << DPluginAuthor(QString::fromUtf8("Marcel Wiesweg"),
+                             QString::fromUtf8("marcel dot wiesweg at gmx dot de"),
+                             QString::fromUtf8("(C) 2012-2013"))
             ;
 }
 

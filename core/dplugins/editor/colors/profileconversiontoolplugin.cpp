@@ -82,12 +82,12 @@ QString ProfileConversionToolPlugin::details() const
 QList<DPluginAuthor> ProfileConversionToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Marcel Wiesweg"),
-                             QLatin1String("marcel dot wiesweg at gmx dot de"),
-                             QLatin1String("(C) 2009-2012"))
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2009-2019"))
+            << DPluginAuthor(QString::fromUtf8("Marcel Wiesweg"),
+                             QString::fromUtf8("marcel dot wiesweg at gmx dot de"),
+                             QString::fromUtf8("(C) 2009-2012"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2009-2019"))
             ;
 }
     

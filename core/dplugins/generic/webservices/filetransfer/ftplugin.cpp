@@ -78,15 +78,15 @@ QString FTPlugin::details() const
 QList<DPluginAuthor> FTPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2010-2019"))
-            << DPluginAuthor(QLatin1String("Maik Qualmann"),
-                             QLatin1String("metzpinguin at gmail dot com"),
-                             QLatin1String("(C) 2017-2019"))
-            << DPluginAuthor(QLatin1String("Johannes Wienke"),
-                             QLatin1String("languitar at semipol dot de"),
-                             QLatin1String("(C) 2009"))
+            << DPluginAuthor(QString::fromUtf8("Johannes Wienke"),
+                             QString::fromUtf8("languitar at semipol dot de"),
+                             QString::fromUtf8("(C) 2009"))
+            << DPluginAuthor(QString::fromUtf8("Maik Qualmann"),
+                             QString::fromUtf8("metzpinguin at gmail dot com"),
+                             QString::fromUtf8("(C) 2017-2019"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2010-2019"))
             ;
 }
 

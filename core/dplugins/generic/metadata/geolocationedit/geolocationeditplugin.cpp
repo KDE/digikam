@@ -77,18 +77,18 @@ QString GeolocationEditPlugin::details() const
 QList<DPluginAuthor> GeolocationEditPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2006-2019"))
-            << DPluginAuthor(QLatin1String("Michael G. Hansen"),
-                             QLatin1String("mike at mghansen dot de"),
-                             QLatin1String("(C) 2008-2012"))
-            << DPluginAuthor(QLatin1String("Gabriel Voicu"),
-                             QLatin1String("ping dot gabi at gmail dot com"),
-                             QLatin1String("(C) 2010-2012"))
-            << DPluginAuthor(QLatin1String("Justus Schwartz"),
-                             QLatin1String("justus at gmx dot li"),
-                             QLatin1String("(C) 2014"))
+            << DPluginAuthor(QString::fromUtf8("Michael G. Hansen"),
+                             QString::fromUtf8("mike at mghansen dot de"),
+                             QString::fromUtf8("(C) 2008-2012"))
+            << DPluginAuthor(QString::fromUtf8("Gabriel Voicu"),
+                             QString::fromUtf8("ping dot gabi at gmail dot com"),
+                             QString::fromUtf8("(C) 2010-2012"))
+            << DPluginAuthor(QString::fromUtf8("Justus Schwartz"),
+                             QString::fromUtf8("justus at gmx dot li"),
+                             QString::fromUtf8("(C) 2014"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2006-2019"))
             ;
 }
 
