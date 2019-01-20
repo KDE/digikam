@@ -40,7 +40,7 @@ preload_shared_library ()
 
 preload_shared_library libfreetype.so
 preload_shared_library libudev.so
-exit
+
 echo "-- digiKam AppImage Bundle"
 echo "-- Use 'help' as CLI argument to know all available options for digiKam application"
 echo "-- Preloading shared libs: $LD_PRELOAD"
