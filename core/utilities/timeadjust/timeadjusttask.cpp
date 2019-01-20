@@ -35,6 +35,7 @@ extern "C"
 // Qt includes
 
 #include <QFile>
+#include <qplatformdefs.h>
 
 // Local includes
 
@@ -322,13 +323,30 @@ void TimeAdjustTask::run()
         else
             modtime = dt.toTime_t();
 
-        utimbuf times;
-        times.actime  = QDateTime::currentDateTime().toTime_t();
-        times.modtime = modtime;
+        struct utimbuf ut;
+        ut.modtime = modtime;
+        ut.actime  = QDateTime::currentDateTime().toTime_t();
 
-        if (utime(QFile::encodeName(d->url.toLocalFile()).constData(), &times) != 0)
+        if (::utime(QFile::encodeName(d->url.toLocalFile()).constData(), &ut) != 0)
         {
             status |= TimeAdjustList::FILE_TIME_ERROR;
+        }
+    }
+
+    if (writeToSidecar && DMetadata::hasSidecar(d->url.toLocalFile()))
+    {
+        QT_STATBUF st;
+
+        if (QT_STAT(QFile::encodeName(d->url.toLocalFile()).constData(), &st) == 0)
+        {
+            struct utimbuf ut;
+            ut.modtime = st.st_mtime;
+            ut.actime  = st.st_atime;
+
+            if (::utime(QFile::encodeName(DMetadata::sidecarPath(d->url.toLocalFile())).constData(), &ut) != 0)
+            {
+                status |= TimeAdjustList::FILE_TIME_ERROR;
+            }
         }
     }
 
