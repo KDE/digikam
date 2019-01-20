@@ -76,9 +76,9 @@ QString PPlugin::details() const
 QList<DPluginAuthor> PPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Tarek Talaat"),
-                             QLatin1String("tarektalaat93 at gmail dot com"),
-                             QLatin1String("(C) 2018"))
+            << DPluginAuthor(QString::fromUtf8("Tarek Talaat"),
+                             QString::fromUtf8("tarektalaat93 at gmail dot com"),
+                             QString::fromUtf8("(C) 2018"))
             ;
 }
 

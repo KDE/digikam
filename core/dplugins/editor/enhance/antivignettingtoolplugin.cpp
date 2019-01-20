@@ -75,12 +75,12 @@ QString AntiVignettingToolPlugin::details() const
 QList<DPluginAuthor> AntiVignettingToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Julien Narboux"),
-                             QLatin1String("julien at narboux dot fr"),
-                             QLatin1String("(C) 2010"))
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2004-2019"))
+            << DPluginAuthor(QString::fromUtf8("Julien Narboux"),
+                             QString::fromUtf8("julien at narboux dot fr"),
+                             QString::fromUtf8("(C) 2010"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2004-2019"))
             ;
 }
     

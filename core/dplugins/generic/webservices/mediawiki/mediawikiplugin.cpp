@@ -76,18 +76,18 @@ QString MediaWikiPlugin::details() const
 QList<DPluginAuthor> MediaWikiPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2011-2019"))
-            << DPluginAuthor(QLatin1String("Alexandre Mendes"),
-                             QLatin1String("alex dot mendes1988 at gmail dot com"),
-                             QLatin1String("(C) 2011"))
-            << DPluginAuthor(QLatin1String("Guillaume Hormiere"),
-                             QLatin1String("hormiere dot guillaume at gmail dot com"),
-                             QLatin1String("(C) 2011-2012"))
-            << DPluginAuthor(QLatin1String("Peter Potrowl"),
-                             QLatin1String("peter dot potrowl at gmail dot com"),
-                             QLatin1String("(C) 2013"))
+            << DPluginAuthor(QString::fromUtf8("Alexandre Mendes"),
+                             QString::fromUtf8("alex dot mendes1988 at gmail dot com"),
+                             QString::fromUtf8("(C) 2011"))
+            << DPluginAuthor(QString::fromUtf8("Guillaume Hormiere"),
+                             QString::fromUtf8("hormiere dot guillaume at gmail dot com"),
+                             QString::fromUtf8("(C) 2011-2012"))
+            << DPluginAuthor(QString::fromUtf8("Peter Potrowl"),
+                             QString::fromUtf8("peter dot potrowl at gmail dot com"),
+                             QString::fromUtf8("(C) 2013"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2011-2019"))
             ;
 }
 

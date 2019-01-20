@@ -80,13 +80,13 @@ QString PanoramaPlugin::details() const
 QList<DPluginAuthor> PanoramaPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2009-2019"),
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2009-2019"),
                              i18n("Author and Maintainer"))
-            << DPluginAuthor(QLatin1String("Benjamin Girault"),
-                             QLatin1String("benjamin dot girault at gmail dot com"),
-                             QLatin1String("(C) 2011-2016"))
+            << DPluginAuthor(QString::fromUtf8("Benjamin Girault"),
+                             QString::fromUtf8("benjamin dot girault at gmail dot com"),
+                             QString::fromUtf8("(C) 2011-2016"))
             ;
 }
 

@@ -76,9 +76,9 @@ QString ImageShackPlugin::details() const
 QList<DPluginAuthor> ImageShackPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Dodon Victor"),
-                             QLatin1String("dodonvictor at gmail dot com"),
-                             QLatin1String("(C) 2012"))
+            << DPluginAuthor(QString::fromUtf8("Dodon Victor"),
+                             QString::fromUtf8("dodonvictor at gmail dot com"),
+                             QString::fromUtf8("(C) 2012"))
             ;
 }
 

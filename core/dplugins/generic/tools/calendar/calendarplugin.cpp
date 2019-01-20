@@ -76,20 +76,20 @@ QString CalendarPlugin::details() const
 QList<DPluginAuthor> CalendarPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2004-2019"),
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2004-2019"),
                              i18n("Developer and Maintainer"))
-            << DPluginAuthor(QLatin1String("Renchi Raju"),
-                             QLatin1String("renchi dot raju at gmail dot com"),
-                             QLatin1String("(C) 2003-2005"),
+            << DPluginAuthor(QString::fromUtf8("Renchi Raju"),
+                             QString::fromUtf8("renchi dot raju at gmail dot com"),
+                             QString::fromUtf8("(C) 2003-2005"),
                              i18n("Former Author"))
-            << DPluginAuthor(QLatin1String("Orgad Shaneh"),
-                             QLatin1String("orgads at gmail dot com"),
-                             QLatin1String("(C) 2007-2008"))
-            << DPluginAuthor(QLatin1String("Tom Albers"),
-                             QLatin1String("tomalbers at kde dot nl"),
-                             QLatin1String("(C) 2006"))
+            << DPluginAuthor(QString::fromUtf8("Orgad Shaneh"),
+                             QString::fromUtf8("orgads at gmail dot com"),
+                             QString::fromUtf8("(C) 2007-2008"))
+            << DPluginAuthor(QString::fromUtf8("Tom Albers"),
+                             QString::fromUtf8("tomalbers at kde dot nl"),
+                             QString::fromUtf8("(C) 2006"))
             ;
 }
 

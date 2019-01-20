@@ -76,12 +76,9 @@ QString IpfsPlugin::details() const
 QList<DPluginAuthor> IpfsPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2018-2019"))
-            << DPluginAuthor(QLatin1String("Amar Lakshya"),
-                             QLatin1String("amar dot lakshya  at xaviers dot edu dot in"),
-                             QLatin1String("(C) 2018"))
+            << DPluginAuthor(QString::fromUtf8("Amar Lakshya"),
+                             QString::fromUtf8("amar dot lakshya at xaviers dot edu dot in"),
+                             QString::fromUtf8("(C) 2018"))
             ;
 }
 

@@ -76,21 +76,21 @@ QString TimeAdjustPlugin::details() const
 QList<DPluginAuthor> TimeAdjustPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2006-2019"))
-            << DPluginAuthor(QLatin1String("Jesper K. Pedersen"),
-                             QLatin1String("blackie at kde dot org"),
-                             QLatin1String("(C) 2003-2005"))
-            << DPluginAuthor(QLatin1String("Smit Mehta"),
-                             QLatin1String("smit dot meh at gmail dot com"),
-                             QLatin1String("(C) 2012"))
-            << DPluginAuthor(QLatin1String("Pieter Edelman"),
-                             QLatin1String("p dot edelman at gmx dot net"),
-                             QLatin1String("(C) 2008"))
-            << DPluginAuthor(QLatin1String("Maik Qualmann"),
-                             QLatin1String("metzpinguin at gmail dot com"),
-                             QLatin1String("(C) 2018"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2006-2019"))
+            << DPluginAuthor(QString::fromUtf8("Jesper K. Pedersen"),
+                             QString::fromUtf8("blackie at kde dot org"),
+                             QString::fromUtf8("(C) 2003-2005"))
+            << DPluginAuthor(QString::fromUtf8("Smit Mehta"),
+                             QString::fromUtf8("smit dot meh at gmail dot com"),
+                             QString::fromUtf8("(C) 2012"))
+            << DPluginAuthor(QString::fromUtf8("Pieter Edelman"),
+                             QString::fromUtf8("p dot edelman at gmx dot net"),
+                             QString::fromUtf8("(C) 2008"))
+            << DPluginAuthor(QString::fromUtf8("Maik Qualmann"),
+                             QString::fromUtf8("metzpinguin at gmail dot com"),
+                             QString::fromUtf8("(C) 2018"))
             ;
 }
 

@@ -77,15 +77,15 @@ QString WaterMarkPlugin::details() const
 QList<DPluginAuthor> WaterMarkPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2009-2019"))
-            << DPluginAuthor(QLatin1String("Mikkel Baekhoej Christensen"),
-                             QLatin1String("mbc at baekhoej dot dk"),
-                             QLatin1String("(C) 2010"))
-            << DPluginAuthor(QLatin1String("Ahmed Fathi"),
-                             QLatin1String("ahmed dot fathi dot abdelmageed at gmail dot com"),
-                             QLatin1String("(C) 2017"))            
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2009-2019"))
+            << DPluginAuthor(QString::fromUtf8("Mikkel Baekhoej Christensen"),
+                             QString::fromUtf8("mbc at baekhoej dot dk"),
+                             QString::fromUtf8("(C) 2010"))
+            << DPluginAuthor(QString::fromUtf8("Ahmed Fathi"),
+                             QString::fromUtf8("ahmed dot fathi dot abdelmageed at gmail dot com"),
+                             QString::fromUtf8("(C) 2017"))            
             ;
 }
 

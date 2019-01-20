@@ -76,9 +76,9 @@ QString VKontaktePlugin::details() const
 QList<DPluginAuthor> VKontaktePlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Alexander Potashev"),
-                             QLatin1String("aspotashev at gmail dot com"),
-                             QLatin1String("(C) 2011-2015"))
+            << DPluginAuthor(QString::fromUtf8("Alexander Potashev"),
+                             QString::fromUtf8("aspotashev at gmail dot com"),
+                             QString::fromUtf8("(C) 2011-2015"))
             ;
 }
 

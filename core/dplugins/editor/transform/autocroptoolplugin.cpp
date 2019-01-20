@@ -76,12 +76,12 @@ QString AutoCropToolPlugin::details() const
 QList<DPluginAuthor> AutoCropToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Sayantan Datta"),
-                             QLatin1String("sayantan dot knz at gmail dot com"),
-                             QLatin1String("(C) 2013"))
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2013-2019"))
+            << DPluginAuthor(QString::fromUtf8("Sayantan Datta"),
+                             QString::fromUtf8("sayantan dot knz at gmail dot com"),
+                             QString::fromUtf8("(C) 2013"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2013-2019"))
             ;
 }
 

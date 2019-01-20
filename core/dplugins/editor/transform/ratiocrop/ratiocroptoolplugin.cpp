@@ -75,15 +75,15 @@ QString RatioCropToolPlugin::details() const
 QList<DPluginAuthor> RatioCropToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Jaromir Malenko"),
-                             QLatin1String("malenko at email dot cz"),
-                             QLatin1String("(C) 2007"))
-            << DPluginAuthor(QLatin1String("Roberto Castagnola"),
-                             QLatin1String("roberto dot castagnola at gmail dot com"),
-                             QLatin1String("(C) 2008"))
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2004-2019"))
+            << DPluginAuthor(QString::fromUtf8("Jaromir Malenko"),
+                             QString::fromUtf8("malenko at email dot cz"),
+                             QString::fromUtf8("(C) 2007"))
+            << DPluginAuthor(QString::fromUtf8("Roberto Castagnola"),
+                             QString::fromUtf8("roberto dot castagnola at gmail dot com"),
+                             QString::fromUtf8("(C) 2008"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2004-2019"))
             ;
 }
 

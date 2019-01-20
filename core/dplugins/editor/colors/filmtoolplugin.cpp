@@ -75,9 +75,9 @@ QString FilmToolPlugin::details() const
 QList<DPluginAuthor> FilmToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Matthias Welwarsky"),
-                             QLatin1String("matthias at welwarsky dot de"),
-                             QLatin1String("(C) 2012"))
+            << DPluginAuthor(QString::fromUtf8("Matthias Welwarsky"),
+                             QString::fromUtf8("matthias at welwarsky dot de"),
+                             QString::fromUtf8("(C) 2012"))
             ;
 }
 

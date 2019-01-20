@@ -89,15 +89,15 @@ QString DigitalScannerPlugin::details() const
 QList<DPluginAuthor> DigitalScannerPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2003-2019"))
-            << DPluginAuthor(QLatin1String("Kare Sars"),
-                             QLatin1String("kare dot sars at kolumbus dot fi"),
-                             QLatin1String("(C) 2003-2005"))
-            << DPluginAuthor(QLatin1String("Angelo Naselli"),
-                             QLatin1String("anaselli at linux dot it"),
-                             QLatin1String("(C) 2006-2007"))
+            << DPluginAuthor(QString::fromUtf8("Kare Sars"),
+                             QString::fromUtf8("kare dot sars at kolumbus dot fi"),
+                             QString::fromUtf8("(C) 2003-2005"))
+            << DPluginAuthor(QString::fromUtf8("Angelo Naselli"),
+                             QString::fromUtf8("anaselli at linux dot it"),
+                             QString::fromUtf8("(C) 2006-2007"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2003-2019"))
             ;
 }
 

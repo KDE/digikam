@@ -76,15 +76,15 @@ QString PresentationPlugin::details() const
 QList<DPluginAuthor> PresentationPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QLatin1String("Gilles Caulier"),
-                             QLatin1String("caulier dot gilles at gmail dot com"),
-                             QLatin1String("(C) 2005-2019"))
-            << DPluginAuthor(QLatin1String("Renchi Raju"),
-                             QLatin1String("renchi dot raju at gmail dot com"),
-                             QLatin1String("(C) 2003-2004"))
-            << DPluginAuthor(QLatin1String("Valerio Fuoglio"),
-                             QLatin1String("valerio dot fuoglio at gmail dot com"),
-                             QLatin1String("(C) 2006-2009"))
+            << DPluginAuthor(QString::fromUtf8("Renchi Raju"),
+                             QString::fromUtf8("renchi dot raju at gmail dot com"),
+                             QString::fromUtf8("(C) 2003-2004"))
+            << DPluginAuthor(QString::fromUtf8("Valerio Fuoglio"),
+                             QString::fromUtf8("valerio dot fuoglio at gmail dot com"),
+                             QString::fromUtf8("(C) 2006-2009"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2005-2019"))
             ;
 }
 
