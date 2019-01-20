@@ -59,7 +59,7 @@ QString RedEyeToolPlugin::iid() const
 
 QIcon RedEyeToolPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("redeye"));
+    return QIcon::fromTheme(QLatin1String("redeyes"));
 }
 
 QString RedEyeToolPlugin::description() const
