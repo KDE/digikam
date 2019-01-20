@@ -687,4 +687,6 @@ BUGFIXES:
 617 ==> 389690 - Updated image label and image is broken after metadata is written to file.
 618 ==> 402944 - crash while looking at face tags.
 619 ==> 402659 - Find Similar context menu action shows no result if used on an image without a fingerprint.
-620 ==>
+620 ==> 225647 - Host application name instead of picasaweb in the report.
+621 ==> 
+
