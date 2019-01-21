@@ -264,6 +264,18 @@ QString DItemInfo::source() const
     return !val.isNull() ? val.toString() : QString();
 }
 
+QString DItemInfo::make() const
+{
+    QVariant val = parseInfoMap(QLatin1String("make"));
+    return !val.isNull() ? val.toString() : QString();
+}
+
+QString DItemInfo::model() const
+{
+    QVariant val = parseInfoMap(QLatin1String("model"));
+    return !val.isNull() ? val.toString() : QString();
+}
+
 QString DItemInfo::exposureTime() const
 {
     QVariant val = parseInfoMap(QLatin1String("exposuretime"));
@@ -285,6 +297,12 @@ QString DItemInfo::aperture() const
 QString DItemInfo::focalLength() const
 {
     QVariant val = parseInfoMap(QLatin1String("focallength"));
+    return !val.isNull() ? val.toString() : QString();
+}
+
+QString DItemInfo::focalLength35mm() const
+{
+    QVariant val = parseInfoMap(QLatin1String("focalLength35mm"));
     return !val.isNull() ? val.toString() : QString();
 }
 

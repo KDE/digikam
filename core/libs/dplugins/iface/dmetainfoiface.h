@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAAM_DMETA_INFO_IFACE_H
-#define DIGIKAAM_DMETA_INFO_IFACE_H
+#ifndef DIGIKAM_DMETA_INFO_IFACE_H
+#define DIGIKAM_DMETA_INFO_IFACE_H
 
 // Local includes
 
@@ -69,4 +69,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAAM_DMETA_INFO_IFACE_H
+#endif // DIGIKAM_DMETA_INFO_IFACE_H

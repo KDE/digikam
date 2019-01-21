@@ -140,12 +140,14 @@ DMetaInfoIface::DInfoMap DMetaInfoIface::itemInfo(const QUrl& url) const
         Template temp;
         meta.getCopyrightInformation(temp);
 
-        map.insert(QLatin1String("creators"),    temp.authors());
-        map.insert(QLatin1String("credit"),      temp.credit());
-        map.insert(QLatin1String("rights"),      temp.copyright()[def]);
-        map.insert(QLatin1String("source"),      temp.source());
+        map.insert(QLatin1String("creators"),     temp.authors());
+        map.insert(QLatin1String("credit"),       temp.credit());
+        map.insert(QLatin1String("rights"),       temp.copyright()[def]);
+        map.insert(QLatin1String("source"),       temp.source());
 
         PhotoInfoContainer photoInfo = meta.getPhotographInformation();
+        map.insert(QLatin1String("make"),         photoInfo.make);
+        map.insert(QLatin1String("model"),        photoInfo.model);
         map.insert(QLatin1String("exposuretime"), photoInfo.exposureTime);
         map.insert(QLatin1String("sensitivity"),  photoInfo.sensitivity);
         map.insert(QLatin1String("aperture"),     photoInfo.aperture);
@@ -153,7 +155,7 @@ DMetaInfoIface::DInfoMap DMetaInfoIface::itemInfo(const QUrl& url) const
 
         // TODO: add more video metadata as needed
         VideoInfoContainer videoInfo = meta.getVideoInformation();
-        map.insert(QLatin1String("videocodec"), videoInfo.videoCodec);
+        map.insert(QLatin1String("videocodec"),   videoInfo.videoCodec);
     }
 
     return map;

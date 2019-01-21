@@ -112,6 +112,20 @@ public:
 
 // -----------------------------------------------------------------
 
+/** DItemInfo is a class to get item information from host application (Showfoto or digiKam)
+ *  The interface is re-implemented in host and depend how item infromation must be retrieved (from a database or by file metadata).
+ *  The easy way to use this container is given below:
+ * 
+ *  QUrl                     itemUrl;                                   // The item url that you want to retrieve information.
+ *  DInfoInterface           hostIface;                                 // The host application interface instance.
+ *
+ *  DInfoInterface::DInfoMap info = hostIface->itemInfo(itemUrl);       // First stage is to get the information map from host application.
+ *  DItemInfo item(info);                                               // Second stage, is to create the DIntenInfo instance for this item by url.
+ *  QString   title       = item.name();                                // Now you can retrieve the title,
+ *  QString   description = item.comment();                             // The comment,
+ *  QDateTime time        = item.dateTime();                            // The time stamp, etc.
+ */
+ 
 class DIGIKAM_EXPORT DItemInfo
 {
 
@@ -122,30 +136,33 @@ public:
 
 public:
 
-    QString            name()         const;
-    QString            comment()      const;
-    QString            title()        const;
-    int                orientation()  const;
-    QSize              dimensions()   const;
-    QDateTime          dateTime()     const;
-    QStringList        tagsPath()     const;
-    QStringList        keywords()     const;
-    int                rating()       const;
-    int                colorLabel()   const;
-    int                pickLabel()    const;
-    double             latitude()     const;
-    double             longitude()    const;
-    double             altitude()     const;
-    qlonglong          fileSize()     const;
-    QStringList        creators()     const;
-    QString            credit()       const;
-    QString            rights()       const;
-    QString            source()       const;
-    QString            exposureTime() const;
-    QString            sensitivity()  const;
-    QString            aperture()     const;
-    QString            focalLength()  const;
-    QString            videoCodec()   const;
+    QString            name()            const;
+    QString            comment()         const;
+    QString            title()           const;
+    int                orientation()     const;
+    QSize              dimensions()      const;
+    QDateTime          dateTime()        const;
+    QStringList        tagsPath()        const;
+    QStringList        keywords()        const;
+    int                rating()          const;
+    int                colorLabel()      const;
+    int                pickLabel()       const;
+    double             latitude()        const;
+    double             longitude()       const;
+    double             altitude()        const;
+    qlonglong          fileSize()        const;
+    QStringList        creators()        const;
+    QString            credit()          const;
+    QString            rights()          const;
+    QString            source()          const;
+    QString            make()            const;
+    QString            model()           const;
+    QString            exposureTime()    const;
+    QString            sensitivity()     const;
+    QString            aperture()        const;
+    QString            focalLength()     const;
+    QString            focalLength35mm() const;
+    QString            videoCodec()      const;
 
     bool hasGeolocationInfo() const;
 
