@@ -427,20 +427,23 @@ DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
 
         // Get Copyright information of picture from database.
         ItemCopyright rights        = info.imageCopyright();
-        map.insert(QLatin1String("creators"), rights.creator());
-        map.insert(QLatin1String("credit"),   rights.credit());
-        map.insert(QLatin1String("rights"),   rights.rights());
-        map.insert(QLatin1String("source"),   rights.source());
+        map.insert(QLatin1String("creators"),     rights.creator());
+        map.insert(QLatin1String("credit"),       rights.credit());
+        map.insert(QLatin1String("rights"),       rights.rights());
+        map.insert(QLatin1String("source"),       rights.source());
 
         PhotoInfoContainer photoInfo = info.photoInfoContainer();
-        map.insert(QLatin1String("exposuretime"), photoInfo.exposureTime);
-        map.insert(QLatin1String("sensitivity"),  photoInfo.sensitivity);
-        map.insert(QLatin1String("aperture"),     photoInfo.aperture);
-        map.insert(QLatin1String("focallength"),  photoInfo.focalLength);
+        map.insert(QLatin1String("make"),            photoInfo.make);
+        map.insert(QLatin1String("model"),           photoInfo.model);
+        map.insert(QLatin1String("exposuretime"),    photoInfo.exposureTime);
+        map.insert(QLatin1String("sensitivity"),     photoInfo.sensitivity);
+        map.insert(QLatin1String("aperture"),        photoInfo.aperture);
+        map.insert(QLatin1String("focallength"),     photoInfo.focalLength);
+        map.insert(QLatin1String("focalLength35mm"), photoInfo.focalLength35mm);
 
         // TODO: add more video metadata as needed
         VideoInfoContainer videoInfo = info.videoInfoContainer();
-        map.insert(QLatin1String("videocodec"), videoInfo.videoCodec);
+        map.insert(QLatin1String("videocodec"),   videoInfo.videoCodec);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Database Info populated for" << url;
     }
