@@ -332,12 +332,6 @@ bool PresentationMainPage::updateUrlList()
             return false;
         }
 
-        if (!d->sharedData->commentsMap.contains(item->url()))
-        {
-            DMetadata meta(item->url().toLocalFile());
-            d->sharedData->commentsMap.insert(item->url(), meta.getItemComments()[QLatin1String("x-default")].caption);
-        }
-
         d->sharedData->urlList.append(item->url());  // Input images files.
         ++it;
     }

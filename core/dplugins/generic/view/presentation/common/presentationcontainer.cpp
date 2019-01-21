@@ -55,7 +55,6 @@ PresentationContainer::PresentationContainer()
     bgOpacity                     = 10;
     commentsLinesLength           = 0;
     captionFont                   = 0;
-    commentsMap                   = QMap<QUrl, QString>();
 
     soundtrackLoop                = false;
     soundtrackRememberPlaylist    = false;
@@ -67,6 +66,8 @@ PresentationContainer::PresentationContainer()
     kbDisableFadeInOut            = false;
     kbDisableCrossFade            = false;
     cacheSize                     = 0;
+    
+    iface                         = 0;
 }
 
 PresentationContainer::~PresentationContainer()

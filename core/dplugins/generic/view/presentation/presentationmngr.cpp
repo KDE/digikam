@@ -61,11 +61,12 @@
 namespace Digikam
 {
 
-PresentationMngr::PresentationMngr(QObject* const parent)
+PresentationMngr::PresentationMngr(QObject* const parent, DInfoInterface* const iface)
     : QObject(parent)
 {
-    m_sharedData = new PresentationContainer();
-    m_plugin     = 0;
+    m_sharedData        = new PresentationContainer();
+    m_sharedData->iface = iface;
+    m_plugin            = 0;
 }
 
 PresentationMngr::~PresentationMngr()
@@ -78,10 +79,9 @@ void PresentationMngr::setPlugin(DPlugin* const plugin)
     m_plugin = plugin;
 }
 
-void PresentationMngr::addFile(const QUrl& url, const QString& comment)
+void PresentationMngr::addFiles(const QList<QUrl>& urls)
 {
-    m_sharedData->commentsMap.insert(url, comment);
-    m_sharedData->urlList << url;
+    m_sharedData->urlList = urls;
 }
 
 void PresentationMngr::showConfigDialog()

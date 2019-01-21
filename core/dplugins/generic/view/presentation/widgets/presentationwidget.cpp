@@ -443,7 +443,8 @@ void PresentationWidget::printComments()
     if (d->currImage.isNull())
         return;
 
-    QString comments = d->sharedData->commentsMap.value(d->imageLoader->currPath(), QString());
+    DItemInfo info(d->sharedData->iface->itemInfo(d->imageLoader->currPath()));
+    QString comments = info.comment();
 
     int yPos = 30; // Text Y coordinate
 

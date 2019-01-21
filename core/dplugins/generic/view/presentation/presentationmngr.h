@@ -36,6 +36,7 @@
 
 #include "digikam_export.h"
 #include "dplugingeneric.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
@@ -48,10 +49,10 @@ class DIGIKAM_EXPORT PresentationMngr : public QObject
 
 public:
 
-    explicit PresentationMngr(QObject* const parent);
+    explicit PresentationMngr(QObject* const parent, DInfoInterface* const iface);
     ~PresentationMngr();
 
-    void addFile(const QUrl& url, const QString& comment);
+    void addFiles(const QList<QUrl>& urls);
     void showConfigDialog();
 
     void setPlugin(DPlugin* const plugin);

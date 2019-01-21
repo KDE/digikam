@@ -33,6 +33,7 @@
 // Local includes
 
 #include "digikam_config.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
@@ -91,7 +92,6 @@ public:
     uint                     bgOpacity;
     int                      commentsLinesLength;
     QFont*                   captionFont;
-    QMap<QUrl, QString>      commentsMap;
 
     // --> Soundtrack page
     bool                     soundtrackLoop;
@@ -107,6 +107,8 @@ public:
     bool                     kbDisableFadeInOut;
     bool                     kbDisableCrossFade;
     uint                     cacheSize;
+    
+    DInfoInterface*          iface;
 };
 
 } // namespace Digikam

@@ -673,7 +673,8 @@ void PresentationGL::printProgress(QImage& layer)
 
 void PresentationGL::printComments(QImage& layer)
 {
-    QString comments = d->sharedData->commentsMap.value(d->imageLoader->currPath(), QString());
+    DItemInfo info(d->sharedData->iface->itemInfo(d->imageLoader->currPath()));
+    QString comments = info.comment();
 
     int yPos = 5; // Text Y coordinate
 

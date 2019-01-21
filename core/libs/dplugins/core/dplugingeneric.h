@@ -86,18 +86,14 @@ protected:
     void addAction(DPluginAction* const ac);
 
     /**
-     * Return the info interface instance for the given object.
+     * Return the info interface instance for the given action object.
      */
-    DInfoInterface* infoIface(QObject* const object) const;
+    DInfoInterface* infoIface(QObject* const ac) const;
 
     /**
      * Helper function to reactivate the desktop visibility of tool widget.
      */
     bool reactivateToolDialog(QWidget* const dlg) const;
-
-private:
-
-    DInfoInterface* interface(QObject* const parent) const;
 
 private:
 

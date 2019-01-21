@@ -107,15 +107,9 @@ void PresentationPlugin::slotPresentation()
 {
     DInfoInterface* const iface = infoIface(sender());
 
-    QPointer<PresentationMngr> mngr = new PresentationMngr(this);
+    QPointer<PresentationMngr> mngr = new PresentationMngr(this, iface);
 
-    foreach (const QUrl& url, iface->currentSelectedItems())
-    {
-        DItemInfo info(iface->itemInfo(url));
-        mngr->addFile(url, info.comment());
-        qApp->processEvents();
-    }
-
+    mngr->addFiles(iface->currentSelectedItems());
     mngr->setPlugin(this);
     mngr->showConfigDialog();
 }
