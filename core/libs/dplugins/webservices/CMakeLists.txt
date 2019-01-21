@@ -20,10 +20,6 @@ remove_definitions(
 # It also does not export symbols, so export all by default
 unset(CMAKE_CXX_VISIBILITY_PRESET)
 
-if(WIN32)
-    add_definitions(-DO2_DLL_EXPORT)
-endif()
-
 # Copied from o2/src/CMakeLists.txt
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

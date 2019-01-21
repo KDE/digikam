@@ -78,5 +78,11 @@ endif()
 
 add_library(dpluginsinterface_src OBJECT ${libdpluginsinterface_SRCS})
 
-# Parse O2 library code and rules at end, ad compilation rules remove important Qt definitions.
+# Parse O2 library code and rules at end, and compilation rules remove important Qt definitions.
+
+if(WIN32)
+    # NOTE: this O2 export symbols rule must be on top level.
+    add_definitions(-DO2_DLL_EXPORT)
+endif()
+
 add_subdirectory(webservices)
