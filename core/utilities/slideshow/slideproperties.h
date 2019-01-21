@@ -42,9 +42,9 @@ class SlideProperties : public QWidget
 public:
 
     explicit SlideProperties(const SlideShowSettings& settings, QWidget* const parent);
-    virtual ~SlideProperties();
+    ~SlideProperties();
 
-    void setCurrentInfo(const SlidePictureInfo& info, const QUrl& url);
+    void setCurrentUrl(const QUrl& url);
 
 private:
 

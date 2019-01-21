@@ -48,6 +48,7 @@
 #include "ratingwidget.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
@@ -232,11 +233,14 @@ SlideToolBar* SlideOSD::toolBar() const
     return d->toolBar;
 }
 
-void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const QUrl& url)
+void SlideOSD::setCurrentUrl(const QUrl& url)
 {
+    DInfoInterface::DInfoMap info = d->settings.iface->itemInfo(url);
+    DItemInfo item(info);
+
     // Update info text.
 
-    d->slideProps->setCurrentInfo(info, url);
+    d->slideProps->setCurrentUrl(url);
 
     // Display Labels.
 
@@ -244,8 +248,8 @@ void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const QUrl& url)
     {
         d->clWidget->blockSignals(true);
         d->plWidget->blockSignals(true);
-        d->clWidget->setColorLabel((ColorLabel)info.colorLabel);
-        d->plWidget->setPickLabel((PickLabel)info.pickLabel);
+        d->clWidget->setColorLabel((ColorLabel)item.colorLabel());
+        d->plWidget->setPickLabel((PickLabel)item.pickLabel());
         d->clWidget->blockSignals(false);
         d->plWidget->blockSignals(false);
     }
@@ -253,7 +257,7 @@ void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const QUrl& url)
     if (d->settings.printRating)
     {
         d->ratingWidget->blockSignals(true);
-        d->ratingWidget->setRating(info.rating);
+        d->ratingWidget->setRating(item.rating());
         d->ratingWidget->blockSignals(false);
     }
 

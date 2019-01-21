@@ -85,11 +85,21 @@ DInfoInterface::DInfoMap DInfoInterface::itemInfo(const QUrl&) const
     return DInfoMap();
 }
 
+void DInfoInterface::setItemInfo(const QUrl&, const DInfoMap&) const
+{
+    qCWarning(DIGIKAM_GENERAL_LOG) << "setItemInfo() not implemented in host interface";
+}
+
 QList<QUrl> DInfoInterface::albumsItems(const DAlbumIDs&) const
 {
     return QList<QUrl>();
 }
 
+void DInfoInterface::setAlbumInfo(int, const DInfoMap&) const
+{
+    qCWarning(DIGIKAM_GENERAL_LOG) << "setAlbumInfo() not implemented in host interface";
+}
+    
 QWidget* DInfoInterface::albumChooser(QWidget* const) const
 {
     return 0;
@@ -204,16 +214,31 @@ int DItemInfo::rating() const
     return !val.isNull() ? val.toInt() : RatingMin;
 }
 
+void DItemInfo::setRating(int rating)
+{
+    m_info.insert(QLatin1String("rating"), rating);
+}
+    
 int DItemInfo::colorLabel() const
 {
     QVariant val = parseInfoMap(QLatin1String("colorlabel"));
     return !val.isNull() ? val.toInt() : NoColorLabel;
 }
 
+void DItemInfo::setColorLabel(int color)
+{
+    m_info.insert(QLatin1String("colorlabel"), color);
+}
+
 int DItemInfo::pickLabel() const
 {
     QVariant val = parseInfoMap(QLatin1String("picklabel"));
     return !val.isNull() ? val.toInt() : NoPickLabel;
+}
+
+void DItemInfo::setPickLabel(int pick)
+{
+    m_info.insert(QLatin1String("picklabel"), pick);
 }
 
 double DItemInfo::latitude() const

@@ -456,6 +456,35 @@ DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
     return map;
 }
 
+void DBInfoIface::setItemInfo(const QUrl& url, const DInfoMap& map) const
+{
+    ItemInfo info    = ItemInfo::fromUrl(url);
+    QStringList keys = map.keys();
+
+    if (map.contains(QLatin1String("rating")))
+    {
+        info.setRating(map[QLatin1String("rating")].toInt());
+        keys.removeAll(QLatin1String("rating"));
+    }
+    
+    if  (map.contains(QLatin1String("colorlabel")))
+    {
+        info.setColorLabel(map[QLatin1String("colorlabel")].toInt());
+        keys.removeAll(QLatin1String("colorlabel"));
+    }
+    
+    if  (map.contains(QLatin1String("picklabel")))
+    {
+        info.setPickLabel(map[QLatin1String("picklabel")].toInt());
+        keys.removeAll(QLatin1String("picklabel"));
+    }
+    
+    if (!keys.isEmpty())
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Keys not yet supported in DMetaInfoIface::setItemInfo():" << keys;
+    }
+}
+
 QList<QUrl> DBInfoIface::albumItems(Album* const album) const
 {
     if (!album)

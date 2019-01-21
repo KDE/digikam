@@ -60,10 +60,9 @@ public:
 
 public:
 
-    explicit SlideShow(const SlideShowSettings& settings);
-    virtual ~SlideShow();
+    explicit SlideShow(DInfoInterface* const iface, const SlideShowSettings& settings);
+    ~SlideShow();
 
-    void setInfoInterface(DInfoInterface* const iface);
     void setCurrentItem(const QUrl& url);
     QUrl currentItem() const;
 

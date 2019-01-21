@@ -175,7 +175,6 @@ EditorWindow::EditorWindow(const QString& name)
     m_setExifOrientationTag        = true;
     m_editingOriginalImage         = true;
     m_actionEnabledState           = false;
-    m_cancelSlideShow              = false;
 
     // Settings containers instance.
 
@@ -708,7 +707,7 @@ void EditorWindow::setupStandardActions()
     {
         ac->setEnabled(false);
     }
-    
+
     // --------------------------------------------------------
 
     createFullScreenAction(QLatin1String("editorwindow_fullscreen"));
@@ -1740,9 +1739,6 @@ void EditorWindow::slotNameLabelCancelButtonPressed()
         m_savingContext.abortingSaving = true;
         m_canvas->abortSaving();
     }
-
-    // If we preparing SlideShow...
-    m_cancelSlideShow = true;
 }
 
 void EditorWindow::slotFileOriginChanged(const QString&)

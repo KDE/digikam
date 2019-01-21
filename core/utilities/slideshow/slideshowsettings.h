@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SLIDESHOW_SETTINGS_H
-#define SLIDESHOW_SETTINGS_H
+#ifndef DIGIKAM_SLIDESHOW_SETTINGS_H
+#define DIGIKAM_SLIDESHOW_SETTINGS_H
 
 // Qt includes
 
@@ -33,56 +33,13 @@
 
 // Local includes
 
-#include "photoinfocontainer.h"
-#include "videoinfocontainer.h"
 #include "digikam_export.h"
 #include "previewsettings.h"
+#include "previewsettings.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
-
-/** This class contains the information of one picture to slide
- */
-class DIGIKAM_EXPORT SlidePictureInfo
-{
-
-public:
-
-    explicit SlidePictureInfo()
-    {
-        rating     = 0;
-        colorLabel = 0;
-        pickLabel  = 0;
-    };
-
-    virtual ~SlidePictureInfo()
-    {
-    };
-
-public:
-
-    int                rating;
-    int                colorLabel;
-    int                pickLabel;
-
-    /** Picture Comment
-     */
-    QString            comment;
-
-    /** Picture Title
-     */
-    QString            title;
-
-    /** Picture Tag names
-     */
-    QStringList        tags;
-
-    /** Exif photo info of picture
-     */
-    PhotoInfoContainer photoInfo;
-};
-
-// --------------------------------------------------------------------------------
 
 /** This class contain all settings to perform a slide show of a group of pictures
  */
@@ -92,7 +49,7 @@ class DIGIKAM_EXPORT SlideShowSettings
 public:
 
     explicit SlideShowSettings();
-    virtual ~SlideShowSettings();
+    ~SlideShowSettings();
 
     void readFromConfig();
     void writeToConfig();
@@ -184,13 +141,13 @@ public:
      */
     QList<QUrl>                  fileList;
 
-    /** Map of pictures information to slide
-     */
-    QMap<QUrl, SlidePictureInfo> pictInfoMap;
-
     /** URL of the first image to show if requested
      */
     QUrl                         imageUrl;
+    
+    /** Interface to access to host application data
+     */
+    DInfoInterface*              iface;
 
 private:
 
@@ -215,4 +172,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SLIDESHOW_SETTINGS_H
+#endif // DIGIKAM_SLIDESHOW_SETTINGS_H

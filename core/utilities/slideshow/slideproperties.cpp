@@ -40,6 +40,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "dinfointerface.h"
 #include "itempropertiestab.h"
 
 namespace Digikam
@@ -59,7 +60,6 @@ public:
     QUrl              url;
 
     SlideShowSettings settings;
-    SlidePictureInfo  info;
 };
 
 SlideProperties::SlideProperties(const SlideShowSettings& settings, QWidget* const parent)
@@ -75,9 +75,8 @@ SlideProperties::~SlideProperties()
     delete d;
 }
 
-void SlideProperties::setCurrentInfo(const SlidePictureInfo& info, const QUrl& url)
+void SlideProperties::setCurrentUrl(const QUrl& url)
 {
-    d->info = info;
     d->url  = url;
     update();
 }
@@ -86,12 +85,15 @@ void SlideProperties::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
 
+    DInfoInterface::DInfoMap info = d->settings.iface->itemInfo(d->url);
+    DItemInfo item(info);
+ 
     QString str;
-    PhotoInfoContainer photoInfo = d->info.photoInfo;
-    QString            comment   = d->info.comment;
-    QString            title     = d->info.title;
-    QStringList tags             = d->info.tags;
-    int offset                   = 0;
+    //PhotoInfoContainer photoInfo = d->info.photoInfo;
+    QString comment  = item.comment();
+    QString title    = item.title();
+    QStringList tags = item.keywords();
+    int offset       = 0;
 
     // Display tag names.
 
@@ -140,21 +142,24 @@ void SlideProperties::paintEvent(QPaintEvent*)
     {
         str.clear();
 
-        if (!photoInfo.make.isEmpty())
+        QString make  = item.make();
+        QString model = item.model();
+
+        if (!make.isEmpty())
         {
-            ItemPropertiesTab::shortenedMakeInfo(photoInfo.make);
-            str = photoInfo.make;
+            ItemPropertiesTab::shortenedMakeInfo(make);
+            str = make;
         }
 
-        if (!photoInfo.model.isEmpty())
+        if (!model.isEmpty())
         {
-            if (!photoInfo.make.isEmpty())
+            if (!make.isEmpty())
             {
                 str += QLatin1String(" / ");
             }
 
-            ItemPropertiesTab::shortenedModelInfo(photoInfo.model);
-            str += photoInfo.model;
+            ItemPropertiesTab::shortenedModelInfo(model);
+            str += model;
         }
 
         printInfoText(p, offset, str);
@@ -165,20 +170,23 @@ void SlideProperties::paintEvent(QPaintEvent*)
     if (d->settings.printExpoSensitivity)
     {
         str.clear();
+        
+        QString exposureTime = item.exposureTime();
+        QString sensitivity  = item.sensitivity();
 
-        if (!photoInfo.exposureTime.isEmpty())
+        if (!exposureTime.isEmpty())
         {
-            str = photoInfo.exposureTime;
+            str = exposureTime;
         }
 
-        if (!photoInfo.sensitivity.isEmpty())
+        if (!sensitivity.isEmpty())
         {
-            if (!photoInfo.exposureTime.isEmpty())
+            if (!exposureTime.isEmpty())
             {
                 str += QLatin1String(" / ");
             }
 
-            str += i18n("%1 ISO", photoInfo.sensitivity);
+            str += i18n("%1 ISO", sensitivity);
         }
 
         printInfoText(p, offset, str);
@@ -190,37 +198,41 @@ void SlideProperties::paintEvent(QPaintEvent*)
     {
         str.clear();
 
-        if (!photoInfo.aperture.isEmpty())
+        QString aperture        = item.aperture();
+        QString focalLength     = item.focalLength();
+        QString focalLength35mm = item.focalLength35mm();
+
+        if (!aperture.isEmpty())
         {
-            str = photoInfo.aperture;
+            str = aperture;
         }
 
-        if (photoInfo.focalLength35mm.isEmpty())
+        if (focalLength35mm.isEmpty())
         {
-            if (!photoInfo.focalLength.isEmpty())
+            if (!focalLength.isEmpty())
             {
-                if (!photoInfo.aperture.isEmpty())
+                if (!aperture.isEmpty())
                 {
                     str += QLatin1String(" / ");
                 }
 
-                str += photoInfo.focalLength;
+                str += focalLength;
             }
         }
         else
         {
-            if (!photoInfo.aperture.isEmpty())
+            if (!aperture.isEmpty())
             {
                 str += QLatin1String(" / ");
             }
 
-            if (!photoInfo.focalLength.isEmpty())
+            if (!focalLength.isEmpty())
             {
-                str += QString::fromUtf8("%1 (%2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm);
+                str += QString::fromUtf8("%1 (%2)").arg(focalLength).arg(focalLength35mm);
             }
             else
             {
-                str += QString::fromUtf8("%1").arg(photoInfo.focalLength35mm);
+                str += QString::fromUtf8("%1").arg(focalLength35mm);
             }
         }
 
@@ -231,9 +243,11 @@ void SlideProperties::paintEvent(QPaintEvent*)
 
     if (d->settings.printDate)
     {
-        if (photoInfo.dateTime.isValid())
+        QDateTime dateTime = item.dateTime();
+
+        if (dateTime.isValid())
         {
-            str = QLocale().toString(photoInfo.dateTime, QLocale::ShortFormat);
+            str = QLocale().toString(dateTime, QLocale::ShortFormat);
             printInfoText(p, offset, str);
         }
     }

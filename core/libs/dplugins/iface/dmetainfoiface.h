@@ -53,7 +53,9 @@ public:
     QList<QUrl> currentAlbumItems()               const;
     QList<QUrl> allAlbumItems()                   const;
 
-    DInfoMap    itemInfo(const QUrl&)             const;
+    DInfoMap    itemInfo(const QUrl&)                     const;
+    void        setItemInfo(const QUrl&, const DInfoMap&) const;
+
     bool        supportAlbums()                   const;
 
     QWidget* uploadWidget(QWidget* const parent)  const;

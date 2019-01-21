@@ -2185,8 +2185,7 @@ void ItemIconView::slideShow(const ItemInfoList& infoList)
 
 void ItemIconView::slotSlideShowBuilderComplete(const SlideShowSettings& settings)
 {
-    QPointer<Digikam::SlideShow> slide = new SlideShow(settings);
-    slide->setInfoInterface(new DBInfoIface(this, QList<QUrl>()));
+    QPointer<Digikam::SlideShow> slide = new SlideShow(new DBInfoIface(this, QList<QUrl>()), settings);
     TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
 
     if (settings.imageUrl.isValid())

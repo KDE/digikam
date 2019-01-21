@@ -73,6 +73,7 @@ SlideShowSettings::SlideShowSettings()
     showProgressIndicator = true;
     slideScreen           = -2;
     autoPlayEnabled       = true;
+    iface                 = 0;
 }
 
 SlideShowSettings::~SlideShowSettings()

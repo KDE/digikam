@@ -152,17 +152,6 @@ void SlideShowBuilder::slotParseItemInfoList(const ItemInfoList& list)
     {
         ItemInfo info       = *it;
         settings.fileList.append(info.fileUrl());
-        SlidePictureInfo pictInfo;
-        pictInfo.comment     = info.comment();
-        pictInfo.title       = info.title();
-        pictInfo.rating      = info.rating();
-        pictInfo.colorLabel  = info.colorLabel();
-        pictInfo.pickLabel   = info.pickLabel();
-        pictInfo.photoInfo   = info.photoInfoContainer();
-        pictInfo.tags        = AlbumManager::instance()->tagNames(info.tagIds());
-        pictInfo.tags.sort();
-
-        settings.pictInfoMap.insert(info.fileUrl(), pictInfo);
 
         advance(i++);
         qApp->processEvents();

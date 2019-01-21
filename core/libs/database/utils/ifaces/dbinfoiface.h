@@ -63,8 +63,10 @@ public:
     QList<QUrl> allAlbumItems()                      const;
 
     DInfoMap    albumInfo(int)                       const;
-    DInfoMap    itemInfo(const QUrl&)                const;
 
+    DInfoMap    itemInfo(const QUrl&)                     const;
+    void        setItemInfo(const QUrl&, const DInfoMap&) const;
+    
     QWidget*    albumChooser(QWidget* const parent)  const;
     DAlbumIDs   albumChooserItems()                  const;
     bool        supportAlbums()                      const;

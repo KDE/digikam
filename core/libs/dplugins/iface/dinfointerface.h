@@ -77,8 +77,11 @@ public:
     virtual QList<QUrl> albumsItems(const DAlbumIDs&)     const;
     virtual QList<QUrl> allAlbumItems()                   const;
 
-    virtual DInfoMap    albumInfo(int)                    const;
-    virtual DInfoMap    itemInfo(const QUrl&)             const;
+    virtual DInfoMap albumInfo(int)                            const;
+    virtual void     setAlbumInfo(int, const DInfoMap&)        const;
+
+    virtual DInfoMap itemInfo(const QUrl&)                     const;
+    virtual void     setItemInfo(const QUrl&, const DInfoMap&) const;
 
 public:
 
@@ -116,14 +119,27 @@ public:
  *  The interface is re-implemented in host and depend how item infromation must be retrieved (from a database or by file metadata).
  *  The easy way to use this container is given below:
  * 
+ *  // READ INFO FROM HOST ---------------------------------------------
+ * 
  *  QUrl                     itemUrl;                                   // The item url that you want to retrieve information.
- *  DInfoInterface           hostIface;                                 // The host application interface instance.
+ *  DInfoInterface*          hostIface;                                 // The host application interface instance.
  *
  *  DInfoInterface::DInfoMap info = hostIface->itemInfo(itemUrl);       // First stage is to get the information map from host application.
  *  DItemInfo item(info);                                               // Second stage, is to create the DIntenInfo instance for this item by url.
  *  QString   title       = item.name();                                // Now you can retrieve the title,
  *  QString   description = item.comment();                             // The comment,
  *  QDateTime time        = item.dateTime();                            // The time stamp, etc.
+ *
+ *  // WRITE INFO TO HOST ----------------------------------------------
+ *
+ *  QUrl                     itemUrl;                                   // The item url that you want to retrieve information.
+ *  DInfoInterface*          hostIface;                                 // The host application interface instance.
+ *
+ *  DInfoInterface::DInfoMap info;                                      // First stage is to create an empty information storage map for this item.
+ *  DItemInfo item(info);                                               // Second stage, is to create the DIntenInfo instance for this item.
+ *  item.setRating(3);                                                  // Store rating to info map.
+ *  item.setColorLabel(1);                                              // Store color label to info map.
+ *  hostIface->setItemInfo(url, info);                                  // Update item information to host using map.
  */
  
 class DIGIKAM_EXPORT DItemInfo
@@ -136,33 +152,38 @@ public:
 
 public:
 
-    QString            name()            const;
-    QString            comment()         const;
-    QString            title()           const;
-    int                orientation()     const;
-    QSize              dimensions()      const;
-    QDateTime          dateTime()        const;
-    QStringList        tagsPath()        const;
-    QStringList        keywords()        const;
-    int                rating()          const;
-    int                colorLabel()      const;
-    int                pickLabel()       const;
-    double             latitude()        const;
-    double             longitude()       const;
-    double             altitude()        const;
-    qlonglong          fileSize()        const;
-    QStringList        creators()        const;
-    QString            credit()          const;
-    QString            rights()          const;
-    QString            source()          const;
-    QString            make()            const;
-    QString            model()           const;
-    QString            exposureTime()    const;
-    QString            sensitivity()     const;
-    QString            aperture()        const;
-    QString            focalLength()     const;
-    QString            focalLength35mm() const;
-    QString            videoCodec()      const;
+    QString            name()             const;
+    QString            comment()          const;
+    QString            title()            const;
+    int                orientation()      const;
+    QSize              dimensions()       const;
+    QDateTime          dateTime()         const;
+    QStringList        tagsPath()         const;
+    QStringList        keywords()         const;
+
+    int                rating()           const;
+    void               setRating(int);
+    int                colorLabel()       const;
+    void               setColorLabel(int);
+    int                pickLabel()        const;
+    void               setPickLabel(int);
+
+    double             latitude()         const;
+    double             longitude()        const;
+    double             altitude()         const;
+    qlonglong          fileSize()         const;
+    QStringList        creators()         const;
+    QString            credit()           const;
+    QString            rights()           const;
+    QString            source()           const;
+    QString            make()             const;
+    QString            model()            const;
+    QString            exposureTime()     const;
+    QString            sensitivity()      const;
+    QString            aperture()         const;
+    QString            focalLength()      const;
+    QString            focalLength35mm()  const;
+    QString            videoCodec()       const;
 
     bool hasGeolocationInfo() const;
 

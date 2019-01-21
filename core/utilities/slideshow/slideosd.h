@@ -48,9 +48,9 @@ class SlideOSD : public QWidget
 public:
 
     explicit SlideOSD(const SlideShowSettings& settings, SlideShow* const parent = 0);
-    virtual ~SlideOSD();
+    ~SlideOSD();
 
-    void setCurrentInfo(const SlidePictureInfo& info, const QUrl& url);
+    void setCurrentUrl(const QUrl& url);
 
     void pause(bool b);
     void video(bool b);

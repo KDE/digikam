@@ -36,40 +36,15 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
 
     settings.exifRotate = Digikam::MetaEngineSettings::instance()->settings().exifRotate;
     settings.fileList   = d->thumbBar->urls();
-    int   i             = 0;
-    float cnt           = settings.fileList.count();
-    m_cancelSlideShow   = false;
-    Digikam::DMetadata meta;
 
-    m_nameLabel->setProgressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
-                                    i18n("Preparing slideshow. Please wait..."));
+    QPointer<Digikam::SlideShow> slide = new Digikam::SlideShow(new DMetaInfoIface(this, d->thumbBar->urls()), settings);
 
-    for (QList<QUrl>::ConstIterator it = settings.fileList.constBegin() ;
-         !m_cancelSlideShow && (it != settings.fileList.constEnd()) ; ++it)
+    if (settings.startWithCurrent)
     {
-        Digikam::SlidePictureInfo pictInfo;
-        meta.load((*it).toLocalFile());
-        pictInfo.comment   = meta.getItemComments()[QLatin1String("x-default")].caption;
-        pictInfo.photoInfo = meta.getPhotographInformation();
-        settings.pictInfoMap.insert(*it, pictInfo);
-
-        m_nameLabel->setProgressValue((int)((i++/cnt)*100.0f));
-        qApp->processEvents();
+        slide->setCurrentItem(d->thumbBar->currentUrl());
     }
 
-    m_nameLabel->setProgressBarMode(Digikam::StatusProgressBar::TextMode, QString());
-
-    if (!m_cancelSlideShow)
-    {
-        QPointer<Digikam::SlideShow> slide = new Digikam::SlideShow(settings);
-
-        if (settings.startWithCurrent)
-        {
-            slide->setCurrentItem(d->thumbBar->currentUrl());
-        }
-
-        slide->show();
-    }
+    slide->show();
 }
 
 } // namespace ShowFoto

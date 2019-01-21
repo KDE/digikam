@@ -100,11 +100,12 @@ public:
     SlideShowSettings settings;
 };
 
-SlideShow::SlideShow(const SlideShowSettings& settings)
+SlideShow::SlideShow(DInfoInterface* const iface, const SlideShowSettings& settings)
     : QStackedWidget(0),
       d(new Private)
 {
-    d->settings = settings;
+    d->settings       = settings;
+    d->settings.iface = iface;
 
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint);
@@ -136,6 +137,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
 #ifdef HAVE_MEDIAPLAYER
     d->videoView = new SlideVideo(this);
+    d->videoView->setInfoInterface(d->settings.iface);
     d->videoView->installEventFilter(this);
 
     connect(d->videoView, SIGNAL(signalVideoLoaded(bool)),
@@ -222,7 +224,7 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
             d->errorView->setCurrentUrl(currentItem());
 
             setCurrentIndex(view);
-            d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
+            d->osd->setCurrentUrl(currentItem());
             break;
 
         case ImageView:
@@ -231,7 +233,7 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
             d->osd->video(false);
 #endif
             setCurrentIndex(view);
-            d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
+            d->osd->setCurrentUrl(currentItem());
             break;
 
         case VideoView:
@@ -239,7 +241,7 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
             d->osd->video(true);
             d->osd->pause(false);
             setCurrentIndex(view);
-            d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
+            d->osd->setCurrentUrl(currentItem());
 #endif
             break;
 
@@ -252,13 +254,6 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
             setCurrentIndex(view);
             break;
     }
-}
-
-void SlideShow::setInfoInterface(DInfoInterface* const iface)
-{
-#ifdef HAVE_MEDIAPLAYER
-    d->videoView->setInfoInterface(iface);
-#endif
 }
 
 void SlideShow::setCurrentItem(const QUrl& url)
@@ -588,28 +583,39 @@ void SlideShow::allowScreenSaver()
 
 void SlideShow::slotAssignRating(int rating)
 {
-    d->settings.pictInfoMap[currentItem()].rating = rating;
+    DInfoInterface::DInfoMap info;
+    DItemInfo item(info);
+    item.setRating(rating);
+    d->settings.iface->setItemInfo(currentItem(), info);
+
     dispatchCurrentInfoChange(currentItem());
     emit signalRatingChanged(currentItem(), rating);
 }
 
 void SlideShow::slotAssignColorLabel(int color)
 {
-    d->settings.pictInfoMap[currentItem()].colorLabel = color;
+    DInfoInterface::DInfoMap info;
+    DItemInfo item(info);
+    item.setColorLabel(color);
+    d->settings.iface->setItemInfo(currentItem(), info);
+
     dispatchCurrentInfoChange(currentItem());
     emit signalColorLabelChanged(currentItem(), color);
 }
 
 void SlideShow::slotAssignPickLabel(int pick)
 {
-    d->settings.pictInfoMap[currentItem()].pickLabel = pick;
+    DInfoInterface::DInfoMap info;
+    DItemInfo item(info);
+    item.setPickLabel(pick);
+    d->settings.iface->setItemInfo(currentItem(), info);
+
     dispatchCurrentInfoChange(currentItem());
     emit signalPickLabelChanged(currentItem(), pick);
 }
 
-void SlideShow::updateTags(const QUrl& url, const QStringList& tags)
+void SlideShow::updateTags(const QUrl& url, const QStringList& /*tags*/)
 {
-    d->settings.pictInfoMap[url].tags = tags;
     dispatchCurrentInfoChange(url);
 }
 
@@ -622,7 +628,7 @@ void SlideShow::dispatchCurrentInfoChange(const QUrl& url)
 {
     if (currentItem() == url)
     {
-        d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
+        d->osd->setCurrentUrl(currentItem());
     }
 }
 

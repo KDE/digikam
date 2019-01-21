@@ -36,6 +36,7 @@
 #include "videoinfocontainer.h"
 #include "template.h"
 #include "dfileselector.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -146,12 +147,13 @@ DMetaInfoIface::DInfoMap DMetaInfoIface::itemInfo(const QUrl& url) const
         map.insert(QLatin1String("source"),       temp.source());
 
         PhotoInfoContainer photoInfo = meta.getPhotographInformation();
-        map.insert(QLatin1String("make"),         photoInfo.make);
-        map.insert(QLatin1String("model"),        photoInfo.model);
-        map.insert(QLatin1String("exposuretime"), photoInfo.exposureTime);
-        map.insert(QLatin1String("sensitivity"),  photoInfo.sensitivity);
-        map.insert(QLatin1String("aperture"),     photoInfo.aperture);
-        map.insert(QLatin1String("focallength"),  photoInfo.focalLength);
+        map.insert(QLatin1String("make"),            photoInfo.make);
+        map.insert(QLatin1String("model"),           photoInfo.model);
+        map.insert(QLatin1String("exposuretime"),    photoInfo.exposureTime);
+        map.insert(QLatin1String("sensitivity"),     photoInfo.sensitivity);
+        map.insert(QLatin1String("aperture"),        photoInfo.aperture);
+        map.insert(QLatin1String("focallength"),     photoInfo.focalLength);
+        map.insert(QLatin1String("focalLength35mm"), photoInfo.focalLength35mm);
 
         // TODO: add more video metadata as needed
         VideoInfoContainer videoInfo = meta.getVideoInformation();
@@ -159,6 +161,35 @@ DMetaInfoIface::DInfoMap DMetaInfoIface::itemInfo(const QUrl& url) const
     }
 
     return map;
+}
+
+void DMetaInfoIface::setItemInfo(const QUrl& url, const DInfoMap& map) const
+{
+    DMetadata meta(url.toLocalFile());
+    QStringList keys = map.keys();
+
+    if (map.contains(QLatin1String("rating")))
+    {
+        meta.setItemRating(map[QLatin1String("rating")].toInt());
+        keys.removeAll(QLatin1String("rating"));
+    }
+    
+    if  (map.contains(QLatin1String("colorlabel")))
+    {
+        meta.setItemColorLabel(map[QLatin1String("colorlabel")].toInt());
+        keys.removeAll(QLatin1String("colorlabel"));
+    }
+    
+    if  (map.contains(QLatin1String("picklabel")))
+    {
+        meta.setItemPickLabel(map[QLatin1String("picklabel")].toInt());
+        keys.removeAll(QLatin1String("picklabel"));
+    }
+    
+    if (!keys.isEmpty())
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Keys not yet supported in DMetaInfoIface::setItemInfo():" << keys;
+    }
 }
 
 bool DMetaInfoIface::supportAlbums() const
