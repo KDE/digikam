@@ -76,10 +76,6 @@ QString CalendarPlugin::details() const
 QList<DPluginAuthor> CalendarPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
-                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
-                             QString::fromUtf8("(C) 2004-2019"),
-                             i18n("Developer and Maintainer"))
             << DPluginAuthor(QString::fromUtf8("Renchi Raju"),
                              QString::fromUtf8("renchi dot raju at gmail dot com"),
                              QString::fromUtf8("(C) 2003-2005"),
@@ -90,6 +86,10 @@ QList<DPluginAuthor> CalendarPlugin::authors() const
             << DPluginAuthor(QString::fromUtf8("Tom Albers"),
                              QString::fromUtf8("tomalbers at kde dot nl"),
                              QString::fromUtf8("(C) 2006"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2004-2019"),
+                             i18n("Developer and Maintainer"))
             ;
 }
 

@@ -83,7 +83,7 @@ QList<DPluginAuthor> EmbossToolPlugin::authors() const
                              QString::fromUtf8("(C) 2004-2019"))
             ;
 }
-    
+
 void EmbossToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);

@@ -83,7 +83,7 @@ QList<DPluginAuthor> LensDistortionToolPlugin::authors() const
                              QString::fromUtf8("(C) 2004-2019"))
             ;
 }
-    
+
 void LensDistortionToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
@@ -97,7 +97,7 @@ void LensDistortionToolPlugin::setup(QObject* const parent)
 
     addAction(ac);
 }
-    
+
 void LensDistortionToolPlugin::slotLensDistortion()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());

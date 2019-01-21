@@ -80,7 +80,7 @@ QList<DPluginAuthor> HSLToolPlugin::authors() const
                              QString::fromUtf8("(C) 2004-2019"))
             ;
 }
-    
+
 void HSLToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);

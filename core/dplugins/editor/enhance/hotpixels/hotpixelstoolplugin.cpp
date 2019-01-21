@@ -83,7 +83,7 @@ QList<DPluginAuthor> HotPixelsToolPlugin::authors() const
                              QString::fromUtf8("(C) 2005-2019"))
             ;
 }
-    
+
 void HotPixelsToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
@@ -96,10 +96,10 @@ void HotPixelsToolPlugin::setup(QObject* const parent)
             this, SLOT(slotHotPixels()));
 
     addAction(ac);
-    
+
     HotPixelsTool::registerFilter();
 }
-    
+
 void HotPixelsToolPlugin::slotHotPixels()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());

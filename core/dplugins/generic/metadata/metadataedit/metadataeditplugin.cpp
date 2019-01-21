@@ -76,12 +76,12 @@ QString MetadataEditPlugin::details() const
 QList<DPluginAuthor> MetadataEditPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
-                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
-                             QString::fromUtf8("(C) 2006-2019"))
             << DPluginAuthor(QString::fromUtf8("Victor Dodon"),
                              QString::fromUtf8("victor dot dodon at cti dot pub dot ro"),
                              QString::fromUtf8("(C) 2010-2012"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2006-2019"))
             ;
 }
 

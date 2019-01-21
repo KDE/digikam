@@ -90,12 +90,12 @@ QList<DPluginAuthor> ProfileConversionToolPlugin::authors() const
                              QString::fromUtf8("(C) 2009-2019"))
             ;
 }
-    
+
 void ProfileConversionToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     m_profileMenuAction     = new IccProfilesMenuAction(icon(), QString(), parent);
-    
+
     connect(m_profileMenuAction, SIGNAL(triggered(IccProfile)),
             this, SLOT(slotConvertToColorSpace(IccProfile)));
 

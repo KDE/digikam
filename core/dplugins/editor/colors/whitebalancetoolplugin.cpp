@@ -75,15 +75,15 @@ QString WhiteBalanceToolPlugin::details() const
 QList<DPluginAuthor> WhiteBalanceToolPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
-                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
-                             QString::fromUtf8("(C) 2004-2019"))
             << DPluginAuthor(QString::fromUtf8("Guillaume Castagnino"),
                              QString::fromUtf8("casta at xwing dot info"),
                              QString::fromUtf8("(C) 2008-2009"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2004-2019"))
             ;
 }
-    
+
 void WhiteBalanceToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);

@@ -83,7 +83,7 @@ QList<DPluginAuthor> RainDropToolPlugin::authors() const
                              QString::fromUtf8("(C) 2006-2019"))
             ;
 }
-    
+
 void RainDropToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);

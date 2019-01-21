@@ -83,7 +83,7 @@ QList<DPluginAuthor> LensAutoFixToolPlugin::authors() const
                              QString::fromUtf8("(C) 2008-2019"))
             ;
 }
-    
+
 void LensAutoFixToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
@@ -97,7 +97,7 @@ void LensAutoFixToolPlugin::setup(QObject* const parent)
 
     addAction(ac);
 }
-    
+
 void LensAutoFixToolPlugin::slotLensAutoFix()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());

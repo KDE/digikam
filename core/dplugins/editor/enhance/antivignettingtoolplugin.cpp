@@ -83,7 +83,7 @@ QList<DPluginAuthor> AntiVignettingToolPlugin::authors() const
                              QString::fromUtf8("(C) 2004-2019"))
             ;
 }
-    
+
 void AntiVignettingToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
@@ -97,7 +97,7 @@ void AntiVignettingToolPlugin::setup(QObject* const parent)
 
     addAction(ac);
 }
-    
+
 void AntiVignettingToolPlugin::slotAntiVignetting()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());

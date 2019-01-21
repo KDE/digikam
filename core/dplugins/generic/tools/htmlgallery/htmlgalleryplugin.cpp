@@ -76,10 +76,6 @@ QString HtmlGalleryPlugin::details() const
 QList<DPluginAuthor> HtmlGalleryPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
-                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
-                             QString::fromUtf8("(C) 2006-2019"),
-                             i18n("Developer and Maintainer"))
             << DPluginAuthor(QString::fromUtf8("Aurelien Gateau"),
                              QString::fromUtf8("agateau at kde dot org"),
                              QString::fromUtf8("(C) 2006-2009"),
@@ -87,6 +83,10 @@ QList<DPluginAuthor> HtmlGalleryPlugin::authors() const
             << DPluginAuthor(QString::fromUtf8("Gianluca Urgese"),
                              QString::fromUtf8("giasone dot 82 at gmail dot com"),
                              QString::fromUtf8("(C) 2010"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2006-2019"),
+                             i18n("Developer and Maintainer"))
             ;
 }
 

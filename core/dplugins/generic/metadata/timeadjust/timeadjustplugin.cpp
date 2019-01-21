@@ -76,9 +76,6 @@ QString TimeAdjustPlugin::details() const
 QList<DPluginAuthor> TimeAdjustPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
-                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
-                             QString::fromUtf8("(C) 2006-2019"))
             << DPluginAuthor(QString::fromUtf8("Jesper K. Pedersen"),
                              QString::fromUtf8("blackie at kde dot org"),
                              QString::fromUtf8("(C) 2003-2005"))
@@ -90,7 +87,10 @@ QList<DPluginAuthor> TimeAdjustPlugin::authors() const
                              QString::fromUtf8("(C) 2008"))
             << DPluginAuthor(QString::fromUtf8("Maik Qualmann"),
                              QString::fromUtf8("metzpinguin at gmail dot com"),
-                             QString::fromUtf8("(C) 2018"))
+                             QString::fromUtf8("(C) 2018-2019"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2006-2019"))
             ;
 }
 

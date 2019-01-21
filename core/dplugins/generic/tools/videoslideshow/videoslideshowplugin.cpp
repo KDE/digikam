@@ -76,13 +76,13 @@ QString VideoSlideShowPlugin::details() const
 QList<DPluginAuthor> VideoSlideShowPlugin::authors() const
 {
     return QList<DPluginAuthor>()
+            << DPluginAuthor(QString::fromUtf8("A Janardhan Reddy"),
+                             QString::fromUtf8("annapareddyjanardhanreddy at gmail dot com"),
+                             QString::fromUtf8("(C) 2012"))
             << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
                              QString::fromUtf8("caulier dot gilles at gmail dot com"),
                              QString::fromUtf8("(C) 2012-2019"),
                              i18n("Author and Maintainer"))
-            << DPluginAuthor(QString::fromUtf8("A Janardhan Reddy"),
-                             QString::fromUtf8("annapareddyjanardhanreddy at gmail dot com"),
-                             QString::fromUtf8("(C) 2012"))
             ;
 }
 

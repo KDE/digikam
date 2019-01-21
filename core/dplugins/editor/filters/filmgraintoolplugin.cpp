@@ -83,7 +83,7 @@ QList<DPluginAuthor> FilmGrainToolPlugin::authors() const
                              QString::fromUtf8("(C) 2004-2019"))
             ;
 }
-    
+
 void FilmGrainToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);

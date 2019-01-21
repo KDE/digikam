@@ -76,10 +76,6 @@ QString MediaServerPlugin::details() const
 QList<DPluginAuthor> MediaServerPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
-                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
-                             QString::fromUtf8("(C) 2012-2019"),
-                             i18n("Developer and Maintainer"))
             << DPluginAuthor(QString::fromUtf8("Ahmed Fathi"),
                              QString::fromUtf8("ahmed dot fathi dot abdelmageed at gmail dot com"),
                              QString::fromUtf8("(C) 2015"))
@@ -89,6 +85,10 @@ QList<DPluginAuthor> MediaServerPlugin::authors() const
             << DPluginAuthor(QString::fromUtf8("Marcel Wiesweg"),
                              QString::fromUtf8("marcel dot wiesweg at gmx dot de"),
                              QString::fromUtf8("(C) 2012-2013"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2012-2019"),
+                             i18n("Developer and Maintainer"))
             ;
 }
 

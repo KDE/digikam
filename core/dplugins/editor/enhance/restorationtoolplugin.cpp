@@ -94,7 +94,7 @@ void RestoreToolPlugin::setup(QObject* const parent)
 
     addAction(ac);
 }
-    
+
 void RestoreToolPlugin::slotRestore()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());

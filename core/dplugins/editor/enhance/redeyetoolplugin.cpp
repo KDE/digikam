@@ -83,7 +83,7 @@ QList<DPluginAuthor> RedEyeToolPlugin::authors() const
                              QString::fromUtf8("(C) 2004-2019"))
             ;
 }
-    
+
 void RedEyeToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
@@ -99,7 +99,7 @@ void RedEyeToolPlugin::setup(QObject* const parent)
 
     addAction(ac);
 }
-    
+
 void RedEyeToolPlugin::slotRedEye()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());

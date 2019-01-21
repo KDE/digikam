@@ -80,7 +80,7 @@ QList<DPluginAuthor> SharpenToolPlugin::authors() const
                              QString::fromUtf8("(C) 2004-2019"))
             ;
 }
-    
+
 void SharpenToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
@@ -94,7 +94,7 @@ void SharpenToolPlugin::setup(QObject* const parent)
 
     addAction(ac);
 }
-    
+
 void SharpenToolPlugin::slotSharpen()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());

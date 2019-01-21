@@ -76,10 +76,6 @@ QString PrintCreatorPlugin::details() const
 QList<DPluginAuthor> PrintCreatorPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
-                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
-                             QString::fromUtf8("(C) 2004-2019"),
-                             i18n("Developer and Maintainer"))
             << DPluginAuthor(QString::fromUtf8("Todd Shoemaker"),
                              QString::fromUtf8("todd at theshoemakers dot net"),
                              QString::fromUtf8("(C) 2003-2004"),
@@ -91,6 +87,10 @@ QList<DPluginAuthor> PrintCreatorPlugin::authors() const
                              QString::fromUtf8("atrink at nociaro dot org"),
                              QString::fromUtf8("(C) 2010"),
                              i18n("Contributor"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2004-2019"),
+                             i18n("Developer and Maintainer"))
             ;
 }
 

@@ -83,7 +83,7 @@ QList<DPluginAuthor> BlurToolPlugin::authors() const
                              QString::fromUtf8("(C) 2004-2019"))
             ;
 }
-    
+
 void BlurToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
@@ -97,7 +97,7 @@ void BlurToolPlugin::setup(QObject* const parent)
 
     addAction(ac);
 }
-    
+
 void BlurToolPlugin::slotBlur()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());

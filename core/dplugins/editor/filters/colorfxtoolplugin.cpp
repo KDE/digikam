@@ -83,7 +83,7 @@ QList<DPluginAuthor> ColorFXToolPlugin::authors() const
                              QString::fromUtf8("(C) 2006-2019"))
             ;
 }
-    
+
 void ColorFXToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);

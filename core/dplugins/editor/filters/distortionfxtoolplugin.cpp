@@ -83,7 +83,7 @@ QList<DPluginAuthor> DistortionFXToolPlugin::authors() const
                              QString::fromUtf8("(C) 2005-2019"))
             ;
 }
-    
+
 void DistortionFXToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);

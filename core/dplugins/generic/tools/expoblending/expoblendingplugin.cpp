@@ -80,16 +80,16 @@ QString ExpoBlendingPlugin::details() const
 QList<DPluginAuthor> ExpoBlendingPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
-                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
-                             QString::fromUtf8("(C) 2009-2019"),
-                             i18n("Author and Maintainer"))
             << DPluginAuthor(QString::fromUtf8("Johannes Wienke"),
                              QString::fromUtf8("languitar at semipol dot de"),
                              QString::fromUtf8("(C) 2010"))
             << DPluginAuthor(QString::fromUtf8("Benjamin Girault"),
                              QString::fromUtf8("benjamin dot girault at gmail dot com"),
                              QString::fromUtf8("(C) 2014"))
+            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
+                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
+                             QString::fromUtf8("(C) 2009-2019"),
+                             i18n("Author and Maintainer"))
             ;
 }
 

@@ -84,7 +84,7 @@ QList<DPluginAuthor> PrintToolPlugin::authors() const
                              QString::fromUtf8("(C) 2009-2019"))
             ;
 }
-    
+
 void PrintToolPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
@@ -99,7 +99,7 @@ void PrintToolPlugin::setup(QObject* const parent)
 
     addAction(ac);
 }
-    
+
 void PrintToolPlugin::slotPrint()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(sender()->parent());
