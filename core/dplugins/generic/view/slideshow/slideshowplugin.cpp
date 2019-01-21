@@ -38,34 +38,13 @@ qMakePairmake
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN SlideShowPlugin::Private
-{
-
-public:
-
-    explicit Private()
-        : slideShowAction(0),
-          slideShowAllAction(0),
-          slideShowSelectionAction(0),
-          slideShowRecursiveAction(0)
-    {
-    }
-
-    QMenu*   slideShowAction;
-    QAction* slideShowAllAction;
-    QAction* slideShowSelectionAction;
-    QAction* slideShowRecursiveAction;
-};
-
 SlideShowPlugin::SlideShowPlugin(QObject* const parent)
-    : DPluginGeneric(parent),
-      d(new Private)
+    : DPluginGeneric(parent)
 {
 }
 
 SlideShowPlugin::~SlideShowPlugin()
 {
-    delete d;
 }
 
 QString SlideShowPlugin::name() const
@@ -101,6 +80,9 @@ QList<DPluginAuthor> SlideShowPlugin::authors() const
             << DPluginAuthor(QString::fromUtf8("Enrico Ros <eros dot kde at email dot it>"),
                              QString::fromUtf8("eros dot kde at email dot it"),
                              QString::fromUtf8("(C) 2004"))
+            << DPluginAuthor(QString::fromUtf8("Renchi Raju"),
+                             QString::fromUtf8("renchi dot raju at gmail dot com"),
+                             QString::fromUtf8("(C) 2004-2005"))
             << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
                              QString::fromUtf8("caulier dot gilles at gmail dot com"),
                              QString::fromUtf8("(C) 2005-2019"))
@@ -109,42 +91,62 @@ QList<DPluginAuthor> SlideShowPlugin::authors() const
 
 void SlideShowPlugin::setup(QObject* const parent)
 {
-    d->slideShowAction = new QMenu(i18n("Slideshow"), parent);
-    d->slideShowAction->setIcon(icon());
-
-    d->slideShowAllAction = new QAction(i18n("All"), parent);
-    d->slideShowAllAction->setObjectName(QLatin1String("slideshow_all"));
-    d->slideShowAllAction->setShortcut(Qt::Key_F9);
-    d->slideShowAction->addAction(d->slideShowAllAction);
-
-    connect(d->slideShowAllAction, SIGNAL(triggered()),
-            this, SLOT(slotSlideShowAll()));
-
-    d->slideShowSelectionAction = new QAction(i18n("Selection"), parent);
-    d->slideShowSelectionAction->setObjectName(QLatin1String("slideshow_selected"));
-    d->slideShowSelectionAction->setShortcut(Qt::ALT+Qt::Key_F9);
-    d->slideShowAction->addAction(d->slideShowSelectionAction);
-
-    connect(d->slideShowSelectionAction, SIGNAL(triggered()),
-            this, SLOT(slotSlideShowSelection()));
-
-    d->slideShowRecursiveAction = new QAction(i18n("With All Sub-Albums"), parent);
-    d->slideShowRecursiveAction->setObjectName(QLatin1String("slideshow_recursive"));
-    d->slideShowRecursiveAction->setShortcut(Qt::SHIFT+Qt::Key_F9);
-    d->slideShowAction->addAction(d->slideShowRecursiveAction);
-
-    connect(d->slideShowRecursiveAction, SIGNAL(triggered()),
-            this, SLOT(slotSlideShowRecursive()));
-
     DPluginAction* const ac = new DPluginAction(parent);
-    ac->setMenu(d->slideShowAction);
+    ac->setIcon(icon());
     ac->setObjectName(QLatin1String("slideshow"));
     ac->setActionCategory(DPluginAction::GenericView);
+
+    DInfoInterface* const iface = infoIface(parent);
+
+    if (iface && iface->supportAlbums())
+    {
+        QMenu* const slideShowAction = new QMenu(i18n("Slideshow"), parent);
+        slideShowAction->setIcon(icon());
+        ac->setMenu(slideShowAction);
+
+        QAction* const slideShowAllAction = new QAction(i18n("All"), parent);
+        slideShowAllAction->setObjectName(QLatin1String("slideshow_all"));
+        slideShowAllAction->setShortcut(Qt::Key_F9);
+        slideShowAction->addAction(d->slideShowAllAction);
+
+        connect(slideShowAllAction, SIGNAL(triggered()),
+                this, SLOT(slotMenuSlideShowAll()));
+
+        QCation* const slideShowSelectionAction = new QAction(i18n("Selection"), parent);
+        slideShowSelectionAction->setObjectName(QLatin1String("slideshow_selected"));
+        slideShowSelectionAction->setShortcut(Qt::ALT+Qt::Key_F9);
+        slideShowAction->addAction(d->slideShowSelectionAction);
+
+        connect(slideShowSelectionAction, SIGNAL(triggered()),
+                this, SLOT(slotMenuSlideShowSelection()));
+
+        QAction* const slideShowRecursiveAction = new QAction(i18n("With All Sub-Albums"), parent);
+        slideShowRecursiveAction->setObjectName(QLatin1String("slideshow_recursive"));
+        slideShowRecursiveAction->setShortcut(Qt::SHIFT+Qt::Key_F9);
+        slideShowAction->addAction(d->slideShowRecursiveAction);
+
+        connect(slideShowRecursiveAction, SIGNAL(triggered()),
+                this, SLOT(slotMenuSlideShowRecursive()));
+    }
+    else
+    {
+        ac->setText(i18nc("@action", "Slideshow"));
+        ac->setShortcut(Qt::Key_F9);
+
+        connect(ac, SIGNAL(triggered(bool)),
+                this, SLOT(slotSlideShow()));
+    }
 
     addAction(ac);
 }
 
-void SlideShowPlugin::slotSlideShowAll()
+void SlideShowPlugin::slotSlideShow()
+{
+    DInfoInterface* const iface = infoIface(sender());
+    
+}
+
+void SlideShowPlugin::slotMenuSlideShowAll()
 {
     /*
     DInfoInterface* const iface = infoIface(sender());
@@ -163,11 +165,11 @@ void SlideShowPlugin::slotSlideShowAll()
     */
 }
 
-void SlideShowPlugin::slotSlideShowSelection()
+void SlideShowPlugin::slotMenuSlideShowSelection()
 {
 }
 
-void SlideShowPlugin::slotSlideShowRecursive()
+void SlideShowPlugin::slotMenuSlideShowRecursive()
 {
 }
 

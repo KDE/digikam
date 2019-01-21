@@ -54,14 +54,10 @@ public:
 
 private Q_SLOTS:
 
-    void slotSlideShowAll();
-    void slotSlideShowSelection();
-    void slotSlideShowRecursive();
-
-private:
-
-    class Private;
-    Private* const d;
+    void slotSlideShow();
+    void slotMenuSlideShowAll();
+    void slotMenuSlideShowSelection();
+    void slotMenuSlideShowRecursive();
 };
 
 } // namespace Digikam
