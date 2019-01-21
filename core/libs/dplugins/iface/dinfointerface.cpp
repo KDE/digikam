@@ -70,16 +70,6 @@ QList<QUrl> DInfoInterface::allAlbumItems() const
     return QList<QUrl>();
 }
 
-QList<QUrl> DInfoInterface::albumItems(int) const
-{
-    return QList<QUrl>();
-}
-
-DInfoInterface::DInfoMap DInfoInterface::albumInfo(int) const
-{
-    return DInfoMap();
-}
-
 DInfoInterface::DInfoMap DInfoInterface::itemInfo(const QUrl&) const
 {
     return DInfoMap();
@@ -90,16 +80,26 @@ void DInfoInterface::setItemInfo(const QUrl&, const DInfoMap&) const
     qCWarning(DIGIKAM_GENERAL_LOG) << "setItemInfo() not implemented in host interface";
 }
 
+QList<QUrl> DInfoInterface::albumItems(int) const
+{
+    return QList<QUrl>();
+}
+
 QList<QUrl> DInfoInterface::albumsItems(const DAlbumIDs&) const
 {
     return QList<QUrl>();
+}
+
+DInfoInterface::DInfoMap DInfoInterface::albumInfo(int) const
+{
+    return DInfoMap();
 }
 
 void DInfoInterface::setAlbumInfo(int, const DInfoMap&) const
 {
     qCWarning(DIGIKAM_GENERAL_LOG) << "setAlbumInfo() not implemented in host interface";
 }
-    
+
 QWidget* DInfoInterface::albumChooser(QWidget* const) const
 {
     return 0;

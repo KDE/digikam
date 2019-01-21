@@ -173,19 +173,19 @@ void DMetaInfoIface::setItemInfo(const QUrl& url, const DInfoMap& map) const
         meta.setItemRating(map[QLatin1String("rating")].toInt());
         keys.removeAll(QLatin1String("rating"));
     }
-    
+
     if  (map.contains(QLatin1String("colorlabel")))
     {
         meta.setItemColorLabel(map[QLatin1String("colorlabel")].toInt());
         keys.removeAll(QLatin1String("colorlabel"));
     }
-    
+
     if  (map.contains(QLatin1String("picklabel")))
     {
         meta.setItemPickLabel(map[QLatin1String("picklabel")].toInt());
         keys.removeAll(QLatin1String("picklabel"));
     }
-    
+
     if (!keys.isEmpty())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Keys not yet supported in DMetaInfoIface::setItemInfo():" << keys;

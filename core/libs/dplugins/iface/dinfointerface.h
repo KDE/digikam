@@ -70,12 +70,12 @@ public:
 
     // Low level items and albums methods
 
-    virtual QList<QUrl> currentSelectedItems()            const;
-    virtual QList<QUrl> currentAlbumItems()               const;
+    virtual QList<QUrl> currentSelectedItems()                 const;
+    virtual QList<QUrl> currentAlbumItems()                    const;
 
-    virtual QList<QUrl> albumItems(int)                   const;
-    virtual QList<QUrl> albumsItems(const DAlbumIDs&)     const;
-    virtual QList<QUrl> allAlbumItems()                   const;
+    virtual QList<QUrl> albumItems(int)                        const;
+    virtual QList<QUrl> albumsItems(const DAlbumIDs&)          const;
+    virtual QList<QUrl> allAlbumItems()                        const;
 
     virtual DInfoMap albumInfo(int)                            const;
     virtual void     setAlbumInfo(int, const DInfoMap&)        const;
