@@ -59,25 +59,37 @@ DPluginGeneric::~DPluginGeneric()
     delete d;
 }
 
-DInfoInterface* DPluginGeneric::infoIface(QObject* const ac) const
+DInfoInterface* DPluginGeneric::infoIface(QObject* const object) const
 {
-    DPluginAction* const pac = dynamic_cast<DPluginAction*>(ac);
+    DPluginAction* const pac = dynamic_cast<DPluginAction*>(object);
 
     if (pac)
     {
-        DXmlGuiWindow* const gui = dynamic_cast<DXmlGuiWindow*>(pac->parent());
+        // First try to get info interface from DPlugin parent object.
 
-        if (gui)
-        {
-            return gui->infoIface(pac);
-        }
+        return interface(pac->parent());
+    }
+    else
+    {
+        // In second, try to get info interface from object as well.
+        return interface(object);
+    }
+}
 
-        DInfoInterface* const iface = dynamic_cast<DInfoInterface*>(pac->parent());
+DInfoInterface* DPluginGeneric::interface(QObject* const parent) const
+{
+    DXmlGuiWindow* const gui = dynamic_cast<DXmlGuiWindow*>(parent);
 
-        if (iface)
-        {
-            return iface;
-        }
+    if (gui)
+    {
+        return gui->infoIface(pac);
+    }
+
+    DInfoInterface* const iface = dynamic_cast<DInfoInterface*>(parent);
+
+    if (iface)
+    {
+        return iface;
     }
 
     return 0;
