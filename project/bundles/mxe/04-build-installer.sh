@@ -130,8 +130,8 @@ cp -r $MXE_INSTALL_PREFIX/qt5/plugins                                   $BUNDLED
 echo -e "\n---------- Marble plugins"
 cp -r $MXE_INSTALL_PREFIX/plugins/*.dll                                 $BUNDLEDIR/plugins      2>/dev/null
 
-echo -e "\n---------- KF5 plugins"
-find  $MXE_INSTALL_PREFIX/lib/plugins -name "*.dll" -type f -exec cp {} $BUNDLEDIR/ \;          2>/dev/null
+echo -e "\n---------- digiKam and KF5 plugins"
+cp -r $MXE_INSTALL_PREFIX/lib/plugins                                   $BUNDLEDIR/             2>/dev/null
 
 echo -e "\n---------- OpenAL for QtAV"
 cp -r $MXE_INSTALL_PREFIX/bin/OpenAL32.dll                              $BUNDLEDIR/             2>/dev/null
@@ -162,9 +162,9 @@ for app in $EXE_FILES ; do
 done
 
 DLL_FILES="\
-`find  $MXE_INSTALL_PREFIX/lib/plugins -name "*.dll" -type f -exec basename {} \; | sed "s|^|$BUNDLEDIR/|"` \
-`find  $MXE_INSTALL_PREFIX/qt5/plugins -name "*.dll" -type f | sed 's|$MXE_INSTALL_PREFIX/qt5/||'`          \
-`find  $MXE_INSTALL_PREFIX/plugins     -name "*.dll" -type f | sed 's|$MXE_INSTALL_PREFIX/plugins/||'`      \
+`find  $MXE_INSTALL_PREFIX/lib/plugins -name "*.dll" -type f | sed 's|$MXE_INSTALL_PREFIX/qt5/||'`     \
+`find  $MXE_INSTALL_PREFIX/qt5/plugins -name "*.dll" -type f | sed 's|$MXE_INSTALL_PREFIX/qt5/||'`     \
+`find  $MXE_INSTALL_PREFIX/plugins     -name "*.dll" -type f | sed 's|$MXE_INSTALL_PREFIX/plugins/||'` \
 "
 
 for app in $DLL_FILES ; do
