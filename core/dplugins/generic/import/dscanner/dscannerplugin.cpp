@@ -42,7 +42,7 @@
 #include "digikam_debug.h"
 #include "scandialog.h"
 
-namespace Digikam
+namespace GenericDScannerPlugin
 {
 
 DigitalScannerPlugin::DigitalScannerPlugin(QObject* const parent)
@@ -150,4 +150,4 @@ void DigitalScannerPlugin::slotDigitalScanner()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDScannerPlugin

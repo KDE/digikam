@@ -37,9 +37,10 @@
 #include "dimg.h"
 #include "dmetadata.h"
 
+using namespace Digikam;
 using namespace KSaneIface;
 
-namespace Digikam
+namespace GenericDScannerPlugin
 {
 
 class Q_DECL_HIDDEN SaveImgThread::Private
@@ -246,4 +247,4 @@ void SaveImgThread::run()
     emit signalComplete(d->newUrl, success);
 }
 
-} // namespace Digikam
+} // namespace GenericDScannerPlugin

@@ -26,12 +26,13 @@
 // Qt includes
 
 #include <QCloseEvent>
+#include <QWidget>
 
 // Local includes
 
 #include "dplugindialog.h"
 
-class QWidget;
+using namespace Digikam;
 
 namespace KSaneIface
 {
@@ -40,7 +41,7 @@ namespace KSaneIface
 
 using namespace KSaneIface;
 
-namespace Digikam
+namespace GenericDScannerPlugin
 {
 
 class ScanDialog : public DPluginDialog
@@ -75,6 +76,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDScannerPlugin
 
 #endif // DIGIKAM_SCAN_DIALOG_H

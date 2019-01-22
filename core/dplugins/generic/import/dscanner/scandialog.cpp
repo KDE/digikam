@@ -52,7 +52,7 @@
 #include "dxmlguiwindow.h"
 #include "dfiledialog.h"
 
-namespace Digikam
+namespace GenericDScannerPlugin
 {
 
 class Q_DECL_HIDDEN ScanDialog::Private
@@ -142,7 +142,7 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
     writableMimetypes.insert(1, QLatin1String("image/jpeg"));
     writableMimetypes.insert(2, QLatin1String("image/tiff"));
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "slotSaveImage: Offered mimetypes: " << writableMimetypes;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "slotSaveImage: Offered mimetypes: " << writableMimetypes;
 
     QLatin1String defaultMimeType("image/png");
     QLatin1String defaultFileName("image.png");
@@ -191,7 +191,7 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
         {
             QMessageBox::critical(0, i18n("Unsupported Format"),
                                   i18n("The target image file format \"%1\" is unsupported.", format));
-            qCWarning(DIGIKAM_GENERAL_LOG) << "target image file format " << format << " is unsupported!";
+            qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "target image file format " << format << " is unsupported!";
             delete imageFileSaveDialog;
             return;
         }
@@ -203,7 +203,7 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
                               i18n("Failed to save file\n\"%1\" to\n\"%2\".",
                               newURL.fileName(),
                               QDir::toNativeSeparators(newURL.toLocalFile().section(QLatin1Char('/'), -2, -2))));
-        qCWarning(DIGIKAM_GENERAL_LOG) << "target URL is not valid !";
+        qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "target URL is not valid !";
         delete imageFileSaveDialog;
         return;
     }
@@ -269,4 +269,4 @@ void ScanDialog::slotThreadDone(const QUrl& url, bool success)
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDScannerPlugin
