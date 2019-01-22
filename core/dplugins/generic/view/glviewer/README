@@ -1,0 +1,75 @@
+--------------------------
+OpenGL image viewer plugin
+--------------------------
+
+This image viewer was designed with speed and ease of usage in mind as well as for mouseless setups (notebooks).
+A image is converted to a non-power-of two OpenGL texture. This means your video driver has to support the GL_ARB_texture_rectangle
+OpenGL extension. Please verify with the command glxinfo.
+
+Please keep in mind that you need alot of video memory: a 5MP image requires 20MB texture memory.
+If you run out texture ram, the downloading time of the texture can be increased up to several seconds.
+Next generation window managers like Beryl will require a massive amount of video memory to run this plugin.
+
+-------------------
+Handbook
+-------------------
+
+1) Start
+--------
+
+- select the images you'd like to view. Ctrl-A for all images
+        if no image is selected, all images of the album are loaded and the first image will be displayed
+        if one image is selected, all images are loaded and the selected image image will be displayed
+        if several images are selected, only the selected images are loaded
+- select View->OpenGl Image viewer
+- for convenience, create a shortcut in the host application. In digiKam, select Settings->Configure Shortcut, search for "image viewer"
+
+
+2) Usage
+--------
+
+next image                 : scrollwheel down or n or down arrow or right arrow or Space
+previous image             : scrollwheel up or p or up arrow or left arrow
+toggle fullscreen/normal   : f
+quit                       : Esc
+toggle scrollwheel action  : c (scrollwheel either zooms or changes the image), default is changing images
+rotation                   : r
+reset view                 : double click
+original size              : o
+
+
+zooming:
+
+- move mouse in y-direction while pressing the right mouse button
+- alternatively, press c and use the scrollwheel
+- plus/minus
+- ctrl + scrollwheel
+
+
+panning:
+
+- move mouse while pressing the left button
+
+
+3) Performace & technical details
+---------------------------------
+
+On a PentiumM 1Ghz, slow 2.5 inch harddrive, I measured the following times for changing an image (5 megapixel, 2MB)
+- loading image from cache: 0ms
+- download texture to video memory: 15ms
+- draw image: 16ms
+  the new image is on the screen after 31ms of the user interaction
+- preload next image to cache 690ms
+  only after preloading is done, the next image can be displayed.
+
+The most expensive part is instanciating a QImage(myimage) object with 690ms,
+which includes reading the file from the harddrive.
+Downscaling to screensize and converting to GL format takes around 70ms.
+At least on my setup, downscaling by CPU is still faster than copying a 20Mb texture to video mem and downscaling by GPU.
+
+Other programs/libraries: time of loading and displaying an image
+SDL:                       750ms
+Kuickshow: (imlib)         690ms (without smooth rendering)
+Kuickshow: (imlib)        1770ms (with smooth rendering)
+feh: (imlib2)              670ms
+this Image Viewer plugin:  720ms (implicit smooth rendering due to OGL)

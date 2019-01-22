@@ -5,3 +5,9 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 add_subdirectory(presentation)
+
+#add_subdirectory(slideshow)
+
+if(HAVE_OPENGL)
+    add_subdirectory(glviewer)
+endif()
