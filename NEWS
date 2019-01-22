@@ -689,4 +689,5 @@ BUGFIXES:
 619 ==> 402659 - Find Similar context menu action shows no result if used on an image without a fingerprint.
 620 ==> 225647 - Host application name instead of picasaweb in the report.
 621 ==> 403350 - After rotating video, when changing video date time, rotation flag is reset.
-622 ==> 
+622 ==> 401010 - Simple search on one file name crashes the program if there is more than one hit.
+623 ==> 
