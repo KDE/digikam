@@ -32,7 +32,7 @@
 
 class QPrinter;
 
-namespace Digikam
+namespace GenericCalendarPlugin
 {
 
 class CalPainter;

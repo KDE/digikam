@@ -38,7 +38,9 @@
 #include "dinfointerface.h"
 #include "digikam_export.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericCalendarPlugin
 {
 
 class DIGIKAM_EXPORT CalWizard : public DWizardDlg

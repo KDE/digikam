@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.Calendar"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericCalendarPlugin
 {
 
 class CalendarPlugin : public DPluginGeneric
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotCalendar();
 };
 
-} // namespace Digikam
+} // namespace GenericCalendarPlugin
 
 #endif // DIGIKAM_CALENDAR_PLUGIN_H

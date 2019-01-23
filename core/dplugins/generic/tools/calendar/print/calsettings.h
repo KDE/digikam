@@ -44,7 +44,7 @@
 
 #include "digikam_config.h"
 
-namespace Digikam
+namespace GenericCalendarPlugin
 {
 
 typedef QPair<QColor, QString> Day;

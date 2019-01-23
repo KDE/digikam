@@ -46,7 +46,9 @@
 #include "dimg.h"
 #include "previewloadthread.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericCalendarPlugin
 {
 
 class Q_DECL_HIDDEN CalPainter::Private

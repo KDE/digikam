@@ -43,7 +43,9 @@ class QDropEvent;
 class QMouseEvent;
 class QPaintEvent;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericCalendarPlugin
 {
 
 class CalMonthWidget : public QPushButton

@@ -31,7 +31,9 @@
 
 #include "dwizardpage.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericCalendarPlugin
 {
 
 class CalIntroPage : public DWizardPage
@@ -43,6 +45,6 @@ public:
     ~CalIntroPage();
 };
 
-} // namespace Digikam
+} // namespace GenericCalendarPlugin
 
 #endif // DIGIKAM_CAL_INTRO_PAGE_H

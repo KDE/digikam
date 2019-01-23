@@ -30,7 +30,7 @@
        <enum>QLayout::SetFixedSize</enum>
       </property>
       <item>
-       <widget class="Digikam::CalWidget" name="calendarWidget" native="true"/>
+       <widget class="GenericCalendarPlugin::CalWidget" name="calendarWidget" native="true"/>
       </item>
      </layout>
     </widget>
@@ -250,7 +250,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Digikam::CalWidget</class>
+   <class>GenericCalendarPlugin::CalWidget</class>
    <extends>QWidget</extends>
    <header>calwidget.h</header>
    <container>1</container>

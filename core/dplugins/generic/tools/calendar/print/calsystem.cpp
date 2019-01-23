@@ -27,7 +27,7 @@
 
 #include "digikam_debug.h"
 
-namespace Digikam
+namespace GenericCalendarPlugin
 {
 
 class Q_DECL_HIDDEN CalSystemPrivate : public QSharedData

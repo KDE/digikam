@@ -34,7 +34,7 @@
 
 #include "calwizard.h"
 
-namespace Digikam
+namespace GenericCalendarPlugin
 {
 
 CalendarPlugin::CalendarPlugin(QObject* const parent)
@@ -115,4 +115,4 @@ void CalendarPlugin::slotCalendar()
     delete wzrd;
 }
 
-} // namespace Digikam
+} // namespace GenericCalendarPlugin

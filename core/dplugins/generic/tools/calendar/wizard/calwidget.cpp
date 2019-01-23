@@ -31,7 +31,7 @@
 #include "calsettings.h"
 #include "digikam_debug.h"
 
-namespace Digikam
+namespace GenericCalendarPlugin
 {
 
 CalWidget::CalWidget(QWidget* const parent)
