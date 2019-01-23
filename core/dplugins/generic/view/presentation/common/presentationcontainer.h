@@ -35,7 +35,9 @@
 #include "digikam_config.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericPresentationPlugin
 {
 
 class PresentationMainPage;
@@ -111,6 +113,6 @@ public:
     DInfoInterface*          iface;
 };
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_CONTAINER_H

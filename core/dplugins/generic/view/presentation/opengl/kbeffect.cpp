@@ -35,7 +35,7 @@
 #include "presentationkb.h"
 #include "presentationkb_p.h"
 
-namespace Digikam
+namespace GenericPresentationPlugin
 {
 
 // -------------------------------------------------------------------------
@@ -185,4 +185,4 @@ void BlendKBEffect::advanceTime(float step)
     }
 }
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin

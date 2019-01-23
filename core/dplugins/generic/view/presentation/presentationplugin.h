@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.Presentation"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericPresentationPlugin
 {
 
 class PresentationPlugin : public DPluginGeneric
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotPresentation();
 };
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_PLUGIN_H

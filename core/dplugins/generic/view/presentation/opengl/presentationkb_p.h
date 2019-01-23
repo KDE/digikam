@@ -40,7 +40,9 @@
 #   include "presentationaudiowidget.h"
 #endif
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericPresentationPlugin
 {
 
 class KBImageLoader;
@@ -109,6 +111,6 @@ public:
     PresentationAudioWidget* playbackWidget;
 };
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_KB_PRIVATE_H

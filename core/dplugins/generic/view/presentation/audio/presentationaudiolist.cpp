@@ -55,7 +55,7 @@
 
 using namespace QtAV;
 
-namespace Digikam
+namespace GenericPresentationPlugin
 {
 
 class Q_DECL_HIDDEN PresentationAudioListItem::Private
@@ -242,4 +242,4 @@ QList<QUrl> PresentationAudioList::fileUrls()
     return files;
 }
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin

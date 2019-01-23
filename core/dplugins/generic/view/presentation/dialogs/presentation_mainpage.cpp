@@ -58,7 +58,9 @@
 #   include "presentationkb.h"
 #endif
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericPresentationPlugin
 {
 
 class Q_DECL_HIDDEN PresentationMainPage::Private
@@ -492,4 +494,4 @@ void PresentationMainPage::setupConnections()
             this, SLOT(slotImagesFilesSelected(QTreeWidgetItem*)));
 }
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin

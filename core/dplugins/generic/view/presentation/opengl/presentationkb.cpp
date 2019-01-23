@@ -53,7 +53,7 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-namespace Digikam
+namespace GenericPresentationPlugin
 {
 
 KBViewTrans::KBViewTrans(bool zoomIn, float relAspect)
@@ -702,4 +702,4 @@ void PresentationKB::slotClose()
     close();
 }
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin

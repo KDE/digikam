@@ -39,7 +39,9 @@
 #include "previewloadthread.h"
 #include "presentationcontainer.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericPresentationPlugin
 {
 
 class Q_DECL_HIDDEN KBImageLoader::Private
@@ -250,4 +252,4 @@ float KBImageLoader::imageAspect() const
     return d->textureAspect;
 }
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin

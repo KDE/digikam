@@ -41,9 +41,10 @@
 #include "presentationcontainer.h"
 #include "digikam_debug.h"
 
+using namespace Digikam;
 using namespace QtAV;
 
-namespace Digikam
+namespace GenericPresentationPlugin
 {
 
 class Q_DECL_HIDDEN PresentationAudioWidget::Private
@@ -404,4 +405,4 @@ void PresentationAudioWidget::slotError()
     slotNext();
 }
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin

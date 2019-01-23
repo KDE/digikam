@@ -66,7 +66,9 @@
 #   include "presentationaudiowidget.h"
 #endif
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericPresentationPlugin
 {
 
 class Q_DECL_HIDDEN PresentationGL::Private
@@ -1710,4 +1712,4 @@ QPixmap PresentationGL::generateCustomOutlinedTextPixmap(const QString& text, QF
     return pix;
 }
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin

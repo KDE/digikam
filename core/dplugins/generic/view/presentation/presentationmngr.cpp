@@ -58,7 +58,7 @@
 #   include "presentationkb.h"
 #endif
 
-namespace Digikam
+namespace GenericPresentationPlugin
 {
 
 PresentationMngr::PresentationMngr(QObject* const parent, DInfoInterface* const iface)
@@ -159,4 +159,4 @@ void PresentationMngr::slotSlideShow()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin

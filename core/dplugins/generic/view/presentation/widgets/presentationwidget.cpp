@@ -64,7 +64,9 @@
 #   include "slidevideo.h"
 #endif
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericPresentationPlugin
 {
 
 class Q_DECL_HIDDEN PresentationWidget::Private
@@ -1555,4 +1557,4 @@ int PresentationWidget::effectBlobs(bool aInit)
     return 10;
 }
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin

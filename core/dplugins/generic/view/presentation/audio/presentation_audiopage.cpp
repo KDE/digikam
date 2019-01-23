@@ -39,7 +39,9 @@
 #include "digikam_debug.h"
 #include "dfiledialog.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericPresentationPlugin
 {
 
 SoundtrackPreview::SoundtrackPreview(QWidget* const parent, const QList<QUrl>& urls, PresentationContainer* const sharedData)
@@ -617,4 +619,4 @@ void PresentationAudioPage::slotImageTotalTimeChanged( const QTime& imageTotalTi
     compareTimes();
 }
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin

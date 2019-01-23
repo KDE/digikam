@@ -42,7 +42,7 @@ class QMouseEvent;
 class QPaintEvent;
 class QWheelEvent;
 
-namespace Digikam
+namespace GenericPresentationPlugin
 {
 
 class PresentationContainer;
@@ -133,6 +133,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_WIDGET_H

@@ -41,7 +41,9 @@
 #include "previewloadthread.h"
 #include "presentationcontainer.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericPresentationPlugin
 {
 
 typedef QMap<QUrl, QImage> LoadedImages;
@@ -309,4 +311,4 @@ void PresentationLoader::checkIsIn(int index) const
     }
 }
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin

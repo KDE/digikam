@@ -38,7 +38,9 @@
 #include "dplugingeneric.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericPresentationPlugin
 {
 
 class PresentationContainer;
@@ -67,6 +69,6 @@ private:
     PresentationContainer* m_sharedData;
 };
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_MNGR_H

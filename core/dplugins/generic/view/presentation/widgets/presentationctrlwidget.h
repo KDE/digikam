@@ -34,7 +34,7 @@
 
 #include "ui_presentationctrlwidget.h"
 
-namespace Digikam
+namespace GenericPresentationPlugin
 {
 
 class PresentationCtrlWidget : public QWidget, public Ui::PresentationCtrlWidget
@@ -79,6 +79,6 @@ private:
     friend class PresentationGL;
 };
 
-} // namespace Digikam
+} // namespace GenericPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_CTRL_WIDGET_H
