@@ -116,7 +116,7 @@ void JAlbumFinalPage::slotProcess()
 
     // Generate JAlbumInfo
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << info;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << info;
 
     d->progressView->addEntry(i18n("Starting to generate jAlbum..."),
                               DHistoryView::ProgressEntry);

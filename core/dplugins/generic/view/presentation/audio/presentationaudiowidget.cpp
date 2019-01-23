@@ -105,7 +105,7 @@ PresentationAudioWidget::PresentationAudioWidget(QWidget* const parent, const QL
 
     if (urls.isEmpty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Tracks list is empty...";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Tracks list is empty...";
         setEnabled(false);
         return;
     }
@@ -192,7 +192,7 @@ void PresentationAudioWidget::enqueue(const QList<QUrl>& urls)
     d->urlList   = urls;
     d->currIndex = 0;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Tracks : " << d->urlList;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Tracks : " << d->urlList;
 
     if (d->urlList.isEmpty())
         return;
@@ -368,7 +368,7 @@ void PresentationAudioWidget::slotPlayerError(const QtAV::AVError& err)
 {
     if (err.error() != AVError::NoError)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "An error as occurred while playing (" << err.string() << ")";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "An error as occurred while playing (" << err.string() << ")";
         slotError();
     }
 }

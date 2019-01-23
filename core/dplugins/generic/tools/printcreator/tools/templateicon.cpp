@@ -93,12 +93,12 @@ void TemplateIcon::begin()
     d->scaleHeight       = float(d->iconSize.height())  / float(d->paperSize.height());
 
 #ifdef DEBUG_OUTPUT
-    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->paperSize.width =" <<  d->paperSize.width();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->paperSize.height=" <<  d->paperSize.height();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->iconSize.width  =" <<  d->iconSize.width();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->iconSize.height =" <<  d->iconSize.height();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->scaleWidth      =" <<  d->scaleWidth;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->scaleHeight     =" <<  d->scaleHeight;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "begin: d->paperSize.width =" <<  d->paperSize.width();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "begin: d->paperSize.height=" <<  d->paperSize.height();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "begin: d->iconSize.width  =" <<  d->iconSize.width();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "begin: d->iconSize.height =" <<  d->iconSize.height();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "begin: d->scaleWidth      =" <<  d->scaleWidth;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "begin: d->scaleHeight     =" <<  d->scaleHeight;
 #endif
 
     // d->icon back ground
@@ -115,10 +115,10 @@ void TemplateIcon::begin()
 void TemplateIcon::fillRect( int x, int y, int w, int h, const QColor& color )
 {
 #ifdef DEBUG_OUTPUT
-    qCDebug(DIGIKAM_GENERAL_LOG) << "fillRect: x1=" << x << " => " << x       * d->scaleWidth;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "fillRect: y1=" << y << " => " << y       * d->scaleHeight;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "fillRect: x2=" << w << " => " << (x + w) * d->scaleWidth;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "fillRect: y2=" << h << " => " << (y + h) * d->scaleHeight;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "fillRect: x1=" << x << " => " << x       * d->scaleWidth;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "fillRect: y1=" << y << " => " << y       * d->scaleHeight;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "fillRect: x2=" << w << " => " << (x + w) * d->scaleWidth;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "fillRect: y2=" << h << " => " << (y + h) * d->scaleHeight;
 #endif
 
     d->painter->fillRect((int)(d->iconMargin + x * d->scaleWidth),

@@ -329,7 +329,7 @@ void AdvPrintPhotoPage::slotOutputChanged(const QString& text)
         {
             if (it->printerName() == text)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Chosen printer: " << it->printerName();
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Chosen printer: " << it->printerName();
                 delete d->printer;
                 d->printer = new QPrinter(*it);
             }
@@ -350,11 +350,11 @@ void AdvPrintPhotoPage::slotXMLLoadElement(QXmlStreamReader& xmlReader)
     {
         // read image is the last.
         AdvPrintPhoto* const pPhoto = d->settings->photos[d->settings->photos.size()-1];
-        qCDebug(DIGIKAM_GENERAL_LOG) << " invoked " << xmlReader.name();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " invoked " << xmlReader.name();
 
         while (xmlReader.readNextStartElement())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << pPhoto->m_url << " " << xmlReader.name();
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << pPhoto->m_url << " " << xmlReader.name();
 
             if (xmlReader.name() == QLatin1String("pa_caption"))
             {
@@ -371,7 +371,7 @@ void AdvPrintPhotoPage::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
                 if (!attr.isEmpty())
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " found " << attr.toString();
                     pPhoto->m_pAdvPrintCaptionInfo->m_captionType =
                         (AdvPrintSettings::CaptionType)attr.toString().toInt(&ok);
                 }
@@ -380,7 +380,7 @@ void AdvPrintPhotoPage::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
                 if (!attr.isEmpty())
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " found " << attr.toString();
                     pPhoto->m_pAdvPrintCaptionInfo->m_captionFont.fromString(attr.toString());
                 }
 
@@ -388,7 +388,7 @@ void AdvPrintPhotoPage::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
                 if (!attr.isEmpty())
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " found " << attr.toString();
                     pPhoto->m_pAdvPrintCaptionInfo->m_captionColor.setNamedColor(attr.toString());
                 }
 
@@ -396,7 +396,7 @@ void AdvPrintPhotoPage::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
                 if (!attr.isEmpty())
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " found " << attr.toString();
                     pPhoto->m_pAdvPrintCaptionInfo->m_captionSize = attr.toString().toInt(&ok);
                 }
 
@@ -404,7 +404,7 @@ void AdvPrintPhotoPage::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
                 if (!attr.isEmpty())
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " found " << attr.toString();
                     pPhoto->m_pAdvPrintCaptionInfo->m_captionText = attr.toString();
                 }
             }
@@ -468,7 +468,7 @@ void AdvPrintPhotoPage::slotContextMenuRequested()
 
         AdvPrintPhoto* const pPhoto  = d->settings->photos[itemIndex];
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << " copies "
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " copies "
                                      << pPhoto->m_copies
                                      << " first "
                                      << pPhoto->m_first;
@@ -497,7 +497,7 @@ void AdvPrintPhotoPage::slotIncreaseCopies()
             return;
 
         list.append(item->url());
-        qCDebug(DIGIKAM_GENERAL_LOG) << " Adding a copy of " << item->url();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " Adding a copy of " << item->url();
         d->photoUi->mPrintList->slotAddImages(list);
     }
 }
@@ -512,7 +512,7 @@ void AdvPrintPhotoPage::slotDecreaseCopies()
         if (!item)
             return;
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << " Removing a copy of " << item->url();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " Removing a copy of " << item->url();
         d->photoUi->mPrintList->slotRemoveItems();
     }
 }
@@ -549,7 +549,7 @@ void AdvPrintPhotoPage::slotAddItems(const QList<QUrl>& list)
                 pPhoto->m_first             = false;
                 d->settings->photos.append(pPhoto);
 
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Added fileName: "
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Added fileName: "
                                              << pPhoto->m_url.fileName()
                                              << " copy number "
                                              << pCurrentPhoto->m_copies;
@@ -563,7 +563,7 @@ void AdvPrintPhotoPage::slotAddItems(const QList<QUrl>& list)
             pPhoto->m_first             = true;
             d->settings->photos.append(pPhoto);
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Added new fileName: "
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Added new fileName: "
                                          << pPhoto->m_url.fileName();
         }
     }
@@ -639,13 +639,13 @@ void AdvPrintPhotoPage::slotRemovingItems(const QList<int>& list)
             }
             else
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << " NULL AdvPrintPhoto object ";
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " NULL AdvPrintPhoto object ";
                 return;
             }
 
             if (pPhotoToRemove)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Removed fileName: "
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Removed fileName: "
                                             << pPhotoToRemove->m_url.fileName()
                                             << " copy number "
                                             << copies;
@@ -672,7 +672,7 @@ void AdvPrintPhotoPage::slotBtnPrintOrderDownClicked()
     d->photoUi->mPrintList->blockSignals(true);
     int currentIndex = d->photoUi->mPrintList->listView()->currentIndex().row();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Moved photo "
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Moved photo "
                                  << currentIndex - 1
                                  << " to  "
                                  << currentIndex;
@@ -687,7 +687,7 @@ void AdvPrintPhotoPage::slotBtnPrintOrderUpClicked()
     d->photoUi->mPrintList->blockSignals(true);
     int currentIndex = d->photoUi->mPrintList->listView()->currentIndex().row();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Moved photo "
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Moved photo "
                                  << currentIndex
                                  << " to  "
                                  << currentIndex + 1;
@@ -699,7 +699,7 @@ void AdvPrintPhotoPage::slotBtnPrintOrderUpClicked()
 
 void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamReader& xmlReader)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << " invoked " << xmlReader.name();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " invoked " << xmlReader.name();
 
     while (!xmlReader.atEnd())
     {
@@ -712,7 +712,7 @@ void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamReader& xmlReader)
 
             if (!attr.isEmpty())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " found " << attr.toString();
                 int index = d->photoUi->m_printer_choice->findText(attr.toString());
 
                 if (index != -1)
@@ -727,7 +727,7 @@ void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamReader& xmlReader)
 
             if (!attr.isEmpty())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " found " << attr.toString();
                 QPrinter::PaperSize paperSize = (QPrinter::PaperSize)attr.toString().toInt(&ok);
                 d->printer->setPaperSize(paperSize);
             }
@@ -736,7 +736,7 @@ void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamReader& xmlReader)
 
             if (!attr.isEmpty())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " found " << attr.toString();
                 d->settings->savedPhotoSize = attr.toString();
             }
         }
@@ -754,7 +754,7 @@ void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamReader& xmlReader)
 
     if (list.count())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << " PhotoSize " << list[0]->text();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " PhotoSize " << list[0]->text();
         d->photoUi->ListPhotoSizes->setCurrentItem(list[0]);
     }
     else
@@ -920,7 +920,7 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
             if ((height > (size.height() + round_value) ||
                  width  > (size.width()  + round_value)))
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "photo size "
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "photo size "
                                              << QSizeF(width, height)
                                              << "> page size "
                                              << size;
@@ -973,7 +973,7 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
                         {
                             photoX = dx * (col + 1) + (col * width);
 
-                            qCDebug(DIGIKAM_GENERAL_LOG) << "photo at P("
+                            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "photo at P("
                                                          << photoX
                                                          << ", "
                                                          << photoY
@@ -991,7 +991,7 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
                 }
                 else
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "I cannot go on, rows "
+                    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "I cannot go on, rows "
                                                  << nRows
                                                  << "> columns "
                                                  << nColumns;
@@ -1048,7 +1048,7 @@ void AdvPrintPhotoPage::slotPageSetup()
     {
         QPrinter* const printer = d->pageSetupDlg->printer();
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Dialog exit, new size "
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Dialog exit, new size "
                                      << printer->paperSize(QPrinter::Millimeter)
                                      << " internal size "
                                      << d->printer->paperSize(QPrinter::Millimeter);
@@ -1058,7 +1058,7 @@ void AdvPrintPhotoPage::slotPageSetup()
                                    &right, &bottom,
                                    QPrinter::Millimeter);
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Dialog exit, new margins: left "
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Dialog exit, new margins: left "
                                      << left
                                      << " right "
                                      << right
@@ -1073,12 +1073,12 @@ void AdvPrintPhotoPage::slotPageSetup()
         //d->settings->pageSize = d->printer.paperSize(QPrinter::Millimeter);
 
 #ifdef DEBUG
-        qCDebug(DIGIKAM_GENERAL_LOG) << " dialog exited num of copies: "
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " dialog exited num of copies: "
                                      << printer->numCopies()
                                      << " inside:   "
                                      << d->printer->numCopies();
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << " dialog exited from : "
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " dialog exited from : "
                                      << printer->fromPage()
                                      << " to:   "
                                      << d->printer->toPage();
@@ -1134,7 +1134,7 @@ void AdvPrintPhotoPage::manageBtnPreviewPage()
 
 void AdvPrintPhotoPage::initPhotoSizes(const QSizeF& pageSize)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "New page size "
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "New page size "
                                  << pageSize
                                  << ", old page size "
                                  << d->settings->pageSize;
@@ -1158,7 +1158,7 @@ void AdvPrintPhotoPage::initPhotoSizes(const QSizeF& pageSize)
                                     QStandardPaths::LocateDirectory));
     const QStringList list = dir.entryList(QStringList() << QLatin1String("*.xml"));
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Template XML files list: "
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Template XML files list: "
                                  << list;
 
     foreach(const QString& fn, list)
@@ -1166,14 +1166,14 @@ void AdvPrintPhotoPage::initPhotoSizes(const QSizeF& pageSize)
         parseTemplateFile(dir.absolutePath() + QLatin1Char('/') + fn, pageSize);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "photosizes count() ="
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "photosizes count() ="
                                  << d->settings->photosizes.count();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "photosizes isEmpty() ="
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "photosizes isEmpty() ="
                                  << d->settings->photosizes.isEmpty();
 
     if (d->settings->photosizes.isEmpty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Empty photoSize-list, create default size";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Empty photoSize-list, create default size";
 
         // There is no valid page size yet.  Create a default page (B10) to prevent crashes.
         AdvPrintPhotoSize* const p = new AdvPrintPhotoSize;
@@ -1221,7 +1221,7 @@ void AdvPrintPhotoPage::initPhotoSizes(const QSizeF& pageSize)
 void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageSize)
 {
     QDomDocument doc(QLatin1String("mydocument"));
-    qCDebug(DIGIKAM_GENERAL_LOG) << " XXX: " <<  fn;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << " XXX: " <<  fn;
 
     if (fn.isEmpty())
     {
@@ -1246,7 +1246,7 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
     // print out the element names of all elements that are direct children
     // of the outermost element.
     QDomElement docElem  = doc.documentElement();
-    qCDebug(DIGIKAM_GENERAL_LOG) << docElem.tagName(); // the node really is an element.
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << docElem.tagName(); // the node really is an element.
 
     QSizeF size;
     QString unit;
@@ -1270,7 +1270,7 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
                 unit = e.attribute(QLatin1String("unit"),
                                    QLatin1String("mm"));
 
-                qCDebug(DIGIKAM_GENERAL_LOG) << e.tagName()
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << e.tagName()
                                              << QLatin1String(" name=")
                                              << e.attribute(QLatin1String("name"),
                                                             QLatin1String("??"))
@@ -1292,7 +1292,7 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
                     {
                         size      *= 25.4;
                         scaleValue = 1000;
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "template size "
+                        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "template size "
                                                      << size
                                                      << " page size "
                                                      << pageSize;
@@ -1301,14 +1301,14 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
                     {
                         size      *= 10;
                         scaleValue = 100;
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "template size "
+                        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "template size "
                                                      << size
                                                      << " page size "
                                                      << pageSize;
                     }
                     else
                     {
-                        qCWarning(DIGIKAM_GENERAL_LOG) << "Wrong unit "
+                        qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Wrong unit "
                                                        << unit
                                                        << " skipping layout";
                         n = n.nextSibling();
@@ -1327,7 +1327,7 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
                          (size.height() > (pageSize.height() + round_value) ||
                           size.width()  > (pageSize.width()  + round_value)))
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "skipping size "
+                    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "skipping size "
                                                  << size
                                                  << " page size "
                                                  << pageSize;
@@ -1337,7 +1337,7 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
                 }
 
                 // Next templates are good
-                qCDebug(DIGIKAM_GENERAL_LOG) << "layout size "
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "layout size "
                                              << size
                                              << " page size "
                                              << pageSize;
@@ -1389,7 +1389,7 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
                             const QStringList list  = dir.entryList(QStringList()
                                                       << desktopFileName);
 
-                            qCDebug(DIGIKAM_GENERAL_LOG) << "Template desktop files list: "
+                            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Template desktop files list: "
                                                          << list;
 
                             QStringList::ConstIterator it  = list.constBegin();
@@ -1403,7 +1403,7 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
                             else
                             {
                                 p->m_label = ep.attribute(QLatin1String("name"), QLatin1String("XXX"));
-                                qCWarning(DIGIKAM_GENERAL_LOG) << "missed template translation "
+                                qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "missed template translation "
                                                                << desktopFileName;
                             }
 
@@ -1471,7 +1471,7 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
                                         }
                                         else
                                         {
-                                            qCWarning(DIGIKAM_GENERAL_LOG)
+                                            qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG)
                                                 << " Wrong grid configuration, rows "
                                                 << rows
                                                 << ", columns "
@@ -1480,7 +1480,7 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
                                     }
                                     else
                                     {
-                                        qCDebug(DIGIKAM_GENERAL_LOG) << "    "
+                                        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "    "
                                                                      <<  et.tagName();
                                     }
                                 }
@@ -1494,7 +1494,7 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
                         }
                         else
                         {
-                            qCDebug(DIGIKAM_GENERAL_LOG) << "? "
+                            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "? "
                                                          <<  ep.tagName()
                                                          << " attr="
                                                          << ep.attribute(QLatin1String("name"),
@@ -1507,7 +1507,7 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
             }
             else
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "??"
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "??"
                                              << e.tagName()
                                              << " name="
                                              << e.attribute(QLatin1String("name"), QLatin1String("??"));

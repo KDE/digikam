@@ -71,8 +71,8 @@ bool GeoDataParser::matchDate(const QDateTime& photoDateTime, int maxGapTime, in
         cameraGMTDateTime.setTimeSpec(Qt::UTC);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "    photoDateTime: " << photoDateTime << photoDateTime.timeSpec();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "cameraGMTDateTime: " << cameraGMTDateTime << cameraGMTDateTime.timeSpec();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "    photoDateTime: " << photoDateTime << photoDateTime.timeSpec();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "cameraGMTDateTime: " << cameraGMTDateTime << cameraGMTDateTime.timeSpec();
 
     // We are trying to find the right date in the GPS points list.
     bool findItem = false;
@@ -85,8 +85,8 @@ bool GeoDataParser::matchDate(const QDateTime& photoDateTime, int maxGapTime, in
         // Camera GMT time and the GPS device GMT time.
 
         nbSecs = qAbs(cameraGMTDateTime.secsTo( it.key() ));
-//         qCDebug(DIGIKAM_GENERAL_LOG) << it.key() << cameraGMTDateTime << nbSecs;
-//         qCDebug(DIGIKAM_GENERAL_LOG) << it.key().timeSpec() << cameraGMTDateTime.timeSpec() << nbSecs;
+//         qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << it.key() << cameraGMTDateTime << nbSecs;
+//         qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << it.key().timeSpec() << cameraGMTDateTime.timeSpec() << nbSecs;
 
         // We tring to find the minimal accuracy.
         if (nbSecs < maxGapTime && nbSecs < nbSecItem)
@@ -292,7 +292,7 @@ bool GeoDataParser::loadGPXFile(const QUrl& url)
         }
     }
 
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "GPX File " << url.fileName()
+    //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "GPX File " << url.fileName()
     //                         << " parsed with " << numPoints()
     //                         << " points extracted" ;
     gpxfile.close();

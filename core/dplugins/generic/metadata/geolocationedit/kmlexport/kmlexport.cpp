@@ -578,18 +578,18 @@ void KmlExport::getConfig()
 
 void KmlExport::logInfo(const QString& msg)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << msg;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << msg;
 }
 
 void KmlExport::logError(const QString& msg)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << msg;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << msg;
     m_logData.append(msg);
 }
 
 void KmlExport::logWarning(const QString& msg)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << msg;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << msg;
     m_logData.append(msg);
 }
 

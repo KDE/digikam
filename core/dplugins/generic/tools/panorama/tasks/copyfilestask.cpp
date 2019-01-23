@@ -72,7 +72,7 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     if (!panoFile.exists())
     {
         errString = i18n("Temporary panorama file does not exists.");
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Temporary panorama file does not exists: " << panoUrl;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Temporary panorama file does not exists: " << panoUrl;
         successFlag = false;
         return;
     }
@@ -80,7 +80,7 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     if (finalPanoFile.exists())
     {
         errString = i18n("A panorama file named <filename>%1</filename> already exists.", finalPanoUrl.fileName());
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Final panorama file already exists: " << finalPanoUrl;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Final panorama file already exists: " << finalPanoUrl;
         successFlag = false;
         return;
     }
@@ -88,7 +88,7 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     if (savePTO && !ptoFile.exists())
     {
         errString = i18n("Temporary project file does not exist.");
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Temporary project file does not exists: " << ptoUrl;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Temporary project file does not exists: " << ptoUrl;
         successFlag = false;
         return;
     }
@@ -96,12 +96,12 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     if (savePTO && finalPTOFile.exists())
     {
         errString = i18n("A project file named <filename>%1</filename> already exists.", finalPTOUrl.fileName());
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Final project file already exists: " << finalPTOUrl;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Final project file already exists: " << finalPTOUrl;
         successFlag = false;
         return;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Copying GPS info...";
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Copying GPS info...";
 
     // Find first src image which contain geolocation and save it to target pano file.
 
@@ -109,13 +109,13 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 
     for (PanoramaItemUrlsMap::const_iterator i = urlList->constBegin(); i != urlList->constEnd(); ++i)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << i.key();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << i.key();
 
         m_meta.load(i.key().toLocalFile());
 
         if (m_meta.getGPSInfo(alt, lat, lng))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "GPS info found and saved in " << panoUrl;
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "GPS info found and saved in " << panoUrl;
             m_meta.load(panoUrl.toLocalFile());
             m_meta.setGPSInfo(alt, lat, lng);
             m_meta.applyChanges(true);
@@ -151,7 +151,7 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     // NOTE : See https://developers.google.com/photo-sphere/metadata/ for details
     if (addGPlusMetadata)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Adding PhotoSphere metadata...";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Adding PhotoSphere metadata...";
         m_meta.registerXmpNameSpace(QLatin1String("http://ns.google.com/photos/1.0/panorama/"), QLatin1String("GPano"));
         m_meta.setXmpTagString("Xmp.GPano.UsePanoramaViewer", QLatin1String("True"));
         m_meta.setXmpTagString("Xmp.GPano.StitchingSoftware", QLatin1String("Panorama digiKam tool with Hugin"));
@@ -160,21 +160,21 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 
     m_meta.applyChanges(true);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Copying panorama file...";
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Copying panorama file...";
 
     if (!panoFile.copy(finalPanoUrl.toLocalFile()) || !panoFile.remove())
     {
         errString = i18n("Cannot move panorama from <filename>%1</filename> to <filename>%2</filename>.",
                          panoUrl.toLocalFile(),
                          finalPanoUrl.toLocalFile());
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot move panorama: QFile error = " << panoFile.error();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Cannot move panorama: QFile error = " << panoFile.error();
         successFlag = false;
         return;
     }
 
     if (savePTO)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Copying project file...";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Copying project file...";
 
         if (!ptoFile.copy(finalPTOUrl.toLocalFile()))
         {
@@ -185,7 +185,7 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
             return;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Copying converted RAW files...";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Copying converted RAW files...";
 
         for (PanoramaItemUrlsMap::const_iterator i = urlList->constBegin(); i != urlList->constEnd(); ++i)
         {

@@ -1420,7 +1420,7 @@ bool CalSystem::dateDifference(const QDate& fromDate, const QDate& toDate,
 
             if (miy0 == 0)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot compute date difference";
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Cannot compute date difference";
                 return false;
             }
 
@@ -1441,7 +1441,7 @@ bool CalSystem::dateDifference(const QDate& fromDate, const QDate& toDate,
 
                 if (dim0 == 0 || dim1 == 0)
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot compute date difference";
+                    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Cannot compute date difference";
                     return false;
                 }
 

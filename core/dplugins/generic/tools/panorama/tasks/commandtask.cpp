@@ -99,8 +99,8 @@ QString CommandTask::getProcessError()
 
 void CommandTask::printDebug(const QString& binaryName)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << binaryName << "command line: " << getCommandLine();
-    qCDebug(DIGIKAM_GENERAL_LOG) << binaryName << "output:" << endl << qPrintable(QLatin1String(" >>\t") +
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << binaryName << "command line: " << getCommandLine();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << binaryName << "output:" << endl << qPrintable(QLatin1String(" >>\t") +
                                                                        output.replace(QLatin1Char('\n'), QLatin1String("\n >>\t")));
 }
 

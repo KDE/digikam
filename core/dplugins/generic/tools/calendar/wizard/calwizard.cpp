@@ -278,7 +278,7 @@ void CalWizard::slotPageSelected(int curr)
                 break;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "printing...";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "printing...";
 
         // PageSize
         d->printer->setPageSize(QPageSize(params.pageSize));

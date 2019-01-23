@@ -158,7 +158,7 @@ void ItemsPage::slotExpoBlendingAction(const Digikam::ExpoBlendingActionData& ad
             }
             default:
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown action";
+                qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown action";
                 break;
             }
         }

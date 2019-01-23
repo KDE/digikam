@@ -241,13 +241,13 @@ bool JAlbumGenerator::run()
         return false;
 
     QString destDir = d->info->destUrl().toLocalFile();
-    qCDebug(DIGIKAM_GENERAL_LOG) << destDir;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << destDir;
 
     QString jarDir = d->info->jarUrl().toLocalFile();
-    qCDebug(DIGIKAM_GENERAL_LOG) << jarDir;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << jarDir;
 
     QString projDir = destDir + QString::fromLatin1("/") + d->info->imageSelectionTitle();
-    qCDebug(DIGIKAM_GENERAL_LOG) << projDir;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << projDir;
 
     if (!d->createDir(projDir))
         return false;

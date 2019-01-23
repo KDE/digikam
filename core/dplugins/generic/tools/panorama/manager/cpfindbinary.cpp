@@ -36,7 +36,7 @@ bool CPFindBinary::parseHeader(const QString& output)
 
     foreach(const QString& line, lines)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << path() << " help header line: \n" << line;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << path() << " help header line: \n" << line;
 
         if (line.contains(headerRegExp))
         {

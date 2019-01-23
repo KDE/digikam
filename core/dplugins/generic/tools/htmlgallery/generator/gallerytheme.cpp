@@ -157,7 +157,7 @@ public:
             }
             else
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Parameter '" << internalName
+                qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Parameter '" << internalName
                                                << "' has unknown type '" << type
                                                << "'. Falling back to string type\n";
                 parameter = new StringThemeParameter();
@@ -219,7 +219,7 @@ const GalleryTheme::List& GalleryTheme::getList()
         }
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "HTML Gallery Themes found:" << sList.size();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "HTML Gallery Themes found:" << sList.size();
 
     return sList;
 }

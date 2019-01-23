@@ -165,7 +165,7 @@ ExpoBlendingThread::ExpoBlendingThread(QObject* const parent)
 
 ExpoBlendingThread::~ExpoBlendingThread()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "ExpoBlendingThread shutting down."
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "ExpoBlendingThread shutting down."
                                  << "Canceling all actions and waiting for them";
 
     // cancel the thread
@@ -173,7 +173,7 @@ ExpoBlendingThread::~ExpoBlendingThread()
     // wait for the thread to finish
     wait();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Thread finished";
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Thread finished";
 
     cleanUpResultFiles();
 
@@ -192,7 +192,7 @@ void ExpoBlendingThread::cleanUpResultFiles()
 
     foreach (const QUrl& url, d->enfuseTmpUrls)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Removing temp file " << url.toLocalFile();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Removing temp file " << url.toLocalFile();
         QFile(url.toLocalFile()).remove();
     }
 
@@ -395,7 +395,7 @@ void ExpoBlendingThread::run()
                     settings.outputFormat   = DSaveSettingsWidget::OUTPUT_JPEG;    // JPEG for preview: fast and small.
                     bool result             = startEnfuse(t->urls, destUrl, settings, t->binaryPath, errors);
 
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Preview result was: " << result;
+                    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Preview result was: " << result;
 
                     // preserve exif information for auto rotation
 
@@ -483,7 +483,7 @@ void ExpoBlendingThread::run()
 
                 default:
                 {
-                    qCritical(DIGIKAM_GENERAL_LOG) << "Unknown action specified" << endl;
+                    qCritical(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown action specified" << endl;
                     break;
                 }
             }
@@ -552,7 +552,7 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
 
     d->preprocessingTmpDir = QSharedPointer<QTemporaryDir>(new QTemporaryDir(prefix));
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Temp dir : " << d->preprocessingTmpDir->path();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Temp dir : " << d->preprocessingTmpDir->path();
 
     // Parallelized pre-process RAW files if necessary.
     d->mixedUrls.clear();
@@ -605,14 +605,14 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
         d->alignProcess->setProgram(alignPath);
         d->alignProcess->setArguments(args);
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Align command line: " << d->alignProcess->program();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Align command line: " << d->alignProcess->program();
 
         d->alignProcess->start();
 
         if (!d->alignProcess->waitForFinished(-1))
         {
             errors = getProcessError(*(d->alignProcess));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "align_image_stack error: " << errors;
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "align_image_stack error: " << errors;
             return false;
         }
 
@@ -640,14 +640,14 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
 
         foreach (const QUrl& inputUrl, d->preProcessedUrlsMap.keys())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Pre-processed output urls map: "
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Pre-processed output urls map: "
                                          << inputUrl << "=>"
                                          << d->preProcessedUrlsMap[inputUrl].preprocessedUrl << ","
                                          << d->preProcessedUrlsMap[inputUrl].previewUrl << ";";
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Align exit status    : " << d->alignProcess->exitStatus();
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Align exit code      : " << d->alignProcess->exitCode();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Align exit status    : " << d->alignProcess->exitStatus();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Align exit code      : " << d->alignProcess->exitCode();
 
         if (d->alignProcess->exitStatus() != QProcess::NormalExit)
         {
@@ -667,13 +667,13 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
     {
         foreach (const QUrl& inputUrl, d->preProcessedUrlsMap.keys())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Pre-processed output urls map: "
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Pre-processed output urls map: "
                                          << inputUrl << "=>"
                                          << d->preProcessedUrlsMap[inputUrl].preprocessedUrl << ","
                                          << d->preProcessedUrlsMap[inputUrl].previewUrl << ";";
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Alignment not performed.";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Alignment not performed.";
         return true;
     }
 }
@@ -709,11 +709,11 @@ bool ExpoBlendingThread::computePreview(const QUrl& inUrl, QUrl& outUrl)
             }
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Preview Image url: " << outUrl << ", saved: " << saved;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Preview Image url: " << outUrl << ", saved: " << saved;
         return saved;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Input image not loaded:" << inUrl;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Input image not loaded:" << inUrl;
 
     return false;
 }
@@ -757,7 +757,7 @@ bool ExpoBlendingThread::convertRaw(const QUrl& inUrl, QUrl& outUrl)
         return false;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Convert RAW output url: " << outUrl;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Convert RAW output url: " << outUrl;
 
     return true;
 }
@@ -833,7 +833,7 @@ bool ExpoBlendingThread::startEnfuse(const QList<QUrl>& inUrls, QUrl& outUrl,
     d->enfuseProcess->setProgram(enfusePath);
     d->enfuseProcess->setArguments(args);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Enfuse command line: " << d->enfuseProcess->program();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Enfuse command line: " << d->enfuseProcess->program();
 
     d->enfuseProcess->start();
 
@@ -843,9 +843,9 @@ bool ExpoBlendingThread::startEnfuse(const QList<QUrl>& inUrls, QUrl& outUrl,
         return false;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Enfuse output url: "  << outUrl;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Enfuse exit status: " << d->enfuseProcess->exitStatus();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Enfuse exit code:   " << d->enfuseProcess->exitCode();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Enfuse output url: "  << outUrl;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Enfuse exit status: " << d->enfuseProcess->exitStatus();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Enfuse exit code:   " << d->enfuseProcess->exitCode();
 
     if (d->enfuseProcess->exitStatus() != QProcess::NormalExit)
     {
@@ -958,7 +958,7 @@ float ExpoBlendingThread::getAverageSceneLuminance(const QUrl& url)
             expo = (float)(nmr) / (float)(div);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << url.fileName() << " : expo = " << expo;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << url.fileName() << " : expo = " << expo;
 
     if (d->meta.getExifTagRational("Exif.Photo.FNumber", num, den))
     {
@@ -981,7 +981,7 @@ float ExpoBlendingThread::getAverageSceneLuminance(const QUrl& url)
             fnum = (float)(exp(log(2.0) * (float)(num) / (float)(den) / 2.0));
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << url.fileName() << " : fnum = " << fnum;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << url.fileName() << " : fnum = " << fnum;
 
     // Some cameras/lens DO print the fnum but with value 0, and this is not allowed for ev computation purposes.
 
@@ -1005,14 +1005,14 @@ float ExpoBlendingThread::getAverageSceneLuminance(const QUrl& url)
         iso = 100.0;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << url.fileName() << " : iso = " << iso;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << url.fileName() << " : iso = " << iso;
 
     // At this point the three variables have to be != -1
 
     if (expo != -1.0 && iso != -1.0 && fnum != -1.0)
     {
         float asl = (expo * iso) / (fnum * fnum * 12.07488f);
-        qCDebug(DIGIKAM_GENERAL_LOG) << url.fileName() << " : ASL ==> " << asl;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << url.fileName() << " : ASL ==> " << asl;
 
         return asl;
     }

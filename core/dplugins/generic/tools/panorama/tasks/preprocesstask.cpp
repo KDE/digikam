@@ -165,12 +165,12 @@ bool PreProcessTask::computePreview(const QUrl& inUrl)
             d->meta.applyChanges(true);
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Preview Image url: " << outUrl << ", saved: " << saved;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Preview Image url: " << outUrl << ", saved: " << saved;
         return saved;
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Error during preview generation of: " << inUrl;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Error during preview generation of: " << inUrl;
         errString = i18n("Input image cannot be loaded for preview generation.");
     }
 
@@ -235,7 +235,7 @@ bool PreProcessTask::convertRaw()
         return false;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Convert RAW output url: " << outUrl;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Convert RAW output url: " << outUrl;
 
     return true;
 }

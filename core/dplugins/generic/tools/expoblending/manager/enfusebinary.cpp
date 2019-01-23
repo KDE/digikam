@@ -42,7 +42,7 @@ bool EnfuseBinary::parseHeader(const QString& output)
     QString headerStartsOld = QLatin1String("==== enfuse, version ");
     QString firstLine = output.section(QLatin1Char('\n'), m_headerLine, m_headerLine);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << path() << " help header line: \n" << firstLine;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << path() << " help header line: \n" << firstLine;
 
     if (firstLine.startsWith(m_headerStarts))
     {
@@ -51,7 +51,7 @@ bool EnfuseBinary::parseHeader(const QString& output)
         versionList.removeLast();
         versionDouble = versionList.join(QLatin1Char('.')).toDouble();
         emit signalEnfuseVersion(versionDouble);
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << path() << " version: " << version();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Found " << path() << " version: " << version();
         return true;
     }
     else if (firstLine.startsWith(headerStartsOld))
@@ -61,7 +61,7 @@ bool EnfuseBinary::parseHeader(const QString& output)
         versionList.removeLast();
         versionDouble = versionList.join(QLatin1Char('.')).toDouble();
         emit signalEnfuseVersion(versionDouble);
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << path() << " version: " << version();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Found " << path() << " version: " << version();
         return true;
     }
 

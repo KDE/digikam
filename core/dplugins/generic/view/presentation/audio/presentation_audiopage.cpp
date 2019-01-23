@@ -601,7 +601,7 @@ void PresentationAudioPage::slotPreviewButtonClicked()
     // Update PresentationContainer from interface
     saveSettings();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Tracks : " << urlList;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Tracks : " << urlList;
 
     QPointer<SoundtrackPreview> preview = new SoundtrackPreview(this, urlList, d->sharedData);
     preview->exec();

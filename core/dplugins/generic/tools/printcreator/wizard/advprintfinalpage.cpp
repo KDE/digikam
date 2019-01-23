@@ -337,7 +337,7 @@ bool AdvPrintFinalPage::print()
                                                 &bottom,
                                                 QPrinter::Millimeter);
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Margins before print dialog: left "
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Margins before print dialog: left "
                                      << left
                                      << " right "
                                      << right
@@ -346,7 +346,7 @@ bool AdvPrintFinalPage::print()
                                      << " bottom "
                                      << bottom;
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "(1) paper page "
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "(1) paper page "
                                      << d->photoPage->printer()->paperSize()
                                      << " size "
                                      << d->photoPage->printer()->paperSize(QPrinter::Millimeter);
@@ -355,7 +355,7 @@ bool AdvPrintFinalPage::print()
         QPrintDialog* const dialog    = new QPrintDialog(d->photoPage->printer(), this);
         dialog->setWindowTitle(i18n("Print Creator"));
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "(2) paper page "
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "(2) paper page "
                                      << dialog->printer()->paperSize()
                                      << " size "
                                      << dialog->printer()->paperSize(QPrinter::Millimeter);
@@ -365,7 +365,7 @@ bool AdvPrintFinalPage::print()
             return false;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "(3) paper page "
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "(3) paper page "
                                      << dialog->printer()->paperSize()
                                      << " size "
                                      << dialog->printer()->paperSize(QPrinter::Millimeter);
@@ -376,14 +376,14 @@ bool AdvPrintFinalPage::print()
             d->photoPage->printer()->setPaperSize(paperSize);
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "(4) paper page "
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "(4) paper page "
                                      << dialog->printer()->paperSize()
                                      << " size "
                                      << dialog->printer()->paperSize(QPrinter::Millimeter);
 
         dialog->printer()->getPageMargins(&left, &top, &right, &bottom, QPrinter::Millimeter);
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Dialog exit, new margins: left "
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Dialog exit, new margins: left "
                                      << left
                                      << " right "
                                      << right

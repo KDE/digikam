@@ -294,12 +294,12 @@ void TimeAdjustTask::run()
 
             if (!ret)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to update metadata in file " << d->url.fileName();
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Failed to update metadata in file " << d->url.fileName();
             }
         }
         else
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to load metadata from file " << d->url.fileName();
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Failed to load metadata from file " << d->url.fileName();
         }
 
         if (!ret)

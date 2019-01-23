@@ -77,9 +77,9 @@ void CreateMKTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 
     runProcess(args);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "pto2mk command line: " << getCommandLine();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "pto2mk command line: " << getCommandLine();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "pto2mk output:" << endl << output;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "pto2mk output:" << endl << output;
 }
 
 } // namespace Digikam

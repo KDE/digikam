@@ -244,7 +244,7 @@ void AdvPrintCaptionPage::updateCaption(AdvPrintPhoto* const pPhoto)
             pPhoto->m_pAdvPrintCaptionInfo->m_captionText  =
                 d->captionUi->m_FreeCaptionFormat->text();
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Update caption properties for"
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Update caption properties for"
                                          << pPhoto->m_url;
         }
     }
@@ -270,7 +270,7 @@ void AdvPrintCaptionPage::slotUpdateCaptions()
                         AdvPrintSettings::NONE)
                         cap = captionFormatter(pPhoto);
 
-                    qCDebug(DIGIKAM_GENERAL_LOG) << cap;
+                    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << cap;
 
                     lvItem->setText(DItemsListView::User1, cap);
                 }
@@ -286,7 +286,7 @@ QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo)
 {
     if (!photo->m_pAdvPrintCaptionInfo)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Internal caption info container is NULL for"
+        qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Internal caption info container is NULL for"
                                        << photo->m_url;
         return QString();
     }
@@ -319,7 +319,7 @@ QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo)
             format = photo->m_pAdvPrintCaptionInfo->m_captionText;
             break;
         default:
-            qCWarning(DIGIKAM_GENERAL_LOG) << "UNKNOWN caption type "
+            qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "UNKNOWN caption type "
                                            << photo->m_pAdvPrintCaptionInfo->m_captionType;
             break;
     }
@@ -366,7 +366,7 @@ QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo)
 
     format.replace(QString::fromUtf8("%r"), resolution);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Caption for"
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Caption for"
                                  << photo->m_url
                                  << ":" << format;
     return format;

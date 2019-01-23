@@ -103,7 +103,7 @@ bool ImageResizeJob::imageResize(MailSettings* const settings,
     QFileInfo tmp(destName);
     QFileInfo tmpDir(tmp.dir().absolutePath());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "tmpDir: " << tmp.dir().absolutePath();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "tmpDir: " << tmp.dir().absolutePath();
 
     if (!tmpDir.exists() || !tmpDir.isWritable())
     {

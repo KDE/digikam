@@ -114,7 +114,7 @@ bool Flip::toolOperations()
                 break;
 
             default:
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Unknown flip action";
+                qCDebug(DIGIKAM_DPLUGIN_BQM_LOG) << "Unknown flip action";
                 return false;
                 break;
         }

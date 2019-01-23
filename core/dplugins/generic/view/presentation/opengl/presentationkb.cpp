@@ -256,7 +256,7 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
         frameRate = d->forceFrameRate;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Frame Rate : " << frameRate;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Frame Rate : " << frameRate;
 
     d->image[0]        = new KBImage(0);
     d->image[1]        = new KBImage(0);
@@ -351,7 +351,7 @@ void PresentationKB::setNewKBEffect()
             break;
 
         default:
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Unknown transition effect, falling back to crossfade";
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown transition effect, falling back to crossfade";
             d->effect = new BlendKBEffect(this, needFadeIn);
             break;
     }

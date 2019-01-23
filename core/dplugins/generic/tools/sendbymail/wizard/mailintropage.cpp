@@ -212,7 +212,7 @@ void MailIntroPage::slotBinariesFound()
 bool MailIntroPage::isComplete() const
 {
     QString val = d->wizard->settings()->binPaths.values().join(QString());
-    qCDebug(DIGIKAM_GENERAL_LOG) << val;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << val;
 
     return (!val.isEmpty());
 }

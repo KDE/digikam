@@ -320,14 +320,14 @@ void PanoPreviewPage::slotStartStitching()
 
 void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "SlotPanoAction (preview)";
-    qCDebug(DIGIKAM_GENERAL_LOG) << "\tstarting, success, canceled, action: " << ad.starting << ad.success << d->canceled << ad.action;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "SlotPanoAction (preview)";
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "\tstarting, success, canceled, action: " << ad.starting << ad.success << d->canceled << ad.action;
 
     QString      text;
 
     QMutexLocker lock(&d->previewBusyMutex);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "\tbusy (preview / stitch):" << d->previewBusy << d->stitchingBusy;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "\tbusy (preview / stitch):" << d->previewBusy << d->stitchingBusy;
 
     if (!ad.starting)           // Something is complete...
     {
@@ -358,7 +358,7 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
                     d->previewWidget->setBusy(false);
                     d->previewBusy = false;
 
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Preview compilation failed: " << ad.message;
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Preview compilation failed: " << ad.message;
                     QString errorString(i18n("<h1><b>Error</b></h1><p>%1</p>",
                                               ad.message));
                     d->previewWidget->setText(errorString);
@@ -392,7 +392,7 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
                     QString message  = i18nc("Here a makefile is a script for GNU Make",
                                              "<p><b>Cannot create makefile: </b></p><p>%1</p>",
                                              ad.message);
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "pto2mk call failed";
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "pto2mk call failed";
                     d->postProcessing->addEntry(message, DHistoryView::ErrorEntry);
 
                     setComplete(false);
@@ -420,7 +420,7 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
                     QString message  = i18nc("a project file is a .pto file, as given to hugin to build a panorama",
                                              "<p><b>Cannot create project file: </b></p><p>%1</p>",
                                              ad.message);
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "pto creation failed";
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "pto creation failed";
                     d->postProcessing->addEntry(message, DHistoryView::ErrorEntry);
 
                     setComplete(false);
@@ -450,7 +450,7 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
                                              ad.id + 1,
                                              d->totalProgress - 1,
                                              ad.message);
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Nona call failed for file #" << ad.id;
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Nona call failed for file #" << ad.id;
                     d->postProcessing->addEntry(message, DHistoryView::ErrorEntry);
 
                     setComplete(false);
@@ -479,7 +479,7 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
                     d->postProcessing->addEntry(i18nc("Error message for panorama compilation",
                                                          "<p><b>Panorama compilation: </b></p><p>%1</p>",
                                                          ad.message.toHtmlEscaped()), DHistoryView::ErrorEntry);
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Enblend call failed";
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Enblend call failed";
 
                     setComplete(false);
                     emit completeChanged();
@@ -488,7 +488,7 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
                 }
                 default:
                 {
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown action (preview) " << ad.action;
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown action (preview) " << ad.action;
                     break;
                 }
             }
@@ -592,7 +592,7 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
                 }
                 default:
                 {
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown action (preview) " << ad.action;
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown action (preview) " << ad.action;
                     break;
                 }
             }
@@ -630,7 +630,7 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
             }
             default:
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown starting action (preview) " << ad.action;
+                qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown starting action (preview) " << ad.action;
                 break;
             }
         }

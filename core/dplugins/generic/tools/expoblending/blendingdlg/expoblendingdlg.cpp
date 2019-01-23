@@ -481,7 +481,7 @@ void ExpoBlendingDlg::saveItem(const QUrl& temp, const EnfuseSettings& settings)
         newUrl = DFileOperations::getUniqueFileUrl(newUrl);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Renaming " << temp << " to " << newUrl;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Renaming " << temp << " to " << newUrl;
 
     if (!newUrl.isEmpty())
     {
@@ -544,7 +544,7 @@ void ExpoBlendingDlg::slotExpoBlendingAction(const Digikam::ExpoBlendingActionDa
             }
             default:
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown action";
+                qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown action";
                 break;
             }
         }
@@ -590,7 +590,7 @@ void ExpoBlendingDlg::slotExpoBlendingAction(const Digikam::ExpoBlendingActionDa
                 }
                 default:
                 {
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown action";
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown action";
                     break;
                 }
             }
@@ -627,7 +627,7 @@ void ExpoBlendingDlg::slotExpoBlendingAction(const Digikam::ExpoBlendingActionDa
                 }
                 default:
                 {
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown action";
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown action";
                     break;
                 }
             }
@@ -653,7 +653,7 @@ void ExpoBlendingDlg::setRejectButtonMode(QDialogButtonBox::StandardButton butto
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Unexpected button mode passed";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unexpected button mode passed";
     }
 }
 

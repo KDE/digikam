@@ -100,16 +100,16 @@ void AdvPrintTask::run()
     {
         case PREPAREPRINT:
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Start prepare to print";
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Start prepare to print";
             preparePrint();
             emit signalDone(!m_cancel);
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Prepare to print is done";
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Prepare to print is done";
 
             break;
 
         case PRINT:
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Start to print";
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Start to print";
 
             if (d->settings->printerName != d->settings->outputName(AdvPrintSettings::FILES) &&
                 d->settings->printerName != d->settings->outputName(AdvPrintSettings::GIMP))
@@ -129,13 +129,13 @@ void AdvPrintTask::run()
                 emit signalDone(!m_cancel && !files.isEmpty());
             }
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Print is done";
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Print is done";
 
             break;
 
         default:    // PREVIEW
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Start to compute preview";
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Start to compute preview";
 
             QImage img(d->size, QImage::Format_ARGB32_Premultiplied);
             QPainter p(&img);
@@ -153,7 +153,7 @@ void AdvPrintTask::run()
             if (!m_cancel)
                 emit signalPreview(img);
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Preview computation is done";
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Preview computation is done";
 
             break;
     }
@@ -326,13 +326,13 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
 {
     if (layouts.isEmpty())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Invalid layout content";
+        qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Invalid layout content";
         return true;
     }
 
     if (photos.count() == 0)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "no photo to print";
+        qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "no photo to print";
         // no photos => last photo
         return true;
     }
@@ -440,10 +440,10 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
         QRect newRectViewPort = QRect(x1 + left, y1 + top, w, h);
         QSize imageSize       = img.size();
 /*
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Image         "
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Image         "
                                      << photo->filename
                                      << " size " << imageSize;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "viewport size "
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "viewport size "
                                      << newRectViewPort.size();
 */
         QPoint point;
@@ -479,7 +479,7 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
             p.save();
             QString caption = AdvPrintCaptionPage::captionFormatter(photo);
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Caption for"
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Caption for"
                                          << photo->m_url
                                          << ":"
                                          << caption;
@@ -520,7 +520,7 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
             }
 
             p.rotate(orientatation);
-            qCDebug(DIGIKAM_GENERAL_LOG) << "rotation "
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "rotation "
                                          << photo->m_rotation
                                          << " orientation "
                                          << orientatation;
@@ -684,7 +684,7 @@ void AdvPrintTask::printCaption(QPainter& p,
     p.setFont(font);
     p.setPen(photo->m_pAdvPrintCaptionInfo->m_captionColor);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Number of lines "
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Number of lines "
                                  << (int) captionByLines.count() ;
 
     // Now draw the caption

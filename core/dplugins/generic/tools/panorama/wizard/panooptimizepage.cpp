@@ -271,8 +271,8 @@ void PanoOptimizePage::slotProgressTimerDone()
 
 void PanoOptimizePage::slotPanoAction(const Digikam::PanoActionData& ad)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "SlotPanoAction (optimize)";
-    qCDebug(DIGIKAM_GENERAL_LOG) << "starting, success, canceled, action: " << ad.starting << ad.success << d->canceled << ad.action;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "SlotPanoAction (optimize)";
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "starting, success, canceled, action: " << ad.starting << ad.success << d->canceled << ad.action;
 
     QString text;
 
@@ -297,7 +297,7 @@ void PanoOptimizePage::slotPanoAction(const Digikam::PanoActionData& ad)
                     disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(Digikam::PanoActionData)),
                                this, SLOT(slotPanoAction(Digikam::PanoActionData)));
 
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Job failed (optimize): " << ad.action;
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Job failed (optimize): " << ad.action;
 
                     if (d->detailsText->isHidden())
                     {
@@ -319,7 +319,7 @@ void PanoOptimizePage::slotPanoAction(const Digikam::PanoActionData& ad)
                 }
                 default:
                 {
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown action (optimize) " << ad.action;
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown action (optimize) " << ad.action;
                     break;
                 }
             }
@@ -350,7 +350,7 @@ void PanoOptimizePage::slotPanoAction(const Digikam::PanoActionData& ad)
                 }
                 default:
                 {
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown action (optimize) " << ad.action;
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown action (optimize) " << ad.action;
                     break;
                 }
             }

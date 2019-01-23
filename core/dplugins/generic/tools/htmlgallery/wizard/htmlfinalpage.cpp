@@ -117,7 +117,7 @@ void HTMLFinalPage::slotProcess()
 
     // Generate GalleryInfo
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << info;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << info;
 
     d->progressView->addEntry(i18n("Starting to generate gallery..."),
                               DHistoryView::ProgressEntry);

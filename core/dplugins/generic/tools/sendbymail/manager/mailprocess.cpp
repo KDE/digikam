@@ -180,7 +180,7 @@ void MailProcess::slotFinishedResize(const QUrl& orgUrl, const QUrl& emailUrl, i
     if (d->cancel) return;
 
     emit signalProgress((int)(80.0*(percent/100.0)));
-    qCDebug(DIGIKAM_GENERAL_LOG) << emailUrl;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << emailUrl;
     d->attachementFiles.append(emailUrl);
     d->settings->setMailUrl(orgUrl, emailUrl);
 
@@ -277,7 +277,7 @@ void MailProcess::buildPropertiesFile()
         if (!propertiesFile.open(QIODevice::WriteOnly))
         {
             emit signalMessage(i18n("Image properties file cannot be opened"), true);
-            qCDebug(DIGIKAM_GENERAL_LOG) << "File open error:" << propertiesFile.fileName();
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "File open error:" << propertiesFile.fileName();
             return;
         }
 
@@ -285,7 +285,7 @@ void MailProcess::buildPropertiesFile()
         propertiesFile.close();
         d->attachementFiles << QUrl::fromLocalFile(propertiesFile.fileName());
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Image properties file done" << propertiesFile.fileName();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Image properties file done" << propertiesFile.fileName();
         emit signalMessage(i18n("Image properties file done"), false);
     }
 }
@@ -355,25 +355,25 @@ QList<QUrl> MailProcess::divideEmails()
     QList<QUrl> processedNow;            // List which can be processed now.
     QList<QUrl> todoAttachement;         // Still todo list
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Attachment limit: " << d->settings->attachementLimit();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Attachment limit: " << d->settings->attachementLimit();
 
     for (QList<QUrl>::const_iterator it = d->attachementFiles.constBegin() ;
         it != d->attachementFiles.constEnd() ; ++it)
     {
         QFile file((*it).toLocalFile());
-        qCDebug(DIGIKAM_GENERAL_LOG) << "File: " << file.fileName() << " Size: " << file.size();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "File: " << file.fileName() << " Size: " << file.size();
 
         if ((myListSize + file.size()) <= d->settings->attachementLimit())
         {
             myListSize += file.size();
             processedNow.append(*it);
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Current list size: " << myListSize;
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Current list size: " << myListSize;
         }
         else
         {
             if ((file.size()) >= d->settings->attachementLimit())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "File \"" << file.fileName()
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "File \"" << file.fileName()
                                              << "\" is out of attachment limit!";
                 QString mess = i18n("The file \"%1\" is too big to be sent, "
                                     "please reduce its size or change your settings",
@@ -409,7 +409,7 @@ bool MailProcess::invokeMailAgent()
 
             if (prog.isEmpty())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Mail binary path is empty."
+                qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Mail binary path is empty."
                                              << "Cannot start Mail client program!";
                 return false;
             }
@@ -579,7 +579,7 @@ bool MailProcess::invokeMailAgent()
 
 void MailProcess::invokeMailAgentError(const QString& prog, const QStringList& args)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Command Line: " << prog << args;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Command Line: " << prog << args;
     QString text = i18n("Failed to start \"%1\" program. Check your system.", prog);
     emit signalMessage(text, true);
     slotCleanUp();
@@ -588,7 +588,7 @@ void MailProcess::invokeMailAgentError(const QString& prog, const QStringList& a
 
 void MailProcess::invokeMailAgentDone(const QString& prog, const QStringList& args)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Command Line: " << prog << args;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Command Line: " << prog << args;
     QString text = i18n("Starting \"%1\" program...", prog);
     emit signalMessage(text, false);
 

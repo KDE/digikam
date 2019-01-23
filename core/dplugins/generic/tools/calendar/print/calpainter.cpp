@@ -282,7 +282,7 @@ void CalPainter::paint(int month)
 
                     QString descr = settings->getDayDescr(month, days[index]);
 
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Painting special info: '" << descr
+                    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Painting special info: '" << descr
                              << "' for date " << days[index] << "/"
                              << month;
 

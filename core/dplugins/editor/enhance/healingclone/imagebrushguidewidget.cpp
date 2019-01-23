@@ -34,7 +34,7 @@ void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if ((e->buttons() & Qt::LeftButton) && !srcSet)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Move The location is: " << e->x() << ", "<< e->y();
+        qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "Move The location is: " << e->x() << ", "<< e->y();
 
         QPoint currentDst = QPoint(e->x(), e->y());
 

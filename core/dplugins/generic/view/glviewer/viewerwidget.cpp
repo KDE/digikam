@@ -158,18 +158,18 @@ ViewerWidget::ViewerWidget(DPlugin* const plugin, DInfoInterface* const iface)
 
     if (selection.count() == 0)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "no image selected, load entire album" ;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "no image selected, load entire album" ;
         myfiles = d->iface->currentAlbumItems();
     }
     else if (selection.count() == 1)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "one image selected, load entire album and start with selected image" ;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "one image selected, load entire album and start with selected image" ;
         selectedImage = selection.first().toLocalFile();
         myfiles       = d->iface->currentAlbumItems();
     }
     else if (selection.count() > 1)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "load " << selection.count() << " selected images" ;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "load " << selection.count() << " selected images" ;
         myfiles = selection;
     }
 
@@ -182,7 +182,7 @@ ViewerWidget::ViewerWidget(DPlugin* const plugin, DInfoInterface* const iface)
 
         if ( s == selectedImage )
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "selected img  " << selectedImage << " has idx=" << foundNumber ;
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "selected img  " << selectedImage << " has idx=" << foundNumber ;
             d->file_idx = foundNumber;
         }
 
@@ -194,11 +194,11 @@ ViewerWidget::ViewerWidget(DPlugin* const plugin, DInfoInterface* const iface)
         {
             d->files.append(s);
             foundNumber++;  //counter for searching the start image in case one image is selected
-            qCDebug(DIGIKAM_GENERAL_LOG) << s << " type=" << mimeTypeName;
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << s << " type=" << mimeTypeName;
         }
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << d->files.count() << "images loaded" ;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << d->files.count() << "images loaded" ;
 
     // initialize cache
     for(int i = 0 ; i < CACHESIZE ; ++i)
@@ -252,7 +252,7 @@ void ViewerWidget::initializeGL()
     glClearDepth(1.0f);
     // Generate d->texture
     glGenTextures(1, d->tex);
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "width=" << width();
+    //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "width=" << width();
 }
 
 bool ViewerWidget::listOfFilesIsEmpty() const
@@ -263,16 +263,16 @@ bool ViewerWidget::listOfFilesIsEmpty() const
 void ViewerWidget::paintGL()
 {
     //this test has to be performed here since QWidget::width() is only updated now
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "enter paintGL: isReallyFullscreen=" << isReallyFullScreen();
+    //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "enter paintGL: isReallyFullscreen=" << isReallyFullScreen();
     //prepare 1st image
     if (d->firstImage && isReallyFullScreen())
     {
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "first image";
+        //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "first image";
         d->texture = loadImage(d->file_idx);
         d->texture->reset();
         downloadTexture(d->texture);
 
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "width=" << width();
+        //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "width=" << width();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
         glTranslatef(0.0f, 0.0f, -5.0f);
@@ -297,19 +297,19 @@ void ViewerWidget::paintGL()
 
     if (!d->firstImage)
     {
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "width=" << width();
+        //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "width=" << width();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
         glTranslatef(0.0f, 0.0f, -5.0f);
         drawImage(d->texture);
     }
 
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "exit paintGL";
+    //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "exit paintGL";
 }
 
 void ViewerWidget::resizeGL(int w, int h)
 {
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "resizeGL,w=" << w;
+    //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "resizeGL,w=" << w;
     glViewport(0, 0, (GLint)w, (GLint)h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -561,14 +561,14 @@ Texture* ViewerWidget::loadImage(int file_index) const
     if (d->cache[imod].file_index==file_index)
     {
         //image is already cached
-        qCDebug(DIGIKAM_GENERAL_LOG) << "image " << file_index << " is already in cache@" << imod ;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "image " << file_index << " is already in cache@" << imod ;
         return d->cache[imod].texture;
     }
     else
     {
         // image is net yet loaded
         QString f = d->files[file_index];
-        qCDebug(DIGIKAM_GENERAL_LOG) << "loading image " << f << "(idx=" << file_index << ") to cache@" << imod ;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "loading image " << f << "(idx=" << file_index << ") to cache@" << imod ;
         d->cache[imod].file_index = file_index;
 
         //when loadImage is called the first time, the frame is not yet fullscreen
@@ -580,12 +580,12 @@ Texture* ViewerWidget::loadImage(int file_index) const
             QDesktopWidget dw;
             //QRect r = dw.screenGeometry(this);
             size    = dw.size();
-            //qCDebug(DIGIKAM_GENERAL_LOG) << "first image:size=" << size.width();
+            //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "first image:size=" << size.width();
         }
         else
         {
             size = QSize(width(),height());
-            //qCDebug(DIGIKAM_GENERAL_LOG) << "next image:size=" << size.width();
+            //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "next image:size=" << size.width();
         }
 
         // handle non-loadable images

@@ -210,12 +210,12 @@ void SearchBackend::slotFinished(QNetworkReply* reply)
         QDomDocument doc;
         doc.setContent(resultString); // error-handling
         QDomElement docElement = doc.documentElement(); // error-handling
-        qCDebug(DIGIKAM_GENERAL_LOG)<<docElement.toElement().tagName();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG)<<docElement.toElement().tagName();
 
         for (QDomNode resultNode = docElement.firstChild() ; !resultNode.isNull() ; resultNode = resultNode.nextSibling())
         {
             QDomElement resultElement = resultNode.toElement();
-            qCDebug(DIGIKAM_GENERAL_LOG) << resultElement.tagName();
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << resultElement.tagName();
 
             if (resultElement.isNull())
             {

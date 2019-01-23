@@ -282,8 +282,8 @@ void PanoLastPage::slotPtoCheckBoxChanged(int)
 
 void PanoLastPage::slotPanoAction(const Digikam::PanoActionData& ad)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "SlotPanoAction (lastPage)";
-    qCDebug(DIGIKAM_GENERAL_LOG) << "starting, success, action:" << ad.starting << ad.success << ad.action;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "SlotPanoAction (lastPage)";
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "starting, success, action:" << ad.starting << ad.success << ad.action;
 
     if (!ad.starting)           // Something is complete...
     {
@@ -303,7 +303,7 @@ void PanoLastPage::slotPanoAction(const Digikam::PanoActionData& ad)
                 }
                 default:
                 {
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown action (last) " << ad.action;
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown action (last) " << ad.action;
                     break;
                 }
             }
@@ -323,7 +323,7 @@ void PanoLastPage::slotPanoAction(const Digikam::PanoActionData& ad)
                 }
                 default:
                 {
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown action (last) " << ad.action;
+                    qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown action (last) " << ad.action;
                     break;
                 }
             }

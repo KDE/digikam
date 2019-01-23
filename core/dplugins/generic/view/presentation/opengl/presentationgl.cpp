@@ -826,7 +826,7 @@ void PresentationGL::slotTimeOut()
 {
     if (!d->effect)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "PresentationGL: No transition method";
+        qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "PresentationGL: No transition method";
         d->effect = &PresentationGL::effectNone;
     }
 

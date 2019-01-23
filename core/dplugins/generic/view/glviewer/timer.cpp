@@ -66,7 +66,7 @@ void Timer::start()
 void Timer::at(const QString& s)
 {
     d->meantime = d->timer.elapsed() - d->meantime;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "stopwatch:" << s << ": " << d->meantime << " ms    overall: " << d->timer.elapsed() << " ms";
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "stopwatch:" << s << ": " << d->meantime << " ms    overall: " << d->timer.elapsed() << " ms";
 }
 
 } // namespace GenericGLViewerPlugin

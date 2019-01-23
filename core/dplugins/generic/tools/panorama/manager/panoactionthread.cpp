@@ -76,26 +76,26 @@ PanoActionThread::PanoActionThread(QObject* const parent)
     qRegisterMetaType<PanoActionData>();
 
     d->threadQueue->setMaximumNumberOfThreads(qMax(QThread::idealThreadCount(), 1));
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Starting Main Thread";
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Starting Main Thread";
 }
 
 PanoActionThread::~PanoActionThread()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Calling action thread destructor";
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Calling action thread destructor";
 
     delete d;
 }
 
 void PanoActionThread::cancel()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Cancel (PanoAction Thread)";
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Cancel (PanoAction Thread)";
     d->threadQueue->dequeue();
     d->threadQueue->requestAbort();
 }
 
 void PanoActionThread::finish()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Finish (PanoAction Thread)";
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Finish (PanoAction Thread)";
     // Wait for all queued jobs to finish
     d->threadQueue->finish();
     d->threadQueue->resume();
@@ -403,7 +403,7 @@ void PanoActionThread::slotStarting(JobPointer j)
     ad.action       = t->action;
     ad.id           = -1;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Starting (PanoAction Thread) (action):" << ad.action;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Starting (PanoAction Thread) (action):" << ad.action;
 
     if (t->action == PANO_NONAFILE)
     {
@@ -431,7 +431,7 @@ void PanoActionThread::slotStepDone(JobPointer j)
     ad.success      = t->success();
     ad.message      = t->errString;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Step done (PanoAction Thread) (action, success):" << ad.action << ad.success;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Step done (PanoAction Thread) (action, success):" << ad.action << ad.success;
 
     if (t->action == PANO_NONAFILE)
     {
@@ -464,7 +464,7 @@ void PanoActionThread::slotDone(JobPointer j)
     ad.success      = t->success();
     ad.message      = t->errString;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Done (PanoAction Thread) (action, success):"
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Done (PanoAction Thread) (action, success):"
                                  << ad.action << ad.success;
 
     if (t->action == PANO_NONAFILE)

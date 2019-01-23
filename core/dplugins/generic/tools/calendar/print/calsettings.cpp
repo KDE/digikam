@@ -291,7 +291,7 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
 {
     if (url.isEmpty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Loading calendar from file failed: No valid url provided!";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Loading calendar from file failed: No valid url provided!";
         return;
     }
 
@@ -304,11 +304,11 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
 #endif
     KCalCore::FileStorage::Ptr fileStorage(new KCalCore::FileStorage(memCal, url.toLocalFile(), new KCalCore::ICalFormat));
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Loading calendar from file " << url.toLocalFile();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Loading calendar from file " << url.toLocalFile();
 
     if (!fileStorage->load())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed!";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Failed!";
     }
     else
     {
@@ -328,7 +328,7 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
 
         foreach(const KCalCore::Event::Ptr event, list)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << event->summary() << endl << "--------";
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << event->summary() << endl << "--------";
             counter++;
 
             if (event->recurs())
@@ -348,7 +348,7 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
             }
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Loaded " << counter << " events";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Loaded " << counter << " events";
         memCal->close();
         fileStorage->close();
     }

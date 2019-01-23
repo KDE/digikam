@@ -532,7 +532,7 @@ public:
             param += QLatin1Char(')');
         }
 
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "param: " << txt << " => " << param;
+        //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "param: " << txt << " => " << param;
 
         return param.toUtf8();
     }
@@ -579,7 +579,7 @@ bool GalleryGenerator::run()
         return false;
 
     QString destDir = d->info->destUrl().toLocalFile();
-    qCDebug(DIGIKAM_GENERAL_LOG) << destDir;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << destDir;
 
     if (!d->createDir(destDir))
         return false;

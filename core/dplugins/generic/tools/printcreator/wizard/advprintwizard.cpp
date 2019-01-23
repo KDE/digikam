@@ -268,7 +268,7 @@ void AdvPrintWizard::previewPhotos()
 {
     if (d->settings->photosizes.isEmpty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Photo sizes is null";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Photo sizes is null";
         return;
     }
 
@@ -365,7 +365,7 @@ void AdvPrintWizard::previewPhotos()
 
 void AdvPrintWizard::slotPreview(const QImage& img)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Receive Preview" << img.size();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Receive Preview" << img.size();
 
     d->photoPage->ui()->BmpFirstPagePreview->clear();
     d->photoPage->ui()->BmpFirstPagePreview->setPixmap(QPixmap::fromImage(img));

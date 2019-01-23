@@ -354,7 +354,7 @@ void GPSItemDetails::slotSetCurrentImage(const QModelIndex& index)
     if (index.isValid())
     {
         GPSItemContainer* const item = d->imageModel->itemFromIndex(index);
-        qCDebug(DIGIKAM_GENERAL_LOG)<<item;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG)<<item;
 
         if (item)
         {

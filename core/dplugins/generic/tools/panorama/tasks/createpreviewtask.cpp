@@ -57,7 +57,7 @@ void CreatePreviewTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     if (data.images.size() != preProcessedUrlsMap.size())
     {
         errString = i18n("Project file parsing failed.");
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Missing parsing data!";
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Missing parsing data!";
         successFlag = false;
         return;
     }
@@ -88,8 +88,8 @@ void CreatePreviewTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
         if (it == ppum->constEnd())
         {
             errString = i18n("Unknown input file in the project file: <filename>%1</filename>", image.fileName);
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Unknown input File in the PTO: " << image.fileName;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "IMG: " << imgUrl.toLocalFile();
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Unknown input File in the PTO: " << image.fileName;
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "IMG: " << imgUrl.toLocalFile();
             successFlag = false;
             return;
         }
@@ -112,7 +112,7 @@ void CreatePreviewTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     previewPtoUrl.setPath(previewPtoUrl.path() + QLatin1String("preview.pto"));
     data.createFile(previewPtoUrl.toLocalFile());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Preview PTO File created: " << previewPtoUrl.fileName();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Preview PTO File created: " << previewPtoUrl.fileName();
 
     successFlag = true;
 }

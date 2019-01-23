@@ -625,7 +625,7 @@ void GeolocationEdit::setItems(const QList<GPSItemContainer*>& items)
 
 void GeolocationEdit::slotFileMetadataLoaded(int beginIndex, int endIndex)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << beginIndex << endIndex;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << beginIndex << endIndex;
     d->fileIOCountDone += (endIndex-beginIndex);
     slotProgressChanged(d->fileIOCountDone);
 
@@ -915,7 +915,7 @@ void GeolocationEdit::saveChanges(const bool closeAfterwards)
 
 void GeolocationEdit::slotFileChangesSaved(int beginIndex, int endIndex)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << beginIndex << endIndex;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << beginIndex << endIndex;
 
     d->fileIOCountDone += (endIndex-beginIndex);
     slotProgressChanged(d->fileIOCountDone);
