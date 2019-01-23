@@ -34,7 +34,9 @@
 #include "actionthreadbase.h"
 #include "timeadjustcontainer.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericTimeAdjustPlugin
 {
 
 class TimeAdjustTask : public ActionJob
@@ -65,6 +67,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+}  // namespace GenericTimeAdjustPlugin
 
 #endif // DIGIKAM_TIME_ADJUST_TASK

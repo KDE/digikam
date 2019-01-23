@@ -36,7 +36,9 @@
 #include "ditemslist.h"
 #include "timeadjustsettings.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericTimeAdjustPlugin
 {
 
 class TimeAdjustList : public DItemsList
@@ -69,6 +71,6 @@ public:
     void setStatus(const QMap<QUrl, int>& status);
 };
 
-}  // namespace Digikam
+}  // namespace GenericTimeAdjustPlugin
 
 #endif // DIGIKAM_TIME_ADJUST_LIST_H

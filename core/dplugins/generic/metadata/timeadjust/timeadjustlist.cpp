@@ -33,7 +33,7 @@
 
 #include <klocalizedstring.h>
 
-namespace Digikam
+namespace GenericTimeAdjustPlugin
 {
 
 TimeAdjustList::TimeAdjustList(QWidget* const parent)
@@ -119,4 +119,4 @@ void TimeAdjustList::setStatus(const QMap<QUrl, int>& status)
     }
 }
 
-}  // namespace Digikam
+}  // namespace GenericTimeAdjustPlugin

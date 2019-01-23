@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.TimeAdjust"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericTimeAdjustPlugin
 {
 
 class TimeAdjustPlugin : public DPluginGeneric
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotTimeAdjust();
 };
 
-} // namespace Digikam
+} // namespace GenericTimeAdjustPlugin
 
 #endif // DIGIKAM_TIME_ADJUST_PLUGIN_H

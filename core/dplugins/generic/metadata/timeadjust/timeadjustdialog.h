@@ -35,11 +35,12 @@
 #include "dplugindialog.h"
 #include "digikam_export.h"
 #include "timeadjustsettings.h"
+#include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericTimeAdjustPlugin
 {
-
-class DInfoInterface;
 
 class DIGIKAM_EXPORT TimeAdjustDialog : public DPluginDialog
 {
@@ -100,6 +101,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+}  // namespace GenericTimeAdjustPlugin
 
 #endif // DIGIKAM_TIME_ADJUST_DIALOG_H

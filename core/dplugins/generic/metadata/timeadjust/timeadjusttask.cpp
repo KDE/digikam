@@ -46,7 +46,7 @@ extern "C"
 #include "timeadjustthread.h"
 #include "metaenginesettings.h"
 
-namespace Digikam
+namespace GenericTimeAdjustPlugin
 {
 
 class Q_DECL_HIDDEN TimeAdjustTask::Private
@@ -359,4 +359,4 @@ void TimeAdjustTask::run()
     emit signalDone();
 }
 
-} // namespace Digikam
+} // namespace GenericTimeAdjustPlugin
