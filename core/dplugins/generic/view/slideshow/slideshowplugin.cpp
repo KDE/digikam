@@ -26,7 +26,7 @@
 
 #include <QPointer>
 #include <QMenu>
-qMakePairmake
+
 // KDE includes
 
 #include <klocalizedstring.h>
@@ -35,7 +35,7 @@ qMakePairmake
 
 #include "slideshow.h"
 
-namespace Digikam
+namespace GenericSlideShowPlugin
 {
 
 SlideShowPlugin::SlideShowPlugin(QObject* const parent)
@@ -143,7 +143,6 @@ void SlideShowPlugin::setup(QObject* const parent)
 void SlideShowPlugin::slotSlideShow()
 {
     DInfoInterface* const iface = infoIface(sender());
-    
 }
 
 void SlideShowPlugin::slotMenuSlideShowAll()
@@ -173,4 +172,4 @@ void SlideShowPlugin::slotMenuSlideShowRecursive()
 {
 }
 
-} // namespace Digikam
+} // namespace GenericSlideShowPlugin

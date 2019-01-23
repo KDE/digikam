@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.SlideShow"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericSlideShowPlugin
 {
 
 class SlideShowPlugin : public DPluginGeneric
@@ -60,6 +62,6 @@ private Q_SLOTS:
     void slotMenuSlideShowRecursive();
 };
 
-} // namespace Digikam
+} // namespace GenericSlideShowPlugin
 
 #endif // DIGIKAM_SLIDESHOW_PLUGIN_H
