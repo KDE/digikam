@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "viewerwidget.h"
+#include "glviewerwidget.h"
 #include "digikam_debug.h"
 
 namespace GenericGLViewerPlugin
@@ -103,13 +103,13 @@ void GLViewerPlugin::slotGLViewer()
 {
     DInfoInterface* const iface = infoIface(sender());
 
-    QPointer<ViewerWidget> view = new ViewerWidget(this, iface);
+    QPointer<GLViewerWidget> view = new GLViewerWidget(this, iface);
 
     if (view->listOfFilesIsEmpty())
     {
         return;
     }
-    
+
     switch (view->getOGLstate())
     {
         case oglOK:

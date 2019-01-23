@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "viewerwidget.h"
+#include "glviewerwidget.h"
 
 // Qt includes
 
@@ -40,30 +40,30 @@
 
 // Local includes
 
-#include "timer.h"
-#include "texture.h"
-#include "helpdialog.h"
+#include "glviewertimer.h"
+#include "glviewertexture.h"
+#include "glviewerhelpdlg.h"
 #include "digikam_debug.h"
 
 #ifndef GL_TEXTURE_RECTANGLE_ARB
-#define GL_TEXTURE_RECTANGLE_ARB   0x84F5
+#   define GL_TEXTURE_RECTANGLE_ARB   0x84F5
 #endif
 
 #ifndef GL_TEXTURE_RECTANGLE_NV
-#define GL_TEXTURE_RECTANGLE_NV    0x84F5
+#   define GL_TEXTURE_RECTANGLE_NV    0x84F5
 #endif
 
 namespace GenericGLViewerPlugin
 {
 
-class ViewerWidget::Private
+class GLViewerWidget::Private
 {
 public:
 
     struct Cache
     {
-        int      file_index;
-        Texture* texture;
+        int              file_index;
+        GLViewerTexture* texture;
     };
 
     enum WheelAction
@@ -99,7 +99,7 @@ public:
         // not be necessary anymore
         zoomsize   = QSize(1024, 768);
 
-        for (int i = 0; i < CACHESIZE ; i++)
+        for (int i = 0 ; i < CACHESIZE ; ++i)
         {
             cache[i].file_index = 0;
             cache[i].texture    = 0;
@@ -124,7 +124,7 @@ public:
     QStringList      files;
     unsigned int     file_idx;
     Cache            cache[CACHESIZE];
-    Texture*         texture;
+    GLViewerTexture* texture;
     float            ratio_view_y, ratio_view_x, delta;
     float            vertex_height, vertex_width, vertex_left, vertex_top, vertex_right, vertex_bottom;
     QPoint           startdrag, previous_pos;
@@ -140,7 +140,7 @@ public:
     DPlugin*         plugin;
 };
 
-ViewerWidget::ViewerWidget(DPlugin* const plugin, DInfoInterface* const iface)
+GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const iface)
     : d(new Private)
 {
     d->plugin = plugin;
@@ -204,7 +204,7 @@ ViewerWidget::ViewerWidget(DPlugin* const plugin, DInfoInterface* const iface)
     for(int i = 0 ; i < CACHESIZE ; ++i)
     {
         d->cache[i].file_index = EMPTY;
-        d->cache[i].texture    = new Texture(d->iface);
+        d->cache[i].texture    = new GLViewerTexture(d->iface);
     }
 
     if ( d->files.isEmpty() )
@@ -220,10 +220,10 @@ ViewerWidget::ViewerWidget(DPlugin* const plugin, DInfoInterface* const iface)
     setMouseTracking(true);
 
     // other initialisations
-    d->wheelAction = ViewerWidget::Private::changeImage;
+    d->wheelAction = GLViewerWidget::Private::changeImage;
 }
 
-ViewerWidget::~ViewerWidget()
+GLViewerWidget::~GLViewerWidget()
 {
     glDeleteTextures(1, d->tex);
 
@@ -239,7 +239,7 @@ ViewerWidget::~ViewerWidget()
 /**
     \todo blending
  */
-void ViewerWidget::initializeGL()
+void GLViewerWidget::initializeGL()
 {
     glEnable(GL_TEXTURE_RECTANGLE_ARB);
     // Clear The Background Color
@@ -255,12 +255,12 @@ void ViewerWidget::initializeGL()
     //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "width=" << width();
 }
 
-bool ViewerWidget::listOfFilesIsEmpty() const
+bool GLViewerWidget::listOfFilesIsEmpty() const
 {
     return d->files.isEmpty();
 }
 
-void ViewerWidget::paintGL()
+void GLViewerWidget::paintGL()
 {
     //this test has to be performed here since QWidget::width() is only updated now
     //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "enter paintGL: isReallyFullscreen=" << isReallyFullScreen();
@@ -307,7 +307,7 @@ void ViewerWidget::paintGL()
     //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "exit paintGL";
 }
 
-void ViewerWidget::resizeGL(int w, int h)
+void GLViewerWidget::resizeGL(int w, int h)
 {
     //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "resizeGL,w=" << w;
     glViewport(0, 0, (GLint)w, (GLint)h);
@@ -341,7 +341,7 @@ void ViewerWidget::resizeGL(int w, int h)
 /**
     render the image
  */
-void ViewerWidget::drawImage(Texture* const tex)
+void GLViewerWidget::drawImage(GLViewerTexture* const tex)
 {
     // cout << "enter drawImage: target=" << d->texture->texnr() << " dim=" << d->texture->height() << " " << d->texture->width();
     glBindTexture(GL_TEXTURE_RECTANGLE_NV, tex->texnr());
@@ -364,7 +364,7 @@ void ViewerWidget::drawImage(Texture* const tex)
     Handle all keyboard events. All events which are not handled trigger
     a help window.
  */
-void ViewerWidget::keyPressEvent(QKeyEvent* k)
+void GLViewerWidget::keyPressEvent(QKeyEvent* k)
 {
     QPoint middlepoint;
 
@@ -425,10 +425,10 @@ void ViewerWidget::keyPressEvent(QKeyEvent* k)
 
         // toggle permanent between "show next image" and "zoom" on mousewheel change
         case Qt::Key_C:
-            if (d->wheelAction==ViewerWidget::Private::zoomImage)
-                d->wheelAction=ViewerWidget::Private::changeImage;
+            if (d->wheelAction==GLViewerWidget::Private::zoomImage)
+                d->wheelAction=GLViewerWidget::Private::changeImage;
             else
-                d->wheelAction=ViewerWidget::Private::zoomImage;
+                d->wheelAction=GLViewerWidget::Private::zoomImage;
             break;
 
         // zoom	in
@@ -466,15 +466,15 @@ void ViewerWidget::keyPressEvent(QKeyEvent* k)
 
         // toggle temorarily between "show next image" and "zoom" on mousewheel change
         case Qt::Key_Control:
-            if (d->wheelAction == ViewerWidget::Private::zoomImage)
+            if (d->wheelAction == GLViewerWidget::Private::zoomImage)
             {
                 //scrollwheel changes to the next image
-                d->wheelAction = ViewerWidget::Private::changeImage;
+                d->wheelAction = GLViewerWidget::Private::changeImage;
             }
             else
             {
                 //scrollwheel does zoom
-                d->wheelAction = ViewerWidget::Private::zoomImage;
+                d->wheelAction = GLViewerWidget::Private::zoomImage;
                 setCursor(d->zoomCursor);
                 d->timerMouseMove.stop();
             }
@@ -486,13 +486,13 @@ void ViewerWidget::keyPressEvent(QKeyEvent* k)
 
         //key is not bound to any action, therefore show help dialog to enlighten the user
         default:
-            HelpDialog help(d->plugin);
+            GLViewerHelpDlg help(d->plugin);
             help.exec();
             break;
     }
 }
 
-void ViewerWidget::keyReleaseEvent(QKeyEvent* e)
+void GLViewerWidget::keyReleaseEvent(QKeyEvent* e)
 {
     switch (e->key())
     {
@@ -516,13 +516,13 @@ void ViewerWidget::keyReleaseEvent(QKeyEvent* e)
             break;
 
         case Qt::Key_Control:
-            if (d->wheelAction == ViewerWidget::Private::zoomImage)
+            if (d->wheelAction == GLViewerWidget::Private::zoomImage)
             {
-                d->wheelAction = ViewerWidget::Private::changeImage;
+                d->wheelAction = GLViewerWidget::Private::changeImage;
             }
             else
             {
-                d->wheelAction = ViewerWidget::Private::zoomImage;
+                d->wheelAction = GLViewerWidget::Private::zoomImage;
                 unsetCursor();
                 d->timerMouseMove.start(2000);
             }
@@ -537,7 +537,7 @@ void ViewerWidget::keyReleaseEvent(QKeyEvent* e)
 /**
     download texture to video memory
  */
-void ViewerWidget::downloadTexture(Texture* const tex)
+void GLViewerWidget::downloadTexture(GLViewerTexture* const tex)
 {
     glBindTexture(GL_TEXTURE_RECTANGLE_NV, tex->texnr());
     // glTexParameterf(GL_TEXTURE_RECTANGLE_NV, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER_ARB);
@@ -554,7 +554,7 @@ void ViewerWidget::downloadTexture(Texture* const tex)
     load d->files[file_index] into a texture object if it is not already cached
     \param file_index index to QStringList d->files
  */
-Texture* ViewerWidget::loadImage(int file_index) const
+GLViewerTexture* GLViewerWidget::loadImage(int file_index) const
 {
     int imod = file_index%CACHESIZE; //index for cache
 
@@ -599,18 +599,18 @@ Texture* ViewerWidget::loadImage(int file_index) const
     }
 }
 
-void ViewerWidget::wheelEvent(QWheelEvent* e)
+void GLViewerWidget::wheelEvent(QWheelEvent* e)
 {
     switch(d->wheelAction)
     {
         // mousewheel triggers zoom
-        case ViewerWidget::Private::zoomImage:
+        case GLViewerWidget::Private::zoomImage:
             setCursor(d->zoomCursor);
             zoom(e->delta(), e->pos(), d->zoomfactor_scrollwheel);
             break;
 
         // mousewheel triggers image change
-        case ViewerWidget::Private::changeImage:
+        case GLViewerWidget::Private::changeImage:
             if (e->delta() < 0)
                 nextImage();
             else
@@ -619,7 +619,7 @@ void ViewerWidget::wheelEvent(QWheelEvent* e)
     }
 }
 
-void ViewerWidget::mousePressEvent(QMouseEvent* e)
+void GLViewerWidget::mousePressEvent(QMouseEvent* e)
 {
     // begin zoom
     // scale down d->texture  for fast zooming
@@ -646,7 +646,7 @@ void ViewerWidget::mousePressEvent(QMouseEvent* e)
     d->previous_pos = e->pos();
 }
 
-void ViewerWidget::mouseMoveEvent(QMouseEvent* e)
+void GLViewerWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if ( e->buttons() == Qt::LeftButton )
     {
@@ -703,7 +703,7 @@ void ViewerWidget::mouseMoveEvent(QMouseEvent* e)
     return;
 }
 
-void ViewerWidget::mouseReleaseEvent(QMouseEvent*)
+void GLViewerWidget::mouseReleaseEvent(QMouseEvent*)
 {
     d->timerMouseMove.start(2000);
     unsetCursor();
@@ -720,16 +720,16 @@ void ViewerWidget::mouseReleaseEvent(QMouseEvent*)
 /**
     a double click resets the view (zoom and move)
  */
-void ViewerWidget::mouseDoubleClickEvent(QMouseEvent*)
+void GLViewerWidget::mouseDoubleClickEvent(QMouseEvent*)
 {
     d->texture->reset();
     updateGL();
 }
 
-void ViewerWidget::prevImage()
+void GLViewerWidget::prevImage()
 {
 #ifdef PERFORMANCE_ANALYSIS
-    Timer timer;
+    GLViewerTimer timer;
 #endif
 
     if (d->file_idx>0)
@@ -765,10 +765,10 @@ void ViewerWidget::prevImage()
         loadImage(d->file_idx-1);
 }
 
-void ViewerWidget::nextImage()
+void GLViewerWidget::nextImage()
 {
 #ifdef PERFORMANCE_ANALYSIS
-    Timer timer;
+    GLViewerTimer timer;
 #endif
 
     if (d->file_idx < (unsigned int)(d->files.count()-1))
@@ -818,7 +818,7 @@ void ViewerWidget::nextImage()
     \param pos position of mouse
     \param factor zoom factor:scrollwheel needs a higher factor that right click mouse move. factor=1 -> no zoom
  */
-void ViewerWidget::zoom(int mdelta, const QPoint& pos, float factor)
+void GLViewerWidget::zoom(int mdelta, const QPoint& pos, float factor)
 {
     if (mdelta==0)
     {
@@ -845,7 +845,7 @@ void ViewerWidget::zoom(int mdelta, const QPoint& pos, float factor)
 /**
     being called if user didn't move the mouse for longer than 2 sec
  */
-void ViewerWidget::slotTimeoutMouseMove()
+void GLViewerWidget::slotTimeoutMouseMove()
 {
     setCursor(Qt::BlankCursor);
 }
@@ -857,7 +857,7 @@ void ViewerWidget::slotTimeoutMouseMove()
     \return OGLstate::oglNoRectangularTexture GLGL_ARB_texture_rectangle is not supported
     \return OGLstate::oglOK all is fine
  */
-OGLstate ViewerWidget::getOGLstate() const
+OGLstate GLViewerWidget::getOGLstate() const
 {
     //no OpenGL context is found. Are the drivers ok?
     if ( !isValid() )
@@ -883,7 +883,7 @@ OGLstate ViewerWidget::getOGLstate() const
     value of the visible size.
     \return true if (screenwidth == widgedwidth)
  */
-bool ViewerWidget::isReallyFullScreen() const
+bool GLViewerWidget::isReallyFullScreen() const
 {
     return (width() == d->screen_width);
 }

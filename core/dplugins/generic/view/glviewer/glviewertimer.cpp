@@ -1,10 +1,10 @@
 /* ============================================================
  *
- * This file is a part of kipi-plugins project
+ * This file is a part of digiKam project
  * http://www.digikam.org
  *
  * Date        : 2007-02-11
- * Description : a kipi plugin to show image using an OpenGL interface.
+ * Description : a tool to show image using an OpenGL interface.
  *
  * Copyright (C) 2007-2008 by Markus Leuthold <kusi at forum dot titlis dot org>
  * Copyright (C) 2008-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -21,33 +21,52 @@
  *
  * ============================================================ */
 
-#ifndef GLVIEWERPLUGIN_TIMER_H
-#define GLVIEWERPLUGIN_TIMER_H
+#include "glviewertimer.h"
 
 // Qt includes
 
-#include <QString>
+#include <QDateTime>
+
+// KDE includes
+
+#include "digikam_debug.h"
 
 namespace GenericGLViewerPlugin
 {
 
-class Timer
+class GLViewerTimer::Private
 {
-
 public:
 
-    Timer();
-    ~Timer();
+    Private()
+    {
+        meantime = 0;
+    }
 
-    void start();
-    void at(const QString& s);
-
-private:
-
-    class Private;
-    Private* const d;
+    QTime timer;
+    int   meantime;
 };
 
-} // namespace GenericGLViewerPlugin
+GLViewerTimer::GLViewerTimer()
+    : d(new Private)
+{
+}
 
-#endif // GLVIEWERPLUGIN_TIMER_H
+GLViewerTimer::~GLViewerTimer()
+{
+    delete d;
+}
+
+void GLViewerTimer::start()
+{
+    d->timer.start();
+    d->meantime = 0;
+}
+
+void GLViewerTimer::at(const QString& s)
+{
+    d->meantime = d->timer.elapsed() - d->meantime;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "stopwatch:" << s << ": " << d->meantime << " ms    overall: " << d->timer.elapsed() << " ms";
+}
+
+} // namespace GenericGLViewerPlugin

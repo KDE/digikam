@@ -1,13 +1,12 @@
 /* ============================================================
  *
- * This file is a part of kipi-plugins project
+ * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2007-02-11
- * Description : a kipi plugin to show image using an OpenGL interface.
+ * Date        : 2012-04-04
+ * Description : a tool to show image using an OpenGL interface.
  *
- * Copyright (C) 2007-2008 by Markus Leuthold <kusi at forum dot titlis dot org>
- * Copyright (C) 2008-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,26 +20,28 @@
  *
  * ============================================================ */
 
-#ifndef GLVIEWERPLUGIN_GLOBAL_H
-#define GLVIEWERPLUGIN_GLOBAL_H
+#ifndef DIGIKAM_GLVIEWERPLUGIN_GLVIEWERHELPDLG_H
+#define DIGIKAM_GLVIEWERPLUGIN_GLVIEWERHELPDLG_H
 
-//Uncomment this line to enable performance checks.
-//#define PERFORMANCE_ANALYSIS
+// Local includes
 
-// Images cache settings. Keep in mind that one cache entry takes 20MB for a 5mpix pic
-#define CACHESIZE 4
-#define EMPTY     99999
+#include "dplugin.h"
+#include "dplugindialog.h"
+
+using namespace Digikam;
 
 namespace GenericGLViewerPlugin
 {
 
-enum OGLstate
+class GLViewerHelpDlg : public DPluginDialog
 {
-    oglOK,
-    oglNoRectangularTexture,
-    oglNoContext
+
+public:
+
+    explicit GLViewerHelpDlg(DPlugin* const plugin);
+    ~GLViewerHelpDlg();
 };
 
 } // namespace GenericGLViewerPlugin
 
-#endif // GLVIEWERPLUGIN_GLOBAL_H
+#endif // DIGIKAM_GLVIEWERPLUGIN_GLVIEWERHELPDLG_H

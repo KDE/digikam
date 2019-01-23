@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "texture.h"
+#include "glviewertexture.h"
 
 // Qt includes
 
@@ -35,12 +35,12 @@
 #include "previewloadthread.h"
 #include "dmetadata.h"
 #include "digikam_debug.h"
-#include "timer.h"
+#include "glviewertimer.h"
 
 namespace GenericGLViewerPlugin
 {
 
-class Texture::Private
+class GLViewerTexture::Private
 {
 public:
 
@@ -83,36 +83,36 @@ public:
     DInfoInterface*                    iface;
 };
 
-Texture::Texture(DInfoInterface* const iface)
+GLViewerTexture::GLViewerTexture(DInfoInterface* const iface)
     : d(new Private)
 {
     d->iface = iface;
     reset();
 }
 
-Texture::~Texture()
+GLViewerTexture::~GLViewerTexture()
 {
     delete d;
 }
 
 /*!
-    \fn Texture::height()
+    \fn GLViewerTexture::height()
  */
-int Texture::height() const
+int GLViewerTexture::height() const
 {
     return d->glimage.height();
 }
 
 /*!
-    \fn Texture::width()
+    \fn GLViewerTexture::width()
  */
-int Texture::width() const
+int GLViewerTexture::width() const
 {
     return d->glimage.width();
 }
 
 /*!
-    \fn Texture::load(QString fn, QSize size, GLuint tn)
+    \fn GLViewerTexture::load(QString fn, QSize size, GLuint tn)
     \brief load file from disc and save it in texture
     \param fn filename to load
     \param size size of image which is downloaded to texture mem
@@ -120,7 +120,7 @@ int Texture::width() const
     if "size" is set to image size, scaling is only performed by the GPU but not
     by the CPU, however the AGP usage to texture memory is increased (20MB for a 5mp image)
  */
-bool Texture::load(const QString& fn, const QSize& size, GLuint tn)
+bool GLViewerTexture::load(const QString& fn, const QSize& size, GLuint tn)
 {
     d->filename     = fn;
     d->texnr        = tn;
@@ -149,7 +149,7 @@ bool Texture::load(const QString& fn, const QSize& size, GLuint tn)
 }
 
 /*!
-    \fn Texture::load(QImage im, QSize size, GLuint tn)
+    \fn GLViewerTexture::load(QImage im, QSize size, GLuint tn)
     \brief copy file from QImage to texture
     \param im Qimage to be copied from
     \param size size of image which is downloaded to texture mem
@@ -157,7 +157,7 @@ bool Texture::load(const QString& fn, const QSize& size, GLuint tn)
     if "size" is set to image size, scaling is only performed by the GPU but not
     by the CPU, however the AGP usage to texture memory is increased (20MB for a 5mp image)
  */
-bool Texture::load(const QImage& im, const QSize& size, GLuint tn)
+bool GLViewerTexture::load(const QImage& im, const QSize& size, GLuint tn)
 {
     d->qimage       = im;
     d->initial_size = size;
@@ -169,11 +169,11 @@ bool Texture::load(const QImage& im, const QSize& size, GLuint tn)
 }
 
 /*!
-    \fn Texture::load()
+    \fn GLViewerTexture::load()
     internal load function
     rt[xy] <= 1
  */
-bool Texture::loadInternal()
+bool GLViewerTexture::loadInternal()
 {
     int w = d->initial_size.width();
     int h = d->initial_size.height();
@@ -205,29 +205,29 @@ bool Texture::loadInternal()
 }
 
 /*!
-    \fn Texture::data() const
+    \fn GLViewerTexture::data() const
  */
-GLvoid* Texture::data() const
+GLvoid* GLViewerTexture::data() const
 {
     return d->glimage.bits();
 }
 
 /*!
-    \fn Texture::texnr() const
+    \fn GLViewerTexture::texnr() const
  */
-GLuint Texture::texnr() const
+GLuint GLViewerTexture::texnr() const
 {
     return d->texnr;
 }
 
 /*!
-    \fn Texture::zoom(float delta, QPoint mousepos)
+    \fn GLViewerTexture::zoom(float delta, QPoint mousepos)
     \brief calculate new tex coords on zooming
     \param delta delta between previous zoom and current zoom
     \param mousepos mouse position returned by QT
     \TODO rename mousepos to something more generic
 */
-void Texture::zoom(float delta, const QPoint& mousepos)
+void GLViewerTexture::zoom(float delta, const QPoint& mousepos)
 //u: start in texture, u=[0..1], u=0 is begin, u=1 is end of texture
 //z=[0..1], z=1 -> no zoom
 //l: length of tex in glFrustum coordinate system
@@ -254,11 +254,11 @@ void Texture::zoom(float delta, const QPoint& mousepos)
 }
 
 /*!
-    \fn Texture::calcVertex()
+    \fn GLViewerTexture::calcVertex()
     Calculate vertices according internal state variables
-    z, ux, uy are calculated in Texture::zoom()
+    z, ux, uy are calculated in GLViewerTexture::zoom()
  */
-void Texture::calcVertex()
+void GLViewerTexture::calcVertex()
 // rt: ratio of tex, rt<=1, see loadInternal() for definition
 // u: start in texture, u=[0..1], u=0 is begin, u=1 is end of texture
 // l: length of tex in glFrustum coordinate system
@@ -286,44 +286,44 @@ void Texture::calcVertex()
 }
 
 /*!
-    \fn Texture::vertex_bottom() const
+    \fn GLViewerTexture::vertex_bottom() const
  */
-GLfloat Texture::vertex_bottom() const
+GLfloat GLViewerTexture::vertex_bottom() const
 {
     return (GLfloat) d->vbottom;
 }
 
 /*!
-    \fn Texture::vertex_top() const
+    \fn GLViewerTexture::vertex_top() const
  */
-GLfloat Texture::vertex_top() const
+GLfloat GLViewerTexture::vertex_top() const
 {
     return (GLfloat) d->vtop;
 }
 
 /*!
-    \fn Texture::vertex_left() const
+    \fn GLViewerTexture::vertex_left() const
  */
-GLfloat Texture::vertex_left() const
+GLfloat GLViewerTexture::vertex_left() const
 {
     return (GLfloat) d->vleft;
 }
 
 /*!
-    \fn Texture::vertex_right() const
+    \fn GLViewerTexture::vertex_right() const
  */
-GLfloat Texture::vertex_right() const
+GLfloat GLViewerTexture::vertex_right() const
 {
     return (GLfloat) d->vright;
 }
 
 /*!
-    \fn Texture::setViewport(int w, int h)
+    \fn GLViewerTexture::setViewport(int w, int h)
     \param w width of window
     \param h height of window
     Set widget's viewport. Ensures that rdx & rdy are always > 1
  */
-void Texture::setViewport(int w, int h)
+void GLViewerTexture::setViewport(int w, int h)
 {
     if (h > w)
     {
@@ -341,10 +341,10 @@ void Texture::setViewport(int w, int h)
 }
 
 /*!
-    \fn Texture::move(QPoint diff)
+    \fn GLViewerTexture::move(QPoint diff)
     new tex coordinates have to be calculated if the view is panned
  */
-void Texture::move(const QPoint& diff)
+void GLViewerTexture::move(const QPoint& diff)
 {
     d->ux = d->ux - diff.x()/float(d->display_x)*d->z*d->rdx/d->rtx;
     d->uy = d->uy + diff.y()/float(d->display_y)*d->z*d->rdy/d->rty;
@@ -352,9 +352,9 @@ void Texture::move(const QPoint& diff)
 }
 
 /*!
-    \fn Texture::reset()
+    \fn GLViewerTexture::reset()
  */
-void Texture::reset()
+void GLViewerTexture::reset()
 {
     d->ux           = 0;
     d->uy           = 0;
@@ -388,12 +388,12 @@ void Texture::reset()
 }
 
 /*!
-    \fn Texture::setSize(QSize size)
+    \fn GLViewerTexture::setSize(QSize size)
     \param size desired texture size. QSize(0,0) will take the full image
     \return true if size has changed, false otherwise
     set new texture size in order to reduce AGP bandwidth
  */
-bool Texture::setSize(QSize size)
+bool GLViewerTexture::setSize(QSize size)
 {
     //don't allow larger textures than the original image. the image will be upsampled by
     //OpenGL if necessary and not by QImage::scale
@@ -423,12 +423,12 @@ bool Texture::setSize(QSize size)
 }
 
 /*!
-    \fn Texture::rotate()
+    \fn GLViewerTexture::rotate()
     \brief smart image rotation
     since the two most frequent usecases are a CW or CCW rotation of 90,
     perform these rotation with one (+90) or two (-90) calls of rotation()
  */
-void Texture::rotate()
+void GLViewerTexture::rotate()
 {
     if (d->iface)
     {
@@ -447,11 +447,11 @@ void Texture::rotate()
 }
 
 /*!
-    \fn Texture::setToOriginalSize()
+    \fn GLViewerTexture::setToOriginalSize()
     zoom image such that each pixel of the screen corresponds to a pixel in the jpg
     remember that OpenGL is not a pixel exact specification, and the image will still be filtered by OpenGL
  */
-void Texture::zoomToOriginal()
+void GLViewerTexture::zoomToOriginal()
 {
     float zoomfactorToOriginal;
     reset();

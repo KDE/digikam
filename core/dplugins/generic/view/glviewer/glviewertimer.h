@@ -21,52 +21,33 @@
  *
  * ============================================================ */
 
-#include "timer.h"
+#ifndef DIGIKAM_GLVIEWERPLUGIN_GLVIEWERTIMER_H
+#define DIGIKAM_GLVIEWERPLUGIN_GLVIEWERTIMER_H
 
 // Qt includes
 
-#include <QDateTime>
-
-// KDE includes
-
-#include "digikam_debug.h"
+#include <QString>
 
 namespace GenericGLViewerPlugin
 {
 
-class Timer::Private
+class GLViewerTimer
 {
+
 public:
 
-    Private()
-    {
-        meantime = 0;
-    }
+    explicit GLViewerTimer();
+    ~GLViewerTimer();
 
-    QTime timer;
-    int   meantime;
+    void start();
+    void at(const QString& s);
+
+private:
+
+    class Private;
+    Private* const d;
 };
 
-Timer::Timer()
-    : d(new Private)
-{
-}
-
-Timer::~Timer()
-{
-    delete d;
-}
-
-void Timer::start()
-{
-    d->timer.start();
-    d->meantime = 0;
-}
-
-void Timer::at(const QString& s)
-{
-    d->meantime = d->timer.elapsed() - d->meantime;
-    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "stopwatch:" << s << ": " << d->meantime << " ms    overall: " << d->timer.elapsed() << " ms";
-}
-
 } // namespace GenericGLViewerPlugin
+
+#endif // DIGIKAM_GLVIEWERPLUGIN_GLVIEWERTIMER_H

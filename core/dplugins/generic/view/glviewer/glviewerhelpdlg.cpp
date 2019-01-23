@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "helpdialog.h"
+#include "glviewerhelpdlg.h"
 
 // Qt includes
 
@@ -35,7 +35,7 @@
 namespace GenericGLViewerPlugin
 {
 
-HelpDialog::HelpDialog(DPlugin* const plugin)
+GLViewerHelpDlg::GLViewerHelpDlg(DPlugin* const plugin)
     : DPluginDialog(0, QLatin1String("GLViewerPluginHelpDlg"))
 {
     setPlugin(plugin);
@@ -185,7 +185,7 @@ HelpDialog::HelpDialog(DPlugin* const plugin)
     resize(700, 550);
 }
 
-HelpDialog::~HelpDialog()
+GLViewerHelpDlg::~GLViewerHelpDlg()
 {
 }
 

@@ -1,10 +1,10 @@
 /* ============================================================
  *
- * This file is a part of kipi-plugins project
+ * This file is a part of digiKam project
  * http://www.digikam.org
  *
  * Date        : 2007-02-11
- * Description : a kipi plugin to show image using an OpenGL interface.
+ * Description : a tool to show image using an OpenGL interface.
  *
  * Copyright (C) 2007-2008 by Markus Leuthold <kusi at forum dot titlis dot org>
  * Copyright (C) 2008-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GLVIEWERPLUGIN_TEXTURE_H
-#define GLVIEWERPLUGIN_TEXTURE_H
+#ifndef DIGIKAM_GLVIEWERPLUGIN_GLVIEWERTEXTURE_H
+#define DIGIKAM_GLVIEWERPLUGIN_GLVIEWERTEXTURE_H
 
 // Qt includes
 
@@ -39,13 +39,13 @@ using namespace Digikam;
 namespace GenericGLViewerPlugin
 {
 
-class Texture
+class GLViewerTexture
 {
 
 public:
 
-    explicit Texture(DInfoInterface* const iface);
-    ~Texture();
+    explicit GLViewerTexture(DInfoInterface* const iface);
+    ~GLViewerTexture();
 
     int  height() const;
     int  width()  const;
@@ -81,4 +81,4 @@ private:
 
 } // namespace GenericGLViewerPlugin
 
-#endif // GLVIEWERPLUGIN_TEXTURE_H
+#endif // DIGIKAM_GLVIEWERPLUGIN_GLVIEWERTEXTURE_H

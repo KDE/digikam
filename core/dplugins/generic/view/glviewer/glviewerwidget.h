@@ -1,10 +1,10 @@
 /* ============================================================
  *
- * This file is a part of kipi-plugins project
+ * This file is a part of digiKam project
  * http://www.digikam.org
  *
  * Date        : 2007-02-11
- * Description : a kipi plugin to show image using an OpenGL interface.
+ * Description : a tool to show image using an OpenGL interface.
  *
  * Copyright (C) 2007-2008 by Markus Leuthold <kusi at forum dot titlis dot org>
  * Copyright (C) 2008-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GLVIEWERPLUGIN_VIEWERWIDGET_H
-#define GLVIEWERPLUGIN_VIEWERWIDGET_H
+#ifndef DIGIKAM_GLVIEWERPLUGIN_GLVIEWERWIDGET_H
+#define DIGIKAM_GLVIEWERPLUGIN_GLVIEWERWIDGET_H
 
 // Qt includes
 
@@ -36,8 +36,8 @@
 
 // Local includes
 
-#include "texture.h"
-#include "global.h"
+#include "glviewertexture.h"
+#include "glviewerglobal.h"
 #include "dplugin.h"
 #include "dinfointerface.h"
 
@@ -46,14 +46,14 @@ using namespace Digikam;
 namespace GenericGLViewerPlugin
 {
 
-class ViewerWidget : public QGLWidget
+class GLViewerWidget : public QGLWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit ViewerWidget(DPlugin* const plugin, DInfoInterface* const iface);
-    ~ViewerWidget();
+    explicit GLViewerWidget(DPlugin* const plugin, DInfoInterface* const iface);
+    ~GLViewerWidget();
 
     void prevImage();
     void nextImage();
@@ -77,9 +77,9 @@ private:
     void mouseDoubleClickEvent(QMouseEvent* e);
     void mouseReleaseEvent(QMouseEvent* e);
 
-    Texture* loadImage(int file_index) const;
-    void     drawImage(Texture* const tex);
-    void     downloadTexture(Texture* const tex);
+    GLViewerTexture* loadImage(int file_index) const;
+    void drawImage(GLViewerTexture* const tex);
+    void downloadTexture(GLViewerTexture* const tex);
 
     void zoom(int mdelta, const QPoint& pos, float factor);
 
@@ -95,4 +95,4 @@ private:
 
 } // namespace GenericGLViewerPlugin
 
-#endif // GLVIEWERPLUGIN_VIEWERWIDGET_H
+#endif // DIGIKAM_GLVIEWERPLUGIN_GLVIEWERWIDGET_H

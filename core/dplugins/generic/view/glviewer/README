@@ -8,7 +8,6 @@ OpenGL extension. Please verify with the command glxinfo.
 
 Please keep in mind that you need alot of video memory: a 5MP image requires 20MB texture memory.
 If you run out texture ram, the downloading time of the texture can be increased up to several seconds.
-Next generation window managers like Beryl will require a massive amount of video memory to run this plugin.
 
 -------------------
 Handbook
