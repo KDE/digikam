@@ -28,7 +28,9 @@
 
 #include "dconfigdlgwidgets.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class MetadataEditDialog;
@@ -69,6 +71,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin
 
 #endif // DIGIKAM_IPTC_EDIT_WIDGET_H

@@ -49,7 +49,9 @@
 #include "dmetadata.h"
 #include "dexpanderbox.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN IPTCProperties::Private
@@ -758,4 +760,4 @@ void IPTCProperties::applyMetadata(QByteArray& iptcData)
     iptcData = meta.getIptc();
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

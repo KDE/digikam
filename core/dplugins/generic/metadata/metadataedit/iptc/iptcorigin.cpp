@@ -52,7 +52,9 @@
 #include "countryselector.h"
 #include "dexpanderbox.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN IPTCOrigin::Private
@@ -710,4 +712,4 @@ void IPTCOrigin::applyMetadata(QByteArray& exifData, QByteArray& iptcData)
     iptcData = meta.getIptc();
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

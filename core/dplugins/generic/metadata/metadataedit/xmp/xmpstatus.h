@@ -28,7 +28,7 @@
 #include <QWidget>
 #include <QByteArray>
 
-namespace Digikam
+namespace GenericMetadataEditPlugin
 {
 
 class XMPStatus : public QWidget
@@ -53,6 +53,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin
 
 #endif // DIGIKAM_XMP_STATUS_H

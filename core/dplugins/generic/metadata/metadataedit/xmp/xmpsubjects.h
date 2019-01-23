@@ -34,7 +34,9 @@
 #include "dmetadata.h"
 #include "subjectwidget.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class XMPSubjects : public SubjectWidget
@@ -50,6 +52,6 @@ public:
     void readMetadata(QByteArray& xmpData);
 };
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin
 
 #endif // DIGIKAM_XMP_SUBJECTS_H

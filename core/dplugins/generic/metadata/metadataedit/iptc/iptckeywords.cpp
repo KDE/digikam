@@ -42,7 +42,9 @@
 
 #include "dmetadata.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN IPTCKeywords::Private
@@ -289,4 +291,4 @@ void IPTCKeywords::applyMetadata(QByteArray& iptcData)
     iptcData = meta.getIptc();
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

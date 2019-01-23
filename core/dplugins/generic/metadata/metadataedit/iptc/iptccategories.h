@@ -29,7 +29,7 @@
 #include <QWidget>
 #include <QByteArray>
 
-namespace Digikam
+namespace GenericMetadataEditPlugin
 {
 
 class IPTCCategories : public QWidget
@@ -68,6 +68,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin
 
 #endif // DIGIKAM_IPTC_CATEGORIES_H

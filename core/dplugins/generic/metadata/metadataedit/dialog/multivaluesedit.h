@@ -27,7 +27,7 @@
 
 #include <QWidget>
 
-namespace Digikam
+namespace GenericMetadataEditPlugin
 {
 
 class MultiValuesEdit : public QWidget
@@ -65,6 +65,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin
 
 #endif // DIGIKAM_MULTI_VALUES_EDIT_H

@@ -41,7 +41,9 @@
 
 #include "dmetadata.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN XMPCategories::Private
@@ -327,4 +329,4 @@ void XMPCategories::applyMetadata(QByteArray& xmpData)
     xmpData = meta.getXmp();
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

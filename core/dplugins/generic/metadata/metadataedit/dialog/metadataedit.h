@@ -33,11 +33,12 @@
 
 #include "digikam_export.h"
 #include "dplugindialog.h"
+#include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
-
-class DInfoInterface;
 
 class DIGIKAM_EXPORT MetadataEditDialog : public DPluginDialog
 {
@@ -86,6 +87,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin
 
 #endif // DIGIKAM_META_DATA_EDIT_H

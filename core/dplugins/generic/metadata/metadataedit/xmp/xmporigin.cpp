@@ -48,7 +48,9 @@
 #include "countryselector.h"
 #include "dexpanderbox.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN XMPOrigin::Private
@@ -570,4 +572,4 @@ void XMPOrigin::applyMetadata(QByteArray& exifData, QByteArray& xmpData)
     xmpData  = meta.getXmp();
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

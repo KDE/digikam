@@ -43,7 +43,9 @@
 #include "metadatacheckbox.h"
 #include "squeezedcombobox.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN ObjectAttributesEdit::Private
@@ -335,4 +337,4 @@ bool ObjectAttributesEdit::isValid() const
     return d->valueCheck->isValid();
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

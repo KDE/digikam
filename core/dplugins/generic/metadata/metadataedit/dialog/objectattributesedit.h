@@ -28,7 +28,7 @@
 
 #include <QWidget>
 
-namespace Digikam
+namespace GenericMetadataEditPlugin
 {
 
 class ObjectAttributesEdit : public QWidget
@@ -63,6 +63,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin
 
 #endif // DIGIKAM_OBJECT_ATTRIBUTES_EDIT_H

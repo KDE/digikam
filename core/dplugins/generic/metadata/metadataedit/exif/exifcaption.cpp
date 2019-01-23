@@ -41,7 +41,9 @@
 
 #include "dmetadata.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN EXIFCaption::Private
@@ -407,4 +409,4 @@ void EXIFCaption::applyMetadata(QByteArray& exifData, QByteArray& iptcData, QByt
     xmpData  = meta.getXmp();
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

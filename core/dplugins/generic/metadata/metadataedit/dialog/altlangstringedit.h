@@ -32,7 +32,9 @@
 
 #include "dmetadata.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class AltLangStringsEdit : public QWidget
@@ -69,6 +71,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin
 
 #endif // DIGIKAM_ALT_LANG_STRING_EDIT_H

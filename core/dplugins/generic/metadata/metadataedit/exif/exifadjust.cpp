@@ -43,7 +43,9 @@
 #include "metadatacheckbox.h"
 #include "dmetadata.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN EXIFAdjust::Private
@@ -377,4 +379,4 @@ void EXIFAdjust::applyMetadata(QByteArray& exifData)
     exifData = meta.getExifEncoded();
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

@@ -43,7 +43,9 @@
 #include "dmetadata.h"
 #include "dexpanderbox.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN XMPContent::Private
@@ -306,4 +308,4 @@ void XMPContent::slotSyncOptionsEnabled(bool defaultLangAlt)
     d->syncEXIFCommentCheck->setEnabled(cond);
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

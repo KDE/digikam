@@ -48,7 +48,9 @@
 #include "dmetadata.h"
 #include "dexpanderbox.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN EXIFDevice::Private
@@ -841,4 +843,4 @@ void EXIFDevice::applyMetadata(QByteArray& exifData)
     exifData = meta.getExifEncoded();
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

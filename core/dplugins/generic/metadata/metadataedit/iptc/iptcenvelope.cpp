@@ -48,7 +48,9 @@
 #include "timezonecombobox.h"
 #include "dmetadata.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN IPTCEnvelope::Private
@@ -703,4 +705,4 @@ void IPTCEnvelope::applyMetadata(QByteArray& iptcData)
     iptcData = meta.getIptc();
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

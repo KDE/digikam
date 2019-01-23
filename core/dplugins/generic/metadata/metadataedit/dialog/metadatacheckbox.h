@@ -30,7 +30,7 @@
 
 #include <QCheckBox>
 
-namespace Digikam
+namespace GenericMetadataEditPlugin
 {
 
 class MetadataCheckBox : public QCheckBox
@@ -54,6 +54,6 @@ private:
     bool m_valid;
 };
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin
 
 #endif // DIGIKAM_METADATA_CHECKBOX_H

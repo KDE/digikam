@@ -44,7 +44,9 @@
 #include "metadatacheckbox.h"
 #include "dmetadata.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN FlashMode
@@ -412,4 +414,4 @@ void EXIFLight::applyMetadata(QByteArray& exifData)
     exifData = meta.getExifEncoded();
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

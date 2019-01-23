@@ -41,7 +41,9 @@
 #include "multistringsedit.h"
 #include "dmetadata.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN XMPStatus::Private
@@ -233,4 +235,4 @@ void XMPStatus::applyMetadata(QByteArray& xmpData)
     xmpData = meta.getXmp();
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

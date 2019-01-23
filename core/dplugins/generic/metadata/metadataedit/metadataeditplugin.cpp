@@ -34,7 +34,7 @@
 
 #include "metadataedit.h"
 
-namespace Digikam
+namespace GenericMetadataEditPlugin
 {
 
 MetadataEditPlugin::MetadataEditPlugin(QObject* const parent)
@@ -118,4 +118,4 @@ void MetadataEditPlugin::slotEditMetadata()
     delete dialog;
 }
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin

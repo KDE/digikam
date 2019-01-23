@@ -34,7 +34,9 @@
 #include "subjectwidget.h"
 #include "dmetadata.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMetadataEditPlugin
 {
 
 class IPTCSubjects : public SubjectWidget
@@ -50,6 +52,6 @@ public:
     void readMetadata(QByteArray& iptcData);
 };
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin
 
 #endif // DIGIKAM_IPTC_SUBJECTS_H

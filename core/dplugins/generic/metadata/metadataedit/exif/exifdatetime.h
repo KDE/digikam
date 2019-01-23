@@ -29,7 +29,7 @@
 #include <QByteArray>
 #include <QDateTime>
 
-namespace Digikam
+namespace GenericMetadataEditPlugin
 {
 
 class EXIFDateTime : public QWidget
@@ -68,6 +68,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericMetadataEditPlugin
 
 #endif // DIGIKAM_EXIF_DATETIME_H
