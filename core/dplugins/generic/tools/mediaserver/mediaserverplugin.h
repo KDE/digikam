@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.MediaServer"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMediaServerPlugin
 {
 
 class MediaServerPlugin : public DPluginGeneric
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotMediaServer();
 };
 
-} // namespace Digikam
+} // namespace GenericMediaServerPlugin
 
 #endif // DIGIKAM_MEDIA_SERVER_PLUGIN_H

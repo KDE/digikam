@@ -33,7 +33,9 @@
 #include "dinfointerface.h"
 #include "dplugindialog.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericMediaServerPlugin
 {
 
 class DIGIKAM_EXPORT DMediaServerDlg : public DPluginDialog
@@ -66,6 +68,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericMediaServerPlugin
 
 #endif // DIGIKAM_DMEDIA_SERVER_DLG_H
