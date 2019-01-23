@@ -31,7 +31,7 @@
 #include "alignbinary.h"
 #include "enfusebinary.h"
 
-namespace Digikam
+namespace GenericExpoBlendingPlugin
 {
 
 class Q_DECL_HIDDEN ExpoBlendingManager::Private
@@ -209,4 +209,4 @@ void ExpoBlendingManager::slotSetEnfuseVersion(double version)
     d->thread->setEnfuseVersion(version);
 }
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin

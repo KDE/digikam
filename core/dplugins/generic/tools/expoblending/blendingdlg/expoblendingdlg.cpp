@@ -73,7 +73,9 @@ extern "C"
 #include "dfileoperations.h"
 #include "dxmlguiwindow.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericExpoBlendingPlugin
 {
 
 class Q_DECL_HIDDEN ExpoBlendingDlg::Private
@@ -512,7 +514,7 @@ void ExpoBlendingDlg::saveItem(const QUrl& temp, const EnfuseSettings& settings)
     }
 }
 
-void ExpoBlendingDlg::slotExpoBlendingAction(const Digikam::ExpoBlendingActionData& ad)
+void ExpoBlendingDlg::slotExpoBlendingAction(const GenericExpoBlendingPlugin::ExpoBlendingActionData& ad)
 {
     QString text;
 
@@ -669,4 +671,4 @@ void ExpoBlendingDlg::slotCloseClicked()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin

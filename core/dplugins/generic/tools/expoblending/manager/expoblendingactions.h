@@ -35,7 +35,7 @@
 
 #include "enfusesettings.h"
 
-namespace Digikam
+namespace GenericExpoBlendingPlugin
 {
 
 enum ExpoBlendingAction
@@ -101,9 +101,9 @@ public:
     ExpoBlendingAction action;
 };
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin
 
-Q_DECLARE_METATYPE(Digikam::ExpoBlendingActionData)
-Q_DECLARE_METATYPE(Digikam::ExpoBlendingItemPreprocessedUrls)
+Q_DECLARE_METATYPE(GenericExpoBlendingPlugin::ExpoBlendingActionData)
+Q_DECLARE_METATYPE(GenericExpoBlendingPlugin::ExpoBlendingItemPreprocessedUrls)
 
 #endif // DIGIKAM_EXPO_BLENDING_ACTIONS_H

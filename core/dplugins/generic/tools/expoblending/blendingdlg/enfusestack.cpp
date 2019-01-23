@@ -44,7 +44,9 @@
 #include "dlayoutbox.h"
 #include "dworkingpixmap.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericExpoBlendingPlugin
 {
 
 class Q_DECL_HIDDEN EnfuseStackItem::Private
@@ -410,4 +412,4 @@ void EnfuseStackList::setTemplateFileName(DSaveSettingsWidget::OutputFormat frm,
     }
 }
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin

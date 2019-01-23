@@ -38,7 +38,7 @@
 
 #include "enfusesettings.h"
 
-namespace Digikam
+namespace GenericExpoBlendingPlugin
 {
 
 class EnfuseStackItem : public QTreeWidgetItem
@@ -46,7 +46,7 @@ class EnfuseStackItem : public QTreeWidgetItem
 public:
 
     explicit EnfuseStackItem(QTreeWidget* const parent);
-    virtual ~EnfuseStackItem();
+    ~EnfuseStackItem();
 
     /** Return the preview image url assigned to item.
      */
@@ -78,7 +78,7 @@ class EnfuseStackList : public QTreeWidget
 public:
 
     explicit EnfuseStackList(QWidget* const parent);
-    virtual ~EnfuseStackList();
+    ~EnfuseStackList();
 
     void setTemplateFileName(DSaveSettingsWidget::OutputFormat, const QString&);
 
@@ -113,6 +113,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin
 
 #endif // DIGIKAM_ENFUSE_STACK_H

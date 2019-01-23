@@ -28,7 +28,9 @@
 
 #include "dbinaryiface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericExpoBlendingPlugin
 {
 
 class AlignBinary : public DBinaryIface
@@ -54,6 +56,6 @@ public:
     }
 };
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin
 
 #endif // DIGIKAM_ALIGN_BINARY_H

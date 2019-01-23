@@ -34,7 +34,9 @@
 #include "dwizarddlg.h"
 #include "expoblendingactions.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericExpoBlendingPlugin
 {
 class ExpoBlendingManager;
 
@@ -66,6 +68,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin
 
 #endif // DIGIKAM_EXPO_BLENDING_WIZARD_H

@@ -35,7 +35,9 @@
 
 class KConfigGroup;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericExpoBlendingPlugin
 {
 
 class EnfuseSettings
@@ -108,6 +110,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin
 
 #endif // DIGIKAM_ENFUSE_SETTINGS_H

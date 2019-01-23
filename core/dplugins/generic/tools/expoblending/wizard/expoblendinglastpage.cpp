@@ -39,7 +39,7 @@
 #include "expoblendingmanager.h"
 #include "dlayoutbox.h"
 
-namespace Digikam
+namespace GenericExpoBlendingPlugin
 {
 
 class Q_DECL_HIDDEN ExpoBlendingLastPage::Private
@@ -87,4 +87,4 @@ ExpoBlendingLastPage::~ExpoBlendingLastPage()
     delete d;
 }
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin

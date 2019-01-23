@@ -29,7 +29,9 @@
 #include "dwizardpage.h"
 #include "expoblendingactions.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericExpoBlendingPlugin
 {
 
 class ExpoBlendingManager;
@@ -53,7 +55,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotProgressTimerDone();
-    void slotExpoBlendingAction(const Digikam::ExpoBlendingActionData&);
+    void slotExpoBlendingAction(const GenericExpoBlendingPlugin::ExpoBlendingActionData&);
 
 private:
 
@@ -65,6 +67,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin
 
 #endif // DIGIKAM_EXPO_BLENDING_PREPROCESS_PAGE_H

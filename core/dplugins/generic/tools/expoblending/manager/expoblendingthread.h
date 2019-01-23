@@ -37,7 +37,9 @@
 
 class QProcess;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericExpoBlendingPlugin
 {
 
 class ExpoBlendingActionData;
@@ -71,8 +73,8 @@ public:
 
 Q_SIGNALS:
 
-    void starting(const Digikam::ExpoBlendingActionData& ad);
-    void finished(const Digikam::ExpoBlendingActionData& ad);
+    void starting(const GenericExpoBlendingPlugin::ExpoBlendingActionData& ad);
+    void finished(const GenericExpoBlendingPlugin::ExpoBlendingActionData& ad);
 
 private:
 
@@ -101,6 +103,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin
 
 #endif // DIGIKAM_EXPO_BLENDING_THREAD_H

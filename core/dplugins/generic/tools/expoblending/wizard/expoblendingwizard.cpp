@@ -41,7 +41,7 @@
 #include "expoblendingmanager.h"
 #include "expoblendingpreprocesspage.h"
 
-namespace Digikam
+namespace GenericExpoBlendingPlugin
 {
 
 class Q_DECL_HIDDEN ExpoBlendingWizard::Private
@@ -168,4 +168,4 @@ void ExpoBlendingWizard::slotItemsPageIsValid(bool valid)
     d->itemsPage->setComplete(valid);
 }
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin

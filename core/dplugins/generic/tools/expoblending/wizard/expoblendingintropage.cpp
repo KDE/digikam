@@ -40,7 +40,7 @@
 #include "enfusebinary.h"
 #include "dlayoutbox.h"
 
-namespace Digikam
+namespace GenericExpoBlendingPlugin
 {
 
 class Q_DECL_HIDDEN ExpoBlendingIntroPage::Private
@@ -128,4 +128,4 @@ bool ExpoBlendingIntroPage::binariesFound()
     return d->binariesWidget->allBinariesFound();
 }
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin

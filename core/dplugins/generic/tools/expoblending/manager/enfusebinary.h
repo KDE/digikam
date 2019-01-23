@@ -28,7 +28,9 @@
 
 #include "dbinaryiface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericExpoBlendingPlugin
 {
 
 class EnfuseBinary : public DBinaryIface
@@ -70,6 +72,6 @@ private:
     double versionDouble;
 };
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin
 
 #endif // DIGIKAM_ENFUSE_BINARY_H

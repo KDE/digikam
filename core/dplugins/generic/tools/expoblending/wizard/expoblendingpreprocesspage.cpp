@@ -51,7 +51,7 @@
 #include "dlayoutbox.h"
 #include "dworkingpixmap.h"
 
-namespace Digikam
+namespace GenericExpoBlendingPlugin
 {
 
 class Q_DECL_HIDDEN ExpoBlendingPreProcessPage::Private
@@ -199,7 +199,7 @@ void ExpoBlendingPreProcessPage::slotProgressTimerDone()
     d->progressTimer->start(300);
 }
 
-void ExpoBlendingPreProcessPage::slotExpoBlendingAction(const Digikam::ExpoBlendingActionData& ad)
+void ExpoBlendingPreProcessPage::slotExpoBlendingAction(const GenericExpoBlendingPlugin::ExpoBlendingActionData& ad)
 {
     QString text;
 
@@ -252,4 +252,4 @@ void ExpoBlendingPreProcessPage::slotExpoBlendingAction(const Digikam::ExpoBlend
     }
 }
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin

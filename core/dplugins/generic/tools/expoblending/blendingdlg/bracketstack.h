@@ -36,7 +36,9 @@
 
 #include "loadingdescription.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericExpoBlendingPlugin
 {
 
 class BracketStackItem : public QTreeWidgetItem
@@ -44,7 +46,7 @@ class BracketStackItem : public QTreeWidgetItem
 public:
 
     explicit BracketStackItem(QTreeWidget* const parent);
-    virtual ~BracketStackItem();
+    ~BracketStackItem();
 
     void setUrl(const QUrl& url);
     const QUrl& url() const;
@@ -91,6 +93,6 @@ private Q_SLOTS:
     void slotItemClicked(QTreeWidgetItem* item, int column);
 };
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin
 
 #endif // DIGIKAM_BRACKET_STACK_H

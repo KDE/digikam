@@ -28,7 +28,9 @@
 #include "dwizardpage.h"
 #include "expoblendingmanager.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericExpoBlendingPlugin
 {
 
 class ExpoBlendingIntroPage : public DWizardPage
@@ -52,6 +54,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericExpoBlendingPlugin
 
 #endif // DIGIKAM_EXPO_BLENDING_INTRO_PAGE_H
