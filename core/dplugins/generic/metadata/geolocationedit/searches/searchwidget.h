@@ -36,16 +36,17 @@
 #include "geomodelhelper.h"
 #include "mapwidget.h"
 #include "searchbackend.h"
+#include "gpsundocommand.h"
+#include "gpsbookmarkowner.h"
 
 class QEvent;
 
 class KConfigGroup;
 
-namespace Digikam
-{
+using namespace Digikam;
 
-class GPSUndoCommand;
-class GPSBookmarkOwner;
+namespace GenericGeolocationEditPlugin
+{
 
 class SearchWidget : public QWidget
 {
@@ -92,6 +93,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin
 
 #endif // DIGIKAM_SEARCH_WIDGET_H

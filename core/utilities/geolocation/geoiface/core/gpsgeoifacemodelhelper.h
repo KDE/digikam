@@ -34,6 +34,7 @@
 // Local includes
 
 #include "geomodelhelper.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -42,7 +43,7 @@ class GPSItemModel;
 class GPSUndoCommand;
 class MapWidget;
 
-class GPSGeoIfaceModelHelper : public GeoModelHelper
+class DIGIKAM_EXPORT GPSGeoIfaceModelHelper : public GeoModelHelper
 {
     Q_OBJECT
 

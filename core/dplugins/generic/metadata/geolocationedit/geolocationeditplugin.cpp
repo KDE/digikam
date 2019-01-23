@@ -34,7 +34,7 @@
 
 #include "geolocationedit.h"
 
-namespace Digikam
+namespace GenericGeolocationEditPlugin
 {
 
 GeolocationEditPlugin::GeolocationEditPlugin(QObject* const parent)
@@ -115,4 +115,4 @@ void GeolocationEditPlugin::slotEditGeolocation()
     delete dialog;
 }
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin

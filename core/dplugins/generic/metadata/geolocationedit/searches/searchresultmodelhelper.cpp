@@ -48,12 +48,11 @@
 
 // Local includes
 
-#include "searchresultmodel.h"
 #include "gpscommon.h"
-#include "gpsundocommand.h"
-#include "gpsitemmodel.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericGeolocationEditPlugin
 {
 
 class Q_DECL_HIDDEN SearchResultModelHelper::Private
@@ -165,4 +164,4 @@ void SearchResultModelHelper::snapItemsTo(const QModelIndex& targetIndex,
     emit(signalUndoCommand(undoCommand));
 }
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin

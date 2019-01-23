@@ -24,15 +24,15 @@
 #ifndef DIGIKAM_KML_GPS_DATA_PARSER_H
 #define DIGIKAM_KML_GPS_DATA_PARSER_H
 
-// Local includes
-
-#include "geodataparser.h"
-
 // Qt includes
 
 #include <QDomDocument>
 
-namespace Digikam
+// Local includes
+
+#include "geodataparser.h"
+
+namespace GenericGeolocationEditPlugin
 {
 
 /*! a classe derivated from GeoDataParser mainly to transform GPS data to KML
@@ -104,6 +104,6 @@ private:
     QDomDocument* kmlDocument;
 };
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin
 
 #endif // DIGIKAM_KML_GPS_DATA_PARSER_H

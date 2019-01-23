@@ -31,16 +31,18 @@
 #include <QModelIndex>
 #include <QWidget>
 
-// local includes
+// Local includes
+
+#include "gpsdatacontainer.h"
+#include "gpsundocommand.h"
+#include "gpsitemmodel.h"
+
+using namespace Digikam;
 
 class KConfigGroup;
 
-namespace Digikam
+namespace GenericGeolocationEditPlugin
 {
-
-class GPSItemModel;
-class GPSUndoCommand;
-class GPSDataContainer;
 
 class GPSItemDetails : public QWidget
 {
@@ -49,7 +51,7 @@ class GPSItemDetails : public QWidget
 public:
 
     explicit GPSItemDetails(QWidget* const parent,
-                             GPSItemModel* const imageModel);
+                            GPSItemModel* const imageModel);
     ~GPSItemDetails();
 
     void setUIEnabledExternal(const bool state);
@@ -81,6 +83,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin
 
 #endif // DIGIKAM_GPS_ITEM_DETAILS_H

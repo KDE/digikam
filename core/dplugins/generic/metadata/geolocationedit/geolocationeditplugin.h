@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.GeolocationEdit"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericGeolocationEditPlugin
 {
 
 class GeolocationEditPlugin : public DPluginGeneric
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotEditGeolocation();
 };
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin
 
 #endif // DIGIKAM_GEOLOCATION_EDIT_PLUGIN_H

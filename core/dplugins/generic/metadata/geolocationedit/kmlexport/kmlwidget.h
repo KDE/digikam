@@ -51,7 +51,9 @@ class QCloseEvent;
 class QSpinBox;
 class QPushButton;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericGeolocationEditPlugin
 {
 
 class DIGIKAM_EXPORT KmlWidget : public QWidget
@@ -142,6 +144,6 @@ protected:
     KmlExport    m_kmlExport;
 };
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin
 
 #endif // DIGIKAM_KML_WIDGET_H

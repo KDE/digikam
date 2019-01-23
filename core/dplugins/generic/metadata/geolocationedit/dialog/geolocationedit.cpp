@@ -64,7 +64,6 @@
 
 #include "dlayoutbox.h"
 #include "digikam_config.h"
-#include "mapwidget.h"
 #include "itemmarkertiler.h"
 #include "trackmanager.h"
 #include "gpscommon.h"
@@ -76,7 +75,6 @@
 #include "gpscorrelatorwidget.h"
 #include "digikam_debug.h"
 #include "dmessagebox.h"
-#include "gpsundocommand.h"
 #include "rgwidget.h"
 #include "kmlwidget.h"
 #include "statusprogressbar.h"
@@ -87,13 +85,14 @@
 #include "dxmlguiwindow.h"
 #include "gpsbookmarkowner.h"
 #include "gpsbookmarkmodelhelper.h"
-#include "dinfointerface.h"
 
 #ifdef GPSSYNC_MODELTEST
 #   include <modeltest.h>
 #endif
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericGeolocationEditPlugin
 {
 
 struct SaveChangedImagesHelper
@@ -1088,4 +1087,4 @@ void GeolocationEdit::adjustMapLayout(const bool syncSettings)
     }
 }
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin

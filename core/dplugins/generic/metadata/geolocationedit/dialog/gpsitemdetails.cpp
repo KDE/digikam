@@ -48,13 +48,11 @@
 // local includes
 
 #include "dlayoutbox.h"
-#include "gpsitemmodel.h"
-#include "gpsundocommand.h"
 #include "graphicsdimgview.h"
 #include "dimgpreviewitem.h"
 #include "dexpanderbox.h"
 
-namespace Digikam
+namespace GenericGeolocationEditPlugin
 {
 
 class Q_DECL_HIDDEN GPSItemDetails::Private
@@ -84,7 +82,7 @@ public:
     {
     }
 
-    GPSItemModel*               imageModel;
+    GPSItemModel*                imageModel;
     GraphicsDImgView*            previewManager;
 
     QCheckBox*                   cbCoordinates;
@@ -459,4 +457,4 @@ void GPSItemDetails::slotSetActive(const bool state)
     }
 }
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin

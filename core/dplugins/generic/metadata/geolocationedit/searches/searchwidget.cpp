@@ -56,15 +56,15 @@
 #include "searchresultmodel.h"
 #include "searchresultmodelhelper.h"
 #include "gpscommon.h"
-#include "gpsundocommand.h"
 #include "gpsitemmodel.h"
-#include "gpsbookmarkowner.h"
 
 #ifdef GPSSYNC_MODELTEST
 #   include <modeltest.h>
 #endif
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericGeolocationEditPlugin
 {
 
 static int QItemSelectionModel_selectedRowsCount(const QItemSelectionModel* const selectionModel)
@@ -485,4 +485,4 @@ void SearchWidget::slotRemoveSelectedFromResultsList()
     slotUpdateActionAvailability();
 }
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin

@@ -31,14 +31,16 @@
 
 // Local includes
 
+#include "searchresultmodel.h"
 #include "geomodelhelper.h"
 #include "searchbackend.h"
+#include "gpsundocommand.h"
+#include "gpsitemmodel.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericGeolocationEditPlugin
 {
-
-class SearchResultModel;
-class GPSUndoCommand;
 
 class SearchResultModelHelper : public GeoModelHelper
 {
@@ -72,6 +74,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin
 
 #endif // DIGIKAM_SEARCH_RESULT_MODEL_HELPER_H

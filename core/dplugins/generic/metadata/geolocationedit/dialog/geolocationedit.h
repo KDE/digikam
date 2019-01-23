@@ -41,15 +41,16 @@
 #include "trackmanager.h"
 #include "gpsitemcontainer.h"
 #include "digikam_export.h"
+#include "dinfointerface.h"
+#include "mapwidget.h"
+#include "gpsundocommand.h"
 
 class QAbstractItemModel;
 
-namespace Digikam
-{
+using namespace Digikam;
 
-class GPSUndoCommand;
-class MapWidget;
-class DInfoInterface;
+namespace GenericGeolocationEditPlugin
+{
 
 class DIGIKAM_EXPORT GeolocationEdit : public DPluginDialog
 {
@@ -109,6 +110,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin
 
 #endif // DIGIKAM_GEO_LOCATION_EDIT_H

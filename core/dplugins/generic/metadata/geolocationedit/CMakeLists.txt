@@ -25,7 +25,6 @@ DIGIKAM_ADD_GENERIC_PLUGIN(GeolocationEdit
     ${CMAKE_CURRENT_SOURCE_DIR}/searches/searchwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialog/gpsitemdetails.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialog/geolocationedit.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialog/gpsgeoifacemodelhelper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/geodataparser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/kmlgpsdataparser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kmlexport/kmlwidget.cpp

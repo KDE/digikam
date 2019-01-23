@@ -33,12 +33,11 @@
 // Local includes
 
 #include "geoifacetypes.h"
-
-// Local includes
-
 #include "rgwidget.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericGeolocationEditPlugin
 {
 
 class SearchBackend : public QObject
@@ -86,6 +85,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin
 
 #endif // DIGIKAM_SEARCH_BACKEND_H

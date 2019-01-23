@@ -27,7 +27,7 @@
 
 #include <klocalizedstring.h>
 
-namespace Digikam
+namespace GenericGeolocationEditPlugin
 {
 
 KMLGeoDataParser::KMLGeoDataParser()
@@ -134,4 +134,4 @@ void KMLGeoDataParser::CreateTrackPoints(QDomElement& parent, QDomDocument& root
     }
 }
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin

@@ -41,7 +41,9 @@
 #include "dmetadata.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericGeolocationEditPlugin
 {
 
 class KmlExport : public QObject
@@ -184,6 +186,6 @@ private:
     QStringList                 m_logData;
 };
 
-} // namespace Digikam
+} // namespace GenericGeolocationEditPlugin
 
 #endif // DIGIKAM_KML_EXPORT_H
