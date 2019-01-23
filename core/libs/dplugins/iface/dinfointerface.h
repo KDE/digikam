@@ -118,9 +118,9 @@ public:
 /** DItemInfo is a class to get item information from host application (Showfoto or digiKam)
  *  The interface is re-implemented in host and depend how item infromation must be retrieved (from a database or by file metadata).
  *  The easy way to use this container is given below:
- * 
+ *
  *  // READ INFO FROM HOST ---------------------------------------------
- * 
+ *
  *  QUrl                     itemUrl;                                   // The item url that you want to retrieve information.
  *  DInfoInterface*          hostIface;                                 // The host application interface instance.
  *
@@ -141,7 +141,7 @@ public:
  *  item.setColorLabel(1);                                              // Store color label to info map.
  *  hostIface->setItemInfo(url, info);                                  // Update item information to host using map.
  */
- 
+
 class DIGIKAM_EXPORT DItemInfo
 {
 
@@ -155,12 +155,13 @@ public:
     QString            name()             const;
     QString            comment()          const;
     QString            title()            const;
-    int                orientation()      const;
     QSize              dimensions()       const;
     QDateTime          dateTime()         const;
     QStringList        tagsPath()         const;
     QStringList        keywords()         const;
 
+    int                orientation()      const;
+    void               setOrientation(int);
     int                rating()           const;
     void               setRating(int);
     int                colorLabel()       const;

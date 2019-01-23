@@ -168,6 +168,12 @@ void DMetaInfoIface::setItemInfo(const QUrl& url, const DInfoMap& map) const
     DMetadata meta(url.toLocalFile());
     QStringList keys = map.keys();
 
+    if (map.contains(QLatin1String("orientation")))
+    {
+        meta.setItemOrientation((DMetadata::ImageOrientation)map[QLatin1String("orientation")].toInt());
+        keys.removeAll(QLatin1String("orientation"));
+    }
+
     if (map.contains(QLatin1String("rating")))
     {
         meta.setItemRating(map[QLatin1String("rating")].toInt());

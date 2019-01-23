@@ -328,11 +328,11 @@ void GLViewerTexture::setViewport(int w, int h)
     if (h > w)
     {
         d->rdx = 1.0;
-        d->rdy = h/float(w);
+        d->rdy = h / float(w);
     }
     else
     {
-        d->rdx = w/float(h);
+        d->rdx = w / float(h);
         d->rdy = 1.0;
     }
 
@@ -346,8 +346,8 @@ void GLViewerTexture::setViewport(int w, int h)
  */
 void GLViewerTexture::move(const QPoint& diff)
 {
-    d->ux = d->ux - diff.x()/float(d->display_x)*d->z*d->rdx/d->rtx;
-    d->uy = d->uy + diff.y()/float(d->display_y)*d->z*d->rdy/d->rty;
+    d->ux = d->ux - diff.x() / float(d->display_x)*d->z*d->rdx / d->rtx;
+    d->uy = d->uy + diff.y() / float(d->display_y)*d->z*d->rdy / d->rty;
     calcVertex();
 }
 
@@ -361,27 +361,27 @@ void GLViewerTexture::reset()
     d->z            = 1.0;
     float zoomdelta = 0;
 
-    if ((d->rtx < d->rty) && (d->rdx < d->rdy) && (d->rtx/d->rty < d->rdx/d->rdy))
+    if ((d->rtx < d->rty) && (d->rdx < d->rdy) && (d->rtx / d->rty < d->rdx / d->rdy))
     {
-        zoomdelta = d->z-d->rdx/d->rdy;
+        zoomdelta = d->z-d->rdx / d->rdy;
     }
 
-    if ((d->rtx < d->rty) && (d->rtx/d->rty > d->rdx/d->rdy))
+    if ((d->rtx < d->rty) && (d->rtx / d->rty > d->rdx / d->rdy))
     {
         zoomdelta = d->z-d->rtx;
     }
 
-    if ((d->rtx >= d->rty) && (d->rdy < d->rdx) && (d->rty/d->rtx < d->rdy/d->rdx))
+    if ((d->rtx >= d->rty) && (d->rdy < d->rdx) && (d->rty / d->rtx < d->rdy / d->rdx))
     {
-        zoomdelta = d->z-d->rdy/d->rdx;
+        zoomdelta = d->z-d->rdy / d->rdx;
     }
 
-    if ((d->rtx >= d->rty) && (d->rty/d->rtx > d->rdy/d->rdx))
+    if ((d->rtx >= d->rty) && (d->rty / d->rtx > d->rdy / d->rdx))
     {
         zoomdelta = d->z-d->rty;
     }
 
-    QPoint p = QPoint(d->display_x/2, d->display_y/2);
+    QPoint p = QPoint(d->display_x / 2, d->display_y / 2);
     zoom(1.0 - zoomdelta, p);
 
     calcVertex();
@@ -430,18 +430,18 @@ bool GLViewerTexture::setSize(QSize size)
  */
 void GLViewerTexture::rotate()
 {
-    if (d->iface)
-    {
-        DMetadata meta;
-        meta.rotateExifQImage(d->qimage, (DMetadata::ImageOrientation)d->rotate_list[d->rotate_idx % 4]);
-    }
+    DMetadata meta;
+    meta.rotateExifQImage(d->qimage, (DMetadata::ImageOrientation)d->rotate_list[d->rotate_idx % 4]);
 
     loadInternal();
-/* FIXME
-    // save new rotation in exif header
-    KPImageInfo info(QUrl::fromLocalFile(d->filename));
-    info.setOrientation(d->rotate_list[d->rotate_idx%4]);
-*/
+
+    // save new rotation in host application
+
+    DInfoInterface::DInfoMap info;
+    DItemInfo item(info);
+    item.setOrientation(d->rotate_list[d->rotate_idx % 4]);
+    d->iface->setItemInfo(QUrl::fromLocalFile(d->filename), info);
+
     reset();
     d->rotate_idx++;
 }
@@ -456,18 +456,18 @@ void GLViewerTexture::zoomToOriginal()
     float zoomfactorToOriginal;
     reset();
 
-    if (float(d->qimage.width())/float(d->qimage.height()) > float(d->display_x)/float(d->display_y))
+    if (float(d->qimage.width()) / float(d->qimage.height()) > float(d->display_x) / float(d->display_y))
     {
         //image touches right and left edge of window
-        zoomfactorToOriginal = float(d->display_x)/d->qimage.width();
+        zoomfactorToOriginal = float(d->display_x) / d->qimage.width();
     }
     else
     {
         //image touches upper and lower edge of window
-        zoomfactorToOriginal = float(d->display_y)/d->qimage.height();
+        zoomfactorToOriginal = float(d->display_y) / d->qimage.height();
     }
 
-    zoom(zoomfactorToOriginal,QPoint(d->display_x/2,d->display_y/2));
+    zoom(zoomfactorToOriginal,QPoint(d->display_x / 2 , d->display_y / 2));
 }
 
 } // namespace GenericGLViewerPlugin

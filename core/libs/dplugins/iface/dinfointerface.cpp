@@ -178,12 +178,6 @@ QString DItemInfo::title() const
     return !val.isNull() ? val.toString() : QString();
 }
 
-int DItemInfo::orientation() const
-{
-    QVariant val = parseInfoMap(QLatin1String("orientation"));
-    return !val.isNull() ? val.toInt() : MetaEngine::ORIENTATION_UNSPECIFIED;
-}
-
 QSize DItemInfo::dimensions() const
 {
     QVariant val = parseInfoMap(QLatin1String("dimensions"));
@@ -208,6 +202,17 @@ QStringList DItemInfo::tagsPath() const
     return !val.isNull() ? val.toStringList() : QStringList();
 }
 
+int DItemInfo::orientation() const
+{
+    QVariant val = parseInfoMap(QLatin1String("orientation"));
+    return !val.isNull() ? val.toInt() : MetaEngine::ORIENTATION_UNSPECIFIED;
+}
+
+void DItemInfo::setOrientation(int val)
+{
+    m_info.insert(QLatin1String("orientation"), val);
+}
+
 int DItemInfo::rating() const
 {
     QVariant val = parseInfoMap(QLatin1String("rating"));
@@ -218,7 +223,7 @@ void DItemInfo::setRating(int rating)
 {
     m_info.insert(QLatin1String("rating"), rating);
 }
-    
+
 int DItemInfo::colorLabel() const
 {
     QVariant val = parseInfoMap(QLatin1String("colorlabel"));

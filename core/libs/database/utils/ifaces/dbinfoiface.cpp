@@ -461,6 +461,12 @@ void DBInfoIface::setItemInfo(const QUrl& url, const DInfoMap& map) const
     ItemInfo info    = ItemInfo::fromUrl(url);
     QStringList keys = map.keys();
 
+    if (map.contains(QLatin1String("orientation")))
+    {
+        info.setOrientation(map[QLatin1String("orientation")].toInt());
+        keys.removeAll(QLatin1String("orientation"));
+    }
+
     if (map.contains(QLatin1String("rating")))
     {
         info.setRating(map[QLatin1String("rating")].toInt());
