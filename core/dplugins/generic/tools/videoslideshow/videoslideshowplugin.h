@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.VideoSlideShow"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamVideoSlideShowPlugin
 {
 
 class VideoSlideShowPlugin : public DPluginGeneric
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotVideoSlideShow();
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamVideoSlideShowPlugin
 
 #endif // DIGIKAM_VIDEO_SLIDESHOW_PLUGIN_H

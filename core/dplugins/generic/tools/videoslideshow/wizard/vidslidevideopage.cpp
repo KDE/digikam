@@ -51,7 +51,7 @@
 
 using namespace QtAV;
 
-namespace Digikam
+namespace GenericDigikamVideoSlideShowPlugin
 {
 
 class Q_DECL_HIDDEN VidSlideVideoPage::Private
@@ -366,4 +366,4 @@ bool VidSlideVideoPage::validatePage()
     return true;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamVideoSlideShowPlugin

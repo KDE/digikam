@@ -31,7 +31,9 @@
 
 #include "dwizardpage.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamVideoSlideShowPlugin
 {
 
 class VidSlideIntroPage : public DWizardPage
@@ -51,6 +53,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamVideoSlideShowPlugin
 
 #endif // DIGIKAM_VIDSLIDE_INTRO_PAGE_H

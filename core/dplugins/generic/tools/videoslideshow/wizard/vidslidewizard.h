@@ -35,7 +35,9 @@
 #include "digikam_export.h"
 #include "vidslidesettings.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamVideoSlideShowPlugin
 {
 
 class DIGIKAM_EXPORT VidSlideWizard : public DWizardDlg
@@ -65,6 +67,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamVideoSlideShowPlugin
 
 #endif // DIGIKAM_VIDSLIDE_WIZARD_H

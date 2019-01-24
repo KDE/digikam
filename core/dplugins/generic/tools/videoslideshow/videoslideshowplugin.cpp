@@ -34,7 +34,7 @@
 
 #include "vidslidewizard.h"
 
-namespace Digikam
+namespace GenericDigikamVideoSlideShowPlugin
 {
 
 VideoSlideShowPlugin::VideoSlideShowPlugin(QObject* const parent)
@@ -108,4 +108,4 @@ void VideoSlideShowPlugin::slotVideoSlideShow()
     delete wzrd;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamVideoSlideShowPlugin

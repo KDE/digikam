@@ -40,7 +40,7 @@
 #include "vidslidewizard.h"
 #include "vidslidesettings.h"
 
-namespace Digikam
+namespace GenericDigikamVideoSlideShowPlugin
 {
 
 class Q_DECL_HIDDEN VidSlideIntroPage::Private
@@ -129,4 +129,4 @@ bool VidSlideIntroPage::validatePage()
     return true;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamVideoSlideShowPlugin
