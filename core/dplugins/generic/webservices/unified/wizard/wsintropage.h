@@ -33,7 +33,9 @@
 
 #include "dwizardpage.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamUnifiedPlugin
 {
 
 class WSIntroPage : public DWizardPage
@@ -59,6 +61,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamUnifiedPlugin
 
 #endif // DIGIKAM_WS_INTRO_PAGE_H

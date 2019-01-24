@@ -32,7 +32,9 @@
 
 #include "dwizardpage.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamUnifiedPlugin
 {
 
 class WSFinalPage : public DWizardPage
@@ -60,6 +62,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamUnifiedPlugin
 
 #endif // DIGIKAM_WS_FINAL_PAGE_H

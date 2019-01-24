@@ -39,7 +39,9 @@
 #include "wssettings.h"
 #include "wsauthentication.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamUnifiedPlugin
 {
 
 class DIGIKAM_EXPORT WSWizard : public DWizardDlg
@@ -80,6 +82,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamUnifiedPlugin
 
 #endif // DIGIKAM_WS_WIZARD_H

@@ -33,7 +33,9 @@
 
 #include "dwizardpage.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamUnifiedPlugin
 {
 
 class WSAlbumsPage : public DWizardPage
@@ -52,6 +54,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamUnifiedPlugin
 
 #endif // DIGIKAM_WS_ALBUMS_PAGE_H

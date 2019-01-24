@@ -30,11 +30,7 @@
 
 #include <klocalizedstring.h>
 
-// Local includes
-
-#include "wswizard.h"
-
-namespace Digikam
+namespace GenericDigikamUnifiedPlugin
 {
 
 UnifiedPlugin::UnifiedPlugin(QObject* const parent)
@@ -113,4 +109,4 @@ void UnifiedPlugin::slotUnified()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamUnifiedPlugin

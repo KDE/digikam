@@ -41,7 +41,9 @@
 #include "dwizardpage.h"
 #include "wsitem.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamUnifiedPlugin
 {
 
 class WSImagesPage : public DWizardPage
@@ -104,6 +106,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamUnifiedPlugin
 
 #endif // DIGIKAM_WS_IMAGES_PAGE_H

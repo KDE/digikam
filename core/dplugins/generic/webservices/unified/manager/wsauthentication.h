@@ -40,7 +40,9 @@
 #include "wssettings.h"
 #include "wsitem.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamUnifiedPlugin
 {
 
 class WSAuthentication : public QObject
@@ -167,6 +169,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamUnifiedPlugin
 
 #endif // DIGIKAM_WS_AUTHENTICATION_H

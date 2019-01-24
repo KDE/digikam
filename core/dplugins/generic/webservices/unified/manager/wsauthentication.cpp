@@ -51,7 +51,7 @@
 #include "imgurtalker.h"
 #include "smugtalker.h"
 
-namespace Digikam
+namespace GenericDigikamUnifiedPlugin
 {
 
 class Q_DECL_HIDDEN WSAuthentication::Private
@@ -434,4 +434,4 @@ void WSAuthentication::slotAddPhotoDone(int errCode, const QString& errMsg)
     uploadNextPhoto();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamUnifiedPlugin

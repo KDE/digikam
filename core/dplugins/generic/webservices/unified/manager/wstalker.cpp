@@ -39,6 +39,8 @@
 #include "o0globals.h"
 #include "wstoolutils.h"
 
+using namespace Digikam;
+
 namespace Digikam
 {
 
@@ -47,7 +49,10 @@ bool operator< (const WSAlbum& first, const WSAlbum& second)
     return first.title < second.title;
 }
 
-// -----------------------------------------------------------------------------
+} // namespace Digikam
+
+namespace GenericDigikamUnifiedPlugin
+{
 
 WSTalker::WSTalker(QWidget* const parent)
     : QObject(parent),
@@ -455,4 +460,4 @@ void WSTalker::slotResponseTokenReceived(const QMap<QString, QString>& /*rep*/)
 {
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamUnifiedPlugin

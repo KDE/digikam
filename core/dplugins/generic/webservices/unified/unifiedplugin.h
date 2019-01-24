@@ -27,12 +27,16 @@
 
 #include "dplugingeneric.h"
 
+// Local includes
+
+#include "wswizard.h"
+
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.Unified"
 
-namespace Digikam
-{
+using namespace Digikam;
 
-class DWizardDlg;
+namespace GenericDigikamUnifiedPlugin
+{
 
 class UnifiedPlugin : public DPluginGeneric
 {
@@ -60,9 +64,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DWizardDlg> m_toolDlg;
+    QPointer<WSWizard> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamUnifiedPlugin
 
 #endif // DIGIKAM_UNIFIED_PLUGIN_H

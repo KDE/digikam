@@ -51,7 +51,7 @@
 #include "wsfinalpage.h"
 #include "wstoolutils.h"
 
-namespace Digikam
+namespace GenericDigikamUnifiedPlugin
 {
 
 class Q_DECL_HIDDEN WSWizard::Private
@@ -184,4 +184,4 @@ void WSWizard::slotBusy(bool val)
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamUnifiedPlugin

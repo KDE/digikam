@@ -48,7 +48,7 @@
 #include "filesaveconflictbox.h"
 #include "digikam_debug.h"
 
-namespace Digikam
+namespace GenericDigikamUnifiedPlugin
 {
 
 class Q_DECL_HIDDEN WSSettingsPage::Private
@@ -252,4 +252,4 @@ bool WSSettingsPage::validatePage()
     return true;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamUnifiedPlugin

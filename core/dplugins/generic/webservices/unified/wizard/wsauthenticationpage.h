@@ -52,7 +52,9 @@
 #include "dinfointerface.h"
 #include "wsauthentication.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamUnifiedPlugin
 {
 
 #ifdef HAVE_QWEBENGINE
@@ -178,6 +180,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamUnifiedPlugin
 
 #endif // DIGIKAM_WS_AUTHENTICATION_PAGE_H
