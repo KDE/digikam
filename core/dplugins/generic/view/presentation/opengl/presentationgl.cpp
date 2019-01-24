@@ -68,7 +68,7 @@
 
 using namespace Digikam;
 
-namespace GenericPresentationPlugin
+namespace GenericDigikamPresentationPlugin
 {
 
 class Q_DECL_HIDDEN PresentationGL::Private
@@ -1712,4 +1712,4 @@ QPixmap PresentationGL::generateCustomOutlinedTextPixmap(const QString& text, QF
     return pix;
 }
 
-} // namespace GenericPresentationPlugin
+} // namespace GenericDigikamPresentationPlugin

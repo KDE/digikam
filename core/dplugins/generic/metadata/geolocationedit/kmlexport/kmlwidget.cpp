@@ -45,7 +45,7 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-namespace GenericGeolocationEditPlugin
+namespace GenericDigikamGeolocationEditPlugin
 {
 
 KmlWidget::KmlWidget(GeolocationEdit* const dlg,
@@ -464,4 +464,4 @@ void KmlWidget::saveSettings()
     config->sync();
 }
 
-} // namespace GenericGeolocationEditPlugin
+} // namespace GenericDigikamGeolocationEditPlugin

@@ -51,7 +51,7 @@
 
 using namespace Digikam;
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN XMPProperties::Private
@@ -547,4 +547,4 @@ void XMPProperties::applyMetadata(QByteArray& xmpData)
     xmpData = meta.getXmp();
 }
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin

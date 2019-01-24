@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-namespace GenericGeolocationEditPlugin
+namespace GenericDigikamGeolocationEditPlugin
 {
 
 class SearchBackend : public QObject
@@ -85,6 +85,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericGeolocationEditPlugin
+} // namespace GenericDigikamGeolocationEditPlugin
 
 #endif // DIGIKAM_SEARCH_BACKEND_H

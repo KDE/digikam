@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericPresentationPlugin
+namespace GenericDigikamPresentationPlugin
 {
 
 class PresentationPlugin : public DPluginGeneric
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotPresentation();
 };
 
-} // namespace GenericPresentationPlugin
+} // namespace GenericDigikamPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_PLUGIN_H

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericCalendarPlugin
+namespace GenericDigikamCalendarPlugin
 {
 
 class CalendarPlugin : public DPluginGeneric
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotCalendar();
 };
 
-} // namespace GenericCalendarPlugin
+} // namespace GenericDigikamCalendarPlugin
 
 #endif // DIGIKAM_CALENDAR_PLUGIN_H

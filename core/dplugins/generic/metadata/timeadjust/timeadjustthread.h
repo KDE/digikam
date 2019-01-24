@@ -38,7 +38,7 @@
 
 using namespace Digikam;
 
-namespace GenericTimeAdjustPlugin
+namespace GenericDigikamTimeAdjustPlugin
 {
 
 class TimeAdjustThread : public ActionThreadBase
@@ -70,6 +70,6 @@ private:
     Private* const d;
 };
 
-}  // namespace GenericTimeAdjustPlugin
+}  // namespace GenericDigikamTimeAdjustPlugin
 
 #endif // DIGIKAM_TIME_ADJUST_THREAD_H

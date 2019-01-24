@@ -41,7 +41,7 @@
 
 using namespace Digikam;
 
-namespace GenericPresentationPlugin
+namespace GenericDigikamPresentationPlugin
 {
 
 SoundtrackPreview::SoundtrackPreview(QWidget* const parent, const QList<QUrl>& urls, PresentationContainer* const sharedData)
@@ -619,4 +619,4 @@ void PresentationAudioPage::slotImageTotalTimeChanged( const QTime& imageTotalTi
     compareTimes();
 }
 
-} // namespace GenericPresentationPlugin
+} // namespace GenericDigikamPresentationPlugin

@@ -42,7 +42,7 @@
 #include <QStringList>
 #include <QWheelEvent>
 
-namespace GenericPresentationPlugin
+namespace GenericDigikamPresentationPlugin
 {
 
 class PresentationContainer;
@@ -120,6 +120,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericPresentationPlugin
+} // namespace GenericDigikamPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_GL_H

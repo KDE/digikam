@@ -34,7 +34,7 @@
 
 #include "geodatacontainer.h"
 
-namespace GenericGeolocationEditPlugin
+namespace GenericDigikamGeolocationEditPlugin
 {
 
 class GeoDataParser
@@ -67,6 +67,6 @@ protected:
     GeoDataMap                                m_GeoDataMap;
 };
 
-} // namespace GenericGeolocationEditPlugin
+} // namespace GenericDigikamGeolocationEditPlugin
 
 #endif // DIGIKAM_GEO_DATA_PARSER_H

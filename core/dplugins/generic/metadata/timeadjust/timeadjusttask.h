@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-namespace GenericTimeAdjustPlugin
+namespace GenericDigikamTimeAdjustPlugin
 {
 
 class TimeAdjustTask : public ActionJob
@@ -67,6 +67,6 @@ private:
     Private* const d;
 };
 
-}  // namespace GenericTimeAdjustPlugin
+}  // namespace GenericDigikamTimeAdjustPlugin
 
 #endif // DIGIKAM_TIME_ADJUST_TASK

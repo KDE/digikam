@@ -35,7 +35,7 @@
 #include "metadatacheckbox.h"
 #include "altlangstredit.h"
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN AltLangStringsEdit::Private
@@ -142,4 +142,4 @@ void AltLangStringsEdit::slotSelectionChanged(const QString& lang)
     emit signalDefaultLanguageEnabled(lang == QLatin1String("x-default"));
 }
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin

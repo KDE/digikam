@@ -43,7 +43,7 @@
 
 using namespace Digikam;
 
-namespace GenericPresentationPlugin
+namespace GenericDigikamPresentationPlugin
 {
 
 typedef QMap<QUrl, QImage> LoadedImages;
@@ -311,4 +311,4 @@ void PresentationLoader::checkIsIn(int index) const
     }
 }
 
-} // namespace GenericPresentationPlugin
+} // namespace GenericDigikamPresentationPlugin

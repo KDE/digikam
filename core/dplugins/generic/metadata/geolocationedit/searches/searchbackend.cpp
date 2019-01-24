@@ -38,7 +38,7 @@
 
 #include "gpscommon.h"
 
-namespace GenericGeolocationEditPlugin
+namespace GenericDigikamGeolocationEditPlugin
 {
 
 class Q_DECL_HIDDEN SearchBackend::Private
@@ -317,4 +317,4 @@ QList<QPair<QString, QString> > SearchBackend::getBackends() const
     return resultList;
 }
 
-} // namespace GenericGeolocationEditPlugin
+} // namespace GenericDigikamGeolocationEditPlugin

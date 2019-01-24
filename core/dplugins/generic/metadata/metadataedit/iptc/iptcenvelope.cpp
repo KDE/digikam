@@ -50,7 +50,7 @@
 
 using namespace Digikam;
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN IPTCEnvelope::Private
@@ -705,4 +705,4 @@ void IPTCEnvelope::applyMetadata(QByteArray& iptcData)
     iptcData = meta.getIptc();
 }
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin

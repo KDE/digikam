@@ -31,7 +31,7 @@
 #define CACHESIZE 4
 #define EMPTY     99999
 
-namespace GenericGLViewerPlugin
+namespace GenericDigikamGLViewerPlugin
 {
 
 enum OGLstate
@@ -41,6 +41,6 @@ enum OGLstate
     oglNoContext
 };
 
-} // namespace GenericGLViewerPlugin
+} // namespace GenericDigikamGLViewerPlugin
 
 #endif // DIGIKAM_GLVIEWERPLUGIN_GLVIEWERGLOBAL_H

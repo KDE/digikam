@@ -45,7 +45,7 @@
 
 using namespace Digikam;
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN ObjectAttributesEdit::Private
@@ -337,4 +337,4 @@ bool ObjectAttributesEdit::isValid() const
     return d->valueCheck->isValid();
 }
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin

@@ -64,7 +64,7 @@
 
 using namespace Digikam;
 
-namespace GenericGeolocationEditPlugin
+namespace GenericDigikamGeolocationEditPlugin
 {
 
 static int QItemSelectionModel_selectedRowsCount(const QItemSelectionModel* const selectionModel)
@@ -485,4 +485,4 @@ void SearchWidget::slotRemoveSelectedFromResultsList()
     slotUpdateActionAvailability();
 }
 
-} // namespace GenericGeolocationEditPlugin
+} // namespace GenericDigikamGeolocationEditPlugin

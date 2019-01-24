@@ -32,7 +32,7 @@
 
 #include <klocalizedstring.h>
 
-namespace GenericGLViewerPlugin
+namespace GenericDigikamGLViewerPlugin
 {
 
 GLViewerHelpDlg::GLViewerHelpDlg(DPlugin* const plugin)
@@ -189,4 +189,4 @@ GLViewerHelpDlg::~GLViewerHelpDlg()
 {
 }
 
-} // namespace GenericGLViewerPlugin
+} // namespace GenericDigikamGLViewerPlugin

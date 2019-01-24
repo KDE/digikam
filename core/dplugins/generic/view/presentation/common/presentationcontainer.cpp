@@ -24,7 +24,7 @@
 
 #include "presentationcontainer.h"
 
-namespace GenericPresentationPlugin
+namespace GenericDigikamPresentationPlugin
 {
 
 PresentationContainer::PresentationContainer()
@@ -75,4 +75,4 @@ PresentationContainer::~PresentationContainer()
     delete captionFont;
 }
 
-} // namespace GenericPresentationPlugin
+} // namespace GenericDigikamPresentationPlugin

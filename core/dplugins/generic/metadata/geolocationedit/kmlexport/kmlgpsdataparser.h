@@ -32,7 +32,7 @@
 
 #include "geodataparser.h"
 
-namespace GenericGeolocationEditPlugin
+namespace GenericDigikamGeolocationEditPlugin
 {
 
 /*! a classe derivated from GeoDataParser mainly to transform GPS data to KML
@@ -104,6 +104,6 @@ private:
     QDomDocument* kmlDocument;
 };
 
-} // namespace GenericGeolocationEditPlugin
+} // namespace GenericDigikamGeolocationEditPlugin
 
 #endif // DIGIKAM_KML_GPS_DATA_PARSER_H

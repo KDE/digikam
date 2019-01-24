@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 class IPTCSubjects : public SubjectWidget
@@ -52,6 +52,6 @@ public:
     void readMetadata(QByteArray& iptcData);
 };
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin
 
 #endif // DIGIKAM_IPTC_SUBJECTS_H

@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace GenericPresentationPlugin
+namespace GenericDigikamPresentationPlugin
 {
 
 PresentationAdvPage::PresentationAdvPage(QWidget* const parent, PresentationContainer* const sharedData)
@@ -89,4 +89,4 @@ void PresentationAdvPage::slotUseMillisecondsToggled()
     emit useMillisecondsToggled();
 }
 
-} // namespace GenericPresentationPlugin
+} // namespace GenericDigikamPresentationPlugin

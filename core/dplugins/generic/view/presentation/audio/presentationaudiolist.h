@@ -41,7 +41,7 @@
 
 #include <QtAV/AVError.h> // krazy:exclude=includes
 
-namespace GenericPresentationPlugin
+namespace GenericDigikamPresentationPlugin
 {
 
 class PresentationAudioListItem : public QObject, public QListWidgetItem
@@ -103,6 +103,6 @@ protected:
     void dropEvent(QDropEvent*);
 };
 
-} // namespace GenericPresentationPlugin
+} // namespace GenericDigikamPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_AUDIO_LIST_H

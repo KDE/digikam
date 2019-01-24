@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericMediaServerPlugin
+namespace GenericDigikamMediaServerPlugin
 {
 
 class MediaServerPlugin : public DPluginGeneric
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotMediaServer();
 };
 
-} // namespace GenericMediaServerPlugin
+} // namespace GenericDigikamMediaServerPlugin
 
 #endif // DIGIKAM_MEDIA_SERVER_PLUGIN_H

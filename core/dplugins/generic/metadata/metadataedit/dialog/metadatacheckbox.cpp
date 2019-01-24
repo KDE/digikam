@@ -25,7 +25,7 @@
 
 #include "metadatacheckbox.h"
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 MetadataCheckBox::MetadataCheckBox(const QString& text, QWidget* const parent)
@@ -56,4 +56,4 @@ void MetadataCheckBox::slotValid()
     setValid(true);
 }
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin

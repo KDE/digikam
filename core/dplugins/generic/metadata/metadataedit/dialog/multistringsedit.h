@@ -27,7 +27,7 @@
 
 #include <QWidget>
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 class MultiStringsEdit : public QWidget
@@ -60,6 +60,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin
 
 #endif // DIGIKAM_MULTI_STRINGS_EDIT_H

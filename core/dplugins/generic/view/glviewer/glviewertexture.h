@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-namespace GenericGLViewerPlugin
+namespace GenericDigikamGLViewerPlugin
 {
 
 class GLViewerTexture
@@ -79,6 +79,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericGLViewerPlugin
+} // namespace GenericDigikamGLViewerPlugin
 
 #endif // DIGIKAM_GLVIEWERPLUGIN_GLVIEWERTEXTURE_H

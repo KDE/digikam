@@ -37,7 +37,7 @@
 
 #include "digikam_debug.h"
 
-namespace GenericPresentationPlugin
+namespace GenericDigikamPresentationPlugin
 {
 
 PresentationCtrlWidget::PresentationCtrlWidget(QWidget* const parent)
@@ -189,4 +189,4 @@ void PresentationCtrlWidget::keyPressEvent(QKeyEvent* event)
     event->accept();
 }
 
-} // namespace GenericPresentationPlugin
+} // namespace GenericDigikamPresentationPlugin

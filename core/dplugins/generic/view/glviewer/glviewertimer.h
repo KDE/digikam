@@ -28,7 +28,7 @@
 
 #include <QString>
 
-namespace GenericGLViewerPlugin
+namespace GenericDigikamGLViewerPlugin
 {
 
 class GLViewerTimer
@@ -48,6 +48,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericGLViewerPlugin
+} // namespace GenericDigikamGLViewerPlugin
 
 #endif // DIGIKAM_GLVIEWERPLUGIN_GLVIEWERTIMER_H

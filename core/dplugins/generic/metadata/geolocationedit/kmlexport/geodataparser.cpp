@@ -40,7 +40,7 @@
 
 #include "digikam_debug.h"
 
-namespace GenericGeolocationEditPlugin
+namespace GenericDigikamGeolocationEditPlugin
 {
 
 GeoDataParser::GeoDataParser()
@@ -299,4 +299,4 @@ bool GeoDataParser::loadGPXFile(const QUrl& url)
     return true;
 }
 
-} // namespace GenericGeolocationEditPlugin
+} // namespace GenericDigikamGeolocationEditPlugin

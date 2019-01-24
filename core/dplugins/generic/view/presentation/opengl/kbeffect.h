@@ -27,7 +27,7 @@
 #ifndef DIGIKAM_KB_EFFECT_H
 #define DIGIKAM_KB_EFFECT_H
 
-namespace GenericPresentationPlugin
+namespace GenericDigikamPresentationPlugin
 {
 
 class KBImage;
@@ -115,6 +115,6 @@ public:
     virtual bool done();
 };
 
-} // namespace GenericPresentationPlugin
+} // namespace GenericDigikamPresentationPlugin
 
 #endif // DIGIKAM°KB_EFFECT_H

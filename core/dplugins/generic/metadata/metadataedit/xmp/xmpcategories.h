@@ -29,7 +29,7 @@
 #include <QWidget>
 #include <QByteArray>
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 class XMPCategories : public QWidget
@@ -68,6 +68,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin
 
 #endif // DIGIKAM_XMP_CATEGORIES_H

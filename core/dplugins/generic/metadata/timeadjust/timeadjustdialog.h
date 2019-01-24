@@ -39,7 +39,7 @@
 
 using namespace Digikam;
 
-namespace GenericTimeAdjustPlugin
+namespace GenericDigikamTimeAdjustPlugin
 {
 
 class DIGIKAM_EXPORT TimeAdjustDialog : public DPluginDialog
@@ -101,6 +101,6 @@ private:
     Private* const d;
 };
 
-}  // namespace GenericTimeAdjustPlugin
+}  // namespace GenericDigikamTimeAdjustPlugin
 
 #endif // DIGIKAM_TIME_ADJUST_DIALOG_H

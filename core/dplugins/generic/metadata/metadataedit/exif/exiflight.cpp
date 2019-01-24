@@ -46,7 +46,7 @@
 
 using namespace Digikam;
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN FlashMode
@@ -414,4 +414,4 @@ void EXIFLight::applyMetadata(QByteArray& exifData)
     exifData = meta.getExifEncoded();
 }
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin

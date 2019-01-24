@@ -49,7 +49,7 @@ class QAbstractItemModel;
 
 using namespace Digikam;
 
-namespace GenericGeolocationEditPlugin
+namespace GenericDigikamGeolocationEditPlugin
 {
 
 class DIGIKAM_EXPORT GeolocationEdit : public DPluginDialog
@@ -110,6 +110,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericGeolocationEditPlugin
+} // namespace GenericDigikamGeolocationEditPlugin
 
 #endif // DIGIKAM_GEO_LOCATION_EDIT_H

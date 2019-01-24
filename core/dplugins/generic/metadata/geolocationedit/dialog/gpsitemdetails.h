@@ -41,7 +41,7 @@ using namespace Digikam;
 
 class KConfigGroup;
 
-namespace GenericGeolocationEditPlugin
+namespace GenericDigikamGeolocationEditPlugin
 {
 
 class GPSItemDetails : public QWidget
@@ -83,6 +83,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericGeolocationEditPlugin
+} // namespace GenericDigikamGeolocationEditPlugin
 
 #endif // DIGIKAM_GPS_ITEM_DETAILS_H

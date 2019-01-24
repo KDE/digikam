@@ -42,7 +42,7 @@
 
 using namespace Digikam;
 
-namespace GenericPresentationPlugin
+namespace GenericDigikamPresentationPlugin
 {
 
 class KBImageLoader;
@@ -111,6 +111,6 @@ public:
     PresentationAudioWidget* playbackWidget;
 };
 
-} // namespace GenericPresentationPlugin
+} // namespace GenericDigikamPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_KB_PRIVATE_H

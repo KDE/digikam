@@ -53,7 +53,7 @@
 #   define GL_TEXTURE_RECTANGLE_NV    0x84F5
 #endif
 
-namespace GenericGLViewerPlugin
+namespace GenericDigikamGLViewerPlugin
 {
 
 class GLViewerWidget::Private
@@ -888,4 +888,4 @@ bool GLViewerWidget::isReallyFullScreen() const
     return (width() == d->screen_width);
 }
 
-} // namespace GenericGLViewerPlugin
+} // namespace GenericDigikamGLViewerPlugin

@@ -41,7 +41,7 @@
 
 using namespace Digikam;
 
-namespace GenericPresentationPlugin
+namespace GenericDigikamPresentationPlugin
 {
 
 class Q_DECL_HIDDEN KBImageLoader::Private
@@ -252,4 +252,4 @@ float KBImageLoader::imageAspect() const
     return d->textureAspect;
 }
 
-} // namespace GenericPresentationPlugin
+} // namespace GenericDigikamPresentationPlugin

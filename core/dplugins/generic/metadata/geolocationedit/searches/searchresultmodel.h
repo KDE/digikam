@@ -36,7 +36,7 @@
 
 class QItemSelection;
 
-namespace GenericGeolocationEditPlugin
+namespace GenericDigikamGeolocationEditPlugin
 {
 
 class SearchResultItem;
@@ -84,6 +84,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericGeolocationEditPlugin
+} // namespace GenericDigikamGeolocationEditPlugin
 
 #endif // DIGIKAM_SEARCH_RESULT_MODEL_H

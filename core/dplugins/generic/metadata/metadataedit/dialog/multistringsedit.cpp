@@ -36,7 +36,7 @@
 
 #include <klocalizedstring.h>
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN MultiStringsEdit::Private
@@ -282,4 +282,4 @@ bool MultiStringsEdit::getValues(QStringList& oldValues, QStringList& newValues)
     return d->valueCheck->isChecked();
 }
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin

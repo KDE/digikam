@@ -42,7 +42,7 @@
 
 using namespace Digikam;
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN MultiValuesEdit::Private
@@ -289,4 +289,4 @@ bool MultiValuesEdit::isValid() const
     return d->valueCheck->isValid();
 }
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin

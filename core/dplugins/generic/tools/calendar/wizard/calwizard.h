@@ -40,7 +40,7 @@
 
 using namespace Digikam;
 
-namespace GenericCalendarPlugin
+namespace GenericDigikamCalendarPlugin
 {
 
 class DIGIKAM_EXPORT CalWizard : public DWizardDlg

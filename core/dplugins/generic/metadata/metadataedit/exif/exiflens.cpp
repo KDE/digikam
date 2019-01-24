@@ -45,7 +45,7 @@
 
 using namespace Digikam;
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN EXIFLens::Private
@@ -441,4 +441,4 @@ void EXIFLens::applyMetadata(QByteArray& exifData)
     exifData = meta.getExifEncoded();
 }
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin

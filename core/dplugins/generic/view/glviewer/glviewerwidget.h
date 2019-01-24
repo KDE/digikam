@@ -43,7 +43,7 @@
 
 using namespace Digikam;
 
-namespace GenericGLViewerPlugin
+namespace GenericDigikamGLViewerPlugin
 {
 
 class GLViewerWidget : public QGLWidget
@@ -93,6 +93,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericGLViewerPlugin
+} // namespace GenericDigikamGLViewerPlugin
 
 #endif // DIGIKAM_GLVIEWERPLUGIN_GLVIEWERWIDGET_H

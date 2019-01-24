@@ -33,7 +33,7 @@
 
 using namespace Digikam;
 
-namespace GenericCalendarPlugin
+namespace GenericDigikamCalendarPlugin
 {
 
 class CalIntroPage : public DWizardPage
@@ -45,6 +45,6 @@ public:
     ~CalIntroPage();
 };
 
-} // namespace GenericCalendarPlugin
+} // namespace GenericDigikamCalendarPlugin
 
 #endif // DIGIKAM_CAL_INTRO_PAGE_H

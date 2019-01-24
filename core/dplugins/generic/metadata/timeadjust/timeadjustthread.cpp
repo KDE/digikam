@@ -29,7 +29,7 @@
 #include "dinfointerface.h"
 #include "timeadjusttask.h"
 
-namespace GenericTimeAdjustPlugin
+namespace GenericDigikamTimeAdjustPlugin
 {
 
 class Q_DECL_HIDDEN TimeAdjustThread::Private
@@ -107,4 +107,4 @@ void TimeAdjustThread::cancel()
     ActionThreadBase::cancel();
 }
 
-}  // namespace GenericTimeAdjustPlugin
+}  // namespace GenericDigikamTimeAdjustPlugin

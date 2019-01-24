@@ -52,7 +52,7 @@
 #include "iptcsubjects.h"
 #include "dmetadata.h"
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN IPTCEditWidget::Private
@@ -359,4 +359,4 @@ bool IPTCEditWidget::isModified() const
     return d->modified;
 }
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin

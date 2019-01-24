@@ -50,7 +50,7 @@
 #include "dxmlguiwindow.h"
 #include "workingwidget.h"
 
-namespace GenericMediaServerPlugin
+namespace GenericDigikamMediaServerPlugin
 {
 
 class Q_DECL_HIDDEN DMediaServerDlg::Private
@@ -362,4 +362,4 @@ void DMediaServerDlg::slotToggleMediaServer()
     }
 }
 
-} // namespace GenericMediaServerPlugin
+} // namespace GenericDigikamMediaServerPlugin

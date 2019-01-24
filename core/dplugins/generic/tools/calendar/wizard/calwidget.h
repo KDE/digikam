@@ -31,7 +31,7 @@
 
 class QPaintEvent;
 
-namespace GenericCalendarPlugin
+namespace GenericDigikamCalendarPlugin
 {
 
 class CalWidget : public QWidget

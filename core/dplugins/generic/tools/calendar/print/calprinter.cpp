@@ -31,7 +31,7 @@
 
 #include "calpainter.h"
 
-namespace GenericCalendarPlugin
+namespace GenericDigikamCalendarPlugin
 {
 
 class Q_DECL_HIDDEN CalPrinter::Private

@@ -53,7 +53,7 @@
 #   include "presentation_audiopage.h"
 #endif
 
-namespace GenericPresentationPlugin
+namespace GenericDigikamPresentationPlugin
 {
 
 class Q_DECL_HIDDEN PresentationDlg::Private
@@ -308,4 +308,4 @@ void PresentationDlg::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-} // namespace GenericPresentationPlugin
+} // namespace GenericDigikamPresentationPlugin

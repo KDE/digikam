@@ -31,7 +31,7 @@
 
 #include <klocalizedstring.h>
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 IPTCSubjects::IPTCSubjects(QWidget* const parent)
@@ -125,4 +125,4 @@ void IPTCSubjects::applyMetadata(QByteArray& iptcData)
     iptcData = meta.getIptc();
 }
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin

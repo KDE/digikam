@@ -44,7 +44,7 @@
 #   include <QTimeZone>
 #endif // HAVE_KCALENDAR
 
-namespace GenericCalendarPlugin
+namespace GenericDigikamCalendarPlugin
 {
 
 class Q_DECL_HIDDEN CalSettings::Private

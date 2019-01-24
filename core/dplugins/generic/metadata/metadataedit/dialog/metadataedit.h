@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-namespace GenericMetadataEditPlugin
+namespace GenericDigikamMetadataEditPlugin
 {
 
 class DIGIKAM_EXPORT MetadataEditDialog : public DPluginDialog
@@ -87,6 +87,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericMetadataEditPlugin
+} // namespace GenericDigikamMetadataEditPlugin
 
 #endif // DIGIKAM_META_DATA_EDIT_H
