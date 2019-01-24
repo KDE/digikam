@@ -32,7 +32,7 @@
 #include <QMap>
 #include <QUrl>
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 enum PanoAction
@@ -109,9 +109,9 @@ struct PanoActionData
     PanoAction          action;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
-Q_DECLARE_METATYPE(Digikam::PanoActionData)
-Q_DECLARE_METATYPE(Digikam::PanoramaPreprocessedUrls)
+Q_DECLARE_METATYPE(GenericDigikamPanoramaPlugin::PanoActionData)
+Q_DECLARE_METATYPE(GenericDigikamPanoramaPlugin::PanoramaPreprocessedUrls)
 
 #endif // DIGIKAM_PANO_ACTIONS_H

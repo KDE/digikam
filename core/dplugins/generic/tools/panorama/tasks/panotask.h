@@ -31,7 +31,7 @@
 
 #include "panoactions.h"
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 class PanoTask : public ThreadWeaver::Job
@@ -59,6 +59,6 @@ protected:
     const QUrl       tmpDir;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_PANO_TASK_H

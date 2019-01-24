@@ -27,7 +27,9 @@
 
 #include "dbinaryiface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPanoramaPlugin
 {
 
 class CPCleanBinary : public DBinaryIface
@@ -50,6 +52,6 @@ public:
         }
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_CPCLEAN_BINARY_H

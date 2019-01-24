@@ -40,7 +40,6 @@
 
 // Local includes
 
-#include "dinfointerface.h"
 #include "dwizardpage.h"
 #include "digikam_debug.h"
 #include "abstractthemeparameter.h"

@@ -28,7 +28,9 @@
 #include "dwizardpage.h"
 #include "panoactions.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPanoramaPlugin
 {
 
 class PanoManager;
@@ -57,7 +59,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotProgressTimerDone();
-    void slotPanoAction(const Digikam::PanoActionData&);
+    void slotPanoAction(const GenericDigikamPanoramaPlugin::PanoActionData&);
 
 private:
 
@@ -65,6 +67,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_PANO_OPTIMIZE_PAGE_H

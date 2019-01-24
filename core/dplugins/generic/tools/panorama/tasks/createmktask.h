@@ -27,7 +27,7 @@
 
 #include "commandtask.h"
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 class CreateMKTask : public CommandTask
@@ -55,6 +55,6 @@ private:
     const PanoramaFileType fileType;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_CREATE_MK_TASK_H

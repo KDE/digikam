@@ -26,7 +26,7 @@
 
 #include <QFile>
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 CpFindTask::CpFindTask(const QString& workDirPath, const QUrl& input,
@@ -68,4 +68,4 @@ void CpFindTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     printDebug(QLatin1String("cpfind"));
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin

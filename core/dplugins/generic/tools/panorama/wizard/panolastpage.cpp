@@ -50,7 +50,7 @@
 #include "panoactionthread.h"
 #include "dlayoutbox.h"
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 class Q_DECL_HIDDEN PanoLastPage::Private
@@ -159,8 +159,8 @@ PanoLastPage::~PanoLastPage()
 
 void PanoLastPage::copyFiles()
 {
-    connect(d->mngr->thread(), SIGNAL(jobCollectionFinished(Digikam::PanoActionData)),
-            this, SLOT(slotPanoAction(Digikam::PanoActionData)));
+    connect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
+            this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
 
     QUrl panoUrl = d->mngr->preProcessedMap().begin().key().adjusted(QUrl::RemoveFilename);
     panoUrl.setPath(panoUrl.path() + panoFileName(d->fileTemplateQLineEdit->text()));
@@ -280,7 +280,7 @@ void PanoLastPage::slotPtoCheckBoxChanged(int)
     checkFiles();
 }
 
-void PanoLastPage::slotPanoAction(const Digikam::PanoActionData& ad)
+void PanoLastPage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoActionData& ad)
 {
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "SlotPanoAction (lastPage)";
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "starting, success, action:" << ad.starting << ad.success << ad.action;
@@ -293,8 +293,8 @@ void PanoLastPage::slotPanoAction(const Digikam::PanoActionData& ad)
             {
                 case PANO_COPY:
                 {
-                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(Digikam::PanoActionData)),
-                               this, SLOT(slotPanoAction(Digikam::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
 
                     d->errorLabel->setText(i18n("<qt><p><font color=\"red\"><b>Error:</b> "
                                                  "%1</font></p></qt>", ad.message));
@@ -314,8 +314,8 @@ void PanoLastPage::slotPanoAction(const Digikam::PanoActionData& ad)
             {
                 case PANO_COPY:
                 {
-                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(Digikam::PanoActionData)),
-                               this, SLOT(slotPanoAction(Digikam::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
 
                     d->copyDone = true;
                     emit signalCopyFinished();
@@ -331,4 +331,4 @@ void PanoLastPage::slotPanoAction(const Digikam::PanoActionData& ad)
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin

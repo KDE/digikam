@@ -23,12 +23,18 @@
 #ifndef DIGIKAM_CREATE_FINAL_PTO_TASK_H
 #define DIGIKAM_CREATE_FINAL_PTO_TASK_H
 
+// Qt includes
+
+#include <QSharedPointer>
+
 // Local includes
 
 #include "panotask.h"
 #include "ptotype.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPanoramaPlugin
 {
 
 class CreateFinalPtoTask : public PanoTask
@@ -52,6 +58,6 @@ private:
     const QRect crop;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_CREATE_FINAL_PTO_TASK_H

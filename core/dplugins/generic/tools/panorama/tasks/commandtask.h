@@ -31,7 +31,7 @@
 
 #include "panotask.h"
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 class CommandTask : public PanoTask
@@ -61,6 +61,6 @@ private:
     QString                  commandPath;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_COMMAND_TASK_H

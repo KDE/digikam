@@ -27,7 +27,9 @@
 
 #include "dbinaryiface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPanoramaPlugin
 {
 
 class HuginExecutorBinary : public DBinaryIface
@@ -51,6 +53,6 @@ public:
     }
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_HUGIN_EXECUTOR_BINARY_H

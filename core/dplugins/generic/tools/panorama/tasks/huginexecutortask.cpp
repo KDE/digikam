@@ -27,7 +27,7 @@
 #include <QFile>
 #include <QFileInfo>
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 HuginExecutorTask::HuginExecutorTask(const QString& workDirPath, const QUrl& input,
@@ -82,4 +82,4 @@ void HuginExecutorTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     printDebug(QLatin1String("hugin_executor"));
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin

@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.Panorama"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPanoramaPlugin
 {
 
 class PanoramaPlugin : public DPluginGeneric
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotPanorama();
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_PANORAMA_PLUGIN_H

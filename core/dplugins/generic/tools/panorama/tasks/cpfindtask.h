@@ -27,7 +27,7 @@
 
 #include "commandtask.h"
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 class CpFindTask : public CommandTask
@@ -52,6 +52,6 @@ private:
     const QUrl& ptoUrl;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_CP_FIND_TASK_H

@@ -30,7 +30,9 @@
 #include "dwizardpage.h"
 #include "panoactions.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPanoramaPlugin
 {
 
 class PanoManager;
@@ -61,6 +63,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_PANO_ITEMS_PAGE_H

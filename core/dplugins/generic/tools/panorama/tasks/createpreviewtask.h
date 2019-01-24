@@ -33,7 +33,9 @@
 #include "ptotype.h"
 #include "metaengine.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPanoramaPlugin
 {
 
 class CreatePreviewTask : public PanoTask
@@ -58,6 +60,6 @@ private:
     MetaEngine                    m_meta;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_CREATE_PREVIEW_TASK_H

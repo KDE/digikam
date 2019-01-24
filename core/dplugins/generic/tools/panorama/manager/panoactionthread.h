@@ -39,7 +39,9 @@
 #include "panoactions.h"
 #include "ptotype.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPanoramaPlugin
 {
 
 struct PanoActionData;
@@ -113,9 +115,9 @@ public:
 
 Q_SIGNALS:
 
-    void starting(const Digikam::PanoActionData& ad);
-    void stepFinished(const Digikam::PanoActionData& ad);
-    void jobCollectionFinished(const Digikam::PanoActionData& ad);
+    void starting(const GenericDigikamPanoramaPlugin::PanoActionData& ad);
+    void stepFinished(const GenericDigikamPanoramaPlugin::PanoActionData& ad);
+    void jobCollectionFinished(const GenericDigikamPanoramaPlugin::PanoActionData& ad);
 
     void cpFindPtoReady(const QUrl& cpFindPtoUrl);
     void cpCleanPtoReady(const QUrl& cpCleanPtoUrl);
@@ -149,6 +151,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_PANO_ACTION_THREAD_H

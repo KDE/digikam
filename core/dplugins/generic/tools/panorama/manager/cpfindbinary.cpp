@@ -26,7 +26,7 @@
 
 #include "digikam_debug.h"
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 bool CPFindBinary::parseHeader(const QString& output)
@@ -56,5 +56,5 @@ bool CPFindBinary::parseHeader(const QString& output)
     return false;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 

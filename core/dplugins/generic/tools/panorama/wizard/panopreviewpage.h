@@ -30,7 +30,9 @@
 
 class QMutexLocker;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPanoramaPlugin
 {
 
 class PanoManager;
@@ -64,7 +66,7 @@ private Q_SLOTS:
 
     void slotCancel();
     void slotStartStitching();
-    void slotPanoAction(const Digikam::PanoActionData&);
+    void slotPanoAction(const GenericDigikamPanoramaPlugin::PanoActionData&);
 
 private:
 
@@ -72,6 +74,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_PANO_PREVIEW_PAGE_H

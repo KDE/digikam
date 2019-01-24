@@ -44,7 +44,7 @@
 
 using namespace ThreadWeaver;
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 class Q_DECL_HIDDEN PanoActionThread::Private
@@ -552,4 +552,4 @@ void PanoActionThread::appendStitchingJobs(QSharedPointer<Sequence>& js,
     (*js) << jobs;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin

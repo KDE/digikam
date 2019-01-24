@@ -32,7 +32,9 @@
 #include "panotask.h"
 #include "metaengine.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPanoramaPlugin
 {
 
 class CopyFilesTask : public PanoTask
@@ -64,6 +66,6 @@ private:
     MetaEngine                       m_meta;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_COPY_FILES_TASK_H

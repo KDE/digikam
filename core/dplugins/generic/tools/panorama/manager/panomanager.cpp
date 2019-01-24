@@ -49,7 +49,7 @@
 #include "huginexecutorbinary.h"
 #include "ptofile.h"
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 class Q_DECL_HIDDEN PanoManager::Private
@@ -651,4 +651,4 @@ void PanoManager::startWizard()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin

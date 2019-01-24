@@ -27,7 +27,7 @@
 
 #include "commandtask.h"
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 class AutoCropTask : public CommandTask
@@ -53,6 +53,6 @@ private:
 //  const bool  buildGPano;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_AUTO_CROP_TASK_H

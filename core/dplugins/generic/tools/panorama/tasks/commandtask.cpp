@@ -31,7 +31,7 @@
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 CommandTask::CommandTask(PanoAction action, const QString& workDirPath, const QString& commandPath)
@@ -48,6 +48,7 @@ CommandTask::~CommandTask()
 void CommandTask::requestAbort()
 {
     PanoTask::requestAbort();
+
     if (!process.isNull())
         process->kill();
 }
@@ -60,7 +61,7 @@ void CommandTask::runProcess(QStringList& args)
     process.reset(new QProcess());
     process->setWorkingDirectory(tmpDir.toLocalFile());
     process->setProcessChannelMode(QProcess::MergedChannels);
-    process->setProcessEnvironment(adjustedEnvironmentForAppImage());
+    process->setProcessEnvironment(Digikam::adjustedEnvironmentForAppImage());
     process->setProgram(commandPath);
     process->setArguments(args);
     process->start();
@@ -76,6 +77,7 @@ QString CommandTask::getProgram()
 {
     if (process.isNull())
         return QString();
+
     return process->program();
 }
 
@@ -83,6 +85,7 @@ QString CommandTask::getCommandLine()
 {
     if (process.isNull())
         return QString();
+
     return (process->program() + QLatin1Char(' ') + process->arguments().join(QLatin1Char(' ')));
 }
 
@@ -90,8 +93,10 @@ QString CommandTask::getProcessError()
 {
     if (isAbortedFlag)
         return i18n("<b>Canceled</b>");
+
     if (process.isNull())
         return QString();
+
     return (i18n("<b>Cannot run <i>%1</i>:</b><p>%2</p>",
                  getProgram(),
                  output.toHtmlEscaped().replace(QLatin1Char('\n'), QLatin1String("<br />"))));
@@ -104,4 +109,4 @@ void CommandTask::printDebug(const QString& binaryName)
                                                                        output.replace(QLatin1Char('\n'), QLatin1String("\n >>\t")));
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin

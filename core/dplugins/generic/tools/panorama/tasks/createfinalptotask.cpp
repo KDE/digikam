@@ -30,7 +30,7 @@
 
 #include <klocalizedstring.h>
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 CreateFinalPtoTask::CreateFinalPtoTask(const QString& workDirPath, QSharedPointer<const PTOType> ptoData, QUrl& finalPtoUrl, const QRect& crop)
@@ -75,4 +75,4 @@ void CreateFinalPtoTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     return;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin

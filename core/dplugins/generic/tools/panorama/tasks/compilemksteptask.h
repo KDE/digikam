@@ -27,7 +27,7 @@
 
 #include "commandtask.h"
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 class CompileMKStepTask : public CommandTask
@@ -58,6 +58,6 @@ private:
     const QString enblendPath;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_COMPILE_MK_STEP_TASK_H

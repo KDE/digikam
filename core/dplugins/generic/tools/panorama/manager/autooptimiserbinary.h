@@ -27,7 +27,9 @@
 
 #include "dbinaryiface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPanoramaPlugin
 {
 
 class AutoOptimiserBinary : public DBinaryIface
@@ -54,6 +56,6 @@ public:
     }
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
 
 #endif // DIGIKAM_AUTO_OPTIMISER_BINARY_H

@@ -34,7 +34,7 @@
 
 #include "digikam_debug.h"
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 CreatePreviewTask::CreatePreviewTask(const QString& workDirPath, QSharedPointer<const PTOType> inputPTO,
@@ -117,4 +117,4 @@ void CreatePreviewTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     successFlag = true;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin

@@ -46,7 +46,7 @@
 #include "panolastpage.h"
 #include "dxmlguiwindow.h"
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 class Q_DECL_HIDDEN PanoWizard::Private
@@ -108,4 +108,4 @@ PanoWizard::~PanoWizard()
     delete d;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin

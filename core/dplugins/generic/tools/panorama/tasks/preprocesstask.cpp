@@ -42,7 +42,7 @@
 #include "drawdecoderwidget.h"
 #include "drawdecoding.h"
 
-namespace Digikam
+namespace GenericDigikamPanoramaPlugin
 {
 
 class PanoObserver;
@@ -240,4 +240,4 @@ bool PreProcessTask::convertRaw()
     return true;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPanoramaPlugin
