@@ -39,7 +39,7 @@
 #include <Vkontakte/userinfojob.h>
 #include <Vkontakte/vkapi.h>
 
-namespace Digikam
+namespace GenericDigikamVKontaktePlugin
 {
 
 class Q_DECL_HIDDEN VKAuthWidget::Private
@@ -192,4 +192,4 @@ QString VKAuthWidget::albumsURL() const
         return QLatin1String("http://vk.com/");
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamVKontaktePlugin

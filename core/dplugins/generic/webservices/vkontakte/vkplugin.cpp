@@ -34,7 +34,7 @@
 
 #include "vkwindow.h"
 
-namespace Digikam
+namespace GenericDigikamVKontaktePlugin
 {
 
 VKontaktePlugin::VKontaktePlugin(QObject* const parent)
@@ -107,4 +107,4 @@ void VKontaktePlugin::slotVKontakte()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamVKontaktePlugin

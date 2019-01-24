@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.VKontakte"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamVKontaktePlugin
 {
 
-class DPluginDialog;
+class VKWindow;
 
 class VKontaktePlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<VKWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamVKontaktePlugin
 
 #endif // DIGIKAM_VKONTAKTE_PLUGIN_H

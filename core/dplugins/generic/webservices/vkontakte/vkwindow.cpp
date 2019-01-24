@@ -61,7 +61,7 @@
 #include "vkalbumchooser.h"
 #include "vkauthwidget.h"
 
-namespace Digikam
+namespace GenericDigikamVKontaktePlugin
 {
 
 class Q_DECL_HIDDEN VKWindow::Private
@@ -440,4 +440,4 @@ void VKWindow::slotPhotoUploadDone(KJob* kjob)
     emit signalUpdateBusyStatus(false);
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamVKontaktePlugin

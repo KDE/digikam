@@ -31,7 +31,7 @@
 #include <QWidget>
 #include <QString>
 
-namespace Digikam
+namespace GenericDigikamVKontaktePlugin
 {
 
 class VKNewAlbumDlg : public QDialog
@@ -83,6 +83,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamVKontaktePlugin
 
 #endif // DIGIKAM_VK_NEW_ALBUM_DLG_H

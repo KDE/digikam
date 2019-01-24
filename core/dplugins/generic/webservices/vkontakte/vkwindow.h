@@ -37,7 +37,9 @@
 
 class KJob;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamVKontaktePlugin
 {
 
 class DIGIKAM_EXPORT VKWindow : public WSToolDialog
@@ -96,6 +98,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamVKontaktePlugin
 
 #endif // DIGIKAM_VK_WINDOW_H

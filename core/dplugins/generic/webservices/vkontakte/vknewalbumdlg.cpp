@@ -47,7 +47,7 @@
 
 #include <Vkontakte/albuminfo.h>
 
-namespace Digikam
+namespace GenericDigikamVKontaktePlugin
 {
 
 class Q_DECL_HIDDEN VKNewAlbumDlg::Private
@@ -202,4 +202,4 @@ const VKNewAlbumDlg::AlbumProperties& VKNewAlbumDlg::album() const
     return d->album;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamVKontaktePlugin

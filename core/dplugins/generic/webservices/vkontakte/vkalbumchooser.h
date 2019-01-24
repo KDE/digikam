@@ -44,7 +44,7 @@ namespace Vkontakte
     class VkApi;
 }
 
-namespace Digikam
+namespace GenericDigikamVKontaktePlugin
 {
 
 class VKAlbumChooser : public QGroupBox
@@ -92,6 +92,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamVKontaktePlugin
 
 #endif // DIGIKAM_VK_ALBUM_CHOOSER_H
