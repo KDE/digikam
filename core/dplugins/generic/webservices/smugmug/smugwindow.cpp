@@ -58,7 +58,7 @@
 #include "smugwidget.h"
 #include "smugnewalbumdlg.h"
 
-namespace Digikam
+namespace GenericDigikamSmugPlugin
 {
 
 class Q_DECL_HIDDEN SmugWindow::Private
@@ -1026,4 +1026,4 @@ void SmugWindow::slotImageListChanged()
     startButton()->setEnabled(!(d->widget->m_imgList->imageUrls().isEmpty()));
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamSmugPlugin

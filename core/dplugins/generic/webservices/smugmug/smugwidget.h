@@ -42,7 +42,9 @@ class QPushButton;
 class QComboBox;
 class QLineEdit;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSmugPlugin
 {
 
 class SmugWidget : public QWidget
@@ -122,6 +124,6 @@ private:
     friend class SmugWindow;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamSmugPlugin
 
 #endif // DIGIKAM_SMUG_WIDGET_H

@@ -40,7 +40,9 @@
 #include "dinfointerface.h"
 #include "digikam_export.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSmugPlugin
 {
 
 class DIGIKAM_EXPORT SmugWindow : public WSToolDialog

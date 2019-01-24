@@ -59,7 +59,9 @@
 #include "o1requestor.h"
 #include "o0globals.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSmugPlugin
 {
 
 class Q_DECL_HIDDEN SmugTalker::Private
@@ -1182,4 +1184,4 @@ QString SmugTalker::htmlToText(const QString& htmlText) const
     return txtDoc.toPlainText();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamSmugPlugin

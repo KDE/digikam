@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.SmugMug"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSmugPlugin
 {
 
-class DPluginDialog;
+class SmugWindow;
 
 class SmugPlugin : public DPluginGeneric
 {
@@ -61,10 +63,10 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlgExport;
-    QPointer<DPluginDialog> m_toolDlgImport;
+    QPointer<SmugWindow> m_toolDlgExport;
+    QPointer<SmugWindow> m_toolDlgImport;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamSmugPlugin
 
 #endif // DIGIKAM_SMUG_PLUGIN_H

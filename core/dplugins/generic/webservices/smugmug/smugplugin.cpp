@@ -34,7 +34,7 @@
 
 #include "smugwindow.h"
 
-namespace Digikam
+namespace GenericDigikamSmugPlugin
 {
 
 SmugPlugin::SmugPlugin(QObject* const parent)
@@ -142,4 +142,4 @@ void SmugPlugin::slotSmugMugImport()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamSmugPlugin

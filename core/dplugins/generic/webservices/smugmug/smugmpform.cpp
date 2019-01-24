@@ -36,7 +36,9 @@
 #include "digikam_debug.h"
 #include "wstoolutils.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSmugPlugin
 {
 
 SmugMPForm::SmugMPForm()
@@ -160,4 +162,4 @@ QByteArray SmugMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamSmugPlugin

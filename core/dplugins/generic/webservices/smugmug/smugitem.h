@@ -29,7 +29,7 @@
 
 #include <QString>
 
-namespace Digikam
+namespace GenericDigikamSmugPlugin
 {
 
 class SmugUser
@@ -184,6 +184,6 @@ public:
     QString name;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamSmugPlugin
 
 #endif // DIGIKAM_SMUG_ITEM_H
