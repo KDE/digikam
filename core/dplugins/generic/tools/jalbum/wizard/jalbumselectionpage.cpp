@@ -31,10 +31,10 @@
 // Local includes
 
 #include "jalbumwizard.h"
-#include "jalbuminfo.h"
+#include "jalbumsettings.h"
 #include "ditemslist.h"
 
-namespace Digikam
+namespace GenericDigikamJAlbumPlugin
 {
 
 class Q_DECL_HIDDEN JAlbumSelectionPage::Private
@@ -54,7 +54,7 @@ public:
 
         if (wizard)
         {
-            info  = wizard->jalbumInfo();
+            info  = wizard->settings();
             iface = info->m_iface;
         }
     }
@@ -64,7 +64,7 @@ public:
     DItemsList*     imageList;
     QStackedWidget* stack;
     JAlbumWizard*   wizard;
-    JAlbumInfo*     info;
+    JAlbumSettings*     info;
     DInfoInterface* iface;
 };
 
@@ -86,11 +86,11 @@ JAlbumSelectionPage::JAlbumSelectionPage(QWizard* const dialog, const QString& t
         d->albumSelector = new QWidget(this);
     }
 
-    d->stack->insertWidget(JAlbumInfo::ALBUMS, d->albumSelector);
+    d->stack->insertWidget(JAlbumSettings::ALBUMS, d->albumSelector);
 
     d->imageList          = new DItemsList(this);
     d->imageList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
-    d->stack->insertWidget(JAlbumInfo::IMAGES, d->imageList);
+    d->stack->insertWidget(JAlbumSettings::IMAGES, d->imageList);
 
     setPageWidget(d->stack);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-pictures")));
@@ -120,7 +120,7 @@ void JAlbumSelectionPage::initializePage()
 {
     d->imageList->setIface(d->iface);
 
-    if (d->info->m_getOption == JAlbumInfo::IMAGES)
+    if (d->info->m_getOption == JAlbumSettings::IMAGES)
     {
         d->imageList->loadImagesFromCurrentSelection();
     }
@@ -130,7 +130,7 @@ void JAlbumSelectionPage::initializePage()
 
 bool JAlbumSelectionPage::validatePage()
 {
-    if (d->stack->currentIndex() == JAlbumInfo::ALBUMS)
+    if (d->stack->currentIndex() == JAlbumSettings::ALBUMS)
     {
         if (d->albumSupport)
         {
@@ -157,7 +157,7 @@ bool JAlbumSelectionPage::validatePage()
 
 bool JAlbumSelectionPage::isComplete() const
 {
-    if (d->stack->currentIndex() == JAlbumInfo::ALBUMS)
+    if (d->stack->currentIndex() == JAlbumSettings::ALBUMS)
     {
         if (!d->albumSupport)
             return false;
@@ -168,4 +168,4 @@ bool JAlbumSelectionPage::isComplete() const
     return (!d->imageList->imageUrls().isEmpty());
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamJAlbumPlugin

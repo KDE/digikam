@@ -27,12 +27,17 @@
 
 #include <QObject>
 
-namespace Digikam
+// Local includes
+
+#include "dprogresswdg.h"
+#include "dhistoryview.h"
+
+using namespace Digikam;
+
+namespace GenericDigikamJAlbumPlugin
 {
 
-class DHistoryView;
-class DProgressWdg;
-class JAlbumInfo;
+class JAlbumSettings;
 class JAlbumElementFunctor;
 
 /**
@@ -45,7 +50,7 @@ class JAlbumGenerator : public QObject
 
 public:
 
-    explicit JAlbumGenerator(JAlbumInfo* const);
+    explicit JAlbumGenerator(JAlbumSettings* const);
     virtual ~JAlbumGenerator();
 
     void setProgressWidgets(DHistoryView* const, DProgressWdg* const);
@@ -81,6 +86,6 @@ private:
     friend class JAlbumElementFunctor;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamJAlbumPlugin
 
 #endif // DIGIKAM_JALBUM_GENERATOR_H

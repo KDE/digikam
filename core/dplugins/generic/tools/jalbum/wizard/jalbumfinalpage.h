@@ -31,7 +31,9 @@
 
 #include "dwizardpage.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamJAlbumPlugin
 {
 
 class JAlbumFinalPage : public DWizardPage
@@ -56,6 +58,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamJAlbumPlugin
 
 #endif // DIGIKAM_JALBUM_FINAL_PAGE_H

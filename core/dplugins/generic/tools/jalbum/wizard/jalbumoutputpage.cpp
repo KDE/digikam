@@ -41,10 +41,10 @@
 // Local includes
 
 #include "jalbumwizard.h"
-#include "jalbuminfo.h"
+#include "jalbumsettings.h"
 #include "dfileselector.h"
 
-namespace Digikam
+namespace GenericDigikamJAlbumPlugin
 {
 
 class Q_DECL_HIDDEN JAlbumOutputPage::Private
@@ -53,14 +53,12 @@ public:
 
     explicit Private()
       : destUrl(0),
-        jarUrl(0),
         titleLabel(0),
         imageSelectionTitle(0)
     {
     }
 
     DFileSelector* destUrl;
-    DFileSelector* jarUrl;
     QLabel*        titleLabel;
     QLineEdit*     imageSelectionTitle;
 };
@@ -95,26 +93,13 @@ JAlbumOutputPage::JAlbumOutputPage(QWizard* const dialog, const QString& title)
 
     // --------------------
 
-    QLabel* const textLabel2 = new QLabel(main);
-    textLabel2->setWordWrap(false);
-    textLabel2->setText(i18n("Path to jAlbum jar file:"));
-
-    d->jarUrl = new DFileSelector(main);
-    d->jarUrl->setFileDlgTitle(i18n("jAlbum jar path"));
-    d->jarUrl->setFileDlgMode(QFileDialog::Directory);
-    textLabel2->setBuddy(d->jarUrl);
-
-    // --------------------
-
     QGridLayout* const grid = new QGridLayout(main);
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->addWidget(d->titleLabel,          0, 0, 1, 1);
     grid->addWidget(d->imageSelectionTitle, 0, 1, 1, 1);
     grid->addWidget(textLabel1,             1, 0, 1, 1);
     grid->addWidget(d->destUrl,             1, 1, 1, 1);
-    grid->addWidget(textLabel2,             2, 0, 1, 1);
-    grid->addWidget(d->jarUrl,              2, 1, 1, 1);
-    grid->setRowStretch(3, 10);
+    grid->setRowStretch(2, 10);
 
     // --------------------
 
@@ -125,12 +110,6 @@ JAlbumOutputPage::JAlbumOutputPage(QWizard* const dialog, const QString& title)
             this, SIGNAL(completeChanged()));
 
     connect(d->destUrl, SIGNAL(signalUrlSelected(QUrl)),
-            this, SIGNAL(completeChanged()));
-
-    connect(d->jarUrl->lineEdit(), SIGNAL(textEdited(QString)),
-            this, SIGNAL(completeChanged()));
-
-    connect(d->jarUrl, SIGNAL(signalUrlSelected(QUrl)),
             this, SIGNAL(completeChanged()));
 
     connect(d->imageSelectionTitle, SIGNAL(textEdited(QString)),
@@ -149,11 +128,10 @@ void JAlbumOutputPage::initializePage()
     if (!wizard)
         return;
 
-    JAlbumInfo* const info  = wizard->jalbumInfo();
+    JAlbumSettings* const info  = wizard->settings();
 
-    d->destUrl->setFileDlgPath(info->destUrl().toLocalFile());
-    d->jarUrl->setFileDlgPath(info->jarUrl().toLocalFile());
-    d->imageSelectionTitle->setText(info->imageSelectionTitle());
+    d->destUrl->setFileDlgPath(info->m_destUrl.toLocalFile());
+    d->imageSelectionTitle->setText(info->m_imageSelectionTitle);
 }
 
 bool JAlbumOutputPage::validatePage()
@@ -161,22 +139,17 @@ bool JAlbumOutputPage::validatePage()
     if (d->destUrl->fileDlgPath().isEmpty())
         return false;
 
-    if (d->jarUrl->fileDlgPath().isEmpty())
-        return false;
-
     if (d->imageSelectionTitle->text().isEmpty())
         return false;
 
-    JAlbumWizard* const wizard = dynamic_cast<JAlbumWizard*>(assistant());
+    JAlbumWizard* const wizard  = dynamic_cast<JAlbumWizard*>(assistant());
 
     if (!wizard)
         return false;
 
-    JAlbumInfo* const info  = wizard->jalbumInfo();
-
-    info->setDestUrl(QUrl::fromLocalFile(d->destUrl->fileDlgPath()));
-    info->setJarUrl(QUrl::fromLocalFile(d->jarUrl->fileDlgPath()));
-    info->setImageSelectionTitle(d->imageSelectionTitle->text());
+    JAlbumSettings* const info      = wizard->settings();
+    info->m_destUrl             = QUrl::fromLocalFile(d->destUrl->fileDlgPath());
+    info->m_imageSelectionTitle = d->imageSelectionTitle->text();
 
     return true;
 }
@@ -188,11 +161,10 @@ bool JAlbumOutputPage::isComplete() const
     if (!wizard)
         return false;
 
-    bool b                   = !d->destUrl->fileDlgPath().isEmpty();
-    b                        = b && !d->jarUrl->fileDlgPath().isEmpty();
-    b                        = b && !d->imageSelectionTitle->text().isEmpty();
+    bool b = !d->destUrl->fileDlgPath().isEmpty();
+    b      = b && !d->imageSelectionTitle->text().isEmpty();
 
     return b;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamJAlbumPlugin

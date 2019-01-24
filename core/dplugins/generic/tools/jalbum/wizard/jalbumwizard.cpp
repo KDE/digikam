@@ -34,21 +34,21 @@
 
 // KDE includes
 
-#include <kconfigdialogmanager.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
 // Local includes
 
-#include "dinfointerface.h"
 #include "dwizardpage.h"
 #include "digikam_debug.h"
 #include "jalbumfinalpage.h"
-#include "jalbuminfo.h"
+#include "jalbumsettings.h"
 #include "jalbumintropage.h"
 #include "jalbumoutputpage.h"
 #include "jalbumselectionpage.h"
 
-namespace Digikam
+namespace GenericDigikamJAlbumPlugin
 {
 
 class Q_DECL_HIDDEN JAlbumWizard::Private
@@ -57,7 +57,6 @@ public:
 
     explicit Private()
       : info(0),
-        configManager(0),
         introPage(0),
         selectionPage(0),
         outputPage(0),
@@ -65,8 +64,7 @@ public:
     {
     }
 
-    JAlbumInfo*            info;
-    KConfigDialogManager*  configManager;
+    JAlbumSettings*            info;
 
     JAlbumIntroPage*       introPage;
     JAlbumSelectionPage*   selectionPage;
@@ -81,15 +79,16 @@ JAlbumWizard::JAlbumWizard(QWidget* const parent, DInfoInterface* const iface)
     setOption(QWizard::NoCancelButtonOnLastPage);
     setWindowTitle(i18n("Create jAlbum Album"));
 
-    d->info = new JAlbumInfo(iface);
-    d->info->load();
+    d->info = new JAlbumSettings(iface);
+    
+    KConfig config;
+    KConfigGroup group   = config.group("jAlbum tool");
+    d->info->readSettings(group);
 
     d->introPage         = new JAlbumIntroPage(this,         i18n("Welcome to jAlbum Album Tool"));
     d->selectionPage     = new JAlbumSelectionPage(this,     i18n("Items Selection"));
     d->outputPage        = new JAlbumOutputPage(this,        i18n("Paths Selection"));
     d->finalPage         = new JAlbumFinalPage(this,         i18n("Generating jAlbum"));
-    d->configManager     = new KConfigDialogManager(this, d->info);
-    d->configManager->updateWidgets();
 }
 
 JAlbumWizard::~JAlbumWizard()
@@ -109,8 +108,9 @@ bool JAlbumWizard::validateCurrentPage()
 
     if (currentPage() == d->outputPage)
     {
-        d->configManager->updateSettings();
-        d->info->save();
+        KConfig config;
+        KConfigGroup group = config.group("jAlbum tool");
+        d->info->writeSettings(group);
     }
 
     return true;
@@ -121,9 +121,9 @@ int JAlbumWizard::nextId() const
     return DWizardDlg::nextId();
 }
 
-JAlbumInfo* JAlbumWizard::jalbumInfo() const
+JAlbumSettings* JAlbumWizard::settings() const
 {
     return d->info;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamJAlbumPlugin

@@ -41,7 +41,7 @@
 // Local includes
 
 #include "jalbumwizard.h"
-#include "jalbuminfo.h"
+#include "jalbumsettings.h"
 #include "jalbumgenerator.h"
 #include "dlayoutbox.h"
 #include "digikam_debug.h"
@@ -49,7 +49,7 @@
 #include "dhistoryview.h"
 #include "webbrowserdlg.h"
 
-namespace Digikam
+namespace GenericDigikamJAlbumPlugin
 {
 
 class Q_DECL_HIDDEN JAlbumFinalPage::Private
@@ -112,16 +112,16 @@ void JAlbumFinalPage::slotProcess()
     d->progressView->clear();
     d->progressBar->reset();
 
-    JAlbumInfo* const info  = wizard->jalbumInfo();
+    JAlbumSettings* const info  = wizard->settings();
 
-    // Generate JAlbumInfo
+    // Generate JAlbumSettings
 
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << info;
 
     d->progressView->addEntry(i18n("Starting to generate jAlbum..."),
                               DHistoryView::ProgressEntry);
 
-    if (info->m_getOption == JAlbumInfo::ALBUMS)
+    if (info->m_getOption == JAlbumSettings::ALBUMS)
     {
         if (!info->m_iface)
             return;
@@ -142,7 +142,7 @@ void JAlbumFinalPage::slotProcess()
     }
 
     d->progressView->addEntry(i18n("Output directory: %1",
-                              QDir::toNativeSeparators(info->destUrl().toLocalFile())),
+                              QDir::toNativeSeparators(info->m_destUrl.toLocalFile())),
                               DHistoryView::ProgressEntry);
 
     JAlbumGenerator generator(info);
@@ -173,4 +173,4 @@ bool JAlbumFinalPage::isComplete() const
     return d->complete;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamJAlbumPlugin

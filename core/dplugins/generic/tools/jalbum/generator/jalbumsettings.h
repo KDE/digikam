@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_JALBUM_INFO_H
-#define DIGIKAM_JALBUM_INFO_H
+#ifndef DIGIKAM_JALBUM_SETTINGS_H
+#define DIGIKAM_JALBUM_SETTINGS_H
 
 // Qt includes
 
@@ -31,17 +31,20 @@
 
 // Local includes
 
-#include "jalbumconfig.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+class KConfigGroup;
+
+namespace GenericDigikamJAlbumPlugin
 {
 
 /**
  * This class stores all the export settings. It is initialized by the
  * Wizard and read by the Generator.
  */
-class JAlbumInfo : public JAlbumConfig
+class JAlbumSettings
 {
 public:
 
@@ -53,26 +56,32 @@ public:
 
 public:
 
-    explicit JAlbumInfo(DInfoInterface* const iface = 0);
-    ~JAlbumInfo();
+    explicit JAlbumSettings(DInfoInterface* const iface = 0);
+    ~JAlbumSettings();
 
+    // Read and write settings in config file between sessions.
+    void  readSettings(KConfigGroup& group);
+    void  writeSettings(KConfigGroup& group);
+    
 public:
 
-    ImageGetOption            m_getOption;      // Type of image selection (albums or images list).
+    QUrl                      m_destUrl;
+    QUrl                      m_jalbumUrl;           // jAlbum java archive path.
+    QUrl                      m_javaUrl;             // Java executable path.
+    QString                   m_imageSelectionTitle; // Jalbum title to use for JAlbumSettings::ImageGetOption::IMAGES selection.
 
-    DInfoInterface::DAlbumIDs m_albumList;      // Albums list for ImageGetOption::ALBUMS selection.
+    ImageGetOption            m_getOption;           // Type of image selection (albums or images list).
 
-    QList<QUrl>               m_imageList;      // Images list for ImageGetOption::IMAGES selection.
+    DInfoInterface::DAlbumIDs m_albumList;           // Albums list for ImageGetOption::ALBUMS selection.
 
-    DInfoInterface*           m_iface;          // Interface to handle items information.
+    QList<QUrl>               m_imageList;           // Images list for ImageGetOption::IMAGES selection.
 
-private:
-
+    DInfoInterface*           m_iface;               // Interface to handle items information.
 };
 
 //! qDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.
-QDebug operator<<(QDebug dbg, const JAlbumInfo& t);
+QDebug operator<<(QDebug dbg, const JAlbumSettings& t);
 
-} // namespace Digikam
+} // namespace GenericDigikamJAlbumPlugin
 
-#endif // DIGIKAM_JALBUM_INFO_H
+#endif // DIGIKAM_JALBUM_SETTINGS_H

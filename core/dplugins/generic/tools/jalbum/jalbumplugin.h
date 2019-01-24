@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.JAlbum"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamJAlbumPlugin
 {
 
 class JAlbumPlugin : public DPluginGeneric
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotJAlbum();
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamJAlbumPlugin
 
 #endif // DIGIKAM_JALBUM_PLUGIN_H

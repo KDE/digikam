@@ -65,7 +65,9 @@ public:
                  const QStringList& args = QStringList(),
                  const QString& desc = QString()
                 );
-    virtual ~DBinaryIface();
+    ~DBinaryIface();
+
+public:
 
     bool                isFound()                   const { return m_isFound;                       }
     const QString&      version()                   const;

@@ -27,6 +27,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QComboBox>
+#include <QGroupBox>
 #include <QIcon>
 
 // KDE includes
@@ -35,12 +36,15 @@
 
 // Local includes
 
+#include "dbinarysearch.h"
 #include "digikam_debug.h"
+#include "jalbumjar.h"
+#include "jalbumjava.h"
 #include "jalbumwizard.h"
-#include "jalbuminfo.h"
+#include "jalbumsettings.h"
 #include "dlayoutbox.h"
 
-namespace Digikam
+namespace GenericDigikamJAlbumPlugin
 {
 
 class Q_DECL_HIDDEN JAlbumIntroPage::Private
@@ -52,13 +56,14 @@ public:
         hbox(0),
         wizard(0),
         info(0),
-        iface(0)
+        iface(0),
+        binSearch(0)
     {
         wizard = dynamic_cast<JAlbumWizard*>(dialog);
 
         if (wizard)
         {
-            info  = wizard->jalbumInfo();
+            info  = wizard->settings();
             iface = info->m_iface;
         }
     }
@@ -66,8 +71,11 @@ public:
     QComboBox*       imageGetOption;
     DHBox*           hbox;
     JAlbumWizard*    wizard;
-    JAlbumInfo*      info;
+    JAlbumSettings*      info;
     DInfoInterface*  iface;
+    DBinarySearch*   binSearch;
+    JalbumJar        jalbumBin;
+    JalbumJava       jalbumJava;
 };
 
 JAlbumIntroPage::JAlbumIntroPage(QWizard* const dialog, const QString& title)
@@ -90,12 +98,30 @@ JAlbumIntroPage::JAlbumIntroPage(QWizard* const dialog, const QString& title)
     d->hbox                     = new DHBox(vbox);
     QLabel* const getImageLabel = new QLabel(i18n("&Choose image selection method:"), d->hbox);
     d->imageGetOption           = new QComboBox(d->hbox);
-    d->imageGetOption->insertItem(JAlbumInfo::ALBUMS, i18n("Albums"));
-    d->imageGetOption->insertItem(JAlbumInfo::IMAGES, i18n("Images"));
+    d->imageGetOption->insertItem(JAlbumSettings::ALBUMS, i18n("Albums"));
+    d->imageGetOption->insertItem(JAlbumSettings::IMAGES, i18n("Images"));
     getImageLabel->setBuddy(d->imageGetOption);
+
+    // --------------------
+
+    QGroupBox* const binaryBox      = new QGroupBox(vbox);
+    QGridLayout* const binaryLayout = new QGridLayout;
+    binaryBox->setLayout(binaryLayout);
+    binaryBox->setTitle(i18nc("@title:group", "jAlbum Binary"));
+    d->binSearch = new DBinarySearch(binaryBox);
+    d->binSearch->addBinary(d->jalbumBin);
+    d->binSearch->addBinary(d->jalbumJava);
 
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("text-html")));
+
+#ifdef Q_OS_WIN
+#else
+    d->binSearch->addDirectory(QLatin1String("/usr/share"));
+#endif
+
+    connect(d->binSearch, SIGNAL(signalBinariesFound(bool)),
+            this, SLOT(slotBinariesFound()));
 }
 
 JAlbumIntroPage::~JAlbumIntroPage()
@@ -109,20 +135,39 @@ void JAlbumIntroPage::initializePage()
 
     if (!albumSupport)
     {
-        d->imageGetOption->setCurrentIndex(JAlbumInfo::IMAGES);
+        d->imageGetOption->setCurrentIndex(JAlbumSettings::IMAGES);
         d->hbox->setEnabled(false);
     }
     else
     {
         d->imageGetOption->setCurrentIndex(d->info->m_getOption);
     }
+
+    d->binSearch->allBinariesFound();
+    slotBinariesFound();
 }
 
 bool JAlbumIntroPage::validatePage()
 {
-    d->info->m_getOption = (JAlbumInfo::ImageGetOption)d->imageGetOption->currentIndex();
+    d->info->m_getOption = (JAlbumSettings::ImageGetOption)d->imageGetOption->currentIndex();
 
     return true;
 }
 
-} // namespace Digikam
+void JAlbumIntroPage::slotBinariesFound()
+{
+    d->info->m_jalbumUrl = QUrl::fromLocalFile(d->jalbumBin.path());
+    d->info->m_javaUrl   = QUrl::fromLocalFile(d->jalbumJava.path());
+
+    emit completeChanged();
+}
+
+bool JAlbumIntroPage::isComplete() const
+{
+    QString val = d->wizard->settings()->m_javaUrl.toLocalFile() + d->wizard->settings()->m_jalbumUrl.toLocalFile();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << val;
+
+    return (!val.isEmpty());
+}
+
+} // namespace GenericDigikamJAlbumPlugin

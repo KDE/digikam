@@ -34,7 +34,7 @@
 
 #include "jalbumwizard.h"
 
-namespace Digikam
+namespace GenericDigikamJAlbumPlugin
 {
 
 JAlbumPlugin::JAlbumPlugin(QObject* const parent)
@@ -105,4 +105,4 @@ void JAlbumPlugin::slotJAlbum()
     delete wzrd;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamJAlbumPlugin

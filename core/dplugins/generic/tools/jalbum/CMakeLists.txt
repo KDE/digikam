@@ -8,7 +8,10 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/tools
+
+                    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
 
@@ -16,12 +19,10 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::ConfigWidgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::Service,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(jalbumplugin_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/generator/jalbumconfig.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/generator/jalbuminfo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/generator/jalbumsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/jalbumgenerator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/jalbumintropage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/jalbumfinalpage.cpp

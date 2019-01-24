@@ -43,8 +43,12 @@
 namespace Digikam
 {
 
-DBinaryIface::DBinaryIface(const QString& binaryName, const QString& projectName, const QString& url,
-                           const QString& toolName, const QStringList& args, const QString& desc)
+DBinaryIface::DBinaryIface(const QString& binaryName,
+                           const QString& projectName,
+                           const QString& url,
+                           const QString& toolName,
+                           const QStringList& args,
+                           const QString& desc)
     : m_checkVersion(false),
       m_headerStarts(QLatin1String("")),
       m_headerLine(0),
@@ -69,9 +73,15 @@ DBinaryIface::DBinaryIface(const QString& binaryName, const QString& projectName
 {
 }
 
-DBinaryIface::DBinaryIface(const QString& binaryName, const QString& minimalVersion, const QString& header,
-                           const int headerLine, const QString& projectName, const QString& url,
-                           const QString& toolName, const QStringList& args, const QString& desc)
+DBinaryIface::DBinaryIface(const QString& binaryName,
+                           const QString& minimalVersion,
+                           const QString& header,
+                           const int headerLine,
+                           const QString& projectName,
+                           const QString& url,
+                           const QString& toolName,
+                           const QStringList& args,
+                           const QString& desc)
     : m_checkVersion(true),
       m_headerStarts(header),
       m_headerLine(headerLine),
@@ -139,7 +149,7 @@ bool DBinaryIface::versionIsRight(const float customVersion) const
 
 QString DBinaryIface::findHeader(const QStringList& output, const QString& header) const
 {
-    foreach(const QString& s, output)
+    foreach (const QString& s, output)
     {
         if (s.startsWith(header))
             return s;
@@ -341,7 +351,7 @@ bool DBinaryIface::recheckDirectories()
         return true;
     }
 
-    foreach(const QString& dir, m_searchPaths)
+    foreach (const QString& dir, m_searchPaths)
     {
         checkDir(dir);
 
@@ -357,7 +367,11 @@ bool DBinaryIface::recheckDirectories()
 QString DBinaryIface::goodBaseName(const QString& b)
 {
 #ifdef Q_OS_WIN
-    return b + QLatin1String(".exe");
+    if (!b.endsWith(QLatin1String(".jar"))
+        // Special case if we check a java archive.
+        return b;
+    else
+        return b + QLatin1String(".exe");
 #else
     return b;
 #endif // Q_OS_WIN

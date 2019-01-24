@@ -43,13 +43,11 @@
 
 #include "digikam_debug.h"
 #include "digikam_globals.h"
-#include "jalbuminfo.h"
+#include "jalbumsettings.h"
 #include "jalbumwizard.h"
-#include "dprogresswdg.h"
-#include "dhistoryview.h"
 #include "dfileoperations.h"
 
-namespace Digikam
+namespace GenericDigikamJAlbumPlugin
 {
 
 class Q_DECL_HIDDEN JAlbumGenerator::Private
@@ -67,7 +65,7 @@ public:
     }
 
     JAlbumGenerator* that;
-    JAlbumInfo*      info;
+    JAlbumSettings*      info;
     QList<QUrl>      urls;
 
     // State info
@@ -102,18 +100,18 @@ public:
         return true;
     }
 
-    bool createUrlsList(void)
+    bool createUrlsList()
     {
-        if (info->m_getOption == JAlbumInfo::ALBUMS)
+        if (info->m_getOption == JAlbumSettings::ALBUMS)
         {
             // Loop over albums selection
 
             DInfoInterface::DAlbumIDs::ConstIterator albumIt  = info->m_albumList.constBegin();
             DInfoInterface::DAlbumIDs::ConstIterator albumEnd = info->m_albumList.constEnd();
 
-            for (; albumIt != albumEnd ; ++albumIt)
+            for ( ; albumIt != albumEnd ; ++albumIt)
             {
-                int id                     = *albumIt;
+                int id = *albumIt;
 
                 // Gather image element list
                 QList<QUrl> imageList;
@@ -133,13 +131,14 @@ public:
         return true;
     }
 
-    bool createProjectFiles(QString& projDir)
+    bool createProjectFiles(const QString& projDir)
     {
         logInfo(i18n("Create jAlbum project files"));
 
         QDir newAlbumDir = QDir(projDir);
 
         QFile createFile(newAlbumDir.filePath(QString::fromLatin1("albumfiles.txt")));
+
         if (!createFile.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             logInfo(i18n("Failed to create project files"));
@@ -147,6 +146,7 @@ public:
         }
 
         QTextStream out(&createFile);
+
         for (QList<QUrl>::ConstIterator it = urls.constBegin(); it != urls.constEnd(); ++it)
         {
             out << (*it).fileName().toLocal8Bit().data() << "\t" << (*it).path().toLocal8Bit().data() << "\n";
@@ -155,6 +155,7 @@ public:
         createFile.close();
 
         QFile settingsFile(newAlbumDir.filePath(QString::fromLatin1("jalbum-settings.jap")));
+
         if (!settingsFile.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             logInfo(i18n("Failed to create settings file"));
@@ -169,12 +170,14 @@ public:
         return true;
     }
 
-    bool launchJalbum(QString& projDir, QString& jarDir)
+    bool launchJalbum(const QString& projDir, const QString& jarDir, const QString& javaExecutable)
     {
         logInfo(i18n("Launch jAlbum with new project files"));
 
+/*
         QString javaExecutable;
         QDir jrePath = QFileInfo(jarDir).dir();
+
         if (jrePath.cd(QString::fromLatin1("jre64/bin/")))
         {
             javaExecutable = jrePath.filePath(QString::fromLatin1("java"));
@@ -183,6 +186,7 @@ public:
         {
             javaExecutable = QString::fromLatin1("java");
         }
+*/
 
         QDir newAlbumDir = QDir(projDir);
 
@@ -218,7 +222,7 @@ public:
 
 // ----------------------------------------------------------------------
 
-JAlbumGenerator::JAlbumGenerator(JAlbumInfo* const info)
+JAlbumGenerator::JAlbumGenerator(JAlbumSettings* const info)
     : QObject(),
       d(new Private)
 {
@@ -240,26 +244,31 @@ bool JAlbumGenerator::run()
     if (!d->init())
         return false;
 
-    QString destDir = d->info->destUrl().toLocalFile();
+    QString destDir = d->info->m_destUrl.toLocalFile();
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << destDir;
 
-    QString jarDir = d->info->jarUrl().toLocalFile();
+    QString javaDir = d->info->m_javaUrl.toLocalFile();
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << javaDir;
+
+    QString jarDir  = d->info->m_jalbumUrl.toLocalFile();
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << jarDir;
 
-    QString projDir = destDir + QString::fromLatin1("/") + d->info->imageSelectionTitle();
+    QString projDir = destDir + QString::fromLatin1("/") + d->info->m_imageSelectionTitle;
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << projDir;
 
     if (!d->createDir(projDir))
         return false;
 
     bool result = d->createUrlsList();
+
     if (result)
     {
         result = d->createProjectFiles(projDir);
     }
+
     if (result)
     {
-        result = d->launchJalbum(projDir, jarDir);
+        result = d->launchJalbum(projDir, jarDir, javaDir);
     }
 
     return result;
@@ -289,4 +298,4 @@ void JAlbumGenerator::setProgressWidgets(DHistoryView* const pView, DProgressWdg
             this, SLOT(slotCancel()));
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamJAlbumPlugin
