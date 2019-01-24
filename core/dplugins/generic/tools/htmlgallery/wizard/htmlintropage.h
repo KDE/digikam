@@ -31,7 +31,9 @@
 
 #include "dwizardpage.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericHtmlGalleryPlugin
 {
 
 class HTMLIntroPage : public DWizardPage
@@ -50,6 +52,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_HTML_INTRO_PAGE_H

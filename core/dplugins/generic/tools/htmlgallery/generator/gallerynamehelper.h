@@ -28,7 +28,7 @@
 
 #include <QStringList>
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 /**
@@ -48,6 +48,6 @@ private:
     QStringList m_list;
 };
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_GALLERY_NAME_HELPER_H

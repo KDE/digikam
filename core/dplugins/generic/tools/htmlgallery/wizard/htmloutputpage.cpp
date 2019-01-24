@@ -44,7 +44,7 @@
 #include "galleryinfo.h"
 #include "dfileselector.h"
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 class Q_DECL_HIDDEN HTMLOutputPage::Private
@@ -193,4 +193,4 @@ bool HTMLOutputPage::isComplete() const
     return b;
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

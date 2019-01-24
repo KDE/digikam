@@ -35,7 +35,7 @@
 static const char* NAME_KEY          = "Name";
 static const char* DEFAULT_VALUE_KEY = "Default";
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 class Q_DECL_HIDDEN AbstractThemeParameter::Private
@@ -83,4 +83,4 @@ QString AbstractThemeParameter::defaultValue() const
     return d->defaultValue;
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

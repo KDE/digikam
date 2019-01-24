@@ -50,7 +50,7 @@
 #include "dhistoryview.h"
 #include "webbrowserdlg.h"
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 class Q_DECL_HIDDEN HTMLFinalPage::Private
@@ -200,4 +200,4 @@ bool HTMLFinalPage::isComplete() const
     return d->complete;
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

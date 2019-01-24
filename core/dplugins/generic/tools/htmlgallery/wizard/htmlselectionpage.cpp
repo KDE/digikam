@@ -34,7 +34,7 @@
 #include "galleryinfo.h"
 #include "ditemslist.h"
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 class Q_DECL_HIDDEN HTMLSelectionPage::Private
@@ -168,4 +168,4 @@ bool HTMLSelectionPage::isComplete() const
     return (!d->imageList->imageUrls().isEmpty());
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

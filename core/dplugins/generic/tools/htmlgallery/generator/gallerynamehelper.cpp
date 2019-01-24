@@ -23,7 +23,7 @@
 
 #include "gallerynamehelper.h"
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 GalleryNameHelper::GalleryNameHelper()
@@ -51,4 +51,4 @@ QString GalleryNameHelper::makeNameUnique(const QString& name)
     return uname;
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

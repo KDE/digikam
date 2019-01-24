@@ -27,7 +27,7 @@
 #include "galleryxmlutils.h"
 #include "metaengine.h"
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 GalleryElement::GalleryElement(const DInfoInterface::DInfoMap& info)
@@ -108,4 +108,4 @@ void GalleryElement::appendImageElementToXML(XMLWriter& xmlWriter,
     XMLElement elem(xmlWriter, elementName, &attrList);
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

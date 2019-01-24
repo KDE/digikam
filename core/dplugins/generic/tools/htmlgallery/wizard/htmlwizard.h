@@ -34,12 +34,14 @@
 #include "dwizarddlg.h"
 #include "gallerytheme.h"
 #include "digikam_export.h"
+#include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericHtmlGalleryPlugin
 {
 
 class GalleryInfo;
-class DInfoInterface;
 
 /**
  * The wizard used by the user to select the various settings.
@@ -67,6 +69,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_HTML_WIZARD_H

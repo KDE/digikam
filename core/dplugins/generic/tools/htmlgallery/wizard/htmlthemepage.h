@@ -34,7 +34,9 @@
 #include "dwizardpage.h"
 #include "gallerytheme.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericHtmlGalleryPlugin
 {
 
 class GalleryInfo;
@@ -80,6 +82,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_HTML_THEME_PAGE_H

@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.HtmlGallery"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericHtmlGalleryPlugin
 {
 
 class HtmlGalleryPlugin : public DPluginGeneric
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotHtmlGallery();
 };
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_HTML_GALLERY_PLUGIN_H

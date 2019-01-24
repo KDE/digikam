@@ -39,7 +39,7 @@
 #include "htmlwizard.h"
 #include "dlayoutbox.h"
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 class Q_DECL_HIDDEN HTMLThemePage::Private
@@ -174,4 +174,4 @@ GalleryTheme::Ptr HTMLThemePage::currentTheme() const
     return GalleryTheme::Ptr(0);
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

@@ -27,7 +27,7 @@
 
 #include <kconfigbase.h>
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 static const char* THEME_GROUP_PREFIX = "Theme ";
@@ -136,4 +136,4 @@ QDebug operator<<(QDebug dbg, const GalleryInfo& t)
     return dbg.space();
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

@@ -35,7 +35,9 @@
 #include "galleryconfig.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericHtmlGalleryPlugin
 {
 
 /**
@@ -89,6 +91,6 @@ private:
 //! qDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.
 QDebug operator<<(QDebug dbg, const GalleryInfo& t);
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_GALLERY_INFO_H

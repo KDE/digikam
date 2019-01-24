@@ -40,7 +40,7 @@
 #include "galleryinfo.h"
 #include "dlayoutbox.h"
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 class Q_DECL_HIDDEN HTMLIntroPage::Private
@@ -128,4 +128,4 @@ bool HTMLIntroPage::validatePage()
     return true;
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

@@ -30,7 +30,7 @@
 
 class QAbstractButton;
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 class InvisibleButtonGroup : public QWidget
@@ -63,6 +63,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_INVISIBLE_BUTTON_GROUP_H

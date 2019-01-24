@@ -28,7 +28,7 @@
 
 #include "gallerynamehelper.h"
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 class GalleryInfo;
@@ -70,6 +70,6 @@ private:
     GalleryNameHelper m_uniqueNameHelper;
 };
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_GALLERY_ELEMENT_FUNCTOR_H

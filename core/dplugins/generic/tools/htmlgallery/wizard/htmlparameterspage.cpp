@@ -46,7 +46,7 @@
 #include "dlayoutbox.h"
 #include "gallerytheme.h"
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 class Q_DECL_HIDDEN HTMLParametersPage::Private
@@ -180,4 +180,4 @@ void HTMLParametersPage::initializePage()
     layout->addItem(spacer, layout->rowCount(), 0);
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

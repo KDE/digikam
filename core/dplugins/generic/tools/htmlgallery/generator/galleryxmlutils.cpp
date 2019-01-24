@@ -23,7 +23,7 @@
 
 #include "galleryxmlutils.h"
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 bool XMLWriter::open(const QString& name)
@@ -108,4 +108,4 @@ XMLElement::~XMLElement()
     xmlTextWriterEndElement(m_writer);
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

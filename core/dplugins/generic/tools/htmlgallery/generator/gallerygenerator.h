@@ -28,11 +28,16 @@
 
 #include <QObject>
 
-namespace Digikam
+// Local includes
+
+#include "dprogresswdg.h"
+#include "dhistoryview.h"
+
+using namespace Digikam;
+
+namespace GenericHtmlGalleryPlugin
 {
 
-class DHistoryView;
-class DProgressWdg;
 class GalleryInfo;
 class GalleryElementFunctor;
 
@@ -82,6 +87,6 @@ private:
     friend class GalleryElementFunctor;
 };
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_GALLERY_GENERATOR_H

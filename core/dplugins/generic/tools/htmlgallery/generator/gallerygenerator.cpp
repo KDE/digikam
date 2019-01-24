@@ -56,11 +56,9 @@
 #include "gallerytheme.h"
 #include "galleryxmlutils.h"
 #include "htmlwizard.h"
-#include "dprogresswdg.h"
-#include "dhistoryview.h"
 #include "dfileoperations.h"
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 typedef QMap<QByteArray, QByteArray> XsltParameterMap;
@@ -632,4 +630,4 @@ QString GalleryGenerator::webifyFileName(const QString& fname)
     return fileName.replace(QRegExp(QLatin1String("[^-0-9a-z]+")), QLatin1String("_"));
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

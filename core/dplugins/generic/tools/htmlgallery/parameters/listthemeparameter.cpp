@@ -31,7 +31,7 @@
 
 #include <kconfiggroup.h>
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 static const char* ITEM_VALUE_KEY   = "Value-";
@@ -110,4 +110,4 @@ QString ListThemeParameter::valueFromWidget(QWidget* widget) const
     return d->mOrderedValueList[comboBox->currentIndex()];
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

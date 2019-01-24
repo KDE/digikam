@@ -46,7 +46,9 @@
 #include "drawdecoder.h"
 #include "drawinfo.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericHtmlGalleryPlugin
 {
 
 /**
@@ -466,4 +468,4 @@ void GalleryElementFunctor::emitWarning(const QString& message)
     emit (m_generator->logWarningRequested(message));
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

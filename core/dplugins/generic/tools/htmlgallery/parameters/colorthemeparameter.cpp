@@ -27,7 +27,9 @@
 
 #include "dcolorselector.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericHtmlGalleryPlugin
 {
 
 QWidget* ColorThemeParameter::createWidget(QWidget* parent, const QString& value) const
@@ -46,4 +48,4 @@ QString ColorThemeParameter::valueFromWidget(QWidget* widget) const
     return button->color().name();
 }
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin

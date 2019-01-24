@@ -28,7 +28,7 @@
 
 #include "abstractthemeparameter.h"
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 /**
@@ -42,6 +42,6 @@ public:
     virtual QString  valueFromWidget(QWidget*)                           const;
 };
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_COLOR_THEME_PARAMETER_H

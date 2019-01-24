@@ -34,7 +34,9 @@
 #include "dmetadata.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericHtmlGalleryPlugin
 {
 
 class XMLWriter;
@@ -96,6 +98,6 @@ public:
     QString                      m_exifGPSAltitude;
 };
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_GALLERY_ELEMENT_H

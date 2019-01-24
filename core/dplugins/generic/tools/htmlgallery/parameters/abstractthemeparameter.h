@@ -30,7 +30,7 @@ class QWidget;
 
 class KConfigGroup;
 
-namespace Digikam
+namespace GenericHtmlGalleryPlugin
 {
 
 /**
@@ -75,6 +75,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_ABSTRACT_THEME_PARAMETER_H
