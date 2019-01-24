@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.PrintCreator"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class PrintCreatorPlugin : public DPluginGeneric
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotPrintCreator();
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin
 
 #endif // DIGIKAM_PRINT_CREATOR_PLUGIN_H

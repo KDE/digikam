@@ -31,7 +31,7 @@
 
 class QResizeEvent;
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class AdvPrintPhoto;

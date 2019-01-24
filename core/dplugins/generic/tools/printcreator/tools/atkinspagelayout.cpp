@@ -35,7 +35,7 @@
 
 #include "atkinspagelayouttree.h"
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class Q_DECL_HIDDEN AtkinsPageLayout::Private

@@ -31,12 +31,13 @@
 // Local includes
 
 #include "dwizardpage.h"
+#include "ditemslist.h"
 #include "ui_advprintcroppage.h"
 
-namespace Digikam
-{
+using namespace Digikam;
 
-class DItemsList;
+namespace GenericDigikamPrintCreatorPlugin
+{
 
 class AdvPrintCropPage : public DWizardPage
 {
@@ -68,6 +69,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_CROP_PAGE_H

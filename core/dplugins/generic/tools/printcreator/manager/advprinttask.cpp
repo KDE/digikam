@@ -49,7 +49,7 @@
 #include "digikam_debug.h"
 #include "digikam_config.h"
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class Q_DECL_HIDDEN AdvPrintTask::Private
@@ -703,4 +703,4 @@ void AdvPrintTask::printCaption(QPainter& p,
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin

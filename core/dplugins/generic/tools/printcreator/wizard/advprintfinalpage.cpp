@@ -56,7 +56,7 @@
 #include "dfileoperations.h"
 #include "dimg.h"
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class Q_DECL_HIDDEN AdvPrintFinalPage::Private
@@ -424,4 +424,4 @@ bool AdvPrintFinalPage::print()
     return false;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin

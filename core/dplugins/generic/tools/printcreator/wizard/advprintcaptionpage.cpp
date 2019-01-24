@@ -43,7 +43,7 @@
 #include "advprintwizard.h"
 #include "advprintphoto.h"
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class Q_DECL_HIDDEN AdvPrintCaptionPage::Private
@@ -372,4 +372,4 @@ QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo)
     return format;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin

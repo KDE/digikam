@@ -31,7 +31,9 @@
 
 #include "dwizardpage.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class AdvPrintOutputPage : public DWizardPage
@@ -51,6 +53,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_OUTPUT_PAGE_H

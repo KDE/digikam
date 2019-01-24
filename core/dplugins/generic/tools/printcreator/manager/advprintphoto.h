@@ -43,7 +43,9 @@
 #include "dimg.h"
 #include "advprintsettings.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class AdvPrintPhotoSize

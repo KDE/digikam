@@ -27,7 +27,9 @@
 
 #include "dbinaryiface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class GimpBinary : public DBinaryIface
@@ -58,6 +60,6 @@ public:
     }
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin
 
 #endif // GIMP_BINARY_H

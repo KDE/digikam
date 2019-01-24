@@ -31,7 +31,7 @@
 
 #include <QList>
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 AtkinsPageLayoutNode::AtkinsPageLayoutNode(double aspectRatio,

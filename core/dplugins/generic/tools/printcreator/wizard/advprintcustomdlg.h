@@ -33,7 +33,7 @@
 
 #include "ui_advprintcustomlayout.h"
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class AdvPrintCustomLayoutDlg : public QDialog,
@@ -58,6 +58,6 @@ private:
     };
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_CUSTOM_DLG_H

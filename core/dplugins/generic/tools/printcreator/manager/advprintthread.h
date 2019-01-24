@@ -31,7 +31,9 @@
 #include "actionthreadbase.h"
 #include "digikam_export.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class DIGIKAM_EXPORT AdvPrintThread : public ActionThreadBase
@@ -55,6 +57,6 @@ Q_SIGNALS:
     void signalPreview(const QImage&);
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_THREAD_H

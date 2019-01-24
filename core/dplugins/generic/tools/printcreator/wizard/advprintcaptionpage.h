@@ -33,13 +33,15 @@
 // Local includes
 
 #include "dwizardpage.h"
+#include "ditemslist.h"
 #include "ui_advprintcaptionpage.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class AdvPrintPhoto;
-class DItemsList;
 
 class AdvPrintCaptionPage : public DWizardPage
 {
@@ -79,6 +81,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_CAPTION_PAGE_H

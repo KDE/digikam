@@ -39,10 +39,11 @@
 #include "advprintphoto.h"
 #include "ui_advprintphotopage.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPrintCreatorPlugin
 {
 
-class DItemsList;
 class TemplateIcon;
 
 class AdvPrintPhotoPage : public DWizardPage
@@ -122,6 +123,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_PHOTO_PAGE_H

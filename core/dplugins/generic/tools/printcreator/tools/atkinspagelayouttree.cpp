@@ -35,7 +35,7 @@
 
 #include "atkinspagelayoutnode.h"
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 AtkinsPageLayoutTree::AtkinsPageLayoutTree(double aspectRatioPage,

@@ -28,7 +28,7 @@
 #include "digikam_debug.h"
 #include "digikam_config.h"
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 AdvPrintThread::AdvPrintThread(QObject* const parent)
@@ -112,4 +112,4 @@ void AdvPrintThread::preview(AdvPrintSettings* const settings, const QSize& size
     appendJobs(collection);
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin

@@ -43,9 +43,11 @@
 
 #include "filesaveconflictbox.h"
 
+using namespace Digikam;
+
 class KConfigGroup;
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class AdvPrintPhoto;
@@ -151,6 +153,6 @@ public:
     QString                           outputPath;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_SETTINGS_H

@@ -35,7 +35,7 @@
 #include "previewloadthread.h"
 #include "advprintwizard.h"
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 AdvPrintPhotoSize::AdvPrintPhotoSize()

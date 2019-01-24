@@ -30,7 +30,7 @@
 
 #include "advprintwizard.h"
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class Q_DECL_HIDDEN AdvPrintAlbumsPage::Private
@@ -109,4 +109,4 @@ bool AdvPrintAlbumsPage::isComplete() const
     return (!d->iface->albumChooserItems().isEmpty());
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin

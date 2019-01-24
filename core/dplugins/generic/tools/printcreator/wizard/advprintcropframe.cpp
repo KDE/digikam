@@ -43,7 +43,7 @@
 #include "advprintphoto.h"
 #include "advprintwizard.h"
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class Q_DECL_HIDDEN AdvPrintCropFrame::Private

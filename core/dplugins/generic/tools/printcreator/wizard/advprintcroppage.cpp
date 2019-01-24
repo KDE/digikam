@@ -42,7 +42,7 @@
 #include "advprintwizard.h"
 #include "advprintphoto.h"
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class Q_DECL_HIDDEN AdvPrintCropPage::Private
@@ -224,4 +224,4 @@ void AdvPrintCropPage::slotBtnCropRotateRightClicked()
     d->wizard->updateCropFrame(photo, d->settings->currentCropPhoto);
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin

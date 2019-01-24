@@ -39,7 +39,9 @@
 #include "actionthreadbase.h"
 #include "digikam_export.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class AdvPrintTask : public ActionJob
@@ -101,6 +103,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_TASK_H

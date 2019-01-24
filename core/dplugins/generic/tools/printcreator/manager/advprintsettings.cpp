@@ -32,7 +32,7 @@
 
 #include "advprintphoto.h"
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 AdvPrintSettings::AdvPrintSettings()
@@ -192,4 +192,4 @@ QRect* AdvPrintSettings::getLayout(int photoIndex, int sizeIndex) const
     return s->m_layouts.at(retVal);
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin

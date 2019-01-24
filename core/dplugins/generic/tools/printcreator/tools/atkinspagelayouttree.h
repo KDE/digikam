@@ -51,7 +51,7 @@
     Use the AtkinsPageLayout adaptor class.
 */
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class AtkinsPageLayoutNode;

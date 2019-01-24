@@ -29,7 +29,7 @@
 #include <QRectF>
 #include <QMap>
 
-namespace Digikam
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 /**

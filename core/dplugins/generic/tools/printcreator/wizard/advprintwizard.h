@@ -36,7 +36,9 @@
 #include "dwizarddlg.h"
 #include "digikam_export.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPrintCreatorPlugin
 {
 
 class DIGIKAM_EXPORT AdvPrintWizard : public DWizardDlg
@@ -78,6 +80,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_WIZARD_H
