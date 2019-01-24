@@ -47,7 +47,7 @@
 #include "twitternewalbumdlg.h"
 #include "twitterwidget.h"
 
-namespace Digikam
+namespace GenericDigikamTwitterPlugin
 {
 
 class Q_DECL_HIDDEN TwWindow::Private
@@ -474,4 +474,4 @@ void TwWindow::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamTwitterPlugin

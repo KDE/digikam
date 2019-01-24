@@ -38,7 +38,9 @@
 #include "dmetadata.h"
 #include "o1twitter.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamTwitterPlugin
 {
 
 class TwTalker : public QObject
@@ -101,6 +103,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamTwitterPlugin
 
 #endif // DIGIKAM_TWITTER_TALKER_H

@@ -60,7 +60,7 @@
 #include "o0settingsstore.h"
 #include "o1requestor.h"
 
-namespace Digikam
+namespace GenericDigikamTwitterPlugin
 {
 
 class Q_DECL_HIDDEN TwTalker::Private
@@ -700,4 +700,4 @@ void TwTalker::parseResponseCreateFolder(const QByteArray& data)
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamTwitterPlugin

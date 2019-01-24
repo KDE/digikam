@@ -27,7 +27,7 @@
 
 #include <QByteArray>
 
-namespace Digikam
+namespace GenericDigikamTwitterPlugin
 {
 
 class TwMPForm
@@ -46,6 +46,6 @@ private:
     QByteArray m_buffer;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamTwitterPlugin
 
 #endif // DIGIKAM_TWITTER_MPFORM_H

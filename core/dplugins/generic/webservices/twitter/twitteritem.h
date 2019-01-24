@@ -27,7 +27,7 @@
 
 #include <QString>
 
-namespace Digikam
+namespace GenericDigikamTwitterPlugin
 {
 
 class TwUser
@@ -104,6 +104,6 @@ public:
     QString originalURL;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamTwitterPlugin
 
 #endif // DIGIKAM_TWITTER_ITEM_H

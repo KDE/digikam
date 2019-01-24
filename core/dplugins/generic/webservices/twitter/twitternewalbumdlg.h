@@ -31,9 +31,11 @@
 
 #include "wsnewalbumdialog.h"
 
+using namespace Digikam;
+
 class QComboBox;
 
-namespace Digikam
+namespace GenericDigikamTwitterPlugin
 {
 
 class TwAlbum;
@@ -54,6 +56,6 @@ private:
      friend class TwWindow;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamTwitterPlugin
 
 #endif // DIGIKAM_TWITTER_NEW_ALBUM_DLG_H

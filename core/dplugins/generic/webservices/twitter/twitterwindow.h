@@ -33,10 +33,12 @@
 #include "dinfointerface.h"
 #include "wstooldialog.h"
 
+using namespace Digikam;
+
 class QCloseEvent;
 class QUrl;
 
-namespace Digikam
+namespace GenericDigikamTwitterPlugin
 {
 
 class TwAlbum;
@@ -92,6 +94,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamTwitterPlugin
 
 #endif // DIGIKAM_TWITTER_WINDOW_H

@@ -32,7 +32,7 @@
 
 #include "digikam_debug.h"
 
-namespace Digikam
+namespace GenericDigikamTwitterPlugin
 {
 
 TwMPForm::TwMPForm()
@@ -63,4 +63,4 @@ QByteArray TwMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamTwitterPlugin

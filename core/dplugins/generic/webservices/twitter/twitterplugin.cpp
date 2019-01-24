@@ -34,7 +34,7 @@
 
 #include "twitterwindow.h"
 
-namespace Digikam
+namespace GenericDigikamTwitterPlugin
 {
 
 TwitterPlugin::TwitterPlugin(QObject* const parent)
@@ -107,4 +107,4 @@ void TwitterPlugin::slotTwitter()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamTwitterPlugin

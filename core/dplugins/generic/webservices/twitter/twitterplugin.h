@@ -26,13 +26,14 @@
 // Local includes
 
 #include "dplugingeneric.h"
+#include "dplugindialog.h"
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.Twitter"
 
-namespace Digikam
-{
+using namespace Digikam;
 
-class DPluginDialog;
+namespace GenericDigikamTwitterPlugin
+{
 
 class TwitterPlugin : public DPluginGeneric
 {
@@ -63,6 +64,6 @@ private:
     QPointer<DPluginDialog> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamTwitterPlugin
 
 #endif // DIGIKAM_TWITTER_PLUGIN_H

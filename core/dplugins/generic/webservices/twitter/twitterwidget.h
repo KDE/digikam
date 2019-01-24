@@ -32,7 +32,9 @@
 #include "wssettingswidget.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamTwitterPlugin
 {
 
 class TwWidget : public WSSettingsWidget
@@ -62,6 +64,6 @@ private:
     friend class TwWindow;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamTwitterPlugin
 
 #endif // DIGIKAM_TWITTER_WIDGET_H
