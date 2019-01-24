@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace GenericExpoBlendingPlugin
+namespace GenericDigikamExpoBlendingPlugin
 {
 
 class AlignBinary : public DBinaryIface
@@ -56,6 +56,6 @@ public:
     }
 };
 
-} // namespace GenericExpoBlendingPlugin
+} // namespace GenericDigikamExpoBlendingPlugin
 
 #endif // DIGIKAM_ALIGN_BINARY_H

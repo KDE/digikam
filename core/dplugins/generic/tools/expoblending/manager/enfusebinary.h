@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace GenericExpoBlendingPlugin
+namespace GenericDigikamExpoBlendingPlugin
 {
 
 class EnfuseBinary : public DBinaryIface
@@ -72,6 +72,6 @@ private:
     double versionDouble;
 };
 
-} // namespace GenericExpoBlendingPlugin
+} // namespace GenericDigikamExpoBlendingPlugin
 
 #endif // DIGIKAM_ENFUSE_BINARY_H

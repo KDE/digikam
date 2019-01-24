@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericExpoBlendingPlugin
+namespace GenericDigikamExpoBlendingPlugin
 {
 
 class ExpoBlendingPlugin : public DPluginGeneric
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotExpoBlending();
 };
 
-} // namespace GenericExpoBlendingPlugin
+} // namespace GenericDigikamExpoBlendingPlugin
 
 #endif // DIGIKAM_EXPO_BLENDING_PLUGIN_H

@@ -39,7 +39,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-namespace GenericExpoBlendingPlugin
+namespace GenericDigikamExpoBlendingPlugin
 {
 
 QString EnfuseSettings::asCommentString() const
@@ -282,4 +282,4 @@ void EnfuseSettingsWidget::writeSettings(KConfigGroup& group)
     group.writeEntry("CIECAM02",         d->ciecam02CB->isChecked());
 }
 
-} // namespace GenericExpoBlendingPlugin
+} // namespace GenericDigikamExpoBlendingPlugin

@@ -39,7 +39,7 @@
 #include "digikam_debug.h"
 #include "thumbnailloadthread.h"
 
-namespace GenericExpoBlendingPlugin
+namespace GenericDigikamExpoBlendingPlugin
 {
 
 BracketStackItem::BracketStackItem(QTreeWidget* const parent)
@@ -251,4 +251,4 @@ void BracketStackList::slotItemClicked(QTreeWidgetItem* item, int column)
     }
 }
 
-} // namespace GenericExpoBlendingPlugin
+} // namespace GenericDigikamExpoBlendingPlugin

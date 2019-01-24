@@ -38,7 +38,7 @@
 
 using namespace Digikam;
 
-namespace GenericExpoBlendingPlugin
+namespace GenericDigikamExpoBlendingPlugin
 {
 
 class BracketStackItem : public QTreeWidgetItem
@@ -93,6 +93,6 @@ private Q_SLOTS:
     void slotItemClicked(QTreeWidgetItem* item, int column);
 };
 
-} // namespace GenericExpoBlendingPlugin
+} // namespace GenericDigikamExpoBlendingPlugin
 
 #endif // DIGIKAM_BRACKET_STACK_H

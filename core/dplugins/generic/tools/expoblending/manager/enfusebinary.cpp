@@ -27,7 +27,7 @@
 
 #include "digikam_debug.h"
 
-namespace GenericExpoBlendingPlugin
+namespace GenericDigikamExpoBlendingPlugin
 {
 
 double EnfuseBinary::getVersion() const
@@ -68,4 +68,4 @@ bool EnfuseBinary::parseHeader(const QString& output)
     return false;
 }
 
-} // namespace GenericExpoBlendingPlugin
+} // namespace GenericDigikamExpoBlendingPlugin

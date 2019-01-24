@@ -38,7 +38,7 @@
 
 #include "enfusesettings.h"
 
-namespace GenericExpoBlendingPlugin
+namespace GenericDigikamExpoBlendingPlugin
 {
 
 class EnfuseStackItem : public QTreeWidgetItem
@@ -113,6 +113,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericExpoBlendingPlugin
+} // namespace GenericDigikamExpoBlendingPlugin
 
 #endif // DIGIKAM_ENFUSE_STACK_H

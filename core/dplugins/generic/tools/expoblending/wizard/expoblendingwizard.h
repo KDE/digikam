@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-namespace GenericExpoBlendingPlugin
+namespace GenericDigikamExpoBlendingPlugin
 {
 class ExpoBlendingManager;
 
@@ -68,6 +68,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericExpoBlendingPlugin
+} // namespace GenericDigikamExpoBlendingPlugin
 
 #endif // DIGIKAM_EXPO_BLENDING_WIZARD_H

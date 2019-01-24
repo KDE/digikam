@@ -75,7 +75,7 @@ extern "C"
 
 using namespace Digikam;
 
-namespace GenericExpoBlendingPlugin
+namespace GenericDigikamExpoBlendingPlugin
 {
 
 class Q_DECL_HIDDEN ExpoBlendingDlg::Private
@@ -514,7 +514,7 @@ void ExpoBlendingDlg::saveItem(const QUrl& temp, const EnfuseSettings& settings)
     }
 }
 
-void ExpoBlendingDlg::slotExpoBlendingAction(const GenericExpoBlendingPlugin::ExpoBlendingActionData& ad)
+void ExpoBlendingDlg::slotExpoBlendingAction(const GenericDigikamExpoBlendingPlugin::ExpoBlendingActionData& ad)
 {
     QString text;
 
@@ -671,4 +671,4 @@ void ExpoBlendingDlg::slotCloseClicked()
     }
 }
 
-} // namespace GenericExpoBlendingPlugin
+} // namespace GenericDigikamExpoBlendingPlugin

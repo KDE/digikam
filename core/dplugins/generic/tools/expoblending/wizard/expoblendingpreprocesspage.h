@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericExpoBlendingPlugin
+namespace GenericDigikamExpoBlendingPlugin
 {
 
 class ExpoBlendingManager;
@@ -55,7 +55,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotProgressTimerDone();
-    void slotExpoBlendingAction(const GenericExpoBlendingPlugin::ExpoBlendingActionData&);
+    void slotExpoBlendingAction(const GenericDigikamExpoBlendingPlugin::ExpoBlendingActionData&);
 
 private:
 
@@ -67,6 +67,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericExpoBlendingPlugin
+} // namespace GenericDigikamExpoBlendingPlugin
 
 #endif // DIGIKAM_EXPO_BLENDING_PREPROCESS_PAGE_H
