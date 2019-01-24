@@ -45,7 +45,7 @@
 #include "yfphoto.h"
 #include "yfalbum.h"
 
-namespace Digikam
+namespace GenericDigikamYFPlugin
 {
 
 class Q_DECL_HIDDEN YFWidget::Private
@@ -156,4 +156,4 @@ QButtonGroup* YFWidget::policyGB() const
     return d->policyGroup;
 }
     
-} // namespace Digikam
+} // namespace GenericDigikamYFPlugin

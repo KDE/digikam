@@ -42,7 +42,7 @@
 #include "yfauth.h"
 #include "yfalbum.h"
 
-namespace Digikam
+namespace GenericDigikamYFPlugin
 {
 
 class Q_DECL_HIDDEN YFTalker::Private
@@ -1176,4 +1176,4 @@ void YFTalker::slotParseResponseUpdateAlbum()
     emit signalUpdateAlbumDone();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamYFPlugin

@@ -46,7 +46,7 @@
 #include "yfalbum.h"
 #include "digikam_debug.h"
 
-namespace Digikam
+namespace GenericDigikamYFPlugin
 {
 
 class Q_DECL_HIDDEN YFNewAlbumDlg::Private
@@ -120,4 +120,4 @@ void YFNewAlbumDlg::slotOkClicked()
     accept();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamYFPlugin

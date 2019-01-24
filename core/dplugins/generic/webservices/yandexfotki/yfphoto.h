@@ -31,7 +31,7 @@
 #include <QDateTime>
 #include <QStringList>
 
-namespace Digikam
+namespace GenericDigikamYFPlugin
 {
 
 class YFPhoto
@@ -229,6 +229,6 @@ protected:
 
 QDebug operator<<(QDebug d, const YFPhoto& p);
 
-} // namespace Digikam
+} // namespace GenericDigikamYFPlugin
 
 #endif // DIGIKAM_YF_PHOTO_H

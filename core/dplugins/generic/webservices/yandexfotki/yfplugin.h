@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.YandexFotki"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamYFPlugin
 {
 
-class DPluginDialog;
+class YFWindow;
 
 class YFPlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<YFWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamYFPlugin
 
 #endif // DIGIKAM_YANDEXFOTKI_PLUGIN_H

@@ -35,7 +35,9 @@
 #include "wssettingswidget.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamYFPlugin
 {
 
 class YFWidget : public WSSettingsWidget
@@ -75,6 +77,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamYFPlugin
 
 #endif // DIGIKAM_YF_WIDGET_H

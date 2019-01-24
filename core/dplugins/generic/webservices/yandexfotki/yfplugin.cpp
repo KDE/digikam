@@ -34,7 +34,7 @@
 
 #include "yfwindow.h"
 
-namespace Digikam
+namespace GenericDigikamYFPlugin
 {
 
 YFPlugin::YFPlugin(QObject* const parent)
@@ -111,4 +111,4 @@ void YFPlugin::slotYandexFotki()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamYFPlugin

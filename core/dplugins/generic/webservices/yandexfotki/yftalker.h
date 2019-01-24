@@ -37,7 +37,7 @@
 
 class QNetworkReply;
 
-namespace Digikam
+namespace GenericDigikamYFPlugin
 {
 
 class YFTalker : public QObject
@@ -193,6 +193,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamYFPlugin
 
 #endif // DIGIKAM_YF_TALKER_H

@@ -29,7 +29,9 @@
 #include "yfalbum.h"
 #include "wsnewalbumdialog.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamYFPlugin
 {
 
 class YFNewAlbumDlg: public WSNewAlbumDialog
@@ -53,6 +55,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamYFPlugin
 
 #endif // DIGIKAM_YF_NEW_ALBUM_DLG_H

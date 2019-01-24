@@ -59,7 +59,6 @@
 #include "yftalker.h"
 #include "yfnewalbumdlg.h"
 #include "digikam_debug.h"
-#include "dinfointerface.h"
 #include "wstoolutils.h"
 #include "wslogindialog.h"
 #include "yfwidget.h"
@@ -67,7 +66,7 @@
 #include "dprogresswdg.h"
 #include "dmetadata.h"
 
-namespace Digikam
+namespace GenericDigikamYFPlugin
 {
 
 class Q_DECL_HIDDEN YFWindow::Private
@@ -839,4 +838,4 @@ void YFWindow::slotUpdateAlbumDone()
     d->talker.listAlbums();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamYFPlugin

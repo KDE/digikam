@@ -36,13 +36,14 @@
 #include "digikam_export.h"
 #include "yfalbum.h"
 #include "yfphoto.h"
+#include "dinfointerface.h"
+
+using namespace Digikam;
 
 class QCloseEvent;
 
-namespace Digikam
+namespace GenericDigikamYFPlugin
 {
-
-class DInfoInterface;
 
 class DIGIKAM_EXPORT YFWindow : public WSToolDialog
 {
@@ -107,6 +108,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamYFPlugin
 
 #endif // DIGIKAM_YF_WINDOW_H
