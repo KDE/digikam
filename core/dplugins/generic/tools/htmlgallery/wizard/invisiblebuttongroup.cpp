@@ -32,7 +32,7 @@
 
 #include <kconfigdialogmanager.h>
 
-namespace GenericHtmlGalleryPlugin
+namespace GenericDigikamHtmlGalleryPlugin
 {
 
 class Q_DECL_HIDDEN InvisibleButtonGroup::Private
@@ -93,4 +93,4 @@ void InvisibleButtonGroup::setSelected(int id)
     }
 }
 
-} // namespace GenericHtmlGalleryPlugin
+} // namespace GenericDigikamHtmlGalleryPlugin

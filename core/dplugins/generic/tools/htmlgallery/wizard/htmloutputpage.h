@@ -33,7 +33,7 @@
 
 using namespace Digikam;
 
-namespace GenericHtmlGalleryPlugin
+namespace GenericDigikamHtmlGalleryPlugin
 {
 
 class HTMLOutputPage : public DWizardPage
@@ -53,6 +53,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericHtmlGalleryPlugin
+} // namespace GenericDigikamHtmlGalleryPlugin
 
 #endif // DIGIKAM_HTML_OUTPUT_PAGE_H

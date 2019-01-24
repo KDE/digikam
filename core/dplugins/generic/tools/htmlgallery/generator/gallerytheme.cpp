@@ -44,7 +44,7 @@
 #include "listthemeparameter.h"
 #include "stringthemeparameter.h"
 
-namespace GenericHtmlGalleryPlugin
+namespace GenericDigikamHtmlGalleryPlugin
 {
 
 static const char* AUTHOR_GROUP           = "X-HTMLGallery Author";
@@ -293,4 +293,4 @@ GalleryTheme::ParameterList GalleryTheme::parameterList() const
     return d->parameterList;
 }
 
-} // namespace GenericHtmlGalleryPlugin
+} // namespace GenericDigikamHtmlGalleryPlugin

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericHtmlGalleryPlugin
+namespace GenericDigikamHtmlGalleryPlugin
 {
 
 class HtmlGalleryPlugin : public DPluginGeneric
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotHtmlGallery();
 };
 
-} // namespace GenericHtmlGalleryPlugin
+} // namespace GenericDigikamHtmlGalleryPlugin
 
 #endif // DIGIKAM_HTML_GALLERY_PLUGIN_H

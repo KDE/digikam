@@ -38,7 +38,7 @@
 
 using namespace Digikam;
 
-namespace GenericHtmlGalleryPlugin
+namespace GenericDigikamHtmlGalleryPlugin
 {
 
 class GalleryInfo;
@@ -69,6 +69,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericHtmlGalleryPlugin
+} // namespace GenericDigikamHtmlGalleryPlugin
 
 #endif // DIGIKAM_HTML_WIZARD_H

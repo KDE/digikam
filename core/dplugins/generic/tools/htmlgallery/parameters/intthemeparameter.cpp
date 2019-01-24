@@ -34,7 +34,7 @@
 static const char* MIN_VALUE_KEY = "Min";
 static const char* MAX_VALUE_KEY = "Max";
 
-namespace GenericHtmlGalleryPlugin
+namespace GenericDigikamHtmlGalleryPlugin
 {
 
 class Q_DECL_HIDDEN IntThemeParameter::Private
@@ -86,4 +86,4 @@ QString IntThemeParameter::valueFromWidget(QWidget* widget) const
     return QString::number(spinBox->value());
 }
 
-} // namespace GenericHtmlGalleryPlugin
+} // namespace GenericDigikamHtmlGalleryPlugin

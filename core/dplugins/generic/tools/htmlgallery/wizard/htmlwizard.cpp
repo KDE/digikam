@@ -53,7 +53,7 @@
 #include "htmlimagesettingspage.h"
 #include "htmlfinalpage.h"
 
-namespace GenericHtmlGalleryPlugin
+namespace GenericDigikamHtmlGalleryPlugin
 {
 
 class Q_DECL_HIDDEN HTMLWizard::Private
@@ -178,4 +178,4 @@ GalleryTheme::Ptr HTMLWizard::galleryTheme() const
     return d->themePage->currentTheme();
 }
 
-} // namespace GenericHtmlGalleryPlugin
+} // namespace GenericDigikamHtmlGalleryPlugin

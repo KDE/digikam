@@ -28,7 +28,7 @@
 
 #include "abstractthemeparameter.h"
 
-namespace GenericHtmlGalleryPlugin
+namespace GenericDigikamHtmlGalleryPlugin
 {
 
 /**
@@ -51,6 +51,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericHtmlGalleryPlugin
+} // namespace GenericDigikamHtmlGalleryPlugin
 
 #endif // DIGIKAM_INT_THEME_PARAMETER_H

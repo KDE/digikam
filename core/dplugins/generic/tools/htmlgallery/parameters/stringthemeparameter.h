@@ -31,7 +31,7 @@
 class QWidget;
 class QString;
 
-namespace GenericHtmlGalleryPlugin
+namespace GenericDigikamHtmlGalleryPlugin
 {
 
 /**
@@ -45,6 +45,6 @@ public:
     virtual QString  valueFromWidget(QWidget*)                           const;
 };
 
-} // namespace GenericHtmlGalleryPlugin
+} // namespace GenericDigikamHtmlGalleryPlugin
 
 #endif // DIGIKAM_STRING_THEME_PARAMETER_H

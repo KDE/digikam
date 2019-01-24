@@ -27,7 +27,7 @@
 
 #include <QLineEdit>
 
-namespace GenericHtmlGalleryPlugin
+namespace GenericDigikamHtmlGalleryPlugin
 {
 
 QWidget* StringThemeParameter::createWidget(QWidget* parent, const QString& value) const
@@ -46,4 +46,4 @@ QString StringThemeParameter::valueFromWidget(QWidget* widget) const
     return edit->text();
 }
 
-} // namespace GenericHtmlGalleryPlugin
+} // namespace GenericDigikamHtmlGalleryPlugin

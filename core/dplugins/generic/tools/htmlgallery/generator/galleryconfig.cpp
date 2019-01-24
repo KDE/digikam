@@ -26,7 +26,7 @@
 
 #include <QCoreApplication>
 
-namespace GenericHtmlGalleryPlugin
+namespace GenericDigikamHtmlGalleryPlugin
 {
 
 GalleryConfig::GalleryConfig()
@@ -327,4 +327,4 @@ QString GalleryConfig::imageSelectionTitle() const
     return m_imageSelectionTitle;
 }
 
-} // namespace GenericHtmlGalleryPlugin
+} // namespace GenericDigikamHtmlGalleryPlugin

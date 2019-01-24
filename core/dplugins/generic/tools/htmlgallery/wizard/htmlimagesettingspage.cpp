@@ -47,7 +47,7 @@
 #include "galleryinfo.h"
 #include "htmlwizard.h"
 
-namespace GenericHtmlGalleryPlugin
+namespace GenericDigikamHtmlGalleryPlugin
 {
 
 class Q_DECL_HIDDEN HTMLImageSettingsPage::Private
@@ -308,4 +308,4 @@ void HTMLImageSettingsPage::initializePage()
     }
 }
 
-} // namespace GenericHtmlGalleryPlugin
+} // namespace GenericDigikamHtmlGalleryPlugin

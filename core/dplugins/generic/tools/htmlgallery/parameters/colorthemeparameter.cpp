@@ -29,7 +29,7 @@
 
 using namespace Digikam;
 
-namespace GenericHtmlGalleryPlugin
+namespace GenericDigikamHtmlGalleryPlugin
 {
 
 QWidget* ColorThemeParameter::createWidget(QWidget* parent, const QString& value) const
@@ -48,4 +48,4 @@ QString ColorThemeParameter::valueFromWidget(QWidget* widget) const
     return button->color().name();
 }
 
-} // namespace GenericHtmlGalleryPlugin
+} // namespace GenericDigikamHtmlGalleryPlugin
