@@ -32,7 +32,9 @@
 #include "mailsettings.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSendByMailPlugin
 {
 
 class MailProcess : public QObject
@@ -98,6 +100,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin
 
 #endif // DIGIKAM_MAIL_PROCESS_H

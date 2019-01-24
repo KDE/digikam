@@ -31,7 +31,9 @@
 
 #include "dwizardpage.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSendByMailPlugin
 {
 
 class MailSettingsPage : public DWizardPage
@@ -56,6 +58,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin
 
 #endif // DIGIKAM_MAIL_SETTINGS_PAGE_H

@@ -39,7 +39,7 @@
 #include "previewloadthread.h"
 #include "dmetadata.h"
 
-namespace Digikam
+namespace GenericDigikamSendByMailPlugin
 {
 
 ImageResizeJob::ImageResizeJob(int* count)
@@ -201,4 +201,4 @@ bool ImageResizeJob::imageResize(MailSettings* const settings,
     return false;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin

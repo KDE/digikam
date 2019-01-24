@@ -47,7 +47,7 @@
 #include "dhistoryview.h"
 #include "mailprocess.h"
 
-namespace Digikam
+namespace GenericDigikamSendByMailPlugin
 {
 
 class Q_DECL_HIDDEN MailFinalPage::Private
@@ -183,4 +183,4 @@ bool MailFinalPage::isComplete() const
     return d->complete;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin

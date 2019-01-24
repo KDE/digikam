@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.SendByMail"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSendByMailPlugin
 {
 
 class SendByMailPlugin : public DPluginGeneric
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotSendByMail();
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin
 
 #endif // DIGIKAM_SEND_BY_MAIL_PLUGIN_H

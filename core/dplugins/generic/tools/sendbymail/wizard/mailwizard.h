@@ -35,7 +35,9 @@
 #include "digikam_export.h"
 #include "mailsettings.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSendByMailPlugin
 {
 
 class DIGIKAM_EXPORT MailWizard : public DWizardDlg
@@ -59,6 +61,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin
 
 #endif // DIGIKAM_MAIL_WIZARD_H

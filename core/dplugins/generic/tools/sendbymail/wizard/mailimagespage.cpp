@@ -38,7 +38,7 @@
 #include "ditemslist.h"
 #include "dlayoutbox.h"
 
-namespace Digikam
+namespace GenericDigikamSendByMailPlugin
 {
 
 class Q_DECL_HIDDEN MailImagesPage::Private
@@ -121,4 +121,4 @@ bool MailImagesPage::isComplete() const
     return (!d->imageList->imageUrls().isEmpty());
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin

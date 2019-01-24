@@ -27,7 +27,9 @@
 
 #include "dbinaryiface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSendByMailPlugin
 {
 
 class SylpheedBinary : public DBinaryIface
@@ -52,6 +54,6 @@ public:
     }
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin
 
 #endif // SYLPHEED_BINARY_H

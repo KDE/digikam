@@ -31,7 +31,7 @@
 
 #include "mailwizard.h"
 
-namespace Digikam
+namespace GenericDigikamSendByMailPlugin
 {
 
 class Q_DECL_HIDDEN MailAlbumsPage::Private
@@ -110,4 +110,4 @@ bool MailAlbumsPage::isComplete() const
     return (!d->iface->albumChooserItems().isEmpty());
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin

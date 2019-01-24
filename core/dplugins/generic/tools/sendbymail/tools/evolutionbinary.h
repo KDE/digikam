@@ -27,7 +27,9 @@
 
 #include "dbinaryiface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSendByMailPlugin
 {
 
 class EvolutionBinary : public DBinaryIface
@@ -52,6 +54,6 @@ public:
     }
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin
 
 #endif // EVOLUTION_BINARY_H

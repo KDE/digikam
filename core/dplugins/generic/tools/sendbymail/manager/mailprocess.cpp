@@ -48,7 +48,7 @@
 #include "digikam_globals.h"
 #include "imageresizethread.h"
 
-namespace Digikam
+namespace GenericDigikamSendByMailPlugin
 {
 
 class Q_DECL_HIDDEN MailProcess::Private
@@ -605,4 +605,4 @@ void MailProcess::slotCleanUp()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin

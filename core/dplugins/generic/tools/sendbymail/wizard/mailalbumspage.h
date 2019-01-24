@@ -33,7 +33,9 @@
 
 #include "dwizardpage.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSendByMailPlugin
 {
 
 class MailAlbumsPage : public DWizardPage
@@ -52,6 +54,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin
 
 #endif // DIGIKAM_MAIL_ALBUMS_PAGE_H

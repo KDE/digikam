@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_RESIZE_JOB_H
-#define IMAGE_RESIZE_JOB_H
+#ifndef DIGIKAM_IMAGE_RESIZE_JOB_H
+#define DIGIKAM_IMAGE_RESIZE_JOB_H
 
 // Qt includes
 
@@ -34,7 +34,9 @@
 #include "actionthreadbase.h"
 #include "mailsettings.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSendByMailPlugin
 {
 
 class ImageResizeJob : public ActionJob
@@ -72,6 +74,6 @@ private:
     QMutex m_mutex;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin
 
-#endif // IMAGE_RESIZE_JOB_H
+#endif // DIGIKAM_IMAGE_RESIZE_JOB_H

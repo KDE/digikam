@@ -48,7 +48,7 @@
 #include "mailsettingspage.h"
 #include "mailfinalpage.h"
 
-namespace Digikam
+namespace GenericDigikamSendByMailPlugin
 {
 
 class Q_DECL_HIDDEN MailWizard::Private
@@ -144,4 +144,4 @@ int MailWizard::nextId() const
     return DWizardDlg::nextId();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin

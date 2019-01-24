@@ -27,7 +27,9 @@
 
 #include "dbinaryiface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSendByMailPlugin
 {
 
 class BalsaBinary : public DBinaryIface
@@ -52,6 +54,6 @@ public:
     }
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin
 
 #endif // BALSA_BINARY_H

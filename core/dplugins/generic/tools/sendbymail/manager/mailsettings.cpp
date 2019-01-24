@@ -29,7 +29,7 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-namespace Digikam
+namespace GenericDigikamSendByMailPlugin
 {
 
 MailSettings::MailSettings()
@@ -138,4 +138,4 @@ QMap<MailSettings::ImageFormat, QString> MailSettings::imageFormatNames()
     return frms;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin

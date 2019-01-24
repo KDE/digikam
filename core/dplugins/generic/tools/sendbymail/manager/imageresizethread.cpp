@@ -33,7 +33,7 @@
 #include "digikam_debug.h"
 #include "imageresizejob.h"
 
-namespace Digikam
+namespace GenericDigikamSendByMailPlugin
 {
 
 ImageResizeThread::ImageResizeThread(QObject* const parent)
@@ -91,4 +91,4 @@ void ImageResizeThread::cancel()
     ActionThreadBase::cancel();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin

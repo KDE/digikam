@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_RESIZE_THREAD_H
-#define IMAGE_RESIZE_THREAD_H
+#ifndef DIGIKAM_IMAGE_RESIZE_THREAD_H
+#define DIGIKAM_IMAGE_RESIZE_THREAD_H
 
 // Qt includes
 
@@ -33,7 +33,9 @@
 #include "actionthreadbase.h"
 #include "mailsettings.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamSendByMailPlugin
 {
 
 class ImageResizeThread : public ActionThreadBase
@@ -59,6 +61,6 @@ private:
     int* m_count;    // although it is private, it's address is passed to Task
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamSendByMailPlugin
 
-#endif // IMAGE_RESIZE_THREAD_H
+#endif // DIGIKAM_IMAGE_RESIZE_THREAD_H
