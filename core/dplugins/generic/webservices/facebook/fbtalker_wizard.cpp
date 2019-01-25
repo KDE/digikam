@@ -58,7 +58,7 @@
 #include "o0settingsstore.h"
 #include "wstoolutils.h"
 
-namespace Digikam
+namespace GenericDigikamFaceBookPlugin
 {
 
 bool operator< (const FbUser& first, const FbUser& second)
@@ -786,4 +786,4 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
                               albumsList);
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFaceBookPlugin

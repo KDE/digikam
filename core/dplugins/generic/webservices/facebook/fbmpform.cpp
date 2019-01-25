@@ -37,7 +37,9 @@
 #include "digikam_debug.h"
 #include "wstoolutils.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFaceBookPlugin
 {
 
 FbMPForm::FbMPForm()
@@ -151,4 +153,4 @@ QByteArray FbMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFaceBookPlugin

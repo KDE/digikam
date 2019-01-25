@@ -32,7 +32,9 @@
 
 #include "wsitem.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFaceBookPlugin
 {
 
 class FbUser
@@ -109,6 +111,6 @@ public:
     QString originalURL;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFaceBookPlugin
 
 #endif // DIGIKAM_FB_ITEM_H

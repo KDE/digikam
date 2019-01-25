@@ -30,7 +30,7 @@
 #include <QByteArray>
 #include <QString>
 
-namespace Digikam
+namespace GenericDigikamFaceBookPlugin
 {
 
 class FbMPForm
@@ -57,6 +57,6 @@ private:
     QByteArray m_boundary;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFaceBookPlugin
 
 #endif // DIGIKAM_FB_MPFORM_H

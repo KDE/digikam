@@ -38,7 +38,9 @@
 class QCloseEvent;
 class QUrl;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFaceBookPlugin
 {
 
 class FbAlbum;
@@ -96,6 +98,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFaceBookPlugin
 
 #endif // DIGIKAM_FB_WINDOW_H

@@ -43,7 +43,7 @@
 #include "ditemslist.h"
 #include "dprogresswdg.h"
 
-namespace Digikam
+namespace GenericDigikamFaceBookPlugin
 {
 
 FbWidget::FbWidget(QWidget* const parent,
@@ -88,4 +88,4 @@ void FbWidget::slotReloadAlbumsRequest()
     emit reloadAlbums(0);
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFaceBookPlugin

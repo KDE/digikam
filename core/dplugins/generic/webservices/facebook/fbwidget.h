@@ -33,7 +33,9 @@
 #include "wssettingswidget.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFaceBookPlugin
 {
 
 class FbWidget : public WSSettingsWidget
@@ -63,6 +65,6 @@ private:
     friend class FbWindow;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFaceBookPlugin
 
 #endif // DIGIKAM_FB_WIDGET_H

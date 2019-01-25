@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.FaceBook"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFaceBookPlugin
 {
 
-class DPluginDialog;
+class FbWindow;
 
 class FbPlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<FbWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFaceBookPlugin
 
 #endif // DIGIKAM_FB_PLUGIN_H

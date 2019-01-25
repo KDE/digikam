@@ -41,7 +41,7 @@
 
 #include "fbitem.h"
 
-namespace Digikam
+namespace GenericDigikamFaceBookPlugin
 {
 
 FbNewAlbumDlg::FbNewAlbumDlg(QWidget* const parent, const QString& toolName)
@@ -79,7 +79,7 @@ void FbNewAlbumDlg::getAlbumProperties(FbAlbum& album)
     getBaseAlbumProperties(baseAlbum);
 
     album.setBaseAlbum(baseAlbum);
-    album.privacy = static_cast<Digikam::FbPrivacy>(m_privacyCoB->itemData(m_privacyCoB->currentIndex()).toInt());
+    album.privacy = static_cast<GenericDigikamFaceBookPlugin::FbPrivacy>(m_privacyCoB->itemData(m_privacyCoB->currentIndex()).toInt());
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFaceBookPlugin

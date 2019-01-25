@@ -35,7 +35,9 @@
 
 class QComboBox;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFaceBookPlugin
 {
 
 class FbAlbum;
@@ -59,6 +61,6 @@ private:
     friend class FbWindow;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFaceBookPlugin
 
 #endif // DIGIKAM_FB_NEW_ALBUM_DLG_H

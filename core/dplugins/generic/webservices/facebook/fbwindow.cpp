@@ -57,7 +57,7 @@
 #include "fbnewalbumdlg.h"
 #include "previewloadthread.h"
 
-namespace Digikam
+namespace GenericDigikamFaceBookPlugin
 {
 
 class Q_DECL_HIDDEN FbWindow::Private
@@ -662,4 +662,4 @@ void FbWindow::slotImageListChanged()
     startButton()->setEnabled(!(d->imgList->imageUrls().isEmpty()));
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFaceBookPlugin

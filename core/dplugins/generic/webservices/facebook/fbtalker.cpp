@@ -64,7 +64,9 @@
 #   include "webwidget.h"
 #endif
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFaceBookPlugin
 {
 
 bool operator< (const FbUser& first, const FbUser& second)
@@ -855,4 +857,4 @@ void FbTalker::parseResponseLogoutUser()
     emit signalLoginDone(-1, QString());
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFaceBookPlugin
