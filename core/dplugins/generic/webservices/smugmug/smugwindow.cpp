@@ -426,7 +426,7 @@ void SmugWindow::writeSettings()
 
 void SmugWindow::slotLoginProgress(int step, int maxStep, const QString &label)
 {
-    DProgressWdg* progressBar = d->widget->progressBar();
+    DProgressWdg* const progressBar = d->widget->progressBar();
 
     if (!label.isEmpty())
         progressBar->setFormat(label);
@@ -482,7 +482,7 @@ void SmugWindow::slotListAlbumsDone(int errCode, const QString &errMsg,
 
     d->widget->m_albumsCoB->clear();
 
-    for (int i = 0; i < albumsList.size(); ++i)
+    for (int i = 0 ; i < albumsList.size() ; ++i)
     {
         QString albumIcon;
 
@@ -512,7 +512,7 @@ void SmugWindow::slotListPhotosDone(int errCode, const QString &errMsg,
 
     d->transferQueue.clear();
 
-    for (int i = 0; i < photosList.size(); ++i)
+    for (int i = 0 ; i < photosList.size() ; ++i)
     {
         d->transferQueue.append(QUrl(photosList.at(i).originalURL));
     }
@@ -688,7 +688,7 @@ void SmugWindow::slotUserChangeRequest(bool /*anonymous*/)
     {
         // Unlink user account and wait active until really logged out
         d->talker->logout();
-        while(d->talker->loggedIn());
+        while (d->talker->loggedIn());
 
         // Re-login
         authenticate();
