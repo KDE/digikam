@@ -63,7 +63,7 @@
 
 using namespace MediaWiki;
 
-namespace Digikam
+namespace GenericDigikamMediaWikiPlugin
 {
 
 class Q_DECL_HIDDEN MediaWikiWindow::Private
@@ -395,4 +395,4 @@ bool MediaWikiWindow::eventFilter(QObject* /*obj*/, QEvent* event)
     return true;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamMediaWikiPlugin

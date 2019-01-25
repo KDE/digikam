@@ -47,7 +47,7 @@
 
 #include "digikam_debug.h"
 
-namespace Digikam
+namespace GenericDigikamMediaWikiPlugin
 {
 
 class Q_DECL_HIDDEN MediaWikiTalker::Private
@@ -269,4 +269,4 @@ void MediaWikiTalker::slotUploadProgress(KJob* job, unsigned long percent)
     emit signalUploadProgress((int)percent);
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamMediaWikiPlugin

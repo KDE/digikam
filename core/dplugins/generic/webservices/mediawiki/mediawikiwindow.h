@@ -36,7 +36,9 @@ class QCloseEvent;
 
 class KJob;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamMediaWikiPlugin
 {
 
 class DIGIKAM_EXPORT MediaWikiWindow : public WSToolDialog
@@ -76,6 +78,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamMediaWikiPlugin
 
 #endif // DIGIKAM_MEDIAWIKI_WINDOW_H

@@ -39,6 +39,8 @@
 
 #include "dinfointerface.h"
 
+using namespace Digikam;
+
 namespace MediaWiki
 {
     class Iface;
@@ -46,7 +48,7 @@ namespace MediaWiki
 
 using namespace MediaWiki;
 
-namespace Digikam
+namespace GenericDigikamMediaWikiPlugin
 {
 
 class MediaWikiTalker : public KJob
@@ -82,6 +84,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamMediaWikiPlugin
 
 #endif // DIGIKAM_MEDIAWIKI_TALKER_H

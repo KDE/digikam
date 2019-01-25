@@ -43,7 +43,9 @@
 #include "dprogresswdg.h"
 #include "ditemslist.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamMediaWikiPlugin
 {
 
 enum MediaWikiDownloadType
@@ -135,6 +137,6 @@ private:
     friend class WmWindow;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamMediaWikiPlugin
 
 #endif // DIGIKAM_MEDIAWIKI_WIDGET_H

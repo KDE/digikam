@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.MediaWiki"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamMediaWikiPlugin
 {
 
-class DPluginDialog;
+class MediaWikiWindow;
 
 class MediaWikiPlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<MediaWikiWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamMediaWikiPlugin
 
 #endif // DIGIKAM_MEDIAWIKI_PLUGIN_H
