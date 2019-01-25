@@ -44,15 +44,16 @@
 #include <QDialog>
 #include <QListView>
 #include <QUrlQuery>
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QJsonArray>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kio/accessmanager.h>
-
-// QJSON includes
-
-//FIXME #include <qjson/parser.h>
 
 // Local includes
 
@@ -276,16 +277,11 @@ void DSWidget::slotFindVersionsForPackageFinished(QNetworkReply* reply)
     }
     else
     {
-        QByteArray ba = reply->readAll();
-        bool ok       = false;
+        QByteArray ba     = reply->readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(ba);
+        QVariant versionSuggestions = doc.toVariant();
 
-/* FIXME
-        QJson::Parser jsonParser;
-        QVariant versionSuggestions = jsonParser.parse(ba, &ok);
-*/
-        QVariant versionSuggestions;
-
-        if (ok)
+        if (versionSuggestions.isValid())
         {
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Query "
                                              << replyUrl.toEncoded().constData()
