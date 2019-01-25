@@ -36,7 +36,7 @@
 #include "rajcesession.h"
 #include "rajcempform.h"
 
-namespace Digikam
+namespace GenericDigikamRajcePlugin
 {
 
 class RajceCommand
@@ -181,6 +181,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamRajcePlugin
 
 #endif // DIGIKAM_RAJCE_COMMAND_H

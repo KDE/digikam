@@ -35,7 +35,7 @@
 
 #include <klocalizedstring.h>
 
-namespace Digikam
+namespace GenericDigikamRajcePlugin
 {
 
 RajceNewAlbumDlg::RajceNewAlbumDlg(QWidget* const parent)
@@ -80,4 +80,4 @@ bool RajceNewAlbumDlg::albumVisible() const
     return m_albumVisible->isChecked();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamRajcePlugin

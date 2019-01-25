@@ -44,7 +44,9 @@
 #include "wstoolutils.h"
 #include "previewloadthread.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamRajcePlugin
 {
 
 const unsigned THUMB_SIZE = 100;
@@ -598,4 +600,4 @@ QByteArray AddPhotoCommand::encode() const
     return ret;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamRajcePlugin

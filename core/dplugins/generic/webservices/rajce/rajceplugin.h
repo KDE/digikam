@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.Rajce"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamRajcePlugin
 {
 
-class DPluginDialog;
+class RajceWindow;
 
 class RajcePlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<RajceWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamRajcePlugin
 
 #endif // DIGIKAM_RAJCE_PLUGIN_H

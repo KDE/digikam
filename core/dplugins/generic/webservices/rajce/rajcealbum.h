@@ -31,7 +31,7 @@
 #include <QDebug>
 #include <QMetaType>
 
-namespace Digikam
+namespace GenericDigikamRajcePlugin
 {
 
 struct RajceAlbum
@@ -62,11 +62,11 @@ struct RajceAlbum
     QDateTime validTo;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamRajcePlugin
 
-QTextStream& operator<<(QTextStream& str, const Digikam::RajceAlbum& a);
-QDebug operator<<(QDebug d, const Digikam::RajceAlbum& a);
+QTextStream& operator<<(QTextStream& str, const GenericDigikamRajcePlugin::RajceAlbum& a);
+QDebug operator<<(QDebug d, const GenericDigikamRajcePlugin::RajceAlbum& a);
 
-Q_DECLARE_METATYPE(Digikam::RajceAlbum)
+Q_DECLARE_METATYPE(GenericDigikamRajcePlugin::RajceAlbum)
 
 #endif // DIGIKAM_RAJCE_ALBUM_H

@@ -37,7 +37,9 @@
 #include "digikam_debug.h"
 #include "wstoolutils.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamRajcePlugin
 {
 
 RajceMPForm::RajceMPForm()
@@ -162,4 +164,4 @@ QByteArray RajceMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamRajcePlugin

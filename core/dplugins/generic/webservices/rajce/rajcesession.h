@@ -33,7 +33,7 @@
 
 #include "rajcealbum.h"
 
-namespace Digikam
+namespace GenericDigikamRajcePlugin
 {
 
 enum RajceCommandType
@@ -122,8 +122,8 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamRajcePlugin
 
-QDebug operator<<(QDebug d, const Digikam::RajceSession& s);
+QDebug operator<<(QDebug d, const GenericDigikamRajcePlugin::RajceSession& s);
 
 #endif // DIGIKAM_RAJCE_SESSION_H

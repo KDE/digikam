@@ -32,11 +32,12 @@
 // Local includes
 
 #include "wssettingswidget.h"
+#include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamRajcePlugin
 {
-
-class DInfoInterface;
    
 class RajceWidget : public WSSettingsWidget
 {
@@ -93,6 +94,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamRajcePlugin
 
 #endif // DIGIKAM_RAJCE_WIDGET_H

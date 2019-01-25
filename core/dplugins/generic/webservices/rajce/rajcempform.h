@@ -29,7 +29,7 @@
 #include <QByteArray>
 #include <QString>
 
-namespace Digikam
+namespace GenericDigikamRajcePlugin
 {
 
 class RajceMPForm
@@ -57,6 +57,6 @@ private:
     QByteArray m_boundary;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamRajcePlugin
 
 #endif // DIGIKAM_RAJCE_MPFORM_H

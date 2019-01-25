@@ -30,7 +30,9 @@
 #include "dinfointerface.h"
 #include "digikam_export.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamRajcePlugin
 {
 
 class RajceWidget;
@@ -60,6 +62,6 @@ private:
     RajceWidget* m_widget;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamRajcePlugin
 
 #endif // DIGIKAM_RAJCE_WINDOW_H

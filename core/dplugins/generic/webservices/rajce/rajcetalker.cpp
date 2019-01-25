@@ -46,7 +46,9 @@
 #include "wstoolutils.h"
 #include "previewloadthread.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamRajcePlugin
 {
 
 const QUrl RAJCE_URL(QLatin1String("http://www.rajce.idnes.cz/liveAPI/index.php"));
@@ -258,9 +260,9 @@ void RajceTalker::cancelCurrentCommand()
     }
 }
 
-void RajceTalker::init(const Digikam::RajceSession& initialState)
+void RajceTalker::init(const RajceSession& initialState)
 {
     d->session = initialState;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamRajcePlugin
