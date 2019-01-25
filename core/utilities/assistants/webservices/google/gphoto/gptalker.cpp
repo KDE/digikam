@@ -42,6 +42,7 @@
 #include <QImage>
 #include <QStringList>
 #include <QUrl>
+#include <QUrlQuery>
 #include <QtAlgorithms>
 #include <QApplication>
 #include <QDir>
@@ -117,6 +118,7 @@ public:
     QString                albumIdToUpload;
     QString                previousImageId;
     QStringList            uploadTokenList;
+    QList<GSFolder>        albumList;
 
     QNetworkAccessManager* netMngr;
 };
@@ -172,7 +174,7 @@ QStringList GPTalker::getUploadTokenList()
  * This uses the authenticated album list fetching to get all the albums included the unlisted-albums
  * which is not returned for an unauthorised request as done without the Authorization header.
  */
-void GPTalker::listAlbums()
+void GPTalker::listAlbums(const QString& nextPageToken)
 {
     if (m_reply)
     {
@@ -183,6 +185,17 @@ void GPTalker::listAlbums()
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "list albums";
 
     QUrl url(d->apiUrl.arg("albums"));
+
+    if (nextPageToken.isEmpty())
+    {
+        d->albumList.clear();
+    }
+    else
+    {
+        QUrlQuery query(url);
+        query.addQueryItem(QLatin1String("pageToken"), nextPageToken);
+        url.setQuery(query);
+    }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url for list albums " << url;
 
@@ -757,30 +770,40 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
     QJsonArray jsonArray    = jsonObject[QLatin1String("albums")].toArray();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json array " << doc;
 
-    QList<GSFolder> albumList;
-
     /**
      * Google-photos allows user to post photos on their main page (not in any albums)
      * so this folder is created for that purpose
      */
-    GSFolder mainPage;
-    albumList.append(mainPage);
+
+    if (d->albumList.isEmpty())
+    {
+        GSFolder mainPage;
+        d->albumList.append(mainPage);
+    }
 
     foreach (const QJsonValue& value, jsonArray)
     {
-        QJsonObject obj = value.toObject();
-
         GSFolder album;
+
+        QJsonObject obj     = value.toObject();
         album.id            = obj[QLatin1String("id")].toString();
         album.title         = obj[QLatin1String("title")].toString();
         album.url           = obj[QLatin1String("productUrl")].toString();
         album.isWriteable   = obj[QLatin1String("isWriteable")].toBool();
 
-        albumList.append(album);
+        d->albumList.append(album);
     }
 
-    std::sort(albumList.begin(), albumList.end(), gphotoLessThan);
-    emit signalListAlbumsDone(1, QLatin1String(""), albumList);
+    QString nextPageToken   = jsonObject[QLatin1String("nextPageToken")].toString();
+
+    if (!nextPageToken.isEmpty())
+    {
+        listAlbums(nextPageToken);
+        return;
+    }
+
+    std::sort(d->albumList.begin(), d->albumList.end(), gphotoLessThan);
+    emit signalListAlbumsDone(1, QLatin1String(""), d->albumList);
 }
 
 void GPTalker::parseResponseListPhotos(const QByteArray& data)

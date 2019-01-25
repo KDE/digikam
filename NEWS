@@ -691,4 +691,5 @@ BUGFIXES:
 621 ==> 403350 - After rotating video, when changing video date time, rotation flag is reset.
 622 ==> 401010 - Simple search on one file name crashes the program if there is more than one hit.
 623 ==> 403569 - Error while uploading image to google picasa/photos.
-624 ==> 
+624 ==> 403594 - Export to Google - Album List incomplete.
+625 ==> 

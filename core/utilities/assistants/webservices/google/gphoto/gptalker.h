@@ -53,8 +53,8 @@ public:
 public:
 
     void    getLoggedInUser();
-    
-    void    listAlbums();
+
+    void    listAlbums(const QString& nextPageToken = QString());
     void    listPhotos(const QString& albumId,
                        const QString& imgmax = QString());
 
@@ -72,9 +72,9 @@ public:
                         bool rescale,
                         int maxDim,
                         int imageQuality);
-    
+
     void    getPhoto(const QString& imgPath);
-    
+
     QStringList getUploadTokenList();
 
     void cancel();
