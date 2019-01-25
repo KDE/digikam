@@ -43,7 +43,7 @@
 #include "dinfointerface.h"
 #include "digikam_debug.h"
 
-namespace Digikam
+namespace GenericDigikamImgUrPlugin
 {
 
 ImgurImagesList::ImgurImagesList(QWidget* const parent)
@@ -210,4 +210,4 @@ QString ImgurImageListViewItem::ImgurDeleteUrl() const
     return text(ImgurImagesList::DeleteURL);
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamImgUrPlugin

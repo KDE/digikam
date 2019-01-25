@@ -39,7 +39,7 @@
 
 #include "o2.h"
 
-namespace Digikam
+namespace GenericDigikamImgUrPlugin
 {
 
 enum class ImgurTalkerActionType
@@ -194,6 +194,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamImgUrPlugin
 
 #endif // DIGIKAM_IMGUR_TALKER_H

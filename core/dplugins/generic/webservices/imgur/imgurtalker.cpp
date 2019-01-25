@@ -46,8 +46,9 @@
 #include "o0settingsstore.h"
 #include "o0globals.h"
 
+using namespace Digikam;
 
-namespace Digikam
+namespace GenericDigikamImgUrPlugin
 {
 
 static const QString imgur_auth_url       = QLatin1String("https://api.imgur.com/oauth2/authorize"),
@@ -424,4 +425,4 @@ void ImgurTalker::doWork()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamImgUrPlugin

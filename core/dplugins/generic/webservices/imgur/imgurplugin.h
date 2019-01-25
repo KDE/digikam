@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.ImgUr"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamImgUrPlugin
 {
 
-class DPluginDialog;
+class ImgurWindow;
 
 class ImgUrPlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<ImgurWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamImgUrPlugin
 
 #endif // DIGIKAM_IMGUR_PLUGIN_H

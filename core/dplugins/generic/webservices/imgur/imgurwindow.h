@@ -39,7 +39,9 @@
 #include "digikam_export.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamImgUrPlugin
 {
 
 class DIGIKAM_EXPORT ImgurWindow : public WSToolDialog
@@ -88,6 +90,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamImgUrPlugin
 
 #endif // DIGIKAM_IMGUR_WINDOW_H

@@ -33,7 +33,9 @@
 #include "ditemslist.h"
 #include "imgurtalker.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamImgUrPlugin
 {
 
 class ImgurImageListViewItem;
@@ -89,6 +91,6 @@ public:
     QString ImgurDeleteUrl() const;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamImgUrPlugin
 
 #endif // DIGIKAM_IMGUR_IMAGES_LIST_H
