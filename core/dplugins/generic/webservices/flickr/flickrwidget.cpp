@@ -24,7 +24,7 @@
 
 #include "flickrwidget_p.h"
 
-namespace Digikam
+namespace GenericDigikamFlickrPlugin
 {
 
 FlickrWidget::FlickrWidget(QWidget* const parent,
@@ -495,4 +495,4 @@ void FlickrWidget::slotAddExtraTagsToggled(bool status)
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFlickrPlugin

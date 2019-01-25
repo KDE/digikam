@@ -29,7 +29,7 @@
 #include <QByteArray>
 #include <QString>
 
-namespace Digikam
+namespace GenericDigikamFlickrPlugin
 {
 
 class FlickrMPForm
@@ -56,6 +56,6 @@ private:
     QByteArray m_boundary;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_MPFORM_H

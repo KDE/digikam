@@ -55,7 +55,7 @@
 #include "previewloadthread.h"
 #include "flickrwidget_p.h"
 
-namespace Digikam
+namespace GenericDigikamFlickrPlugin
 {
 
 class Q_DECL_HIDDEN FlickrWindow::Private
@@ -886,4 +886,4 @@ void FlickrWindow::slotReloadPhotoSetRequest()
     d->talker->listPhotoSets();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFlickrPlugin

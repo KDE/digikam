@@ -38,7 +38,9 @@
 #include "wssettingswidget.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFlickrPlugin
 {
 
 class FlickrWidget : public WSSettingsWidget
@@ -80,6 +82,6 @@ private:
     friend class FlickrWindow;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_WIDGET_H

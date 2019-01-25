@@ -38,7 +38,9 @@
 #include "digikam_debug.h"
 #include "wstoolutils.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFlickrPlugin
 {
 
 FlickrMPForm::FlickrMPForm()
@@ -163,4 +165,4 @@ QByteArray FlickrMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFlickrPlugin

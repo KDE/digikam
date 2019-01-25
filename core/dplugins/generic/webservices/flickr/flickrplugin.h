@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.Flickr"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFlickrPlugin
 {
 
-class DPluginDialog;
+class FlickrWindow;
 
 class FlickrPlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<FlickrWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_PLUGIN_H

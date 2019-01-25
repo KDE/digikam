@@ -43,7 +43,9 @@
 #include "wstooldialog.h"
 #include "digikam_export.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFlickrPlugin
 {
 
 class DIGIKAM_EXPORT FlickrWindow : public WSToolDialog
@@ -104,6 +106,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_WINDOW_H

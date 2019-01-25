@@ -44,7 +44,6 @@
 
 #include "dworkingpixmap.h"
 #include "wstoolutils.h"
-#include "thumbnailloadthread.h"
 
 namespace GenericDigikamGoogleServicesPlugin
 {

@@ -35,7 +35,7 @@
 #include "digikam_debug.h"
 #include "flickritem.h"
 
-namespace Digikam
+namespace GenericDigikamFlickrPlugin
 {
 
 FlickrNewAlbumDlg::FlickrNewAlbumDlg(QWidget* const parent, const QString& toolName)
@@ -58,4 +58,4 @@ void FlickrNewAlbumDlg::getFolderProperties(FPhotoSet& folder)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Folder Title " << folder.title<<" Folder Description "<<folder.description;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFlickrPlugin

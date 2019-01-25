@@ -34,7 +34,9 @@
 
 #include "ditemslist.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFlickrPlugin
 {
 
 class FlickrList : public DItemsList
@@ -160,6 +162,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_LIST_H

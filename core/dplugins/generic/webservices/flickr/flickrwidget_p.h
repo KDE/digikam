@@ -49,7 +49,9 @@
 #include "wscomboboxintermediate.h"
 #include "flickrlist.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFlickrPlugin
 {
 
 class Q_DECL_HIDDEN FlickrWidget::Private
@@ -98,6 +100,6 @@ public:
     FlickrList*             imglst;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_WIDGET_PRIVATE_H

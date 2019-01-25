@@ -29,7 +29,9 @@
 
 #include "wsnewalbumdialog.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFlickrPlugin
 {
 
 class FPhotoSet;
@@ -46,6 +48,6 @@ public:
     void getFolderProperties(FPhotoSet& folder);
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_NEW_ALBUM_DLG_H

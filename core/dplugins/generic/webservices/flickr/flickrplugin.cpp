@@ -34,7 +34,7 @@
 
 #include "flickrwindow.h"
 
-namespace Digikam
+namespace GenericDigikamFlickrPlugin
 {
 
 FlickrPlugin::FlickrPlugin(QObject* const parent)
@@ -120,4 +120,4 @@ void FlickrPlugin::slotFlickr()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFlickrPlugin
