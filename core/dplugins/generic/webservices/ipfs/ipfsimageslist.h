@@ -6,7 +6,7 @@
  * Date        : 2012-02-12
  * Description : a tool to export images to IPFS web service
  *
- * Copyright (C) 2018 by Amar Lakshya <amar dot lakshya  at xaviers dot edu dot in>
+ * Copyright (C) 2018 by Amar Lakshya <amar dot lakshya at xaviers dot edu dot in>
  * Copyright (C) 2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -55,10 +55,12 @@ public:
         Url         = DItemsListView::User3,
     };
 
+public:
+
     explicit IpfsImagesList(QWidget* const parent = 0);
     ~IpfsImagesList() Q_DECL_OVERRIDE {}
 
-    QList<const IpfsImagesListViewItem*> getPendingItems();
+    QList<const IpfsImagesListViewItem*> getPendingItems() const;
 
 public Q_SLOTS:
 

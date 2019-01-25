@@ -181,7 +181,7 @@ class DIGIKAM_EXPORT CtrlButton : public QPushButton
 public:
 
     explicit CtrlButton(const QIcon& icon, QWidget* parent = 0);
-    virtual ~CtrlButton();
+    ~CtrlButton();
 };
 
 // -------------------------------------------------------------------------
@@ -216,7 +216,7 @@ public:
 public:
 
     explicit DItemsList(QWidget* const parent, int iconSize = -1);
-    virtual ~DItemsList();
+    ~DItemsList();
 
     void                setAllowRAW(bool allow);
     void                setAllowDuplicate(bool allow);
@@ -233,7 +233,7 @@ public:
 
     int                 iconSize()  const;
 
-    DItemsListView*    listView()  const;
+    DItemsListView*     listView()  const;
 
     void                processing(const QUrl& url);
     void                processed(const QUrl& url, bool success);
