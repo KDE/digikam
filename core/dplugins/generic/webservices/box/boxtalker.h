@@ -37,7 +37,9 @@
 #include "o0globals.h"
 #include "dmetadata.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamBoxPlugin
 {
 
 class BOXTalker : public QObject
@@ -98,6 +100,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamBoxPlugin
 
 #endif // DIGIKAM_BOX_TALKER_H

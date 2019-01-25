@@ -38,7 +38,9 @@
 class QCloseEvent;
 class QUrl;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamBoxPlugin
 {
 
 class DIGIKAM_EXPORT BOXWindow : public WSToolDialog
@@ -92,6 +94,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamBoxPlugin
 
 #endif // DIGIKAM_BOX_WINDOW_H

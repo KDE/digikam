@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.Box"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamBoxPlugin
 {
 
-class DPluginDialog;
+class BOXWindow;
 
 class BoxPlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<BOXWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamBoxPlugin
 
 #endif // DIGIKAM_BOX_PLUGIN_H

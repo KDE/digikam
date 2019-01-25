@@ -47,7 +47,7 @@
 #include "boxnewalbumdlg.h"
 #include "boxwidget.h"
 
-namespace Digikam
+namespace GenericDigikamBoxPlugin
 {
 
 class Q_DECL_HIDDEN BOXWindow::Private
@@ -467,4 +467,4 @@ void BOXWindow::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamBoxPlugin

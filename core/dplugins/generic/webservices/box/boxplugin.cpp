@@ -34,7 +34,7 @@
 
 #include "boxwindow.h"
 
-namespace Digikam
+namespace GenericDigikamBoxPlugin
 {
 
 BoxPlugin::BoxPlugin(QObject* const parent)
@@ -108,4 +108,4 @@ void BoxPlugin::slotBox()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamBoxPlugin

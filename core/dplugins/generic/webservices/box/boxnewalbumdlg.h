@@ -27,7 +27,9 @@
 
 #include "wsnewalbumdialog.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamBoxPlugin
 {
 
 class BOXFolder;
@@ -44,6 +46,6 @@ public:
     void getFolderTitle(BOXFolder& folder);
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamBoxPlugin
 
 #endif // DIGIKAM_BOX_NEW_ALBUM_DLG_H

@@ -52,7 +52,7 @@
 #include "previewloadthread.h"
 #include "o0settingsstore.h"
 
-namespace Digikam
+namespace GenericDigikamBoxPlugin
 {
 
 class Q_DECL_HIDDEN BOXTalker::Private
@@ -497,4 +497,4 @@ void BOXTalker::parseResponseCreateFolder(const QByteArray& data)
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamBoxPlugin

@@ -27,7 +27,7 @@
 #include "digikam_debug.h"
 #include "boxitem.h"
 
-namespace Digikam
+namespace GenericDigikamBoxPlugin
 {
 
 BOXNewAlbumDlg::BOXNewAlbumDlg(QWidget* const parent, const QString& toolName)
@@ -48,4 +48,4 @@ void BOXNewAlbumDlg::getFolderTitle(BOXFolder& folder)
     folder.title = QLatin1Char('/') + getTitleEdit()->text();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamBoxPlugin
