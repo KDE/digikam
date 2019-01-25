@@ -38,7 +38,9 @@
 class QCloseEvent;
 class QUrl;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPinterestPlugin
 {
 
 class DIGIKAM_EXPORT PWindow : public WSToolDialog
@@ -92,6 +94,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPinterestPlugin
 
 #endif // DIGIKAM_P_WINDOW_H

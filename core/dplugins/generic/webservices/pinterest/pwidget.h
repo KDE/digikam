@@ -35,7 +35,9 @@
 
 class QButtonGroup;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPinterestPlugin
 {
 
 class PWidget : public WSSettingsWidget
@@ -57,6 +59,6 @@ private:
     friend class PWindow;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPinterestPlugin
 
 #endif // DIGIKAM_P_WIDGET_H

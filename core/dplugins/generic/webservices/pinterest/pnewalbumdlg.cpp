@@ -27,7 +27,7 @@
 #include "digikam_debug.h"
 #include "pitem.h"
 
-namespace Digikam
+namespace GenericDigikamPinterestPlugin
 {
 
 PNewAlbumDlg::PNewAlbumDlg(QWidget* const parent, const QString& toolName)
@@ -48,4 +48,4 @@ void PNewAlbumDlg::getFolderTitle(PFolder& folder)
     folder.title = getTitleEdit()->text();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPinterestPlugin

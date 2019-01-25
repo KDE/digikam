@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.Pinterest"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPinterestPlugin
 {
 
-class DPluginDialog;
+class PWindow;
 
 class PPlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<PWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPinterestPlugin
 
 #endif // DIGIKAM_OD_PLUGIN_H

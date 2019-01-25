@@ -27,7 +27,7 @@
 
 #include <QString>
 
-namespace Digikam
+namespace GenericDigikamPinterestPlugin
 {
 
 class PPhoto
@@ -53,6 +53,6 @@ public:
     QString title;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPinterestPlugin
 
 #endif // DIGIKAM_P_ITEM_H

@@ -35,7 +35,9 @@
 #include "pitem.h"
 #include "dmetadata.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPinterestPlugin
 {
 
 class PTalker : public QObject
@@ -99,6 +101,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPinterestPlugin
 
 #endif // DIGIKAM_P_TALKER_H

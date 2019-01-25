@@ -27,7 +27,9 @@
 
 #include "wsnewalbumdialog.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPinterestPlugin
 {
 
 class PFolder;
@@ -44,6 +46,6 @@ public:
     void getFolderTitle(PFolder& folder);
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPinterestPlugin
 
 #endif // DIGIKAM_P_NEW_ALBUM_DLG_H

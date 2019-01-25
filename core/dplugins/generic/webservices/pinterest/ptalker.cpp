@@ -62,7 +62,7 @@
 #   include "webwidget.h"
 #endif
 
-namespace Digikam
+namespace GenericDigikamPinterestPlugin
 {
 
 class Q_DECL_HIDDEN PTalker::Private
@@ -615,4 +615,4 @@ void PTalker::readSettings()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPinterestPlugin
