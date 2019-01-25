@@ -88,10 +88,9 @@ DSWidget::DSWidget(DInfoInterface* const iface, QWidget* const parent)
     QWidget* const settingsBox           = new QWidget(this);
     QVBoxLayout* const settingsBoxLayout = new QVBoxLayout(settingsBox);
 
-    m_headerLabel = new DActiveLabel(QUrl(GenericDigikamDebianScreenshotsPlugin::debshotsUrl),
-                                     QLatin1String(":/debianscreenshots/sdnlogo.png"),
-                                     settingsBox);
-    m_headerLabel->setWhatsThis( i18n("This is a clickable link to open the Debian Screenshots home page in a web browser.") );
+    m_headerLabel = new DActiveLabel(QUrl(), QString(), settingsBox);
+    m_headerLabel->updateData(QUrl(GenericDigikamDebianScreenshotsPlugin::debshotsUrl), QImage(QLatin1String(":/debianscreenshots/dslogo.png")));
+    m_headerLabel->setWhatsThis(i18n("This is a clickable link to open the Debian Screenshots home page in a web browser."));
 
     QGroupBox* const pkgGroupBox   = new QGroupBox(settingsBox);
     pkgGroupBox->setTitle(i18n("Package"));

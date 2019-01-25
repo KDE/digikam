@@ -80,7 +80,7 @@ DSWindow::DSWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     connect(m_widget, SIGNAL(requiredPackageInfoAvailable(bool)),
             this, SLOT(slotRequiredPackageInfoAvailableReceived(bool)));
 
-    connect(this, SIGNAL(user1Clicked()),
+    connect(startButton(), SIGNAL(clicked()),
             this, SLOT(slotStartTransfer()));
 
     connect(m_widget->progressBar(), SIGNAL(signalProgressCanceled()),
@@ -91,7 +91,6 @@ DSWindow::DSWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     
     connect(m_buttons, SIGNAL(clicked(QAbstractButton*)),
             this, SLOT(slotButtonClicked(QAbstractButton*)));
-    
 }
 
 DSWindow::~DSWindow()
