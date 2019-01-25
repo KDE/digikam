@@ -28,7 +28,7 @@
 
 #include <QByteArray>
 
-namespace Digikam
+namespace GenericDigikamDropBoxPlugin
 {
 
 class DBMPForm
@@ -47,6 +47,6 @@ private:
     QByteArray m_buffer;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamDropBoxPlugin
 
 #endif // DIGIKAM_DB_MPFORM_H

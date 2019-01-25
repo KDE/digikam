@@ -33,7 +33,7 @@
 
 #include "digikam_debug.h"
 
-namespace Digikam
+namespace GenericDigikamDropBoxPlugin
 {
 
 DBMPForm::DBMPForm()
@@ -64,4 +64,4 @@ QByteArray DBMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamDropBoxPlugin

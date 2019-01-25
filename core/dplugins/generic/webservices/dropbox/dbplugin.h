@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.DropBox"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamDropBoxPlugin
 {
 
-class DPluginDialog;
+class DBWindow;
 
 class DBPlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<DBWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamDropBoxPlugin
 
 #endif // DIGIKAM_DB_PLUGIN_H

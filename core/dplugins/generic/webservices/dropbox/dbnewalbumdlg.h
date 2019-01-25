@@ -28,7 +28,9 @@
 
 #include "wsnewalbumdialog.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamDropBoxPlugin
 {
 
 class DBFolder;
@@ -45,6 +47,6 @@ public:
     void getFolderTitle(DBFolder& folder);
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamDropBoxPlugin
 
 #endif // DIGIKAM_DB_NEW_ALBUM_DLG_H

@@ -30,7 +30,7 @@
 #include <QString>
 #include <QNetworkReply>
 
-namespace Digikam
+namespace GenericDigikamDropBoxPlugin
 {
 
 class DBTalker : public QObject
@@ -87,6 +87,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamDropBoxPlugin
 
 #endif // DIGIKAM_DB_TALKER_H

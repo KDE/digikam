@@ -40,7 +40,9 @@ class QButtonGroup;
 class QComboBox;
 class QPushButton;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamDropBoxPlugin
 {
 
 class DBWidget : public WSSettingsWidget
@@ -61,6 +63,6 @@ private:
     friend class DBWindow;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamDropBoxPlugin
 
 #endif // DIGIKAM_DB_WIDGET_H

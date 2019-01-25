@@ -55,7 +55,9 @@
 #include "o0globals.h"
 #include "o0settingsstore.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamDropBoxPlugin
 {
 
 class Q_DECL_HIDDEN DBTalker::Private
@@ -468,4 +470,4 @@ void DBTalker::parseResponseCreateFolder(const QByteArray& data)
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamDropBoxPlugin
