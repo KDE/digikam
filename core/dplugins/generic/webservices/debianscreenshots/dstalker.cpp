@@ -36,9 +36,7 @@
 
 // KDE includes
 
-#include <ktoolinvocation.h>
 #include <kio/job.h>
-#include <kio/jobuidelegate.h>
 
 // Local includes
 
