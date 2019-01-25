@@ -24,7 +24,11 @@
 #ifndef DIGIKAM_IMAGE_SHACK_ITEM_H
 #define DIGIKAM_IMAGE_SHACK_ITEM_H
 
-namespace Digikam
+// Qt includes
+
+#include <QString>
+
+namespace GenericDigikamImageShackPlugin
 {
 
 class ImageShackGallery
@@ -59,6 +63,6 @@ public:
     QString m_bucket;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamImageShackPlugin
 
 #endif // DIGIKAM_IMAGE_SHACK_ITEM_H

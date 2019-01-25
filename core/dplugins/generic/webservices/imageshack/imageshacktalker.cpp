@@ -48,7 +48,9 @@
 #include "imageshackmpform.h"
 #include "digikam_debug.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamImageShackPlugin
 {
 
 class Q_DECL_HIDDEN ImageShackTalker::Private
@@ -554,4 +556,4 @@ void ImageShackTalker::parseAddPhotoToGalleryDone(QByteArray data)
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamImageShackPlugin

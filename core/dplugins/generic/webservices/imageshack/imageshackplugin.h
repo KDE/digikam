@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.ImageShack"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamImageShackPlugin
 {
 
-class DPluginDialog;
+class ImageShackWindow;
 
 class ImageShackPlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<ImageShackWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamImageShackPlugin
 
 #endif // DIGIKAM_IMAGESHACK_PLUGIN_H

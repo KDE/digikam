@@ -38,7 +38,9 @@
 
 #include "wsnewalbumdialog.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamImageShackPlugin
 {
 
 class ImageShackNewAlbumDlg : public WSNewAlbumDialog
@@ -53,6 +55,6 @@ public:
     QString getAlbumTitle();
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamImageShackPlugin
 
 #endif // DIGIKAM_IMAGE_SHACK_NEWALBUMDLG_H

@@ -29,7 +29,7 @@
 #include <QByteArray>
 #include <QString>
 
-namespace Digikam
+namespace GenericDigikamImageShackPlugin
 {
 
 class ImageShackMPForm
@@ -56,6 +56,6 @@ private:
     QByteArray m_boundary;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamImageShackPlugin
 
 #endif // DIGIKAM_IMAGE_SHACK_MPFORM_H

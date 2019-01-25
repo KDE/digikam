@@ -34,7 +34,7 @@
 
 #include "imageshackwindow.h"
 
-namespace Digikam
+namespace GenericDigikamImageShackPlugin
 {
 
 ImageShackPlugin::ImageShackPlugin(QObject* const parent)
@@ -108,4 +108,4 @@ void ImageShackPlugin::slotImageShack()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamImageShackPlugin

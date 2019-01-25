@@ -63,7 +63,7 @@
 #include "wslogindialog.h"
 #include "imageshacknewalbumdlg.h"
 
-namespace Digikam
+namespace GenericDigikamImageShackPlugin
 {
 
 class Q_DECL_HIDDEN ImageShackWindow::Private
@@ -452,4 +452,4 @@ void ImageShackWindow::slotNewAlbumRequest()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamImageShackPlugin

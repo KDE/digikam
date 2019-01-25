@@ -36,7 +36,9 @@
 #include "ditemslist.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamImageShackPlugin
 {
 
 class DIGIKAM_EXPORT ImageShackWindow : public WSToolDialog
@@ -95,6 +97,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamImageShackPlugin
 
 #endif // DIGIKAM_IMAGE_SHACK_WINDOW_H

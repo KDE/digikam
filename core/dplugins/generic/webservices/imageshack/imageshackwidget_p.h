@@ -54,7 +54,9 @@
 #include "ditemslist.h"
 #include "imageshacksession.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamImageShackPlugin
 {
 
 class Q_DECL_HIDDEN ImageShackWidget::Private
@@ -97,6 +99,6 @@ public:
     DProgressWdg*      progressBar;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamImageShackPlugin
 
 #endif // DIGIKAM_IMAGE_SHACK_WIDGET_PRIVATE_H

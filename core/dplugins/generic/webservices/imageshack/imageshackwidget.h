@@ -35,7 +35,9 @@
 #include "wssettingswidget.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamImageShackPlugin
 {
 
 class ImageShackSession;
@@ -74,6 +76,6 @@ private:
     friend class ImageShackWindow;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamImageShackPlugin
 
 #endif // DIGIKAM_IMAGE_SHACK_WIDGET_H
