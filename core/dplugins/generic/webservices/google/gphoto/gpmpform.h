@@ -29,7 +29,7 @@
 #include <QByteArray>
 #include <QString>
 
-namespace Digikam
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 class GPMPForm
@@ -60,6 +60,6 @@ private:
     QByteArray m_boundary;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin
 
 #endif // DIGIKAM_GP_MPFORM_H

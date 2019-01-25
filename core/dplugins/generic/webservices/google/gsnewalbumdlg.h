@@ -38,7 +38,9 @@
 
 #include "wsnewalbumdialog.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 class GSFolder;
@@ -62,6 +64,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin
 
 #endif // DIGIKAM_GS_NEW_ALBUM_DLG_H

@@ -57,7 +57,9 @@
 #include "previewloadthread.h"
 #include "dmetadata.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 static bool gdriveLessThan(const GSFolder& p1, const GSFolder& p2)
@@ -487,4 +489,4 @@ void GDTalker::cancel()
     emit signalBusy(false);
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin

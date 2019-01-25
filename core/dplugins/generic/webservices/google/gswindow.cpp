@@ -60,7 +60,7 @@
 #include "gsreplacedlg.h"
 #include "digikam_debug.h"
 
-namespace Digikam
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 class Q_DECL_HIDDEN GSWindow::Private
@@ -1361,4 +1361,4 @@ void GSWindow::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin

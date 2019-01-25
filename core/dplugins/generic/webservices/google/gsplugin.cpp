@@ -34,7 +34,7 @@
 
 #include "gswindow.h"
 
-namespace Digikam
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 GSPlugin::GSPlugin(QObject* const parent)
@@ -166,4 +166,4 @@ void GSPlugin::slotExportGdrive()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin

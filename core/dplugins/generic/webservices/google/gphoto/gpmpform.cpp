@@ -35,7 +35,9 @@
 
 #include "wstoolutils.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 GPMPForm::GPMPForm()
@@ -159,4 +161,4 @@ QByteArray GPMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin

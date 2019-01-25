@@ -61,9 +61,11 @@
 #include "previewloadthread.h"
 #include "dmetadata.h"
 
+using namespace Digikam;
+
 #define NB_MAX_ITEM_UPLOAD 50
 
-namespace Digikam
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 static bool gphotoLessThan(const GSFolder& p1, const GSFolder& p2)
@@ -921,4 +923,4 @@ void GPTalker::parseResponseUploadPhoto(const QByteArray& data)
     emit signalUploadPhotoDone(1, QString(), listPhotoId);
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin

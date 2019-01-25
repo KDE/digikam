@@ -46,7 +46,7 @@
 #include "wstoolutils.h"
 #include "thumbnailloadthread.h"
 
-namespace Digikam
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 class Q_DECL_HIDDEN ReplaceDialog::Private
@@ -331,4 +331,4 @@ int ReplaceDialog::getResult()
     return d->result;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin

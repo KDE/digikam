@@ -58,14 +58,13 @@
 
 #include "gdmpform.h"
 #include "digikam_debug.h"
-
-// O2 includes
-
+#include "wstoolutils.h"
 #include "o0globals.h"
 #include "o0settingsstore.h"
-#include "wstoolutils.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 class Q_DECL_HIDDEN GSTalkerBase::Private
@@ -237,4 +236,4 @@ void GSTalkerBase::doOAuth()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin

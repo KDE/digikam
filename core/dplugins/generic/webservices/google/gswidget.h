@@ -34,9 +34,11 @@
 #include "gsitem.h"
 #include "dinfointerface.h"
 
+using namespace Digikam;
+
 class QButtonGroup;
 
-namespace Digikam
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 enum GPhotoTagsBehaviour
@@ -69,6 +71,6 @@ private:
     friend class GSWindow;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin
 
 #endif // DIGIKAM_GS_WIDGET_H

@@ -40,7 +40,9 @@
 #include "digikam_debug.h"
 #include "wstoolutils.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 GDMPForm::GDMPForm()
@@ -165,4 +167,4 @@ QString GDMPForm::getFileSize() const
     return m_file_size;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin

@@ -34,11 +34,12 @@
 // Local includes
 
 #include "dinfointerface.h"
+#include "thumbnailloadthread.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamGoogleServicesPlugin
 {
-
-class LoadingDescription;
 
 enum ReplaceDialog_Result
 {
@@ -88,6 +89,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin
 
 #endif // DIGIKAM_GS_REPLACE_DLG_H

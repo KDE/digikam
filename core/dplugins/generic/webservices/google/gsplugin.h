@@ -27,12 +27,14 @@
 
 #include "dplugingeneric.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.generic.Google"
+#define DPLUGIN_IID "org.kde.digikam.plugin.generic.GoogleServices"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamGoogleServicesPlugin
 {
 
-class DPluginDialog;
+class GSWindow;
 
 class GSPlugin : public DPluginGeneric
 {
@@ -62,11 +64,11 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlgExportGphoto;
-    QPointer<DPluginDialog> m_toolDlgImportGphoto;
-    QPointer<DPluginDialog> m_toolDlgExportGdrive;
+    QPointer<GSWindow> m_toolDlgExportGphoto;
+    QPointer<GSWindow> m_toolDlgImportGphoto;
+    QPointer<GSWindow> m_toolDlgExportGdrive;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin
 
 #endif // DIGIKAM_GS_PLUGIN_H

@@ -42,7 +42,7 @@
 
 #include "gsitem.h"
 
-namespace Digikam
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 class Q_DECL_HIDDEN GSNewAlbumDlg::Private
@@ -155,4 +155,4 @@ void GSNewAlbumDlg::getAlbumProperties(GSFolder& album)
     return;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin

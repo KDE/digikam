@@ -42,7 +42,9 @@
 
 class QCloseEvent;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamGoogleServicesPlugin
 {
 class GDTalker;
 class GPTalker;
@@ -105,6 +107,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin
 
 #endif // DIGIKAM_GS_WINDOW_H

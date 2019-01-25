@@ -36,7 +36,7 @@
 #include "gsitem.h"
 #include "gstalkerbase.h"
 
-namespace Digikam
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 class GDTalker : public GSTalkerBase
@@ -88,6 +88,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin
 
 #endif // DIGIKAM_GD_TALKER_H

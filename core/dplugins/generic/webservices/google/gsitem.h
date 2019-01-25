@@ -30,7 +30,7 @@
 #include <QUrl>
 #include <QString>
 
-namespace Digikam
+namespace GenericDigikamGoogleServicesPlugin
 {
 
 enum GoogleService
@@ -107,6 +107,6 @@ public:
     QString     url;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamGoogleServicesPlugin
 
 #endif // DIGIKAM_GS_ITEM_H
