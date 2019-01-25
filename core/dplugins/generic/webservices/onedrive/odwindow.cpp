@@ -47,7 +47,7 @@
 #include "odnewalbumdlg.h"
 #include "odwidget.h"
 
-namespace Digikam
+namespace GenericDigikamOneDrivePlugin
 {
 
 class Q_DECL_HIDDEN ODWindow::Private
@@ -465,4 +465,4 @@ void ODWindow::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamOneDrivePlugin

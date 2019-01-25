@@ -35,7 +35,9 @@
 #include "oditem.h"
 #include "dmetadata.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamOneDrivePlugin
 {
 
 class ODTalker : public QObject
@@ -96,6 +98,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamOneDrivePlugin
 
 #endif // DIGIKAM_OD_TALKER_H

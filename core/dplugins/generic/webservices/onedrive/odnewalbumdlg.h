@@ -27,7 +27,9 @@
 
 #include "wsnewalbumdialog.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamOneDrivePlugin
 {
 
 class ODFolder;
@@ -44,6 +46,6 @@ public:
     void getFolderTitle(ODFolder& folder);
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamOneDrivePlugin
 
 #endif // DIGIKAM_OD_NEW_ALBUM_DLG_H

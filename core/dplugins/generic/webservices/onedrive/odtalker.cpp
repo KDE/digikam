@@ -62,7 +62,7 @@
 #   include "webwidget.h"
 #endif
 
-namespace Digikam
+namespace GenericDigikamOneDrivePlugin
 {
 
 class Q_DECL_HIDDEN ODTalker::Private
@@ -587,4 +587,4 @@ void ODTalker::readSettings()
     }
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamOneDrivePlugin

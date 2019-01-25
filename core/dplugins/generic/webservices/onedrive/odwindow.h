@@ -38,7 +38,9 @@
 class QCloseEvent;
 class QUrl;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamOneDrivePlugin
 {
 
 class DIGIKAM_EXPORT ODWindow : public WSToolDialog
@@ -92,6 +94,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamOneDrivePlugin
 
 #endif // DIGIKAM_OD_WINDOW_H

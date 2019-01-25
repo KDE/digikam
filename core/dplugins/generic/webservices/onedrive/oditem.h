@@ -27,7 +27,7 @@
 
 #include <QString>
 
-namespace Digikam
+namespace GenericDigikamOneDrivePlugin
 {
 
 class ODPhoto
@@ -52,6 +52,6 @@ public:
     QString title;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamOneDrivePlugin
 
 #endif // DIGIKAM_OD_ITEM_H

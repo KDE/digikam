@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.OneDrive"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamOneDrivePlugin
 {
 
-class DPluginDialog;
+class ODWindow;
 
 class ODPlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<ODWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamOneDrivePlugin
 
 #endif // DIGIKAM_OD_PLUGIN_H

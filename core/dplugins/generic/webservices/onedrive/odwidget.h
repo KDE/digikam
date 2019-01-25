@@ -33,9 +33,11 @@
 #include "oditem.h"
 #include "dinfointerface.h"
 
+using namespace Digikam;
+
 class QButtonGroup;
 
-namespace Digikam
+namespace GenericDigikamOneDrivePlugin
 {
 
 class ODWidget : public WSSettingsWidget
@@ -57,6 +59,6 @@ private:
     friend class ODWindow;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamOneDrivePlugin
 
 #endif // DIGIKAM_OD_WIDGET_H

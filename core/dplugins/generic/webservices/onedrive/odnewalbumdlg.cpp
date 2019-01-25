@@ -27,7 +27,7 @@
 #include "digikam_debug.h"
 #include "oditem.h"
 
-namespace Digikam
+namespace GenericDigikamOneDrivePlugin
 {
 
 ODNewAlbumDlg::ODNewAlbumDlg(QWidget* const parent, const QString& toolName)
@@ -48,4 +48,4 @@ void ODNewAlbumDlg::getFolderTitle(ODFolder& folder)
     folder.title = QLatin1Char('/') + getTitleEdit()->text();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamOneDrivePlugin
