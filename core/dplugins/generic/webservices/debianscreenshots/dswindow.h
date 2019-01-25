@@ -23,26 +23,19 @@
 #ifndef DIGIKAM_DS_WINDOW_H
 #define DIGIKAM_DS_WINDOW_H
 
+// Qt includes
+
+#include <QUrl>
+#include <QList>
+
 // Local includes
 
-#include "kp4tooldialog.h"
+#include "wstooldialog.h"
+#include "dinfointerface.h"
 
 class QCloseEvent;
 
-class QUrl;
-
-namespace KIPI
-{
-    class Interface;
-}
-
-namespace KIPIPlugins
-{
-    class KPAboutData;
-}
-
-using namespace KIPI;
-using namespace KIPIPlugins;
+using namespace Digikam;
 
 namespace GenericDigikamDebianScreenshotsPlugin
 {
@@ -50,7 +43,7 @@ namespace GenericDigikamDebianScreenshotsPlugin
 class DSTalker;
 class DSWidget;
 
-class DSWindow : public KP4ToolDialog
+class DSWindow : public WSToolDialog
 {
     Q_OBJECT
 
@@ -103,7 +96,7 @@ private:
     QString      m_tmpDir;
     QString      m_tmpPath;
 
-    QUrl::List   m_transferQueue;
+    QList<QUrl>  m_transferQueue;
 
     DSTalker*    m_talker;
     DSWidget*    m_widget;

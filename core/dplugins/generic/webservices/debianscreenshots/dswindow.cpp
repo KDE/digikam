@@ -31,15 +31,16 @@
 #include <QMenu>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QApplication>
 
 // Local includes
 
-#include "rawengine.h"
+#include "drawdecoder.h"
 #include "dmessagebox.h"
 #include "ditemslist.h"
 #include "dmetadata.h"
 #include "digikam_debug.h"
-#include "dprogresswidget.h"
+#include "statusprogressbar.h"
 #include "dstalker.h"
 #include "dswidget.h"
 
@@ -50,22 +51,18 @@ static int maxWidth  = 800;
 static int maxHeight = 600;
 
 DSWindow::DSWindow(const QString& tmpFolder, QWidget* const /*parent*/)
-    : KP4ToolDialog(0),
+    : WSToolDialog(0, QLatin1String("DebianScreenshots Export Dialog")),
       m_uploadEnabled(false),
       m_imagesCount(0),
       m_imagesTotal(0),
-//      m_talker(new DSTalker(this)),
       m_tmpDir(tmpFolder)
 {
     m_tmpPath.clear();
-//    m_tmpDir      = tmpFolder;
-//    m_imagesCount = 0;
-//    m_imagesTotal = 0;
     m_talker = new DSTalker(this);
     m_widget = new DSWidget(this);
 
     setMainWidget(m_widget);
-    setWindowIcon(QIcon::fromTheme("dk-debianscreenshots"));
+    setWindowIcon(QIcon::fromTheme(QLatin1String("dk-debianscreenshots")));
     setButtons(Help|User1|Close);
     setDefaultButton(Close);
     setModal(false);
@@ -90,20 +87,6 @@ DSWindow::DSWindow(const QString& tmpFolder, QWidget* const /*parent*/)
 
     connect(m_widget->progressBar(), SIGNAL(signalProgressCanceled()),
             this, SLOT(slotStopAndCloseProgressBar()));
-
-    // ------------------------------------------------------------------------
-
-    KPAboutData* const about = new KPAboutData(ki18n("Debian Screenshots Export"), 0,
-                                   KAboutLicense::GPL,
-                                   ki18n("A Kipi plugin to export an image collection "
-                                         "to the Debian Screenshots web site."),
-                                   ki18n("(c) 2010, Pau Garcia i Quiles\n"));
-
-    about->addAuthor(ki18n("Pau Garcia i Quiles"), ki18n("Author and maintainer"),
-                     "pgquiles at elpauer dot org");
-
-    about->setHandbookEntry("debianscreenshots");
-    setAboutData(about);
 
     // ------------------------------------------------------------------------
 
@@ -190,7 +173,7 @@ void DSWindow::slotStartTransfer()
     m_widget->progressBar()->setValue(0);
     m_widget->progressBar()->show();
     m_widget->progressBar()->progressScheduled(i18n("Debian Screenshots export"), true, true);
-    m_widget->progressBar()->progressThumbnailChanged(QIcon::fromTheme("dk-debianscreenshots").pixmap(22, 22));
+    m_widget->progressBar()->progressThumbnailChanged(QIcon::fromTheme(QLatin1String("dk-debianscreenshots")).pixmap(22, 22));
 
     uploadNextPhoto();
 }
@@ -202,7 +185,7 @@ bool DSWindow::prepareImageForUpload(const QString& imgPath, MassageType massage
     if ( massage == DSWindow::ImageIsRaw )
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Get RAW preview " << imgPath;
-        KDcrawIface::KDcraw::loadRawPreview(image, imgPath);
+        DRawDecoder::loadRawPreview(image, imgPath);
     }
     else
     {
@@ -251,7 +234,7 @@ void DSWindow::uploadNextPhoto()
     QImageReader imgReader(imgPath);
     QByteArray imgFormat = imgReader.format();
 
-    if( QString::compare(QString(imgFormat), QString("PNG"), Qt::CaseInsensitive) != 0 )
+    if ( QString::compare(QLatin1String(imgFormat), QLatin1String("PNG"), Qt::CaseInsensitive) != 0 )
     {
         massageRequired = DSWindow::NotPNG;
     }
@@ -259,13 +242,13 @@ void DSWindow::uploadNextPhoto()
     // check if image > 800x600
     QImage img = imgReader.read();
 
-    if( (img.width() > maxWidth) || (img.height() > maxHeight) )
+    if ( (img.width() > maxWidth) || (img.height() > maxHeight) )
     {
         massageRequired = DSWindow::ResizeRequired;
     }
 
     // check if we have to RAW file -> use preview image then
-    if( KPMetadata::isRawFile(imgPath) )
+    if ( DRawDecoder::isRawFile(imgPath) )
     {
         massageRequired = DSWindow::ImageIsRaw;
     }
@@ -316,10 +299,12 @@ void DSWindow::slotAddScreenshotDone(int errCode, const QString& errMsg)
     }
     else
     {
-        if (KMessageBox::warningContinueCancel(this,
-                         i18n("Failed to upload photo to Debian Screenshots: %1\n"
-                              "Do you want to continue?", errMsg))
-                         != KMessageBox::Continue)
+        if (DMessageBox::showContinueCancel(QMessageBox::Warning,
+                                            qApp->activeWindow(),
+                                            qApp->applicationName(),
+                                            i18n("Failed to upload photo to Debian Screenshots: %1\n"
+                                                 "Do you want to continue?", errMsg))
+            == QMessageBox::Yes)
         {
             m_widget->progressBar()->hide();
             m_transferQueue.clear();
