@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "packagedelegate.moc"
+#include "packagedelegate.h"
 
 // Qt includes
 
