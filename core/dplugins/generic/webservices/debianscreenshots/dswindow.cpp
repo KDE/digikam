@@ -27,24 +27,18 @@
 #include <QFileInfo>
 #include <QCloseEvent>
 #include <QImageReader>
-
-// KDE includes
-
-#include <QMenu>
-#include <klineedit.h>
 #include <QComboBox>
-#include <kpushbutton.h>
-#include <kmessagebox.h>
-#include "digikam_debug.h"
-
-// LibKDcraw includes
-
-#include <KDCRAW/KDcraw>
+#include <QMenu>
+#include <QLineEdit>
+#include <QPushButton>
 
 // Local includes
 
+#include "rawengine.h"
+#include "dmessagebox.h"
 #include "ditemslist.h"
 #include "dmetadata.h"
+#include "digikam_debug.h"
 #include "dprogresswidget.h"
 #include "dstalker.h"
 #include "dswidget.h"

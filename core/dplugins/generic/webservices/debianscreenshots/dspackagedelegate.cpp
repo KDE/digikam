@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "packagedelegate.h"
+#include "dspackagedelegate.h"
 
 // Qt includes
 

@@ -22,7 +22,7 @@ qt5_add_resources(debianscreenshotsplugin_QRC_SRCS dsplugin.qrc)
 
 DIGIKAM_ADD_GENERIC_PLUGIN(DebianScreenshots
     ${CMAKE_CURRENT_SOURCE_DIR}/dsmpform.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/dspackagedelegate.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dspackagedelegate.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/dstalker.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/dswidget.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/dswindow.cpp
