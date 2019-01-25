@@ -29,10 +29,13 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.FileTransfer"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFileTransferPlugin
 {
 
-class DPluginDialog;
+class FTExportWindow;
+class FTImportWindow;
 
 class FTPlugin : public DPluginGeneric
 {
@@ -61,10 +64,10 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlgExport;
-    QPointer<DPluginDialog> m_toolDlgImport;
+    QPointer<FTExportWindow> m_toolDlgExport;
+    QPointer<FTImportWindow> m_toolDlgImport;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFileTransferPlugin
 
 #endif // DIGIKAM_FT_PLUGIN_H

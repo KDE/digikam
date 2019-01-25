@@ -41,7 +41,9 @@ namespace KIO
     class Job;
 }
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFileTransferPlugin
 {
 
 /**
@@ -96,6 +98,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFileTransferPlugin
 
 #endif // DIGIKAM_FT_IMPORT_WINDOW_H

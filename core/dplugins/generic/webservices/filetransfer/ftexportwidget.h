@@ -34,11 +34,12 @@
 // Local includes
 
 #include "dinfointerface.h"
+#include "ditemslist.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFileTransferPlugin
 {
-
-class DItemsList;
 
 class FTExportWidget: public QWidget
 {
@@ -95,6 +96,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFileTransferPlugin
 
 #endif // DIGIKAM_FT_EXPORT_WIDGET_H

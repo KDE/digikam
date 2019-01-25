@@ -42,7 +42,9 @@ namespace KIO
     class Job;
 }
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFileTransferPlugin
 {
 
 class FTExportWidget;
@@ -135,6 +137,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFileTransferPlugin
 
 #endif // DIGIKAM_FT_EXPORT_WINDOW_H

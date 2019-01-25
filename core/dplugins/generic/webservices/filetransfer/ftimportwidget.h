@@ -32,11 +32,12 @@
 // Local includes
 
 #include "dinfointerface.h"
+#include "ditemslist.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamFileTransferPlugin
 {
-
-class DItemsList;
 
 /**
  * Helper widget for the import tool.
@@ -92,6 +93,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamFileTransferPlugin
 
 #endif // DIGIKAM_FT_IMPORT_WIDGET_H

@@ -35,10 +35,9 @@
 
 // Local includes
 
-#include "ditemslist.h"
 #include "dfiledialog.h"
 
-namespace Digikam
+namespace GenericDigikamFileTransferPlugin
 {
 
 class Q_DECL_HIDDEN FTImportWidget::Private
@@ -128,4 +127,4 @@ QList<QUrl> FTImportWidget::sourceUrls() const
     return d->imageList->imageUrls();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFileTransferPlugin

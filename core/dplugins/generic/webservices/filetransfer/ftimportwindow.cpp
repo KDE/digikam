@@ -41,7 +41,7 @@
 #include "ftimportwidget.h"
 #include "ditemslist.h"
 
-namespace Digikam
+namespace GenericDigikamFileTransferPlugin
 {
 
 class Q_DECL_HIDDEN FTImportWindow::Private
@@ -160,4 +160,4 @@ void FTImportWindow::slotSourceAndTargetUpdated()
     startButton()->setEnabled(hasUrlToImport && hasTarget);
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFileTransferPlugin

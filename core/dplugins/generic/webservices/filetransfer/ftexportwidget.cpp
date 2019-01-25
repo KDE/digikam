@@ -45,7 +45,7 @@
 #include "wstoolutils.h"
 #include "dlayoutbox.h"
 
-namespace Digikam
+namespace GenericDigikamFileTransferPlugin
 {
 
 class Q_DECL_HIDDEN FTExportWidget::Private
@@ -201,4 +201,4 @@ void FTExportWidget::slotLabelUrlChanged()
     emit signalTargetUrlChanged(d->targetUrl);
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamFileTransferPlugin
