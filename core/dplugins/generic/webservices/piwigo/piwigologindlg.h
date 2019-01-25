@@ -32,7 +32,7 @@
 #include <QString>
 #include <QDialog>
 
-namespace Digikam
+namespace GenericDigikamPiwigoPlugin
 {
 
 class PiwigoSession;
@@ -58,6 +58,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPiwigoPlugin
 
 #endif // DIGIKAM_PIWIGO_LOGIN_DLG_H

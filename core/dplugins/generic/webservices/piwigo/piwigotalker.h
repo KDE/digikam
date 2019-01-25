@@ -42,9 +42,11 @@
 
 #include "dinfointerface.h"
 
+using namespace Digikam;
+
 template <class T> class QList;
 
-namespace Digikam
+namespace GenericDigikamPiwigoPlugin
 {
 
 class PiwigoAlbum;
@@ -145,6 +147,6 @@ private:
     static QString s_authToken;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPiwigoPlugin
 
 #endif // PIWIGOTALKER_H

@@ -36,7 +36,9 @@
 #include "wstooldialog.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPiwigoPlugin
 {
 
 class PiwigoAlbum;
@@ -80,6 +82,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPiwigoPlugin
 
 #endif // DIGIKAM_PIWIGO_WINDOW_H

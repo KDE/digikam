@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.Piwigo"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamPiwigoPlugin
 {
 
-class DPluginDialog;
+class PiwigoWindow;
 
 class PiwigoPlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<PiwigoWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamPiwigoPlugin
 
 #endif // DIGIKAM_PIWIGO_PLUGIN_H

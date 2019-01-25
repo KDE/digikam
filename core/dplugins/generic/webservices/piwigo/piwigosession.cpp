@@ -40,7 +40,7 @@
 
 #include "digikam_debug.h"
 
-namespace Digikam
+namespace GenericDigikamPiwigoPlugin
 {
 
 class Q_DECL_HIDDEN PiwigoSession::Private
@@ -128,4 +128,4 @@ void PiwigoSession::save()
     config.sync();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPiwigoPlugin

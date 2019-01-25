@@ -64,7 +64,7 @@
 #include "piwigotalker.h"
 #include "imagedialog.h"
 
-namespace Digikam
+namespace GenericDigikamPiwigoPlugin
 {
 
 class Q_DECL_HIDDEN PiwigoWindow::Private
@@ -644,4 +644,4 @@ QString PiwigoWindow::cleanName(const QString& str) const
     return plain;
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamPiwigoPlugin
