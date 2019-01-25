@@ -233,16 +233,21 @@ void DSWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
 
         QStandardItemModel* const m = new QStandardItemModel(pkgSuggestions.count(), 2, m_pkgLineEdit->completer());
 
-        for ( int i = 0; i < pkgSuggestions.count(); ++i)
+        for ( int i = 0 ; i < pkgSuggestions.count() ; ++i)
         {
             QModelIndex pkgIdx             = m->index(i, 0);
             QModelIndex descIdx            = m->index(i, 1);
             QList<QByteArray> pkgDescSplit = pkgSuggestions.at(i).split('|');
-            QString pkg                    = QString::fromUtf8(pkgDescSplit.at(0));
-            QString desc                   = QString::fromUtf8(pkgDescSplit.at(1));
-            m->setData(pkgIdx, pkg);
-            m->setData(descIdx, desc);
+            
+            if (!pkgDescSplit.isEmpty())
+            {
+                QString pkg  = QString::fromUtf8(pkgDescSplit.at(0));
+                QString desc = QString::fromUtf8(pkgDescSplit.at(1));
+                m->setData(pkgIdx, pkg);
+                m->setData(descIdx, desc);
+            }
         }
+
         m_pkgLineEdit->completer()->setModel(m);
     }
 
