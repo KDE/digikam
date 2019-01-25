@@ -32,7 +32,7 @@
 
 #include "dactivelabel.h"
 #include "ditemslist.h"
-#include "statusprogressbar.h"
+#include "dprogresswdg.h"
 
 class QButtonGroup;
 class QNetworkReply;
@@ -58,8 +58,8 @@ public:
     explicit DSWidget(QWidget* const parent);
     ~DSWidget();
 
-    DItemsList* imagesList()         const;
-    StatusProgressBar* progressBar() const;
+    DItemsList* imagesList()    const;
+    DProgressWdg* progressBar() const;
 
 Q_SIGNALS:
 
@@ -75,21 +75,21 @@ private Q_SLOTS:
 
 private:
 
-    QButtonGroup*                  m_dlGrp;
-    QString                        m_lastTip;
-    QUrl                           m_lastQueryUrl;
+    QButtonGroup*       m_dlGrp;
+    QString             m_lastTip;
+    QUrl                m_lastQueryUrl;
 
-    QLineEdit*                     m_pkgLineEdit;
-    QComboBox*                     m_versionsComboBox;
-    QLineEdit*                     m_descriptionLineEdit;
+    QLineEdit*          m_pkgLineEdit;
+    QComboBox*          m_versionsComboBox;
+    QLineEdit*          m_descriptionLineEdit;
 
-    KIO::AccessManager*            m_httpManager;
-    KIO::AccessManager*            m_jsonManager;
+    KIO::AccessManager* m_httpManager;
+    KIO::AccessManager* m_jsonManager;
 
-    DActiveLabel*                  m_headerLabel;
+    DActiveLabel*       m_headerLabel;
 
-    DItemsList*                    m_imgList;
-    StatusProgressBar*             m_progressBar;
+    DItemsList*         m_imgList;
+    DProgressWdg*       m_progressBar;
 
     friend class DSWindow;
 };

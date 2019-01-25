@@ -40,7 +40,7 @@
 #include "ditemslist.h"
 #include "dmetadata.h"
 #include "digikam_debug.h"
-#include "statusprogressbar.h"
+#include "dprogresswdg.h"
 #include "dstalker.h"
 #include "dswidget.h"
 
@@ -60,38 +60,37 @@ DSWindow::DSWindow(const QString& tmpFolder, QWidget* const /*parent*/)
     m_tmpPath.clear();
     m_talker = new DSTalker(this);
     m_widget = new DSWidget(this);
+    m_widget->setMinimumSize(700, 500);
 
     setMainWidget(m_widget);
     setWindowIcon(QIcon::fromTheme(QLatin1String("dk-debianscreenshots")));
-    setButtons(Help|User1|Close);
-    setDefaultButton(Close);
     setModal(false);
-
     setWindowTitle(i18n("Export to Debian Screenshots"));
-    setButtonGuiItem(User1,
-                     KGuiItem(i18n("Start Upload"), "network-workgroup",
-                              i18n("Start upload to Debian Screenshots")));
-    enableButton(User1, false); // Disable until package and version data have been fulfilled
-    m_widget->setMinimumSize(700, 500);
+    
+    startButton()->setText(i18n("Start Upload"));
+    startButton()->setToolTip(i18n("Start upload to Debian Screenshots web service"));
+    startButton()->setEnabled(false); // Disable until package and version data have been fulfilled
 
     // ------------------------------------------------------------------------
 
     connect(m_widget->m_imgList, SIGNAL(signalImageListChanged()),
-            this, SLOT(slotMaybeEnableUser1()) );
+            this, SLOT(slotMaybeEnableStartButton()));
 
     connect(m_widget, SIGNAL(requiredPackageInfoAvailable(bool)),
             this, SLOT(slotRequiredPackageInfoAvailableReceived(bool)));
 
     connect(this, SIGNAL(user1Clicked()),
-            this, SLOT(slotStartTransfer()) );
+            this, SLOT(slotStartTransfer()));
 
     connect(m_widget->progressBar(), SIGNAL(signalProgressCanceled()),
             this, SLOT(slotStopAndCloseProgressBar()));
 
-    // ------------------------------------------------------------------------
-
     connect(m_talker, SIGNAL(signalAddScreenshotDone(int,QString)),
             this, SLOT(slotAddScreenshotDone(int,QString)));
+    
+    connect(m_buttons, SIGNAL(clicked(QAbstractButton*)),
+            this, SLOT(slotButtonClicked(QAbstractButton*)));
+    
 }
 
 DSWindow::~DSWindow()
@@ -104,20 +103,20 @@ void DSWindow::slotStopAndCloseProgressBar()
     m_widget->m_imgList->cancelProcess();
     m_widget->imagesList()->listView()->clear();
     m_widget->progressBar()->progressCompleted();
-    done(Close);
+    done(QDialog::Accepted);
 }
 
-void DSWindow::slotButtonClicked(int button)
+void DSWindow::slotButtonClicked(QAbstractButton* button)
 {
-    switch (button)
+    switch (m_buttons->buttonRole(button))
     {
-        case Close:
+        case QDialogButtonBox::RejectRole:
         {
             if (m_widget->progressBar()->isHidden())
             {
                 m_widget->imagesList()->listView()->clear();
                 m_widget->progressBar()->progressCompleted();
-                done(Close);
+                done(QDialog::Rejected);
             }
             else // cancel login/transfer
             {
@@ -128,15 +127,10 @@ void DSWindow::slotButtonClicked(int button)
             }
             break;
         }
-        case User1:
+        case QDialogButtonBox::ActionRole:
         {
             slotStartTransfer();
             break;
-        }
-        default:
-        {
-             KDialog::slotButtonClicked(button);
-             break;
         }
     }
 }
@@ -205,7 +199,7 @@ bool DSWindow::prepareImageForUpload(const QString& imgPath, MassageType massage
     }
 
     // get temporary file name
-    m_tmpPath = m_tmpDir + QFileInfo(imgPath).baseName().trimmed() + ".png";
+    m_tmpPath = m_tmpDir + QFileInfo(imgPath).baseName().trimmed() + QLatin1String(".png");
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Saving to temp file: " << m_tmpPath;
     image.save(m_tmpPath, "PNG");
@@ -234,7 +228,7 @@ void DSWindow::uploadNextPhoto()
     QImageReader imgReader(imgPath);
     QByteArray imgFormat = imgReader.format();
 
-    if ( QString::compare(QLatin1String(imgFormat), QLatin1String("PNG"), Qt::CaseInsensitive) != 0 )
+    if ( QString::fromLatin1(imgFormat).compare(QLatin1String("PNG"), Qt::CaseInsensitive) != 0 )
     {
         massageRequired = DSWindow::NotPNG;
     }
@@ -248,7 +242,7 @@ void DSWindow::uploadNextPhoto()
     }
 
     // check if we have to RAW file -> use preview image then
-    if ( DRawDecoder::isRawFile(imgPath) )
+    if (DRawDecoder::isRawFile(QUrl::fromLocalFile(imgPath)))
     {
         massageRequired = DSWindow::ImageIsRaw;
     }
@@ -262,7 +256,8 @@ void DSWindow::uploadNextPhoto()
             slotAddScreenshotDone(666, i18n("Cannot open file"));
             return;
         }
-        res = m_talker->addScreenshot(m_tmpPath, m_widget->m_pkgLineEdit->text(),
+        res = m_talker->addScreenshot(m_tmpPath,
+                                      m_widget->m_pkgLineEdit->text(),
                                       m_widget->m_versionsComboBox->currentText(),
                                       m_widget->m_descriptionLineEdit->text());
     }
@@ -315,9 +310,9 @@ void DSWindow::slotAddScreenshotDone(int errCode, const QString& errMsg)
     uploadNextPhoto();
 }
 
-void DSWindow::slotMaybeEnableUser1()
+void DSWindow::slotMaybeEnableStartButton()
 {
-    enableButton(User1, !(m_widget->m_imgList->imageUrls().isEmpty()) && m_uploadEnabled );
+    startButton()->setEnabled(!(m_widget->m_imgList->imageUrls().isEmpty()) && m_uploadEnabled);
 }
 
 void DSWindow::slotRequiredPackageInfoAvailableReceived(bool enabled)
@@ -325,7 +320,7 @@ void DSWindow::slotRequiredPackageInfoAvailableReceived(bool enabled)
     m_uploadEnabled = enabled; // Save the all-data-completed status to be able to enable the upload
                                // button later in case the image list is empty at the moment
 
-    slotMaybeEnableUser1();
+    slotMaybeEnableStartButton();
 }
 
 } // namespace GenericDigikamDebianScreenshotsPlugin

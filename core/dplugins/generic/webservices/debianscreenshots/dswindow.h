@@ -34,6 +34,7 @@
 #include "dinfointerface.h"
 
 class QCloseEvent;
+class QAbstractButton;
 
 using namespace Digikam;
 
@@ -46,7 +47,6 @@ class DSWidget;
 class DSWindow : public WSToolDialog
 {
     Q_OBJECT
-
     Q_ENUMS(MassageKind)
 
 public:
@@ -63,8 +63,8 @@ public:
 private Q_SLOTS:
 
     void slotStartTransfer();
-    void slotMaybeEnableUser1();
-    void slotButtonClicked(int button);
+    void slotMaybeEnableStartButton();
+    void slotButtonClicked(QAbstractButton*);
     void slotRequiredPackageInfoAvailableReceived(bool enabled);
     void slotAddScreenshotDone(int errCode, const QString& errMsg);
     void slotStopAndCloseProgressBar();
